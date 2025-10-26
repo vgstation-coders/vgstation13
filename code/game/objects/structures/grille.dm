@@ -15,10 +15,7 @@
 	var/grille_material = /obj/item/stack/rods
 
 /obj/structure/grille/canSmoothWith()
-	var/static/list/smoothables = list(
-		/obj/structure/grille,
-	)
-	return smoothables
+	return 1
 
 /obj/structure/grille/relativewall()
 	if(broken)
@@ -28,9 +25,7 @@
 /obj/structure/grille/isSmoothableNeighbor(atom/A)
 	if(istype(A,/obj/structure/grille))
 		var/obj/structure/grille/G = A
-		if(G.broken)
-			return 0
-	return ..()
+		return !G.broken
 
 /obj/structure/grille/examine(mob/user)
 
@@ -81,7 +76,19 @@
 
 /obj/structure/grille/Bumped(atom/user)
 	if(ismob(user))
-		shock(user, 60) //Give the user the benifit of the doubt
+		var/mob/M = user
+		var/damage_dealt = shock(M, 60) //Give the user the benifit of the doubt
+		if (damage_dealt && M.client)
+			if(M.pulledby)
+				add_logs(M.pulledby, M, "pulled into a shocked grille", TRUE, src, get_coordinates_string(src))
+			else if(M.last_bumped_by_timestamp - 0.1 SECONDS <= world.time <= M.last_bumped_by_timestamp + 0.1 SECONDS) // If got bumped into a grille
+				var/mob/hostile = M.last_bumped_by.get()
+				add_logs(hostile, M, "bumped into a shocked grille", TRUE, src, get_coordinates_string(src))
+			else if(M.last_thrown_by_timestamp - 0.1 SECONDS <= world.time <= M.last_thrown_by_timestamp + 2 SECONDS) // If got thrown into a grille
+				var/mob/hostile = M.last_thrown_by.get()
+				add_logs(hostile, src, "thrown into a shocked grilled", TRUE, src, get_coordinates_string(src))
+			else
+				M.attack_log += "\[[time_stamp()]\]: walked into a shocked grille (no bumper/no pusher)"
 
 /obj/structure/grille/hitby(var/atom/movable/AM)
 	. = ..()
@@ -144,19 +151,27 @@
 	shock(user, 100)
 	return
 
-/obj/structure/grille/attack_animal(var/mob/living/simple_animal/M as mob)
-	M.delayNextAttack(8)
-	if(M.melee_damage_upper == 0)
-		return
-	M.do_attack_animation(src, M)
-	M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
-					  "<span class='warning'>You smash against \the [src].</span>", \
-					  "You hear twisting metal.")
-	health -= rand(M.melee_damage_lower, M.melee_damage_upper)
+/obj/structure/grille/attack_animal(var/mob/living/simple_animal/M)
+	if(istype(M,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = M
+		M.delayNextAttack(8)
+		if(!SA.melee_damage_upper)
+			return
+		M.do_attack_animation(src, M)
+		M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
+						  "<span class='warning'>You smash against \the [src].</span>", \
+						  "You hear twisting metal.")
+		health -= rand(SA.melee_damage_lower, SA.melee_damage_upper)
+	else if(istype(M,/mob/living/complex_animal))
+		var/mob/living/complex_animal/CA = M
+		M.delayNextAttack(8)
+		M.do_attack_animation(src, M)
+		M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
+						  "<span class='warning'>You smash against \the [src].</span>", \
+						  "You hear twisting metal.")
+		health -= CA.base_damage  + rand(-CA.damage_variance , CA.damage_variance )
 	healthcheck(hitsound = 1)
 	shock(M, 100)
-	return
-
 
 /obj/structure/grille/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
@@ -206,7 +221,6 @@
 		ASSERT(istype(W, /obj/item/stack)) //in case someone adds a grille with a non-stackable item as a grille_material
 		var/obj/item/stack/stack = W
 		health = initial(health)
-		broken = 0
 		healthcheck()
 		user.visible_message("<span class='notice'>[user] repairs the [src] with [stack].</span>", \
 		"<span class='notice'>You repair the [src] with [stack].</span>")

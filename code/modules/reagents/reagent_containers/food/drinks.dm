@@ -7,7 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/weapon/reagent_containers/food/drinks
 	name = "drink"
-	desc = "yummy"
+	desc = "Yummy."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
 	icon = 'icons/obj/drinks.dmi'
 	icon_state = "glassbottle"
@@ -27,7 +27,7 @@
 	var/bottleheight = 23 //To offset the molotov rag and fire - beer and ale are 23
 	var/smashtext = "bottle of " //To handle drinking glasses and the flask of holy water
 	var/smashname = "broken bottle" //As above
-	var/flammable = 0
+	var/can_be_lit = 0
 	var/flammin = 0
 	var/flammin_color = null
 	var/base_icon_state = "glassbottle"
@@ -236,11 +236,7 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has attacked [M.name] ([M.ckey]) with a bottle!</font>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been smashed with a bottle by [user.name] ([user.ckey])</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] with a bottle. ([M.ckey])</font>")
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 
 		//The reagents in the bottle splash all over the target, thanks for the idea Nodrak
 		if(src.reagents)
@@ -279,11 +275,7 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [M.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 
 		if(reagents.total_volume)
 			if (ishuman(M))
@@ -298,9 +290,7 @@
 			spawn(5)
 				reagents.trans_to(M, gulp_size)
 
-		if(isrobot(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
-			var/mob/living/silicon/robot/bro = user
-			bro.cell.use(30)
+		if(use_cell_charge(user,30)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
 			var/refill = reagents.get_master_reagent_id()
 			spawn(600)
 				reagents.add_reagent(refill, gulp_size)
@@ -561,6 +551,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/chifir
 	name = "Siberian Chifir"
 	desc = "Only a true siberian can appreciate its deep and rich flavor. Embrace siberian tradition!"
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "tea"
 	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/chifir/New()
@@ -624,6 +615,7 @@
 	name = "\improper cup ramen"
 	desc = "A taste that reminds you of your school years."
 	icon_state = "ramen"
+
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/New()
 	..()
 	reagents.add_reagent(DRY_RAMEN, 30)
@@ -631,14 +623,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating //vendor version
-	name = "\improper cup ramen"
-	desc = "Just add 12ml water, self heats!"
-	icon_state = "ramen"
-/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating/New()
-	..()
-	reagents.add_reagent(CALCIUMOXIDE, 2)
-	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
-	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+	desc = "Self-heating: just add 10u water!"
 
 /obj/item/weapon/reagent_containers/food/drinks/groans
 	name = "Groans Soda"
@@ -831,7 +816,7 @@
 	to_chat(user, "You pull the tab, you feel the drink heat up in your hands, and its horrible fumes hits your nose like a ton of bricks. You drop the soup in disgust.")
 	var/turf/T = get_turf(user.loc)
 	var/obj/item/weapon/reagent_containers/food/drinks/discount_ramen_hot/A = new /obj/item/weapon/reagent_containers/food/drinks/discount_ramen_hot(T)
-	A.desc += " It feels warm.." //This is required
+	A.desc += " It feels warm." //This is required
 	user.drop_from_inventory(src)
 	qdel(src)
 
@@ -877,7 +862,13 @@
 	..()
 	if (flags & OPENCONTAINER)
 		overlays += image(icon = icon, icon_state = "soda_open")
-		update_blood_overlay()
+		set_blood_overlay()
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/kitchen/canopener))
+		if(!is_open_container())
+			return pop_open(user)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
@@ -1021,7 +1012,7 @@
 	overlays.len = 0
 	if (!(flags & OPENCONTAINER))
 		overlays += image(icon = icon, icon_state = "bottle_cap")
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum
 	name = "Nuka Cola Quantum"
@@ -1051,7 +1042,7 @@
 	overlays.len = 0
 	if (!(flags & OPENCONTAINER))
 		overlays += image(icon = icon, icon_state = "bottle_cap")
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink
 	name = "Brawndo"
@@ -1193,8 +1184,8 @@
 	icon_state = "gibness"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness/New()
 	..()
-	reagents.add_reagent(BEER, 25)
-	reagents.add_reagent(POTATO, 25)
+	reagents.add_reagent(STOUT, 45)
+	reagents.add_reagent(POTATO, 5)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer
 	name = "Geometer"
@@ -1223,8 +1214,7 @@
 	icon_state = "orchardtides"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides/New()
 	..()
-	reagents.add_reagent(BEER, 20)
-	reagents.add_reagent(APPLEJUICE, 30)
+	reagents.add_reagent(CIDER, 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken
 	name = "Sleimiken"
@@ -1241,8 +1231,7 @@
 	icon_state = "strongebow"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow/New()
 	..()
-	reagents.add_reagent(BEER, 30)
-	reagents.add_reagent(APPLEJUICE, 20)
+	reagents.add_reagent(CIDER, 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee
 	name = "Kiririn FIRE"
@@ -1262,7 +1251,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee
 	name = "Energizer"
-	desc = "Smells a bit like Battery Acid"
+	desc = "Smells a bit like Battery Acid."
 	icon_state = "engicoffee"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee/New()
 	..()
@@ -1270,7 +1259,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard
 	name = "Supermatter Sea Salt Soda "
-	desc = "Mmmmm Blurple"
+	desc = "Mmmmm... blurple."
 	icon_state = "engicoffee_shard"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard/New()
 	..()
@@ -1545,14 +1534,10 @@
 /obj/item/weapon/reagent_containers/food/drinks/thermos/update_temperature_overlays()
 	//we only care about the steam
 
-	if (!particles)
-		particles = new/particles/steam
-
-	particles.spawning = 0
-
 	if(!cap && reagents && reagents.total_volume)
-		if (reagents.chem_temp >= STEAMTEMP)
-			steam_spawn_adjust(reagents.chem_temp)
+		steam_spawn_adjust(reagents.chem_temp)
+	else
+		steam_spawn_adjust(0)
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos/full/New()
 	..()
@@ -1673,7 +1658,7 @@
 	..()
 	if (reagents.reagent_list.len > 0)
 		mug_reagent_overlay()
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup
 	name = "\improper cup"
@@ -1976,7 +1961,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/kahlua
 	name = "Robert Robust's Coffee Liqueur"
-	desc = "A widely known, Mexican coffee-flavoured liqueur. In production since 1936, HONK"
+	desc = "A widely known, Mexican coffee-flavoured liqueur. In production since 1936, HONK!"
 	icon_state = "kahluabottle"
 	vending_cat = "fermented"
 	molotov = -1
@@ -2154,16 +2139,17 @@
 				user?.attack_log += text("\[[time_stamp()]\] <span class='danger'>Threw a [lit ? "lit" : "unlit"] molotov to \the [hit_atom], containing [reagents.get_reagent_ids()]</span>")
 				log_attack("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name(user)] and containing [reagents.get_reagent_ids()]")
 				message_admins("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name_admin(user)] and containing [reagents.get_reagent_ids()]")
-			reagents.splashplosion(reagents.total_volume >= (reagents.maximum_volume/2))//splashing everything on the tile hit, and the surrounding ones if we're over half full.
+			reagents.splashplosion(0)//splashing everything on the tile hit, and the surrounding ones if we're over half full.
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
 		if(molotov == 1) //for molotovs
 			if(lit)
 				new /obj/effect/decal/cleanable/ash(get_turf(src))
 				var/turf/loca = get_turf(src)
+				var/fueltemp = possible_fuels[FUEL]
 				if(loca)
 					new /obj/effect/fire(loca)
-					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+					loca.hotspot_expose(fueltemp["max_temperature"], FULL_FLAME,1)
 			else
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
 
@@ -2222,6 +2208,24 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
 			D.dip(src, user)
 
+/obj/item/weapon/reagent_containers/food/drinks/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(!(molotov == 1))
+		return
+	if(lit)
+		return
+	ignite()
+
+/obj/item/weapon/reagent_containers/food/drinks/ignite()
+	if(lit)
+		return
+	light("<span class='danger'>The raging fire sets \the [src] alight.</span>")
+
+/obj/item/weapon/reagent_containers/food/drinks/extinguish()
+	lit = 0
+	update_brightness()
+	update_icon()
+	..()
+
 /obj/item/weapon/reagent_containers/food/drinks/molotov
 	name = "incendiary cocktail"
 	smashtext = ""
@@ -2245,10 +2249,10 @@
 		visible_message(flavor_text)
 		processing_objects.Add(src)
 		update_icon()
-	if(!lit && flammable)
+	if(!lit && can_be_lit)
 		lit = 1
 		visible_message(flavor_text)
-		flammable = 0
+		can_be_lit = 0
 		update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/blow_act(var/mob/living/user)
@@ -2309,7 +2313,7 @@
 	var/turf/loca = get_turf(src)
 	if(lit && loca)
 //		to_chat(world, "<span  class='warning'>Burning...</span>")
-		loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+		loca.hotspot_expose(700, SMALL_FLAME)
 	return
 
 // Sliding from one table to another
@@ -2329,8 +2333,8 @@
 				return ..()
 
 			// Geometrically checking if we're on a straight line.
-			var/vector/V = atoms2vector(src, over_location)
-			var/vector/V_norm = V.normalized()
+			var/_vector/V = atoms2vector(src, over_location)
+			var/_vector/V_norm = V.normalized()
 			if (!V_norm.is_integer())
 				return ..() // Only a cardinal vector (north, south, east, west) can pass this test
 
@@ -2341,7 +2345,7 @@
 			do
 				temp_turf = temp_turf.get_translated_turf(V_norm)
 				if (!locate(/obj/structure/table) in temp_turf)
-					var/vector/V2 = atoms2vector(src, temp_turf)
+					var/_vector/V2 = atoms2vector(src, temp_turf)
 					vector_translate(V2, 0.1 SECONDS)
 					user.visible_message("<span class='warning'>\The [user] slides \the [src] down the table... and straight into the ground!</span>", "<span class='warning'>You slide \the [src] down the table, and straight into the ground!</span>")
 					create_broken_bottle()

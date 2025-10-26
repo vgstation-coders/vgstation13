@@ -19,7 +19,7 @@
 
 
 //////CUT OPEN///////
-/datum/surgery_step/eye/cut_open/tool_quality(obj/item/tool)
+/datum/surgery_step/eye/cut_open/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -126,12 +126,11 @@
 	eyes.take_damage(5, 0)
 
 //////CAUTERIZE///////
-/datum/surgery_step/eye/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/eye/cauterize/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/eye/cauterize
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,

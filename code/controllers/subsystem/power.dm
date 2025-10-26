@@ -15,6 +15,7 @@ var/list/cable_list = list() //Index for all cables, so that powernets don't hav
 	var/list/currentrun_cables
 	var/list/currentrun_powerents
 	var/list/currentrun_power_machines
+	var/no_pop_mode // Will make powernets provide power when there's no players online.
 
 
 /datum/subsystem/power/New()
@@ -48,12 +49,19 @@ var/list/cable_list = list() //Index for all cables, so that powernets don't hav
 		if (PC.build_status && PC.rebuild_from() && MC_TICK_CHECK)
 			return
 
+	if(istype(ticker.mode, /datum/gamemode/dynamic))
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!D.living_players.len)
+			no_pop_mode = TRUE
+		else
+			no_pop_mode = FALSE
 	while (currentrun_powerents.len)
 		var/datum/powernet/powerNetwork = currentrun_powerents[currentrun_powerents.len]
 		currentrun_powerents.len--
 		if (!powerNetwork || powerNetwork.gcDestroyed)
 			continue
 
+		powerNetwork.no_pop_mode = no_pop_mode
 		powerNetwork.reset()
 		if (MC_TICK_CHECK)
 			return

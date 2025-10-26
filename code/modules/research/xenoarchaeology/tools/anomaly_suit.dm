@@ -36,7 +36,6 @@
 
 //Xenoarch space suit.
 //For the current standard suit see /obj/item/clothing/suit/space/rig/arch in "code\modules\clothing\spacesuits\rig.dm".
-
 /obj/item/clothing/suit/space/anomaly
 	name = "Excavation suit"
 	desc = "A pressure resistant excavation suit partially capable of insulating against exotic alien energies. There is a small tag on it that reads: 'Property of <s>Engineering</s> Research'."

@@ -45,10 +45,13 @@ var/stacking_limit = 90
 	var/list/living_antags = list()
 	var/list/dead_players = list()
 	var/list/list_observers = list()
-	var/last_time_of_population = 0
 
 	var/latejoin_injection_cooldown = 0
 	var/midround_injection_cooldown = 0
+	//Initial starting cooldowns after the round starts, for when you don't want midrounds too early in the round.
+	//If set to 0 or negative, uses the regular cooldown behavior.
+	var/latejoin_starting_round_cooldown = LATEJOIN_STARTING_ROUND_DELAY
+	var/midround_starting_round_cooldown = MIDROUND_STARTING_ROUND_DELAY
 
 	var/datum/dynamic_ruleset/latejoin/forced_latejoin_rule = null
 
@@ -99,8 +102,8 @@ var/stacking_limit = 90
 	else
 		dat += "none.<br>"
 	dat += "<br>Injection Timers: (<b>[GetInjectionChance()]%</b> chance)<BR>"
-	dat += "Latejoin: [latejoin_injection_cooldown>60 ? "[round(latejoin_injection_cooldown/60,0.1)] minutes" : "[latejoin_injection_cooldown] seconds"] <a href='?_src_=holder;injectnow=1'>\[Now!\]</A><BR>"
-	dat += "Midround: [midround_injection_cooldown>60 ? "[round(midround_injection_cooldown/60,0.1)] minutes" : "[midround_injection_cooldown] seconds"] <a href='?_src_=holder;injectnow=2'>\[Now!\]</A><BR>"
+	dat += "Latejoin: [round(latejoin_injection_cooldown*2/60)]m [(latejoin_injection_cooldown*2) % 60]s <a href='?_src_=holder;injectnow=1'>\[Now!\]</A><BR>"
+	dat += "Midround: [round(midround_injection_cooldown*2/60)]m [(midround_injection_cooldown*2) % 60]s <a href='?_src_=holder;injectnow=2'>\[Now!\]</A><BR>"
 	return jointext(dat, "")
 
 /datum/gamemode/dynamic/Topic(href, href_list)
@@ -142,7 +145,7 @@ var/stacking_limit = 90
 	out += "<B>Remaining threat/threat_level:</B> [threat]/[threat_level]<br/>"
 	out += "<B>Remaining midround threat/threat_level:</B> [midround_threat]/[midround_threat_level]"
 
-	usr << browse(out, "window=threatlog;size=700x500")
+	usr << browse(HTML_SKELETON(out), "window=threatlog;size=700x500")
 
 /datum/gamemode/dynamic/GetScoreboard()
 
@@ -206,11 +209,17 @@ var/stacking_limit = 90
 
 	generate_threat()
 
-	var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
-	latejoin_injection_cooldown = round(clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
+	if(latejoin_starting_round_cooldown > 0)
+		latejoin_injection_cooldown = latejoin_starting_round_cooldown
+	else
+		var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
+		latejoin_injection_cooldown = round(clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
 
-	var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
-	midround_injection_cooldown = round(clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
+	if(midround_starting_round_cooldown > 0)
+		midround_injection_cooldown = midround_starting_round_cooldown
+	else
+		var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
+		midround_injection_cooldown = round(clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
 
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font> and <font size='8'>[midround_threat_level]</font> for midround!")
 	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level] and [midround_threat_level]</font> for midround!")
@@ -530,7 +539,7 @@ var/stacking_limit = 90
 			return 1
 	return 0
 
-/datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype,var/forced=0,var/caller)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
+/datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype,var/forced=0,var/rule_caller)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
 	var/datum/dynamic_ruleset/midround/new_rule
 	if(ispath(ruletype))
 		new_rule = new ruletype()//you should only use it to call midround rules though.
@@ -540,8 +549,8 @@ var/stacking_limit = 90
 		message_admins("DYNAMIC MODE: The specific ruleset failed beacuse a type other than a path or rule was sent.")
 		log_admin("DYNAMIC MODE: The specific ruleset failed beacuse a type other than a path or rule was sent.")
 		return
-	if(caller)
-		new_rule.calledBy = caller
+	if(rule_caller)
+		new_rule.calledBy = rule_caller
 	update_playercounts()
 	var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
 	current_players[CURRENT_LIVING_PLAYERS] = living_players.Copy()
@@ -635,7 +644,7 @@ var/stacking_limit = 90
 				message_admins("DYNAMIC MODE: Couldn't ready-up a single ruleset. Lack of eligible candidates, population, or threat.")
 				log_admin("DYNAMIC MODE: Couldn't ready-up a single ruleset. Lack of eligible candidates, population, or threat.")
 		else
-			midround_injection_cooldown = rand(600,1050)
+			midround_injection_cooldown = rand(MIDROUND_EXTENDED_DELAY_MIN, MIDROUND_EXTENDED_DELAY_MAX)
 
 
 /datum/gamemode/dynamic/proc/update_playercounts()
@@ -662,11 +671,6 @@ var/stacking_limit = 90
 					living_players.Add(M)//yes we're adding a ghost to "living_players", so make sure to properly check for type when testing midround rules
 					continue
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
-
-	if(living_players.len) //if anybody is around and alive in the current round
-		last_time_of_population = world.time
-	else if(last_time_of_population && world.time - last_time_of_population > 1 HOURS) //if enough time has passed without it
-		ticker.station_nolife_cinematic()
 
 /datum/gamemode/dynamic/proc/GetInjectionChance()
 	var/chance = 0

@@ -15,6 +15,9 @@
 	src.adding += using
 	action_intent = using
 
+	using.pointer_to_var = &action_intent
+	using.pointer_to_list = &adding
+
 //intent small hud objects
 	var/icon/ico
 
@@ -29,6 +32,9 @@
 	src.adding += using
 	help_intent = using
 
+	using.pointer_to_var = &help_intent
+	using.pointer_to_list = &adding
+
 	ico = new('icons/mob/screen1_alien.dmi', "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),ico.Width()/2,ico.Height()/2,ico.Width(),ico.Height())
@@ -39,6 +45,9 @@
 	using.layer = HUD_ABOVE_ITEM_LAYER
 	src.adding += using
 	disarm_intent = using
+
+	using.pointer_to_var = &disarm_intent
+	using.pointer_to_list = &adding
 
 	ico = new('icons/mob/screen1_alien.dmi', "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
@@ -51,6 +60,9 @@
 	src.adding += using
 	grab_intent = using
 
+	using.pointer_to_var = &grab_intent
+	using.pointer_to_list = &adding
+
 	ico = new('icons/mob/screen1_alien.dmi', "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),1,1,ico.Width()/2,ico.Height()/2)
@@ -61,6 +73,9 @@
 	using.layer = HUD_ABOVE_ITEM_LAYER
 	src.adding += using
 	hurt_intent = using
+
+	using.pointer_to_var = &hurt_intent
+	using.pointer_to_list = &adding
 
 //end intent small hud objects
 
@@ -73,6 +88,9 @@
 	src.adding += using
 	move_intent = using
 
+	using.pointer_to_var = &move_intent
+	using.pointer_to_list = &adding
+
 	using = new /obj/abstract/screen
 	using.name = "drop"
 	using.icon = 'icons/mob/screen1_alien.dmi'
@@ -80,6 +98,8 @@
 	using.screen_loc = ui_drop_throw
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
+
+	using.pointer_to_list = &adding
 
 //equippable shit
 	init_hand_icons('icons/mob/screen1_alien.dmi')
@@ -92,6 +112,7 @@
 	using.screen_loc = ui_swaphand1
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
+	using.pointer_to_list = &adding
 
 	using = new /obj/abstract/screen/inventory
 	using.name = "hand"
@@ -101,6 +122,7 @@
 	using.screen_loc = ui_swaphand2
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
+	using.pointer_to_list = &adding
 
 	//pocket 1
 	inv_box = new /obj/abstract/screen/inventory
@@ -111,6 +133,7 @@
 	inv_box.slot_id = slot_l_store
 	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
+	inv_box.pointer_to_list = &adding
 
 	//pocket 2
 	inv_box = new /obj/abstract/screen/inventory
@@ -121,29 +144,34 @@
 	inv_box.slot_id = slot_r_store
 	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
+	inv_box.pointer_to_list = &adding
 
 	mymob.throw_icon = new /obj/abstract/screen
 	mymob.throw_icon.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.throw_icon.icon_state = "act_throw_off"
 	mymob.throw_icon.name = "throw"
 	mymob.throw_icon.screen_loc = ui_drop_throw
+	mymob.throw_icon.pointer_to_var = &mymob.throw_icon
 
 	mymob.healths = new /obj/abstract/screen
 	mymob.healths.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_alien_health
+	mymob.healths.pointer_to_var = &mymob.healths
 
 	mymob.pullin = new /obj/abstract/screen
 	mymob.pullin.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull_resist
+	mymob.pullin.pointer_to_var = &mymob.pullin
 
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+	mymob.zone_sel.pointer_to_var = &mymob.zone_sel
 
 	plasma_hud()
 
@@ -158,3 +186,4 @@
 	vampire_blood_display.name = "Alien Plasma"
 	vampire_blood_display.icon_state = "dark128"
 	vampire_blood_display.screen_loc = ui_under_health
+	vampire_blood_display.pointer_to_var = &vampire_blood_display

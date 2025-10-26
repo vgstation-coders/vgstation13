@@ -74,7 +74,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				B.volume += 0.1 // regenerate blood VERY slowly
 				if(M_REGEN in mutations)
 					B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
-				if (iscultist(src) && (iscultist(src) in blood_communion))//cultists that take on the blood communion tattoo get a slight blood regen bonus
+				var/datum/role/cultist/C = iscultist(src)
+				if (C && C.blood_pool)//cultists that take on the blood communion tattoo get a slight blood regen bonus
 					if(M_REGEN in mutations)
 						B.volume += 0.6
 					else
@@ -243,6 +244,31 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	blood_splatter(src,src)
 	stat_collection.blood_spilled += amt
 	return 1
+
+/**
+ * Sprays blood in a given direction and strength.
+ *
+ * Strength indicates how far the blood will travel, covering each tile it passes.
+ *
+ * Arguments:
+ * splat_dir: The direction to spray the blood in.
+ * splat_strength: How many tiles it will travel.
+*/
+/mob/living/proc/spray_blood(splat_dir, splat_strength = 3)
+	return
+
+/mob/living/carbon/human/spray_blood(splat_dir, splat_strength = 3)
+	if(!isturf(loc))
+		return
+	if(species && species.anatomy_flags & NO_BLOOD)
+		return
+	var/obj/effect/decal/cleanable/blood/hitsplatter/splat = new(loc)
+	splat.add_blood(src)
+	splat.blood_data = get_blood_data()
+	splat.color = splat.blood_data["blood_colour"]
+	var/turf/targ = get_ranged_target_turf(src, splat_dir, splat_strength)
+	var/callback/C = new /callback(splat, nameof(splat::fly_towards()))
+	C.invoke_async(targ,splat_strength)
 
 /****************************************************
 				BLOOD TRANSFERS

@@ -233,7 +233,7 @@
 	containsdesc = "Circuit boards for controlling a R-UST engine."
 
 /datum/supply_packs/rust_gyrotron
-	contains = list(/obj/machinery/rust/gyrotron)
+	contains = list(/obj/machinery/power/gyrotron)
 	name = "R-UST Mk. 7 gyrotron"
 	cost = 25
 	containertype = /obj/structure/closet/crate/secure/large
@@ -292,7 +292,7 @@
 	containername = "atmospheric circulator crate"
 	group = "Engineering"
 	access = list(access_engine_minor)
-	containsdesc = "Two circulators for a thermoelectric generator. Requires the generator itself to function (not included)."
+	containsdesc = "One circulator for a thermoelectric generator. Requires the generator and a second circulator to function (not included)."
 
 /datum/supply_packs/supermatter_shard
 	contains = list(/obj/machinery/power/supermatter/shard)
@@ -399,3 +399,95 @@
 	access = list(access_engine_minor)
 	group = "Engineering"
 	containsdesc = "A fearsome monster, dehydrated into portable form. Can possibly be used to generate a large amount of power, but is more likely just going to eat through your walls."
+
+/datum/supply_packs/cryotheum
+	name = "Small cryotheum tank"
+	contains = list(/obj/item/weapon/tank/cryotheum)
+	cost = 60
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "small cryotheum tank crate"
+	access = list(access_engine_minor)
+	group = "Engineering"
+	containsdesc = "Contains a small amount of cryotheum, the anomalous gas with cooling properties. This tank is more than enough to kick-start a Cryotheum Resonator."
+
+/datum/supply_packs/cryotheum_resonator
+	name = "Cryotheum resonator"
+	contains = list(/obj/machinery/cryotheum_resonator,
+					/obj/item/bluespace_crystal/artificial)
+	cost = 140
+	containertype = /obj/structure/closet/crate/secure/large/reinforced
+	containername = "cryotheum resonator crate"
+	access = list(access_engine_minor)
+	group = "Engineering"
+	containsdesc = "A cutting edge machine that tears into a universe orthogonal to ours and applies alternative laws of physics to gaseous oxygen in its immediate vicinity. Requires a bluespace crystal to work (an artificial crystal comes with this crate!)."
+
+/datum/supply_packs/fissionreactor_starterkit
+	contains = list(
+		/obj/item/weapon/fuelrod/small/starter,
+		/obj/item/weapon/book/manual/engineering_fissionreactor_guide,
+		/obj/structure/closet/crate/flatpack/fission_controller, //makes a crappy 1x2 interior. but it'll do.
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
+		/obj/item/weapon/storage/box/fissionsupply_fuelmaker,
+	)
+	name = "Fission reactor starter kit"
+	cost = 150 //Includes a lot of plasteel. Fuck you, ask the miners for more you socially inept jobbie.
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Fission reactor starter kit"
+	group = "Engineering"
+	access = list(access_engine_major)
+	containsdesc = "Everything you need to build a very basic fission reactor. Comes with a pre-filled (albeit small) fuel reservoir."
+
+/datum/supply_packs/fissionreactor_expansion
+	contains = list(
+		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+	)
+	name = "Fission reactor expansion pak"
+	cost = 50 //See above.
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Fission reactor expansion pak"
+	group = "Engineering"
+	access = list(access_engine_major)
+	containsdesc = "Contains supplies to expand an existing fission reactor. Includes parts for 4 casings and 3 interior assemblies. Remember to turn it off and drain the coolant first!"
+
+/datum/supply_packs/fissionreactor_bigrod
+	contains = list(
+		/obj/item/weapon/fuelrod/large
+	)
+	name = "High-capacity fuel reservoir"
+	cost = 65 //It's a one time purchase, really. somewhat costly, but not that much for a department. watch for meltdowns.
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Large fuel reservoir"
+	group = "Engineering"
+	access = list(access_engine_major)
+	containsdesc = "An extra-large fuel reservoir, for extra power or for more complex fuel mixes. Use with extreme caution and control rods inserted."
+
+
+/datum/supply_packs/fissionreactor_randomrod
+	contains = list(
+		/obj/item/weapon/fuelrod/randomized
+	)
+	name = "Pre-filled fuel reservoir"
+	cost = 33 //expendable item. costs a decent bit because it's the standard size, and comes with materials in it. random materials, too. have fun!
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Pre-filled fuel reservoir"
+	group = "Engineering"
+	access = list(access_engine_major)
+	containsdesc = "A standard fuel reservoir, filled with a unique mixture selected by NanoTrasen's engineering team."
+
+

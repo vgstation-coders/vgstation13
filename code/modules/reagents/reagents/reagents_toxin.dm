@@ -1,14 +1,14 @@
 //Poisonous chemicals
 
-/datum/reagent/amanatin
-	name = "Alpha-Amanatin"
-	id = AMANATIN
+/datum/reagent/amanitin
+	name = "Alpha-Amanitin"
+	id = AMANITIN
 	description = "A deadly poison derived from certain species of Amanita. Sits in the victim's system for a long period of time, then ravages the body."
 	color = "#792300" //rgb: 121, 35, 0
 	custom_metabolism = 0.01
 	var/activated = 0
 
-/datum/reagent/amanatin/on_mob_life(var/mob/living/M)
+/datum/reagent/amanitin/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -39,7 +39,7 @@
 				H.adjustToxLoss(0.1)
 				if(prob(8))
 					H.vomit()
-		if(600 to INFINITY)	//Ded in 10 minutes with a minimum of 6 units
+		if(601 to INFINITY)	//Ded in 10 minutes with a minimum of 6 units
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(20))
@@ -139,7 +139,7 @@
 	id = CHEFSPECIAL
 	description = "An extremely toxic chemical that will surely end in death."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#CF3600" //rgb: 207, 54, 0
+	color = "#D957F9" //rgb: 217, 82, 249
 	custom_metabolism = 0.01
 	overdose_tick = 165
 	density = 0.687 //Let's assume it's a compound of cyanide
@@ -148,6 +148,7 @@
 /datum/reagent/chefspecial/on_overdose(var/mob/living/M)
 	M.death(0)
 	M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
+	log_attack("[key_name(M)] was killed by Chef Excellence's Special Sauce (CHEFSPECIAL).")
 
 //Otherwise known as a "Mickey Finn"
 /datum/reagent/chloralhydrate
@@ -448,9 +449,10 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_PHYTOCHEMISTRY)
-			T.reagents.remove_reagent(id, 1)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -477,6 +479,64 @@
 		I.desc = "Looks like this was \an [O] some time ago."
 		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		qdel(O)
+
+/datum/reagent/mutagen/metastable
+	name = "Metastable Mutagen"
+	id = METASTABLE_MUTAGEN
+	description = "A modified variant of Unstable Mutagen that causes controlled mutations in plants and accelerates the onset of symptoms due to radiation poisoning."
+
+/datum/reagent/mutagen/metastable/on_mob_life(var/mob/living/M)
+	if(!M.dna)
+		return //No robots, AIs, aliens, Ians or other mobs should be affected by this.
+	if(!M)
+		M = holder.my_atom
+	if(..())
+		return 1
+	M.apply_radiation(3,RAD_INTERNAL)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.rad_tick += 20 * REM //QUICKLY advances the rad_tick
+
+/datum/reagent/mutagen/metastable/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(30))
+			T.mutate(GENE_PHYTOCHEMISTRY, PLANT_CHEMICAL)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
+
+/datum/reagent/mutagen/metastable/metatable
+	name = "Metatable Mutagen"
+	id = METATABLE_MUTAGEN
+	description = "Causes controlled mutations in plants and tables, and accelerates the onset of radiation symptoms."
+
+/datum/reagent/mutagen/metastable/metatable/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(!(O.dissolvable() == PACID))
+		return
+	var/list/tabletypes = list(/obj/structure/table,
+								/obj/structure/table/woodentable,
+								/obj/structure/table/woodentable/poker,
+								/obj/structure/table/glass,
+								/obj/structure/table/glass/plasma,
+								/obj/structure/table/plastic,
+								/obj/structure/table/reinforced,
+								/obj/structure/table/reinforced/clockwork
+								)
+	if(istype(O,/obj/structure/table))
+		var/selectedtable = pick(tabletypes)
+		O.visible_message("<span class='warning'>\The [O] suddenly changes shape!</span>")
+		new selectedtable(O.loc) //the new call for tables automatically deletes the previous one, so no need for a qdel here
 
 /datum/reagent/nanites
 	name = "Nanites"
@@ -605,14 +665,14 @@
 		return 1
 
 	switch(tick)
-		if(1 to 15)
+		if (1 to 15)
 			M.eye_blurry = max(M.eye_blurry, 10)
-		if(15 to 25)
+		if (16 to 25)
 			M.drowsyness  = max(M.drowsyness, 20)
-		if (25 to 240)
+		if (26 to 240)
 			M.Paralyse(20)
 			M.drowsyness  = max(M.drowsyness, 30)
-		if(240 to INFINITY) // 8 minutes
+		if (241 to INFINITY) // 8 minutes
 			var/mob/living/carbon/human/H = M
 			var/datum/organ/internal/heart/damagedheart = H.get_heart()
 			damagedheart.damage += 10
@@ -645,6 +705,7 @@
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	density = 1.4 //Let's just assume it's alpha-solanine
+	plant_toxins = 2
 
 /datum/reagent/toxin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -652,10 +713,6 @@
 
 	//Toxins are really weak, but without being treated, last very long
 	M.adjustToxLoss(0.2)
-
-/datum/reagent/toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(2)
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"

@@ -12,7 +12,4 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": "explicit"
 	},
-	"workbench.editorAssociations": {
-		"*.dmi": "imagePreview.previewEditor"
-	},
 }

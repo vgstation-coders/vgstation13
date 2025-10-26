@@ -41,7 +41,6 @@ var/datum/controller/gameticker/ticker
 
 	var/explosion_in_progress
 	var/station_was_nuked
-	var/no_life_on_station
 	var/revolutionary_victory //If on, Castle can be voted if the conditions are right
 	var/malfunctioning_AI_victory //If on, will play a different credits song
 
@@ -53,9 +52,6 @@ var/datum/controller/gameticker/ticker
 	// Tag mode!
 	var/tag_mode_enabled = FALSE
 
-
-#define LOBBY_TICKING 1
-#define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
 	var/path = "sound/music/login/"
 	if(Holiday == APRIL_FOOLS_DAY)
@@ -86,13 +82,27 @@ var/datum/controller/gameticker/ticker
 			pregame_timeleft = world.timeofday + delay_timetotal
 			to_chat(world, "<B><span class='notice'>Welcome to the pre-game lobby!</span></B>")
 			to_chat(world, "Please, setup your character and select ready. Game will start in [(delay_timetotal) / 10] seconds.")
+		#ifndef UNIT_TESTS_AUTORUN
+		var/noplayers = FALSE
+		#endif
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
 				sleep(1)
 				vote.process()
 				watchdog.check_for_update()
+		#ifndef UNIT_TESTS_AUTORUN
+			if(!player_list.len)
+				going = LOBBY_TICKING_STOPPED
+				noplayers = TRUE
+				continue
+			else if(!going && noplayers)
+				going = LOBBY_TICKING
+				pregame_timeleft = world.timeofday + delay_timetotal
+				noplayers = FALSE
+		#endif
 			if (world.timeofday < (863800 -  delay_timetotal) &&  pregame_timeleft > 863950) // having a remaining time > the max of time of day is bad....
 				pregame_timeleft -= 864000
+				time_taken_in_lobby -= 864000
 			if(!going && !remaining_time)
 				remaining_time = pregame_timeleft - world.timeofday
 			if(going == LOBBY_TICKING_RESTARTED)
@@ -102,8 +112,6 @@ var/datum/controller/gameticker/ticker
 			if(going && world.timeofday >= pregame_timeleft)
 				current_state = GAME_STATE_SETTING_UP
 	while (!setup())
-#undef LOBBY_TICKING
-#undef LOBBY_TICKING_RESTARTED
 
 /datum/controller/gameticker/proc/IsThematic(var/playlist)
 	if(!theme)
@@ -128,6 +136,7 @@ var/datum/controller/gameticker/ticker
 	theme.update_icon()
 
 /datum/controller/gameticker/proc/setup()
+	var/total_tick = get_game_time()
 	//Create and announce mode
 	if(master_mode=="secret")
 		hide_mode = 1
@@ -215,27 +224,28 @@ var/datum/controller/gameticker/ticker
 		CHECK_TICK
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
-	if(roundstart_occupied_area_paths.len)
-		var/tick = get_game_time()
-		var/obj/machinery/light_switch/LS
-		var/obj/machinery/light/lightykun
-		var/obj/item/device/flashlight/lamp/lampychan
-		for(var/area/A in areas)
-			if(A.type in roundstart_occupied_area_paths)
-				for(var/obj/O in A)
-					LS = O
-					lightykun = O
-					lampychan = O
-					if(istype(LS))
-						LS.toggle_switch(1, playsound = FALSE)
-					else if(istype(lightykun))
-						lightykun.on = 1
-						lightykun.update()
-					else if(istype(lampychan))
-						lampychan.toggle_onoff(1)
+	if(config.roundstart_lights_on || roundstart_occupied_area_paths.len)
+		var/light_tick = get_game_time()
+		var/area/A
+		for(var/obj/item/device/flashlight/lamp/lampychan in lamps)
+			A = get_area(lampychan)
+			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+				lampychan.toggle_onoff(1)
+		for(var/obj/machinery/light_switch/LS in lightswitches)
+			A = get_area(LS)
+			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+				LS.toggle_switch(1, FALSE, FALSE)
+				roundstart_occupied_area_paths -= A.type // lights are covered by this so skip these areas
+		if(roundstart_occupied_area_paths.len)
+			for(var/obj/machinery/light/lightykun in alllights)
+				A = get_area(lightykun)
+				if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+					lightykun.on = 1
+					lightykun.update()
 		//Force the lighting subsystem to update.
 		SSlighting.fire(FALSE, FALSE)
-		log_admin("Turned the lights on in [(get_game_time() - tick) / 10] seconds.")
+		log_admin("Turned the lights on in [(get_game_time() - light_tick) / 10] seconds.")
+		message_admins("Turned the lights on in [(get_game_time() - light_tick) / 10] seconds.")
 
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
@@ -313,6 +323,9 @@ var/datum/controller/gameticker/ticker
 	Master.RoundStart()
 	wageSetup()
 	post_roundstart()
+	log_admin("Roundstart complete in [(get_game_time() - total_tick) / 10] seconds.")
+	message_admins("Roundstart complete in [(get_game_time() - total_tick) / 10] seconds.")
+	log_admin("Round started with [new_players_ready.len] players. There are [clients.len] players total. There are currently [admins.len] admins online")
 	return 1
 
 /mob/living/carbon/human/proc/make_fake_ai()
@@ -457,33 +470,6 @@ var/datum/controller/gameticker/ticker
 
 	if(cinematic)
 		qdel(cinematic)		//end the cinematic
-
-/datum/controller/gameticker/proc/station_nolife_cinematic(var/override = null)
-	if( cinematic )
-		return	//already a cinematic in progress!
-
-	for (var/datum/html_interface/hi in html_interfaces)
-		hi.closeAll()
-
-	//initialise our cinematic screen object
-	cinematic = new(src)
-	cinematic.icon = 'icons/effects/station_explosion.dmi'
-	cinematic.icon_state = "station_nolife"
-	cinematic.plane = HUD_PLANE
-	cinematic.mouse_opacity = 0
-	cinematic.screen_loc = "1,0"
-
-	//actually turn everything off
-	power_failure(0)
-
-	//If its actually the end of the round, wait for it to end.
-	//Otherwise if its a verb it will continue on afterwards.
-	sleep(300)
-
-	if(cinematic)
-		qdel(cinematic)		//end the cinematic
-
-	no_life_on_station = TRUE
 
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)
@@ -634,27 +620,27 @@ var/datum/controller/gameticker/ticker
 	if(platinum_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(platinum)]'> <b>Platinum Trophy</b> (never removed his clothes, kept his bomb dispenser until the end, and escaped on the shuttle):"}
 		for (var/mob/M in platinum_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(gold_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(gold)]'> <b>Gold Trophy</b> (kept his bomb dispenser until the end, and escaped on the shuttle):"}
 		for (var/mob/M in gold_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(silver_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(silver)]'> <b>Silver Trophy</b> (kept his bomb dispenser until the end, and escaped in a pod):"}
 		for (var/mob/M in silver_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(bronze_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(bronze)]'> <b>Bronze Trophy</b> (kept his bomb dispenser until the end):"}
 		for (var/mob/M in bronze_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(special_tier.len)
 		text += "<br><b>Special Mention</b> to those adorable MoMMis:"
 		for (var/mob/M in special_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.name]</b>"}
 
 	return text
@@ -682,6 +668,7 @@ var/datum/controller/gameticker/ticker
 	return roles
 
 /datum/controller/gameticker/proc/post_roundstart()
+	usr = null
 	//Handle all the cyborg syncing
 	var/list/active_ais = active_ais()
 	if(active_ais.len)
@@ -720,6 +707,9 @@ var/datum/controller/gameticker/ticker
 					qdel(obj)
 
 		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
+		roundstart_timestamp = world.time
+		time_taken_in_lobby = world.timeofday - time_taken_in_lobby
+
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 
@@ -752,6 +742,12 @@ var/datum/controller/gameticker/ticker
 			play_vox_sound(sound,map.zMainStation,null)
 
 	create_random_orders(3) //Populate the order system so cargo has something to do
+	if(istype(mode, /datum/gamemode/dynamic))
+		var/datum/gamemode/dynamic/D = mode
+		if(D.living_players.len < 6) // Fill all the SMES to capacity if there's 5 or less players, to give players more time to set up the power.
+			for(var/obj/machinery/power/battery/smes/S in power_machines)
+				if(S.charge) //Only do this if the SMES has any charge in the first place
+					S.charge = S.capacity
 
 // -- Tag mode!
 /datum/controller/gameticker/proc/tag_mode(var/mob/user)

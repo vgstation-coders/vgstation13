@@ -79,7 +79,7 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("burns")
 	hitsound = "sound/weapons/welderattack.ogg"
-	heat_production = 500
+	heat_production = 5000
 	source_temperature = TEMPERATURE_HOTMETAL
 	surgerysound = 'sound/items/cautery.ogg'
 
@@ -99,7 +99,7 @@
 	force = 10.0
 	throwforce = 5.0
 	toolspeed = 0.6
-	heat_production = 1500
+	heat_production = 15000
 	source_temperature = TEMPERATURE_PLASMA
 	sterility = 100
 
@@ -120,6 +120,7 @@
 	item_state = "laserscalpel2"
 	force = 15.0
 	toolspeed = 0.4
+	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 2500, MAT_URANIUM = 250)
 
 /obj/item/tool/surgicaldrill
 	name = "surgical drill"
@@ -198,7 +199,7 @@
 /obj/item/tool/scalpel/laser/attack_self(mob/user)
 	if(!cauterymode && held)
 		to_chat(user, "You disable the blade and switch to the scalpel's cautery tool.")
-		heat_production = 1600
+		heat_production = 15000
 		sharpness = 0
 		sharpness_flags = 0
 	else if(!held)
@@ -233,12 +234,10 @@
 	else if(istype(used_item, /obj/item/tool/cautery/laser))
 		if(held)
 			to_chat(user, "<span class='notice'>There's already a cautery attached to \the [src].</span>")
-		else if(!held && user.drop_item(used_item, src))
+		else if(!held && user.drop_item(used_item, src, failmsg = TRUE))
 			to_chat(user, "<span class='notice'>You attach \the [used_item] to \the [src].</span>")
 			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 			src.held = used_item
-		else
-			to_chat(user, "<span class='danger'>You can't let go of \the [used_item]!</span>")
 
 /*
 /obj/item/tool/scalpel/laser/old //unused laser scalpel
@@ -262,6 +261,7 @@
 	force = 15.0
 	toolspeed = 0.4
 	heat_production = 10000000
+	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 250)
 
 /obj/item/tool/scalpel/laser/tier2/New()
 	..()
@@ -304,7 +304,7 @@
 	toolspeed = 0.5
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
-	heat_production = 3000
+	heat_production = 27000
 	source_temperature = TEMPERATURE_PLASMA
 
 /obj/item/tool/circular_saw/suicide_act(var/mob/living/user)
@@ -321,7 +321,9 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+
 	surgerysound = 'sound/items/bonegel.ogg'
 
 /obj/item/tool/bonegel/suicide_act(var/mob/living/user)
@@ -340,9 +342,10 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
-	var/usage_amount = 10
 	surgerysound = 'sound/items/fixovein.ogg'
 
 /obj/item/tool/FixOVein/clot

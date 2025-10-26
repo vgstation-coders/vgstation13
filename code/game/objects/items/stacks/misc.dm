@@ -66,7 +66,7 @@
 					return
 
 			if(T.canBuildLattice(src))
-				to_chat(user, "<span class='notice'>Constructing support lattice ...</span>")
+				to_chat(user, "<span class='notice'>Constructing support lattice...</span>")
 				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 				new /obj/structure/lattice(T)
 				use(1)
@@ -138,7 +138,7 @@
 
 /obj/item/stack/chains
 	name = "chain"
-	desc = "link by link, my chain got longer."
+	desc = "Link by link, my chain got longer."
 	icon_state = "chains"
 	singular_name = "chain"
 	irregular_plural = "chains"
@@ -192,7 +192,7 @@ var/list/datum/stack_recipe/chain_recipes = list (
 
 /obj/item/stack/bolts
 	name = "plasteel bolts"
-	singular name = "bag of plasteel bolts"
+	singular_name = "bag of plasteel bolts"
 	desc = "Plasteel bolts are used in the anchoring of structures, though they can also be applied to reinforced flooring to make it difficult to crawl across."
 	icon_state = "bagofbolts"
 	flags = FPRINT

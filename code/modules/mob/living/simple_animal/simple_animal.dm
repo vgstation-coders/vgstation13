@@ -110,6 +110,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/is_pet = FALSE //We're somebody's precious, precious pet.
 
 	var/pacify_aura = FALSE
+	var/is_poisonous = FALSE //whether certian hostile mobs will avoid this.
 
 	var/blooded = TRUE	//Until we give them proper vessels, this lets us know which animals should bleed and stuff
 	var/acidimmune = 0 //A check for whether the mob doesn't take damage from acid reagents. Set to 0 by default
@@ -362,14 +363,41 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(!atmos_suitable)
 		adjustOxyLoss(unsuitable_atmos_damage)
 
-	if(bodytemperature < minbodytemp)
-		temperature_alert = TEMP_ALARM_COLD_STRONG
-		adjustBruteLoss(cold_damage_per_tick)
-	else if(bodytemperature > maxbodytemp)
-		temperature_alert = TEMP_ALARM_HEAT_STRONG
-		adjustBruteLoss(heat_damage_per_tick)
-	else
+	if(!client) //We do not care about temperature alerts when we can't show it to anyone so we use a simplified calculation
 		temperature_alert = 0
+		if(bodytemperature < minbodytemp)
+			adjustBruteLoss(cold_damage_per_tick)
+		else if(bodytemperature > maxbodytemp)
+			adjustBruteLoss(heat_damage_per_tick)
+	else if(bodytemperature < initial(bodytemperature))
+		if(minbodytemp) //It's not at 0
+			//Extract a percentage out of this
+			var/temp_difference = initial(bodytemperature) - bodytemperature
+			var/cold_difference = initial(bodytemperature) - minbodytemp
+			//Converts difference into a value from 0 to 1, 0.01 = 1%, 1 = 100%
+			var/percentage_to_minbodytemp = round(temp_difference/cold_difference, 0.01)
+			if(percentage_to_minbodytemp <= 0.33)
+				temperature_alert = 0
+			else if(percentage_to_minbodytemp <= 0.66)
+				temperature_alert = TEMP_ALARM_COLD_WEAK
+			else if(percentage_to_minbodytemp <= 1)
+				temperature_alert = TEMP_ALARM_COLD_MILD
+			else
+				temperature_alert = TEMP_ALARM_COLD_STRONG
+				adjustBruteLoss(heat_damage_per_tick)
+	else //bodytemperature is at or higher than what it was.
+		var/temp_difference = bodytemperature - initial(bodytemperature)
+		var/heat_difference = maxbodytemp - initial(bodytemperature)
+		var/percentage_to_maxbodytemp = round(temp_difference/heat_difference, 0.01)
+		if(percentage_to_maxbodytemp <= 0.33)
+			temperature_alert = 0
+		else if(percentage_to_maxbodytemp <= 0.66)
+			temperature_alert = TEMP_ALARM_HEAT_WEAK
+		else if(percentage_to_maxbodytemp <= 1)
+			temperature_alert = TEMP_ALARM_HEAT_MILD
+		else
+			temperature_alert = TEMP_ALARM_HEAT_STRONG
+			adjustBruteLoss(heat_damage_per_tick)
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(status_flags & BUDDHAMODE)
@@ -444,11 +472,16 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return PROJECTILE_COLLISION_DEFAULT
 	Proj.on_hit(src, 0)
+	if(supernatural && isholyweapon(Proj))
+		playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "holy",sleeptime = 5, lay = NARSIE_GLOW,plane = ABOVE_LIGHTING_PLANE)
+		purge = 3
 	adjustBruteLoss(Proj.damage)
 	return PROJECTILE_COLLISION_DEFAULT
 
@@ -560,12 +593,20 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else if (user.is_pacified(VIOLENCE_DEFAULT,src))
 		return
 	if(supernatural && isholyweapon(O))
+		playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "holy",sleeptime = 5, lay = NARSIE_GLOW,plane = ABOVE_LIGHTING_PLANE)
 		purge = 3
 	if(O.hitsound)
 		playsound(loc, O.hitsound, 50, 1, -1)
 	..()
 
-
+/mob/living/simple_animal/thrown_defense(var/obj/O,var/speed = 5)
+	if(supernatural && isholyweapon(O))
+		playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "holy",sleeptime = 5, lay = NARSIE_GLOW,plane = ABOVE_LIGHTING_PLANE)
+		purge = 3
+		return 2
+	return ..()
 
 /mob/living/simple_animal/base_movement_tally()
 	return speed
@@ -709,9 +750,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/update_fire()
 	return
-/mob/living/simple_animal/IgniteMob()
+/mob/living/simple_animal/ignite()
 	return 0
-/mob/living/simple_animal/ExtinguishMob()
+/mob/living/simple_animal/extinguish()
 	return
 
 /mob/living/simple_animal/revive(refreshbutcher = 1)
@@ -722,6 +763,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		maxHealth = initial(maxHealth)
 		maxHealth -= (initial(maxHealth) / meat_amount) * meat_taken
 	health = maxHealth
+	bodytemperature = initial(bodytemperature)
 	..(0)
 
 /mob/living/simple_animal/proc/make_babies() // <3 <3 <3
@@ -825,7 +867,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/proc/delayedRegen()
 	set waitfor = 0
 	isRegenerating = 1
-	sleep(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
+	var/timer = rand(minRegenTime, maxRegenTime) //Don't want it being predictable
+	while((timer > 0))
+		timer -= 1 SECONDS
+		if(!(stat == DEAD)) //Some shenanigans caused the mob to be revived early, quit the regeneration
+			isRegenerating = 0
+			return
+		sleep(1 SECONDS)
 	if(src)
 		resurrect()
 		revive()
@@ -909,6 +957,22 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		return FALSE
 
+/mob/living/simple_animal/proc/atepoison() //reusable function
+	health -= 5
+	if(prob(10))
+		if(istype(loc, /turf/simulated))
+			var/turf/simulated/T = loc
+			T.add_vomit_floor(src, 1, 0, 1)
+		Stun(5)
+		visible_message("<span class='warning'>[src] throws up!</span>","<span class='danger'>You throw up!</span>")
+		playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+
 // Simplemobs do not have hands.
 /mob/living/simple_animal/put_in_hand_check(obj/item/W, index)
 	return 0
+
+/mob/living/simple_animal/isUnholy()
+	if (supernatural)
+		return TRUE
+	else
+		return ..()

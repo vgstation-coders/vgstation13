@@ -69,7 +69,7 @@
 	var/list/plates = list() // If the plates are stacked, they come here
 	var/new_stack = 0 // allows mappers to create plate stacks
 	var/trash_color = null
-	autoignition_temperature = 0
+	flammable = FALSE
 
 /obj/item/trash/plate/clean
 	icon_state = "cleanplate"
@@ -270,6 +270,9 @@
 	if(istype(snack,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) //no platestacking even with recursive food, for now
 		to_chat(user, "<span class='warning'>That's already got a plate!</span>")
 		return
+	if(istype(snack,/obj/item/weapon/reagent_containers/food/snacks/devil)) //the plate doesn't call after_consume, so this will do for now.
+		to_chat(user, "<span class='warning'>\The [snack] cannot be contained by any traditional dinnerware and must be eaten by hand!</span>")
+		return
 
 	var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/F = new(get_turf(src),snack)
 
@@ -286,7 +289,7 @@
 			F.item_state = snack.item_state
 		else
 			F.item_state = snack.icon_state
-		F.particles = snack.particles
+		snack.transfer_particles(F)
 		F.update_icon()
 	if (plates.len > 0)
 		user.put_in_hands(F)
@@ -388,7 +391,7 @@
 			extra_food_overlay.overlays -= topping //thank you Comic
 		if(!fullyCustom && !stackIngredients && overlays.len)
 			extra_food_overlay.overlays -= filling //we can't directly modify the overlay, so we have to remove it and then add it again
-			var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
+			var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(S)), override_dir = S.dir), 1, 1)
 			filling.color = BlendRGB(filling.color, newcolor, 1/ingredients.len)
 			extra_food_overlay.overlays += image(filling)
 		else
@@ -420,7 +423,8 @@
 	var/image/I
 	if(fullyCustom)
 		//putting a snack on a plate?
-		fingerprints = S.fingerprints.Copy()
+		if (S.fingerprints)//stuff cooked in a pan might not have fingerprints
+			fingerprints = S.fingerprints.Copy()
 		//let's start by removing the overlays that aren't actually part of the food item (candles, ice, blood stains,....)
 		S.overlays.len = 0
 		S.overlays += S.extra_food_overlay
@@ -438,7 +442,7 @@
 		if(istype(S) && S.filling_color != "#FFFFFF")
 			I.color = S.filling_color
 		else
-			I.color = AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
+			I.color = AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(S)), override_dir = S.dir), 1, 1)
 		if(stackIngredients)
 			I.pixel_y = ingredients.len * 2 * PIXEL_MULTIPLIER
 	if(fullyCustom || stackIngredients)
@@ -727,7 +731,7 @@
 				S.reagents.trans_to(src,S.reagents.total_volume)
 				ingredients += S
 				updateName()
-				var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
+				var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(S)), override_dir = S.dir), 1, 1)
 				filling.color = BlendRGB(filling.color, newcolor, 1/ingredients.len)
 				update_icon()
 		else
@@ -740,7 +744,7 @@
 	overlays.len = 0//no choice here but to redraw everything in the correct order so filling doesn't appear over ice, blood and fire.
 	overlays += filling
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 	if (on_fire && fire_overlay)
 		overlays += fire_overlay
 
@@ -767,7 +771,7 @@
 	if(S.filling_color != "#FFFFFF")
 		I.color = S.filling_color
 	else
-		I.color = AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
+		I.color = AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(S)), override_dir = S.dir), 1, 1)
 	return I
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/Destroy()

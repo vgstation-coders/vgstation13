@@ -23,9 +23,12 @@
 	var/geneticdamage = 0
 
 	powerpoints = 4	//evolve points
+	shows_spells = TRUE
+	spell_exclude = /spell/changeling/evolve
 
 	var/mimicing = ""
-	var/disease_immunity = 0 //If on, the changeling doesn't suffer any symptoms from diseases
+	var/disease_immunity = FALSE //If on, the changeling doesn't suffer any symptoms from diseases
+	var/faster_suck = FALSE //If on, reduces the delay between the changeling's absorb DNA stages from 15 seconds to 8 seconds.
 
 /datum/role/changeling/OnPostSetup(var/laterole = FALSE)
 	. = ..()
@@ -69,7 +72,7 @@
 	antag.current << sound('sound/effects/ling_intro.ogg')
 
 /datum/role/changeling/ForgeObjectives()
-	if(!antag.current.client.prefs.antag_objectives)
+	if(!antag.current.client.prefs.get_pref(/datum/preference_setting/toggle/antag_objectives))
 		AppendObjective(/datum/objective/freeform/changeling)
 		return
 	AppendObjective(/datum/objective/absorb)

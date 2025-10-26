@@ -5,12 +5,15 @@
 	globalscreen = TRUE
 
 /obj/abstract/screen/movable/action_button/Click(location,control,params)
+	if(usr.click_delayer.blocked())
+		return
 	var/list/modifiers = params2list(params)
 	if(modifiers["shift"])
 		moved = FALSE
 		usr.update_action_buttons() //redraw buttons that are no longer considered "moved"
 		return TRUE
 	linked_action.Trigger()
+	usr.click_delayer.setDelay(1)
 	return TRUE
 
 /obj/abstract/screen/movable/action_button/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
@@ -59,10 +62,11 @@
 
 
 /obj/abstract/screen/movable/action_button/MouseEntered(location,control,params)
-	openToolTip(usr,src,params,title = name,content = desc,theme = actiontooltipstyle)
+	//openToolTip(usr,src,params,title = name,content = desc,theme = actiontooltipstyle)
+	usr.client?.tooltips.show(src, mouse=params, title=name, content=desc)
 
 /obj/abstract/screen/movable/action_button/MouseExited()
-	closeToolTip(usr)
+	usr.client?.tooltips.hide()
 
 /mob/proc/update_action_buttons_icon()
 	for(var/X in actions)

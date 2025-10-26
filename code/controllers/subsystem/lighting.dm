@@ -4,6 +4,8 @@ var/list/lighting_update_lights    = list() // List of lighting sources  queued 
 var/list/lighting_update_corners   = list() // List of lighting corners  queued for update.
 var/list/lighting_update_overlays  = list() // List of lighting overlays queued for update.
 
+var/list/lighting_update_lights_lowpriority = list() // List of lighting sources we want to update, but we should do last for performance. Used for day/night cycle so that changing the ToD doesn't freeze every single light.
+
 /datum/subsystem/lighting
 	name          = "Lighting"
 	init_order    = SS_INIT_LIGHTING
@@ -19,13 +21,19 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 	..("L:[lighting_update_lights.len]|C:[lighting_update_corners.len]|O:[lighting_update_overlays.len]")
 
 /datum/subsystem/lighting/Initialize(timeofday)
-	create_all_lighting_overlays()
+	for(var/area/A in areas)
+		if(A.dynamic_lighting)
+			for(var/turf/T in A.area_turfs)
+				if(T.dynamic_lighting)
+					new /atom/movable/lighting_overlay(T, TRUE)
 	..()
 
 /datum/subsystem/lighting/fire(resumed=FALSE, allow_breaks=TRUE)
 	var/real_tick_limit = CURRENT_TICKLIMIT
 	CURRENT_TICKLIMIT = (real_tick_limit - world.tick_usage)/3
 	var/i = 0
+	
+	
 	for (i in 1 to lighting_update_lights.len)
 		var/datum/light_source/L = lighting_update_lights[i]
 
@@ -74,6 +82,33 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 			break
 	if (i)
 		lighting_update_overlays.Cut(1, i+1)
+		i = 0
+
+
+	
+	CURRENT_TICKLIMIT = real_tick_limit // i have no idea what this does. Ctrl C Ctrl V go!!!
+
+	
+	for (i in 1 to lighting_update_lights_lowpriority.len)
+		var/datum/light_source/L = lighting_update_lights_lowpriority[i]
+
+		if (L.check() || L.destroyed || L.force_update)
+			L.remove_lum()
+			if (!L.destroyed)
+				L.apply_lum()
+
+		else if (L.vis_update) //We smartly update only tiles that became (in) visible to use.
+			L.smart_vis_update()
+
+		L.vis_update   = FALSE
+		L.force_update = FALSE
+		L.needs_update = FALSE
+
+		if (TICK_CHECK && allow_breaks)
+			break
+	if (i)
+		lighting_update_lights_lowpriority.Cut(1, i+1)
+		i=0
 
 /datum/subsystem/lighting/Recover()
 	initialized = SSlighting.initialized

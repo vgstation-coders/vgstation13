@@ -43,6 +43,7 @@
 	if(client && client.media)
 		client.media.stop_music()
 
+
 	unregister_event(/event/mob_area_changed, src, nameof(src::OnMobAreaChanged()))
 
 	if(admin_datums[src.ckey])

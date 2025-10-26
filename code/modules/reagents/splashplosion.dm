@@ -19,7 +19,7 @@
 	else
 		for(var/turf/T in dview(range, epicenter, INVISIBILITY_MAXIMUM))
 			if (cheap_pythag(T.x - epicenter.x,T.y - epicenter.y) <= range + 0.5)
-				if (test_reach(epicenter,T,PASSTABLE|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER))
+				if (test_reach(epicenter,T,PASSTABLE|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER|PASSRAILING))
 					hit_turfs += T
 
 	for(var/datum/reagent/R in reagent_list)

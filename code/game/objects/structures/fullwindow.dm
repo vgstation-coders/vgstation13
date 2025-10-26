@@ -13,6 +13,8 @@
 	penetration_dampening = 1
 	cracked_base = "fcrack"
 	is_fulltile = TRUE
+	verb_rotates = FALSE
+	alt_click_rotates = FALSE
 	disperse_coeff = 0.95
 	pass_flags_self = PASSGLASS
 	bordersmooth_override = 1

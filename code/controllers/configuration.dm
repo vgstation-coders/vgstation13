@@ -76,6 +76,7 @@
 	var/copy_logs = null
 	var/cargo_forwarding_on_roundstart = 0
 	var/cargo_forwarding_amount_override = 0
+	var/roundstart_lights_on = 0
 
 	// BSQL things
 	var/bsql_debug = 0
@@ -183,6 +184,7 @@
 	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
 	var/skip_holominimap_generation = 0 //If 1, don't generate holominimaps
 	var/skip_vault_generation = 0 //If 1, don't generate vaults
+	var/skip_fixedvault_generation = 0 //If 1, don't generate fixed vaults
 	var/disable_vault_rotation = 0 //If 1, don't load vaults rotated
 	var/shut_up_automatic_diagnostic_and_announcement_system = 0 //If 1, don't play the vox sounds at the start of every shift.
 	var/no_lobby_music = 0 //If 1, don't play lobby music, regardless of client preferences.
@@ -206,7 +208,31 @@
 	var/thermal_dissipation = 1 //Whether or not thermal dissipation occurs.
 	var/reagents_heat_air = 0 //Whether or not reagents exchanging heat with the surrounding air actually heat or the cool air. If off, the energy change only applies to the reagents.
 
+	var/maprender_lags_game = 0 //If the map render checks tick or not to get done during a round
+
 	var/library_url = ""
+	var/branch_head = ""
+	var/stats_addr = ""
+
+	//Resources
+	var/rsclist = ""
+	var/rscstring = ""
+
+	// TGUI & tg asset thing
+	var/tgui_max_chunk_count = 32
+	var/tg_asset_transport = "simple" // simple or "webroot". Webroot is via CDN.
+	var/cache_assets = 1 // Disabled during dev, enabled during prod
+	var/smart_cache_assets = 1
+	var/save_spritesheets = 0 // Disabled by default.
+
+	var/asset_simple_preload = 0 // Disabled by default
+
+	// tg asset cdn via webroot systme. Currently unused.
+	var/asset_cdn_webroot = ""
+	var/asset_cdn_url = ""
+	//Is Dynamic+ Enabled
+	var/dynamic_plus = FALSE
+
 
 /datum/configuration/New()
 	. = ..()
@@ -282,6 +308,9 @@
 
 				if ("cargo_forwarding_amount_override")
 					cargo_forwarding_amount_override = text2num(value)
+
+				if("roundstart_lights_on")
+					roundstart_lights_on = 1
 
 				if ("use_recursive_explosions")
 					use_recursive_explosions = 1
@@ -612,6 +641,8 @@
 					skip_holominimap_generation = 1
 				if("skip_vault_generation")
 					skip_vault_generation = 1
+				if("skip_fixedvault_generation")
+					skip_fixedvault_generation = 1
 				if("disable_vault_rotation")
 					disable_vault_rotation = 1
 				if("shut_up_automatic_diagnostic_and_announcement_system")
@@ -638,7 +669,14 @@
 					discord_password = value
 				if("library_url")
 					library_url = value
-
+				if("branch_head")
+					branch_head = value
+				if("stats_addr")
+					stats_addr = value
+				if("rsclist")
+					rsclist = value
+				if("rscstring")
+					rscstring = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
@@ -692,10 +730,14 @@
 					config.silent_borg = 1
 				if("borer_takeover_immediately")
 					config.borer_takeover_immediately = 1
+				if("maprender_lags_game")
+					config.maprender_lags_game = 1
 				if("hardcore_mode")
 					hardcore_mode = value
 				if("humans_speak")
 					voice_noises = 1
+				if("dynamic_plus")
+					config.dynamic_plus = TRUE
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

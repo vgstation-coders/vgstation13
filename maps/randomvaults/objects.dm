@@ -8,7 +8,6 @@
 	name = "mysterious structure"
 	requires_power = 0
 	icon_state = "firingrange"
-	dynamic_lighting = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
@@ -57,15 +56,12 @@
 /area/vault/fastfood
 
 /area/vault/fastfood/dining
-	requires_power = 1
 	icon_state = "cafeteria"
 
 /area/vault/fastfood/kitchen
-	requires_power = 1
 	icon_state = "kitchen"
 
 /area/vault/fastfood/misc
-	requires_power = 1
 	icon_state = "fmaint"
 
 /area/vault/mechclubhouse
@@ -293,6 +289,13 @@
 /obj/docking_port/destination/vault/amelab
 	areaname = "Nanotrasen Experimental AME Lab"
 
+/area/vault/soulblade_sanctum
+	jammed = 2
+	color = "red"
+	ambient_sounds = list(
+		/datum/ambience/spaced2,
+		/datum/ambience/spaced3,
+		)
 
 /area/vault/meteorlogical
 	name = "\improper Meteorlogical Station"
@@ -418,7 +421,9 @@
 
 /obj/item/weapon/fuel_assembly/trilithium/New()
 	. = ..()
-	rod_quantities["Trilithium"] = 300
+	rod_current_quantities["Trilithium"] = 300
+	rod_starting_quantities["Trilithium"] = 300
+	percent_depleted = 0
 
 /obj/machinery/power/apc/frame/rust_vault
 	make_alerts = FALSE
@@ -650,7 +655,7 @@
 		return
 
 	var/dat = text("<B>Engine Ejection Module</B><HR>\nStatus: Ejected<BR>\n<BR>\nCountdown: N/60 \[Reset\]<BR>\n<BR>\nEngine Ejected!<BR>\n<BR>\n<A href='?src=\ref[];mach_close=computer'>Close</A>", user)
-	user << browse(dat, "window=computer;size=400x500")
+	user << browse(HTML_SKELETON(dat), "window=computer;size=400x500")
 
 /obj/machinery/computer/ejectedengine/shield
 	name = "Shield Control Console"
@@ -663,7 +668,7 @@
 		return
 
 	var/dat = text("<B>Shield Generator Control</B><HR>\n<font color=red>Error:</font> Cannot locate projector array<BR>\n<font color=red>Error:</font> Cannot locate shield capacitors<BR>\n<font color=red>Error:</font> Cannot locate command signal<BR>\n<BR>\n<A href='?src=\ref[];mach_close=computer'>Close</A>", user)
-	user << browse(dat, "window=computer;size=400x500")
+	user << browse(HTML_SKELETON(dat), "window=computer;size=400x500")
 
 /obj/machinery/door/firedoor/red
 	name = "\improper Firelock"
@@ -962,7 +967,7 @@
 
 /obj/machinery/microwave/upgraded
 	component_parts = newlist(\
-		/obj/item/weapon/circuitboard/microwave,\
+		/obj/item/weapon/circuitboard/small/microwave,\
 		/obj/item/weapon/stock_parts/micro_laser/high/ultra,\
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,\
 		/obj/item/weapon/stock_parts/console_screen\
@@ -1020,7 +1025,7 @@
 /obj/item/device/pda/clown/broken/attack_self(mob/user)
 	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function
 
-/obj/structure/falserwall/doorobscurer
+/obj/structure/falsewall/rwall/doorobscurer
 	layer = ABOVE_DOOR_LAYER
 
 /mob/living/simple_animal/hostile/retaliate/cookbot
@@ -1057,6 +1062,7 @@
 	minbodytemp = 0
 
 	mob_property_flags = MOB_ROBOTIC
+	meat_type = null
 
 	environment_smash_flags = 0
 

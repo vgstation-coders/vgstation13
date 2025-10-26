@@ -147,7 +147,7 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 		<h3><a href='byond://?src=\ref[src];option=submit;new=1;candidate=\ref[candidate]'>Submit Personality</a></h3><br>
 		<a href='byond://?src=\ref[src];option=save;new=1;candidate=\ref[candidate]'>Save Personality</a><br>
 		<a href='byond://?src=\ref[src];option=load;new=1;candidate=\ref[candidate]'>Load Personality</a><br>"}
-	M << browse(dat, "window=paiRecruit")
+	M << browse(HTML_SKELETON(dat), "window=paiRecruit")
 
 /datum/paiController/proc/findPAI(var/obj/item/device/paicard/p, var/mob/user)
 	requestRecruits(p)
@@ -191,13 +191,13 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 
 	dat += "</table>"
 
-	user << browse(dat, "window=findPai")
+	user << browse(HTML_SKELETON(dat), "window=findPai")
 
 /datum/paiController/proc/requestRecruits(var/obj/item/device/paicard/p)
 	for(var/mob/dead/observer/O in player_list) // We handle polling ourselves.
 		if(O.client && get_role_desire_str(O.client.prefs.roles[ROLE_PAI]) != "Never")
 			if(check_recruit(O))
-				to_chat(O, "<span class='recruit'>A pAI card is looking for personalities. (<a href='?src=\ref[src];signup=1'>Sign Up</a> | <a href='?src=\ref[O];follow=\ref[p]'>Teleport</a>)</span>")
+				to_chat(O, "<span class='recruit'>A pAI card is looking for personalities. (<a href='?src=\ref[src];signup=1'>Sign Up</a> | [formatFollow(p,"Teleport")])</span>")
 				//question(O.client)
 
 /datum/paiController/proc/check_recruit(var/mob/dead/observer/O)

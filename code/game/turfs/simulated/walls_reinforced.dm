@@ -56,7 +56,7 @@
 	update_paint_overlay()
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
-	user.delayNextAttack(W.attack_delay)
+	user.delayNextAttack(5)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
@@ -350,6 +350,7 @@
 	//This is obsolete since reinforced false walls were commented out, but gotta slap the wall with my hand anyways !
 	else if(!d_state)
 		if(istype(W, /obj/item/tool/crowbar/red))
+			user.delayNextAttack(W.attack_delay)
 			playsound(src, "crowbar_hit", 50, 1, -1)
 		else
 			return attack_hand(user)

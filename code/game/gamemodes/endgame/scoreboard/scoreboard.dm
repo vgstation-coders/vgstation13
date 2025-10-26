@@ -2,24 +2,39 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 
 /datum/controller/gameticker/scoreboard
 	var/crewscore 			= 0 //This is the overall var/score for the whole round
+
 	var/plasmashipped		= 0 //How much plasma has been sent to centcom?
 	var/stuffshipped		= 0 //How many centcom orders have cargo fulfilled?
 	var/stuffforwarded		= 0 //How many cargo forwards have been fulfilled?
 	var/stuffnotforwarded	= 0 //How many cargo forwards have not been fulfilled?
+
 	var/stuffharvested		= 0 //How many harvests have hydroponics done (per crop)?
 	var/oremined			= 0 //How many chunks of ore were smelted
-	var/eventsendured		= 0 //How many random events did the station endure?
-	var/powerloss			= 0 //How many APCs have alarms (under 30 %)?
-	var/atmoloss			= 0 //How many air alarms are giving issues?
-	var/maxpower			= 0 //Most watts in grid on any of the world's powergrids.
-	var/escapees			= 0 //How many people got out alive?
-	var/deadcrew			= 0 //Humans who died during the round
-	var/deadsilicon			= 0 //Silicons who died during the round
-	var/mess				= 0 //How much messes on the floor went uncleaned
-	var/litter				= 0 //How much trash is laying on the station floor
 	var/meals				= 0 //How much food was actively cooked that day
 	var/slimes				= 0 //How many slimes were harvested
 	var/artifacts			= 0 //How many large artifacts were analyzed and activated
+
+	var/eventsendured		= 0 //How many random events did the station endure?
+
+	var/powerloss			= 0 //How many APCs have alarms (under 30 %)?
+	var/atmoloss			= 0 //How many air alarms are giving issues?
+	var/powerbonus			= 0 //If all APCs on the station are running optimally, big bonus
+	var/atmobonus			= 0 //If all air alarms on the station are running optimally, big bonus
+	var/maxpower			= 0 //Most watts in grid on any of the world's powergrids.
+
+	var/machineupgrades		= 0 //How many machines were upgraded?
+
+	var/escapees			= 0 //How many people got out alive?
+	var/deadcrew			= 0 //Humans who died during the round
+	var/deadsilicon			= 0 //Silicons who died during the round
+	var/deadaipenalty		= 0 //AIs who died during the round
+	var/rescuedpets			= 0 //how many pets were brought back to centcomm (alive)
+	var/rescueianbonus		= 0 //ian is a special little guy :)
+
+	var/mess				= 0 //How much messes on the floor went uncleaned
+	var/litter				= 0 //How much trash is laying on the station floor
+	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
+
 	var/disease_good		= 0 //How many unique diseases currently affecting living mobs of cumulated danger <3
 	var/disease_vaccine		= null //Which many vaccine antibody isolated
 	var/disease_vaccine_score= 0 //the associated score
@@ -29,11 +44,11 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/disease_most		= null //Most spread disease
 	var/disease_most_count	= 0 //Most spread disease
 
+	var/turfssingulod		= 0 //Amount of turfs eaten by singularities.
+
+	var/static/list/badvars		= list("deadcrew","deadsilicon","deadaipenalty","mess","litter","powerloss","atmoloss","stuffnotforwarded","disease_bad","turfssingulod")
+
 	//These ones are mainly for the stat panel
-	var/powerbonus			= 0 //If all APCs on the station are running optimally, big bonus
-	var/atmobonus			= 0 //If all air alarms on the station are running optimally, big bonus
-	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
-	var/deadaipenalty		= 0 //AIs who died during the round
 	var/foodeaten			= 0 //How much food was consumed
 	var/clownabuse			= 0 //How many times a clown was punched, struck or otherwise maligned
 	var/slips				= 0 //How many people have slipped during this round
@@ -65,7 +80,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/largest_TTV			= 0 //The largest Tank Transfer Valve explosion this round
 	var/deadpets			= 0 //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 	var/buttbotfarts		= 0 //Messages mimicked by buttbots.
-	var/turfssingulod		= 0 //Amount of turfs eaten by singularities.
 	var/shardstouched		= 0 //+1 for each pair of shards that bump into eachother.
 	var/kudzugrowth			= 0 //Amount of kudzu tiles successfully grown, even if they were later eradicated.
 	var/nukedefuse			= 9999 //Seconds the nuke had left when it was defused.
@@ -82,15 +96,16 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/shuttlebombed		= 0
 	var/bagelscooked		= 0
 	var/disease				= 0
+	var/summon_guns_count   = 0 //Tracked by the Summon Guns artifact to determine if special audio is guaranteed to play.
 	var/list/money_leaderboard = list()
 	var/list/shoal_leaderboard = list()
 	var/list/implant_phrases = list()
 	var/list/global_paintings = list()
 
-/datum/controller/gameticker/scoreboard/proc/main(var/dat)
-	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
-	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
+	var/badmin_score		= 0
+	var/badmin_override		= FALSE
 
+/datum/controller/gameticker/scoreboard/proc/main(var/dat)
 	ticker.mode.declare_completion()
 	dat += "[ticker.mode.dat]<HR>"
 
@@ -100,10 +115,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += service_score()
 	dat += supply_score()
 	dat += science_score()
-	if(NO)
-		dat += nuke_op_score(NO)
-	if(RV)
-		dat += revolution_score(RV)
 	dat += syndicate_score()
 	dat += silicon_score()
 	dat += misc_score()
@@ -145,8 +156,12 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Cargo Crates Forwarded:</B> [score.stuffforwarded] ([score.stuffforwarded * 50] Points)<BR>"
 	if(score.oremined > 0)
 		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
+	if(score.rescuedpets)
+		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points)<BR>"
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
+	if (score.machineupgrades > 0)
+		dat += "<B>Total Upgraded Machines Rating:</B> [score.machineupgrades] ([score.machineupgrades * 5] Points)<BR>"
 	if (score.disease_vaccine_score > 0)
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
 	if (score.disease_extracted > 0)
@@ -165,8 +180,10 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Destroyed Silicons:</B> [score.deadsilicon] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadsilicon * 500 : score.deadsilicon * -500] Points)<BR>"
 	if (score.deadaipenalty > 0)
 		dat += "<B>AIs Destroyed:</B> [score.deadaipenalty] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadaipenalty * 1000 : score.deadaipenalty * -1000] Points)<BR>"
-	dat += "<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>"
-	dat += "<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>"
+	if(score.mess > 0)
+		dat += "<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>"
+	if(score.litter > 0)
+		dat += "<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>"
 	if(score.stuffnotforwarded > 0)
 		dat += "<B>Cargo Crates Not Forwarded:</B> [score.stuffnotforwarded] (-[score.stuffnotforwarded * 25] Points)<BR>"
 	if (score.powerloss > 0)
@@ -177,14 +194,24 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Tiles destroyed by a singularity:</B> [score.turfssingulod] (-[round(score.turfssingulod/2)] Points)<BR>"
 	if(score.disease_bad > 0)
 		dat += "<B>Bad diseases in living mobs:</B> [score.disease_bad] (-[score.disease_bad * 50] Points)<BR>"
+	var/badfound = FALSE
+	for(var/variable in src.badvars)
+		if(vars[variable] > 0)
+			badfound = TRUE
+	if(!badfound)
+		dat += "<B>Nothing bad to report! Good job, crew!</B><BR>"
 
 	dat += "<BR><U>THE WEIRD</U><BR>"
-/*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
-	var/profit = totalfunds - 100000
+	var/totalfunds = 0
+	for(var/dept in department_accounts)
+		var/datum/money_account/act = department_accounts[dept]
+		totalfunds += act.money
+	dat += "<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
+	var/profit = totalfunds - init_station_funds
 	if (profit > 0)
-		dat += "<B>Station Profit:</B> +[num2text(profit,50)]<BR>"
+		dat += "<B>Station Profit:</B> +$[num2text(profit,50)]<BR>"
 	else if (profit < 0)
-		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"*/
+		dat += "<B>Station Deficit:</B> -$[num2text(abs(profit),50)]<BR>"
 	if(score.foodeaten > 0)
 		dat += "<B>Food Eaten:</b> [score.foodeaten]<BR>"
 	if(score.clownabuse > 0)
@@ -228,13 +255,16 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Most Spread Disease:</B> [dis_name ? "[dis_name]":"[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)]"][nickname] (Origin: [D.origin], Strength: [D.strength]%, spread among [score.disease_most_count] mobs)<BR>"
 		for(var/datum/disease2/effect/e in D.effects)
 			dat += "&#x25CF; Stage [e.stage] - <b>[e.name]</b><BR>"
-	if(weathertracker.len && map.climate)
-		dat += "<B>Climate Composition: ([map.climate])</B> "
-		//first, total ticks
-		var/totalticks = total_list(get_list_of_elements(weathertracker))
-		for(var/element in weathertracker)
-			dat += "[element] ([round(weathertracker[element]*100/totalticks)]%) "
-		dat += "<BR>"
+	if(weathertracker.len && climates.len)
+		for(var/i = 1; i < world.maxz; i++)
+			var/datum/climate/C = SSweather.get_climate(i)
+			if(C)
+				dat += "<B>Z-Level [i] Climate Composition: ([C])</B> "
+				//first, total ticks
+				var/totalticks = total_list(get_list_of_elements(weathertracker))
+				for(var/element in weathertracker)
+					dat += "[element] ([round(weathertracker[element]*100/totalticks)]%) "
+				dat += "<BR>"
 
 	//Vault and away mission specific scoreboard elements
 	//The process_scoreboard() proc returns a list of strings associated with their score value (the number that's added to the total score)
@@ -263,6 +293,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/list/dept_leaderboard = get_dept_leaderboard()
 	for (var/i = 1 to dept_leaderboard.len)
 		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
+
+	if(score.badmin_score)
+		dat += "<BR><span class='sinister'><B>Mysterious circumstances:</B> [score.badmin_score] Points</span><BR>"
 
 	dat += "<HR><BR>"
 	dat += "<B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"
@@ -310,27 +343,27 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
 	dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
 	var/i = 1
-	for(var/datum/record/money/entry in leaderboard.data)
-		var/cash = num2text(entry.cash, 12)
-		var/list/split_date = splittext(entry.date, "-")
+	for(var/datum/data/record/money/entry in leaderboard.data)
+		var/cash = num2text(entry.fields["cash"], 12)
+		var/list/split_date = splittext(entry.fields["date"], "-")
 		if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
 			leaderboard.clear_records()
 			dat += "No rich escapees yet!"
 			break
 		else
-			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.fields["ckey"]]</b> ([entry.fields["role"]]). That shift lasted [entry.fields["shift_duration"]]. Date: [entry.fields["date"]]<br>"
 	var/datum/persistence_task/highscores/trader/leaderboard2 = score.shoal_leaderboard
 	dat += "<br><b>MONTHLY TOP 5 RICHEST TRADERS:</b><br>"
 	i = 1
-	for(var/datum/record/money/entry in leaderboard2.data)
-		var/cash = num2text(entry.cash, 12)
-		var/list/split_date = splittext(entry.date, "-")
+	for(var/datum/data/record/money/entry in leaderboard2.data)
+		var/cash = num2text(entry.fields["cash"], 12)
+		var/list/split_date = splittext(entry.fields["date"], "-")
 		if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
 			leaderboard2.clear_records()
 			dat += "No rich traders yet!"
 			break
 		else
-			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b>. That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.fields["ckey"]]</b>. That shift lasted [entry.fields["shift_duration"]]. Date: [entry.fields["date"]]<br>"
 	return dat
 
 /mob/proc/display_round_end_scoreboard()

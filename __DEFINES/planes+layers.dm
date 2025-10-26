@@ -131,10 +131,16 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define OBJ_PLANE 				(4 + FLOAT_PLANE)			// For objects which appear below humans.
 
 	#define BELOW_TABLE_LAYER			0
+	#define CARGO_CART_OFFSET			0.1
 	#define TABLE_LAYER					0.5
 	#define OPEN_DOOR_LAYER				1
 	#define BELOW_OBJ_LAYER				2
 	#define MACHINERY_LAYER				2.5
+	#define HYDROPONIC_TRAY_LAYER		2.5
+	#define HYDROPONIC_TRAY_BACK_LID_LAYER		2.501
+	#define HYDROPONIC_TRAY_PLANT_LAYER			2.502
+	#define HYDROPONIC_TRAY_ATMOS_LAYER			2.503
+	#define HYDROPONIC_TRAY_FRONT_LID_LAYER		2.504
 	// OBJ_LAYER 	 					3
 	#define ABOVE_OBJ_LAYER				4
 	#define SIDE_WINDOW_LAYER			5
@@ -169,16 +175,16 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define CHAIR_ARMREST_LAYER 		0
 	#define DISPOSALS_CHUTE_LAYER 		0
 	#define EASEL_LAYER					0
-	#define RAILING_BACK_LAYER 			0.1
-	#define RAILING_MID_LAYER 			0.2
 	#define CANVAS_LAYER				1					// So that canvas always appear above easels
 	#define EASEL_OVERLAY_LAYER			2					// So that the easel bits that hold a canvas in place always appear above a canvas
-	#define RAILING_FRONT_LAYER 		0.3
 	#define WINDOOR_LAYER 				1
 	#define OPEN_CURTAIN_LAYER			2
-	#define CLOSED_CURTAIN_LAYER		3
-	#define CLOSED_FIREDOOR_LAYER		4
-	#define POTTED_PLANT_LAYER			5
+	#define POTTED_PLANT_LAYER			3
+	#define RAILING_BACK_LAYER 			3.1
+	#define RAILING_MID_LAYER 			3.2
+	#define RAILING_FRONT_LAYER 		3.3
+	#define CLOSED_CURTAIN_LAYER		4
+	#define CLOSED_FIREDOOR_LAYER		5
 	#define LIGHT_FIXTURE_LAYER			6
 	#define CHAT_LAYER					7
 
@@ -195,6 +201,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define EFFECTS_PLANE 			(12 + FLOAT_PLANE)			// For special effects.
 
+	#define BLOODSTONE_BASE		 		2
 	#define BELOW_PROJECTILE_LAYER 		3
 	#define PROJECTILE_LAYER 			4
 	#define ABOVE_PROJECTILE_LAYER 		5
@@ -211,7 +218,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define GHOST_LAYER 				1
 
-#define FAKE_CAMERA_PLANE		(14)
+#define FAKE_CAMERA_BUTTONS_PLANE		(14)
 
 #define LIGHTING_PLANE 			(15)	// Don't put anything other than lighting_overlays in there please
 	#define SELF_VISION_LAYER 		   -1
@@ -226,11 +233,13 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
+#define FAKE_CAMERA_SCREEN_PLANE 17
+
 #define OPEN_OVERLAY_PLANE	(17 + FLOAT_PLANE) // This one won't behave either
 
 #define BASE_PLANE 				(18 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-#define MISC_HUD_MARKERS_PLANE	19
+#define NARSIE_PLANE			19
 
 #define ANTAG_HUD_PLANE		 	20
 
@@ -260,6 +269,11 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define MIND_UI_BACK 				10
 	#define MIND_UI_BUTTON 				11
 	#define MIND_UI_FRONT 				12
+
+	#define MIND_UI_GROUP_A 			0
+	#define MIND_UI_GROUP_B 			3
+	#define MIND_UI_GROUP_C 			6
+	#define MIND_UI_GROUP_D 			9
 
 #define ABOVE_HUD_PLANE 		24		// For being above the Head-Up Display
 
@@ -356,52 +370,37 @@ var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster =
 	appearance_flags = 0
 	plane = BASE_PLANE
 	mouse_opacity = 0
-	screen_loc = "CENTER,CENTER"
+	screen_loc = "SOUTHWEST"
 	render_source = "*overdark"
 
 var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planemaster_target = new()
 
-// DARKNESS PLANEMASTER
-// One planemaster for each client, which they gain during mob/login()
-/obj/abstract/screen/plane_master/darkness_planemaster
-	plane = LIGHTING_PLANE
-	blend_mode = BLEND_MULTIPLY
+/obj/abstract/screen/plane_master/fakecamera_screen_planemaster
+	plane = FAKE_CAMERA_SCREEN_PLANE
+	alpha = 0
 
-/obj/abstract/screen/plane_master/darkness_planemaster_dummy
+/obj/abstract/screen/plane_master/fakecamera_screen_planemaster_dummy
 	alpha = 0
 	appearance_flags = 0
-	plane = LIGHTING_PLANE
+	plane = FAKE_CAMERA_SCREEN_PLANE
 
-/client/proc/initialize_darkness_planemaster()
-	if(darkness_planemaster)
-		screen -= darkness_planemaster
-		qdel(darkness_planemaster)
-	if(darkness_planemaster_dummy)
-		screen -= darkness_planemaster_dummy
-		qdel(darkness_planemaster_dummy)
-	darkness_planemaster = new /obj/abstract/screen/plane_master/darkness_planemaster
-	screen |= darkness_planemaster
-	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	screen |= darkness_planemaster_dummy
-
-
-/obj/abstract/screen/plane_master/fakecamera_planemaster
-	plane = FAKE_CAMERA_PLANE
+/obj/abstract/screen/plane_master/fakecamera_button_planemaster
+	plane = FAKE_CAMERA_BUTTONS_PLANE
 	alpha = 0
-
-/obj/abstract/screen/plane_master/fakecamera_planemaster_dummy
-	alpha = 0
-	appearance_flags = 0
-	plane = FAKE_CAMERA_PLANE
 
 /client/proc/initialize_fakecamera_planemaster()
-	if(fakecamera_planemaster)
-		screen -= fakecamera_planemaster
-		qdel(fakecamera_planemaster)
-	if(fakecamera_planemaster_dummy)
-		screen -= fakecamera_planemaster_dummy
-		qdel(fakecamera_planemaster_dummy)
-	fakecamera_planemaster = new /obj/abstract/screen/plane_master/fakecamera_planemaster
-	screen |= fakecamera_planemaster
-	fakecamera_planemaster_dummy = new /obj/abstract/screen/plane_master/fakecamera_planemaster_dummy
-	screen |= fakecamera_planemaster_dummy
+	if(fakecamera_screen_planemaster)
+		screen -= fakecamera_screen_planemaster
+		qdel(fakecamera_screen_planemaster)
+	if(fakecamera_screen_planemaster_dummy)
+		screen -= fakecamera_screen_planemaster_dummy
+		qdel(fakecamera_screen_planemaster_dummy)
+	if(fakecamera_button_planemaster)
+		screen -= fakecamera_button_planemaster
+		qdel(fakecamera_button_planemaster)
+	fakecamera_screen_planemaster = new /obj/abstract/screen/plane_master/fakecamera_screen_planemaster
+	screen |= fakecamera_screen_planemaster
+	fakecamera_screen_planemaster_dummy = new /obj/abstract/screen/plane_master/fakecamera_screen_planemaster_dummy
+	screen |= fakecamera_screen_planemaster_dummy
+	fakecamera_button_planemaster = new /obj/abstract/screen/plane_master/fakecamera_button_planemaster
+	screen |= fakecamera_button_planemaster

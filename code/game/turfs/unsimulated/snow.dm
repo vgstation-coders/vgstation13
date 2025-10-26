@@ -47,6 +47,9 @@
 	global_snowtiles += src
 	if(real_snow_tile && !ignore_blizzard_updates)
 		environment_snowtiles += src
+	footstep_sound = sounds_snow
+	footstep_sound_barefoot = sounds_snow
+	footstep_sound_claw = sounds_snow
 
 /turf/unsimulated/floor/snow/Destroy()
 	if(real_snow_tile && !ignore_blizzard_updates)
@@ -64,8 +67,9 @@
 
 /turf/unsimulated/floor/snow/proc/get_snow_state()
 	. = snow_intensity_override
-	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
-		var/datum/weather/snow/S = map.climate.current_weather
+	var/datum/climate/C = SSweather.get_climate(src.z)
+	if(map && C && istype(C.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = C.current_weather
 		if(!.)
 			. = S.snow_intensity
 	if(!.)
@@ -127,9 +131,6 @@
 		if(H.client)
 			if(!istype(OL,/turf/unsimulated/floor/snow))
 				H << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
-			if(isliving(H) && !H.locked_to && !H.lying && !H.flying)
-				if(snowsound?.len)
-					playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 
 /turf/unsimulated/floor/snow/cultify()
@@ -159,11 +160,13 @@
 	anchored = 1
 	plane = ABOVE_TURF_PLANE
 	mouse_opacity = 0
+	var/datum/climate/arctic/parent_climate = null
 
-/obj/effect/blizzard_holder/New()
+/obj/effect/blizzard_holder/New(var/datum/climate/arctic/climate_ref = null)
 	..()
-	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
-		var/datum/weather/snow/S = map.climate.current_weather
+	parent_climate = climate_ref
+	if(map && parent_climate && istype(parent_climate.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = parent_climate.current_weather
 		UpdateSnowfall(S.snow_intensity)
 	else
 		UpdateSnowfall(SNOW_CALM)
@@ -259,12 +262,12 @@
 
 	var/extract_amount = min(snowballs, snowball_amount)
 
-	for(var/i = 0; i < extract_amount, i++)
+	for(var/i = 0; i < extract_amount; i++)
 		if(snowball_stack)
 			snowball_stack.add(1)
 			snowballs--
 			break
-		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(user.loc)
+		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(loc)
 		snowball.pixel_x = rand(-16, 16) * PIXEL_MULTIPLIER //Would be wise to move this into snowball New() down the line
 		snowball.pixel_y = rand(-16, 16) * PIXEL_MULTIPLIER
 

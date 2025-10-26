@@ -18,6 +18,7 @@
 	src.add_spell(new /spell/aoe_turf/starman_heal)
 	src.add_spell(new /spell/targeted/starman_shield)
 	src.add_spell(new /spell/targeted/starman_warp)
+	src.add_spell(new /spell/starman_dance)
 
 /mob/living/silicon/robot/starman/updatename(var/prefix)
 
@@ -75,9 +76,9 @@
 	name = "Telepathic Binaural Attack"
 	desc = "Forces the menacing tunes of the Starman into the minds of all your enemies. And you."
 	hud_state = "time_future"
-	invocation_type = SpI_NONE
-	charge_type = Sp_RECHARGE
-	charge_max = 10
+	invocation_type = SP_INV_NONE
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 1 SECONDS
 	var/list/starman_music = list('sound/music/battle_against_a_machine.ogg', 'sound/music/imbossible.ogg')
 
 /spell/aoe_turf/starman_play_music/cast(list/targets, mob/user = user)
@@ -104,9 +105,9 @@
 	desc = "Teleport to the targeted location."
 	hud_state = "starman_warp"
 	school = "evocation"
-	charge_type = Sp_RECHARGE
-	charge_max = 60
-	invocation_type = SpI_NONE
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 6 SECONDS
+	invocation_type = SP_INV_NONE
 	range = 8
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
@@ -138,9 +139,9 @@
 	name = "Psi Lifeup Alpha"
 	desc = "Slightly heal yourself."
 	hud_state = "psi_lifeup_alpha"
-	charge_type = Sp_RECHARGE
-	charge_max = 250
-	invocation_type = SpI_NONE
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 25 SECONDS
+	invocation_type = SP_INV_NONE
 	var/heal_amount = 30
 
 /spell/aoe_turf/starman_heal/cast(list/targets, mob/living/user = user)
@@ -173,9 +174,9 @@
 	desc = "Generates a psionic barrier in the given direction."
 	hud_state = "psi_shield_beta"
 	school = "evocation"
-	charge_type = Sp_RECHARGE
-	charge_max = 150
-	invocation_type = SpI_NONE
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 15 SECONDS
+	invocation_type = SP_INV_NONE
 	range = 8
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
@@ -231,12 +232,12 @@
 	desc = "Conjures a psionic starstorm that impacts around you."
 	hud_state = "psi_starstorm_omega"
 	school = "conjuration"
-	charge_max = 1800
+	charge_cooldown_max = 180 SECONDS
 
-	charge_type = Sp_RECHARGE
-	invocation_type = SpI_NONE
+	charge_type = SP_RECHARGE
+	invocation_type = SP_INV_NONE
 
-	duration = 100
+	duration = 10 SECONDS
 	range = 5
 	selection_type = "range"
 	var/meteor_count = 12
@@ -282,12 +283,12 @@
 	desc = "Shocks the minds of all entities around you, causing severe mental distress."
 	hud_state = "psi_brainshock_omega"
 	school = "conjuration"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 
-	charge_type = Sp_RECHARGE
-	invocation_type = SpI_NONE
+	charge_type = SP_RECHARGE
+	invocation_type = SP_INV_NONE
 
-	duration = 100
+	duration = 10 SECONDS
 	range = 6
 	selection_type = "range"
 	var/move_with_user = 0
@@ -313,6 +314,30 @@
 		user.visible_message("<span class='danger'>\The [user] bends reality in impossible ways!</span>","<span class='notice'>*Beep* Hostile consciousnesses twisted.</span>")
 
 	..()
+
+/spell/starman_dance
+	name = "Starman's Dance"
+	desc = "Damn! Look at those moves!"
+	override_icon = 'icons/mob/robots.dmi'
+	hud_state = "starman"
+	charge_cooldown_max = 10 SECONDS
+	spell_flags = INCLUDEUSER
+	range = 1
+
+//Because spellcode requires a target, any target, even if there is no target
+/spell/starman_dance/choose_targets(mob/user)
+	return list(user)
+
+//Because the .dmi file sprite is larger than the robots sprite the new sprite will be displaced
+//Temporarily shifts the starman's sprite for the duration of the animation
+//The duration is set manually because BYOND doesn't support playing it for as long as the flick lasts
+//The duration is 0.4 (40ms) frame delay * 45 frames (and one frame is 10ms shorter because the timing is not precise) = 1.799 seconds
+/spell/starman_dance/cast(list/targets, mob/user)
+	var/original_x = user.pixel_x
+	user.pixel_x -= 7 * PIXEL_MULTIPLIER
+	flick('icons/mob/robots_starman_dance.dmi', user)
+	spawn(18)
+		user.pixel_x = original_x
 
 
 /obj/item/weapon/gun/energy/starman_beam

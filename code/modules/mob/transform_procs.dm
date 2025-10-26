@@ -1,5 +1,3 @@
-#define MONKEY_ANIM_TIME 22
-
 // A standardized proc for turning a mob into a monkey
 // ignore_primitive will force the mob to specifically become a monkey and not its primitive type
 // returns the monkey mob
@@ -148,12 +146,12 @@
 			comm.ai += O
 	if(mind)
 		mind.transfer_to(O)
+		O.mind.assigned_role = "AI"
 	else
 		O.key = key
 	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
 	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
 	O.job = "AI"
-	O.mind.assigned_role = "AI"
 	mob_rename_self(O,"ai", null, 1)
 	. = O
 	if(del_mob)
@@ -187,7 +185,8 @@
 	if(!skipnaming)
 		spawn()
 			O.Namepick()
-	O.mind.assigned_role = "Cyborg"
+	if(O.mind) //Otherwise it would runtime if done against mindless mobs
+		O.mind.assigned_role = "Cyborg"
 	qdel(src)
 	return O
 
@@ -215,7 +214,8 @@
 	if(!skipnaming)
 		spawn()
 			O.Namepick()
-	O.mind.assigned_role = "Mobile MMI"
+	if(O.mind)
+		O.mind.assigned_role = "Mobile MMI"
 	qdel(src)
 	return O
 
@@ -291,7 +291,8 @@
 	new_human.randomise_appearance_for(new_human.gender)
 	if(!new_species || !(new_species in all_species))
 		new_species = pick(whitelisted_species)
-	new_human.set_species(new_species)
+	new_human.set_species(new_species, transfer_damage = TRUE, target_override = src) //Transfer damage from the current mob to the new one
+	new_human.regenerate_icons()
 	if(isliving(src))
 		var/mob/living/L = src
 		new_human.languages |= L.languages
@@ -313,7 +314,7 @@
 
 /mob/proc/Animalize()
 	var/mobtext = input("Filter to a type name", "Choose a type") as text
-	var/mobpath = filter_list_input("Which type of mob should [src] turn into?", "Choose a type", get_matching_types(mobtext, /mob/living/simple_animal))
+	var/mobpath = filter_typelist_input("Which type of mob should [src] turn into?", "Choose a type", get_matching_types(mobtext, /mob/living/simple_animal))
 	if(!mobpath)
 		return
 	if(!safe_animal(mobpath))
@@ -378,5 +379,3 @@
 		my_appearance.b_facial = my_appearance.b_hair = 5
 		update_hair() //wie zal dat zijn?
 
-
-#undef MONKEY_ANIM_TIME

@@ -6,9 +6,9 @@
 	school = "vampire"
 	user_type = USER_TYPE_VAMPIRE
 
-	charge_type = Sp_RECHARGE
-	charge_max = 3 MINUTES
-	invocation_type = SpI_NONE
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 3 MINUTES
+	invocation_type = SP_INV_NONE
 	range = 1
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK | NEEDSHUMAN
@@ -17,6 +17,7 @@
 
 	override_base = "vamp"
 	hud_state = "vampire_disaese"
+	valid_targets = list(/mob/living/carbon)
 
 	var/blood_cost = 50
 
@@ -24,11 +25,6 @@
 	. = ..()
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
-
-/spell/targeted/disease/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
-	if(!istype(target, /mob/living/carbon))
-		return FALSE
-	return ..()
 
 /spell/targeted/disease/cast(var/list/targets, var/mob/user)
 	if (targets.len > 1)

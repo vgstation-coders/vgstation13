@@ -9,7 +9,7 @@
 {{else}}
   {{:helper.link('Access Modification', 'home', {'choice' : 'mode', 'mode_target' : 0}, !data.mode ? 'disabled' : null)}}
   {{:helper.link('Crew Manifest', 'folder-open', {'choice' : 'mode', 'mode_target' : 1}, data.mode ? 'disabled' : null)}}
-  {{:helper.link('Print', 'print', {'choice' : 'print'}, (data.mode || data.has_modify) ? null : 'disabled')}}
+  {{:helper.link((data.mode ? 'Print Manifest' : 'Print Access Report'), 'print', {'choice' : 'print'}, (data.mode || data.has_modify) ? null : 'disabled')}}
 
   {{if data.mode}}
     <div class='item'>
@@ -22,10 +22,6 @@
     <div class='item'>
       <h2>Access Modification</h2>
     </div>
-
-    {{if !data.authenticated}}
-      <span class='alert'><i>Please insert the IDs into the terminal to proceed.</i></span><br>
-    {{/if}}
 
     <div class='item'>
       <div class='itemLabel'>
@@ -43,7 +39,13 @@
         {{:helper.link(data.scan_name, 'eject', {'choice' : 'scan'})}}
       </div>
     </div>
-    <hr>
+
+    <br><hr>
+
+	{{if !data.authenticated}}
+      <span class='alert'><i>Please insert the IDs into the terminal to proceed.</i></span><br>
+    {{/if}}
+
     {{if data.authenticated}}
       <script type="text/javascript">
         function markRed(){
@@ -120,6 +122,15 @@
             </div>
           </div>
         </form>
+
+		<div class='item'>
+		<div class='itemLabel'>
+			Biometrics:
+		</div>
+		<div class='itemContent'>
+			{{:data.target_bio}}
+		</div>
+		</div>
 
         <div class='item'>
           <h2>Assignment</h2>

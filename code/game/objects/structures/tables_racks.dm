@@ -142,7 +142,8 @@
 					continue
 			if(!skip_sum) //means there is a window between the two tiles in this direction
 				var/obj/structure/table/T = locate(/obj/structure/table,get_step(src,direction))
-				if(T && !T.flipped)
+				var/obj/machinery/door/table/DT = locate(/obj/machinery/door/table,get_step(src,direction))
+				if((T && !T.flipped) || (DT && DT.density))
 					if(direction <5)
 						dir_sum += direction
 					else
@@ -292,8 +293,8 @@
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
 	destroy()
 
-/obj/structure/table/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+/obj/structure/table/attack_animal(var/mob/living/simple_animal/user)
+	if(istype(user,/mob/living/simple_animal) && user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
@@ -598,8 +599,10 @@
 	icon_state = "woodtable"
 	parts = /obj/item/weapon/table_parts/wood
 	health = 50
-	autoignition_temperature = AUTOIGNITION_WOOD // TODO:  Special ash subtype that looks like charred table legs.
-	fire_fuel = 5
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+
 
 /obj/structure/table/woodentable/cultify()
 	return
@@ -749,6 +752,9 @@
 	desc = "A plastic table perfect for on a space patio."
 	icon_state = "plastictable"
 	parts = /obj/item/weapon/table_parts/plastic
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 
 /*
  * Racks
@@ -788,14 +794,14 @@
 			destroy(FALSE)
 		if(2.0)
 			if(prob(50))
-				destroy(TRUE)
-			else
 				destroy(FALSE)
+			else
+				destroy(TRUE)
 		if(3.0)
 			if(prob(25))
-				destroy(TRUE)
-			else
 				destroy(FALSE)
+			else
+				destroy(TRUE)
 
 /obj/structure/rack/proc/checkhealth()
 	if(health <= 0)
@@ -868,8 +874,14 @@
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
 	destroy()
 
-/obj/structure/rack/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+/obj/structure/rack/attack_animal(mob/living/user)
+	if(istype(user,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA=user
+		if(SA.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+			user.do_attack_animation(src, user)
+			visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
+			destroy()
+	else if(istype(user,/mob/living/complex_animal))
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()

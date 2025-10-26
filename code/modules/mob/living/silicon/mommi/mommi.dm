@@ -13,7 +13,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	maxHealth = 60
 	health = 60
 
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	mob_bump_flag = ROBOT
 	mob_swap_flags = ALLMOBS
 	mob_push_flags = 0
@@ -132,11 +132,11 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	else if(istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
 		if(wiresexposed)
 			to_chat(user, "Close the panel first.")
-		else if(cell)
+		else if(get_cell())
 			to_chat(user, "There is a power cell already installed.")
 		else
 			user.drop_item(W, src)
-			cell = W
+			add_cell(W,user)
 			to_chat(user, "You insert the power cell.")
 		updateicon()
 
@@ -146,12 +146,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
+	else if(W.is_screwdriver(user) && opened && !get_cell())	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		updateicon()
 
-	else if(W.is_screwdriver(user) && opened && cell)	// radio
+	else if(W.is_screwdriver(user) && opened && get_cell())	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 		else
@@ -189,12 +189,13 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	add_fingerprint(user)
 
 	if(opened && !wiresexposed && (!isMoMMI(user)))
+		var/obj/item/weapon/cell/cell = get_cell()
 		if(cell)
 			cell.updateicon()
 			cell.add_fingerprint(user)
 			user.put_in_active_hand(cell)
 			to_chat(user, "You remove \the [cell].")
-			cell = null
+			clear_cell()
 			updateicon()
 			return
 
@@ -274,7 +275,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			dat += text("[module.emag]: <B>Activated</B><BR>")
 		else
 			dat += text("[module.emag]: <A HREF=?src=\ref[src];act=\ref[module.emag]>Activate</A><BR>")
-	src << browse(dat, "window=robotmod&can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=robotmod&can_close=1")
 	onclose(src,"robotmod") // Register on-close shit, which unsets machinery.
 
 
@@ -335,9 +336,19 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	udder.my_atom = src
 	..()
 
+/mob/living/silicon/robot/mommi/Destroy()
+	QDEL_NULL(udder)
+	return ..()
+
 /mob/living/silicon/robot/mommi/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(gives_milk && udder && prob(5))
 		udder.add_reagent(MOMMIMILK, rand(5, 10))
 	..()
+
+/mob/living/silicon/robot/mommi/ignite()
+	return 0
+
+/mob/living/silicon/robot/mommi/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	return 0

@@ -22,7 +22,6 @@
 	. = ..()
 	if(.)
 		return
-
 	tgui_interact(user)
 
 /obj/machinery/computer/merch/tgui_interact(mob/user, datum/tgui/ui)
@@ -80,11 +79,3 @@
 			else
 				to_chat(usr, "<span class='notice'>You fail to check out the [params["name"]].</span>")
 				dispensing = FALSE
-
-/obj/machinery/computer/merch/update_icon()
-	if(stat & BROKEN)
-		icon_state = "comm_logsb"
-	else if(stat & (FORCEDISABLE|NOPOWER))
-		icon_state = "comm_logs0"
-	else
-		icon_state = initial(icon_state)

@@ -146,8 +146,8 @@
 	finished[1] = /obj/item/weapon/gun/energy/gun/nuclear
 
 /obj/item/device/modkit/plasmacutter
-	name = "plasma cutter conversion kit"
-	desc = "A set of tools that enables conversion of a mining diamond drill into a plasma cutter. Needs to be loaded with the parts of a proto-kinetic accelerator first."
+	name = "advanced plasma cutter conversion kit"
+	desc = "A set of tools that enables conversion of a plamsa cutter into a more advanced form. Needs to be loaded with the parts of a proto-kinetic accelerator first."
 
 /obj/item/device/modkit/plasmacutter/New()
 	..()
@@ -156,7 +156,7 @@
 	finished = new/list(1)
 
 	parts[1] =	0
-	original[1] = /obj/item/weapon/pickaxe/drill/diamond
+	original[1] = /obj/item/weapon/pickaxe/plasmacutter
 	finished[1] = /obj/item/weapon/pickaxe/plasmacutter/accelerator
 
 /obj/item/device/modkit/plasmacutter/attackby(atom/target, mob/user, proximity_flag)
@@ -197,3 +197,19 @@
 	parts[1] =	1
 	original[1] = /obj/item/weapon/fireaxe
 	finished[1] = /obj/item/weapon/fireaxe/antimatter
+
+/obj/item/device/modkit/kineticshotgun
+	name = "proto-kinetic pump-shotgun conversion kit"
+	desc = "A set of tools that enables conversion of a proto-kinetic accelerator into a proto-kinetic pump-shotgun, capable of pump-action self-charging."
+	icon_state = "modkit_kinetic"
+	item_state = "modkit"
+
+/obj/item/device/modkit/kineticshotgun/New()
+	..()
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	1
+	original[1] = /obj/item/weapon/gun/energy/kinetic_accelerator
+	finished[1] = /obj/item/weapon/gun/energy/kinetic_accelerator/shotgun

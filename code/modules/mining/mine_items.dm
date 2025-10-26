@@ -46,20 +46,18 @@
 	icon_state = "lantern"
 	item_state = "lantern"
 	desc = "A mining lantern."
-	brightness_on = 6			// luminosity when on
-	light_power = 2
+	brightness_on = 1
+	range_on = 6
 	light_color = LIGHT_COLOR_TUNGSTEN
 
 //Explicit
-/obj/item/device/flashlight/lantern/on/New()
-	..()
-
+/obj/item/device/flashlight/lantern/on
 	on = 1
-	update_brightness()
 
 /obj/item/device/flashlight/lantern/on/dim
 	name = "dim lantern"
-	light_power = 0.6
+	brightness_on = 0.6
+	range_on = 5
 
 /*****************************Pickaxe********************************/
 
@@ -84,22 +82,27 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("hits", "pierces", "slices", "attacks")
 	toolsounds = list('sound/weapons/Genhit.ogg')
+	slimeadd_message = "You mold the slime extract around the tip of SRCTAG"
+	hitsound = "sound/weapons/bloodyslice.ogg"
+	slimes_accepted = SLIME_OIL|SLIME_PYRITE
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
 	var/excavation_amount = 100
 
 /obj/item/weapon/pickaxe/slime_act(primarytype, mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/oil)
-		has_slime=1
-		to_chat(user, "You mold the slime extract around the tip of \the [src].")
-		return TRUE
+	switch(primarytype)
+		if(SLIME_OIL)
+			slimeadd_success_message = "It now has a strangely dense gravitational aura to it"
+		if(SLIME_PYRITE)
+			slimeadd_success_message = "It shines spectacularly"
+	. = ..()
 
 /obj/item/weapon/pickaxe/hammer
 	name = "sledgehammer"
 	//icon_state = "sledgehammer" Waiting on sprite
 	desc = "A mining hammer made of reinforced metal. You feel like smashing your boss in the face with this."
 	drill_verb = "hammering"
+	hitsound = "sound/weapons/toolbox.ogg"
 
 /obj/item/weapon/pickaxe/silver
 	name = "silver pickaxe"
@@ -142,14 +145,15 @@
 	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5)
 
 /obj/item/weapon/pickaxe/plasmacutter
-	name = "plasma torch"
+	name = "plasma cutter"
 	icon_state = "plasmacutter"
-	item_state = "gun"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
+	item_state = "plasmacutter"
 	w_class = W_CLASS_MEDIUM //it is smaller than the pickaxe
 	damtype = "fire"
-	heat_production = 3800
+	heat_production = 27000
 	source_temperature = TEMPERATURE_PLASMA
-	toolspeed = 0.2 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
+	toolspeed = 0.15 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
 	sharpness = 1.0
 	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
@@ -157,9 +161,12 @@
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	toolsounds = list('sound/items/Welder.ogg')
+	hitsound = "sound/weapons/welderattack.ogg"
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator
-	name = "plasma cutter"
+	name = "advanced plasma cutter"
+	icon_state = "advplasmacutter"
+	item_state = "advplasmacutter"
 	desc = "A rock cutter that's powerful enough to cut through rocks and xenos with ease. Ingeniously, it's powered by putting solid plasma directly into it - even plasma ore, for those miners on the go."
 	toolspeed = 0.05
 	diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS
@@ -187,6 +194,7 @@
 		current_ammo--
 		generic_projectile_fire(A, src, /obj/item/projectile/kinetic/cutter, 'sound/weapons/Taser.ogg', user)
 		user.delayNextAttack(4)
+		update_icon()
 	else
 		src.visible_message("*click click*")
 		playsound(src, 'sound/weapons/empty.ogg', 100, 1)
@@ -194,15 +202,25 @@
 /obj/item/weapon/pickaxe/plasmacutter/accelerator/attackby(atom/target, mob/user, proximity_flag)
 	if(proximity_flag && istype(target, /obj/item/stack/ore/plasma))
 		var/obj/item/stack/ore/plasma/A = target
-		if(current_ammo < max_ammo)
-			var/loading_ammo = min(max_ammo - current_ammo, A.amount)
-			A.use(loading_ammo)
-			current_ammo += loading_ammo
-			to_chat(user, "<span class='notice'>You load \the [src].</span>")
-			return
-		else
+		if(!(current_ammo < max_ammo))
 			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
 			return
+		to_chat(user, "<span class='notice'>You start smelting \the [target] with \the [src]'s built in energy converter.</span>")
+		while(current_ammo < max_ammo)
+			if(!A || A.amount == 0)
+				break
+			if(do_after(user, src, 5, 5))
+				if(!(current_ammo < max_ammo))
+					return
+				if(!A || !A.use(1))
+					break
+				current_ammo += 1
+				playsound(usr, 'sound/items/lighter1.ogg', 100, 1)
+				update_icon()
+			else
+				to_chat(user, "<span class='notice'>You stop loading \the [src].</span>")
+				return
+		to_chat(user, "<span class='notice'>You finish loading \the [src].</span>")
 
 	if(proximity_flag && istype(target, /obj/item/stack/sheet/mineral/plasma))
 		var/obj/item/stack/sheet/mineral/plasma/A = target
@@ -211,6 +229,8 @@
 			A.use(loading_ammo)
 			current_ammo += loading_ammo
 			to_chat(user, "<span class='notice'>You load \the [src].</span>")
+			playsound(usr, 'sound/items/lighter1.ogg', 100, 1)
+			update_icon()
 			return
 		else
 			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
@@ -220,6 +240,22 @@
 /obj/item/weapon/pickaxe/plasmacutter/accelerator/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It has [current_ammo] round\s remaining. The safety is [safety ? "on" : "off"].</span>")
+
+/obj/item/weapon/pickaxe/plasmacutter/accelerator/update_icon()
+	..()
+	switch(15 * current_ammo / max_ammo) //magic to convert arbitary amounts of max ammo into the 15 scale!
+		if(0)
+			icon_state = initial(icon_state) + "0"
+		if(1 to 3)
+			icon_state = initial(icon_state) + "20"
+		if(4 to 6)
+			icon_state = initial(icon_state) + "40"
+		if(7 to 9)
+			icon_state = initial(icon_state) + "60"
+		if(10 to 12)
+			icon_state = initial(icon_state) + "80"
+		if(13 to 15)
+			icon_state = initial(icon_state)
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
@@ -239,7 +275,7 @@
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=2"
 	desc = "Yours is the drill that will pierce through the rock walls."
 	drill_verb = "drilling"
-
+	hitsound = 'sound/weapons/circsawhit.ogg'
 	diggables = DIG_ROCKS | DIG_SOIL //drills are multipurpose
 
 /obj/item/weapon/pickaxe/drill/diamond //When people ask about the badass leader of the mining tools, they are talking about ME!
@@ -274,8 +310,7 @@
 	w_type = RECYK_MISC
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "bludgeons", "thrashes", "whacks")
-
-
+	hitsound = "trayhit"
 	toolspeed = 0.4
 	diggables = DIG_SOIL //soil only
 
@@ -695,50 +730,55 @@
 	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 5
+	starting_materials = list(MAT_IRON = 200)
+	w_type = RECYK_ELECTRONIC
 	var/loaded = 1
 	var/refreshes_drops = FALSE
 
 /obj/item/weapon/lazarus_injector/update_icon()
 	..()
-	if(loaded)
-		icon_state = "lazarus_hypo"
-	else
-		icon_state = "lazarus_empty"
+	icon_state = loaded ? "lazarus_hypo" : "lazarus_empty"
+	w_type = loaded ? RECYK_ELECTRONIC : RECYK_METAL
 
 /obj/item/weapon/lazarus_injector/afterattack(atom/target, mob/user, proximity_flag)
-	if(!loaded)
+	if(!loaded || !proximity_flag)
 		return
-	if(istype(target, /mob/living) && proximity_flag)
-		if(istype(target, /mob/living/simple_animal))
-			var/mob/living/simple_animal/M = target
-			if(M.mob_property_flags & MOB_NO_LAZ)
-				to_chat(user, "<span class='warning'>\The [src] is incapable of reviving \the [M].</span>")
-				return
-			if(M.stat == DEAD)
-
-				M.faction = "lazarus \ref[user]"
-				M.revive(refreshbutcher = refreshes_drops)
-				if(istype(target, /mob/living/simple_animal/hostile))
-					var/mob/living/simple_animal/hostile/H = M
-					H.friends += makeweakref(user)
-
-					log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
-					H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
-					user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
-					msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-
-				loaded = 0
-				user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
-				"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
-				playsound(src,'sound/effects/refill.ogg',50,1)
-				update_icon()
-				return
-			else
-				to_chat(user, "<span class='warning'>\The [src] is only effective on the dead.</span>")
-				return
-		else
-			to_chat(user, "<span class='warning'>\The [src] is only effective on lesser beings.</span>")
+	var/mob/living/L
+	if(isliving(target))
+		L = target
+	else if(istype(target,/obj/item/weapon/holder))
+		var/obj/item/weapon/holder/hol = target
+		L = hol.stored_mob
+	else
+		to_chat(user, "<span class='warning'>\The [src] is only effective on living things.</span>")
+		return
+	if(istype(L, /mob/living/simple_animal))
+		var/mob/living/simple_animal/M = L
+		if(M.mob_property_flags & MOB_NO_LAZ)
+			to_chat(user, "<span class='warning'>\The [src] is incapable of reviving \the [M].</span>")
 			return
+		if(M.stat == DEAD)
+
+			M.faction = "lazarus \ref[user]"
+			M.revive(refreshbutcher = refreshes_drops)
+			if(istype(M, /mob/living/simple_animal/hostile))
+				var/mob/living/simple_animal/hostile/H = M
+				H.friends += makeweakref(user)
+
+				log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
+				H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
+				user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
+				msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+
+			loaded = 0
+			user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
+			"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
+			playsound(src,'sound/effects/refill.ogg',50,1)
+			update_icon()
+		else
+			to_chat(user, "<span class='warning'>\The [src] is only effective on the dead.</span>")
+	else
+		to_chat(user, "<span class='warning'>\The [src] is only effective on lesser beings.</span>")
 
 /obj/item/weapon/lazarus_injector/examine(mob/user)
 	..()

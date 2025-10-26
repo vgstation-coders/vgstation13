@@ -43,7 +43,7 @@
 			victim_head.appearance = victim.appearance
 			victim_head.transform = matrix()
 			victim_head.dir = SOUTH
-			var/icon/victim_head_icon = getFlatIcon(victim_head, cache = 0, exact = 1)
+			var/icon/victim_head_icon = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(victim_head)), override_dir = SOUTH)
 			victim_head_icon.Crop(1,23,32,32)
 			victim_head.overlays.len = 0
 			victim_head.underlays.len = 0

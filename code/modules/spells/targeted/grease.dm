@@ -6,28 +6,28 @@
 	specialization = SSOFFENSIVE
 
 	school = "evocation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	invocation = "GR'ESE LIT'NING"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 0
 	spell_flags = NEEDSCLOTHES | INCLUDEUSER
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 	hud_state = "bucket"
 
 /spell/targeted/grease/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_POWER)
-			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+		if(SP_POWER)
+			if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 				return "You can already emit grease at the targeted location!"
 			return "Allows you to target a different location within 4 tiles of you to cover it with grease."
 	return ..()
 
 
 /spell/targeted/grease/empower_spell()
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 
 	var/explosion_description = ""
-	switch(spell_levels[Sp_POWER])
+	switch(spell_levels[SP_POWER])
 		if(0)
 			explosion_description = "You will now emit grease from your location."
 		if(1)
@@ -41,7 +41,7 @@
 	return "You have improved Grease into [name]. [explosion_description]"
 
 /spell/targeted/grease/cast(var/list/targets, mob/user)
-	if(spell_levels[Sp_POWER] >= 1)
+	if(spell_levels[SP_POWER] >= 1)
 		for(var/A in targets)
 			var/turf/T = get_turf(A)
 			var/datum/effect/system/foam_spread/s = new()

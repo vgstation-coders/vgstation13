@@ -60,9 +60,17 @@
 /turf/simulated/floor/wood
 	name = "floor"
 	icon_state = "wood"
-
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/wood()
+	thermal_mass = 5
+
+/turf/simulated/floor/wood/New()
+	..()
+	footstep_sound = sounds_wood
+	footstep_sound_barefoot = sounds_wood_barefoot
+	footstep_sound_claw = sounds_wood_claw
 
 /turf/simulated/floor/wood/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/wood(null)
@@ -254,6 +262,9 @@
 /turf/simulated/floor/engine/cult/cultify()
 	return
 
+/turf/simulated/floor/engine/cult/decultify()
+	ChangeTurf(/turf/simulated/floor/plating)
+
 /turf/simulated/floor/engine/cult/clockworkify()
 	return
 
@@ -297,6 +308,9 @@
 	icon_state = "deck"
 	icon_plating = "deck"
 	desc = "Children love to play on this deck."
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/wood()
+	thermal_mass = 5
 
 /turf/simulated/floor/plating/deck/New()
 	..()
@@ -378,13 +392,20 @@
 
 /turf/simulated/floor/beach/water/New()
 	..()
-	var/image/water = image("icon"='icons/misc/beach.dmi',"icon_state"="water5")
-	water.plane = ABOVE_HUMAN_PLANE
-	overlays += water
+	if(!BW)
+		BW = new
+	vis_contents.Add(BW)
+
+/turf/simulated/floor/beach/water/Destroy()
+	vis_contents.Cut()
+	..()
 
 /turf/simulated/floor/grass
 	name = "Grass patch"
 	icon_state = "grass1"
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/wood()
+	thermal_mass = 5
 
 /turf/simulated/floor/grass/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/grass(null)
@@ -399,11 +420,18 @@
 				if(istype(get_step(src,direction),/turf/simulated/floor))
 					var/turf/simulated/floor/FF = get_step(src,direction)
 					FF.update_icon() //so siding get updated properly
+	
+	footstep_sound = sounds_grass
+	footstep_sound_barefoot = sounds_grass
+	footstep_sound_claw = sounds_grass
 
 /turf/simulated/floor/carpet
 	name = "Carpet"
 	icon_state = "carpet"
 	var/has_siding=1
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/fabric()
+	thermal_mass = 5
 
 /turf/simulated/floor/carpet/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/carpet(null)
@@ -412,6 +440,7 @@
 	if(!icon_state)
 		icon_state = initial(icon_state)
 	..()
+	
 	if(has_siding)
 		spawn(4)
 			if(src)
@@ -421,12 +450,19 @@
 						var/turf/simulated/floor/FF = get_step(src,direction)
 						FF.update_icon() //so siding get updated properly
 
+	footstep_sound = sounds_carpet
+	footstep_sound_barefoot = sounds_carpet_barefoot
+	footstep_sound_claw = sounds_carpet_barefoot
+
 /turf/simulated/floor/carpet/cultify()
 	return
 
 /turf/simulated/floor/arcade
 	name = "Arcade Carpet"
 	icon_state = "arcade"
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/fabric()
+	thermal_mass = 5
 
 /turf/simulated/floor/arcade/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/arcade(null)
@@ -519,3 +555,20 @@
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 	//icon = 'icons/turf/shuttle-debug.dmi'
+
+// Plated catwalks
+/turf/simulated/floor/plated_catwalk
+	icon = 'icons/turf/catwalks.dmi'
+	icon_state = "pcat0"
+	name = "plated catwalk"
+	desc = "A hybrid floor tile-catwalk which provides visibility and easy access to pipes and wires beneath it."
+	plane = TURF_PLANE
+	layer = PAINT_LAYER
+	hatch_installed = TRUE
+	hatch_open = FALSE
+
+/turf/simulated/floor/plated_catwalk/New()
+	..()
+	overlays.Cut()
+	overlays += mutable_appearance(icon='icons/turf/floors.dmi', icon_state="plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
+	overlays += mutable_appearance(icon='icons/turf/catwalks.dmi', icon_state="[icon_state]_olay", layer = PAINT_LAYER, plane = TURF_PLANE)

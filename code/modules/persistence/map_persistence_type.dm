@@ -34,6 +34,9 @@
 //Note 2: The cap was added because reading 30k of objects crashes the server
 /datum/map_persistence_type/proc/writeSavefile()
 	var/list/finished_list = list()
+	var/old_max = arbitrary_max_objects
+	arbitrary_max_objects = round(clamp(arbitrary_max_objects-(score.crewscore/20),0,500)) //Crewscore of 10,000 makes the next station spotless!
+	log_debug("Map persistence \"[name]\" at [arbitrary_max_objects] max objects after crewscore calculations. (was [old_max])")
 	if(tracking.len > arbitrary_max_objects)
 		log_debug("Map persistence \"[name]\" hit the cap. [tracking.len - arbitrary_max_objects] objects did not make it.")
 		tracking.Cut(arbitrary_max_objects)

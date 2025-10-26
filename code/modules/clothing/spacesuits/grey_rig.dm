@@ -120,7 +120,7 @@
 //Leader//
 
 /obj/item/clothing/suit/space/rig/grey/leader
-	name = "Administrator Pressure Suit"	//Not an admin item. Just a thematic name. It's capitalized unlike the others because it's important! And also because it looks better on the reflect message.
+	name = "\improper Administrator Pressure Suit"	//Not an admin item. Just a thematic name. It's capitalized unlike the others because it's important! And also because it looks better on the reflect message.
 	desc = "A pressure suit for high ranking officials in the Grey Democratic Republic. It provides much better protection than a standard soldier suit."
 	icon_state = "rig_grey_leader"
 	item_state = "rig_grey_leader"
@@ -135,16 +135,16 @@
 /obj/item/clothing/suit/space/rig/grey/leader/equipped(mob/living/carbon/human/H, equipped_slot)
 	if(equipped_slot == slot_wear_suit)
 		if(isgrey(H))
-			to_chat(H,"<span class='notice'>The [src] forms a perfect seal around your body. You hear it hum as it adjusts its components.</span>")
+			to_chat(H,"<span class='notice'>\The [src] forms a perfect seal around your body. You hear it hum as it adjusts its components.</span>")
 		else
-			to_chat(H,"<span class='warning'>The [src] is barely able to form a seal around your body and flashes a warning: Overweight user detected!</span>") // If a human equips it, it will complain a bit. Doesn't affect the stats, however
+			to_chat(H,"<span class='warning'>\The [src] is barely able to form a seal around your body and flashes a warning: Overweight user detected!</span>") // If a human equips it, it will complain a bit. Doesn't affect the stats, however
 	..()
 
 /obj/item/clothing/suit/space/rig/grey/leader/dissolvable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
 	return FALSE
 
 /obj/item/clothing/head/helmet/space/rig/grey/leader
-	name = "Administrator Pressure Helmet"
+	name = "\improper Administrator Pressure Helmet"
 	desc = "A grey Administrator's pressure helmet. Glory to the mothership, and all hail the Chairman!"
 	icon_state = "rig0-grey_leader_dome"
 	item_state = "rig0-grey_leader_dome"

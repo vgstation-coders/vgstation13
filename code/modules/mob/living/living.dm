@@ -26,6 +26,11 @@
 
 	if(addicted_chems)
 		QDEL_NULL(addicted_chems)
+
+	var/datum/gamemode/dynamic/dyn_mode = ticker?.mode
+	if (istype(dyn_mode))
+		dyn_mode.living_players -= src
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -86,7 +91,7 @@
 	if(istype(get_turf(src),/turf/unsimulated/floor/brimstone))
 		FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
 		fire_stacks = 11
-		IgniteMob() // ffffFIRE!!!! FIRE!!! FIRE!!
+		ignite() // ffffFIRE!!!! FIRE!!! FIRE!!
 	return 1
 
 // Apply connect damage
@@ -123,19 +128,19 @@
 			G.overlays = 0
 			if(istype(G.mind.current, /mob/living/carbon/human/))
 				var/mob/living/carbon/human/H = G.mind.current
-				G.overlays += H.obj_overlays[ID_LAYER]
-				G.overlays += H.obj_overlays[EARS_LAYER]
-				G.overlays += H.obj_overlays[SUIT_LAYER]
-				G.overlays += H.obj_overlays[GLASSES_LAYER]
-				G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-				G.overlays += H.obj_overlays[BELT_LAYER]
-				G.overlays += H.obj_overlays[BACK_LAYER]
-				G.overlays += H.obj_overlays[HEAD_LAYER]
-				G.overlays += H.obj_overlays[HANDCUFF_LAYER]
+				G.overlays += H.overlays_standing[ID_LAYER]
+				G.overlays += H.overlays_standing[EARS_LAYER]
+				G.overlays += H.overlays_standing[SUIT_LAYER]
+				G.overlays += H.overlays_standing[GLASSES_LAYER]
+				G.overlays += H.overlays_standing[GLASSES_OVER_HAIR_LAYER]
+				G.overlays += H.overlays_standing[BELT_LAYER]
+				G.overlays += H.overlays_standing[BACK_LAYER]
+				G.overlays += H.overlays_standing[HEAD_LAYER]
+				G.overlays += H.overlays_standing[HANDCUFF_LAYER]
 			G.invisibility = 0
 			to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
 		spawn(1)
-			dust()
+			gib()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -433,7 +438,7 @@
 /mob/living/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
+			visible_message("<span class='warning'>\The [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
@@ -567,7 +572,7 @@ Thanks.
 	else
 		reagents.clear_reagents()
 	heal_overall_damage(1000, 1000)
-	ExtinguishMob()
+	extinguish()
 	fire_stacks = 0
 	/*
 	if(locked_to)
@@ -652,7 +657,7 @@ Thanks.
 
 	if(config.allow_Metadata)
 		if(client)
-			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.metadata]")
+			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.get_pref(/datum/preference_setting/string/metadata)]")
 		else
 			to_chat(usr, "[src] does not have any stored infomation!")
 	else
@@ -739,7 +744,7 @@ Thanks.
 		stop_pulling()
 		. = ..()
 
-	if ((s_active && !is_holder_of(src, s_active)))
+	if (s_active && !is_holder_of(src, s_active) && !s_active.Adjacent(src))
 		s_active.close(src)
 
 	if(update_slimes)
@@ -748,13 +753,6 @@ Thanks.
 
 	if(T != loc)
 		handle_hookchain(Dir)
-
-	if(client && client.eye && istype(client.eye,/turf/simulated/wall))
-		var/turf/simulated/wall/W = client.eye
-		if (!Adjacent(W))
-			client.eye = src
-			client.perspective = MOB_PERSPECTIVE
-			W.peeper = null
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
@@ -867,7 +865,7 @@ Thanks.
 		if(!istype(CM) || !CM.handcuffed)
 			var/datum/chain/tether_datum = L.tether.chain_datum
 			if(tether_datum.extremity_B == src)
-				L.visible_message("<span class='danger'>\the [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
+				L.visible_message("<span class='danger'>\The [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
 							  "<span class='warning'>You quickly grab and remove \the [L.tether] tethered to your body.</span>")
 				L.tether = null
 				tether_datum.extremity_B = null
@@ -876,7 +874,7 @@ Thanks.
 	//Trying to unstick a stickybomb
 	for(var/obj/item/stickybomb/B in L)
 		if(B.stuck_to)
-			L.visible_message("<span class='danger'>\the [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
+			L.visible_message("<span class='danger'>\The [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
 						  "<span class='warning'>You reach for \the [B] stuck on your body and start pulling.</span>")
 			if(do_after(L, src, 30, 10, FALSE))
 				L.visible_message("<span class='danger'>After struggling for an instant, \the [L] manages unstick \the [B] from his body!</span>",
@@ -1024,6 +1022,16 @@ Thanks.
 		var/obj/structure/closet/C = L.loc
 		if(C.opened)
 			return //Door's open... wait, why are you in it's contents then?
+		if(istype(C.loc, /obj/structure/rack/crate_shelf) && istype(C,/obj/structure/closet/crate))
+			var/obj/structure/closet/crate/R = C
+			var/obj/structure/rack/crate_shelf/CS = C.loc
+			CS.relay_container_resist_act(src,R)
+			return
+		if(istype(C.loc, /obj/spacepod/) && istype(C,/obj/structure/closet/crate)) //todo - make this generic for future space pod cargo systems
+			var/obj/structure/closet/crate/R = C
+			var/obj/spacepod/speesepod = C.loc
+			speesepod.attempt_cargo_resist(src,R)
+			return
 		if(!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
 			if(istype(C, /obj/structure/closet/secure_closet))
 				var/obj/structure/closet/secure_closet/SC = L.loc
@@ -1034,7 +1042,7 @@ Thanks.
 					return //closed but not welded...
 
 		//okay, so the closet is either welded or locked... resist!!!
-		L.visible_message("<span class='danger'>The [C] begins to shake violenty!</span>",
+		L.visible_message("<span class='danger'>\The [C] begins to shake violenty!</span>",
 						  "<span class='warning'>You lean on the back of [C] and start pushing the door open (this will take about [breakout_time] minutes).</span>")
 		spawn(0)
 			if(do_after(usr, C, breakout_time * 60 * 10, 30, custom_checks = new /callback(C, /obj/structure/closet/proc/on_do_after))) 	//minutes * 60seconds * 10deciseconds
@@ -1062,21 +1070,15 @@ Thanks.
 					sleep(10)
 					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
-					SC.welded = 0
-					L.visible_message("<span class='danger'>[L] successfully breaks out of [SC]!</span>",
-									  "<span class='notice'>You successfully break out!</span>")
-					if(istype(SC.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
-						var/obj/item/delivery/large/BD = SC.loc
-						BD.attack_hand(usr)
-					SC.open()
-				else
-					C.welded = 0
-					L.visible_message("<span class='danger'>[L] successfully breaks out of [C]!</span>",
-									  "<span class='notice'>You successfully break out!</span>")
-					if(istype(C.loc, /obj/item/delivery/large)) //nullspace ect.. read the comment above
-						var/obj/item/delivery/large/BD = C.loc
-						BD.attack_hand(usr)
-					C.open()
+				C.welded = 0
+				if(C.arcanetampered)
+					C.bless() // so it doesn't just close again, fairness on the user
+				L.visible_message("<span class='danger'>[L] successfully breaks out of [C]!</span>",
+									"<span class='notice'>You successfully break out!</span>")
+				if(istype(C.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
+					var/obj/item/delivery/large/BD = C.loc
+					BD.attack_hand(usr)
+				C.open()
 
 	//Removing a headcrab
 	if(ishuman(L))
@@ -1143,7 +1145,7 @@ Thanks.
 				sleep(1 SECONDS)
 			CM.fire_stacks = 0
 			CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>","<span class='notice'>You extinguish yourself.</span>")
-			ExtinguishMob()
+			extinguish()
 			return
 
 		CM.resist_restraints()
@@ -1349,7 +1351,6 @@ Thanks.
 				now_pushing = 0
 				return
 
-			tmob.LAssailant = src
 			tmob.assaulted_by(src, TRUE)
 
 		now_pushing = 0
@@ -1373,6 +1374,8 @@ Thanks.
 						var/mob/M = AM
 						INVOKE_EVENT(src, /event/before_move)
 						step(M, t)
+						M.last_bumped_by = makeweakref(src)
+						M.last_bumped_by_timestamp = world.time
 						INVOKE_EVENT(src, /event/after_move)
 					else
 						step(AM, t)
@@ -1539,15 +1542,14 @@ Thanks.
 				var/start_T_descriptor = "<font color='#6b5d00'>tile at [start_T.x], [start_T.y], [start_T.z] in area [get_area(start_T)]</font>"
 				var/end_T_descriptor = "<font color='#6b4400'>tile at [end_T.x], [end_T.y], [end_T.z] in area [get_area(end_T)]</font>"
 
-				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been thrown by [usr.name] ([usr.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been thrown by [src.name] ([src.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				src.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
 
-				log_attack("<font color='red'>[usr.name] ([usr.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				if(!iscarbon(usr))
-					M.LAssailant = null
-				else
-					M.LAssailant = usr
-					M.assaulted_by(usr)
+				M.last_thrown_by = makeweakref(src)
+				M.last_thrown_by_timestamp = world.time
+
+				log_attack("<font color='red'>[src.name] ([src.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				M.assaulted_by(src)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
@@ -1557,7 +1559,7 @@ Thanks.
 			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
 			return FAILED_THROW
 
-		if(I.pre_throw(target))
+		if(I.pre_throw(target,src))
 			return FAILED_THROW
 
 	remove_from_mob(item)
@@ -1708,152 +1710,6 @@ Thanks.
 	score.slips++
 	return 1
 
-///////////////////////DISEASE STUFF///////////////////////////////////////////////////////////////////
-
-//Blocked is whether clothing prevented the spread of contact/blood
-/mob/living/proc/assume_contact_diseases(var/list/disease_list,var/atom/source,var/blocked=0,var/bleeding=0)
-	if (istype(disease_list) && disease_list.len > 0)
-		for(var/ID in disease_list)
-			var/datum/disease2/disease/V = disease_list[ID]
-			if (!V)
-				message_admins("[key_name(src)] is trying to assume contact diseases from touching \a [source], but the disease_list contains an ID ([ID]) that isn't associated to an actual disease datum! Ping Deity about it please.")
-				return
-			if(!blocked && V.spread & SPREAD_CONTACT)
-				infect_disease2(V, notes="(Contact, from [source])")
-			else if(suitable_colony() && V.spread & SPREAD_COLONY)
-				infect_disease2(V, notes="(Colonized, from [source])")
-			else if(!blocked && bleeding && (V.spread & SPREAD_BLOOD))
-				infect_disease2(V, notes="(Blood, from [source])")
-
-//Called in Life() by humans (in handle_virus_updates.dm), monkeys and mice
-/mob/living/proc/find_nearby_disease()//only tries to find Contact and Blood spread diseases. Airborne ones are handled by breath_airborne_diseases()
-	if(locked_to)//Riding a vehicle?
-		return
-	if(flying)//Flying?
-		return
-
-	var/turf/T = get_turf(src)
-
-	//Virus Dishes aren't toys, handle with care, especially when they're open.
-	for(var/obj/effect/decal/cleanable/virusdish/dish in T)
-		dish.infection_attempt(src)
-	for(var/obj/item/weapon/virusdish/dish in T)
-		if (dish.open && dish.contained_virus)
-			dish.infection_attempt(src,dish.contained_virus)
-	var/obj/item/weapon/virusdish/dish = locate() in held_items
-	if (dish && dish.open && dish.contained_virus)
-		dish.infection_attempt(src,dish.contained_virus)
-
-	//Now to check for stuff that's on the floor
-	var/block = 0
-	var/bleeding = 0
-	if (lying)
-		block = check_contact_sterility(FULL_TORSO)
-		bleeding = check_bodypart_bleeding(FULL_TORSO)
-	else
-		block = check_contact_sterility(FEET)
-		bleeding = check_bodypart_bleeding(FEET)
-
-	var/static/list/viral_cleanable_types = list(
-		/obj/effect/decal/cleanable/blood,
-		/obj/effect/decal/cleanable/mucus,
-		/obj/effect/decal/cleanable/vomit,
-		)
-
-	for(var/obj/effect/decal/cleanable/C in T)
-		if (is_type_in_list(C,viral_cleanable_types))
-			assume_contact_diseases(C.virus2,C,block,bleeding)
-
-	for(var/obj/effect/rune/R in T)
-		assume_contact_diseases(R.virus2,R,block,bleeding)
-	return 0
-
-//This one is used for one-way infections, such as getting splashed with someone's blood due to clobbering them to death
-/mob/living/proc/oneway_contact_diseases(var/mob/living/L,var/block=0,var/bleeding=0)
-	assume_contact_diseases(L.virus2,L,block,bleeding)
-
-//This one is used for two-ways infections, such as hand-shakes, hugs, punches, people bumping into each others, etc
-/mob/living/proc/share_contact_diseases(var/mob/living/L,var/block=0,var/bleeding=0)
-	L.assume_contact_diseases(virus2,src,block,bleeding)
-	assume_contact_diseases(L.virus2,L,block,bleeding)
-
-//Called in Life() by humans (in handle_breath.dm), monkeys and mice
-/mob/living/proc/breath_airborne_diseases()//only tries to find Airborne spread diseases. Blood and Contact ones are handled by find_nearby_disease()
-	if (!check_airborne_sterility() && isturf(loc))//checking for sterile mouth protections
-		breath_airborne_diseases_from_clouds()
-
-		var/turf/T = get_turf(src)
-		var/list/breathable_cleanable_types = list(
-			/obj/effect/decal/cleanable/blood,
-			/obj/effect/decal/cleanable/mucus,
-			/obj/effect/decal/cleanable/vomit,
-			)
-
-		for(var/obj/effect/decal/cleanable/C in T)
-			if (is_type_in_list(C,breathable_cleanable_types))
-				if(istype(C.virus2,/list) && C.virus2.len > 0)
-					for(var/ID in C.virus2)
-						var/datum/disease2/disease/V = C.virus2[ID]
-						if(V.spread & SPREAD_AIRBORNE)
-							infect_disease2(V, notes="(Airborne, from [C])")
-
-		for(var/obj/effect/rune/R in T)
-			if(istype(R.virus2,/list) && R.virus2.len > 0)
-				for(var/ID in R.virus2)
-					var/datum/disease2/disease/V = R.virus2[ID]
-					if(V.spread & SPREAD_AIRBORNE)
-						infect_disease2(V, notes="(Airborne, from [R])")
-
-		spawn (1)
-			//we don't want the rest of the mobs to start breathing clouds before they've settled down
-			//otherwise it can produce exponential amounts of lag if many mobs are in an enclosed space
-			spread_airborne_diseases()
-
-/mob/living/proc/breath_airborne_diseases_from_clouds()
-	for(var/turf/T in range(1, src))
-		for(var/obj/effect/pathogen_cloud/cloud in T.contents)
-			if (!cloud.sourceIsCarrier || cloud.source != src || cloud.modified)
-				if (Adjacent(cloud))
-					for (var/ID in cloud.viruses)
-						var/datum/disease2/disease/V = cloud.viruses[ID]
-						//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
-						infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
-
-/mob/living/proc/spread_airborne_diseases()
-	//spreading our own airborne viruses
-	if (virus2 && virus2.len > 0)
-		var/list/airborne_viruses = filter_disease_by_spread(virus2,required = SPREAD_AIRBORNE)
-		if (airborne_viruses && airborne_viruses.len > 0)
-			var/strength = 0
-			for (var/ID in airborne_viruses)
-				var/datum/disease2/disease/V = airborne_viruses[ID]
-				strength += V.infectionchance
-			strength = round(strength/airborne_viruses.len)
-			while (strength > 0)//stronger viruses create more clouds at once
-				new /obj/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
-				strength -= 40
-
-/mob/living/proc/handle_virus_updates()
-	if(status_flags & GODMODE)
-		return 0
-
-	src.find_nearby_disease()//getting diseases from blood/mucus/vomit splatters and open dishes
-
-	activate_diseases()
-
-/mob/living/proc/activate_diseases()
-	if (virus2.len)
-		var/active_disease = pick(virus2)//only one disease will activate its effects at a time.
-		for (var/ID in virus2)
-			var/datum/disease2/disease/V = virus2[ID]
-			if(istype(V))
-				V.activate(src,active_disease!=ID)
-
-				if (prob(radiation))//radiation turns your body into an inefficient pathogenic incubator.
-					V.incubate(src,rad_tick/10)
-					//effect mutations won't occur unless the mob also has ingested mutagen
-					//and even if they occur, the new effect will have a badness similar to the old one, so helpful pathogen won't instantly become deadly ones.
-
 /mob/living/blob_act(destroy = 0,var/obj/effect/blob/source = null)
 	if(flags & INVULNERABLE)
 		return
@@ -1866,14 +1722,6 @@ Thanks.
 			infect_disease2(D, notes="(Blob, from [source])")
 
 	..()
-
-/mob/living/proc/handle_symptom_on_death()
-	if(islist(virus2) && virus2.len > 0)
-		for(var/I in virus2)
-			var/datum/disease2/disease/D = virus2[I]
-			if(D.effects.len)
-				for(var/datum/disease2/effect/E in D.effects)
-					E.on_death(src)
 
 //Brain slug proc for voluntary removal of control.
 /mob/living/proc/release_control()

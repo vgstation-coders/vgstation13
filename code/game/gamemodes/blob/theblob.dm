@@ -256,8 +256,7 @@ var/list/blob_overminds = list()
 	if (user.a_intent == I_HURT)
 		user.delayNextAttack(8)
 		user.do_attack_animation(src, user)
-		var/datum/species/S = user.get_organ_species(user.get_active_hand_organ())
-		user.visible_message("<span class='danger'>\The [user] [S.attack_verb] \the [src].</span>")
+		user.visible_message(span_danger("\The [user] [user.get_hand_attack_verb()] \the [src]."))
 		health -= (user.get_unarmed_damage(src)/brute_resist)
 		playsound(src, 'sound/effects/attackblob.ogg', 50, 1)
 		update_health()
@@ -427,11 +426,12 @@ var/list/blob_looks_player = list(//Options available to players
 /obj/effect/blob/proc/run_action()
 	return 0
 
-/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source)
+/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source, var/manual = FALSE)
 	if(prob && !prob(health))
 		return
-	if(istype(T, /turf/space) && prob(75))
-		return
+	if(!manual) //Manually-expanded blobs don't care about 50% chance to not expand in space.
+		if(istype(T, /turf/space) && prob(50))
+			return
 	if(!T)
 		var/list/dirs = cardinal.Copy()
 		for(var/i in 1 to 4)

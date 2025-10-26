@@ -54,22 +54,7 @@
 			adjusted_fire_damage = fire_damage * 0.25
 
 	spawn()
-		if(spread && current_step >= spread_start && blast_age < 4)
-			var/turf/TS = get_turf(src)
-			for(var/turf/TU in range(1, TS))
-				if(TU != get_turf(src))
-					var/tilehasfire = 0
-					var/obstructed = 0
-					for(var/obj/effect/E in TU)
-						if(istype(E, /obj/effect/fire_blast))
-							tilehasfire = 1
-					for(var/obj/machinery/door/D in TU)
-						if(istype(D, /obj/machinery/door/airlock) || istype(D, /obj/machinery/door/mineral))
-							if(D.density)
-								obstructed = 1
-					if(prob(spread_chance) && TS.Adjacent(TU) && !TU.density && !tilehasfire && !obstructed)
-						new type(TU, fire_damage, current_step, blast_age+1, pressure, blast_temperature, duration)
-				sleep(1)
+		blast_spread(current_step, pressure, blast_temperature)
 
 	spawn()
 		while(world.time < began_life + duration)
@@ -98,14 +83,14 @@
 
 			var/turf/T2 = get_turf(src)
 			if(T2)
-				T2.hotspot_expose((blast_temperature * 2) + 380,500)
+				try_hotspot_expose((blast_temperature * 2) + 380,MEDIUM_FLAME, 1)
 			sleep(2)
 		qdel(src)
 
 /obj/effect/fire_blast/proc/burn_mob(mob/living/L, var/adjusted_fire_damage)
 	if(!L.on_fire)
 		L.adjust_fire_stacks(0.5)
-		L.IgniteMob()
+		L.ignite()
 
 	if(L.mutations.Find(M_RESIST_HEAT)) //Heat resistance protects you from damage, but you still get set on fire
 		return
@@ -114,6 +99,24 @@
 		L.adjustFireLoss(adjusted_fire_damage * 2) //Deals double damage to non-human mobs
 	else
 		L.adjustFireLoss(adjusted_fire_damage)
+
+/obj/effect/fire_blast/proc/blast_spread(current_step, pressure, blast_temperature)
+	if(spread && current_step >= spread_start && blast_age < 4)
+		var/turf/TS = get_turf(src)
+		for(var/turf/TU in range(1, TS))
+			if(TU != get_turf(src))
+				var/tilehasfire = 0
+				var/obstructed = 0
+				for(var/obj/effect/E in TU)
+					if(istype(E, /obj/effect/fire_blast))
+						tilehasfire = 1
+				for(var/obj/machinery/door/D in TU)
+					if(istype(D, /obj/machinery/door/airlock) || istype(D, /obj/machinery/door/mineral))
+						if(D.density)
+							obstructed = 1
+				if(prob(spread_chance) && TS.Adjacent(TU) && !TU.density && !tilehasfire && !obstructed)
+					new type(TU, fire_damage, current_step, blast_age+1, pressure, blast_temperature, duration)
+			sleep(1)
 
 /obj/effect/fire_blast/dragonbreath/burn_mob(mob/living/L, var/adjusted_fire_damage, var/origin)
 	if(L.mutations.Find(M_RESIST_HEAT)) //Heat resistance protects you from fear

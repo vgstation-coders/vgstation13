@@ -188,7 +188,7 @@
 
 /obj/item/clothing/head/justice
 	name = "justice hat"
-	desc = "fight for what's righteous!"
+	desc = "Fight for what's righteous!"
 	icon_state = "justicered"
 	item_state = "justicered"
 	flags = FPRINT
@@ -222,7 +222,7 @@
 	desc = "A working man's cap."
 	icon_state = "flat_cap"
 	item_state = "detective"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/head/flatcap/linen
@@ -398,7 +398,7 @@
 
 /obj/item/clothing/head/bearpelt/real/spare
 	name = "spare bear pelt"
-	desc = "It shimmers in the light"
+	desc = "It shimmers in the light."
 	icon_state = "sparebearpelt"
 	item_state = "sparebearpelt"
 	slot_flags = SLOT_ID|SLOT_HEAD
@@ -532,7 +532,7 @@
 	desc = "Show everyone just how patriotic you are."
 	icon_state = "libertyhat"
 	item_state = "libertyhat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/maidhat
@@ -540,7 +540,7 @@
 	desc = "Do these even do anything besides look cute?"
 	icon_state = "maidhat"
 	item_state = "maidhat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/maidhat
@@ -556,14 +556,14 @@
 	desc = "A funny hat worn by extremely boring people."
 	icon_state = "mitre"
 	item_state = "mitre"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/clownpiece
 	name = "Clownpiece's jester hat"
 	desc = "A purple polka-dotted jester's hat with yellow pompons."
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	vertical_offset = 4
 
 /obj/item/clothing/head/headband
@@ -654,7 +654,9 @@
 	desc = "A party cone. Not useful to disguise one's self as a unicorn or to impale one's foes."
 	icon_state = "birthdayhat"
 	item_state = "birthdayhat"
-	species_fit = list(INSECT_SHAPED)
+	w_class = W_CLASS_SMALL //Fits several in a box!
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
+	vertical_offset = 4
 
 /obj/item/clothing/head/snake
 	name = "snake head"
@@ -698,7 +700,7 @@
 
 /obj/item/clothing/head/bedsheet_ghost
 	name = "Bedsheet Ghost"
-	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky"
+	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky."
 	icon_state = "bedsheet_ghost"
 	body_parts_covered = FACE|FULL_HEAD|HIDEHAIR
 	wear_override = new/icon("icon" = 'icons/misc/empty.dmi', "icon_state" = "empty_icon")
@@ -825,3 +827,71 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 	desc = "It survived an explosive implant, it'll survive you."
 	flags = FPRINT
 	icon_state = "syndiefootballhelmet"
+
+/obj/item/clothing/head/trucker
+	name = "cable appreciation hat"
+	desc = "Trucker hat with \"I FUCKING LOVE CABLES\" written on the front in a large and obnoxious font."
+	flags = FPRINT
+	icon_state = "trucker"
+	item_state = "trucker"
+
+/obj/item/clothing/head/hunter
+	name = "white bandana"
+	desc = "An old piece of cloth that keeps hair out of your monster slaying business."
+	icon_state = "hunter"
+	item_state = "hunter_headband"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+
+/obj/item/clothing/head/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/head/hunter/rangeTackleBonus()
+	return 1
+
+/obj/item/clothing/head/shadowhead
+	name = "shadow costume head"
+	desc = "Amnesia not included."
+	icon_state = "shadowhead"
+	item_state = "shadowhead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/sonichead
+	name = "sonic costume head"
+	desc = "Formerly a pre-order bonus."
+	icon_state = "sonichead"
+	item_state = "sonichead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/tailshead
+	name = "tails costume head"
+	desc = "Smells like mint."
+	icon_state = "tailshead"
+	item_state = "tailshead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/knuckleshead
+	name = "knuckles costume head"
+	desc = "What a knucklehead."
+	icon_state = "knuckleshead"
+	item_state = "knuckleshead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/amyhead
+	name = "amy costume head"
+	desc = "Pretty pink I think."
+	icon_state = "amyhead"
+	item_state = "amyhead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/coonskin_cap
+	name = "coonskin cap"
+	desc = "You may all well go to hell, and I will go to Space Texas."
+	icon_state = "coonskin_cap"
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY

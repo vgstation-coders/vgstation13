@@ -121,7 +121,7 @@
 	if(!T.density && !istype(T, /turf/space))
 		new /obj/effect/fire(T) //add some fire as an effect because low intensity liquid fuel looks weak
 		new /obj/effect/decal/cleanable/liquid_fuel(T, 0.1, get_dir(T.loc, T)) //spawn some fuel at the tur)
-		T.hotspot_expose(500,500) //light it on fire
+		try_hotspot_expose(500,MEDIUM_FLAME,1) //light it on fire
 		previousturf = null
 
 	for(var/mob/M in viewers(1, loc))

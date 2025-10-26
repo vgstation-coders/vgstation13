@@ -7,9 +7,10 @@
 	amount = 1
 	max_amount = 50
 	w_class = W_CLASS_TINY
+	w_type = RECYK_BIOLOGICAL
 	throw_speed = 4
 	throw_range = 10
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	flammable = TRUE
 
 	var/animal_type
 
@@ -41,7 +42,7 @@
 		if(C.use(5))
 			user.drop_item(src, force_drop = 1)
 
-			var/obj/item/clothing/mask/necklace/teeth/X = new(get_turf(src))
+			var/obj/item/clothing/accessory/necklace/teeth/X = new(get_turf(src))
 
 			X.animal_type = src.animal_type
 			X.teeth_amount = amount

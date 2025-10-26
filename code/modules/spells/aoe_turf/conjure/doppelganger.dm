@@ -6,13 +6,13 @@
 
 	summon_type = list(/mob/living/simple_animal/hostile/humanoid/wizard/doppelganger/melee)
 
-	price = Sp_BASE_PRICE / 2
-	level_max = list(Sp_TOTAL = 2, Sp_SPEED = 2)
-	charge_max = 300
-	cooldown_reduc = 100
-	cooldown_min = 100
+	price = SP_BASE_PRICE / 2
+	level_max = list(SP_TOTAL = 2, SP_SPEED = 2)
+	charge_cooldown_max = 30 SECONDS
+	cooldown_reduc = 10 SECONDS
+	cooldown_min = 10 SECONDS
 	invocation = "MY O'N CLO'N"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	hud_state = "wiz_doppelganger"
 	var/spell_duration = 8 MINUTES

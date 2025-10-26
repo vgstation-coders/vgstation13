@@ -32,10 +32,11 @@
 	return ..()
 
 /obj/abstract/screen/movable/spell_master/MouseEntered(location,control,params)
-	openToolTip(usr,src,params,title = name,content = "Click and drag while closed to move this around the screen")
+	//openToolTip(usr,src,params,title = name,content = "Click and drag while closed to move this around the screen")
+	usr.client?.tooltips.show(src, mouse=params, title=name, content="Click and drag while closed to move this around the screen")
 
 /obj/abstract/screen/movable/spell_master/MouseExited()
-	closeToolTip(usr)
+	usr.client?.tooltips.hide()
 
 /obj/abstract/screen/movable/spell_master/Click()
 	if(!spell_objects.len)
@@ -90,6 +91,8 @@
 	if(!spell)
 		return
 
+	if(spell.spell_flags & NO_BUTTON) //no button to add if we don't get one
+		return
 	if(spell.connected_button) //we have one already, for some reason
 		if(spell.connected_button in spell_objects)
 			return
@@ -97,9 +100,6 @@
 			spell_objects.Add(spell.connected_button)
 			toggle_open(2)
 			return
-
-	if(spell.spell_flags & NO_BUTTON) //no button to add if we don't get one
-		return
 
 	var/obj/abstract/screen/spell/newscreen = new /obj/abstract/screen/spell
 	newscreen.spellmaster = src
@@ -272,10 +272,11 @@
 	if(!spell)
 		return
 	var/dat = spell.generate_tooltip()
-	openToolTip(usr,src,params,title = name,content = dat)
+	//openToolTip(usr,src,params,title = name,content = dat)
+	usr.client?.tooltips.show(src, mouse=params, title=name, content=dat)
 
 /obj/abstract/screen/spell/MouseExited()
-	closeToolTip(usr)
+	usr.client?.tooltips.hide()
 
 /obj/abstract/screen/spell/Destroy()
 	..()
@@ -305,12 +306,12 @@
 		spell_icon = spell.hud_state
 	overlays -= spell_icon
 
-	if((spell.charge_type & Sp_RECHARGE) || (spell.charge_type & Sp_CHARGES) || (spell.charge_type & Sp_GRADUAL))
-		if(spell.charge_counter < spell.charge_max)
+	if((spell.charge_type & SP_RECHARGE) || (spell.charge_type & SP_CHARGES) || (spell.charge_type & SP_GRADUAL))
+		if(spell.charge_counter < spell.charge_cooldown_max)
 			icon_state = "[spell_base]_spell_base"
 			if(spell.charge_counter > 0)
 				var/icon/partial_charge = icon(src.icon, "[spell_base]_spell_ready")
-				partial_charge.Crop(1, 1, partial_charge.Width(), round(partial_charge.Height() * spell.charge_counter / spell.charge_max))
+				partial_charge.Crop(1, 1, partial_charge.Width(), round(partial_charge.Height() * spell.charge_counter / spell.charge_cooldown_max))
 				overlays += partial_charge
 				if(last_charged_icon)
 					overlays -= last_charged_icon

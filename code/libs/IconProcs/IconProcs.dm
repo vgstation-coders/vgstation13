@@ -479,6 +479,12 @@
 
 	return rgb(r, g, b)
 
+/proc/SubRGB(rgb1, rgb2, amount)
+	var/list/RGB1 = rgb2num(rgb1)
+	var/list/RGB2 = rgb2num(rgb2)
+
+	return rgb(clamp(RGB1[1] - RGB2[1], 0, 255), clamp(RGB1[2] - RGB2[2], 0, 255), clamp(RGB1[3] - RGB2[3], 0, 255))
+
 /proc/BlendRGBasHSV(rgb1, rgb2, amount)
 	return HSVtoRGB(RGBtoHSV(rgb1), RGBtoHSV(rgb2), amount)
 

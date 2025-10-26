@@ -49,7 +49,7 @@
 
 
 ///////sepARATE ANUS///////
-/datum/surgery_step/butt/seperate_anus/tool_quality(obj/item/tool)
+/datum/surgery_step/butt/seperate_anus/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -122,12 +122,11 @@
 
 
 ///////CAUTERIZE BUTT/////////
-/datum/surgery_step/butt/cauterize_butt/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/butt/cauterize_butt/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/butt/cauterize_butt
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,
@@ -153,7 +152,7 @@
 	"<span class='notice'>You have cauterized [target]'s ass with \the [tool].</span>")
 	var/obj/item/clothing/head/butt/B = new(target.loc)
 	B.transfer_buttdentity(target)
-	target.op_stage.butt = 4
+	target.op_stage.butt = SURGERY_NO_BUTT
 
 /datum/surgery_step/butt/cauterize_butt/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='warning'>[target] lets out a small fart, which gets set alight with [user]'s [tool]!</span>" , \
@@ -209,7 +208,7 @@
 	allowed_tools = list(
 		/obj/item/tool/bonegel = 100,
 		/obj/item/tool/bonesetter/bone_mender = 100,
-		/obj/item/tool/screwdriver = 75,
+		"screwdriver" = 75,
 		)
 
 	duration = 5 SECONDS
@@ -303,12 +302,11 @@
 
 
 ///////CAUTERIZE NEW BUTT/////////
-/datum/surgery_step/butt_replace/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/butt_replace/cauterize/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/butt_replace/cauterize
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,

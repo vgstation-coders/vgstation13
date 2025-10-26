@@ -138,7 +138,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 			load_admins()
 			return
 
-		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin")
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT `ckey`, `rank`, `level`, `flags` FROM erro_admin")
 		if(!query.Execute(FALSE))
 			message_admins("Error: [query.ErrorMsg()]")
 			log_sql("Error: [query.ErrorMsg()]")
@@ -167,7 +167,6 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 			config.admin_legacy_system = 1
 			load_admins()
 			return
-
 	#ifdef TESTING
 	var/msg = "Admins Built:\n"
 	for(var/ckey in admin_datums)
@@ -176,7 +175,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 		if(D)
 			rank = D.rank
 		msg += "\t[ckey] - [rank]\n"
-	//testing(msg)
+	testing(msg)
 	#endif
 
 #ifdef TESTING

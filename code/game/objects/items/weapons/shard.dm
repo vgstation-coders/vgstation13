@@ -8,7 +8,7 @@
 	icon_state = "large"
 	sharpness = 0.8
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
-	desc = "Could probably be used as ... a throwing weapon?"
+	desc = "Could probably be used as... a throwing weapon?"
 	w_class = W_CLASS_TINY
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	force = 5.0
@@ -50,6 +50,7 @@
 	throwforce = 15.0
 	icon_state = "plasmalarge"
 	item_state = "shard-plasglass"
+	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_MISC, MAT_GLASS = CC_PER_SHEET_GLASS)
 	glass = /obj/item/stack/sheet/glass/plasmaglass
 	shrapnel_type = /obj/item/projectile/bullet/shrapnel/small/plasma
 

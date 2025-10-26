@@ -90,6 +90,7 @@
 	var/datum/objective_holder/objectives=new
 	var/logo_icon = 'icons/logos.dmi'
 	var/logo_state = "synd-logo"
+	var/logo_image //Where the image itself gets stored
 
 	var/default_admin_voice = "Supreme Leader"
 	var/admin_voice_style = "radio" // check stylesheet.dm for a list of all possible styles
@@ -113,6 +114,9 @@
 	var/datum/stat/role/stat_datum = null
 	var/datum/stat/role/stat_datum_type = /datum/stat/role
 
+	var/shows_spells = FALSE //shows any spells the user got
+	var/spell_exclude //don't count these
+
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	// Link faction.
 	faction=fac
@@ -134,6 +138,8 @@
 	objectives.owner = M
 	stat_datum = new stat_datum_type()
 
+	//In case we want a simpler copy of the icon without creating the image over and over again, such as in examine text
+	logo_image = "<img src='data:image/png;base64,[icon2base64(icon(logo_icon, logo_state))]'>"
 	return 1
 
 /datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0, var/msg_admins = TRUE)
@@ -313,6 +319,9 @@
 /datum/role/proc/GetFaction()
 	return faction
 
+/datum/role/proc/ExtraScoreboard()
+	return ""
+
 /datum/role/proc/GetScoreboard()
 	var/win = 1
 	var/text = ""
@@ -323,7 +332,7 @@
 		var/icon/sprotch = icon('icons/effects/blood.dmi', "sprotch")
 		text += "<img src='data:image/png;base64,[icon2base64(sprotch)]' style='position:relative; top:10px;'/>"
 	else
-		var/icon/flat = getFlatIcon(M, SOUTH, 0, 1)
+		var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 		if(M.stat == DEAD)
 			if (ishuman(M) || ismonkey(M))
 				flat.Turn(90)
@@ -348,6 +357,8 @@
 		text += "body destroyed"
 		win = 0
 	text += ")"
+
+	text += ExtraScoreboard()
 
 	if(objectives.objectives.len > 0)
 		var/count = 1
@@ -376,8 +387,24 @@
 		text += "</ul>"
 
 	stat_collection.add_role(src, win)
+	text += GetBought()
 
 	return text
+
+/datum/role/proc/GetBought()
+	. = ""
+	if(shows_spells)
+		if(antag?.current?.spell_list?.len)
+			. += "<BR>The [name] knew:<BR>"
+			for(var/spell/S in antag.current.spell_list)
+				var/icon/tempimage
+				if(spell_exclude && istype(S,spell_exclude))
+					continue
+				if(S.override_icon != "")
+					tempimage = icon(S.override_icon, S.hud_state)
+				else
+					tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+				. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
 
 /datum/role/proc/extraPanelButtons()
 	var/dat = ""
@@ -552,7 +579,7 @@
 /datum/role/proc/handle_reagent(var/reagent_id)
 	return
 
-/datum/role/proc/handle_splashed_reagent(var/reagent_id)
+/datum/role/proc/handle_splashed_reagent(var/reagent_id, var/method, var/volume)
 	return
 
 //Does the role have special clothing restrictions?
@@ -582,6 +609,10 @@
 		return
 	D.spend_midround_threat(amount)
 	D.threat_log += "[worldtime2text()]: [name] has decreased the threat amount by [amount]."
+
+//Additional text that appears when examining something.
+/datum/role/proc/role_examine_text_addition(var/target)
+	return
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

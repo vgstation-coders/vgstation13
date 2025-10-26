@@ -1,7 +1,7 @@
 /obj/machinery/media/receiver/boombox
 	name = "Boombox"
 	desc = "Tune in and tune out."
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	icon='icons/obj/radio.dmi'
 	icon_state="radio"
 
@@ -27,7 +27,7 @@
 				Volume: <A href='byond://?src=\ref[src];set_volume=-1'>[volume*100]%</a><BR>
 				"}
 	dat+={"</TT></body></html>"}
-	user << browse(dat, "window=radio-recv")
+	user << browse(HTML_SKELETON(dat), "window=radio-recv")
 	onclose(user, "radio-recv")
 	return
 

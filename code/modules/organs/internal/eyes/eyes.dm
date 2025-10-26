@@ -10,6 +10,10 @@
 	var/list/colourmatrix = list()
 
 /datum/organ/internal/eyes/proc/update_perception(var/mob/living/carbon/human/M)
+	// Bad hack but in 516 any non-zero value of the dark plane will result in glitch for night vision googles
+	// Fix by reworking dark planes?
+	if (istype(M.glasses, /obj/item/clothing/glasses/scanner/night))
+		return
 	M.dark_plane.alphas["human"] = 5
 
 /datum/organ/internal/eyes/process() //Eye damage replaces the old eye_stat var.
@@ -63,7 +67,7 @@
 
 /datum/organ/internal/eyes/mushroom/update_perception(var/mob/living/carbon/human/M)
 	if (dark_mode)
-		M.master_plane.blend_mode = BLEND_SUBTRACT
+		M.lighting_planemaster.blend_mode = BLEND_SUBTRACT
 		M.dark_plane.alphas["mushroom_inverted"] = 100
 		M.dark_plane.blend_mode = BLEND_MULTIPLY
 		M.dark_plane.colours = "#FF0000"
@@ -74,7 +78,7 @@
 			0,-0.1,0,1,
 			0,0,0,0)
 	else
-		M.master_plane.blend_mode = BLEND_MULTIPLY
+		M.lighting_planemaster.blend_mode = BLEND_MULTIPLY
 		M.dark_plane.blend_mode = BLEND_ADD
 		M.dark_plane.colours = null
 		M.client.color = list(

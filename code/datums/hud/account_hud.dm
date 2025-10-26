@@ -73,7 +73,7 @@
 		if(!check_HUD_visibility(perp, M))
 			continue
 		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
-			S = getStaticIcon(getFlatIcon(perp))
+			S = getStaticIcon(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(perp)), override_dir = SOUTH))
 			C.images += image(S, perp, "hudstatic")
 			continue
 		var/obj/item/weapon/card/id/card = perp.get_id_card()
@@ -96,7 +96,7 @@
 					cash += bankacc.money
 				cashdisplay = "$[cash]"
 			if(cash < povertyline)
-				S = getStaticIcon(getFlatIcon(perp))
+				S = getStaticIcon(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(perp)), override_dir = SOUTH))
 				C.images += image(S, perp, "hudstatic")
 			holder.maptext = "<span class='maptext yell black_outline' style='text-align: center; vertical-align: top; color: white;'>[cashdisplay]</span>"
 			C.images += holder

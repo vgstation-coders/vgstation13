@@ -1,4 +1,7 @@
 
+//MOSTLY DEPRECATED, USE GET FLAT ICON DELUXE INSTEAD.
+//still used somewhat by maprendering.dm
+
 /* *********************************************************************
         _____      _     ______ _       _     _____
        / ____|    | |   |  ____| |     | |   |_   _|

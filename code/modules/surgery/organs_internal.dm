@@ -237,7 +237,7 @@
 
 
 //////DETACH ORGAN////
-/datum/surgery_step/internal/detatch_organ/tool_quality(obj/item/tool)
+/datum/surgery_step/internal/detatch_organ/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0

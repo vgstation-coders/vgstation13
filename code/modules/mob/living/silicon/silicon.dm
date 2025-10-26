@@ -27,6 +27,7 @@
 	var/datum/state_laws_ui/state_laws_ui = new() //holds the UI state for the State Laws verb. See: state_laws.dm
 
 	var/stored_freqs = 0
+	var/time_last_speech = 0 // Used to prevent spam, put here so silicons can properly talk.
 
 /mob/living/silicon/hasFullAccess()
 	return 1
@@ -124,13 +125,13 @@
 			for(var/i = 1; i < alarm_types_clear.len; i++)
 				alarm_types_clear[i] = 0
 
-/mob/living/silicon/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
+/mob/living/silicon/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0, failmsg)
 	return 1
 
 /mob/living/silicon/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
+			visible_message("<span class='warning'>\The [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
@@ -155,7 +156,7 @@
 /mob/living/silicon/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj.nodamage)
 		adjustBruteLoss(Proj.damage)
-	Proj.on_hit(src,2)
+	Proj.robot_on_hit(src,100) //Unique variant of on_hit
 	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/silicon/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
@@ -235,7 +236,7 @@
 	if(data_core)
 		dat += data_core.get_manifest(1) // make it monochrome
 	dat += "<br>"
-	src << browse(dat, "window=airoster")
+	src << browse(HTML_SKELETON(dat), "window=airoster")
 	onclose(src, "airoster")
 
 /mob/living/silicon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
@@ -311,7 +312,7 @@
 		var/synth = (L in speech_synthesizer_langs)
 		dat += "<b>[L.name] (:[L.key])</b>[synth ? default_str : null]<br/>Speech Synthesizer: <i>[synth ? "YES" : "NOT SUPPORTED"]</i><br/>[L.desc]<br/><br/>"
 
-	src << browse(dat, "window=checklanguage")
+	src << browse(HTML_SKELETON(dat), "window=checklanguage")
 	return
 
 /mob/living/silicon/dexterity_check()
@@ -362,3 +363,11 @@
 		return
 	if(ui_key == "state_laws")
 		return state_laws_ui_interact(user, ui_key, ui, force_open) //state_laws.dm
+
+//A separate check from attacked_by (a carbon-level proc), with only a fragment in order to play hitsounds
+/mob/living/silicon/attacked_by(var/obj/item/I, var/mob/living/user, def_zone, originator, crit, flavor, force)
+	if(!..())
+		return FALSE
+	if(I.hitsound)
+		playsound(loc, I.hitsound, 50, 1, -1)
+	return TRUE

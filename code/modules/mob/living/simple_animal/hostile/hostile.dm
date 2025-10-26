@@ -36,6 +36,7 @@
 	var/list/target_rules = list()
 
 	var/can_ventcrawl = FALSE // If the mob can ventcrawl
+	var/avoids_poisonous = FALSE
 	var/mob/living/simple_animal/hostile/asteroid/hivelord/hivelord = null
 
 /mob/living/simple_animal/hostile/New()
@@ -150,6 +151,8 @@
 	var/list/Targets = list()
 	var/Target
 	for(var/atom/A in ListTargets())
+		if (!isValidTarget(A))
+			continue
 		if(Found(A))//Just in case people want to override targetting
 			var/list/FoundTarget = list()
 			FoundTarget += A
@@ -164,6 +167,19 @@
 
 /mob/living/simple_animal/hostile/proc/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
 	return
+
+/mob/living/simple_animal/hostile/proc/isValidTarget(var/atom/A)//we should have made that proc long ago instead of expanding CanAttack()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA=A
+		if(SA.is_poisonous && avoids_poisonous )
+			return FALSE
+		if(SA.pacify_aura)
+			return FALSE
+	if(istype(A,/mob/living/complex_animal))
+		var/mob/living/complex_animal/CA=A
+		if(CA.pacify_aura)
+			return FALSE
+	return !loneliness_affected(A)
 
 /mob/living/simple_animal/hostile/proc/PickTarget(var/list/Targets)//Step 3, pick amongst the possible, attackable targets
 	if(target != null)//If we already have a target, but are told to pick again, calculate the lowest distance between all possible, and pick from the lowest distance targets
@@ -214,6 +230,16 @@
 		for(var/datum/weakref/ref in friends)
 			if (ref.get() == L)
 				return 0
+
+		//don't attack things which pacify (eg pillows or capybaras)
+		if(istype(L,/mob/living/simple_animal))
+			var/mob/living/simple_animal/SA = L
+			if (SA.pacify_aura)
+				return 0
+		if(istype(L,/mob/living/complex_animal))
+			var/mob/living/complex_animal/CA=L
+			if(CA.pacify_aura)
+				return 0		
 		return 1
 	if(isobj(the_target))
 		//if(the_target.type in wanted_objects)
@@ -463,6 +489,11 @@
 /mob/living/simple_animal/hostile/proc/create_projectile(var/mob/user)
 	return new projectiletype(user.loc)
 
+/mob/living/simple_animal/hostile/UnarmedAttack(var/atom/A,var/proximity,var/params)
+	if(istype(A,/mob/living/complex_animal))
+		unarmed_attack_mob(A)
+	..()
+
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
 	if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		EscapeConfinement()
@@ -483,6 +514,8 @@
 					 /obj/structure/grille,
 					 /obj/structure/girder,
 					 /obj/structure/rack,
+					 /obj/structure/railing,
+					 /obj/machinery/door/table,
 					 /obj/machinery/door/window,
 					 /obj/item/tape,
 					 /obj/item/toy/balloon/inflated/decoy,

@@ -19,7 +19,7 @@ var/list/impact_master = list()
 	plane = EFFECTS_PLANE
 	anchored = 1 //There's a reason this is here, Mport. God fucking damn it -Agouri. Find&Fix by Pete. The reason this is here is to stop the curving of emitter shots.
 	flags = FPRINT
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	mouse_opacity = 0
 	var/bumped = 0		//Prevents it from hitting more than one guy at once
 	var/def_zone = ""	//Aiming at
@@ -68,7 +68,7 @@ var/list/impact_master = list()
 	var/penetration = 0	//if set to -1, will always phase through obstacles
 	var/mark_type = "trace"	//what marks will the bullet leave on a wall that it penetrates? from 'icons/effects/96x96.dmi'
 
-	var/inaccurate = 0
+	var/inaccurate = 0 //Will be rendered inaccurate and more likely to miss at a distance
 
 	var/turf/target = null
 	var/datum/tracker/tracker_datum = null
@@ -109,8 +109,16 @@ var/list/impact_master = list()
 	var/travel_range = 0	//if set, the projectile will be deleted when its distance from the firing location exceeds this
 	var/decay_type = null	//if set, along with travel range, will drop a new item of this type when the projectile exceeds its course
 	var/special_collision = PROJECTILE_COLLISION_DEFAULT
+	var/has_special_suicide = FALSE //when set to true will invoke a custom_mouthshot() in place of the standard mouthshot effect.
+
 
 	var/is_crit = FALSE
+	var/point_blank = FALSE //If fired at point-blank, deals extra damage and doesn't miss.
+
+	var/excessive_missing = FALSE //If toggled on, projectiles will always miss instead of hitting a different body part when missing
+	var/projectile_miss_chance = 0 //Innate miss chance, often modified by the gun
+	var/projectile_miss_message //If it has an unique miss message then it will be appended upon missing a hit
+	var/projectile_miss_message_replace //If toggled on, the miss message will completely replace the message for missing targets instead
 
 /obj/item/projectile/New()
 	..()
@@ -157,6 +165,11 @@ var/list/impact_master = list()
 		playsound(loc, hitsound, 35, 1)
 	return 1
 
+//A special on_hit variant that gets applied to robots, for when you want some things to affect robots but not everything.
+//Code that checks for this is in code/modules/mob/living/silicon/silicon.dm
+/obj/item/projectile/proc/robot_on_hit(var/atom/atarget, var/blocked = 0)
+	return on_hit(atarget, blocked)
+
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
 	if(!istype(target) || !istype(user))
 		return 0
@@ -179,22 +192,14 @@ var/list/impact_master = list()
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot himself with a <b>[type]</b>"
 			if(firer.key || firer.ckey)
 				msg_admin_attack("[key_name(firer)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
-			if(!iscarbon(firer))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer
-				M.assaulted_by(firer)
+			M.assaulted_by(firer)
 		else
 			log_attack("<font color='red'>[key_name(firer)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			if((firer.key || firer.ckey) && (M.key || M.ckey))
 				msg_admin_attack("[key_name(firer)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
-			if(!iscarbon(firer))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer
-				M.assaulted_by(firer)
+			M.assaulted_by(firer)
 	else
 		M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN/(no longer exists)</b> shot <b>UNKNOWN/(no longer exists)</b> with a <b>[type]</b>"
 		msg_admin_attack("UNKNOWN/(no longer exists) shot UNKNOWN/(no longer exists) with a [type]. Wait what the fuck?")
@@ -256,11 +261,13 @@ var/list/impact_master = list()
 		//Lower accurancy/longer range tradeoff. Distance matters a lot here, so at
 		// close distance, actually RAISE the chance to hit.
 		var/distance = get_dist(starting,loc)
-		var/miss_modifier = (is_crit ? -99999 : -30) // Crits never miss
+		var/miss_modifier = ((is_crit ? -99999 : -30) + projectile_miss_chance) // Crits never miss
 		if (istype(shot_from,/obj/item/weapon/gun))	//If you aim at someone beforehead, it'll hit more often.
 			var/obj/item/weapon/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
 			if (daddy.target && (original in daddy.target)) //As opposed to no-delay pew pew
 				miss_modifier += -30
+		if(point_blank) //Accurate at point blank.
+			miss_modifier += -50
 		if(istype(src, /obj/item/projectile/beam/lightning)) //Lightning is quite accurate
 			miss_modifier += -200
 			if(inaccurate)
@@ -269,31 +276,39 @@ var/list/impact_master = list()
 			var/turf/simulated/floor/f = get_turf(A.loc)
 			if(f && istype(f))
 				f.break_tile()
-				f.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
+				f.hotspot_expose(1000,FULL_FLAME,1)
 		else
 			if(inaccurate)
 				miss_modifier += 8*distance
 				miss_modifier += (abs(miss_modifier))
 
-			def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier)
+			def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier, excessive_missing)
 
-		if(!def_zone)
-			visible_message("<span class='notice'>\The [src] misses [M] narrowly!</span>")
+		var/missing_due_to_no_limb_text //Offers an unique missing sound message to clue players in as to why they missed
+		if(ishuman(M)) //Human check
+			var/mob/living/carbon/human/H = M
+			var/datum/organ/external/affecting = H.get_organ(def_zone)
+			if(affecting.status & ORGAN_DESTROYED) //Target zone ended up on a missing limb, count it as a miss
+				missing_due_to_no_limb_text = "\The [src] misses [H] narrowly due to flying through where their <span class='danger'>[affecting.display_name]</span> used to be!"
+				def_zone = null
+		if(!def_zone) //The miss messages have an extra space at the beginning in order to be spaced properly
+			if(projectile_miss_message_replace)
+				M.visible_message(projectile_miss_message)
+			else if(missing_due_to_no_limb_text)
+				M.visible_message("<span class='notice'>[missing_due_to_no_limb_text][projectile_miss_message ? " [projectile_miss_message]" : ""]</span>")
+			else
+				M.visible_message("<span class='notice'>\The [src] misses [M] narrowly![projectile_miss_message ? " [projectile_miss_message]" : ""]</span>")
 			special_collision = PROJECTILE_COLLISION_MISS
 		else
 			if(!custom_impact)
 				if(silenced)
 					to_chat(M, "<span class='warning'>You've been shot in the [parse_zone(def_zone)] by the [src.name]!</span>")
 				else
-					visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
+					M.visible_message("<span class='warning'>[M.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 			admin_warn(M)
 			if(istype(firer, /mob))
 				M.do_hitmarker(firer)
-				if(!iscarbon(firer))
-					M.LAssailant = null
-				else
-					M.LAssailant = firer
-					M.assaulted_by(firer)
+				M.assaulted_by(firer)
 
 	if(!A)
 		return 1
@@ -305,11 +320,7 @@ var/list/impact_master = list()
 				var/mob/BM = JC.occupant
 				if(istype(firer, /mob))
 					admin_warn(BM)
-					if(!iscarbon(firer))
-						BM.LAssailant = null
-				else
-					BM.LAssailant = firer
-					BM.assaulted_by(firer)
+				BM.assaulted_by(firer)
 
 	var/turf/A_turf = get_turf(A) //Store the location of A for later use in case it is destroyed in bullet_act()
 
@@ -502,17 +513,23 @@ var/list/impact_master = list()
 	return 1
 
 
+/obj/item/projectile/proc/on_step()
+	return
+
 /obj/item/projectile/proc/process_step()
 	if(src.loc)
+		var/sleeptime = projectile_speed
 		if(dist_x > dist_y)
-			bresenham_step(dist_x,dist_y,dx,dy)
+			sleeptime *= bresenham_step(dist_x,dist_y,dx,dy)
 		else
-			bresenham_step(dist_y,dist_x,dy,dx)
+			sleeptime *= bresenham_step(dist_y,dist_x,dy,dx)
 		if(linear_movement)
 			update_pixel()
 			pixel_x = PixelX
 			pixel_y = PixelY
-
+		if (sleeptime)//so we don't act twice on the the same frame
+			kill_count--
+			on_step()
 		bumped = 0
 
 		if (tracker_datum && tracker_datum.changed)
@@ -545,7 +562,7 @@ var/list/impact_master = list()
 				if(rotate)
 					target_angle = round(Get_Angle(current,target))
 
-		sleep(projectile_speed)
+		sleep(sleeptime)
 
 
 /obj/item/projectile/proc/bresenham_step(var/distA, var/distB, var/dA, var/dB)
@@ -559,7 +576,6 @@ var/list/impact_master = list()
 				new decay_type(T)
 			bullet_die()
 			return 1
-	kill_count--
 	total_steps++
 	if(error < 0)
 		var/atom/step = get_step(src, dB)
@@ -764,9 +780,11 @@ var/list/impact_master = list()
 		return //cannot shoot yourself
 	if(istype(A, /obj/item/projectile))
 		return
-	if(istype(A, /mob/living))
-		result = 2 //We hit someone, return 1!
-		return
+	if(ismovable(A))
+		var/atom/movable/AM = A
+		if(isliving(AM) || (locate(/mob/living) in AM) || (locate(/mob/living) in AM.locked_atoms))
+			result = 2 //We hit someone, return 1!
+			return
 	result = 1
 	return
 
@@ -857,4 +875,7 @@ var/list/impact_master = list()
 	return
 
 /obj/item/projectile/proc/teleport_act()
+	return
+
+/obj/item/projectile/proc/custom_mouthshot(mob/living/user)
 	return

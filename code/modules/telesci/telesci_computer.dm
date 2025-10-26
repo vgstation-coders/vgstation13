@@ -125,12 +125,10 @@
 		to_chat(user, "<span class='warning'>There is already a cell in \the [name].</span>")
 		return TRUE
 
-	if(user.drop_item(W, src))
+	if(user.drop_item(W, src, failmsg = TRUE))
 		cell = W
 		user.visible_message("[user] inserts a cell into \the [src].", "You insert a cell into \the [src].")
 		nanomanager.update_uis(src)
-	else
-		to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 
 /obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
@@ -224,7 +222,7 @@
 
 	if(prob(1))
 		// The OH SHIT FUCK GOD DAMN IT LYNCH THE SCIENTISTS event.
-		visible_message("<span class='warning'>The telepad changes colors rapidly, and opens a portal, and you see what your mind seems to think is the very threads that hold the pattern of the universe together, and a eerie sense of paranoia creeps into you.</span>")
+		visible_message("<span class='warning'>The telepad changes colors rapidly, and opens a portal, and you see what your mind seems to think is the very threads that hold the pattern of the universe together, and an eerie sense of paranoia creeps into you.</span>")
 		for(var/mob/living/carbon/O in viewers(src, null)) //I-IT'S A FEEEEATUUUUUUUREEEEE
 			spacevine_infestation()
 		spark(telepad)

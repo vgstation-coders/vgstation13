@@ -7,8 +7,9 @@
 	anchored = 0
 	pressure_resistance = ONE_ATMOSPHERE*5
 	flags = FPRINT
-	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 3
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	var/obj/item/clothing/suit/suit = null
 	var/obj/item/clothing/head/hat = null
 

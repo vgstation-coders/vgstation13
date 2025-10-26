@@ -57,7 +57,7 @@
 	if(!master)
 		master = user
 	if(master != user)
-		to_chat(user,"<span class='danger'>This nanodictionary is already partially used up. Useless. You need the fundamentals.</span>.")
+		to_chat(user,"<span class='danger'>This nanodictionary is already partially used up. Useless. You need the fundamentals.</span>")
 		return
 	busy = TRUE
 	if(do_after(user, src,progress_time, 10, custom_checks = new /callback(src, /obj/item/dictionary/proc/on_do_after)))
@@ -75,7 +75,7 @@
 
 /obj/item/dictionary/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
 	. =  do_after_default_checks(arglist(args))
-	if(. && prob(35))
+	if(. && !user.mind.miming && prob(35))
 		practice(user)
 	return .
 

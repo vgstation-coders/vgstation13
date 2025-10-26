@@ -6,16 +6,16 @@
 	abbreviation = "BL"
 
 	school = "abjuration"
-	charge_max = 20
+	charge_cooldown_max = 2 SECONDS
 	spell_flags = IGNOREDENSE | IGNORESPACE
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 7
 	inner_radius = 1
-	cooldown_min = 5 //4 deciseconds reduction per rank
+	cooldown_min = 0.5 SECONDS //0.4 SECONDS reduction per rank
 	hud_state = "wiz_blink"
 	selection_type = "range"
-	quicken_price = Sp_BASE_PRICE
+	quicken_price = SP_BASE_PRICE
 
 /spell/aoe_turf/blink/cast(var/list/targets, mob/user)
 	if(!targets.len)
@@ -42,7 +42,7 @@
 	override_base = "vamp"
 	hud_state = "vamp_blink"
 
-	charge_max = 20 SECONDS
+	charge_cooldown_max = 20 SECONDS
 	cooldown_min = 20 SECONDS
 
 	var/max_lum = 1

@@ -5,7 +5,7 @@
 	name = "remote signaling device"
 	short_name = "signaler"
 
-	desc = "Used to remotely activate devices."
+	desc = "Used to remotely activate devices. Alt-click to toggle between the configuration menu and sending a signal on use."
 	icon_state = "signaller"
 	item_state = "signaler"
 	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 200)
@@ -20,6 +20,7 @@
 	var/delay = 0
 	var/datum/radio_frequency/radio_connection
 	var/deadman = 0
+	var/autosignal = 0
 
 	accessible_values = list(\
 		VALUE_CODE = "code;"+VT_NUMBER+";1;100",\
@@ -60,6 +61,13 @@
 		else
 			to_chat(user, "<span class='warning'>Re-secure the signaler first!</span>")
 
+
+/obj/item/device/assembly/signaler/proc/attempt_activate()
+	if(!cooldown)
+		activate()
+	else
+		to_chat(usr, "<span class='warning'>You must wait a little before sending out a signal again!</span>")
+
 /obj/item/device/assembly/signaler/activate()
 	if(cooldown > 0)
 		return 0
@@ -75,7 +83,7 @@
 		holder.update_icon()
 	return
 
-/obj/item/device/assembly/signaler/interact(mob/user as mob, flag1)
+/obj/item/device/assembly/signaler/proc/show_menu(var/user as mob)
 	var/t1 = "-------"
 //		if ((src.b_stat && !( flag1 )))
 //			t1 = text("-------<BR>\nGreen Wire: []<BR>\nRed Wire:   []<BR>\nBlue Wire:  []<BR>\n", (src.wires & 4 ? text("<A href='?src=\ref[];wires=4'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=4'>Mend Wire</A>", src)), (src.wires & 2 ? text("<A href='?src=\ref[];wires=2'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=2'>Mend Wire</A>", src)), (src.wires & 1 ? text("<A href='?src=\ref[];wires=1'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=1'>Mend Wire</A>", src)))
@@ -85,6 +93,7 @@
 		<TT>
 
 		<A href='byond://?src=\ref[src];send=1'>Send Signal</A><BR>
+		<A href='byond://?src=\ref[src];toggle_silent=1'>Button press sound: O[silent ? "ff" : "n"]</A><BR>
 		<B>Frequency/Code</B> for signaler:<BR>
 		Frequency:
 		<A href='byond://?src=\ref[src];freq=-10'>-</A>
@@ -101,9 +110,16 @@
 		<A href='byond://?src=\ref[src];code=5'>+</A><BR>
 		[t1]
 		</TT>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 	return
+
+/obj/item/device/assembly/signaler/interact(mob/user as mob, flag1)
+	if(autosignal)
+		spawn(0)
+			attempt_activate()
+	else
+		show_menu(user)
 
 
 /obj/item/device/assembly/signaler/Topic(href, href_list)
@@ -129,10 +145,10 @@
 
 	if(href_list["send"])
 		spawn(0)
-			if(!cooldown)
-				activate()
-			else
-				to_chat(usr, "<span class='warning'>You must wait a little before sending out a signal again!</span>")
+			attempt_activate()
+
+	if(href_list["toggle_silent"])
+		silent = !silent
 
 	if(usr)
 		attack_self(usr)
@@ -151,6 +167,8 @@
 	signal.encryption = code
 	signal.data["message"] = "ACTIVATE"
 	radio_connection.post_signal(src, signal)
+	if(!silent)
+		playsound(src,'sound/items/assemblytick2.ogg',100)
 
 	if(istype(loc, /obj/item/device/assembly_holder))
 		investigation_log(I_WIRES, "used as signaler in \a [loc]. Last touched by: [fingerprintslast], Last user processed: [key_name(usr)] - [format_frequency(frequency)]/[code]")
@@ -291,3 +309,16 @@
 		set_frequency(sanitize_frequency(new_value))
 	else
 		return ..()
+
+/obj/item/device/assembly/signaler/AltClick(var/mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		..()
+		return
+	if(autosignal)
+		autosignal = 0
+		to_chat(user, "<span class='notice'>The signaller will now show the configuration menu on use.</span>")
+		icon_state = "signaller"
+	else
+		autosignal = 1
+		to_chat(user, "<span class='notice'>The signaller will now activate the signal on use without showing the menu.</span>")
+		icon_state = "signaller_autosignal"

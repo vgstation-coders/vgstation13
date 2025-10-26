@@ -34,13 +34,15 @@
 
 	animate_movement = 0
 
+	luminosity = 2
+
 	var/def_zone=""
 	var/charged_up = FALSE
 	var/base_damage = 0//The damage dealt per step when not charged_up
 	var/full_damage = 0//The damage dealth when charged_up
 	var/damage_type=BURN
 
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE | PASSRAILING
 
 	// The first beam object
 	var/obj/effect/beam/master = null
@@ -79,6 +81,11 @@
 	full_damage = 1
 	max_range = 4
 
+
+/obj/effect/beam/New(turf/loc)
+	..()
+	update_icon()
+
 /obj/effect/beam/emitter/eyes/emit(var/spawn_by, var/_range=-1,var/charged = FALSE)
 	..()
 	if (charged)
@@ -95,7 +102,6 @@
 	if (!charged_up)
 		charged_up = TRUE
 		update_icon()
-
 
 /obj/effect/beam/emitter/eyes/update_icon()
 	if(!master)

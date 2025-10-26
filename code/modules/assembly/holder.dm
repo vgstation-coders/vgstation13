@@ -266,10 +266,9 @@
 	ign.secured = 1
 	ign.holder = src
 	var/obj/item/device/assembly/timer/tmr = new(src)
-	tmr.time=5
+	tmr.time=10
 	tmr.secured = 1
 	tmr.holder = src
-	processing_objects.Add(tmr)
 	a_left = tmr
 	a_right = ign
 	secured = 1

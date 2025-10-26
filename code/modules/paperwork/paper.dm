@@ -12,13 +12,15 @@
 	item_state = "paper"
 	throwforce = 0
 	w_class = W_CLASS_TINY
+	starting_materials = list(MAT_CARDBOARD = 40)
 	w_type = RECYK_WOOD
+	flammable = TRUE
 	throw_range = 1
 	throw_speed = 1
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 	var/info		//What's actually written on the paper.
 	var/info_links	//A different version of the paper which includes html links at fields and EOF
@@ -56,7 +58,7 @@
 
 	if(img)
 		user << browse_rsc(img.img, "tmp_photo.png")
-		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
+		info_image = "<img src='tmp_photo.png' width='192' style='image-rendering: pixelated' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
 	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name];size=[display_x]x[display_y]")
 	onclose(user, "[name]")
 
@@ -259,6 +261,8 @@
 		\[row\] - Creates a new table row.<br>
 		\[cell\] - Creates a new table cell.<br>
 		\[sign\] : Inserts a signature of your name in a foolproof way.<br>
+		\[stationname\] : Inserts the name of the station.<br>
+		\[logo\] : Inserts a medium-size Nanotrasen logo.<br>
 		\[field\] : Inserts an invisible field which lets you start type from there. Useful for forms.<br>
 		\[date\] : Inserts the current date in the format DAY MONTH, YEAR.<br>
 		\[time\] : Inserts the current station time.<br>
@@ -315,12 +319,12 @@
 			//Not writing with a pen or crayon
 			if(!istype(i,/obj/item/weapon/pen) && !istype(i,/obj/item/toy/crayon))
 				to_chat(usr, "<span class='warning'>Please ensure your pen is in your active hand and that you're holding the paper.</span>")
-				continue
+				return
 
 			//Lost the paper or lost consciousness
 			if(!Adjacent(usr, 1) || usr.isUnconscious()) //the 1 means that the paper can be in one other item and be written on
-				to_chat(usr, "<span class='warning'>You are to unable to write on this paper.</span>")
-				continue
+				to_chat(usr, "<span class='warning'>You are unable to write on this paper.</span>")
+				return
 
 		while(isnull(new_text))
 

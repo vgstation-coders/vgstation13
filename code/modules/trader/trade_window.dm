@@ -274,7 +274,7 @@
 	if(change_money(TP.current_price(user)))
 		SStrade.loyal_customers[user.get_face_name()] += TP.current_price(user)
 		TP.totalsold++
-		var/atom/movable/AM = new TP.path(user.loc)
+		var/atom/movable/AM = new TP.path(loc)
 		product_selected = null
 		if(isitem(AM))
 			user.put_in_hands(AM)

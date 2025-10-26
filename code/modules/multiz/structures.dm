@@ -221,7 +221,7 @@
 	bound_width = 2 * WORLD_ICON_SIZE
 
 /obj/structure/stairs_frame
-	name = "\improper stair frame"
+	name = "stair frame"
 	desc = "Frames of stairs that are supposed to lead to another deck."
 	icon = 'icons/obj/stairs.dmi'
 	icon_state = "stairframe"
@@ -245,7 +245,7 @@
 	else if(istype(W, /obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = W
 		if(!anchored)
-			to_chat(user, "<span class='warning'>The [src] must be anchored first!.</span>")
+			to_chat(user, "<span class='warning'>\The [src] must be anchored first!.</span>")
 			return
 		else
 			if(S.amount < 4)

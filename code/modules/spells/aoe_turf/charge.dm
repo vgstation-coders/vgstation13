@@ -5,12 +5,12 @@
 	specialization = SSUTILITY
 
 	school = "transmutation"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = 0
 	invocation = "DIRI CEL"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 0
-	cooldown_min = 400 //50 deciseconds reduction per rank
+	cooldown_min = 40 SECONDS //5 SECONDS reduction per rank
 
 	hud_state = "wiz_charge"
 
@@ -28,7 +28,7 @@
 	if(M.spell_list.len != 0)
 		for(var/spell/S in M.spell_list)
 			if(!istype(S, /spell/aoe_turf/charge))
-				S.charge_counter = S.charge_max
+				S.charge_counter = S.charge_cooldown_max
 		to_chat(M, "<span class='notice'>You feel raw magic flowing through you, it feels good!</span>")
 	else
 		to_chat(M, "<span class='notice'>You feel very strange for a moment, but then it passes.</span>")

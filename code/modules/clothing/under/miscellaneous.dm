@@ -58,6 +58,7 @@
 	icon_state = "mailman"
 	item_state = "b_suit"
 	_color = "mailman"
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/sexyclown
@@ -117,7 +118,7 @@
 	icon_state = "syndicate"
 	item_state = "bl_suit"
 	_color = "syndicate"
-	desc = "it's a cybernetically enhanced jumpsuit used for administrative duties."
+	desc = "It's a cybernetically enhanced jumpsuit used for administrative duties."
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
@@ -218,7 +219,7 @@
 	icon_state = "blackskirt"
 	_color = "blackskirt"
 	body_parts_covered = FULL_TORSO|ARMS
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/schoolgirl
 	name = "schoolgirl uniform"
@@ -519,7 +520,7 @@
 	icon_state = "libertyshirt"
 	item_state = "libertyshirt"
 	_color = "libertyshirt"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/bikersuit
 	name = "biker's outfit"
@@ -541,7 +542,8 @@
 	icon_state = "mega"
 	item_state = "mega"
 	_color = "mega"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+	body_parts_covered = HIDETAIL
 
 /obj/item/clothing/under/proto
 	name = "The Prototype Suit"
@@ -581,7 +583,7 @@
 	icon_state = "maid"
 	item_state = "maid"
 	_color = "maid"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/darkholme
 	name = "\improper Darkholme"
@@ -655,7 +657,7 @@
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
 	_color = "clownpiece"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/cia
 	name = "casual IAA outfit"
@@ -872,6 +874,7 @@
 	icon_state = "tourist"
 	item_state = "g_suit"
 	_color = "tourist"
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/varsity
@@ -898,7 +901,7 @@
 
 /obj/item/clothing/under/clownsuit
 	name = "formal clown outfit"
-	desc = "for clowns living in a society."
+	desc = "For clowns living in a society."
 	icon_state = "clownsuit"
 	item_state = "clownsuit"
 	_color = "clownsuit"
@@ -913,13 +916,15 @@
 	_color = "skelesuit"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
-	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR|HIDETAIL
 
 /obj/item/clothing/under/clownpsyche
 	name = "Psychedelic clown outfit"
 	desc = "Do you know the definition of insanity?"
 	icon_state = "clownpsyche"
 	item_state = "clownpsyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	luminosity = 2
 	_color = "clownpsyche"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED)
@@ -998,6 +1003,20 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/clothing/under/hunter
+	name = "modern vampire hunter's attire"
+	desc = "A tough leather vest with stylish white pants."
+	icon_state = "hunter"
+	item_state = "hunter_uniform"
+	_color = "hunter"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+
+/obj/item/clothing/under/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/under/hunter/rangeTackleBonus()
+	return 1
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -1092,3 +1111,12 @@
 	dyeable_parts = list("drape","trim")
 	clothing_flags = COLORS_OVERLAY
 	color = COLOR_LINEN
+
+/obj/item/clothing/under/sonicman
+	name = "sonicman suit"
+	desc = "Did you call me?"
+	icon_state = "sonicmansuit"
+	item_state = "sonicmansuit"
+	_color = "sonicmansuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	clothing_flags = ONESIZEFITSALL

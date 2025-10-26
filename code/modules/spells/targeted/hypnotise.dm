@@ -6,9 +6,9 @@
 	school = "vampire"
 	user_type = USER_TYPE_VAMPIRE
 
-	charge_type = Sp_RECHARGE
-	charge_max = 3 MINUTES
-	invocation_type = SpI_NONE
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 3 MINUTES
+	invocation_type = SP_INV_NONE
 	range = 1
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK | NEEDSHUMAN
@@ -22,7 +22,7 @@
 	hud_state = "vampire_hypno"
 
 	var/blood_cost = 10
-	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	valid_targets = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 /spell/targeted/hypnotise/cast_check(skipcharge = 0, mob/user = usr)
 	. = ..()
@@ -42,7 +42,7 @@
 
 	var/mob/living/carbon/C = target
 	if ((C.sdisabilities & BLIND) || (C.sight & BLIND))
-		to_chat(user, "<span class='warning'>\the [C] is blind!</span>")
+		to_chat(user, "<span class='warning'>\The [C] is blind!</span>")
 		return TRUE
 	var/success = C.vampire_affected(user.mind)
 	switch(success)

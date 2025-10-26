@@ -9,6 +9,7 @@
 	I.pixel_y = pixel_y
 	I.color=color
 	T.AddDecal(I)
+	I = null
 	qdel(src)
 
 /obj/effect/decal/warning_stripes/oldstyle

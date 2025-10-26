@@ -1077,7 +1077,7 @@
 /turf/unsimulated/floor/evil,
 /area/awaymission/hive)
 "ep" = (
-/obj/item/weapon/invisible_spray,
+/obj/item/weapon/syndie_spray/invisible_spray,
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "eq" = (
@@ -2145,7 +2145,7 @@
 	},
 /area/awaymission/hive)
 "ia" = (
-/obj/item/weapon/circuitboard/microwave,
+/obj/item/weapon/circuitboard/small/microwave,
 /obj/item/trash/liquidfood,
 /obj/effect/decal/cleanable/scattered_sand,
 /turf/simulated/floor/shuttle{

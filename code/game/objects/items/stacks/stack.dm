@@ -1,5 +1,3 @@
-#define CORRECT_STACK_NAME(stack) ((stack.irregular_plural && stack.amount > 1) ? stack.irregular_plural : "[stack.singular_name]")
-
 /* Stack type objects!
  * Contains:
  * 		Stacks
@@ -31,11 +29,12 @@
 	update_materials()
 	update_icon()
 	//forceMove(loc) // So that Crossed gets called, so that stacks can be merged
+	initial_thermal_mass = thermal_mass
+	thermal_mass = initial_thermal_mass * src.amount
 
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
 		usr << browse(null, "window=stack")
-	src.forceMove(null)
 	..()
 
 /obj/item/stack/examine(mob/user)
@@ -44,7 +43,10 @@
 	if(amount == 1)
 		be = "is"
 
-	to_chat(user, "<span class='info'>There [be] [src.amount] [CORRECT_STACK_NAME(src)][amount == 1 || irregular_plural ? "" : "s"] in the stack.</span>")
+	to_chat(user, "<span class='info'>There [be] [src.amount] [correct_name()] in the stack.</span>")
+
+/obj/item/stack/proc/correct_name()
+	return "[irregular_plural && amount > 1 ? irregular_plural : "[singular_name]"][amount == 1 || irregular_plural ? "" : "s"]"
 
 /obj/item/stack/attack_self(mob/user as mob)
 	list_recipes(user)
@@ -61,7 +63,7 @@
 		var/datum/stack_recipe_list/srl = recipe_list[recipes_sublist]
 		recipe_list = srl.recipes
 	var/t1 = "<HTML><HEAD><title>[name] recipes</title></HEAD><body><TT>Amount of [name] available: [src.amount]<br>"
-	for(var/i = 1;i <= recipe_list.len,i++)
+	for(var/i = 1;i <= recipe_list.len;i++)
 		var/E = recipe_list[i]
 		if(isnull(E))
 			t1 += "<hr>"
@@ -97,7 +99,7 @@
 			else
 				title += "[R.title]"
 
-			title += " ([R.req_amount] [CORRECT_STACK_NAME(src)])"
+			title += " ([R.req_amount] [correct_name()])"
 			if(R.other_reqs.len)
 				for(var/ii = 1 to R.other_reqs.len)
 					can_build = 0
@@ -106,7 +108,7 @@
 					if(ispath(looking_for, /obj/item/stack))
 						var/obj/item/stack/S = new looking_for
 						req_amount = R.other_reqs[looking_for]
-						title += ", [req_amount] [CORRECT_STACK_NAME(S)]"
+						title += ", [req_amount] [S.correct_name()]"
 					else
 						title += ", [initial(looking_for.name)] required in vicinity"
 					if(ispath(user.get_inactive_hand(), looking_for))
@@ -162,6 +164,11 @@
 /obj/item/stack/proc/stop_build(var/_last_crafting = FALSE)
 	return
 
+/obj/item/stack/useThermalMass(var/used_mass)
+	..()
+	var/used_amount = round(initial_thermal_mass * amount - thermal_mass)
+	use(used_amount)
+
 /obj/item/stack/Topic(href, href_list)
 	..()
 	if ((usr.restrained() || usr.stat || !allow_use(usr)))
@@ -194,7 +201,9 @@
 		return
 
 	if(src.amount>=amount)
+		var/thermal_mass_used = thermal_mass/src.amount
 		src.amount-=amount
+		thermal_mass -= thermal_mass_used
 		update_materials()
 	else
 		return 0
@@ -228,6 +237,8 @@
 
 /obj/item/stack/proc/add(var/amount)
 	src.amount += amount
+	if(thermal_mass)
+		thermal_mass += initial_thermal_mass * amount
 	update_materials()
 
 /obj/item/stack/proc/set_amount(new_amount)
@@ -294,7 +305,7 @@
 	if (can_stack_with(target))
 		var/obj/item/stack/S = target
 		if (amount >= max_amount)
-			to_chat(user, "\The [src] cannot hold anymore [CORRECT_STACK_NAME(src)].")
+			to_chat(user, "\The [src] cannot hold anymore [correct_name()].")
 			return 1
 		var/to_transfer
 		if (user.get_inactive_hand()==S)
@@ -303,7 +314,7 @@
 			to_transfer = min(S.amount, max_amount-amount)
 		add(to_transfer)
 		transfer_data_from(S,to_transfer)
-		to_chat(user, "You add [to_transfer] [((to_transfer > 1) && S.irregular_plural) ? S.irregular_plural : "[S.singular_name]\s"] to \the [src]. It now contains [amount] [CORRECT_STACK_NAME(src)].")
+		to_chat(user, "You add [to_transfer] [((to_transfer > 1) && S.irregular_plural) ? S.irregular_plural : "[S.singular_name]\s"] to \the [src]. It now contains [amount] [correct_name()].")
 		if (S && user.machine==S)
 			spawn(0) interact(user)
 		S.use(to_transfer)
@@ -359,7 +370,7 @@
 			if(S.max_amount >= S.amount + add_amount)
 				S.add(add_amount)
 				if(user)
-					to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [CORRECT_STACK_NAME(S)].</span>")
+					to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [S.correct_name()].</span>")
 				return S
 	var/obj/item/stack/S = new_stack_type
 	for(var/i = 0 to round(add_amount/initial(S.max_amount)))
@@ -379,12 +390,10 @@
 		return
 	return ..()
 
-/obj/item/stack/restock()
-	if(!restock_amount)
+/obj/item/stack/restock(nanobots = FALSE)
+	if(nanobots || !restock_amount)
 		return //Do not restock this stack type
 	if(amount < max_amount)
 		amount += restock_amount
 	if(amount > max_amount)
 		amount = max_amount
-
-#undef CORRECT_STACK_NAME

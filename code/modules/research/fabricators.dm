@@ -27,7 +27,6 @@
 	var/list/queue = list()
 	var/processing_queue = 0
 	var/screen = 0
-	var/temp
 	var/list/part_sets = list()
 	var/datum/design/last_made
 	var/start_end_anims = 0
@@ -63,18 +62,32 @@
 	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating - 1
 	max_material_storage = (initial(max_material_storage)+(T * 187500))
+	update_coeff()
 
-	T = 0
-	var/datum/tech/Tech = files.known_tech["materials"]
+//A separate proc for updating the machine's coefficiency ratings
+/obj/machinery/r_n_d/fabricator/update_coeff()
+	// Each material tech level above 1 increases the reduction by 4%, each manipulator increases the reduction by 8% per tier above 1
+	var/manip_rating = 0 //Improves resource efficiency
 	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
-		T += Ma.rating - 1
-	resource_coeff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((Tech.level - 1)+(T * 2)))/25,0.01), min_cap_C)
+		manip_rating += Ma.rating - 1 // + 1 per tier above tier 1, adds up with other manipulators
+	var/datum/tech/machine_tech = files.known_tech["materials"].level
+	var/datum/tech/console_tech
+	if(linked_console) //Check to see if there's a linked console to draw research from, otherwise use the machinery's innate research
+		console_tech = linked_console.files.known_tech["materials"].level
+	if(console_tech && (console_tech > machine_tech))
+		machine_tech = console_tech
+	resource_coeff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((machine_tech - 1)+(manip_rating * 2)))/25,0.01), min_cap_C)
 
-	T = 0
-	Tech = files.known_tech["programming"]
+	// Each data tech level above 1 increases the reduction by 4%, each micro-laser increases the reduction by 12% per tier above 1
+	var/laser_rating = 0 //Improves fabrication speed
 	for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
-		T += Ml.rating - 1
-	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*((Tech.level - 1)+(T * 3)))/25,0.01), min_cap_T)
+		laser_rating += Ml.rating - 1
+	machine_tech = files.known_tech["programming"].level
+	if(linked_console)
+		console_tech = linked_console.files.known_tech["programming"].level
+		if(console_tech > machine_tech)
+			machine_tech = console_tech
+	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*((machine_tech - 1)+(laser_rating * 3)))/25,0.01), min_cap_T)
 
 /obj/machinery/r_n_d/fabricator/emag_act()
 	sleep()
@@ -332,13 +345,18 @@
 	if(start_end_anims)
 		flick("[base_state]_end",src)
 	if(being_built)
-		if(!being_built.materials)
-			being_built.materials = new /datum/materials(being_built)
-		for(var/matID in part.materials)
-			if(copytext(matID, 1, 2) != "$") //it's not a material, let's ignore it
-				continue
-			being_built.materials.storage = initial_materials.Copy()
-			being_built.materials.addAmount(matID, get_resource_cost_w_coeff(part,matID)) //slap in what we built with - matching the cost
+		if(part.use_design_materials) // Determines whether the printed item will use the design's resource costs for its materials
+			if(!being_built.materials)
+				being_built.materials = new /datum/materials(being_built)
+			for(var/matID in part.materials)
+				if(copytext(matID, 1, 2) != "$") //it's not a material, let's ignore it
+					continue
+				being_built.materials.storage[matID] = 0 // Reset the item's resource cost and use the design's.
+				being_built.materials.addAmount(matID, get_resource_cost_w_coeff(part,matID)) //slap in what we built with - matching the cost
+		else if(being_built.materials) // Check if it has materials, and if so reduce them accordingly
+			for(var/matID in being_built.materials.storage)
+				if(being_built.materials.storage[matID]) // Only do this for materials that the printed item actually has
+					being_built.materials.storage[matID] = get_resource_cost_w_coeff_no_design(being_built.materials.storage[matID], matID)
 		if(part.locked && research_flags &LOCKBOXES)
 			var/obj/item/weapon/storage/lockbox/L
 			//if(research_flags &TRUELOCKS)
@@ -382,7 +400,7 @@
 				break
 			var/datum/design/D = set_parts[i]
 			add_to_queue(D)
-	visible_message("[bicon(src)] <b>[src]</b> beeps: \"[set_name] parts were added to the queue\".")
+	visible_message("[bicon(src)] <b>[src]</b> beeps: \"[replacetext(set_name, "_", " ")] parts were added to the queue\".")
 	return
 
 /obj/machinery/r_n_d/fabricator/proc/add_to_queue(var/datum/design/part)
@@ -420,44 +438,33 @@
 					i++
 	return i
 
-/obj/machinery/r_n_d/fabricator/proc/update_tech()
+/obj/machinery/r_n_d/fabricator/proc/update_tech(var/datum/tech/old_materials, var/datum/tech/old_programming)
 	if(!files)
 		return
 	var/output
-	var/diff
-	var/datum/tech/T = files.known_tech["materials"]
-	if(T && T.level > 1)
-		var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
-		for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
-			pmat += Ma.rating - 1
-		diff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((T.level - 1)+(pmat*2)))/25,0.01), min_cap_C)
-		if(resource_coeff!=diff)
-			resource_coeff = diff
-			output+="Production efficiency increased.<br>"
-	T = files.known_tech["programming"]
-	if(T && T.level > 1)
-		var/ptime = 0
-		for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
-			ptime += Ml.rating - 1
-		diff = max(round(initial(time_coeff) - (initial(time_coeff)*((T.level - 1)+(ptime*3)))/25,0.1), min_cap_T)
-		if(time_coeff!=diff)
-			time_coeff = diff
-			output+="Production routines updated.<br>"
+	var/datum/tech/T = files.known_tech["materials"].level
+	if(T && (T > old_materials))
+		output += "Production efficiency increased."
+	T = files.known_tech["programming"].level
+	if(T && (T > old_programming))
+		if(output)
+			output += " " //Add one space.
+		output += "Production routines improved."
 	return output
 
-
-/obj/machinery/r_n_d/fabricator/proc/sync(silent=null)
-	var/new_data=0
-	var/found = 0
-	var/obj/machinery/computer/rdconsole/console
+/obj/machinery/r_n_d/fabricator/proc/sync()
 	if(busy)
 		visible_message("[bicon(src)] <b>[src]</b> beeps, \"Please wait for completion of current operation.\"")
 		return
+	var/new_data = 0
+	var/obj/machinery/computer/rdconsole/console
 	if(linked_console)
 		console = linked_console
 	else
 		visible_message("[bicon(src)] <b>[src]</b> beeps, \"Not connected to a server. Please connect from a local console first.\"")
 	if(console)
+		var/datum/tech/old_materials = files.known_tech["materials"].level
+		var/datum/tech/old_programming = files.known_tech["programming"].level
 		for(var/ID in console.files.known_tech)
 			var/datum/tech/T = console.files.known_tech[ID]
 			if(T)
@@ -467,19 +474,14 @@
 				files.AddDesign2Known(D)
 		files.RefreshResearch()
 		var/i = convert_designs()
-		var/tech_output = update_tech()
-		if(!silent)
-			temp = "Processed [i] equipment designs.<br>"
-			temp += tech_output
-			temp += "<a href='?src=\ref[src];clear_temp=1'>Return</a>"
-			updateUsrDialog()
+		var/tech_output = update_tech(old_materials, old_programming)
 		if(i || tech_output)
 			new_data=1
-	if(new_data)
-		visible_message("[bicon(src)] <b>[src]</b> beeps, \"Successfully synchronized with R&D server. New data processed.\"")
-	if(!silent && !found)
-		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
-	updateUsrDialog()
+		if(new_data)
+			visible_message("[bicon(src)] <b>[src]</b> beeps, \"Successfully synchronized with R&D server. New data processed.\"")
+		if(tech_output)
+			visible_message("[bicon(src)] <b>[src]</b> beeps, \"[tech_output]\"")
+		update_coeff()
 
 /obj/machinery/r_n_d/fabricator/kick_act(mob/living/H)
 	..()
@@ -498,6 +500,10 @@
 
 /obj/machinery/r_n_d/fabricator/proc/get_resource_cost_w_coeff(var/datum/design/part as obj,var/resource as text, var/roundto=1)
 	return max(1,round(part.materials[resource]*resource_coeff, roundto))
+
+// When you just want to convert a value directly into a resource cost without relying on the design
+/obj/machinery/r_n_d/fabricator/proc/get_resource_cost_w_coeff_no_design(var/value, var/resource, var/roundto = 1)
+	return max(1, round(value*resource_coeff, roundto))
 
 //produces the adjusted time taken to build a component
 //different fabricators have different modifiers
@@ -618,7 +624,6 @@
 
 	if(href_list["sync"])
 		queue = list()
-		temp = "Updating local R&D database..."
 		updateUsrDialog()
 		spawn(30)
 			sync()
@@ -694,4 +699,8 @@
 	return 0
 
 /obj/machinery/r_n_d/fabricator/proc/update_buffer_size()
+	return
+
+//Mainly used by fabricators in fabricators.dm
+/obj/machinery/r_n_d/proc/update_coeff()
 	return

@@ -132,6 +132,7 @@
 		icon_state = "centrifugeb"
 
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		kill_moody_light()
 		set_light(0)
 	else
 		if (on)
@@ -142,11 +143,10 @@
 			centrifuge_light.layer = ABOVE_LIGHTING_LAYER
 			overlays += centrifuge_light
 			var/image/centrifuge_glow = image(icon,"centrifuge_glow")
-			centrifuge_glow.plane = ABOVE_LIGHTING_PLANE
-			centrifuge_glow.layer = ABOVE_LIGHTING_LAYER
 			centrifuge_glow.blend_mode = BLEND_ADD
 			overlays += centrifuge_glow
 		else
+			kill_moody_light()
 			set_light(2,1)
 
 		switch (special)
@@ -563,7 +563,7 @@
 /obj/machinery/disease2/centrifuge/breakdown()
 	for (var/i = 1 to vial_data.len)
 		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
-		vial_datum.vial.forceMove(loc)
+		vial_datum?.vial?.forceMove(loc)
 		vial_data[i] = null
 
 	special = CENTRIFUGE_LIGHTSPECIAL_OFF

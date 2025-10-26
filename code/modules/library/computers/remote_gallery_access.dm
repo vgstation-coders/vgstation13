@@ -136,9 +136,23 @@
 /obj/machinery/computer/library/checkout/remote_gallery/make_external_book(var/datum/cachedbook/newbook)
 	if(!newbook)
 		return
-	var/obj/item/mounted/frame/painting/custom/C = new(get_turf(src))
+
+	var/obj/item/mounted/frame/painting/custom/C
+	var/datum/custom_painting/painting_data = json2painting(newbook.content, newbook.title, newbook.author, newbook.description)
+
+	//pick a canvas that fits the bitmap size.
+	if (painting_data.bitmap_width == 24)
+		if (painting_data.bitmap_height == 24)
+			C = new/obj/item/mounted/frame/painting/custom/large(get_turf(src))
+		else
+			C = new/obj/item/mounted/frame/painting/custom/landscape(get_turf(src))
+	else if(painting_data.bitmap_height == 24)
+		C = new/obj/item/mounted/frame/painting/custom/portrait(get_turf(src))
+	else
+		C = new/obj/item/mounted/frame/painting/custom(get_turf(src))
+
 	C.name = "[newbook.title] by [newbook.author]"
 	C.desc = newbook.description
-	C.set_painting_data(json2painting(newbook.content, newbook.title, newbook.author, newbook.description))
+	C.set_painting_data(painting_data)
 	C.update_painting(TRUE)
 	return C

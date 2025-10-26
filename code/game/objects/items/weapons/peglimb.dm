@@ -7,4 +7,5 @@
 	throw_speed = 0
 	throw_range = 0
 	w_class = W_CLASS_LARGE
-	autoignition_temperature = AUTOIGNITION_WOOD
+	w_type = RECYK_WOOD
+	flammable = TRUE

@@ -6,9 +6,9 @@
 	school = "vampire"
 	user_type = USER_TYPE_VAMPIRE
 
-	charge_type = Sp_RECHARGE
-	charge_max = 3 MINUTES
-	invocation_type = SpI_NONE
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 3 MINUTES
+	invocation_type = SP_INV_NONE
 	range = 1
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK | NEEDSHUMAN
@@ -17,6 +17,7 @@
 
 	override_base = "vamp"
 	hud_state = "vampire_enthrall"
+	valid_targets = list(/mob/living/carbon/human) // Can only enthrall humans
 
 	var/blood_cost = 150
 
@@ -24,12 +25,6 @@
 	. = ..()
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
-
-/spell/targeted/enthrall/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
-	if (!ishuman(target)) // Can only enthrall humans
-		return FALSE
-	return ..()
-
 
 /spell/targeted/enthrall/cast(var/list/targets, var/mob/user)
 	if (targets.len > 1)

@@ -6,9 +6,9 @@
 	school = "vampire"
 	user_type = USER_TYPE_VAMPIRE
 
-	charge_type = Sp_RECHARGE
-	charge_max = 5 MINUTES
-	invocation_type = SpI_NONE
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 5 MINUTES
+	invocation_type = SP_INV_NONE
 	range = 4
 	spell_flags = STATALLOWED | NEEDSHUMAN
 	cooldown_min = 5 MINUTES

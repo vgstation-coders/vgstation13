@@ -87,7 +87,6 @@
 	set src in oview(1)
 
 	if(mybag && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
-		mybag.forceMove(get_turf(usr))
 		usr.put_in_hands(mybag)
 		mybag = null
 

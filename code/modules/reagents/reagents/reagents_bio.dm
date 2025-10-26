@@ -47,6 +47,8 @@
 	mug_name = "mug of tomato juice"
 	mug_desc = "Are you sure this is tomato juice?"
 	flags = CHEMFLAG_PIGMENT
+	plant_nutrition = 5
+	plant_watering = 1
 
 	data = list(
 		"viruses" = null,
@@ -198,6 +200,7 @@
 						var/blood_total_before = V.blood_total
 						var/blood_usable_before = V.blood_usable
 						var/divisor = (locate(/datum/power/vampire/mature) in V.current_powers) ? min(2,foundmob.stat + 1) : (min(2,foundmob.stat + 1)*2)
+						divisor = divisor * BLOOD_UNIT_DRAIN_MULTIPLIER
 						if (!(targetref in V.feeders))
 							V.feeders[targetref] = 0
 						if (V.feeders[targetref] < MAX_BLOOD_PER_TARGET)
@@ -271,11 +274,6 @@
 		var/obj/item/clothing/mask/stone/S = O
 		S.spikes()
 
-/datum/reagent/blood/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(5, TRUE)
-	T.add_waterlevel(1)
-
 /datum/reagent/carp_pheromones
 	name = "Carp Pheromones"
 	id = CARPPHEROMONES
@@ -304,13 +302,60 @@
 	if(prob(5)) //5% chance of stinking per life()
 		for(var/mob/living/carbon/C in oview(stench_radius, M)) //All other carbons in 4 tile radius (excluding our mob)
 			if(C.stat)
-				return
+				continue
 			if(istype(C.wear_mask))
 				var/obj/item/clothing/mask/c_mask = C.wear_mask
 				if(c_mask.body_parts_covered & MOUTH)
 					continue //If the carbon's mouth is covered, let's assume they don't smell it
 
 			to_chat(C, "<span class='warning'>You are engulfed by a [pick("tremendous", "foul", "disgusting", "horrible")] stench emanating from [M]!</span>")
+
+/datum/reagent/killer_pheromones
+	name = "Killer Pheromones"
+	id = KILLERPHEROMONES
+	description = "A viscous liquid with a strong smell that resembles blood and ketchup, which is like blood in the water to killer tomatoes if air was water."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#993300"
+	custom_metabolism = 2
+	density = 109.06
+	var/list/mob/living/simple_animal/hostile/retaliate/horde = list()
+
+/datum/reagent/killer_pheromones/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(!tick)
+		to_chat(M,"<span class='bad'><b>You feel like [pick("you're alerting a horde", "something is waiting to pounce on you", "carnivorous beings are nearby")]! [pick("Do you, perhaps...?","Maybe... just maybe...")]</b></span>")
+
+	if(volume < 3)
+		if(volume <= custom_metabolism)
+			to_chat(M,"<span class='good'>You feel [pick("like the coast is clear", "out of danger", "less threatened")]!</span>")
+		else if(!(tick%4))
+			to_chat(M,"<span class='notice'>You feel [pick("further from danger", "like you're losing something chasing you", "less hunted down")]...</span>")
+
+	var/stench_radius = clamp(volume * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 reagents on you
+
+	var/alerted = 0
+	for(var/mob/living/simple_animal/hostile/retaliate/R in view(stench_radius, M)) //All other retaliating hostile mobs in radius
+		if(R == M || R.stat || R.hostile || (M in R.enemies))
+			continue
+
+		R.Retaliate()
+		horde += R
+		alerted++
+		break
+
+	if(alerted >= 2)
+		to_chat(M,"<span class='danger'>YOU HAVE ALERTED THE HORDE!</span>")
+
+/datum/reagent/killer_pheromones/reagent_deleted()
+	if(..())
+		return 1
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+	for(var/mob/living/simple_animal/hostile/retaliate/R in horde)
+		R.enemies -= M
 
 /datum/reagent/ectoplasm
 	name = "Ectoplasm"
@@ -416,12 +461,21 @@
 	description = "A mutated fungal compound that causes rapid rotting in iron infrastructures."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#005200" //moldy green
+	var/roboorgan_damage=10
+	var/melt_robolimb_threshold = 70
+	var/robolimb_damage_multiplier =2 //all multiplier vars scale damage with volume
+	var/robot_damage_multiplier = 2
+	var/mecha_damage_multiplier = 2
 
 /datum/reagent/ironrot/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
 		return 1
 
-	if(volume >= 5 && T.can_thermite && istype(T, /turf/simulated/wall))
+	if(istype(T,/turf/simulated/floor) && volume >= 1)
+		var/turf/simulated/floor/F = T
+		if(F.floor_tile?.material == "metal") //"rots away" metal floor tiles
+			F.make_plating()
+	if(istype(T, /turf/simulated/wall) && volume >= 5 &&T.can_thermite)
 		var/turf/simulated/wall/W = T
 		W.rot()
 
@@ -429,14 +483,14 @@
 	if(..())
 		return 1
 
-	M.adjustToxLoss(2 * REM)
+	M.adjustToxLoss(1 * REM)
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
 		for(var/datum/organ/internal/I in C.internal_organs)
 			if(I.robotic == 2)
-				I.take_damage(10, 0)//robo organs get damaged by ingested ironrot
+				I.take_damage(roboorgan_damage, 0)//robo organs get damaged by ingested ironrot
 
 /datum/reagent/ironrot/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -444,9 +498,45 @@
 
 	if(method == TOUCH)
 		if(issilicon(M))//borgs are hurt on touch by this chem
-			M.adjustFireLoss(10)
-			M.adjustBruteLoss(10)
-//todo : mech and pod damage
+			M.adjustFireLoss(ceil((robot_damage_multiplier*volume)/2))
+			M.adjustBruteLoss(ceil((robot_damage_multiplier*volume)/2))
+		if(M.mob_property_flags & MOB_ROBOTIC)
+			M.adjustFireLoss(ceil((robot_damage_multiplier*volume)/2))
+			M.adjustBruteLoss(ceil((robot_damage_multiplier*volume)/2))
+		if(ishuman(M))
+			var/mob/living/carbon/human/H=M
+			var/list/damaged_organs_list = new/list()
+			for(var/datum/organ/external/affecting in H.organs)
+				if(affecting.is_robotic()&& affecting.status != ORGAN_DESTROYED)
+					if((affecting.get_health() + (robolimb_damage_multiplier*volume)) >= melt_robolimb_threshold)
+						to_chat(H,"<span class = 'danger'>\The [src.name] completely corrodes away your [affecting.display_name]!</span>")
+						affecting.dust()
+						continue
+					affecting.take_damage(ceil((robolimb_damage_multiplier*volume)/2),ceil((robolimb_damage_multiplier*volume)/2), 0, 0, used_weapon = "iron-rotting agent")
+					damaged_organs_list.Add(affecting.display_name)
+			if(damaged_organs_list) //formats the string to be less spammy using the message multiplier.
+				var/ampersand = FALSE
+				var/damaged_organs_string = ""
+				for(var/organ_name in damaged_organs_list)
+					damaged_organs_string = "[damaged_organs_string][ampersand? " & ":""][organ_name]"
+					if(!ampersand)
+						ampersand=TRUE
+				to_chat(H, "<span class = 'warning'>The [src.name] burns your [damaged_organs_string]!</span>")
+
+/datum/reagent/ironrot/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(istype(O,/obj/mecha))
+		var/obj/mecha/ME=O
+		ME.take_damage(ceil((mecha_damage_multiplier*volume)/2), damage_type = "fire")
+		ME.take_damage(ceil((mecha_damage_multiplier*volume)/2), damage_type = "brute")
+		return
+	if(istype(O,/obj/machinery/turret))
+		var/obj/machinery/turret/TU = O
+		TU.health-=mecha_damage_multiplier*volume
+	if(O.w_type == RECYK_METAL)
+		O.acid_melt()
 
 /datum/reagent/mucus
 	name = "Mucus"

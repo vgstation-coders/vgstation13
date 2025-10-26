@@ -41,7 +41,7 @@
 			dat += "<li><b>[initial(cast_type.name)]:</b> [amount]</li>"
 
 	dat += "</ul><A href='?src=\ref[src];removeall=1'>Empty box</A>"
-	user << browse("[dat]", "window=orebox")
+	user << browse(HTML_SKELETON(dat), "window=orebox")
 	return
 
 /obj/structure/ore_box/Topic(href, href_list)

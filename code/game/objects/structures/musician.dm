@@ -72,9 +72,9 @@
 		if(istype(instrumentObj,/obj/item/device/instrument))
 			var/obj/item/device/instrument/INS = instrumentObj
 			INS.OnPlayed(user,M)
-		if(!M.client.prefs.hear_instruments)
+		if(!M.client.prefs.get_pref(/datum/preference_setting/toggle/hear_instruments))
 			continue
-		M.playsound_local(source, soundfile, 100, falloff = 5)
+		M.playsound_local(source, soundfile, 100, falloff = 5, source = instrumentObj)
 	if(recording && live)
 		if(world.time - time_since_last_note <= 0 && recorded_line != "")
 			recorded_line += "-"
@@ -120,8 +120,13 @@
 				//to_chat(world, "beat: [beat] / beat length: [length(beat)]")
 				if(!length(beat)) //This occurs when a comma is at the end of a line
 					beat = " " //It's intended to be a space so here we make it a space
+
 				var/list/notes = splittext(beat, "/")
-				for(var/note in splittext(notes[1], "-"))
+				var/delta = length(notes)==2 && text2num(notes[2]) ? text2num(notes[2]) : 1
+				var/note_str = splittext(notes[1], "-")
+
+				var/duration = sanitize_tempo(src.tempo/delta)
+				for(var/note in note_str)
 					//to_chat(world, "note: [note]")
 					if(!playing || shouldStopPlaying(user))//If the instrument is playing, or special case
 						playing = 0
@@ -146,10 +151,11 @@
 				if (ui)
 					ui.send_message("activeChord", list2params(list(lineCount, chordCount)))
 				//nanomanager.send_message(src, instrumentObj.name, "activeChord", list(lineCount, chordCount))
-				if(notes.len >= 2 && text2num(notes[2]))
+				/*if(notes.len >= 2 && text2num(notes[2]))
 					sleep(sanitize_tempo(tempo / text2num(notes[2])))
 				else
-					sleep(tempo)
+					sleep(tempo)*/
+				sleep(duration)
 				chordCount++
 
 			lineCount++

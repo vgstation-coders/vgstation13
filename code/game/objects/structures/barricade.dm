@@ -133,6 +133,8 @@
 	sheetamount = 3
 	layer = ABOVE_DOOR_LAYER
 	is_fulltile = TRUE
+	verb_rotates = FALSE
+	alt_click_rotates = FALSE
 
 //Basically the barricade version of full windows, and inherits the former rather than the later
 /obj/structure/window/barricade/full/New(loc)
@@ -143,7 +145,9 @@
 /obj/structure/window/barricade/full/setup_border_dummy()
 	return
 
-/obj/structure/window/barricade/full/blocks_doors()
+/obj/structure/window/barricade/full/blocks_doors(var/obj/machinery/door/D)
+	if (istype(D, /obj/machinery/door/firedoor/border_only))
+		return FALSE
 	return TRUE
 
 /obj/structure/window/barricade/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)

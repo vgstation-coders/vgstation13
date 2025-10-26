@@ -93,8 +93,14 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	..()
 	if(!holomap_z_levels_mapped.len)
 		holomap_z_levels_mapped = list(map.zMainStation, map.zAsteroid, map.zDerelict)
+		if(map.zAdditionalStationZlevel>0)
+			holomap_z_levels_mapped+=map.zAdditionalStationZlevel
 	if(!holomap_z_levels_unmapped.len)
-		holomap_z_levels_unmapped = list(map.zTCommSat, map.zDeepSpace)
+		holomap_z_levels_unmapped = list()
+		if(map.zTCommSat>0)
+			holomap_z_levels_unmapped+=map.zTCommSat
+		if(map.zDeepSpace>0)
+			holomap_z_levels_unmapped+=map.zDeepSpace		
 
 /obj/machinery/computer/crew/Destroy()
 	deactivateAll()
@@ -561,10 +567,11 @@ Tooltip interface
 	parseAdd = A
 
 /obj/abstract/screen/interface/tooltip/MouseEntered(location,control,params)
-	openToolTip(user, src, params, title = title, content = content)
+	//openToolTip(user, src, params, title = title, content = content)
+	usr.client?.tooltips.show(src, mouse=params, title=title, content=content)
 
 /obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
-	closeToolTip(user)
+	usr.client?.tooltips.hide()
 
 /obj/abstract/screen/interface/tooltip/Click(location,control,params)
 	..()

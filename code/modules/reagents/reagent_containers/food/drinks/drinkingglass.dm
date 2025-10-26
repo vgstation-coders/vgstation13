@@ -21,7 +21,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
-	flammable = 0
+	can_be_lit = 0
 	if(!molotov)
 		lit = 0
 		light_color = null
@@ -66,7 +66,7 @@
 				filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 				overlays += filling
 
-			if(R.flammable)
+			if(R.can_be_lit)
 				if(lit)
 					var/image/I = image(icon, src, "[icon_state]-flamin")
 					I.blend_mode = BLEND_ADD
@@ -78,7 +78,7 @@
 					name = "flaming [name]"
 					desc += " Damn that looks hot!"
 				else
-					flammable = 1
+					can_be_lit = 1
 	else
 		icon_state = "glass_empty"
 		item_state = "glass_empty"
@@ -91,7 +91,24 @@
 		M.update_inv_hands()
 
 	update_temperature_overlays()
-	update_blood_overlay()
+	set_blood_overlay()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/attack(var/mob/living/M, var/mob/user)
+	var/obj/item/I
+	if(user.zone_sel.selecting == "l_hand")
+		I = M.get_held_item_by_index(GRASP_LEFT_HAND)
+	else if(user.zone_sel.selecting == "r_hand")
+		I = M.get_held_item_by_index(GRASP_RIGHT_HAND)
+	if(I && istype(I,src.type) && user.a_intent == I_HELP)
+		user.visible_message("<span class='notice'>[user] offers a toast to [M] with \his [src.name].</span>", "<span class='notice'>You offer a toast to [M] with your [src.name].</span>")
+		if(alert(M,"Accept [user]\'s toast proposal?","Offered toast","Yes","No") == "Yes")
+			if(M.Adjacent(user) && !M.stat && !user.stat)
+				playsound(get_turf(user), 'sound/items/glass-clinking.ogg', 50, 1)
+				user.visible_message("<span class='notice'>[user] toasts with [M].</span>", "<span class='notice'>You toast with [M].</span>")
+		else
+			user.visible_message("<span class='warning'>[M] declines [user]\'s toast offer.</span>")
+	else
+		..()
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/attack_self(mob/user)
 	if(switching)

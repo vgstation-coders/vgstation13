@@ -27,7 +27,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot
 	name = "\improper MULEbot"
 	desc = "A Multiple Utility Load Effector bot."
-	icon_state = "mulebot0"
+	icon_state = "mulebot"
 	icon_initial = "mulebot"
 	density = 1
 	anchored = 1
@@ -44,7 +44,7 @@ var/global/mulebot_count = 0
 	suffix = ""
 
 	var/home_destination = "" 	// tag of home beacon
-	req_access = list(access_cargo) // added robotics access so assembly line drop-off works properly -veyveyr //I don't think so, Tim. You need to add it to the MULE's hidden robot ID card. -NEO
+	req_access = list(access_cargo_bot) // added robotics access so assembly line drop-off works properly -veyveyr //I don't think so, Tim. You need to add it to the MULE's hidden robot ID card. -NEO
 	var/mode = MODE_IDLE		//0 = idle/ready
 						//1 = loading/unloading
 						//2 = moving to deliver
@@ -80,6 +80,7 @@ var/global/mulebot_count = 0
 	var/honk_cooldown = 1 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
 	var/coolingdown = FALSE
 	var/honk_coolingdown = FALSE
+	var/list/bot_sprites = list("default","flames","cargonia","gold")
 
 	// Technically if we were true to form, the navbeacon should've an insider radio which would be sending the signal rather than sending the signal itself
 	// The gain in functionality if it were to be implented is negligeble for a lot of confusing code
@@ -129,6 +130,14 @@ var/global/mulebot_count = 0
 
 	..()
 
+/obj/machinery/bot/mulebot/update_icon()
+	overlays.Cut()
+	if(!on && open)
+		overlays += image(icon,src,"mulebot-hatch")
+	else if(on && mode != MODE_WAITING && wires.MobAvoid() != 0)
+		overlays += image(icon,src,"mulebot1")
+	..()
+
 // attack by item
 // emag : lock/unlock,
 // screwdriver: open/close hatch
@@ -136,11 +145,8 @@ var/global/mulebot_count = 0
 // other: chance to knock rider off bot
 /obj/machinery/bot/mulebot/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(I.attack_delay)
-	if(istype(I,/obj/item/weapon/card/emag))
-		toggle_lock(user, TRUE)
-		to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] [src]'s controls!</span>")
-		flick("[icon_initial]-emagged", src)
-		playsound(src, 'sound/effects/sparks1.ogg', 100, 0)
+	if(emag_check(I,user))
+		return
 	else if(istype(I, /obj/item/weapon/card/id))
 		if(toggle_lock(user))
 			to_chat(user, "<span class='notice'>Controls [(locked ? "locked" : "unlocked")].</span>")
@@ -150,7 +156,7 @@ var/global/mulebot_count = 0
 		if(user.drop_item(C, src))
 			cell = C
 			updateDialog()
-	else if((istype(I,/obj/item/tool/wirecutters)||istype(I,/obj/item/device/multitool)) && user.a_intent != I_HURT)
+	else if((I.is_wirecutter(user) || I.is_multitool(user)) && user.a_intent != I_HURT)
 		attack_hand(user)
 	else if(I.is_screwdriver(user) && user.a_intent != I_HURT)
 		if(locked)
@@ -158,14 +164,12 @@ var/global/mulebot_count = 0
 			return
 		I.playtoolsound(src, 25, extrarange = -6)
 		open = !open
+		var/openword = "close"
 		if(open)
-			src.visible_message("[user] opens the maintenance hatch of [src]", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
+			openword = "open"
 			on = 0
-			icon_state="[icon_initial]-hatch"
-		else
-			src.visible_message("[user] closes the maintenance hatch of [src]", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
-			icon_state = "[icon_initial]0"
-
+		src.visible_message("[user] [openword]s the maintenance hatch of [src]", "<span class='notice'>You [openword] [src]'s maintenance hatch.</span>")
+		update_icon()
 		updateDialog()
 	else if (I.is_wrench(user) && user.a_intent != I_HURT)
 		if (src.health < maxHealth)
@@ -187,6 +191,15 @@ var/global/mulebot_count = 0
 			user.visible_message("<span class='warning'>[user] knocks [load] off [src] with \the [I]!</span>", "<span class='warning'>You knock [load] off [src] with \the [I]!</span>")
 		. = ..()
 
+/obj/machinery/bot/mulebot/emag_act(mob/user)
+	toggle_lock(user, TRUE)
+	to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] [src]'s controls!</span>")
+	playsound(src, 'sound/effects/sparks1.ogg', 100, 0)
+	if(!(on && mode != MODE_WAITING && wires.MobAvoid() != 0))
+		overlays += image(icon,src,"mulebot1")
+	overlays += image(icon,src,"mulebot-emagged")
+	spawn(4)
+		update_icon()
 
 /obj/machinery/bot/mulebot/ex_act(var/severity)
 	unload(0)
@@ -284,7 +297,7 @@ var/global/mulebot_count = 0
 		else
 			dat += "The bot is in maintenance mode and cannot be controlled.<BR>"
 
-	user << browse("<HEAD><TITLE>Mulebot [suffix ? "([suffix])" : ""]</TITLE></HEAD>[dat]", "window=mulebot;size=350x500")
+	user << browse(HTML_SKELETON_TITLE("Mulebot [suffix ? "([suffix])" : ""]", dat), "window=mulebot;size=350x500")
 	onclose(user, "mulebot")
 	return
 
@@ -335,7 +348,7 @@ var/global/mulebot_count = 0
 		if ("pause")
 			if(mode != MODE_WAITING)
 				mode = MODE_WAITING
-				icon_state = "[icon_initial]0"
+				update_icon()
 			else
 				mode = MODE_IDLE
 		if ("clear_queue")
@@ -372,7 +385,7 @@ var/global/mulebot_count = 0
 			if("power")
 				if (src.on)
 					turn_off()
-					icon_state = "[icon_initial]0"
+					update_icon()
 				else if (cell && !open)
 					turn_on()
 				else
@@ -406,7 +419,7 @@ var/global/mulebot_count = 0
 			if("stop")
 				if(mode != MODE_WAITING)
 					mode = MODE_WAITING
-					icon_state = "[icon_initial]0"
+					update_icon()
 					updateDialog()
 
 			if("go")
@@ -503,7 +516,7 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/turn_off()
 	..()
-	icon_state = "[icon_initial]0"
+	update_icon()
 	summoned = FALSE
 	target = null
 	destination = ""
@@ -681,7 +694,7 @@ var/global/mulebot_count = 0
 			mode = MODE_MOVING
 	else
 		mode = MODE_IDLE
-	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
+	update_icon()
 
 /obj/machinery/bot/mulebot/set_destination(var/new_dest)
 	astar_debug_mulebots("Requesting a path to [new_dest]")
@@ -1001,7 +1014,7 @@ var/global/mulebot_count = 0
 	if(!on || remaining_steps <= 0 || !path.len || mode == MODE_WAITING)
 		return FALSE
 	//Ok, we're on, we're not done, and we have a path.
-	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
+	update_icon()
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
 	if(!process_astar_path()) // Process the pathfinding. This handles most movement/delivery stuff.
 		//And if there are problems processing, go here.
@@ -1084,7 +1097,7 @@ var/global/mulebot_count = 0
 	destination = ""
 	target = null
 	summoned  = FALSE
-	icon_state = "[icon_initial]0"
+	update_icon()
 	if(!destinations_queue.len && current_order.returning && current_order.loc_description != home_destination)
 		//Finished our current task, nothing in the queue, we're not home? Let's go home.
 		start_home()

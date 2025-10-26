@@ -204,6 +204,17 @@
 	hitsound = 'sound/items/badtothebone.ogg'
 	can_honk_baton = 0
 
+/obj/item/weapon/bikehorn/ankhhorn
+	name = "ankh horn"
+	desc = "Curse of Ra be upon ye!"
+	icon_state = "ankh_horn"
+	item_state = "ankh_horn"
+	attack_verb = list("curses")
+	hitsound = 'sound/items/curseofra.ogg'
+	can_honk_baton = 0
+	honk_delay = 80 //long audio
+	vary_pitch = 0 //we want the same pitch
+
 #define TELE_COOLDOWN 5 SECONDS
 
 /obj/item/weapon/bikehorn/rubberducky/quantum
@@ -249,7 +260,8 @@
 	icon_state = "glue0"
 
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	var/uses = 1 //How many uses the glue has.
 	var/glue_duration = -1 //-1 For infinite.
 	var/glue_state_to_set = GLUE_STATE_PERMA //This is the glue state we set to the item the user puts glue on.
@@ -296,6 +308,8 @@
 	update_icon()
 	apply_glue(target)
 
+/obj/item/weapon/glue/proc/apply_glue(obj/item/target)
+	target.glue_act(glue_duration, glue_state_to_set)
 
 /obj/item/weapon/glue/temp_glue
 	name = "bottle of school glue"
@@ -318,6 +332,13 @@
 		return
 	name = "empty school glue bottle"
 	icon_state = "glue_safe0"
+
+/obj/item/weapon/glue/infinite/afterattack()
+	.=..()
+	uses = 1
+	update_icon()
+
+//--------------------------------
 
 /obj/proc/glue_act(var/stick_time = 1 SECONDS, var/glue_state = GLUE_STATE_NONE) //proc for when glue is used on something
 	default_glue_act(stick_time, glue_state)
@@ -345,30 +366,31 @@
 	else
 		return 0
 
+//--------------------------------
+
 /obj/item/glue_act(stick_time)
-	cant_drop++
-	..()
+	cant_drop = TRUE
+	if (current_glue_state != GLUE_STATE_PERMA)
+		..()
 
 /obj/item/unglue()
 	if(..())
-		cant_drop--
+		cant_drop = FALSE
+
+//--------------------------------
 
 /obj/item/clothing/glue_act(stick_time, glue_state)
-	canremove--
-	default_glue_act(stick_time, glue_state)
+	canremove = FALSE
+	if (current_glue_state != GLUE_STATE_PERMA)
+		default_glue_act(stick_time, glue_state)
 
 /obj/item/clothing/unglue()
 	if(default_unglue())
-		canremove++
+		canremove = TRUE
+
+//--------------------------------
 
 /obj/structure/bed/glue_act(stick_time)
 	..()
 
-/obj/item/weapon/glue/proc/apply_glue(obj/item/target)
-	target.glue_act(glue_duration, glue_state_to_set)
-
-/obj/item/weapon/glue/infinite/afterattack()
-	.=..()
-	uses = 1
-	update_icon()
 

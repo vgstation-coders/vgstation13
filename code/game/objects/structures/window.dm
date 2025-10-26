@@ -28,7 +28,10 @@ var/list/one_way_windows
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
 	pass_flags_self = PASSGLASS
-	var/obj/abstract/Overlays/damage_overlay
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
+	rotate_type = /obj/structure/window
+	var/mutable_appearance/damage_overlay
 	var/image/oneway_overlay
 	var/cracked_base = "crack"
 
@@ -61,9 +64,9 @@ var/list/one_way_windows
 	return unsmoothables
 
 /obj/structure/window/isSmoothableNeighbor(atom/A)
-	if(isobj(A))
-		var/obj/O = A
-		return ..() && O.anchored && O.density
+	if(A?.density && ismovable(A))
+		var/atom/movable/O = A
+		return O.anchored && ..()
 
 /obj/structure/window/relativewall()
 	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
@@ -88,14 +91,6 @@ var/list/one_way_windows
 /obj/structure/window/examine(mob/user)
 	..()
 	examine_health(user)
-
-/obj/structure/window/AltClick(mob/user)
-	if(is_fulltile)
-		. = ..()
-	else
-		if(user.incapacitated() || !Adjacent(user))
-			return
-		rotate()
 
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
@@ -144,9 +139,11 @@ var/list/one_way_windows
 		if(sound)
 			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 		if(!damage_overlay)
-			damage_overlay = new(src)
+			damage_overlay = mutable_appearance(src)
 			damage_overlay.icon = icon('icons/obj/structures/window.dmi')
 			damage_overlay.dir = src.dir
+			damage_overlay.layer = OBJ_LAYER
+			damage_overlay.blend_mode = BLEND_ADD
 
 		overlays -= damage_overlay
 
@@ -350,10 +347,14 @@ var/list/one_way_windows
 
 /obj/structure/window/attack_animal(mob/user as mob)
 
-	var/mob/living/simple_animal/M = user
-	if(M.melee_damage_upper <= 0)
-		return
-	attack_generic(M, M.melee_damage_upper)
+	if(istype(user,/mob/living/simple_animal))
+		var/mob/living/simple_animal/M = user
+		if(M.melee_damage_upper <= 0)
+			return
+		attack_generic(M, M.melee_damage_upper)
+	else if(istype(user,/mob/living/complex_animal))
+		var/mob/living/complex_animal/M = user
+		attack_generic(M, M.base_damage+rand(-M.damage_variance ,M.damage_variance ))
 
 /obj/structure/window/attack_slime(mob/user as mob)
 
@@ -610,33 +611,10 @@ var/list/one_way_windows
 					return 0
 	return 1
 
-/obj/structure/window/verb/rotate()
-	set name = "Rotate Window Counter-Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if(anchored)
-		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
-		return 0
-
+/obj/structure/window/change_dir(new_dir, changer)
 	update_nearby_tiles() //Compel updates before
-	change_dir(turn(dir, 90))
+	. = ..()
 	update_nearby_tiles()
-	return
-
-/obj/structure/window/verb/revrotate()
-	set name = "Rotate Window Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if(anchored)
-		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
-		return 0
-
-	update_nearby_tiles() //Compel updates before
-	change_dir(turn(dir, 270))
-	update_nearby_tiles()
-	return
 
 /obj/structure/window/Destroy()
 	setDensity(FALSE) //Sanity while we do the rest

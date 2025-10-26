@@ -132,8 +132,18 @@
 
 	user.set_machine(src)
 
-
-	var/t = {"<TT><B>Solar Generator Control</B><HR><PRE>
+	var/t=""
+	if(SSDayNight?.overwrite_solars && (src.z in daynight_z_lvls) )
+		t = {"<TT><B>Solar Generator Control</B><HR><PRE>
+<B>Generated power</B> : [round(lastgen)] W<BR>
+Planet Rotational Period : [abs(SSDayNight.solar_orbit_period)] minutes<BR>
+Planet Rotational Direction : [SSDayNight.solar_orbit_period < 0 ? "CCW" : "CW"]<BR>
+Nearest Star Orientation : [SSDayNight.nearest_star_angle]&deg<BR>
+Array Orientation : [rate_control(src,"cdir","[cdir]&deg",1,10,60)]<BR>
+<BR><HR><BR>
+Tracking :"}
+	else
+		t = {"<TT><B>Solar Generator Control</B><HR><PRE>
 <B>Generated power</B> : [round(lastgen)] W<BR>
 Station Orbital Period : [60/abs(sun.rotationRate)] minutes<BR>
 Station Orbital Direction : [sun.rotationRate < 0 ? "CCW" : "CW"]<BR>
@@ -158,7 +168,7 @@ Manual Tracking Direction:"}
 		if(1)
 			t += "<B>CW</B> <A href='?src=\ref[src];trackdir=-1'>CCW</A><BR>"
 	t += "<A href='?src=\ref[src];close=1'>Close</A></TT>"
-	user << browse(t, "window=solcon")
+	user << browse(HTML_SKELETON(t), "window=solcon")
 	onclose(user, "solcon")
 	return
 
