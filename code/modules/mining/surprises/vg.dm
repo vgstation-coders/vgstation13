@@ -157,3 +157,8 @@
 	name = "Space hobo shack - RCD"
 
 	file_path = "maps/misc/hoboshack_rcd.dmm"
+
+/datum/map_element/hoboshack/clown
+	name = "Space hobo shack - Clown"
+
+	file_path = "maps/misc/hoboshack_clown.dmm"
