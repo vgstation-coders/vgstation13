@@ -525,7 +525,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 		M.apply_radiation((rand(amount, amount*5)), RAD_EXTERNAL)
 	qdel(src)
 
-/obj/item/stack/ore/cerenkite/attack_self(mob/user)
+/obj/item/stack/sheet/mineral/cerenkite/attack_self(mob/user)
 	visible_message("<span class='danger'>\The [src] emits some dangerous radiation!</span>")
 	var/L = get_turf(user)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
