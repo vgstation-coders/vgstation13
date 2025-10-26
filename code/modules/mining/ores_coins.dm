@@ -269,7 +269,7 @@
 		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
 	qdel(src)
 
-/obj/item/stack/ore/cerenkite/attack_hand(mob/user as mob)
+/obj/item/stack/ore/cerenkite/attack_self(mob/user)
 	var/L = get_turf(user)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
 		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
@@ -290,7 +290,7 @@
 	..()
 	color = pick("#FF0000","#0000FF","#008000","#FFFF00")
 
-/obj/item/stack/ore/cytine/attack_hand(mob/user as mob)
+/obj/item/stack/ore/cytine/attack_self(mob/user)
 	var/obj/item/weapon/glowstick/G = new /obj/item/weapon/glowstick(user.loc)
 	G.color = color
 	G.light_color = color
