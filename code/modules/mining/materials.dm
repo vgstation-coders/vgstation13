@@ -473,7 +473,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/pharosium
 	name="Pharosium"
 	id=MAT_PHAROSIUM
-	value=10
+	value=VALUE_PHAROSIUM //10
 	oretype=/obj/item/stack/ore/pharosium
 	sheettype=/obj/item/stack/sheet/mineral/pharosium
 	default_show_in_menus = FALSE
@@ -483,7 +483,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/char
 	name="Char"
 	id=MAT_CHAR
-	value=5
+	value=VALUE_CHAR //5
 	oretype=/obj/item/stack/ore/char
 	sheettype=/obj/item/stack/sheet/mineral/char
 	default_show_in_menus = FALSE
@@ -493,7 +493,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/claretine
 	name="Claretine"
 	id=MAT_CLARETINE
-	value=50
+	value=VALUE_CLARETINE //50
 	oretype=/obj/item/stack/ore/claretine
 	sheettype=/obj/item/stack/sheet/mineral/claretine
 	default_show_in_menus = FALSE
@@ -503,7 +503,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/bohrum
 	name="Bohrum"
 	id=MAT_BOHRUM
-	value=50
+	value=VALUE_BOHRUM //50
 	oretype=/obj/item/stack/ore/bohrum
 	sheettype=/obj/item/stack/sheet/mineral/bohrum
 	default_show_in_menus = FALSE
@@ -513,7 +513,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/syreline
 	name="Syreline"
 	id=MAT_SYRELINE
-	value=70
+	value=VALUE_SYRELINE //70
 	oretype=/obj/item/stack/ore/syreline
 	sheettype=/obj/item/stack/sheet/mineral/syreline
 	default_show_in_menus = FALSE
@@ -523,7 +523,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/erebite
 	name="Erebite"
 	id=MAT_EREBITE
-	value=50
+	value=VALUE_EREBITE //50
 	oretype=/obj/item/stack/ore/erebite
 	sheettype=/obj/item/stack/sheet/mineral/erebite
 	default_show_in_menus = FALSE
@@ -533,7 +533,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/cytine
 	name="Cytine"
 	id=MAT_CYTINE
-	value=30
+	value=VALUE_CYTINE //30
 	oretype=/obj/item/stack/ore/cytine
 	sheettype=/obj/item/stack/sheet/mineral/cytine
 	default_show_in_menus = FALSE
@@ -543,7 +543,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/uqill
 	name="Uqill"
 	id=MAT_UQILL
-	value=90
+	value=VALUE_UQILL //90
 	oretype=/obj/item/stack/ore/uqill
 	sheettype=/obj/item/stack/sheet/mineral/uqill
 	default_show_in_menus = FALSE
@@ -553,7 +553,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/mauxite
 	name="Mauxite"
 	id=MAT_MAUXITE
-	value=5
+	value=VALUE_MAUXITE //5
 	oretype=/obj/item/stack/ore/mauxite
 	sheettype=/obj/item/stack/sheet/mineral/mauxite
 	default_show_in_menus = FALSE
@@ -563,7 +563,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/cobryl
 	name="Cobryl"
 	id=MAT_COBRYL
-	value=30
+	value=VALUE_COBRYL //30
 	oretype=/obj/item/stack/ore/cobryl
 	sheettype=/obj/item/stack/sheet/mineral/cobryl
 	default_show_in_menus = FALSE
@@ -573,7 +573,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/cerenkite
 	name="Cerenkite"
 	id=MAT_CERENKITE
-	value=50
+	value=VALUE_CERENKITE //50
 	oretype=/obj/item/stack/ore/cerenkite
 	sheettype=/obj/item/stack/sheet/mineral/cerenkite
 	default_show_in_menus = FALSE
@@ -582,7 +582,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/molitz
 	name="Molitz"
 	id=MAT_MOLITZ
-	value=10
+	value=VALUE_MOLITZ //10
 	oretype=/obj/item/stack/ore/molitz
 	sheettype=/obj/item/stack/sheet/mineral/molitz
 	default_show_in_menus = FALSE
