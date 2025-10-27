@@ -540,6 +540,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	if(!..())
 		return
 	explosion(get_turf(target),-1,0,source.quality)
+	if(prob(10/source.quality))
+		qdel(source)
 
 /datum/material/cytine
 	name="Cytine"
