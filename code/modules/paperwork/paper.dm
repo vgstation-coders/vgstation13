@@ -547,6 +547,20 @@ var/global/list/paper_folding_results = list ( \
 	var/list/blacklist = list(
 		/obj/item/weapon/paper/flag,
 		/obj/item/weapon/paper/photograph,
+		/obj/item/weapon/paper/derelict_invoice,
+		/obj/item/weapon/paper/amelab1,
+		/obj/item/weapon/paper/amelab2,
+		/obj/item/weapon/paper/amelab3,
+		/obj/item/weapon/paper/amelab4,
+		/obj/item/weapon/paper/amelab5,
+		/obj/item/weapon/paper/amelab6,
+		/obj/item/weapon/paper/amelab7,
+		/obj/item/weapon/paper/explosive,
+		/obj/item/weapon/paper/djstation,
+		/obj/item/weapon/paper/talisman,
+		/obj/item/weapon/paper/sokoban,
+		/obj/item/weapon/paper/tomb_notes,
+		/obj/item/weapon/paper/vox_paper,
 		)
 
 /obj/item/weapon/paper/random/New()
