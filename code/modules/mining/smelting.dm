@@ -160,3 +160,88 @@
 		MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL
 	)
 	yieldtype=/obj/item/bluespace_crystal
+
+/datum/smelting_recipe/mauxite
+	name="Mauxite"
+	ingredients=list(
+		MAT_MAUXITE = CC_PER_SHEET_MAUXITE
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/mauxite
+
+/datum/smelting_recipe/molitz
+	name="Molitz"
+	ingredients=list(
+		MAT_MOLITZ = CC_PER_SHEET_MOLITZ
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/molitz
+
+/datum/smelting_recipe/pharosium
+	name="Pharosium"
+	ingredients=list(
+		MAT_PHAROSIUM = CC_PER_SHEET_PHAROSIUM
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/pharosium
+
+/datum/smelting_recipe/cobryl
+	name="Cobryl"
+	ingredients=list(
+		MAT_COBRYL = CC_PER_SHEET_COBRYL
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/cobryl
+
+/datum/smelting_recipe/char
+	name="Char"
+	ingredients=list(
+		MAT_CHAR = CC_PER_SHEET_CHAR
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/char
+
+/datum/smelting_recipe/claretine
+	name="Claretine"
+	ingredients=list(
+		MAT_CLARETINE = CC_PER_SHEET_CLARETINE
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/claretine
+
+/datum/smelting_recipe/bohrum
+	name="Bohrum"
+	ingredients=list(
+		MAT_BOHRUM = CC_PER_SHEET_BOHRUM
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/bohrum
+
+/datum/smelting_recipe/syreline
+	name="Syreline"
+	ingredients=list(
+		MAT_SYRELINE = CC_PER_SHEET_SYRELINE
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/syreline
+
+/datum/smelting_recipe/erebite
+	name="Erebite"
+	ingredients=list(
+		MAT_EREBITE = CC_PER_SHEET_EREBITE
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/erebite
+
+/datum/smelting_recipe/cerenkite
+	name="Cerenkite"
+	ingredients=list(
+		MAT_CERENKITE = CC_PER_SHEET_CERENKITE
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/cerenkite
+
+/datum/smelting_recipe/cytine
+	name="Cytine"
+	ingredients=list(
+		MAT_CYTINE = CC_PER_SHEET_CYTINE
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/cytine
+
+/datum/smelting_recipe/uqill
+	name="Uqill"
+	ingredients=list(
+		MAT_UQILL = CC_PER_SHEET_UQILL
+	)
+	yieldtype=/obj/item/stack/sheet/mineral/uqill
+
