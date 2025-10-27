@@ -89,21 +89,21 @@
 			clear_fullscreen("numb")
 
 	if(stat != DEAD)
-		if(eye_blind || blinded)
+		filter_update_delay = -1
+
+		if(blinded)
 			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 		else
 			clear_fullscreen("blind")
 		var/impaired_vision = get_impaired_vision_range()
 		if(impaired_vision)
 			enable_nearsightedness(impaired_vision)
-			//overlay_fullscreen("nearsighted", /obj/abstract/screen/fullscreen/nearsighted, impaired_vision)
 		else
 			disable_nearsightedness()
-			//clear_fullscreen("nearsighted")
 		if(eye_blurry)
-			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
+			enable_blurriness(eye_blurry)
 		else
-			clear_fullscreen("blurry")
+			disable_blurriness()
 		if(druggy)
 			enable_druggy_overlays()
 		else
@@ -114,20 +114,27 @@
 			clear_fullscreen("high_red")
 
 /mob/living/proc/get_impaired_vision_range()
-	var/total = 0
-	if(nearsightedness)
-		total += nearsightedness
+	var/total = nearsightedness//+3 with NEARSIGHTED
+
+	total += eye_blind
+
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		var/datum/organ/internal/eyes = H.internal_organs_by_name["eyes"]
-		if(eyes && eyes.is_bruised())
+
+		if(eyes && (eyes.is_bruised()))
 			var/a = eyes.damage - eyes.min_bruised_damage
 			var/b = eyes.min_broken_damage - eyes.min_bruised_damage
-			total += Ceiling(10 * a / b) //10 is here because there's 10 different states in screen1_blindness.dmi
+			//(+0) to (+10) depending on eye damage
+			total += 10 * (a / b)
+
 		if(H.glasses && istype(H.glasses, /obj/item/clothing))
+			//prescription glasses enhance eyesight (-3), welding goggles worsen it (+5)
 			total += H.glasses.nearsighted_modifier
+
 		if(H.head && istype(H.head, /obj/item/clothing))
 			var/obj/item/clothing/hat = H.head
+			//unathi helmet and welding helmet worsen eyesight (+5)
 			total += hat.nearsighted_modifier
 
 	if(ismonkey(src))

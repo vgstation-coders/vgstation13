@@ -543,7 +543,7 @@
 	if (welding)
 		setWelding(FALSE)
 
-/obj/item/tool/weldingtool/proc/eye_msg(var/severity, var/message, var/hallucination = null)
+/obj/item/tool/weldingtool/proc/eye_msg(var/mob/user, var/severity, var/message, var/hallucination = null)
 	if ((world.time >= (last_message_time + WELDINGTOOL_MSG_DELAY)) || (severity > last_message_severity))
 		last_message_severity = severity
 		last_message_time = world.time
@@ -565,48 +565,38 @@
 		if(eye_damaging && !(user.sdisabilities & BLIND))
 			if (safety >= 2)
 				if(E.eyeprot > 0)
-					eye_msg(0, "<span class='notice'>Your eyelenses darken to accommodate for the welder's glow.</span>")
+					eye_msg(user, 0, "<span class='notice'>Your eyelenses darken to accommodate for the welder's glow.</span>")
 				else
 					var/obj/item/clothing/to_thank = H.head
 					if(!to_thank || (istype(to_thank) && H.glasses && H.glasses.eyeprot > to_thank.eyeprot))
 						to_thank = H.glasses
-					eye_msg(0, "<span class='notice'>Your [to_thank] protects you the welder's glow.</span>")
+					eye_msg(user, 0, "<span class='notice'>Your [to_thank] protects you the welder's glow.</span>")
 			else
 				switch(safety)
 					if(1)
-						user.simple_message("<span class='warning'>Your eyes sting a little.</span>",\
-							"<span class='warning'>You shed a tear.</span>")
+						eye_msg(user, 0, "<span class='warning'>Your eyes sting a little.</span>", "<span class='warning'>You shed a tear.</span>")
 						E.damage += rand(1, 2)
-						if(E.damage > 12)
-							user.eye_blurry += rand(3,6)
 					if(0)
-						user.simple_message("<span class='warning'>Your eyes burn.</span>",\
-							"<span class='warning'>Some tears fall down from your eyes.</span>")
-						if(E.damage > 10)
-							E.damage += rand(3, 6)
-						else
-							E.damage += rand(2, 4)
+						eye_msg(user, 1, "<span class='warning'>Your eyes burn.</span>", "<span class='warning'>Some tears fall down from your eyes.</span>")
+						E.damage += rand(2, 4)
 					if(-1)
 						var/obj/item/clothing/to_blame = H.head //blame the hat
 						if(!to_blame || (istype(to_blame) && H.glasses && H.glasses.eyeprot < to_blame.eyeprot)) //if we don't have a hat, the issue is the glasses. Otherwise, if the glasses are worse, blame the glasses
 							to_blame = H.glasses
-						user.simple_message("<span class='warning'>Your [to_blame] intensifies the welder's glow. Your eyes itch and burn severely.</span>",\
-							"<span class='warning'>Somebody's cutting onions.</span>")
-						user.eye_blurry += rand(12,20)
+						eye_msg(2, "<span class='warning'>Your [to_blame] intensifies the welder's glow. Your eyes itch and burn severely.</span>", 	"<span class='warning'>Somebody's cutting onions.</span>")
 						E.damage += rand(12, 16)
-			if(E.damage > 10 && safety < 2)
-				user.simple_message("<span class='warning'>Your eyes are really starting to hurt. This can't be good for you!</span>",\
-					"<span class='warning'>This is too sad! You start to cry.</span>")
-			if (E.damage >= E.min_broken_damage)
-				user.simple_message("<span class='warning'>You go blind!</span>","<span class='warning'>Somebody turns the lights off.</span>")
-				user.sdisabilities |= BLIND
-			else if (E.damage >= E.min_bruised_damage)
-				user.simple_message("<span class='warning'>Your vision is getting darker!</span>","<span class='warning'>Somebody turns the lights off.</span>")
-				//user.eye_blind = 5
-				user.eye_blurry = 5
-				//user.disabilities |= NEARSIGHTED
-				//spawn(100)
-				//	user.disabilities &= ~NEARSIGHTED
+
+				if (E.damage >= E.min_broken_damage)
+					//new eye damage at least 35
+					eye_msg(user, 4, "<span class='warning'>You go blind!</span>", 	"<span class='warning'>Somebody turns the lights off.</span>")
+				else if (E.damage >= E.min_bruised_damage)//5
+					//new eye damage at least 5
+					eye_msg(user, 3, "<span class='warning'>Your eyes are really starting to hurt. This can't be good for you!</span>", 	"<span class='warning'>This is too sad! You start to cry.</span>")
+					user.eye_blind = 2//additional vision deterioration that goes off over 3-6 seconds
+					user.eye_blurry = 5
+				else
+					user.eye_blind = 2//slight vision deterioration that goes off after 1-2 seconds
+					user.eye_blurry = 1
 
 /obj/item/tool/weldingtool/update_icon()
 	..()

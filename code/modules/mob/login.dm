@@ -80,6 +80,7 @@
 	create_orphan_planemasters()
 	list_perception_planemasters()
 	init_perception_filters()
+	login_perception_filters_update()
 
 	regular_hud_updates()
 

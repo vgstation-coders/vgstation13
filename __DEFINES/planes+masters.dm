@@ -140,7 +140,6 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 	var/list/orphan_planemasters = list()
 	var/list/perception_planemasters = list()
 	var/list/perception_filters = list()
-	var/list/misc_planemasters = list()
 
 //Creating new planemasters for every plane that doesn't already have a dedicated planemaster
 //BE SURE TO UPDATE THIS LIST IF YOU ADD OR REMOVE OTHER PLANEMASTERS
@@ -180,13 +179,6 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 		perception_filters.orphan_planemasters[orphan_plane] = PM
 		client.screen += PM
 
-	var/obj/abstract/screen/plane_master/PM = new(client)
-	PM.plane = IMPAIRED_PLANE
-	perception_filters.misc_planemasters["IMPAIRED_PLANE"] = PM
-	client.screen += PM
-	PM.filters += filter(type="radial_blur", name="impaired_radial", x = 0, y = 0, size = 0, offset = 340)
-
-
 //Adding all the planemasters we want to add filters on top to a single list so it's easier to manipulate
 /mob/proc/list_perception_planemasters()
 	perception_filters.perception_planemasters.len = 0
@@ -218,38 +210,132 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 
 	overlay_fullscreen("impaired_crit", /obj/abstract/screen/fullscreen/impaired_crit)//displayed right from the start, and scaled up so that its out of view
 
+	//Blurriness
+	var/bluriness_blur = filter(type="blur", name="blurriness_blur", size=0)
+	perception_filters.perception_filters += "blurriness_blur"
+
+	var/bluriness_displacement = filter(type="displace", name="blurriness_displace", x=0, y=0, size=0, icon='icons/mob/blurry_icon_large.dmi', flags=FILTER_OVERLAY)
+	perception_filters.perception_filters += "blurriness_displace"
+
+	for (var/obj/planemaster in perception_filters.perception_planemasters)
+		planemaster.filters += bluriness_blur
+		planemaster.filters += bluriness_displacement
+
+
+/mob/proc/login_perception_filters_update()
+
+/mob/living/login_perception_filters_update()
+	var/impaired_vision = get_impaired_vision_range()
+	if(impaired_vision)
+		enable_nearsightedness(impaired_vision, FALSE)
+
 /mob/proc/remove_perception_filters()
 	for (var/obj/planemaster in perception_filters.perception_planemasters)
 		for (var/filter in perception_filters.perception_filters)
 			planemaster.filters -= filter
 
-var/static/nearsightedness_offsets = list(192, 128, 64, 32, 16, 8, 4, 2, 1, 0)
+
 var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 
-/mob/proc/enable_nearsightedness(var/_severity)
-	var/_offset = nearsightedness_offsets[_severity]
+/mob
+	var/filter_update_delay = -1
 
-	for (var/obj/planemaster in perception_filters.perception_planemasters)
-		var/F1 = planemaster.filters["nearsightedness_angular"]
-		animate(F1, size = 0.5, offset = _offset, time = 20)
-		spawn(1)//Don't remove or THE GAME WILL EXPLODE
-			var/F2 = planemaster.filters["nearsightedness_radial"]
-			animate(F2, size = 0.01, offset = _offset, time = 20)
+/mob/proc/enable_nearsightedness(var/_severity, var/_animate = TRUE)
+	var/_a = 9 - _severity
+	var/_nearsightedness_offset = 0
+	if (_a >= 0)
+		_nearsightedness_offset = min(192, 2 ** (_a))
 
-	var/_scale = impaired_scale[_severity]
+
+	if (_animate)
+		filter_update_delay++
+		spawn(filter_update_delay)
+			for (var/obj/planemaster in perception_filters.perception_planemasters)
+				var/F1 = planemaster.filters["nearsightedness_angular"]
+				animate(F1, size = 0.5, offset = _nearsightedness_offset, time = 20)
+		filter_update_delay++
+		spawn(filter_update_delay)
+			for (var/obj/planemaster in perception_filters.perception_planemasters)
+				var/F2 = planemaster.filters["nearsightedness_radial"]
+				animate(F2, size = 0.01, offset = _nearsightedness_offset, time = 20)
+	else
+		filter_update_delay++
+		spawn(filter_update_delay)
+			for (var/obj/planemaster in perception_filters.perception_planemasters)
+				var/F1 = planemaster.filters["nearsightedness_angular"]
+				F1:offset = _nearsightedness_offset
+		filter_update_delay++
+		spawn(filter_update_delay)
+			for (var/obj/planemaster in perception_filters.perception_planemasters)
+				var/F2 = planemaster.filters["nearsightedness_radial"]
+				F2:offset = _nearsightedness_offset
+
+
+	var/_b = 10 - _severity
+	var/_nearsightedness_scale = 1
+	if (_b > 0)
+		_nearsightedness_scale = min(40, 3 * _b)
+
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
 	var/matrix/M = matrix()
-	M.Scale(_scale, _scale)
-	animate(screen, transform = M, time = 20)
+	M.Scale(_nearsightedness_scale, _nearsightedness_scale)
+	if (_animate)
+		animate(screen, transform = M, time = 20)
+	else
+		screen.transform = M
 
 /mob/proc/disable_nearsightedness()
-	for (var/obj/planemaster in perception_filters.perception_planemasters)
-		var/F1 = planemaster.filters["nearsightedness_angular"]
-		animate(F1, size = 0, offset = 256, time = 20)
-		spawn(1)//Don't remove or THE GAME WILL EXPLODE
+	filter_update_delay++
+	spawn(filter_update_delay)
+		for (var/obj/planemaster in perception_filters.perception_planemasters)
+			var/F1 = planemaster.filters["nearsightedness_angular"]
+			animate(F1, size = 0.5, offset = 256, time = 20)
+	filter_update_delay++
+	spawn(filter_update_delay)
+		for (var/obj/planemaster in perception_filters.perception_planemasters)
 			var/F2 = planemaster.filters["nearsightedness_radial"]
-			animate(F2, size = 0, offset = 256, time = 20)
+			animate(F2, size = 0.01, offset = 256, time = 20)
+
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
 	var/matrix/M = matrix()
 	M.Scale(40, 40)
 	animate(screen, transform = M, time = 20)
+
+/mob
+	var/test_blur_displace = 2
+
+/mob/proc/enable_blurriness(var/_blurriness)
+	//overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
+	//update_fullscreen_alpha("blurry", clamp(_blurriness * 10, 0, 100), 20)
+
+	filter_update_delay++
+	spawn(filter_update_delay)
+		for (var/obj/planemaster in perception_filters.perception_planemasters)
+			var/F1 = planemaster.filters["blurriness_blur"]
+			var/_a = 1.1
+			var/_b = 0.4
+			animate(F1, size = _a, time = 10)
+			animate(size = _b, time = 10)
+	filter_update_delay++
+	spawn(filter_update_delay)//seems like it won't work here either unless we wait here
+		for (var/obj/planemaster in perception_filters.perception_planemasters)
+			var/F2 = planemaster.filters["blurriness_displace"]
+			animate(F2, size = test_blur_displace, time = 5)
+			animate(size = -test_blur_displace, time = 10)
+			animate(size = 0, time = 5)
+
+
+
+/mob/proc/disable_blurriness()
+	//clear_fullscreen("blurry")
+
+	filter_update_delay++
+	spawn(filter_update_delay)
+		for (var/obj/planemaster in perception_filters.perception_planemasters)
+			var/F1 = planemaster.filters["blurriness_blur"]
+			animate(F1, size = 0, time = 20)
+	filter_update_delay++
+	spawn(filter_update_delay)
+		for (var/obj/planemaster in perception_filters.perception_planemasters)
+			var/F2 = planemaster.filters["blurriness_displace"]
+			animate(F2, size = 0, time = 20)

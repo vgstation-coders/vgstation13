@@ -122,15 +122,11 @@
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "blurry"
+	alpha = 0//set to 255 by update_fullscreen_alpha();
 
 /obj/abstract/screen/fullscreen/nearsighted
 	icon = 'icons/mob/screen1_blindness.dmi'
 	icon_state = "eye"
-
-/obj/abstract/screen/fullscreen/impaired_crit
-	icon_state = "blackimageoverlay"
-	plane = IMPAIRED_PLANE
-	globalscreen = 1//need this screen object to keep existing
 
 /obj/abstract/screen/fullscreen/impaired_crit/New()
 	..()

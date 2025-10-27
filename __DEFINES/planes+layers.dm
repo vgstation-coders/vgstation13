@@ -250,9 +250,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define STATIC_LAYER				2
 	#define REACTIVATE_CAMERA_LAYER		3
 
-#define IMPAIRED_PLANE 			22		// The darkness that covers the screen when impaired_vision gets really high
-
-#define FULLSCREEN_PLANE		23		// for fullscreen overlays that do not cover the hud.
+#define FULLSCREEN_PLANE		22		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 		0
 	#define DAMAGE_HUD_LAYER 			1
@@ -261,7 +259,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define CRIT_LAYER 					4
 	#define HALLUCINATION_LAYER 		5
 
-#define HUD_PLANE 				24		// For the Head-Up Display
+#define HUD_PLANE 				23		// For the Head-Up Display
 
 	#define UNDER_HUD_LAYER 			0
 	#define HUD_BASE_LAYER		 		1
@@ -278,7 +276,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define MIND_UI_GROUP_C 			6
 	#define MIND_UI_GROUP_D 			9
 
-#define ABOVE_HUD_PLANE 		25		// For being above the Head-Up Display
+#define ABOVE_HUD_PLANE 		24		// For being above the Head-Up Display
 
 
 /atom/proc/hud_layerise()
