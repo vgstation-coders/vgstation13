@@ -589,7 +589,6 @@
 		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, author, title, content, description FROM `painting_db` ORDER BY RAND() LIMIT 1")
 		if(query.Execute())
 			if(query.NextRow())
-				var/painting_id = query.item[1]
 				var/painting_author = query.item[2]
 				var/painting_title = query.item[3]
 				var/painting_content = query.item[4]

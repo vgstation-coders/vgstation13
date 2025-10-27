@@ -835,9 +835,6 @@
 		if(!wall)
 			continue
 
-		var/area/turf_area = get_area(diag_turf)
-		wall.plane = isopensurface(turf_area) ? EFFECTS_PLANE : OBJ_PLANE //prevents weather overlays from appearing over diagonal walls on procgen planets and snaxi
-
 		if(istype(diag_turf, /turf/space))
 			var/turf/space/nextturf = null
 			for(var/direction in list(NORTH, SOUTH, EAST, WEST))
@@ -858,6 +855,21 @@
 		for(var/turf/simulated/T1 in turfs_to_update)
 			for(var/obj/machinery/door/D2 in T1)
 				D2.update_nearby_tiles()
+
+	// Unregister shuttle turfs from weather system
+	// doing this for source and destination in case we move between planets
+	var/datum/allocation/source_allocation = SSmapping.get_allocation(trf = our_center)
+	var/datum/climate/source_climate = SSweather.get_climate(our_center.z, source_allocation)
+	var/datum/allocation/dest_allocation = SSmapping.get_allocation(trf = new_center)
+	var/datum/climate/dest_climate = SSweather.get_climate(new_center.z, dest_allocation)
+
+	for(var/turf/T in linked_area.contents)
+		if(source_climate)
+			source_climate.unregister_weather_turf(T)
+		if(dest_climate)
+			dest_climate.unregister_weather_turf(T)
+		for(var/obj/effect/weather_holder/WH in T.vis_contents)
+			T.vis_contents -= WH
 
 	return 1
 
