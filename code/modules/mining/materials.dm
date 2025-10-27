@@ -539,7 +539,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/erebite/on_use(obj/source, atom/target, mob/user)
 	if(!..())
 		return
-	explosion(get_turf(target),-1,0,2*source.quality)
+	explosion(get_turf(target),-1,0,source.quality)
 
 /datum/material/cytine
 	name="Cytine"
