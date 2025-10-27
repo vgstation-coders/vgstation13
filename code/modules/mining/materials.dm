@@ -478,7 +478,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/pharosium
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_PHAROSIUM
-
+	sharpness_mod = 0.75
+	quality_mod = 1.4
 
 /datum/material/char
 	name="Char"
@@ -489,7 +490,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_CHAR
 
-
 /datum/material/claretine
 	name="Claretine"
 	id=MAT_CLARETINE
@@ -498,7 +498,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/claretine
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_CLARETINE
-
+	sharpness_mod = 0.75
+	brunt_damage_mod = 0.9
+	quality_mod = 1.5
 
 /datum/material/bohrum
 	name="Bohrum"
@@ -508,7 +510,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/bohrum
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_BOHRUM
-
+	brunt_damage_mod = 1.25
+	quality_mod = 1.5
 
 /datum/material/syreline
 	name="Syreline"
@@ -518,7 +521,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/syreline
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_SYRELINE
-
+	brunt_damage_mod = 1.2
+	sharpness_mod = 1.3
+	quality_mod = 2.5
 
 /datum/material/erebite
 	name="Erebite"
@@ -528,6 +533,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/erebite
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_EREBITE
+	brunt_damage_mod = 0.7
+	sharpness_mod = 0.7
 
 /datum/material/erebite/on_use(obj/source, atom/target, mob/user)
 	if(!..())
@@ -543,7 +550,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_CYTINE
 
-
 /datum/material/uqill
 	name="Uqill"
 	id=MAT_UQILL
@@ -552,7 +558,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/uqill
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_UQILL
-
+	sharpness_mod = 0.75
+	quality_mod = 2
 
 /datum/material/mauxite
 	name="Mauxite"
@@ -562,7 +569,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/mauxite
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_MAUXITE
-
+	brunt_damage_mod = 1.25
+	quality_mod = 1.25
 
 /datum/material/cobryl
 	name="Cobryl"
@@ -572,7 +580,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/cobryl
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_COBRYL
-
+	brunt_damage_mod = 1.25
+	quality_mod = 1.25
+	quality_mod = 1.5
 
 /datum/material/cerenkite
 	name="Cerenkite"
@@ -582,6 +592,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/cerenkite
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_CERENKITE
+	brunt_damage_mod = 1.8
+	sharpness_mod = 0.4
+	quality_mod = 1.8
 
 /datum/material/cerenkite/on_use(obj/source, atom/target, mob/user)
 	if(!..())
@@ -598,6 +611,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/molitz
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_MOLITZ
+	sharpness_mod = 1.7
 
 /datum/material/molitz/on_use(obj/source)
 	if(!..())
