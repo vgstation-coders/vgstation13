@@ -403,6 +403,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/pharosium
 	name = "pharosium"
+	singular_name = "pharosium sheet"
 	icon_state = "sheet-pharosium"
 	force = 5.0
 	throwforce = 5
@@ -420,6 +421,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/char
 	name = "char"
+	singular_name = "char sheet"
 	icon_state = "sheet-char"
 	force = 5.0
 	throwforce = 5
@@ -434,6 +436,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/claretine
 	name = "claretine"
+	singular_name = "claretine sheet"
 	icon_state = "sheet-claretine"
 	force = 5.0
 	throwforce = 5
@@ -451,6 +454,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/cobryl
 	name = "cobryl"
+	singular_name = "cobryl sheet"
 	icon_state = "sheet-cobryl"
 	force = 5.0
 	throwforce = 5
@@ -468,6 +472,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/bohrum
 	name = "bohrum"
+	singular_name = "bohrum sheet"
 	icon_state = "sheet-bohrum"
 	force = 5.0
 	throwforce = 5
@@ -485,6 +490,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/syreline
 	name = "syreline"
+	singular_name = "syreline sheet"
 	icon_state = "sheet-syreline"
 	force = 5.0
 	throwforce = 5
@@ -502,6 +508,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/erebite
 	name = "erebite"
+	singular_name = "erebite sheet"
 	icon_state = "sheet-erebite"
 	force = 5.0
 	throwforce = 5
@@ -527,6 +534,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/cerenkite
 	name = "cerenkite"
+	singular_name = "cerenkite sheet"
 	icon_state = "sheet-cerenkite"
 	force = 5.0
 	throwforce = 5
@@ -558,6 +566,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/cytine
 	name = "cytine"
+	singular_name = "cytine sheet"
 	icon_state = "sheet-cytine"
 	force = 5.0
 	throwforce = 5
@@ -583,6 +592,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/uqill
 	name = "uqill"
+	singular_name = "uqill sheet"
 	icon_state = "sheet-uqill"
 	force = 5.0
 	throwforce = 5
@@ -613,6 +623,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/mauxite
 	name = "mauxite"
+	singular_name = "mauxite sheet"
 	icon_state = "sheet-mauxite"
 	force = 5.0
 	throwforce = 5
@@ -630,6 +641,7 @@ var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/molitz
 	name = "molitz"
+	singular_name = "molitz sheet"
 	icon_state = "sheet-molitz"
 	force = 5.0
 	throwforce = 5
