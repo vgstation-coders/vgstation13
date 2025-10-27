@@ -1,3 +1,44 @@
+/**
+ * This system allows turfs to display decorative edges and corners where they meet
+ * adjacent turfs of different types or lower priority. This is useful for creating
+ * smooth transitions between different floor types, showing borders, etc.
+ *
+ * HOW TO MAKE A TURF COMPATIBLE WITH THE EDGE SYSTEM:
+ *
+ * 1. SET EDGE FLAGS:
+ *    - EDGE_CARDINAL: Enable cardinal direction edges (NORTH, SOUTH, EAST, WEST)
+ *    - EDGE_INNER_DIAGONAL: Show inner diagonal corners (L-shaped corners)
+ *    - EDGE_OUTER_DIAGONAL: Show outer diagonal corners (convex corners)
+ *    - EDGE_THREEFOLD: Show three-sided corners (U-shaped edges)
+ *
+ * 2. SET EDGE PRIORITY:
+ *    Set the edge_priority variable to determine which turf's edges are shown
+ *    when two edge-enabled turfs meet. Higher priority turfs will show their
+ *    edges over lower priority turfs.
+ *
+ * 3. SET EDGE OVERLAY TYPE:
+ *    Set the edge_overlay_type variable to the type of edge overlay object to use.
+ *    This defaults to /obj/effect/edge_overlay but can be customized.
+ *
+ * 4. SET BASE ICON STATE:
+ *    The base_icon_state variable should be set to the icon state prefix used
+ *    for edge sprites in 'icons/turf/edges_corners.dmi'. The system will look for:
+ *    - "[base_icon_state]" for cardinal edges
+ *    - "[base_icon_state]_corner" for diagonal corners (if flags enabled)
+ *
+ * EDGE SPRITE REQUIREMENTS:
+ * The edge sprites should be in 'icons/turf/edges_corners.dmi' with the following naming:
+ * - "[base_icon_state]" - Used for cardinal direction edges AND diagonal (outer) corners.
+ * - "[base_icon_state]_corner" - Used for inner diagonal corners and three-sided corners.
+ *
+ * EXAMPLE:
+ * /turf/simulated/floor/grass
+ *     edge_flags = EDGE_CARDINAL | EDGE_INNER_DIAGONAL | EDGE_OUTER_DIAGONAL
+ *     edge_priority = 3
+ *     edge_overlay_type = /obj/effect/edge_overlay
+ *     base_icon_state = "grass"
+ */
+
 // Returns a list of directions where edges will be placed.
 /turf/proc/edge_check()
 	var/turf/adj
