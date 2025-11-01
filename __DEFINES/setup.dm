@@ -332,7 +332,7 @@ var/MAX_EXPLOSION_RANGE = 32
 #define MOUTH			(1<<12)
 #define EARS			(1<<13)
 
-#define TAIL			(1<<19) //why is that one so high anyway?
+#define TAIL			(1<<19)
 
 
 // bitflags for clothing parts
