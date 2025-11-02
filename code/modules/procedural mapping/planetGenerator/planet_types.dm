@@ -15,7 +15,7 @@
 	var/loot_modifier = 0
 	//Climate datum
 	var/datum/climate/climate
-	var/climate_type = CLIMATE_NONE
+	var/climate_type = null
 	//Allocation occupied by this planet.
 	var/allocation = null
 	//Icon shown in the planet scanner.
@@ -246,7 +246,7 @@
 	mapgen = /datum/planetGenerator/beach
 	default_baseturf = /turf/unsimulated/beach/sand
 	loot_type = LOOT_TYPE_BEACH
-	climate_type = CLIMATE_TROPICAL
+	climate_type = /datum/climate/tropical
 	icon_state = "beach2"
 
 /datum/planet_type/desert
@@ -255,7 +255,7 @@
 	mapgen = /datum/planetGenerator/desert
 	default_baseturf = /turf/unsimulated/floor/planetary/desert
 	loot_type = LOOT_TYPE_DESERT
-	climate_type = CLIMATE_DESERT
+	climate_type = /datum/climate/desert
 	loot_modifier = 5
 	icon_state = "desert"
 
@@ -265,7 +265,7 @@
 	mapgen = /datum/planetGenerator/grass
 	default_baseturf = /turf/unsimulated/floor/planetary/dirt
 	loot_type = LOOT_TYPE_GRASS
-	climate_type = CLIMATE_TEMPERATE
+	climate_type = /datum/climate/temperate
 	icon_state = "earth"
 
 /datum/planet_type/jungle
@@ -274,7 +274,7 @@
 	mapgen = /datum/planetGenerator/jungle
 	default_baseturf = /turf/unsimulated/floor/jungle/grass
 	loot_type = LOOT_TYPE_JUNGLE
-	climate_type = CLIMATE_TROPICAL
+	climate_type = /datum/climate/tropical
 	loot_modifier = 10
 	icon_state = "jungle2"
 
@@ -284,7 +284,7 @@
 	mapgen = /datum/planetGenerator/lava
 	default_baseturf = /turf/unsimulated/floor/planetary/basalt
 	loot_type = LOOT_TYPE_LAVA
-	climate_type = CLIMATE_LAVA
+	climate_type = /datum/climate/lava
 	loot_modifier = 15
 	icon_state = "lava"
 
@@ -294,7 +294,7 @@
 	mapgen = /datum/planetGenerator/snow
 	default_baseturf = /turf/unsimulated/floor/snow
 	loot_type = LOOT_TYPE_SNOW
-	climate_type = CLIMATE_ARCTIC
+	climate_type = /datum/climate/arctic
 	loot_modifier = 5
 	icon_state = "snow"
 
@@ -304,7 +304,7 @@
 	mapgen = /datum/planetGenerator/urban
 	default_baseturf = /turf/unsimulated/floor/planetary/wasteland
 	loot_type = LOOT_TYPE_URBAN
-	climate_type = CLIMATE_TOXIC
+	climate_type = /datum/climate/wasteland
 	loot_modifier = 10
 	icon_state = "barren"
 
@@ -314,6 +314,6 @@
 	mapgen = /datum/planetGenerator/xeno
 	default_baseturf = /turf/unsimulated/floor/grey_sand
 	loot_type = LOOT_TYPE_XENO
-	climate_type = CLIMATE_XENO
+	climate_type = /datum/climate/xeno
 	loot_modifier = 20
 	icon_state = "xeno1"

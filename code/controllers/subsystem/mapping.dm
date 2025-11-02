@@ -783,7 +783,7 @@ var/datum/subsystem/mapping/SSmapping
  * and which planet type is assigned to it. Also tracks shuttle landing zones for persistent
  * shuttle landings on the planet.
  *
- * NOTE: To be replaced with vlevels in the future.
+ * NOTE: To be replaced with virtual z-levels in the future.
  */
 /datum/allocation
 	/// Sector coordinates as [x, y] in the procgen grid

@@ -258,7 +258,7 @@
 					if(D.docked_with)
 						continue
 					// Skip planet surface ports when we have a procedural disk - they'll be shown via the disk instead
-					if(istype(D, /obj/docking_port/destination/planet_surface) && disk && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+					if(istype(D, /obj/docking_port/destination/planet_surface) && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
 						continue
 					else
 						text = get_doc_href(D)
@@ -270,7 +270,7 @@
 					dat += " | <b>[get_doc_href(disk.destination)]</b> | "
 				else //Shuttle not allowed to use disk
 					dat += " | <b>ERROR: Unable to read coordinates from disk (unknown encryption key)</b>"
-			else if(disk && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+			else if(istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
 				var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
 				if(proc_disk.planet_ref && proc_disk.compatible(shuttle))
 					dat += " | <b><a href='?src=\ref[src];select_procedural=1'>[proc_disk.planet_ref.planet_name] Landing</a></b> | "
@@ -320,7 +320,7 @@
 		return
 
 	// Land on a planet
-	if(procgen_target && disk && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+	if(procgen_target && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
 		var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
 		if(proc_disk.planet_ref)
 			travel_to_planet(proc_disk.planet_ref, user)
@@ -357,7 +357,7 @@
 		return
 
 	// Set the disk's destination to the surface port for validation purposes
-	if(disk && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+	if(istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
 		var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
 		proc_disk.destination = surface_port
 
@@ -436,7 +436,7 @@
 		if(!allowed(usr))
 			to_chat(usr, "<span class='red'>Access denied.</span>")
 			return
-		if(disk && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+		if(istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
 			var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
 			procgen_target = proc_disk.planet_ref?.planet_name
 			selected_port = null

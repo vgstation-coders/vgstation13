@@ -263,6 +263,7 @@
 
 /// Takes a weighted list (see above) and expands it into raw entries
 /// This eats more memory, but saves time when actually picking from it
+/// Example:  list(item1 = 6, item2 = 3, item3 = 9) becomes list(item1, item1, item2, item3, item3, item3)
 /proc/expand_weights(list/list_to_pick)
 	var/list/values = list()
 	for(var/item in list_to_pick)
@@ -286,7 +287,7 @@
 /// Note: this implementation is expensive as heck for large numbers, I only use it because most of my usecase
 /// Is < 10 ints
 /proc/greatest_common_factor(list/values)
-	var/smallest = min(arglist(values))
+	var/smallest = min(values)
 	for(var/i in smallest to 1 step -1)
 		var/safe = TRUE
 		for(var/entry in values)
