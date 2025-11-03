@@ -223,7 +223,7 @@
 	},
 /area/shack)
 "rz" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	pixel_y = 24
 	},
 /turf/simulated/floor{
@@ -466,7 +466,7 @@
 /turf/simulated/floor/plating,
 /area/shack)
 "NF" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

@@ -122,7 +122,7 @@
 	},
 /area/shack)
 "C" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2

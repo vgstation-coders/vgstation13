@@ -395,7 +395,7 @@
 /turf/simulated/floor/plating,
 /area/shack)
 "Kq" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -413,7 +413,7 @@
 	},
 /area/shack)
 "Mt" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
