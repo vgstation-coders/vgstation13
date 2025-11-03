@@ -1,0 +1,1005 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"an" = (
+/obj/structure/bed,
+/obj/effect/landmark/hobostart,
+/obj/item/weapon/bedsheet/green,
+/turf/simulated/floor/wood,
+/area/shack)
+"ax" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"by" = (
+/obj/machinery/door/mineral/wood/log,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/wood,
+/area/shack)
+"bA" = (
+/obj/structure/forge,
+/turf/simulated/floor/wood,
+/area/shack)
+"ci" = (
+/mob/living/simple_animal/cow/chocolate{
+	min_oxy = 0;
+	minbodytemp = 0;
+	name = "space chocolate cow";
+	desc = "This special breed of chocolate cow can live comfortably in a vacuum. Makes delicious chocolate milk."
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"ex" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/full/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shack)
+"fK" = (
+/obj/structure/railing/wood{
+	dir = 4;
+	health = 3000
+	},
+/mob/living/simple_animal/cow{
+	min_oxy = 0;
+	minbodytemp = 0;
+	name = "space cow";
+	desc = "This rare breed of cow can live comfortably without an atmosphere. Just don't tip them over."
+	},
+/obj/machinery/light{
+	dir = 4;
+	pixel_x = -5
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"gq" = (
+/obj/effect/landmark/hobostart,
+/obj/structure/bed/chair/wood/normal,
+/turf/simulated/floor/wood,
+/area/shack)
+"gC" = (
+/obj/structure/mirror{
+	pixel_x = 26;
+	pixel_y = 2
+	},
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 13
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"gI" = (
+/obj/structure/table/woodentable,
+/obj/machinery/power/apc{
+	cell_type = 0;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_y = -24
+	},
+/obj/item/weapon/storage/toolbox/mechanical{
+	pixel_y = -6
+	},
+/obj/item/device/crank_charger,
+/obj/item/weapon/cell/super{
+	pixel_y = 7;
+	pixel_x = 6
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"hj" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/pitchfork,
+/obj/item/weapon/paper{
+	info = "TODO: Milk the Cows - Grab the Eggs - Go to the farmshack to buy some more wheat - Package yesterday's harve-"
+	},
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"hr" = (
+/obj/structure/railing/wood{
+	dir = 4;
+	health = 3000
+	},
+/mob/living/simple_animal/chicken{
+	name = "space chicken";
+	desc = "This special breed of chicken is immune to the hazards of space.";
+	minbodytemp = 0;
+	min_oxy = 0
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"hC" = (
+/obj/machinery/door/mineral/wood/log,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"hK" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"hQ" = (
+/obj/structure/toilet,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"ia" = (
+/mob/living/simple_animal/chicken{
+	name = "space chicken";
+	desc = "This special breed of chicken is immune to the hazards of space.";
+	minbodytemp = 0;
+	min_oxy = 0
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"iU" = (
+/obj/structure/railing/wood{
+	dir = 1;
+	health = 3000
+	},
+/obj/structure/railing/wood{
+	dir = 4;
+	health = 3000
+	},
+/mob/living/simple_animal/cow{
+	min_oxy = 0;
+	minbodytemp = 0;
+	name = "space cow";
+	desc = "This rare breed of cow can live comfortably without an atmosphere. Just don't tip them over."
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"lG" = (
+/obj/structure/railing/wood{
+	dir = 8;
+	health = 3000
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"ni" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/full/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shack)
+"nK" = (
+/turf/simulated/floor/wood,
+/area/shack)
+"pb" = (
+/obj/structure/table/woodentable,
+/obj/item/trash/plate/clean,
+/obj/item/weapon/reagent_containers/food/snacks/friedegg,
+/obj/item/weapon/reagent_containers/food/snacks/friedegg,
+/obj/item/weapon/reagent_containers/food/snacks/friedegg,
+/obj/item/weapon/reagent_containers/food/snacks/friedegg,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"pc" = (
+/mob/living/simple_animal/chick{
+	name = "space chick";
+	min_oxy = 0;
+	minbodytemp = 0
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"pA" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"pR" = (
+/obj/machinery/space_heater/campfire/stove/fireplace/preset,
+/turf/simulated/floor/wood,
+/area/shack)
+"rv" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"rB" = (
+/turf/simulated/wall/r_rock/porous,
+/area/shack)
+"rT" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/item/weapon/reagent_containers/food/snacks/egg,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"sp" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating,
+/area/shack)
+"sr" = (
+/obj/item/clothing/suit/mino,
+/obj/item/clothing/suit/mino,
+/obj/item/clothing/suit/leather,
+/obj/item/clothing/suit/leather,
+/obj/structure/closet/cabinet,
+/obj/machinery/light,
+/turf/simulated/floor/wood,
+/area/shack)
+"tB" = (
+/obj/structure/railing/wood{
+	dir = 4;
+	health = 3000
+	},
+/obj/machinery/light{
+	dir = 4;
+	pixel_x = -5
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"tH" = (
+/obj/item/anvil,
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"tR" = (
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"ve" = (
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"wq" = (
+/obj/structure/table/woodentable,
+/obj/item/device/flashlight/lamp/green,
+/turf/simulated/floor/wood,
+/area/shack)
+"yA" = (
+/obj/effect/landmark/hobostart,
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/green,
+/turf/simulated/floor/wood,
+/area/shack)
+"zi" = (
+/obj/machinery/door/mineral/wood/log,
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"zq" = (
+/mob/living/simple_animal/cow{
+	min_oxy = 0;
+	minbodytemp = 0;
+	name = "space cow";
+	desc = "This rare breed of cow can live comfortably without an atmosphere. Just don't tip them over."
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"AG" = (
+/obj/structure/railing/wood,
+/obj/structure/railing/wood{
+	dir = 4;
+	health = 3000
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"Cq" = (
+/mob/living/simple_animal/chick{
+	name = "space chick";
+	min_oxy = 0;
+	minbodytemp = 0
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 10;
+	initialize_directions = 6
+	},
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"CV" = (
+/obj/item/clothing/under/wedding/bride_red,
+/obj/structure/closet/cabinet,
+/obj/item/clothing/under/suit_jacket,
+/obj/machinery/light,
+/turf/simulated/floor/wood,
+/area/shack)
+"Di" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"EH" = (
+/obj/structure/railing/wood{
+	dir = 8;
+	health = 3000
+	},
+/obj/machinery/light{
+	dir = 8;
+	pixel_x = 5
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"FO" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1;
+	initialize_directions = 14
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"Hj" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/pan,
+/turf/simulated/floor/wood,
+/area/shack)
+"HQ" = (
+/obj/machinery/egg_incubator,
+/obj/item/trash/egg,
+/obj/item/trash/egg,
+/turf/simulated/floor/wood,
+/area/shack)
+"JN" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/glass/bucket/wooden,
+/obj/item/weapon/reagent_containers/glass/bucket/wooden,
+/obj/item/weapon/reagent_containers/glass/bucket/wooden,
+/obj/item/weapon/reagent_containers/glass/bucket/wooden,
+/obj/item/weapon/reagent_containers/glass/bucket/wooden,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"KR" = (
+/obj/structure/railing/wood,
+/obj/structure/railing/wood{
+	dir = 8;
+	health = 3000
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"Lw" = (
+/obj/structure/railing/wood{
+	dir = 4;
+	health = 3000
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"Mo" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/milk,
+/obj/item/weapon/reagent_containers/food/drinks/milk,
+/turf/simulated/floor/wood,
+/area/shack)
+"Mw" = (
+/obj/structure/railing/wood{
+	dir = 1;
+	health = 3000
+	},
+/obj/structure/railing/wood{
+	dir = 4;
+	health = 3000
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"MO" = (
+/turf/simulated/wall/mineral/wood/log,
+/area/shack)
+"NI" = (
+/obj/structure/closet{
+	name = "chickenfeed"
+	},
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"Oo" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"Ou" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/fancy/egg_box/empty,
+/obj/item/weapon/storage/fancy/egg_box/empty,
+/obj/item/weapon/storage/fancy/egg_box/empty,
+/obj/item/weapon/storage/fancy/egg_box/empty,
+/obj/item/weapon/storage/fancy/egg_box/empty,
+/obj/item/weapon/storage/fancy/egg_box/empty,
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"Py" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"Rj" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/shack)
+"RI" = (
+/obj/structure/railing/wood{
+	dir = 1;
+	health = 3000
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"Sa" = (
+/obj/structure/railing/wood{
+	dir = 1;
+	health = 3000
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"Se" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/full/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shack)
+"St" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"Te" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/shack)
+"TM" = (
+/obj/machinery/cooking/grill,
+/obj/structure/table/reinforced,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"TP" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"TQ" = (
+/obj/structure/railing/wood{
+	dir = 1;
+	health = 3000
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/obj/effect/landmark/hobostart,
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"TR" = (
+/obj/machinery/disposal/compactor{
+	name = "dung compactor"
+	},
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"Uk" = (
+/obj/structure/railing/wood{
+	dir = 8;
+	health = 3000
+	},
+/mob/living/simple_animal/chicken{
+	name = "space chicken";
+	desc = "This special breed of chicken is immune to the hazards of space.";
+	minbodytemp = 0;
+	min_oxy = 0
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"Vj" = (
+/obj/structure/railing/wood,
+/turf/simulated/floor/grass,
+/area/shack)
+"Vv" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/milk,
+/obj/item/weapon/reagent_containers/food/drinks/milk,
+/obj/item/weapon/reagent_containers/food/drinks/milk,
+/obj/item/weapon/reagent_containers/food/drinks/milk,
+/obj/item/weapon/reagent_containers/food/drinks/milk,
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"WG" = (
+/obj/structure/railing/wood{
+	dir = 4;
+	health = 3000
+	},
+/mob/living/simple_animal/chicken{
+	name = "space chicken";
+	desc = "This special breed of chicken is immune to the hazards of space.";
+	minbodytemp = 0;
+	min_oxy = 0
+	},
+/obj/machinery/light{
+	dir = 4;
+	pixel_x = -5
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"WO" = (
+/obj/structure/bed/chair/vehicle/tractor,
+/obj/machinery/cart,
+/obj/machinery/cart,
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"Yd" = (
+/obj/structure/rack,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/toolbox/electrical,
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"Ye" = (
+/obj/structure/railing/wood{
+	dir = 1;
+	health = 3000
+	},
+/obj/structure/railing/wood{
+	dir = 8;
+	health = 3000
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"Yz" = (
+/turf/simulated/floor/grass,
+/area/shack)
+"YH" = (
+/obj/structure/closet{
+	name = "cowfeed"
+	},
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"YK" = (
+/obj/structure/sink/kitchen{
+	pixel_y = 20
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"Zy" = (
+/obj/structure/railing/wood{
+	dir = 1;
+	health = 3000
+	},
+/mob/living/simple_animal/cow/chocolate{
+	min_oxy = 0;
+	minbodytemp = 0;
+	name = "space chocolate cow";
+	desc = "This special breed of chocolate cow can live comfortably in a vacuum. Makes delicious chocolate milk."
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+
+(1,1,1) = {"
+rB
+rB
+rB
+rB
+rB
+rB
+ve
+ve
+ve
+ve
+ve
+ve
+ve
+ve
+ve
+"}
+(2,1,1) = {"
+rB
+wq
+yA
+an
+CV
+MO
+WO
+ve
+Ye
+EH
+Uk
+lG
+EH
+KR
+ve
+"}
+(3,1,1) = {"
+rB
+nK
+TP
+nK
+sr
+MO
+Yd
+ve
+RI
+ia
+Yz
+Yz
+ia
+Vj
+ve
+"}
+(4,1,1) = {"
+rB
+MO
+hC
+MO
+MO
+MO
+rT
+ve
+RI
+Yz
+ia
+Yz
+Yz
+Vj
+ve
+"}
+(5,1,1) = {"
+rB
+Hj
+ax
+gq
+tH
+sp
+Ou
+ve
+RI
+Yz
+Yz
+ia
+Yz
+Vj
+ve
+"}
+(6,1,1) = {"
+rB
+TM
+ax
+nK
+bA
+Se
+NI
+ve
+RI
+ia
+Yz
+Yz
+Yz
+Vj
+ve
+"}
+(7,1,1) = {"
+rB
+YK
+ax
+TP
+ni
+Rj
+ex
+Oo
+Mw
+tB
+hr
+Lw
+WG
+AG
+ve
+"}
+(8,1,1) = {"
+rB
+pR
+FO
+St
+by
+pA
+zi
+ve
+ve
+ve
+ve
+ve
+ve
+ve
+ve
+"}
+(9,1,1) = {"
+rB
+rv
+ax
+MO
+ni
+Te
+ex
+Oo
+Ye
+EH
+lG
+lG
+EH
+KR
+ve
+"}
+(10,1,1) = {"
+rB
+pb
+Di
+MO
+hQ
+hK
+YH
+ve
+RI
+zq
+Yz
+ci
+Yz
+Vj
+ve
+"}
+(11,1,1) = {"
+rB
+Mo
+FO
+by
+gC
+Py
+hj
+ve
+Zy
+Yz
+Yz
+Yz
+zq
+Vj
+ve
+"}
+(12,1,1) = {"
+rB
+MO
+hC
+MO
+MO
+MO
+JN
+ve
+RI
+ci
+Yz
+zq
+Yz
+Vj
+ve
+"}
+(13,1,1) = {"
+rB
+pc
+ax
+Sa
+gI
+MO
+Vv
+ve
+RI
+Yz
+ci
+Yz
+ci
+Vj
+ve
+"}
+(14,1,1) = {"
+rB
+HQ
+Cq
+TQ
+tR
+MO
+TR
+ve
+iU
+tB
+Lw
+Lw
+fK
+AG
+ve
+"}
+(15,1,1) = {"
+rB
+rB
+rB
+rB
+rB
+rB
+ve
+ve
+ve
+ve
+ve
+ve
+ve
+ve
+ve
+"}

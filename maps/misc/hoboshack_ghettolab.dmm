@@ -1,0 +1,659 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"am" = (
+/obj/structure/table,
+/obj/machinery/chem_dispenser/booze_dispenser,
+/turf/simulated/floor,
+/area/shack)
+"aJ" = (
+/obj/structure/table,
+/obj/item/weapon/storage/toolbox/electrical{
+	pixel_y = 12
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
+/turf/simulated/floor/plating,
+/area/shack)
+"aW" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/machinery/door/airlock/external{
+	name = "hobo lab"
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"bA" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/obj/item/weapon/storage/box/lights/he,
+/turf/simulated/floor/plating,
+/area/shack)
+"bI" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/item/weapon/paper{
+	info = "i couldn't get you a chem dispenser but i found this bot and some assorted goodies in a crashed ship, hope they help you man, see you around -JB";
+	desc = "Seems to have been scribbled down in a hurry...";
+	name = "scribbled note";
+	pixel_x = 7
+	},
+/turf/simulated/floor,
+/area/shack)
+"bK" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor/plating,
+/area/shack)
+"df" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/turf/simulated/floor,
+/area/shack)
+"dh" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor,
+/area/shack)
+"eA" = (
+/obj/structure/rack,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/toolbox/mechanical,
+/obj/item/clothing/head/welding,
+/obj/item/tool/solder,
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/simulated/floor,
+/area/shack)
+"fm" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor,
+/area/shack)
+"fr" = (
+/obj/structure/table,
+/obj/machinery/chem_dispenser/brewer,
+/turf/simulated/floor,
+/area/shack)
+"ga" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/shack)
+"gb" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/reagent_dispensers/silicate,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"gm" = (
+/obj/item/anvil,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
+/turf/simulated/floor,
+/area/shack)
+"gz" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/shack)
+"gC" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/blue,
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor,
+/area/shack)
+"hh" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/template_noop,
+/area/shack)
+"hr" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 9
+	},
+/turf/simulated/floor,
+/area/shack)
+"hZ" = (
+/obj/structure/table,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/weapon/reagent_containers/glass/bottle/antitoxin,
+/obj/item/weapon/reagent_containers/glass/bottle/antitoxin,
+/obj/item/weapon/grenade/chem_grenade/metalfoam,
+/turf/simulated/floor,
+/area/shack)
+"iH" = (
+/obj/structure/closet/cabinet,
+/obj/item/stack/sheet/glass/glass/bigstack,
+/obj/item/clothing/accessory/stethoscope,
+/obj/item/stack/sheet/wood/bigstack,
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 30
+	},
+/obj/item/clothing/under/rank/scientist,
+/obj/item/clothing/shoes/purple,
+/turf/simulated/floor,
+/area/shack)
+"jv" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6;
+	initialize_directions = 6
+	},
+/turf/simulated/floor,
+/area/shack)
+"kw" = (
+/obj/structure/safe,
+/obj/abstract/map/spawner/safe/food,
+/turf/simulated/floor/plating,
+/area/shack)
+"lV" = (
+/mob/living/simple_animal/robot/NPC/dusky{
+	name = "stolen barbot";
+	desc = "The name plate has rusted away with time, but it still keeps making drinks if it gets money."
+	},
+/turf/simulated/floor,
+/area/shack)
+"mL" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/machinery/door/airlock/external{
+	name = "hobo lab"
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"mX" = (
+/obj/structure/table,
+/obj/machinery/chem_dispenser/soda_dispenser,
+/turf/simulated/floor,
+/area/shack)
+"oc" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/shack)
+"py" = (
+/obj/machinery/power/treadmill{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/plating,
+/area/shack)
+"pN" = (
+/obj/machinery/atmospherics/unary/tank/air,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"rm" = (
+/turf/simulated/floor,
+/area/shack)
+"ru" = (
+/obj/structure/table,
+/turf/simulated/floor,
+/area/shack)
+"rG" = (
+/obj/structure/table,
+/obj/item/trash/bowl{
+	pixel_x = 6
+	},
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker,
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/mutagen,
+/obj/item/weapon/storage/box/beakers,
+/turf/simulated/floor,
+/area/shack)
+"rR" = (
+/turf/simulated/wall,
+/area/shack)
+"rX" = (
+/obj/structure/cable/yellow,
+/obj/item/weapon/cell,
+/obj/machinery/power/apc{
+	cell_type = 0;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_y = -24
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"sl" = (
+/obj/structure/table,
+/obj/machinery/bunsen_burner/mapped,
+/turf/simulated/floor,
+/area/shack)
+"tF" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/forge,
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
+/turf/simulated/floor,
+/area/shack)
+"uw" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/shack)
+"uF" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor,
+/area/shack)
+"vb" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/shack)
+"yF" = (
+/obj/structure/bed/chair/office{
+	dir = 4
+	},
+/obj/effect/landmark/hobostart,
+/obj/machinery/light/he,
+/turf/simulated/floor,
+/area/shack)
+"AV" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/turf/simulated/floor/plating,
+/area/shack)
+"BD" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating,
+/area/shack)
+"Cq" = (
+/obj/structure/table,
+/obj/item/weapon/book/manual/barman_recipes,
+/turf/simulated/floor,
+/area/shack)
+"CP" = (
+/turf/template_noop,
+/area/shack)
+"DT" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/shack)
+"DZ" = (
+/obj/item/weapon/storage/wallet,
+/obj/item/weapon/spacecash/c1000,
+/obj/item/weapon/spacecash/c1000,
+/obj/item/weapon/spacecash/c1000,
+/obj/item/weapon/storage/wallet,
+/obj/item/clothing/head/timefake,
+/obj/item/weapon/storage/wallet,
+/obj/structure/table,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/shack)
+"Fc" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6;
+	initialize_directions = 6
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"Gk" = (
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"HX" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/shack)
+"Ij" = (
+/obj/machinery/cooking/still,
+/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+/turf/simulated/floor/plating,
+/area/shack)
+"IX" = (
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/turf/simulated/floor,
+/area/shack)
+"Jq" = (
+/obj/structure/rack,
+/obj/item/weapon/tank/emergency_oxygen/double,
+/obj/item/weapon/tank/emergency_oxygen/double,
+/obj/item/weapon/storage/toolbox/electrical,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/shack)
+"JD" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/machinery/door/mineral/iron,
+/turf/simulated/floor/plating,
+/area/shack)
+"Kq" = (
+/obj/structure/sink{
+	dir = 8;
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/obj/structure/mirror{
+	pixel_x = -26
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/shack)
+"Mt" = (
+/obj/structure/toilet{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/landmark/hobostart,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/shack)
+"Nk" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"Nm" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/shack)
+"Ny" = (
+/obj/structure/table,
+/obj/machinery/microwave{
+	pixel_y = 6
+	},
+/turf/simulated/floor,
+/area/shack)
+"Os" = (
+/obj/machinery/door/mineral/iron,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor,
+/area/shack)
+"PZ" = (
+/obj/machinery/chem_master/electrolytic,
+/turf/simulated/floor,
+/area/shack)
+"SY" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor,
+/area/shack)
+"UG" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/shack)
+"UK" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/shack)
+"Va" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/shack)
+"VT" = (
+/turf/simulated/wall/r_rock/porous,
+/area/shack)
+"Xy" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/machinery/door/mineral/iron,
+/turf/simulated/floor,
+/area/shack)
+"Xz" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/shack)
+
+(1,1,1) = {"
+VT
+VT
+VT
+VT
+VT
+VT
+VT
+VT
+VT
+VT
+VT
+VT
+VT
+rR
+hh
+"}
+(2,1,1) = {"
+VT
+Ij
+kw
+rR
+Kq
+Mt
+rR
+Ny
+hZ
+rG
+eA
+Jq
+dh
+aW
+Gk
+"}
+(3,1,1) = {"
+VT
+gb
+BD
+rR
+Os
+rR
+rR
+oc
+gz
+jv
+fm
+fm
+DT
+Nk
+Gk
+"}
+(4,1,1) = {"
+VT
+aJ
+Fc
+JD
+Va
+fm
+Nm
+bI
+ga
+hr
+rm
+gz
+uF
+mL
+Gk
+"}
+(5,1,1) = {"
+VT
+py
+rX
+rR
+rm
+gz
+IX
+Cq
+SY
+sl
+rR
+vb
+Xy
+rR
+hh
+"}
+(6,1,1) = {"
+VT
+pN
+AV
+rR
+tF
+HX
+lV
+ru
+Xz
+yF
+rR
+DZ
+df
+UK
+CP
+"}
+(7,1,1) = {"
+VT
+bK
+bA
+rR
+gm
+uw
+mX
+am
+PZ
+fr
+rR
+iH
+gC
+UG
+CP
+"}
+(8,1,1) = {"
+VT
+VT
+VT
+VT
+VT
+VT
+VT
+VT
+rR
+rR
+rR
+rR
+rR
+rR
+hh
+"}

@@ -74,7 +74,7 @@
 	},
 /area/shack)
 "lF" = (
-/turf/simulated/wall/mineral/wood,
+/turf/simulated/wall/mineral/wood/log,
 /area/shack)
 "lQ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -183,8 +183,9 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
 	},
-/obj/machinery/door/mineral/wood{
-	name = "Wooden Door"
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
 	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
@@ -209,8 +210,9 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
 	},
-/obj/machinery/door/mineral/wood{
-	name = "Wooden Door"
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
 	},
 /turf/simulated/floor/wood,
 /area/shack)
@@ -324,6 +326,9 @@
 	icon_state = "asteroidfloor"
 	},
 /area/shack)
+"Jm" = (
+/turf/unsimulated/floor/asteroid,
+/area/shack)
 "Kr" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1;
@@ -339,6 +344,10 @@
 	initialize_directions = 14
 	},
 /obj/structure/reagent_dispensers/fueltank,
+/obj/item/blueprints/construction_permit,
+/obj/item/weapon/circuitboard/airlock,
+/obj/item/weapon/circuitboard/airlock,
+/obj/item/weapon/circuitboard/airlock,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
 	},
@@ -385,11 +394,8 @@
 	dir = 4;
 	initialize_directions = 12
 	},
-/obj/effect/decal/cleanable/generic,
-/obj/item/blueprints/construction_permit,
-/obj/item/weapon/circuitboard/airlock,
-/obj/item/weapon/circuitboard/airlock,
-/obj/item/weapon/circuitboard/airlock,
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/obj/item/seeds/towermycelium,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
 	},
@@ -415,6 +421,13 @@
 	icon_state = "asteroidplating"
 	},
 /area/shack)
+"Vo" = (
+/obj/structure/closet/crate,
+/obj/abstract/map/spawner/misc/seeds,
+/obj/abstract/map/spawner/misc/seeds,
+/obj/abstract/map/spawner/misc/seeds,
+/turf/unsimulated/floor/asteroid,
+/area/shack)
 "WD" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/toolbox/mechanical,
@@ -430,8 +443,9 @@
 	dir = 4;
 	initialize_directions = 12
 	},
-/obj/machinery/door/mineral/wood{
-	name = "Wooden Door"
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
 	},
 /turf/simulated/floor/wood,
 /area/shack)
@@ -452,9 +466,7 @@
 /area/shack)
 "Yt" = (
 /obj/structure/ore_box,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/asteroid,
 /area/shack)
 "Zu" = (
 /obj/structure/table/woodentable,
@@ -467,9 +479,7 @@
 	},
 /area/shack)
 "ZK" = (
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidplating"
-	},
+/turf/template_noop,
 /area/shack)
 
 (1,1,1) = {"
@@ -506,7 +516,7 @@ rN
 Fy
 Cp
 Od
-ZK
+Jm
 "}
 (4,1,1) = {"
 zH
@@ -518,7 +528,7 @@ Kr
 EH
 cE
 QD
-ZK
+Jm
 "}
 (5,1,1) = {"
 zH
@@ -530,7 +540,7 @@ uX
 Hg
 Cp
 Yn
-ZK
+Jm
 "}
 (6,1,1) = {"
 zH
@@ -589,6 +599,6 @@ lF
 lF
 lF
 lF
-ZK
+Vo
 ZK
 "}
