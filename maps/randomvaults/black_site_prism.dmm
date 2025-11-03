@@ -10,11 +10,7 @@
 /obj/machinery/door/mineral/wood{
 	name = "Wooden Door"
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/carpet{
 	icon_state = "carpetsymbol"
 	},
@@ -269,11 +265,7 @@
 	},
 /obj/structure/grille/broken,
 /obj/item/weapon/shard,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/item/stack/rods{
 	amount = 3
 	},
@@ -336,11 +328,7 @@
 	},
 /area/vault/black_site_prism)
 "aH" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
@@ -428,17 +416,10 @@
 	},
 /area/vault/black_site_prism)
 "bs" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/structure/grille/window_spawner/reinforced,
+/obj/structure/cable/mapping/yellow{
+	dir = 8
+	},
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -482,11 +463,7 @@
 	},
 /area/vault/black_site_prism)
 "cf" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/wood,
 /area/vault/black_site_prism)
@@ -672,11 +649,7 @@
 	name = "Privacy Shutters";
 	opacity = 0
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
@@ -690,11 +663,7 @@
 	},
 /area/vault/black_site_prism)
 "gF" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "dark"
@@ -725,11 +694,7 @@
 	},
 /area/vault/black_site_prism)
 "hg" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/wall,
 /area/vault/black_site_prism)
 "hj" = (
@@ -746,11 +711,7 @@
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/wood,
 /area/vault/black_site_prism)
 "hC" = (
@@ -770,11 +731,7 @@
 	},
 /area/vault/black_site_prism)
 "hM" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
@@ -808,11 +765,7 @@
 	},
 /area/vault/black_site_prism)
 "iz" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/machinery/door/airlock/research{
 	name = "Research Division Access";
 	req_access_txt = "47"
@@ -848,11 +801,7 @@
 /area/vault/black_site_prism)
 "iR" = (
 /obj/structure/table/reinforced,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/machinery/door_control{
 	id_tag = "NTBS-EE"
 	},
@@ -927,17 +876,6 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
-"lx" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/grille/window_spawner/reinforced,
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "ly" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/landmark/corpse/syndicatecommando,
@@ -1009,15 +947,6 @@
 	},
 /turf/simulated/floor/wood,
 /area/vault/black_site_prism)
-"mL" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/grille/window_spawner/reinforced,
-/turf/simulated/floor/plating,
-/area/vault/black_site_prism)
 "mP" = (
 /obj/item/clothing/shoes/sandal/slippers,
 /obj/structure/painting/random{
@@ -1086,15 +1015,6 @@
 	icon_state = "carpetsymbol"
 	},
 /area/vault/black_site_prism)
-"ob" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/grille/window_spawner/reinforced,
-/turf/simulated/floor/wood,
-/area/vault/black_site_prism)
 "om" = (
 /turf/unsimulated/floor{
 	dir = 1;
@@ -1150,14 +1070,6 @@
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
-/area/vault/black_site_prism)
-"pl" = (
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/grille/window_spawner/plasma/full,
-/turf/space,
 /area/vault/black_site_prism)
 "pm" = (
 /obj/structure/window/reinforced{
@@ -1426,11 +1338,7 @@
 	},
 /obj/structure/grille/broken,
 /obj/item/weapon/shard,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -1893,11 +1801,7 @@
 	},
 /area/vault/black_site_prism)
 "yd" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/wall/invulnerable,
 /area/vault/black_site_prism)
 "yi" = (
@@ -1916,11 +1820,7 @@
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "yu" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/plasma/full,
 /turf/space,
 /area/vault/black_site_prism)
@@ -1980,11 +1880,7 @@
 /obj/machinery/door/poddoor{
 	id_tag = "NTBS-EE"
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor{
 	name = "plating"
@@ -2001,11 +1897,7 @@
 	},
 /area/vault/black_site_prism)
 "zK" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor{
 	name = "plating"
@@ -2266,11 +2158,7 @@
 /area/vault/black_site_prism)
 "DX" = (
 /obj/structure/table/reinforced,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/machinery/door_control{
 	id_tag = "NTBS-EW"
 	},
@@ -2280,11 +2168,7 @@
 /area/vault/black_site_prism)
 "Ep" = (
 /obj/structure/door_assembly/door_assembly_sec,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -2337,11 +2221,7 @@
 /area/vault/black_site_prism)
 "Fn" = (
 /obj/structure/curtain/medical,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -2467,11 +2347,7 @@
 /obj/machinery/atmospherics/pipe/simple/yellow/visible{
 	dir = 4
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "dark"
@@ -2554,19 +2430,6 @@
 	icon_state = "dark"
 	},
 /area/vault/black_site_prism)
-"IN" = (
-/obj/machinery/door/mineral/wood{
-	name = "Wooden Door"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpetsymbol"
-	},
-/area/vault/black_site_prism)
 "IS" = (
 /obj/structure/window/reinforced,
 /turf/unsimulated/floor{
@@ -2602,19 +2465,11 @@
 	},
 /area/vault/black_site_prism)
 "JO" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/wall/r_wall,
 /area/vault/black_site_prism)
 "JR" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/effect/decal/cleanable/blood/stattrack,
 /obj/structure/door_assembly/door_assembly_sec,
 /turf/unsimulated/floor{
@@ -2652,11 +2507,7 @@
 /obj/machinery/door/poddoor{
 	id_tag = "NTBS-EW"
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor{
 	name = "plating"
@@ -2862,17 +2713,6 @@
 	icon_state = "carpetnoconnect"
 	},
 /area/vault/black_site_prism)
-"Mf" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/grille/window_spawner/reinforced,
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "Mg" = (
 /obj/structure/bed/chair{
 	dir = 4
@@ -2901,20 +2741,6 @@
 	dir = 4;
 	icon_state = "darkred"
 	},
-/area/vault/black_site_prism)
-"Mq" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/grille/window_spawner/plasma/full,
-/turf/simulated/floor/engine,
 /area/vault/black_site_prism)
 "Mr" = (
 /turf/unsimulated/floor{
@@ -3042,11 +2868,7 @@
 "Nn" = (
 /obj/structure/grille/broken,
 /obj/item/weapon/shard,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "No" = (
@@ -3155,11 +2977,7 @@
 	name = "Research Division Access";
 	req_access_txt = "47"
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -3276,10 +3094,8 @@
 	},
 /area/vault/black_site_prism)
 "Qf" = (
-/obj/structure/cable/yellow{
-	icon_state = "0-8"
-	},
 /obj/structure/grille/window_spawner/plasma/full,
+/obj/structure/cable/mapping/yellow,
 /turf/space,
 /area/vault/black_site_prism)
 "Qh" = (
@@ -3506,11 +3322,7 @@
 /area/vault/black_site_prism)
 "TR" = (
 /obj/structure/curtain/medical,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "darkblue"
@@ -3530,11 +3342,7 @@
 /obj/machinery/door/window{
 	dir = 1
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -3546,11 +3354,7 @@
 /obj/machinery/door/window{
 	dir = 2
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -3593,11 +3397,7 @@
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/wood,
 /area/vault/black_site_prism)
 "Ve" = (
@@ -3628,11 +3428,7 @@
 	},
 /area/vault/black_site_prism)
 "VJ" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /obj/structure/grille/window_spawner/plasma/full,
 /turf/simulated/floor/engine,
 /area/vault/black_site_prism)
@@ -3715,11 +3511,7 @@
 	dir = 1;
 	req_access = list(63)
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -4136,11 +3928,11 @@ Kr
 Kr
 nh
 iQ
-mL
+hM
 gK
 NU
 Qw
-mL
+hM
 iQ
 nh
 Kr
@@ -4189,11 +3981,11 @@ Kr
 Kr
 nh
 iQ
-mL
+hM
 rK
 iQ
 sq
-mL
+hM
 iQ
 nh
 Kr
@@ -4242,11 +4034,11 @@ Kr
 Kr
 nh
 iQ
-mL
+hM
 pR
 NU
 wJ
-mL
+hM
 iQ
 nh
 Kr
@@ -4348,7 +4140,7 @@ Kr
 Kr
 nh
 iQ
-mL
+hM
 tc
 cN
 iQ
@@ -4401,11 +4193,11 @@ Kr
 Kr
 nh
 iQ
-mL
+hM
 vd
 iQ
 Fu
-mL
+hM
 iQ
 nh
 Kr
@@ -4454,11 +4246,11 @@ nh
 nh
 nh
 iQ
-mL
+hM
 TK
 uu
 Jz
-mL
+hM
 iQ
 nh
 nh
@@ -4511,7 +4303,7 @@ iz
 Yc
 yw
 QB
-mL
+hM
 iQ
 aB
 GC
@@ -4519,7 +4311,7 @@ MN
 rC
 rC
 Gr
-Mf
+gF
 NY
 NY
 tK
@@ -4572,7 +4364,7 @@ BR
 BR
 DI
 da
-Mf
+gF
 XC
 Wa
 XC
@@ -4625,7 +4417,7 @@ gF
 My
 Hi
 Pk
-Mf
+gF
 XC
 kl
 XC
@@ -4678,7 +4470,7 @@ AM
 JR
 DO
 Ot
-Mf
+gF
 MU
 OP
 XC
@@ -4697,9 +4489,9 @@ Kr
 "}
 (16,1,1) = {"
 av
-pl
+Qf
 Iu
-pl
+Qf
 aw
 Kr
 Kr
@@ -4719,19 +4511,19 @@ aH
 Ep
 nh
 WI
-Mq
+VJ
 kL
 kL
 kL
-Mq
+VJ
 om
 nh
 kl
 xV
-Mf
+gF
 Qh
 Pk
-lx
+gF
 gF
 gF
 gF
@@ -4772,16 +4564,16 @@ ng
 xP
 nh
 WI
-Mq
+VJ
 kL
 at
 kL
-Mq
+VJ
 om
 nh
 EL
 xV
-Mf
+gF
 tC
 XP
 Bq
@@ -4825,16 +4617,16 @@ xo
 ng
 nh
 WI
-Mq
+VJ
 kL
 kL
 kL
-Mq
+VJ
 om
 nh
 XC
 xV
-Mf
+gF
 JS
 BR
 BR
@@ -4892,7 +4684,7 @@ gF
 gF
 gF
 sD
-Mf
+gF
 om
 iQ
 nh
@@ -4940,12 +4732,12 @@ VE
 nh
 Tt
 mx
-Mf
+gF
 Tt
 XC
 XC
 XC
-Mf
+gF
 om
 iQ
 nh
@@ -4993,12 +4785,12 @@ KA
 nh
 Tt
 EK
-Mf
+gF
 Tt
 EK
 kl
 OP
-Mf
+gF
 bz
 iQ
 nh
@@ -5209,7 +5001,7 @@ jc
 hG
 tw
 vx
-Mf
+gF
 om
 nh
 QH
@@ -5262,7 +5054,7 @@ IS
 ui
 Xm
 px
-Mf
+gF
 dI
 PJ
 iQ
@@ -5315,7 +5107,7 @@ Ki
 wt
 ek
 AU
-Mf
+gF
 om
 nh
 QH
@@ -5668,7 +5460,7 @@ wG
 ku
 eb
 zg
-Mf
+gF
 om
 iQ
 nh
@@ -5716,12 +5508,12 @@ Kr
 nh
 iQ
 WI
-Mf
+gF
 zg
 ly
 zg
 pQ
-Mf
+gF
 om
 iQ
 nh
@@ -5769,12 +5561,12 @@ Kr
 nh
 iQ
 WI
-Mf
+gF
 zg
 wG
 wG
 Yh
-Mf
+gF
 om
 iQ
 nh
@@ -5822,7 +5614,7 @@ Kr
 nh
 iQ
 WI
-Mf
+gF
 tL
 eb
 zg
@@ -5839,11 +5631,11 @@ po
 Kh
 zu
 nh
-ob
-ob
-IN
-ob
-ob
+cf
+cf
+ab
+cf
+cf
 Vc
 PK
 dT
@@ -5995,7 +5787,7 @@ cC
 Og
 xY
 Nl
-mL
+hM
 zS
 wy
 nT
@@ -6048,7 +5840,7 @@ cC
 yJ
 IM
 sS
-mL
+hM
 ZU
 nh
 nh
@@ -6101,7 +5893,7 @@ cC
 uc
 iQ
 Lo
-mL
+hM
 ZU
 nh
 Kr
@@ -6154,7 +5946,7 @@ cC
 YY
 iQ
 hj
-mL
+hM
 ZU
 nh
 Kr
@@ -6313,7 +6105,7 @@ cC
 Er
 Jt
 PV
-mL
+hM
 ZU
 nh
 Kr
@@ -6366,7 +6158,7 @@ cC
 JZ
 iQ
 VU
-mL
+hM
 ZU
 nh
 Kr
@@ -6419,7 +6211,7 @@ cC
 aC
 iQ
 Nu
-mL
+hM
 ZU
 nh
 Kr

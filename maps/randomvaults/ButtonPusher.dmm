@@ -3,24 +3,16 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk3"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/radioactivecatwalk)
 "as" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "radiation";
 	pixel_y = -32;
 	name = "RADIATION SHELTER"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -29,33 +21,6 @@
 /obj/machinery/atmospherics/unary/tank/oxygen,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
-	},
-/area/vault/radioactivelab)
-"aQ" = (
-/obj/structure/catwalk{
-	icon_state = "catwalk12"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/space,
-/area/vault/radioactivecatwalk)
-"aR" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating{
-	icon_state = "asteroidfloor"
 	},
 /area/vault/radioactivelab)
 "bu" = (
@@ -68,12 +33,8 @@
 "bw" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/soot,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/foamedmetal,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -99,28 +60,6 @@
 	tag = "icon-panelscorched"
 	},
 /area/vault/radioactivelab)
-"ct" = (
-/obj/structure/catwalk{
-	icon_state = "catwalk12"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8";
-	tag = ""
-	},
-/turf/space,
-/area/vault/radioactivecatwalk)
 "cR" = (
 /obj/structure/lattice,
 /turf/space,
@@ -145,11 +84,7 @@
 "ee" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/soot,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -165,11 +100,7 @@
 /obj/machinery/door/airlock/glass_research{
 	name = "Secure Area"
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
 	},
@@ -246,16 +177,6 @@
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched";
 	tag = "icon-panelscorched"
-	},
-/area/vault/radioactivelab)
-"fQ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating{
-	icon_state = "asteroidfloor"
 	},
 /area/vault/radioactivelab)
 "gn" = (
@@ -379,11 +300,6 @@
 	},
 /area/vault/radioactivelab)
 "io" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/railing{
 	dir = 1
@@ -393,6 +309,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/mineral/uranium{
 	icon_state = "floor";
 	name = "irradiated floor"
@@ -466,25 +383,8 @@
 /obj/effect/decal/cleanable/soot,
 /turf/space,
 /area/vault/radioactivecatwalk)
-"kh" = (
-/obj/machinery/door/firedoor,
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/radioactivelab)
 "kr" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = ""
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -493,34 +393,15 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk15"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8";
-	tag = ""
-	},
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/radioactivecatwalk)
 "kx" = (
 /obj/structure/plasticflaps/mining,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "all-asteroid"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
 	},
@@ -657,29 +538,20 @@
 	},
 /area/vault/radioactivelab)
 "oh" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/mineral/uranium{
 	icon_state = "floor";
 	name = "irradiated floor"
 	},
 /area/vault/radioactivelab)
 "ot" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8";
-	tag = ""
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg3";
 	tag = "icon-platingdmg3"
@@ -689,21 +561,8 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = ""
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/space,
 /area/vault/radioactivecatwalk)
@@ -978,18 +837,6 @@
 	name = "irradiated floor"
 	},
 /area/vault/radioactivelab)
-"uQ" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8";
-	tag = ""
-	},
-/turf/simulated/floor/plating{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/radioactivelab)
 "uV" = (
 /obj/machinery/door/poddoor{
 	desc = "A thick, lead-lined shutter.";
@@ -1014,12 +861,8 @@
 	desc = "Disturbingly warm to the touch.";
 	icon = 'icons/obj/doors/Doorplasma.dmi'
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/cleanable/soot,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/radioactivelab)
 "wf" = (
@@ -1087,34 +930,17 @@
 /area/vault/radioactivelab)
 "xs" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
 /area/vault/radioactivelab)
 "xy" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8";
-	tag = ""
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/space,
 /area/vault/radioactivecatwalk)
@@ -1170,13 +996,8 @@
 /area/vault/radioactivelab)
 "yC" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8";
-	tag = ""
-	},
 /obj/item/trash/bustanuts,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -1252,17 +1073,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/radioactivelab)
-"Ab" = (
-/obj/structure/catwalk{
-	icon_state = "catwalk12"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/space,
-/area/vault/radioactivecatwalk)
 "Ax" = (
 /obj/structure/table,
 /obj/effect/decal/cleanable/dirt,
@@ -1362,15 +1172,15 @@
 	icon_state = "catwalk12"
 	},
 /obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
 	d1 = 1;
 	d2 = 8;
 	icon_state = "1-8";
 	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
 /obj/structure/cable{
 	d1 = 2;
@@ -1396,19 +1206,10 @@
 /area/vault/radioactivelab)
 "CB" = (
 /obj/structure/lattice,
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4";
-	tag = ""
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = ""
-	},
 /obj/structure/grille/broken,
+/obj/structure/cable/mapping{
+	dir = 4
+	},
 /turf/space,
 /area/vault/radioactivecatwalk)
 "CC" = (
@@ -1545,22 +1346,6 @@
 	icon_state = "asteroidfloor"
 	},
 /area/vault/radioactivelab)
-"EM" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor/plating{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/radioactivelab)
 "EN" = (
 /obj/effect/decal/cleanable/soot,
 /obj/effect/decal/cleanable/blood/oil,
@@ -1613,16 +1398,12 @@
 /area/vault/radioactivelab)
 "GL" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "radiation";
 	pixel_y = -32;
 	name = "RADIATION SHELTER"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -1637,12 +1418,8 @@
 /area/vault/radioactivecatwalk)
 "HR" = (
 /obj/structure/catwalk,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/cleanable/soot,
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/radioactivecatwalk)
 "Id" = (
@@ -1760,16 +1537,8 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk8"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8";
-	tag = ""
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/space,
 /area/vault/radioactivecatwalk)
@@ -1920,16 +1689,11 @@
 /area/vault/radioactivelab)
 "Ov" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8";
-	tag = ""
-	},
 /obj/item/weapon/paper{
 	info = "They screwed us all! We are as good as fucking dead. Whatever bullshit was going on in the lab, they did it without warning us. Bob did some scans and he reckons we were exposed to over thirty times the lethal dose of radiation. Doctor K. barricaded himself in communications, not that we even need to open the radiation shelter anymore. We were already cooked. Bob sealed the lab off with foam, I hope that scientific ASSHOLE director in there rots in hell.";
 	name = "personal log 3"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -1982,28 +1746,12 @@
 /turf/simulated/floor/plating,
 /area/vault/radioactivelab)
 "Qo" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched";
 	tag = "icon-panelscorched"
 	},
 /area/vault/radioactivecatwalk)
-"Qu" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = ""
-	},
-/turf/simulated/floor/plating{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/radioactivelab)
 "Qw" = (
 /obj/machinery/door/airlock/gold{
 	name = "Dormitory";
@@ -2016,14 +1764,10 @@
 /area/vault/radioactivelab)
 "QR" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light/small{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -2056,14 +1800,10 @@
 	},
 /area/vault/radioactivelab)
 "RY" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light/small{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -2073,11 +1813,7 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk2"
 	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/radioactivecatwalk)
 "Sy" = (
@@ -2104,11 +1840,6 @@
 /area/vault/radioactivelab)
 "Tb" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /obj/machinery/power/apc{
 	dir = 1;
 	name = "_North APC";
@@ -2118,6 +1849,7 @@
 	locked = 0
 	},
 /obj/effect/decal/cleanable/greenglow,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -2138,16 +1870,6 @@
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "ramptop"
-	},
-/area/vault/radioactivelab)
-"TT" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating{
-	icon_state = "asteroidfloor"
 	},
 /area/vault/radioactivelab)
 "TU" = (
@@ -2280,11 +2002,7 @@
 /area/vault/radioactivelab)
 "Xc" = (
 /obj/machinery/door/firedoor,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -2329,11 +2047,7 @@
 "Zk" = (
 /obj/machinery/door/firedoor,
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -2361,10 +2075,6 @@
 /turf/space,
 /area/vault/radioactivecatwalk)
 "ZW" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/egg_incubator{
 	name = "Prototype Subspace Tunneler";
@@ -2375,6 +2085,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (EAST)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/mineral/uranium{
 	icon_state = "floor";
 	name = "irradiated floor"
@@ -2554,7 +2265,7 @@ wA
 (6,1,1) = {"
 wA
 Uc
-aQ
+oN
 Id
 wA
 yg
@@ -2588,11 +2299,11 @@ ZH
 (7,1,1) = {"
 wA
 bJ
-Ab
+oN
 bJ
 wA
 bJ
-Ab
+oN
 bJ
 wA
 ZH
@@ -2656,11 +2367,11 @@ wA
 (9,1,1) = {"
 wA
 wA
-Ab
+xy
 bJ
 wA
 bJ
-Ab
+xy
 bJ
 wA
 wA
@@ -2668,16 +2379,16 @@ MB
 ps
 ot
 JQ
-uQ
+xs
 QR
-aR
-aR
-aR
+xs
+xs
+xs
 QR
-aR
+xs
 Xc
-aR
-Qu
+xs
+xs
 Zz
 Zz
 AV
@@ -2694,7 +2405,7 @@ BY
 Id
 wA
 yg
-ct
+xy
 Id
 wA
 wA
@@ -2724,11 +2435,11 @@ wA
 (11,1,1) = {"
 wA
 yg
-BY
+xy
 Id
 wA
 yg
-ct
+xy
 Id
 wA
 wA
@@ -2745,7 +2456,7 @@ IO
 Cl
 Zz
 Tb
-EM
+xs
 gQ
 SA
 Bv
@@ -3187,7 +2898,7 @@ OI
 Aa
 FH
 SA
-TT
+kr
 Ua
 FT
 bY
@@ -3221,7 +2932,7 @@ tp
 Ua
 Zz
 SA
-TT
+kr
 Ua
 Ua
 Ua
@@ -3345,17 +3056,17 @@ wA
 wA
 Zz
 yC
-aR
+xs
 QR
-fQ
-fQ
-aR
-aR
+kr
+kr
+xs
+xs
 QR
-aR
-aR
-aR
-kh
+xs
+xs
+xs
+Zk
 RY
 Ov
 Zz
