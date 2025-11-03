@@ -1,0 +1,301 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/machinery/atmospherics/unary/tank/air,
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"b" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/template_noop,
+/area/shack)
+"d" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"g" = (
+/obj/machinery/atmospherics/unary/cap/hidden/supply{
+	dir = 1
+	},
+/obj/machinery/microwave{
+	pixel_y = 6
+	},
+/obj/structure/table,
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"n" = (
+/turf/template_noop,
+/area/shack)
+"o" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5
+	},
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"q" = (
+/obj/structure/cable/yellow,
+/obj/machinery/power/port_gen/pacman/super,
+/obj/item/stack/sheet/mineral/uranium{
+	amount = 50
+	},
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"r" = (
+/obj/machinery/atmospherics/binary/valve/digital{
+	dir = 4;
+	name = "only open when room expanded"
+	},
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"s" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"v" = (
+/obj/item/weapon/paper{
+	name = "Thank you for purchasing the homemaker kit!";
+	info = "Thank you for purchasing Syndie Kat's homemaker kit! This prefab bundle has all you need to start building your own home anywhere in space! Just make sure to not pressurize the room until you're happy with the size. Enjoy!"
+	},
+/obj/machinery/power/apc{
+	cell_type = 0;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_x = 29
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"w" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	on = 1
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"x" = (
+/obj/effect/landmark/hobostart,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"y" = (
+/turf/simulated/wall,
+/area/shack)
+"B" = (
+/obj/structure/plasticflaps/mining,
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"C" = (
+/obj/structure/sink{
+	dir = 8;
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"F" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/obj/structure/rack,
+/obj/item/weapon/storage/toolbox/syndicate,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/device/rcd/rpd,
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv{
+	name = "Syndie Kat's patented Rapid-Construction Device (SK-RCD)"
+	},
+/obj/item/weapon/storage/wallet,
+/obj/item/weapon/storage/wallet,
+/obj/item/stack/rcd_ammo{
+	amount = 12
+	},
+/obj/item/stack/rcd_ammo{
+	amount = 12
+	},
+/obj/item/stack/rcd_ammo{
+	amount = 12
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/item/weapon/storage/box/lights/he,
+/obj/item/weapon/storage/wallet,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/storage/belt/mining,
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"J" = (
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"M" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"O" = (
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"P" = (
+/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"Q" = (
+/obj/item/anvil,
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"R" = (
+/obj/structure/reagent_dispensers/sacid,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"W" = (
+/obj/structure/forge,
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+"Z" = (
+/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless{
+	name = "plating"
+	},
+/area/shack)
+
+(1,1,1) = {"
+y
+y
+y
+y
+y
+y
+b
+"}
+(2,1,1) = {"
+y
+a
+o
+C
+R
+y
+n
+"}
+(3,1,1) = {"
+y
+a
+d
+x
+g
+M
+O
+"}
+(4,1,1) = {"
+y
+Z
+J
+r
+J
+B
+O
+"}
+(5,1,1) = {"
+y
+W
+w
+P
+s
+M
+O
+"}
+(6,1,1) = {"
+y
+Q
+v
+F
+q
+y
+n
+"}
+(7,1,1) = {"
+y
+y
+y
+y
+y
+y
+b
+"}
