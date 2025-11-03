@@ -7,11 +7,11 @@
 	flammable = FALSE
 	var/sheet_material = MAT_IRON
 
-/obj/item/trash/scrap/New(location,material_amount = CC_PER_SHEET_DEFAULT,material_type)
+/obj/item/trash/scrap/New(loc, age, icon_state, color, dir, pixel_x, pixel_y, obj/item/source, material_amount = CC_PER_SHEET_DEFAULT, material_type)
 	if(material_type)
 		sheet_material = material_type
 	starting_materials = list("[sheet_material]" = material_amount)
-	. = ..(location)
+	. = ..()
 	var/datum/material/mat = materials.getMaterial(sheet_material)
 	sheet_type = mat.sheettype
 	var/material_name = lowertext(mat.name)
@@ -32,7 +32,7 @@
 		var/datum/material/mat = materials.getMaterial(sheet_material)
 		if(materials.getAmount(sheet_material) >= mat.cc_per_sheet && WT.remove_fuel(1,user))
 			to_chat(user, "<span class='notice'>You weld \the [src] into sheets of [lowertext(mat.name)]</span>")
-			materials.makeSheets(loc,TRUE)
+			materials.makeSheets(get_turf(src),TRUE)
 			if(materials.getAmount(sheet_material) <= 0)
 				qdel(src)
 				return

@@ -125,8 +125,11 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
 	// So we can see in maint better
-	if(client && client.darkness_planemaster)
-		client.darkness_planemaster.alpha = 192
+
+	if(dark_plane)
+		dark_plane.alphas["pulsedemon"] = 63
+	check_dark_vision()
+
 	update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/regular_hud_updates()

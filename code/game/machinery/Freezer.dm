@@ -30,6 +30,8 @@
 
 	RefreshParts()
 
+	update_icon()
+
 /obj/machinery/atmospherics/unary/cold_sink/freezer/RefreshParts()
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
@@ -42,10 +44,13 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer/update_icon()
 	if(node1)
 		if(on)
+			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_freezer_on")
 			icon_state = "freezer_1"
 		else
+			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_freezer")
 			icon_state = "freezer"
 	else
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_freezer")
 		icon_state = "freezer_0"
 	..()
 
@@ -170,6 +175,7 @@
 	)
 
 	RefreshParts()
+	update_icon()
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/RefreshParts()
 	var/lasercount = 0
@@ -183,10 +189,13 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/update_icon()
 	if(node1)
 		if(on)
+			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_heater_on")
 			icon_state = "heater_1"
 		else
+			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_heater")
 			icon_state = "heater"
 	else
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_heater")
 		icon_state = "heater_0"
 	..()
 	return

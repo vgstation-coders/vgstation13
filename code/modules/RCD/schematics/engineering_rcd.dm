@@ -825,14 +825,16 @@
 	dat+="Set Name: <span class='schem'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_name;value_input=yes'> [linked_rcd.settings["airlock_name"] || linked_rcd.selected_schem.name ]</a></span> <span class='schem'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_name;value=[linked_rcd.selected_schem.name]'> Reset </a></span>"
 	
 	
-	if(istype(linked_rcd.selected_schem,/datum/rcd_grouped_schematic/airlock/windoor))
-		dat+={"
-	<table style='text-align:center;line-height:110%;'>
-	<tr><td colspan=2> <span class='schem[linked_rcd.settings["airlock_dir"]==NORTH ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_dir;value_isnum=yes;value=[NORTH]'>NORTH</a></span> </td></tr>
-	<tr><td> <span class='schem[linked_rcd.settings["airlock_dir"]==WEST ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_dir;value_isnum=yes;value=[WEST]'>WEST</a></span> </td><td> <span class='schem[linked_rcd.settings["airlock_dir"]==EAST ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_dir;value_isnum=yes;value=[EAST]'>EAST</a></span> </td></tr>
-	<tr><td colspan=2> <span class='schem[linked_rcd.settings["airlock_dir"]==SOUTH ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_dir;value_isnum=yes;value=[SOUTH]'>SOUTH</a></span> </td></tr>
-	</table>
-	"}
+	if(istype(linked_rcd.selected_schem,/datum/rcd_grouped_schematic/airlock))
+		var/datum/rcd_grouped_schematic/airlock/sel=linked_rcd.selected_schem
+		if(sel.has_direction)
+			dat+={"
+		<table style='text-align:center;line-height:110%;'>
+		<tr><td colspan=2> <span class='schem[linked_rcd.settings["airlock_dir"]==NORTH ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_dir;value_isnum=yes;value=[NORTH]'>NORTH</a></span> </td></tr>
+		<tr><td> <span class='schem[linked_rcd.settings["airlock_dir"]==WEST ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_dir;value_isnum=yes;value=[WEST]'>WEST</a></span> </td><td> <span class='schem[linked_rcd.settings["airlock_dir"]==EAST ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_dir;value_isnum=yes;value=[EAST]'>EAST</a></span> </td></tr>
+		<tr><td colspan=2> <span class='schem[linked_rcd.settings["airlock_dir"]==SOUTH ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_dir;value_isnum=yes;value=[SOUTH]'>SOUTH</a></span> </td></tr>
+		</table>
+		"}
 	
 	dat+="<hr>"
 	
@@ -902,6 +904,7 @@
 
 /datum/rcd_grouped_schematic/airlock/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
+	var/dirtouse=linked_rcd.settings["airlock_dir"] || NORTH
 	var/cc=0
 	if(!T)
 		return 0
@@ -931,7 +934,10 @@
 		T.ChangeTurf(/turf/simulated/floor)
 	
 	var/obj/machinery/door/airlock/newairlock = new path(T)
-		
+	
+	if(has_direction)
+		newairlock.dir=dirtouse
+	
 	newairlock.name=linked_rcd.settings["airlock_name"] || name
 		
 	if(linked_rcd.settings["airlock_acany"])
@@ -1076,10 +1082,10 @@
 /datum/rcd_grouped_schematic/airlock/windoor
 	name="Windoor"
 	icon='icons/obj/doors/windoor.dmi'
+	has_direction=TRUE
 	path=/obj/machinery/door/window
 	
 /datum/rcd_grouped_schematic/airlock/windoor/send_assets(var/client/client)
-	has_direction=TRUE
 	register_asset("airlock_[name]_RCD.png", new/icon(icon, "left" ))
 	send_asset(client, "airlock_[name]_RCD.png")	
 
@@ -1130,12 +1136,229 @@
 	return cost	
 
 
+/datum/rcd_grouped_schematic/airlock/tabledoor
+	name="table door"
+	cost = 2
+	path=/obj/machinery/door/table
+	has_direction=TRUE
+	var/ticon="metaldoor_closed"
+
+/datum/rcd_grouped_schematic/airlock/tabledoor/send_assets(var/client/client)
+	register_asset("airlock_[name]_RCD.png", new/icon('icons/obj/doors/tabledoor.dmi', ticon ))
+	send_asset(client, "airlock_[name]_RCD.png")	
+
+/datum/rcd_grouped_schematic/airlock/tabledoor/wood
+	name="wooden table door"
+	path=/obj/machinery/door/table/wood
+	ticon="wooddoor_closed"
+	
+/datum/rcd_grouped_schematic/airlock/tabledoor/glass
+	name="glass table door"
+	path=/obj/machinery/door/table/glass
+	ticon="glassdoor_closed"	
+
+/datum/rcd_grouped_schematic/airlock/tabledoor/plastic
+	name="plastic table door"
+	path=/obj/machinery/door/table/plastic
+	ticon="plasticdoor_closed"
+
+/datum/rcd_grouped_schematic/airlock/tabledoor/reinforced
+	name="reinforced table door"
+	cost = 3
+	path=/obj/machinery/door/table/reinforced
+	ticon="rmetaldoor_closed"
+
+/datum/rcd_grouped_schematic/airlock/tabledoor/glass/plasma
+	name="plasma glass table door"
+	cost = 3
+	path=/obj/machinery/door/table/glass/plasma
+	ticon="pglassdoor_closed"
+
+
+/datum/rcd_scematic_grouping/misc_objects
+	name="misc"
+	headerimage="RCD_HEADER_MISC.png"
+	
+/datum/rcd_scematic_grouping/misc_objects/generate_html()
+	var/dat=""
+	
+	for(var/datum/rcd_grouped_schematic/schem in schematics)
+		dat+=schem.generate_html()
+
+	
+	return dat
+	
+/datum/rcd_scematic_grouping/misc_objects/switch_to()
+	linked_rcd.selected_schem = schematics[1]	
+
+/datum/rcd_scematic_grouping/misc_objects/send_assets(var/client/client)
+	register_asset("RCD_HEADER_MISC.png", new/icon('icons/obj/computer.dmi', "computer_generic" ))
+	send_asset(client, "RCD_HEADER_MISC.png")	
+
+	for(var/datum/rcd_grouped_schematic/schem in schematics)
+		schem.send_assets(client)
+		
+	
+/datum/rcd_grouped_schematic/table
+	name = "table" //what's displayed
+	cost = 1
+	var/html_icon="std"
+	var/path = /obj/structure/table
+	var/list/swappable_types=list(/obj/structure/table,/obj/structure/table/woodentable,/obj/structure/table/glass,/obj/structure/table/plastic,/obj/structure/table/woodentable/poker)
+
+/datum/rcd_grouped_schematic/table/generate_html()
+	return "<span style='display:inline-block;padding:0px;' class='schem[linked_rcd.selected_schem==src ? "_selected" : "" ]'><a style='display:block;background:none;border:none;' href='?src=\ref[linked_rcd.interface];set_schematic=[name]'><img src='table_[html_icon]_RCD.png' style='padding:4px;border:none;background:none;'></a></span>"
+	
+/datum/rcd_grouped_schematic/table/send_assets(var/client/client)
+	register_asset("table_std_RCD.png", new/icon('icons/obj/structures.dmi', "table" ))
+	send_asset(client, "table_std_RCD.png")	
+
+
+/datum/rcd_grouped_schematic/table/build(var/atom/A, var/mob/user)
+	var/turf/T=get_turf(A)
+	var/cc=0
+	
+	if(!T)
+		return 0
+	if (istype(T, /turf/simulated/floor) || istype(T,/turf/unsimulated/floor))
+		cc=cost
+	else
+		to_chat(user, "You can't place a [name] here!")
+		return 0
+		
+	var/obj/structure/table/to_rep=null
+	for(var/obj/structure/table/tab in T.contents)
+		if( !(tab.type in swappable_types) || tab.type==path )
+			to_chat(user, "There's already another table here!")
+			return 0
+		else
+			to_rep=tab
+			cc=cost-1
+			break
+	if(linked_rcd.get_energy(user) < cc)
+		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
+		return 0			
+	if(!linked_rcd.delay(user, A, 2 SECONDS))
+		return 0
+	if(linked_rcd.get_energy(user) < cc)
+		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
+		return 0
+	playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
+	
+	if (to_rep)
+		qdel(to_rep)
+	new path(T)
+	return cc	
+
+
+/datum/rcd_grouped_schematic/table/wood
+	name = "wooden table"
+	html_icon="wood"
+	path = /obj/structure/table/woodentable
+
+/datum/rcd_grouped_schematic/table/wood/send_assets(var/client/client)
+	register_asset("table_wood_RCD.png", new/icon('icons/obj/structures.dmi', "woodtable" ))
+	send_asset(client, "table_wood_RCD.png")	
+
+/datum/rcd_grouped_schematic/table/poker
+	name = "poker table"
+	html_icon="poker"
+	path = /obj/structure/table/woodentable/poker
+
+/datum/rcd_grouped_schematic/table/poker/send_assets(var/client/client)
+	register_asset("table_poker_RCD.png", new/icon('icons/obj/structures.dmi', "pokertable" ))
+	send_asset(client, "table_poker_RCD.png")	
+
+
+/datum/rcd_grouped_schematic/table/plastic
+	name = "plastic table"
+	html_icon="plastic"
+	path = /obj/structure/table/plastic
+
+/datum/rcd_grouped_schematic/table/plastic/send_assets(var/client/client)
+	register_asset("table_plastic_RCD.png", new/icon('icons/obj/structures.dmi', "plastictable" ))
+	send_asset(client, "table_plastic_RCD.png")	
+
+
+/datum/rcd_grouped_schematic/table/glass
+	name = "glass table"
+	html_icon="glass"
+	path = /obj/structure/table/glass
+
+/datum/rcd_grouped_schematic/table/glass/send_assets(var/client/client)
+	register_asset("table_glass_RCD.png", new/icon('icons/obj/structures.dmi', "glass_table" ))
+	send_asset(client, "table_glass_RCD.png")	
+
+
+/datum/rcd_grouped_schematic/table/pglass
+	name = "plasma glass table"
+	cost=2
+	html_icon="pglass"
+	path = /obj/structure/table/glass/plasma
+
+/datum/rcd_grouped_schematic/table/pglass/send_assets(var/client/client)
+	register_asset("table_pglass_RCD.png", new/icon('icons/obj/structures.dmi', "plasma_table" ))
+	send_asset(client, "table_pglass_RCD.png")	
+
+
+/datum/rcd_grouped_schematic/table/reinforced
+	name = "reinforced table"
+	cost=2
+	html_icon="r"
+	path = /obj/structure/table/reinforced
+
+/datum/rcd_grouped_schematic/table/reinforced/send_assets(var/client/client)
+	register_asset("table_r_RCD.png", new/icon('icons/obj/structures.dmi', "reinftable" ))
+	send_asset(client, "table_r_RCD.png")	
 
 
 
+/datum/rcd_grouped_schematic/rack
+	name = "rack"
+	cost = 1
 
-//prefab groups, so you don't have to change all 3 RCDs to add a shematic
+/datum/rcd_grouped_schematic/rack/generate_html()
+	return "<span style='display:inline-block;padding:0px;' class='schem[linked_rcd.selected_schem==src ? "_selected" : "" ]'><a style='display:block;background:none;border:none;' href='?src=\ref[linked_rcd.interface];set_schematic=[name]'><img src='rack_RCD.png' style='padding:4px;border:none;background:none;'></a></span>"
+	
+/datum/rcd_grouped_schematic/rack/send_assets(var/client/client)
+	register_asset("rack_RCD.png", new/icon('icons/obj/objects.dmi', "rack" ))
+	send_asset(client, "rack_RCD.png")	
 
+
+/datum/rcd_grouped_schematic/rack/build(var/atom/A, var/mob/user)
+	var/turf/T=get_turf(A)
+	var/cc=0
+	
+	if(!T)
+		return 0
+	if (istype(T, /turf/simulated/floor) || istype(T,/turf/unsimulated/floor))
+		cc=cost
+	else
+		to_chat(user, "You can't place a [name] here!")
+		return 0
+		
+	for(var/obj/structure/rack/r in T.contents)
+		to_chat(user, "There's already a [name] here!")
+		return 0
+	
+	if(linked_rcd.get_energy(user) < cc)
+		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
+		return 0			
+	if(!linked_rcd.delay(user, A, 2 SECONDS))
+		return 0
+	if(linked_rcd.get_energy(user) < cc)
+		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
+		return 0
+	playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
+	
+	new/obj/structure/rack(T)
+	return cc	
+
+
+
+//========================================================================
+//prefab groups, so you don't have to change all 3 RCDs to add a schematic
+//========================================================================
 /datum/rcd_scematic_grouping/build_wall/engi_std
 
 /datum/rcd_scematic_grouping/build_wall/engi_std/New(var/obj/item/device/rcd/rcdtouse=null)
@@ -1207,7 +1430,13 @@
 	schematics+= new /datum/rcd_grouped_schematic/airlock/science(rcdtouse)
 	schematics+= new /datum/rcd_grouped_schematic/airlock/glass_science(rcdtouse)
 	schematics+= new /datum/rcd_grouped_schematic/airlock/external(rcdtouse)
+	
 	schematics+= new /datum/rcd_grouped_schematic/airlock/windoor(rcdtouse)
+	
+	schematics+= new /datum/rcd_grouped_schematic/airlock/tabledoor(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/airlock/tabledoor/wood(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/airlock/tabledoor/glass(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/airlock/tabledoor/plastic(rcdtouse)
 
 /datum/rcd_scematic_grouping/build_airlock/engi_std/CE
 
@@ -1215,4 +1444,22 @@
 	..(rcdtouse)
 	schematics+= new/datum/rcd_grouped_schematic/airlock/vault(rcdtouse)
 	schematics+= new/datum/rcd_grouped_schematic/airlock/highsecurity(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/airlock/tabledoor/reinforced(rcdtouse)
 
+
+/datum/rcd_scematic_grouping/misc_objects/engi_std
+
+/datum/rcd_scematic_grouping/misc_objects/engi_std/New(var/obj/item/device/rcd/rcdtouse=null)
+	..(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/table(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/table/wood(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/table/poker(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/table/glass(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/table/plastic(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/rack(rcdtouse)
+	
+/datum/rcd_scematic_grouping/misc_objects/engi_std/CE
+
+/datum/rcd_scematic_grouping/misc_objects/engi_std/CE/New(var/obj/item/device/rcd/rcdtouse=null)
+	..(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/table/reinforced(rcdtouse)

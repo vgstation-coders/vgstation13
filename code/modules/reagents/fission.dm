@@ -33,3 +33,7 @@
 
 /datum/reagent/drink/doctor_delight/irradiate(var/list/current_reagents=null)
 	return list(EQUALIZONE=0.25)
+
+//big powah.
+/datum/reagent/agentw/irradiate(var/list/current_reagents=null)
+	return list(RADON=1.0)

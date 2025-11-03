@@ -1492,3 +1492,14 @@
 	new	/obj/item/clothing/gloves/sonicman(src)
 	new	/obj/item/clothing/shoes/sonicman(src)
 	..()
+
+/obj/item/weapon/storage/box/large/utensils_plastic
+	name = "Plastic Utensils"
+	desc = "For your picnic needs"
+	icon_state = "putensil_box"
+	item_state = "box"
+	items_to_spawn = list(
+			/obj/item/weapon/kitchen/utensil/spoon/plastic=7,
+			/obj/item/weapon/kitchen/utensil/fork/plastic=7,
+			/obj/item/weapon/kitchen/utensil/knife/plastic=7,
+		)

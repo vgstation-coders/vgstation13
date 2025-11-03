@@ -2060,6 +2060,9 @@ var/global/list/adminbusteleportlocs = list()
 /area/surface/jungle/underground/zoned/casino
 	name = "\improper Casino"	
 
+/area/surface/jungle/underground/zoned/ghetto_morgue
+	name = "\improper Crypt"
+
 /area/surface/jungle/zoned
 	forbid_apc=FALSE
 	construction_zone=FALSE
@@ -2094,6 +2097,18 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/surface/jungle/zoned/dump
 	name = "\improper Dump"
+
+/area/surface/jungle/zoned/aifenced
+	name = "\improper AI Restricted Fenced Zone"
+
+/area/surface/jungle/zoned/dorms_patio
+	name = "\improper Dormitory Patio"
+
+/area/surface/jungle/zoned/medbay_patio
+	name = "\improper Medbay Break Patio"
+
+/area/surface/jungle/zoned/solars
+	name = "\improper Solar Array"
 
 /area/surface/jungle/landing
 	name = "\improper Landing Area"

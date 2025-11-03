@@ -1,0 +1,1301 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"am" = (
+/obj/structure/table/plastic,
+/obj/item/device/pda/clown,
+/obj/item/weapon/storage/wallet,
+/obj/item/weapon/storage/wallet,
+/obj/item/weapon/storage/wallet,
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/weapon/nullrod/honk,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"aA" = (
+/obj/machinery/door/mineral/transparent{
+	color = "#FFFF00"
+	},
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"aR" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"cl" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/conveyor{
+	dir = 5;
+	id_tag = "clown";
+	movedir = 4
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"ds" = (
+/obj/item/anvil{
+	color = "#FF0000"
+	},
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"dy" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"eu" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	on = 1
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"fa" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/door/mineral/wood/log{
+	color = "#FFFF00"
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"fb" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"gs" = (
+/obj/structure/table/plastic,
+/obj/item/toy/plushie/fumo/clown,
+/obj/item/weapon/p_folded/folded_heart{
+	pixel_x = 15;
+	pixel_y = -1;
+	color = "#FF0000"
+	},
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"jA" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/clothing/head/banana_hat,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"jD" = (
+/obj/item/weapon/storage/backpack/clownpackpsyche,
+/obj/item/clothing/shoes/clownshoespsyche,
+/obj/item/clothing/under/clownpsyche,
+/obj/item/clothing/mask/gas/clownmaskpsyche,
+/obj/structure/closet/cabinet,
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/borg/upgrade/honk,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"jG" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/structure/wizard/altar,
+/obj/item/toy/plushie/fumo/mime,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor6-old";
+	tag = "icon-floor6-old"
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"kC" = (
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"kH" = (
+/turf/simulated/wall/r_rock/porous,
+/area/shack)
+"lL" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/candle/blood{
+	wax = 99999999;
+	name = "ritual candle"
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"lM" = (
+/obj/structure/toilet{
+	dir = 4;
+	name = "competitive shitting player 1";
+	color = "#FF0000"
+	},
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"ms" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"nr" = (
+/obj/structure/closet/cabinet,
+/obj/item/stack/sheet/glass/glass/bigstack,
+/obj/item/clothing/accessory/stethoscope,
+/obj/item/stack/sheet/wood/bigstack,
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 30
+	},
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"ns" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/power/apc{
+	cell_type = 0;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_y = -24
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"op" = (
+/obj/structure/bed/racecar,
+/obj/item/weapon/bedsheet/clown,
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"ri" = (
+/obj/structure/forge{
+	color = "#FFFF00"
+	},
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"rv" = (
+/turf/simulated/wall/mineral/plastic,
+/area/shack)
+"rF" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/weapon/bananapeel/bluespace,
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "clown";
+	movedir = 4
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"si" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"sV" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/weapon/bananapeel/traitorpeel/curse,
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "clown";
+	movedir = 8
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"sX" = (
+/obj/machinery/door/mineral/transparent{
+	color = "#FFFF00"
+	},
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"tl" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/weapon/bananapeel/traitorpeel/curse,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "clown";
+	movedir = 8
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"tx" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"uB" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/clothing/accessory/waterflower,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"vW" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/mob/living/simple_animal/hostile/retaliate/clown,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"wQ" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1;
+	initialize_directions = 14
+	},
+/obj/item/clothing/accessory/waterflower,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"zz" = (
+/obj/structure/table/plastic,
+/obj/item/toy/plushie/fumo/clown/clownette,
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"AT" = (
+/obj/structure/punching_bag/clown,
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"CA" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 9
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"CK" = (
+/obj/machinery/door/mineral/transparent{
+	color = "#FFFF00";
+	name = "DO NOT OPEN HERE BE CLUWNES";
+	opacity = 1
+	},
+/obj/structure/window/barricade/full/block,
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "silent bouncy floor";
+	color = "#FFFF00";
+	material = "bananium";
+	volume_mult = 0
+	},
+/area/shack)
+"Dk" = (
+/obj/structure/sink/puddle,
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"DM" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/conveyor_switch/oneway,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Ed" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Ek" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	on = 1
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"En" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/mob/living/simple_animal/hostile/retaliate/clown,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"ES" = (
+/obj/structure/window/barricade/full/block,
+/obj/machinery/door/mineral/transparent{
+	color = "#FFFF00";
+	name = "DO NOT OPEN HERE BE CLUWNES";
+	opacity = 1
+	},
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "silent bouncy floor";
+	color = "#FFFF00";
+	material = "bananium";
+	volume_mult = 0
+	},
+/area/shack)
+"Fs" = (
+/mob/living/simple_animal/hostile/retaliate/faguette,
+/mob/living/simple_animal/hostile/retaliate/faguette,
+/mob/living/simple_animal/hostile/retaliate/faguette,
+/mob/living/simple_animal/hostile/retaliate/cluwne,
+/mob/living/simple_animal/hostile/retaliate/cluwne,
+/mob/living/simple_animal/hostile/retaliate/cluwne,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin,
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin,
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin,
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin,
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin,
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"FZ" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/weapon/bananapeel/traitorpeel/curse,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "clown";
+	movedir = 8
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"HK" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/conveyor{
+	dir = 9;
+	id_tag = "clown";
+	in_reverse = 1;
+	movedir = 1
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"JA" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/weapon/storage/fancy/incensebox/banana,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Kk" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"KW" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/machinery/door/mineral/wood/log{
+	color = "#FFFF00"
+	},
+/turf/simulated/floor/plating,
+/area/shack)
+"Lq" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/shack)
+"LZ" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/mob/living/simple_animal/hamster{
+	icon_dead = "clown_dead";
+	icon_living = "clown";
+	icon_state = "clown";
+	icon_gib = "clown_gib";
+	emote_hear = list();
+	emote_see = list("honks");
+	attack_sound = 'sound/items/bikehorn.ogg';
+	health = 100000;
+	desc = "This clown was given a divine task by the Honkmother to run forevermore and been granted immortality in exchange. Are those hamster whiskers?";
+	brain_damage_modifier = 0;
+	brute_damage_modifier = 0;
+	burn_damage_modifier = 0;
+	clone_damage_modifier = 0;
+	hal_damage_modifier = 0;
+	movement_speed_modifier = 5;
+	oxy_damage_modifier = 0;
+	tox_damage_modifier = 0;
+	name = "Clown that Runs on the Treadmill"
+	},
+/obj/machinery/power/treadmill{
+	dir = 8
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Pk" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/weapon/kitchen/utensil/knife/large/ritual,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Qf" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8;
+	name = "reinforced one-way window";
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shack)
+"Qz" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/structure/reagent_dispensers/corn_oil_tank,
+/obj/machinery/light/he,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"RB" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/item/clothing/suit/banana_suit,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"SY" = (
+/turf/template_noop,
+/area/shack)
+"Tu" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"TV" = (
+/obj/structure/rack,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/toolbox/mechanical,
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/weapon/reagent_containers/spray/lube,
+/obj/item/weapon/reagent_containers/spray/lube,
+/obj/item/weapon/reagent_containers/spray/lube,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"UV" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Vg" = (
+/mob/living/simple_animal/hostile/retaliate/faguette,
+/mob/living/simple_animal/hostile/retaliate/faguette,
+/mob/living/simple_animal/hostile/retaliate/faguette,
+/mob/living/simple_animal/hostile/retaliate/cluwne,
+/mob/living/simple_animal/hostile/retaliate/cluwne,
+/mob/living/simple_animal/hostile/retaliate/cluwne,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin,
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin,
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin,
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin,
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin,
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin,
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 8
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Vi" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/conveyor{
+	dir = 10;
+	id_tag = "clown";
+	in_reverse = 1;
+	movedir = 8
+	},
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Wh" = (
+/obj/machinery/door/mineral/transparent{
+	color = "#FFFF00";
+	name = "DO NOT OPEN HERE BE CLUWNES";
+	opacity = 1
+	},
+/obj/structure/window/barricade/full/block,
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "silent bouncy floor";
+	color = "#FFFF00";
+	material = "bananium";
+	volume_mult = 0
+	},
+/area/shack)
+"Wo" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shack)
+"WY" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/light/he,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Xc" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6;
+	initialize_directions = 6
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Xs" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/conveyor{
+	dir = 6;
+	id_tag = "clown";
+	in_reverse = 1;
+	movedir = 2
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"XB" = (
+/obj/structure/mirror{
+	pixel_y = -31
+	},
+/obj/structure/toilet{
+	dir = 8;
+	name = "competitive shitting player 2";
+	color = "#0000FF"
+	},
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"XF" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"Yo" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/item/weapon/bananapeel/bluespace,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "clown";
+	movedir = 4
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"YV" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+
+(1,1,1) = {"
+AT
+kH
+kH
+kH
+kH
+kH
+kH
+kH
+kH
+kH
+kH
+kH
+"}
+(2,1,1) = {"
+SY
+rv
+jD
+am
+rv
+lL
+jG
+lL
+rv
+Dk
+lM
+kH
+"}
+(3,1,1) = {"
+SY
+Qf
+op
+Ed
+rv
+dy
+Pk
+Xc
+aA
+fb
+XB
+kH
+"}
+(4,1,1) = {"
+SY
+Lq
+rv
+sX
+rv
+ms
+dy
+WY
+rv
+rv
+rv
+kH
+"}
+(5,1,1) = {"
+SY
+Wo
+jA
+RB
+XF
+vW
+uB
+Xs
+cl
+XF
+LZ
+kH
+"}
+(6,1,1) = {"
+SY
+rv
+gs
+Kk
+dy
+dy
+dy
+tl
+rF
+dy
+ns
+kH
+"}
+(7,1,1) = {"
+SY
+rv
+zz
+Kk
+dy
+eu
+UV
+tl
+rF
+uB
+Qz
+kH
+"}
+(8,1,1) = {"
+kC
+fa
+dy
+wQ
+si
+En
+Tu
+FZ
+Yo
+si
+UV
+kH
+"}
+(9,1,1) = {"
+kC
+Ek
+si
+CA
+YV
+dy
+aR
+sV
+rF
+CK
+Wh
+kH
+"}
+(10,1,1) = {"
+kC
+KW
+dy
+tx
+dy
+dy
+JA
+sV
+rF
+ES
+Fs
+kH
+"}
+(11,1,1) = {"
+SY
+rv
+nr
+ds
+ri
+TV
+DM
+Vi
+HK
+ES
+Vg
+kH
+"}
+(12,1,1) = {"
+AT
+kH
+kH
+kH
+kH
+kH
+kH
+kH
+kH
+kH
+kH
+kH
+"}

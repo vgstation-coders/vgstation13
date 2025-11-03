@@ -56,7 +56,7 @@
 
 	dark_plane = null
 	self_vision = null
-	master_plane = null
+	lighting_planemaster = null
 
 	QDEL_NULL(hud_used)
 	for(var/atom/movable/leftovers in src)
@@ -1610,7 +1610,7 @@ Use this proc preferably at the end of an equipment loadout
 	if (self_vision)
 		if (isturf(loc))
 			var/turf/T = loc
-			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
+			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (lighting_planemaster.blend_mode == BLEND_MULTIPLY))
 				animate(self_vision, alpha = self_vision.target_alpha, time = 0)
 			else
 				animate(self_vision, alpha = 0, time = 0)
@@ -2196,7 +2196,11 @@ Use this proc preferably at the end of an equipment loadout
 			continue
 		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
 		return TRUE
-
+	for(var/mob/living/complex_animal/P in view(src))
+		if(P.isDead() || !P.pacify_aura)
+			continue
+		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
+		return TRUE
 	return FALSE
 
 /mob/proc/handle_regular_hud_updates()

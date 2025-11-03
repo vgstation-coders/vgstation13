@@ -1216,11 +1216,11 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	icon_state = "produce2"
 	desc = "They taste like... burning."
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle/New()
-	..()
+/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle/New(var/loc,var/mob/berry_picker=null)
+	..(loc)
 	icon_state = "produce2" //the icon state is set in ..()
 	reagents.add_reagent(NUTRIMENT,1) //we want 3 total. there's already 2 from ..()
 	bitesize=3 //consume it in 1 bite.
-	if(prob(33))
+	if(berry_picker ? (berry_picker.lucky_prob_rand() < 0.3333) : prob(33) ) //33% base chance to be poison, improved by luck
 		reagents.add_reagent(TOXIN,1)
 		bitesize=4

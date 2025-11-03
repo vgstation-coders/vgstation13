@@ -125,7 +125,7 @@
 		if(gases_found.len)
 			to_chat(user,"<span class='notice'>This [src.name] is filled with [english_list(gases_found)]!")
 
-/obj/machinery/atmospherics/pipe/proc/get_visible_gases()
+/obj/machinery/atmospherics/proc/get_visible_gases()
 	. = list()
 	var/datum/gas_mixture/gases = return_air()
 	if(gases)

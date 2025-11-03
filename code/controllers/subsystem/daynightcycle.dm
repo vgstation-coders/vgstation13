@@ -40,6 +40,10 @@ On the map dm file, redefine the following:
 	//The initial values don't matter, it just needs to fire initially, then set itself into the cycle.
 	var/next_firetime = 0 //In essence this is world.time + the time you want. Ex: world.time + 3 MINUTES
 	var/list/currentrun
+	var/overwrite_solars=FALSE //if true, the solars will run off of the day/night cycle to determine light power.
+	var/nearest_star_angle=0.0 //the angle of the star that the solars will use.
+	var/nearest_star_power=1.0 //how much power does the star give the solars? multiplier to base solar generation.
+	var/solar_orbit_period=60 //less than 0 = CCW (east to west), CW (west to east) is more than one. in minutes. doesn't really matter that much, it's just for text mostly.
 
 /datum/subsystem/daynightcycle/New()
 	NEW_SS_GLOBAL(SSDayNight)
@@ -63,7 +67,7 @@ On the map dm file, redefine the following:
 		if(!T || T.gcDestroyed)
 			continue
 
-		T.set_light(next_light_range,next_light_power,current_timeOfDay)
+		T.set_light(next_light_range,next_light_power,current_timeOfDay,TRUE)
 
 		if(MC_TICK_CHECK)
 			return
