@@ -173,4 +173,4 @@
 	name = "Space hobo shack - Space Ranch"
 
 	file_path = "maps/misc/hoboshack_spaceranch.dmm"
-
+	can_rotate = FALSE
