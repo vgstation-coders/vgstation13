@@ -1,0 +1,941 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aV" = (
+/obj/machinery/atmospherics/unary/tank/air,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"bu" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/obj/structure/door_assembly/door_assembly_ext,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"cc" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	external_pressure_bound = 101;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"cD" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shack)
+"er" = (
+/turf/simulated/floor/plating,
+/area/shack)
+"eE" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"fx" = (
+/obj/effect/gibspawner/blood,
+/obj/machinery/light/he/broken{
+	dir = 4
+	},
+/obj/item/weapon/storage/bag/ore,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/pickaxe/shovel,
+/obj/structure/rack,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"fL" = (
+/obj/machinery/door/mineral/iron,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"fM" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/unsimulated/floor/ayy/tech,
+/area/shack)
+"fT" = (
+/obj/structure/closet/walllocker/emerglocker/north{
+	pixel_y = 0;
+	pixel_x = -32
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"hp" = (
+/obj/item/anvil{
+	icon = 'icons/obj/structures.dmi';
+	icon_state = "reinftable";
+	name = "makeshift anvil table"
+	},
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"im" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"is" = (
+/obj/effect/gibspawner/genericmothership,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor,
+/area/shack)
+"iu" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/landmark/corpse/grey/leader,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"iL" = (
+/obj/effect/gibspawner/blood,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"jr" = (
+/obj/structure/window/full/reinforced/plasma,
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma,
+/turf/simulated/floor/plating,
+/area/shack)
+"jy" = (
+/obj/structure/bed/ayy1,
+/turf/simulated/floor/plating,
+/area/shack)
+"kq" = (
+/obj/effect/gibspawner/blood,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/obj/machinery/power/apc{
+	cell_type = 0;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_y = 24
+	},
+/obj/machinery/light/he{
+	dir = 4
+	},
+/obj/item/weapon/cell/rad/large{
+	icon_state = "yellow slime extract";
+	icon = 'icons/mob/slimes.dmi';
+	name = "exotic power cell";
+	desc = "A powercell of unknown make that seems to recharge on its own."
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"lU" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/wall/shuttle,
+/area/shack)
+"lV" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shack)
+"mE" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/turf/unsimulated/floor/ayy,
+/area/shack)
+"nT" = (
+/turf/simulated/floor/asteroid,
+/area/shack)
+"ow" = (
+/obj/structure/closet/walllocker/emerglocker/north{
+	pixel_y = 0;
+	pixel_x = 32
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"oI" = (
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"pe" = (
+/obj/structure/bed/chair/shuttle/white,
+/obj/effect/landmark/hobostart,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/unsimulated/floor/ayy/fancy,
+/area/shack)
+"qA" = (
+/obj/effect/decal/cleanable/blood/stattrack,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"rz" = (
+/obj/structure/sink/acid{
+	pixel_y = 24
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"rK" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating,
+/area/shack)
+"rP" = (
+/obj/item/stack/sheet/wood/bigstack,
+/obj/item/stack/sheet/wood/bigstack,
+/obj/item/stack/sheet/glass/glass/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
+/obj/structure/closet/ayy,
+/turf/simulated/floor,
+/area/shack)
+"sG" = (
+/obj/effect/gibspawner/genericmothership,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"sX" = (
+/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
+/turf/unsimulated/floor/ayy/fancy,
+/area/shack)
+"tr" = (
+/obj/structure/table,
+/turf/unsimulated/floor/ayy,
+/area/shack)
+"uk" = (
+/turf/unsimulated/floor/ayy/fancy,
+/area/shack)
+"uJ" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"uP" = (
+/obj/structure/bed/ayy1,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"wc" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"wY" = (
+/obj/structure/bed/ayy1,
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"xk" = (
+/obj/item/weapon/circuitboard/small/microwave,
+/obj/machinery/constructable_frame/machine_frame/small,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/obj/structure/table,
+/turf/simulated/floor/plating,
+/area/shack)
+"yz" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/unsimulated/floor/ayy/fancy,
+/area/shack)
+"yC" = (
+/obj/structure/dispenser/oxygen,
+/turf/simulated/wall/shuttle,
+/area/shack)
+"zm" = (
+/obj/machinery/light/he/broken{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"zu" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/obj/effect/landmark/corpse/grey/soldier_unarmed,
+/obj/effect/landmark/corpse/grey/soldier_unarmed,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"zL" = (
+/obj/machinery/optable,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"Ag" = (
+/obj/structure/grille/broken,
+/turf/simulated/wall,
+/area/shack)
+"BS" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"Dd" = (
+/obj/effect/decal/cleanable/soot,
+/obj/structure/door_assembly/door_assembly_ext,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"Ds" = (
+/obj/item/weapon/gun/energy/smalldisintegrator,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"DF" = (
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/pan,
+/turf/unsimulated/floor/ayy/fancy,
+/area/shack)
+"DW" = (
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/obj/effect/gibspawner/genericmothership,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"Fv" = (
+/turf/simulated/floor,
+/area/shack)
+"Gn" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"GB" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma,
+/obj/structure/grille,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shack)
+"Ho" = (
+/turf/unsimulated/floor/ayy/tech,
+/area/shack)
+"HY" = (
+/turf/unsimulated/floor/ayy,
+/area/shack)
+"Ih" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/turf/simulated/floor/plating,
+/area/shack)
+"Im" = (
+/turf/simulated/wall/shuttle,
+/area/shack)
+"Jk" = (
+/turf/simulated/wall,
+/area/shack)
+"KB" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor/plating,
+/area/shack)
+"KJ" = (
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"Lm" = (
+/obj/structure/forge,
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"Lp" = (
+/obj/machinery/light/he/broken,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"Nc" = (
+/obj/effect/decal/cleanable/soot,
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/obj/structure/computerframe,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"Nn" = (
+/obj/structure/reagent_dispensers/cauldron/barrel,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/unsimulated/floor/ayy/fancy,
+/area/shack)
+"Nw" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/wall,
+/area/shack)
+"NB" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/item/weapon/shard/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/grille/broken,
+/turf/simulated/floor/plating,
+/area/shack)
+"NF" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/turf/simulated/floor,
+/area/shack)
+"Ow" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shack)
+"PU" = (
+/obj/structure/dispenser/empty,
+/turf/simulated/wall/shuttle,
+/area/shack)
+"QJ" = (
+/obj/machinery/suit_storage_unit,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"RF" = (
+/turf/template_noop,
+/area)
+"Tp" = (
+/obj/structure/shuttle/engine/propulsion,
+/turf/space,
+/area/shack)
+"TU" = (
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"UB" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"Vb" = (
+/obj/structure/shuttle/engine/heater,
+/turf/simulated/floor/plating,
+/area/shack)
+"VH" = (
+/obj/machinery/light/he/broken{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"Wf" = (
+/obj/structure/bed/ayy2,
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"Wr" = (
+/obj/structure/closet/ayy{
+	name = "long-term rations locker";
+	desc = "A common storage unit, mass produced by grey laborers. This one's full of flour."
+	},
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor,
+/area/shack)
+"WC" = (
+/obj/effect/decal/cleanable/blood/stattrack{
+	dir = 4;
+	pixel_x = -12;
+	pixel_y = 16
+	},
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"WS" = (
+/obj/effect/gibspawner/blood,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"Xy" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/landmark/corpse/vox/prisoner,
+/obj/effect/landmark/corpse/vox/prisoner,
+/obj/effect/landmark/corpse/vox/prisoner,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"XI" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/grille/broken,
+/turf/simulated/floor/plating,
+/area/shack)
+"Yf" = (
+/obj/machinery/door/airlock/alarmlock,
+/turf/simulated/floor{
+	icon_state = "alien_tile_worn"
+	},
+/area/shack)
+"YC" = (
+/obj/effect/landmark/corpse/grey/researcher,
+/obj/effect/decal/cleanable/soot,
+/obj/effect/landmark/corpse/grey/researcher,
+/turf/simulated/floor/asteroid,
+/area/shack)
+"Zi" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/turf/simulated/floor/plating,
+/area/shack)
+"Zn" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/unsimulated/floor/ayy/fancy,
+/area/shack)
+"Zw" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shack)
+
+(1,1,1) = {"
+RF
+RF
+RF
+RF
+RF
+RF
+RF
+RF
+nT
+nT
+nT
+nT
+nT
+nT
+nT
+RF
+RF
+"}
+(2,1,1) = {"
+RF
+RF
+RF
+RF
+RF
+RF
+Im
+NB
+lV
+GB
+Im
+BS
+BS
+BS
+nT
+nT
+nT
+"}
+(3,1,1) = {"
+RF
+RF
+RF
+RF
+Im
+Im
+uP
+WS
+wY
+jy
+VH
+Im
+Im
+Xy
+Gn
+BS
+nT
+"}
+(4,1,1) = {"
+RF
+RF
+RF
+Im
+xk
+Jk
+WS
+oI
+Ho
+WS
+oI
+oI
+Im
+Im
+BS
+Gn
+BS
+"}
+(5,1,1) = {"
+RF
+RF
+Im
+tr
+Ho
+Jk
+er
+Ds
+Fv
+Fv
+NF
+Im
+QJ
+Im
+Im
+Im
+BS
+"}
+(6,1,1) = {"
+RF
+RF
+Im
+rz
+HY
+Fv
+Jk
+Nw
+er
+Jk
+Im
+oI
+Ho
+fL
+ow
+uJ
+BS
+"}
+(7,1,1) = {"
+RF
+Im
+zm
+oI
+er
+Yf
+er
+eE
+oI
+oI
+oI
+Fv
+KJ
+PU
+Im
+Im
+BS
+"}
+(8,1,1) = {"
+RF
+XI
+HY
+Ho
+oI
+Im
+oI
+Zn
+DF
+uk
+Fv
+Fv
+oI
+Ih
+Vb
+Tp
+wc
+"}
+(9,1,1) = {"
+DW
+Ag
+Ho
+zL
+Fv
+Im
+im
+sX
+pe
+Nn
+fM
+Fv
+cc
+jr
+Vb
+rK
+BS
+"}
+(10,1,1) = {"
+RF
+cD
+sG
+qA
+er
+Jk
+Fv
+Wr
+yz
+Fv
+oI
+Fv
+HY
+Zw
+rK
+Tp
+Gn
+"}
+(11,1,1) = {"
+RF
+Im
+zm
+oI
+WC
+er
+qA
+is
+Fv
+Ho
+HY
+oI
+Lp
+yC
+Im
+Im
+BS
+"}
+(12,1,1) = {"
+RF
+RF
+Im
+aV
+Zi
+oI
+Im
+lU
+Yf
+er
+er
+HY
+oI
+fL
+fT
+uJ
+Gn
+"}
+(13,1,1) = {"
+RF
+RF
+Im
+aV
+iL
+Im
+Ho
+mE
+Fv
+oI
+HY
+er
+QJ
+Im
+Im
+Im
+Gn
+"}
+(14,1,1) = {"
+RF
+RF
+RF
+Im
+kq
+Jk
+HY
+er
+oI
+UB
+TU
+hp
+Im
+Im
+YC
+zu
+BS
+"}
+(15,1,1) = {"
+RF
+RF
+RF
+RF
+Im
+Im
+fx
+Wf
+KB
+rP
+Lm
+Im
+Im
+bu
+iu
+BS
+nT
+"}
+(16,1,1) = {"
+RF
+RF
+RF
+RF
+RF
+RF
+Im
+Ag
+Ag
+Ow
+Im
+Dd
+Nc
+Gn
+nT
+nT
+nT
+"}
+(17,1,1) = {"
+RF
+RF
+RF
+RF
+RF
+RF
+RF
+RF
+nT
+nT
+nT
+nT
+nT
+nT
+nT
+RF
+RF
+"}

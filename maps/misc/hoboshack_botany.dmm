@@ -1,0 +1,795 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ak" = (
+/obj/machinery/power/apc{
+	cell_type = 0;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_y = -24
+	},
+/obj/structure/cable/yellow,
+/obj/item/weapon/cell/potato/soviet,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"bh" = (
+/obj/structure/rack,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/simulated/floor/wood,
+/area/shack)
+"bk" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"bJ" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/coin/iron,
+/obj/item/toy/cards,
+/obj/effect/glowshroom,
+/turf/simulated/floor/wood,
+/area/shack)
+"cQ" = (
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1;
+	initialize_directions = 14
+	},
+/obj/effect/glowshroom,
+/turf/simulated/floor/grass,
+/area/shack)
+"cV" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"cW" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"dn" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/glowshroom,
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken"
+	},
+/area/shack)
+"eA" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"eD" = (
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"eR" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/crumbs,
+/turf/simulated/floor/wood,
+/area/shack)
+"hL" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/glass/bottle/left4zed,
+/obj/item/weapon/reagent_containers/glass/bottle/mutagen,
+/obj/item/weapon/reagent_containers/glass/bottle/diethylamine,
+/obj/item/device/analyzer/plant_analyzer,
+/obj/item/weapon/reagent_containers/dropper,
+/turf/simulated/floor/grass,
+/area/shack)
+"ik" = (
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"im" = (
+/obj/structure/closet/cabinet,
+/obj/effect/decal/cleanable/cobweb2,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/clothing/shoes/orange,
+/obj/item/clothing/under/color/prisoner,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"iA" = (
+/obj/effect/decal/cleanable/generic,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood,
+/area/shack)
+"iV" = (
+/obj/structure/table/woodentable,
+/obj/machinery/microwave{
+	pixel_y = 6
+	},
+/obj/effect/glowshroom,
+/turf/simulated/floor/wood,
+/area/shack)
+"jj" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"jQ" = (
+/turf/simulated/wall/mineral/wood/log,
+/area/shack)
+"kp" = (
+/obj/effect/landmark/hobostart,
+/obj/structure/bed/chair/wood/normal{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/crumbs,
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken"
+	},
+/area/shack)
+"lA" = (
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/obj/effect/glowshroom,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"lK" = (
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/grass,
+/area/shack)
+"ng" = (
+/turf/template_noop,
+/area/shack)
+"oL" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"pe" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor/wood,
+/area/shack)
+"qI" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"qJ" = (
+/obj/item/blueprints/construction_permit,
+/obj/item/weapon/circuitboard/airlock,
+/obj/item/weapon/circuitboard/airlock,
+/obj/item/weapon/circuitboard/airlock,
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"rG" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"rI" = (
+/obj/effect/glowshroom,
+/turf/template_noop,
+/area/shack)
+"sn" = (
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/obj/effect/glowshroom,
+/turf/simulated/floor/grass,
+/area/shack)
+"sz" = (
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"te" = (
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"tp" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood,
+/area/shack)
+"ts" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"tM" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	on = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"uF" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"uG" = (
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"uS" = (
+/obj/structure/table/woodentable,
+/obj/abstract/map/spawner/misc/seeds,
+/obj/abstract/map/spawner/misc/seeds,
+/obj/abstract/map/spawner/misc/seeds,
+/obj/abstract/map/spawner/misc/seeds,
+/obj/abstract/map/spawner/misc/seeds,
+/obj/abstract/map/spawner/misc/seeds,
+/obj/abstract/map/spawner/misc/seeds,
+/obj/abstract/map/spawner/misc/seeds,
+/obj/item/seeds/towermycelium,
+/obj/item/seeds/grassseed,
+/obj/item/seeds/glowshroom,
+/turf/simulated/floor/grass,
+/area/shack)
+"wl" = (
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/turf/simulated/floor/grass,
+/area/shack)
+"yE" = (
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood,
+/area/shack)
+"zg" = (
+/turf/simulated/floor/grass,
+/area/shack)
+"zw" = (
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken4"
+	},
+/area/shack)
+"zF" = (
+/obj/item/stack/tile/grass{
+	pixel_x = -6;
+	pixel_y = 5
+	},
+/obj/structure/rack,
+/obj/item/stack/sheet/mineral/sandstone{
+	amount = 25s
+	},
+/obj/item/stack/sheet/glass/rglass{
+	pixel_y = -5;
+	pixel_x = 6
+	},
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom,
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom,
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom,
+/obj/item/stack/sheet/wood/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/stack/rods,
+/obj/item/stack/sheet/glass/glass/bigstack,
+/obj/effect/glowshroom,
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom{
+	potency = 200
+	},
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom{
+	potency = 200
+	},
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom{
+	potency = 200
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"AL" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5;
+	initialize_directions = 5
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"AX" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/clown,
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/wood,
+/area/shack)
+"BV" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/wall/mineral/wood/log,
+/area/shack)
+"Dg" = (
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"DU" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1;
+	initialize_directions = 14
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"Em" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood,
+/area/shack)
+"GW" = (
+/obj/item/anvil,
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
+/turf/simulated/floor/wood,
+/area/shack)
+"He" = (
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"Hn" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"HC" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood,
+/area/shack)
+"IS" = (
+/turf/simulated/wall/r_rock/porous,
+/area/shack)
+"JN" = (
+/turf/simulated/floor/wood,
+/area/shack)
+"LG" = (
+/obj/structure/toilet,
+/obj/item/weapon/soap,
+/obj/effect/landmark/hobostart,
+/obj/effect/glowshroom,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/shack)
+"Nz" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken4"
+	},
+/area/shack)
+"Oi" = (
+/obj/structure/forge,
+/turf/simulated/floor/wood,
+/area/shack)
+"QK" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood,
+/area/shack)
+"Rw" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"Rx" = (
+/obj/structure/safe,
+/obj/abstract/map/spawner/safe/any,
+/obj/effect/glowshroom,
+/turf/simulated/floor/wood,
+/area/shack)
+"SN" = (
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood,
+/area/shack)
+"SO" = (
+/obj/structure/mirror{
+	pixel_y = 30;
+	pixel_x = 29
+	},
+/turf/simulated/wall/mineral/wood/log,
+/area/shack)
+"Td" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"To" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/effect/glowshroom,
+/turf/simulated/floor/wood,
+/area/shack)
+"Ts" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/shack)
+"Uq" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"Uv" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"WF" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1;
+	initialize_directions = 14
+	},
+/turf/simulated/floor/grass,
+/area/shack)
+"Ya" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/weapon/storage/wallet/random,
+/obj/item/weapon/storage/wallet/random,
+/obj/item/weapon/storage/wallet/random,
+/obj/item/weapon/storage/box/donkpockets,
+/turf/simulated/floor/wood,
+/area/shack)
+"Yg" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken"
+	},
+/area/shack)
+"YB" = (
+/obj/machinery/power/port_gen/pacman{
+	anchored = 1
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 30
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"ZQ" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood,
+/area/shack)
+
+(1,1,1) = {"
+IS
+IS
+IS
+IS
+IS
+IS
+IS
+jQ
+ng
+"}
+(2,1,1) = {"
+IS
+te
+Uq
+lA
+jj
+YB
+zF
+jQ
+rI
+"}
+(3,1,1) = {"
+IS
+DU
+bk
+qJ
+uG
+oL
+ak
+jQ
+ng
+"}
+(4,1,1) = {"
+IS
+Uv
+jQ
+jQ
+jQ
+jQ
+jQ
+jQ
+ng
+"}
+(5,1,1) = {"
+IS
+Hn
+hL
+uS
+im
+iA
+AX
+cV
+ng
+"}
+(6,1,1) = {"
+IS
+Hn
+lK
+zg
+Td
+Em
+Rx
+qI
+rI
+"}
+(7,1,1) = {"
+IS
+cQ
+sz
+sz
+BV
+tp
+uF
+Dg
+ng
+"}
+(8,1,1) = {"
+IS
+He
+wl
+wl
+ZQ
+Yg
+iV
+qI
+ng
+"}
+(9,1,1) = {"
+IS
+He
+wl
+sn
+pe
+Nz
+Ya
+eA
+ng
+"}
+(10,1,1) = {"
+IS
+He
+wl
+wl
+Td
+cW
+bh
+jQ
+rI
+"}
+(11,1,1) = {"
+IS
+WF
+AL
+zg
+eR
+dn
+iA
+yE
+ik
+"}
+(12,1,1) = {"
+IS
+Rw
+To
+ts
+tM
+rG
+QK
+HC
+ik
+"}
+(13,1,1) = {"
+IS
+jQ
+eD
+jQ
+zw
+JN
+kp
+SN
+ik
+"}
+(14,1,1) = {"
+IS
+LG
+Ts
+SO
+GW
+Oi
+bJ
+jQ
+rI
+"}
+(15,1,1) = {"
+IS
+IS
+IS
+IS
+IS
+IS
+IS
+IS
+ng
+"}

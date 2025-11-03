@@ -143,30 +143,30 @@ var/MAX_EXPLOSION_RANGE = 32
 #define ADMINBUS_MAX_CAPACITY	16
 
 //WEIGHT CLASSES
-#define W_CLASS_TINY 1
-#define W_CLASS_SMALL 2
-#define W_CLASS_MEDIUM 3
-#define W_CLASS_LARGE 4
-#define W_CLASS_HUGE 5
-#define W_CLASS_GIANT 20
+#define W_CLASS_TINY 	1
+#define W_CLASS_SMALL 	2
+#define W_CLASS_MEDIUM 	3
+#define W_CLASS_LARGE 	4
+#define W_CLASS_HUGE 	5
+#define W_CLASS_GIANT 	20
 
 
 //ITEM INVENTORY SLOT BITMASKS
-#define SLOT_OCLOTHING 1
-#define SLOT_ICLOTHING 2
-#define SLOT_GLOVES 4
-#define SLOT_EYES 8
-#define SLOT_EARS 16
-#define SLOT_MASK 32
-#define SLOT_HEAD 64
-#define SLOT_FEET 128
-#define SLOT_ID 256
-#define SLOT_BELT 512
-#define SLOT_BACK 1024
-#define SLOT_POCKET 2048		//this is to allow items with a w_class of 3 or 4 to fit in pockets.
-#define SLOT_DENYPOCKET 4096	//this is to deny items with a w_class of 2 or 1 to fit in pockets.
-#define SLOT_TWOEARS 8192
-#define SLOT_LEGS = 16384
+#define SLOT_OCLOTHING 	(1)
+#define SLOT_ICLOTHING 	(1<<1)
+#define SLOT_GLOVES 	(1<<2)
+#define SLOT_EYES 		(1<<3)
+#define SLOT_EARS 		(1<<4)
+#define SLOT_MASK 		(1<<5)
+#define SLOT_HEAD 		(1<<6)
+#define SLOT_FEET 		(1<<7)
+#define SLOT_ID 		(1<<8)
+#define SLOT_BELT 		(1<<9)
+#define SLOT_BACK 		(1<<10)
+#define SLOT_POCKET 	(1<<11)		//this is to allow items with a w_class of 3 or 4 to fit in pockets.
+#define SLOT_DENYPOCKET (1<<12)	//this is to deny items with a w_class of 2 or 1 to fit in pockets.
+#define SLOT_TWOEARS 	(1<<13)
+#define SLOT_LEGS 		(1<<14)
 
 
 //MANNEQUIN SLOT BITMASKS
@@ -185,33 +185,35 @@ var/MAX_EXPLOSION_RANGE = 32
 
 //FLAGS BITMASK
 
+#define NONE 					0
+
 //Item flags!
-#define PROXMOVE	1	// Will the code check us when we move or when something moves near us? Note that if the item doesn't have this flag, HasProximity() will never execute for it.
-#define FPRINT		2	// takes a fingerprint
-#define INVULNERABLE 8
-#define HEAR		16 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
-#define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
+#define PROXMOVE				(1) // Will the code check us when we move or when something moves near us? Note that if the item doesn't have this flag, HasProximity() will never execute for it.
+#define FPRINT					(1<<1) // takes a fingerprint
+#define INVULNERABLE 			(1<<2)
+#define HEAR					(1<<3) // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
+#define HEAR_ALWAYS 			(1<<4) // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
+#define TWOHANDABLE				(1<<5)
+#define MUSTTWOHAND				(1<<6)
+#define SLOWDOWN_WHEN_CARRIED 	(1<<7) //Apply slowdown when carried in hands, instead of only when worn
+#define NOBLOODY				(1<<8) // used to items if they don't want to get a blood overlay
+#define NO_ATTACK_MSG			(1<<9) // when an item has this it produces no "X has been hit by Y with Z" message with the default handler
+#define NO_THROW_MSG 			(1<<10) // produce no "X has thrown Y" message when somebody throws this item
+#define NO_STORAGE_MSG 			(1<<11) // produce no "X puts the Y into the backpack" message when somebody moves this item in their inventory
+#define OPENCONTAINER			(1<<12) // is an open container for chemistry purposes
+#define	NOREACT 				(1<<13) // Reagents don't react inside this container.
+#define TIMELESS				(1<<14) // Immune to time manipulation.
+#define SILENTCONTAINER			(1<<15) //reactions inside make no noise
+#define ATOM_INITIALIZED 		(1<<16) // initialize() was called
+//define <>						(1<<17)
+//define <>						(1<<18)
+//define <>						(1<<19)
+//define <>				 		(1<<20)
+//define <>						(1<<21)
+//define <>						(1<<22)
+//define <>						(1<<23) <- Don't go higher! As of 2025 we are limited to 24 bits for bitwise operations.
 
-#define TWOHANDABLE	64
-#define MUSTTWOHAND	128
-#define SLOWDOWN_WHEN_CARRIED 256 //Apply slowdown when carried in hands, instead of only when worn
-
-#define NOBLOODY	512	// used to items if they don't want to get a blood overlay
-
-#define NO_ATTACK_MSG 	1024 // when an item has this it produces no "X has been hit by Y with Z" message with the default handler
-#define NO_THROW_MSG 	2048 // produce no "X has thrown Y" message when somebody throws this item
-#define NO_STORAGE_MSG 	4096 // produce no "X puts the Y into the backpack" message when somebody moves this item in their inventory
-
-#define OPENCONTAINER	8192  // is an open container for chemistry purposes
-#define	NOREACT 		16384 // Reagents don't react inside this container.
-
-#define TIMELESS		32768 // Immune to time manipulation.
-
-#define SILENTCONTAINER	65536 //reactions inside make no noise
-#define ATOM_INITIALIZED 131072 // initialize() was called
-
-#define ALL ~0
-#define NONE 0
+#define ALL 					(~0)
 
 //These go in flow_flags but don't really have anything in particular to do with airflow. Bad name.
 
@@ -221,27 +223,27 @@ var/MAX_EXPLOSION_RANGE = 32
 
 
 //sharpness flags
-#define SHARP_TIP 		 1 // Has a pointy-stabby end, such as a syringe or a knife tip.
-#define SHARP_BLADE		 2 // Has a blade long and thin enough to slice something with.
-#define SERRATED_BLADE	 4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
-#define CHOPWOOD		 8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
-#define INSULATED_EDGE 	 16 // One of the edges of this thing is insulated, even though the rest of it isn't.
-#define HOT_EDGE 		 32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
-#define CUT_WALL 64 //Will cut through walls and girders when the item has this flag
-#define CUT_AIRLOCK 128 //Will cut through airlocks when the item has this flag
+#define SHARP_TIP 		(1) // Has a pointy-stabby end, such as a syringe or a knife tip.
+#define SHARP_BLADE		(1<<1) // Has a blade long and thin enough to slice something with.
+#define SERRATED_BLADE	(1<<2) // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
+#define CHOPWOOD		(1<<3) // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
+#define INSULATED_EDGE 	(1<<4) // One of the edges of this thing is insulated, even though the rest of it isn't.
+#define HOT_EDGE 		(1<<5) // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+#define CUT_WALL 		(1<<6) //Will cut through walls and girders when the item has this flag
+#define CUT_AIRLOCK 	(1<<7) //Will cut through airlocks when the item has this flag
 
 //flags for pass_flags
-#define PASSTABLE	1
-#define PASSGLASS	2
-#define PASSGRILLE	4
-#define PASSMOB		8
-#define PASSBLOB	16
-#define PASSMACHINE	32 //computers, vending machines, rnd machines
-#define PASSDOOR	64 //not just airlocks, but also firelocks, windoors etc
-#define PASSGIRDER	128
-#define PASSRAILING 256
+#define PASSTABLE	(1)
+#define PASSGLASS	(1<<1)
+#define PASSGRILLE	(1<<2)
+#define PASSMOB		(1<<3)
+#define PASSBLOB	(1<<4)
+#define PASSMACHINE	(1<<5) //computers, vending machines, rnd machines
+#define PASSDOOR	(1<<6) //not just airlocks, but also firelocks, windoors etc
+#define PASSGIRDER	(1<<7)
+#define PASSRAILING (1<<8)
 
-#define PASSALL	PASSTABLE|PASSGLASS|PASSGRILLE|PASSMOB|PASSBLOB|PASSMACHINE|PASSGIRDER|PASSRAILING
+#define PASSALL		(~0) //bolt of pain
 
 
 /*
@@ -251,59 +253,59 @@ var/MAX_EXPLOSION_RANGE = 32
 	They also have a secondary use in to_bump() code for living mobs, in the mob_bump_flag and mob_swap_flags/mob_push_flags vars
 */
 
-#define HUMAN 1
-#define MONKEY 2
-#define ALIEN 4
-#define ROBOT 8
-#define SLIME 16
-#define SIMPLE_ANIMAL 32
+#define HUMAN 			(1)
+#define MONKEY 			(1<<1)
+#define ALIEN 			(1<<2)
+#define ROBOT 			(1<<3)
+#define SLIME 			(1<<4)
+#define SIMPLE_ANIMAL 	(1<<5)
 
-#define ALLMOBS 63 //update this
+#define ALLMOBS 		(~0)
 
 //turf-only flags
-#define NOJAUNT		1
-#define NO_MINIMAP  2 //Invisible to minimaps (fuck minimaps)
+#define NOJAUNT			(1)
+#define NO_MINIMAP  	(1<<1)//Invisible to minimaps (fuck minimaps)
 
 
 //slots
-#define slot_back 1
-#define slot_wear_mask 2
-#define slot_handcuffed 3
-#define slot_belt 4
-#define slot_wear_id 5
-#define slot_ears 6
-#define slot_glasses 7
-#define slot_gloves 8
-#define slot_head 9
-#define slot_shoes 10
-#define slot_wear_suit 11
-#define slot_w_uniform 12
-#define slot_l_store 13
-#define slot_r_store 14
-#define slot_s_store 15
-#define slot_in_backpack 16
-#define slot_legcuffed 17
-#define slot_legs 18
+#define slot_back 			1
+#define slot_wear_mask 		2
+#define slot_handcuffed 	3
+#define slot_belt 			4
+#define slot_wear_id 		5
+#define slot_ears 			6
+#define slot_glasses 		7
+#define slot_gloves 		8
+#define slot_head 			9
+#define slot_shoes 			10
+#define slot_wear_suit 		11
+#define slot_w_uniform 		12
+#define slot_l_store 		13
+#define slot_r_store 		14
+#define slot_s_store 		15
+#define slot_in_backpack 	16
+#define slot_legcuffed 		17
+#define slot_legs 			18
 
 //slots, but in string format.
-#define slot_back_str "1"
-#define slot_wear_mask_str "2"
-#define slot_handcuffed_str "3"
-#define slot_belt_str "4"
-#define slot_wear_id_str "5"
-#define slot_ears_str "6"
-#define slot_glasses_str "7"
-#define slot_gloves_str "8"
-#define slot_head_str "9"
-#define slot_shoes_str "10"
-#define slot_wear_suit_str "11"
-#define slot_w_uniform_str "12"
-#define slot_l_store_str "13"
-#define slot_r_store_str "14"
-#define slot_s_store_str "15"
-#define slot_in_backpack_str "16"
-#define slot_legcuffed_str "17"
-#define slot_legs_str "18"
+#define slot_back_str 			"1"
+#define slot_wear_mask_str 		"2"
+#define slot_handcuffed_str 	"3"
+#define slot_belt_str 			"4"
+#define slot_wear_id_str 		"5"
+#define slot_ears_str 			"6"
+#define slot_glasses_str 		"7"
+#define slot_gloves_str 		"8"
+#define slot_head_str 			"9"
+#define slot_shoes_str 			"10"
+#define slot_wear_suit_str 		"11"
+#define slot_w_uniform_str 		"12"
+#define slot_l_store_str 		"13"
+#define slot_r_store_str 		"14"
+#define slot_s_store_str 		"15"
+#define slot_in_backpack_str 	"16"
+#define slot_legcuffed_str 		"17"
+#define slot_legs_str 			"18"
 
 #define ACCESSORY_ITEM "accessory item"
 #define SURVIVAL_BOX "Survival Box"
@@ -315,55 +317,55 @@ var/MAX_EXPLOSION_RANGE = 32
 
 // bitflags for mob parts
 
-#define HEAD			1		//specifically the top of the head- imagine it as the scalp.
-#define EYES			2048
-#define MOUTH			4096
-#define EARS			8192
+#define HEAD			(1)		//specifically the top of the head- imagine it as the scalp.
+#define UPPER_TORSO		(1<<1)
+#define LOWER_TORSO		(1<<2)
+#define LEG_LEFT		(1<<3)
+#define LEG_RIGHT		(1<<4)
+#define FOOT_LEFT		(1<<5)
+#define FOOT_RIGHT		(1<<6)
+#define ARM_LEFT		(1<<7)
+#define ARM_RIGHT		(1<<8)
+#define HAND_LEFT		(1<<9)
+#define HAND_RIGHT		(1<<10)
+#define EYES			(1<<11)
+#define MOUTH			(1<<12)
+#define EARS			(1<<13)
 
-#define UPPER_TORSO		2
-#define LOWER_TORSO		4
-#define LEG_LEFT		8
-#define LEG_RIGHT		16
-#define FOOT_LEFT		32
-#define FOOT_RIGHT		64
-#define ARM_LEFT		128
-#define ARM_RIGHT		256
-#define HAND_LEFT		512
-#define HAND_RIGHT		1024
-#define TAIL			524288
+#define TAIL			(1<<19)
 
 
 // bitflags for clothing parts
 
-#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)	// 6
-#define FACE			(EYES|MOUTH|BEARD)			// 38912
-#define BEARD			32768
-#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)		// 14337
-#define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
-#define FEET			(FOOT_LEFT|FOOT_RIGHT) 		// 96
-#define ARMS			(ARM_LEFT|ARM_RIGHT)		// 384
-#define HANDS			(HAND_LEFT|HAND_RIGHT) 		// 1536
-#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS) // 16383
-#define IGNORE_INV		16384 // Don't make stuff invisible
+#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
+#define FACE			(EYES|MOUTH|BEARD)
+#define BEARD			(1<<15)
+#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
+#define LEGS			(LEG_LEFT|LEG_RIGHT)
+#define FEET			(FOOT_LEFT|FOOT_RIGHT)
+#define ARMS			(ARM_LEFT|ARM_RIGHT)
+#define HANDS			(HAND_LEFT|HAND_RIGHT)
+#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS)
+#define IGNORE_INV		(1<<14) // Don't make stuff invisible
 
 
 // bitflags for invisibility
 // Used in body_parts_covered
 
 #define HIDEGLOVES			HANDS
-#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)		// 414
+#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
 #define HIDESHOES			FEET
 #define HIDEMASK			FACE
 #define HIDEEARS			EARS
 #define HIDEEYES			EYES
 #define HIDEFACE			FACE
 #define HIDETAIL			TAIL
-#define HIDEHEADHAIR 		65536
-#define MASKHEADHAIR		131072
+#define HIDEHEADHAIR 		(1<<16)
+#define MASKHEADHAIR		(1<<17)
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR) // 98304
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
 #define	HIDESUITSTORAGE		LOWER_TORSO
-#define	HIDEBACK			262144
+#define	HIDEBACK			(1<<18)
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
 // Used with human/proc/get_heat_protection() and human/proc/get_cold_protection() as well as calculate_affecting_pressure() now
@@ -389,38 +391,23 @@ var/MAX_EXPLOSION_RANGE = 32
 var/global/list/BODY_PARTS = list(HEAD,EYES,EARS,MOUTH,UPPER_TORSO,LOWER_TORSO,LEG_RIGHT,LEG_LEFT,FOOT_LEFT,FOOT_RIGHT,ARM_LEFT,ARM_RIGHT,HAND_LEFT,HAND_RIGHT)
 var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EYES]" = COVER_PROTECTION_EYES,"[EARS]" = COVER_PROTECTION_EARS, "[MOUTH]" = COVER_PROTECTION_MOUTH, "[UPPER_TORSO]" = COVER_PROTECTION_UPPER_TORSO,"[LOWER_TORSO]" = COVER_PROTECTION_LOWER_TORSO,"[LEG_LEFT]" = COVER_PROTECTION_LEG_LEFT,"[LEG_RIGHT]" = COVER_PROTECTION_LEG_RIGHT,"[FOOT_LEFT]" = COVER_PROTECTION_FOOT_LEFT,"[FOOT_RIGHT]" = COVER_PROTECTION_FOOT_RIGHT,"[ARM_LEFT]" = COVER_PROTECTION_ARM_LEFT,"[ARM_RIGHT]" = COVER_PROTECTION_ARM_RIGHT,"[HAND_LEFT]" = COVER_PROTECTION_HAND_LEFT,"[HAND_RIGHT]" = COVER_PROTECTION_HAND_RIGHT)
 
-
-//bitflags for mutations
-	// Extra powers:
-#define SHADOW			(1<<10)	// shadow teleportation (create in/out portals anywhere) (25%)
-#define SCREAM			(1<<11)	// supersonic screaming (25%)
-#define EXPLOSIVE		(1<<12)	// exploding on-demand (15%)
-#define REGENERATION	(1<<13)	// superhuman regeneration (30%)
-#define REPROCESSOR		(1<<14)	// eat anything (50%)
-#define SHAPESHIFTING	(1<<15)	// take on the appearance of anything (40%)
-#define PHASING			(1<<16)	// ability to phase through walls (40%)
-#define SHIELD			(1<<17)	// shielding from all projectile attacks (30%)
-#define SHOCKWAVE		(1<<18)	// attack a nearby tile and cause a massive shockwave, knocking most people on their asses (25%)
-#define ELECTRICITY		(1<<19)	// ability to shoot electric attacks (15%)
-
-
 // String identifiers for associative list lookup
 
 // mob/var/list/mutations
 
 // Used in preferences.
-#define DISABILITY_FLAG_NEARSIGHTED 1
-#define DISABILITY_FLAG_FAT         2
-#define DISABILITY_FLAG_EPILEPTIC   4
-#define DISABILITY_FLAG_DEAF        8
-#define DISABILITY_FLAG_BLIND       16
-#define DISABILITY_FLAG_MUTE		32
-#define DISABILITY_FLAG_VEGAN		64
-#define DISABILITY_FLAG_ASTHMA 128
-#define DISABILITY_FLAG_LACTOSE		256
-#define DISABILITY_FLAG_LISP		512
-#define DISABILITY_FLAG_ANEMIA		1024
-#define DISABILITY_FLAG_EHS			2048
+#define DISABILITY_FLAG_NEARSIGHTED (1)
+#define DISABILITY_FLAG_FAT         (1<<1)
+#define DISABILITY_FLAG_EPILEPTIC   (1<<2)
+#define DISABILITY_FLAG_DEAF        (1<<3)
+#define DISABILITY_FLAG_BLIND       (1<<4)
+#define DISABILITY_FLAG_MUTE		(1<<5)
+#define DISABILITY_FLAG_VEGAN		(1<<6)
+#define DISABILITY_FLAG_ASTHMA 		(1<<7)
+#define DISABILITY_FLAG_LACTOSE		(1<<8)
+#define DISABILITY_FLAG_LISP		(1<<9)
+#define DISABILITY_FLAG_ANEMIA		(1<<10)
+#define DISABILITY_FLAG_EHS			(1<<11)
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -448,6 +435,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_THERMALS		14	//see mobs through walls
 #define M_CHARGE		15	//charge at a target, knocking them down and dealing damage
 
+//Dunno where those originally came from but they're all unused.
+//Leaving their comments here in case maybe they inspire someone to code them in
 //#define HEAL			12 	// (Not implemented) healing people with hands
 //#define SHADOW		13 	// (Not implemented) shadow teleportation (create in/out portals anywhere) (25%)
 //#define SCREAM		14 	// (Not implemented) supersonic screaming (25%)
@@ -461,7 +450,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 //#define ELECTRICITY	22 	// (Not implemented) ability to shoot electric attacks (15%)
 
 //2spooky
-#define M_SKELETON 29
+#define M_SKELETON 		29
 
 // Other Mutations:
 #define M_NO_BREATH		100 	// no need to breathe
@@ -490,15 +479,15 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_CHAV			210
 
 // /vg/ muts
-#define M_LOUD		308		// CAUSES INTENSE YELLING
-#define M_WHISPER	309		// causes quiet whispering
-#define M_DIZZY		310		// Trippy.
-#define M_SANS		311		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'I love comic sans' IN YOUR PR.
-#define M_FARSIGHT	312		// Increases mob's view range by 2
-#define M_NOIR		313		// aww yis detective noir
-#define M_VEGAN		314
-#define M_ASTHMA	315
-#define M_LACTOSE	316
+#define M_LOUD			308		// CAUSES INTENSE YELLING
+#define M_WHISPER		309		// causes quiet whispering
+#define M_DIZZY			310		// Trippy.
+#define M_SANS			311		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'I love comic sans' IN YOUR PR.
+#define M_FARSIGHT		312		// Increases mob's view range by 2
+#define M_NOIR			313		// aww yis detective noir
+#define M_VEGAN			314
+#define M_ASTHMA		315
+#define M_LACTOSE		316
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\
@@ -510,51 +499,51 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define M_HARDCORE      300
 
 //disabilities
-#define NEARSIGHTED		1
-#define EPILEPSY		2
-#define COUGHING		4
-#define TOURETTES		8
-#define NERVOUS			16
-#define ASTHMA		32
-#define LACTOSE		64
-#define ANEMIA		128
-#define ELECTROSENSE	256
+#define NEARSIGHTED		(1)
+#define EPILEPSY		(1<<1)
+#define COUGHING		(1<<2)
+#define TOURETTES		(1<<3)
+#define NERVOUS			(1<<4)
+#define ASTHMA			(1<<5)
+#define LACTOSE			(1<<6)
+#define ANEMIA			(1<<7)
+#define ELECTROSENSE	(1<<8)
 
 //sdisabilities
-#define BLIND			1
-#define MUTE			2
-#define DEAF			4
+#define BLIND			(1)
+#define MUTE			(1<<1)
+#define DEAF			(1<<2)
 
 //mob/var/stat things
-#define CONSCIOUS	0
-#define UNCONSCIOUS	1
-#define DEAD		2
+#define CONSCIOUS		0
+#define UNCONSCIOUS		1
+#define DEAD			2
 
 // channel numbers for power
-#define EQUIP	1
-#define LIGHT	2
-#define ENVIRON	3
-#define TOTAL	4	//for total power used only
-#define STATIC_EQUIP 5
+#define EQUIP			1
+#define LIGHT			2
+#define ENVIRON			3
+#define TOTAL			4	//for total power used only
+#define STATIC_EQUIP 	5
 #define STATIC_LIGHT	6
 #define STATIC_ENVIRON	7
 
 // bitflags for machine stat variable
-#define BROKEN		1
-#define NOPOWER		2
-#define POWEROFF	4		// unused
-#define MAINT		8		// under maintaince
-#define EMPED		16		// temporary broken by EMP pulse
-#define FORCEDISABLE 32 	//disabled either via wire pulse, grid check, or malf ai
-#define NOAICONTROL 	64		//ai control disable
+#define BROKEN			(1)
+#define NOPOWER			(1<<1)
+#define POWEROFF		(1<<2)	// unused
+#define MAINT			(1<<3)	// under maintaince
+#define EMPED			(1<<4)	// temporary broken by EMP pulse
+#define FORCEDISABLE 	(1<<5) 	//disabled either via wire pulse, grid check, or malf ai
+#define NOAICONTROL 	(1<<6)	//ai control disable
 
 
 //bitflags for door switches.
-#define OPEN	1
-#define IDSCAN	2
-#define BOLTS	4
-#define SHOCK	8
-#define SAFE	16
+#define OPEN	(1)
+#define IDSCAN	(1<<1)
+#define BOLTS	(1<<2)
+#define SHOCK	(1<<3)
+#define SAFE	(1<<4)
 
 #define ENGINE_EJECT_Z	3
 
@@ -604,23 +593,24 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define I_HURT		"hurt"
 
 //I hate adding defines like this but I'd much rather deal with bitflags than lists and string searches
-#define SUICIDE_ACT_BRUTELOSS 1
-#define SUICIDE_ACT_FIRELOSS 2
-#define SUICIDE_ACT_TOXLOSS 4
-#define SUICIDE_ACT_OXYLOSS 8
-#define SUICIDE_ACT_CUSTOM 16
+#define SUICIDE_ACT_BRUTELOSS 	(1)
+#define SUICIDE_ACT_FIRELOSS 	(1<<1)
+#define SUICIDE_ACT_TOXLOSS 	(1<<2)
+#define SUICIDE_ACT_OXYLOSS 	(1<<3)
+#define SUICIDE_ACT_CUSTOM 		(1<<4)
 
 //Bitflags defining which status effects could be or are inflicted on a mob
-#define CANSTUN		1
-#define CANKNOCKDOWN	2
-#define CANPARALYSE	4
-#define CANPUSH		8
-#define UNPACIFIABLE 16		//Immune to pacify effects.
-#define GODMODE		4096
-#define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
-#define BUDDHAMODE	16384
-#define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
-#define ALWAYS_CRIT 65536
+#define CANSTUN			(1)
+#define CANKNOCKDOWN	(1<<1)
+#define CANPARALYSE		(1<<2)
+#define CANPUSH			(1<<3)
+#define UNPACIFIABLE 	(1<<4)		//Immune to pacify effects.
+
+#define GODMODE			(1<<12)
+#define FAKEDEATH		(1<<13)	//Replaces stuff like changeling.changeling_fakedeath
+#define BUDDHAMODE		(1<<14)
+#define XENO_HOST		(1<<15)	//Tracks whether we're gonna be a baby alien's mummy.
+#define ALWAYS_CRIT 	(1<<16)
 
 var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons/Taser.ogg','sound/weapons/armbomb.ogg','sound/voice/hiss1.ogg','sound/voice/hiss2.ogg','sound/voice/hiss3.ogg','sound/voice/hiss4.ogg','sound/voice/hiss5.ogg','sound/voice/hiss6.ogg','sound/effects/Glassbr1.ogg','sound/effects/Glassbr2.ogg','sound/effects/Glassbr3.ogg','sound/items/Welder.ogg','sound/items/Welder2.ogg','sound/machines/airlock.ogg','sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
 
@@ -665,12 +655,12 @@ var/list/liftable_structures = list(\
 //A set of constants used to determine which type of mute an admin wishes to apply:
 //Please read and understand the muting/automuting stuff before changing these. MUTE_IC_AUTO etc = (MUTE_IC << 1)
 //Therefore there needs to be a gap between the flags for the automute flags
-#define MUTE_IC			1
-#define MUTE_OOC		2
-#define MUTE_PRAY		4
-#define MUTE_ADMINHELP	8
-#define MUTE_DEADCHAT	16
-#define MUTE_ALL		31
+#define MUTE_IC			(1)
+#define MUTE_OOC		(1<<1)
+#define MUTE_PRAY		(1<<2)
+#define MUTE_ADMINHELP	(1<<3)
+#define MUTE_DEADCHAT	(1<<4)
+#define MUTE_ALL		(~0)
 
 //Number of identical messages required to get the spam-prevention automute thing to trigger warnings and automutes
 #define SPAM_TRIGGER_WARNING 5
@@ -710,13 +700,13 @@ var/list/liftable_structures = list(\
 /*
 FOR IN-GAME TESTING PURPOSES (var/sight bitflags)
 
-BLIND		1
-SEE_MOBS	4
-SEE_OBJS	8
-SEE_TURFS	16
-SEE_SELF	32
-SEE_INFRA	64
-SEE_PIXELS	256
+BLIND		(1)
+SEE_MOBS	(1<<2)
+SEE_OBJS	(1<<3)
+SEE_TURFS	(1<<4)
+SEE_SELF	(1<<5)
+SEE_INFRA	(1<<6)
+SEE_PIXELS	(1<<8)
 */
 
 // Object specific defines.
@@ -726,9 +716,9 @@ SEE_PIXELS	256
 // Some mob defines below.
 #define AI_CAMERA_LUMINOSITY 5
 
-#define BORGMESON 1
-#define BORGTHERM 2
-#define BORGXRAY  4
+#define BORGMESON (1)
+#define BORGTHERM (1<<1)
+#define BORGXRAY  (1<<2)
 
 //some arbitrary defines to be used by self-pruning global lists. (see master_controller)
 #define PROCESS_KILL 26	//Used to trigger removal from a processing list
@@ -739,18 +729,18 @@ SEE_PIXELS	256
 #define PROJECTILE_COLLISION_REBOUND	3
 #define PROJECTILE_COLLISION_PORTAL		4
 
-#define HOSTILE_STANCE_IDLE 1
-#define HOSTILE_STANCE_ALERT 2
-#define HOSTILE_STANCE_ATTACK 3
-#define HOSTILE_STANCE_ATTACKING 4
-#define HOSTILE_STANCE_TIRED 5
+#define HOSTILE_STANCE_IDLE 		1
+#define HOSTILE_STANCE_ALERT 		2
+#define HOSTILE_STANCE_ATTACK 		3
+#define HOSTILE_STANCE_ATTACKING 	4
+#define HOSTILE_STANCE_TIRED 		5
 
-#define BEE_ROAMING 0
-#define BEE_OUT_FOR_PLANTS 1
+#define BEE_ROAMING 		0
+#define BEE_OUT_FOR_PLANTS 	1
 #define BEE_OUT_FOR_ENEMIES 2
-#define BEE_HEADING_HOME 3
-#define BEE_SWARM 4
-#define BEE_BUILDING 5
+#define BEE_HEADING_HOME 	3
+#define BEE_SWARM 			4
+#define BEE_BUILDING 		5
 
 #define BEE_STING_BLOCK		0
 #define BEE_STING_PIERCE	1
@@ -760,48 +750,52 @@ SEE_PIXELS	256
 
 //for infestation events
 #define LOC_KITCHEN 0
-#define LOC_ATMOS 1
-#define LOC_INCIN 2
-#define LOC_CHAPEL 3
+#define LOC_ATMOS 	1
+#define LOC_INCIN 	2
+#define LOC_CHAPEL 	3
 #define LOC_LIBRARY 4
-#define LOC_HYDRO 5
-#define LOC_VAULT 6
-#define LOC_TECH 7
+#define LOC_HYDRO 	5
+#define LOC_VAULT 	6
+#define LOC_TECH 	7
 
-#define VERM_MICE    0
-#define VERM_LIZARDS 1
-#define VERM_SPIDERS 2
-#define VERM_SLIMES  3
-#define VERM_BATS    4
-#define VERM_BORERS  5
-#define VERM_MIMICS  6
-#define VERM_ROACHES 7
-#define VERM_GREMLINS 8
-#define VERM_BEES 9
-#define VERM_HORNETS 10
-#define VERM_SYPHONER 11
-#define VERM_GREMTIDE 12
-#define VERM_CRABS 13
-#define VERM_DIONA 14
-#define VERM_MUSHMEN 15
-#define VERM_FROGS 14
-#define VERM_SNAILS 15
-#define VERM_HEADCRABS 16
+//-----------------------------------------------
+#define VERM_MICE    	0
+#define VERM_LIZARDS 	1
+#define VERM_SPIDERS 	2
+#define VERM_SLIMES  	3
+#define VERM_BATS    	4
+#define VERM_BORERS  	5
+#define VERM_MIMICS  	6
+#define VERM_ROACHES 	7
+#define VERM_GREMLINS 	8
+#define VERM_BEES 		9
+#define VERM_HORNETS 	10
+#define VERM_SYPHONER 	11
+#define VERM_GREMTIDE 	12
+#define VERM_CRABS 		13
+#define VERM_DIONA 		14
+#define VERM_MUSHMEN 	15
+#define VERM_FROGS 		16
+#define VERM_SNAILS 	17
+#define VERM_HEADCRABS 	18
+
+#define VERM_MAX		18//keep updated
+//-----------------------------------------------
 
 
-#define MONSTER_BEAR    0
-#define MONSTER_CREATURE 1
-#define MONSTER_XENO 2
-#define MONSTER_HIVEBOT  3
-#define MONSTER_ZOMBIE    4
-#define MONSTER_SKRITE  5
-#define MONSTER_SQUEEN  6
-#define MONSTER_FROG 7
-#define MONSTER_GOLIATH 8
-#define MONSTER_DAVID 9
-#define MONSTER_MADCRAB 10
-#define MONSTER_MEATBALLER 11
-#define MONSTER_BIG_ROACH 12
+#define MONSTER_BEAR    	0
+#define MONSTER_CREATURE 	1
+#define MONSTER_XENO 		2
+#define MONSTER_HIVEBOT  	3
+#define MONSTER_ZOMBIE    	4
+#define MONSTER_SKRITE  	5
+#define MONSTER_SQUEEN  	6
+#define MONSTER_FROG 		7
+#define MONSTER_GOLIATH 	8
+#define MONSTER_DAVID 		9
+#define MONSTER_MADCRAB 	10
+#define MONSTER_MEATBALLER 	11
+#define MONSTER_BIG_ROACH 	12
 #define MONSTER_ROACH_QUEEN 13
 
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
@@ -814,19 +808,20 @@ SEE_PIXELS	256
 
 ///////////////////ORGAN DEFINES///////////////////
 
-#define ORGAN_CUT_AWAY		1
-#define ORGAN_GAUZED		2
-#define ORGAN_ATTACHABLE	4
-#define ORGAN_BLEEDING		8
-#define ORGAN_BROKEN		32
-#define ORGAN_DESTROYED		64
-#define ORGAN_ROBOT			128
-#define ORGAN_SPLINTED		256
-#define SALVED				512
-#define ORGAN_DEAD			1024
-#define ORGAN_MUTATED		2048
-#define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
-#define ORGAN_MALFUNCTIONING 8192
+#define ORGAN_CUT_AWAY			(1)
+#define ORGAN_GAUZED			(1<<1)
+#define ORGAN_ATTACHABLE		(1<<2)
+#define ORGAN_BLEEDING			(1<<3)
+
+#define ORGAN_BROKEN			(1<<5)
+#define ORGAN_DESTROYED			(1<<6)
+#define ORGAN_ROBOT				(1<<7)
+#define ORGAN_SPLINTED			(1<<8)
+#define SALVED					(1<<9)
+#define ORGAN_DEAD				(1<<10)
+#define ORGAN_MUTATED			(1<<11)
+#define ORGAN_PEG				(1<<12) // ROB'S MAGICAL PEGLEGS v2
+#define ORGAN_MALFUNCTIONING 	(1<<13)
 
 #define SURGERY_SUCCESS_NORMAL 0
 #define SURGERY_SUCCESS_ALWAYS 1
@@ -836,45 +831,45 @@ SEE_PIXELS	256
 //Please don't edit these values without speaking to [current /vg/ host here] first
 //Currently at the limit for rank bitflags, if any are needed to be added in the future then consider replacement of R_MOD as we don't use it at time of writing, or merge R_STEALTH into R_ADMIN.
 
-#define R_BUILDMODE		1
-#define R_ADMIN			2
-#define R_BAN			4
-#define R_FUN			8
-#define R_SERVER		16
-#define R_DEBUG			32
-#define R_POSSESS		64
-#define R_PERMISSIONS	128
-#define R_STEALTH		256
-#define R_REJUVENATE	512
-#define R_VAREDIT		1024
-#define R_SOUNDS		2048
-#define R_SPAWN			4096
-#define R_MOD			8192
-#define R_ADMINBUS		16384
-#define R_POLLING		32768
+#define R_BUILDMODE		(1)
+#define R_ADMIN			(1<<1)
+#define R_BAN			(1<<2)
+#define R_FUN			(1<<3)
+#define R_SERVER		(1<<4)
+#define R_DEBUG			(1<<5)
+#define R_POSSESS		(1<<6)
+#define R_PERMISSIONS	(1<<7)
+#define R_STEALTH		(1<<8)
+#define R_REJUVENATE	(1<<9)
+#define R_VAREDIT		(1<<10)
+#define R_SOUNDS		(1<<11)
+#define R_SPAWN			(1<<12)
+#define R_MOD			(1<<13)
+#define R_ADMINBUS		(1<<14)
+#define R_POLLING		(1<<15)
 
-#define R_MAXPERMISSION 32768 //This holds the maximum value for a permission. It is used in iteration, so keep it updated.
+#define R_MAXPERMISSION (1<<15) //This holds the maximum value for a permission. It is used in iteration, so keep it updated.
 
-#define R_HOST			65535
+#define R_HOST			((1<<16) - 1)//I'm sure there's a reason for it not just being (1<<16), there probably isn't though
 
 //Preference toggles
-#define SOUND_ADMINHELP	1
-#define SOUND_MIDI		2
-#define SOUND_AMBIENCE	4
-#define SOUND_LOBBY		8
-#define CHAT_OOC		16
-#define CHAT_DEAD		32
-#define CHAT_GHOSTEARS	64
-#define CHAT_GHOSTSIGHT	128
-#define CHAT_PRAYER		256
-#define CHAT_RADIO		512
-#define CHAT_ATTACKLOGS	1024
-#define CHAT_DEBUGLOGS	2048
-#define CHAT_LOOC		4096
-#define CHAT_GHOSTRADIO 8192
-#define SOUND_STREAMING 16384 // /vg/
-#define CHAT_GHOSTPDA   32768
-#define AUTO_DEADMIN	65536
+#define SOUND_ADMINHELP	(1)
+#define SOUND_MIDI		(1<<1)
+#define SOUND_AMBIENCE	(1<<2)
+#define SOUND_LOBBY		(1<<3)
+#define CHAT_OOC		(1<<4)
+#define CHAT_DEAD		(1<<5)
+#define CHAT_GHOSTEARS	(1<<6)
+#define CHAT_GHOSTSIGHT	(1<<7)
+#define CHAT_PRAYER		(1<<8)
+#define CHAT_RADIO		(1<<9)
+#define CHAT_ATTACKLOGS	(1<<10)
+#define CHAT_DEBUGLOGS	(1<<11)
+#define CHAT_LOOC		(1<<12)
+#define CHAT_GHOSTRADIO (1<<13)
+#define SOUND_STREAMING (1<<14) // /vg/
+#define CHAT_GHOSTPDA   (1<<15)
+#define AUTO_DEADMIN	(1<<16)
 
 #define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC|SOUND_STREAMING)
 
@@ -884,10 +879,10 @@ SEE_PIXELS	256
 // First bit is no/yes.
 // Second bit is persistence (save to char prefs).
 // Third bit is whether we polled for that role yet.
-#define ROLEPREF_ENABLE         1 // Enable role for this character.
-#define ROLEPREF_PERSIST        2 // Used to flag a pref as Always/Never
-#define ROLEPREF_POLLED         4 // Have we polled this guy?
-#define ROLEPREF_SAVE           8 // Flag the pref to be saved permanently.
+#define ROLEPREF_ENABLE         (1) // Enable role for this character.
+#define ROLEPREF_PERSIST        (1<<1) // Used to flag a pref as Always/Never
+#define ROLEPREF_POLLED         (1<<2) // Have we polled this guy?
+#define ROLEPREF_SAVE           (1<<3) // Flag the pref to be saved permanently.
 
 #define ROLEPREF_NEVER   ROLEPREF_PERSIST
 #define ROLEPREF_NO      0
@@ -911,25 +906,14 @@ SEE_PIXELS	256
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
 
-/*//Languages!
-#define LANGUAGE_HUMAN		1
-#define LANGUAGE_ALIEN		2
-#define LANGUAGE_DOG		4
-#define LANGUAGE_CAT		8
-#define LANGUAGE_BINARY		16
-#define LANGUAGE_OTHER		32768
-
-#define LANGUAGE_UNIVERSAL	65535
-*/
-
 #define LEFT 1
 #define RIGHT 2
 
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
 #define HEALTH_HUD          "health" // a simple line rounding the mob's number health
 #define STATUS_HUD          "status" // alive, dead, diseased, etc.
-#define PHYSRECORD_HUD			"p_record" // what medbay has set your records to
-#define MENTRECORD_HUD			"m_record" // what medbay has set your records to
+#define PHYSRECORD_HUD		"p_record" // what medbay has set your records to
+#define MENTRECORD_HUD		"m_record" // what medbay has set your records to
 #define ID_HUD              "id" // the job asigned to your ID
 #define WAGE_HUD			"wage" // the wage assigned to your ID
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status
@@ -973,40 +957,40 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	)
 
 //Generic species flags.
-#define WHITELISTED (1<<0)	//species that don't break player preferences available to admins only
-#define PLAYABLE (1<<1)		//species available to players
-#define NO_BREATHE (1<<2)
-#define NO_SCAN (1<<3)
-#define NO_PAIN (1<<4)
-#define IS_SLOW (1<<5)
-#define IS_PLANT (1<<6)
-#define RAD_ABSORB (1<<7)
-#define REQUIRE_LIGHT (1<<8)
-#define HYPOTHERMIA_IMMUNE (1<<9)
-#define PLASMA_IMMUNE (1<<10)
-#define RAD_GLOW (1<<11)
-#define ELECTRIC_HEAL (1<<12)
-#define SPECIES_NO_MOUTH (1<<13)
-//#define REQUIRE_DARK (1<<14)
-#define RAD_IMMUNE (1<<15)
+#define WHITELISTED 		(1)	//species that don't break player preferences available to admins only
+#define PLAYABLE 			(1<<1)		//species available to players
+#define NO_BREATHE 			(1<<2)
+#define NO_SCAN 			(1<<3)
+#define NO_PAIN 			(1<<4)
+#define IS_SLOW 			(1<<5)
+#define IS_PLANT 			(1<<6)
+#define RAD_ABSORB 			(1<<7)
+#define REQUIRE_LIGHT 		(1<<8)
+#define HYPOTHERMIA_IMMUNE 	(1<<9)
+#define PLASMA_IMMUNE 		(1<<10)
+#define RAD_GLOW 			(1<<11)
+#define ELECTRIC_HEAL 		(1<<12)
+#define SPECIES_NO_MOUTH 	(1<<13)
+//#define REQUIRE_DARK 		(1<<14)
+#define RAD_IMMUNE 			(1<<15)
 
 //Species anatomical flags.
-#define HAS_SKIN_TONE 1
-#define HAS_LIPS 2
-#define HAS_UNDERWEAR 4
-#define HAS_TAIL 8
-#define CAN_BE_FAT 16
-#define IS_BULKY 32 //can't wear exosuits, gloves, masks, or hardsuits
-#define NO_SKIN 64
-#define NO_BLOOD 128
-#define HAS_SWEAT_GLANDS 256
-#define NO_BONES 512
-#define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
-#define MULTICOLOR 2048	//skin color is unique rather than tone variation
-#define ACID4WATER 4096 //Acid now acts like water, and vice versa.
-#define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
-#define RGBSKINTONE 16384
-#define HAS_ICON_SKIN_TONE 32768
+#define HAS_SKIN_TONE 		(1)
+#define HAS_LIPS 			(1<<1)
+#define HAS_UNDERWEAR 		(1<<2)
+#define HAS_TAIL 			(1<<3)
+#define CAN_BE_FAT 			(1<<4)
+#define IS_BULKY 			(1<<5) //can't wear exosuits, gloves, masks, or hardsuits
+#define NO_SKIN 			(1<<6)
+#define NO_BLOOD 			(1<<7)
+#define HAS_SWEAT_GLANDS 	(1<<8)
+#define NO_BONES 			(1<<9)
+#define NO_STRUCTURE 		(1<<10)	//no vessels, muscles, or any sort of internal structure, uniform throughout
+#define MULTICOLOR 			(1<<11)	//skin color is unique rather than tone variation
+#define ACID4WATER 			(1<<12) //Acid now acts like water, and vice versa.
+#define NO_BALD 			(1<<13) //cannot lose hair through being shaved/radiation/etc
+#define RGBSKINTONE 		(1<<14)
+#define HAS_ICON_SKIN_TONE 	(1<<15)
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1014,11 +998,11 @@ var/default_colour_matrix = list(1,0,0,0,\
 								 0,0,0,1)
 
 //species chemical flags
-#define NO_DRINK 1
-#define NO_EAT 2
-#define NO_SPLASH 4
-#define NO_INJECT 8
-#define NO_CRYO 16
+#define NO_DRINK 	(1)
+#define NO_EAT 		(1<<1)
+#define NO_SPLASH 	(1<<2)
+#define NO_INJECT 	(1<<3)
+#define NO_CRYO 	(1<<4)
 
 
 // from bay station
@@ -1027,11 +1011,11 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define INFECTION_LEVEL_THREE 1000
 
 //Diseases, Virus, Antigens
-#define	SPREAD_BLOOD	1//can be extracted from the carrier's blood, all diseases have this by default.
-#define	SPREAD_CONTACT	2//touching or bumping into someone may transmit the virus, virus can survive on items for a while. gloves lower the chance of transmission.
-#define	SPREAD_AIRBORNE	4//carrier mobs will periodically release invisible clouds that carry the virus to adjacent mobs that can breath it.
-#define SPREAD_COLONY 8 //like contact, but only spreads to suited individuals or pressure-resistant clothing.
-#define SPREAD_MEMETIC 16 //spreads on hearing, doesn't appear on goggles
+#define	SPREAD_BLOOD	(1)//can be extracted from the carrier's blood, all diseases have this by default.
+#define	SPREAD_CONTACT	(1<<1)//touching or bumping into someone may transmit the virus, virus can survive on items for a while. gloves lower the chance of transmission.
+#define	SPREAD_AIRBORNE	(1<<2)//carrier mobs will periodically release invisible clouds that carry the virus to adjacent mobs that can breath it.
+#define SPREAD_COLONY 	(1<<3) //like contact, but only spreads to suited individuals or pressure-resistant clothing.
+#define SPREAD_MEMETIC 	(1<<4) //spreads on hearing, doesn't appear on goggles
 
 
 #define EFFECT_DANGER_HELPFUL	"0"
@@ -1069,22 +1053,22 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 
 //Language flags.
-//#define WHITELISTED (1<<0)  // Language is available if the speaker is whitelisted. Used in species flags
-#define RESTRICTED (1<<1)   // Language can only be accquired by spawning or an admin.
-#define CAN_BE_SECONDARY_LANGUAGE (1<<2)	// Language is available on character setup as secondary language.
-#define NONORAL (1<<3)		//Language is spoken without using the mouth, so can be spoken while muzzled.
+//#define WHITELISTED 				(1)  // Language is available if the speaker is whitelisted. Used in species flags
+#define RESTRICTED 					(1<<1)  // Language can only be accquired by spawning or an admin.
+#define CAN_BE_SECONDARY_LANGUAGE 	(1<<2)	// Language is available on character setup as secondary language.
+#define NONORAL 					(1<<3)	//Language is spoken without using the mouth, so can be spoken while muzzled.
 
 // Hairstyle flags
 #define HAIRSTYLE_CANTRIP 1 // 5% chance of tripping your stupid ass if you're running.
 
 // equip_to_slot_if_possible flags
 #define EQUIP_FAILACTION_NOTHING 0
-#define EQUIP_FAILACTION_DELETE 1
-#define EQUIP_FAILACTION_DROP 2
+#define EQUIP_FAILACTION_DELETE  1
+#define EQUIP_FAILACTION_DROP    2
 
 //mob_can_equip flags
-#define CANNOT_EQUIP 0
-#define CAN_EQUIP 1
+#define CANNOT_EQUIP 			 0
+#define CAN_EQUIP 				 1
 #define CAN_EQUIP_BUT_SLOT_TAKEN 2
 
 
@@ -1203,20 +1187,20 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 
 //used to define machine behaviour in attackbys and other code situations
-#define EMAGGABLE		1 //can we emag it? If this is flagged, the machine calls emag_act()
-#define SCREWTOGGLE		2 //does it toggle panel_open when hit by a screwdriver?
-#define CROWDESTROY		4 //does hitting a panel_open machine with a crowbar disassemble it?
-#define WRENCHMOVE		8 //does hitting it with a wrench toggle its anchored state?
-#define FIXED2WORK		16 //does it need to be anchored to work? Try to use this with WRENCHMOVE - hooks into power code
-#define EJECTNOTDEL		32 //when we destroy the machine, does it remove all its items or destroy them?
-#define WELD_FIXED		64 //if it is attacked by a welder and is anchored, it'll toggle between welded and unwelded to the floor
-#define MULTITOOL_MENU	128 //if it has multitool menu functionality inherently
-#define PURCHASER		256 //it connects to the centcom database at roundstart
-#define WIREJACK		512 //can we wirejack it? if flagged, machine calls wirejack()
-#define SHUTTLEWRENCH	1024 //if this flag exists, the computer can be wrenched on shuttle floors
-#define SECUREDPANEL 2048 //it won't let you open the deconstruction panel if you don't have the linked account number. Originally used for custom vending machines
-#define MULTIOUTPUT 4096 //Let's you set the output location with a multitool
-#define UPGRADENOSCORE 8192 //Incase the machine use is nothing but malicious
+#define EMAGGABLE		(1) //can we emag it? If this is flagged, the machine calls emag_act()
+#define SCREWTOGGLE		(1<<1) //does it toggle panel_open when hit by a screwdriver?
+#define CROWDESTROY		(1<<2) //does hitting a panel_open machine with a crowbar disassemble it?
+#define WRENCHMOVE		(1<<3) //does hitting it with a wrench toggle its anchored state?
+#define FIXED2WORK		(1<<4) //does it need to be anchored to work? Try to use this with WRENCHMOVE - hooks into power code
+#define EJECTNOTDEL		(1<<5) //when we destroy the machine, does it remove all its items or destroy them?
+#define WELD_FIXED		(1<<6) //if it is attacked by a welder and is anchored, it'll toggle between welded and unwelded to the floor
+#define MULTITOOL_MENU	(1<<7) //if it has multitool menu functionality inherently
+#define PURCHASER		(1<<8) //it connects to the centcom database at roundstart
+#define WIREJACK		(1<<9) //can we wirejack it? if flagged, machine calls wirejack()
+#define SHUTTLEWRENCH	(1<<10) //if this flag exists, the computer can be wrenched on shuttle floors
+#define SECUREDPANEL 	(1<<11) //it won't let you open the deconstruction panel if you don't have the linked account number. Originally used for custom vending machines
+#define MULTIOUTPUT 	(1<<12) //Let's you set the output location with a multitool
+#define UPGRADENOSCORE 	(1<<13) //Incase the machine use is nothing but malicious
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 
@@ -1230,23 +1214,23 @@ var/default_colour_matrix = list(1,0,0,0,\
 //bitflags are my waifu - Comic
 
 //NB TRUELOCKS should ONLY be used for machines that produce stuff that's not good in an emergency i.e. a gun fabricator. Be very careful with it
-#define CONSOLECONTROL		1	//does the console control it? can't be interacted if not linked
-#define HASOUTPUT			2	//does it have an output? - mainly for fabricators
-#define TAKESMATIN			4	//does it takes materials (sheets) - mainly for fabricators
-#define NANOTOUCH			8	//does it have a nanoui when you smack it with your hand? - mainly for fabricators
-#define HASMAT_OVER			16	//does it have overlays for when you load materials in? - mainly for fabricators
-#define ACCESS_EMAG			32	//does it lose all its access when smacked by an emag? incompatible with CONSOLECONTROl, for obvious reasons
-#define LOCKBOXES			64	//does it spawn a lockbox around a design which is said to be locked? - for fabricators
-#define TRUELOCKS			128 //does it make a truly locked lockbox? If not set, the lockboxes made are unlockable by any crew with an ID
-#define IGNORE_MATS			256 //does it ignore material requirements for designs? - warning, can be OP
-#define IGNORE_CHEMS		512 //does it ignore chemical requirements for designs? - also super OP
-#define FAB_RECYCLER		1024//does it recycle materials from items? used for autolathe checks
+#define CONSOLECONTROL		(1)		//does the console control it? can't be interacted if not linked
+#define HASOUTPUT			(1<<1)	//does it have an output? - mainly for fabricators
+#define TAKESMATIN			(1<<2)	//does it takes materials (sheets) - mainly for fabricators
+#define NANOTOUCH			(1<<3)	//does it have a nanoui when you smack it with your hand? - mainly for fabricators
+#define HASMAT_OVER			(1<<4)	//does it have overlays for when you load materials in? - mainly for fabricators
+#define ACCESS_EMAG			(1<<5)	//does it lose all its access when smacked by an emag? incompatible with CONSOLECONTROl, for obvious reasons
+#define LOCKBOXES			(1<<6)	//does it spawn a lockbox around a design which is said to be locked? - for fabricators
+#define TRUELOCKS			(1<<7) //does it make a truly locked lockbox? If not set, the lockboxes made are unlockable by any crew with an ID
+#define IGNORE_MATS			(1<<8) //does it ignore material requirements for designs? - warning, can be OP
+#define IGNORE_CHEMS		(1<<9) //does it ignore chemical requirements for designs? - also super OP
+#define FAB_RECYCLER		(1<<10)//does it recycle materials from items? used for autolathe checks
 
 // Mecca scanner flags
-#define MECH_SCAN_FAIL		1 // Cannot be scanned at all.
-#define MECH_SCAN_ILLEGAL	2 // Can only be scanned by the antag scanner.
-#define MECH_SCAN_ACCESS	4 // Can only be scanned with the access required for the machine
-#define MECH_SCAN_GOONECODE 8 // Cannot be scanned and gives a "this is closed source!" message on scan attempt.
+#define MECH_SCAN_FAIL		(1) 	// Cannot be scanned at all.
+#define MECH_SCAN_ILLEGAL	(1<<1) // Can only be scanned by the antag scanner.
+#define MECH_SCAN_ACCESS	(1<<2) // Can only be scanned with the access required for the machine
+#define MECH_SCAN_GOONECODE (1<<3) // Cannot be scanned and gives a "this is closed source!" message on scan attempt.
 
 
 // EMOTES!
@@ -1262,10 +1246,10 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define MINIMUM_FREQUENCY 1200
 
 // /vg/ - Mining flags
-#define DIG_ROCKS	1	//mining turfs - minerals, the asteroid stuff, you know
-#define DIG_SOIL	2	//dirt - this flag gives it shovel functionality
-#define DIG_WALLS	4	//metal station walls - not the mineral ones
-#define DIG_RWALLS	8	//reinforced station walls - beware
+#define DIG_ROCKS	(1)	//mining turfs - minerals, the asteroid stuff, you know
+#define DIG_SOIL	(1<<1)	//dirt - this flag gives it shovel functionality
+#define DIG_WALLS	(1<<2)	//metal station walls - not the mineral ones
+#define DIG_RWALLS	(1<<3)	//reinforced station walls - beware
 
 // For first investigation_log arg
 // Easier to idiot-proof it this way.
@@ -1282,10 +1266,10 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 
 // delayNext() flags.
-#define DELAY_MOVE    1
-#define DELAY_ATTACK  2
-#define DELAY_SPECIAL 4
-#define DELAY_THROW 8
+#define DELAY_MOVE    	(1)
+#define DELAY_ATTACK  	(1<<1)
+#define DELAY_SPECIAL 	(1<<2)
+#define DELAY_THROW 	(1<<3)
 #define DELAY_ALL (DELAY_MOVE|DELAY_ATTACK|DELAY_SPECIAL|DELAY_THROW)
 
 //singularity defines
@@ -1332,23 +1316,23 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define PDA_APP_SNAKEII_MAXLABYRINTH	8
 
 //Some alien checks for reagents for alien races.
-#define IS_DIONA 1
-#define IS_VOX 2
-#define IS_PLASMA 3
-#define IS_GREY 4
+#define IS_DIONA 	1
+#define IS_VOX 		2
+#define IS_PLASMA 	3
+#define IS_GREY 	4
 
 
 //Turf Construction defines
 #define BUILD_SILENT_FAILURE -1		//We failed but don't give an error message
-#define BUILD_FAILURE 0				//We failed so give an error message
-#define BUILD_SUCCESS 1			//Looks for a lattice to build.
-#define BUILD_IGNORE 2		//Ignores the need for lattice to build.
+#define BUILD_FAILURE 		0				//We failed so give an error message
+#define BUILD_SUCCESS 		1			//Looks for a lattice to build.
+#define BUILD_IGNORE 		2		//Ignores the need for lattice to build.
 
 
-#define ARENA_SETUP 0		//under construction/resetting the arena
+#define ARENA_SETUP 	0	//under construction/resetting the arena
 #define ARENA_AVAILABLE 1	//arena is ready for a new game
-#define ARENA_INGAME 2		//a game is currently being played in the arena
-#define ARENA_ENDGAME 3		//a game just finished and the arena is about to reset
+#define ARENA_INGAME 	2	//a game is currently being played in the arena
+#define ARENA_ENDGAME 	3	//a game just finished and the arena is about to reset
 
 // Languages
 #define LANGUAGE_GALACTIC_COMMON "Galactic Common"
@@ -1449,9 +1433,9 @@ var/proccalls = 1
 
 
 //MALFUNCTION FLAGS
-#define COREFIRERESIST 1
-#define HIGHRESCAMS 2
-#define COREFORTIFY 4
+#define COREFIRERESIST	(1)
+#define HIGHRESCAMS 	(1<<1)
+#define COREFORTIFY 	(1<<2)
 
 //Mob sizes
 #define SIZE_TINY	1 //Mice, lizards, borers, kittens - mostly things that can fit into a man's palm
@@ -1467,13 +1451,13 @@ var/proccalls = 1
 #define MESSAGE_HEAR	2 //Hearable message
 
 //Food flags. code/modules/reagents/reagent_containers/food/snacks.dm
-#define FOOD_MEAT	1
-#define FOOD_ANIMAL	2
-#define FOOD_SWEET	4
-#define FOOD_LIQUID	8
-#define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
-#define FOOD_LACTOSE	32 //Contains MILK
-#define FOOD_DIPPABLE	64 //Can be dipped in non-empty open reagent containers
+#define FOOD_MEAT				(1)
+#define FOOD_ANIMAL				(1<<1)
+#define FOOD_SWEET				(1<<2)
+#define FOOD_LIQUID				(1<<3)
+#define FOOD_SKELETON_FRIENDLY 	(1<<4) //Can be eaten by skeletons
+#define FOOD_LACTOSE			(1<<5) //Contains MILK
+#define FOOD_DIPPABLE			(1<<6) //Can be dipped in non-empty open reagent containers
 
 #define UTENSILE_FORK	1
 #define UTENSILE_SPOON	2
@@ -1612,12 +1596,12 @@ var/proccalls = 1
 #define SPECIAL_ATTACK_FAILED 2
 
 // Defines for the map writer, moved here for reasons.
-#define DMM_IGNORE_AREAS 1
-#define DMM_IGNORE_TURFS 2
-#define DMM_IGNORE_OBJS 4
-#define DMM_IGNORE_NPCS 8
-#define DMM_IGNORE_PLAYERS 16
-#define DMM_IGNORE_MOBS 24
+#define DMM_IGNORE_AREAS 	(1)
+#define DMM_IGNORE_TURFS 	(1<<1)
+#define DMM_IGNORE_OBJS 	(1<<2)
+#define DMM_IGNORE_NPCS 	(1<<3)
+#define DMM_IGNORE_PLAYERS 	(1<<4)
+#define DMM_IGNORE_MOBS 	(DMM_IGNORE_NPCS|DMM_IGNORE_PLAYERS)
 
 //Cancer defines for the scanners
 #define CANCER_STAGE_BENIGN 1 //Not 100 % medically correct, but we'll assume benign cancer never fails to worsen. No effect, but can be detected before it fucks you up. Instant
@@ -1631,11 +1615,11 @@ var/proccalls = 1
 #define BOMBERMAN "bomberman"
 
 // /proc/is_honorable() flags.
-#define HONORABLE_BOMBERMAN  262144
-#define HONORABLE_HIGHLANDER 524288
-#define HONORABLE_NINJA      1048576
-#define HONORABLE_NOGUNALLOWED	2097152
-#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA|HONORABLE_NOGUNALLOWED
+#define HONORABLE_BOMBERMAN  	(1<<18)//why are those so fucking large?
+#define HONORABLE_HIGHLANDER 	(1<<19)
+#define HONORABLE_NINJA      	(1<<20)
+#define HONORABLE_NOGUNALLOWED	(1<<21)
+#define HONORABLE_ALL       	(HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA|HONORABLE_NOGUNALLOWED)
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 
@@ -1653,15 +1637,15 @@ var/proccalls = 1
 #define BLOB_CORE_PROPORTION 20
 
 //Holomap filters
-#define HOLOMAP_FILTER_DEATHSQUAD				1
-#define HOLOMAP_FILTER_ERT						2
-#define HOLOMAP_FILTER_NUKEOPS					4
-#define HOLOMAP_FILTER_ELITESYNDICATE			8
-#define HOLOMAP_FILTER_VOX						16
-#define HOLOMAP_FILTER_STATIONMAP				32
-#define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		64//features markers over the captain's office, the armory, the SMES
-#define HOLOMAP_FILTER_CULT						128//bloodstone locators
-#define HOLOMAP_FILTER_TAXI						256//shuttles with have their original location displayed on station maps
+#define HOLOMAP_FILTER_DEATHSQUAD				(1)
+#define HOLOMAP_FILTER_ERT						(1<<1)
+#define HOLOMAP_FILTER_NUKEOPS					(1<<2)
+#define HOLOMAP_FILTER_ELITESYNDICATE			(1<<3)
+#define HOLOMAP_FILTER_VOX						(1<<4)
+#define HOLOMAP_FILTER_STATIONMAP				(1<<5)
+#define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		(1<<6)//features markers over the captain's office, the armory, the SMES
+#define HOLOMAP_FILTER_CULT						(1<<7)//bloodstone locators
+#define HOLOMAP_FILTER_TAXI						(1<<8)//shuttles with have their original location displayed on station maps
 
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
@@ -1697,19 +1681,19 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_CULT_EXIT		"path_exit"
 #define HOLOMAP_MARKER_CULT_RUNE		"rune"
 
-#define HOLOMAP_DRAW_NORMAL	0
-#define HOLOMAP_DRAW_FULL	1
-#define HOLOMAP_DRAW_EMPTY	2
-#define HOLOMAP_DRAW_PATH	3
+#define HOLOMAP_DRAW_NORMAL		0
+#define HOLOMAP_DRAW_FULL		1
+#define HOLOMAP_DRAW_EMPTY		2
+#define HOLOMAP_DRAW_PATH		3
 #define HOLOMAP_DRAW_HALLWAY	4
 
 #define HUMAN_DNA	1
 #define XENO_DNA	2
 
 // Buffer datatype flags.
-#define DNA2_BUF_UI 1
-#define DNA2_BUF_UE 2
-#define DNA2_BUF_SE 4
+#define DNA2_BUF_UI (1)
+#define DNA2_BUF_UE (1<<1)
+#define DNA2_BUF_SE (1<<2)
 
 #define DEFAULT_BLOOD	"#A10808"
 #define DEFAULT_FLESH	"#FFC896"
@@ -1729,9 +1713,9 @@ var/proccalls = 1
 #define NPC_TAMPER_ACT_NOMSG  2 //Don't produce a visible message
 
 //Changing the order of these needlessly will break functionality of the client holding lists
-#define NO_ANIMATION 0
-#define ITEM_ANIMATION 1
-#define PERSON_ANIMATION 2
+#define NO_ANIMATION 		0
+#define ITEM_ANIMATION 		1
+#define PERSON_ANIMATION 	2
 
 //For client preferences.
 #define CREDITS_NEVER "Never"
@@ -1754,12 +1738,12 @@ var/proccalls = 1
 #define MAX_SHEET_STACK_AMOUNT	50
 
 // Used to determine which HUD is in use
-#define HUD_NONE 0
-#define HUD_MEDICAL 1
-#define HUD_SECURITY 2
-#define HUD_WAGE 3
-#define HUD_MESON 4
-#define HUD_ARRESTACCESS 5
+#define HUD_NONE 			0
+#define HUD_MEDICAL 		1
+#define HUD_SECURITY 		2
+#define HUD_WAGE 			3
+#define HUD_MESON 			4
+#define HUD_ARRESTACCESS 	5
 
 //Cyborg components
 #define COMPONENT_BROKEN -1
@@ -1956,8 +1940,8 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define CANDLES_UNLIT 1
 #define CANDLES_LIT 2
 
-#define MINDUI_FLAG_PROCESSING	1
-#define MINDUI_FLAG_TOOLTIP		2
+#define MINDUI_FLAG_PROCESSING	(1)
+#define MINDUI_FLAG_TOOLTIP		(1<<1)
 
 #define MINDUI_MAX_CULT_SLOTS	14
 
@@ -2015,6 +1999,6 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 
 #define ZAS_DUST_TURFS_PER_TICK	20
 
-#define LOBBY_TICKING_STOPPED 0
-#define LOBBY_TICKING 1
+#define LOBBY_TICKING_STOPPED 	0
+#define LOBBY_TICKING 			1
 #define LOBBY_TICKING_RESTARTED 2
