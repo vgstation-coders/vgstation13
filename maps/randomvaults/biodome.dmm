@@ -37,10 +37,7 @@
 /area/vault/biodome)
 "aj" = (
 /obj/machinery/power/solar/panel/tracker,
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/biodome)
 "ak" = (
@@ -57,83 +54,29 @@
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating,
 /area/vault/biodome)
-"ao" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/plating/airless,
-/area/vault/biodome)
-"ap" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating/airless,
-/area/vault/biodome)
-"aq" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor/plating/airless,
-/area/vault/biodome)
 "ar" = (
 /obj/machinery/power/solar/panel,
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/biodome)
 "as" = (
 /obj/structure/flora/ausbushes/stalkybush,
 /turf/simulated/floor/grass,
 /area/vault/biodome)
-"at" = (
-/obj/machinery/power/solar/panel,
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/simulated/floor/plating/airless,
-/area/vault/biodome)
 "au" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor/plating/airless,
 /area/vault/biodome)
 "av" = (
 /obj/machinery/power/solar/panel,
 /obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
-/area/vault/biodome)
-"aw" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor/airless,
 /area/vault/biodome)
 "ax" = (
 /obj/structure/flora/ausbushes/ywflowers,
@@ -147,16 +90,6 @@
 /obj/structure/reagent_dispensers/watertank,
 /turf/simulated/floor/grass,
 /area/vault/biodome)
-"aA" = (
-/obj/machinery/power/solar/panel,
-/obj/structure/cable,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/airless,
-/area/vault/biodome)
 "aB" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil,
 /turf/simulated/floor/grass,
@@ -164,22 +97,6 @@
 "aC" = (
 /obj/structure/flora/ausbushes/ppflowers,
 /turf/simulated/floor/grass,
-/area/vault/biodome)
-"aD" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor/airless,
-/area/vault/biodome)
-"aE" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor/plating/airless,
 /area/vault/biodome)
 "aF" = (
 /obj/machinery/floodlight/on,
@@ -213,55 +130,12 @@
 /turf/simulated/floor/grass,
 /area/vault/biodome)
 "aM" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless,
 /area/vault/biodome)
-"aN" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor,
-/area/vault/biodome)
-"aO" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/vault/biodome)
-"aP" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/wood,
-/area/vault/biodome)
 "aQ" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/wood,
-/area/vault/biodome)
-"aR" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor/wood,
 /area/vault/biodome)
@@ -275,11 +149,7 @@
 /turf/simulated/floor/wood,
 /area/vault/biodome)
 "aU" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/biodome)
 "aV" = (
@@ -320,11 +190,7 @@
 "ba" = (
 /obj/machinery/power/solar/control,
 /obj/structure/cable,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/wood,
 /area/vault/biodome)
 "bb" = (
@@ -346,11 +212,7 @@
 /turf/simulated/floor/grass,
 /area/vault/biodome)
 "be" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/wood,
 /area/vault/biodome)
 "bf" = (
@@ -380,29 +242,9 @@
 	},
 /turf/simulated/floor/grass,
 /area/vault/biodome)
-"bj" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
-/area/vault/biodome)
-"bk" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor,
-/area/vault/biodome)
 "bl" = (
 /obj/structure/window/reinforced,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/biodome)
 "bm" = (
@@ -411,33 +253,18 @@
 /area/vault/biodome)
 "bn" = (
 /obj/machinery/door/airlock/external,
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/vault/biodome)
 "bo" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/biodome)
 "bp" = (
 /obj/machinery/door/airlock/external,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/biodome)
 "bq" = (
@@ -449,33 +276,14 @@
 /turf/simulated/floor,
 /area/vault/biodome)
 "bs" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/machinery/bot/farmbot/duey,
-/turf/simulated/floor,
-/area/vault/biodome)
-"bt" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/biodome)
 "bu" = (
 /obj/machinery/door/airlock/external,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/vault/biodome)
@@ -483,11 +291,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/biodome)
 "bw" = (
@@ -499,14 +303,11 @@
 /turf/simulated/floor,
 /area/vault/biodome)
 "by" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/power/apc{
 	dir = 1;
 	pixel_y = 24
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/biodome)
 "bz" = (
@@ -550,59 +351,26 @@
 /turf/simulated/floor/wood,
 /area/vault/biodome)
 "bI" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
-/area/vault/biodome)
-"bJ" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor/airless,
 /area/vault/biodome)
 "bK" = (
 /obj/structure/flora/ausbushes/pointybush,
 /turf/simulated/floor/grass,
 /area/vault/biodome)
-"bL" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/airless,
-/area/vault/biodome)
 "bM" = (
 /obj/machinery/power/solar/panel,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/biodome)
 "bN" = (
 /obj/machinery/power/solar/panel,
 /obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/turf/simulated/floor/plating/airless,
-/area/vault/biodome)
-"bO" = (
-/obj/machinery/power/solar/panel,
-/obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/biodome)
 
@@ -614,16 +382,16 @@ aa
 aa
 aa
 aa
-ao
+bI
 aM
 aM
 aM
 aM
-bj
+bo
 bl
 bn
 bv
-bj
+bo
 aM
 aM
 aM
@@ -645,8 +413,8 @@ aa
 aa
 aa
 aa
-ao
-aw
+bI
+aM
 ah
 ah
 ah
@@ -660,7 +428,7 @@ ah
 ah
 ah
 ah
-bJ
+aM
 bI
 aa
 aa
@@ -676,8 +444,8 @@ aa
 aa
 aa
 aa
-ao
-aw
+bI
+aM
 ah
 ah
 ak
@@ -693,7 +461,7 @@ ak
 ak
 ah
 ah
-bJ
+aM
 bI
 aa
 aa
@@ -708,7 +476,7 @@ aa
 aa
 aa
 av
-aw
+aM
 ah
 ah
 ak
@@ -717,7 +485,7 @@ ak
 ak
 am
 am
-aO
+aU
 am
 am
 ak
@@ -726,7 +494,7 @@ bz
 ak
 ah
 ah
-bJ
+aM
 bM
 aa
 aa
@@ -739,7 +507,7 @@ aa
 aa
 aa
 ar
-aw
+aM
 ah
 ah
 ak
@@ -749,7 +517,7 @@ aH
 ak
 am
 am
-aO
+aU
 am
 am
 bz
@@ -759,8 +527,8 @@ ak
 ak
 ah
 ah
-bJ
-bO
+aM
+ar
 aa
 aa
 aa
@@ -781,7 +549,7 @@ ak
 aG
 am
 am
-aO
+aU
 am
 am
 ak
@@ -813,7 +581,7 @@ aF
 ax
 am
 am
-aO
+aU
 am
 am
 ak
@@ -843,9 +611,9 @@ ak
 aB
 ak
 az
-aN
 aU
-bk
+aU
+aU
 am
 am
 bA
@@ -875,7 +643,7 @@ aC
 aB
 ak
 ak
-aO
+aU
 am
 am
 am
@@ -907,7 +675,7 @@ aG
 ak
 aT
 bf
-aO
+aU
 am
 am
 am
@@ -939,7 +707,7 @@ ak
 aT
 bb
 bf
-aO
+aU
 am
 am
 am
@@ -971,7 +739,7 @@ ak
 aS
 aS
 aF
-aO
+aU
 am
 am
 am
@@ -1003,7 +771,7 @@ am
 am
 am
 am
-aO
+aU
 am
 am
 am
@@ -1035,7 +803,7 @@ am
 am
 am
 am
-aO
+aU
 ai
 bq
 ai
@@ -1063,11 +831,11 @@ am
 am
 am
 am
-aN
 aU
 aU
 aU
-bk
+aU
+aU
 bm
 ai
 bw
@@ -1095,7 +863,7 @@ am
 am
 am
 am
-aO
+aU
 am
 am
 am
@@ -1127,15 +895,15 @@ am
 am
 am
 am
-aO
-am
-am
-am
-am
-am
-aN
 aU
-bk
+am
+am
+am
+am
+am
+aU
+aU
+aU
 am
 am
 am
@@ -1159,13 +927,13 @@ ay
 ak
 ak
 aI
-aP
+be
 aV
 bc
 bg
 am
 am
-aO
+aU
 am
 am
 ak
@@ -1191,13 +959,13 @@ ak
 ak
 ak
 aJ
-aP
+be
 aW
 bd
 bh
 am
 am
-aO
+aU
 am
 am
 aK
@@ -1223,7 +991,7 @@ az
 aC
 ak
 aK
-aP
+be
 aX
 be
 be
@@ -1287,7 +1055,7 @@ ak
 ax
 al
 aJ
-aP
+be
 aT
 aT
 bf
@@ -1319,7 +1087,7 @@ ah
 ak
 ak
 aL
-aP
+be
 aZ
 aT
 aW
@@ -1351,13 +1119,13 @@ ah
 ah
 ak
 aJ
-aR
+be
 ba
 be
 be
 aU
 aU
-bt
+aU
 am
 am
 ak
@@ -1378,7 +1146,7 @@ aa
 aa
 aa
 aa
-at
+ar
 ac
 ah
 ah
@@ -1389,7 +1157,7 @@ aS
 aS
 am
 am
-aO
+aU
 am
 am
 ak
@@ -1399,8 +1167,8 @@ aC
 ak
 ah
 ah
-bL
-bO
+aM
+ar
 aa
 aa
 aa
@@ -1409,10 +1177,10 @@ aa
 (26,1,1) = {"
 aa
 aa
-ao
+bI
 au
-aA
-aD
+bM
+aM
 ah
 ah
 ak
@@ -1421,7 +1189,7 @@ ak
 ak
 am
 am
-aO
+aU
 am
 am
 ak
@@ -1430,7 +1198,7 @@ az
 ak
 ah
 ah
-bL
+aM
 bN
 aa
 aa
@@ -1441,11 +1209,11 @@ aa
 (27,1,1) = {"
 aa
 ab
-ap
+bI
 ab
 aa
-aE
-aD
+bI
+aM
 ah
 ah
 ak
@@ -1461,8 +1229,8 @@ ak
 ak
 ah
 ah
-bL
-aq
+aM
+bI
 aa
 aa
 aa
@@ -1473,12 +1241,12 @@ aa
 (28,1,1) = {"
 aa
 aj
-aq
+bI
 aa
 aa
 aa
-aE
-aD
+bI
+aM
 ah
 ah
 ah
@@ -1492,8 +1260,8 @@ ah
 ah
 ah
 ah
-bL
-aq
+aM
+bI
 aa
 aa
 aa
@@ -1510,21 +1278,21 @@ aa
 aa
 aa
 aa
-aE
+bI
 aM
 aM
 aM
 aM
-bj
+bo
 bl
 bu
 bv
-bj
+bo
 aM
 aM
 aM
 aM
-aq
+bI
 aa
 aa
 aa

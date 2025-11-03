@@ -1,9 +1,5 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "ak" = (
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/power/apc{
 	cell_type = 0;
 	coverlocked = 0;
@@ -18,6 +14,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (EAST)"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "av" = (
@@ -45,11 +42,7 @@
 /obj/machinery/atmospherics/binary/valve{
 	dir = 4
 	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "co" = (
@@ -80,16 +73,12 @@
 	},
 /area/vault/amelab)
 "ei" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/effect/decal/warning_stripes/pathmarkers/yellow,
 /obj/effect/decal/warning_stripes/pathmarkers/yellow{
 	dir = 4;
 	tag = "icon-pathmarker (EAST)"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/engine/airless,
 /area/vault/amelab/lab)
 "ev" = (
@@ -156,25 +145,13 @@
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "hN" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
+/obj/structure/cable/mapping/yellow{
+	dir = 1
 	},
 /turf/simulated/floor/dark,
 /area/vault/amelab)
@@ -217,11 +194,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "jH" = (
@@ -257,11 +230,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "kQ" = (
@@ -279,30 +248,18 @@
 /obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "mM" = (
 /obj/machinery/door/airlock/maintenance_hatch{
 	name = "Extra Jar Storage"
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "mY" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "na" = (
@@ -378,11 +335,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (NORTH)"
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "so" = (
@@ -539,20 +492,13 @@
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "Af" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
+/obj/structure/cable/mapping/yellow{
+	dir = 1
 	},
 /turf/simulated/floor/plating/airless,
 /area/vault/amelab/lab)
@@ -630,11 +576,6 @@
 	},
 /area/vault/amelab)
 "Dn" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/effect/decal/warning_stripes/pathmarkers/yellow{
 	dir = 1;
 	tag = "icon-pathmarker (NORTH)"
@@ -643,6 +584,7 @@
 	dir = 4;
 	tag = "icon-pathmarker (EAST)"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/engine/airless,
 /area/vault/amelab/lab)
 "DI" = (
@@ -668,31 +610,24 @@
 	dir = 1;
 	tag = "icon-map (NORTH)"
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "Eg" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/power/port_gen/pacman,
-/obj/structure/cable/yellow,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "Ek" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/machinery/power/terminal{
 	dir = 4
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/amelab/lab)
 "Et" = (
@@ -722,11 +657,7 @@
 	dir = 4;
 	tag = "icon-intact (EAST)"
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "Fw" = (
@@ -735,17 +666,13 @@
 	},
 /area/vault/amelab)
 "Fz" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/door/airlock/engineering{
 	name = "Antimatter Engine Lab"
 	},
 /obj/item/tape/atmos{
 	icon_state = "atmos_door"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "FC" = (
@@ -767,11 +694,7 @@
 	dir = 4;
 	tag = "icon-intact (EAST)"
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "Hm" = (
@@ -809,16 +732,12 @@
 /turf/space,
 /area/vault/amelab)
 "JP" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/effect/decal/warning_stripes/pathmarkers/yellow,
 /obj/effect/decal/warning_stripes/pathmarkers/yellow{
 	dir = 8;
 	tag = "icon-pathmarker (WEST)"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/engine/airless,
 /area/vault/amelab/lab)
 "Ky" = (
@@ -838,11 +757,6 @@
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "KO" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/item/weapon/anodevice,
 /obj/effect/decal/warning_stripes/pathmarkers/yellow{
 	dir = 8;
@@ -852,6 +766,7 @@
 	dir = 4;
 	tag = "icon-pathmarker (EAST)"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/engine/airless,
 /area/vault/amelab/lab)
 "LT" = (
@@ -860,11 +775,8 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/machinery/computer/powermonitor,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating/airless,
 /area/vault/amelab/lab)
 "Me" = (
@@ -992,11 +904,7 @@
 "RX" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "Sk" = (
@@ -1017,16 +925,12 @@
 /turf/simulated/floor/engine/airless,
 /area/vault/amelab/lab)
 "SJ" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/warning_stripes/pathmarkers/yellow,
 /obj/effect/decal/warning_stripes/pathmarkers/yellow{
 	dir = 1;
 	tag = "icon-pathmarker (NORTH)"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/engine/airless,
 /area/vault/amelab/lab)
 "SM" = (
@@ -1128,11 +1032,8 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/effect/blob/core/ame_lab,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/engine/airless,
 /area/vault/amelab/lab)
 "WE" = (
@@ -1197,11 +1098,7 @@
 "WM" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered,
 /obj/machinery/atmospherics/unary/vent_scrubber/on/layered,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "Xc" = (
@@ -1231,11 +1128,7 @@
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "ZY" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/amelab/lab)
 
