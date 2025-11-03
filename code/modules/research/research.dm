@@ -50,7 +50,6 @@ var/global/list/tech_list = list()
 var/global/list/hidden_tech = list(
 	/datum/tech,
 	/datum/tech/nanotrasen,
-	/datum/tech/derelict,
 	)
 
 /datum/research								//Holder for all the existing, archived, and known tech. Individual to console.
@@ -267,13 +266,6 @@ var/global/list/hidden_tech = list(
 	goal_level=0 // Doesn't count towards maxed research, since it's bonus.
 	max_level=8
 	new_category = "Nanotrasen"
-
-/datum/tech/derelict
-	name = "Derelict Technologies Research"
-	desc = "The study of materials long lost."
-	id = "goone"
-	goal_level=0 // Doesn't count towards maxed research, since it's bonus.
-	max_level=1
 
 /datum/tech/anomaly
 	name = "Anomaly Research"
