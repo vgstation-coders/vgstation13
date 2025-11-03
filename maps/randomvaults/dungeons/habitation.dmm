@@ -340,10 +340,7 @@
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable/mapping,
 /obj/item/stack/sheet/mineral/plasma{
 	amount = 30
 	},
@@ -3857,10 +3854,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "Ho" = (
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/cable/mapping,
 /obj/machinery/power/apc{
 	cell_type = 0;
 	icon_state = "apc1";
