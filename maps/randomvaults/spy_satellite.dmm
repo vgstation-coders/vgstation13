@@ -5,28 +5,18 @@
 "b" = (
 /obj/machinery/power/solar/panel/tracker,
 /obj/structure/catwalk,
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/spy_sat)
 "c" = (
 /obj/machinery/power/solar/panel,
 /obj/structure/catwalk,
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/spy_sat)
 "d" = (
 /obj/structure/catwalk,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/spy_sat)
 "e" = (
@@ -39,28 +29,12 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor/airless{
 	icon_state = "solarpanel"
 	},
-/area/vault/spy_sat)
-"f" = (
-/obj/machinery/power/solar/panel,
-/obj/structure/catwalk,
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/turf/space,
 /area/vault/spy_sat)
 "g" = (
 /obj/machinery/power/battery/smes,
@@ -73,8 +47,8 @@
 	},
 /area/vault/spy_sat)
 "h" = (
-/obj/structure/cable,
 /obj/machinery/power/magtape_deck/syndicate,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless{
 	icon_state = "solarpanel"
 	},
@@ -151,7 +125,7 @@ a
 a
 a
 a
-f
+c
 a
 a
 a

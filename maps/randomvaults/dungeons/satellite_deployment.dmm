@@ -93,65 +93,30 @@
 	},
 /area/vault/spy_sat/deployment)
 "aq" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/machinery/light/small{
 	dir = 8;
 	tag = "icon-lbulb1 (WEST)"
 	},
+/obj/structure/cable/mapping{
+	dir = 4
+	},
 /turf/simulated/floor,
 /area/vault/spy_sat/deployment)
 "ar" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor,
-/area/vault/spy_sat/deployment)
-"as" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/vault/spy_sat/deployment)
 "at" = (
 /obj/machinery/door/airlock/vault,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/window/barricade/full/block,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/spy_sat/deployment)
 "au" = (
 /obj/abstract/map/spawner/engi/dispensers,
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/spy_sat/deployment)
 "av" = (
@@ -178,11 +143,7 @@
 /area/vault/spy_sat/deployment)
 "az" = (
 /obj/structure/closet/crate/secure/plasma/prefilled,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/spy_sat/deployment)
 "aA" = (
@@ -211,23 +172,6 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/vault/spy_sat/deployment)
-"aF" = (
-/obj/abstract/map/spawner/engi/dispensers,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor,
-/area/vault/spy_sat/deployment)
-"aG" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/engine,
 /area/vault/spy_sat/deployment)
 "aH" = (
 /obj/machinery/power/port_gen/pacman,
@@ -268,24 +212,11 @@
 /turf/simulated/floor,
 /area/vault/spy_sat/deployment)
 "aO" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/spy_sat/deployment)
 "aP" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/engine,
 /area/vault/spy_sat/deployment)
 "aQ" = (
@@ -328,14 +259,6 @@
 	},
 /turf/simulated/floor,
 /area/vault/spy_sat/deployment)
-"aU" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor,
-/area/vault/spy_sat/deployment)
 "aV" = (
 /obj/machinery/vending/tool,
 /turf/simulated/floor,
@@ -367,7 +290,7 @@
 /obj/machinery/power/terminal{
 	dir = 8
 	},
-/obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/spy_sat/deployment)
 "bb" = (
@@ -2818,7 +2741,7 @@ ad
 ad
 ad
 ah
-as
+aO
 ah
 ad
 ad
@@ -2932,7 +2855,7 @@ ad
 ad
 au
 az
-aF
+au
 aO
 aS
 ba
@@ -3046,7 +2969,7 @@ ah
 ah
 ah
 ah
-as
+aO
 ah
 ah
 ad
@@ -3100,9 +3023,9 @@ ad
 aj
 ah
 aA
-aG
 aP
-aU
+aP
+aO
 ah
 bi
 ad

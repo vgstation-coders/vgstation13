@@ -47,11 +47,7 @@
 	dir = 8;
 	tag = "icon-pathmarker (WEST)"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -284,8 +280,8 @@
 /turf/unsimulated/floor/snow,
 /area)
 "qr" = (
-/obj/structure/cable/yellow,
 /obj/machinery/computer/powermonitor,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -308,10 +304,7 @@
 	dir = 1;
 	pixel_y = 24
 	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -381,11 +374,7 @@
 	tag = "icon-pathmarker (WEST)"
 	},
 /obj/effect/decal/warning_stripes/pathmarkers/blue,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -735,11 +724,7 @@
 	dir = 1;
 	tag = "icon-pathmarker (NORTH)"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
