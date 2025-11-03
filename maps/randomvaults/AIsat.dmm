@@ -30,23 +30,12 @@
 /turf/space,
 /area/vault/AIsat)
 "ah" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
 /obj/structure/catwalk,
 /obj/machinery/power/solar/panel/tracker,
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/AIsat)
 "ai" = (
-/turf/simulated/wall/r_wall,
-/area/vault/AIsat)
-"aj" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/simulated/wall/r_wall,
 /area/vault/AIsat)
 "ak" = (
@@ -61,39 +50,19 @@
 /obj/machinery/recharge_station,
 /turf/simulated/floor/plating/airless,
 /area/vault/AIsat)
-"an" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor/plating/airless/damaged,
-/area/vault/AIsat)
 "ao" = (
 /obj/machinery/r_n_d/fabricator/mech,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/AIsat)
 "ap" = (
 /obj/machinery/computer/rdconsole/robotics,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/AIsat)
 "aq" = (
 /obj/machinery/computer/security,
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/AIsat)
 "ar" = (
@@ -131,78 +100,19 @@
 /obj/item/robot_parts/r_leg,
 /turf/simulated/floor/plating/airless,
 /area/vault/AIsat)
-"ax" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/airless,
-/area/vault/AIsat)
-"ay" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/vault/AIsat)
-"az" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/vault/AIsat)
-"aA" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/vault/AIsat)
 "aB" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/catwalk,
+/obj/structure/cable/mapping{
+	dir = 8
+	},
 /turf/space,
 /area/vault/AIsat)
 "aC" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
+/obj/structure/catwalk,
+/obj/structure/catwalk,
+/obj/structure/cable/mapping{
+	dir = 4
 	},
-/obj/structure/catwalk,
-/obj/structure/catwalk,
 /turf/space,
 /area/vault/AIsat)
 "aD" = (
@@ -233,49 +143,6 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/vault/AIsat)
-"aJ" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/catwalk,
-/obj/structure/catwalk,
-/turf/space,
-/area/vault/AIsat)
-"aK" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/vault/AIsat)
-"aL" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/vault/AIsat)
 "aM" = (
 /obj/structure/cable,
 /obj/machinery/power/solar/panel,
@@ -300,23 +167,18 @@
 /turf/space,
 /area/vault/AIsat)
 "aQ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/structure/catwalk,
+/obj/structure/cable/mapping{
+	dir = 4
+	},
 /turf/space,
 /area/vault/AIsat)
 "aR" = (
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/power/apc/no_alerts/vault_AIsat,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/greengrid,
 /area/vault/AIsat)
 "aS" = (
@@ -325,11 +187,7 @@
 	name = "AI Core Door";
 	req_access_txt = "109"
 	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/greengrid,
 /area/vault/AIsat)
 "aT" = (
@@ -349,43 +207,13 @@
 /obj/item/stack/cable_coil/cut,
 /turf/space,
 /area)
-"aW" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/vault/AIsat)
 "aX" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/wall/r_wall,
 /area/vault/AIsat)
 "aY" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless/damaged,
-/area/vault/AIsat)
-"aZ" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor/plating/airless,
 /area/vault/AIsat)
 "ba" = (
 /obj/item/device/radio/intercom{
@@ -401,12 +229,8 @@
 	name = "Private AI Channel";
 	pixel_y = -25
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /mob/living/silicon/decoy/AIvault,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/greengrid,
 /area/vault/AIsat)
 "bb" = (
@@ -417,31 +241,8 @@
 /turf/simulated/wall/r_wall,
 /area/vault/AIsat)
 "bc" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
-/area/vault/AIsat)
-"bd" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/catwalk,
-/turf/space,
 /area/vault/AIsat)
 "be" = (
 /obj/structure/lattice,
@@ -452,11 +253,6 @@
 /obj/effect/gibspawner/robot,
 /turf/space,
 /area)
-"bg" = (
-/obj/structure/cable,
-/obj/structure/catwalk,
-/turf/space,
-/area/vault/AIsat)
 "bh" = (
 /obj/item/stack/sheet/metal,
 /turf/space,
@@ -474,23 +270,12 @@
 	icon_state = "crateopen";
 	opened = 1
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/AIsat)
 "bl" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/wall/r_wall,
 /area/vault/AIsat)
@@ -515,35 +300,16 @@
 /turf/simulated/wall/r_wall,
 /area/vault/AIsat)
 "bn" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/wall/r_wall,
 /area/vault/AIsat)
 "bo" = (
 /obj/structure/closet/crate,
 /obj/item/weapon/aiModule/core/antimov,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
-/area/vault/AIsat)
-"bp" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor/plating/airless/damaged,
 /area/vault/AIsat)
 "bq" = (
 /obj/machinery/power/solar/control/vault_listening,
@@ -563,13 +329,11 @@
 /turf/simulated/floor/plating/airless,
 /area/vault/AIsat)
 "bt" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
+/obj/structure/catwalk,
+/obj/structure/catwalk,
+/obj/structure/cable/mapping{
+	dir = 8
 	},
-/obj/structure/catwalk,
-/obj/structure/catwalk,
 /turf/space,
 /area/vault/AIsat)
 "bu" = (
@@ -630,7 +394,7 @@ aa
 aa
 aa
 ar
-ay
+aQ
 aM
 ad
 aa
@@ -647,7 +411,7 @@ aa
 aa
 aa
 ar
-az
+aQ
 aM
 aa
 aV
@@ -664,7 +428,7 @@ aa
 aa
 aa
 ar
-az
+aQ
 aN
 aU
 aa
@@ -681,7 +445,7 @@ aa
 aa
 aa
 ar
-aA
+aQ
 aO
 aa
 aU
@@ -698,7 +462,7 @@ aa
 aa
 aa
 ar
-aA
+aQ
 aP
 aV
 be
@@ -715,7 +479,7 @@ aa
 aa
 aa
 aa
-aB
+aQ
 aa
 aa
 bf
@@ -734,8 +498,8 @@ aa
 aa
 aC
 aQ
-aW
-bg
+aQ
+aQ
 be
 aa
 aa
@@ -751,7 +515,7 @@ aa
 aa
 aa
 ad
-aB
+aQ
 bh
 aa
 aa
@@ -802,8 +566,8 @@ ak
 at
 at
 at
-aZ
-an
+bc
+aY
 aF
 aF
 aG
@@ -848,8 +612,8 @@ aa
 (14,1,1) = {"
 aa
 ah
-aj
-an
+aX
+aY
 av
 at
 aS
@@ -901,11 +665,11 @@ aa
 ae
 ai
 aq
-ax
-ax
-ax
 bc
-bp
+bc
+bc
+bc
+aY
 at
 at
 at
@@ -970,10 +734,10 @@ aa
 aa
 aa
 aa
-aJ
-aQ
-bd
-aQ
+bt
+aB
+aB
+aB
 bt
 aa
 aa
@@ -1004,11 +768,11 @@ aa
 aa
 aa
 ar
-aK
+aB
 aM
 ad
 ar
-aK
+aB
 aM
 aa
 aa
@@ -1021,11 +785,11 @@ aa
 aa
 aa
 ar
-aK
+aB
 aM
 aa
 ar
-aK
+aB
 aM
 aa
 aa
@@ -1038,11 +802,11 @@ aa
 aa
 aa
 ar
-aK
+aB
 aM
 aa
 ar
-aK
+aB
 aM
 aa
 aa
@@ -1055,11 +819,11 @@ aa
 aa
 aa
 ar
-aK
+aB
 aM
 aa
 ar
-aK
+aB
 aM
 aa
 aa
@@ -1072,11 +836,11 @@ aa
 aa
 aa
 ar
-aL
+aB
 aM
 ad
 ar
-aL
+aB
 aM
 aa
 aa
