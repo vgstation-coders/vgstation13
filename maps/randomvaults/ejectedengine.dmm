@@ -205,25 +205,18 @@
 /turf/simulated/floor,
 /area/vault/ejectedengine/SMES)
 "aK" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/computer/ejectedengine/engine,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/SMES)
 "aL" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
 	pixel_y = 1
 	},
 /obj/machinery/computer/ejectedengine/shield,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/SMES)
 "aM" = (
@@ -299,11 +292,7 @@
 /turf/simulated/floor,
 /area/vault/ejectedengine/SMES)
 "aU" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/SMES)
 "aV" = (
@@ -380,6 +369,9 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
+/obj/structure/cable/mapping{
+	dir = 8
+	},
 /turf/simulated/floor,
 /area/vault/ejectedengine/SMES)
 "bb" = (
@@ -395,6 +387,7 @@
 	name = "Engineering Access";
 	req_access_txt = "10"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/SMES)
 "bc" = (
@@ -591,6 +584,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/wall,
 /area/vault/ejectedengine/SMES)
 "bA" = (
@@ -669,6 +663,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "bL" = (
@@ -683,11 +678,7 @@
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "bN" = (
@@ -760,11 +751,7 @@
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "cc" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/wall,
 /area/vault/ejectedengine/generator)
 "cd" = (
@@ -847,6 +834,7 @@
 	icon_state = "1-2"
 	},
 /obj/item/trash/chips,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "cq" = (
@@ -887,42 +875,26 @@
 /obj/machinery/camera/noview{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
 "cw" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
 "cx" = (
 /obj/machinery/atmospherics/pipe/simple/general/visible,
 /obj/machinery/meter,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
 "cy" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/machinery/computer/station_alert,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
 "cz" = (
@@ -971,11 +943,7 @@
 /obj/machinery/atmospherics/pipe/simple/general/visible{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "cF" = (
@@ -992,11 +960,7 @@
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 10
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/wall,
 /area/vault/ejectedengine/generator)
 "cH" = (
@@ -1049,15 +1013,8 @@
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
 "cO" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
@@ -1066,90 +1023,63 @@
 	name = "Engineering Access";
 	req_access_txt = "10"
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
 "cQ" = (
 /obj/machinery/door/firedoor/red,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "cR" = (
 /obj/machinery/atmospherics/unary/portables_connector{
 	dir = 1
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "cS" = (
 /obj/machinery/atmospherics/unary/portables_connector{
 	dir = 1
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/light/burnt{
 	dir = 1
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "cT" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/machinery/alarm{
 	pixel_y = 24
+	},
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "cU" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
-/area/vault/ejectedengine/burnroom)
+/area/vault/ejectedengine/generator)
 "cV" = (
 /obj/machinery/firealarm{
 	pixel_y = 24
 	},
 /obj/machinery/camera/noview,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "cW" = (
 /obj/machinery/atmospherics/unary/portables_connector,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "cX" = (
@@ -1157,14 +1087,10 @@
 	dir = 5
 	},
 /obj/machinery/meter,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/light/burnt{
 	dir = 1
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "cY" = (
@@ -1172,14 +1098,10 @@
 /obj/machinery/atmospherics/pipe/manifold/general/visible{
 	dir = 1
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/light_switch{
 	pixel_y = 24
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "cZ" = (
@@ -1190,22 +1112,14 @@
 /obj/machinery/atmospherics/pipe/simple/general/visible{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "da" = (
 /obj/machinery/atmospherics/pipe/simple/general/visible{
 	dir = 9
 	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "db" = (
@@ -1229,12 +1143,8 @@
 /area/vault/ejectedengine/generator)
 "de" = (
 /obj/machinery/atmospherics/pipe/simple/general/visible,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/glowshroom/single,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "df" = (
@@ -1306,11 +1216,7 @@
 	dir = 4
 	},
 /obj/machinery/meter,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
 "dn" = (
@@ -1336,11 +1242,7 @@
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "dr" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "ds" = (
@@ -1395,11 +1297,7 @@
 /area/vault/ejectedengine/generator)
 "dA" = (
 /obj/machinery/atmospherics/pipe/simple/general/visible,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "dB" = (
@@ -1408,11 +1306,8 @@
 /turf/simulated/floor/plating,
 /area/vault/ejectedengine/generator)
 "dC" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/computer/powermonitor,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
 "dD" = (
@@ -1453,7 +1348,7 @@
 /obj/machinery/power/apc/no_alerts{
 	pixel_y = -24
 	},
-/obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/burnroom)
 "dJ" = (
@@ -1501,12 +1396,8 @@
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "dP" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/item/device/radio,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "dQ" = (
@@ -1542,12 +1433,12 @@
 /turf/space,
 /area)
 "dW" = (
-/obj/structure/cable,
 /obj/machinery/computer/general_air_control{
 	frequency = 1553;
 	name = "Engine Monitoring Console";
 	sensors = list("engine_sensor"="Engine Sensor")
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
 "dX" = (
@@ -1579,79 +1470,39 @@
 /obj/machinery/atmospherics/unary/portables_connector{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light/burnt{
 	dir = 8
+	},
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "ec" = (
-/obj/machinery/atmospherics/pipe/simple/general/visible{
-	dir = 4
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor,
-/area/vault/ejectedengine/generator)
+/area/vault/ejectedengine/monitoring)
 "ed" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/manifold/general/visible{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "ee" = (
 /obj/machinery/atmospherics/pipe/simple/general/visible{
 	dir = 5
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "ef" = (
 /obj/machinery/atmospherics/pipe/simple/general/visible{
 	dir = 10
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/vault/ejectedengine/generator)
-"eg" = (
-/obj/machinery/atmospherics/pipe/simple/general/visible{
-	dir = 9
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "eh" = (
@@ -1685,7 +1536,7 @@
 	dir = 4;
 	pixel_x = 24
 	},
-/obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
 "em" = (
@@ -1699,11 +1550,7 @@
 	dir = 4;
 	pixel_x = -22
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "eo" = (
@@ -1737,18 +1584,14 @@
 	dir = 8;
 	pixel_x = -24
 	},
-/obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "er" = (
 /obj/machinery/atmospherics/pipe/manifold/general/visible{
 	dir = 1
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "es" = (
@@ -1786,12 +1629,8 @@
 /obj/machinery/atmospherics/unary/portables_connector{
 	dir = 1
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light/burnt,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/generator)
 "ez" = (
@@ -1835,15 +1674,8 @@
 /turf/simulated/floor/plating,
 /area/vault/ejectedengine/gasstorage)
 "eE" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/wall,
 /area/vault/ejectedengine/gasstorage)
@@ -1872,11 +1704,7 @@
 	pixel_y = 24
 	},
 /obj/structure/cable,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/gasstorage)
 "eK" = (
@@ -1889,34 +1717,18 @@
 	},
 /turf/simulated/floor,
 /area/vault/ejectedengine/gasstorage)
-"eM" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor,
-/area/vault/ejectedengine/gasstorage)
 "eN" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/gasstorage)
 "eO" = (
 /obj/machinery/camera/noview{
 	dir = 8
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/machinery/light/burnt{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/gasstorage)
 "eP" = (
@@ -1948,10 +1760,6 @@
 /obj/machinery/camera/noview{
 	dir = 4
 	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/driver_button{
 	id_tag = "engine_gas";
 	pixel_x = -25
@@ -1959,6 +1767,7 @@
 /obj/machinery/light/burnt{
 	dir = 1
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/gasstorage)
 "eU" = (
@@ -2047,11 +1856,7 @@
 /area/vault/ejectedengine/burnroom)
 "fg" = (
 /obj/machinery/atmospherics/unary/vent_pump,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/ejectedengine/gasstorage)
 "fh" = (
@@ -2153,11 +1958,7 @@
 /turf/simulated/floor,
 /area/vault/ejectedengine/gasstorage)
 "fA" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/damaged,
 /area/vault/ejectedengine/gasstorage)
 "fB" = (
@@ -2582,9 +2383,9 @@ aH
 bT
 ch
 cv
-cL
+cw
 dm
-dD
+ec
 dW
 cl
 bT
@@ -2707,7 +2508,7 @@ bT
 cl
 cy
 cO
-cL
+cw
 dD
 dY
 cg
@@ -2923,7 +2724,7 @@ bC
 bX
 bX
 bC
-cU
+dr
 bX
 bX
 bC
@@ -3132,7 +2933,7 @@ aa
 an
 az
 aM
-aV
+aU
 aC
 bn
 bv
@@ -3174,7 +2975,7 @@ bG
 db
 dx
 ca
-ec
+cE
 ca
 ca
 ca
@@ -3211,11 +3012,11 @@ eo
 eu
 eB
 eH
-eM
+eN
 eV
 fa
 fg
-eV
+eN
 fA
 fF
 ad
@@ -3263,8 +3064,8 @@ bw
 bK
 bK
 cp
-cE
-cE
+cU
+cU
 bK
 dS
 ef
@@ -3329,7 +3130,7 @@ cG
 de
 dA
 dA
-eg
+da
 cE
 er
 ey

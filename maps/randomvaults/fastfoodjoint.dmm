@@ -70,11 +70,7 @@
 /obj/structure/railing/glass{
 	dir = 1
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -164,11 +160,7 @@
 	},
 /area/vault/fastfood/dining)
 "cG" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -230,12 +222,8 @@
 	},
 /area/vault/fastfood/kitchen)
 "eb" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/cleanable/generic,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "eL" = (
@@ -259,17 +247,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/misc)
-"fy" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/kitchen)
 "fA" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 4;
@@ -313,11 +290,7 @@
 /area/vault/fastfood/dining)
 "gl" = (
 /mob/living/simple_animal/mouse/common/black,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -398,11 +371,6 @@
 "if" = (
 /obj/structure/table/reinforced,
 /obj/item/trash/plate,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/door/firedoor/border_only{
 	dir = 8;
 	name = "Firelock West"
@@ -415,6 +383,7 @@
 	name = "Kitchen Shutters";
 	opacity = 0
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "cafeteria"
@@ -497,11 +466,7 @@
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "jH" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -559,11 +524,7 @@
 /area/vault/fastfood)
 "mb" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -593,15 +554,11 @@
 "mi" = (
 /obj/machinery/door/airlock,
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/door/firedoor/border_only{
 	name = "Firelock South"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
 "mr" = (
@@ -741,10 +698,7 @@
 	pixel_y = 24;
 	dir = 1]
 	},
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "qA" = (
@@ -782,12 +736,8 @@
 	},
 /area/vault/fastfood/dining)
 "rr" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/cleanable/cockroach_remains,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "rB" = (
@@ -797,11 +747,7 @@
 /turf/space,
 /area/vault/fastfood)
 "rC" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "rP" = (
@@ -864,11 +810,7 @@
 /area/vault/fastfood)
 "tb" = (
 /mob/living/simple_animal/hostile/retaliate/cookbot,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -923,11 +865,7 @@
 "tV" = (
 /obj/item/weapon/stool/bar,
 /obj/structure/railing/glass,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -993,11 +931,8 @@
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "uT" = (
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/power/port_gen/pacman,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "vc" = (
@@ -1085,11 +1020,7 @@
 /obj/structure/bed/chair/plastic{
 	dir = 8
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1147,15 +1078,11 @@
 	},
 /area/vault/fastfood/dining)
 "zB" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9;
 	initialize_directions = 9
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1200,14 +1127,10 @@
 	},
 /area/vault/fastfood/misc)
 "Az" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/alarm{
 	pixel_y = 24
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "AT" = (
@@ -1254,7 +1177,7 @@
 /obj/machinery/power/apc{
 	pixel_y = -24
 	},
-/obj/structure/cable/yellow,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "cafeteria"
@@ -1338,15 +1261,11 @@
 /area/vault/fastfood/dining)
 "Dp" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5;
 	initialize_directions = 5
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1361,11 +1280,6 @@
 /area/vault/fastfood/dining)
 "DI" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/railing/glass{
 	dir = 1
 	},
@@ -1373,6 +1287,7 @@
 	dir = 4;
 	initialize_directions = 12
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1387,16 +1302,6 @@
 /obj/item/weapon/stool/bar,
 /obj/structure/railing/glass{
 	dir = 1
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/vault/fastfood/dining)
-"DW" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
 	},
 /turf/simulated/floor{
 	icon_state = "bar"
@@ -1639,17 +1544,6 @@
 	icon_state = "asteroidfloor"
 	},
 /area/vault/fastfood)
-"IQ" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/kitchen)
 "Je" = (
 /obj/structure/table/plastic,
 /obj/effect/decal/cleanable/dirt,
@@ -1690,11 +1584,6 @@
 /area/vault/fastfood)
 "JF" = (
 /obj/machinery/door/airlock,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
 	dir = 8;
@@ -1707,6 +1596,7 @@
 	dir = 8;
 	name = "Firelock West"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -1733,20 +1623,11 @@
 /area/vault/fastfood/kitchen)
 "JK" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6;
 	initialize_directions = 6
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "JQ" = (
@@ -1832,11 +1713,6 @@
 	},
 /area/vault/fastfood/kitchen)
 "Ln" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/railing/glass{
 	dir = 1
 	},
@@ -1844,6 +1720,7 @@
 	dir = 4;
 	initialize_directions = 12
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1871,20 +1748,11 @@
 /area/vault/fastfood/dining)
 "LS" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "LU" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/railing/glass{
 	dir = 1
 	},
@@ -1892,6 +1760,7 @@
 	dir = 6;
 	initialize_directions = 6
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1920,11 +1789,7 @@
 /obj/structure/railing/glass{
 	dir = 1
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1969,11 +1834,7 @@
 	},
 /obj/item/trash/chips,
 /obj/structure/railing/glass,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -2040,11 +1901,7 @@
 	},
 /obj/item/weapon/kitchen/utensil/fork,
 /obj/item/trash/popcorn,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -2223,11 +2080,7 @@
 	},
 /area/vault/fastfood/kitchen)
 "RY" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "cafeteria"
@@ -2253,15 +2106,8 @@
 	},
 /area/vault/fastfood/dining)
 "SC" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
+/obj/structure/cable/mapping/yellow{
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -2424,9 +2270,7 @@
 	dir = 1]
 	},
 /obj/structure/closet/secure_closet/freezer/kitchen,
-/obj/structure/cable/yellow{
-	icon_state = "0-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2445,14 +2289,10 @@
 	},
 /area/vault/fastfood/kitchen)
 "XV" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "Yh" = (
@@ -2629,11 +2469,11 @@ LS
 JK
 mi
 Dp
-DW
+jH
 Mk
 Nn
-DW
-DW
+jH
+jH
 bi
 Od
 Pp
@@ -3010,7 +2850,7 @@ Li
 Hs
 ub
 Kf
-fy
+mb
 VG
 Ka
 JE
@@ -3085,7 +2925,7 @@ Gf
 Fu
 WS
 Hj
-fy
+mb
 Li
 JJ
 aa
@@ -3110,7 +2950,7 @@ mb
 mb
 mb
 mb
-IQ
+mb
 Le
 Ka
 aa
