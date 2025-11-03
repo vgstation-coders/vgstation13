@@ -169,8 +169,8 @@
 
 	file_path = "maps/misc/hoboshack_saucer.dmm"
 
-/datum/map_element/hoboshack/chickenfarm
-	name = "Space hobo shack - Space Chicken Farm"
+/datum/map_element/hoboshack/spaceranch
+	name = "Space hobo shack - Space Ranch"
 
-	file_path = "maps/misc/hoboshack_chickenfarm.dmm"
+	file_path = "maps/misc/hoboshack_spaceranch.dmm"
 
