@@ -13,9 +13,7 @@
 	},
 /area/vault/laundromat)
 "aR" = (
-/obj/structure/cable/yellow{
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor,
 /area/vault/laundromat)
 "bu" = (
@@ -74,7 +72,7 @@
 /area/vault/laundromat)
 "cJ" = (
 /obj/machinery/power/port_gen/pacman,
-/obj/structure/cable/yellow,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -108,9 +106,7 @@
 	dir = 1
 	},
 /obj/machinery/light/he,
-/obj/structure/cable/yellow{
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor,
 /area/vault/laundromat)
 "ed" = (
@@ -192,10 +188,8 @@
 /obj/structure/window{
 	dir = 1
 	},
-/obj/structure/cable/yellow{
-	icon_state = "2-4"
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor,
 /area/vault/laundromat)
 "ka" = (
@@ -545,11 +539,6 @@
 /obj/machinery/light/he{
 	dir = 4
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/structure/rack,
 /obj/item/weapon/reagent_containers/spray/cleaner,
 /obj/item/weapon/reagent_containers/spray/cleaner{
@@ -560,6 +549,7 @@
 	pixel_y = -7;
 	pixel_x = 1
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -606,12 +596,8 @@
 	},
 /area/vault/laundromat)
 "FK" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/flora/pottedplant/random,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -654,11 +640,7 @@
 /turf/space,
 /area)
 "Hu" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -826,11 +808,9 @@
 /area)
 "Rw" = (
 /obj/effect/landmark/corpse/pirate/ranged,
-/obj/structure/cable/yellow{
-	icon_state = "2-8"
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor,
 /area/vault/laundromat)
 "Sa" = (
@@ -879,13 +859,10 @@
 /area/vault/laundromat)
 "Vb" = (
 /obj/effect/landmark/corpse,
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/power/apc{
 	pixel_y = -24
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},

@@ -96,24 +96,17 @@
 	dir = 1;
 	pixel_y = 24
 	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomsat)
 "as" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomsat)
 "at" = (
@@ -165,11 +158,7 @@
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomsat)
 "az" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomsat)
 "aA" = (
@@ -187,11 +176,7 @@
 /area/turret_protected/tcomsat)
 "aC" = (
 /obj/machinery/power/battery/smes/infinite,
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -242,13 +227,9 @@
 	dir = 1;
 	pixel_y = 24
 	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /obj/structure/table,
 /obj/item/weapon/paper_bin,
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -328,11 +309,7 @@
 	name = "Station Intercom (General)";
 	pixel_x = -28
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -359,11 +336,7 @@
 	},
 /area/tcommsat/computer)
 "aX" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -465,11 +438,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -571,24 +540,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor{
-	icon_state = "dark vault full"
-	},
-/area/turret_protected/tcomsat)
-"bv" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -597,91 +549,48 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/door/airlock/hatch{
 	name = "Telecoms Control Room";
 	req_access_txt = "61"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/tcommsat/computer)
 "bx" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 6
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
 /area/tcommsat/computer)
 "by" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{
 	dir = 1
 	},
 /mob/living/simple_animal/hostile/humanoid/russian,
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
 /area/tcommsat/computer)
 "bz" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
 /area/tcommsat/computer)
 "bA" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 4
 	},
 /obj/effect/landmark/corpse/russian,
 /mob/living/simple_animal/hostile/humanoid/russian/ranged,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/tcommsat/computer)
-"bB" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
-	dir = 4
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -816,11 +725,6 @@
 	},
 /area/tcommsat/computer)
 "bW" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/computer/general_air_control/large_tank_control{
 	name = "Coldroom Monitoring";
 	sensors = list("satellite_coldroom"="Server Room")
@@ -829,6 +733,7 @@
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "warnwhite"
 	},
@@ -966,6 +871,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,
 /obj/structure/grille/window_spawner/reinforced/full,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/turret_protected/goonroom)
 "ck" = (
@@ -1037,14 +943,11 @@
 	},
 /area/turret_protected/goonroom)
 "cs" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/power/apc{
 	dir = 1;
 	pixel_y = 24
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	name = "Mainframe Base";
 	nitrogen = 100;
@@ -1080,19 +983,10 @@
 	},
 /area/turret_protected/goonroom)
 "cv" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	name = "Mainframe Base";
 	nitrogen = 100;
@@ -1191,11 +1085,6 @@
 	},
 /area/turret_protected/goonroom)
 "cE" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/air_sensor{
 	id_tag = "satellite_coldroom";
 	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
@@ -1204,6 +1093,7 @@
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	icon_state = "dark";
 	name = "Mainframe Floor";
@@ -1303,11 +1193,6 @@
 	},
 /area/turret_protected/goonroom)
 "cN" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/door/window/brigdoor{
 	base_state = "left";
 	dir = 1;
@@ -1317,6 +1202,7 @@
 	icon_state = "loading_area";
 	tag = "icon-loading_area"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	icon_state = "dark";
 	name = "Mainframe Floor";
@@ -1393,11 +1279,7 @@
 	},
 /area/turret_protected/goonroom)
 "cW" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	icon_state = "dark";
 	name = "Mainframe Floor";
@@ -1495,15 +1377,11 @@
 	},
 /area/turret_protected/goonroom)
 "dh" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/structure/displaycase/gooncode,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	icon_state = "dark";
 	name = "Mainframe Floor";
@@ -1604,11 +1482,7 @@
 	},
 /area/turret_protected/goonroom)
 "dr" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	name = "Mainframe Base";
 	nitrogen = 100;
@@ -1693,16 +1567,12 @@
 	},
 /area/turret_protected/goonroom)
 "dA" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/structure/table,
 /obj/structure/window/reinforced,
 /obj/item/weapon/coin/gold,
 /obj/item/weapon/coin/gold,
 /obj/item/toy/gasha/pomf,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	icon_state = "dark";
 	name = "Mainframe Floor";
@@ -1804,16 +1674,12 @@
 	},
 /area/turret_protected/goonroom)
 "dK" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	icon_state = "dark";
 	name = "Mainframe Floor";
@@ -1853,12 +1719,8 @@
 	},
 /area/turret_protected/goonroom)
 "dQ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	name = "Mainframe Base";
 	nitrogen = 100;
@@ -1886,11 +1748,7 @@
 	},
 /area/turret_protected/goonroom)
 "dS" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/wall/r_wall,
 /area/turret_protected/goonroom)
 "dT" = (
@@ -1926,26 +1784,18 @@
 	dir = 1;
 	pixel_y = 24
 	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (NORTH)"
 	},
 /mob/living/simple_animal/hostile/humanoid/russian,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
 "dY" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -1956,19 +1806,10 @@
 	name = "Station Intercom (General)";
 	pixel_y = 20
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
 "dZ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -1977,6 +1818,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
 "ea" = (
@@ -2059,11 +1901,7 @@
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
 "ei" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
 "ej" = (
@@ -2138,12 +1976,8 @@
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
 "er" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /mob/living/simple_animal/hostile/humanoid/russian,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
 "es" = (
@@ -2178,25 +2012,13 @@
 /turf/simulated/wall/r_wall,
 /area/turret_protected/tcomfoyer)
 "ex" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/door/airlock/hatch{
 	name = "Telecoms Satellite";
 	req_access_txt = "61"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
-"ey" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/grille/window_spawner/reinforced,
-/turf/simulated/floor/plating,
-/area/tcommsat/entrance)
 "ez" = (
 /obj/structure/cable{
 	d2 = 2;
@@ -2218,15 +2040,6 @@
 	},
 /turf/simulated/floor,
 /area/tcommsat/entrance)
-"eB" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/sign/electricshock,
-/turf/simulated/wall/r_wall,
-/area/tcommsat/entrance)
 "eC" = (
 /obj/item/device/radio/intercom{
 	name = "Station Intercom (General)";
@@ -2238,14 +2051,10 @@
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eD" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eE" = (
@@ -2278,92 +2087,34 @@
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eI" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/structure/grille/window_spawner/reinforced,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/tcommsat/entrance)
-"eJ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor,
-/area/tcommsat/entrance)
 "eK" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (NORTH)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eL" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/light/small{
 	dir = 1
 	},
 /mob/living/simple_animal/hostile/humanoid/russian,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eM" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor,
-/area/tcommsat/entrance)
-"eN" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eO" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/tcommsat/entrance)
-"eP" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eQ" = (
@@ -2372,15 +2123,11 @@
 /turf/simulated/wall/r_wall,
 /area/tcommsat/entrance)
 "eR" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/door/airlock/hatch{
 	name = "Telecoms Satellite";
 	req_access_txt = "61"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eS" = (
@@ -2398,16 +2145,12 @@
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eU" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eV" = (
@@ -2431,14 +2174,6 @@
 	tag = "icon-warning_corner (NORTH)"
 	},
 /obj/effect/landmark/corpse/russian,
-/turf/simulated/floor,
-/area/tcommsat/entrance)
-"eX" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eY" = (
@@ -2465,14 +2200,6 @@
 	},
 /turf/simulated/floor,
 /area/tcommsat/entrance)
-"fb" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor,
-/area/tcommsat/entrance)
 "fc" = (
 /obj/machinery/power/apc{
 	cell_type = 0;
@@ -2481,10 +2208,7 @@
 	opened = 1;
 	pixel_y = 24
 	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "fd" = (
@@ -5011,7 +4735,7 @@ at
 aA
 aq
 be
-bv
+bu
 bT
 ce
 cq
@@ -5090,7 +4814,7 @@ au
 au
 aR
 bf
-bv
+bu
 bT
 ce
 cq
@@ -5107,7 +4831,7 @@ bg
 dm
 bT
 ev
-ey
+eI
 ev
 ev
 ai
@@ -5169,7 +4893,7 @@ aj
 aB
 aS
 bg
-bv
+bu
 bT
 ce
 cr
@@ -5187,7 +4911,7 @@ ee
 dV
 dV
 ez
-eJ
+eU
 ev
 ai
 ab
@@ -5344,7 +5068,7 @@ dX
 eg
 ep
 dV
-eB
+eF
 eL
 ev
 ev
@@ -5503,11 +5227,11 @@ ei
 er
 ex
 eD
-eN
+eO
 eR
 eU
-eX
-fb
+eO
+eO
 eG
 fi
 eG
@@ -5643,7 +5367,7 @@ al
 aG
 aX
 aX
-bB
+bz
 bX
 ci
 cq
@@ -5819,7 +5543,7 @@ em
 dV
 dV
 eH
-eP
+eO
 ev
 ai
 ab
