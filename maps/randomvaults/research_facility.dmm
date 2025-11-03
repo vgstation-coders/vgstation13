@@ -22,10 +22,7 @@
 /obj/machinery/power/battery/smes{
 	charge = 0
 	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "af" = (
@@ -34,13 +31,8 @@
 /obj/item/stack/sheet/mineral/uranium{
 	amount = 25
 	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8";
-	tag = ""
-	},
 /obj/item/weapon/circuitboard/small/cell_charger,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "ag" = (
@@ -133,11 +125,7 @@
 	},
 /area/vault/research)
 "at" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "au" = (
@@ -146,19 +134,7 @@
 /area/vault/research)
 "av" = (
 /obj/abstract/map/spawner/misc/medivault,
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/plating,
-/area/vault/research)
-"aw" = (
-/obj/abstract/map/spawner/mobs/medivault,
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "ax" = (
@@ -169,39 +145,14 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/research)
-"ay" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/plating,
-/area/vault/research)
-"az" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating,
-/area/vault/research)
 "aA" = (
 /obj/abstract/map/spawner/mobs/medivault,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "aB" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8";
-	tag = ""
-	},
 /obj/effect/decal/cleanable/cobweb2,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "aC" = (
@@ -219,14 +170,6 @@
 "aE" = (
 /obj/machinery/power/port_gen/pacman/super,
 /obj/structure/cable,
-/turf/simulated/floor/plating,
-/area/vault/research)
-"aF" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /turf/simulated/floor/plating,
 /area/vault/research)
 "aG" = (
@@ -249,20 +192,13 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
 /area/vault/research)
 "aL" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -276,31 +212,9 @@
 	icon_state = "dark vault full"
 	},
 /area/vault/research)
-"aN" = (
-/obj/machinery/door/airlock/maintenance,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/machinery/door/poddoor{
-	id_tag = "madagascar";
-	name = "Lockdown System"
-	},
-/turf/simulated/floor/plating,
-/area/vault/research)
 "aO" = (
 /obj/structure/sign/electricshock,
 /turf/simulated/wall/r_wall,
-/area/vault/research)
-"aP" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating,
 /area/vault/research)
 "aQ" = (
 /obj/structure/crematorium,
@@ -370,35 +284,18 @@
 	icon_state = "white"
 	},
 /area/vault/research)
-"aX" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = "90Curve"
-	},
-/turf/simulated/floor/plating,
-/area/vault/research)
 "aY" = (
 /obj/machinery/door/airlock/maintenance,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/door/poddoor{
 	id_tag = "madagascar";
 	name = "Lockdown System"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "aZ" = (
 /obj/effect/landmark/corpse/doctor,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -413,14 +310,6 @@
 /obj/abstract/map/spawner/misc/medivault,
 /turf/simulated/floor/plating,
 /area/vault/research)
-"bc" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor/plating,
-/area/vault/research)
 "bd" = (
 /obj/structure/cable{
 	d2 = 8;
@@ -429,42 +318,24 @@
 /turf/simulated/floor/plating,
 /area/vault/research)
 "be" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/item/tool/wirecutters,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "bf" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/vault/research)
 "bg" = (
 /obj/effect/landmark/corpse/engineer,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "bh" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "bi" = (
@@ -1775,9 +1646,9 @@ ac
 ac
 ae
 am
-ay
-aN
-bc
+at
+aY
+at
 ac
 by
 bL
@@ -1801,7 +1672,7 @@ ac
 ac
 af
 at
-aF
+at
 aO
 aA
 ac
@@ -1829,7 +1700,7 @@ ac
 ac
 ac
 ac
-az
+at
 bs
 bA
 bN
@@ -1906,7 +1777,7 @@ ac
 ai
 av
 at
-aN
+aY
 bf
 ac
 ac
@@ -1930,7 +1801,7 @@ ac
 ac
 ac
 aj
-aw
+aA
 am
 ac
 bg
@@ -1959,7 +1830,7 @@ aj
 ax
 aI
 ac
-az
+at
 ac
 bD
 bP
@@ -1985,7 +1856,7 @@ ac
 ac
 ac
 ac
-az
+at
 ac
 ac
 ac
@@ -2008,9 +1879,9 @@ ac
 ac
 ac
 ac
-ay
 at
-aP
+at
+bh
 bh
 ac
 bE
@@ -2034,7 +1905,7 @@ ac
 ac
 ac
 ak
-az
+at
 ac
 ac
 bi
@@ -2060,7 +1931,7 @@ ac
 ac
 ac
 al
-az
+at
 ac
 aQ
 bj
@@ -2112,7 +1983,7 @@ ac
 ac
 ac
 am
-az
+at
 ac
 aS
 bl
@@ -2138,7 +2009,7 @@ ac
 ac
 ac
 am
-az
+at
 ac
 ac
 bm
@@ -2164,7 +2035,7 @@ ac
 ac
 ac
 am
-az
+at
 ac
 aT
 bn
@@ -2190,7 +2061,7 @@ ac
 ac
 ac
 an
-az
+at
 ac
 aU
 bo
@@ -2216,7 +2087,7 @@ ac
 ac
 ac
 an
-az
+at
 aJ
 aV
 eS
@@ -2268,7 +2139,7 @@ ac
 ac
 ac
 ao
-az
+at
 ac
 ac
 ac
@@ -2296,7 +2167,7 @@ ac
 ac
 aB
 at
-aX
+at
 am
 bx
 am

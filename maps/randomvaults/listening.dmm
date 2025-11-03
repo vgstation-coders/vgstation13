@@ -4,31 +4,15 @@
 /area)
 "ab" = (
 /obj/structure/catwalk,
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
 /obj/machinery/power/solar/panel/tracker,
-/turf/space,
-/area/vault/listening)
-"ac" = (
-/obj/structure/catwalk,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/listening)
 "ad" = (
 /turf/simulated/wall/r_wall,
 /area/vault/listening)
 "ae" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/wall/r_wall,
 /area/vault/listening)
 "af" = (
@@ -45,14 +29,10 @@
 /area/vault/listening)
 "ah" = (
 /obj/machinery/telecomms/relay/preset/vault_listening,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light/small{
 	dir = 1
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	name = "Mainframe Base";
 	nitrogen = 100;
@@ -61,11 +41,7 @@
 	},
 /area/vault/listening)
 "ai" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid{
 	icon_state = "dark";
 	name = "Mainframe Floor";
@@ -75,14 +51,10 @@
 	},
 /area/vault/listening)
 "aj" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/door/airlock/glass_engineering{
 	name = "Telecommunications chamber"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "ak" = (
@@ -98,11 +70,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "am" = (
@@ -134,16 +102,12 @@
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "ap" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "aq" = (
@@ -156,14 +120,11 @@
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "ar" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
 /obj/machinery/power/solar/control/vault_listening,
 /obj/machinery/light/small{
 	dir = 1
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "as" = (
@@ -179,14 +140,6 @@
 	},
 /area/vault/listening)
 "au" = (
-/turf/simulated/floor/plating,
-/area/vault/listening)
-"av" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "aw" = (
@@ -207,15 +160,8 @@
 /area/vault/listening)
 "ay" = (
 /obj/structure/catwalk,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/space,
 /area/vault/listening)
@@ -240,91 +186,34 @@
 /area/vault/listening)
 "aA" = (
 /obj/structure/catwalk,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/listening)
 "aB" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/grille/window_spawner/reinforced,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "aC" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "aD" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "aE" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "aF" = (
 /obj/structure/catwalk,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/space,
-/area/vault/listening)
-"aG" = (
-/obj/structure/catwalk,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/space,
 /area/vault/listening)
@@ -371,14 +260,11 @@
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "aO" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/power/apc/no_alerts/vault_listening{
 	pixel_y = -24
 	},
 /obj/machinery/computer/powermonitor,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "aP" = (
@@ -798,7 +684,7 @@ aa
 aa
 aa
 as
-az
+ay
 aH
 af
 af
@@ -825,7 +711,7 @@ aa
 aa
 aa
 as
-az
+ay
 aH
 aa
 af
@@ -852,7 +738,7 @@ aa
 aa
 aa
 as
-az
+ay
 aH
 aa
 ad
@@ -879,7 +765,7 @@ aa
 af
 aa
 as
-az
+ay
 aH
 aa
 ad
@@ -906,7 +792,7 @@ af
 af
 af
 as
-az
+ay
 aH
 af
 ad
@@ -1059,7 +945,7 @@ ad
 "}
 (13,1,1) = {"
 ab
-ac
+aA
 ae
 ah
 ai
@@ -1067,7 +953,7 @@ aj
 al
 aj
 ap
-av
+aC
 aD
 aJ
 au
@@ -1121,7 +1007,7 @@ ad
 af
 ad
 ar
-av
+aC
 aE
 aK
 aP
@@ -1365,7 +1251,7 @@ aa
 aa
 aa
 aw
-aG
+aF
 aL
 aa
 aa
