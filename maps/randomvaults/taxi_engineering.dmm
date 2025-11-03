@@ -26,20 +26,11 @@
 /turf/space,
 /area/vault/taxi_engi/atmos)
 "af" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/reagent_dispensers/fueltank,
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/taxi_engi/atmos)
 "ag" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
 	},
@@ -48,6 +39,7 @@
 	icon_state = "coil_red1";
 	name = "cable piece"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "ah" = (
@@ -139,55 +131,35 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "as" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
 	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "at" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
+	},
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "au" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "av" = (
@@ -195,25 +167,16 @@
 	name = "Chief Engineer";
 	req_access_txt = "56"
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "aw" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -222,6 +185,7 @@
 	dir = 8;
 	icon_state = "pipe-c"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg3"
 	},
@@ -294,12 +258,8 @@
 /turf/simulated/floor,
 /area/vault/taxi_engi/atmos)
 "aH" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "aI" = (
@@ -332,11 +292,11 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "aL" = (
-/obj/structure/cable,
 /obj/machinery/power/apc/no_alerts{
 	pixel_y = -24
 	},
 /obj/machinery/suit_storage_unit/medical/empty,
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "neutralfull"
@@ -379,47 +339,25 @@
 	},
 /area/vault/taxi_engi/CE_office)
 "aP" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/effect/decal/cleanable/greenglow,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "aQ" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/machinery/power/rad_collector{
+	anchored = 1
 	},
-/obj/effect/decal/cleanable/greenglow,
-/turf/simulated/floor/plating/airless,
+/obj/structure/cable/mapping,
+/turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "aR" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg3"
 	},
 /area/vault/taxi_engi/engine)
 "aS" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating/airless,
-/area/vault/taxi_engi/engine)
-"aU" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "aV" = (
@@ -449,11 +387,8 @@
 /turf/simulated/wall/r_wall,
 /area/vault/taxi_engi/atmos)
 "bb" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/structure/grille/window_spawner/reinforced,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bc" = (
@@ -489,17 +424,10 @@
 	req_one_access_txt = "10;24"
 	},
 /obj/machinery/door/firedoor,
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/cable/mapping{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bg" = (
@@ -515,38 +443,18 @@
 /obj/item/stack/sheet/plasteel,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/CE_office)
-"bj" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/effect/decal/cleanable/greenglow,
-/turf/simulated/floor/plating/airless,
-/area/vault/taxi_engi/engine)
 "bk" = (
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "bl" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "bm" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/lattice,
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/taxi_engi/engine)
 "bn" = (
@@ -560,60 +468,32 @@
 	},
 /area/vault/taxi_engi/engine)
 "bo" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/lattice,
 /obj/item/stack/sheet/plasteel,
+/obj/structure/cable/mapping,
 /turf/space,
 /area/vault/taxi_engi/engine)
 "bp" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/camera/emp_proof{
 	c_tag = "<5rCgb#NORTHEASTLReG>";
 	name = "broken security camera";
 	network = list("S*&^ngular##")
 	},
 /obj/effect/decal/cleanable/blood/tracks/footprints/boots,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "bq" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/cleanable/blood/tracks/footprints/boots,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "br" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/effect/decal/cleanable/blood/tracks/footprints/boots,
-/turf/simulated/floor/plating/airless,
-/area/vault/taxi_engi/engine)
-"bs" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
-/obj/structure/lattice,
-/turf/space,
+/turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "bt" = (
 /obj/structure/disposalpipe/segment,
@@ -736,14 +616,6 @@
 /obj/effect/decal/slag,
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi)
-"bH" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/plating,
-/area/vault/taxi_engi/engine)
 "bI" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -832,84 +704,41 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "bU" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched"
 	},
 /area/vault/taxi_engi/engine)
 "bV" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
 	level = 2;
 	on = 1
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "bW" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/cleanable/blood/drip,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "bX" = (
 /obj/machinery/door/airlock/external{
 	req_access_txt = "13"
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "bY" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/item/broken_device,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
-"bZ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor/plating/airless,
-/area/vault/taxi_engi/engine)
 "ca" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light{
 	dir = 8
 	},
@@ -919,20 +748,12 @@
 	pixel_x = -25;
 	req_access_txt = "10"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cb" = (
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
-/area/vault/taxi_engi/engine)
-"cc" = (
-/obj/machinery/power/emitter{
-	anchored = 1;
-	dir = 4;
-	state = 2
-	},
-/obj/structure/cable,
-/turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "cd" = (
 /obj/structure/grille/broken,
@@ -944,7 +765,7 @@
 	dir = 8;
 	state = 2
 	},
-/obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "cf" = (
@@ -976,25 +797,16 @@
 /area/vault/taxi_engi/lobby)
 "ci" = (
 /obj/machinery/door/firedoor,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
 /obj/machinery/door/airlock/glass{
 	name = "Primary Tool Storage"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/lobby)
 "cj" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
 	},
@@ -1005,42 +817,27 @@
 /obj/effect/decal/cleanable/blood/writing{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/lobby)
 "ck" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/lobby)
 "cl" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/machinery/hologram/holopad,
 /obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/obj/structure/cable/mapping{
 	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/lobby)
 "cm" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -1048,22 +845,19 @@
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor4"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/lobby)
 "cn" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "warning";
 	tag = "icon-warning (EAST)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/lobby)
 "co" = (
@@ -1093,19 +887,12 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cp" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
+	},
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
@@ -1146,11 +933,7 @@
 	name = "Singularity Shutters";
 	opacity = 0
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cu" = (
@@ -1253,14 +1036,10 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "cE" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "cF" = (
@@ -1292,26 +1071,15 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cJ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg2"
@@ -1321,20 +1089,12 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cL" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/closet/firecloset,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cM" = (
@@ -1403,11 +1163,6 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cQ" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/item/device/radio/intercom{
 	pixel_y = 25
 	},
@@ -1416,35 +1171,24 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cR" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/light{
 	dir = 1
 	},
 /obj/structure/closet/secure_closet/engineering_electrical,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cS" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/closet/secure_closet/engineering_welding,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cT" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cU" = (
@@ -1521,19 +1265,12 @@
 /turf/simulated/floor,
 /area/vault/taxi_engi/lobby)
 "df" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/structure/reagent_dispensers/watertank,
 /obj/structure/disposalpipe/segment{
 	dir = 4
+	},
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/vault/taxi_engi/lobby)
@@ -1553,16 +1290,13 @@
 	dir = 4;
 	pixel_x = 24
 	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor5"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/taxi_engi/lobby)
 "di" = (
@@ -1574,12 +1308,8 @@
 	},
 /area/vault/taxi_engi/engine)
 "dj" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "dk" = (
@@ -1594,17 +1324,13 @@
 /obj/machinery/power/terminal{
 	dir = 1
 	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
 /obj/effect/decal/mecha_wreckage/ripley/firefighter,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "dn" = (
@@ -1627,11 +1353,6 @@
 /obj/machinery/power/terminal{
 	dir = 1
 	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
@@ -1643,6 +1364,7 @@
 	network = list("S*&^ngular##");
 	pixel_x = 32
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "dp" = (
@@ -1664,16 +1386,12 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "dq" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "dr" = (
@@ -1712,15 +1430,6 @@
 	dir = 5;
 	icon_state = "warnwhite"
 	},
-/area/vault/taxi_engi/engine)
-"dx" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/lattice,
-/turf/space,
 /area/vault/taxi_engi/engine)
 "dy" = (
 /obj/structure/window/reinforced{
@@ -1761,27 +1470,19 @@
 	amount = 50
 	},
 /obj/item/clothing/gloves/black,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/item/weapon/storage/toolbox/mechanical{
 	pixel_x = -2;
 	pixel_y = -1
 	},
 /obj/item/device/silicate_sprayer,
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "yellow"
 	},
 /area/vault/taxi_engi/lobby)
 "dF" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/effect/decal/cleanable/blood/gibs,
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "yellow"
 	},
@@ -1813,17 +1514,8 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "dJ" = (
@@ -1854,15 +1546,8 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "dN" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
@@ -1879,24 +1564,10 @@
 	name = "Singularity Shutters";
 	opacity = 0
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "dP" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "warning";
@@ -1904,6 +1575,9 @@
 	},
 /obj/item/clothing/shoes/workboots,
 /obj/effect/decal/remains/human,
+/obj/structure/cable/mapping{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "dQ" = (
@@ -1992,11 +1666,6 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/mechanics)
 "ef" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 6
 	},
@@ -2005,6 +1674,7 @@
 	dir = 1;
 	pixel_y = 24
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "dark vault stripe"
@@ -2064,74 +1734,31 @@
 	req_access_txt = "23"
 	},
 /obj/machinery/door/firedoor,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "em" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/machinery/suit_storage_unit/engie,
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "yellow"
 	},
 /area/vault/taxi_engi/engine)
 "en" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/mapping{
+	dir = 1
+	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "eo" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg3"
 	},
-/area/vault/taxi_engi/engine)
-"ep" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/vault/taxi_engi/engine)
-"eq" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor/damaged,
 /area/vault/taxi_engi/engine)
 "er" = (
 /turf/simulated/floor,
@@ -2218,44 +1845,29 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/mechanics)
 "eD" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/mechanics)
 "eE" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /obj/structure/bed/chair/office/dark{
 	dir = 1
+	},
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/taxi_engi/mechanics)
 "eF" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/mechanics)
 "eG" = (
@@ -2274,14 +1886,6 @@
 /obj/item/clothing/gloves/yellow,
 /obj/item/clothing/glasses/scanner/meson,
 /obj/item/device/multitool,
-/turf/simulated/floor/plating,
-/area/vault/taxi_engi/storage)
-"eJ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "eK" = (
@@ -2313,11 +1917,7 @@
 /turf/simulated/floor,
 /area/vault/taxi_engi/engine)
 "eO" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/taxi_engi/engine)
 "eP" = (
@@ -2330,11 +1930,6 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/engine)
 "eQ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/machinery/door_control{
 	id_tag = "Singularity";
 	name = "Shutters Control";
@@ -2347,24 +1942,13 @@
 	tag = "icon-warning (WEST)"
 	},
 /obj/structure/closet/radiation,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "eR" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/light,
 /obj/effect/decal/cleanable/blood/drip,
-/turf/simulated/floor/plating,
-/area/vault/taxi_engi/engine)
-"eS" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "eT" = (
@@ -2391,15 +1975,11 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/mechanics)
 "eX" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
 	on = 1
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -2438,11 +2018,7 @@
 	pixel_x = 3;
 	pixel_y = -3
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "fd" = (
@@ -2486,11 +2062,7 @@
 /turf/simulated/floor,
 /area/vault/taxi_engi/engine)
 "fh" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/engine)
 "fi" = (
@@ -2605,14 +2177,10 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "old"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
 	},
@@ -2666,11 +2234,7 @@
 	req_access_txt = "10"
 	},
 /obj/machinery/door/firedoor,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "fx" = (
@@ -2678,16 +2242,6 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "fy" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/machinery/light{
 	dir = 8
 	},
@@ -2696,6 +2250,9 @@
 	name = "Shutters Control";
 	pixel_x = -25;
 	req_access_txt = "10"
+	},
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
@@ -2723,10 +2280,7 @@
 	dir = 4;
 	state = 2
 	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "fC" = (
@@ -2742,28 +2296,14 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
-"fD" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
-/area/vault/taxi_engi/engine)
 "fE" = (
 /obj/machinery/door/airlock/glass{
 	name = "Pod Bay"
 	},
 /obj/machinery/door/firedoor,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/mine/stun,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/taxi_engi/mechanics)
 "fF" = (
@@ -2775,20 +2315,8 @@
 	icon_state = "platingdmg1"
 	},
 /area/vault/taxi_engi/storage)
-"fH" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor/plating,
-/area/vault/taxi_engi/storage)
 "fI" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "fJ" = (
@@ -2796,20 +2324,12 @@
 	name = "Secure Tech Storage";
 	req_access_txt = "19;23"
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "fK" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /mob/living/simple_animal/hostile/giant_spider/hunter/dead,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "fL" = (
@@ -2836,10 +2356,7 @@
 	dir = 1;
 	pixel_y = 24
 	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "fP" = (
@@ -2871,16 +2388,6 @@
 /obj/effect/decal/cleanable/cobweb2,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
-"fT" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
-/area/vault/taxi_engi/engine)
 "fU" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -2891,14 +2398,6 @@
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
-/area/vault/taxi_engi/engine)
-"fV" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "fW" = (
 /obj/item/stack/cable_coil{
@@ -2921,11 +2420,7 @@
 	},
 /area/vault/taxi_engi/engine)
 "fY" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1"
 	},
@@ -2934,14 +2429,10 @@
 /turf/simulated/wall,
 /area/vault/taxi_engi/podbay)
 "ga" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/item/weapon/beach_ball/holoball,
 /obj/effect/decal/cleanable/blood/tracks/footprints/vox,
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark vault corner";
@@ -2955,16 +2446,13 @@
 	dir = 1;
 	icon_state = "corner"
 	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/item/weapon/circuitboard/mecha/pod,
 /obj/item/pod_parts/armor/civ,
 /obj/machinery/power/apc/no_alerts{
 	dir = 1;
 	pixel_y = 24
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
 	},
@@ -2985,11 +2473,6 @@
 /turf/simulated/wall/r_wall,
 /area/vault/taxi_engi/podbay)
 "ge" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/structure/rack{
 	dir = 8
 	},
@@ -2997,6 +2480,7 @@
 	pixel_x = -1;
 	pixel_y = 1
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gf" = (
@@ -3047,35 +2531,19 @@
 /obj/item/stack/sheet/plasteel,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
-"gl" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor/plating/airless,
-/area/vault/taxi_engi/engine)
 "gm" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched"
 	},
 /area/vault/taxi_engi/engine)
 "gn" = (
 /obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
 	d1 = 1;
 	d2 = 4;
 	icon_state = "1-4"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
 "go" = (
@@ -3087,11 +2555,8 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi)
 "gp" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/effect/decal/cleanable/blood/tracks/footprints/clown,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/vault/taxi_engi)
 "gq" = (
@@ -3152,7 +2617,6 @@
 	},
 /area/vault/taxi_engi/podbay)
 "gx" = (
-/obj/structure/cable,
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
@@ -3165,6 +2629,7 @@
 	dir = 8
 	},
 /obj/structure/grille/window_spawner/reinforced,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gy" = (
@@ -3184,10 +2649,6 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gz" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -3196,6 +2657,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille/window_spawner/reinforced,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gA" = (
@@ -3575,10 +3037,10 @@ cF
 dg
 dF
 el
-eJ
+fI
 fc
-eJ
-fH
+fI
+fI
 gd
 gv
 gK
@@ -3707,12 +3169,12 @@ av
 aK
 bh
 bB
-bI
+cT
 cs
-bI
+cT
 bN
 dK
-bI
+cT
 eN
 ff
 aA
@@ -3735,7 +3197,7 @@ aB
 cL
 dl
 dL
-ep
+eO
 dl
 fg
 aB
@@ -3753,16 +3215,16 @@ al
 aM
 bi
 bC
-bn
+fY
 aB
 cM
 dm
 dM
-eq
+fh
 eO
 fh
 fw
-fH
+fI
 gi
 gh
 gh
@@ -3799,7 +3261,7 @@ ay
 aO
 az
 bE
-bI
+cT
 aB
 cO
 do
@@ -3843,9 +3305,9 @@ aa
 am
 aa
 aP
-bj
-fV
-bZ
+aP
+aS
+aS
 aB
 cQ
 dq
@@ -3865,7 +3327,7 @@ gV
 aa
 am
 aA
-aQ
+aP
 bk
 bk
 bk
@@ -3913,17 +3375,17 @@ am
 aa
 aS
 aB
-bH
+cT
 ca
 ct
 cT
 dt
 dS
 ev
-eS
+cT
 ct
 fy
-fT
+aR
 gk
 am
 am
@@ -3936,7 +3398,7 @@ am
 aa
 aS
 aB
-bI
+cT
 bI
 cu
 cU
@@ -3946,7 +3408,7 @@ ew
 eT
 fk
 bI
-bI
+cT
 aB
 am
 aa
@@ -3959,7 +3421,7 @@ am
 am
 aS
 aB
-bI
+cT
 bn
 cv
 cV
@@ -3969,7 +3431,7 @@ ex
 cU
 fl
 bI
-bI
+cT
 aA
 aa
 aa
@@ -3982,7 +3444,7 @@ aa
 aa
 aR
 aB
-bJ
+aQ
 bJ
 cw
 cU
@@ -3992,7 +3454,7 @@ ey
 cU
 cv
 fz
-bJ
+aQ
 aB
 aa
 aa
@@ -4026,10 +3488,10 @@ aa
 aa
 aa
 aa
-aU
+aS
 bl
-fV
-cc
+aS
+fB
 cy
 cX
 cb
@@ -4038,8 +3500,8 @@ eA
 cb
 fn
 fB
-fV
-gl
+aS
+aS
 cd
 aa
 aa
@@ -4096,7 +3558,7 @@ aa
 aa
 aa
 aa
-bn
+fY
 am
 am
 aa
@@ -4154,7 +3616,7 @@ aa
 aa
 bM
 aa
-bn
+fY
 aa
 aa
 aa
@@ -4223,7 +3685,7 @@ aa
 aV
 am
 aa
-aQ
+aP
 cd
 aa
 aa
@@ -4327,7 +3789,7 @@ aa
 aa
 aa
 br
-fV
+aS
 ce
 aa
 aa
@@ -4372,19 +3834,19 @@ aa
 aa
 aa
 aa
-bs
-fV
-fV
-fV
-fV
-dx
-dx
-dx
-fV
-dx
-fD
+bm
+aS
+aS
+aS
+aS
+bm
+bm
+bm
+aS
+bm
+aR
 fY
-bZ
+aS
 aa
 aa
 aa
