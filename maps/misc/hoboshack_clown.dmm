@@ -13,7 +13,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "aA" = (
@@ -28,7 +29,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "aR" = (
@@ -42,7 +44,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "cl" = (
@@ -52,12 +55,14 @@
 	},
 /obj/machinery/conveyor{
 	dir = 5;
-	id_tag = "clown"
+	id_tag = "clown";
+	movedir = 4
 	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "ds" = (
@@ -72,7 +77,20 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"dy" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "eu" = (
@@ -86,7 +104,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "fa" = (
@@ -113,7 +132,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "gs" = (
@@ -131,7 +151,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "jA" = (
@@ -143,7 +164,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "jD" = (
@@ -157,10 +179,14 @@
 	alpha = 200
 	},
 /obj/item/borg/upgrade/honk,
+/obj/machinery/light/he{
+	dir = 8
+	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "jG" = (
@@ -177,7 +203,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "kC" = (
@@ -198,7 +225,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "lM" = (
@@ -215,7 +243,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "ms" = (
@@ -226,10 +255,14 @@
 /obj/structure/bed/chair{
 	dir = 4
 	},
+/obj/machinery/light/he{
+	dir = 1
+	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "nr" = (
@@ -244,10 +277,38 @@
 	color = "#FFFF00";
 	alpha = 200
 	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"ns" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/power/apc{
+	cell_type = 0;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_y = -24
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "op" = (
@@ -261,7 +322,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "ri" = (
@@ -272,10 +334,14 @@
 	color = "#FFFF00";
 	alpha = 200
 	},
+/obj/machinery/light/he{
+	dir = 4
+	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "rv" = (
@@ -286,15 +352,17 @@
 	color = "#FFFF00";
 	alpha = 200
 	},
+/obj/item/weapon/bananapeel/bluespace,
 /obj/machinery/conveyor{
 	dir = 4;
-	id_tag = "clown"
+	id_tag = "clown";
+	movedir = 4
 	},
-/obj/item/weapon/bananapeel/bluespace,
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "si" = (
@@ -306,7 +374,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "sV" = (
@@ -314,15 +383,17 @@
 	color = "#FFFF00";
 	alpha = 200
 	},
-/obj/machinery/conveyor{
-	dir = 8;
-	id_tag = "clown"
-	},
 /obj/item/weapon/bananapeel/traitorpeel/curse,
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "clown";
+	movedir = 8
+	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "sX" = (
@@ -339,7 +410,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "tl" = (
@@ -347,18 +419,35 @@
 	color = "#FFFF00";
 	alpha = 200
 	},
-/obj/machinery/conveyor{
-	dir = 8;
-	id_tag = "clown"
-	},
 /obj/item/weapon/bananapeel/traitorpeel/curse,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "clown";
+	movedir = 8
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
+"tx" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/structure/bed/chair{
 	dir = 4
 	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "uB" = (
@@ -370,7 +459,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "vW" = (
@@ -382,7 +472,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "wQ" = (
@@ -398,7 +489,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "zz" = (
@@ -408,10 +500,14 @@
 	color = "#FFFF00";
 	alpha = 200
 	},
+/obj/machinery/light/he{
+	dir = 1
+	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "AT" = (
@@ -429,7 +525,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "CK" = (
@@ -445,8 +542,10 @@
 	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
-	name = "bouncy floor";
-	color = "#FFFF00"
+	name = "silent bouncy floor";
+	color = "#FFFF00";
+	material = "bananium";
+	volume_mult = 0
 	},
 /area/shack)
 "Dk" = (
@@ -458,7 +557,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "DM" = (
@@ -470,7 +570,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "Ed" = (
@@ -485,7 +586,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "Ek" = (
@@ -508,7 +610,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "ES" = (
@@ -524,8 +627,10 @@
 	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
-	name = "bouncy floor";
-	color = "#FFFF00"
+	name = "silent bouncy floor";
+	color = "#FFFF00";
+	material = "bananium";
+	volume_mult = 0
 	},
 /area/shack)
 "Fs" = (
@@ -561,7 +666,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "FZ" = (
@@ -569,18 +675,20 @@
 	color = "#FFFF00";
 	alpha = 200
 	},
-/obj/machinery/conveyor{
-	dir = 8;
-	id_tag = "clown"
-	},
 /obj/item/weapon/bananapeel/traitorpeel/curse,
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 4
 	},
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "clown";
+	movedir = 8
+	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "HK" = (
@@ -592,12 +700,13 @@
 	dir = 9;
 	id_tag = "clown";
 	in_reverse = 1;
-	movedir = 8
+	movedir = 1
 	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "JA" = (
@@ -609,7 +718,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "Kk" = (
@@ -623,7 +733,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "KW" = (
@@ -645,6 +756,45 @@
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
 /area/shack)
+"LZ" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/mob/living/simple_animal/hamster{
+	icon_dead = "clown_dead";
+	icon_living = "clown";
+	icon_state = "clown";
+	icon_gib = "clown_gib";
+	emote_hear = list();
+	emote_see = list("honks");
+	attack_sound = 'sound/items/bikehorn.ogg';
+	health = 100000;
+	desc = "This clown was given a divine task by the Honkmother to run forevermore and been granted immortality in exchange. Are those hamster whiskers?";
+	brain_damage_modifier = 0;
+	brute_damage_modifier = 0;
+	burn_damage_modifier = 0;
+	clone_damage_modifier = 0;
+	hal_damage_modifier = 0;
+	movement_speed_modifier = 5;
+	oxy_damage_modifier = 0;
+	tox_damage_modifier = 0;
+	name = "Clown that Runs on the Treadmill"
+	},
+/obj/machinery/power/treadmill{
+	dir = 8
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
 "Pk" = (
 /obj/abstract/map/paint_coat{
 	color = "#FFFF00";
@@ -654,7 +804,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "Qf" = (
@@ -677,10 +828,12 @@
 	alpha = 200
 	},
 /obj/structure/reagent_dispensers/corn_oil_tank,
+/obj/machinery/light/he,
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "RB" = (
@@ -695,7 +848,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "SY" = (
@@ -712,7 +866,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "TV" = (
@@ -740,7 +895,12 @@
 /obj/item/weapon/reagent_containers/spray/lube,
 /obj/item/weapon/reagent_containers/spray/lube,
 /obj/item/weapon/reagent_containers/spray/lube,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
 /area/shack)
 "UV" = (
 /obj/abstract/map/paint_coat{
@@ -753,7 +913,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "Vg" = (
@@ -788,7 +949,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "Vi" = (
@@ -799,12 +961,17 @@
 /obj/machinery/conveyor{
 	dir = 10;
 	id_tag = "clown";
-	in_reverse = 1
+	in_reverse = 1;
+	movedir = 8
+	},
+/obj/machinery/light/he{
+	dir = 4
 	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "Wh" = (
@@ -824,8 +991,10 @@
 	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
-	name = "bouncy floor";
-	color = "#FFFF00"
+	name = "silent bouncy floor";
+	color = "#FFFF00";
+	material = "bananium";
+	volume_mult = 0
 	},
 /area/shack)
 "Wo" = (
@@ -840,6 +1009,22 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/shack)
+"WY" = (
+/obj/abstract/map/paint_coat{
+	color = "#FFFF00";
+	alpha = 200
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/light/he,
+/turf/simulated/floor/mineral/clown{
+	icon_state = "floor";
+	name = "bouncy floor";
+	color = "#FFFF00";
+	material = "bananium"
+	},
+/area/shack)
 "Xc" = (
 /obj/abstract/map/paint_coat{
 	color = "#FFFF00";
@@ -852,7 +1037,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "Xs" = (
@@ -863,7 +1049,8 @@
 /obj/machinery/conveyor{
 	dir = 6;
 	id_tag = "clown";
-	in_reverse = 1
+	in_reverse = 1;
+	movedir = 2
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -871,7 +1058,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "XB" = (
@@ -891,7 +1079,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "XF" = (
@@ -899,10 +1088,14 @@
 	color = "#FFFF00";
 	alpha = 200
 	},
+/obj/machinery/light/he{
+	dir = 8
+	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "Yo" = (
@@ -910,16 +1103,18 @@
 	color = "#FFFF00";
 	alpha = 200
 	},
-/obj/machinery/conveyor{
-	dir = 4;
-	id_tag = "clown"
-	},
 /obj/item/weapon/bananapeel/bluespace,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "clown";
+	movedir = 4
+	},
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 "YV" = (
@@ -931,7 +1126,8 @@
 /turf/simulated/floor/mineral/clown{
 	icon_state = "floor";
 	name = "bouncy floor";
-	color = "#FFFF00"
+	color = "#FFFF00";
+	material = "bananium"
 	},
 /area/shack)
 
@@ -969,7 +1165,7 @@ Qf
 op
 Ed
 rv
-XF
+dy
 Pk
 Xc
 aA
@@ -984,8 +1180,8 @@ rv
 sX
 rv
 ms
-XF
-Kk
+dy
+WY
 rv
 rv
 rv
@@ -1002,7 +1198,7 @@ uB
 Xs
 cl
 XF
-XF
+LZ
 kH
 "}
 (6,1,1) = {"
@@ -1010,13 +1206,13 @@ SY
 rv
 gs
 Kk
-XF
-XF
-XF
+dy
+dy
+dy
 tl
 rF
-XF
-XF
+dy
+ns
 kH
 "}
 (7,1,1) = {"
@@ -1024,7 +1220,7 @@ SY
 rv
 zz
 Kk
-XF
+dy
 eu
 UV
 tl
@@ -1036,7 +1232,7 @@ kH
 (8,1,1) = {"
 kC
 fa
-XF
+dy
 wQ
 si
 En
@@ -1053,7 +1249,7 @@ Ek
 si
 CA
 YV
-XF
+dy
 aR
 sV
 rF
@@ -1064,10 +1260,10 @@ kH
 (10,1,1) = {"
 kC
 KW
-XF
-ms
-XF
-XF
+dy
+tx
+dy
+dy
 JA
 sV
 rF
