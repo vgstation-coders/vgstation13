@@ -413,10 +413,6 @@
 /obj/machinery/power/terminal{
 	dir = 1
 	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/power/apc{
 	dir = 1;
 	environ = 1;
@@ -426,6 +422,7 @@
 	name = "apc";
 	pixel_y = 24
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/engine,
 /area/mining_bar)
 "bn" = (
@@ -437,11 +434,8 @@
 /turf/simulated/floor/engine,
 /area/mining_bar)
 "bo" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/machinery/power/port_gen/pacman,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/engine,
 /area/mining_bar)
 "bp" = (

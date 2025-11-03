@@ -104,8 +104,8 @@
 	},
 /area/vault/podstation/exterior)
 "ba" = (
-/obj/structure/cable/yellow,
 /obj/machinery/power/port_gen/pacman,
+/obj/structure/cable/mapping/yellow,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -2183,11 +2183,6 @@
 	},
 /area/vault/podstation/interior)
 "WT" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/structure/closet/crate/trashcart,
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,
 /obj/item/weapon/storage/wallet,
@@ -2199,6 +2194,7 @@
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -2302,19 +2298,10 @@
 	},
 /area/vault/podstation/interior)
 "XS" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/wall,
 /area/vault/podstation/interior)
 "Yt" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/rack,
 /obj/item/device/crank_charger,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
@@ -2337,6 +2324,7 @@
 /obj/item/stack/sheet/mineral/plasma{
 	amount = 20
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/podstation/interior)
 "Yx" = (
@@ -2345,10 +2333,6 @@
 	},
 /area/vault/podstation/exterior)
 "YD" = (
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/machinery/power/apc{
 	cell_type = 0;
 	dir = 4;
@@ -2364,6 +2348,7 @@
 	dir = 9
 	},
 /obj/machinery/meter,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/vault/podstation/interior)
 "YT" = (
