@@ -168,3 +168,9 @@
 	name = "Space hobo shack - Crashed Saucer"
 
 	file_path = "maps/misc/hoboshack_saucer.dmm"
+
+/datum/map_element/hoboshack/chickenfarm
+	name = "Space hobo shack - Space Chicken Farm"
+
+	file_path = "maps/misc/hoboshack_chickenfarm.dmm"
+
