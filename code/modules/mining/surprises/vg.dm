@@ -162,3 +162,9 @@
 	name = "Space hobo shack - Clown"
 
 	file_path = "maps/misc/hoboshack_clown.dmm"
+	can_rotate = FALSE
+
+/datum/map_element/hoboshack/saucer
+	name = "Space hobo shack - Crashed Saucer"
+
+	file_path = "maps/misc/hoboshack_saucer.dmm"
