@@ -1645,8 +1645,6 @@ Thanks.
 						animate(C, pixel_x=C.pixel_x + trig_amp_x * PIXEL_MULTIPLIER, pixel_y=C.pixel_y + trig_amp_y * PIXEL_MULTIPLIER, time=0.6, easing=SINE_EASING|EASE_OUT, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
 					sleep(7)
 					if(C)
-						C.pixel_x -= pixel_x_diff * PIXEL_MULTIPLIER
-						C.pixel_y -= pixel_y_diff * PIXEL_MULTIPLIER
 						animate(C, pixel_x=C.pixel_x - pixel_x_diff * PIXEL_MULTIPLIER, pixel_y=C.pixel_y - pixel_y_diff * PIXEL_MULTIPLIER, time=0.6, easing=SINE_EASING|EASE_OUT, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
 			src = oldsrc
 		if(!wasdizzy)
