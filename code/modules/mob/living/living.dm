@@ -1621,7 +1621,8 @@ Thanks.
 		var/client/C = client
 		var/pixel_x_diff = 0
 		var/pixel_y_diff = 0
-		var/temp
+		var/trig_amp_x
+		var/trig_amp_y
 		var/saved_dizz = dizziness
 		dizziness = max(dizziness - 1, 0)
 		if(C)
@@ -1630,24 +1631,23 @@ Thanks.
 			src = null
 			spawn(0)
 				if(C)
-					temp = amplitude * sin(0.008 * saved_dizz * world.time)
-					pixel_x_diff += temp
-					C.pixel_x += temp * PIXEL_MULTIPLIER
-					temp = amplitude * cos(0.008 * saved_dizz * world.time)
-					pixel_y_diff += temp
-					C.pixel_y += temp * PIXEL_MULTIPLIER
-					sleep(3)
+					trig_amp_x = amplitude * sin(0.008 * saved_dizz * world.time)
+					pixel_x_diff += trig_amp_x
+					trig_amp_y = amplitude * cos(0.008 * saved_dizz * world.time)
+					pixel_y_diff += trig_amp_y
+					animate(C, pixel_x=C.pixel_x + trig_amp_x * PIXEL_MULTIPLIER, pixel_y=C.pixel_y + trig_amp_y * PIXEL_MULTIPLIER, time=0.6, easing=SINE_EASING|EASE_OUT, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
+					sleep(7)
 					if(C)
-						temp = amplitude * sin(0.008 * saved_dizz * world.time)
-						pixel_x_diff += temp
-						C.pixel_x += temp * PIXEL_MULTIPLIER
-						temp = amplitude * cos(0.008 * saved_dizz * world.time)
-						pixel_y_diff += temp
-						C.pixel_y += temp * PIXEL_MULTIPLIER
-					sleep(3)
+						trig_amp_x = amplitude * sin(0.008 * saved_dizz * world.time)
+						pixel_x_diff += trig_amp_x
+						trig_amp_y = amplitude * cos(0.008 * saved_dizz * world.time)
+						pixel_y_diff += trig_amp_y
+						animate(C, pixel_x=C.pixel_x + trig_amp_x * PIXEL_MULTIPLIER, pixel_y=C.pixel_y + trig_amp_y * PIXEL_MULTIPLIER, time=0.6, easing=SINE_EASING|EASE_OUT, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
+					sleep(7)
 					if(C)
 						C.pixel_x -= pixel_x_diff * PIXEL_MULTIPLIER
 						C.pixel_y -= pixel_y_diff * PIXEL_MULTIPLIER
+						animate(C, pixel_x=C.pixel_x - pixel_x_diff * PIXEL_MULTIPLIER, pixel_y=C.pixel_y - pixel_y_diff * PIXEL_MULTIPLIER, time=0.6, easing=SINE_EASING|EASE_OUT, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
 			src = oldsrc
 		if(!wasdizzy)
 			dizziness = 0
