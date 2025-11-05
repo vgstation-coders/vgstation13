@@ -407,7 +407,11 @@
 	if(edge_overlays.len)
 		for(var/datum/weakref/EO in edge_overlays)
 			var/obj/effect/edge_overlay/E = EO.get()
-			qdel(E)
+			if(E)
+				var/turf/T = E.loc
+				if(T)
+					var/edge_dir = get_dir(src, T)
+					E.remove_direction(edge_dir, src)
 		edge_overlays.len = 0
 
 	//Rebuild turf

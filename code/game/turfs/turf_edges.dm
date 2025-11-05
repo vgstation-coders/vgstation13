@@ -45,6 +45,8 @@
 	var/list/edges = list()
 	for(var/direction in alldirs)
 		adj = get_step(src, direction)
+		if(!adj)
+			continue // Skip null turfs at map boundaries
 		if(!istype(adj, src) && adj.edge_priority < edge_priority)
 			edges += direction
 	return edges
@@ -52,32 +54,74 @@
 /turf/proc/update_edges()
 	if(!(edge_flags & EDGE_CARDINAL))
 		return
+
 	var/list/dirs = edge_check()
+	var/list/new_overlays = list()
+
+	// Remove directions we're no longer providing
+	if(edge_overlays.len)
+		for(var/datum/weakref/EO in edge_overlays)
+			var/obj/effect/edge_overlay/E = EO.get()
+			if(!E)
+				continue
+			var/turf/T = E.loc
+			if(!T)
+				continue
+			var/edge_dir = get_dir(src, T)
+
+			if((edge_dir in dirs) && T.edge_priority < edge_priority && !iswall(T))
+				new_overlays += EO
+			else
+				E.remove_direction(edge_dir, src)
+
+	// Add directions we need
 	for(var/direction in dirs)
-		var/obj/effect/edge_overlay/edge
 		var/turf/T = get_step(src, direction)
 		if(iswall(T) || T.edge_priority > edge_priority)
 			continue
-		for(var/obj/effect/edge_overlay/E in T.contents)
-			if(!istype(E))
-				continue
-			edge = E
-			if(edge.turf_type != src.type)
-				edge = null //create another one
+
+		var/obj/effect/edge_overlay/edge
+
+		var/already_have = FALSE
+		for(var/datum/weakref/EO in new_overlays)
+			var/obj/effect/edge_overlay/E = EO.get()
+			if(E && E.loc == T)
+				edge = E
+				already_have = TRUE
 				break
+
+		if(!edge)
+			for(var/obj/effect/edge_overlay/E in T.contents)
+				if(!istype(E))
+					continue
+				if(E.turf_type != src.type)
+					if(E.priority < edge_priority)
+						qdel(E)
+					continue
+				edge = E
+				break
+
 		if(!edge)
 			edge = new edge_overlay_type(T)
 			edge.turf_type = src.type
 			edge.priority = edge_priority
 			edge.layer += edge_priority
-		edge.add_edge_overlay(direction,base_icon_state,edge_flags)
-		edge_overlays += makeweakref(edge)
+			edge.base_icon_state = base_icon_state
+			edge.edge_flags = edge_flags
+
+		edge.add_direction(direction, src, base_icon_state, edge_flags)
+
+		if(!already_have)
+			new_overlays += makeweakref(edge)
+
+	edge_overlays = new_overlays
 
 /obj/effect/edge_overlay
 	name = "edge overlay"
 	mouse_opacity = 0
 	layer = EDGE_LAYER
 	plane = ABOVE_TURF_PLANE
+	anchored = TRUE
 	var/olay_icon = 'icons/turf/edges_corners.dmi'
 	var/olay_layer = EDGE_LAYER
 	var/olay_plane = ABOVE_TURF_PLANE
@@ -85,17 +129,56 @@
 	var/priority = 0
 	var/list/cardinal_dirs = list()
 	var/list/diagonal_dirs = list()
+	var/base_icon_state = null
+	var/edge_flags = 0
+	var/refcount = 0
+	var/list/direction_sources = list()
 
-/obj/effect/edge_overlay/proc/add_edge_overlay(var/dir_to_use,var/icon_state_to_use,var/flags)
-	if((dir_to_use in cardinal_dirs) || (dir_to_use in diagonal_dirs))
+/obj/effect/edge_overlay/proc/add_direction(var/dir, var/turf/source, var/icon_state_to_use, var/flags)
+	if(!direction_sources["[dir]"])
+		direction_sources["[dir]"] = list()
+
+	var/list/sources = direction_sources["[dir]"]
+	var/datum/weakref/source_ref = makeweakref(source)
+
+	for(var/datum/weakref/WR in sources)
+		if(WR.get() == source)
+			return
+
+	sources += source_ref
+	direction_sources["[dir]"] = sources
+
+	if(!base_icon_state)
+		base_icon_state = icon_state_to_use
+	if(!edge_flags)
+		edge_flags = flags
+
+	rebuild_edges()
+
+/obj/effect/edge_overlay/proc/remove_direction(var/dir, var/turf/source)
+	if(!direction_sources["[dir]"])
 		return
-	if(dir_to_use in diagonal)
-		diagonal_dirs += dir_to_use
-	else if(dir_to_use in cardinal)
-		cardinal_dirs += dir_to_use
+
+	var/list/sources = direction_sources["[dir]"]
+
+	for(var/datum/weakref/WR in sources)
+		if(WR.get() == source)
+			sources -= WR
+			break
+
+	if(sources.len == 0)
+		direction_sources -= "[dir]"
 	else
-		return // not a valid direction
+		direction_sources["[dir]"] = sources
+
+	if(direction_sources.len == 0)
+		qdel(src)
+	else
+		rebuild_edges()
+
+/obj/effect/edge_overlay/proc/build_overlay_visuals(var/icon_state_to_use, var/flags)
 	overlays.len = 0
+
 	/////CARDINALS/////
 	var/edge_count = cardinal_dirs.len
 	switch(edge_count)
@@ -126,6 +209,50 @@
 	for(var/dir in diagonal_dirs)
 		if(check_covered(dir))
 			outer_corner(dir,icon_state_to_use,flags)
+
+/obj/effect/edge_overlay/proc/rebuild_edges()
+	cardinal_dirs.len = 0
+	diagonal_dirs.len = 0
+	overlays.len = 0
+
+	var/turf/my_turf = loc
+	if(!my_turf)
+		qdel(src)
+		return
+
+	var/list/dirs_to_remove = list()
+	for(var/dir_str in direction_sources)
+		var/dir = text2num(dir_str)
+		var/list/sources = direction_sources[dir_str]
+		var/list/valid_sources = list()
+
+		for(var/datum/weakref/WR in sources)
+			var/turf/source_turf = WR.get()
+			if(source_turf && (source_turf.edge_flags & EDGE_CARDINAL) && source_turf.type == turf_type)
+				var/turf/check_target = get_step(source_turf, dir)
+				if(check_target == my_turf && my_turf.edge_priority < source_turf.edge_priority)
+					valid_sources += WR
+
+		if(valid_sources.len == 0)
+			dirs_to_remove += dir_str
+		else
+			direction_sources[dir_str] = valid_sources
+			if(dir in diagonal)
+				diagonal_dirs += dir
+			else if(dir in cardinal)
+				cardinal_dirs += dir
+
+	for(var/dir_str in dirs_to_remove)
+		direction_sources -= dir_str
+
+	if(direction_sources.len == 0)
+		qdel(src)
+		return
+
+	if(!base_icon_state || !edge_flags)
+		return
+
+	build_overlay_visuals(base_icon_state, edge_flags)
 
 /obj/effect/edge_overlay/proc/check_covered(var/dir_to_check) //check if placing a corner would overlap with an edge
 	for(var/cardinal_dir in cardinal_dirs)
