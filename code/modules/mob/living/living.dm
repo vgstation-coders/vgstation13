@@ -1645,7 +1645,7 @@ Thanks.
 						animate(C, pixel_x = C.pixel_x + trig_amp_x * PIXEL_MULTIPLIER, pixel_y = C.pixel_y + trig_amp_y * PIXEL_MULTIPLIER, time=6, easing=SINE_EASING, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
 						sleep(7)
 						if(C)
-							animate(C, pixel_x = 0, pixel_y = 0, time=6, easing=SINE_EASING, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
+							animate(C, pixel_x = 0, pixel_y = 0, time=6, easing=SINE_EASING)
 			src = oldsrc
 		if(!wasdizzy)
 			dizziness = 0
