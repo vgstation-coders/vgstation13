@@ -1619,6 +1619,8 @@ Thanks.
 			dizziness = 120
 			wasdizzy = 0
 		var/client/C = client
+		var/pixel_x_diff = 0
+		var/pixel_y_diff = 0
 		var/trig_amp_x
 		var/trig_amp_y
 		var/saved_dizz = dizziness
@@ -1630,16 +1632,20 @@ Thanks.
 			spawn(0)
 				if(C)
 					trig_amp_x = amplitude * sin(0.008 * saved_dizz * world.time)
+					pixel_x_diff += trig_amp_x
 					trig_amp_y = amplitude * cos(0.008 * saved_dizz * world.time)
-					animate(C, pixel_x=C.pixel_x + trig_amp_x * PIXEL_MULTIPLIER, pixel_y=C.pixel_y + trig_amp_y * PIXEL_MULTIPLIER, time=6, easing=SINE_EASING, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
+					pixel_y_diff += trig_amp_y
+					animate(C, pixel_x = pixel_x + trig_amp_x * PIXEL_MULTIPLIER, pixel_y = pixel_y + trig_amp_y * PIXEL_MULTIPLIER, time=6, easing=SINE_EASING, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
 					sleep(7)
 					if(C)
 						trig_amp_x = amplitude * sin(0.008 * saved_dizz * world.time)
+						pixel_x_diff += trig_amp_x
 						trig_amp_y = amplitude * cos(0.008 * saved_dizz * world.time)
-						animate(C, pixel_x=C.pixel_x + trig_amp_x * PIXEL_MULTIPLIER, pixel_y=C.pixel_y + trig_amp_y * PIXEL_MULTIPLIER, time=6, easing=SINE_EASING, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
+						pixel_y_diff += trig_amp_y
+						animate(C, pixel_x = pixel_x + trig_amp_x * PIXEL_MULTIPLIER, pixel_y = pixel_y + trig_amp_y * PIXEL_MULTIPLIER, time=6, easing=SINE_EASING, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
 					sleep(7)
 					if(C)
-						animate(C, pixel_x=0, pixel_y=0, time=6, easing=SINE_EASING, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
+						animate(C, pixel_x = pixel_x - pixel_x_diff * PIXEL_MULTIPLIER, pixel_y = pixel_y - pixel_y_diff * PIXEL_MULTIPLIER, time=6, easing=SINE_EASING, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
 			src = oldsrc
 		if(!wasdizzy)
 			dizziness = 0
