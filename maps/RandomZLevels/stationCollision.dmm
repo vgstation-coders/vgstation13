@@ -1151,33 +1151,15 @@
 /obj/structure/closet/firecloset,
 /turf/simulated/floor,
 /area/awaymission/northblock)
-"do" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
-/area/awaymission/northblock)
 "dp" = (
 /obj/machinery/door/airlock/highsecurity{
 	name = "Security Airlock"
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/research)
 "dq" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "delivery"
 	},
@@ -1189,21 +1171,13 @@
 /obj/machinery/door/window{
 	name = "Windoor"
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
 /area/awaymission/research)
 "ds" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -1262,11 +1236,7 @@
 	},
 /area/awaymission/northblock)
 "dA" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless{
 	icon_state = "damaged5"
 	},
@@ -1288,13 +1258,13 @@
 /area/awaymission/research)
 "dD" = (
 /obj/structure/window/reinforced,
-/obj/structure/cable,
 /obj/machinery/power/apc{
 	cell_type = 7500;
 	dir = 8;
 	name = "Research APC";
 	pixel_x = -28
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -1431,16 +1401,6 @@
 	},
 /turf/simulated/floor/airless{
 	icon_state = "damaged2"
-	},
-/area/awaymission/northblock)
-"dU" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
 	},
 /area/awaymission/northblock)
 "dV" = (
@@ -1624,91 +1584,36 @@
 	},
 /area/awaymission/northblock)
 "et" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/northblock)
 "eu" = (
 /obj/machinery/door/airlock/command,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/northblock)
 "ev" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless{
 	icon_state = "damaged3"
 	},
 /area/awaymission/northblock)
-"ew" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/awaymission/northblock)
 "ex" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless{
 	icon_state = "floorscorched1"
 	},
 /area/awaymission/northblock)
-"ey" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
-/area/awaymission/northblock)
 "ez" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "blue"
 	},
 /area/awaymission/northblock)
-"eA" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
-/area/awaymission/northblock)
 "eB" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor/airless{
 	icon_state = "floorscorched1"
@@ -1800,7 +1705,7 @@
 	name = "North Block APC";
 	pixel_x = 28
 	},
-/obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "blue"
@@ -1814,11 +1719,7 @@
 	},
 /area/awaymission/northblock)
 "eO" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless{
 	icon_state = "damaged2"
 	},
@@ -1946,11 +1847,7 @@
 	},
 /area/awaymission/northblock)
 "fd" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless{
 	icon_state = "floorscorched2"
 	},
@@ -2101,16 +1998,6 @@
 	icon_state = "damaged2"
 	},
 /area/awaymission/midblock)
-"fv" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
-/area/awaymission/midblock)
 "fw" = (
 /obj/structure/table,
 /obj/item/weapon/storage/toolbox/mechanical,
@@ -2227,31 +2114,19 @@
 /turf/simulated/floor/airless,
 /area/awaymission/midblock)
 "fH" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless{
 	icon_state = "floorscorched1"
 	},
 /area/awaymission/midblock)
 "fI" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless{
 	icon_state = "damaged5"
 	},
 /area/awaymission/midblock)
 "fJ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless{
 	icon_state = "damaged2"
 	},
@@ -2341,14 +2216,6 @@
 	icon_state = "grimy"
 	},
 /area/awaymission/northblock)
-"fV" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/airless,
-/area/awaymission/midblock)
 "fW" = (
 /turf/simulated/wall,
 /area/awaymission/midblock)
@@ -2423,11 +2290,7 @@
 	},
 /area/awaymission/northblock)
 "gi" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless{
 	icon_state = "floorscorched2"
 	},
@@ -2584,52 +2447,28 @@
 	name = "Mid Block APC";
 	pixel_x = -28
 	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "gG" = (
 /obj/item/ammo_casing/shotgun,
 /obj/item/ammo_casing/shotgun,
 /obj/item/ammo_casing/shotgun,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "gH" = (
 /obj/item/ammo_casing/shotgun,
 /obj/effect/decal/remains/human,
 /obj/item/clothing/under/rank/bartender,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/decal/cleanable/blood/splatter,
 /obj/item/weapon/gun/projectile/shotgun/pump/sc_pump,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "gI" = (
 /obj/structure/table,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/awaymission/midblock)
-"gJ" = (
-/obj/item/weapon/stool,
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "gK" = (
@@ -2833,11 +2672,7 @@
 /area/awaymission/midblock)
 "hl" = (
 /obj/item/weapon/stool,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "hm" = (
@@ -2970,11 +2805,7 @@
 	dir = 4;
 	icon_state = "tube1"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless,
 /area/awaymission/midblock)
 "hD" = (
@@ -2999,11 +2830,7 @@
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "hG" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "hH" = (
@@ -3067,12 +2894,8 @@
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "hR" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/cleanable/blood/splatter,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "hS" = (
@@ -3146,41 +2969,26 @@
 	name = "Arrivals Block APC";
 	pixel_x = -28
 	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "red"
 	},
 /area/awaymission/arrivalblock)
 "ib" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/arrivalblock)
 "ic" = (
 /obj/structure/bed/chair{
 	dir = 1
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/arrivalblock)
 "id" = (
 /obj/effect/decal/remains/human,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -3190,35 +2998,12 @@
 /obj/machinery/door/airlock/glass_security{
 	name = "Glass Airlock"
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/arrivalblock)
 "if" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless,
-/area/awaymission/midblock)
-"ig" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
 /area/awaymission/midblock)
 "ih" = (
 /obj/machinery/microwave{
@@ -3246,12 +3031,8 @@
 	},
 /obj/item/ammo_casing/a12mm,
 /obj/item/clothing/under/syndicate,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/item/weapon/gun/projectile/automatic/c20r/sc_c20r,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "il" = (
@@ -3350,12 +3131,8 @@
 /area/awaymission/midblock)
 "iB" = (
 /obj/item/ammo_casing/a12mm,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/decal/cleanable/blood/splatter,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "iC" = (
@@ -3434,11 +3211,7 @@
 /area/awaymission/arrivalblock)
 "iL" = (
 /obj/machinery/door/airlock/glass,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/midblock)
 "iM" = (
@@ -3495,14 +3268,6 @@
 /obj/machinery/light{
 	dir = 8;
 	icon_state = "tube1"
-	},
-/turf/simulated/floor/airless,
-/area/awaymission/southblock)
-"iV" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
 	},
 /turf/simulated/floor/airless,
 /area/awaymission/southblock)
@@ -3584,42 +3349,19 @@
 	},
 /area/awaymission/southblock)
 "jk" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor/airless,
-/area/awaymission/southblock)
-"jl" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless,
 /area/awaymission/southblock)
 "jm" = (
 /obj/item/ammo_casing/a12mm{
 	pixel_y = 4
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless,
 /area/awaymission/southblock)
 "jn" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor/airless,
 /area/awaymission/southblock)
@@ -3627,32 +3369,7 @@
 /obj/structure/sign/redcross{
 	pixel_y = -32
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/airless,
-/area/awaymission/southblock)
-"jp" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/airless,
-/area/awaymission/southblock)
-"jq" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/airless,
 /area/awaymission/southblock)
 "jr" = (
@@ -3671,11 +3388,7 @@
 /obj/machinery/door/airlock/maintenance{
 	name = "Airlock"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/southblock)
 "jv" = (
@@ -3690,11 +3403,7 @@
 /area/awaymission/southblock)
 "jx" = (
 /obj/machinery/door/airlock/glass,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/southblock)
 "jy" = (
@@ -3763,11 +3472,7 @@
 /turf/simulated/floor,
 /area/awaymission/southblock)
 "jI" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/southblock)
 "jJ" = (
@@ -3889,7 +3594,7 @@
 	name = "South Block APC";
 	pixel_y = -30
 	},
-/obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/southblock)
 "kf" = (
@@ -3935,22 +3640,14 @@
 	dir = 4;
 	icon_state = "tube1"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/southblock)
 "kn" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /obj/machinery/gateway/center/away{
 	calibrated = 0
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "kp" = (
@@ -4011,12 +3708,8 @@
 	},
 /area/awaymission/gateroom)
 "kx" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/gateway/away,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "kz" = (
@@ -4170,14 +3863,10 @@
 	},
 /area/awaymission/gateroom)
 "kT" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/landmark{
 	name = "awaystart"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "warning"
@@ -4266,14 +3955,10 @@
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "lf" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/effect/landmark{
 	name = "awaystart"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "lg" = (
@@ -4493,44 +4178,29 @@
 /area/awaymission/southblock)
 "lJ" = (
 /obj/effect/decal/remains/human,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/southblock)
 "lK" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/door/airlock/highsecurity{
 	name = "Security Airlock"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "lL" = (
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "lM" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "lN" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/machinery/power/battery/smes/infinite{
 	desc = "A high-capacity superconducting magnetic energy storage (SMES) unit.";
 	name = "power storage unit"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "lO" = (
@@ -4579,43 +4249,16 @@
 	},
 /turf/simulated/floor,
 /area/awaymission/southblock)
-"lV" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor,
-/area/awaymission/southblock)
-"lW" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/awaymission/southblock)
 "lX" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "warning"
 	},
 /area/awaymission/southblock)
 "lY" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -4623,48 +4266,20 @@
 	},
 /area/awaymission/southblock)
 "lZ" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "warning"
 	},
 /area/awaymission/southblock)
 "ma" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/door/airlock/engineering,
-/turf/simulated/floor,
-/area/awaymission/gateroom)
-"mb" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "mc" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor,
 /area/awaymission/gateroom)
@@ -4731,12 +4346,8 @@
 	},
 /area/awaymission/southblock)
 "mm" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/machinery/light/small,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "mn" = (
@@ -5844,7 +5455,7 @@ dm
 aj
 af
 eh
-ew
+et
 ef
 fa
 aj
@@ -6042,7 +5653,7 @@ an
 aj
 dT
 ei
-ey
+eO
 dw
 fb
 aj
@@ -6114,16 +5725,16 @@ fb
 aj
 fs
 fH
-fV
+if
 gi
-fV
-fV
+if
+if
 hC
-fV
-ig
-fV
-fV
-iV
+if
+fH
+if
+if
+jk
 jk
 gB
 hx
@@ -6190,7 +5801,7 @@ fW
 fW
 fW
 iW
-jl
+jk
 jt
 hx
 hx
@@ -6240,7 +5851,7 @@ am
 am
 aq
 ek
-eA
+fd
 aF
 aG
 aB
@@ -6256,7 +5867,7 @@ gk
 it
 fW
 iW
-jl
+jk
 jt
 hx
 hx
@@ -6302,15 +5913,15 @@ aF
 cE
 aq
 aq
-do
+ex
 dA
-dU
-dU
+ex
+ex
 eB
 eO
 fd
 fd
-fv
+fH
 fJ
 fW
 gk
@@ -6322,7 +5933,7 @@ gk
 hN
 fW
 iX
-jl
+jk
 jb
 jb
 jb
@@ -6520,7 +6131,7 @@ gk
 hO
 fW
 iW
-jl
+jk
 jb
 jJ
 kf
@@ -6652,7 +6263,7 @@ ih
 iu
 fW
 iW
-jl
+jk
 jb
 jK
 kg
@@ -6718,7 +6329,7 @@ gk
 iv
 fW
 iW
-jl
+jk
 jb
 jL
 kh
@@ -6784,7 +6395,7 @@ gk
 iw
 fW
 iZ
-jl
+jk
 jv
 jL
 ki
@@ -6850,7 +6461,7 @@ gk
 ix
 fW
 iW
-jl
+jk
 jb
 jM
 kj
@@ -6916,7 +6527,7 @@ gk
 gk
 fW
 iW
-jl
+jk
 jb
 jN
 kk
@@ -6982,7 +6593,7 @@ gt
 iy
 fW
 iW
-jl
+jk
 jb
 jb
 jb
@@ -7048,7 +6659,7 @@ ii
 iz
 fW
 iW
-jl
+jk
 jw
 jO
 jO
@@ -7114,7 +6725,7 @@ ij
 iA
 fW
 iW
-jp
+jk
 jx
 jI
 kl
@@ -7124,7 +6735,7 @@ jI
 jI
 jI
 lJ
-lV
+jI
 jO
 jb
 "}
@@ -7172,15 +6783,15 @@ fB
 by
 fW
 gu
-gJ
+hl
 hl
 hG
 hR
 ik
 iB
 iL
-iV
-jq
+jk
+jk
 jy
 jy
 jy
@@ -7190,7 +6801,7 @@ jy
 jy
 jy
 jy
-lW
+jI
 jO
 jb
 "}
@@ -7652,7 +7263,7 @@ jU
 kp
 jy
 lL
-mb
+lM
 lL
 jy
 "}
