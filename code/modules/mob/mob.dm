@@ -1680,11 +1680,6 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/AdjustDizzy(amount)
 	dizziness = max(dizziness+amount, 0)
-	if(dizziness <= 0)
-		var/client/C = client
-		if(C)
-			C.pixel_x = 0
-			C.pixel_y = 0
 
 /mob/proc/Paralyse(amount)
 	if(status_flags & CANPARALYSE)

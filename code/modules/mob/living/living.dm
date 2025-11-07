@@ -1612,13 +1612,13 @@ Thanks.
 	reset_vars_after_duration(resettable_vars, duration)
 
 /mob/living/proc/handle_dizziness()
+	var/client/C = client
 	//Dizziness
-	if(dizziness || undergoing_hypothermia() == MODERATE_HYPOTHERMIA)
+	if(dizziness > 0 || undergoing_hypothermia() == MODERATE_HYPOTHERMIA)
 		var/wasdizzy = 1
 		if(undergoing_hypothermia() == MODERATE_HYPOTHERMIA && !dizziness && prob(50))
 			dizziness = 120
 			wasdizzy = 0
-		var/client/C = client
 		var/trig_amp_x
 		var/trig_amp_y
 		var/saved_dizz = dizziness
@@ -1640,6 +1640,8 @@ Thanks.
 						animate(C, pixel_x = 0, pixel_y = 0, time=9, easing=SINE_EASING)
 		if(!wasdizzy)
 			dizziness = 0
+	if(C && dizziness <= 0 && (C.pixel_x != 0 || C.pixel_y != 0))
+		animate(C, pixel_x = 0, pixel_y = 0, time=9, easing=SINE_EASING)
 
 
 /mob/living/proc/handle_jitteriness()
