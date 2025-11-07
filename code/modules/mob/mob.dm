@@ -304,7 +304,7 @@
 	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
 	if(loneliness_affected(source || speaker,TRUE))
 		return
-	
+
 	if(!client) //We dun goof
 		return
 
@@ -1672,11 +1672,19 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/Jitter(amount)
 	jitteriness = max(jitteriness,amount,0)
 
+/mob/proc/AdjustJitter(amount)
+	jitteriness = max(jitteriness+amount, 0)
+
 /mob/proc/Dizzy(amount)
 	dizziness = max(dizziness,amount,0)
 
 /mob/proc/AdjustDizzy(amount)
 	dizziness = max(dizziness+amount, 0)
+	if(dizziness <= 0)
+		var/client/C = client
+		if(C)
+			C.pixel_x = 0
+			C.pixel_y = 0
 
 /mob/proc/Paralyse(amount)
 	if(status_flags & CANPARALYSE)

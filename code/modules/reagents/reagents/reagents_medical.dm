@@ -1156,7 +1156,7 @@ var/global/list/charcoal_doesnt_remove=list(
 		M.adjustCloneLoss(-5) //Repairs DNA!
 		holder.remove_reagent(MEDNANOBOTS, 0.25) //Consumes a quarter of an unit every time it heals.
 	if(M.dizziness)
-		M.dizziness = max(0, M.dizziness - 15)
+		M.AdjustDizzy(-15)
 	if(M.confused)
 		M.remove_confused(5)
 	for(var/datum/disease/D in M.viruses) //Diseases that work under the second rework of viruses, or "Viro 3"

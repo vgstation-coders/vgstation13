@@ -115,10 +115,10 @@
 
 	remove_confused(1)
 	// decrement dizziness counter, clamped to 0
+	var/dizzy_decrement = -1
 	if(resting)
-		dizziness = max(0, dizziness - 5)
-	else
-		dizziness = max(0, dizziness - 1)
+		dizzy_decrement = -5
+	AdjustDizzy(dizzy_decrement)
 
 	updatehealth()
 
