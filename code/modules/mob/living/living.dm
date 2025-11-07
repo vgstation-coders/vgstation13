@@ -1622,7 +1622,7 @@ Thanks.
 		var/trig_amp_x
 		var/trig_amp_y
 		var/saved_dizz = dizziness
-		dizziness = max(dizziness - 1, 0)
+		dizziness = max(dizziness - standard_dizzy_reduce, 0)
 		if(C)
 			var/amplitude = dizziness * (sin(dizziness * 0.044 * world.time) + 1) / 70 //This shit is annoying at high strength
 			spawn(0)
