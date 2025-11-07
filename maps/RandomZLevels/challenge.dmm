@@ -1178,11 +1178,7 @@
 /area/awaymission/challenge/end)
 "dc" = (
 /obj/machinery/gateway,
-/obj/structure/cable{
-	icon_state = "0-2";
-	pixel_y = 1;
-	d2 = 2
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	tag = "icon-vault (WEST)";
 	icon_state = "vault";
@@ -1198,15 +1194,11 @@
 /turf/simulated/floor/bluegrid,
 /area/awaymission/challenge/end)
 "df" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/door/poddoor{
 	id_tag = "challenge";
 	name = "Gateway Shutters"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -1244,10 +1236,8 @@
 	},
 /area/awaymission/challenge/end)
 "dk" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -1298,31 +1288,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/challenge/end)
-"dq" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/awaymission/challenge/end)
-"dr" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/awaymission/challenge/end)
 "ds" = (
 /obj/machinery/light,
 /turf/simulated/floor/bluegrid,
@@ -1332,8 +1297,8 @@
 /turf/simulated/floor/bluegrid,
 /area/awaymission/challenge/end)
 "du" = (
-/obj/structure/cable,
 /obj/machinery/power/battery/smes/infinite,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/bluegrid,
 /area/awaymission/challenge/end)
 "dv" = (
@@ -2136,7 +2101,7 @@ dc
 df
 dk
 dk
-dq
+dk
 du
 bM
 "}
@@ -2202,7 +2167,7 @@ cT
 de
 dl
 cc
-dr
+dk
 dv
 bM
 "}

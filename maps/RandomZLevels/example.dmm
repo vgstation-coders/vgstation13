@@ -18,11 +18,7 @@
 /obj/machinery/power/battery/smes{
 	charge = 5e+006
 	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/example)
 "af" = (
@@ -49,60 +45,13 @@
 	},
 /turf/simulated/floor,
 /area/awaymission/example)
-"ak" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor,
-/area/awaymission/example)
-"al" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/awaymission/example)
 "am" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/example)
 "ao" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /obj/machinery/gateway/center/away,
-/turf/simulated/floor,
-/area/awaymission/example)
-"aq" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/example)
 "ar" = (
@@ -115,54 +64,24 @@
 /area/awaymission/example)
 "at" = (
 /obj/machinery/gateway,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
-/area/awaymission/example)
-"av" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/turf/simulated/floor/plating,
 /area/awaymission/example)
 "aw" = (
 /turf/simulated/floor/plating,
 /area/awaymission/example)
 "ax" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/awaymission/example)
 "ay" = (
 /obj/machinery/light/small,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/awaymission/example)
-"az" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/awaymission/example)
 "aA" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/effect/decal/cleanable/blood/oil,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/example)
 "aB" = (
@@ -3991,7 +3910,7 @@ ab
 ac
 ac
 ac
-az
+am
 ac
 ac
 ac
@@ -4057,7 +3976,7 @@ ab
 ab
 ac
 ac
-av
+ax
 aC
 aG
 ac
@@ -4321,7 +4240,7 @@ aa
 aa
 aa
 ab
-az
+am
 ab
 aa
 aa
@@ -4387,7 +4306,7 @@ ab
 ab
 ab
 ab
-az
+am
 ab
 ab
 aa
@@ -4451,8 +4370,8 @@ aa
 aa
 ab
 ae
-ak
-aq
+am
+am
 aA
 aD
 ab
@@ -4517,7 +4436,7 @@ aa
 aa
 ab
 af
-al
+am
 ar
 ac
 aE

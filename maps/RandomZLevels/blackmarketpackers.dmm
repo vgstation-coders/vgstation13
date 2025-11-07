@@ -137,29 +137,14 @@
 /obj/item/weapon/storage/box/syringes,
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship1)
-"aL" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/plating/airless,
-/area/awaymission/BMPship1)
 "aM" = (
 /obj/machinery/optable,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship1)
 "aN" = (
 /obj/machinery/computer/operating,
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship1)
 "aP" = (
@@ -254,11 +239,7 @@
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship1)
 "ba" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship1)
 "bc" = (
@@ -358,50 +339,22 @@
 	},
 /area/awaymission/BMPship1)
 "bv" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/item/clothing/glasses/regular/hipster,
-/turf/simulated/floor/plating/airless,
-/area/awaymission/BMPship1)
-"bw" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship1)
 "bx" = (
 /obj/machinery/door/unpowered/shuttle,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated,
 /area/awaymission/BMPship1)
 "by" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	dir = 8;
 	icon_state = "warnplate";
 	tag = "icon-warnplate (WEST)"
 	},
-/area/awaymission/BMPship1)
-"bz" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "bA" = (
 /obj/structure/closet/crate/freezer,
@@ -413,17 +366,7 @@
 /obj/machinery/gateway/center/away{
 	calibrated = 0
 	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
-"bE" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "bF" = (
@@ -447,13 +390,9 @@
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship3)
 "bK" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/machinery/shieldwallgen,
 /turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
+/area/awaymission/BMPship2)
 "bM" = (
 /obj/machinery/gateway/away,
 /turf/simulated/floor/plating,
@@ -507,38 +446,18 @@
 /obj/machinery/sleeper,
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship1)
-"bZ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
 "ca" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/item/weapon/hand_labeler,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "cb" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "cc" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/item/weapon/storage/box,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "cd" = (
@@ -632,11 +551,7 @@
 	},
 /area/awaymission/BMPship1)
 "cw" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating{
 	icon_state = "warnplate"
 	},
@@ -664,15 +579,12 @@
 	},
 /area/awaymission/BMPship3)
 "cB" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
 /obj/machinery/power/apc{
 	dir = 1;
 	locked = 0;
 	req_access = ""
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "carpet";
 	tag = "icon-carpet"
@@ -813,14 +725,10 @@
 	},
 /area/awaymission/BMPship2)
 "cV" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/door/poddoor/shutters{
 	id_tag = "packerCargo"
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "cW" = (
@@ -838,17 +746,11 @@
 	},
 /area/awaymission/BMPship3)
 "cY" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/machinery/power/terminal{
+	dir = 8
 	},
-/turf/simulated/floor{
-	dir = 4;
-	icon_state = "carpet15-7";
-	tag = "icon-carpet15-7 (EAST)"
-	},
-/area/awaymission/BMPship3)
+/turf/simulated/floor/plating,
+/area/awaymission/BMPship1)
 "cZ" = (
 /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice,
 /turf/simulated/floor{
@@ -924,14 +826,6 @@
 	icon_state = "hydrofloor"
 	},
 /area/awaymission/BMPship1)
-"do" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor,
-/area/awaymission/BMPship1)
 "dp" = (
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
@@ -949,24 +843,8 @@
 	tag = "icon-carpet15-11 (EAST)"
 	},
 /area/awaymission/BMPship3)
-"dt" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor{
-	dir = 4;
-	icon_state = "carpet15-11";
-	tag = "icon-carpet15-11 (EAST)"
-	},
-/area/awaymission/BMPship3)
 "du" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "carpet";
 	tag = "icon-carpet"
@@ -991,11 +869,7 @@
 /area/awaymission/BMPship2)
 "dy" = (
 /obj/structure/window/reinforced,
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "barber";
 	tag = "icon-barber"
@@ -1026,16 +900,6 @@
 	icon_state = "bar"
 	},
 /area/awaymission/BMPship2)
-"dC" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/awaymission/BMPship1)
 "dD" = (
 /obj/structure/closet/secure_closet/freezer/meat{
 	opened = 1
@@ -1074,17 +938,13 @@
 	},
 /area/awaymission/BMPship1)
 "dI" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /obj/machinery/power/apc{
 	dir = 1;
 	environ = 0;
 	locked = 0;
 	req_access = ""
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "dJ" = (
@@ -1131,17 +991,6 @@
 	tag = "icon-carpet10-0 (EAST)"
 	},
 /area/awaymission/BMPship3)
-"dO" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor{
-	icon_state = "carpet";
-	tag = "icon-carpet"
-	},
-/area/awaymission/BMPship3)
 "dP" = (
 /obj/machinery/portable_atmospherics/hydroponics,
 /turf/simulated/floor{
@@ -1172,87 +1021,24 @@
 	tag = "icon-green (SOUTHEAST)"
 	},
 /area/awaymission/BMPship2)
-"dU" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/awaymission/BMPship2)
-"dV" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/awaymission/BMPship2)
-"dW" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/awaymission/BMPship2)
 "dX" = (
 /obj/item/weapon/reagent_containers/food/snacks/meat,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
 /area/awaymission/BMPship1)
 "dY" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
 "dZ" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "hydrofloor"
 	},
-/area/awaymission/BMPship1)
-"ea" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor,
 /area/awaymission/BMPship1)
 "eb" = (
 /obj/structure/cable{
@@ -1353,11 +1139,7 @@
 	dir = 4;
 	icon_state = "tube1"
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "carpet";
@@ -1372,22 +1154,8 @@
 	icon_state = "bar"
 	},
 /area/awaymission/BMPship2)
-"eo" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/awaymission/BMPship2)
 "eq" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1403,16 +1171,6 @@
 "es" = (
 /turf/simulated/wall/r_wall,
 /area/awaymission/BMPship2)
-"et" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/awaymission/BMPship1)
 "eu" = (
 /obj/machinery/light{
 	dir = 4
@@ -1480,15 +1238,8 @@
 	},
 /area/awaymission/BMPship3)
 "eD" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "carpet";
@@ -1497,60 +1248,25 @@
 /area/awaymission/BMPship3)
 "eE" = (
 /obj/machinery/door/airlock/silver,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "carpetside";
 	tag = "icon-carpetside (EAST)"
 	},
 /area/awaymission/BMPship2)
-"eF" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/awaymission/BMPship2)
 "eG" = (
 /obj/machinery/shieldwallgen,
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship2)
-"eH" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/awaymission/BMPship2)
 "eI" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
 /obj/machinery/power/apc{
 	dir = 1;
 	locked = 0;
 	req_access = ""
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1596,11 +1312,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1646,28 +1358,6 @@
 	icon_state = "warning"
 	},
 /area/awaymission/BMPship1)
-"eU" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor{
-	icon_state = "hydrofloor"
-	},
-/area/awaymission/BMPship1)
-"eV" = (
-/obj/machinery/power/battery/smes/infinite{
-	desc = "A high-capacity superconducting magnetic energy storage (SMES) unit.";
-	name = "power storage unit"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
 "eW" = (
 /obj/machinery/power/terminal{
 	dir = 8
@@ -1679,15 +1369,8 @@
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "eX" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -1737,11 +1420,7 @@
 	},
 /area/awaymission/BMPship3)
 "fd" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "carpet15-15";
@@ -1809,14 +1488,10 @@
 	},
 /area/awaymission/BMPship1)
 "fn" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -1860,24 +1535,8 @@
 	},
 /turf/space,
 /area/awaymission/BMPship1)
-"fw" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor{
-	dir = 4;
-	icon_state = "carpet15-7";
-	tag = "icon-carpet15-7 (EAST)"
-	},
-/area/awaymission/BMPship3)
 "fx" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "carpet15-13";
@@ -1885,69 +1544,16 @@
 	},
 /area/awaymission/BMPship3)
 "fy" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "carpet15-7";
 	tag = "icon-carpet15-7 (EAST)"
 	},
 /area/awaymission/BMPship3)
-"fz" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor{
-	dir = 4;
-	icon_state = "carpet15-15";
-	tag = "icon-carpet15-15 (EAST)"
-	},
-/area/awaymission/BMPship3)
-"fA" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/awaymission/BMPship2)
-"fB" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/awaymission/BMPship2)
 "fC" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
+/obj/structure/cable/mapping{
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "bar"
@@ -2013,11 +1619,7 @@
 	},
 /area/awaymission/BMPship3)
 "fL" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "carpet15-11";
@@ -2059,53 +1661,17 @@
 	},
 /area/awaymission/BMPship2)
 "fR" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
+/obj/structure/cable/mapping{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
 /area/awaymission/BMPship2)
 "fS" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "bar"
-	},
-/area/awaymission/BMPship1)
-"fT" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/awaymission/BMPship1)
-"fU" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
 	},
 /area/awaymission/BMPship1)
 "fV" = (
@@ -2124,15 +1690,11 @@
 	desc = "A high-capacity superconducting magnetic energy storage (SMES) unit.";
 	name = "power storage unit"
 	},
-/obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "fY" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "warning"
@@ -2202,12 +1764,8 @@
 /turf/simulated/floor/shuttle/plating,
 /area/awaymission/BMPship1)
 "gj" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/item/weapon/cell/high,
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
 "gk" = (
@@ -2222,12 +1780,8 @@
 	},
 /area/awaymission/BMPship3)
 "gm" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/door/unpowered/shuttle,
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "carpetside";
 	tag = "icon-carpetside"
@@ -2333,53 +1887,26 @@
 /obj/item/stack/cable_coil{
 	amount = 5
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship3)
 "gE" = (
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship3)
 "gF" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless{
 	icon_state = "panelscorched";
 	tag = "icon-panelscorched"
 	},
 /area/awaymission/BMPship3)
-"gG" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
-/area/awaymission/BMPship3)
 "gH" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/item/weapon/kitchen/utensil/knife/large,
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -2393,21 +1920,7 @@
 	},
 /area/awaymission/BMPship2)
 "gJ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/awaymission/BMPship1)
-"gL" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -2455,27 +1968,13 @@
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship3)
 "gT" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship3)
 "gU" = (
 /turf/simulated/floor{
 	icon_state = "plating";
 	tag = "icon-plating"
-	},
-/area/awaymission/BMPship2)
-"gV" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
 	},
 /area/awaymission/BMPship2)
 "gW" = (
@@ -2498,11 +1997,7 @@
 	},
 /area/awaymission/BMPship1)
 "gZ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/shuttle/plating,
 /area/awaymission/BMPship1)
 "ha" = (
@@ -2554,20 +2049,12 @@
 /obj/machinery/door/airlock/silver{
 	locked = 1
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
 "hi" = (
 /obj/machinery/door/unpowered/shuttle,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
 "hj" = (
@@ -2578,12 +2065,8 @@
 	},
 /area/awaymission)
 "hm" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/door/airlock/silver,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/awaymission/BMPship3)
 "hp" = (
@@ -2641,7 +2124,7 @@
 /turf/simulated/floor/engine,
 /area/awaymission/BMPship3)
 "hz" = (
-/obj/structure/cable,
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless{
 	icon_state = "platingdmg3";
 	tag = "icon-platingdmg3"
@@ -2714,36 +2197,19 @@
 /area/awaymission/BMPship1)
 "hP" = (
 /obj/effect/decal/remains/human,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
 "hR" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
+/obj/structure/cable/mapping{
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
 "hS" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
 "hT" = (
@@ -2809,11 +2275,7 @@
 /obj/structure/bed,
 /obj/item/weapon/bedsheet,
 /obj/item/weapon/storage/wallet/random,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
 "ie" = (
@@ -2841,45 +2303,14 @@
 	tag = "icon-platingdmg3"
 	},
 /area/awaymission)
-"ii" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/simulated/floor/plating/airless,
-/area/awaymission)
 "ij" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating/airless,
 /area/awaymission)
 "ik" = (
 /obj/machinery/door/unpowered/shuttle,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable/mapping,
 /turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
-"il" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/awaymission/BMPship1)
-"im" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor,
 /area/awaymission/BMPship1)
 "in" = (
 /obj/item/weapon/shard{
@@ -9704,7 +9135,7 @@ dL
 ej
 cX
 ds
-fw
+fy
 fL
 fd
 gm
@@ -9958,8 +9389,8 @@ ip
 ip
 ip
 cB
-cY
-dt
+fy
+fL
 dN
 el
 cX
@@ -10090,15 +9521,15 @@ ci
 cA
 cA
 du
-dO
+du
 em
 eD
 fd
-fz
+fd
 cA
 gc
 ip
-gG
+hz
 gT
 gT
 hm
@@ -10352,7 +9783,7 @@ cK
 cK
 cK
 en
-dV
+eq
 cK
 cK
 cK
@@ -10481,8 +9912,8 @@ cE
 cZ
 cK
 cK
-eo
-eF
+eq
+eq
 cK
 cK
 cK
@@ -10611,7 +10042,7 @@ cF
 cF
 cF
 dP
-dV
+eq
 es
 es
 es
@@ -10741,7 +10172,7 @@ cG
 da
 da
 dQ
-dV
+eq
 es
 fe
 fe
@@ -10871,7 +10302,7 @@ cH
 da
 dv
 dQ
-dV
+eq
 es
 ff
 fe
@@ -11001,7 +10432,7 @@ cI
 da
 da
 dR
-dV
+eq
 es
 fe
 fh
@@ -11131,7 +10562,7 @@ cG
 db
 da
 dQ
-dV
+eq
 es
 fg
 fg
@@ -11261,8 +10692,8 @@ cJ
 cJ
 cJ
 dS
-dV
-eG
+eq
+bK
 fh
 fh
 fh
@@ -11391,10 +10822,10 @@ cE
 cK
 cK
 cK
-dW
-eH
 eq
-fA
+eq
+eq
+fR
 eq
 eq
 eq
@@ -11524,7 +10955,7 @@ cK
 cK
 cK
 fi
-dV
+eq
 cK
 cK
 gp
@@ -11654,7 +11085,7 @@ hr
 hr
 eI
 eq
-fB
+eq
 fP
 hr
 hr
@@ -11784,7 +11215,7 @@ cK
 cK
 cK
 cK
-dV
+eq
 cK
 cK
 cK
@@ -11910,7 +11341,7 @@ ha
 cN
 dd
 dy
-dU
+eq
 eq
 eq
 eq
@@ -11919,7 +11350,7 @@ eq
 eq
 eq
 eq
-gV
+eq
 cK
 hr
 ac
@@ -12040,7 +11471,7 @@ ha
 cO
 dd
 dz
-dV
+eq
 cK
 eJ
 cK
@@ -12049,7 +11480,7 @@ cK
 cK
 gq
 cK
-dV
+eq
 cK
 hr
 hG
@@ -12170,7 +11601,7 @@ ha
 cP
 de
 dA
-dV
+eq
 er
 eK
 fj
@@ -12179,7 +11610,7 @@ cK
 er
 gr
 gI
-dV
+eq
 fP
 hr
 hH
@@ -12300,7 +11731,7 @@ ha
 cK
 cK
 cK
-dV
+eq
 es
 eL
 es
@@ -12309,7 +11740,7 @@ fQ
 es
 gs
 es
-dV
+eq
 cK
 hr
 ac
@@ -12430,7 +11861,7 @@ cn
 cK
 cK
 cK
-dV
+eq
 es
 eK
 es
@@ -12439,7 +11870,7 @@ cK
 es
 gt
 es
-dV
+eq
 cK
 hr
 hI
@@ -12560,7 +11991,7 @@ cn
 cK
 cK
 cK
-dV
+eq
 es
 eK
 es
@@ -12569,7 +12000,7 @@ cK
 es
 gt
 es
-dV
+eq
 cK
 hr
 hG
@@ -12690,7 +12121,7 @@ cn
 cK
 cK
 cK
-dV
+eq
 es
 eK
 es
@@ -12699,7 +12130,7 @@ cK
 es
 gt
 es
-dV
+eq
 cK
 hr
 ac
@@ -12820,7 +12251,7 @@ ha
 cQ
 df
 cK
-dV
+eq
 es
 eK
 es
@@ -12829,7 +12260,7 @@ cK
 es
 gt
 es
-dV
+eq
 cK
 hr
 hJ
@@ -12950,7 +12381,7 @@ ha
 cR
 df
 cK
-dV
+eq
 es
 eM
 es
@@ -12959,7 +12390,7 @@ cK
 es
 eM
 es
-dV
+eq
 fP
 hr
 hK
@@ -13071,7 +12502,7 @@ aa
 aa
 aa
 ha
-aL
+ba
 ba
 bv
 aG
@@ -13080,7 +12511,7 @@ ha
 cS
 cK
 dB
-dV
+eq
 es
 eN
 es
@@ -13089,7 +12520,7 @@ cK
 es
 eN
 es
-dV
+eq
 cK
 hr
 hL
@@ -13203,14 +12634,14 @@ aa
 ha
 aM
 aG
-bw
+ba
 aG
 bX
 ha
 cQ
 df
 cK
-dW
+eq
 eq
 eO
 eq
@@ -13219,12 +12650,12 @@ fR
 eq
 eO
 eq
-eF
+eq
 cK
 hr
 hM
 hG
-ii
+ij
 hG
 iw
 iE
@@ -13333,7 +12764,7 @@ aa
 ha
 aN
 aG
-bw
+ba
 aG
 aG
 ha
@@ -13345,7 +12776,7 @@ cK
 eP
 fk
 cK
-dV
+eq
 gf
 gu
 cK
@@ -13605,7 +13036,7 @@ di
 di
 fm
 di
-fT
+gJ
 fm
 di
 di
@@ -13614,7 +13045,7 @@ ha
 dp
 hO
 ht
-il
+hS
 dp
 iy
 ha
@@ -13723,28 +13154,28 @@ aj
 ha
 aQ
 bd
-bz
-bK
-bZ
+cb
+cb
+cb
 cp
 ha
 dh
-dC
+gJ
 dX
-et
-et
+gJ
+gJ
 fn
-et
-fU
+gJ
+gJ
 fn
-et
+gJ
 gJ
 di
 ha
 dp
 dp
 dp
-il
+hS
 dp
 iz
 ha
@@ -13868,13 +13299,13 @@ fF
 fF
 fo
 gv
-fT
+gJ
 di
 hg
 dp
 bd
 dp
-il
+hS
 ir
 dp
 ha
@@ -13998,13 +13429,13 @@ fp
 fV
 gh
 gw
-fT
+gJ
 di
 ha
 dp
 dp
 ic
-il
+hS
 is
 bd
 ha
@@ -14128,13 +13559,13 @@ fp
 fp
 fp
 gw
-fT
+gJ
 di
 ha
 hs
 dp
 dp
-il
+hS
 dp
 dp
 ha
@@ -14258,13 +13689,13 @@ fG
 fG
 gi
 gx
-gL
-et
+gJ
+gJ
 hh
-do
+hS
 hP
 id
-im
+hS
 ic
 dp
 hg
@@ -14392,7 +13823,7 @@ di
 gX
 ha
 ht
-il
+hS
 dp
 dp
 dp
@@ -14522,7 +13953,7 @@ gM
 gY
 ha
 hu
-il
+hS
 ic
 dp
 ic
@@ -14652,7 +14083,7 @@ ha
 ha
 ha
 hv
-il
+hS
 dp
 dp
 dp
@@ -14763,7 +14194,7 @@ aa
 ha
 aU
 bd
-bE
+cb
 bd
 cb
 cv
@@ -14782,7 +14213,7 @@ dH
 dH
 ha
 hs
-il
+hS
 dp
 ha
 it
@@ -14895,23 +14326,23 @@ aU
 bi
 bd
 bd
-bz
+cb
 cw
 cV
-do
-do
+hS
+hS
 dY
-do
-eU
-eU
-do
-do
+hS
+dZ
+dZ
+hS
+hS
 gj
-eU
-do
+dZ
+hS
 gZ
 hi
-do
+hS
 hR
 dp
 ha
@@ -15160,11 +14591,11 @@ ha
 ha
 ha
 dn
-ea
-bK
-eV
-bK
-bK
+dY
+cb
+fX
+cb
+cb
 fX
 bd
 gy
@@ -15292,7 +14723,7 @@ ha
 dI
 eb
 bd
-eW
+cY
 bd
 bd
 eW
@@ -15423,8 +14854,8 @@ dJ
 ec
 ex
 eX
-ex
-ex
+fY
+fY
 fY
 dJ
 ec
