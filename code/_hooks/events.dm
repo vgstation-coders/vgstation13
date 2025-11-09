@@ -370,8 +370,8 @@
 		registered_events[event_type] = list()
 	var/key = "[ref(target)]:[procname]"
 	registered_events[event_type][key] = list(
-		EVENT_HANDLER_OBJREF_INDEX = target,
-		EVENT_HANDLER_PROCNAME_INDEX = procname
+		/*EVENT_HANDLER_OBJREF_INDEX*/ target,
+		/*EVENT_HANDLER_PROCNAME_INDEX*/ procname
 	)
 
 /**
