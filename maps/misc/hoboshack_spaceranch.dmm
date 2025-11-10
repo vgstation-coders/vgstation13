@@ -19,7 +19,15 @@
 /area/shack)
 "bA" = (
 /obj/structure/forge,
-/turf/simulated/floor/wood,
+/obj/effect/decal/warning_stripes{
+	dir = 6;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHEAST)"
+	},
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "ci" = (
 /mob/living/simple_animal/cow/chocolate{
@@ -61,8 +69,16 @@
 /area/shack)
 "gq" = (
 /obj/effect/landmark/hobostart,
-/obj/structure/bed/chair/wood/normal,
-/turf/simulated/floor/wood,
+/obj/effect/decal/warning_stripes{
+	dir = 9;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHWEST)"
+	},
+/obj/structure/bed/chair/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "gC" = (
 /obj/structure/mirror{
@@ -190,6 +206,17 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/shack)
+"nF" = (
+/obj/effect/decal/warning_stripes{
+	dir = 5;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHEAST)"
+	},
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
+/area/shack)
 "nK" = (
 /turf/simulated/floor/wood,
 /area/shack)
@@ -289,7 +316,15 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/turf/simulated/floor/wood,
+/obj/effect/decal/warning_stripes{
+	dir = 10;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHWEST)"
+	},
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "tR" = (
 /obj/machinery/atmospherics/unary/tank/air{
@@ -838,7 +873,7 @@ ve
 rB
 TM
 ax
-nK
+nF
 bA
 Se
 NI
