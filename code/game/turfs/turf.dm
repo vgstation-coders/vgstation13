@@ -121,7 +121,7 @@
 	pick_icon_state()
 
 /turf/proc/pick_icon_state()
-	if(base_icon_state && min_icon_states && max_icon_states && prob(variance))
+	if(base_icon_state && max_icon_states && prob(variance))
 		icon_state = "[base_icon_state][rand(min_icon_states,max_icon_states)]"
 
 /turf/initialize()
