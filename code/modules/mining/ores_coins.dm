@@ -442,13 +442,7 @@
 		// Something about this coin stands out...
 		luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
 		overlays += image('icons/obj/items.dmi', "shine")
-		if (prob(20))
-			// Sometimes it's very lucky!
-			luckiness = 500 * credits
-		else
-			// But most of the time, it's just our imagination.
-			luckiness = 0
-
+		luckiness = 500 * credits
 
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
 	if(material==null)
