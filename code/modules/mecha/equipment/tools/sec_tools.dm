@@ -11,7 +11,7 @@
 	var/datum/global_iterator/pr_mech_jail
 	salvageable = 0
 	equip_type = EQUIP_UTILITY
-	has_equip_overlay = FALSE
+	equip_slot = MECHA_BACK
 	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/can_attach(obj/mecha/combat/G)

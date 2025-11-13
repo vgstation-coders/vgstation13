@@ -9,7 +9,7 @@
 	var/projectiles_cache = 0
 	var/projectiles_cache_max = 100
 	var/disabledreload = FALSE
-	var/ammo_type = "/obj/item/ammo_casing/c9mm"
+	var/list/ammo_types = list(/obj/item/ammo_casing/c9mm)
 	var/caliber = MM9
 	var/no_caliber = FALSE
 	var/list/loaded_projectiles = list()
@@ -83,7 +83,7 @@
 
 	if(is_ammo_storage)
 		var/obj/item/ammo_storage/box/A = box
-		if(!A.stored_ammo)
+		if(!A.stored_ammo || !A.stored_ammo.len)
 			to_chat(user, "<span class='warning'>This box of ammo is empty!</span>")
 			return
 		sample_ammo = A.stored_ammo[1]
@@ -101,8 +101,19 @@
 
 	var/found_gun = FALSE
 	for(var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/gun in equipment)
-		if(gun.no_caliber || gun.ammo_type != sample_ammo.type)
+		// FIX: Check if sample_ammo.type is in the ammo_types list
+		if(gun.no_caliber)
 			continue
+		if(!gun.ammo_types || !gun.ammo_types.len)
+			continue
+		var/ammo_compatible = FALSE
+		for(var/ammo_path in gun.ammo_types)
+			if(sample_ammo.type == ammo_path)
+				ammo_compatible = TRUE
+				break
+		if(!ammo_compatible)
+			continue
+
 		found_gun = TRUE
 		var/ammo_needed = gun.projectiles_cache_max - gun.projectiles_cache
 		if(ammo_needed > 0)
@@ -124,7 +135,15 @@
 				var/obj/item/weapon/storage/box/B = box
 				var/list/ammo_to_remove = list()
 				for(var/obj/item/ammo_casing/casing in B.contents)
-					if(casing.type != gun.ammo_type || !casing.BB)
+					// FIX: Check if casing.type is in the ammo_types list
+					if(!casing.BB)
+						continue
+					var/casing_compatible = FALSE
+					for(var/ammo_path in gun.ammo_types)
+						if(casing.type == ammo_path)
+							casing_compatible = TRUE
+							break
+					if(!casing_compatible)
 						continue
 					if(ammo_loaded >= ammo_needed)
 						break

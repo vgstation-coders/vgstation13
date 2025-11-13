@@ -317,7 +317,6 @@
 	energy_drain = 15
 	var/dam_force = 20
 	equip_type = EQUIP_UTILITY
-	has_equip_overlay = FALSE
 	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/can_attach(obj/mecha/working/M as obj)
@@ -1470,7 +1469,6 @@
 	var/datum/global_iterator/pr_switchtool
 	var/obj/item/weapon/switchtool/engineering/mech/switchtool
 	equip_type = EQUIP_UTILITY
-	has_equip_overlay = FALSE
 	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/can_attach(var/obj/mecha/working/clarke/M)

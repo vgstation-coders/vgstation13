@@ -5,7 +5,6 @@
 	initial_icon = "durand"
 	base_color = "#A8ABB3"
 	step_in = 3
-	dir_in = 1 //Facing North.
 	health = 350
 	deflect_chance = 10
 	damage_absorption = list("brute"=0.7,"fire"=1,"bullet"=0.8,"laser"=1,"energy"=1,"bomb"=1)

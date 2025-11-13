@@ -91,7 +91,7 @@
 	var/silicon_pilot
 	var/silicon_icon_state = null
 	var/mech_maints_ready = FALSE
-	var/enter_delay = 40
+	var/enter_delay = 20
 
 	var/list/equipment = new
 	var/obj/item/mecha_parts/mecha_equipment/selected
@@ -637,7 +637,6 @@ Fire damage comes from tank
 
 	if(user.a_intent == I_DISARM && !flipped)
 		TryFlip(user, FALSE, tool = "[user]'s shove")
-		to_chat(user, "<span class='warning'>debug: probably called TryFlip! [user]</span>")
 	else if((M_HULK in user.mutations) && !prob(temp_deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
@@ -827,7 +826,6 @@ Fire damage comes from tank
 		if(damage >= internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
 			src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),ignore_threshold)
 
-//		var/obj/item/mecha_parts/component/armor/ArmC = internal_components[MECH_ARMOR]
 		var/chance = 75
 		var/penetration = Proj.penetration + temp_proj_penetration
 		if(!enclosed && occupant && !silicon_pilot)
@@ -843,7 +841,6 @@ Fire damage comes from tank
 					src.take_damage(damage/1.5, Proj.flag) // Less damage transferred to the mech
 					return
 				return
-//		rad_protection = initial(rad_protection)
 
 		//AP projectiles have a chance to cause additional damage
 		if(temp_penetration_reduction)
@@ -1847,20 +1844,19 @@ Fire damage comes from tank
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
 
-	var/delay = 0
+	var/delay = enter_delay
 
 	if(HC)
 		delay += HC.egress_delay
 	if(get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/runningboard))
-		enter_delay += delay
-		enter_delay = max(0, enter_delay -= 40)
-		if(enter_delay <= 0)
+		delay = max(0, delay -= 40)
+		if(delay <= 0)
 			visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the running board!</span>")
 			refresh_spells()
 			moved_inside(usr)
 	else
 		visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
-		if(do_after(usr, src, enter_delay + delay))
+		if(do_after(usr, src, delay))
 			if(!src.occupant)
 				moved_inside(usr)
 				refresh_spells()

@@ -5,17 +5,17 @@
 	initial_icon = "ripley"
 	silicon_icon_state = "ripley-empty"
 	base_color = "#DFD472"
-	step_in = 2.5 //Move speed, lower is faster.
+	step_in = 2 //Move speed, lower is faster.
 	/// How fast the mech is in low pressure
-	var/fast_pressure_step_in = 1.5
+	var/fast_pressure_step_in = 1
 	/// How fast the mech is in normal pressure
-	var/slow_pressure_step_in = 2.5
+	var/slow_pressure_step_in = 2
 	transparent_cabin = TRUE
 	health = 150
 	damage_absorption = list("brute"=0.85,"fire"=1.2,"bullet"=1,"laser"=1,"energy"=1,"bomb"=1)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley
 	enclosed = FALSE
-	enter_delay = 15
+	enter_delay = 10
 	mech_sprites = list(
 		"ripley",
 		"ripley_glass",
@@ -78,17 +78,17 @@
 	name = "APLU MK-II \"Ripley\""
 	icon_state = "ripleymkii"
 	initial_icon = "ripleymkii"
-	step_in = 3 //Move speed, lower is faster.
+	step_in = 2.5 //Move speed, lower is faster.
 	/// How fast the mech is in low pressure
-	fast_pressure_step_in = 2
+	fast_pressure_step_in = 1.5
 	/// How fast the mech is in normal pressure
-	slow_pressure_step_in = 3
+	slow_pressure_step_in = 2.5
 	transparent_cabin = FALSE
 	health = 200
 	damage_absorption = list("brute"=0.8,"fire"=1.2,"bullet"=1,"laser"=1,"energy"=1,"bomb"=0.8)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/mk2
 	enclosed = TRUE
-	enter_delay = 40
+	enter_delay = 20
 	mech_sprites = list(
 		"ripleymkii",
 		"titan",

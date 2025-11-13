@@ -5,7 +5,6 @@
 	initial_icon = "gygax"
 	base_color = "#ED5F3B"
 	step_in = 2
-	dir_in = 1 //Facing North.
 	health = 250
 	deflect_chance = 0
 	damage_absorption = list("brute"=0.9,"fire"=1,"bullet"=1,"laser"=0.9,"energy"=1,"bomb"=1)

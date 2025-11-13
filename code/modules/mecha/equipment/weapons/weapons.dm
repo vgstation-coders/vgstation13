@@ -169,7 +169,7 @@
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	max_projectiles = 20
 	projectiles_cache_max = 60
-	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot"
+	ammo_types = list(/obj/item/ammo_casing/shotgun/buckshot, /obj/item/ammo_casing/shotgun/buckshot/fragment)
 	caliber = GAUGE12
 	step_delay = 20
 
@@ -184,7 +184,7 @@
 	projectiles_cache_max = 300
 	projectiles_per_shot = 3
 	burst_delay = 2
-	ammo_type = "/obj/item/ammo_casing/c380auto"
+	ammo_types = list(/obj/item/ammo_casing/c380auto)
 	caliber = POINT380
 	step_delay = 20
 
@@ -198,7 +198,7 @@
 	max_projectiles = 30
 	projectiles_cache_max = 90
 	projectiles_per_shot = 1
-	ammo_type = "/obj/item/ammo_casing/c9mm"
+	ammo_types = list(/obj/item/ammo_casing/c9mm)
 	caliber = MM9
 	step_delay = 20
 
@@ -213,7 +213,7 @@
 	equip_slot = MECHA_BACK
 	var/missile_speed = 2
 	var/missile_range = 30
-	ammo_type = "/obj/item/ammo_casing/rocket_rpg"
+	ammo_types = list(/obj/item/ammo_casing/rocket_rpg)
 	caliber = ROCKETGRENADE
 	step_delay = 80
 
@@ -262,7 +262,7 @@
 	var/det_time = 20
 	var/obj/item/weapon/grenade/grenade
 	var/can_pre_detonate = FALSE
-	ammo_type = "/obj/item/weapon/grenade/flashbang"
+	ammo_types =  list(/obj/item/weapon/grenade/flashbang)
 	caliber = null
 	no_caliber = TRUE
 
@@ -326,7 +326,7 @@
 	starts_full = TRUE // QoL
 	var/mode = 0
 	var/inflatable_type = 0
-	ammo_type = "/obj/item/weapon/grenade/inflatable"
+	ammo_types = list(/obj/item/weapon/grenade/inflatable)
 	equip_type = EQUIP_UTILITY
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/Topic(href,href_list)
@@ -384,7 +384,7 @@
 	equip_cooldown = 20
 	need_colorize = FALSE
 	starts_full = TRUE // Honk
-	ammo_type = "/obj/item/weapon/bananapeel"
+	ammo_types = list(/obj/item/weapon/bananapeel)
 	caliber = null
 	no_caliber = TRUE
 	step_delay = 20
@@ -419,7 +419,7 @@
 	equip_cooldown = 10
 	need_colorize = FALSE
 	starts_full = TRUE
-	ammo_type = "/obj/item/device/assembly/mousetrap"
+	ammo_types = list(/obj/item/device/assembly/mousetrap)
 	caliber = null
 	no_caliber = TRUE
 	step_delay = 20
@@ -455,7 +455,7 @@
 	equip_cooldown = 5
 	range = MELEE|RANGED
 	starts_full = TRUE // Honk
-	ammo_type = "/obj/item/weapon/reagent_containers/food/snacks/pie"
+	ammo_types = list(/obj/item/weapon/reagent_containers/food/snacks/pie)
 	caliber = null
 	no_caliber = TRUE
 	step_delay = 20
@@ -490,7 +490,7 @@
 	missile_range = 30
 	equip_cooldown = 10
 	starts_full = TRUE
-	ammo_type = "/obj/item/weapon/legcuffs/bolas"
+	ammo_types = list(/obj/item/weapon/legcuffs/bolas)
 	caliber = null
 	no_caliber = TRUE
 	step_delay = 40

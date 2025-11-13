@@ -5,7 +5,6 @@
 	initial_icon = "phazon"
 	base_color = "#4D79A0"
 	step_in = 1
-	dir_in = 1 //Facing North.
 	step_energy_drain = 3
 	health = 140
 	deflect_chance = 10
