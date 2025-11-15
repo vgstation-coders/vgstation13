@@ -16809,7 +16809,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/plating,
-/area/maintenance/fsmaint2)
+/area/maintenance/ghettotheatre)
 "aCu" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -100490,7 +100490,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/research_outpost/xenobot)
+/area/research_outpost/hallway)
 "eeT" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
@@ -115144,6 +115144,9 @@
 	},
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
+"kSI" = (
+/turf/simulated/wall,
+/area/hallway/secondary/exit)
 "loT" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -115526,6 +115529,9 @@
 	icon_state = "asteroidplating"
 	},
 /area/mine/explored)
+"pPg" = (
+/turf/simulated/wall,
+/area/hallway/primary/central)
 "pQs" = (
 /obj/structure/table/woodentable,
 /turf/simulated/floor/wood,
@@ -220720,7 +220726,7 @@ anV
 aug
 auP
 avD
-awr
+ang
 awU
 ayh
 aza
@@ -233291,8 +233297,8 @@ aFP
 aDA
 aqp
 ara
-ara
-ara
+pPg
+pPg
 bak
 bca
 bdK
@@ -236761,7 +236767,7 @@ aeq
 aeW
 afw
 agb
-agz
+agy
 agy
 ahH
 aiC
@@ -241795,7 +241801,7 @@ aaa
 aaa
 aoT
 aoT
-aqw
+ara
 ara
 ara
 asz
@@ -242297,7 +242303,7 @@ aaa
 aaa
 aaa
 aaa
-aqv
+ati
 aqZ
 arO
 asy
@@ -269938,7 +269944,7 @@ aaa
 aaa
 aaa
 aaa
-aRx
+kSI
 bbj
 bcG
 bcG
@@ -1260857,7 +1260863,7 @@ eiD
 ejK
 ekK
 elO
-emD
+emA
 ens
 ehq
 dVE
@@ -1262865,7 +1262871,7 @@ eiA
 ejH
 ekJ
 elK
-emA
+emD
 enp
 ehu
 dVE
