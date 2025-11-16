@@ -1147,6 +1147,7 @@
 	if(prob(10)) //I'M SO ANEMIC I COULD JUST -DIE-.
 		var/datum/wound/internal_bleeding/I = new (15)
 		affected.wounds += I
+		affected.internally_bleeding = TRUE
 		custom_pain("Something tears wetly in your [affected] as [selection] is pulled free!", 1)
 	return 1
 

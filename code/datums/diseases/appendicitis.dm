@@ -54,4 +54,5 @@
 			var/datum/wound/W = new /datum/wound/internal_bleeding(20)
 			H.adjustToxLoss(25)
 			groin.wounds += W
+			groin.internally_bleeding = TRUE
 			src.cure()
