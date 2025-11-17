@@ -165,8 +165,9 @@ Pipelines + Other Objects -> Pipe network
 	for (var/obj/machinery/atmospherics/connected_node in node_list)
 		var/con_dir = get_dir(src, connected_node)
 		missing_nodes -= con_dir // finds all the directions that aren't pointed to by a node
-		var/image/nodecon = icon_node_con(con_dir)
-		if(nodecon)
+		var/image/nodecon_ref = icon_node_con(con_dir)
+		if(nodecon_ref)
+			var/image/nodecon = image(nodecon_ref)
 			nodecon.color = node_color_for(connected_node)
 			nodecon.alpha = node_alpha_for(connected_node)
 			nodecon.plane = node_plane()
