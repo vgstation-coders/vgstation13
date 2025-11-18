@@ -1412,7 +1412,7 @@
 /area/vault/mothership_lab/maintenance)
 "nL" = (
 /obj/structure/table/reinforced,
-/obj/item/device/flashlight/lamp/slime,
+/obj/item/device/flashlight/slime,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "nQ" = (

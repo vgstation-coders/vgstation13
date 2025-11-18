@@ -1519,7 +1519,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/table,
-/obj/item/device/flashlight/lamp/slime,
+/obj/item/device/flashlight/slime,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
 "ne" = (
@@ -3406,7 +3406,7 @@
 	dir = 8
 	},
 /obj/structure/table,
-/obj/item/device/flashlight/lamp/slime,
+/obj/item/device/flashlight/slime,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
 "Ec" = (
@@ -4099,7 +4099,7 @@
 /area/vault/mothership_lab/cave)
 "Ji" = (
 /obj/structure/table/reinforced,
-/obj/item/device/flashlight/lamp/slime,
+/obj/item/device/flashlight/slime,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "Jo" = (
@@ -5089,7 +5089,7 @@
 /area/vault/mothership_lab/habitation)
 "SL" = (
 /obj/structure/table,
-/obj/item/device/flashlight/lamp/slime,
+/obj/item/device/flashlight/slime,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
 "SO" = (
