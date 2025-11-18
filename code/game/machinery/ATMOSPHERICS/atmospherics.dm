@@ -31,7 +31,6 @@ Pipelines + Other Objects -> Pipe network
 	var/initialize_directions_he = 0 // Same, but for HE pipes.
 
 	var/can_be_coloured = 1 //set to 0 to blacklist your atmos thing from being colored
-	var/can_be_transparent = 1 //set to 0 to blacklist your atmos thing from being painted transparent
 	var/image/centre_overlay = null
 	// Investigation logs
 	var/log
@@ -136,9 +135,6 @@ Pipelines + Other Objects -> Pipe network
 
 	return PIPE_COLOR_GREY
 
-/obj/machinery/atmospherics/proc/node_alpha_for(var/obj/machinery/atmospherics/other)
-	return alpha < 255 ? alpha : other.alpha
-
 /obj/machinery/atmospherics/proc/node_layer()
 	var/new_layer = level == LEVEL_BELOW_FLOOR ? PIPE_LAYER : EXPOSED_PIPE_LAYER
 	return PIPING_LAYER(new_layer, piping_layer)
@@ -169,14 +165,8 @@ Pipelines + Other Objects -> Pipe network
 		if(nodecon_ref)
 			var/image/nodecon = image(nodecon_ref)
 			nodecon.color = node_color_for(connected_node)
-			nodecon.alpha = node_alpha_for(connected_node)
 			nodecon.plane = node_plane()
 			nodecon.layer = node_layer()
-			if(nodecon.alpha < 255)
-				var/list/node_gases = connected_node.get_visible_gases()
-				if(node_gases)
-					for(var/nodegas in node_gases)
-						nodecon.underlays += image('icons/obj/atmospherics/gas_overlays.dmi',src,nodegas,nodecon.layer,con_dir)
 			underlays += nodecon
 		if (!adjacent_procd && connected_node.update_icon_ready && !(istype(connected_node,/obj/machinery/atmospherics/pipe/simple)))
 			connected_node.update_icon(1)
