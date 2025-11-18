@@ -6071,7 +6071,7 @@
 "amL" = (
 /obj/machinery/door/airlock/external{
 	name = "Toxins Western External Airlock";
-	req_access_txt = "47"
+	req_one_access_txt = "13;47"
 	},
 /turf/simulated/floor/plating/airless,
 /area/maintenance/fore)
@@ -7548,7 +7548,7 @@
 "apQ" = (
 /obj/machinery/door/airlock/external{
 	name = "Toxins Western External Airlock";
-	req_access_txt = "47"
+	req_one_access_txt = "13;47"
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fore)
@@ -7563,7 +7563,7 @@
 	},
 /obj/machinery/door/airlock/external{
 	name = "Testing Eastern External Airlock";
-	req_access_txt = "47"
+	req_one_access_txt = "13;47"
 	},
 /turf/simulated/floor/plating/airless,
 /area/maintenance/fpmaint)
@@ -9867,7 +9867,7 @@
 	},
 /obj/machinery/door/airlock/external{
 	name = "Testing Eastern External Airlock";
-	req_access_txt = "47"
+	req_one_access_txt = "13;47"
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
