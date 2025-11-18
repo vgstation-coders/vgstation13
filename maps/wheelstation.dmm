@@ -95314,9 +95314,7 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/gearstore)
 "dWb" = (
-/obj/machinery/atmospherics/unary/tank/air{
-	dir = 8
-	},
+/obj/structure/closet/crate/flatpack/brewer,
 /turf/simulated/floor/plating,
 /area/research_outpost/gearstore)
 "dWc" = (
@@ -1265828,7 +1265826,7 @@ dRx
 dSq
 dSZ
 dNW
-dUz
+dUx
 nrZ
 dVW
 dUz
@@ -1266330,7 +1266328,7 @@ dRF
 dSo
 dTj
 dSo
-dUz
+dUx
 dVi
 dVV
 dWC
@@ -1270851,7 +1270849,7 @@ dTO
 dUx
 dVp
 dWb
-dWb
+dWa
 dUz
 dXr
 dKo
