@@ -256,6 +256,7 @@
 /area/vault/mothership_lab/habitation)
 "cr" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil,
+/obj/item/seeds/aloe,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "cu" = (
@@ -502,17 +503,11 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/habitation)
 "eg" = (
-/obj/item/seeds/potatoseed,
-/obj/item/seeds/potatoseed,
-/obj/item/seeds/tomatoseed,
-/obj/item/seeds/tomatoseed,
-/obj/item/seeds/wheatseed,
-/obj/item/seeds/wheatseed,
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
 	on = 1
 	},
-/obj/structure/closet/crate/ayy,
+/obj/machinery/vending/hydroseeds,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "eh" = (
@@ -1519,13 +1514,13 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/table,
-/obj/item/device/flashlight/lamp/slime,
+/obj/item/device/flashlight/slime,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
 "ne" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/portable_atmospherics/hydroponics/soil,
-/obj/item/weapon/reagent_containers/glass/bottle/eznutrient,
+/obj/item/seeds/aloe,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "ni" = (
@@ -2267,18 +2262,7 @@
 /area/vault/mothership_lab/cave)
 "td" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/stock_parts/manipulator,
-/obj/item/weapon/stock_parts/manipulator,
-/obj/item/weapon/stock_parts/matter_bin,
-/obj/item/weapon/stock_parts/matter_bin,
-/obj/item/weapon/stock_parts/micro_laser,
-/obj/item/weapon/stock_parts/micro_laser,
-/obj/item/weapon/stock_parts/scanning_module,
-/obj/item/weapon/stock_parts/scanning_module,
-/obj/item/weapon/stock_parts/console_screen,
-/obj/item/weapon/stock_parts/console_screen,
-/obj/item/weapon/stock_parts/micro_laser,
-/obj/structure/closet/crate/ayy,
+/obj/machinery/botany/editor,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "tf" = (
@@ -3406,7 +3390,7 @@
 	dir = 8
 	},
 /obj/structure/table,
-/obj/item/device/flashlight/lamp/slime,
+/obj/item/device/flashlight/slime,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
 "Ec" = (
@@ -3620,12 +3604,11 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
 "FM" = (
-/obj/structure/reagent_dispensers/watertank,
-/obj/item/weapon/reagent_containers/glass/bucket,
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 1;
 	on = 1
 	},
+/obj/machinery/botany/extractor,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "FP" = (
@@ -4099,7 +4082,7 @@
 /area/vault/mothership_lab/cave)
 "Ji" = (
 /obj/structure/table/reinforced,
-/obj/item/device/flashlight/lamp/slime,
+/obj/item/device/flashlight/slime,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "Jo" = (
@@ -4749,9 +4732,7 @@
 /area/vault/mothership_lab/habitation)
 "PW" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/circuitboard/biogenerator,
-/obj/item/weapon/reagent_containers/glass/beaker/large,
-/obj/machinery/constructable_frame/machine_frame,
+/obj/machinery/biogenerator,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "Qb" = (
@@ -5089,7 +5070,7 @@
 /area/vault/mothership_lab/habitation)
 "SL" = (
 /obj/structure/table,
-/obj/item/device/flashlight/lamp/slime,
+/obj/item/device/flashlight/slime,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
 "SO" = (
@@ -5161,6 +5142,7 @@
 	dir = 4;
 	pixel_x = 11
 	},
+/obj/item/weapon/reagent_containers/glass/bucket,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "Tu" = (
@@ -5662,6 +5644,10 @@
 /obj/item/weapon/pickaxe/shovel/spade,
 /obj/item/weapon/storage/bag/plants,
 /obj/item/weapon/storage/bag/plants,
+/obj/item/device/analyzer/plant_analyzer,
+/obj/item/device/analyzer/plant_analyzer,
+/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk,
+/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "Xq" = (
