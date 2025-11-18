@@ -22959,7 +22959,7 @@
 /area/bridge)
 "aVl" = (
 /obj/structure/table/holotable/wood,
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /turf/simulated/floor/beach/sand,
 /area/hallway/primary/central)
 "aVm" = (
@@ -94659,7 +94659,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/research_outpost/xenobot)
+/area/research_outpost/hallway)
 "dSS" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -95199,14 +95199,6 @@
 /area/science/test_area)
 "dTF" = (
 /obj/structure/hanging_lantern,
-/turf/unsimulated/floor/asteroid,
-/area/mine/explored)
-"dTG" = (
-/obj/machinery/airlock_sensor{
-	id_tag = "vox_eva_ext_airlock_sensor";
-	master_tag = "vox_eva_airlock_control";
-	pixel_y = -24
-	},
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "dTH" = (
@@ -95999,15 +95991,6 @@
 "dUT" = (
 /turf/simulated/wall,
 /area/vox_trading_post/eva)
-"dUU" = (
-/obj/machinery/door/airlock/external{
-	frequency = 1449;
-	icon_state = "door_locked";
-	id_tag = "vox_eva_airlock_exterior";
-	locked = 1
-	},
-/turf/simulated/floor/plating/vox,
-/area/vox_trading_post/eva)
 "dUV" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -96730,33 +96713,6 @@
 /obj/effect/glowshroom/single,
 /turf/simulated/wall,
 /area/vox_trading_post/eva)
-"dWc" = (
-/obj/structure/closet/emcloset/vox,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 6
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/vox_trading_post/eva)
-"dWd" = (
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	dir = 4;
-	frequency = 1449;
-	id_tag = "vox_eva_airlock_pump"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/vox_trading_post/eva)
-"dWe" = (
-/obj/machinery/airlock_sensor{
-	id_tag = "vox_eva_airlock_sensor";
-	master_tag = "vox_eva_airlock_control";
-	pixel_x = 24
-	},
-/obj/machinery/portable_atmospherics/canister/nitrogen,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 10
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/vox_trading_post/eva)
 "dWf" = (
 /turf/simulated/wall,
 /area/mine/unexplored)
@@ -97305,18 +97261,6 @@
 	},
 /turf/simulated/floor/grass,
 /area/science/test_area)
-"dXd" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 8
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/vox_trading_post/eva)
-"dXe" = (
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/vox_trading_post/eva)
 "dXg" = (
 /obj/structure/transit_tube{
 	icon_state = "E-SW"
@@ -98026,22 +97970,9 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/science/test_area)
-"dYq" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/wall,
-/area/vox_trading_post/eva)
 "dYr" = (
-/obj/machinery/door/airlock/external{
-	frequency = 1449;
-	icon_state = "door_locked";
-	id_tag = "vox_eva_airlock_interior";
-	locked = 1
-	},
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating/vox,
-/area/vox_trading_post/eva)
-"dYs" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/wall,
 /area/vox_trading_post/eva)
 "dYt" = (
 /obj/structure/transit_tube{
@@ -98515,14 +98446,7 @@
 "dZi" = (
 /obj/structure/cable/yellow{
 	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/airlock_sensor{
-	id_tag = "vox_eva_int_airlock_sensor";
-	master_tag = "vox_eva_airlock_control";
-	pixel_y = 24
+	icon_state = "0-2"
 	},
 /obj/machinery/power/apc{
 	dir = 8;
@@ -98544,19 +98468,10 @@
 /turf/simulated/floor/vox,
 /area/vox_trading_post/eva)
 "dZk" = (
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	id_tag = "vox_eva_airlock_control";
-	pixel_y = 24;
-	tag_airpump = "vox_eva_airlock_pump";
-	tag_chamber_sensor = "vox_eva_airlock_sensor";
-	tag_exterior_door = "vox_eva_airlock_exterior";
-	tag_exterior_sensor = "vox_eva_ext_airlock_sensor";
-	tag_interior_door = "vox_eva_airlock_interior";
-	tag_interior_sensor = "vox_eva_int_airlock_sensor"
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
 	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 4
-	},
+/obj/structure/closet/emcloset/vox,
 /turf/simulated/floor/vox,
 /area/vox_trading_post/eva)
 "dZl" = (
@@ -98606,12 +98521,6 @@
 	req_access_txt = "47"
 	},
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
-/turf/simulated/floor,
-/area/research_outpost/gearstore)
-"dZs" = (
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 1
-	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "dZt" = (
@@ -99017,8 +98926,8 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 8
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
 	},
 /turf/simulated/floor/vox,
 /area/vox_trading_post/eva)
@@ -99080,13 +98989,6 @@
 	dir = 4
 	},
 /turf/simulated/floor/plating,
-/area/research_outpost/gearstore)
-"eao" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor,
 /area/research_outpost/gearstore)
 "eap" = (
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
@@ -99401,27 +99303,12 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/gearstore)
 "ebc" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "anom_int_airlock_sensor";
-	master_tag = "anom_airlock_control";
-	pixel_y = -24
-	},
 /obj/structure/dispenser/oxygen,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "ebd" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 5
-	},
-/turf/simulated/floor,
-/area/research_outpost/gearstore)
-"ebe" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 10
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "ebf" = (
@@ -99961,12 +99848,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/gearstore)
-"ecm" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 5
-	},
-/turf/simulated/wall/r_wall,
-/area/research_outpost/gearstore)
 "ecn" = (
 /obj/structure/window/reinforced{
 	dir = 4
@@ -99980,19 +99861,12 @@
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/full/reinforced,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 10
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
 /area/research_outpost/gearstore)
 "eco" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "anom_airlock_interior";
-	locked = 1
+	req_access_txt = "47"
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -100318,27 +100192,15 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "anom_airlock_control";
-	pixel_x = -24;
-	tag_airpump = "anom_airlock_pump";
-	tag_chamber_sensor = "anom_airlock_sensor";
-	tag_exterior_door = "anom_airlock_exterior";
-	tag_exterior_sensor = "anom_ext_airlock_sensor";
-	tag_interior_door = "anom_airlock_interior";
-	tag_interior_sensor = "anom_int_airlock_sensor"
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "ecZ" = (
 /obj/machinery/recharger{
 	pixel_x = 29
-	},
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	frequency = 1331;
-	id_tag = "anom_airlock_pump"
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -100780,19 +100642,9 @@
 /area/mine/explored)
 "edY" = (
 /obj/structure/closet/walllocker/emerglocker/west,
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "anom_airlock_sensor";
-	master_tag = "anom_airlock_control";
-	pixel_x = -24;
-	pixel_y = 21
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 5
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -100803,9 +100655,6 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 9
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -101212,11 +101061,7 @@
 /area/research_outpost/gearstore)
 "eeT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "anom_airlock_exterior";
-	locked = 1
+	req_access_txt = "47"
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -101618,20 +101463,6 @@
 /turf/unsimulated/floor/airless{
 	dir = 6;
 	icon_state = "asteroidwarning"
-	},
-/area/mine/explored)
-"efJ" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "anom_ext_airlock_sensor";
-	master_tag = "anom_airlock_control";
-	pixel_y = 24
-	},
-/obj/structure/hanging_lantern{
-	dir = 1
-	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
 	},
 /area/mine/explored)
 "efK" = (
@@ -1211748,7 +1211579,7 @@ aaa
 aak
 dNe
 dNe
-dIu
+dJh
 dIu
 dIu
 dIu
@@ -1212250,7 +1212081,7 @@ aaa
 aaa
 dNe
 dNe
-dIu
+dJh
 dIu
 dIu
 dIu
@@ -1212752,12 +1212583,12 @@ aaa
 aaa
 dNe
 dNe
-dIu
-dIu
-dIu
-dIu
-dIu
-dIu
+dJh
+dJh
+dJh
+dJh
+dJh
+dJh
 eaS
 ebV
 ecI
@@ -1213254,9 +1213085,9 @@ aaa
 aak
 dNe
 dNe
-dUT
-dWb
-dUT
+dNe
+dNe
+dNe
 dUT
 dUT
 dWb
@@ -1213755,11 +1213586,11 @@ aaa
 aaa
 aaa
 dNe
-dTG
+dNe
+dNe
+dNe
+dNe
 dUT
-dWc
-dXd
-dYq
 dZi
 eag
 eaU
@@ -1214258,9 +1214089,9 @@ dIv
 dIv
 dNe
 dNe
-dUU
-dWd
-dWd
+dNe
+dNe
+dNe
 dYr
 dZj
 eah
@@ -1214760,10 +1214591,10 @@ dIv
 dIv
 dNe
 dNe
+dNe
+dNe
+dNe
 dUT
-dWe
-dXe
-dYs
 dZk
 eai
 eaW
@@ -1215262,9 +1215093,9 @@ dIv
 dIv
 dNe
 dTH
-dUT
-dUT
-dWb
+dNe
+dNe
+dNe
 dUT
 dWb
 dUT
@@ -1215764,12 +1215595,12 @@ dIv
 dIv
 dIu
 dTI
-dIu
-dIu
-dIu
-dIu
-dIu
-dIu
+dJh
+dJh
+dJh
+dJh
+dJh
+dJh
 eaX
 eca
 ecN
@@ -1226313,7 +1226144,7 @@ dIv
 dIv
 dIv
 dIv
-dML
+dIv
 dML
 dML
 dNe
@@ -1226815,7 +1226646,7 @@ dIv
 dIv
 dIv
 dIv
-dML
+dIv
 dIv
 dML
 dNe
@@ -1227317,7 +1227148,7 @@ dIv
 dIv
 dIv
 dIv
-dML
+dIv
 dIv
 dML
 dNe
@@ -1246892,14 +1246723,14 @@ dVd
 dWl
 dXm
 dXj
-dZs
-eao
+dZq
+eam
 ebc
-ecm
 dXh
 dXh
 dXh
-efJ
+dXh
+efK
 egm
 dNe
 dJh
@@ -1247898,7 +1247729,7 @@ dXo
 dXj
 dZu
 eaq
-ebe
+dXj
 eco
 ecZ
 edZ
@@ -1254925,7 +1254756,7 @@ dWv
 dXC
 dYF
 dZF
-eaw
+eaz
 ebk
 dVo
 dJh
@@ -1256933,7 +1256764,7 @@ dWy
 dXF
 dYG
 dZJ
-eaz
+eaw
 ebn
 dVr
 dJh

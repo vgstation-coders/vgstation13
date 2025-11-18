@@ -17353,6 +17353,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -36625,9 +36626,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/ert)
-"dAZ" = (
-/turf/space,
-/area/research_outpost/hallway)
 "dBd" = (
 /obj/structure/table/reinforced,
 /turf/simulated/floor{
@@ -39041,12 +39039,6 @@
 /obj/machinery/camera{
 	name = "Outpost Expedition Preperation";
 	network = list("MINE","RD","SS13")
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "MINE_int_airlock_sensor";
-	master_tag = "MINE_airlock_control";
-	pixel_y = 22
 	},
 /turf/simulated/floor,
 /area/mine/production)
@@ -41725,13 +41717,6 @@
 	name = "plating"
 	},
 /area/centcom/suppy)
-"eUx" = (
-/obj/machinery/conveyor_switch/oneway{
-	id_tag = "mining_internal";
-	name = "mining conveyor"
-	},
-/turf/unsimulated/floor/asteroid,
-/area/research_outpost/hallway)
 "eUy" = (
 /obj/machinery/atmospherics/pipe/simple/filtering/visible,
 /obj/machinery/meter,
@@ -43721,7 +43706,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/yellow/visible,
 /turf/simulated/floor/plating,
-/area)
+/area/mine/explored)
 "fzJ" = (
 /obj/structure/table,
 /obj/item/weapon/storage/firstaid/toxin{
@@ -44104,12 +44089,6 @@
 	icon_state = "xenobio";
 	name = "Xenobiology"
 	})
-"fFJ" = (
-/obj/machinery/door/airlock/external{
-	id_tag = "MINE_airlock_exterior"
-	},
-/turf/simulated/floor/plating,
-/area/mine/production)
 "fGs" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/pickaxe,
@@ -47193,28 +47172,6 @@
 /area/maintenance/starboard)
 "gwP" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 6
-	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "MINE_airlock_control";
-	name = "Mining Airlock Controller";
-	pixel_x = -24;
-	tag_airpump = "MINE_airlock_pump";
-	tag_chamber_sensor = "MINE_airlock_sensor";
-	tag_exterior_door = "MINE_airlock_exterior";
-	tag_exterior_sensor = "MINE_ext_airlock_sensor";
-	tag_interior_door = "MINE_airlock_interior";
-	tag_interior_sensor = "MINE_int_airlock_sensor"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "MINE_airlock_sensor";
-	master_tag = "MINE_airlock_control";
-	pixel_x = -24;
-	pixel_y = -10
-	},
 /turf/simulated/floor/plating,
 /area/mine/production)
 "gwR" = (
@@ -50380,10 +50337,6 @@
 	icon_state = "grimy"
 	},
 /area/security/detectives_office)
-"hqw" = (
-/obj/structure/hanging_lantern,
-/turf/unsimulated/floor/asteroid,
-/area/research_outpost/hallway)
 "hqQ" = (
 /obj/machinery/portable_atmospherics/hydroponics,
 /turf/unsimulated/floor{
@@ -50801,8 +50754,11 @@
 	},
 /area/science/hallway)
 "hwP" = (
-/turf/unsimulated/floor/asteroid,
-/area/research_outpost/hallway)
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 9
+	},
+/turf/simulated/floor,
+/area/mine/production)
 "hwS" = (
 /obj/structure/cable{
 	d2 = 4;
@@ -55844,21 +55800,6 @@
 	},
 /turf/space,
 /area/shuttle/transport1/centcom)
-"jah" = (
-/obj/structure/grille,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/mine/production)
 "jav" = (
 /obj/structure/window/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
@@ -56338,10 +56279,6 @@
 	icon_state = "caution"
 	},
 /area/engineering/atmos_control)
-"jfL" = (
-/obj/structure/disposalpipe/segment,
-/turf/unsimulated/mineral/random,
-/area/mine/unexplored)
 "jfT" = (
 /obj/structure/table/glass,
 /obj/item/device/mmi/posibrain,
@@ -64104,10 +64041,6 @@
 	tag = "icon-yellowsiding"
 	},
 /area/hallway/primary/port)
-"lmk" = (
-/obj/structure/ore_box,
-/turf/unsimulated/floor/asteroid,
-/area/research_outpost/hallway)
 "lmG" = (
 /obj/machinery/biogenerator,
 /turf/simulated/floor{
@@ -67837,12 +67770,6 @@
 	dir = 1;
 	name = "Outpost Exit";
 	network = list("MINE","RD","SS13")
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "MINE_ext_airlock_sensor";
-	master_tag = "MINE_airlock_control";
-	pixel_y = -18
 	},
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidplating"
@@ -74130,12 +74057,6 @@
 	icon_state = "toxstorage";
 	name = "Toxins Storage"
 	})
-"ohi" = (
-/obj/structure/hanging_lantern{
-	dir = 1
-	},
-/turf/unsimulated/floor/asteroid,
-/area)
 "ohj" = (
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
@@ -79687,10 +79608,6 @@
 	icon_state = "whitepurple"
 	},
 /area/research_outpost/hallway)
-"pNd" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor,
-/area/mine/production)
 "pNj" = (
 /obj/structure/painting/random,
 /turf/unsimulated/wall,
@@ -83750,9 +83667,6 @@
 	},
 /turf/simulated/floor/vox/wood,
 /area/vox_trading_post/dorms)
-"qVj" = (
-/turf/unsimulated/floor/asteroid,
-/area)
 "qVr" = (
 /obj/structure/table,
 /obj/machinery/recharger{
@@ -85370,11 +85284,6 @@
 	icon_state = "white"
 	},
 /area/medical/genetics)
-"rtU" = (
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidplating"
-	},
-/area/research_outpost/hallway)
 "rtW" = (
 /obj/machinery/light{
 	dir = 1
@@ -91869,9 +91778,7 @@
 	},
 /area/vox_trading_post/gardens)
 "tpf" = (
-/obj/machinery/door/airlock/external{
-	id_tag = "MINE_airlock_interior"
-	},
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating,
 /area/mine/production)
 "tpr" = (
@@ -99275,10 +99182,9 @@
 	name = "Toxins"
 	})
 "vBP" = (
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	dir = 8;
-	frequency = 1331;
-	id_tag = "MINE_airlock_pump"
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
 	},
 /turf/simulated/floor/plating,
 /area/mine/production)
@@ -99836,9 +99742,6 @@
 /turf/simulated/floor,
 /area/storage/tools)
 "vKs" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 9
-	},
 /obj/machinery/hologram/holopad,
 /turf/simulated/floor,
 /area/mine/production)
@@ -1207577,7 +1207480,7 @@ sDF
 sDF
 vgk
 eiG
-qVj
+bAS
 aaa
 aaa
 aaa
@@ -1208079,8 +1207982,8 @@ sDF
 sDF
 vWk
 eiG
-qVj
-qVj
+bAS
+bAS
 aaa
 aaa
 aaa
@@ -1208096,7 +1207999,7 @@ aoc
 ovd
 ovd
 mqh
-qnj
+mqh
 mqh
 mqh
 mqh
@@ -1208598,7 +1208501,7 @@ ovd
 ovd
 ovd
 mqh
-qnj
+mqh
 mqh
 mqh
 mqh
@@ -1209083,10 +1208986,10 @@ tQJ
 sDF
 sDF
 eiG
-qVj
-qVj
-qVj
-qVj
+bAS
+bAS
+bAS
+bAS
 aaa
 aaa
 aaa
@@ -1209095,7 +1208998,7 @@ aoc
 aaa
 aaa
 aoc
-fPa
+ovd
 wpd
 wpd
 wpd
@@ -1209585,19 +1209488,19 @@ tQJ
 lpE
 lpE
 vrZ
-qVj
-qVj
-qVj
-qVj
-qVj
+bAS
+bAS
+bAS
+bAS
+bAS
 aaa
 aaa
 aaa
 aoc
 aaa
 aaa
-fPa
-fPa
+ovd
+ovd
 wpd
 miH
 hLV
@@ -1210087,19 +1209990,19 @@ tdb
 iRb
 ths
 egh
-qVj
-qVj
-qVj
-qVj
-qVj
-qVj
-qVj
+bAS
+bAS
+bAS
+bAS
+bAS
+bAS
+bAS
 aoc
 aoc
 aoc
 aoc
-fPa
-fPa
+ovd
+ovd
 wpd
 miH
 miH
@@ -1210592,16 +1210495,16 @@ egh
 hPM
 hPM
 dTg
-ohi
-qVj
-qVj
-qVj
-qVj
+wWH
+bAS
+bAS
+bAS
+bAS
 aoc
 aaa
 aaa
-fPa
-fPa
+ovd
+ovd
 wpd
 miH
 iND
@@ -1211094,11 +1210997,11 @@ cQv
 uVG
 cUc
 uVF
-qVj
-qVj
-qVj
-qVj
-qVj
+bAS
+bAS
+bAS
+bAS
+bAS
 wpd
 wpd
 wpd
@@ -1211596,11 +1211499,11 @@ qic
 vEc
 vEc
 qic
-qVj
-qVj
-qVj
-qVj
-qVj
+bAS
+bAS
+bAS
+bAS
+bAS
 wpd
 wTw
 gwB
@@ -1212098,11 +1212001,11 @@ hPM
 qnv
 vzD
 dTg
-qVj
-qVj
-qVj
-qVj
-qVj
+bAS
+bAS
+bAS
+bAS
+bAS
 wpd
 jPQ
 tzi
@@ -1212597,14 +1212500,14 @@ dYD
 dYD
 wTX
 hPM
-qVj
-qVj
-qVj
-qVj
-qVj
-qVj
-qVj
-qVj
+bAS
+bAS
+bAS
+bAS
+bAS
+bAS
+bAS
+bAS
 wpd
 miH
 ras
@@ -1213056,9 +1212959,9 @@ aaa
 aaa
 aaa
 aaa
-dAZ
-dAZ
-dAZ
+aaa
+aaa
+aaa
 kMD
 eDh
 rLp
@@ -1213099,13 +1213002,13 @@ dYD
 dYD
 dYD
 uzo
-qVj
-qVj
-qVj
-qVj
-qVj
-qVj
-qVj
+bAS
+bAS
+bAS
+bAS
+bAS
+bAS
+bAS
 aaa
 wpd
 iSC
@@ -1213557,10 +1213460,10 @@ aaa
 aaa
 aaa
 aaa
-dAZ
-dAZ
-dAZ
-dAZ
+aaa
+aaa
+aaa
+aaa
 kMD
 njU
 rLp
@@ -1213601,12 +1213504,12 @@ dYD
 dYD
 dYD
 vxF
-qVj
-qVj
-qVj
-qVj
-qVj
-qVj
+bAS
+bAS
+bAS
+bAS
+bAS
+bAS
 aaa
 aaa
 wpd
@@ -1214058,11 +1213961,11 @@ aaa
 aaa
 aaa
 aaa
-dAZ
-dAZ
-dAZ
-dAZ
-dAZ
+aaa
+aaa
+aaa
+aaa
+aaa
 kMD
 dQA
 cYk
@@ -1214103,12 +1214006,12 @@ gcR
 dYD
 dYD
 tDf
-qVj
-qVj
-qVj
-qVj
-qVj
-qVj
+bAS
+bAS
+bAS
+bAS
+bAS
+bAS
 aaa
 aaa
 wpd
@@ -1214560,11 +1214463,11 @@ aaa
 aaa
 aaa
 aaa
-dAZ
-dAZ
-dAZ
-dAZ
-dAZ
+aaa
+aaa
+aaa
+aaa
+aaa
 kMD
 bEx
 pBu
@@ -1214605,11 +1214508,11 @@ hPM
 lAx
 lAx
 hPM
-qVj
-qVj
-qVj
-qVj
-ieo
+bAS
+bAS
+bAS
+bAS
+yez
 aoc
 aaa
 aaa
@@ -1215062,11 +1214965,11 @@ aaa
 aaa
 aaa
 aaa
-dAZ
-hwP
-hwP
-hwP
-hwP
+aaa
+bAS
+bAS
+bAS
+bAS
 kMD
 xwS
 kMD
@@ -1215564,10 +1215467,10 @@ aaa
 aaa
 aaa
 aaa
-hwP
-hwP
-hwP
-hqw
+bAS
+bAS
+bAS
+uxR
 hPM
 hPM
 vzO
@@ -1216066,10 +1215969,10 @@ aaa
 aaa
 aaa
 bAS
-rtU
-rtU
-rtU
-rtU
+bvx
+bvx
+bvx
+bvx
 gVj
 oXs
 vzO
@@ -1216568,10 +1216471,10 @@ aaa
 aaa
 bAS
 bAS
-rtU
-rtU
-rtU
-rtU
+bvx
+bvx
+bvx
+bvx
 gVj
 oXs
 vzO
@@ -1217070,10 +1216973,10 @@ bAS
 bAS
 bAS
 bAS
-rtU
-rtU
-eUx
-hqw
+bvx
+bvx
+swe
+uxR
 hPM
 vgb
 vgb
@@ -1217572,11 +1217475,11 @@ bAS
 bAS
 bAS
 bAS
-rtU
-rtU
-hwP
-lmk
-lmk
+bvx
+bvx
+bAS
+ppR
+ppR
 vgb
 tCc
 vZv
@@ -1218074,11 +1217977,11 @@ bAS
 bAS
 bAS
 bAS
-rtU
-rtU
-hwP
-lmk
-lmk
+bvx
+bvx
+bAS
+ppR
+ppR
 vgb
 pcN
 qiJ
@@ -1218577,10 +1218480,10 @@ bAS
 bAS
 bAS
 bvx
-rtU
-hwP
-hwP
-lmk
+bvx
+bAS
+bAS
+ppR
 vgb
 lql
 tTs
@@ -1219080,9 +1218983,9 @@ bAS
 swe
 bvx
 bvx
-hwP
-hwP
-lmk
+bAS
+bAS
+ppR
 vgb
 lql
 vZv
@@ -1221094,7 +1220997,7 @@ vgb
 vgb
 eig
 qiJ
-vDT
+hwP
 ihE
 tEn
 xjo
@@ -1221593,9 +1221496,9 @@ bvx
 oLh
 mFt
 gwP
-jah
-pNd
-pNd
+oLh
+vZv
+vZv
 vKs
 prq
 ahX
@@ -1222092,7 +1221995,7 @@ sMl
 sMl
 bvx
 bvx
-fFJ
+tpf
 ahu
 vBP
 tpf
@@ -1253211,21 +1253114,21 @@ fPa
 fPa
 fPa
 fPa
-jfL
-jfL
-jfL
-jfL
-jfL
-jfL
-jfL
-jfL
-jfL
-jfL
-jfL
-jfL
-jfL
-jfL
-jfL
+fPa
+fPa
+fPa
+fPa
+fPa
+fPa
+fPa
+fPa
+fPa
+fPa
+fPa
+fPa
+fPa
+fPa
+fPa
 fPa
 fPa
 fPa

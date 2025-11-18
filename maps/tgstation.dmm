@@ -5008,44 +5008,12 @@
 	},
 /turf/space,
 /area/solar/fport)
-"ahW" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 6
-	},
-/turf/simulated/wall/r_wall,
-/area/security/range{
-	name = "\improper Security E.V.A"
-	})
 "ahX" = (
 /turf/simulated/wall/r_wall,
 /area/security/range{
 	name = "\improper Security E.V.A"
 	})
-"ahY" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/wall/r_wall,
-/area/security/range{
-	name = "\improper Security E.V.A"
-	})
-"ahZ" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 1
-	},
-/turf/simulated/wall/r_wall,
-/area/security/range{
-	name = "\improper Security E.V.A"
-	})
 "aia" = (
-/turf/simulated/wall,
-/area/security/range{
-	name = "\improper Security E.V.A"
-	})
-"aib" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 10
-	},
 /turf/simulated/wall,
 /area/security/range{
 	name = "\improper Security E.V.A"
@@ -5414,13 +5382,6 @@
 /turf/space,
 /area/solar/fport)
 "aiK" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "sec_eva_ext_airlock_sensor";
-	master_tag = "sec_eva_airlock_control";
-	pixel_x = 24;
-	req_access_txt = "63"
-	},
 /obj/machinery/camera{
 	dir = 8;
 	name = "Security E.V.A. External"
@@ -5437,10 +5398,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTHWEST)"
 	},
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	frequency = 1331;
-	id_tag = "sec_eva_airlock_pump"
-	},
+/obj/structure/closet/emcloset,
 /turf/simulated/floor/plating,
 /area/security/range{
 	name = "\improper Security E.V.A"
@@ -5451,31 +5409,6 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTHEAST)"
 	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "sec_eva_airlock_control";
-	pixel_x = 5;
-	pixel_y = 24;
-	req_access_txt = "63";
-	tag_airpump = "sec_eva_airlock_pump";
-	tag_chamber_sensor = "sec_eva_airlock_sensor";
-	tag_exterior_door = "sec_eva_ext_airlock";
-	tag_exterior_sensor = "sec_eva_ext_airlock_sensor";
-	tag_interior_door = "sec_eva_int_airlock";
-	tag_interior_sensor = "sec_eva_int_airlock_sensor"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "sec_eva_airlock_sensor";
-	master_tag = "sec_eva_airlock_control";
-	pixel_x = -5;
-	pixel_y = 24;
-	req_access_txt = "63"
-	},
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	frequency = 1331;
-	id_tag = "sec_eva_airlock_pump"
-	},
 /turf/simulated/floor/plating,
 /area/security/range{
 	name = "\improper Security E.V.A"
@@ -5483,6 +5416,7 @@
 "aiN" = (
 /obj/machinery/recharger,
 /obj/structure/table,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "red"
@@ -5491,13 +5425,6 @@
 	name = "\improper Security E.V.A"
 	})
 "aiO" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "sec_eva_int_airlock_sensor";
-	master_tag = "sec_eva_airlock_control";
-	pixel_x = -24;
-	req_access_txt = "63"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "warning_corner";
@@ -5506,7 +5433,6 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
 	icon_state = "space";
@@ -6018,20 +5944,12 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 8
-	},
 /turf/simulated/floor/plating,
 /area/security/range{
 	name = "\improper Security E.V.A"
 	})
 "ajD" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "sec_eva_ext_airlock";
-	locked = 1;
 	name = "Security External Airlock";
 	req_access_txt = "63"
 	},
@@ -6044,15 +5962,7 @@
 	dir = 4;
 	name = "Firelock East"
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "sec_eva_int_airlock";
-	locked = 1;
 	name = "Security External Airlock";
 	req_access_txt = "63"
 	},
@@ -6066,7 +5976,6 @@
 	icon_state = "warning";
 	tag = "icon-warning (EAST)"
 	},
-/obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden,
 /turf/simulated/floor/plating,
 /area/security/range{
 	name = "\improper Security E.V.A"
@@ -6076,9 +5985,6 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -6097,11 +6003,6 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/obj/machinery/meter,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "red"
@@ -6134,7 +6035,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 5
+	},
 /turf/simulated/floor,
 /area/security/range{
 	name = "\improper Security E.V.A"
@@ -6637,11 +6540,6 @@
 	icon_state = "warning";
 	tag = "icon-warning (SOUTHWEST)"
 	},
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	dir = 1;
-	frequency = 1331;
-	id_tag = "sec_eva_airlock_pump"
-	},
 /turf/simulated/floor/plating,
 /area/security/range{
 	name = "\improper Security E.V.A"
@@ -6669,11 +6567,6 @@
 	icon_state = "warning";
 	tag = "icon-warning (SOUTHEAST)"
 	},
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	dir = 1;
-	frequency = 1331;
-	id_tag = "sec_eva_airlock_pump"
-	},
 /turf/simulated/floor/plating,
 /area/security/range{
 	name = "\improper Security E.V.A"
@@ -6688,9 +6581,6 @@
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
 	},
 /obj/item/weapon/tank/jetpack,
 /turf/simulated/floor{
@@ -6709,9 +6599,6 @@
 /obj/machinery/camera{
 	dir = 1;
 	name = "Security E.V.A."
-	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 10;
@@ -6732,7 +6619,9 @@
 	tag = "icon-warning (NORTH)"
 	},
 /obj/item/weapon/tank/jetpack,
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5
+	},
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "red"
@@ -6749,9 +6638,6 @@
 	tag = "icon-warning (NORTH)"
 	},
 /obj/item/weapon/tank/jetpack,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /turf/simulated/floor{
 	icon_state = "red"
 	},
@@ -7135,28 +7021,17 @@
 	},
 /turf/space,
 /area/solar/fstarboard)
-"alj" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 5
-	},
-/turf/simulated/wall/r_wall,
-/area/security/range{
-	name = "\improper Security E.V.A"
-	})
 "alk" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
-/turf/simulated/wall/r_wall,
-/area/security/range{
-	name = "\improper Security E.V.A"
-	})
-"all" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 9
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
 	},
-/turf/simulated/wall/r_wall,
-/area/security/range{
-	name = "\improper Security E.V.A"
-	})
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating,
+/area/vox_trading_post/trade_processing)
 "alm" = (
 /turf/simulated/wall,
 /area/security/medical)
@@ -101076,14 +100951,6 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating/airless,
 /area/science/test_area)
-"efJ" = (
-/obj/machinery/airlock_sensor{
-	id_tag = "vox_eva_ext_airlock_sensor";
-	master_tag = "vox_eva_airlock_control";
-	pixel_y = -24
-	},
-/turf/unsimulated/floor/asteroid,
-/area/mine/explored)
 "efK" = (
 /obj/structure/hanging_lantern,
 /turf/unsimulated/floor/asteroid,
@@ -101878,15 +101745,6 @@
 "egX" = (
 /turf/simulated/wall,
 /area/vox_trading_post/eva)
-"egY" = (
-/obj/machinery/door/airlock/external{
-	frequency = 1449;
-	icon_state = "door_locked";
-	id_tag = "vox_eva_airlock_exterior";
-	locked = 1
-	},
-/turf/simulated/floor/plating/vox,
-/area/vox_trading_post/eva)
 "egZ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -102609,33 +102467,6 @@
 /obj/effect/glowshroom/single,
 /turf/simulated/wall,
 /area/vox_trading_post/eva)
-"eig" = (
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	dir = 4;
-	frequency = 1449;
-	id_tag = "vox_eva_airlock_pump"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/vox_trading_post/eva)
-"eih" = (
-/obj/structure/closet/emcloset/vox,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 6
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/vox_trading_post/eva)
-"eii" = (
-/obj/machinery/airlock_sensor{
-	id_tag = "vox_eva_airlock_sensor";
-	master_tag = "vox_eva_airlock_control";
-	pixel_x = 24
-	},
-/obj/machinery/portable_atmospherics/canister/nitrogen,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 10
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/vox_trading_post/eva)
 "eik" = (
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'INTERNALS REQUIRED'.";
@@ -103193,18 +103024,6 @@
 	},
 /turf/simulated/floor/grass,
 /area/science/test_area)
-"ejh" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 8
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/vox_trading_post/eva)
-"eji" = (
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/vox_trading_post/eva)
 "ejk" = (
 /obj/structure/transit_tube{
 	icon_state = "E-SW"
@@ -103917,21 +103736,8 @@
 /turf/simulated/floor/plating/airless,
 /area/science/test_area)
 "eku" = (
-/obj/machinery/door/airlock/external{
-	frequency = 1449;
-	icon_state = "door_locked";
-	id_tag = "vox_eva_airlock_interior";
-	locked = 1
-	},
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating/vox,
-/area/vox_trading_post/eva)
-"ekv" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/wall,
-/area/vox_trading_post/eva)
-"ekw" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/wall,
 /area/vox_trading_post/eva)
 "ekx" = (
 /obj/structure/transit_tube{
@@ -104417,12 +104223,6 @@
 	d2 = 2;
 	icon_state = "0-2"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/airlock_sensor{
-	id_tag = "vox_eva_int_airlock_sensor";
-	master_tag = "vox_eva_airlock_control";
-	pixel_y = 24
-	},
 /obj/machinery/power/apc{
 	dir = 8;
 	locked = 0;
@@ -104433,19 +104233,10 @@
 /turf/simulated/floor/vox,
 /area/vox_trading_post/eva)
 "elo" = (
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	id_tag = "vox_eva_airlock_control";
-	pixel_y = 24;
-	tag_airpump = "vox_eva_airlock_pump";
-	tag_chamber_sensor = "vox_eva_airlock_sensor";
-	tag_exterior_door = "vox_eva_airlock_exterior";
-	tag_exterior_sensor = "vox_eva_ext_airlock_sensor";
-	tag_interior_door = "vox_eva_airlock_interior";
-	tag_interior_sensor = "vox_eva_int_airlock_sensor"
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
 	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 4
-	},
+/obj/structure/closet/emcloset/vox,
 /turf/simulated/floor/vox,
 /area/vox_trading_post/eva)
 "elp" = (
@@ -104517,12 +104308,6 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor,
-/area/research_outpost/gearstore)
-"elz" = (
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 1
-	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "elA" = (
@@ -104918,8 +104703,8 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 8
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
 	},
 /turf/simulated/floor/vox,
 /area/vox_trading_post/eva)
@@ -104972,13 +104757,6 @@
 /area/research_outpost/tempstorage)
 "ems" = (
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
-/turf/simulated/floor,
-/area/research_outpost/gearstore)
-"emt" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "emu" = (
@@ -105312,20 +105090,11 @@
 /area/research_outpost/tempstorage)
 "enh" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 8
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "eni" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "anom_int_airlock_sensor";
-	master_tag = "anom_airlock_control";
-	pixel_y = -24
-	},
 /obj/structure/dispenser/oxygen,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "enj" = (
@@ -105334,12 +105103,6 @@
 	pixel_x = 24
 	},
 /obj/structure/closet/crate,
-/turf/simulated/floor,
-/area/research_outpost/gearstore)
-"enk" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 10
-	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "enl" = (
@@ -105884,18 +105647,9 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
 /area/research_outpost/gearstore)
-"eos" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/wall/r_wall,
-/area/research_outpost/gearstore)
 "eot" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "anom_airlock_interior";
-	locked = 1
+	req_access_txt = "47"
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -106217,30 +105971,15 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "anom_airlock_control";
-	pixel_x = -24;
-	tag_airpump = "anom_airlock_pump";
-	tag_chamber_sensor = "anom_airlock_sensor";
-	tag_exterior_door = "anom_airlock_exterior";
-	tag_exterior_sensor = "anom_ext_airlock_sensor";
-	tag_interior_door = "anom_airlock_interior";
-	tag_interior_sensor = "anom_int_airlock_sensor"
-	},
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	frequency = 1331;
-	id_tag = "anom_airlock_pump"
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "epf" = (
 /obj/machinery/recharger{
 	pixel_x = 29
-	},
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	frequency = 1331;
-	id_tag = "anom_airlock_pump"
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -106663,18 +106402,10 @@
 /area/mine/explored)
 "eqb" = (
 /obj/structure/closet/walllocker/emerglocker/west,
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "anom_airlock_sensor";
-	master_tag = "anom_airlock_control";
-	pixel_x = -24;
-	pixel_y = 21
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "eqc" = (
@@ -106684,9 +106415,6 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 9
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -107091,11 +106819,7 @@
 /area/research_outpost/gearstore)
 "eqW" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "anom_airlock_exterior";
-	locked = 1
+	req_access_txt = "47"
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -107518,20 +107242,6 @@
 /turf/unsimulated/floor/airless{
 	dir = 6;
 	icon_state = "asteroidwarning"
-	},
-/area/mine/explored)
-"erL" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "anom_ext_airlock_sensor";
-	master_tag = "anom_airlock_control";
-	pixel_y = 24
-	},
-/obj/structure/hanging_lantern{
-	dir = 1
-	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
 	},
 /area/mine/explored)
 "erM" = (
@@ -108154,15 +107864,7 @@
 	},
 /area/vox_trading_post/trade_processing)
 "esO" = (
-/obj/machinery/door/airlock/external{
-	frequency = 1551;
-	icon_state = "door_locked";
-	id_tag = "vox_trade_airlock_interior";
-	locked = 1
-	},
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 4
-	},
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor{
 	icon_state = "asteroidfloor"
 	},
@@ -108174,30 +107876,6 @@
 	},
 /area/vox_trading_post/trade_processing)
 "esQ" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1551;
-	id_tag = "vox_trade_chamber_sensor";
-	master_tag = "vox_trade_airlock_control";
-	pixel_x = 6;
-	pixel_y = -24
-	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1551;
-	id_tag = "vox_trade_airlock_control";
-	pixel_x = -6;
-	pixel_y = -25;
-	tag_airpump = "vox_trade_airlock_pump";
-	tag_chamber_sensor = "vox_trade_chamber_sensor";
-	tag_exterior_door = "vox_trade_airlock_exterior";
-	tag_exterior_sensor = "vox_trade_ext_airlock_sensor";
-	tag_interior_door = "vox_trade_airlock_interior";
-	tag_interior_sensor = "vox_trade_int_airlock_sensor"
-	},
-/obj/machinery/atmospherics/unary/vent_pump/high_volume{
-	dir = 8;
-	frequency = 1551;
-	id_tag = "vox_trade_airlock_pump"
-	},
 /turf/simulated/floor{
 	icon_state = "asteroidfloor"
 	},
@@ -108651,9 +108329,6 @@
 	tag = "icon-warning (SOUTHEAST)"
 	},
 /obj/structure/closet/emcloset,
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 9
-	},
 /obj/machinery/door/window{
 	dir = 1
 	},
@@ -108667,12 +108342,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (EAST)"
 	},
-/obj/machinery/atmospherics/unary/portables_connector{
-	dir = 4
-	},
-/obj/machinery/portable_atmospherics/canister/air{
-	filled = 0.2
-	},
+/obj/machinery/portable_atmospherics/canister/air,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -108692,9 +108362,6 @@
 /obj/structure/closet/emcloset,
 /obj/machinery/door/window{
 	dir = 1
-	},
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -114520,24 +114187,6 @@
 	icon_state = "whitegreen"
 	},
 /area/medical/virology)
-"eJw" = (
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning";
-	tag = "icon-warning (EAST)"
-	},
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden,
-/obj/machinery/airlock_sensor{
-	frequency = 1551;
-	id_tag = "vox_trade_int_airlock_sensor";
-	master_tag = "vox_trade_airlock_control";
-	pixel_x = 24;
-	pixel_y = 6
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/vox_trading_post/trade_processing)
 "eNj" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -114649,19 +114298,6 @@
 /obj/structure/catwalk,
 /turf/space,
 /area/medical/virology)
-"fTL" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1551;
-	id_tag = "vox_trade_ext_airlock_sensor";
-	master_tag = "vox_trade_airlock_control";
-	pixel_x = -24;
-	pixel_y = 6
-	},
-/turf/unsimulated/floor/airless{
-	dir = 4;
-	icon_state = "asteroidwarning"
-	},
-/area/mine/explored)
 "gdr" = (
 /obj/structure/sign/biohazard,
 /turf/simulated/wall/r_wall,
@@ -115015,17 +114651,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
-"jwl" = (
-/obj/machinery/door/airlock/external{
-	frequency = 1551;
-	icon_state = "door_locked";
-	id_tag = "vox_trade_airlock_exterior";
-	locked = 1
-	},
-/turf/simulated/floor{
-	icon_state = "asteroidfloor"
-	},
-/area/vox_trading_post/trade_processing)
 "jyd" = (
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide,
 /turf/simulated/floor{
@@ -115478,14 +115103,6 @@
 	icon_state = "dark"
 	},
 /area/vox_trading_post/trade_processing)
-"pnS" = (
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 6
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/vox_trading_post/trade_processing)
 "pqh" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -115845,12 +115462,6 @@
 	icon_state = "white"
 	},
 /area/medical/virology_break)
-"sEN" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 5
-	},
-/turf/simulated/wall/r_wall,
-/area/research_outpost/gearstore)
 "tbd" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -217192,11 +216803,11 @@ aaa
 aaa
 aaa
 aaa
-ahW
+ahX
 aiL
 ajC
 aky
-alj
+ahX
 aaa
 aaa
 anh
@@ -217694,11 +217305,11 @@ aaa
 aaa
 aaa
 aaa
-ahZ
+ahX
 aiM
 ajF
 akA
-alk
+ahX
 aaa
 aaa
 anj
@@ -218196,11 +217807,11 @@ aaj
 aal
 aaj
 aaa
-ahY
+ahX
 ahX
 ajE
 akz
-ahY
+ahX
 aaa
 aaa
 ani
@@ -218698,11 +218309,11 @@ acG
 afE
 acG
 acG
-aib
+aia
 aiO
 ajH
 akC
-all
+ahX
 alQ
 alQ
 alQ
@@ -1218692,10 +1218303,10 @@ dVB
 dVB
 dVE
 dVE
-dUR
-dUR
-dUR
-dUR
+dVE
+dVE
+dVE
+dVE
 emW
 enV
 eoK
@@ -1219192,9 +1218803,9 @@ aaa
 aaj
 dVB
 dVB
-egX
-eif
-egX
+dVB
+dVB
+dVB
 egX
 egX
 eif
@@ -1219693,11 +1219304,11 @@ aaa
 aaa
 aaa
 dVB
-efJ
+dVB
+dVB
+dVB
+dVB
 egX
-eih
-ejh
-ekv
 eln
 eml
 emY
@@ -1220196,9 +1219807,9 @@ dUS
 dYv
 dVB
 dVB
-egY
-eig
-eig
+dVB
+dVB
+dVB
 eku
 elm
 emk
@@ -1220698,10 +1220309,10 @@ dUS
 dYv
 dVB
 dVB
+dVB
+dVB
+dVB
 egX
-eii
-eji
-ekw
 elo
 emm
 ena
@@ -1221200,9 +1220811,9 @@ dUS
 dYv
 dVB
 efL
-egX
-egX
-eif
+dVB
+dVB
+dVB
 egX
 eif
 egX
@@ -1225733,7 +1225344,7 @@ erA
 esm
 rRp
 etq
-esm
+alk
 emZ
 dVE
 dUR
@@ -1226735,8 +1226346,8 @@ dVE
 emZ
 erB
 esi
-pnS
-eJw
+eoP
+eto
 etI
 emZ
 dVE
@@ -1228241,7 +1227852,7 @@ dVE
 eqO
 hkT
 etn
-jwl
+esO
 emZ
 esp
 dVB
@@ -1228744,7 +1228355,7 @@ eqO
 tse
 epd
 epd
-fTL
+epd
 erK
 dVB
 dVE
@@ -1252830,14 +1252441,14 @@ ehk
 eis
 ejv
 ejl
-elz
-emt
+elv
+emq
 eni
-eos
-eos
-sEN
 ejp
-erL
+ejp
+ejp
+ejp
+erM
 esp
 dVB
 dVE
@@ -1253836,7 +1253447,7 @@ ejx
 ejl
 elB
 emv
-enk
+ejl
 eot
 epf
 eqc

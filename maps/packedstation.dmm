@@ -879,18 +879,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
-"abK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/maintenance/fstarboardsolar)
 "abL" = (
 /turf/simulated/wall,
 /area/maintenance/fstarboardsolar)
@@ -39650,10 +39638,6 @@
 "boV" = (
 /turf/simulated/wall/r_wall,
 /area/maintenance/aportsolar)
-"boW" = (
-/obj/structure/lattice,
-/turf/space,
-/area/maintenance/aportsolar)
 "boX" = (
 /obj/machinery/requests_console{
 	announcementConsole = 1;
@@ -58449,9 +58433,6 @@
 /area/vox_trading_post/dorms)
 "cwQ" = (
 /obj/structure/table/reinforced,
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 10
-	},
 /obj/structure/noticeboard{
 	pixel_y = 32
 	},
@@ -59298,22 +59279,6 @@
 	icon_state = "dark"
 	},
 /area/vox_trading_post/gardens)
-"cys" = (
-/obj/structure/catwalk,
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_solars_ext_airlock_sensor";
-	master_tag = "vox_solars_airlock_control";
-	pixel_x = 24;
-	req_access_txt = "140"
-	},
-/turf/space,
-/area/vox_trading_post/solararray)
 "cyt" = (
 /obj/machinery/power/solar/control{
 	id_tag = "voxsolar";
@@ -59323,13 +59288,6 @@
 /obj/structure/cable/green{
 	d2 = 2;
 	icon_state = "0-2"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_solars_int_airlock_sensor";
-	master_tag = "vox_solars_airlock_control";
-	pixel_x = -24;
-	req_access_txt = "140"
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/vox,
@@ -59353,7 +59311,6 @@
 /area/vox_trading_post/solars)
 "cyv" = (
 /obj/machinery/portable_atmospherics/canister/nitrogen,
-/obj/machinery/atmospherics/unary/portables_connector,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/solars)
@@ -59537,14 +59494,8 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "vox_solars_airlock_exterior";
-	locked = 1
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/solars)
 "cyT" = (
@@ -59553,57 +59504,12 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/atmospherics/unary/vent_pump/high_volume{
-	dir = 4;
-	frequency = 1331;
-	id_tag = "vox_solars_airlock_pump"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 9;
 	icon_state = "all";
 	tag = "icon-all (NORTHWEST)"
 	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "vox_solars_airlock_control";
-	pixel_x = -7;
-	pixel_y = 25;
-	req_access_txt = "140";
-	tag_airpump = "vox_solars_airlock_pump";
-	tag_chamber_sensor = "vox_solars_airlock_sensor";
-	tag_exterior_door = "vox_solars_airlock_exterior";
-	tag_exterior_sensor = "vox_solars_ext_airlock_sensor";
-	tag_interior_door = "vox_solars_airlock_interior";
-	tag_interior_sensor = "vox_solars_int_airlock_sensor"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_solars_airlock_sensor";
-	master_tag = "vox_solars_airlock_control";
-	pixel_x = 5;
-	pixel_y = 21;
-	req_access_txt = "140"
-	},
 /obj/machinery/light/small,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/vox,
-/area/vox_trading_post/solars)
-"cyU" = (
-/obj/structure/cable/green{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/general/hidden{
-	dir = 4
-	},
-/obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "vox_solars_airlock_interior";
-	locked = 1
-	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/solars)
@@ -59616,9 +59522,6 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/obj/machinery/atmospherics/pipe/simple/general/hidden{
-	dir = 4
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/cable/green{
 	icon_state = "5-6"
@@ -59626,16 +59529,10 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/solars)
 "cyW" = (
-/obj/machinery/atmospherics/pipe/simple/general/hidden{
-	dir = 4
-	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/solars)
 "cyX" = (
-/obj/machinery/atmospherics/pipe/simple/general/hidden{
-	dir = 9
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/cable/green{
 	icon_state = "9-10"
@@ -60030,23 +59927,11 @@
 	dir = 4;
 	icon_state = "nitrogen"
 	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_goodsfloor_ext_airlock_sensor";
-	master_tag = "vox_goodsfloor_airlock_control";
-	pixel_y = 24
-	},
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 4
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vox_trading_post/trading_floor)
 "czY" = (
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 4
-	},
 /obj/machinery/alarm{
 	pixel_y = 24
 	},
@@ -60079,16 +59964,11 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/trading_floor)
 "cAe" = (
-/obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "vox_goodsfloor_airlock_interior";
-	locked = 1
-	},
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+/obj/machinery/door/airlock/silver{
+	name = "Trade Floor";
+	normalspeed = 0;
+	req_access_txt = "140"
 	},
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/trading_floor)
@@ -60099,44 +59979,12 @@
 	tag = "icon-all (NORTHWEST)"
 	},
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "vox_goodsfloor_airlock_control";
-	pixel_x = -7;
-	pixel_y = 25;
-	tag_chamber_sensor = "vox_goodsfloor_airlock_sensor";
-	tag_exterior_door = "vox_goodsfloor_airlock_exterior";
-	tag_exterior_sensor = "vox_goodsfloor_ext_airlock_sensor";
-	tag_interior_door = "vox_goodsfloor_airlock_interior";
-	tag_interior_sensor = "vox_goodsfloor_int_airlock_sensor"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_goodsfloor_airlock_sensor";
-	master_tag = "vox_goodsfloor_airlock_control";
-	pixel_x = 5;
-	pixel_y = 21
-	},
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	dir = 4;
-	frequency = 1331;
-	id_tag = "vox_goodsfloor_airlock_pump"
-	},
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/trading_floor)
 "cAg" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "oxygen"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_goodsfloor_int_airlock_sensor";
-	master_tag = "vox_goodsfloor_airlock_control";
-	pixel_y = 24
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -60149,10 +59997,6 @@
 	name = "Outpost APC";
 	pixel_y = 24;
 	req_access = null
-	},
-/obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden{
-	dir = 4;
-	tag = "icon-adapter_2 (EAST)"
 	},
 /obj/structure/cable/green{
 	d2 = 2;
@@ -60181,33 +60025,22 @@
 	},
 /area/vox_trading_post/hallway)
 "cAk" = (
-/obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "vox_goodsfloor_airlock_exterior";
-	locked = 1
-	},
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 4
+/obj/machinery/door/airlock/silver{
+	name = "Trade Floor";
+	normalspeed = 0;
+	req_access_txt = "140"
 	},
 /turf/simulated/floor/plating,
 /area/vox_trading_post/trading_floor)
 "cAl" = (
 /obj/machinery/vending/groans,
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 4
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vox_trading_post/trading_floor)
 "cAm" = (
 /obj/machinery/vending/discount,
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 4
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -60257,7 +60090,6 @@
 /obj/structure/bed/chair{
 	dir = 8
 	},
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden,
 /obj/machinery/light/small{
 	dir = 4
 	},
@@ -60686,7 +60518,6 @@
 /obj/structure/bed/chair{
 	dir = 8
 	},
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -60725,9 +60556,12 @@
 	dir = 4;
 	tag = "icon-map (EAST)"
 	},
-/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layered,
 /obj/structure/cable/green{
 	icon_state = "1-10"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-map (EAST)"
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -60845,20 +60679,13 @@
 /obj/structure/bed/chair{
 	dir = 8
 	},
-/obj/machinery/atmospherics/pipe/manifold/filtering/hidden,
+/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vox_trading_post/trading_floor)
-"cBX" = (
-/obj/machinery/atmospherics/pipe/manifold/filtering/hidden{
-	dir = 4
-	},
-/turf/unsimulated/floor/airless{
-	dir = 4;
-	icon_state = "asteroidwarning"
-	},
-/area/mine/explored)
 "cBY" = (
 /obj/machinery/atmospherics/pipe/manifold/filtering/hidden,
 /turf/unsimulated/floor/airless{
@@ -61338,25 +61165,6 @@
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/trading_floor)
-"cCY" = (
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden,
-/turf/unsimulated/floor/airless{
-	dir = 4;
-	icon_state = "asteroidwarning"
-	},
-/area/mine/explored)
-"cCZ" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_tradehall_ext_airlock_sensor";
-	master_tag = "vox_tradehall_airlock_control";
-	pixel_x = -24
-	},
-/turf/unsimulated/floor/airless{
-	dir = 6;
-	icon_state = "asteroidwarning"
-	},
-/area/mine/explored)
 "cDa" = (
 /turf/simulated/wall/r_rock,
 /area/vox_trading_post/docking)
@@ -61503,43 +61311,13 @@
 	},
 /area/vox_trading_post/hallway)
 "cDr" = (
-/obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "vox_tradehall_airlock_interior";
-	locked = 1
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating,
 /area/vox_trading_post/trading_floor)
 "cDs" = (
 /obj/machinery/light/small{
 	dir = 1
-	},
-/obj/machinery/atmospherics/unary/vent_pump/high_volume{
-	dir = 4;
-	frequency = 1331;
-	id_tag = "vox_tradehall_airlock_pump"
-	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "vox_tradehall_airlock_control";
-	pixel_x = -7;
-	pixel_y = -24;
-	tag_airpump = "vox_tradehall_airlock_pump";
-	tag_chamber_sensor = "vox_tradehall_airlock_sensor";
-	tag_exterior_door = "vox_tradehall_airlock_exterior";
-	tag_exterior_sensor = "vox_tradehall_ext_airlock_sensor";
-	tag_interior_door = "vox_tradehall_airlock_interior";
-	tag_interior_sensor = "vox_tradehall_int_airlock_sensor"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_tradehall_airlock_sensor";
-	master_tag = "vox_tradehall_airlock_control";
-	pixel_x = 5;
-	pixel_y = -22
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 9;
@@ -61601,20 +61379,6 @@
 "cDC" = (
 /turf/simulated/wall/r_rock,
 /area/vox_trading_post/vault)
-"cDD" = (
-/obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "vox_tradehall_airlock_exterior";
-	locked = 1
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/vox_trading_post/trading_floor)
 "cDE" = (
 /obj/machinery/atmospherics/pipe/simple/filtering/hidden{
 	dir = 9
@@ -61626,17 +61390,6 @@
 /area/mine/explored)
 "cDF" = (
 /obj/docking_port/destination/vox/tradepost,
-/turf/space,
-/area)
-"cDG" = (
-/obj/structure/catwalk,
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_dock_ext_airlock_sensor";
-	master_tag = "vox_dock_airlock_control";
-	pixel_x = 24;
-	req_access_txt = "140"
-	},
 /turf/space,
 /area)
 "cDI" = (
@@ -61694,17 +61447,6 @@
 	icon_state = "dark"
 	},
 /area/vox_trading_post/trading_floor)
-"cDT" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_tradehall_int_airlock_sensor";
-	master_tag = "vox_tradehall_airlock_control";
-	pixel_x = 24
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/vox_trading_post/trading_floor)
 "cDU" = (
 /obj/machinery/portable_atmospherics/canister/nitrogen,
 /obj/structure/window{
@@ -61724,13 +61466,6 @@
 /obj/item/weapon/tank/nitrogen,
 /obj/item/weapon/tank/nitrogen,
 /obj/item/weapon/tank/nitrogen,
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_dock_int_airlock_sensor";
-	master_tag = "vox_dock_airlock_control";
-	pixel_x = -24;
-	req_access_txt = "140"
-	},
 /obj/machinery/atmospherics/unary/vent_pump{
 	frequency = 1331;
 	name = "Outpost Air Vent";
@@ -61797,53 +61532,24 @@
 /turf/simulated/wall,
 /area/vox_trading_post/trading_floor)
 "cEb" = (
-/obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "vox_dock_airlock_exterior";
-	locked = 1
-	},
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 6
-	},
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/eva)
 "cEc" = (
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	dir = 8;
-	frequency = 1331;
-	id_tag = "vox_dock_airlock_pump"
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 9;
 	icon_state = "all";
 	tag = "icon-all (NORTHWEST)"
 	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "vox_dock_airlock_control";
-	pixel_x = -7;
-	pixel_y = 25;
-	req_access_txt = "140";
-	tag_airpump = "vox_dock_airlock_pump";
-	tag_chamber_sensor = "vox_dock_airlock_sensor";
-	tag_exterior_door = "vox_dock_airlock_exterior";
-	tag_exterior_sensor = "vox_dock_ext_airlock_sensor";
-	tag_interior_door = "vox_dock_airlock_interior";
-	tag_interior_sensor = "vox_dock_int_airlock_sensor"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_dock_airlock_sensor";
-	master_tag = "vox_dock_airlock_control";
-	pixel_x = 5;
-	pixel_y = 21;
-	req_access_txt = "140"
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light/small,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	frequency = 1331;
+	name = "Outpost Air Vent";
+	on = 1
+	},
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/eva)
 "cEd" = (
@@ -61926,17 +61632,11 @@
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "cEj" = (
-/obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "vox_dock_airlock_interior";
-	locked = 1
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/eva)
 "cEl" = (
@@ -62299,16 +61999,6 @@
 	},
 /area/vox_trading_post/docking)
 "cEU" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 10
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_eva_airlock_sensor";
-	master_tag = "vox_eva_airlock_control";
-	pixel_y = 24;
-	req_access_txt = "140"
-	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -62444,24 +62134,8 @@
 	},
 /area/vox_trading_post/docking)
 "cFg" = (
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	dir = 4;
-	frequency = 1331;
-	id_tag = "vox_eva_airlock_pump"
-	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "vox_eva_airlock_control";
-	pixel_y = 25;
-	req_access_txt = "140";
-	tag_airpump = "vox_eva_airlock_pump";
-	tag_chamber_sensor = "vox_eva_airlock_sensor";
-	tag_exterior_door = "vox_eva_airlock_exterior";
-	tag_exterior_sensor = "vox_eva_ext_airlock_sensor";
-	tag_interior_door = "vox_eva_airlock_interior";
-	tag_interior_sensor = "vox_eva_int_airlock_sensor"
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/closet/emcloset/vox,
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
 	},
@@ -62489,9 +62163,6 @@
 	tag = ""
 	},
 /obj/structure/window/full/reinforced,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 6
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/glowshroom/single,
 /turf/simulated/floor/plating/vox,
@@ -62684,14 +62355,11 @@
 	},
 /area/vox_trading_post/docking)
 "cFA" = (
-/obj/machinery/door/airlock/external{
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "vox_eva_airlock_interior";
-	locked = 1
-	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
 /obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
 	},
@@ -62876,24 +62544,6 @@
 	},
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/armory)
-"cFT" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/turf/simulated/wall/r_rock,
-/area/vox_trading_post/storage_1)
-"cFU" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 9
-	},
-/turf/simulated/wall/r_rock,
-/area/vox_trading_post/storage_1)
-"cFV" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/turf/simulated/wall,
-/area/vox_trading_post/storage_1)
 "cFX" = (
 /obj/effect/glowshroom/single,
 /obj/machinery/power/apc{
@@ -62909,19 +62559,6 @@
 	icon_state = "asteroidplating"
 	},
 /area/vox_trading_post/storage_1)
-"cFY" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_eva_ext_airlock_sensor";
-	master_tag = "vox_eva_airlock_control";
-	pixel_x = -24;
-	req_access_txt = "140"
-	},
-/turf/unsimulated/floor/airless{
-	dir = 6;
-	icon_state = "asteroidwarning"
-	},
-/area/mine/explored)
 "cFZ" = (
 /obj/machinery/suit_storage_unit/excavation,
 /turf/simulated/floor{
@@ -63386,7 +63023,6 @@
 	},
 /area/vox_trading_post/docking)
 "cGX" = (
-/obj/structure/closet/emcloset/vox,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4;
 	tag = "icon-intact (EAST)"
@@ -63395,6 +63031,8 @@
 	dir = 4;
 	tag = "icon-intact (EAST)"
 	},
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
 	},
@@ -69831,13 +69469,8 @@
 	},
 /area/library)
 "dVE" = (
-/obj/machinery/door/airlock/external{
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "vox_eva_airlock_exterior";
-	locked = 1
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
 	},
@@ -69954,17 +69587,7 @@
 /area/hallway/primary/central)
 "eCQ" = (
 /obj/item/weapon/stool,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "vox_eva_int_airlock_sensor";
-	master_tag = "vox_eva_airlock_control";
-	pixel_x = 25;
-	req_access_txt = "140"
-	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
 	},
@@ -70138,7 +69761,9 @@
 /area/library)
 "fEz" = (
 /obj/item/weapon/stool,
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 9
+	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
 	},
@@ -70779,7 +70404,6 @@
 	},
 /area/library)
 "kDY" = (
-/obj/machinery/atmospherics/pipe/simple/filtering/hidden,
 /obj/structure/closet/walllocker/emerglocker{
 	pixel_x = 32
 	},
@@ -71100,12 +70724,13 @@
 /turf/simulated/floor/plating,
 /area/supply/storage)
 "mgC" = (
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/unary/vent_pump{
 	dir = 4;
 	frequency = 1331;
-	id_tag = "vox_eva_airlock_pump"
+	name = "Outpost Air Vent";
+	on = 1
 	},
-/obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
 	},
@@ -71212,9 +70837,6 @@
 /turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "mLc" = (
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 4
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light/small,
 /turf/simulated/floor/vox{
@@ -72126,15 +71748,6 @@
 /obj/structure/disposalpipe/segment,
 /turf/simulated/floor,
 /area/hallway/secondary/exit)
-"uNL" = (
-/obj/effect/glowshroom/single,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/vox{
-	icon_state = "asteroidplating"
-	},
-/area/vox_trading_post/trading_floor)
 "uVs" = (
 /obj/structure/shuttle/diag_wall/smooth,
 /turf/space,
@@ -173212,7 +172825,7 @@ aXf
 bnw
 blc
 boy
-boW
+aai
 aaa
 aaa
 aaa
@@ -203753,7 +203366,7 @@ aai
 aaa
 aaa
 aaa
-abJ
+adW
 acr
 acZ
 adC
@@ -204255,7 +203868,7 @@ aai
 aaa
 aaa
 aaa
-abK
+abL
 abL
 abL
 abL
@@ -1151639,7 +1151252,7 @@ cvy
 cvC
 cvn
 cvy
-cys
+cwr
 cyR
 aaa
 czG
@@ -1153146,7 +1152759,7 @@ aaa
 aaa
 cyk
 cyk
-cyU
+cyS
 czr
 cyk
 aai
@@ -1153665,7 +1153278,7 @@ cAa
 qUA
 biJ
 cDi
-cDG
+agO
 agO
 aai
 aaa
@@ -1158674,7 +1158287,7 @@ czk
 czk
 czk
 cDh
-uNL
+kbC
 cDm
 gjf
 cAw
@@ -1163200,13 +1162813,13 @@ cBW
 cCo
 cDS
 cDS
-cDT
+cDS
 cEm
 cuO
 cGK
 cFi
 cFA
-cFV
+cGY
 cGK
 cGK
 cuO
@@ -1163708,7 +1163321,7 @@ cuO
 cGY
 cFg
 mgC
-cFT
+cGK
 cuO
 cuO
 cuz
@@ -1164210,7 +1163823,7 @@ cuO
 cGY
 cEU
 mLc
-cFU
+cGK
 cuO
 cuz
 cuz
@@ -1164705,7 +1164318,7 @@ cAQ
 cBY
 cBk
 cCX
-cDD
+cDr
 cEa
 cuP
 cuP
@@ -1165204,17 +1164817,17 @@ cuP
 cuP
 cuV
 cAR
-cBX
-cCY
-cCY
 cDE
-cCZ
+cvd
+cvd
+cvd
+cuY
 cuP
 cuP
 cuV
 cvd
 cvd
-cFY
+cuY
 cuP
 cuO
 cuO
@@ -1184680,7 +1184293,7 @@ cuz
 cuz
 cuz
 cuz
-cuO
+cuz
 cuz
 cuz
 cuz
@@ -1185182,7 +1184795,7 @@ cuz
 cuz
 cuz
 cuz
-cuO
+cuz
 cuz
 cuz
 cuz
@@ -1185684,7 +1185297,7 @@ cuz
 cuz
 cuz
 cuz
-cuO
+cuz
 cuz
 cuz
 cuz
@@ -1186186,7 +1185799,7 @@ cuz
 cuz
 cuz
 cuz
-cuO
+cuz
 cuz
 cuz
 cuz
@@ -1205362,7 +1204975,7 @@ cuP
 cuP
 cuP
 cuO
-cuz
+cuO
 cuO
 cuP
 cuP
@@ -1205864,7 +1205477,7 @@ cuP
 cuP
 cuO
 cuO
-cuz
+cuO
 cuS
 cuP
 cuP
@@ -1206366,7 +1205979,7 @@ cuP
 aai
 cuO
 cuO
-cuz
+cuO
 cuS
 cvI
 cuP
@@ -1206868,7 +1206481,7 @@ agO
 aai
 cuO
 cuO
-cuz
+cuO
 cuS
 cuP
 cuP
@@ -1207370,7 +1206983,7 @@ agO
 aai
 cuO
 cuO
-cuz
+cuO
 cuO
 cuP
 cuP

@@ -94035,8 +94035,8 @@
 	},
 /area/prison/medical)
 "edw" = (
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 4
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 9
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -94150,20 +94150,6 @@
 	icon_state = "dark"
 	},
 /area/prison/hallway/aft)
-"edE" = (
-/obj/structure/cable/orange{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/prison/hallway/aft)
 "edF" = (
 /obj/machinery/suit_storage_unit/security,
 /turf/simulated/floor{
@@ -94234,35 +94220,9 @@
 	dir = 8
 	},
 /obj/structure/flora/pottedplant/random,
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "pris_int_airlock_sensor";
-	master_tag = "pris_airlock_control";
-	pixel_y = -24
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/prison/hallway/aft)
-"edM" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/cable/orange{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/simulated/floor/plating,
 /area/prison/hallway/aft)
 "edN" = (
 /obj/structure/cable/orange{
@@ -94281,11 +94241,8 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "pris_airlock_interior";
-	locked = 1
+	name = "Security External Airlock";
+	req_access_txt = "63"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -94338,11 +94295,6 @@
 	},
 /area/security/toilet)
 "edR" = (
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	dir = 8;
-	frequency = 1331;
-	id_tag = "pris_airlock_pump"
-	},
 /obj/structure/cable/orange{
 	d1 = 1;
 	d2 = 2;
@@ -94352,6 +94304,10 @@
 	d1 = 1;
 	d2 = 8;
 	icon_state = "1-8"
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -94381,20 +94337,6 @@
 	d1 = 2;
 	d2 = 4;
 	icon_state = "2-4"
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 5
-	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "pris_airlock_control";
-	pixel_x = -24;
-	tag_airpump = "pris_airlock_pump";
-	tag_chamber_sensor = "pris_airlock_sensor";
-	tag_exterior_door = "pris_airlock_exterior";
-	tag_exterior_sensor = "pris_ext_airlock_sensor";
-	tag_interior_door = "pris_airlock_interior";
-	tag_interior_sensor = "pris_int_airlock_sensor"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -94441,13 +94383,6 @@
 	d1 = 1;
 	d2 = 8;
 	icon_state = "1-8"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "pris_airlock_sensor";
-	master_tag = "pris_airlock_control";
-	pixel_x = -24;
-	pixel_y = 21
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -94544,10 +94479,6 @@
 	icon_state = "asteroidplating"
 	},
 /area/mine/production)
-"eem" = (
-/obj/structure/disposalpipe/segment,
-/turf/unsimulated/mineral/random,
-/area/mine/unexplored)
 "een" = (
 /turf/unsimulated/floor/asteroid/plating,
 /area/mine/production)
@@ -94558,17 +94489,6 @@
 	},
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
-"eep" = (
-/turf/space,
-/area/research_outpost/hallway)
-"eeq" = (
-/turf/unsimulated/floor/asteroid,
-/area/research_outpost/hallway)
-"eer" = (
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidplating"
-	},
-/area/research_outpost/hallway)
 "ees" = (
 /obj/structure/sink/puddle,
 /obj/item/fish_eggs/goldfish,
@@ -94606,13 +94526,8 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "eex" = (
-/obj/structure/hanging_lantern,
-/turf/unsimulated/floor/asteroid,
-/area/research_outpost/hallway)
-"eey" = (
-/obj/structure/ore_box,
-/turf/unsimulated/floor/asteroid,
-/area/research_outpost/hallway)
+/turf/simulated/floor/plating,
+/area/mine/explored)
 "eez" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
@@ -94742,21 +94657,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/hallway)
-"eeR" = (
-/obj/structure/grille,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/mine/production)
 "eeS" = (
 /obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -94874,7 +94774,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidplating"
 	},
-/area/research_outpost/hallway)
+/area/mine/explored)
 "eff" = (
 /obj/machinery/suit_storage_unit/mining,
 /obj/effect/decal/warning_stripes{
@@ -94950,9 +94850,22 @@
 /turf/simulated/floor,
 /area/engineering/supermatter_room)
 "efl" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor,
-/area/mine/production)
+/obj/structure/table/reinforced,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	icon_state = "shutter0";
+	id_tag = "bar";
+	name = "Bar Shutters";
+	opacity = 0
+	},
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/crew_quarters/bar)
 "efm" = (
 /turf/simulated/floor,
 /area/mine/production)
@@ -95294,9 +95207,6 @@
 	},
 /area/mine/production)
 "efW" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 9
-	},
 /obj/machinery/hologram/holopad,
 /turf/simulated/floor,
 /area/mine/production)
@@ -103579,8 +103489,11 @@
 /turf/space,
 /area)
 "evR" = (
-/turf/unsimulated/floor/asteroid,
-/area)
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 9
+	},
+/turf/simulated/floor,
+/area/mine/production)
 "evS" = (
 /obj/structure/cable/yellow,
 /obj/structure/cable/yellow{
@@ -103589,7 +103502,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/yellow/visible,
 /turf/simulated/floor/plating,
-/area)
+/area/mine/explored)
 "evT" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
@@ -104282,12 +104195,6 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/yellow/visible,
 /turf/space,
-/area)
-"ewU" = (
-/obj/structure/hanging_lantern{
-	dir = 1
-	},
-/turf/unsimulated/floor/asteroid,
 /area)
 "ewV" = (
 /obj/structure/window/reinforced{
@@ -111639,13 +111546,6 @@
 /obj/item/clothing/accessory/rad_patch,
 /turf/simulated/floor,
 /area/engineering/supermatter_room)
-"eKZ" = (
-/obj/machinery/conveyor_switch/oneway{
-	id_tag = "mining_internal";
-	name = "mining conveyor"
-	},
-/turf/unsimulated/floor/asteroid,
-/area/research_outpost/hallway)
 "eLa" = (
 /obj/machinery/mineral/unloading_machine,
 /turf/simulated/floor/plating,
@@ -112549,53 +112449,27 @@
 	icon_state = "1-4"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "pris_airlock_exterior";
-	locked = 1
+	name = "Security External Airlock";
+	req_access_txt = "63"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/prison/hallway/aft)
-"eNp" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "pris_ext_airlock_sensor";
-	master_tag = "pris_airlock_control";
-	pixel_x = -24;
-	pixel_y = 21
-	},
-/turf/unsimulated/floor/asteroid,
-/area/mine/explored)
 "eNq" = (
 /obj/machinery/camera{
 	dir = 1;
 	name = "Outpost Exit";
 	network = list("MINE","RD","SS13")
 	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "MINE_ext_airlock_sensor";
-	master_tag = "MINE_airlock_control";
-	pixel_y = -18
-	},
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidplating"
 	},
 /area/mine/explored)
-"eNr" = (
-/obj/machinery/door/airlock/external{
-	id_tag = "MINE_airlock_exterior"
-	},
-/turf/simulated/floor/plating,
-/area/mine/production)
 "eNs" = (
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	dir = 8;
-	frequency = 1331;
-	id_tag = "MINE_airlock_pump"
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
 	},
 /turf/simulated/floor/plating,
 /area/mine/production)
@@ -112610,34 +112484,10 @@
 /area/mine/production)
 "eNu" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 6
-	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "MINE_airlock_control";
-	name = "Mining Airlock Controller";
-	pixel_x = -24;
-	tag_airpump = "MINE_airlock_pump";
-	tag_chamber_sensor = "MINE_airlock_sensor";
-	tag_exterior_door = "MINE_airlock_exterior";
-	tag_exterior_sensor = "MINE_ext_airlock_sensor";
-	tag_interior_door = "MINE_airlock_interior";
-	tag_interior_sensor = "MINE_int_airlock_sensor"
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "MINE_airlock_sensor";
-	master_tag = "MINE_airlock_control";
-	pixel_x = -24;
-	pixel_y = -10
-	},
 /turf/simulated/floor/plating,
 /area/mine/production)
 "eNv" = (
-/obj/machinery/door/airlock/external{
-	id_tag = "MINE_airlock_interior"
-	},
+/obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating,
 /area/mine/production)
 "eNw" = (
@@ -112645,12 +112495,6 @@
 /obj/machinery/camera{
 	name = "Outpost Expedition Preperation";
 	network = list("MINE","RD","SS13")
-	},
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "MINE_int_airlock_sensor";
-	master_tag = "MINE_airlock_control";
-	pixel_y = 22
 	},
 /turf/simulated/floor,
 /area/mine/production)
@@ -114552,7 +114396,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidplating"
 	},
-/area/research_outpost/hallway)
+/area/mine/explored)
 "vcX" = (
 /obj/structure/table,
 /obj/machinery/sewing_machine{
@@ -216476,7 +216320,7 @@ bXD
 bZI
 cbF
 cdy
-bXD
+efl
 chg
 cbI
 bZS
@@ -1213511,7 +1213355,7 @@ erz
 erz
 euT
 evw
-evR
+dRu
 aaa
 aaa
 aaa
@@ -1214013,8 +1213857,8 @@ erz
 erz
 euU
 evw
-evR
-evR
+dRu
+dRu
 aaa
 aaa
 aaa
@@ -1215017,10 +1214861,10 @@ erE
 erz
 erz
 evw
-evR
-evR
-evR
-evR
+dRu
+dRu
+dRu
+dRu
 aaa
 aaa
 aaa
@@ -1215519,11 +1215363,11 @@ erE
 euJ
 euJ
 evy
-evR
-evR
-evR
-evR
-evR
+dRu
+dRu
+dRu
+dRu
+dRu
 aaa
 aaa
 aaa
@@ -1216021,13 +1215865,13 @@ eur
 euK
 euV
 erk
-evR
-evR
-evR
-evR
-evR
-evR
-evR
+dRu
+dRu
+dRu
+dRu
+dRu
+dRu
+dRu
 aax
 aax
 aax
@@ -1216526,11 +1216370,11 @@ erk
 eeE
 eeE
 ewD
-ewU
-evR
-evR
-evR
-evR
+dSS
+dRu
+dRu
+dRu
+dRu
 aax
 aaa
 aaa
@@ -1216869,13 +1216713,13 @@ dVz
 dYI
 dVz
 edw
-edE
-dVz
-edM
+edG
+dVy
+edW
 edT
 edX
 edW
-eNp
+dRu
 dRu
 dRu
 dQU
@@ -1217028,11 +1216872,11 @@ evz
 evT
 ewn
 ewE
-evR
-evR
-evR
-evR
-evR
+dRu
+dRu
+dRu
+dRu
+dRu
 ezn
 ezn
 ezn
@@ -1217530,11 +1217374,11 @@ evA
 evU
 evU
 evA
-evR
-evR
-evR
-evR
-evR
+dRu
+dRu
+dRu
+dRu
+dRu
 ezn
 ezP
 eAn
@@ -1218032,11 +1217876,11 @@ eeE
 evV
 ewo
 ewD
-evR
-evR
-evR
-evR
-evR
+dRu
+dRu
+dRu
+dRu
+dRu
 ezn
 ezQ
 eAo
@@ -1218531,14 +1218375,14 @@ esj
 esj
 euZ
 eeE
-evR
-evR
-evR
-evR
-evR
-evR
-evR
-evR
+dRu
+dRu
+dRu
+dRu
+dRu
+dRu
+dRu
+dRu
 ezn
 ezR
 eAp
@@ -1218990,9 +1218834,9 @@ aaa
 aaa
 aaa
 aaa
-eep
-eep
-eep
+aaa
+aaa
+aaa
 eeM
 eeZ
 eeO
@@ -1219033,13 +1218877,13 @@ esj
 esj
 esj
 efu
-evR
-evR
-evR
-evR
-evR
-evR
-evR
+dRu
+dRu
+dRu
+dRu
+dRu
+dRu
+dRu
 aaa
 ezn
 ezS
@@ -1219491,10 +1219335,10 @@ aaa
 aaa
 aaa
 aaa
-eep
-eep
-eep
-eep
+aaa
+aaa
+aaa
+aaa
 eeM
 efa
 eeO
@@ -1219535,12 +1219379,12 @@ esj
 esj
 esj
 efv
-evR
-evR
-evR
-evR
-evR
-evR
+dRu
+dRu
+dRu
+dRu
+dRu
+dRu
 aaa
 aaa
 ezn
@@ -1219992,11 +1219836,11 @@ aaa
 aaa
 aaa
 aaa
-eep
-eep
-eep
-eep
-eep
+aaa
+aaa
+aaa
+aaa
+aaa
 eeM
 efb
 eeP
@@ -1220037,12 +1219881,12 @@ eNx
 esj
 esj
 efw
-evR
-evR
-evR
-evR
-evR
-evR
+dRu
+dRu
+dRu
+dRu
+dRu
+dRu
 aaa
 aaa
 ezn
@@ -1220494,11 +1220338,11 @@ aaa
 aaa
 aaa
 aaa
-eep
-eep
-eep
-eep
-eep
+aaa
+aaa
+aaa
+aaa
+aaa
 eeM
 efc
 eft
@@ -1220539,11 +1220383,11 @@ eeE
 euL
 euL
 eeE
-evR
-evR
-evR
-evR
-ade
+dRu
+dRu
+dRu
+dRu
+eex
 aax
 aaa
 aaa
@@ -1220996,11 +1220840,11 @@ aaa
 aaa
 aaa
 aaa
-eep
-eeq
-eeq
-eeq
-eeq
+aaa
+dRu
+dRu
+dRu
+dRu
 eeM
 eeX
 eeM
@@ -1221498,10 +1221342,10 @@ aaa
 aaa
 aaa
 aaa
-eeq
-eeq
-eeq
-eex
+dRu
+dRu
+dRu
+dRA
 eeE
 eeE
 efd
@@ -1222000,9 +1221844,9 @@ aaa
 aaa
 aaa
 dRu
-eer
-eer
-eer
+edd
+edd
+edd
 efe
 eLa
 eeQ
@@ -1222502,9 +1222346,9 @@ aaa
 aaa
 dRu
 dRu
-eer
-eer
-eer
+edd
+edd
+edd
 uTp
 eLa
 eeQ
@@ -1223004,10 +1222848,10 @@ dRu
 dRu
 dRu
 dRu
-eer
-eer
-eKZ
-eex
+edd
+edd
+eeo
+dRA
 eeE
 eeu
 eeu
@@ -1223506,11 +1223350,11 @@ dRu
 dRu
 dRu
 dRu
-eer
-eer
-eeq
-eey
-eey
+edd
+edd
+dRu
+dTT
+dTT
 eeu
 eff
 efm
@@ -1224008,11 +1223852,11 @@ dRu
 dRu
 dRu
 dRu
-eer
-eer
-eeq
-eey
-eey
+edd
+edd
+dRu
+dTT
+dTT
 eeu
 efg
 efx
@@ -1224511,10 +1224355,10 @@ dRu
 dRu
 dRu
 edd
-eer
-eeq
-eeq
-eey
+edd
+dRu
+dRu
+dTT
 eeu
 efh
 efy
@@ -1225014,9 +1224858,9 @@ dRu
 eeo
 edd
 edd
-eeq
-eeq
-eey
+dRu
+dRu
+dTT
 eeu
 efh
 efm
@@ -1227028,7 +1226872,7 @@ eeu
 eeu
 eNw
 efx
-efS
+evR
 egs
 egJ
 egZ
@@ -1227527,9 +1227371,9 @@ edd
 eev
 eeB
 eNu
-eeR
-efl
-efl
+eev
+efm
+efm
 efW
 egr
 egK
@@ -1228026,7 +1227870,7 @@ eef
 eef
 edd
 edd
-eNr
+eNv
 eeC
 eNs
 eNv
@@ -1259145,21 +1258989,21 @@ dQU
 dQU
 dQU
 dQU
-eem
-eem
-eem
-eem
-eem
-eem
-eem
-eem
-eem
-eem
-eem
-eem
-eem
-eem
-eem
+dQU
+dQU
+dQU
+dQU
+dQU
+dQU
+dQU
+dQU
+dQU
+dQU
+dQU
+dQU
+dQU
+dQU
+dQU
 dQU
 dQU
 dQU

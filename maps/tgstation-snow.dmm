@@ -12222,12 +12222,6 @@
 	icon_state = "floorgrime"
 	},
 /area/mine/production)
-"aCz" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 10
-	},
-/turf/simulated/floor,
-/area/research_outpost/gearstore)
 "aCA" = (
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/libertycap,
 /turf/unsimulated/floor/snow/cave/rock,
@@ -12359,15 +12353,11 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/tempstorage)
 "aCV" = (
-/obj/structure/table,
-/obj/item/weapon/storage/box/excavation,
-/obj/item/weapon/pickaxe,
-/obj/item/tool/wrench,
-/obj/item/device/measuring_tape,
 /obj/machinery/alarm{
 	dir = 8;
 	pixel_x = 24
 	},
+/obj/structure/closet/crate,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "aCW" = (
@@ -12558,10 +12548,6 @@
 "aDR" = (
 /obj/machinery/recharger{
 	pixel_x = 29
-	},
-/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
-	frequency = 1331;
-	id_tag = "anom_airlock_pump"
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -14569,11 +14555,11 @@
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "aIf" = (
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 1
-	},
-/turf/simulated/floor,
-/area/research_outpost/gearstore)
+/obj/structure/table/woodentable,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
+/turf/simulated/floor/wood,
+/area/crew_quarters/bar)
 "aIg" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -14883,13 +14869,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/gearstore)
-"aIO" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor,
-/area/research_outpost/gearstore)
 "aIP" = (
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
 /turf/simulated/floor,
@@ -15028,14 +15007,13 @@
 	name = "Toxins"
 	})
 "aJe" = (
-/obj/machinery/door/airlock/external{
-	req_access_txt = "13";
-	req_one_access_txt = "13"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/door/airlock/external{
+	req_access_txt = "47"
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/dorm2{
@@ -15190,21 +15168,12 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/gearstore)
 "aJw" = (
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "anom_int_airlock_sensor";
-	master_tag = "anom_airlock_control";
-	pixel_y = -24
-	},
 /obj/structure/dispenser/oxygen,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "aJx" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 5
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "aJy" = (
@@ -15397,10 +15366,7 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/gearstore)
 "aJU" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 5
-	},
-/turf/simulated/wall,
+/turf/simulated/wall/r_wall,
 /area/research_outpost/gearstore)
 "aJV" = (
 /obj/structure/window/reinforced{
@@ -15415,19 +15381,12 @@
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/full/reinforced,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 10
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
 /area/research_outpost/gearstore)
 "aJW" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "anom_airlock_interior";
-	locked = 1
+	req_access_txt = "47"
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -15545,18 +15504,10 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/machinery/embedded_controller/radio/airlock_controller{
-	frequency = 1331;
-	id_tag = "anom_airlock_control";
-	pixel_x = -24;
-	tag_airpump = "anom_airlock_pump";
-	tag_chamber_sensor = "anom_airlock_sensor";
-	tag_exterior_door = "anom_airlock_exterior";
-	tag_exterior_sensor = "anom_ext_airlock_sensor";
-	tag_interior_door = "anom_airlock_interior";
-	tag_interior_sensor = "anom_int_airlock_sensor"
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
 "aKo" = (
@@ -15582,14 +15533,13 @@
 	name = "Toxins"
 	})
 "aKq" = (
-/obj/machinery/door/airlock/external{
-	req_access_txt = "13";
-	req_one_access_txt = "13"
-	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/machinery/door/airlock/external{
+	req_access_txt = "47"
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/dorm2{
@@ -15716,19 +15666,9 @@
 /area/mine/explored)
 "aKG" = (
 /obj/structure/closet/walllocker/emerglocker/west,
-/obj/machinery/airlock_sensor{
-	frequency = 1331;
-	id_tag = "anom_airlock_sensor";
-	master_tag = "anom_airlock_control";
-	pixel_x = -24;
-	pixel_y = 21
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 5
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -15739,9 +15679,6 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 9
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -15814,11 +15751,7 @@
 /area/research_outpost/gearstore)
 "aKT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
-	frequency = 1331;
-	icon_state = "door_locked";
-	id_tag = "anom_airlock_exterior";
-	locked = 1
+	req_access_txt = "47"
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -177428,13 +177361,13 @@ aEY
 aFM
 aGt
 aGq
-aIf
-aIO
+aIc
+aIM
 aJw
 aJU
-aDS
-aDS
-aDS
+aJU
+aJU
+aJU
 aLg
 aoX
 aaD
@@ -178034,7 +177967,7 @@ aGv
 aGq
 aIh
 aBM
-aCz
+aGq
 aJW
 aDR
 aKH
@@ -178337,10 +178270,10 @@ aHw
 aAz
 aIQ
 aCV
-aDS
-aDS
-aDS
-aDS
+aJU
+aJU
+aJU
+aJU
 abH
 aoX
 aaD
@@ -253203,7 +253136,7 @@ bGn
 bCC
 bGn
 bAS
-wfm
+aIf
 bGn
 bGj
 bEs
