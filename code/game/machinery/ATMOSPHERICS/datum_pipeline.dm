@@ -1,6 +1,8 @@
 /datum/pipeline
 	var/datum/gas_mixture/air
 
+	var/list/last_visible_gases = list()
+
 	var/list/obj/machinery/atmospherics/pipe/members = list()
 	var/list/obj/machinery/atmospherics/pipe/edges = list() //Used for building networks
 
@@ -25,6 +27,16 @@
 	edges = null
 	..()
 
+/datum/pipeline/proc/get_visible_gases()
+	. = list()
+	if(air)
+		if(air.molar_density(GAS_SLEEPING) > 1 / CELL_VOLUME)
+			. += list("nitrous oxide")
+		if(air.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
+			. += list("plasma")
+		if(air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME)
+			. += list("cryotheum")
+
 /datum/pipeline/proc/process()
 	#ifdef BURST_PIPES
 	if((world.timeofday - last_pressure_check) / 10 >= PRESSURE_CHECK_DELAY)
@@ -37,9 +49,12 @@
 					last_pressure_check=world.timeofday
 					break //Only delete 1 pipe per process
 	#endif
-	for(var/obj/machinery/atmospherics/pipe/member in members)
-		if(member.transparent && member.exposed())
-			member.update_icon()
+	var/list/visible_gases = get_visible_gases()
+	if(visible_gases.len != last_visible_gases.len)
+		last_visible_gases = visible_gases
+		for(var/obj/machinery/atmospherics/pipe/member in members)
+			if(member.transparent && member.exposed())
+				member.update_icon()
 
 	//Allow for reactions
 	//air.react() //Should be handled by pipe_network now
