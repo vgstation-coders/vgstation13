@@ -110,7 +110,7 @@
 
 /datum/biome/dry_seafloor
 	biome_temperature = T20C + 10
-	open_turf_types = list(/turf/unsimulated/floor/planetary/desert/dry = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/dry_basin = 1)
 
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 10,

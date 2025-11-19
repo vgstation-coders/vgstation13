@@ -135,7 +135,7 @@
 				qdel(edge)
 	if(opacity)
 		has_opaque_atom = TRUE
-	if(edge_flags & EDGE_CARDINAL)
+	if((edge_flags & EDGE_CARDINAL) && !(turf_flags & DEFER_EDGING))
 		update_edges()
 
 /turf/ex_act(severity)
@@ -363,7 +363,7 @@
 	return
 
 //Creates a new turf
-/turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1,var/defer_edges = FALSE)
 	var/area/original_area=loc
 	if(loc)
 		var/area/A = loc
@@ -429,6 +429,8 @@
 			QDEL_NULL(F.floor_tile)
 		F = null
 
+	if(defer_edges)
+		turf_flags |= DEFER_EDGING
 	if(ispath(N, /turf/simulated/floor))
 		//if the old turf had a zone, connect the new turf to it as well - Cael
 		//Adjusted by SkyMarshal 5/10/13 - The air master will handle the addition of the new turf.

@@ -45,14 +45,14 @@
 	var/list/edges = list()
 	for(var/direction in alldirs)
 		adj = get_step(src, direction)
-		if(!adj)
+		if(!adj || istype(adj, /turf/unsimulated/border) || istype(adj, /turf/unsimulated/mineral/gibtonite))
 			continue // Skip null turfs at map boundaries
 		if(!istype(adj, src) && adj.edge_priority < edge_priority)
 			edges += direction
 	return edges
 
 /turf/proc/update_edges()
-	if(!(edge_flags & EDGE_CARDINAL))
+	if(!(edge_flags & EDGE_CARDINAL) || (turf_flags & DEFER_EDGING))
 		return
 
 	var/list/dirs = edge_check()

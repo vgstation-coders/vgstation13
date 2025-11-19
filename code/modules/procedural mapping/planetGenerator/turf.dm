@@ -20,26 +20,19 @@
 	oxygen = MOLES_O2STANDARD
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
-	var/base_icon_state
-	var/floor_variance = 30 //how often the floor texture is randomized
-	var/min_icon_states = 1 //because some states are indexed from 0 for whatever fucking reason
-	var/max_icon_states = 1 //how many different floor textures there are
-
-/turf/unsimulated/floor/planetary/New()
-	..()
-	if(prob(floor_variance) && max_icon_states > 1)
-		icon_state = base_icon_state + "[rand(min_icon_states,max_icon_states)]"
 
 //Caves
 /turf/unsimulated/floor/planetary/cave
 	name = "cave floor"
 	icon_state = "cavefl_1"
 	base_icon_state = "cavefl_"
+	min_icon_states = 1
 	max_icon_states = 4
 
 /turf/unsimulated/floor/planetary/cave/xeno
 
 /turf/unsimulated/floor/planetary/cave/xeno/New()
+	..()
 	new /obj/effect/alien/weeds(src)
 
 /turf/unsimulated/mineral/cave
@@ -53,9 +46,13 @@
 	name = "desert"
 	icon = 'icons/turf/planetary/desert.dmi'
 	icon_state = "desert"
+	base_icon_state = "desert"
+	edge_priority = SAND_EDGE_PRIORITY
+	edge_flags = EDGE_CARDINAL|EDGE_OUTER_DIAGONAL
 
-/turf/unsimulated/floor/planetary/desert/dry
+/turf/unsimulated/floor/planetary/dry_basin
 	name = "dry basin"
+	icon = 'icons/turf/planetary/desert.dmi'
 	icon_state = "drydesert"
 
 /turf/unsimulated/floor/planetary/grass
@@ -63,14 +60,20 @@
 	icon = 'icons/turf/planetary/grass.dmi'
 	icon_state = "grass0"
 	base_icon_state = "grass"
+	min_icon_states = 1
 	max_icon_states = 3
+	variance = 40
+	edge_priority = GRASS_EDGE_PRIORITY
+	edge_flags = ALL_EDGES
 
 /turf/unsimulated/floor/planetary/dirt
 	name = "dirt"
 	icon = 'icons/turf/planetary/grass.dmi'
 	icon_state = "dirt.1"
 	base_icon_state = "dirt."
+	min_icon_states = 2
 	max_icon_states = 4
+	variance = 40
 	turf_flags = NO_RUINS
 
 /turf/unsimulated/floor/snow/glacier
@@ -78,14 +81,21 @@
 	temperature = T0C
 	var/glacier_processed = FALSE
 
+/turf/unsimulated/floor/planetary/snow_cave
+	name = "icy cave floor"
+	icon = 'icons/turf/new_snow.dmi'
+	icon_state = "permafrost_full"
+
 /turf/unsimulated/floor/planetary/wasteland
 	name = "wasteland"
 	icon = 'icons/turf/planetary/battlefield.dmi'
 	icon_state = "wasteland"
 	base_icon_state = "wasteland"
-	floor_variance = 60
+	variance = 60
 	min_icon_states = 0
 	max_icon_states = 32
+	edge_flags = EDGE_CARDINAL
+	edge_priority = SAND_EDGE_PRIORITY
 
 /turf/unsimulated/floor/planetary/toxic //gives mobs rads
 	name = "no man's land"
@@ -93,7 +103,7 @@
 	icon = 'icons/turf/planetary/wasteplanet.dmi'
 	icon_state = "wasteplanet0"
 	base_icon_state = "wasteplanet"
-	floor_variance = 40
+	variance = 40
 	max_icon_states = 12
 
 /turf/unsimulated/floor/planetary/toxic/mob_life_effects(mob/living/affected)
@@ -101,7 +111,7 @@
 
 /turf/unsimulated/floor/planetary/toxic/New()
 	..()
-	if(prob(floor_variance))
+	if(prob(variance))
 		set_light(2, 1, "#00ff00")
 
 /turf/unsimulated/floor/planetary/basalt
@@ -111,36 +121,39 @@
 	base_icon_state = "basalt"
 	min_icon_states = 0
 	max_icon_states = 12
+	edge_flags = EDGE_CARDINAL|EDGE_OUTER_DIAGONAL
+	edge_priority = CAVE_FLOOR_EDGE_PRIORITY
 
 /turf/unsimulated/floor/planetary/sand/volcanic
 	name = "volcanic sand"
 	desc = "Sand, filled with a wide array of volcanic minerals have turned it a soft black color. Suprisingly good for plants, all things considered"
 	icon = 'icons/turf/planetary/volcanicsand.dmi'
-	icon_state = "sand_1"
-	base_icon_state = "sand_"
-	floor_variance = 50
+	icon_state = "volcsand1"
+	base_icon_state = "volcsand"
+	variance = 50
+	min_icon_states = 1
 	max_icon_states = 5
+	edge_flags = EDGE_CARDINAL|EDGE_OUTER_DIAGONAL
+	edge_priority = SAND_EDGE_PRIORITY
 
 /turf/unsimulated/floor/planetary/grass/lavaland
 	name = "crimson grass"
 	desc = "This grass has adapted extremely well to the hot enviroments of lava planets, as it is adept at absorbing the red light that passes the atmosphere."
 	icon = 'icons/turf/planetary/redgrass.dmi'
-	icon_state = "grass_1"
-	base_icon_state = "grass_"
-	floor_variance = 100
+	icon_state = "redgrass1"
+	base_icon_state = "redgrass"
+	variance = 100
 	max_icon_states = 3
 
 /turf/unsimulated/floor/planetary/moss
 	name = "mossy carpet"
 	desc = "When the forests burned away and the sky grew dark, the moss learned to feed on the falling ash."
 	icon_state = "moss"
-	icon = 'icons/turf/planetary/lava_moss.dmi'
+	icon = 'icons/turf/planetary/lava.dmi'
 	base_icon_state = "moss"
 	gender = PLURAL
 	light_power = 1
 	light_range = 2
-	pixel_x = -9
-	pixel_y = -9
 
 /turf/unsimulated/floor/planetary/obsidian
 	name = "obsidian"
@@ -205,12 +218,17 @@
 	icon = 'icons/turf/planetary/shrouded.dmi'
 	icon_state = "shrouded0"
 	base_icon_state = "shrouded"
-	floor_variance = 80
-	min_icon_states = 0
+	variance = 80
+	min_icon_states = 1
 	max_icon_states = 8
+	edge_flags = EDGE_CARDINAL|EDGE_OUTER_DIAGONAL
+	edge_priority = SAND_EDGE_PRIORITY
 
 /turf/unsimulated/floor/planetary/xeno/desert/white
 	name = "white sand desert"
 	icon = 'icons/turf/planetary/whitesands.dmi'
-	icon_state = "sand"
-	max_icon_states = 1
+	base_icon_state = "wsand"
+	icon_state = "wsand"
+	max_icon_states = 0
+	edge_flags = EDGE_CARDINAL|EDGE_OUTER_DIAGONAL
+	edge_priority = SAND_EDGE_PRIORITY

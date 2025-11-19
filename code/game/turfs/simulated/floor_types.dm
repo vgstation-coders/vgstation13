@@ -410,8 +410,6 @@
 	min_icon_states = 2
 	max_icon_states = 4
 	variance = 50
-	edge_priority = GRASS_EDGE_PRIORITY
-	edge_flags = ALL_EDGES
 
 /turf/simulated/floor/grass/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/grass(null)

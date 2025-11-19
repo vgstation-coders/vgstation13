@@ -78,7 +78,7 @@
 	// Preserve NO_RUINS flag through turf change
 	var/stored_flags = gen_turf.turf_flags & NO_RUINS
 	var/turf/new_turf_type = get_turf_type(gen_turf, string_gen)
-	var/turf/new_turf = gen_turf.ChangeTurf(new_turf_type)
+	var/turf/new_turf = gen_turf.ChangeTurf(new_turf_type, defer_edges = TRUE)
 	// Restore the preserved flag
 	new_turf?.turf_flags |= stored_flags
 	new_turf.oxygen = MOLES_O2STANDARD
@@ -126,7 +126,7 @@
 
 	var/atom/flora_type = pick(flora_spawn_list_expanded)
 	var/atom/spawned = new flora_type(floor_turf)
-	floor_turf.turf_flags |= NO_LAVA_GEN_1
+	floor_turf.turf_flags |= NO_LAVA_GEN
 	return spawned
 
 /**
@@ -154,7 +154,7 @@
 	var/atom/spawned = new feature_type(floor_turf)
 	// Insert at the head of the list, so the most recent features get checked first
 	feature_list.Insert(1, spawned)
-	floor_turf.turf_flags |= NO_LAVA_GEN_1
+	floor_turf.turf_flags |= NO_LAVA_GEN
 	return spawned
 
 /datum/biome/proc/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
@@ -172,7 +172,7 @@
 
 	var/spawner_type = pickweight(loot_spawners)
 	var/obj/abstract/loot_spawner/spawned = new spawner_type(floor_turf, cave = cavespawn)
-	floor_turf.turf_flags |= NO_LAVA_GEN_1
+	floor_turf.turf_flags |= NO_LAVA_GEN
 	return spawned
 
 /datum/biome/cave/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
@@ -224,7 +224,7 @@
 
 	// Insert at the head of the list, so the most recent mobs get checked first
 	mob_list.Insert(1, spawned)
-	floor_turf.turf_flags |= NO_LAVA_GEN_1
+	floor_turf.turf_flags |= NO_LAVA_GEN
 	return spawned
 
 /**
@@ -267,6 +267,8 @@
  * * planet_faction - Optional faction to assign to spawned mobs
  */
 /datum/biome/proc/populate_turf(turf/gen_turf, list/feature_list, list/mob_list, var/datum/loot_table/loot_to_spawn, planet_faction = null)
+	gen_turf.turf_flags &= ~DEFER_EDGING
+	gen_turf.update_edges()
 	if(!can_populate_turf(gen_turf))
 		return
 

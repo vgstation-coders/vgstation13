@@ -24,7 +24,7 @@
 	var/construction_allowed=FALSE //if we can add lattices and turn this into plating
 
 
-/turf/unsimulated/floor/jungle/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/unsimulated/floor/jungle/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	var/former_icoover=plated_icon_override
 	.=..()
 	if(.)

@@ -24,7 +24,7 @@
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 	var/list/existing_prints = list()
 
-/turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
 	var/datum/climate/C = SSweather.get_climate(src.z, A)
 	if(C)
@@ -305,11 +305,23 @@
 	icon = 'icons/turf/new_snow.dmi'
 	icon_state = "pit"
 
+/turf/unsimulated/floor/snow/spread
+	icon_state = "snow"
+	base_icon_state = "snow"
+	edge_flags = EDGE_CARDINAL
+	edge_priority = SAND_EDGE_PRIORITY
+
 /turf/unsimulated/floor/snow/cave
 	name = "snowy cave floor"
 	desc = "Sheltered from blizzards outside, but still cold."
 	ignore_blizzard_updates = TRUE
 	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
+
+/turf/unsimulated/floor/snow/cave/spread
+	icon_state = "snow"
+	base_icon_state = "snow"
+	edge_flags = EDGE_CARDINAL
+	edge_priority = SAND_EDGE_PRIORITY
 
 /turf/unsimulated/floor/snow/cave/rock
 	name = "rocky cave floor"

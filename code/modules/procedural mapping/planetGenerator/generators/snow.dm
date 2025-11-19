@@ -89,7 +89,7 @@
 /datum/biome/snow
 	biome_temperature = T0C
 	open_turf_types = list(
-		/turf/unsimulated/floor/snow = 10
+		/turf/unsimulated/floor/snow/spread = 10
 	)
 	flora_spawn_list = list(
 		/obj/structure/flora/tree/pine = 2,
@@ -129,7 +129,7 @@
 
 /datum/biome/snow/lush
 	open_turf_types = list(
-		/turf/unsimulated/floor/snow = 1
+		/turf/unsimulated/floor/snow/spread = 1
 	)
 	flora_spawn_list = list(
 		/obj/structure/flora/grass/both = 1
@@ -167,7 +167,7 @@
 
 /datum/biome/arctic
 	open_turf_types = list(
-		/turf/unsimulated/floor/snow = 4
+		/turf/unsimulated/floor/snow/spread = 4
 	)
 	mob_spawn_list = list(
 		/mob/living/simple_animal/hostile/wolf = 25,
@@ -211,13 +211,13 @@
 /datum/biome/iceberg/lake
 	open_turf_types = list(
 //		/turf/unsimulated/floor/snow/glacier = 1, //this causes an infinite loop and crashes the MC
-		/turf/unsimulated/floor/snow = 1,
+		/turf/unsimulated/floor/snow/spread = 1,
 	)
 
 /datum/biome/cave/snow
 	biome_temperature = T0C
 	open_turf_types = list(
-		/turf/unsimulated/floor/snow/cave = 1
+		/turf/unsimulated/floor/snow/cave/spread = 1
 	)
 	flora_spawn_chance = 6
 	flora_spawn_list = list(
@@ -256,7 +256,7 @@
 
 /datum/biome/cave/snow/ice
 	open_turf_types = list(
-		/turf/unsimulated/floor/snow/cave = 1
+		/turf/unsimulated/floor/snow/cave/spread = 1
 	)
 	closed_turf_types = list(
 		/turf/unsimulated/wall/rock/ice = 1

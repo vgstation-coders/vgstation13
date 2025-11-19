@@ -44,8 +44,6 @@
 	min_icon_states = 2
 	max_icon_states = 4
 	variance = 50
-	edge_priority = GRASS_EDGE_PRIORITY
-	edge_flags = ALL_EDGES
 
 /turf/unsimulated/floor/grass/New()
 	..()

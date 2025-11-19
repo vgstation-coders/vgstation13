@@ -180,7 +180,7 @@ var/list/icon_state_to_appearance = list()
 	img.plane = BELOW_TURF_PLANE
 	overlays += img
 
-/turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/digsite_depressed = 0)
+/turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/digsite_depressed = 0, var/defer_edges = FALSE)
 	mineral_turfs -= src
 	var/datum/finds/old_finds = finddatum
 	. = ..(N, tell_universe, 1, allow)
@@ -771,10 +771,8 @@ var/list/icon_state_to_appearance = list()
 	icon_state = "cave_wall"
 	base_icon_state = "cave_wall"
 	mined_type = /turf/unsimulated/floor/planetary/cave
-
-/turf/unsimulated/mineral/random/cave/add_rock_overlay()
-	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)
-	..(img = image('icons/turf/spookycave.dmi', "spooky_cave_corners",layer = CORNER_LAYER),offset = -16)
+	edge_priority = ROCK_EDGE_PRIORITY
+	edge_flags = ALL_EDGES
 
 /turf/unsimulated/mineral/random/xeno
 	name = "strange wall"
@@ -799,16 +797,15 @@ var/list/icon_state_to_appearance = list()
 	icon_state = "cave_wall"
 	base_icon_state = "cave_wall"
 	mined_type = /turf/unsimulated/floor/planetary/cave
-
-/turf/unsimulated/mineral/random/high_chance/cave/add_rock_overlay()
-	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)
-	..(img = image('icons/turf/spookycave.dmi', "spooky_cave_corners",layer = CORNER_LAYER),offset = -16)
+	edge_priority = ROCK_EDGE_PRIORITY
+	edge_flags = ALL_EDGES
 
 /turf/unsimulated/mineral/random/high_chance/xeno
 	name = "strange wall"
 	icon_state = "rock(clown)"
 	base_icon_state = "rock(clown)"
 	mined_type = /turf/unsimulated/floor/grey_sand
+	overlay_state = "xeno_overlay"
 
 /turf/unsimulated/mineral/random/high_chance_clown
 	icon_state = "rock(clown)"
@@ -1088,6 +1085,8 @@ var/list/icon_state_to_appearance = list()
 
 	icon = 'icons/turf/new_snow.dmi'
 	icon_state = "permafrost_full"
+	base_icon_state = "permafrost_full"
+	max_icon_states = 0
 	temperature = T_ARCTIC
 	oxygen = MOLES_O2STANDARD_ARCTIC
 	nitrogen = MOLES_N2STANDARD_ARCTIC

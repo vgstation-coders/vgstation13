@@ -204,11 +204,18 @@ var/list/name_to_mineral
 	ore = /obj/item/weapon/gibtonite
 
 /mineral/gibtonite/UpdateTurf(var/turf/unsimulated/mineral/T)
+	var/needs_edges = FALSE
 	if(!istype(T,/turf/unsimulated/mineral/gibtonite))
 		var/old_state = T.icon_state
+		if(istype(T,/turf/unsimulated/mineral/underground) || istype(T,/turf/unsimulated/mineral/random/cave)) //gross but it is what it is ok
+			needs_edges = TRUE
 		var/turf/unsimulated/mineral/newturf = T.ChangeTurf(/turf/unsimulated/mineral/gibtonite)
 		newturf.base_icon_state = old_state
 		newturf.icon_state = old_state
+		if(needs_edges)
+			newturf.edge_priority = ROCK_EDGE_PRIORITY
+			newturf.edge_flags = ALL_EDGES
+			newturf.update_edges()
 	else
 		..()
 

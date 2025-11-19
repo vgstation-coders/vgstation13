@@ -60,6 +60,10 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 /datum/climate/proc/register_weather_turf(var/turf/T)
 	if(!T)
 		return
+	if(!isopensurface(T.loc))
+		if(T in weather_turfs)
+			weather_turfs -= T
+		return
 	if(T in weather_turfs)
 		return
 	weather_turfs += T
@@ -505,9 +509,12 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 
 	// Filter to only players in open surface areas (not caves/indoors)
 	for(var/mob/M in players_near_weather)
-		var/area/A = get_area(M)
+		if(!istype(M, /mob/living))
+			continue
+		var/mob/living/L = M
+		var/area/A = get_area(L)
 		if(A && isopensurface(A))
-			playerlist += M
+			playerlist += L
 
 	return playerlist
 
@@ -515,14 +522,16 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(!weather_sound)
 		return
 	var/list/affected_players = get_weather_affected_players()
-	for(var/mob/M in affected_players)
-		if(M && M.client)
+	for(var/mob/living/M in affected_players)
+		if(M?.client)
 			M << sound(weather_sound, repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = weather_sound_volume)
 
 /datum/weather/proc/stop_weather_sounds()
 	var/list/affected_players = get_weather_affected_players()
-	for(var/mob/M in affected_players)
-		if(M && M.client)
+	for(var/mob/living/M in affected_players)
+		if(M?.client)
+			if(M.stat == DEAD)
+				continue
 			M << sound(null, repeat = 0, wait = 0, channel = CHANNEL_WEATHER, volume = 0)
 
 /datum/weather/snow
@@ -708,7 +717,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		var/delay = rand(1,5) SECONDS
 		spawn(delay)
 			thunder()
-	else if(prob(lightning_chance)*2)
+	else if(prob(lightning_chance))
 		thunder()
 
 /datum/weather/cloudy/storm/proc/thunder()
@@ -716,7 +725,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/chosen_sound = pick(thunder_sounds)
 	var/sound/S = sound(chosen_sound, 0, 0, 0, 100)
 	var/sound/S_quiet = sound('sound/effects/explosionfar.ogg', 0, 0, 0, 100)
-	for(var/mob/M in playerlist)
+	for(var/mob/living/M in playerlist)
 		if(istype(get_area(M),/area/planet/cave))
 			M << S_quiet
 		else
