@@ -147,7 +147,7 @@
 
 /obj/item/device/modkit/plasmacutter
 	name = "advanced plasma cutter conversion kit"
-	desc = "A set of tools that enables conversion of a plamsa cutter into a more advanced form. Needs to be loaded with the parts of a proto-kinetic accelerator first."
+	desc = "A set of tools that enables conversion of a plasma cutter into a more advanced form. Needs to be loaded with the parts of a proto-kinetic accelerator first."
 
 /obj/item/device/modkit/plasmacutter/New()
 	..()

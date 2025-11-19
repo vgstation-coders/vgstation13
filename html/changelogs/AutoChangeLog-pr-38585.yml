@@ -1,0 +1,5 @@
+author: jwhitak
+delete-after: true
+changes:
+- bugfix: Internal Bleeds no longer stop bleeding when all the burn and brute damage
+    on a limb is healed.

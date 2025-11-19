@@ -122,6 +122,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define BLOOD_LAYER					17
 	#define GIBS_OVERLAY_LAYER			18 //Holy fuck I'm so fucking mad it took me this long to figure it out. If you suspect an overlay isn't showing TRY GIVING IT A REALLY HIGH LAYER
 	#define CREEPER_LAYER				19
+	#define EDGE_LAYER					69
 	#define WEED_LAYER					420
 
 #define NOIR_BLOOD_PLANE 		(2 + FLOAT_PLANE)		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
@@ -374,30 +375,6 @@ var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster =
 	render_source = "*overdark"
 
 var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planemaster_target = new()
-
-// DARKNESS PLANEMASTER
-// One planemaster for each client, which they gain during mob/login()
-/obj/abstract/screen/plane_master/darkness_planemaster
-	plane = LIGHTING_PLANE
-	blend_mode = BLEND_MULTIPLY
-
-/obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	alpha = 0
-	appearance_flags = 0
-	plane = LIGHTING_PLANE
-
-/client/proc/initialize_darkness_planemaster()
-	if(darkness_planemaster)
-		screen -= darkness_planemaster
-		qdel(darkness_planemaster)
-	if(darkness_planemaster_dummy)
-		screen -= darkness_planemaster_dummy
-		qdel(darkness_planemaster_dummy)
-	darkness_planemaster = new /obj/abstract/screen/plane_master/darkness_planemaster
-	screen |= darkness_planemaster
-	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	screen |= darkness_planemaster_dummy
-
 
 /obj/abstract/screen/plane_master/fakecamera_screen_planemaster
 	plane = FAKE_CAMERA_SCREEN_PLANE

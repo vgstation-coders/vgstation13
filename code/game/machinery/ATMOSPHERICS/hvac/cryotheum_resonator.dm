@@ -127,11 +127,11 @@
 	var/amount = 0
 	if(crystal != null)
 		if(istype(crystal, /obj/item/bluespace_crystal/artificial))
-			amount = 120
+			amount = 250
 		else if(istype(crystal, /obj/item/bluespace_crystal/flawless))
-			amount = 950
+			amount = 1250
 		else
-			amount = 240
+			amount = 500
 	if(emagged)
 		amount *= 1.2
 	return amount

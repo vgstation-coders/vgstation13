@@ -21,16 +21,25 @@
 		var/datum/rcd_scematic_grouping/build_floors/engi_std/floor_g = new(src)
 		var/datum/rcd_scematic_grouping/build_windows/engi_std/window_g = new(src)
 		var/datum/rcd_scematic_grouping/build_airlock/engi_std/airlock_g=new(src)
+		var/datum/rcd_scematic_grouping/misc_objects/engi_std/misc_g=new(src)
 	
 		schem_groups+=dest_g
 		schem_groups+=wall_g
 		schem_groups+=floor_g
 		schem_groups+=airlock_g
 		schem_groups+=window_g
+		schem_groups+=misc_g
 	
 		current_menu=schem_groups[1]?.name
 		schem_groups[1]?.switch_to()
-	
+
+/obj/item/device/rcd/matter/engineering/pickup(var/mob/living/L)
+	..()
+	if(L.client)
+		for(var/datum/rcd_scematic_grouping/schemgroup in schem_groups)
+			schemgroup.send_assets(L.client)
+			for(var/datum/rcd_grouped_schematic/sch)
+				sch.send_assets(L.client)	
 
 /obj/item/device/rcd/matter/engineering/Destroy()
 	. = ..()
@@ -228,6 +237,13 @@
 	current_menu=schem_groups[1]?.name
 	schem_groups[1]?.switch_to()
 
+/obj/item/device/rcd/borg/engineering/pickup(var/mob/living/L)
+	..()
+	if(L.client)
+		for(var/datum/rcd_scematic_grouping/schemgroup in schem_groups)
+			schemgroup.send_assets(L.client)
+			for(var/datum/rcd_grouped_schematic/sch)
+				sch.send_assets(L.client)
 	
 /obj/item/device/rcd/borg/engineering/attack_self(var/mob/user)
 	if(!isrobot(user))
@@ -415,6 +431,7 @@
 		schem_groups+=new /datum/rcd_scematic_grouping/build_floors/engi_std/CE(src)
 		schem_groups+=new /datum/rcd_scematic_grouping/build_airlock/engi_std/CE(src)
 		schem_groups+=new /datum/rcd_scematic_grouping/build_windows/engi_std(src)
+		schem_groups+=new /datum/rcd_scematic_grouping/misc_objects/engi_std/CE(src)
 	
 		current_menu=schem_groups[1].name
 		schem_groups[1].switch_to()
@@ -431,9 +448,14 @@
 		for(var/datum/rcd_scematic_grouping/schem_group in schem_groups)
 			if(istype(schem_group,/datum/rcd_scematic_grouping/build_windows) )
 				schem_group.schematics+=new /datum/rcd_grouped_schematic/glass/plasma(src)
-				schem_group.schematics+=new /datum/rcd_grouped_schematic/glass/rplas(src)
+				schem_group.schematics+=new /datum/rcd_grouped_schematic/glass/rplas(src)	
+			if(istype(schem_group,/datum/rcd_scematic_grouping/build_airlock) )
+				schem_group.schematics+= new /datum/rcd_grouped_schematic/airlock/tabledoor/reinforced(src)
 			if(istype(schem_group,/datum/rcd_scematic_grouping/build_floors) )
 				schem_group.schematics+= new/datum/rcd_grouped_schematic/plasmaglassfloor(src)
+			if(istype(schem_group,/datum/rcd_scematic_grouping/misc_objects) )
+				schem_group.schematics+= new/datum/rcd_grouped_schematic/table/pglass(src)	
+		loaded_clients=list() //refresh images since we are adding more to show.
 		rebuild_ui()
 			
 

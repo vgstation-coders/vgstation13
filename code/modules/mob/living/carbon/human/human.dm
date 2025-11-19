@@ -1147,6 +1147,7 @@
 	if(prob(10)) //I'M SO ANEMIC I COULD JUST -DIE-.
 		var/datum/wound/internal_bleeding/I = new (15)
 		affected.wounds += I
+		affected.internally_bleeding = TRUE
 		custom_pain("Something tears wetly in your [affected] as [selection] is pulled free!", 1)
 	return 1
 
@@ -1615,10 +1616,13 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		dark_plane.colours = null
 		dark_plane.blend_mode = BLEND_ADD
 
-	if (master_plane)
-		master_plane.blend_mode = BLEND_MULTIPLY
+	if (lighting_planemaster)
+		lighting_planemaster.blend_mode = BLEND_MULTIPLY
 
 	if(client && dark_plane)
+		if(dna && (dna.mutantrace == "shadow"))
+			dark_plane.alphas["shadow"] = 155
+
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 		if(E)
 			E.update_perception(src)

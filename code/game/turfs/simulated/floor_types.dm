@@ -406,21 +406,18 @@
 	flammable = TRUE
 	thermal_material = new/datum/thermal_material/wood()
 	thermal_mass = 5
+	base_icon_state = "grass"
+	min_icon_states = 2
+	max_icon_states = 4
+	variance = 50
+	edge_priority = GRASS_EDGE_PRIORITY
+	edge_flags = ALL_EDGES
 
 /turf/simulated/floor/grass/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/grass(null)
 
 /turf/simulated/floor/grass/New()
-	icon_state = "grass[pick("1","2","3","4")]"
 	..()
-	spawn(4)
-		if(src)
-			update_icon()
-			for(var/direction in cardinal)
-				if(istype(get_step(src,direction),/turf/simulated/floor))
-					var/turf/simulated/floor/FF = get_step(src,direction)
-					FF.update_icon() //so siding get updated properly
-	
 	footstep_sound = sounds_grass
 	footstep_sound_barefoot = sounds_grass
 	footstep_sound_claw = sounds_grass
@@ -440,7 +437,7 @@
 	if(!icon_state)
 		icon_state = initial(icon_state)
 	..()
-	
+
 	if(has_siding)
 		spawn(4)
 			if(src)
@@ -486,16 +483,22 @@
 
 /turf/simulated/floor/damaged
 	icon_state = "damaged1"
+	base_icon_state = "damaged"
+	min_icon_states = 1
+	max_icon_states = 2
+	variance = 100
 
-/turf/simulated/floor/damaged/New()
+/turf/simulated/floor/damaged/pick_icon_state()
 	broken = prob(71) // 5 of the icon states are "damaged" icons, 2 are burned.
 	burnt  = !broken
 
 	if(broken)
-		icon_state = pick("damaged1", "damaged2", "damaged3", "damaged4", "damaged5")
+		base_icon_state = "damaged"
+		max_icon_states = 5
 
 	else // Burnt states.
-		icon_state = pick("floorscorched1", "floorscorched2")
+		base_icon_state = "floorscorched"
+		max_icon_states = 2
 
 	. = ..()
 
@@ -505,25 +508,32 @@
 	nitrogen    = 0.01
 	temperature = TCMB
 
-/turf/simulated/floor/plating/ironsand/New()
-	..()
+/turf/simulated/floor/plating/ironsand
 	name = "Iron Sand"
-	icon_state = "ironsand[rand(1,15)]"
+	icon_state = "ironsand1"
+	base_icon_state = "ironsand"
+	min_icon_states = 1
+	max_icon_states = 15
+	variance = 100
 
 /turf/simulated/floor/plating/airless/damaged
 	icon_state = "platingdmg1"
+	base_icon_state = "platingdmg"
+	min_icon_states = 1
+	max_icon_states = 3
+	variance = 100
 
-/turf/simulated/floor/plating/airless/damaged/New()
+/turf/simulated/floor/plating/airless/damaged/pick_icon_state()
 	broken = prob(75) // 3 of the icon states are "damaged" icons, 1 is burned.
 	burnt  = !broken
 
 	if(broken)
-		icon_state = pick("platingdmg1", "platingdmg2", "platigndmg3")
+		base_icon_state = "platingdmg"
+		max_icon_states = 3
+		..()
 
 	else // Burnt state.
 		icon_state = "panelscorched"
-
-	. = ..()
 
 //syndie themed
 /turf/simulated/floor/dark

@@ -77,11 +77,11 @@
 // PRIVATE = only edit, use, or override these if you're editing the system as a whole
 
 var/global/list/screen_alarms_locs = list(
-	1 = ui_alert1,
-	2 = ui_alert2,
-	3 = ui_alert3,
-	4 = ui_alert4,
-	5 = ui_alert5
+	ui_alert1,
+	ui_alert2,
+	ui_alert3,
+	ui_alert4,
+	ui_alert5
 	)
 
 //Re-render all alerts

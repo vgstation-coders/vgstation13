@@ -140,21 +140,26 @@ var/list/foliage_replacments=list(
 	desc="A thick and lush carpet of various plant species, sustained by a regular supply to water."
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "grass_jungle1"
+	base_icon_state = "grass_jungle"
+	variance = 100
+	min_icon_states = 1
+	max_icon_states = 4
+	edge_flags = ALL_EDGES
+	edge_priority = GRASS_EDGE_PRIORITY
 	turf_speed_multiplier=1.0 // tall grass.
 	construction_allowed=TRUE
 	var/regrowticks=0 //world.time
-	
+
 /turf/unsimulated/floor/jungle/grass/New(var/loc)
 	..()
-	icon_state="grass_jungle[rand(1,4)]"
 	footstep_sound = sounds_grass
 	footstep_sound_barefoot = sounds_grass
 	footstep_sound_claw = sounds_grass
-	
+
 	if(SSFoliageRegrow && !generate_foliage())
 		turfs_to_regrow +=src
 		regrowticks=0
-	
+
 /turf/unsimulated/floor/jungle/grass/proc/generate_foliage()
 	if (prob(50))
 		if(prob(10)) //10% chance to replace with rocks or some shit. 5% over all
@@ -419,7 +424,7 @@ var/list/foliage_replacments=list(
 	opacity=1
 	desc="Solid dirt as far as the eye can see."
 	icon='icons/turf/walls.dmi'
-	icon_state = "j_dirtwall"	
+	icon_state = "j_dirtwall"
 	var/loosened=FALSE // you dig with a pickaxe, too, dumbass.
 
 
@@ -484,7 +489,7 @@ var/list/foliage_replacments=list(
 
 /turf/unsimulated/floor/jungle/underground/crate_loot
 	icon_state="rock(high)"
-	
+
 /turf/unsimulated/floor/jungle/underground/crate_loot/New()
 	..()
 	icon_state="j_dirtwall" //use the normal icon. initial icon is different so you can see it in the map editor.
@@ -500,7 +505,7 @@ var/list/foliage_replacments=list(
 	name="Bedrock"
 	desc="A very dense rock. Nothing seems to be able to dig through it."
 	icon='icons/turf/walls.dmi'
-	icon_state = "j_rockfloor"	
+	icon_state = "j_rockfloor"
 	var/obj/structure/ladder/jungle_tunnel/hashole=null
 	construction_allowed=TRUE
 
@@ -525,7 +530,7 @@ var/list/foliage_replacments=list(
 				if(!hashole && !cannot_dig_up() )
 					to_chat(usr,"you finish making a hole.")
 					icon_state="j_rockfloor_l"
-					
+
 					var/obj/structure/ladder/jungle_tunnel/l_tunnel=new(src)
 					var/obj/structure/ladder/jungle_tunnel/l_surf=new(locate(x,y,1))
 
@@ -558,10 +563,10 @@ var/list/foliage_replacments=list(
 	if(recursive)
 		..()
 	icon_state="j_rockfloor"
-	
+
 	if(locate(/obj/structure/ladder/jungle_tunnel) in contents)
 		icon_state="j_rockfloor_l"
-	
+
 	if(cannot_dig_up())
 		icon_state="j_rockfloor_d"
 

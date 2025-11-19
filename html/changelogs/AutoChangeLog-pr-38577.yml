@@ -1,0 +1,4 @@
+author: Blonichu
+delete-after: true
+changes:
+- bugfix: Fixed a bug where feather stacks would turn white when separated.

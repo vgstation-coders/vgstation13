@@ -58,7 +58,7 @@ var/global/list/mineralSpawnChance[]
 	name = "Rock"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
-	var/base_icon_state = "rock" // above is for mappers.
+	base_icon_state = "rock" // above is for mappers.
 	oxygen = 0
 	nitrogen = 0
 	opacity = 1
@@ -82,16 +82,17 @@ var/global/list/mineralSpawnChance[]
 	icon_state = "snow_rock"
 	base_icon_state = "snow_rock"
 	mined_type = /turf/unsimulated/floor/snow/permafrost
-	overlay_state = "snow_rock_overlay"
-
-/turf/unsimulated/mineral/snow/New()
-	base_icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
-	..()
+	base_icon_state = "snow_rock"
+	min_icon_states = 1
+	max_icon_states = 4
+	variance = 80
 
 /turf/unsimulated/mineral/underground
 	icon_state = "cave_wall"
 	base_icon_state = "cave_wall"
 	mined_type = /turf/unsimulated/floor/asteroid/underground
+	edge_priority = ROCK_EDGE_PRIORITY
+	edge_flags = ALL_EDGES
 
 /turf/unsimulated/mineral/air
 	oxygen = MOLES_O2STANDARD
@@ -112,11 +113,6 @@ var/global/list/mineralSpawnChance[]
 	dismantle_type = /turf/unsimulated/mineral
 	girder_type = null
 	walltype = "rock_rf"
-	//overlay_state = "rock_overlay"
-
-/*/turf/simulated/wall/r_rock/New()
-	..()
-	add_rock_overlay()*/
 
 /turf/simulated/wall/r_rock/porous
 	name = "reinforced porous rock"
@@ -143,10 +139,9 @@ var/global/list/mineralSpawnChance[]
 	nitrogen = MOLES_N2STANDARD
 	temperature = T0C
 	mined_type = /turf/simulated/floor/plating/snow/cold
-
-/turf/unsimulated/mineral/internal/ice/New()
-	base_icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
-	..()
+	min_icon_states = 1
+	max_icon_states = 4
+	variance = 80
 
 /turf/unsimulated/mineral/hive
 	mined_type = /turf/unsimulated/floor/evil
@@ -156,6 +151,8 @@ var/global/list/mineralSpawnChance[]
 	. = ..()
 	if(istype(src))
 		MineralSpread()
+	if(!base_icon_state)
+		base_icon_state = icon_state
 	update_icon()
 
 var/list/icon_state_to_appearance = list()
@@ -171,7 +168,8 @@ var/list/icon_state_to_appearance = list()
 			mineral_overlay = image('icons/turf/mine_overlays.dmi', mineral_name)
 			overlays += mineral_overlay
 		icon_state = base_icon_state
-		add_rock_overlay()
+		if(!(edge_flags & EDGE_CARDINAL)) //old-style edges
+			add_rock_overlay()
 		icon_state_to_appearance["[base_icon_state]-[mineral_name]"] = appearance
 
 /turf/proc/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
@@ -181,10 +179,6 @@ var/list/icon_state_to_appearance = list()
 	img.pixel_y = offset*PIXEL_MULTIPLIER
 	img.plane = BELOW_TURF_PLANE
 	overlays += img
-
-/turf/unsimulated/mineral/underground/add_rock_overlay()
-	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)
-	..(img = image('icons/turf/spookycave.dmi', "spooky_cave_corners",layer = CORNER_LAYER),offset = -16)
 
 /turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/digsite_depressed = 0)
 	mineral_turfs -= src
@@ -510,6 +504,10 @@ var/list/icon_state_to_appearance = list()
 	var/sand_type = /obj/item/stack/ore/glass
 	plane = PLATING_PLANE
 	overlay_state = "roidfloor_overlay"
+	base_icon_state = "asteroid"
+	min_icon_states = 0
+	max_icon_states = 12
+	variance = 20
 
 /turf/unsimulated/floor/asteroid/color_finds()
 	var/static/list/finds_colorspace = list(1,0.5,0.5,0,
@@ -530,6 +528,7 @@ var/list/icon_state_to_appearance = list()
 	oxygen = MOLES_O2STANDARD_ARCTIC
 	nitrogen = MOLES_N2STANDARD_ARCTIC
 	icon_state = "cavefl_1"
+	overlay_state = ""
 	sand_type = /obj/item/stack/ore/glass/cave
 
 /turf/unsimulated/floor/asteroid/underground/New()
@@ -544,8 +543,6 @@ var/list/icon_state_to_appearance = list()
 
 /turf/unsimulated/floor/asteroid/New()
 	..()
-	if(prob(20) && icon_state == "asteroid")
-		icon_state = "asteroid[rand(0,12)]"
 	add_rock_overlay()
 	footstep_sound = sounds_asteroid
 
@@ -616,7 +613,6 @@ var/list/icon_state_to_appearance = list()
 	if(dug && ispath(sand_type, /obj/item/stack/ore/glass))
 		icon_state = "asteroid_dug"
 		overlays.Cut()
-		add_rock_overlay()
 
 /turf/unsimulated/floor/asteroid/proc/gets_dug()
 	if(dug)
@@ -631,13 +627,16 @@ var/list/icon_state_to_appearance = list()
 /turf/simulated/floor/asteroid
 	name = "Asteroid"
 	icon = 'icons/turf/floors.dmi'
-	icon_state = "asteroid"
+	icon_state = "asteroid0"
 	intact = 0
 	oxygen = 0.01
 	nitrogen = 0.01
 	temperature = TCMB
 	plane = PLATING_PLANE
-	overlay_state = "roidfloor_overlay"
+	base_icon_state = "asteroid"
+	min_icon_states = 0
+	max_icon_states = 12
+	variance = 20
 	var/dug
 	var/sand_type = /obj/item/stack/ore/glass
 
@@ -651,21 +650,9 @@ var/list/icon_state_to_appearance = list()
 
 /turf/simulated/floor/asteroid/New()
 	..()
-	if(prob(20))
-		icon_state = "asteroid[rand(0,12)]"
 	icon_regular_floor = initial(icon_state)
-	add_rock_overlay()
 
 	footstep_sound = sounds_asteroid
-
-
-/turf/simulated/floor/asteroid/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
-	if(!overlay_state || overlay_state == "")
-		return
-	img.pixel_x = offset*PIXEL_MULTIPLIER
-	img.pixel_y = offset*PIXEL_MULTIPLIER
-	img.plane = BELOW_PLATING_PLANE
-	overlays += img
 
 /turf/simulated/floor/asteroid/is_plating()
 	return 0
@@ -771,7 +758,6 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "snow_rock"
 	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
-
 	mineralPool = "snow"
 	turf_flags = NO_RUINS
 

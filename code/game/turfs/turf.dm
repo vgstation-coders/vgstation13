@@ -8,6 +8,16 @@
 	var/intact = 1
 	var/turf_flags = 0
 
+	//icon stuff
+	var/base_icon_state
+	var/min_icon_states = 0
+	var/max_icon_states = 0
+	var/variance = 50 // % chance to use varied icon state
+	var/edge_priority = 0 // higher priority edges are placed over lower-priority ones
+	var/edge_flags = 0
+	var/edge_overlay_type = /obj/effect/edge_overlay
+	var/list/datum/weakref/edge_overlays = list()
+
 	//properties for open tiles (/floor)
 	var/oxygen = 0
 	var/carbon_dioxide = 0
@@ -91,8 +101,6 @@
 	..()
 	if(bullet_marks)
 		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
-	if(locate(/obj/effect/ash) in src)
-		to_chat(user, "It is covered in ashes.")
 
 /turf/proc/process()
 	set waitfor = FALSE
@@ -106,6 +114,13 @@
 	footstep_sound = sounds_floor
 	footstep_sound_barefoot = sounds_floor_barefoot
 	footstep_sound_claw = sounds_floor_claw
+	if(!base_icon_state)
+		base_icon_state = icon_state
+	pick_icon_state()
+
+/turf/proc/pick_icon_state()
+	if(base_icon_state && max_icon_states && prob(variance))
+		icon_state = "[base_icon_state][rand(min_icon_states,max_icon_states)]"
 
 /turf/initialize()
 	..()
@@ -114,8 +129,14 @@
 		A.area_turfs += src
 	for(var/atom/movable/AM in src)
 		src.Entered(AM)
+		if(istype(AM, /obj/effect/edge_overlay))
+			var/obj/effect/edge_overlay/edge = AM
+			if(edge.turf_type == src.type || edge.priority <= edge_priority)
+				qdel(edge)
 	if(opacity)
 		has_opaque_atom = TRUE
+	if(edge_flags & EDGE_CARDINAL)
+		update_edges()
 
 /turf/ex_act(severity)
 	return 0
@@ -381,6 +402,16 @@
 		for(var/obj/effect/overlay/puddle/ice/P in src)
 			qdel(P)
 
+	if(edge_overlays.len)
+		for(var/datum/weakref/EO in edge_overlays)
+			var/obj/effect/edge_overlay/E = EO.get()
+			if(E)
+				var/turf/T = E.loc
+				if(T)
+					var/edge_dir = get_dir(src, T)
+					E.remove_direction(edge_dir, src)
+		edge_overlays.len = 0
+
 	//Rebuild turf
 	var/turf/T = src
 	env = T.air //Get the air before the change
@@ -464,6 +495,8 @@
 	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
+	for(var/turf/adj in range(1,src))
+		adj.update_edges()
 	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
 		if(.)
 			var/turf/NewTurf=.
