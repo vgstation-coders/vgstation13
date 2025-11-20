@@ -290,6 +290,18 @@
 // oldarea: the old area being left
 /event/mob_area_changed
 
+// Called when a mob enters a planet
+// Arguments:
+// mob/living/M: the mob entering the planet
+// datum/planet_type/planet: the planet being entered
+/event/planet_entered
+
+// Called when a mob exits a planet
+// Arguments:
+// mob/living/M: the mob exiting the planet
+// datum/planet_type/planet: the planet being exited
+/event/planet_exited
+
 // Note: the following are used by datum/component/ai subtypes to give instructions to each other.
 // AI components are expected to INVOKE_EVENT these to send commands to other components
 // on the same datum without having to hold references to them.

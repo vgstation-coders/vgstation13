@@ -465,21 +465,21 @@ var/area/space_area
 	for(var/mob/mob_in_obj in Obj.contents)
 		if(istype(mob_in_obj))
 			INVOKE_EVENT(mob_in_obj, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
-			if(planet)
-				if(mob_in_obj.client)
-					planet.add_player(mob_in_obj)
-				else
-					planet.planet_mobs += mob_in_obj
+			if(planet && istype(mob_in_obj, /mob/living))
+				var/mob/living/L = mob_in_obj
+				L.register_event(/event/planet_entered, planet, "on_mob_entered")
+				L.register_event(/event/planet_exited, planet, "on_mob_exited")
+				INVOKE_EVENT(L, /event/planet_entered, L, planet)
 
 	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
 		INVOKE_EVENT(M, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
-		if(planet)
-			if(M.client)
-				planet.add_player(M)
-			else
-				planet.planet_mobs += M
+		if(planet && istype(M, /mob/living))
+			var/mob/living/L = M
+			L.register_event(/event/planet_entered, planet, "on_mob_entered")
+			L.register_event(/event/planet_exited, planet, "on_mob_exited")
+			INVOKE_EVENT(L, /event/planet_entered, L, planet)
 		if(narrator)
 			narrator.Crossed(M)
 
@@ -491,18 +491,16 @@ var/area/space_area
 			Obj.planet = null
 			if(istype(Obj, /mob))
 				var/mob/M = Obj
-				if(M.client)
-					planet.remove_player(M)
-				else
-					planet.planet_mobs -= M
+				INVOKE_EVENT(M, /event/planet_exited, M, planet)
+				M.unregister_event(/event/planet_entered, planet, "on_mob_entered")
+				M.unregister_event(/event/planet_exited, planet, "on_mob_exited")
 			for(var/atom/movable/thing in get_contents_in_object(Obj))
 				thing.planet = null
 				if(istype(thing, /mob))
 					var/mob/M = thing
-					if(M.client)
-						planet.remove_player(M)
-					else
-						planet.planet_mobs -= M
+					INVOKE_EVENT(M, /event/planet_exited, M, planet)
+					M.unregister_event(/event/planet_entered, planet, "on_mob_entered")
+					M.unregister_event(/event/planet_exited, planet, "on_mob_exited")
 
 	INVOKE_EVENT(src, /event/area_exited, "exiter" = Obj)
 	..()
