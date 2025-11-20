@@ -49,7 +49,6 @@
 
 	apply_weather_slowdown(weather)
 	update_weather_vision(weather)
-	apply_weather_sound(weather)
 
 /mob/living/carbon/human/proc/get_exposed_organs()
 	var/list/exposed = list()
@@ -103,10 +102,3 @@
 	// Stop weather sounds when clearing effects
 	if(client)
 		src << sound(null, repeat = 0, wait = 0, channel = CHANNEL_WEATHER, volume = 0)
-
-/mob/living/carbon/human/proc/apply_weather_sound(var/datum/weather/weather)
-	if(!weather || !client)
-		return
-	// Start weather sound if the weather has one
-	if(weather.weather_sound)
-		src << sound(weather.weather_sound, repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = weather.weather_sound_volume)

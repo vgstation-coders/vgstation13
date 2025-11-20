@@ -79,6 +79,7 @@
 	)
 
 /datum/planetGenerator/urban/post_process(datum/allocation/allocation)
+	..()
 	if(!allocation || !allocation.turfs)
 		return
 

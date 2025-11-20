@@ -43,14 +43,14 @@
 	var/death_limit = 3
 
 	/// The type of the area that will be used for all non-cave biomes.
-	var/area/primary_area_type
+	var/area/planet/primary_area_type
 	/// The area instance that will be used for all non-cave biomes.
-	var/area/primary_area
+	var/area/planet/primary_area
 
 	/// The type of the area that will be used for all cave biomes.
-	var/area/cave_area_type = /area/planet/cave
+	var/area/planet/cave_area_type = /area/planet/cave
 	/// The area instance that will be used for all cave biomes.
-	var/area/cave_area
+	var/area/planet/cave_area
 
 	/// Effectively a 2D array of biomes, organized by heat categories, then humidity.
 	/// Note that the heat categories are NOT all equal-size.
@@ -116,7 +116,7 @@
 	turf_biome.populate_turf(gen_turf, created_features, created_mobs, planet_loot, planet_faction)
 
 /datum/planetGenerator/proc/post_process(datum/allocation/allocation)
-	return // override in child types
+	return
 
 /// Gets the biome for a turf, using the cache if available, otherwise calculating and caching it.
 /// Returns: The datum/biome for the given turf

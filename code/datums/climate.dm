@@ -169,6 +169,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 				qdel(current_weather)
 				current_weather = new weather(src)
 				current_weather.execute()
+				current_weather.update_weather_sounds()
 			else
 				weather_transitions[current_weather.type] = list(weather = 100)
 
@@ -488,7 +489,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	else if(parent.z)
 		SSDayNight.weather_mod = light_modifier
 		SSDayNight.update_global_lighting()
-	update_weather_sounds()
 
 /datum/weather/proc/tick()
 	timeleft -= SS_WAIT_WEATHER
@@ -519,20 +519,14 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	return playerlist
 
 /datum/weather/proc/update_weather_sounds()
-	if(!weather_sound)
-		return
 	var/list/affected_players = get_weather_affected_players()
 	for(var/mob/living/M in affected_players)
-		if(M?.client)
-			M << sound(weather_sound, repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = weather_sound_volume)
+		M.update_weather_sounds(FALSE)
 
 /datum/weather/proc/stop_weather_sounds()
 	var/list/affected_players = get_weather_affected_players()
 	for(var/mob/living/M in affected_players)
-		if(M?.client)
-			if(M.stat == DEAD)
-				continue
-			M << sound(null, repeat = 0, wait = 0, channel = CHANNEL_WEATHER, volume = 0)
+		M.update_weather_sounds(TRUE)
 
 /datum/weather/snow
 	precip_intensity = WEATHER_CALM
@@ -867,3 +861,15 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	exposed_damage = 2
 	damage_type = BURN
 	vision_reduction = 1
+
+/mob/living/proc/update_weather_sounds(var/clear = FALSE)
+	if(clear)
+		src << sound(null, repeat = 0, wait = 0, channel = CHANNEL_WEATHER, volume = 0)
+		return
+	var/datum/climate/C = SSweather.get_climate_from_turf(get_turf(src))
+	if(!C?.current_weather)
+		return
+	var/datum/weather/W = C.current_weather
+	if(!W.weather_sound)
+		return
+	src << sound(W.weather_sound, repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = W.weather_sound_volume)
