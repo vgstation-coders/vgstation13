@@ -164,7 +164,6 @@
 	)
 	mob_spawn_chance = 20
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 50,
 		/mob/living/simple_animal/hostile/humanoid/grey = 25,
 		/mob/living/simple_animal/hostile/humanoid/grey/prisoner = 25,
 		/mob/living/simple_animal/hostile/humanoid/grey/prisoner/melee = 25,

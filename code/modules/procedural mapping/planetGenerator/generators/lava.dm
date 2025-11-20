@@ -254,7 +254,6 @@
 		/mob/living/simple_animal/hostile/asteroid/magmaw = 30,
 		/mob/living/simple_animal/hostile/asteroid/hivelord = 15,
 		/mob/living/simple_animal/hostile/asteroid/pillow = 5,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
 		/mob/living/simple_animal/hostile/scarybat/cave = 20,
 		/mob/living/simple_animal/cockroach = 20,
 		/mob/living/simple_animal/mouse/common = 12,

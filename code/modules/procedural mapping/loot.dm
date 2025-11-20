@@ -571,6 +571,9 @@
 
 /obj/abstract/loot_spawner/proc/spawn_into_container()
 	var/possible_container = pick(containers)
+	if(ispath(possible_container, /obj/structure/closet/crate/chest) && prob(10)) // it's a mimic!!
+		new /mob/living/simple_animal/hostile/mimic/crate/chest(loc)
+		return
 	if(ispath(possible_container, /obj/structure))
 		var/obj/structure/container = new possible_container(loc)
 		QDEL_LIST(container.contents) //no spawning with pre-existing contents

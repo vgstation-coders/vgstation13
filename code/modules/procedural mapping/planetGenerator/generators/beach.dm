@@ -199,7 +199,6 @@
 		/mob/living/simple_animal/hostile/bear/brownbear = 10,
 		/mob/living/simple_animal/crab = 10,
 		/mob/living/simple_animal/hostile/scarybat/cave = 1,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 10,
 		/mob/living/simple_animal/cockroach = 25,
 		/mob/living/simple_animal/mouse/common = 20,
 		/mob/living/simple_animal/hostile/mushroom = 5,

@@ -144,7 +144,6 @@
 		/mob/living/simple_animal/cockroach = 25,
 		/mob/living/simple_animal/hostile/asteroid/goliath = 25,
 		/mob/living/simple_animal/hostile/monster/skrite = 1,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 10,
 		/mob/living/simple_animal/hostile/scarybat/cave = 20,
 		/mob/living/simple_animal/hostile/asteroid/hivelord = 8,
 		/mob/living/simple_animal/hostile/mushroom = 10,

@@ -359,7 +359,6 @@
 		/mob/living/simple_animal/hostile/asteroid/goliath = 15,
 		/mob/living/simple_animal/hostile/giant_spider = 20,
 		/mob/living/simple_animal/hostile/bear/brownbear = 10,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
 		/mob/living/simple_animal/hostile/scarybat/cave = 25,
 		/mob/living/simple_animal/hostile/mushroom = 18,
 		/mob/living/simple_animal/mouse/common = 15
@@ -383,7 +382,6 @@
 		/mob/living/simple_animal/hostile/asteroid/goliath = 15,
 		/mob/living/simple_animal/hostile/giant_spider = 20,
 		/mob/living/simple_animal/hostile/bear/brownbear = 10,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
 		/mob/living/simple_animal/hostile/scarybat/cave = 22,
 		/mob/living/simple_animal/hostile/mushroom = 20,
 		/mob/living/simple_animal/snail = 15
@@ -410,7 +408,6 @@
 		/mob/living/simple_animal/hostile/giant_spider = 25,
 		/mob/living/simple_animal/hostile/bear/brownbear = 12,
 		/mob/living/simple_animal/parrot = 10,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
 		/mob/living/simple_animal/hostile/scarybat/cave = 20,
 		/mob/living/simple_animal/hostile/mushroom = 25,
 		/mob/living/simple_animal/snail = 18
@@ -443,7 +440,6 @@
 		/mob/living/simple_animal/parrot = 12,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 18,
 		/mob/living/simple_animal/hostile/frog = 8,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
 		/mob/living/simple_animal/hostile/scarybat/cave = 20,
 		/mob/living/simple_animal/hostile/mushroom = 28,
 		/mob/living/simple_animal/snail = 20,
@@ -475,7 +471,6 @@
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 20,
 		/mob/living/simple_animal/hostile/frog = 10,
 		/mob/living/simple_animal/capybara = 12,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
 		/mob/living/simple_animal/hostile/scarybat/cave = 18,
 		/mob/living/simple_animal/hostile/mushroom = 25,
 		/mob/living/simple_animal/snail = 22,

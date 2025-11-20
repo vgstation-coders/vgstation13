@@ -290,7 +290,6 @@
 		/mob/living/simple_animal/cockroach = 25,
 		/mob/living/simple_animal/mouse/common = 20,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 15,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
 		/mob/living/simple_animal/hostile/scarybat/cave = 20,
 		/mob/living/simple_animal/hostile/mushroom = 15,
 		/mob/living/simple_animal/hostile/asteroid/pillow = 1,
@@ -314,7 +313,6 @@
 		/mob/living/simple_animal/mouse/common = 25,
 		/mob/living/simple_animal/rabbit/bunny = 15,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 12,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
 		/mob/living/simple_animal/hostile/scarybat/cave = 18,
 		/mob/living/simple_animal/hostile/mushroom = 20,
 		/mob/living/simple_animal/snail = 10
@@ -337,7 +335,6 @@
 		/mob/living/simple_animal/cockroach = 30,
 		/mob/living/simple_animal/mouse/common = 20,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 8,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
 		/mob/living/simple_animal/hostile/scarybat/cave = 15,
 		/mob/living/simple_animal/hostile/mushroom = 35,
 		/mob/living/simple_animal/snail = 12
@@ -367,7 +364,6 @@
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 18,
 		/mob/living/simple_animal/snail = 30,
 		/mob/living/simple_animal/snail/greasy = 8,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
 		/mob/living/simple_animal/hostile/scarybat/cave = 20,
 		/mob/living/simple_animal/hostile/mushroom = 25,
 		/mob/living/simple_animal/hostile/lizard/frog = 15
