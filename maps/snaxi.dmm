@@ -70910,7 +70910,6 @@
 /area/vox_trading_post/solars)
 "dEs" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_exterior";
@@ -70993,7 +70992,6 @@
 /area/vox_trading_post/solars)
 "dEy" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_interior";
@@ -86761,6 +86759,13 @@
 	name = "plating"
 	},
 /area/tdome/tdome1)
+"sVv" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/crew_quarters/bar)
 "sWa" = (
 /obj/structure/table,
 /obj/item/stack/sheet/metal{
@@ -152907,7 +152912,7 @@ aoi
 aoZ
 apX
 avO
-axb
+sVv
 apZ
 aqO
 atZ

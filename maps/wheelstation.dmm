@@ -35542,6 +35542,7 @@
 /area/crew_quarters/bar)
 "bmt" = (
 /obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -57820,8 +57821,12 @@
 	},
 /area/security/gas_chamber)
 "cai" = (
-/obj/machinery/atmospherics/unary/tank/air,
-/turf/simulated/floor/plating,
+/obj/structure/table,
+/obj/item/weapon/storage/box/mugs,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "red"
+	},
 /area/security/eva)
 "caj" = (
 /obj/structure/table,
@@ -57829,7 +57834,10 @@
 /obj/machinery/firealarm{
 	pixel_y = 29
 	},
-/turf/simulated/floor,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "red"
+	},
 /area/security/eva)
 "cak" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
@@ -57853,7 +57861,7 @@
 	pixel_y = 28
 	},
 /turf/simulated/floor{
-	dir = 9;
+	dir = 1;
 	icon_state = "red"
 	},
 /area/security/eva)
@@ -58147,18 +58155,14 @@
 	},
 /area/security/gas_chamber)
 "caY" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
-/obj/machinery/meter,
 /obj/structure/extinguisher_cabinet{
 	pixel_y = -30
 	},
-/turf/simulated/floor/plating,
+/turf/simulated/floor{
+	icon_state = "red"
+	},
 /area/security/eva)
 "caZ" = (
-/obj/machinery/atmospherics/binary/pump/on{
-	dir = 8;
-	target_pressure = 4000
-	},
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
@@ -58167,16 +58171,18 @@
 	name = "_South APC";
 	pixel_y = -24
 	},
-/turf/simulated/floor,
+/turf/simulated/floor{
+	icon_state = "red"
+	},
 /area/security/eva)
 "cba" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 8
-	},
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/simulated/floor/plating,
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "red"
+	},
 /area/security/eva)
 "cbb" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
@@ -58204,7 +58210,7 @@
 	},
 /turf/simulated/floor{
 	dir = 8;
-	icon_state = "red"
+	icon_state = "redcorner"
 	},
 /area/security/eva)
 "cbd" = (
@@ -59520,7 +59526,6 @@
 	dir = 6
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_int_airlock";
@@ -59532,7 +59537,6 @@
 /area/security/eva)
 "cdz" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_ext_airlock";
@@ -100038,6 +100042,14 @@
 	icon_state = "dark"
 	},
 /area/engineering/supermatter_room)
+"gzc" = (
+/obj/structure/table,
+/obj/machinery/chem_dispenser/brewer/mapping,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "red"
+	},
+/area/security/eva)
 "gzK" = (
 /obj/machinery/camera{
 	name = "Engineering Monitoring North"
@@ -205964,7 +205976,7 @@ bVV
 bXf
 bYs
 bZp
-cai
+gzc
 cba
 cbU
 ccB

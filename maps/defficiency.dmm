@@ -5684,7 +5684,7 @@
 	master_tag = "toxins_west_control";
 	pixel_x = 4;
 	pixel_y = -24;
-	req_access_txt = "13"
+	req_one_access_txt = "13;7"
 	},
 /obj/machinery/camera{
 	dir = 1;
@@ -6078,13 +6078,12 @@
 /area/engine/rust_control)
 "amL" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "toxins_west_ext_airlock";
 	locked = 1;
 	name = "Toxins Western External Airlock";
-	req_access_txt = "13"
+	req_one_access_txt = "13;7"
 	},
 /turf/simulated/floor/plating/airless,
 /area/maintenance/fore)
@@ -6097,13 +6096,13 @@
 	id_tag = "toxins_west_control";
 	pixel_x = -7;
 	pixel_y = 8;
-	req_access_txt = "13";
 	tag_airpump = "toxins_west_pump";
 	tag_chamber_sensor = "toxins_west_sensor";
 	tag_exterior_door = "toxins_west_ext_airlock";
 	tag_exterior_sensor = "toxins_west_ext_sensor";
 	tag_interior_door = "toxins_west_int_airlock";
-	tag_interior_sensor = "toxins_west_int_sensor"
+	tag_interior_sensor = "toxins_west_int_sensor";
+	req_one_access_txt = "13;7"
 	},
 /turf/simulated/wall,
 /area/maintenance/fore)
@@ -6516,7 +6515,7 @@
 	id_tag = "toxins_west_sensor";
 	master_tag = "toxins_west_control";
 	pixel_x = 24;
-	req_access_txt = "13"
+	req_one_access_txt = "13;7"
 	},
 /obj/machinery/camera{
 	dir = 8;
@@ -7080,7 +7079,7 @@
 	master_tag = "toxins_east_control";
 	pixel_x = 4;
 	pixel_y = -24;
-	req_access_txt = "13"
+	req_one_access_txt = "13;7"
 	},
 /turf/space,
 /area)
@@ -7631,13 +7630,12 @@
 /area/engine/turbine_control)
 "apQ" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "toxins_west_int_airlock";
 	locked = 1;
 	name = "Toxins Western Internal Airlock";
-	req_access_txt = "13"
+	req_one_access_txt = "13;7"
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fore)
@@ -7662,13 +7660,12 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "toxins_east_ext_airlock";
 	locked = 1;
 	name = "Testing Eastern External Airlock";
-	req_access_txt = "13"
+	req_one_access_txt = "13;7"
 	},
 /turf/simulated/floor/plating/airless,
 /area/maintenance/fpmaint)
@@ -7678,13 +7675,13 @@
 	id_tag = "toxins_east_control";
 	pixel_x = -7;
 	pixel_y = 8;
-	req_access_txt = "13";
 	tag_airpump = "toxins_east_pump";
 	tag_chamber_sensor = "toxins_east_sensor";
 	tag_exterior_door = "toxins_east_ext_airlock";
 	tag_exterior_sensor = "toxins_east_ext_sensor";
 	tag_interior_door = "toxins_east_int_airlock";
-	tag_interior_sensor = "toxins_east_int_sensor"
+	tag_interior_sensor = "toxins_east_int_sensor";
+	req_one_access_txt = "13;7"
 	},
 /turf/simulated/wall,
 /area/maintenance/fpmaint)
@@ -8447,13 +8444,13 @@
 	id_tag = "toxins_west_control";
 	pixel_x = 5;
 	pixel_y = 28;
-	req_access_txt = "13";
 	tag_airpump = "toxins_west_pump";
 	tag_chamber_sensor = "toxins_west_sensor";
 	tag_exterior_door = "toxins_west_ext_airlock";
 	tag_exterior_sensor = "toxins_west_ext_sensor";
 	tag_interior_door = "toxins_west_int_airlock";
-	tag_interior_sensor = "toxins_west_int_sensor"
+	tag_interior_sensor = "toxins_west_int_sensor";
+	req_one_access_txt = "13;7"
 	},
 /obj/machinery/airlock_sensor{
 	frequency = 1331;
@@ -8461,7 +8458,7 @@
 	master_tag = "toxins_west_control";
 	pixel_x = -5;
 	pixel_y = 24;
-	req_access_txt = "13"
+	req_one_access_txt = "13;7"
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -8525,7 +8522,7 @@
 	id_tag = "toxins_east_sensor";
 	master_tag = "toxins_east_control";
 	pixel_x = 24;
-	req_access_txt = "13"
+	req_one_access_txt = "13;7"
 	},
 /obj/machinery/camera{
 	dir = 4;
@@ -10113,13 +10110,12 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "toxins_east_int_airlock";
 	locked = 1;
 	name = "Toxins Eastern Internal Airlock";
-	req_access_txt = "13"
+	req_one_access_txt = "13;7"
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
@@ -10733,13 +10729,13 @@
 	id_tag = "toxins_east_control";
 	pixel_x = 5;
 	pixel_y = 28;
-	req_access_txt = "13";
 	tag_airpump = "toxins_east_pump";
 	tag_chamber_sensor = "toxins_east_sensor";
 	tag_exterior_door = "toxins_east_ext_airlock";
 	tag_exterior_sensor = "toxins_east_ext_sensor";
 	tag_interior_door = "toxins_east_int_airlock";
-	tag_interior_sensor = "toxins_east_int_sensor"
+	tag_interior_sensor = "toxins_east_int_sensor";
+	req_one_access_txt = "13;7"
 	},
 /obj/machinery/airlock_sensor{
 	frequency = 1331;
@@ -10747,7 +10743,7 @@
 	master_tag = "toxins_east_control";
 	pixel_x = -5;
 	pixel_y = 24;
-	req_access_txt = "13"
+	req_one_access_txt = "13;7"
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -12510,7 +12506,7 @@
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/maintenance/fore)
+/area/maintenance/fpmaint)
 "azr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
@@ -27493,7 +27489,7 @@
 "aZZ" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/wall,
-/area/maintenance/fore)
+/area/derelictparts/fore)
 "baa" = (
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg3"
@@ -66211,10 +66207,24 @@
 	},
 /area/security/brig)
 "cvQ" = (
-/turf/space,
-/area/derelictparts/apderelict{
-	name = "Aft Starboard Derelict"
-	})
+/obj/structure/table/reinforced,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 2;
+	icon_state = "shutter0";
+	id_tag = "bar";
+	name = "Bar Shutters";
+	opacity = 0
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/crew_quarters/bar)
 "cvR" = (
 /obj/structure/rack,
 /obj/item/weapon/minihoe,
@@ -101105,9 +101115,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/entry)
-"egf" = (
-/turf/unsimulated/floor/asteroid,
-/area)
 "egg" = (
 /obj/effect/decal/cleanable/cobweb2,
 /turf/simulated/floor/plating,
@@ -234911,7 +234918,7 @@ aYY
 baK
 bcc
 bdz
-bfg
+cvQ
 bgZ
 biz
 bjX
@@ -256554,9 +256561,9 @@ bMT
 csw
 bMT
 bMT
-cvQ
-cvQ
-cvQ
+aaa
+aaa
+aaa
 bMT
 bMT
 bMT
@@ -1243391,7 +1243398,7 @@ eiI
 eil
 ecI
 ecI
-egf
+ecI
 efX
 efX
 efX
