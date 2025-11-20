@@ -58158,6 +58158,9 @@
 /obj/structure/extinguisher_cabinet{
 	pixel_y = -30
 	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "red"
 	},
@@ -58171,6 +58174,9 @@
 	name = "_South APC";
 	pixel_y = -24
 	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "red"
 	},
@@ -58178,6 +58184,9 @@
 "cba" = (
 /obj/machinery/light/small{
 	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
 	},
 /turf/simulated/floor{
 	dir = 10;
