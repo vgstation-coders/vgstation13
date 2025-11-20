@@ -22133,16 +22133,6 @@
 	icon_state = "floor3"
 	},
 /area/shuttle/trade/start)
-"bio" = (
-/obj/structure/transit_tube{
-	icon_state = "E-SW"
-	},
-/obj/machinery/door/airlock/external{
-	req_access_txt = "13";
-	req_one_access_txt = "13"
-	},
-/turf/unsimulated/floor/snow/asphalt/mine,
-/area/mine/explored)
 "bip" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -186506,7 +186496,7 @@ aHC
 aIu
 aCb
 aEg
-bio
+aKg
 aaJ
 aEs
 aaD
