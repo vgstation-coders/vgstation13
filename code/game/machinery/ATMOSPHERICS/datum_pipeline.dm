@@ -1,7 +1,12 @@
+#define NO_VISIBLE_GASES 0
+#define VISIBLE_NITROUS 1
+#define VISIBLE_PLASMA 2
+#define VISIBLE_CRYOTHEUM 4
+
 /datum/pipeline
 	var/datum/gas_mixture/air
 
-	var/list/last_visible_gases = list()
+	var/last_visible_gases = NO_VISIBLE_GASES
 
 	var/list/obj/machinery/atmospherics/pipe/members = list()
 	var/list/obj/machinery/atmospherics/pipe/edges = list() //Used for building networks
@@ -28,14 +33,14 @@
 	..()
 
 /datum/pipeline/proc/get_visible_gases()
-	. = list()
+	. = NO_VISIBLE_GASES
 	if(air)
 		if(air.molar_density(GAS_SLEEPING) > 1 / CELL_VOLUME)
-			. += list("nitrous oxide")
+			. |= VISIBLE_NITROUS
 		if(air.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
-			. += list("plasma")
+			. |= VISIBLE_PLASMA
 		if(air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME)
-			. += list("cryotheum")
+			. |= VISIBLE_CRYOTHEUM
 
 /datum/pipeline/proc/process()
 	#ifdef BURST_PIPES
@@ -49,8 +54,8 @@
 					last_pressure_check=world.timeofday
 					break //Only delete 1 pipe per process
 	#endif
-	var/list/visible_gases = get_visible_gases()
-	if(visible_gases.len != last_visible_gases.len)
+	var/visible_gases = get_visible_gases()
+	if(visible_gases != last_visible_gases) //checks if any flag is changed at all
 		last_visible_gases = visible_gases
 		for(var/obj/machinery/atmospherics/pipe/member in members)
 			if(member.transparent && member.exposed())
@@ -216,3 +221,8 @@
 			air.temperature -= heat/total_heat_capacity
 	if(network)
 		network.update = 1
+
+#undef NO_VISIBLE_GASES
+#undef VISIBLE_NITROUS
+#undef VISIBLE_PLASMA
+#undef VISIBLE_CRYOTHEUM
