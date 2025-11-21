@@ -293,9 +293,3 @@
 	desc = "An invisible bullet casing, it's hard to tell if it's been spent or not."
 	projectile_type = /obj/item/projectile/bullet/invisible
 	icon_state = null
-
-/obj/item/ammo_casing/shotgun/buckshot/fragment
-	desc = "A 12 gauge shell filled with fragments, designed for a exosuit shotgun. Usable in any shotgun, but is less accurate."
-	caliber = GAUGE12
-	projectile_type = /obj/item/projectile/bullet/buckshot/fragments
-	w_type = RECYK_METAL

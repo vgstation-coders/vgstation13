@@ -169,7 +169,7 @@
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	max_projectiles = 20
 	projectiles_cache_max = 60
-	ammo_types = list(/obj/item/ammo_casing/shotgun/buckshot, /obj/item/ammo_casing/shotgun/buckshot/fragment)
+	ammo_types = list(/obj/item/ammo_casing/shotgun/buckshot)
 	caliber = GAUGE12
 	step_delay = 20
 
