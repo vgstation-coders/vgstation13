@@ -125,10 +125,10 @@
 				for(var/i = 1 to ammo_to_transfer)
 					var/obj/item/ammo_casing/casing = A.get_round()
 					if(casing && casing.BB)
-						if(do_after(user, 2 SECONDS, src))
-							playsound(src, 'sound/weapons/magazine_load_click.ogg', 50, 1)
-							gun.projectiles_cache++
-							ammo_loaded++
+						playsound(src, 'sound/weapons/magazine_load_click.ogg', 50, 1)
+						gun.projectiles_cache++
+						ammo_loaded++
+						qdel(casing)
 					else
 						break
 			else
