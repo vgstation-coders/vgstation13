@@ -23,10 +23,7 @@
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
 	if(planet)
-		if(client)
-			planet.remove_player(src)
-		else
-			planet.planet_mobs -= src
+		planet.on_mob_exited(src, planet)
 
 	for(var/datum/mind/mind in heard_by)
 		for(var/M in mind.heard_before)

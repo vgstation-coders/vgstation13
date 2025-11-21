@@ -46,7 +46,7 @@ On the map dm file, redefine the following:
 	var/nearest_star_angle=0.0 //the angle of the star that the solars will use.
 	var/nearest_star_power=1.0 //how much power does the star give the solars? multiplier to base solar generation.
 	var/solar_orbit_period=60 //less than 0 = CCW (east to west), CW (west to east) is more than one. in minutes. doesn't really matter that much, it's just for text mostly.
-  
+
 	var/weather_mod = 1 //weather light modifier
 
 /datum/subsystem/daynightcycle/New()
@@ -102,16 +102,8 @@ On the map dm file, redefine the following:
 							daynight_turfs += T
 							break
 
-/datum/subsystem/daynightcycle/proc/play_globalsound()
-	for(var/mob/M in player_list)
-		if(!M.client)
-			continue
-		else
-			switch(current_timeOfDay)
-				if(TOD_SUNRISE)
-					M << 'sound/misc/6amRooster.wav'
-				if(TOD_NIGHTTIME)
-					M << 'sound/misc/6pmWolf.wav'
+/datum/subsystem/daynightcycle/proc/play_globalsound() //override in map files
+	return
 
 
 /**

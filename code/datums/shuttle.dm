@@ -156,6 +156,16 @@
 	for(var/obj/docking_port/D in linked_area)
 		docking_ports_aboard |= D
 
+	for(var/turf/T in linked_area.area_turfs)
+		var/corner = FALSE
+		if(!isopensurface(T) || !istype(T,/turf/space))
+			for(var/obj/O in T.contents)
+				if(istype(O,/obj/structure/shuttle))
+					corner = TRUE
+					break
+			if(corner)
+				continue
+			T.shuttle_turf = TRUE
 	return
 
 /datum/shuttle/Destroy()
@@ -870,6 +880,8 @@
 			dest_climate.unregister_weather_turf(T)
 		for(var/obj/effect/weather_holder/WH in T.vis_contents)
 			T.vis_contents -= WH
+		for(var/obj/effect/edge_overlay/E in T)
+			qdel(E)
 
 	return 1
 

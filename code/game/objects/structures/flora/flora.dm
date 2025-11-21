@@ -885,6 +885,7 @@
 	. = ..()
 	color = pick( "#846996", "#7b4e99", "#924fab")
 	icon_state = "barren_large"
+	update_transparency()
 
 /obj/structure/flora/tree/dead/hell
 	name = "crimson tree"
@@ -898,6 +899,7 @@
 /obj/structure/flora/tree/dead/hell/New()
 	. = ..()
 	icon_state = "tree_[rand(1,6)]"
+	update_transparency()
 
 /obj/structure/flora/tree/dead_pine
 	name = "dead pine"
@@ -924,6 +926,7 @@
 /obj/structure/flora/tree/dead/tall/New()
 	. = ..()
 	icon_state = "[base_icon_state]_[rand(1,3)]"
+	update_transparency()
 
 /obj/structure/flora/tree/dead/tall/grey
 	name = "petrified trunk"
@@ -938,3 +941,4 @@
 /obj/structure/flora/tree/dead/tall/living/New()
 	. = ..()
 	icon_state = pick("pine_1","pine_2","bald")
+	update_transparency()

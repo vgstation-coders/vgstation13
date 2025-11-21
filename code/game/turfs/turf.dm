@@ -57,6 +57,8 @@
 	penetration_dampening = 10
 	// if STANDING     ON THE EDGE        OF THE z-level will transition you to another
 	var/can_border_transition = 0
+
+	var/shuttle_turf = FALSE // is this turf part of a shuttle and ISN'T A SHUTTLE TURF TYPE REEE
 /*
  * Technically obsoleted by base_turf
 	//For building on the asteroid.
