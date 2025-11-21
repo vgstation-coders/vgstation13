@@ -118,6 +118,8 @@
 	var/penetration_reduction = 1
 	var/can_lock = TRUE // If the mecha can be dna or id locked
 
+	var/falloutchance = 25
+
 	var/can_strafe = TRUE
 
 //mechaequipt2 stuffs
@@ -1044,20 +1046,24 @@ Fire damage comes from tank
 
 /obj/mecha/proc/get_step_delay(var/tally = 0)
 
-	if(equipment.len)
-		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
-			if(ME.get_step_delay())
-				tally += ME.get_step_delay()
-
 	for(var/slot in internal_components)
 		var/obj/item/mecha_parts/component/C = internal_components[slot]
 		if(C && C.get_step_delay())
 			tally += C.get_step_delay()
 
+	if(equipment.len)
+		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
+			if(ME.get_step_delay())
+				tally += ME.get_step_delay()
+/*
 	if(tally <= weight_max)
 		tally -= (clamp(tally, 0, tally * 0.5))
 	else
 		tally += weight_max
+*/
+
+	var/weight_ratio = tally / weight_max
+	tally = tally * (0.5 + (weight_ratio * 0.75))
 
 	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
 	if(!actuator || actuator.integrity <= 0)
@@ -1998,6 +2004,13 @@ Fire damage comes from tank
 	if(usr != occupant)
 		return
 	if(user_trapped)
+		try_eject_stuck()
+	src.go_out()
+	add_fingerprint(usr)
+	return
+
+/obj/mecha/proc/try_eject_stuck()
+	if(user_trapped)
 		to_chat(occupant, "<span class='danger'>The [src]'s cockpit hatch is pinned underneath its bulk and won't budge! You try pushing with all your strength..</span>")
 		if(do_after(occupant, src, 5 SECONDS))
 			if(prob(10))
@@ -2007,9 +2020,6 @@ Fire damage comes from tank
 				to_chat(occupant, "<span class='warning'>You fail to extract yourself from the [src]. </span>")
 				return
 		return
-	src.go_out()
-	add_fingerprint(usr)
-	return
 
 /obj/mecha/verb/lock_direction()
 	set name = "Lock direction"
@@ -2049,13 +2059,7 @@ Fire damage comes from tank
 			return
 	if(istype(over_location))
 		if(user_trapped)
-			if(do_after(occupant, src, 5 SECONDS))
-				if(prob(10))
-					to_chat(occupant, "<span class='warning'>You manage to extract yourself from the [src].</span>")
-					src.go_out(over_location)
-			else
-				to_chat(occupant, "<span class='warning'>You fail to extract yourself from the [src]. </span>")
-				return
+			try_eject_stuck()
 		else
 			go_out(over_location)
 	add_fingerprint(usr)
@@ -3165,13 +3169,6 @@ Manual flips too hard and too easy
 //////////////////////////////////
 ////////  Flip  ////////
 //////////////////////////////////
-/obj/mecha
-	var/falloutchance = 5
-	var/crushchance = 5
-/obj/mecha/working/ripley/hichance
-	crushchance = 95
-	falloutchance = 95
-	weight_max = 10
 
 /obj/mecha/Uncross(atom/movable/mover)
 	if(!src || src.health <= 0)
@@ -3232,7 +3229,7 @@ Manual flips too hard and too easy
 			occupant.take_overall_damage(10) // ow my face
 			occupant.Stun(1)
 			occupant.Knockdown(1)
-			if(prob(crushchance)) // occupant is crushed after falling out
+			if(prob(50)) // occupant is crushed after falling out
 				occupant.take_overall_damage(mecha_crush_dam)
 				occupant.Stun(2)
 				occupant.Knockdown(2)
@@ -3285,7 +3282,7 @@ Manual flips too hard and too easy
 	src.transform = M
 
 /obj/mecha/proc/unflip_horizontal()
-	var/matrix/M = matrix()  // Identity matrix = no rotation
+	var/matrix/M = matrix()
 	src.transform = M
 
 //////////////////////////////////
