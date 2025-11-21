@@ -1,0 +1,43 @@
+/obj/item/weapon/grenade/dudebomb
+	name = "dudebomb"
+	icon_state = "dudebomb"
+	item_state = "dudebomb"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_COMBAT + "=2"
+	det_time = 12 SECONDS
+	armsound = 'sound/weapons/dudebomb.ogg'
+
+/obj/item/weapon/grenade/dudebomb/prime()
+	var/turf/you_vile_cur = get_turf(src)
+	if(!you_vile_cur)
+		return
+
+	var/list/dudes_to_bomb = get_all_mobs_in_dview(you_vile_cur, ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon))
+
+	var/mob/living/holder = get_holder_of_type(src, /mob/living)
+	if(holder)
+		if(ismob(loc))
+			var/mob/M = loc
+			M.drop_from_inventory(src)
+
+	for(var/mob/living/M in dudes_to_bomb)
+		if(ishuman(M))
+			var/mob/living/carbon/human/GOGOGOGOGOGO = M
+			var/turf/T = get_turf(GOGOGOGOGOGO)
+			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = MOB_PLANE)
+			GOGOGOGOGOGO.GALize()
+	qdel(src)
+
+/obj/item/weapon/grenade/attack_self(mob/user as mob)
+	if(!active)
+		if(clown_check(user))
+			to_chat(user, "<span class='attack'>You prime \the [name]! [det_time/10] seconds!</span>")
+
+			activate(user,FALSE)
+			add_fingerprint(user)
+			if(iscarbon(user))
+				var/mob/living/carbon/C = user
+				C.throw_mode_on()
+	return
+
+/obj/item/weapon/grenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	to_chat(user, "<span class = 'warning'>YEAH, GAL O SENGEN.</span>")

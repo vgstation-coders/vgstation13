@@ -390,6 +390,7 @@
 			/obj/item/clothing/under/grey/grey_soldier,
 			/obj/item/clothing/under/grey/grey_researcher,
 			/obj/machinery/power/supermatter/shard,
+			/obj/item/weapon/grenade/dudebomb,
 		),
 		VERY_RARE_LOOT = list(
 			/obj/item/weapon/nullrod/sword/chaos/mimicry,
