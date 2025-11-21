@@ -854,11 +854,11 @@
 					break
 
 			if(nextturf)
-				diag_turf.ChangeTurf(nextturf.type, allow = 1)
 				diag_turf.icon = nextturf.icon
 				diag_turf.icon_state = nextturf.icon_state
 			else
-				diag_turf.ChangeTurf(/turf/space, allow = 1)
+				diag_turf.icon = initial(diag_turf.icon)
+				diag_turf.icon_state = initial(diag_turf.icon_state)
 
 	//Update doors
 	if(turfs_to_update.len)
