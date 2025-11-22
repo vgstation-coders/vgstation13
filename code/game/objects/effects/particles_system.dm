@@ -571,3 +571,65 @@ var/list/particle_string_to_type = list(
 
 	appearance_flags = RESET_COLOR|RESET_ALPHA
 	plane = ABOVE_LIGHTING_PLANE
+
+/particles/rain
+	width = 32
+	height = 32
+	count = 20
+
+	lifespan = 2
+	fade = 1
+	spawning = 0
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("rain_1","rain_2","rain_3")
+	position = generator("box", list(-1,12), list(1,12))
+	velocity = list(0,10)
+	friction = 0.1
+	drift = generator("box", list(-0.2,0), list(0.2,0))
+
+	appearance_flags = RESET_COLOR
+	blend_mode = BLEND_ADD
+	plane = ABOVE_LIGHTING_PLANE
+
+/particles/ash
+	width = 64
+	height = 64
+	count = 20
+
+	lifespan = 5
+	fade = 2
+	spawning = 1
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("ash_1","ash_2","ash_3")
+	position = generator("box", list(-15,-15), list(15,15))
+	velocity = generator("box", list(-1,2), list(1,2))
+	friction = 0.1
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+	scale = list(0.6, 0.6)
+	grow = list(0.05, 0.05)
+
+	appearance_flags = RESET_COLOR
+	plane = ABOVE_LIGHTING_PLANE
+
+/particles/fallout
+	width = 64
+	height = 64
+	count = 20
+
+	lifespan = 10
+	fade = 5
+	spawning = 1
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("fallout_1","fallout_2","fallout_3")
+	position = generator("box", list(-15,-15), list(15,15))
+	velocity = generator("box", list(-1,1), list(1,1))
+	friction = 0.1
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+	scale = list(0.6, 0.6)
+	grow = list(0.05, 0.05)
+
+	appearance_flags = RESET_COLOR
+	plane = ABOVE_LIGHTING_PLANE

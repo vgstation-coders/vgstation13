@@ -88,10 +88,9 @@
 			mutations.Remove(M_HARDCORE)
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
-	if(istype(get_turf(src),/turf/unsimulated/floor/brimstone))
-		FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
-		fire_stacks = 11
-		ignite() // ffffFIRE!!!! FIRE!!! FIRE!!
+	var/turf/T = get_turf(src)
+	if(T)
+		T.mob_life_effects(src)
 	return 1
 
 // Apply connect damage

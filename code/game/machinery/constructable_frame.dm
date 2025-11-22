@@ -1749,3 +1749,13 @@ to destroy them and players will be able to make replacements.
 		/obj/item/weapon/stock_parts/matter_bin = 1,
 	)
 
+/obj/item/weapon/circuitboard/planet_scanner
+	name = "Circuit board (Deep Space Scanner)"
+	build_path = /obj/machinery/planet_scanner
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=4;"
+	req_components = list(
+		/obj/item/weapon/stock_parts/scanning_module = 2,
+		/obj/item/weapon/stock_parts/console_screen = 1,
+		/obj/item/weapon/stock_parts/capacitor = 2
+	)

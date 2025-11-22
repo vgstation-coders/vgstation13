@@ -105,6 +105,10 @@
 				if (H.z == 0 && !pos)
 					continue
 
+				// Block suit sensors location on z-level 7 (procedurally-generated planets)
+				if(pos && pos.z == map.zProcGen)
+					pos = null
+
 				var/obj/item/weapon/card/id/I = H.wear_id ? H.wear_id.GetID() : null
 
 				if (I)

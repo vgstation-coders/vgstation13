@@ -25,9 +25,10 @@
 
 /datum/artifact_effect/projectiles
 	effecttype = "projectiles"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_PRECURSOR)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_PRECURSOR)
 	effect = ARTIFACT_EFFECT_PULSE
 	effectrange = 7
+	effect_hint = EFFECT_HINT_CONCENTRATED_ENERGY_EMISSIONS
 	var/projectiletype
 	var/num_of_shots
 	copy_for_battery = list("projectiletype", "num_of_shots")
@@ -35,7 +36,6 @@
 /datum/artifact_effect/projectiles/New()
 	..()
 	effectrange = 7
-	effect_type = pick(1,3,4,6)
 	chargelevelmax = rand(2, 5)
 	projectiletype = pick(validartifactprojectiles)
 	num_of_shots = pick(100;1, 100;2, 50;3, 25;4, 10;6)

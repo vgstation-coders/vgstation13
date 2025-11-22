@@ -90,8 +90,9 @@ var/list/admin_verbs_admin = list(
 	/client/proc/climate_panel,
 	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
 	/client/proc/toggle_admin_examine,
-	/client/proc/beasts_panel	/* Lists all forgotten beasts generated, along with their characteristics */
-	)
+	/client/proc/beasts_panel,	/* Lists all forgotten beasts generated, along with their characteristics */
+	/datum/admins/proc/procedural_generation_panel
+)
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
 	/client/proc/jobbans,

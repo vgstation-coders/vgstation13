@@ -969,7 +969,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/examine(mob/user)
 	..()
-	to_chat(user, "The lighter is [lit ? "":"un"]lit")
+	to_chat(user, "The lighter is [lit ? "":"un"]lit.")
 
 //Also updates the name, the damage and item_state for good measure
 /obj/item/weapon/lighter/update_icon()

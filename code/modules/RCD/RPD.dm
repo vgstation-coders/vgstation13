@@ -86,6 +86,11 @@
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
 	..()
 	L.register_event(/event/clickon, src, nameof(src::mob_onclickon()))
+	if(L.client)
+		for(var/cat in schematics)
+			var/list/S = schematics[cat]
+			for(var/datum/rcd_schematic/C in S)
+				C.send_list_assets(L.client)
 
 /obj/item/device/rcd/rpd/dropped(var/mob/living/L)
 	..()
@@ -105,10 +110,10 @@
 
 /obj/item/device/rcd/rpd/attack_self(var/mob/user)
 	..()
-	for(var/cat in schematics)
-		var/list/L = schematics[cat]
-		for(var/datum/rcd_schematic/C in L)
-			for(var/client/client in interface.clients)
+	for(var/client/client in interface.clients)
+		for(var/cat in schematics)
+			var/list/L = schematics[cat]
+			for(var/datum/rcd_schematic/C in L)
 				C.send_list_assets(client)
 	
 

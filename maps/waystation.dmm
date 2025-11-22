@@ -30524,6 +30524,13 @@
 /obj/machinery/camera/autoname{
 	dir = 1
 	},
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/machinery/planet_scanner{
+	anchored = 1;
+	icon_state = "scanner_idle"
+	},
 /turf/simulated/floor{
 	icon_state = "blue"
 	},

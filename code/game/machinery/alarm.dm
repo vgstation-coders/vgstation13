@@ -906,12 +906,12 @@ var/global/list/air_alarms = list()
 	data["target_temp"] = config.target_temperature  - T0C
 	data["atmos_alarm"] = this_area.atmosalm
 	data["modes"] = list(
-		AALARM_MODE_SCRUBBING   = list("name"="Filtering",   "desc"="Scrubs out contaminants"),\
-		AALARM_MODE_REPLACEMENT = list("name"="Replace Air", "desc"="Siphons out air while replacing"),\
-		AALARM_MODE_PANIC       = list("name"="Panic",       "desc"="Siphons air out of the room"),\
-		AALARM_MODE_CYCLE       = list("name"="Cycle",       "desc"="Siphons air before replacing"),\
-		AALARM_MODE_FILL        = list("name"="Fill",        "desc"="Shuts off scrubbers and opens vents"),\
-		AALARM_MODE_OFF         = list("name"="Off",         "desc"="Shuts off vents and scrubbers"))
+		/*AALARM_MODE_SCRUBBING*/ list("name"="Filtering",   "desc"="Scrubs out contaminants"),\
+		/*AALARM_MODE_REPLACEMENT*/ list("name"="Replace Air", "desc"="Siphons out air while replacing"),\
+		/*AALARM_MODE_PANIC*/ list("name"="Panic",       "desc"="Siphons air out of the room"),\
+		/*AALARM_MODE_CYCLE*/ list("name"="Cycle",       "desc"="Siphons air before replacing"),\
+		/*AALARM_MODE_FILL*/ list("name"="Fill",        "desc"="Shuts off scrubbers and opens vents"),\
+		/*AALARM_MODE_OFF*/ list("name"="Off",         "desc"="Shuts off vents and scrubbers"))
 	data["mode"]=mode
 
 	var/list/tmplist = new/list()

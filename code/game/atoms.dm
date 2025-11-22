@@ -57,6 +57,9 @@ var/global/list/ghdel_profiling_roundstart = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
+	// The planet the atom is on, if any.
+	var/datum/planet_type/planet = null
+
 	var/emagged = 0 // Some things other than machinery can be
 	var/emag_cost = 0 // Emag energy cost (in MJ)
 	var/arcanetampered = 0 //A looot of things can be
@@ -473,8 +476,6 @@ its easier to just keep the beam vertical.
 	if(on_fire)
 		user.simple_message("<span class='danger'>OH SHIT! IT'S ON FIRE!</span>",\
 			"<span class='info'>It's on fire, man.</span>")
-	if(charred_overlay)
-		to_chat(user, span_info("It's covered in ash."))
 	if(min_harm_label && harm_labeled)
 		if(harm_labeled < min_harm_label)
 			to_chat(user, harm_label_examine[1])
@@ -557,8 +558,6 @@ its easier to just keep the beam vertical.
 /atom/proc/clean_act(var/cleanliness)//1 = contact with water (splashed with water, removes glue from objs), 2 = space cleaner or efficient cleaning (showers, sink, soap), 3 = bleach
 	if (cleanliness >= CLEANLINESS_SPACECLEANER)
 		clean_blood()
-		if(charred_overlay)
-			cut_overlay(charred_overlay)
 	if (cleanliness >= CLEANLINESS_BLEACH)
 		color = ""
 	if (cleanliness >= CLEANLINESS_WATER)//I mean, not sure why we'd ever add a rank below water but, futur-proofing and all that jazz

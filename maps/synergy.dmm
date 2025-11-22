@@ -16992,12 +16992,15 @@
 	},
 /area/bridge)
 "aEB" = (
-/obj/machinery/recharger{
-	pixel_y = 5
-	},
-/obj/structure/table/woodentable,
 /obj/structure/disposalpipe/segment{
 	dir = 4
+	},
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/machinery/planet_scanner{
+	anchored = 1;
+	icon_state = "scanner_idle"
 	},
 /turf/simulated/floor{
 	icon_state = "darkbluefull";
@@ -19338,6 +19341,9 @@
 	d2 = 2;
 	icon_state = "1-2";
 	tag = ""
+	},
+/obj/machinery/recharger{
+	pixel_y = 5
 	},
 /turf/simulated/floor{
 	dir = 6;

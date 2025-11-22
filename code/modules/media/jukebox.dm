@@ -159,9 +159,9 @@ var/global/global_playlists = list()
 
 
 var/global/list/loopModeNames=list(
-	JUKEMODE_SHUFFLE     = "Shuffle",
-	JUKEMODE_REPEAT_SONG = "Single",
-	JUKEMODE_PLAY_ONCE   = "Once"
+	/*JUKEMODE_SHUFFLE*/ "Shuffle",
+	/*JUKEMODE_REPEAT_SONG*/ "Single",
+	/*JUKEMODE_PLAY_ONCE*/ "Once"
 )
 /obj/machinery/media/jukebox
 

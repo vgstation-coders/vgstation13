@@ -168,14 +168,13 @@
 /turf/unsimulated/floor/grey_sand
 	name = "chalky soil"
 	icon = 'icons/turf/floors.dmi'
+	base_icon_state = "xeno_rock_tile_"
 	icon_state = "xeno_rock_tile_1"
+	min_icon_states = 2
+	max_icon_states = 12
+	variance = 33
 	temperature = T20C
 	plane = PLATING_PLANE
-
-/turf/unsimulated/floor/grey_sand/New()
-	..()
-	if(prob(33))
-		icon_state = "xeno_rock_tile_[rand(1,12)]"
 
 /turf/unsimulated/floor/grey_sand/Entered(atom/A, atom/OL) // Ayy dirt tiles play walking sound effects!
 	..()
@@ -284,6 +283,16 @@
 	name = "bvvak blossoms"
 	icon = 'icons/obj/flora/ausflora.dmi'
 	icon_state = "xeno_plant_2"
+
+/obj/structure/flora/xeno_flora/red
+	name = "zzyzzp vine"
+	icon = 'icons/obj/flora/ausflora.dmi'
+	icon_state = "xeno_plant_3"
+
+/obj/structure/flora/xeno_flora/orange
+	name = "quux sprout"
+	icon = 'icons/obj/flora/ausflora.dmi'
+	icon_state = "xeno_plant_4"
 
 /obj/structure/acid_puddle // What in the goddamn...
 	name = "sizzling puddle"

@@ -1,8 +1,8 @@
 /datum/artifact_effect/menagerie
 	effecttype = "menagerie"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_WIZARD)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_WIZARD)
 	effect = ARTIFACT_EFFECT_PULSE
-	effect_type = 5
+	effect_hint = EFFECT_HINT_INTERDIMENSIONAL_BLUESPACE_PHASING
 	var/static/list/possible_types = list()
 
 /datum/artifact_effect/menagerie/New()

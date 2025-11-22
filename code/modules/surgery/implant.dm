@@ -148,6 +148,7 @@
 		to_chat(user, "<span class='warning'>You tear some vessels trying to fit such big object in this cavity.")
 		var/datum/wound/internal_bleeding/I = new (15)
 		affected.wounds += I
+		affected.internally_bleeding = TRUE
 		affected.owner.custom_pain("You feel something rip in your [affected.display_name]!", 1, scream=TRUE)
 	user.drop_item(tool)
 	affected.hidden = tool

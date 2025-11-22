@@ -156,6 +156,16 @@
 	for(var/obj/docking_port/D in linked_area)
 		docking_ports_aboard |= D
 
+	for(var/turf/T in linked_area.area_turfs)
+		var/corner = FALSE
+		if(!isopensurface(T) || !istype(T,/turf/space))
+			for(var/obj/O in T.contents)
+				if(istype(O,/obj/structure/shuttle))
+					corner = TRUE
+					break
+			if(corner)
+				continue
+			T.shuttle_turf = TRUE
 	return
 
 /datum/shuttle/Destroy()
@@ -560,6 +570,27 @@
 				occupants.Add(L)
 	return occupants
 
+/datum/shuttle/proc/get_size()
+	if(!linked_area)
+		return null
+
+	var/low_x = world.maxx
+	var/low_y = world.maxy
+	var/high_x = 1
+	var/high_y = 1
+
+	for(var/turf/T in linked_area)
+		if(T.x < low_x)
+			low_x = T.x
+		if(T.x > high_x)
+			high_x = T.x
+		if(T.y < low_y)
+			low_y = T.y
+		if(T.y > high_y)
+			high_y = T.y
+
+	return list(abs(high_x - low_x) + 1, abs(high_y - low_y) + 1)
+
 /proc/get_refill_area(var/obj/docking_port/destination/D)
 	if(ispath(D?.refill_area))
 		return locate(D.refill_area)
@@ -645,6 +676,7 @@
 
 
 	var/list/turfs_to_update = list()
+	var/list/corner_turfs = list()
 
 	//Move turfs
 	for(var/datum/coords/C in new_turfs)
@@ -661,6 +693,10 @@
 		if(!new_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get new turf at [C.x_pos];[C.y_pos];[new_center.z]")
 			continue
+
+		// stop the shuttle corners from stealing turfs
+		if(locate(/obj/structure/shuttle/diag_wall) in old_turf)
+			corner_turfs[new_turf] = 1
 
 		var/turf/displace_to = locate(C.x_pos,throwy,new_center.z)
 		for(var/atom/movable/AM as mob|obj in new_turf.contents)
@@ -688,7 +724,7 @@
 
 		linked_area.contents.Add(new_turf)
 		new_turf.change_area(old_area,linked_area)
-		if(!istype(old_turf, /turf/space))
+		if(isshuttleturf(old_turf))
 			new_turf.ChangeTurf(old_turf.type, allow = 1)
 		new_turfs[C] = new_turf
 
@@ -803,11 +839,49 @@
 		if(istype(old_turf,/turf/space))
 			old_turf.lighting_clear_overlay() //A horrible band-aid fix for lighting overlays appearing over space
 
+	// shuttle corner adjustments
+	for(var/turf/diag_turf in corner_turfs)
+		var/obj/structure/shuttle/diag_wall/wall = locate(/obj/structure/shuttle/diag_wall) in diag_turf
+		if(!wall)
+			continue
+
+		if(istype(diag_turf, /turf/space))
+			var/turf/space/nextturf = null
+			for(var/direction in list(NORTH, SOUTH, EAST, WEST))
+				var/turf/check_turf = get_step(diag_turf, direction)
+				if(check_turf && istype(check_turf, /turf/space))
+					nextturf = check_turf
+					break
+
+			if(nextturf)
+				diag_turf.icon = nextturf.icon
+				diag_turf.icon_state = nextturf.icon_state
+			else
+				diag_turf.icon = initial(diag_turf.icon)
+				diag_turf.icon_state = initial(diag_turf.icon_state)
+
 	//Update doors
 	if(turfs_to_update.len)
 		for(var/turf/simulated/T1 in turfs_to_update)
 			for(var/obj/machinery/door/D2 in T1)
 				D2.update_nearby_tiles()
+
+	// Unregister shuttle turfs from weather system
+	// doing this for source and destination in case we move between planets
+	var/datum/allocation/source_allocation = SSmapping.get_allocation(trf = our_center)
+	var/datum/climate/source_climate = SSweather.get_climate(our_center.z, source_allocation)
+	var/datum/allocation/dest_allocation = SSmapping.get_allocation(trf = new_center)
+	var/datum/climate/dest_climate = SSweather.get_climate(new_center.z, dest_allocation)
+
+	for(var/turf/T in linked_area.contents)
+		if(source_climate)
+			source_climate.unregister_weather_turf(T)
+		if(dest_climate)
+			dest_climate.unregister_weather_turf(T)
+		for(var/obj/effect/weather_holder/WH in T.vis_contents)
+			T.vis_contents -= WH
+		for(var/obj/effect/edge_overlay/E in T)
+			qdel(E)
 
 	return 1
 

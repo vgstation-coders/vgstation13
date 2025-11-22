@@ -32,7 +32,14 @@
 	
 		current_menu=schem_groups[1]?.name
 		schem_groups[1]?.switch_to()
-	
+
+/obj/item/device/rcd/matter/engineering/pickup(var/mob/living/L)
+	..()
+	if(L.client)
+		for(var/datum/rcd_scematic_grouping/schemgroup in schem_groups)
+			schemgroup.send_assets(L.client)
+			for(var/datum/rcd_grouped_schematic/sch)
+				sch.send_assets(L.client)	
 
 /obj/item/device/rcd/matter/engineering/Destroy()
 	. = ..()
@@ -230,6 +237,13 @@
 	current_menu=schem_groups[1]?.name
 	schem_groups[1]?.switch_to()
 
+/obj/item/device/rcd/borg/engineering/pickup(var/mob/living/L)
+	..()
+	if(L.client)
+		for(var/datum/rcd_scematic_grouping/schemgroup in schem_groups)
+			schemgroup.send_assets(L.client)
+			for(var/datum/rcd_grouped_schematic/sch)
+				sch.send_assets(L.client)
 	
 /obj/item/device/rcd/borg/engineering/attack_self(var/mob/user)
 	if(!isrobot(user))

@@ -49,3 +49,9 @@ var/list/feather_colors = list(
 	if(!..(feather))
 		return FALSE
 	return src.color == feather.color
+
+//So that feathers keep their color when they leave the stack.
+/obj/item/stack/sheet/feather/transfer_data_from(var/obj/item/stack/sheet/feather/S, var/amount)
+	..()
+	if(istype(S, /obj/item/stack/sheet/feather))
+		src.color = S.color

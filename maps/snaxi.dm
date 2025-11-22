@@ -211,6 +211,17 @@
 		return
 	H.equip_or_collect(new /obj/item/weapon/book/manual/snow(H.back), slot_in_backpack)
 
+/datum/subsystem/daynightcycle/play_globalsound()
+	for(var/mob/M in player_list)
+		if(!M.client)
+			continue
+		else
+			switch(current_timeOfDay)
+				if(TOD_SUNRISE)
+					M << 'sound/misc/6amRooster.wav'
+				if(TOD_NIGHTTIME)
+					M << 'sound/misc/6pmWolf.wav'
+
 ////////////////////////////////////////////////////////////////
 #include "snaxi.dmm"
 #endif

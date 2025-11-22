@@ -59,9 +59,8 @@
 	solar_orbit_period=130.6359
 	var/solartime=0 //start at 0. set not like that for debugging. or manually set next_firetime with varedit.
 
-/datum/subsystem/daynightcycle/process_lighting()
+/datum/subsystem/daynightcycle/advance_time()
 	flags&=(0^SS_FIRE_IN_LOBBY) //we don't want this one firing in lobby constantly, as we've tweaked the lighting to be just right on startup. we still want it to fire once though.
-	
 	// YCbCr is a superior colorspace. fight me.
 	var/luma=0.0
 	var/chroma_b=0.0

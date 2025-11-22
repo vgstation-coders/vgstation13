@@ -25041,9 +25041,13 @@
 /turf/simulated/floor,
 /area/bridge)
 "bqn" = (
-/obj/structure/table,
-/obj/item/weapon/storage/toolbox/mechanical,
-/obj/item/airbag,
+/obj/machinery/planet_scanner{
+	anchored = 1;
+	icon_state = "scanner_idle"
+	},
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
 /turf/simulated/floor,
 /area/bridge)
 "bqo" = (
@@ -25357,6 +25361,8 @@
 /obj/item/device/flash,
 /obj/item/device/flash,
 /obj/item/device/flash,
+/obj/item/airbag,
+/obj/item/weapon/storage/toolbox/mechanical,
 /turf/simulated/floor,
 /area/bridge)
 "brc" = (

@@ -134,3 +134,13 @@
 	materials = list (MAT_IRON = 4000, MAT_GLASS = 2000)
 	category = "Bluespace"
 	build_path = /obj/item/device/telepad_beacon
+
+/datum/design/p_gps
+	name = "Expedition Tracker"
+	desc = "A specialized GPS device designed for planetary exploration. Only tracks other devices on the same planet. Features an emergency distress beacon."
+	id = "p_gps"
+	req_tech = list(Tc_BLUESPACE = 3, Tc_MAGNETS = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_DIAMOND = 250, MAT_IRON = 250, MAT_GLASS = 250, MAT_URANIUM = 250)
+	category = "Bluespace"
+	build_path = /obj/item/device/gps/planetary
