@@ -318,7 +318,7 @@ export const PlanetScanner = (props) => {
                     onClick={() => act('start_scan')}
                     tooltip={
                       other_scan_in_progress
-                        ? "A planet scan is already in progress on this station - multiple scans are disabled due to electrical infetterance."
+                        ? "A planet scan is already in progress on this station - multiple scans are disabled due to electrical infetterence."
                         : at_scan_limit
                         ? "Maximum scans reached"
                         : `Requires ${required_energy?.toLocaleString() || 0} J of energy`
