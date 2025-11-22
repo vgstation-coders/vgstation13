@@ -162,6 +162,7 @@
 	data["at_scan_limit"] = scans_completed >= PLANET_SCANNER_MAX_SCANS
 	data["can_scan"] = can_start_scan()
 	data["waiting_for_generation"] = waiting_for_generation
+	data["other_scan_in_progress"] = (SSmapping?.scanning || SSmapping?.generating) && !scanning && !waiting_for_generation
 
 	// Power and energy information
 	data["required_energy"] = required_scan_energy
@@ -186,7 +187,7 @@
 
 /// Check if the scanner is ready to start a new scan
 /obj/machinery/planet_scanner/proc/can_start_scan()
-	return anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && scans_completed < PLANET_SCANNER_MAX_SCANS
+	return anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && scans_completed < PLANET_SCANNER_MAX_SCANS && !SSmapping?.scanning && !SSmapping?.generating
 
 /// Get the current scan progress as a percentage (0-100), or null if not scanning
 /obj/machinery/planet_scanner/proc/get_scan_progress()
@@ -298,6 +299,7 @@
 	scanning = TRUE
 	current_scan_energy = 0
 	use_power = MACHINE_POWER_USE_ACTIVE
+	SSmapping.scanning = TRUE
 	update_icon()
 	return TRUE
 
@@ -349,6 +351,7 @@
 	waiting_for_generation = FALSE
 	current_scan_energy = 0
 	use_power = MACHINE_POWER_USE_IDLE
+	SSmapping.scanning = FALSE
 	playsound(src, 'sound/machines/alert.ogg', 50, 1)
 	update_icon()
 
@@ -356,6 +359,7 @@
 /obj/machinery/planet_scanner/proc/complete_scan()
 	waiting_for_generation = TRUE
 	use_power = MACHINE_POWER_USE_IDLE // Stop consuming power
+	SSmapping.scanning = FALSE
 	spawn_new_planet()
 
 /// Finalize the scan after planet generation is complete
