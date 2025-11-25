@@ -1822,6 +1822,7 @@
 #include "code\modules\mecha\equipment\tools\medical_tools.dm"
 #include "code\modules\mecha\equipment\tools\sec_tools.dm"
 #include "code\modules\mecha\equipment\tools\tools.dm"
+#include "code\modules\mecha\equipment\weapons\mecha_ballistic.dm"
 #include "code\modules\mecha\equipment\weapons\weapons.dm"
 #include "code\modules\mecha\medical\medical.dm"
 #include "code\modules\mecha\medical\odysseus.dm"
