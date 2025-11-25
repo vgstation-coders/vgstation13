@@ -22,35 +22,46 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/action(atom/target)
 	if(!action_checks(target))
 		return
+	set_ready_state(0)
 	var/originaltarget = target
 	var/turf/curloc = get_turf(chassis)
 	var/turf/targloc = get_turf(target)
 
 	if(!curloc || !targloc)
+		do_after_cooldown()
 		return
+	var/start_loc = curloc
+	spawn
+		for(var/i=1 to min(projectiles, projectiles_per_shot))
+			if(!chassis)
+				break
+			var/turf/fire_from = start_loc
+			var/atom/current_target = originaltarget
+			var/turf/current_targloc = targloc
+			if(defective)
+				current_target = get_inaccuracy(originaltarget, 2, chassis)
+				current_targloc = get_turf(current_target)
+			if(!current_targloc || current_targloc == fire_from)
+				break
+			playsound(chassis, fire_sound, 80, 1)
+			var/obj/item/projectile/A = new projectile(fire_from)
+			src.projectiles--
+			A.firer = chassis.occupant
+			A.original = current_target
+			A.current = fire_from
+			A.starting = fire_from
+			A.yo = current_targloc.y - fire_from.y
+			A.xo = current_targloc.x - fire_from.x
+			A.OnFired()
+			spawn(0)
+				A.process()
+			if(i < min(projectiles, projectiles_per_shot))
+				sleep(burst_delay)
 
-	for(var/i=1 to min(projectiles, projectiles_per_shot))
-		if(defective)
-			target = get_inaccuracy(originaltarget, 2, chassis)
-			targloc = get_turf(target)
-		if(!targloc || targloc == curloc)
-			break
-		playsound(chassis, fire_sound, 80, 1)
-		var/obj/item/projectile/A = new projectile(curloc)//new projectile(curloc)
-		src.projectiles--
-		A.firer = chassis.occupant
-		A.original = target
-		A.current = curloc
-		A.starting = curloc
-		A.yo = targloc.y - curloc.y
-		A.xo = targloc.x - curloc.x
-		sleep(burst_delay)
-		set_ready_state(0)
-		A.OnFired()
-		A.process()
-	log_message("Fired from [src.name], targeting [originaltarget].")
-	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
-	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
+		log_message("Fired from [src.name], targeting [originaltarget].")
+		message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
+		log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
+
 	do_after_cooldown()
 	return
 
@@ -101,7 +112,6 @@
 
 	var/found_gun = FALSE
 	for(var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/gun in equipment)
-		// FIX: Check if sample_ammo.type is in the ammo_types list
 		if(gun.no_caliber)
 			continue
 		if(!gun.ammo_types || !gun.ammo_types.len)

@@ -1805,6 +1805,7 @@
 #include "code\modules\mecha\mech_bay.dm"
 #include "code\modules\mecha\mech_fabricator.dm"
 #include "code\modules\mecha\mecha.dm"
+#include "code\modules\mecha\mecha_ammo.dm"
 #include "code\modules\mecha\mecha_construction_chassis.dm"
 #include "code\modules\mecha\mecha_construction_paths.dm"
 #include "code\modules\mecha\mecha_control_console.dm"
