@@ -27,15 +27,15 @@ var/list/forms_of_nirvana = list("buddha","chill")
 		L << 'sound/effects/gong-one.ogg'
 		switch(mode)
 			if("buddha")
-				L.status_flags ^= BUDDHAMODE
+				L.status_flags |= BUDDHAMODE
 			if("chill")
-				L.status_flags ^= PACIFIED
+				L.status_flags |= PACIFIED
 
 /datum/event/profound_peace/end()
 	for(var/mob/living/L in participants)
 		L << 'sound/effects/gong-two.ogg'
 		switch(mode)
 			if("buddha")
-				L.status_flags ^= BUDDHAMODE
+				L.status_flags &= ~BUDDHAMODE
 			if("chill")
-				L.status_flags ^= PACIFIED
+				L.status_flags &= ~PACIFIED
