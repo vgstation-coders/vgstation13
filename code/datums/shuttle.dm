@@ -678,6 +678,7 @@
 
 	var/list/turfs_to_update = list()
 	var/list/corner_turfs = list()
+	var/list/old_turfs = list() // Turfs that need weather re-registered after shuttle leaves
 
 	//Move turfs
 	for(var/datum/coords/C in new_turfs)
@@ -725,8 +726,10 @@
 
 		linked_area.contents.Add(new_turf)
 		new_turf.change_area(old_area,linked_area)
-		if(isshuttleturf(old_turf))
+		if(isshuttleturf(old_turf) || old_turf.shuttle_turf)
 			new_turf.ChangeTurf(old_turf.type, allow = 1)
+			new_turf.shuttle_turf = TRUE
+			old_turf.shuttle_turf = FALSE
 		new_turfs[C] = new_turf
 
 		//***Remove old turf from shuttle's area****
@@ -840,6 +843,8 @@
 		if(istype(old_turf,/turf/space))
 			old_turf.lighting_clear_overlay() //A horrible band-aid fix for lighting overlays appearing over space
 
+		old_turfs += old_turf
+
 	// shuttle corner adjustments
 	for(var/turf/diag_turf in corner_turfs)
 		var/obj/structure/shuttle/diag_wall/wall = locate(/obj/structure/shuttle/diag_wall) in diag_turf
@@ -883,6 +888,13 @@
 			T.vis_contents -= WH
 		for(var/obj/effect/edge_overlay/E in T)
 			qdel(E)
+
+	// Re-register turfs left behind by the shuttle with the source climate
+	if(source_climate)
+		for(var/turf/old_turf in old_turfs)
+			source_climate.register_weather_turf(old_turf)
+		var/datum/planet_type/source_planet = source_climate.allocation?.ptype
+		SSDayNight.update_turf_lighting(old_turfs, source_planet)
 
 	return 1
 

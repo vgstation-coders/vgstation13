@@ -142,7 +142,6 @@
 		/mob/living/simple_animal/mouse/common = 20,
 		/mob/living/simple_animal/cow = 10,
 		/mob/living/simple_animal/hostile/deer = 15,
-		/mob/living/simple_animal/rabbit/bunny = 25,
 		/mob/living/simple_animal/chicken = 15,
 		/mob/living/simple_animal/chick = 10,
 		/mob/living/simple_animal/cat = 3,
@@ -158,7 +157,6 @@
 	flora_spawn_chance = 70
 	mob_spawn_list = list(
 		/mob/living/simple_animal/mouse/common = 20,
-		/mob/living/simple_animal/rabbit/bunny = 30,
 		/mob/living/simple_animal/hostile/spacehog/piglet = 5,
 		/mob/living/simple_animal/hostile/spacehog/adult = 3,
 		/mob/living/simple_animal/hostile/spacehog/adult/mama = 1,

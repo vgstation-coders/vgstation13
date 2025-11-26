@@ -260,7 +260,7 @@
 	name = "beach planet"
 	desc = "The platonic ideal of vacation spots. Warm, comfortable temperatures, and a breathable atmosphere."
 	mapgen = /datum/planetGenerator/beach
-	default_baseturf = /turf/unsimulated/beach/sand
+	default_baseturf = /turf/unsimulated/floor/planetary/grass
 	loot_type = LOOT_TYPE_BEACH
 	climate_type = /datum/climate/tropical
 	icon_state = "beach2"
@@ -279,7 +279,7 @@
 	name = "grass planet"
 	desc = "A temperate planet with a breathable atmosphere and abundant flora and fauna."
 	mapgen = /datum/planetGenerator/grass
-	default_baseturf = /turf/unsimulated/floor/planetary/dirt
+	default_baseturf = /turf/unsimulated/floor/planetary/grass
 	loot_type = LOOT_TYPE_GRASS
 	climate_type = /datum/climate/temperate
 	icon_state = "earth"
