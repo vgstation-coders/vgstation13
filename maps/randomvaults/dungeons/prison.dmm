@@ -91,7 +91,7 @@
 	},
 /area/vault/prison)
 "aq" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/shower{
@@ -102,7 +102,7 @@
 	},
 /area/vault/prison)
 "ar" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -853,7 +853,7 @@
 	},
 /area/vault/prison)
 "co" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

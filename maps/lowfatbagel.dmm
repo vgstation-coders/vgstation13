@@ -3035,7 +3035,7 @@
 /turf/simulated/floor,
 /area/supply/storage)
 "agM" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -3598,7 +3598,7 @@
 /turf/simulated/floor,
 /area/security/checkpoint)
 "ahF" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -7150,7 +7150,7 @@
 /obj/structure/mirror{
 	pixel_y = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 20
 	},
 /turf/simulated/floor{
@@ -7161,7 +7161,7 @@
 /obj/structure/mirror{
 	pixel_y = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 20
 	},
 /obj/machinery/power/apc{
@@ -8374,7 +8374,7 @@
 	},
 /area/crew_quarters/kitchen)
 "auL" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small,
@@ -14275,7 +14275,7 @@
 	},
 /area/crew_quarters/toilet)
 "aME" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
 	pixel_y = 32
 	},
@@ -15821,7 +15821,7 @@
 	dir = 8;
 	flickering = 1
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -17921,7 +17921,7 @@
 	},
 /area/crew_quarters/toilet)
 "aXS" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small,
@@ -19174,7 +19174,7 @@
 /obj/item/device/rcd/tile_painter,
 /obj/item/tool/screwdriver,
 /obj/item/weapon/book/manual/barman_recipes,
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 30
 	},
 /turf/simulated/floor{
@@ -22481,7 +22481,7 @@
 	},
 /area/janitor)
 "bjA" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -26188,7 +26188,7 @@
 	},
 /area/crew_quarters/bar)
 "bsU" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 32
 	},
 /obj/machinery/firealarm{
@@ -27115,7 +27115,7 @@
 	name = "\improper Cyborg Station"
 	})
 "bwZ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -29826,7 +29826,7 @@
 /area/library)
 "bJr" = (
 /obj/structure/closet/l3closet/scientist,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -30495,7 +30495,7 @@
 /turf/simulated/wall/r_wall,
 /area/engineering/engine_storage)
 "bTz" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 30
 	},
 /turf/simulated/floor/plating,
@@ -30767,7 +30767,7 @@
 /obj/structure/mirror{
 	pixel_y = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 25
 	},
 /turf/simulated/floor{
@@ -36174,7 +36174,7 @@
 	},
 /obj/effect/decal/cleanable/vomit,
 /obj/item/weapon/broken_bottle,
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -37277,7 +37277,7 @@
 	},
 /area/engineering/supermatter_room)
 "dMB" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -38372,7 +38372,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "eaa" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -39700,7 +39700,7 @@
 /turf/unsimulated/floor,
 /area/centcom/living)
 "eqn" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -41405,7 +41405,7 @@
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "ePR" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -42368,7 +42368,7 @@
 /turf/simulated/floor,
 /area/mine/living_quarters)
 "feg" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -46427,7 +46427,7 @@
 	},
 /area/research_outpost/hallway)
 "goP" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 8
 	},
@@ -47224,7 +47224,7 @@
 /turf/simulated/floor/plating,
 /area/mine/production)
 "gwR" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 1
 	},
 /obj/structure/curtain/open/privacy,
@@ -48076,7 +48076,7 @@
 	},
 /area/mine/maintenance)
 "gHG" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /obj/item/fish_eggs/goldfish,
 /obj/item/fish_eggs/goldfish,
 /turf/simulated/floor/grass{
@@ -49090,7 +49090,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 1
 	},
 /obj/structure/curtain/open/privacy,
@@ -49114,7 +49114,7 @@
 /area/research_outpost/xenobot)
 "gXb" = (
 /obj/structure/closet/l3closet/scientist,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -53668,7 +53668,7 @@
 /turf/simulated/floor/plating,
 /area/mine/explored)
 "iqu" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -54815,7 +54815,7 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
 "iIi" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -55108,7 +55108,7 @@
 /area/hallway/primary/port)
 "iNx" = (
 /obj/structure/reagent_dispensers/watertank,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -59480,7 +59480,7 @@
 	},
 /area/shuttle/nuclearops)
 "kat" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -62099,7 +62099,7 @@
 /turf/simulated/floor,
 /area/engineering/atmos)
 "kMb" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/vox{
@@ -67719,7 +67719,7 @@
 	},
 /area/research_outpost/xenobot)
 "mrh" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -69573,7 +69573,7 @@
 /turf/simulated/wall/r_wall,
 /area/engineering/atmos)
 "mQi" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -69586,7 +69586,7 @@
 	},
 /area/prison/cell_block/hydroponics)
 "mQl" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -72948,7 +72948,7 @@
 /turf/simulated/floor/plating,
 /area/hallway/primary/central)
 "nQm" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 32
 	},
 /obj/item/weapon/minihoe,
@@ -73224,7 +73224,7 @@
 /turf/simulated/floor/vox,
 /area/vox_trading_post/docking)
 "nWe" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -74702,7 +74702,7 @@
 /turf/unsimulated/beach/coastline,
 /area/centcom/holding)
 "ooY" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -75039,7 +75039,7 @@
 	},
 /area/mine/explored)
 "osg" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -76921,7 +76921,7 @@
 /area/hallway/primary/starboard)
 "oVB" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -77663,7 +77663,7 @@
 	},
 /area/science/breakroom)
 "pih" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /turf/simulated/floor{
@@ -80934,7 +80934,7 @@
 	dir = 4;
 	pixel_x = -24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -81015,7 +81015,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/atmos)
 "qhc" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -82593,7 +82593,7 @@
 /obj/structure/mirror{
 	pixel_x = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -83883,7 +83883,7 @@
 	dir = 8;
 	pixel_x = 24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -84496,7 +84496,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "rhn" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -86327,7 +86327,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/closet/l3closet/scientist,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -88240,7 +88240,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/door_control{
@@ -88448,7 +88448,7 @@
 	},
 /area/mine/explored)
 "suc" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -94002,7 +94002,7 @@
 	},
 /area/centcom/suppy)
 "ubm" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -96247,7 +96247,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "uFy" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

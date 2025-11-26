@@ -1,0 +1,70 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/jungle/grass,
+/area/surface/jungle)
+"e" = (
+/obj/structure/flora/ausbushes/grassybush,
+/turf/unsimulated/floor/jungle/grass,
+/area/surface/jungle)
+"i" = (
+/turf/unsimulated/floor/jungle/dirt,
+/area/surface/jungle)
+"j" = (
+/obj/machinery/space_heater/campfire{
+	burntime = 5
+	},
+/obj/machinery/cooking/grill/spit,
+/turf/unsimulated/floor/jungle/dirt,
+/area/surface/jungle)
+"k" = (
+/obj/structure/flora/ausbushes/brflowers,
+/turf/unsimulated/floor/jungle/grass,
+/area/surface/jungle)
+"l" = (
+/obj/item/weapon/spear/wooden,
+/turf/unsimulated/floor/jungle/dirt,
+/area/surface/jungle)
+"N" = (
+/obj/effect/landmark/corpse,
+/turf/unsimulated/floor/jungle/grass,
+/area/surface/jungle)
+"Y" = (
+/obj/structure/flora/jungle_berries,
+/turf/unsimulated/floor/jungle/grass,
+/area/surface/jungle)
+
+(1,1,1) = {"
+k
+a
+N
+a
+e
+"}
+(2,1,1) = {"
+a
+a
+l
+k
+a
+"}
+(3,1,1) = {"
+a
+i
+j
+i
+a
+"}
+(4,1,1) = {"
+a
+a
+i
+a
+a
+"}
+(5,1,1) = {"
+a
+k
+a
+a
+Y
+"}

@@ -106,7 +106,7 @@
 		return  //we used the rag as a bandage
 	if(!proximity_flag)
 		return 0 // Not adjacent
-	if (istype(target,/obj/structure/sink))
+	if (istype(target,/obj/structure/wc/sink))
 		return	// We're here to fill the rag, not use it pointlessly
 	if(reagents.total_volume < 1)
 		to_chat(user, "<span class='notice'>Your rag is dry!</span>")

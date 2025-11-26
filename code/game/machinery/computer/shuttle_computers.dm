@@ -329,10 +329,6 @@
 	if(!selected_port && shuttle.docking_ports.len >= 2)
 		selected_port = pick(shuttle.docking_ports - shuttle.current_port)
 
-	// Close shuttle doors before departure only when traveling to or from procgen levels
-	if(selected_port.z == map.zProcGen || shuttle.linked_area.z == map.zProcGen)
-		shuttle.close_all_doors()
-
 	//Send a message to the shuttle to move
 	shuttle.travel_to(selected_port, src, user)
 
@@ -376,8 +372,6 @@
 	transit_port.generate_borders = 1
 	shuttle.set_transit_dock(transit_port)
 
-	// Close shuttle doors before departure since we're using a transit area and begin the trip
-	shuttle.close_all_doors()
 	shuttle.travel_to(surface_port, src, user)
 
 /obj/machinery/computer/shuttle_control/Topic(href, href_list)

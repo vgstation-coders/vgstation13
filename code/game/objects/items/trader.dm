@@ -200,7 +200,7 @@
 /obj/structure/wetdryvac/MouseDropFrom(var/obj/O, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!can_use(usr,O))
 		return
-	if(istype(O,/obj/structure/sink))
+	if(istype(O,/obj/structure/wc/sink))
 		if(!reagents.total_volume)
 			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
 			return

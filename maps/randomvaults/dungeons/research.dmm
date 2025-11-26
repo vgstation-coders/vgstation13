@@ -4,7 +4,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "ai" = (
-/obj/structure/toilet/acid{
+/obj/structure/wc/toilet/acid{
 	dir = 4
 	},
 /turf/unsimulated/floor/lab_sterile,
@@ -747,7 +747,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "gE" = (
-/obj/structure/toilet/acid{
+/obj/structure/wc/toilet/acid{
 	dir = 8
 	},
 /obj/machinery/light/small/broken{
@@ -1263,7 +1263,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "mq" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -1300,7 +1300,7 @@
 	},
 /area/vault/mothership_lab/research)
 "mK" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -1349,7 +1349,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "nb" = (
-/obj/structure/toilet/acid{
+/obj/structure/wc/toilet/acid{
 	dir = 4
 	},
 /turf/unsimulated/floor/ayy/maint,
@@ -1880,7 +1880,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "sr" = (
-/obj/structure/toilet/acid,
+/obj/structure/wc/toilet/acid,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "sA" = (
@@ -2098,7 +2098,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "vt" = (
-/obj/structure/toilet/acid,
+/obj/structure/wc/toilet/acid,
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
@@ -2199,7 +2199,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "wz" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -2654,7 +2654,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "BR" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},
@@ -2693,7 +2693,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/armory)
 "Cw" = (
-/obj/structure/toilet/acid,
+/obj/structure/wc/toilet/acid,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/research)
 "CC" = (
@@ -3379,7 +3379,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/maintenance)
 "KI" = (
-/obj/structure/toilet/acid,
+/obj/structure/wc/toilet/acid,
 /obj/machinery/light/small{
 	dir = 1
 	},
@@ -3476,7 +3476,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "Lz" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},
@@ -3680,7 +3680,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Nv" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -4089,7 +4089,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "Ra" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -4325,7 +4325,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/armory)
 "Tc" = (
-/obj/structure/toilet/acid,
+/obj/structure/wc/toilet/acid,
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
@@ -4619,7 +4619,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "Ws" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -4973,7 +4973,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "ZA" = (
-/obj/structure/toilet/acid,
+/obj/structure/wc/toilet/acid,
 /obj/machinery/light/small/broken{
 	dir = 1
 	},

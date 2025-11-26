@@ -34,7 +34,6 @@
 
 #define SS_PRIORITY_TIMER          1000
 #define FIRE_PRIORITY_RUNECHAT	   410
-#define SS_PRIORITY_MAPPING		   300
 #define SS_PRIORITY_WEATHER        210
 #define SS_PRIORITY_TICKER         200
 #define SS_PRIORITY_MOB            150
@@ -51,6 +50,7 @@
 #define SS_PRIORITY_ENGINES		   89
 #define SS_PRIORITY_PIPENET        85
 #define SS_PRIORITY_AIR            70
+#define SS_PRIORITY_MAPPING		   67
 #define SS_PRIORITY_EVENT          65
 #define SS_PRIORITY_DISEASE        60
 #define SS_PRIORITY_FAST_MACHINERY 55

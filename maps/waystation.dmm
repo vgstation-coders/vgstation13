@@ -3850,7 +3850,7 @@
 /turf/simulated/wall/r_wall,
 /area/security/interrogation)
 "aVQ" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/item/weapon/reagent_containers/glass/bucket{
@@ -5749,7 +5749,7 @@
 	name = "Upper Terminal"
 	})
 "bsv" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -6023,7 +6023,7 @@
 	pixel_x = -28;
 	pixel_y = -3
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -8195,7 +8195,7 @@
 /obj/machinery/camera{
 	name = "Research Division Access"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -13756,7 +13756,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -13953,7 +13953,7 @@
 /area/hallway/primary/aft)
 "dnY" = (
 /obj/machinery/atmospherics/unary/portables_connector,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -24187,7 +24187,7 @@
 /turf/simulated/floor,
 /area/engineering/break_room)
 "fKI" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -24618,7 +24618,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/disposal)
 "fQn" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/unsimulated/floor{
@@ -24626,7 +24626,7 @@
 	},
 /area/syndicate_mothership)
 "fQw" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/effect/decal/cleanable/vomit,
@@ -24941,7 +24941,7 @@
 	},
 /area/syndicate_mothership)
 "fTG" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -29628,7 +29628,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/supply)
 "hdn" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems unspeakably filthy.";
 	dir = 4
 	},
@@ -33655,7 +33655,7 @@
 	dir = 4;
 	pixel_x = -22
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -37013,7 +37013,7 @@
 	},
 /area/centcom/living)
 "iZe" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -37886,7 +37886,6 @@
 	})
 "jkj" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_exterior";
@@ -38670,7 +38669,7 @@
 	name = "\improper Central Terminal"
 	})
 "jsM" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
@@ -39745,7 +39744,7 @@
 	one_way = 1
 	},
 /obj/structure/curtain/open/privacy,
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/structure/cable/orange{
 	d1 = 1;
 	d2 = 2;
@@ -39780,7 +39779,7 @@
 	},
 /area/centcom/test)
 "jHp" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -39922,7 +39921,7 @@
 /area/engineering/engine)
 "jJw" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -40015,7 +40014,7 @@
 	dir = 4;
 	pixel_x = -22
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -41015,7 +41014,7 @@
 	name = "Starboard Backrooms"
 	})
 "jVU" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -43982,7 +43981,7 @@
 	},
 /area/centcom/ert)
 "kGv" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -45026,7 +45025,6 @@
 /area/centcom/control)
 "kTS" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_interior";
@@ -45870,7 +45868,6 @@
 /area/centcom/ert)
 "ldB" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_goodsfloor_airlock_interior";
@@ -45964,7 +45961,7 @@
 	},
 /area/centcom/ert)
 "lei" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -48404,7 +48401,6 @@
 /area/centcom/test)
 "lJb" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_tradehall_airlock_exterior";
@@ -48701,7 +48697,7 @@
 	},
 /area/medical/genetics)
 "lNg" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -49744,7 +49740,6 @@
 	dir = 4
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_interior";
@@ -52798,7 +52793,7 @@
 	},
 /area/shuttle/trade/start)
 "mKL" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/door_control{
@@ -52816,7 +52811,7 @@
 	},
 /area/crew_quarters/toilet)
 "mKV" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/effect/landmark{
@@ -55386,7 +55381,7 @@
 /turf/space,
 /area/shuttle/escape/centcom)
 "nsJ" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
@@ -55395,7 +55390,7 @@
 	},
 /area/crew_quarters/toilet)
 "nsN" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -55506,7 +55501,7 @@
 	name = "Lower Backrooms"
 	})
 "nty" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	desc = "A sink used for washing one's hands and face. It looks rusty and home-made";
 	name = "old sink";
 	pixel_y = 28
@@ -55982,7 +55977,7 @@
 	},
 /area/centcom/control)
 "nzu" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -56189,7 +56184,6 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_exterior";
@@ -60862,7 +60856,7 @@
 	},
 /area/hallway/primary/aft)
 "oNh" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12
 	},
@@ -64571,7 +64565,7 @@
 	},
 /area/engineering/atmos)
 "pLv" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -66024,7 +66018,7 @@
 	},
 /area/vox_trading_post/trading_floor)
 "qkF" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -69116,7 +69110,7 @@
 /obj/structure/mirror{
 	pixel_y = -32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -69794,7 +69788,7 @@
 /turf/simulated/wall,
 /area/medical/surgery)
 "rOz" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -69866,7 +69860,6 @@
 	})
 "rPv" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_tradehall_airlock_interior";
@@ -70641,7 +70634,7 @@
 	name = "Upper Terminal"
 	})
 "shK" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor/vox{
@@ -71005,7 +70998,7 @@
 /turf/simulated/floor/plating,
 /area/bridge)
 "srW" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -72987,7 +72980,7 @@
 /turf/space,
 /area)
 "tmY" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/effect/glowshroom/single,
@@ -73122,7 +73115,7 @@
 /turf/simulated/floor,
 /area/security/main)
 "tqf" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -78576,7 +78569,7 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 24
 	},
 /turf/simulated/floor{
@@ -80004,7 +79997,7 @@
 	},
 /area/vox_trading_post/gardens)
 "wEj" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -80274,7 +80267,6 @@
 /area/turret_protected/tcomms_control_room)
 "wKT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_goodsfloor_airlock_exterior";

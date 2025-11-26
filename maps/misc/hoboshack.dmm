@@ -31,7 +31,7 @@
 	},
 /area/shack)
 "gK" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/machinery/light/small{
@@ -153,7 +153,7 @@
 	},
 /area/shack)
 "sE" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

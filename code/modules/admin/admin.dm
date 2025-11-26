@@ -806,6 +806,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsadmin=showailaws'>Show AI Laws</A><BR>
 			<A href='?src=\ref[src];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
 			<BR>
+			<A href='?src=\ref[src];secretsadmin=settime'>Set round time offset</A><BR>
+			<BR>
 			<BR>
 			"}
 

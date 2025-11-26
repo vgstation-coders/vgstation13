@@ -85,7 +85,7 @@
 	pixel_x = 26;
 	pixel_y = 2
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 13
 	},
@@ -152,7 +152,7 @@
 /turf/simulated/floor/plating,
 /area/shack)
 "hQ" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/machinery/light{
 	dir = 1
 	},
@@ -765,7 +765,7 @@
 /turf/unsimulated/floor/asteroid,
 /area/shack)
 "YK" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 20
 	},
 /turf/simulated/floor/wood,

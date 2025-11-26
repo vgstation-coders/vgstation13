@@ -719,7 +719,7 @@
 	},
 /area)
 "OQ" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /obj/structure/flora/ausbushes/reedbush{
 	pixel_y = 6
 	},

@@ -470,6 +470,9 @@
 	var/obj/effect/landmark/start/endpoint = null
 	for(var/obj/effect/landmark/start/S in landmarks_list)
 		if(S.name == rank)
+			if(S.override_latejoin_behavior)
+				target.forceMove(S.loc)
+				return
 			endpoint = S
 			break
 	if(!endpoint)

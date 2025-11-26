@@ -2166,7 +2166,6 @@
 	})
 "aeu" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_ext_airlock";
@@ -2510,7 +2509,7 @@
 	},
 /area/security/toilet)
 "afl" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/door_control{
@@ -3043,7 +3042,6 @@
 	})
 "agn" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_int_airlock";
@@ -3393,7 +3391,7 @@
 /obj/structure/mirror{
 	pixel_y = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 22
 	},
 /turf/simulated/floor{
@@ -3626,7 +3624,7 @@
 	},
 /area/security/perma)
 "ahw" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/structure/curtain/open/privacy,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -4100,7 +4098,7 @@
 /turf/simulated/wall,
 /area/security/perma)
 "aiu" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -17543,7 +17541,7 @@
 	},
 /area/security/interrogation)
 "aFw" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/window/reinforced,
@@ -18433,7 +18431,7 @@
 /obj/structure/mirror{
 	pixel_y = 30
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -27402,7 +27400,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/curtain/open,
@@ -28628,7 +28626,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
 "aYu" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -42562,7 +42560,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
 "bxj" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -45234,7 +45232,7 @@
 	},
 /area/crew_quarters/kitchen)
 "bCu" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -49752,7 +49750,7 @@
 	},
 /area/crew_quarters/kitchen)
 "bLk" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -50908,7 +50906,7 @@
 	dir = 4;
 	icon_state = "warning"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 32
 	},
 /turf/simulated/floor{
@@ -51437,7 +51435,7 @@
 /turf/simulated/floor/carpet,
 /area/crew_quarters/sleep)
 "bOB" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/machinery/light/small{
 	dir = 4
 	},
@@ -51454,7 +51452,7 @@
 	},
 /area/crew_quarters/toilet)
 "bOC" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/machinery/light/small{
 	dir = 4
 	},
@@ -51905,7 +51903,7 @@
 /turf/simulated/floor,
 /area/hydroponics)
 "bPv" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -52991,7 +52989,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -53146,7 +53144,7 @@
 /obj/structure/mirror{
 	pixel_x = -28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -54767,7 +54765,7 @@
 	},
 /area/chapel/main)
 "bUF" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -54925,7 +54923,7 @@
 /obj/machinery/camera{
 	name = "Research Division Access"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -55772,7 +55770,7 @@
 	},
 /area/science/hallway)
 "bWC" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -56557,7 +56555,7 @@
 	dir = 1;
 	name = "Air Scrubber (1)"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -63403,7 +63401,7 @@
 	},
 /area/medical/virology)
 "cls" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -65832,7 +65830,7 @@
 	dir = 8;
 	pixel_x = 30
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -67177,7 +67175,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTHWEST)"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -67798,7 +67796,7 @@
 	},
 /area/science/xenobiology)
 "ctg" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -71704,7 +71702,7 @@
 	},
 /area/syndicate_mothership)
 "cAq" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -71809,7 +71807,7 @@
 	},
 /area/syndicate_mothership)
 "cAU" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/unsimulated/floor{
@@ -71817,7 +71815,7 @@
 	},
 /area/syndicate_mothership)
 "cAV" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/effect/decal/cleanable/vomit,
@@ -71895,7 +71893,7 @@
 	},
 /area/syndicate_mothership)
 "cBh" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -76010,7 +76008,7 @@
 /area/centcom/test)
 "cLS" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -76269,7 +76267,7 @@
 	},
 /area/centcom/ert)
 "cMD" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -77165,7 +77163,7 @@
 	},
 /area/centcom/ert)
 "cOF" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -79003,7 +79001,7 @@
 /turf/space,
 /area/shuttle/ert/centcom)
 "cSo" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -86649,7 +86647,7 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/kitchen)
 "dtO" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -87373,7 +87371,7 @@
 	},
 /area/vox_trading_post/kitchen)
 "dve" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -87513,7 +87511,7 @@
 	},
 /area/vox_trading_post/kitchen)
 "dvw" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /turf/simulated/floor/vox{
@@ -88919,7 +88917,7 @@
 	},
 /area/vox_trading_post/dorms)
 "dyd" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -88940,7 +88938,7 @@
 	},
 /area/vox_trading_post/dorms)
 "dyf" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -89893,7 +89891,6 @@
 /area/mine/production)
 "dAr" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1333;
 	icon_state = "door_locked";
 	id_tag = "min_airlock_exterior";
@@ -89922,7 +89919,6 @@
 /area/mine/production)
 "dAu" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1333;
 	icon_state = "door_locked";
 	id_tag = "min_airlock_interior";
@@ -91493,7 +91489,7 @@
 	},
 /area/mine/living_quarters)
 "dDw" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -91543,7 +91539,7 @@
 /turf/simulated/wall,
 /area/mine/living_quarters)
 "dDC" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -92891,7 +92887,6 @@
 /area/research_outpost/gearstore)
 "dGx" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_interior";
@@ -92921,7 +92916,6 @@
 /area/research_outpost/gearstore)
 "dGA" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_exterior";
@@ -96080,7 +96074,7 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/power)
 "dLW" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2

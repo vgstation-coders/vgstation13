@@ -42,6 +42,8 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/planets = list()
 	/// All sector allocations for planets
 	var/list/allocations = list()
+	/// Whether a planet scanner is currently scanning
+	var/scanning = FALSE
 	/// Whether a planet is currently being generated
 	var/generating = FALSE
 	/// The planet currently being generated

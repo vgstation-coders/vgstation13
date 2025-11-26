@@ -822,7 +822,7 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood/dining)
 "sn" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	dir = 8;
 	pixel_x = 30
 	},
@@ -1055,7 +1055,7 @@
 	},
 /area/vault/fastfood)
 "we" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -1190,7 +1190,7 @@
 	},
 /area/vault/fastfood/misc)
 "Ap" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/structure/window/reinforced/tinted,
@@ -2106,7 +2106,7 @@
 	},
 /area/vault/fastfood/misc)
 "PW" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/structure/window/reinforced/tinted,

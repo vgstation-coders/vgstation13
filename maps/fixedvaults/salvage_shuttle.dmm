@@ -32,7 +32,7 @@
 /area/shuttle/salvage/start)
 "aW" = (
 /obj/structure/bed/roller,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

@@ -384,6 +384,7 @@
 
 	if(transit_port && get_transit_delay())
 		if(use_transit == TRANSIT_ALWAYS || (use_transit == TRANSIT_ACROSS_Z_LEVELS && (linked_area.z != destination_port.z)))
+			close_all_doors()
 			move_to_dock(transit_port)
 			spawn(max(1,get_transit_delay()-5))
 				for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)

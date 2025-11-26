@@ -64,6 +64,8 @@
 			var/obj/effect/edge_overlay/E = EO.get()
 			if(!E)
 				continue
+			if(E.turf_type!=src.type)
+				continue
 			var/turf/T = E.loc
 			if(!T)
 				continue
@@ -95,8 +97,8 @@
 				if(!istype(E))
 					continue
 				if(E.turf_type != src.type)
-					if(E.priority < edge_priority)
-						qdel(E)
+					//if(E.priority < edge_priority)
+						//qdel(E)
 					continue
 				edge = E
 				break
@@ -288,3 +290,10 @@
 	I.plane = olay_plane
 	I.layer = olay_layer + priority
 	overlays += I
+
+
+/obj/effect/edge_overlay/water
+	plane = ABOVE_OBJ_PLANE
+
+/obj/effect/edge_overlay/water/deep
+	plane = MOB_PLANE

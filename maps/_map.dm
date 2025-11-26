@@ -33,7 +33,7 @@
 	var/zDeepSpace = 6
 	var/zProcGen = 7 //temporary until dynamic z levels are implemented
 
-	var/zAdditionalStationZlevel = -1 // -1 because surely nothing will ever go to Z -1, right? why not null? because nullspace
+	var/zAdditionalStationZlevel = 0 // 0 because surely nothing will ever go to Z 0, right? why not null? because nullspace
 
 	var/skip_hobo_shack = FALSE // if true, skips hobo shack generation. set to TRUE if you want to map your own custom one for the map.
 
@@ -192,6 +192,8 @@ var/global/list/accessable_z_levels = list()
 	var/z //Number of the z-level (the z coordinate)
 	var/z_above //The linked zLevel Z above, for multiZ
 	var/z_below //Same, with below
+	var/list/transition_crosswrap_z=null // list(z_north,z_south,z_east,z_west). when you hit the edge, instead of drifting to a random zlevel or looping on the current one, teleports you to the corresponding edge on the z-level in the list.
+	var/planetside=FALSE //if the z-level is supposed to represent being on a planet, surface or underground.
 
 /datum/zLevel/proc/post_mapload()
 	return
@@ -247,6 +249,7 @@ var/global/list/accessable_z_levels = list()
 	base_area = /area/surface/snow
 	movementJammed = TRUE
 	transitionLoops = TRUE
+	planetside = TRUE
 
 //for junglestation
 /datum/zLevel/junglesurface
@@ -254,12 +257,17 @@ var/global/list/accessable_z_levels = list()
 	base_turf = /turf/unsimulated/floor/jungle/dirt
 	base_area = /area/surface/jungle/landing //hacky workaround.
 	movementJammed = TRUE
+	planetside = TRUE
 
 /datum/zLevel/jungleunderground
 	name = "jungle underground"
 	base_turf = /turf/unsimulated/floor/jungle/bedrock
 	base_area = /area/surface/jungle/underground
 	movementJammed = TRUE
+	planetside = TRUE
+
+/datum/zLevel/junglesurface/mining
+	name = "Jungle Fallen Meteor"
 
 //for Horizon
 /datum/zLevel/hyperspace

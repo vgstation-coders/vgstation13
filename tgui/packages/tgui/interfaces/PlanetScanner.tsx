@@ -38,6 +38,7 @@ type Data = {
   waiting_for_generation: boolean;
   generation_stage: number | null;
   generation_progress: number | null;
+  other_scan_in_progress: boolean;
 };
 
 const STAGE_TERRAIN = 1;
@@ -66,6 +67,7 @@ export const PlanetScanner = (props) => {
     waiting_for_generation,
     generation_stage,
     generation_progress,
+    other_scan_in_progress,
   } = data;
 
   // State for cycling through planets
@@ -315,7 +317,9 @@ export const PlanetScanner = (props) => {
                     disabled={!can_scan}
                     onClick={() => act('start_scan')}
                     tooltip={
-                      at_scan_limit
+                      other_scan_in_progress
+                        ? "A planet scan is already in progress on this station - multiple scans are disabled due to electrical infetterence."
+                        : at_scan_limit
                         ? "Maximum scans reached"
                         : `Requires ${required_energy?.toLocaleString() || 0} J of energy`
                     }

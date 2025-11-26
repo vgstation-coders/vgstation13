@@ -5,12 +5,12 @@
 	icon_living = "dino"
 	icon_dead = "dino_dead"
 	size=SIZE_BIG
-	health=80
-	maxHealth=80
-	armor=list(melee=20,bullet=30,laser=5,energy=0,bomb=0,bio=0,rad=0)
+	health=100
+	maxHealth=100
+	armor=list(melee=35,bullet=30,laser=5,energy=0,bomb=0,bio=0,rad=0)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/oogabooga
 	max_food=100
-	food_flags = ANIMAL_CARNIVORE
+	food_flags = ANIMAL_CARNIVORE | ANIMAL_FRUGIVORE
 	base_damage = 20
 	damage_variance = 5
 	behavior_flags = ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_PACK_DYNAMICS | ANIMAL_BEHAVIOR_RETALIATE | ANIMAL_BEHAVIOR_DESTRUCTIVE | ANIMAL_BEHAVIOR_AVOID_CAPTURE | ANIMAL_BEHAVIOR_TERRITORIAL
@@ -60,22 +60,22 @@
 	var/i=rand(1,3)
 	switch(i)
 		if(1)
-			emote("me", MESSAGE_SEE, "bites \the [individual].")
+			emote("me", MESSAGE_SEE, "bites \the [individual]!")
 		if(2)
-			emote("me", MESSAGE_SEE, "chomps on \the [individual].")
+			emote("me", MESSAGE_SEE, "chomps on \the [individual]!")
 		if(3)
-			emote("me", MESSAGE_SEE, "nibbles at \the [individual].")
+			emote("me", MESSAGE_SEE, "nibbles at \the [individual]!")
 
 /mob/living/complex_animal/dinosaur/get_idle_sounds()
 	if(prob(10))
 		var/i=rand(1,3)
 		switch(i)
 			if(1)
-				emote("me", MESSAGE_HEAR, "growls")
+				emote("me", MESSAGE_HEAR, "growls.")
 			if(2)
-				emote("me", MESSAGE_HEAR, "roars")
+				emote("me", MESSAGE_HEAR, "roars.")
 			if(3)
-				emote("me", MESSAGE_HEAR, "stomps")
+				emote("me", MESSAGE_HEAR, "stomps.")
 
 
 /mob/living/complex_animal/dinosaur/determine_tresspass(var/mob/trespasser)	

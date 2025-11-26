@@ -4592,6 +4592,12 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				for(var/sig in lawchanges)
 					dat += "[sig]<BR>"
 				usr << browse(HTML_SKELETON(dat), "window=lawchanges;size=800x500")
+			if("settime")
+				var/hours = input(usr,"How many hours?","Round time",0) as num
+				var/mins = input(usr,"How many minutes?","Round time",0) as num
+				var/secs = input(usr,"How many seconds?","Round time",0) as num
+
+				admin_time_offset = (hours HOURS) + (mins MINUTES) + (secs SECONDS)
 			if("list_job_debug")
 				var/dat = "<B>Job Debug info.</B><HR>"
 				if(job_master)
