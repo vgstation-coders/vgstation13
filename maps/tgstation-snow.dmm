@@ -15423,7 +15423,6 @@
 "aJW" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_interior";
@@ -15814,7 +15813,6 @@
 /area/research_outpost/gearstore)
 "aKT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_exterior";

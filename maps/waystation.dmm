@@ -37879,7 +37879,6 @@
 	})
 "jkj" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_exterior";
@@ -45019,7 +45018,6 @@
 /area/centcom/control)
 "kTS" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_interior";
@@ -45863,7 +45861,6 @@
 /area/centcom/ert)
 "ldB" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_goodsfloor_airlock_interior";
@@ -48397,7 +48394,6 @@
 /area/centcom/test)
 "lJb" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_tradehall_airlock_exterior";
@@ -49737,7 +49733,6 @@
 	dir = 4
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_interior";
@@ -56182,7 +56177,6 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_exterior";
@@ -69859,7 +69853,6 @@
 	})
 "rPv" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_tradehall_airlock_interior";
@@ -80267,7 +80260,6 @@
 /area/turret_protected/tcomms_control_room)
 "wKT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_goodsfloor_airlock_exterior";

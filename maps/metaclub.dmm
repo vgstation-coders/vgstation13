@@ -109250,7 +109250,6 @@
 "erD" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_interior";
@@ -109456,7 +109455,6 @@
 /area/mine/explored)
 "erW" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_exterior";
@@ -118511,6 +118509,15 @@
 "hgL" = (
 /turf/simulated/wall,
 /area/crew_quarters/barber)
+"hhq" = (
+/obj/machinery/door/airlock/external{
+	frequency = 1449;
+	icon_state = "door_locked";
+	id_tag = "vox_eva_airlock_interior";
+	locked = 1
+	},
+/turf/simulated/wall,
+/area/vox_trading_post/hallway)
 "hjx" = (
 /obj/structure/closet/wardrobe/orange,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -119669,7 +119676,6 @@
 	dir = 4
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_int_airlock";
@@ -122094,7 +122100,6 @@
 /area/shuttle/escape_pod3)
 "xDf" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_ext_airlock";
@@ -1235994,7 +1235999,7 @@ eaH
 eaH
 eaH
 eaH
-etd
+hhq
 etn
 ety
 etd

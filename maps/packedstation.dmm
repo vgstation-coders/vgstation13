@@ -59538,7 +59538,6 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_exterior";
@@ -59598,7 +59597,6 @@
 	dir = 4
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_interior";
@@ -60080,7 +60078,6 @@
 /area/vox_trading_post/trading_floor)
 "cAe" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_goodsfloor_airlock_interior";
@@ -60182,7 +60179,6 @@
 /area/vox_trading_post/hallway)
 "cAk" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_goodsfloor_airlock_exterior";
@@ -61504,7 +61500,6 @@
 /area/vox_trading_post/hallway)
 "cDr" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_tradehall_airlock_interior";
@@ -61603,7 +61598,6 @@
 /area/vox_trading_post/vault)
 "cDD" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_tradehall_airlock_exterior";
@@ -61798,7 +61792,6 @@
 /area/vox_trading_post/trading_floor)
 "cEb" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_exterior";
@@ -61927,7 +61920,6 @@
 /area/mine/explored)
 "cEj" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_interior";

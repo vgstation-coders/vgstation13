@@ -2166,7 +2166,6 @@
 	})
 "aeu" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_ext_airlock";
@@ -3043,7 +3042,6 @@
 	})
 "agn" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_int_airlock";
@@ -89887,7 +89885,6 @@
 /area/mine/production)
 "dAr" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1333;
 	icon_state = "door_locked";
 	id_tag = "min_airlock_exterior";
@@ -89916,7 +89913,6 @@
 /area/mine/production)
 "dAu" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1333;
 	icon_state = "door_locked";
 	id_tag = "min_airlock_interior";
@@ -92885,7 +92881,6 @@
 /area/research_outpost/gearstore)
 "dGx" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_interior";
@@ -92915,7 +92910,6 @@
 /area/research_outpost/gearstore)
 "dGA" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_exterior";

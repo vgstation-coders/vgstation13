@@ -59520,7 +59520,6 @@
 	dir = 6
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_int_airlock";
@@ -59532,7 +59531,6 @@
 /area/security/eva)
 "cdz" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_ext_airlock";

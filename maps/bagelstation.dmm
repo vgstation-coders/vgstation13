@@ -94281,7 +94281,6 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "pris_airlock_interior";
@@ -112549,7 +112548,6 @@
 	icon_state = "1-4"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "pris_airlock_exterior";

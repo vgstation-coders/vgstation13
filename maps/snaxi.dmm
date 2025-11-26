@@ -70910,7 +70910,6 @@
 /area/vox_trading_post/solars)
 "dEs" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_exterior";
@@ -70993,7 +70992,6 @@
 /area/vox_trading_post/solars)
 "dEy" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_interior";
