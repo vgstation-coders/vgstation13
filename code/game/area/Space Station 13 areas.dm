@@ -200,6 +200,10 @@ var/global/list/adminbusteleportlocs = list()
 	flags = NO_PERSISTENCE
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
+/area/shuttle/Exited(atom/movable/Obj)
+	..()
+	Obj.pixel_y = initial(Obj.pixel_y)
+
 /area/shuttle/arrival
 	name = "\improper Arrival Shuttle"
 
@@ -565,6 +569,9 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Trading Post"
 	icon_state = "yellow"
 
+/area/shuttle/exploration
+	name = "\improper Exploration Shuttle"
+	icon_state = "yellow"
 
 /area/airtunnel1/      // referenced in airtunnel.dm:759
 
@@ -2038,10 +2045,10 @@ var/global/list/adminbusteleportlocs = list()
 /area/surface/jungle/fenced
 	name = "\improper Outdoors"
 	icon_state="jungle_fenced"
-	
+
 /area/surface/jungle/underground
 	name = "\improper Underground"
-	icon_state="jungle_wild"	
+	icon_state="jungle_wild"
 
 /area/surface/jungle/underground/zoned
 	forbid_apc=FALSE
@@ -2055,10 +2062,10 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Ghetto Surgery"
 
 /area/surface/jungle/underground/zoned/ghettomining
-	name = "\improper Refinery"	
+	name = "\improper Refinery"
 
 /area/surface/jungle/underground/zoned/casino
-	name = "\improper Casino"	
+	name = "\improper Casino"
 
 /area/surface/jungle/underground/zoned/ghetto_morgue
 	name = "\improper Crypt"
@@ -2093,7 +2100,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Bazaar"
 
 /area/surface/jungle/zoned/art_zone
-	name = "\improper Portrait Zone"	
+	name = "\improper Portrait Zone"
 
 /area/surface/jungle/zoned/dump
 	name = "\improper Dump"

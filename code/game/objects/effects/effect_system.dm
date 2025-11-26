@@ -1178,3 +1178,16 @@ steam.start() -- spawns the effect
 /obj/effect/weather_holder/xeno
 	precip_overlays = list("clear","acid_rain","acid_rain_hard")
 	overlay_counts = list(1,1,1)
+
+/obj/effect/landing_zone
+	name = "landing zone"
+	icon_state = "LZ_scan"
+	density = 0
+	anchored = 1
+	mouse_opacity = 0
+	var/overlay_state = "LZ_warn"
+
+/obj/effect/landing_zone/New(loc, var/corner = FALSE)
+	. = ..()
+	if(corner)
+		overlays += image(icon, icon_state = overlay_state)

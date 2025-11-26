@@ -959,6 +959,49 @@
 		procedural_generation_panel()
 		return
 
+	else if(href_list["procgen_add_landing_zone"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_add_landing_zone"])
+		if(!planet)
+			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
+			return
+		if(!planet.allocation)
+			to_chat(usr, "<span class='warning'>This planet has no allocation!</span>")
+			return
+
+		if(SSmapping.generating && SSmapping.current_planet == planet)
+			to_chat(usr, "<span class='warning'>Planet is still generating! Please wait for generation to complete.</span>")
+			return
+
+		var/datum/allocation/alloc = planet.allocation
+
+		if(alloc.shuttle_landing_zones[/datum/shuttle/exploration])
+			to_chat(usr, "<span class='warning'>This planet already has a landing zone for the exploration shuttle!</span>")
+			procedural_generation_panel()
+			return
+
+		if(!exploration_shuttle)
+			to_chat(usr, "<span class='warning'>Exploration shuttle not found!</span>")
+			return
+
+		var/list/shuttle_size = exploration_shuttle.get_size()
+		if(!shuttle_size)
+			to_chat(usr, "<span class='warning'>Unable to determine shuttle dimensions.</span>")
+			return
+
+		var/obj/docking_port/destination/planet_surface/surface_port = SSmapping.get_shuttle_landing_zone(alloc, exploration_shuttle, shuttle_size)
+		if(!surface_port)
+			to_chat(usr, "<span class='warning'>No suitable landing zone found on [planet.planet_name]. The planet terrain may be too irregular.</span>")
+			return
+
+		exploration_shuttle.add_dock(surface_port)
+
+		message_admins("[key_name_admin(usr)] added a landing zone for the exploration shuttle on [planet.planet_name].")
+		to_chat(usr, "<span class='notice'>Landing zone successfully created on [planet.planet_name] and added to exploration shuttle.</span>")
+		procedural_generation_panel()
+		return
+
 	/////////////////////////////////////new ban stuff
 	else if(href_list["unbanf"])
 		if(!check_rights(R_BAN))

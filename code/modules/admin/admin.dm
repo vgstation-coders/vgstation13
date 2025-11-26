@@ -1012,7 +1012,7 @@ var/global/floorIsLava = 0
 	if(SSmapping.planets.len)
 		has_planets = TRUE
 		dat += "<table border='1' style='width:100%'>"
-		dat += "<tr><th>Planet Name</th><th>Planet Type</th><th>Z-Level</th><th>Sector</th><th>Weather</th><th>Time</th><th>Actions</th></tr>"
+		dat += "<tr><th>Planet Name</th><th>Planet Type</th><th>Z-Level</th><th>Sector</th><th>Weather</th><th>Time</th><th>Landing Zone</th><th>Actions</th></tr>"
 
 		// Display existing planets with their allocation data
 		for(var/datum/planet_type/planet in SSmapping.planets)
@@ -1043,6 +1043,17 @@ var/global/floorIsLava = 0
 					if(TOD_SUNSET) current_time = "Sunset"
 					if(TOD_NIGHTTIME) current_time = "Nighttime"
 
+			// Check landing zone status
+			var/landing_zone_status = ""
+			var/is_generating = SSmapping.generating && (SSmapping.current_planet == planet)
+
+			if(is_generating)
+				landing_zone_status = "<i>Generating...</i>"
+			else if(alloc.shuttle_landing_zones[/datum/shuttle/exploration])
+				landing_zone_status = "Active"
+			else
+				landing_zone_status = "<A href='?_src_=holder;procgen_add_landing_zone=\ref[planet]'>Add Landing Zone</A>"
+
 			dat += "<tr>"
 			dat += "<td>[planet_name]</td>"
 			dat += "<td>[planet.name]</td>"
@@ -1050,6 +1061,7 @@ var/global/floorIsLava = 0
 			dat += "<td>[sector]</td>"
 			dat += "<td>[current_weather] <A href='?_src_=holder;procgen_weather=\ref[planet]'>\[Change\]</A></td>"
 			dat += "<td>[current_time] <A href='?_src_=holder;procgen_time=\ref[planet]'>\[Change\]</A></td>"
+			dat += "<td>[landing_zone_status]</td>"
 			dat += "<td><A href='?_src_=holder;procgen_jump=\ref[planet]'>Jump to Planet</A> | <A href='?_src_=holder;procgen_delete=\ref[planet]'>Destroy</A></td>"
 			dat += "</tr>"
 

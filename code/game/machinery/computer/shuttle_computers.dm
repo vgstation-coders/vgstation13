@@ -329,6 +329,14 @@
 	if(!selected_port && shuttle.docking_ports.len >= 2)
 		selected_port = pick(shuttle.docking_ports - shuttle.current_port)
 
+	if(istype(selected_port, /obj/docking_port/destination/planet_surface))
+		var/obj/docking_port/destination/planet_surface/surface_port = selected_port
+		var/datum/allocation/alloc = SSmapping.get_allocation(trf = get_turf(surface_port))
+		if(istype(alloc))
+			var/list/shuttle_size = shuttle.get_size()
+			if(shuttle_size)
+				SSmapping.spawn_lz_warnings(alloc, shuttle, shuttle_size, surface_port)
+
 	//Send a message to the shuttle to move
 	shuttle.travel_to(selected_port, src, user)
 

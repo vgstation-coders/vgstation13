@@ -660,17 +660,32 @@ var/datum/subsystem/mapping/SSmapping
  *
  * Arguments:
  * * alloc - The planet allocation to search within
+ * * shuttle - The shuttle that needs a landing zone
  * * size - List containing [width, height] of the landing area needed
  *
  * Returns:
- * * The top-left turf of a suitable landing zone, or null if no valid location found
+ * * An associative list with "port_turf" (where to place docking port) and "port_dir" (direction for port), or null if no valid location found
  */
-/datum/subsystem/mapping/proc/get_landing_zone(var/datum/allocation/alloc,var/list/size)
-	if (!alloc || !size || size.len != 2)
+/datum/subsystem/mapping/proc/get_landing_zone(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size)
+	if (!alloc || !shuttle || !size || size.len != 2)
 		return null
+	if(!shuttle.linked_port)
+		return null
+
 	var/x_dim = size[1]
 	var/y_dim = size[2]
 	var/list/turf/search_turfs = turfs_from_sector(alloc.sector, alloc.z)
+
+	// Calculate shuttle bounds and docking port offset
+	var/low_x = world.maxx
+	var/low_y = world.maxy
+	for(var/turf/T in shuttle.linked_area)
+		if(T.x < low_x)
+			low_x = T.x
+		if(T.y < low_y)
+			low_y = T.y
+	var/port_offset_x = shuttle.linked_port.x - low_x
+	var/port_offset_y = shuttle.linked_port.y - low_y
 
 	// Get sector boundaries to calculate relative positions
 	var/list/bounds = get_sector_bounds(alloc.sector)
@@ -725,7 +740,25 @@ var/datum/subsystem/mapping/SSmapping
 					found = FALSE
 
 		if (found)
-			return T  // Return top-left turf of matching rectangle
+			// Calculate the destination docking port position
+			// The port goes at the shuttle's bottom-left + port offset, then shifted one turf in the shuttle port's direction
+			var/port_x = T.x + port_offset_x
+			var/port_y = T.y + port_offset_y
+			var/turf/port_base_turf = locate(port_x, port_y, alloc.z)
+			var/turf/port_turf = get_step(port_base_turf, shuttle.linked_port.dir)
+
+			// The destination port direction is opposite to the shuttle's port direction
+			var/port_dir = turn(shuttle.linked_port.dir, 180)
+
+			// Add landing zone overlays to all turfs the shuttle will occupy
+			for(var/dx = 0; dx < x_dim; dx++)
+				for(var/dy = 0; dy < y_dim; dy++)
+					var/turf/overlay_turf = locate(T.x + dx, T.y + dy, alloc.z)
+					if(overlay_turf)
+						var/is_corner = (dx == 0 || dx == x_dim - 1) && (dy == 0 || dy == y_dim - 1)
+						new /obj/effect/landing_zone(overlay_turf, corner = is_corner)
+
+			return list("port_turf" = port_turf, "port_dir" = port_dir)
 
 	return null
 
@@ -751,20 +784,27 @@ var/datum/subsystem/mapping/SSmapping
 	// Check if this shuttle already has a landing zone on this planet
 	if(alloc.shuttle_landing_zones[shuttle.type])
 		var/obj/docking_port/existing_port = alloc.shuttle_landing_zones[shuttle.type]
-		if(existing_port && existing_port.loc) // Make sure it still exists
+		if(existing_port?.loc) // Make sure it still exists
+			spawn_lz_warnings(alloc, shuttle, size, existing_port)
 			return existing_port
 		else
 			// Clean up dead reference
 			alloc.shuttle_landing_zones -= shuttle.type
 
-	// Find a new landing zone
-	var/turf/landing_zone = get_landing_zone(alloc, size)
-	if(!landing_zone)
+	// Find a new landing zone - now returns port placement info
+	var/list/landing_info = get_landing_zone(alloc, shuttle, size)
+	if(!landing_info)
 		return null
 
-	// Create and register the landing zone
-	var/obj/docking_port/destination/planet_surface/surface_port = new(landing_zone)
-	surface_port.dir = NORTH
+	var/turf/port_turf = landing_info["port_turf"]
+	var/port_dir = landing_info["port_dir"]
+
+	if(!port_turf)
+		return null
+
+	// Create and register the landing zone at the correct position
+	var/obj/docking_port/destination/planet_surface/surface_port = new(port_turf)
+	surface_port.dir = port_dir
 	surface_port.areaname = "[alloc.ptype.planet_name] surface"
 
 	// Set the base turf type for proper surface restoration when shuttles depart
@@ -776,6 +816,61 @@ var/datum/subsystem/mapping/SSmapping
 
 	return surface_port
 
+/datum/subsystem/mapping/proc/spawn_lz_warnings(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size, var/obj/docking_port/port)
+	if(!alloc || !shuttle || !size || !port)
+		return
+
+	var/x_dim = size[1]
+	var/y_dim = size[2]
+
+	var/low_x = world.maxx
+	var/low_y = world.maxy
+	for(var/turf/T in shuttle.linked_area)
+		if(T.x < low_x)
+			low_x = T.x
+		if(T.y < low_y)
+			low_y = T.y
+	var/port_offset_x = shuttle.linked_port.x - low_x
+	var/port_offset_y = shuttle.linked_port.y - low_y
+
+	// The shuttle's docking port will end up at the turf the destination port points to
+	var/turf/shuttle_port_turf = get_step(get_turf(port), port.dir)
+	var/bottom_left_x = shuttle_port_turf.x - port_offset_x
+	var/bottom_left_y = shuttle_port_turf.y - port_offset_y
+
+	for(var/dx = 0; dx < x_dim; dx++)
+		for(var/dy = 0; dy < y_dim; dy++)
+			var/turf/overlay_turf = locate(bottom_left_x + dx, bottom_left_y + dy, alloc.z)
+			if(overlay_turf)
+				var/is_corner = (dx == 0 || dx == x_dim - 1) && (dy == 0 || dy == y_dim - 1)
+				new /obj/effect/landing_zone(overlay_turf, corner = is_corner)
+
+/datum/subsystem/mapping/proc/clear_lz_warnings(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size, var/obj/docking_port/port)
+	if(!alloc || !shuttle || !size || !port)
+		return
+
+	var/x_dim = size[1]
+	var/y_dim = size[2]
+
+	var/low_x = world.maxx
+	var/low_y = world.maxy
+	for(var/turf/T in shuttle.linked_area)
+		if(T.x < low_x)
+			low_x = T.x
+		if(T.y < low_y)
+			low_y = T.y
+	var/port_offset_x = shuttle.linked_port.x - low_x
+	var/port_offset_y = shuttle.linked_port.y - low_y
+
+	var/turf/shuttle_port_turf = get_step(get_turf(port), port.dir)
+	var/bottom_left_x = shuttle_port_turf.x - port_offset_x
+	var/bottom_left_y = shuttle_port_turf.y - port_offset_y
+
+	for(var/dx = 0; dx < x_dim; dx++)
+		for(var/dy = 0; dy < y_dim; dy++)
+			var/turf/overlay_turf = locate(bottom_left_x + dx, bottom_left_y + dy, alloc.z)
+			for(var/obj/effect/landing_zone/overlay in overlay_turf)
+				qdel(overlay)
 /**
  * # Allocation Datum
  *

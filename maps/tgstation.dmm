@@ -42788,15 +42788,9 @@
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
 "bDE" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/hallway/secondary/entry)
+/obj/structure/closet/emcloset/vox,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "bDF" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -43743,13 +43737,7 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "bFt" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
 "bFu" = (
@@ -46827,13 +46815,9 @@
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
 "bLa" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/hallway/secondary/entry)
+/obj/structure/closet/firecloset/full,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "bLb" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -114601,6 +114585,10 @@
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
+"fit" = (
+/obj/machinery/firealarm,
+/turf/simulated/wall/shuttle,
+/area/shuttle/exploration)
 "fiZ" = (
 /obj/structure/table,
 /turf/simulated/floor{
@@ -114685,6 +114673,10 @@
 	icon_state = "whitegreen"
 	},
 /area/medical/virology)
+"gjv" = (
+/obj/structure/rack,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "gka" = (
 /obj/machinery/air_sensor{
 	frequency = 1443;
@@ -114696,6 +114688,16 @@
 	oxygen = 0.01
 	},
 /area/research_outpost/atmos)
+"gnk" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/obj/structure/shuttle/engine/propulsion{
+	dir = 4;
+	layer = 2
+	},
+/turf/space,
+/area/shuttle/exploration)
 "goC" = (
 /obj/structure/cable/yellow{
 	d1 = 2;
@@ -114832,6 +114834,12 @@
 	oxygen = 0.01
 	},
 /area/research_outpost/atmos)
+"hCv" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/space,
+/area/shuttle/exploration)
 "hGd" = (
 /obj/item/beacon,
 /turf/simulated/floor{
@@ -114851,6 +114859,10 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
+"hRD" = (
+/obj/machinery/suit_storage_unit,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "hVM" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -114919,6 +114931,9 @@
 	icon_state = "whitegreen"
 	},
 /area/medical/medbay)
+"ira" = (
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "itc" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -114971,6 +114986,14 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
+"iFp" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
+"iFG" = (
+/obj/machinery/light,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "iGm" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/cable/yellow{
@@ -115009,6 +115032,10 @@
 	icon_state = "white"
 	},
 /area/research_outpost/hallway)
+"iVv" = (
+/obj/structure/closet/emcloset,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "jfn" = (
 /obj/structure/disposalpipe/junction{
 	dir = 4;
@@ -115232,6 +115259,9 @@
 	icon_state = "dark"
 	},
 /area/gateway)
+"mlu" = (
+/turf/simulated/wall/shuttle,
+/area/shuttle/exploration)
 "mmK" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
@@ -115249,6 +115279,10 @@
 	icon_state = "white"
 	},
 /area/medical/medbay)
+"mCS" = (
+/obj/item/device/radio/intercom,
+/turf/simulated/wall/shuttle,
+/area/shuttle/exploration)
 "mGN" = (
 /obj/structure/disposalpipe/junction{
 	dir = 8;
@@ -115276,9 +115310,19 @@
 	oxygen = 0
 	},
 /area/engineering/atmos)
+"mTI" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/space,
+/area)
 "mUP" = (
 /turf/simulated/wall,
 /area/medical/patient_room2)
+"nbq" = (
+/obj/structure/bed/chair,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "npJ" = (
 /obj/machinery/door/poddoor/glass{
 	id_tag = "medsuits";
@@ -115299,6 +115343,16 @@
 /obj/abstract/map/spawner/maint,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
+"nxs" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/obj/structure/shuttle/engine/propulsion{
+	dir = 4;
+	layer = 2
+	},
+/turf/space,
+/area/shuttle/exploration)
 "nzq" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -115361,6 +115415,10 @@
 	toxins = 70000
 	},
 /area/engineering/atmos)
+"nZM" = (
+/obj/structure/closet/medical_wall,
+/turf/simulated/wall/shuttle,
+/area/shuttle/exploration)
 "obs" = (
 /turf/simulated/wall,
 /area/storage/art)
@@ -115390,6 +115448,12 @@
 /obj/structure/sign/biohazard,
 /turf/simulated/wall,
 /area/medical/virology_break)
+"orF" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "osN" = (
 /obj/structure/table,
 /obj/item/device/radio{
@@ -115446,6 +115510,15 @@
 /obj/structure/grille,
 /turf/space,
 /area/engineering/engine)
+"oRW" = (
+/obj/machinery/door/airlock/external{
+	name = "Arrival Airlock"
+	},
+/obj/docking_port/destination/exploration/station{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/hallway/secondary/entry)
 "oZU" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -115583,6 +115656,10 @@
 /obj/structure/catwalk,
 /turf/space,
 /area/maintenance/virology_maint)
+"qkZ" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/space,
+/area/shuttle/exploration)
 "qmk" = (
 /obj/machinery/door/airlock/maintenance{
 	req_access_txt = "12"
@@ -115678,6 +115755,19 @@
 	icon_state = "white"
 	},
 /area/medical/patient_room2)
+"qTt" = (
+/obj/machinery/door/airlock/external{
+	name = "Arrival Airlock"
+	},
+/obj/docking_port/shuttle{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
+"qWU" = (
+/obj/machinery/computer/shuttle_control/exploration,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "qYv" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 1
@@ -115698,6 +115788,10 @@
 /obj/structure/sign/poster,
 /turf/simulated/wall,
 /area/crew_quarters/hop)
+"rwU" = (
+/obj/structure/rack/crate_shelf,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "rxd" = (
 /obj/structure/bed/chair/office/light{
 	dir = 8
@@ -115712,6 +115806,11 @@
 	icon_state = "white"
 	},
 /area/medical/patient_room2)
+"rxn" = (
+/obj/machinery/suit_storage_unit,
+/obj/machinery/light,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "rxp" = (
 /obj/machinery/door/airlock/external{
 	name = "N2O Miner Access";
@@ -115757,6 +115856,11 @@
 	icon_state = "dark"
 	},
 /area/vox_trading_post/trade_processing)
+"rWW" = (
+/obj/structure/table,
+/obj/item/weapon/storage/lockbox/diskettebox,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "rYm" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -115930,6 +116034,10 @@
 	icon_state = "red"
 	},
 /area/hallway/primary/fore)
+"tYb" = (
+/obj/machinery/sleeper,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "ubR" = (
 /obj/item/trash/cigbutt,
 /obj/item/trash/cigbutt{
@@ -116050,6 +116158,13 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/plating,
 /area/storage/art)
+"uBM" = (
+/obj/structure/table,
+/obj/machinery/door_control{
+	id_tag = "exploration"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "uCb" = (
 /obj/structure/table,
 /obj/machinery/camera{
@@ -116112,6 +116227,13 @@
 	icon_state = "white"
 	},
 /area/medical/patient_room2)
+"uPL" = (
+/obj/machinery/door/airlock/hatch,
+/obj/machinery/door/poddoor{
+	id_tag = "exploration"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "uRA" = (
 /obj/machinery/atmospherics/unary/vent_pump/high_volume{
 	canSpawnMice = 0;
@@ -116156,6 +116278,12 @@
 	},
 /turf/simulated/floor/wood,
 /area/library)
+"vaf" = (
+/obj/structure/bed/chair/shuttle/blue{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "vaF" = (
 /obj/item/weapon/storage/fancy/vials{
 	pixel_x = -2;
@@ -116373,6 +116501,12 @@
 	tag = "icon-showroomfloor (NORTH)"
 	},
 /area/storage/art)
+"wue" = (
+/obj/structure/table,
+/obj/item/weapon/storage/firstaid/regular,
+/obj/item/device/healthanalyzer,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "wJa" = (
 /obj/machinery/disease2/incubator,
 /turf/simulated/floor{
@@ -116384,6 +116518,19 @@
 /obj/item/trash/cigbutt,
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
+"wQS" = (
+/obj/machinery/suit_storage_unit,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
+"wRB" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "wVB" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -116424,6 +116571,13 @@
 	icon_state = "whitegreen"
 	},
 /area/medical/virology)
+"xhJ" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/obj/machinery/door/poddoor{
+	id_tag = "exploration"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "xjj" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -116505,6 +116659,10 @@
 	},
 /turf/simulated/floor/plating,
 /area/medical/virology)
+"xJj" = (
+/obj/machinery/vending/wallmed1,
+/turf/simulated/wall/shuttle,
+/area/shuttle/exploration)
 "xRn" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -116554,6 +116712,25 @@
 	icon_state = "grimy"
 	},
 /area/crew_quarters/bar)
+"xZZ" = (
+/obj/structure/closet,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "yal" = (
 /obj/structure/bed/chair/comfy/black{
 	dir = 4
@@ -116568,6 +116745,10 @@
 	icon_state = "asteroidfloor"
 	},
 /area/mine/explored)
+"ygF" = (
+/obj/item/mounted/frame/soundsystem,
+/turf/simulated/wall/shuttle,
+/area/shuttle/exploration)
 "yhl" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/cable/yellow{
@@ -171568,7 +171749,7 @@ aaa
 aaa
 aaa
 aaa
-aaa
+mTI
 aaa
 aaa
 aaa
@@ -176096,11 +176277,11 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+hCv
+xhJ
+xhJ
+xhJ
+qkZ
 aaa
 aaa
 aaa
@@ -176598,11 +176779,11 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+mlu
+uBM
+qWU
+rWW
+mlu
 aaa
 aaa
 aaa
@@ -177100,11 +177281,11 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+ygF
+wRB
+vaf
+iFG
+mlu
 aaa
 aaa
 aaa
@@ -177601,13 +177782,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+hCv
+mlu
+ira
+hRD
+ira
+mlu
+qkZ
 aaa
 aaa
 aaa
@@ -178103,13 +178284,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+mlu
+bLa
+ira
+ira
+ira
+iFp
+mlu
 aaa
 aaa
 aaa
@@ -178605,13 +178786,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+uPL
+ira
+ira
+ira
+ira
+ira
+uPL
 aaa
 aaa
 aaa
@@ -179107,13 +179288,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+mlu
+bDE
+ira
+ira
+ira
+iVv
+mlu
 aaa
 aaa
 aaa
@@ -179609,13 +179790,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+gnk
+mCS
+nbq
+ira
+orF
+fit
+nxs
 aaa
 aaa
 aaa
@@ -180112,11 +180293,11 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+mlu
+wQS
+ira
+rxn
+mlu
 aaa
 aaa
 aaa
@@ -180613,13 +180794,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+hCv
+mlu
+nbq
+ira
+orF
+mlu
+qkZ
 aaa
 aaa
 aaa
@@ -181115,13 +181296,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+xJj
+wue
+ira
+ira
+ira
+rwU
+mlu
 aaa
 aaa
 aaa
@@ -181617,13 +181798,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+nZM
+ira
+ira
+ira
+ira
+gjv
+mlu
 aaa
 aaa
 aaa
@@ -182119,13 +182300,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+mlu
+tYb
+ira
+ira
+ira
+xZZ
+mlu
 aaa
 aaa
 aaa
@@ -182621,13 +182802,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaj
-aaa
-aaa
-aaa
-aaa
-aaa
+gnk
+mlu
+wQS
+ira
+rxn
+mlu
+nxs
 aaa
 aaa
 aaa
@@ -183124,11 +183305,11 @@ aaa
 aaa
 aaa
 aaa
-aaj
-aaj
-aaa
-aaa
-aaa
+gnk
+mlu
+qTt
+mlu
+nxs
 aaa
 aaa
 aaa
@@ -183626,10 +183807,10 @@ aaa
 aaa
 aaa
 aaa
-aMW
-aaj
 aaa
-aaa
+bFt
+oRW
+bFt
 aaa
 aaa
 aaa
@@ -184128,10 +184309,10 @@ aaa
 aaa
 aaa
 aaa
-aAY
-aaj
 aaa
-aaa
+bFt
+aKh
+bFt
 aaa
 aaa
 aaa
@@ -184630,11 +184811,11 @@ aaa
 aaa
 aaa
 aaa
-bDE
+aAY
 bFt
+aNa
 bFt
-bFt
-bLa
+aAY
 aaa
 aaa
 aaa
@@ -185132,11 +185313,11 @@ aaa
 aaa
 aaa
 aaa
-aIP
+aAY
 bFu
 aKi
 bIZ
-aIQ
+bDD
 aaa
 aaa
 aaa

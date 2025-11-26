@@ -323,6 +323,8 @@
 	if(broadcast)
 		broadcast.announce("The shuttle has received your message and will be sent [time].")
 
+	animate_liftoff()
+
 	destination_port = D
 	last_moved = world.time
 	moving = 1
@@ -359,6 +361,7 @@
 						to_chat(user, "[A.name] is preventing the shuttle from departing.")
 				moving = 0
 				destination_port = null
+				reset_visuals()
 				return
 			for(var/atom/movable/AA in linked_area)
 				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "to_z" = D.z, "from_z" = linked_port.z)
@@ -390,13 +393,86 @@
 				for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
 					spawn()
 						P.shoot_exhaust()
+			animate_transit()
 			sleep(get_transit_delay())
 
 	if(destination_port)
+		animate_landing()
 		move_to_dock(destination_port)
 		destination_port = null
 
 	moving = 0
+
+/datum/shuttle/proc/animate_liftoff()
+	var/variation = rand(2,5)
+	for(var/atom/A in linked_area.contents)
+		var/skip = FALSE
+		if(istype(A,/obj/structure/shuttle/engine/heater))
+			var/obj/structure/shuttle/engine/heater/H = A
+			H.activate()
+		if(istype(A,/mob))
+			var/mob/M = A
+			M << sound("sound/machines/hyperspace_begin.ogg", repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE, volume = 75)
+		if(istype(A,/turf))
+			var/turf/T = A
+			for(var/obj/O in T.contents)
+				if(istype(O,/obj/structure/shuttle/diag_wall))
+					skip = TRUE
+					break
+		if(skip)
+			continue
+		var/base_y = initial(A.pixel_y) + 5
+		animate(A, pixel_y = base_y, time = 5, easing = SINE_EASING | EASE_OUT)
+		animate(pixel_y = base_y + variation, time = 10, easing = SINE_EASING, loop = -1)
+		animate(pixel_y = base_y - variation, time = 10, easing = SINE_EASING)
+		animate(pixel_y = base_y + variation, time = 10, easing = SINE_EASING)
+
+/datum/shuttle/proc/animate_transit()
+	var/variation = rand(2,5)
+	for(var/atom/A in linked_area.contents)
+		var/skip = FALSE
+		A.pixel_y = initial(A.pixel_y)
+		if(istype(A,/mob))
+			var/mob/M = A
+			M << sound("sound/machines/hyperspace_progress.ogg", repeat = 0, wait = 1, channel = CHANNEL_AMBIENCE, volume = 75)
+		if(istype(A,/turf))
+			var/turf/T = A
+			for(var/obj/O in T.contents)
+				if(istype(O,/obj/structure/shuttle/diag_wall))
+					skip = TRUE
+					break
+		if(skip)
+			continue
+		var/base_y = initial(A.pixel_y)
+		animate(A, pixel_y = base_y , time = 10, easing = SINE_EASING, loop = -1)
+		animate(pixel_y = base_y - variation, time = 10, easing = SINE_EASING)
+		animate(pixel_y = base_y + variation, time = 10, easing = SINE_EASING)
+
+/datum/shuttle/proc/animate_landing()
+	for(var/atom/A in linked_area.contents)
+		var/skip = FALSE
+		if(istype(A,/mob))
+			var/mob/M = A
+			M << sound("sound/machines/hyperspace_end.ogg", repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE, volume = 75)
+		if(istype(A,/turf))
+			var/turf/T = A
+			for(var/obj/O in T.contents)
+				if(istype(O,/obj/structure/shuttle/diag_wall))
+					skip = TRUE
+					break
+		if(skip)
+			continue
+		A.pixel_y = 10
+		animate(A, pixel_y = initial(A.pixel_y) , time = 10, easing = SINE_EASING)
+	reset_visuals()
+
+/datum/shuttle/proc/reset_visuals()
+	for(var/atom/A in linked_area.contents)
+		if(istype(A,/obj/structure/shuttle/engine/heater))
+			var/obj/structure/shuttle/engine/heater/H = A
+			H.deactivate()
+		animate(A)
+		A.pixel_y = initial(A.pixel_y)
 
 //This is the proc you want to use to FORCE a shuttle to move. It always moves it, unless the shuttle or its area don't exist. Transit is skipped, after_flight() is called
 /datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0, var/rotate_after = 0) //A direct proc with no bullshit
@@ -729,6 +805,9 @@
 			new_turf.ChangeTurf(old_turf.type, allow = 1)
 		new_turfs[C] = new_turf
 
+		old_turf.pixel_y = initial(old_turf.pixel_y)
+		new_turf.pixel_y = old_turf.pixel_y
+
 		//***Remove old turf from shuttle's area****
 
 		refill_area.contents.Add(old_turf)
@@ -883,6 +962,11 @@
 			T.vis_contents -= WH
 		for(var/obj/effect/edge_overlay/E in T)
 			qdel(E)
+
+	//Kill all lz warning effects
+	var/obj/docking_port/port = dest_allocation.shuttle_landing_zones[src.type]
+	var/size = get_size()
+	SSmapping.clear_lz_warnings(dest_allocation, src, size, port)
 
 	return 1
 
