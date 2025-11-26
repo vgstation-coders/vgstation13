@@ -122,7 +122,7 @@ export const PlanetScanner = (props) => {
             </Stack.Item>
           )}
 
-          {powered && anchored && (
+          {!!powered && anchored && (
             <>
               <Stack.Item>
                 <Section title="Scanner Status">
