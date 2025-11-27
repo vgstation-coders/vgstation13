@@ -404,7 +404,7 @@
 	moving = 0
 
 /datum/shuttle/proc/animate_liftoff()
-	var/variation = rand(2,5)
+	var/variation = rand(1,2)
 	for(var/atom/A in linked_area.contents)
 		var/skip = FALSE
 		if(istype(A,/obj/structure/shuttle/engine/heater))
@@ -425,10 +425,9 @@
 		animate(A, pixel_y = base_y, time = 5, easing = SINE_EASING | EASE_OUT)
 		animate(pixel_y = base_y + variation, time = 10, easing = SINE_EASING, loop = -1)
 		animate(pixel_y = base_y - variation, time = 10, easing = SINE_EASING)
-		animate(pixel_y = base_y + variation, time = 10, easing = SINE_EASING)
 
 /datum/shuttle/proc/animate_transit()
-	var/variation = rand(2,5)
+	var/variation = rand(1,2)
 	for(var/atom/A in linked_area.contents)
 		var/skip = FALSE
 		A.pixel_y = initial(A.pixel_y)
@@ -444,7 +443,7 @@
 		if(skip)
 			continue
 		var/base_y = initial(A.pixel_y)
-		animate(A, pixel_y = base_y , time = 10, easing = SINE_EASING, loop = -1)
+		animate(A, pixel_y = base_y , time = 10, easing = SINE_EASING|EASE_OUT, loop = -1)
 		animate(pixel_y = base_y - variation, time = 10, easing = SINE_EASING)
 		animate(pixel_y = base_y + variation, time = 10, easing = SINE_EASING)
 
@@ -462,9 +461,10 @@
 					break
 		if(skip)
 			continue
-		A.pixel_y = 10
-		animate(A, pixel_y = initial(A.pixel_y) , time = 10, easing = SINE_EASING)
-	reset_visuals()
+		A.pixel_y = 5
+		animate(A, pixel_y = initial(A.pixel_y), time = 10, easing = SINE_EASING|EASE_OUT)
+	spawn(15)
+		reset_visuals()
 
 /datum/shuttle/proc/reset_visuals()
 	for(var/atom/A in linked_area.contents)
