@@ -1,0 +1,62 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/template_noop)
+"g" = (
+/obj/machinery/space_heater/campfire{
+	burntime = 5
+	},
+/obj/machinery/cooking/grill/spit,
+/turf/unsimulated/floor/jungle/dirt,
+/area/ruin/surface)
+"D" = (
+/obj/structure/flora/ausbushes/fullgrass,
+/turf/template_noop,
+/area/template_noop)
+"E" = (
+/obj/structure/flora/ausbushes/brflowers,
+/turf/template_noop,
+/area/template_noop)
+"M" = (
+/turf/unsimulated/floor/jungle/dirt,
+/area/ruin/surface)
+"N" = (
+/obj/structure/flora/ausbushes/stalkybush,
+/turf/template_noop,
+/area/template_noop)
+
+(1,1,1) = {"
+E
+a
+D
+a
+N
+"}
+(2,1,1) = {"
+a
+E
+M
+D
+a
+"}
+(3,1,1) = {"
+a
+M
+g
+M
+a
+"}
+(4,1,1) = {"
+a
+D
+M
+a
+D
+"}
+(5,1,1) = {"
+N
+a
+a
+D
+a
+"}

@@ -1,0 +1,79 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/effect/decal/mecha_wreckage/vehicle/tractor,
+/obj/item/key/tractor{
+	name = "cargo tractor key";
+	vin = "CARGO_TRACTORS";
+	pixel_x = -3;
+	pixel_y = 11
+	},
+/turf/unsimulated/floor/jungle/dirt,
+/area/ruin/surface)
+"f" = (
+/obj/structure/flora/ausbushes/sparsegrass,
+/turf/template_noop,
+/area/template_noop)
+"i" = (
+/obj/machinery/cart/cargo{
+	dir = 4
+	},
+/obj/item/clothing/gloves/yellow,
+/obj/structure/closet/crate,
+/obj/abstract/map/spawner/assistant/tools,
+/obj/abstract/map/spawner/assistant/materials,
+/turf/unsimulated/floor/jungle/dirt,
+/area/ruin/surface)
+"q" = (
+/obj/effect/landmark/corpse/assistant,
+/turf/template_noop,
+/area/ruin/surface)
+"D" = (
+/obj/structure/flora/ausbushes/fullgrass,
+/turf/template_noop,
+/area/template_noop)
+"M" = (
+/obj/structure/flora/tree/shitty,
+/turf/unsimulated/floor/jungle/dirt,
+/area/ruin/surface)
+"O" = (
+/obj/structure/flora/ausbushes/sunnybush,
+/turf/template_noop,
+/area/template_noop)
+"S" = (
+/obj/structure/flora/ausbushes/genericbush,
+/turf/template_noop,
+/area/template_noop)
+"V" = (
+/turf/template_noop,
+/area/template_noop)
+
+(1,1,1) = {"
+V
+D
+V
+"}
+(2,1,1) = {"
+D
+V
+O
+"}
+(3,1,1) = {"
+V
+i
+V
+"}
+(4,1,1) = {"
+V
+a
+q
+"}
+(5,1,1) = {"
+O
+M
+f
+"}
+(6,1,1) = {"
+S
+V
+V
+"}

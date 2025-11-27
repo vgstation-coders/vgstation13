@@ -1,0 +1,344 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/template_noop)
+"b" = (
+/obj/structure/grille,
+/obj/structure/window{
+	dir = 1
+	},
+/obj/structure/window{
+	dir = 8
+	},
+/obj/structure/window{
+	dir = 4
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"c" = (
+/mob/living/complex_animal/frog,
+/turf/template_noop,
+/area/template_noop)
+"d" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/wood,
+/area/ruin)
+"e" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/turf/simulated/floor/wood,
+/area/ruin)
+"i" = (
+/obj/structure/flora/jungle_berries,
+/turf/template_noop,
+/area/template_noop)
+"j" = (
+/obj/structure/flora/ausbushes/lavendergrass,
+/turf/template_noop,
+/area/template_noop)
+"l" = (
+/obj/item/weapon/stool/bar,
+/turf/template_noop,
+/area/ruin/surface)
+"n" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola{
+	pixel_x = -7
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola{
+	pixel_y = 6;
+	pixel_x = 9
+	},
+/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle,
+/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle,
+/turf/simulated/floor/wood,
+/area/ruin)
+"q" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka{
+	pixel_x = -6
+	},
+/obj/item/weapon/reagent_containers/food/drinks/bottle/limejuice{
+	pixel_x = 7
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"r" = (
+/obj/structure/flora/ausbushes/grassybush,
+/turf/template_noop,
+/area/template_noop)
+"t" = (
+/mob/living/complex_animal/parrot{
+	builtin_phrases = list("Hi.","Hello!","Cracker?","BAWWWWK george mellons griffing me!","Give me a drink, bartender.","Another round!","What the hell am I drinking?","And stay out!","No tabs - cash up front!");
+	name = "Mallory";
+	mob_max_age = 45000;
+	food_per_tick = 0.0
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"u" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/bottle/tequila{
+	pixel_x = 4
+	},
+/obj/item/weapon/reagent_containers/food/drinks/bottle/rum{
+	pixel_x = -9
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"v" = (
+/obj/structure/table/woodentable,
+/turf/simulated/floor/wood,
+/area/ruin)
+"w" = (
+/turf/simulated/floor/wood,
+/area/ruin)
+"x" = (
+/obj/structure/flora/ausbushes/sunnybush,
+/turf/template_noop,
+/area/template_noop)
+"A" = (
+/obj/structure/flora/ausbushes/ppflowers,
+/turf/template_noop,
+/area/template_noop)
+"E" = (
+/obj/structure/closet/crate/freezer,
+/obj/item/ice_crystal,
+/obj/item/ice_crystal,
+/obj/item/ice_crystal,
+/obj/item/ice_crystal,
+/obj/item/ice_crystal,
+/obj/item/ice_crystal,
+/obj/item/ice_crystal,
+/turf/simulated/floor/wood,
+/area/ruin)
+"F" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/spacecash/c10,
+/obj/item/weapon/spacecash/c10,
+/obj/item/weapon/spacecash/c10,
+/turf/simulated/floor/wood,
+/area/ruin)
+"I" = (
+/obj/structure/flora/ausbushes/leafybush,
+/turf/template_noop,
+/area/template_noop)
+"J" = (
+/obj/structure/flora/ausbushes/grassybush,
+/mob/living/complex_animal/frog,
+/turf/template_noop,
+/area/template_noop)
+"L" = (
+/turf/simulated/wall/mineral/wood,
+/area/ruin)
+"M" = (
+/obj/structure/flora/ausbushes/leafybush,
+/mob/living/complex_animal/frog,
+/turf/template_noop,
+/area/template_noop)
+"Q" = (
+/obj/structure/grille,
+/obj/structure/window{
+	dir = 8
+	},
+/obj/structure/window{
+	dir = 4
+	},
+/obj/structure/window,
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"U" = (
+/obj/structure/hanging_lantern/dim,
+/turf/simulated/floor/wood,
+/area/ruin)
+"V" = (
+/turf/template_noop,
+/area/ruin/surface)
+"Y" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/shaker{
+	pixel_x = -7
+	},
+/obj/item/weapon/reagent_containers/food/drinks/shaker{
+	pixel_x = 11
+	},
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"Z" = (
+/obj/structure/reagent_dispensers/brewerybeerkeg/contraband,
+/obj/structure/table/woodentable,
+/turf/simulated/floor/wood,
+/area/ruin)
+
+(1,1,1) = {"
+a
+I
+I
+a
+a
+a
+I
+J
+a
+a
+x
+a
+x
+"}
+(2,1,1) = {"
+a
+a
+a
+M
+I
+a
+a
+a
+a
+a
+a
+x
+x
+"}
+(3,1,1) = {"
+a
+a
+L
+L
+d
+L
+L
+b
+Q
+L
+V
+a
+x
+"}
+(4,1,1) = {"
+j
+a
+L
+e
+w
+q
+L
+Y
+w
+v
+l
+a
+a
+"}
+(5,1,1) = {"
+a
+j
+L
+n
+w
+u
+L
+e
+w
+F
+l
+a
+a
+"}
+(6,1,1) = {"
+j
+a
+L
+E
+w
+w
+d
+t
+w
+v
+l
+c
+a
+"}
+(7,1,1) = {"
+a
+c
+L
+w
+w
+U
+L
+b
+Q
+L
+V
+a
+A
+"}
+(8,1,1) = {"
+a
+j
+L
+Z
+Z
+Z
+L
+i
+i
+i
+a
+A
+A
+"}
+(9,1,1) = {"
+j
+a
+L
+L
+L
+L
+L
+i
+a
+a
+a
+a
+a
+"}
+(10,1,1) = {"
+a
+a
+a
+a
+A
+a
+a
+c
+a
+A
+a
+a
+a
+"}
+(11,1,1) = {"
+j
+a
+a
+a
+a
+a
+r
+r
+A
+a
+a
+a
+a
+"}

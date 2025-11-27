@@ -1,0 +1,173 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/template_noop)
+"b" = (
+/obj/structure/fence/corner,
+/turf/template_noop,
+/area/ruin/surface)
+"k" = (
+/turf/template_noop,
+/area/ruin/surface)
+"l" = (
+/obj/structure/fence/door/opened,
+/turf/template_noop,
+/area/ruin/surface)
+"p" = (
+/obj/structure/fence/corner{
+	dir = 1
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"r" = (
+/obj/structure/fence,
+/turf/template_noop,
+/area/ruin/surface)
+"t" = (
+/obj/item/stack/rods,
+/turf/template_noop,
+/area/ruin/surface)
+"u" = (
+/obj/item/weapon/corncob,
+/turf/template_noop,
+/area/template_noop)
+"w" = (
+/obj/abstract/map/nest/deer,
+/turf/template_noop,
+/area/ruin/surface)
+"A" = (
+/obj/structure/fence/cut/large,
+/turf/template_noop,
+/area/ruin/surface)
+"C" = (
+/obj/structure/fence/corner{
+	dir = 8
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"E" = (
+/obj/machinery/atmospherics/unary/tank/empty{
+	desc = "An old pressure tank repressurized to store corn.";
+	name = "deer feeder"
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"I" = (
+/obj/structure/fence/cut/large{
+	dir = 4
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"M" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"Q" = (
+/obj/item/weapon/reagent_containers/food/snacks/grown/corn{
+	icon = 'icons/obj/hydroponics/corn.dmi';
+	pixel_x = 3;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/snacks/grown/corn{
+	icon = 'icons/obj/hydroponics/corn.dmi';
+	pixel_x = -2;
+	pixel_y = 3
+	},
+/obj/item/weapon/reagent_containers/food/snacks/grown/corn{
+	icon = 'icons/obj/hydroponics/corn.dmi'
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"V" = (
+/obj/item/weapon/corncob,
+/turf/template_noop,
+/area/ruin/surface)
+"W" = (
+/obj/structure/fence/corner{
+	dir = 4
+	},
+/turf/template_noop,
+/area/ruin/surface)
+
+(1,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+C
+r
+r
+r
+A
+p
+a
+"}
+(3,1,1) = {"
+a
+M
+V
+k
+k
+V
+I
+a
+"}
+(4,1,1) = {"
+a
+M
+k
+w
+k
+k
+l
+a
+"}
+(5,1,1) = {"
+a
+M
+k
+E
+Q
+k
+t
+a
+"}
+(6,1,1) = {"
+a
+I
+V
+k
+V
+k
+t
+u
+"}
+(7,1,1) = {"
+a
+W
+r
+A
+r
+r
+b
+a
+"}
+(8,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+"}

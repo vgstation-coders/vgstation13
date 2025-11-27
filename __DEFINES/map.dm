@@ -17,14 +17,15 @@
 #define BIOME_WARM_CAVE "warm_cave"
 #define BIOME_HOT_CAVE "hot_cave"
 
-#define LOOT_TYPE_BEACH (1<<0)
-#define LOOT_TYPE_DESERT (1<<1)
-#define LOOT_TYPE_GRASS (1<<2)
-#define LOOT_TYPE_JUNGLE (1<<3)
-#define LOOT_TYPE_LAVA (1<<4)
-#define LOOT_TYPE_SNOW (1<<5)
-#define LOOT_TYPE_URBAN (1<<6)
-#define LOOT_TYPE_XENO (1<<7)
+#define RUIN_TYPE_GENERIC 	(1<<0)
+#define RUIN_TYPE_SNOW 		(1<<1)
+#define RUIN_TYPE_JUNGLE 	(1<<2)
+#define RUIN_TYPE_TROPICAL 	(1<<3)
+#define RUIN_TYPE_LAVA 		(1<<4)
+#define RUIN_TYPE_URBAN 	(1<<5)
+#define RUIN_TYPE_XENO 		(1<<6)
+#define RUIN_TYPE_WET 		(1<<7)
+#define RUIN_TYPE_GREEBLE	(1<<8)
 
 #define SECTOR_SIZE 100 //max width/height of a sector in turfs. temporary - will be dynamic later
 #define RUIN_PLACEMENT_PADDING 5 // Padding around ruins when placing them in sectors to avoid edge issues
