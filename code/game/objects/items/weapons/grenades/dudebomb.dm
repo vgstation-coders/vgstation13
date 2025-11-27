@@ -23,7 +23,7 @@
 		if(ishuman(M))
 			var/mob/living/carbon/human/GOGOGOGOGOGO = M
 			if(!GOGOGOGOGOGO.stat)
-				GOGOGOGOGOGO.say("Yeah, Gal O Sengen.")
+				GOGOGOGOGOGO.say("Yeah, Gal-O Sengen.")
 			spawn(2 SECONDS)
 				var/turf/T = get_turf(GOGOGOGOGOGO)
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,null,anim_plane = MOB_PLANE)
