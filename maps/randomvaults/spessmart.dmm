@@ -1406,7 +1406,7 @@
 /turf/simulated/floor/engine,
 /area/vault/supermarket/restricted)
 "dc" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/effect/decal/cleanable/blood/drip,
@@ -1906,7 +1906,7 @@
 	},
 /area/vault/supermarket/entrance)
 "ew" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 1
 	},
 /obj/machinery/newscaster{
@@ -1924,7 +1924,7 @@
 /obj/structure/mirror{
 	pixel_x = -32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2

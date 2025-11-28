@@ -23,7 +23,7 @@
 	var/delay_spraying = TRUE // Whether to delay the next attack after using it
 
 	//! List of things to avoid spraying on close range. TODO Remove snowflake, handle this in every attackby() properly.
-	var/list/ignore_spray_types = list(/obj/item/weapon/storage, /obj/structure/table, /obj/structure/rack, /obj/structure/closet, /obj/structure/sink)
+	var/list/ignore_spray_types = list(/obj/item/weapon/storage, /obj/structure/table, /obj/structure/rack, /obj/structure/closet, /obj/structure/wc/sink)
 
 /obj/item/weapon/reagent_containers/spray/New()
 	..()

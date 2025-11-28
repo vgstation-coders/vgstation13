@@ -264,7 +264,12 @@ var/MAX_EXPLOSION_RANGE = 32
 
 //turf-only flags
 #define NOJAUNT			(1)
-#define NO_MINIMAP  	(1<<1)//Invisible to minimaps (fuck minimaps)
+#define NO_MINIMAP  	(1<<1) //Invisible to minimaps (fuck minimaps)
+#define NO_LAVA_GEN 	(1<<2) // Blocks lava rivers being generated on the turf
+#define NO_RUINS 		(1<<3) // Blocks ruins spawning on the turf
+#define NO_FLORA 		(1<<4) // Prevents plants from growing
+#define NO_LOOT 		(1<<5) // No loot spawning here
+#define DEFER_EDGING	(1<<6) // Skip adding edges on init
 
 //turf edge flags
 #define EDGE_CARDINAL		1<<1 // edges on cardinals only
@@ -273,9 +278,13 @@ var/MAX_EXPLOSION_RANGE = 32
 #define EDGE_THREEFOLD		1<<4 // inside of two inner corners
 #define ALL_EDGES EDGE_CARDINAL|EDGE_OUTER_DIAGONAL|EDGE_INNER_DIAGONAL|EDGE_THREEFOLD
 
-#define SAND_EDGE_PRIORITY			1
-#define GRASS_EDGE_PRIORITY			2
-#define ROCK_EDGE_PRIORITY			3
+
+#define CAVE_FLOOR_EDGE_PRIORITY	1
+#define SAND_EDGE_PRIORITY			2
+#define GRASS_EDGE_PRIORITY			3
+#define ROCK_EDGE_PRIORITY			4
+#define WATER_EDGE_PRIORITY			5
+#define DEEPWATER_EDGE_PRIORITY		6
 
 //slots
 #define slot_back 			1
@@ -615,6 +624,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define CANPARALYSE		(1<<2)
 #define CANPUSH			(1<<3)
 #define UNPACIFIABLE 	(1<<4)		//Immune to pacify effects.
+#define PACIFIED	 	(1<<5)
 
 #define GODMODE			(1<<12)
 #define FAKEDEATH		(1<<13)	//Replaces stuff like changeling.changeling_fakedeath

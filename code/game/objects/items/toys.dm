@@ -46,9 +46,11 @@
 		if(istype(A, /obj/structure/reagent_dispensers/watertank))
 			A.reagents.trans_to(src, 10)
 			to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
-		else if(istype(A,/obj/structure/sink))
-			reagents.add_reagent(WATER, 10)
-			to_chat(user, "<span class = 'notice'>You fill the balloon using \the [A].</span>")
+		else if(istype(A,/obj/structure/wc/sink))
+			var/obj/structure/wc/sink/S = A
+			if(S.watersource && !S.watersource.reagents.is_empty())
+				S.watersource.reagents.trans_to(src, 10)
+				to_chat(user, "<span class = 'notice'>You fill the balloon using \the [A].</span>")
 		src.desc = "A translucent balloon with some form of liquid sloshing around in it."
 		src.update_icon()
 	return

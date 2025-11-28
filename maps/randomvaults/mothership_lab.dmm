@@ -69,7 +69,7 @@
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "aR" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -491,7 +491,7 @@
 	},
 /area/vault/mothership_lab/control_room)
 "iG" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -947,7 +947,7 @@
 /turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/entrance)
 "nL" = (
-/obj/structure/toilet/acid{
+/obj/structure/wc/toilet/acid{
 	dir = 4
 	},
 /turf/unsimulated/floor/lab_sterile,
@@ -1286,7 +1286,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/entrance)
 "tf" = (
-/obj/structure/toilet/acid{
+/obj/structure/wc/toilet/acid{
 	dir = 8
 	},
 /obj/machinery/light/small{
@@ -1640,7 +1640,7 @@
 /obj/structure/mirror{
 	pixel_x = 28
 	},
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},
@@ -2730,7 +2730,7 @@
 	},
 /area/vault/mothership_lab/control_room)
 "PC" = (
-/obj/structure/toilet/acid{
+/obj/structure/wc/toilet/acid{
 	dir = 8
 	},
 /turf/unsimulated/floor/lab_sterile,

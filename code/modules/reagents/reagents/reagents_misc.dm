@@ -433,12 +433,10 @@ var/procizine_tolerance = 0
 				to_chat(M, "<span class='notice'>You hear a ticking sound</span>")
 			else
 				to_chat(M, "<span class='notice'>You hear a tocking sound</span>")
-	if((floor(world.time / (1 HOURS)) + 1) > currentHour)
-		if(!currentHour)
-			currentHour = floor(world.time / (1 HOURS)) + 1
-		else
+	if((floor(get_round_time() / (1 HOURS)) + 1) > currentHour)
+		if(currentHour)
 			punctualiteExplode(M)
-			currentHour = floor(world.time / (1 HOURS)) + 1
+		currentHour = floor(get_round_time() / (1 HOURS)) + 1
 
 /datum/reagent/punctualite/proc/punctualiteExplode(var/mob/living/H)
 	var/bigBoom = 0

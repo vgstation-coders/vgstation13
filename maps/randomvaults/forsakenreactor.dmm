@@ -149,7 +149,7 @@
 	},
 /area/vault/forsakenreactor)
 "bO" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 1
 	},
@@ -1869,7 +1869,7 @@
 /turf/simulated/floor/airless,
 /area/vault/forsakenreactor)
 "zI" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 1
 	},
@@ -2307,7 +2307,7 @@
 /turf/simulated/floor/plating,
 /area/vault/forsakenreactor)
 "HB" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2

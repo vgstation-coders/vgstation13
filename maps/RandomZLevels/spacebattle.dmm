@@ -2674,7 +2674,7 @@
 	},
 /area/awaymission/spacebattle/cruiser)
 "ic" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2778,7 +2778,7 @@
 	},
 /area/awaymission/spacebattle/syndicate7)
 "is" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

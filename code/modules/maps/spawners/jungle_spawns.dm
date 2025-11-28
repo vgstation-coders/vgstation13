@@ -34,6 +34,8 @@ var/list/junglemobs_passive_rare=list(
 	else
 		amount=rand(2,5)
 		to_spawn = pick(junglemobs_hostile)
+		if(to_spawn==/mob/living/complex_animal/panther) //being carnivores only, they need a bit of help to get the population ball rolling. also they spread out a lot.
+			amount+=2
 	..()
 
 

@@ -1204,7 +1204,7 @@
 	},
 /area/awaymission/wwgov)
 "dB" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /mob/living/simple_animal/hostile/creature,
 /turf/simulated/floor{
 	icon_state = "white";
@@ -1814,7 +1814,7 @@
 /turf/simulated/floor,
 /area/awaymission/wwrefine)
 "fe" = (
-/obj/structure/sink,
+/obj/structure/wc/sink,
 /turf/simulated/floor/wood,
 /area/awaymission/wwmines)
 "ff" = (
@@ -1907,13 +1907,13 @@
 /turf/simulated/floor,
 /area/awaymission/wwrefine)
 "fp" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 1
 	},
 /turf/simulated/floor/wood,
 /area/awaymission/wwmines)
 "fq" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 1
 	},
 /obj/item/ammo_storage/speedloader/a357,

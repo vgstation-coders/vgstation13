@@ -90,7 +90,7 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 				freq_config_data[index] -= 1
 		if(JUKE_SHUFFLE)
 			if(IsIndexCut(JUKE_SHUFFLE))
-				J.allowed_modes = list(2 = "Single", 3 = "Once")
+				J.allowed_modes = list(null,"Single","Once")
 				J.loop_mode = JUKEMODE_PLAY_ONCE //Dammit Comic you're relentless there's no reason to define something for one use
 			else
 				J.allowed_modes = loopModeNames.Copy()

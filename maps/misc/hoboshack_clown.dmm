@@ -230,7 +230,7 @@
 	},
 /area/shack)
 "lM" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4;
 	name = "competitive shitting player 1";
 	color = "#FF0000"
@@ -549,7 +549,7 @@
 	},
 /area/shack)
 "Dk" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /obj/abstract/map/paint_coat{
 	color = "#FFFF00";
 	alpha = 200
@@ -1066,7 +1066,7 @@
 /obj/structure/mirror{
 	pixel_y = -31
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8;
 	name = "competitive shitting player 2";
 	color = "#0000FF"

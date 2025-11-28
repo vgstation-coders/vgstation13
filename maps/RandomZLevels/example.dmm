@@ -476,7 +476,7 @@
 /turf/simulated/floor/plating,
 /area/awaymission/example)
 "bs" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 12
 	},
 /obj/machinery/light/small{
@@ -556,7 +556,7 @@
 	},
 /area/awaymission/example)
 "bD" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2

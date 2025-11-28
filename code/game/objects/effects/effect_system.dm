@@ -1112,3 +1112,69 @@ steam.start() -- spawns the effect
 
 		if(dmglevel<4)
 			holder.ex_act(dmglevel)
+
+//Weather Holders
+/obj/effect/weather_holder
+	name = "weather holder"
+	desc = "you shouldn't see this"
+	density = 0
+	anchored = 1
+	plane = ABOVE_TURF_PLANE
+	mouse_opacity = 0
+	var/datum/climate/parent_climate = null
+	var/list/precip_overlays = list()
+	var/list/overlay_counts = list()
+	var/overlay_icon = 'icons/turf/weatherfx.dmi'
+
+/obj/effect/weather_holder/New(var/datum/climate/climate_ref = null)
+	..()
+	parent_climate = climate_ref
+	if(map && parent_climate && parent_climate.current_weather)
+		UpdatePrecipitation(parent_climate.current_weather.precip_intensity)
+	else
+		UpdatePrecipitation(WEATHER_CALM)
+
+/obj/effect/weather_holder/proc/UpdatePrecipitation(var/weather_state)
+	var/cache_key = "[type]_[weather_state]"
+	if(!precip_state_to_texture[cache_key])
+		cache_weather_tile(weather_state)
+	appearance = precip_state_to_texture[cache_key]
+
+/obj/effect/weather_holder/proc/cache_weather_tile(var/weather_state)
+	overlays.Cut()
+	for(var/i = 1 to overlay_counts[weather_state+1])
+		var/image/precipfx = image(overlay_icon, "[precip_overlays[weather_state+1]][i]", SNOW_OVERLAY_LAYER)
+		precipfx.plane = EFFECTS_PLANE
+		overlays += precipfx
+	var/cache_key = "[type]_[weather_state]"
+	precip_state_to_texture[cache_key] = appearance
+
+/obj/effect/weather_holder/blizzard
+	precip_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
+	overlay_counts = list(2,2,2,3)
+
+/obj/effect/weather_holder/blizzard/heavy
+
+/obj/effect/weather_holder/temperate
+	precip_overlays = list("clear","rain_average","rain_hard","rain_storm")
+	overlay_counts = list(1,1,1,3)
+
+/obj/effect/weather_holder/tropical
+	precip_overlays = list("clear","rain_average","rain_average","rain_storm")
+	overlay_counts = list(1,1,1,3)
+
+/obj/effect/weather_holder/desert
+	precip_overlays = list("clear","dust","sand","clear")
+	overlay_counts = list(1,2,3,1)
+
+/obj/effect/weather_holder/lava
+	precip_overlays = list("clear","ash","ash_storm")
+	overlay_counts = list(1,2,1)
+
+/obj/effect/weather_holder/fallout
+	precip_overlays = list("clear","rad","rad_storm","toxic_rain","toxic_rain_hard")
+	overlay_counts = list(1,1,1,1,1)
+
+/obj/effect/weather_holder/xeno
+	precip_overlays = list("clear","acid_rain","acid_rain_hard")
+	overlay_counts = list(1,1,1)

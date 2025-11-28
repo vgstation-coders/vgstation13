@@ -200,7 +200,7 @@
 /obj/structure/wetdryvac/MouseDropFrom(var/obj/O, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!can_use(usr,O))
 		return
-	if(istype(O,/obj/structure/sink))
+	if(istype(O,/obj/structure/wc/sink))
 		if(!reagents.total_volume)
 			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
 			return
@@ -249,12 +249,6 @@
 		else if(P.wet == TURF_WET_WATER)
 			reagents.add_reagent(WATER,1)
 		qdel(P)
-	for(var/obj/effect/ash/A in T)
-		if(reagents.is_full())
-			visible_message(span_warning("\The [src] sputters, wet tank full!"))
-			break
-		reagents.add_reagent(CARBON,1)
-		qdel(A)
 	T.clean_blood()
 	for(var/obj/item/trash/R in T)
 		if(trash.len >= max_trash)

@@ -221,7 +221,7 @@
 /turf/simulated/floor/holofloor/grass,
 /area/holodeck/source_zoo)
 "aH" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /turf/simulated/floor/holofloor/grass,
 /area/holodeck/source_zoo)
 "aI" = (
@@ -1128,7 +1128,7 @@
 	},
 /area/holodeck/source_checkers)
 "dt" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /obj/structure/flora/ausbushes/reedbush{
 	pixel_y = 6
 	},

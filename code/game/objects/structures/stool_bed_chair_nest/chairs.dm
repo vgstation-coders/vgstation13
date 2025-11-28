@@ -169,7 +169,7 @@
 		if(!M.knockdown)	//Spam prevention
 			M.visible_message(\
 				"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
-				"Having no butt, you slide right out of the [src]",\
+				"Having no butt, you slide right out of the [src].",\
 				"You hear metal clanking.")
 
 			M.Knockdown(5)

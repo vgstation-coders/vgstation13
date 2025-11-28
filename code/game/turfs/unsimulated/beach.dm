@@ -1,6 +1,7 @@
 /turf/unsimulated/beach
 	name = "Beach"
 	icon = 'icons/misc/beach.dmi'
+	plane = PLATING_PLANE
 
 /turf/unsimulated/beach/New()
 	..()
@@ -54,17 +55,20 @@ var/obj/effect/beach_water/unsimmed/BWU
 /turf/unsimulated/beach/water/deep
 	name = "deep water"
 	density = 1
+	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT
 
 /turf/unsimulated/beach/sandbar
 	name = "sandbar"
 	desc = "Very shallow water that conceals a layer of sand."
 	icon_state = "sandbar"
+	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT
 
 /turf/unsimulated/beach/shallows
 	name = "Shallows"
 	desc = "Shallow water that you can submerge in only waist deep."
 	icon_state = "water"
 	var/image/water
+	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT
 
 /turf/unsimulated/beach/shallows/New()
 	..()

@@ -1,0 +1,343 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/structure/fence/corner{
+	dir = 1
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"b" = (
+/obj/machinery/suspension_gen{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"d" = (
+/obj/item/trash/bowl,
+/obj/item/trash/soda_cans{
+	pixel_x = 10;
+	pixel_y = 9
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"e" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/device/measuring_tape,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"h" = (
+/obj/structure/fence/door,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/tape/engineering{
+	icon_state = "engineering_door"
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"j" = (
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"k" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"l" = (
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/pickaxe/plasmacutter,
+/turf/template_noop,
+/area/ruin/surface)
+"o" = (
+/obj/structure/closet/crate,
+/obj/item/weapon/pickaxe,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/clothing/gloves/latex,
+/obj/item/clothing/glasses/scanner/science,
+/turf/template_noop,
+/area/ruin/surface)
+"q" = (
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/storage/box/excavation,
+/obj/item/weapon/pickaxe/excavationdrill,
+/turf/template_noop,
+/area/ruin/surface)
+"r" = (
+/obj/structure/bed/chair/folding{
+	dir = 8
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"u" = (
+/obj/machinery/floodlight,
+/turf/template_noop,
+/area/ruin/surface)
+"v" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid{
+	color = "#a37552"
+	},
+/area/ruin/surface)
+"w" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/bone{
+	pixel_x = -7;
+	pixel_y = 7
+	},
+/turf/unsimulated/floor/asteroid{
+	color = "#a37552"
+	},
+/area/ruin/surface)
+"y" = (
+/obj/machinery/floodlight,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"A" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/fossil/bone,
+/turf/unsimulated/floor/asteroid{
+	color = "#a37552"
+	},
+/area/ruin/surface)
+"B" = (
+/obj/structure/table,
+/obj/item/device/flashlight/lantern,
+/turf/template_noop,
+/area/ruin/surface)
+"E" = (
+/obj/structure/bed/chair/folding,
+/turf/template_noop,
+/area/ruin/surface)
+"F" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/trash/liquidfood,
+/turf/template_noop,
+/area/ruin/surface)
+"G" = (
+/obj/structure/bed/chair/folding{
+	dir = 4
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"H" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/template_noop,
+/area/ruin/surface)
+"I" = (
+/obj/structure/largecrate,
+/turf/template_noop,
+/area/ruin/surface)
+"K" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/bone,
+/obj/item/stack/sheet/bone{
+	pixel_x = 5;
+	pixel_y = -3
+	},
+/turf/unsimulated/floor/asteroid{
+	color = "#a37552"
+	},
+/area/ruin/surface)
+"L" = (
+/obj/structure/fence/corner,
+/turf/template_noop,
+/area/ruin/surface)
+"M" = (
+/obj/structure/bed/chair/folding{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/template_noop,
+/area/ruin/surface)
+"P" = (
+/obj/item/weapon/pickaxe/shovel,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"Q" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"S" = (
+/obj/structure/fence,
+/turf/template_noop,
+/area/ruin/surface)
+"T" = (
+/obj/structure/bed/chair/folding{
+	dir = 1
+	},
+/turf/template_noop,
+/area/ruin/surface)
+"V" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/remains/human,
+/turf/unsimulated/floor/asteroid{
+	color = "#a37552"
+	},
+/area/ruin/surface)
+"W" = (
+/obj/structure/anomaly_container,
+/obj/machinery/artifact,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"X" = (
+/turf/template_noop,
+/area/ruin/surface)
+"Y" = (
+/obj/effect/decal/cleanable/campfire,
+/obj/effect/decal/cleanable/dirt,
+/turf/template_noop,
+/area/ruin/surface)
+"Z" = (
+/obj/structure/table,
+/obj/item/device/depth_scanner,
+/obj/item/weapon/book/manual/excavation{
+	pixel_x = 1;
+	pixel_y = 8
+	},
+/turf/template_noop,
+/area/ruin/surface)
+
+(1,1,1) = {"
+a
+S
+S
+S
+S
+S
+a
+X
+X
+X
+X
+X
+X
+X
+"}
+(2,1,1) = {"
+Q
+k
+j
+W
+b
+b
+Q
+X
+G
+G
+X
+X
+X
+X
+"}
+(3,1,1) = {"
+Q
+k
+j
+k
+k
+j
+Q
+E
+B
+l
+X
+X
+X
+X
+"}
+(4,1,1) = {"
+Q
+k
+k
+A
+V
+k
+Q
+E
+Z
+q
+X
+M
+d
+X
+"}
+(5,1,1) = {"
+Q
+y
+k
+K
+v
+k
+h
+H
+X
+H
+X
+Y
+T
+X
+"}
+(6,1,1) = {"
+Q
+k
+e
+V
+A
+j
+Q
+o
+H
+X
+X
+r
+F
+X
+"}
+(7,1,1) = {"
+Q
+j
+k
+v
+w
+k
+Q
+o
+X
+X
+X
+X
+X
+X
+"}
+(8,1,1) = {"
+Q
+j
+j
+k
+k
+P
+Q
+I
+X
+X
+X
+X
+X
+X
+"}
+(9,1,1) = {"
+L
+S
+S
+S
+S
+S
+L
+u
+X
+X
+X
+X
+X
+X
+"}

@@ -1199,7 +1199,7 @@
 "zt" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/cobweb2,
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /turf/simulated/floor/plating{
@@ -1533,7 +1533,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/vomit/pre_dry,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 13;
 	pixel_y = -1

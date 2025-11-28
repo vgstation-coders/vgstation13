@@ -154,7 +154,7 @@
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "aC" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -902,7 +902,7 @@
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "cR" = (
-/obj/structure/sink/kitchen,
+/obj/structure/wc/sink/kitchen,
 /turf/simulated/wall/invulnerable/r_wall,
 /area/vault/assistantlair)
 "cS" = (

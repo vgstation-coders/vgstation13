@@ -358,6 +358,10 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/friedegg
 
+/datum/recipe/friedeggalt
+	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1, EGGYOLK = 4) //one egg worth
+	result = /obj/item/weapon/reagent_containers/food/snacks/friedegg
+
 /datum/recipe/boiledegg
 	reagents = list(WATER = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)

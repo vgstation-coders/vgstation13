@@ -38,13 +38,12 @@
 
 
 /turf/unsimulated/floor/grass
+	name = "grass"
 	icon_state = "grass1"
 	base_icon_state = "grass"
 	min_icon_states = 2
 	max_icon_states = 4
 	variance = 50
-	edge_priority = GRASS_EDGE_PRIORITY
-	edge_flags = ALL_EDGES
 
 /turf/unsimulated/floor/grass/New()
 	..()
@@ -120,3 +119,8 @@
 /turf/unsimulated/floor/brimstone/Destroy()
 	overlays.Cut()
 	..()
+
+
+/turf/unsimulated/floor/brimstone/mob_life_effects(mob/living/affected)
+	affected.FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
+	affected.ignite() // ffffFIRE!!!! FIRE!!! FIRE!!

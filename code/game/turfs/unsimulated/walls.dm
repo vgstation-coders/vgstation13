@@ -40,8 +40,14 @@
 	name = "unnaturally hard ice wall"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "snow_rock"
-	edge_flags = EDGE_CARDINAL
-	edge_priority = ROCK_EDGE_PRIORITY
+
+/turf/unsimulated/wall/rock/ice/New()
+	..()
+	var/image/img = image('icons/turf/rock_overlay.dmi', "snow_rock_overlay",layer = SIDE_LAYER)
+	img.pixel_x = -4*PIXEL_MULTIPLIER
+	img.pixel_y = -4*PIXEL_MULTIPLIER
+	img.plane = BELOW_TURF_PLANE
+	overlays += img
 
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)

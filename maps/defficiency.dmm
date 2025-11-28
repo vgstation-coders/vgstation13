@@ -5714,7 +5714,7 @@
 	},
 /area/medical/virology)
 "alX" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -6168,7 +6168,7 @@
 	},
 /area/medical/virology)
 "amT" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -6611,7 +6611,7 @@
 	},
 /area/medical/virology)
 "anO" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -7863,7 +7863,7 @@
 	},
 /area/medical/medbay)
 "aql" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -13983,7 +13983,7 @@
 	},
 /area/medical/paramedics)
 "aBy" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -15633,7 +15633,7 @@
 	},
 /area/science/storage)
 "aEC" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -15943,7 +15943,7 @@
 	},
 /area/medical/cmo)
 "aFb" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{
@@ -17051,7 +17051,7 @@
 	},
 /area/medical/cmo)
 "aGT" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -21660,7 +21660,7 @@
 	},
 /area/medical/surgery)
 "aPi" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -21784,7 +21784,7 @@
 /turf/simulated/wall,
 /area/security/checkpoint/medical)
 "aPs" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -22757,7 +22757,7 @@
 	},
 /area/hydroponics)
 "aRn" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -24722,7 +24722,7 @@
 	},
 /area/hydroponics)
 "aUO" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -25588,7 +25588,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
 "aWq" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -26135,7 +26135,7 @@
 	pixel_x = 26;
 	pixel_y = -8
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -26934,7 +26934,7 @@
 /obj/structure/mirror{
 	pixel_x = -28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -28143,7 +28143,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 10
 	},
 /turf/simulated/floor{
@@ -28874,7 +28874,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "bcq" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -29581,7 +29581,7 @@
 	},
 /area/crew_quarters/kitchen)
 "bdJ" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor{
@@ -34318,7 +34318,7 @@
 	},
 /obj/structure/cable/yellow,
 /obj/structure/disposalpipe/segment,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -36338,7 +36338,7 @@
 	},
 /area/science/xenobiology)
 "bpj" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -36388,7 +36388,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -36396,7 +36396,7 @@
 	},
 /area/science/rd)
 "bpo" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -36460,7 +36460,7 @@
 	},
 /area/science/hallway)
 "bpt" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -38893,7 +38893,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "btU" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -43644,7 +43644,7 @@
 	name = "Aft Port Derelict"
 	})
 "bCE" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -44778,7 +44778,7 @@
 /obj/effect/decal/remains/human{
 	desc = "They look like human remains. It smells like pain and dissapointment."
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -44820,7 +44820,7 @@
 "bEU" = (
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
 	pixel_y = 32
 	},
@@ -44853,7 +44853,7 @@
 	name = "Aft Port Derelict"
 	})
 "bEX" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -44870,7 +44870,7 @@
 "bEY" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/generic,
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
 	pixel_y = 32
 	},
@@ -44885,7 +44885,7 @@
 	icon_state = "gib6"
 	},
 /obj/item/tool/crowbar,
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
 	pixel_y = 32
 	},
@@ -44951,7 +44951,7 @@
 /turf/simulated/wall/r_wall,
 /area/turret_protected/ai)
 "bFf" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -45300,7 +45300,7 @@
 	name = "Aft Port Derelict"
 	})
 "bFU" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -45848,7 +45848,7 @@
 	dir = 1
 	},
 /obj/item/weapon/newspaper,
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -45891,7 +45891,7 @@
 	pixel_x = 8;
 	pixel_y = -8
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -46932,7 +46932,7 @@
 	name = "Aft Port Derelict"
 	})
 "bJg" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -47844,7 +47844,7 @@
 /obj/effect/decal/cleanable/cobweb,
 /obj/effect/decal/cleanable/vomit,
 /obj/item/weapon/broken_bottle,
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -54835,7 +54835,7 @@
 "bYO" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/cigbutt,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -57156,7 +57156,7 @@
 /area/derelictparts/medbay)
 "cdv" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -57600,7 +57600,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/fitness)
 "ceu" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 27
 	},
 /obj/effect/decal/cleanable/generic,
@@ -58194,7 +58194,7 @@
 	name = "Aft Starboard Derelict"
 	})
 "cfH" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 27
 	},
 /turf/simulated/floor{
@@ -59160,7 +59160,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "chJ" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 1
 	},
@@ -59176,7 +59176,7 @@
 	name = "Aft Starboard Derelict"
 	})
 "chK" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 1
 	},
@@ -59890,7 +59890,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/vault)
 "cjo" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 27
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -59917,7 +59917,7 @@
 	},
 /area/maintenance/vault)
 "cjq" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 27
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -60167,7 +60167,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "cjO" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
@@ -60176,7 +60176,7 @@
 	},
 /area/crew_quarters/locker)
 "cjP" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
@@ -60218,7 +60218,7 @@
 	},
 /area/crew_quarters/locker)
 "cjU" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -60926,7 +60926,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "clh" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -61650,7 +61650,7 @@
 	},
 /area/crew_quarters/locker)
 "cmD" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -61822,7 +61822,7 @@
 	},
 /area/derelictparts/medbay)
 "cmR" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/structure/window/reinforced/tinted{
@@ -61837,7 +61837,7 @@
 /turf/simulated/wall,
 /area/derelictparts/aft)
 "cmT" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -61965,7 +61965,7 @@
 /obj/machinery/light_construct/small{
 	dir = 8
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 1
 	},
@@ -61984,7 +61984,7 @@
 /turf/simulated/wall,
 /area/maintenance/vault)
 "cnj" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 1
 	},
@@ -62019,7 +62019,7 @@
 	dir = 8
 	},
 /obj/effect/decal/cleanable/generic,
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 1
 	},
@@ -62223,7 +62223,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "cnF" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -62735,7 +62735,7 @@
 	},
 /area/crew_quarters/locker)
 "coJ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -62845,7 +62845,7 @@
 	},
 /area/security/prison)
 "coX" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor{
@@ -64559,13 +64559,13 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/structure/mirror{
 	pixel_y = 30
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -64985,7 +64985,7 @@
 	name = "Aft Starboard Derelict"
 	})
 "cto" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -64995,7 +64995,7 @@
 	},
 /area/security/brig)
 "ctp" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /turf/simulated/floor{
@@ -68893,7 +68893,7 @@
 /turf/simulated/floor/carpet,
 /area/crew_quarters/hop)
 "cBu" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -68942,7 +68942,7 @@
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
 "cBz" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -77692,7 +77692,6 @@
 	})
 "cQv" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_int_airlock";
@@ -77710,7 +77709,6 @@
 	})
 "cQw" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_ext_airlock";
@@ -81269,7 +81267,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -81663,7 +81661,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/astarboardsolar)
 "cXs" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -83875,7 +83873,7 @@
 /turf/unsimulated/floor,
 /area/syndicate_mothership)
 "dck" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/unsimulated/floor{
@@ -83959,7 +83957,7 @@
 	},
 /area/syndicate_mothership)
 "dcw" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -87883,7 +87881,7 @@
 /area/centcom/test)
 "dmN" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -88172,7 +88170,7 @@
 	},
 /area/centcom/ert)
 "dnC" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -89092,7 +89090,7 @@
 	},
 /area/centcom/ert)
 "dpH" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -90900,7 +90898,7 @@
 /turf/unsimulated/wall,
 /area/centcom/test)
 "dts" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -96431,7 +96429,6 @@
 /area/vox_trading_post/solars)
 "dXO" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_exterior";
@@ -96557,7 +96554,7 @@
 /area/vox_trading_post/solars)
 "dXZ" = (
 /obj/machinery/portable_atmospherics/hydroponics,
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor/vox{
@@ -96654,7 +96651,6 @@
 /area/vox_trading_post/solars)
 "dYk" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_interior";
@@ -97458,7 +97454,7 @@
 	},
 /area/shuttle/trade/start)
 "dZG" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor/vox{
@@ -99025,7 +99021,6 @@
 	tag = "icon-warning (NORTH)"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_exterior";
@@ -99057,7 +99052,6 @@
 /area/vox_trading_post/hallway)
 "ect" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_interior";
@@ -100017,7 +100011,6 @@
 /area/vox_trading_post/armory)
 "eed" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_trading_airlock_interior";
@@ -100521,7 +100514,6 @@
 /area/vox_trading_post/armory)
 "eeT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_trading_airlock_exterior";
@@ -100739,10 +100731,10 @@
 	dir = 4;
 	pixel_x = -24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/vox{
@@ -101508,7 +101500,7 @@
 	},
 /area/research_outpost/entry)
 "egU" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -103568,7 +103560,7 @@
 	},
 /area/research_outpost/xenobot)
 "ekp" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -106122,7 +106114,6 @@
 	name = "Firelock North"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_int_door";
@@ -106327,7 +106318,6 @@
 /area/mine/explored)
 "epl" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_ext_door";
@@ -108157,7 +108147,7 @@
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "etv" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -108329,7 +108319,7 @@
 	},
 /area/mine/explored)
 "etP" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -109361,7 +109351,7 @@
 	},
 /area/derelict/secret)
 "ewx" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /obj/structure/mirror{
@@ -109382,7 +109372,7 @@
 	},
 /area/derelict/secret)
 "ewz" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -110326,6 +110316,21 @@
 	icon_state = "dark-markings"
 	},
 /area/engineering/engine)
+"nil" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/planet_scanner{
+	anchored = 1;
+	icon_state = "scanner_idle"
+	},
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/turf/simulated/floor/carpet,
+/area/bridge)
 "niJ" = (
 /obj/machinery/claw_machine,
 /turf/simulated/floor{
@@ -110929,7 +110934,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/effect/decal/cleanable/greenglow,
@@ -225950,7 +225955,7 @@ cOq
 cOq
 cOq
 cOq
-cOq
+nil
 cTZ
 cUL
 cVv

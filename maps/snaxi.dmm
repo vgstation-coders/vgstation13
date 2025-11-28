@@ -4794,7 +4794,7 @@
 /turf/simulated/floor,
 /area/hydroponics)
 "anf" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -4852,7 +4852,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/theatre)
 "anl" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/structure/disposalpipe/trunk{
@@ -5398,7 +5398,7 @@
 /turf/unsimulated/floor/snow,
 /area/surface/outer/nw)
 "aow" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -5411,7 +5411,7 @@
 	},
 /area/crew_quarters/sleep)
 "aoy" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/simulated/floor{
@@ -5700,7 +5700,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
 	},
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	name = "bar sink";
 	pixel_y = 28
 	},
@@ -5928,7 +5928,7 @@
 	name = "\improper Bridge Engineering"
 	})
 "apA" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -7874,7 +7874,7 @@
 	},
 /area/crew_quarters/sleep)
 "atT" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -16639,7 +16639,7 @@
 	d2 = 2;
 	icon_state = "0-2"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -17183,7 +17183,7 @@
 	},
 /area/medical/surgery)
 "aNi" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -20934,7 +20934,7 @@
 	},
 /area/medical/surgery)
 "aVT" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -33498,13 +33498,13 @@
 /turf/simulated/wall/r_wall,
 /area/crew_quarters)
 "bzk" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -16
 	},
@@ -38448,7 +38448,7 @@
 	},
 /area/security/perma)
 "bHj" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -44456,7 +44456,7 @@
 /turf/simulated/floor/wood,
 /area/library)
 "bRQ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -52745,7 +52745,7 @@
 /area/centcom/test)
 "cib" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -53006,7 +53006,7 @@
 	},
 /area/centcom/ert)
 "ciM" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -53795,7 +53795,7 @@
 	},
 /area/centcom/ert)
 "ckI" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -55880,7 +55880,7 @@
 	},
 /area/centcom/ert)
 "cpm" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -61074,7 +61074,7 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "cBT" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -61255,7 +61255,7 @@
 	},
 /area/syndicate_mothership)
 "cCu" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/unsimulated/floor{
@@ -61263,7 +61263,7 @@
 	},
 /area/syndicate_mothership)
 "cCv" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/effect/decal/cleanable/vomit,
@@ -61344,7 +61344,7 @@
 	},
 /area/syndicate_mothership)
 "cCN" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -64658,7 +64658,7 @@
 	},
 /area/derelict/secret)
 "dsx" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -64668,7 +64668,7 @@
 	},
 /area/derelict/secret)
 "dsy" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /obj/structure/mirror{
@@ -65985,7 +65985,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/ghettobar)
 "dvl" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor/plating,
@@ -69803,7 +69803,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -70277,7 +70277,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (WEST)"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -70303,7 +70303,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -70910,7 +70910,6 @@
 /area/vox_trading_post/solars)
 "dEs" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_exterior";
@@ -70993,7 +70992,6 @@
 /area/vox_trading_post/solars)
 "dEy" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_interior";
@@ -71471,7 +71469,7 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/hallway)
 "dFn" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/machinery/light/small{
 	dir = 4
 	},
@@ -71591,7 +71589,7 @@
 	},
 /area/vox_trading_post/dorms)
 "dFy" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -72010,7 +72008,7 @@
 	},
 /area/vox_trading_post/kitchen)
 "dGi" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor/vox{
@@ -73023,7 +73021,7 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/gardens)
 "dHX" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -73043,7 +73041,7 @@
 /turf/simulated/wall,
 /area/vox_trading_post/trade_processing)
 "dHZ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -73945,7 +73943,7 @@
 	},
 /area/vox_trading_post/gardens)
 "dJR" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -73976,7 +73974,7 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/trade_processing)
 "dJU" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -77026,7 +77024,7 @@
 	dir = 8;
 	pixel_x = 24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -84868,7 +84866,7 @@
 /turf/simulated/floor/plating,
 /area/supply/storage)
 "qnE" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -86040,7 +86038,7 @@
 /turf/simulated/floor/plating,
 /area/security/checkpoint/supply)
 "rVw" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -87639,7 +87637,7 @@
 	name = "\improper Taxi Civilian Dock"
 	})
 "uhG" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /turf/simulated/floor{
@@ -87786,7 +87784,7 @@
 	},
 /area/alien)
 "utA" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

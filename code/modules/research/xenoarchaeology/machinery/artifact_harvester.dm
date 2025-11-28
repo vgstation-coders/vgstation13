@@ -225,7 +225,7 @@
 						var/datum/artifact_effect/E = new effecttype(inserted_battery)
 
 						//duplicate it's unique settings
-						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","activation_sound"))
+						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_hint","activation_sound"))
 							E.vars[varname] = isolated_primary.vars[varname]
 
 						//duplicate any effect-specific settings
@@ -273,7 +273,7 @@
 						var/datum/artifact_effect/E = new effecttype(inserted_battery)
 
 						//duplicate it's unique settings
-						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","activation_sound"))
+						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_hint","activation_sound"))
 							E.vars[varname] = isolated_secondary.vars[varname]
 
 						//duplicate any effect-specific settings

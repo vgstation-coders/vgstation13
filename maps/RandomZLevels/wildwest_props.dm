@@ -186,6 +186,11 @@
 		L.reagents.add_reagent(FEVERFEW,3)
 		to_chat(L, "<span class='danger'>You prick yourself on \the [src].</span>")
 
+/obj/structure/flora/desert/saguaro/hell
+	name = "hell cactus"
+	desc = "The Hell Cactus has adapted to the harshest environment known to man or beast."
+	color = "#4500a1"
+
 /obj/structure/flora/desert/saguaro/New()
 	..()
 	icon_state = "saguaro_[rand(1,2)]"

@@ -50,6 +50,7 @@
 #define SS_PRIORITY_ENGINES		   89
 #define SS_PRIORITY_PIPENET        85
 #define SS_PRIORITY_AIR            70
+#define SS_PRIORITY_MAPPING		   67
 #define SS_PRIORITY_EVENT          65
 #define SS_PRIORITY_DISEASE        60
 #define SS_PRIORITY_FAST_MACHINERY 55

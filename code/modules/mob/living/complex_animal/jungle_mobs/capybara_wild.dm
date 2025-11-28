@@ -21,7 +21,7 @@
 	if(!..())
 		return FALSE
 	if(prob(33))
-		visible_message("\the [src] starts resting")
+		visible_message("\The [src] starts resting.")
 		behavior_state=ANIMAL_STATE_SPECIAL
 		icon_state="capybara-rest"
 		walk(src,0)
@@ -34,14 +34,14 @@
 	if(prob(20))
 		behavior_state=ANIMAL_STATE_IDLE
 		icon_state="capybara"
-		visible_message("\the [src] gets back up")
+		visible_message("\The [src] gets back up.")
 	return TRUE
 
 /mob/living/complex_animal/capybara_wild/tick_state_fleeing()
 	if(!..())
 		return FALSE
 	if(prob(33))
-		visible_message("\the [src] forgives \the [target]")
+		visible_message("\The [src] forgives \the [target].")
 		abort_target()
 		return FALSE
 	return TRUE
@@ -66,11 +66,11 @@
 	var/i=rand(1,2)
 	switch(i)
 		if(1)
-			emote("me", MESSAGE_SEE, "nibbles \the [individual].")
+			emote("me", MESSAGE_SEE, "nibbles \the [individual]!")
 		if(2)
-			emote("me", MESSAGE_SEE, "scratches \the [individual].")
+			emote("me", MESSAGE_SEE, "scratches \the [individual]!")
 
 
 /mob/living/complex_animal/capybara_wild/trypet(mob/living/carbon/human/M)
 	..()
-	emote("me", MESSAGE_SEE, "closes its eyes for a moment and looks content")
+	emote("me", MESSAGE_SEE, "closes its eyes for a moment and looks content.")

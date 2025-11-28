@@ -132,7 +132,7 @@ var/list/open_overlay_depths
 		return 1
 	return 0
 
-/turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	overlays.Cut()
 	vis_contents.Cut()
 	..()
@@ -149,24 +149,20 @@ var/list/open_overlay_depths
 
 /turf/unsimulated/floor/snow/openspace_update(var/turf/above)
 	if(above && !isopenspace(above))
-		snow_intensity_override = SNOW_CALM // should be at least a bit chilly
+		precip_intensity_override = WEATHER_CALM // should be at least a bit chilly
 		ignore_blizzard_updates = TRUE
 		vis_contents.Cut()
 	else
-		snow_intensity_override = 0
+		precip_intensity_override = 0
 		ignore_blizzard_updates = FALSE
-		if(!blizzard_image)
-			blizzard_image = new
-		if(!(blizzard_image in vis_contents))
-			vis_contents += blizzard_image
 
-/turf/simulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/simulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	var/turf/simulated/open/BS = GetBelow(src)
 	if(BS && (istype(BS,/turf/simulated/wall) || istype(BS,/turf/unsimulated/wall)) && isopenspace(N))
 		return
 	return ..()
 
-/turf/unsimulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/unsimulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	var/turf/simulated/open/BS = GetBelow(src)
 	if(BS && (istype(BS,/turf/simulated/wall) || istype(BS,/turf/unsimulated/wall)) && isopenspace(N))
 		return
@@ -316,7 +312,7 @@ var/obj/effect/glass_open_overlay/plasma/openpgfloor
 	else
 		..()
 
-/turf/simulated/floor/glass/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/simulated/floor/glass/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	vis_contents.Cut()
 	overlays.Cut()
 	..()

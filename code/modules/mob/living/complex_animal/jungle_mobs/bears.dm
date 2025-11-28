@@ -8,7 +8,7 @@
 	size=SIZE_BIG
 	health=60
 	maxHealth=60
-	armor=list(melee=20,bullet=20,laser=20,energy=0,bomb=0,bio=0,rad=0)
+	armor=list(melee=10,bullet=20,laser=20,energy=0,bomb=0,bio=0,rad=0)
 	max_food=100
 	food_flags = ANIMAL_CARNIVORE | ANIMAL_HERBIVORE
 	base_damage = 25
@@ -16,6 +16,7 @@
 	behavior_flags = ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_RETALIATE | ANIMAL_BEHAVIOR_PACK_DYNAMICS | ANIMAL_BEHAVIOR_DESTRUCTIVE | ANIMAL_BEHAVIOR_AVOID_CAPTURE
 	movespeed=5
 	kin_check_type_path=/mob/living/complex_animal/bear
+	max_local_population=5
 	var/sea_bear=TRUE
 
 /mob/living/complex_animal/bear/get_idle_sounds()
@@ -23,19 +24,19 @@
 		var/i=rand(1,2)
 		switch(i)
 			if(1)
-				emote("me", MESSAGE_HEAR, "growls")
+				emote("me", MESSAGE_HEAR, "growls.")
 			if(2)
-				emote("me", MESSAGE_HEAR, "roars")
+				emote("me", MESSAGE_HEAR, "roars.")
 
 /mob/living/complex_animal/bear/get_attack_msg(var/individual)
 	var/i=rand(1,3)
 	switch(i)
 		if(1)
-			emote("me", MESSAGE_SEE, "bites \the [individual].")
+			emote("me", MESSAGE_SEE, "bites \the [individual]!")
 		if(2)
-			emote("me", MESSAGE_SEE, "swings at \the [individual].")
+			emote("me", MESSAGE_SEE, "swings at \the [individual]!")
 		if(3)
-			emote("me", MESSAGE_SEE, "claws \the [individual].")
+			emote("me", MESSAGE_SEE, "claws \the [individual]!")
 
 
 /mob/living/complex_animal/bear/verify_target(var/individual,var/max_distance=-1,var/allow_dead=FALSE)

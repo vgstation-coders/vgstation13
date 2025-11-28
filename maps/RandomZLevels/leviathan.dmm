@@ -685,7 +685,7 @@
 /turf/simulated/floor/plating/airless,
 /area/awaymission/leviathan/mining)
 "cj" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -695,7 +695,7 @@
 	},
 /area/awaymission/leviathan/mining)
 "ck" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /obj/structure/mirror{
@@ -1668,7 +1668,7 @@
 /turf/space,
 /area)
 "eJ" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -1684,7 +1684,7 @@
 	},
 /area/awaymission/leviathan/research)
 "eK" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

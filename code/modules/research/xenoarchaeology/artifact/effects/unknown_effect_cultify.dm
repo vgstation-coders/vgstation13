@@ -1,8 +1,8 @@
 /datum/artifact_effect/cultify
 	effecttype = "cultify"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH, ARTIFACT_STYLE_WIZARD, ARTIFACT_STYLE_RELIQUARY)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH, ARTIFACT_STYLE_WIZARD, ARTIFACT_STYLE_RELIQUARY)
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
-	effect_type = 2
+	effect_hint = EFFECT_HINT_ATOMIC_SYNTHESIS
 
 /datum/artifact_effect/cultify/DoEffectAura()
 	make_culty(min(3, effectrange))

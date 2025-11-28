@@ -57,6 +57,8 @@
 	penetration_dampening = 10
 	// if STANDING     ON THE EDGE        OF THE z-level will transition you to another
 	var/can_border_transition = 0
+
+	var/shuttle_turf = FALSE // is this turf part of a shuttle and ISN'T A SHUTTLE TURF TYPE REEE
 /*
  * Technically obsoleted by base_turf
 	//For building on the asteroid.
@@ -101,8 +103,6 @@
 	..()
 	if(bullet_marks)
 		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
-	if(locate(/obj/effect/ash) in src)
-		to_chat(user, "It is covered in ashes.")
 
 /turf/proc/process()
 	set waitfor = FALSE
@@ -121,7 +121,7 @@
 	pick_icon_state()
 
 /turf/proc/pick_icon_state()
-	if(base_icon_state && min_icon_states && max_icon_states && prob(variance))
+	if(base_icon_state && max_icon_states && prob(variance))
 		icon_state = "[base_icon_state][rand(min_icon_states,max_icon_states)]"
 
 /turf/initialize()
@@ -137,7 +137,7 @@
 				qdel(edge)
 	if(opacity)
 		has_opaque_atom = TRUE
-	if(edge_flags & EDGE_CARDINAL)
+	if((edge_flags & EDGE_CARDINAL) && !(turf_flags & DEFER_EDGING))
 		update_edges()
 
 /turf/ex_act(severity)
@@ -226,6 +226,7 @@
 					contents_brought += recursive_type_check(B)
 
 			var/locked_to_current_z = FALSE//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
+			var/randomize_drift_position = TRUE // if true, randomizes where you'll end up on the new Z-level
 
 			var/datum/zLevel/ZL = map.zLevels[z]
 			if(ZL.transitionLoops)
@@ -245,6 +246,19 @@
 
 
 			var/move_to_z = src.z
+			
+			if(ZL.transition_crosswrap_z && ZL.transition_crosswrap_z.len>=4)
+				locked_to_current_z=TRUE //prevent shuffling z-level later in the code.
+				randomize_drift_position=FALSE
+				if(A.y>world.maxy - TRANSITIONEDGE) // NORTH
+					move_to_z=ZL.transition_crosswrap_z[1]
+				else if(A.y<=TRANSITIONEDGE) // SOUTH
+					move_to_z=ZL.transition_crosswrap_z[2]
+				else if(A.x>world.maxx - TRANSITIONEDGE) // EAST
+					move_to_z=ZL.transition_crosswrap_z[3]
+				else if(A.x<=TRANSITIONEDGE) // WEST
+					move_to_z=ZL.transition_crosswrap_z[4]
+				
 
 			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
 			for(var/mob/living/L in contents_brought)
@@ -275,19 +289,23 @@
 
 			if(src.x <= TRANSITIONEDGE)
 				A.x = world.maxx - TRANSITIONEDGE - 2
-				A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
 
 			else if (A.x >= (world.maxx - TRANSITIONEDGE - 1))
 				A.x = TRANSITIONEDGE + 1
-				A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
 
 			else if (src.y <= TRANSITIONEDGE)
 				A.y = world.maxy - TRANSITIONEDGE -2
-				A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
 
 			else if (A.y >= (world.maxy - TRANSITIONEDGE - 1))
 				A.y = TRANSITIONEDGE + 1
-				A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
 
 			spawn (0)
 				if(was_pulling && MOB) //Carry the object they were pulling over when they transition
@@ -365,7 +383,7 @@
 	return
 
 //Creates a new turf
-/turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1,var/defer_edges = FALSE)
 	var/area/original_area=loc
 	if(loc)
 		var/area/A = loc
@@ -407,7 +425,11 @@
 	if(edge_overlays.len)
 		for(var/datum/weakref/EO in edge_overlays)
 			var/obj/effect/edge_overlay/E = EO.get()
-			qdel(E)
+			if(E)
+				var/turf/T = E.loc
+				if(T)
+					var/edge_dir = get_dir(src, T)
+					E.remove_direction(edge_dir, src)
 		edge_overlays.len = 0
 
 	//Rebuild turf
@@ -427,6 +449,8 @@
 			QDEL_NULL(F.floor_tile)
 		F = null
 
+	if(defer_edges)
+		turf_flags |= DEFER_EDGING
 	if(ispath(N, /turf/simulated/floor))
 		//if the old turf had a zone, connect the new turf to it as well - Cael
 		//Adjusted by SkyMarshal 5/10/13 - The air master will handle the addition of the new turf.
@@ -867,3 +891,6 @@
 
 /turf/proc/OnEmptyReagents()
 	turf_reagent_amount = null
+
+/turf/proc/mob_life_effects(mob/living/affected) //apply effects to mobs standing on this turf every life() tick
+	return

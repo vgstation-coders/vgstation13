@@ -285,3 +285,16 @@
 	if (istype(locked_to,/obj/item/weapon/beartrap))
 		return TRUE
 	return ..()
+
+/mob/living/simple_animal/hostile/bear/beartrap_act(var/obj/item/weapon/beartrap/trap)
+	trap.trapped = 1
+	trap.trappedbear = src
+	LostTarget()
+	dir = SOUTH
+	trap.armed = 0
+	playsound(trap, 'sound/effects/snap.ogg', 60, 1)
+	trap.lock_atom(src, /datum/locking_category/beartrap)
+	adjustBruteLoss(20)
+	update_canmove()
+	update_icon()
+	return TRUE

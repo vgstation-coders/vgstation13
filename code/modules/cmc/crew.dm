@@ -100,7 +100,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		if(map.zTCommSat>0)
 			holomap_z_levels_unmapped+=map.zTCommSat
 		if(map.zDeepSpace>0)
-			holomap_z_levels_unmapped+=map.zDeepSpace		
+			holomap_z_levels_unmapped+=map.zDeepSpace
 
 /obj/machinery/computer/crew/Destroy()
 	deactivateAll()
@@ -216,6 +216,10 @@ GENERAL PROCS
 				// Special case: If the mob is inside an object confirm the z-level on turf level.
 				if (H.z == 0 && (!pos || pos.z != z))
 					continue
+
+				// Block suit sensors location on z-level 7 (procedurally-generated planets)
+				if(pos && pos.z == map.zProcGen)
+					pos = null
 
 				var/obj/item/weapon/card/id/I = H.wear_id ? H.wear_id.GetID() : null
 
