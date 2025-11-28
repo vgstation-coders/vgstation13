@@ -14895,10 +14895,10 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
 "ayH" = (
-/obj/machinery/door/airlock/external{
-	name = "Escape Airlock"
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitebluecorner"
 	},
-/turf/simulated/floor/plating,
 /area/science/shuttlebay)
 "ayI" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -69738,10 +69738,13 @@
 /turf/simulated/floor/wood,
 /area/library)
 "dFo" = (
-/obj/machinery/light{
-	dir = 4
+/obj/machinery/door/airlock/glass{
+	name = "Vacant Office"
 	},
-/turf/simulated/floor/plating,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitebluecorner"
+	},
 /area/science/shuttlebay)
 "dFA" = (
 /obj/effect/decal/warning_stripes{
@@ -71555,7 +71558,13 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "oyQ" = (
-/turf/simulated/floor/plating,
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitebluecorner"
+	},
 /area/science/shuttlebay)
 "oRZ" = (
 /obj/structure/closet,
@@ -167361,7 +167370,7 @@ aaa
 aaa
 aaa
 rVF
-oyQ
+ayH
 frs
 asY
 ehg
@@ -167865,7 +167874,7 @@ aaa
 frs
 oyQ
 dFo
-oyQ
+ayH
 rVF
 aaa
 aaa

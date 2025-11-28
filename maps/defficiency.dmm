@@ -1362,12 +1362,12 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "acR" = (
-/obj/effect/decal/warning_stripes{
-	dir = 5;
-	icon_state = "warning";
-	tag = "icon-warning (NORTHEAST)"
-	},
 /obj/structure/closet/emcloset,
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "acS" = (
@@ -2352,13 +2352,9 @@
 /turf/simulated/floor/wood,
 /area/derelictparts/stripclub)
 "aeR" = (
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning_corner";
-	tag = "icon-warning_corner (EAST)"
-	},
-/turf/simulated/floor,
-/area/hallway/secondary/entry)
+/obj/structure/shuttle/engine/propulsion,
+/turf/space,
+/area/shuttle/exploration)
 "aeS" = (
 /obj/machinery/light{
 	dir = 8
@@ -2381,19 +2377,8 @@
 /turf/simulated/wall/r_wall,
 /area/hallway/secondary/entry)
 "aeU" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	name = "EXTERNAL AIRLOCK";
-	pixel_x = 32
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning";
-	tag = "icon-warning (EAST)"
-	},
-/turf/simulated/floor,
-/area/hallway/secondary/entry)
+/turf/simulated/wall/shuttle/black,
+/area/shuttle/exploration)
 "aeW" = (
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
@@ -109946,6 +109931,31 @@
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine)
+"fUS" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
+	},
+/turf/simulated/floor/glass/plasma,
+/area/hallway/secondary/entry)
+"gqb" = (
+/obj/structure/closet,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "gEG" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/folder/red{
@@ -110009,6 +110019,12 @@
 	icon_state = "white"
 	},
 /area/engine/control)
+"hmN" = (
+/obj/structure/bed/chair/shuttle/red{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "hpW" = (
 /obj/machinery/door/airlock/glass_engineering{
 	name = "Engine Room";
@@ -110066,9 +110082,23 @@
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine)
+"hHZ" = (
+/obj/machinery/showcase{
+	desc = "A stand with a model of an explorer wearing a dated Nanotrasen Exploration Hardsuit. This model is a memorial for explorers with whom contact was lost forever.";
+	name = "'Lost Explorer' employee exhibit"
+	},
+/turf/simulated/floor/light,
+/area/hallway/secondary/entry)
 "hLz" = (
 /turf/simulated/floor/plating,
 /area/derelictparts/fsderelict)
+"hND" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/obj/machinery/door/poddoor{
+	id_tag = "exploration"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "hSQ" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -110138,6 +110168,14 @@
 	icon_state = "dark"
 	},
 /area/tcomms/storage)
+"iRP" = (
+/obj/effect/decal/warning_stripes/siding/gold,
+/turf/simulated/floor/glass/plasma,
+/area/hallway/secondary/entry)
+"iTr" = (
+/obj/item/device/radio/intercom,
+/turf/simulated/wall/shuttle/black,
+/area/shuttle/exploration)
 "iVL" = (
 /obj/structure/table/reinforced,
 /obj/machinery/door/poddoor/shutters{
@@ -110164,6 +110202,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
+"iYB" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "jlA" = (
 /obj/machinery/door/airlock/maintenance{
 	name = "Cargo Bay Warehouse Maintenance";
@@ -110172,6 +110216,12 @@
 /obj/structure/disposalpipe/segment,
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
+"jwD" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 5
+	},
+/turf/simulated/floor/glass/plasma,
+/area/hallway/secondary/entry)
 "jBR" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -110201,6 +110251,10 @@
 	icon_state = "dark"
 	},
 /area/engineering/engine)
+"jXi" = (
+/obj/structure/closet/medical_wall,
+/turf/simulated/wall/shuttle/black,
+/area/shuttle/exploration)
 "kdZ" = (
 /obj/structure/cable/yellow{
 	d1 = 2;
@@ -110212,6 +110266,25 @@
 	icon_state = "dark vault stripe"
 	},
 /area/engineering/engine)
+"keO" = (
+/obj/docking_port{
+	dir = 2
+	},
+/obj/machinery/door/airlock/external{
+	name = "Arrival Airlock"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
+"kwr" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
+"kLv" = (
+/obj/machinery/sleeper,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "kLN" = (
 /obj/machinery/vending/art,
 /turf/simulated/floor/wood,
@@ -110237,6 +110310,20 @@
 	},
 /turf/simulated/floor,
 /area/engineering/supermatter_room)
+"kXi" = (
+/obj/machinery/computer/shuttle_control/exploration,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
+"kZK" = (
+/obj/structure/closet/emcloset,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
+"lku" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 8
+	},
+/turf/space,
+/area/shuttle/exploration)
 "lvc" = (
 /obj/structure/cable/yellow{
 	d2 = 2;
@@ -110253,6 +110340,10 @@
 /obj/structure/reagent_dispensers/water_cooler,
 /turf/simulated/floor,
 /area/engineering/break_room)
+"lJT" = (
+/obj/machinery/firealarm,
+/turf/simulated/wall/shuttle/black,
+/area/shuttle/exploration)
 "lOW" = (
 /obj/machinery/computer/tetris,
 /turf/simulated/floor{
@@ -110266,6 +110357,14 @@
 /obj/effect/decal/cleanable/blood/gibs/robot,
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
+"mbP" = (
+/obj/structure/table,
+/obj/machinery/door_control{
+	id_tag = "exploration"
+	},
+/obj/item/weapon/storage/lockbox/diskettebox,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "mcs" = (
 /obj/effect/landmark{
 	name = "xeno_spawn";
@@ -110275,6 +110374,12 @@
 	icon_state = "floorgrime"
 	},
 /area/supply/storage)
+"mut" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 9
+	},
+/turf/simulated/floor/glass/plasma,
+/area/hallway/secondary/entry)
 "mvL" = (
 /obj/effect/landmark/map_element/salvage_shuttle_spiders,
 /turf/space,
@@ -110326,6 +110431,12 @@
 	icon_state = "dark-markings"
 	},
 /area/engineering/engine)
+"nda" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 8
+	},
+/turf/simulated/floor/glass/plasma,
+/area/hallway/secondary/entry)
 "nil" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -110496,6 +110607,10 @@
 	icon_state = "dark vault stripe"
 	},
 /area/engineering/engine)
+"pip" = (
+/obj/structure/rack/crate_shelf,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "pka" = (
 /obj/machinery/light,
 /turf/simulated/floor{
@@ -110681,6 +110796,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
+"rfn" = (
+/obj/structure/table,
+/obj/item/device/healthanalyzer,
+/obj/item/weapon/storage/firstaid/regular,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "rgk" = (
 /obj/machinery/camera/emp_proof{
 	dir = 4;
@@ -110689,6 +110810,12 @@
 	},
 /turf/space,
 /area)
+"rAl" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 10
+	},
+/turf/simulated/floor/glass/plasma,
+/area/hallway/secondary/entry)
 "rMu" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 8
@@ -110734,6 +110861,13 @@
 /obj/item/tool/wirecutters,
 /turf/space,
 /area)
+"scA" = (
+/obj/machinery/door/airlock/external{
+	name = "Arrival Airlock"
+	},
+/obj/docking_port/destination/exploration/station,
+/turf/simulated/floor/plating,
+/area/hallway/secondary/entry)
 "sgB" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/nmpi,
@@ -110764,6 +110898,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/supply/storage)
+"ssN" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 4
+	},
+/turf/simulated/floor/glass/plasma,
+/area/hallway/secondary/entry)
 "suE" = (
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -110782,6 +110922,10 @@
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/transport1/centcom)
+"sOE" = (
+/obj/machinery/vending/wallmed1,
+/turf/simulated/wall/shuttle/black,
+/area/shuttle/exploration)
 "sSd" = (
 /obj/structure/cable/yellow{
 	d1 = 2;
@@ -110797,6 +110941,14 @@
 /obj/item/clothing/head/hardhat,
 /turf/space,
 /area)
+"tpu" = (
+/obj/structure/rack,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
+"txM" = (
+/obj/structure/closet/emcloset/vox,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "tSR" = (
 /obj/machinery/door/firedoor/border_only{
 	dir = 1;
@@ -110844,6 +110996,31 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
+"utB" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
+	icon_state = "space";
+	name = "EXTERNAL AIRLOCK";
+	pixel_x = -32;
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/hallway/secondary/entry)
+"uFc" = (
+/obj/machinery/suit_storage_unit,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
+"uJp" = (
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "uNz" = (
 /obj/machinery/photobooth,
 /turf/simulated/floor,
@@ -110858,6 +111035,17 @@
 	icon_state = "solarpanel"
 	},
 /area/solar/fstarboard)
+"uRa" = (
+/obj/item/mounted/frame/soundsystem,
+/turf/simulated/wall/shuttle/black,
+/area/shuttle/exploration)
+"uWx" = (
+/obj/structure/shuttle/diag_wall/black{
+	layer = 5
+	},
+/obj/structure/shuttle/engine/heater,
+/turf/space,
+/area/shuttle/exploration)
 "uXi" = (
 /obj/machinery/conveyor/centcom_auto{
 	dir = 9;
@@ -110890,6 +111078,15 @@
 	},
 /turf/space,
 /area/shuttle/transport1/centcom)
+"vyC" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "vHn" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
@@ -110960,6 +111157,15 @@
 	icon_state = "dark vault stripe"
 	},
 /area/engineering/engine)
+"vTs" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "vUt" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/paper_bin/red{
@@ -110969,6 +111175,12 @@
 /obj/item/weapon/pen,
 /turf/simulated/floor,
 /area/crew_quarters/courtroom)
+"wgn" = (
+/obj/machinery/door/airlock/external{
+	name = "Arrival Airlock"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "wgo" = (
 /obj/machinery/door_control{
 	id_tag = "Singularity";
@@ -111028,6 +111240,14 @@
 	icon_state = "cult"
 	},
 /area/library)
+"wGe" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 4;
+	layer = 5
+	},
+/obj/structure/shuttle/engine/heater,
+/turf/space,
+/area/shuttle/exploration)
 "wGX" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -111110,6 +111330,12 @@
 	icon_state = "dark"
 	},
 /area/tcomms/storage)
+"xDT" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 1
+	},
+/turf/space,
+/area/shuttle/exploration)
 "xIy" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -111122,6 +111348,12 @@
 	},
 /turf/simulated/wall,
 /area/derelictparts/fsderelict)
+"xIV" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 6
+	},
+/turf/simulated/floor/glass/plasma,
+/area/hallway/secondary/entry)
 "xTi" = (
 /obj/structure/cable/yellow{
 	d2 = 8;
@@ -232875,10 +233107,10 @@ acd
 acm
 abc
 acR
-adw
-adw
-adw
-aeR
+afx
+afx
+afx
+afx
 afv
 afx
 adu
@@ -233376,11 +233608,11 @@ abV
 abc
 abc
 abc
-acT
-ady
-ady
-adZ
 aeA
+afx
+mut
+nda
+rAl
 afv
 afx
 adu
@@ -233869,8 +234101,6 @@ aaa
 aaa
 aaa
 aaa
-aaf
-aaf
 aaa
 aaa
 aaa
@@ -233879,10 +234109,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aeb
+agu
 aeA
+afx
+fUS
+hHZ
+iRP
 afw
 afQ
 agt
@@ -234379,12 +234611,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
 aeb
 aeA
+afx
+jwD
+ssN
+xIV
 afy
 afS
 agv
@@ -234879,14 +235111,14 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
 acT
 ady
 aec
 aeA
+afx
+afx
+afx
+afx
 afx
 afR
 agu
@@ -235381,14 +235613,14 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
 adz
 adA
 aea
-aeU
+afx
+afa
+adw
+adw
+adw
 afz
 afT
 aeb
@@ -235883,17 +236115,17 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
 acT
 ady
+adZ
+aeA
+adu
+aeT
 aev
-aeT
-aeT
-aeT
-agw
+acT
+ady
+ady
+aec
 aea
 aiq
 ady
@@ -236387,10 +236619,10 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
+aeb
+aeA
+afb
+aeT
 aaa
 aaa
 aaa
@@ -236889,10 +237121,10 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
+agw
+aeA
+adu
+agu
 oul
 afW
 afW
@@ -237377,24 +237609,24 @@ aaa
 aaa
 aaa
 aaa
+lku
+aeU
+aeU
+lJT
+hND
+hND
+hND
+hND
+iTr
+aeU
+aeU
+uWx
+aeR
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+aev
+aeA
+adu
+aeb
 afW
 aeX
 afB
@@ -237878,25 +238110,25 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+lku
+iTr
+pip
+tpu
+kwr
+uJp
+uJp
+uJp
+uJp
+kwr
+txM
+kZK
+aeU
+acT
+ady
+aed
+aeA
+adu
+aeb
 aex
 aeW
 aeW
@@ -238380,25 +238612,25 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+hND
+mbP
+uJp
+uJp
+uJp
+uFc
+vTs
+vTs
+uFc
+uJp
+uJp
+uJp
+wgn
+aea
+adA
+aea
+afx
+adu
+aeb
 afW
 aeZ
 afB
@@ -238882,25 +239114,25 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+hND
+kXi
+hmN
+uJp
+uJp
+uFc
+vyC
+vyC
+uFc
+uJp
+uJp
+uJp
+keO
+scA
+adA
+aea
+afx
+adu
+agw
 aez
 afW
 afW
@@ -239384,25 +239616,25 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+xDT
+aeU
+uFc
+gqb
+iYB
+uJp
+uJp
+uJp
+uJp
+iYB
+rfn
+kLv
+aeU
+acT
+ady
+aed
+aeA
+afb
+aeT
 aaa
 aaa
 aaa
@@ -239887,29 +240119,29 @@ aaa
 aaa
 aaa
 aaa
+xDT
+aeU
+aeU
+uRa
+hND
+hND
+hND
+hND
+sOE
+jXi
+aeU
+wGe
+aeR
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aev
 aeT
-agu
+aeA
+adu
+aeT
+aeT
+acT
+ady
+ady
+adZ
 ahA
 ait
 ady
@@ -240403,14 +240635,14 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aeT
+utB
+aeA
+alf
+aeB
+aeB
+aeB
+aeB
+adv
 aeb
 adA
 aeb
@@ -240903,16 +241135,16 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
 acT
 ady
-ady
-ady
-ady
-aed
-aeT
+aec
+aeA
+afx
+afx
+afx
+afx
+afx
+adu
 agz
 aea
 agw
@@ -241405,16 +241637,16 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
 acU
 adA
 aea
-aeB
-aeB
-aeB
-aeB
+adw
+adw
+adw
+afx
+afx
+afx
+alf
 agA
 afx
 aeB
@@ -241907,10 +242139,10 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
 acT
+ady
+ady
+ady
 ady
 adZ
 aeA

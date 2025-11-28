@@ -131159,7 +131159,9 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 4
 	},
-/obj/structure/shuttle/engine/propulsion,
+/obj/structure/shuttle/engine/propulsion{
+	layer = 1
+	},
 /turf/space,
 /area/shuttle/exploration)
 "iKb" = (
@@ -132057,7 +132059,9 @@
 /area/hallway/primary/central)
 "otw" = (
 /obj/structure/shuttle/diag_wall/smooth,
-/obj/structure/shuttle/engine/propulsion,
+/obj/structure/shuttle/engine/propulsion{
+	layer = 1
+	},
 /turf/space,
 /area/shuttle/exploration)
 "oCS" = (
