@@ -45247,7 +45247,7 @@
 "fWZ" = (
 /obj/structure/table,
 /obj/machinery/door_control{
-	id_tag = exploration
+	id_tag = "exploration"
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
@@ -51660,7 +51660,7 @@
 "hJn" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /obj/machinery/door/poddoor{
-	id_tag = exploration
+	id_tag = "exploration"
 	},
 /turf/space,
 /area/shuttle/exploration)
@@ -75367,7 +75367,7 @@
 "ovp" = (
 /obj/machinery/door/airlock/hatch,
 /obj/machinery/door/poddoor{
-	id_tag = exploration
+	id_tag = "exploration"
 	},
 /turf/unsimulated/wall/blastdoor,
 /area/shuttle/exploration)
@@ -92066,7 +92066,7 @@
 "toY" = (
 /obj/machinery/door/airlock/hatch,
 /obj/machinery/door/poddoor{
-	id_tag = exploration
+	id_tag = "exploration"
 	},
 /turf/space,
 /area/shuttle/exploration)
