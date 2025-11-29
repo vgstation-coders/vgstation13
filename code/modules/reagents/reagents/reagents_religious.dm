@@ -77,6 +77,7 @@
 		return 1
 	if(volume >= 5)
 		T.bless()
+		T.wet(800) //needs a bit more than regular water cause it's not as pure
 
 	T.clean_act(CLEANLINESS_WATER)
 
