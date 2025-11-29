@@ -419,7 +419,7 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 			neighbour = locate() in get_step(get_turf(C),direction)
 			if(!neighbour || neighbour.get_powernet() != C.get_powernet())
 				found_directions += list(dir2text(direction))
-		iff(found_directions.len)
+		if(found_directions.len)
 			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))] (Directions: [english_list(found_directions)])</span><br>"
 	error_str += "<h1>Terminal connections on current Z Level [z]</h1>"
 	for(var/obj/machinery/power/terminal/T in terminals)
