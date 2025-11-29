@@ -130897,8 +130897,11 @@
 /turf/simulated/floor/wood,
 /area/hallway/primary/aft)
 "gWp" = (
-/obj/structure/closet/medical_wall,
-/turf/simulated/wall/shuttle,
+/obj/structure/grille/window_spawner/reinforced/full,
+/obj/machinery/door/poddoor{
+	id_tag = "exploration"
+	},
+/turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "gYD" = (
 /obj/machinery/firealarm,
@@ -132146,6 +132149,10 @@
 	icon_state = "floor4"
 	},
 /area/shuttle/escape_pod1)
+"prC" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/shuttle,
+/area/shuttle/exploration)
 "psd" = (
 /obj/machinery/portable_atmospherics/hydroponics,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -239029,9 +239036,9 @@ uZC
 otw
 aaa
 hHs
-uZC
-uZC
-uZC
+gWp
+gWp
+gWp
 otw
 aaa
 aaa
@@ -239529,7 +239536,7 @@ pPt
 lYK
 jqg
 gYD
-uZC
+prC
 uZC
 pXa
 iYJ
@@ -241537,8 +241544,8 @@ ohG
 lYK
 rBT
 wtN
-uZC
-uZC
+prC
+gml
 atp
 lYK
 hqG
@@ -242041,9 +242048,9 @@ uZC
 iEw
 aaa
 yeD
-gml
 gWp
-uZC
+gWp
+gWp
 iEw
 aaa
 aaa

@@ -312,7 +312,7 @@ var/global/datum/shuttle/exploration/exploration_shuttle = new(starting_area = /
 /obj/machinery/computer/shuttle_control/exploration/New()
 	link_to(exploration_shuttle)
 	var/obj/item/weapon/paper/passkey = new(get_turf(src))
-	var/obj/item/weapon/book/manual/planets/manual = new(get_turf(src))
+	new /obj/item/weapon/book/manual/planets(get_turf(src))
 
 	passkey.name = "Exploration Shuttle authentication"
 	passkey.info = "Central Command has procured a new-model Exploration Shuttle for your station.<hr>This shuttle's password is: \"<b>[exploration_shuttle.password]</b>\"."

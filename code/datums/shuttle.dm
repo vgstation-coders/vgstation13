@@ -964,9 +964,9 @@
 			qdel(E)
 
 	//Kill all lz warning effects
-	var/obj/docking_port/port = dest_allocation.shuttle_landing_zones[src.type]
-	var/size = get_size()
-	SSmapping.clear_lz_warnings(dest_allocation, src, size, port)
+	if(istype(dest_allocation))
+		var/size = get_size()
+		SSmapping.clear_lz_warnings(dest_allocation, src, size, null)
 
 	return 1
 
@@ -1084,6 +1084,214 @@
 		for(var/image/I in images)
 			usr.client.images -= I
 	return
+
+//Planetary landing zone datum
+/datum/landing_zone
+	var/list/turf/turf_list = list()
+	var/datum/weakref/shuttle_ref
+	var/datum/weakref/planet_ref
+	var/obj/docking_port/destination/planet_surface/docking_port
+	var/width = 0
+	var/height = 0
+
+/datum/landing_zone/New(var/datum/shuttle/shuttle, var/datum/planet_type/planet)
+	. = ..()
+	if(!shuttle || !planet)
+		qdel(src)
+		return
+
+	if(!shuttle.linked_port || !shuttle.linked_area)
+		qdel(src)
+		return
+
+	var/datum/allocation/alloc = planet.allocation
+	if(!alloc)
+		qdel(src)
+		return
+
+	shuttle_ref = makeweakref(shuttle)
+	planet_ref = makeweakref(planet)
+
+	var/list/size = get_size(shuttle)
+	if(!size)
+		qdel(src)
+		return
+
+	width = size[1]
+	height = size[2]
+
+	var/list/landing_info = find_landing_location(shuttle, alloc, width, height)
+	if(!landing_info)
+		qdel(src)
+		return
+
+	var/turf/bottom_left = landing_info["bottom_left"]
+	var/turf/port_turf = landing_info["port_turf"]
+	var/port_dir = landing_info["port_dir"]
+
+	// Populate turf list
+	for(var/dx = 0; dx < width; dx++)
+		for(var/dy = 0; dy < height; dy++)
+			var/turf/T = locate(bottom_left.x + dx, bottom_left.y + dy, alloc.z)
+			if(!T)
+				CRASH("Landing zone creation failed - turf not found at expected location ([bottom_left.x + dx];[bottom_left.y + dy];[alloc.z])")
+			turf_list += T
+
+	// Create the docking port
+	docking_port = new(port_turf)
+	docking_port.dir = port_dir
+	docking_port.areaname = "[planet.planet_name] surface"
+
+	if(planet.default_baseturf)
+		docking_port.base_turf_type = planet.default_baseturf
+
+/datum/landing_zone/proc/get_size(var/datum/shuttle/shuttle)
+	if(!shuttle?.linked_area)
+		return null
+
+	var/low_x = world.maxx
+	var/low_y = world.maxy
+	var/high_x = 0
+	var/high_y = 0
+
+	for(var/turf/T in shuttle.linked_area)
+		if(T.x < low_x) low_x = T.x
+		if(T.y < low_y) low_y = T.y
+		if(T.x > high_x) high_x = T.x
+		if(T.y > high_y) high_y = T.y
+
+	if(high_x < low_x || high_y < low_y)
+		return null
+
+	return list(high_x - low_x + 1, high_y - low_y + 1)
+
+/datum/landing_zone/proc/find_landing_location(var/datum/shuttle/shuttle, var/datum/allocation/alloc, var/x_dim, var/y_dim)
+	if(!shuttle?.linked_port || !alloc)
+		return null
+
+	var/list/search_turfs = SSmapping.turfs_from_sector(alloc.sector, alloc.z)
+
+	// Calculate shuttle bounds and docking port offset
+	var/low_x = world.maxx
+	var/low_y = world.maxy
+	for(var/turf/T in shuttle.linked_area)
+		if(T.x < low_x)
+			low_x = T.x
+		if(T.y < low_y)
+			low_y = T.y
+	var/port_offset_x = shuttle.linked_port.x - low_x
+	var/port_offset_y = shuttle.linked_port.y - low_y
+
+	// Get sector boundaries to calculate relative positions
+	var/list/bounds = SSmapping.get_sector_bounds(alloc.sector)
+	var/x_min = bounds["x_min"]
+	var/y_min = bounds["y_min"]
+
+	// Create matrix with relative coordinates
+	var/datum/turf_matrix[SECTOR_SIZE][SECTOR_SIZE]
+	for(var/turf/T in search_turfs)
+		var/rel_x = T.x - x_min + 1
+		var/rel_y = T.y - y_min + 1
+		turf_matrix[rel_x][rel_y] = T
+
+	// Define safe zone boundaries (accounting for edge buffer and shuttle size)
+	var/safe_x_min = LANDING_ZONE_EDGE_BUFFER + 1
+	var/safe_x_max = SECTOR_SIZE - LANDING_ZONE_EDGE_BUFFER - x_dim
+	var/safe_y_min = LANDING_ZONE_EDGE_BUFFER + 1
+	var/safe_y_max = SECTOR_SIZE - LANDING_ZONE_EDGE_BUFFER - y_dim
+
+	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
+		return // Not enough space for safe landing
+
+	// Create randomized search list within safe boundaries
+	var/list/search_positions = list()
+	for(var/rel_x = safe_x_min; rel_x <= safe_x_max; rel_x++)
+		for(var/rel_y = safe_y_min; rel_y <= safe_y_max; rel_y++)
+			var/turf/T = turf_matrix[rel_x][rel_y]
+			if(T && !iswall(T) && !istype(T, /turf/unsimulated/mineral))
+				search_positions += T
+
+	// Shuffle the search positions for randomization
+	if(!search_positions.len)
+		return null
+
+	search_positions = shuffle(search_positions)
+
+	// Search through randomized positions
+	for(var/turf/T in search_positions)
+		var/rel_x = T.x - x_min + 1
+		var/rel_y = T.y - y_min + 1
+		var/found = TRUE
+
+		for(var/dx = 0; dx < x_dim && found; dx++)
+			for(var/dy = 0; dy < y_dim && found; dy++)
+				var/check_x = rel_x + dx
+				var/check_y = rel_y + dy
+				if(check_x > SECTOR_SIZE || check_y > SECTOR_SIZE) // Out of sector bounds
+					found = FALSE
+					continue
+				var/turf/target = turf_matrix[check_x][check_y]
+				if(!target || !istype(target, T.type))
+					found = FALSE
+
+		if(found)
+			// Calculate the destination docking port position
+			var/port_x = T.x + port_offset_x
+			var/port_y = T.y + port_offset_y
+			var/turf/port_base_turf = locate(port_x, port_y, alloc.z)
+			var/turf/port_turf = get_step(port_base_turf, shuttle.linked_port.dir)
+
+			// The destination port direction is opposite to the shuttle's port direction
+			var/port_dir = turn(shuttle.linked_port.dir, 180)
+
+			return list("bottom_left" = T, "port_turf" = port_turf, "port_dir" = port_dir)
+
+	return
+
+/datum/landing_zone/proc/spawn_warnings()
+	clear_warnings()
+	for(var/turf/T in turf_list)
+		var/is_corner = is_corner_turf(T)
+		new /obj/effect/landing_zone(T, corner = is_corner)
+
+/datum/landing_zone/proc/clear_warnings()
+	for(var/turf/T in turf_list)
+		for(var/obj/effect/landing_zone/overlay in T)
+			qdel(overlay)
+
+/datum/landing_zone/proc/is_corner_turf(var/turf/T)
+	if(!turf_list.len || !T)
+		return FALSE
+
+	var/min_x = world.maxx
+	var/max_x = 0
+	var/min_y = world.maxy
+	var/max_y = 0
+
+	for(var/turf/check in turf_list)
+		if(check.x < min_x) min_x = check.x
+		if(check.x > max_x) max_x = check.x
+		if(check.y < min_y) min_y = check.y
+		if(check.y > max_y) max_y = check.y
+
+	return (T.x == min_x || T.x == max_x) && (T.y == min_y || T.y == max_y)
+
+/datum/landing_zone/Destroy()
+	clear_warnings()
+	if(docking_port)
+		qdel(docking_port)
+		docking_port = null
+	turf_list = null
+	shuttle_ref = null
+	planet_ref = null
+	return ..()
+
+/datum/landing_zone/proc/get_shuttle()
+	return shuttle_ref?.get()
+
+/datum/landing_zone/proc/get_planet()
+	return planet_ref?.get()
+
 
 #undef INIT_SUCCESS
 #undef INIT_NO_AREA

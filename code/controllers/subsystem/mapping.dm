@@ -651,226 +651,50 @@ var/datum/subsystem/mapping/SSmapping
 			return A
 	return z //return the z level if no allocation found
 
-/**
- * Finds a suitable landing zone for a shuttle on a planet
- *
- * Searches the planet's sector for a flat area large enough to accommodate
- * the specified dimensions, staying at least 11 tiles from sector edges.
- * Returns a random valid location to provide variety.
- *
- * Arguments:
- * * alloc - The planet allocation to search within
- * * shuttle - The shuttle that needs a landing zone
- * * size - List containing [width, height] of the landing area needed
- *
- * Returns:
- * * An associative list with "port_turf" (where to place docking port) and "port_dir" (direction for port), or null if no valid location found
- */
-/datum/subsystem/mapping/proc/get_landing_zone(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size)
-	if (!alloc || !shuttle || !size || size.len != 2)
-		return null
-	if(!shuttle.linked_port)
-		return null
-
-	var/x_dim = size[1]
-	var/y_dim = size[2]
-	var/list/turf/search_turfs = turfs_from_sector(alloc.sector, alloc.z)
-
-	// Calculate shuttle bounds and docking port offset
-	var/low_x = world.maxx
-	var/low_y = world.maxy
-	for(var/turf/T in shuttle.linked_area)
-		if(T.x < low_x)
-			low_x = T.x
-		if(T.y < low_y)
-			low_y = T.y
-	var/port_offset_x = shuttle.linked_port.x - low_x
-	var/port_offset_y = shuttle.linked_port.y - low_y
-
-	// Get sector boundaries to calculate relative positions
-	var/list/bounds = get_sector_bounds(alloc.sector)
-	var/x_min = bounds["x_min"]
-	var/y_min = bounds["y_min"]
-
-	// Create matrix with relative coordinates
-	var/datum/turf_matrix[SECTOR_SIZE][SECTOR_SIZE]
-	for (var/turf/T in search_turfs)
-		var/rel_x = T.x - x_min + 1
-		var/rel_y = T.y - y_min + 1
-		turf_matrix[rel_x][rel_y] = T
-
-	// Define safe zone boundaries (accounting for edge buffer and shuttle size)
-	var/safe_x_min = LANDING_ZONE_EDGE_BUFFER + 1
-	var/safe_x_max = SECTOR_SIZE - LANDING_ZONE_EDGE_BUFFER - x_dim
-	var/safe_y_min = LANDING_ZONE_EDGE_BUFFER + 1
-	var/safe_y_max = SECTOR_SIZE - LANDING_ZONE_EDGE_BUFFER - y_dim
-
-	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
-		return null // Not enough space for safe landing
-
-	// Create randomized search list within safe boundaries
-	var/list/search_positions = list()
-	for(var/rel_x = safe_x_min; rel_x <= safe_x_max; rel_x++)
-		for(var/rel_y = safe_y_min; rel_y <= safe_y_max; rel_y++)
-			var/turf/T = turf_matrix[rel_x][rel_y]
-			if(T && !iswall(T) && !istype(T, /turf/unsimulated/mineral))
-				search_positions += T
-
-	// Shuffle the search positions for randomization
-	if(!search_positions.len)
-		return null
-
-	search_positions = shuffle(search_positions)
-
-	// Search through randomized positions
-	for(var/turf/T in search_positions)
-		var/rel_x = T.x - x_min + 1
-		var/rel_y = T.y - y_min + 1
-		var/found = TRUE
-
-		for (var/dx = 0; dx < x_dim && found; dx++)
-			for (var/dy = 0; dy < y_dim && found; dy++)
-				var/check_x = rel_x + dx
-				var/check_y = rel_y + dy
-				if(check_x > SECTOR_SIZE || check_y > SECTOR_SIZE) // Out of sector bounds
-					found = FALSE
-					continue
-				var/turf/target = turf_matrix[check_x][check_y]
-				if (!target || !istype(target,T.type))
-					found = FALSE
-
-		if (found)
-			// Calculate the destination docking port position
-			// The port goes at the shuttle's bottom-left + port offset, then shifted one turf in the shuttle port's direction
-			var/port_x = T.x + port_offset_x
-			var/port_y = T.y + port_offset_y
-			var/turf/port_base_turf = locate(port_x, port_y, alloc.z)
-			var/turf/port_turf = get_step(port_base_turf, shuttle.linked_port.dir)
-
-			// The destination port direction is opposite to the shuttle's port direction
-			var/port_dir = turn(shuttle.linked_port.dir, 180)
-
-			// Add landing zone overlays to all turfs the shuttle will occupy
-			for(var/dx = 0; dx < x_dim; dx++)
-				for(var/dy = 0; dy < y_dim; dy++)
-					var/turf/overlay_turf = locate(T.x + dx, T.y + dy, alloc.z)
-					if(overlay_turf)
-						var/is_corner = (dx == 0 || dx == x_dim - 1) && (dy == 0 || dy == y_dim - 1)
-						new /obj/effect/landing_zone(overlay_turf, corner = is_corner)
-
-			return list("port_turf" = port_turf, "port_dir" = port_dir)
-
-	return null
-
-/**
- * Gets or creates a persistent landing zone for a specific shuttle on a planet
- *
- * Checks if the shuttle type already has a registered landing zone on this planet.
- * If not, finds a new landing zone and creates a docking port for it.
- * This ensures shuttles return to the same location on repeated landings.
- *
- * Arguments:
- * * alloc - The planet allocation to create a landing zone in
- * * shuttle - The shuttle that needs a landing zone
- * * size - List containing [width, height] for the landing area
- *
- * Returns:
- * * The docking port for the landing zone, or null if no suitable location found
- */
 /datum/subsystem/mapping/proc/get_shuttle_landing_zone(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size)
-	if(!alloc || !shuttle || !size)
+	if(!alloc || !shuttle)
 		return null
 
 	// Check if this shuttle already has a landing zone on this planet
 	if(alloc.shuttle_landing_zones[shuttle.type])
-		var/obj/docking_port/existing_port = alloc.shuttle_landing_zones[shuttle.type]
-		if(existing_port?.loc) // Make sure it still exists
-			spawn_lz_warnings(alloc, shuttle, size, existing_port)
-			return existing_port
+		var/datum/landing_zone/existing_lz = alloc.shuttle_landing_zones[shuttle.type]
+		if(existing_lz?.docking_port?.loc)
+			existing_lz.spawn_warnings()
+			return existing_lz.docking_port
 		else
-			// Clean up dead reference
 			alloc.shuttle_landing_zones -= shuttle.type
 
-	// Find a new landing zone - now returns port placement info
-	var/list/landing_info = get_landing_zone(alloc, shuttle, size)
-	if(!landing_info)
-		return null
-
-	var/turf/port_turf = landing_info["port_turf"]
-	var/port_dir = landing_info["port_dir"]
-
-	if(!port_turf)
-		return null
-
-	// Create and register the landing zone at the correct position
-	var/obj/docking_port/destination/planet_surface/surface_port = new(port_turf)
-	surface_port.dir = port_dir
-	surface_port.areaname = "[alloc.ptype.planet_name] surface"
-
-	// Set the base turf type for proper surface restoration when shuttles depart
-	if(alloc.ptype && alloc.ptype.default_baseturf)
-		surface_port.base_turf_type = alloc.ptype.default_baseturf
+	var/datum/landing_zone/new_lz = new(shuttle, alloc.ptype)
+	if(!new_lz || !new_lz.docking_port)
+		return
 
 	// Remember this landing zone for this shuttle type
-	alloc.shuttle_landing_zones[shuttle.type] = surface_port
+	alloc.shuttle_landing_zones[shuttle.type] = new_lz
 
-	return surface_port
+	new_lz.spawn_warnings()
+
+	return new_lz.docking_port
 
 /datum/subsystem/mapping/proc/spawn_lz_warnings(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size, var/obj/docking_port/port)
-	if(!alloc || !shuttle || !size || !port)
+	if(!alloc || !shuttle)
 		return
 
-	var/x_dim = size[1]
-	var/y_dim = size[2]
+	var/datum/landing_zone/lz = alloc.shuttle_landing_zones[shuttle.type]
+	if(!lz)
+		return
 
-	var/low_x = world.maxx
-	var/low_y = world.maxy
-	for(var/turf/T in shuttle.linked_area)
-		if(T.x < low_x)
-			low_x = T.x
-		if(T.y < low_y)
-			low_y = T.y
-	var/port_offset_x = shuttle.linked_port.x - low_x
-	var/port_offset_y = shuttle.linked_port.y - low_y
-
-	// The shuttle's docking port will end up at the turf the destination port points to
-	var/turf/shuttle_port_turf = get_step(get_turf(port), port.dir)
-	var/bottom_left_x = shuttle_port_turf.x - port_offset_x
-	var/bottom_left_y = shuttle_port_turf.y - port_offset_y
-
-	for(var/dx = 0; dx < x_dim; dx++)
-		for(var/dy = 0; dy < y_dim; dy++)
-			var/turf/overlay_turf = locate(bottom_left_x + dx, bottom_left_y + dy, alloc.z)
-			if(overlay_turf)
-				var/is_corner = (dx == 0 || dx == x_dim - 1) && (dy == 0 || dy == y_dim - 1)
-				new /obj/effect/landing_zone(overlay_turf, corner = is_corner)
+	lz.spawn_warnings()
 
 /datum/subsystem/mapping/proc/clear_lz_warnings(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size, var/obj/docking_port/port)
-	if(!alloc || !shuttle || !size || !port)
+	if(!alloc || !shuttle)
 		return
 
-	var/x_dim = size[1]
-	var/y_dim = size[2]
+	var/datum/landing_zone/lz = alloc.shuttle_landing_zones[shuttle.type]
+	if(!lz)
+		return
 
-	var/low_x = world.maxx
-	var/low_y = world.maxy
-	for(var/turf/T in shuttle.linked_area)
-		if(T.x < low_x)
-			low_x = T.x
-		if(T.y < low_y)
-			low_y = T.y
-	var/port_offset_x = shuttle.linked_port.x - low_x
-	var/port_offset_y = shuttle.linked_port.y - low_y
+	lz.clear_warnings()
 
-	var/turf/shuttle_port_turf = get_step(get_turf(port), port.dir)
-	var/bottom_left_x = shuttle_port_turf.x - port_offset_x
-	var/bottom_left_y = shuttle_port_turf.y - port_offset_y
-
-	for(var/dx = 0; dx < x_dim; dx++)
-		for(var/dy = 0; dy < y_dim; dy++)
-			var/turf/overlay_turf = locate(bottom_left_x + dx, bottom_left_y + dy, alloc.z)
-			for(var/obj/effect/landing_zone/overlay in overlay_turf)
-				qdel(overlay)
 /**
  * # Allocation Datum
  *
@@ -888,7 +712,7 @@ var/datum/subsystem/mapping/SSmapping
 	var/z = 7
 	var/datum/planet_type/ptype
 	var/list/turf/turfs = list()
-	/// Tracks persistent shuttle landing zones - associative list: shuttle_type -> docking_port
+	/// Tracks persistent shuttle landing zones - associative list: shuttle_type -> /datum/landing_zone
 	var/list/shuttle_landing_zones = list()
 
 #undef STAGE_TERRAIN

@@ -1074,7 +1074,7 @@ var/global/floorIsLava = 0
 	dat += "<h2>Create New Planet:</h2>"
 	dat += "<p><A href='?_src_=holder;procgen_create=1'>Generate New Planet</A></p>"
 
-	var/datum/browser/popup = new(usr, "procgen_panel", "Procedural Generation Panel", 800, 600)
+	var/datum/browser/popup = new(usr, "procgen_panel", "Procedural Generation Panel", 1000, 600)
 	popup.set_content(dat)
 	popup.open()
 

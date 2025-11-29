@@ -337,6 +337,17 @@
 			if(shuttle_size)
 				SSmapping.spawn_lz_warnings(alloc, shuttle, shuttle_size, surface_port)
 
+			// Set up transit for planet surface travel
+			var/engine_dir = SOUTH
+			for(var/obj/structure/shuttle/engine/propulsion/engine in shuttle.linked_area)
+				engine_dir = engine.dir
+				break
+			var/obj/docking_port/destination/transit/transit_port = generate_transit_area(shuttle, engine_dir, 1)
+			if(transit_port)
+				transit_port.areaname = "transit to [alloc.ptype?.planet_name || "planet surface"]"
+				transit_port.generate_borders = 1
+				shuttle.set_transit_dock(transit_port)
+
 	//Send a message to the shuttle to move
 	shuttle.travel_to(selected_port, src, user)
 
