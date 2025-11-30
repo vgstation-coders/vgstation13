@@ -28915,7 +28915,7 @@
 "boF" = (
 /obj/structure/shuttle/engine/propulsion/left,
 /obj/structure/shuttle/diag_wall/smooth,
-/turf/space,
+/turf/simulated/floor/plating,
 /area/shuttle/escape_pod1)
 "boG" = (
 /obj/machinery/door/unpowered/shuttle,
@@ -28929,7 +28929,7 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 4
 	},
-/turf/space,
+/turf/simulated/floor/plating,
 /area/shuttle/escape_pod1)
 "boI" = (
 /turf/simulated/wall,
@@ -29185,7 +29185,7 @@
 "bpz" = (
 /obj/structure/shuttle/engine/propulsion/left,
 /obj/structure/shuttle/diag_wall/smooth,
-/turf/space,
+/turf/simulated/floor/plating,
 /area/shuttle/escape_pod2)
 "bpA" = (
 /obj/machinery/door/unpowered/shuttle,
@@ -29199,7 +29199,7 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 4
 	},
-/turf/space,
+/turf/simulated/floor/plating,
 /area/shuttle/escape_pod2)
 "bpC" = (
 /obj/machinery/light/small{

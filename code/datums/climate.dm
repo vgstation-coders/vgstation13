@@ -57,18 +57,17 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		weather_image.UpdatePrecipitation(WEATHER_CALM)
 
 // Register any outdoor turf with this climate (generalized for all weather types)
-/datum/climate/proc/register_weather_turf(var/turf/T)
+/datum/climate/proc/register_weather_turf(var/turf/T,var/force = FALSE)
 	if(!T)
 		return
-	if(!isopensurface(T.loc))
-		if(T in weather_turfs)
-			weather_turfs -= T
-		return
-	if(T in weather_turfs)
-		return
-	weather_turfs += T
+	if(!force)
+		if(!isopensurface(T.loc))
+			if(T in weather_turfs)
+				weather_turfs -= T
+			return
+	weather_turfs |= T
 	if(weather_image)
-		T.vis_contents += weather_image
+		T.vis_contents |= weather_image
 
 // Unregister an outdoor turf from this climate
 /datum/climate/proc/unregister_weather_turf(var/turf/T)
@@ -83,15 +82,30 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	return
 
 /datum/climate/proc/forecast()
+	if(!current_weather)
+		CRASH("Forecast called with null current_weather on [src]")
+	if(!istype(current_weather, /datum/weather))
+		CRASH("Forecast called with invalid current_weather ([current_weather]) on [src] - expected weather instance, got [current_weather.type]")
+
+	// Validate that current weather type has transitions defined
+	if(!(current_weather.type in weather_transitions))
+		CRASH("Forecast called but current weather type [current_weather.type] not found in weather_transitions for [src]")
+
 	var/cycle = 1
 	clear_forecast()
 	forecasts = list(current_weather) //project based on current weather
 	while(forecasts.len <= PREDICTION_MINIMUM+1 && cycle <= PREDICTION_MAXIMUM)
 		var/datum/weather/W = forecasts[forecasts.len]
+		if(!istype(W, /datum/weather))
+			CRASH("Forecast found invalid weather in forecasts list: [W]")
 		var/list/possible_transitions = weather_transitions[W.type]
 		if(!possible_transitions || !possible_transitions.len)
 			break //No further transitions possible
 		var/path = pickweight(possible_transitions)
+		if(isnull(path))
+			CRASH("Forecast got null path from pickweight for weather type [W.type] - transitions: [json_encode(possible_transitions)]")
+		if(!ispath(path, /datum/weather))
+			CRASH("Forecast got invalid path [path] from pickweight for weather type [W.type] - expected weather type path")
 		if(path == W.type)
 			W.timeleft += round(rand(cycle_freq[1],cycle_freq[2]),SS_WAIT_WEATHER)
 		else
@@ -171,7 +185,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 				current_weather.execute()
 				current_weather.update_weather_sounds()
 			else
-				weather_transitions[current_weather.type] = list(weather = 100)
+				weather_transitions[current_weather.type] = list()
+				weather_transitions[current_weather.type][weather] = 100
 
 	else if(istype(weather,/datum/weather))
 		//We have been given a specific weather datum. It may be modified, so run it no matter what.
@@ -183,7 +198,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 			current_weather.execute()
 		else
 			var/datum/weather/W = weather
-			weather_transitions[current_weather.type] = list(W.type = 100)
+			weather_transitions[current_weather.type] = list()
+			weather_transitions[current_weather.type][W.type] = 100
 
 	else
 		WARNING("Change weather was called with [weather], neither a weather datum nor a path.")

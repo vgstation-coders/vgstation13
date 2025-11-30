@@ -876,10 +876,16 @@
 	// doing this for source and destination in case we move between planets
 	var/datum/allocation/source_allocation = SSmapping.get_allocation(trf = our_center)
 	var/datum/climate/source_climate = SSweather.get_climate(our_center.z, source_allocation)
+	if(!source_climate)
+		source_climate = SSweather.get_climate(our_center.z, null)
 	var/datum/allocation/dest_allocation = SSmapping.get_allocation(trf = new_center)
 	var/datum/climate/dest_climate = SSweather.get_climate(new_center.z, dest_allocation)
+	if(!dest_climate)
+		dest_climate = SSweather.get_climate(new_center.z, null)
 
 	for(var/turf/T in linked_area.contents)
+		if(T in corner_turfs)
+			continue
 		if(source_climate)
 			source_climate.unregister_weather_turf(T)
 		if(dest_climate)
@@ -892,9 +898,25 @@
 	// Re-register turfs left behind by the shuttle with the source climate
 	if(source_climate)
 		for(var/turf/old_turf in old_turfs)
-			source_climate.register_weather_turf(old_turf)
-		var/datum/planet_type/source_planet = source_climate.allocation?.ptype
+			source_climate.register_weather_turf(old_turf, TRUE)
+
+	var/datum/planet_type/source_planet = source_climate?.allocation?.ptype
+	if(source_planet)
 		SSDayNight.update_turf_lighting(old_turfs, source_planet)
+	else if(our_center.z in daynight_z_lvls) //pre-mapped day/night users like snaxi or jungle
+		for(var/turf/old_turf in old_turfs)
+			if(IsEven(old_turf.x) && IsEven(old_turf.y))
+				var/area/A = get_area(old_turf)
+				if(isopensurface(A))
+					daynight_turfs |= old_turf
+				else
+					for(var/cdir in cardinal)
+						var/turf/T1 = get_step(old_turf, cdir)
+						var/area/A1 = get_area(T1)
+						if(istype(A1, /area/surface))
+							daynight_turfs |= old_turf
+							break
+		SSDayNight.update_turf_lighting(old_turfs)
 
 	return 1
 

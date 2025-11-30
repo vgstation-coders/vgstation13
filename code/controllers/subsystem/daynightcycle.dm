@@ -191,10 +191,20 @@ On the map dm file, redefine the following:
 		T.set_light(next_light_range, light_power, planet.current_timeOfDay, lowpriority)
 
 // Force lighting change on a list of turfs (used mainly for when shuttles leave)
-/datum/subsystem/daynightcycle/proc/update_turf_lighting(var/list/turf/turfs, var/datum/planet_type/planet)
-	if(!turfs.len || !planet)
+/datum/subsystem/daynightcycle/proc/update_turf_lighting(var/list/turf/turfs, var/datum/planet_type/planet = null)
+	if(!turfs.len)
 		return
-	var/light_power = (planet.current_timeOfDay == TOD_NIGHTTIME) ? 3 : 10
-	light_power *= planet.weather_mod
+
+	var/timeOfDay
+	var/light_power
+
+	if(planet)
+		timeOfDay = planet.current_timeOfDay
+		light_power = (timeOfDay == TOD_NIGHTTIME) ? 3 : 10
+		light_power *= planet.weather_mod
+	else
+		timeOfDay = current_timeOfDay
+		light_power = next_light_power * weather_mod
+
 	for(var/turf/T in turfs)
-		T.set_light(next_light_range, light_power, planet.current_timeOfDay, lowpriority = FALSE)
+		T.set_light(next_light_range, light_power, timeOfDay, lowpriority = FALSE)

@@ -61,3 +61,35 @@ var/list/precip_state_to_texture = list()
 			C.register_weather_turf(S)
 
 	return C
+
+// Restart a specific climate in case it gets corrupted
+/datum/subsystem/weather/proc/restart_climate(var/datum/climate/C)
+	if(!C || !istype(C))
+		return FALSE
+
+	var/climate_type = C.type
+	var/climate_z = C.z
+	var/datum/allocation/climate_allocation = C.allocation
+
+	climates -= C
+
+	C.clear_forecast()
+	if(C.current_weather)
+		qdel(C.current_weather)
+	if(C.weather_image)
+		for(var/turf/T in C.weather_turfs)
+			T.vis_contents -= C.weather_image
+		qdel(C.weather_image)
+	qdel(C)
+
+	var/datum/climate/new_climate = new climate_type(climate_z, climate_allocation, FALSE)
+	climates += new_climate
+
+	if(climate_allocation && climate_allocation.turfs)
+		for(var/turf/unsimulated/floor/snow/S in climate_allocation.turfs)
+			new_climate.register_weather_turf(S)
+	else
+		for(var/turf/unsimulated/floor/snow/S in block(locate(1, 1, climate_z), locate(world.maxx, world.maxy, climate_z)))
+			new_climate.register_weather_turf(S)
+
+	return TRUE

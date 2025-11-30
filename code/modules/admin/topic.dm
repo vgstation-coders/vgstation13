@@ -691,6 +691,20 @@
 		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu] for Z-[C.z].</span>", 1)
 		climate_panel()
 
+	else if(href_list["climate_restart"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/climate/C = locate(href_list["climate_restart"])
+		if(!C || !istype(C))
+			return
+		var/response = alert(usr, "This will completely restart the climate controller for Z-[C.z]. Continue?", "Restart Climate", "Yes", "No")
+		if(response != "Yes")
+			return
+		SSweather.restart_climate(C)
+		log_admin("[key_name(usr)] restarted the climate controller for Z-[C.z].")
+		message_admins("<span class='notice'>[key_name(usr)] restarted the climate controller for Z-[C.z].</span>", 1)
+		climate_panel()
+
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
 			return
