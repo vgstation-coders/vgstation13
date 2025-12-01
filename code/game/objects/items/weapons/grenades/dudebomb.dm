@@ -10,15 +10,7 @@
 	var/turf/you_vile_cur = get_turf(src)
 	if(!you_vile_cur)
 		return
-
 	var/list/dudes_to_bomb = get_all_mobs_in_dview(you_vile_cur, ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon))
-
-	var/mob/living/holder = get_holder_of_type(src, /mob/living)
-	if(holder)
-		if(ismob(loc))
-			var/mob/M = loc
-			M.drop_from_inventory(src)
-
 	for(var/mob/living/M in dudes_to_bomb)
 		if(ishuman(M))
 			var/mob/living/carbon/human/GOGOGOGOGOGO = M
@@ -40,7 +32,6 @@
 			if(iscarbon(user))
 				var/mob/living/carbon/C = user
 				C.throw_mode_on()
-	return
 
 /obj/item/weapon/grenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	to_chat(user, "<span class = 'warning'>YEAH, GAL-O SENGEN.</span>")
