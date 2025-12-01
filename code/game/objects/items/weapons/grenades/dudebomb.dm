@@ -22,12 +22,12 @@
 				GOGOGOGOGOGO.GALize()
 	qdel(src)
 
-/obj/item/weapon/grenade/attack_self(mob/user as mob)
+/obj/item/weapon/grenade/dudebomb/attack_self(mob/user as mob)
 	if(!active)
 		if(clown_check(user))
 			to_chat(user, "<span class='attack'>You prime \the [name]! [det_time/10] seconds!</span>")
 
-			activate(user,FALSE)
+			activate(user, FALSE)
 			add_fingerprint(user)
 			if(iscarbon(user))
 				var/mob/living/carbon/C = user
