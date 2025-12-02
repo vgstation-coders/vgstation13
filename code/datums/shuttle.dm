@@ -161,11 +161,12 @@
 		if(!isopensurface(T) || !istype(T,/turf/space))
 			for(var/obj/O in T.contents)
 				if(istype(O,/obj/structure/shuttle))
-					corner = TRUE
-					break
+					if(istype(T,/turf/space))
+						corner = TRUE
+						break
 			if(corner)
 				continue
-			T.shuttle_turf = TRUE
+			T.turf_flags |= SHUTTLE_TURF
 	return
 
 /datum/shuttle/Destroy()
@@ -726,10 +727,10 @@
 
 		linked_area.contents.Add(new_turf)
 		new_turf.change_area(old_area,linked_area)
-		if(isshuttleturf(old_turf) || old_turf.shuttle_turf)
+		if(isshuttleturf(old_turf) || (old_turf.turf_flags & SHUTTLE_TURF))
 			new_turf.ChangeTurf(old_turf.type, allow = 1)
-			new_turf.shuttle_turf = TRUE
-			old_turf.shuttle_turf = FALSE
+			new_turf.turf_flags |= SHUTTLE_TURF
+			old_turf.turf_flags &= ~SHUTTLE_TURF
 		new_turfs[C] = new_turf
 
 		//***Remove old turf from shuttle's area****

@@ -270,6 +270,7 @@ var/MAX_EXPLOSION_RANGE = 32
 #define NO_FLORA 		(1<<4) // Prevents plants from growing
 #define NO_LOOT 		(1<<5) // No loot spawning here
 #define DEFER_EDGING	(1<<6) // Skip adding edges on init
+#define SHUTTLE_TURF	(1<<7) // Turf is part of a shuttle
 
 //turf edge flags
 #define EDGE_CARDINAL		1<<1 // edges on cardinals only
