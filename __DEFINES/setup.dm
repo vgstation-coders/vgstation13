@@ -278,10 +278,13 @@ var/MAX_EXPLOSION_RANGE = 32
 #define EDGE_THREEFOLD		1<<4 // inside of two inner corners
 #define ALL_EDGES EDGE_CARDINAL|EDGE_OUTER_DIAGONAL|EDGE_INNER_DIAGONAL|EDGE_THREEFOLD
 
+
 #define CAVE_FLOOR_EDGE_PRIORITY	1
 #define SAND_EDGE_PRIORITY			2
 #define GRASS_EDGE_PRIORITY			3
 #define ROCK_EDGE_PRIORITY			4
+#define WATER_EDGE_PRIORITY			5
+#define DEEPWATER_EDGE_PRIORITY		6
 
 //slots
 #define slot_back 			1
@@ -621,6 +624,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define CANPARALYSE		(1<<2)
 #define CANPUSH			(1<<3)
 #define UNPACIFIABLE 	(1<<4)		//Immune to pacify effects.
+#define PACIFIED	 	(1<<5)
 
 #define GODMODE			(1<<12)
 #define FAKEDEATH		(1<<13)	//Replaces stuff like changeling.changeling_fakedeath

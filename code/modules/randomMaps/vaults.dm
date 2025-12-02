@@ -334,6 +334,7 @@
 
 	return start_turf && (start_turf.z <= map.zDeepSpace)
 
+	
 //Proc that populates a single area with many vaults, randomly
 //A is the area OR a list of turfs where the placement happens
 //map_element_objects is a list of vaults that have to be placed. Defaults to subtypes of /datum/map_element/vault (meaning all vaults are spawned)

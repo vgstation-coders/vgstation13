@@ -45060,6 +45060,7 @@
 "bHF" = (
 /obj/structure/table/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -106560,7 +106561,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/research_outpost/xenobot)
+/area/research_outpost/hallway)
 "emG" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
@@ -109260,11 +109261,11 @@
 "erD" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_interior";
-	locked = 1
+	locked = 1;
+	req_access_txt = "47"
 	},
 /turf/simulated/floor,
 /area/research_outpost/gearstore)
@@ -109466,7 +109467,6 @@
 /area/mine/explored)
 "erW" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_exterior";
@@ -112904,16 +112904,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/mine/explored)
-"eyY" = (
-/obj/structure/hanging_lantern{
-	dir = 1
-	},
-/turf/unsimulated/floor/asteroid,
-/area/mine/unexplored)
-"eyZ" = (
-/obj/structure/ore_box,
-/turf/unsimulated/floor/asteroid,
-/area/mine/unexplored)
 "eza" = (
 /obj/structure/table,
 /obj/item/weapon/storage/box/bodybags{
@@ -113435,11 +113425,6 @@
 	},
 /turf/space,
 /area)
-"ezR" = (
-/turf/unsimulated/floor/asteroid,
-/area/vox_trading_post/trading_floor{
-	name = "\improper Vox Casino"
-	})
 "ezS" = (
 /turf/simulated/floor/plating,
 /area/mine/living_quarters)
@@ -118548,6 +118533,15 @@
 "hgL" = (
 /turf/simulated/wall,
 /area/crew_quarters/barber)
+"hhq" = (
+/obj/machinery/door/airlock/external{
+	frequency = 1449;
+	icon_state = "door_locked";
+	id_tag = "vox_eva_airlock_interior";
+	locked = 1
+	},
+/turf/simulated/wall,
+/area/vox_trading_post/hallway)
 "hjx" = (
 /obj/structure/closet/wardrobe/orange,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -119806,7 +119800,6 @@
 	dir = 4
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_int_airlock";
@@ -122326,7 +122319,6 @@
 /area/shuttle/escape_pod3)
 "xDf" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_ext_airlock";
@@ -1212084,7 +1212076,7 @@ eoT
 epC
 eqa
 eqB
-cBx
+cBo
 eru
 eok
 eqM
@@ -1214092,7 +1214084,7 @@ eoQ
 epy
 epX
 eqx
-cBo
+cBx
 err
 eoj
 eqM
@@ -1224205,9 +1224197,9 @@ eaH
 eaH
 eaH
 eaH
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1224707,9 +1224699,9 @@ eaH
 eaH
 eaH
 eaH
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1225210,8 +1225202,8 @@ eaH
 eaH
 eaH
 eaH
-eaQ
-eaQ
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1225711,9 +1225703,9 @@ eaH
 eaH
 eaH
 eaH
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1226214,8 +1226206,8 @@ eaH
 eaH
 eaH
 eaH
-eaQ
-eaQ
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1226716,10 +1226708,10 @@ eaH
 eaH
 eaH
 eaH
-eaQ
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1227218,10 +1227210,10 @@ eaH
 eaH
 eaH
 eaH
-eaQ
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1227721,10 +1227713,10 @@ eaH
 eaH
 eaH
 eaH
-eaQ
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1228224,9 +1228216,9 @@ eaH
 eaH
 eaH
 eaH
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1228727,8 +1228719,8 @@ ewC
 ewC
 ewC
 ewC
-eaQ
-eaQ
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1229229,8 +1229221,8 @@ exB
 ewT
 eyj
 ewC
-eaQ
-eaQ
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1229731,8 +1229723,8 @@ ewT
 exR
 ewT
 ewC
-eaQ
-eaQ
+eeb
+eeb
 eaH
 eaH
 eaH
@@ -1230233,9 +1230225,9 @@ exA
 ewT
 eyi
 ewC
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
 eaH
 eaH
 eqM
@@ -1230735,10 +1230727,10 @@ ewT
 ewT
 ewT
 ewC
-eaQ
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
+eeb
 eaH
 eqM
 eqM
@@ -1231237,12 +1231229,12 @@ ewT
 ewT
 ewT
 ewC
-eaQ
-eaQ
-eaQ
-eaQ
-eaQ
-eaH
+eeb
+eeb
+eeb
+eeb
+eeb
+eqM
 eeb
 eeb
 eeb
@@ -1231739,12 +1231731,12 @@ ewT
 ewT
 ewT
 ewC
-eyY
-eaQ
-eaQ
-eaQ
-eaQ
-eaQ
+etr
+eeb
+eeb
+eeb
+eeb
+eeb
 eeb
 eeb
 eeb
@@ -1232241,12 +1232233,12 @@ exC
 ewT
 eyl
 ewC
-eyZ
-eaQ
-eaQ
-eaQ
-eaQ
-eaQ
+egc
+eeb
+eeb
+eeb
+eeb
+eeb
 eeb
 eeb
 eeb
@@ -1232746,9 +1232738,9 @@ ewC
 ewC
 ewC
 ewC
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
 eeb
 eeb
 eeb
@@ -1233248,9 +1233240,9 @@ ewT
 ewT
 ezn
 ewC
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
 eeb
 eeb
 eeb
@@ -1233750,9 +1233742,9 @@ ewT
 ewT
 ewT
 ewC
-eaQ
-eaQ
-eaQ
+eeb
+eeb
+eeb
 eeb
 eeb
 eeb
@@ -1234252,9 +1234244,9 @@ ewT
 ewT
 ewT
 ewC
-ezR
-ezR
-ezR
+eeb
+eeb
+eeb
 eeb
 eeb
 eeb
@@ -1236233,7 +1236225,7 @@ eaH
 eaH
 eaH
 eaH
-etd
+hhq
 etn
 ety
 etd

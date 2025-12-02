@@ -2166,7 +2166,6 @@
 	})
 "aeu" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_ext_airlock";
@@ -3043,7 +3042,6 @@
 	})
 "agn" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_int_airlock";
@@ -89904,7 +89902,6 @@
 /area/mine/production)
 "dAr" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1333;
 	icon_state = "door_locked";
 	id_tag = "min_airlock_exterior";
@@ -89933,7 +89930,6 @@
 /area/mine/production)
 "dAu" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1333;
 	icon_state = "door_locked";
 	id_tag = "min_airlock_interior";
@@ -92902,7 +92898,6 @@
 /area/research_outpost/gearstore)
 "dGx" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_interior";
@@ -92932,7 +92927,6 @@
 /area/research_outpost/gearstore)
 "dGA" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_exterior";
@@ -100458,8 +100452,12 @@
 /turf/unsimulated/wall/blastdoor,
 /area/shuttle/exploration)
 "why" = (
-/turf/simulated/wall,
-/area/mine/unexplored)
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/crew_quarters/bar)
 "wje" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -223975,7 +223973,7 @@ buD
 buD
 bAU
 byu
-bDM
+why
 bFs
 bGT
 bIs
@@ -1143519,8 +1143517,8 @@ dvS
 dvS
 dvS
 dxy
-why
-dpP
+tIQ
+duY
 duY
 duY
 dpQ
@@ -1144021,10 +1144019,10 @@ dwV
 dvS
 dxz
 dvp
-why
-dpP
-dpP
-dpP
+tIQ
+duY
+duY
+duY
 duY
 dyk
 dpQ
@@ -1144523,11 +1144521,11 @@ dvp
 dxk
 dxA
 dvp
-dpP
-dpP
-dpP
-dpP
-dpP
+duY
+duY
+duY
+duY
+duY
 duY
 dpQ
 dpQ
@@ -1145027,9 +1145025,9 @@ dwW
 dwW
 dwW
 dwW
-dpP
-dpP
-dpP
+duY
+duY
+duY
 duY
 dpQ
 dpQ
@@ -1145530,10 +1145528,10 @@ dxL
 dxS
 dwW
 dwW
-dpP
-dpP
-dpP
-dpP
+duY
+duY
+duY
+duY
 duY
 dpQ
 dpQ
@@ -1146032,10 +1146030,10 @@ dxM
 dxT
 dya
 dwW
-dpP
-dpP
-dpP
-dpP
+duY
+duY
+duY
+duY
 duY
 dpQ
 dpQ
@@ -1146534,10 +1146532,10 @@ dxN
 dxT
 dyb
 dwW
-dpP
-dpP
-dpP
-dpP
+duY
+duY
+duY
+duY
 duY
 dpQ
 dpQ
@@ -1147037,9 +1147035,9 @@ dxU
 dwW
 dwW
 duY
-dpP
-dpP
-dpP
+duY
+duY
+duY
 duY
 dpQ
 dpQ
@@ -1147541,7 +1147539,7 @@ duY
 duY
 duY
 duY
-dpP
+duY
 duY
 dpQ
 dpQ

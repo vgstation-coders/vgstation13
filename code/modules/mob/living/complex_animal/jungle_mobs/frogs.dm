@@ -13,7 +13,7 @@
 	base_damage = 5
 	damage_variance = 1
 	behavior_flags = ANIMAL_BEHAVIOR_AVOID_PRED
-	movespeed=7
+	movespeed=4
 	kin_check_type_path=/mob/living/complex_animal/frog
 	petable=TRUE
 	pass_flags = PASSTABLE | PASSRAILING | PASSMACHINE | PASSMOB
@@ -27,9 +27,9 @@
 		var/i=rand(1,2)
 		switch(i)
 			if(1)
-				emote("me", MESSAGE_HEAR, "ribbits")
+				emote("me", MESSAGE_HEAR, "ribbits.")
 			if(2)
-				emote("me", MESSAGE_HEAR, "croaks")
+				emote("me", MESSAGE_HEAR, "croaks.")
 
 
 /mob/living/complex_animal/frog/trypet(mob/living/carbon/human/M)

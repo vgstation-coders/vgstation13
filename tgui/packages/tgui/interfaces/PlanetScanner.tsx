@@ -180,7 +180,7 @@ export const PlanetScanner = (props) => {
             </Stack.Item>
           )}
 
-          {powered && anchored && !scanning_disabled && (
+          {!!powered && anchored && !scanning_disabled && (
             <>
               <Stack.Item>
                 <Section title="Scanner Status">

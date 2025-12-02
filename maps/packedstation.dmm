@@ -879,18 +879,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
-"abK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/maintenance/fstarboardsolar)
 "abL" = (
 /turf/simulated/wall,
 /area/maintenance/fstarboardsolar)
@@ -28299,6 +28287,7 @@
 	},
 /obj/structure/table/reinforced,
 /obj/item/weapon/reagent_containers/glass/rag,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -59413,9 +59402,6 @@
 	icon_state = "dark vault full"
 	},
 /area/vox_trading_post/gardens)
-"cyB" = (
-/turf/space,
-/area/mine/explored)
 "cyF" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -59533,7 +59519,6 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_exterior";
@@ -59593,7 +59578,6 @@
 	dir = 4
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_interior";
@@ -60075,7 +60059,6 @@
 /area/vox_trading_post/trading_floor)
 "cAe" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_goodsfloor_airlock_interior";
@@ -60177,7 +60160,6 @@
 /area/vox_trading_post/hallway)
 "cAk" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_goodsfloor_airlock_exterior";
@@ -61499,7 +61481,6 @@
 /area/vox_trading_post/hallway)
 "cDr" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_tradehall_airlock_interior";
@@ -61598,7 +61579,6 @@
 /area/vox_trading_post/vault)
 "cDD" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_tradehall_airlock_exterior";
@@ -61793,7 +61773,6 @@
 /area/vox_trading_post/trading_floor)
 "cEb" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_exterior";
@@ -61922,7 +61901,6 @@
 /area/mine/explored)
 "cEj" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_interior";
@@ -203986,7 +203964,7 @@ aai
 aaa
 aaa
 aaa
-abJ
+adW
 acr
 acZ
 adC
@@ -204488,7 +204466,7 @@ aai
 aaa
 aaa
 aaa
-abK
+abL
 abL
 abL
 abL
@@ -1205595,7 +1205573,7 @@ cuP
 cuP
 cuP
 cuO
-cuz
+cuO
 cuO
 cuP
 cuP
@@ -1206097,7 +1206075,7 @@ cuP
 cuP
 cuO
 cuO
-cuz
+cuO
 cuS
 cuP
 cuP
@@ -1206599,7 +1206577,7 @@ cuP
 aai
 cuO
 cuO
-cuz
+cuO
 cuS
 cvI
 cuP
@@ -1207101,7 +1207079,7 @@ agO
 aai
 cuO
 cuO
-cuz
+cuO
 cuS
 cuP
 cuP
@@ -1207603,7 +1207581,7 @@ agO
 aai
 cuO
 cuO
-cuz
+cuO
 cuO
 cuP
 cuP
@@ -1211613,7 +1211591,7 @@ cuL
 aaa
 aaa
 aaa
-cyB
+aaa
 aai
 agO
 aai

@@ -137,6 +137,13 @@
 	else
 		plane = OBJ_PLANE
 
+/obj/structure/bed/chair/verb/rotate_chair()
+	set name = "Rotate Chair"
+	set hidden = TRUE
+	set src in oview(1)
+
+	rotate_ccw()
+
 /obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
 	if(!rotates_anchored || user.incapacitated())
 		return

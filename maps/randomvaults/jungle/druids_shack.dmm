@@ -1,0 +1,175 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/floor/wood,
+/area/surface/jungle)
+"i" = (
+/obj/item/clothing/suit/wizrobe{
+	color = "#22ff22";
+	pixel_y = -6
+	},
+/obj/item/clothing/head/wizard/fake{
+	color = "#22ff22";
+	pixel_y = 10
+	},
+/obj/item/clothing/shoes/black{
+	pixel_y = -19
+	},
+/turf/simulated/floor/wood,
+/area/surface/jungle)
+"j" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/spellbook/oneuse/snakes{
+	pixel_y = 8
+	},
+/turf/simulated/floor/wood,
+/area/surface/jungle)
+"q" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/tinted/frosted,
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 1
+	},
+/turf/simulated/floor/plating/deck,
+/area/surface/jungle)
+"r" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/tinted/frosted,
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 1
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 8
+	},
+/turf/simulated/floor/plating/deck,
+/area/surface/jungle)
+"s" = (
+/obj/structure/flora/ausbushes/grassybush,
+/turf/unsimulated/floor/jungle/grass,
+/area/surface/jungle)
+"x" = (
+/mob/living/simple_animal/cat/snek{
+	name = "Tylenol the Foolish"
+	},
+/turf/simulated/floor/wood,
+/area/surface/jungle)
+"C" = (
+/turf/simulated/wall/mineral/wood,
+/area/surface/jungle)
+"I" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/green,
+/turf/simulated/floor/wood,
+/area/surface/jungle)
+"K" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/plating/deck,
+/area/surface/jungle)
+"L" = (
+/obj/structure/bed/chair/comfy/lime{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/surface/jungle)
+"P" = (
+/turf/unsimulated/floor/jungle/grass,
+/area/surface/jungle)
+"S" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/tinted/frosted,
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 4
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 1
+	},
+/turf/simulated/floor/plating/deck,
+/area/surface/jungle)
+"T" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 1
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 4
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 8
+	},
+/turf/simulated/floor/plating/deck,
+/area/surface/jungle)
+"V" = (
+/turf/unsimulated/floor/jungle/dirt,
+/area/surface/jungle)
+"X" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/tinted/frosted,
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 4
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 8
+	},
+/turf/simulated/floor/plating/deck,
+/area/surface/jungle)
+"Z" = (
+/obj/structure/closet/cabinet,
+/obj/item/clothing/suit/wizrobe{
+	color = "#22ff22";
+	pixel_y = -6
+	},
+/obj/item/clothing/suit/wizrobe{
+	color = "#22ff22";
+	pixel_y = -6
+	},
+/obj/item/clothing/head/wizard/fake{
+	color = "#22ff22";
+	pixel_y = 10
+	},
+/obj/item/clothing/head/wizard/fake{
+	color = "#22ff22";
+	pixel_y = 10
+	},
+/obj/item/clothing/shoes/black,
+/turf/simulated/floor/wood,
+/area/surface/jungle)
+
+(1,1,1) = {"
+C
+T
+X
+C
+C
+s
+"}
+(2,1,1) = {"
+r
+j
+L
+a
+C
+P
+"}
+(3,1,1) = {"
+q
+x
+i
+a
+K
+V
+"}
+(4,1,1) = {"
+S
+I
+Z
+a
+C
+P
+"}
+(5,1,1) = {"
+C
+T
+X
+C
+C
+s
+"}

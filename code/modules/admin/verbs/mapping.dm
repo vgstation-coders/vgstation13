@@ -414,12 +414,13 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 		if(!C.d1) //It's a stub
 			continue
 		var/obj/structure/cable/neighbour
-		neighbour = locate() in get_step(get_turf(C),C.d1)
-		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
-			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
-		neighbour = locate() in get_step(get_turf(C),C.d2)
-		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
-			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
+		var/list/found_directions = list()
+		for(var/direction in list(C.d1,C.d2))
+			neighbour = locate() in get_step(get_turf(C),direction)
+			if(!neighbour || neighbour.get_powernet() != C.get_powernet())
+				found_directions += list(dir2text(direction))
+		if(found_directions.len)
+			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))] (Directions: [english_list(found_directions)])</span><br>"
 	error_str += "<h1>Terminal connections on current Z Level [z]</h1>"
 	for(var/obj/machinery/power/terminal/T in terminals)
 		var/turf/T2 = get_turf(T)

@@ -1746,9 +1746,6 @@
 /area/hallway/primary/foreport{
 	name = "Upper Terminal"
 	})
-"avZ" = (
-/turf/space,
-/area/mine/explored)
 "awh" = (
 /obj/effect/landmark/start{
 	name = "Shaft Miner"
@@ -19776,9 +19773,6 @@
 	icon_state = "white"
 	},
 /area/science/xenobiology)
-"eKC" = (
-/turf/unsimulated/floor/asteroid,
-/area)
 "eKE" = (
 /obj/docking_port/destination/vox/southeast_station,
 /turf/space,
@@ -22585,6 +22579,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -37997,7 +37992,6 @@
 	})
 "jkj" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_exterior";
@@ -45150,7 +45144,6 @@
 /area/centcom/control)
 "kTS" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_interior";
@@ -45994,7 +45987,6 @@
 /area/centcom/ert)
 "ldB" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_goodsfloor_airlock_interior";
@@ -48528,7 +48520,6 @@
 /area/centcom/test)
 "lJb" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_tradehall_airlock_exterior";
@@ -49868,7 +49859,6 @@
 	dir = 4
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_interior";
@@ -56335,7 +56325,6 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_exterior";
@@ -70061,7 +70050,6 @@
 	})
 "rPv" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_tradehall_airlock_interior";
@@ -70498,9 +70486,6 @@
 	dir = 1
 	},
 /turf/space,
-/area)
-"sba" = (
-/turf/unsimulated/floor/asteroid/plating,
 /area)
 "sbI" = (
 /obj/structure/table/woodentable,
@@ -80551,7 +80536,6 @@
 /area/turret_protected/tcomms_control_room)
 "wKT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_goodsfloor_airlock_exterior";
@@ -1161869,10 +1161853,10 @@ cFY
 cFY
 cFY
 cFY
-gga
-gga
-gga
-gga
+cFY
+cFY
+cFY
+cFY
 cFY
 cFY
 cFY
@@ -1162371,10 +1162355,10 @@ cFY
 cFY
 cFY
 cFY
-gga
-gga
-gga
-gga
+cFY
+cFY
+cFY
+cFY
 cFY
 cFY
 cFY
@@ -1187268,7 +1187252,7 @@ yho
 yho
 yho
 ekh
-eKC
+rAv
 cFY
 cFY
 cFY
@@ -1187770,7 +1187754,7 @@ ndy
 clX
 qFj
 gSr
-sba
+mQx
 rAv
 xKs
 xKs
@@ -1188272,7 +1188256,7 @@ uDD
 sFG
 emS
 gSr
-sba
+mQx
 kIJ
 jTb
 wKz
@@ -1188774,7 +1188758,7 @@ eZC
 uuj
 vhI
 gSr
-sba
+mQx
 afc
 gNI
 tHY
@@ -1189276,7 +1189260,7 @@ nra
 mGL
 xaM
 gSr
-sba
+mQx
 gYb
 xKs
 isS
@@ -1189778,7 +1189762,7 @@ xie
 arJ
 lgG
 gSr
-sba
+mQx
 dyM
 xKs
 xKs
@@ -1190280,7 +1190264,7 @@ yho
 yho
 jny
 eil
-sba
+mQx
 vZi
 hCt
 jLg
@@ -1190782,7 +1190766,7 @@ mQx
 mQx
 mQx
 mQx
-sba
+mQx
 sQz
 dbp
 jLg
@@ -1191284,7 +1191268,7 @@ yho
 yho
 yly
 xOm
-sba
+mQx
 fHc
 ltm
 ugl
@@ -1191786,7 +1191770,7 @@ ndy
 mFO
 qFj
 gSr
-sba
+mQx
 nuB
 xKs
 xKs
@@ -1228177,7 +1228161,7 @@ rAv
 rAv
 rAv
 vJN
-ucF
+vJN
 vJN
 rAv
 mQx
@@ -1228679,7 +1228663,7 @@ rAv
 rAv
 vJN
 vJN
-ucF
+vJN
 yho
 rAv
 mQx
@@ -1229181,7 +1229165,7 @@ rAv
 rtG
 vJN
 vJN
-ucF
+vJN
 yho
 bnh
 mQx
@@ -1229683,7 +1229667,7 @@ lvZ
 rtG
 vJN
 vJN
-ucF
+vJN
 yho
 rAv
 mQx
@@ -1230185,7 +1230169,7 @@ lvZ
 rtG
 vJN
 vJN
-ucF
+vJN
 vJN
 rAv
 mQx
@@ -1234195,7 +1234179,7 @@ pbh
 cFY
 cFY
 cFY
-avZ
+cFY
 rtG
 lvZ
 rtG

@@ -361,7 +361,6 @@
 /area/vox_trading_post/solars)
 "aaR" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_exterior";
@@ -520,7 +519,6 @@
 /area/vox_trading_post/solars)
 "abf" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_solars_airlock_interior";
@@ -2685,7 +2683,6 @@
 	tag = "icon-warning (NORTH)"
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_exterior";
@@ -2717,7 +2714,6 @@
 /area/vox_trading_post/hallway)
 "aeR" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_dock_airlock_interior";
@@ -3916,7 +3912,6 @@
 /area/vox_trading_post/armory)
 "agT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_trading_airlock_interior";
@@ -4441,7 +4436,6 @@
 /area/vox_trading_post/trading_floor)
 "ahM" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "vox_trading_airlock_exterior";
@@ -103356,7 +103350,6 @@
 	dir = 4
 	},
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_int_airlock";
@@ -103370,7 +103363,6 @@
 	})
 "dJG" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "sec_eva_ext_airlock";
@@ -131704,6 +131696,13 @@
 	icon_state = "dark"
 	},
 /area/medical/medbay2)
+"mrt" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/crew_quarters/bar)
 "msS" = (
 /obj/structure/closet/toolcloset,
 /obj/structure/cable{
@@ -209484,7 +209483,7 @@ cnK
 cse
 cuv
 cus
-cus
+mrt
 cAX
 cCL
 cEC

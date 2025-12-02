@@ -12021,7 +12021,7 @@
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
-/area/research_outpost/iso2)
+/area/research_outpost/iso1)
 "aBQ" = (
 /obj/machinery/light,
 /obj/structure/anomaly_container,
@@ -12057,7 +12057,7 @@
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
-/area/research_outpost/iso1)
+/area/research_outpost/iso2)
 "aCa" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -15028,14 +15028,13 @@
 	name = "Toxins"
 	})
 "aJe" = (
-/obj/machinery/door/airlock/external{
-	req_access_txt = "13";
-	req_one_access_txt = "13"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/door/airlock/external{
+	req_access_txt = "7"
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/dorm2{
@@ -15423,7 +15422,6 @@
 "aJW" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_interior";
@@ -15583,8 +15581,7 @@
 	})
 "aKq" = (
 /obj/machinery/door/airlock/external{
-	req_access_txt = "13";
-	req_one_access_txt = "13"
+	req_access_txt = "7"
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -15814,7 +15811,6 @@
 /area/research_outpost/gearstore)
 "aKT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_exterior";
@@ -75335,6 +75331,13 @@
 	oxygen = 0.01
 	},
 /area/maintenance/disposal)
+"iDB" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/crew_quarters/bar)
 "iDD" = (
 /obj/machinery/door/window{
 	base_state = "right";
@@ -254404,7 +254407,7 @@ bEs
 pQf
 bvv
 byU
-byU
+iDB
 bbq
 bcD
 bdH

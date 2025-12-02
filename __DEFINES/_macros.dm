@@ -82,7 +82,7 @@
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
 
-#define isanimal(A) istype(A, /mob/living/simple_animal)
+#define isanimal(A) istype(A, /mob/living/simple_animal) || istype(A,/mob/living/complex_animal)
 
 #define iscorgi(A) istype(A, /mob/living/simple_animal/corgi)
 

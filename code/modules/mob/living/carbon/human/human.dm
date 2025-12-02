@@ -2625,3 +2625,31 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 			return list(
 
 		*/
+
+/mob/living/carbon/human/beartrap_act(var/obj/item/weapon/beartrap/trap)
+	trap.trappedorgan = pick_usable_organ(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+	if(!trap.trappedorgan)//no leg to snap to
+		return FALSE
+	trap.trapped = 1
+	trap.trappeduser = src
+	trap.armed = 0
+
+	playsound(trap, 'sound/effects/snap.ogg', 60, 1)
+	audible_scream()
+	trap.lock_atom(src, /datum/locking_category/beartrap)
+	register_event(/event/moved, trap, nameof(trap::forcefully_remove()))
+
+	if(trap.trappedorgan.take_damage(15, 0, 25, SERRATED_BLADE & SHARP_BLADE))
+		UpdateDamageIcon()
+		updatehealth()
+
+	if(!pick_usable_organ(trap.trappedorgan)) //check if they lost their leg, and get them out of the trap
+		to_chat(src, "<span class='warning'>With your leg missing, you slip out of the bear trap!</span>")
+		trap.trapped = 0
+		trap.trappeduser.unregister_event(/event/moved, trap, nameof(trap::forcefully_remove()))
+		trap.trappeduser = null
+		trap.unlock_atom(src)
+		trap.anchored = FALSE
+
+	update_canmove()
+	return TRUE

@@ -226,6 +226,7 @@
 					contents_brought += recursive_type_check(B)
 
 			var/locked_to_current_z = FALSE//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
+			var/randomize_drift_position = TRUE // if true, randomizes where you'll end up on the new Z-level
 
 			var/datum/zLevel/ZL = map.zLevels[z]
 			if(ZL.transitionLoops)
@@ -245,6 +246,19 @@
 
 
 			var/move_to_z = src.z
+			
+			if(ZL.transition_crosswrap_z && ZL.transition_crosswrap_z.len>=4)
+				locked_to_current_z=TRUE //prevent shuffling z-level later in the code.
+				randomize_drift_position=FALSE
+				if(A.y>world.maxy - TRANSITIONEDGE) // NORTH
+					move_to_z=ZL.transition_crosswrap_z[1]
+				else if(A.y<=TRANSITIONEDGE) // SOUTH
+					move_to_z=ZL.transition_crosswrap_z[2]
+				else if(A.x>world.maxx - TRANSITIONEDGE) // EAST
+					move_to_z=ZL.transition_crosswrap_z[3]
+				else if(A.x<=TRANSITIONEDGE) // WEST
+					move_to_z=ZL.transition_crosswrap_z[4]
+				
 
 			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
 			for(var/mob/living/L in contents_brought)
@@ -275,19 +289,23 @@
 
 			if(src.x <= TRANSITIONEDGE)
 				A.x = world.maxx - TRANSITIONEDGE - 2
-				A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
 
 			else if (A.x >= (world.maxx - TRANSITIONEDGE - 1))
 				A.x = TRANSITIONEDGE + 1
-				A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
 
 			else if (src.y <= TRANSITIONEDGE)
 				A.y = world.maxy - TRANSITIONEDGE -2
-				A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
 
 			else if (A.y >= (world.maxy - TRANSITIONEDGE - 1))
 				A.y = TRANSITIONEDGE + 1
-				A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
 
 			spawn (0)
 				if(was_pulling && MOB) //Carry the object they were pulling over when they transition
