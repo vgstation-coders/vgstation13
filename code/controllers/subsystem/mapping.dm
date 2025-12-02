@@ -325,7 +325,9 @@ var/datum/subsystem/mapping/SSmapping
 	if(!chosen_ruin_type)
 		chosen_ruin_type = pick(ruin_types)
 
-	SSmapping.spawn_planet(chosen_planet_type, chosen_ruin_type)
+	var/hide_from_scanner = alert(user, "Should this planet be hidden from the Deep Space Scanner?", "Scanner Visibility", "No", "Yes") == "Yes"
+
+	SSmapping.spawn_planet(chosen_planet_type, chosen_ruin_type, hide_from_scanner)
 
 /**
  * Creates a grid of 25 99x99 sectors for procedural generation
@@ -365,11 +367,12 @@ var/datum/subsystem/mapping/SSmapping
  * Arguments:
  * * planet_datum - The planet type path or instance to spawn
  * * ruin_type - Optional ruin type to place on the planet
+ * * hide_from_scanner - Optional boolean to hide the planet from the Deep Space Scanner
  *
  * Returns:
  * * TRUE if generation started successfully, FALSE if already generating
  */
-/datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, ruin_type)
+/datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, ruin_type, hide_from_scanner = FALSE)
 	if(generating)
 		message_admins("Planet generation already in progress! Please wait for '[current_planet.planet_name]' to complete.")
 		return FALSE
@@ -382,6 +385,10 @@ var/datum/subsystem/mapping/SSmapping
 	current_allocation = assign_allocation(current_planet, world.maxz)
 	current_ruin_type = ruin_type
 	planets += current_planet
+
+	// Set scanner visibility
+	if(hide_from_scanner)
+		current_planet.hidden = TRUE
 
 	// Set base_turf_type on areas so explosions reveal the correct turf
 	if(current_planet.default_baseturf)

@@ -224,6 +224,9 @@
 
 	var/list/planet_data = list()
 	for(var/datum/planet_type/planet in SSmapping.planets)
+		if(planet.hidden)
+			continue
+
 		var/list/planet_info = list()
 		planet_info["name"] = planet.name
 		planet_info["desc"] = planet.desc

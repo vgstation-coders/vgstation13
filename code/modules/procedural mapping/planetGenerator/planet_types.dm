@@ -32,6 +32,8 @@
 	var/process_mobs = FALSE // Whether to process mobs on this planet
 	// Faction for mobs spawned on this planet
 	var/mob_faction
+	// Whether this planet is hidden from the deep space scanner
+	var/hidden = FALSE
 
 /**
  * Builds the list of turfs affected by day/night cycle for this planet
