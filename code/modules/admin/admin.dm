@@ -1074,6 +1074,13 @@ var/global/floorIsLava = 0
 	dat += "<h2>Create New Planet:</h2>"
 	dat += "<p><A href='?_src_=holder;procgen_create=1'>Generate New Planet</A></p>"
 
+	// Exploration program controls
+	dat += "<h2>Exploration Program:</h2>"
+	if(SSmapping.scanning_disabled)
+		dat += "<p><span style='color:red;font-weight:bold;'>Status: Suspended</span> - <A href='?_src_=holder;procgen_toggle_exploration=1' style='color:green;'>Reactivate</A></p>"
+	else
+		dat += "<p><span style='color:green;font-weight:bold;'>Status: Active</span> - <A href='?_src_=holder;procgen_toggle_exploration=1' style='color:red;'>Suspend (Recall Shuttle & Disable Scanning)</A></p>"
+
 	var/datum/browser/popup = new(usr, "procgen_panel", "Procedural Generation Panel", 1000, 600)
 	popup.set_content(dat)
 	popup.open()

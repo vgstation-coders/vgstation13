@@ -309,6 +309,10 @@ var/global/datum/shuttle/exploration/exploration_shuttle = new(starting_area = /
 	add_dock(/obj/docking_port/destination/salvage/trading_post)
 	add_dock(/obj/docking_port/destination/salvage/derelict)
 
+/datum/shuttle/exploration/after_flight()
+	..()
+	remove_dock(/obj/docking_port/destination/exploration/centcom)
+
 /obj/machinery/computer/shuttle_control/exploration/New()
 	link_to(exploration_shuttle)
 	var/obj/item/weapon/paper/passkey = new(get_turf(src))

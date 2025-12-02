@@ -244,7 +244,7 @@
 //This is the proc you generally want to use when moving a shuttle. Runs all sorts of checks (cooldown, if already moving, etc)
 //If you want to bypass it, set destination_port to something and call pre_flight()
 //Alternatively, call move_to_dock(destination)
-/datum/shuttle/proc/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
+/datum/shuttle/proc/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user, var/eject = FALSE)
 	if(!D)
 		return 0 //no docking port
 	if(!linked_port)
@@ -304,9 +304,9 @@
 			var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
 			message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
 	else
-		actually_travel_to(D, broadcast, user)
+		actually_travel_to(D, broadcast, user, eject)
 
-/datum/shuttle/proc/actually_travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
+/datum/shuttle/proc/actually_travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user, var/eject = FALSE)
 	//Handle the message
 	var/time = "as soon as possible"
 	switch(pre_flight_delay)
@@ -324,6 +324,8 @@
 		broadcast.announce("The shuttle has received your message and will be sent [time].")
 
 	animate_liftoff()
+	if(eject)
+		eject_mobs()
 
 	destination_port = D
 	last_moved = world.time
@@ -341,6 +343,8 @@
 	destination_port.start_warning_lights()
 
 	spawn(get_pre_flight_delay())
+		if(eject)
+			eject_mobs(TRUE) //Make sure there aren't any stowaways
 		if(current_port)
 			current_port.stop_warning_lights()
 		if(destination_port)
@@ -1084,6 +1088,49 @@
 		for(var/image/I in images)
 			usr.client.images -= I
 	return
+
+//Throws people off a shuttle back into the station
+/datum/shuttle/proc/eject_mobs(var/harder = FALSE)
+	var/turf/initial_turf
+	var/turf/target_turf
+	if(!harder)
+		initial_turf = get_step(get_turf(linked_port), opposite_dirs[linked_port.dir])
+		target_turf = get_ranged_target_turf(initial_turf, linked_port.dir, 10)
+
+		// Open any doors along the ejection path
+		var/turf/check_turf = initial_turf
+		var/safety = 0
+		var/list/doors_to_open = list()
+		while(check_turf)
+			for(var/obj/machinery/door/D in check_turf)
+				doors_to_open += D
+			if(check_turf == target_turf)
+				break
+			check_turf = get_step(check_turf, linked_port.dir)
+			safety++
+			if(safety > 12)
+				break
+
+		for(var/obj/machinery/door/D in doors_to_open)
+			D.open()
+
+	var/list/mobs_to_eject = list()
+	for(var/mob/living/M in linked_area)
+		mobs_to_eject += M
+
+	if(harder)
+		var/obj/structure/inflatable/shelter/S = new(get_turf(linked_port))
+		for(var/mob/living/M in mobs_to_eject)
+			M.anchored = FALSE
+			M.forceMove(S)
+			to_chat(M, "<span class='warning'>\The [src] has ejected you!</span>")
+		S.ThrowAtStation()
+	else
+		for(var/mob/living/M in mobs_to_eject)
+			M.anchored = FALSE
+			M.forceMove(initial_turf)
+			M.throw_at(target_turf, rand(5,10), 2)
+			to_chat(M, "<span class='warning'>\The [src] has ejected you!</span>")
 
 //Planetary landing zone datum
 /datum/landing_zone

@@ -76,6 +76,10 @@ var/datum/subsystem/mapping/SSmapping
 	var/max_turfs_per_tick = 1000
 	/// Minimum turfs to process per tick
 	var/min_turfs_per_tick = 50
+	/// Is scanning disabled globally
+	var/scanning_disabled = FALSE
+	/// World time when scanning can be toggled again
+	var/scanning_toggle_cooldown = 0
 
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)

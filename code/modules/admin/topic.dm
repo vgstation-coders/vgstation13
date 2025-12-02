@@ -838,6 +838,13 @@
 		procedural_generation_panel()
 		return
 
+	else if(href_list["procgen_toggle_exploration"])
+		if(!check_rights(R_ADMIN))
+			return
+		toggle_exploration_program(usr, bypass_cooldown = TRUE)
+		procedural_generation_panel()
+		return
+
 	else if(href_list["procgen_jump"])
 		if(!check_rights(R_ADMIN))
 			return
