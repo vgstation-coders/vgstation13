@@ -111038,9 +111038,7 @@
 /turf/simulated/wall/shuttle/black,
 /area/shuttle/exploration)
 "uWx" = (
-/obj/structure/shuttle/diag_wall/black{
-	layer = 5
-	},
+/obj/structure/shuttle/diag_wall/black,
 /obj/structure/shuttle/engine/heater,
 /turf/space,
 /area/shuttle/exploration)
@@ -111240,8 +111238,7 @@
 /area/library)
 "wGe" = (
 /obj/structure/shuttle/diag_wall/black{
-	dir = 4;
-	layer = 5
+	dir = 4
 	},
 /obj/structure/shuttle/engine/heater,
 /turf/space,

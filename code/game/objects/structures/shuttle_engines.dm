@@ -23,6 +23,7 @@
 	name = "engine"
 	density = 1
 	anchored = 1.0
+	layer = BELOW_OBJ_LAYER
 
 /obj/structure/shuttle/engine/heater
 	name = "heater"

@@ -99888,9 +99888,7 @@
 /area/maintenance/port)
 "rgk" = (
 /obj/structure/shuttle/diag_wall/smooth,
-/obj/structure/shuttle/engine/propulsion{
-	layer = 1
-	},
+/obj/structure/shuttle/engine/propulsion,
 /turf/space,
 /area/shuttle/exploration)
 "rqE" = (
@@ -100131,9 +100129,7 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 4
 	},
-/obj/structure/shuttle/engine/propulsion{
-	layer = 1
-	},
+/obj/structure/shuttle/engine/propulsion,
 /turf/space,
 /area/shuttle/exploration)
 "tCs" = (

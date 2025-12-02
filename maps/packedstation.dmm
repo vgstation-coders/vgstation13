@@ -72239,8 +72239,7 @@
 	dir = 1
 	},
 /obj/structure/shuttle/engine/propulsion{
-	dir = 4;
-	layer = 2
+	dir = 4
 	},
 /turf/space,
 /area/shuttle/exploration)
@@ -72664,8 +72663,7 @@
 	dir = 4
 	},
 /obj/structure/shuttle/engine/propulsion{
-	dir = 4;
-	layer = 2
+	dir = 4
 	},
 /turf/space,
 /area/shuttle/exploration)
