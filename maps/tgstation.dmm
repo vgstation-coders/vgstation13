@@ -32715,9 +32715,6 @@
 	anchored = 1;
 	icon_state = "scanner_idle"
 	},
-/obj/item/device/gps/planetary,
-/obj/item/device/gps/planetary,
-/obj/item/device/gps/planetary,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "vault";
