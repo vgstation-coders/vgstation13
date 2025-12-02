@@ -321,6 +321,9 @@ var/global/datum/shuttle/exploration/exploration_shuttle = new(starting_area = /
 /obj/docking_port/destination/exploration/station
 	areaname = "exploration shuttle dock"
 
+/obj/docking_port/destination/exploration/centcom
+	areaname = "exploration shuttle dock centcomm"
+
 /obj/machinery/computer/shuttle_control/exploration
 	icon_state = "syndishuttle"
 

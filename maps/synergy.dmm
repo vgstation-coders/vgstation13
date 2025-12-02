@@ -98314,6 +98314,10 @@
 	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/fitness)
+"fpN" = (
+/obj/docking_port/destination/exploration/centcom,
+/turf/space,
+/area)
 "ftn" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -459013,7 +459017,7 @@ aaa
 aaa
 aaa
 aaa
-aaa
+fpN
 aaa
 aaa
 aaa

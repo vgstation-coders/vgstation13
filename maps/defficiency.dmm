@@ -110813,6 +110813,10 @@
 	},
 /turf/simulated/floor/glass/plasma,
 /area/hallway/secondary/entry)
+"rJD" = (
+/obj/docking_port/destination/exploration/centcom,
+/turf/space,
+/area)
 "rMu" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 8
@@ -459225,7 +459229,7 @@ aaa
 aaa
 aaa
 aaa
-aaa
+rJD
 aaa
 aaa
 aaa

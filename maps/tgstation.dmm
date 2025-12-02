@@ -116306,6 +116306,10 @@
 	icon_state = "white"
 	},
 /area/medical/virology)
+"vkv" = (
+/obj/docking_port/destination/exploration/centcom,
+/turf/space,
+/area)
 "voi" = (
 /obj/machinery/atm{
 	pixel_x = 30
@@ -475079,7 +475083,7 @@ aaa
 aaa
 aaa
 aaa
-aaa
+vkv
 aaa
 aaa
 aaa

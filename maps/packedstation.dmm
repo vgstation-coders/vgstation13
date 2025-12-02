@@ -70387,6 +70387,10 @@
 	icon_state = "dark vault full"
 	},
 /area/gateway)
+"hzC" = (
+/obj/docking_port/destination/exploration/centcom,
+/turf/space,
+/area)
 "hFB" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
@@ -422534,7 +422538,7 @@ aaa
 aaa
 aaa
 aaa
-aaa
+hzC
 aaa
 aaa
 aaa

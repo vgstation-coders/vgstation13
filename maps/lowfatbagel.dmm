@@ -108402,6 +108402,10 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area)
+"ydd" = (
+/obj/docking_port/destination/exploration/centcom,
+/turf/space,
+/area)
 "ydh" = (
 /turf/simulated/floor/wood,
 /area/syndicate_mothership)
@@ -458370,7 +458374,7 @@ aaa
 aaa
 aaa
 aaa
-aaa
+ydd
 aaa
 aaa
 aaa

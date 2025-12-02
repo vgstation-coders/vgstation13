@@ -70330,6 +70330,10 @@
 	},
 /turf/simulated/floor/wood,
 /area/derelictparts/diner)
+"rWN" = (
+/obj/docking_port/destination/exploration/centcom,
+/turf/space,
+/area)
 "rWS" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -436508,7 +436512,7 @@ cFY
 cFY
 cFY
 cFY
-cFY
+rWN
 cFY
 cFY
 cFY
