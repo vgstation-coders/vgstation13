@@ -137,7 +137,7 @@
 		if(climate_added)
 			break
 	var/datum/climate/Cnew = SSweather.get_climate(T.z)
-	if(climate_added)
+	if(climate_added && Cnew)
 		Cnew.register_weather_turf(T, TRUE)
 		plane = EFFECTS_PLANE
 		layer = SNOW_OVERLAY_LAYER + 1
