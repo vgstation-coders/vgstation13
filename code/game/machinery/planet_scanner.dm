@@ -398,7 +398,7 @@
 /// Returns: A ruin type path, or null if no ruins are available
 /obj/machinery/planet_scanner/proc/select_random_ruin_type()
 	var/list/available_ruins = list()
-	for(var/ruin_path in subtypesof(/datum/map_element/mining_surprise))
+	for(var/ruin_path in subtypesof(/datum/map_element/ruin))
 		available_ruins += ruin_path
 
 	if(available_ruins.len)
