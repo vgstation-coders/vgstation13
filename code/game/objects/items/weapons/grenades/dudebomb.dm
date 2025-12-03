@@ -33,5 +33,5 @@
 				var/mob/living/carbon/C = user
 				C.throw_mode_on()
 
-/obj/item/weapon/grenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/grenade/dudebomb/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	to_chat(user, "<span class = 'warning'>YEAH, GAL-O SENGEN.</span>")
