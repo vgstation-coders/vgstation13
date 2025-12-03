@@ -647,7 +647,7 @@
 			occupants.Add(L)
 	else
 		for(var/mob/living/L in mob_list)
-			if(get_area(src) == linked_area)
+			if(get_area(L) == linked_area)
 				occupants.Add(L)
 	return occupants
 
@@ -978,7 +978,7 @@
 			source_climate.register_weather_turf(old_turf)
 		var/datum/planet_type/source_planet = source_climate.allocation?.ptype
 		SSDayNight.update_turf_lighting(old_turfs, source_planet)
-    
+
 	//Kill all lz warning effects
 	if(istype(dest_allocation))
 		var/size = get_size()
@@ -1126,9 +1126,7 @@
 		for(var/obj/machinery/door/D in doors_to_open)
 			D.open()
 
-	var/list/mobs_to_eject = list()
-	for(var/mob/living/M in linked_area)
-		mobs_to_eject += M
+	var/list/mobs_to_eject = get_occupants(TRUE)
 
 	if(harder)
 		var/obj/structure/inflatable/shelter/S = new(get_turf(linked_port))
@@ -1142,6 +1140,7 @@
 			M.anchored = FALSE
 			M.forceMove(initial_turf)
 			M.throw_at(target_turf, rand(5,10), 2)
+			M.Knockdown(3)
 			to_chat(M, "<span class='warning'>\The [src] has ejected you!</span>")
 
 //Planetary landing zone datum
