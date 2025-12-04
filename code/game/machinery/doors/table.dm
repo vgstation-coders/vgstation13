@@ -136,6 +136,9 @@
 	if(operating)
 		return
 
+	if(isobserver(user) && !isAdminGhost(user))
+		return
+
 	if(!user.restrained() && (user.size > SIZE_TINY))
 		add_fingerprint(user)
 		if(!emagged && !allowed(user))
