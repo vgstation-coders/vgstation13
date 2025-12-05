@@ -119,8 +119,6 @@
 	if(druggy)
 		druggy = max(druggy-1,0)
 
-	if(jitteriness)
-		jitteriness = max(jitteriness-1,0)
 	handle_jitteriness()
 	handle_dizziness()
 

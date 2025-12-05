@@ -1621,7 +1621,10 @@ Thanks.
 		var/trig_amp_x
 		var/trig_amp_y
 		var/saved_dizz = dizziness
-		dizziness = max(dizziness - standard_dizzy_reduce, 0)
+		var/dizzy_reduce = standard_dizzy_reduce
+		if(resting)
+			dizzy_reduce *= 5
+		AdjustDizzy(-dizzy_reduce)
 		if(C)
 			var/amplitude = dizziness * (sin(dizziness * 0.044 * world.time) + 1) / 70 //This shit is annoying at high strength
 			spawn(0)
@@ -1644,6 +1647,10 @@ Thanks.
 
 
 /mob/living/proc/handle_jitteriness()
+	var/jitter_reduce = standard_dizzy_reduce
+	if(resting)
+		jitter_reduce *= 5
+	AdjustJitter(-jitter_reduce)
 	if(jitteriness)
 		var/amplitude = min(8, (jitteriness/70) + 1)
 		var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
