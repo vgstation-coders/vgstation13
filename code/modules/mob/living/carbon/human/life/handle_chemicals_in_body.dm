@@ -125,8 +125,6 @@
 			Paralyse(5)
 
 	remove_confused(1)
-	handle_dizziness()
-	handle_jitteriness()
 
 	handle_trace_chems()
 
