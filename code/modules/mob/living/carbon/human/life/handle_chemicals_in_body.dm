@@ -126,12 +126,8 @@
 			Paralyse(5)
 
 	remove_confused(1)
-	// decrement dizziness counter, clamped to 0
-	var/dizzy_decrement = -3
-	if(resting)
-		dizzy_decrement = -15
-	AdjustDizzy(dizzy_decrement)
-	AdjustJitter(dizzy_decrement)
+	handle_dizziness()
+	handle_jitteriness()
 	if(jittery_time && !jitteriness)
 		animate(src)
 

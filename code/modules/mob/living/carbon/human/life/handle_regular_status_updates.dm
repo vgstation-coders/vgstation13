@@ -119,9 +119,6 @@
 		else if(ear_damage < 25) //Ear damage heals slowly under this threshold. otherwise you'll need earmuffs
 			ear_damage = max(ear_damage - 0.05, 0)
 
-		handle_dizziness()
-		handle_jitteriness()
-
 		//Flying
 		if(flying)
 			spawn()

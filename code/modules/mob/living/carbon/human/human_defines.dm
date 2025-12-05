@@ -15,6 +15,11 @@
 
 	flags = HEAR_ALWAYS | PROXMOVE
 
+	standard_dizzy_reduce = 4
+	standard_jitter_reduce = 4
+	rested_dizzy_reduce = 16
+	rested_jitter_reduce = 16
+
 	var/age = 30		//Player's age (pure fluff)
 	//var/b_type = "A+"	//Player's bloodtype //NOW HANDLED IN THEIR DNA
 
