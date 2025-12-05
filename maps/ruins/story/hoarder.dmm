@@ -26,7 +26,7 @@
 /area/ruin)
 "k" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "n" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/brown,

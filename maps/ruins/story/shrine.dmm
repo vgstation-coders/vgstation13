@@ -1,0 +1,150 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/template_noop)
+"b" = (
+/turf/simulated/wall/cult,
+/area/ruin)
+"c" = (
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"d" = (
+/obj/structure/wizard/altar,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"e" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"f" = (
+/obj/effect/landmark/story,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"g" = (
+/obj/structure/bed/chair/wood/normal,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"h" = (
+/obj/machinery/old_database,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"i" = (
+/obj/structure/closet/crate,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"j" = (
+/obj/machinery/telecomms/relay/planetary,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"k" = (
+/obj/structure/closet/cabinet/basic,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"l" = (
+/obj/item/candle/blood{
+	lit = 1
+	},
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"m" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"n" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/black,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"o" = (
+/obj/structure/cult_legacy/tome,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"p" = (
+/obj/structure/table/woodentable,
+/obj/structure/reagent_dispensers/bloodkeg,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+"r" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
+
+(1,1,1) = {"
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(2,1,1) = {"
+b
+r
+c
+l
+c
+c
+k
+b
+a
+"}
+(3,1,1) = {"
+b
+p
+l
+c
+c
+c
+n
+b
+a
+"}
+(4,1,1) = {"
+b
+c
+c
+d
+f
+c
+c
+e
+m
+"}
+(5,1,1) = {"
+b
+j
+l
+c
+c
+g
+o
+b
+a
+"}
+(6,1,1) = {"
+b
+h
+c
+l
+c
+c
+i
+b
+a
+"}
+(7,1,1) = {"
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}

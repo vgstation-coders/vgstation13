@@ -9,7 +9,7 @@
 /area/ruin)
 "f" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "i" = (
 /obj/machinery/light{
 	dir = 4

@@ -4,7 +4,7 @@
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "ak" = (
 /obj/item/weapon/kitchen/rollingpin,
 /obj/structure/table,
@@ -24,7 +24,7 @@
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "aJ" = (
 /obj/machinery/light/he{
 	dir = 4
@@ -250,7 +250,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "eQ" = (
 /obj/structure/rack,
 /obj/item/weapon/lazarus_injector/advanced,
@@ -430,11 +430,11 @@
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "iK" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "iP" = (
 /obj/machinery/chem_master/snackbar_machine,
 /obj/machinery/alarm{
@@ -566,7 +566,7 @@
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "mJ" = (
 /obj/machinery/vending/dinnerware,
 /turf/simulated/floor{
@@ -579,7 +579,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "mZ" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/disposal/compactor,
@@ -643,7 +643,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "pR" = (
 /obj/structure/railing/glass{
 	dir = 1
@@ -721,7 +721,7 @@
 /area/vault/fastfood/misc)
 "rB" = (
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "rC" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -943,7 +943,7 @@
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "vR" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
@@ -965,7 +965,7 @@
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "we" = (
 /obj/structure/sink{
 	dir = 4;
@@ -1023,7 +1023,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "yH" = (
 /obj/structure/closet/crate/freezer,
 /obj/item/slime_extract/silver,
@@ -1072,14 +1072,14 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Ag" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/railing,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Aj" = (
 /obj/structure/closet/crate/freezer,
 /obj/abstract/map/spawner/allfood,
@@ -1434,7 +1434,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Hs" = (
 /obj/structure/table,
 /obj/machinery/microwave{
@@ -1597,7 +1597,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "JZ" = (
 /obj/structure/table/plastic,
 /obj/item/trash/chips/donitos,
@@ -1623,7 +1623,7 @@
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Kf" = (
 /obj/item/weapon/kitchen/rollingpin,
 /obj/structure/table,
@@ -1776,12 +1776,12 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "MU" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "Nf" = (
 /obj/item/weapon/stool/bar,
 /turf/simulated/floor{
@@ -2113,7 +2113,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "VB" = (
 /obj/structure/closet/secure_closet/freezer/fridge,
 /turf/simulated/floor{
@@ -2219,7 +2219,7 @@
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Xr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4;

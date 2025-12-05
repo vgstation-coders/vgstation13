@@ -197,6 +197,7 @@ var/datum/subsystem/mapping/SSmapping
 			if(current_ruin_type)
 				var/datum/map_element/ruin/used_ruin = ispath(current_ruin_type) ? (new current_ruin_type) : current_ruin_type
 				place_ruin_in_allocation(used_ruin, current_allocation)
+				current_allocation.placed_ruin = used_ruin
 			place_story_ruins(current_allocation)
 
 			current_stage = STAGE_POPULATION
@@ -319,7 +320,7 @@ var/datum/subsystem/mapping/SSmapping
 		return
 
 	var/list/ruin_types = list()
-	for(var/ruin_path in subtypesof(/datum/map_element/ruin))
+	for(var/ruin_path in (subtypesof(/datum/map_element/ruin) - typesof(/datum/map_element/ruin/story)))
 		ruin_types += ruin_path
 
 	var/chosen_ruin_type = input(user, "Select a ruin to place on the planet (random if no selection):", "Vault Selection") as null|anything in ruin_types
@@ -779,6 +780,8 @@ var/datum/subsystem/mapping/SSmapping
 	/// Tracks persistent shuttle landing zones - associative list: shuttle_type -> /datum/landing_zone
 	var/list/shuttle_landing_zones = list()
 	var/obj/machinery/telecomms/relay/planetary/comms_relay
+	/// The main ruin placed on this allocation
+	var/datum/map_element/ruin/placed_ruin
 
 #undef STAGE_TERRAIN
 #undef STAGE_RUIN

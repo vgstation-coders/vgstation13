@@ -271,6 +271,8 @@ var/list/datum/story_theme/story_themes = list()
 	var/story_year = 0
 	/// The character name from the story
 	var/character_name = ""
+	/// The name of the ruin this database is in
+	var/ruin_name = ""
 
 /obj/machinery/old_database/attack_hand(mob/user)
 	if(activated)
@@ -321,6 +323,10 @@ var/list/datum/story_theme/story_themes = list()
 /obj/machinery/old_database/proc/generate_data_disk()
 	var/turf/T = get_turf(src)
 	var/datum/allocation/alloc = SSmapping.get_allocation(trf = T)
+
+	// Get the name of the other ruin placed on this planet
+	if(istype(alloc) && alloc.placed_ruin)
+		ruin_name = alloc.placed_ruin.name
 
 	// Pick a random valid tech (excluding hidden/special techs)
 	var/list/valid_techs = list(
@@ -457,6 +463,158 @@ var/list/datum/story_theme/story_themes = list()
 		return "[first] [pick(last_names)]"
 	return "John Smith"
 
+/// Add contextual weather/environment entries to the entry pool
+/obj/machinery/old_database/proc/add_weather_entries(var/list/entry_pool, var/planet_style, var/char_name)
+	switch(planet_style)
+		if("lava planet")
+			entry_pool += "The volcanic activity makes everything ten times harder. Heat shielding failures are a daily concern."
+			entry_pool += "Lava flows have cut off the northern section. Rerouting through the caves."
+		if("frozen planet")
+			entry_pool += "The temperature dropped below -100C last night. Life support is struggling."
+			entry_pool += "Ice storms every few hours. Visibility goes to zero. We just hunker down and wait."
+		if("desert planet")
+			entry_pool += "Water conservation is critical. Every drop counts out here."
+			entry_pool += "Sandstorms are relentless. The equipment is taking a beating from constant abrasion."
+		if("jungle planet")
+			entry_pool += "The jungle never stops growing. I swear the vines move when you're not looking."
+			entry_pool += "Humidity is destroying our electronics. Everything needs constant maintenance."
+		if("wasteland planet")
+			entry_pool += "Radiation levels are higher than projected. Had to adjust exposure schedules."
+			entry_pool += "The ruins here tell a story of catastrophe. Whatever happened, it was sudden and total."
+		if("beach planet")
+			entry_pool += "The tropical climate is pleasant, but the salt air corrodes everything metal."
+			entry_pool += "High tide flooded the lower storage area. We've relocated supplies to higher ground."
+		if("grass planet")
+			entry_pool += "The temperate weather is ideal for long-term habitation. Almost Earth-like conditions."
+			entry_pool += "Seasonal changes are more pronounced than expected. Preparing for what passes for winter here."
+		if("unknown planet")
+			entry_pool += "Atmospheric readings fluctuate wildly. Our instruments can't make sense of the data."
+			entry_pool += "The environment here defies conventional understanding. Nothing behaves as it should."
+
+/// Add contextual ruin-specific entries to the entry pool
+/obj/machinery/old_database/proc/add_ruin_entries(var/list/entry_pool, var/ruin_type)
+	switch(ruin_type)
+		if("bunker")
+			entry_pool += "The bunker's defensive systems are holding up well. Reinforced construction was worth the extra expense."
+			entry_pool += "Weapons inventory complete. We're well-stocked for any contingency."
+		if("cabin")
+			entry_pool += "The cabin provides adequate shelter. Basic, but it serves its purpose."
+			entry_pool += "Finally got the fireplace working properly. Small comforts matter out here."
+		if("laboratory")
+			entry_pool += "Laboratory equipment calibrated and operational. Ready to begin primary research objectives."
+			entry_pool += "The lab setup here is exactly what we need for this work. Well-equipped facility."
+		if("ufo")
+			entry_pool += "Ship systems nominal. All primary functions operating within parameters."
+			entry_pool += "Hull integrity holding. The vessel remains spaceworthy despite the landing."
+		if("outpost")
+			entry_pool += "Outpost perimeter secure. All defensive systems armed and operational."
+			entry_pool += "Fortifications complete. This position is defensible against expected threat levels."
+		if("workshop")
+			entry_pool += "Workshop tools and equipment inventory complete. Have everything needed for the job."
+			entry_pool += "Maintenance bay operational. Can handle repairs and fabrication as required."
+		if("shrine")
+			entry_pool += "The sacred space is prepared. The rituals can proceed as planned."
+			entry_pool += "Consecration of the shrine complete. This place resonates with the proper energies."
+		if("greenhouse")
+			entry_pool += "Greenhouse environmental systems stable. Plants are thriving under current conditions."
+			entry_pool += "Agricultural yields exceeding projections. The hydroponic setup is working perfectly."
+		if("camp")
+			entry_pool += "Base camp established. Not luxurious, but functional for our needs."
+			entry_pool += "Shelter construction complete. We're as settled as we're going to get out here."
+		if("hoarder den")
+			entry_pool += "Organized my collection today. Everything has its place in my system."
+			entry_pool += "Salvage storage at capacity. Need to sort through and prioritize the valuable pieces."
+		if("listening post")
+			entry_pool += "Communications array operational. Monitoring all designated frequencies as ordered."
+			entry_pool += "Signal intercepts logged and filed. The listening post is performing its function perfectly."
+
+/// Add contextual fauna/mob encounter entries based on planet type
+/obj/machinery/old_database/proc/add_fauna_entries(var/list/entry_pool, var/planet_style)
+	switch(planet_style)
+		if("beach planet")
+			entry_pool += "Observed several species of crabs along the shoreline. Mostly harmless, but territorial."
+			entry_pool += "The local wildlife includes some surprisingly intelligent capybaras. They seem curious about our presence."
+			entry_pool += "Encountered aggressive frogs near the wetlands. Their jumping reach is remarkable."
+		if("desert planet")
+			entry_pool += "The desert lizards here are abundant. Most scatter when approached, but some hold their ground."
+			entry_pool += "Massive goliath-class creatures spotted in the distance. Avoiding direct contact."
+			entry_pool += "Strange insectoid life forms emerge at dusk. Classification pending."
+		if("frozen planet")
+			entry_pool += "Pack of wolves spotted near the perimeter. They're watching us. Recommend staying inside after dark."
+			entry_pool += "Polar bears are active in this region. One investigated the camp last night. Security protocols updated."
+			entry_pool += "Encountered what the team is calling 'wendigos' - bipedal predators adapted to the cold. Extremely dangerous."
+		if("grass planet")
+			entry_pool += "The grasslands support diverse herbivores - everything from cattle-like creatures to deer."
+			entry_pool += "Discovered aggressive cockatrice specimens. Their behavior suggests territorial nesting."
+			entry_pool += "Local fauna includes various domesticated species gone feral. The ecology here is fascinating."
+		if("jungle planet")
+			entry_pool += "The jungle teems with life. Parrots, monkeys, and stranger things in the canopy."
+			entry_pool += "Poison dart frogs are common in the undergrowth. Specimens collected for study, with extreme caution."
+			entry_pool += "Spotted a large predatory cat - possibly a panther variant. It's been tracking us for two days."
+		if("lava planet")
+			entry_pool += "Goliath-class megafauna dominate this hellscape. Their biology shouldn't work, but here they are."
+			entry_pool += "Basilisk creatures can somehow survive the heat. They burrow through rock like water."
+			entry_pool += "The local 'hivelords' are territorial and aggressive. Lost a drone to one yesterday."
+		if("wasteland planet")
+			entry_pool += "The ruins are infested with roaches. Not the Earth variety - these are adapted to radiation."
+			entry_pool += "Reanimated corpses wander the wastes. Necromantic phenomenon or biological? Unclear."
+			entry_pool += "Whatever caused the apocalypse here, the survivors have mutated into something barely recognizable."
+		if("unknown planet")
+			entry_pool += "The native lifeforms defy classification. Grey humanoids with technology beyond our understanding."
+			entry_pool += "Encountered autonomous drones of alien design. They ignore us unless we approach designated zones."
+			entry_pool += "Strange polyp-like organisms dot the landscape. They react to movement with surprising hostility."
+
+/// Add contextual loot/resource discovery entries based on planet type
+/obj/machinery/old_database/proc/add_loot_entries(var/list/entry_pool, var/planet_style)
+	switch(planet_style)
+		if("beach planet")
+			entry_pool += "Found crates of preserved food and beverages. Tropical rations, mostly. Better than nutrient paste."
+			entry_pool += "Salvaged entertainment equipment from storage - instruments, games, recreational items. Morale boost."
+			entry_pool += "Discovered clothing storage. Beach attire and linens. Impractical but clean."
+		if("desert planet")
+			entry_pool += "Recovered engineering tools from the workshop. Standard maintenance equipment, well-preserved by the dry climate."
+			entry_pool += "Medical supplies found in sealed containers. The heat didn't compromise everything."
+			entry_pool += "Trash everywhere, but occasionally there's useful scrap metal in the debris."
+		if("frozen planet")
+			entry_pool += "Found winter survival gear in the storage lockers. Insulated clothing, thermal equipment."
+			entry_pool += "Food stores are frozen solid. Perfectly preserved, ironically. We'll eat well."
+			entry_pool += "Salvaged cold-weather bedding and entertainment items. Small comforts in a frozen hell."
+		if("grass planet")
+			entry_pool += "Storage areas contain standard colonist supplies - everything from bedding to paperwork."
+			entry_pool += "Found crates of clothing and personal effects. Someone was planning to stay long-term."
+			entry_pool += "Entertainment and food stores are intact. Games, instruments, preserved rations."
+		if("jungle planet")
+			entry_pool += "Humidity ruined most paper goods, but sealed containers of food and supplies survived."
+			entry_pool += "Found entertainment equipment moldy but functional. Someone packed musical instruments."
+			entry_pool += "Salvaged clothing from sealed storage. Jungle-appropriate gear, thankfully."
+		if("lava planet")
+			entry_pool += "Heat-resistant equipment caches located. Engineering tools, protective gear, specialized clothing."
+			entry_pool += "Found intact medical supplies in thermal containers. Someone knew what they were doing."
+			entry_pool += "AI modules discovered in shielded storage. Exotic tech, possibly valuable."
+		if("wasteland planet")
+			entry_pool += "Scavenged bureaucratic records and combat equipment from the ruins. Mix of office supplies and weapons."
+			entry_pool += "Medical kits found in abandoned clinics. Some supplies still usable despite the decay."
+			entry_pool += "Structural salvage everywhere - broken vending machines, mystery tech. Junk with potential."
+		if("unknown planet")
+			entry_pool += "Discovered alien artifacts and exotic technology. Nothing in our databases matches this."
+			entry_pool += "Found caches of experimental equipment. Grey technology, far beyond our understanding."
+			entry_pool += "Exotic loot scattered throughout. Crystals, strange devices, incomprehensible machinery."
+
+/// Add entries about other ruins/structures encountered on the planet
+/obj/machinery/old_database/proc/add_other_ruin_entries(var/list/entry_pool)
+	if(ruin_name && ruin_name != "")
+		entry_pool += "Spotted [ruin_name] in the distance during a survey sweep. Didn't investigate - staying focused on primary objectives."
+		entry_pool += "Picked up unusual energy readings from [ruin_name] in the eastern sector. Another facility? Potential salvage opportunity, or potential threat."
+		entry_pool += "Found debris trail leading to [ruin_name] over the ridge. Someone else was here, not that long ago. Makes you wonder what happened to them."
+		entry_pool += "Scans indicate [ruin_name] on this planet. We're not the first ones here, and probably not the last."
+	else
+		entry_pool += "Spotted another structure in the distance during a survey sweep. Didn't investigate - staying focused on primary objectives."
+		entry_pool += "Picked up unusual energy readings from the eastern sector. Another facility? Potential salvage opportunity, or potential threat."
+		entry_pool += "Found debris trail leading over the ridge. Someone else was here, not that long ago. Makes you wonder what happened to them."
+		entry_pool += "Scans indicate multiple artificial structures on this planet. We're not the first ones here, and probably not the last."
+	entry_pool += "Discovered old landing site about two kilometers out. Whoever landed there is long gone. Left their trash though."
+	entry_pool += "There are other ruins on this world. Some look newer than ours, some older. This planet has seen a lot of visitors."
+
 /// Helper to get date-related variables and corruption
 /obj/machinery/old_database/proc/get_log_dates()
 	var/list/data = list()
@@ -554,6 +712,13 @@ var/list/datum/story_theme/story_themes = list()
 		"Supply drop arrived. Half the equipment was damaged in transit. Filed complaint with logistics. Again."
 	)
 
+	// Add contextual entries based on environment and location
+	add_weather_entries(entry_pool, planet_style, researcher_name)
+	add_ruin_entries(entry_pool, ruin_name)
+	add_fauna_entries(entry_pool, planet_style)
+	add_loot_entries(entry_pool, planet_style)
+	add_other_ruin_entries(entry_pool)
+
 	return build_log_from_pool(entry_pool, "NANOTRASEN PLANETARY SURVEY", "[planet_name] - Research Division", dates["years_old"])
 
 /// Wizard teleportation accident log
@@ -586,6 +751,13 @@ var/list/datum/story_theme/story_themes = list()
 		"A creature attempted to eat my hat. MY HAT. It has been turned into a small pile of ash. The hat is irreplaceable."
 	)
 
+	// Add contextual entries
+	add_weather_entries(entry_pool, planet_style, wizard_name)
+	add_ruin_entries(entry_pool, ruin_name)
+	add_fauna_entries(entry_pool, planet_style)
+	add_loot_entries(entry_pool, planet_style)
+	add_other_ruin_entries(entry_pool)
+
 	return build_log_from_pool(entry_pool, "ARCANE JOURNAL", "Property of [wizard_name]", dates["years_old"])
 
 /// Ninja technology hunting log
@@ -617,6 +789,13 @@ var/list/datum/story_theme/story_themes = list()
 		"Created secondary cache of stolen data. If primary extraction fails, future agents can recover the intelligence.",
 		"The silence here is complete. No wildlife near the facility anymore. Something has driven them away. Investigating."
 	)
+
+	// Add contextual entries
+	add_weather_entries(entry_pool, planet_style, ninja_name)
+	add_ruin_entries(entry_pool, ruin_name)
+	add_fauna_entries(entry_pool, planet_style)
+	add_loot_entries(entry_pool, planet_style)
+	add_other_ruin_entries(entry_pool)
 
 	return build_log_from_pool(entry_pool, "SPIDER CLAN MISSION REPORT", "Agent: [ninja_name]", dates["years_old"])
 
@@ -651,6 +830,13 @@ var/list/datum/story_theme/story_themes = list()
 		"The silence after a firefight never gets old. [second_commando] is running diagnostics. I'm writing this. The work continues."
 	)
 
+	// Add contextual entries
+	add_weather_entries(entry_pool, planet_style, commando_name)
+	add_ruin_entries(entry_pool, ruin_name)
+	add_fauna_entries(entry_pool, planet_style)
+	add_loot_entries(entry_pool, planet_style)
+	add_other_ruin_entries(entry_pool)
+
 	return build_log_from_pool(entry_pool, "DEATH SQUAD RECONNAISSANCE", "Mission: SILENT HORIZON", dates["years_old"])
 
 /// Stranded clown log
@@ -682,6 +868,13 @@ var/list/datum/story_theme/story_themes = list()
 		"Built a tiny circus tent out of lab coats. Chuckles is the main attraction. Ticket price: one (1) laugh. Business is slow.",
 		"The night is scariest part. No audience, no laughter, just me and Chuckles and the weird noises outside. ...HONK."
 	)
+
+	// Add contextual entries
+	add_weather_entries(entry_pool, planet_style, clown_name)
+	add_ruin_entries(entry_pool, ruin_name)
+	add_fauna_entries(entry_pool, planet_style)
+	add_loot_entries(entry_pool, planet_style)
+	add_other_ruin_entries(entry_pool)
 
 	return build_log_from_pool(entry_pool, "THE HONKENING CONTINUES", "A Clown's Tale by [clown_name]", dates["years_old"])
 
@@ -715,6 +908,13 @@ var/list/datum/story_theme/story_themes = list()
 		"The network has grown to touch the far corners of this hollow shell. Every room now speaks to every other. The metal beings would call this 'efficiency'."
 	)
 
+	// Add contextual entries
+	add_weather_entries(entry_pool, planet_style, mushroom_name)
+	add_ruin_entries(entry_pool, ruin_name)
+	add_fauna_entries(entry_pool, planet_style)
+	add_loot_entries(entry_pool, planet_style)
+	add_other_ruin_entries(entry_pool)
+
 	return build_log_from_pool(entry_pool, "SPORE-KEEPER'S CHRONICLE", "Written by [mushroom_name]", dates["years_old"])
 
 /// Grey alien research log
@@ -746,6 +946,13 @@ var/list/datum/story_theme/story_themes = list()
 		"The Council would disapprove of the time spent here. There is much to learn about these creatures. Their persistence is admirable.",
 		"Human concept of 'humor' analyzed. 47% of samples incomprehensible. 12% mildly amusing. The 'clown' category defies all classification."
 	)
+
+	// Add contextual entries
+	add_weather_entries(entry_pool, planet_style, grey_name)
+	add_ruin_entries(entry_pool, ruin_name)
+	add_fauna_entries(entry_pool, planet_style)
+	add_loot_entries(entry_pool, planet_style)
+	add_other_ruin_entries(entry_pool)
 
 	return build_log_from_pool(entry_pool, "XENOSCIENCE EXPEDITION LOG", "Observer: [grey_name]", dates["years_old"])
 
@@ -779,6 +986,13 @@ var/list/datum/story_theme/story_themes = list()
 		"Found a functioning communication array! Tried to contact Arkships but too far. Signal too weak. Will try again."
 	)
 
+	// Add contextual entries
+	add_weather_entries(entry_pool, planet_style, vox_name)
+	add_ruin_entries(entry_pool, ruin_name)
+	add_fauna_entries(entry_pool, planet_style)
+	add_loot_entries(entry_pool, planet_style)
+	add_other_ruin_entries(entry_pool)
+
 	return build_log_from_pool(entry_pool, "TRADE MANIFEST AND NOTES", "Trader: [vox_name]", dates["years_old"])
 
 /// Syndicate recon agent log
@@ -810,6 +1024,13 @@ var/list/datum/story_theme/story_themes = list()
 		"Cover identity compromised? Unknown. Taking precautions. Encrypted all local files, prepared evacuation routes.",
 		"This planet has strategic value beyond the research data. Forwarding coordinates to Syndicate colonial division."
 	)
+
+	// Add contextual entries
+	add_weather_entries(entry_pool, planet_style, agent_name)
+	add_ruin_entries(entry_pool, ruin_name)
+	add_fauna_entries(entry_pool, planet_style)
+	add_loot_entries(entry_pool, planet_style)
+	add_other_ruin_entries(entry_pool)
 
 	return build_log_from_pool(entry_pool, "SYNDICATE FIELD REPORT", "Agent: [agent_name] - CLASSIFIED", dates["years_old"])
 
@@ -1008,6 +1229,21 @@ var/list/datum/story_theme/story_themes = list()
 	name = "ufo"
 	file_path = "maps/ruins/story/ufo.dmm"
 	theme = STORY_GREY
+
+/datum/map_element/ruin/story/workshop
+	name = "workshop"
+	file_path = "maps/ruins/story/workshop.dmm"
+	theme = STORY_NT|STORY_VOX|STORY_SYNDICATE
+
+/datum/map_element/ruin/story/shrine
+	name = "shrine"
+	file_path = "maps/ruins/story/shrine.dmm"
+	theme = STORY_WIZARD|STORY_NINJA
+
+/datum/map_element/ruin/story/greenhouse
+	name = "greenhouse"
+	file_path = "maps/ruins/story/greenhouse.dmm"
+	theme = STORY_NT|STORY_MUSHROOM
 
 #undef STORY_NT
 #undef STORY_WIZARD

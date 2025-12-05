@@ -1,7 +1,7 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "f" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/red,
