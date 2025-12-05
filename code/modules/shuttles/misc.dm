@@ -296,18 +296,12 @@ var/global/datum/shuttle/exploration/exploration_shuttle = new(starting_area = /
 	can_link_to_computer = LINK_PASSWORD_ONLY
 	password = TRUE
 	stable = 1 //Don't stun everyone and don't throw anything when moving
-	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
+	can_rotate = 1
 
 /datum/shuttle/exploration/initialize()
 	.=..()
 	add_dock(/obj/docking_port/destination/exploration/station)
-	add_dock(/obj/docking_port/destination/salvage/arrivals)
-	add_dock(/obj/docking_port/destination/salvage/north)
-	add_dock(/obj/docking_port/destination/salvage/east)
-	add_dock(/obj/docking_port/destination/salvage/south)
-	add_dock(/obj/docking_port/destination/salvage/mining)
-	add_dock(/obj/docking_port/destination/salvage/trading_post)
-	add_dock(/obj/docking_port/destination/salvage/derelict)
+	add_dock(/obj/docking_port/destination/salvage/dj)
 
 /datum/shuttle/exploration/after_flight()
 	..()

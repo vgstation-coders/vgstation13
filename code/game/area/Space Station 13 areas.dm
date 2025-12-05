@@ -202,6 +202,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/shuttle/Exited(atom/movable/Obj)
 	..()
+	animate(Obj)
 	Obj.pixel_y = initial(Obj.pixel_y)
 
 /area/shuttle/arrival
