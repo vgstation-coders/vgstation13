@@ -1039,6 +1039,39 @@
 	reagents.add_reagent(NUTRIMENT, 1)
 	reagents.add_reagent(CINNAMON, 2)
 
+/obj/item/weapon/reagent_containers/food/snacks/chocoladeletter
+	name = "chocolate letter"
+	desc = "A large letter made out of chocolate. Traditionally given to someone whose first name starts with the same letter."
+	icon = 'icons/obj/food_seasonal.dmi'
+	icon_state = "chocoladeletter"
+	food_flags = FOOD_SWEET
+	harmfultocorgis = TRUE
+	var/letterletter = "S"
+	//var/obj/effect/overlay/letter_overlay/indeschoen = null
+
+/obj/item/weapon/reagent_containers/food/snacks/chocoladeletter/New(loc,var/letterfood = letterletter)
+	..()
+	/*if(!indeschoen)
+		indeschoen = new()*/
+	var/list/lettermaker = list("letter_message" = letterfood,
+								"letter_color" = "#35220d",
+								"letter_size" = "12",
+								"font_name" = "Times New Roman")
+	//indeschoen.maptext = <span style='color:"#35220d"";font-size:24px;font-family:"Arial"''>[letter]</span>
+	//indeschoen.maptext = "<span style=\"color:[lettermaker["letter_color"]];font-size:[lettermaker["letter_size"]]px;font-family:'[lettermaker["font_name"]]'\">[lettermaker["letter_message"]]</span>"
+	maptext = "<span style=\"color:[lettermaker["letter_color"]];font-size:[lettermaker["letter_size"]]px;font-family:'[lettermaker["font_name"]]'\">[lettermaker["letter_message"]]</span>"
+	//overlays += indeschoen
+	maptext_x = 8
+	maptext_y = 8
+	//vis_contents += indeschoen
+	reagents.add_reagent(COCO, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/chocoladeletter/Destroy()
+	..()
+	/*if(indeschoen)
+		vis_contents -= indeschoen
+		indeschoen.filters = null
+		QDEL_NULL(indeschoen)*/
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar
 	name = "chocolate bar"
