@@ -1,7 +1,6 @@
 //Refer to life.dm for caller
 
 /mob/living/carbon/human/proc/handle_chemicals_in_body()
-	var/jittery_time = jitteriness
 
 	if(reagents)
 
@@ -128,8 +127,6 @@
 	remove_confused(1)
 	handle_dizziness()
 	handle_jitteriness()
-	if(jittery_time && !jitteriness)
-		animate(src)
 
 	handle_trace_chems()
 

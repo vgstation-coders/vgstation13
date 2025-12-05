@@ -1650,6 +1650,7 @@ Thanks.
 	var/jitter_reduce = standard_jitter_reduce
 	if(resting)
 		jitter_reduce = rested_jitter_reduce
+	var/saved_jitter = jitteriness
 	AdjustJitter(-jitter_reduce)
 	if(jitteriness)
 		var/amplitude = min(8, (jitteriness/70) + 1)
@@ -1668,6 +1669,8 @@ Thanks.
 			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
+	else if(saved_jitter)
+		animate(src)
 
 /mob/living/proc/Silent(amount)
 	silent = max(max(silent,amount),0)
