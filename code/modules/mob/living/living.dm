@@ -1647,7 +1647,7 @@ Thanks.
 
 
 /mob/living/proc/handle_jitteriness()
-	var/jitter_reduce = standard_dizzy_reduce
+	var/jitter_reduce = standard_jitter_reduce
 	if(resting)
 		jitter_reduce *= 5
 	AdjustJitter(-jitter_reduce)

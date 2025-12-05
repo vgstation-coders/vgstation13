@@ -84,3 +84,4 @@
 
 	var/list/luminosity_sources = list()
 	var/standard_dizzy_reduce = 1
+	var/standard_jitter_reduce = 1
