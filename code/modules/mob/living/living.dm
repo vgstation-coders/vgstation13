@@ -1621,7 +1621,7 @@ Thanks.
 		var/trig_amp_x
 		var/trig_amp_y
 		var/saved_dizz = dizziness
-		if(status != DEAD)
+		if(stat != DEAD)
 			var/dizzy_reduce = standard_dizzy_reduce
 			if(resting)
 				dizzy_reduce = rested_dizzy_reduce
@@ -1649,7 +1649,7 @@ Thanks.
 
 /mob/living/proc/handle_jitteriness()
 	var/saved_jitter = jitteriness
-	if(status != DEAD)
+	if(stat != DEAD)
 		var/jitter_reduce = standard_jitter_reduce
 		if(resting)
 			jitter_reduce = rested_jitter_reduce
