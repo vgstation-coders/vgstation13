@@ -379,3 +379,6 @@
 		my_appearance.b_facial = my_appearance.b_hair = 5
 		update_hair() //wie zal dat zijn?
 
+		drop_hands(force_drop = 1)
+		var/strooigoed = new /obj/item/weapon/reagent_containers/food/snacks/kruidnoten(get_active_hand())
+		put_in_hands(strooigoed)

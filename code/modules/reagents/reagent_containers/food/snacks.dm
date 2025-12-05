@@ -941,16 +941,24 @@
 
 	var/NM = time2text(world.realtime,"Month")
 	var/cookiecutter
+	var/holiday = Get_Holiday()
 
-	switch(NM)
-		if("February")
-			cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
-		if("December")
-			cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
-		if("October")
-			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
-		else
-			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
+	if(holiday)
+		if(holiday == SINTERKLAAS)
+			cookiecutter = pick( list("mijter","sinterklaas","piet","kadotje","schoentje") )
+
+	else
+		switch(NM)
+			if("February")
+				cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
+			if("December")
+				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
+			if("October")
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
+			if("October")
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
+			else
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
 	icon_state = "[cookiecutter]"
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
@@ -1002,6 +1010,35 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SUGAR, 4)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/taaitaai //sinterklaas
+	name = "taaitaai mannetje"
+	desc = "Spicy, chewy and sweet little candy, vaguely shaped like a person."
+	icon = 'icons/obj/food_seasonal.dmi'
+	icon_state = "taaitaai_1"
+
+/obj/item/weapon/reagent_containers/food/snacks/taaitaai/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(CINNAMON, 2)
+	var/taai = pick(list("taaitaai_1","taaitaai_2","taaitaai_3"))
+	icon_state = "[taai]"
+
+/obj/item/weapon/reagent_containers/food/snacks/kruidnoten
+	name = "handful of kruidnoten"
+	desc = "Tiny hard spiced cookies, perfect for throwing at people!"
+	icon = 'icons/obj/food_seasonal.dmi'
+	icon_state = "kruidnoten"
+	wrapped = 0
+	bitesize = 2
+	throwforce = 3
+	throw_speed = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/kruidnoten/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(CINNAMON, 2)
+
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar
 	name = "chocolate bar"
