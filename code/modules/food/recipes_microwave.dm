@@ -529,6 +529,10 @@
 		)
 	result = /mob/living/simple_animal/hostile/gingerbread
 
+/datum/recipe/taaitaai
+	reagents = list(CINNAMON = 5, SUGARS = 5, WATER = 5, FLOUR = 5) //no nutmeg, anise, clove, cardamom, etc so this works
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/taaitaai
+
 /datum/recipe/chocoladeletter
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/chocolatebar, /obj/item/weapon/paper)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chocoladeletter

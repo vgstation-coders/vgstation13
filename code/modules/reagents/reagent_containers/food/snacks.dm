@@ -1011,11 +1011,22 @@
 	reagents.add_reagent(SUGAR, 4)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/taaitaai
+	name = "taaitaai mannetjes"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/taaitaai
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/taaitaai/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(CINNAMON, 5)
+	reagents.add_reagent(FLOUR, 5)
+
 /obj/item/weapon/reagent_containers/food/snacks/taaitaai //sinterklaas
 	name = "taaitaai mannetje"
-	desc = "Spicy, chewy and sweet little candy, vaguely shaped like a person."
+	desc = "Spicy, chewy and sweet little cookies, vaguely shaped like a person."
 	icon = 'icons/obj/food_seasonal.dmi'
 	icon_state = "taaitaai_1"
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/taaitaai/New()
 	..()
@@ -1030,7 +1041,7 @@
 	icon = 'icons/obj/food_seasonal.dmi'
 	icon_state = "kruidnoten"
 	wrapped = 0
-	bitesize = 2
+	bitesize = 3
 	throwforce = 3
 	throw_speed = 3
 
@@ -1047,31 +1058,17 @@
 	food_flags = FOOD_SWEET
 	harmfultocorgis = TRUE
 	var/letterletter = "S"
-	//var/obj/effect/overlay/letter_overlay/indeschoen = null
 
 /obj/item/weapon/reagent_containers/food/snacks/chocoladeletter/New(loc,var/letterfood = letterletter)
 	..()
-	/*if(!indeschoen)
-		indeschoen = new()*/
 	var/list/lettermaker = list("letter_message" = letterfood,
 								"letter_color" = "#35220d",
 								"letter_size" = "12",
 								"font_name" = "Times New Roman")
-	//indeschoen.maptext = <span style='color:"#35220d"";font-size:24px;font-family:"Arial"''>[letter]</span>
-	//indeschoen.maptext = "<span style=\"color:[lettermaker["letter_color"]];font-size:[lettermaker["letter_size"]]px;font-family:'[lettermaker["font_name"]]'\">[lettermaker["letter_message"]]</span>"
 	maptext = "<span style=\"color:[lettermaker["letter_color"]];font-size:[lettermaker["letter_size"]]px;font-family:'[lettermaker["font_name"]]'\">[lettermaker["letter_message"]]</span>"
-	//overlays += indeschoen
 	maptext_x = 8
 	maptext_y = 8
-	//vis_contents += indeschoen
 	reagents.add_reagent(COCO, 1)
-
-/obj/item/weapon/reagent_containers/food/snacks/chocoladeletter/Destroy()
-	..()
-	/*if(indeschoen)
-		vis_contents -= indeschoen
-		indeschoen.filters = null
-		QDEL_NULL(indeschoen)*/
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar
 	name = "chocolate bar"
