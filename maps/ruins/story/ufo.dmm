@@ -63,6 +63,7 @@
 /area/ruin)
 "w" = (
 /obj/machinery/optable,
+/obj/machinery/light/he,
 /turf/unsimulated/floor/ayy,
 /area/ruin)
 "A" = (
@@ -84,6 +85,9 @@
 	pixel_x = -32
 	},
 /obj/machinery/telecomms/relay/planetary,
+/obj/machinery/light/he{
+	dir = 1
+	},
 /turf/unsimulated/floor/ayy,
 /area/ruin)
 "H" = (

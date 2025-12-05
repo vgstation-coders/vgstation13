@@ -15,6 +15,10 @@
 "e" = (
 /turf/simulated/wall/mineral/wood,
 /area/ruin)
+"f" = (
+/obj/abstract/loot_spawner/trash/on_ground,
+/turf/simulated/floor/vox/wood,
+/area/ruin)
 "h" = (
 /obj/structure/rack,
 /obj/abstract/map/spawner/floorpill,
@@ -36,6 +40,7 @@
 /area/ruin)
 "y" = (
 /obj/structure/rack,
+/obj/abstract/map/spawner/maint,
 /turf/simulated/floor/vox/wood,
 /area/ruin)
 "B" = (
@@ -43,6 +48,7 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/abstract/map/spawner/maint,
 /turf/simulated/floor/vox/wood,
 /area/ruin)
 "G" = (
@@ -102,7 +108,7 @@ G
 G
 e
 d
-a
+f
 e
 h
 a
@@ -117,8 +123,8 @@ n
 a
 V
 a
-a
-y
+f
+I
 S
 G
 "}
@@ -142,7 +148,7 @@ e
 e
 v
 a
-y
+I
 e
 G
 "}
@@ -165,7 +171,7 @@ G
 e
 c
 a
-a
+f
 y
 e
 G

@@ -508,6 +508,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	on = FALSE
 	toggled = FALSE
 	use_power = MACHINE_POWER_USE_NONE
+	hide = TRUE
+	network = "tcommsat"
 	var/datum/allocation/relay_allocation
 	/// Whether the relay has been activated - once activated, operates indefinitely without power
 	var/activated = FALSE
@@ -521,6 +523,13 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		alloc.comms_relay = src
 	else
 		CRASH("Failed to get allocation for planetary relay at [T] ([T.z])")
+	var/datum/planet_type/P = alloc.ptype
+	var/p_name = P.planet_name
+	p_name = replacetext(p_name, " ", "_")
+	autolinkers = list("[p_name]_relay")
+	for(var/obj/machinery/telecomms/hub/H in telecomms_list)
+		H.autolinkers |= list("[p_name]_relay")
+		H.add_link(src)
 
 /obj/machinery/telecomms/relay/planetary/update_power()
 	// Once activated, the relay operates indefinitely without power

@@ -599,7 +599,7 @@ var/datum/subsystem/mapping/SSmapping
 
 	var/list/spawned_objects = result["objects"]
 
-	// Process all story landmarks in the spawned ruin
+	// Process all story landmarks and old_database objects in the spawned ruin
 	for(var/atom/A in spawned_objects)
 		if(istype(A, /obj/effect/landmark/story))
 			var/obj/effect/landmark/story/landmark = A
@@ -607,6 +607,11 @@ var/datum/subsystem/mapping/SSmapping
 			landmark.story_year = story_year
 			landmark.character_name = character_name
 			landmark.spawn_story_entity()
+		else if(istype(A, /obj/machinery/old_database))
+			var/obj/machinery/old_database/db = A
+			db.assigned_theme = theme
+			db.story_year = story_year
+			db.character_name = character_name
 
 /**
  * Assigns a planet to a sector

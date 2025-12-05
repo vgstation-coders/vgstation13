@@ -9,7 +9,7 @@
 #define STORY_SYNDICATE	(1<<9)
 
 /// Threshold in years - stories younger than this spawn hostile mobs, older spawn corpses
-#define STORY_RECENT_THRESHOLD 20
+#define STORY_RECENT_THRESHOLD 50
 /// Chance that a story landmark spawns nothing (body is missing)
 #define STORY_MISSING_CHANCE 25
 
@@ -265,6 +265,12 @@ var/list/datum/story_theme/story_themes = list()
 	use_power = MACHINE_POWER_USE_NONE
 	var/activated = FALSE
 	var/activating = FALSE
+	/// The assigned story theme datum (set by place_story_ruins)
+	var/datum/story_theme/assigned_theme
+	/// The year the story took place
+	var/story_year = 0
+	/// The character name from the story
+	var/character_name = ""
 
 /obj/machinery/old_database/attack_hand(mob/user)
 	if(activated)
@@ -356,8 +362,12 @@ var/list/datum/story_theme/story_themes = list()
 	say("DATA ARCHIVE GENERATED. [uppertext(chosen_tech["name"])] DATA RECOVERED.")
 
 /obj/machinery/old_database/proc/generate_exploration_log(var/planet_name, var/planet_style, var/tech_name, var/tech_level)
-	// Pick a random theme for the journal
-	var/theme = pick("nanotrasen", "wizard", "ninja", "commando", "clown", "mushroom", "grey", "vox", "syndicate")
+	// Use the assigned theme if available, otherwise pick a random one
+	var/theme = "nanotrasen"
+	if(assigned_theme)
+		theme = assigned_theme.name
+	else
+		theme = pick("nanotrasen", "wizard", "ninja", "commando", "clown", "mushroom", "grey", "vox", "syndicate")
 
 	switch(theme)
 		if("wizard")
@@ -379,44 +389,58 @@ var/list/datum/story_theme/story_themes = list()
 		else
 			return generate_nanotrasen_log(planet_name, planet_style, tech_name, tech_level)
 
-/// Generate a wizard name from the name lists
+/// Generate a wizard name from the name lists (or use assigned name)
 /obj/machinery/old_database/proc/get_wizard_name()
+	if(character_name)
+		return character_name
 	if(wizard_first?.len && wizard_second?.len)
 		return "[pick(wizard_first)] [pick(wizard_second)]"
 	return "Merlin the Confused"
 
-/// Generate a ninja name from the name lists
+/// Generate a ninja name from the name lists (or use assigned name)
 /obj/machinery/old_database/proc/get_ninja_name()
+	if(character_name)
+		return character_name
 	if(ninja_titles?.len && ninja_names?.len)
 		return "[pick(ninja_titles)] [pick(ninja_names)]"
 	return "Shadow Warrior"
 
-/// Generate a commando name from the name lists
+/// Generate a commando name from the name lists (or use assigned name)
 /obj/machinery/old_database/proc/get_commando_name()
+	if(character_name)
+		return character_name
 	if(commando_names?.len)
 		return pick(commando_names)
 	return "Agent Smith"
 
-/// Generate a clown name from the name lists
+/// Generate a clown name from the name lists (or use assigned name)
 /obj/machinery/old_database/proc/get_clown_name()
+	if(character_name)
+		return character_name
 	if(clown_names?.len)
 		return pick(clown_names)
 	return "Honkers McHonkface"
 
-/// Generate a mushroom name from the name lists
+/// Generate a mushroom name from the name lists (or use assigned name)
 /obj/machinery/old_database/proc/get_mushroom_name()
+	if(character_name)
+		return character_name
 	if(mush_first?.len && mush_last?.len)
 		return "[pick(mush_first)] [pick(mush_last)]"
 	return "Sporeling Capsworth"
 
-/// Generate a grey name from the name lists
+/// Generate a grey name from the name lists (or use assigned name)
 /obj/machinery/old_database/proc/get_grey_name()
+	if(character_name)
+		return character_name
 	if(grey_first_male?.len && grey_last?.len)
 		return "[pick(grey_first_male + grey_first_female)] [pick(grey_last)]"
 	return "Zix'qua Vorn"
 
-/// Generate a vox name from syllables
+/// Generate a vox name from syllables (or use assigned name)
 /obj/machinery/old_database/proc/get_vox_name()
+	if(character_name)
+		return character_name
 	if(vox_name_syllables?.len)
 		var/name = ""
 		for(var/i in 1 to rand(2, 4))
@@ -424,8 +448,10 @@ var/list/datum/story_theme/story_themes = list()
 		return capitalize(name)
 	return "Kititaki"
 
-/// Generate a standard NT researcher name
+/// Generate a standard NT researcher name (or use assigned name)
 /obj/machinery/old_database/proc/get_researcher_name()
+	if(character_name)
+		return character_name
 	if(first_names_male?.len && last_names?.len)
 		var/first = pick(prob(50) ? first_names_male : first_names_female)
 		return "[first] [pick(last_names)]"
@@ -883,6 +909,7 @@ var/list/datum/story_theme/story_themes = list()
 
 	var/years_old = game_year - story_year
 	var/turf/T = get_turf(src)
+	var/is_clown = (assigned_theme.name == "clown")
 
 	if(years_old <= STORY_RECENT_THRESHOLD)
 		// Recent story - spawn a hostile mob
@@ -896,11 +923,46 @@ var/list/datum/story_theme/story_themes = list()
 		// Old story - spawn a corpse
 		if(assigned_theme.corpse_types.len)
 			var/corpse_type = pick(assigned_theme.corpse_types)
-			var/obj/effect/landmark/corpse/C = new corpse_type(T)
+			// Create the corpse landmark (which will spawn the corpse and delete itself)
+			new corpse_type(T)
+			// If we have a custom name, find the spawned corpse and rename it
 			if(character_name)
-				C.name = character_name
+				for(var/mob/living/M in T)
+					M.name = character_name
+					M.real_name = character_name
+					break
+
+	// If this is a clown story, spawn banana peels throughout the ruin
+	if(is_clown)
+		spawn_clown_banana_peels()
 
 	qdel(src)
+
+/**
+ * Spawns banana peels throughout the ruin area for clown stories
+ */
+/obj/effect/landmark/story/proc/spawn_clown_banana_peels()
+	var/area/ruin_area = get_area(src)
+	if(!ruin_area)
+		return
+
+	// Get all turfs in the ruin area
+	var/list/valid_turfs = list()
+	for(var/turf/simulated/floor/F in ruin_area)
+		// Don't spawn on dense turfs or turfs with dense objects
+		var/blocked = FALSE
+		for(var/atom/A in F)
+			if(A.density)
+				blocked = TRUE
+				break
+		if(!blocked)
+			valid_turfs += F
+
+	// Spawn 3-8 banana peels randomly throughout the ruin
+	var/num_peels = rand(3, 8)
+	for(var/i in 1 to min(num_peels, valid_turfs.len))
+		var/turf/spawn_turf = pick_n_take(valid_turfs)
+		new /obj/item/weapon/bananapeel(spawn_turf)
 
 /**
  * # Story Ruin
@@ -926,6 +988,11 @@ var/list/datum/story_theme/story_themes = list()
 	name = "cabin"
 	file_path = "maps/ruins/story/cabin.dmm"
 	theme = STORY_NT|STORY_WIZARD|STORY_NINJA|STORY_CLOWN|STORY_MUSHROOM|STORY_GREY
+
+/datum/map_element/ruin/story/camp
+	name = "camp"
+	file_path = "maps/ruins/story/camp.dmm"
+	theme = STORY_NT|STORY_WIZARD|STORY_NINJA|STORY_CLOWN|STORY_MUSHROOM|STORY_GREY|STORY_VOX|STORY_SYNDICATE
 
 /datum/map_element/ruin/story/hoarder
 	name = "hoarder den"
