@@ -105,10 +105,9 @@
 									network.merge(other.network)
 								else
 									network = other.network
-									if (network)
-										network.line_members -= other
-										if (!(src in network.line_members)) // sins against the nesting god
-											network.line_members += src
+									network.line_members -= other
+									if (!(src in network.line_members)) // sins against the nesting god
+										network.line_members += src
 
 							other.members = null
 							other.edges = null
