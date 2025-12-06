@@ -7,9 +7,9 @@
 	var/datum/pipe_network/network
 
 	var/alert_pressure = 0
-var/last_pressure_check=0
+	var/last_pressure_check=0
 
-var/const/PRESSURE_CHECK_DELAY=5 // 5s delay between pchecks to give pipenets time to recover.
+	var/const/PRESSURE_CHECK_DELAY=5 // 5s delay between pchecks to give pipenets time to recover.
 
 /datum/pipeline/Destroy()
 	if(network) //For the pipenet rebuild
