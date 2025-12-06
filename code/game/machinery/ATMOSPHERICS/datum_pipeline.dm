@@ -85,11 +85,8 @@
 								continue
 							P.parent = src
 
-							if (!(P in members))
-								members += P
-
-							if (!(P in possible_expansions))
-								possible_expansions += P
+							members |= P
+							possible_expansions |= P
 
 							volume += P.volume
 							alert_pressure = min(alert_pressure, P.alert_pressure)
@@ -97,8 +94,7 @@
 								air.merge(P.air_temporary)
 
 						for (var/obj/machinery/atmospherics/pipe/edge_pipe in other.edges)
-							if (!(edge_pipe in edges))
-								edges += edge_pipe
+							edges |= edge_pipe
 
 						if (other.air && other.air != air)
 							air.merge(other.air)
