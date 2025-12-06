@@ -7,9 +7,9 @@
 	var/datum/pipe_network/network
 
 	var/alert_pressure = 0
-	var/last_pressure_check=0
+var/last_pressure_check=0
 
-	var/const/PRESSURE_CHECK_DELAY=5 // 5s delay between pchecks to give pipenets time to recover.
+var/const/PRESSURE_CHECK_DELAY=5 // 5s delay between pchecks to give pipenets time to recover.
 
 /datum/pipeline/Destroy()
 	if(network) //For the pipenet rebuild
@@ -71,21 +71,62 @@
 
 			if(result.len>0)
 				for(var/obj/machinery/atmospherics/pipe/item in result)
-					if(item.parent != src)
-						if(item.parent)
-							//Destroy the old pipeline so that the air is stored in the pipes
-							//This could be optimized significantly by making it merge item.parent into this pipeline instead (or vice versa) but I'm just fixing a bug here
-							qdel(item.parent)
-						members += item
-						possible_expansions += item
+					var/merged_other = FALSE
+					if(item.parent != src) // encountered a pipe that is not part of this pipeline
+						if(item.parent) // it is already part of another pipeline
+							// merge other pipeline into this to create one bigger pipeline
+							var/datum/pipeline/other = item.parent
 
-						volume += item.volume
-						item.parent = src
+							for (var/obj/machinery/atmospherics/pipe/P in other.members)
+								if (P.parent == src)
+									continue
+								P.parent = src
 
-						alert_pressure = min(alert_pressure, item.alert_pressure)
+								if (!(P in members))
+									members += P
 
-						if(item.air_temporary)
-							air.merge(item.air_temporary)
+								if (!(P in possible_expansions))
+									possible_expansions += P
+
+								volume += P.volume
+								alert_pressure = min(alert_pressure, P.alert_pressure)
+								if (P.air_temporary)
+									air.merge(P.air_temporary)
+
+							for (var/obj/machinery/atmospherics/pipe/edge_pipe in other.edges)
+								if (!(edge_pipe in edges))
+									edges += edge_pipe
+
+							if (other.air && other.air != air)
+								air.merge(other.air)
+
+							if (other.network && other.network != network)
+								if (network)
+									network.merge(other.network)
+								else
+									network = other.network
+									if (network)
+										network.line_members -= other
+										if (!(src in network.line_members)) // sins against the nesting god
+											network.line_members += src
+
+							other.members = null
+							other.edges = null
+							other.air = null
+							other.network = null
+
+							merged_other = TRUE
+
+						members |= item
+						possible_expansions |= item
+
+						if (!merged_other)
+							volume += item.volume
+							if(item.air_temporary)
+								air.merge(item.air_temporary)
+							item.parent = src
+							alert_pressure = min(alert_pressure, item.alert_pressure)
+
 
 					edge_check--
 
