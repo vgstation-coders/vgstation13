@@ -90,8 +90,6 @@
 
 							volume += P.volume
 							alert_pressure = min(alert_pressure, P.alert_pressure)
-							if (P.air_temporary)
-								air.merge(P.air_temporary)
 
 						for (var/obj/machinery/atmospherics/pipe/edge_pipe in other.edges)
 							edges |= edge_pipe
@@ -112,6 +110,7 @@
 						other.edges = null
 						other.air = null
 						other.network = null
+						qdel(other)
 
 						merged_other = TRUE
 
@@ -124,9 +123,6 @@
 							air.merge(item.air_temporary)
 						item.parent = src
 						alert_pressure = min(alert_pressure, item.alert_pressure)
-
-
-
 
 			if(edge_check>0)
 				edges += borderline
