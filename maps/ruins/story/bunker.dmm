@@ -29,7 +29,7 @@
 /area/ruin)
 "l" = (
 /obj/structure/curtain/black,
-/turf/space,
+/turf/simulated/floor/dark,
 /area/ruin)
 "m" = (
 /obj/structure/bed/chair/comfy/black{

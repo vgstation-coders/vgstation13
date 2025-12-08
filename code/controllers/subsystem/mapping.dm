@@ -566,33 +566,32 @@ var/datum/subsystem/mapping/SSmapping
 	if(!allocation || !allocation.ptype)
 		return
 
-	// Find all available story ruin types
 	var/list/story_ruin_types = subtypesof(/datum/map_element/ruin/story)
-	if(!story_ruin_types.len)
-		return
 
-	// Pick a random story ruin
 	var/ruin_type = pick(story_ruin_types)
 	var/datum/map_element/ruin/story/story_ruin = new ruin_type()
-
-	// Get a compatible story theme for this ruin
 	var/datum/story_theme/theme = get_compatible_story_theme(story_ruin.theme)
-	if(!theme)
-		qdel(story_ruin)
-		return
 
-	// Calculate the story year (between 1 and 200 years ago)
 	var/max_age = 200
 	var/story_year = game_year - rand(1, max_age)
 
-	// Generate the character name for this story
 	var/character_name = theme.generate_character_name()
 
-	// Assign theme and year to the ruin
+	var/disease_type = null
+	if(prob(STORY_DISEASE_CHANCE))
+		var/list/allowed_disease_types = list(
+			/datum/disease2/disease/virus,
+			/datum/disease2/disease/bacteria,
+			/datum/disease2/disease/prion
+		)
+		disease_type = pick(allowed_disease_types)
+		var/datum/disease2/disease/temp_disease = new disease_type()
+		theme.disease_log_entry = theme.get_disease_entry(temp_disease.form)
+		qdel(temp_disease)
+
 	story_ruin.assigned_theme = theme
 	story_ruin.story_year = story_year
 
-	// Place the ruin and get the spawned objects
 	var/list/result = place_ruin_in_allocation(story_ruin, allocation)
 	if(!result)
 		qdel(story_ruin)
@@ -600,19 +599,80 @@ var/datum/subsystem/mapping/SSmapping
 
 	var/list/spawned_objects = result["objects"]
 
-	// Process all story landmarks and old_database objects in the spawned ruin
+	var/loot_type = pick_story_loot(spawned_objects, story_ruin)
+	if(loot_type)
+		theme.stashed_loot_type = loot_type
+		spawn_story_loot(spawned_objects, story_ruin, loot_type)
+
 	for(var/atom/A in spawned_objects)
 		if(istype(A, /obj/effect/landmark/story))
 			var/obj/effect/landmark/story/landmark = A
 			landmark.assigned_theme = theme
 			landmark.story_year = story_year
 			landmark.character_name = character_name
+			landmark.disease_type = disease_type
 			landmark.spawn_story_entity()
 		else if(istype(A, /obj/machinery/old_database))
 			var/obj/machinery/old_database/db = A
 			db.assigned_theme = theme
 			db.story_year = story_year
 			db.character_name = character_name
+
+/datum/subsystem/mapping/proc/pick_story_loot(list/spawned_objects, datum/map_element/ruin/story/story_ruin)
+	if(!spawned_objects || !story_ruin)
+		return null
+
+	// DEBUG if(!prob(20))
+	// DEBUG 	return null
+
+	var/list/loot_table_types = subtypesof(/datum/loot_table)
+	if(!loot_table_types.len)
+		return null
+
+	return pick(loot_table_types)
+
+/datum/subsystem/mapping/proc/spawn_story_loot(list/spawned_objects, datum/map_element/ruin/story/story_ruin, loot_type)
+	if(!spawned_objects || !story_ruin || !loot_type)
+		return
+
+	var/list/ruin_turfs = list()
+	for(var/atom/A in spawned_objects)
+		ruin_turfs |= get_turf(A)
+
+	var/list/valid_turfs = list()
+	for(var/turf/T in ruin_turfs)
+		if(!isfloor(T))
+			continue
+
+		var/has_structure = FALSE
+		for(var/obj/O in T)
+			if(istype(O,/obj/structure) || istype(O,/obj/machinery))
+				has_structure = TRUE
+				break
+		if(has_structure)
+			continue
+
+		var/adj_wall = FALSE
+		var/adj_door = FALSE
+		for(var/turf/adj in orange(1, T))
+			if(iswall(adj))
+				adj_wall = TRUE
+			for(var/obj/machinery/door/D in adj)
+				adj_door = TRUE
+				break
+			if(adj_door)
+				break
+
+		if(!adj_wall || adj_door)
+			continue
+
+		valid_turfs += T
+
+	if(!valid_turfs.len)
+		return
+
+	var/turf/chosen_turf = pick(valid_turfs)
+	new /obj/abstract/loot_spawner/story(chosen_turf, loot_type, story_ruin.loot_containers)
 
 /**
  * Assigns a planet to a sector

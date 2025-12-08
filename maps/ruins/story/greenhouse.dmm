@@ -3,8 +3,7 @@
 /turf/template_noop,
 /area/template_noop)
 "b" = (
-/obj/machinery/portable_atmospherics/hydroponics,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/grass,
 /area/ruin)
 "c" = (
 /turf/simulated/wall,
@@ -81,7 +80,6 @@
 /area/ruin)
 "q" = (
 /obj/structure/grille/window_spawner/full,
-/obj/structure/curtain/closed,
 /turf/simulated/floor/wood,
 /area/ruin)
 "r" = (
@@ -100,37 +98,37 @@
 
 (1,1,1) = {"
 c
-c
+q
+q
+q
+q
 q
 c
 q
-c
-c
-c
-c
+q
 c
 a
 "}
 (2,1,1) = {"
-c
-b
+q
 f
+b
 I
-f
 b
+f
 j
 m
 g
-c
+q
 a
 "}
 (3,1,1) = {"
-c
-b
-f
-f
+q
 f
 b
+f
+b
+f
 o
 o
 o
@@ -151,12 +149,12 @@ c
 r
 "}
 (5,1,1) = {"
-c
-b
-f
-f
+q
 f
 b
+f
+b
+f
 o
 o
 o
@@ -164,12 +162,12 @@ i
 h
 "}
 (6,1,1) = {"
-c
-b
+q
 f
+b
 p
-f
 b
+f
 n
 o
 o
@@ -178,11 +176,11 @@ r
 "}
 (7,1,1) = {"
 c
-c
 q
-c
 q
-c
+q
+q
+q
 c
 o
 o
@@ -196,10 +194,10 @@ a
 a
 a
 a
-c
+q
 e
 k
-c
+q
 a
 "}
 (9,1,1) = {"
@@ -210,8 +208,8 @@ a
 a
 a
 c
-c
-c
+q
+q
 c
 a
 "}

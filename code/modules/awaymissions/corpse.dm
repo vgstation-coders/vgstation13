@@ -1375,10 +1375,6 @@
 	corpsegloves = /obj/item/clothing/gloves/ninja
 	corpsemask = /obj/item/clothing/mask/gas/voice/ninja
 
-/obj/effect/landmark/corpse/ninja/unequipped
-	name = "Ninja"
-	corpseuniform = /obj/item/clothing/under/color/black
-
 #undef G_MALE
 #undef G_FEMALE
 #undef G_BOTH

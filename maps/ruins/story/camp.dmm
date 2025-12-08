@@ -3,16 +3,19 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "g" = (
-/obj/machinery/telecomms/relay/planetary,
 /turf/template_noop,
-/area/exposed_ruin)
+/area/template_noop)
 "h" = (
 /turf/simulated/wall/mineral/wood/log,
 /area/ruin)
 "m" = (
+/obj/structure/curtain/open/bed,
+/turf/template_noop,
+/area/ruin)
+"o" = (
 /obj/machinery/old_database,
 /turf/template_noop,
-/area/exposed_ruin)
+/area/ruin)
 "z" = (
 /obj/effect/decal/cleanable/campfire,
 /obj/machinery/cooking/grill/spit,
@@ -29,37 +32,57 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/template_noop,
 /area/exposed_ruin)
+"J" = (
+/obj/machinery/telecomms/relay/planetary,
+/turf/template_noop,
+/area/ruin)
 "Q" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil,
 /obj/item/weapon/bedsheet,
-/obj/structure/curtain/open/bed,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/landmark/story,
 /turf/template_noop,
 /area/ruin)
 
 (1,1,1) = {"
-m
-a
-g
+h
+h
+h
+h
+h
 "}
 (2,1,1) = {"
 h
+J
+o
 Q
 h
 "}
 (3,1,1) = {"
+h
+m
+m
+m
+h
+"}
+(4,1,1) = {"
+g
 B
 F
 a
+g
 "}
-(4,1,1) = {"
+(5,1,1) = {"
+g
 a
 z
 a
+g
 "}
-(5,1,1) = {"
+(6,1,1) = {"
+g
 a
 a
 F
+g
 "}

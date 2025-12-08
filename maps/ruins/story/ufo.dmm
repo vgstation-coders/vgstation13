@@ -135,7 +135,7 @@
 /area/ruin)
 "U" = (
 /obj/structure/cage,
-/mob/living/simple_animal/cow,
+/obj/abstract/map/spawner/mobs/monkeys,
 /turf/unsimulated/floor/ayy,
 /area/ruin)
 "V" = (
