@@ -7,7 +7,7 @@
 /area/template_noop)
 "ad" = (
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "af" = (
 /obj/machinery/light/small,
 /turf/template_noop,
@@ -20,24 +20,24 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ai" = (
 /obj/machinery/light{
 	dir = 4
 	},
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aj" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ak" = (
 /obj/structure/flora/pottedplant,
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "al" = (
 /obj/machinery/light/small{
 	dir = 4

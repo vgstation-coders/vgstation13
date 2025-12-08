@@ -2,7 +2,7 @@
 "a" = (
 /obj/abstract/map/spawner/misc/gym,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "b" = (
 /turf/simulated/floor/damaged/airless,
 /area/vault/gym)
@@ -20,7 +20,7 @@
 "f" = (
 /obj/item/weapon/reagent_containers/spray/cleaner,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "g" = (
 /turf/simulated/wall,
 /area/vault/gym)
@@ -89,7 +89,7 @@
 /area/vault/gym)
 "t" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "u" = (
 /obj/effect/decal/cleanable/vomit,
 /turf/simulated/floor/airless,

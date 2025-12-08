@@ -12,7 +12,7 @@
 	tag = "icon-barricade (EAST)"
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ag" = (
 /obj/structure/window/barricade{
 	dir = 1;
@@ -20,11 +20,11 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ah" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ai" = (
 /obj/structure/window/barricade{
 	dir = 8;
@@ -36,7 +36,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ak" = (
 /obj/structure/window/barricade{
 	dir = 8;
@@ -44,12 +44,12 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "al" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "am" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/template_noop,
@@ -58,22 +58,22 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/soot,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ao" = (
 /obj/structure/window/barricade{
 	dir = 1;
 	tag = "icon-barricade (NORTH)"
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aq" = (
 /obj/structure/bed/chair/comfy/couch/mid/red,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "as" = (
 /obj/item/weapon/match,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "au" = (
 /obj/structure/window/barricade{
 	dir = 1;
@@ -81,15 +81,15 @@
 	},
 /obj/item/trash/cigbutt,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aw" = (
 /obj/structure/bed/chair/comfy/couch/left/red,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ax" = (
 /obj/item/weapon/storage/fancy/matchbox/empty,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ay" = (
 /obj/structure/window/barricade{
 	dir = 1;
@@ -97,11 +97,11 @@
 	},
 /obj/effect/decal/cleanable/soot,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "az" = (
 /obj/structure/bed/chair/comfy/couch/right/red,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aA" = (
 /turf/simulated/wall/mineral/wood,
 /area/vault/zathura)
@@ -378,7 +378,7 @@
 /area/vault/zathura)
 "bw" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "bx" = (
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
@@ -499,7 +499,7 @@
 	name = "Walter"
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "bQ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -598,7 +598,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/soot,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ce" = (
 /obj/effect/landmark/corpse/skellington{
 	corpsegender = 1;
