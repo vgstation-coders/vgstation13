@@ -1,6 +1,3 @@
-// Ninja Story Theme
-// Spider Clan technology acquisition mission logs
-
 /datum/story_theme/ninja
 	name = "ninja"
 	theme_flag = STORY_NINJA
@@ -206,3 +203,50 @@
 			entries += "Even debris can contain useful intelligence. Sorted and relevant items cached."
 			entries += "Refuse analyzed and selectively retained. Nothing escapes a trained operative's notice."
 	return entries
+
+/datum/story_theme/ninja/get_disease_entry(var/disease_form)
+	var/list/entries = list()
+	switch(disease_form)
+		if("Virus")
+			entries = list(
+				"Viral contamination detected. Suit medical systems compensating. Mission continues.",
+				"Fever compromising operational efficiency. The Clan trained us to operate through worse. Adapting.",
+				"The virus spreads despite suit countermeasures. Biological warfare? Or environmental hazard? Investigating origin.",
+				"System alert: elevated temperature, reduced reaction time. Adjusting combat protocols to compensate."
+			)
+		if("Bacteria")
+			entries = list(
+				"Wound infection detected. Suit administering antibiotics. Field treatment insufficient.",
+				"Bacterial contamination from local environment. The Clan's medical training is being tested.",
+				"Infection spreading. Pain is a distraction; the mission is focus. But the body has limits.",
+				"Medical alert: systemic bacterial infection. Require extraction for proper treatment. Mission timeline compressed."
+			)
+		if("Parasite")
+			entries = list(
+				"Parasitic lifeform detected in digestive system. Contracted from local fauna. Unacceptable oversight.",
+				"The parasite is affecting nutrient absorption. Energy reserves depleting faster than projected.",
+				"Internal sensors confirm parasitic infection. The creature must have entered through contaminated water.",
+				"Symbiotic or parasitic - irrelevant. It compromises operational capacity. Seeking treatment options."
+			)
+		if("Prion")
+			entries = list(
+				"Cognitive function... fluctuating. Difficulty maintaining mission focus. This is... concerning.",
+				"The Clan's mental disciplines failing. Something wrong with neural pathways. Cannot identify cause.",
+				"Memory gaps appearing. Training routines incomplete in recall. What is happening to me?",
+				"Neurological degradation detected. If this continues, mission data must be uploaded before... before..."
+			)
+		if("Fungus")
+			entries = list(
+				"Fungal growth detected on suit exterior. Now spreading to exposed tissue. Containment failed.",
+				"The spores have taken root. Suit integrity compromised at joint seals. Mycological hazard underestimated.",
+				"Fungal infection spreading beneath the skin. The Clan has protocols, but not the resources here.",
+				"Mycelium network visible on forearm. Fascinating if it weren't killing me. Documenting for Clan medical archives."
+			)
+		else
+			entries = list(
+				"Unknown pathogen affecting system efficiency. Symptoms do not match Clan medical databases.",
+				"Illness compromising mission parameters. The body fails where the will remains strong.",
+				"Disease progression accelerating. Must complete objectives before becoming fully incapacitated.",
+				"Sick. Weak. But still a Spider Clan operative. The mission continues until it cannot."
+			)
+	return pick(entries)

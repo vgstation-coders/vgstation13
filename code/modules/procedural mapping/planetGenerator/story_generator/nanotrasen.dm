@@ -1,6 +1,3 @@
-// Nanotrasen Story Theme
-// Standard corporate research expedition logs
-
 /datum/story_theme/nanotrasen
 	name = "nanotrasen"
 	theme_flag = STORY_NT
@@ -116,14 +113,12 @@
 
 /datum/story_theme/nanotrasen/get_fauna_entries()
 	var/list/entries = ..()
-	// Add NT-specific observations
 	entries += "[secondary_character_name] has started a specimen catalog. Corporate will want detailed reports."
 	entries += "The local fauna shows no fear of our equipment. Either they've never seen humans, or they have and don't consider us threats."
 	return entries
 
 /datum/story_theme/nanotrasen/get_loot_entries()
 	var/list/entries = ..()
-	// Add NT-specific observations
 	entries += "Inventory logged and catalogued per NT Standard Procedure 7-Alpha. [secondary_character_name] is meticulous about documentation."
 	entries += "All recovered assets tagged for corporate review. Some of this equipment predates current NT models."
 	return entries
@@ -198,3 +193,53 @@
 			entries += "[secondary_character_name] insists on sorting through the debris. 'Reclamation efficiency', they call it."
 			entries += "Even the refuse has been catalogued. Nothing escapes NT documentation requirements."
 	return entries
+
+/datum/story_theme/nanotrasen/get_disease_entry(var/disease_form)
+	if(!secondary_character_name)
+		generate_secondary_character_name()
+
+	var/list/entries = list()
+	switch(disease_form)
+		if("Virus")
+			entries = list(
+				"Viral infection confirmed. [secondary_character_name] is running tests. Quarantine protocols in effect.",
+				"The fever keeps climbing. [secondary_character_name] says the medical supplies are insufficient. Central Command has been notified.",
+				"NT Health Protocol 12-B initiated. Viral contamination from unknown source. Symptoms worsening.",
+				"[secondary_character_name] caught it too. We're both symptomatic now. Isolation is pointless. Focusing on treatment."
+			)
+		if("Bacteria")
+			entries = list(
+				"Bacterial infection in the wound from last week. [secondary_character_name] is administering antibiotics.",
+				"Sepsis risk elevated. [secondary_character_name] is monitoring vitals. Medical evac may be necessary.",
+				"The infection isn't responding to standard treatment. [secondary_character_name] suggests we try the experimental protocols.",
+				"NT medical supplies running low. [secondary_character_name] is rationing the antibiotics. This is serious."
+			)
+		if("Parasite")
+			entries = list(
+				"Parasitology report: local fauna carried something we didn't screen for. [secondary_character_name] is researching treatment.",
+				"The parasite is wreaking havoc on my digestive system. [secondary_character_name] found similar cases in the medical database.",
+				"Appetite is insatiable but nutrition is failing. [secondary_character_name] suspects the organism is competing for resources.",
+				"[secondary_character_name] extracted a sample. It's worse than we thought. Recommending xenobiological hazard classification."
+			)
+		if("Prion")
+			entries = list(
+				"Cognitive assessment shows concerning results. [secondary_character_name] is worried. I'm... having trouble with that report.",
+				"Memory is fragmenting. [secondary_character_name]'s name took me too long to recall. This isn't normal.",
+				"Prion disease suspected. [secondary_character_name] found the likely contamination source. Too late for me. Warning others.",
+				"[secondary_character_name] keeps explaining things I should know. The knowledge is there, then it's... not. Documenting while I can."
+			)
+		if("Fungus")
+			entries = list(
+				"Fungal infection spreading despite treatment. [secondary_character_name] says the local strain is resistant to standard antifungals.",
+				"The mycelium is visible now. [secondary_character_name] is documenting for NT xenobiological records. Clinically fascinating. Personally terrifying.",
+				"[secondary_character_name] tried surgical removal. It grew back within hours. This organism is... aggressive.",
+				"Spore count in my lungs is rising. [secondary_character_name] has isolated me from the main facility. Standard containment."
+			)
+		else
+			entries = list(
+				"Unknown pathogen detected. [secondary_character_name] is running every test we have. Symptoms don't match NT medical databases.",
+				"Getting worse. [secondary_character_name] is doing everything possible. Corporate needs to know about this biological hazard.",
+				"This illness isn't in any of our files. [secondary_character_name] thinks it might be native to this planet. First contact of the wrong kind.",
+				"If we don't make it, [secondary_character_name] and I have documented everything. NT will know what killed us, at least."
+			)
+	return pick(entries)

@@ -208,3 +208,50 @@
 			entries += "Even NT garbage analyzed for intelligence value. Sorted and relevant materials cached."
 			entries += "Refuse processed per standard protocol. Nothing escapes Syndicate attention."
 	return entries
+
+/datum/story_theme/syndicate/get_disease_entry(var/disease_form)
+	var/list/entries = list()
+	switch(disease_form)
+		if("Virus")
+			entries = list(
+				"Viral infection detected. Syndicate field medicine deployed. Operational capacity reduced but mission continues.",
+				"The virus is aggressive. NT biological research notes mention nothing about this strain. Natural or engineered?",
+				"Fever compromising operational security. Reaction time degraded. Adjusting mission parameters to compensate.",
+				"If this is a Nanotrasen bioweapon, it's effective. If it's natural, this planet is more dangerous than briefed."
+			)
+		if("Bacteria")
+			entries = list(
+				"Wound infection despite field treatment. Syndicate medical supplies insufficient for this strain.",
+				"Bacterial contamination spreading. The corporation's abandoned research didn't mention local pathogens. Oversight or deliberate omission?",
+				"Infection progressing. Pain is manageable. The mission is not. Requesting emergency extraction protocols.",
+				"Sepsis risk increasing. Syndicate training covers operating wounded. This is... beyond that training."
+			)
+		if("Parasite")
+			entries = list(
+				"Parasitic organism contracted from local fauna or water supply. Intelligence failure on environmental hazards.",
+				"The parasite is affecting combat readiness. Nutrient absorption compromised. This was not in the briefing materials.",
+				"Internal scans confirm infestation. Syndicate medical protocols recommend surgical extraction. Equipment unavailable.",
+				"The creature grows while I weaken. Poetic, perhaps. The corporation's research here suddenly seems more relevant."
+			)
+		if("Prion")
+			entries = list(
+				"Cognitive function deteriorating. Memory of mission parameters... fragmenting. This is wrong.",
+				"Syndicate conditioning should protect against mental degradation. It's not. Something is attacking my mind directly.",
+				"Mission... what was the mission? The data. Yes. Upload the data. Before... before I forget why.",
+				"If this log reaches Command, know that the agent's mind failed before the agent did. The disease is in my thoughts."
+			)
+		if("Fungus")
+			entries = list(
+				"Fungal infection established despite decontamination protocols. Local strain shows unusual aggression.",
+				"The spores have spread to respiratory system. Filtration mask inadequate. Syndicate R&D should note this strain.",
+				"Mycelium visible on exposed skin. Attempted removal caused accelerated growth. Changing tactics to containment.",
+				"The fungus is spreading faster than projected. This planet's ecology is more hostile than any NT security system."
+			)
+		else
+			entries = list(
+				"Unknown pathogen affecting system performance. Does not match any Syndicate medical database entries.",
+				"Illness progressing. Etiology unknown. If this is NT's doing, they've created something new. If not, this planet did.",
+				"Operational capacity at 60% and declining. The mission may need to be aborted. Or the operative may need to be.",
+				"Syndicate does not leave agents behind. But Syndicate also does not tolerate mission failure. The math is simple."
+			)
+	return pick(entries)

@@ -222,6 +222,53 @@
 			entries += "One person's trash is another clown's treasure! Found THREE rubber bands! Jackpot!"
 	return entries
 
+/datum/story_theme/clown/get_disease_entry(var/disease_form)
+	var/list/entries = list()
+	switch(disease_form)
+		if("Virus")
+			entries = list(
+				"ACHOO! Got the sniffles. My red nose is even REDDER now! ...wait, is that bad? HONK of concern!",
+				"Feeling woozy. The room is spinning! Actually, that's kind of fun! Wheee! ...ow, fell over.",
+				"This virus is NO JOKE! And I know jokes! My whole BODY is the punchline now and it's NOT FUNNY!",
+				"Chuckles says I look pale. I told Chuckles I'm a CLOWN, we're SUPPOSED to look pale! ...but yeah, I feel terrible."
+			)
+		if("Bacteria")
+			entries = list(
+				"Something's infected! Probably from juggling questionable objects. Worth it? ...maybe not this time.",
+				"Bacteria are like tiny unfunny clowns living inside me. EVICTION NOTICE! ...they're not listening.",
+				"The infection is spreading. Drew a frowny face on the bandage. At least SOMETHING should express how I feel!",
+				"Chuckles is worried about my wound. I told him it's just a flesh wound! He didn't laugh. Neither did I. Ow."
+			)
+		if("Parasite")
+			entries = list(
+				"Something's living in my tummy and it's NOT the butterflies from stage fright! UNINVITED GUEST! HONK!",
+				"The parasite is making me hungry ALL the time. Ate my emergency pie. This is SERIOUS now.",
+				"I can feel it wiggling! That's MY bit! Only I'M supposed to wiggle! COPYRIGHT INFRINGEMENT!",
+				"Chuckles thinks I should see a doctor. I think doctors should see ME! ...performing. Once I'm better. If I get better."
+			)
+		if("Prion")
+			entries = list(
+				"Forgot my best joke today. THE BEST ONE. It had a punchline about... about... what was it about?",
+				"My brain feels fuzzy. Fuzzier than my backup wig. That's VERY fuzzy. This isn't funny anymore.",
+				"Can't remember if I fed Chuckles. Can't remember if Chuckles needs feeding. Can't remember what Chuckles is. ...rock?",
+				"The thoughts come and go. Like an audience! Except the audience leaves and comes back. My thoughts just... leave. HONK?"
+			)
+		if("Fungus")
+			entries = list(
+				"Found mushrooms growing on my costume! Tried to make them into a hat. They're on my SKIN. Less fun now.",
+				"The fungus is spreading! I'm becoming a fun-GUY! Get it? FUN-GUY? ...I'm scared, Chuckles.",
+				"Itchy itchy ITCHY! Worse than that time I used poison ivy for a bouquet gag! MUCH worse!",
+				"The mushrooms are pretty colors at least. Silver linings! ...the silver lining is I'm becoming a garden. HONK of existential crisis!"
+			)
+		else
+			entries = list(
+				"Don't feel so good. The show must go on though! *weak honk* ...okay maybe a short intermission.",
+				"Sick as a dog! Wait, dogs are cute. Sick as a... mime? Yeah. Sick as a MIME. *shudders*",
+				"Whatever this is, it's NOT funny. And I'm an EXPERT on what's funny! This is the opposite!",
+				"Chuckles is being a good nurse. He just sits there, supportively. Because he's a rock. I love you, Chuckles."
+			)
+	return pick(entries)
+
 /datum/story_theme/clown/on_ruin_placed(var/turf/ruin_turf)
 	var/area/ruin_area = get_area(ruin_turf)
 	if(!ruin_area)

@@ -210,3 +210,50 @@
 			entries += "Human refuse analyzed and sorted. Their waste reveals much about their priorities. Enlightening."
 			entries += "Discarded materials cached. What humans discard often has value they failed to recognize."
 	return entries
+
+/datum/story_theme/grey/get_disease_entry(var/disease_form)
+	var/list/entries = list()
+	switch(disease_form)
+		if("Virus")
+			entries = list(
+				"Viral contamination detected. Local pathogen has bypassed standard psionic immunities. This is... unexpected.",
+				"The fever is affecting telepathic clarity. Symptoms mirror human descriptions but feel... different. Subjective experience noted.",
+				"Human viruses should not affect our biology. This strain has adapted. Or was adapted. Concerning implications.",
+				"Council medical protocols inadequate for this pathogen. The irony of seeking human remedies is not lost on this observer."
+			)
+		if("Bacteria")
+			entries = list(
+				"Bacterial infection in tissue that should resist such primitive organisms. Local evolution has produced... surprises.",
+				"The infection spreads despite mental commands to the cellular level. The body refuses to obey. A humbling experience.",
+				"Human antibiotics showing partial effectiveness. Their crude solutions sometimes work where elegance fails.",
+				"Documenting symptoms for Council medical archives. Our species has little experience with bacterial disease. Now we have more."
+			)
+		if("Parasite")
+			entries = list(
+				"Parasitic organism has established itself within this unit. Attempted psionic expulsion failed. The creature has no mind to influence.",
+				"The parasite feeds without awareness, without thought. Pure biological mechanism. Efficient. Horrifying.",
+				"Tried to communicate with the organism. Void. It exists only to consume. The humans deal with such things constantly. Perspective gained.",
+				"The creature grows while this unit weakens. A perfect parasitic relationship. Academically fascinating. Personally distressing."
+			)
+		if("Prion")
+			entries = list(
+				"Cognitive patterns fragmenting. Thoughts that should flow like water now... stutter. This is not normal degradation.",
+				"The Council's mental archives feel... distant. Knowledge I have possessed for centuries slips away. What is happening?",
+				"Prion contamination suspected. Our neurology should be immune. Should be. The word 'should' loses meaning.",
+				"If this log becomes disjointed, know that [character_name]'s mind was intact. Was. The disease eats thought itself."
+			)
+		if("Fungus")
+			entries = list(
+				"Fungal growth has established on dermal tissue. Psionic barriers ineffective against non-sentient invasion.",
+				"The spores show remarkable adaptation to non-human biology. Evolution or design? The distinction may matter.",
+				"Mycelial network spreading beneath the skin. Can feel it growing. A violation of bodily sovereignty most profound.",
+				"The fungus has begun to affect neural tissue. Hallucinations mixing with telepathic reception. Reality grows uncertain."
+			)
+		else
+			entries = list(
+				"Unknown pathogen affecting this unit. Does not match Council medical databases. A new disease, perhaps.",
+				"Symptoms resist classification. Neither clearly viral, bacterial, nor parasitic. Something else. Something new.",
+				"The illness progresses despite all intervention. Humans endure such helplessness regularly. Their resilience is... notable.",
+				"If this unit fails, the Council must know: this planet holds dangers our surveys did not detect. Learn from this error."
+			)
+	return pick(entries)

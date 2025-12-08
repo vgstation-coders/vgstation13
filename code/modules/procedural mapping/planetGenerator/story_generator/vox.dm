@@ -210,3 +210,50 @@
 			entries += "Even garbage has value! Scrap metal! Spare parts! Softskins wasteful! [character_name] resourceful!"
 			entries += "Sorted through junk! Found GOOD junk! Stashed GOOD junk! Bad junk thrown away! Efficiency!"
 	return entries
+
+/datum/story_theme/vox/get_disease_entry(var/disease_form)
+	var/list/entries = list()
+	switch(disease_form)
+		if("Virus")
+			entries = list(
+				"SKREE! [character_name] has the sicks! Fever making feathers droop! Bad trade! Did not sign up for virus!",
+				"Softskin virus got into [character_name]! Vox immune system fighting! SKREE of anger at tiny invaders!",
+				"Sneezing on the salvage! Unprofessional! [character_name] quarantines self. Virus bad for business!",
+				"The Arkships have medicine for this. The Arkships are FAR AWAY. [character_name] must wait. And sneeze. SKREE."
+			)
+		if("Bacteria")
+			entries = list(
+				"Wound got infected! Bacteria from this stupid planet! [character_name] should have been more careful with sharp salvage!",
+				"Green stuff coming from cut. Not good green. Bad green. Infection green. SKREE of medical concern!",
+				"Bacterial infection spreading! Vox bodies fight hard but need proper medicine! This planet has NO proper medicine!",
+				"[character_name] tried softskin antibiotics. Taste TERRIBLE. Work... maybe? Feathers still falling out though!"
+			)
+		if("Parasite")
+			entries = list(
+				"Something LIVING in [character_name]'s stomach! Not food! INVADER! How dare! SKREE of violated digestion!",
+				"Ate wrong thing. Now wrong thing living in [character_name]. Parasites are THIEVES! Stealing MY nutrients!",
+				"Parasite getting bigger! [character_name] getting thinner! This is NOT fair trade! EVICTION NOTICE to belly creature!",
+				"The worm thinks it owns [character_name]'s insides. WRONG. [character_name] will outlast stupid worm! Probably! SKREE!"
+			)
+		if("Prion")
+			entries = list(
+				"[character_name] forgot... forgot what [character_name] forgot. Bad sign. Brain not working right. SKREE?",
+				"Words hard to find. Trade math getting wrong. [character_name] is GOOD at trade math. Something broken in head.",
+				"The Arkships... what are... no, [character_name] remembers. The Arkships. Home. Memory slipping like bad grip on salvage.",
+				"If other Vox find this... [character_name] was good trader. Brain going bad now. Remember [character_name] kindly. SKREE... of sad."
+			)
+		if("Fungus")
+			entries = list(
+				"MUSHROOMS ON FEATHERS! [character_name] is not a garden! OFF! OFF OFF! SKREE of fungal horror!",
+				"Spores got under scales. Itchy! Burny! Growing! [character_name] tried to pluck them. BAD IDEA. More grew back!",
+				"[character_name] becoming fuzzy in wrong places. Fungus spreading. Not cute fuzzy. Scary fuzzy. Medical emergency!",
+				"The fungus glows at night now. [character_name] is a nightlight. WORST UPGRADE. Did not want! SKREE!"
+			)
+		else
+			entries = list(
+				"[character_name] sick with mystery illness! Softskin diseases make no sense! Vox bodies NOT designed for this planet!",
+				"Bad sicks. Very bad sicks. [character_name] needs real Vox medicine, not softskin garbage remedies!",
+				"Getting weaker. Salvage piling up but [character_name] too sick to move it. WASTE! Being sick is EXPENSIVE!",
+				"If [character_name] dies here, other Vox take the salvage. Fair is fair. But [character_name] would rather NOT DIE! SKREE!"
+			)
+	return pick(entries)

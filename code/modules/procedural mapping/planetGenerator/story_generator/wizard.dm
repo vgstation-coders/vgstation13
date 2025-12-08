@@ -202,3 +202,50 @@
 			entries += "Even refuse can have value. Certain components work surprisingly well as improvised spell foci."
 			entries += "Sorted through the debris. The mundanes discard things that a resourceful wizard can still use."
 	return entries
+
+/datum/story_theme/wizard/get_disease_entry(var/disease_form)
+	var/list/entries = list()
+	switch(disease_form)
+		if("Virus")
+			entries = list(
+				"A mundane ailment has somehow bypassed my arcane defenses. The fever interferes with spellcasting. Unacceptable.",
+				"Viral infection. My immune enhancement charms have failed. The Art requires a clear mind - this illness denies me that.",
+				"The virus spreads through my system faster than my restoration cantrips can contain it. Most vexing.",
+				"Attempted to transmute the virus into something harmless. Partial success. I am now host to a very confused pathogen."
+			)
+		if("Bacteria")
+			entries = list(
+				"Bacterial contamination in a minor wound. My healing magic keeps it contained but cannot eliminate it. The infection persists.",
+				"The mundane world has its own forms of corruption. This bacterial invasion is proving... stubbornly resistant to magical treatment.",
+				"Infection spreading despite my best purification rituals. Perhaps the bacteria here are simply too alien for standard cleansing magic.",
+				"The wound festers. Even a wizard's flesh is merely flesh. A humbling reminder."
+			)
+		if("Parasite")
+			entries = list(
+				"Something has taken residence within me. Not a familiar - far less pleasant. A parasitic entity defying magical expulsion.",
+				"The creature feeds on my magical essence as well as my physical nutrients. This is... professionally embarrassing.",
+				"Attempted to communicate with the parasite telepathically. It does not think. It only hungers. Concerning.",
+				"The parasite is immune to transformation magic. I tried to turn it into something beneficial. It turned my spell inward. Clever, for a worm."
+			)
+		if("Prion")
+			entries = list(
+				"My thoughts... scatter like startled birds. The mental disciplines of the Federation are failing me.",
+				"Something is wrong with my mind. Spells I've known for decades slip away mid-casting. This is not natural forgetting.",
+				"The disease attacks thought itself. Magic requires will and focus. Both are... fragmenting.",
+				"If this journal becomes incoherent, know that [character_name] fought to the last. The mind... the mind is the wizard. Without it..."
+			)
+		if("Fungus")
+			entries = list(
+				"Fungal growth has taken root despite my wards. The spores must have been magically inert until germination. Clever adaptation.",
+				"The mycelium spreads beneath my skin like roots seeking water. Nature magic might commune with it. I dare not try.",
+				"Attempted to burn it away with controlled fire magic. It absorbed the energy. The fungus is now slightly luminescent. Not helpful.",
+				"The mushrooms have a faint magical aura now. They're learning from me. When I die, this planet may have its first magical fungal colony. Small consolation."
+			)
+		else
+			entries = list(
+				"An illness has taken hold that defies magical classification. Neither curse nor hex nor mundane disease. Something new.",
+				"My body fails while my magic remains strong. The irony is not lost on me. I could level mountains but cannot cure a cough.",
+				"The Federation's healing arts are meant for magical afflictions. This... this is something else entirely.",
+				"Sick. Weakening. The portal home remains incomplete. Perhaps this is fitting - a wizard's hubris undone by a simple pathogen."
+			)
+	return pick(entries)

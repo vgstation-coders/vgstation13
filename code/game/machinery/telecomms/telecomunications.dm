@@ -511,7 +511,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	hide = TRUE
 	network = "tcommsat"
 	var/datum/allocation/relay_allocation
-	/// Whether the relay has been activated - once activated, operates indefinitely without power
 	var/activated = FALSE
 
 /obj/machinery/telecomms/relay/planetary/New()
@@ -536,7 +535,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(activated)
 		on = TRUE
 		return
-	// Before activation, relay is always off
 	on = FALSE
 
 /obj/machinery/telecomms/relay/planetary/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)

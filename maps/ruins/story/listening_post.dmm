@@ -2,11 +2,6 @@
 "a" = (
 /turf/simulated/wall/syndicate,
 /area/ruin)
-"b" = (
-/obj/structure/table,
-/obj/item/weapon/paper/intercoms,
-/turf/simulated/floor/dark,
-/area/ruin)
 "f" = (
 /turf/template_noop,
 /area/exposed_ruin)
@@ -95,7 +90,7 @@ a
 C
 P
 L
-b
+m
 P
 a
 f

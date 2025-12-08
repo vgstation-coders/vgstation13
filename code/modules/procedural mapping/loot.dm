@@ -777,8 +777,9 @@
 		/obj/item/weapon/storage/briefcase/centcomm,
 	)
 
-/obj/abstract/loot_spawner/story/New(var/loc, var/loot_type, var/list/container_types)
-	..(loc)
+/obj/abstract/loot_spawner/story/New(var/spawn_loc, var/loot_type, var/list/container_types)
+	if(spawn_loc)
+		loc = spawn_loc
 	if(!loot_type)
 		qdel(src)
 		return

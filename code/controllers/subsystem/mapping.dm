@@ -622,9 +622,6 @@ var/datum/subsystem/mapping/SSmapping
 	if(!spawned_objects || !story_ruin)
 		return null
 
-	// DEBUG if(!prob(20))
-	// DEBUG 	return null
-
 	var/list/loot_table_types = subtypesof(/datum/loot_table)
 	if(!loot_table_types.len)
 		return null

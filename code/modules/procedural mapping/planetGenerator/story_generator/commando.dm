@@ -216,3 +216,53 @@
 			entries += "[secondary_character_name] sorted the salvage. Some of it might be useful. Most of it won't."
 			entries += "Even the junk pile got processed. Death Squad doesn't leave resources behind."
 	return entries
+
+/datum/story_theme/commando/get_disease_entry(var/disease_form)
+	if(!secondary_character_name)
+		generate_secondary_character_name()
+
+	var/list/entries = list()
+	switch(disease_form)
+		if("Virus")
+			entries = list(
+				"Viral infection confirmed. [secondary_character_name] administered field treatment. Maintaining combat readiness despite fever.",
+				"The virus is hitting the squad hard. [secondary_character_name] and I are both symptomatic. Mission continues regardless.",
+				"Central Command didn't warn us about local pathogens. Noted for after-action report. If we survive to file one.",
+				"[secondary_character_name] says the virus matches nothing in our medical database. First contact situation. Just our luck."
+			)
+		if("Bacteria")
+			entries = list(
+				"Wound infection from hostile contact. [secondary_character_name] cleaned it, but the bacteria here are aggressive.",
+				"Bacterial infection spreading despite treatment. [secondary_character_name] is rationing antibiotics. We may not have enough.",
+				"The infection is slowing me down. [secondary_character_name] offered to take point. Denied. Commanders lead from the front.",
+				"Sepsis risk elevated. [secondary_character_name] knows field surgery. Hoping it won't come to that."
+			)
+		if("Parasite")
+			entries = list(
+				"Contracted a parasite from local fauna. [secondary_character_name] is monitoring symptoms. Combat effectiveness maintained. For now.",
+				"The parasite is affecting appetite and energy levels. [secondary_character_name] adjusted ration distribution accordingly.",
+				"Internal hostile confirmed. [secondary_character_name] says extraction requires equipment we don't have. Fighting on two fronts now.",
+				"[secondary_character_name] offered to attempt field surgery. The cure might be worse than the disease. Declined for now."
+			)
+		if("Prion")
+			entries = list(
+				"Something's wrong with my head. Forgetting protocols. [secondary_character_name] noticed before I did. Bad sign.",
+				"[secondary_character_name] is running operations now. I can't... can't trust my own judgment anymore. The disease is in my brain.",
+				"Briefing [secondary_character_name] on everything I remember. While I still remember it. Mission must continue.",
+				"Tell Central Command that Commander [character_name] served to the end. [secondary_character_name] has command. I... where was I?"
+			)
+		if("Fungus")
+			entries = list(
+				"Fungal infection established on exposed skin. [secondary_character_name] applied antifungal treatment. Spreading anyway.",
+				"The spores are in my lungs. [secondary_character_name] hears it in my breathing. Filtration came too late.",
+				"[secondary_character_name] is documenting the infection's progression. For medical intelligence. And my service record.",
+				"The fungus is spreading despite everything. [secondary_character_name] is maintaining distance. Smart. Following protocols."
+			)
+		else
+			entries = list(
+				"Unknown illness affecting squad performance. [secondary_character_name] is holding up better than I am.",
+				"Can't identify the pathogen. [secondary_character_name] treating symptoms as best we can. Mission continues.",
+				"Getting worse. [secondary_character_name] may need to complete objectives alone. Briefing them on contingencies.",
+				"Death Squad doesn't quit. We complete the mission or we die trying. [secondary_character_name] understands."
+			)
+	return pick(entries)
