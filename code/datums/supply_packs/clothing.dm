@@ -204,7 +204,7 @@
 	containsdesc = "Replacement janitor PPE. Includes overalls, a belt, gloves, and galoshes."
 
 /datum/supply_packs/waifu
-	name = "Feminine formalwear"
+	name = "Feminine attire"
 	contains = list(/obj/item/clothing/under/dress/dress_fire,
 					/obj/item/clothing/under/dress/dress_green,
 					/obj/item/clothing/under/dress/dress_orange,
@@ -219,12 +219,14 @@
 					/obj/item/clothing/under/wedding/bride_white,
 					/obj/item/clothing/under/sundress,
 					/obj/item/clothing/under/keyholesweater,
-					/obj/item/clothing/under/casualhoodie/skirt)
+					/obj/item/clothing/under/casualhoodie/skirt,
+					/obj/item/clothing/under/tian,
+					/obj/item/clothing/under/matsuda)
 	cost = 30
 	containertype = /obj/structure/closet/crate/basic
-	containername = "feminine formalwear crate"
+	containername = "feminine attire crate"
 	group = "Clothing"
-	containsdesc = "Contains a massive collection of female attire."
+	containsdesc = "Contains a massive collection of dresses and other female attire."
 
 /datum/supply_packs/knight //why seperate them
 	name = "Knight armors"
