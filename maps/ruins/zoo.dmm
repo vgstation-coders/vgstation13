@@ -10,6 +10,11 @@
 /obj/item/weapon/spacecash/c10,
 /obj/item/weapon/spacecash/c10,
 /obj/item/weapon/spacecash/c10,
+/obj/abstract/loot_spawner/entertainment,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/ruin/surface)
+"c" = (
+/obj/abstract/loot_spawner/trash,
 /turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "d" = (
@@ -33,10 +38,6 @@
 	},
 /turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
-"h" = (
-/obj/structure/flora/ausbushes/sunnybush,
-/turf/template_noop,
-/area/template_noop)
 "i" = (
 /obj/structure/fence/corner,
 /obj/structure/fence/corner{
@@ -52,10 +53,6 @@
 /obj/structure/flora/jungle_berries,
 /turf/unsimulated/floor/jungle/grass,
 /area/ruin/surface)
-"m" = (
-/obj/structure/flora/ausbushes/grassybush,
-/turf/template_noop,
-/area/template_noop)
 "n" = (
 /obj/structure/flora/ausbushes/lavendergrass,
 /turf/unsimulated/floor/jungle/grass,
@@ -97,6 +94,11 @@
 /area/ruin/surface)
 "B" = (
 /obj/structure/table,
+/obj/abstract/loot_spawner/food_or_drink,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/ruin/surface)
+"D" = (
+/obj/abstract/loot_spawner/structure,
 /turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "F" = (
@@ -182,7 +184,6 @@ N
 N
 N
 N
-h
 N
 N
 N
@@ -193,7 +194,8 @@ N
 N
 N
 N
-h
+N
+N
 N
 N
 N
@@ -203,11 +205,11 @@ N
 (2,1,1) = {"
 N
 N
-m
 N
 N
 N
-h
+N
+N
 N
 H
 H
@@ -218,16 +220,16 @@ N
 N
 N
 N
-m
 N
-h
+N
+N
 N
 "}
 (3,1,1) = {"
 N
 N
 N
-m
+N
 N
 N
 N
@@ -247,12 +249,12 @@ N
 N
 "}
 (4,1,1) = {"
-h
 N
 N
 N
 N
-m
+N
+N
 N
 N
 f
@@ -262,11 +264,11 @@ f
 f
 N
 N
-m
 N
 N
 N
-m
+N
+N
 N
 "}
 (5,1,1) = {"
@@ -286,7 +288,7 @@ z
 N
 N
 N
-h
+N
 N
 N
 N
@@ -350,7 +352,7 @@ L
 M
 f
 f
-f
+D
 M
 L
 L
@@ -532,7 +534,7 @@ L
 L
 L
 i
-f
+D
 f
 f
 i
@@ -695,7 +697,7 @@ K
 z
 f
 f
-f
+c
 z
 o
 Z

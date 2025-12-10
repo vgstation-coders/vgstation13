@@ -29,6 +29,7 @@
 	name = "closet"
 	},
 /obj/effect/decal/cleanable/cobweb,
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor/airless,
 /area/vault/gym)
 "i" = (
@@ -128,6 +129,15 @@
 /obj/item/weapon/mop,
 /turf/simulated/floor/airless,
 /area/vault/gym)
+"O" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/airless,
+/area/vault/gym)
+"R" = (
+/obj/structure/closet,
+/obj/abstract/loot_spawner/clothing,
+/turf/simulated/floor/airless,
+/area/vault/gym)
 
 (1,1,1) = {"
 t
@@ -157,8 +167,8 @@ t
 t
 g
 h
-o
-o
+R
+R
 o
 u
 z
@@ -205,9 +215,9 @@ t
 t
 g
 l
+R
 o
-o
-o
+R
 c
 B
 g
@@ -243,7 +253,7 @@ g
 n
 r
 s
-j
+O
 c
 C
 e

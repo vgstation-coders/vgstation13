@@ -10,7 +10,12 @@
 /area/vault/hotspring)
 "d" = (
 /obj/structure/closet/athletic_mixed,
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor/beach/sand,
+/area/vault/hotspring)
+"g" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/wood,
 /area/vault/hotspring)
 "j" = (
 /obj/item/weapon/reagent_containers/food/snacks/grown/orange{
@@ -83,6 +88,7 @@
 	icon_state = "bahama_mama";
 	pixel_y = 8
 	},
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor/wood,
 /area/vault/hotspring)
 "M" = (
@@ -100,7 +106,7 @@
 /turf/unsimulated/beach/sandbar,
 /area/vault/hotspring)
 "Q" = (
-/turf/template_noop,
+/turf/unsimulated/floor/snow/cave,
 /area/vault/hotspring)
 "T" = (
 /turf/unsimulated/beach/shallows,
@@ -212,7 +218,7 @@ u
 T
 M
 r
-r
+g
 Y
 Q
 Q

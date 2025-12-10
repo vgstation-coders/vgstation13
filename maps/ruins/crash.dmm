@@ -78,6 +78,13 @@
 	icon_state = "dark"
 	},
 /area/ruin)
+"i" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/abstract/loot_spawner/engineering,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/ruin)
 "j" = (
 /obj/machinery/sleeper{
 	dir = 1
@@ -251,6 +258,11 @@
 	icon_state = "dark"
 	},
 /area/ruin)
+"C" = (
+/obj/structure/lattice,
+/obj/abstract/loot_spawner/medical,
+/turf/template_noop,
+/area/ruin/surface)
 "D" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -306,6 +318,11 @@
 	icon_state = "wall3"
 	},
 /area/ruin)
+"K" = (
+/obj/structure/lattice,
+/obj/abstract/loot_spawner/exotic,
+/turf/template_noop,
+/area/ruin/surface)
 "L" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/effect/decal/cleanable/dirt,
@@ -396,6 +413,7 @@
 	icon_state = "2-4"
 	},
 /obj/effect/decal/cleanable/dirt,
+/obj/abstract/loot_spawner/structure,
 /turf/simulated/floor/vox{
 	icon_state = "dark"
 	},
@@ -541,7 +559,7 @@ A
 o
 G
 G
-G
+K
 Q
 "}
 (8,1,1) = {"
@@ -565,7 +583,7 @@ N
 j
 N
 o
-A
+i
 A
 A
 H
@@ -591,7 +609,7 @@ G
 "}
 (11,1,1) = {"
 J
-G
+C
 G
 G
 o

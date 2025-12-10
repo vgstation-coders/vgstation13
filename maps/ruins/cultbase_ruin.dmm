@@ -71,6 +71,7 @@
 /area/ruin)
 "o" = (
 /obj/structure/cult_legacy/tome,
+/obj/abstract/loot_spawner/decoration,
 /turf/simulated/floor/engine/cult,
 /area/ruin)
 "p" = (
@@ -113,12 +114,21 @@
 /obj/structure/cult/pillar/alt,
 /turf/simulated/floor/engine/cult,
 /area/ruin)
+"G" = (
+/obj/structure/table/woodentable,
+/obj/abstract/loot_spawner/combat,
+/turf/simulated/floor/engine/cult,
+/area/ruin)
 "L" = (
 /obj/structure/table/woodentable,
 /turf/simulated/floor/engine/cult,
 /area/ruin)
 "T" = (
 /turf/simulated/floor/carpet,
+/area/ruin)
+"X" = (
+/obj/abstract/loot_spawner/exotic,
+/turf/simulated/floor/engine/cult,
 /area/ruin)
 "Z" = (
 /obj/effect/decal/cleanable/blood{
@@ -199,13 +209,13 @@ a
 a
 a
 e
-d
+X
 i
 d
 e
 T
 e
-L
+G
 i
 d
 e

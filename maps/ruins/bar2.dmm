@@ -49,7 +49,7 @@
 	},
 /area/mining_bar)
 "ah" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -315,6 +315,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/abstract/loot_spawner/trash,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "barber"
@@ -385,6 +386,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
+/obj/abstract/loot_spawner/engineering,
 /turf/simulated/floor/engine,
 /area/mining_bar)
 "bi" = (
@@ -604,6 +606,10 @@
 /obj/machinery/door/mineral/wood,
 /turf/simulated/floor/plating,
 /area/mining_bar)
+"dx" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/plating,
+/area/mining_bar)
 "gm" = (
 /obj/structure/table/woodentable,
 /obj/item/ashtray/bronze,
@@ -622,6 +628,10 @@
 /obj/item/weapon/storage/toolbox/robotics,
 /obj/item/weapon/book/manual/robotics_cyborgs,
 /turf/simulated/floor/engine,
+/area/mining_bar)
+"mN" = (
+/obj/abstract/loot_spawner/entertainment,
+/turf/simulated/floor/wood,
 /area/mining_bar)
 "qv" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/visible{
@@ -659,6 +669,7 @@
 "PG" = (
 /obj/structure/table,
 /obj/item/weapon/storage/toolbox/mechanical,
+/obj/abstract/loot_spawner/module,
 /turf/simulated/floor/engine,
 /area/mining_bar)
 "Rq" = (
@@ -669,6 +680,22 @@
 /obj/effect/glowshroom,
 /turf/template_noop,
 /area/template_noop)
+"Ws" = (
+/obj/abstract/loot_spawner/food_or_drink,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"Ys" = (
+/obj/abstract/loot_spawner/decoration,
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"ZX" = (
+/obj/structure/table/woodentable,
+/obj/abstract/loot_spawner/food_or_drink,
+/turf/simulated/floor/wood,
+/area/mining_bar)
 
 (1,1,1) = {"
 bW
@@ -694,7 +721,7 @@ ab
 af
 ah
 aU
-bp
+Ws
 ab
 bg
 bg
@@ -838,7 +865,7 @@ ac
 bc
 aN
 ap
-ae
+ZX
 ax
 bc
 bk
@@ -874,7 +901,7 @@ au
 aA
 aE
 aQ
-ae
+ZX
 ax
 bc
 bc
@@ -924,7 +951,7 @@ bW
 "}
 (15,1,1) = {"
 ab
-bT
+mN
 bc
 bc
 bT
@@ -968,7 +995,7 @@ aX
 bl
 br
 br
-bc
+dx
 ab
 bW
 bW
@@ -980,7 +1007,7 @@ bW
 bW
 ab
 ab
-bT
+Ys
 bT
 bc
 bT

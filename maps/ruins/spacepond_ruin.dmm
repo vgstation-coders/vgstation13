@@ -25,6 +25,8 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat,
 /obj/item/weapon/reagent_containers/food/drinks/flour,
 /obj/item/weapon/storage/fancy/egg_box,
+/obj/abstract/loot_spawner/food_or_drink,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor{
 	icon_state = "cafeteria"
 	},
@@ -240,6 +242,9 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor/wood{
 	broken = 1;
 	icon_state = "wood-broken3"
@@ -270,6 +275,7 @@
 "aR" = (
 /obj/item/stack/medical/ointment,
 /obj/item/stack/medical/bruise_pack,
+/obj/abstract/loot_spawner/medical,
 /turf/simulated/floor/wood,
 /area/vault/spacepond)
 "aS" = (
@@ -396,6 +402,18 @@
 /turf/unsimulated/floor/asteroid,
 /area/ruin/surface)
 "bp" = (
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"qy" = (
+/obj/abstract/loot_spawner/entertainment,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"Eq" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"ON" = (
+/obj/abstract/loot_spawner/decoration,
 /turf/unsimulated/floor/asteroid,
 /area/ruin/surface)
 
@@ -666,7 +684,7 @@ ab
 (13,1,1) = {"
 aa
 ab
-bp
+qy
 bp
 bp
 bo
@@ -802,7 +820,7 @@ ac
 ap
 aA
 aA
-aA
+Eq
 be
 bp
 bp
@@ -854,7 +872,7 @@ bi
 bp
 ab
 ab
-bp
+ON
 bp
 ab
 ab

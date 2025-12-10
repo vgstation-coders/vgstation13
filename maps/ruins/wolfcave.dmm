@@ -13,7 +13,15 @@
 /obj/item/stack/sheet/bone,
 /turf/unsimulated/floor/snow/cave/rock,
 /area/vault/wolfcave)
+"y" = (
+/obj/abstract/loot_spawner/combat,
+/turf/unsimulated/floor/snow/cave,
+/area/vault/wolfcave)
 "H" = (
+/turf/unsimulated/floor/snow/cave,
+/area/vault/wolfcave)
+"K" = (
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/unsimulated/floor/snow/cave,
 /area/vault/wolfcave)
 "M" = (
@@ -176,7 +184,7 @@ q
 H
 H
 q
-H
+K
 H
 H
 S
@@ -234,7 +242,7 @@ M
 M
 H
 H
-H
+y
 q
 a
 "}

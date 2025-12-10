@@ -13,10 +13,12 @@
 /obj/item/weapon/paper_bin{
 	pixel_y = 8
 	},
+/obj/abstract/loot_spawner/bureaucracy,
 /turf/simulated/floor/wood,
 /area/ruin)
 "g" = (
 /obj/structure/table/woodentable,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor/wood,
 /area/ruin)
 "h" = (
@@ -61,6 +63,9 @@
 /obj/structure/closet/cabinet/snow,
 /obj/item/weapon/lighter/zippo,
 /obj/item/device/multitool,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor/wood,
 /area/ruin)
 "I" = (

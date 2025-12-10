@@ -5,6 +5,10 @@
 "i" = (
 /turf/unsimulated/mineral/random/high_chance/snow,
 /area/ruin/surface)
+"E" = (
+/obj/abstract/loot_spawner/trash,
+/turf/unsimulated/floor/snow,
+/area/template_noop)
 "N" = (
 /turf/unsimulated/mineral/random/high_chance_clown/snow,
 /area/ruin/surface)
@@ -18,7 +22,7 @@ a
 a
 "}
 (2,1,1) = {"
-a
+E
 i
 i
 i

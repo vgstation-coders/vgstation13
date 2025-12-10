@@ -154,7 +154,7 @@
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "aC" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -902,7 +902,7 @@
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "cR" = (
-/obj/structure/sink/kitchen,
+/obj/structure/wc/sink/kitchen,
 /turf/simulated/wall/invulnerable/r_wall,
 /area/vault/assistantlair)
 "cS" = (
@@ -1182,6 +1182,30 @@
 	icon_state = "panelscorched"
 	},
 /area/vault/assistantlair)
+"jB" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/plating,
+/area/vault/assistantlair)
+"ly" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/plating,
+/area/vault/assistantlair)
+"yL" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched"
+	},
+/area/vault/assistantlair)
+"By" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/arcade,
+/area/vault/assistantlair)
+"XJ" = (
+/obj/effect/decal/cleanable/cobweb2,
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/plating,
+/area/vault/assistantlair)
 
 (1,1,1) = {"
 aa
@@ -1225,7 +1249,7 @@ aI
 aO
 aV
 bf
-am
+yL
 aa
 aa
 aa
@@ -1573,7 +1597,7 @@ ak
 ah
 aa
 aF
-ah
+ly
 aa
 ah
 aa
@@ -1645,7 +1669,7 @@ bn
 bu
 bn
 aa
-bK
+By
 bK
 bK
 bK
@@ -1655,7 +1679,7 @@ aa
 ao
 am
 aa
-bb
+XJ
 ao
 dp
 aa
@@ -1684,7 +1708,7 @@ bK
 bK
 cx
 aa
-ao
+jB
 ah
 aa
 aa

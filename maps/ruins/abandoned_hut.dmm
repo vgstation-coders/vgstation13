@@ -2,10 +2,6 @@
 "a" = (
 /turf/simulated/wall/mineral/wood,
 /area/ruin)
-"b" = (
-/obj/structure/flora/ausbushes/grassybush,
-/turf/template_noop,
-/area/template_noop)
 "c" = (
 /obj/structure/grille,
 /obj/structure/window{
@@ -40,12 +36,9 @@
 	pixel_x = -9;
 	pixel_y = -1
 	},
+/obj/abstract/loot_spawner/entertainment,
 /turf/simulated/floor/wood,
 /area/ruin)
-"i" = (
-/obj/structure/flora/ausbushes/ppflowers,
-/turf/template_noop,
-/area/ruin/surface)
 "j" = (
 /obj/structure/bed/chair/wood/normal,
 /turf/simulated/floor/wood,
@@ -92,18 +85,17 @@
 	},
 /turf/simulated/floor/wood,
 /area/ruin)
-"q" = (
-/obj/structure/flora/ausbushes/sparsegrass,
-/turf/template_noop,
-/area/ruin/surface)
 "r" = (
 /obj/structure/closet/cabinet,
 /obj/item/clothing/under/color/prisoner,
 /obj/item/clothing/under/color/prisoner,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor/wood,
 /area/ruin)
 "u" = (
-/turf/unsimulated/floor/jungle/dirt,
+/turf/unsimulated/floor/planetary/dirt,
 /area/ruin/surface)
 "v" = (
 /obj/structure/bed,
@@ -111,14 +103,10 @@
 /obj/structure/curtain/open/bed,
 /turf/simulated/floor/wood,
 /area/ruin)
-"w" = (
-/obj/structure/flora/ausbushes/genericbush,
-/turf/template_noop,
-/area/template_noop)
 "z" = (
 /obj/machinery/space_heater/campfire,
 /obj/machinery/cooking/grill/spit,
-/turf/unsimulated/floor/jungle/dirt,
+/turf/unsimulated/floor/planetary/dirt,
 /area/ruin/surface)
 "B" = (
 /turf/template_noop,
@@ -162,6 +150,7 @@
 /area/ruin)
 "R" = (
 /obj/structure/table/woodentable,
+/obj/abstract/loot_spawner/combat,
 /turf/simulated/floor/wood,
 /area/ruin)
 "S" = (
@@ -173,6 +162,7 @@
 "T" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor/wood,
 /area/ruin)
 "X" = (
@@ -195,13 +185,13 @@
 /area/ruin)
 
 (1,1,1) = {"
-w
-w
+H
+H
 u
 H
-b
-b
-b
+H
+H
+H
 "}
 (2,1,1) = {"
 a
@@ -262,9 +252,9 @@ P
 F
 F
 a
-i
 B
-i
+B
+B
 "}
 (9,1,1) = {"
 O
@@ -280,7 +270,7 @@ a
 c
 d
 a
-q
+B
 B
 B
 "}

@@ -3,7 +3,17 @@
 /obj/structure/flora/tree/pine,
 /turf/template_noop,
 /area/ruin/surface)
+"f" = (
+/obj/structure/flora/tree/pine,
+/obj/abstract/loot_spawner/medical,
+/turf/template_noop,
+/area/ruin/surface)
 "r" = (
+/turf/template_noop,
+/area/ruin/surface)
+"x" = (
+/obj/structure/flora/tree/pine,
+/obj/abstract/loot_spawner/combat,
 /turf/template_noop,
 /area/ruin/surface)
 "J" = (
@@ -48,7 +58,7 @@ r
 r
 a
 a
-a
+x
 r
 r
 r
@@ -94,7 +104,7 @@ a
 "}
 (7,1,1) = {"
 a
-a
+f
 r
 r
 r

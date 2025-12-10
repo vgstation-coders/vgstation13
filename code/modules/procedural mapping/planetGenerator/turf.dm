@@ -74,7 +74,14 @@
 	min_icon_states = 2
 	max_icon_states = 4
 	variance = 40
-	turf_flags = NO_RUINS
+
+/turf/unsimulated/floor/planetary/dirt/New()
+	..()
+	if(!map.zProcGen || z != map.zProcGen)
+		name = "Soil"
+		desc = "A mixture of sediments, clays, and decomposed matter."
+		icon_state = "ironsand1"
+
 
 /turf/unsimulated/floor/snow/glacier
 	name = "glacier"

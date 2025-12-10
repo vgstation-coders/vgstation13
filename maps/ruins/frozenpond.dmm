@@ -6,6 +6,11 @@
 /obj/structure/flora/tree/pine,
 /turf/unsimulated/floor/snow,
 /area/ruin/surface)
+"m" = (
+/obj/structure/flora/tree/pine,
+/obj/abstract/loot_spawner/medical,
+/turf/unsimulated/floor/snow,
+/area/ruin/surface)
 "n" = (
 /turf/unsimulated/floor/snow,
 /area/ruin/surface)
@@ -89,7 +94,7 @@ a
 (7,1,1) = {"
 a
 a
-e
+m
 x
 x
 x

@@ -45,6 +45,7 @@
 	info = "The rambling journal of a man whose pod never made it back to Central Command. The last entry reads, 'Dear journal, I think this is it for me. I really wish I took the shuttle...'"
 	},
 /obj/effect/decal/cleanable/dirt,
+/obj/abstract/loot_spawner/entertainment,
 /turf/simulated/floor/shuttle,
 /area/ruin)
 "m" = (

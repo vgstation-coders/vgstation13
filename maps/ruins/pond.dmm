@@ -5,10 +5,6 @@
 "b" = (
 /turf/template_noop,
 /area/template_noop)
-"h" = (
-/obj/structure/flora/ausbushes/stalkybush,
-/turf/template_noop,
-/area/template_noop)
 "n" = (
 /obj/item/weapon/storage/fancy/beer_box/empty{
 	pixel_y = 16;
@@ -16,25 +12,9 @@
 	},
 /turf/template_noop,
 /area/ruin/surface)
-"x" = (
-/obj/structure/flora/ausbushes/reedbush,
-/turf/template_noop,
-/area/ruin/surface)
-"z" = (
-/obj/structure/flora/ausbushes/sunnybush,
-/turf/template_noop,
-/area/ruin/surface)
-"D" = (
-/obj/structure/flora/ausbushes/fullgrass,
-/turf/template_noop,
-/area/ruin/surface)
 "G" = (
 /turf/unsimulated/floor/jungle/water_deep,
 /area/ruin/surface)
-"I" = (
-/obj/structure/flora/ausbushes/fullgrass,
-/turf/template_noop,
-/area/template_noop)
 "O" = (
 /obj/structure/bed/chair/folding,
 /turf/template_noop,
@@ -51,65 +31,63 @@
 	pixel_x = 5;
 	pixel_y = 3
 	},
+/obj/abstract/loot_spawner/food_or_drink,
+/obj/abstract/loot_spawner/entertainment,
 /turf/template_noop,
 /area/ruin/surface)
 "R" = (
 /turf/unsimulated/floor/jungle/water,
 /area/ruin/surface)
-"Y" = (
-/obj/structure/flora/ausbushes/stalkybush,
-/turf/template_noop,
-/area/ruin/surface)
 
 (1,1,1) = {"
 b
 b
-I
-b
-h
 b
 b
-I
+b
+b
+b
+b
 b
 b
 b
 "}
 (2,1,1) = {"
-h
 b
 b
-z
-a
-x
-a
-a
-a
-I
-h
+b
+b
+b
+b
+b
+b
+b
+b
+b
 "}
 (3,1,1) = {"
 b
-I
-a
-x
+b
+b
+b
 R
 R
 R
-x
-Y
-I
+b
+b
+b
 b
 "}
 (4,1,1) = {"
 b
-a
-a
+b
+b
 R
 R
 G
 R
 R
-a
+b
 b
 b
 "}
@@ -122,7 +100,7 @@ G
 G
 G
 R
-x
+b
 b
 b
 "}
@@ -135,60 +113,60 @@ R
 G
 G
 R
-a
+b
 b
 b
 "}
 (7,1,1) = {"
 b
-a
-a
-x
-R
-G
-G
-R
-a
 b
-I
+b
+b
+R
+G
+G
+R
+b
+b
+b
 "}
 (8,1,1) = {"
 b
-I
-a
-a
+b
+b
+b
 R
 R
 R
 R
-x
+b
 b
 b
 "}
 (9,1,1) = {"
 b
-I
 b
-D
-x
-a
-x
-a
-a
-I
+b
+b
+b
+b
+b
+b
+b
+b
 b
 "}
 (10,1,1) = {"
-I
-b
-h
-I
 b
 b
 b
-I
 b
-I
+b
+b
+b
+b
+b
+b
 b
 "}
 (11,1,1) = {"
@@ -197,10 +175,10 @@ b
 b
 b
 b
-h
 b
 b
 b
 b
-h
+b
+b
 "}

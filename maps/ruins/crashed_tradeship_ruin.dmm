@@ -305,6 +305,7 @@
 /obj/effect/decal/cleanable/blood/splatter{
 	basecolor = "#2299FC"
 	},
+/obj/abstract/loot_spawner/exotic,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
@@ -426,6 +427,7 @@
 /obj/structure/table,
 /obj/item/weapon/shard,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
@@ -450,7 +452,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/item/weapon/crossbow,
+/obj/abstract/loot_spawner/combat,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
@@ -480,6 +482,12 @@
 	icon_state = "floor3"
 	},
 /area/ruin)
+"VT" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/dirt,
+/obj/abstract/loot_spawner/structure,
+/turf/template_noop,
+/area/template_noop)
 "Wf" = (
 /obj/item/weapon/shard{
 	icon_state = "small"
@@ -535,6 +543,7 @@
 /area/ruin)
 "Zc" = (
 /obj/structure/table/reinforced,
+/obj/abstract/loot_spawner/module,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
@@ -730,7 +739,7 @@ ah
 FX
 Rl
 Yk
-Hf
+VT
 WZ
 ab
 ab

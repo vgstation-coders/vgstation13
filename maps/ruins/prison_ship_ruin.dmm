@@ -11,6 +11,10 @@
 	},
 /turf/unsimulated/mineral,
 /area/vault/prison_ship)
+"e" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
 "f" = (
 /obj/item/stack/rods,
 /turf/simulated/floor/shuttle/plating,
@@ -120,6 +124,10 @@
 /obj/structure/shuttle/diag_wall/smooth,
 /turf/template_noop,
 /area/vault/prison_ship)
+"Y" = (
+/obj/abstract/loot_spawner/combat,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
 
 (1,1,1) = {"
 D
@@ -157,8 +165,8 @@ D
 B
 k
 q
-t
-t
+e
+Y
 B
 "}
 (5,1,1) = {"

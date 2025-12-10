@@ -43,6 +43,9 @@
 /area/vault/cabin)
 "I" = (
 /obj/structure/closet/cabinet/snow,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor/wood,
 /area/vault/cabin)
 "P" = (
@@ -56,6 +59,11 @@
 /obj/item/clothing/head/helmet/space/santahat,
 /obj/item/clothing/suit/space/santa,
 /obj/item/weapon/storage/backpack/santabag,
+/turf/simulated/floor/wood,
+/area/vault/cabin)
+"U" = (
+/obj/structure/hanging_lantern,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor/wood,
 /area/vault/cabin)
 "V" = (
@@ -129,7 +137,7 @@ a
 P
 z
 C
-s
+U
 P
 s
 P

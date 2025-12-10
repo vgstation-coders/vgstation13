@@ -7,36 +7,30 @@
 	burntime = 5
 	},
 /obj/machinery/cooking/grill/spit,
-/turf/unsimulated/floor/jungle/dirt,
+/turf/unsimulated/floor/planetary/dirt,
 /area/ruin/surface)
-"D" = (
-/obj/structure/flora/ausbushes/fullgrass,
-/turf/template_noop,
-/area/template_noop)
 "E" = (
-/obj/structure/flora/ausbushes/brflowers,
-/turf/template_noop,
-/area/template_noop)
-"M" = (
-/turf/unsimulated/floor/jungle/dirt,
+/obj/abstract/loot_spawner/food_or_drink{
+	containers = list(/obj/item/weapon/storage/box,/obj/item/weapon/storage/box/large)
+	},
+/turf/unsimulated/floor/planetary/dirt,
 /area/ruin/surface)
-"N" = (
-/obj/structure/flora/ausbushes/stalkybush,
-/turf/template_noop,
-/area/template_noop)
+"M" = (
+/turf/unsimulated/floor/planetary/dirt,
+/area/ruin/surface)
 
 (1,1,1) = {"
-E
 a
-D
 a
-N
+a
+a
+a
 "}
 (2,1,1) = {"
 a
+a
 E
-M
-D
+a
 a
 "}
 (3,1,1) = {"
@@ -48,15 +42,15 @@ a
 "}
 (4,1,1) = {"
 a
-D
+a
 M
 a
-D
+a
 "}
 (5,1,1) = {"
-N
 a
 a
-D
+a
+a
 a
 "}

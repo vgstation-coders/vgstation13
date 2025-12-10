@@ -26,6 +26,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/abstract/loot_spawner/engineering,
 /turf/simulated/floor/mineral/plastic,
 /area/vault/mechclubhouse)
 "g" = (
@@ -89,6 +90,10 @@
 	},
 /turf/simulated/floor/mineral/plastic,
 /area/vault/mechclubhouse)
+"t" = (
+/obj/abstract/loot_spawner/structure,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/ruin/surface)
 "u" = (
 /obj/item/stack/sheet/mineral/uranium,
 /obj/item/stack/sheet/mineral/uranium,
@@ -138,6 +143,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor/carpet,
 /area/vault/mechclubhouse)
 "G" = (
@@ -201,6 +207,11 @@
 /obj/item/weapon/pen,
 /turf/simulated/floor/carpet,
 /area/vault/mechclubhouse)
+"S" = (
+/obj/structure/table/glass,
+/obj/abstract/loot_spawner/food_or_drink,
+/turf/simulated/floor/carpet,
+/area/vault/mechclubhouse)
 "T" = (
 /obj/structure/vendomatpack/mining,
 /turf/unsimulated/floor/jungle/path_plated,
@@ -210,7 +221,7 @@
 /turf/simulated/floor/carpet,
 /area/vault/mechclubhouse)
 "V" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8
 	},
 /obj/item/weapon/soap,
@@ -224,7 +235,7 @@
 /turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "Y" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/mineral/plastic,
@@ -331,7 +342,7 @@ u
 M
 J
 G
-U
+S
 R
 G
 G
@@ -410,7 +421,7 @@ v
 T
 k
 p
-v
+t
 v
 v
 "}

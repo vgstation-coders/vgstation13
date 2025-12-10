@@ -11,7 +11,7 @@
 
 /datum/map_element/ruin
 	var/ruin_type = RUIN_TYPE_GENERIC
-	var/count=0 //how many are added to the list to pick from. spawn weights, also how many are allowed to be spawned.
+	var/cost = RUIN_COST_MEDIUM
 
 /datum/map_element/ruin/initialize(list/objects)
 	..(objects)
@@ -20,52 +20,40 @@
 	for(var/turf/new_turf in objects)
 		new_turf.turf_flags |= NO_MINIMAP
 
-/datum/map_element/ruin/geode_ruin
-	name="Geode"
-	file_path = "maps/ruins/geode_ruin.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GENERIC
-
-/datum/map_element/ruin/crashed_tradeship_ruin
-	name="Crashed Tradeship"
-	file_path = "maps/ruins/crashed_tradeship_ruin.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN|RUIN_TYPE_XENO
-
-/datum/map_element/ruin/crashed_pod_ruin
-	name="Crashed Pod"
-	file_path = "maps/ruins/crashed_pod_ruin.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE
-
 /datum/map_element/ruin/digsite_ruin
 	name="Abandoned Digsite"
 	file_path = "maps/ruins/abandoned_digsite_ruin.dmm"
 	ruin_type = RUIN_TYPE_GENERIC
+	cost = RUIN_COST_MEDIUM
 
-/datum/map_element/ruin/aliens_ruin
-	name="Alien Hive"
-	file_path = "maps/ruins/huggernest_ruin.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_URBAN|RUIN_TYPE_XENO
+/datum/map_element/ruin/abandoned_hut
+	file_path = "maps/ruins/abandoned_hut.dmm"
+//	count=4
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_MEDIUM
 
-/datum/map_element/ruin/mine_bar_ruin
-	name = "The Buried Bar"
-	desc = "A miner walks into a bar, Dusky says \"Sorry, you're too young to be served\"."
-	file_path = "maps/ruins/bar_ruin.dmm"
+/datum/map_element/ruin/witch
+	file_path = "maps/ruins/alchemistwitch.dmm"
+//	count=1
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_MEDIUM
+
+/datum/map_element/ruin/amelab
+	file_path = "maps/ruins/amelab_ruin.dmm"
 	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY
 
-/datum/map_element/ruin/cultbase_ruin
-	name = "Cult Base"
-	desc = "An evil lurks within these walls."
-
-	file_path = "maps/ruins/cultbase_ruin.dmm"
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+// Too big for default 99x99 planets.
+// /datum/map_element/ruin/assistantslair
+// 	file_path = "maps/ruins/assistantslair_ruin.dmm"
+// 	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+//  cost = RUIN_COST_HEAVY
 
 /datum/map_element/ruin/asteroid_temple
 	file_path = "maps/ruins/asteroid_temple_ruin.dmm"
 	can_rotate = TRUE
 	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_MEDIUM
 
 /datum/map_element/ruin/asteroid_temple/initialize(list/objects)
 	..(objects)
@@ -83,16 +71,106 @@
 		new /mob/living/simple_animal/hostile/mimic/crate/item(get_turf(S), original) //Make copies
 		qdel(S)
 
-/datum/map_element/ruin/pretty_rad_clubhouse
-	file_path = "maps/ruins/pretty_rad_clubhouse_ruin.dmm"
-	can_rotate = TRUE
+/datum/map_element/ruin/bar
+	file_path = "maps/ruins/bar.dmm"
+//	count=3
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE|RUIN_TYPE_TROPICAL
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/mine_bar_ruin
+	name = "The Buried Bar"
+	desc = "A miner walks into a bar, Dusky says \"Sorry, you're too young to be served\"."
+	file_path = "maps/ruins/bar2.dmm"
 	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_MEDIUM
+
+/datum/map_element/ruin/bearcave
+	file_path = "maps/ruins/bearcave.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/buriedbody
+	file_path = "maps/ruins/buriedbody.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/bus_stop
+	file_path = "maps/ruins/bus_stop.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW|RUIN_TYPE_URBAN
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/cabin
+	file_path = "maps/ruins/cabin.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/campfire
+	file_path = "maps/ruins/campfire_s.dmm"
+//	count=6
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/campfire_corpse
+	file_path = "maps/ruins/campfire_s_deadguy.dmm"
+//	count=6
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/j5a
+	file_path = "maps/ruins/cheater.dmm"
+	can_rotate = FALSE
+//	count=2
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/construction_site
+	file_path = "maps/ruins/construction_site.dmm"
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/crash
+	file_path = "maps/ruins/crash.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_SNOW|RUIN_TYPE_URBAN|RUIN_TYPE_XENO
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/crashed_pod_ruin
+	name="Crashed Pod"
+	file_path = "maps/ruins/crashed_pod_ruin.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN|RUIN_TYPE_XENO
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/crashed_tractor
+	file_path = "maps/ruins/crashed_tractor.dmm"
+//	count=3
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/crashed_tradeship_ruin
+	name="Crashed Tradeship"
+	file_path = "maps/ruins/crashed_tradeship_ruin.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN|RUIN_TYPE_XENO
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/cultbase_ruin
+	name = "Cult Base"
+	desc = "An evil lurks within these walls."
+	file_path = "maps/ruins/cultbase_ruin.dmm"
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY
 
 /datum/map_element/ruin/dance_revolution
 	name = "Dance Dance Revolution"
 	file_path = "maps/ruins/dance_revolution_ruin.dmm"
 	var/obj/structure/dance_dance_revolution/machine
 	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY
 
 /datum/map_element/ruin/dance_revolution/initialize(list/objects)
 	.=..()
@@ -113,260 +191,243 @@
 
 	return L
 
-/datum/map_element/ruin/spacegym
-	file_path = "maps/ruins/spacegym_ruin.dmm"
+/datum/map_element/ruin/deerfeeder
+	file_path = "maps/ruins/deerfeeder.dmm"
 	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
 
-/datum/map_element/ruin/spacepond
-	file_path = "maps/ruins/spacepond_ruin.dmm"
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL|RUIN_TYPE_WET
-
-/datum/map_element/ruin/spacepond/pre_load()
-	load_dungeon(/datum/map_element/dungeon/wine_cellar,rotation)
-
-/datum/map_element/ruin/prison
-	file_path = "maps/ruins/prison_ship_ruin.dmm"
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
-
-/datum/map_element/ruin/prison/pre_load()
-	load_dungeon(/datum/map_element/dungeon/prison,rotation)
-
-/datum/map_element/ruin/amelab
-	file_path = "maps/ruins/amelab_ruin.dmm"
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
-
-/datum/map_element/ruin/soulblade_sanctum
-	file_path = "maps/ruins/soulblade_sanctum_ruin.dmm"
-	ruin_type = RUIN_TYPE_GENERIC
-
-/datum/map_element/ruin/zathura
-	file_path = "maps/ruins/house_ruin.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GENERIC
-
-/datum/map_element/ruin/ironchef
-	file_path = "maps/ruins/ironchef_ruin.dmm"
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
-
-/datum/map_element/ruin/assistantslair
-	file_path = "maps/ruins/assistantslair_ruin.dmm"
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
-
-/datum/map_element/ruin/podstation
-	file_path = "maps/ruins/podstation_ruin.dmm"
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+/datum/map_element/ruin/druid
+	file_path = "maps/ruins/druids_shack.dmm"
+//	count=1
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_MEDIUM
 
 /datum/map_element/ruin/fastfoodjoint
 	name = "Fast food joint"
 	file_path = "maps/ruins/fastfoodjoint_ruin.dmm"
 	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
-
-/datum/map_element/ruin/laundromat
-	file_path = "maps/ruins/laundromat_ruin.dmm"
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
-
-/datum/map_element/ruin/laundromat/pre_load()
-	load_dungeon(/datum/map_element/dungeon/laundromat_drug_lab,rotation)
-
-/datum/map_element/ruin/campfire
-	file_path = "maps/ruins/campfire_s.dmm"
-	count=6
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/campfire_corpse
-	file_path = "maps/ruins/campfire_s_deadguy.dmm"
-	count=6
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/abandoned_hut
-	file_path = "maps/ruins/abandoned_hut.dmm"
-	count=4
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/logging
-	file_path = "maps/ruins/logging.dmm"
-	count=3
-	ruin_type = RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/crashed_tractor
-	file_path = "maps/ruins/crashed_tractor.dmm"
-	count=3
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/bar
-	file_path = "maps/ruins/bar.dmm"
-	count=3
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE|RUIN_TYPE_TROPICAL
-
-/datum/map_element/ruin/sunbath
-	file_path = "maps/ruins/sunbath.dmm"
-	can_rotate = FALSE
-	count=3
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE|RUIN_TYPE_TROPICAL
-
-/datum/map_element/ruin/deadhunter
-	file_path = "maps/ruins/slain_hunter.dmm"
-	count=3
-	ruin_type = RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/zoo
-	file_path = "maps/ruins/zoo.dmm"
-	can_rotate = FALSE
-	count=1
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE|RUIN_TYPE_TROPICAL|RUIN_TYPE_URBAN
-
-/datum/map_element/ruin/druid
-	file_path = "maps/ruins/druids_shack.dmm"
-	count=1
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/pond
-	file_path = "maps/ruins/pond.dmm"
-	can_rotate = FALSE
-	count=4
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL|RUIN_TYPE_JUNGLE|RUIN_TYPE_WET
-
-/datum/map_element/ruin/witch
-	file_path = "maps/ruins/alchemistwitch.dmm"
-	count=1
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/taxidermy
-	file_path = "maps/ruins/taxi.dmm"
-	count=2
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/drunkard
-	file_path = "maps/ruins/wasted.dmm"
-	count=4
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/podbaby
-	file_path = "maps/ruins/podbaby.dmm"
-	count=3
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/j5a
-	file_path = "maps/ruins/cheater.dmm"
-	can_rotate = FALSE
-	count=2
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
-
-/datum/map_element/ruin/cabin
-	file_path = "maps/ruins/cabin.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/crash
-	file_path = "maps/ruins/crash.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/kennel
-	file_path = "maps/ruins/kennel.dmm"
-	ruin_type = RUIN_TYPE_SNOW|RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
-
-/datum/map_element/ruin/grove
-	file_path = "maps/ruins/grove.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/hotspring
-	file_path = "maps/ruins/hotspring.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/deerfeeder
-	file_path = "maps/ruins/deerfeeder.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/wolfcave
-	file_path = "maps/ruins/wolfcave.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/thermalplant
-	file_path = "maps/ruins/thermalplant.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/construction_site
-	file_path = "maps/ruins/construction_site.dmm"
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/santacabin
-	file_path = "maps/ruins/santacabin.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_HEAVY
 
 /datum/map_element/ruin/frozenpond
 	file_path = "maps/ruins/frozenpond.dmm"
 	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
 
-/datum/map_element/ruin/rockysnow
-	file_path = "maps/ruins/rockysnow.dmm"
+/datum/map_element/ruin/geode_ruin
+	name="Geode"
+	file_path = "maps/ruins/geode_ruin.dmm"
 	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/bus_stop
-	file_path = "maps/ruins/bus_stop.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/buriedbody
-	file_path = "maps/ruins/buriedbody.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/guncache
-	file_path = "maps/ruins/guncache.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/mine_patch
-	file_path = "maps/ruins/mine_patch.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/lostsnowmobile
-	file_path = "maps/ruins/lostsnowmobile.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/bearcave
-	file_path = "maps/ruins/bearcave.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/trees
-	file_path = "maps/ruins/trees.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
+	ruin_type = RUIN_TYPE_GENERIC
+	cost = RUIN_COST_MEDIUM
 
 /datum/map_element/ruin/geysercluster
 	file_path = "maps/ruins/geysercluster.dmm"
 	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
-
-/datum/map_element/ruin/unfrozen_pond
-	file_path = "maps/ruins/unfrozen_pond.dmm"
-	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
 
 /datum/map_element/ruin/greatwhite
 	file_path = "maps/ruins/greatwhite.dmm"
 	can_rotate = TRUE
 	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_MEDIUM
 
-/datum/map_element/ruin/witchsabbath
-	file_path = "maps/ruins/witchsabbath.dmm"
+/datum/map_element/ruin/grove
+	file_path = "maps/ruins/grove.dmm"
 	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_MEDIUM
+
+/datum/map_element/ruin/guncache
+	file_path = "maps/ruins/guncache.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/hotspring
+	file_path = "maps/ruins/hotspring.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_MEDIUM
+
+/datum/map_element/ruin/zathura
+	file_path = "maps/ruins/house_ruin.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_GENERIC
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/aliens_ruin
+	name="Alien Hive"
+	file_path = "maps/ruins/huggernest_ruin.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_URBAN|RUIN_TYPE_XENO
+	cost = RUIN_COST_HEAVY
 
 /datum/map_element/ruin/huntinggrounds
 	file_path = "maps/ruins/huntinggrounds.dmm"
 	can_rotate = TRUE
-	ruin_type = RUIN_TYPE_GREEBLE|RUIN_TYPE_SNOW
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/ironchef
+	file_path = "maps/ruins/ironchef_ruin.dmm"
+	ruin_type = RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/kennel
+	file_path = "maps/ruins/kennel.dmm"
+	ruin_type = RUIN_TYPE_SNOW|RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_MEDIUM
+
+/datum/map_element/ruin/laundromat
+	file_path = "maps/ruins/laundromat_ruin.dmm"
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/laundromat/pre_load()
+	load_dungeon(/datum/map_element/dungeon/laundromat_drug_lab,rotation)
+
+/datum/map_element/ruin/logging
+	file_path = "maps/ruins/logging.dmm"
+//	count=3
+	ruin_type = RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_MEDIUM
+
+/datum/map_element/ruin/lostsnowmobile
+	file_path = "maps/ruins/lostsnowmobile.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/mine_patch
+	file_path = "maps/ruins/mine_patch.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/podbaby
+	file_path = "maps/ruins/podbaby.dmm"
+//	count=3
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/podstation
+	file_path = "maps/ruins/podstation_ruin.dmm"
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/pond
+	file_path = "maps/ruins/pond.dmm"
+	can_rotate = FALSE
+//	count=4
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL|RUIN_TYPE_JUNGLE|RUIN_TYPE_WET
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/pretty_rad_clubhouse
+	file_path = "maps/ruins/pretty_rad_clubhouse_ruin.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/prison
+	file_path = "maps/ruins/prison_ship_ruin.dmm"
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/prison/pre_load()
+	load_dungeon(/datum/map_element/dungeon/prison,rotation)
+
+/datum/map_element/ruin/rockysnow
+	file_path = "maps/ruins/rockysnow.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/santacabin
+	file_path = "maps/ruins/santacabin.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/deadhunter
+	file_path = "maps/ruins/slain_hunter.dmm"
+//	count=3
+	ruin_type = RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/soulblade_sanctum
+	file_path = "maps/ruins/soulblade_sanctum_ruin.dmm"
+	ruin_type = RUIN_TYPE_GENERIC
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/spacegym
+	file_path = "maps/ruins/spacegym_ruin.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	cost = RUIN_COST_MEDIUM
+
+/datum/map_element/ruin/spacepond
+	file_path = "maps/ruins/spacepond_ruin.dmm"
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL|RUIN_TYPE_WET
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/spacepond/pre_load()
+	load_dungeon(/datum/map_element/dungeon/wine_cellar,rotation)
+
+/datum/map_element/ruin/sunbath
+	file_path = "maps/ruins/sunbath.dmm"
+	can_rotate = FALSE
+//	count=3
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE|RUIN_TYPE_TROPICAL
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/taxidermy
+	file_path = "maps/ruins/taxi.dmm"
+//	count=2
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/thermalplant
+	file_path = "maps/ruins/thermalplant.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_HEAVY
+
+/datum/map_element/ruin/trees
+	file_path = "maps/ruins/trees.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/unfrozen_pond
+	file_path = "maps/ruins/unfrozen_pond.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/drunkard
+	file_path = "maps/ruins/wasted.dmm"
+//	count=4
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/witchsabbath
+	file_path = "maps/ruins/witchsabbath.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/wolfcave
+	file_path = "maps/ruins/wolfcave.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_SNOW
+	cost = RUIN_COST_LIGHT
+
+/datum/map_element/ruin/zoo
+	file_path = "maps/ruins/zoo.dmm"
+	can_rotate = FALSE
+//	count=1
+	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_JUNGLE|RUIN_TYPE_TROPICAL|RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY

@@ -76,13 +76,11 @@
 /area/vault/podstation/interior)
 "aM" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "aN" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	icon_state = "asteroidwarning"
 	},
 /area/ruin/surface)
@@ -94,24 +92,22 @@
 /area/ruin/surface)
 "aW" = (
 /obj/machinery/floodlight/on/infinite,
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
 /area/ruin/surface)
+"aY" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/abstract/loot_spawner/engineering,
+/turf/unsimulated/floor/jungle/concrete,
+/area/ruin/surface)
 "ba" = (
 /obj/structure/cable/yellow,
 /obj/machinery/power/port_gen/pacman,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/ruin/surface)
-"bq" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 4;
-	icon_state = "asteroidwarning"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "bB" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
@@ -185,7 +181,7 @@
 /area/vault/podstation/interior)
 "cx" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
@@ -242,9 +238,7 @@
 /area/vault/podstation/interior)
 "dU" = (
 /obj/structure/fence/door,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "ev" = (
 /mob/living/simple_animal/hostile/bigroach,
@@ -282,9 +276,7 @@
 /area/vault/podstation/interior)
 "eZ" = (
 /obj/structure/lattice,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "fx" = (
 /obj/structure/table/reinforced,
@@ -310,7 +302,7 @@
 	},
 /area/vault/podstation/interior)
 "fJ" = (
-/turf/simulated/floor{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
@@ -326,9 +318,7 @@
 /area/vault/podstation/interior)
 "gm" = (
 /obj/structure/hanging_lantern,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "gp" = (
 /mob/living/simple_animal/cockroach,
@@ -376,6 +366,8 @@
 /obj/item/clothing/shoes/workboots,
 /obj/item/clothing/head/beanie/black,
 /obj/item/clothing/head/beanie/black,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor,
 /area/vault/podstation/interior)
 "gS" = (
@@ -386,9 +378,7 @@
 	name = "Pod Station Northwest";
 	network = list("PODSTATION")
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/vault/podstation/interior)
 "hd" = (
 /obj/item/trash/lollipopstick,
@@ -399,9 +389,7 @@
 	name = "Pod Station Northeast";
 	network = list("PODSTATION")
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/vault/podstation/interior)
 "hs" = (
 /obj/structure/closet/crate/freezer,
@@ -439,7 +427,7 @@
 /area/ruin/surface)
 "hD" = (
 /mob/living/simple_animal/cockroach,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -496,7 +484,7 @@
 /area/vault/podstation/interior)
 "iv" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	dir = 4;
 	pixel_x = -30
 	},
@@ -560,7 +548,7 @@
 /area/ruin/surface)
 "kb" = (
 /obj/machinery/floodlight/on/infinite,
-/turf/unsimulated/floor/asteroid,
+/turf/template_noop,
 /area/ruin/surface)
 "kp" = (
 /obj/structure/rack,
@@ -569,9 +557,7 @@
 	},
 /obj/item/weapon/cell/high/empty,
 /obj/item/weapon/cell/high/empty,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "kq" = (
 /mob/living/simple_animal/cockroach,
@@ -604,7 +590,7 @@
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid,
+/turf/template_noop,
 /area/ruin/surface)
 "kQ" = (
 /obj/effect/decal/cleanable/dirt,
@@ -655,7 +641,7 @@
 "lt" = (
 /obj/item/weapon/barricade_kit,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
@@ -667,9 +653,7 @@
 /obj/structure/rack,
 /obj/item/device/crank_charger,
 /obj/item/device/crank_charger,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "lz" = (
 /obj/structure/table/woodentable,
@@ -849,9 +833,7 @@
 /area/vault/podstation/interior)
 "or" = (
 /obj/structure/signpost,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "oZ" = (
 /obj/effect/decal/cleanable/blood/oil,
@@ -988,26 +970,20 @@
 /obj/structure/fence{
 	dir = 4
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "ru" = (
 /obj/structure/reagent_dispensers/silicate,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "rx" = (
 /obj/structure/fence/corner{
 	dir = 1
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "rF" = (
 /mob/living/simple_animal/cockroach,
@@ -1042,19 +1018,19 @@
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
 /area/ruin/surface)
 "sX" = (
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 10;
 	icon_state = "asteroidwarning"
 	},
 /area/ruin/surface)
 "tc" = (
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 6;
 	icon_state = "asteroidwarning"
 	},
@@ -1063,16 +1039,12 @@
 /obj/structure/bed/chair,
 /obj/item/trash/cigbutt,
 /obj/item/trash/cigbutt,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "uy" = (
 /obj/structure/bed/chair,
 /obj/item/weapon/storage/fancy/cigarettes/spaceports,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "uF" = (
 /obj/structure/sign/securearea,
@@ -1165,9 +1137,7 @@
 "wh" = (
 /obj/item/trash/tray,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "wi" = (
 /obj/machinery/camera{
@@ -1175,9 +1145,7 @@
 	name = "Pod Station Southwest";
 	network = list("PODSTATION")
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/vault/podstation/interior)
 "wu" = (
 /obj/item/trash/plate,
@@ -1239,7 +1207,7 @@
 /area/vault/podstation/interior)
 "yU" = (
 /obj/item/trash/candy,
-/turf/unsimulated/floor/asteroid,
+/turf/template_noop,
 /area/ruin/surface)
 "zr" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1247,9 +1215,7 @@
 	dir = 1
 	},
 /obj/structure/lattice,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "zs" = (
 /mob/living/simple_animal/cockroach,
@@ -1320,7 +1286,7 @@
 	name = "Pod Station Southeast";
 	network = list("PODSTATION")
 	},
-/turf/unsimulated/floor/asteroid,
+/turf/template_noop,
 /area/vault/podstation/interior)
 "AI" = (
 /mob/living/simple_animal/cockroach,
@@ -1383,15 +1349,15 @@
 /turf/simulated/floor,
 /area/vault/podstation/interior)
 "CY" = (
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 9;
 	icon_state = "asteroidwarning"
 	},
 /area/ruin/surface)
 "Db" = (
-/turf/unsimulated/floor/airless{
-	dir = 1;
-	icon_state = "asteroidwarning"
+/turf/unsimulated/floor/jungle/path_plated{
+	icon_state = "asteroidwarning";
+	dir = 1
 	},
 /area/ruin/surface)
 "Dq" = (
@@ -1403,7 +1369,7 @@
 "Dx" = (
 /obj/item/trash/bustanuts,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 5;
 	icon_state = "asteroidwarning"
 	},
@@ -1422,32 +1388,22 @@
 	},
 /turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
-"DW" = (
-/obj/structure/lattice,
-/turf/template_noop,
-/area/template_noop)
 "En" = (
 /obj/structure/reagent_dispensers/cauldron/barrel{
 	name = "Discount Dan's Sauce Barrel"
 	},
 /obj/effect/decal/cleanable/greenglow,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "Eu" = (
 /obj/effect/decal/cleanable/greenglow,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "Fe" = (
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "FB" = (
 /obj/machinery/door/airlock/freezer,
@@ -1491,7 +1447,7 @@
 "Ga" = (
 /obj/item/trash/chicken_bucket,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
@@ -1506,12 +1462,10 @@
 	},
 /obj/item/weapon/reagent_containers/glass/bottle/sacid,
 /obj/item/weapon/reagent_containers/glass/bottle/sacid,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "GO" = (
-/obj/structure/sink/kitchen,
+/obj/structure/wc/sink/kitchen,
 /turf/simulated/wall,
 /area/vault/podstation/interior)
 "Hg" = (
@@ -1527,28 +1481,22 @@
 	pixel_x = 1;
 	pixel_y = 1
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "HJ" = (
 /obj/structure/fence/corner{
 	dir = 8
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "HV" = (
 /obj/structure/fence/door/opened,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "HW" = (
 /obj/effect/decal/cleanable/ash,
 /obj/item/trash/cigbutt/cigarbutt,
-/turf/simulated/floor{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
@@ -1602,6 +1550,13 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/podstation/interior)
+"Kd" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/abstract/loot_spawner/trash,
+/turf/unsimulated/floor/jungle/concrete,
+/area/ruin/surface)
 "Kg" = (
 /obj/machinery/light/small{
 	dir = 1;
@@ -1648,7 +1603,7 @@
 /area/ruin/surface)
 "Li" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
@@ -1697,6 +1652,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on/layered{
 	dir = 8
 	},
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "cafeteria"
@@ -1705,6 +1661,7 @@
 "Mx" = (
 /obj/structure/table,
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "cafeteria"
@@ -1726,22 +1683,19 @@
 /area/ruin/surface)
 "Np" = (
 /obj/structure/fence,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "NA" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/abstract/loot_spawner/module,
 /turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "NF" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/packet/mayo,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "NS" = (
 /obj/structure/closet/crate/trashcart,
@@ -1753,9 +1707,7 @@
 /obj/item/trash/zam_notraisins,
 /obj/item/weapon/newspaper,
 /obj/item/weapon/storage/fancy/cigarettes/ntstandard,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "Ov" = (
 /obj/machinery/light/small{
@@ -1874,12 +1826,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/podstation/interior)
-"QK" = (
-/turf/unsimulated/floor/airless{
-	dir = 4;
-	icon_state = "asteroidwarning"
-	},
-/area/ruin/surface)
 "QW" = (
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden,
 /turf/template_noop,
@@ -1982,9 +1928,7 @@
 	icon_state = "bot"
 	},
 /obj/structure/dispenser/oxygen,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "Ti" = (
 /obj/structure/bed/chair{
@@ -2004,7 +1948,7 @@
 /area/ruin/surface)
 "TM" = (
 /obj/item/weapon/shard,
-/turf/unsimulated/floor/asteroid,
+/turf/template_noop,
 /area/ruin/surface)
 "TO" = (
 /obj/item/inflatable/shelter,
@@ -2014,7 +1958,11 @@
 /turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "TV" = (
-/turf/unsimulated/floor/asteroid,
+/turf/template_noop,
+/area/ruin/surface)
+"Uc" = (
+/obj/abstract/loot_spawner/structure,
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "Uk" = (
 /obj/item/tool/wrench,
@@ -2038,20 +1986,16 @@
 	icon_state = "bot"
 	},
 /obj/structure/reagent_dispensers/fueltank,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "VJ" = (
 /obj/structure/fence/corner{
 	dir = 10
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "VP" = (
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
@@ -2066,17 +2010,13 @@
 /obj/structure/fence{
 	dir = 4
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "VW" = (
 /obj/structure/fence/corner{
 	dir = 5
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "VX" = (
 /obj/machinery/camera{
@@ -2085,16 +2025,12 @@
 	name = "Pod Station North";
 	network = list("PODSTATION")
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/vault/podstation/interior)
 "VY" = (
 /obj/item/trash/cigbutt,
 /obj/item/weapon/storage/bag/trash,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "Wu" = (
 /obj/machinery/cryopod,
@@ -2119,9 +2055,7 @@
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "Xi" = (
 /obj/effect/decal/cleanable/dirt,
@@ -2260,9 +2194,7 @@
 /turf/simulated/floor/plating,
 /area/vault/podstation/interior)
 "Yx" = (
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/jungle/path_plated,
 /area/ruin/surface)
 "YD" = (
 /obj/structure/cable/yellow{
@@ -2314,12 +2246,12 @@
 /turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "ZI" = (
-/turf/unsimulated/floor/airless{
+/turf/unsimulated/floor/jungle/path_plated{
 	icon_state = "asteroidwarning"
 	},
 /area/ruin/surface)
 "ZP" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/effect/decal/cleanable/vomit/pre_dry,
@@ -2366,7 +2298,7 @@ TV
 TV
 TV
 TV
-DW
+pU
 TV
 Yx
 HV
@@ -2793,7 +2725,7 @@ Kk
 xt
 AD
 Kk
-Yx
+Uc
 Yx
 Yx
 aM
@@ -2834,25 +2766,25 @@ pU
 (21,1,1) = {"
 TV
 TV
-QK
-QK
-QK
+fJ
+fJ
+fJ
 lt
-QK
+fJ
 sN
-QK
-QK
+fJ
+fJ
 sN
 Ga
-QK
-QK
-QK
-QK
+fJ
+fJ
+fJ
+fJ
 Li
-QK
-QK
-QK
-QK
+fJ
+fJ
+fJ
+fJ
 pU
 pU
 "}
@@ -3059,7 +2991,7 @@ pU
 (30,1,1) = {"
 TV
 Yx
-bq
+Li
 fJ
 fJ
 fJ
@@ -3068,11 +3000,11 @@ tc
 Zy
 Zy
 Dx
-QK
-QK
-QK
-QK
-QK
+fJ
+fJ
+fJ
+fJ
+fJ
 aM
 TV
 pU
@@ -3089,7 +3021,7 @@ Zy
 hw
 Zy
 Zy
-NA
+aY
 YT
 Zy
 Lv
@@ -3195,7 +3127,7 @@ Zy
 DR
 YT
 Zy
-NA
+Kd
 aO
 Zy
 Db

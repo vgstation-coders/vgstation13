@@ -38,6 +38,10 @@
 "C" = (
 /turf/unsimulated/floor/snow/permafrost,
 /area/ruin/surface)
+"D" = (
+/obj/abstract/loot_spawner/engineering,
+/turf/unsimulated/floor/snow/permafrost,
+/area/ruin/surface)
 "E" = (
 /obj/machinery/constructable_frame/machine_frame,
 /obj/item/stack/cable_coil/random,
@@ -54,6 +58,10 @@
 	},
 /obj/item/stack/sheet/metal/bigstack,
 /obj/item/blueprints/construction_permit,
+/turf/unsimulated/floor/snow/permafrost,
+/area/ruin/surface)
+"P" = (
+/obj/abstract/loot_spawner/trash,
 /turf/unsimulated/floor/snow/permafrost,
 /area/ruin/surface)
 "R" = (
@@ -164,7 +172,7 @@ W
 a
 a
 C
-C
+D
 M
 C
 C
@@ -217,7 +225,7 @@ C
 a
 A
 C
-C
+P
 W
 "}
 (12,1,1) = {"

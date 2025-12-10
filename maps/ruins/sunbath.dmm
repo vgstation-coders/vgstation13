@@ -1,22 +1,10 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
-"a" = (
-/obj/structure/flora/jungle_berries,
-/turf/template_noop,
-/area/template_noop)
 "c" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/fancy/beer_box,
 /turf/unsimulated/floor/jungle/path,
 /area/ruin/surface)
 "h" = (
-/turf/template_noop,
-/area/template_noop)
-"p" = (
-/obj/structure/flora/ausbushes/grassybush,
-/turf/template_noop,
-/area/template_noop)
-"u" = (
-/obj/structure/flora/ausbushes/stalkybush,
 /turf/template_noop,
 /area/template_noop)
 "y" = (
@@ -42,16 +30,12 @@
 /obj/structure/bed/chair/wood/normal,
 /turf/unsimulated/floor/jungle/path,
 /area/ruin/surface)
-"R" = (
-/obj/structure/flora/ausbushes/reedbush,
-/turf/template_noop,
-/area/template_noop)
 
 (1,1,1) = {"
-a
 h
 h
-p
+h
+h
 h
 "}
 (2,1,1) = {"
@@ -59,7 +43,7 @@ h
 h
 c
 h
-p
+h
 "}
 (3,1,1) = {"
 h
@@ -69,16 +53,16 @@ y
 h
 "}
 (4,1,1) = {"
-R
+h
 h
 G
 h
 h
 "}
 (5,1,1) = {"
-R
-R
 h
-u
-u
+h
+h
+h
+h
 "}

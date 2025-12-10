@@ -15,10 +15,6 @@
 	},
 /turf/simulated/floor/plating/deck,
 /area/ruin)
-"c" = (
-/mob/living/complex_animal/frog,
-/turf/template_noop,
-/area/template_noop)
 "d" = (
 /obj/machinery/door/mineral/wood,
 /turf/simulated/floor/wood,
@@ -32,14 +28,6 @@
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
 /turf/simulated/floor/wood,
 /area/ruin)
-"i" = (
-/obj/structure/flora/jungle_berries,
-/turf/template_noop,
-/area/template_noop)
-"j" = (
-/obj/structure/flora/ausbushes/lavendergrass,
-/turf/template_noop,
-/area/template_noop)
 "l" = (
 /obj/item/weapon/stool/bar,
 /turf/template_noop,
@@ -55,6 +43,7 @@
 	},
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle,
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor/wood,
 /area/ruin)
 "q" = (
@@ -67,10 +56,6 @@
 	},
 /turf/simulated/floor/wood,
 /area/ruin)
-"r" = (
-/obj/structure/flora/ausbushes/grassybush,
-/turf/template_noop,
-/area/template_noop)
 "t" = (
 /mob/living/complex_animal/parrot{
 	builtin_phrases = list("Hi.","Hello!","Cracker?","BAWWWWK george mellons griffing me!","Give me a drink, bartender.","Another round!","What the hell am I drinking?","And stay out!","No tabs - cash up front!");
@@ -97,14 +82,16 @@
 "w" = (
 /turf/simulated/floor/wood,
 /area/ruin)
-"x" = (
-/obj/structure/flora/ausbushes/sunnybush,
-/turf/template_noop,
-/area/template_noop)
 "A" = (
-/obj/structure/flora/ausbushes/ppflowers,
-/turf/template_noop,
-/area/template_noop)
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/abstract/loot_spawner/food_or_drink,
+/turf/simulated/floor/wood,
+/area/ruin)
 "E" = (
 /obj/structure/closet/crate/freezer,
 /obj/item/ice_crystal,
@@ -123,23 +110,9 @@
 /obj/item/weapon/spacecash/c10,
 /turf/simulated/floor/wood,
 /area/ruin)
-"I" = (
-/obj/structure/flora/ausbushes/leafybush,
-/turf/template_noop,
-/area/template_noop)
-"J" = (
-/obj/structure/flora/ausbushes/grassybush,
-/mob/living/complex_animal/frog,
-/turf/template_noop,
-/area/template_noop)
 "L" = (
 /turf/simulated/wall/mineral/wood,
 /area/ruin)
-"M" = (
-/obj/structure/flora/ausbushes/leafybush,
-/mob/living/complex_animal/frog,
-/turf/template_noop,
-/area/template_noop)
 "Q" = (
 /obj/structure/grille,
 /obj/structure/window{
@@ -178,38 +151,6 @@
 /area/ruin)
 
 (1,1,1) = {"
-a
-I
-I
-a
-a
-a
-I
-J
-a
-a
-x
-a
-x
-"}
-(2,1,1) = {"
-a
-a
-a
-M
-I
-a
-a
-a
-a
-a
-a
-x
-x
-"}
-(3,1,1) = {"
-a
-a
 L
 L
 d
@@ -219,14 +160,10 @@ b
 Q
 L
 V
-a
-x
 "}
-(4,1,1) = {"
-j
-a
+(2,1,1) = {"
 L
-e
+A
 w
 q
 L
@@ -234,12 +171,8 @@ Y
 w
 v
 l
-a
-a
 "}
-(5,1,1) = {"
-a
-j
+(3,1,1) = {"
 L
 n
 w
@@ -249,12 +182,8 @@ e
 w
 F
 l
-a
-a
 "}
-(6,1,1) = {"
-j
-a
+(4,1,1) = {"
 L
 E
 w
@@ -264,12 +193,8 @@ t
 w
 v
 l
-c
-a
 "}
-(7,1,1) = {"
-a
-c
+(5,1,1) = {"
 L
 w
 w
@@ -279,64 +204,24 @@ b
 Q
 L
 V
-a
-A
 "}
-(8,1,1) = {"
-a
-j
+(6,1,1) = {"
 L
 Z
 Z
 Z
 L
-i
-i
-i
-a
-A
-A
-"}
-(9,1,1) = {"
-j
-a
-L
-L
-L
-L
-L
-i
-a
 a
 a
 a
 a
 "}
-(10,1,1) = {"
-a
-a
-a
-a
-A
-a
-a
-c
-a
-A
-a
-a
-a
-"}
-(11,1,1) = {"
-j
-a
-a
-a
-a
-a
-r
-r
-A
+(7,1,1) = {"
+L
+L
+L
+L
+L
 a
 a
 a

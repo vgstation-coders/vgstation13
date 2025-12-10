@@ -104,7 +104,7 @@
 /turf/simulated/floor/grass,
 /area/vault/ironchef)
 "ap" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /obj/item/weapon/reagent_containers/glass/bucket,
 /turf/simulated/floor/grass,
 /area/vault/ironchef)
@@ -178,7 +178,7 @@
 	},
 /area/vault/ironchef)
 "aB" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /turf/simulated/floor/grass,
 /area/vault/ironchef)
 "aC" = (
@@ -275,7 +275,7 @@
 	},
 /area/vault/ironchef)
 "aP" = (
-/obj/structure/sink/kitchen,
+/obj/structure/wc/sink/kitchen,
 /turf/simulated/wall,
 /area/vault/ironchef)
 "aQ" = (
@@ -748,6 +748,7 @@
 /area/vault/ironchef)
 "cb" = (
 /obj/structure/table/woodentable,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/unsimulated/floor/jungle/path_plated,
 /area/vault/ironchef)
 "cc" = (
@@ -792,6 +793,7 @@
 	dir = 8
 	},
 /obj/structure/railing/wood/glass,
+/obj/abstract/loot_spawner/trash,
 /turf/unsimulated/floor/jungle/path_plated,
 /area/vault/ironchef)
 "cj" = (
@@ -839,6 +841,11 @@
 "Nh" = (
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor/carpet,
+/area/vault/ironchef)
+"Rc" = (
+/obj/structure/table/woodentable,
+/obj/abstract/loot_spawner/entertainment,
+/turf/unsimulated/floor/jungle/path_plated,
 /area/vault/ironchef)
 "Rr" = (
 /obj/machinery/smartfridge/condiments,
@@ -1259,7 +1266,7 @@ bp
 jl
 bl
 aM
-cb
+Rc
 cb
 aa
 cd

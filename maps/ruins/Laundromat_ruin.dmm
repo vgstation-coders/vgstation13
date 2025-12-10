@@ -120,6 +120,7 @@
 /obj/structure/window{
 	dir = 1
 	},
+/obj/abstract/loot_spawner/structure,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -138,6 +139,17 @@
 	dir = 1
 	},
 /obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"he" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/abstract/loot_spawner/structure,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -234,7 +246,7 @@
 /area/vault/laundromat)
 "oC" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 12
 	},
@@ -613,6 +625,12 @@
 /obj/effect/landmark/corpse/quartermaster,
 /obj/structure/bed/chair/comfy/couch/left/red,
 /obj/item/device/assembly/signaler,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"LY" = (
+/obj/abstract/loot_spawner/structure,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -1058,7 +1076,7 @@ TW
 cQ
 EV
 PG
-Hu
+he
 Gj
 sV
 sV
@@ -1067,7 +1085,7 @@ sV
 sV
 sV
 pA
-kN
+LY
 UO
 EV
 vP

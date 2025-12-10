@@ -1,8 +1,11 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "aa" = (
-/turf/unsimulated/floor/airless{
-	dir = 4;
-	icon_state = "asteroidwarning"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidwarning";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor";
+	dir = 4
 	},
 /area/ruin/surface)
 "ak" = (
@@ -20,9 +23,12 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/airless{
-	dir = 8;
-	icon_state = "asteroidwarning"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidwarning";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor";
+	dir = 8
 	},
 /area/ruin/surface)
 "aJ" = (
@@ -40,6 +46,7 @@
 	initialize_directions = 12
 	},
 /obj/effect/decal/cleanable/generic,
+/obj/abstract/loot_spawner/decoration,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "bf" = (
@@ -247,8 +254,11 @@
 /obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidfloor";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor"
 	},
 /area/ruin/surface)
 "eQ" = (
@@ -426,9 +436,12 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/airless{
-	dir = 8;
-	icon_state = "asteroidwarning"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidwarning";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor";
+	dir = 8
 	},
 /area/ruin/surface)
 "iK" = (
@@ -562,9 +575,12 @@
 	dir = 1;
 	invisibility = 1
 	},
-/turf/unsimulated/floor/airless{
-	dir = 4;
-	icon_state = "asteroidwarning"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidwarning";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor";
+	dir = 4
 	},
 /area/ruin/surface)
 "mJ" = (
@@ -576,8 +592,11 @@
 /area/vault/fastfood/dining)
 "mX" = (
 /obj/structure/railing,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidfloor";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor"
 	},
 /area/ruin/surface)
 "mZ" = (
@@ -640,8 +659,11 @@
 	dir = 1
 	},
 /obj/structure/railing,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidfloor";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor"
 	},
 /area/ruin/surface)
 "pR" = (
@@ -748,7 +770,7 @@
 /turf/unsimulated/floor/jungle/concrete,
 /area/vault/fastfood/dining)
 "sn" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	dir = 8;
 	pixel_x = 30
 	},
@@ -939,9 +961,12 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/airless{
-	dir = 8;
-	icon_state = "asteroidwarning"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidwarning";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor";
+	dir = 8
 	},
 /area/ruin/surface)
 "vR" = (
@@ -961,13 +986,16 @@
 /area/vault/fastfood/dining)
 "wc" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
-	dir = 4;
-	icon_state = "asteroidwarning"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidwarning";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor";
+	dir = 4
 	},
 /area/ruin/surface)
 "we" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -1020,8 +1048,11 @@
 /obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidfloor";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor"
 	},
 /area/ruin/surface)
 "yH" = (
@@ -1069,15 +1100,21 @@
 	},
 /area/vault/fastfood/dining)
 "Af" = (
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidfloor";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor"
 	},
 /area/ruin/surface)
 "Ag" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/railing,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidfloor";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor"
 	},
 /area/ruin/surface)
 "Aj" = (
@@ -1095,7 +1132,7 @@
 	},
 /area/vault/fastfood/misc)
 "Ap" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/structure/window/reinforced/tinted,
@@ -1431,8 +1468,11 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidfloor";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor"
 	},
 /area/ruin/surface)
 "Hs" = (
@@ -1518,6 +1558,16 @@
 	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
+"Jv" = (
+/obj/abstract/loot_spawner/structure,
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidwarning";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor";
+	dir = 4
+	},
+/area/ruin/surface)
 "Jw" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/grille,
@@ -1594,8 +1644,11 @@
 	dir = 1
 	},
 /obj/structure/railing,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidfloor";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor"
 	},
 /area/ruin/surface)
 "JZ" = (
@@ -1619,9 +1672,12 @@
 /area/vault/fastfood/kitchen)
 "Kb" = (
 /obj/machinery/light/small/broken,
-/turf/unsimulated/floor/airless{
-	dir = 4;
-	icon_state = "asteroidwarning"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidwarning";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor";
+	dir = 4
 	},
 /area/ruin/surface)
 "Kf" = (
@@ -1759,6 +1815,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1773,8 +1830,11 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidfloor";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor"
 	},
 /area/ruin/surface)
 "MU" = (
@@ -1877,6 +1937,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -1938,7 +1999,7 @@
 	},
 /area/vault/fastfood/misc)
 "PW" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/structure/window/reinforced/tinted,
@@ -2011,6 +2072,7 @@
 	dir = 4;
 	initialize_directions = 12
 	},
+/obj/abstract/loot_spawner/engineering,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "Rl" = (
@@ -2104,18 +2166,23 @@
 	pixel_x = 5;
 	pixel_y = 2
 	},
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Tt" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidfloor";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor"
 	},
 /area/ruin/surface)
 "VB" = (
 /obj/structure/closet/secure_closet/freezer/fridge,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2215,9 +2282,12 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/airless{
-	dir = 8;
-	icon_state = "asteroidwarning"
+/turf/unsimulated/floor/planetary/dirt{
+	icon_state = "asteroidwarning";
+	base_icon_state = null;
+	icon = 'icons/turf/floors.dmi';
+	name = "floor";
+	dir = 8
 	},
 /area/ruin/surface)
 "Xr" = (
@@ -2266,6 +2336,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
+"Ya" = (
+/obj/abstract/loot_spawner/entertainment,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
 "Yh" = (
 /turf/simulated/floor{
 	icon_state = "bar"
@@ -2487,7 +2563,7 @@ jf
 Wo
 Pt
 Ln
-Yh
+Ya
 wH
 Af
 ME
@@ -2822,7 +2898,7 @@ wc
 wH
 ND
 wH
-aa
+Jv
 wc
 aa
 wc

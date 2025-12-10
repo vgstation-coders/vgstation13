@@ -10,6 +10,10 @@
 	},
 /turf/unsimulated/floor/snow/asphalt,
 /area/ruin/surface)
+"t" = (
+/obj/abstract/loot_spawner/bureaucracy,
+/turf/unsimulated/floor/snow/asphalt,
+/area/ruin/surface)
 "A" = (
 /obj/structure/bed/chair/wood/pew/right{
 	name = "bench"
@@ -79,7 +83,7 @@ s
 (6,1,1) = {"
 W
 O
-U
+t
 s
 "}
 (7,1,1) = {"

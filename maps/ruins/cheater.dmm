@@ -1,8 +1,4 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
-"a" = (
-/obj/structure/flora/ausbushes/fullgrass,
-/turf/template_noop,
-/area/template_noop)
 "g" = (
 /turf/template_noop,
 /area/ruin/surface)
@@ -25,9 +21,6 @@
 	},
 /turf/template_noop,
 /area/ruin/surface)
-"u" = (
-/turf/template_noop,
-/area/template_noop)
 "G" = (
 /obj/structure/table/woodentable/poker,
 /obj/item/toy/singlecard{
@@ -77,6 +70,7 @@
 	pixel_x = 5;
 	pixel_y = 2
 	},
+/obj/abstract/loot_spawner/combat,
 /turf/template_noop,
 /area/ruin/surface)
 "W" = (
@@ -96,42 +90,14 @@
 /area/ruin/surface)
 
 (1,1,1) = {"
-a
-a
-u
-u
-a
-u
-"}
-(2,1,1) = {"
-u
 j
 J
 l
 R
-a
 "}
-(3,1,1) = {"
-a
+(2,1,1) = {"
 g
 G
 W
 g
-u
-"}
-(4,1,1) = {"
-u
-u
-u
-u
-a
-u
-"}
-(5,1,1) = {"
-u
-a
-u
-a
-u
-u
 "}

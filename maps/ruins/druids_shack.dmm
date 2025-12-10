@@ -23,6 +23,10 @@
 	},
 /turf/simulated/floor/wood,
 /area/ruin)
+"p" = (
+/obj/abstract/loot_spawner/exotic,
+/turf/simulated/floor/wood,
+/area/ruin)
 "q" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced/tinted/frosted,
@@ -42,10 +46,6 @@
 	},
 /turf/simulated/floor/plating/deck,
 /area/ruin)
-"s" = (
-/obj/structure/flora/ausbushes/grassybush,
-/turf/template_noop,
-/area/template_noop)
 "x" = (
 /mob/living/simple_animal/cat/snek{
 	name = "Tylenol the Foolish"
@@ -98,7 +98,7 @@
 /turf/simulated/floor/plating/deck,
 /area/ruin)
 "V" = (
-/turf/unsimulated/floor/jungle/dirt,
+/turf/unsimulated/floor/planetary/dirt,
 /area/ruin/surface)
 "X" = (
 /obj/structure/grille,
@@ -130,6 +130,7 @@
 	pixel_y = 10
 	},
 /obj/item/clothing/shoes/black,
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor/wood,
 /area/ruin)
 
@@ -139,7 +140,7 @@ T
 X
 C
 C
-s
+P
 "}
 (2,1,1) = {"
 r
@@ -161,7 +162,7 @@ V
 S
 I
 Z
-a
+p
 C
 P
 "}
@@ -171,5 +172,5 @@ T
 X
 C
 C
-s
+P
 "}

@@ -58,6 +58,10 @@
 	},
 /turf/template_noop,
 /area/ruin/surface)
+"K" = (
+/obj/abstract/loot_spawner/trash/on_ground,
+/turf/template_noop,
+/area/ruin/surface)
 "M" = (
 /obj/structure/fence{
 	dir = 4
@@ -126,7 +130,7 @@ a
 M
 k
 w
-k
+K
 k
 l
 a

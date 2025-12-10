@@ -59,6 +59,10 @@
 /obj/structure/reagent_dispensers/cauldron/witch,
 /turf/simulated/floor/grass,
 /area/ruin/surface)
+"O" = (
+/obj/abstract/loot_spawner/food_or_drink,
+/turf/simulated/floor/grass,
+/area/ruin/surface)
 "V" = (
 /obj/structure/flora/grass/brown,
 /turf/template_noop,
@@ -130,7 +134,7 @@ l
 b
 b
 b
-b
+O
 l
 a
 "}

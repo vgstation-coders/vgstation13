@@ -45,6 +45,12 @@
 	},
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
+"s" = (
+/obj/abstract/loot_spawner/trash,
+/turf/simulated/floor{
+	icon_state = "dark vault stripe"
+	},
+/area/vault/kennel)
 "w" = (
 /obj/item/stack/rods,
 /obj/item/weapon/shard{
@@ -98,6 +104,12 @@
 	icon_state = "dark"
 	},
 /area/vault/kennel)
+"P" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor{
+	icon_state = "dark vault stripe"
+	},
+/area/vault/kennel)
 "R" = (
 /mob/living/simple_animal/hostile/wolf/pliable,
 /turf/simulated/floor/engine/concrete,
@@ -127,6 +139,12 @@
 	icon_state = "dark vault stripe"
 	},
 /area/vault/kennel)
+"Z" = (
+/obj/abstract/loot_spawner/food_or_drink,
+/turf/simulated/floor{
+	icon_state = "dark vault stripe"
+	},
+/area/vault/kennel)
 
 (1,1,1) = {"
 g
@@ -145,7 +163,7 @@ K
 R
 p
 N
-o
+Z
 a
 "}
 (3,1,1) = {"
@@ -185,7 +203,7 @@ K
 R
 p
 N
-o
+P
 a
 "}
 (7,1,1) = {"
@@ -215,7 +233,7 @@ R
 L
 p
 N
-o
+s
 a
 "}
 (10,1,1) = {"

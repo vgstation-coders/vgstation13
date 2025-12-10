@@ -6,12 +6,20 @@
 /obj/structure/flora/tree/pine,
 /turf/template_noop,
 /area/ruin/surface)
+"z" = (
+/obj/abstract/loot_spawner/medical,
+/turf/template_noop,
+/area/ruin/surface)
 "A" = (
 /obj/abstract/map/nest/deer,
 /turf/template_noop,
 /area/ruin/surface)
 "E" = (
 /turf/unsimulated/wall/rock/ice,
+/area/ruin/surface)
+"J" = (
+/obj/abstract/loot_spawner/combat,
+/turf/template_noop,
 /area/ruin/surface)
 "S" = (
 /obj/abstract/map/nest/wolf,
@@ -231,7 +239,7 @@ E
 E
 E
 S
-a
+J
 E
 E
 E
@@ -249,7 +257,7 @@ E
 a
 a
 a
-a
+z
 E
 E
 h

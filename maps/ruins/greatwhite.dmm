@@ -2,11 +2,21 @@
 "a" = (
 /turf/template_noop,
 /area/template_noop)
+"b" = (
+/obj/structure/flora/tree/pine,
+/obj/abstract/loot_spawner/combat,
+/turf/unsimulated/floor/snow,
+/area/ruin/surface)
 "g" = (
 /turf/unsimulated/floor/snow,
 /area/ruin/surface)
 "q" = (
 /mob/living/simple_animal/hostile/asteroid/goliath/snow/great,
+/turf/unsimulated/floor/snow,
+/area/ruin/surface)
+"r" = (
+/obj/structure/flora/tree/pine,
+/obj/abstract/loot_spawner/medical,
 /turf/unsimulated/floor/snow,
 /area/ruin/surface)
 "z" = (
@@ -77,7 +87,7 @@ g
 g
 g
 g
-z
+b
 g
 a
 a
@@ -85,7 +95,7 @@ a
 (5,1,1) = {"
 a
 a
-z
+r
 g
 g
 g

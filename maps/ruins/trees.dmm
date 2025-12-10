@@ -6,6 +6,10 @@
 "l" = (
 /turf/template_noop,
 /area/template_noop)
+"n" = (
+/obj/abstract/loot_spawner/combat,
+/turf/template_noop,
+/area/template_noop)
 
 (1,1,1) = {"
 l
@@ -31,7 +35,7 @@ l
 l
 l
 l
-l
+n
 a
 l
 l

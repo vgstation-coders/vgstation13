@@ -40,26 +40,19 @@
 "l" = (
 /turf/simulated/wall/mineral/wood,
 /area/ruin)
-"s" = (
-/obj/structure/flora/ausbushes/pointybush,
-/turf/template_noop,
-/area/template_noop)
 "x" = (
 /obj/structure/table/woodentable,
 /obj/item/tool/scalpel,
 /obj/item/weapon/reagent_containers/syringe/giant{
 	pixel_y = 10
 	},
+/obj/abstract/loot_spawner/medical,
 /turf/simulated/floor/wood,
 /area/ruin)
 "A" = (
 /obj/structure/hanging_lantern/dim,
 /turf/simulated/floor/wood,
 /area/ruin)
-"K" = (
-/obj/structure/flora/ausbushes/sunnybush,
-/turf/template_noop,
-/area/template_noop)
 "L" = (
 /obj/structure/table/woodentable,
 /obj/item/stack/cable_coil/white,
@@ -97,20 +90,16 @@
 	},
 /turf/simulated/floor/plating/deck,
 /area/ruin)
-"Y" = (
-/obj/structure/flora/ausbushes/palebush,
-/turf/template_noop,
-/area/template_noop)
 
 (1,1,1) = {"
-K
-K
-K
+M
+M
+M
 M
 b
 M
 M
-K
+M
 M
 "}
 (2,1,1) = {"
@@ -122,7 +111,7 @@ U
 l
 l
 l
-Y
+M
 "}
 (3,1,1) = {"
 M
@@ -147,7 +136,7 @@ l
 M
 "}
 (5,1,1) = {"
-K
+M
 l
 N
 a
@@ -155,7 +144,7 @@ a
 a
 A
 l
-Y
+M
 "}
 (6,1,1) = {"
 M
@@ -169,7 +158,7 @@ l
 M
 "}
 (7,1,1) = {"
-K
+M
 l
 R
 a
@@ -191,7 +180,7 @@ l
 M
 "}
 (9,1,1) = {"
-s
+M
 M
 l
 N
@@ -199,28 +188,28 @@ a
 e
 l
 M
-Y
+M
 "}
 (10,1,1) = {"
-s
+M
 M
 l
 x
 h
 L
 l
-Y
-Y
+M
+M
 "}
 (11,1,1) = {"
-s
-s
+M
+M
 l
 l
 l
 l
 l
-Y
+M
 M
 "}
 (12,1,1) = {"
@@ -228,9 +217,9 @@ M
 M
 M
 M
-s
 M
-s
+M
+M
 M
 M
 "}

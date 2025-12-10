@@ -2,6 +2,11 @@
 "a" = (
 /turf/template_noop,
 /area/template_noop)
+"b" = (
+/obj/effect/alien/weeds,
+/obj/abstract/loot_spawner/exotic,
+/turf/simulated/floor/plating,
+/area/ruin)
 "c" = (
 /turf/simulated/wall/r_wall,
 /area/ruin)
@@ -127,6 +132,11 @@
 /obj/structure/rack,
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
+/area/ruin)
+"A" = (
+/obj/effect/alien/weeds,
+/obj/abstract/loot_spawner/exotic,
+/turf/simulated/floor,
 /area/ruin)
 "B" = (
 /obj/structure/girder,
@@ -299,7 +309,7 @@ a
 a
 c
 U
-f
+b
 E
 W
 H
@@ -349,7 +359,7 @@ C
 K
 q
 l
-r
+A
 n
 c
 Z

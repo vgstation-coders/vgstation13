@@ -86,6 +86,7 @@
 /area/vault/asteroid)
 "as" = (
 /obj/structure/table/woodentable,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor/wood,
 /area/vault/asteroid)
 "at" = (
@@ -126,6 +127,7 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 4
 	},
+/obj/abstract/loot_spawner/trash,
 /turf/simulated/floor/plating,
 /area/vault/asteroid)
 "aB" = (
@@ -408,6 +410,18 @@
 	},
 /turf/simulated/floor/carpet,
 /area/vault/asteroid)
+"py" = (
+/obj/abstract/loot_spawner/medical,
+/turf/simulated/floor/plating/airless,
+/area/vault/asteroid)
+"uE" = (
+/obj/abstract/loot_spawner/exotic,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"IS" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/plating/airless,
+/area/vault/asteroid)
 
 (1,1,1) = {"
 aa
@@ -517,7 +531,7 @@ ap
 aa
 ac
 af
-ah
+py
 ac
 ad
 ac
@@ -656,7 +670,7 @@ au
 au
 aJ
 au
-au
+uE
 ac
 aa
 aa
@@ -829,7 +843,7 @@ aa
 aa
 ac
 ag
-ah
+IS
 ac
 ad
 ap

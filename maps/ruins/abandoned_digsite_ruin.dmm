@@ -9,7 +9,7 @@
 /obj/machinery/suspension_gen{
 	dir = 4
 	},
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/asteroid/air,
 /area/ruin/surface)
 "d" = (
 /obj/item/trash/bowl,
@@ -22,7 +22,7 @@
 "e" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/device/measuring_tape,
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/asteroid/air,
 /area/ruin/surface)
 "h" = (
 /obj/structure/fence/door,
@@ -33,11 +33,11 @@
 /turf/template_noop,
 /area/ruin/surface)
 "j" = (
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/asteroid/air,
 /area/ruin/surface)
 "k" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/asteroid/air,
 /area/ruin/surface)
 "l" = (
 /obj/structure/table,
@@ -72,7 +72,7 @@
 /area/ruin/surface)
 "v" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid{
+/turf/unsimulated/floor/asteroid/air{
 	color = "#a37552"
 	},
 /area/ruin/surface)
@@ -82,18 +82,18 @@
 	pixel_x = -7;
 	pixel_y = 7
 	},
-/turf/unsimulated/floor/asteroid{
+/turf/unsimulated/floor/asteroid/air{
 	color = "#a37552"
 	},
 /area/ruin/surface)
 "y" = (
 /obj/machinery/floodlight,
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/asteroid/air,
 /area/ruin/surface)
 "A" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/fossil/bone,
-/turf/unsimulated/floor/asteroid{
+/turf/unsimulated/floor/asteroid/air{
 	color = "#a37552"
 	},
 /area/ruin/surface)
@@ -132,7 +132,7 @@
 	pixel_x = 5;
 	pixel_y = -3
 	},
-/turf/unsimulated/floor/asteroid{
+/turf/unsimulated/floor/asteroid/air{
 	color = "#a37552"
 	},
 /area/ruin/surface)
@@ -149,7 +149,7 @@
 /area/ruin/surface)
 "P" = (
 /obj/item/weapon/pickaxe/shovel,
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/asteroid/air,
 /area/ruin/surface)
 "Q" = (
 /obj/structure/fence{
@@ -170,14 +170,14 @@
 "V" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/remains/human,
-/turf/unsimulated/floor/asteroid{
+/turf/unsimulated/floor/asteroid/air{
 	color = "#a37552"
 	},
 /area/ruin/surface)
 "W" = (
 /obj/structure/anomaly_container,
 /obj/machinery/artifact,
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/asteroid/air,
 /area/ruin/surface)
 "X" = (
 /turf/template_noop,

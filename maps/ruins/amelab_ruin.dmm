@@ -75,6 +75,9 @@
 /obj/structure/closet/cabinet,
 /obj/item/clothing/head/pajamahat/blue,
 /obj/item/clothing/under/pj/blue,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
 	},
@@ -321,6 +324,9 @@
 /obj/structure/closet/cabinet,
 /obj/item/clothing/head/pajamahat/red,
 /obj/item/clothing/under/pj/red,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
 	},
@@ -478,6 +484,7 @@
 "wy" = (
 /obj/structure/table,
 /obj/item/weapon/storage/box/donkpockets/random_amount,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor,
 /area/vault/amelab)
 "xe" = (
@@ -504,6 +511,7 @@
 /obj/structure/sign/nosmoking_2{
 	pixel_x = -28
 	},
+/obj/abstract/loot_spawner/structure,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "yellow"
@@ -579,6 +587,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/abstract/loot_spawner/engineering,
 /turf/simulated/floor/dark,
 /area/vault/amelab)
 "Bw" = (
@@ -755,6 +764,7 @@
 /obj/item/weapon/storage/bag/clipboard/amelab{
 	pixel_x = 3
 	},
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor,
 /area/vault/amelab)
 "HV" = (
@@ -871,6 +881,7 @@
 	pixel_x = 3;
 	pixel_y = -3
 	},
+/obj/abstract/loot_spawner/engineering,
 /turf/simulated/floor/plating,
 /area/vault/amelab/lab)
 "Nn" = (
@@ -1147,6 +1158,7 @@
 /obj/item/weapon/stock_parts/console_screen,
 /obj/item/weapon/stock_parts/console_screen,
 /obj/item/weapon/circuitboard/port_smes,
+/obj/abstract/loot_spawner/module,
 /turf/simulated/floor/plating,
 /area/vault/amelab/lab)
 "WM" = (
@@ -1175,6 +1187,7 @@
 /obj/structure/table,
 /obj/effect/decal/cleanable/cobweb,
 /obj/machinery/cell_charger,
+/obj/abstract/loot_spawner/engineering,
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "ZY" = (

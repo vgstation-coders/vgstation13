@@ -455,6 +455,12 @@
 	},
 /turf/simulated/floor/engine,
 /area/vault/thermalplant)
+"FO" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/thermalplant)
 "Ij" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
 	dir = 9
@@ -579,6 +585,12 @@
 	icon_state = "1-8";
 	tag = ""
 	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/thermalplant)
+"QS" = (
+/obj/abstract/loot_spawner/engineering,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -784,7 +796,7 @@ uG
 uG
 uG
 Kz
-uG
+FO
 uG
 Kz
 "}
@@ -818,7 +830,7 @@ uG
 uG
 uG
 Kz
-uG
+QS
 uG
 Kz
 "}
@@ -936,7 +948,7 @@ uG
 JV
 mS
 hz
-uG
+QS
 Kz
 UL
 Kz
