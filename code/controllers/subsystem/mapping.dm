@@ -340,17 +340,9 @@ var/datum/subsystem/mapping/SSmapping
 	if(!chosen_planet_type)
 		return
 
-	var/list/ruin_types = list()
-	for(var/ruin_path in subtypesof(/datum/map_element/ruin))
-		ruin_types += ruin_path
-
-	var/chosen_ruin_type = input(user, "Select a ruin to place on the planet (random if no selection):", "Vault Selection") as null|anything in ruin_types
-	if(!chosen_ruin_type)
-		chosen_ruin_type = pick(ruin_types)
-
 	var/hide_from_scanner = alert(user, "Should this planet be hidden from the Deep Space Scanner?", "Scanner Visibility", "No", "Yes") == "Yes"
 
-	SSmapping.spawn_planet(chosen_planet_type, chosen_ruin_type, hide_from_scanner)
+	SSmapping.spawn_planet(chosen_planet_type, hide_from_scanner)
 
 /**
  * Creates a grid of 25 99x99 sectors for procedural generation
@@ -497,10 +489,6 @@ var/datum/subsystem/mapping/SSmapping
 		if(isturf(A))
 			var/turf/T = A
 
-			// Set the baseturf if not already set
-			var/area/AA = get_area(T)
-			if(AA?.base_turf_type != default_baseturf)
-				AA.base_turf_type = default_baseturf
 
 			// Replace floor turfs with planet's default baseturf
 			if(istype(T, /turf/unsimulated/floor/asteroid))
