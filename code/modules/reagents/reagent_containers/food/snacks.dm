@@ -944,10 +944,11 @@
 	var/holiday = Get_Holiday()
 
 	if(holiday)
-		if(holiday == SINTERKLAAS)
-			cookiecutter = pick( list("mijter","sinterklaas","piet","kadotje","schoentje") )
+		switch(holiday)
+			if (SINTERKLAAS)
+				cookiecutter = pick( list("mijter","sinterklaas","piet","kadotje","schoentje") )
 
-	else
+	if(!cookiecutter)
 		switch(NM)
 			if("February")
 				cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
@@ -956,7 +957,7 @@
 			if("October")
 				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
 			else
-				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred","mijter","sinterklaas","piet","kadotje","schoentje") )
 	icon_state = "[cookiecutter]"
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
