@@ -548,10 +548,12 @@
 		return
 	if(prob(20))
 		Destroy()
+		return
 	if(locate(/obj/structure) in get_turf(src)) //if spawner is placed on a structure, just spawn one item on it
 		scatter = FALSE
 		roll_min = 1
 		roll_max = 1
+		containers = list()
 	rolls = rand(roll_min, roll_max)
 	table = new table()
 	loot = table.loot_roll(rolls)

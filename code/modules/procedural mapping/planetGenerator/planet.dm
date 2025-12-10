@@ -82,6 +82,9 @@
 	/// Merged loot table used for spawning loot on this planet
 	var/datum/loot_table/planet_loot
 
+	/// Expanded weighted list of ruins for this planet's type
+	var/list/weighted_ruin_list = list()
+
 /datum/planetGenerator/New()
 	// Initialize perlin noise seeds with random values
 	height_seed = rand(0, 50000)

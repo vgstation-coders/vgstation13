@@ -9,9 +9,6 @@
 	var/mapgen = null
 	///The fallback turf if mapgen fails.
 	var/default_baseturf = null
-	// The type of ruins this planet can spawn
-	var/ruin_type
-	var/prohibited_ruin_type
 	//Value that gets added to loot rolls on this planet.
 	var/loot_modifier = 0
 	//Climate datum
@@ -35,6 +32,12 @@
 	var/mob_faction
 	// Whether this planet is hidden from the deep space scanner
 	var/hidden = FALSE
+	// Ruin types available on this planet.
+	var/ruin_whitelist = RUIN_TYPE_GENERIC
+	var/ruin_blacklist = 0
+	var/preferred_ruin_type = RUIN_TYPE_GENERIC //3x more likely to spawn these types of ruins than others
+	// Ruin buget
+	var/ruin_budget = RUIN_BUDGET_PLANET
 
 /**
  * Builds the list of turfs affected by day/night cycle for this planet
@@ -264,7 +267,8 @@
 	desc = "The platonic ideal of vacation spots. Warm, comfortable temperatures, and a breathable atmosphere."
 	mapgen = /datum/planetGenerator/beach
 	default_baseturf = /turf/unsimulated/floor/planetary/grass
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL|RUIN_TYPE_WET
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL|RUIN_TYPE_WET
+	preferred_ruin_type = RUIN_TYPE_TROPICAL
 	climate_type = /datum/climate/tropical
 	icon_state = "beach2"
 
@@ -273,10 +277,10 @@
 	desc = "A hot, arid world with vast deserts and scarce water sources."
 	mapgen = /datum/planetGenerator/desert
 	default_baseturf = /turf/unsimulated/floor/planetary/desert
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL
-	prohibited_ruin_type = RUIN_TYPE_WET
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL
+	ruin_blacklist = RUIN_TYPE_WET
+	preferred_ruin_type = RUIN_TYPE_TROPICAL
 	climate_type = /datum/climate/desert
-	loot_modifier = 5
 	icon_state = "desert"
 
 /datum/planet_type/grass
@@ -284,7 +288,8 @@
 	desc = "A temperate planet with a breathable atmosphere and abundant flora and fauna."
 	mapgen = /datum/planetGenerator/grass
 	default_baseturf = /turf/unsimulated/floor/planetary/grass
-	ruin_type = RUIN_TYPE_GENERIC
+	ruin_whitelist = RUIN_TYPE_GENERIC
+	preferred_ruin_type = RUIN_TYPE_GENERIC
 	climate_type = /datum/climate/temperate
 	icon_state = "earth"
 
@@ -293,9 +298,9 @@
 	desc = "A hot, humid planet teeming with exotic flora and fauna."
 	mapgen = /datum/planetGenerator/jungle
 	default_baseturf = /turf/unsimulated/floor/jungle/grass
-	ruin_type = RUIN_TYPE_JUNGLE|RUIN_TYPE_TROPICAL
+	ruin_whitelist = RUIN_TYPE_JUNGLE|RUIN_TYPE_TROPICAL
+	preferred_ruin_type = RUIN_TYPE_JUNGLE
 	climate_type = /datum/climate/tropical
-	loot_modifier = 10
 	icon_state = "jungle2"
 
 /datum/planet_type/lava
@@ -303,10 +308,10 @@
 	desc = "A planet rife with seismic and volcanic activity. High temperatures and dangerous xenofauna render it dangerous for the unprepared."
 	mapgen = /datum/planetGenerator/lava
 	default_baseturf = /turf/unsimulated/floor/planetary/basalt
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_LAVA
-	prohibited_ruin_type = RUIN_TYPE_WET
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_LAVA
+	ruin_blacklist = RUIN_TYPE_WET
+	preferred_ruin_type = RUIN_TYPE_LAVA
 	climate_type = /datum/climate/lava
-	loot_modifier = 15
 	icon_state = "lava"
 
 /datum/planet_type/snow
@@ -314,9 +319,9 @@
 	desc = "A frozen planet covered in thick snow, thicker ice, and dangerous predators."
 	mapgen = /datum/planetGenerator/snow
 	default_baseturf = /turf/unsimulated/floor/snow
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_SNOW
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_SNOW
+	preferred_ruin_type = RUIN_TYPE_SNOW
 	climate_type = /datum/climate/arctic
-	loot_modifier = 5
 	icon_state = "snow"
 
 /datum/planet_type/urban
@@ -324,18 +329,20 @@
 	desc = "A desolate, toxic world littered with the remnants of a long-gone civilization and the conflict that ended it."
 	mapgen = /datum/planetGenerator/urban
 	default_baseturf = /turf/unsimulated/floor/planetary/wasteland
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
-	prohibited_ruin_type = RUIN_TYPE_WET
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	ruin_blacklist = RUIN_TYPE_WET
+	preferred_ruin_type = RUIN_TYPE_URBAN
 	climate_type = /datum/climate/wasteland
-	loot_modifier = 10
 	icon_state = "barren"
+	ruin_budget = RUIN_BUDGET_PLANET * 2
 
 /datum/planet_type/xeno
 	name = "unknown planet"
 	desc = "An alien world with an atmosphere and ecosystem that defies human understanding."
 	mapgen = /datum/planetGenerator/xeno
 	default_baseturf = /turf/unsimulated/floor/grey_sand
-	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_XENO
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_XENO
+	preferred_ruin_type = RUIN_TYPE_XENO
 	climate_type = /datum/climate/xeno
-	loot_modifier = 20
 	icon_state = "xeno1"
+	ruin_budget = RUIN_BUDGET_PLANET * 2

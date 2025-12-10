@@ -3080,7 +3080,6 @@
 #include "maps\randomvaults\sokoban.dm"
 #include "maps\randomvaults\spessmart.dm"
 #include "maps\randomvaults\mining\mining_surprise_items.dm"
-#include "maps\randomvaults\snaxi\snaxivault_defines.dm"
 #include "maps\RandomZLevels\Academy.dm"
 #include "maps\RandomZLevels\assistantChamber.dm"
 #include "maps\RandomZLevels\challenge.dm"

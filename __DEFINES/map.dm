@@ -32,7 +32,6 @@
 
 #define RUIN_BUDGET_PLANET  10 //max per planet
 #define RUIN_BUDGET_JUNGLE  20 //max for junglestation
-#define RUIN_BUDGET_SNAXI   20 //max for snaxi
 
 #define SECTOR_SIZE 100 //max width/height of a sector in turfs. temporary - will be dynamic later
 #define RUIN_PLACEMENT_PADDING 5 // Padding around ruins when placing them in sectors to avoid edge issues
