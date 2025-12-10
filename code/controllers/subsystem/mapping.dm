@@ -476,6 +476,11 @@ var/datum/subsystem/mapping/SSmapping
 		if(isturf(A))
 			var/turf/T = A
 
+			// Set the area's baseturf if not already set
+			var/area/AA = get_area(T)
+			if(AA?.base_turf_type != default_baseturf)
+				AA.base_turf_type = default_baseturf
+
 			// Replace floor turfs with planet's default baseturf
 			if(istype(T, /turf/unsimulated/floor/asteroid))
 				if(default_baseturf)
