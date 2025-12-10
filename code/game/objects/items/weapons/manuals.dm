@@ -1742,3 +1742,12 @@ Different sizes of fuel reservoirs exist, with the starter kit coming with a fai
 	
 </body>
 </html>"}
+
+
+/obj/item/weapon/book/manual/planets
+	name = "Explorer's Field Manual"
+	icon_state = "planetbook"
+	author = "NanoTrasen"
+	title = "Explorer's Field Manual"
+	wiki_page = "Guide to Planetary Exploration"
+	id = 26

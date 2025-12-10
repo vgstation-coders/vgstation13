@@ -115,7 +115,7 @@
 			var/list/L = schematics[cat]
 			for(var/datum/rcd_schematic/C in L)
 				C.send_list_assets(client)
-	
+
 
 /obj/item/device/rcd/rpd/rebuild_ui()
 	var/dat = ""
@@ -154,12 +154,12 @@
 	if(selected)
 		var/multitext=""
 		var/autotext=""
-	
+
 		if (has_slimes & SLIME_METAL)//build_all
 			multitext=" <div style='margin-top:1em;'><b>Multilayer Mode: </b><a href='?src=\ref[interface];toggle_multi=1'><span class='[build_all? "schem_selected" : "schem"]'>[build_all ? "On" : "Off"]</span></a></div> "
 		if (has_slimes & SLIME_YELLOW)//build_all
 			autotext=" <div style='margin-top:1em;'><b>Autowrench: </b><a href='?src=\ref[interface];toggle_auto=1'><span class='[autowrench? "schem_selected" : "schem"]'>[autowrench ? "On" : "Off"]</span></a></div> "
-	
+
 		for(var/client/client in interface.clients)
 			selected.send_assets(client)
 		var/schematichtml=selected.get_HTML(args)
@@ -186,7 +186,7 @@
 		build_all=has_slimes & SLIME_METAL ? !build_all : 0
 		rebuild_ui()
 		return TRUE
-	
+
 
 
 
@@ -312,7 +312,7 @@
 
 	src.build_all = !src.build_all
 	if (interface)
-		rebuild_ui() 
+		rebuild_ui()
 	to_chat(usr, "You [build_all ? "enable" : "disable"] the multilayer mode.")
 
 /obj/item/device/rcd/rpd/proc/autowrench()
@@ -324,11 +324,20 @@
 
 	src.autowrench = !src.autowrench
 	if (interface)
-		rebuild_ui() 
+		rebuild_ui()
 	to_chat(usr, "You [autowrench ? "enable" : "disable"] the automatic wrenching mode.")
 
 /obj/item/device/rcd/rpd/admin
 	name = "experimental Rapid-Piping-Device (RPD)"
+	build_all = TRUE
+	autowrench = TRUE
+	has_slimes = SLIME_METAL|SLIME_YELLOW // just so this doesn't cause anything off
+
+/obj/item/device/rcd/rpd/admin/New()
+	. = ..()
+	verbs += /obj/item/device/rcd/rpd/proc/multilayer
+	verbs += /obj/item/device/rcd/rpd/proc/autowrench
+
 
 /obj/item/device/rcd/rpd/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is building pipes inside \himself! It looks like \he's trying to commit suicide!</span>")

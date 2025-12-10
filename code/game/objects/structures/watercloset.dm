@@ -11,7 +11,8 @@
 
 /obj/structure/wc/New()
 	. = ..()
-	watersource = new watertype
+	if(watertype)
+		watersource = new watertype
 
 /obj/structure/wc/verb/empty_container_into()
 	set name = "Empty container into"

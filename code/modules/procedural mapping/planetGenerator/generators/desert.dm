@@ -94,7 +94,6 @@
 	mob_spawn_chance = 2
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 20,
-		/mob/living/simple_animal/rabbit/bunny = 30,
 		/mob/living/simple_animal/hostile/lizard = 35,
 		/mob/living/simple_animal/mouse/common = 25,
 		/mob/living/simple_animal/cricket = 20,

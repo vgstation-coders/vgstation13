@@ -40,6 +40,8 @@
 /obj/mecha/combat/phazon/to_bump(var/atom/obstacle)
 	if(phasing && get_charge()>=phasing_energy_drain)
 		var/turf/new_turf = get_step(src, dir)
+		if(new_turf.turf_flags & NOJAUNT)
+			return
 		var/datum/zLevel/L = get_z_level(new_turf)
 		if (L.teleJammed)
 			return

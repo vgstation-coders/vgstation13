@@ -282,3 +282,48 @@ var/global/datum/shuttle/admin/admin_shuttle = new(starting_area = /area/shuttle
 
 /obj/machinery/computer/shuttle_control/admin_shuttle/emag_act() //Can't be emagged to hijack the centcom ferry
 	return
+
+//EXPLORATION SHUTTLE
+var/global/datum/shuttle/exploration/exploration_shuttle = new(starting_area = /area/shuttle/exploration)
+
+/datum/shuttle/exploration
+	name = "exploration shuttle"
+	cooldown = 30 SECONDS
+
+	transit_delay = 27 SECONDS //Once somebody sends the shuttle, it waits for 3 seconds before leaving. Transit delay is reduced to compensate for that
+	pre_flight_delay = 3 SECONDS
+
+	can_link_to_computer = LINK_PASSWORD_ONLY
+	password = TRUE
+	stable = 1 //Don't stun everyone and don't throw anything when moving
+	can_rotate = 1
+
+/datum/shuttle/exploration/initialize()
+	.=..()
+	add_dock(/obj/docking_port/destination/exploration/station)
+	add_dock(/obj/docking_port/destination/salvage/dj)
+
+/datum/shuttle/exploration/after_flight()
+	..()
+	remove_dock(/obj/docking_port/destination/exploration/centcom)
+
+/obj/machinery/computer/shuttle_control/exploration/New()
+	link_to(exploration_shuttle)
+	var/obj/item/weapon/paper/passkey = new(get_turf(src))
+	new /obj/item/weapon/book/manual/planets(get_turf(src))
+
+	passkey.name = "Exploration Shuttle authentication"
+	passkey.info = "Central Command has procured a new-model Exploration Shuttle for your station.<hr>This shuttle's password is: \"<b>[exploration_shuttle.password]</b>\"."
+	.=..()
+
+/obj/docking_port/destination/exploration/station
+	areaname = "exploration shuttle dock"
+
+/obj/docking_port/destination/exploration/centcom
+	areaname = "exploration shuttle dock centcomm"
+
+/obj/machinery/computer/shuttle_control/exploration
+	icon_state = "syndishuttle"
+
+	light_color = LIGHT_COLOR_RED
+	allow_silicons = 0 //stay on the station shiticon

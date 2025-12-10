@@ -58,7 +58,6 @@
 	// if STANDING     ON THE EDGE        OF THE z-level will transition you to another
 	var/can_border_transition = 0
 
-	var/shuttle_turf = FALSE // is this turf part of a shuttle and ISN'T A SHUTTLE TURF TYPE REEE
 /*
  * Technically obsoleted by base_turf
 	//For building on the asteroid.
@@ -246,7 +245,7 @@
 
 
 			var/move_to_z = src.z
-			
+
 			if(ZL.transition_crosswrap_z && ZL.transition_crosswrap_z.len>=4)
 				locked_to_current_z=TRUE //prevent shuffling z-level later in the code.
 				randomize_drift_position=FALSE
@@ -258,7 +257,7 @@
 					move_to_z=ZL.transition_crosswrap_z[3]
 				else if(A.x<=TRANSITIONEDGE) // WEST
 					move_to_z=ZL.transition_crosswrap_z[4]
-				
+
 
 			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
 			for(var/mob/living/L in contents_brought)

@@ -76,6 +76,10 @@ var/datum/subsystem/mapping/SSmapping
 	var/max_turfs_per_tick = 1000
 	/// Minimum turfs to process per tick
 	var/min_turfs_per_tick = 50
+	/// Is scanning disabled globally
+	var/scanning_disabled = FALSE
+	/// World time when scanning can be toggled again
+	var/scanning_toggle_cooldown = 0
 
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)
@@ -321,7 +325,9 @@ var/datum/subsystem/mapping/SSmapping
 	if(!chosen_ruin_type)
 		chosen_ruin_type = pick(ruin_types)
 
-	SSmapping.spawn_planet(chosen_planet_type, chosen_ruin_type)
+	var/hide_from_scanner = alert(user, "Should this planet be hidden from the Deep Space Scanner?", "Scanner Visibility", "No", "Yes") == "Yes"
+
+	SSmapping.spawn_planet(chosen_planet_type, chosen_ruin_type, hide_from_scanner)
 
 /**
  * Creates a grid of 25 99x99 sectors for procedural generation
@@ -361,11 +367,12 @@ var/datum/subsystem/mapping/SSmapping
  * Arguments:
  * * planet_datum - The planet type path or instance to spawn
  * * ruin_type - Optional ruin type to place on the planet
+ * * hide_from_scanner - Optional boolean to hide the planet from the Deep Space Scanner
  *
  * Returns:
  * * TRUE if generation started successfully, FALSE if already generating
  */
-/datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, ruin_type)
+/datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, ruin_type, hide_from_scanner = FALSE)
 	if(generating)
 		message_admins("Planet generation already in progress! Please wait for '[current_planet.planet_name]' to complete.")
 		return FALSE
@@ -378,6 +385,10 @@ var/datum/subsystem/mapping/SSmapping
 	current_allocation = assign_allocation(current_planet, world.maxz)
 	current_ruin_type = ruin_type
 	planets += current_planet
+
+	// Set scanner visibility
+	if(hide_from_scanner)
+		current_planet.hidden = TRUE
 
 	// Set base_turf_type on areas so explosions reveal the correct turf
 	if(current_planet.default_baseturf)
@@ -651,130 +662,49 @@ var/datum/subsystem/mapping/SSmapping
 			return A
 	return z //return the z level if no allocation found
 
-/**
- * Finds a suitable landing zone for a shuttle on a planet
- *
- * Searches the planet's sector for a flat area large enough to accommodate
- * the specified dimensions, staying at least 11 tiles from sector edges.
- * Returns a random valid location to provide variety.
- *
- * Arguments:
- * * alloc - The planet allocation to search within
- * * size - List containing [width, height] of the landing area needed
- *
- * Returns:
- * * The top-left turf of a suitable landing zone, or null if no valid location found
- */
-/datum/subsystem/mapping/proc/get_landing_zone(var/datum/allocation/alloc,var/list/size)
-	if (!alloc || !size || size.len != 2)
-		return null
-	var/x_dim = size[1]
-	var/y_dim = size[2]
-	var/list/turf/search_turfs = turfs_from_sector(alloc.sector, alloc.z)
-
-	// Get sector boundaries to calculate relative positions
-	var/list/bounds = get_sector_bounds(alloc.sector)
-	var/x_min = bounds["x_min"]
-	var/y_min = bounds["y_min"]
-
-	// Create matrix with relative coordinates
-	var/datum/turf_matrix[SECTOR_SIZE][SECTOR_SIZE]
-	for (var/turf/T in search_turfs)
-		var/rel_x = T.x - x_min + 1
-		var/rel_y = T.y - y_min + 1
-		turf_matrix[rel_x][rel_y] = T
-
-	// Define safe zone boundaries (accounting for edge buffer and shuttle size)
-	var/safe_x_min = LANDING_ZONE_EDGE_BUFFER + 1
-	var/safe_x_max = SECTOR_SIZE - LANDING_ZONE_EDGE_BUFFER - x_dim
-	var/safe_y_min = LANDING_ZONE_EDGE_BUFFER + 1
-	var/safe_y_max = SECTOR_SIZE - LANDING_ZONE_EDGE_BUFFER - y_dim
-
-	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
-		return null // Not enough space for safe landing
-
-	// Create randomized search list within safe boundaries
-	var/list/search_positions = list()
-	for(var/rel_x = safe_x_min; rel_x <= safe_x_max; rel_x++)
-		for(var/rel_y = safe_y_min; rel_y <= safe_y_max; rel_y++)
-			var/turf/T = turf_matrix[rel_x][rel_y]
-			if(T && !iswall(T) && !istype(T, /turf/unsimulated/mineral))
-				search_positions += T
-
-	// Shuffle the search positions for randomization
-	if(!search_positions.len)
-		return null
-
-	search_positions = shuffle(search_positions)
-
-	// Search through randomized positions
-	for(var/turf/T in search_positions)
-		var/rel_x = T.x - x_min + 1
-		var/rel_y = T.y - y_min + 1
-		var/found = TRUE
-
-		for (var/dx = 0; dx < x_dim && found; dx++)
-			for (var/dy = 0; dy < y_dim && found; dy++)
-				var/check_x = rel_x + dx
-				var/check_y = rel_y + dy
-				if(check_x > SECTOR_SIZE || check_y > SECTOR_SIZE) // Out of sector bounds
-					found = FALSE
-					continue
-				var/turf/target = turf_matrix[check_x][check_y]
-				if (!target || !istype(target,T.type))
-					found = FALSE
-
-		if (found)
-			return T  // Return top-left turf of matching rectangle
-
-	return null
-
-/**
- * Gets or creates a persistent landing zone for a specific shuttle on a planet
- *
- * Checks if the shuttle type already has a registered landing zone on this planet.
- * If not, finds a new landing zone and creates a docking port for it.
- * This ensures shuttles return to the same location on repeated landings.
- *
- * Arguments:
- * * alloc - The planet allocation to create a landing zone in
- * * shuttle - The shuttle that needs a landing zone
- * * size - List containing [width, height] for the landing area
- *
- * Returns:
- * * The docking port for the landing zone, or null if no suitable location found
- */
 /datum/subsystem/mapping/proc/get_shuttle_landing_zone(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size)
-	if(!alloc || !shuttle || !size)
+	if(!alloc || !shuttle)
 		return null
 
 	// Check if this shuttle already has a landing zone on this planet
 	if(alloc.shuttle_landing_zones[shuttle.type])
-		var/obj/docking_port/existing_port = alloc.shuttle_landing_zones[shuttle.type]
-		if(existing_port && existing_port.loc) // Make sure it still exists
-			return existing_port
+		var/datum/landing_zone/existing_lz = alloc.shuttle_landing_zones[shuttle.type]
+		if(existing_lz?.docking_port?.loc)
+			existing_lz.spawn_warnings()
+			return existing_lz.docking_port
 		else
-			// Clean up dead reference
 			alloc.shuttle_landing_zones -= shuttle.type
 
-	// Find a new landing zone
-	var/turf/landing_zone = get_landing_zone(alloc, size)
-	if(!landing_zone)
-		return null
-
-	// Create and register the landing zone
-	var/obj/docking_port/destination/planet_surface/surface_port = new(landing_zone)
-	surface_port.dir = NORTH
-	surface_port.areaname = "[alloc.ptype.planet_name] surface"
-
-	// Set the base turf type for proper surface restoration when shuttles depart
-	if(alloc.ptype && alloc.ptype.default_baseturf)
-		surface_port.base_turf_type = alloc.ptype.default_baseturf
+	var/datum/landing_zone/new_lz = new(shuttle, alloc.ptype)
+	if(!new_lz || !new_lz.docking_port)
+		return
 
 	// Remember this landing zone for this shuttle type
-	alloc.shuttle_landing_zones[shuttle.type] = surface_port
+	alloc.shuttle_landing_zones[shuttle.type] = new_lz
 
-	return surface_port
+	new_lz.spawn_warnings()
+
+	return new_lz.docking_port
+
+/datum/subsystem/mapping/proc/spawn_lz_warnings(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size, var/obj/docking_port/port)
+	if(!alloc || !shuttle)
+		return
+
+	var/datum/landing_zone/lz = alloc.shuttle_landing_zones[shuttle.type]
+	if(!lz)
+		return
+
+	lz.spawn_warnings()
+
+/datum/subsystem/mapping/proc/clear_lz_warnings(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size, var/obj/docking_port/port)
+	if(!alloc || !shuttle)
+		return
+
+	var/datum/landing_zone/lz = alloc.shuttle_landing_zones[shuttle.type]
+	if(!lz)
+		return
+
+	lz.clear_warnings()
 
 /**
  * # Allocation Datum
@@ -793,7 +723,7 @@ var/datum/subsystem/mapping/SSmapping
 	var/z = 7
 	var/datum/planet_type/ptype
 	var/list/turf/turfs = list()
-	/// Tracks persistent shuttle landing zones - associative list: shuttle_type -> docking_port
+	/// Tracks persistent shuttle landing zones - associative list: shuttle_type -> /datum/landing_zone
 	var/list/shuttle_landing_zones = list()
 
 #undef STAGE_TERRAIN

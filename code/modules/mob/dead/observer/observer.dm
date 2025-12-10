@@ -258,6 +258,8 @@ Works together with spawning an observer, noted above.
 	if(key && !(copytext(key,1,2)=="@"))
 		if((src && src.client && src.client.holder))
 			log_admin("[key_name(src)] is now a[src.client.holder ? "n admin-" : " "]ghost.")
+			// Clear weather sounds when ghosting
+			client << sound(null, repeat = 0, wait = 0, channel = CHANNEL_WEATHER, volume = 0)
 		var/ghostype = /mob/dead/observer
 		if (deafmute)
 			ghostype = /mob/dead/observer/deafmute

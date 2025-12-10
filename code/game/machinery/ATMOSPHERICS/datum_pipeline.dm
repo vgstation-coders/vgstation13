@@ -25,8 +25,7 @@
 	edges = null
 	..()
 
-/datum/pipeline/proc/process()
-	#ifdef BURST_PIPES
+/datum/pipeline/proc/process()//This use to be called called from the pipe networks
 	if((world.timeofday - last_pressure_check) / 10 >= PRESSURE_CHECK_DELAY)
 		//Check to see if pressure is within acceptable limits
 		var/pressure = air.return_pressure()
@@ -36,10 +35,7 @@
 					// Delay next update so we have a chance to recalculate.
 					last_pressure_check=world.timeofday
 					break //Only delete 1 pipe per process
-	#endif
-	for(var/obj/machinery/atmospherics/pipe/member in members)
-		if(member.transparent && member.exposed())
-			member.update_icon()
+
 
 	//Allow for reactions
 	//air.react() //Should be handled by pipe_network now
@@ -75,23 +71,58 @@
 
 			if(result.len>0)
 				for(var/obj/machinery/atmospherics/pipe/item in result)
-					if(item.parent != src)
-						if(item.parent)
-							//Destroy the old pipeline so that the air is stored in the pipes
-							//This could be optimized significantly by making it merge item.parent into this pipeline instead (or vice versa) but I'm just fixing a bug here
-							qdel(item.parent)
-						members += item
-						possible_expansions += item
+					var/merged_other = FALSE
+					edge_check--
+					if (item.parent == src) // encountered a pipe already in this pipeline
+						continue
+					// encountered a pipe that is not part of this pipeline
+					if(item.parent) // it is already part of another pipeline
+						// merge other pipeline into this to create one bigger pipeline
+						var/datum/pipeline/other = item.parent
 
+						for (var/obj/machinery/atmospherics/pipe/P in other.members)
+							if (P.parent == src)
+								continue
+							P.parent = src
+
+							members |= P
+							possible_expansions |= P
+
+							volume += P.volume
+							alert_pressure = min(alert_pressure, P.alert_pressure)
+
+						for (var/obj/machinery/atmospherics/pipe/edge_pipe in other.edges)
+							edges |= edge_pipe
+
+						if (other.air && other.air != air)
+							air.merge(other.air)
+
+						if (other.network && other.network != network)
+							if (network)
+								network.merge(other.network)
+							else
+								network = other.network
+								network.line_members -= other
+								if (!(src in network.line_members)) // sins against the nesting god
+									network.line_members += src
+
+						other.members = null
+						other.edges = null
+						other.air = null
+						other.network = null
+						qdel(other)
+
+						merged_other = TRUE
+
+					members |= item
+					possible_expansions |= item
+
+					if (!merged_other)
 						volume += item.volume
-						item.parent = src
-
-						alert_pressure = min(alert_pressure, item.alert_pressure)
-
 						if(item.air_temporary)
 							air.merge(item.air_temporary)
-
-					edge_check--
+						item.parent = src
+						alert_pressure = min(alert_pressure, item.alert_pressure)
 
 			if(edge_check>0)
 				edges += borderline

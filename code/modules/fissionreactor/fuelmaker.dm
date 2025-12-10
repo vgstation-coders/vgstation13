@@ -84,7 +84,7 @@ the machine which makes fuel reservoirs have things in them.
 				heldrod.forceMove(loc)
 			qdel(src)
 		return TRUE	
-	if( istype(I,/obj/item/weapon/reagent_containers) )
+	if( istype(I,/obj/item/weapon/reagent_containers/glass) )
 		var/obj/item/weapon/reagent_containers/C=I
 		if(container)
 			to_chat(user,"There's already a container inside of \the [src].")
@@ -233,15 +233,13 @@ the machine which makes fuel reservoirs have things in them.
 		for(var/datum/reagent/R  in heldrod.fueldata.fuel.reagent_list)
 			current_rodamt+=R.volume
 					
-		estimated_time=floor(heldrod.fueldata.lifetime/60)
-		if(heldrod.fueldata.absorbance>heldrod.fueldata.wattage)
-			if(heldrod.fueldata.wattage>0)
-				estimated_time/= (heldrod.fueldata.absorbance-heldrod.fueldata.wattage)/heldrod.fueldata.wattage
-				estimated_time=floor(estimated_time)
-			else
-				estimated_time="never"
+		estimated_time=heldrod.fueldata.lifetime/60
+		if(heldrod.fueldata.wattage>0)
+			estimated_time=floor(estimated_time/heldrod.fueldata.get_fuel_life_factor())
 		else
-			estimated_power=heldrod.fueldata.wattage - heldrod.fueldata.absorbance		
+			estimated_time="never"
+	
+		estimated_power=max(0,heldrod.fueldata.wattage - heldrod.fueldata.absorbance)		
 				
 				
 	if (reagent_wiki)

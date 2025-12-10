@@ -95,7 +95,6 @@
 	mob_spawn_chance = 2
 	mob_spawn_list = list(
 		/mob/living/simple_animal/mouse/common = 50,
-		/mob/living/simple_animal/rabbit/bunny = 50,
 		/mob/living/simple_animal/hostile/deer = 10,
 		/mob/living/simple_animal/cockroach = 10,
 		/mob/living/simple_animal/cricket = 10,
@@ -170,7 +169,6 @@
 	mob_spawn_chance = 3
 	mob_spawn_list = list(
 		/mob/living/simple_animal/mouse/common = 15,
-		/mob/living/simple_animal/rabbit/bunny = 25,
 		/mob/living/simple_animal/hostile/deer = 20,
 		/mob/living/simple_animal/hostile/deer/flesh = 1,
 		/mob/living/simple_animal/hostile/bear/brownbear = 8,
@@ -228,7 +226,6 @@
 	mob_spawn_chance = 5
 	mob_spawn_list = list(
 		/mob/living/simple_animal/mouse/common = 10,
-		/mob/living/simple_animal/rabbit/bunny = 15,
 		/mob/living/simple_animal/hostile/deer = 15,
 		/mob/living/simple_animal/hostile/bear/brownbear = 10,
 		/mob/living/simple_animal/cockroach = 20,
@@ -261,7 +258,6 @@
 	mob_spawn_chance = 6
 	mob_spawn_list = list(
 		/mob/living/simple_animal/mouse/common = 10,
-		/mob/living/simple_animal/rabbit/bunny = 12,
 		/mob/living/simple_animal/cockroach = 25,
 		/mob/living/simple_animal/bee = 30,
 		/mob/living/simple_animal/hostile/lizard = 30,
@@ -311,7 +307,6 @@
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 20,
 		/mob/living/simple_animal/mouse/common = 25,
-		/mob/living/simple_animal/rabbit/bunny = 15,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 12,
 		/mob/living/simple_animal/hostile/scarybat/cave = 18,
 		/mob/living/simple_animal/hostile/mushroom = 20,
@@ -360,7 +355,6 @@
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 25,
 		/mob/living/simple_animal/mouse/common = 18,
-		/mob/living/simple_animal/rabbit/bunny = 10,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 18,
 		/mob/living/simple_animal/snail = 30,
 		/mob/living/simple_animal/snail/greasy = 8,

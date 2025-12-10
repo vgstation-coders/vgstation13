@@ -691,6 +691,20 @@
 		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu] for Z-[C.z].</span>", 1)
 		climate_panel()
 
+	else if(href_list["climate_restart"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/climate/C = locate(href_list["climate_restart"])
+		if(!C || !istype(C))
+			return
+		var/response = alert(usr, "This will completely restart the climate controller for Z-[C.z]. Continue?", "Restart Climate", "Yes", "No")
+		if(response != "Yes")
+			return
+		SSweather.restart_climate(C)
+		log_admin("[key_name(usr)] restarted the climate controller for Z-[C.z].")
+		message_admins("<span class='notice'>[key_name(usr)] restarted the climate controller for Z-[C.z].</span>", 1)
+		climate_panel()
+
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
 			return
@@ -838,6 +852,13 @@
 		procedural_generation_panel()
 		return
 
+	else if(href_list["procgen_toggle_exploration"])
+		if(!check_rights(R_ADMIN))
+			return
+		toggle_exploration_program(usr, bypass_cooldown = TRUE)
+		procedural_generation_panel()
+		return
+
 	else if(href_list["procgen_jump"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -956,6 +977,63 @@
 
 		message_admins("[key_name_admin(usr)] deleted planet [planet_name].")
 		to_chat(usr, "<span class='notice'>Planet [planet_name] has been deleted.</span>")
+		procedural_generation_panel()
+		return
+
+	else if(href_list["procgen_add_landing_zone"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_add_landing_zone"])
+		if(!planet)
+			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
+			return
+		if(!planet.allocation)
+			to_chat(usr, "<span class='warning'>This planet has no allocation!</span>")
+			return
+
+		if(SSmapping.generating && SSmapping.current_planet == planet)
+			to_chat(usr, "<span class='warning'>Planet is still generating! Please wait for generation to complete.</span>")
+			return
+
+		var/datum/allocation/alloc = planet.allocation
+
+		if(alloc.shuttle_landing_zones[/datum/shuttle/exploration])
+			to_chat(usr, "<span class='warning'>This planet already has a landing zone for the exploration shuttle!</span>")
+			procedural_generation_panel()
+			return
+
+		if(!exploration_shuttle)
+			to_chat(usr, "<span class='warning'>Exploration shuttle not found!</span>")
+			return
+
+		var/list/shuttle_size = exploration_shuttle.get_size()
+		if(!shuttle_size)
+			to_chat(usr, "<span class='warning'>Unable to determine shuttle dimensions.</span>")
+			return
+
+		var/obj/docking_port/destination/planet_surface/surface_port = SSmapping.get_shuttle_landing_zone(alloc, exploration_shuttle, shuttle_size)
+		if(!surface_port)
+			to_chat(usr, "<span class='warning'>No suitable landing zone found on [planet.planet_name]. The planet terrain may be too irregular.</span>")
+			return
+
+		exploration_shuttle.add_dock(surface_port)
+
+		message_admins("[key_name_admin(usr)] added a landing zone for the exploration shuttle on [planet.planet_name].")
+		to_chat(usr, "<span class='notice'>Landing zone successfully created on [planet.planet_name] and added to exploration shuttle.</span>")
+		procedural_generation_panel()
+		return
+
+	else if(href_list["procgen_toggle_visibility"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_toggle_visibility"])
+		if(!planet)
+			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
+			return
+
+		planet.hidden = !planet.hidden
+		var/new_status = planet.hidden ? "hidden from" : "visible on"
+		to_chat(usr, "<span class='notice'>[planet.planet_name] is now [new_status] the Deep Space Scanner.</span>")
 		procedural_generation_panel()
 		return
 

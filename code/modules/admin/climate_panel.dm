@@ -53,17 +53,17 @@
 				sorted_climates += C
 
 	for(var/datum/climate/C in sorted_climates)
-		if(!C.current_weather)
-			continue
 		var/datum/weather/W = C.current_weather
 		var/sector_display = C.allocation ? "([C.allocation.sector[1]], [C.allocation.sector[2]])" : "N/A"
+		var/weather_display = W ? "[W.name] <a href='?_src_=vars;Vars=\ref[W]'>\[VV\]</A>" : "<font color='red'>ERROR: NULL</font>"
+		var/timeleft_display = W ? "<a href='?src=\ref[src];climate_timeleft=\ref[W]'>[formatTimeDuration(W.timeleft)]</A>" : "<font color='red'>N/A</font>"
 		dat += {"<tr>
 			<td>Z-[C.z]</td>
 			<td>[sector_display]</td>
 			<td>[C.name] <a href='?_src_=vars;Vars=\ref[C]'>\[VV\]</A></td>
-			<td>[W.name] <a href='?_src_=vars;Vars=\ref[W]'>\[VV\]</A></td>
-			<td><a href='?src=\ref[src];climate_timeleft=\ref[W]'>[formatTimeDuration(W.timeleft)]</A></td>
-			<td><a href='?src=\ref[src];climate_weather=\ref[C]'>Change Weather</A></td>
+			<td>[weather_display]</td>
+			<td>[timeleft_display]</td>
+			<td><a href='?src=\ref[src];climate_weather=\ref[C]'>Change Weather</A> | <a href='?src=\ref[src];climate_restart=\ref[C]'>Restart</A></td>
 			</tr>"}
 
 	dat += {"

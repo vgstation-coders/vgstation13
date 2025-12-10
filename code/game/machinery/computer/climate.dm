@@ -29,11 +29,11 @@ var/list/climatecomps = list()
 	dat += "<center>"
 	dat += "<div class='modal'><div class='modal-content'><div class='line'><b>Weather Report</b></div><br>"
 	var/datum/climate/C = SSweather.get_climate(src.z)
-	if(C)
+	if(C?.current_weather)
 		var/datum/weather/W = C.current_weather
-		var/reported_temp = C.current_weather.temperature - 273.15
-		var/remaining_time = formatTimeDuration(C.current_weather.timeleft)
-		dat += "<b>Current Weather:</b> <div class='line'>[C.current_weather.name]</div>"
+		var/reported_temp = W.temperature - 273.15
+		var/remaining_time = formatTimeDuration(W.timeleft)
+		dat += "<b>Current Weather:</b> <div class='line'>[W.name]</div>"
 		dat += "<b>Temperature:</b> <div class='line'>[reported_temp] Celcius</div>"
 		dat += W.weather_details()
 		dat += "<b>Next Meteorlogical Event:</b> <div class='line'>[remaining_time]</div>"

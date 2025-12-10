@@ -163,6 +163,7 @@
 	data["can_scan"] = can_start_scan()
 	data["waiting_for_generation"] = waiting_for_generation
 	data["other_scan_in_progress"] = (SSmapping?.scanning || SSmapping?.generating) && !scanning && !waiting_for_generation
+	data["scanning_disabled"] = SSmapping.scanning_disabled
 
 	// Power and energy information
 	data["required_energy"] = required_scan_energy
@@ -187,7 +188,7 @@
 
 /// Check if the scanner is ready to start a new scan
 /obj/machinery/planet_scanner/proc/can_start_scan()
-	return anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && scans_completed < PLANET_SCANNER_MAX_SCANS && !SSmapping?.scanning && !SSmapping?.generating
+	return anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && scans_completed < PLANET_SCANNER_MAX_SCANS && !SSmapping?.scanning && !SSmapping?.generating && !SSmapping.scanning_disabled
 
 /// Get the current scan progress as a percentage (0-100), or null if not scanning
 /obj/machinery/planet_scanner/proc/get_scan_progress()
@@ -223,6 +224,9 @@
 
 	var/list/planet_data = list()
 	for(var/datum/planet_type/planet in SSmapping.planets)
+		if(planet.hidden)
+			continue
+
 		var/list/planet_info = list()
 		planet_info["name"] = planet.name
 		planet_info["desc"] = planet.desc
@@ -394,7 +398,7 @@
 /// Returns: A ruin type path, or null if no ruins are available
 /obj/machinery/planet_scanner/proc/select_random_ruin_type()
 	var/list/available_ruins = list()
-	for(var/ruin_path in subtypesof(/datum/map_element/mining_surprise))
+	for(var/ruin_path in subtypesof(/datum/map_element/ruin))
 		available_ruins += ruin_path
 
 	if(available_ruins.len)

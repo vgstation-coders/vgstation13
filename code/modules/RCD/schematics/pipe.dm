@@ -59,13 +59,11 @@
 		"green"  = PIPE_COLOR_GREEN,
 		"orange" = PIPE_COLOR_ORANGE,
 		"purple" = PIPE_COLOR_PURPLE,
-		"transparent" = "transparent",
 		"custom" = "custom"
 	)
 	var/last_colouration = 0
 	var/selected_color = "grey"
 	var/colouring_delay = 0
-	var/transparency = FALSE
 
 /datum/rcd_schematic/paint_pipes/New(var/obj/item/device/rcd/n_master)
 	. = ..()
@@ -78,8 +76,6 @@
 
 	for(var/color_name in available_colors)
 		var/color = available_colors[color_name]
-		if (color == "transparent")
-			color = "#FFFFFF"
 		if (color == "custom")
 			color = "#000000"
 		color_css += {"
@@ -105,7 +101,7 @@
 	. += "<h4>Colour Choice:</h4>"
 	for(var/color_name in available_colors)
 		var/selected = ""
-		if(color_name == selected_color || (color_name == "transparent" && transparency))
+		if(color_name == selected_color)
 			selected = " selected"
 		if (selected_color == "custom")
 			selected_color = input("Select Colour to change the pipe to", "Custom Pipe Colour", selected_color) as color
@@ -127,46 +123,44 @@
 		to_chat(user, "<span class='danger'>\The [O] cannot be painted.</span>")
 		return 1
 
-	if(transparency && !O.can_be_transparent)
-		to_chat(user, "<span class='danger'>\The [O] cannot be painted transparent.</span>")
-		return 1
-
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
-	var/painted_color = selected_color
 	if (selected_color in available_colors)
-		painted_color = available_colors[selected_color]
+		selected_color = available_colors[selected_color]
 	if(mass_colour && world.timeofday < last_colouration + colouring_delay)
 		return "We aren't ready to mass paint again; please wait [(last_colouration+colouring_delay)-world.timeofday] more seconds!"
-	O.color = painted_color
-	O.transparent = transparency
-	var/obj/machinery/atmospherics/pipe/pipe_to_mass_colour
-	if(mass_colour)
-		if(istype(O, /obj/machinery/atmospherics/unary/cap))
-			var/obj/machinery/atmospherics/unary/cap/cap = O
-			var/obj/machinery/atmospherics/pipe/maybe_pipe_to_colour = cap.node1
-			if (istype(maybe_pipe_to_colour))
-				pipe_to_mass_colour = maybe_pipe_to_colour
-		else if(istype(O, /obj/machinery/atmospherics/pipe))
-			pipe_to_mass_colour = O
-	if(pipe_to_mass_colour)
-		var/datum/pipeline/pipe_line = pipe_to_mass_colour.parent
+	if(mass_colour && istype(O, /obj/machinery/atmospherics/unary/cap))
+		var/obj/machinery/atmospherics/unary/cap/cap = O
+		var/obj/machinery/atmospherics/pipe/maybe_pipe_to_colour = cap.node1
+		if (istype(maybe_pipe_to_colour))
+			var/datum/pipeline/pipe_line = maybe_pipe_to_colour.parent
+			var/list/pipeline_members = pipe_line.members
+			if(pipeline_members.len < 500)
+				last_colouration = world.timeofday
+				colouring_delay = (pipeline_members.len)/2
+				O.color = selected_color
+				maybe_pipe_to_colour.mass_colouration(selected_color)
+			else
+				return "That pipe network is simply too big to paint!"
+	else if(mass_colour && istype(O, /obj/machinery/atmospherics/pipe))
+		var/obj/machinery/atmospherics/pipe/pipe_to_colour = O
+		var/datum/pipeline/pipe_line = pipe_to_colour.parent
 		var/list/pipeline_members = pipe_line.members
-		last_colouration = world.timeofday
-		colouring_delay = (pipeline_members.len)/2
-		pipe_to_mass_colour.mass_colouration(painted_color,transparency)
+		if(pipeline_members.len < 500)
+			last_colouration = world.timeofday
+			colouring_delay = (pipeline_members.len)/2
+			O.color = selected_color
+			pipe_to_colour.mass_colouration(selected_color)
+		else
+			return "That pipe network is simply too big to paint!"
 	else
+		O.color = selected_color
 		O.update_icon()
-	var/object = "\the [O] [selected_color][transparency ? ", transparent" : ""]."
-	user.visible_message("<span class='notice'>[user] paints [object]</span>","<span class='notice'>You paint [object]</span>")
+	user.visible_message("<span class='notice'>[user] paints \the [O] [selected_color].</span>","<span class='notice'>You paint \the [O] [selected_color].</span>")
 	// is pipe painting really worth logging? cmon now
 
 /datum/rcd_schematic/paint_pipes/Topic(var/href, var/list/href_list)
 	if(href_list["set_color"])
 		if(href_list["set_color"] in available_colors)
-			if(href_list["set_color"] == "transparent")
-				transparency = !transparency
-				master.update_options_menu()
-				return 1
 			selected_color = href_list["set_color"]
 			master.update_options_menu()
 	if(href_list["set_mass_colour"])
@@ -360,31 +354,31 @@
 	. += "</span>"
 
 	if(layer)
-
+	
 		. += {"<span id="layersholder">
 		<table class="layer">
 			<tr>
 			<td class="layergradv" id="[layer==1 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=1"> </a></td>
 			<td class="layergradv" id="[layer==2 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=2"> </a></td>
-			<td class="layergradv" id="[layer==3 ? "layer_center_selected" : "layer_center" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=3"> </a></td>
-			<td class="layergradv" id="[layer==4 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=4"> </a></td>
+			<td class="layergradv" id="[layer==3 ? "layer_center_selected" : "layer_center" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=3"> </a></td> 
+			<td class="layergradv" id="[layer==4 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=4"> </a></td> 
 			<td class="layergradv" id="[layer==5 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=5"> </a></td>
 			</tr>
 		</table>
-
+		
 		<table class="layer">
-
+		
 			<tr><td class="layergradh" id="[layer==1 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=1">  </a></td></tr>
 			<tr><td class="layergradh" id="[layer==2 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=2">  </a></td></tr>
 			<tr><td class="layergradh" id="[layer==3 ? "layer_center_selected" : "layer_center" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=3">  </a></td></tr>
 			<tr><td class="layergradh" id="[layer==4 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=4">  </a></td></tr>
 			<tr><td class="layergradh" id="[layer==5 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=5">  </a></td></tr>
-
-
+		
+	
 		</table></span>
 	"}
-
-
+	
+	
 
 	. += {"
 		<div>
@@ -418,7 +412,7 @@
 		set_layer(n_layer)
 
 		return 1
-
+		
 	if("set_freq" in href_list)
 		var/newfreq=master.frequency
 		if(href_list["set_freq"]!="-1")
@@ -431,9 +425,9 @@
 			if(newfreq < 10000)
 				master.frequency = newfreq
 			master.rebuild_ui()
-
+			
 		return 1
-
+		
 	if("set_id" in href_list)
 		var/newid=master.id
 		if(href_list["set_id"]!="-1")

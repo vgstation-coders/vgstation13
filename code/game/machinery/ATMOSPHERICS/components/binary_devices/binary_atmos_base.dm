@@ -3,8 +3,6 @@
 	initialize_directions = SOUTH|NORTH
 	use_power = MACHINE_POWER_USE_IDLE
 
-	can_be_transparent = FALSE
-
 	var/frequency = -1
 
 	var/datum/gas_mixture/air1

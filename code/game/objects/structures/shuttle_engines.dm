@@ -23,9 +23,18 @@
 	name = "engine"
 	density = 1
 	anchored = 1.0
+	layer = BELOW_OBJ_LAYER
 
 /obj/structure/shuttle/engine/heater
 	name = "heater"
+	icon_state = "heater"
+
+/obj/structure/shuttle/engine/heater/proc/activate()
+	flick("heater_warmup",src)
+	icon_state = "heater_on"
+
+/obj/structure/shuttle/engine/heater/proc/deactivate()
+	flick("heater_cooldown",src)
 	icon_state = "heater"
 
 /obj/structure/shuttle/engine/heater/cultify()

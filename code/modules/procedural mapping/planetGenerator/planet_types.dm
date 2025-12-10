@@ -33,6 +33,8 @@
 	var/process_mobs = FALSE // Whether to process mobs on this planet
 	// Faction for mobs spawned on this planet
 	var/mob_faction
+	// Whether this planet is hidden from the deep space scanner
+	var/hidden = FALSE
 
 /**
  * Builds the list of turfs affected by day/night cycle for this planet
@@ -261,7 +263,7 @@
 	name = "beach planet"
 	desc = "The platonic ideal of vacation spots. Warm, comfortable temperatures, and a breathable atmosphere."
 	mapgen = /datum/planetGenerator/beach
-	default_baseturf = /turf/unsimulated/beach/sand
+	default_baseturf = /turf/unsimulated/floor/planetary/grass
 	ruin_type = RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL|RUIN_TYPE_WET
 	climate_type = /datum/climate/tropical
 	icon_state = "beach2"
@@ -281,7 +283,7 @@
 	name = "grass planet"
 	desc = "A temperate planet with a breathable atmosphere and abundant flora and fauna."
 	mapgen = /datum/planetGenerator/grass
-	default_baseturf = /turf/unsimulated/floor/planetary/dirt
+	default_baseturf = /turf/unsimulated/floor/planetary/grass
 	ruin_type = RUIN_TYPE_GENERIC
 	climate_type = /datum/climate/temperate
 	icon_state = "earth"

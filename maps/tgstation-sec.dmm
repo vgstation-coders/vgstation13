@@ -17189,6 +17189,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -94659,7 +94660,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/research_outpost/xenobot)
+/area/research_outpost/hallway)
 "dSS" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -1254923,7 +1254924,7 @@ dWv
 dXC
 dYF
 dZF
-eaw
+eaz
 ebk
 dVo
 dJh
@@ -1256931,7 +1256932,7 @@ dWy
 dXF
 dYG
 dZJ
-eaz
+eaw
 ebn
 dVr
 dJh

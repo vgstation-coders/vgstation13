@@ -200,6 +200,11 @@ var/global/list/adminbusteleportlocs = list()
 	flags = NO_PERSISTENCE
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
+/area/shuttle/Exited(atom/movable/Obj)
+	..()
+	animate(Obj)
+	Obj.pixel_y = initial(Obj.pixel_y)
+
 /area/shuttle/arrival
 	name = "\improper Arrival Shuttle"
 
@@ -565,6 +570,9 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Trading Post"
 	icon_state = "yellow"
 
+/area/shuttle/exploration
+	name = "\improper Exploration Shuttle"
+	icon_state = "yellow"
 
 /area/airtunnel1/      // referenced in airtunnel.dm:759
 

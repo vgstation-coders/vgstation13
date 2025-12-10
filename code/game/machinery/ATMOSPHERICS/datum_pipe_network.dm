@@ -44,9 +44,11 @@
 		reconcile_air() //equalize_gases(gases)
 		radiate = null //Reset our last ticks calculation for the post-radiate() gases inside a thermal plate
 
+#ifdef ATMOS_PIPELINE_PROCESSING
 	//Give pipelines their process call for pressure checking and what not. Have to remove pressure checks for the time being as pipes dont radiate heat - Mport
 	for(var/datum/pipeline/line_member in line_members)
 		line_member.process()
+#endif
 
 /datum/pipe_network/proc/build_network(obj/machinery/atmospherics/start_normal, obj/machinery/atmospherics/reference)
 	//Purpose: Generate membership roster

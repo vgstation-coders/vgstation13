@@ -22,19 +22,18 @@
 
 	layer = PIPING_LAYER(layer, piping_layer)
 
-/obj/machinery/atmospherics/pipe/proc/mass_colouration(mass_colour,transparency)
+/obj/machinery/atmospherics/pipe/proc/mass_colouration(var/mass_colour)
 	if (findtext(mass_colour,"#"))
 		var/datum/pipeline/pipeline = parent
-		spawn()
-			for(var/obj/machinery/atmospherics/pipe in pipeline.members)
-				if(pipe.can_be_coloured)
-					pipe.color = mass_colour
-					pipe.transparent = transparency
-					pipe.update_icon()
-				CHECK_TICK
-			for(var/obj/machinery/atmospherics/pipe in pipeline.edges)
-				pipe.update_icon()
-				CHECK_TICK
+		var/list/update_later = list()
+		for(var/obj/machinery/atmospherics/pipe in pipeline.members)
+			if(pipe.can_be_coloured)
+				pipe.color = mass_colour
+		for(var/obj/machinery/atmospherics/pipe in pipeline.edges)
+			pipe.update_icon()
+		update_later -= pipeline.edges
+		for(var/obj/machinery/atmospherics/pipe in update_later)
+			pipe.update_icon(1)
 
 /obj/machinery/atmospherics/pipe/singularity_pull(/obj/machinery/singularity/S, size)
 	return
@@ -53,16 +52,6 @@
 		overlays.Cut()
 		overlays += centre_overlay
 	..()
-	update_gas_underlay()
-
-/obj/machinery/atmospherics/pipe/proc/update_gas_underlay()
-	if(transparent)
-		var/list/gases_found = get_visible_gases()
-		if(gases_found.len)
-			for(var/direction in cardinal)
-				if(initialize_directions & direction)
-					for(var/gasfound in gases_found)
-						underlays += image('icons/obj/atmospherics/gas_overlays.dmi',src,gasfound,layer,direction)
 
 /obj/machinery/atmospherics/pipe/t_scanner_expose()
 	if (exposed())
@@ -117,24 +106,6 @@
 		air_temporary = null
 
 	..()
-
-/obj/machinery/atmospherics/pipe/examine(mob/user)
-	. = ..()
-	if(transparent)
-		var/list/gases_found = get_visible_gases()
-		if(gases_found.len)
-			to_chat(user,"<span class='notice'>This [src.name] is filled with [english_list(gases_found)]!")
-
-/obj/machinery/atmospherics/proc/get_visible_gases()
-	. = list()
-	var/datum/gas_mixture/gases = return_air()
-	if(gases)
-		if(gases.molar_density(GAS_SLEEPING) > 1 / CELL_VOLUME)
-			. += list("nitrous oxide")
-		if(gases.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
-			. += list("plasma")
-		if(gases.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME)
-			. += list("cryotheum")
 
 /obj/machinery/atmospherics/pipe/simple
 	icon = 'icons/obj/pipes.dmi'
@@ -352,8 +323,7 @@
 	else
 		underlays.Cut()
 		icon_state = "intact"
-		alpha = transparent || invisibility ? 128 : 255
-		update_gas_underlay()
+		alpha = invisibility ? 128 : 255
 		if(!adjacent_procd)
 			for(var/obj/machinery/atmospherics/node in node_list)
 				if(node.update_icon_ready && !(istype(node,/obj/machinery/atmospherics/pipe/simple)))

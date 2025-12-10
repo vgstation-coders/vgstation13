@@ -56656,8 +56656,17 @@
 	},
 /area/mine/explored)
 "cHi" = (
-/turf/space,
-/area/mine/explored)
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/crew_quarters/kitchen)
 "cHj" = (
 /turf/simulated/floor/engine{
 	name = "n2 floor";
@@ -208540,7 +208549,7 @@ rsr
 mMu
 fas
 tLN
-yjS
+cHi
 iDk
 iDk
 iDk
@@ -1188856,8 +1188865,8 @@ cDs
 cDs
 cDs
 cDs
-cDr
-cDr
+aaa
+aaa
 cDs
 cDs
 cDs
@@ -1189357,9 +1189366,9 @@ cDs
 cDs
 cDs
 cDs
-cDr
-cDr
-cDr
+aaa
+aaa
+aaa
 cDs
 cDs
 cDs
@@ -1189861,7 +1189870,7 @@ aaa
 aaa
 aaa
 aaa
-cDr
+aaa
 cDs
 cDs
 cDs
@@ -1212085,7 +1212094,7 @@ cDx
 cDx
 cDx
 cDv
-cDo
+cDv
 cDv
 cDx
 cDx
@@ -1212587,7 +1212596,7 @@ cDx
 cDx
 cDv
 cDv
-cDo
+cDv
 cDA
 cDx
 cDx
@@ -1213089,7 +1213098,7 @@ cDx
 asx
 cDv
 cDv
-cDo
+cDv
 cDA
 cEp
 cDx
@@ -1213591,7 +1213600,7 @@ byo
 asx
 cDv
 cDv
-cDo
+cDv
 cDA
 cDx
 cDx
@@ -1214093,7 +1214102,7 @@ byo
 asx
 cDv
 cDv
-cDo
+cDv
 cDv
 cDx
 cDx
@@ -1218103,7 +1218112,7 @@ cDs
 aaa
 aaa
 aaa
-cHi
+aaa
 asx
 byo
 asx
