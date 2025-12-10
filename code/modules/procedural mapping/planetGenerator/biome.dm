@@ -148,11 +148,20 @@
 
 	var/atom/feature_type = pick(feature_spawn_list_expanded)
 
+	// Use spatial bucketing during planet generation for O(1) lookups instead of O(n)
+	if(SSmapping.generating)
+		if(!SSmapping.can_spawn_feature_at(floor_turf.x, floor_turf.y, feature_type))
+			return null
+		var/atom/spawned = new feature_type(floor_turf)
+		SSmapping.add_feature_to_bucket(spawned)
+		floor_turf.turf_flags |= NO_LAVA_GEN
+		return spawned
+
+	// Fallback to list-based checking for non-planet-generation uses
 	if(!can_spawn_feature(floor_turf, feature_type, feature_list))
 		return null
 
 	var/atom/spawned = new feature_type(floor_turf)
-	// Insert at the head of the list, so the most recent features get checked first
 	feature_list.Insert(1, spawned)
 	floor_turf.turf_flags |= NO_LAVA_GEN
 	return spawned
@@ -212,6 +221,19 @@
 
 	var/atom/picked_mob = pick(mob_spawn_list_expanded)
 
+	// Use spatial bucketing during planet generation for O(1) lookups instead of O(n)
+	if(SSmapping.generating)
+		if(!SSmapping.can_spawn_mob_at(floor_turf.x, floor_turf.y, picked_mob))
+			return null
+		var/atom/spawned = new picked_mob(floor_turf)
+		if(planet_faction && ismob(spawned))
+			var/mob/M = spawned
+			M.faction = planet_faction
+		SSmapping.add_mob_to_bucket(spawned)
+		floor_turf.turf_flags |= NO_LAVA_GEN
+		return spawned
+
+	// Fallback to list-based checking for non-planet-generation uses
 	if(!can_spawn_mob(floor_turf, picked_mob, mob_list))
 		return null
 
@@ -222,7 +244,6 @@
 		var/mob/M = spawned
 		M.faction = planet_faction
 
-	// Insert at the head of the list, so the most recent mobs get checked first
 	mob_list.Insert(1, spawned)
 	floor_turf.turf_flags |= NO_LAVA_GEN
 	return spawned
@@ -267,8 +288,7 @@
  * * planet_faction - Optional faction to assign to spawned mobs
  */
 /datum/biome/proc/populate_turf(turf/gen_turf, list/feature_list, list/mob_list, var/datum/loot_table/loot_to_spawn, planet_faction = null)
-	gen_turf.turf_flags &= ~DEFER_EDGING
-	gen_turf.update_edges()
+	// Edge updates are now batched in STAGE_FINALIZE for performance
 	if(!can_populate_turf(gen_turf))
 		return
 
