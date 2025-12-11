@@ -786,7 +786,7 @@
 	roll_min = rand(1,3)
 	roll_max = rand(roll_min,10)
 	table = loot_type
-	if(container_types && container_types.len)
+	if(container_types?.len)
 		containers = container_types
 	rolls = rand(roll_min, roll_max)
 	table = new table()
