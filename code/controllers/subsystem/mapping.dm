@@ -635,6 +635,7 @@ var/datum/subsystem/mapping/SSmapping
 
 	return pick(loot_table_types)
 
+// Places a loot container in the story vault adjacent to a wall, not adjacent to a doorway, and not on top of an existing structure.
 /datum/subsystem/mapping/proc/spawn_story_loot(list/spawned_objects, datum/map_element/ruin/story/story_ruin, loot_type)
 	if(!spawned_objects || !story_ruin || !loot_type)
 		return
