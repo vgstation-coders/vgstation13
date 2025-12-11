@@ -1,9 +1,0 @@
-author: CrazyAmphibian
-delete-after: true
-changes:
-- rscadd: 'Jungle: added crocodiles'
-- bugfix: 'Jungle: fixed a space tile, distro issues, and other mapping issues'
-- tweak: 'Jungle: improved trader outpost to be more intuitive, due to the differences
-    of junglestation'
-- tweak: 'Jungle: replaced some cows with chickens'
-- tweak: 'Jungle: slightly tweaked animal AI to be a bit more interesting'
