@@ -35,7 +35,7 @@
 /obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang
 	network = list(CAMERANET_SS13, CAMERANET_OBS)
 
-/obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang/tgui_interact(mob/user, datum/tgui/ui)
+/obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang/get_available_cameras()
 	for(var/mob/living/L in player_list) //sets it here
 		if(!L.obs_camera)
 			L.obs_camera = new(L)
