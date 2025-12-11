@@ -193,22 +193,12 @@
 		var/mob/living/carbon/human/L = AM
 		L.ignite()
 
-/turf/unsimulated/floor/planetary/lava/attackby(obj/item/attacking_item, mob/user, params)
-	..()
-	if(istype(attacking_item, /obj/item/stack/rods))
-		var/obj/item/stack/rods/R = attacking_item
-		var/obj/structure/lattice/H = locate(/obj/structure/lattice, src)
-		if(H)
-			to_chat(user, span_warning("There is already a lattice here!"))
-			return
-		if(R.use(1))
-			to_chat(user, span_notice("You construct a lattice."))
-			playsound(src, 'sound/weapons/genhit.ogg', 50, TRUE)
-			new /obj/structure/lattice(locate(x, y, z))
-		else
-			to_chat(user, span_warning("You need one rod to build a heatproof lattice."))
-		return
-	return FALSE
+/turf/unsimulated/floor/planetary/lava/canBuildCatwalk()
+	if(!planet)
+		return BUILD_FAILURE
+	else if(!(locate(/obj/structure/lattice) in contents))
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
 
 /obj/effect/particle_emitter/lava
 	particles = new/particles/candle

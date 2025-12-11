@@ -6,6 +6,7 @@
 	var/datum/paint_overlay/paint_overlay = null
 	var/list/stacked_paint = list()
 	var/active
+	var/lastdragturftype=null
 
 /obj/item/stack/tile/Destroy()
 	..()
@@ -88,17 +89,21 @@
 		return
 	else //End click drag construction, create grille
 		QDEL_NULL(active)
+		lastdragturftype=null
 
 /obj/item/stack/tile/can_drag_use(mob/user, turf/T)
 	if(user.Adjacent(T)) //can we place here
 		var/canbuild = T.canBuildPlating()
 		if(canbuild == BUILD_SUCCESS || canbuild == BUILD_IGNORE || T.canBuildFloortile(src.type))
-			if(use(1)) //place and use rod
-				return 1
-			else
-				QDEL_NULL(active) //otherwise remove the draggable screen
+			if(lastdragturftype ? (T.type==lastdragturftype || (T.type in typesof(lastdragturftype)) || (lastdragturftype in typesof(T.type))) : TRUE)
+				if(use(1)) //place and use rod
+					return 1
+				else
+					QDEL_NULL(active) //otherwise remove the draggable screen
+					lastdragturftype=null
 
 /obj/item/stack/tile/drag_use(mob/user, turf/T)
+	lastdragturftype=T.type
 	if(T.canBuildFloortile(src.type) && istype(T,/turf/simulated/floor))
 		var/turf/simulated/floor/F = T
 		F.make_tiled_floor(src)
@@ -114,6 +119,7 @@
 
 /obj/item/stack/tile/end_drag_use()
 	QDEL_NULL(active)
+	lastdragturftype=null
 
 /obj/item/stack/tile/metal
 	name = "floor tile"

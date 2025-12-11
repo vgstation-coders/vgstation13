@@ -66,6 +66,7 @@
 	base_damage = 35
 	damage_variance = 5
 	behavior_flags = ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_TERRITORIAL | ANIMAL_BEHAVIOR_RETALIATE | ANIMAL_BEHAVIOR_PACK_DYNAMICS | ANIMAL_BEHAVIOR_DESTRUCTIVE | ANIMAL_BEHAVIOR_AVOID_CAPTURE
+	animal_flags = ANIMAL_FLAG_IMMORTAL
 	movespeed=4
 	sea_bear=FALSE
 
@@ -136,6 +137,7 @@
 	name="\proper Chef Bear"
 	desc="Not to be confused with Chief Bear, leader of bear tribe. This one just likes to cook."
 	behavior_flags = ANIMAL_BEHAVIOR_TERRITORIAL | ANIMAL_BEHAVIOR_RETALIATE | ANIMAL_BEHAVIOR_DESTRUCTIVE | ANIMAL_BEHAVIOR_AVOID_CAPTURE
+	animal_flags = ANIMAL_FLAG_IMMORTAL
 	movespeed=4
 	health=100
 	mob_max_age=9999999

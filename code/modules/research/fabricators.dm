@@ -499,11 +499,11 @@
 	stopped=1
 
 /obj/machinery/r_n_d/fabricator/proc/get_resource_cost_w_coeff(var/datum/design/part as obj,var/resource as text, var/roundto=1)
-	return max(1,round(part.materials[resource]*resource_coeff, roundto))
+	return max(0,round(part.materials[resource]*resource_coeff, roundto))
 
 // When you just want to convert a value directly into a resource cost without relying on the design
 /obj/machinery/r_n_d/fabricator/proc/get_resource_cost_w_coeff_no_design(var/value, var/resource, var/roundto = 1)
-	return max(1, round(value*resource_coeff, roundto))
+	return max(0, round(value*resource_coeff, roundto))
 
 //produces the adjusted time taken to build a component
 //different fabricators have different modifiers
