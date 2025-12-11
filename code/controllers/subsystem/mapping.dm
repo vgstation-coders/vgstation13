@@ -80,11 +80,11 @@ var/datum/subsystem/mapping/SSmapping
 	/// Spatial buckets for mobs - key is "cellX_cellY", value is list of mobs in that cell
 	var/list/mob_buckets = list()
 	/// Base turfs processed per tick (adjusted dynamically)
-	var/turfs_per_tick = 200
+	var/turfs_per_tick = 300
 	/// Maximum turfs to process per tick
-	var/max_turfs_per_tick = 1000
+	var/max_turfs_per_tick = 2000
 	/// Minimum turfs to process per tick
-	var/min_turfs_per_tick = 50
+	var/min_turfs_per_tick = 100
 	/// Is scanning disabled globally
 	var/scanning_disabled = FALSE
 	/// World time when scanning can be toggled again
@@ -256,20 +256,21 @@ var/datum/subsystem/mapping/SSmapping
 			while(queue_index <= finalize_queue.len && turfs_processed < target_turfs)
 				var/turf/T = finalize_queue[queue_index]
 				if(T)
-					// Batched edge updates - much faster than per-turf during population
+					// Batched edge updates - only for turfs that have edge rendering enabled
 					T.turf_flags &= ~DEFER_EDGING
-					T.update_edges()
+					if(T.edge_flags & EDGE_CARDINAL)
+						T.update_edges()
 
 					// Fix any remaining space turfs
 					if(istype(T, /turf/space) && current_planet.default_baseturf)
 						T.ChangeTurf(current_planet.default_baseturf)
 
-					// Combined weather + daynight registration (only check even coords for daynight)
+					// Weather + daynight registration - skip cave areas entirely (they never need weather/daynight)
 					var/area/A = get_area(T)
-					if(A)
+					if(A && !istype(A, /area/planet/cave))
 						var/is_open_surface = isopensurface(A)
 
-						// Register weather turfs
+						// Register weather turfs (only open surface areas)
 						if(is_open_surface && current_planet.climate)
 							current_planet.climate.register_weather_turf(T)
 
@@ -277,14 +278,9 @@ var/datum/subsystem/mapping/SSmapping
 						if(IsEven(T.x) && IsEven(T.y))
 							if(is_open_surface)
 								current_planet.daynight_turfs += T
-							else
-								// Check cardinal neighbors for cave entrances
-								for(var/cdir in cardinal)
-									var/turf/T1 = get_step(T, cdir)
-									var/area/A1 = get_area(T1)
-									if(istype(A1, /area/surface))
-										current_planet.daynight_turfs += T
-										break
+							else if(istype(A, /area/surface))
+								// Non-open surface areas (like covered areas) still get daynight
+								current_planet.daynight_turfs += T
 
 				queue_index++
 				turfs_processed++
@@ -348,18 +344,18 @@ var/datum/subsystem/mapping/SSmapping
 /datum/subsystem/mapping/proc/throttle(tick_start, turfs_processed)
 	var/tick_used = world.tick_usage - tick_start
 
-	// If we used less than 30% of tick, increase rate significantly
-	if(tick_used < 30 && turfs_per_tick < max_turfs_per_tick)
+	// Aggressive scaling - ramp up quickly when we have headroom
+	if(tick_used < 20 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 200, max_turfs_per_tick)
+	else if(tick_used < 40 && turfs_per_tick < max_turfs_per_tick)
 		turfs_per_tick = min(turfs_per_tick + 100, max_turfs_per_tick)
-	// If we used less than 50% of tick, increase rate moderately
-	else if(tick_used < 50 && turfs_per_tick < max_turfs_per_tick)
+	else if(tick_used < 60 && turfs_per_tick < max_turfs_per_tick)
 		turfs_per_tick = min(turfs_per_tick + 50, max_turfs_per_tick)
-	// If we used more than 80% of tick, decrease rate
-	else if(tick_used > 80 && turfs_per_tick > min_turfs_per_tick)
-		turfs_per_tick = max(turfs_per_tick - 100, min_turfs_per_tick)
-	// If we used more than 70% of tick, decrease rate moderately
-	else if(tick_used > 70 && turfs_per_tick > min_turfs_per_tick)
-		turfs_per_tick = max(turfs_per_tick - 50, min_turfs_per_tick)
+	// Scale back when approaching limits
+	else if(tick_used > 85 && turfs_per_tick > min_turfs_per_tick)
+		turfs_per_tick = max(turfs_per_tick - 150, min_turfs_per_tick)
+	else if(tick_used > 75 && turfs_per_tick > min_turfs_per_tick)
+		turfs_per_tick = max(turfs_per_tick - 75, min_turfs_per_tick)
 
 /**
  * Gets the spatial bucket key for given coordinates
@@ -909,6 +905,5 @@ var/datum/subsystem/mapping/SSmapping
 #undef STAGE_RUIN
 #undef STAGE_POPULATION
 #undef STAGE_WEATHER
-#undef STAGE_EDGES
 #undef STAGE_FINALIZE
 #undef SPATIAL_BUCKET_SIZE
