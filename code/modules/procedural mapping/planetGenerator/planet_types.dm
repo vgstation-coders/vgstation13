@@ -35,34 +35,6 @@
 	// Whether this planet is hidden from the deep space scanner
 	var/hidden = FALSE
 
-/**
- * Builds the list of turfs affected by day/night cycle for this planet
- *
- * Scans through all turfs in the allocation and identifies those in open surface areas
- * that should receive day/night lighting changes.
- */
-/datum/planet_type/proc/build_daynight_turflist()
-	daynight_turfs = list()
-	if(!allocation)
-		return
-
-	var/datum/allocation/A = allocation
-	if(!A.turfs || !A.turfs.len)
-		return
-
-	for(var/turf/T in A.turfs)
-		if(IsEven(T.x) && IsEven(T.y))
-			var/area/area_check = get_area(T)
-			if(isopensurface(area_check))
-				daynight_turfs += T
-			else
-				for(var/cdir in cardinal)
-					var/turf/T1 = get_step(T, cdir)
-					var/area/A1 = get_area(T1)
-					if(istype(A1, /area/surface))
-						daynight_turfs += T
-						break
-
 /datum/planet_type/New()
 	..()
 	planet_name = generate_planet_name()

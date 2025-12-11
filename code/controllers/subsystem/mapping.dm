@@ -18,7 +18,7 @@
 #define STAGE_WEATHER 4
 #define STAGE_FINALIZE 5
 
-/// Cell size for spatial bucketing - slightly larger than max spawn distance for efficient lookups
+/// Cell size for spatial bucketing of mobs
 #define SPATIAL_BUCKET_SIZE 15
 
 var/datum/subsystem/mapping/SSmapping
@@ -53,10 +53,15 @@ var/datum/subsystem/mapping/SSmapping
 	var/datum/planet_type/current_planet
 	/// The allocation for the current planet
 	var/datum/allocation/current_allocation
-	/// Start time for generation tracking
-	var/generation_start_time = 0
+
+	/// Is scanning disabled globally
+	var/scanning_disabled = FALSE
+	/// World time when scanning can be toggled again
+	var/scanning_toggle_cooldown = 0
 
 	// Queue-based processing variables
+	/// Start time for generation tracking
+	var/generation_start_time = 0
 	/// Current processing stage: STAGE_TERRAIN, STAGE_POPULATION, STAGE_WEATHER, or STAGE_FINALIZE
 	var/current_stage = null
 	/// Queue of turfs for terrain generation
@@ -73,22 +78,14 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/created_features = list()
 	/// Mobs created during population
 	var/list/created_mobs = list()
-	/// Queue of turfs for edge updates and finalization
-	var/list/finalize_queue = list()
-	/// Spatial buckets for features - key is "cellX_cellY", value is list of features in that cell
-	var/list/feature_buckets = list()
-	/// Spatial buckets for mobs - key is "cellX_cellY", value is list of mobs in that cell
-	var/list/mob_buckets = list()
-	/// Base turfs processed per tick (adjusted dynamically)
-	var/turfs_per_tick = 300
-	/// Maximum turfs to process per tick
-	var/max_turfs_per_tick = 2000
-	/// Minimum turfs to process per tick
-	var/min_turfs_per_tick = 100
-	/// Is scanning disabled globally
-	var/scanning_disabled = FALSE
-	/// World time when scanning can be toggled again
-	var/scanning_toggle_cooldown = 0
+
+	// Fast-processing lists
+	var/list/finalize_queue = list() // Queue of turfs for edge updates and finalization
+	var/list/feature_buckets = list() // Spatial buckets for features - key is "cellX_cellY", value is list of features in that cell
+	var/list/mob_buckets = list() // Spatial buckets for mobs - key is "cellX_cellY", value is list of mobs in that cell
+	var/turfs_per_tick = 300 // Base turfs processed per tick (adjusted dynamically)
+	var/max_turfs_per_tick = 2000 // Maximum turfs to process per tick
+	var/min_turfs_per_tick = 100 // Minimum turfs to process per tick
 
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)
@@ -238,48 +235,38 @@ var/datum/subsystem/mapping/SSmapping
 				return
 
 		if(STAGE_WEATHER)
-			// Initialize climate without registering turfs (done in STAGE_FINALIZE)
 			if(current_planet.climate_type)
 				current_planet.climate = SSweather.set_climate(current_planet.climate_type, world.maxz, current_allocation, random_start = TRUE)
 
-			// Prepare finalize queue
 			finalize_queue = current_allocation.turfs.Copy()
 			current_stage = STAGE_FINALIZE
 			queue_index = 1
 
 		if(STAGE_FINALIZE)
-			// Combined finalization pass: edges + space turf fix + weather registration + daynight turfs
 			if(current_mapgen)
 				current_mapgen.post_process(current_allocation)
-				current_mapgen = null // Only run once
+				current_mapgen = null
 
 			while(queue_index <= finalize_queue.len && turfs_processed < target_turfs)
 				var/turf/T = finalize_queue[queue_index]
 				if(T)
-					// Batched edge updates - only for turfs that have edge rendering enabled
 					T.turf_flags &= ~DEFER_EDGING
-					if(T.edge_flags & EDGE_CARDINAL)
+					if(T.edge_flags & EDGE_CARDINAL) // Edge turfs that need it
 						T.update_edges()
 
-					// Fix any remaining space turfs
+					// Close up any remaining space turfs
 					if(istype(T, /turf/space) && current_planet.default_baseturf)
 						T.ChangeTurf(current_planet.default_baseturf)
 
-					// Weather + daynight registration - skip cave areas entirely (they never need weather/daynight)
+					// Weather + daynight registration
 					var/area/A = get_area(T)
-					if(A && !istype(A, /area/planet/cave))
-						var/is_open_surface = isopensurface(A)
-
-						// Register weather turfs (only open surface areas)
-						if(is_open_surface && current_planet.climate)
+					if(!istype(A, /area/planet/cave))
+						if(isopensurface(A) && current_planet.climate)
 							current_planet.climate.register_weather_turf(T)
 
-						// Build daynight turf list (only even coordinates for performance)
+						// Build daynight turf list
 						if(IsEven(T.x) && IsEven(T.y))
-							if(is_open_surface)
-								current_planet.daynight_turfs += T
-							else if(istype(A, /area/surface))
-								// Non-open surface areas (like covered areas) still get daynight
+							if(isopensurface(A))
 								current_planet.daynight_turfs += T
 
 				queue_index++
@@ -289,8 +276,7 @@ var/datum/subsystem/mapping/SSmapping
 					throttle(tick_start, turfs_processed)
 					return
 
-			if(queue_index > finalize_queue.len)
-				// Finalization complete - do one-time cleanup
+			if(queue_index > finalize_queue.len) // Cleanup
 				if(current_planet.climate)
 					SSweather.fire()
 
@@ -332,19 +318,13 @@ var/datum/subsystem/mapping/SSmapping
 	if(turfs_processed > 0)
 		throttle(tick_start, turfs_processed)
 
-/**
- * Adjusts the turfs_per_tick based on current tick usage
- *
- * Increases rate if we're using less than 50% of tick, decreases if using more than 80%
- *
- * Arguments:
- * * tick_start - Tick usage at the start of processing
- * * turfs_processed - Number of turfs processed this tick
- */
+
+// Adjusts the turfs_per_tick based on current tick usage
+// Increases rate if we're using less than 50% of tick, decreases if using more than 80%
 /datum/subsystem/mapping/proc/throttle(tick_start, turfs_processed)
 	var/tick_used = world.tick_usage - tick_start
 
-	// Aggressive scaling - ramp up quickly when we have headroom
+	// Scale up when performing well
 	if(tick_used < 20 && turfs_per_tick < max_turfs_per_tick)
 		turfs_per_tick = min(turfs_per_tick + 200, max_turfs_per_tick)
 	else if(tick_used < 40 && turfs_per_tick < max_turfs_per_tick)
@@ -357,25 +337,9 @@ var/datum/subsystem/mapping/SSmapping
 	else if(tick_used > 75 && turfs_per_tick > min_turfs_per_tick)
 		turfs_per_tick = max(turfs_per_tick - 75, min_turfs_per_tick)
 
-/**
- * Gets the spatial bucket key for given coordinates
- *
- * Arguments:
- * * x - X coordinate
- * * y - Y coordinate
- *
- * Returns:
- * * String key in format "cellX_cellY"
- */
 /datum/subsystem/mapping/proc/get_bucket_key(x, y)
 	return "[round(x / SPATIAL_BUCKET_SIZE)]_[round(y / SPATIAL_BUCKET_SIZE)]"
 
-/**
- * Adds a feature to its spatial bucket
- *
- * Arguments:
- * * feature - The feature atom to add
- */
 /datum/subsystem/mapping/proc/add_feature_to_bucket(atom/feature)
 	if(!feature)
 		return
@@ -385,12 +349,6 @@ var/datum/subsystem/mapping/SSmapping
 	feature_buckets[key] += feature
 	created_features += feature
 
-/**
- * Adds a mob to its spatial bucket
- *
- * Arguments:
- * * spawned_mob - The mob/spawner to add
- */
 /datum/subsystem/mapping/proc/add_mob_to_bucket(atom/spawned_mob)
 	if(!spawned_mob)
 		return
@@ -400,25 +358,10 @@ var/datum/subsystem/mapping/SSmapping
 	mob_buckets[key] += spawned_mob
 	created_mobs += spawned_mob
 
-/**
- * Checks if a feature can spawn at the given location using spatial bucketing
- *
- * Only checks nearby buckets instead of the entire feature list - O(1) average instead of O(n)
- *
- * Arguments:
- * * x - X coordinate to check
- * * y - Y coordinate to check
- * * feature_type - The type of feature being spawned
- * * distance - Minimum distance from same-type features (default FEATURE_SPAWN_DISTANCE = 7)
- *
- * Returns:
- * * TRUE if feature can spawn, FALSE if too close to another feature of same type
- */
 /datum/subsystem/mapping/proc/can_spawn_feature_at(x, y, feature_type, distance = 7)
 	var/cell_x = round(x / SPATIAL_BUCKET_SIZE)
 	var/cell_y = round(y / SPATIAL_BUCKET_SIZE)
 
-	// Check current cell and adjacent cells (3x3 grid)
 	for(var/dx = -1 to 1)
 		for(var/dy = -1 to 1)
 			var/key = "[cell_x + dx]_[cell_y + dy]"
@@ -427,26 +370,11 @@ var/datum/subsystem/mapping/SSmapping
 				continue
 			for(var/atom/other_feature in bucket)
 				if(istype(other_feature, feature_type))
-					var/dist = max(abs(x - other_feature.x), abs(y - other_feature.y)) // Chebyshev distance
+					var/dist = max(abs(x - other_feature.x), abs(y - other_feature.y)) // chessboard distance
 					if(dist <= distance)
 						return FALSE
 	return TRUE
 
-/**
- * Checks if a mob can spawn at the given location using spatial bucketing
- *
- * Only checks nearby buckets instead of the entire mob list - O(1) average instead of O(n)
- *
- * Arguments:
- * * x - X coordinate to check
- * * y - Y coordinate to check
- * * mob_type - The type of mob being spawned
- * * hostile_distance - Distance for hostile mobs (default 12)
- * * spawner_distance - Distance for spawners (default 2)
- *
- * Returns:
- * * TRUE if mob can spawn, FALSE if too close to another mob/spawner
- */
 /datum/subsystem/mapping/proc/can_spawn_mob_at(x, y, mob_type, hostile_distance = 12, spawner_distance = 2)
 	var/cell_x = round(x / SPATIAL_BUCKET_SIZE)
 	var/cell_y = round(y / SPATIAL_BUCKET_SIZE)
@@ -454,7 +382,6 @@ var/datum/subsystem/mapping/SSmapping
 	var/is_hostile = ispath(mob_type, /mob/living/simple_animal/hostile)
 	var/is_spawner = ispath(mob_type, /obj/abstract/map/spawner/mobs)
 
-	// Check current cell and adjacent cells (3x3 grid)
 	for(var/dx = -1 to 1)
 		for(var/dy = -1 to 1)
 			var/key = "[cell_x + dx]_[cell_y + dy]"
@@ -466,16 +393,13 @@ var/datum/subsystem/mapping/SSmapping
 					continue
 
 				var/atom/A = thing
-				var/dist = max(abs(x - A.x), abs(y - A.y)) // Chebyshev distance
+				var/dist = max(abs(x - A.x), abs(y - A.y)) // chessboard distance
 
-				// Hostile mobs keep away from other hostiles
 				if(dist <= hostile_distance && (ishostile(thing) || is_hostile))
 					return FALSE
 
-				// Spawners keep away from everything
 				if(dist <= spawner_distance && (istype(thing, /obj/abstract/map/spawner/mobs) || is_spawner))
 					return FALSE
-
 	return TRUE
 
 /proc/generate_planet(mob/user)
