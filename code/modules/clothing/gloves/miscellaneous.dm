@@ -170,7 +170,7 @@
 	icon_state = "knuckles"
 	item_state = "knuckles"
 	w_type = RECYK_METAL
-	melt_temperature = MELTPOINT_STEEL
+	flammable = false
 
 	attack_verb = list("punches")
 	bonus_knockout = 17 //Slight knockout chance increase.
