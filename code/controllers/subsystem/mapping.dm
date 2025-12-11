@@ -587,7 +587,9 @@ var/datum/subsystem/mapping/SSmapping
 		var/list/allowed_disease_types = list(
 			/datum/disease2/disease/virus,
 			/datum/disease2/disease/bacteria,
-			/datum/disease2/disease/prion
+			/datum/disease2/disease/prion,
+			/datum/disease2/disease/fungus,
+			/datum/disease2/disease/parasite
 		)
 		disease_type = pick(allowed_disease_types)
 		var/datum/disease2/disease/temp_disease = new disease_type()
