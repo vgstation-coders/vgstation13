@@ -6,32 +6,32 @@
 /turf/unsimulated/floor{
 	icon_state = "arcade"
 	},
-/area/vault)
+/area/obslounge)
 "ce" = (
 /obj/structure/table/woodentable,
 /obj/machinery/chem_dispenser/booze_dispenser/mapping,
 /turf/unsimulated/floor{
 	icon_state = "carpet"
 	},
-/area/vault)
+/area/obslounge)
 "cn" = (
 /obj/effect/landmark/obs_spawn,
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "eJ" = (
 /turf/unsimulated/floor{
 	icon_state = "engine";
 	name = "reinforced floor"
 	},
-/area/vault)
+/area/obslounge)
 "eM" = (
 /obj/machinery/vending/cola,
 /turf/unsimulated/floor{
 	icon_state = "wood"
 	},
-/area/vault)
+/area/obslounge)
 "hj" = (
 /obj/structure/bed/chair/comfy/couch/right/teal{
 	dir = 4
@@ -42,30 +42,30 @@
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "hJ" = (
 /obj/structure/bed/chair/comfy/red,
 /turf/unsimulated/floor{
 	icon_state = "arcade"
 	},
-/area/vault)
+/area/obslounge)
 "hW" = (
 /obj/machinery/vending/snack,
 /turf/unsimulated/floor{
 	icon_state = "wood"
 	},
-/area/vault)
+/area/obslounge)
 "iy" = (
 /turf/unsimulated/wall{
 	icon_state = "wood0"
 	},
-/area/vault)
+/area/obslounge)
 "kd" = (
 /turf/unsimulated/wall/fakeglass{
 	dir = 8;
 	icon_state = "fakewindows2"
 	},
-/area/vault)
+/area/obslounge)
 "mh" = (
 /obj/structure/table/woodentable,
 /obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang,
@@ -73,7 +73,7 @@
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "mm" = (
 /obj/structure/bed/chair/comfy/couch/right/teal{
 	dir = 8
@@ -84,7 +84,7 @@
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "nw" = (
 /obj/structure/railing/wood{
 	dir = 4
@@ -96,77 +96,77 @@
 	icon_state = "engine";
 	name = "reinforced floor"
 	},
-/area/vault)
+/area/obslounge)
 "or" = (
 /obj/structure/table/woodentable,
 /obj/machinery/chem_dispenser/brewer/mapping,
 /turf/unsimulated/floor{
 	icon_state = "carpet"
 	},
-/area/vault)
+/area/obslounge)
 "oy" = (
 /turf/unsimulated/floor{
 	icon_state = "arcade"
 	},
-/area/vault)
+/area/obslounge)
 "oC" = (
 /turf/unsimulated/wall/fakeglass{
 	dir = 1;
 	icon_state = "fakewindows2"
 	},
-/area/vault)
+/area/obslounge)
 "qp" = (
 /obj/structure/table/woodentable,
 /obj/machinery/chem_dispenser/soda_dispenser/mapping,
 /turf/unsimulated/floor{
 	icon_state = "carpet"
 	},
-/area/vault)
+/area/obslounge)
 "sZ" = (
 /obj/machinery/computer/arcade,
 /turf/unsimulated/floor{
 	icon_state = "arcade"
 	},
-/area/vault)
+/area/obslounge)
 "tf" = (
 /obj/machinery/door/mineral/wood,
 /turf/unsimulated/floor{
 	icon_state = "wood"
 	},
-/area/vault)
+/area/obslounge)
 "uU" = (
 /obj/machinery/door/mineral/wood,
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "vz" = (
 /turf/unsimulated/floor{
 	icon_state = "wood"
 	},
-/area/vault)
+/area/obslounge)
 "vS" = (
 /turf/unsimulated/floor{
 	icon_state = "carpetsymbol"
 	},
-/area/vault)
+/area/obslounge)
 "wY" = (
 /obj/machinery/vending/coffee,
 /turf/unsimulated/floor{
 	icon_state = "wood"
 	},
-/area/vault)
+/area/obslounge)
 "xK" = (
 /turf/unsimulated/floor{
 	icon_state = "carpet"
 	},
-/area/vault)
+/area/obslounge)
 "xM" = (
 /obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang,
 /turf/unsimulated/floor{
 	icon_state = "carpetsymbol"
 	},
-/area/vault)
+/area/obslounge)
 "yL" = (
 /obj/structure/table/woodentable,
 /obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang,
@@ -176,17 +176,17 @@
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "zd" = (
 /turf/unsimulated/wall/fakeglass{
 	dir = 8
 	},
-/area/vault)
+/area/obslounge)
 "zx" = (
 /turf/unsimulated/wall/fakeglass{
 	dir = 4
 	},
-/area/vault)
+/area/obslounge)
 "zZ" = (
 /obj/item/weapon/reagent_containers/food/drinks/shaker,
 /obj/structure/table/woodentable,
@@ -197,13 +197,13 @@
 /turf/unsimulated/floor{
 	icon_state = "carpet"
 	},
-/area/vault)
+/area/obslounge)
 "BZ" = (
 /turf/unsimulated/wall{
 	icon_state = "white";
 	icon = 'icons/effects/32x32.dmi'
 	},
-/area/vault)
+/area/obslounge)
 "Cc" = (
 /obj/structure/bed/chair/comfy/red{
 	dir = 1
@@ -211,30 +211,30 @@
 /turf/unsimulated/floor{
 	icon_state = "wood"
 	},
-/area/vault)
+/area/obslounge)
 "Dk" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/glass/rag,
 /turf/unsimulated/floor{
 	icon_state = "carpetside"
 	},
-/area/vault)
+/area/obslounge)
 "EI" = (
 /turf/unsimulated/wall/fakeglass,
-/area/vault)
+/area/obslounge)
 "Fb" = (
 /obj/structure/bed/chair/comfy/red,
 /turf/unsimulated/floor{
 	icon_state = "wood"
 	},
-/area/vault)
+/area/obslounge)
 "Ge" = (
 /obj/effect/step_trigger/ghostizer,
 /turf/unsimulated/floor{
 	icon_state = "white";
 	icon = 'icons/effects/32x32.dmi'
 	},
-/area/vault)
+/area/obslounge)
 "GW" = (
 /obj/structure/railing/wood{
 	dir = 8
@@ -244,26 +244,26 @@
 	icon_state = "engine";
 	name = "reinforced floor"
 	},
-/area/vault)
+/area/obslounge)
 "Ha" = (
 /obj/structure/table/woodentable,
 /turf/unsimulated/floor{
 	icon_state = "carpetside"
 	},
-/area/vault)
+/area/obslounge)
 "Ht" = (
 /obj/structure/table/woodentable,
 /obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang,
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "HA" = (
 /obj/machinery/vending/boozeomat,
 /turf/unsimulated/floor{
 	icon_state = "carpet"
 	},
-/area/vault)
+/area/obslounge)
 "Jz" = (
 /obj/structure/bed/chair/comfy/red{
 	dir = 4
@@ -271,7 +271,7 @@
 /turf/unsimulated/floor{
 	icon_state = "carpetsymbol"
 	},
-/area/vault)
+/area/obslounge)
 "JV" = (
 /obj/structure/railing/wood{
 	dir = 8
@@ -280,7 +280,7 @@
 	icon_state = "engine";
 	name = "reinforced floor"
 	},
-/area/vault)
+/area/obslounge)
 "KR" = (
 /obj/structure/table/woodentable,
 /obj/machinery/microwave{
@@ -291,13 +291,13 @@
 	dir = 4;
 	icon_state = "carpetside"
 	},
-/area/vault)
+/area/obslounge)
 "Lq" = (
 /obj/machinery/door/mineral/wood,
 /turf/unsimulated/floor{
 	icon_state = "carpetsymbol"
 	},
-/area/vault)
+/area/obslounge)
 "Mo" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/paper_bin/green{
@@ -316,7 +316,7 @@
 	dir = 10;
 	icon_state = "carpetside"
 	},
-/area/vault)
+/area/obslounge)
 "Ni" = (
 /obj/structure/bed/chair/comfy/couch/mid/teal{
 	dir = 8
@@ -327,7 +327,7 @@
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "Nw" = (
 /obj/structure/railing/wood{
 	dir = 4
@@ -336,12 +336,12 @@
 	icon_state = "engine";
 	name = "reinforced floor"
 	},
-/area/vault)
+/area/obslounge)
 "Oh" = (
 /turf/unsimulated/wall/fakeglass{
 	dir = 1
 	},
-/area/vault)
+/area/obslounge)
 "Ov" = (
 /obj/structure/table/woodentable,
 /obj/structure/railing/wood{
@@ -351,14 +351,14 @@
 	dir = 6;
 	icon_state = "carpetside"
 	},
-/area/vault)
+/area/obslounge)
 "Ox" = (
 /obj/structure/railing/wood,
 /turf/unsimulated/floor{
 	icon_state = "engine";
 	name = "reinforced floor"
 	},
-/area/vault)
+/area/obslounge)
 "Qv" = (
 /obj/structure/bed/chair/comfy/couch/left/teal{
 	dir = 8
@@ -369,7 +369,7 @@
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "Rf" = (
 /obj/structure/bed/chair/comfy/couch/left/teal{
 	dir = 4
@@ -380,7 +380,7 @@
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "RN" = (
 /obj/structure/bed/chair/comfy/couch/mid/teal{
 	dir = 4
@@ -391,7 +391,7 @@
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
-/area/vault)
+/area/obslounge)
 "Ut" = (
 /turf/unsimulated/wall{
 	icon_state = "white";
@@ -403,7 +403,7 @@
 /turf/unsimulated/floor{
 	icon_state = "wood"
 	},
-/area/vault)
+/area/obslounge)
 "Yb" = (
 /obj/structure/railing/wood{
 	dir = 1
@@ -412,21 +412,21 @@
 	icon_state = "engine";
 	name = "reinforced floor"
 	},
-/area/vault)
+/area/obslounge)
 "YC" = (
 /obj/structure/table/woodentable,
 /obj/item/toy/cards,
 /turf/unsimulated/floor{
 	icon_state = "carpetside"
 	},
-/area/vault)
+/area/obslounge)
 "ZN" = (
 /obj/machinery/door/window/plasma/secure,
 /turf/unsimulated/floor{
 	dir = 4;
 	icon_state = "carpetside"
 	},
-/area/vault)
+/area/obslounge)
 
 (1,1,1) = {"
 Ut

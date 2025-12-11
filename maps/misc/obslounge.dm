@@ -25,3 +25,9 @@
 /obj/effect/landmark/obs_spawn/proc/spawn_mob(mob/M)
 	var/mob/living/carbon/human/dummy/obser = new(loc)
 	obser.key = M.key
+
+/area/obslounge
+	name = "Unknown"
+	requires_power = 0
+	dynamic_lighting = 0
+	icon_state = "firingrange"
