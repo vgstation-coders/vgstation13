@@ -512,6 +512,7 @@
 		to_chat(user, "You splash the [O] onto \the [src], causing it to quiver and come to life!")
 		new came_from_slime_type(get_turf(src))
 		uses--
+		update_icon()
 		qdel(O)
 		if(uses <= 0)
 			qdel(src)
