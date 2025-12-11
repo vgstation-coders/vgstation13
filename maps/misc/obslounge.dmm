@@ -68,7 +68,7 @@
 /area/vault)
 "mh" = (
 /obj/structure/table/woodentable,
-/obj/machinery/computer/security/telescreen/entertainment/wooden_tv,
+/obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang,
 /obj/structure/railing/wood,
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
@@ -162,14 +162,14 @@
 	},
 /area/vault)
 "xM" = (
-/obj/machinery/computer/security/telescreen/entertainment/wooden_tv,
+/obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang,
 /turf/unsimulated/floor{
 	icon_state = "carpetsymbol"
 	},
 /area/vault)
 "yL" = (
 /obj/structure/table/woodentable,
-/obj/machinery/computer/security/telescreen/entertainment/wooden_tv,
+/obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang,
 /obj/structure/railing/wood{
 	dir = 1
 	},
@@ -191,7 +191,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/shaker,
 /obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/food/drinks/flask/barflask,
-/obj/machinery/computer/security/telescreen/entertainment/wooden_tv{
+/obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang{
 	pixel_y = 24
 	},
 /turf/unsimulated/floor{
@@ -253,7 +253,7 @@
 /area/vault)
 "Ht" = (
 /obj/structure/table/woodentable,
-/obj/machinery/computer/security/telescreen/entertainment/wooden_tv,
+/obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang,
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
 	},
