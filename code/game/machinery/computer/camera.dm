@@ -316,8 +316,8 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 /obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang/tgui_interact(mob/user, datum/tgui/ui)
 	for(var/mob/living/L in player_list) //sets it here
 		if(!L.obs_camera)
-			obs_camera = new(L)
-			obs_camera.network = list(CAMERANET_OBS)
+			L.obs_camera = new(L)
+			L.obs_camera.network = list(CAMERANET_OBS)
 	. = ..()
 
 /obj/machinery/computer/security/wooden_tv
