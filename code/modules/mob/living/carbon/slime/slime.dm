@@ -505,13 +505,16 @@
 
 	//slime res
 	if(istype(O, /obj/item/weapon/slimeres))
-		if(uses == 0)
+		if(uses <= 0)
 			to_chat(user, "<span class='warning'>The solution doesn't work on used extracts!</span>")
+			qdel(src)
 			return ..()
 		to_chat(user, "You splash the [O] onto \the [src], causing it to quiver and come to life!")
 		new came_from_slime_type(get_turf(src))
 		uses--
 		qdel(O)
+		if(uses <= 0)
+			qdel(src)
 
 //perform individual slime_act() stuff on children overriding the method here
 /obj/item/slime_extract/afterattack(var/atom/target, mob/user, proximity)
@@ -521,7 +524,7 @@
 		if (uses > 0)
 			uses -= 1
 			update_icon()
-		if (uses == 0)
+		if (uses <= 0)
 			qdel(src)
 
 /obj/item/slime_extract/New()
@@ -534,16 +537,18 @@
 
 /obj/item/slime_extract/update_icon()
 	..()
-	if (uses == 1||uses<0) //return if 1 or less uses
+	if(uses <= 0) //delete if no uses
+		qdel(src)
+	if (uses <= 1) //return if 1 use
 		icon_state = icon_state_backup
-	else if (uses == 3||uses>2) //if 3 or more uses use the triple icon
+	else if (uses >= 3) //if 3 or more uses use the triple icon
 		icon_state = "[icon_state_backup]_3"
 	else 		//only option left is two uses
 		icon_state = "[icon_state_backup]_2"
 
 /obj/item/slime_extract/examine(mob/user)
 	..()
-	to_chat(user, "<span class='notice'>\The [name] has [uses] left.</span>")
+	to_chat(user, "<span class='notice'>\The [name] has [uses] use\s left.</span>")
 
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
