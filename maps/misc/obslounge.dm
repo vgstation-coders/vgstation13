@@ -16,3 +16,12 @@
     if(ME.type == /datum/map_element/dungeon/obslounge)
         var/datum/map_element/dungeon/obslounge/OBS = ME
         OBS.obs_spawner = src
+
+/obj/effect/landmark/obs_spawn/Crossed(H as mob|obj)
+	..()
+	if(istype(H, /mob/dead/observer))
+		spawn_mob(H)
+
+/obj/effect/landmark/obs_spawn/proc/spawn_mob(mob/M)
+	var/mob/living/carbon/human/dummy/obser = new(loc)
+	obser.key = M.key

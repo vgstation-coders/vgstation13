@@ -589,8 +589,7 @@
 		load_dungeon(/datum/map_element/dungeon/obslounge)
 	var/datum/map_element/dungeon/obslounge/OBSGAAANG = locate() in existing_dungeons
 	if(OBSGAAANG?.obs_spawner)
-		var/mob/living/carbon/human/dummy/obser = new(OBSGAAANG.obs_spawner.loc)
-		obser.key = src.key
+		OBSGAAANG.obs_spawner.spawn_mob()
 
 /mob/dead/observer/verb/pai_signup()
 	set name = "Sign up as pAI"
