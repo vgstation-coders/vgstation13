@@ -310,16 +310,6 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	moody_state = "overlay_security_det"
 	icon = 'icons/obj/computer.dmi'
 
-/obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang
-	network = list(CAMERANET_SS13, CAMERANET_OBS)
-
-/obj/machinery/computer/security/telescreen/entertainment/wooden_tv/obsgang/tgui_interact(mob/user, datum/tgui/ui)
-	for(var/mob/living/L in player_list) //sets it here
-		if(!L.obs_camera)
-			L.obs_camera = new(L)
-			L.obs_camera.network = list(CAMERANET_OBS)
-	. = ..()
-
 /obj/machinery/computer/security/wooden_tv
 	name = "Security Cameras"
 	desc = "An old TV hooked into the stations camera network."
