@@ -30,7 +30,6 @@
 	name = "Bagelstation"
 	path = "Bagelstation"
 	var/bagel_requirement = 17
-	is_enabled = FALSE
 
 /datum/next_map/bagel/is_votable()
 	if(score.bagelscooked < bagel_requirement)
