@@ -1,7 +1,7 @@
 /mob/living/silicon/robot/mommi/sammi
 	name = "Stationary Assembler MMI"
 	real_name = "Stationary Assembler MMI"
-	desc = "This versatile assembler is controlled by a transient mind-cluster network, unfortunately it is prone to connection loss"
+	desc = "This versatile assembler is controlled by a transient mind-cluster network, unfortunately it is prone to connection loss."
 	icon = 'icons/mob/mommi.dmi'
 	icon_state = "sammi_offline"
 	maxHealth = 200

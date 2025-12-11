@@ -73,6 +73,7 @@
 #define LIGHT_COLOR_SLIME_LAMP "#AFC84B" //Weird color, between yellow and green, very slimy. rgb(175, 200, 75)
 #define LIGHT_COLOR_TUNGSTEN   "#FFF5E0" //Extremely diluted yellow, close to skin color (for some reason). rgb(255, 245, 224)
 #define LIGHT_COLOR_HALOGEN    "#F0FAFA" //Barely visible cyan-ish hue, as the doctor prescribed. rgb(240, 250, 250)
+#define LIGHT_COLOR_LAVA "#f5b85d"
 
 //Defines for lighting status, see power/lighting.dm
 #define LIGHT_OK     0

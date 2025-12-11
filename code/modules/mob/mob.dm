@@ -22,6 +22,9 @@
 	return RECYK_BIOLOGICAL
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
+	if(planet)
+		planet.on_mob_exited(src, planet)
+
 	for(var/datum/mind/mind in heard_by)
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
@@ -56,7 +59,7 @@
 
 	dark_plane = null
 	self_vision = null
-	master_plane = null
+	lighting_planemaster = null
 
 	QDEL_NULL(hud_used)
 	for(var/atom/movable/leftovers in src)
@@ -300,8 +303,10 @@
 	else
 		to_chat(src, msg)
 
-/mob/proc/show_message(var/msg, var/type, var/alt, var/alt_type, var/mob/speaker)//Message, type of message (1=visible or 2=hearable), alternative message, alt message type (1=if blind or 2=if deaf), and optionally the speaker
+/mob/proc/show_message(var/msg, var/type, var/alt, var/alt_type, var/mob/speaker, atom/source)//Message, type of message (1=visible or 2=hearable), alternative message, alt message type (1=if blind or 2=if deaf), and optionally the speaker
 	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
+	if(loneliness_affected(source || speaker,TRUE))
+		return
 
 	if(!client) //We dun goof
 		return
@@ -372,7 +377,7 @@
 			msg = drugged_message
 		if(blind_drugged_message)
 			msg2 = blind_drugged_message
-	show_message( msg, MESSAGE_SEE, msg2, MESSAGE_HEAR)
+	show_message( msg, MESSAGE_SEE, msg2, MESSAGE_HEAR, source = A)
 
 // Show a message to all mobs in sight of this atom
 // Use for objects performing visible actions
@@ -1608,7 +1613,7 @@ Use this proc preferably at the end of an equipment loadout
 	if (self_vision)
 		if (isturf(loc))
 			var/turf/T = loc
-			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
+			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (lighting_planemaster.blend_mode == BLEND_MULTIPLY))
 				animate(self_vision, alpha = self_vision.target_alpha, time = 0)
 			else
 				animate(self_vision, alpha = 0, time = 0)
@@ -2158,6 +2163,13 @@ Use this proc preferably at the end of an equipment loadout
 		alpha = alphas[alphas[1]]
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(status_flags & PACIFIED)
+		if(locate(/datum/event/profound_peace) in events)
+			to_chat(src, "<span class='notice'>You feel [pick("like ","as if ","")]this [pick("would misalign your inner chakras","prevents you from attaining nirvana","would be bad for your own karma")].</span>")
+		else
+			to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")
+		return TRUE
+
 	if(paxban_isbanned(ckey))
 		to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")
 		return TRUE
@@ -2194,7 +2206,11 @@ Use this proc preferably at the end of an equipment loadout
 			continue
 		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
 		return TRUE
-
+	for(var/mob/living/complex_animal/P in view(src))
+		if(P.isDead() || !P.pacify_aura)
+			continue
+		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
+		return TRUE
 	return FALSE
 
 /mob/proc/handle_regular_hud_updates()
@@ -2264,6 +2280,9 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/isUnholy()
 	return (isanycultist(src) || isvampire(src))
+
+/mob/proc/beartrap_act(var/obj/item/weapon/beartrap/trap)
+	return FALSE
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

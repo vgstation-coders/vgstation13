@@ -239,6 +239,9 @@ var/global/list/all_docking_ports = list()
 
 		generate_borders = 0
 
+/obj/docking_port/destination/planet_surface
+	areaname = "planet surface"
+
 //SILLY PROC
 /proc/select_port_from_list(var/mob/user, var/message="Select a docking port", var/title="Admin abuse", var/list/list) //like input
 	if(!list || !user)

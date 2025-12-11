@@ -104,7 +104,7 @@
 			var/turf/T = get_turf(Target)
 			if(T.canBuildLattice(src))
 				if(src.use(1))
-					to_chat(user, "<span class='notice'>Constructing some foundations ...</span>")
+					to_chat(user, "<span class='notice'>Constructing some foundations...</span>")
 					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					new /obj/structure/lattice/wood(T)
 

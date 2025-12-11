@@ -70,6 +70,7 @@
 		</head>
 		<body>
 		<h2 style="text-align:center">Artifact Panel</h2>
+		<b><a href='?src=\ref[src];artifactpanel_spawnsmall=1'>Small Find Spawn Tool</a></b>
 		<table>
 		<tr>
 		<th style="width:1%">Artifact ID</th>
@@ -165,9 +166,9 @@
 		for (var/turf/unsimulated/mineral/M in SSxenoarch.artifact_spawning_turfs)
 			if (!istype(M))
 				continue
-			if (!M.artifact_find)
+			if (!M.finddatum || !M.finddatum.artifact_find)
 				continue
-			var/datum/artifact_find/A = M.artifact_find
+			var/datum/artifact_find/A = M.finddatum.artifact_find
 			dat += {"<tr>
 				<td>[A.artifact_id]</td>
 				<td><b>Buried</b> <a href='?src=\ref[src];artifactpanel_jumpto=\ref[M]'>([M.x],[M.y],[M.z])</a></td>

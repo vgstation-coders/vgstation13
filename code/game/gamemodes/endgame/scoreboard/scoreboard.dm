@@ -157,7 +157,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	if(score.oremined > 0)
 		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
 	if(score.rescuedpets)
-		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points<BR>)"
+		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points)<BR>"
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
 	if (score.machineupgrades > 0)
@@ -255,13 +255,16 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Most Spread Disease:</B> [dis_name ? "[dis_name]":"[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)]"][nickname] (Origin: [D.origin], Strength: [D.strength]%, spread among [score.disease_most_count] mobs)<BR>"
 		for(var/datum/disease2/effect/e in D.effects)
 			dat += "&#x25CF; Stage [e.stage] - <b>[e.name]</b><BR>"
-	if(weathertracker.len && map.climate)
-		dat += "<B>Climate Composition: ([map.climate])</B> "
-		//first, total ticks
-		var/totalticks = total_list(get_list_of_elements(weathertracker))
-		for(var/element in weathertracker)
-			dat += "[element] ([round(weathertracker[element]*100/totalticks)]%) "
-		dat += "<BR>"
+	if(weathertracker.len && climates.len)
+		for(var/i = 1; i < world.maxz; i++)
+			var/datum/climate/C = SSweather.get_climate(i)
+			if(C)
+				dat += "<B>Z-Level [i] Climate Composition: ([C])</B> "
+				//first, total ticks
+				var/totalticks = total_list(get_list_of_elements(weathertracker))
+				for(var/element in weathertracker)
+					dat += "[element] ([round(weathertracker[element]*100/totalticks)]%) "
+				dat += "<BR>"
 
 	//Vault and away mission specific scoreboard elements
 	//The process_scoreboard() proc returns a list of strings associated with their score value (the number that's added to the total score)

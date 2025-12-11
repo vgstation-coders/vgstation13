@@ -16,6 +16,8 @@
 	siemens_coefficient = 1
 	density = 0
 	anchored = 0
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/link_to = null
 	var/link_angle = 0
 
@@ -84,18 +86,8 @@
 		setDensity(anchored)
 		O.playtoolsound(src, 50)
 
-/obj/item/pod_parts/pod_frame/verb/rotate()
-	set name = "Rotate Frame"
-	set category = "Object"
-	set src in oview(1)
-	if(anchored)
-		to_chat(usr, "\The [src] is securely bolted!")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
 /obj/item/pod_parts/pod_frame/attack_hand()
-	src.rotate()
+	rotate_ccw()
 
 /obj/item/pod_parts/pod_frame/fore_port
 	name = "fore port pod frame"

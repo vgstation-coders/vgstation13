@@ -31,8 +31,9 @@
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
+	var/zProcGen = 7 //temporary until dynamic z levels are implemented
 
-	var/zAdditionalStationZlevel = -1 // -1 because surely nothing will ever go to Z -1, right? why not null? because nullspace
+	var/zAdditionalStationZlevel = 0 // 0 because surely nothing will ever go to Z 0, right? why not null? because nullspace
 
 	var/skip_hobo_shack = FALSE // if true, skips hobo shack generation. set to TRUE if you want to map your own custom one for the map.
 
@@ -101,7 +102,6 @@
 
 	var/snow_theme = FALSE
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
-	var/datum/climate/climate = null //use for weather cycle
 	var/has_engines = FALSE // Is the map a space ship with big engines?
 	var/broken_lights = TRUE //broken lights roundstart
 	var/can_have_robots = TRUE
@@ -192,6 +192,8 @@ var/global/list/accessable_z_levels = list()
 	var/z //Number of the z-level (the z coordinate)
 	var/z_above //The linked zLevel Z above, for multiZ
 	var/z_below //Same, with below
+	var/list/transition_crosswrap_z=null // list(z_north,z_south,z_east,z_west). when you hit the edge, instead of drifting to a random zlevel or looping on the current one, teleports you to the corresponding edge on the z-level in the list.
+	var/planetside=FALSE //if the z-level is supposed to represent being on a planet, surface or underground.
 
 /datum/zLevel/proc/post_mapload()
 	return
@@ -247,6 +249,7 @@ var/global/list/accessable_z_levels = list()
 	base_area = /area/surface/snow
 	movementJammed = TRUE
 	transitionLoops = TRUE
+	planetside = TRUE
 
 //for junglestation
 /datum/zLevel/junglesurface
@@ -254,12 +257,17 @@ var/global/list/accessable_z_levels = list()
 	base_turf = /turf/unsimulated/floor/jungle/dirt
 	base_area = /area/surface/jungle/landing //hacky workaround.
 	movementJammed = TRUE
+	planetside = TRUE
 
 /datum/zLevel/jungleunderground
 	name = "jungle underground"
 	base_turf = /turf/unsimulated/floor/jungle/bedrock
 	base_area = /area/surface/jungle/underground
 	movementJammed = TRUE
+	planetside = TRUE
+
+/datum/zLevel/junglesurface/mining
+	name = "Jungle Fallen Meteor"
 
 //for Horizon
 /datum/zLevel/hyperspace
@@ -365,7 +373,8 @@ var/global/list/accessable_z_levels = list()
 		var/choice = input("Which Z-level do you wish to set the base turf for?") as null|num
 		if(!choice)
 			return
-		var/new_base_path = input("Please select a turf path (cancel to reset to /turf/space).") as null|anything in typesof(/turf)
+		var/new_base_text = input("Filter to a turf type.","Turf Type") as text
+		var/new_base_path = filter_typelist_input("Please select a turf path (cancel to reset to /turf/space).","Turf Path",get_matching_types(new_base_text,/turf))
 		if(!new_base_path)
 			new_base_path = /turf/space //Only hardcode in the whole thing, feel free to change this if somewhere in the distant future spess is deprecated
 		var/update_old_base = alert(src, "Do you wish to update the old base? This will LAG.", "Update old turfs?", "Yes", "No")

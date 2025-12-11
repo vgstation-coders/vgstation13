@@ -11,6 +11,12 @@ nanoui is used to open and update nano browser uis
 #define STATUS_UPDATE 1 // ORANGE Visability
 #define STATUS_DISABLED 0 // RED Visability
 #define STATUS_CLOSE -1 // Close the window
+
+// Post-Byond 516 DPI scaling settings affect the opened window.
+// Rather than e.g. 100x100 you get (window size / scale), so for 125% scaling you get 80x80.
+// This messes up a lot of interfaces so this value is cached and applied to opening windows to correct for scaling.
+/client/var/dpiScale = 1
+
 /datum/nanoui
 	// the user who opened this ui
 	var/mob/user
@@ -457,7 +463,12 @@ nanoui is used to open and update nano browser uis
 
 	var/window_size = ""
 	if (width && height)
-		window_size = "size=[width]x[height];"
+		var/effective_width = width
+		var/effective_height = height
+		if (user.client.dpiScale && user.client.dpiScale != 1)
+			effective_width = round(width * user.client.dpiScale)
+			effective_height = round(height * user.client.dpiScale)
+		window_size = "size=[effective_width]x[effective_height]"
 	update_status(0)
 	user << browse(get_html(), "window=[window_id];[window_size][window_options]")
 	winset(user, "mapwindow.map", "focus=true") // return keyboard focus to map
@@ -523,6 +534,20 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/Topic(href, href_list)
+	if (href_list["nanoui_dpr"])
+		var/scale = text2num(href_list["nanoui_dpr"])
+		if (!scale && href_list["nanoui_inner_w"] && width)
+			var/inner_width = text2num(href_list["nanoui_inner_w"])
+			if (inner_width > 0)
+				scale = width / inner_width
+		if (scale)
+			if (user && user.client)
+				user.client.dpiScale = scale
+			if (user && width && height)
+				var/adjusted_width = round(width * scale)
+				var/adjusted_height = round(height * scale)
+				winset(user, window_id, "size=[adjusted_width]x[adjusted_height]")
+
 	update_status(0) // update the status
 	if (status != STATUS_INTERACTIVE || user != usr) // If UI is not interactive or usr calling Topic is not the UI user
 		return

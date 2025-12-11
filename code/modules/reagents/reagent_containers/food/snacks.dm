@@ -4,7 +4,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks
 	name = "snack"
-	desc = "yummy"
+	desc = "Yummy."
 	icon_state = null
 	log_reagents = 1
 	w_type = RECYK_BIOLOGICAL
@@ -941,16 +941,23 @@
 
 	var/NM = time2text(world.realtime,"Month")
 	var/cookiecutter
+	var/holiday = Get_Holiday()
 
-	switch(NM)
-		if("February")
-			cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
-		if("December")
-			cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
-		if("October")
-			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
-		else
-			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
+	if(holiday)
+		switch(holiday)
+			if (SINTERKLAAS)
+				cookiecutter = pick( list("mijter","sinterklaas","piet","kadotje","schoentje") )
+
+	if(!cookiecutter)
+		switch(NM)
+			if("February")
+				cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
+			if("December")
+				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
+			if("October")
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
+			else
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred","mijter","sinterklaas","piet","kadotje","schoentje") )
 	icon_state = "[cookiecutter]"
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
@@ -1002,6 +1009,65 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SUGAR, 4)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/taaitaai
+	name = "taaitaai mannetjes"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/taaitaai
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/taaitaai/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(CINNAMON, 5)
+	reagents.add_reagent(FLOUR, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/taaitaai //sinterklaas
+	name = "taaitaai mannetje"
+	desc = "Spicy, chewy and sweet little cookies, vaguely shaped like a person."
+	icon = 'icons/obj/food_seasonal.dmi'
+	icon_state = "taaitaai_1"
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/taaitaai/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(CINNAMON, 2)
+	var/taai = pick(list("taaitaai_1","taaitaai_2","taaitaai_3"))
+	icon_state = "[taai]"
+
+/obj/item/weapon/reagent_containers/food/snacks/kruidnoten
+	name = "handful of kruidnoten"
+	desc = "Tiny hard spiced cookies, perfect for throwing at people!"
+	icon = 'icons/obj/food_seasonal.dmi'
+	icon_state = "kruidnoten"
+	wrapped = 0
+	bitesize = 3
+	throwforce = 3
+	throw_speed = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/kruidnoten/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(CINNAMON, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/chocoladeletter
+	name = "chocolate letter"
+	desc = "A large letter made out of chocolate. Traditionally given to someone whose first name starts with the same letter."
+	icon = 'icons/obj/food_seasonal.dmi'
+	icon_state = "chocoladeletter"
+	food_flags = FOOD_SWEET
+	harmfultocorgis = TRUE
+	var/letterletter = "S"
+
+/obj/item/weapon/reagent_containers/food/snacks/chocoladeletter/New(loc,var/letterfood = letterletter)
+	..()
+	var/list/lettermaker = list("letter_message" = letterfood,
+								"letter_color" = "#35220d",
+								"letter_size" = "12",
+								"font_name" = "Times New Roman")
+	maptext = "<span style=\"color:[lettermaker["letter_color"]];font-size:[lettermaker["letter_size"]]px;font-family:'[lettermaker["font_name"]]'\">[lettermaker["letter_message"]]</span>"
+	maptext_x = 8
+	maptext_y = 8
+	reagents.add_reagent(COCO, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar
 	name = "chocolate bar"
@@ -2765,7 +2831,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/spacylibertyduff
 	name = "Spacy Liberty Duff"
-	desc = "Jello gelatin, from Alfred Hubbard's cookbook"
+	desc = "Jello gelatin, from Alfred Hubbard's cookbook."
 	icon_state = "spacylibertyduff"
 	trash = /obj/item/trash/snack_bowl
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
@@ -8079,7 +8145,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe
 	name = "Steamed Lobster"
-	desc = "A steamed lobster, served with a side of melted butter and a slice of lemon. You can still feel its hatred"
+	desc = "A steamed lobster, served with a side of melted butter and a slice of lemon. You can still feel its hatred."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_deluxe"
 	food_flags = FOOD_MEAT

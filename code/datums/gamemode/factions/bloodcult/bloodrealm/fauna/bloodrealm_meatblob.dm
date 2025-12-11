@@ -834,7 +834,7 @@
 //"Corpse" that spawns when a meatblob tile gets destroyed, meant to be butchered
 /mob/living/simple_animal/meat_blob_chunk
 	name = "meat blob chunk"
-	desc = "The remains of a meat blob, waiting to be butchered"
+	desc = "The remains of a meat blob, waiting to be butchered."
 	icon = 'icons/mob/meatblob.dmi'
 	icon_state = "blob_corpse"
 	icon_living = "blob_corpse"

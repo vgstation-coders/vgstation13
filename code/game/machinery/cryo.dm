@@ -203,7 +203,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	..()
 	if(Adjacent(user))
 		if(contents.len)
-			to_chat(user, "You can just about make out some properties of the cryo's murky depths:")
+			to_chat(user, "You can just about make out some properties of \the [src]'s murky depths:")
 			var/count = 0
 			var/list/stuff = list()
 			for(var/atom/movable/floater in ((contents - beaker) - occupant))
@@ -213,14 +213,14 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 					stuff += floater
 
 			if(occupant)
-				to_chat(user, "A figure floats in the depths, they appear to be [occupant]")
+				to_chat(user, "A figure floats in the depths, they appear to be [occupant].")
 
 			if (count)
 				// Let's just assume you can only have observers if there's a mob too.
-				to_chat(user, "<i>...[count] shape\s float behind them...</i>")
+				to_chat(user, "<i>...[count] shape\s float[count == 1 ? "s" : ""] behind them...</i>")
 
 			if(stuff.len)
-				to_chat(user, "Miscellaneous contents float in the depths, it appears to be [counted_english_list(stuff)]")
+				to_chat(user, "Miscellaneous contents float in the depths, it appears to be [counted_english_list(stuff)].")
 
 			if(beaker)
 				to_chat(user, "A beaker, releasing the following chemicals into the fluids:")

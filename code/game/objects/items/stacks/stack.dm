@@ -63,7 +63,7 @@
 		var/datum/stack_recipe_list/srl = recipe_list[recipes_sublist]
 		recipe_list = srl.recipes
 	var/t1 = "<HTML><HEAD><title>[name] recipes</title></HEAD><body><TT>Amount of [name] available: [src.amount]<br>"
-	for(var/i = 1;i <= recipe_list.len,i++)
+	for(var/i = 1;i <= recipe_list.len;i++)
 		var/E = recipe_list[i]
 		if(isnull(E))
 			t1 += "<hr>"
@@ -390,8 +390,8 @@
 		return
 	return ..()
 
-/obj/item/stack/restock()
-	if(!restock_amount)
+/obj/item/stack/restock(nanobots = FALSE)
+	if(nanobots || !restock_amount)
 		return //Do not restock this stack type
 	if(amount < max_amount)
 		amount += restock_amount

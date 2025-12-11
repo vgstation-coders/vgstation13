@@ -191,7 +191,7 @@
 
 /obj/item/keycard
 	name = "mysterious keycard"
-	desc = "A keycard for opening a door somewhere"
+	desc = "A keycard for opening a door somewhere."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "keycard"
 	var/insert_type = 0 // What kind of bitflag does this access on the door?

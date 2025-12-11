@@ -154,3 +154,23 @@
 			qdel(src)
 	else
 		..()
+
+/obj/structure/geyser/hell
+	name = "thermal geyser"
+	desc = "A geyser is a type of spring that is caused by the upward force of heat attemping to escape outward from a mineral body."
+	density = 1
+	anchored = 1
+	icon = 'icons/misc/beach.dmi'
+	icon_state = "geyser-hell"
+
+/obj/structure/geyser/unstable/hell
+	icon_state = "geyser-hell"
+
+/obj/structure/geyser/critical/hell
+	icon_state = "geyser-hell"
+
+/obj/structure/geyser/vent/hell
+	icon_state = "geyser-hell"
+
+/obj/structure/sealedgeyser/hell
+	icon_state = "geyser-hell"

@@ -5,7 +5,7 @@
 	anchored = 0
 	name = "computer frame"
 	desc = "A metal frame ready to receive a circuit board, wires and a glass panel."
-	icon = 'icons/obj/stock_parts.dmi'
+	icon = 'icons/obj/machines/constructable.dmi'
 	icon_state = "0"
 	var/state = 0
 	var/obj/item/weapon/circuitboard/circuit = null
@@ -37,7 +37,16 @@
 	var/powernet = null
 	var/list/records = null
 	var/contain_parts = 1
+	var/blank_type = /obj/item/weapon/circuitboard/blank
 	toolsounds = list('sound/items/Screwdriver.ogg')
+
+/obj/item/weapon/circuitboard/small
+	name = "mini circuit board"
+	board_type = MACHINE_SMALL
+	icon_state = "small_mod"
+	starting_materials = list(MAT_GLASS = 1000) // Recycle glass only
+	w_class = W_CLASS_TINY
+	blank_type = /obj/item/weapon/circuitboard/blank/small
 
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"
@@ -373,7 +382,7 @@
 		var/obj/item/tool/weldingtool/WT = I
 		if(WT.remove_fuel(1,user))
 			I.playtoolsound(loc, 30)
-			user.create_in_hands(src, /obj/item/weapon/circuitboard/blank, msg = "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
+			user.create_in_hands(src, blank_type, msg = "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
 	else
 		return ..()
 

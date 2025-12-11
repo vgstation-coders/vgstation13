@@ -92,12 +92,13 @@ var/global/ingredientLimit = 10
 	..()
 
 /obj/machinery/cooking/New()
-	if (ticker)
+	if(SSobj && SSobj.initialized)
 		initialize()
 
 	return ..()
 
 /obj/machinery/cooking/initialize()
+	..()
 	if (foodChoices)
 		var/obj/item/food
 

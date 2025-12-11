@@ -5780,7 +5780,7 @@
 "bhp" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/cartridge/clown,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/item/device/instrument/violin,
 /obj/machinery/light_switch{
 	pixel_y = 28
@@ -10925,7 +10925,7 @@
 /obj/item/device/radio/intercom/medbay{
 	pixel_x = -30
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -14021,7 +14021,7 @@
 /turf/simulated/floor/carpet,
 /area/syndicate_mothership)
 "cYb" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -14163,7 +14163,7 @@
 	},
 /area/syndicate_mothership)
 "cYt" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/effect/decal/cleanable/vomit,
@@ -14172,7 +14172,7 @@
 	},
 /area/syndicate_mothership)
 "cYu" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/unsimulated/floor{
@@ -14244,7 +14244,7 @@
 	},
 /area/syndicate_mothership)
 "cYC" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -18182,7 +18182,7 @@
 /area/centcom/test)
 "dke" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -18441,7 +18441,7 @@
 	},
 /area/centcom/ert)
 "dkP" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -19359,7 +19359,7 @@
 	},
 /area/centcom/ert)
 "dmU" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -21133,7 +21133,7 @@
 /turf/unsimulated/wall,
 /area/centcom/test)
 "dqx" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -29291,7 +29291,7 @@
 	},
 /area/djstation)
 "dJk" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -29302,7 +29302,7 @@
 	},
 /area/djstation)
 "dJl" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /turf/simulated/floor{
@@ -33404,7 +33404,7 @@
 /turf/simulated/wall,
 /area/construction/mommi_nest)
 "ebL" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -34406,7 +34406,7 @@
 	},
 /area/medical/medbay)
 "eoT" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /turf/simulated/floor{
@@ -35291,7 +35291,7 @@
 /turf/simulated/floor/plating/airless,
 /area/shuttle/research/station)
 "eAD" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
@@ -36225,7 +36225,7 @@
 /area/shuttle/salvage/start)
 "eHC" = (
 /obj/structure/bed/roller,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -38238,7 +38238,7 @@
 	},
 /area/science/robotics)
 "fjv" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/abstract/map/spawner/floorpill/guaranteed,
@@ -38763,7 +38763,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
 "fqY" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -43160,7 +43160,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/hallway/primary)
 "gDh" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -43262,7 +43262,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/burn_chamber)
 "gEE" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12
 	},
@@ -48142,7 +48142,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
 "hSV" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/structure/table,
@@ -49890,7 +49890,7 @@
 	},
 /area/medical/paramedics)
 "ira" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/plating{
@@ -50647,7 +50647,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "iEi" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/simulated/floor/plating,
@@ -52704,7 +52704,7 @@
 	name = "Station Intercom (General)";
 	pixel_x = -26
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -54436,7 +54436,7 @@
 	},
 /area/mine/living_quarters)
 "jJv" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /obj/item/fish_eggs/goldfish,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 9
@@ -64135,7 +64135,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/sleep)
 "mtN" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -65713,7 +65713,7 @@
 	},
 /area/engineering/burn_chamber)
 "mOI" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -68291,7 +68291,7 @@
 	},
 /area/engineering/burn_chamber)
 "nyP" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -69413,7 +69413,7 @@
 	},
 /area/science/xenobiology)
 "nNr" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -69488,7 +69488,7 @@
 	},
 /area/medical/medbay)
 "nOD" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -73963,7 +73963,7 @@
 /turf/simulated/floor,
 /area/hallway/secondary/exit)
 "pdM" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /turf/simulated/floor{
@@ -74809,7 +74809,7 @@
 /obj/structure/mirror{
 	pixel_x = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -75219,7 +75219,7 @@
 /turf/simulated/floor,
 /area/hallway/primary/aft)
 "pxy" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -84746,7 +84746,7 @@
 	},
 /area/research_outpost/entry)
 "sfx" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -85348,7 +85348,7 @@
 	},
 /area/engineering/atmos)
 "sqp" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -95100,7 +95100,7 @@
 	},
 /area/bridge)
 "uYT" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/abstract/map/spawner/floorpill,
@@ -95629,7 +95629,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/theatre)
 "vhi" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -100490,7 +100490,7 @@
 /turf/simulated/floor/plating,
 /area/medical/virology)
 "www" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -102816,7 +102816,7 @@
 	},
 /area/maintenance/port)
 "xds" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

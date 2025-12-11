@@ -13,7 +13,10 @@
 /obj/structure/flora/Destroy()
 	if(istype(loc,/turf/unsimulated/floor/jungle/grass))
 		var/turf/unsimulated/floor/jungle/grass/G=loc
-		G.turf_speed_multiplier=1.1
+		G.turf_speed_multiplier=1.0
+		if(SSFoliageRegrow)
+			turfs_to_regrow +=G
+			G.regrowticks=world.time
 	..()
 
 /obj/structure/flora/update_icon()
@@ -724,9 +727,9 @@
 		tickssincelastgrowth=0
 		var/i=3
 		while(i)
-			new/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle(loc)
+			new/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle(loc,user)
 			i--
-			if(prob(50))
+			if(user.lucky_prob_rand()<0.5) //luckier people get more berries.
 				i=0
 		icon_state="stage-6"
 	else
@@ -741,3 +744,201 @@
 		tickssincelastgrowth++
 	..()
 	processing_objects+=src // flora is not normally an object which calls this proc, so we have to manually re-add it every cycle.
+
+//lavaland lmao
+/obj/structure/flora/firebush
+	name = "flaming bush"
+	desc = "A bush being consumed by flames. Maybe it'll rise from its ashes like a phoenix?"
+	icon = 'icons/obj/flora/hellflora.dmi'
+	icon_state = "hell_bush"
+	density = FALSE
+	light_color = "#e08300"
+	light_power = 2
+	light_range = 3
+
+/obj/structure/flora/ausbushes/fullgrass/hell
+	name = "thick hellish grass"
+	desc = "A thick patch of grass tinted red."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_range = 2
+	light_power = 3
+	gender = PLURAL
+
+/obj/structure/flora/ausbushes/fullgrass/hell/New()
+	. = ..()
+	icon_state = "fullgrass_[rand(1, 3)]"
+	light_color = pick("#e87800", "#780606")
+
+/obj/structure/flora/ausbushes/sparsegrass/hell
+	name = "sparse hellish grass"
+	desc = "A sparse patch of grass tinted red."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_range = 2
+	light_power = 3
+	gender = PLURAL
+
+/obj/structure/flora/ausbushes/sparsegrass/hell/New()
+	. = ..()
+	icon_state = "sparsegrass_[rand(1, 3)]"
+	light_color = pick("#e87800", "#780606")
+
+/obj/structure/flora/ausbushes/grassybush/hell
+	name = "crimson bush"
+	desc = "A crimson bush, native to lava planets."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_color = "#c70404"
+	light_range = 2
+	light_power = 3
+
+/obj/structure/flora/ausbushes/hell
+	name = "smouldering bush"
+	desc = "Some kind of orange plant that appears to be slowly burning."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_range = 2
+	light_power = 1
+
+/obj/structure/flora/ausbushes/hell/New()
+	. = ..()
+	if(icon_state == "firstbush_1")
+		icon_state = "firstbush_[rand(1, 4)]"
+	light_color = pick("#e87800", "#780606")
+
+/obj/structure/flora/ausbushes/fernybush/hell
+	name = "hellish fern"
+	desc = "Some kind of orange fern."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_range = 2
+	light_power = 1
+
+/obj/structure/flora/ausbushes/fernybush/hell/New()
+	. = ..()
+	icon_state = "fernybush_[rand(1, 3)]"
+	light_color = pick("#e87800", "#780606")
+
+/obj/structure/flora/ausbushes/genericbush/hell
+	name = "hellish bush"
+	desc = "A small crimson bush."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_range = 2
+	light_power = 2
+
+/obj/structure/flora/ausbushes/genericbush/hell/New()
+	. = ..()
+	icon_state = "genericbush_[rand(1, 4)]"
+	light_color = pick("#e87800", "#780606")
+
+/obj/structure/flora/ausbushes/ywflowers/hell
+	name = "lavablossom"
+	desc = "Some red and orange flowers. They appear to be faintly glowing."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_color = "#aba507"
+	light_power = 3
+	light_range = 2
+	gender = PLURAL
+
+/obj/structure/flora/rock/lava
+	name = "lavatic rock"
+	desc = "A volcanic rock. Lava is gushing from it. "
+	icon = 'icons/obj/flora/lavarocks.dmi'
+	icon_state = "basalt1"
+	var/base_icon_state = "basalt"
+	light_color = "#ab4907"
+	light_power = 3
+	light_range = 2
+
+/obj/structure/flora/rock/lava/New()
+	. = ..()
+	icon_state = "[base_icon_state][rand(1,3)]"
+
+/obj/structure/flora/rock/pile/lava
+	name = "rock shards"
+	desc = "Jagged shards of volcanic rock protuding from the ground."
+	icon = 'icons/obj/flora/lavarocks.dmi'
+	icon_state = "lavarocks1"
+	var/base_icon_state = "lavarocks"
+	gender = PLURAL
+
+/obj/structure/flora/rock/pile/lava/New()
+	. = ..()
+	icon_state = "[base_icon_state][rand(1,3)]"
+
+/obj/structure/flora/rock/asteroid
+	name = "pebbles"
+	desc = "Some small pebbles, sheared off a larger rock."
+	icon_state = "asteroid0"
+	var/base_icon_state = "asteroid"
+	density = FALSE
+	gender = PLURAL
+
+/obj/structure/flora/rock/asteroid/New()
+	. = ..()
+	icon_state = "[base_icon_state][rand(0,9)]"
+
+/obj/structure/flora/tree/dead/barren
+	name = "petrified tree"
+	desc = "An ancient trunk, mummified by the passage of time. This one still has some purple to it."
+	color = "#846996"
+	icon = 'icons/obj/flora/barren_tree.dmi'
+	icon_state = "barren_large"
+
+/obj/structure/flora/tree/dead/barren/New()
+	. = ..()
+	color = pick( "#846996", "#7b4e99", "#924fab")
+	icon_state = "barren_large"
+	update_transparency()
+
+/obj/structure/flora/tree/dead/hell
+	name = "crimson tree"
+	desc = "A crimson tree with lava oozing from it, providing a slight glow."
+	icon = 'icons/obj/flora/lavatrees.dmi'
+	pixel_x = -16
+	light_color = LIGHT_COLOR_RED
+	light_range = 2
+	light_power = 0.85
+
+/obj/structure/flora/tree/dead/hell/New()
+	. = ..()
+	icon_state = "tree_[rand(1,6)]"
+	update_transparency()
+
+/obj/structure/flora/tree/dead_pine
+	name = "dead pine"
+	desc = "A dead pine tree, its leaves stripped away."
+	icon = 'icons/obj/flora/bigtrees.dmi'
+	icon_state = "med_pine_dead"
+	pixel_x = -16
+
+/obj/structure/flora/tree/dead_acacia
+	name = "dead acacia"
+	desc = "A dead acacia tree, its leaves stripped away."
+	icon = 'icons/obj/flora/bigtrees.dmi'
+	icon_state = "african_acacia_dead"
+	pixel_x = -16
+
+/obj/structure/flora/tree/dead/tall
+	name = "dead tall tree"
+	desc = "The last vestiges of an once majestic tree."
+	icon = 'icons/obj/flora/tall_trees.dmi'
+	icon_state = "tree_1"
+	var/base_icon_state = "tree"
+	pixel_x = -16
+
+/obj/structure/flora/tree/dead/tall/New()
+	. = ..()
+	icon_state = "[base_icon_state]_[rand(1,3)]"
+	update_transparency()
+
+/obj/structure/flora/tree/dead/tall/grey
+	name = "petrified trunk"
+	desc = "An ancient tree was carbonized in fire and ash. Only a skeleton remains."
+	icon = 'icons/obj/flora/tall_trees_dead.dmi'
+
+/obj/structure/flora/tree/dead/tall/living //lol
+	name = "tall pine tree"
+	desc = "A majestic pine tree."
+	icon_state = "pine_1"
+
+/obj/structure/flora/tree/dead/tall/living/New()
+	. = ..()
+	icon_state = pick("pine_1","pine_2","bald")
+	update_transparency()

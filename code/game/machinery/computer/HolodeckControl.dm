@@ -384,6 +384,10 @@
 		for(var/obj/item/weapon/holo/esword/H in linkedholodeck)
 			H.damtype = BRUTE
 
+		for(var/obj/item/weapon/beach_ball/holoball/B in linkedholodeck)
+			new /obj/item/weapon/beach_ball/holoball/rigged/explosive(B.loc)
+			qdel(B)
+
 	if (!bandaid && (!linkedholodeck.area_turfs || linkedholodeck.area_turfs.len <= 0))
 		log_admin("The Holodeck broke when switching from [old_room ? old_room : "null"] to [room_name]. Attempting bandaid fix.")
 		message_admins("The Holodeck broke when switching from [old_room ? old_room : "null"] to [room_name]. Attempting bandaid fix.")
@@ -580,6 +584,119 @@
 	desc = "Here's your chance, do your dance at the Space Jam."
 	w_class = W_CLASS_LARGE //Stops people from hiding it in their bags/pockets
 
+/obj/item/weapon/beach_ball/holoball/attack_self(mob/user)
+	. = ..()
+	if(!user.attack_delayer.blocked() && user.drop_item(src,get_step(src,user.dir)))
+		playsound(src,'sound/items/basketball_bounce.ogg',50)
+		user.visible_message("<span class='notice'>[user] bounces \the [src].</span>","<span class='notice'>You bounce \the [src].</span>","<span class='notice'>You hear a ball bouncing.</span>")
+		user.delayNextAttack(4)
+		spawn(2)
+			if(isturf(loc))
+				user.put_in_hands(src)
+
+/obj/item/weapon/beach_ball/holoball/on_disarm_drop(mob/user)
+	user.put_in_hands(src)
+
+/obj/item/weapon/beach_ball/holoball/rigged
+	var/travel = 0
+	var/travel_limit = 4
+	var/silent = FALSE
+
+/obj/item/weapon/beach_ball/holoball/rigged/examine(mob/user)
+	. = ..()
+	if(!silent)
+		to_chat(user,"<span class='danger'>This ball is fitted with anti-traveling defense mechanisms! Be sure to bounce it every [travel_limit] steps or else!</span>")
+
+/obj/item/weapon/beach_ball/holoball/rigged/pickup(mob/user)
+	. = ..()
+	user.register_event(/event/moved, src, nameof(src::travel()))
+
+/obj/item/weapon/beach_ball/holoball/rigged/dropped(mob/user)
+	. = ..()
+	user.unregister_event(/event/moved, src, nameof(src::travel()))
+
+/obj/item/weapon/beach_ball/holoball/rigged/attack_self(mob/user)
+	. = ..()
+	travel = 0
+
+/obj/item/weapon/beach_ball/holoball/rigged/proc/travel(atom/movable/mover)
+	travel++
+	if(travel > travel_limit)
+		travel_foul(mover)
+
+/obj/item/weapon/beach_ball/holoball/rigged/proc/travel_foul(atom/movable/mover)
+	say("Technical foul! Traveling!")
+	travel = 0
+
+/obj/item/weapon/beach_ball/holoball/rigged/say_quote(var/text)
+	return "beeps, [text]"
+
+/obj/item/weapon/beach_ball/holoball/rigged/explosive/travel_foul(atom/movable/mover)
+	. = ..()
+	var/turf/T = get_turf(src.loc)
+
+	var/mob/M
+	if (ismob(mover))
+		M = mover
+		M.show_message("<span class='warning'>Your [src.name] explodes!</span>", 1)
+
+	if(T)
+		try_hotspot_expose(700,SMALL_FLAME,0)
+
+		explosion(T, -1, -1, 2, 3, whodunnit = M)
+
+	qdel(src)
+
+/obj/item/weapon/beach_ball/holoball/rigged/explosive/discrete
+	silent = TRUE
+
+/obj/item/weapon/beach_ball/holoball/rigged/stun
+	var/stuns = TRUE
+
+/obj/item/weapon/beach_ball/holoball/rigged/stun/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user))
+		stuns = !stuns
+		to_chat(user,"<span class='notice'>You turn stunning on traveling [stuns ? "On" : "Off"].</span>")
+		return
+	return ..()
+
+/obj/item/weapon/beach_ball/holoball/rigged/stun/travel_foul(atom/movable/mover)
+	if (stuns && isliving(mover))
+		. = ..()
+		var/mob/living/M = mover
+		playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+		M.Knockdown(5)
+		M.Stun(5)
+		if(iscarbon(M))
+			M.apply_effect(10, STUTTER)
+
+/obj/item/weapon/beach_ball/holoball/rigged/stun/discrete
+	silent = TRUE
+
+/obj/item/weapon/beach_ball/holoball/rigged/grenade
+	silent = TRUE //Set to false when a nade is put inside
+	var/obj/item/weapon/grenade/held_grenade = null
+	var/discrete_grenade = FALSE
+
+/obj/item/weapon/beach_ball/holoball/rigged/grenade/attackby(obj/item/weapon/W, mob/user)
+	. = ..()
+	if(istype(W,/obj/item/weapon/grenade))
+		if(held_grenade)
+			to_chat(user,"<span class='warning'>There is already a grenade in \the [src]!</span>")
+		else if(user.drop_item(W,src))
+			to_chat(user,"<span class='notice'>You add \the [W] to \the [src], rigging it to prime on traveling fouls.</span>")
+			held_grenade = W
+			if(!discrete_grenade)
+				silent = FALSE
+
+/obj/item/weapon/beach_ball/holoball/rigged/grenade/travel_foul(atom/movable/mover)
+	. = ..()
+	if(held_grenade)
+		held_grenade.prime()
+
+/obj/item/weapon/beach_ball/holoball/rigged/grenade/discrete
+	discrete_grenade = TRUE
+
 /obj/structure/holohoop
 	name = "basketball hoop"
 	desc = "Boom, Shakalaka!"
@@ -588,6 +705,18 @@
 	anchored = 1
 	density = 1
 	throwpass = 1
+	var/score = 0
+
+/obj/structure/holohoop/examine(mob/user)
+	. = ..()
+	to_chat(user,"<span class='notice'>The current score on \the [src] is [score].</span>")
+
+/obj/structure/holohoop/attack_hand(mob/user, params, proximity)
+	. = ..()
+	if(score > 0)
+		if(alert(user,"Reset the score?","Hoop score","Yes","No") == "Yes")
+			score = 0
+			user.visible_message("<span class='notice'>[user] resets the score on \the [src].</span>","<span class='notice'>You reset the score on \the [src].</span>")
 
 /obj/structure/holohoop/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
@@ -601,11 +730,9 @@
 		G.affecting.Stun(5)
 		visible_message("<span class='warning'>[G.assailant] dunks [G.affecting] into the [src]!</span>")
 		qdel(W)
-		return
 	else if (istype(W, /obj/item) && get_dist(src,user)<2)
 		if(user.drop_item(W, src.loc))
 			visible_message("<span class='notice'>[user] dunks [W] into the [src]!</span>")
-			return
 
 /obj/structure/holohoop/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/item) && mover.throwing)
@@ -615,7 +742,10 @@
 		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
 		if(prob(50) || (mob && mob.reagents.get_sportiness()>=5))
 			I.forceMove(src.loc)
-			visible_message("<span class='notice'>Swish! \the [I] lands in \the [src].</span>")
+			visible_message("<span class='notice'>[mob && prob(1) ? "Sign [mob] up for the Knicks!"/*Deus Ex reference*/ : "Swish! \the [I] lands in \the [src]."]</span>")
+			score += 2
+			if(get_dist(src,mob)>3)
+				score += 1 //Three pointer
 		else
 			visible_message("<span class='warning'>\The [I] bounces off of \the [src]'s rim!</span>")
 		return 0

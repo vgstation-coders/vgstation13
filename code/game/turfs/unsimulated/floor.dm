@@ -36,13 +36,31 @@
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
 
+/turf/unsimulated/floor/canBuildLattice()
+	if(!planet)
+		return BUILD_FAILURE
+	else if(!(locate(/obj/structure/lattice) in contents))
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/unsimulated/floor/canBuildPlating()
+	if(!planet)
+		return BUILD_FAILURE
+	else if(locate(/obj/structure/lattice) in contents)
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
 
 /turf/unsimulated/floor/grass
+	name = "grass"
 	icon_state = "grass1"
+	base_icon_state = "grass"
+	min_icon_states = 2
+	max_icon_states = 4
+	variance = 50
 
 /turf/unsimulated/floor/grass/New()
 	..()
-	icon_state = "grass[rand(1,4)]"
 	footstep_sound = sounds_grass
 	footstep_sound_barefoot = sounds_grass
 	footstep_sound_claw = sounds_grass
@@ -50,17 +68,15 @@
 /turf/unsimulated/floor/mars
 	name = "surface"
 	icon_state = "ironsand1"
+	base_icon_state = "ironsand"
+	min_icon_states = 2
+	max_icon_states = 15
+	variance = 30
 
 	carbon_dioxide = MOLES_CO2MARS
 	nitrogen = MOLES_N2MARS
 	oxygen = 0
 	temperature = T20C
-
-/turf/unsimulated/floor/mars/New()
-	..()
-
-	if(prob(30))
-		icon_state = "ironsand[rand(1,15)]"
 
 /turf/unsimulated/floor/mars/air
 	carbon_dioxide = 0
@@ -97,13 +113,16 @@
 
 /turf/unsimulated/floor/brimstone
 	icon_state = "ironsand1"
+	base_icon_state = "ironsand"
+	min_icon_states = 2
+	max_icon_states = 15
+	variance = 30
 
 /turf/unsimulated/floor/brimstone/New()
 	..()
 	if(Holiday == APRIL_FOOLS_DAY)
 		ChangeTurf(/turf/unsimulated/floor/snow) // hell froze over
 		return
-	icon_state = "ironsand[rand(1,15)]"
 	overlays.Cut()
 	var/image/fire = image('icons/effects/fire.dmi', "[rand(1,3)]")
 	fire.blend_mode = BLEND_ADD
@@ -114,3 +133,8 @@
 /turf/unsimulated/floor/brimstone/Destroy()
 	overlays.Cut()
 	..()
+
+
+/turf/unsimulated/floor/brimstone/mob_life_effects(mob/living/affected)
+	affected.FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
+	affected.ignite() // ffffFIRE!!!! FIRE!!! FIRE!!

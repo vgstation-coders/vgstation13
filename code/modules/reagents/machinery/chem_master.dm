@@ -754,8 +754,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 /obj/machinery/chem_master/proc/isgoodnumber(var/num)
 	if(isnum(num))
-		if(num > 200)
-			num = 200
+		if(num > 300)
+			num = 300
 		else if(num < 0)
 			num = 1
 		else

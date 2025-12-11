@@ -46,6 +46,8 @@ var/global/firstblood = FALSE
 	INVOKE_EVENT(src, /event/death, "user" = src, "body_destroyed" = gibbed)
 	living_mob_list -= src
 	dead_mob_list += src
+	if(planet)
+		planet.on_mob_exited(src, planet)
 	if(attack_log.len)
 		var/lastmsg = attack_log[attack_log.len]
 		for(var/mob/living/L in living_mob_list)

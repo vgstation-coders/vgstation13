@@ -1083,7 +1083,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 			else if (stat & BROKEN)
 				playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 100, 1)
-				visible_message("<EM>[user.name]</EM> further abuses the shattered [src].")
+				visible_message("<EM>[user.name]</EM> further abuses the shattered \the [src].")
 
 			else
 				var/obj/item/weapon/photo/P = I

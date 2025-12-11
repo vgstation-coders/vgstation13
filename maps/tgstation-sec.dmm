@@ -1138,7 +1138,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fstarboardsolar)
 "acC" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,
@@ -2573,7 +2573,7 @@
 /obj/structure/mirror{
 	pixel_x = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -4105,7 +4105,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "aiA" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/effect/decal/cleanable/generic,
@@ -9946,7 +9946,7 @@
 	},
 /area/crew_quarters/sleep)
 "avg" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -9962,7 +9962,7 @@
 	},
 /area/crew_quarters/toilet)
 "avh" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/simulated/floor{
@@ -9970,7 +9970,7 @@
 	},
 /area/crew_quarters/toilet)
 "avi" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/machinery/camera{
@@ -10636,7 +10636,7 @@
 	},
 /area/crew_quarters/sleep)
 "awJ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -10999,7 +10999,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "axA" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/abstract/map/spawner/floorpill,
@@ -11992,7 +11992,7 @@
 	},
 /area/crew_quarters/sleep)
 "azy" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -12017,7 +12017,7 @@
 	},
 /area/crew_quarters/toilet)
 "azA" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -12035,7 +12035,7 @@
 	},
 /area/crew_quarters/toilet)
 "azB" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -12819,7 +12819,7 @@
 	},
 /area/crew_quarters/sleep)
 "aAW" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -12883,7 +12883,7 @@
 /obj/structure/table/woodentable,
 /obj/item/weapon/cartridge/clown,
 /obj/item/weapon/gun/banannon,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/structure/cable/yellow{
 	d2 = 2;
 	icon_state = "0-2";
@@ -13724,7 +13724,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aCX" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/structure/table,
@@ -17189,6 +17189,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -18061,14 +18062,12 @@
 /area/crew_quarters/bar)
 "aLL" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 2;
-	name = "Bar Door";
-	req_one_access_txt = "25;28"
-	},
 /obj/machinery/light{
 	dir = 4
+	},
+/obj/machinery/door/table/reinforced{
+	dir = 1;
+	req_one_access_txt = "25;28"
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -18934,11 +18933,9 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/window/brigdoor{
-	dir = 8;
-	name = "Kitchen";
-	req_access = null;
-	req_one_access_txt = "25;28;35"
+/obj/machinery/door/table/reinforced{
+	req_one_access_txt = "25;28;35";
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -18955,7 +18952,7 @@
 	},
 /area/crew_quarters/kitchen)
 "aND" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor{
@@ -19361,7 +19358,7 @@
 	dir = 8;
 	pixel_x = -24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -22107,7 +22104,7 @@
 /turf/simulated/floor,
 /area/hydroponics)
 "aTT" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -23867,7 +23864,7 @@
 	},
 /area/crew_quarters/kitchen)
 "aXc" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -24201,7 +24198,7 @@
 	},
 /area/crew_quarters/locker/locker_toilet)
 "aXP" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -24868,7 +24865,7 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "aZh" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -24896,7 +24893,7 @@
 	},
 /area/crew_quarters/locker/locker_toilet)
 "aZk" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -25527,7 +25524,7 @@
 	},
 /area/crew_quarters/locker/locker_toilet)
 "baI" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -25996,7 +25993,7 @@
 	},
 /area/crew_quarters/locker/locker_toilet)
 "bbL" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -29747,16 +29744,13 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "biV" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	icon_state = "right";
-	name = "Captain's Desk Door";
-	req_access_txt = "20"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
 /obj/machinery/light,
+/obj/machinery/door/table/wood{
+	req_access_txt = "20"
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "biW" = (
@@ -30809,9 +30803,8 @@
 	},
 /area/medical/medbay)
 "bkR" = (
-/obj/machinery/door/window{
+/obj/machinery/door/table/reinforced{
 	dir = 1;
-	name = "Medbay Reception";
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -31106,7 +31099,7 @@
 /obj/machinery/camera{
 	name = "Research Division Access"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -31733,7 +31726,7 @@
 	},
 /area/crew_quarters/captain)
 "bmB" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -32818,7 +32811,7 @@
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
 "boo" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{
@@ -43223,7 +43216,7 @@
 	},
 /area/science/breakroom)
 "bIH" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -43677,7 +43670,7 @@
 /area/medical/storage)
 "bJB" = (
 /obj/structure/disposalpipe/segment,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -44367,7 +44360,7 @@
 	},
 /area/medical/surgery)
 "bKI" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -45072,7 +45065,7 @@
 	},
 /area/medical/surgery)
 "bMc" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -45693,7 +45686,7 @@
 	},
 /area/medical/medbay)
 "bNp" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -53441,7 +53434,7 @@
 /turf/simulated/wall/r_wall,
 /area/science/xenobiology)
 "cbz" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -53493,7 +53486,7 @@
 	},
 /area/science/xenobiology)
 "cbC" = (
-/obj/structure/sink/kitchen,
+/obj/structure/wc/sink/kitchen,
 /turf/simulated/wall,
 /area/maintenance/asmaint2)
 "cbD" = (
@@ -54296,7 +54289,7 @@
 /turf/simulated/wall,
 /area/science/xenobiology)
 "cdf" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -57129,7 +57122,7 @@
 	dir = 4;
 	pixel_x = -23
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -58290,7 +58283,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/virology_maint)
 "cjZ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -58411,7 +58404,7 @@
 	},
 /area/science/xenobiology)
 "ckl" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -60250,7 +60243,7 @@
 	dir = 4;
 	pixel_x = -22
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -69745,7 +69738,7 @@
 	},
 /area/syndicate_mothership)
 "cFf" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -70025,7 +70018,7 @@
 	},
 /area/syndicate_mothership)
 "cFK" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/unsimulated/floor{
@@ -70033,7 +70026,7 @@
 	},
 /area/syndicate_mothership)
 "cFL" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/effect/decal/cleanable/vomit,
@@ -70200,7 +70193,7 @@
 	},
 /area/syndicate_mothership)
 "cGf" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -74561,7 +74554,7 @@
 /area/centcom/test)
 "cSe" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -74820,7 +74813,7 @@
 	},
 /area/centcom/ert)
 "cSP" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -75716,7 +75709,7 @@
 	},
 /area/centcom/ert)
 "cUR" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -77459,7 +77452,7 @@
 	},
 /area/centcom/ert)
 "cYw" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -84432,7 +84425,7 @@
 	},
 /area/djstation)
 "dve" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -84443,7 +84436,7 @@
 	},
 /area/djstation)
 "dvf" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /turf/simulated/floor{
@@ -89873,7 +89866,7 @@
 /obj/structure/closet/hydrant{
 	pixel_x = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -90009,7 +90002,7 @@
 	},
 /area/research_outpost/atmos)
 "dKc" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /obj/structure/mirror{
@@ -94667,7 +94660,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/research_outpost/xenobot)
+/area/research_outpost/hallway)
 "dSS" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -99628,7 +99621,7 @@
 	dir = 4;
 	on = 1
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /obj/structure/mirror{
@@ -99996,7 +99989,6 @@
 "eco" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_interior";
@@ -100070,7 +100062,7 @@
 /turf/simulated/floor/plating/airless,
 /area/science/test_area)
 "ecx" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/vox{
@@ -101220,7 +101212,6 @@
 /area/research_outpost/gearstore)
 "eeT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_exterior";
@@ -103915,7 +103906,7 @@
 /turf/simulated/floor/vox,
 /area/vox_trading_post/gardens)
 "ekj" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -103948,7 +103939,7 @@
 	},
 /area/vox_trading_post/gardens)
 "ekm" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12
 	},
@@ -106306,7 +106297,7 @@
 /turf/unsimulated/floor/asteroid/plating,
 /area/mine/explored)
 "epJ" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -106314,7 +106305,7 @@
 	},
 /area/mine/living_quarters)
 "epK" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /obj/machinery/light/small,
@@ -109048,7 +109039,7 @@
 /area/shuttle/salvage/start)
 "evv" = (
 /obj/structure/bed/roller,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -110477,10 +110468,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
 "wDX" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 8;
-	name = "Library Desk Door";
+/obj/machinery/door/table/wood{
 	req_access_txt = "37"
 	},
 /turf/simulated/floor/wood,
@@ -1254936,7 +1254924,7 @@ dWv
 dXC
 dYF
 dZF
-eaw
+eaz
 ebk
 dVo
 dJh
@@ -1256944,7 +1256932,7 @@ dWy
 dXF
 dYG
 dZJ
-eaz
+eaw
 ebn
 dVr
 dJh

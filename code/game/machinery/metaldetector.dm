@@ -147,11 +147,11 @@
 		if("senmode")
 			senset = !senset
 		if("setlogs")
-			toggle_logflag(href_list["logflag"])
+			toggle_logflag(text2num(href_list["logflag"]))
 		if("viewlogs")
 			logview = !logview
 		if("clearlogs")
-			switch(href_list["logflag"])
+			switch(text2num(href_list["logflag"]))
 				if(LOG_CLEAR)
 					clear_logs.Cut()
 				if(LOG_SUS)

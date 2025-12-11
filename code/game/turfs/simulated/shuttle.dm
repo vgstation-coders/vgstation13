@@ -89,6 +89,7 @@
 		T.dynamic_lighting = 1
 		if(SSlighting && SSlighting.initialized && !T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)
+		update_weather_overlays(T)
 
 /obj/structure/shuttle/diag_wall/New()
 	..()
@@ -107,6 +108,11 @@
 	if(istype(T,/turf/space))
 		T.dynamic_lighting = 0
 		T.lighting_clear_overlay()
+	var/datum/climate/Cold = SSweather.get_climate(T.z)
+	if(Cold)
+		Cold.unregister_weather_turf(T, TRUE)
+		plane = initial(plane)
+		layer = initial(layer)
 	..()
 	T = get_turf(destination)
 	if(T)
@@ -116,6 +122,26 @@
 		T.dynamic_lighting = 1
 		if(!T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)
+		update_weather_overlays(T)
+
+/obj/structure/shuttle/diag_wall/proc/update_weather_overlays(var/turf/T)
+	var/climate_added = FALSE
+	for(var/turf/adjT in range(1, T))
+		if(adjT == T)
+			continue
+		if(istype(adjT, T.type))
+			for(var/obj/effect/weather_holder/WH in adjT.vis_contents)
+				T.vis_contents |= WH
+				climate_added = TRUE
+				break
+		if(climate_added)
+			break
+	var/datum/allocation/A = SSmapping.get_allocation(trf = T)
+	var/datum/climate/Cnew = SSweather.get_climate(T.z,A)
+	if(climate_added && Cnew)
+		Cnew.register_weather_turf(T, TRUE)
+		plane = EFFECTS_PLANE
+		layer = SNOW_OVERLAY_LAYER + 1
 
 /obj/structure/shuttle/diag_wall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)

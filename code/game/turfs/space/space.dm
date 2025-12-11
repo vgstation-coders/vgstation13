@@ -177,7 +177,7 @@
 /turf/space/singularity_act()
 	return
 
-/turf/space/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/space/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	return ..(N, tell_universe, 1, allow)
 
 /turf/space/lighting_build_overlay()

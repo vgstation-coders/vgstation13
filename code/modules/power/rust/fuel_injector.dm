@@ -20,6 +20,8 @@
 	power_priority = POWER_PRIORITY_POWER_EQUIPMENT
 	idle_power_usage = 10
 	active_power_usage = 500
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/remote_access_enabled = TRUE
 	var/emergency_insert_ready = FALSE
 	var/last_power_request = 0
@@ -324,29 +326,3 @@
 		updateDialog()
 	else
 		visible_message("<span class='warning'>[bicon(src)] A red light flashes on \the [src].</span>")
-
-/obj/machinery/power/rust_fuel_injector/verb/rotate_clock()
-	set category = "Object"
-	set name = "Rotate injector (Clockwise)"
-	set src in view(1)
-
-	if (anchored || usr.incapacitated())
-		return
-
-	src.dir = turn(src.dir, -90)
-
-/obj/machinery/power/rust_fuel_injector/verb/rotate_anticlock()
-	set category = "Object"
-	set name = "Rotate injector (Counter-clockwise)"
-	set src in view(1)
-
-	if (anchored || usr.incapacitated())
-		return
-
-	src.dir = turn(src.dir, 90)
-
-
-/obj/machinery/power/rust_fuel_injector/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate_clock()

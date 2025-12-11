@@ -792,7 +792,7 @@
 
 /obj/item/clothing/head/helmet/space/skrell/black
 	name = "skrell combat helmet"
-	desc = "a military Skrell space helmet."
+	desc = "A military Skrell space helmet."
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
 	species_restricted = list(SKRELL_SHAPED)
 	species_fit = list(SKRELL_SHAPED)
@@ -802,7 +802,7 @@
 
 /obj/item/clothing/suit/space/skrell/black
 	name = "skrell combat suit"
-	desc = "a military Skrell space suit."
+	desc = "A military Skrell space suit."
 	icon_state = "skrell_black"
 	item_state = "syndicate-black"
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
@@ -825,7 +825,7 @@
 
 /obj/item/clothing/head/helmet/space/skrell/white
 	name = "skrell space helmet"
-	desc = "a civilian Skrell space helmet."
+	desc = "A civilian Skrell space helmet."
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
 	species_restricted = list(SKRELL_SHAPED)
 	species_fit = list(SKRELL_SHAPED)
@@ -835,7 +835,7 @@
 
 /obj/item/clothing/suit/space/skrell/white
 	name = "skrell space suit"
-	desc = "a civilian Skrell space suit."
+	desc = "A civilian Skrell space suit."
 	icon_state = "skrell_white"
 	item_state = "medical_hardsuit"
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)

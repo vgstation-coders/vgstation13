@@ -14,8 +14,10 @@ var/datum/subsystem/sounds/SSsounds
 
 /datum/subsystem/sounds/fire(resumed = FALSE)
 	var/list/done = list()
-	for (var/mob/player in player_list)
-		for (var/datum/sound_emitter/E in player.current_sound_emitters)
+	for (var/client/client in clients)
+		if (!client.listener_context)
+			continue
+		for (var/datum/sound_emitter/E in client.listener_context.current_channels_by_emitter)
 			if (done[E]) // only need to run update_active_sound_param once per emitter
 				continue
 			spawn()

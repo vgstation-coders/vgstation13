@@ -114,8 +114,7 @@
 // This makes (100*100)/(10*10) = 100 nodes
 
 /datum/map/active/map_specific_init()
-	climate = new /datum/climate/arctic()
-
+	SSweather.set_climate(/datum/climate/arctic, map.zMainStation)
 	generate_mapvaults()
 
 	for (var/x = center_x; x <= center_x + center_x/3; x = x + 10)
@@ -211,6 +210,17 @@
 	if(!istype(H))
 		return
 	H.equip_or_collect(new /obj/item/weapon/book/manual/snow(H.back), slot_in_backpack)
+
+/datum/subsystem/daynightcycle/play_globalsound()
+	for(var/mob/M in player_list)
+		if(!M.client)
+			continue
+		else
+			switch(current_timeOfDay)
+				if(TOD_SUNRISE)
+					M << 'sound/misc/6amRooster.wav'
+				if(TOD_NIGHTTIME)
+					M << 'sound/misc/6pmWolf.wav'
 
 ////////////////////////////////////////////////////////////////
 #include "snaxi.dmm"

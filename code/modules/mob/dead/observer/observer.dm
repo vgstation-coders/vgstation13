@@ -44,7 +44,7 @@ var/creating_arena = FALSE
 	var/conversionHUD = 0
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
-	var/lastchairspin
+	var/last_obj_spin
 	var/pathogenHUD = FALSE
 	var/manual_poltergeist_cooldown //var-edit this to manually modify a ghost's poltergeist cooldown, set it to null to reset to global
 
@@ -258,12 +258,12 @@ Works together with spawning an observer, noted above.
 	if(key && !(copytext(key,1,2)=="@"))
 		if((src && src.client && src.client.holder))
 			log_admin("[key_name(src)] is now a[src.client.holder ? "n admin-" : " "]ghost.")
+			// Clear weather sounds when ghosting
+			client << sound(null, repeat = 0, wait = 0, channel = CHANNEL_WEATHER, volume = 0)
 		var/ghostype = /mob/dead/observer
 		if (deafmute)
 			ghostype = /mob/dead/observer/deafmute
 		var/mob/dead/observer/ghost = new ghostype(src, flags)	//Transfer safety to observer spawning proc.
-		if (sound_zone_manager)
-			sound_zone_manager.unregister_listener(src)
 		var/timetocheck = timeofdeath
 		if (isbrain(src))
 			var/mob/living/carbon/brain/brainmob = src

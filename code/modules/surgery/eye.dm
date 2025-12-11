@@ -156,6 +156,8 @@
 	if (target.op_stage.eyes == 3)
 		target.disabilities &= ~NEARSIGHTED
 		target.sdisabilities &= ~BLIND
+		target.eye_blind = 0
+		target.eye_blurry = 0
 		eyes.damage = 0
 	target.op_stage.eyes = 0
 

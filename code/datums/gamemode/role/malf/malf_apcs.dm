@@ -65,6 +65,9 @@
 	malfimage = new /atom/movable/fake_camera_image(loc)
 	malfimage.pixel_y = pixel_y
 	malfimage.pixel_x = pixel_x
+	malfbuttons = new /atom/movable/fake_camera_image/fake_camera_buttons(loc)
+	malfbuttons.pixel_y = pixel_y
+	malfbuttons.pixel_x = pixel_x
 	update_icon()
 
 /obj/machinery/power/apc/proc/clear_malf()
@@ -98,8 +101,8 @@
 	name          = ""
 	anchored      = TRUE
 	icon = 'icons/obj/power.dmi'
-	icon_state = "apcfake"
-	plane = FAKE_CAMERA_PLANE
+	icon_state = "apco3-2"
+	plane = FAKE_CAMERA_SCREEN_PLANE
 	mouse_opacity    = 0
 
 /atom/movable/fake_camera_image/New(var/turf/loc, var/new_icon, var/new_icon_state)
@@ -109,6 +112,9 @@
 	if(new_icon_state)
 		icon_state = new_icon_state
 
+/atom/movable/fake_camera_image/fake_camera_buttons
+	icon_state = "apcfake"
+	plane = FAKE_CAMERA_BUTTONS_PLANE
 
 
 /spell/aoe_turf/corereturn

@@ -64,10 +64,10 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 					secondary_effect.ToggleActivate(2)
 
 /obj/machinery/artifact/proc/generate_icon()
-	prefix = pick(primary_effect.valid_style_types)
-	numsuffix = pick(rand(1,all_artifact_style_effect_types[prefix]))
+	prefix = pick(primary_effect.valid_artifact_styles)
+	numsuffix = pick(rand(1,all_artifact_styles[prefix]))
 
-	if(prefix in goon_style_effect_types)
+	if(prefix in goon_artifact_styles)
 		icon = 'goon/icons/obj/artifacts.dmi'
 		if(prefix != ARTIFACT_STYLE_RELIQUARY)
 			fx_image = image(icon, "[prefix][numsuffix]fx")

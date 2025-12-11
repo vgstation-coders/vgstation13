@@ -114,6 +114,7 @@
 /obj/effect/landmark/start
 	name = "start"
 	icon_state = "x"
+	var/override_latejoin_behavior=FALSE //up to you to code what this does. see new_player.dm:proc/Meteortype_Latejoin for an example.
 
 /obj/effect/narration
 	name = "narrator"
@@ -250,3 +251,7 @@ var/list/map_landmarks = list()
 
 /obj/effect/landmark/map_element/deepspaceroid
 	maptype = /datum/map_element/fixedvault/deepspaceroid
+	
+/obj/effect/landmark/start/trader_also_latejoin
+	name = "Trader"
+	override_latejoin_behavior=TRUE

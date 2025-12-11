@@ -219,6 +219,19 @@
 			teleatom.visible_message("<span class='danger'>\The [teleatom] bounces off of the portal!</span>")
 		return FALSE
 
+	// Block teleportation to/from/within z-level 7 (procedurally-generated planets)
+	var/turf/curturf = get_turf(teleatom)
+	if(curturf && curturf.z == map.zProcGen)
+		if(ismob(teleatom))
+			var/mob/M = teleatom
+			to_chat(M, "<span class='warning'>A mysterious force prevents teleportation from this location!</span>")
+		return FALSE
+	if(destination.z == 7)
+		if(ismob(teleatom))
+			var/mob/M = teleatom
+			to_chat(M, "<span class='warning'>A mysterious force prevents teleportation to that location!</span>")
+		return FALSE
+
 	if(destination.z == map.zCentcomm) //centcomm z-level
 		if(istype(teleatom, /obj/mecha) && (universe.name != "Supermatter Cascade"))
 			var/obj/mecha/MM = teleatom

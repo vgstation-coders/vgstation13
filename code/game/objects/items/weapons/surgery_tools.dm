@@ -120,6 +120,7 @@
 	item_state = "laserscalpel2"
 	force = 15.0
 	toolspeed = 0.4
+	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 2500, MAT_URANIUM = 250)
 
 /obj/item/tool/surgicaldrill
 	name = "surgical drill"
@@ -260,6 +261,7 @@
 	force = 15.0
 	toolspeed = 0.4
 	heat_production = 10000000
+	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 250)
 
 /obj/item/tool/scalpel/laser/tier2/New()
 	..()
@@ -344,7 +346,6 @@
 	flammable = TRUE
 
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
-	var/usage_amount = 10
 	surgerysound = 'sound/items/fixovein.ogg'
 
 /obj/item/tool/FixOVein/clot

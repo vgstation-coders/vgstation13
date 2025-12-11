@@ -33,7 +33,7 @@
 	list(/obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
 	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/head/helmet/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/suit/clockwork_robes),
-	/obj/item/clothing/mask/necklace/xeno_claw,
+	/obj/item/clothing/accessory/necklace/xeno_claw,
 	/obj/item/clothing/under/newclothes,
 	/obj/item/clothing/suit/storage/draculacoat,
 	list(/obj/item/clothing/head/helmet/richard, /obj/item/clothing/under/jacketsuit),

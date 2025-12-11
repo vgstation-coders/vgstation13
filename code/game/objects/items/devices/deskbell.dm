@@ -2,7 +2,7 @@
 
 /obj/item/device/deskbell
 	name = "desk bell"
-	desc = "ding. ding."
+	desc = "Ding. Ding."
 	icon_state = "deskbell_2"
 	force = 5
 	throwforce = 5

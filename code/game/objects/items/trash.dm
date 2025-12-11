@@ -14,7 +14,7 @@
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	//var/global/list/trash_items = list()
 
-/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/obj/item/source)
+/obj/item/trash/New(loc, age, icon_state, color, dir, pixel_x, pixel_y, obj/item/source)
 	if(age)
 		setPersistenceAge(age)
 	if(icon_state)

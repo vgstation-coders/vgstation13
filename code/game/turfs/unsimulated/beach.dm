@@ -2,17 +2,19 @@
 	name = "Beach"
 	icon = 'icons/misc/beach.dmi'
 
+/turf/unsimulated/beach/New()
+	..()
+	footstep_sound = sounds_sand
+	footstep_sound_barefoot = sounds_sand
+	footstep_sound_claw = sounds_sand
+
 /turf/unsimulated/beach/sand
 	name = "Sand"
 	icon_state = "sand"
 
-/turf/unsimulated/beach/sand/spread/New()
-	..()
-	var/image/img = image('icons/turf/rock_overlay.dmi', "sand_overlay",layer = SIDE_LAYER)
-	img.pixel_x = -4*PIXEL_MULTIPLIER
-	img.pixel_y = -4*PIXEL_MULTIPLIER
-	img.plane = BELOW_TURF_PLANE
-	overlays += img
+/turf/unsimulated/beach/sand/spread
+	edge_flags = EDGE_CARDINAL
+	edge_priority = SAND_EDGE_PRIORITY
 
 /turf/unsimulated/beach/coastline
 	name = "Coastline"
@@ -41,6 +43,9 @@ var/obj/effect/beach_water/unsimmed/BWU
 	if(!BWU)
 		BWU = new
 	vis_contents.Add(BWU)
+	footstep_sound = sounds_water
+	footstep_sound_barefoot = sounds_water
+	footstep_sound_claw = sounds_water
 
 /turf/unsimulated/beach/water/Destroy()
 	vis_contents.Cut()
@@ -49,17 +54,20 @@ var/obj/effect/beach_water/unsimmed/BWU
 /turf/unsimulated/beach/water/deep
 	name = "deep water"
 	density = 1
+	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT
 
 /turf/unsimulated/beach/sandbar
 	name = "sandbar"
 	desc = "Very shallow water that conceals a layer of sand."
 	icon_state = "sandbar"
+	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT
 
 /turf/unsimulated/beach/shallows
 	name = "Shallows"
 	desc = "Shallow water that you can submerge in only waist deep."
 	icon_state = "water"
 	var/image/water
+	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT
 
 /turf/unsimulated/beach/shallows/New()
 	..()

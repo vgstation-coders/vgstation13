@@ -1161,15 +1161,26 @@ About the new airlock wires panel:
 		visible_message("<span class='warning'>\The [user] forces \the [src] [density ? "open" : "closed"]!</span>")
 		density ? open(1) : close(1)
 
-/obj/machinery/door/airlock/attack_animal(var/mob/living/simple_animal/M)
+/obj/machinery/door/airlock/attack_animal(var/mob/living/M)
 	if(isElectrified())
 		shock(M, 100)
 
 	if(operating)
 		return
-	var/level_of_door_opening = M.environment_smash_flags & OPEN_DOOR_WEAK
-	if(M.environment_smash_flags & OPEN_DOOR_STRONG)
-		level_of_door_opening = 2
+	
+	var/dooropendelay=0
+	var/level_of_door_opening = 0
+	if(istype(M,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA=M
+		level_of_door_opening=SA.environment_smash_flags & OPEN_DOOR_WEAK
+		if(SA.environment_smash_flags & OPEN_DOOR_STRONG)
+			level_of_door_opening = 2
+		dooropendelay=SA.force_airlock_time
+	else if(istype(M,/mob/living/complex_animal))
+		level_of_door_opening = 1
+	
+	
+	
 	if(!level_of_door_opening)
 		return
 	if((locked || welded || jammed) && level_of_door_opening < 2)
@@ -1180,7 +1191,7 @@ About the new airlock wires panel:
 		if(arePowerSystemsOn() && !(stat & (FORCEDISABLE|NOPOWER)))
 			if(level_of_door_opening < 2)
 				return
-			if(!M.force_airlock_time)
+			if(!dooropendelay)
 				if(M.client)
 					density ? open(1):close(1)
 				else if(density)
@@ -1189,7 +1200,7 @@ About the new airlock wires panel:
 				to_chat(M, "<span class='notice'>You start forcing the airlock [density ? "open" : "closed"].</span>")
 				visible_message("<span class='warning'>\The [src]'s motors whine as something begins trying to force it [density ? "open" : "closed"]!</span>",\
 						"<span class='notice'>You hear groaning metal and overworked motors.</span>")
-				if(do_after(M,src,M.force_airlock_time))
+				if(do_after(M,src,dooropendelay))
 					if(locked || welded || jammed) //if it got welded/bolted during the do_after
 						to_chat(M, "<span class='notice'>The airlock won't budge!</span>")
 						return

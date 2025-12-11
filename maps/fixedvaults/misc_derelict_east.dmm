@@ -2152,7 +2152,7 @@
 	name = "\improper Derelict Central Maintenance"
 	})
 "lA" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -3075,7 +3075,7 @@
 	name = "\improper Derelict Theatre"
 	})
 "pV" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -4052,7 +4052,7 @@
 /turf/simulated/floor,
 /area/derelict/holodeck)
 "vV" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -4453,7 +4453,7 @@
 	},
 /area/derelict/singularity_engine)
 "xT" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -6068,10 +6068,10 @@
 /turf/simulated/floor,
 /area/derelict/crew_quarters)
 "Ht" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -6502,7 +6502,7 @@
 	name = "Derelict Fore Maintenance"
 	})
 "JM" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -6732,7 +6732,7 @@
 	},
 /area/derelict/singularity_engine)
 "Lf" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -7386,7 +7386,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -8407,10 +8407,10 @@
 	name = "\improper Derelict Central Maintenance"
 	})
 "TG" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2

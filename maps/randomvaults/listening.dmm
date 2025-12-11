@@ -397,7 +397,7 @@
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "aR" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{
@@ -408,7 +408,7 @@
 	},
 /area/vault/listening)
 "aS" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

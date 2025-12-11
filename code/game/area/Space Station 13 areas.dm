@@ -200,6 +200,11 @@ var/global/list/adminbusteleportlocs = list()
 	flags = NO_PERSISTENCE
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
+/area/shuttle/Exited(atom/movable/Obj)
+	..()
+	animate(Obj)
+	Obj.pixel_y = initial(Obj.pixel_y)
+
 /area/shuttle/arrival
 	name = "\improper Arrival Shuttle"
 
@@ -565,6 +570,9 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Trading Post"
 	icon_state = "yellow"
 
+/area/shuttle/exploration
+	name = "\improper Exploration Shuttle"
+	icon_state = "yellow"
 
 /area/airtunnel1/      // referenced in airtunnel.dm:759
 
@@ -2033,19 +2041,51 @@ var/global/list/adminbusteleportlocs = list()
 //JUNGLE STATION
 /area/surface/jungle
 	name = "\improper Untamed Wilderness"
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 	icon_state="jungle_wild"
+	always_unpowered=TRUE
+
+//to hide vaults on the main station z-level
+/area/surface/jungle/vault
+	icon_state="jungle_landing"
+
+
+/area/surface/jungle/roid //i have no idea if using the same zone for 2 z-levels will cause technical issues, but i don't want to take the chance.
+
+//vault spawning on Z4
+/area/surface/jungle/roid/vaults
+	icon_state="jungle_landing"
+
+/area/surface/jungle/mining
+	name = "\proper Meteor Impact"
+	icon_state="jungle_fenced"
+	always_unpowered=FALSE
+
+/area/surface/jungle/mining/unexplored
+	icon_state="jungle_zone"
 
 /area/surface/jungle/fenced
 	name = "\improper Outdoors"
 	icon_state="jungle_fenced"
-	
+	holomap_draw_override = HOLOMAP_DRAW_PATH
+	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
+	always_unpowered=FALSE
+
+/area/surface/jungle/fenced/trader
+	name= "\improper Vox Outpost"
+
+/area/surface/jungle/fenced/trader/solars
+	name= "\improper Vox Outpost Solar Array"
+
 /area/surface/jungle/underground
 	name = "\improper Underground"
-	icon_state="jungle_wild"	
+	icon_state="jungle_wild"
+	always_unpowered=TRUE
 
 /area/surface/jungle/underground/zoned
 	forbid_apc=FALSE
 	construction_zone=FALSE
+	always_unpowered=FALSE
 	icon_state="jungle_zone"
 
 /area/surface/jungle/underground/zoned/speakeasy
@@ -2055,15 +2095,30 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Ghetto Surgery"
 
 /area/surface/jungle/underground/zoned/ghettomining
-	name = "\improper Refinery"	
+	name = "\improper Refinery"
 
 /area/surface/jungle/underground/zoned/casino
-	name = "\improper Casino"	
+	name = "\improper Casino"
+
+/area/surface/jungle/underground/zoned/ghetto_morgue
+	name = "\improper Crypt"
+
+/area/surface/jungle/underground/zoned/tcomms
+	name = "\proper Underground Relay"
+
+/area/surface/jungle/underground/zoned/roid_tcomms
+	name = "\proper Underground Relay"
+
+/area/surface/jungle/underground/zoned/ghetto_research
+	name = "\improper Ghetto Research"
 
 /area/surface/jungle/zoned
 	forbid_apc=FALSE
 	construction_zone=FALSE
+	always_unpowered=FALSE
 	icon_state="jungle_zone"
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
 
 /area/surface/jungle/zoned/prison_yard
 	name = "\improper Prison Yard"
@@ -2073,12 +2128,15 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/surface/jungle/zoned/atmos_outside
 	name = "\improper Exterior Atmospherics"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/surface/jungle/zoned/sme_outside
 	name = "\improper Supermatter Cooling Zone"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/surface/jungle/zoned/reactor_outside
 	name = "\improper Reactor Cooling Zone"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/surface/jungle/zoned/botanty_outside
 	name = "\improper Outdoor Botany Area"
@@ -2090,15 +2148,46 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Bazaar"
 
 /area/surface/jungle/zoned/art_zone
-	name = "\improper Portrait Zone"	
+	name = "\improper Portrait Zone"
 
 /area/surface/jungle/zoned/dump
 	name = "\improper Dump"
+	holomap_color = HOLOMAP_AREACOLOR_CARGO
+
+/area/surface/jungle/zoned/aifenced
+	name = "\improper AI Restricted Fenced Zone"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+
+/area/surface/jungle/zoned/dorms_patio
+	name = "\improper Dormitory Patio"
+
+/area/surface/jungle/zoned/medbay_patio
+	name = "\improper Medbay Break Patio"
+	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
+
+/area/surface/jungle/zoned/solars
+	name = "\improper Solar Array"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
+
+/area/surface/jungle/zoned/cargogarage
+	name = "\improper Cargo Parking"
+	holomap_color = HOLOMAP_AREACOLOR_CARGO
+
+/area/surface/jungle/zoned/cargolobby
+	name = "\improper Cargo Lobby"
+	holomap_color = HOLOMAP_AREACOLOR_CARGO
+
+/area/surface/jungle/zoned/bombrange
+	name = "\improper Bomb Range"
+
+/area/surface/jungle/zoned/roid_prep
+	name = "\improper Mine Solar Array"
 
 /area/surface/jungle/landing
 	name = "\improper Landing Area"
 	icon_state="jungle_landing"
 	base_turf_type=/turf/unsimulated/floor/jungle/concrete
+	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
 //DJSTATION
 

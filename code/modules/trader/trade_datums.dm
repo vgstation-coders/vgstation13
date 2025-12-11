@@ -71,17 +71,19 @@
 	maxunits = 3
 	sales_category = TRADE_VARIETY
 
+/datum/trade_product/lostlemuria
+	name = "Lost Crate of Lemuria"
+	path = /obj/structure/closet/crate/lemuria
+	baseprice = 160
+	maxunits = 2
+	sales_category = TRADE_VARIETY
+
 /datum/trade_product/babel
 	name = "Library of Babel shipment"
 	path = /obj/structure/closet/crate/library
 	baseprice = 100
 	maxunits = 5
 	sales_category = TRADE_VARIETY
-
-/datum/trade_product/mechagy
-	name = "Mecha Graveyard shuttle disk"
-	path = /obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard
-	baseprice = 100
 
 /datum/trade_product/mechexpac
 	name = "exosuit expansion kit"
@@ -102,11 +104,6 @@
 	baseprice = 100
 	maxunits = 2
 	restocks_left = 3
-
-/datum/trade_product/fakeposter
-	name = "cargo cache kit"
-	path = /obj/item/weapon/fakeposter_kit
-	baseprice = 50
 
 /datum/trade_product/yantarcrate
 	name = "Yantar medical crate"

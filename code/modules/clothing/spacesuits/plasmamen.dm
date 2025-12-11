@@ -82,6 +82,10 @@
 	pressure_resistance = 400 * ONE_ATMOSPHERE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
+/obj/item/clothing/suit/space/plasmaman/atmostech/firefighter
+	name = "plasmaman firefighter suit"
+	icon_state = "plasmamanFirefighter_suit"
+
 /obj/item/clothing/head/helmet/space/plasmaman/atmostech
 	name = "plasmaman atmospheric helmet"
 	icon_state = "plasmamanAtmos_helmet0"
@@ -93,6 +97,11 @@
 /obj/item/clothing/head/helmet/space/plasmaman/atmostech/New()
 	actions_types += /datum/action/item_action/toggle_helmet_mask
 	..()
+
+/obj/item/clothing/head/helmet/space/plasmaman/atmostech/firefighter
+	name = "plasmaman firefighter helmet"
+	icon_state = "plasmamanFirefighter_helmet0"
+	base_state = "plasmamanFirefighter_helmet"
 
 /obj/item/clothing/suit/space/plasmaman/engineer
 	name = "plasmaman engineer suit"

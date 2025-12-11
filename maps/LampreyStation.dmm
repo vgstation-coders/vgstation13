@@ -10936,7 +10936,7 @@
 	},
 /area/lamprey/bronxmaintenanceblob)
 "ayG" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/window{
@@ -10952,7 +10952,7 @@
 	},
 /area/lamprey/toprung)
 "ayH" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/effect/landmark/corpse/assistant,
@@ -20662,7 +20662,7 @@
 /area/lamprey/voxtradepost)
 "aWl" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/wood,
 /area/lamprey/voxtradepost)
@@ -21983,7 +21983,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/darkfarm)
 "aZd" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	anchored = 0
 	},
 /turf/simulated/floor{
@@ -21992,7 +21992,7 @@
 	},
 /area/lamprey/warzonemaintenanceblob)
 "aZe" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	anchored = 0
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -22002,7 +22002,7 @@
 	},
 /area/lamprey/warzonemaintenanceblob)
 "aZf" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	anchored = 0
 	},
 /obj/machinery/camera{
@@ -22855,7 +22855,7 @@
 /turf/simulated/floor/wood,
 /area/lamprey/darkfarm)
 "baT" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	anchored = 0
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -22866,10 +22866,10 @@
 	},
 /area/lamprey/warzonemaintenanceblob)
 "baU" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	anchored = 0
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	anchored = 0
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -31522,7 +31522,7 @@
 	},
 /area/lamprey/escape)
 "btI" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/window/reinforced{
@@ -31558,7 +31558,7 @@
 	},
 /area/lamprey/escape)
 "btL" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/window/reinforced{
@@ -42385,7 +42385,7 @@
 /obj/structure/window{
 	dir = 1
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -43159,7 +43159,7 @@
 	},
 /area/lamprey/virology)
 "bTj" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_z = 32
 	},
 /obj/machinery/camera{
@@ -43913,7 +43913,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bUP" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
 	pixel_y = 32
 	},
@@ -59299,7 +59299,7 @@
 /turf/simulated/wall/r_wall,
 /area/lamprey/botanymaintenanceblob)
 "cCV" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -60140,7 +60140,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/hellmaintenanceblob)
 "cEX" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{
@@ -60566,7 +60566,7 @@
 /obj/structure/window{
 	dir = 8
 	},
-/obj/structure/sink,
+/obj/structure/wc/sink,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -60575,7 +60575,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/aftstarboardhallways)
 "cFT" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/machinery/light/small{
 	dir = 1
 	},
@@ -60722,7 +60722,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/hellmaintenanceblob)
 "cGm" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{
@@ -60751,7 +60751,7 @@
 	},
 /area/lamprey/losspital)
 "cGp" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -61270,7 +61270,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/hellmaintenanceblob)
 "cHu" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{
@@ -61905,7 +61905,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/hellmaintenanceblob)
 "cIO" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{
@@ -63328,7 +63328,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cLV" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -63338,7 +63338,7 @@
 	},
 /area/lamprey/researchwarehousemaintenanceblob)
 "cLW" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -64083,7 +64083,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cNz" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -64622,7 +64622,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cOD" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -65797,7 +65797,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cRl" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -66370,7 +66370,7 @@
 /turf/simulated/floor,
 /area/lamprey/bridge)
 "cSv" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{
@@ -72121,7 +72121,7 @@
 /turf/simulated/floor,
 /area/lamprey/miniatureboxstationreplica)
 "dfo" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/door/window,
@@ -79108,7 +79108,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/engineering)
 "drM" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/effect/decal/cleanable/vomit,
 /obj/effect/landmark/start{
 	name = "Chief Engineer"
@@ -85097,7 +85097,7 @@
 /turf/simulated/floor/wood,
 /area/lamprey/bridge)
 "dDC" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -85128,7 +85128,7 @@
 /obj/structure/mirror{
 	pixel_x = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -85955,7 +85955,7 @@
 /obj/structure/mirror{
 	pixel_x = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -86628,7 +86628,7 @@
 	},
 /area/lamprey/xenobiology)
 "dGx" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -88529,7 +88529,7 @@
 /turf/simulated/floor/engine/n20,
 /area/lamprey/miniatureboxstationreplica)
 "dKr" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -88544,7 +88544,7 @@
 /area/lamprey/xenobiomaintenanceblob)
 "dKt" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /turf/simulated/floor/plating{
@@ -89988,7 +89988,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/xenobiomaintenanceblob)
 "dNd" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -90833,7 +90833,7 @@
 "dOF" = (
 /obj/structure/grille,
 /obj/structure/window/full/reinforced/tinted,
-/obj/item/weapon/circuitboard/microwave,
+/obj/item/weapon/circuitboard/small/microwave,
 /turf/simulated/floor/plating,
 /area/lamprey/thebelt)
 "dOG" = (
@@ -100973,7 +100973,7 @@
 /area/lamprey/bridge)
 "ekB" = (
 /obj/structure/table/woodentable,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/item/weapon/lipstick,
 /turf/simulated/floor/arcade,
 /area/lamprey/bridge)
@@ -109291,7 +109291,7 @@
 	},
 /area/lamprey/arrivals)
 "eBx" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/effect/step_trigger/teleporter{
@@ -109632,7 +109632,7 @@
 /obj/structure/mirror{
 	pixel_y = 30
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -112082,7 +112082,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/lamprey/porthallways)
 "eHF" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -112155,7 +112155,7 @@
 /turf/simulated/floor/shuttle,
 /area/lamprey/porthallways)
 "eHK" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -112179,7 +112179,7 @@
 	},
 /area/lamprey/porthallways)
 "eHM" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -112767,7 +112767,7 @@
 	},
 /area/lamprey/xenobiomaintenanceblob)
 "eII" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/structure/window/reinforced/tinted{
@@ -112782,7 +112782,7 @@
 	},
 /area/lamprey/headofpersonnelline)
 "eIJ" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -112876,7 +112876,7 @@
 	},
 /area/lamprey/enginerooms)
 "eIS" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -112991,7 +112991,7 @@
 	},
 /area/lamprey/headofpersonnelline)
 "eJd" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -113069,7 +113069,7 @@
 	},
 /area/lamprey/enginerooms)
 "eJk" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/structure/window/reinforced/tinted{
@@ -118888,7 +118888,7 @@
 	},
 /area/lamprey/catchall)
 "eVv" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -118930,7 +118930,7 @@
 	},
 /area/lamprey/catchall)
 "eVy" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 30
 	},
 /turf/simulated/floor{
@@ -118953,7 +118953,7 @@
 	},
 /area/lamprey/catchall)
 "eVB" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -119739,7 +119739,7 @@
 	},
 /area/lamprey/catchall)
 "eWX" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small,
@@ -121647,7 +121647,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/catchall)
 "fbh" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 30
 	},
 /turf/simulated/floor{
@@ -121718,7 +121718,7 @@
 /turf/simulated/floor/plating,
 /area/centcom/suppy)
 "fbo" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -121882,7 +121882,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/catchall)
 "fbK" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -122120,7 +122120,7 @@
 	},
 /area/lamprey/catchall)
 "fcq" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -122135,7 +122135,7 @@
 	},
 /area/lamprey/catchall)
 "fcr" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -122161,7 +122161,7 @@
 	},
 /area/centcom/striketeam)
 "fcv" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "barber"
@@ -124007,7 +124007,7 @@
 /area/centcom/test)
 "fhv" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -124065,7 +124065,7 @@
 /turf/unsimulated/wall,
 /area/centcom/test)
 "fhE" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/plating{
@@ -124275,7 +124275,7 @@
 	},
 /area/centcom/ert)
 "fih" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -125191,7 +125191,7 @@
 	},
 /area/centcom/ert)
 "fkl" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -125974,7 +125974,7 @@
 	},
 /area/centcom/control)
 "flR" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -126611,7 +126611,7 @@
 	},
 /area/shuttle/escape/centcom)
 "fnj" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /turf/simulated/floor{
@@ -127083,7 +127083,7 @@
 	},
 /area/centcom/ert)
 "fou" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -128796,7 +128796,7 @@
 /turf/simulated/floor/plating/vox,
 /area/shuttle/nuclearops)
 "fsx" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 30
 	},
 /obj/machinery/light/small{
@@ -129462,7 +129462,7 @@
 /turf/space,
 /area/shuttle/nuclearops)
 "ftK" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/effect/step_trigger/teleporter{
@@ -137149,7 +137149,7 @@
 /obj/structure/mirror{
 	pixel_x = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -148318,7 +148318,7 @@
 /obj/structure/mirror{
 	pixel_y = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 20
 	},
 /turf/space,
@@ -148393,7 +148393,7 @@
 /obj/structure/rack,
 /obj/item/weapon/circuitboard/arcade,
 /obj/item/weapon/circuitboard/med_data,
-/obj/item/weapon/circuitboard/microwave,
+/obj/item/weapon/circuitboard/small/microwave,
 /turf/space,
 /area)
 "gkh" = (
@@ -149101,13 +149101,13 @@
 /turf/space,
 /area)
 "glG" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/space,
 /area)
 "glH" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/sign/poster{
@@ -149389,7 +149389,7 @@
 /turf/space,
 /area)
 "gmj" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -149422,13 +149422,13 @@
 /turf/space,
 /area)
 "gmm" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 30
 	},
 /turf/space,
 /area)
 "gmn" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -151712,7 +151712,7 @@
 /turf/space,
 /area)
 "gqw" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 32
 	},
 /turf/space,
@@ -155977,7 +155977,7 @@
 /turf/simulated/wall/r_wall,
 /area)
 "gyE" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -156257,7 +156257,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/derelict/ship)
 "gze" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -156268,7 +156268,7 @@
 	},
 /area)
 "gzf" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /turf/simulated/floor{
@@ -161014,7 +161014,7 @@
 /turf/space,
 /area)
 "gIG" = (
-/obj/structure/sink/kitchen,
+/obj/structure/wc/sink/kitchen,
 /turf/simulated/wall,
 /area)
 "gIH" = (
@@ -162946,7 +162946,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -166362,7 +166362,7 @@
 /obj/structure/mirror{
 	pixel_x = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -166922,7 +166922,7 @@
 /turf/space,
 /area)
 "gTx" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 10
 	},
 /turf/space,
@@ -167370,7 +167370,7 @@
 /turf/space,
 /area)
 "gUk" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -167385,7 +167385,7 @@
 	dir = 8;
 	pixel_x = -24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -167606,7 +167606,7 @@
 /obj/structure/mirror{
 	pixel_x = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -168489,7 +168489,7 @@
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_x = -32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -175189,7 +175189,7 @@
 /turf/space,
 /area)
 "hhO" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -177582,7 +177582,7 @@
 /turf/space,
 /area)
 "hmp" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -177941,7 +177941,7 @@
 /turf/space,
 /area)
 "hmV" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = -34
 	},
 /turf/space,
@@ -179741,7 +179741,7 @@
 /obj/structure/mirror{
 	pixel_y = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 20
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -180830,7 +180830,7 @@
 /turf/space,
 /area)
 "hsf" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /turf/space,
 /area)
 "hsg" = (
@@ -181250,7 +181250,7 @@
 /turf/space,
 /area)
 "hsU" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /obj/item/fish_eggs/goldfish,
 /obj/item/fish_eggs/goldfish,
 /turf/space,
@@ -182013,7 +182013,7 @@
 	dir = 1;
 	pixel_y = -25
 	},
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/item/clothing/mask/horsehead,
 /obj/item/clothing/mask/pig,
 /obj/item/clothing/mask/fakemoustache,
@@ -187959,7 +187959,7 @@
 	},
 /area/vault)
 "hHD" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -187969,7 +187969,7 @@
 	},
 /area/syndicate_mothership)
 "hHE" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -189688,7 +189688,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -194276,10 +194276,10 @@
 	dir = 4;
 	pixel_x = -24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small,
@@ -196103,7 +196103,7 @@
 	},
 /area/lamprey/excavationtunnels)
 "hYz" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 1
 	},
 /turf/simulated/floor/plating{
@@ -196369,7 +196369,7 @@
 	},
 /area/lamprey/excavationtunnels)
 "hZi" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/item/weapon/paper/pamphlet,
@@ -196414,7 +196414,7 @@
 	},
 /area/lamprey/excavationtunnels)
 "hZo" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/plating{

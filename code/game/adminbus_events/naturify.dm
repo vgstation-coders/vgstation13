@@ -14,7 +14,7 @@ var/list/flora_types = list(
 									/obj/structure/flora/ausbushes/brflowers = 14,
 									/obj/structure/flora/ausbushes/ppflowers = 14,
 									/obj/structure/seedbush = 10,
-									/obj/structure/sink/puddle = 3,
+									/obj/structure/wc/sink/puddle = 3,
 							 )
 
 var/list/animal_types = list(
@@ -36,7 +36,7 @@ var/list/cave_decor_types = list(
 									/obj/item/weapon/melee/bone_club = 1,
 									/obj/item/weapon/melee/wooden_club = 1,
 									/obj/structure/boulder = 12,
-									/obj/structure/sink/puddle = 12,
+									/obj/structure/wc/sink/puddle = 12,
 							 )
 
 var/list/beach_decor_types = list(
@@ -279,9 +279,9 @@ var/list/seedbush_spawns = list(
 	for(var/turf/T in target)
 		uncharge_all_cells_recursive(T)
 
-	for(var/obj/structure/sink/S in target)
-		if(!istype(S, /obj/structure/sink/puddle))
-			new /obj/structure/sink/puddle(S.loc)
+	for(var/obj/structure/wc/sink/S in target)
+		if(!istype(S, /obj/structure/wc/sink/puddle))
+			new /obj/structure/wc/sink/puddle(S.loc)
 			qdel(S)
 
 	for(var/obj/item/weapon/reagent_containers/glass/bucket/buckets in target)

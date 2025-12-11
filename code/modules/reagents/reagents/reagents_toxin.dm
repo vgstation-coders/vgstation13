@@ -39,7 +39,7 @@
 				H.adjustToxLoss(0.1)
 				if(prob(8))
 					H.vomit()
-		if(600 to INFINITY)	//Ded in 10 minutes with a minimum of 6 units
+		if(601 to INFINITY)	//Ded in 10 minutes with a minimum of 6 units
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(20))
@@ -483,7 +483,19 @@
 /datum/reagent/mutagen/metastable
 	name = "Metastable Mutagen"
 	id = METASTABLE_MUTAGEN
-	description = "Causes controlled mutations in plants."
+	description = "A modified variant of Unstable Mutagen that causes controlled mutations in plants and accelerates the onset of symptoms due to radiation poisoning."
+
+/datum/reagent/mutagen/metastable/on_mob_life(var/mob/living/M)
+	if(!M.dna)
+		return //No robots, AIs, aliens, Ians or other mobs should be affected by this.
+	if(!M)
+		M = holder.my_atom
+	if(..())
+		return 1
+	M.apply_radiation(3,RAD_INTERNAL)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.rad_tick += 20 * REM //QUICKLY advances the rad_tick
 
 /datum/reagent/mutagen/metastable/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -501,28 +513,12 @@
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
-/datum/reagent/mutagen/metatable
+/datum/reagent/mutagen/metastable/metatable
 	name = "Metatable Mutagen"
 	id = METATABLE_MUTAGEN
-	description = "Causes controlled mutations in plants and tables."
+	description = "Causes controlled mutations in plants and tables, and accelerates the onset of radiation symptoms."
 
-/datum/reagent/mutagen/metatable/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	if(!holder)
-		return
-	if(!T)
-		T = holder.my_atom //Try to find the mob through the holder
-	if(!istype(T)) //Still can't find it, abort
-		return
-	var/amount = T.reagents.get_reagent_amount(id)
-	if(amount >= 1)
-		if(prob(30))
-			T.mutate(GENE_PHYTOCHEMISTRY, PLANT_CHEMICAL)
-			if(prob(50))
-				T.reagents.remove_reagent(id, 1)
-	else if(amount > 0)
-		T.reagents.remove_reagent(id, amount)
-
-/datum/reagent/mutagen/metatable/reaction_obj(var/obj/O, var/volume)
+/datum/reagent/mutagen/metastable/metatable/reaction_obj(var/obj/O, var/volume)
 	if(..())
 		return 1
 
@@ -669,14 +665,14 @@
 		return 1
 
 	switch(tick)
-		if(1 to 15)
+		if (1 to 15)
 			M.eye_blurry = max(M.eye_blurry, 10)
-		if(15 to 25)
+		if (16 to 25)
 			M.drowsyness  = max(M.drowsyness, 20)
-		if (25 to 240)
+		if (26 to 240)
 			M.Paralyse(20)
 			M.drowsyness  = max(M.drowsyness, 30)
-		if(240 to INFINITY) // 8 minutes
+		if (241 to INFINITY) // 8 minutes
 			var/mob/living/carbon/human/H = M
 			var/datum/organ/internal/heart/damagedheart = H.get_heart()
 			damagedheart.damage += 10

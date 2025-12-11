@@ -4,9 +4,10 @@
 	id = "laserscalpel1"
 	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
+	materials = list (MAT_IRON = 15000, MAT_GLASS = 7500) //Contains both the scalpel and the cautery
 	category = "Surgery"
 	build_path = /obj/item/tool/scalpel/laser
+	use_design_materials = FALSE //Split between the scalpel and cautery
 
 /datum/design/laserscalpel2
 	name = "High Precision Laser Scalpel"
@@ -14,9 +15,10 @@
 	id = "laserscalpel2"
 	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 3, Tc_BIOTECH = 4)
 	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 500)
+	materials = list (MAT_IRON = 15000, MAT_GLASS = 7500, MAT_URANIUM = 500)
 	category = "Surgery"
 	build_path = /obj/item/tool/scalpel/laser/tier2
+	use_design_materials = FALSE
 
 /datum/design/incisionmanager
 	name = "Surgical Incision Manager"
@@ -79,14 +81,34 @@
 	build_path = /obj/item/tool/surgicaldrill/diamond
 
 /datum/design/switchtool
-	name = "Surgeon's Switchtool"
+	name = "Surgeon's Switchtool (Full)"
 	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."
 	id = "switchtool"
 	req_tech = list(Tc_MATERIALS = 5, Tc_BLUESPACE = 3, Tc_BIOTECH = 3)
 	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
+	materials = list (MAT_IRON = 90000, MAT_GLASS = 40000) //Contains tools worth 75000 metal and 40000 glass, the switchtool itself has 15000 metal
 	category = "Surgery"
 	build_path = /obj/item/weapon/switchtool/surgery
+	use_design_materials = FALSE //So that the switchtool doesn't contain 90000 metal and 40000 glass
+
+// Reduce the printed item materials accordingly
+/datum/design/switchtool/after_craft(obj/O, obj/machinery/r_n_d/fabricator/F)
+	..()
+	for(var/obj/item/I in O.contents)
+		if(!I.materials)
+			continue
+		for(var/matID in I.materials.storage)
+			I.materials.storage[matID] = F.get_resource_cost_w_coeff_no_design(I.materials.storage[matID], matID)
+
+/datum/design/empty_switchtool
+	name = "Surgeon's Switchtool (Empty)"
+	desc = "An empty switchtool, ready to be fitted with surgery tools. For the surgeon on the go."
+	id = "empty_switchtool"
+	req_tech = list(Tc_MATERIALS = 5, Tc_BLUESPACE = 3, Tc_BIOTECH = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 15000)
+	category = "Surgery"
+	build_path = /obj/item/weapon/switchtool/surgery/empty
 
 /datum/design/surgery_rollerbed
 	name = "Mobile Operating Table"

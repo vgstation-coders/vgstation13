@@ -16,9 +16,9 @@
 	id="recharger"
 	req_tech = list(Tc_POWERSTORAGE = 2, Tc_COMBAT = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 3)
+	materials = list(MAT_GLASS = 1000, SACID = 3)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/recharger
+	build_path = /obj/item/weapon/circuitboard/small/recharger
 
 
 /datum/design/photocopier
@@ -37,9 +37,9 @@
 	id = "fax"
 	req_tech = list ("bluespace" = 2, "materials" = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 1000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/fax
+	build_path = /obj/item/weapon/circuitboard/small/fax
 
 /datum/design/condimaster
 	name = "Circuit Design (CondiMaster)"

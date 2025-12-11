@@ -93,7 +93,7 @@
 	var/nticks=0
 	var/disable_config_sync = FALSE
 
-/obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=0)
+/obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=1)
 	..(loc)
 
 	// For standardized subtypes, once they're established.
@@ -248,10 +248,11 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())
 		return
-	user.visible_message("[user] shows you: [bicon(src)] [name]: assignment: [assignment]",\
-		"You flash your ID card: [bicon(src)] [name]: assignment: [assignment]")
-	user.delayNextAttack(1 SECONDS)
+	user.visible_message("[user] shows you: [bicon(src)] [name]. Assignment: [assignment]",\
+		"You flash your ID card: [bicon(src)] [name]. Assignment: [assignment]")
+	user.delayNextAttack(0.5 SECONDS)
 	add_fingerprint(user)
+	flash_object_animation(user, src, FLASH_ID_ANIM)
 
 /obj/item/weapon/card/id/GetAccess()
 	if(arcanetampered)
@@ -453,7 +454,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/syndicate/AltClick()
 	if (can_use(usr)) // Checks that the this is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
 		copy_appearance = !copy_appearance
-		to_chat(usr, "<span class='notice'>zThe [src] is now set to copy [copy_appearance ? "the appearance along with" : "just"] the access.</span>")
+		to_chat(usr, "<span class='notice'>\The [src] is now set to copy [copy_appearance ? "the appearance along with" : "just"] the access.</span>")
 		return
 	return ..()
 

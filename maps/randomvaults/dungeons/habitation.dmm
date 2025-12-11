@@ -53,7 +53,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "az" = (
-/obj/structure/toilet/acid{
+/obj/structure/wc/toilet/acid{
 	dir = 4
 	},
 /obj/machinery/light/small/broken{
@@ -279,7 +279,7 @@
 /area/vault/mothership_lab/cave)
 "cB" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/toilet/acid,
+/obj/structure/wc/toilet/acid,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/hobo)
 "cF" = (
@@ -468,7 +468,7 @@
 /obj/structure/mirror{
 	pixel_y = 33
 	},
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},
@@ -1202,7 +1202,7 @@
 /area/vault/mothership_lab/raidtunnel_lower)
 "ku" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -1212,7 +1212,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/administration)
 "kF" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -1840,7 +1840,7 @@
 /turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/administration)
 "pr" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},
@@ -2342,7 +2342,7 @@
 /area/vault/mothership_lab/habitation)
 "tI" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/toilet/acid,
+/obj/structure/wc/toilet/acid,
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
@@ -2632,7 +2632,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "wB" = (
-/obj/structure/toilet/acid,
+/obj/structure/wc/toilet/acid,
 /obj/machinery/light/small{
 	dir = 1
 	},
@@ -3373,7 +3373,7 @@
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/habitation)
 "DU" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -3796,7 +3796,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -4904,7 +4904,7 @@
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/cave)
 "Rk" = (
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -5157,7 +5157,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "Tp" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -5358,7 +5358,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -5409,7 +5409,7 @@
 /area/vault/mothership_lab/cave)
 "Vz" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -5562,7 +5562,7 @@
 	blood_color = "#2299FC";
 	icon_state = "floor5"
 	},
-/obj/structure/sink/acid{
+/obj/structure/wc/sink/acid{
 	pixel_y = 28
 	},
 /obj/item/weapon/kitchen/utensil/knife/tactical,
@@ -5665,7 +5665,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "Xq" = (
-/obj/structure/toilet/acid{
+/obj/structure/wc/toilet/acid{
 	dir = 8
 	},
 /turf/unsimulated/floor/lab_sterile,

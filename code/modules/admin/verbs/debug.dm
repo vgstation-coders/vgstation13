@@ -404,13 +404,16 @@ Pressure: [env.pressure]"}
 */
 
 //TODO: merge the vievars version into this or something maybe mayhaps
-/client/proc/cmd_debug_del_all()
+/client/proc/cmd_debug_del_all(target as text)
 	set category = "Debug"
 	set name = "Del-All"
+	set desc = "Delete all atoms of a type. Finish path with a period to hide subtypes."
 
+	if(!istext(target))
+		return
 	// to prevent REALLY stupid deletions
-	var/blocked = list(/obj, /mob, /mob/living, /mob/living/carbon, /mob/living/carbon/human, /mob/dead, /mob/dead/observer, /mob/living/silicon, /mob/living/silicon/robot, /mob/living/silicon/ai)
-	var/hsbitem = input(usr, "Choose an object to delete.", "Delete:") as null|anything in typesof(/obj) + typesof(/mob) - blocked
+	var/blocked = list(/atom/movable/lighting_overlay, /atom/movable/border_dummy, /obj, /mob, /mob/living, /mob/living/carbon, /mob/living/carbon/human, /mob/dead, /mob/dead/observer, /mob/living/silicon, /mob/living/silicon/robot, /mob/living/silicon/ai)
+	var/hsbitem = filter_typelist_input("Choose an object to delete.", "Delete:", get_matching_types(target,/atom/movable) - blocked)
 	if(hsbitem)
 		for(var/atom/O in world)
 			if(istype(O, hsbitem))

@@ -96,7 +96,7 @@
 	desc = "A weapon favored by syndicate infiltration teams."
 	w_class = W_CLASS_LARGE
 	force = 10
-	starting_materials = list(MAT_IRON = 200000)
+	starting_materials = list(MAT_IRON = 5000)
 	w_type = RECYK_ELECTRONIC
 	projectile_type = "/obj/item/projectile/energy/bolt/large"
 
@@ -176,7 +176,7 @@
 			projectile_type = "/obj/item/projectile/energy/electrode/fast"
 		else
 			projectile_type = "/obj/item/projectile/energy/electrode/scatter"
-			
+
 /obj/item/weapon/gun/energy/shotgun/update_icon()
 	..()
 	if(pumped)
