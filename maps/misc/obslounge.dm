@@ -22,9 +22,55 @@
 	if(istype(H, /mob/dead/observer))
 		spawn_mob(H)
 
-/obj/effect/landmark/obs_spawn/proc/spawn_mob(mob/M)
-	var/mob/living/carbon/human/dummy/obser = new(loc)
-	obser.key = M.key
+/obj/effect/landmark/obs_spawn/proc/spawn_mob(mob/M) //Stripped down character creation without disabilities or language
+	var/datum/preferences/prefs = M.client.prefs
+	var/datum/species/chosen_species
+
+	var/species = prefs.get_pref(/datum/preference_setting/string/species)
+	var/datum/preference_setting/name_pref = prefs.get_pref_datum(/datum/preference_setting/string/real_name)
+
+	if(species)
+		chosen_species = all_species[species]
+
+    // Determine mob type based on species. This means every player is no longer a human
+	var/mob_type = /mob/living/carbon/human
+	if(chosen_species)
+		switch(chosen_species.name)
+			if("Vox") mob_type = /mob/living/carbon/human/vox
+			if("Unathi") mob_type = /mob/living/carbon/human/unathi
+			if("Skrell") mob_type = /mob/living/carbon/human/skrell
+			if("Tajaran") mob_type = /mob/living/carbon/human/tajaran
+			if("Diona") mob_type = /mob/living/carbon/human/diona
+			if("Plasmaman") mob_type = /mob/living/carbon/human/plasmaman
+
+	var/mob/living/carbon/human/new_character = new mob_type(loc)
+	new_character.status_flags = GODMODE|CANPUSH|UNPACIFIABLE
+
+	if(species)
+		chosen_species = all_species[species]
+	new_character.set_species(species)
+
+	if(ticker.random_players || appearance_isbanned(src)) //disabling ident bans for now
+		var/datum/preference_setting/flavor_text = prefs.get_pref_datum(/datum/preference_setting/string/flavor_text)
+		new_character.setGender(pick(MALE, FEMALE))
+		name_pref.setting = random_name(new_character.gender, new_character.species.name)
+		prefs.randomize_appearance_for(new_character)
+		flavor_text.setting = ""
+	else
+		prefs.copy_to(new_character)
+
+	new_character.equip_to_slot_or_del(new /obj/item/clothing/under/color/white(new_character), slot_w_uniform)
+	new_character.equip_to_slot_or_del(new /obj/item/clothing/shoes/white(new_character), slot_shoes)
+	new_character.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(new_character), slot_back)
+
+	if (M.mind)
+		M.mind.active = 0 // we wish to transfer the key manually
+		M.mind.transfer_to(new_character) // won't transfer key since the mind is not active
+
+	new_character.name = name_pref.setting
+	new_character.dna.ready_dna(new_character)
+
+	new_character.key = M.key
 
 /area/obslounge
 	name = "Unknown"
