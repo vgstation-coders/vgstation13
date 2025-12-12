@@ -94,3 +94,16 @@
 			L.obs_camera = new(L)
 			L.obs_camera.network = list(CAMERANET_OBS)
 	. = ..()
+
+/obj/machinery/vending/allweapons
+	name = "fun dispenser"
+	desc = "Dispenses fun."
+	icon_state = "circus"
+
+/obj/machinery/vending/allweapons/build_inventories()
+	products.Cut()
+	for(var/weapontype in subtypesof(/obj/item/weapon/gun))
+		products[weapontype] = 1
+	for(var/meleetype in subtypesof(/obj/item/weapon/melee))
+		products[meleetype] = 1
+	..()

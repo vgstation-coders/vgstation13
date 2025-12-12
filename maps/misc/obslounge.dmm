@@ -362,6 +362,12 @@
 	name = "reinforced floor"
 	},
 /area/obslounge)
+"PC" = (
+/obj/machinery/vending/allweapons,
+/turf/unsimulated/floor{
+	icon_state = "wood"
+	},
+/area/obslounge)
 "Qv" = (
 /obj/structure/bed/chair/comfy/couch/left/teal{
 	dir = 8
@@ -644,7 +650,7 @@ BZ
 (11,1,1) = {"
 Ut
 iy
-vz
+PC
 vz
 vz
 JV
