@@ -1,28 +1,28 @@
 /datum/map_element/dungeon/obslounge
-    file_path = "maps/misc/obslounge.dmm"
-    unique = TRUE
-    var/obj/effect/landmark/obs_spawn/obs_spawner
+	file_path = "maps/misc/obslounge.dmm"
+	unique = TRUE
+	var/obj/effect/landmark/obs_spawn/obs_spawner
 
 /obj/effect/step_trigger/ghostizer
 	var/joins_obsgang = FALSE
 
 /obj/effect/step_trigger/ghostizer/Trigger(var/atom/movable/A)
-    if(isliving(A))
-        var/mob/living/L = A
+	if(isliving(A))
+		var/mob/living/L = A
 		var/mob/dead/observer/obsganger = L.ghostize()
 		obsganger.started_as_observer = joins_obsgang
-        qdel(L)
+		qdel(L)
 
 /obj/effect/step_trigger/ghostizer/obsgang
 	joins_obsgang = TRUE
 
 /obj/effect/landmark/obs_spawn
-    name = "obsgang spawner"
+	name = "obsgang spawner"
 
 /obj/effect/landmark/obs_spawn/spawned_by_map_element(datum/map_element/ME, list/objects)
-    if(ME.type == /datum/map_element/dungeon/obslounge)
-        var/datum/map_element/dungeon/obslounge/OBS = ME
-        OBS.obs_spawner = src
+	if(ME.type == /datum/map_element/dungeon/obslounge)
+		var/datum/map_element/dungeon/obslounge/OBS = ME
+		OBS.obs_spawner = src
 
 /obj/effect/landmark/obs_spawn/Crossed(H as mob|obj)
 	..()
@@ -39,7 +39,7 @@
 	if(species)
 		chosen_species = all_species[species]
 
-    // Determine mob type based on species. This means every player is no longer a human
+	// Determine mob type based on species. This means every player is no longer a human
 	var/mob_type = /mob/living/carbon/human
 	if(chosen_species)
 		switch(chosen_species.name)
