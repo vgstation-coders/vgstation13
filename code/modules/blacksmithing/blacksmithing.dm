@@ -146,8 +146,7 @@
 			qdel(src)
 			return
 	if(istype(A,/obj/item/weapon/hammer))
-		var/strikesmod = round((max(1, round(A.quality/2, 1)) * A.material_type.brunt_damage_mod)
-		strikes += strikesmod
+		strikes += round(max(1, round(A.quality/2, 1)) * A.material_type.brunt_damage_mod)
 	else if(istype(A,/obj/item/weapon/storage/toolbox))
 		strikes+=0.25
 	if(!readytoquench && strikes >= strikes_required)
