@@ -92,8 +92,21 @@
 	for(var/mob/living/L in player_list) //sets it here
 		if(!L.obs_camera)
 			L.obs_camera = new(L)
-			L.obs_camera.network = list(CAMERANET_OBS)
 	. = ..()
+
+/obj/machinery/camera/obs
+	network = list(CAMERANET_OBS)
+
+/obj/machinery/camera/obs/name_camera()
+	var/basename = loc.name || "Unknown"
+	var/nethash = english_list(network)
+	var/suffix = 0
+	while(!suffix || ((nethash+c_tag) in camera_names))
+		c_tag = "[basename]"
+		if(suffix)
+			c_tag += " [suffix]"
+		suffix++
+	camera_names[nethash+c_tag]=src
 
 /obj/machinery/vending/allweapons
 	name = "fun dispenser"
@@ -103,7 +116,7 @@
 /obj/machinery/vending/allweapons/build_inventories()
 	products.Cut()
 	for(var/weapontype in subtypesof(/obj/item/weapon/gun))
-		products[weapontype] = 1
+		products[weapontype] = INFINITY
 	for(var/meleetype in subtypesof(/obj/item/weapon/melee))
-		products[meleetype] = 1
+		products[meleetype] = INFINITY
 	..()
