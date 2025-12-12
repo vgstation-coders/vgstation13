@@ -478,6 +478,11 @@ var/datum/subsystem/mapping/SSmapping
 		if(isturf(A))
 			var/turf/T = A
 
+			// Set the area's baseturf if not already set
+			var/area/AA = get_area(T)
+			if(AA?.base_turf_type != default_baseturf)
+				AA.base_turf_type = default_baseturf
+
 			// Replace floor turfs with planet's default baseturf
 			if(istype(T, /turf/unsimulated/floor/asteroid))
 				if(default_baseturf)
@@ -582,7 +587,9 @@ var/datum/subsystem/mapping/SSmapping
 		var/list/allowed_disease_types = list(
 			/datum/disease2/disease/virus,
 			/datum/disease2/disease/bacteria,
-			/datum/disease2/disease/prion
+			/datum/disease2/disease/prion,
+			/datum/disease2/disease/fungus,
+			/datum/disease2/disease/parasite
 		)
 		disease_type = pick(allowed_disease_types)
 		var/datum/disease2/disease/temp_disease = new disease_type()
@@ -628,6 +635,7 @@ var/datum/subsystem/mapping/SSmapping
 
 	return pick(loot_table_types)
 
+// Places a loot container in the story vault adjacent to a wall, not adjacent to a doorway, and not on top of an existing structure.
 /datum/subsystem/mapping/proc/spawn_story_loot(list/spawned_objects, datum/map_element/ruin/story/story_ruin, loot_type)
 	if(!spawned_objects || !story_ruin || !loot_type)
 		return

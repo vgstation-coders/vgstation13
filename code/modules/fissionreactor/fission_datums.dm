@@ -514,6 +514,9 @@ datums for the fission reactor, which includes the fuel and reactor
 		return
 	if(fuel.life<=0)
 		return
+	if (fuel.lifetime<=0)
+		fuel.life=0
+		return
 	if(fuel.wattage<=0)
 		return
 		
@@ -521,9 +524,9 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/powerfactor=fuel_rods.len*((fuel_reactivity) - ( (fuel_reactivity-fuel_reactivity_with_rods)*control_rod_insertion))
 
 	var/totalpowertodump=0
+	speedfactor*=fuel.get_fuel_life_factor()
 	if(fuel.wattage < fuel.absorbance) //slow down the reaction if there's not enuff powah
 		totalpowertodump=0
-		speedfactor*=(fuel.absorbance-fuel.wattage)/fuel.wattage
 	else
 		totalpowertodump=(fuel.wattage-fuel.absorbance)*dt
 	
@@ -726,3 +729,10 @@ datums for the fission reactor, which includes the fuel and reactor
 			
 	
 	return products
+
+/datum/fission_fuel/proc/get_fuel_life_factor() //call after rederive_stats()
+	if(!wattage)
+		return 1.0
+	if(absorbance > wattage)
+		return wattage/(2*absorbance-wattage)
+	return 1.0

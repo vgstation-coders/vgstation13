@@ -82,7 +82,7 @@
 /datum/map_element/ruin/story/greenhouse
 	name = "greenhouse"
 	file_path = "maps/ruins/story/greenhouse.dmm"
-	theme = STORY_NT
+	theme = STORY_NT|STORY_CLOWN|STORY_VOX
 	loot_containers = list(
 		/obj/structure/closet/crate
 	)

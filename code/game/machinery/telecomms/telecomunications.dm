@@ -503,7 +503,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/relay/planetary
 	name = "planetary telecommunications relay"
-	desc = "A compact relay designed for planetary installations. Only provides communications within the local sector."
+	desc = "A relay which provides telecommunications coverage for a planet."
 	icon_state = "relay"
 	on = FALSE
 	toggled = FALSE

@@ -2092,6 +2092,7 @@
 #include "code\modules\mob\living\complex_animal\base.dm"
 #include "code\modules\mob\living\complex_animal\jungle_mobs\bears.dm"
 #include "code\modules\mob\living\complex_animal\jungle_mobs\capybara_wild.dm"
+#include "code\modules\mob\living\complex_animal\jungle_mobs\crocodile.dm"
 #include "code\modules\mob\living\complex_animal\jungle_mobs\dino.dm"
 #include "code\modules\mob\living\complex_animal\jungle_mobs\frogs.dm"
 #include "code\modules\mob\living\complex_animal\jungle_mobs\gorilla.dm"

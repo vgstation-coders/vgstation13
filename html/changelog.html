@@ -73,6 +73,68 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2025.12.11</h2>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You can now build on planet surfaces.</li>
+				<li class="bugfix">Fixed weather and daylight affecting indoor ruin areas.</li>
+				<li class="bugfix">Fixed explosions in ruins exposing space turfs.</li>
+				<li class="bugfix">Fixed ruins spawning over wall turfs.</li>
+			</ul>
+			<h2 class="date">2025.12.10</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Jungle: added crocodiles</li>
+				<li class="bugfix">Jungle: fixed a space tile, distro issues, and other mapping issues</li>
+				<li class="tweak">Jungle: improved trader outpost to be more intuitive, due to the differences of junglestation</li>
+				<li class="tweak">Jungle: replaced some cows with chickens</li>
+				<li class="tweak">Jungle: slightly tweaked animal AI to be a bit more interesting</li>
+			</ul>
+			<h2 class="date">2025.12.09</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">fission reactor controllers now display their heat output in watts.</li>
+				<li class="bugfix">Fixed some bugs with fission reactor, including broken icons, improper fuel life calculations, and being able to extract reagents from food</li>
+				<li class="tweak">drag click quick construction with tiles has been changed, and will now only build on tiles of the same type as the first one you built on. engineers rejoice, no more mistaken floor tile placements!</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">bundle emags shouldn&#39;t be the shitty bugged ones no more</li>
+			</ul>
+			<h3 class="author">Inorien updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug that caused complex pipenets to lock up when being merged</li>
+			</ul>
+			<h3 class="author">gurfan updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes enabling VOX corruption in the AI announcement menu causing the menu to 404. Also removes the option on the menu to change voice styles because the masculine voice is dead. RIP.</li>
+				<li class="bugfix">Fixes Nikita rockets disappearing instead of detonating after they run out of fuel, or when they collide with another projectile.</li>
+				<li class="bugfix">Fixes certain printed items at a Protolathe having 1 unit of every material in the game. Also fixes the large energy crossbow giving 50 sheets worth of metal when recycled, for some reason.</li>
+				<li class="bugfix">Fixes non-admin ghosts being able to open/close tabledoors.</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed mobs on a given planet getting paused if all players on the planet were in a shuttle.</li>
+				<li class="bugfix">Fixed shuttles randomly using or not using a transit level when traveling to/from planets.</li>
+				<li class="bugfix">Fixed atoms floating in perpetuity after leaving a shuttle.</li>
+				<li class="bugfix">Fixed empty station turfs appearing over coastal turfs.</li>
+				<li class="bugfix">Fixed shuttles landing in lava, water, and ruins.</li>
+				<li class="bugfix">Removed all non-planetary destinations from the Exploration Shuttle.</li>
+			</ul>
+			<h2 class="date">2025.12.08</h2>
+			<h3 class="author">Inorien updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed DPI scaling messing with NanoUI</li>
+			</ul>
+			<h2 class="date">2025.12.05</h2>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The most important holiday of the year, Pakjesavond van het Sinterklaasfeest, now has some more content.</li>
+				<li class="rscadd">The Staff of Sinterklaas that can only be bought by wizards on the 5th of December now gives its jovial targets a spell that lets them summon candy. Said candy is great for throwing at people.</li>
+				<li class="rscadd">Seasonal cookies now have Sinterklaas variants, only on the 5th.</li>
+				<li class="rscadd">Chocolate letters! Write a single letter on a piece of paper, add it to the microwave, then add a chocolate bar.</li>
+				<li class="rscadd">Taaitaai! 5u cinnamon, sugar, flour and water for 6.</li>
+			</ul>
 			<h2 class="date">2025.12.04</h2>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
@@ -1459,81 +1521,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Blowing on hot things no longer works while dead.</li>
 				<li class="bugfix">Putting out hot items no longer works while dead or far away.</li>
 				<li class="rscadd">Mortars can now grind anything an all-in-one grinder can, to the same amounts, and vice versa.</li>
-			</ul>
-			<h2 class="date">2025.02.24</h2>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">the reactor expansion-pak now only gives 1 control rod circuit board (instead of 2) to reduce clutter.</li>
-				<li class="tweak">reactor now irradiate over a larger area.</li>
-				<li class="tweak">reactor casings take less time to build</li>
-				<li class="tweak">reactor casings with piping now visually show their direction</li>
-				<li class="bugfix">fixed the ISC not being able to be deconstructed</li>
-				<li class="bugfix">fixed reactor girders not giving the correct number of plasteel sheets when deconstructing</li>
-				<li class="bugfix">fixed piping from reactors not returning the correct pipe</li>
-				<li class="imageadd">fuel rods will now animate when a reactor is on</li>
-				<li class="spellcheck">fission reactor coolant ports no longer face &#39;&#39;soth&#39;&#39;</li>
-				<li class="spellcheck">the NantoTrasen engineering team has revised the reactor guidebook to address a few lingering questions about the design of reactors.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Plasma glass shards will now recycle properly.</li>
-			</ul>
-			<h2 class="date">2025.02.21</h2>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">You can now do some actions like loading someone into an inflatable shelter, styling someone else&#39;s hair, or reloading a vending machine even if you have progress bars turned off.</li>
-			</ul>
-			<h2 class="date">2025.02.20</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">Fixes several typos and improper capitalization on a bunch of fission reactor stuff.</li>
-				<li class="spellcheck">Renames the Fuel Rod (object) to Fuel Reservoir, to reduce the confusion between the machinery fuel rod and the object, since no matter how many fuel rod cores you have in your reactor, you only ever need 1 (one) fuel rod (now reservoir).</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Miming characters will no longer verbally practice while learning a new language.</li>
-			</ul>
-			<h2 class="date">2025.02.19</h2>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">A new engine has been added: fission reactors! Used in conjunction with a TEG, they can make a respectable amount of power with a low upkeep.</li>
-				<li class="rscadd">Fission reactors can either be ordered from a cargo crate, or unlocked with the help of the science department and miners.</li>
-				<li class="rscadd">Fueling a fission reactor will require some outside assistance. Ask a miner for some uranium, or the chemist for some radium.</li>
-				<li class="rscadd">Fission reactors can convert certain non-fuel reagents into them to more exotic ones.</li>
-				<li class="rscadd">Fission reactors will produce a new gas as a byproduct: Radon. Radon is highly radioactive, and can supercharge the supermatter (caution is advised)</li>
-				<li class="rscadd">The RCD has been given a UI overhaul, which makes it a detached menu similar to that of the RPD</li>
-				<li class="rscadd">The RCD can now construct additional buildings, as well as has more options for window placment</li>
-				<li class="tweak">The RCD can now build things which previously required upgrading an existing building or a floor. Overall matter cost and construction time has not been affected.</li>
-				<li class="bugfix">The RCD will no longer change window blueprints that are currently being constructed</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Buffs the crisisbot by giving them access to splints, a single lube spraybottle and changing their hypospray to contain Doctor&#39;s Delight, Dexalin Plus, Methamphetamine, Oxycodone, Creatine and Chloral Hydrate, and raising the total volume available on the injector.</li>
-				<li class="rscadd">Blitzkrieg module cyborgs (Nuke Ops) now carry an emag for door busting purposes.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You may now insert your ID by clicking it on the medical records computer rather than having to open the UI first.</li>
-				<li class="rscadd">You now get a message when you start putting a crate in the disposals.</li>
-			</ul>
-			<h3 class="author">MercuriusGH updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Cargo pizzas are warm now and come in a metal crate</li>
-			</ul>
-			<h3 class="author">brndd updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">R&amp;D can now build the spiderbot fabricator: a machine that allows ghosts to respawn as spiderbots. It must be loaded with metal sheets to work. Build it by researching Programming 4 and Engineering 4 and printing the board from the circuit imprinter.</li>
-			</ul>
-			<h2 class="date">2025.02.18</h2>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Battlemats allow you to pick up game pieces no matter what side of the board you are sitting on.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Scientist biosuits now offer some protection from slime attacks and slime feeding. (half reduction for the latter)</li>
-				<li class="spellcheck">Messages from slime feeding sent to the slime and feedee are now formatted better.</li>
-				<li class="spellcheck">Biosuit descriptions now spell &#34;contaminant&#34; properly.</li>
 			</ul>
 		</div>
 		<!--

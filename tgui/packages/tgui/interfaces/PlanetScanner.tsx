@@ -116,7 +116,7 @@ export const PlanetScanner = (props) => {
             </Stack.Item>
           )}
 
-          {!powered && anchored && (
+          {!powered && !!anchored && (
             <Stack.Item>
               <Section>
                 <Box color="bad">No power</Box>
@@ -124,7 +124,7 @@ export const PlanetScanner = (props) => {
             </Stack.Item>
           )}
 
-          {scanning_disabled && powered && anchored && (
+          {!!scanning_disabled && !!powered && !!anchored && (
             <Stack.Item grow>
               <Section fill>
                 <Stack fill vertical justify="center" align="center">
@@ -180,7 +180,7 @@ export const PlanetScanner = (props) => {
             </Stack.Item>
           )}
 
-          {!!powered && anchored && !scanning_disabled && (
+          {!!powered && !!anchored && !scanning_disabled && (
             <>
               <Stack.Item>
                 <Section title="Scanner Status">

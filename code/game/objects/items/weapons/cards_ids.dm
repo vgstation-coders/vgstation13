@@ -93,7 +93,7 @@
 	var/nticks=0
 	var/disable_config_sync = FALSE
 
-/obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=0)
+/obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=1)
 	..(loc)
 
 	// For standardized subtypes, once they're established.
