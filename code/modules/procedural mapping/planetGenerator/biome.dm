@@ -127,6 +127,7 @@
 	var/atom/flora_type = pick(flora_spawn_list_expanded)
 	var/atom/spawned = new flora_type(floor_turf)
 	floor_turf.turf_flags |= NO_LAVA_GEN
+	spawned.planet = floor_turf.planet
 	return spawned
 
 /**
@@ -154,6 +155,7 @@
 		var/atom/spawned = new feature_type(floor_turf)
 		SSmapping.add_feature_to_bucket(spawned)
 		floor_turf.turf_flags |= NO_LAVA_GEN
+		spawned.planet = floor_turf.planet
 		return spawned
 
 /datum/biome/proc/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
@@ -172,6 +174,7 @@
 	var/spawner_type = pickweight(loot_spawners)
 	var/obj/abstract/loot_spawner/spawned = new spawner_type(floor_turf, cave = cavespawn)
 	floor_turf.turf_flags |= NO_LAVA_GEN
+	spawned.planet = floor_turf.planet
 	return spawned
 
 /datum/biome/cave/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
@@ -197,7 +200,6 @@
 
 	var/atom/picked_mob = pick(mob_spawn_list_expanded)
 
-	// Use spatial bucketing during planet generation for O(1) lookups instead of O(n)
 	if(SSmapping.generating)
 		if(!SSmapping.can_spawn_mob_at(floor_turf.x, floor_turf.y, picked_mob))
 			return null
@@ -207,6 +209,7 @@
 			M.faction = planet_faction
 		SSmapping.add_mob_to_bucket(spawned)
 		floor_turf.turf_flags |= NO_LAVA_GEN
+		spawned.planet = floor_turf.planet
 		return spawned
 
 /**
