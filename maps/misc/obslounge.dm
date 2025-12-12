@@ -94,10 +94,10 @@
 			L.obs_camera = new(L)
 	. = ..()
 
-/obj/machinery/camera/obs
+/obj/machinery/camera/all/obs
 	network = list(CAMERANET_OBS)
 
-/obj/machinery/camera/obs/name_camera()
+/obj/machinery/camera/all/obs/name_camera()
 	var/basename = loc.name || "Unknown"
 	var/nethash = english_list(network)
 	var/suffix = 0
