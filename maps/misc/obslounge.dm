@@ -119,4 +119,6 @@
 		products[weapontype] = INFINITY
 	for(var/meleetype in subtypesof(/obj/item/weapon/melee))
 		products[meleetype] = INFINITY
+	for(var/toytype in subtypesof(/obj/item/toy))
+		products[toytype] = INFINITY
 	..()
