@@ -2,33 +2,33 @@
 "a" = (
 /obj/structure/flora/tree/pine,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "f" = (
 /obj/structure/flora/tree/pine,
 /obj/abstract/loot_spawner/medical,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "r" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "x" = (
 /obj/structure/flora/tree/pine,
 /obj/abstract/loot_spawner/combat,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "J" = (
 /obj/item/weapon/hatchet,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "V" = (
 /obj/structure/flora/tree_stump,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "W" = (
 /obj/structure/flora/tree/pine,
 /obj/structure/flora/tree/pine,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 a

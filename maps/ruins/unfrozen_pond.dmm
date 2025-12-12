@@ -1,36 +1,36 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "d" = (
 /obj/structure/flora/rock,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "g" = (
 /obj/item/weapon/fish/lobster,
 /turf/unsimulated/beach/shallows,
-/area/ruin/surface)
+/area/exposed_ruin)
 "n" = (
 /mob/living/simple_animal/crab/snowy{
 	name = "snow crab"
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "q" = (
 /turf/unsimulated/beach/shallows,
-/area/ruin/surface)
+/area/exposed_ruin)
 "H" = (
 /obj/item/weapon/fish/salmon,
 /turf/unsimulated/beach/shallows,
-/area/ruin/surface)
+/area/exposed_ruin)
 "I" = (
 /obj/structure/geyser,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "U" = (
 /obj/glacier,
 /turf/unsimulated/beach/shallows,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 U

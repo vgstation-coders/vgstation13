@@ -6,7 +6,7 @@
 	icon_state = "ruin"
 	base_turf_type = /turf/unsimulated/floor/planetary/grass
 
-/area/ruin/surface //allows daylight and weather
+/area/exposed_ruin //allows daylight and weather
 	name = "exposed ruin"
 	icon_state = "ruin_exposed"
 

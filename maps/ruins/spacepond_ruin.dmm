@@ -50,13 +50,13 @@
 "ai" = (
 /obj/effect/decal/cleanable/blood/drip,
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aj" = (
 /obj/structure/hanging_lantern{
 	dir = 1
 	},
 /turf/unsimulated/beach/sand,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ak" = (
 /obj/machinery/door/mineral/wood,
 /turf/simulated/floor/wood,
@@ -127,7 +127,7 @@
 "aw" = (
 /obj/item/clothing/shoes/black,
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ax" = (
 /obj/effect/decal/cleanable/blood/tracks/footprints{
 	dir = 1;
@@ -140,11 +140,11 @@
 	tag = "icon-human1 (WEST)"
 	},
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "ay" = (
 /mob/living/simple_animal/hostile/carp/baby,
 /turf/unsimulated/beach/water,
-/area/ruin/surface)
+/area/exposed_ruin)
 "az" = (
 /obj/abstract/map/spawner/space/drinks,
 /turf/simulated/floor/carpet,
@@ -169,18 +169,18 @@
 "aD" = (
 /obj/effect/decal/cleanable/blood/splatter,
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aE" = (
 /obj/effect/decal/cleanable/blood,
 /obj/effect/landmark/corpse,
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aF" = (
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aG" = (
 /obj/effect/decal/cleanable/blood/tracks/footprints{
 	dir = 1;
@@ -193,7 +193,7 @@
 	tag = "icon-human1 (NORTH)"
 	},
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aH" = (
 /obj/structure/bed/chair/comfy/brown{
 	dir = 1
@@ -271,7 +271,7 @@
 "aQ" = (
 /obj/effect/decal/cleanable/blood/gibs/limb,
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aR" = (
 /obj/item/stack/medical/ointment,
 /obj/item/stack/medical/bruise_pack,
@@ -288,7 +288,7 @@
 "aT" = (
 /obj/structure/hanging_lantern,
 /turf/unsimulated/beach/sand,
-/area/ruin/surface)
+/area/exposed_ruin)
 "aU" = (
 /obj/structure/flora/pottedplant,
 /turf/simulated/floor/carpet,
@@ -344,14 +344,14 @@
 	tag = "icon-human1 (NORTH)"
 	},
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "bc" = (
 /turf/unsimulated/mineral,
-/area/ruin/surface)
+/area/exposed_ruin)
 "bd" = (
 /obj/structure/flora/ausbushes/reedbush,
 /turf/unsimulated/beach/sand,
-/area/ruin/surface)
+/area/exposed_ruin)
 "be" = (
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/wood{
@@ -370,23 +370,23 @@
 "bh" = (
 /obj/effect/decal/cleanable/campfire,
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "bi" = (
 /turf/unsimulated/beach/sand,
-/area/ruin/surface)
+/area/exposed_ruin)
 "bj" = (
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor/wood,
 /area/vault/spacepond)
 "bk" = (
 /turf/unsimulated/beach/water,
-/area/ruin/surface)
+/area/exposed_ruin)
 "bl" = (
 /obj/structure/hanging_lantern{
 	dir = 1
 	},
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "bm" = (
 /obj/machinery/door/mineral/sandstone,
 /turf/unsimulated/floor/asteroid,
@@ -396,18 +396,18 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "bo" = (
 /obj/item/clothing/under/overalls,
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "bp" = (
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "qy" = (
 /obj/abstract/loot_spawner/entertainment,
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
 "Eq" = (
 /obj/abstract/loot_spawner/structure,
 /turf/simulated/floor/carpet,
@@ -415,7 +415,19 @@
 "ON" = (
 /obj/abstract/loot_spawner/decoration,
 /turf/unsimulated/floor/asteroid,
-/area/ruin/surface)
+/area/exposed_ruin)
+"qy" = (
+/obj/abstract/loot_spawner/entertainment,
+/turf/unsimulated/floor/asteroid,
+/area/exposed_ruin)
+"Eq" = (
+/obj/abstract/loot_spawner/structure,
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"ON" = (
+/obj/abstract/loot_spawner/decoration,
+/turf/unsimulated/floor/asteroid,
+/area/exposed_ruin)
 
 (1,1,1) = {"
 aa

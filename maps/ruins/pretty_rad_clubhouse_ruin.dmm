@@ -48,7 +48,7 @@
 /obj/item/pod_parts/armor,
 /obj/structure/table,
 /turf/unsimulated/floor/jungle/path_plated,
-/area/ruin/surface)
+/area/exposed_ruin)
 "l" = (
 /obj/structure/flora/pottedplant{
 	icon_state = "plant-22";
@@ -82,7 +82,7 @@
 /obj/item/pod_parts/core,
 /obj/structure/table,
 /turf/unsimulated/floor/jungle/path_plated,
-/area/ruin/surface)
+/area/exposed_ruin)
 "r" = (
 /obj/item/stack/sheet/metal/bigstack,
 /obj/item/stack/sheet/glass/glass/bigstack{
@@ -93,7 +93,7 @@
 "t" = (
 /obj/abstract/loot_spawner/structure,
 /turf/unsimulated/floor/jungle/path_plated,
-/area/ruin/surface)
+/area/exposed_ruin)
 "u" = (
 /obj/item/stack/sheet/mineral/uranium,
 /obj/item/stack/sheet/mineral/uranium,
@@ -105,7 +105,7 @@
 /area/vault/mechclubhouse)
 "v" = (
 /turf/unsimulated/floor/jungle/path_plated,
-/area/ruin/surface)
+/area/exposed_ruin)
 "w" = (
 /obj/machinery/washing_machine,
 /turf/simulated/floor/carpet,
@@ -118,7 +118,7 @@
 "z" = (
 /obj/machinery/vending/mining,
 /turf/unsimulated/floor/jungle/path_plated,
-/area/ruin/surface)
+/area/exposed_ruin)
 "A" = (
 /obj/machinery/light{
 	dir = 8
@@ -215,7 +215,7 @@
 "T" = (
 /obj/structure/vendomatpack/mining,
 /turf/unsimulated/floor/jungle/path_plated,
-/area/ruin/surface)
+/area/exposed_ruin)
 "U" = (
 /obj/structure/table/glass,
 /turf/simulated/floor/carpet,
@@ -233,7 +233,7 @@
 "X" = (
 /obj/machinery/suit_storage_unit/engie,
 /turf/unsimulated/floor/jungle/path_plated,
-/area/ruin/surface)
+/area/exposed_ruin)
 "Y" = (
 /obj/structure/wc/toilet{
 	dir = 4

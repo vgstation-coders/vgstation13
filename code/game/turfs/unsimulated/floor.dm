@@ -36,6 +36,20 @@
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
 
+/turf/unsimulated/floor/canBuildLattice()
+	if(!planet)
+		return BUILD_FAILURE
+	else if(!(locate(/obj/structure/lattice) in contents))
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/unsimulated/floor/canBuildPlating()
+	if(!planet)
+		return BUILD_FAILURE
+	else if(locate(/obj/structure/lattice) in contents)
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
 
 /turf/unsimulated/floor/grass
 	name = "grass"

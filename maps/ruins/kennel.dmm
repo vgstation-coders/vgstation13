@@ -10,7 +10,7 @@
 /area/vault/kennel)
 "g" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "i" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -72,7 +72,7 @@
 "C" = (
 /obj/item/stack/rods,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "D" = (
 /obj/structure/fence/cut/large,
 /turf/simulated/floor/engine/concrete,

@@ -99,7 +99,7 @@
 /area/ruin)
 "V" = (
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "X" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced/tinted/frosted,

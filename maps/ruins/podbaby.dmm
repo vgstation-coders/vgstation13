@@ -8,10 +8,10 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "n" = (
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "q" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -22,15 +22,15 @@
 	},
 /obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor/shuttle/plating,
-/area/ruin/surface)
+/area/exposed_ruin)
 "s" = (
 /obj/structure/shuttle/engine/propulsion/left,
 /obj/structure/shuttle/diag_wall/smooth,
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "v" = (
 /turf/simulated/floor/shuttle,
-/area/ruin/surface)
+/area/exposed_ruin)
 "A" = (
 /obj/effect/landmark/corpse/assistant/robust,
 /obj/effect/decal/cleanable/blood/gibs/up{
@@ -43,7 +43,7 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "F" = (
 /obj/machinery/light/small/broken{
 	dir = 8
@@ -53,30 +53,30 @@
 	},
 /obj/abstract/loot_spawner/medical,
 /turf/simulated/floor/shuttle,
-/area/ruin/surface)
+/area/exposed_ruin)
 "H" = (
 /turf/simulated/wall/shuttle,
-/area/ruin/surface)
+/area/exposed_ruin)
 "P" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 1
 	},
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "U" = (
 /obj/effect/decal/cleanable/blood/gibs/up{
 	color = "#772222"
 	},
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "W" = (
 /obj/abstract/loot_spawner/trash/on_ground,
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "Y" = (
 /obj/machinery/door/unpowered/shuttle,
 /turf/simulated/floor/shuttle,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 a

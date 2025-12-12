@@ -2,26 +2,26 @@
 "a" = (
 /obj/structure/window/barricade/snow,
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "c" = (
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "t" = (
 /obj/effect/landmark/corpse/assistant,
 /obj/structure/window/barricade/snow,
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "w" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "B" = (
 /obj/structure/flora/rock/pile/snow,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "O" = (
 /obj/structure/flora/rock/pile/snow,
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 w

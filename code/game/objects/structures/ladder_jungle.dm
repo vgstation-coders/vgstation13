@@ -7,6 +7,9 @@
 	return
 /obj/structure/ladder/jungle_tunnel/singularity_act()
 	return 0
+	
+/obj/structure/ladder/jungle_tunnel/singularity_pull()
+	return 0
 
 
 /obj/structure/ladder/jungle_tunnel/MouseDropTo(var/atom/movable/over_object,var/mob/user,var/src_location,var/over_location,var/src_control,var/over_control,var/params)

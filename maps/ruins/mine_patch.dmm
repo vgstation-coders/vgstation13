@@ -4,14 +4,14 @@
 /area/template_noop)
 "i" = (
 /turf/unsimulated/mineral/random/high_chance/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "E" = (
 /obj/abstract/loot_spawner/trash,
 /turf/unsimulated/floor/snow,
 /area/template_noop)
 "N" = (
 /turf/unsimulated/mineral/random/high_chance_clown/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 a

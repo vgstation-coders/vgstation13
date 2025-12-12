@@ -4,7 +4,7 @@
 /area/ruin)
 "b" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "d" = (
 /obj/structure/mannequin/wood{
 	name = "Dinosaur";

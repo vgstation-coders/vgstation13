@@ -4,28 +4,28 @@
 /area/template_noop)
 "i" = (
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "j" = (
 /obj/machinery/space_heater/campfire{
 	burntime = 5
 	},
 /obj/machinery/cooking/grill/spit,
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "l" = (
 /obj/item/weapon/spear/wooden,
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "N" = (
 /obj/effect/landmark/corpse,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "Y" = (
 /obj/abstract/loot_spawner/food_or_drink{
 	containers = list(/obj/item/weapon/storage/box,/obj/item/weapon/storage/box/large)
 	},
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 a

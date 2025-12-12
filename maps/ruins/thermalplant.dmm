@@ -142,7 +142,7 @@
 	dir = 10
 	},
 /turf/unsimulated/floor/noblizz_permafrost/icecore,
-/area/ruin/surface)
+/area/exposed_ruin)
 "kJ" = (
 /obj/item/tool/wrench,
 /turf/simulated/floor{
@@ -154,7 +154,7 @@
 	dir = 6
 	},
 /turf/unsimulated/floor/noblizz_permafrost/icecore,
-/area/ruin/surface)
+/area/exposed_ruin)
 "mS" = (
 /obj/machinery/atmospherics/binary/volume_pump{
 	dir = 1;
@@ -282,7 +282,7 @@
 	dir = 5
 	},
 /turf/unsimulated/floor/noblizz_permafrost/icecore,
-/area/ruin/surface)
+/area/exposed_ruin)
 "qr" = (
 /obj/structure/cable/yellow,
 /obj/machinery/computer/powermonitor,
@@ -371,7 +371,7 @@
 "wN" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging,
 /turf/unsimulated/floor/noblizz_permafrost/icecore,
-/area/ruin/surface)
+/area/exposed_ruin)
 "xl" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 10
@@ -412,7 +412,7 @@
 	dir = 9
 	},
 /turf/unsimulated/floor/noblizz_permafrost/icecore,
-/area/ruin/surface)
+/area/exposed_ruin)
 "zL" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
 	dir = 10
@@ -666,10 +666,10 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/noblizz_permafrost/icecore,
-/area/ruin/surface)
+/area/exposed_ruin)
 "Su" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "SM" = (
 /obj/machinery/light/he{
 	dir = 8

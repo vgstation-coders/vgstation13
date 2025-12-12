@@ -8,7 +8,7 @@
 	pixel_y = 11
 	},
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "i" = (
 /obj/machinery/cart/cargo{
 	dir = 4
@@ -18,14 +18,14 @@
 /obj/abstract/map/spawner/assistant/tools,
 /obj/abstract/map/spawner/assistant/materials,
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "q" = (
 /obj/effect/landmark/corpse/assistant,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "M" = (
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "V" = (
 /turf/template_noop,
 /area/template_noop)

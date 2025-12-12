@@ -1,7 +1,7 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "e" = (
 /obj/structure/closet/cabinet,
 /obj/item/clothing/head/wizard/clown,
@@ -36,7 +36,7 @@
 	name = "Witch's cauldron"
 	},
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "q" = (
 /obj/structure/grille,
 /obj/structure/window{

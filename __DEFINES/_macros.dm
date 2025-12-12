@@ -244,7 +244,7 @@
 
 #define iswall(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall) || istype(A, /turf/unsimulated/mineral))
 
-#define isopensurface(A) ((istype(A, /area/surface) || istype(A, /area/planet) || istype(A, /area/ruin/surface)) && !istype(A, /area/planet/cave))
+#define isopensurface(A) ((istype(A, /area/surface) || istype(A, /area/planet) || istype(A, /area/exposed_ruin)) && !istype(A, /area/planet/cave))
 
 #define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
 

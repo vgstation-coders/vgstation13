@@ -4,10 +4,10 @@
 /area/template_noop)
 "b" = (
 /turf/simulated/floor/grass,
-/area/ruin/surface)
+/area/exposed_ruin)
 "l" = (
 /turf/unsimulated/floor/snow/permafrost,
-/area/ruin/surface)
+/area/exposed_ruin)
 "m" = (
 /obj/structure/table/woodentable,
 /obj/item/potion/healing{
@@ -16,12 +16,12 @@
 	},
 /obj/item/potion/deception,
 /turf/simulated/floor/grass,
-/area/ruin/surface)
+/area/exposed_ruin)
 "n" = (
 /obj/effect/decal/cleanable/campfire,
 /obj/machinery/cooking/grill/spit,
 /turf/simulated/floor/grass,
-/area/ruin/surface)
+/area/exposed_ruin)
 "r" = (
 /obj/item/weapon/staff/broom,
 /obj/item/clothing/head/witchwig{
@@ -29,28 +29,28 @@
 	},
 /obj/structure/table/woodentable,
 /turf/simulated/floor/grass,
-/area/ruin/surface)
+/area/exposed_ruin)
 "t" = (
 /obj/item/weapon/stool/piano{
 	dir = 4;
 	name = "stool"
 	},
 /turf/simulated/floor/grass,
-/area/ruin/surface)
+/area/exposed_ruin)
 "B" = (
 /obj/structure/flora/ausbushes/fullgrass,
 /turf/simulated/floor/grass,
-/area/ruin/surface)
+/area/exposed_ruin)
 "D" = (
 /obj/structure/flora/ausbushes/lavendergrass,
 /obj/structure/flora/ausbushes/lavendergrass,
 /obj/structure/flora/ausbushes/sparsegrass,
 /turf/simulated/floor/grass,
-/area/ruin/surface)
+/area/exposed_ruin)
 "G" = (
 /obj/structure/flora/ausbushes/sparsegrass,
 /turf/simulated/floor/grass,
-/area/ruin/surface)
+/area/exposed_ruin)
 "H" = (
 /obj/structure/flora/grass/both,
 /turf/template_noop,
@@ -58,11 +58,11 @@
 "N" = (
 /obj/structure/reagent_dispensers/cauldron/witch,
 /turf/simulated/floor/grass,
-/area/ruin/surface)
+/area/exposed_ruin)
 "O" = (
 /obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor/grass,
-/area/ruin/surface)
+/area/exposed_ruin)
 "V" = (
 /obj/structure/flora/grass/brown,
 /turf/template_noop,

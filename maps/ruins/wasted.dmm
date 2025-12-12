@@ -3,25 +3,25 @@
 /obj/effect/landmark/corpse/assistant,
 /obj/item/weapon/reagent_containers/food/drinks/bottle,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "e" = (
 /obj/effect/decal/cleanable/vomit,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "l" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "p" = (
 /obj/item/weapon/storage/fancy/beer_box/empty,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "x" = (
 /turf/template_noop,
 /area/template_noop)
 "A" = (
 /obj/item/weapon/reagent_containers/food/drinks/bottle,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 x

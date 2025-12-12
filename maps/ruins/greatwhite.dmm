@@ -6,23 +6,23 @@
 /obj/structure/flora/tree/pine,
 /obj/abstract/loot_spawner/combat,
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "g" = (
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "q" = (
 /mob/living/simple_animal/hostile/asteroid/goliath/snow/great,
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "r" = (
 /obj/structure/flora/tree/pine,
 /obj/abstract/loot_spawner/medical,
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "z" = (
 /obj/structure/flora/tree/pine,
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 a

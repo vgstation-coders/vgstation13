@@ -7,7 +7,7 @@
 	name = "floor";
 	dir = 4
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "ak" = (
 /obj/item/weapon/kitchen/rollingpin,
 /obj/structure/table,
@@ -30,7 +30,7 @@
 	name = "floor";
 	dir = 8
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "aJ" = (
 /obj/machinery/light/he{
 	dir = 4
@@ -260,7 +260,7 @@
 	icon = 'icons/turf/floors.dmi';
 	name = "floor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "eQ" = (
 /obj/structure/rack,
 /obj/item/weapon/lazarus_injector/advanced,
@@ -443,11 +443,11 @@
 	name = "floor";
 	dir = 8
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "iK" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "iP" = (
 /obj/machinery/chem_master/snackbar_machine,
 /obj/machinery/alarm{
@@ -582,7 +582,7 @@
 	name = "floor";
 	dir = 4
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "mJ" = (
 /obj/machinery/vending/dinnerware,
 /turf/simulated/floor{
@@ -598,7 +598,7 @@
 	icon = 'icons/turf/floors.dmi';
 	name = "floor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "mZ" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/disposal/compactor,
@@ -665,7 +665,7 @@
 	icon = 'icons/turf/floors.dmi';
 	name = "floor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "pR" = (
 /obj/structure/railing/glass{
 	dir = 1
@@ -743,7 +743,7 @@
 /area/vault/fastfood/misc)
 "rB" = (
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "rC" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -968,7 +968,7 @@
 	name = "floor";
 	dir = 8
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "vR" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
@@ -993,7 +993,7 @@
 	name = "floor";
 	dir = 4
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "we" = (
 /obj/structure/wc/sink{
 	dir = 4;
@@ -1054,7 +1054,7 @@
 	icon = 'icons/turf/floors.dmi';
 	name = "floor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "yH" = (
 /obj/structure/closet/crate/freezer,
 /obj/item/slime_extract/silver,
@@ -1106,7 +1106,7 @@
 	icon = 'icons/turf/floors.dmi';
 	name = "floor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Ag" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/railing,
@@ -1116,7 +1116,7 @@
 	icon = 'icons/turf/floors.dmi';
 	name = "floor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Aj" = (
 /obj/structure/closet/crate/freezer,
 /obj/abstract/map/spawner/allfood,
@@ -1474,7 +1474,7 @@
 	icon = 'icons/turf/floors.dmi';
 	name = "floor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Hs" = (
 /obj/structure/table,
 /obj/machinery/microwave{
@@ -1567,7 +1567,7 @@
 	name = "floor";
 	dir = 4
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Jw" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/grille,
@@ -1650,7 +1650,7 @@
 	icon = 'icons/turf/floors.dmi';
 	name = "floor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "JZ" = (
 /obj/structure/table/plastic,
 /obj/item/trash/chips/donitos,
@@ -1679,7 +1679,7 @@
 	name = "floor";
 	dir = 4
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Kf" = (
 /obj/item/weapon/kitchen/rollingpin,
 /obj/structure/table,
@@ -1836,12 +1836,12 @@
 	icon = 'icons/turf/floors.dmi';
 	name = "floor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "MU" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/jungle/concrete,
-/area/ruin/surface)
+/area/exposed_ruin)
 "Nf" = (
 /obj/item/weapon/stool/bar,
 /turf/simulated/floor{
@@ -2179,7 +2179,7 @@
 	icon = 'icons/turf/floors.dmi';
 	name = "floor"
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "VB" = (
 /obj/structure/closet/secure_closet/freezer/fridge,
 /obj/abstract/loot_spawner/food_or_drink,
@@ -2289,7 +2289,7 @@
 	name = "floor";
 	dir = 8
 	},
-/area/ruin/surface)
+/area/exposed_ruin)
 "Xr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4;

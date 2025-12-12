@@ -1,7 +1,7 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "b" = (
 /turf/template_noop,
 /area/template_noop)
@@ -11,14 +11,14 @@
 	pixel_x = -2
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "G" = (
 /turf/unsimulated/floor/jungle/water_deep,
-/area/ruin/surface)
+/area/exposed_ruin)
 "O" = (
 /obj/structure/bed/chair/folding,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "P" = (
 /obj/structure/table/holotable/wood,
 /obj/item/weapon/reagent_containers/food/drinks/beer{
@@ -34,10 +34,10 @@
 /obj/abstract/loot_spawner/food_or_drink,
 /obj/abstract/loot_spawner/entertainment,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "R" = (
 /turf/unsimulated/floor/jungle/water,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 b

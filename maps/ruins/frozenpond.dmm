@@ -1,23 +1,23 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "e" = (
 /obj/structure/flora/tree/pine,
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "m" = (
 /obj/structure/flora/tree/pine,
 /obj/abstract/loot_spawner/medical,
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "n" = (
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 "x" = (
 /obj/glacier,
 /turf/unsimulated/floor/snow,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 a

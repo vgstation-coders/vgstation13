@@ -1,7 +1,7 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "g" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "j" = (
 /obj/item/folding_chair,
 /obj/effect/landmark/corpse/civilian,
@@ -9,7 +9,7 @@
 	color = "#A10808"
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "l" = (
 /obj/structure/table/woodentable/poker,
 /obj/item/toy/singlecard{
@@ -20,7 +20,7 @@
 	icon_state = "sc_5 of Spades"
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "G" = (
 /obj/structure/table/woodentable/poker,
 /obj/item/toy/singlecard{
@@ -39,7 +39,7 @@
 	icon_state = "sc_Ace of Diamonds"
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "J" = (
 /obj/structure/table/woodentable/poker,
 /obj/item/toy/singlecard{
@@ -57,7 +57,7 @@
 	pixel_x = 15
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "R" = (
 /obj/structure/bed/chair/folding{
 	dir = 1
@@ -72,7 +72,7 @@
 	},
 /obj/abstract/loot_spawner/combat,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "W" = (
 /obj/structure/table/woodentable/poker,
 /obj/item/toy/singlecard{
@@ -87,7 +87,7 @@
 	icon_state = "sc_6 of Diamonds"
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 j

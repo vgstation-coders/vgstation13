@@ -96,7 +96,7 @@
 /area/ruin)
 "u" = (
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "v" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/green,
@@ -107,10 +107,10 @@
 /obj/machinery/space_heater/campfire,
 /obj/machinery/cooking/grill/spit,
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "B" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "F" = (
 /turf/simulated/floor/wood,
 /area/ruin)

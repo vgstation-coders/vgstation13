@@ -66,6 +66,7 @@ var/global/list/mineralSpawnChance[]
 	blocks_air = 1
 	holomap_draw_override = HOLOMAP_DRAW_FULL
 	overlay_state = "rock_overlay"
+	turf_flags = NO_RUINS
 	//temperature = TCMB
 	var/mineral/mineral
 	var/last_act = 0

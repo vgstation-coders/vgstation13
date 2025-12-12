@@ -220,7 +220,7 @@
 	dir = 8
 	},
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "y" = (
 /obj/machinery/door/airlock/hatch{
 	id_tag = "vox_interior";
@@ -262,7 +262,7 @@
 /obj/structure/lattice,
 /obj/abstract/loot_spawner/medical,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "D" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -299,7 +299,7 @@
 "G" = (
 /obj/structure/lattice,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "H" = (
 /obj/machinery/atm{
 	desc = "It looks extremely scuffed and dirty, as if it had been stolen.";
@@ -322,7 +322,7 @@
 /obj/structure/lattice,
 /obj/abstract/loot_spawner/exotic,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "L" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/effect/decal/cleanable/dirt,
@@ -334,7 +334,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/lattice,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "N" = (
 /obj/machinery/sleeper{
 	dir = 1
@@ -405,7 +405,7 @@
 /area/ruin)
 "U" = (
 /turf/unsimulated/wall/rock/ice,
-/area/ruin/surface)
+/area/exposed_ruin)
 "V" = (
 /obj/structure/cable{
 	d1 = 2;

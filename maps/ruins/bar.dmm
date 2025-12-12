@@ -31,7 +31,7 @@
 "l" = (
 /obj/item/weapon/stool/bar,
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "n" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola{
@@ -130,7 +130,7 @@
 /area/ruin)
 "V" = (
 /turf/template_noop,
-/area/ruin/surface)
+/area/exposed_ruin)
 "Y" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/food/drinks/shaker{

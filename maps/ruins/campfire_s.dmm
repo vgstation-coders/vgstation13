@@ -8,16 +8,16 @@
 	},
 /obj/machinery/cooking/grill/spit,
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "E" = (
 /obj/abstract/loot_spawner/food_or_drink{
 	containers = list(/obj/item/weapon/storage/box,/obj/item/weapon/storage/box/large)
 	},
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 "M" = (
 /turf/unsimulated/floor/planetary/dirt,
-/area/ruin/surface)
+/area/exposed_ruin)
 
 (1,1,1) = {"
 a
