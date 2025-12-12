@@ -229,7 +229,7 @@
 	},
 /area/obslounge)
 "Ge" = (
-/obj/effect/step_trigger/ghostizer,
+/obj/effect/step_trigger/ghostizer/obsgang,
 /turf/unsimulated/floor{
 	icon_state = "white";
 	icon = 'icons/effects/32x32.dmi'

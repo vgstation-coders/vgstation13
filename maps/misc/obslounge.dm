@@ -3,11 +3,18 @@
     unique = TRUE
     var/obj/effect/landmark/obs_spawn/obs_spawner
 
+/obj/effect/step_trigger/ghostizer
+	var/joins_obsgang = FALSE
+
 /obj/effect/step_trigger/ghostizer/Trigger(var/atom/movable/A)
     if(isliving(A))
         var/mob/living/L = A
-        qdel(L.ghostize())
+		var/mob/dead/observer/obsganger = L.ghostize()
+		obsganger.started_as_observer = joins_obsgang
         qdel(L)
+
+/obj/effect/step_trigger/ghostizer/obsgang
+	joins_obsgang = TRUE
 
 /obj/effect/landmark/obs_spawn
     name = "obsgang spawner"
