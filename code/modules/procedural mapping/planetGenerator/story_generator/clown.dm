@@ -16,7 +16,17 @@
 	return character_name
 
 /datum/story_theme/clown/get_log_info()
-	return list("title" = "THE HONKENING CONTINUES", "subtitle" = "A Clown's Tale by [character_name]")
+	var/list/titles = list(
+		"The Banana Peel Chronicles",
+		"The Honkening",
+		"The Great Clown Escape",
+		"Circus of the Stars",
+		"The Jester's Journey",
+		"How I Learned to Sotp Worry and Love the HONK",
+		"A Clown's Tale by [character_name]"
+
+	)
+	return list("title" = pick_n_take(titles), "subtitle" = pick_n_take(titles))
 
 /datum/story_theme/clown/get_generic_entries()
 	return list(
@@ -83,7 +93,7 @@
 			entries += "Cozy cabin! Needs more color though. I've been redecorating with anything I can find. Abstract expressionism!"
 			entries += "The fireplace is nice for roasting... I don't actually know how to cook. Burned water somehow."
 		if("shrine")
-			entries += "Found a shrine! Made an offering. It was my last pie. WORTH IT. The clown gods will be pleased."
+			entries += "Found a shrine! Made an offering. It was my last pie. WORTH IT. Honkmother will be pleased."
 			entries += "This place feels spiritual. I've been praying for a rescue ship with a good sense of humor."
 		if("camp")
 			entries += "Camping is fun! Said no one ever. Where's the room service? Where's the AUDIENCE?"
@@ -115,7 +125,7 @@
 			entries += "MONKEYS! They understand comedy! One of them threw something at me. Beautiful slapstick! Proud of them."
 			entries += "A big cat has been following me. Either it wants to eat me or it wants tickets to my show. Either way, scary!"
 		if("lava planet")
-			entries += "How do these things LIVE here? I can barely survive and I'm wearing protective gear! (Protective clown gear.)"
+			entries += "How do these things LIVE here? I can barely survive and I'm wearing protective (clown) gear!"
 			entries += "Saw a creature literally swimming in lava. I can't even take a hot shower. Show-off."
 		if("wasteland planet")
 			entries += "Zombie things? ZOMBIE THINGS?! HONK HONK HONK! Not funny! NOT FUNNY!"
@@ -139,7 +149,7 @@
 			entries += "Found frozen food. Don't need a freezer here! Planet IS the freezer! Modern problems require modern solutions."
 		if("grass planet")
 			entries += "Regular supplies. Boring. Drew funny faces on all the containers. Much better."
-			entries += "Found games! Board games! I play against Chuckles. Chuckles always loses. Because he's a rock."
+			entries += "Found games! Board games! I play against Chuckles. Chuckles keeps on winning somehow. Showoff."
 		if("jungle planet")
 			entries += "Everything is wet and moldy. Even my enthusiasm. Especially my enthusiasm."
 			entries += "Found instruments! A little damp but functional! Formed a one-clown band. Audience: zero. Dreams: crushed."
@@ -147,7 +157,7 @@
 			entries += "Heat-proof stuff! My rubber nose no longer melts as fast. UPGRADE!"
 			entries += "Found fancy tech. Don't know what it does but it lights up. Made it into a disco ball. PARTY!"
 		if("wasteland planet")
-			entries += "Found weapons. Turned them into juggling equipment. More fun this way! (Probably safer too.)"
+			entries += "Found weapons. Turned them into juggling equipment. More fun this way!"
 			entries += "Old vending machine! Kicked it until something came out. It was just dust. Sad HONK."
 		if("unknown planet")
 			entries += "Found weird glowing things. Attached them to my shoes. Now I have light-up clown shoes! AMAZING!"
@@ -158,7 +168,7 @@
 	var/list/entries = list()
 	switch(ruin_name)
 		if("Geode")
-			entries += "Found a GIANT SPARKLY ROCK! It's like a disco ball from space! Chuckles is JEALOUS. Not as pretty as Chuckles though. (Don't tell the rock I said that.)"
+			entries += "Found a GIANT SPARKLY ROCK! It's like a disco ball from space! Chuckles is JEALOUS. Not as pretty as Chuckles though. Don't tell the space rock I said that."
 			entries += "The crystal cave is beautiful! I did a stand-up routine inside. The acoustics were AMAZING. The crystals didn't laugh but they sparkled. Close enough!"
 			entries += "Tried to juggle some crystals from the geode. They're sharp. Hands are bleeding. Classic slapstick! HONK of pain!"
 		if("Crashed Tradeship")
@@ -171,10 +181,10 @@
 			entries += "Found an escape pod! No survivors. Just a single shoe. ONE SHOE. Even in tragedy, comedy. That's my philosophy."
 		if("Abandoned Digsite")
 			entries += "Someone was digging here! For WHAT? Buried treasure? Buried pies? Buried FUNNY? I must investigate! After my nap."
-			entries += "The digsite is full of holes! Perfect for pratfalls! I fell in three of them! Comedy GOLDMINE! (Also my ankle hurts.)"
+			entries += "The digsite is full of holes! Perfect for pratfalls! I fell in three of them! Comedy GOLDMINE! My ankle hurts."
 			entries += "Archaeologists were here! Looking for OLD JOKES probably! Ancient humor! I could teach them SO MUCH! If they weren't gone."
 		if("Alien Hive")
-			entries += "NOPE. NOPE NOPE NOPE. Found an alien hive. You know what's NOT funny? Aliens. NOT. FUNNY. Running away now. HONK of terror!"
+			entries += "NOPE. NOPE NOPE NOPE. Found an alien hive. You know what's NOT funny? Aliens. NOT. FUNNY. Running away now.  I had enough alien births in one lifetime thank you very much!"
 			entries += "The alien nest thing is TERRIFYING. Tried to do a comedy routine to calm down. The aliens did NOT appreciate it. Still running."
 			entries += "I have named the alien hive 'The No-Fun Zone.' Chuckles and I are NEVER going there. Not even for a pie. Well... maybe for a pie."
 		if("The Buried Bar")
@@ -204,7 +214,7 @@
 			entries += "Engineering stuff! Made a unicycle! It doesn't work! Stashed the parts for Attempt Two!"
 		if(/datum/loot_table/entertainment)
 			entries += "TOYS! GAMES! ACTUAL FUN THINGS! THIS IS THE BEST DAY! *carefully stashes everything* Mine now."
-			entries += "Entertainment supplies! Chuckles and I can finally play cards! Chuckles always loses because he's a rock!"
+			entries += "Entertainment supplies! Chuckles and I can finally play cards! Chuckles keeps on winning somehow, I DON'T GET IT!"
 		if(/datum/loot_table/weighted/exotic)
 			entries += "Weird glowing stuff! Is it magic? Is it science? Is it a new comedy prop? STASHED FOR INVESTIGATION!"
 			entries += "Found mysterious items! They might be valuable! They might explode! Either way, ENTERTAINING!"

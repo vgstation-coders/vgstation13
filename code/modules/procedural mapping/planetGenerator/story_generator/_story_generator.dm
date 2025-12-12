@@ -90,6 +90,7 @@
 			entries += "The ruins here tell a story of catastrophe. Whatever happened, it was sudden and total."
 		if("beach planet")
 			entries += "The tropical climate is pleasant, but the salt air corrodes everything metal."
+			entries += "Sacrificial anodes are a must in this environment. Replacing them weekly."
 			entries += "High tide flooded the lower storage area. We've relocated supplies to higher ground."
 		if("grass planet")
 			entries += "The temperate weather is ideal for long-term habitation. Almost Earth-like conditions."
@@ -122,7 +123,7 @@
 			entries += "Maintenance bay operational. Can handle repairs and fabrication as required."
 		if("shrine")
 			entries += "The sacred space is prepared. The rituals can proceed as planned."
-			entries += "Consecration of the shrine complete. This place resonates with the proper energies."
+			entries += "Consecration of the shrine is complete. This place resonates with the proper energies."
 		if("greenhouse")
 			entries += "Greenhouse environmental systems stable. Plants are thriving under current conditions."
 			entries += "Agricultural yields exceeding projections. The hydroponic setup is working perfectly."
@@ -141,7 +142,7 @@
 	var/list/entries = list()
 	switch(planet_style)
 		if("beach planet")
-			entries += "Observed several species of crabs along the shoreline. Mostly harmless, but territorial."
+			entries += "Observed several species of crabs along the shoreline. Mostly harmless as long as you do NOT snip them."
 			entries += "The local wildlife includes some surprisingly intelligent capybaras. They seem curious about our presence."
 			entries += "Encountered aggressive frogs near the wetlands. Their jumping reach is remarkable."
 		if("desert planet")
@@ -169,8 +170,7 @@
 			entries += "Reanimated corpses wander the wastes. Necromantic phenomenon or biological? Unclear."
 			entries += "Whatever caused the apocalypse here, the survivors have mutated into something barely recognizable."
 		if("unknown planet")
-			entries += "The native lifeforms defy classification. Grey humanoids with technology beyond our understanding."
-			entries += "Encountered autonomous drones of alien design. They ignore us unless we approach designated zones."
+			entries += "Encountered autonomous drones of alien design. They ignore us unless we approach designated zones. They appear to be ancient."
 			entries += "Strange polyp-like organisms dot the landscape. They react to movement with surprising hostility."
 	return entries
 
@@ -205,10 +205,14 @@
 			entries += "Scavenged bureaucratic records and combat equipment from the ruins. Mix of office supplies and weapons."
 			entries += "Medical kits found in abandoned clinics. Some supplies still usable despite the decay."
 			entries += "Structural salvage everywhere - broken vending machines, mystery tech. Junk with potential."
+			if(prob(1)) //we do a little trolling
+				for(var/obj/machinery/nuclearbomb/N in nuclear_bombs)
+					if(N.z == 1)
+						entries += "Discovered a paper with the numbers '[N.r_code]' scribbled on it. Might be important."
 		if("unknown planet")
-			entries += "Discovered alien artifacts and exotic technology. Nothing in our databases matches this."
-			entries += "Found caches of experimental equipment. Grey technology, far beyond our understanding."
-			entries += "Exotic loot scattered throughout. Crystals, strange devices, incomprehensible machinery."
+			entries += "Discovered ancient alien artifacts and exotic technology. Nothing in our databases matches this."
+			entries += "Found caches of experimental equipment. Ancient technology, far beyond our understanding."
+			entries += "Exotic loot scattered throughout. Crystals, strange devices, incomprehensible machinery from a distant past."
 	return entries
 
 /datum/story_theme/proc/get_main_ruin_entries()
@@ -339,7 +343,7 @@
 		if("wasteland planet")
 			return pick("Radiation levels elevated but within tolerable parameters.", "Urban ruins suggest catastrophic conflict or disaster.", "Scavenged technology indicates advanced pre-collapse civilization.")
 		if("unknown planet")
-			return pick("Sensor readings inconsistent with known physics.", "Native organisms defy standard biological classification.", "Discovered structures of non-humanoid design.")
+			return pick("Sensor readings inconsistent with known physics.", "Native organisms defy standard biological classification.", "Discovered ancient structures of non-humanoid design.")
 		else
 			return pick("Standard geological surveys completed.", "Atmosphere within acceptable parameters.", "Resource deposits identified for potential extraction.")
 
