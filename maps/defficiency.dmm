@@ -13980,22 +13980,17 @@
 	},
 /area/medical/genetics)
 "aBC" = (
-/obj/structure/table/reinforced,
-/obj/item/device/gps/science,
-/obj/item/device/gps/science,
-/obj/item/device/gps/science,
-/obj/item/device/gps/science,
-/obj/item/device/gps/science,
 /obj/machinery/door_control{
 	id_tag = "misclab";
 	name = "Test Chamber Blast Doors";
 	pixel_x = -24;
 	req_access_txt = "47"
 	},
+/obj/machinery/computer/telescience,
 /turf/simulated/floor{
-	dir = 9;
+	dir = 1;
 	icon_state = "dark_navy";
-	tag = "icon-dark_navy (NORTHWEST)"
+	tag = "icon-dark_navy (NORTH)"
 	},
 /area/science/telescience)
 "aBD" = (
@@ -14743,7 +14738,9 @@
 "aCW" = (
 /obj/machinery/iv_drip,
 /turf/simulated/floor{
-	icon_state = "dark"
+	dir = 4;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (EAST)"
 	},
 /area/medical/surgery_ghetto{
 	name = "Overflow Surgery"
@@ -18826,7 +18823,8 @@
 	pixel_y = 24
 	},
 /turf/simulated/floor{
-	icon_state = "dark"
+	icon_state = "dark_navy_corner";
+	tag = "icon-dark_navy_corner"
 	},
 /area/medical/surgery_ghetto{
 	name = "Overflow Surgery"
@@ -20891,7 +20889,9 @@
 /obj/item/clothing/mask/breath/vox,
 /obj/item/clothing/mask/breath/vox,
 /turf/simulated/floor{
-	icon_state = "dark"
+	dir = 4;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (EAST)"
 	},
 /area/medical/surgery_ghetto{
 	name = "Overflow Surgery"
@@ -21698,7 +21698,9 @@
 	pixel_x = -1
 	},
 /turf/simulated/floor{
-	icon_state = "dark"
+	dir = 4;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (EAST)"
 	},
 /area/medical/surgery_ghetto{
 	name = "Overflow Surgery"
@@ -22566,7 +22568,9 @@
 	},
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/simulated/floor{
-	icon_state = "dark"
+	dir = 6;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (SOUTHEAST)"
 	},
 /area/medical/surgery_ghetto{
 	name = "Overflow Surgery"
@@ -24534,7 +24538,12 @@
 /turf/simulated/floor/engine/airless,
 /area/science/mixing)
 "aUf" = (
-/obj/machinery/computer/telescience,
+/obj/structure/table/reinforced,
+/obj/item/device/gps/science,
+/obj/item/device/gps/science,
+/obj/item/device/gps/science,
+/obj/item/device/gps/science,
+/obj/item/device/gps/science,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark_navy";
@@ -24601,7 +24610,9 @@
 	},
 /obj/machinery/atmospherics/unary/cryo_cell,
 /turf/simulated/floor{
-	icon_state = "dark"
+	dir = 10;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (SOUTHWEST)"
 	},
 /area/medical/medbay)
 "aUo" = (
@@ -24643,9 +24654,8 @@
 	pixel_y = 1
 	},
 /turf/simulated/floor{
-	dir = 10;
 	icon_state = "dark_navy";
-	tag = "icon-dark_navy (SOUTHWEST)"
+	tag = "icon-dark_navy"
 	},
 /area/medical/medbay)
 "aUr" = (
@@ -24653,6 +24663,7 @@
 	dir = 4;
 	name = "Firelock East"
 	},
+/obj/structure/flora/pottedplant/random,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark_navy";
@@ -25610,7 +25621,9 @@
 /area/medical/medbay)
 "aWc" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
-/obj/item/weapon/stool,
+/obj/structure/bed/chair/office/dark{
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -30504,8 +30517,8 @@
 "beX" = (
 /turf/simulated/floor{
 	dir = 8;
-	icon_state = "dark purple corner";
-	tag = "icon-dark purple corner (WEST)"
+	icon_state = "dark purple stripe";
+	tag = "icon-dark purple stripe (WEST)"
 	},
 /area/science/telescience)
 "beY" = (
@@ -110726,6 +110739,14 @@
 	},
 /turf/simulated/floor,
 /area/engineering/engine)
+"oJs" = (
+/turf/simulated/floor{
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy"
+	},
+/area/medical/surgery_ghetto{
+	name = "Overflow Surgery"
+	})
 "oUX" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
@@ -110957,6 +110978,15 @@
 /obj/item/weapon/storage/firstaid/regular,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
+"rfC" = (
+/obj/machinery/suit_storage_unit/medical,
+/turf/simulated/floor{
+	icon_state = "dark_navy_corner";
+	tag = "icon-dark_navy_corner"
+	},
+/area/medical/surgery_ghetto{
+	name = "Overflow Surgery"
+	})
 "rfJ" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -218297,7 +218327,7 @@ aQH
 bon
 aIr
 aIr
-aIr
+rfC
 bbO
 aUf
 aWc
@@ -218799,7 +218829,7 @@ aKj
 bgO
 aNI
 aNI
-aNI
+oJs
 aSy
 iXO
 oUX
