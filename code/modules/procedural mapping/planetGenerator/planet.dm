@@ -82,6 +82,9 @@
 	/// Merged loot table used for spawning loot on this planet
 	var/datum/loot_table/planet_loot
 
+	/// Number of gas vents present on the planet
+	var/vent_count = 0
+
 /datum/planetGenerator/New()
 	// Initialize perlin noise seeds with random values
 	height_seed = rand(0, 50000)
@@ -98,6 +101,8 @@
 
 	// Initialize the biome cache
 	turf_biome_cache = list()
+
+	vent_count = rand(0,3)
 	return ..()
 
 /datum/planetGenerator/proc/generate_turf(turf/gen_turf)
@@ -116,6 +121,16 @@
 	turf_biome.populate_turf(gen_turf, created_features, created_mobs, planet_loot, planet_faction)
 
 /datum/planetGenerator/proc/post_process(datum/allocation/allocation)
+	if(vent_count <= 0)
+		return
+	while(vent_count > 0)
+		var/turf/unsimulated/T = pick(allocation.turfs)
+		if(!istype(T))
+			continue
+		var/area/A = get_area(T)
+		if(isopensurface(A) || (istype(A, /area/planet/cave) && !iswall(T)))
+			new /datum/vent(T)
+			vent_count -= 1
 	return
 
 /// Gets the biome for a turf, using the cache if available, otherwise calculating and caching it.

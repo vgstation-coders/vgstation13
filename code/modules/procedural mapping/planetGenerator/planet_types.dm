@@ -34,6 +34,16 @@
 	var/mob_faction
 	// Whether this planet is hidden from the deep space scanner
 	var/hidden = FALSE
+	// Weighted list of possible gas vent types a planet can spawn
+	var/list/vent_types = list(
+		GAS_OXYGEN = 10,
+		GAS_PLASMA = 5,
+		GAS_SLEEPING = 1,
+		GAS_CARBON = 5,
+		GAS_NITROGEN = 5,
+		GAS_CRYOTHEUM = 0,
+		GAS_RADON = 0
+	)
 
 /**
  * Builds the list of turfs affected by day/night cycle for this planet
@@ -305,6 +315,15 @@
 	climate_type = /datum/climate/lava
 	loot_modifier = 15
 	icon_state = "lava"
+	vent_types = list(
+		GAS_OXYGEN = 5,
+		GAS_PLASMA = 5,
+		GAS_SLEEPING = 0,
+		GAS_CARBON = 10,
+		GAS_NITROGEN = 0,
+		GAS_CRYOTHEUM = 0,
+		GAS_RADON = 0
+	)
 
 /datum/planet_type/snow
 	name = "frozen planet"
@@ -315,6 +334,15 @@
 	climate_type = /datum/climate/arctic
 	loot_modifier = 5
 	icon_state = "snow"
+	vent_types = list(
+		GAS_OXYGEN = 10,
+		GAS_PLASMA = 5,
+		GAS_SLEEPING = 0,
+		GAS_CARBON = 5,
+		GAS_NITROGEN = 5,
+		GAS_CRYOTHEUM = 1,
+		GAS_RADON = 0
+	)
 
 /datum/planet_type/urban
 	name = "wasteland planet"
@@ -325,6 +353,15 @@
 	climate_type = /datum/climate/wasteland
 	loot_modifier = 10
 	icon_state = "barren"
+	vent_types = list(
+		GAS_OXYGEN = 5,
+		GAS_PLASMA = 0,
+		GAS_SLEEPING = 0,
+		GAS_CARBON = 10,
+		GAS_NITROGEN = 5,
+		GAS_CRYOTHEUM = 0,
+		GAS_RADON = 5
+	)
 
 /datum/planet_type/xeno
 	name = "unknown planet"
@@ -335,3 +372,12 @@
 	climate_type = /datum/climate/xeno
 	loot_modifier = 20
 	icon_state = "xeno1"
+	vent_types = list(
+		GAS_OXYGEN = 1,
+		GAS_PLASMA = 10,
+		GAS_SLEEPING = 5,
+		GAS_CARBON = 1,
+		GAS_NITROGEN = 5,
+		GAS_CRYOTHEUM = 0,
+		GAS_RADON = 0
+	)

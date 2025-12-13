@@ -289,3 +289,178 @@
 	desc = "Pumping oxygen and nitrous oxide."
 	overlay_color = "#7EA7E0"
 	gases = list(GAS_OXYGEN = 0.5, GAS_SLEEPING = 0.5)
+
+
+// Surface gas miner - receives gas from linked gas extractors on planet surfaces.
+/obj/machinery/atmospherics/miner/surface
+	name = "surface gas receiver"
+	desc = "A specialized gas miner that receives gasses from remote surface extractors."
+	icon_state = "miner"
+	overlay_color = "#80FF80"
+	on = TRUE
+	base_gas_production = 0 // Doesn't produce gas on its own
+
+	machine_flags = WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU
+
+	var/list/linked_extractors = list() // List of weakrefs to linked extractors
+	var/warmup_time = 10 SECONDS // Time for extractors to warm up
+	var/warmup_power_usage = 500 // Power draw during warmup
+
+/obj/machinery/atmospherics/miner/surface/New()
+	..()
+	gases = list() // No default gases - set by linked extractors
+
+/obj/machinery/atmospherics/miner/surface/initialize()
+	..()
+	// Auto-link with any pre-mapped gas extractors that aren't already linked
+	for(var/obj/machinery/gas_extractor/E in machines)
+		if(!E.linked_miner_ref?.get())
+			// Link this extractor to us
+			linked_extractors += makeweakref(E)
+			E.linked_miner_ref = makeweakref(src)
+
+/obj/machinery/atmospherics/miner/surface/Destroy()
+	// Unlink all extractors
+	for(var/datum/weakref/ref in linked_extractors)
+		var/obj/machinery/gas_extractor/E = ref.get()
+		if(E)
+			E.linked_miner_ref = null
+	linked_extractors.Cut()
+	..()
+
+/obj/machinery/atmospherics/miner/surface/examine(mob/user)
+	. = ..()
+	var/extractor_count = 0
+	for(var/datum/weakref/ref in linked_extractors)
+		if(ref.get())
+			extractor_count++
+	to_chat(user, "<span class='info'>Linked extractors: [extractor_count]</span>")
+
+// Multitool linking - allows linking extractors and consoles to this miner
+/obj/machinery/atmospherics/miner/surface/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	var/dat = "<b>Linked Surface Extractors:</b><br><ul>"
+	var/idx = 1
+	for(var/datum/weakref/ref in linked_extractors)
+		var/obj/machinery/gas_extractor/E = ref.get()
+		if(E)
+			dat += "<li>[E.name] at ([E.x], [E.y], [E.z]) <a href='?src=\ref[src];unlink=[idx]'>\[X\]</a></li>"
+		idx++
+	dat += "</ul>"
+	dat += "<br><i>You can also link control consoles to this receiver using a multitool.</i>"
+	return dat
+
+/obj/machinery/atmospherics/miner/surface/canLink(var/obj/O, var/list/context)
+	return istype(O, /obj/machinery/gas_extractor) || istype(O, /obj/machinery/computer/gas_extractor_console)
+
+/obj/machinery/atmospherics/miner/surface/isLinkedWith(var/obj/O)
+	for(var/datum/weakref/ref in linked_extractors)
+		if(ref.get() == O)
+			return TRUE
+	return FALSE
+
+/obj/machinery/atmospherics/miner/surface/linkWith(var/mob/user, var/obj/O, var/list/context)
+	// Handle gas extractor linking
+	if(istype(O, /obj/machinery/gas_extractor))
+		var/obj/machinery/gas_extractor/E = O
+		// Check if already linked
+		for(var/datum/weakref/ref in linked_extractors)
+			if(ref.get() == E)
+				return FALSE
+		// Unlink from previous miner if any
+		if(E.linked_miner_ref)
+			var/obj/machinery/atmospherics/miner/surface/old_miner = E.linked_miner_ref.get()
+			if(old_miner)
+				old_miner.unlink_extractor(E)
+		// Link to this miner
+		linked_extractors += makeweakref(E)
+		E.linked_miner_ref = makeweakref(src)
+		return TRUE
+
+	// Handle console linking
+	if(istype(O, /obj/machinery/computer/gas_extractor_console))
+		var/obj/machinery/computer/gas_extractor_console/C = O
+		C.linked_miner_ref = makeweakref(src)
+		return TRUE
+
+	return FALSE
+
+/obj/machinery/atmospherics/miner/surface/getLink(var/idx)
+	if(idx >= 1 && idx <= linked_extractors.len)
+		var/datum/weakref/ref = linked_extractors[idx]
+		return ref.get()
+	return null
+
+/obj/machinery/atmospherics/miner/surface/unlinkFrom(var/mob/user, var/obj/buffer)
+	return unlink_extractor(buffer)
+
+/obj/machinery/atmospherics/miner/surface/proc/unlink_extractor(var/obj/machinery/gas_extractor/E)
+	if(!E)
+		return FALSE
+	for(var/datum/weakref/ref in linked_extractors)
+		if(ref.get() == E)
+			linked_extractors -= ref
+			E.linked_miner_ref = null
+			return TRUE
+	return FALSE
+
+/obj/machinery/atmospherics/miner/surface/process()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		return
+	if(!on)
+		return
+
+	// Update gases from linked extractors
+	gases.Cut()
+	var/total_extraction = 0
+	var/active_extractor_count = 0
+
+	// First pass: count active extractors
+	for(var/datum/weakref/ref in linked_extractors)
+		var/obj/machinery/gas_extractor/E = ref.get()
+		if(!E || !E.extracting || !E.linked_vent)
+			continue
+		var/datum/vent/V = E.linked_vent
+		if(!V || V.mols <= 0)
+			continue
+		active_extractor_count++
+
+	// Calculate rate modifier - halve each gas type when multiple extractors
+	var/rate_modifier = 1
+	if(active_extractor_count > 1)
+		rate_modifier = 1 / active_extractor_count
+
+	// Second pass: add gas types with modified rates
+	for(var/datum/weakref/ref in linked_extractors)
+		var/obj/machinery/gas_extractor/E = ref.get()
+		if(!E || !E.extracting || !E.linked_vent)
+			continue
+		var/datum/vent/V = E.linked_vent
+		if(!V || V.mols <= 0)
+			continue
+
+		// Add this extractor's gas type to our output with rate modifier
+		var/adjusted_rate = E.extraction_rate * rate_modifier
+		if(gases[V.gas_type])
+			gases[V.gas_type] += adjusted_rate
+		else
+			gases[V.gas_type] = adjusted_rate
+		total_extraction += adjusted_rate
+
+	if(total_extraction <= 0)
+		return
+
+	var/oldstat = stat
+	if(!istype(loc, /turf/simulated))
+		stat |= BROKEN
+	else
+		stat &= ~BROKEN
+	if(stat != oldstat)
+		update_icon()
+	if(stat & BROKEN)
+		return
+
+	var/extra_mined_gas = power_load_two_ticks_ago * WATT_TO_KPA_COEFFICIENT
+	power_load_two_ticks_ago = power_load_last_tick
+	power_load_last_tick = active_power_usage
+	set_rate(base_gas_production + extra_mined_gas + (total_extraction * 100))
+	tranfer_gas()
