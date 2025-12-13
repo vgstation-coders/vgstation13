@@ -85,22 +85,9 @@
 		message_admins("<span class='info'>Unable to find a suitable area to spawn vaults in, skipping surface vault generation!</span>")
 		return 0
 
-	var/size=0
-	for(var/turf/T in VAULT_AREA.contents)
-		size++
-	var/total_vault_slots = ceil(size* 0.00035 )
-	var/vaults_avalible=list_of_vaults.len
-	var/vaults_unique=list_unique_vaults.len
-
-	message_admins("<span class='info'>[VAULT_AREA] is [size] tiles large, meaning we generate [total_vault_slots] vaults there.</span>")
-	world.log << "[VAULT_AREA] is [size] tiles large, meaning we generate [total_vault_slots] vaults there."
-
-	var/adjusted_amount=min(total_vault_slots,vaults_unique)
-	var/placed_fixed = populate_area_with_vaults(VAULT_AREA, list_unique_vaults, adjusted_amount, 1, filter_function=/proc/jungle_filter, overwrites=TRUE)
-
-	var/adjusted_amount_rng=min(total_vault_slots-placed_fixed,vaults_avalible)
-	var/placed_rand = populate_area_with_vaults(VAULT_AREA, list_of_vaults, adjusted_amount_rng, 1, filter_function=/proc/jungle_filter, overwrites=TRUE)
-	message_admins("<span class='info'>placed [placed_fixed+placed_rand] vaults (requested [total_vault_slots]->[adjusted_amount_rng+adjusted_amount]) in [VAULT_AREA]</span>")
+	var/placed_fixed = populate_area_with_vaults(VAULT_AREA, list_unique_vaults, -1, 1, filter_function=/proc/jungle_filter, overwrites=TRUE)
+	var/placed_rand = populate_area_with_vaults(VAULT_AREA, list_of_vaults, -1, 1, filter_function=/proc/jungle_filter, overwrites=TRUE)
+	message_admins("<span class='info'>placed [placed_fixed+placed_rand] vaults in [VAULT_AREA]</span>")
 
 	return placed_fixed+placed_rand
 
