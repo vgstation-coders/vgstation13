@@ -657,6 +657,9 @@ var/stacking_limit = 90
 			continue
 		if (istype(M,/mob/new_player))
 			continue
+		if(M.observing_round)
+			list_observers.Add(M)
+			continue
 		if (M.stat != DEAD)
 			living_players.Add(M)
 			if (M.mind && (M.mind.antag_roles.len > 0))

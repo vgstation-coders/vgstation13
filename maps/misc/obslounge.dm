@@ -77,6 +77,7 @@
 	new_character.name = name_pref.setting
 	new_character.dna.ready_dna(new_character)
 
+	new_character.observing_round = TRUE
 	new_character.key = M.key
 
 /area/obslounge

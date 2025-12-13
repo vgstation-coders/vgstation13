@@ -85,3 +85,4 @@
 	var/list/luminosity_sources = list()
 
 	var/obj/machinery/camera/all/obs/obs_camera //do not set this unless obsgang lounge is in effect
+	var/observing_round = FALSE //obsgang lounge
