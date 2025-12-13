@@ -10,7 +10,7 @@
 	if(isliving(A))
 		var/mob/living/L = A
 		var/mob/dead/observer/obsganger = L.ghostize()
-		obsganger.started_as_observer = joins_obsgang
+		obsganger.observing_round = joins_obsgang
 		qdel(L)
 
 /obj/effect/step_trigger/ghostizer/obsgang

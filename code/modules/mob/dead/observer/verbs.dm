@@ -582,7 +582,7 @@
 /mob/dead/observer/verb/obs_lounge()
 	set name = "Go to observer lounge"
 	set category = "Ghost"
-	if(!started_as_observer)
+	if(!observing_round)
 		to_chat(src, "<span class='warning'>This feature is for obsgang only.</span>")
 		return
 	if(!(/datum/map_element/dungeon/obslounge in existing_dungeons))

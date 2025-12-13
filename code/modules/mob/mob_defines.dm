@@ -304,3 +304,5 @@
 
 	var/datum/weakref/last_thrown_by = null // weakrefs
 	var/last_thrown_by_timestamp = -INFINITY
+
+	var/observing_round = FALSE //obsgang lounge

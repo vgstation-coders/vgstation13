@@ -34,7 +34,7 @@ var/creating_arena = FALSE
 	var/datum/hud/living/carbon/hud = null // hud
 	var/bootime = 0
 	var/next_poltergeist = 0
-	var/started_as_observer //This variable is set to 1 when you enter the game as an observer.
+	//var/observing_round	//This variable is set to 1 when you enter the game as an observer.
 							//If you died in the game and are a ghsot - this will remain as null.
 							//Note that this is not a reliable way to determine if admins started as observers, since they change mobs a lot.
 	var/has_enabled_antagHUD = 0
@@ -65,7 +65,7 @@ var/creating_arena = FALSE
 	//add_spell(new /spell/ghost_show_map, "grey_spell_ready")
 
 	can_reenter_corpse = flags & GHOST_CAN_REENTER
-	started_as_observer = flags & GHOST_IS_OBSERVER
+	observing_round = flags & GHOST_IS_OBSERVER
 
 	stat = DEAD
 

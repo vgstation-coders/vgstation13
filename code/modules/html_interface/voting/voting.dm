@@ -277,7 +277,7 @@ var/global/datum/controller/vote/vote = new()
 					return 0
 				if(isobserver(user))
 					var/mob/dead/observer/O = user
-					if(O.started_as_observer)
+					if(O.observing_round)
 						to_chat(user, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 						return 0
 		//check vote then remove vote
@@ -417,7 +417,7 @@ var/global/datum/controller/vote/vote = new()
 							continue
 						if(isobserver(M))
 							var/mob/dead/observer/O = M
-							if(O.started_as_observer)
+							if(O.observing_round)
 								continue
 				interact(C)
 		else
