@@ -340,7 +340,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#CACAD2" //rgb: 202, 202, 210
 	density = 11.87
-	custom_metabolism = 0.1
+	custom_metabolism = 0.005
 	flags = CHEMFLAG_NOTREMOVABLE
 	specheatcap = 0.128
 
