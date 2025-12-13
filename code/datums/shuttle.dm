@@ -967,6 +967,8 @@
 		dest_climate = SSweather.get_climate(new_center.z, null)
 
 	for(var/turf/T in linked_area.contents)
+		for(var/obj/effect/edge_overlay/E in T)
+			qdel(E)
 		if(T in corner_turfs)
 			continue
 		if(source_climate)
@@ -975,8 +977,6 @@
 			dest_climate.unregister_weather_turf(T)
 		for(var/obj/effect/weather_holder/WH in T.vis_contents)
 			T.vis_contents -= WH
-		for(var/obj/effect/edge_overlay/E in T)
-			qdel(E)
 
 	// Re-register turfs left behind by the shuttle with the source climate
 	if(source_climate)

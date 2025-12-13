@@ -342,11 +342,14 @@
 			for(var/obj/structure/shuttle/engine/propulsion/engine in shuttle.linked_area)
 				engine_dir = engine.dir
 				break
-			var/obj/docking_port/destination/transit/transit_port = generate_transit_area(shuttle, engine_dir, 1)
+			// Reuse existing transit port if valid, otherwise create a new one
+			var/obj/docking_port/destination/transit/transit_port = shuttle.transit_port
+			if(!transit_port)
+				transit_port = generate_transit_area(shuttle, engine_dir, 1)
+				shuttle.set_transit_dock(transit_port)
 			if(transit_port)
 				transit_port.areaname = "transit to [alloc.ptype?.planet_name || "planet surface"]"
 				transit_port.generate_borders = 1
-				shuttle.set_transit_dock(transit_port)
 
 	//Send a message to the shuttle to move
 	shuttle.travel_to(selected_port, src, user)
@@ -365,6 +368,12 @@
 		to_chat(user, "<span class='warning'>Unable to determine shuttle dimensions.</span>")
 		return
 
+	if(istype(shuttle.current_port, /obj/docking_port/destination/planet_surface))
+		var/datum/allocation/current_alloc = SSmapping.get_allocation(trf = get_turf(shuttle.current_port))
+		if(current_alloc == planet.allocation)
+			to_chat(user, "<span class='warning'>The shuttle is already on [planet.planet_name].</span>")
+			return
+
 	// Get or create a landing zone for this shuttle
 	var/obj/docking_port/destination/planet_surface/surface_port = SSmapping.get_shuttle_landing_zone(planet.allocation, shuttle, shuttle_size)
 	if(!surface_port)
@@ -382,14 +391,16 @@
 		engine_dir = engine.dir
 		break
 
-	// Create transit area for the journey with correct orientation
-	var/obj/docking_port/destination/transit/transit_port = generate_transit_area(shuttle, engine_dir, 1)
+	// Reuse existing transit port if valid, otherwise create a new one
+	var/obj/docking_port/destination/transit/transit_port = shuttle.transit_port
 	if(!transit_port)
-		to_chat(user, "<span class='warning'>Failed to create transit area.</span>")
-		return
+		transit_port = generate_transit_area(shuttle, engine_dir, 1)
+		if(!transit_port)
+			to_chat(user, "<span class='warning'>Failed to create transit area.</span>")
+			return
+		shuttle.set_transit_dock(transit_port)
 	transit_port.areaname = "transit to [planet.planet_name]"
 	transit_port.generate_borders = 1
-	shuttle.set_transit_dock(transit_port)
 
 	shuttle.travel_to(surface_port, src, user)
 
