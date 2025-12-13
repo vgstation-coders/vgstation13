@@ -11006,6 +11006,18 @@
 /obj/item/weapon/hand_labeler,
 /obj/item/weapon/gun/syringe,
 /obj/structure/table/glass,
+/obj/item/clothing/suit/strait_jacket{
+	pixel_x = 12;
+	pixel_y = 6
+	},
+/obj/item/clothing/suit/strait_jacket{
+	pixel_x = 15;
+	pixel_y = 7
+	},
+/obj/item/clothing/mask/muzzle{
+	pixel_x = 16;
+	pixel_y = 5
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -14765,7 +14777,7 @@
 	},
 /area/science/storage)
 "aDa" = (
-/obj/machinery/door/airlock/research{
+/obj/machinery/door/airlock/glass_research{
 	name = "Genetics Research";
 	req_access_txt = "5;9"
 	},
@@ -26960,14 +26972,12 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
 	dir = 8
 	},
 /obj/structure/window/reinforced{
 	dir = 1
 	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/medical/paramedics)
 "aYT" = (
@@ -37870,9 +37880,6 @@
 /area/science/lab)
 "brX" = (
 /obj/structure/bed/chair,
-/obj/machinery/light{
-	dir = 4
-	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "purple"
@@ -37881,6 +37888,9 @@
 "brY" = (
 /obj/machinery/alarm{
 	pixel_y = 24
+	},
+/obj/machinery/light{
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -41376,6 +41386,13 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
 	name = "Firelock East"
+	},
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "biohazard";
+	name = "Biohazard Blast Doors";
+	opacity = 0
 	},
 /turf/simulated/floor{
 	icon_state = "white"
