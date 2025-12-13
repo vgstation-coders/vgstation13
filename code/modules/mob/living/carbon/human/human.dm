@@ -817,7 +817,9 @@
 						if(G.reagents.total_volume <= G.reagents.maximum_volume-7) //Container can fit 7 more units of chemicals - vomit into it
 							G.reagents.add_reagent(VOMIT, rand(3,10))
 							if(src.reagents)
-								reagents.trans_to(G, 1 + reagents.total_volume * vomitvolume) //one tenth
+								for (var/datum/reagent/current_reagent in reagents.reagent_list)
+									if(! (current_reagent.flags & CHEMFLAG_NOTREMOVABLE)) //do not vomit out unremovable chems
+										reagents.trans_id_to(G, current_reagent.id, reagents.get_reagent_amount(current_reagent.id)*vomitvolume) 
 						else //Container is nearly full - fill it to the brim with vomit and spawn some more on the floor
 							G.reagents.add_reagent(VOMIT, 10)
 							spawn_vomit_on_floor = 1

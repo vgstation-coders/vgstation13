@@ -815,7 +815,9 @@ its easier to just keep the beam vertical.
 			this.icon_state = "vomittox_[pick(1,4)]"
 
 		if(active && steal_reagents_from_mob && M && M.reagents)
-			M.reagents.trans_to(this, M.reagents.total_volume * 0.1)
+			for (var/datum/reagent/current_reagent in M.reagents.reagent_list)
+				if(! (current_reagent.flags & CHEMFLAG_NOTREMOVABLE)) //do not vomit out unremovable chems
+					M.reagents.trans_id_to(this, current_reagent.id, M.reagents.get_reagent_amount(current_reagent.id)*0.1) 
 
 
 /atom/proc/clean_blood()
