@@ -3089,5 +3089,10 @@
 #include "maps\RandomZLevels\tomb.dm"
 #include "maps\RandomZLevels\wildwest.dm"
 #include "maps\RandomZLevels\wildwest_props.dm"
+#include "maps\ruins\generic_ruin.dm"
+#include "maps\ruins\jungle_ruin.dm"
+#include "maps\ruins\snow_ruin.dm"
+#include "maps\ruins\urban_ruin.dm"
+#include "maps\ruins\xeno_ruin.dm"
 #include "maps\wheelstation\areas.dm"
 // END_INCLUDE
