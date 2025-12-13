@@ -222,6 +222,31 @@
 				if(TOD_NIGHTTIME)
 					M << 'sound/misc/6pmWolf.wav'
 
+// Shuttles get locked down on Snaxi during blizzards
+/datum/weather/snow/calm/execute()
+	..()
+	research_shuttle.lockdown = FALSE //note: blob can't happen on this map
+	mining_shuttle.lockdown = FALSE
+	security_shuttle.lockdown = FALSE
+
+/datum/weather/snow/light/execute()
+	..()
+	research_shuttle.lockdown = FALSE
+	mining_shuttle.lockdown = FALSE
+	security_shuttle.lockdown = FALSE
+
+/datum/weather/snow/heavy/execute()
+	..()
+	research_shuttle.lockdown = FALSE
+	mining_shuttle.lockdown = FALSE
+	security_shuttle.lockdown = FALSE
+
+/datum/weather/snow/blizzard/execute()
+	..()
+	research_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
+	mining_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
+	security_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
+
 ////////////////////////////////////////////////////////////////
 #include "snaxi.dmm"
 #endif
