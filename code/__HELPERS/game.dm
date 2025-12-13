@@ -280,12 +280,8 @@
 	for(var/i = 1; i <= player_list.len; i++)
 		var/mob/M = player_list[i]
 		if(M && M.client)
-			if(istype(M, /mob/new_player)) // exclude people in the lobby
+			if(istype(M, /mob/new_player) || M.observing_round) // exclude people in the lobby or who started as observers
 				continue
-			else if(isobserver(M)) // Ghosts are fine if they were playing once (didn't start as observers)
-				var/mob/dead/observer/O = M
-				if(O.observing_round) // Exclude people who started as observers
-					continue
 			active_players++
 	return active_players
 

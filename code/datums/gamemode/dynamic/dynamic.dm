@@ -667,9 +667,6 @@ var/stacking_limit = 90
 		else
 			if (istype(M,/mob/dead/observer))
 				var/mob/dead/observer/O = M
-				if (O.observing_round)//Observers
-					list_observers.Add(M)
-					continue
 				if (O.mind && O.mind.current && O.mind.current.ajourn)//Cultists
 					living_players.Add(M)//yes we're adding a ghost to "living_players", so make sure to properly check for type when testing midround rules
 					continue

@@ -275,11 +275,9 @@ var/global/datum/controller/vote/vote = new()
 				if(isnewplayer(user))
 					to_chat(user, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 					return 0
-				if(isobserver(user))
-					var/mob/dead/observer/O = user
-					if(O.observing_round)
-						to_chat(user, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
-						return 0
+				if(user.observing_round)
+					to_chat(user, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
+					return 0
 		//check vote then remove vote
 		if(vote && vote == "cancel_vote")
 			cancel_vote(user)
@@ -415,10 +413,8 @@ var/global/datum/controller/vote/vote = new()
 						//Do not prompt non-admin new players or round start observers for a map vote - Pomf
 						if(isnewplayer(M))
 							continue
-						if(isobserver(M))
-							var/mob/dead/observer/O = M
-							if(O.observing_round)
-								continue
+						if(M.observing_round)
+							continue
 				interact(C)
 		else
 			if(istype(user) && user.client)
