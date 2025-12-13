@@ -227,10 +227,8 @@ var/global/datum/credits/end_credits = new
 			continue
 		if(C.holder.rights & (R_DEBUG|R_ADMIN))
 			var/observername = ""
-			if(C.mob && istype(C.mob,/mob/dead/observer))
-				var/mob/dead/observer/O = C.mob
-				if(O.observing_round)
-					observername = "[O.real_name] a.k.a. "
+			if(C.mob?.observing_round)
+				observername = "[O.real_name] a.k.a. "
 			staff += "<h2>[uppertext(pick(staffjobs))] - [observername]'[C.key]'</h2><br>"
 
 	producers = list("<h1>Directed by</br>[uppertext(director)]</h1>","[jointext(staff,"")]")

@@ -39,26 +39,22 @@
 			entry += " <i>(as [C.holder.fakekey])</i>"
 		if(C.mob.real_name)
 			entry += " - Playing as [C.mob.real_name]"
-		switch(C.mob.stat)
-			if(UNCONSCIOUS)
-				entry += " - <span style='color:darkgray'><b>Unconscious</b></span>"
-			if(DEAD)
-				if(isobserver(C.mob))
-					var/mob/dead/observer/O = C.mob
-					if(O.observing_round)
-						entry += " - <span style='color:gray'>Observing</span>"
-						observers++
+		if(C.mob.observing_round)
+			entry += " - <span style='color:gray'>Observing</span>"
+			observers++
+		else
+			switch(C.mob.stat)
+				if(UNCONSCIOUS)
+					entry += " - <span style='color:darkgray'><b>Unconscious</b></span>"
+				if(DEAD)
+					if (isnewplayer(C.mob))
+						entry += " - <span style='color:gray'><i>Lobby</i></span>"
+						lobby++
 					else
 						entry += " - <b>DEAD</b>"
 						dead++
-				else if (isnewplayer(C.mob))
-					entry += " - <span style='color:gray'><i>Lobby</i></span>"
-					lobby++
 				else
-					entry += " - <b>DEAD</b>"
-					dead++
-			else
-				living++
+					living++
 		if (C.mob.mind && C.mob.mind.antag_roles.len > 0)
 			var/counts_as_antag = FALSE
 			for(var/role in C.mob.mind.antag_roles)
