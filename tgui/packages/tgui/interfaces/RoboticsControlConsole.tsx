@@ -144,7 +144,7 @@ const Cyborgs = (props) => {
                 </Box>
               </LabeledList.Item>
 			  <LabeledList.Item label="Location">
-				{cyborg.location}
+                {cyborg.location}
               </LabeledList.Item>
               <LabeledList.Item label="Cell Charge">
                 <Box color={cyborg.charge <= 30
