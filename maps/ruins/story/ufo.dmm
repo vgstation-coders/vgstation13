@@ -1,0 +1,265 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/machinery/old_database,
+/turf/unsimulated/floor/ayy/fancy,
+/area/ruin)
+"b" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/template_noop,
+/area/exposed_ruin)
+"d" = (
+/obj/structure/closet/crate/bin,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"g" = (
+/obj/structure/closet/secure_closet/ayy,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"h" = (
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"i" = (
+/turf/unsimulated/floor/ayy/fancy,
+/area/ruin)
+"j" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/paper_bin/purple,
+/obj/item/weapon/pen,
+/obj/item/weapon/folder/purple,
+/turf/unsimulated/floor/ayy/fancy,
+/area/ruin)
+"m" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"q" = (
+/obj/structure/wc/sink/acid{
+	pixel_y = 28
+	},
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"r" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"s" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"u" = (
+/obj/structure/table/reinforced,
+/obj/item/binoculars,
+/turf/unsimulated/floor/ayy/fancy,
+/area/ruin)
+"v" = (
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"w" = (
+/obj/machinery/optable,
+/obj/machinery/light/he,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"A" = (
+/turf/template_noop,
+/area/template_noop)
+"C" = (
+/obj/structure/shuttle/engine/propulsion/left{
+	dir = 1
+	},
+/turf/space,
+/area/ruin)
+"D" = (
+/obj/structure/wc/toilet/acid,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"E" = (
+/obj/structure/sign/poster{
+	icon_state = "bsposter10";
+	pixel_x = -32
+	},
+/obj/machinery/telecomms/relay/planetary,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"H" = (
+/obj/structure/bed/chair/comfy/ayy2,
+/obj/effect/landmark/story,
+/turf/unsimulated/floor/ayy/fancy,
+/area/ruin)
+"K" = (
+/obj/structure/cage,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"M" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"N" = (
+/obj/structure/bed/ayy1,
+/obj/structure/curtain/open/bed,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"O" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/zambiscuit_package,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"P" = (
+/turf/simulated/wall/shuttle,
+/area/ruin)
+"R" = (
+/obj/structure/table/reinforced,
+/obj/item/tool/bonesetter,
+/obj/item/tool/bonegel,
+/obj/item/tool/FixOVein,
+/obj/item/weapon/switchtool/surgery,
+/obj/item/tool/cautery,
+/obj/item/weapon/storage/box/masks,
+/obj/item/weapon/storage/firstaid,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"T" = (
+/obj/structure/table/reinforced,
+/obj/item/device/flashlight/lamp,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"U" = (
+/obj/structure/cage,
+/obj/abstract/map/spawner/mobs/monkeys,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"V" = (
+/obj/structure/table/reinforced,
+/obj/machinery/microwave,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"W" = (
+/obj/machinery/door/airlock/external,
+/turf/unsimulated/floor/ayy,
+/area/ruin)
+"Z" = (
+/obj/structure/shuttle/engine/heater{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "old_enginewarn";
+	tag = "icon-old_enginewarn"
+	},
+/area/ruin)
+
+(1,1,1) = {"
+A
+A
+r
+P
+h
+P
+b
+A
+A
+"}
+(2,1,1) = {"
+A
+r
+P
+g
+N
+T
+P
+b
+A
+"}
+(3,1,1) = {"
+r
+P
+E
+i
+i
+i
+U
+P
+b
+"}
+(4,1,1) = {"
+P
+q
+i
+i
+u
+i
+i
+K
+P
+"}
+(5,1,1) = {"
+C
+Z
+i
+H
+j
+i
+i
+v
+W
+"}
+(6,1,1) = {"
+P
+D
+i
+i
+a
+i
+i
+R
+P
+"}
+(7,1,1) = {"
+m
+P
+d
+i
+i
+i
+w
+P
+s
+"}
+(8,1,1) = {"
+A
+m
+P
+V
+M
+O
+P
+s
+A
+"}
+(9,1,1) = {"
+A
+A
+m
+P
+h
+P
+s
+A
+A
+"}

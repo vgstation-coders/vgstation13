@@ -4,6 +4,9 @@
 	can_butcher = 0
 	mob_property_flags = MOB_ROBOTIC
 	meat_type = null
+	standard_dizzy_reduce = 2 //This literally only exists because it was reworked a little and it keeps them behaving the same as before, set to 1 if you don't want that
+	rested_dizzy_reduce = 2 //They don't use this
+	rested_jitter_reduce = 1 //Likewise
 
 	var/flashed = 0
 	var/syndicate = 0

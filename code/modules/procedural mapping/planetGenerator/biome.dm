@@ -127,6 +127,7 @@
 	var/atom/flora_type = pick(flora_spawn_list_expanded)
 	var/atom/spawned = new flora_type(floor_turf)
 	floor_turf.turf_flags |= NO_LAVA_GEN
+	spawned.planet = floor_turf.planet
 	return spawned
 
 /**
@@ -148,14 +149,14 @@
 
 	var/atom/feature_type = pick(feature_spawn_list_expanded)
 
-	if(!can_spawn_feature(floor_turf, feature_type, feature_list))
-		return null
-
-	var/atom/spawned = new feature_type(floor_turf)
-	// Insert at the head of the list, so the most recent features get checked first
-	feature_list.Insert(1, spawned)
-	floor_turf.turf_flags |= NO_LAVA_GEN
-	return spawned
+	if(SSmapping.generating)
+		if(!SSmapping.can_spawn_feature_at(floor_turf.x, floor_turf.y, feature_type))
+			return null
+		var/atom/spawned = new feature_type(floor_turf)
+		SSmapping.add_feature_to_bucket(spawned)
+		floor_turf.turf_flags |= NO_LAVA_GEN
+		spawned.planet = floor_turf.planet
+		return spawned
 
 /datum/biome/proc/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
 	if(!length(loot_spawners))
@@ -173,24 +174,11 @@
 	var/spawner_type = pickweight(loot_spawners)
 	var/obj/abstract/loot_spawner/spawned = new spawner_type(floor_turf, cave = cavespawn)
 	floor_turf.turf_flags |= NO_LAVA_GEN
+	spawned.planet = floor_turf.planet
 	return spawned
 
 /datum/biome/cave/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
 	return ..(floor_turf, area_flags, TRUE)
-
-/**
- * Checks if a feature can spawn at the given location based on distance from other features
- *
- * Arguments:
- * * floor_turf - The turf to check
- * * feature_type - The type of feature being spawned
- * * feature_list - List of existing features
- */
-/datum/biome/proc/can_spawn_feature(turf/simulated/floor/floor_turf, feature_type, list/feature_list)
-	for(var/other_feature in feature_list)
-		if(get_dist(floor_turf, other_feature) <= FEATURE_SPAWN_DISTANCE && istype(other_feature, feature_type))
-			return FALSE
-	return TRUE
 
 /**
  * Attempts to spawn a mob on the given turf
@@ -212,46 +200,17 @@
 
 	var/atom/picked_mob = pick(mob_spawn_list_expanded)
 
-	if(!can_spawn_mob(floor_turf, picked_mob, mob_list))
-		return null
-
-	var/atom/spawned = new picked_mob(floor_turf)
-
-	// Assign planet faction to the spawned mob if provided
-	if(planet_faction && ismob(spawned))
-		var/mob/M = spawned
-		M.faction = planet_faction
-
-	// Insert at the head of the list, so the most recent mobs get checked first
-	mob_list.Insert(1, spawned)
-	floor_turf.turf_flags |= NO_LAVA_GEN
-	return spawned
-
-/**
- * Checks if a mob can spawn at the given location based on distance from other mobs and spawners
- *
- * Uses [HOSTILE_MOB_SPAWN_DISTANCE] for hostile mobs and [SPAWNER_SPAWN_DISTANCE] for spawners.
- * Arguments:
- * * floor_turf - The turf to check
- * * mob_type - The type of mob being spawned
- * * mob_list - List of existing mobs and spawners
- */
-/datum/biome/proc/can_spawn_mob(turf/simulated/floor/floor_turf, mob_type, list/mob_list)
-	for(var/thing in mob_list)
-		if(!ishostile(thing) && !istype(thing, /obj/abstract/map/spawner/mobs))
-			continue
-
-		var/distance = get_dist(floor_turf, thing)
-
-		// Hostile mobs have a HOSTILE_MOB_SPAWN_DISTANCE tile keep-away square radius from everything
-		if(distance <= HOSTILE_MOB_SPAWN_DISTANCE && (ishostile(thing) || ispath(mob_type, /mob/living/simple_animal/hostile)))
-			return FALSE
-
-		// Spawners have a SPAWNER_SPAWN_DISTANCE tile keep-away square radius from everything
-		if(distance <= SPAWNER_SPAWN_DISTANCE && (istype(thing, /obj/abstract/map/spawner/mobs) || ispath(mob_type, /obj/abstract/map/spawner/mobs)))
-			return FALSE
-
-	return TRUE
+	if(SSmapping.generating)
+		if(!SSmapping.can_spawn_mob_at(floor_turf.x, floor_turf.y, picked_mob))
+			return null
+		var/atom/spawned = new picked_mob(floor_turf)
+		if(planet_faction && ismob(spawned))
+			var/mob/M = spawned
+			M.faction = planet_faction
+		SSmapping.add_mob_to_bucket(spawned)
+		floor_turf.turf_flags |= NO_LAVA_GEN
+		spawned.planet = floor_turf.planet
+		return spawned
 
 /**
  * Fills a turf with flora, features, and creatures based on the biome's variables
@@ -267,8 +226,6 @@
  * * planet_faction - Optional faction to assign to spawned mobs
  */
 /datum/biome/proc/populate_turf(turf/gen_turf, list/feature_list, list/mob_list, var/datum/loot_table/loot_to_spawn, planet_faction = null)
-	gen_turf.turf_flags &= ~DEFER_EDGING
-	gen_turf.update_edges()
 	if(!can_populate_turf(gen_turf))
 		return
 

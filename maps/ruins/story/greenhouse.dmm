@@ -1,0 +1,215 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/template_noop)
+"b" = (
+/turf/simulated/floor/grass,
+/area/ruin)
+"c" = (
+/turf/simulated/wall,
+/area/ruin)
+"d" = (
+/obj/structure/table,
+/obj/item/device/flashlight/lamp,
+/obj/item/weapon/paper_bin,
+/turf/simulated/floor/wood,
+/area/ruin)
+"e" = (
+/obj/machinery/telecomms/relay/planetary,
+/turf/simulated/floor/wood,
+/area/ruin)
+"f" = (
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/turf/simulated/floor/grass,
+/area/ruin)
+"g" = (
+/obj/structure/closet/crate,
+/obj/item/seeds/ambrosiavulgarisseed,
+/obj/item/seeds/carrotseed,
+/obj/item/seeds/potatoseed,
+/turf/simulated/floor/wood,
+/area/ruin)
+"h" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"i" = (
+/obj/machinery/door/airlock/glass,
+/turf/space,
+/area/ruin)
+"j" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/glass/bucket,
+/turf/simulated/floor/wood,
+/area/ruin)
+"k" = (
+/obj/machinery/old_database,
+/turf/simulated/floor/wood,
+/area/ruin)
+"l" = (
+/obj/structure/bed/chair/office/light{
+	dir = 8
+	},
+/obj/effect/landmark/story,
+/turf/simulated/floor/wood,
+/area/ruin)
+"m" = (
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/glass/bottle/eznutrient,
+/obj/item/weapon/pickaxe/shovel/spade,
+/obj/item/weapon/minihoe,
+/turf/simulated/floor/wood,
+/area/ruin)
+"n" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"o" = (
+/turf/simulated/floor/wood,
+/area/ruin)
+"p" = (
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/grass,
+/area/ruin)
+"q" = (
+/obj/structure/grille/window_spawner/full,
+/turf/simulated/floor/wood,
+/area/ruin)
+"r" = (
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"I" = (
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/grass,
+/area/ruin)
+
+(1,1,1) = {"
+c
+q
+q
+q
+q
+q
+c
+q
+q
+c
+a
+"}
+(2,1,1) = {"
+q
+f
+b
+I
+b
+f
+j
+m
+g
+q
+a
+"}
+(3,1,1) = {"
+q
+f
+b
+f
+b
+f
+o
+o
+o
+q
+a
+"}
+(4,1,1) = {"
+q
+o
+o
+o
+o
+o
+o
+l
+d
+c
+r
+"}
+(5,1,1) = {"
+q
+f
+b
+f
+b
+f
+o
+o
+o
+i
+h
+"}
+(6,1,1) = {"
+q
+f
+b
+p
+b
+f
+n
+o
+o
+c
+r
+"}
+(7,1,1) = {"
+c
+q
+q
+q
+q
+q
+c
+o
+o
+q
+a
+"}
+(8,1,1) = {"
+a
+a
+a
+a
+a
+a
+q
+e
+k
+q
+a
+"}
+(9,1,1) = {"
+a
+a
+a
+a
+a
+a
+c
+q
+q
+c
+a
+"}

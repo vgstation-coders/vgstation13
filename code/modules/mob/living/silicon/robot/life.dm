@@ -119,11 +119,7 @@
 	if(druggy)
 		druggy = max(druggy-1,0)
 
-	if(jitteriness)
-		jitteriness = max(jitteriness-1,0)
 	handle_jitteriness()
-	if(dizziness)
-		dizziness = max(0, dizziness - 1)
 	handle_dizziness()
 
 	if(camera && !scrambledcodes)
