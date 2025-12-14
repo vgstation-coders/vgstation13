@@ -1675,6 +1675,9 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/Jitter(amount)
 	jitteriness = max(jitteriness,amount,0)
 
+/mob/proc/AdjustJitter(amount)
+	jitteriness = max(jitteriness+amount, 0)
+
 /mob/proc/Dizzy(amount)
 	dizziness = max(dizziness,amount,0)
 
