@@ -111,6 +111,17 @@ var/list/sand_sound = list('sound/effects/sand_walk1.ogg', 'sound/effects/sand_w
 				if((get_z_dist(player_turf, turf_source) <= Dist) || (P1 && get_z_dist(P1, turf_source) <= Dist) || (P2 && get_z_dist(player_turf, P2) <= Dist) || (P1 && P2 && get_z_dist(P1, P2) <= Dist))
 					player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel, wait, source)
 
+	for (var/atom/sound_hearer in sound_hearers)
+		var/turf/hearer_turf = get_turf(sound_hearer)
+
+		for(var/z0 in GetOpenConnectedZlevels(turf_source))
+			if (hearer_turf && turf_source && hearer_turf.z == z0)
+				var/turf/portal/P1 = locate(/turf/portal) in hearer_turf.vis_locs
+				var/turf/portal/P2 = locate(/turf/portal) in turf_source.vis_locs
+				if((get_z_dist(hearer_turf, turf_source) <= Dist) || (P1 && get_z_dist(P1, turf_source) <= Dist) || (P2 && get_z_dist(hearer_turf, P2) <= Dist) || (P1 && P2 && get_z_dist(P1, P2) <= Dist))
+					sound_hearer.hear_sound(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel, wait, source)
+
+
 var/const/FALLOFF_SOUNDS = 1
 var/const/SURROUND_CAP = 7
 
@@ -119,7 +130,7 @@ var/const/SURROUND_CAP = 7
 /mob/proc/playsound_local(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0,var/wait = FALSE, var/atom/source)
 	if(loneliness_affected(source,TRUE))
 		return
-	
+
 	if(!src.client)
 		return
 

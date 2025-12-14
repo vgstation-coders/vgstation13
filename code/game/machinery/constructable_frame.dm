@@ -583,6 +583,16 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 4,
 							/obj/item/weapon/stock_parts/console_screen = 1)
 
+/obj/item/weapon/circuitboard/acoustic
+	name = "Circuit Board (Acoustic Resonator)"
+	desc = "A circuit board used to run a machine that converts acoustic energy into power."
+	build_path = /obj/machinery/power/acoustic
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=4;" + Tc_POWERSTORAGE + "=4"
+	req_components = list (
+							/obj/item/weapon/stock_parts/capacitor = 4,
+							/obj/item/weapon/stock_parts/console_screen = 1)
+
 /obj/item/weapon/circuitboard/chemheater
 	name = "Circuit Board (Directed Laser Heater)"
 	desc = "A circuit board used to run a container heating device."

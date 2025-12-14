@@ -44,6 +44,16 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/treadmill
 
+/datum/design/acoustic
+	name = "Circuit Design (Acoustic Resonator)"
+	desc = "Allows for the construction of circuit boards used to build Acoustic Resonators."
+	id="acoustic"
+	req_tech = list(Tc_POWERSTORAGE = 4, Tc_ENGINEERING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/acoustic
+
 /datum/design/cell_charger
 	name = "Circuit Design (Cell Charger)"
 	desc = "Allows for the construction of circuit boards used to build a Cell Charger."
