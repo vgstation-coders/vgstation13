@@ -48,7 +48,7 @@
 	name = "Circuit Design (Acoustic Resonator)"
 	desc = "Allows for the construction of circuit boards used to build Acoustic Resonators."
 	id="acoustic"
-	req_tech = list(Tc_POWERSTORAGE = 4, Tc_ENGINEERING = 4)
+	req_tech = list(Tc_POWERSTORAGE = 5, Tc_ENGINEERING = 5)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
