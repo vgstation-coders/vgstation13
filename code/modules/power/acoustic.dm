@@ -6,6 +6,7 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 	icon_state = "acoustic"
 	density = 1
 	machine_flags = SCREWTOGGLE | WRENCHMOVE
+	flags = FPRINT | HEAR
 	anchored = 1
 	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
@@ -32,6 +33,10 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 /obj/machinery/power/acoustic/Destroy()
 	sound_hearers -= src
 	. = ..()
+
+/obj/machinery/power/acoustic/examine(mob/user as mob)
+	..()
+	to_chat(user, "<span class='info'>During the last cycle, it produced [tick_power] watts.</span>")
 
 /obj/machinery/power/acoustic/Hear(datum/speech/speech, rendered_speech)
 	. = ..()
