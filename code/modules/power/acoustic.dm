@@ -14,6 +14,7 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 	var/tick_power = 0 //How much power did we produce last count?
 	var/power_efficiency = 1 //Based on parts
 	var/list/last_heard = list() //Spam prevention
+	var/things_heard = 0
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/acoustic,
 		/obj/item/weapon/stock_parts/capacitor,
@@ -45,7 +46,7 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 
 /obj/machinery/power/acoustic/examine(mob/user as mob)
 	..()
-	to_chat(user, "<span class='info'>During the last cycle, it produced [format_watts(tick_power)].</span>")
+	to_chat(user, "<span class='info'>During the last cycle, it produced [format_watts(tick_power)] from [things_heard] sources.</span>")
 
 /obj/machinery/power/acoustic/Hear(datum/speech/speech, rendered_speech)
 	. = ..()
@@ -63,12 +64,14 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 				rate /= 2
 		last_heard |= list(speech.speaker)
 		count_power += (rate * power_efficiency)
+		things_heard++
 		flick("acoustic1",src)
 
 /obj/machinery/power/acoustic/process()
 	tick_power = count_power
 	count_power = 0
 	last_heard = list()
+	things_heard = 0
 	add_avail(tick_power)
 
 /atom/proc/hear_sound(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0,var/wait = FALSE, var/atom/source)
@@ -95,4 +98,5 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 			/// end ///
 
 		count_power += (vol * power_efficiency)
+		things_heard++
 		flick("acoustic1",src)
