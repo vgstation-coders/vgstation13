@@ -1818,7 +1818,53 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 	usr << browse(HTML_SKELETON(dat), "window=beastspanel;size=840x450")
 
 /datum/admins/proc/create_megabeast(var/datum/procedural_mobspawn/add_template)
+	if(!check_rights(R_SPAWN))
+		return
+
 	if(!add_template)
-		new /datum/procedural_mobspawn()
+		if(alert(usr, "Create custom megabeast?", "Megabeast panel", "Yes", "No") == "Yes")
+			//your inputs go here
+			var/datum/procedural_mobspawn/my_monster = new()
+			my_monster.name =  input(usr,"Please name your megabeast:","Name your megabeast",null) as text
+			if(!my_monster.name)
+				my_monster.name = "Forgotten Beast"
+			var/mob/living/simple_animal/hostile/mob_type = filter_typelist_input("Please select the base mob.", "Mob selection", typesof(/mob/living/simple_animal/hostile))
+			if(mob_type:icon)
+				my_monster.icon = mob_type:icon
+				my_monster.icon_state = mob_type:icon_state
+			if(alert(usr, "Apply custom attributes?", "Megabeast panel", "Yes", "No") == "Yes")
+				my_monster.maxHealth =  input(usr,"Maximum HP","Megabeast panel",null) as num
+				my_monster.melee_damage_lower =  input(usr,"Minimum Damage","Megabeast panel",null) as num
+				my_monster.melee_damage_upper =  input(usr,"Maximum Damage","Megabeast panel",null) as num
+			if(alert(usr, "Customize appearance modifiers?", "Megabeast panel", "Yes", "No") == "Yes")
+				my_monster.color =  input(usr,"Color (Text):","Megabeast panel",null) as color
+				var/scaling_x =  input(usr,"Size Multiplier - X axis, base 1.00","Megabeast panel",null) as num
+				var/scaling_y =  input(usr,"Size Multiplier - Y axis, base 1.00","Megabeast panel",null) as num
+				my_monster.size_matrix = matrix()
+				my_monster.size_matrix.Scale(scaling_x, scaling_y)
+			if(alert(usr, "Manually assign abilities?", "Megabeast panel", "Yes", "No") == "Yes")
+				if(alert(usr, "Assign projectile attack?", "Megabeast panel", "Yes", "No") == "Yes")
+					my_monster.projectiletype = filter_typelist_input("Please select the projectile.", "Projectile selection", typesof(/obj/item/projectile))
+					my_monster.ranged = TRUE
+				else
+					if(alert(usr, "Assign breath attack?", "Megabeast panel", "Yes", "No") == "Yes")
+						var/list/my_breaths = list()
+						for (var/list/x in breath_list)
+							my_breaths += x[1]
+						var/selection = input("Please select the breath type.", "Breath selection") as null|anything in my_breaths
+
+						for (var/list/x in breath_list)
+							if(selection in x)
+								my_monster.PickBreath(x[1])
+				if(alert(usr, "Make it radioactive?", "Megabeast panel", "Yes", "No") == "Yes")
+					my_monster.radioactive = TRUE
+				else
+					my_monster.radioactive = FALSE
+
+				if(alert(usr, "Assign vapors?", "Megabeast panel", "Yes", "No") == "Yes")
+					return
+					//do the vapor thing here
+		else
+			new /datum/procedural_mobspawn()
 		return
 	new /mob/living/simple_animal/hostile/forgotten_beast(get_turf(usr), add_template)

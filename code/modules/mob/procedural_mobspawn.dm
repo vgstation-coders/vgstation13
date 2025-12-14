@@ -102,14 +102,13 @@ var/list/procgen_loot = list(//path, # of items
 		"wing",
 		)
 	var/list/randomloot
-
 //Generate datum variables on creation
 /datum/procedural_mobspawn/New(var/mob/living/simple_animal/hostile/mobtype)
 	PickMob(mobtype)
 	if(!ranged)
 		if(prob(30))
 			PickProjectile()
-		else
+		else if(prob(30))
 			PickBreath()
 	//When finished, add self to the global list of generated mobs for future reference
 	procgen_mob_datums += src
@@ -120,8 +119,8 @@ var/list/procgen_loot = list(//path, # of items
 	if(!mymob)
 		var/list/mob_types = existing_typesof(/mob/living/simple_animal/hostile)
 		mymob = pick(mob_types)
-	health = clamp((mymob.health * 10), 100, 1000)
-	maxHealth = clamp((mymob.maxHealth * 10), 100, 1000)
+	health = clamp((mymob.health * 10), 200, 1000)
+	maxHealth = clamp((mymob.maxHealth * 10), 200, 1000)
 	GenerateDesc()
 	if(prob(90))
 		AddFlavorText()
@@ -192,8 +191,14 @@ var/list/procgen_loot = list(//path, # of items
 	projectiletype = P
 	desc += " Beware of its deadly [P.name]s!"//needs some variation
 
-/datum/procedural_mobspawn/proc/PickBreath()
-	var/list/breath_type = pick(breath_list)
+/datum/procedural_mobspawn/proc/PickBreath(breath_string)
+	var/list/breath_type = list()
+	if(breath_string)
+		for (var/list/x in breath_list)
+			if (breath_string in x)
+				breath_type = x
+	else
+		breath_type = pick(breath_list)
 	if(breath_type.len < 4)
 		return
 	ranged = TRUE
