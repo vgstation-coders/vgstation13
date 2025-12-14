@@ -11,6 +11,7 @@ var/global/list/rad_collectors = list()
 	req_access = list(access_engine_minor)
 	var/obj/item/weapon/tank/plasma/P = null
 	var/last_power = 0
+	var/total_power_last_cycle = 0
 	var/active = 0
 	var/locked = 0
 	var/drain_ratio = 3.5 //3.5 times faster than original.
@@ -30,6 +31,7 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/process()
 	if (P)
+		total_power_last_cycle = last_power
 		last_power = 0
 		if (P.air_contents[GAS_PLASMA] <= 0)
 			investigation_log(I_SINGULO,"<font color='red'>out of fuel</font>.")
@@ -56,7 +58,7 @@ var/global/list/rad_collectors = list()
 		return 1
 	else if(istype(W, /obj/item/device/analyzer) || istype(W, /obj/item/device/multitool))
 		if(active)
-			to_chat(user, "<span class='notice'>\The [W] registers that [format_watts(last_power)] is being produced every cycle.</span>")
+			to_chat(user, "<span class='notice'>\The [W] registers that [format_watts(total_power_last_cycle)] is being produced every cycle.</span>")
 		else
 			to_chat(user, "<span class='notice'>\The [W] registers that the unit is currently not producing power.</span>")
 		return 1
@@ -121,7 +123,7 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/proc/eject()
 	locked = 0
-	last_power = 0
+	total_power_last_cycle = 0
 
 	if(isnull(P))
 		return
@@ -173,7 +175,7 @@ var/global/list/rad_collectors = list()
 	else
 		icon_state = "ca"
 		flick("ca_deactive", src)
-		last_power = 0
+		total_power_last_cycle = 0
 
 	update_icons()
 
