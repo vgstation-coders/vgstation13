@@ -1,9 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Slime extracts no longer delete when trying to be put into and pulled out
-    of open envelopes.
-- bugfix: Slime extracts now properly delete and update their icon when slime resurrection
-    serum is used on them.
-- spellcheck: Examining slime extracts now says "The extract has [number] use(s) left",
-    adding the missing "uses" word.

@@ -1,5 +1,0 @@
-author: west3436
-delete-after: true
-changes:
-- rscadd: Added a Planetary Relay which allows planetary explorers to communicate
-    with crewmembers back on the station.
