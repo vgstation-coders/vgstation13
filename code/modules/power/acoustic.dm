@@ -41,6 +41,9 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 /obj/machinery/power/acoustic/Hear(datum/speech/speech, rendered_speech)
 	. = ..()
 	if(anchored)
+		var/rate = length(speech.message)
+		if("megaphone" in speech.message_classes)
+			rate *= 2
 		count_power += length(speech.message)
 		flick("acoustic1",src)
 
