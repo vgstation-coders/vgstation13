@@ -15,6 +15,7 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 	var/power_efficiency = 1 //Based on parts
 	var/list/last_heard = list() //Spam prevention
 	var/things_heard = 0
+	var/deaf = 0 //Ticks this is "deaf" for
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/acoustic,
 		/obj/item/weapon/stock_parts/capacitor,
@@ -47,10 +48,12 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 /obj/machinery/power/acoustic/examine(mob/user as mob)
 	..()
 	to_chat(user, "<span class='info'>During the last cycle, it produced [format_watts(tick_power)] from [things_heard] sources.</span>")
+	if(deaf)
+		to_chat(user, "<span class='info'>Its speaker is inactive for [deaf] more cycle\s.</span>")
 
 /obj/machinery/power/acoustic/Hear(datum/speech/speech, rendered_speech)
-	. = ..()
-	if(anchored)
+	if(anchored && !deaf)
+		. = ..()
 		if(speech.speaker in last_heard)
 			return
 		var/rate = length(speech.message)
@@ -68,9 +71,12 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 		flick("acoustic1",src)
 
 /obj/machinery/power/acoustic/process()
+	deaf = max(deaf-1,0)
 	tick_power = count_power
 	count_power = 0
 	last_heard = list()
+	if(things_heard > 100 * power_efficiency)
+		deaf = min(things_heard/100,2 MINUTES)
 	things_heard = 0
 	add_avail(tick_power)
 
@@ -78,8 +84,7 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 	return
 
 /obj/machinery/power/acoustic/hear_sound(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0,var/wait = FALSE, var/atom/source)
-	if(anchored)
-		vol /= 100 // makes it 1 at 100 instead of normal value
+	if(anchored && !deaf)
 		if(gas_modified)
 			var/turf/current_turf = get_turf(src)
 			if(!current_turf)
