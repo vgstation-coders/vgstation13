@@ -76,6 +76,7 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 
 /obj/machinery/power/acoustic/hear_sound(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0,var/wait = FALSE, var/atom/source)
 	if(anchored)
+		vol /= 100 // makes it 1 at 100 instead of normal value
 		if(gas_modified)
 			var/turf/current_turf = get_turf(src)
 			if(!current_turf)
