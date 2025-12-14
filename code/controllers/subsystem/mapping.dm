@@ -217,7 +217,9 @@ var/datum/subsystem/mapping/SSmapping
 				return
 
 		if(STAGE_RUIN)
-			place_story_ruins(current_allocation)
+			if(!current_mapgen.spawned_story_ruin)
+				place_story_ruins(current_allocation)
+				current_mapgen.spawned_story_ruin = TRUE
 			if(current_planet.ruin_budget <= 0)
 				current_stage = STAGE_POPULATION
 				queue_index = 1
@@ -323,7 +325,6 @@ var/datum/subsystem/mapping/SSmapping
 				current_allocation = null
 				current_stage = null
 				current_mapgen = null
-				current_ruin_type = null
 				terrain_queue = list()
 				population_queue = list()
 				finalize_queue = list()
@@ -437,15 +438,6 @@ var/datum/subsystem/mapping/SSmapping
 	var/chosen_planet_type = input(user, "Select a planet type to generate:", "Planet Generation") as null|anything in planet_types
 	if(!chosen_planet_type)
 		return
-
-	var/list/ruin_types = list()
-	for(var/ruin_path in (subtypesof(/datum/map_element/ruin) - typesof(/datum/map_element/ruin/story)))
-		ruin_types += ruin_path
-
-	var/chosen_ruin_type = input(user, "Select a ruin to place on the planet (random if no selection):", "Vault Selection") as null|anything in ruin_types
-	if(!chosen_ruin_type)
-		chosen_ruin_type = pick(ruin_types)
-
 	var/hide_from_scanner = alert(user, "Should this planet be hidden from the Deep Space Scanner?", "Scanner Visibility", "No", "Yes") == "Yes"
 
 	SSmapping.spawn_planet(chosen_planet_type, hide_from_scanner)
@@ -702,118 +694,6 @@ var/datum/subsystem/mapping/SSmapping
 		return list("turf" = ruin_turf, "objects" = load_result)
 	else
 		CRASH("Failed to load ruin [ruin_to_use.name] at [ruin_turf.x], [ruin_turf.y]")
-
-/datum/subsystem/mapping/proc/place_story_ruins(datum/allocation/allocation)
-	if(!allocation || !allocation.ptype)
-		return
-
-	var/list/story_ruin_types = subtypesof(/datum/map_element/ruin/story)
-
-	var/ruin_type = pick(story_ruin_types)
-	var/datum/map_element/ruin/story/story_ruin = new ruin_type()
-	var/datum/story_theme/theme = get_compatible_story_theme(story_ruin.theme)
-
-	var/max_age = 200
-	var/story_year = game_year - rand(1, max_age)
-
-	var/character_name = theme.generate_character_name()
-
-	var/disease_type = null
-	if(prob(STORY_DISEASE_CHANCE))
-		var/list/allowed_disease_types = list(
-			/datum/disease2/disease/virus,
-			/datum/disease2/disease/bacteria,
-			/datum/disease2/disease/prion,
-			/datum/disease2/disease/fungus,
-			/datum/disease2/disease/parasite
-		)
-		disease_type = pick(allowed_disease_types)
-		var/datum/disease2/disease/temp_disease = new disease_type()
-		theme.disease_log_entry = theme.get_disease_entry(temp_disease.form)
-		qdel(temp_disease)
-
-	story_ruin.assigned_theme = theme
-	story_ruin.story_year = story_year
-
-	var/list/result = place_ruin_in_allocation(story_ruin, allocation)
-	if(!result)
-		qdel(story_ruin)
-		return
-
-	var/list/spawned_objects = result["objects"]
-
-	var/loot_type = pick_story_loot(spawned_objects, story_ruin)
-	if(loot_type)
-		theme.stashed_loot_type = loot_type
-		spawn_story_loot(spawned_objects, story_ruin, loot_type)
-
-	for(var/atom/A in spawned_objects)
-		if(istype(A, /obj/effect/landmark/story))
-			var/obj/effect/landmark/story/landmark = A
-			landmark.assigned_theme = theme
-			landmark.story_year = story_year
-			landmark.character_name = character_name
-			landmark.disease_type = disease_type
-			landmark.spawn_story_entity()
-		else if(istype(A, /obj/machinery/old_database))
-			var/obj/machinery/old_database/db = A
-			db.assigned_theme = theme
-			db.story_year = story_year
-			db.character_name = character_name
-
-/datum/subsystem/mapping/proc/pick_story_loot(list/spawned_objects, datum/map_element/ruin/story/story_ruin)
-	if(!spawned_objects || !story_ruin)
-		return null
-
-	var/list/loot_table_types = subtypesof(/datum/loot_table)
-	if(!loot_table_types.len)
-		return null
-
-	return pick(loot_table_types)
-
-// Places a loot container in the story vault adjacent to a wall, not adjacent to a doorway, and not on top of an existing structure.
-/datum/subsystem/mapping/proc/spawn_story_loot(list/spawned_objects, datum/map_element/ruin/story/story_ruin, loot_type)
-	if(!spawned_objects || !story_ruin || !loot_type)
-		return
-
-	var/list/ruin_turfs = list()
-	for(var/atom/A in spawned_objects)
-		ruin_turfs |= get_turf(A)
-
-	var/list/valid_turfs = list()
-	for(var/turf/T in ruin_turfs)
-		if(!isfloor(T))
-			continue
-
-		var/has_structure = FALSE
-		for(var/obj/O in T)
-			if(istype(O,/obj/structure) || istype(O,/obj/machinery))
-				has_structure = TRUE
-				break
-		if(has_structure)
-			continue
-
-		var/adj_wall = FALSE
-		var/adj_door = FALSE
-		for(var/turf/adj in orange(1, T))
-			if(iswall(adj))
-				adj_wall = TRUE
-			for(var/obj/machinery/door/D in adj)
-				adj_door = TRUE
-				break
-			if(adj_door)
-				break
-
-		if(!adj_wall || adj_door)
-			continue
-
-		valid_turfs += T
-
-	if(!valid_turfs.len)
-		return
-
-	var/turf/chosen_turf = pick(valid_turfs)
-	new /obj/abstract/loot_spawner/story(chosen_turf, loot_type, story_ruin.loot_containers)
 
 /datum/subsystem/mapping/proc/place_story_ruins(datum/allocation/allocation)
 	if(!allocation || !allocation.ptype)
