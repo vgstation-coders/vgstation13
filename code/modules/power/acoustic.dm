@@ -13,6 +13,7 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 	var/count_power = 0 //How much power have we produced SO FAR this count?
 	var/tick_power = 0 //How much power did we produce last count?
 	var/power_efficiency = 1 //Based on parts
+	var/list/last_heard = list() //Spam prevention
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/acoustic,
 		/obj/item/weapon/stock_parts/capacitor,
@@ -49,15 +50,25 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 /obj/machinery/power/acoustic/Hear(datum/speech/speech, rendered_speech)
 	. = ..()
 	if(anchored)
+		if(speech.speaker in last_heard)
+			return
 		var/rate = length(speech.message)
 		if("megaphone" in speech.message_classes)
 			rate *= 2
+		if (ismob(speech.speaker))
+			var/mob/M = speech.speaker
+			if(M_LOUD in M.mutations)
+				rate *= 2
+			if(M_WHISPER in M.mutations)
+				rate /= 2
+		last_heard |= list(speech.speaker)
 		count_power += (rate * power_efficiency)
 		flick("acoustic1",src)
 
 /obj/machinery/power/acoustic/process()
 	tick_power = count_power
 	count_power = 0
+	last_heard = list()
 	add_avail(tick_power)
 
 /atom/proc/hear_sound(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0,var/wait = FALSE, var/atom/source)
