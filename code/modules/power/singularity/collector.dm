@@ -30,6 +30,7 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/process()
 	if (P)
+		last_power = 0
 		if (P.air_contents[GAS_PLASMA] <= 0)
 			investigation_log(I_SINGULO,"<font color='red'>out of fuel</font>.")
 			eject()
@@ -152,7 +153,7 @@ var/global/list/rad_collectors = list()
 	if (P && active)
 		var/power_produced = P.air_contents[GAS_PLASMA] * pulse_strength * 3.5 // original was 20, nerfed to 2 now 3.5 should get you about 500kw
 		add_avail(power_produced)
-		last_power = power_produced
+		last_power += power_produced
 
 /obj/machinery/power/rad_collector/proc/update_icons()
 	overlays.len = 0
