@@ -29,6 +29,14 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 /obj/machinery/power/acoustic/New()
 	. = ..()
 	sound_hearers += src
+	RefreshParts()
+
+/obj/machinery/power/acoustic/RefreshParts()
+	var/calc = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+			calc+=SP.rating
+	power_efficiency = calc/4 //Possible results 1, 2, and 3 -- basically, what tier we have
 
 /obj/machinery/power/acoustic/Destroy()
 	sound_hearers -= src
@@ -44,7 +52,7 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 		var/rate = length(speech.message)
 		if("megaphone" in speech.message_classes)
 			rate *= 2
-		count_power += length(speech.message)
+		count_power += (rate * power_efficiency)
 		flick("acoustic1",src)
 
 /obj/machinery/power/acoustic/process()
@@ -74,5 +82,5 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 				vol = vol * atmosphere / ONE_ATMOSPHERE //diverges from mob hearing here, more gas means more power!
 			/// end ///
 
-		count_power += vol
+		count_power += (vol * power_efficiency)
 		flick("acoustic1",src)
