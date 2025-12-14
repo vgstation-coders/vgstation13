@@ -205,3 +205,8 @@ var/global/list/rad_collectors = list()
 	if(P && active)
 		var/power_produced = (P.air_contents[GAS_PLASMA] * pulse_strength * 3.5)/100 // original was 20, nerfed to 2 now 3.5 should get you about 500kw
 		connected_module.chassis.cell.charge = min(connected_module.chassis.cell.charge + power_produced, connected_module.chassis.cell.maxcharge)
+
+/obj/machinery/power/rad_collector/examine(mob/user)
+	..()
+	if(isobserver(user))
+		to_chat(user, "<span class='notice'>\The [src] registers that [format_watts(total_power_last_cycle)] is being produced every cycle.</span>")
