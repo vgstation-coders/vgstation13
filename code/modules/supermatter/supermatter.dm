@@ -672,7 +672,7 @@
 		data["id"] = linked.id_tag
 		data["temperature"] = linked.last_data["temperature"]
 		data["stability"] = linked.stability()
-		data["thermal_power"] = linked.thermal_power_output
+		data["formatted_thermal_power"] = format_watts(linked.thermal_power_output)
 		if(!istype(linked.loc, /turf)||istype(linked.loc, /turf/space))
 			data["dps"] = 0 //If crated or in space, damage is exactly 0
 			data["oxygen"] = 0 //This doesn't really matter because power isn't generated in this state
