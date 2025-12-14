@@ -44,7 +44,7 @@ var/list/atom/sound_hearers = list() // Things that hear actual audio sound and 
 
 /obj/machinery/power/acoustic/examine(mob/user as mob)
 	..()
-	to_chat(user, "<span class='info'>During the last cycle, it produced [tick_power] watts.</span>")
+	to_chat(user, "<span class='info'>During the last cycle, it produced [format_watts(tick_power)].</span>")
 
 /obj/machinery/power/acoustic/Hear(datum/speech/speech, rendered_speech)
 	. = ..()
