@@ -29,3 +29,17 @@
 #define SECTOR_SIZE 100 //max width/height of a sector in turfs. temporary - will be dynamic later
 #define RUIN_PLACEMENT_PADDING 5 // Padding around ruins when placing them in sectors to avoid edge issues
 #define LANDING_ZONE_EDGE_BUFFER 11 // Buffer distance from sector edges for shuttle landing zones
+
+// Story generator defines
+#define STORY_NT		1
+#define STORY_WIZARD 	(1<<1)
+#define STORY_NINJA 	(1<<2)
+#define STORY_COMMANDO	(1<<3)
+#define STORY_CLOWN		(1<<4)
+#define STORY_GREY		(1<<5)
+#define STORY_VOX		(1<<6)
+#define STORY_SYNDICATE	(1<<7)
+
+#define STORY_RECENT_THRESHOLD 70 // Threshold in years - stories younger than this spawn hostile mobs, older spawn corpses
+#define STORY_MISSING_CHANCE 25 // Chance that a story landmark spawns nothing (body is missing)
+#define STORY_DISEASE_CHANCE 10 // Chance that a spawned character is infected with a random disease

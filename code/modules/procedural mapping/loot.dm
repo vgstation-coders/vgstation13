@@ -771,6 +771,38 @@
 /obj/abstract/loot_spawner/trash/on_ground
 	containers = list()
 
+/obj/abstract/loot_spawner/story
+	containers = list(
+		/obj/item/weapon/storage/briefcase,
+		/obj/item/weapon/storage/briefcase/centcomm,
+	)
+
+/obj/abstract/loot_spawner/story/New(var/spawn_loc, var/loot_type, var/list/container_types)
+	if(spawn_loc)
+		loc = spawn_loc
+	if(!loot_type)
+		qdel(src)
+		return
+	roll_min = rand(1,3)
+	roll_max = rand(roll_min,10)
+	table = loot_type
+	if(container_types?.len)
+		containers = container_types
+	rolls = rand(roll_min, roll_max)
+	table = new table()
+	loot = table.loot_roll(rolls)
+	if(containers.len)
+		containers = containers + base_containers
+		spawn_into_container()
+	else
+		var/list/valid_turfs = list()
+		for(var/turf/T in range(2, src))
+			if(!T.density && !iswall(T))
+				valid_turfs += T
+		for(var/item_type in loot)
+			new item_type(pick(valid_turfs))
+	qdel(src)
+
 #undef COMMON_LOOT
 #undef UNCOMMON_LOOT
 #undef RARE_LOOT
