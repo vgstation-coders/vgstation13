@@ -143,7 +143,7 @@ const Cyborgs = (props) => {
                       : 'Nominal'}
                 </Box>
               </LabeledList.Item>
-			  <LabeledList.Item label="Location">
+              <LabeledList.Item label="Location">
                 {cyborg.location}
               </LabeledList.Item>
               <LabeledList.Item label="Cell Charge">
