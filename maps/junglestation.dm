@@ -70,26 +70,18 @@
 
 //partially stolen from snaxi
 /datum/map/active/generate_mapvaults()
-	var/list/list_unique_vaults = get_ruin_list(whitelist = RUIN_TYPE_JUNGLE) //we do this to guarantee that all vaults will try to spawn at least once
-
-	var/list/list_of_vaults = list() //then we fill in any remaining space with additional random vaults.
+	var/list/list_of_vaults = get_ruin_list(whitelist = RUIN_TYPE_JUNGLE)
 	var/budget = RUIN_BUDGET_JUNGLE
-	var/list/potential_ruins = list_unique_vaults.Copy()
-	while(budget > 0)
-		var/datum/map_element/ruin/R = pick_n_take(potential_ruins)
-		budget -= R.cost
-		list_of_vaults += R
 
 	var/area/surface/jungle/roid/vaults/VAULT_AREA=locate(/area/surface/jungle/roid/vaults)
 	if(!VAULT_AREA)
 		message_admins("<span class='info'>Unable to find a suitable area to spawn vaults in, skipping surface vault generation!</span>")
 		return 0
 
-	var/placed_fixed = populate_area_with_vaults(VAULT_AREA, list_unique_vaults, -1, 1, filter_function=/proc/jungle_filter, overwrites=TRUE)
 	var/placed_rand = populate_area_with_vaults(VAULT_AREA, list_of_vaults, -1, 1, filter_function=/proc/jungle_filter, overwrites=TRUE)
-	message_admins("<span class='info'>placed [placed_fixed+placed_rand] vaults in [VAULT_AREA]</span>")
+	message_admins("<span class='info'>placed [placed_rand] vaults in [VAULT_AREA]</span>")
 
-	return placed_fixed+placed_rand
+	return placed_rand
 
 /proc/jungle_filter(var/datum/map_element/E, var/turf/start_turf)
 	var/list/dimensions = E.get_dimensions()
