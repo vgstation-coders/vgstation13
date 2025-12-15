@@ -40105,7 +40105,7 @@
 /turf/space,
 /area)
 "evR" = (
-/obj/machinery/suit_storage_unit,
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "evS" = (
@@ -53617,10 +53617,10 @@
 /turf/simulated/wall,
 /area/hallway/secondary/exit)
 "ioq" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 8
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "ioM" = (
@@ -107441,10 +107441,10 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
 "xQE" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "xQF" = (
