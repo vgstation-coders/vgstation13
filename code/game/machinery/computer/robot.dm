@@ -72,7 +72,7 @@
 			continue
 		var/obj/item/weapon/cell/Rcell = R.get_cell()
 		var/borg_location = get_area_name(R)
-		var/area/A = get_area(R)
+		var/turf/A = get_turf(R)
 		if(!isnull(A))
 			var/borg_x = A.x - WORLD_X_OFFSET[A.z]
 			var/borg_y = A.y - WORLD_Y_OFFSET[A.z]
