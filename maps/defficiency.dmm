@@ -11815,6 +11815,7 @@
 	},
 /area/medical/genetics)
 "ayb" = (
+/obj/structure/flora/pottedplant/random,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark purple corner";
@@ -12719,7 +12720,6 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/structure/flora/pottedplant/random,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark purple stripe";
