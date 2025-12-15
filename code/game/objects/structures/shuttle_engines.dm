@@ -68,6 +68,8 @@
 	name = "shuttle engine pre-igniter"
 	var/obj/structure/shuttle/engine/propulsion/DIY/connected_engine
 	anchored = FALSE
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 /obj/structure/shuttle/engine/heater/DIY/proc/try_connect()
 	if(!anchored)
