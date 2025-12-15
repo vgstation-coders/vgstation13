@@ -391,7 +391,7 @@
 		if(L == default_language)
 			dat += "<b>[L.name] (:[L.key])</b> - default - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a><br/>[L.desc]<br/><br/>"
 		else
-			dat += "<b>[L.name] (:[L.key])</b> - <a href='byond://?src=\ref[src];default_lang=[html_encode(sanitize_simple("[L]"))]'>set default</a><br/>[L.desc]<br/><br/>"
+			dat += "<b>[L.name] (:[L.key])</b> - <a href='byond://?src=\ref[src];default_lang=[html_encode("[L]")]'>set default</a><br/>[L.desc]<br/><br/>"
 
 	src << browse(HTML_SKELETON(dat), "window=checklanguage")
 
