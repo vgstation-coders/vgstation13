@@ -133,7 +133,8 @@ CREATE TABLE client (
 	show_warning_next_time INTEGER DEFAULT 0,
 	last_warned_message TEXT DEFAULT '',
 	warning_admin TEXT DEFAULT '',
-	fps INTEGER DEFAULT 0
+	fps INTEGER DEFAULT 0,
+	ui_scale REAL DEFAULT 1
 );
 
 

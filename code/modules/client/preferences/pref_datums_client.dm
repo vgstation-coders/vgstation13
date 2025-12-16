@@ -523,6 +523,26 @@
 	setting = desired_fps
 	parent.client.fps = (setting < 0) ? RECOMMENDED_CLIENT_FPS : setting
 
+/datum/preference_setting/numerical/ui_scale
+	name = "UI Scale"
+	sql_name = "ui_scale"
+	sql_table = "client"
+	enabled = TRUE
+
+	default_setting = 1
+	max_value = 2
+	min_value = 0.6
+
+/datum/preference_setting/numerical/ui_scale/choose_setting(var/mob/user)
+	var/val = input(user, "Set UI scale (0.6-2.0):", "UI Scale", setting) as num|null
+	if (isnull(val))
+		return
+	setting = clamp(val, min_value, max_value)
+	if (user?.client)
+		user.client.ui_scale = setting
+		user.client.apply_ui_scale()
+		user.client.ui_scale_save_pref()
+
 // THESE ARE UNIMPLEMENTED FROM tgui MIGRATIONS! TOFIX
 /datum/preference_setting/toggle/tgui_input
 	name = "tgui_input"
