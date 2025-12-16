@@ -211,7 +211,7 @@
 					cell.add_fingerprint(user)
 					user.put_in_active_hand(cell)
 					to_chat(user, "You remove \the [cell].")
-					cell = null
+					clear_cell()
 					updateicon()
 					return
 		else if(!opened && !key)

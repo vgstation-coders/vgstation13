@@ -108,7 +108,9 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 				"rquote" = signal.data["rquote"],
 				"message_classes" = signal.data["message_classes"],
 				"wrapper_classes" = signal.data["wrapper_classes"],
-				"trace" = signal.data["trace"]
+				"trace" = signal.data["trace"],
+				"allocations" = signal.data["allocations"],
+				"source_allocation" = signal.data["source_allocation"]
 			)
 
 			// Keep the "original" signal constant
@@ -498,6 +500,98 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(!can(signal))
 		return 0
 	return receiving
+
+/obj/machinery/telecomms/relay/planetary
+	name = "planetary telecommunications relay"
+	desc = "A relay which provides telecommunications coverage for a planet."
+	icon_state = "relay"
+	on = FALSE
+	toggled = FALSE
+	use_power = MACHINE_POWER_USE_NONE
+	hide = TRUE
+	network = "tcommsat"
+	var/datum/allocation/relay_allocation
+	var/activated = FALSE
+
+/obj/machinery/telecomms/relay/planetary/New()
+	..()
+	var/turf/T = get_turf(src)
+	var/datum/allocation/alloc = SSmapping.get_allocation(trf = T)
+	if(istype(alloc))
+		relay_allocation = alloc
+		alloc.comms_relay = src
+	else
+		CRASH("Failed to get allocation for planetary relay at [T] ([T.z])")
+	var/datum/planet_type/P = alloc.ptype
+	var/p_name = P.planet_name
+	p_name = replacetext(p_name, " ", "_")
+	autolinkers = list("[p_name]_relay")
+	for(var/obj/machinery/telecomms/hub/H in telecomms_list)
+		H.autolinkers |= list("[p_name]_relay")
+		H.add_link(src)
+
+/obj/machinery/telecomms/relay/planetary/update_power()
+	// Once activated, the relay operates indefinitely without power
+	if(activated)
+		on = TRUE
+		return
+	on = FALSE
+
+/obj/machinery/telecomms/relay/planetary/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
+	if(can(signal) && broadcasting)
+		signal.data["level"] |= listening_level
+		if(!signal.data["allocations"])
+			signal.data["allocations"] = list()
+		signal.data["allocations"] |= relay_allocation
+
+/obj/machinery/telecomms/relay/planetary/can_send(datum/signal/signal)
+	if(!can(signal))
+		return 0
+	if(!broadcasting)
+		return 0
+	return in_allocation(signal)
+
+/obj/machinery/telecomms/relay/planetary/can_receive(datum/signal/signal)
+	if(!can(signal))
+		return 0
+	if(!receiving)
+		return 0
+	return in_allocation(signal)
+
+/// Checks if the signal originated from the same allocation as this relay
+/obj/machinery/telecomms/relay/planetary/proc/in_allocation(datum/signal/signal)
+	if(!relay_allocation)
+		return FALSE
+
+	var/datum/allocation/signal_alloc = signal.data["source_allocation"]
+	if(signal_alloc)
+		return signal_alloc == relay_allocation
+
+	var/mob/M = signal.data["mob"]
+	if(!M)
+		return FALSE
+
+	var/turf/mob_turf = get_turf(M)
+	if(!mob_turf)
+		return FALSE
+
+	var/alloc = SSmapping.get_allocation(trf = mob_turf)
+	if(istype(alloc, /datum/allocation))
+		signal.data["source_allocation"] = alloc
+		return alloc == relay_allocation
+
+	return FALSE
+
+/obj/machinery/telecomms/relay/planetary/proc/activate()
+	if(activated)
+		return FALSE
+	activated = TRUE
+	toggled = TRUE
+	update_power_and_icon()
+	return TRUE
+
+/obj/machinery/telecomms/relay/planetary/checkheat()
+	return
 
 /*
 	The bus mainframe idles and waits for hubs to relay them signals. They act

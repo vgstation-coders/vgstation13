@@ -114,11 +114,8 @@
 		reagents.metabolize(src)
 
 	remove_confused(1)
-	// decrement dizziness counter, clamped to 0
-	if(resting)
-		dizziness = max(0, dizziness - 5)
-	else
-		dizziness = max(0, dizziness - 1)
+	handle_dizziness()
+	handle_jitteriness()
 
 	updatehealth()
 

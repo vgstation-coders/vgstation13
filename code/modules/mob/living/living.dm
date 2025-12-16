@@ -1611,48 +1611,49 @@ Thanks.
 	reset_vars_after_duration(resettable_vars, duration)
 
 /mob/living/proc/handle_dizziness()
+	var/client/C = client
 	//Dizziness
-	if(dizziness || undergoing_hypothermia() == MODERATE_HYPOTHERMIA)
+	if(dizziness > 0 || undergoing_hypothermia() == MODERATE_HYPOTHERMIA)
 		var/wasdizzy = 1
 		if(undergoing_hypothermia() == MODERATE_HYPOTHERMIA && !dizziness && prob(50))
 			dizziness = 120
 			wasdizzy = 0
-		var/client/C = client
-		var/pixel_x_diff = 0
-		var/pixel_y_diff = 0
-		var/temp
+		var/trig_amp_x
+		var/trig_amp_y
 		var/saved_dizz = dizziness
-		dizziness = max(dizziness - 1, 0)
+		if(stat != DEAD)
+			var/dizzy_reduce = standard_dizzy_reduce
+			if(resting)
+				dizzy_reduce = rested_dizzy_reduce
+			AdjustDizzy(-dizzy_reduce)
 		if(C)
-			var/oldsrc = src
 			var/amplitude = dizziness * (sin(dizziness * 0.044 * world.time) + 1) / 70 //This shit is annoying at high strength
-			src = null
 			spawn(0)
 				if(C)
-					temp = amplitude * sin(0.008 * saved_dizz * world.time)
-					pixel_x_diff += temp
-					C.pixel_x += temp * PIXEL_MULTIPLIER
-					temp = amplitude * cos(0.008 * saved_dizz * world.time)
-					pixel_y_diff += temp
-					C.pixel_y += temp * PIXEL_MULTIPLIER
-					sleep(3)
-					if(C)
-						temp = amplitude * sin(0.008 * saved_dizz * world.time)
-						pixel_x_diff += temp
-						C.pixel_x += temp * PIXEL_MULTIPLIER
-						temp = amplitude * cos(0.008 * saved_dizz * world.time)
-						pixel_y_diff += temp
-						C.pixel_y += temp * PIXEL_MULTIPLIER
-					sleep(3)
-					if(C)
-						C.pixel_x -= pixel_x_diff * PIXEL_MULTIPLIER
-						C.pixel_y -= pixel_y_diff * PIXEL_MULTIPLIER
-			src = oldsrc
+					if(dizziness > 0)
+						trig_amp_x = amplitude * sin(0.008 * saved_dizz * world.time)
+						trig_amp_y = amplitude * cos(0.008 * saved_dizz * world.time)
+						animate(C, pixel_x = trig_amp_x * PIXEL_MULTIPLIER, pixel_y = trig_amp_y * PIXEL_MULTIPLIER, time=9, easing=SINE_EASING, flags=ANIMATION_PARALLEL)
+						sleep(10)
+						if(C)
+							trig_amp_x = amplitude * sin(0.008 * saved_dizz * world.time)
+							trig_amp_y = amplitude * cos(0.008 * saved_dizz * world.time)
+							animate(C, pixel_x = -trig_amp_x * PIXEL_MULTIPLIER, pixel_y = -trig_amp_y * PIXEL_MULTIPLIER, time=9, easing=SINE_EASING, flags=ANIMATION_PARALLEL)
+					else
+						animate(C, pixel_x = 0, pixel_y = 0, time=9, easing=SINE_EASING)
 		if(!wasdizzy)
 			dizziness = 0
+	if(C && dizziness <= 0 && (C.pixel_x != 0 || C.pixel_y != 0))
+		animate(C, pixel_x = 0, pixel_y = 0, time=9, easing=SINE_EASING)
 
 
 /mob/living/proc/handle_jitteriness()
+	var/saved_jitter = jitteriness
+	if(stat != DEAD)
+		var/jitter_reduce = standard_jitter_reduce
+		if(resting)
+			jitter_reduce = rested_jitter_reduce
+		AdjustJitter(-jitter_reduce)
 	if(jitteriness)
 		var/amplitude = min(8, (jitteriness/70) + 1)
 		var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
@@ -1670,6 +1671,8 @@ Thanks.
 			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
+	else if(saved_jitter)
+		animate(src)
 
 /mob/living/proc/Silent(amount)
 	silent = max(max(silent,amount),0)

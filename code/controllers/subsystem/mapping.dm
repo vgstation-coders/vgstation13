@@ -18,6 +18,9 @@
 #define STAGE_WEATHER 4
 #define STAGE_FINALIZE 5
 
+/// Cell size for spatial bucketing of mobs
+#define SPATIAL_BUCKET_SIZE 15
+
 var/datum/subsystem/mapping/SSmapping
 
 /datum/subsystem/mapping
@@ -50,10 +53,15 @@ var/datum/subsystem/mapping/SSmapping
 	var/datum/planet_type/current_planet
 	/// The allocation for the current planet
 	var/datum/allocation/current_allocation
-	/// Start time for generation tracking
-	var/generation_start_time = 0
+
+	/// Is scanning disabled globally
+	var/scanning_disabled = FALSE
+	/// World time when scanning can be toggled again
+	var/scanning_toggle_cooldown = 0
 
 	// Queue-based processing variables
+	/// Start time for generation tracking
+	var/generation_start_time = 0
 	/// Current processing stage: STAGE_TERRAIN, STAGE_POPULATION, STAGE_WEATHER, or STAGE_FINALIZE
 	var/current_stage = null
 	/// Queue of turfs for terrain generation
@@ -70,16 +78,14 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/created_features = list()
 	/// Mobs created during population
 	var/list/created_mobs = list()
-	/// Base turfs processed per tick (adjusted dynamically)
-	var/turfs_per_tick = 200
-	/// Maximum turfs to process per tick
-	var/max_turfs_per_tick = 1000
-	/// Minimum turfs to process per tick
-	var/min_turfs_per_tick = 50
-	/// Is scanning disabled globally
-	var/scanning_disabled = FALSE
-	/// World time when scanning can be toggled again
-	var/scanning_toggle_cooldown = 0
+
+	// Fast-processing lists
+	var/list/finalize_queue = list() // Queue of turfs for edge updates and finalization
+	var/list/feature_buckets = list() // Spatial buckets for features - key is "cellX_cellY", value is list of features in that cell
+	var/list/mob_buckets = list() // Spatial buckets for mobs - key is "cellX_cellY", value is list of mobs in that cell
+	var/turfs_per_tick = 300 // Base turfs processed per tick (adjusted dynamically)
+	var/max_turfs_per_tick = 2000 // Maximum turfs to process per tick
+	var/min_turfs_per_tick = 100 // Minimum turfs to process per tick
 
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)
@@ -107,7 +113,8 @@ var/datum/subsystem/mapping/SSmapping
 			progress = 100
 		if(STAGE_FINALIZE)
 			stage_name = "Finalize"
-			progress = 100
+			if(finalize_queue.len > 0)
+				progress = round((queue_index / finalize_queue.len) * 100, 0.1)
 
 	return ..("[stage_name] [progress]% | TpT:[turfs_per_tick]")
 
@@ -197,11 +204,15 @@ var/datum/subsystem/mapping/SSmapping
 			if(current_ruin_type)
 				var/datum/map_element/ruin/used_ruin = ispath(current_ruin_type) ? (new current_ruin_type) : current_ruin_type
 				place_ruin_in_allocation(used_ruin, current_allocation)
+				current_allocation.placed_ruin = used_ruin
+			place_story_ruins(current_allocation)
 
 			current_stage = STAGE_POPULATION
 			queue_index = 1
 			created_features = list()
 			created_mobs = list()
+			feature_buckets = list()
+			mob_buckets = list()
 			turfs_processed = 0
 
 		if(STAGE_POPULATION)
@@ -209,8 +220,6 @@ var/datum/subsystem/mapping/SSmapping
 				var/turf/T = population_queue[queue_index]
 				if(T)
 					current_mapgen.populate_turf(T, created_features, created_mobs, current_mapgen.planet_loot, current_planet.mob_faction)
-					for(var/atom/movable/AM in T)
-						AM.planet = current_planet
 				queue_index++
 				turfs_processed++
 
@@ -228,80 +237,170 @@ var/datum/subsystem/mapping/SSmapping
 		if(STAGE_WEATHER)
 			if(current_planet.climate_type)
 				current_planet.climate = SSweather.set_climate(current_planet.climate_type, world.maxz, current_allocation, random_start = TRUE)
-				register_weather_turfs(current_planet.climate, current_allocation)
-				SSweather.fire()
 
+			finalize_queue = current_allocation.turfs.Copy()
 			current_stage = STAGE_FINALIZE
 			queue_index = 1
 
 		if(STAGE_FINALIZE)
 			if(current_mapgen)
 				current_mapgen.post_process(current_allocation)
+				current_mapgen = null
 
-			// Error-proofing
-			if(current_planet.default_baseturf)
-				for(var/turf/T in current_allocation.turfs)
-					if(istype(T, /turf/space))
+			while(queue_index <= finalize_queue.len && turfs_processed < target_turfs)
+				var/turf/T = finalize_queue[queue_index]
+				if(T)
+					T.turf_flags &= ~DEFER_EDGING
+					if(T.edge_flags & EDGE_CARDINAL) // Edge turfs that need it
+						T.update_edges()
+
+					// Close up any remaining space turfs
+					if(istype(T, /turf/space) && current_planet.default_baseturf)
 						T.ChangeTurf(current_planet.default_baseturf)
 
-			current_planet.build_daynight_turflist()
+					// Weather + daynight registration
+					var/area/A = get_area(T)
+					if(!istype(A, /area/planet/cave))
+						if(isopensurface(A) && current_planet.climate)
+							current_planet.climate.register_weather_turf(T)
 
-			var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
-			current_planet.current_timeOfDay = pick(possible_times)
+						// Build daynight turf list
+						if(IsEven(T.x) && IsEven(T.y))
+							if(isopensurface(A))
+								current_planet.daynight_turfs += T
 
-			switch(current_planet.current_timeOfDay)
-				if(TOD_MORNING) current_planet.next_firetime = world.time + 5 MINUTES
-				if(TOD_SUNRISE) current_planet.next_firetime = world.time + 3 MINUTES
-				if(TOD_DAYTIME) current_planet.next_firetime = world.time + 14 MINUTES
-				if(TOD_AFTERNOON) current_planet.next_firetime = world.time + 15 MINUTES
-				if(TOD_SUNSET) current_planet.next_firetime = world.time + 3 MINUTES
-				if(TOD_NIGHTTIME) current_planet.next_firetime = world.time + 36 MINUTES
+				queue_index++
+				turfs_processed++
 
-			SSDayNight.update_planet_lighting(current_planet, immediate = TRUE)
+				if(MC_TICK_CHECK)
+					throttle(tick_start, turfs_processed)
+					return
 
-			var/total_time = (world.timeofday - generation_start_time) / 10
-			message_admins("Planet '[current_planet.planet_name]' generated successfully at z-level [world.maxz] in [total_time]s")
+			if(queue_index > finalize_queue.len) // Cleanup
+				if(current_planet.climate)
+					SSweather.fire()
 
-			generating = FALSE
-			current_planet = null
-			current_allocation = null
-			current_stage = null
-			current_mapgen = null
-			current_ruin_type = null
-			terrain_queue = list()
-			population_queue = list()
-			queue_index = 1
-			created_features = null
-			created_mobs = null
+				var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
+				current_planet.current_timeOfDay = pick(possible_times)
+
+				switch(current_planet.current_timeOfDay)
+					if(TOD_MORNING) current_planet.next_firetime = world.time + 5 MINUTES
+					if(TOD_SUNRISE) current_planet.next_firetime = world.time + 3 MINUTES
+					if(TOD_DAYTIME) current_planet.next_firetime = world.time + 14 MINUTES
+					if(TOD_AFTERNOON) current_planet.next_firetime = world.time + 15 MINUTES
+					if(TOD_SUNSET) current_planet.next_firetime = world.time + 3 MINUTES
+					if(TOD_NIGHTTIME) current_planet.next_firetime = world.time + 36 MINUTES
+
+				SSDayNight.update_planet_lighting(current_planet, immediate = TRUE)
+
+				var/total_time = (world.timeofday - generation_start_time) / 10
+				message_admins("Planet '[current_planet.planet_name]' generated successfully at z-level [world.maxz] in [total_time]s")
+
+				generating = FALSE
+				current_planet = null
+				current_allocation = null
+				current_stage = null
+				current_mapgen = null
+				current_ruin_type = null
+				terrain_queue = list()
+				population_queue = list()
+				finalize_queue = list()
+				queue_index = 1
+				created_features = null
+				created_mobs = null
+				feature_buckets = list()
+				mob_buckets = list()
+			else
+				throttle(tick_start, turfs_processed)
+				return
 
 	// Adjust processing rate based on performance
 	if(turfs_processed > 0)
 		throttle(tick_start, turfs_processed)
 
-/**
- * Adjusts the turfs_per_tick based on current tick usage
- *
- * Increases rate if we're using less than 50% of tick, decreases if using more than 80%
- *
- * Arguments:
- * * tick_start - Tick usage at the start of processing
- * * turfs_processed - Number of turfs processed this tick
- */
+
+// Adjusts the turfs_per_tick based on current tick usage
+// Increases rate if we're using less than 50% of tick, decreases if using more than 80%
 /datum/subsystem/mapping/proc/throttle(tick_start, turfs_processed)
 	var/tick_used = world.tick_usage - tick_start
 
-	// If we used less than 30% of tick, increase rate significantly
-	if(tick_used < 30 && turfs_per_tick < max_turfs_per_tick)
+	// Scale up when performing well
+	if(tick_used < 20 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 200, max_turfs_per_tick)
+	else if(tick_used < 40 && turfs_per_tick < max_turfs_per_tick)
 		turfs_per_tick = min(turfs_per_tick + 100, max_turfs_per_tick)
-	// If we used less than 50% of tick, increase rate moderately
-	else if(tick_used < 50 && turfs_per_tick < max_turfs_per_tick)
+	else if(tick_used < 60 && turfs_per_tick < max_turfs_per_tick)
 		turfs_per_tick = min(turfs_per_tick + 50, max_turfs_per_tick)
-	// If we used more than 80% of tick, decrease rate
-	else if(tick_used > 80 && turfs_per_tick > min_turfs_per_tick)
-		turfs_per_tick = max(turfs_per_tick - 100, min_turfs_per_tick)
-	// If we used more than 70% of tick, decrease rate moderately
-	else if(tick_used > 70 && turfs_per_tick > min_turfs_per_tick)
-		turfs_per_tick = max(turfs_per_tick - 50, min_turfs_per_tick)
+	// Scale back when approaching limits
+	else if(tick_used > 85 && turfs_per_tick > min_turfs_per_tick)
+		turfs_per_tick = max(turfs_per_tick - 150, min_turfs_per_tick)
+	else if(tick_used > 75 && turfs_per_tick > min_turfs_per_tick)
+		turfs_per_tick = max(turfs_per_tick - 75, min_turfs_per_tick)
+
+/datum/subsystem/mapping/proc/get_bucket_key(x, y)
+	return "[round(x / SPATIAL_BUCKET_SIZE)]_[round(y / SPATIAL_BUCKET_SIZE)]"
+
+/datum/subsystem/mapping/proc/add_feature_to_bucket(atom/feature)
+	if(!feature)
+		return
+	var/key = get_bucket_key(feature.x, feature.y)
+	if(!feature_buckets[key])
+		feature_buckets[key] = list()
+	feature_buckets[key] += feature
+	created_features += feature
+
+/datum/subsystem/mapping/proc/add_mob_to_bucket(atom/spawned_mob)
+	if(!spawned_mob)
+		return
+	var/key = get_bucket_key(spawned_mob.x, spawned_mob.y)
+	if(!mob_buckets[key])
+		mob_buckets[key] = list()
+	mob_buckets[key] += spawned_mob
+	created_mobs += spawned_mob
+
+/datum/subsystem/mapping/proc/can_spawn_feature_at(x, y, feature_type, distance = 7)
+	var/cell_x = round(x / SPATIAL_BUCKET_SIZE)
+	var/cell_y = round(y / SPATIAL_BUCKET_SIZE)
+
+	for(var/dx = -1 to 1)
+		for(var/dy = -1 to 1)
+			var/key = "[cell_x + dx]_[cell_y + dy]"
+			var/list/bucket = feature_buckets[key]
+			if(!bucket)
+				continue
+			for(var/atom/other_feature in bucket)
+				if(istype(other_feature, feature_type))
+					var/dist = max(abs(x - other_feature.x), abs(y - other_feature.y)) // chessboard distance
+					if(dist <= distance)
+						return FALSE
+	return TRUE
+
+/datum/subsystem/mapping/proc/can_spawn_mob_at(x, y, mob_type, hostile_distance = 12, spawner_distance = 2)
+	var/cell_x = round(x / SPATIAL_BUCKET_SIZE)
+	var/cell_y = round(y / SPATIAL_BUCKET_SIZE)
+
+	var/is_hostile = ispath(mob_type, /mob/living/simple_animal/hostile)
+	var/is_spawner = ispath(mob_type, /obj/abstract/map/spawner/mobs)
+
+	for(var/dx = -1 to 1)
+		for(var/dy = -1 to 1)
+			var/key = "[cell_x + dx]_[cell_y + dy]"
+			var/list/bucket = mob_buckets[key]
+			if(!bucket)
+				continue
+			for(var/thing in bucket)
+				if(!ishostile(thing) && !istype(thing, /obj/abstract/map/spawner/mobs))
+					continue
+
+				var/atom/A = thing
+				var/dist = max(abs(x - A.x), abs(y - A.y)) // chessboard distance
+
+				if(dist <= hostile_distance && (ishostile(thing) || is_hostile))
+					return FALSE
+
+				if(dist <= spawner_distance && (istype(thing, /obj/abstract/map/spawner/mobs) || is_spawner))
+					return FALSE
+	return TRUE
 
 /proc/generate_planet(mob/user)
 	if(!user)
@@ -318,7 +417,7 @@ var/datum/subsystem/mapping/SSmapping
 		return
 
 	var/list/ruin_types = list()
-	for(var/ruin_path in subtypesof(/datum/map_element/ruin))
+	for(var/ruin_path in (subtypesof(/datum/map_element/ruin) - typesof(/datum/map_element/ruin/story)))
 		ruin_types += ruin_path
 
 	var/chosen_ruin_type = input(user, "Select a ruin to place on the planet (random if no selection):", "Vault Selection") as null|anything in ruin_types
@@ -565,6 +664,118 @@ var/datum/subsystem/mapping/SSmapping
 	else
 		CRASH("Failed to load ruin [ruin.name] at [ruin_turf.x], [ruin_turf.y]")
 
+/datum/subsystem/mapping/proc/place_story_ruins(datum/allocation/allocation)
+	if(!allocation || !allocation.ptype)
+		return
+
+	var/list/story_ruin_types = subtypesof(/datum/map_element/ruin/story)
+
+	var/ruin_type = pick(story_ruin_types)
+	var/datum/map_element/ruin/story/story_ruin = new ruin_type()
+	var/datum/story_theme/theme = get_compatible_story_theme(story_ruin.theme)
+
+	var/max_age = 200
+	var/story_year = game_year - rand(1, max_age)
+
+	var/character_name = theme.generate_character_name()
+
+	var/disease_type = null
+	if(prob(STORY_DISEASE_CHANCE))
+		var/list/allowed_disease_types = list(
+			/datum/disease2/disease/virus,
+			/datum/disease2/disease/bacteria,
+			/datum/disease2/disease/prion,
+			/datum/disease2/disease/fungus,
+			/datum/disease2/disease/parasite
+		)
+		disease_type = pick(allowed_disease_types)
+		var/datum/disease2/disease/temp_disease = new disease_type()
+		theme.disease_log_entry = theme.get_disease_entry(temp_disease.form)
+		qdel(temp_disease)
+
+	story_ruin.assigned_theme = theme
+	story_ruin.story_year = story_year
+
+	var/list/result = place_ruin_in_allocation(story_ruin, allocation)
+	if(!result)
+		qdel(story_ruin)
+		return
+
+	var/list/spawned_objects = result["objects"]
+
+	var/loot_type = pick_story_loot(spawned_objects, story_ruin)
+	if(loot_type)
+		theme.stashed_loot_type = loot_type
+		spawn_story_loot(spawned_objects, story_ruin, loot_type)
+
+	for(var/atom/A in spawned_objects)
+		if(istype(A, /obj/effect/landmark/story))
+			var/obj/effect/landmark/story/landmark = A
+			landmark.assigned_theme = theme
+			landmark.story_year = story_year
+			landmark.character_name = character_name
+			landmark.disease_type = disease_type
+			landmark.spawn_story_entity()
+		else if(istype(A, /obj/machinery/old_database))
+			var/obj/machinery/old_database/db = A
+			db.assigned_theme = theme
+			db.story_year = story_year
+			db.character_name = character_name
+
+/datum/subsystem/mapping/proc/pick_story_loot(list/spawned_objects, datum/map_element/ruin/story/story_ruin)
+	if(!spawned_objects || !story_ruin)
+		return null
+
+	var/list/loot_table_types = subtypesof(/datum/loot_table)
+	if(!loot_table_types.len)
+		return null
+
+	return pick(loot_table_types)
+
+// Places a loot container in the story vault adjacent to a wall, not adjacent to a doorway, and not on top of an existing structure.
+/datum/subsystem/mapping/proc/spawn_story_loot(list/spawned_objects, datum/map_element/ruin/story/story_ruin, loot_type)
+	if(!spawned_objects || !story_ruin || !loot_type)
+		return
+
+	var/list/ruin_turfs = list()
+	for(var/atom/A in spawned_objects)
+		ruin_turfs |= get_turf(A)
+
+	var/list/valid_turfs = list()
+	for(var/turf/T in ruin_turfs)
+		if(!isfloor(T))
+			continue
+
+		var/has_structure = FALSE
+		for(var/obj/O in T)
+			if(istype(O,/obj/structure) || istype(O,/obj/machinery))
+				has_structure = TRUE
+				break
+		if(has_structure)
+			continue
+
+		var/adj_wall = FALSE
+		var/adj_door = FALSE
+		for(var/turf/adj in orange(1, T))
+			if(iswall(adj))
+				adj_wall = TRUE
+			for(var/obj/machinery/door/D in adj)
+				adj_door = TRUE
+				break
+			if(adj_door)
+				break
+
+		if(!adj_wall || adj_door)
+			continue
+
+		valid_turfs += T
+
+	if(!valid_turfs.len)
+		return
+
+	var/turf/chosen_turf = pick(valid_turfs)
+	new /obj/abstract/loot_spawner/story(chosen_turf, loot_type, story_ruin.loot_containers)
+
 /**
  * Assigns a planet to a sector
  *
@@ -730,9 +941,13 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/turf/turfs = list()
 	/// Tracks persistent shuttle landing zones - associative list: shuttle_type -> /datum/landing_zone
 	var/list/shuttle_landing_zones = list()
+	var/obj/machinery/telecomms/relay/planetary/comms_relay
+	/// The main ruin placed on this allocation
+	var/datum/map_element/ruin/placed_ruin
 
 #undef STAGE_TERRAIN
 #undef STAGE_RUIN
 #undef STAGE_POPULATION
 #undef STAGE_WEATHER
 #undef STAGE_FINALIZE
+#undef SPATIAL_BUCKET_SIZE

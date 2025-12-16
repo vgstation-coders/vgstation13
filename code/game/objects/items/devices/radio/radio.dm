@@ -492,7 +492,7 @@
 */
 
 
-/obj/item/device/radio/proc/receive_range(freq, level)
+/obj/item/device/radio/proc/receive_range(freq, level, list/allocations = null)
 	// check if this radio can receive on the given frequency, and if so,
 	// what the range is in which mobs will hear the radio
 	// returns: -1 if can't receive, range otherwise
@@ -505,6 +505,15 @@
 		var/turf/position = get_turf(src)
 		if(!position || !(position.z in level))
 			return -1
+		// If we're on the procgen z-level and allocations exist, check if our allocation is allowed
+		if(position.z == map.zProcGen && allocations?.len)
+			var/alloc = SSmapping.get_allocation(trf = position)
+			if(istype(alloc, /datum/allocation))
+				if(!(alloc in allocations))
+					return -1
+			else
+				// Radio is on procgen z-level but not in any allocation
+				return -1
 	if(freq == SYND_FREQ)
 		if(!(src.syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
 			return -1
