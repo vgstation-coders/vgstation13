@@ -416,8 +416,8 @@ var/list/particle_string_to_type = list(
 
 //Gas vents
 /particles/gas_vent
-	width = 32
-	height = 64
+	width = 96
+	height = 96
 	count = 20
 	spawning = 2
 

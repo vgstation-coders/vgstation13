@@ -7,7 +7,7 @@
 // Used to extract gasses from planetary gas vents. Use with a surface gas miner on the station.
 /obj/machinery/gas_extractor
 	name = "\improper Surface Gas Extractor"
-	desc = "A drilling rig designed to extract gasses from planetary vents."
+	desc = "A drilling rig designed to extract gasses from planetary vents. Sends gasses to a linked Surface Gas Receiver on the station using Bluespace technology."
 	icon = 'icons/obj/machines/drill.dmi'
 	icon_state = "deep_core_drill"
 	var/base_icon_state = "deep_core_drill"
@@ -34,8 +34,9 @@
 
 	var/extraction_rate = 1
 
-	var/warned_low_reserves = FALSE // Has the 25% reserve warning been played?
-	var/warned_low_stability = FALSE // Has the 50% stability warning been played?
+	// warning flags
+	var/warned_low_reserves = FALSE
+	var/warned_low_stability = FALSE
 
 /obj/machinery/gas_extractor/New()
 	..()
@@ -46,7 +47,7 @@
 	if(linked_miner_ref)
 		var/obj/machinery/atmospherics/miner/surface/M = linked_miner_ref.get()
 		if(M)
-			M.unlink_extractor(src)
+			M.unlinkFrom(buffer = src)
 		linked_miner_ref = null
 	linked_vent = null
 	..()
@@ -54,7 +55,7 @@
 /obj/machinery/gas_extractor/examine(mob/user)
 	. = ..()
 	if(stat & BROKEN)
-		to_chat(user, "<span class='warning'>\The [src] is broken and non-functional.</span>")
+		to_chat(user, "<span class='warning'>\The [src] is broken.</span>")
 		return
 
 	switch(extractor_state)
@@ -72,12 +73,12 @@
 
 	to_chat(user, "<span class='info'>Stability: [stability]%</span>")
 	if(stability <= 25)
-		to_chat(user, "<span class='boldwarning'>WARNING: Stability critical! Structural failure imminent!</span>")
+		to_chat(user, "<span class='boldwarning'>WARNING: Stability critical! Vent collapse imminent!</span>")
 
 	if(linked_miner_ref?.get())
 		to_chat(user, "<span class='info'>Linked to station receiver.</span>")
 	else
-		to_chat(user, "<span class='warning'>Not linked to any station receiver. Use a multitool to link.</span>")
+		to_chat(user, "<span class='warning'>Not linked to any station receiver.</span>")
 
 /obj/machinery/gas_extractor/update_icon()
 	overlays.Cut()
@@ -111,21 +112,16 @@
 	. = ..()
 	if(!.)
 		return
-	// Handle vent particle effects
 	var/datum/vent/V = find_vent()
+	if(!V)
+		return
 	if(anchored)
-		// Remove vent particles when anchored on a vent
-		if(V)
-			var/turf/T = V.turf_ref?.get()
-			if(T)
-				T.remove_particles(PS_GAS_VENT)
+		var/turf/T = V.turf_ref?.get()
+		T.remove_particles(PS_GAS_VENT)
 	else
-		// Restore vent particles when unwrenched
-		if(V)
-			var/turf/T = V.turf_ref?.get()
-			if(T)
-				T.add_particles(PS_GAS_VENT)
-		// Reset state when unwrenched
+		var/turf/T = V.turf_ref?.get()
+		T.add_particles(PS_GAS_VENT)
+
 		if(deployed || active || extracting)
 			deployed = FALSE
 			active = FALSE
@@ -153,15 +149,13 @@
 /obj/machinery/gas_extractor/ui_data(mob/user)
 	var/list/data = list()
 
-	// Basic status
+	// Basic info
 	data["anchored"] = anchored
 	data["broken"] = (stat & BROKEN) ? TRUE : FALSE
-
-	// Link status
 	var/obj/machinery/atmospherics/miner/surface/M = linked_miner_ref?.get()
 	data["linked"] = M ? TRUE : FALSE
 
-	// State information
+	// States
 	data["state"] = extractor_state
 	switch(extractor_state)
 		if(EXTRACTOR_STATE_UNDEPLOYED)
@@ -179,7 +173,7 @@
 
 	data["deployed"] = deployed
 
-	// Can we deploy?
+	// Deployment
 	data["can_deploy"] = FALSE
 	data["deploy_error"] = null
 	if(!anchored)
@@ -193,15 +187,12 @@
 	else if(extractor_state == EXTRACTOR_STATE_UNDEPLOYED)
 		data["can_deploy"] = TRUE
 
-	// Warmup progress
+	// Misc
 	data["warmup_progress"] = warmup_ticks_required > 0 ? round((warmup_ticks / warmup_ticks_required) * 100) : 0
-
-	// Extraction info
 	data["extracting"] = extracting
-	// Calculate mols per second (extraction_rate is per tick, ticks are 2 seconds)
 	data["extraction_rate"] = extraction_rate / 2
 
-	// Gas type - convert ID to proper name
+	// Gas types
 	if(linked_vent)
 		var/datum/gas/gas_datum = XGM.gases[linked_vent.gas_type]
 		if(gas_datum)
@@ -221,10 +212,8 @@
 		data["vent_initial"] = 0
 		data["vent_reserves_percent"] = 0
 
-	// Damage threshold - stability degrades below 25%
+	// Damage & stability
 	data["damage_threshold"] = 25
-
-	// Stability
 	data["stability"] = stability
 	data["max_stability"] = max_stability
 	data["stability_percent"] = max_stability > 0 ? round((stability / max_stability) * 100) : 0
@@ -247,16 +236,13 @@
 				return TRUE
 			if(extractor_state != EXTRACTOR_STATE_UNDEPLOYED)
 				return TRUE
-			// Check for linked miner
 			if(!linked_miner_ref?.get())
 				to_chat(usr, "<span class='warning'>\The [src] is not linked to a station receiver! Use a multitool to link it first.</span>")
 				return TRUE
-			// Check for gas vent
 			linked_vent = find_vent()
 			if(!linked_vent)
 				to_chat(usr, "<span class='warning'>No gas vent detected beneath \the [src]!</span>")
 				return TRUE
-			// Begin deployment
 			to_chat(usr, "<span class='notice'>You begin deploying \the [src]...</span>")
 			extractor_state = EXTRACTOR_STATE_DEPLOYING
 			flick(base_icon_state + "-deploy", src)
@@ -293,15 +279,12 @@
 /obj/machinery/gas_extractor/proc/find_vent()
 	var/turf/T = get_turf(src)
 	if(!T)
-		return null
-	// Search for a vent datum at this location
+		return
 	for(var/datum/vent/V in gas_vents)
 		var/turf/vent_turf = V.turf_ref?.get()
 		if(vent_turf == T)
 			return V
-	return null
 
-// Multitool linking - buffer this extractor so it can be linked to a surface miner
 /obj/machinery/gas_extractor/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	var/dat = ""
 	if(linked_miner_ref?.get())
@@ -309,7 +292,6 @@
 		dat += "<b>Linked to:</b> [M.name] at ([M.x], [M.y], [M.z]) <a href='?src=\ref[src];unlink=1'>\[X\]</a><br>"
 	else
 		dat += "<b>Not linked to any receiver.</b><br>"
-		dat += "<i>Buffer this extractor, then link it from a Surface Gas Receiver's multitool menu.</i><br>"
 	return dat
 
 /obj/machinery/gas_extractor/Topic(href, href_list)
@@ -321,7 +303,7 @@
 		if(linked_miner_ref)
 			var/obj/machinery/atmospherics/miner/surface/M = linked_miner_ref.get()
 			if(M)
-				M.unlink_extractor(src)
+				M.unlinkFrom(buffer = src)
 			else
 				linked_miner_ref = null
 			to_chat(usr, "<span class='notice'>Unlinked from station receiver.</span>")
@@ -334,7 +316,6 @@
 	if(!anchored || !deployed)
 		return
 
-	// Check if we still have a valid miner link
 	var/obj/machinery/atmospherics/miner/surface/M = linked_miner_ref?.get()
 	if(!M)
 		if(extracting)
@@ -342,7 +323,6 @@
 			update_icon()
 		return
 
-	// Check if miner has power
 	if(M.stat & NOPOWER)
 		if(extracting)
 			extracting = FALSE
@@ -351,7 +331,6 @@
 
 	switch(extractor_state)
 		if(EXTRACTOR_STATE_WARMUP)
-			// Consume warmup power via the miner
 			M.use_power(500)
 			warmup_ticks++
 			if(warmup_ticks >= warmup_ticks_required)
@@ -368,11 +347,9 @@
 				update_icon()
 				return
 
-			// Calculate extraction based on miner's power usage
 			var/power_factor = M.active_power_usage / M.base_power_usage
 			var/mols_to_extract = extraction_rate * power_factor
 
-			// Extract gas from vent (if any remains)
 			if(linked_vent.mols > 0)
 				if(linked_vent.mols >= mols_to_extract)
 					linked_vent.mols -= mols_to_extract
@@ -380,40 +357,34 @@
 					mols_to_extract = linked_vent.mols
 					linked_vent.mols = 0
 
-			// Check for low reserves warning (25%)
 			if(linked_vent.mols > 0 && linked_vent.mols < (linked_vent.initial_mols * 0.25))
 				if(!warned_low_reserves)
 					warned_low_reserves = TRUE
 					playsound(src, 'sound/machines/warning-buzzer.ogg', 60, FALSE)
 					visible_message("<span class='warning'>\The [src] emits a warning buzzer - vent reserves critically low!</span>")
 
-			// Check stability
-			// Degrade when vent is below 25% capacity, or double rate when completely empty
 			if(linked_vent.mols <= 0)
 				stability = max(0, stability - 2) // Double degradation when empty
 			else if(linked_vent.mols < (linked_vent.initial_mols * 0.25))
 				stability = max(0, stability - 1)
 
-			// Stability warnings
 			if(stability <= 50 && !warned_low_stability)
 				warned_low_stability = TRUE
 				playsound(src, 'sound/machines/warning.ogg', 70, FALSE)
-				visible_message("<span class='boldwarning'>\The [src] emits an alarm - structural integrity at 50%!</span>")
+				visible_message("<span class='boldwarning'>\The [src] emits an alarm - vent integrity at 50%!</span>")
 
 			if(stability <= 25 && stability > 0)
 				if(prob(10)) // Occasional warning
-					visible_message("<span class='boldwarning'>\The [src] shudders violently! Structural integrity compromised!</span>")
+					visible_message("<span class='boldwarning'>\The [src] shudders violently! Vent integrity compromised!</span>")
 
 			update_icon()
 
-			// Check for explosion
 			if(stability <= 0)
 				explode()
 				return
 
 /obj/machinery/gas_extractor/proc/explode()
 	visible_message("<span class='boldwarning'>\The [src] suffers a catastrophic structural failure!</span>")
-	// Medium explosion
 	explosion(get_turf(src), 0, 1, 3, 4)
 	stat |= BROKEN
 	extracting = FALSE
@@ -438,10 +409,10 @@
 
 
 ///////////////////////////////////
-// Gas Extractor Control Console
+// Gas Extractor Control Console //
 ///////////////////////////////////
 // A console for monitoring and controlling surface gas extractors
-// Allows remote monitoring of extractor status and control of gas production rates
+// Links: Console <-> Surface Gas Receiver <-> Surface Gas Extractors
 
 /obj/machinery/computer/gas_extractor_console
 	name = "gas extractor control console"
@@ -462,27 +433,22 @@
 	idle_power_usage = 50
 	active_power_usage = 200
 
-	id_tag = "gas_extractor_console" // Required for multitool buffer
+	id_tag = "gas_extractor_console"
 
-	var/datum/weakref/linked_miner_ref // Link to the surface gas miner
-
-/obj/machinery/computer/gas_extractor_console/New()
-	..()
+	var/datum/weakref/linked_miner_ref
 
 /obj/machinery/computer/gas_extractor_console/initialize()
 	..()
-	// Auto-link to surface gas miners on the same z-level for premapped consoles
 	if(!linked_miner_ref)
 		for(var/obj/machinery/atmospherics/miner/surface/M in world)
 			if(M.z == src.z)
 				linked_miner_ref = makeweakref(M)
-				break // Link to the first one found
+				break
 
 /obj/machinery/computer/gas_extractor_console/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
-	// Disable console when unwrenched
 	if(!anchored)
 		stat |= FORCEDISABLE
 	else
@@ -516,7 +482,6 @@
 /obj/machinery/computer/gas_extractor_console/ui_data(mob/user)
 	var/list/data = list()
 
-	// Check if we have a linked miner
 	var/obj/machinery/atmospherics/miner/surface/M = linked_miner_ref?.get()
 	data["linked"] = M ? TRUE : FALSE
 	data["broken"] = (stat & BROKEN) ? TRUE : FALSE
@@ -524,12 +489,11 @@
 	if(!M)
 		return data
 
-	// Get miner status
 	data["miner_on"] = M.on
 	data["miner_power"] = M.active_power_usage
 	data["miner_base_power"] = M.base_power_usage
 
-	// Get gas production rates - calculate per gas type
+	// Get gas production rates per type
 	var/list/gas_rates = list()
 	if(M.gases && M.gases.len > 0)
 		for(var/gas_id in M.gases)
@@ -538,10 +502,8 @@
 				continue
 
 			// Calculate moles per second for this gas type
-			// M.rate is total moles per tick (2 seconds)
-			// M.gases[gas_id] is the ratio of this gas
 			var/gas_mols_per_tick = M.rate * M.gases[gas_id]
-			var/gas_mols_per_second = gas_mols_per_tick / 2
+			var/gas_mols_per_second = gas_mols_per_tick / 2 // machines subsystem ticks once every 2s
 
 			gas_rates += list(list(
 				"name" = gas_datum.name,
@@ -550,8 +512,7 @@
 			))
 	data["gas_rates"] = gas_rates
 
-	// Get total production rate
-	data["total_rate"] = M.rate ? round(M.rate / 2, 0.01) : 0 // Convert from per-tick to per-second
+	data["total_rate"] = M.rate ? round(M.rate / 2, 0.01) : 0
 
 	var/list/extractors = list()
 	for(var/datum/weakref/ref in M.linked_extractors)
@@ -629,9 +590,8 @@
 			var/new_power = text2num(params["power"])
 			if(!isnum(new_power) || new_power < 0)
 				return FALSE
-			// Reasonable limits
 			if(new_power > 50000)
-				to_chat(usr, "<span class='warning'>Power draw cannot exceed 50kW for safety reasons.</span>")
+				to_chat(usr, "<span class='warning'>Bluespace link collapses with power rates higher than 50kW.</span>")
 				return FALSE
 			M.active_power_usage = new_power
 			M.power_load_last_tick = new_power
@@ -645,7 +605,7 @@
 			if(new_power < M.base_power_usage)
 				new_power = M.base_power_usage
 			if(new_power > 50000)
-				to_chat(usr, "<span class='warning'>Power draw cannot exceed 50kW for safety reasons.</span>")
+				to_chat(usr, "<span class='warning'>Bluespace link collapses with power rates higher than 50kW.</span>")
 				return FALSE
 			M.active_power_usage = new_power
 			M.power_load_last_tick = new_power
@@ -661,36 +621,31 @@
 				if(!E || "\ref[E]" != extractor_ref)
 					continue
 
-				// Toggle the extractor
 				if(!E.deployed && !E.active)
-					// Try to deploy
 					if(!E.anchored)
 						to_chat(usr, "<span class='warning'>\The [E] must be bolted down first.</span>")
 						return FALSE
 					if(E.stat & BROKEN)
 						to_chat(usr, "<span class='warning'>\The [E] is broken!</span>")
 						return FALSE
-					if(E.extractor_state != 0) // EXTRACTOR_STATE_UNDEPLOYED
+					if(E.extractor_state != EXTRACTOR_STATE_UNDEPLOYED)
 						return FALSE
 
-					// Check for gas vent
 					E.linked_vent = E.find_vent()
 					if(!E.linked_vent)
 						to_chat(usr, "<span class='warning'>No gas vent detected beneath \the [E]!</span>")
 						return FALSE
 
-					// Begin deployment
-					E.extractor_state = 1 // EXTRACTOR_STATE_DEPLOYING
+					E.extractor_state = EXTRACTOR_STATE_DEPLOYING
 					flick(E.base_icon_state + "-deploy", E)
 					E.finish_deployment()
 					return TRUE
 
 				else if(E.deployed || E.active)
-					// Shutdown
-					if(E.extractor_state == 2 || E.extractor_state == 3) // WARMUP or EXTRACTING
+					if(E.extractor_state == EXTRACTOR_STATE_WARMUP || E.extractor_state == EXTRACTOR_STATE_EXTRACTING)
 						E.active = FALSE
 						E.extracting = FALSE
-						E.extractor_state = 0 // EXTRACTOR_STATE_UNDEPLOYED
+						E.extractor_state = EXTRACTOR_STATE_UNDEPLOYED
 						E.deployed = FALSE
 						E.warmup_ticks = 0
 						E.warned_low_reserves = FALSE
@@ -698,10 +653,8 @@
 						flick(E.base_icon_state + "-undeploy", E)
 						E.update_icon()
 						return TRUE
-
 	return FALSE
 
-// Multitool linking interface
 /obj/machinery/computer/gas_extractor_console/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	var/dat = "<b>Gas Extractor Console</b><br>"
 	if(linked_miner_ref?.get())

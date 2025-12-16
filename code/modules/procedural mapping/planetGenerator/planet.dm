@@ -102,7 +102,7 @@
 	// Initialize the biome cache
 	turf_biome_cache = list()
 
-	vent_count = rand(0,3)
+	vent_count = rand(0,5)
 	return ..()
 
 /datum/planetGenerator/proc/generate_turf(turf/gen_turf)

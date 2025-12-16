@@ -237,7 +237,7 @@ var/list/datum/vent/gas_vents = list() // Global list of all gas vents
 
 /datum/vent/New(var/turf)
 	..()
-	mols = rand(3,10) * MOLES_CELLSTANDARD
+	mols = rand(10,50) * MOLES_CELLSTANDARD
 	initial_mols = mols
 	gas_vents += src
 	turf_ref = makeweakref(turf)
