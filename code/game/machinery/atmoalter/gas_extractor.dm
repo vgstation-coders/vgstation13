@@ -33,6 +33,8 @@
 	plane = ABOVE_HUMAN_PLANE
 	layer = CLOSED_CURTAIN_LAYER
 
+	id_tag = "gas_extractor"
+
 	var/extractor_state = EXTRACTOR_STATE_UNDEPLOYED
 	var/deployed = FALSE
 	var/active = FALSE
@@ -251,7 +253,7 @@
 			if(extractor_state != EXTRACTOR_STATE_UNDEPLOYED)
 				return TRUE
 			if(!linked_miner_ref?.get())
-				to_chat(usr, "<span class='warning'>\The [src] is not linked to a station receiver! Use a multitool to link it first.</span>")
+				to_chat(usr, "<span class='warning'>\The [src] is not linked to a station receiver!</span>")
 				return TRUE
 			linked_vent = find_vent()
 			if(!linked_vent)
@@ -299,18 +301,62 @@
 		if(vent_turf == T)
 			return V
 
+/obj/machinery/gas_extractor/canLink(var/obj/O, var/list/context)
+	return istype(O, /obj/machinery/atmospherics/miner/surface)
+
+/obj/machinery/gas_extractor/isLinkedWith(var/obj/O)
+	return linked_miner_ref?.get() == O
+
+/obj/machinery/gas_extractor/linkWith(var/mob/user, var/obj/O, var/list/context)
+	if(istype(O, /obj/machinery/atmospherics/miner/surface))
+		var/obj/machinery/atmospherics/miner/surface/M = O
+		if(linked_miner_ref)
+			var/obj/machinery/atmospherics/miner/surface/old_miner = linked_miner_ref.get()
+			if(old_miner)
+				old_miner.unlinkFrom(user, src)
+		linked_miner_ref = makeweakref(M)
+		var/found = FALSE
+		for(var/datum/weakref/ref in M.linked_extractors)
+			if(ref.get() == src)
+				found = TRUE
+				break
+		if(!found)
+			M.linked_extractors += makeweakref(src)
+		return TRUE
+	return FALSE
+
+/obj/machinery/gas_extractor/getLink(var/idx)
+	if(idx == 1)
+		return linked_miner_ref?.get()
+
+/obj/machinery/gas_extractor/unlinkFrom(var/mob/user, var/obj/buffer)
+	if(istype(buffer, /obj/machinery/atmospherics/miner/surface))
+		if(linked_miner_ref?.get() == buffer)
+			linked_miner_ref = null
+			return TRUE
+	return FALSE
+
 /obj/machinery/gas_extractor/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
-	var/dat = ""
+	var/dat = "<b>Linked Surface Gas Receivers:</b><br><ul>"
 	if(linked_miner_ref?.get())
 		var/obj/machinery/atmospherics/miner/surface/M = linked_miner_ref.get()
-		dat += "<b>Linked to:</b> [M.name] at ([M.x], [M.y], [M.z]) <a href='?src=\ref[src];unlink=1'>\[X\]</a><br>"
-	else
-		dat += "<b>Not linked to any receiver.</b><br>"
+		dat += "[M.name] at ([M.x], [M.y], [M.z]) <a href='?src=\ref[src];unlink=1'>\[X\]</a><br>"
 	return dat
 
 /obj/machinery/gas_extractor/Topic(href, href_list)
 	. = ..()
 	if(.)
+		return
+
+	if("link" in href_list)
+		var/obj/item/device/multitool/P = usr.get_active_hand()
+		if(!istype(P))
+			return
+		var/obj/machinery/atmospherics/miner/surface/M = P.buffer?.get()
+		if(istype(M))
+			linkWith(usr, M)
+			to_chat(usr, "<span class='notice'>Linked to [M.name].</span>")
+		update_multitool_menu(usr)
 		return
 
 	if("unlink" in href_list)

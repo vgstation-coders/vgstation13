@@ -303,6 +303,7 @@
 	anchored = FALSE
 	base_gas_production = 0 // Doesn't produce gas on its own
 
+	id_tag = "surface_gas_receiver"
 	machine_flags = WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU
 
 	var/list/linked_extractors = list()
@@ -339,6 +340,43 @@
 	dat += "</ul>"
 	return dat
 
+/obj/machinery/atmospherics/miner/surface/Topic(href, href_list)
+	. = ..()
+	if(.)
+		return
+
+	if("link_extractor" in href_list)
+		var/obj/item/device/multitool/P = usr.get_active_hand()
+		if(!istype(P))
+			return
+		var/obj/machinery/gas_extractor/E = P.buffer?.get()
+		if(istype(E))
+			linkWith(usr, E)
+			to_chat(usr, "<span class='notice'>Linked to [E.name].</span>")
+		update_multitool_menu(usr)
+		return
+
+	if("link_console" in href_list)
+		var/obj/item/device/multitool/P = usr.get_active_hand()
+		if(!istype(P))
+			return
+		var/obj/machinery/computer/gas_extraction/C = P.buffer?.get()
+		if(istype(C))
+			linkWith(usr, C)
+			to_chat(usr, "<span class='notice'>Linked to [C.name].</span>")
+		update_multitool_menu(usr)
+		return
+
+	if("unlink" in href_list)
+		var/idx = text2num(href_list["unlink"])
+		if(idx >= 1 && idx <= linked_extractors.len)
+			var/datum/weakref/ref = linked_extractors[idx]
+			var/obj/machinery/gas_extractor/E = ref.get()
+			if(E)
+				unlinkFrom(usr, E)
+				to_chat(usr, "<span class='notice'>Unlinked from [E.name].</span>")
+		update_multitool_menu(usr)
+
 /obj/machinery/atmospherics/miner/surface/canLink(var/obj/O, var/list/context)
 	return istype(O, /obj/machinery/gas_extractor) || istype(O, /obj/machinery/computer/gas_extraction)
 
@@ -374,18 +412,22 @@
 		return ref.get()
 
 /obj/machinery/atmospherics/miner/surface/unlinkFrom(var/mob/user, var/obj/buffer)
-	if(!istype(buffer, /obj/machinery/gas_extractor))
+	if(istype(buffer, /obj/machinery/gas_extractor))
+		var/obj/machinery/gas_extractor/E = buffer
+		for(var/datum/weakref/ref in linked_extractors)
+			if(ref.get() == E)
+				linked_extractors -= ref
+				E.linked_miner_ref = null
+				return TRUE
 		return FALSE
 
-	var/obj/machinery/gas_extractor/E = buffer
-	if(!E)
-		return FALSE
-
-	for(var/datum/weakref/ref in linked_extractors)
-		if(ref.get() == E)
-			linked_extractors -= ref
-			E.linked_miner_ref = null
+	else if(istype(buffer, /obj/machinery/computer/gas_extraction))
+		var/obj/machinery/computer/gas_extraction/C = buffer
+		if(C.linked_miner_ref?.get() == src)
+			C.linked_miner_ref = null
 			return TRUE
+		return FALSE
+
 	return FALSE
 
 /obj/machinery/atmospherics/miner/surface/process()
