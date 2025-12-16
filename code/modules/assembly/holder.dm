@@ -237,6 +237,9 @@
 
 
 /obj/item/device/assembly_holder/process_activation(var/obj/D, var/normal = 1, var/special = 1)
+	if (QDELETED(src))
+		// if this assembly was in a grenade that exploded and was thus qdel'd by the time we get here
+		return
 	if(!D)
 		return 0
 	if(!secured)

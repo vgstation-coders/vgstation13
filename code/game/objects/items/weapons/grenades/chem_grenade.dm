@@ -282,6 +282,10 @@
 
 	reservoir.reagents.trans_to(src, reservoir.reagents.total_volume)
 
+	if (QDELETED(src) || !reagents || !reagents.total_volume)
+		// incase the grenade was explosive and the explosion already qdel'd the grenade
+		return
+
 	if(reagents.total_volume) //The possible reactions didnt use up all reagents.
 		reagents.splashplosion(affected_area)
 
