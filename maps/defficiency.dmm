@@ -13932,9 +13932,7 @@
 	name = "Medbay Surgery Overflow Maintenance";
 	req_access_txt = "45"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/medical/surgery_ghetto{
 	name = "Overflow Surgery"
 	})
@@ -32521,7 +32519,6 @@
 	req_access_txt = "5; 33"
 	},
 /obj/structure/disposalpipe/segment,
-/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -32553,7 +32550,6 @@
 "biu" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/smartfridge/chemistry,
-/obj/structure/disposalpipe/segment,
 /obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -48589,14 +48585,11 @@
 	dir = 4;
 	tag = "icon-maintguide (EAST)"
 	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 1;
-	initialize_directions = 11
-	},
 /obj/effect/nmpi{
 	dir = 10;
 	tag = "icon-maintguide (SOUTHWEST)"
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "bMy" = (
@@ -48605,6 +48598,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /obj/machinery/door/airlock/maintenance{
 	name = "Security Maintenance";
 	req_access_txt = "1"
@@ -48618,7 +48612,13 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 9
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)"
+	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "bMA" = (
@@ -48641,23 +48641,12 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "bMB" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 1;
+	initialize_directions = 11
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/effect/nmpi{
-	dir = 4;
-	tag = "icon-maintguide (EAST)"
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 5
-	},
-/turf/simulated/floor/plating,
-/area/maintenance/apmaint)
+/turf/simulated/wall,
+/area/security/checkpoint/supply)
 "bMC" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -49372,9 +49361,6 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	initialize_directions = 11
-	},
 /obj/effect/nmpi{
 	dir = 4;
 	tag = "icon-maintguide (EAST)"
@@ -49403,9 +49389,9 @@
 /area/maintenance/apmaint)
 "bNL" = (
 /obj/structure/cable/yellow{
-	d1 = 4;
+	d1 = 1;
 	d2 = 8;
-	icon_state = "4-8"
+	icon_state = "1-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -49420,12 +49406,13 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 9
-	},
 /obj/effect/nmpi{
 	dir = 4;
 	tag = "icon-maintguide (EAST)"
+	},
+/obj/effect/nmpi{
+	dir = 5;
+	tag = "icon-maintguide (NORTHEAST)"
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
@@ -49440,6 +49427,10 @@
 	},
 /obj/structure/closet/crate,
 /obj/abstract/map/spawner/maint,
+/obj/effect/nmpi{
+	dir = 5;
+	tag = "icon-maintguide (NORTHEAST)"
+	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "bNN" = (
@@ -49452,9 +49443,6 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
 /obj/effect/nmpi{
@@ -110226,6 +110214,12 @@
 	icon_state = "whitepurple"
 	},
 /area/science/lab)
+"hep" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/wall,
+/area/security/checkpoint/supply)
 "hmN" = (
 /obj/structure/bed/chair/shuttle/red{
 	dir = 1
@@ -111379,7 +111373,9 @@
 	},
 /area/medical/genetics)
 "sRx" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 5
+	},
 /turf/simulated/wall,
 /area/security/checkpoint/supply)
 "sSd" = (
@@ -230708,7 +230704,7 @@ bLI
 bLI
 bLK
 sRx
-bMB
+bNE
 bEm
 bPy
 bQT
@@ -231209,7 +231205,7 @@ nIn
 sld
 juH
 bqE
-bLI
+bMB
 bMx
 bEj
 bPz
@@ -232213,7 +232209,7 @@ tui
 fTR
 pPL
 bKO
-bLI
+hep
 bNN
 bEm
 bPy
@@ -232715,7 +232711,7 @@ bIF
 bJM
 qZN
 bEm
-bEm
+bLH
 bNN
 bEm
 bPD
