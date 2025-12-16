@@ -101,10 +101,16 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 			dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>"
 		else
 			dat += "<li>Emergency Response Team (Disabled while below Code Red)</li>"
-		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>
-			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li>
-			</ul>"}
-		user << browse(HTML_SKELETON(dat), "window=keycard_auth;size=500x300")
+			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Maintenance Access'>[(access_maint_tunnels in all_access_list) ? "Revoke" : "Grant"] Emergency Maintenance Access</A></li>"
+			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Security Access'>[(access_security in all_access_list) ? "Revoke" : "Grant"] Emergency Security Access</A></li>"
+			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Medical Access'>[(access_medical in all_access_list) ? "Revoke" : "Grant"] Emergency Medical Access</A></li>"
+			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Science Access'>[(access_science in all_access_list) ? "Revoke" : "Grant"] Emergency Science Access</A></li>"
+			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Engineering Access'>[(access_engine_minor in all_access_list) ? "Revoke" : "Grant"] Emergency Engineering Access</A></li>"
+			//no public command, we're not commies
+			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Civilian areas Access'>[(access_bar in all_access_list) ? "Revoke" : "Grant"] Emergency Civilian areas Access</A></li>"
+			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Supply Access'>[(access_cargo in all_access_list) ? "Revoke" : "Grant"] Emergency Supply Access</A></li>"
+			
+		user << browse(HTML_SKELETON(dat), "window=keycard_auth;size=500x400")
 	if(screen == 2)
 
 		dat += "Please swipe your card to authorize the following event: <b>[event]</b>"
@@ -181,12 +187,56 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		if("Red alert")
 			set_security_level(SEC_LEVEL_RED)
 			feedback_inc("alert_keycard_auth_red",1)
-		if("Grant Emergency Maintenance Access")
-			make_doors_all_access(list(access_maint_tunnels))
-			feedback_inc("alert_keycard_auth_maintGrant",1)
-		if("Revoke Emergency Maintenance Access")
-			revoke_doors_all_access(list(access_maint_tunnels))
-			feedback_inc("alert_keycard_auth_maintRevoke",1)
+		if("Toggle Emergency Maintenance Access")
+			if(access_maint_tunnels in all_access_list)
+				revoke_doors_all_access(list(access_maint_tunnels))
+				feedback_inc("alert_keycard_auth_maintRevoke",1)
+			else
+				make_doors_all_access(list(access_maint_tunnels))
+				feedback_inc("alert_keycard_auth_maintGrant",1)
+		if("Toggle Emergency Security Access")
+			if(access_security in all_access_list)
+				revoke_doors_all_access(get_region_accesses(1))
+				feedback_inc("alert_keycard_auth_secRevoke",1)
+			else
+				make_doors_all_access(get_region_accesses(1))
+				feedback_inc("alert_keycard_auth_secGrant",1)			
+		if("Toggle Emergency Medical Access")
+			if(access_medical in all_access_list)
+				revoke_doors_all_access(get_region_accesses(2))
+				feedback_inc("alert_keycard_auth_medRevoke",1)
+			else
+				make_doors_all_access(get_region_accesses(2))
+				feedback_inc("alert_keycard_auth_medGrant",1)
+		if("Toggle Emergency Science Access")
+			if(access_science in all_access_list)
+				revoke_doors_all_access(get_region_accesses(3))
+				feedback_inc("alert_keycard_auth_sciRevoke",1)
+			else
+				make_doors_all_access(get_region_accesses(3))
+				feedback_inc("alert_keycard_auth_sciGrant",1)	
+		if("Toggle Emergency Engineering Access")
+			if(access_engine_minor in all_access_list)
+				revoke_doors_all_access(get_region_accesses(4) - list(access_maint_tunnels))
+				feedback_inc("alert_keycard_auth_engRevoke",1)
+			else
+				make_doors_all_access(get_region_accesses(4) - list(access_maint_tunnels))
+				feedback_inc("alert_keycard_auth_engGrant",1)	
+		if("Toggle Emergency Civilian areas Access")
+			if(access_bar in all_access_list)
+				revoke_doors_all_access(get_region_accesses(6))
+				feedback_inc("alert_keycard_auth_civRevoke",1)
+			else
+				make_doors_all_access(get_region_accesses(6))
+				feedback_inc("alert_keycard_auth_civGrant",1)	
+		if("Toggle Emergency Supply Access")
+			if(access_cargo in all_access_list)
+				revoke_doors_all_access(get_region_accesses(7))
+				feedback_inc("alert_keycard_auth_supRevoke",1)
+			else
+				make_doors_all_access(get_region_accesses(7))
+				feedback_inc("alert_keycard_auth_supGrant",1)	
+		
 		if("Emergency Response Team")
 			var/datum/striketeam/ert/response_team = new()
 			response_team.mission = ert_reason
