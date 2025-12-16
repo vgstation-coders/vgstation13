@@ -299,7 +299,8 @@
 	desc = "A specialized gas miner that receives gasses from remote surface extractors."
 	icon_state = "miner"
 	overlay_color = "#80FF80"
-	on = TRUE
+	on = FALSE
+	anchored = FALSE
 	base_gas_production = 0 // Doesn't produce gas on its own
 
 	machine_flags = WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU
@@ -339,7 +340,7 @@
 	return dat
 
 /obj/machinery/atmospherics/miner/surface/canLink(var/obj/O, var/list/context)
-	return istype(O, /obj/machinery/gas_extractor) || istype(O, /obj/machinery/computer/gas_extractor_console)
+	return istype(O, /obj/machinery/gas_extractor) || istype(O, /obj/machinery/computer/gas_extraction)
 
 /obj/machinery/atmospherics/miner/surface/isLinkedWith(var/obj/O)
 	for(var/datum/weakref/ref in linked_extractors)
@@ -361,8 +362,8 @@
 		E.linked_miner_ref = makeweakref(src)
 		return TRUE
 
-	else if(istype(O, /obj/machinery/computer/gas_extractor_console))
-		var/obj/machinery/computer/gas_extractor_console/C = O
+	else if(istype(O, /obj/machinery/computer/gas_extraction))
+		var/obj/machinery/computer/gas_extraction/C = O
 		C.linked_miner_ref = makeweakref(src)
 		return TRUE
 	return FALSE

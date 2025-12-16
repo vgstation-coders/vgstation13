@@ -267,7 +267,6 @@ var/list/datum/vent/gas_vents = list() // Global list of all gas vents
 	T.overlays += gas_overlay
 	T.add_particles(PS_GAS_VENT)
 	T.adjust_particles(PS_GAS_VENT, PVAR_COLOR, particle_color)
-	message_admins("Spawned new vent at [T.x],[T.y] emitting [gas_type].")
 	T = null
 
 /datum/vent/Destroy()

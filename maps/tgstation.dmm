@@ -31280,7 +31280,7 @@
 /area/bridge)
 "bhf" = (
 /obj/machinery/computer/security/engineering,
-/obj/machinery/computer/gas_extractor_console,
+/obj/machinery/computer/gas_extraction,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -31986,7 +31986,6 @@
 	},
 /area/bridge)
 "biJ" = (
-/obj/machinery/computer/gas_extractor_console,
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "darkblue"
@@ -32730,7 +32729,6 @@
 	},
 /area/bridge)
 "bko" = (
-/obj/machinery/atmospherics/miner/surface,
 /turf/simulated/floor{
 	icon_state = "dark-markings"
 	},
@@ -116668,10 +116666,6 @@
 /obj/machinery/vending/wallmed1,
 /turf/simulated/wall/shuttle,
 /area/shuttle/exploration)
-"xNg" = (
-/obj/machinery/gas_extractor,
-/turf/simulated/floor/shuttle,
-/area/shuttle/exploration)
 "xRn" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -181808,7 +181802,7 @@ aaa
 aaa
 aaa
 nZM
-xNg
+ira
 ira
 ira
 ira

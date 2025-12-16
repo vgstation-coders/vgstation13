@@ -86,7 +86,7 @@ export const GasExtractorConsole = () => {
           {!linked && !broken ? (
             <Stack.Item>
               <NoticeBox warning>
-                Not linked to a surface gas receiver - Use a multitool to link
+                Not linked to a surface gas receiver
               </NoticeBox>
             </Stack.Item>
           ) : null}

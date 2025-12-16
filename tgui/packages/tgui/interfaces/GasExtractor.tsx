@@ -107,7 +107,7 @@ export const GasExtractor = () => {
           {!linked && anchored && !broken ? (
             <Stack.Item>
               <NoticeBox warning>
-                Not linked to a station receiver - Use a multitool to link
+                Not linked to a station gas receiver
               </NoticeBox>
             </Stack.Item>
           ) : null}

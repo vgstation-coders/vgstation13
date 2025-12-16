@@ -10,3 +10,4 @@
 #define Tc_POWERSTORAGE      "powerstorage"
 #define Tc_NANOTRASEN        "nanotrasen"
 #define Tc_ANOMALY           "anomaly"
+#define Tc_EXPLORATION       "exploration"
