@@ -263,7 +263,7 @@
 				H.visible_message("<span class='warning'>[H] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
 			return TRUE
 	if(pp > min_puke) // Too much toxins
-		var/ratio = (pp/min_gag)
+		var/ratio = (pp/min_puke)
 		if(min_puke_mask && mask_blocked)
 			if(pp > min_puke_mask)
 				ratio = (pp/min_puke_mask)
