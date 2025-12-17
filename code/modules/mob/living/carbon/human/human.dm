@@ -804,6 +804,9 @@
 				if(T && T.open)
 					src.visible_message("<span class='warning'>[src] throws up into \the [T]!</span>", "<span class='danger'>You throw up into \the [T]!</span>")
 					skip_message = 1
+					var/datum/reagents/temp = new/datum/reagents(100)
+					reagents?.trans_removable_to(temp, vomitvolume, 1)
+					qdel(temp)
 				else //Look for a bucket
 
 					for(var/obj/item/weapon/reagent_containers/glass/G in (location.contents + src.get_active_hand() + src.get_inactive_hand()))
@@ -816,10 +819,7 @@
 
 						if(G.reagents.total_volume <= G.reagents.maximum_volume-7) //Container can fit 7 more units of chemicals - vomit into it
 							G.reagents.add_reagent(VOMIT, rand(3,10))
-							if(src.reagents)
-								for (var/datum/reagent/current_reagent in reagents.reagent_list)
-									if(! (current_reagent.flags & CHEMFLAG_NOTREMOVABLE)) //do not vomit out unremovable chems
-										reagents.trans_id_to(G, current_reagent.id, reagents.get_reagent_amount(current_reagent.id)*vomitvolume) 
+							reagents?.trans_removable_to(G, vomitvolume, 1)
 						else //Container is nearly full - fill it to the brim with vomit and spawn some more on the floor
 							G.reagents.add_reagent(VOMIT, 10)
 							spawn_vomit_on_floor = 1
