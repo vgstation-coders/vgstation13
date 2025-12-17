@@ -78,7 +78,7 @@ var/static/list/no_miasma_locs = list(/obj/item/bodybag,/obj/structure/morgue)
 		var/atom/location = loc
 		var/datum/gas_mixture/loc_air = location.return_air()
 		if(loc_air && loc_air.temperature > T0C && !is_type_in_list(loc,no_miasma_locs))
-			loc_air.adjust_gas(GAS_MIASMA,1*size)
+			loc_air.adjust_gas(GAS_MIASMA,miasma_production_rate*size)
 	if (flags & INVULNERABLE)
 		bodytemperature = initial(bodytemperature)
 	if (monkeyizing)

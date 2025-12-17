@@ -9,6 +9,8 @@
 
 	size = SIZE_NORMAL
 
+	var/miasma_production_rate = 1 //mols per tick
+
 	//Damage related vars, NOTE: THESE SHOULD ONLY BE MODIFIED BY PROCS
 	var/bruteloss = 0	//Brutal damage caused by brute force (punching, being clubbed by a toolbox ect... this also accounts for pressure damage)
 	var/oxyloss = 0		//Oxygen depravation damage (no air in lungs)
