@@ -251,17 +251,6 @@
 	var/pp = get_pp()
 	var/mob/living/carbon/human/H = lungs.owner
 	var/mask_blocked = H.wear_mask && (H.wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
-	if(pp > min_gag) // Too much toxins
-		var/ratio = (pp/min_gag)
-		if(min_gag_mask && mask_blocked)
-			if(pp > min_gag_mask)
-				ratio = (pp/min_gag_mask)
-			else
-				ratio = 0
-		if(ratio)
-			if(prob(5))
-				H.visible_message("<span class='warning'>[H] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
-			return TRUE
 	if(pp > min_puke) // Too much toxins
 		var/ratio = (pp/min_puke)
 		if(min_puke_mask && mask_blocked)
@@ -271,5 +260,16 @@
 				ratio = 0
 		if(ratio)
 			H.vomit()
+			return TRUE
+	else if(pp > min_gag) // Too much toxins
+		var/ratio = (pp/min_gag)
+		if(min_gag_mask && mask_blocked)
+			if(pp > min_gag_mask)
+				ratio = (pp/min_gag_mask)
+			else
+				ratio = 0
+		if(ratio)
+			if(prob(5))
+				H.visible_message("<span class='warning'>[H] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
 			return TRUE
 	return FALSE
