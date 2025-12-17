@@ -16,6 +16,8 @@
 #define MOB_NO_PETRIFY 64 //can't get petrified
 #define MOB_NO_LAZ 128 //Can not be revived via lazarus injector
 
+#define MOB_NONFLESH (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL)
+
 #define NO_BACKPACK 1
 #define BACKPACK 2
 #define SATCHEL_NORM 3
