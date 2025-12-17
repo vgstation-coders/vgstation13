@@ -157,7 +157,21 @@
 /datum/gas/radon/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
 
+/datum/gas/miasma
+	id = GAS_MIASMA
+	name = "Miasma"
+	short_name = "Miasma"
 
+	specific_heat = 30
+	molar_mass = 0.163 // @MoMMI#9954 roll 32 405
 
+	tile_overlay = new /obj/effect/overlay/gas_overlay/miasma()
+	overlay_limit = MOLES_MIASMA_VISIBLE / CELL_VOLUME
+	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
+/datum/gas/miasma/is_human_safe(moles, datum/gas_mixture/mixture)
+	return moles/mixture.total_moles() < 0.01
 
+/obj/effect/overlay/gas_overlay/miasma
+	name = "miasma"
+	icon_state = "miasma"

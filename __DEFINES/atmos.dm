@@ -12,6 +12,7 @@
 
 #define MOLES_PLASMA_VISIBLE	0.7 //Moles in a standard cell after which plasma is visible
 #define MOLES_CRYOTHEUM_VISIBLE	0.7 //Moles in a standard cell after which cryotheum is visible
+#define MOLES_MIASMA_VISIBLE	2 //Moles in a standard cell after which cryotheum is visible
 #define MOLES_O2STANDARD (MOLES_CELLSTANDARD*O2STANDARD)	// O2 standard value (21%)
 #define MOLES_N2STANDARD (MOLES_CELLSTANDARD*N2STANDARD)	// N2 standard value (79%)
 

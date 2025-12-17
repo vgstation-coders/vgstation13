@@ -67,11 +67,18 @@
 	if(butchery)
 		to_chat(user, "<span class='info'>[butchery]</span>")
 
+var/static/list/no_miasma_locs = list(/obj/item/bodybag,/obj/structure/morgue)
+
 /mob/living/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
 
 	..()
+	if(stat == DEAD && !(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL)))
+		var/atom/location = loc
+		var/datum/gas_mixture/loc_air = location.return_air()
+		if(loc_air && loc_air.temperature > T0C && !is_type_in_list(loc,no_miasma_locs))
+			loc_air.adjust_gas(GAS_MIASMA,0.01)
 	if (flags & INVULNERABLE)
 		bodytemperature = initial(bodytemperature)
 	if (monkeyizing)

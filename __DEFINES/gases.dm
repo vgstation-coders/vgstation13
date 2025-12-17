@@ -7,3 +7,4 @@
 #define GAS_VOLATILE "volatile_fuel"
 #define GAS_OXAGENT  "oxygen_agent_b"
 #define GAS_RADON  "radon"
+#define GAS_MIASMA  "miasma"

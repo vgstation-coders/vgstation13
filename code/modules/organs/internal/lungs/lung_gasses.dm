@@ -202,7 +202,7 @@
 	var/max_pp=0 // Maximum toxins partial pressure before you get effects. (0.5)
 	var/max_pp_mask=0 // Same as above, but with a mask. (5 _MOLES_; Set to 0 to disable mask blocking.)
 	var/radspermole=3
-	
+
 /datum/lung_gas/radioactive/New(var/gas_id, var/max_pp=0, var/max_pp_mask=0, var/radspermole=3)
 	..(gas_id)
 	src.max_pp = max_pp
@@ -228,4 +228,48 @@
 			return TRUE
 		return FALSE
 	else
-		return FALSE	
+		return FALSE
+////////////////////////
+// MIASMA
+////////////////////////
+
+/datum/lung_gas/noxious
+	var/min_gag=0 // Minimum atmospheric partial pressure before you start spluttering
+	var/min_gag_mask=0 // Same as above, but with a mask. (5 _MOLES_; Set to 0 to disable mask blocking.)
+	var/min_puke=0 // Minimum atmospheric partial pressure before you start throwing up
+	var/min_puke_mask=0 // Same as above, but with a mask. (5 _MOLES_; Set to 0 to disable mask blocking.)
+
+/datum/lung_gas/noxious/New(var/gas_id, var/min_gag=0, var/min_gag_mask=0, var/min_puke=0, var/min_puke_mask = 0)
+	..(gas_id)
+	src.min_gag = min_gag
+	src.min_gag_mask = min_gag_mask
+	src.min_puke = min_puke
+	src.min_puke_mask = min_puke_mask
+
+/datum/lung_gas/noxious/handle_inhale()
+	..()
+	var/pp = get_pp()
+	var/mob/living/carbon/human/H = lungs.owner
+	var/mask_blocked = H.wear_mask && (H.wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+	if(pp > min_gag) // Too much toxins
+		var/ratio = (pp/min_gag)
+		if(min_gag_mask && mask_blocked)
+			if(pp > min_gag_mask)
+				ratio = (pp/min_gag_mask)
+			else
+				ratio = 0
+		if(ratio)
+			if(prob(5))
+				H.visible_message("<span class='warning'>[H] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+			return TRUE
+	if(pp > min_puke) // Too much toxins
+		var/ratio = (pp/min_gag)
+		if(min_puke_mask && mask_blocked)
+			if(pp > min_puke_mask)
+				ratio = (pp/min_puke_mask)
+			else
+				ratio = 0
+		if(ratio)
+			H.vomit()
+			return TRUE
+	return FALSE

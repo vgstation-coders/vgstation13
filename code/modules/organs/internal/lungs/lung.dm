@@ -20,8 +20,8 @@
 		new /datum/lung_gas/waste(GAS_CARBON,            max_pp=10),
 		new /datum/lung_gas/toxic(GAS_PLASMA,                    max_pp=0.5, max_pp_mask=5, reagent_id=PLASMA, reagent_mult=0.1),
 		new /datum/lung_gas/radioactive(GAS_RADON,      max_pp=0.1, max_pp_mask=5, radspermole=3),
-		
 		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
+		new /datum/lung_gas/noxious(GAS_MIASMA, min_gag=1, min_gag_mask=5, min_puke=2, min_puke_mask=10),
 	)
 
 	var/inhale_volume = BREATH_VOLUME
