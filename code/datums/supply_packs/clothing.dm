@@ -205,7 +205,8 @@
 
 /datum/supply_packs/waifu
 	name = "Feminine attire"
-	contains = list(/obj/item/clothing/under/dress/dress_fire,
+	contains = list(/obj/item/clothing/under/dress,
+					/obj/item/clothing/under/dress/dress_fire,
 					/obj/item/clothing/under/dress/dress_green,
 					/obj/item/clothing/under/dress/dress_orange,
 					/obj/item/clothing/under/dress/dress_pink,
