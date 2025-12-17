@@ -409,6 +409,10 @@
 		return
 	params = params2list(params)
 
+	// can be null if the mouse isn't over the game window, e.g. if its hovering verbs instead etc
+	if (!params["screen-loc"])
+		return
+
 	mouse["left"]["icon"] = text2num(params["icon-x"])
 	mouse["bottom"]["icon"] = text2num(params["icon-y"])
 
@@ -416,9 +420,6 @@
 		mouse["left"]["vis"] = text2num(params["vis-x"])
 	if (params["vis-y"])
 		mouse["bottom"]["vis"] = text2num(params["vis-y"])
-
-	if (!params["screen-loc"])
-		return
 
 	var/list/screenLoc = splittext(params["screen-loc"], ",")
 	var/list/screenLocLeft = splittext(screenLoc[1], ":")
