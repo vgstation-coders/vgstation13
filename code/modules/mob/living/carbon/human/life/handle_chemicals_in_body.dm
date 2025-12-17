@@ -1,7 +1,6 @@
 //Refer to life.dm for caller
 
 /mob/living/carbon/human/proc/handle_chemicals_in_body()
-	var/jittery_time = jitteriness
 
 	if(reagents)
 
@@ -126,15 +125,6 @@
 			Paralyse(5)
 
 	remove_confused(1)
-	//Decrement dizziness counter, clamped to 0
-	if(resting)
-		dizziness = max(0, dizziness - 15)
-		jitteriness = max(0, jitteriness - 15)
-	else
-		dizziness = max(0, dizziness - 3)
-		jitteriness = max(0, jitteriness - 3)
-	if(jittery_time && !jitteriness)
-		animate(src)
 
 	handle_trace_chems()
 

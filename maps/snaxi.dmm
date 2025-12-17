@@ -41614,9 +41614,6 @@
 	icon_state = "cult"
 	},
 /area/library)
-"bNc" = (
-/turf/simulated/wall,
-/area/security/main)
 "bNd" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -137296,7 +137293,7 @@ bHH
 bIw
 bJj
 bKg
-bNc
+bLc
 bLX
 bMK
 bND

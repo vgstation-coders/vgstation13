@@ -128,7 +128,6 @@
 /datum/next_map/snaxi
 	name = "Snow Station"
 	path = "Snow Taxi"
-	min_players = 30
 
 /datum/next_map/snaxi/is_votable()
 	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
