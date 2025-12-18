@@ -485,6 +485,10 @@ var/list/datum/story_theme/story_themes = list()
 	var/ruin_name = ""
 
 /obj/machinery/old_database/attack_hand(mob/user)
+	if(isobserver(user))
+		to_chat(user, "<span class='rose'>Your ghostly hand goes right through!</span>")
+		return
+
 	if(activated)
 		to_chat(user, "<span class='notice'>\The [src] has already been activated and its data retrieved.</span>")
 		return
