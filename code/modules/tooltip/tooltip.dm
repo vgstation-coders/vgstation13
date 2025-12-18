@@ -27,7 +27,7 @@
 /datum/tooltips/New(client/C)
 	..()
 	spawn(0)
-		if (!C) 
+		if (!C)
 			return
 		owner = C
 		clearAll()
@@ -38,7 +38,7 @@
 	/// Used on client login to clean up any tooltips that might have been stuck open from a previous round
 /datum/tooltips/proc/clearAll()
 	//
-	if (!owner) 
+	if (!owner)
 		return
 	for (var/window,windowId in params2list(winget(owner, "[mapId].*", "id")))
 		if (findtext(windowId, windowPrefix, 1, length(windowPrefix) + 1))
@@ -82,7 +82,7 @@
 /datum/tooltips/proc/show(atom/target, mouse, title, content, theme, list/align, list/size, list/offset, list/bounds, list/extra)
 	var/datum/tooltip/toShow = null
 	if (canShowHover())
-		if (!hoverTip) 
+		if (!hoverTip)
 			hoverTip = new /datum/tooltip(src)
 		toShow = hoverTip
 	if (!theme)
@@ -94,7 +94,7 @@
 	/// Preload a tooltip by creating it ahead of time whilst remaining invisible
 	/// Intended to speed up initial show times
 /datum/tooltips/proc/preload()
-	
+
 	var/datum/tooltip/tooltip = null
 	tooltip = new /datum/tooltip(src)
 	hoverTip = tooltip
@@ -180,7 +180,7 @@
 
 
 /datum/tooltip/proc/getIconSize()
-	
+
 	var/iconW = world.icon_size
 	var/iconH = world.icon_size
 	if (istext(world.icon_size))
@@ -190,7 +190,7 @@
 	return alist("width" = iconW, "height" = iconH)
 
 /datum/tooltip/proc/getView()
-	
+
 	var/viewX = holder.owner.view
 	var/viewY = holder.owner.view
 	if (istext(holder.owner.view))
@@ -200,7 +200,7 @@
 	return alist("x" = viewX, "y" = viewY)
 
 /datum/tooltip/proc/setMouseWithoutParams(list/clientView, list/iconSize)
-	
+
 	var/atom/refTarget = target.get()
 	var/pixloc/clientLoc = bound_pixloc(holder.owner.virtual_eye, SOUTHWEST)
 	var/pixloc/targetLoc = bound_pixloc(refTarget, SOUTHWEST)
@@ -212,16 +212,16 @@
 	)
 
 /datum/tooltip/proc/shouldUpdate(atom/_target)
-	
-	if (!target) 
+
+	if (!target)
 		return FALSE
 	var/atom/refTarget = target.get()
 	return showing && !hiding && loaded && _target == refTarget
 
 /datum/tooltip/proc/build()
-	
+
 	var/atom/refTarget = target.get()
-	if (!refTarget) 
+	if (!refTarget)
 		return
 
 	if (!options.bounds["width"] && !options.bounds["height"])
@@ -256,13 +256,13 @@
 		))
 	))
 
-	if (hiding) 
+	if (hiding)
 		return
 	holder.owner << output(params, "[window]:tooltip.init")
 
 /datum/tooltip/proc/update()
-	
-	if (hiding) 
+
+	if (hiding)
 		return
 	holder.owner << output(list2params(list(json_encode(alist(
 		"options" = options.toList(),
@@ -270,7 +270,7 @@
 
 
 /datum/tooltip/proc/show(atom/_target, _mouse, _title, _content, _theme, list/_align, list/_size, list/_offset, list/_bounds, list/_extra)
-	if (!holder) 
+	if (!holder)
 		return
 
 	var/update = shouldUpdate(_target)
@@ -278,25 +278,25 @@
 	hiding = FALSE
 	target = makeweakref(_target)
 
-	if (!update) 
+	if (!update)
 		options.reset()
-	if (_mouse) 
+	if (_mouse)
 		options.setMouse(_mouse)
-	if (_title) 
+	if (_title)
 		options.title = _title
-	if (_content) 
+	if (_content)
 		options.setContent(_content)
-	if (_theme) 
+	if (_theme)
 		options.theme = _theme
-	if (_align) 
+	if (_align)
 		options.setAlign(_align)
-	if (_size) 
+	if (_size)
 		options.setSize(_size)
-	if (_offset) 
+	if (_offset)
 		options.setOffset(_offset)
-	if (_bounds) 
+	if (_bounds)
 		options.setBounds(_bounds)
-	if (_extra) 
+	if (_extra)
 		options.extra = _extra
 
 	if (update)
@@ -307,7 +307,7 @@
 		loaded ? build() : create()
 
 /datum/tooltip/proc/hide()
-	if (hiding || !holder) 
+	if (hiding || !holder)
 		return
 	hiding = TRUE
 	holder.owner << output("", "[window]:tooltip.hide")
@@ -405,16 +405,20 @@
 	 */
 /datum/tooltipOptions/proc/setMouse(params)
 	mouse = alist("left" = alist(), "bottom" = alist())
-	if (!params) 
+	if (!params)
 		return
 	params = params2list(params)
+
+	// can be null if the mouse isn't over the game window, e.g. if its hovering verbs instead etc
+	if (!params["screen-loc"])
+		return
 
 	mouse["left"]["icon"] = text2num(params["icon-x"])
 	mouse["bottom"]["icon"] = text2num(params["icon-y"])
 
-	if (params["vis-x"]) 
+	if (params["vis-x"])
 		mouse["left"]["vis"] = text2num(params["vis-x"])
-	if (params["vis-y"]) 
+	if (params["vis-y"])
 		mouse["bottom"]["vis"] = text2num(params["vis-y"])
 
 	var/list/screenLoc = splittext(params["screen-loc"], ",")
@@ -434,27 +438,27 @@
 	 */
 /datum/tooltipOptions/proc/setAlign(flags)
 	align = alist("x" = "left", "y" = "bottom")
-	if (!flags) 
+	if (!flags)
 		return
 
 	var/list/newAlign = alist("x" = "", "y" = "")
-	if (flags & TOOLTIP_TOP) 
+	if (flags & TOOLTIP_TOP)
 		newAlign["y"] = "top"
-	else if (flags & TOOLTIP_BOTTOM) 
+	else if (flags & TOOLTIP_BOTTOM)
 		newAlign["y"] = "bottom"
-	if (flags & TOOLTIP_RIGHT) 
+	if (flags & TOOLTIP_RIGHT)
 		newAlign["x"] = "right"
-	else if (flags & TOOLTIP_LEFT) 
+	else if (flags & TOOLTIP_LEFT)
 		newAlign["x"] = "left"
 	if (flags & TOOLTIP_CENTER)
-		if (newAlign["x"]) 
+		if (newAlign["x"])
 			newAlign["y"] = "center"
-		else 
+		else
 			newAlign["x"] = "center"
 
-	if (!newAlign["x"]) 
+	if (!newAlign["x"])
 		newAlign["x"] = "left"
-	if (!newAlign["y"]) 
+	if (!newAlign["y"])
 		newAlign["y"] = "bottom"
 	align = newAlign
 

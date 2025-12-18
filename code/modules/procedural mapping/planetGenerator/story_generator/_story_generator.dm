@@ -497,6 +497,7 @@ var/list/datum/story_theme/story_themes = list()
 	if(isobserver(user) && !isAdminGhost(user))
 		to_chat(user, "<span class='warning'>Your ghostly limb passes right through \the [src].</span>")
 		return
+
 	if(activated)
 		to_chat(user, "<span class='notice'>\The [src] has already been activated and its data retrieved.</span>")
 		return

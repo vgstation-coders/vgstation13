@@ -602,12 +602,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	weather_sound = 'sound/misc/snowstorm/snowfall_calm.ogg'
 	weather_sound_volume = 30
 
-/datum/weather/snow/calm/execute()
-	..()
-	research_shuttle.lockdown = FALSE //note: blob can't happen on this map
-	mining_shuttle.lockdown = FALSE
-	security_shuttle.lockdown = FALSE
-
 /datum/weather/snow/light
 	name = "light"
 	precip_intensity = WEATHER_MODERATE
@@ -618,12 +612,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	weather_sound = 'sound/misc/snowstorm/snowfall_average.ogg'
 	weather_sound_volume = 40
 	vision_reduction = 1
-
-/datum/weather/snow/light/execute()
-	..()
-	research_shuttle.lockdown = FALSE
-	mining_shuttle.lockdown = FALSE
-	security_shuttle.lockdown = FALSE
 
 /datum/weather/snow/heavy
 	name = "<font color='orange'>heavy</font>"
@@ -636,12 +624,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	weather_sound_volume = 60
 	vision_reduction = 2
 
-/datum/weather/snow/heavy/execute()
-	..()
-	research_shuttle.lockdown = FALSE
-	mining_shuttle.lockdown = FALSE
-	security_shuttle.lockdown = FALSE
-
 /datum/weather/snow/blizzard
 	name = "<font color='red'>blizzard</font>"
 	precip_intensity = WEATHER_SEVERE
@@ -653,12 +635,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	weather_sound = 'sound/misc/snowstorm/snowfall_blizzard.ogg'
 	weather_sound_volume = 80
 	vision_reduction = 3
-
-/datum/weather/snow/blizzard/execute()
-	..()
-	research_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
-	mining_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
-	security_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
 
 /datum/weather/snow/blizzard/omega
 	name = "<font color='purple'>dark season</font>"

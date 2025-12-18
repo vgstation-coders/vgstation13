@@ -81,6 +81,9 @@
 			timesoundloop(decrement,freq)
 
 /obj/item/device/assembly/timer/proc/countdown()
+	if (QDELETED(src) || QDELETED(holder))
+		// if the timer was destroyed by an explosion while counting down and we came here from a spawn()
+		return
 	if(timing)
 		if(time > 0)
 			spawn(10)
@@ -94,7 +97,8 @@
 			if(repeat && time > 0)
 				spawn()
 					countdown()
-		updateUsrDialog()
+		if (!QDELETED(src))
+			updateUsrDialog()
 
 /obj/item/device/assembly/timer/update_icon()
 	overlays.len = 0

@@ -54,10 +54,11 @@
 		return
 
 	for(var/turf/T in block(locate(t_loc.x, t_loc.y, t_loc.z), locate(t_loc.x+new_transit.width, t_loc.y+new_transit.height, t_loc.z)))
-		T.ChangeTurf(/turf/space/transit)
-		var/turf/space/transit/t_turf = T
-		t_turf.pushdirection = direction
-		t_turf.update_icon()
+		var/turf/space/transit/t_turf = T.ChangeTurf(/turf/space/transit,0,0,1,0)
+		if(istype(t_turf))
+			t_turf.pushdirection = direction
+			t_turf.update_icon()
+			CHECK_TICK
 
 	//Transit turfs placed - place the docking port!
 	//First, find the shuttle docking port's location relative to the shuttle's lower left corner

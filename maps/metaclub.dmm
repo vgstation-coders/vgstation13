@@ -118586,10 +118586,10 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "hlS" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 8
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area)
 "hna" = (
@@ -119138,10 +119138,10 @@
 	},
 /area/prison/rec_room)
 "kxA" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area)
 "kBF" = (
@@ -120199,7 +120199,7 @@
 /turf/simulated/floor/wood,
 /area/library)
 "oNo" = (
-/obj/machinery/suit_storage_unit,
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area)
 "oOj" = (

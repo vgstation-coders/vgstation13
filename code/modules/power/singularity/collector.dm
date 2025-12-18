@@ -11,6 +11,7 @@ var/global/list/rad_collectors = list()
 	req_access = list(access_engine_minor)
 	var/obj/item/weapon/tank/plasma/P = null
 	var/last_power = 0
+	var/total_power_last_cycle = 0
 	var/active = 0
 	var/locked = 0
 	var/drain_ratio = 3.5 //3.5 times faster than original.
@@ -30,6 +31,8 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/process()
 	if (P)
+		total_power_last_cycle = last_power
+		last_power = 0
 		if (P.air_contents[GAS_PLASMA] <= 0)
 			investigation_log(I_SINGULO,"<font color='red'>out of fuel</font>.")
 			eject()
@@ -55,7 +58,7 @@ var/global/list/rad_collectors = list()
 		return 1
 	else if(istype(W, /obj/item/device/analyzer) || istype(W, /obj/item/device/multitool))
 		if(active)
-			to_chat(user, "<span class='notice'>\The [W] registers that [format_watts(last_power)] is being produced every cycle.</span>")
+			to_chat(user, "<span class='notice'>\The [W] registers that [format_watts(total_power_last_cycle)] is being produced every cycle.</span>")
 		else
 			to_chat(user, "<span class='notice'>\The [W] registers that the unit is currently not producing power.</span>")
 		return 1
@@ -120,7 +123,7 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/proc/eject()
 	locked = 0
-	last_power = 0
+	total_power_last_cycle = 0
 
 	if(isnull(P))
 		return
@@ -152,7 +155,7 @@ var/global/list/rad_collectors = list()
 	if (P && active)
 		var/power_produced = P.air_contents[GAS_PLASMA] * pulse_strength * 3.5 // original was 20, nerfed to 2 now 3.5 should get you about 500kw
 		add_avail(power_produced)
-		last_power = power_produced
+		last_power += power_produced
 
 /obj/machinery/power/rad_collector/proc/update_icons()
 	overlays.len = 0
@@ -172,7 +175,7 @@ var/global/list/rad_collectors = list()
 	else
 		icon_state = "ca"
 		flick("ca_deactive", src)
-		last_power = 0
+		total_power_last_cycle = 0
 
 	update_icons()
 
@@ -202,3 +205,8 @@ var/global/list/rad_collectors = list()
 	if(P && active)
 		var/power_produced = (P.air_contents[GAS_PLASMA] * pulse_strength * 3.5)/100 // original was 20, nerfed to 2 now 3.5 should get you about 500kw
 		connected_module.chassis.cell.charge = min(connected_module.chassis.cell.charge + power_produced, connected_module.chassis.cell.maxcharge)
+
+/obj/machinery/power/rad_collector/examine(mob/user)
+	..()
+	if(isobserver(user))
+		to_chat(user, "<span class='notice'>\The [src] registers that [format_watts(total_power_last_cycle)] is being produced every cycle.</span>")
