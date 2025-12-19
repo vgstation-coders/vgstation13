@@ -87,9 +87,8 @@ var/static/list/no_miasma_locs = list(/obj/item/bodybag,/obj/structure/morgue,/o
 		var/datum/gas_mixture/loc_air = location.return_air()
 		if(loc_air && loc_air.temperature > T0C && !is_type_in_list(location,no_miasma_locs))
 			var/species_multiplier = 0
-			var/datum/species/S = get_species()
-			if(S)
-				species_multiplier = S.miasma_modifier
+			if(species)
+				species_multiplier = species.miasma_modifier
 			if(species_multiplier > 0)
 				loc_air.adjust_gas(GAS_MIASMA,miasma_production_rate*(meat_amount-meat_taken)*species_multiplier)
 	// Why the fuck is this handled here?
