@@ -15,14 +15,23 @@
 	var/firing = FALSE
 	var/sabotaged = FALSE
 	var/blocked = FALSE
+	var/blocking_reason = "Bluespace recall is unavailable in this location."
 
 /obj/item/device/bert/attack_self(var/mob/living/user)
 	if(firing)
 		return
 	var/area/A = get_area(user)
+	if(!isopensurface(A))
+		to_chat(user, "<span class='warning'>\The [src] emits a buzz and nothing happens. Space radiation interferes with Bluespace recall; BERT can only be used on planets.</span>")
+		playsound(user, 'sound/machines/buzz-sigh.ogg', 50, 1)
+		return
 	var/jammed = (A.jammed || A.flags & (NO_TELEPORT|NO_PORTALS))? TRUE : FALSE
 	if(jammed)
 		to_chat(user, "<span class='warning'>\The [src] emits a buzz and nothing happens. It seems teleportation is jammed in this area.</span>")
+		playsound(user, 'sound/machines/buzz-sigh.ogg', 50, 1)
+		return
+	if(blocked)
+		to_chat(user, "<span class='warning'>\The [src] emits a buzz and nothing happens. [blocking_reason]</span>")
 		playsound(user, 'sound/machines/buzz-sigh.ogg', 50, 1)
 		return
 	if(recall_point)
@@ -91,12 +100,15 @@
 	var/turf/T = get_turf(src)
 	if(recall_point.z != T.z)
 		to_block = TRUE
+		blocking_reason = "Bluespace recall range does not extend across z-levels."
 	if(T.planet)
 		if(recall_point.planet && T.planet != recall_point.planet)
 			to_block = TRUE
+			blocking_reason = "Bluespace recall range does not extend across planets."
 	var/area/A = get_area(src)
 	if(A.jammed || A.flags & (NO_TELEPORT|NO_PORTALS))
 		to_block = TRUE
+		blocking_reason = "It seems teleportation is jammed in this area."
 	blocked = to_block
 	update_icon()
 
