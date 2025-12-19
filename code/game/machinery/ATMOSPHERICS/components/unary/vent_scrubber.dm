@@ -253,7 +253,6 @@
 				update_icon()
 
 			//Remix the resulting gases
-			filtered_out.gas[GAS_MIASMA] = 0 //this vanishes in pipelines
 			air_contents.merge(filtered_out)
 
 			loc.assume_air(removed)
