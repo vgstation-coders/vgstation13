@@ -74,7 +74,7 @@ var/static/list/no_miasma_locs = list(/obj/item/bodybag,/obj/structure/morgue)
 		return 0 //under effects of time magick
 
 	..()
-	if(stat == DEAD && !(mob_property_flags & MOB_NONFLESH))
+	if(stat == DEAD && health < config.health_threshold_dead + getOxyLoss() && !(mob_property_flags & MOB_NONFLESH))
 		var/atom/location = loc
 		var/datum/gas_mixture/loc_air = location.return_air()
 		if(loc_air && loc_air.temperature > T0C && !is_type_in_list(loc,no_miasma_locs))
