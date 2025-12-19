@@ -53,19 +53,19 @@
 /spell/aoe_turf/grue_hide/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.hide()
 
-/spell/aoe_turf/grue_egg
-	name = "Reproduce"
-	desc = "Spawn offspring in the form of an egg."
-	user_type = USER_TYPE_GRUE
-	panel = "Grue"
-	hud_state = "grue_egg"
-	override_base = "grue"
-	range = 0
-	charge_type = SP_RECHARGE
-	charge_cooldown_max = 0
+///spell/aoe_turf/grue_egg
+//	name = "Reproduce"
+//	desc = "Spawn offspring in the form of an egg."
+//	user_type = USER_TYPE_GRUE
+//	panel = "Grue"
+//	hud_state = "grue_egg"
+//	override_base = "grue"
+//	range = 0
+//	charge_type = SP_RECHARGE
+//	charge_cooldown_max = 0
 
-/spell/aoe_turf/grue_egg/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
-	user.reproduce()
+///spell/aoe_turf/grue_egg/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
+//	user.reproduce()
 
 /spell/aoe_turf/grue_moult
 	name = "Moult"

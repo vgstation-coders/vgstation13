@@ -40,8 +40,8 @@
 
 	var/lifestage=GRUE_ADULT												 //1=baby grue, 2=grueling, 3=(mature) grue
 	var/eatencount=0												//number of sentient carbons eaten, makes the grue more powerful
-	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
-	var/spawncount=0												//how many eggs laid by this grue have successfully hatched
+//	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
+//	var/spawncount=0												//how many eggs laid by this grue have successfully hatched
 
 	var/number = 1 //Appends a number to the grue to keep it distinguishable, the compiler doesn't play nicely with putting rand(1, 1000) here so it goes in New()
 
@@ -267,8 +267,8 @@
 			handle_feed(pick(feed_targets))
 
 	//Egglaying
-	if(config.grue_egglaying && (lifestage==GRUE_ADULT) && (eatencharge>0) && (lightparams.dark_dim_light==GRUE_DARK))
-		reproduce()
+//	if(config.grue_egglaying && (lifestage==GRUE_ADULT) && (eatencharge>0) && (lightparams.dark_dim_light==GRUE_DARK))
+//		reproduce()
 
 	//Movement
 	//
@@ -413,8 +413,8 @@
 		pass_flags = 0
 		reagents.maximum_volume = 1500
 		//Adult grue spells: eat, lay eggs, shadow shunt, and drain light
-		if(config.grue_egglaying)
-			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+//		if(config.grue_egglaying)
+//			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_blink, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_drainlight/, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
@@ -448,8 +448,8 @@
 		stat(null, "Nutritive energy: [round(nutrienergy,0.1)]/[round(maxnutrienergy,0.1)]")
 		if(lifestage>=GRUE_JUVENILE)
 			stat(null, "Sentient organisms eaten: [eatencount]")
-		if(config.grue_egglaying && lifestage==GRUE_ADULT)
-			stat(null, "Reproductive energy: [eatencharge]")
+//		if(config.grue_egglaying && lifestage==GRUE_ADULT)
+//			stat(null, "Reproductive energy: [eatencharge]")
 
 /mob/living/simple_animal/hostile/grue/gruespawn
 	lifestage=GRUE_LARVA
@@ -523,8 +523,8 @@
 		var/hintstring=""
 		if(lifestage==GRUE_JUVENILE)
 			hintstring="a juvenile, and can eat sentient beings to gain their strength"
-		else if(lifestage==GRUE_ADULT)
-			hintstring="fully-grown[config.grue_egglaying ? ", and can lay eggs to spawn offspring" : ""]"
+//		else if(lifestage==GRUE_ADULT)
+//			hintstring="fully-grown[config.grue_egglaying ? ", and can lay eggs to spawn offspring" : ""]"
 		visible_message("<span class='warning'>The chrysalis shifts and morphs into a grue!</span>","<span class='warning'>You finish moulting! You are now [hintstring].</span>")
 		playsound(src, 'sound/effects/grue_moult.ogg', 50, 1)
 	else
@@ -540,42 +540,42 @@
 	..()
 
 //Reproduction via egglaying.
-/mob/living/simple_animal/hostile/grue/proc/reproduce()
+// /mob/living/simple_animal/hostile/grue/proc/reproduce()
 
-	if(lifestage==GRUE_ADULT) //must be adult
-		if(eatencharge<=0)
-			to_chat(src, "<span class='notice'>You need to feed more first.</span>")
-			return
-		else if(!isturf(loc))
-			to_chat(src, "<span class='notice'>You need more room to reproduce.</span>")
-			return
-		else if(stat==UNCONSCIOUS)
-			to_chat(src, "<span class='notice'>You must be awake to reproduce.</span>")
-			return
-		else if(busy)
-			to_chat(src, "<span class='notice'>You are already doing something.</span>")
-			return
-		else
-			handle_reproduce()
+//	if(lifestage==GRUE_ADULT) //must be adult
+//		if(eatencharge<=0)
+//			to_chat(src, "<span class='notice'>You need to feed more first.</span>")
+//			return
+//		else if(!isturf(loc))
+//			to_chat(src, "<span class='notice'>You need more room to reproduce.</span>")
+//			return
+//		else if(stat==UNCONSCIOUS)
+//			to_chat(src, "<span class='notice'>You must be awake to reproduce.</span>")
+//			return
+//		else if(busy)
+//			to_chat(src, "<span class='notice'>You are already doing something.</span>")
+//			return
+//		else
+//			handle_reproduce()
 
-	else
-		to_chat(src, "<span class='notice'>You haven't grown enough to reproduce yet.</span>")
+//	else
+//		to_chat(src, "<span class='notice'>You haven't grown enough to reproduce yet.</span>")
 
-/mob/living/simple_animal/hostile/grue/proc/handle_reproduce()
+///mob/living/simple_animal/hostile/grue/proc/handle_reproduce()
 
-	if(eatencharge>=1)
-		busy=TRUE
-		visible_message("<span class='warning'>\The [src] tightens up...</span>","<span class='notice'>You start to push out an egg...</span>")
-		if(do_after(src, src, 5 SECONDS))
-			visible_message("<span class='warning'>\The [src] pushes out an egg!</span>","<span class='notice'>You lay an egg.</span>")
-			eatencharge--
-			var/mob/living/simple_animal/grue_egg/E = new /mob/living/simple_animal/grue_egg(get_turf(src))
-			E.parent_grue=src //mark this grue as the parent of the egg
-		busy=FALSE
+//	if(eatencharge>=1)
+//		busy=TRUE
+//		visible_message("<span class='warning'>\The [src] tightens up...</span>","<span class='notice'>You start to push out an egg...</span>")
+//		if(do_after(src, src, 5 SECONDS))
+//			visible_message("<span class='warning'>\The [src] pushes out an egg!</span>","<span class='notice'>You lay an egg.</span>")
+//			eatencharge--
+//			var/mob/living/simple_animal/grue_egg/E = new /mob/living/simple_animal/grue_egg(get_turf(src))
+//			E.parent_grue=src //mark this grue as the parent of the egg
+//		busy=FALSE
 
-	else
-		to_chat(src, "<span class='notice'>You need to feed more first.</span>")
-		return
+//	else
+//		to_chat(src, "<span class='notice'>You need to feed more first.</span>")
+//		return
 
 //Procs for grabbing players.
 /mob/living/simple_animal/hostile/grue/proc/request_player()
@@ -632,7 +632,7 @@
 				var/datum/role/grue/G = mind.GetRole(GRUE)
 				if(G)
 					G.eatencount++
-			eatencharge++ //can be spent on egg laying
+//			eatencharge++ //can be spent on egg laying
 			grue_stat_updates(TRUE)
 		else
 			if(isskellington(E))

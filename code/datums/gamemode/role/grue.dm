@@ -20,13 +20,11 @@
 		AppendObjective(/datum/objective/grue/grue_basic)
 	else
 		AppendObjective(/datum/objective/grue/eat_sentients)
-		if(prob(50) && config.grue_egglaying)
-			AppendObjective(/datum/objective/grue/spawn_offspring)
+//		if(prob(50) && config.grue_egglaying)
+//			AppendObjective(/datum/objective/grue/spawn_offspring)
 
 /datum/role/grue/GetScoreboard()
 	. = ..()
-	. += "The grue ate [eatencount] sentient being[eatencount==1 ? "" : "s"]"
-	if(config.grue_egglaying)
-		. += " and spawned [spawncount] offspring"
-	. += ".<BR>"
-
+	. += "The grue ate [eatencount] sentient being[eatencount==1 ? "" : "s"].<BR>"
+//	if(config.grue_egglaying)
+//		. += " and spawned [spawncount] offspring"

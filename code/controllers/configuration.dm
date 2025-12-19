@@ -179,7 +179,7 @@
 
 	var/renders_url = ""
 
-	var/grue_egglaying = 1 //Whether or not grues can lay eggs to reproduce
+//	var/grue_egglaying = 1 //Whether or not grues can lay eggs to reproduce
 
 	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
 	var/skip_holominimap_generation = 0 //If 1, don't generate holominimaps
@@ -423,8 +423,8 @@
 				if ("no_respawn_as_hobo")
 					config.respawn_as_hobo = 0
 
-				if ("no_grue_egglaying")
-					config.grue_egglaying = 0
+//				if ("no_grue_egglaying")
+//					config.grue_egglaying = 0
 
 				if ("servername")
 					config.server_name = value
