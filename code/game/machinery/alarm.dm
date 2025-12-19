@@ -206,7 +206,7 @@
 	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
-	scrubbed_gases = list( GAS_CARBON, GAS_PLASMA )
+	scrubbed_gases = list( GAS_CARBON, GAS_PLASMA, GAS_MIASMA )
 
 /datum/airalarm_configuration/preset/vox //For vox
 	name = "Vox"
@@ -224,7 +224,7 @@
 	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
-	scrubbed_gases = list( GAS_OXYGEN, GAS_CARBON, GAS_PLASMA )
+	scrubbed_gases = list( GAS_OXYGEN, GAS_CARBON, GAS_PLASMA, GAS_MIASMA )
 
 /datum/airalarm_configuration/preset/coldroom //Server rooms etc.
 	name = "Coldroom"
@@ -242,7 +242,7 @@
 	pressure_threshold = new /datum/airalarm_threshold(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.90, ONE_ATMOSPHERE*2.3)
 	temperature_threshold = new /datum/airalarm_threshold(20, 40, 140, 160)
 	target_temperature = 90
-	scrubbed_gases = list( GAS_OXYGEN, GAS_CARBON, GAS_PLASMA )
+	scrubbed_gases = list( GAS_OXYGEN, GAS_CARBON, GAS_PLASMA, GAS_MIASMA )
 
 /datum/airalarm_configuration/preset/plasmaman //HONK
 	name = "Plasmaman"
@@ -260,7 +260,7 @@
 	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
-	scrubbed_gases = list( GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON )
+	scrubbed_gases = list( GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON, GAS_MIASMA )
 
 /datum/airalarm_configuration/preset/vacuum
 	name = "Vacuum"
@@ -278,7 +278,7 @@
 	pressure_threshold = new /datum/airalarm_threshold(-1, -1, ONE_ATMOSPHERE*0.01, ONE_ATMOSPHERE*0.05)
 	temperature_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
 	target_temperature = T0C+20
-	scrubbed_gases = list( GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING, GAS_CRYOTHEUM )
+	scrubbed_gases = list( GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING, GAS_CRYOTHEUM, GAS_MIASMA )
 
 /datum/airalarm_configuration/preset/fire_suppression
 	name = "Fire Suppression"
