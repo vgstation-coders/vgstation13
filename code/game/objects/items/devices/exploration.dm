@@ -138,6 +138,7 @@
 	var/max_time = 2 MINUTES
 	var/used_time = 0
 	var/mob/living/holder
+	var/mob/living/last_holder
 
 /obj/item/device/pacification_beacon/attack_self(var/mob/living/user)
 	if(user.incapacitated() || !Adjacent(user))
@@ -154,11 +155,21 @@
 		holder = null
 	update_icon()
 
+/obj/item/device/pacification_beacon/dropped()
+	..()
+	holder = null
+
 /obj/item/device/pacification_beacon/process()
 	..()
+	if(!holder)
+		processing_objects -= src
+		last_holder.pacify_aura = initial(last_holder.pacify_aura)
+		last_holder.hallucination = initial(last_holder.hallucination)
+		return
 	if(src in holder.contents)
 		holder.pacify_aura = TRUE
 		holder.hallucination = max(holder.hallucination, 50)
+		last_holder = holder
 	else
 		holder.pacify_aura = initial(holder.pacify_aura)
 		holder.hallucination = initial(holder.hallucination)
@@ -190,6 +201,7 @@
 	processing_objects -= src
 	if(holder)
 		holder.pacify_aura = initial(holder.pacify_aura)
+		holder.hallucination = initial(holder.hallucination)
 		holder = null
 	..()
 
