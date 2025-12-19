@@ -80,8 +80,8 @@ var/static/list/no_miasma_locs = list(/obj/item/bodybag,/obj/structure/morgue,/o
 		return 0
 	if(!loc)
 		return 0	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
-	if(miasma_production_rate > 0 && stat == DEAD &&\
-	((mind && mind.suiciding) || health < config.health_threshold_dead + getOxyLoss() || (M_HUSK in mutations) || (M_NOCLONE in mutations)) &&\
+	if(miasma_production_rate > 0 && stat == DEAD && !((M_HUSK in mutations) || (M_NOCLONE in mutations)) &&\
+	((mind && mind.suiciding) || health < config.health_threshold_dead + getOxyLoss()) &&\
 	!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL)))
 		var/atom/location = loc
 		var/datum/gas_mixture/loc_air = location.return_air()
