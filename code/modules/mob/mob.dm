@@ -1729,6 +1729,9 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/get_species()
 	return ""
 
+/mob/proc/get_species_datum()
+	return
+
 /mob/proc/flash_weak_pain()
 	flick("weak_pain",pain)
 

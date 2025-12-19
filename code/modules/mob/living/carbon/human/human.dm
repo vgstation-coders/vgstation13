@@ -763,6 +763,9 @@
 
 	return species.name
 
+/mob/proc/get_species_datum()
+	return species
+
 /mob/living/carbon/human/proc/play_xylophone()
 	if(!src.xylophone)
 		visible_message("<span class='warning'>[src] begins playing \his ribcage like a xylophone. It's quite spooky.</span>","<span class='notice'>You begin to play a spooky refrain on your ribcage.</span>","<span class='notice'>You hear a spooky xylophone melody.</span>")
