@@ -79,7 +79,7 @@
 
 /datum/gas_reaction/n2o_thermal_decomposition
 	name = "N2O decomposition"
-	
+
 /datum/gas_reaction/n2o_thermal_decomposition/reaction_is_possible(datum/gas_mixture/mixture)
 	return mixture.temperature>=300+T0C && mixture[GAS_SLEEPING]>0
 
@@ -90,19 +90,36 @@
 	cratio*=  1- (1/((mixture.pressure/ONE_ATMOSPHERE)+1)) //higher pressures make more reactions happen
 	cratio=min(0.95,max(0,cratio)**0.5)
 	to_return[GAS_SLEEPING]=mixture[GAS_SLEEPING]*cratio
-	return to_return	
-	
-	
+	return to_return
+
+
 /datum/gas_reaction/n2o_thermal_decomposition/perform_reaction( datum/gas_mixture/mixture, reactant_amounts )
 	if(!reactant_amounts)
 		return
 	var/const/decomposition_energy=82050 //82.05 Kj/mol
 	var/moles_n2o=reactant_amounts[GAS_SLEEPING]
-	
+
 	mixture[GAS_OXYGEN]+=reactant_amounts[GAS_SLEEPING]*0.5
 	mixture[GAS_NITROGEN]+=moles_n2o
 	mixture[GAS_SLEEPING]=max(0,mixture[GAS_SLEEPING]-moles_n2o)
-	
+
 	mixture.add_thermal_energy(moles_n2o*decomposition_energy)
-	
+
+	mixture.update_values()
+
+/datum/gas_reaction/miasma_dissipation
+	name = "Miasma dissipation"
+
+/datum/gas_reaction/miasma_dissipation/reaction_is_possible(datum/gas_mixture/mixture)
+	return mixture[GAS_MIASMA]>0
+
+/datum/gas_reaction/miasma_dissipation/reaction_amounts_requested( datum/gas_mixture/mixture )
+	var/to_return=list()
+	to_return[GAS_MIASMA]=mixture[GAS_MIASMA]*0.995 // keep it simple
+	return to_return
+
+/datum/gas_reaction/miasma_dissipation/perform_reaction( datum/gas_mixture/mixture, reactant_amounts )
+	if(!reactant_amounts)
+		return
+	mixture[GAS_MIASMA]=max(0,reactant_amounts[GAS_MIASMA])
 	mixture.update_values()
