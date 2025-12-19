@@ -763,7 +763,7 @@
 
 	return species.name
 
-/mob/proc/get_species_datum()
+/mob/living/carbon/human/get_species_datum()
 	return species
 
 /mob/living/carbon/human/proc/play_xylophone()
