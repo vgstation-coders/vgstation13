@@ -67,7 +67,7 @@
 	if(butchery)
 		to_chat(user, "<span class='info'>[butchery]</span>")
 
-var/static/list/no_miasma_locs = list(/obj/item/bodybag,/obj/structure/morgue,/obj/structure/closet/coffin)
+var/static/list/no_miasma_locs = list(/obj/structure/closet/body_bag,/obj/structure/morgue,/obj/structure/closet/coffin)
 
 /mob/living/Life()
 	if(timestopped)
