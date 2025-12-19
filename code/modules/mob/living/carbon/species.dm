@@ -59,6 +59,7 @@ var/global/list/playable_species = list("Human")
 	var/myhuman												// mob reference
 
 	var/breath_type = GAS_OXYGEN   // Non-oxygen gas breathed, if any.
+	var/miasma_modifier = 1
 	var/survival_gear = /obj/item/weapon/storage/box/survival // For spawnin'.
 
 	var/cold_level_1 = 220  // Cold damage level 1 below this point.
@@ -442,6 +443,7 @@ var/global/list/playable_species = list("Human")
 	known_languages = list(LANGUAGE_CLATTER)
 	flags = WHITELISTED | NO_BREATHE
 	anatomy_flags = NO_SKIN | NO_BLOOD
+	miasma_modifier = 0
 	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
 
@@ -590,6 +592,8 @@ var/global/list/playable_species = list("Human")
 
 	flags = PLAYABLE | WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER | HAS_ICON_SKIN_TONE
+
+	miasma_modifier = 0.5
 
 	spells = list(/spell/targeted/telepathy)
 
@@ -1165,6 +1169,7 @@ var/list/has_died_as_golem = list()
 
 	flags = WHITELISTED | PLAYABLE | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
 	anatomy_flags = NO_BALD
+	miasma_modifier = 2
 
 	gender = NEUTER
 

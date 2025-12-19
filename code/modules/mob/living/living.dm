@@ -86,7 +86,11 @@ var/static/list/no_miasma_locs = list(/obj/item/bodybag,/obj/structure/morgue)
 		var/atom/location = loc
 		var/datum/gas_mixture/loc_air = location.return_air()
 		if(loc_air && loc_air.temperature > T0C && !is_type_in_list(location,no_miasma_locs))
-			loc_air.adjust_gas(GAS_MIASMA,miasma_production_rate*(meat_amount-meat_taken))
+			var/species_multiplier = 0
+			var/datum/species/S = get_species()
+			if(S)
+				species_multiplier = S.miasma_modifier
+			loc_air.adjust_gas(GAS_MIASMA,miasma_production_rate*(meat_amount-meat_taken)*species_multiplier)
 	// Why the fuck is this handled here?
 	if(reagents && reagents.has_reagent(BUSTANUT))
 		if(!(M_HARDCORE in mutations))

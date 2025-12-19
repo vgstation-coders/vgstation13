@@ -144,6 +144,7 @@
 	deform = 'icons/mob/human_races/vox/r_voxboney.dmi' //Do bones deform noticeably?
 	known_languages = list(LANGUAGE_VOX, LANGUAGE_CLATTER)
 
+	miasma_modifier = 0
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
 
 	primitive = /mob/living/carbon/monkey/vox/skeletal
