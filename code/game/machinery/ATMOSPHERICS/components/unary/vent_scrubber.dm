@@ -17,7 +17,7 @@
 
 	// Maps a gas ID to TRUE or FALSE, indicating whether that gas is currently being scrubbed.
 	var/scrubbed_gases[] = list()
-	var/list/default_scrubbed_gases = list( GAS_CARBON, GAS_PLASMA )
+	var/list/default_scrubbed_gases = list( GAS_CARBON, GAS_PLASMA, GAS_MIASMA )
 
 	var/volume_rate		= 1000 // 120
 	var/panic			= 0 //is this scrubber panicked?
@@ -52,10 +52,10 @@
 	default_scrubbed_gases = list(GAS_CARBON)
 
 /obj/machinery/atmospherics/unary/vent_scrubber/vox
-	default_scrubbed_gases = list(GAS_CARBON, GAS_PLASMA, GAS_OXYGEN)
+	default_scrubbed_gases = list(GAS_CARBON, GAS_PLASMA, GAS_OXYGEN, GAS_MIASMA)
 
 /obj/machinery/atmospherics/unary/vent_scrubber/on/vox
-	default_scrubbed_gases = list(GAS_CARBON, GAS_PLASMA, GAS_OXYGEN)
+	default_scrubbed_gases = list(GAS_CARBON, GAS_PLASMA, GAS_OXYGEN, GAS_MIASMA)
 
 /obj/machinery/atmospherics/unary/vent_scrubber/New()
 	..()
@@ -253,6 +253,7 @@
 				update_icon()
 
 			//Remix the resulting gases
+			filtered_out.gas[GAS_MIASMA] = 0 //this vanishes in pipelines
 			air_contents.merge(filtered_out)
 
 			loc.assume_air(removed)
