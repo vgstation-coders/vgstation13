@@ -80,8 +80,8 @@ var/static/list/no_miasma_locs = list(/obj/item/bodybag,/obj/structure/morgue)
 		return 0
 	if(!loc)
 		return 0	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
-	if(stat == DEAD &&\
-	((mind && mind.suiciding) || && health < config.health_threshold_dead + getOxyLoss()) &&\
+	if(miasma_production_rate > 0 && stat == DEAD &&\
+	((mind && mind.suiciding) || health < config.health_threshold_dead + getOxyLoss()) &&\
 	!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL)))
 		var/atom/location = loc
 		var/datum/gas_mixture/loc_air = location.return_air()
@@ -90,7 +90,8 @@ var/static/list/no_miasma_locs = list(/obj/item/bodybag,/obj/structure/morgue)
 			var/datum/species/S = get_species()
 			if(S)
 				species_multiplier = S.miasma_modifier
-			loc_air.adjust_gas(GAS_MIASMA,miasma_production_rate*(meat_amount-meat_taken)*species_multiplier)
+			if(species_multiplier > 0)
+				loc_air.adjust_gas(GAS_MIASMA,miasma_production_rate*(meat_amount-meat_taken)*species_multiplier)
 	// Why the fuck is this handled here?
 	if(reagents && reagents.has_reagent(BUSTANUT))
 		if(!(M_HARDCORE in mutations))
