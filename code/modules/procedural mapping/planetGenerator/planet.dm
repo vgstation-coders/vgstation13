@@ -123,15 +123,19 @@
 /datum/planetGenerator/proc/post_process(datum/allocation/allocation)
 	if(vent_count <= 0)
 		return
+	var/list/created_vents = list()
 	while(vent_count > 0)
 		var/turf/unsimulated/T = pick(allocation.turfs)
 		if(!istype(T))
 			continue
 		var/area/A = get_area(T)
 		if(isopensurface(A) || (istype(A, /area/planet/cave) && !iswall(T)))
-			new /datum/vent(T)
+			var/datum/vent/newvent =  new /datum/vent(T)
+			created_vents += newvent
 			vent_count -= 1
-	return
+	if(created_vents.len)
+		var/datum/planet_type/planet = allocation.ptype
+		planet.vents += created_vents
 
 /// Gets the biome for a turf, using the cache if available, otherwise calculating and caching it.
 /// Returns: The datum/biome for the given turf

@@ -44,6 +44,7 @@
 		GAS_CRYOTHEUM = 0,
 		GAS_RADON = 0
 	)
+	var/list/vents = list()
 
 /datum/planet_type/New()
 	..()

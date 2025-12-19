@@ -239,7 +239,7 @@
 		if(istype(L,/mob/living/complex_animal))
 			var/mob/living/complex_animal/CA=L
 			if(CA.pacify_aura)
-				return 0		
+				return 0
 		return 1
 	if(isobj(the_target))
 		//if(the_target.type in wanted_objects)
@@ -254,6 +254,8 @@
 			var/obj/machinery/door/airlock/A = the_target
 			if(!A.density || A.operating || A.locked || A.welded)
 				return 0
+			return 1
+		if(istype(the_target, /obj/structure/emergency_shield))
 			return 1
 	return 0
 
@@ -515,6 +517,8 @@
 					 /obj/structure/girder,
 					 /obj/structure/rack,
 					 /obj/structure/railing,
+					 /obj/structure/emergency_shield,
+					 /obj/machinery/shieldwall,
 					 /obj/machinery/door/table,
 					 /obj/machinery/door/window,
 					 /obj/item/tape,

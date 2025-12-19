@@ -1165,6 +1165,105 @@
 			M.Knockdown(3)
 			to_chat(M, "<span class='warning'>\The [src] has ejected you!</span>")
 
+/datum/shuttle/proc/update_appearance(obj/item/O, mob/user)
+	if(!O || !user)
+		return
+	var/obj/item/device/shuttle_holopainter/sam = O
+	if(!istype(sam))
+		return
+	if(sam.emagged)
+		for(var/turf/simulated/wall/shuttle/W in linked_area)
+			W.walltype = "swall"
+			W.relativewall()
+			W.color = "#ff00dd"
+		for(var/obj/structure/shuttle/diag_wall/WD in linked_area)
+			WD.icon_state = "diagonalWallS"
+			WD.color = "#ff00dd"
+		for(var/turf/simulated/floor/shuttle/F in linked_area)
+			F.icon_state = "clown"
+		return
+	if(sam.target == "Walls")
+		var/used_walltype
+		switch(sam.preset)
+			if("White Smoothed")
+				used_walltype = "swall"
+			if("Black Smoothed")
+				used_walltype = "bswall"
+			if("White Unsmoothed")
+				used_walltype = "wall1"
+			if("Black Unsmoothed")
+				used_walltype = "wall3"
+			if("Syndicate")
+				used_walltype = "satwall"
+			if("Layered")
+				used_walltype = "vwall"
+			else
+				used_walltype = "swall"
+		for(var/turf/simulated/wall/shuttle/W in linked_area)
+			W.walltype = used_walltype
+			W.relativewall()
+			if(sam.sel_color)
+				W.color = sam.sel_color
+		for(var/obj/structure/shuttle/diag_wall/WD in linked_area)
+			if(sam.sel_color)
+				if(istype(WD,/obj/structure/shuttle/diag_wall/smooth))
+					WD.icon_state = "diagonalWallS"
+				else
+					WD.icon_state = "diagonalWall"
+				WD.color = sam.sel_color
+			else
+				switch(sam.preset)
+					if("White Smoothed")
+						used_walltype = "diagonalWallS"
+					if("Black Smoothed")
+						used_walltype = "diagonalWall3S"
+					if("White Unsmoothed")
+						used_walltype = "diagonalWall"
+					if("Black Unsmoothed")
+						used_walltype = "diagonalWall3"
+					if("Syndicate")
+						used_walltype = "diagonalWall3"
+					if("Layered")
+						used_walltype = "vwall"
+					else
+						used_walltype = "diagonalWallS"
+				WD.icon_state = used_walltype
+	else if(sam.target == "Floors")
+		var/used_floortype
+		switch(sam.preset)
+			if("White")
+				used_floortype = "floor3"
+			if("Blue")
+				used_floortype = "floor"
+			if("Yellow")
+				used_floortype = "floor2"
+			if("Red")
+				used_floortype = "floor4"
+			if("Purple")
+				used_floortype = "floor5"
+			if("Plated")
+				used_floortype = "vfloor"
+			if("Cult")
+				used_floortype = "cult"
+			else
+				used_floortype = "floor_recolor"
+
+		for(var/turf/simulated/floor/shuttle/F in linked_area)
+			F.icon_state = used_floortype
+			if(sam.sel_color)
+				F.color = sam.sel_color
+	else
+		for(var/turf/simulated/floor/shuttle/F in linked_area)
+			F.icon_state = initial(F.icon_state)
+			F.color = initial(F.color)
+		for(var/turf/simulated/wall/shuttle/W in linked_area)
+			W.walltype = initial(W.walltype)
+			W.update_icon()
+			W.color = initial(W.color)
+		for(var/obj/structure/shuttle/diag_wall/WD in linked_area)
+			WD.icon_state = initial(WD.icon_state)
+			WD.color = initial(WD.color)
+
 //Planetary landing zone datum
 /datum/landing_zone
 	var/list/turf/turf_list = list()
