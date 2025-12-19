@@ -77,6 +77,9 @@
 	var/cargo_forwarding_on_roundstart = 0
 	var/cargo_forwarding_amount_override = 0
 	var/roundstart_lights_on = 0
+	var/miasma_disabled = 0
+	var/miasma_dissipation_rate = 0.005
+	var/miasma_burn_rate = 5
 
 	// BSQL things
 	var/bsql_debug = 0
@@ -308,6 +311,15 @@
 
 				if ("cargo_forwarding_amount_override")
 					cargo_forwarding_amount_override = text2num(value)
+
+				if("miasma_disabled")
+					miasma_disabled = 1
+
+				if("miasma_dissipation_rate")
+					miasma_dissipation_rate = text2num(value)
+
+				if("miasma_burn_rate")
+					miasma_burn_rate = text2num(value)
 
 				if("roundstart_lights_on")
 					roundstart_lights_on = 1
