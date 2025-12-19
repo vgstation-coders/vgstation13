@@ -297,7 +297,6 @@
 		src.icon_state = malfunction ? "shieldoffbr":"shieldoff"
 
 ////FIELD GEN START //shameless copypasta from fieldgen, powersink, and grille
-#define maxstoredpower 500
 /obj/machinery/shieldwallgen
 		name = "shield generator"
 		desc = "A shield generator."
@@ -317,6 +316,7 @@
 		var/destroyed = 0
 		var/shieldload = 0
 		var/maxshieldload = 200
+		var/maxstoredpower = 500
 		var/datum/power_connection/consumer/cable/power_connection = null
 		var/storedpower = 0
 		var/storedpower_consumption = 50
@@ -631,6 +631,18 @@
 /obj/machinery/shieldwallgen/bullet_act(var/obj/item/projectile/Proj)
 	storedpower -= Proj.damage
 	return ..()
+
+// Holofield variant
+/obj/item/weapon/circuitboard/holofield
+	name = "Circuit board (Holofield Generator)"
+	desc = "A circuit board used to run a machine that generates a holofield which permits passage of crewmembers while blocking airflow and hostile fauna."
+	build_path = /obj/machinery/shieldwallgen/holofield
+	board_type = MACHINE
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_BLUESPACE + "=3" + Tc_EXPLORATION + "=1"
+	req_components = list(
+							/obj/item/weapon/stock_parts/scanning_module = 3,
+							/obj/item/weapon/stock_parts/micro_laser = 4
+							)
 
 /obj/machinery/shieldwallgen/holofield
 	name = "holofield generator"

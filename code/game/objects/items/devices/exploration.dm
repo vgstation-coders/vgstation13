@@ -356,7 +356,7 @@
 // A device that creates a temporary shield barrier to block attacks.
 /obj/item/device/emshield_projector
 	name = "Emergency Shield Projector"
-	desc = "A handheld device that generates a temporary shield barrier in front of the user, blocking incoming attacks. The shield lasts for thirty seconds or until it absorbs a certain amount of damage. Requires a bluespace crystal to recharge once depleted."
+	desc = "A handheld device that generates a temporary shield barrier surrounding the user, blocking incoming attacks. The shield lasts for thirty seconds or until it absorbs a certain amount of damage. Requires a bluespace crystal to recharge once depleted."
 	icon_state = "holoprojector"
 	w_class = W_CLASS_TINY
 	w_type = RECYK_ELECTRONIC

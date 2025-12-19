@@ -149,7 +149,7 @@
 	name = "Bluespace Emergency Recall Tool"
 	desc = "A single-use device that sends the user back to their point of origin when activated. Useful for escaping dangerous situations."
 	id = "bert"
-	req_tech = list(Tc_BLUESPACE = 3, Tc_EXPLORATION = 2)
+	req_tech = list(Tc_BLUESPACE = 3, Tc_EXPLORATION = 1)
 	build_type = PROTOLATHE
 	materials = list(MAT_DIAMOND = 250, MAT_IRON = 250)
 	category = "Bluespace"
