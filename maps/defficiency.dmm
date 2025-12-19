@@ -110264,11 +110264,11 @@
 	},
 /area/engineering/engine)
 "keO" = (
-/obj/docking_port{
-	dir = 2
-	},
 /obj/machinery/door/airlock/external{
 	name = "Arrival Airlock"
+	},
+/obj/docking_port/shuttle{
+	dir = 2
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
