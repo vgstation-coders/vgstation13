@@ -44,6 +44,7 @@
 
 	var/datum/weakref/linked_miner_ref
 	var/datum/vent/linked_vent
+	var/mols_extracted = 0 //mols extracted last tick
 
 	var/warmup_ticks = 0
 	var/warmup_ticks_required = 5
@@ -408,13 +409,13 @@
 				return
 
 			var/power_factor = M.active_power_usage / M.base_power_usage
-			var/mols_to_extract = extraction_rate * power_factor
+			mols_extracted = extraction_rate * power_factor
 
 			if(linked_vent.mols > 0)
-				if(linked_vent.mols >= mols_to_extract)
-					linked_vent.mols -= mols_to_extract
+				if(linked_vent.mols >= mols_extracted)
+					linked_vent.mols -= mols_extracted
 				else
-					mols_to_extract = linked_vent.mols
+					mols_extracted = linked_vent.mols
 					linked_vent.mols = 0
 
 			if(linked_vent.mols > 0 && linked_vent.mols < (linked_vent.initial_mols * 0.25))

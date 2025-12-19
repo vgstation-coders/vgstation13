@@ -461,7 +461,7 @@
 		if(!V || V.mols <= 0)
 			continue
 
-		var/adjusted_rate = E.extraction_rate * rate_modifier
+		var/adjusted_rate = E.mols_extracted * rate_modifier
 		if(gases[V.gas_type])
 			gases[V.gas_type] += adjusted_rate
 		else

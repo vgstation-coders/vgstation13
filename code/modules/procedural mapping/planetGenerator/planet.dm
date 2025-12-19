@@ -123,6 +123,7 @@
 /datum/planetGenerator/proc/post_process(datum/allocation/allocation)
 	if(vent_count <= 0)
 		return
+	var/checked_turfs = 0
 	while(vent_count > 0)
 		var/turf/unsimulated/T = pick(allocation.turfs)
 		if(!istype(T))
@@ -131,6 +132,9 @@
 		if(isopensurface(A) || (istype(A, /area/planet/cave) && !iswall(T)))
 			new /datum/vent(T)
 			vent_count -= 1
+		checked_turfs++
+		if(checked_turfs > 100) //arbitrary limit to prevent infinite loops
+			break
 	return
 
 /// Gets the biome for a turf, using the cache if available, otherwise calculating and caching it.
