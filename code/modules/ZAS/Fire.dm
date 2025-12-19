@@ -597,6 +597,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		air_contents[GAS_PLASMA] = 0
 	if(air_contents.molar_ratio(GAS_VOLATILE) < 0.1 / CELL_VOLUME)
 		air_contents[GAS_VOLATILE] = 0
+	if(air_contents.molar_ratio(GAS_MIASMA) < 0.1 / CELL_VOLUME)
+		air_contents[GAS_MIASMA] = 0
 	air_contents.update_values()
 
 	//Set firelevel and fire light.
@@ -749,7 +751,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio + combustion_oxy_used * ZAS_oxygen_consumption_multiplier),
 		GAS_PLASMA, -min(src[GAS_PLASMA], (src[GAS_PLASMA] * used_fuel_ratio * used_reactants_ratio) * 3),
 		GAS_CARBON, max(2 * total_fuel * used_reactants_ratio + combustion_co2_prod * ZAS_oxygen_consumption_multiplier, 0),
-		GAS_VOLATILE, -min(src[GAS_VOLATILE], (src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5)) //Fuel burns 5 times as quick
+		GAS_VOLATILE, -min(src[GAS_VOLATILE], (src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5), //Fuel burns 5 times as quick
+		GAS_MIASMA, -min(src[GAS_MIASMA], (src[GAS_MIASMA] * used_fuel_ratio * used_reactants_ratio) * 2)) //Miasma burns 2 times as quick
 
 	//Calculate the energy produced by the reaction and then set the new temperature of the mix.
 	var/combustion_efficiency = max((1 - temperature/max_temperature),0)

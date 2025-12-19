@@ -115,7 +115,7 @@
 
 /datum/gas_reaction/miasma_dissipation/reaction_amounts_requested( datum/gas_mixture/mixture )
 	var/to_return=list()
-	to_return[GAS_MIASMA]=min(mixture[GAS_MIASMA]*0.995,mixture[GAS_MIASMA]-0.005) // keep it "simple"
+	to_return[GAS_MIASMA]=min(mixture[GAS_MIASMA]*(1-MIASMA_DISSIPATION_RATE),mixture[GAS_MIASMA]-MIASMA_DISSIPATION_RATE) // keep it "simple"
 	return to_return
 
 /datum/gas_reaction/miasma_dissipation/perform_reaction( datum/gas_mixture/mixture, reactant_amounts )
