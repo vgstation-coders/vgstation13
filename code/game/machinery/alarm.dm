@@ -255,7 +255,7 @@
 							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) ,
-							GAS_MIASMA = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
+							GAS_MIASMA = new /datum/airalarm_threshold(-1, -1, 0.5, 1))
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
 	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
