@@ -14,6 +14,7 @@
 	primitive = /mob/living/carbon/monkey/skellington/plasma
 
 	breath_type = GAS_PLASMA
+	miasma_modifier = 0.25
 
 	heat_level_1 = 350  // Heat damage level 1 above this point.
 	heat_level_2 = 400  // Heat damage level 2 above this point.
