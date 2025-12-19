@@ -80,7 +80,8 @@ var/static/list/no_miasma_locs = list(/obj/structure/closet/body_bag,/obj/struct
 		return 0
 	if(!loc)
 		return 0	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
-	if(!config.miasma_disabled && miasma_production_rate > 0 && stat == DEAD && !((M_HUSK in mutations) || (M_NOCLONE in mutations)) &&\
+	if(!config.miasma_disabled && miasma_production_rate > 0 && stat == DEAD && bodytemperature > T0C &&\
+	!((M_HUSK in mutations) || (M_NOCLONE in mutations)) &&\
 	((mind && mind.suiciding) || health < config.health_threshold_dead + getOxyLoss()) &&\
 	!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL)))
 		var/atom/location = loc
