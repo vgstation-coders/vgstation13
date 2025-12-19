@@ -74,11 +74,13 @@ var/static/list/no_miasma_locs = list(/obj/item/bodybag,/obj/structure/morgue)
 		return 0 //under effects of time magick
 
 	..()
-	if(stat == DEAD && health < config.health_threshold_dead + getOxyLoss() && !(mob_property_flags & MOB_NONFLESH))
+	if(stat == DEAD &&\
+	((mind && mind.suiciding) || && health < config.health_threshold_dead + getOxyLoss()) &&\
+	!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL)))
 		var/atom/location = loc
 		var/datum/gas_mixture/loc_air = location.return_air()
 		if(loc_air && loc_air.temperature > T0C && !is_type_in_list(loc,no_miasma_locs))
-			loc_air.adjust_gas(GAS_MIASMA,miasma_production_rate*size)
+			loc_air.adjust_gas(GAS_MIASMA,miasma_production_rate*(meat_amount-meat_taken))
 	if (flags & INVULNERABLE)
 		bodytemperature = initial(bodytemperature)
 	if (monkeyizing)
@@ -1410,7 +1412,7 @@ Thanks.
 
 /mob/living/proc/turn_into_statue(forever = 0, force)
 	if(!force)
-		if(mob_property_flags & MOB_NONFLESH)
+		if(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL))
 			return 0
 
 	spawn()
