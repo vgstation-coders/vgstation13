@@ -1422,6 +1422,14 @@ var/global/blood_virus_spreading_disabled = 0
 		log_admin("[key_name(usr)] checked the Climate Panel.")
 	feedback_add_details("admin_verb","CLI")
 
+/client/proc/mobs_panel()
+	set name = "Mobs Panel"
+	set category = "Debug"
+	if(holder)
+		holder.mobs_panel()
+		log_admin("[key_name(usr)] checked the Mobs Panel.")
+	feedback_add_details("admin_verb","MOBP")
+
 
 /client/proc/start_line_profiling()
 	set category = "Profile"

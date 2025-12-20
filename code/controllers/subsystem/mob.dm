@@ -9,16 +9,41 @@ var/datum/subsystem/mob/SSmob
 	display_order = SS_DISPLAY_MOB
 
 	var/list/currentrun
-	var/paused = 0 // Count of mobs skipped due to planet optimization
+	var/list/paused_z = list()
+	var/paused = 0 // Count of mobs skipped due to empty z/planet mob pausing
 
 
 /datum/subsystem/mob/New()
 	NEW_SS_GLOBAL(SSmob)
-
+	for(var/datum/zLevel/Z in map.zLevels)
+		paused_z += list(Z = TRUE)
 
 /datum/subsystem/mob/stat_entry()
-	..("P:[mob_list.len] | Paused:[paused]")
+	..("Processing:[mob_list.len - paused] | Paused:[paused]")
 
+/// Called at roundstart to initialize z-level pause states based on player presence
+/datum/subsystem/mob/proc/initialize_z_pause()
+	for(var/datum/zLevel/level in map.zLevels)
+		if(!level)
+			continue
+		var/list/players = mobs_in_zlevel(level.z, client_needed = TRUE)
+		paused_z[level] = !length(players)
+
+/datum/subsystem/mob/proc/z_pause_check(mob/living/user, to_z, from_z)
+	if(!istype(user) || !user.client)
+		return
+
+	// Mark the new z-level as having players
+	if(to_z)
+		var/datum/zLevel/new_level = map.zLevels[to_z]
+		paused_z[new_level] = FALSE
+
+	// Check if the old z-level still has any players
+	if(from_z)
+		var/list/players = mobs_in_zlevel(from_z, client_needed = TRUE)
+		if(!length(players))
+			var/datum/zLevel/oldlevel = map.zLevels[from_z]
+			paused_z[oldlevel] = TRUE
 
 /datum/subsystem/mob/fire(resumed = FALSE)
 	if (!resumed)
@@ -32,11 +57,19 @@ var/datum/subsystem/mob/SSmob
 		if (!M || M.gcDestroyed || M.timestopped)
 			continue
 
-		// Skip processing non-player mobs on planets without players
-		if (M.planet && !M.client)
-			if (!M.planet.process_mobs)
+		// Skip processing non-player mobs on paused z-levels or planets
+		if (!M.client)
+			if(!M.z)
+				qdel(M) // Hiding in nullspace
+				continue
+			var/datum/zLevel/level = map.zLevels[M.z]
+			if (paused_z[level])
 				paused++
 				continue
+			else if (M.planet)
+				if (!M.planet.process_mobs)
+					paused++
+					continue
 
 		M.Life()
 

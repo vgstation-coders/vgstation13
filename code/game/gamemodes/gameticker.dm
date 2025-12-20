@@ -669,6 +669,10 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker/proc/post_roundstart()
 	usr = null
+
+	// Initialize z-level pause states based on player presence
+	SSmob.initialize_z_pause()
+
 	//Handle all the cyborg syncing
 	var/list/active_ais = active_ais()
 	if(active_ais.len)

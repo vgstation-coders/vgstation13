@@ -705,6 +705,76 @@
 		message_admins("<span class='notice'>[key_name(usr)] restarted the climate controller for Z-[C.z].</span>", 1)
 		climate_panel()
 
+	else if(href_list["mobs_panel_refresh"])
+		if(!check_rights(R_DEBUG))
+			return
+		mobs_panel()
+
+	else if(href_list["mobs_panel_clients"])
+		if(!check_rights(R_DEBUG))
+			return
+		var/z = text2num(href_list["mobs_z"])
+		if(!z)
+			return
+		var/list/players = mobs_in_zlevel(z, client_needed = TRUE)
+		if(!length(players))
+			to_chat(usr, "<span class='notice'>No players on Z-[z].</span>")
+			return
+		to_chat(usr, "<span class='notice'><b>Players on Z-[z] ([length(players)]):</b></span>")
+		for(var/mob/M in players)
+			to_chat(usr, "<span class='notice'>- [M] ([M.key]) <a href='?_src_=vars;Vars=\ref[M]'>\[VV\]</a> <a href='?_src_=holder;adminplayeropts=\ref[M]'>\[PP\]</a></span>")
+
+	else if(href_list["mobs_panel_paused"])
+		if(!check_rights(R_DEBUG))
+			return
+		var/z = text2num(href_list["mobs_z"])
+		if(!z)
+			return
+		var/datum/zLevel/level = map.zLevels[z]
+		if(!level || !SSmob.paused_z[level])
+			to_chat(usr, "<span class='notice'>Z-[z] is not paused.</span>")
+			return
+		var/list/paused_mobs = list()
+		for(var/mob/M in mob_list)
+			if(!M.client && M.z == z)
+				paused_mobs += M
+		if(!length(paused_mobs))
+			to_chat(usr, "<span class='notice'>No non-player mobs on Z-[z].</span>")
+			return
+		to_chat(usr, "<span class='notice'><b>Paused mobs on Z-[z] ([length(paused_mobs)]):</b></span>")
+		for(var/mob/M in paused_mobs)
+			to_chat(usr, "<span class='notice'>- [M] ([M.type]) <a href='?_src_=vars;Vars=\ref[M]'>\[VV\]</a></span>")
+
+	else if(href_list["mobs_panel_all"])
+		if(!check_rights(R_DEBUG))
+			return
+		var/z = text2num(href_list["mobs_z"])
+		if(!z)
+			return
+		var/list/all_mobs = mobs_in_zlevel(z, client_needed = FALSE)
+		if(!length(all_mobs))
+			to_chat(usr, "<span class='notice'>No mobs on Z-[z].</span>")
+			return
+		to_chat(usr, "<span class='notice'><b>All mobs on Z-[z] ([length(all_mobs)]):</b></span>")
+		for(var/mob/M in all_mobs)
+			var/client_status = M.client ? "(PLAYER: [M.key])" : ""
+			to_chat(usr, "<span class='notice'>- [M] [client_status] ([M.type]) <a href='?_src_=vars;Vars=\ref[M]'>\[VV\]</a></span>")
+
+	else if(href_list["mobs_panel_toggle"])
+		if(!check_rights(R_DEBUG))
+			return
+		var/z = text2num(href_list["mobs_z"])
+		if(!z)
+			return
+		var/datum/zLevel/level = map.zLevels[z]
+		if(!level)
+			return
+		SSmob.paused_z[level] = !SSmob.paused_z[level]
+		var/new_state = SSmob.paused_z[level] ? "PAUSED" : "ACTIVE"
+		log_admin("[key_name(usr)] toggled Z-[z] mob processing to [new_state].")
+		message_admins("<span class='notice'>[key_name(usr)] toggled Z-[z] mob processing to [new_state].</span>", 1)
+		mobs_panel()
+
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
 			return

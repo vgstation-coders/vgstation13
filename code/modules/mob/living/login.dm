@@ -27,7 +27,7 @@
 
 		if (hasFactionIcons(src))
 			update_faction_icons()
-	
+
 	if(virus2.len)
 		for(var/ID in virus2)
 			var/datum/disease2/disease/V = virus2[ID]
@@ -35,3 +35,8 @@
 				if(e.count > 0 && e.type == /datum/disease2/effect/loneliness)
 					e.side_effect(src)
 					return
+
+	register_event(/event/z_transition, src, nameof(src::OnMobZChanged()))
+
+	// Notify SSmob that a player has entered this z-level
+	SSmob.z_pause_check(src, z, null)

@@ -1779,3 +1779,8 @@ Thanks.
 			for(var/role in mind.antag_roles)
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
+
+/// Event handler for z_transition events. Updates SSmob's paused_z tracking.
+/mob/living/proc/OnMobZChanged(mob/living/user, to_z, from_z)
+	if(SSmob)
+		SSmob.z_pause_check(src, to_z, from_z)
