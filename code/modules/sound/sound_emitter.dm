@@ -86,6 +86,7 @@
 	if (sound_zone_manager)
 		szm = sound_zone_manager
 	sound_zone_manager.register_emitter(src)
+	source.register_event(/event/moved, src, nameof(src::on_source_moved()))
 
 /datum/sound_emitter/Destroy()
 	sound_emitter_collection.remove(src)
@@ -94,6 +95,7 @@
 	if (sounds)
 		sounds.Cut()
 		sounds = null
+	source.unregister_event(/event/moved, src, nameof(src::on_source_moved()))
 	. = ..()
 
 /*
