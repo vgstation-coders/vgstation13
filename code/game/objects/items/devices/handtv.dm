@@ -150,6 +150,10 @@ var/global/list/camera_bugs = list()
 	cam_background.icon_state = "clear"
 	cam_background.fill_rect(1, 1, size_x, size_y)
 
+/obj/item/device/handtv/dropped(mob/user)
+	. = ..()
+	ui_close()
+
 /obj/item/device/handtv/ui_close(mob/user)
 	// Unregister map objects
 	user.client.clear_map(map_name)
