@@ -79,6 +79,9 @@ var/global/list/camera_bugs = list()
 		ui = new(user, src, tgui_interface)
 		ui.open()
 
+	if(loc != user)
+		ui.close()
+
 /obj/item/device/handtv/ui_data()
 	var/list/data = list()
 	data["activeCamera"] = null
@@ -149,10 +152,6 @@ var/global/list/camera_bugs = list()
 	cam_screen.vis_contents = visible_turfs
 	cam_background.icon_state = "clear"
 	cam_background.fill_rect(1, 1, size_x, size_y)
-
-/obj/item/device/handtv/dropped(mob/user)
-	. = ..()
-	ui_close()
 
 /obj/item/device/handtv/ui_close(mob/user)
 	// Unregister map objects
