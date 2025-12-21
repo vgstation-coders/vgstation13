@@ -147,8 +147,6 @@
 
 	update_env_effect()
 
-	var/sound/S = active_sound.get()
-	S.status |= SOUND_UPDATE
 	INVOKE_EVENT(src, /event/sound_updated, "emitter" = src)
 
 /datum/sound_emitter/proc/stop()
