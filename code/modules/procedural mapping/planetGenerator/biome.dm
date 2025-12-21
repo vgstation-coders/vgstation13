@@ -158,27 +158,24 @@
 		spawned.planet = floor_turf.planet
 		return spawned
 
-/datum/biome/proc/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
+/datum/biome/proc/spawn_loot(turf/simulated/floor/floor_turf, area_flags)
+	return
+
+/datum/biome/cave/spawn_loot(turf/simulated/floor/floor_turf, area_flags)
 	if(!length(loot_spawners))
 		return null
 	if(!prob(loot_spawn_chance))
 		return null
 	if(floor_turf.turf_flags & NO_LOOT)
 		return null
-	if(!cavespawn)
-		if(!prob(20)) //non-cave loot is rarer
-			return null
 	if(!(area_flags & FLORA_ALLOWED)) // Uses FLORA_ALLOWED flag
 		return null
 
 	var/spawner_type = pickweight(loot_spawners)
-	var/obj/abstract/loot_spawner/spawned = new spawner_type(floor_turf, cave = cavespawn)
+	var/obj/abstract/loot_spawner/spawned = new spawner_type(floor_turf, cave = TRUE)
 	floor_turf.turf_flags |= NO_LAVA_GEN
 	spawned.planet = floor_turf.planet
 	return spawned
-
-/datum/biome/cave/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
-	return ..(floor_turf, area_flags, TRUE)
 
 /**
  * Attempts to spawn a mob on the given turf

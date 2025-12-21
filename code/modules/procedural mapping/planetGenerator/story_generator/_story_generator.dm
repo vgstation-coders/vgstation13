@@ -484,11 +484,23 @@ var/list/datum/story_theme/story_themes = list()
 	var/character_name = ""
 	var/ruin_name = ""
 
+/obj/machinery/old_database/examine(mob/user)
+	..()
+	if(activating)
+		to_chat(user, "<span class='warning'>It is currently rebooting.</span>")
+	else
+		to_chat(user, "<span class='notice'>It is powered off. You can attempt to activate it to recover any stored data.</span>")
+
 /obj/machinery/old_database/attack_hand(mob/user)
+	if(..())
+		return
+	if(isobserver(user) && !isAdminGhost(user))
+		to_chat(user, "<span class='warning'>Your ghostly limb passes right through \the [src].</span>")
+		return
+
 	if(activated)
 		to_chat(user, "<span class='notice'>\The [src] has already been activated and its data retrieved.</span>")
 		return
-
 	if(activating)
 		to_chat(user, "<span class='warning'>\The [src] is already in the process of rebooting!</span>")
 		return

@@ -84,6 +84,10 @@
 
 	/// Number of gas vents present on the planet
 	var/vent_count = 0
+ 
+	/// Expanded weighted list of ruins for this planet's type
+	var/list/weighted_ruin_list = list()
+	var/spawned_story_ruin = FALSE
 
 /datum/planetGenerator/New()
 	// Initialize perlin noise seeds with random values

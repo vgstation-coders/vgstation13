@@ -62668,10 +62668,10 @@
 	},
 /area/security/gas_chamber)
 "plc" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "ple" = (
@@ -79664,10 +79664,10 @@
 	},
 /area/science/hallway)
 "won" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 8
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "woX" = (
@@ -83462,7 +83462,7 @@
 /turf/unsimulated/floor/asteroid/plating,
 /area/mine/explored)
 "yfF" = (
-/obj/machinery/suit_storage_unit,
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "yfR" = (

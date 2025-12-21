@@ -1179,6 +1179,9 @@
 							continue
 					if (istype(O, /mob/living/simple_animal/construct))
 						var/mob/living/simple_animal/construct/cons = O
+						if (!(cons.construct_type in construct_types))
+							// its a harvester or something
+							continue
 						if (!(cons.construct_type in free_construct_slots))
 							free_construct_slots += cons.construct_type
 							var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/S

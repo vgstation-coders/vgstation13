@@ -53,7 +53,6 @@ var/datum/subsystem/mapping/SSmapping
 	var/datum/planet_type/current_planet
 	/// The allocation for the current planet
 	var/datum/allocation/current_allocation
-
 	/// Is scanning disabled globally
 	var/scanning_disabled = FALSE
 	/// World time when scanning can be toggled again
@@ -72,13 +71,10 @@ var/datum/subsystem/mapping/SSmapping
 	var/queue_index = 1
 	/// The mapgen instance for the current planet
 	var/datum/planetGenerator/current_mapgen
-	/// The ruin type to place on the current planet
-	var/current_ruin_type
 	/// Features created during population
 	var/list/created_features = list()
 	/// Mobs created during population
 	var/list/created_mobs = list()
-
 	// Fast-processing lists
 	var/list/finalize_queue = list() // Queue of turfs for edge updates and finalization
 	var/list/feature_buckets = list() // Spatial buckets for features - key is "cellX_cellY", value is list of features in that cell
@@ -87,8 +83,28 @@ var/datum/subsystem/mapping/SSmapping
 	var/max_turfs_per_tick = 2000 // Maximum turfs to process per tick
 	var/min_turfs_per_tick = 100 // Minimum turfs to process per tick
 
+	var/list/ruins_by_type = list()
+
+
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)
+	ruins_by_type["[RUIN_TYPE_GENERIC]"] = list()
+	ruins_by_type["[RUIN_TYPE_SNOW]"] = list()
+	ruins_by_type["[RUIN_TYPE_JUNGLE]"] = list()
+	ruins_by_type["[RUIN_TYPE_TROPICAL]"] = list()
+	ruins_by_type["[RUIN_TYPE_LAVA]"] = list()
+	ruins_by_type["[RUIN_TYPE_URBAN]"] = list()
+	ruins_by_type["[RUIN_TYPE_XENO]"] = list()
+	ruins_by_type["[RUIN_TYPE_WET]"] = list()
+
+	var/list/ruins = subtypesof(/datum/map_element/ruin)
+	for(var/R in ruins)
+		var/datum/map_element/ruin/ME = new R()
+		for(var/type_flag in ruins_by_type)
+			var/numeric_flag = text2num(type_flag)
+			if(ME.ruin_type & numeric_flag)
+				ruins_by_type[type_flag] += R
+		qdel(ME)
 
 /datum/subsystem/mapping/stat_entry(msg)
 	if(!generating)
@@ -201,19 +217,27 @@ var/datum/subsystem/mapping/SSmapping
 				return
 
 		if(STAGE_RUIN)
-			if(current_ruin_type)
-				var/datum/map_element/ruin/used_ruin = ispath(current_ruin_type) ? (new current_ruin_type) : current_ruin_type
+			if(!current_mapgen.spawned_story_ruin)
+				place_story_ruins(current_allocation)
+				current_mapgen.spawned_story_ruin = TRUE
+			if(current_planet.ruin_budget <= 0)
+				current_stage = STAGE_POPULATION
+				queue_index = 1
+				created_features = list()
+				created_mobs = list()
+				feature_buckets = list()
+				mob_buckets = list()
+				turfs_processed = 0
+			else
+				if(!current_mapgen.weighted_ruin_list.len)
+					var/list/ruins = get_ruin_list(whitelist = current_planet.ruin_whitelist, blacklist = current_planet.ruin_blacklist)
+					current_mapgen.weighted_ruin_list = weighted_ruin_list(ruins, current_planet.preferred_ruin_type)
+				var/datum/map_element/ruin/used_ruin = pick(current_mapgen.weighted_ruin_list)
+				for(var/ruin_entry in current_mapgen.weighted_ruin_list)
+					if(ruin_entry == used_ruin)
+						current_mapgen.weighted_ruin_list.Remove(ruin_entry)
 				place_ruin_in_allocation(used_ruin, current_allocation)
-				current_allocation.placed_ruin = used_ruin
-			place_story_ruins(current_allocation)
-
-			current_stage = STAGE_POPULATION
-			queue_index = 1
-			created_features = list()
-			created_mobs = list()
-			feature_buckets = list()
-			mob_buckets = list()
-			turfs_processed = 0
+				current_planet.ruin_budget -= used_ruin.cost
 
 		if(STAGE_POPULATION)
 			while(queue_index <= population_queue.len && turfs_processed < target_turfs)
@@ -301,7 +325,6 @@ var/datum/subsystem/mapping/SSmapping
 				current_allocation = null
 				current_stage = null
 				current_mapgen = null
-				current_ruin_type = null
 				terrain_queue = list()
 				population_queue = list()
 				finalize_queue = list()
@@ -415,18 +438,9 @@ var/datum/subsystem/mapping/SSmapping
 	var/chosen_planet_type = input(user, "Select a planet type to generate:", "Planet Generation") as null|anything in planet_types
 	if(!chosen_planet_type)
 		return
-
-	var/list/ruin_types = list()
-	for(var/ruin_path in (subtypesof(/datum/map_element/ruin) - typesof(/datum/map_element/ruin/story)))
-		ruin_types += ruin_path
-
-	var/chosen_ruin_type = input(user, "Select a ruin to place on the planet (random if no selection):", "Vault Selection") as null|anything in ruin_types
-	if(!chosen_ruin_type)
-		chosen_ruin_type = pick(ruin_types)
-
 	var/hide_from_scanner = alert(user, "Should this planet be hidden from the Deep Space Scanner?", "Scanner Visibility", "No", "Yes") == "Yes"
 
-	SSmapping.spawn_planet(chosen_planet_type, chosen_ruin_type, hide_from_scanner)
+	SSmapping.spawn_planet(chosen_planet_type, hide_from_scanner)
 
 /**
  * Creates a grid of 25 99x99 sectors for procedural generation
@@ -465,13 +479,12 @@ var/datum/subsystem/mapping/SSmapping
  *
  * Arguments:
  * * planet_datum - The planet type path or instance to spawn
- * * ruin_type - Optional ruin type to place on the planet
  * * hide_from_scanner - Optional boolean to hide the planet from the Deep Space Scanner
  *
  * Returns:
  * * TRUE if generation started successfully, FALSE if already generating
  */
-/datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, ruin_type, hide_from_scanner = FALSE)
+/datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, hide_from_scanner = FALSE)
 	if(generating)
 		message_admins("Planet generation already in progress! Please wait for '[current_planet.planet_name]' to complete.")
 		return FALSE
@@ -482,7 +495,6 @@ var/datum/subsystem/mapping/SSmapping
 	current_planet = new planet_datum
 	current_mapgen = new current_planet.mapgen
 	current_allocation = assign_allocation(current_planet, world.maxz)
-	current_ruin_type = ruin_type
 	planets += current_planet
 
 	// Set scanner visibility
@@ -539,8 +551,8 @@ var/datum/subsystem/mapping/SSmapping
  * * allocation - The sector allocation containing planet information
  * * spawned_objects - List of all objects spawned by the ruin template
  */
-/datum/subsystem/mapping/proc/post_process_ruin_turfs(datum/map_element/ruin, datum/allocation/allocation, list/spawned_objects)
-	if(!ruin || !allocation || !allocation.ptype)
+/datum/subsystem/mapping/proc/post_process_ruin_turfs(datum/map_element/ruin/ruin_to_use, datum/allocation/allocation, list/spawned_objects)
+	if(!ruin_to_use || !allocation || !allocation.ptype)
 		return
 
 	var/datum/planet_type/planet = allocation.ptype
@@ -602,29 +614,30 @@ var/datum/subsystem/mapping/SSmapping
  * Returns:
  * * A list containing "turf" (placement location) and "objects" (spawned objects) on success, or null on failure
  */
-/datum/subsystem/mapping/proc/place_ruin_in_allocation(datum/map_element/ruin, datum/allocation/allocation)
-	if(!ruin || !allocation)
+/datum/subsystem/mapping/proc/place_ruin_in_allocation(datum/map_element/ruin/ruin_to_use, datum/allocation/allocation)
+	if(!ruin_to_use || !allocation)
 		return null
 
 	// Initialize the dimensions of the map element before using them
-	ruin.assign_dimensions()
+	ruin_to_use.assign_dimensions()
 
 	// Calculate sector boundaries for proper placement within allocation
 	var/list/bounds = get_sector_bounds(allocation.sector)
 
 	// Calculate safe placement bounds within the sector, with padding
 	var/safe_x_min = bounds["x_min"] + RUIN_PLACEMENT_PADDING
-	var/safe_x_max = bounds["x_max"] - ruin.width - RUIN_PLACEMENT_PADDING
+	var/safe_x_max = bounds["x_max"] - ruin_to_use.width - RUIN_PLACEMENT_PADDING
 	var/safe_y_min = bounds["y_min"] + RUIN_PLACEMENT_PADDING
-	var/safe_y_max = bounds["y_max"] - ruin.height - RUIN_PLACEMENT_PADDING
+	var/safe_y_max = bounds["y_max"] - ruin_to_use.height - RUIN_PLACEMENT_PADDING
 
 	// Ensure we have valid placement area
 	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
-		CRASH("Warning: Ruin [ruin.name] ([ruin.width]x[ruin.height]) too large for sector [allocation.sector[1]],[allocation.sector[2]] - skipping ruin placement")
-
+		CRASH("Warning: Ruin [ruin_to_use.name] ([ruin_to_use.width]x[ruin_to_use.height]) too large for sector [allocation.sector[1]],[allocation.sector[2]] - skipping ruin placement")
 	// Try up to 20 times to find a valid placement location
 	var/max_attempts = 20
 	var/turf/ruin_turf = null
+
+	var/ruin_separation = 10 // Minimum turfs between ruins
 
 	for(var/attempt = 1; attempt <= max_attempts; attempt++)
 		// Find random placement location within safe bounds
@@ -636,8 +649,8 @@ var/datum/subsystem/mapping/SSmapping
 
 		// Check if any turfs in the ruin footprint have NO_RUINS flag
 		var/valid_location = TRUE
-		for(var/dx = 0; dx < ruin.width; dx++)
-			for(var/dy = 0; dy < ruin.height; dy++)
+		for(var/dx = 0; dx < ruin_to_use.width; dx++)
+			for(var/dy = 0; dy < ruin_to_use.height; dy++)
 				var/turf/check_turf = locate(candidate_turf.x + dx, candidate_turf.y + dy, allocation.z)
 				if(check_turf && (check_turf.turf_flags & NO_RUINS))
 					valid_location = FALSE
@@ -645,24 +658,42 @@ var/datum/subsystem/mapping/SSmapping
 			if(!valid_location)
 				break
 
+		// Check for minimum separation from other placed ruins
+		if(valid_location)
+			for(var/list/placed in allocation.placed_ruins)
+				var/placed_x = placed[1]
+				var/placed_y = placed[2]
+				var/placed_w = placed[3]
+				var/placed_h = placed[4]
+				var/new_x_min = candidate_turf.x - ruin_separation
+				var/new_x_max = candidate_turf.x + ruin_to_use.width + ruin_separation
+				var/new_y_min = candidate_turf.y - ruin_separation
+				var/new_y_max = candidate_turf.y + ruin_to_use.height + ruin_separation
+				var/placed_x_max = placed_x + placed_w
+				var/placed_y_max = placed_y + placed_h
+				if(!(new_x_max < placed_x || new_x_min > placed_x_max || new_y_max < placed_y || new_y_min > placed_y_max))
+					valid_location = FALSE
+					break
+
 		if(valid_location)
 			ruin_turf = candidate_turf
 			break
 		else if(attempt == max_attempts)
-			message_admins("Warning: Failed to find valid placement for ruin [ruin.name] after [max_attempts] attempts - NO_RUINS flags blocking placement")
 			return null
 
 	if(!ruin_turf)
 		return null
 
 	// Note: load() adds +1 to x and y coordinates, so we subtract 1 to place at exact location
-	var/load_result = ruin.load(ruin_turf.x - 1, ruin_turf.y - 1, allocation.z, 0, TRUE, TRUE)
+	var/load_result = ruin_to_use.load(ruin_turf.x - 1, ruin_turf.y - 1, allocation.z, 0, TRUE, TRUE)
 
 	if(load_result)
-		post_process_ruin_turfs(ruin, allocation, load_result)
+		// Record this ruin's position for separation checking
+		allocation.placed_ruins += list(list(ruin_turf.x, ruin_turf.y, ruin_to_use.width, ruin_to_use.height))
+		post_process_ruin_turfs(ruin_to_use, allocation, load_result)
 		return list("turf" = ruin_turf, "objects" = load_result)
 	else
-		CRASH("Failed to load ruin [ruin.name] at [ruin_turf.x], [ruin_turf.y]")
+		CRASH("Failed to load ruin [ruin_to_use.name] at [ruin_turf.x], [ruin_turf.y]")
 
 /datum/subsystem/mapping/proc/place_story_ruins(datum/allocation/allocation)
 	if(!allocation || !allocation.ptype)
@@ -944,6 +975,8 @@ var/datum/subsystem/mapping/SSmapping
 	var/obj/machinery/telecomms/relay/planetary/comms_relay
 	/// The main ruin placed on this allocation
 	var/datum/map_element/ruin/placed_ruin
+	/// Tracks placed ruins as list of lists: list(x, y, width, height) for separation checking
+	var/list/placed_ruins = list()
 
 #undef STAGE_TERRAIN
 #undef STAGE_RUIN

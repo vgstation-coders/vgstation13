@@ -1,0 +1,756 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/jungle/dirt,
+/area/exposed_ruin)
+"b" = (
+/obj/structure/table,
+/obj/item/weapon/spacecash/c10,
+/obj/item/weapon/spacecash/c10,
+/obj/item/weapon/spacecash/c10,
+/obj/item/weapon/spacecash/c10,
+/obj/item/weapon/spacecash/c10,
+/obj/item/weapon/spacecash/c10,
+/obj/abstract/loot_spawner/entertainment,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"c" = (
+/obj/abstract/loot_spawner/trash,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"d" = (
+/obj/structure/flora/tree/shitty,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"e" = (
+/mob/living/simple_animal/cow/chocolate,
+/obj/structure/flora/ausbushes/fullgrass,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"f" = (
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"g" = (
+/obj/structure/fence/corner,
+/obj/structure/sign/securearea{
+	name = "DANGER: SPIDERS";
+	desc = "A warning sign which reads 'DANGER:SPIDERS'.";
+	icon_state = "fauna1"
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"i" = (
+/obj/structure/fence/corner,
+/obj/structure/fence/corner{
+	dir = 8
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"j" = (
+/obj/structure/flora/ausbushes/fullgrass,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"l" = (
+/obj/structure/flora/jungle_berries,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"n" = (
+/obj/structure/flora/ausbushes/lavendergrass,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"o" = (
+/obj/structure/flora/rock,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"p" = (
+/obj/structure/bed/chair/office{
+	dir = 8
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"q" = (
+/turf/unsimulated/floor/jungle/water,
+/area/exposed_ruin)
+"w" = (
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"x" = (
+/obj/structure/flora/ausbushes/leafybush,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"y" = (
+/mob/living/simple_animal/cow/chocolate,
+/obj/structure/flora/ausbushes/lavendergrass,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"z" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"A" = (
+/obj/structure/fence/corner,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"B" = (
+/obj/structure/table,
+/obj/abstract/loot_spawner/food_or_drink,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"D" = (
+/obj/abstract/loot_spawner/structure,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"F" = (
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/flora/ausbushes/fullgrass,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"G" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "zoo";
+	name = "decal"
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"H" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"J" = (
+/mob/living/simple_animal/hostile/humanoid/tajaran,
+/turf/unsimulated/floor/jungle/sand,
+/area/exposed_ruin)
+"K" = (
+/turf/unsimulated/floor/jungle/sand,
+/area/exposed_ruin)
+"L" = (
+/obj/structure/fence,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"M" = (
+/obj/structure/fence/corner{
+	dir = 8
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"N" = (
+/turf/template_noop,
+/area/template_noop)
+"O" = (
+/mob/living/complex_animal/dinosaur,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"R" = (
+/obj/structure/table,
+/obj/machinery/pos{
+	dir = 4;
+	pixel_x = -5;
+	pixel_y = 2
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"S" = (
+/obj/structure/fence/door,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"T" = (
+/mob/living/simple_animal/hostile/asteroid/basilisk/gorgon,
+/turf/unsimulated/floor/jungle/dirt,
+/area/exposed_ruin)
+"U" = (
+/mob/living/simple_animal/cow/chocolate,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+"V" = (
+/mob/living/simple_animal/hostile/asteroid/basilisk,
+/turf/unsimulated/floor/jungle/dirt,
+/area/exposed_ruin)
+"Y" = (
+/obj/structure/fence/corner,
+/obj/structure/sign/securearea{
+	name = "DANGER: SPIDERS";
+	desc = "A warning sign which reads 'DANGER:SPIDERS'.";
+	icon_state = "fauna3"
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"Z" = (
+/obj/structure/flora/ausbushes/reedbush,
+/turf/unsimulated/floor/jungle/grass,
+/area/exposed_ruin)
+
+(1,1,1) = {"
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+"}
+(2,1,1) = {"
+N
+N
+N
+N
+N
+N
+N
+N
+H
+H
+H
+H
+H
+N
+N
+N
+N
+N
+N
+N
+N
+"}
+(3,1,1) = {"
+N
+N
+N
+N
+N
+N
+N
+N
+G
+b
+R
+B
+G
+N
+N
+N
+N
+N
+N
+N
+N
+"}
+(4,1,1) = {"
+N
+N
+N
+N
+N
+N
+N
+N
+f
+f
+p
+f
+f
+N
+N
+N
+N
+N
+N
+N
+N
+"}
+(5,1,1) = {"
+N
+N
+N
+N
+N
+N
+N
+N
+z
+f
+f
+f
+z
+N
+N
+N
+N
+N
+N
+N
+N
+"}
+(6,1,1) = {"
+M
+L
+L
+L
+L
+L
+L
+L
+Y
+f
+f
+f
+g
+L
+L
+L
+L
+L
+L
+L
+M
+"}
+(7,1,1) = {"
+z
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+z
+"}
+(8,1,1) = {"
+z
+f
+M
+L
+L
+L
+L
+L
+M
+f
+f
+D
+M
+L
+L
+L
+L
+L
+M
+f
+z
+"}
+(9,1,1) = {"
+z
+f
+z
+l
+l
+l
+l
+l
+z
+f
+f
+f
+z
+a
+a
+a
+d
+j
+z
+f
+z
+"}
+(10,1,1) = {"
+z
+f
+z
+j
+w
+w
+O
+j
+z
+f
+f
+f
+z
+T
+a
+a
+j
+j
+z
+f
+z
+"}
+(11,1,1) = {"
+z
+f
+z
+j
+w
+w
+w
+j
+z
+f
+f
+f
+z
+a
+a
+V
+x
+w
+z
+f
+z
+"}
+(12,1,1) = {"
+z
+f
+S
+j
+d
+w
+w
+j
+z
+f
+f
+f
+z
+a
+a
+a
+w
+j
+S
+f
+z
+"}
+(13,1,1) = {"
+z
+f
+z
+j
+O
+w
+O
+j
+z
+f
+f
+f
+z
+V
+a
+a
+j
+x
+z
+f
+z
+"}
+(14,1,1) = {"
+z
+f
+z
+d
+w
+w
+w
+j
+z
+f
+f
+f
+z
+a
+a
+a
+w
+d
+z
+f
+z
+"}
+(15,1,1) = {"
+z
+f
+z
+j
+j
+d
+j
+j
+z
+f
+f
+f
+z
+a
+a
+a
+l
+l
+z
+f
+z
+"}
+(16,1,1) = {"
+z
+f
+i
+L
+L
+L
+L
+L
+i
+D
+f
+f
+i
+L
+L
+L
+L
+L
+i
+f
+z
+"}
+(17,1,1) = {"
+z
+f
+z
+l
+j
+d
+j
+j
+z
+f
+f
+f
+z
+n
+U
+j
+j
+w
+z
+f
+z
+"}
+(18,1,1) = {"
+z
+f
+S
+l
+w
+w
+w
+j
+z
+f
+f
+f
+z
+w
+w
+j
+j
+o
+z
+f
+z
+"}
+(19,1,1) = {"
+z
+f
+z
+d
+w
+w
+w
+d
+z
+f
+f
+f
+z
+F
+j
+e
+j
+w
+S
+f
+z
+"}
+(20,1,1) = {"
+z
+f
+z
+K
+K
+K
+K
+K
+z
+f
+f
+f
+z
+w
+w
+w
+y
+n
+z
+f
+z
+"}
+(21,1,1) = {"
+z
+f
+z
+K
+q
+q
+J
+J
+z
+f
+f
+f
+z
+Z
+q
+q
+w
+n
+z
+f
+z
+"}
+(22,1,1) = {"
+z
+f
+z
+K
+q
+q
+J
+K
+z
+f
+f
+f
+z
+Z
+q
+q
+w
+n
+z
+f
+z
+"}
+(23,1,1) = {"
+z
+f
+z
+K
+K
+K
+K
+K
+z
+f
+f
+c
+z
+o
+Z
+Z
+w
+n
+z
+f
+z
+"}
+(24,1,1) = {"
+z
+f
+A
+L
+L
+L
+L
+L
+A
+f
+f
+f
+A
+L
+L
+L
+L
+L
+A
+f
+z
+"}
+(25,1,1) = {"
+A
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+A
+"}

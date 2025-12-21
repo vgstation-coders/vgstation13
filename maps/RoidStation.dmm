@@ -130968,7 +130968,7 @@
 /turf/space,
 /area/shuttle/exploration)
 "hJU" = (
-/obj/machinery/suit_storage_unit,
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "hLe" = (
@@ -131940,10 +131940,10 @@
 	},
 /area/derelict/singularity_engine)
 "nLB" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "nMv" = (
@@ -132413,10 +132413,10 @@
 	},
 /area/turret_protected/tcomms_control_room)
 "rdX" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 8
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "rff" = (

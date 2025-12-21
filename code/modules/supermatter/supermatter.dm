@@ -52,6 +52,7 @@
 	var/power = 0
 	var/power_loss_modifier = 2500 // Higher == less power lost every process(). Was 500. With three emitters and no O2, power should tend towards 13935.5 J.
 	var/max_power = 2000 // Used for lighting scaling.
+	var/thermal_power_output = 0	//approximate thermal output(joules of heating in the last tick which is effectively watts), read by silicons/monitoring computer
 
 	var/list/last_data = list("temperature" = 293, "oxygen" = 0.2)
 	var/oxygen = 0				  // Moving this up here for easier debugging.
@@ -351,9 +352,12 @@
 
 	//Also keep in mind we are only adding this temperature to (efficiency)% of the one tile the rock
 	//is on. An increase of 4*C @ 25% efficiency here results in an increase of 1*C / (#tilesincore) overall.
+	var/temperature_before = removed.temperature
 	removed.temperature += cryoheatdamping*(device_energy / THERMAL_RELEASE_MODIFIER)
 
 	removed.temperature = max(0, min(removed.temperature, 1000+(1500*cryoheatdamping) ))
+	var/temperature_after = removed.temperature
+	thermal_power_output =  (temperature_after-temperature_before) * removed.heat_capacity() //doesn't account for generated gas so not very accurate
 
 	//Calculate how much gas to release
 	removed.adjust_multi(
@@ -431,7 +435,8 @@
 	to_chat(user, "<span class = \"info\">Matrix Instability: [stability]%</span>")
 	to_chat(user, "<span class = \"info\">Damage: [format_num(damage)]</span>")// idfk what units we're using.
 
-	to_chat(user, "<span class = \"info\">Power: [format_num(power)]J</span>")// Same
+	to_chat(user, "<span class = \"info\">Matrix energy: [format_num(power)]J</span>")// Same
+	to_chat(user, "<span class = \"info\">Approximate thermal output: [format_watts(thermal_power_output)]</span>")
 
 
 /obj/machinery/power/supermatter/attack_hand(mob/user as mob)
@@ -667,6 +672,7 @@
 		data["id"] = linked.id_tag
 		data["temperature"] = linked.last_data["temperature"]
 		data["stability"] = linked.stability()
+		data["formatted_thermal_power"] = format_watts(linked.thermal_power_output)
 		if(!istype(linked.loc, /turf)||istype(linked.loc, /turf/space))
 			data["dps"] = 0 //If crated or in space, damage is exactly 0
 			data["oxygen"] = 0 //This doesn't really matter because power isn't generated in this state

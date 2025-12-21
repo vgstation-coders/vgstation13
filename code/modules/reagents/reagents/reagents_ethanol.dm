@@ -38,7 +38,7 @@
 			if(isnum(A.tick))
 				common_tick += A.tick
 
-	M.dizziness += dizzy_adj
+	M.AdjustDizzy(M.standard_dizzy_reduce + dizzy_adj)
 	if(common_tick >= slur_start && tick < pass_out)
 		if(!M.slurring)
 			M.slurring = 1

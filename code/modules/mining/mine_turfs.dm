@@ -1051,7 +1051,15 @@ var/list/icon_state_to_appearance = list()
 		if(det_time >= 1 && det_time <= 2)
 			G.det_quality = 2
 			G.icon_state = "Gibtonite ore 2"
-	ChangeTurf(/turf/unsimulated/floor/asteroid/gibtonite_remains)
+
+	var/turf_type = mined_type
+	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
+	if(istype(A))
+		var/datum/planet_type/planet = A.ptype
+		if(planet?.default_baseturf)
+			turf_type = planet.default_baseturf
+
+	ChangeTurf(turf_type)
 
 /turf/unsimulated/floor/asteroid/gibtonite_remains
 	var/det_time = 0

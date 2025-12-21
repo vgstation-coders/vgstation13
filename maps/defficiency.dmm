@@ -111013,7 +111013,7 @@
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
 "uFc" = (
-/obj/machinery/suit_storage_unit,
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "uJp" = (
