@@ -7869,6 +7869,9 @@
 	pixel_y = 4
 	},
 /obj/structure/table/glass,
+/obj/item/device/radio/intercom/medbay{
+	pixel_y = 25
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -11863,9 +11866,6 @@
 /turf/simulated/wall/r_wall,
 /area/medical/cmo)
 "ayf" = (
-/obj/item/device/radio/intercom/medbay{
-	pixel_x = 30
-	},
 /obj/machinery/light{
 	dir = 4
 	},
@@ -16914,8 +16914,8 @@
 /obj/machinery/power/apc{
 	pixel_y = -24
 	},
-/obj/structure/bed,
 /obj/item/weapon/bedsheet/black,
+/obj/structure/bed,
 /turf/simulated/floor{
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy"
@@ -19813,14 +19813,14 @@
 	},
 /area/medical/medbay)
 "aLV" = (
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
 /obj/machinery/door/firedoor/border_only{
 	dir = 8;
 	name = "Firelock West"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/structure/disposalpipe/segment{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -19858,10 +19858,10 @@
 /obj/machinery/alarm{
 	pixel_y = 22
 	},
-/obj/structure/disposalpipe/segment{
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+/obj/structure/disposalpipe/segment{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -20919,7 +20919,7 @@
 	},
 /obj/machinery/door/airlock/glass_medical{
 	name = "Cloning";
-	req_access_txt = "5"
+	req_access_txt = "45"
 	},
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
@@ -22630,6 +22630,9 @@
 "aQR" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/black,
+/obj/machinery/light_switch{
+	pixel_y = 22
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark_navy";
@@ -22698,11 +22701,11 @@
 /obj/machinery/camera{
 	name = "Medbay - Guard Office"
 	},
-/obj/machinery/newscaster{
-	pixel_y = 32
-	},
 /obj/machinery/light{
 	dir = 1
+	},
+/obj/machinery/firealarm{
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -23627,8 +23630,9 @@
 	name = "Firelock West"
 	},
 /obj/machinery/door/airlock/glass_medical{
-	name = "Medbay";
-	req_access_txt = "5"
+	name = "Medbay Desk";
+	req_access_txt = "5";
+	id_tag = "MedbayDesk"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -23688,6 +23692,9 @@
 /obj/machinery/disposal,
 /obj/structure/disposalpipe/trunk{
 	dir = 8
+	},
+/obj/machinery/light_switch{
+	pixel_x = 22
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -25613,6 +25620,9 @@
 /area/medical/medbay)
 "aWb" = (
 /obj/machinery/bioprinter/prosthetics,
+/obj/machinery/light{
+	dir = 8
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -26955,15 +26965,14 @@
 	},
 /area/medical/medbay2)
 "aYP" = (
-/obj/machinery/firealarm{
-	dir = 8;
-	pixel_x = -24
-	},
 /obj/machinery/light{
 	dir = 8
 	},
 /obj/structure/disposalpipe/segment,
 /obj/structure/flora/pottedplant/random,
+/obj/machinery/newscaster{
+	pixel_x = -32
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark_navy_corner";
@@ -27933,8 +27942,7 @@
 "bar" = (
 /obj/structure/filingcabinet/medical,
 /obj/machinery/alarm{
-	dir = 8;
-	pixel_x = 22
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -29540,9 +29548,6 @@
 /area/medical/surgery)
 "bdq" = (
 /obj/machinery/bioprinter,
-/obj/machinery/light{
-	dir = 8
-	},
 /obj/machinery/alarm{
 	dir = 4;
 	pixel_x = -23
@@ -31746,6 +31751,9 @@
 	dir = 5
 	},
 /obj/structure/disposalpipe/segment,
+/obj/machinery/light/small{
+	dir = 8
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -32605,9 +32613,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
-/obj/machinery/light/small{
-	dir = 8
-	},
 /obj/structure/disposalpipe/segment{
 	dir = 1;
 	icon_state = "pipe-c"
@@ -33271,10 +33276,6 @@
 	},
 /area/science/lab)
 "bjE" = (
-/obj/machinery/alarm{
-	dir = 4;
-	pixel_x = -23
-	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1
 	},
@@ -33291,6 +33292,9 @@
 /obj/item/clothing/mask/gas,
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone{
 	pixel_x = 12
+	},
+/obj/machinery/light{
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "dark neutral corner";
@@ -33329,9 +33333,6 @@
 	},
 /area/science/lab)
 "bjK" = (
-/obj/machinery/light_switch{
-	pixel_x = -23
-	},
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -33368,7 +33369,8 @@
 	req_access_txt = "500"
 	},
 /turf/simulated/floor{
-	icon_state = "dark"
+	icon_state = "dark_navy_full";
+	tag = "icon-dark_navy_full"
 	},
 /area/medical/paramedics)
 "bjO" = (
@@ -33378,13 +33380,17 @@
 	pixel_x = -32
 	},
 /obj/structure/table,
+/obj/item/device/healthanalyzer{
+	pixel_x = 7;
+	pixel_y = 10
+	},
 /obj/machinery/bunsen_burner{
 	pixel_x = -8;
 	pixel_y = 7
 	},
 /obj/item/weapon/storage/bag/chem{
-	pixel_x = 6;
-	pixel_y = -1
+	pixel_x = 10;
+	pixel_y = 2
 	},
 /obj/item/weapon/reagent_containers/dropper{
 	pixel_x = -2;
@@ -33416,12 +33422,8 @@
 	pixel_x = 7
 	},
 /obj/item/toy/figure/clown{
-	pixel_y = 12;
-	pixel_x = -2
-	},
-/obj/item/device/healthanalyzer{
-	pixel_x = -4;
-	pixel_y = -1
+	pixel_y = 10;
+	pixel_x = -3
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -34536,16 +34538,16 @@
 	pixel_y = 12
 	},
 /obj/item/weapon/storage/pill_bottle/inaprovaline{
-	pixel_x = -4;
-	pixel_y = -2
+	pixel_x = -5;
+	pixel_y = -1
 	},
 /obj/item/weapon/storage/pill_bottle/inaprovaline{
 	pixel_x = -1;
-	pixel_y = -4
+	pixel_y = -1
 	},
 /obj/item/weapon/storage/pill_bottle/inaprovaline{
-	pixel_x = 2;
-	pixel_y = -5
+	pixel_x = 4;
+	pixel_y = -2
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -35342,6 +35344,9 @@
 	dir = 10
 	},
 /obj/structure/closet/paramedic,
+/obj/machinery/light_switch{
+	pixel_x = -23
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark_navy";
@@ -35392,12 +35397,13 @@
 	},
 /area/medical/chemistry)
 "bnf" = (
+/obj/structure/table,
+/obj/item/weapon/storage/box/labels{
+	pixel_y = 12
+	},
 /obj/item/weapon/hand_labeler{
-	pixel_y = 12;
 	pixel_x = -3
 	},
-/obj/structure/table,
-/obj/item/weapon/storage/box/labels,
 /obj/item/stack/package_wrap,
 /turf/simulated/floor{
 	dir = 4;
@@ -36720,6 +36726,10 @@
 /obj/machinery/atmospherics/unary/portables_connector{
 	dir = 8
 	},
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 22
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark neutral corner";
@@ -37951,9 +37961,6 @@
 /turf/simulated/floor,
 /area/science/lab)
 "brX" = (
-/obj/machinery/light{
-	dir = 4
-	},
 /obj/structure/bed/chair,
 /turf/simulated/floor{
 	dir = 5;
@@ -38022,11 +38029,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor{
-	icon_state = "cautioncorner";
-	tag = "icon-cautioncorner (EAST)";
-	dir = 1
-	},
+/turf/simulated/floor,
 /area/hallway/primary/central)
 "bsf" = (
 /turf/simulated/floor{
@@ -110288,6 +110291,14 @@
 	icon_state = "whitepurple"
 	},
 /area/science/lab)
+"hdV" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	on = 0;
+	pixel_y = 32
+	},
+/turf/simulated/floor/bluegrid,
+/area/turret_protected/ai)
 "hep" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /turf/simulated/floor,
@@ -110744,6 +110755,9 @@
 /area/shuttle/exploration)
 "leq" = (
 /obj/structure/flora/pottedplant/random,
+/obj/machinery/light{
+	dir = 8
+	},
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "purple"
@@ -110822,6 +110836,12 @@
 	icon_state = "floorgrime"
 	},
 /area/supply/storage)
+"mfN" = (
+/obj/machinery/newscaster{
+	pixel_y = 32
+	},
+/turf/simulated/floor,
+/area/hallway/primary/fore)
 "mut" = (
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 9
@@ -111191,12 +111211,6 @@
 /turf/simulated/floor,
 /area/hallway/primary/central)
 "pJh" = (
-/obj/item/weapon/reagent_containers/spray/cleaner{
-	desc = "Someone has crossed out the 'Space' from Space Cleaner and written in Chemistry. Scrawled on the back is, 'Okay, whoever filled this with polytrinic acid, it was only funny the first time. It was hard enough replacing the CMO's first cat!'";
-	name = "Chemistry Cleaner";
-	pixel_x = -9;
-	pixel_y = 1
-	},
 /obj/item/clothing/glasses/scanner/science{
 	pixel_x = 8;
 	pixel_y = 10
@@ -111210,6 +111224,12 @@
 	pixel_y = -4
 	},
 /obj/structure/table,
+/obj/item/weapon/reagent_containers/spray/cleaner{
+	desc = "Someone has crossed out the 'Space' from Space Cleaner and written in Chemistry. Scrawled on the back is, 'Okay, whoever filled this with polytrinic acid, it was only funny the first time. It was hard enough replacing the CMO's first cat!'";
+	name = "Chemistry Cleaner";
+	pixel_x = -9;
+	pixel_y = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark brown corner";
 	tag = "icon-dark brown corner (SOUTHEAST)";
@@ -111726,6 +111746,13 @@
 	},
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
+"uET" = (
+/turf/simulated/floor{
+	icon_state = "cautioncorner";
+	tag = "icon-cautioncorner (EAST)";
+	dir = 1
+	},
+/area/hallway/primary/central)
 "uFc" = (
 /obj/machinery/suit_storage_unit,
 /turf/simulated/floor/shuttle,
@@ -213862,7 +213889,7 @@ bCL
 bDO
 bFb
 bGa
-bwB
+hdV
 bwB
 bwB
 bKt
@@ -230415,7 +230442,7 @@ bnf
 bop
 bpK
 biq
-bsf
+uET
 bpL
 bus
 bvF
@@ -231403,7 +231430,7 @@ aOe
 aPu
 aKv
 aIN
-aIS
+mfN
 aWg
 aXz
 aYU
