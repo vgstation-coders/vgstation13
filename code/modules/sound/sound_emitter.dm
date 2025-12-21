@@ -96,6 +96,7 @@
 		sounds.Cut()
 		sounds = null
 	source.unregister_event(/event/moved, src, nameof(src::on_source_moved()))
+	INVOKE_EVENT(src, /event/destroyed, "emitter" = src)
 	. = ..()
 
 /*
