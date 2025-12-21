@@ -15,8 +15,6 @@ var/datum/subsystem/mob/SSmob
 
 /datum/subsystem/mob/New()
 	NEW_SS_GLOBAL(SSmob)
-	for(var/datum/zLevel/Z in map.zLevels)
-		paused_z += list(Z = TRUE)
 
 /datum/subsystem/mob/stat_entry()
 	..("Processing:[mob_list.len - paused] | Paused:[paused]")
@@ -50,6 +48,10 @@ var/datum/subsystem/mob/SSmob
 		currentrun = mob_list.Copy()
 		paused = 0
 
+	if(!paused_z.len)
+		for(var/datum/zLevel/Z in map.zLevels)
+			paused_z += list(Z = TRUE)
+
 	while (currentrun.len)
 		var/mob/M = currentrun[currentrun.len]
 		currentrun.len--
@@ -58,16 +60,24 @@ var/datum/subsystem/mob/SSmob
 			continue
 
 		// Skip processing non-player mobs on paused z-levels or planets
-		if (!M.client)
-			if(!M.z)
-				qdel(M) // Hiding in nullspace
-				continue
-			var/datum/zLevel/level = map.zLevels[M.z]
+		if (!M.client && istype(M, /mob/living))
+			var/z_to_check
+			var/mob/living/L = M
+			if(!L.z)
+				var/turf/T = get_turf(L)
+				if(!T || !T.z)
+					qdel(L) // Hiding in nullspace
+					continue
+				else
+					z_to_check = T.z
+			else
+				z_to_check = L.z
+			var/datum/zLevel/level = map.zLevels[z_to_check]
 			if (paused_z[level])
 				paused++
 				continue
-			else if (M.planet)
-				if (!M.planet.process_mobs)
+			else if (L.planet)
+				if (!L.planet.process_mobs)
 					paused++
 					continue
 

@@ -31,6 +31,8 @@
 	if (istype(dyn_mode))
 		dyn_mode.living_players -= src
 
+	unregister_event(/event/z_transition, src, nameof(src::OnMobZChanged()))
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered

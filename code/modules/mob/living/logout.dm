@@ -6,4 +6,5 @@
 
 	unregister_event(/event/z_transition, src, nameof(src::OnMobZChanged()))
 	// Notify SSmob to check if this z-level still has players
-	SSmob.z_pause_check(src,null,z)
+	if(SSmob)
+		SSmob.z_pause_check(src,null,z)

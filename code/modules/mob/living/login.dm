@@ -39,4 +39,5 @@
 	register_event(/event/z_transition, src, nameof(src::OnMobZChanged()))
 
 	// Notify SSmob that a player has entered this z-level
-	SSmob.z_pause_check(src, z, null)
+	if(SSmob)
+		SSmob.z_pause_check(src, z, null)
