@@ -32,7 +32,7 @@
 
 		if(EAST) // West to east
 			dira="ew"
-			i=1+(((y^2)-x)%15) // Vary widely across Y, but just increment across X
+			i=1+((((y^2)-x)%15)+15)%15 // Vary widely across Y, but just increment across X (true modulo for negative values)
 
 
 		/*

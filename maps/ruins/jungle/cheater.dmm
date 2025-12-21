@@ -1,0 +1,103 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"g" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"j" = (
+/obj/item/folding_chair,
+/obj/effect/landmark/corpse/civilian,
+/obj/effect/decal/cleanable/blood/gibs/up{
+	color = "#A10808"
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"l" = (
+/obj/structure/table/woodentable/poker,
+/obj/item/toy/singlecard{
+	icon_state = "sc_4 of Hearts"
+	},
+/obj/item/toy/singlecard{
+	pixel_x = 6;
+	icon_state = "sc_5 of Spades"
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"G" = (
+/obj/structure/table/woodentable/poker,
+/obj/item/toy/singlecard{
+	pixel_y = 5;
+	pixel_x = 7;
+	icon_state = "sc_Ace of Hearts"
+	},
+/obj/item/toy/singlecard{
+	pixel_y = 5;
+	pixel_x = -17;
+	icon_state = "sc_Ace of Clubs"
+	},
+/obj/item/toy/singlecard{
+	pixel_y = 5;
+	pixel_x = -7;
+	icon_state = "sc_Ace of Diamonds"
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"J" = (
+/obj/structure/table/woodentable/poker,
+/obj/item/toy/singlecard{
+	pixel_y = 5;
+	pixel_x = -9;
+	icon_state = "sc_Ace of Hearts"
+	},
+/obj/item/toy/singlecard{
+	pixel_y = 5;
+	pixel_x = 6;
+	icon_state = "sc_Ace of Spades"
+	},
+/obj/item/toy/cards{
+	pixel_y = -9;
+	pixel_x = 15
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"R" = (
+/obj/structure/bed/chair/folding{
+	dir = 1
+	},
+/obj/item/ammo_casing/a357{
+	pixel_x = 10;
+	pixel_y = 6
+	},
+/obj/item/ammo_casing/a357{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/abstract/loot_spawner/combat,
+/turf/template_noop,
+/area/exposed_ruin)
+"W" = (
+/obj/structure/table/woodentable/poker,
+/obj/item/toy/singlecard{
+	pixel_x = 6;
+	icon_state = "sc_8 of Hearts"
+	},
+/obj/item/toy/singlecard{
+	icon_state = "sc_7 of Spades"
+	},
+/obj/item/toy/singlecard{
+	pixel_x = -17;
+	icon_state = "sc_6 of Diamonds"
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+
+(1,1,1) = {"
+j
+J
+l
+R
+"}
+(2,1,1) = {"
+g
+G
+W
+g
+"}

@@ -1,6 +1,7 @@
 #define NO_TRANSIT 0 //Don't use transit areas
 #define TRANSIT_ACROSS_Z_LEVELS 1 //Only use transit areas if moving to another z-level
 #define TRANSIT_ALWAYS 2 //Always use transit areas
+#define CHEAP_TRANSIT 3 //Only use transit areas when moving to another z-level, with free travel between the station and roid
 
 //Whether this shuttle can be linked to a shuttle control console.
 #define LINK_FREE 0
@@ -406,7 +407,7 @@
 		return
 
 	if(transit_port && get_transit_delay())
-		if(use_transit == TRANSIT_ALWAYS || (use_transit == TRANSIT_ACROSS_Z_LEVELS && (linked_area.z != destination_port.z)) || (istype(destination_port,/obj/docking_port/destination/planet_surface) || istype(linked_port,/obj/docking_port/destination/planet_surface)))
+		if(transit_check())
 			close_all_doors()
 			move_to_dock(transit_port)
 			spawn(max(1,get_transit_delay()-5))
@@ -419,14 +420,50 @@
 				if(istype(A,/mob/living))
 					var/mob/living/M = A
 					M << sound("sound/machines/hyperspace_progress.ogg", repeat = 0, wait = 1, channel = CHANNEL_AMBIENCE, volume = 75)
-			sleep(get_transit_delay())
+			spawn(get_transit_delay())
+				complete_flight()
+			return
 
+	complete_flight()
+
+/datum/shuttle/proc/complete_flight()
 	if(destination_port)
 		animate_landing()
 		move_to_dock(destination_port)
 		destination_port = null
 
 	moving = 0
+
+/datum/shuttle/proc/transit_check()
+	if(use_transit == NO_TRANSIT) // no transit
+		return FALSE
+	else if(use_transit == TRANSIT_ALWAYS) // always transit
+		return TRUE
+	else if(linked_area.z == destination_port.z) // same z-level
+		if(istype(destination_port,/obj/docking_port/destination/planet_surface) || istype(linked_port,/obj/docking_port/destination/planet_surface)) //transit to/from a planet
+			return TRUE
+		else
+			return FALSE
+	else if(use_transit == CHEAP_TRANSIT) // station <-> roid no transit
+		if(linked_area.z == map.zMainStation) // no transit from station to the roid
+			if(destination_port.z == map.zAsteroid)
+				return FALSE
+			else
+				return TRUE
+		else if(destination_port.z == map.zMainStation) // no transit from roid to station
+			if(linked_area.z == map.zAsteroid)
+				return FALSE
+			else
+				return TRUE
+		else
+			return TRUE
+	else if(use_transit == TRANSIT_ACROSS_Z_LEVELS) // transit across a z-level
+		if(linked_area.z != destination_port.z)
+			return TRUE
+		else
+			return FALSE
+	else
+		return FALSE
 
 /datum/shuttle/proc/animate_liftoff()
 	var/variation = rand(1,2)
@@ -967,6 +1004,8 @@
 		dest_climate = SSweather.get_climate(new_center.z, null)
 
 	for(var/turf/T in linked_area.contents)
+		for(var/obj/effect/edge_overlay/E in T)
+			qdel(E)
 		if(T in corner_turfs)
 			continue
 		if(source_climate)
@@ -975,8 +1014,6 @@
 			dest_climate.unregister_weather_turf(T)
 		for(var/obj/effect/weather_holder/WH in T.vis_contents)
 			T.vis_contents -= WH
-		for(var/obj/effect/edge_overlay/E in T)
-			qdel(E)
 
 	// Re-register turfs left behind by the shuttle with the source climate
 	if(source_climate)

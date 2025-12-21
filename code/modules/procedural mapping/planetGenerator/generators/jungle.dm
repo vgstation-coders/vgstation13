@@ -84,7 +84,6 @@
 /datum/biome/jungle
 	biome_temperature = T20C + 10
 	loot_spawners = list(
-		/obj/abstract/loot_spawner/bedsheet = 1,
 		/obj/abstract/loot_spawner/bureaucracy = 1,
 		/obj/abstract/loot_spawner/clothing = 1,
 		/obj/abstract/loot_spawner/decoration = 1,

@@ -98215,10 +98215,10 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "egS" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 8
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "ehN" = (
@@ -99470,10 +99470,10 @@
 	},
 /area/security/perma)
 "ooZ" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "oqf" = (
@@ -99765,7 +99765,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/starboard)
 "qfi" = (
-/obj/machinery/suit_storage_unit,
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "qiT" = (

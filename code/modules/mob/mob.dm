@@ -430,7 +430,7 @@
 			spell_master.update_spells(0, src)
 
 	for (var/time in crit_rampup)
-		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
+		if (world.time > text2num(time) + 20 SECONDS) // clear out the items older than 20 seconds
 			crit_rampup -= time
 
 	if(base_luck ? base_luck.temporary_luckiness : FALSE)
