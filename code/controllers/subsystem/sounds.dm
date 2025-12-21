@@ -23,4 +23,4 @@ var/datum/subsystem/sounds/SSsounds
 			spawn()
 				// recalc volume and such for when player/emitter isn't raising move events
 				E.update_active_sound_param()
-				done[E] = TRUE
+			done[E] = TRUE
