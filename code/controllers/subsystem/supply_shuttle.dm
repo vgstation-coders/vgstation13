@@ -317,8 +317,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		if(T.density)
 			continue
 		var/contcount
-		for(var/atom/A in T.contents)
-			if(islightingoverlay(A) || istype(A, /obj/machinery/conveyor))
+		for(var/atom/movable/MA in T.contents)
+			if(MA.anchored && !ismecha(MA))
 				continue
 			contcount++
 		if(contcount)
