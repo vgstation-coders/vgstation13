@@ -154,7 +154,7 @@ var/global/list/camera_bugs = list()
 
 /obj/item/device/handtv/ui_close(mob/user)
 	// Unregister map objects
-	user.client.clear_map(map_name)
+	user.client?.clear_map(map_name)
 
 /obj/item/device/handtv/proc/show_camera_static()
 	cam_screen.vis_contents.Cut()
