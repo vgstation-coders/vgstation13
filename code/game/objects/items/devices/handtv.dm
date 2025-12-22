@@ -26,7 +26,6 @@ var/global/list/camera_bugs = list()
 
 /obj/item/device/handtv/initialize()
 	..()
-	//tv_monitors += src
 	// Map name has to start and end with an A-Z character,
 	// and definitely NOT with a square bracket or even a number.
 	map_name = "camera_console_[ref(src)]_map"
