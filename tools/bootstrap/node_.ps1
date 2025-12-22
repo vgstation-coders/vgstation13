@@ -30,8 +30,16 @@ if ($Env:TG_BOOTSTRAP_CACHE) {
 	$Cache = $Env:TG_BOOTSTRAP_CACHE
 }
 $NodeVersion = Extract-Variable -Path "$BaseDir\..\..\dependencies.sh" -Key "NODE_VERSION_PRECISE"
-$NodeSource = "https://nodejs.org/download/release/v$NodeVersion/win-x64/node.exe"
-$NodeTargetDir = "$Cache\node-v$NodeVersion"
+
+## Migration (temporary (lol)) remove old Node version in case a developer is running on an older workspace version
+$OldNodeTargetDir = "$Cache\node-v$NodeVersion"
+if (Test-Path $OldNodeTargetDir -PathType Container) {
+	Remove-Item $OldNodeTargetDir -Recurse -Force
+}
+
+$NodeArch = "x64"
+$NodeSource = "https://nodejs.org/download/release/v$NodeVersion/win-$NodeArch/node.exe"
+$NodeTargetDir = "$Cache\node-v$NodeVersion-$NodeArch"
 $NodeTarget = "$NodeTargetDir\node.exe"
 
 ## Just print the path and exit
