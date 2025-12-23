@@ -512,17 +512,15 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	network = "tcommsat"
 	var/activated = FALSE
 
-/obj/machinery/telecomms/relay/planetary/New()
+/obj/machinery/telecomms/relay/planetary/post_ruin_load()
 	..()
-	var/datum/virtual_z/vz = get_virtual_z()
+	var/datum/virtual_z/vz = get_virtual_z(FALSE)
 	if(!vz)
-		log_world("Warning: Planetary relay spawned on turf without virtual_z at [x],[y],[z]")
-		return
+		CRASH("Planetary relay spawned on turf without virtual_z at [x],[y],[z]")
 	vz.comms_relay = src
 	var/datum/planet_type/P = vz.planet
 	if(!P)
-		log_world("Warning: Planetary relay spawned on virtual_z without planet at [x],[y],[z]")
-		return
+		CRASH("Planetary relay spawned on virtual_z without planet at [x],[y],[z]")
 	var/p_name = P.planet_name
 	p_name = replacetext(p_name, " ", "_")
 	autolinkers = list("[p_name]_relay")

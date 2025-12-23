@@ -116,21 +116,21 @@ var/datum/subsystem/mapping/SSmapping
 		if(STAGE_TERRAIN)
 			stage_name = "Terrain"
 			if(terrain_queue.len > 0)
-				progress = round((queue_index / terrain_queue.len) * 100, 0.1)
+				progress = round((queue_index / terrain_queue.len) * 100, 1)
 		if(STAGE_RUIN)
 			stage_name = "Ruin"
-			progress = 100
+			progress = clamp(round((1-(current_planet.ruin_budget / initial(current_planet.ruin_budget))) * 100, 1),0,100)
 		if(STAGE_POPULATION)
 			stage_name = "Population"
 			if(population_queue.len > 0)
-				progress = round((queue_index / population_queue.len) * 100, 0.1)
+				progress = round((queue_index / population_queue.len) * 100, 1)
 		if(STAGE_WEATHER)
 			stage_name = "Weather"
 			progress = 100
 		if(STAGE_FINALIZE)
 			stage_name = "Finalize"
 			if(finalize_queue.len > 0)
-				progress = round((queue_index / finalize_queue.len) * 100, 0.1)
+				progress = round((queue_index / finalize_queue.len) * 100, 1)
 
 	return ..("[stage_name] [progress]% | TpT:[turfs_per_tick]")
 
@@ -314,6 +314,8 @@ var/datum/subsystem/mapping/SSmapping
 					if(TOD_SUNSET) current_planet.next_firetime = world.time + 3 MINUTES
 					if(TOD_NIGHTTIME) current_planet.next_firetime = world.time + 36 MINUTES
 
+				daynight_v_lvls |= current_virtual_z
+				SSDayNight.flags = 0
 				SSDayNight.update_planet_lighting(current_planet, immediate = TRUE)
 
 				var/total_time = (world.timeofday - generation_start_time) / 10
@@ -346,18 +348,18 @@ var/datum/subsystem/mapping/SSmapping
 /datum/subsystem/mapping/proc/throttle(tick_start, turfs_processed)
 	var/tick_used = world.tick_usage - tick_start
 
-	// Scale up aggressively when performing well
-	if(tick_used < 15 && turfs_per_tick < max_turfs_per_tick)
-		turfs_per_tick = min(turfs_per_tick + 400, max_turfs_per_tick)
-	else if(tick_used < 30 && turfs_per_tick < max_turfs_per_tick)
+	// Scale up when performing well
+	if(tick_used < 20 && turfs_per_tick < max_turfs_per_tick)
 		turfs_per_tick = min(turfs_per_tick + 200, max_turfs_per_tick)
-	else if(tick_used < 50 && turfs_per_tick < max_turfs_per_tick)
+	else if(tick_used < 40 && turfs_per_tick < max_turfs_per_tick)
 		turfs_per_tick = min(turfs_per_tick + 100, max_turfs_per_tick)
+	else if(tick_used < 60 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 50, max_turfs_per_tick)
 	// Scale back when approaching limits
-	else if(tick_used > 90 && turfs_per_tick > min_turfs_per_tick)
-		turfs_per_tick = max(turfs_per_tick - 200, min_turfs_per_tick)
-	else if(tick_used > 80 && turfs_per_tick > min_turfs_per_tick)
-		turfs_per_tick = max(turfs_per_tick - 100, min_turfs_per_tick)
+	else if(tick_used > 85 && turfs_per_tick > min_turfs_per_tick)
+		turfs_per_tick = max(turfs_per_tick - 150, min_turfs_per_tick)
+	else if(tick_used > 75 && turfs_per_tick > min_turfs_per_tick)
+		turfs_per_tick = max(turfs_per_tick - 75, min_turfs_per_tick)
 
 /datum/subsystem/mapping/proc/get_bucket_key(x, y)
 	return "[round(x / SPATIAL_BUCKET_SIZE)]_[round(y / SPATIAL_BUCKET_SIZE)]"
@@ -443,98 +445,47 @@ var/datum/subsystem/mapping/SSmapping
 
 // Tries to place a new virtual zLevel of given size within the specified zLevel
 /datum/subsystem/mapping/proc/try_place_vz(var/datum/zLevel/check_z, var/size, var/spacing)
-	if(!check_z?.virtual_z_levels.len)
-		return list("x" = 1, "y" = 1)
+	var/target_x = 1
+	var/target_y = 1
 
-	// Try to find a free spot using a simple grid-based search going row by row from bottom-left
-	var/test_y = 1
+	/// Sanity
+	if(size > world.maxx || size > world.maxy)
+		CRASH("Tried to find virtual level allocation that cannot possibly fit in a physical level.")
 
-	while(test_y + size <= world.maxy)
-		var/test_x = 1
+	/// Methodical trial and error method
+	while(TRUE)
+		var/upper_target_x = target_x + size
+		var/upper_target_y = target_y + size
 
-		while(test_x + size <= world.maxx)
-			// Check if this position would overlap with any existing virtual_z
-			var/overlaps = FALSE
+		var/out_of_bounds = FALSE
+		if((target_x < 1 || upper_target_x > world.maxx) || (target_y < 1 || upper_target_y > world.maxy))
+			out_of_bounds = TRUE
 
-			for(var/datum/virtual_z/V in check_z.virtual_z_levels)
-				// Calculate the bounds of existing virtual_z with spacing
-				var/existing_x1 = V.x_offset - spacing
-				var/existing_y1 = V.y_offset - spacing
-				var/existing_x2 = V.x_offset + V.size + spacing
-				var/existing_y2 = V.y_offset + V.size + spacing
+		if(!out_of_bounds && check_z.is_box_free(target_x, target_y, upper_target_x, upper_target_y))
+			// Found non-overlapping position, now ensure minimum spacing
+			var/min_y = check_z.get_min_valid_y(target_x, upper_target_x, target_y, spacing)
+			var/min_x = check_z.get_min_valid_x(target_y, upper_target_y, target_x, spacing)
 
-				// Calculate the bounds of the new virtual_z
-				var/new_x1 = test_x
-				var/new_y1 = test_y
-				var/new_x2 = test_x + size
-				var/new_y2 = test_y + size
+			if(min_y > target_y)
+				target_y = min_y
+				continue // Re-check with adjusted position
+			if(min_x > target_x)
+				target_x = min_x
+				continue // Re-check with adjusted position
 
-				// Check for overlap
-				if(!(new_x2 < existing_x1 || new_x1 > existing_x2 || new_y2 < existing_y1 || new_y1 > existing_y2))
-					overlaps = TRUE
-					test_x = existing_x2 + 1
-					break
+			return list("x" = target_x, "y" = target_y) // Found valid spot with proper spacing
 
-			if(!overlaps) // Found a spot
-				return list("x" = test_x, "y" = test_y)
+		if(upper_target_x > world.maxx) // If we can't increment x, then the search is over
+			break
 
-			if(overlaps)
-				continue
-			else
-				test_x++
-
-		// Move to next row - find the minimum y position above all existing allocations at this height
-		var/next_y = test_y + 1
-		for(var/datum/virtual_z/V in check_z.virtual_z_levels)
-			if(V.y_offset > test_y && V.y_offset < next_y + size)
-				next_y = V.y_offset + V.size + spacing
-
-		test_y = next_y
-
-	// No space found
-	return null
-
-/datum/subsystem/mapping/proc/set_vz_borders(var/datum/virtual_z/vz, var/spacing)
-	if(!vz || !vz.z() || spacing <= 0)
-		return
-
-	var/z_level = vz.z()
-	var/x1 = vz.x_offset
-	var/y1 = vz.y_offset
-	var/x2 = vz.x_offset + vz.size - 1
-	var/y2 = vz.y_offset + vz.size - 1
-
-	// Top
-	if(y2 + spacing <= world.maxy)
-		for(var/x = max(1, x1 - spacing); x <= min(world.maxx, x2 + spacing); x++)
-			for(var/y = y2 + 1; y <= min(world.maxy, y2 + spacing); y++)
-				var/turf/T = locate(x, y, z_level)
-				if(T && !istype(T, /turf/unsimulated/border))
-					T.ChangeTurf(/turf/unsimulated/border)
-
-	// Bottom
-	if(y1 - spacing >= 1)
-		for(var/x = max(1, x1 - spacing); x <= min(world.maxx, x2 + spacing); x++)
-			for(var/y = max(1, y1 - spacing); y < y1; y++)
-				var/turf/T = locate(x, y, z_level)
-				if(T && !istype(T, /turf/unsimulated/border))
-					T.ChangeTurf(/turf/unsimulated/border)
-
-	// Left
-	if(x1 - spacing >= 1)
-		for(var/y = y1; y <= y2; y++)
-			for(var/x = max(1, x1 - spacing); x < x1; x++)
-				var/turf/T = locate(x, y, z_level)
-				if(T && !istype(T, /turf/unsimulated/border))
-					T.ChangeTurf(/turf/unsimulated/border)
-
-	// Right
-	if(x2 + spacing <= world.maxx)
-		for(var/y = y1; y <= y2; y++)
-			for(var/x = x2 + 1; x <= min(world.maxx, x2 + spacing); x++)
-				var/turf/T = locate(x, y, z_level)
-				if(T && !istype(T, /turf/unsimulated/border))
-					T.ChangeTurf(/turf/unsimulated/border)
+		var/increments_y = TRUE
+		if(upper_target_y > world.maxy)
+			target_y = 1
+			increments_y = FALSE
+		if(increments_y)
+			target_y += spacing
+		else
+			target_x += spacing
 
 /**
  * Initialize all biomes
@@ -586,7 +537,7 @@ var/datum/subsystem/mapping/SSmapping
 			turfs_per_tick = 1000
 		else
 			turfs_per_tick = 500
-	current_virtual_z = map.addVLevel(size_to_use, defer_list_init = TRUE)
+	current_virtual_z = map.addVLevel(size_to_use)
 	planets += current_planet
 	current_virtual_z.planet = current_planet
 	current_planet.v = current_virtual_z

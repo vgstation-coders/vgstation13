@@ -1014,6 +1014,9 @@ a {
 
 				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")
 
+/obj/proc/post_ruin_load()
+	return
+
 /**
  * This proc is used for telling whether something can pass by this object in a given direction, for use by the pathfinding system.
  *

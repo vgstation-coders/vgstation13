@@ -89,7 +89,7 @@ On the map dm file, redefine the following:
 		if(!istype(v) || v.planet)
 			continue
 
-		for(var/turf/T in block(locate(1, 1, v.z()), locate(world.maxx, world.maxy, v.z())))
+		for(var/turf/T in block(locate(v.low_x, v.low_y, v.z()), locate(v.high_x, v.high_y, v.z())))
 			if(IsEven(T.x) && IsEven(T.y))
 				var/area/A = get_area(T)
 				if(isopensurface(A))
@@ -177,7 +177,7 @@ On the map dm file, redefine the following:
  * * immediate - If TRUE, applies lighting immediately instead of queueing (default TRUE for instant updates)
  */
 /datum/subsystem/daynightcycle/proc/update_planet_lighting(var/datum/planet_type/planet, var/immediate = TRUE)
-	if(!planet || !planet.daynight_turfs)
+	if(!planet?.daynight_turfs)
 		return
 
 	// Use the same light power calculation as global cycle

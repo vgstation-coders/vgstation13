@@ -22,10 +22,14 @@
 
 	var/obj/machinery/telecomms/relay/planetary/comms_relay = null
 
+	var/low_x = 0
+	var/high_x = 0
+	var/low_y = 0
+	var/high_y = 0
 	var/x_offset = 0 //x position of first turf in virtual z level
 	var/y_offset = 0 //y position of first turf in virtual z level
 
-/datum/virtual_z/New(var/datum/zLevel/z, var/input_size)
+/datum/virtual_z/New(var/datum/zLevel/z, var/input_size, var/input_x = 0, var/input_y = 0)
 	. = ..()
 	if(!z)
 		CRASH("Tried creating a virtual zLevel without a parent zLevel!")
@@ -33,6 +37,8 @@
 		CRASH("Tried creating a virtual zLevel before SSmapping was ready!")
 	parent_z = z
 	size = input_size
+	x_offset = input_x
+	y_offset = input_y
 	setup()
 
 /datum/virtual_z/proc/setup()
@@ -46,6 +52,12 @@
 		var/area/A = get_area(T)
 		areas |= A
 		A.virtual_z_level = src
+	var/list/bounds = get_bounds()
+	low_x = bounds["x_min"]
+	high_x = bounds["x_max"]
+	low_y = bounds["y_min"]
+	high_y = bounds["y_max"]
+	make_borders()
 
 /datum/virtual_z/proc/get_bounds()
 	return list(
@@ -70,24 +82,33 @@
 /datum/virtual_z/proc/get_players()
 	return mobs_in_vlevel(src, TRUE, mob_list)
 
+/datum/virtual_z/proc/get_living_players()
+	var/list/mob/players = get_players()
+	var/list/mob/living/living_players = list()
+	for(var/mob/M in players)
+		if(istype(M, /mob/living))
+			var/mob/living/L = M
+			living_players |= L
+	return living_players
+
 //////////////////////////////////////
 /////// COORDINATE TRANSLATION ///////
 //////////////////////////////////////
 //Get virtual x from true x
 /datum/virtual_z/proc/vx(var/atom/A = null, var/coord = null)
 	if(coord)
-		return coord - x_offset
+		return coord - x_offset + 1
 	if(!A)
 		return null
-	return A.x - x_offset
+	return A.x - x_offset + 1
 
 //Get virtual y from true y
 /datum/virtual_z/proc/vy(var/atom/A = null, var/coord = null)
 	if(coord)
-		return coord - y_offset
+		return coord - y_offset + 1
 	if(!A)
 		return null
-	return A.y - y_offset
+	return A.y - y_offset + 1
 
 //Get virtual z from true z
 /datum/virtual_z/proc/vz(var/atom/A)
@@ -95,19 +116,59 @@
 
 //Get true x from virtual x
 /datum/virtual_z/proc/x(var/coord)
-	return coord + x_offset
+	return coord + x_offset - 1
 
 //Get true y from virtual y
 /datum/virtual_z/proc/y(var/coord)
-	return coord + y_offset
+	return coord + y_offset - 1
 
 //Get true z from virtual z
 /datum/virtual_z/proc/z()
 	return parent_z.z
 
-/////////////////////////////////////
-///////// PLANET GENERATION /////////
-/////////////////////////////////////
+//////////////////////////////////
+///////// MAP GENERATION /////////
+//////////////////////////////////
+/datum/virtual_z/proc/make_borders()
+	var/spacing = ALLOCATION_SPACING_DEFAULT
+
+	var/z_level = z()
+	var/x1 = low_x
+	var/y1 = low_y
+	var/x2 = high_x
+	var/y2 = high_y
+
+	// Top - spawn borders if there's any space above
+	if(y2 < world.maxy)
+		for(var/x = max(1, x1 - spacing); x <= min(world.maxx, x2 + spacing); x++)
+			for(var/y = y2 + 1; y <= min(world.maxy, y2 + spacing); y++)
+				var/turf/T = locate(x, y, z_level)
+				if(!istype(T, /turf/unsimulated/border))
+					T.ChangeTurf(/turf/unsimulated/border)
+
+	// Bottom - spawn borders if there's any space below
+	if(y1 > 1)
+		for(var/x = max(1, x1 - spacing); x <= min(world.maxx, x2 + spacing); x++)
+			for(var/y = max(1, y1 - spacing); y < y1; y++)
+				var/turf/T = locate(x, y, z_level)
+				if(!istype(T, /turf/unsimulated/border))
+					T.ChangeTurf(/turf/unsimulated/border)
+
+	// Left - spawn borders if there's any space to the left
+	if(x1 > 1)
+		for(var/y = y1; y <= y2; y++)
+			for(var/x = max(1, x1 - spacing); x < x1; x++)
+				var/turf/T = locate(x, y, z_level)
+				if(!istype(T, /turf/unsimulated/border))
+					T.ChangeTurf(/turf/unsimulated/border)
+
+	// Right - spawn borders if there's any space to the right
+	if(x2 < world.maxx)
+		for(var/y = y1; y <= y2; y++)
+			for(var/x = x2 + 1; x <= min(world.maxx, x2 + spacing); x++)
+				var/turf/T = locate(x, y, z_level)
+				if(!istype(T, /turf/unsimulated/border))
+					T.ChangeTurf(/turf/unsimulated/border)
 
 // Assigns all appropriate turfs on the vlevel to the provided climate system
 /datum/virtual_z/proc/register_weather_turfs(var/datum/climate/climate)
@@ -151,19 +212,23 @@
 		mineral_replacement = /turf/unsimulated/mineral/random
 
 	// Process all turfs in the spawned objects
-	for(var/atom/A in spawned_objects)
-		if(isturf(A))
-			var/turf/T = A
-
-			// Set the area's baseturf if not already set and replace floor and wall turfs
-			var/area/AA = get_area(T)
-			if(AA?.base_turf_type != default_baseturf)
-				AA.base_turf_type = default_baseturf
+	for(var/area/A in spawned_objects)
+		if(istype(A))
+			A.virtual_z_level = src
+			areas |= A  // Add ruin areas to the virtual_z's areas list for proper get_turfs() lookups
+			if(A?.base_turf_type != default_baseturf)
+				A.base_turf_type = default_baseturf
+	for(var/atom/AA in spawned_objects)
+		if(isturf(AA))
+			var/turf/T = AA
 			if(istype(T, /turf/unsimulated/floor/asteroid))
 				if(default_baseturf)
 					T.ChangeTurf(default_baseturf)
 			else if(istype(T, /turf/unsimulated/mineral))
 				T.ChangeTurf(mineral_replacement)
+		else if(isobj(AA))
+			var/obj/O = AA
+			O.post_ruin_load()
 
 /datum/virtual_z/proc/place_ruin(datum/map_element/ruin/ruin_to_use)
 	if(!ruin_to_use)

@@ -159,18 +159,11 @@
 	new_vz.name = level.name
 	return new_vz
 
-/datum/map/proc/addVLevel(var/size = ALLOCATION_SMALL, var/defer_list_init = FALSE)
+/datum/map/proc/addVLevel(var/size = ALLOCATION_SMALL)
 	var/found_x = 0
 	var/found_y = 0
 
-	var/spacing = ALLOCATION_SPACING_SMALL
-	switch(size)
-		if(ALLOCATION_FULL)
-			spacing = 0
-		if(ALLOCATION_LARGE)
-			spacing = ALLOCATION_SPACING_LARGE
-		if(ALLOCATION_MEDIUM)
-			spacing = ALLOCATION_SPACING_MEDIUM
+	var/spacing = ALLOCATION_SPACING_DEFAULT
 
 	// Check existing dynamic zLevels for available space using 2D bin packing
 	var/datum/zLevel/z_to_use = null
@@ -193,16 +186,10 @@
 		found_y = 1
 
 	// Create the new virtual_z
-	var/datum/virtual_z/new_vz = new(z_to_use, size, defer_list_init)
-	new_vz.x_offset = found_x
-	new_vz.y_offset = found_y
+	var/datum/virtual_z/new_vz = new(z_to_use, size, found_x, found_y)
 
 	// Add to global vLevels list (map global is set during gameplay)
 	map.vLevels |= new_vz
-
-	// Create border turfs around this virtual_z, if required
-	if(spacing > 0)
-		SSmapping.set_vz_borders(new_vz, spacing)
 
 	return new_vz
 
@@ -268,6 +255,38 @@ var/global/list/accessable_z_levels = list()
 
 /datum/zLevel/proc/blur_holomap(var/area/aera, var/turf/truf)
 	return FALSE
+
+/datum/zLevel/proc/is_box_free(low_x, low_y, high_x, high_y)
+	for(var/datum/virtual_z/vlevel in virtual_z_levels)
+		if(low_x <= vlevel.high_x && vlevel.low_x <= high_x && low_y <= vlevel.high_y && vlevel.low_y <= high_y)
+			return FALSE
+	return TRUE
+
+// Returns the minimum Y position that would have at least 'spacing' turfs of separation from all existing vlevels
+// Returns 0 if no adjustment needed
+/datum/zLevel/proc/get_min_valid_y(low_x, high_x, low_y, spacing)
+	var/min_y = 0
+	for(var/datum/virtual_z/vlevel in virtual_z_levels)
+		// Check if we overlap in X (meaning we need Y separation)
+		if(low_x <= vlevel.high_x && vlevel.low_x <= high_x)
+			// Calculate minimum Y to have 'spacing' turfs of gap from this vlevel
+			var/required_y = vlevel.high_y + spacing + 1
+			if(required_y > low_y && required_y > min_y)
+				min_y = required_y
+	return min_y
+
+// Returns the minimum X position that would have at least 'spacing' turfs of separation from all existing vlevels
+// Returns 0 if no adjustment needed
+/datum/zLevel/proc/get_min_valid_x(low_y, high_y, low_x, spacing)
+	var/min_x = 0
+	for(var/datum/virtual_z/vlevel in virtual_z_levels)
+		// Check if we overlap in Y (meaning we need X separation)
+		if(low_y <= vlevel.high_y && vlevel.low_y <= high_y)
+			// Calculate minimum X to have 'spacing' turfs of gap from this vlevel
+			var/required_x = vlevel.high_x + spacing + 1
+			if(required_x > low_x && required_x > min_x)
+				min_x = required_x
+	return min_x
 
 ////////////////////////////////
 
