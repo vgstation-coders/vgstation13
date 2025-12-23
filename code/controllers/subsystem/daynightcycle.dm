@@ -1,7 +1,7 @@
 var/datum/subsystem/daynightcycle/SSDayNight
 
 var/list/daynight_turfs = list()
-var/list/daynight_z_lvls = list()
+var/list/daynight_v_lvls = list()
 /* Default Timing
 Morning	  - 2 Mins
 Sunrise   - 2 Mins
@@ -26,7 +26,7 @@ Nighttime - 36 Minutes
 	wait          = 1 MINUTES
 /*
 On the map dm file, redefine the following:
-	- 'daynight_z_lvls' to change the zLevels that the day/night cycle applies to. Do not redefine if you want this subsystem disabled.
+	- 'daynight_v_lvls' to change the zLevels that the day/night cycle applies to. Do not redefine if you want this subsystem disabled.
 	  The global cycle applies to all z-levels in this list EXCEPT map.zProcGen (planets have individual cycles).
 	- 'advance_time()' to change the lighting scheme - supports both global and per-planet cycles.
 	- 'play_globalsound()' to change or disable the sound played at sunrise and sunset (only for global cycle).
@@ -53,14 +53,14 @@ On the map dm file, redefine the following:
 	NEW_SS_GLOBAL(SSDayNight)
 
 /datum/subsystem/daynightcycle/Initialize()
-	daynight_z_lvls += map.zProcGen
-	if(!daynight_z_lvls.len)
+	if(!daynight_v_lvls.len)
 		flags = SS_NO_INIT | SS_NO_FIRE
-	get_turflist()
+	else
+		get_turflist()
 	..()
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
-	// Process global cycle (applies to all z-levels in daynight_z_lvls except zProcGen)
+	// Process global cycle (applies to all z-levels in daynight_v_lvls except zProcGen)
 	if(world.time >= next_firetime)
 		advance_time()
 		update_global_lighting()
@@ -80,16 +80,16 @@ On the map dm file, redefine the following:
 /**
  * Builds the global daynight_turfs list
  *
- * Scans all z-levels in daynight_z_lvls EXCEPT for map.zProcGen (which has planets with individual cycles)
+ * Scans all z-levels in daynight_v_lvls EXCEPT for map.zProcGen (which has planets with individual cycles)
  * and identifies turfs that should receive the global day/night cycle lighting.
  */
 /datum/subsystem/daynightcycle/proc/get_turflist()
-	for(var/z in daynight_z_lvls)
-		// Skip the procgen z-level - planets have their own independent cycles
-		if(z == map.zProcGen)
+	for(var/datum/virtual_z/v in daynight_v_lvls)
+		// Planets have their own independent cycles
+		if(!istype(v) || v.planet)
 			continue
 
-		for(var/turf/T in block(locate(1, 1, z), locate(world.maxx, world.maxy, z)))
+		for(var/turf/T in block(locate(1, 1, v.z()), locate(world.maxx, world.maxy, v.z())))
 			if(IsEven(T.x) && IsEven(T.y))
 				var/area/A = get_area(T)
 				if(isopensurface(A))
@@ -110,7 +110,7 @@ On the map dm file, redefine the following:
  * Advances time of day to the next phase
  *
  * If planet is provided, advances that planet's time. Otherwise, advances the global cycle.
- * The global cycle applies to all z-levels in daynight_z_lvls EXCEPT map.zProcGen.
+ * The global cycle applies to all z-levels in daynight_v_lvls EXCEPT map.zProcGen.
  * Global sounds (rooster/wolf) only play when advancing the global cycle, not individual planets.
  * This function can be overridden in map.dm files for custom lighting schemes (like junglestation).
  *

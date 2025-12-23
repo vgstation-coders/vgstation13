@@ -1053,11 +1053,8 @@ var/list/icon_state_to_appearance = list()
 			G.icon_state = "Gibtonite ore 2"
 
 	var/turf_type = mined_type
-	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
-	if(istype(A))
-		var/datum/planet_type/planet = A.ptype
-		if(planet?.default_baseturf)
-			turf_type = planet.default_baseturf
+	if(planet?.default_baseturf)
+		turf_type = planet.default_baseturf
 
 	ChangeTurf(turf_type)
 

@@ -12,6 +12,7 @@ var/area/space_area
 	var/list/obj/machinery/light_switch/lightswitches = list()
 	var/list/obj/machinery/light/lights = list()
 	var/list/area_turfs
+	var/datum/virtual_z/virtual_z_level
 	plane = LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null

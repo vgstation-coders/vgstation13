@@ -25,13 +25,13 @@
 	var/nameShort = ""
 	var/nameLong = ""
 	var/list/datum/zLevel/zLevels = list()
+	var/list/datum/virtual_z/vLevels = list()
 	var/zMainStation = 1
 	var/zCentcomm = 2
 	var/zTCommSat = 3
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
-	var/zProcGen = 7 //temporary until dynamic z levels are implemented
 
 	var/zAdditionalStationZlevel = 0 // 0 because surely nothing will ever go to Z 0, right? why not null? because nullspace
 
@@ -111,6 +111,12 @@
 
 	src.loadZLevels(src.zLevels)
 
+	// Populate vLevels list from all zLevel virtual_z_levels
+	// This must be done here because the global 'map' variable isn't set during loadZLevels
+	for(var/datum/zLevel/Z in src.zLevels)
+		for(var/datum/virtual_z/V in Z.virtual_z_levels)
+			src.vLevels |= V
+
 	//The spawn below is needed
 	spawn()
 		for(var/T in load_map_elements)
@@ -126,15 +132,11 @@
 	return 0
 
 /datum/map/proc/loadZLevels(list/levelPaths)
-
-
 	for(var/i = 1 to levelPaths.len)
 		var/path = levelPaths[i]
 		addZLevel(new path, i)
 
 /datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0, make_base_turf = FALSE, fast_base_turf = FALSE)
-
-
 	if(!istype(level))
 		warning("ERROR: addZLevel received [level ? "a bad level of type [ispath(level) ? "[level]" : "[level.type]" ]" : "no level at all!"]")
 		return
@@ -148,6 +150,61 @@
 	level.z = z_to_use
 	if(!istype(level.base_turf,/turf/space) && make_base_turf)
 		level.reset_base_turf(/turf/space,fast_base_turf)
+
+	linkVLevel(level)
+
+/datum/map/proc/linkVLevel(datum/zLevel/level)
+	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL)
+	new_vz.id = level.z
+	new_vz.name = level.name
+	return new_vz
+
+/datum/map/proc/addVLevel(var/size = ALLOCATION_SMALL, var/defer_list_init = FALSE)
+	var/found_x = 0
+	var/found_y = 0
+
+	var/spacing = ALLOCATION_SPACING_SMALL
+	switch(size)
+		if(ALLOCATION_FULL)
+			spacing = 0
+		if(ALLOCATION_LARGE)
+			spacing = ALLOCATION_SPACING_LARGE
+		if(ALLOCATION_MEDIUM)
+			spacing = ALLOCATION_SPACING_MEDIUM
+
+	// Check existing dynamic zLevels for available space using 2D bin packing
+	var/datum/zLevel/z_to_use = null
+	for(var/datum/zLevel/check_z in zLevels)
+		if(istype(check_z, /datum/zLevel/dynamic))
+			var/list/placement = SSmapping.try_place_vz(check_z, size, spacing)
+			if(placement)
+				z_to_use = check_z
+				found_x = placement["x"]
+				found_y = placement["y"]
+				break
+
+	// Create a new dynamic zLevel if no suitable one was found
+	if(!z_to_use)
+		z_to_use = new /datum/zLevel/dynamic()
+		world.maxz++
+		z_to_use.z = world.maxz
+		map.zLevels += z_to_use
+		found_x = 1
+		found_y = 1
+
+	// Create the new virtual_z
+	var/datum/virtual_z/new_vz = new(z_to_use, size, defer_list_init)
+	new_vz.x_offset = found_x
+	new_vz.y_offset = found_y
+
+	// Add to global vLevels list (map global is set during gameplay)
+	map.vLevels |= new_vz
+
+	// Create border turfs around this virtual_z, if required
+	if(spacing > 0)
+		SSmapping.set_vz_borders(new_vz, spacing)
+
+	return new_vz
 
 var/global/list/accessable_z_levels = list()
 
@@ -194,6 +251,8 @@ var/global/list/accessable_z_levels = list()
 	var/z_below //Same, with below
 	var/list/transition_crosswrap_z=null // list(z_north,z_south,z_east,z_west). when you hit the edge, instead of drifting to a random zlevel or looping on the current one, teleports you to the corresponding edge on the z-level in the list.
 	var/planetside=FALSE //if the z-level is supposed to represent being on a planet, surface or underground.
+
+	var/list/virtual_z_levels = list() //list of virtual z-levels that use this z-level as their base
 
 /datum/zLevel/proc/post_mapload()
 	return
@@ -314,6 +373,11 @@ var/global/list/accessable_z_levels = list()
 		var/generator = pick(typesof(/obj/structure/radial_gen/movable/snow_nature/snow_forest) + typesof(/obj/structure/radial_gen/movable/snow_nature/snow_grass))
 		new generator(T)
 
+/datum/zLevel/dynamic
+	name = "dynamic zLevel"
+	movementJammed = TRUE
+	transitionLoops = FALSE
+
 // Debug ///////////////////////////////////////////////////////
 
 /*
@@ -386,3 +450,4 @@ var/global/list/accessable_z_levels = list()
 		feedback_add_details("admin_verb", "BTC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		message_admins("[key_name_admin(usr)] has set the base turf for Z-level [choice] to [get_base_turf(choice)]. This will affect all destroyed turfs from now on.")
 		log_admin("[key_name(usr)] has set the base turf for Z-level [choice] to [get_base_turf(choice)]. This will affect all destroyed turfs from now on.")
+

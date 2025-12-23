@@ -66,8 +66,8 @@
  * * new_area - The area to assign the turf to
  * * string_gen - Optional string used for procedural generation logic
  */
-/datum/biome/proc/generate_turf(turf/gen_turf, area/new_area, string_gen)
-	var/area/current_area = get_area(gen_turf)
+/datum/biome/proc/generate_turf(turf/gen_turf, area/new_area, string_gen, size, x_offset = 0, y_offset = 0)
+	var/area/current_area = gen_turf.loc
 	if(!(current_area.flags & CAVES_ALLOWED))
 		return FALSE
 
@@ -77,7 +77,7 @@
 
 	// Preserve NO_RUINS flag through turf change
 	var/stored_flags = gen_turf.turf_flags & NO_RUINS
-	var/turf/new_turf_type = get_turf_type(gen_turf, string_gen)
+	var/turf/new_turf_type = get_turf_type(gen_turf, string_gen, size, x_offset, y_offset)
 	var/turf/new_turf = gen_turf.ChangeTurf(new_turf_type, defer_edges = TRUE)
 	// Restore the preserved flag
 	new_turf?.turf_flags |= stored_flags
@@ -94,7 +94,7 @@
  * * gen_turf - The turf being generated
  * * string_gen - Optional string used for procedural generation logic
  */
-/datum/biome/proc/get_turf_type(turf/gen_turf, string_gen)
+/datum/biome/proc/get_turf_type(turf/gen_turf, string_gen, size, x_offset = 0, y_offset = 0)
 	return pick(open_turf_types_expanded)
 
 /**
@@ -290,12 +290,20 @@
  * * gen_turf - The turf being generated
  * * string_gen - String containing generation data, indexed by coordinate
  */
-/datum/biome/cave/get_turf_type(turf/gen_turf, string_gen)
+/datum/biome/cave/get_turf_type(turf/gen_turf, string_gen, size, x_offset = 0, y_offset = 0)
 	// Gets the character in string_gen corresponding to gen_turf's coords. If it is nonzero,
 	// place a closed turf; otherwise place an open turf
-	var/rel_x = ((gen_turf.x - 1) % SECTOR_SIZE) + 1
-	var/rel_y = ((gen_turf.y - 1) % SECTOR_SIZE) + 1
-	var/string_index = SECTOR_SIZE * (rel_y - 1) + rel_x
+	if(!size || !string_gen)
+		return pick(open_turf_types_expanded)
+	// Calculate relative coordinates within the virtual_z
+	var/rel_x = gen_turf.x - x_offset + 1
+	var/rel_y = gen_turf.y - y_offset + 1
+	// Clamp to valid range
+	rel_x = clamp(rel_x, 1, size)
+	rel_y = clamp(rel_y, 1, size)
+	var/string_index = size * (rel_y - 1) + rel_x
+	if(string_index < 1 || string_index > length(string_gen))
+		return pick(open_turf_types_expanded)
 	var/is_closed = text2num(string_gen[string_index])
 	return pick(is_closed ? closed_turf_types_expanded : open_turf_types_expanded)
 

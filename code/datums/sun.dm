@@ -42,7 +42,7 @@ var/global/datum/sun/sun
 		var/obj/machinery/power/solar/panel/tracker/T
 		for(T in solars_list)
 			if(T.powernet)
-				if(SSDayNight?.overwrite_solars && (T.z in daynight_z_lvls) )
+				if(SSDayNight?.overwrite_solars && (T.get_virtual_z() in daynight_v_lvls) )
 					T.set_angle(SSDayNight.nearest_star_angle)
 				else
 					occlusion(T)
@@ -73,7 +73,7 @@ var/global/datum/sun/sun
 
 	for(S in solars_list)
 		if(S.powernet)
-			if(SSDayNight?.overwrite_solars && (S.z in daynight_z_lvls) )
+			if(SSDayNight?.overwrite_solars && (S.get_virtual_z() in daynight_v_lvls) )
 				occlusion_planetside(S)
 			else
 				occlusion(S)
@@ -114,7 +114,7 @@ var/global/datum/sun/sun
 	S.update_icon()
 
 //ignore blocking tiles if we're using the day/night for our power determination, and instead use angles and whatnot.
-/datum/sun/proc/occlusion_planetside(const/obj/machinery/power/solar/panel/S)	
+/datum/sun/proc/occlusion_planetside(const/obj/machinery/power/solar/panel/S)
 	S.obscured = 0
 	S.update_solar_exposure()
 	S.update_icon()

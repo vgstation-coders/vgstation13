@@ -70,6 +70,8 @@
 
 	/// Cellular automaton output string used during cave generation
 	var/cave_automaton_data
+	/// Size used for cave cellular automaton generation
+	var/cave_generation_size
 
 	/// Temporary list storing features created during population phase (cleared after use)
 	var/list/created_features = list()
@@ -86,15 +88,15 @@
 	var/list/weighted_ruin_list = list()
 	var/spawned_story_ruin = FALSE
 
-/datum/planetGenerator/New()
+/datum/planetGenerator/New(var/generation_size)
 	// Initialize perlin noise seeds with random values
 	height_seed = rand(0, 50000)
 	humidity_seed = rand(0, 50000)
 	heat_seed = rand(0, 50000)
 
-	// Generate cellular automaton data for caves if they are enabled
-	if(mountain_height < 1)
-		cave_automaton_data = rustg_cnoise_generate("[initial_closed_chance]", "[smoothing_iterations]", "[birth_limit]", "[death_limit]", "[SECTOR_SIZE]", "[SECTOR_SIZE]")
+	// Store generation size for deferred cave data generation
+	cave_generation_size = generation_size
+	// Note: cave_automaton_data is generated lazily via generate_cave_data() to avoid blocking
 
 	// Initialize area instances
 	primary_area = new primary_area_type
@@ -104,8 +106,20 @@
 	turf_biome_cache = list()
 	return ..()
 
-/datum/planetGenerator/proc/generate_turf(turf/gen_turf)
-	var/area/turf_area = get_area(gen_turf)
+/// Generates the cellular automaton data for caves. Called lazily to avoid blocking during spawn_planet().
+/datum/planetGenerator/proc/generate_cave_data()
+	if(cave_automaton_data)
+		return // Already generated
+	if(mountain_height >= 1)
+		return // Caves disabled
+	if(!cave_generation_size)
+		return // No size set
+
+	cave_automaton_data = rustg_cnoise_generate("[initial_closed_chance]", "[smoothing_iterations]", "[birth_limit]", "[death_limit]", "[cave_generation_size]", "[cave_generation_size]")
+
+/datum/planetGenerator/proc/generate_turf(turf/gen_turf, x_offset = 0, y_offset = 0)
+	// Use .loc directly instead of get_area() for speed
+	var/area/turf_area = gen_turf.loc
 	if(!(turf_area.flags & CAVES_ALLOWED))
 		return
 
@@ -113,13 +127,13 @@
 
 	// Determine which area to use based on biome type
 	var/area/used_area = istype(turf_biome, /datum/biome/cave) ? cave_area : primary_area
-	turf_biome.generate_turf(gen_turf, used_area, cave_automaton_data)
+	turf_biome.generate_turf(gen_turf, used_area, cave_automaton_data, cave_generation_size, x_offset, y_offset)
 
 /datum/planetGenerator/proc/populate_turf(turf/gen_turf, created_features, created_mobs, planet_loot, planet_faction = null)
 	var/datum/biome/turf_biome = get_biome(gen_turf)
 	turf_biome.populate_turf(gen_turf, created_features, created_mobs, planet_loot, planet_faction)
 
-/datum/planetGenerator/proc/post_process(datum/allocation/allocation)
+/datum/planetGenerator/proc/post_process(datum/virtual_z/virtual_z)
 	return
 
 /// Gets the biome for a turf, using the cache if available, otherwise calculating and caching it.

@@ -351,18 +351,18 @@
 		mobs_found += M
 	return mobs_found
 
-/proc/mobs_in_allocation(var/datum/allocation/alloc, var/client_needed=0, var/moblist=mob_list)
+/proc/mobs_in_vlevel(var/datum/virtual_z/vz, var/client_needed=FALSE, var/moblist=mob_list)
+	if(vz.size == ALLOCATION_FULL)
+		return mobs_in_zlevel(vz.z(), client_needed, moblist)
 	var/list/mobs_found = list()
-	if(!alloc)
-		return mobs_found
+	var/list/turf/turfs = vz.get_turfs()
 	for(var/mob/M in moblist)
 		if(client_needed && !M.client)
 			continue
 		var/turf/T = get_turf(M)
-		if(T?.z != alloc.z)
+		if(T?.z != vz.z())
 			continue
-		var/datum/allocation/A = SSmapping.get_allocation(trf = T)
-		if(A != alloc)
+		if(!turfs.Find(T))
 			continue
 		mobs_found += M
 	return mobs_found

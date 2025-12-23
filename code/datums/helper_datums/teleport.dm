@@ -221,7 +221,10 @@
 
 	// Block teleportation to/from/within z-level 7 (procedurally-generated planets)
 	var/turf/curturf = get_turf(teleatom)
-	if(curturf && curturf.z == map.zProcGen)
+	if(!curturf)
+		return FALSE
+	var/datum/virtual_z/curvz = curturf.get_virtual_z()
+	if(curvz?.planet)
 		if(ismob(teleatom))
 			var/mob/M = teleatom
 			to_chat(M, "<span class='warning'>A mysterious force prevents teleportation from this location!</span>")

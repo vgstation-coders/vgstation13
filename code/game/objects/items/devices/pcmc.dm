@@ -105,8 +105,9 @@
 				if (H.z == 0 && !pos)
 					continue
 
-				// Block suit sensors location on z-level 7 (procedurally-generated planets)
-				if(pos && pos.z == map.zProcGen)
+				// Block suit sensors location on planets
+				var/datum/virtual_z/vz = pos.get_virtual_z()
+				if(vz?.planet)
 					pos = null
 
 				var/obj/item/weapon/card/id/I = H.wear_id ? H.wear_id.GetID() : null

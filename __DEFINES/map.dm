@@ -33,9 +33,20 @@
 #define RUIN_BUDGET_PLANET  10 //max per planet
 #define RUIN_BUDGET_JUNGLE  20 //max for junglestation
 
-#define SECTOR_SIZE 100 //max width/height of a sector in turfs. temporary - will be dynamic later
-#define RUIN_PLACEMENT_PADDING 5 // Padding around ruins when placing them in sectors to avoid edge issues
-#define LANDING_ZONE_EDGE_BUFFER 11 // Buffer distance from sector edges for shuttle landing zones
+// Allocation sizing for virtual z-levels
+#define ALLOCATION_SMALL		92 // can fit 25 in one zlevel with 10 spacing
+#define ALLOCATION_MEDIUM		246 // can fit 4 in one zlevel with 8 spacing
+#define ALLOCATION_LARGE		400 // can fit 1 large + 9 small with 8 spacing
+#define ALLOCATION_FULL			500 // takes up the whole zlevel
+
+// Allocation spacing
+#define ALLOCATION_SPACING_SMALL	10 // spacing for tiny allocations
+#define ALLOCATION_SPACING_MEDIUM	8  // spacing for medium allocations
+#define ALLOCATION_SPACING_LARGE	8  // spacing for large allocations
+
+// Padding sizes
+#define RUIN_PLACEMENT_PADDING 		5 // Padding around ruins when placing them in sectors to avoid edge issues
+#define LANDING_ZONE_EDGE_BUFFER 	11 // Buffer distance from sector edges for shuttle landing zones
 
 // Story generator defines
 #define STORY_NT		1

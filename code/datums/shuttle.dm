@@ -994,14 +994,14 @@
 
 	// Unregister shuttle turfs from weather system
 	// doing this for source and destination in case we move between planets
-	var/datum/allocation/source_allocation = SSmapping.get_allocation(trf = our_center)
-	var/datum/climate/source_climate = SSweather.get_climate(our_center.z, source_allocation)
+	var/datum/virtual_z/source_v = our_center.get_virtual_z()
+	var/datum/climate/source_climate = SSweather.get_climate(source_v)
 	if(!source_climate)
-		source_climate = SSweather.get_climate(our_center.z, null)
-	var/datum/allocation/dest_allocation = SSmapping.get_allocation(trf = new_center)
-	var/datum/climate/dest_climate = SSweather.get_climate(new_center.z, dest_allocation)
+		source_climate = SSweather.get_climate(source_v)
+	var/datum/virtual_z/dest_v = new_center.get_virtual_z()
+	var/datum/climate/dest_climate = SSweather.get_climate(dest_v)
 	if(!dest_climate)
-		dest_climate = SSweather.get_climate(new_center.z, null)
+		dest_climate = SSweather.get_climate(dest_v)
 
 	for(var/turf/T in linked_area.contents)
 		for(var/obj/effect/edge_overlay/E in T)
@@ -1020,10 +1020,10 @@
 		for(var/turf/old_turf in old_turfs)
 			source_climate.register_weather_turf(old_turf, TRUE)
 
-	var/datum/planet_type/source_planet = source_climate?.allocation?.ptype
+	var/datum/planet_type/source_planet = source_climate?.v?.planet
 	if(source_planet)
 		SSDayNight.update_turf_lighting(old_turfs, source_planet)
-	else if(our_center.z in daynight_z_lvls) //pre-mapped day/night users like snaxi or jungle
+	else if(our_center.z in daynight_v_lvls) //pre-mapped day/night users like snaxi or jungle
 		for(var/turf/old_turf in old_turfs)
 			if(IsEven(old_turf.x) && IsEven(old_turf.y))
 				var/area/A = get_area(old_turf)
@@ -1039,9 +1039,9 @@
 		SSDayNight.update_turf_lighting(old_turfs)
 
 	//Kill all lz warning effects
-	if(istype(dest_allocation))
+	if(istype(dest_v))
 		var/size = get_size()
-		SSmapping.clear_lz_warnings(dest_allocation, src, size, null)
+		dest_v.clear_lz_warnings(src, size, null)
 
 	return 1
 
@@ -1221,8 +1221,8 @@
 		qdel(src)
 		return
 
-	var/datum/allocation/alloc = planet.allocation
-	if(!alloc)
+	var/datum/virtual_z/vz = planet.v
+	if(!vz)
 		qdel(src)
 		return
 
@@ -1237,7 +1237,7 @@
 	width = size[1]
 	height = size[2]
 
-	var/list/landing_info = find_landing_location(shuttle, alloc, width, height)
+	var/list/landing_info = find_landing_location(shuttle, vz, width, height)
 	if(!landing_info)
 		qdel(src)
 		return
@@ -1249,9 +1249,9 @@
 	// Populate turf list
 	for(var/dx = 0; dx < width; dx++)
 		for(var/dy = 0; dy < height; dy++)
-			var/turf/T = locate(bottom_left.x + dx, bottom_left.y + dy, alloc.z)
+			var/turf/T = locate(bottom_left.x + dx, bottom_left.y + dy, vz.z())
 			if(!T)
-				CRASH("Landing zone creation failed - turf not found at expected location ([bottom_left.x + dx];[bottom_left.y + dy];[alloc.z])")
+				CRASH("Landing zone creation failed - turf not found at expected location ([bottom_left.x + dx];[bottom_left.y + dy];[vz.z()])")
 			turf_list += T
 
 	// Create the docking port
@@ -1283,11 +1283,11 @@
 
 	return list(high_x - low_x + 1, high_y - low_y + 1)
 
-/datum/landing_zone/proc/find_landing_location(var/datum/shuttle/shuttle, var/datum/allocation/alloc, var/x_dim, var/y_dim)
-	if(!shuttle?.linked_port || !alloc)
+/datum/landing_zone/proc/find_landing_location(var/datum/shuttle/shuttle, var/datum/virtual_z/vz, var/x_dim, var/y_dim)
+	if(!shuttle?.linked_port || !vz)
 		return null
 
-	var/list/search_turfs = SSmapping.turfs_from_sector(alloc.sector, alloc.z)
+	var/list/search_turfs = vz.get_turfs()
 
 	// Calculate shuttle bounds and docking port offset
 	var/low_x = world.maxx
@@ -1301,12 +1301,12 @@
 	var/port_offset_y = shuttle.linked_port.y - low_y
 
 	// Get sector boundaries to calculate relative positions
-	var/list/bounds = SSmapping.get_sector_bounds(alloc.sector)
+	var/list/bounds = vz.get_bounds()
 	var/x_min = bounds["x_min"]
 	var/y_min = bounds["y_min"]
 
 	// Create matrix with relative coordinates
-	var/datum/turf_matrix[SECTOR_SIZE][SECTOR_SIZE]
+	var/datum/turf_matrix[vz.size][vz.size]
 	for(var/turf/T in search_turfs)
 		var/rel_x = T.x - x_min + 1
 		var/rel_y = T.y - y_min + 1
@@ -1314,9 +1314,9 @@
 
 	// Define safe zone boundaries (accounting for edge buffer and shuttle size)
 	var/safe_x_min = LANDING_ZONE_EDGE_BUFFER + 1
-	var/safe_x_max = SECTOR_SIZE - LANDING_ZONE_EDGE_BUFFER - x_dim
+	var/safe_x_max = vz.size - LANDING_ZONE_EDGE_BUFFER - x_dim
 	var/safe_y_min = LANDING_ZONE_EDGE_BUFFER + 1
-	var/safe_y_max = SECTOR_SIZE - LANDING_ZONE_EDGE_BUFFER - y_dim
+	var/safe_y_max = vz.size - LANDING_ZONE_EDGE_BUFFER - y_dim
 
 	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
 		return // Not enough space for safe landing
@@ -1345,7 +1345,7 @@
 			for(var/dy = 0; dy < y_dim && found; dy++)
 				var/check_x = rel_x + dx
 				var/check_y = rel_y + dy
-				if(check_x > SECTOR_SIZE || check_y > SECTOR_SIZE) // Out of sector bounds
+				if(check_x > vz.size || check_y > vz.size) // Out of sector bounds
 					found = FALSE
 					continue
 				var/turf/target = turf_matrix[check_x][check_y]
@@ -1356,7 +1356,7 @@
 			// Calculate the destination docking port position
 			var/port_x = T.x + port_offset_x
 			var/port_y = T.y + port_offset_y
-			var/turf/port_base_turf = locate(port_x, port_y, alloc.z)
+			var/turf/port_base_turf = locate(port_x, port_y, vz.z())
 			var/turf/port_turf = get_step(port_base_turf, shuttle.linked_port.dir)
 
 			// The destination port direction is opposite to the shuttle's port direction

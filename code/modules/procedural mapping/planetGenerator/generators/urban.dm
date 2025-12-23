@@ -78,30 +78,21 @@
 		)
 	)
 
-/datum/planetGenerator/urban/post_process(datum/allocation/allocation)
+/datum/planetGenerator/urban/post_process(datum/virtual_z/vz)
 	..()
-	if(!allocation || !allocation.turfs)
+	if(!vz)
 		return
 
 	var/decay_chance = 20 // Chance for road tiles to be decayed/missing (reduced from 35)
 	var/num_road_segments = rand(8, 15) // Number of road segments to generate
 
-	// Find bounds of the allocation
-	var/min_x = 999999
-	var/max_x = 0
-	var/min_y = 999999
-	var/max_y = 0
+	var/vz_bounds = vz.get_bounds()
+	var/min_x = vz_bounds["x_min"]
+	var/max_x = vz_bounds["x_max"]
+	var/min_y = vz_bounds["y_min"]
+	var/max_y = vz_bounds["y_max"]
 
-	for(var/turf/T in allocation.turfs)
-		if(T.x < min_x)
-			min_x = T.x
-		if(T.x > max_x)
-			max_x = T.x
-		if(T.y < min_y)
-			min_y = T.y
-		if(T.y > max_y)
-			max_y = T.y
-
+	var/list/all_turfs = vz.get_turfs()
 	var/list/road_turfs = list()
 
 	// random walk roads
@@ -125,8 +116,9 @@
 					current_y = clamp(current_y, min_y, max_y)
 
 				for(var/w = 0; w < road_width; w++)
-					var/turf/T = locate(x, current_y + w, allocation.turfs[1].z)
-					if(T && (T in allocation.turfs))
+					var/z_to_use = vz.z()
+					var/turf/T = locate(x, current_y + w, z_to_use)
+					if(T && (T in all_turfs))
 						var/area/A = get_area(T)
 						if(!istype(A, /area/planet/urban))
 							continue
@@ -149,8 +141,9 @@
 					current_x = clamp(current_x, min_x, max_x)
 
 				for(var/w = 0; w < road_width; w++)
-					var/turf/T = locate(current_x + w, y, allocation.turfs[1].z)
-					if(T && (T in allocation.turfs))
+					var/z_to_use = vz.z()
+					var/turf/T = locate(current_x + w, y, z_to_use)
+					if(T && (T in all_turfs))
 						var/area/A = get_area(T)
 						if(!istype(A, /area/planet/urban))
 							continue
@@ -164,7 +157,7 @@
 									new /obj/effect/decal/warning_stripes/pathmarkers(T, EAST)
 
 	// potholes (midwest reference)
-	for(var/turf/unsimulated/floor/jungle/concrete/C in allocation.turfs)
+	for(var/turf/unsimulated/floor/jungle/concrete/C in all_turfs)
 		if(prob(12)) // the most magical of all numbers
 			var/decay_options = list(
 				/turf/unsimulated/floor/planetary/wasteland,
@@ -189,8 +182,9 @@
 		var/can_place = TRUE
 		for(var/check_x = building_x - 1; check_x <= building_x + building_width + 1; check_x++)
 			for(var/check_y = building_y - 1; check_y <= building_y + building_height + 1; check_y++)
-				var/turf/check_turf = locate(check_x, check_y, allocation.turfs[1].z)
-				if(!check_turf || !(check_turf in allocation.turfs))
+				var/z_to_use = vz.z()
+				var/turf/check_turf = locate(check_x, check_y, z_to_use)
+				if(!check_turf || !(check_turf in all_turfs))
 					can_place = FALSE
 					break
 				var/area/check_area = get_area(check_turf)
@@ -209,8 +203,9 @@
 		// Place building
 		for(var/bx = building_x; bx < building_x + building_width; bx++)
 			for(var/by = building_y; by < building_y + building_height; by++)
-				var/turf/build_turf = locate(bx, by, allocation.turfs[1].z)
-				if(!build_turf || !(build_turf in allocation.turfs))
+				var/z_to_use = vz.z()
+				var/turf/build_turf = locate(bx, by, z_to_use)
+				if(!build_turf || !(build_turf in all_turfs))
 					continue
 
 				// Outer walls (with decay)

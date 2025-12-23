@@ -14,8 +14,6 @@
 	//Climate datum
 	var/datum/climate/climate
 	var/climate_type = null
-	//Allocation occupied by this planet.
-	var/allocation = null
 	//Icon shown in the planet scanner.
 	var/icon_state = "moon"
 	var/icon/ico
@@ -38,6 +36,8 @@
 	var/preferred_ruin_type = RUIN_TYPE_GENERIC //3x more likely to spawn these types of ruins than others
 	// Ruin buget
 	var/ruin_budget = RUIN_BUDGET_PLANET
+	// Virtual z level this planet exists on
+	var/datum/virtual_z/v
 
 /datum/planet_type/New()
 	..()

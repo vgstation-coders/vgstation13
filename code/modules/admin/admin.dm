@@ -1012,29 +1012,26 @@ var/global/floorIsLava = 0
 	if(SSmapping.planets.len)
 		has_planets = TRUE
 		dat += "<table border='1' style='width:100%'>"
-		dat += "<tr><th>Planet Name</th><th>Planet Type</th><th>Z-Level</th><th>Sector</th><th>Weather</th><th>Time</th><th>Landing Zone</th><th>Visibility</th><th>Actions</th></tr>"
+		dat += "<tr><th>Planet Name</th><th>Planet Type</th><th>V-Level</th><th>Weather</th><th>Time</th><th>Landing Zone</th><th>Visibility</th><th>Actions</th></tr>"
 
-		// Display existing planets with their allocation data
+		// Display existing planets with their virtual z-level data
 		for(var/datum/planet_type/planet in SSmapping.planets)
-			var/z_level = "Unknown"
-			var/sector = "Unknown"
 			var/planet_name = planet.planet_name
 			var/current_weather = "N/A"
 			var/current_time = "N/A"
 
-			var/datum/allocation/alloc = planet.allocation
-			z_level = alloc.z
-			sector = "[alloc.sector[1]], [alloc.sector[2]]"
+			var/datum/virtual_z/vz = planet.v
 
-			if(!alloc)
-				CRASH("Planet [planet_name] has no allocation!")
+
+			if(!vz)
+				CRASH("Planet [planet_name] has no virtual z-level!")
 
 			// Get current weather info
 			if(planet.climate && planet.climate.current_weather)
 				current_weather = planet.climate.current_weather.name
 
 			// Get current time of day info for this specific planet
-			if(SSDayNight && alloc && (z_level in daynight_z_lvls))
+			if(SSDayNight && vz && (vz in daynight_v_lvls))
 				switch(planet.current_timeOfDay)
 					if(TOD_MORNING) current_time = "Morning"
 					if(TOD_SUNRISE) current_time = "Sunrise"
@@ -1049,7 +1046,7 @@ var/global/floorIsLava = 0
 
 			if(is_generating)
 				landing_zone_status = "<i>Generating...</i>"
-			else if(alloc.shuttle_landing_zones[/datum/shuttle/exploration])
+			else if(vz.shuttle_landing_zones[/datum/shuttle/exploration])
 				landing_zone_status = "Active"
 			else
 				landing_zone_status = "<A href='?_src_=holder;procgen_add_landing_zone=\ref[planet]'>Add Landing Zone</A>"
@@ -1061,8 +1058,7 @@ var/global/floorIsLava = 0
 			dat += "<tr>"
 			dat += "<td>[planet_name]</td>"
 			dat += "<td>[planet.name]</td>"
-			dat += "<td>[z_level]</td>"
-			dat += "<td>[sector]</td>"
+			dat += "<td>[vz.id]</td>"
 			dat += "<td>[current_weather] <A href='?_src_=holder;procgen_weather=\ref[planet]'>\[Change\]</A></td>"
 			dat += "<td>[current_time] <A href='?_src_=holder;procgen_time=\ref[planet]'>\[Change\]</A></td>"
 			dat += "<td>[landing_zone_status]</td>"

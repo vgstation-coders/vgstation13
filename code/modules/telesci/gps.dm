@@ -82,11 +82,12 @@ var/list/all_GPS_list = list()
 /obj/item/device/gps/proc/get_location_name()
 	var/turf/device_turf = get_turf(src)
 	var/area/device_area = get_area(src)
+	var/datum/virtual_z/vz = get_virtual_z()
 	if (emped)
 		return "ERROR"
 	else if(!device_turf || !device_area)
 		return "UNKNOWN"
-	else if(device_turf.z == map.zProcGen)
+	else if(vz)
 		return "SIGNAL JAMMED"
 	else if(device_turf.z > WORLD_X_OFFSET.len)
 		return "[format_text(device_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
@@ -110,7 +111,7 @@ var/list/all_GPS_list = list()
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
 	var/turf/device_turf = get_turf(src)
-	if(!emped && transmitting && !(device_turf && device_turf.z == map.zProcGen))
+	if(!emped && transmitting && !(device_turf && device_turf.planet))
 		var/list/ui_list
 		if(view_all)
 			ui_list = all_GPS_list
@@ -171,7 +172,7 @@ var/list/all_GPS_list = list()
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
 	var/turf/device_turf = get_turf(src)
-	if(!(device_turf && device_turf.z == map.zProcGen))
+	if(!(device_turf && device_turf.planet))
 		var/list/ui_list
 		if(view_all)
 			ui_list = all_GPS_list
@@ -386,18 +387,15 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 		return "ERROR"
 	else if(!device_turf || !device_area)
 		return "UNKNOWN"
-	else if(device_turf.z != map.zProcGen)
+	else if(!device_turf.planet)
 		return "NOT ON PLANET"
 	else
-		// Show coordinates relative to the sector
-		var/datum/allocation/alloc = SSmapping.get_allocation(trf = device_turf)
-		if(!istype(alloc, /datum/allocation))
+		// coordinates are relative to each vlevel
+		var/datum/virtual_z/vz = get_virtual_z()
+		if(!istype(vz))
 			return "[format_text(device_area.name)] (UNKNOWN)"
-		var/list/bounds = SSmapping.get_sector_bounds(alloc.sector)
-		var/rel_x = device_turf.x - bounds["x_min"] + 1
-		var/rel_y = device_turf.y - bounds["y_min"] + 1
-		var/planet_name = alloc.ptype ? alloc.ptype.planet_name : "Unknown Planet"
-		return "[format_text(device_area.name)] ([planet_name]: [rel_x], [rel_y])"
+		var/planet_name = vz.planet ? vz.planet.planet_name : "Unknown Planet"
+		return "[format_text(device_area.name)] ([planet_name]: [vx()], [vy()], [vz()])"
 
 /obj/item/device/gps/planetary/ui_data()
 	var/list/data = list()
@@ -414,23 +412,20 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	var/turf/device_turf = get_turf(src)
 
 	// Only show other devices if we're on a planet and transmitting
-	if(!emped && transmitting && device_turf && device_turf.z == map.zProcGen)
-		var/datum/allocation/my_alloc = SSmapping.get_allocation(trf = device_turf)
-		if(istype(my_alloc, /datum/allocation))
+	if(!emped && transmitting && device_turf?.planet)
+		var/datum/virtual_z/vz = get_virtual_z()
+		if(istype(vz))
 			// Always show docking ports on this planet
 			for(var/obj/docking_port/destination/planet_surface/port in all_docking_ports)
 				var/turf/port_turf = get_turf(port)
-				if(!port_turf || port_turf.z != map.zProcGen)
+				var/datum/virtual_z/port_vz = port_turf.get_virtual_z()
+				if(!port_vz)
 					continue
-				var/datum/allocation/port_alloc = SSmapping.get_allocation(trf = port_turf)
-				if(port_alloc == my_alloc)
-					var/list/bounds = SSmapping.get_sector_bounds(my_alloc.sector)
-					var/rel_x = port_turf.x - bounds["x_min"] + 1
-					var/rel_y = port_turf.y - bounds["y_min"] + 1
-					var/planet_name = my_alloc.ptype ? my_alloc.ptype.planet_name : "Unknown Planet"
+				if(port_vz == vz)
+					var/planet_name = vz.planet ? vz.planet.planet_name : "Unknown Planet"
 					var/list/device_data = list()
 					device_data["tag"] = "DOCK"
-					device_data["location_text"] = "[port.areaname] ([planet_name]: [rel_x], [rel_y])"
+					device_data["location_text"] = "[port.areaname] ([planet_name]: [port_turf.vx()], [port_turf.vy()], [port_turf.vz()])"
 					devices += list(device_data)
 
 			// Only show other planetary GPSes on the same planet
@@ -438,10 +433,10 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 				if(!other.transmitting || other == src)
 					continue
 				var/turf/other_turf = get_turf(other)
-				if(!other_turf || other_turf.z != map.zProcGen)
+				if(!other_turf?.planet)
 					continue
-				var/datum/allocation/other_alloc = SSmapping.get_allocation(trf = other_turf)
-				if(other_alloc == my_alloc)
+				var/datum/virtual_z/other_vz = other_turf.get_virtual_z()
+				if(other_vz == vz)
 					var/list/device_data = list()
 					device_data["tag"] = other.gpstag
 					device_data["location_text"] = other.get_location_name()
@@ -461,24 +456,21 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 				to_chat(usr, "<span class='warning'>The GPS is experiencing electromagnetic interference!</span>")
 				return FALSE
 			var/turf/device_turf = get_turf(src)
-			if(!device_turf || device_turf.z != map.zProcGen)
+			if(!device_turf?.planet)
 				to_chat(usr, "<span class='warning'>The distress beacon only works on planet surfaces!</span>")
 				return FALSE
 
 			// planet information
-			var/datum/allocation/my_alloc = SSmapping.get_allocation(trf = device_turf)
-			if(!istype(my_alloc, /datum/allocation))
+			var/datum/virtual_z/vz = get_virtual_z()
+			if(!istype(vz))
 				to_chat(usr, "<span class='warning'>Unable to determine location!</span>")
 				return FALSE
 
-			var/planet_name = my_alloc.ptype ? my_alloc.ptype.planet_name : "Unknown Planet"
-			var/list/bounds = SSmapping.get_sector_bounds(my_alloc.sector)
-			var/rel_x = device_turf.x - bounds["x_min"] + 1
-			var/rel_y = device_turf.y - bounds["y_min"] + 1
+			var/planet_name = vz.planet ? vz.planet.planet_name : "Unknown Planet"
 			var/area/device_area = get_area(src)
 
 			// station-wide announcement
-			command_alert("Emergency distress beacon activated by GPS unit [gpstag] on planet [planet_name]. Location: [format_text(device_area.name)] ([rel_x], [rel_y])", "Planetary Distress Beacon Activated")
+			command_alert("Emergency distress beacon activated by GPS unit [gpstag] on planet [planet_name]. Location: [format_text(device_area.name)] ([device_turf.vx()], [device_turf.vy()], [device_turf.vz()])", "Planetary Distress Beacon Activated")
 
 			// cooldown
 			beacon_cooldown = world.time + beacon_cooldown_time
@@ -512,40 +504,38 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	data["beacon_cooldown"] = max(0, round((beacon_cooldown - world.time) / 10))
 	data["beacon_time_remaining"] = beacon_active ? max(0, round((beacon_cooldown - world.time) / 10)) : 0
 	var/list/devices = list()
-	var/turf/device_turf = get_turf(src)
+	var/datum/virtual_z/vz = get_virtual_z()
 
-	if(device_turf && device_turf.z == map.zProcGen)
-		var/datum/allocation/my_alloc = SSmapping.get_allocation(trf = device_turf)
-		if(istype(my_alloc, /datum/allocation))
+	if(istype(vz))
+		for(var/obj/docking_port/destination/planet_surface/port in all_docking_ports)
+			var/turf/port_turf = get_turf(port)
+			if(!port_turf)
+				continue
+			var/datum/virtual_z/port_v = port_turf.get_virtual_z()
+			if(!port_v)
+				continue
+			if(port_v == vz)
+				var/planet_name = vz.planet ? vz.planet.planet_name : "Unknown Planet"
+				var/device_data[0]
+				device_data["tag"] = "DOCK"
+				device_data["location_text"] = "[port.areaname] ([planet_name]: [port_turf.vx()], [port_turf.vy()], [port_turf.vz()])"
+				devices += list(device_data)
 
-			for(var/obj/docking_port/destination/planet_surface/port in all_docking_ports)
-				var/turf/port_turf = get_turf(port)
-				if(!port_turf || port_turf.z != map.zProcGen)
-					continue
-				var/datum/allocation/port_alloc = SSmapping.get_allocation(trf = port_turf)
-				if(port_alloc == my_alloc)
-					var/list/bounds = SSmapping.get_sector_bounds(my_alloc.sector)
-					var/rel_x = port_turf.x - bounds["x_min"] + 1
-					var/rel_y = port_turf.y - bounds["y_min"] + 1
-					var/planet_name = my_alloc.ptype ? my_alloc.ptype.planet_name : "Unknown Planet"
-					var/device_data[0]
-					device_data["tag"] = "DOCK"
-					device_data["location_text"] = "[port.areaname] ([planet_name]: [rel_x], [rel_y])"
-					devices += list(device_data)
-
-			for(var/D in gps_list)
-				var/obj/item/device/gps/planetary/G = D
-				if(!istype(G) || !G.transmitting || src == G)
-					continue
-				var/turf/other_turf = get_turf(G)
-				if(!other_turf || other_turf.z != map.zProcGen)
-					continue
-				var/datum/allocation/other_alloc = SSmapping.get_allocation(trf = other_turf)
-				if(other_alloc == my_alloc)
-					var/device_data[0]
-					device_data["tag"] = G.gpstag
-					device_data["location_text"] = G.get_location_name()
-					devices += list(device_data)
+		for(var/D in gps_list)
+			var/obj/item/device/gps/planetary/G = D
+			if(!istype(G) || !G.transmitting || src == G)
+				continue
+			var/turf/other_turf = get_turf(G)
+			if(!other_turf)
+				continue
+			var/datum/virtual_z/other_v = other_turf.get_virtual_z()
+			if(!other_v)
+				continue
+			if(other_v == vz)
+				var/device_data[0]
+				device_data["tag"] = G.gpstag
+				device_data["location_text"] = G.get_location_name()
+				devices += list(device_data)
 	data["devices"] = devices
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -566,22 +556,19 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 			to_chat(usr, "<span class='warning'>The GPS is experiencing electromagnetic interference!</span>")
 			return FALSE
 		var/turf/device_turf = get_turf(src)
-		if(!device_turf || device_turf.z != map.zProcGen)
+		if(!device_turf?.planet)
 			to_chat(usr, "<span class='warning'>The distress beacon only works on planetary surfaces!</span>")
 			return FALSE
 
-		var/datum/allocation/my_alloc = SSmapping.get_allocation(trf = device_turf)
-		if(!istype(my_alloc, /datum/allocation))
+		var/datum/virtual_z/vz = device_turf.get_virtual_z()
+		if(!istype(vz))
 			to_chat(usr, "<span class='warning'>Unable to determine planetary location!</span>")
 			return FALSE
 
-		var/planet_name = my_alloc.ptype ? my_alloc.ptype.planet_name : "Unknown Planet"
-		var/list/bounds = SSmapping.get_sector_bounds(my_alloc.sector)
-		var/rel_x = device_turf.x - bounds["x_min"] + 1
-		var/rel_y = device_turf.y - bounds["y_min"] + 1
+		var/planet_name = vz.planet ? vz.planet.planet_name : "Unknown Planet"
 		var/area/device_area = get_area(src)
 
-		command_alert("Emergency distress beacon activated by GPS unit [gpstag] on planet [planet_name]. Location: [format_text(device_area.name)] ([rel_x], [rel_y])", "Planetary Distress Beacon Activated")
+		command_alert("Emergency distress beacon activated by GPS unit [gpstag] on planet [planet_name]. Location: [format_text(device_area.name)] ([vx()], [vy()], [vz()])", "Planetary Distress Beacon Activated")
 
 		beacon_cooldown = world.time + beacon_cooldown_time
 		beacon_active = TRUE

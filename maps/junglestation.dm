@@ -54,7 +54,7 @@
 	zLevels[zSecondunderground].transition_crosswrap_z=list(zAdditionalStationZlevel,zAdditionalStationZlevel,zAdditionalStationZlevel,zAdditionalStationZlevel)
 	world.name = "NT Colony Gamma-8"
 	station_name="NT Colony Gamma-8"
-	daynight_z_lvls=list(1,4)
+	daynight_v_lvls=list(map.vLevels[1],map.vLevels[4])
 	turfs_to_regrow=list()
 
 
