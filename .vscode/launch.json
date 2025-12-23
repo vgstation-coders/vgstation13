@@ -20,6 +20,7 @@
 			"type": "byond",
 			"request": "launch",
 			"name": "Launch DreamSeeker (No Build)",
+			"preLaunchTask": "Wait for DreamDaemon",
 			"dmb": "${workspaceFolder}/${command:CurrentDMB}"
 		}
 	],
