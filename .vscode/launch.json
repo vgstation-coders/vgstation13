@@ -19,16 +19,10 @@
 		{
 			"type": "byond",
 			"request": "launch",
-			"name": "Launch DreamSeeker (No Build)",
-			"preLaunchTask": "Wait for DreamDaemon",
-			"dmb": "${workspaceFolder}/${command:CurrentDMB}"
-		}
-	],
-	"compounds": [
-		{
 			"name": "Launch Both",
-			"configurations": ["Launch DreamDaemon", "Launch DreamSeeker (No Build)"],
-			"stopAll": true
+			"preLaunchTask": "Build and Launch Server",
+			"dmb": "${workspaceFolder}/${command:CurrentDMB}",
+			"dreamDaemon": true
 		}
 	]
 }

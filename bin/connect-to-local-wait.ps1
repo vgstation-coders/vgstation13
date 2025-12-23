@@ -2,13 +2,16 @@
 # Autodetects port by finding what dreamdaemon.exe is listening on
 
 function Find-DreamDaemonPort {
-    $connections = Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object {
-        $proc = Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue
-        $proc.ProcessName -in @('dd', 'dreamdaemon')
+	# check running processes, this is slow as shit because it looks at everything so erroraction should be faster
+    $proc = Get-Process -Name 'dd','dreamdaemon' -ErrorAction SilentlyContinue | Select-Object -First 1
+    if (-not $proc) {
+        return $null
     }
 
-    if ($connections) {
-        return $connections[0].LocalPort
+	# found the process, get the port
+    $conn = Get-NetTCPConnection -OwningProcess $proc.Id -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($conn) {
+        return $conn.LocalPort
     }
     return $null
 }
@@ -17,7 +20,12 @@ function Test-Server {
     param([string]$Server = "localhost", [int]$Port)
     try {
         $client = New-Object System.Net.Sockets.TcpClient
-        $client.Connect($Server, $Port)
+        $asyncResult = $client.BeginConnect($Server, $Port, $null, $null)
+        if (-not $asyncResult.AsyncWaitHandle.WaitOne(1000)) {
+            $client.Close()
+            return $false
+        }
+        $client.EndConnect($asyncResult)
         $stream = $client.GetStream()
 
         $query = "?ping"
@@ -47,12 +55,16 @@ function Test-Server {
     }
 }
 
+$detectedPort = $null
+
 while ($true) {
+	# get whatever port dreamdaemon is on
     $port = Find-DreamDaemonPort
     if ($port) {
-        Write-Host "Found DreamDaemon on port $port, feelsgoodman"
+        Write-Host "Found DreamDaemon on port $port"
+		# ping the server to make sure we can actually connect yet
         if (Test-Server -Port $port) {
-            Write-Host "DreamDaemon ready"
+            $detectedPort = $port
             break
         }
         Write-Host "Server is still starting and not responding yet, retrying"
@@ -60,4 +72,12 @@ while ($true) {
         Write-Host "DreamDaemon has not yet launched, retrying"
     }
     Start-Sleep -Seconds 2
+}
+
+if ($detectedPort) {
+    $dsPath = "C:\Program Files (x86)\BYOND\bin\dreamseeker.exe"
+    if (-not (Test-Path $dsPath)) {
+        $dsPath = "C:\Program Files\BYOND\bin\dreamseeker.exe"
+    }
+    Start-Process $dsPath -ArgumentList "byond://localhost:$detectedPort"
 }
