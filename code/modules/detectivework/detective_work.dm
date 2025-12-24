@@ -157,7 +157,7 @@
 					process_card()
 			else
 				to_chat(usr, "<span class='warning'>No files detected to scan with [I].</span>")
-		if(scanning)
+		if(I && scanning)
 			to_chat(usr, "<span class='warning'>There is already \a [scanning] in the scanning slot!.</span>")
 		else if(istype(I, /obj/item/weapon/storage/evidencebag))
 			if(I.contents.len)
