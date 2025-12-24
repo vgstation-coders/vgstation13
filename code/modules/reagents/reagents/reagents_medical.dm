@@ -489,10 +489,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-3)
-		M.adjustOxyLoss(-3)
-		M.heal_organ_damage(3,3)
-		M.adjustToxLoss(-3)
+		var/multiplier = 1
+		if(M.bodytemperature < 95)
+			multiplier = 2
+		M.adjustCloneLoss(-3 * multiplier)
+		M.adjustOxyLoss(-3 * multiplier)
+		M.heal_organ_damage(3 * multiplier, 3 * multiplier)
+		M.adjustToxLoss(-3 * multiplier)
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
@@ -683,10 +686,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-1)
-		M.adjustOxyLoss(-1)
-		M.heal_organ_damage(1,1)
-		M.adjustToxLoss(-1)
+		var/multiplier = 1
+		if(M.bodytemperature < 95)
+			multiplier = 2
+		M.adjustCloneLoss(-1 * multiplier)
+		M.adjustOxyLoss(-1 * multiplier)
+		M.heal_organ_damage(1 * multiplier, 1 * multiplier)
+		M.adjustToxLoss(-1 * multiplier)
 
 /datum/reagent/cryptobiolin
 	name = "Cryptobiolin"
