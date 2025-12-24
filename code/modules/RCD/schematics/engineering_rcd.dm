@@ -1,13 +1,13 @@
 /datum/rcd_scematic_grouping/destroy
 	name="deconstruct"
 	headerimage="RCD_HEADER_DESTROY.png"
-	
+
 /datum/rcd_scematic_grouping/destroy/generate_html()
 	return ..()
 
 /datum/rcd_scematic_grouping/destroy/send_assets(var/client/client)
 	register_asset("RCD_HEADER_DESTROY.png", new/icon('icons/effects/condecon.dmi', "decon" ))
-	send_asset(client, "RCD_HEADER_DESTROY.png")	
+	send_asset(client, "RCD_HEADER_DESTROY.png")
 
 /datum/rcd_scematic_grouping/destroy/New(var/obj/item/device/rcd/rcdtouse=null)
 	..(rcdtouse)
@@ -15,12 +15,12 @@
 	linked_rcd.settings["decon_floors"]=1
 	linked_rcd.settings["decon_airlocks"]=1
 	linked_rcd.settings["decon_windows"]=1
-		
+
 
 
 /datum/rcd_scematic_grouping/destroy/switch_to()
 	var/found=FALSE
-	
+
 	for(var/datum/rcd_grouped_schematic/S in src.schematics)
 		if(istype(S,/datum/rcd_grouped_schematic/destroy_all))
 			linked_rcd.selected_schem=S
@@ -32,27 +32,27 @@
 /datum/rcd_grouped_schematic/destroy_all
 	name="all"
 	cost=5
-	
+
 /datum/rcd_grouped_schematic/destroy_all/generate_html()
 	var/dat=""
 	var/list/options=linked_rcd.settings
-	
-	
+
+
 	dat+="Deconstruction settings:<br><ul style='line-height:150%;'>"
 	dat+="<li><span class='[options["decon_walls"]?"schem_selected":"schem"]'><a href='?src=\ref[linked_rcd.interface];set_arg=decon_walls;value=[ options["decon_walls"] ? "0" : "1"];value_isnum=yes;'  >Walls</a></span><br></li>"
-	
+
 	dat+="<li><span class='[options["decon_floors"]?"schem_selected":"schem"]'><a href='?src=\ref[linked_rcd.interface];set_arg=decon_floors;value=[ options["decon_floors"] ? "0" : "1"];value_isnum=yes;' >Floors</a></span><br></li>"
-	
+
 	dat+="<li><span class='[options["decon_airlocks"]?"schem_selected":"schem"]'><a href='?src=\ref[linked_rcd.interface];set_arg=decon_airlocks;value=[ options["decon_airlocks"] ? "0" : "1"];value_isnum=yes;' >Airlocks</a></span><br></li>"
-	
+
 	dat+="<li><span class='[options["decon_windows"]?"schem_selected":"schem"]'><a href='?src=\ref[linked_rcd.interface];set_arg=decon_windows;value=[ options["decon_windows"] ? "0" : "1"];value_isnum=yes;' >Windows</a></span><br></li>"
-	
+
 	dat+="</ul>"
 	return dat
 
 /datum/rcd_grouped_schematic/destroy_all/build(var/atom/A, var/mob/user)
 	var/list/options=linked_rcd.settings
-	
+
 	if(istype(A, /turf/simulated/wall) && options["decon_walls"])
 		var/turf/simulated/wall/T = A
 		if(istype(T, /turf/simulated/wall/r_wall)  || istype(T, /turf/simulated/wall/invulnerable))
@@ -118,14 +118,14 @@
 			qdel(W)
 			return cost
 	return 0
-	
+
 
 
 
 /datum/rcd_scematic_grouping/build_wall
 	name="walls"
 	headerimage="RCD_HEADER_WALLS.png"
-	
+
 /datum/rcd_scematic_grouping/build_wall/generate_html()
 	var/dat=""
 	dat+="<table class='clickabletable'><tr><th>wall</th><th>matter cost</th><th>construction time</th><th>upgradable from</th></tr>"
@@ -133,31 +133,31 @@
 		dat+=schem.generate_html()
 	dat+="</table>"
 	return dat
-	
+
 /datum/rcd_scematic_grouping/build_wall/switch_to()
 	linked_rcd.selected_schem = schematics[1]
 
 /datum/rcd_scematic_grouping/build_wall/send_assets(var/client/client)
 	register_asset("floor_RCD.png", new/icon('icons/turf/floors.dmi', "floor" ))
-	send_asset(client, "floor_RCD.png")	
-	
+	send_asset(client, "floor_RCD.png")
+
 	register_asset("wall_RCD.png", new/icon('icons/turf/walls.dmi', "metal0" ))
-	send_asset(client, "wall_RCD.png")	
-	
+	send_asset(client, "wall_RCD.png")
+
 	register_asset("rwall_RCD.png", new/icon('icons/turf/walls.dmi', "rwall0" ))
-	send_asset(client, "rwall_RCD.png")	
-	
+	send_asset(client, "rwall_RCD.png")
+
 	register_asset("woodwall_RCD.png", new/icon('icons/turf/walls.dmi', "wood0" ))
-	send_asset(client, "woodwall_RCD.png")	
-	
+	send_asset(client, "woodwall_RCD.png")
+
 	register_asset("girder_RCD.png", new/icon('icons/obj/structures.dmi', "girder" ))
-	send_asset(client, "girder_RCD.png")		
-	
-	
+	send_asset(client, "girder_RCD.png")
+
+
 	register_asset("RCD_HEADER_WALLS.png", new/icon('icons/turf/walls.dmi', "metal0" ))
-	send_asset(client, "RCD_HEADER_WALLS.png")	
-	
-	
+	send_asset(client, "RCD_HEADER_WALLS.png")
+
+
 /datum/rcd_grouped_schematic/normalwall
 	name="wall"
 	cost=3
@@ -165,10 +165,10 @@
 /datum/rcd_grouped_schematic/normalwall/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	var/costtouse=0
-	
+
 	if(!linked_rcd)
 		return 0
-	
+
 	if(istype(T,/turf/simulated/floor))
 		costtouse=cost
 	else
@@ -176,17 +176,17 @@
 			costtouse=cost+1 //add cost to make the floor
 		else
 			costtouse=0
-	
+
 	if(!costtouse)
 		to_chat(user, "You cannot build a wall here!")
 		return 0
-		
+
 	for(var/atom/A2 in T.contents)
 		if(A2.type==/obj/structure/girder )
 			costtouse-=1
 			break
-	
-	
+
+
 	playsound(linked_rcd, 'sound/machines/click.ogg', 50, 1)
 	if(linked_rcd.delay(user, A, 2 SECONDS))
 		if(linked_rcd.get_energy(user) < costtouse)
@@ -198,7 +198,7 @@
 		playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
 		T.ChangeTurf(/turf/simulated/wall)
 		return costtouse
-	
+
 	return 0
 
 /datum/rcd_grouped_schematic/normalwall/generate_html()
@@ -218,7 +218,7 @@
 	var/timetaken= 2 SECONDS
 	if(!linked_rcd)
 		return 0
-	
+
 	if(istype(T,/turf/simulated/floor))
 		costtouse=cost+3 //add cost to make a regular wall
 		timetaken = 4 SECONDS
@@ -231,7 +231,7 @@
 				costtouse=cost
 			else
 				costtouse=0
-			
+
 	if(costtouse)
 		playsound(linked_rcd, 'sound/machines/click.ogg', 50, 1)
 		if(linked_rcd.delay(user, A, timetaken))
@@ -243,7 +243,7 @@
 			return costtouse
 	else
 		to_chat(user, "You cannot build a wall here!")
-	
+
 	return 0
 
 /datum/rcd_grouped_schematic/rwall/generate_html()
@@ -259,10 +259,10 @@
 /datum/rcd_grouped_schematic/woodwall/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	var/costtouse=0
-	
+
 	if(!linked_rcd)
 		return 0
-	
+
 	if(istype(T,/turf/simulated/floor))
 		costtouse=cost
 	else
@@ -273,26 +273,26 @@
 	if(!costtouse)
 		to_chat(user, "You cannot build a wall here!")
 		return 0
-		
+
 	for(var/atom/A2 in T.contents)
 		if(A2.type==/obj/structure/girder )
 			costtouse-=1
 			break
-			
+
 	playsound(linked_rcd, 'sound/machines/click.ogg', 50, 1)
 	if(linked_rcd.delay(user, A, 2 SECONDS))
 		if(linked_rcd.get_energy(user) < costtouse)
 			to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
 			return 0
 		for(var/atom/A2 in T.contents)
-			if(A2.type==/obj/structure/girder )	
+			if(A2.type==/obj/structure/girder )
 				qdel(A2)
 		playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
 		T.ChangeTurf(/turf/simulated/wall/mineral/wood)
 		return costtouse
 	else
 		to_chat(user, "You cannot build a wall here!")
-	
+
 	return 0
 
 /datum/rcd_grouped_schematic/woodwall/generate_html()
@@ -303,7 +303,7 @@
 /datum/rcd_grouped_schematic/girder
 	name="girder"
 	cost=1
-	
+
 /datum/rcd_grouped_schematic/girder/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	var/truecost=0
@@ -314,7 +314,7 @@
 	else
 		to_chat(user, "You cannot build a [name] here!")
 		return 0
-	
+
 	for(var/atom/A2 in T.contents)
 		if(A2.type==/obj/structure/girder )
 			to_chat(user, "There's already a [name] here!")
@@ -332,13 +332,13 @@
 /datum/rcd_grouped_schematic/girder/generate_html()
 	var/a="<a href='?src=\ref[linked_rcd.interface];set_schematic=[name];'>"
 	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='girder_RCD.png'></a></td><td>[a][cost+1]</a></td><td>[a]2</a></td><td>[a]<img src='floor_RCD.png'></a></td></tr>"
-	
+
 
 /datum/rcd_scematic_grouping/build_floors
 	name="floors"
 	headerimage="RCD_HEADER_FLOORS.png"
-	
-	
+
+
 /datum/rcd_scematic_grouping/build_floors/generate_html()
 	var/dat=""
 	dat+="<table class='clickabletable'><tr><th>floor</th><th>matter cost</th><th>construction time</th><th>upgradable from</th></tr>"
@@ -346,40 +346,40 @@
 		dat+=schem.generate_html()
 	dat+="</table>"
 	return dat
-	
+
 /datum/rcd_scematic_grouping/build_floors/switch_to()
-	linked_rcd.selected_schem = schematics[1]	
+	linked_rcd.selected_schem = schematics[1]
 
 /datum/rcd_scematic_grouping/build_floors/send_assets(var/client/client)
 	register_asset("floor_RCD.png", new/icon('icons/turf/floors.dmi', "floor" ))
-	send_asset(client, "floor_RCD.png")	
-	
+	send_asset(client, "floor_RCD.png")
+
 	register_asset("plating_RCD.png", new/icon('icons/turf/floors.dmi', "plating" ))
-	send_asset(client, "plating_RCD.png")	
+	send_asset(client, "plating_RCD.png")
 
 	register_asset("rfloor_RCD.png", new/icon('icons/turf/floors.dmi', "engine" ))
-	send_asset(client, "rfloor_RCD.png")	
-	
+	send_asset(client, "rfloor_RCD.png")
+
 	register_asset("glassfloor_RCD.png", new/icon('icons/turf/overlays.dmi', "glass_floor" ))
-	send_asset(client, "glassfloor_RCD.png")	
-	
+	send_asset(client, "glassfloor_RCD.png")
+
 	register_asset("plasglassfloor_RCD.png", new/icon('icons/turf/overlays.dmi', "plasma_glass_floor" ))
-	send_asset(client, "plasglassfloor_RCD.png")	
-	
+	send_asset(client, "plasglassfloor_RCD.png")
+
 	register_asset("lattice_RCD.png", new/icon('icons/obj/smoothlattice.dmi', "lattice15" ))
-	send_asset(client, "lattice_RCD.png")	
-	
+	send_asset(client, "lattice_RCD.png")
+
 	register_asset("catwalk_RCD.png", new/icon('icons/turf/catwalks.dmi', "catwalk0" ))
-	send_asset(client, "catwalk_RCD.png")	
-	
+	send_asset(client, "catwalk_RCD.png")
+
 	register_asset("RCD_HEADER_FLOORS.png", new/icon('icons/turf/floors.dmi', "floor" ))
-	send_asset(client, "RCD_HEADER_FLOORS.png")	
-	
-	
+	send_asset(client, "RCD_HEADER_FLOORS.png")
+
+
 /datum/rcd_grouped_schematic/floor
 	name="floor"
 	cost=1
-	
+
 /datum/rcd_grouped_schematic/floor/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	if(!istype(T,/turf/space) && !istype(T,/turf/unsimulated/floor))
@@ -394,13 +394,13 @@
 
 /datum/rcd_grouped_schematic/floor/generate_html()
 	var/a = "<a href='?src=\ref[linked_rcd.interface];set_schematic=[name];'>"
-	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='floor_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]&emsp;</a></td></tr>"		
-	
-	
+	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='floor_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]&emsp;</a></td></tr>"
+
+
 /datum/rcd_grouped_schematic/plating
 	name="plating"
 	cost=1
-	
+
 /datum/rcd_grouped_schematic/plating/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	if(!istype(T,/turf/space) && !istype(T,/turf/unsimulated/floor))
@@ -415,13 +415,13 @@
 
 /datum/rcd_grouped_schematic/plating/generate_html()
 	var/a = "<a href='?src=\ref[linked_rcd.interface];set_schematic=[name];'>"
-	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='plating_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]&emsp;</a></td></tr>"		
+	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='plating_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]&emsp;</a></td></tr>"
 
 
 /datum/rcd_grouped_schematic/rfloor
 	name="reinforced floor"
 	cost=1
-	
+
 /datum/rcd_grouped_schematic/rfloor/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	var/cc=0
@@ -433,11 +433,11 @@
 	else
 		if(T.type==/turf/simulated/floor || T.type==/turf/simulated/floor/plating )
 			cc=cost
-		
+
 	if(!cc)
 		to_chat(user, "You connot build this floor here!")
 		return 0
-		
+
 	if(linked_rcd.delay(user, A, 2 SECONDS))
 		if(linked_rcd.get_energy(user) < cost)
 			to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
@@ -449,13 +449,13 @@
 
 /datum/rcd_grouped_schematic/rfloor/generate_html()
 	var/a = "<a href='?src=\ref[linked_rcd.interface];set_schematic=[name];'>"
-	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='rfloor_RCD.png'></a></td><td>[a][cost+1]</a></td><td>[a]2</a></td><td>[a]<img src='floor_RCD.png'><img src='plating_RCD.png'></a></td></tr>"		
-	
+	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='rfloor_RCD.png'></a></td><td>[a][cost+1]</a></td><td>[a]2</a></td><td>[a]<img src='floor_RCD.png'><img src='plating_RCD.png'></a></td></tr>"
+
 
 /datum/rcd_grouped_schematic/glassfloor
 	name="glass floor"
 	cost=1
-	
+
 /datum/rcd_grouped_schematic/glassfloor/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	if(!istype(T,/turf/space))
@@ -470,7 +470,7 @@
 
 /datum/rcd_grouped_schematic/glassfloor/generate_html()
 	var/a = "<a href='?src=\ref[linked_rcd.interface];set_schematic=[name];'>"
-	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='glassfloor_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]&emsp;</a></td></tr>"		
+	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='glassfloor_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]&emsp;</a></td></tr>"
 
 
 /datum/rcd_grouped_schematic/plasmaglassfloor
@@ -496,13 +496,13 @@
 
 /datum/rcd_grouped_schematic/plasmaglassfloor/generate_html()
 	var/a = "<a href='?src=\ref[linked_rcd.interface];set_schematic=[name];'>"
-	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='plasglassfloor_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]<img src='glassfloor_RCD.png'></a></td></tr>"		
+	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='plasglassfloor_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]<img src='glassfloor_RCD.png'></a></td></tr>"
 
-	
+
 /datum/rcd_grouped_schematic/lattice
 	name="lattice"
 	cost=1
-	
+
 /datum/rcd_grouped_schematic/lattice/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	if(!istype(T,/turf/space) && !istype(T,/turf/unsimulated/floor))
@@ -514,18 +514,18 @@
 	if(locate(/obj/structure/lattice) in T.contents)
 		to_chat(user, "There's already a [name] here!")
 		return 0
-	new /obj/structure/lattice(T)	
+	new /obj/structure/lattice(T)
 	playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
 	return cost
-	
+
 /datum/rcd_grouped_schematic/lattice/generate_html()
 	var/a = "<a href='?src=\ref[linked_rcd.interface];set_schematic=[name];'>"
-	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='lattice_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]&emsp;</a></td></tr>"		
+	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='lattice_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]&emsp;</a></td></tr>"
 
 /datum/rcd_grouped_schematic/catwalk
 	name="catwalk"
 	cost=2
-	
+
 /datum/rcd_grouped_schematic/catwalk/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	if(!istype(T,/turf/space) && !istype(T,/turf/unsimulated/floor))
@@ -541,31 +541,31 @@
 	for(var/obj/structure/lattice/L in T.contents)
 		qdel(L)
 		refund=1
-	new /obj/structure/catwalk(T)	
+	new /obj/structure/catwalk(T)
 	playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
 	return cost-refund
-	
+
 /datum/rcd_grouped_schematic/catwalk/generate_html()
 	var/a = "<a href='?src=\ref[linked_rcd.interface];set_schematic=[name];'>"
-	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='catwalk_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]<img src='lattice_RCD.png'></a></td></tr>"	
-	
+	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='catwalk_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]0</a></td><td>[a]<img src='lattice_RCD.png'></a></td></tr>"
+
 
 /datum/rcd_scematic_grouping/build_windows
 	name="windows"
 	headerimage="RCD_HEADER_WINDOWS.png"
-	
+
 /datum/rcd_scematic_grouping/build_windows/generate_html()
 	var/dat=""
-	
+
 	var/build_n=linked_rcd.settings["window_north"]
 	var/build_s=linked_rcd.settings["window_south"]
 	var/build_e=linked_rcd.settings["window_east"]
 	var/build_w=linked_rcd.settings["window_west"]
 	var/build_c=linked_rcd.settings["window_center"]
 	var/skipgrile=linked_rcd.settings["window_nogrille"]
-	
+
 	dat+="<table><tr><td> <span class='[skipgrile ? "schem" : "schem_selected"]'><a href='?src=\ref[linked_rcd.interface];set_arg=window_nogrille;value_toggle=yes;'>place grille</a></span></td>"
-	
+
 	dat+={"<td> <table class='clickabletable' >
 	<tr><td></td><td style='width:3em;height:1em;' class='[build_n ? "schem_selected" : "schem" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=window_north;value_toggle=yes;'/></td><td></td></tr>
 	<tr><td class='[build_w ? "schem_selected" : "schem" ]' style='width:1em;height:3em;'><a href='?src=\ref[linked_rcd.interface];set_arg=window_west;value_toggle=yes;'/></td><td style='width:3em;height:3em;' class='[build_c ? "schem_selected" : "schem" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=window_center;value_toggle=yes;'/></td><td style='width:1em;height:3em;' class='[build_e ? "schem_selected" : "schem" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=window_east;value_toggle=yes;'/></td></tr>
@@ -573,37 +573,37 @@
 	</table> </td>"}
 
 	dat+="</tr></table>"
-	
+
 	dat+="<table class='clickabletable'><tr><th>material</th><th>matter cost</th><th>construction time</th><th>upgradable from</th></tr>"
 	for(var/datum/rcd_grouped_schematic/schem in schematics)
 		dat+=schem.generate_html()
 	dat+="</table>"
 	return dat
-	
+
 /datum/rcd_scematic_grouping/build_windows/switch_to()
-	linked_rcd.selected_schem = schematics[2] //use rglass by default.		
+	linked_rcd.selected_schem = schematics[2] //use rglass by default.
 
 
 /datum/rcd_scematic_grouping/build_windows/send_assets(var/client/client)
 	register_asset("floor_RCD.png", new/icon('icons/turf/floors.dmi', "floor" ))
-	send_asset(client, "floor_RCD.png")	
-	
+	send_asset(client, "floor_RCD.png")
+
 	register_asset("glass_RCD.png", new/icon('icons/obj/stacks_sheets.dmi', "sheet-glass" ))
-	send_asset(client, "glass_RCD.png")	
-	
+	send_asset(client, "glass_RCD.png")
+
 	register_asset("rglass_RCD.png", new/icon('icons/obj/stacks_sheets.dmi', "sheet-rglass" ))
-	send_asset(client, "rglass_RCD.png")	
-	
+	send_asset(client, "rglass_RCD.png")
+
 	register_asset("pglass_RCD.png", new/icon('icons/obj/stacks_sheets.dmi', "sheet-plasmaglass" ))
-	send_asset(client, "pglass_RCD.png")	
-	
+	send_asset(client, "pglass_RCD.png")
+
 	register_asset("rpglass_RCD.png", new/icon('icons/obj/stacks_sheets.dmi', "sheet-plasmarglass" ))
-	send_asset(client, "rpglass_RCD.png")	
-	
+	send_asset(client, "rpglass_RCD.png")
+
 	register_asset("RCD_HEADER_WINDOWS.png", new/icon('icons/obj/window_grille_spawner.dmi', "rwindowgrille" ))
-	send_asset(client, "RCD_HEADER_WINDOWS.png")	
-	
-	
+	send_asset(client, "RCD_HEADER_WINDOWS.png")
+
+
 
 /datum/rcd_grouped_schematic/glass
 	var/obj/structure/window/windowtype=null
@@ -617,21 +617,21 @@
 	..(rcdtouse)
 	canupgrade_windows=new()
 	canupgrade_fullwindows=new()
-	
+
 
 /datum/rcd_grouped_schematic/glass/build(var/atom/A, var/mob/user)
-	
+
 	var/build_n=linked_rcd.settings["window_north"]
 	var/build_s=linked_rcd.settings["window_south"]
 	var/build_e=linked_rcd.settings["window_east"]
 	var/build_w=linked_rcd.settings["window_west"]
 	var/build_c=linked_rcd.settings["window_center"] //store window directions.
 	var/skipgrile=linked_rcd.settings["window_nogrille"]
-	
+
 	var/nowindows=!(build_n || build_s || build_e || build_w || build_c)
 	if(nowindows && skipgrile)
 		return 0
-	
+
 	var/cc=0
 	var/refund=0
 	var/turf/T=get_turf(A)
@@ -641,18 +641,18 @@
 		cc=(nowindows ? 1 : cost)
 	if(istype(T,/turf/space) || istype(T,/turf/unsimulated/floor))
 		cc=(nowindows ? 1 : cost)+1
-	
+
 	if(!cc)
 		to_chat(user, "You can't place a [name] here!")
-		return 0		
+		return 0
 	if(linked_rcd.get_energy(user) < cc)
 		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
-		return 0			
+		return 0
 	if(!linked_rcd.delay(user, A, construct_delay))
 		return 0
-		
+
 	playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
-	
+
 	if(istype(T,/turf/space)|| istype(T,/turf/unsimulated/floor))
 		T.ChangeTurf(/turf/simulated/floor)
 	if( (!locate(/obj/structure/grille) in T.contents) && !skipgrile)
@@ -730,8 +730,8 @@
 					refund=upgrade_refund
 					break
 			var/obj/structure/window/nwin=new fullwindowtype(T)
-			nwin.update_nearby_tiles()	
-			
+			nwin.update_nearby_tiles()
+
 	return cc-refund
 
 
@@ -753,7 +753,7 @@
 	windowtype=/obj/structure/window/reinforced
 	fullwindowtype=/obj/structure/window/full/reinforced
 	upgrade_refund=1
-	
+
 /datum/rcd_grouped_schematic/glass/reinforced/New(var/obj/item/device/rcd/rcdtouse=null)
 	..(rcdtouse)
 	canupgrade_windows+=/obj/structure/window
@@ -762,7 +762,7 @@
 /datum/rcd_grouped_schematic/glass/reinforced/generate_html()
 	var/a="<a href='?src=\ref[linked_rcd.interface];set_schematic=[name]'>"
 	return "<tr class='[linked_rcd.selected_schem==src? "schem_selected" : "schem"]'><td>[a]<img src='rglass_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]2</a></td><td>[a]<img src='floor_RCD.png'><img src='glass_RCD.png'></a></td></tr>"
-	
+
 /datum/rcd_grouped_schematic/glass/plasma
 	name="plasma glass window"
 	cost=6
@@ -780,7 +780,7 @@
 /datum/rcd_grouped_schematic/glass/plasma/generate_html()
 	var/a="<a href='?src=\ref[linked_rcd.interface];set_schematic=[name]'>"
 	return "<tr class='[linked_rcd.selected_schem==src? "schem_selected" : "schem"]'><td>[a]<img src='pglass_RCD.png'></a></td><td>[a][cost]</a></td><td>[a]2</a></td><td>[a]<img src='floor_RCD.png'><img src='glass_RCD.png'></a></td></tr>"
-	
+
 
 /datum/rcd_grouped_schematic/glass/rplas
 	name="reinforced plasma glass window"
@@ -805,10 +805,11 @@
 	headerimage="RCD_HEADER_AIRLOCKS.png"
 	selectiondialogue="Enter the name of the airlock"
 
-/datum/rcd_scematic_grouping/build_airlock/New(var/obj/item/device/rcd/rcdtouse=null)	
+/datum/rcd_scematic_grouping/build_airlock/New(var/obj/item/device/rcd/rcdtouse=null)
 	..(rcdtouse)
 	linked_rcd.settings["airlock_access"]= new /list()
 	linked_rcd.settings["airlock_dir"]=NORTH
+	linked_rcd.settings["access_dir"]=0
 
 /datum/rcd_scematic_grouping/build_airlock/switch_to()
 	if(schematics.len)
@@ -816,16 +817,16 @@
 
 /datum/rcd_scematic_grouping/build_airlock/send_assets(var/client/client)
 	register_asset("RCD_HEADER_AIRLOCKS.png", new/icon('icons/obj/doors/door.dmi', "door_closed" ))
-	send_asset(client, "RCD_HEADER_AIRLOCKS.png")	
+	send_asset(client, "RCD_HEADER_AIRLOCKS.png")
 
 
 /datum/rcd_scematic_grouping/build_airlock/generate_html()
 	var/dat=""
 	//set name
 	dat+="Set Name: <span class='schem'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_name;value_input=yes'> [linked_rcd.settings["airlock_name"] || linked_rcd.selected_schem.name ]</a></span> <span class='schem'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_name;value=[linked_rcd.selected_schem.name]'> Reset </a></span>"
-	
-	
-	if(istype(linked_rcd.selected_schem,/datum/rcd_grouped_schematic/airlock))
+
+	var/isairlock = istype(linked_rcd.selected_schem,/datum/rcd_grouped_schematic/airlock)
+	if(isairlock)
 		var/datum/rcd_grouped_schematic/airlock/sel=linked_rcd.selected_schem
 		if(sel.has_direction)
 			dat+={"
@@ -835,27 +836,40 @@
 		<tr><td colspan=2> <span class='schem[linked_rcd.settings["airlock_dir"]==SOUTH ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_dir;value_isnum=yes;value=[SOUTH]'>SOUTH</a></span> </td></tr>
 		</table>
 		"}
-	
+
 	dat+="<hr>"
-	
+
 	//access settings
 	dat+="<b>Set access</b>"
-	
+
 	dat+=" <span class='schem'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_access;value_resetlist=yes'>Reset</a></span> "
-	
+
 	dat+=" <span class='schem[ (!linked_rcd.settings["airlock_hideacc"]) ? "":"_selected"]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_hideacc;value_toggle=yes'>Hide</a></span> "
-	
-	
+
 	if(!linked_rcd.settings["airlock_hideacc"])
+		if(isairlock)
+			var/datum/rcd_grouped_schematic/airlock/sel=linked_rcd.selected_schem
+			if(!sel.has_direction)
+				dat+={"
+			<table style='text-align:center;line-height:110%;'>
+			<tr><td colspan=3> <span class='schem[linked_rcd.settings["access_dir"]==NORTH ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=access_dir;value_isnum=yes;value=[NORTH]'>NORTH</a></span> </td></tr>
+			<tr><td> <span class='schem[linked_rcd.settings["access_dir"]==WEST ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=access_dir;value_isnum=yes;value=[WEST]'>WEST</a></span> </td><td> <span class='schem[linked_rcd.settings["access_dir"]==0 ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=access_dir;value_isnum=yes;value=0'>NONE</a></span> </td><td> <span class='schem[linked_rcd.settings["access_dir"]==EAST ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=access_dir;value_isnum=yes;value=[EAST]'>EAST</a></span> </td></tr>
+			<tr><td colspan=3> <span class='schem[linked_rcd.settings["access_dir"]==SOUTH ? "_selected" :"" ]'><a href='?src=\ref[linked_rcd.interface];set_arg=access_dir;value_isnum=yes;value=[SOUTH]'>SOUTH</a></span> </td></tr>
+			</table>
+			"}
+				dat+="<br><br><b>Access direction:</b> "
+				dat+="<span class='schem[linked_rcd.settings["airlock_acnodir"] ? "":"_selected"]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_acnodir;value=0;value_isnum=yes'> Normal</a></span> "
+				dat+="<span class='schem[linked_rcd.settings["airlock_acnodir"] ? "_selected" :""]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_acnodir;value=1;value_isnum=yes'> Inverted</a></span>"
+
 		dat+="<br><br><b>Mode:</b> "
 		dat+="<span class='schem[linked_rcd.settings["airlock_acany"] ? "":"_selected"]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_acany;value=0;value_isnum=yes'> All</a></span> "
 		dat+="<span class='schem[linked_rcd.settings["airlock_acany"] ? "_selected" :""]'><a href='?src=\ref[linked_rcd.interface];set_arg=airlock_acany;value=1;value_isnum=yes'> Any</a></span>"
-	
+
 		dat+="<table class='clickabletable'><tr>"
 		for(var/i = 1; i <= 7; i++)
 			dat+="<th style='width:14%'>[get_region_accesses_name(i)]</th>"
 		dat+="</tr>"
-	
+
 		var/drew=TRUE
 		var/row=1
 		while(drew)
@@ -878,7 +892,7 @@
 			dat += "</tr>"
 			row++
 		dat+="</table>"
-	
+
 	dat+="<hr>"
 	//select door
 
@@ -892,12 +906,12 @@
 	name="airlock"
 	cost=3
 	var/icon='icons/obj/doors/door.dmi'
-	var/path = /obj/machinery/door/airlock 
+	var/path = /obj/machinery/door/airlock
 	var/has_direction=FALSE
-		
+
 /datum/rcd_grouped_schematic/airlock/send_assets(var/client/client)
 	register_asset("airlock_[name]_RCD.png", new/icon(icon, "door_closed" ))
-	send_asset(client, "airlock_[name]_RCD.png")	
+	send_asset(client, "airlock_[name]_RCD.png")
 
 /datum/rcd_grouped_schematic/airlock/generate_html()
 	return "<span style='display:inline-block;padding:0px;' class='schem[linked_rcd.selected_schem==src ? "_selected" : "" ]'><a style='display:block;background:none;border:none;' href='?src=\ref[linked_rcd.interface];set_schematic=[name]'><img src='airlock_[name]_RCD.png' style='padding:4px;border:none;background:none;'></a></span>"
@@ -905,6 +919,7 @@
 /datum/rcd_grouped_schematic/airlock/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	var/dirtouse=linked_rcd.settings["airlock_dir"] || NORTH
+	var/accesstouse=linked_rcd.settings["access_dir"] || 0
 	var/cc=0
 	if(!T)
 		return 0
@@ -919,37 +934,41 @@
 		if (istype(at, /obj/machinery/door/airlock))
 			to_chat(user, "There's already an airlock here!")
 			return 0
-	
+
 	if(linked_rcd.get_energy(user) < cc)
 		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
-		return 0			
+		return 0
 	if(!linked_rcd.delay(user, A, 5 SECONDS))
 		return 0
 	if(linked_rcd.get_energy(user) < cc)
 		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
 		return 0
 	playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
-	
+
 	if(istype(T, /turf/space))
 		T.ChangeTurf(/turf/simulated/floor)
-	
+
 	var/obj/machinery/door/airlock/newairlock = new path(T)
-	
+
 	if(has_direction)
 		newairlock.dir=dirtouse
-	
+	else
+		newairlock.req_access_dir=accesstouse
+		newairlock.access_not_dir=linked_rcd.settings["airlock_acnodir"] || 0
+
 	newairlock.name=linked_rcd.settings["airlock_name"] || name
-		
+
 	if(linked_rcd.settings["airlock_acany"])
 		var/list/aa=linked_rcd.settings["airlock_access"]
 		newairlock.req_one_access = aa?.Copy()
 	else
 		var/list/aa=linked_rcd.settings["airlock_access"]
 		newairlock.req_access = aa?.Copy()
+
 	newairlock.autoclose=1
 	return cost
-	
-	
+
+
 /datum/rcd_grouped_schematic/airlock/standard
 
 /datum/rcd_grouped_schematic/airlock/glass
@@ -965,135 +984,135 @@
 /datum/rcd_grouped_schematic/airlock/freezer
 	name="Freezer Airlock"
 	icon='icons/obj/doors/Doorfreezer.dmi'
-	path=/obj/machinery/door/airlock/freezer	
-	
+	path=/obj/machinery/door/airlock/freezer
+
 /datum/rcd_grouped_schematic/airlock/hatch
 	name="Airtight Hatch"
 	icon='icons/obj/doors/Doorhatchele.dmi'
-	path=/obj/machinery/door/airlock/hatch	
+	path=/obj/machinery/door/airlock/hatch
 
 /datum/rcd_grouped_schematic/airlock/maintenance_hatch
 	name="Maintenance Hatch"
 	icon='icons/obj/doors/Doorhatchmaint2.dmi'
-	path=/obj/machinery/door/airlock/maintenance_hatch	
+	path=/obj/machinery/door/airlock/maintenance_hatch
 
 /datum/rcd_grouped_schematic/airlock/glass_command
 	name="Glass Command Airlock"
 	icon='icons/obj/doors/Doorcomglass.dmi'
-	path=/obj/machinery/door/airlock/glass_command	
-	
+	path=/obj/machinery/door/airlock/glass_command
+
 /datum/rcd_grouped_schematic/airlock/glass_engineering
 	name="Glass Engineering Airlock"
 	icon='icons/obj/doors/Doorengglass.dmi'
-	path=/obj/machinery/door/airlock/glass_engineering		
-	
+	path=/obj/machinery/door/airlock/glass_engineering
+
 /datum/rcd_grouped_schematic/airlock/glass_security
 	name="Glass Security Airlock"
 	icon='icons/obj/doors/Doorsecglass.dmi'
-	path=/obj/machinery/door/airlock/glass_security	
-	
+	path=/obj/machinery/door/airlock/glass_security
+
 /datum/rcd_grouped_schematic/airlock/glass_medical
 	name="Glass Medical Airlock"
 	icon='icons/obj/doors/doormedglass.dmi'
-	path=/obj/machinery/door/airlock/glass_medical	
-	
+	path=/obj/machinery/door/airlock/glass_medical
+
 /datum/rcd_grouped_schematic/airlock/mining
 	name="Mining Airlock"
 	icon='icons/obj/doors/Doormining.dmi'
-	path=/obj/machinery/door/airlock/mining		
-	
+	path=/obj/machinery/door/airlock/mining
+
 /datum/rcd_grouped_schematic/airlock/atmos
 	name="Atmospherics Airlock"
 	icon='icons/obj/doors/Dooratmo.dmi'
-	path=/obj/machinery/door/airlock/atmos		
-	
+	path=/obj/machinery/door/airlock/atmos
+
 /datum/rcd_grouped_schematic/airlock/research
 	name="Research Airlock"
 	icon='icons/obj/doors/doorresearch.dmi'
-	path=/obj/machinery/door/airlock/research	
+	path=/obj/machinery/door/airlock/research
 
 /datum/rcd_grouped_schematic/airlock/glass_research
 	name="Glass Research Airlock"
 	icon='icons/obj/doors/doorresearchglass.dmi'
-	path=/obj/machinery/door/airlock/glass_research	
+	path=/obj/machinery/door/airlock/glass_research
 
 /datum/rcd_grouped_schematic/airlock/glass_mining
 	name="Glass Mining Airlock"
 	icon='icons/obj/doors/Doorminingglass.dmi'
-	path=/obj/machinery/door/airlock/glass_mining	
+	path=/obj/machinery/door/airlock/glass_mining
 
 /datum/rcd_grouped_schematic/airlock/glass_atmos
 	name="Glass Atmospherics Airlock"
 	icon='icons/obj/doors/Dooratmoglass.dmi'
-	path=/obj/machinery/door/airlock/glass_atmos	
-	
+	path=/obj/machinery/door/airlock/glass_atmos
+
 /datum/rcd_grouped_schematic/airlock/science
 	name="Science Airlock"
 	icon='icons/obj/doors/Doorsci.dmi'
-	path=/obj/machinery/door/airlock/science	
-	
+	path=/obj/machinery/door/airlock/science
+
 /datum/rcd_grouped_schematic/airlock/glass_science
 	name="Glass Science Airlock"
 	icon='icons/obj/doors/Doorsciglass.dmi'
-	path=/obj/machinery/door/airlock/glass_science	
-	
+	path=/obj/machinery/door/airlock/glass_science
+
 /datum/rcd_grouped_schematic/airlock/highsecurity
 	name="High Tech Security Airlock"
 	icon='icons/obj/doors/hightechsecurity.dmi'
 	path=/obj/machinery/door/airlock/highsecurity
-	cost=5	
-	
+	cost=5
+
 /datum/rcd_grouped_schematic/airlock/vault
 	name="Vault"
 	icon='icons/obj/doors/hightechsecurity.dmi'
 	path=/obj/machinery/door/airlock/vault
-	cost=5		
+	cost=5
 
 /datum/rcd_grouped_schematic/airlock/command
 	name="Command Airlock"
 	icon='icons/obj/doors/Doorcom.dmi'
-	path=/obj/machinery/door/airlock/command	
+	path=/obj/machinery/door/airlock/command
 
 /datum/rcd_grouped_schematic/airlock/security
 	name="Security Airlock"
 	icon='icons/obj/doors/Doorsec.dmi'
-	path=/obj/machinery/door/airlock/security	
+	path=/obj/machinery/door/airlock/security
 
 /datum/rcd_grouped_schematic/airlock/engineering
 	name="Engineering Airlock"
 	icon='icons/obj/doors/Dooreng.dmi'
-	path=/obj/machinery/door/airlock/engineering	
+	path=/obj/machinery/door/airlock/engineering
 
 /datum/rcd_grouped_schematic/airlock/medical
 	name="Medical Airlock"
 	icon='icons/obj/doors/doormed.dmi'
-	path=/obj/machinery/door/airlock/medical	
+	path=/obj/machinery/door/airlock/medical
 
 /datum/rcd_grouped_schematic/airlock/maintenance
 	name="Maintenance Airlock"
 	icon='icons/obj/doors/Doormaint.dmi'
-	path=/obj/machinery/door/airlock/maintenance	
+	path=/obj/machinery/door/airlock/maintenance
 
 /datum/rcd_grouped_schematic/airlock/external
 	name="External Airlock"
 	icon='icons/obj/doors/Doorext.dmi'
-	path=/obj/machinery/door/airlock/external	
-		
+	path=/obj/machinery/door/airlock/external
+
 /datum/rcd_grouped_schematic/airlock/windoor
 	name="Windoor"
 	icon='icons/obj/doors/windoor.dmi'
 	has_direction=TRUE
 	path=/obj/machinery/door/window
-	
+
 /datum/rcd_grouped_schematic/airlock/windoor/send_assets(var/client/client)
 	register_asset("airlock_[name]_RCD.png", new/icon(icon, "left" ))
-	send_asset(client, "airlock_[name]_RCD.png")	
+	send_asset(client, "airlock_[name]_RCD.png")
 
 /datum/rcd_grouped_schematic/airlock/windoor/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	var/cc=0
 	var/dirtouse=linked_rcd.settings["airlock_dir"] || NORTH
-	
+
 	if(!T)
 		return 0
 	if(istype(T, /turf/space))
@@ -1107,25 +1126,25 @@
 		if (istype(at, /obj/machinery/door/window) && at.dir==dirtouse)
 			to_chat(user, "There's already a windoor here!")
 			return 0
-	
+
 	if(linked_rcd.get_energy(user) < cc)
 		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
-		return 0			
+		return 0
 	if(!linked_rcd.delay(user, A, 5 SECONDS))
 		return 0
 	if(linked_rcd.get_energy(user) < cc)
 		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
 		return 0
 	playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
-	
+
 	if(istype(T, /turf/space))
 		T.ChangeTurf(/turf/simulated/floor)
-	
+
 	var/obj/machinery/door/airlock/newwindoor = new path(T)
-		
+
 	newwindoor.name=linked_rcd.settings["airlock_name"] || name
 	newwindoor.change_dir(dirtouse)
-		
+
 	if(linked_rcd.settings["airlock_acany"])
 		var/list/aa=linked_rcd.settings["airlock_access"]
 		newwindoor.req_one_access = aa?.Copy()
@@ -1133,7 +1152,7 @@
 		var/list/aa=linked_rcd.settings["airlock_access"]
 		newwindoor.req_access = aa?.Copy()
 	newwindoor.autoclose=1
-	return cost	
+	return cost
 
 
 /datum/rcd_grouped_schematic/airlock/tabledoor
@@ -1145,17 +1164,17 @@
 
 /datum/rcd_grouped_schematic/airlock/tabledoor/send_assets(var/client/client)
 	register_asset("airlock_[name]_RCD.png", new/icon('icons/obj/doors/tabledoor.dmi', ticon ))
-	send_asset(client, "airlock_[name]_RCD.png")	
+	send_asset(client, "airlock_[name]_RCD.png")
 
 /datum/rcd_grouped_schematic/airlock/tabledoor/wood
 	name="wooden table door"
 	path=/obj/machinery/door/table/wood
 	ticon="wooddoor_closed"
-	
+
 /datum/rcd_grouped_schematic/airlock/tabledoor/glass
 	name="glass table door"
 	path=/obj/machinery/door/table/glass
-	ticon="glassdoor_closed"	
+	ticon="glassdoor_closed"
 
 /datum/rcd_grouped_schematic/airlock/tabledoor/plastic
 	name="plastic table door"
@@ -1178,27 +1197,27 @@
 /datum/rcd_scematic_grouping/misc_objects
 	name="misc"
 	headerimage="RCD_HEADER_MISC.png"
-	
+
 /datum/rcd_scematic_grouping/misc_objects/generate_html()
 	var/dat=""
-	
+
 	for(var/datum/rcd_grouped_schematic/schem in schematics)
 		dat+=schem.generate_html()
 
-	
+
 	return dat
-	
+
 /datum/rcd_scematic_grouping/misc_objects/switch_to()
-	linked_rcd.selected_schem = schematics[1]	
+	linked_rcd.selected_schem = schematics[1]
 
 /datum/rcd_scematic_grouping/misc_objects/send_assets(var/client/client)
 	register_asset("RCD_HEADER_MISC.png", new/icon('icons/obj/computer.dmi', "computer_generic" ))
-	send_asset(client, "RCD_HEADER_MISC.png")	
+	send_asset(client, "RCD_HEADER_MISC.png")
 
 	for(var/datum/rcd_grouped_schematic/schem in schematics)
 		schem.send_assets(client)
-		
-	
+
+
 /datum/rcd_grouped_schematic/table
 	name = "table" //what's displayed
 	cost = 1
@@ -1208,16 +1227,16 @@
 
 /datum/rcd_grouped_schematic/table/generate_html()
 	return "<span style='display:inline-block;padding:0px;' class='schem[linked_rcd.selected_schem==src ? "_selected" : "" ]'><a style='display:block;background:none;border:none;' href='?src=\ref[linked_rcd.interface];set_schematic=[name]'><img src='table_[html_icon]_RCD.png' style='padding:4px;border:none;background:none;'></a></span>"
-	
+
 /datum/rcd_grouped_schematic/table/send_assets(var/client/client)
 	register_asset("table_std_RCD.png", new/icon('icons/obj/structures.dmi', "table" ))
-	send_asset(client, "table_std_RCD.png")	
+	send_asset(client, "table_std_RCD.png")
 
 
 /datum/rcd_grouped_schematic/table/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	var/cc=0
-	
+
 	if(!T)
 		return 0
 	if (istype(T, /turf/simulated/floor) || istype(T,/turf/unsimulated/floor))
@@ -1225,7 +1244,7 @@
 	else
 		to_chat(user, "You can't place a [name] here!")
 		return 0
-		
+
 	var/obj/structure/table/to_rep=null
 	for(var/obj/structure/table/tab in T.contents)
 		if( !(tab.type in swappable_types) || tab.type==path )
@@ -1237,18 +1256,18 @@
 			break
 	if(linked_rcd.get_energy(user) < cc)
 		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
-		return 0			
+		return 0
 	if(!linked_rcd.delay(user, A, 2 SECONDS))
 		return 0
 	if(linked_rcd.get_energy(user) < cc)
 		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
 		return 0
 	playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
-	
+
 	if (to_rep)
 		qdel(to_rep)
 	new path(T)
-	return cc	
+	return cc
 
 
 /datum/rcd_grouped_schematic/table/wood
@@ -1258,7 +1277,7 @@
 
 /datum/rcd_grouped_schematic/table/wood/send_assets(var/client/client)
 	register_asset("table_wood_RCD.png", new/icon('icons/obj/structures.dmi', "woodtable" ))
-	send_asset(client, "table_wood_RCD.png")	
+	send_asset(client, "table_wood_RCD.png")
 
 /datum/rcd_grouped_schematic/table/poker
 	name = "poker table"
@@ -1267,7 +1286,7 @@
 
 /datum/rcd_grouped_schematic/table/poker/send_assets(var/client/client)
 	register_asset("table_poker_RCD.png", new/icon('icons/obj/structures.dmi', "pokertable" ))
-	send_asset(client, "table_poker_RCD.png")	
+	send_asset(client, "table_poker_RCD.png")
 
 
 /datum/rcd_grouped_schematic/table/plastic
@@ -1277,7 +1296,7 @@
 
 /datum/rcd_grouped_schematic/table/plastic/send_assets(var/client/client)
 	register_asset("table_plastic_RCD.png", new/icon('icons/obj/structures.dmi', "plastictable" ))
-	send_asset(client, "table_plastic_RCD.png")	
+	send_asset(client, "table_plastic_RCD.png")
 
 
 /datum/rcd_grouped_schematic/table/glass
@@ -1287,7 +1306,7 @@
 
 /datum/rcd_grouped_schematic/table/glass/send_assets(var/client/client)
 	register_asset("table_glass_RCD.png", new/icon('icons/obj/structures.dmi', "glass_table" ))
-	send_asset(client, "table_glass_RCD.png")	
+	send_asset(client, "table_glass_RCD.png")
 
 
 /datum/rcd_grouped_schematic/table/pglass
@@ -1298,7 +1317,7 @@
 
 /datum/rcd_grouped_schematic/table/pglass/send_assets(var/client/client)
 	register_asset("table_pglass_RCD.png", new/icon('icons/obj/structures.dmi', "plasma_table" ))
-	send_asset(client, "table_pglass_RCD.png")	
+	send_asset(client, "table_pglass_RCD.png")
 
 
 /datum/rcd_grouped_schematic/table/reinforced
@@ -1309,7 +1328,7 @@
 
 /datum/rcd_grouped_schematic/table/reinforced/send_assets(var/client/client)
 	register_asset("table_r_RCD.png", new/icon('icons/obj/structures.dmi', "reinftable" ))
-	send_asset(client, "table_r_RCD.png")	
+	send_asset(client, "table_r_RCD.png")
 
 
 
@@ -1319,16 +1338,16 @@
 
 /datum/rcd_grouped_schematic/rack/generate_html()
 	return "<span style='display:inline-block;padding:0px;' class='schem[linked_rcd.selected_schem==src ? "_selected" : "" ]'><a style='display:block;background:none;border:none;' href='?src=\ref[linked_rcd.interface];set_schematic=[name]'><img src='rack_RCD.png' style='padding:4px;border:none;background:none;'></a></span>"
-	
+
 /datum/rcd_grouped_schematic/rack/send_assets(var/client/client)
 	register_asset("rack_RCD.png", new/icon('icons/obj/objects.dmi', "rack" ))
-	send_asset(client, "rack_RCD.png")	
+	send_asset(client, "rack_RCD.png")
 
 
 /datum/rcd_grouped_schematic/rack/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	var/cc=0
-	
+
 	if(!T)
 		return 0
 	if (istype(T, /turf/simulated/floor) || istype(T,/turf/unsimulated/floor))
@@ -1336,23 +1355,23 @@
 	else
 		to_chat(user, "You can't place a [name] here!")
 		return 0
-		
+
 	for(var/obj/structure/rack/r in T.contents)
 		to_chat(user, "There's already a [name] here!")
 		return 0
-	
+
 	if(linked_rcd.get_energy(user) < cc)
 		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
-		return 0			
+		return 0
 	if(!linked_rcd.delay(user, A, 2 SECONDS))
 		return 0
 	if(linked_rcd.get_energy(user) < cc)
 		to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
 		return 0
 	playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
-	
+
 	new/obj/structure/rack(T)
-	return cc	
+	return cc
 
 
 
@@ -1391,7 +1410,7 @@
 /datum/rcd_scematic_grouping/build_floors/engi_std/CE/New(var/obj/item/device/rcd/rcdtouse=null)
 	..(rcdtouse)
 	schematics += new/datum/rcd_grouped_schematic/rfloor(rcdtouse)
-	
+
 
 
 /datum/rcd_scematic_grouping/build_windows/engi_std
@@ -1430,9 +1449,9 @@
 	schematics+= new /datum/rcd_grouped_schematic/airlock/science(rcdtouse)
 	schematics+= new /datum/rcd_grouped_schematic/airlock/glass_science(rcdtouse)
 	schematics+= new /datum/rcd_grouped_schematic/airlock/external(rcdtouse)
-	
+
 	schematics+= new /datum/rcd_grouped_schematic/airlock/windoor(rcdtouse)
-	
+
 	schematics+= new /datum/rcd_grouped_schematic/airlock/tabledoor(rcdtouse)
 	schematics+= new /datum/rcd_grouped_schematic/airlock/tabledoor/wood(rcdtouse)
 	schematics+= new /datum/rcd_grouped_schematic/airlock/tabledoor/glass(rcdtouse)
@@ -1440,7 +1459,7 @@
 
 /datum/rcd_scematic_grouping/build_airlock/engi_std/CE
 
-/datum/rcd_scematic_grouping/build_airlock/engi_std/CE/New(var/obj/item/device/rcd/rcdtouse=null)	
+/datum/rcd_scematic_grouping/build_airlock/engi_std/CE/New(var/obj/item/device/rcd/rcdtouse=null)
 	..(rcdtouse)
 	schematics+= new/datum/rcd_grouped_schematic/airlock/vault(rcdtouse)
 	schematics+= new/datum/rcd_grouped_schematic/airlock/highsecurity(rcdtouse)
@@ -1457,7 +1476,7 @@
 	schematics+= new /datum/rcd_grouped_schematic/table/glass(rcdtouse)
 	schematics+= new /datum/rcd_grouped_schematic/table/plastic(rcdtouse)
 	schematics+= new /datum/rcd_grouped_schematic/rack(rcdtouse)
-	
+
 /datum/rcd_scematic_grouping/misc_objects/engi_std/CE
 
 /datum/rcd_scematic_grouping/misc_objects/engi_std/CE/New(var/obj/item/device/rcd/rcdtouse=null)

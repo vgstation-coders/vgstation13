@@ -19,13 +19,6 @@
 	var/currently_drawing_blood = 0 //One patient at a time.
 	var/quiet = 0
 	var/since_last_reward = 0 //Once every 55u, dispense reward
-	var/list/possible_rewards = list(/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
-								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
-								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
-								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped,
-								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped,
-								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped,
-								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy) //3/7 chance for one cookie, 3/7 chance for chococoin, 1/7 for many cookies!
 	var/list/contained_bags = list()
 	var/obj/item/weapon/reagent_containers/blood/last_bag
 
@@ -275,8 +268,14 @@
 
 /obj/machinery/bot/bloodbot/proc/dispense_reward()
 	speak(pick("Enjoy!","Come again!","Donate often!"))
-	var/path = pick(possible_rewards)
-	new path(get_turf(src))
+	var/roll = rand(1,7)
+	if (roll <= 3) // 3/7 chance for single cookie
+		new /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje(get_turf(src))
+	else if (roll <= 6) // 3/7 chance for chococoin
+		new /obj/item/weapon/reagent_containers/food/snacks/chococoin(get_turf(src))
+	else // 1/7 chance for a stack of ijzerkoekje
+		for (var/i = 1 to 6)
+			new /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje(get_turf(src))
 
 /obj/machinery/bot/bloodbot/proc/speak(var/message)
 	if(!src.on || !message)

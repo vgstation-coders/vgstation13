@@ -387,6 +387,8 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs -= src
+		if(istype(A, /area/shuttle))
+			turf_flags |= SHUTTLE_TURF
 	if (!N || !allow)
 		return
 	remove_particles()

@@ -696,15 +696,15 @@ var/list/shuttle_log = list()
 	return
 
 /proc/toggle_exploration_program(var/mob/user, var/bypass_cooldown = FALSE)
-	if(!bypass_cooldown && world.time < SSmapping.scanning_toggle_cooldown)
-		var/time_left = (SSmapping.scanning_toggle_cooldown - world.time) MINUTES
-		to_chat(user, "<span class='warning'>Exploration shuttle is undergoing maintenance. [round(time_left, 0.1)] minutes remaining.</span>")
+	if(!bypass_cooldown && world.time < (SSmapping.last_lockdown_time + SSmapping.lockdown_duration))
+		var/time_left = (SSmapping.last_lockdown_time + SSmapping.lockdown_duration) - world.time
+		to_chat(user, "<span class='warning'>[SSmapping.scanning_disabled?"Exploration shuttle":"Centcomm shuttle dock"] is undergoing maintenance. [round(time_left/10/60,0.1)] minutes remaining.</span>")
 		return FALSE
 
 	if(SSmapping.scanning_disabled)
 		SSmapping.scanning_disabled = FALSE
 		if(!bypass_cooldown)
-			SSmapping.scanning_toggle_cooldown = world.time + 15 MINUTES
+			SSmapping.last_lockdown_time = world.time
 
 		var/obj/docking_port/destination/exploration/station/station_dock = exploration_shuttle.add_dock(/obj/docking_port/destination/exploration/station)
 		if(!station_dock)
@@ -721,7 +721,7 @@ var/list/shuttle_log = list()
 	else
 		SSmapping.scanning_disabled = TRUE
 		if(!bypass_cooldown)
-			SSmapping.scanning_toggle_cooldown = world.time + 15 MINUTES
+			SSmapping.last_lockdown_time = world.time
 
 		var/obj/docking_port/destination/exploration/centcom/centcom_dock = exploration_shuttle.add_dock(/obj/docking_port/destination/exploration/centcom)
 		if(!centcom_dock)

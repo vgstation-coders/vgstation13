@@ -49663,6 +49663,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/port)
+"bQb" = (
+/obj/structure/disposalpipe/segment,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/lobby)
 "bQc" = (
 /turf/simulated/wall/r_wall,
 /area/turret_protected/ai_upload)
@@ -49973,17 +49979,19 @@
 	},
 /area/hallway/primary/starboard)
 "bQK" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
-/obj/structure/disposalpipe/sortjunction/HoS/mirrored{
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/sortjunction/IAA{
 	dir = 8
 	},
 /turf/simulated/floor{
-	icon_state = "yellowsiding";
-	tag = "icon-yellowsiding"
+	icon_state = "dark"
 	},
-/area/hallway/primary/starboard)
+/area/security/brig)
 "bQL" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -50006,10 +50014,10 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/disposalpipe/sortjunction/Security/mirrored{
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/sortjunction/GenSecurity/mirrored{
 	dir = 8
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor{
 	icon_state = "yellowsiding";
 	tag = "icon-yellowsiding"
@@ -51169,12 +51177,14 @@
 /turf/simulated/floor,
 /area/security/checkpoint)
 "bSV" = (
-/obj/structure/disposalpipe/segment{
-	dir = 8;
-	icon_state = "pipe-c"
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
 	},
-/turf/simulated/wall,
-/area/maintenance/aft)
+/obj/structure/disposalpipe/segment,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/lobby)
 "bSW" = (
 /turf/simulated/wall,
 /area/maintenance/aft)
@@ -51184,14 +51194,11 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 2;
-	icon_state = "pipe-j2"
-	},
 /obj/machinery/door/airlock/maintenance{
 	req_access_txt = "12"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "bSY" = (
@@ -93741,6 +93748,9 @@
 	})
 "due" = (
 /obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk{
+	dir = 4
+	},
 /turf/simulated/floor/wood,
 /area/lawoffice{
 	name = "\improper Internal Affairs Office"
@@ -93774,6 +93784,10 @@
 "dui" = (
 /obj/effect/landmark/start{
 	name = "Internal Affairs Agent"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 2;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor/carpet,
 /area/lawoffice{
@@ -94166,6 +94180,9 @@
 	req_access = null;
 	req_access_txt = "38"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor/wood,
 /area/lawoffice{
 	name = "\improper Internal Affairs Office"
@@ -94176,6 +94193,9 @@
 	d1 = 2;
 	d2 = 4;
 	icon_state = "2-4"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor/wood,
 /area/lawoffice{
@@ -94195,6 +94215,9 @@
 	dir = 4;
 	name = "Firelock East"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor/carpet,
 /area/lawoffice{
 	name = "\improper Internal Affairs Office"
@@ -94211,6 +94234,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor/wood,
 /area/lawoffice{
 	name = "\improper Internal Affairs Office"
@@ -94220,6 +94246,9 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor/carpet,
 /area/lawoffice{
@@ -94262,6 +94291,10 @@
 	icon_state = "4-8"
 	},
 /obj/item/beacon,
+/obj/structure/disposalpipe/segment{
+	dir = 2;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -96100,6 +96133,9 @@
 	dir = 8;
 	name = "Firelock West"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "darkred";
@@ -96107,6 +96143,9 @@
 	},
 /area/security/lobby)
 "dye" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "darkredcorners";
@@ -96146,6 +96185,10 @@
 "dyh" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 8
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 2;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -96634,6 +96677,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkredcorners";
@@ -97044,6 +97088,7 @@
 /obj/machinery/light{
 	dir = 8
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -97413,6 +97458,7 @@
 	dir = 4;
 	name = "Brig Access"
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -97688,6 +97734,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 8
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -98205,6 +98252,7 @@
 	name = "Security Blast Door";
 	opacity = 0
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -98697,6 +98745,7 @@
 /area/security/brig)
 "dCj" = (
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "darkredcorners";
@@ -99099,10 +99148,8 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 8;
-	icon_state = "pipe-j2";
-	tag = ""
+/obj/structure/disposalpipe/sortjunction/Detective/mirrored{
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -99210,8 +99257,8 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/structure/disposalpipe/segment{
-	dir = 4
+/obj/structure/disposalpipe/sortjunction/Warden/mirrored{
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -100126,6 +100173,7 @@
 /obj/item/weapon/folder/red{
 	pixel_y = 3
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -100844,6 +100892,7 @@
 /obj/effect/landmark/start{
 	name = "Warden"
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -101609,6 +101658,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -102162,6 +102212,7 @@
 /area/security/warden)
 "dHw" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -102687,6 +102738,7 @@
 	name = "Firelock North"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "darkredfull";
 	tag = "icon-darkredfull"
@@ -103179,8 +103231,6 @@
 	},
 /area/security/warden)
 "dJl" = (
-/obj/structure/table,
-/obj/item/weapon/storage/fancy/donut_box,
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_y = 26
 	},
@@ -103188,6 +103238,10 @@
 	dir = 8;
 	name = "Station Intercom (General)";
 	pixel_x = -28
+	},
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -103714,6 +103768,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/item/weapon/storage/fancy/donut_box,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -131020,6 +131075,19 @@
 	},
 /turf/space,
 /area/shuttle/transport1/centcom)
+"hTa" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/lobby)
 "hVc" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
 	dir = 4
@@ -131839,6 +131907,14 @@
 	icon_state = "blue"
 	},
 /area/hallway/primary/central)
+"niQ" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor/carpet,
+/area/lawoffice{
+	name = "\improper Internal Affairs Office"
+	})
 "niY" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -132206,6 +132282,16 @@
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
+"pRN" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/segment{
+	dir = 8;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/warden)
 "pUl" = (
 /turf/simulated/floor{
 	dir = 4;
@@ -132513,6 +132599,15 @@
 /area/maintenance/auxcharge{
 	name = "Power Substation"
 	})
+"shr" = (
+/obj/structure/disposalpipe/segment{
+	dir = 1;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/lobby)
 "snz" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -132749,6 +132844,14 @@
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
+"tHU" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/lobby)
 "tNu" = (
 /obj/docking_port/destination/pod3/station,
 /turf/simulated/floor/plating,
@@ -133091,6 +133194,15 @@
 	},
 /turf/space,
 /area/shuttle/exploration)
+"vWU" = (
+/obj/structure/disposalpipe/segment{
+	dir = 1;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor/carpet,
+/area/lawoffice{
+	name = "\improper Internal Affairs Office"
+	})
 "wcz" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -133260,6 +133372,16 @@
 	icon_state = "dark"
 	},
 /area/prison/cell_block/A)
+"xvk" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/structure/disposalpipe/segment,
+/turf/simulated/floor{
+	icon_state = "darkred";
+	tag = "icon-darkred"
+	},
+/area/security/brig)
 "xCq" = (
 /obj/structure/window/reinforced/plasma{
 	dir = 8
@@ -219562,7 +219684,7 @@ dso
 dsW
 dtz
 dui
-dtz
+vWU
 dvF
 dtz
 dxq
@@ -220064,7 +220186,7 @@ dso
 dsX
 dtA
 duj
-dtz
+niQ
 dvG
 dwv
 dxr
@@ -223076,7 +223198,7 @@ dsw
 dsw
 dsw
 dul
-dxz
+hTa
 dvI
 dsw
 dsw
@@ -223579,10 +223701,10 @@ dsw
 dsw
 dsr
 dve
-dvM
-dsw
-dsw
-dsw
+bSV
+bQb
+bQb
+shr
 dyQ
 dzI
 dAm
@@ -224084,7 +224206,7 @@ dsa
 dvN
 dwB
 dxu
-dsw
+tHU
 dyW
 dzF
 dAh
@@ -225597,7 +225719,7 @@ dAj
 dAP
 dBz
 dCj
-dEG
+bQK
 dDD
 dEu
 dFx
@@ -226100,13 +226222,13 @@ dAQ
 dBA
 dCk
 dCX
-dDA
+xvk
 dEv
 dFy
 dGF
 dHw
 dIu
-dHw
+pRN
 dKc
 dKO
 dLM
@@ -234564,8 +234686,8 @@ bHl
 bJB
 bLV
 brG
-bQK
-bSV
+bQE
+bSW
 bVn
 bXt
 bZK

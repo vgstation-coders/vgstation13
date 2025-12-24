@@ -97,7 +97,6 @@
 	)
 	flora_spawn_chance = 5
 	loot_spawners = list(
-		/obj/abstract/loot_spawner/bedsheet = 1,
 		/obj/abstract/loot_spawner/bureaucracy = 1,
 		/obj/abstract/loot_spawner/clothing = 1,
 		/obj/abstract/loot_spawner/decoration = 1,
