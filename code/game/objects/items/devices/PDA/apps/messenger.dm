@@ -362,7 +362,6 @@
 	icon = "pda_mail"
 	var/send_poll = FALSE
 
-
 /datum/pda_app/multimessage/get_dat(var/mob/user)
 	var/dat = ""
 	dat += {"<h4><span class='pda_icon pda_mail'></span> MultiMessenger V2.0.6</h4>
