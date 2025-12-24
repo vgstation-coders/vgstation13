@@ -137,32 +137,33 @@
 
 /obj/machinery/computer/forensic_scanning/attackby(obj/item/I, mob/user)
 	. = ..()
-	if(isgripper(I))
-		var/obj/item/weapon/gripper/G = I
-		if(G.wrapped)
-			scanning = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
-			G.drop_item(G.wrapped, src)
+	if(authenticated)
+		if(isgripper(I))
+			var/obj/item/weapon/gripper/G = I
+			if(G.wrapped)
+				scanning = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
+				G.drop_item(G.wrapped, src)
+				updateUsrDialog()
+		else
+			if(istype(I,/obj/item/weapon/f_card))
+				card = I
+				if(!card.fingerprints)
+					card.fingerprints = list()
+				if(card.amount > 1 || !card.fingerprints.len)
+					to_chat(usr, "<span class='warning'>ERROR: No prints/too many cards.</span>")
+					if(card.loc == src)
+						card.forceMove(src.loc)
+					card = null
+					return
+				if(user.drop_item(I, src))
+					process_card()
+			else if(istype(I, /obj/item/weapon/storage/evidencebag) && I.contents.len)
+				var/obj/item/weapon/storage/evidencebag/EVB = I
+				scanning = EVB.contents[1]
+				EVB.remove_from_storage(scanning, src, TRUE, TRUE)
+			else if(user.drop_item(I, src))
+				scanning = I
 			updateUsrDialog()
-	else
-		if(istype(I,/obj/item/weapon/f_card))
-			card = I
-			if(!card.fingerprints)
-				card.fingerprints = list()
-			if(card.amount > 1 || !card.fingerprints.len)
-				to_chat(usr, "<span class='warning'>ERROR: No prints/too many cards.</span>")
-				if(card.loc == src)
-					card.forceMove(src.loc)
-				card = null
-				return
-			if(user.drop_item(I, src))
-				process_card()
-		else if(istype(I, /obj/item/weapon/storage/evidencebag) && I.contents.len)
-			var/obj/item/weapon/storage/evidencebag/EVB = I
-			scanning = EVB.contents[1]
-			EVB.remove_from_storage(scanning, src, TRUE, TRUE)
-		else if(user.drop_item(I, src))
-			scanning = I
-		updateUsrDialog()
 
 /obj/machinery/computer/forensic_scanning/Topic(href,href_list)
 	. = ..()
