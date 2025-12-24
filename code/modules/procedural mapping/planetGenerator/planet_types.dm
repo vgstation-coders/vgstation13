@@ -32,6 +32,7 @@
 	var/mob_faction
 	// Whether this planet is hidden from the deep space scanner
 	var/hidden = FALSE
+
 	// Weighted list of possible gas vent types a planet can spawn
 	var/list/vent_types = list(
 		GAS_OXYGEN = 10,
@@ -42,13 +43,14 @@
 		GAS_CRYOTHEUM = 0,
 		GAS_RADON = 0
 	)
-	var/list/vents = list()
+  
 	// Ruin types available on this planet.
 	var/ruin_whitelist = RUIN_TYPE_GENERIC
 	var/ruin_blacklist = 0
 	var/preferred_ruin_type = RUIN_TYPE_GENERIC //3x more likely to spawn these types of ruins than others
 	// Ruin buget
 	var/ruin_budget = RUIN_BUDGET_PLANET
+
 
 /datum/planet_type/New()
 	..()

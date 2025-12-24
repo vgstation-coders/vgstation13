@@ -1130,11 +1130,12 @@
 		else
 			return mask & (~setbit)
 
+var/list/obj/structure/disposalpipe/sortjunction/sort_junctions = list()
+
 //a three-way junction that sorts objects
 /obj/structure/disposalpipe/sortjunction
 	icon_state = "pipe-j1s"
-	var/sortType = 0 //Deprecated, here for legacy support.
-	var/sort_tag //Replacement of the above, more construction friendly.
+	var/list/sort_tags = list() //Replacement of the above, more construction friendly.
 
 	var/posdir = 0
 	var/negdir = 0
@@ -1142,8 +1143,8 @@
 
 /obj/structure/disposalpipe/sortjunction/proc/updatedesc()
 	desc = "An underfloor disposal pipe with a package sorting mechanism."
-	if(sort_tag)
-		desc += "\nIt's tagged with [sort_tag]."
+	if(sort_tags.len)
+		desc += "\nIt's tagged with [english_list(sort_tags)]."
 
 /obj/structure/disposalpipe/sortjunction/update_dir()
 	posdir = dir
@@ -1162,24 +1163,29 @@
 
 /obj/structure/disposalpipe/sortjunction/New()
 	. = ..()
-	if(sortType && !sort_tag)
-		sort_tag = uppertext(map.default_tagger_locations[sortType])
-
-	else if(sort_tag)
-		sort_tag = uppertext(sort_tag)
-
+	sort_junctions += src
+	if(sort_tags.len)
+		for(var/idx in 1 to sort_tags.len) //has to be like this or it won't modify
+			sort_tags[idx] = uppertext(sort_tags[idx])
 	update_dir()
 	updatedesc()
 	update()
+
+/obj/structure/disposalpipe/sortjunction/Destroy()
+	sort_junctions -= src
+	. = ..()
 
 /obj/structure/disposalpipe/sortjunction/attackby(var/obj/item/I, var/mob/user)
 	if(istype(I, /obj/item/device/destTagger))
 		var/obj/item/device/destTagger/O = I
 
 		if(O.currTag)// Tag set
-			sort_tag = uppertext(O.destinations[O.currTag])
+			if(O.add_tag)
+				sort_tags |= list(uppertext(O.destinations[O.currTag]))
+			else
+				sort_tags = list(uppertext(O.destinations[O.currTag]))
 			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
-			to_chat(user, "<span class='notice'>Changed filter to [sort_tag]</span>")
+			to_chat(user, "<span class='notice'>Changed filter to [english_list(sort_tags)]</span>")
 			updatedesc()
 		return 1
 
@@ -1193,7 +1199,7 @@
 	//var/flipdir = turn(fromdir, 180)
 	if(fromdir != sortdir)	// probably came from the negdir
 
-		if(sort_tag == sortTag) //if destination matches filtered type...
+		if(sortTag in sort_tags) //if destination matches filtered type...
 			return sortdir		// exit through sortdirection
 		else
 			return posdir
@@ -1223,157 +1229,199 @@
 ////////////////// SortJunctionSubtypes//////////////////
 
 /obj/structure/disposalpipe/sortjunction/Disposals
-	sort_tag = DISP_DISPOSALS
+	sort_tags = list(DISP_DISPOSALS)
 
 /obj/structure/disposalpipe/sortjunction/Disposals/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Cargo
-	sort_tag = DISP_CARGO_BAY
+	sort_tags = list(DISP_CARGO_BAY)
 
 /obj/structure/disposalpipe/sortjunction/Cargo/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/QM
-	sort_tag = DISP_QM_OFFICE
+	sort_tags = list(DISP_QM_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/QM/mirrored
 	icon_state = "pipe-j2s"
 
+/obj/structure/disposalpipe/sortjunction/GenEngineering
+	sort_tags = list(DISP_ENGINEERING,DISP_CE_OFFICE,DISP_ATMOSPHERICS)
+
+/obj/structure/disposalpipe/sortjunction/GenEngineering/mirrored
+	icon_state = "pipe-j2s"
+
 /obj/structure/disposalpipe/sortjunction/Engineering
-	sort_tag = DISP_ENGINEERING
+	sort_tags = list(DISP_ENGINEERING)
 
 /obj/structure/disposalpipe/sortjunction/Engineering/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/CE
-	sort_tag = DISP_CE_OFFICE
+	sort_tags = list(DISP_CE_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/CE/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Atmos
-	sort_tag = DISP_ATMOSPHERICS
+	sort_tags = list(DISP_ATMOSPHERICS)
 
 /obj/structure/disposalpipe/sortjunction/Atmos/mirrored
 	icon_state = "pipe-j2s"
 
+/obj/structure/disposalpipe/sortjunction/GenSecurity
+	sort_tags = list(DISP_SECURITY,DISP_HOS_OFFICE,DISP_DETECTIVE,DISP_WARDEN,DISP_IAA)
+
+/obj/structure/disposalpipe/sortjunction/GenSecurity/mirrored
+	icon_state = "pipe-j2s"
+
 /obj/structure/disposalpipe/sortjunction/Security
-	sort_tag = DISP_SECURITY
+	sort_tags = list(DISP_SECURITY)
 
 /obj/structure/disposalpipe/sortjunction/Security/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/HoS
-	sort_tag = DISP_HOS_OFFICE
+	sort_tags = list(DISP_HOS_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/HoS/mirrored
 	icon_state = "pipe-j2s"
 
+/obj/structure/disposalpipe/sortjunction/Warden
+	sort_tags = list(DISP_WARDEN)
+
+/obj/structure/disposalpipe/sortjunction/Warden/mirrored
+	icon_state = "pipe-j2s"
+
+/obj/structure/disposalpipe/sortjunction/Detective
+	sort_tags = list(DISP_DETECTIVE)
+
+/obj/structure/disposalpipe/sortjunction/Detective/mirrored
+	icon_state = "pipe-j2s"
+
+/obj/structure/disposalpipe/sortjunction/IAA
+	sort_tags = list(DISP_IAA)
+
+/obj/structure/disposalpipe/sortjunction/IAA/mirrored
+	icon_state = "pipe-j2s"
+
+/obj/structure/disposalpipe/sortjunction/GenMedbay
+	sort_tags = list(DISP_MEDBAY,DISP_CMO_OFFICE,DISP_CHEMISTRY)
+
+/obj/structure/disposalpipe/sortjunction/GenMedbay/mirrored
+	icon_state = "pipe-j2s"
+
 /obj/structure/disposalpipe/sortjunction/Medbay
-	sort_tag = DISP_MEDBAY
+	sort_tags = list(DISP_MEDBAY)
 
 /obj/structure/disposalpipe/sortjunction/Medbay/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/CMO
-	sort_tag = DISP_CMO_OFFICE
+	sort_tags = list(DISP_CMO_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/CMO/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Chemistry
-	sort_tag = DISP_CHEMISTRY
+	sort_tags = list(DISP_CHEMISTRY)
 
 /obj/structure/disposalpipe/sortjunction/Chemistry/mirrored
 	icon_state = "pipe-j2s"
 
+/obj/structure/disposalpipe/sortjunction/GenResearch
+	sort_tags = list(DISP_RESEARCH,DISP_RD_OFFICE,DISP_ROBOTICS)
+
+/obj/structure/disposalpipe/sortjunction/GenResearch/mirrored
+	icon_state = "pipe-j2s"
+
 /obj/structure/disposalpipe/sortjunction/Research
-	sort_tag = DISP_RESEARCH
+	sort_tags = list(DISP_RESEARCH)
 
 /obj/structure/disposalpipe/sortjunction/Research/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/RD
-	sort_tag = DISP_RD_OFFICE
+	sort_tags = list(DISP_RD_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/RD/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Robotics
-	sort_tag = DISP_ROBOTICS
+	sort_tags = list(DISP_ROBOTICS)
 
 /obj/structure/disposalpipe/sortjunction/Robotics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/HoP
-	sort_tag = DISP_HOP_OFFICE
+	sort_tags = list(DISP_HOP_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/HoP/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Library
-	sort_tag = DISP_LIBRARY
+	sort_tags = list(DISP_LIBRARY)
 
 /obj/structure/disposalpipe/sortjunction/Library/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Chapel
-	sort_tag = DISP_CHAPEL
+	sort_tags = list(DISP_CHAPEL)
 
 /obj/structure/disposalpipe/sortjunction/Chapel/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Theatre
-	sort_tag = DISP_THEATRE
+	sort_tags = list(DISP_THEATRE)
 
 /obj/structure/disposalpipe/sortjunction/Theatre/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Bar
-	sort_tag = DISP_BAR
+	sort_tags = list(DISP_BAR)
 
 /obj/structure/disposalpipe/sortjunction/Bar/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Kitchen
-	sort_tag = DISP_KITCHEN
+	sort_tags = list(DISP_KITCHEN)
 
 /obj/structure/disposalpipe/sortjunction/Kitchen/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Hydroponics
-	sort_tag = DISP_HYDROPONICS
+	sort_tags = list(DISP_HYDROPONICS)
 
 /obj/structure/disposalpipe/sortjunction/Hydroponics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Janitor
-	sort_tag = DISP_JANITOR_CLOSET
+	sort_tags = list(DISP_JANITOR_CLOSET)
 
 /obj/structure/disposalpipe/sortjunction/Janitor/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Genetics
-	sort_tag = DISP_GENETICS
+	sort_tags = list(DISP_GENETICS)
 
 /obj/structure/disposalpipe/sortjunction/Genetics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Telecomms
-	sort_tag = DISP_TELECOMMS
+	sort_tags = list(DISP_TELECOMMS)
 
 /obj/structure/disposalpipe/sortjunction/Telecomms/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Mechanics
-	sort_tag = DISP_MECHANICS
+	sort_tags = list(DISP_MECHANICS)
 
 /obj/structure/disposalpipe/sortjunction/Mechanics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Telescience
-	sort_tag = DISP_TELESCIENCE
+	sort_tags = list(DISP_TELESCIENCE)
 
 /obj/structure/disposalpipe/sortjunction/Telescience/mirrored
 	icon_state = "pipe-j2s"

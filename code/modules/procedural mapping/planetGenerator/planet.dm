@@ -84,6 +84,7 @@
 
 	/// Number of gas vents present on the planet
 	var/vent_count = 0
+ 
 	/// Expanded weighted list of ruins for this planet's type
 	var/list/weighted_ruin_list = list()
 	var/spawned_story_ruin = FALSE
@@ -126,19 +127,19 @@
 /datum/planetGenerator/proc/post_process(datum/allocation/allocation)
 	if(vent_count <= 0)
 		return
-	var/list/created_vents = list()
+	var/checked_turfs = 0
 	while(vent_count > 0)
 		var/turf/unsimulated/T = pick(allocation.turfs)
 		if(!istype(T))
 			continue
 		var/area/A = get_area(T)
 		if(isopensurface(A) || (istype(A, /area/planet/cave) && !iswall(T)))
-			var/datum/vent/newvent =  new /datum/vent(T)
-			created_vents += newvent
+			new /datum/vent(T)
 			vent_count -= 1
-	if(created_vents.len)
-		var/datum/planet_type/planet = allocation.ptype
-		planet.vents += created_vents
+		checked_turfs++
+		if(checked_turfs > 100) //arbitrary limit to prevent infinite loops
+			break
+	return
 
 /// Gets the biome for a turf, using the cache if available, otherwise calculating and caching it.
 /// Returns: The datum/biome for the given turf
