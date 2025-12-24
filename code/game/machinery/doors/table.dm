@@ -177,12 +177,25 @@
 
 /obj/machinery/door/table/open()
 	playsound(src, soundeffect, 100, 1)
+	state_animate()
 	return ..()
 
 /obj/machinery/door/table/close()
 	playsound(src, soundeffect, 100, 1)
+	state_animate()
 	. = ..()
 	set_opacity(0) //always seethru
+
+/obj/machinery/door/table/proc/state_animate()
+	if(dir & (EAST|WEST))
+		pixel_x -= 2
+	else
+		pixel_y -= 2
+	spawn(2)
+		if(dir & (EAST|WEST))
+			pixel_x += 2
+		else
+			pixel_y += 2
 
 /obj/machinery/door/table/attackby(obj/item/W, mob/user, params)
 	if (density && istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
