@@ -355,6 +355,7 @@
 	starting_materials = list(MAT_DIAMOND = 250, MAT_IRON = 250, MAT_GLASS = 250, MAT_URANIUM = 250)
 	volume = 50
 	possible_transfer_amounts = list(5,10,15,25,50)
+	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial/noreact
 	name = "stasis vial"
@@ -362,6 +363,7 @@
 	icon_state = "svial"
 	starting_materials = list(MAT_DIAMOND = 250, MAT_IRON = 250, MAT_GLASS = 250, MAT_URANIUM = 250)
 	flags = FPRINT | OPENCONTAINER | NOREACT
+	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
 	..()
