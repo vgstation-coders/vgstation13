@@ -141,11 +141,9 @@
 		if(isgripper(I))
 			var/obj/item/weapon/gripper/G = I
 			if(G.wrapped)
-				scanning = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
-				G.drop_item(G.wrapped, src)
-				updateUsrDialog()
-		else
-			if(istype(I,/obj/item/weapon/f_card))
+				I = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
+		if(istype(I,/obj/item/weapon/f_card))
+			if(files && files.len)
 				card = I
 				if(!card.fingerprints)
 					card.fingerprints = list()
@@ -157,13 +155,18 @@
 					return
 				if(user.drop_item(I, src))
 					process_card()
-			else if(istype(I, /obj/item/weapon/storage/evidencebag) && I.contents.len)
+			else
+				to_chat(usr, "<span class='warning'>No files detected to scan with [I].</span>")
+		if(scanning)
+			to_chat(usr, "<span class='warning'>There is already \a [scanning] in the scanning slot!.</span>")
+		else if(istype(I, /obj/item/weapon/storage/evidencebag))
+			if(I.contents.len)
 				var/obj/item/weapon/storage/evidencebag/EVB = I
 				scanning = EVB.contents[1]
 				EVB.remove_from_storage(scanning, src, TRUE, TRUE)
-			else if(user.drop_item(I, src))
-				scanning = I
-			updateUsrDialog()
+		else if(user.drop_item(I, src))
+			scanning = I
+		updateUsrDialog()
 
 /obj/machinery/computer/forensic_scanning/Topic(href,href_list)
 	. = ..()
@@ -207,7 +210,7 @@
 						if(M.drop_item(I, src))
 							scanning = I
 			else
-				to_chat(usr, "Invalid Object Rejected.")
+				to_chat(usr, "<span class='warning'>Invalid Object Rejected.</span>")
 		if("card")  //Processing a fingerprint card.
 			var/mob/M = usr
 			var/obj/item/I = M.get_active_hand()
