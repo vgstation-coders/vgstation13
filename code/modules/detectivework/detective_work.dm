@@ -445,6 +445,7 @@
 			scan_data = ""
 		if("cancel")
 			scan_process = 0
+			scan_data = ""
 		if("add") //Adding an object (Manually) to the database.
 			if(scanning)
 				add_data(scanning)
