@@ -73,7 +73,7 @@
 				if(T.level <= 1) //He's dead, Jim!
 					continue
 				T.level = 1 // This never happens, so make it dramatic. T.level--
-				//Except it does happen and floods the logs!! Minimum level is 1, not 0
+				//Except it does happen and floods the admins!! Minimum level is 1, not 0
 				message_admins("[src] lost [T.id] tech levels due to heat damage.")
 				for(var/obj/machinery/computer/rdservercontrol/SC in machines)
 					SC.screen = -1 //Display an alert
