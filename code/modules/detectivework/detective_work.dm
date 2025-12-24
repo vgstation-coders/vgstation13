@@ -508,6 +508,9 @@
 					scan_data = null
 		updateUsrDialog()
 
+/obj/machinery/computer/forensic_scanning/ex_act()
+	return
+
 /obj/machinery/computer/forensic_scanning/proc/add_data_scanner(var/obj/item/device/W)
 	if(istype(W, /obj/item/device/detective_scanner))
 		var/obj/item/device/detective_scanner/D = W
