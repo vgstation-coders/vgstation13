@@ -673,7 +673,7 @@ var/global/list/charcoal_doesnt_remove=list(
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
 	id = CRYOXADONE
-	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly."
+	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly, with an even greater effect at under 95K."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
