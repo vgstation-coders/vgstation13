@@ -183,6 +183,9 @@ var/list/particle_string_to_type = list(
 	PS_SACRED_FLAME = /particles/sacred_flame,
 	PS_SACRED_FLAME2 = /particles/sacred_flame/alt,
 	PS_BIBLE_PAGE = /particles/bible_page,
+	PS_SHADOW_SMOKE = /particles/cult_smoke,
+	PS_SHADOW_SMOKE2 = /particles/cult_smoke/alt,
+	PS_GAS_VENT = /particles/gas_vent
 	)
 
 /particles
@@ -411,6 +414,25 @@ var/list/particle_string_to_type = list(
 	position = generator("box", list(-15,-15), list(15,15))
 	velocity = list(0,0)
 
+//Gas vents
+/particles/gas_vent
+	width = 96
+	height = 96
+	count = 20
+	spawning = 2
+
+	color = "#FFFFFF99"
+	lifespan = 1 SECONDS
+	fade = 0.5 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "gas"
+	position = generator("box", list(-3,12), list(3,12))
+	velocity = generator("box", list(-0.8,1.5), list(0.8,2.5))
+	friction = 0.15
+	drift = generator("box", list(-0.5,-0.1), list(0.5,0.1))
+	scale = list(0.5, 0.5)
+	grow = list(0.08, 0.08)
+
 /turf
 	var/last_dust_time = 0
 	var/last_dust_strength = 0
@@ -568,4 +590,66 @@ var/list/particle_string_to_type = list(
 	grow = generator("box", list(-0.3,-0.3), list(0,0))
 
 	appearance_flags = RESET_COLOR|RESET_ALPHA
+	plane = ABOVE_LIGHTING_PLANE
+
+/particles/rain
+	width = 32
+	height = 32
+	count = 20
+
+	lifespan = 2
+	fade = 1
+	spawning = 0
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("rain_1","rain_2","rain_3")
+	position = generator("box", list(-1,12), list(1,12))
+	velocity = list(0,10)
+	friction = 0.1
+	drift = generator("box", list(-0.2,0), list(0.2,0))
+
+	appearance_flags = RESET_COLOR
+	blend_mode = BLEND_ADD
+	plane = ABOVE_LIGHTING_PLANE
+
+/particles/ash
+	width = 64
+	height = 64
+	count = 20
+
+	lifespan = 5
+	fade = 2
+	spawning = 1
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("ash_1","ash_2","ash_3")
+	position = generator("box", list(-15,-15), list(15,15))
+	velocity = generator("box", list(-1,2), list(1,2))
+	friction = 0.1
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+	scale = list(0.6, 0.6)
+	grow = list(0.05, 0.05)
+
+	appearance_flags = RESET_COLOR
+	plane = ABOVE_LIGHTING_PLANE
+
+/particles/fallout
+	width = 64
+	height = 64
+	count = 20
+
+	lifespan = 10
+	fade = 5
+	spawning = 1
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("fallout_1","fallout_2","fallout_3")
+	position = generator("box", list(-15,-15), list(15,15))
+	velocity = generator("box", list(-1,1), list(1,1))
+	friction = 0.1
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+	scale = list(0.6, 0.6)
+	grow = list(0.05, 0.05)
+
+	appearance_flags = RESET_COLOR
 	plane = ABOVE_LIGHTING_PLANE

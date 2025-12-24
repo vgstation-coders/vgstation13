@@ -575,3 +575,37 @@
 	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
+
+// Random painting from remote gallery
+/obj/item/mounted/frame/painting/custom/random
+	name = "random painting"
+	base_name = "random painting"
+	desc = "A canvas loaded with a random design from the remote gallery."
+	base_desc = "A canvas loaded with a random design from the remote gallery."
+
+/obj/item/mounted/frame/painting/custom/random/New()
+	..()
+	if(SSdbcore.IsConnected())
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, author, title, content, description FROM `painting_db` ORDER BY RAND() LIMIT 1")
+		if(query.Execute())
+			if(query.NextRow())
+				var/painting_author = query.item[2]
+				var/painting_title = query.item[3]
+				var/painting_content = query.item[4]
+				var/painting_description = query.item[5]
+
+				if(painting_content)
+					var/datum/custom_painting/new_painting = json2painting(painting_content, painting_title, painting_author, painting_description)
+					if(new_painting)
+						painting_width = new_painting.bitmap_width
+						painting_height = new_painting.bitmap_height
+						painting_offset_x = new_painting.offset_x
+						painting_offset_y = new_painting.offset_y
+						base_color = new_painting.base_color
+
+						set_painting_data(new_painting)
+						update_painting(TRUE)
+
+						name = "[painting_title] by [painting_author]"
+						desc = painting_description
+		qdel(query)

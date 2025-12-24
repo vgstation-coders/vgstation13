@@ -81,10 +81,14 @@
 	talked |= break_grabs(target)
 
 	if(!talked)
-		target.drop_item()
+		var/obj/item/dropped_item = target.drop_item()
+		dropped_item.on_disarm_drop(src)
 		visible_message("<span class='danger'>[src] has disarmed [target]!</span>")
 	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 	return 1
+
+/obj/item/proc/on_disarm_drop(mob/user)
+	return
 
 /mob/living/carbon/human/proc/get_organ_species(organ)
 	var/datum/organ/external/OE
@@ -272,12 +276,14 @@
 			to_chat(src, "<span class='notice'><B>They don't have a mouth!</B></span>")
 			return 0
 	if(src.check_body_part_coverage(MOUTH))
-		to_chat(src, "<span class='notice'><B>Remove your [src.get_body_part_coverage(MOUTH)]!</B></span>")
+		var/obj/item/I = src.get_body_part_coverage(MOUTH)
+		to_chat(src, "<span class='notice'><B>Remove your [I.name]!</B></span>")
 		return 0
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
 		if(H.check_body_part_coverage(MOUTH))
-			to_chat(src, "<span class='notice'><B>Remove their [H.get_body_part_coverage(MOUTH)]!</B></span>")
+			var/obj/item/I = H.get_body_part_coverage(MOUTH)
+			to_chat(src, "<span class='notice'><B>Remove their [I.name]!</B></span>")
 			return 0
 
 	if(!target.cpr_time)

@@ -57,6 +57,9 @@ var/global/list/ghdel_profiling_roundstart = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
+	// The planet the atom is on, if any.
+	var/datum/planet_type/planet = null
+
 	var/emagged = 0 // Some things other than machinery can be
 	var/emag_cost = 0 // Emag energy cost (in MJ)
 	var/arcanetampered = 0 //A looot of things can be
@@ -473,8 +476,6 @@ its easier to just keep the beam vertical.
 	if(on_fire)
 		user.simple_message("<span class='danger'>OH SHIT! IT'S ON FIRE!</span>",\
 			"<span class='info'>It's on fire, man.</span>")
-	if(charred_overlay)
-		to_chat(user, span_info("It's covered in ash."))
 	if(min_harm_label && harm_labeled)
 		if(harm_labeled < min_harm_label)
 			to_chat(user, harm_label_examine[1])
@@ -557,8 +558,6 @@ its easier to just keep the beam vertical.
 /atom/proc/clean_act(var/cleanliness)//1 = contact with water (splashed with water, removes glue from objs), 2 = space cleaner or efficient cleaning (showers, sink, soap), 3 = bleach
 	if (cleanliness >= CLEANLINESS_SPACECLEANER)
 		clean_blood()
-		if(charred_overlay)
-			cut_overlay(charred_overlay)
 	if (cleanliness >= CLEANLINESS_BLEACH)
 		color = ""
 	if (cleanliness >= CLEANLINESS_WATER)//I mean, not sure why we'd ever add a rank below water but, futur-proofing and all that jazz
@@ -793,7 +792,11 @@ its easier to just keep the beam vertical.
 	if(!istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 
-	blood_color = blood_DNA.len ? BlendRYB(blood_color, blood_data["blood_colour"], 0.5) : blood_data["blood_colour"] //mix new color into existing blood_color if applicable
+	if (blood_color && blood_DNA.len)
+		blood_color = BlendRYB(blood_color, blood_data["blood_colour"], 0.5) //mix new color into existing blood_color if applicable
+	else
+		blood_color = blood_data["blood_colour"]
+
 	return TRUE
 
 /atom/proc/add_vomit_floor(mob/living/carbon/M, toxvomit = 0, active = 0, steal_reagents_from_mob = 1)
@@ -812,7 +815,7 @@ its easier to just keep the beam vertical.
 			this.icon_state = "vomittox_[pick(1,4)]"
 
 		if(active && steal_reagents_from_mob && M && M.reagents)
-			M.reagents.trans_to(this, M.reagents.total_volume * 0.1)
+			M.reagents.trans_removable_to(this, 0.1, 1)
 
 
 /atom/proc/clean_blood()
@@ -1123,70 +1126,6 @@ its easier to just keep the beam vertical.
 	if (blood_color && blood_DNA && blood_DNA.len)
 		return TRUE
 	return FALSE
-
-//Single overlay moody light
-/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0)
-	overlays -= moody_light
-	var/area/here = get_area(src)
-	if (here && here.dynamic_lighting)
-		moody_light = image(moody_icon, src, moody_state)
-		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
-		moody_light.plane = LIGHTING_PLANE
-		moody_light.blend_mode = BLEND_ADD
-		moody_light.alpha = moody_alpha
-		moody_light.color = moody_color
-		moody_light.pixel_x = offX
-		moody_light.pixel_y = offY
-		overlays += moody_light
-	luminosity = max(luminosity, 2)
-
-/atom/proc/kill_moody_light()
-	overlays -= moody_light
-	luminosity = initial(luminosity)
-	moody_light = null
-
-//Multi-overlay moody lights. don't combine both procs on a single atom, use one or the other.
-/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0, var/image_override = null)
-	if (!index)
-		return
-	if (isnull(moody_lights))
-		moody_lights = list()
-	if (index in moody_lights)
-		overlays -= moody_lights[index]
-	var/area/here = get_area(src)
-	if (here && here.dynamic_lighting)
-		if (image_override)
-			moody_light = image_override
-		else
-			moody_light = image(moody_icon, src, moody_state)
-		moody_light.appearance_flags |= RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
-		moody_light.plane = LIGHTING_PLANE
-		moody_light.blend_mode = BLEND_ADD
-		moody_light.alpha = moody_alpha
-		moody_light.color = moody_color
-		moody_light.pixel_x = offX
-		moody_light.pixel_y = offY
-		moody_lights[index] = moody_light
-		overlays += moody_lights[index]
-	luminosity = max(luminosity, 2)
-
-/atom/proc/kill_moody_light_index(var/index)
-	if (isnull(moody_lights))
-		moody_lights = list()
-	if (!index || !(index in moody_lights))
-		return
-	overlays -= moody_lights[index]
-	moody_lights.Remove(index)
-	if (moody_lights.len <= 0)
-		luminosity = initial(luminosity)
-
-/atom/proc/kill_moody_light_all()
-	if (isnull(moody_lights))
-		moody_lights = list()
-	for (var/i in moody_lights)
-		overlays -= moody_lights[i]
-		moody_lights.Remove(i)
-	luminosity = initial(luminosity)
 
 /atom/proc/silicate_act(var/atom/A, var/mob/user)
 	return FALSE

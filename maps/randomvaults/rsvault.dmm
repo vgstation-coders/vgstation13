@@ -262,7 +262,7 @@
 /turf/simulated/floor,
 /area)
 "bn" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	dir = 8
 	},
 /turf/simulated/floor,

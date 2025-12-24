@@ -89,7 +89,9 @@ var/list/admin_verbs_admin = list(
 	/client/proc/body_archive_panel,
 	/client/proc/climate_panel,
 	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
-	/client/proc/toggle_admin_examine
+	/client/proc/toggle_admin_examine,
+	/client/proc/beasts_panel,	/* Lists all forgotten beasts generated, along with their characteristics */
+	/datum/admins/proc/procedural_generation_panel
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -1103,12 +1105,35 @@ var/list/admin_verbs_mod = list(
 
 	stop_all_media()
 
+var/list/fax_presets = list(
+	"Centcomm" = {"<!DOCTYPE html>
+<html>
+<body style="background-color:darkblue;">
+
+<h1><center><font color="white">NANOTRASEN CENTRAL COMMAND</font></center></h1>
+<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center>
+<p><center><font color="white">\[MESSAGE BODY GOES HERE\]</center></font></p>
+<p><center><font color="white">\[MESSAGE BODY GOES HERE\]</center></font></p>
+
+</body>
+</html>"},
+	"Internal Affairs" = {"<html><style>body {color: #000000; background: #ccffff;}
+h1 {color: #000000; font-size:30px;}
+fieldset {width:140px;}
+</style><body><center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center><BR>
+\[MESSAGE BODY GOES HERE\]
+<BR><BR><I>Central Command</I>
+</body></html>"},
+	"Blank" = ""
+)
+
 /client/proc/SendCentcommFax()
 	set	category = "Fun"
 	set name = "Send Fax"
 	set desc = "Sends a fax to all fax machines."
 
-	var/sent = input(src, "Please enter a message send via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
+	var/preset = input(src,"Which preset to use?","Preset formatting") as null|anything in fax_presets
+	var/sent = input(src, "Please enter a message send via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", fax_presets[preset]) as message|null
 	if(!sent)
 		return
 
@@ -1131,7 +1156,8 @@ var/list/admin_verbs_mod = list(
 	var/mission_to_load = alert(usr, "How do you want to select the map element?", "Map element loading", "Choose a /datum/map_element object", "Load external .dmm file", "Cancel")
 	switch(mission_to_load)
 		if("Choose a /datum/map_element object")
-			var/new_map_element = input(usr, "Please select the map element object.", "Map element loading") as null|anything in typesof(/datum/map_element) - /datum/map_element
+			var/element_type = input("Specify a map element type. Periods exclude subtypes.", "Map element type") as text
+			var/new_map_element = filter_typelist_input("Please select the map element object.", "Map element loading", get_matching_types(element_type,/datum/map_element))
 			if(!new_map_element)
 				return
 
@@ -1405,3 +1431,11 @@ var/list/admin_verbs_mod = list(
 		to_chat(usr, "<span class='notice'>You toggle [holder.admin_examine ? "on" : "off"] admin examining.")
 	feedback_add_details("admin_verb","admin_examine")
 	return
+
+/client/proc/beasts_panel()
+	set name = "Megabeast Panel"
+	set category = "Admin"
+	if(holder)
+		holder.beasts_panel()
+		log_admin("[key_name(usr)] checked the Megabeast Panel.")
+	feedback_add_details("admin_verb","BST")

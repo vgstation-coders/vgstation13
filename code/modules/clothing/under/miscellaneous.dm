@@ -118,7 +118,7 @@
 	icon_state = "syndicate"
 	item_state = "bl_suit"
 	_color = "syndicate"
-	desc = "it's a cybernetically enhanced jumpsuit used for administrative duties."
+	desc = "It's a cybernetically enhanced jumpsuit used for administrative duties."
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
@@ -899,9 +899,23 @@
 	item_state = "callum_suit"
 	_color = "callum_suit"
 
+/obj/item/clothing/under/tian
+	name = "tian dress"
+	desc = "Custom-made for a warrior, long long ago."
+	icon_state = "tian_dress"
+	item_state = "tian_dress"
+	_color = "tian_dress"
+
+/obj/item/clothing/under/matsuda
+	name = "disheveled jumpsuit"
+	desc = "A rolled down jumpsuit and undershirt combo, styled after old Martian actress."
+	icon_state = "matsuda"
+	item_state = "matsuda"
+	_color = "matsuda"
+
 /obj/item/clothing/under/clownsuit
 	name = "formal clown outfit"
-	desc = "for clowns living in a society."
+	desc = "For clowns living in a society."
 	icon_state = "clownsuit"
 	item_state = "clownsuit"
 	_color = "clownsuit"
@@ -1006,7 +1020,7 @@
 
 /obj/item/clothing/under/hunter
 	name = "modern vampire hunter's attire"
-	desc = "A tough leather vest with stylish white pants"
+	desc = "A tough leather vest with stylish white pants."
 	icon_state = "hunter"
 	item_state = "hunter_uniform"
 	_color = "hunter"

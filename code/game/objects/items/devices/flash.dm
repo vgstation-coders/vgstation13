@@ -15,6 +15,7 @@
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_COMBAT + "=1"
 	min_harm_label = 15 //Multiple layers?
 	harm_label_examine = list("<span class='info'>A label is on the bulb, but doesn't cover it.</span>", "<span class='warning'>A label covers the bulb!</span>")
+	ignore_blocking = IGNORE_SOME_SHIELDS
 
 	var/times_used = 0 //Number of times it's been used.
 	var/broken = 0     //Is the flash burnt out?
@@ -92,6 +93,8 @@
 
 	if(iscarbon(M))
 		var/mob/living/carbon/Subject = M
+		if(Subject.check_shields(0, src)) //Will trigger a ninja's hologram protection
+			flashfail = TRUE
 
 		if(Subject.eyecheck() > 0 || flashfail)
 			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
@@ -234,7 +237,7 @@
 						O.show_message("<span class='disarm'>[M] is blinded by the flash!</span>")
 	..()
 
-/obj/item/device/flash/restock()
+/obj/item/device/flash/restock(nanobots = FALSE)
 	if(broken)
 		broken = 0
 		times_used = 0

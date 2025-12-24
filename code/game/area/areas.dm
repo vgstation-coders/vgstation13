@@ -20,7 +20,7 @@ var/area/space_area
 	var/obj/effect/narration/narrator = null
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
-	flags = 0
+	flags = CAVES_ALLOWED
 
 /area/New()
 	area_turfs = list()
@@ -330,7 +330,7 @@ var/area/space_area
 		updateicon()
 	return
 
-/area/proc/get_ambience_list()
+/area/proc/get_ambience_list(mob/user)
 	//Check if the area has an AI and add the appropriate ambience
 	var/list/ambience_list = list()
 	ambience_list.Add(ambient_sounds)
@@ -340,6 +340,8 @@ var/area/space_area
 			if(AI?.laws.name == "Asimov's Three Laws of Robotics")
 				ambience_list.Add(/datum/ambience/AI/harmonica)
 			break
+	if(user.loneliness_affected())
+		ambience_list.Add(/datum/ambience/nobodyhere)
 	if(ambience_list.len > 0)
 		return ambience_list
 
@@ -453,21 +455,53 @@ var/area/space_area
 		Obj.underlays -= Obj.shadow
 
 	Obj.area_entered(src)
+	if(planet)
+		Obj.planet = planet
 	for(var/atom/movable/thing in get_contents_in_object(Obj))
 		thing.area_entered(src)
+		if(planet)
+			thing.planet = planet
 
 	for(var/mob/mob_in_obj in Obj.contents)
 		if(istype(mob_in_obj))
 			INVOKE_EVENT(mob_in_obj, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
+			if(planet && istype(mob_in_obj, /mob/living))
+				var/mob/living/L = mob_in_obj
+				L.register_event(/event/planet_entered, planet, "on_mob_entered")
+				L.register_event(/event/planet_exited, planet, "on_mob_exited")
+				INVOKE_EVENT(L, /event/planet_entered, L, planet)
 
 	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
 		INVOKE_EVENT(M, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
+		if(planet && istype(M, /mob/living))
+			var/mob/living/L = M
+			L.register_event(/event/planet_entered, planet, "on_mob_entered")
+			L.register_event(/event/planet_exited, planet, "on_mob_exited")
+			INVOKE_EVENT(L, /event/planet_entered, L, planet)
 		if(narrator)
 			narrator.Crossed(M)
 
 /area/Exited(atom/movable/Obj)
+	if(planet)
+		var/turf/T = get_turf(Obj)
+		var/area/newArea = T ? get_area(T) : null
+		if(!newArea || newArea.planet != planet)
+			Obj.planet = null
+			if(istype(Obj, /mob))
+				var/mob/M = Obj
+				INVOKE_EVENT(M, /event/planet_exited, M, planet)
+				M.unregister_event(/event/planet_entered, planet, "on_mob_entered")
+				M.unregister_event(/event/planet_exited, planet, "on_mob_exited")
+			for(var/atom/movable/thing in get_contents_in_object(Obj))
+				thing.planet = null
+				if(istype(thing, /mob))
+					var/mob/M = thing
+					INVOKE_EVENT(M, /event/planet_exited, M, planet)
+					M.unregister_event(/event/planet_entered, planet, "on_mob_entered")
+					M.unregister_event(/event/planet_exited, planet, "on_mob_exited")
+
 	INVOKE_EVENT(src, /event/area_exited, "exiter" = Obj)
 	..()
 

@@ -4,6 +4,7 @@
 	icon = 'icons/obj/siege_cannon.dmi'
 	icon_state = "siege_cannon"
 	density = TRUE
+	verb_rotates = TRUE
 	var/obj/item/loadedItem = null
 	var/mob/living/loadedMob = null
 	var/wFuel = 0
@@ -181,22 +182,6 @@
 		icon_state = "clownnon"
 		name = "circus cannon"
 
-/obj/structure/siege_cannon/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/structure/siege_cannon/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	src.dir = turn(src.dir, 90)
-	return 1
-
 
 //CANNONBALLS/////
 
@@ -296,7 +281,7 @@
 //Fuse bomb//////// -Refactored as cannonball by kanef, was originally a device for some reason. Nothing needed to be changed since icon state is the only unique var in that type, and it's set here anyways
 /obj/item/cannonball/fuse_bomb
 	name = "fuse bomb"
-	desc = "fshhhhhhhh BOOM!"
+	desc = "Fshhhhhhhh BOOM!"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "fuse_bomb_5"
 	item_state = "fuse_bomb"
@@ -347,7 +332,7 @@
 				assembled = 2
 				to_chat(user, "<span  class='notice'>You wire the [src].</span>")
 				name = "fuse bomb"
-				desc = "fshhhhhhhh BOOM!"
+				desc = "Fshhhhhhhh BOOM!"
 				update_icon()
 	else if(assembled == 2)
 		if(!fuse_lit)

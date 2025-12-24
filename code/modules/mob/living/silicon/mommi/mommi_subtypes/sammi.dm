@@ -1,7 +1,7 @@
 /mob/living/silicon/robot/mommi/sammi
 	name = "Stationary Assembler MMI"
 	real_name = "Stationary Assembler MMI"
-	desc = "This versatile assembler is controlled by a transient mind-cluster network, unfortunately it is prone to connection loss"
+	desc = "This versatile assembler is controlled by a transient mind-cluster network, unfortunately it is prone to connection loss."
 	icon = 'icons/mob/mommi.dmi'
 	icon_state = "sammi_offline"
 	maxHealth = 200
@@ -211,7 +211,7 @@
 					cell.add_fingerprint(user)
 					user.put_in_active_hand(cell)
 					to_chat(user, "You remove \the [cell].")
-					cell = null
+					clear_cell()
 					updateicon()
 					return
 		else if(!opened && !key)

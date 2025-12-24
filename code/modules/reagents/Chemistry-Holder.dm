@@ -400,6 +400,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return total_transfered
 */
 
+/datum/reagents/proc/trans_removable_to(var/obj/target, var/transfer_frac=0.1, var/transfer_flat=1)
+	var/total_transfered = 0
+	for (var/datum/reagent/current_reagent in reagent_list)
+		if(! (current_reagent.flags & CHEMFLAG_NOTREMOVABLE))
+			var/amt = (get_reagent_amount(current_reagent.id)*transfer_frac) + transfer_flat
+			total_transfered += trans_id_to(target, current_reagent.id, amt) 
+	return total_transfered
+
 /datum/reagents/proc/metabolize(var/mob/living/M, var/alien)
 	if(M && chem_temp != M.bodytemperature)
 		chem_temp = M.bodytemperature

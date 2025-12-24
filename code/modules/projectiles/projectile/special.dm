@@ -334,6 +334,9 @@
 
 	new fire_blast_type(T, fire_damage, stepped_range, 1, pressure, temperature, fire_duration)
 
+/obj/item/projectile/fire_breath/sprayer
+	max_range = 2
+
 /obj/item/projectile/fire_breath/shuttle_exhaust //don't stand behind rockets
 	fire_blast_type = /obj/effect/fire_blast/blue
 

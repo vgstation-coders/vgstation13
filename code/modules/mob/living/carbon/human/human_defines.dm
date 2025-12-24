@@ -15,6 +15,11 @@
 
 	flags = HEAR_ALWAYS | PROXMOVE
 
+	standard_dizzy_reduce = 4 //This should be 3 it was reworked a little and it keeps them behaving the same as before, set to 1 if you don't want that
+	standard_jitter_reduce = 4 //Likewise
+	rested_dizzy_reduce = 16 //This should be 15 it was reworked a little and it keeps them behaving the same as before, set to 1 if you don't want that
+	rested_jitter_reduce = 16 //Likewise
+
 	var/age = 30		//Player's age (pure fluff)
 	//var/b_type = "A+"	//Player's bloodtype //NOW HANDLED IN THEIR DNA
 
@@ -84,3 +89,7 @@
 	var/calorie_burn_rate = HUNGER_FACTOR
 	var/time_last_speech = 0 //When was the last time we talked?
 	var/manual_emote_sound_override = 0 //If toggled on, allows humans to make audible emotes
+
+	// Weather effect tracking
+	var/weather_slowdown_applied = 0 // Stores the slowdown multiplier that was applied
+	var/weather_vision_reduction = 0 // Stores the vision reduction amount to be applied in handle_regular_hud_updates

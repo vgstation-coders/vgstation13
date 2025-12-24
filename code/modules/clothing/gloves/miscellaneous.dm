@@ -22,8 +22,8 @@
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/gloves/cyborg
-	desc = "beep boop borp"
 	name = "cyborg gloves"
+	desc = "Beep boop borp."
 	icon_state = "black"
 	item_state = "black"
 	siemens_coefficient = 1.0
@@ -169,6 +169,8 @@
 	name = "brass knuckles"
 	icon_state = "knuckles"
 	item_state = "knuckles"
+	w_type = RECYK_METAL
+	flammable = FALSE
 
 	attack_verb = list("punches")
 	bonus_knockout = 17 //Slight knockout chance increase.

@@ -32,7 +32,7 @@
 
 		if(EAST) // West to east
 			dira="ew"
-			i=1+(((y^2)-x)%15) // Vary widely across Y, but just increment across X
+			i=1+((((y^2)-x)%15)+15)%15 // Vary widely across Y, but just increment across X (true modulo for negative values)
 
 
 		/*
@@ -50,7 +50,7 @@
 	if(icon_state != "black")
 		icon_state = "speedspace_[dira]_[i]"
 
-/turf/space/transit/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 0)
+/turf/space/transit/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 0, var/defer_edges = FALSE)
 	return ..(N, tell_universe, 1, allow)
 
 //Overwrite because we dont want people building rods in space.
@@ -92,7 +92,7 @@
 	plane = ABOVE_PARALLAX_PLANE
 	icon_state="debug-north"
 
-/turf/space/transit/horizon/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/space/transit/horizon/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
     return ..(N, tell_universe, 1, allow)
 
 /turf/space/transit/horizon/canBuildCatwalk()
@@ -133,7 +133,7 @@
 	plane = ABOVE_PARALLAX_PLANE
 	icon_state="debug-north"
 
-/turf/space/transit/faketransit/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/space/transit/faketransit/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
     return ..(N, tell_universe, 1, allow)
 
 /turf/space/transit/faketransit/canBuildCatwalk()

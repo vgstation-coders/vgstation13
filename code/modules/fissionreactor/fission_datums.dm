@@ -2,9 +2,9 @@
 IN THIS FILE:
 datums for the fission reactor, which includes the fuel and reactor
 */
-#define FISSIONREACTOR_MELTDOWNTEMP 5500 //temp when shit goes wrong
-#define FISSIONREACTOR_DANGERTEMP 4500 //temp to start warning you and to SCRAM
-#define FISSIONREACTOR_SAFEENUFFTEMP 1000 //temp where SCRAM resets
+#define FISSIONREACTOR_MELTDOWNTEMP 11000 //temp when shit goes wrong
+#define FISSIONREACTOR_DANGERTEMP 9000 //temp to start warning you and to SCRAM
+#define FISSIONREACTOR_SAFEENUFFTEMP 2000 //temp where SCRAM resets
 
 /datum/fission_reactor_holder
 	var/list/obj/machinery/fissionreactor/fissionreactor_fuelrod/fuel_rods=list() //phase 0 vars, set upon construction
@@ -337,7 +337,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	coolant.volume=CELL_VOLUME* (sizex-2)*(sizey-2) //sub 2 to make sure there's no casing involved in the internal volume.
 	coolant.volume=max(coolant.volume,1) //atmos code will probably shit itself if this is 0.
 
-	heat_capacity=sizex*sizey*2500 // this scales with area as well.
+	heat_capacity=sizex*sizey*1500 // this scales with area as well.
 	return null
 	
 /datum/fission_reactor_holder/proc/determineexplosionsize()
@@ -514,6 +514,9 @@ datums for the fission reactor, which includes the fuel and reactor
 		return
 	if(fuel.life<=0)
 		return
+	if (fuel.lifetime<=0)
+		fuel.life=0
+		return
 	if(fuel.wattage<=0)
 		return
 		
@@ -521,9 +524,9 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/powerfactor=fuel_rods.len*((fuel_reactivity) - ( (fuel_reactivity-fuel_reactivity_with_rods)*control_rod_insertion))
 
 	var/totalpowertodump=0
+	speedfactor*=fuel.get_fuel_life_factor()
 	if(fuel.wattage < fuel.absorbance) //slow down the reaction if there's not enuff powah
 		totalpowertodump=0
-		speedfactor*=(fuel.absorbance-fuel.wattage)/fuel.wattage
 	else
 		totalpowertodump=(fuel.wattage-fuel.absorbance)*dt
 	
@@ -726,3 +729,10 @@ datums for the fission reactor, which includes the fuel and reactor
 			
 	
 	return products
+
+/datum/fission_fuel/proc/get_fuel_life_factor() //call after rederive_stats()
+	if(!wattage)
+		return 1.0
+	if(absorbance > wattage)
+		return wattage/(2*absorbance-wattage)
+	return 1.0

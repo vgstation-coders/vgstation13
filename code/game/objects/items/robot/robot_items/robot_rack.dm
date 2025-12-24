@@ -80,7 +80,7 @@
 //Ammo racks, they hold/make mags and borgs can attack it with projectile guns to load them.
 /obj/item/robot_rack/ammo
 	name = "default magazine carrier"
-	desc = "ADMINS STOP SPAWNING ME"
+	desc = "ADMINS STOP SPAWNING ME!!!"
 	initial_type = /obj/item/ammo_storage/magazine
 	object_type = /obj/item/ammo_storage/magazine
 	var/reload_type = /obj/item/weapon/gun/projectile/automatic
@@ -88,7 +88,7 @@
 	capacity = 1
 	var/charge = 0
 
-/obj/item/robot_rack/ammo/restock()
+/obj/item/robot_rack/ammo/restock(nanobots = FALSE)
 	charge++
 	if((charge >= NEEDED_CHARGE_TO_RESTOCK_MAG) && (length(held) < capacity)) //takes about 60 seconds.
 		var/obj/item/ammo_storage/magazine/ammo = new initial_type(src)

@@ -289,3 +289,200 @@
 	desc = "Pumping oxygen and nitrous oxide."
 	overlay_color = "#7EA7E0"
 	gases = list(GAS_OXYGEN = 0.5, GAS_SLEEPING = 0.5)
+
+/////////////////////////////////////////////
+////////////////SURFACE MINER////////////////
+/////////////////////////////////////////////
+//Receives gas from linked gas extractors on planet surfaces.
+/obj/machinery/atmospherics/miner/surface
+	name = "surface gas receiver"
+	desc = "A specialized gas miner that receives gasses from remote surface extractors."
+	icon_state = "miner"
+	overlay_color = "#80FF80"
+	on = FALSE
+	anchored = FALSE
+	base_gas_production = 0 // Doesn't produce gas on its own
+
+	id_tag = "surface_gas_receiver"
+	machine_flags = WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU
+
+	var/list/linked_extractors = list()
+	var/warmup_time = 10 SECONDS
+	var/warmup_power_usage = 500
+
+/obj/machinery/atmospherics/miner/surface/New()
+	..()
+	gases = list()
+
+/obj/machinery/atmospherics/miner/surface/initialize()
+	..()
+	for(var/obj/machinery/gas_extractor/E in machines)
+		if(!E.linked_miner_ref?.get())
+			linked_extractors += makeweakref(E)
+			E.linked_miner_ref = makeweakref(src)
+
+/obj/machinery/atmospherics/miner/surface/Destroy()
+	for(var/datum/weakref/ref in linked_extractors)
+		var/obj/machinery/gas_extractor/E = ref.get()
+		if(E)
+			E.linked_miner_ref = null
+	linked_extractors.Cut()
+	..()
+
+/obj/machinery/atmospherics/miner/surface/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	var/dat = "<b>Linked Surface Extractors:</b><br><ul>"
+	var/idx = 1
+	for(var/datum/weakref/ref in linked_extractors)
+		var/obj/machinery/gas_extractor/E = ref.get()
+		if(E)
+			dat += "<li>[E.name] at ([E.x], [E.y], [E.z]) <a href='?src=\ref[src];unlink=[idx]'>\[X\]</a></li>"
+		idx++
+	dat += "</ul>"
+	return dat
+
+/obj/machinery/atmospherics/miner/surface/Topic(href, href_list)
+	. = ..()
+	if(.)
+		return
+
+	if("link_extractor" in href_list)
+		var/obj/item/device/multitool/P = usr.get_active_hand()
+		if(!istype(P))
+			return
+		var/obj/machinery/gas_extractor/E = P.buffer?.get()
+		if(istype(E))
+			linkWith(usr, E)
+			to_chat(usr, "<span class='notice'>Linked to [E.name].</span>")
+		update_multitool_menu(usr)
+		return
+
+	if("link_console" in href_list)
+		var/obj/item/device/multitool/P = usr.get_active_hand()
+		if(!istype(P))
+			return
+		var/obj/machinery/computer/gas_extraction/C = P.buffer?.get()
+		if(istype(C))
+			linkWith(usr, C)
+			to_chat(usr, "<span class='notice'>Linked to [C.name].</span>")
+		update_multitool_menu(usr)
+		return
+
+	if("unlink" in href_list)
+		var/idx = text2num(href_list["unlink"])
+		if(idx >= 1 && idx <= linked_extractors.len)
+			var/datum/weakref/ref = linked_extractors[idx]
+			var/obj/machinery/gas_extractor/E = ref.get()
+			if(E)
+				unlinkFrom(usr, E)
+				to_chat(usr, "<span class='notice'>Unlinked from [E.name].</span>")
+		update_multitool_menu(usr)
+
+/obj/machinery/atmospherics/miner/surface/canLink(var/obj/O, var/list/context)
+	return istype(O, /obj/machinery/gas_extractor) || istype(O, /obj/machinery/computer/gas_extraction)
+
+/obj/machinery/atmospherics/miner/surface/isLinkedWith(var/obj/O)
+	for(var/datum/weakref/ref in linked_extractors)
+		if(ref.get() == O)
+			return TRUE
+	return FALSE
+
+/obj/machinery/atmospherics/miner/surface/linkWith(var/mob/user, var/obj/O, var/list/context)
+	if(istype(O, /obj/machinery/gas_extractor))
+		var/obj/machinery/gas_extractor/E = O
+		for(var/datum/weakref/ref in linked_extractors)
+			if(ref.get() == E)
+				return FALSE
+		if(E.linked_miner_ref)
+			var/obj/machinery/atmospherics/miner/surface/old_miner = E.linked_miner_ref.get()
+			if(old_miner)
+				old_miner.unlinkFrom(user, E)
+		linked_extractors += makeweakref(E)
+		E.linked_miner_ref = makeweakref(src)
+		return TRUE
+
+	else if(istype(O, /obj/machinery/computer/gas_extraction))
+		var/obj/machinery/computer/gas_extraction/C = O
+		C.linked_miner_ref = makeweakref(src)
+		return TRUE
+	return FALSE
+
+/obj/machinery/atmospherics/miner/surface/getLink(var/idx)
+	if(idx >= 1 && idx <= linked_extractors.len)
+		var/datum/weakref/ref = linked_extractors[idx]
+		return ref.get()
+
+/obj/machinery/atmospherics/miner/surface/unlinkFrom(var/mob/user, var/obj/buffer)
+	if(istype(buffer, /obj/machinery/gas_extractor))
+		var/obj/machinery/gas_extractor/E = buffer
+		for(var/datum/weakref/ref in linked_extractors)
+			if(ref.get() == E)
+				linked_extractors -= ref
+				E.linked_miner_ref = null
+				return TRUE
+		return FALSE
+
+	else if(istype(buffer, /obj/machinery/computer/gas_extraction))
+		var/obj/machinery/computer/gas_extraction/C = buffer
+		if(C.linked_miner_ref?.get() == src)
+			C.linked_miner_ref = null
+			return TRUE
+		return FALSE
+
+	return FALSE
+
+/obj/machinery/atmospherics/miner/surface/process()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		return
+	if(!on)
+		return
+
+	gases.Cut()
+	var/total_extraction = 0
+	var/active_extractor_count = 0
+
+	for(var/datum/weakref/ref in linked_extractors)
+		var/obj/machinery/gas_extractor/E = ref.get()
+		if(!E || !E.extracting || !E.linked_vent)
+			continue
+		var/datum/vent/V = E.linked_vent
+		if(!V || V.mols <= 0)
+			continue
+		active_extractor_count++
+
+	var/rate_modifier = 1
+	if(active_extractor_count > 1)
+		rate_modifier = 1 / active_extractor_count // Gas miner is the bottleneck
+
+	for(var/datum/weakref/ref in linked_extractors)
+		var/obj/machinery/gas_extractor/E = ref.get()
+		if(!E || !E.extracting || !E.linked_vent)
+			continue
+		var/datum/vent/V = E.linked_vent
+		if(!V || V.mols <= 0)
+			continue
+
+		var/adjusted_rate = E.mols_extracted * rate_modifier
+		if(gases[V.gas_type])
+			gases[V.gas_type] += adjusted_rate
+		else
+			gases[V.gas_type] = adjusted_rate
+		total_extraction += adjusted_rate
+
+	if(total_extraction <= 0)
+		return
+
+	var/oldstat = stat
+	if(!istype(loc, /turf/simulated))
+		stat |= BROKEN
+	else
+		stat &= ~BROKEN
+	if(stat != oldstat)
+		update_icon()
+	if(stat & BROKEN)
+		return
+
+	var/extra_mined_gas = power_load_two_ticks_ago * WATT_TO_KPA_COEFFICIENT
+	power_load_two_ticks_ago = power_load_last_tick
+	power_load_last_tick = active_power_usage
+	set_rate(base_gas_production + extra_mined_gas + (total_extraction * 100))
+	tranfer_gas()

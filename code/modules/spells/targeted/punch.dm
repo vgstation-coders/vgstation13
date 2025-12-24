@@ -142,7 +142,7 @@
 // Rat punch code here
 /spell/targeted/punch/roidrat // A much less powerful version of the wizard punch. Can launch a mob a long distance, but causes no explosion. Even this rat's gains have their limits
 	name = "Roid Rat Punch"
-	desc = "This spell empowers your next close-and-personal unarmed attack to launch the enemy with great force"
+	desc = "This spell empowers your next close-and-personal unarmed attack to launch the enemy with great force."
 	abbreviation = "RP"
 	user_type = USER_TYPE_GYMRAT
 	charge_cooldown_max = 30 SECONDS // Much longer cooldown than the wizard spell

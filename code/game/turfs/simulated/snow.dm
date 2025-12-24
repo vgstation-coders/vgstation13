@@ -17,8 +17,8 @@
 	if(icon_state_to_appearance[icon_state])
 		appearance = icon_state_to_appearance[icon_state]
 	else
-		var/image/snowfx1 = image('icons/turf/snowfx.dmi', "snowlayer1",SNOW_OVERLAY_LAYER)
-		var/image/snowfx2 = image('icons/turf/snowfx.dmi', "snowlayer2",SNOW_OVERLAY_LAYER)
+		var/image/snowfx1 = image('icons/turf/weatherfx.dmi', "snowlayer1",SNOW_OVERLAY_LAYER)
+		var/image/snowfx2 = image('icons/turf/weatherfx.dmi', "snowlayer2",SNOW_OVERLAY_LAYER)
 		snowfx1.plane = EFFECTS_PLANE
 		snowfx2.plane = EFFECTS_PLANE
 		overlays += snowfx1
@@ -70,7 +70,7 @@
 
 	var/extract_amount = min(snowballs, snowball_amount)
 
-	for(var/i = 0; i < extract_amount, i++)
+	for(var/i = 0; i < extract_amount; i++)
 		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(loc)
 		snowball.pixel_x = rand(-16, 16) * PIXEL_MULTIPLIER //Would be wise to move this into snowball New() down the line
 		snowball.pixel_y = rand(-16, 16) * PIXEL_MULTIPLIER

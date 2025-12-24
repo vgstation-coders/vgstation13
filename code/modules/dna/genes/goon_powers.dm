@@ -311,7 +311,7 @@
 			possible_targets += target
 
 		if(spell_flags & SELECTABLE)
-			for(var/i = 1; i<=max_targets, i++)
+			for(var/i = 1; i<=max_targets; i++)
 				var/atom/movable/M = input("Choose something to eat.", "Targeting") as null|anything in possible_targets
 				if(!M)
 					break

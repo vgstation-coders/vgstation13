@@ -21,6 +21,9 @@
 
 	icon_state="pathmarker"
 
+/obj/effect/decal/warning_stripes/pathmarkers/horizontal
+	dir = WEST
+
 /obj/effect/decal/warning_stripes/pathmarkers/yellow
 	color = "#ffff00"
 

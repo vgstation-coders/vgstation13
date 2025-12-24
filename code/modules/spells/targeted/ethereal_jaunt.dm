@@ -12,7 +12,7 @@
 	range = SELFCAST
 	max_targets = 1
 	cooldown_min = 10 SECONDS //5 SECONDS reduction per rank
-	duration = 5 SECONDS 
+	duration = 5 SECONDS
 	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 
 	hud_state = "wiz_jaunt"
@@ -50,6 +50,9 @@
 	if(target.incorporeal_move) //they're already jaunting, we have another fix for this but this is sane
 		return
 	target.unlock_from()
+	target.flags |= INVULNERABLE //Moved these up here to hopefully reduce incidents where someone can be attacked while jaunting.
+	var/old_density = target.density
+	target.setDensity(FALSE)
 	//Begin jaunting with an animation
 	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = enteranim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	if(mist)
@@ -57,16 +60,13 @@
 		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 		steam.set_up(10, 0, mobloc)
 		steam.start()
-
 	//Turn on jaunt incorporeal movement, make him invincible and invisible
 	if(empowered)
 		target.incorporeal_move = INCORPOREAL_ETHEREAL_IMPROVED
 	else
 		target.incorporeal_move = INCORPOREAL_ETHEREAL
 	target.make_invisible(ETHEREAL, 0, TRUE, 125, INVISIBILITY_LEVEL_TWO)
-	target.flags |= INVULNERABLE
-	var/old_density = target.density
-	target.setDensity(FALSE)
+	update_HUD_in_range(target) //This will do a lot of redundant calculations with mass jaunting, could probably be optimized.
 	target.candrop = 0
 	for(var/obj/abstract/screen/movable/spell_master/SM in target.spell_masters)
 		SM.silence_spells(duration+25)

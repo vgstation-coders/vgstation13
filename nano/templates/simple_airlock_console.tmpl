@@ -29,6 +29,9 @@
 			{{:helper.link('Force interior door', 'alert', {'command' : 'force_int'}, null, data.processing ? 'yellowBackground' : null)}}
 		{{/if}}
 		</div>
+		<div class="itemContent" style="width: auto">
+				{{:helper.link('Secure', data.secure ? 'locked' : 'unlocked', {'command' : 'secure'}, data.processing ? 'disabled' : null, data.secure ? 'linkOn' : null)}}
+		</div>
 	</div>
 	<div class="item" style="padding-top: 10px; width: 100%">
 			{{:helper.link('Abort', 'cancel', {'command' : 'abort'}, data.processing ? null : 'disabled', data.processing ? 'redBackground' : null)}}

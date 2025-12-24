@@ -123,7 +123,7 @@ var/list/apiaries_list = list()
 
 /obj/machinery/apiary/examine(mob/user)
 	..()
-	var/species_name = "bees"//people would expect an apiary to contain bees by default I guess.
+	var/species_name = BEESPECIES_NORMAL//people would expect an apiary to contain bees by default I guess.
 	if (species)
 		species_name = species.common_name
 	if(!worker_bees_inside && !queen_bees_inside)

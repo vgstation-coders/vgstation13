@@ -66,6 +66,8 @@
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
+#define ishostile(A) (istype(A, /mob/living/simple_animal/hostile))
+
 #define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
 
 #define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
@@ -80,7 +82,7 @@
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
 
-#define isanimal(A) istype(A, /mob/living/simple_animal)
+#define isanimal(A) istype(A, /mob/living/simple_animal) || istype(A,/mob/living/complex_animal)
 
 #define iscorgi(A) istype(A, /mob/living/simple_animal/corgi)
 
@@ -226,7 +228,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()) || istype(A,/obj/effect/ash))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -240,7 +242,9 @@
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
 
-#define iswall(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall))
+#define iswall(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall) || istype(A, /turf/unsimulated/mineral))
+
+#define isopensurface(A) ((istype(A, /area/surface) || istype(A, /area/planet) || istype(A, /area/exposed_ruin)) && !istype(A, /area/planet/cave))
 
 #define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
 

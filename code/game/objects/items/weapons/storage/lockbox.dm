@@ -340,6 +340,7 @@
 
 /obj/item/weapon/storage/lockbox/oneuse
 	desc = "A locked box. When unlocked, the case will fall apart."
+	starting_materials = null // No recycling the one-use lockboxes
 
 /obj/item/weapon/storage/lockbox/AltClick()
 	if(verb_togglelock())
@@ -411,7 +412,7 @@
 /obj/item/weapon/storage/lockbox/diskettebox/large/open
 	icon_state = "map_diskbox_large_open"
 	locked = FALSE
-	
+
 /obj/item/weapon/storage/lockbox/diskettebox/large/nolock
 	startswithelectronics = FALSE
 	locked = FALSE

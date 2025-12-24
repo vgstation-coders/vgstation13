@@ -19,12 +19,13 @@
 	carbon_dioxide = MOLES_JUNGLE_CO2_STD
 	plane = PLATING_PLANE
 	intact=0
+	can_border_transition=TRUE
 	var/DIGGING_BLOCKED = null // null = you can dig upwards when underground. otherwise, it's a string which is displayed to the user when they try to.
 	var/plated_icon_override=null //used for the name plaque. NT COLONY Γ 8. in case you were wondering what font it uses: Liberation Sans Regular, 24pt. use two layers. one is #343434 and is above another that is #767676, offset by 1 pixel x and y.
 	var/construction_allowed=FALSE //if we can add lattices and turn this into plating
 
 
-/turf/unsimulated/floor/jungle/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/unsimulated/floor/jungle/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	var/former_icoover=plated_icon_override
 	.=..()
 	if(.)
@@ -136,40 +137,47 @@ var/list/foliage_replacments=list(
 )
 
 /turf/unsimulated/floor/jungle/grass
-	name="Jungle Grass"
+	name="Dense Grass"
 	desc="A thick and lush carpet of various plant species, sustained by a regular supply to water."
 	icon = 'icons/turf/floors.dmi'
-	icon_state = "grass_alt1"
-	turf_speed_multiplier=1.1 // tall grass.
+	icon_state = "grass_jungle1"
+	base_icon_state = "grass_jungle"
+	variance = 100
+	min_icon_states = 1
+	max_icon_states = 4
+	edge_flags = ALL_EDGES
+	edge_priority = GRASS_EDGE_PRIORITY
+	turf_speed_multiplier=1.0 // tall grass.
 	construction_allowed=TRUE
+	var/regrowticks=0 //world.time
 
-/turf/unsimulated/floor/jungle/grass/New(var/loc,var/NO_GROW=FALSE)
+/turf/unsimulated/floor/jungle/grass/New(var/loc)
 	..()
 	footstep_sound = sounds_grass
 	footstep_sound_barefoot = sounds_grass
 	footstep_sound_claw = sounds_grass
-	if(NO_GROW)
-		return
 
-	//var/area/A = loc
-	//if(prob( (A.type!=/area/surface/jungle) ? 50 : 100 )) //populated areas have less plants. DOESN'T WORK. IS NULL. WHYYYYYYYYYYYYY
+	if(SSFoliageRegrow && !generate_foliage())
+		turfs_to_regrow +=src
+		regrowticks=0
+
+/turf/unsimulated/floor/jungle/grass/proc/generate_foliage()
 	if (prob(50))
 		if(prob(10)) //10% chance to replace with rocks or some shit. 5% over all
 			var/rep=pick(foliage_replacments)
-			new rep(src)
 			turf_speed_multiplier+=0.6
+			return new rep(src)
 		else //45% over all
 			var/plantseed = abs(( sin((x+rand(-2,2))*5.01+213.998) + sin((y+rand(-2,2))*4.56+71.294) )%%1.0)
 			plantseed = 1+floor(plantseed*(foliage_choices.len-0.01))//mmm, dumb float math
 
 			var/create=foliage_choices[plantseed]
 			if(create)
-				new create(src)
 				turf_speed_multiplier+=0.6
+				return new create(src)
 	else if(prob(50)) //25% overall
 		if( !(locate(/obj/structure/flora/tree) in range(2,src)) )
-			new/obj/structure/flora/tree/shitty(src)
-
+			return new/obj/structure/flora/tree/shitty(src)
 
 /turf/unsimulated/floor/jungle/grass/Destroy()
 	..()
@@ -200,25 +208,25 @@ var/list/foliage_replacments=list(
 			if(prob(40))
 				ChangeTurf(/turf/unsimulated/floor/jungle/dirt)
 
-/turf/unsimulated/floor/jungle/grass/New()
-	..()
-	icon_state="grass_alt[rand(1,4)]"
+/turf/unsimulated/floor/jungle/grass/no_flora
+	icon_state="grass_alt1" //uses an alt texture at first so that it appears different while mapping. this will correct itself when it spawns.
 
-/turf/unsimulated/floor/jungle/grass/no_flora //BYOND...
-/turf/unsimulated/floor/jungle/grass/no_flora/New(var/loc)
-	..(loc,TRUE)
-
+/turf/unsimulated/floor/jungle/grass/no_flora/generate_foliage()
+	return
 
 /turf/unsimulated/floor/jungle/mud
 	name="Mud"
 	desc="A viscous mixture of water and soil."
-	turf_speed_multiplier=2 //mud is difficult to travel over
-	icon='icons/turf/walls.dmi'
-	icon_state = "rock(high)"
+	turf_speed_multiplier=1.75 //mud is difficult to travel over
+	icon='icons/turf/planetary/jungle.dmi'
+	icon_state = "mud"
+	edge_flags = 0
+	edge_priority = 1
 
-/turf/unsimulated/floor/jungle/mud/New()
-	..()
-	icon_state="ironsand[rand(1,15)]"
+/turf/unsimulated/floor/jungle/mud/New()	
+	footstep_sound = sounds_water
+	footstep_sound_barefoot = sounds_water
+	footstep_sound_claw = sounds_water
 
 
 /turf/unsimulated/floor/jungle/concrete
@@ -268,36 +276,45 @@ var/list/foliage_replacments=list(
 		if(do_after(user, src, 20/s ))
 			ChangeTurf(/turf/unsimulated/floor/jungle/path)
 	s=item_terraforming_ispickaxe(C)
-	if(s>0.0 && !hashole)
+	if(s>0.0 && !hashole && can_dig_down(user) )
 		to_chat(usr,"you start digging downwards...")
 		if(do_after(user, src, 80/s ))
 			if(!hashole)
 				to_chat(usr,"you finish making a hole.")
 				var/obj/structure/ladder/jungle_tunnel/l_surf=new(src)
-				var/obj/structure/ladder/jungle_tunnel/l_tunnel=new(locate(x,y,2))
+				var/obj/structure/ladder/jungle_tunnel/l_tunnel=new(locate(x,y, z==1 ? 2 : 6))
 				l_tunnel.up=l_surf
 				l_surf.down=l_tunnel
 				hashole=l_surf
-				var/turf/T2=locate(x,y,2)
+				var/turf/T2=locate(x,y,z==1 ? 2 : 6)
 				T2?.ChangeTurf(/turf/unsimulated/floor/jungle/bedrock)
 				var/turf/unsimulated/floor/jungle/bedrock/TT=T2
 				TT?.hashole=l_tunnel
 			return
 	if(C.type== /obj/item/stack/ore/glass && hashole)
 		var/obj/item/stack/ore/glass/T = C
-		if(T.amount<50)
-			to_chat(usr,"you need 50 sand to do this!")
+		if(T.amount<25)
+			to_chat(usr,"you need 25 sand to do this!")
 			return
 		to_chat(usr,"you start filling the hole back with soil...")
 		if(do_after(user, src, 80 ))
-			if(T.use(50))
+			if(T.use(25))
 				to_chat(usr,"you fill the hole back with soil.")
 				var/turf/T2=hashole.down.loc
-				T2?.ChangeTurf(/turf/unsimulated/floor/jungle/underground)
+				T2?.ChangeTurf(/turf/unsimulated/mineral/jungle_underground)
 				qdel(hashole.down)
 				qdel(hashole)
 				hashole=null
 
+/turf/unsimulated/floor/jungle/dirt/proc/can_dig_down(var/mob/user=null)
+	var/turf/T=locate(x,y,z==1 ? 2 : 6)
+	if(istype(T,/turf/unsimulated/floor/jungle))
+		return TRUE	
+	if(istype(T,/turf/unsimulated/mineral))
+		return TRUE		
+	if(user)
+		to_chat(user,"<span class='warning'>Something hard blocks you from digging downwards.</span>")
+	return FALSE
 
 /turf/unsimulated/floor/jungle/path
 	name="Compressed Dirt"
@@ -384,17 +401,66 @@ var/list/foliage_replacments=list(
 
 
 
+/atom/movable/junglewateroverlay
+	icon = 'icons/misc/beach.dmi'
+	icon_state = "water5"
+	anchored      = TRUE
+	name=""
+	plane            = ABOVE_OBJ_PLANE
+	mouse_opacity    = 0
+	invisibility     = INVISIBILITY_LIGHTING
+
+/atom/movable/junglewateroverlay/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	if(harderforce)
+		. = ..()
+/atom/movable/junglewateroverlay/ex_act(severity)
+	return 0
+/atom/movable/junglewateroverlay/shuttle_act()
+	return 0
+/atom/movable/junglewateroverlay/can_shuttle_move()
+	return 0
+/atom/movable/junglewateroverlay/singularity_act()
+	return
+/atom/movable/junglewateroverlay/singularity_pull()
+	return
+/atom/movable/junglewateroverlay/blob_act()
+	return
+/atom/movable/junglewateroverlay/send_to_future(var/duration)
+	return
+/atom/movable/junglewateroverlay/send_to_past(var/duration)
+	return
+/atom/movable/junglewateroverlay/clean_act(var/cleanliness)
+	return
+	
 /turf/unsimulated/floor/jungle/water
 	name="Water"
 	desc="It's about knee-height. Probably not safe to drink from."
 	icon = 'icons/misc/beach.dmi'
 	icon_state = "water5"
-	turf_speed_multiplier=1.75
-	plane = ABOVE_OBJ_PLANE
+	turf_speed_multiplier=2.0
 	DIGGING_BLOCKED = "Something tells you that this is a really bad idea."
 	turf_reagents = list(WATER=1.0)
 	reagent_interaction_flags = TURF_REAGENT_ENTER | TURF_REAGENT_FILLS_CONTAINERS
 	turf_reagent_amount = 5
+	turf_flags = NO_FLORA
+	edge_flags = ALL_EDGES
+	edge_priority = WATER_EDGE_PRIORITY
+	edge_overlay_type = /obj/effect/edge_overlay/water
+	var/atom/movable/junglewateroverlay/wateroverlay=null
+	
+/turf/unsimulated/floor/jungle/water/New()
+	..()
+	update_icon()
+	footstep_sound = sounds_water
+	footstep_sound_barefoot = sounds_water
+	footstep_sound_claw = sounds_water
+	icon='icons/turf/planetary/jungle.dmi'
+	icon_state = "mud"
+	wateroverlay=new(src)
+
+/turf/unsimulated/floor/jungle/water/Destroy()
+	qdel(wateroverlay)
+	..()
 
 /turf/unsimulated/floor/jungle/water_deep
 	name="Deep Water"
@@ -402,12 +468,31 @@ var/list/foliage_replacments=list(
 	icon = 'icons/misc/beach.dmi'
 	icon_state = "water2"
 	turf_speed_multiplier=2.5
-	plane = MOB_PLANE
 	DIGGING_BLOCKED = "Something tells you that this is a really bad idea."
 	turf_reagents = list(WATER=1.0)
 	reagent_interaction_flags = TURF_REAGENT_ENTER | TURF_REAGENT_FILLS_CONTAINERS
 	turf_reagent_amount = 10
+	edge_flags = ALL_EDGES
+	base_icon_state = "deepjunglewater" // to re-create the icon, take the water5 set, then adjust the alpha so that it has full opaque at the dark parts, THEN you need to run it through chroma and lightness, 0, -70, -68. THEN THEN you make the icon have 35% opacity AND THEN AND ONLY THEN do you have  your complete usable icon thank you byond very cool
+	edge_priority = DEEPWATER_EDGE_PRIORITY
+	edge_overlay_type = /obj/effect/edge_overlay/water/deep
+	var/atom/movable/junglewateroverlay/wateroverlay=null
+	
+/turf/unsimulated/floor/jungle/water_deep/New()
+	..()
+	update_icon()
+	footstep_sound = sounds_water
+	footstep_sound_barefoot = sounds_water
+	footstep_sound_claw = sounds_water
+	wateroverlay=new(src)
+	wateroverlay.icon_state="water2"
+	wateroverlay.plane=MOB_PLANE
+	icon='icons/turf/planetary/jungle.dmi'
+	icon_state = "mud"
 
+/turf/unsimulated/floor/jungle/water_deep/Destroy()
+	qdel(wateroverlay)
+	..()
 
 /turf/unsimulated/floor/jungle/sand
 	name="Sand"
@@ -416,54 +501,68 @@ var/list/foliage_replacments=list(
 	icon_state = "sand"
 	construction_allowed=TRUE
 
+/turf/unsimulated/floor/jungle/sand/New()
+	..()
+	footstep_sound = sounds_sand
+	footstep_sound_barefoot = sounds_sand
+	footstep_sound_claw = sounds_sand
 
-/turf/unsimulated/floor/jungle/underground
+
+/turf/unsimulated/mineral/jungle_underground
 	name="Packed Soil"
-	density=1
-	opacity=1
 	desc="Solid dirt as far as the eye can see."
 	icon='icons/turf/walls.dmi'
-	icon_state = "gingerbread15"
-	var/loosened=FALSE // you dig with a pickaxe, too, dumbass.
+	icon_state = "j_dirtwall"
+	temperature = T_JUNGLE
+	oxygen = MOLES_JUNGLE_O2_STD
+	nitrogen = MOLES_JUNGLE_N2_STD
+	carbon_dioxide = MOLES_JUNGLE_CO2_STD
+	mineral=null
 
+/turf/unsimulated/mineral/jungle_underground/New()
+	..()
+	mineral_turfs-=src
+	icon_state = "j_dirtwall"
+	overlays=list()
+	var/image/img = image('icons/turf/rock_overlay.dmi', "dirt_overlay",layer = SIDE_LAYER)
+	img.pixel_x = -4*PIXEL_MULTIPLIER
+	img.pixel_y = -4*PIXEL_MULTIPLIER
+	img.plane = BELOW_TURF_PLANE
+	overlays += img
 
-/turf/unsimulated/floor/jungle/underground/ex_act(severity)
+/turf/unsimulated/mineral/jungle_underground/ex_act(severity)
 	switch(severity)
 		if(1)
+			generate_loot()
 			ChangeTurf(/turf/unsimulated/floor/jungle/bedrock)
 		if(2)
 			if(prob(50))
+				generate_loot()
 				ChangeTurf(/turf/unsimulated/floor/jungle/bedrock)
-			else
-				loosened=TRUE
-		if(3)
-			if(prob(75))
-				loosened=TRUE
 
 
-/turf/unsimulated/floor/jungle/underground/attackby(obj/item/C as obj, mob/user as mob)
+/turf/unsimulated/mineral/jungle_underground/attackby(obj/item/C as obj, mob/user as mob)
 	if(!C || !user)
 		return 0
 	var/s=0.0
 	s=item_terraforming_ispickaxe(C)
 	if(s>0.0)
-		if (loosened)
-			to_chat(user, "<span class='notice'>The soil is already loose.</span>")
-		else
-			to_chat(user, "<span class='notice'>You start to loosen the soil...</span>")
-			if(do_after(user, src, 20/s ))
-				loosened=TRUE
+		to_chat(user,"<span class='notice'>You begin to break apart the soil...</span>")
+		if(do_after(user, src, 30/s ))
+			generate_loot(C,user)
+			ChangeTurf(/turf/unsimulated/floor/jungle/bedrock)
+			return
 	s=item_terraforming_isshovel(C)
 	if(s>0.0)
-		to_chat(user, loosened ? "<span class='notice'>You begin to break apart the soil...</span>" : "<span class='notice'>You struggle to break up the soil...</span>")
-		if(do_after(user, src, (loosened ? 20 : 60)/s ))
+		to_chat(user, "<span class='notice'>You begin to break apart the soil...</span>")
+		if(do_after(user, src, 30/s ))
 			generate_loot(C,user)
 			ChangeTurf(/turf/unsimulated/floor/jungle/bedrock)
 			return
 
 
-/turf/unsimulated/floor/jungle/underground/generate_loot(var/obj/item/C, var/mob/user)
-	new/obj/item/stack/ore/glass(src,50) //theres no dirt, so we use sand instead.
+/turf/unsimulated/mineral/jungle_underground/proc/generate_loot(var/obj/item/C, var/mob/user)
+	new/obj/item/stack/ore/glass(src,25) //theres no dirt, so we use sand instead.
 	if(!user)
 		return
 	if (user.lucky_prob_rand()>0.5) //50% base chance
@@ -480,21 +579,75 @@ var/list/foliage_replacments=list(
 			new/obj/item/stack/ore/uranium(src,user.lucky_prob_rand_range(1,3))
 	return
 
+/turf/unsimulated/mineral/jungle_underground/proc/item_terraforming_ispickaxe(obj/item/C)
+	if(istype(C,/obj/item/weapon/pickaxe) && !istype(C,/obj/item/weapon/pickaxe/shovel))
+		return (1/C.toolspeed)/2.5 //default toolspeed is 0.4. do this math because lower=faster, but we want higher=faster.
+	if(istype(C,/obj/item/tool/crowbar))
+		if(istype(C,/obj/item/tool/crowbar/halligan)) //halligans have a pick end.
+			return 0.75
+		return 0.5
+	if(istype(C,/obj/item/weapon/kitchen/utensil/knife))  //for those daring prison escapes, also because it's funny.
+		return 0.1
+	return 0.0
+
+/turf/unsimulated/mineral/jungle_underground/proc/item_terraforming_isshovel(obj/item/C)
+	if(istype(C,/obj/item/weapon/pickaxe/shovel))
+		return (1/C.toolspeed)/2.5
+	if(istype(C,/obj/item/weapon/kitchen/utensil/spoon) || istype(C,/obj/item/weapon/kitchen/utensil/spork))  //see above
+		return 0.1
+	return 0.0
+
+
+/turf/unsimulated/mineral/jungle_underground/Bumped(AM)
+	. = ..()
+	
+	if(istype(AM,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = AM
+		if(istype(H.get_active_hand(),/obj/item/weapon/pickaxe) || istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe)) //prevents double attacking the same turf because parent proc covers this
+			return
+		if(item_terraforming_isshovel(H.get_active_hand()) || item_terraforming_ispickaxe(H.get_active_hand()))
+			attackby(H.get_active_hand(), H)
+		else if(item_terraforming_isshovel(H.get_inactive_hand()) || item_terraforming_ispickaxe(H.get_inactive_hand()))
+			attackby(H.get_inactive_hand(), H)
+			
+/turf/unsimulated/mineral/jungle_underground/MineralSpread() //do nothing
+	return
+
+/turf/unsimulated/mineral/jungle_underground/crate_loot
+	icon_state="rock(high)"
+
+/turf/unsimulated/mineral/jungle_underground/crate_loot/New()
+	icon_state="j_dirtwall"
+	..()
+
+/turf/unsimulated/mineral/jungle_underground/crate_loot/generate_loot(var/obj/item/C, var/mob/user)
+	..()
+	if(user.lucky_prob_rand()>0.996) //0.4% chance (1 in 250). affected by luck, naturally.
+		visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
+		var/ctype=pick(valid_abandoned_crate_types)
+		new ctype(src)
+
 /turf/unsimulated/floor/jungle/bedrock
 	name="Bedrock"
 	desc="A very dense rock. Nothing seems to be able to dig through it."
 	icon='icons/turf/walls.dmi'
-	icon_state = "mariahive_noanimation"
+	icon_state = "j_rockfloor"
 	var/obj/structure/ladder/jungle_tunnel/hashole=null
 	construction_allowed=TRUE
 
 
 /turf/unsimulated/floor/jungle/bedrock/New(var/loc)
-	if(locate(/obj/structure/ladder/jungle_tunnel) in contents)
-		icon_state="mariahive_noanimation_l"
+	..()
+	update_icon()
 
-	if(cannot_dig_up())
-		icon_state="mariahive_noanimation_d"
+/turf/unsimulated/floor/jungle/bedrock/update_icon()
+	icon_state = "j_rockfloor"
+	overlays=list()
+	if(locate(/obj/structure/ladder/jungle_tunnel) in contents)
+		overlays+=image('icons/turf/walls.dmi', "j_rfloor_overlay_l")
+	else if(cannot_dig_up())
+		overlays+=image('icons/turf/walls.dmi', "j_rfloor_overlay_d")
+		
 
 /turf/unsimulated/floor/jungle/bedrock/attackby(obj/item/C as obj, mob/user as mob)
 	..()
@@ -508,75 +661,50 @@ var/list/foliage_replacments=list(
 			if(do_after(user, src, 80/s ))
 				if(!hashole && !cannot_dig_up() )
 					to_chat(usr,"you finish making a hole.")
-					icon_state="mariahive_noanimation_l"
 
 					var/obj/structure/ladder/jungle_tunnel/l_tunnel=new(src)
-					var/obj/structure/ladder/jungle_tunnel/l_surf=new(locate(x,y,1))
+					var/obj/structure/ladder/jungle_tunnel/l_surf=new(locate(x,y,z==2 ? 1 : 4))
+
+					update_icon()
 
 					l_tunnel.up=l_surf
 					l_surf.down=l_tunnel
 
-					var/turf/T2=locate(x,y,1)
+					var/turf/T2=locate(x,y,z==2 ? 1 : 4)
 					T2?.ChangeTurf(/turf/unsimulated/floor/jungle/dirt)
 					var/turf/unsimulated/floor/jungle/dirt/TT=T2
 					TT?.hashole=l_surf
 					hashole=l_tunnel
 				else
+					update_icon()
 					to_chat(usr,"something gets in your way.")
 				return
 		else
-			to_chat(usr,cannot_dig_up() || "something solid prevents you from tunneling upwards.")
+			to_chat(usr,cannot_dig_up())
+			update_icon()
 
 
 /turf/unsimulated/floor/jungle/bedrock/examine()
 	..()
-	if(icon_state=="mariahive_noanimation_d")
-		to_chat(usr,cannot_dig_up() || "it seems that there's something solid above you that you won't be able to dig through.")
+	if(cannot_dig_up())
+		to_chat(usr,cannot_dig_up())
 		return
-	if(icon_state=="mariahive_noanimation_l")
+	if(locate(/obj/structure/ladder/jungle_tunnel) in contents)
 		to_chat(usr,"there's a hole leading to the surface.")
 
 
 //we also use enter to reveal tiles, since the tile above could change.
-/turf/unsimulated/floor/jungle/bedrock/Entered(var/atom/movable/Obj,var/recursive=TRUE)
-	if(recursive)
-		..()
-	icon_state="mariahive_noanimation"
+/turf/unsimulated/floor/jungle/bedrock/Entered(var/atom/movable/Obj)
+	..()
+	update_icon()
 
-	if(locate(/obj/structure/ladder/jungle_tunnel) in contents)
-		icon_state="mariahive_noanimation_l"
-
-	if(cannot_dig_up())
-		icon_state="mariahive_noanimation_d"
-
-	if(recursive) //we reveal the state of surrounding bedrock. there's probably a better way to do this.
-		var/turf/T2=get_step(src,NORTH)
-		if(T2 && T2.type==/turf/unsimulated/floor/jungle/bedrock)
-			T2.Entered(Obj,FALSE)
-		T2=get_step(src,SOUTH)
-		if(T2 && T2.type==/turf/unsimulated/floor/jungle/bedrock)
-			T2.Entered(Obj,FALSE)
-		T2=get_step(src,EAST)
-		if(T2 && T2.type==/turf/unsimulated/floor/jungle/bedrock)
-			T2.Entered(Obj,FALSE)
-		T2=get_step(src,WEST)
-		if(T2 && T2.type==/turf/unsimulated/floor/jungle/bedrock)
-			T2.Entered(Obj,FALSE)
-		T2=get_step(src,NORTHEAST)
-		if(T2 && T2.type==/turf/unsimulated/floor/jungle/bedrock)
-			T2.Entered(Obj,FALSE)
-		T2=get_step(src,SOUTHEAST)
-		if(T2 && T2.type==/turf/unsimulated/floor/jungle/bedrock)
-			T2.Entered(Obj,FALSE)
-		T2=get_step(src,NORTHWEST)
-		if(T2 && T2.type==/turf/unsimulated/floor/jungle/bedrock)
-			T2.Entered(Obj,FALSE)
-		T2=get_step(src,SOUTHWEST)
-		if(T2 && T2.type==/turf/unsimulated/floor/jungle/bedrock)
-			T2.Entered(Obj,FALSE)
+	//we reveal the state of surrounding bedrock. there was a better way to do this. how did i forget to use range?
+	for(var/turf/unsimulated/floor/jungle/bedrock/B in orange(1))
+		B.update_icon()
+	
 
 /turf/unsimulated/floor/jungle/bedrock/proc/cannot_dig_up()
-	var/turf/T=locate(x,y,1)
+	var/turf/T=locate(x,y,z==2 ? 1 : 4)
 	if(!istype(T,/turf/unsimulated/floor/jungle))
 		return "something hard blocks the way."
 	var/turf/unsimulated/floor/jungle/JT = T
@@ -604,6 +732,33 @@ var/list/foliage_replacments=list(
 	return
 /turf/unsimulated/floor/jungle/worldborder/attackby(obj/item/C as obj, mob/user as mob)
 	return
+
+
+//so mining the planetside roid doesn't cause ZAS hell
+/turf/unsimulated/mineral/random/jungle
+	temperature = T_JUNGLE
+	oxygen = MOLES_JUNGLE_O2_STD
+	nitrogen = MOLES_JUNGLE_N2_STD
+	carbon_dioxide = MOLES_JUNGLE_CO2_STD
+	mined_type = /turf/unsimulated/floor/jungle/path
+
+/turf/unsimulated/mineral/random/high_chance/jungle
+	temperature = T_JUNGLE
+	oxygen = MOLES_JUNGLE_O2_STD
+	nitrogen = MOLES_JUNGLE_N2_STD
+	carbon_dioxide = MOLES_JUNGLE_CO2_STD
+	mined_type = /turf/unsimulated/floor/jungle/path
+
+/turf/unsimulated/floor/jungle/wasteland
+	name="wasteland"
+	desc="A dry, cracked surface with little vegetation."
+	icon = 'icons/turf/planetary/jungle.dmi'
+	icon_state = "wasteland"
+
+/turf/unsimulated/floor/jungle/wasteland/New()
+	..()
+	icon_state="wasteland[rand(0,12)]"
+
 
 #undef T_JUNGLE
 #undef JUNGLE_PRESSURE

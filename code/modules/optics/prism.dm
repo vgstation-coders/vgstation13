@@ -9,6 +9,8 @@ var/list/obj/machinery/prism/prism_list = list()
 	use_power = MACHINE_POWER_USE_NONE
 	anchored = 0
 	density = 1
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 	var/obj/effect/beam/emitter/beam
 
@@ -23,8 +25,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	prism_list += src
 
 /obj/machinery/prism/Destroy()
-	qdel(beam)
-	beam=null
+	QDEL_NULL(beam)
 	prism_list -= src
 	..()
 
@@ -34,39 +35,10 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(get_dir(src, B) != dir)
 			return 1
 
-/obj/machinery/prism/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, -90)
-	qdel(beam)
-	beam=null
+/obj/machinery/prism/change_dir(new_dir, changer)
+	. = ..()
+	QDEL_NULL(beam)
 	update_beams()
-	return 1
-
-/obj/machinery/prism/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, 90)
-	qdel(beam)
-	beam=null
-	update_beams()
-	return 1
-
-
-/obj/machinery/prism/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate_cw()
 
 /obj/machinery/prism/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
@@ -97,6 +69,8 @@ var/list/obj/machinery/prism/prism_list = list()
 
 /obj/machinery/prism/proc/update_beams(var/obj/effect/beam/emitter/touching_beam)
 	overlays.len = 0
+	underlays.len = 0
+	kill_moody_light_all()
 	//testing("Beam count: [beams.len]")
 	if(get_dir(src, touching_beam) == dir)
 		return 0 //Make no change for beams touching us on our emission side.
@@ -130,11 +104,20 @@ var/list/obj/machinery/prism/prism_list = list()
 
 			var/beamdir=get_dir(B.loc,src)
 			overlays += image(icon=icon,icon_state="beam_arrow",dir=beamdir)
+			update_moody_light_index("beam_arrow_[beamdir]",'icons/lighting/moody_lights.dmi', "overlay_beam_arrow", moody_color = "#66ffff", dir_override = beamdir)
+
+			var/indir = turn(beamdir, 180)
+			underlays += B.get_machine_underlay(indir)
+			update_moody_light_index("inbeam_dir[indir]",'icons/lighting/moody_lights.dmi', "overlay_emitter_beam_underlay_short", moody_color = "#66ffff", dir_override = indir)
+
 		if(newbeam)
 			beam.emit(spawn_by=spawners)
 		else
 			beam.set_power(beam.power)
 		icon_state = "prism_on"
+		update_moody_light_index("base",'icons/lighting/moody_lights.dmi', "overlay_prism", moody_color = "#66ffff")
+		underlays += beam.get_machine_underlay(dir)
+		update_moody_light_index("outbeam_dir[dir]",'icons/lighting/moody_lights.dmi', "overlay_emitter_beam_underlay_short", moody_color = "#66ffff", dir_override = dir)
 	else
 		icon_state = "prism_off"
 		if (beam)

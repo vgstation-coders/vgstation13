@@ -1,0 +1,144 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"d" = (
+/turf/template_noop,
+/area/template_noop)
+"h" = (
+/obj/effect/decal/cleanable/blood{
+	color = "#772222"
+	},
+/obj/item/weapon/gun/projectile/hecate/hunting,
+/turf/template_noop,
+/area/exposed_ruin)
+"i" = (
+/obj/structure/flora/ausbushes/ywflowers,
+/obj/item/weapon/reagent_containers/food/snacks/meat,
+/obj/item/weapon/reagent_containers/food/snacks/meat{
+	pixel_x = 7
+	},
+/obj/item/weapon/reagent_containers/food/snacks/meat{
+	pixel_y = -3;
+	pixel_x = 7
+	},
+/obj/item/weapon/reagent_containers/food/snacks/meat{
+	pixel_x = -7;
+	pixel_y = -4
+	},
+/obj/item/clothing/head/bearpelt/brown/real{
+	pixel_y = 14
+	},
+/obj/effect/decal/cleanable/blood{
+	color = "#772222"
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"j" = (
+/obj/effect/decal/cleanable/blood{
+	color = "#772222"
+	},
+/turf/template_noop,
+/area/template_noop)
+"l" = (
+/obj/effect/decal/cleanable/blood{
+	color = "#772222"
+	},
+/obj/item/ammo_casing/c38,
+/obj/item/ammo_casing/c38{
+	pixel_x = 6;
+	pixel_y = 10
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = -6;
+	pixel_y = -3
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = -10;
+	pixel_y = 6
+	},
+/mob/living/complex_animal/panther,
+/turf/template_noop,
+/area/exposed_ruin)
+"t" = (
+/obj/effect/decal/cleanable/blood{
+	color = "#772222"
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = 7;
+	pixel_y = -5
+	},
+/obj/item/ammo_casing/c38{
+	pixel_y = -8;
+	pixel_x = 5
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = 6;
+	pixel_y = 10
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = 6;
+	pixel_y = 7
+	},
+/obj/effect/landmark/corpse/assistant,
+/turf/template_noop,
+/area/exposed_ruin)
+"x" = (
+/obj/effect/decal/cleanable/blood,
+/turf/template_noop,
+/area/template_noop)
+"R" = (
+/obj/effect/decal/cleanable/blood{
+	color = "#772222"
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = -10;
+	pixel_y = 6
+	},
+/obj/item/ammo_casing/c38{
+	pixel_y = -8;
+	pixel_x = 5
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = -6;
+	pixel_y = -3
+	},
+/turf/template_noop,
+/area/template_noop)
+"U" = (
+/mob/living/complex_animal/panther,
+/turf/template_noop,
+/area/exposed_ruin)
+
+(1,1,1) = {"
+d
+d
+d
+d
+d
+"}
+(2,1,1) = {"
+d
+x
+d
+d
+d
+"}
+(3,1,1) = {"
+j
+i
+t
+h
+U
+"}
+(4,1,1) = {"
+d
+j
+R
+d
+d
+"}
+(5,1,1) = {"
+d
+d
+l
+d
+d
+"}

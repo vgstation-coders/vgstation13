@@ -1,8 +1,8 @@
 /datum/artifact_effect/clockwork
 	effecttype = "clockworkify"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ANCIENT, ARTIFACT_STYLE_PRECURSOR, ARTIFACT_STYLE_RELIQUARY)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ANCIENT, ARTIFACT_STYLE_PRECURSOR, ARTIFACT_STYLE_RELIQUARY)
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
-	effect_type = 2
+	effect_hint = EFFECT_HINT_ATOMIC_SYNTHESIS
 
 /datum/artifact_effect/clockwork/DoEffectAura()
 	make_clockworky(min(3, effectrange))

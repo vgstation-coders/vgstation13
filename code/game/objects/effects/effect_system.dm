@@ -144,10 +144,11 @@ steam.start() -- spawns the effect
 /////////////////////////////////////////////
 
 #define SPARK_TEMP 500
+#define SPARK_TURF_LIMIT 8
 
 /obj/effect/sparks
 	name = "sparks"
-	desc = "it's a spark what do you need to know?"
+	desc = "It's a spark, what do you need to know?"
 	icon_state = "sparks"
 	anchored = 1
 
@@ -228,11 +229,17 @@ steam.start() -- spawns the effect
   */
 /proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE, var/silent = FALSE)
 	loc = get_turf(loc)
+	var/tally = -1 //Prevent the sparks from starting if there are already too many sparks on the same tile. -1 to exclude itself
+	for(var/obj/effect/sparks/S in loc.contents)
+		tally++
+	if(tally >= SPARK_TURF_LIMIT)
+		return
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
 	S.start(surfaceburn, silent)
 
 #undef SPARK_TEMP
+#undef SPARK_TURF_LIMIT
 
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS
@@ -1105,3 +1112,82 @@ steam.start() -- spawns the effect
 
 		if(dmglevel<4)
 			holder.ex_act(dmglevel)
+
+//Weather Holders
+/obj/effect/weather_holder
+	name = "weather holder"
+	desc = "you shouldn't see this"
+	density = 0
+	anchored = 1
+	plane = ABOVE_TURF_PLANE
+	mouse_opacity = 0
+	var/datum/climate/parent_climate = null
+	var/list/precip_overlays = list()
+	var/list/overlay_counts = list()
+	var/overlay_icon = 'icons/turf/weatherfx.dmi'
+
+/obj/effect/weather_holder/New(var/datum/climate/climate_ref = null)
+	..()
+	parent_climate = climate_ref
+	if(map && parent_climate && parent_climate.current_weather)
+		UpdatePrecipitation(parent_climate.current_weather.precip_intensity)
+	else
+		UpdatePrecipitation(WEATHER_CALM)
+
+/obj/effect/weather_holder/proc/UpdatePrecipitation(var/weather_state)
+	var/cache_key = "[type]_[weather_state]"
+	if(!precip_state_to_texture[cache_key])
+		cache_weather_tile(weather_state)
+	appearance = precip_state_to_texture[cache_key]
+
+/obj/effect/weather_holder/proc/cache_weather_tile(var/weather_state)
+	overlays.Cut()
+	for(var/i = 1 to overlay_counts[weather_state+1])
+		var/image/precipfx = image(overlay_icon, "[precip_overlays[weather_state+1]][i]", SNOW_OVERLAY_LAYER)
+		precipfx.plane = EFFECTS_PLANE
+		overlays += precipfx
+	var/cache_key = "[type]_[weather_state]"
+	precip_state_to_texture[cache_key] = appearance
+
+/obj/effect/weather_holder/blizzard
+	precip_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
+	overlay_counts = list(2,2,2,3)
+
+/obj/effect/weather_holder/blizzard/heavy
+
+/obj/effect/weather_holder/temperate
+	precip_overlays = list("clear","rain_average","rain_hard","rain_storm")
+	overlay_counts = list(1,1,1,3)
+
+/obj/effect/weather_holder/tropical
+	precip_overlays = list("clear","rain_average","rain_average","rain_storm")
+	overlay_counts = list(1,1,1,3)
+
+/obj/effect/weather_holder/desert
+	precip_overlays = list("clear","dust","sand","clear")
+	overlay_counts = list(1,2,3,1)
+
+/obj/effect/weather_holder/lava
+	precip_overlays = list("clear","ash","ash_storm")
+	overlay_counts = list(1,2,1)
+
+/obj/effect/weather_holder/fallout
+	precip_overlays = list("clear","rad","rad_storm","toxic_rain","toxic_rain_hard")
+	overlay_counts = list(1,1,1,1,1)
+
+/obj/effect/weather_holder/xeno
+	precip_overlays = list("clear","acid_rain","acid_rain_hard")
+	overlay_counts = list(1,1,1)
+
+/obj/effect/landing_zone
+	name = "landing zone"
+	icon_state = "LZ_scan"
+	density = 0
+	anchored = 1
+	mouse_opacity = 0
+	var/overlay_state = "LZ_warn"
+
+/obj/effect/landing_zone/New(loc, var/corner = FALSE)
+	. = ..()
+	if(corner)
+		overlays += image(icon, icon_state = overlay_state)

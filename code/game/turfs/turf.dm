@@ -8,6 +8,16 @@
 	var/intact = 1
 	var/turf_flags = 0
 
+	//icon stuff
+	var/base_icon_state
+	var/min_icon_states = 0
+	var/max_icon_states = 0
+	var/variance = 50 // % chance to use varied icon state
+	var/edge_priority = 0 // higher priority edges are placed over lower-priority ones
+	var/edge_flags = 0
+	var/edge_overlay_type = /obj/effect/edge_overlay
+	var/list/datum/weakref/edge_overlays = list()
+
 	//properties for open tiles (/floor)
 	var/oxygen = 0
 	var/carbon_dioxide = 0
@@ -47,6 +57,7 @@
 	penetration_dampening = 10
 	// if STANDING     ON THE EDGE        OF THE z-level will transition you to another
 	var/can_border_transition = 0
+
 /*
  * Technically obsoleted by base_turf
 	//For building on the asteroid.
@@ -91,8 +102,6 @@
 	..()
 	if(bullet_marks)
 		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
-	if(locate(/obj/effect/ash) in src)
-		to_chat(user, "It is covered in ashes.")
 
 /turf/proc/process()
 	set waitfor = FALSE
@@ -101,6 +110,19 @@
 		for(var/mob/M in contents)
 			GiveReagentsTo(M)
 
+/turf/New()
+	..()
+	footstep_sound = sounds_floor
+	footstep_sound_barefoot = sounds_floor_barefoot
+	footstep_sound_claw = sounds_floor_claw
+	if(!base_icon_state)
+		base_icon_state = icon_state
+	pick_icon_state()
+
+/turf/proc/pick_icon_state()
+	if(base_icon_state && max_icon_states && prob(variance))
+		icon_state = "[base_icon_state][rand(min_icon_states,max_icon_states)]"
+
 /turf/initialize()
 	..()
 	if(loc)
@@ -108,8 +130,14 @@
 		A.area_turfs += src
 	for(var/atom/movable/AM in src)
 		src.Entered(AM)
+		if(istype(AM, /obj/effect/edge_overlay))
+			var/obj/effect/edge_overlay/edge = AM
+			if(edge.turf_type == src.type || edge.priority <= edge_priority)
+				qdel(edge)
 	if(opacity)
 		has_opaque_atom = TRUE
+	if((edge_flags & EDGE_CARDINAL) && !(turf_flags & DEFER_EDGING))
+		update_edges()
 
 /turf/ex_act(severity)
 	return 0
@@ -197,6 +225,7 @@
 					contents_brought += recursive_type_check(B)
 
 			var/locked_to_current_z = FALSE//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
+			var/randomize_drift_position = TRUE // if true, randomizes where you'll end up on the new Z-level
 
 			var/datum/zLevel/ZL = map.zLevels[z]
 			if(ZL.transitionLoops)
@@ -216,6 +245,19 @@
 
 
 			var/move_to_z = src.z
+
+			if(ZL.transition_crosswrap_z && ZL.transition_crosswrap_z.len>=4)
+				locked_to_current_z=TRUE //prevent shuffling z-level later in the code.
+				randomize_drift_position=FALSE
+				if(A.y>world.maxy - TRANSITIONEDGE) // NORTH
+					move_to_z=ZL.transition_crosswrap_z[1]
+				else if(A.y<=TRANSITIONEDGE) // SOUTH
+					move_to_z=ZL.transition_crosswrap_z[2]
+				else if(A.x>world.maxx - TRANSITIONEDGE) // EAST
+					move_to_z=ZL.transition_crosswrap_z[3]
+				else if(A.x<=TRANSITIONEDGE) // WEST
+					move_to_z=ZL.transition_crosswrap_z[4]
+
 
 			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
 			for(var/mob/living/L in contents_brought)
@@ -246,19 +288,23 @@
 
 			if(src.x <= TRANSITIONEDGE)
 				A.x = world.maxx - TRANSITIONEDGE - 2
-				A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
 
 			else if (A.x >= (world.maxx - TRANSITIONEDGE - 1))
 				A.x = TRANSITIONEDGE + 1
-				A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
 
 			else if (src.y <= TRANSITIONEDGE)
 				A.y = world.maxy - TRANSITIONEDGE -2
-				A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
 
 			else if (A.y >= (world.maxy - TRANSITIONEDGE - 1))
 				A.y = TRANSITIONEDGE + 1
-				A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
+				if(randomize_drift_position)
+					A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
 
 			spawn (0)
 				if(was_pulling && MOB) //Carry the object they were pulling over when they transition
@@ -336,11 +382,13 @@
 	return
 
 //Creates a new turf
-/turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1,var/defer_edges = FALSE)
 	var/area/original_area=loc
 	if(loc)
 		var/area/A = loc
 		A.area_turfs -= src
+		if(istype(A, /area/shuttle))
+			turf_flags |= SHUTTLE_TURF
 	if (!N || !allow)
 		return
 	remove_particles()
@@ -375,6 +423,16 @@
 		for(var/obj/effect/overlay/puddle/ice/P in src)
 			qdel(P)
 
+	if(edge_overlays.len)
+		for(var/datum/weakref/EO in edge_overlays)
+			var/obj/effect/edge_overlay/E = EO.get()
+			if(E)
+				var/turf/T = E.loc
+				if(T)
+					var/edge_dir = get_dir(src, T)
+					E.remove_direction(edge_dir, src)
+		edge_overlays.len = 0
+
 	//Rebuild turf
 	var/turf/T = src
 	env = T.air //Get the air before the change
@@ -392,6 +450,8 @@
 			QDEL_NULL(F.floor_tile)
 		F = null
 
+	if(defer_edges)
+		turf_flags |= DEFER_EDGING
 	if(ispath(N, /turf/simulated/floor))
 		//if the old turf had a zone, connect the new turf to it as well - Cael
 		//Adjusted by SkyMarshal 5/10/13 - The air master will handle the addition of the new turf.
@@ -458,6 +518,8 @@
 	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
+	for(var/turf/adj in range(1,src))
+		adj.update_edges()
 	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
 		if(.)
 			var/turf/NewTurf=.
@@ -700,7 +762,7 @@
 	I.alpha = 128
 	// Since holomaps are overlays of the turf
 	// This'll make them always be just above the turf and not block interaction.
-	I.plane = OBJ_PLANE
+	I.plane = FLOAT_PLANE + 1
 	// When I said above turfs I mean it.
 	I.layer = HOLOMAP_LAYER
 
@@ -830,3 +892,6 @@
 
 /turf/proc/OnEmptyReagents()
 	turf_reagent_amount = null
+
+/turf/proc/mob_life_effects(mob/living/affected) //apply effects to mobs standing on this turf every life() tick
+	return

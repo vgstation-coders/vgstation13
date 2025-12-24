@@ -184,9 +184,8 @@ included:
 	playsound(src,'sound/machines/fission/rc_scram.ogg',50)
 	say("#pd=_e$%@er~is(i-n re\"ui\[ements?", class = "binaryradio")
 	req_config_access=list()
-
-/obj/machinery/fissioncontroller/can_emag()
-	return req_config_access.len>=1
+	machine_flags &= ~EMAGGABLE
+	emagged=TRUE
 
 /obj/machinery/fissioncontroller/New()
 	..()
@@ -379,8 +378,10 @@ CRITICAL<br>
 				estimatedtimeleft="Expired"
 			else if(associated_reactor.fuel_rods_affected_by_rods==associated_reactor.fuel_rods.len && associated_reactor.control_rod_insertion>=1.0)
 				estimatedtimeleft="Halted" //avoids a div by 0
+			else if(associated_reactor.fuel.wattage<=0)
+				estimatedtimeleft="None"
 			else
-				var/secs=associated_reactor.fuel.lifetime
+				var/secs=associated_reactor.fuel.lifetime/associated_reactor.fuel.get_fuel_life_factor()
 				secs/=associated_reactor.fuel_rods.len - (associated_reactor.fuel_rods_affected_by_rods*associated_reactor.control_rod_insertion)
 				secs *= associated_reactor.fuel.life
 				secs=floor(secs)
@@ -400,7 +401,7 @@ CRITICAL<br>
 		else if(!associated_reactor.fuel)
 			status="<span class='status_nofuel'>No Fuel</span>"
 		else if(associated_reactor.fuel.life<=0)
-			status="<span class='status_done'>Depleated</span>"
+			status="<span class='status_done'>Depleted</span>"
 		else if (!associated_reactor.considered_on())
 			status="<span class='status_halt'>Standby</span>"
 	
@@ -412,10 +413,22 @@ CRITICAL<br>
 		coolanttemppercent=floor(coolanttemppercent*100+0.5)
 	
 		var/reactivity=associated_reactor.fuel_rods.len*((associated_reactor.fuel_reactivity) - ( (associated_reactor.fuel_reactivity-associated_reactor.fuel_reactivity_with_rods)*associated_reactor.control_rod_insertion))
+		var/thermaloutput=0
+		if(associated_reactor.fuel)
+			thermaloutput=reactivity * max(0,associated_reactor.fuel.wattage-associated_reactor.fuel.absorbance)
 		reactivity=floor(reactivity*100+0.5)
 		var/speed=associated_reactor.fuel_rods.len - (associated_reactor.fuel_rods_affected_by_rods*associated_reactor.control_rod_insertion)
 		speed=floor(speed*100+0.5)
 	
+		if (thermaloutput>=1000000000)
+			thermaloutput="[round(thermaloutput/1000000000,0.1)] GW" //if you accomplish this then good job
+		else if (thermaloutput>=1000000)
+			thermaloutput="[round(thermaloutput/1000000,0.1)] MW"
+		else if (thermaloutput>=1000)
+			thermaloutput="[round(thermaloutput/1000,0.1)] kW"
+		else
+			thermaloutput="[round(thermaloutput,0.1)] W"
+		
 
 		var/highesttemp=0.0
 		var/graphstring=""
@@ -427,9 +440,9 @@ CRITICAL<br>
 	
 	
 	
-		var/coolant_tempdisplay="[floor(associated_reactor.coolant.temperature)]K"
-		var/reactor_tempdisplay="[floor(associated_reactor.temperature)]K"
-		var/reactor_highesttempdisplay="[floor(highesttemp)]K"
+		var/coolant_tempdisplay="[floor(associated_reactor.coolant.temperature)][emagged ? "°" : ""]K"
+		var/reactor_tempdisplay="[floor(associated_reactor.temperature)][emagged ? "°" : ""]K"
+		var/reactor_highesttempdisplay="[floor(highesttemp)][emagged ? "°" : ""]K"
 		if(tempdisplaymode==1) //C
 			coolant_tempdisplay="[floor(associated_reactor.coolant.temperature-273.15)]°C"
 			reactor_tempdisplay="[floor(associated_reactor.temperature-273.15)]°C"
@@ -439,9 +452,9 @@ CRITICAL<br>
 			reactor_tempdisplay="[floor(1.8*associated_reactor.temperature-459.67)]°F"
 			reactor_highesttempdisplay="[floor(1.8*highesttemp-459.67)]°F"
 		else if(tempdisplaymode==3) //R (because muh absolute scale)
-			coolant_tempdisplay="[floor(1.8*associated_reactor.coolant.temperature)]R"
-			reactor_tempdisplay="[floor(1.8*associated_reactor.temperature)]R"
-			reactor_highesttempdisplay="[floor(1.8*highesttemp)]R"
+			coolant_tempdisplay="[floor(1.8*associated_reactor.coolant.temperature)][emagged ? "°" : ""]R"
+			reactor_tempdisplay="[floor(1.8*associated_reactor.temperature)][emagged ? "°" : ""]R"
+			reactor_highesttempdisplay="[floor(1.8*highesttemp)][emagged ? "°" : ""]R"
 		
 	
 		aychteeemel_string={"<table style='border-collapse:initial;'>
@@ -471,9 +484,9 @@ CRITICAL<br>
 </div>
 
 <br>
-<br>
 
 <div style="display:inline-block;width:100%;">
+<span style="width:100%;display:inline-block;">Thermal Output:&nbsp;[thermaloutput]</span>
 <span style="width:50%;display:inline-block;">Fuel Life:&nbsp;[fuelusepercent]%</span><span style="width:50%;display:inline-block;text-align:right;">Reactivity:&nbsp;[reactivity]%</span>
 <span style="width:50%;display:inline-block;">Est. Time:&nbsp;[estimatedtimeleft]</span><span style="width:50%;display:inline-block;text-align:right;">Fissile Rate:[speed]%</span>
 <span style="width:50%;display:inline-block;">Status:&nbsp;[status]</span><span style="width:50%;display:inline-block;text-align:right;">Fuel: [associated_reactor.fuel_rods.len]&nbsp;&nbsp;Ctrl:[associated_reactor.control_rods.len]</span>

@@ -306,7 +306,7 @@
 /turf/simulated/floor/mineral/gingerbread_nest,
 /area/vault/gingerbread_house)
 "kB" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 27
 	},
 /obj/effect/decal/cleanable/flour,
@@ -348,7 +348,7 @@
 /turf/simulated/floor/mineral/gingerbread_dirt_tile,
 /area/vault/gingerbread_house)
 "lo" = (
-/obj/structure/sink,
+/obj/structure/wc/sink,
 /obj/machinery/light/he{
 	dir = 1
 	},
@@ -823,7 +823,7 @@
 /turf/simulated/floor/mineral/gingerbread_floor,
 /area/vault/gingerbread_house)
 "FW" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 10
 	},
 /turf/simulated/floor/mineral/gingerbread_tile,
@@ -1229,7 +1229,7 @@
 /area/vault/gingerbread_house)
 "Wn" = (
 /obj/structure/curtain/open/shower/security,
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/mineral/gingerbread_floor,

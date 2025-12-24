@@ -75,6 +75,8 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 	flags = FPRINT
 	w_class = W_CLASS_MEDIUM
 	level = 2
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/frequency = 0
 	var/id_tag = null
 
@@ -328,28 +330,14 @@ var/global/list/nlist = list( \
 var/list/straight_pipes = list(PIPE_SIMPLE_STRAIGHT, PIPE_HE_STRAIGHT, PIPE_INSULATED_STRAIGHT, PIPE_MVALVE, PIPE_DVALVE)
 var/list/bent_pipes = list(PIPE_SIMPLE_BENT, PIPE_HE_BENT, PIPE_INSULATED_BENT)
 var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_MANIFOLD4W)
-/obj/item/pipe/verb/rotate()
-	set category = "Object"
-	set name = "Rotate Pipe"
-	set src in view(1)
 
-	if(usr.isUnconscious() || usr.restrained())
-		return
-
-	src.dir = turn(src.dir, -90)
-
+/obj/item/pipe/change_dir(new_dir, changer)
+	. = ..()
 	if (pipe_type in straight_pipes)
 		dir=rotate_pipe_straight(dir)
 	else if (pipe_type in manifold_pipes)
 		dir = 2
 	//src.pipe_dir = get_pipe_dir()
-	return
-
-/obj/item/pipe/AltClick(var/mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		..()
-		return
-	rotate()
 
 /obj/item/pipe/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
@@ -439,7 +427,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			return 0
 
 /obj/item/pipe/attack_self(mob/user as mob)
-	return rotate()
+	return rotate_ccw()
 
 /obj/item/pipe/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
@@ -521,7 +509,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 
 		if(PIPE_HE_CAP)
 			P=new /obj/machinery/atmospherics/unary/cap/heat(src.loc)
-			
+
 		if(PIPE_BSCAP)
 			P=new /obj/machinery/atmospherics/unary/cap/bluespace(src.loc)
 
@@ -606,7 +594,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	var/id_tag = null
 
 	var/layer_to_make = PIPING_LAYER_DEFAULT
-	
+
 /obj/item/pipe_meter/New(loc, freq, id)
 	..()
 	if(freq)
@@ -652,7 +640,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	w_class = W_CLASS_LARGE
 	var/frequency = 1439
 	var/id_tag = null
-	
+
 /obj/item/pipe_gsensor/New(loc, freq, id)
 	..()
 	if(freq)

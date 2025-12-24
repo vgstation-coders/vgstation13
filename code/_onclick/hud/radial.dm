@@ -23,12 +23,13 @@
 	if(!locked)
 		icon_state = "radial_slice_focus"
 	if(tooltip_desc)
-		openToolTip(usr,src,params,title = src.name,content = tooltip_desc,theme = parent.tooltip_theme)
+		//openToolTip(usr,src,params,title = src.name,content = tooltip_desc,theme = parent.tooltip_theme)
+		usr.client?.tooltips.show(src, mouse=params, title=name, content=tooltip_desc, theme=parent.tooltip_theme)
 
 /obj/abstract/screen/radial/slice/MouseExited(location, control, params)
 	. = ..()
 	icon_state = "radial_slice"
-	closeToolTip(usr)
+	usr.client?.tooltips.hide()
 
 /obj/abstract/screen/radial/slice/Click(location, control, params)
 	if (!parent || locked)

@@ -4,6 +4,7 @@ var/global/datum/shuttle/security/security_shuttle = new(starting_area = /area/s
 	name = "security shuttle"
 	can_link_to_computer = LINK_FREE
 	req_access = list(access_security)
+	use_transit = CHEAP_TRANSIT
 
 /datum/shuttle/security/initialize()
 	.=..()

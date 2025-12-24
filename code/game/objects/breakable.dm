@@ -236,17 +236,27 @@
 
 //Simple animals attacking the object
 
-/obj/attack_animal(mob/living/simple_animal/M)
-	if(M.melee_damage_upper && M.a_intent == I_HURT && breakable_flags & BREAKABLE_UNARMED)
+/obj/attack_animal(mob/living/L)
+	if(istype(L,/mob/living/simple_animal))
+		var/mob/living/simple_animal/M=L
+		if(M.melee_damage_upper && M.a_intent == I_HURT && breakable_flags & BREAKABLE_UNARMED)
+			M.do_attack_animation(src, M)
+			M.delayNextAttack(1 SECONDS)
+			var/glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper), skip_break = TRUE)
+			if(M.attack_sound)
+				playsound(src, M.attack_sound, 50, 1)
+			M.visible_message("<span class='warning'>\The [M] [M.attacktext] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [shift_verb_tense(M.attacktext)] \the [src][generate_break_text(glanced)]</span>")
+			try_break()
+		else
+			. = ..()
+	else if(istype(L,/mob/living/complex_animal))
+		var/mob/living/complex_animal/M=L
 		M.do_attack_animation(src, M)
 		M.delayNextAttack(1 SECONDS)
-		var/glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper), skip_break = TRUE)
-		if(M.attack_sound)
-			playsound(src, M.attack_sound, 50, 1)
-		M.visible_message("<span class='warning'>\The [M] [M.attacktext] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [shift_verb_tense(M.attacktext)] \the [src][generate_break_text(glanced)]</span>")
+		var/glanced=!take_damage(M.base_damage +rand(-M.damage_variance,M.damage_variance), skip_break = TRUE)
+		M.visible_message("<span class='warning'>\The [M] attacks \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You attack \the [src][generate_break_text(glanced)]</span>")
 		try_break()
-	else
-		. = ..()
+	
 
 //Object ballistically colliding with something
 

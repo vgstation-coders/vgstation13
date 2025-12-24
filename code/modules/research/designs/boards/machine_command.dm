@@ -51,3 +51,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/labor
+
+/datum/design/planetscanner
+	name = "Circuit Design (Planet Scanner)"
+	desc = "Allows for the construction of circuit boards used to build a planet scanner."
+	id = "planetscanner"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 3, Tc_BLUESPACE = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/planet_scanner

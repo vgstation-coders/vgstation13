@@ -23,10 +23,14 @@
 
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user)
 	if(issolder(W))
-		new /obj/item/weapon/circuitboard/blank(user.loc)
-		to_chat(user, "<span class='notice'>You fashion a blank circuitboard out of the glass.</span>")
-		W.playtoolsound(loc, 35)
-		src.use(1)
+		var/static/list/board_types = list("Regular" = /obj/item/weapon/circuitboard/blank,"Small" = /obj/item/weapon/circuitboard/blank/small)
+		var/board_type = input(user,"Which board size to use?","Board size") as null|anything in board_types
+		board_type = board_types[board_type]
+		if(ispath(board_type))
+			new board_type(user.loc)
+			to_chat(user, "<span class='notice'>You fashion a blank circuitboard out of the glass.</span>")
+			W.playtoolsound(loc, 35)
+			src.use(1)
 	if(istype(W, /obj/item/stack/rods) && !reinforced)
 		var/obj/item/stack/rods/V  = W
 		var/obj/item/stack/sheet/glass/RG = new rglass()
@@ -160,6 +164,7 @@ var/list/datum/stack_recipe/rglass_recipes = list (
 	new/datum/stack_recipe("window", /obj/structure/window/reinforced/loose, 1, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("full window", /obj/structure/window/full/reinforced/loose, 2, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("windoor", /obj/structure/windoor_assembly/, 5, time = 10, start_unanchored = TRUE, on_floor = TRUE),
+	new/datum/stack_recipe/table_door("table door", /obj/machinery/door/table/glass/, 2, one_per_turf = TRUE, on_floor = TRUE),
 	new/datum/stack_recipe("glass tile", /obj/item/stack/tile/rglass, 1, time = 2, on_floor = TRUE),
 	)
 
@@ -172,5 +177,6 @@ var/list/datum/stack_recipe/plasmarglass_recipes = list (
 	new/datum/stack_recipe("window", /obj/structure/window/reinforced/plasma/loose, 1, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("full window", /obj/structure/window/full/reinforced/plasma/loose, 2, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("windoor", /obj/structure/windoor_assembly/plasma, 5, time = 10, start_unanchored = TRUE, on_floor = TRUE),
+	new/datum/stack_recipe/table_door("table door", /obj/machinery/door/table/glass/plasma, 2, one_per_turf = TRUE, on_floor = TRUE),
 	new/datum/stack_recipe("glass tile", /obj/item/stack/tile/rglass/plasma, 1, time = 2, on_floor = TRUE),
 	)

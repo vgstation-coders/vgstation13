@@ -88,6 +88,31 @@
 	holder.clear_reagents(TRUE)
 	holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
 
+/datum/chemical_reaction/fake_explosion_potassium
+	name = "Honk Potassium Explosion"
+	id = "explosion_honk"
+	result = null
+	required_reagents = list(POTASSIUM = 1, HONKSERUM = 1)
+	result_amount = 2
+	secondary = 1
+	var/volume_divisor = 3
+
+/datum/chemical_reaction/fake_explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/range = min (MAX_EXPLOSION_RANGE, round(created_volume/volume_divisor) - 1)
+	var/devastation = round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
+	var/heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
+	var/light = min(7, range) // clamps to 7 light range for grenades
+	var/flash = range * 1.5
+	explosion_effect(get_turf(holder.my_atom),devastation,heavy,light,flash)
+
+/datum/chemical_reaction/fake_explosion_potassium/bigger
+	name = "Honkoglycerin Explosion"
+	id = "explosion_honk_2"
+	result = null
+	required_reagents = list(HONKSERUM = 3, SACIDS = 5, PACIDS = 4)
+	result_amount = 8
+	volume_divisor = 2
+
 /datum/chemical_reaction/explosion_potassium/holy
 	id = "holy_explosion_potassium"
 	required_reagents = list(POTASSIUM = 1, HOLYWATER = 1)
@@ -146,14 +171,22 @@
 	//100 created volume = 4 heavy range & 7 light range. A few tiles smaller than traitor EMP grandes.
 	//200 created volume = 8 heavy range & 14 light range. 4 tiles larger than traitor EMP grenades.
 	empulse(location, round(created_volume / 24), round(created_volume / 14), 1)
-	holder.clear_reagents()
+	holder.clear_reagents(TRUE)
+	holder.add_reagent(FERROURANIUM,created_volume/10)
+
+/datum/chemical_reaction/silica
+	name = "Silica"
+	id = SILICA
+	result = SILICA
+	required_reagents = list(SILICON = 1, OXYGEN = 2)
+	result_amount = 3
 
 /datum/chemical_reaction/silicate
 	name = "Silicate"
 	id = SILICATE
 	result = SILICATE
-	required_reagents = list(ALUMINUM = 1, SILICON = 1, OXYGEN = 1)
-	result_amount = 9
+	required_reagents = list(ALUMINUM = 2, SILICA = 3, SILICON = 1)
+	result_amount = 18
 
 /datum/chemical_reaction/phalanximine
 	name = "Phalanximine"
@@ -266,8 +299,8 @@
 	name = "Space Lube"
 	id = LUBE
 	result = LUBE
-	required_reagents = list(WATER = 1, SILICON = 1, OXYGEN = 1)
-	result_amount = 4
+	required_reagents = list(WATER = 2, SILICA = 3, SILICON = 1)
+	result_amount = 8
 
 /datum/chemical_reaction/sodium_polyacrylate
 	name = "Sodium Polyacrylate"
@@ -928,7 +961,7 @@
 	name = "Solid Metal"
 	id = "metalsolid"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = U_PER_SHEET)
 	result_amount = 1 //amount of sheets created per the above reagents ^
 
 /datum/chemical_reaction/solidification/proc/product_to_spawn()
@@ -943,7 +976,7 @@
 	name = "Solid Plasma"
 	id = "solidplasma"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PLASMA = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PLASMA = U_PER_SHEET)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/plasma/product_to_spawn()
@@ -953,7 +986,7 @@
 	name = "Solid Silver"
 	id = "solidsilver"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, SILVER = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, SILVER = U_PER_SHEET)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/silver/product_to_spawn()
@@ -963,7 +996,7 @@
 	name = "Solid Gold"
 	id = "solidgold"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, GOLD = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, GOLD = U_PER_SHEET)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/gold/product_to_spawn()
@@ -973,7 +1006,7 @@
 	name = "Solid Uranium"
 	id = "soliduranium"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, URANIUM = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, URANIUM = U_PER_SHEET)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/uranium/product_to_spawn()
@@ -983,7 +1016,7 @@
 	name = "Solid Diamond"
 	id = "soliddiamond"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, DIAMONDDUST = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, DIAMONDDUST = U_PER_SHEET)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/diamond/product_to_spawn()
@@ -993,7 +1026,7 @@
 	name = "Solid Bananium"
 	id = "solidbananium"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, BANANA = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, BANANA = U_PER_SHEET)
 	required_catalysts = list(PHAZON = 1)
 	result_amount = 1
 
@@ -1025,7 +1058,7 @@
 	name = "Solid Plasma Glass"
 	id = "solidplasmaglass"
 	result = null
-	required_reagents = list(SILICATE = 20, CONDENSEDCAPSAICIN = 10, PLASMA = 20) //You need even stronger heat to make plasmaglass
+	required_reagents = list(SILICATE = 20, CONDENSEDCAPSAICIN = 10, PLASMA = U_PER_SHEET) //You need even stronger heat to make plasmaglass
 	result_amount = 1 //amount of sheets created per the above reagents
 
 /datum/chemical_reaction/solidification/plasmaglass/product_to_spawn()
@@ -1137,6 +1170,20 @@
 	id = COMNANOBOTS
 	result = COMNANOBOTS
 	required_reagents = list(NANOBOTS = 1, MUTAGEN = 5, SILICATE = 5, IRON = 10)
+	result_amount = 2.5
+
+/datum/chemical_reaction/engnanobots
+	name = "Energetic Nanobots"
+	id = ENGNANOBOTS
+	result = ENGNANOBOTS
+	required_reagents = list(NANOBOTS = 1, FERROURANIUM = 10)
+	result_amount = 2.5
+
+/datum/chemical_reaction/cargonanobots
+	name = "Cargonian Nanobots"
+	id = CARGONANOBOTS
+	result = CARGONANOBOTS
+	required_reagents = list(NANOBOTS = 1, PLASMA = 50)
 	result_amount = 2.5
 
 //Surgery tools from chemicals because why not? Requires a vial to make them and consumes it as a part of making the tool.
@@ -1395,7 +1442,7 @@
 /datum/chemical_reaction/slime_extract/required_condition_check(datum/reagents/holder)
 	if(istype(holder.my_atom, /obj/item/slime_extract))
 		var/obj/item/slime_extract/S = holder.my_atom
-		if(S.Uses > 0)
+		if(S.uses > 0)
 			return 1
 	return 0
 
@@ -1407,9 +1454,9 @@
 		B.forceMove(get_turf(holder.my_atom))
 	if(istype(holder.my_atom, /obj/item/slime_extract))
 		var/obj/item/slime_extract/S = holder.my_atom
-		S.Uses--
+		S.uses--
 		S.update_icon()
-		if(S.Uses <= 0)
+		if(S.uses <= 0)
 			if(!istype(S.loc, /obj/item/weapon/grenade/chem_grenade) && !quiet)
 				S.visible_message("<span class='notice'>[bicon(holder.my_atom)] \The [holder.my_atom]'s power is consumed in the reaction.</span>")
 			qdel(S)
@@ -2739,6 +2786,21 @@
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
 
+/datum/chemical_reaction/applecider
+	name = "Apple Cider"
+	id = CIDER
+	result = CIDER
+	required_reagents = list(APPLEJUICE = 10)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 10
+
+/datum/chemical_reaction/snakebite
+	name = "Snakebite"
+	id = SNAKEBITE
+	result = SNAKEBITE
+	required_reagents = list(BEER = 5, CIDER = 5)
+	result_amount = 10
+
 /datum/chemical_reaction/vodka
 	name = "Vodka"
 	id = VODKA
@@ -3750,7 +3812,7 @@
 	name = "Sodium Silicate"
 	id = SODIUMSILICATE
 	result = SODIUMSILICATE
-	required_reagents = list(SODIUM = 2, SILICON = 1, OXYGEN = 3)
+	required_reagents = list(SODIUM = 2, SILICA = 3, OXYGEN = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/untable

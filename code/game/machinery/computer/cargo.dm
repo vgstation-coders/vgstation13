@@ -483,7 +483,7 @@ For vending packs, see vending_packs.dm*/
 			new /obj/item/weapon/paper/request_form(loc, current_acct, P, crates, reason)
 		reqtime = (world.time + 5) % 1e5
 		//make our supply_order datum
-		for(var/i = 1; i <= crates; i++)
+		for(var/i in 1 to crates)
 			SSsupply_shuttle.ordernum++
 			var/datum/supply_order/O = new /datum/supply_order()
 			O.ordernum = SSsupply_shuttle.ordernum
@@ -497,6 +497,22 @@ For vending packs, see vending_packs.dm*/
 
 			if(!SSsupply_shuttle.restriction) //If set to 0 restriction, auto-approve
 				SSsupply_shuttle.confirm_order(O,usr,SSsupply_shuttle.requestlist.len)
+		if(usr.reagents?.has_reagent(CARGONANOBOTS,10)) //TODO: merge some of the code with the order comp so that there's less copy pasting
+			for(var/i in 1 to rand(1,ceil(usr.reagents.get_reagent_amount(CARGONANOBOTS)/10)))
+				var/datum/supply_packs/P2 = SSsupply_shuttle.supply_packs[pick("Combat shotguns","High-Tech energy weapons","Security weapons")]
+				if(!P2)
+					continue
+				SSsupply_shuttle.ordernum++
+				var/datum/supply_order/O = new /datum/supply_order()
+				O.ordernum = SSsupply_shuttle.ordernum
+				O.object = P2
+				O.orderedby = idname
+				O.authorized_name = current_acct["authorized_name"]
+				O.account = account
+				O.comment = pick("Hail cargonia!","Secession.","Overthrowal of security.","Greytide stationwide!")
+				SSsupply_shuttle.requestlist += O
+				stat_collection.crates_ordered++
+				SSsupply_shuttle.confirm_order(O,usr,SSsupply_shuttle.requestlist.len) //Position: last
 		return 1
 	else if(href_list["confirmorder"])
 		//Find the correct supply_order datum
@@ -864,7 +880,7 @@ For vending packs, see vending_packs.dm*/
 		reqtime = (world.time + 5) % 1e5
 
 		//make our supply_order datum
-		for(var/i = 1; i <= crates; i++)
+		for(var/i in 1 to crates)
 			SSsupply_shuttle.ordernum++
 			var/datum/supply_order/O = new /datum/supply_order()
 			O.ordernum = SSsupply_shuttle.ordernum
@@ -877,6 +893,22 @@ For vending packs, see vending_packs.dm*/
 			stat_collection.crates_ordered++
 
 			if(!SSsupply_shuttle.restriction) //Restriction = 0, auto order
+				SSsupply_shuttle.confirm_order(O,usr,SSsupply_shuttle.requestlist.len) //Position: last
+		if(usr.reagents?.has_reagent(CARGONANOBOTS,10))
+			for(var/i in 1 to rand(1,ceil(usr.reagents.get_reagent_amount(CARGONANOBOTS)/10)))
+				var/datum/supply_packs/P2 = SSsupply_shuttle.supply_packs[pick("Combat shotguns","High-Tech energy weapons","Security weapons")]
+				if(!P2)
+					continue
+				SSsupply_shuttle.ordernum++
+				var/datum/supply_order/O = new /datum/supply_order()
+				O.ordernum = SSsupply_shuttle.ordernum
+				O.object = P2
+				O.orderedby = idname
+				O.authorized_name = current_acct["authorized_name"]
+				O.account = account
+				O.comment = pick("Hail cargonia!","Secession.","Overthrowal of security.","Greytide stationwide!")
+				SSsupply_shuttle.requestlist += O
+				stat_collection.crates_ordered++
 				SSsupply_shuttle.confirm_order(O,usr,SSsupply_shuttle.requestlist.len) //Position: last
 		return 1
 	else if (href_list["last_viewed_group"])

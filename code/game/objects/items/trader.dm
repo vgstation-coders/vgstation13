@@ -200,7 +200,7 @@
 /obj/structure/wetdryvac/MouseDropFrom(var/obj/O, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!can_use(usr,O))
 		return
-	if(istype(O,/obj/structure/sink))
+	if(istype(O,/obj/structure/wc/sink))
 		if(!reagents.total_volume)
 			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
 			return
@@ -249,12 +249,6 @@
 		else if(P.wet == TURF_WET_WATER)
 			reagents.add_reagent(WATER,1)
 		qdel(P)
-	for(var/obj/effect/ash/A in T)
-		if(reagents.is_full())
-			visible_message(span_warning("\The [src] sputters, wet tank full!"))
-			break
-		reagents.add_reagent(CARBON,1)
-		qdel(A)
 	T.clean_blood()
 	for(var/obj/item/trash/R in T)
 		if(trash.len >= max_trash)
@@ -328,80 +322,3 @@
 		return ..()
 	myvac.whrr(get_turf(target))
 	return 1
-
-/obj/item/weapon/fakeposter_kit
-	name = "cargo cache kit"
-	desc = "Used to create a hidden cache behind what appears to be a cargo poster."
-	icon = 'icons/obj/barricade.dmi'
-	icon_state = "barricade_kit"
-	w_class = W_CLASS_MEDIUM
-	w_type = RECYK_WOOD
-	flammable = TRUE
-
-/obj/item/weapon/fakeposter_kit/preattack(atom/target, mob/user , proximity)
-	if(!proximity)
-		return
-	if(istype(target,/turf/simulated/wall))
-		playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
-		if(do_after(user,target,4 SECONDS))
-			to_chat(user,"<span class='notice'>Using the kit, you hollow out the wall and hang the poster in front.</span>")
-			var/obj/structure/fakecargoposter/FCP = new(target)
-			FCP.access_loc = get_turf(user)
-			qdel(src)
-			return 1
-	else
-		return ..()
-
-/obj/structure/fakecargoposter
-	icon = 'icons/obj/posters.dmi'
-	var/obj/item/weapon/storage/cargocache/cash
-	var/turf/access_loc
-
-/obj/structure/fakecargoposter/New()
-	..()
-	var/datum/poster/type = pick(/datum/poster/special/cargoflag,/datum/poster/special/cargofull)
-	icon_state = initial(type.icon_state)
-	desc = initial(type.desc)
-	name = initial(type.name)
-	cash = new(src)
-
-/obj/structure/fakecargoposter/examine(mob/user)
-	..()
-	if(user.loc == access_loc)
-		to_chat(user, "<span class='info'>Upon closer inspection, there's a hidden cache behind it accessible with a free hand.</span>")
-
-/obj/structure/fakecargoposter/Destroy()
-	for(var/atom/movable/A in cash.contents)
-		A.forceMove(loc)
-	QDEL_NULL(cash)
-	..()
-
-/obj/structure/fakecargoposter/attackby(var/obj/item/weapon/W, mob/user)
-	if(iswelder(W))
-		visible_message("<span class='warning'>[user] is destroying the hidden cache disguised as a poster!</span>")
-		var/obj/item/tool/weldingtool/WT=W
-		if(WT.do_weld(user, src, 10 SECONDS, 5))
-			visible_message("<span class='warning'>[user] destroyed the hidden cache!</span>")
-			qdel(src)
-	else if(user.loc == access_loc)
-		cash.attackby(W,user)
-	else
-		..()
-
-/obj/structure/fakecargoposter/attack_hand(mob/user)
-	if(user.loc == access_loc)
-		cash.AltClick(user)
-
-/obj/item/weapon/storage/cargocache
-	name = "cargo cache"
-	desc = "A large hidey hole for all your goodies."
-	icon = 'icons/obj/posters.dmi'
-	icon_state = "cargoposter-flag"
-	fits_max_w_class = W_CLASS_LARGE
-	max_combined_w_class = 28
-	slot_flags = 0
-
-/obj/item/weapon/storage/cargocache/distance_interact(mob/user)
-	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))
-		return TRUE
-	return FALSE

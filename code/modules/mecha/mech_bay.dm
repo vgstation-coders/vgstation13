@@ -128,6 +128,8 @@
 	anchored = 1
 	icon = 'icons/mecha/mech_bay.dmi'
 	icon_state = "recharge_port"
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/obj/machinery/mech_bay_recharge_floor/recharge_floor
 	var/obj/machinery/computer/mech_bay_power_console/recharge_console
 	var/datum/global_iterator/mech_bay_recharger/pr_recharger
@@ -243,36 +245,6 @@
 		recharge_console.recharge_floor = recharge_floor
 		return 1
 	return 0
-
-/obj/machinery/mech_bay_recharge_port/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!istype(usr,/mob/living))
-		return
-
-	var/mob/living/U = usr
-	if(src.anchored || U.stat)
-		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/machinery/mech_bay_recharge_port/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!istype(usr,/mob/living))
-		return
-
-	var/mob/living/U = usr
-	if(src.anchored || U.stat)
-		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
-		return 0
-	src.dir = turn(src.dir, 90)
-	return 1
 
 /datum/global_iterator/mech_bay_recharger
 	delay = 20

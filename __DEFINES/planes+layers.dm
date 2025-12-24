@@ -122,6 +122,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define BLOOD_LAYER					17
 	#define GIBS_OVERLAY_LAYER			18 //Holy fuck I'm so fucking mad it took me this long to figure it out. If you suspect an overlay isn't showing TRY GIVING IT A REALLY HIGH LAYER
 	#define CREEPER_LAYER				19
+	#define EDGE_LAYER					69
 	#define WEED_LAYER					420
 
 #define NOIR_BLOOD_PLANE 		(2 + FLOAT_PLANE)		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
@@ -218,7 +219,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define GHOST_LAYER 				1
 
-#define FAKE_CAMERA_PLANE		(14)
+#define FAKE_CAMERA_BUTTONS_PLANE		(14)
 
 #define LIGHTING_PLANE 			(15)	// Don't put anything other than lighting_overlays in there please
 	#define SELF_VISION_LAYER 		   -1
@@ -232,6 +233,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
+
+#define FAKE_CAMERA_SCREEN_PLANE 17
 
 #define OPEN_OVERLAY_PLANE	(17 + FLOAT_PLANE) // This one won't behave either
 
@@ -368,52 +371,37 @@ var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster =
 	appearance_flags = 0
 	plane = BASE_PLANE
 	mouse_opacity = 0
-	screen_loc = "SOUTHWEST,SOUTHWEST"
+	screen_loc = "SOUTHWEST"
 	render_source = "*overdark"
 
 var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planemaster_target = new()
 
-// DARKNESS PLANEMASTER
-// One planemaster for each client, which they gain during mob/login()
-/obj/abstract/screen/plane_master/darkness_planemaster
-	plane = LIGHTING_PLANE
-	blend_mode = BLEND_MULTIPLY
+/obj/abstract/screen/plane_master/fakecamera_screen_planemaster
+	plane = FAKE_CAMERA_SCREEN_PLANE
+	alpha = 0
 
-/obj/abstract/screen/plane_master/darkness_planemaster_dummy
+/obj/abstract/screen/plane_master/fakecamera_screen_planemaster_dummy
 	alpha = 0
 	appearance_flags = 0
-	plane = LIGHTING_PLANE
+	plane = FAKE_CAMERA_SCREEN_PLANE
 
-/client/proc/initialize_darkness_planemaster()
-	if(darkness_planemaster)
-		screen -= darkness_planemaster
-		qdel(darkness_planemaster)
-	if(darkness_planemaster_dummy)
-		screen -= darkness_planemaster_dummy
-		qdel(darkness_planemaster_dummy)
-	darkness_planemaster = new /obj/abstract/screen/plane_master/darkness_planemaster
-	screen |= darkness_planemaster
-	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	screen |= darkness_planemaster_dummy
-
-
-/obj/abstract/screen/plane_master/fakecamera_planemaster
-	plane = FAKE_CAMERA_PLANE
+/obj/abstract/screen/plane_master/fakecamera_button_planemaster
+	plane = FAKE_CAMERA_BUTTONS_PLANE
 	alpha = 0
-
-/obj/abstract/screen/plane_master/fakecamera_planemaster_dummy
-	alpha = 0
-	appearance_flags = 0
-	plane = FAKE_CAMERA_PLANE
 
 /client/proc/initialize_fakecamera_planemaster()
-	if(fakecamera_planemaster)
-		screen -= fakecamera_planemaster
-		qdel(fakecamera_planemaster)
-	if(fakecamera_planemaster_dummy)
-		screen -= fakecamera_planemaster_dummy
-		qdel(fakecamera_planemaster_dummy)
-	fakecamera_planemaster = new /obj/abstract/screen/plane_master/fakecamera_planemaster
-	screen |= fakecamera_planemaster
-	fakecamera_planemaster_dummy = new /obj/abstract/screen/plane_master/fakecamera_planemaster_dummy
-	screen |= fakecamera_planemaster_dummy
+	if(fakecamera_screen_planemaster)
+		screen -= fakecamera_screen_planemaster
+		qdel(fakecamera_screen_planemaster)
+	if(fakecamera_screen_planemaster_dummy)
+		screen -= fakecamera_screen_planemaster_dummy
+		qdel(fakecamera_screen_planemaster_dummy)
+	if(fakecamera_button_planemaster)
+		screen -= fakecamera_button_planemaster
+		qdel(fakecamera_button_planemaster)
+	fakecamera_screen_planemaster = new /obj/abstract/screen/plane_master/fakecamera_screen_planemaster
+	screen |= fakecamera_screen_planemaster
+	fakecamera_screen_planemaster_dummy = new /obj/abstract/screen/plane_master/fakecamera_screen_planemaster_dummy
+	screen |= fakecamera_screen_planemaster_dummy
+	fakecamera_button_planemaster = new /obj/abstract/screen/plane_master/fakecamera_button_planemaster
+	screen |= fakecamera_button_planemaster

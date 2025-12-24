@@ -188,7 +188,7 @@
 
 /obj/item/clothing/head/justice
 	name = "justice hat"
-	desc = "fight for what's righteous!"
+	desc = "Fight for what's righteous!"
 	icon_state = "justicered"
 	item_state = "justicered"
 	flags = FPRINT
@@ -398,7 +398,7 @@
 
 /obj/item/clothing/head/bearpelt/real/spare
 	name = "spare bear pelt"
-	desc = "It shimmers in the light"
+	desc = "It shimmers in the light."
 	icon_state = "sparebearpelt"
 	item_state = "sparebearpelt"
 	slot_flags = SLOT_ID|SLOT_HEAD
@@ -700,7 +700,7 @@
 
 /obj/item/clothing/head/bedsheet_ghost
 	name = "Bedsheet Ghost"
-	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky"
+	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky."
 	icon_state = "bedsheet_ghost"
 	body_parts_covered = FACE|FULL_HEAD|HIDEHAIR
 	wear_override = new/icon("icon" = 'icons/misc/empty.dmi', "icon_state" = "empty_icon")

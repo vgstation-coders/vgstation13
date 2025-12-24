@@ -1273,7 +1273,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "dD" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -1331,7 +1331,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "dL" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2

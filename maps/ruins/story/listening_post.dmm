@@ -1,0 +1,152 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/wall/syndicate,
+/area/ruin)
+"f" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"i" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/dark,
+/area/ruin)
+"m" = (
+/obj/structure/table,
+/turf/simulated/floor/dark,
+/area/ruin)
+"y" = (
+/obj/structure/bed/chair,
+/obj/effect/landmark/story,
+/turf/simulated/floor/dark,
+/area/ruin)
+"z" = (
+/obj/machinery/telecomms/relay/planetary,
+/turf/simulated/floor/dark,
+/area/ruin)
+"C" = (
+/obj/machinery/old_database,
+/turf/simulated/floor/dark,
+/area/ruin)
+"K" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/dark,
+/area/ruin)
+"L" = (
+/obj/structure/table,
+/obj/item/device/radio/intercom,
+/turf/simulated/floor/dark,
+/area/ruin)
+"P" = (
+/turf/simulated/floor/dark,
+/area/ruin)
+"T" = (
+/obj/machinery/door/airlock/highsecurity,
+/turf/simulated/floor/dark,
+/area/ruin)
+"W" = (
+/obj/machinery/media/jukebox/dj,
+/turf/simulated/floor/dark,
+/area/ruin)
+
+(1,1,1) = {"
+f
+f
+f
+f
+f
+f
+f
+f
+f
+"}
+(2,1,1) = {"
+f
+a
+a
+a
+a
+a
+a
+a
+f
+"}
+(3,1,1) = {"
+f
+a
+P
+P
+K
+P
+P
+a
+f
+"}
+(4,1,1) = {"
+f
+a
+C
+P
+L
+m
+P
+a
+f
+"}
+(5,1,1) = {"
+f
+a
+z
+P
+y
+L
+P
+T
+f
+"}
+(6,1,1) = {"
+f
+a
+W
+P
+L
+m
+P
+a
+f
+"}
+(7,1,1) = {"
+f
+a
+P
+P
+i
+P
+P
+a
+f
+"}
+(8,1,1) = {"
+f
+a
+a
+a
+a
+a
+a
+a
+f
+"}
+(9,1,1) = {"
+f
+f
+f
+f
+f
+f
+f
+f
+f
+"}

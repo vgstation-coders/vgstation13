@@ -559,7 +559,12 @@ Class Procs:
 	gl_uid++
 
 /obj/machinery/proc/dropFrame()
-	var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+	var/frame_type = /obj/machinery/constructable_frame/machine_frame
+	for(var/obj/I in component_parts)
+		if(istype(I,/obj/item/weapon/circuitboard/small))
+			frame_type = /obj/machinery/constructable_frame/machine_frame/small
+			break
+	var/obj/machinery/constructable_frame/machine_frame/M = new frame_type(src.loc)
 	M.set_build_state(2)
 	M.state = 1
 

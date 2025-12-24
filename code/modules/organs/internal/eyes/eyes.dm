@@ -67,7 +67,7 @@
 
 /datum/organ/internal/eyes/mushroom/update_perception(var/mob/living/carbon/human/M)
 	if (dark_mode)
-		M.master_plane.blend_mode = BLEND_SUBTRACT
+		M.lighting_planemaster.blend_mode = BLEND_SUBTRACT
 		M.dark_plane.alphas["mushroom_inverted"] = 100
 		M.dark_plane.blend_mode = BLEND_MULTIPLY
 		M.dark_plane.colours = "#FF0000"
@@ -78,7 +78,7 @@
 			0,-0.1,0,1,
 			0,0,0,0)
 	else
-		M.master_plane.blend_mode = BLEND_MULTIPLY
+		M.lighting_planemaster.blend_mode = BLEND_MULTIPLY
 		M.dark_plane.blend_mode = BLEND_ADD
 		M.dark_plane.colours = null
 		M.client.color = list(

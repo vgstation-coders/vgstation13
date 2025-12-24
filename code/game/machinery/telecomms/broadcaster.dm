@@ -82,7 +82,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 			var/datum/speech/speech = new /datum/speech
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
-			Broadcast_Message(speech, signal.data["vmask"], 0, signal.data["compression"], signal.data["level"])
+			Broadcast_Message(speech, signal.data["vmask"], 0, signal.data["compression"], signal.data["level"], signal.data["allocations"])
 
 
 
@@ -98,7 +98,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 			var/datum/speech/speech = new /datum/speech
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
-			Broadcast_Message(speech, signal.data["vmask"], null, signal.data["compression"], signal.data["level"])
+			Broadcast_Message(speech, signal.data["vmask"], null, signal.data["compression"], signal.data["level"], signal.data["allocations"])
 
 
 
@@ -112,7 +112,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 			var/datum/speech/speech = new /datum/speech
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
-			Broadcast_Message(speech, signal.data["vmask"], 4, signal.data["compression"], signal.data["level"])
+			Broadcast_Message(speech, signal.data["vmask"], 4, signal.data["compression"], signal.data["level"], signal.data["allocations"])
 
 
 		if(!message_delay)
@@ -258,7 +258,8 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		var/vmask,               // voice mask (bool)
 		var/data,                // ???
 		var/compression,         // Level of compression
-		var/list/level)          // z-levels that can hear us
+		var/list/level,          // z-levels that can hear us
+		var/list/allocations)    // planetary allocations that can hear us (for procgen z-level)
 
 #ifdef SAY_DEBUG
 	if(speech.speaker)
@@ -289,7 +290,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	switch (data)
 		if (1) // broadcast only to intercom devices
 			for (var/obj/item/device/radio/intercom/R in all_radios["[speech.frequency]"])
-				if (R && R.receive_range(speech.frequency, level) > -1)
+				if (R && R.receive_range(speech.frequency, level, allocations) > -1)
 					jamming_severity = radio_jamming_severity(R)
 					if (is_completely_jammed(jamming_severity))
 						continue
@@ -302,7 +303,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 				if (istype(R, /obj/item/device/radio/headset))
 					continue
 
-				if (R && R.receive_range(speech.frequency, level) > -1)
+				if (R && R.receive_range(speech.frequency, level, allocations) > -1)
 					jamming_severity = radio_jamming_severity(R)
 					if (is_completely_jammed(jamming_severity))
 						continue
@@ -312,7 +313,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 					radios += R
 		else // broadcast to ALL radio devices
 			for (var/obj/item/device/radio/R in all_radios["[speech.frequency]"])
-				if (R && R.receive_range(speech.frequency, level) > -1)
+				if (R && R.receive_range(speech.frequency, level, allocations) > -1)
 					jamming_severity = radio_jamming_severity(R)
 					if (is_completely_jammed(jamming_severity))
 						continue

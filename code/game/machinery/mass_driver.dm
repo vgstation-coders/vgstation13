@@ -126,6 +126,8 @@ var/list/mass_drivers = list()
 	icon_state = "mass_driver_b0"
 	density = 0
 	anchored = 0
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/datum/construction/reversible/construct
 
 /obj/machinery/mass_driver_frame/New()
@@ -135,17 +137,6 @@ var/list/mass_drivers = list()
 /obj/machinery/mass_driver_frame/attackby(var/obj/item/W, var/mob/user)
 	if(!construct || !construct.action(W, user))
 		..()
-
-/obj/machinery/mass_driver_frame/verb/rotate()
-	set category = "Object"
-	set name = "Rotate Frame"
-	set src in view(1)
-
-	if (usr.isUnconscious() || usr.restrained())
-		return
-
-	src.dir = turn(src.dir, -90)
-	return
 
 /datum/construction/reversible/mass_driver
 	result = /obj/machinery/mass_driver

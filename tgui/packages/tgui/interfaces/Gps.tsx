@@ -18,6 +18,10 @@ type Data = {
   autorefresh: String,
   location_text: String,
   devices: Device[],
+  beacon_ready?: Boolean,
+  beacon_cooldown?: number,
+  beacon_active?: Boolean,
+  beacon_time_remaining?: number,
 }
 
 
@@ -30,6 +34,10 @@ export const Gps = (props) => {
     autorefresh,
     location_text,
     devices,
+    beacon_ready,
+    beacon_cooldown,
+    beacon_active,
+    beacon_time_remaining,
   } = data;
   return (
     <Window
@@ -71,6 +79,26 @@ export const Gps = (props) => {
                     value={gpstag}
                     onCommit={(value) => (act('set_tag', { new_tag: value }))}
                   />
+            {(beacon_ready !== undefined) && (
+              <>
+                {beacon_active ? (
+                  <Button
+                    icon="times-circle"
+                    color="bad"
+                    onClick={() => act('cancel_beacon')}>
+                    Cancel Beacon ({beacon_time_remaining}s remaining)
+                  </Button>
+                ) : (
+                  <Button
+                    icon="broadcast-tower"
+                    color={beacon_ready ? "bad" : "average"}
+                    disabled={!beacon_ready}
+                    onClick={() => act('distress_beacon')}>
+                    {beacon_ready ? "Distress Beacon" : `Beacon Cooldown: ${beacon_cooldown}s`}
+                  </Button>
+                )}
+              </>
+            )}
           </Section>
         )}
         {!emped && !!transmitting && (

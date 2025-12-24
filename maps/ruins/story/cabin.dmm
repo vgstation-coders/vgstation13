@@ -1,0 +1,201 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"f" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/red,
+/turf/simulated/floor/wood,
+/area/ruin)
+"l" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 8
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"m" = (
+/obj/structure/closet/cabinet/snow,
+/turf/simulated/floor/wood,
+/area/ruin)
+"o" = (
+/obj/structure/bed/chair/comfy/couch/left/red{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"q" = (
+/turf/simulated/wall/mineral/wood,
+/area/ruin)
+"r" = (
+/obj/structure/coatrack,
+/turf/simulated/floor/wood,
+/area/ruin)
+"v" = (
+/obj/structure/grille/window_spawner/full,
+/obj/structure/curtain/black,
+/turf/simulated/floor/wood,
+/area/ruin)
+"z" = (
+/obj/structure/rack,
+/obj/item/stack/sheet/wood/bigstack,
+/turf/simulated/floor/wood,
+/area/ruin)
+"B" = (
+/obj/machinery/space_heater/campfire/stove/fireplace,
+/turf/simulated/floor/wood,
+/area/ruin)
+"J" = (
+/obj/machinery/space_heater/campfire/stove,
+/turf/simulated/floor/wood,
+/area/ruin)
+"K" = (
+/obj/structure/bed/chair/comfy/couch/mid/red{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"L" = (
+/obj/structure/bed/chair/comfy/couch/right/red{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"M" = (
+/obj/machinery/telecomms/relay/planetary,
+/turf/simulated/floor/wood,
+/area/ruin)
+"N" = (
+/obj/item/deer_head,
+/turf/simulated/wall/mineral/wood,
+/area/ruin)
+"Q" = (
+/obj/structure/table/woodentable,
+/obj/item/device/flashlight/lamp/green{
+	on = 1
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"R" = (
+/turf/simulated/floor/wood,
+/area/ruin)
+"S" = (
+/obj/effect/landmark/story,
+/turf/simulated/floor/wood,
+/area/ruin)
+"W" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/wood,
+/area/ruin)
+"Z" = (
+/obj/machinery/old_database,
+/turf/simulated/floor/wood,
+/area/ruin)
+
+(1,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+q
+q
+q
+v
+v
+q
+q
+q
+a
+"}
+(3,1,1) = {"
+a
+N
+R
+R
+R
+Q
+R
+m
+q
+a
+"}
+(4,1,1) = {"
+a
+q
+R
+o
+R
+l
+R
+r
+q
+a
+"}
+(5,1,1) = {"
+a
+q
+B
+K
+R
+S
+R
+R
+W
+a
+"}
+(6,1,1) = {"
+a
+q
+R
+L
+R
+R
+R
+R
+q
+a
+"}
+(7,1,1) = {"
+a
+q
+z
+R
+M
+Z
+J
+f
+q
+a
+"}
+(8,1,1) = {"
+a
+q
+q
+q
+v
+v
+q
+q
+q
+a
+"}
+(9,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}

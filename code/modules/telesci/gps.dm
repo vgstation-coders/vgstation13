@@ -86,6 +86,8 @@ var/list/all_GPS_list = list()
 		return "ERROR"
 	else if(!device_turf || !device_area)
 		return "UNKNOWN"
+	else if(device_turf.z == map.zProcGen)
+		return "SIGNAL JAMMED"
 	else if(device_turf.z > WORLD_X_OFFSET.len)
 		return "[format_text(device_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
 	else
@@ -107,7 +109,8 @@ var/list/all_GPS_list = list()
 	data["autorefresh"] = autorefreshing
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
-	if(!emped && transmitting)
+	var/turf/device_turf = get_turf(src)
+	if(!emped && transmitting && !(device_turf && device_turf.z == map.zProcGen))
 		var/list/ui_list
 		if(view_all)
 			ui_list = all_GPS_list
@@ -167,18 +170,20 @@ var/list/all_GPS_list = list()
 	data["autorefresh"] = autorefreshing
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
-	var/list/ui_list
-	if(view_all)
-		ui_list = all_GPS_list
-	else
-		ui_list = gps_list
-	for(var/D in ui_list)
-		var/obj/item/device/gps/G = D
-		if(G.transmitting && src != G)
-			var/device_data[0]
-			device_data["tag"] = G.gpstag
-			device_data["location_text"] = G.get_location_name()
-			devices += list(device_data)
+	var/turf/device_turf = get_turf(src)
+	if(!(device_turf && device_turf.z == map.zProcGen))
+		var/list/ui_list
+		if(view_all)
+			ui_list = all_GPS_list
+		else
+			ui_list = gps_list
+		for(var/D in ui_list)
+			var/obj/item/device/gps/G = D
+			if(G.transmitting && src != G)
+				var/device_data[0]
+				device_data["tag"] = G.gpstag
+				device_data["location_text"] = G.get_location_name()
+				devices += list(device_data)
 	data["devices"] = devices
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -362,3 +367,236 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	if(!transmitting)
 		return
 	send_signal(wearer, src, "SPS [gpstag]: Code Red", TRUE, TRUE)
+
+/obj/item/device/gps/planetary
+	base_name = "expedition tracker"
+	desc = "A specialized GPS device designed for planetary exploration. Only tracks other devices on the same planet. Features an emergency distress beacon."
+	icon_state = "gps-et"
+	base_tag = "EXP"
+	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MAGNETS + "=3"
+	var/beacon_cooldown = 0
+	var/beacon_cooldown_time = 5 MINUTES
+	var/beacon_active = FALSE
+	var/beacon_activation_time = 0
+
+/obj/item/device/gps/planetary/get_location_name()
+	var/turf/device_turf = get_turf(src)
+	var/area/device_area = get_area(src)
+	if(emped)
+		return "ERROR"
+	else if(!device_turf || !device_area)
+		return "UNKNOWN"
+	else if(device_turf.z != map.zProcGen)
+		return "NOT ON PLANET"
+	else
+		// Show coordinates relative to the sector
+		var/datum/allocation/alloc = SSmapping.get_allocation(trf = device_turf)
+		if(!istype(alloc, /datum/allocation))
+			return "[format_text(device_area.name)] (UNKNOWN)"
+		var/list/bounds = SSmapping.get_sector_bounds(alloc.sector)
+		var/rel_x = device_turf.x - bounds["x_min"] + 1
+		var/rel_y = device_turf.y - bounds["y_min"] + 1
+		var/planet_name = alloc.ptype ? alloc.ptype.planet_name : "Unknown Planet"
+		return "[format_text(device_area.name)] ([planet_name]: [rel_x], [rel_y])"
+
+/obj/item/device/gps/planetary/ui_data()
+	var/list/data = list()
+	data["emped"] = emped
+	data["transmitting"] = transmitting
+	data["gpstag"] = gpstag
+	data["autorefresh"] = autorefreshing
+	data["location_text"] = get_location_name()
+	data["beacon_active"] = beacon_active
+	data["beacon_ready"] = (world.time >= beacon_cooldown)
+	data["beacon_cooldown"] = max(0, round((beacon_cooldown - world.time) / 10))
+	data["beacon_time_remaining"] = beacon_active ? max(0, round((beacon_cooldown - world.time) / 10)) : 0
+	var/list/devices = list()
+	var/turf/device_turf = get_turf(src)
+
+	// Only show other devices if we're on a planet and transmitting
+	if(!emped && transmitting && device_turf && device_turf.z == map.zProcGen)
+		var/datum/allocation/my_alloc = SSmapping.get_allocation(trf = device_turf)
+		if(istype(my_alloc, /datum/allocation))
+			// Always show docking ports on this planet
+			for(var/obj/docking_port/destination/planet_surface/port in all_docking_ports)
+				var/turf/port_turf = get_turf(port)
+				if(!port_turf || port_turf.z != map.zProcGen)
+					continue
+				var/datum/allocation/port_alloc = SSmapping.get_allocation(trf = port_turf)
+				if(port_alloc == my_alloc)
+					var/list/bounds = SSmapping.get_sector_bounds(my_alloc.sector)
+					var/rel_x = port_turf.x - bounds["x_min"] + 1
+					var/rel_y = port_turf.y - bounds["y_min"] + 1
+					var/planet_name = my_alloc.ptype ? my_alloc.ptype.planet_name : "Unknown Planet"
+					var/list/device_data = list()
+					device_data["tag"] = "DOCK"
+					device_data["location_text"] = "[port.areaname] ([planet_name]: [rel_x], [rel_y])"
+					devices += list(device_data)
+
+			// Only show other planetary GPSes on the same planet
+			for(var/obj/item/device/gps/planetary/other in gps_list)
+				if(!other.transmitting || other == src)
+					continue
+				var/turf/other_turf = get_turf(other)
+				if(!other_turf || other_turf.z != map.zProcGen)
+					continue
+				var/datum/allocation/other_alloc = SSmapping.get_allocation(trf = other_turf)
+				if(other_alloc == my_alloc)
+					var/list/device_data = list()
+					device_data["tag"] = other.gpstag
+					device_data["location_text"] = other.get_location_name()
+					devices += list(device_data)
+	data["devices"] = devices
+	return data
+
+/obj/item/device/gps/planetary/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+	if(..())
+		return
+	switch(action)
+		if("distress_beacon")
+			if(world.time < beacon_cooldown)
+				to_chat(usr, "<span class='warning'>The distress beacon is still recharging!</span>")
+				return FALSE
+			if(emped)
+				to_chat(usr, "<span class='warning'>The GPS is experiencing electromagnetic interference!</span>")
+				return FALSE
+			var/turf/device_turf = get_turf(src)
+			if(!device_turf || device_turf.z != map.zProcGen)
+				to_chat(usr, "<span class='warning'>The distress beacon only works on planet surfaces!</span>")
+				return FALSE
+
+			// planet information
+			var/datum/allocation/my_alloc = SSmapping.get_allocation(trf = device_turf)
+			if(!istype(my_alloc, /datum/allocation))
+				to_chat(usr, "<span class='warning'>Unable to determine location!</span>")
+				return FALSE
+
+			var/planet_name = my_alloc.ptype ? my_alloc.ptype.planet_name : "Unknown Planet"
+			var/list/bounds = SSmapping.get_sector_bounds(my_alloc.sector)
+			var/rel_x = device_turf.x - bounds["x_min"] + 1
+			var/rel_y = device_turf.y - bounds["y_min"] + 1
+			var/area/device_area = get_area(src)
+
+			// station-wide announcement
+			command_alert("Emergency distress beacon activated by GPS unit [gpstag] on planet [planet_name]. Location: [format_text(device_area.name)] ([rel_x], [rel_y])", "Planetary Distress Beacon Activated")
+
+			// cooldown
+			beacon_cooldown = world.time + beacon_cooldown_time
+			beacon_active = TRUE
+			beacon_activation_time = world.time
+
+			to_chat(usr, "<span class='notice'>Distress beacon activated! A station-wide alert has been sent.</span>")
+			playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 1)
+
+			return TRUE
+		if("cancel_beacon")
+			if(!beacon_active)
+				to_chat(usr, "<span class='warning'>No beacon is currently active!</span>")
+				return FALSE
+
+			beacon_active = FALSE
+			to_chat(usr, "<span class='notice'>Distress beacon cancelled.</span>")
+			return TRUE
+	return FALSE
+
+/obj/item/device/gps/planetary/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	var/data[0]
+	if(emped)
+		data["emped"] = TRUE
+	data["transmitting"] = transmitting
+	data["gpstag"] = gpstag
+	data["autorefresh"] = autorefreshing
+	data["location_text"] = get_location_name()
+	data["beacon_active"] = beacon_active
+	data["beacon_ready"] = (world.time >= beacon_cooldown)
+	data["beacon_cooldown"] = max(0, round((beacon_cooldown - world.time) / 10))
+	data["beacon_time_remaining"] = beacon_active ? max(0, round((beacon_cooldown - world.time) / 10)) : 0
+	var/list/devices = list()
+	var/turf/device_turf = get_turf(src)
+
+	if(device_turf && device_turf.z == map.zProcGen)
+		var/datum/allocation/my_alloc = SSmapping.get_allocation(trf = device_turf)
+		if(istype(my_alloc, /datum/allocation))
+
+			for(var/obj/docking_port/destination/planet_surface/port in all_docking_ports)
+				var/turf/port_turf = get_turf(port)
+				if(!port_turf || port_turf.z != map.zProcGen)
+					continue
+				var/datum/allocation/port_alloc = SSmapping.get_allocation(trf = port_turf)
+				if(port_alloc == my_alloc)
+					var/list/bounds = SSmapping.get_sector_bounds(my_alloc.sector)
+					var/rel_x = port_turf.x - bounds["x_min"] + 1
+					var/rel_y = port_turf.y - bounds["y_min"] + 1
+					var/planet_name = my_alloc.ptype ? my_alloc.ptype.planet_name : "Unknown Planet"
+					var/device_data[0]
+					device_data["tag"] = "DOCK"
+					device_data["location_text"] = "[port.areaname] ([planet_name]: [rel_x], [rel_y])"
+					devices += list(device_data)
+
+			for(var/D in gps_list)
+				var/obj/item/device/gps/planetary/G = D
+				if(!istype(G) || !G.transmitting || src == G)
+					continue
+				var/turf/other_turf = get_turf(G)
+				if(!other_turf || other_turf.z != map.zProcGen)
+					continue
+				var/datum/allocation/other_alloc = SSmapping.get_allocation(trf = other_turf)
+				if(other_alloc == my_alloc)
+					var/device_data[0]
+					device_data["tag"] = G.gpstag
+					device_data["location_text"] = G.get_location_name()
+					devices += list(device_data)
+	data["devices"] = devices
+
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	if(!ui)
+		ui = new(user, src, ui_key, "gps.tmpl", "[src]", 530, 600)
+		ui.set_initial_data(data)
+		ui.open()
+	ui.set_auto_update(autorefreshing)
+
+/obj/item/device/gps/planetary/Topic(href, href_list)
+	if(..())
+		return FALSE
+	if(href_list["distress_beacon"])
+		if(world.time < beacon_cooldown)
+			to_chat(usr, "<span class='warning'>The distress beacon is still recharging!</span>")
+			return FALSE
+		if(emped)
+			to_chat(usr, "<span class='warning'>The GPS is experiencing electromagnetic interference!</span>")
+			return FALSE
+		var/turf/device_turf = get_turf(src)
+		if(!device_turf || device_turf.z != map.zProcGen)
+			to_chat(usr, "<span class='warning'>The distress beacon only works on planetary surfaces!</span>")
+			return FALSE
+
+		var/datum/allocation/my_alloc = SSmapping.get_allocation(trf = device_turf)
+		if(!istype(my_alloc, /datum/allocation))
+			to_chat(usr, "<span class='warning'>Unable to determine planetary location!</span>")
+			return FALSE
+
+		var/planet_name = my_alloc.ptype ? my_alloc.ptype.planet_name : "Unknown Planet"
+		var/list/bounds = SSmapping.get_sector_bounds(my_alloc.sector)
+		var/rel_x = device_turf.x - bounds["x_min"] + 1
+		var/rel_y = device_turf.y - bounds["y_min"] + 1
+		var/area/device_area = get_area(src)
+
+		command_alert("Emergency distress beacon activated by GPS unit [gpstag] on planet [planet_name]. Location: [format_text(device_area.name)] ([rel_x], [rel_y])", "Planetary Distress Beacon Activated")
+
+		beacon_cooldown = world.time + beacon_cooldown_time
+		beacon_active = TRUE
+		beacon_activation_time = world.time
+
+		to_chat(usr, "<span class='notice'>Distress beacon activated! A station-wide alert has been sent.</span>")
+		playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 1)
+
+		return TRUE
+	if(href_list["cancel_beacon"])
+		if(!beacon_active)
+			to_chat(usr, "<span class='warning'>No beacon is currently active!</span>")
+			return FALSE
+
+		beacon_active = FALSE
+		to_chat(usr, "<span class='notice'>Distress beacon cancelled.</span>")
+		return TRUE
+	return FALSE

@@ -340,6 +340,33 @@
 		mobs_found += M
 	return mobs_found
 
+/proc/mobs_in_zlevel(var/target_z, var/client_needed=0, var/moblist=mob_list)
+	var/list/mobs_found = list()
+	for(var/mob/M in moblist)
+		if(client_needed && !M.client)
+			continue
+		var/turf/T = get_turf(M)
+		if(T?.z != target_z)
+			continue
+		mobs_found += M
+	return mobs_found
+
+/proc/mobs_in_allocation(var/datum/allocation/alloc, var/client_needed=0, var/moblist=mob_list)
+	var/list/mobs_found = list()
+	if(!alloc)
+		return mobs_found
+	for(var/mob/M in moblist)
+		if(client_needed && !M.client)
+			continue
+		var/turf/T = get_turf(M)
+		if(T?.z != alloc.z)
+			continue
+		var/datum/allocation/A = SSmapping.get_allocation(trf = T)
+		if(A != alloc)
+			continue
+		mobs_found += M
+	return mobs_found
+
 /proc/GetRedPart(const/hexa)
 	return hex2num(copytext(hexa, 2, 4))
 

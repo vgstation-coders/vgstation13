@@ -23,7 +23,7 @@
 		if(M.getToxLoss())
 			M.adjustToxLoss(-2)
 		if(M.dizziness != 0)
-			M.dizziness = max(0, M.dizziness - 15)
+			M.AdjustDizzy(-15)
 		if(M.confused != 0)
 			M.remove_confused(5)
 	else
@@ -79,6 +79,8 @@
 	description = "Plasma in its liquid form."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
+	fission_time=18000 //5 hours.
+	fission_absorbtion=8333.333
 
 /datum/reagent/plasma/New()
 	..()
@@ -113,6 +115,56 @@
 
 	//Toxins are really weak, but without being treated, last very long
 	M.adjustToxLoss(0.2)
+
+/datum/reagent/silica
+	name = "Silica"
+	id = SILICA
+	description = "Fine particles of silicon dioxide, often found as a component of rock."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#FFBB88"
+	density = 2.2
+	specheatcap = 0.7
+
+/datum/reagent/silica/reaction_mob(mob/living/M, method, volume, list/zone_sels, allow_permeability, list/splashplosion)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if (H.check_body_part_coverage(EYES))
+			to_chat(H, "<span class='warning'>Your eyewear protects you from \the [src]!</span>")
+		else
+			H.visible_message("<span class='warning'>[H] is blinded by the [src]!</span>", \
+				"<span class='warning'>\The [src] flies into your eyes!</span>")
+			H.eye_blurry = max(H.eye_blurry, rand(3,8))
+			H.eye_blind = max(H.eye_blind, rand(1,3))
+			H.drop_hands(get_turf(H))
+		log_attack("<font color='red'>[M] ([H ? H.ckey : "what"]) was pocketsanded by ([holder.my_atom.fingerprintslast])</font>")
+	M.extinguish()
+
+/datum/reagent/silica/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(O.on_fire)
+		O.extinguish()
+
+/datum/reagent/silica/reaction_turf(turf/simulated/T, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(!locate(/obj/effect/decal/cleanable/scattered_sand) in T)
+		new/obj/effect/decal/cleanable/scattered_sand(T)
+
+	for(var/atom/atm in T) //extinguishing things
+		if(isliving(atm)) // For extinguishing mobs on fire
+			var/mob/living/M = atm
+			M.extinguish()
+		if(atm.on_fire) // For extinguishing objects on fire
+			atm.extinguish()
+
+	if(volume >= U_PER_SHEET)
+		drop_stack(/obj/item/stack/ore/glass,T,floor(volume/U_PER_SHEET))
 
 /datum/reagent/silicate
 	name = "Silicate"
@@ -173,6 +225,12 @@
 				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
+
+/datum/reagent/uranium/ferro
+	name = "Ferrouranium"
+	id = FERROURANIUM
+	description = "An alloy of iron and uranium, specially bonded for metallic elasticity and tensility."
+	color = "#A0C0C0"
 
 //----------------------------------------------------------------------------------------------------
 
@@ -237,7 +295,7 @@
 	specheatcap = 0.124
 	fission_time=4500 //1.25 hours.
 	fission_power=66666.67 //spooky
-	
+
 /datum/reagent/plutonium/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
@@ -253,7 +311,7 @@
 	specheatcap = 0.936
 	custom_metabolism = 1 //decays really fast, so it shouldn't linger long.
 	fission_time=300 //5 minutes.
-	
+
 /datum/reagent/radon/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
@@ -268,7 +326,7 @@
 	color = "#676767" //rgb: 103, 103, 103
 	density = 11.34
 	specheatcap = 0.129
-	
+
 /datum/reagent/lead/on_mob_life(var/mob/living/M) //less potent mercury
 	if(..())
 		return 1
@@ -302,8 +360,24 @@
 	specheatcap = 0.124
 	fission_time=7200 //2 hours
 	//no fission power because thorium isn't actually fissile.
-	
+
 /datum/reagent/thorium/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	M.apply_radiation(0.5, RAD_INTERNAL)
+
+/datum/reagent/agentw
+	name ="Agent W Isotope III-B"
+	id = AGENT_W
+	description = "A highly energetic fissile fuel mixture whose composition was lost to time. Attempts to recreate it have fallen short, leaving the only stock remaining to be sitting around as a collector's item, suspended in bluespace containment. Those foolish enough to use it have often met unfortunate fates."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#FCCAD2" //rgb: 252, 202, 210
+	density = 23.13
+	specheatcap = 0.431
+	fission_time=1800 //30 minutes (1/2 an hour).
+	fission_power=333333.333 //5x plutonium
+
+/datum/reagent/agentw/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.apply_radiation(25, RAD_INTERNAL)

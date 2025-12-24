@@ -131,7 +131,7 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/hit_apply(var/mob/living/X, var/blocked) // this is relevant because of projectile/energy/electrode
 	// Random crits
 	if ((Holiday == APRIL_FOOLS_DAY) && firer && X.client)
-		firer.crit_rampup[text2num(world.time)] = damage
+		firer.crit_rampup[num2text(world.time)] = damage
 	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)

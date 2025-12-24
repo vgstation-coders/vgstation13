@@ -104,6 +104,9 @@
 		if(VOXBROWN)
 			icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxbrn.dmi'
+		if(VOXPLUCKED)
+			icobase = 'icons/mob/human_races/vox/r_voxplucked.dmi'
+			deform = 'icons/mob/human_races/vox/r_def_voxplucked.dmi'
 		else
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
@@ -128,6 +131,9 @@
 			if(VOXBROWN)
 				icobase = 'icons/mob/human_races/vox/r_voxbrn_duck.dmi'
 				deform = 'icons/mob/human_races/vox/r_def_voxbrn_duck.dmi'
+			if(VOXPLUCKED)
+				icobase = 'icons/mob/human_races/vox/r_voxplucked.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxplucked.dmi'
 			else
 				icobase = 'icons/mob/human_races/vox/r_vox_duck.dmi'
 				deform = 'icons/mob/human_races/vox/r_def_vox_duck.dmi'
@@ -182,3 +188,58 @@
 
 /datum/species/skellington/skelevox/fallback()
 	return "Vox"
+
+/mob/living/carbon/human/vox/Life()
+	..()
+	//feather regeneration
+	for(var/datum/butchering_product/feathers/vox/F in butchering_drops)
+		if(F.amount <= 5 && !stat)
+			feather_regen += 1 SECONDS
+			if(feather_regen == 2 SECONDS)
+				to_chat(src, "<span class='notice'>You feel a tingling sensation as your feathers begin to regrow.</span>")
+		if(feather_regen >= 15 MINUTES)
+			my_appearance.s_tone = original_vox_tone
+			F.amount = F.initial_amount
+			to_chat(src, "<span class='notice'>Your feathers regrow fully.</span>")
+			feather_regen = 0
+			species.updatespeciescolor(src)
+			update_cold_levels()
+			regenerate_icons()
+
+/mob/living/carbon/human/vox/handle_random_events()
+	..()
+	//BALD, BALD, BALD!!!
+	if(my_appearance.s_tone != VOXPLUCKED)
+		if(radiation >= 50)
+			for(var/datum/butchering_product/feathers/vox/F in butchering_drops)
+				while(F.amount > 0)
+					F.spawn_result(loc, src)
+			if(!original_vox_tone)
+				original_vox_tone = my_appearance.s_tone
+			my_appearance.s_tone = VOXPLUCKED
+			species.updatespeciescolor(src)
+			update_cold_levels()
+			regenerate_icons()
+			to_chat(src, "<span class='notice'>Your feathers fall out from the radiation!</span>")
+
+/mob/living/carbon/human/vox/attack_hand(mob/living/carbon/M as mob)
+	if(!stat && M.a_intent == I_GRAB && M == src)
+		// Only allow if there are feathers left to pluck
+		for(var/datum/butchering_product/feathers/vox/F in butchering_drops)
+			if(F.amount > 0)
+				M.visible_message("<span class='warning'>[src] preens a feather from [src.gender==MALE ? "himself" : "herself"].</span>", "<span class='notice'>You preen a feather from yourself.</span>")
+				F.spawn_result(get_turf(src), src)
+				return
+		to_chat(M, "<span class='notice'>You have no feathers left to pluck!</span>")
+	else
+		..()
+
+/mob/living/carbon/human/vox/proc/update_cold_levels()
+	if(my_appearance.s_tone == VOXPLUCKED)
+		species.cold_level_1 = 220
+		species.cold_level_2 = 200
+		species.cold_level_3 = 120
+	else
+		species.cold_level_1 = 80
+		species.cold_level_2 = 50
+		species.cold_level_3 = 0

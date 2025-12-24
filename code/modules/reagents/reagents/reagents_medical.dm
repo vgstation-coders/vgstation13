@@ -341,7 +341,7 @@
 				H.dizziness = max(H.dizziness, 10)
 				if(prob(5))
 					to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
-			if(75 to INFINITY)
+			if(76 to INFINITY)
 				H.dizziness = max(H.dizziness, 20)
 				if(prob(10))
 					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
@@ -549,13 +549,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	switch(volume)
-		if(1 to 4.5)
+		if(1 to 4.59)
 			M.Jitter(5)
 			if(prob(10))
 				to_chat(M, "You feel slightly energized, but nothing happens")
 			if(has_been_armstrong>0) //Added in case person metabolizes below 5 units to prevent infinite hulk
 				dehulk(M)
-		if(4.5 to 15)
+		if(4.60 to 15)
 			if(ishuman(M)) //Does nothing to non-humans.
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona") //Dionae are broken as fuck
@@ -584,6 +584,88 @@ var/global/list/charcoal_doesnt_remove=list(
 		H.update_mutations()		//update our mutation overlays
 		H.update_body()
 		to_chat(H, "The nanobots burn themselves out in your body.")
+
+/datum/reagent/engnanobots
+	name = "Energetic Nanobots"
+	id = ENGNANOBOTS
+	description = "Microscopic robots intended for use in humans. Configured for rapid recharging of electrical systems."
+	reagent_state = REAGENT_STATE_SOLID
+	dupeable = FALSE
+	color = "#80805F" //rgb: 52, 63, 66
+	overdose_am = 15
+	custom_metabolism = 0.1
+	density = 134.21
+	specheatcap = 0.19999
+
+/datum/reagent/engnanobots/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	var/obj/item/weapon/cell/possible_cell = M.get_cell()
+	if(possible_cell)
+		possible_cell.give(200 * REM)
+	for(var/obj/item/I in M)
+		I.restock()
+	M.radiation = max(M.radiation - 5 * REM, 0)
+
+/datum/reagent/engnanobots/on_overdose(var/mob/living/M)
+	var/obj/structure/cable/C = locate() in get_turf(M)
+	if(electrocute_mob(M, C, C, 1))
+		spark(M)
+		return
+
+/datum/reagent/engnanobots/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(isitem(O))
+		var/obj/item/I = O
+		I.restock(TRUE)
+
+/datum/reagent/engnanobots/reaction_mob(mob/living/M, method, volume, list/zone_sels, allow_permeability, list/splashplosion)
+	if(..())
+		return 1
+
+	var/obj/item/weapon/cell/possible_cell = M.get_cell()
+	if(possible_cell)
+		possible_cell.give(volume*10)
+	for(var/obj/item/I in M)
+		I.restock()
+
+/datum/reagent/engnanobots/reaction_turf(turf/simulated/T, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	emitted_harvestable_radiation(T, volume, volume/10)
+
+/datum/reagent/cargonanobots
+	name = "Cargonian Nanobots"
+	id = CARGONANOBOTS
+	description = "Microscopic robots intended for use in humans. Configured for departmental seccession and overthrowals."
+	reagent_state = REAGENT_STATE_SOLID
+	dupeable = FALSE
+	color = "#A05F3F" //rgb: 52, 63, 66
+	custom_metabolism = 0.1
+	density = 96.64
+	specheatcap = 5.14318
+
+/datum/reagent/cargonanobots/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(prob(10))
+		to_chat(M, "You feel [pick("as if your department needs to secede",\
+									"like proudly proclaiming your department allegiance",\
+									"the need to move a lot of crates around")].")
+	if(prob(5))
+		M.say("[pick("Hail cargonia","Move freight","Miners, [pick("don't die on me","bring me my materials")]")]!")
+
+/datum/reagent/cargonanobots/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(istype(O,/obj/structure/closet/crate))
+		O.health -= volume
 
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
@@ -1074,7 +1156,7 @@ var/global/list/charcoal_doesnt_remove=list(
 		M.adjustCloneLoss(-5) //Repairs DNA!
 		holder.remove_reagent(MEDNANOBOTS, 0.25) //Consumes a quarter of an unit every time it heals.
 	if(M.dizziness)
-		M.dizziness = max(0, M.dizziness - 15)
+		M.AdjustDizzy(-15)
 	if(M.confused)
 		M.remove_confused(5)
 	for(var/datum/disease/D in M.viruses) //Diseases that work under the second rework of viruses, or "Viro 3"
@@ -1096,7 +1178,7 @@ var/global/list/charcoal_doesnt_remove=list(
 				if(prob(20))
 					to_chat(M, pick("You feel more like yourself again."))
 
-		if(5 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
+		if(6 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
 			percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
 			if(prob(20))
 				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
@@ -1104,7 +1186,7 @@ var/global/list/charcoal_doesnt_remove=list(
 			if(prob(percent_machine))
 				holder.add_reagent(MEDNANOBOTS, 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
-		if(20 to INFINITY) //Now you've done it.
+		if(21 to INFINITY) //Now you've done it.
 			if(istype(M, /mob/living/simple_animal/hostile/monster/cyber_horror))
 				return
 			spawning_horror = 1
@@ -1471,7 +1553,7 @@ var/global/list/charcoal_doesnt_remove=list(
 		if(1 to 15)
 			M.adjustCloneLoss(-1)
 			M.heal_organ_damage(1, 1)
-		if(15 to 35)
+		if(16 to 35)
 			M.adjustCloneLoss(-2)
 			M.heal_organ_damage(2, 1)
 			if(ishuman(M))
@@ -1591,7 +1673,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	switch(tick)
 		if(1 to 5)
 			M.eye_blurry = max(M.eye_blurry, 10) //Eyes get blurry immediately
-		if(5 to INFINITY)
+		if(6 to INFINITY)
 			M.drowsyness  = max(M.drowsyness, 10) //Drowsiness even outside of the sleeper
 
 	//This handles sleeper/cryo vs out of sleeper/cryo behaviors
