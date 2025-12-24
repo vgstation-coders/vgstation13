@@ -112,8 +112,8 @@
 			if(scanning)
 				if(scan_process)
 
-					dat += {"Scan Object: [scanning.name]<br>
-						<a href='?src=\ref[src];operation=cancel'>Cancel Scan</a> Print<br>"}
+					dat += {"Scan Object: <span class='linkOff'>[scanning.name]</span><br>
+						<a href='?src=\ref[src];operation=cancel'>Cancel Scan</a> <span class='linkOff'>Print</span><br>"}
 				else
 					if(isai)
 						dat += "Scan Object: [scanning.name]<br>"
