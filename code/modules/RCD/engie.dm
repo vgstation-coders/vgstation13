@@ -495,6 +495,6 @@
 /obj/item/device/rcd/matter/engineering/mech/use_energy(var/amount, var/mob/user)
 	return	//mech charge is used up elsewhere
 	
-/obj/item/device/rcd/matter/get_energy(var/mob/user)
+/obj/item/device/rcd/matter/engineering/mech/get_energy(var/mob/user)
 	return INFINITY
 	
