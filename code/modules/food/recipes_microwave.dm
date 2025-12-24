@@ -2847,7 +2847,7 @@
 
 /datum/recipe/ijzerkoekje
 	reagents = list(FLOUR = 30, IRON = 30)
-	result = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy
+	result = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
 
 /datum/recipe/ijzerkoekje/make_food(obj/container, mob/user)
 	// fixing a buggy old hack, dont ask any questions
