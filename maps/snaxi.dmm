@@ -80204,6 +80204,34 @@
 	icon_state = "white"
 	},
 /area/centcom/evac)
+"jTj" = (
+/obj/structure/closet/crate/chest,
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/silver{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/gold{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/uranium{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/diamond{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/phazon{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/clown{
+	amount = 50
+	},
+/obj/item/device/device_analyser/syndicate,
+/turf/simulated/floor{
+	icon_state = "warnwhite"
+	},
+/area/science/lab)
 "jTt" = (
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "";
@@ -120445,7 +120473,7 @@ bmm
 bnl
 boY
 boY
-bqb
+jTj
 bqE
 qez
 brG

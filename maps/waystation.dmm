@@ -9907,6 +9907,38 @@
 	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/hop)
+"cqB" = (
+/obj/structure/closet/crate/chest,
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/silver{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/gold{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/uranium{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/diamond{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/phazon{
+	amount = 50
+	},
+/obj/item/stack/sheet/mineral/clown{
+	amount = 50
+	},
+/obj/item/device/device_analyser/syndicate,
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning";
+	tag = "icon-warning"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/science/lab)
 "cqO" = (
 /obj/machinery/disposal,
 /obj/structure/disposalpipe/trunk{
@@ -198051,7 +198083,7 @@ mgM
 cTa
 atk
 aHN
-iig
+cqB
 taB
 dYd
 sKA
