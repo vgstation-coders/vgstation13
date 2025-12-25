@@ -195,6 +195,17 @@
 
 	return new_vz
 
+/datum/map/proc/addTransitVLevel(size_x,size_y, datum/shuttle/shuttle, direction)
+	var/datum/virtual_z/new_vz = src.addVLevel(size_x,size_y)
+	new_vz.name = "[shuttle.name] - transit area"
+	new_vz.linked_shuttle = shuttle
+	for(var/turf/T in new_vz.get_turfs(FALSE))
+		var/turf/space/transit/t_turf = T.ChangeTurf(/turf/space/transit,0,0,1,0)
+		t_turf.pushdirection = direction
+		t_turf.update_icon()
+		CHECK_TICK
+	return new_vz
+
 var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/map_specific_init()

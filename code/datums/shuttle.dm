@@ -1202,6 +1202,24 @@
 			M.Knockdown(3)
 			to_chat(M, "<span class='warning'>\The [src] has ejected you!</span>")
 
+/datum/shuttle/proc/get_docking_port_offset()
+	if(!linked_port)
+		return null
+
+	var/low_x = world.maxx
+	var/low_y = world.maxy
+
+	for(var/turf/T in linked_area)
+		if(T.x < low_x)
+			low_x = T.x
+		if(T.y < low_y)
+			low_y = T.y
+
+	var/offset_x = linked_port.x - low_x
+	var/offset_y = linked_port.y - low_y
+
+	return list(offset_x, offset_y)
+
 //Planetary landing zone datum
 /datum/landing_zone
 	var/list/turf/turf_list = list()
@@ -1289,16 +1307,11 @@
 
 	var/list/search_turfs = vz.get_turfs()
 
-	// Calculate shuttle bounds and docking port offset
-	var/low_x = world.maxx
-	var/low_y = world.maxy
-	for(var/turf/T in shuttle.linked_area)
-		if(T.x < low_x)
-			low_x = T.x
-		if(T.y < low_y)
-			low_y = T.y
-	var/port_offset_x = shuttle.linked_port.x - low_x
-	var/port_offset_y = shuttle.linked_port.y - low_y
+	var/list/offsets = shuttle.get_docking_port_offset()
+	if(!offsets || offsets.len < 2)
+		return null
+	var/port_offset_x = offsets[1]
+	var/port_offset_y = offsets[2]
 
 	// Get sector boundaries to calculate relative positions
 	var/list/bounds = vz.get_bounds()
@@ -1310,16 +1323,14 @@
 	for(var/turf/T in search_turfs)
 		var/rel_x = T.x - x_min + 1
 		var/rel_y = T.y - y_min + 1
-		if(rel_x > 0 && rel_x <= vz.size_x && rel_y > 0 && rel_y <= vz.size_y)
-			if(!turf_matrix[rel_x])
-				turf_matrix[rel_x] = list()
-			turf_matrix[rel_x][rel_y] = T
+		var/key = "[rel_x],[rel_y]"
+		turf_matrix[key] = T
 
 	// Define safe zone boundaries (accounting for edge buffer and shuttle size)
 	var/safe_x_min = LANDING_ZONE_EDGE_BUFFER + 1
-	var/safe_x_max = vz.size_x - LANDING_ZONE_EDGE_BUFFER - x_dim
+	var/safe_x_max = vz.size_x - LANDING_ZONE_EDGE_BUFFER - x_dim + 1
 	var/safe_y_min = LANDING_ZONE_EDGE_BUFFER + 1
-	var/safe_y_max = vz.size_y - LANDING_ZONE_EDGE_BUFFER - y_dim
+	var/safe_y_max = vz.size_y - LANDING_ZONE_EDGE_BUFFER - y_dim + 1
 
 	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
 		return // Not enough space for safe landing
@@ -1328,14 +1339,16 @@
 	var/list/search_positions = list()
 	for(var/rel_x = safe_x_min; rel_x <= safe_x_max; rel_x++)
 		for(var/rel_y = safe_y_min; rel_y <= safe_y_max; rel_y++)
-			var/turf/T = turf_matrix[rel_x][rel_y]
+			var/key = "[rel_x],[rel_y]"
+			if(!turf_matrix[key])
+				continue
+			var/turf/T = turf_matrix[key]
 			if(T && !iswall(T) && !istype(T, /turf/unsimulated/mineral) && istype(T.loc, /area/planet) && !istype(T, /turf/unsimulated/beach/water) && !istype(T,/turf/unsimulated/floor/planetary/lava))
 				search_positions += T
 
 	// Shuffle the search positions for randomization
 	if(!search_positions.len)
 		return null
-
 	search_positions = shuffle(search_positions)
 
 	// Search through randomized positions
@@ -1348,10 +1361,14 @@
 			for(var/dy = 0; dy < y_dim && found; dy++)
 				var/check_x = rel_x + dx
 				var/check_y = rel_y + dy
-				if(check_x > vz.size_x || check_y > vz.size_y) // Out of sector bounds
+				if(check_x < 1 || check_x > vz.size_x || check_y < 1 || check_y > vz.size_y) // Out of sector bounds
 					found = FALSE
 					continue
-				var/turf/target = turf_matrix[check_x][check_y]
+				var/check_key = "[check_x],[check_y]"
+				if(!turf_matrix[check_key]) // Check if turf exists at this coordinate
+					found = FALSE
+					continue
+				var/turf/target = turf_matrix[check_key]
 				if(!target || !istype(target, T.type))
 					found = FALSE
 
@@ -1366,8 +1383,6 @@
 			var/port_dir = turn(shuttle.linked_port.dir, 180)
 
 			return list("bottom_left" = T, "port_turf" = port_turf, "port_dir" = port_dir)
-
-	return
 
 /datum/landing_zone/proc/spawn_warnings()
 	clear_warnings()

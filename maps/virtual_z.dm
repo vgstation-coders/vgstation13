@@ -13,6 +13,7 @@
 
 	var/list/area/areas = list()
 	var/list/shuttle_landing_zones = list()
+	var/datum/shuttle/linked_shuttle = null // If this virtual z-level is a transit area, the shuttle it's linked to
 
 	var/placed_ruin = null
 	var/list/placed_ruins = list()
@@ -47,7 +48,7 @@
 	parent_z.virtual_z_levels |= src
 	map.vLevels |= src
 	id = map.vLevels.len
-	var/list/turf/turfs = get_turfs(FALSE)
+	var/list/turf/turfs = get_turfs()
 	for(var/turf/T in turfs)
 		if(!T)
 			continue
@@ -69,14 +70,8 @@
 		"y_max" = y_offset + size_y - 1
 	)
 
-/datum/virtual_z/proc/get_turfs(var/fast = TRUE)
-	var/list/turf/turfs = list()
-	if(fast)
-		for(var/area/A in areas)
-			turfs += A.area_turfs
-	else
-		turfs = block(locate(x_offset, y_offset, parent_z.z), locate(x_offset + size_x - 1, y_offset + size_y - 1, parent_z.z))
-	return turfs
+/datum/virtual_z/proc/get_turfs()
+	return block(locate(x_offset, y_offset, parent_z.z), locate(x_offset + size_x - 1, y_offset + size_y - 1, parent_z.z))
 
 /datum/virtual_z/proc/get_mobs()
 	return mobs_in_vlevel(src, FALSE, mob_list)
