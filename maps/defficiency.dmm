@@ -56610,7 +56610,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
 	},
-/obj/structure/disposalpipe/junction{
+/obj/structure/disposalpipe/sortjunction/IAA{
 	dir = 4
 	},
 /turf/simulated/floor,
@@ -56644,10 +56644,8 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 8;
-	icon_state = "pipe-j2";
-	tag = "icon-pipe-j2 (WEST)"
+/obj/structure/disposalpipe/sortjunction/Detective/mirrored{
+	dir = 8
 	},
 /turf/simulated/floor,
 /area/crew_quarters/sleep)
@@ -73233,6 +73231,9 @@
 /obj/machinery/camera{
 	name = "Security Hallway West"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "darkred";
@@ -73245,8 +73246,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/disposalpipe/segment{
-	dir = 2;
-	icon_state = "pipe-c"
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -73273,6 +73273,9 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "darkred";
@@ -73285,6 +73288,10 @@
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 2;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -73299,6 +73306,9 @@
 /obj/item/device/radio/intercom{
 	name = "Station Intercom (General)";
 	pixel_y = 22
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -74069,15 +74079,16 @@
 	},
 /area/security/brig)
 "cKq" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/disposalpipe/segment,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
-	icon_state = "dark"
+	dir = 1;
+	icon_state = "darkred";
+	tag = "icon-darkred (NORTH)"
 	},
 /area/security/brig)
 "cKr" = (
@@ -74108,6 +74119,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -75015,11 +75027,11 @@
 	},
 /area/security/brig)
 "cLS" = (
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "darkred";
@@ -75030,13 +75042,13 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "darkred";
@@ -75045,13 +75057,12 @@
 /area/security/brig)
 "cLU" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
-/obj/structure/disposalpipe/junction{
-	dir = 1;
-	icon_state = "pipe-y"
-	},
 /obj/machinery/alarm{
 	dir = 1;
 	pixel_y = -23
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "darkred";
@@ -75071,12 +75082,10 @@
 	},
 /area/security/brig)
 "cLW" = (
-/obj/structure/disposalpipe/junction{
-	dir = 8;
-	icon_state = "pipe-j2";
-	tag = "icon-pipe-j2 (WEST)"
-	},
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
+/obj/structure/disposalpipe/sortjunction/Warden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "darkred";
 	tag = "icon-darkred"
@@ -75091,10 +75100,11 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/junction{
+	dir = 1;
+	icon_state = "pipe-y"
+	},
 /turf/simulated/floor{
 	icon_state = "darkred";
 	tag = "icon-darkred"
@@ -75106,9 +75116,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/disposalpipe/junction{
-	dir = 8;
-	icon_state = "pipe-j2";
-	tag = "icon-pipe-j2 (WEST)"
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "darkred";
@@ -111140,6 +111148,24 @@
 	icon_state = "whitepurplecorner"
 	},
 /area/science/hallway)
+"puz" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "darkred";
+	tag = "icon-darkred (NORTH)"
+	},
+/area/security/brig)
 "puT" = (
 /obj/structure/lattice,
 /turf/simulated/wall/r_wall,
@@ -242606,7 +242632,7 @@ cEt
 cFZ
 cHx
 cIT
-cKq
+cKr
 cLU
 cNh
 cOO
@@ -243107,7 +243133,7 @@ cCO
 cEu
 cGa
 cHy
-cIU
+cKq
 cKA
 cLV
 cNh
@@ -244111,7 +244137,7 @@ cCM
 czk
 cFY
 cHw
-cJe
+puz
 cKp
 cLT
 cNl
@@ -245115,7 +245141,7 @@ ctl
 ctl
 ctl
 cIY
-cIU
+cKq
 cKA
 cLZ
 cNp
