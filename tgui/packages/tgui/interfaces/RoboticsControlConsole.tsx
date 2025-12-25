@@ -18,6 +18,7 @@ type Cyborg = {
   name: string,
   locked_down: number,
   status: number, // ss13, 0 = alive, etc
+  location: string,
   charge: number,
   module: string,
   master: string,
@@ -141,6 +142,9 @@ const Cyborgs = (props) => {
                       ? 'Locked Down'
                       : 'Nominal'}
                 </Box>
+              </LabeledList.Item>
+              <LabeledList.Item label="Location">
+                {cyborg.location}
               </LabeledList.Item>
               <LabeledList.Item label="Cell Charge">
                 <Box color={cyborg.charge <= 30

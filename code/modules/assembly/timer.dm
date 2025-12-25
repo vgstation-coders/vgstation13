@@ -68,8 +68,13 @@
 	return
 
 /obj/item/device/assembly/timer/proc/timesoundloop(decrement = clamp(SPEEDSUP_SECONDS-time,0,SPEEDSUP_SECONDS)*SPEEDSUP_SECONDS,freq = 1)
+	if (QDELETED(src))
+		// if the timer was destroyed by an explosion while counting down and we came here from a spawn()
+		return
 	if(!silent && timing && time > 0)
-		playsound(src,decrement >= 7 && speedsup == TICK_SPEEDUP ? 'sound/items/assemblytick1.ogg' : 'sound/items/assemblytick2.ogg',100,1,frequency = freq)
+		if (get_turf(src))
+			// in case timer is in nullspace when the spawn comes back
+			playsound(src,decrement >= 7 && speedsup == TICK_SPEEDUP ? 'sound/items/assemblytick1.ogg' : 'sound/items/assemblytick2.ogg',100,1,frequency = freq)
 		spawn(max(1,10 - decrement))
 			if(speedsup && time <= SPEEDSUP_SECONDS)
 				decrement++
@@ -81,7 +86,7 @@
 			timesoundloop(decrement,freq)
 
 /obj/item/device/assembly/timer/proc/countdown()
-	if (QDELETED(src) || QDELETED(holder))
+	if (QDELETED(src))
 		// if the timer was destroyed by an explosion while counting down and we came here from a spawn()
 		return
 	if(timing)

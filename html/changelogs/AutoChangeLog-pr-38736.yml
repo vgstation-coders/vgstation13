@@ -1,8 +1,0 @@
-author: west3436
-delete-after: true
-changes:
-- bugfix: Fixed turfs changed on shuttles after roundstart aren't changed into /turf/space
-    on movement.
-- bugfix: Fixed incorrect exploration lockdown timing.
-- bugfix: Fixed the incorrectly-typed docking port on Deff preventing the Exploration
-    Shuttle from working.

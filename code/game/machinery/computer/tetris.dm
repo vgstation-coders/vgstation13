@@ -40,7 +40,7 @@ var/list/deleted_machines_tetris_highscores = list()
 	return ..()
 
 /obj/machinery/computer/tetris/initialize()
-	leaderboard_init = SSpersistence_misc.read_data(/datum/persistence_task/highscores/tetris)
+	leaderboard_init = SSpersistence_tasks.read_data(/datum/persistence_task/highscores/tetris)
 	return ..()
 
 /obj/machinery/computer/tetris/Destroy()
