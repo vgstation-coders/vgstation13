@@ -10158,14 +10158,11 @@
 /turf/simulated/floor/plating,
 /area/medical/genetics)
 "auL" = (
-/obj/item/weapon/storage/firstaid/o2{
-	pixel_x = 2;
-	pixel_y = 6
-	},
-/obj/item/weapon/storage/firstaid/regular,
 /obj/structure/table/glass,
 /obj/item/weapon/reagent_containers/spray/cleaner{
-	name = "Medbay Cleaner"
+	name = "Medbay Cleaner";
+	pixel_y = 6;
+	pixel_x = 3
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -11728,12 +11725,6 @@
 	icon_state = "dark";
 	tag = "icon-dark (NORTH)"
 	},
-/area/medical/genetics)
-"axS" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/turf/simulated/wall,
 /area/medical/genetics)
 "axT" = (
 /obj/structure/cable/yellow{
@@ -18823,10 +18814,8 @@
 /obj/machinery/vending/wallmed2{
 	pixel_x = -28
 	},
-/obj/item/stack/medical/advanced/bruise_pack,
-/obj/item/tool/cautery{
-	pixel_x = 4
-	},
+/obj/item/tool/bonegel,
+/obj/item/tool/circular_saw,
 /turf/simulated/floor{
 	icon_state = "dark floor full";
 	tag = "icon-dark floor full"
@@ -18845,13 +18834,15 @@
 	},
 /area/medical/surgery)
 "aKm" = (
-/obj/item/tool/bonesetter,
-/obj/item/tool/bonegel,
 /obj/machinery/camera{
 	name = "Surgery Operating";
 	pixel_x = 22
 	},
 /obj/structure/table/glass,
+/obj/item/stack/medical/advanced/bruise_pack{
+	pixel_x = -3;
+	pixel_y = 4
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark floor stripe";
@@ -19670,7 +19661,6 @@
 /area/science/storage)
 "aLJ" = (
 /obj/structure/table/reinforced,
-/obj/machinery/computer/med_data/laptop,
 /turf/simulated/floor{
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy"
@@ -19686,8 +19676,11 @@
 	},
 /area/science/storage)
 "aLM" = (
-/obj/item/tool/retractor,
 /obj/structure/table/glass,
+/obj/item/tool/FixOVein,
+/obj/item/tool/cautery{
+	pixel_x = 4
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark floor stripe";
@@ -20767,8 +20760,8 @@
 	},
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup{
 	desc = "Kingston's personal cup.";
-	pixel_y = 8;
-	pixel_x = -5
+	pixel_y = 9;
+	pixel_x = -3
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/item/ashtray/glass{
@@ -20806,11 +20799,11 @@
 /obj/item/tool/scalpel{
 	pixel_y = 12
 	},
-/obj/item/tool/circular_saw,
 /obj/structure/table/glass,
 /obj/machinery/light{
 	dir = 8
 	},
+/obj/item/tool/retractor,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark floor stripe";
@@ -21073,11 +21066,6 @@
 	dir = 4
 	},
 /obj/machinery/holosign/morgue,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -21653,9 +21641,7 @@
 /turf/simulated/floor/engine,
 /area/science/telescience)
 "aPf" = (
-/obj/structure/dispenser{
-	pixel_x = -1
-	},
+/obj/structure/dispenser/oxygen,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark_navy";
@@ -21667,6 +21653,7 @@
 "aPg" = (
 /obj/item/tool/hemostat,
 /obj/structure/table/glass,
+/obj/item/tool/bonesetter,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark floor stripe";
@@ -22488,8 +22475,6 @@
 	name = "Overflow Surgery"
 	})
 "aQJ" = (
-/obj/item/tool/surgicaldrill,
-/obj/item/tool/FixOVein,
 /obj/structure/table/glass,
 /obj/machinery/light_switch{
 	dir = 4;
@@ -22498,6 +22483,10 @@
 	},
 /obj/item/device/radio/intercom/medbay{
 	pixel_x = -30
+	},
+/obj/item/tool/surgicaldrill{
+	pixel_x = 4;
+	pixel_y = 6
 	},
 /turf/simulated/floor{
 	icon_state = "dark floor full";
@@ -23493,7 +23482,8 @@
 	req_one_access_txt = "500;39"
 	},
 /turf/simulated/floor{
-	icon_state = "dark"
+	icon_state = "dark_navy_full";
+	tag = "icon-dark_navy_full"
 	},
 /area/medical/surgery_ghetto{
 	name = "Overflow Surgery"
@@ -23665,6 +23655,15 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
+	},
+/obj/machinery/door_control{
+	desc = "A remote control switch for the medbay foyer.";
+	id_tag = "MedbayFoyerL";
+	name = "Medbay Doors Control";
+	normaldoorcontrol = 1;
+	pixel_x = -15;
+	pixel_y = -24;
+	req_access_txt = "5"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -24651,7 +24650,6 @@
 	id_tag = "MedbayFoyerL";
 	name = "Medbay Exit Button";
 	normaldoorcontrol = 1;
-	pixel_y = -8;
 	range = 3;
 	pixel_x = 26
 	},
@@ -24662,12 +24660,12 @@
 /area/medical/medbay)
 "aUv" = (
 /obj/item/weapon/paper_bin/white{
-	pixel_x = 7;
+	pixel_x = -5;
 	pixel_y = 9
 	},
 /obj/structure/table/reinforced,
 /obj/item/weapon/pen{
-	pixel_x = 6;
+	pixel_x = -3;
 	pixel_y = 2
 	},
 /turf/simulated/floor{
@@ -24676,15 +24674,6 @@
 	},
 /area/medical/medbay2)
 "aUw" = (
-/obj/machinery/door_control{
-	desc = "A remote control switch for the medbay foyer.";
-	id_tag = "MedbayFoyerL";
-	name = "Medbay Doors Control";
-	normaldoorcontrol = 1;
-	pixel_x = 28;
-	pixel_y = 10;
-	req_access_txt = "5"
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/disposalpipe/segment,
 /obj/machinery/door/table/reinforced{
@@ -25493,6 +25482,10 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
 	on = 1
+	},
+/obj/machinery/computer/med_data/laptop{
+	pixel_y = -25;
+	pixel_x = 5
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -33298,6 +33291,11 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor/plating,
 /area/medical/paramedics)
 "bjL" = (
@@ -220432,7 +220430,7 @@ aei
 ate
 aCY
 aCY
-axS
+aCY
 aCY
 aCY
 aCY
