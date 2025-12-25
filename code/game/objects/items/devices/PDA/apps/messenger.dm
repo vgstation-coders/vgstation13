@@ -361,13 +361,13 @@
 	price = 0
 	icon = "pda_mail"
 	var/send_poll = FALSE
+	var/static/list/multimessage_department_list = list("Security","Engineering","Medical","Research","Cargo","Service","Everyone")
 
 /datum/pda_app/multimessage/get_dat(var/mob/user)
 	var/dat = ""
 	dat += {"<h4><span class='pda_icon pda_mail'></span> MultiMessenger V2.0.6</h4>
 			<a href='byond://?src=\ref[src];togglePoll=1'><span class='pda_icon pda_mail'></span> Poll creation: [send_poll ? "On" : "Off"]</a><br>
 			<h4><span class='pda_icon pda_menu'></span> Select Department</h4><ul>"}
-	var/static/list/multimessage_department_list = list("Security","Engineering","Medical","Research","Cargo","Service","Everyone")
 	for (var/dept_name in multimessage_department_list)
 		dat += "<li><a href='byond://?src=\ref[src];multicast=[dept_name]'>[dept_name]</a></li>"
 	dat += "</ul>"
