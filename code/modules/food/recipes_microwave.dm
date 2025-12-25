@@ -2847,16 +2847,13 @@
 
 /datum/recipe/ijzerkoekje
 	reagents = list(FLOUR = 30, IRON = 30)
-	result = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy
+	result = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
 
-/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy
-	name = "Helper Dummy"
-	desc = "You should never see this text."
-
-/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy/New()
-	for(var/i = 1 to 6)
-		new /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje(get_turf(src))
-	qdel(src)
+/datum/recipe/ijzerkoekje/make_food(obj/container, mob/user)
+	// fixing a buggy old hack, dont ask any questions
+	for (var/i = 1 to 5)
+		new result(get_turf(container))
+	return ..()
 
 /datum/recipe/pimiento
 	items = list(

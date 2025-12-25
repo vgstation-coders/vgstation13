@@ -229,3 +229,58 @@
 	max_icon_states = 0
 	edge_flags = EDGE_CARDINAL|EDGE_OUTER_DIAGONAL
 	edge_priority = SAND_EDGE_PRIORITY
+
+///////// Gas Vents /////////
+var/list/datum/vent/gas_vents = list() // Global list of all gas vents
+
+/datum/vent
+	var/overlay_icon = 'icons/turf/overlays.dmi'
+	var/overlay_state = "vent"
+	var/gas_type = GAS_OXYGEN
+	var/datum/weakref/turf_ref
+	var/icon/gas_overlay
+	var/mols
+	var/initial_mols // The original amount of mols when the vent was created
+
+/datum/vent/New(var/turf)
+	..()
+	mols = rand(10,50) * MOLES_CELLSTANDARD
+	initial_mols = mols
+	gas_vents += src
+	turf_ref = makeweakref(turf)
+	var/turf/unsimulated/T = turf_ref.get()
+	if(!istype(T))
+		T = null
+		Destroy()
+		return
+	gas_type = pickweight(T.planet.vent_types)
+	var/particle_color = "#808080ff"
+	switch(gas_type)
+		if(GAS_OXYGEN)
+			particle_color = "#808080ff"
+		if(GAS_PLASMA)
+			particle_color = "#B233CCff"
+		if(GAS_SLEEPING)
+			particle_color = "#FFFFFFff"
+		if(GAS_CARBON)
+			particle_color = "#808080ff"
+		if(GAS_NITROGEN)
+			particle_color = "#808080ff"
+		if(GAS_CRYOTHEUM)
+			particle_color = "#50AFDEff"
+		if(GAS_RADON)
+			particle_color = "#629700ff"
+	gas_overlay = icon(overlay_icon, overlay_state)
+	T.overlays += gas_overlay
+	T.add_particles(PS_GAS_VENT)
+	T.adjust_particles(PS_GAS_VENT, PVAR_COLOR, particle_color)
+	T = null
+
+/datum/vent/Destroy()
+	gas_vents -= src
+	var/turf/unsimulated/T = turf_ref.get()
+	if(istype(T))
+		T.overlays -= gas_overlay
+		T.remove_particles(PS_GAS_VENT)
+	T = null
+	..()

@@ -12499,10 +12499,7 @@
 	dir = 6;
 	tag = ""
 	},
-/obj/structure/disposalpipe/segment{
-	dir = 4;
-	icon_state = "pipe-c"
-	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "aIs" = (
@@ -12518,9 +12515,9 @@
 	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,
-/obj/structure/disposalpipe/junction{
-	dir = 4;
-	icon_state = "pipe-j2"
+/obj/structure/disposalpipe/segment{
+	dir = 1;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
@@ -23754,9 +23751,8 @@
 	icon_state = "0-2";
 	pixel_y = 1
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 8;
-	icon_state = "pipe-j2"
+/obj/structure/disposalpipe/sortjunction/Detective/mirrored{
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -32828,6 +32824,12 @@
 	icon_state = "carpet"
 	},
 /area/centcom/living)
+"cyP" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/maintenance/fsmaint)
 "cyW" = (
 /turf/simulated/floor/asteroid/air,
 /area/security/perma)
@@ -33494,6 +33496,17 @@
 	icon_state = "dark"
 	},
 /area/science/hallway)
+"cHZ" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/structure/disposalpipe/sortjunction/IAA,
+/turf/simulated/floor/plating,
+/area/maintenance/fsmaint)
 "cIh" = (
 /obj/machinery/door/window{
 	dir = 2;
@@ -39038,10 +39051,7 @@
 	name = "Toxins"
 	})
 "eif" = (
-/obj/structure/disposalpipe/junction{
-	dir = 2;
-	icon_state = "pipe-j2"
-	},
+/obj/structure/disposalpipe/sortjunction/Warden/mirrored,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -76275,6 +76285,13 @@
 	icon_state = "dark"
 	},
 /area/security/main)
+"oIb" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor/plating,
+/area/maintenance/fsmaint)
 "oIe" = (
 /obj/structure/sign/securearea,
 /turf/simulated/wall/r_wall,
@@ -250837,7 +250854,7 @@ aDx
 aDx
 aDx
 arV
-acK
+oIb
 aIq
 aiv
 aiv
@@ -251339,8 +251356,8 @@ aDv
 aBo
 aDv
 arV
-acK
-aqj
+cyP
+aqh
 aJt
 aJt
 aJt
@@ -251841,7 +251858,7 @@ aDy
 aEw
 aFj
 aGB
-aiv
+cHZ
 aIs
 aJt
 aKb

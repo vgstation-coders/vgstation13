@@ -4806,9 +4806,6 @@
 	pixel_y = 1
 	},
 /obj/structure/window/full/reinforced,
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
 /turf/simulated/floor/plating,
 /area/security/hos)
 "ahI" = (
@@ -5316,7 +5313,6 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/disposalpipe/segment,
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
 /area/security/hos)
@@ -6453,7 +6449,6 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/disposalpipe/segment,
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
 /area/security/hos)
@@ -7053,7 +7048,6 @@
 	dir = 4
 	},
 /obj/structure/cable/yellow,
-/obj/structure/disposalpipe/segment,
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
 /area/security/hos)
@@ -8398,14 +8392,8 @@
 	dir = 4;
 	pixel_x = -22
 	},
-/obj/structure/table,
-/obj/item/weapon/paper_bin/red{
-	pixel_x = -3;
-	pixel_y = 7
-	},
-/obj/item/weapon/pen,
-/obj/item/weapon/folder/red,
-/obj/item/weapon/stamp/warden,
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -8445,6 +8433,12 @@
 	dir = 4
 	},
 /obj/item/weapon/folder/red,
+/obj/item/weapon/paper_bin/red{
+	pixel_x = -3;
+	pixel_y = 7
+	},
+/obj/item/weapon/stamp/warden,
+/obj/item/weapon/pen,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -8982,6 +8976,7 @@
 	dir = 4;
 	name = "Firelock East"
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "red"
@@ -9304,10 +9299,17 @@
 	dir = 4;
 	name = "Firelock East"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 1;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor,
 /area/security/brig)
 "apj" = (
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor,
 /area/security/brig)
 "apk" = (
@@ -9319,12 +9321,16 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor,
 /area/security/brig)
 "apl" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /obj/structure/disposalpipe/segment{
-	dir = 4
+	dir = 4;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor,
 /area/security/brig)
@@ -9337,7 +9343,7 @@
 	name = "Firelock West"
 	},
 /obj/structure/disposalpipe/segment{
-	dir = 4;
+	dir = 2;
 	icon_state = "pipe-c"
 	},
 /turf/simulated/floor,
@@ -9945,6 +9951,10 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 8;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor{
 	icon_state = "red"
 	},
@@ -9962,9 +9972,8 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/structure/disposalpipe/segment{
-	dir = 8;
-	icon_state = "pipe-c"
+/obj/structure/disposalpipe/sortjunction/Warden/mirrored{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "red"
@@ -13247,6 +13256,8 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk,
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -13723,6 +13734,7 @@
 	name = "Firelock North"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor/plating,
 /area/security/detectives_office)
 "awp" = (
@@ -14130,6 +14142,7 @@
 /area/hallway/primary/fore)
 "awV" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "red"
@@ -14718,6 +14731,10 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 1;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor,
 /area/hallway/primary/fore)
 "ayf" = (
@@ -14736,20 +14753,35 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor,
 /area/hallway/primary/fore)
 "ayh" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor,
-/area/hallway/primary/fore)
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/disposalpipe/sortjunction/Chapel{
+	dir = 4;
+	icon_state = "pipe-j2s"
+	},
+/turf/simulated/floor/plating,
+/area/maintenance/fsmaint2)
 "ayi" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/hallway/primary/fore)
@@ -14760,6 +14792,9 @@
 "ayk" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/hallway/primary/fore)
@@ -14772,6 +14807,9 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor,
 /area/hallway/primary/fore)
 "aym" = (
@@ -14782,7 +14820,9 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1
 	},
-/obj/structure/disposalpipe/segment,
+/obj/structure/disposalpipe/sortjunction/Detective/mirrored{
+	dir = 1
+	},
 /turf/simulated/floor,
 /area/hallway/primary/fore)
 "ayo" = (
@@ -18302,6 +18342,9 @@
 /obj/effect/landmark/start{
 	name = "Internal Affairs Agent"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -18311,6 +18354,10 @@
 	pixel_x = -30;
 	phone_name = "Law Office"
 	},
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -18319,6 +18366,9 @@
 /obj/structure/table/reinforced,
 /obj/item/weapon/folder,
 /obj/item/weapon/folder,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -18332,6 +18382,9 @@
 /obj/item/device/camera{
 	pixel_x = 3;
 	pixel_y = -4
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "cult"
@@ -18348,6 +18401,9 @@
 	},
 /obj/effect/landmark/start{
 	name = "Internal Affairs Agent"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "cult"
@@ -19437,9 +19493,7 @@
 	name = "Fore Primary Hallway"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/disposalpipe/junction{
-	dir = 1
-	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "redcorner"
@@ -19456,13 +19510,6 @@
 	dir = 4;
 	icon_state = "redcorner"
 	},
-/area/hallway/primary/fore)
-"aIe" = (
-/obj/structure/disposalpipe/segment{
-	dir = 2;
-	icon_state = "pipe-c"
-	},
-/turf/simulated/floor,
 /area/hallway/primary/fore)
 "aIf" = (
 /obj/structure/closet/secure_closet/personal,
@@ -20129,15 +20176,14 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aJD" = (
-/obj/structure/disposalpipe/sortjunction/Security{
-	dir = 4;
-	icon_state = "pipe-j2s"
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/structure/disposalpipe/sortjunction/GenSecurity/mirrored{
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -20172,14 +20218,13 @@
 	},
 /area/hallway/primary/fore)
 "aJG" = (
-/obj/structure/disposalpipe/sortjunction/HoS{
-	dir = 4;
-	icon_state = "pipe-j2s"
-	},
 /obj/structure/cable/yellow{
 	d1 = 2;
 	d2 = 8;
 	icon_state = "2-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/hallway/primary/fore)
@@ -24049,15 +24094,12 @@
 /area/maintenance/fsmaint2)
 "aSB" = (
 /obj/structure/disposalpipe/segment{
-	dir = 4
+	dir = 4;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
 "aSC" = (
-/obj/structure/disposalpipe/segment{
-	dir = 4;
-	icon_state = "pipe-c"
-	},
 /obj/machinery/power/apc{
 	dir = 1;
 	pixel_y = 24
@@ -24825,14 +24867,13 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/structure/disposalpipe/sortjunction/Chapel{
-	dir = 4;
-	icon_state = "pipe-j2s"
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 8;
 	icon_state = "1-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
@@ -31280,6 +31321,7 @@
 /area/bridge)
 "bhf" = (
 /obj/machinery/computer/security/engineering,
+/obj/machinery/computer/gas_extraction,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -95343,6 +95385,23 @@
 /obj/docking_port/destination/syndicate/commssat,
 /turf/space,
 /area)
+"dGD" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/window/full/reinforced,
+/obj/structure/disposalpipe/segment,
+/turf/simulated/floor/plating,
+/area/security/warden)
 "dJs" = (
 /obj/effect/landmark/map_element/deepspaceruin,
 /turf/space,
@@ -114926,6 +114985,14 @@
 "ira" = (
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
+"isE" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "cult"
+	},
+/area/lawoffice)
 "itc" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -115434,6 +115501,15 @@
 	tag = "icon-showroomfloor (NORTH)"
 	},
 /area/storage/art)
+"oiQ" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 1
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/security/brig)
 "orE" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/sign/biohazard,
@@ -115716,6 +115792,16 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
+"qMf" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/security/brig)
 "qOn" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -115848,6 +115934,26 @@
 	icon_state = "toxstorage";
 	name = "Toxins Storage"
 	})
+"rOH" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "lawyer_blast";
+	name = "Privacy Shutters";
+	opacity = 0
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/lawoffice)
 "rRp" = (
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor{
@@ -115906,6 +116012,16 @@
 	icon_state = "white"
 	},
 /area/medical/virology)
+"snz" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/sortjunction/IAA/mirrored{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "red"
+	},
+/area/hallway/primary/fore)
 "ssc" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -218909,7 +219025,7 @@ ats
 avC
 arR
 nKb
-ayh
+aBX
 aYU
 vJD
 aBC
@@ -220917,7 +221033,7 @@ auP
 avD
 ang
 awU
-ayh
+aBX
 aza
 obs
 obs
@@ -221419,7 +221535,7 @@ arj
 arj
 arj
 awZ
-ayj
+bUK
 aze
 aAr
 aBF
@@ -221921,7 +222037,7 @@ auR
 atx
 aws
 axb
-ayh
+aBX
 azg
 awr
 aBG
@@ -222423,7 +222539,7 @@ auQ
 avE
 aws
 axa
-ayh
+aBX
 azf
 aAs
 aAs
@@ -223427,7 +223543,7 @@ auS
 avF
 aws
 axc
-ayh
+aBX
 azh
 aAs
 aBH
@@ -223929,7 +224045,7 @@ aqC
 aqC
 aws
 axf
-ayh
+aBX
 azk
 aAu
 aBJ
@@ -224431,7 +224547,7 @@ auU
 avH
 aoS
 axe
-ayh
+aBX
 azj
 aAs
 aBI
@@ -224933,7 +225049,7 @@ auW
 avI
 aoS
 awU
-ayh
+aBX
 azm
 aAv
 aAv
@@ -225435,7 +225551,7 @@ auV
 asP
 aoS
 awU
-ayh
+aBX
 azl
 aAs
 aAs
@@ -226439,7 +226555,7 @@ asc
 asR
 aoS
 awU
-ayh
+aBX
 azn
 aAw
 aBK
@@ -226927,7 +227043,7 @@ alw
 amf
 amO
 any
-akN
+dGD
 aoD
 api
 apW
@@ -226941,7 +227057,7 @@ ase
 asU
 aoS
 awU
-ayh
+aBX
 azn
 aAw
 aBN
@@ -227431,7 +227547,7 @@ amO
 anx
 aof
 aoB
-apd
+apo
 apV
 aqG
 arv
@@ -227443,7 +227559,7 @@ aup
 avK
 awt
 awU
-ayh
+aBX
 azp
 aAw
 aBM
@@ -227933,7 +228049,7 @@ amQ
 anA
 akP
 aoF
-apd
+apo
 apY
 aqI
 ary
@@ -227945,7 +228061,7 @@ asV
 avL
 awv
 awU
-ayh
+aBX
 azr
 aAx
 aBP
@@ -228447,13 +228563,13 @@ asV
 avL
 awu
 awU
-ayh
+aBX
 azq
 aAw
 aBO
 aDt
 aEp
-aDq
+isE
 aHd
 aAw
 aJz
@@ -228949,13 +229065,13 @@ asV
 avM
 awx
 axj
-ayh
+aBX
 azt
 aAw
 aBR
 aDv
 aEs
-aDv
+rOH
 aHf
 aAw
 aJE
@@ -229439,7 +229555,7 @@ amR
 anB
 aog
 aoG
-apf
+qMf
 apZ
 aqJ
 arx
@@ -229457,7 +229573,7 @@ aAy
 aBQ
 aAy
 aEr
-aAy
+snz
 aAy
 aIc
 aJD
@@ -229941,7 +230057,7 @@ amS
 anC
 aoh
 aoJ
-apd
+apo
 aqc
 aqM
 arB
@@ -229961,7 +230077,7 @@ ayd
 ayd
 ayd
 ayd
-aIe
+ayd
 aJG
 aLd
 ayd
@@ -230443,7 +230559,7 @@ alB
 agO
 agO
 aoI
-aph
+oiQ
 aqb
 aqL
 arA
@@ -255572,7 +255688,7 @@ ayB
 aQa
 aqw
 aSB
-aTU
+ayh
 aVs
 aVs
 aVs
