@@ -113,7 +113,7 @@
 // This makes (100*100)/(10*10) = 100 nodes
 
 /datum/map/active/map_specific_init()
-	SSweather.set_climate(/datum/climate/arctic, map.zMainStation)
+	SSweather.set_climate(/datum/climate/arctic, zLevel = map.zMainStation)
 	generate_mapvaults()
 
 	for (var/x = center_x; x <= center_x + center_x/3; x = x + 10)

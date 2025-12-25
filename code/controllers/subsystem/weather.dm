@@ -33,7 +33,9 @@ var/list/precip_state_to_texture = list()
 		return null
 	return get_climate(vz)
 
-/datum/subsystem/weather/proc/set_climate(var/datum/climate/climate_type, var/datum/virtual_z/vz, var/random_start = FALSE)
+/datum/subsystem/weather/proc/set_climate(var/datum/climate/climate_type, var/datum/virtual_z/vz = null, var/datum/zLevel/zLevel = null, var/random_start = FALSE)
+	if(zLevel)
+		vz = zLevel.virtual_z_levels[1]
 	if(!vz)
 		CRASH("Failed to set climate: virtual_z was null.")
 	if(!climate_type)
