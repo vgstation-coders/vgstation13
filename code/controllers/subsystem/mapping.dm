@@ -199,7 +199,7 @@ var/datum/subsystem/mapping/SSmapping
 			while(queue_index <= terrain_queue.len && turfs_processed < target_turfs)
 				var/turf/T = terrain_queue[queue_index]
 				if(T)
-					current_mapgen.generate_turf(T, current_virtual_z.x_offset, current_virtual_z.y_offset)
+					current_mapgen.generate_turf(T, current_virtual_z.x_min, current_virtual_z.y_min)
 					T.planet = current_planet
 				queue_index++
 				turfs_processed++
@@ -559,12 +559,7 @@ var/datum/subsystem/mapping/SSmapping
 	current_mapgen.cave_area.virtual_z_level = current_virtual_z
 
 	// Populate terrain generation queue
-	var/list/vz_bounds = current_virtual_z.get_bounds()
-	var/x1 = vz_bounds["x_min"]
-	var/y1 = vz_bounds["y_min"]
-	var/x2 = vz_bounds["x_max"]
-	var/y2 = vz_bounds["y_max"]
-	terrain_queue = block(locate(x1, y1, current_virtual_z.z()), locate(x2, y2, current_virtual_z.z()))
+	terrain_queue = current_virtual_z.get_turfs()
 
 	// Populate population queue with all sector turfs
 	population_queue = terrain_queue.Copy()
@@ -614,28 +609,28 @@ var/datum/subsystem/mapping/SSmapping
 			tests_passed++
 
 		// Verify bounds calculations
-		var/expected_high_x = vz.low_x + expected_x - 1
-		var/expected_high_y = vz.low_y + expected_y - 1
-		if(vz.high_x != expected_high_x || vz.high_y != expected_high_y)
-			fail_messages += "FAIL: [expected_x]x[expected_y] vz bounds incorrect. Expected high=([expected_high_x],[expected_high_y]), got ([vz.high_x],[vz.high_y])"
+		var/expected_x_max = vz.x_min + expected_x - 1
+		var/expected_y_max = vz.y_min + expected_y - 1
+		if(vz.x_max != expected_x_max || vz.y_max != expected_y_max)
+			fail_messages += "FAIL: [expected_x]x[expected_y] vz bounds incorrect. Expected high=([expected_x_max],[expected_y_max]), got ([vz.x_max],[vz.y_max	])"
 			tests_failed++
 		else
 			tests_passed++
 
-		// Verify coordinate translation - virtual (1,1) should map to world (low_x, low_y)
+		// Verify coordinate translation - virtual (1,1) should map to world (x_min, y_min)
 		var/world_x_1 = vz.x(1)
 		var/world_y_1 = vz.y(1)
-		if(world_x_1 != vz.low_x || world_y_1 != vz.low_y)
-			fail_messages += "FAIL: [expected_x]x[expected_y] vz x(1)/y(1) should be ([vz.low_x],[vz.low_y]), got ([world_x_1],[world_y_1])"
+		if(world_x_1 != vz.x_min || world_y_1 != vz.y_min)
+			fail_messages += "FAIL: [expected_x]x[expected_y] vz x(1)/y(1) should be ([vz.x_min],[vz.y_min]), got ([world_x_1],[world_y_1])"
 			tests_failed++
 		else
 			tests_passed++
 
-		// Verify coordinate translation - virtual (size_x, size_y) should map to world (high_x, high_y)
+		// Verify coordinate translation - virtual (size_x, size_y) should map to world (x_max, y_max)
 		var/world_x_max = vz.x(vz.size_x)
 		var/world_y_max = vz.y(vz.size_y)
-		if(world_x_max != vz.high_x || world_y_max != vz.high_y)
-			fail_messages += "FAIL: [expected_x]x[expected_y] vz x([vz.size_x])/y([vz.size_y]) should be ([vz.high_x],[vz.high_y]), got ([world_x_max],[world_y_max])"
+		if(world_x_max != vz.x_max || world_y_max != vz.y_max)
+			fail_messages += "FAIL: [expected_x]x[expected_y] vz x([vz.size_x])/y([vz.size_y]) should be ([vz.x_max],[vz.y_max]), got ([world_x_max],[world_y_max])"
 			tests_failed++
 		else
 			tests_passed++
@@ -688,7 +683,7 @@ var/datum/subsystem/mapping/SSmapping
 		else
 			tests_failed++
 
-		message_admins("Created [expected_x]x[expected_y] virtual z-level at world ([vz.low_x],[vz.low_y])-([vz.high_x],[vz.high_y]), id=[vz.id]")
+		message_admins("Created [expected_x]x[expected_y] virtual z-level at world ([vz.x_min],[vz.y_min])-([vz.x_max],[vz.y_max]), id=[vz.id]")
 
 	// Test overlapping - verify none of the created vzs overlap
 	for(var/i = 1 to created_vzs.len)
@@ -697,8 +692,8 @@ var/datum/subsystem/mapping/SSmapping
 			var/datum/virtual_z/b = created_vzs[j]
 			if(a.parent_z != b.parent_z)
 				continue
-			var/overlap_x = (a.low_x <= b.high_x) && (a.high_x >= b.low_x)
-			var/overlap_y = (a.low_y <= b.high_y) && (a.high_y >= b.low_y)
+			var/overlap_x = (a.x_min <= b.x_max) && (a.x_max >= b.x_min)
+			var/overlap_y = (a.y_min <= b.y_max) && (a.y_max >= b.y_min)
 			if(overlap_x && overlap_y)
 				fail_messages += "FAIL: Virtual z-levels overlap!"
 				tests_failed++

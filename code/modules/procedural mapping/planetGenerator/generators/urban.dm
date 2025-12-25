@@ -86,19 +86,13 @@
 	var/decay_chance = 20 // Chance for road tiles to be decayed/missing (reduced from 35)
 	var/num_road_segments = rand(8, 15) // Number of road segments to generate
 
-	var/vz_bounds = vz.get_bounds()
-	var/min_x = vz_bounds["x_min"]
-	var/max_x = vz_bounds["x_max"]
-	var/min_y = vz_bounds["y_min"]
-	var/max_y = vz_bounds["y_max"]
-
 	var/list/all_turfs = vz.get_turfs()
 	var/list/road_turfs = list()
 
 	// random walk roads
 	for(var/i = 1; i <= num_road_segments; i++)
-		var/start_x = rand(min_x + 5, max_x - 5)
-		var/start_y = rand(min_y + 5, max_y - 5)
+		var/start_x = rand(vz.x_min + 5, vz.x_max - 5)
+		var/start_y = rand(vz.y_min + 5, vz.y_max - 5)
 
 		var/is_horizontal = prob(50)
 		var/segment_length = rand(20, 50)
@@ -110,10 +104,10 @@
 		// horizontal roads
 		if(is_horizontal)
 			var/current_y = start_y
-			for(var/x = start_x; x < start_x + segment_length && x <= max_x; x++)
+			for(var/x = start_x; x < start_x + segment_length && x <= vz.x_max; x++)
 				if(prob(curve_chance))
 					current_y += pick(-1, 1)
-					current_y = clamp(current_y, min_y, max_y)
+					current_y = clamp(current_y, vz.y_min, vz.y_max)
 
 				for(var/w = 0; w < road_width; w++)
 					var/z_to_use = vz.z()
@@ -135,10 +129,10 @@
 		else
 			// vertical roads
 			var/current_x = start_x
-			for(var/y = start_y; y < start_y + segment_length && y <= max_y; y++)
+			for(var/y = start_y; y < start_y + segment_length && y <= vz.y_max; y++)
 				if(prob(curve_chance))
 					current_x += pick(-1, 1)
-					current_x = clamp(current_x, min_x, max_x)
+					current_x = clamp(current_x, vz.x_min, vz.x_max)
 
 				for(var/w = 0; w < road_width; w++)
 					var/z_to_use = vz.z()
@@ -176,8 +170,8 @@
 		var/building_width = rand(4, 10)
 		var/building_height = rand(4, 10)
 
-		var/building_x = rand(min_x + 10, max_x - building_width - 10)
-		var/building_y = rand(min_y + 10, max_y - building_height - 10)
+		var/building_x = rand(vz.x_min + 10, vz.x_max - building_width - 10)
+		var/building_y = rand(vz.y_min + 10, vz.y_max - building_height - 10)
 
 		var/can_place = TRUE
 		for(var/check_x = building_x - 1; check_x <= building_x + building_width + 1; check_x++)

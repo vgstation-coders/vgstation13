@@ -1313,16 +1313,11 @@
 	var/port_offset_x = offsets[1]
 	var/port_offset_y = offsets[2]
 
-	// Get sector boundaries to calculate relative positions
-	var/list/bounds = vz.get_bounds()
-	var/x_min = bounds["x_min"]
-	var/y_min = bounds["y_min"]
-
 	// Create matrix with relative coordinates
 	var/list/turf_matrix = list()
 	for(var/turf/T in search_turfs)
-		var/rel_x = T.x - x_min + 1
-		var/rel_y = T.y - y_min + 1
+		var/rel_x = T.x - vz.x_min + 1
+		var/rel_y = T.y - vz.y_min + 1
 		var/key = "[rel_x],[rel_y]"
 		turf_matrix[key] = T
 
@@ -1353,8 +1348,8 @@
 
 	// Search through randomized positions
 	for(var/turf/T in search_positions)
-		var/rel_x = T.x - x_min + 1
-		var/rel_y = T.y - y_min + 1
+		var/rel_x = T.x - vz.x_min + 1
+		var/rel_y = T.y - vz.y_min + 1
 		var/found = TRUE
 
 		for(var/dx = 0; dx < x_dim && found; dx++)

@@ -24,12 +24,11 @@
 
 	var/obj/machinery/telecomms/relay/planetary/comms_relay = null
 
-	var/low_x = 0
-	var/high_x = 0
-	var/low_y = 0
-	var/high_y = 0
-	var/x_offset = 0 //x position of first turf in virtual z level
-	var/y_offset = 0 //y position of first turf in virtual z level
+	// Absolute coordinate bounds within the parent z-level
+	var/x_min = 0
+	var/x_max = 0
+	var/y_min = 0
+	var/y_max = 0
 
 /datum/virtual_z/New(var/datum/zLevel/z, var/input_size_x, var/input_size_y, var/input_x = 0, var/input_y = 0)
 	. = ..()
@@ -40,8 +39,10 @@
 	parent_z = z
 	size_x = input_size_x
 	size_y = input_size_y
-	x_offset = input_x
-	y_offset = input_y
+	x_min = input_x
+	y_min = input_y
+	x_max = x_min + size_x - 1
+	y_max = y_min + size_y - 1
 	setup()
 
 /datum/virtual_z/proc/setup()
@@ -55,23 +56,10 @@
 		var/area/A = get_area(T)
 		areas |= A
 		A.virtual_z_level = src
-	var/list/bounds = get_bounds()
-	low_x = bounds["x_min"]
-	high_x = bounds["x_max"]
-	low_y = bounds["y_min"]
-	high_y = bounds["y_max"]
 	make_borders()
 
-/datum/virtual_z/proc/get_bounds()
-	return list(
-		"x_min" = x_offset,
-		"x_max" = x_offset + size_x - 1,
-		"y_min" = y_offset,
-		"y_max" = y_offset + size_y - 1
-	)
-
 /datum/virtual_z/proc/get_turfs()
-	return block(locate(x_offset, y_offset, parent_z.z), locate(x_offset + size_x - 1, y_offset + size_y - 1, parent_z.z))
+	return block(locate(x_min, y_min, parent_z.z), locate(x_max, y_max, parent_z.z))
 
 /datum/virtual_z/proc/get_mobs()
 	return mobs_in_vlevel(src, FALSE, mob_list)
@@ -97,7 +85,7 @@
 		coord = A.x
 	if(!coord)
 		return null
-	return coord - low_x + 1
+	return coord - x_min + 1
 
 //Get virtual y from true y
 /datum/virtual_z/proc/vy(var/atom/A = null, var/coord = null)
@@ -105,7 +93,7 @@
 		coord = A.y
 	if(!coord)
 		return null
-	return coord - low_y + 1
+	return coord - y_min + 1
 
 //Get virtual z from true z
 /datum/virtual_z/proc/vz(var/atom/A)
@@ -113,11 +101,11 @@
 
 //Get true x from virtual x
 /datum/virtual_z/proc/x(var/coord)
-	return coord + low_x - 1
+	return coord + x_min - 1
 
 //Get true y from virtual y
 /datum/virtual_z/proc/y(var/coord)
-	return coord + low_y - 1
+	return coord + y_min - 1
 
 //Get true z from virtual z
 /datum/virtual_z/proc/z()
@@ -130,39 +118,35 @@
 	var/spacing = ALLOCATION_SPACING_DEFAULT
 
 	var/z_level = z()
-	var/x1 = low_x
-	var/y1 = low_y
-	var/x2 = high_x
-	var/y2 = high_y
 
 	// Top - spawn borders if there's any space above
-	if(y2 < world.maxy)
-		for(var/x = max(1, x1 - spacing); x <= min(world.maxx, x2 + spacing); x++)
-			for(var/y = y2 + 1; y <= min(world.maxy, y2 + spacing); y++)
+	if(y_max < world.maxy)
+		for(var/x = max(1, x_min - spacing); x <= min(world.maxx, x_max + spacing); x++)
+			for(var/y = y_max + 1; y <= min(world.maxy, y_max + spacing); y++)
 				var/turf/T = locate(x, y, z_level)
 				if(!istype(T, /turf/unsimulated/border))
 					T.ChangeTurf(/turf/unsimulated/border)
 
 	// Bottom - spawn borders if there's any space below
-	if(y1 > 1)
-		for(var/x = max(1, x1 - spacing); x <= min(world.maxx, x2 + spacing); x++)
-			for(var/y = max(1, y1 - spacing); y < y1; y++)
+	if(y_min > 1)
+		for(var/x = max(1, x_min - spacing); x <= min(world.maxx, x_max + spacing); x++)
+			for(var/y = max(1, y_min - spacing); y < y_min; y++)
 				var/turf/T = locate(x, y, z_level)
 				if(!istype(T, /turf/unsimulated/border))
 					T.ChangeTurf(/turf/unsimulated/border)
 
 	// Left - spawn borders if there's any space to the left
-	if(x1 > 1)
-		for(var/y = y1; y <= y2; y++)
-			for(var/x = max(1, x1 - spacing); x < x1; x++)
+	if(x_min > 1)
+		for(var/y = y_min; y <= y_max; y++)
+			for(var/x = max(1, x_min - spacing); x < x_min; x++)
 				var/turf/T = locate(x, y, z_level)
 				if(!istype(T, /turf/unsimulated/border))
 					T.ChangeTurf(/turf/unsimulated/border)
 
 	// Right - spawn borders if there's any space to the right
-	if(x2 < world.maxx)
-		for(var/y = y1; y <= y2; y++)
-			for(var/x = x2 + 1; x <= min(world.maxx, x2 + spacing); x++)
+	if(x_max < world.maxx)
+		for(var/y = y_min; y <= y_max; y++)
+			for(var/x = x_max + 1; x <= min(world.maxx, x_max + spacing); x++)
 				var/turf/T = locate(x, y, z_level)
 				if(!istype(T, /turf/unsimulated/border))
 					T.ChangeTurf(/turf/unsimulated/border)
@@ -233,11 +217,10 @@
 
 	ruin_to_use.assign_dimensions()
 
-	var/list/bounds = get_bounds()
-	var/safe_x_min = bounds["x_min"] + RUIN_PLACEMENT_PADDING
-	var/safe_x_max = bounds["x_max"] - ruin_to_use.width - RUIN_PLACEMENT_PADDING
-	var/safe_y_min = bounds["y_min"] + RUIN_PLACEMENT_PADDING
-	var/safe_y_max = bounds["y_max"] - ruin_to_use.height - RUIN_PLACEMENT_PADDING
+	var/safe_x_min = x_min + RUIN_PLACEMENT_PADDING
+	var/safe_x_max = x_max - ruin_to_use.width - RUIN_PLACEMENT_PADDING
+	var/safe_y_min = y_min + RUIN_PLACEMENT_PADDING
+	var/safe_y_max = y_max - ruin_to_use.height - RUIN_PLACEMENT_PADDING
 
 	// Ensure we have valid placement area
 	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)

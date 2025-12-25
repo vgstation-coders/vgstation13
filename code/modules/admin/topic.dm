@@ -712,9 +712,8 @@
 		if(!V || !istype(V))
 			to_chat(usr, "<span class='warning'>Invalid virtual z-level reference.</span>")
 			return
-		var/list/bounds = V.get_bounds()
-		var/center_x = round((bounds["x_min"] + bounds["x_max"]) / 2)
-		var/center_y = round((bounds["y_min"] + bounds["y_max"]) / 2)
+		var/center_x = round((V.x_min + V.x_max) / 2)
+		var/center_y = round((V.y_min + V.y_max) / 2)
 		var/turf/T = locate(center_x, center_y, V.z())
 		if(T)
 			usr.forceMove(T)

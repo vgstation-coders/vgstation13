@@ -25,8 +25,8 @@
 	//Now calculate the location of the destination docking port
 	//Docking ports dock like this: [  ][->][<-][  ], so the resulting coordinates will have to be shifted 1 turf in the direction of the shuttle docking port
 	//Otherwise both arrows will be on the same turf
-	var/dest_x = transit_vz.low_x + buffer_space + port_x
-	var/dest_y = transit_vz.low_y + buffer_space + port_y
+	var/dest_x = transit_vz.x_min + buffer_space + port_x
+	var/dest_y = transit_vz.y_min + buffer_space + port_y
 	var/turf/destination_turf = get_step(locate(dest_x, dest_y, transit_vz.z()), shuttle.linked_port.dir)
 
 	var/obj/docking_port/destination/transit/result = new(destination_turf)

@@ -100,7 +100,7 @@
 					<td>[V.id]</td>
 					<td>[V.name] <a href='?_src_=vars;Vars=\ref[V]'>\[VV\]</a></td>
 					<td>[size_name]</td>
-					<td>([V.x_offset], [V.y_offset])</td>
+					<td>([V.x_min], [V.y_min])</td>
 					<td>[planet_name]</td>
 					<td>[mobs_list.len]</td>
 					<td>[players_list.len]</td>

@@ -271,7 +271,7 @@ var/global/list/accessable_z_levels = list()
 
 /datum/zLevel/proc/is_box_free(low_x, low_y, high_x, high_y)
 	for(var/datum/virtual_z/vlevel in virtual_z_levels)
-		if(low_x <= vlevel.high_x && vlevel.low_x <= high_x && low_y <= vlevel.high_y && vlevel.low_y <= high_y)
+		if(low_x <= vlevel.x_max && vlevel.x_min <= high_x && low_y <= vlevel.y_max && vlevel.y_min <= high_y)
 			return FALSE
 	return TRUE
 
@@ -281,9 +281,9 @@ var/global/list/accessable_z_levels = list()
 	var/min_y = 0
 	for(var/datum/virtual_z/vlevel in virtual_z_levels)
 		// Check if we overlap in X (meaning we need Y separation)
-		if(low_x <= vlevel.high_x && vlevel.low_x <= high_x)
+		if(low_x <= vlevel.x_max && vlevel.x_min <= high_x)
 			// Calculate minimum Y to have 'spacing' turfs of gap from this vlevel
-			var/required_y = vlevel.high_y + spacing + 1
+			var/required_y = vlevel.y_max + spacing + 1
 			if(required_y > low_y && required_y > min_y)
 				min_y = required_y
 	return min_y
@@ -294,9 +294,9 @@ var/global/list/accessable_z_levels = list()
 	var/min_x = 0
 	for(var/datum/virtual_z/vlevel in virtual_z_levels)
 		// Check if we overlap in Y (meaning we need X separation)
-		if(low_y <= vlevel.high_y && vlevel.low_y <= high_y)
+		if(low_y <= vlevel.y_max && vlevel.y_min <= high_y)
 			// Calculate minimum X to have 'spacing' turfs of gap from this vlevel
-			var/required_x = vlevel.high_x + spacing + 1
+			var/required_x = vlevel.x_max + spacing + 1
 			if(required_x > low_x && required_x > min_x)
 				min_x = required_x
 	return min_x

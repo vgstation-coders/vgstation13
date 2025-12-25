@@ -1139,7 +1139,7 @@ its easier to just keep the beam vertical.
 	for(var/datum/virtual_z/VV in map.vLevels)
 		if(T.z != VV.z())
 			continue
-		if(T.x >= VV.low_x && T.x <= VV.high_x && T.y >= VV.low_y && T.y <= VV.high_y)
+		if(T.x >= VV.x_min && T.x <= VV.x_max && T.y >= VV.y_min && T.y <= VV.y_max)
 			V = VV
 			break
 	return V
