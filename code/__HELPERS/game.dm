@@ -352,7 +352,7 @@
 	return mobs_found
 
 /proc/mobs_in_vlevel(var/datum/virtual_z/vz, var/client_needed=FALSE, var/moblist=mob_list)
-	if(vz.size == ALLOCATION_FULL)
+	if(vz.size_x == ALLOCATION_FULL && vz.size_y == ALLOCATION_FULL)
 		return mobs_in_zlevel(vz.z(), client_needed, moblist)
 	var/list/mobs_found = list()
 	var/list/turf/turfs = vz.get_turfs()

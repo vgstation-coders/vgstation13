@@ -883,8 +883,8 @@
 		var/datum/planet_type/planet = locate(href_list["procgen_jump"])
 		if(planet?.v)
 			var/datum/virtual_z/vz = planet.v
-			var/center_x = vz.x(coord = vz.size/2)
-			var/center_y = vz.y(coord = vz.size/2)
+			var/center_x = vz.x(coord = vz.size_x/2)
+			var/center_y = vz.y(coord = vz.size_y/2)
 			var/turf/jump_target = locate(center_x, center_y, vz.z())
 			if(jump_target)
 				SendAdminGhostTo(jump_target, null)

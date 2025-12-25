@@ -80,17 +80,20 @@
 			for(var/datum/virtual_z/V in Z.virtual_z_levels)
 				var/planet_name = V.planet ? V.planet.name : "<span class='no-vlevels'>None</span>"
 				var/size_name = "Unknown"
-				switch(V.size)
-					if(ALLOCATION_SMALL)
-						size_name = "Small"
-					if(ALLOCATION_MEDIUM)
-						size_name = "Medium"
-					if(ALLOCATION_LARGE)
-						size_name = "Large"
-					if(ALLOCATION_FULL)
-						size_name = "Full"
-					else
-						size_name = "[V.size]"
+				if(V.size_x == ALLOCATION_FULL && V.size_y == ALLOCATION_FULL)
+					size_name = "Full"
+				else if(V.size_x == V.size_y)
+					switch(V.size_x)
+						if(ALLOCATION_SMALL)
+							size_name = "Small"
+						if(ALLOCATION_MEDIUM)
+							size_name = "Medium"
+						if(ALLOCATION_LARGE)
+							size_name = "Large"
+						else
+							size_name = "[V.size_x]"
+				else
+					size_name = "[V.size_x]x[V.size_y]"
 				var/list/mobs_list = V.get_mobs()
 				var/list/players_list = V.get_players()
 				dat += {"<tr>

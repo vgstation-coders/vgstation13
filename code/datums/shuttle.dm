@@ -1306,17 +1306,20 @@
 	var/y_min = bounds["y_min"]
 
 	// Create matrix with relative coordinates
-	var/datum/turf_matrix[vz.size][vz.size]
+	var/list/turf_matrix = list()
 	for(var/turf/T in search_turfs)
 		var/rel_x = T.x - x_min + 1
 		var/rel_y = T.y - y_min + 1
-		turf_matrix[rel_x][rel_y] = T
+		if(rel_x > 0 && rel_x <= vz.size_x && rel_y > 0 && rel_y <= vz.size_y)
+			if(!turf_matrix[rel_x])
+				turf_matrix[rel_x] = list()
+			turf_matrix[rel_x][rel_y] = T
 
 	// Define safe zone boundaries (accounting for edge buffer and shuttle size)
 	var/safe_x_min = LANDING_ZONE_EDGE_BUFFER + 1
-	var/safe_x_max = vz.size - LANDING_ZONE_EDGE_BUFFER - x_dim
+	var/safe_x_max = vz.size_x - LANDING_ZONE_EDGE_BUFFER - x_dim
 	var/safe_y_min = LANDING_ZONE_EDGE_BUFFER + 1
-	var/safe_y_max = vz.size - LANDING_ZONE_EDGE_BUFFER - y_dim
+	var/safe_y_max = vz.size_y - LANDING_ZONE_EDGE_BUFFER - y_dim
 
 	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
 		return // Not enough space for safe landing
@@ -1345,7 +1348,7 @@
 			for(var/dy = 0; dy < y_dim && found; dy++)
 				var/check_x = rel_x + dx
 				var/check_y = rel_y + dy
-				if(check_x > vz.size || check_y > vz.size) // Out of sector bounds
+				if(check_x > vz.size_x || check_y > vz.size_y) // Out of sector bounds
 					found = FALSE
 					continue
 				var/turf/target = turf_matrix[check_x][check_y]

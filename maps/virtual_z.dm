@@ -7,7 +7,8 @@
 /datum/virtual_z
 	var/name = "Virtual Z-Level"
 	var/id = 0
-	var/size = ALLOCATION_SMALL
+	var/size_x = ALLOCATION_SMALL
+	var/size_y = ALLOCATION_SMALL
 	var/datum/zLevel/parent_z
 
 	var/list/area/areas = list()
@@ -29,14 +30,15 @@
 	var/x_offset = 0 //x position of first turf in virtual z level
 	var/y_offset = 0 //y position of first turf in virtual z level
 
-/datum/virtual_z/New(var/datum/zLevel/z, var/input_size, var/input_x = 0, var/input_y = 0)
+/datum/virtual_z/New(var/datum/zLevel/z, var/input_size_x, var/input_size_y, var/input_x = 0, var/input_y = 0)
 	. = ..()
 	if(!z)
 		CRASH("Tried creating a virtual zLevel without a parent zLevel!")
 	if(!SSmapping)
 		CRASH("Tried creating a virtual zLevel before SSmapping was ready!")
 	parent_z = z
-	size = input_size
+	size_x = input_size_x
+	size_y = input_size_y
 	x_offset = input_x
 	y_offset = input_y
 	setup()
@@ -62,9 +64,9 @@
 /datum/virtual_z/proc/get_bounds()
 	return list(
 		"x_min" = x_offset,
-		"x_max" = x_offset + size - 1,
+		"x_max" = x_offset + size_x - 1,
 		"y_min" = y_offset,
-		"y_max" = y_offset + size - 1
+		"y_max" = y_offset + size_y - 1
 	)
 
 /datum/virtual_z/proc/get_turfs(var/fast = TRUE)
@@ -73,7 +75,7 @@
 		for(var/area/A in areas)
 			turfs += A.area_turfs
 	else
-		turfs = block(locate(x_offset, y_offset, parent_z.z), locate(x_offset + size - 1, y_offset + size - 1, parent_z.z))
+		turfs = block(locate(x_offset, y_offset, parent_z.z), locate(x_offset + size_x - 1, y_offset + size_y - 1, parent_z.z))
 	return turfs
 
 /datum/virtual_z/proc/get_mobs()
@@ -96,19 +98,19 @@
 //////////////////////////////////////
 //Get virtual x from true x
 /datum/virtual_z/proc/vx(var/atom/A = null, var/coord = null)
-	if(coord)
-		return coord - x_offset + 1
-	if(!A)
+	if(A)
+		coord = A.x
+	if(!coord)
 		return null
-	return A.x - x_offset + 1
+	return coord - low_x + 1
 
 //Get virtual y from true y
 /datum/virtual_z/proc/vy(var/atom/A = null, var/coord = null)
-	if(coord)
-		return coord - y_offset + 1
-	if(!A)
+	if(A)
+		coord = A.y
+	if(!coord)
 		return null
-	return A.y - y_offset + 1
+	return coord - low_y + 1
 
 //Get virtual z from true z
 /datum/virtual_z/proc/vz(var/atom/A)
@@ -116,11 +118,11 @@
 
 //Get true x from virtual x
 /datum/virtual_z/proc/x(var/coord)
-	return coord + x_offset - 1
+	return coord + low_x - 1
 
 //Get true y from virtual y
 /datum/virtual_z/proc/y(var/coord)
-	return coord + y_offset - 1
+	return coord + low_y - 1
 
 //Get true z from virtual z
 /datum/virtual_z/proc/z()
@@ -244,7 +246,7 @@
 
 	// Ensure we have valid placement area
 	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
-		CRASH("Warning: Ruin [ruin_to_use.name] ([ruin_to_use.width]x[ruin_to_use.height]) too large for virtual Z with size: [size] - skipping ruin placement")
+		CRASH("Warning: Ruin [ruin_to_use.name] ([ruin_to_use.width]x[ruin_to_use.height]) too large for virtual Z with size: [size_x]x[size_y] - skipping ruin placement")
 	// Try up to 20 times to find a valid placement location
 	var/max_attempts = 20
 	var/turf/ruin_turf = null

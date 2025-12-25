@@ -444,18 +444,18 @@ var/datum/subsystem/mapping/SSmapping
 	SSmapping.spawn_planet(chosen_planet_type, hide_from_scanner)
 
 // Tries to place a new virtual zLevel of given size within the specified zLevel
-/datum/subsystem/mapping/proc/try_place_vz(var/datum/zLevel/check_z, var/size, var/spacing)
+/datum/subsystem/mapping/proc/try_place_vz(var/datum/zLevel/check_z, var/size_x, var/size_y, var/spacing)
 	var/target_x = 1
 	var/target_y = 1
 
 	/// Sanity
-	if(size > world.maxx || size > world.maxy)
+	if(size_x > world.maxx || size_y > world.maxy)
 		CRASH("Tried to find virtual level allocation that cannot possibly fit in a physical level.")
 
 	/// Methodical trial and error method
 	while(TRUE)
-		var/upper_target_x = target_x + size
-		var/upper_target_y = target_y + size
+		var/upper_target_x = target_x + size_x
+		var/upper_target_y = target_y + size_y
 
 		var/out_of_bounds = FALSE
 		if((target_x < 1 || upper_target_x > world.maxx) || (target_y < 1 || upper_target_y > world.maxy))
@@ -576,6 +576,143 @@ var/datum/subsystem/mapping/SSmapping
 	message_admins("Started generating planet '[current_planet.planet_name]' at v-level [current_virtual_z.id]. [terrain_queue.len] turfs to process.")
 
 	return TRUE
+
+/// Admin-facing quick test for virtual z-levels. For comprehensive testing, use the unit test system.
+/datum/subsystem/mapping/proc/test_vz_creation()
+	message_admins("Running virtual z-level creation tests...")
+
+	var/tests_passed = 0
+	var/tests_failed = 0
+	var/list/fail_messages = list()
+
+	// Test 1: Create virtual z-levels with different dimensions
+	var/list/test_cases = list(
+		list("x" = 10, "y" = 30),
+		list("x" = 40, "y" = 20),
+		list("x" = 33, "y" = 33)
+	)
+
+	var/list/datum/virtual_z/created_vzs = list()
+
+	for(var/list/test_case in test_cases)
+		var/expected_x = test_case["x"]
+		var/expected_y = test_case["y"]
+		var/datum/virtual_z/vz = map.addVLevel(expected_x, expected_y)
+
+		if(!vz)
+			fail_messages += "FAIL: Could not create [expected_x]x[expected_y] virtual z-level"
+			tests_failed++
+			continue
+
+		created_vzs += vz
+
+		// Verify dimensions
+		if(vz.size_x != expected_x || vz.size_y != expected_y)
+			fail_messages += "FAIL: [expected_x]x[expected_y] vz has wrong size: [vz.size_x]x[vz.size_y]"
+			tests_failed++
+		else
+			tests_passed++
+
+		// Verify bounds calculations
+		var/expected_high_x = vz.low_x + expected_x - 1
+		var/expected_high_y = vz.low_y + expected_y - 1
+		if(vz.high_x != expected_high_x || vz.high_y != expected_high_y)
+			fail_messages += "FAIL: [expected_x]x[expected_y] vz bounds incorrect. Expected high=([expected_high_x],[expected_high_y]), got ([vz.high_x],[vz.high_y])"
+			tests_failed++
+		else
+			tests_passed++
+
+		// Verify coordinate translation - virtual (1,1) should map to world (low_x, low_y)
+		var/world_x_1 = vz.x(1)
+		var/world_y_1 = vz.y(1)
+		if(world_x_1 != vz.low_x || world_y_1 != vz.low_y)
+			fail_messages += "FAIL: [expected_x]x[expected_y] vz x(1)/y(1) should be ([vz.low_x],[vz.low_y]), got ([world_x_1],[world_y_1])"
+			tests_failed++
+		else
+			tests_passed++
+
+		// Verify coordinate translation - virtual (size_x, size_y) should map to world (high_x, high_y)
+		var/world_x_max = vz.x(vz.size_x)
+		var/world_y_max = vz.y(vz.size_y)
+		if(world_x_max != vz.high_x || world_y_max != vz.high_y)
+			fail_messages += "FAIL: [expected_x]x[expected_y] vz x([vz.size_x])/y([vz.size_y]) should be ([vz.high_x],[vz.high_y]), got ([world_x_max],[world_y_max])"
+			tests_failed++
+		else
+			tests_passed++
+
+		// Verify roundtrip: virtual -> world -> virtual for corners and center
+		var/list/test_virtual_coords = list(
+			list("vx" = 1, "vy" = 1),
+			list("vx" = expected_x, "vy" = expected_y),
+			list("vx" = round(expected_x / 2), "vy" = round(expected_y / 2)),
+			list("vx" = min(10, expected_x), "vy" = min(30, expected_y))
+		)
+
+		for(var/list/vc in test_virtual_coords)
+			var/test_vx = vc["vx"]
+			var/test_vy = vc["vy"]
+
+			// Virtual -> World
+			var/world_x = vz.x(test_vx)
+			var/world_y = vz.y(test_vy)
+
+			// World -> Virtual
+			var/back_vx = vz.vx(coord = world_x)
+			var/back_vy = vz.vy(coord = world_y)
+
+			if(back_vx != test_vx || back_vy != test_vy)
+				fail_messages += "FAIL: [expected_x]x[expected_y] vz roundtrip failed for virtual ([test_vx],[test_vy]): world=([world_x],[world_y]) -> back=([back_vx],[back_vy])"
+				tests_failed++
+			else
+				tests_passed++
+
+		// Verify all virtual coords within bounds are positive
+		var/has_invalid = FALSE
+		var/step_vx = max(1, round(expected_x / 3))
+		var/step_vy = max(1, round(expected_y / 3))
+		var/test_vx = 1
+		while(test_vx <= expected_x && !has_invalid)
+			var/test_vy = 1
+			while(test_vy <= expected_y && !has_invalid)
+				var/world_x = vz.x(test_vx)
+				var/world_y = vz.y(test_vy)
+				var/result_vx = vz.vx(coord = world_x)
+				var/result_vy = vz.vy(coord = world_y)
+				if(result_vx != test_vx || result_vy != test_vy)
+					has_invalid = TRUE
+					fail_messages += "FAIL: [expected_x]x[expected_y] vz coord mismatch at virtual ([test_vx],[test_vy]): got ([result_vx],[result_vy])"
+				test_vy += step_vy
+			test_vx += step_vx
+		if(!has_invalid)
+			tests_passed++
+		else
+			tests_failed++
+
+		message_admins("Created [expected_x]x[expected_y] virtual z-level at world ([vz.low_x],[vz.low_y])-([vz.high_x],[vz.high_y]), id=[vz.id]")
+
+	// Test overlapping - verify none of the created vzs overlap
+	for(var/i = 1 to created_vzs.len)
+		for(var/j = i + 1 to created_vzs.len)
+			var/datum/virtual_z/a = created_vzs[i]
+			var/datum/virtual_z/b = created_vzs[j]
+			if(a.parent_z != b.parent_z)
+				continue
+			var/overlap_x = (a.low_x <= b.high_x) && (a.high_x >= b.low_x)
+			var/overlap_y = (a.low_y <= b.high_y) && (a.high_y >= b.low_y)
+			if(overlap_x && overlap_y)
+				fail_messages += "FAIL: Virtual z-levels overlap!"
+				tests_failed++
+			else
+				tests_passed++
+
+	// Report results
+	for(var/msg in fail_messages)
+		message_admins(msg)
+
+	if(tests_failed == 0)
+		message_admins("<span class='good'>Virtual z-level tests complete: [tests_passed] passed, [tests_failed] failed</span>")
+	else
+		message_admins("<span class='bad'>Virtual z-level tests complete: [tests_passed] passed, [tests_failed] failed</span>")
 
 #undef STAGE_TERRAIN
 #undef STAGE_RUIN

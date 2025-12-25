@@ -514,7 +514,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/relay/planetary/post_ruin_load()
 	..()
-	var/datum/virtual_z/vz = get_virtual_z(FALSE)
+	var/datum/virtual_z/vz = get_virtual_z()
 	if(!vz)
 		CRASH("Planetary relay spawned on turf without virtual_z at [x],[y],[z]")
 	vz.comms_relay = src

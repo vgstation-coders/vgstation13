@@ -154,12 +154,14 @@
 	linkVLevel(level)
 
 /datum/map/proc/linkVLevel(datum/zLevel/level)
-	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL)
+	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL)
 	new_vz.id = level.z
 	new_vz.name = level.name
 	return new_vz
 
-/datum/map/proc/addVLevel(var/size = ALLOCATION_SMALL)
+/datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null)
+	if(!size_y)
+		size_y = size_x
 	var/found_x = 0
 	var/found_y = 0
 
@@ -169,7 +171,7 @@
 	var/datum/zLevel/z_to_use = null
 	for(var/datum/zLevel/check_z in zLevels)
 		if(istype(check_z, /datum/zLevel/dynamic))
-			var/list/placement = SSmapping.try_place_vz(check_z, size, spacing)
+			var/list/placement = SSmapping.try_place_vz(check_z, size_x, size_y, spacing)
 			if(placement)
 				z_to_use = check_z
 				found_x = placement["x"]
@@ -186,7 +188,7 @@
 		found_y = 1
 
 	// Create the new virtual_z
-	var/datum/virtual_z/new_vz = new(z_to_use, size, found_x, found_y)
+	var/datum/virtual_z/new_vz = new(z_to_use, size_x, size_y, found_x, found_y)
 
 	// Add to global vLevels list (map global is set during gameplay)
 	map.vLevels |= new_vz
