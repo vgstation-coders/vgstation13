@@ -1,0 +1,310 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/structure/lattice,
+/obj/item/weapon/shard,
+/turf/space,
+/area/vault)
+"c" = (
+/turf/simulated/wall/r_wall,
+/area/vault)
+"f" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/abstract/map/spawner/maint,
+/turf/simulated/floor/plating/airless,
+/area/vault)
+"g" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault)
+"h" = (
+/obj/structure/sign/chinese/danger,
+/turf/simulated/wall/r_wall,
+/area/vault)
+"j" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/paper_bin/black{
+	pixel_x = -5;
+	pixel_y = 5
+	},
+/obj/item/weapon/storage/bag/clipboard{
+	pixel_x = 5
+	},
+/turf/simulated/floor/engine,
+/area/vault)
+"k" = (
+/obj/machinery/door_control{
+	id_tag = "abno1";
+	name = "Containment Room";
+	normaldoorcontrol = 1;
+	specialfunctions = 4
+	},
+/turf/simulated/wall/r_wall,
+/area/vault)
+"m" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/space,
+/area/vault)
+"n" = (
+/obj/item/weapon/shard,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/space,
+/area/vault)
+"o" = (
+/turf/space,
+/area/vault)
+"p" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault)
+"q" = (
+/turf/simulated/floor/engine,
+/area/vault)
+"r" = (
+/obj/item/stack/rods,
+/obj/item/weapon/shard,
+/turf/space,
+/area/vault)
+"s" = (
+/obj/item/weapon/shard,
+/turf/space,
+/area/vault)
+"u" = (
+/obj/machinery/door/airlock{
+	id_tag = "abno1";
+	name = "Containment Room";
+	locked = 1;
+	icon_state = "door_locked"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating,
+/area/vault)
+"v" = (
+/obj/abstract/map/spawner/maint,
+/turf/space,
+/area/vault)
+"w" = (
+/turf/simulated/floor/plating/airless,
+/area/vault)
+"y" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/engine,
+/area/vault)
+"z" = (
+/obj/structure/lattice,
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/space,
+/area/vault)
+"B" = (
+/obj/structure/sign/chinese/access_restricted,
+/turf/simulated/wall/r_wall,
+/area/vault)
+"C" = (
+/obj/structure/lattice,
+/turf/space,
+/area/vault)
+"E" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/engine,
+/area/vault)
+"F" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/engine,
+/area/vault)
+"H" = (
+/obj/machinery/power/apc{
+	dir = 1;
+	pixel_y = 24;
+	name = "Containment APC"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/engine,
+/area/vault)
+"K" = (
+/obj/structure/sign/biohazard,
+/turf/simulated/wall/r_wall,
+/area/vault)
+"M" = (
+/obj/abstract/map/spawner/maint,
+/turf/simulated/floor/plating/airless,
+/area/vault)
+"P" = (
+/obj/item/stack/rods,
+/turf/space,
+/area/vault)
+"Q" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/engine,
+/area/vault)
+"S" = (
+/obj/structure/lattice,
+/obj/abstract/map/spawner/highrisk,
+/turf/simulated/floor/damaged/airless,
+/area/vault)
+"U" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/item/stack/cable_coil/cut,
+/turf/space,
+/area/vault)
+"W" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault)
+"X" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/engine,
+/area/vault)
+"Y" = (
+/obj/abstract/map/spawner/mobs/abnormality,
+/turf/simulated/floor/engine,
+/area/vault)
+"Z" = (
+/obj/structure/sign/chinese/caution,
+/turf/simulated/wall/r_wall,
+/area/vault)
+
+(1,1,1) = {"
+s
+o
+o
+o
+o
+P
+o
+a
+M
+"}
+(2,1,1) = {"
+s
+r
+c
+c
+c
+c
+c
+w
+o
+"}
+(3,1,1) = {"
+o
+o
+c
+H
+y
+F
+K
+w
+C
+"}
+(4,1,1) = {"
+o
+s
+c
+q
+q
+Q
+h
+S
+a
+"}
+(5,1,1) = {"
+o
+v
+c
+X
+Y
+Q
+Z
+g
+W
+"}
+(6,1,1) = {"
+P
+o
+c
+q
+q
+Q
+k
+n
+m
+"}
+(7,1,1) = {"
+o
+s
+c
+j
+q
+E
+u
+U
+f
+"}
+(8,1,1) = {"
+v
+P
+c
+c
+c
+c
+B
+p
+m
+"}
+(9,1,1) = {"
+o
+s
+o
+v
+P
+s
+o
+z
+o
+"}
