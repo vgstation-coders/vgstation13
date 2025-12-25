@@ -45,6 +45,7 @@
 	center_y = 163
 
 /datum/map/active/New()
+	daynight_z_lvls = list(zMainStation,zAsteroid)
 	..()
 	//linking roid and station
 	zLevels[zMainStation].transition_crosswrap_z=list(zAsteroid,zAsteroid,zAsteroid,zAsteroid)
@@ -54,7 +55,6 @@
 	zLevels[zSecondunderground].transition_crosswrap_z=list(zAdditionalStationZlevel,zAdditionalStationZlevel,zAdditionalStationZlevel,zAdditionalStationZlevel)
 	world.name = "NT Colony Gamma-8"
 	station_name="NT Colony Gamma-8"
-	daynight_v_lvls=list(map.vLevels[1],map.vLevels[4])
 	turfs_to_regrow=list()
 
 
@@ -126,7 +126,8 @@
 
 		advance_time()
 		if(!resumed)
-			currentrun = daynight_turfs.Copy()
+			for(var/datum/virtual_z/vz in daynight_v_lvls)
+				currentrun += vz.daynight_turfs.Copy()
 
 	while(currentrun.len)
 		var/turf/T = currentrun[currentrun.len]
@@ -141,7 +142,8 @@
 			return
 
 		if(!resumed)
-			currentrun = daynight_turfs.Copy()
+			for(var/datum/virtual_z/vz in daynight_v_lvls)
+				currentrun += vz.daynight_turfs.Copy()
 
 
 /datum/subsystem/daynightcycle/advance_time()

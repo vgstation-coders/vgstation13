@@ -290,7 +290,7 @@ var/datum/subsystem/mapping/SSmapping
 						// Build daynight turf list (sampling every other tile for performance)
 						if(IsEven(T.x) && IsEven(T.y))
 							if(isopensurface(A))
-								current_planet.daynight_turfs += T
+								current_virtual_z.daynight_turfs += T
 
 				queue_index++
 				turfs_processed++
@@ -304,19 +304,19 @@ var/datum/subsystem/mapping/SSmapping
 					SSweather.fire()
 
 				var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
-				current_planet.current_timeOfDay = pick(possible_times)
+				current_virtual_z.current_timeOfDay = pick(possible_times)
 
-				switch(current_planet.current_timeOfDay)
-					if(TOD_MORNING) current_planet.next_firetime = world.time + 5 MINUTES
-					if(TOD_SUNRISE) current_planet.next_firetime = world.time + 3 MINUTES
-					if(TOD_DAYTIME) current_planet.next_firetime = world.time + 14 MINUTES
-					if(TOD_AFTERNOON) current_planet.next_firetime = world.time + 15 MINUTES
-					if(TOD_SUNSET) current_planet.next_firetime = world.time + 3 MINUTES
-					if(TOD_NIGHTTIME) current_planet.next_firetime = world.time + 36 MINUTES
+				switch(current_virtual_z.current_timeOfDay)
+					if(TOD_MORNING) current_virtual_z.next_firetime = world.time + 5 MINUTES
+					if(TOD_SUNRISE) current_virtual_z.next_firetime = world.time + 3 MINUTES
+					if(TOD_DAYTIME) current_virtual_z.next_firetime = world.time + 14 MINUTES
+					if(TOD_AFTERNOON) current_virtual_z.next_firetime = world.time + 15 MINUTES
+					if(TOD_SUNSET) current_virtual_z.next_firetime = world.time + 3 MINUTES
+					if(TOD_NIGHTTIME) current_virtual_z.next_firetime = world.time + 36 MINUTES
 
 				daynight_v_lvls |= current_virtual_z
 				SSDayNight.flags = 0
-				SSDayNight.update_planet_lighting(current_planet, immediate = TRUE)
+				SSDayNight.update_lighting(current_virtual_z, immediate = TRUE)
 
 				var/total_time = (world.timeofday - generation_start_time) / 10
 				message_admins("Planet '[current_planet.planet_name]' generated successfully at v-level [current_virtual_z.id] in [total_time]s")

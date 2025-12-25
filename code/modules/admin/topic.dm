@@ -953,11 +953,11 @@
 			if("Nighttime") new_time = TOD_NIGHTTIME
 
 		// Set the time for this specific planet
-		planet.current_timeOfDay = new_time
-		planet.next_firetime = world.time + 10 MINUTES
+		vz.current_timeOfDay = new_time
+		vz.next_firetime = world.time + 10 MINUTES
 
 		// Force immediate lighting update for this planet only
-		SSDayNight.update_planet_lighting(planet, immediate = TRUE)
+		SSDayNight.update_lighting(vz, immediate = TRUE)
 
 		message_admins("[key_name_admin(usr)] changed time of day to [choice] on [planet.planet_name].")
 		procedural_generation_panel()

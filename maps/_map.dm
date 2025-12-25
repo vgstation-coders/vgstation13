@@ -106,6 +106,8 @@
 	var/broken_lights = TRUE //broken lights roundstart
 	var/can_have_robots = TRUE
 
+	var/list/daynight_z_lvls = list() //Z-levels that participate in the day/night cycle
+
 /datum/map/New()
 	. = ..()
 
@@ -116,6 +118,8 @@
 	for(var/datum/zLevel/Z in src.zLevels)
 		for(var/datum/virtual_z/V in Z.virtual_z_levels)
 			src.vLevels |= V
+			if(Z.z in daynight_z_lvls)
+				daynight_v_lvls += V
 
 	//The spawn below is needed
 	spawn()

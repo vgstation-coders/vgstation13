@@ -30,6 +30,12 @@
 	var/y_min = 0
 	var/y_max = 0
 
+	// Daynight cycle support
+	var/current_timeOfDay = TOD_DAYTIME
+	var/next_firetime = 0
+	var/list/daynight_turfs = list()
+	var/weather_mod = 1 // Weather light modifier
+
 /datum/virtual_z/New(var/datum/zLevel/z, var/input_size_x, var/input_size_y, var/input_x = 0, var/input_y = 0)
 	. = ..()
 	if(!z)

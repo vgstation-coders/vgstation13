@@ -46,15 +46,14 @@
 **	See: daynightcycle.dm  **
 ****************************/
 /datum/map/active/New()
+	daynight_z_lvls = list(zMainStation)
 	. = ..()
-
 	research_shuttle.name = "Southern Station Shuttle"
 	research_shuttle.req_access = list()
 	mining_shuttle.name = "Northwest Station Shuttle"
 	mining_shuttle.req_access = list()
 	security_shuttle.name = "Northeast Station Shuttle"
 	security_shuttle.req_access = list()
-	daynight_z_lvls = list(zMainStation)
 
 /datum/map/active/special_ui(var/obj/abstract/screen/S, mob/user)
 	if(!user)

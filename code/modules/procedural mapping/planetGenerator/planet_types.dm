@@ -17,11 +17,6 @@
 	//Icon shown in the planet scanner.
 	var/icon_state = "moon"
 	var/icon/ico
-	// Day/night cycle variables
-	var/current_timeOfDay = TOD_DAYTIME
-	var/next_firetime = 0
-	var/list/daynight_turfs = list()
-	var/weather_mod = 1 // Planet-specific weather light modifier
 	// Player tracking for mob processing optimization
 	var/list/planet_mobs = list() // All mobs on this planet
 	var/list/players = list() // All living player mobs currently on this planet

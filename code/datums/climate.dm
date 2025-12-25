@@ -491,13 +491,11 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		parent.weather_image.UpdatePrecipitation(precip_intensity)
 
 	// Update lighting based on weather conditions
-	var/datum/planet_type/planet = parent.get_planet()
-	if(planet)
-		planet.weather_mod = light_modifier
-		SSDayNight.update_planet_lighting(planet, immediate = TRUE)
-	else if(parent.v)
-		SSDayNight.weather_mod = light_modifier
-		SSDayNight.update_global_lighting()
+	var/datum/virtual_z/vz = parent.v
+	if(!vz)
+		CRASH("execute called on weather with null virtual_z.")
+	vz.weather_mod = light_modifier
+	SSDayNight.update_lighting(vz, immediate = TRUE)
 
 /datum/weather/proc/tick()
 	timeleft -= SS_WAIT_WEATHER

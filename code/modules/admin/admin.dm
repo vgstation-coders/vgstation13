@@ -1032,7 +1032,7 @@ var/global/floorIsLava = 0
 
 			// Get current time of day info for this specific planet
 			if(SSDayNight && vz && (vz in daynight_v_lvls))
-				switch(planet.current_timeOfDay)
+				switch(vz.current_timeOfDay)
 					if(TOD_MORNING) current_time = "Morning"
 					if(TOD_SUNRISE) current_time = "Sunrise"
 					if(TOD_DAYTIME) current_time = "Daytime"

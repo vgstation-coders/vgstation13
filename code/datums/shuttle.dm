@@ -1020,23 +1020,8 @@
 		for(var/turf/old_turf in old_turfs)
 			source_climate.register_weather_turf(old_turf, TRUE)
 
-	var/datum/planet_type/source_planet = source_climate?.v?.planet
-	if(source_planet)
-		SSDayNight.update_turf_lighting(old_turfs, source_planet)
-	else if(our_center.z in daynight_v_lvls) //pre-mapped day/night users like snaxi or jungle
-		for(var/turf/old_turf in old_turfs)
-			if(IsEven(old_turf.x) && IsEven(old_turf.y))
-				var/area/A = get_area(old_turf)
-				if(isopensurface(A))
-					daynight_turfs |= old_turf
-				else
-					for(var/cdir in cardinal)
-						var/turf/T1 = get_step(old_turf, cdir)
-						var/area/A1 = get_area(T1)
-						if(istype(A1, /area/surface))
-							daynight_turfs |= old_turf
-							break
-		SSDayNight.update_turf_lighting(old_turfs)
+	if(source_v.daynight_turfs.len)
+		SSDayNight.update_turf_lighting(old_turfs, source_v)
 
 	//Kill all lz warning effects
 	if(istype(dest_v))
