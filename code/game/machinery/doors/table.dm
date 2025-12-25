@@ -262,10 +262,6 @@
 				remove_electronics()
 			return
 
-	if(!allowed(user))
-		denied()
-		return
-
 	. = ..()
 
 /obj/machinery/door/table/emag_act(var/mob/user)
