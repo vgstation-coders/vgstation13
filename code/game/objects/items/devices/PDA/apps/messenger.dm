@@ -382,7 +382,7 @@
 		refresh_pda()
 	if(href_list["multicast"])
 		var/target = href_list["multicast"]
-		if(!target || !(target in department_list))
+		if(!target || !(target in multimessage_department_list))
 			return
 		var/t = input(U, "Please enter message", "Message to [target]", null) as text|null
 		var/pollamt = 0
