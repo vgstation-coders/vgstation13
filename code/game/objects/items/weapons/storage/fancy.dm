@@ -585,8 +585,8 @@
 
 	var/i = 0
 	for (var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial in contents)
-		var/image/vial_image = image('icons/obj/vialbox.dmi',src,"vial")
-		if(vial.reagents.total_volume)
+		var/image/vial_image = image('icons/obj/vialbox.dmi',src,vial.icon_state)
+		if(!vial.opaque && vial.reagents.total_volume)
 			var/image/filling = image('icons/obj/vialbox.dmi',src, "vial_reagents")
 			filling.icon += mix_color_from_reagents(vial.reagents.reagent_list)
 			filling.alpha = mix_alpha_from_reagents(vial.reagents.reagent_list)
