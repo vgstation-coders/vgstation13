@@ -23,13 +23,13 @@
 			var/tries = 0
 			var/area/our_area = null
 			while((!our_area || !(locate(/turf/simulated/wall) in get_area_turfs(our_area)) ||\
-					(our_area in used_areas)) && tries < 100)
+					(our_area in used_areas) || istype(our_area,/area/shuttle)) && tries < 100)
 				our_area = pick(the_station_areas)
 				tries++
 			used_areas.Add(our_area)
 			var/list/turf/simulated_area_turfs = list()
 			for(var/turf/T in get_area_turfs(our_area))
-				if(istype(T,/turf/simulated/wall))
+				if(!(T.flags & INVULNERABLE) && istype(T,/turf/simulated/wall))
 					simulated_area_turfs.Add(T)
 			if(simulated_area_turfs.len)
 				var/turf/center = pick(simulated_area_turfs)

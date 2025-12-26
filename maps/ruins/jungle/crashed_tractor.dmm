@@ -1,0 +1,62 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/effect/decal/mecha_wreckage/vehicle/tractor,
+/obj/item/key/tractor{
+	name = "cargo tractor key";
+	vin = "CARGO_TRACTORS";
+	pixel_x = -3;
+	pixel_y = 11
+	},
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+"i" = (
+/obj/machinery/cart/cargo{
+	dir = 4
+	},
+/obj/item/clothing/gloves/yellow,
+/obj/structure/closet/crate,
+/obj/abstract/map/spawner/assistant/tools,
+/obj/abstract/map/spawner/assistant/materials,
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+"q" = (
+/obj/effect/landmark/corpse/assistant,
+/turf/template_noop,
+/area/exposed_ruin)
+"M" = (
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+"V" = (
+/turf/template_noop,
+/area/template_noop)
+
+(1,1,1) = {"
+V
+V
+V
+"}
+(2,1,1) = {"
+V
+V
+V
+"}
+(3,1,1) = {"
+V
+i
+V
+"}
+(4,1,1) = {"
+V
+a
+q
+"}
+(5,1,1) = {"
+V
+M
+V
+"}
+(6,1,1) = {"
+V
+V
+V
+"}

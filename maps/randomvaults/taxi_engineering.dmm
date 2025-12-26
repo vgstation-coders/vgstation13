@@ -998,10 +998,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
 	},
-/obj/structure/disposalpipe/sortjunction{
-	icon_state = "pipe-j2s";
-	sort_tag = "ENGINEERING"
-	},
+/obj/structure/disposalpipe/sortjunction/Engineering/mirrored,
 /obj/effect/decal/cleanable/blood/writing{
 	dir = 4
 	},

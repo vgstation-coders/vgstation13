@@ -491,3 +491,16 @@
 	containsdesc = "A standard fuel reservoir, filled with a unique mixture selected by NanoTrasen's engineering team."
 
 
+/datum/supply_packs/surface_gas_extractor
+	contains = list(
+		/obj/item/weapon/circuitboard/gas_extraction,
+		/obj/item/weapon/circuitboard/gas_extractor,
+		/obj/machinery/atmospherics/miner
+	)
+	name = "Surface Gas Extraction Kit"
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "Surface Gas Extraction Kit"
+	group = "Engineering"
+	access = list(access_engine_major)
+	containsdesc = "Contains the necessary components to set up a Surface Gas Extraction System, including a Surface Gas Receiver and circuit boards for a Gas Extraction Console and Surface Gas Extractor."

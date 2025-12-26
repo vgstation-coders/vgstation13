@@ -19006,6 +19006,8 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk,
 /turf/simulated/floor/wood,
 /area/crew_quarters/courtroom)
 "aJE" = (
@@ -19493,6 +19495,7 @@
 /area/crew_quarters/courtroom)
 "aKH" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on/layered,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor/wood,
 /area/crew_quarters/courtroom)
 "aKI" = (
@@ -19967,6 +19970,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor/wood,
 /area/crew_quarters/courtroom)
 "aLK" = (
@@ -20449,6 +20453,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor/wood,
 /area/crew_quarters/courtroom)
 "aMG" = (
@@ -21241,6 +21246,15 @@
 	})
 "aOs" = (
 /obj/structure/table/woodentable,
+/obj/item/weapon/paper_bin{
+	pixel_x = -3;
+	pixel_y = 7
+	},
+/obj/machinery/computer/med_data/laptop,
+/obj/item/weapon/folder/red,
+/obj/item/weapon/pen,
+/obj/item/weapon/hand_labeler,
+/obj/item/weapon/reagent_containers/food/drinks/flask/detflask,
 /obj/item/device/camera{
 	desc = "A one use - polaroid camera. 30 photos left.";
 	name = "detectives camera";
@@ -21248,12 +21262,12 @@
 	},
 /obj/item/device/taperecorder,
 /obj/item/ashtray/bronze,
+/obj/machinery/light{
+	dir = 1
+	},
 /obj/item/device/radio/intercom{
 	name = "Common Channel";
 	pixel_y = 25
-	},
-/obj/machinery/light{
-	dir = 1
 	},
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
@@ -21306,6 +21320,7 @@
 	dir = 1;
 	name = "Firelock North"
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor/wood,
 /area/security/lobby)
 "aOz" = (
@@ -21628,9 +21643,6 @@
 	},
 /area/security/brig)
 "aPs" = (
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
 /obj/structure/cable{
 	d1 = 2;
 	d2 = 8;
@@ -21646,6 +21658,9 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/structure/disposalpipe/sortjunction/Detective{
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -22320,10 +22335,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 4
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 1;
-	icon_state = "pipe-j2"
-	},
+/obj/structure/disposalpipe/sortjunction/HoS,
 /turf/simulated/floor,
 /area/security/brig)
 "aQO" = (
@@ -23051,6 +23063,13 @@
 /obj/item/weapon/storage/box/chemimp{
 	pixel_x = 5;
 	pixel_y = 3
+	},
+/obj/item/weapon/storage/lockbox/loyalty,
+/obj/item/tool/wrench,
+/obj/item/tool/crowbar,
+/obj/item/weapon/disk/design_disk/ammolathe{
+	pixel_x = -12;
+	pixel_y = 6
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -24101,14 +24120,10 @@
 	},
 /area/security/warden)
 "aWo" = (
-/obj/structure/table,
-/obj/item/weapon/storage/lockbox/loyalty,
-/obj/item/weapon/disk/design_disk/ammolathe{
-	pixel_x = -12;
-	pixel_y = 6
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk{
+	dir = 4
 	},
-/obj/item/tool/wrench,
-/obj/item/tool/crowbar,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -24133,13 +24148,16 @@
 	pixel_y = 1
 	},
 /obj/structure/window/reinforced,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/security/warden)
 "aWq" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on/layered{
 	dir = 4
 	},
-/obj/structure/disposalpipe/segment,
+/obj/structure/disposalpipe/sortjunction/Warden,
 /turf/simulated/floor,
 /area/security/brig)
 "aWr" = (
@@ -69484,8 +69502,8 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on/layered{
 	dir = 1
 	},
-/obj/structure/disposalpipe/segment{
-	dir = 4
+/obj/structure/disposalpipe/sortjunction/IAA{
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -69759,6 +69777,7 @@
 /area/crew_quarters/casino)
 "hBC" = (
 /obj/machinery/photobooth/security,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor,
 /area/security/brig)
 "hCd" = (
@@ -69959,6 +69978,10 @@
 /area/crew_quarters/theatre)
 "hWG" = (
 /obj/machinery/photocopier,
+/obj/structure/disposalpipe/segment{
+	dir = 2;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
 "hYo" = (
@@ -70764,6 +70787,9 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 4
+	},
+/obj/structure/disposalpipe/segment{
 	dir = 4
 	},
 /turf/simulated/floor/carpet,
@@ -71892,6 +71918,15 @@
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/theatre)
+"lwQ" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "red"
+	},
+/area/security/brig)
 "lxW" = (
 /obj/machinery/suit_storage_unit/atmos,
 /obj/effect/decal/warning_stripes{
@@ -72783,6 +72818,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 6
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
@@ -74150,6 +74188,9 @@
 "pzM" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on/layered{
 	dir = 8
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
@@ -75911,7 +75952,7 @@
 /area/crew_quarters/bar)
 "sxX" = (
 /obj/structure/bed/chair/comfy/black{
-	dir = 8
+	dir = 1
 	},
 /obj/effect/landmark/start{
 	name = "Detective"
@@ -75923,6 +75964,9 @@
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
@@ -78507,7 +78551,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/structure/disposalpipe/sortjunction/Security,
+/obj/structure/disposalpipe/sortjunction/GenSecurity,
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "xik" = (
@@ -79057,16 +79101,6 @@
 	},
 /area/crew_quarters/bar)
 "xYM" = (
-/obj/structure/table/woodentable,
-/obj/item/weapon/paper_bin{
-	pixel_x = -3;
-	pixel_y = 7
-	},
-/obj/machinery/computer/med_data/laptop,
-/obj/item/weapon/folder/red,
-/obj/item/weapon/pen,
-/obj/item/weapon/hand_labeler,
-/obj/item/weapon/reagent_containers/food/drinks/flask/detflask,
 /obj/machinery/requests_console{
 	department = "Detective's office";
 	pixel_y = -30
@@ -79074,6 +79108,14 @@
 /obj/machinery/light_switch{
 	pixel_x = -28;
 	pixel_y = 5
+	},
+/obj/item/device/radio/intercom{
+	name = "Common Channel";
+	pixel_y = 25
+	},
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk{
+	dir = 4
 	},
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
@@ -185457,7 +185499,7 @@ aSe
 aSe
 aSe
 aSe
-aSe
+lwQ
 aXo
 gQf
 aZC

@@ -132,7 +132,7 @@ var/global/list/battery_online =	list(
 	//update_sound()
 
 /obj/machinery/power/battery/setup_sound()
-	sound_emitter = new /datum/sound_emitter(src, is_static = TRUE)
+	sound_emitter = new /datum/sound_emitter(src)
 	if(sound_emitter)
 		//var/sound/smes_hum = sound()
 		//smes_hum.file = 'sound/machines/looping/smes_hum.ogg'

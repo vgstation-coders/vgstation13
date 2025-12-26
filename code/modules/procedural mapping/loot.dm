@@ -47,10 +47,6 @@
 			results += chosen_loot
 	return results
 
-
-/datum/loot_table/bedsheet/New()
-	loot += subtypesof(/obj/item/weapon/bedsheet)
-
 /datum/loot_table/weighted/bureaucracy
 	loot = list(
 		COMMON_LOOT = list(
@@ -543,12 +539,21 @@
 	var/roll_min = 1 //minimum rolls
 	var/roll_max = 3 //maximum rolls
 	var/rolls
+	var/scatter = TRUE
 
 /obj/abstract/loot_spawner/New(var/cave = FALSE,var/override = FALSE)
 	..()
 	if(!table)
 		Destroy()
 		return
+	if(prob(20))
+		Destroy()
+		return
+	if(locate(/obj/structure) in get_turf(src)) //if spawner is placed on a structure, just spawn one item on it
+		scatter = FALSE
+		roll_min = 1
+		roll_max = 1
+		containers = list()
 	rolls = rand(roll_min, roll_max)
 	table = new table()
 	loot = table.loot_roll(rolls)
@@ -562,12 +567,16 @@
 				containers = containers + base_containers
 		spawn_into_container()
 	else
-		var/list/valid_turfs = list()
-		for(var/turf/T in range(2, src))
-			if(!T.density && !iswall(T))
-				valid_turfs += T
-		for(var/item_type in loot)
-			new item_type(pick(valid_turfs))
+		if(scatter)
+			var/list/valid_turfs = list()
+			for(var/turf/T in range(2, src))
+				if(!T.density && !iswall(T))
+					valid_turfs += T
+			for(var/item_type in loot)
+				new item_type(pick(valid_turfs))
+		else
+			for(var/item_type in loot)
+				new item_type(loc)
 	Destroy()
 
 /obj/abstract/loot_spawner/proc/spawn_into_container()
@@ -593,16 +602,6 @@
 	containers = list()
 	table = null
 	..()
-
-/obj/abstract/loot_spawner/bedsheet
-	name = "bedsheet spawner"
-	icon_state = "loot_bedsheet"
-	table = /datum/loot_table/bedsheet
-	roll_min = 3
-	roll_max = 10
-	containers = list(
-		/obj/structure/closet/crate/bin
-	)
 
 /obj/abstract/loot_spawner/bureaucracy
 	name = "bureaucracy spawner"

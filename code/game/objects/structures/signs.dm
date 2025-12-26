@@ -360,3 +360,8 @@
 	name = "TAXI"
 	desc = "A sign designating the way to a public shuttle for transport into space."
 	icon_state = "taxi"
+
+/obj/structure/sign/bodydisposal
+    name = "Body Disposal"
+    desc = "The pride and joy of both medical doctors and scientists, an injured man being thrown out of a tube."
+    icon_state = "medchute"

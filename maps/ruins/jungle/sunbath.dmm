@@ -1,0 +1,68 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"c" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/fancy/beer_box,
+/turf/unsimulated/floor/jungle/path,
+/area/exposed_ruin)
+"h" = (
+/turf/template_noop,
+/area/template_noop)
+"y" = (
+/turf/unsimulated/floor/jungle/path,
+/area/exposed_ruin)
+"G" = (
+/obj/item/clothing/glasses/sunglasses{
+	pixel_y = -5
+	},
+/obj/structure/table/woodentable,
+/obj/item/weapon/lighter{
+	pixel_y = 6;
+	pixel_x = 11
+	},
+/obj/item/weapon/storage/fancy/cigarettes/goldencarp{
+	pixel_y = 7;
+	pixel_x = -6
+	},
+/turf/unsimulated/floor/jungle/path,
+/area/exposed_ruin)
+"O" = (
+/obj/effect/landmark/corpse,
+/obj/structure/bed/chair/wood/normal,
+/turf/unsimulated/floor/jungle/path,
+/area/exposed_ruin)
+
+(1,1,1) = {"
+h
+h
+h
+h
+h
+"}
+(2,1,1) = {"
+h
+h
+c
+h
+h
+"}
+(3,1,1) = {"
+h
+y
+O
+y
+h
+"}
+(4,1,1) = {"
+h
+h
+G
+h
+h
+"}
+(5,1,1) = {"
+h
+h
+h
+h
+h
+"}

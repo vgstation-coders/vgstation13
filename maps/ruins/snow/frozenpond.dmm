@@ -1,0 +1,141 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"e" = (
+/obj/structure/flora/tree/pine,
+/turf/unsimulated/floor/snow,
+/area/exposed_ruin)
+"m" = (
+/obj/structure/flora/tree/pine,
+/obj/abstract/loot_spawner/medical,
+/turf/unsimulated/floor/snow,
+/area/exposed_ruin)
+"n" = (
+/turf/unsimulated/floor/snow,
+/area/exposed_ruin)
+"x" = (
+/obj/glacier,
+/turf/unsimulated/floor/snow,
+/area/exposed_ruin)
+
+(1,1,1) = {"
+a
+a
+n
+n
+n
+n
+n
+n
+a
+a
+"}
+(2,1,1) = {"
+a
+n
+n
+x
+x
+x
+x
+n
+a
+a
+"}
+(3,1,1) = {"
+a
+n
+x
+x
+x
+x
+x
+e
+n
+a
+"}
+(4,1,1) = {"
+a
+n
+x
+x
+x
+x
+x
+x
+n
+a
+"}
+(5,1,1) = {"
+a
+n
+x
+x
+x
+x
+x
+x
+n
+a
+"}
+(6,1,1) = {"
+a
+n
+n
+x
+x
+x
+x
+x
+n
+a
+"}
+(7,1,1) = {"
+a
+a
+m
+x
+x
+x
+x
+x
+n
+a
+"}
+(8,1,1) = {"
+a
+a
+n
+x
+x
+x
+x
+x
+e
+a
+"}
+(9,1,1) = {"
+a
+a
+n
+x
+x
+x
+x
+n
+n
+a
+"}
+(10,1,1) = {"
+a
+a
+n
+n
+n
+n
+n
+n
+a
+a
+"}

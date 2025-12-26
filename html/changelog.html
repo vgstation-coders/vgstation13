@@ -73,6 +73,91 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2025.12.25</h2>
+			<h3 class="author">Inorien updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Timers running on their own (no assembly) can count down once again, after a week of holiday</li>
+				<li class="bugfix">Cryo tubes now update their appearance correctly when equipment power drops</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The wallrot random event no longer targets shuttles or shuttle walls.</li>
+			</ul>
+			<h3 class="author">braplord updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Deff: paramedic station is now powered</li>
+				<li class="bugfix">eva tank storage no longer has plasma</li>
+				<li class="bugfix">removed an out of place pipe</li>
+			</ul>
+			<h3 class="author">hacker-on-steroids updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">robotics console should now display cyborg location</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Admins will not get as spammed when research servers lose tech levels due to heat damage.</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed turfs changed on shuttles after roundstart aren&#39;t changed into /turf/space on movement.</li>
+				<li class="bugfix">Fixed incorrect exploration lockdown timing.</li>
+				<li class="bugfix">Fixed the incorrectly-typed docking port on Deff preventing the Exploration Shuttle from working.</li>
+			</ul>
+			<h2 class="date">2025.12.24</h2>
+			<h3 class="author">Inorien updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Archive-ready Diskset no longer contains an un-archivable NT disk if it was researched</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added Surface Gas Extractors which can be used to mine gasses on planets and send them to a linked Gas Receiver.</li>
+			</ul>
+			<h2 class="date">2025.12.23</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Warden, detective and internal affairs agent offices now support disposals with sorting junctions for deliveries. They have been added to all the relevant maps.</li>
+				<li class="rscadd">Sorting junctions now support more than one destination tag. Destination taggers will now have a toggle between adding to these or replacing them, defaulting at replacing. The blobs of pipes that output to both security and heads of security have now been replaced with a single multiple output general security department sorting junction on all relevant maps. (Note that this does not affect deliveries, as these are further separated along their disposal lines afterwards)</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed multiple story ruins spawning on a planet.</li>
+			</ul>
+			<h2 class="date">2025.12.22</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Rapid construction devices can now set the access direction of fulltile doors, and its inversion.</li>
+			</ul>
+			<h3 class="author">braplord updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Deff: telescience now has its own patient dumpster</li>
+				<li class="tweak">Deff: added some items</li>
+				<li class="tweak">Deff: removed the body scanner from overflow</li>
+				<li class="bugfix">Deff: fixed some pipes</li>
+			</ul>
+			<h2 class="date">2025.12.21</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Beer now makes people dizzy again if only one type is consumed.</li>
+			</ul>
+			<h3 class="author">braplord updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Defficiency: new shared telesience space between research and medbay</li>
+				<li class="rscadd">Defficiency: more disposal bins</li>
+				<li class="rscadd">Defficiency: biohazard button now actually has biohazard blast doors to close</li>
+				<li class="rscadd">Defficiency: paramedic station now sits between research and chemistry</li>
+				<li class="rscdel">Defficiency: medbay checkpoint is gone</li>
+				<li class="tweak">Defficiency: paramedic station is split into an eva room for medbay and surgery overflow</li>
+				<li class="tweak">Defficiency: surgery overflow has been moved and genetics has a bit more space</li>
+				<li class="tweak">Defficiency: moved medbay&#39;s desk where the checkpoint used to be</li>
+				<li class="tweak">Defficiency: main r&amp;d laboratory is slightly larger</li>
+				<li class="tweak">Defficiency: duny&#39;s dogshit pipes in medbay and some adjacent areas were fixed</li>
+				<li class="tweak">Defficiency: chemistry is now vertical</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Unified planetary vaults (procgen, snaxi, and jungle) into one type.</li>
+				<li class="experiment">Removed non-cave loot spawns from planets.</li>
+			</ul>
 			<h2 class="date">2025.12.18</h2>
 			<h3 class="author">Eneocho updated:</h3>
 			<ul class="changes bgimages16">
@@ -1504,52 +1589,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Escape pods must now exist before they can be sent crashing into the escape shuttle.</li>
-			</ul>
-			<h2 class="date">2025.04.14</h2>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Windows in the abandoned spaceship are now properly dense again.</li>
-			</ul>
-			<h2 class="date">2025.04.01</h2>
-			<h3 class="author">mentgah updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">YOU CAN NOW HOLD HANDS!!!</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added pixel shifting.</li>
-			</ul>
-			<h2 class="date">2025.03.31</h2>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">chicken-of-the-stars now works as wheat for vox chickens</li>
-			</ul>
-			<h2 class="date">2025.03.21</h2>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Idea Guy Events 1 - HOG. Stations with excess assistants or a chef may encounter a hog in maintenance that runs around but does not directly attack crewmen.</li>
-			</ul>
-			<h2 class="date">2025.03.18</h2>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscdel">The mech RED has been reverted to the old UI due to technical issues.</li>
-				<li class="tweak">The new RCD UI no longer tries to send images every time the UI is opened, only the first. If images are broken, click the Reload Images button in the UI and reopen it.</li>
-				<li class="tweak">The new RCD will default to reinforced glass for windows instead of the weaker one.</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Clowns can now channel the power of the Egyptian Sun God into an Ankh Horn by jamming their horns into unprocessed sand (regular sand, not sandstone).</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Arcane tampered closets now bless and untamper themselves if unwelded or resisted out of.</li>
-			</ul>
-			<h3 class="author">mentgah updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed a bug in synths that made the play button stay toggled on even when not playing music.</li>
-				<li class="tweak">Drag directional synth sprites are now all consistent with each other.</li>
-				<li class="tweak">The synth is now able to be wrenched/unwrenched instantly.</li>
-				<li class="tweak">The synth starts unanchored.</li>
 			</ul>
 		</div>
 		<!--

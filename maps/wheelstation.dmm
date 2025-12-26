@@ -34506,10 +34506,7 @@
 	codes_txt = "patrol;next_patrol=hop1";
 	location = "bridge1"
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 2;
-	icon_state = "pipe-j2"
-	},
+/obj/structure/disposalpipe/sortjunction/IAA/mirrored,
 /turf/simulated/floor,
 /area/hallway/primary/western)
 "bkp" = (
@@ -38107,10 +38104,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
 	dir = 8
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 2;
-	icon_state = "pipe-j2"
-	},
+/obj/structure/disposalpipe/sortjunction/Detective/mirrored,
 /turf/simulated/floor,
 /area/hallway/primary/western)
 "brd" = (
@@ -49520,14 +49514,13 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 1
-	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor,
 /area/security/brig)
 "bMb" = (
 /obj/structure/disposalpipe/segment{
-	dir = 4
+	dir = 4;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor{
 	icon_state = "redcorner"
@@ -50082,6 +50075,7 @@
 	},
 /area/security/main)
 "bNb" = (
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -50765,6 +50759,7 @@
 	dir = 8;
 	pixel_x = 24
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -51437,8 +51432,8 @@
 /turf/simulated/floor,
 /area/security/warden)
 "bPj" = (
-/obj/structure/table,
-/obj/machinery/recharger,
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -51453,6 +51448,7 @@
 /obj/machinery/alarm{
 	pixel_y = 24
 	},
+/obj/machinery/recharger,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -52059,6 +52055,9 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -52086,7 +52085,9 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/obj/structure/disposalpipe/segment,
+/obj/structure/disposalpipe/sortjunction/Warden/mirrored{
+	dir = 1
+	},
 /turf/simulated/floor,
 /area/security/brig)
 "bQq" = (
@@ -52119,6 +52120,9 @@
 	dir = 4;
 	name = "Firelock East"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -52134,6 +52138,9 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -52945,13 +52952,19 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/disposalpipe/segment,
+/obj/structure/disposalpipe/junction{
+	dir = 1
+	},
 /turf/simulated/floor,
 /area/security/brig)
 "bRF" = (
 /obj/machinery/firealarm{
 	dir = 4;
 	pixel_x = 29
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 8;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -53593,6 +53606,10 @@
 	},
 /area/security/warden)
 "bSP" = (
+/obj/structure/disposalpipe/segment{
+	dir = 1;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},

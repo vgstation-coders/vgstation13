@@ -209,7 +209,7 @@ var/global/datum/controller/vote/vote = new()
 	return text
 
 /datum/controller/vote/proc/persistent()
-	var/datum/persistence_task/vote/task = SSpersistence_misc.tasks["/datum/persistence_task/vote"]
+	var/datum/persistence_task/vote/task = SSpersistence_tasks.tasks["/datum/persistence_task/vote"]
 	task.insert_counts(tally)
 	task.on_shutdown()
 	return majority()
@@ -390,7 +390,7 @@ var/global/datum/controller/vote/vote = new()
 		choices = shuffle(choices)
 		//initialize tally
 		if(config.toggle_vote_method == PERSISTENT && mode == "map")
-			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks["/datum/persistence_task/vote"]
+			var/datum/persistence_task/vote/task = SSpersistence_tasks.tasks["/datum/persistence_task/vote"]
 			for(var/i = 1; i <= choices.len; i++)
 				if(isnull(task.data[choices[i]]))
 					tally += choices[i]

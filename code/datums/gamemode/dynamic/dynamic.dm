@@ -246,7 +246,7 @@ var/stacking_limit = 90
 		"two_rounds_ago" = list(),
 		"three_rounds_ago" = list()
 	)
-	var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/latest_dynamic_rulesets)
+	var/list/data = SSpersistence_tasks.read_data(/datum/persistence_task/latest_dynamic_rulesets)
 	if(length(data))
 		for (var/entries in data)
 			var/previous_rulesets_text = data[entries]
@@ -259,7 +259,7 @@ var/stacking_limit = 90
 
 	//Recapping the weight of the various rulesets according to their categories
 	ruleset_category_weights = list()
-	data = SSpersistence_misc.read_data(/datum/persistence_task/dynamic_ruleset_weights)
+	data = SSpersistence_tasks.read_data(/datum/persistence_task/dynamic_ruleset_weights)
 	for (var/rule in subtypesof(/datum/dynamic_ruleset))//first we dress the list of all categories according to the rulesets that currently exist
 		var/datum/dynamic_ruleset/ruletype = rule
 		var/rulecategory = initial(ruletype.weight_category)
