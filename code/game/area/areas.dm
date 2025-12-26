@@ -17,6 +17,7 @@ var/area/space_area
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
 	var/project_shadows = FALSE
+	var/obj/effect/area_alert_holder/alert_holder = null
 	var/obj/effect/narration/narrator = null
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
@@ -48,6 +49,8 @@ var/area/space_area
 		power_equip = 1
 		power_environ = 1
 
+	alert_holder = new(src)
+
 	..()
 
 //	spawn(15)
@@ -61,6 +64,9 @@ var/area/space_area
 /area/Destroy()
 	..()
 	areaapc = null
+	if (alert_holder)
+		QDEL_NULL(alert_holder)
+
 
 /*
  * Added to fix mech fabs 05/2013 ~Sayu.
@@ -346,36 +352,8 @@ var/area/space_area
 		return ambience_list
 
 /area/proc/updateicon()
-	if (!areaapc)
-		icon_state = null
-		luminosity = 0
-		return
-	if ((fire || eject || party || radalert) && ((!requires_power)?(!requires_power):power_environ))//If it doesn't require power, can still activate this proc.
-		luminosity = 1
-		// Highest priority at the top.
-		if(radalert && !fire)
-			icon_state = "radiation"
-		else if(fire && !radalert && !eject && !party)
-			icon_state = "blue"
-		/*else if(atmosalm && !fire && !eject && !party)
-			icon_state = "bluenew"*/
-		else if(!fire && eject && !party)
-			icon_state = "red"
-		else if(party && !fire && !eject)
-			icon_state = "party"
-		else
-			icon_state = "blue-red"
-	else
-	//	new lighting behaviour with obj lights
-		icon_state = null
-		luminosity = 0
-
-
-/*
-#define EQUIP 1
-#define LIGHT 2
-#define ENVIRON 3
-*/
+	if (alert_holder)
+		alert_holder.update()
 
 /area/proc/powered(var/chan)		// return true if the area has power to given channel
 
