@@ -353,6 +353,7 @@
 	desc = "A newly-developed high-capacity vial that uses advances in bluespace research. Can hold up to 50 units."
 	icon_state = "bsvial"
 	starting_materials = list(MAT_DIAMOND = 250, MAT_IRON = 250, MAT_GLASS = 250, MAT_URANIUM = 250)
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=6"
 	volume = 50
 	possible_transfer_amounts = list(5,10,15,25,50)
 	opaque = TRUE
@@ -362,6 +363,7 @@
 	desc = "A small vial powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 25 units."
 	icon_state = "svial"
 	starting_materials = list(MAT_DIAMOND = 250, MAT_IRON = 250, MAT_GLASS = 250, MAT_URANIUM = 250)
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=6"
 	flags = FPRINT | OPENCONTAINER | NOREACT
 	opaque = TRUE
 
