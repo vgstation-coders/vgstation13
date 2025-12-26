@@ -305,6 +305,8 @@
 
 	var/changed_name = ""
 	if(custom_name)
+		custom_name = replacetext(custom_name, "{AINAME}", (connected_ai ? connected_ai.name : "AI"))
+		custom_name = replacetext(custom_name, "{###}", num2text(ident))
 		changed_name = custom_name
 	else
 		changed_name = "[modtype] [braintype]-[num2text(ident)]"
