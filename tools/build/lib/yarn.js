@@ -30,7 +30,7 @@ if (fs.existsSync(pnpFile) && fs.existsSync(yarnrcFile)) {
   if (yarnrc.includes('nodeLinker: node_modules')) {
     fs.rmSync(pnpFile, { force: true });
     fs.rmSync(path.join(tguiDir, '.pnp.loader.mjs'), { force: true });
-    fs.rmSync(path.join(tguiDir, '.yarn/unplugged'), { force: true, recursive: true });
+    fs.rmSync(path.join(tguiDir, '.yarn/unplugged'), { force: true, recursive: true }); // may be locked by zombie node process
     fs.rmSync(path.join(tguiDir, '.yarn/install-state.gz'), { force: true });
     fs.rmSync(path.join(tguiDir, '.yarn/install-target'), { force: true });
   }
