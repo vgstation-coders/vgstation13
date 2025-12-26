@@ -37,7 +37,7 @@ if (Test-Path $OldNodeTargetDir -PathType Container) {
 	Remove-Item $OldNodeTargetDir -Recurse -Force -ErrorAction SilentlyContinue
 	# If Windows didnt let it get deleted emit info for user to do it
 	if (Test-Path $OldNodeTargetDir -PathType Container) {
-		Write-Output "Could not delete legacy Node at $OldNodeTargetDir, end locking node.exe process and try again or delete this manually (nonessential clenaup)"
+		Write-Output "Could not delete legacy Node at $OldNodeTargetDir, end locking node.exe process and try again or delete this manually"
 	}
 }
 
@@ -46,7 +46,7 @@ $OldYarnCrapDir = [System.IO.Path]::GetFullPath("$BaseDir\..\..\tgui\.yarn\unplu
 if (Test-Path $OldYarnCrapDir -PathType Container) {
 	Remove-Item $OldYarnCrapDir -Recurse -Force -ErrorAction SilentlyContinue
 	if (Test-Path $OldYarnCrapDir -PathType Container) {
-		Write-Output "Could not delete old Yarn cache $OldYarnCrapDir, end locking node.exe process and try again or delete this manually (nonessential clenaup)"
+		Write-Output "Could not delete old Yarn cache $OldYarnCrapDir, end locking node.exe process and try again or delete this manually"
 	}
 }
 
