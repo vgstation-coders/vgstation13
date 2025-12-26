@@ -1203,7 +1203,6 @@ steam.start() -- spawns the effect
 	mouse_opacity = 0
 	icon = 'icons/turf/areas.dmi'
 	var/area/parent_area = null
-	var/active = FALSE // if in parent_area.area_turfs' vis_contents or not
 
 /obj/effect/area_alert_holder/New(area/A)
 	..()
@@ -1235,29 +1234,8 @@ steam.start() -- spawns the effect
 	icon_state = new_state
 	luminosity = new_luminosity
 
-	if (new_state && !active)
-		add_to_turfs()
-	else if (!new_state && active)
-		remove_from_turfs()
-
-/obj/effect/area_alert_holder/proc/add_to_turfs()
-	if (!parent_area)
-		return
-	active = TRUE
-	for (var/turf/T in parent_area.area_turfs)
-		T.vis_contents |= src
-
-/obj/effect/area_alert_holder/proc/remove_from_turfs()
-	if (!parent_area)
-		return
-	active = FALSE
-	for (var/turf/T in parent_area.area_turfs)
-		T.vis_contents -= src
-
 /obj/effect/area_alert_holder/proc/add_turf(turf/T)
-	if (active)
-		T.vis_contents |= src
+	T.vis_contents |= src
 
 /obj/effect/area_alert_holder/proc/remove_turf(turf/T)
-	if (active)
-		T.vis_contents -= src
+    T.vis_contents -= src
