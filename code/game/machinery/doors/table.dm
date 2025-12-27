@@ -11,7 +11,7 @@
 	closed_layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite its density.
 	use_power = MACHINE_POWER_USE_NONE
-	machine_flags = SCREWTOGGLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE | WIREJACK
 	icon = 'icons/obj/doors/tabledoor.dmi'
 	icon_state = "metaldoor_closed"
 	prefix = "metal" //Corresponds to the mineral type
@@ -37,7 +37,6 @@
 		set_up_access()
 		electronics = new /obj/item/weapon/circuitboard/airlock(src)
 		electronics.installed = TRUE
-		machine_flags = SCREWTOGGLE | EMAGGABLE | WIREJACK
 		if(req_access?.len)
 			electronics.conf_access = req_access
 		else if(req_one_access?.len)
@@ -169,7 +168,6 @@
 		electronics = null
 	req_access = list()
 	req_one_access = list()
-	machine_flags = SCREWTOGGLE
 
 /obj/machinery/door/table/proc/dismantle()
 	remove_electronics()
@@ -247,7 +245,7 @@
 					else
 						req_access = electronics.conf_access
 				electronics.installed = TRUE
-				machine_flags = SCREWTOGGLE | EMAGGABLE | WIREJACK
+				emagged = FALSE
 				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
 			return
@@ -288,7 +286,7 @@
 	return TRUE
 
 /obj/machinery/door/table/wirejack(var/mob/living/silicon/pai/P)
-	if(..())
+	if(electronics && !emagged && ..())
 		SwitchState()
 
 /obj/machinery/door/table/bullet_act(var/obj/item/projectile/Proj)
