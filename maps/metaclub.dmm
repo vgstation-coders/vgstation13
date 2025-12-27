@@ -42868,6 +42868,7 @@
 	dir = 8
 	},
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bDA" = (
@@ -44703,6 +44704,7 @@
 	})
 "bHe" = (
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bHf" = (
@@ -44728,6 +44730,7 @@
 	},
 /obj/item/weapon/book/manual/security_space_law,
 /obj/item/weapon/book/manual/security_antag_guide,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bHj" = (
@@ -45750,6 +45753,7 @@
 	pixel_y = 5
 	},
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bIO" = (
@@ -48932,12 +48936,14 @@
 /obj/structure/bookcase{
 	name = "bookcase (Non-Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bNZ" = (
 /obj/structure/bookcase{
 	name = "bookcase (Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bOa" = (
@@ -50435,6 +50441,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Religious)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bQY" = (
@@ -50460,6 +50467,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Adult)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bRc" = (
@@ -54821,6 +54829,7 @@
 /obj/structure/table/woodentable,
 /obj/item/weapon/paper,
 /obj/machinery/light,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bYz" = (
@@ -54858,6 +54867,7 @@
 "bYB" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/pill_bottle/dice,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bYC" = (
@@ -120323,6 +120333,7 @@
 	},
 /obj/item/mounted/poster,
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "oRi" = (
@@ -121224,6 +121235,7 @@
 	pixel_x = 1;
 	pixel_y = 5
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "sfW" = (

@@ -26561,6 +26561,7 @@
 /obj/structure/table/woodentable,
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "aXu" = (
@@ -29799,6 +29800,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Reference)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bel" = (
@@ -31572,6 +31574,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bhJ" = (
@@ -114847,6 +114850,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Religious)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "hty" = (
@@ -115301,6 +115305,7 @@
 	dir = 1;
 	pixel_y = -22
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "lYr" = (
@@ -115680,6 +115685,7 @@
 /area/hallway/primary/central)
 "pQs" = (
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "pWL" = (
@@ -115921,6 +115927,7 @@
 	pixel_y = -6
 	},
 /obj/machinery/light/small,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "rIi" = (
@@ -116249,6 +116256,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Adult)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "uBa" = (
@@ -116390,6 +116398,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Non-Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "vaf" = (

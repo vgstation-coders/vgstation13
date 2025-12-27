@@ -52218,6 +52218,7 @@
 /area/crew_quarters/theatre)
 "bPU" = (
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bPV" = (
@@ -53090,6 +53091,7 @@
 /area/library)
 "bRA" = (
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bRB" = (
@@ -57891,11 +57893,13 @@
 /obj/structure/table/woodentable,
 /obj/item/weapon/pen,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "caH" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/paper_bin,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "caI" = (
@@ -58437,6 +58441,7 @@
 "cbR" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/fancy/crayons,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "cbS" = (
@@ -59036,6 +59041,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "cda" = (
@@ -59044,6 +59050,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "cdb" = (
@@ -99410,6 +99417,7 @@
 /obj/structure/table/woodentable,
 /obj/machinery/disk_duplicator,
 /obj/item/weapon/storage/lockbox/diskettebox/large/full,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "nJE" = (
@@ -100152,6 +100160,7 @@
 /obj/structure/bookcase,
 /obj/item/weapon/book/manual/security_space_law,
 /obj/item/weapon/book/manual/security_antag_guide,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "sQI" = (

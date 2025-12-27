@@ -435,6 +435,49 @@
 	title = name
 	icon_state = "book[rand(1, 9)]"
 
+
+/*
+ * Random Library Books, from the Library!
+ */
+
+/obj/item/weapon/book/library_randomized/
+	var/worksafe = TRUE
+
+/obj/item/weapon/book/library_randomized/dangerous/
+	//not safe
+	worksafe = FALSE
+
+/obj/item/weapon/book/library_randomized/New()
+	. = ..()
+	if(SSobj && SSobj.initialized)
+		initialize()
+
+/obj/item/weapon/book/library_randomized/initialize()
+	. = ..()
+	var/datum/cachedbook/newbook = library_catalog.getRandomItem(worksafe)
+	if(!newbook || !newbook.id)
+		//failed to find a book. Likely not using a SQL DB. This is a failsafe.
+		//Picks a random useful manual!
+		var/Btype = pick(typesof(/obj/item/weapon/book/manual)-/obj/item/weapon/book/manual)
+		var/obj/item/weapon/book/B = new Btype
+		name = B.name
+		title = B.title
+		author = B.author
+		dat = B.dat
+		icon_state = B.icon_state
+		item_state = icon_state
+		qdel(B)
+		return
+	name = "Book: [newbook.title]"
+	title = newbook.title
+	author = newbook.author
+	dat = newbook.content
+	if(newbook.cover)
+		icon_state = newbook.cover
+	else
+		icon_state = "book[rand(1,9)]"
+	item_state = icon_state
+
 /*
  * Barcode Scanner
  */

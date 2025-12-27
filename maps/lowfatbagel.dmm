@@ -5398,6 +5398,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/arcade{
 	icon_state = "bcarpet02";
 	tag = "icon-bcarpet02"
@@ -56748,6 +56749,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/arcade{
 	icon_state = "bcarpet08";
 	tag = "icon-bcarpet08"
@@ -64649,6 +64651,7 @@
 	name = "bookcase (Adult)"
 	},
 /obj/effect/decal/cleanable/cobweb2,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/security/rec_room)
 "lse" = (
@@ -69108,6 +69111,7 @@
 /obj/structure/bookcase,
 /obj/item/weapon/book/manual/security_space_law,
 /obj/item/weapon/book/manual/security_antag_guide,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/arcade{
 	icon_state = "bcarpet08";
 	tag = "icon-bcarpet08"
@@ -74608,6 +74612,7 @@
 /area/engineering/engine)
 "olt" = (
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/arcade{
 	icon_state = "bcarpet08";
 	tag = "icon-bcarpet08"
@@ -81107,6 +81112,7 @@
 /area/vox_trading_post/dorms)
 "qfJ" = (
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/arcade{
 	icon_state = "bcarpet02";
 	tag = "icon-bcarpet02"

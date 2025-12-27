@@ -85939,6 +85939,7 @@
 	dir = 4
 	},
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "dff" = (
@@ -86531,11 +86532,13 @@
 /obj/item/weapon/book/manual/detective,
 /obj/item/weapon/book/manual/engineering_guide,
 /obj/item/weapon/book/manual/mailing_guide,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "dgk" = (
 /obj/structure/bookcase,
 /obj/item/weapon/book/manual/chef_recipes,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "dgl" = (
@@ -86995,6 +86998,7 @@
 /area/library)
 "dhc" = (
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "dhd" = (
@@ -87017,6 +87021,7 @@
 /obj/structure/bookcase,
 /obj/item/weapon/book/manual/security_space_law,
 /obj/item/weapon/book/manual/security_antag_guide,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "dhh" = (
@@ -87800,6 +87805,7 @@
 	},
 /obj/structure/table/woodentable,
 /obj/item/weapon/dice/borg,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "diL" = (
@@ -88175,6 +88181,7 @@
 /obj/item/weapon/paper_bin,
 /obj/item/weapon/pen/red,
 /obj/item/weapon/pen/blue,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet{
 	icon_state = "carpet13-5"
 	},
@@ -131211,6 +131218,7 @@
 	},
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/pill_bottle/dice,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet{
 	icon_state = "carpet13-5"
 	},
