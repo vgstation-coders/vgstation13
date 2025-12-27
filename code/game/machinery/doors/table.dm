@@ -37,6 +37,7 @@
 		set_up_access()
 		electronics = new /obj/item/weapon/circuitboard/airlock(src)
 		electronics.installed = TRUE
+		machine_flags = SCREWTOGGLE | EMAGGABLE | WIREJACK
 		if(req_access?.len)
 			electronics.conf_access = req_access
 		else if(req_one_access?.len)
@@ -168,6 +169,7 @@
 		electronics = null
 	req_access = list()
 	req_one_access = list()
+	machine_flags = SCREWTOGGLE
 
 /obj/machinery/door/table/proc/dismantle()
 	remove_electronics()
@@ -245,6 +247,7 @@
 					else
 						req_access = electronics.conf_access
 				electronics.installed = TRUE
+				machine_flags = SCREWTOGGLE | EMAGGABLE | WIREJACK
 				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
 			return
