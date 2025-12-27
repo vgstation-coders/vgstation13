@@ -29,10 +29,10 @@
 
 	var/scare_cooldown
 	var/scare_cooldown_time = 5 SECONDS
+	blooded = FALSE
 
 /mob/living/simple_animal/scp_173/New()
 	. = ..()
-	blooded = FALSE
 
 /mob/living/simple_animal/scp_173/Life()
 	if(timestopped)
@@ -125,6 +125,7 @@
 	if(!check_los())
 		return
 
+	canmove = 0
 	//Send the warning that SCP is homing in
 	target_turf = get_turf(target)
 	if(!scare_played && ishuman(target)) //Let's minimize the spam
@@ -169,6 +170,7 @@
 			next_turf = get_step(src, get_dir(next_turf,target))
 			num_turfs--
 		target_turf = null
+		canmove = 1
 
 	scare_cooldown = world.time + scare_cooldown_time
 
@@ -180,6 +182,7 @@
 	if(scare_cooldown > world.time)
 		return
 
+	scare_cooldown = world.time + scare_cooldown_time
 	//If we're not strangling anyone, take a stroll
 	if(prob(25)) //1 in 4 chance of checking out something new
 		var/list/turfs = new/list()
@@ -263,7 +266,6 @@
 		else
 			entry_vent = null
 
-	scare_cooldown = world.time + scare_cooldown_time
 
 //This performs an immediate neck snap check, meant to avoid people cheesing SCP-173 by just running faster than Life() refresh
 /mob/living/simple_animal/scp_173/proc/check_snap_neck()
