@@ -26,6 +26,8 @@
 		target = safepick(oview(1,src))
 	if(!istype(target, /atom))
 		return
+	if(!Adjacent(target))
+		return
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
 		if(src.occupant.a_intent == I_HURT)
