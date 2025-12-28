@@ -1419,7 +1419,7 @@ var/list/cult_spires = list()
 /obj/structure/cult/pillar/update_icon()
 	if (!direction_to_bloodstone)
 		var/datum/faction/bloodcult/_cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (_cult.bloodstone)
+		if (_cult?.bloodstone)
 			var/_angle = arctan((_cult.bloodstone.y - y) / (_cult.bloodstone.x - x))
 			if ((_cult.bloodstone.x - x) < 0)
 				_angle += 180
