@@ -92,6 +92,8 @@
 	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
 
 	var/last_burn
+	var/smoking = FALSE //is the obj emitting smoke particles
+
 	var/vent_use = FALSE //can this be used while ventcrawling
 
 /obj/item/New()
@@ -1805,3 +1807,27 @@ var/global/objects_thrown_when_explode = FALSE
 		var/mob/living/L = user
 		L.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
 		L.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")
+
+/obj/item/checkburn()
+	if(!flammable)
+		CRASH("[src] tried to burn despite not being flammable!")
+	if(on_fire)
+		return
+	if(!smoking)
+		checksmoke()
+	..()
+
+/obj/item/proc/checksmoke()
+	var/datum/gas_mixture/G = return_air()
+	if(!G)
+		return
+	while(G && G.temperature >= (autoignition_temperature * 0.75))
+		if(!smoking)
+			add_particles(PS_SMOKE)
+			smoking = TRUE
+		var/rate = clamp(lerp_generic(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
+		sleep(10 SECONDS)
+		G = return_air()
+	remove_particles(PS_SMOKE)
+	smoking = FALSE

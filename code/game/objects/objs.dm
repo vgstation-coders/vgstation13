@@ -14,7 +14,6 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	var/sharpness_flags = 0 //Describe in which way this thing is sharp. Shouldn't sharpness be exclusive to obj/item?
 	var/heat_production = 0
 	var/source_temperature = 0
-	var/smoking = FALSE //is the obj emitting smoke particles
 	var/price = 0
 
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
@@ -501,30 +500,6 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 /obj/ignite()
 	if(..())
 		remove_particles(PS_SMOKE)
-
-/obj/item/checkburn()
-	if(!flammable)
-		CRASH("[src] tried to burn despite not being flammable!")
-	if(on_fire)
-		return
-	if(!smoking)
-		checksmoke()
-	..()
-
-/obj/item/proc/checksmoke()
-	var/datum/gas_mixture/G = return_air()
-	if(!G)
-		return
-	while(G && G.temperature >= (autoignition_temperature * 0.75))
-		if(!smoking)
-			add_particles(PS_SMOKE)
-			smoking = TRUE
-		var/rate = clamp(lerp_generic(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
-		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
-		sleep(10 SECONDS)
-		G = return_air()
-	remove_particles(PS_SMOKE)
-	smoking = FALSE
 
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
