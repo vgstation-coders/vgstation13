@@ -628,9 +628,6 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 /obj/proc/hide(h)
 	return
 
-/obj/proc/container_resist()
-	return
-
 /**
  * Called when a mob inside this obj's contents logs out.
  */
