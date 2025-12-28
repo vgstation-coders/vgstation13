@@ -554,9 +554,9 @@ var/datum/subsystem/mapping/SSmapping
 
 	// Set planet and v on the shared areas (done once here instead of per-turf)
 	current_mapgen.primary_area.planet = current_planet
-	current_mapgen.primary_area.virtual_z_level = current_virtual_z
+	current_mapgen.primary_area.v = current_virtual_z
 	current_mapgen.cave_area.planet = current_planet
-	current_mapgen.cave_area.virtual_z_level = current_virtual_z
+	current_mapgen.cave_area.v = current_virtual_z
 
 	// Populate terrain generation queue
 	terrain_queue = current_virtual_z.get_turfs()

@@ -59,10 +59,14 @@
 	for(var/turf/T in turfs)
 		if(!T)
 			continue
+		T.v = src
 		var/area/A = get_area(T)
+		if(!A || isspace(A))
+			continue
 		areas |= A
-		A.virtual_z_level = src
-	make_borders()
+		A.v = src
+	spawn(0)
+		make_borders()
 
 /datum/virtual_z/proc/get_turfs()
 	return block(locate(x_min, y_min, parent_z.z), locate(x_max, y_max, parent_z.z))
@@ -121,41 +125,57 @@
 ///////// MAP GENERATION /////////
 //////////////////////////////////
 /datum/virtual_z/proc/make_borders()
-	var/spacing = ALLOCATION_SPACING_DEFAULT
-
 	var/z_level = z()
+	var/list/sides = list(
+		"North" = TRUE,
+		"South" = TRUE,
+		"East" = TRUE,
+		"West" = TRUE
+		)
+	var/list/spacing = list(
+		"North" = ALLOCATION_SPACING_DEFAULT,
+		"South" = ALLOCATION_SPACING_DEFAULT,
+		"East" = ALLOCATION_SPACING_DEFAULT,
+		"West" = ALLOCATION_SPACING_DEFAULT
+	)
+	if(x_min <= ALLOCATION_SPACING_DEFAULT)
+		if(x_min == 0)
+			spacing["West"] = 0
+			sides["West"] = FALSE
+		else
+			spacing["West"] = x_min
+	if(y_min <= ALLOCATION_SPACING_DEFAULT)
+		if(y_min == 0)
+			spacing["North"] = 0
+			sides["North"] = FALSE
+		else
+			spacing["North"] = y_min
+	if(world.maxx - x_max <= ALLOCATION_SPACING_DEFAULT)
+		if(world.maxx - x_max == 0)
+			spacing["East"] = 0
+			sides["East"] = FALSE
+		else
+			spacing["East"] = world.maxx - x_max
+	if(world.maxy - y_max <= ALLOCATION_SPACING_DEFAULT)
+		if(world.maxy - y_max == 0)
+			spacing["South"] = 0
+			sides["South"] = FALSE
+		else
+			spacing["South"] = world.maxy - y_max
 
-	// Top - spawn borders if there's any space above
-	if(y_max < world.maxy)
-		for(var/x = max(1, x_min - spacing); x <= min(world.maxx, x_max + spacing); x++)
-			for(var/y = y_max + 1; y <= min(world.maxy, y_max + spacing); y++)
-				var/turf/T = locate(x, y, z_level)
-				if(!istype(T, /turf/unsimulated/border))
-					T.ChangeTurf(/turf/unsimulated/border)
+	var/list/turf/border_turfs = list()
 
-	// Bottom - spawn borders if there's any space below
-	if(y_min > 1)
-		for(var/x = max(1, x_min - spacing); x <= min(world.maxx, x_max + spacing); x++)
-			for(var/y = max(1, y_min - spacing); y < y_min; y++)
-				var/turf/T = locate(x, y, z_level)
-				if(!istype(T, /turf/unsimulated/border))
-					T.ChangeTurf(/turf/unsimulated/border)
+	var/outer_x_min = max(1, x_min - spacing["West"])
+	var/outer_x_max = min(world.maxx, x_max + spacing["East"])
+	var/outer_y_min = max(1, y_min - spacing["South"])
+	var/outer_y_max = min(world.maxy, y_max + spacing["North"])
 
-	// Left - spawn borders if there's any space to the left
-	if(x_min > 1)
-		for(var/y = y_min; y <= y_max; y++)
-			for(var/x = max(1, x_min - spacing); x < x_min; x++)
-				var/turf/T = locate(x, y, z_level)
-				if(!istype(T, /turf/unsimulated/border))
-					T.ChangeTurf(/turf/unsimulated/border)
+	var/list/turf/outer_block = block(locate(outer_x_min, outer_y_min, z_level), locate(outer_x_max, outer_y_max, z_level))
+	var/list/turf/inner_block = block(locate(x_min, y_min, z_level), locate(x_max, y_max, z_level))
 
-	// Right - spawn borders if there's any space to the right
-	if(x_max < world.maxx)
-		for(var/y = y_min; y <= y_max; y++)
-			for(var/x = x_max + 1; x <= min(world.maxx, x_max + spacing); x++)
-				var/turf/T = locate(x, y, z_level)
-				if(!istype(T, /turf/unsimulated/border))
-					T.ChangeTurf(/turf/unsimulated/border)
+	border_turfs = outer_block - inner_block
+	for(var/turf/T in border_turfs)
+		T.ChangeTurf(/turf/unsimulated/border)
 
 // Assigns all appropriate turfs on the vlevel to the provided climate system
 /datum/virtual_z/proc/register_weather_turfs(var/datum/climate/climate)
@@ -200,14 +220,15 @@
 
 	// Process all turfs in the spawned objects
 	for(var/area/A in spawned_objects)
-		if(istype(A))
-			A.virtual_z_level = src
+		if(istype(A) && !isspace(A))
+			A.v = src
 			areas |= A  // Add ruin areas to the virtual_z's areas list for proper get_turfs() lookups
 			if(A?.base_turf_type != default_baseturf)
 				A.base_turf_type = default_baseturf
 	for(var/atom/AA in spawned_objects)
 		if(isturf(AA))
 			var/turf/T = AA
+			T.v = src
 			if(istype(T, /turf/unsimulated/floor/asteroid))
 				if(default_baseturf)
 					T.ChangeTurf(default_baseturf)

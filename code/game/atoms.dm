@@ -1132,17 +1132,8 @@ its easier to just keep the beam vertical.
 
 // Returns the virtual_z datum for this atom's area, or null if none
 /atom/proc/get_virtual_z()
-	var/datum/virtual_z/V = null
 	var/turf/T = get_turf(src)
-	if(!T)
-		return null
-	for(var/datum/virtual_z/VV in map.vLevels)
-		if(T.z != VV.z())
-			continue
-		if(T.x >= VV.x_min && T.x <= VV.x_max && T.y >= VV.y_min && T.y <= VV.y_max)
-			V = VV
-			break
-	return V
+	return T?.v
 
 // Returns the virtual x coordinate of this atom
 /atom/proc/vx()
