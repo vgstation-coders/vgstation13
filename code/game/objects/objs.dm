@@ -631,12 +631,6 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 /obj/proc/container_resist()
 	return
 
-/obj/proc/can_pickup(mob/living/user)
-	return 0
-
-/obj/proc/verb_pickup(mob/living/user)
-	return 0
-
 /obj/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
 	return 0
 

@@ -1082,7 +1082,7 @@ var/global/objects_thrown_when_explode = FALSE
 		return CANNOT_EQUIP //Unsupported slot
 		//END GRINCH
 
-/obj/item/can_pickup(mob/living/user, var/actually_picking_up = TRUE, var/silent = FALSE)
+/obj/item/proc/can_pickup(mob/living/user, var/actually_picking_up = TRUE, var/silent = FALSE)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return FALSE
 	if(actually_picking_up && prepickup(user))
@@ -1103,11 +1103,7 @@ var/global/objects_thrown_when_explode = FALSE
 		return FALSE
 	return TRUE
 
-/obj/item/verb_pickup(mob/living/user)
-	//set src in oview(1)
-	//set category = "Object"
-	//set name = "Pick up"
-
+/obj/item/proc/verb_pickup(mob/living/user)
 	if(!can_pickup(user))
 		return FALSE
 

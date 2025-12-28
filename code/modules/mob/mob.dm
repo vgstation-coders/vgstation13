@@ -1157,7 +1157,7 @@ Use this proc preferably at the end of an equipment loadout
 						else
 							to_chat(M, "<span class='info'><b>\The [L]</b> looks at [A].</span>")
 
-/mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
+/mob/living/verb/verb_pickup(obj/item/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"
 	set category = "Object"
 
@@ -1167,7 +1167,7 @@ Use this proc preferably at the end of an equipment loadout
 /proc/acquirable_objects_in_view(var/mob/living/L, var/range)
 	var/list/obj_list = list()
 	for(var/turf/T in view(L, range))
-		for(var/obj/I in T)
+		for(var/obj/item/I in T)
 			if(I.can_pickup(L, FALSE, TRUE))
 				obj_list.Add(I)
 	return obj_list
