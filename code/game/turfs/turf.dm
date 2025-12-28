@@ -16,7 +16,7 @@
 	var/edge_priority = 0 // higher priority edges are placed over lower-priority ones
 	var/edge_flags = 0
 	var/edge_overlay_type = /obj/effect/edge_overlay
-	var/list/datum/weakref/edge_overlays = list()
+	var/list/datum/weakref/edge_overlays
 
 	//properties for open tiles (/floor)
 	var/oxygen = 0
@@ -86,12 +86,12 @@
 
 	var/datum/paint_overlay/paint_overlay = null
 
-	var/list/footstep_sound = list()
-	var/list/footstep_sound_barefoot = list()
-	var/list/footstep_sound_claw = list()
+	var/list/footstep_sound
+	var/list/footstep_sound_barefoot
+	var/list/footstep_sound_claw
 
 	//reagent stuff
-	var/list/turf_reagents = list() //a list of reagent ids, associated with their relative amount. eg WATER=1 these numbers should sum to 1, though.
+	var/list/turf_reagents //a list of reagent ids, associated with their relative amount. eg WATER=1 these numbers should sum to 1, though.
 	var/reagent_interaction_flags = 0
 	var/turf_reagent_amount = null // null = do not make any reagents and skip the code
 	var/turf_reagent_method = TOUCH
@@ -114,6 +114,16 @@
 
 /turf/New()
 	..()
+	if(skip_turf_init)
+		return
+
+	//Lazy list inits
+	edge_overlays = list()
+	footstep_sound = list()
+	footstep_sound_barefoot = list()
+	footstep_sound_claw = list()
+	turf_reagents = list()
+
 	footstep_sound = sounds_floor
 	footstep_sound_barefoot = sounds_floor_barefoot
 	footstep_sound_claw = sounds_floor_claw
@@ -121,11 +131,27 @@
 		base_icon_state = icon_state
 	pick_icon_state()
 
+	//fire stuff
+	if(!thermal_material)
+		flammable = FALSE
+	else
+		if(!autoignition_temperature)
+			autoignition_temperature = thermal_material.autoignition_temperature
+		if(thermal_mass)
+			initial_thermal_mass = thermal_mass
+		fire_protection = world.time
+
 /turf/proc/pick_icon_state()
 	if(base_icon_state && max_icon_states && prob(variance))
 		icon_state = "[base_icon_state][rand(min_icon_states,max_icon_states)]"
 
 /turf/initialize()
+	if(skip_turf_init)
+		if(loc)
+			var/area/A = loc
+			A.area_turfs += src
+		flags |= ATOM_INITIALIZED
+		return
 	..()
 	if(loc)
 		var/area/A = loc

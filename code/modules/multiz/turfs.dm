@@ -142,6 +142,8 @@ var/list/open_overlay_depths
 
 /turf/initialize()
 	. = ..()
+	if(skip_turf_init)
+		return
 	if(HasBelow(src.z))
 		var/turf/below = GetBelow(src)
 		if(below)

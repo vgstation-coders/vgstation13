@@ -140,7 +140,7 @@
 		var/path = levelPaths[i]
 		addZLevel(new path, i)
 
-/datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0, make_base_turf = FALSE, fast_base_turf = FALSE)
+/datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0, make_base_turf = FALSE, fast_base_turf = FALSE, create_virtual_z = FALSE)
 	if(!istype(level))
 		warning("ERROR: addZLevel received [level ? "a bad level of type [ispath(level) ? "[level]" : "[level.type]" ]" : "no level at all!"]")
 		return
@@ -155,7 +155,8 @@
 	if(!istype(level.base_turf,/turf/space) && make_base_turf)
 		level.reset_base_turf(/turf/space,fast_base_turf)
 
-	linkVLevel(level)
+	if(create_virtual_z || zLevels.len < 7)
+		linkVLevel(level)
 
 /datum/map/proc/linkVLevel(datum/zLevel/level)
 	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL)
@@ -185,7 +186,10 @@
 	// Create a new dynamic zLevel if no suitable one was found
 	if(!z_to_use)
 		z_to_use = new /datum/zLevel/dynamic()
+		// Skip turf initialization during z-level creation to avoid lag
+		skip_turf_init = TRUE
 		world.maxz++
+		skip_turf_init = FALSE
 		z_to_use.z = world.maxz
 		map.zLevels += z_to_use
 		found_x = 1
