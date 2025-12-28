@@ -1131,6 +1131,15 @@ var/global/objects_thrown_when_explode = FALSE
 		attack_paw(user)
 	return
 
+/obj/item/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
+	return 0
+
+
+/obj/item/proc/quick_store(var/obj/item/I, mob/user) //proc used to handle quick storing
+	if(user?.client)
+		user.client.last_quick_stored = world.time
+	return 0
+
 //Used in twohanding
 /obj/item/proc/wield(mob/user, var/inactive = FALSE)
 	if(!user.can_wield(src))
