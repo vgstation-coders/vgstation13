@@ -97,7 +97,7 @@
 	takeDamage(Proj.damage)
 	return ..()
 
-/obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user, params)
+/obj/structure/cult/attackby(var/obj/item/W, var/mob/user, params)
 	if (istype(W))
 		if(user.a_intent == I_HELP || W.force == 0)
 			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
