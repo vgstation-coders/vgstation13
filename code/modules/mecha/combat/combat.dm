@@ -38,11 +38,14 @@
 
 				var/datum/organ/external/temp = H.get_organ(pick(LIMB_CHEST, LIMB_CHEST, LIMB_CHEST, LIMB_HEAD))
 				if(temp)
-					var/update = 0
+					if (prob(50))//this is still busted but now you have a chance to get out of stunlock
+						H.Paralyse(1)
+					var/update = temp.take_damage(rand(force/2, force), 0)
+					//nothing to my knowledge changes mecha damage type, so this will most likely be the only case to ever proc
+					/*
 					switch(damtype)
-						if("brute")//nothing to my knowledge changes mecha damage type, so this will most likely be the only case to ever proc
-							if (prob(50))
-								H.Paralyse(1)
+						if("brute")
+							H.Paralyse(1)
 							update |= temp.take_damage(rand(force/2, force), 0)
 						if("fire")
 							update |= temp.take_damage(0, rand(force/2, force))
@@ -52,15 +55,20 @@
 									H.reagents.add_reagent(CARPOTOXIN, force)
 								if(H.reagents.get_reagent_amount(CRYPTOBIOLIN) + force < force*2)
 									H.reagents.add_reagent(CRYPTOBIOLIN, force)
+					*/
 					if(update)
 						H.UpdateDamageIcon(1)
 				H.updatehealth()
 
 			else
+				if (prob(50))//this is still busted but now you have a chance to get out of stunlock
+					M.Paralyse(1)
+				M.take_overall_damage(rand(force/2, force))
+				//nothing to my knowledge changes mecha damage type, so this will most likely be the only case to ever proc
+				/*
 				switch(damtype)
-					if("brute")//nothing to my knowledge changes mecha damage type, so this will most likely be the only case to ever proc
-						if (prob(50))
-							M.Paralyse(1)
+					if("brute")
+						M.Paralyse(1)
 						M.take_overall_damage(rand(force/2, force))
 					if("fire")
 						M.take_overall_damage(0, rand(force/2, force))
@@ -70,6 +78,7 @@
 								M.reagents.add_reagent(CARPOTOXIN, force)
 							if(M.reagents.get_reagent_amount(CRYPTOBIOLIN) + force < force*2)
 								M.reagents.add_reagent(CRYPTOBIOLIN, force)
+				*/
 				M.updatehealth()
 			src.occupant_message("You hit [target].")
 			src.visible_message("<span class='red'><b>[src.name] hits [target].</b></span>")
