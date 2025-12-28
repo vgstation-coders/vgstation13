@@ -232,6 +232,12 @@ var/global/list/screen_alarms_locs = list(
 	desc = "Find some good air before you pass out!"
 	icon_state = "carbon_oxy"
 
+/obj/abstract/screen/alert/carbon/breath/vox
+	icon_state = "carbon_nitro"
+
+/obj/abstract/screen/alert/carbon/breath/plasma
+	icon_state = "carbon_plasma"
+
 /obj/abstract/screen/alert/tox
 	name = "Toxins"
 	desc = "Your body is exposed to either environmental toxins or radiation poisoning."
