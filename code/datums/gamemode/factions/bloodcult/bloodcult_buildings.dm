@@ -1427,7 +1427,7 @@ var/list/cult_spires = list()
 			var/_y_drift = sin(_angle) / 15
 			direction_to_bloodstone = list(_x_drift - 0.02, _y_drift - 0.02, _x_drift + 0.02, _y_drift + 0.02)
 		else
-			direction_to_bloodstone = list(-0.2, -0.2, 0.2, 0.02)
+			direction_to_bloodstone = list(-0.02, -0.02, 0.02, 0.02)
 
 	if (!particle_init)
 		add_particles(PS_PILLAR_BEACON)
