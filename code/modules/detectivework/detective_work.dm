@@ -139,6 +139,9 @@
 	. = ..()
 	if(authenticated)
 		if(isgripper(I))
+			if(scanning)
+				to_chat(usr, "<span class='warning'>There is already \a [scanning] in the scanning slot!.</span>")
+				return
 			var/obj/item/weapon/gripper/G = I
 			if(G.wrapped && G.drop_item(I))
 				scanning = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
@@ -158,9 +161,11 @@
 						process_card()
 				else
 					to_chat(usr, "<span class='warning'>No files detected to scan with [I].</span>")
+					return
 			if(I && scanning)
 				to_chat(usr, "<span class='warning'>There is already \a [scanning] in the scanning slot!.</span>")
-			else if(istype(I, /obj/item/weapon/storage/evidencebag))
+				return
+			if(istype(I, /obj/item/weapon/storage/evidencebag))
 				if(I.contents.len)
 					var/obj/item/weapon/storage/evidencebag/EVB = I
 					scanning = EVB.contents[1]
