@@ -981,7 +981,34 @@ its easier to just keep the beam vertical.
 		if(uppertext(C.ckey) == uppertext(fingerprintslast))
 			return C.mob
 
+/atom/New()
+	if(skip_turf_init)
+		return
+
+	// Incase any lighting vars are on in the typepath we turn the light on in New().
+	if (light_power && light_range)
+		update_light()
+
+	if (opacity && isturf(loc))
+		var/turf/T = loc
+		T.has_opaque_atom = TRUE // No need to recalculate it in this case, it's guaranteed to be on afterwards anyways.
+
+	//atom creation method that preloads variables at creation
+	if(use_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
+		_preloader.load(src)
+
+	. = ..()
+
+	particle_systems = list() //Lazy init
+
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING && canSmoothWith())
+		relativewall()
+		relativewall_neighbours()
+
 /atom/initialize()
+	if(skip_turf_init)
+		flags |= ATOM_INITIALIZED
+		return
 	if(canSmoothWith())
 		relativewall()
 	flags |= ATOM_INITIALIZED
