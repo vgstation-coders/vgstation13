@@ -136,7 +136,7 @@
 	overlays.len = 0
 	overlays += mask
 
-	shade.pixel_x = mask.pixel_x
+	shade.pixel_x = mask.pixel_x - 16
 
 	overlays += shade
 
