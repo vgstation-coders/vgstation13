@@ -22,6 +22,7 @@
 #define SPATIAL_BUCKET_SIZE 15
 
 var/datum/subsystem/mapping/SSmapping
+var/skip_turf_init = FALSE
 
 /datum/subsystem/mapping
 	name       = "Mapping"
@@ -125,7 +126,7 @@ var/datum/subsystem/mapping/SSmapping
 				progress = round((current_chunk_y / current_virtual_z.y_max) * 100, 1)
 		if(STAGE_RUIN)
 			stage_name = "Ruin"
-			progress = clamp(round((1-(current_planet.ruin_budget / initial(current_planet.ruin_budget))) * 100, 1),0,100)
+			progress = "[current_planet.ruin_budget]" / "[initial(current_planet.ruin_budget)]"
 		if(STAGE_POPULATION)
 			stage_name = "Population"
 			if(population_queue.len > 0)
@@ -548,7 +549,7 @@ var/datum/subsystem/mapping/SSmapping
 	current_planet = new planet_datum
 	message_admins("DEBUG spawn_planet: new planet_datum took [(TICK_USAGE_REAL - step_start)]ms")
 
-	var/size_to_use = pick(ALLOCATION_LARGE)
+	var/size_to_use = pick(ALLOCATION_SMALL)
 
 	step_start = TICK_USAGE_REAL
 	current_mapgen = new current_planet.mapgen(size_to_use)

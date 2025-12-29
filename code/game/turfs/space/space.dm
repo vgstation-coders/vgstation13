@@ -1,5 +1,3 @@
-var/skip_turf_init = FALSE
-
 /turf/space
 	icon = 'icons/turf/space.dmi'
 	name = "\proper space"
