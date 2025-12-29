@@ -122,12 +122,8 @@
 
 	var/timeleft = (timetocheck - (world.time - DEATH_SHADEOUT_TIMER)) / DEATH_SHADEOUT_TIMER
 
-	to_chat(world, "timeleft = [timeleft]")
-
 	mask.pixel_x = max(0, 288 - (288 * timeleft))
 
-
-	to_chat(world, "mask.pixel_x = [mask.pixel_x]")
 	if (timeleft <= 0)
 		adjust_particles(PVAR_SPAWNING, 0)
 	else
