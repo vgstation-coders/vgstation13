@@ -12,6 +12,7 @@
 		/obj/abstract/mind_ui_element/shade_timer_gauge,
 		/obj/abstract/mind_ui_element/shade_timer_front,
 		)
+	display_with_parent = TRUE
 
 /datum/mind_ui/bloodcult_shade_timer/Valid()
 	var/mob/M = mind.current
@@ -44,7 +45,7 @@
 	element_flags = MINDUI_FLAG_PROCESSING
 	mouse_opacity = 0
 	var/red_blink = FALSE
-	var/timeleft = DEATH_SHADEOUT_TIMER
+	var/timeleft = 60
 
 /obj/abstract/mind_ui_element/shade_timer_count/process()
 	if (invisibility == 101)
@@ -122,7 +123,7 @@
 
 	var/timeleft = (timetocheck - (world.time - DEATH_SHADEOUT_TIMER)) / DEATH_SHADEOUT_TIMER
 
-	mask.pixel_x = max(0, 288 - (288 * timeleft))
+	mask.pixel_x = max(0, 288 * timeleft)
 
 	if (timeleft <= 0)
 		adjust_particles(PVAR_SPAWNING, 0)
