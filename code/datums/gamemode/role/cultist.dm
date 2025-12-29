@@ -234,6 +234,7 @@
 	var/mob/M = antag?.current
 	if(M)
 		M.DisplayUI("Cultist")
+		M.DisplayUI("Shade Timer")//only actually appears if the player is dead
 		if (M.client && M.hud_used)
 			if (isshade(M))
 				if (istype(M.loc,/obj/item/weapon/melee/soulblade))
@@ -247,6 +248,7 @@
 	if(M)
 		M.HideUI("Cultist")
 		M.HideUI("Bloodcult Runes")
+		M.HideUI("Shade Timer")
 
 /datum/role/cultist/extraPanelButtons()
 	var/dat = ""
