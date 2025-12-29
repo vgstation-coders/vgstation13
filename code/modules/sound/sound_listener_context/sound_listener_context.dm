@@ -130,12 +130,14 @@
 	E.register_event(/event/sound_started, src, nameof(src::start_hearing()))
 	E.register_event(/event/sound_stopped, src, nameof(src::stop_hearing()))
 	E.register_event(/event/sound_pushed, src, nameof(src::hear_once()))
+	E.register_event(/event/destroyed, src, nameof(src::on_emitter_destroyed()))
 
 /datum/sound_listener_context/proc/unsubscribe_from(datum/sound_emitter/E)
 	E.unregister_event(/event/sound_updated, src, nameof(src::on_sound_update()))
 	E.unregister_event(/event/sound_started, src, nameof(src::start_hearing()))
 	E.unregister_event(/event/sound_stopped, src, nameof(src::stop_hearing()))
 	E.unregister_event(/event/sound_pushed, src, nameof(src::hear_once()))
+	E.unregister_event(/event/destroyed, src, nameof(src::on_emitter_destroyed()))
 
 /datum/sound_listener_context/proc/start_hearing(datum/sound_emitter/emitter)
 	if (!emitter.is_currently_playing())
@@ -173,6 +175,10 @@
 	S.channel = chan
 	apply_proxymob_effects(S)
 	client << S
+
+/datum/sound_listener_context/proc/on_emitter_destroyed(datum/sound_emitter/emitter)
+	// /event/sound_stopped is invoked by sound_emitter/Destroy, here just cleans up the local reference
+	audible_emitters -= emitter
 
 /datum/sound_listener_context/proc/on_enter_range(datum/sound_emitter/E)
 	start_hearing(E) // this can throw if channel reservation fails, subscribe after its safe

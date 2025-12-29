@@ -31321,6 +31321,7 @@
 /area/bridge)
 "bhf" = (
 /obj/machinery/computer/security/engineering,
+/obj/machinery/computer/gas_extraction,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},

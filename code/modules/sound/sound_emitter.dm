@@ -78,12 +78,7 @@
 
 	var/datum/sound_zone_manager/szm // not strictly necessary but its here for easy debugging in this early stage
 
-// for static things (e.g. machines that must be bolted to work) pass is_static = TRUE
-//  this causes the reserved channel to be taken from a shared pool, as static objects won't move close
-//  to eachother and won't contend. There is no overlap between the shared and unique pools, so no contention
-//  for example if someone carrying something noisy (mobile -> unique pool) walks close to something in the shared pool.
-// Dimensional Push is the exception to this (probably), the sound messing up is part of the !!! fun !!!
-/datum/sound_emitter/New(atom/A, var/is_static = FALSE)
+/datum/sound_emitter/New(atom/A)
 	..()
 	source = A
 	range = world.view
@@ -91,6 +86,7 @@
 	if (sound_zone_manager)
 		szm = sound_zone_manager
 	sound_zone_manager.register_emitter(src)
+	source.register_event(/event/moved, src, nameof(src::on_source_moved()))
 
 /datum/sound_emitter/Destroy()
 	sound_emitter_collection.remove(src)
@@ -99,6 +95,8 @@
 	if (sounds)
 		sounds.Cut()
 		sounds = null
+	source.unregister_event(/event/moved, src, nameof(src::on_source_moved()))
+	INVOKE_EVENT(src, /event/destroyed, "emitter" = src)
 	. = ..()
 
 /*
@@ -152,8 +150,6 @@
 
 	update_env_effect()
 
-	var/sound/S = active_sound.get()
-	S.status |= SOUND_UPDATE
 	INVOKE_EVENT(src, /event/sound_updated, "emitter" = src)
 
 /datum/sound_emitter/proc/stop()

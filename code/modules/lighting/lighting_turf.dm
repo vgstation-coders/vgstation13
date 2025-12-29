@@ -78,6 +78,10 @@
 
 		else
 			lighting_clear_overlay()
+	if (old_area.alert_holder)
+		old_area.alert_holder.remove_turf(src)
+	if (new_area.alert_holder)
+		new_area.alert_holder.add_turf(src)
 
 /turf/proc/get_corners()
 	if (has_opaque_atom)

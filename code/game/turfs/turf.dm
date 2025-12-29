@@ -128,6 +128,8 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
+		if (A.alert_holder)
+			A.alert_holder.add_turf(src)
 	for(var/atom/movable/AM in src)
 		src.Entered(AM)
 		if(istype(AM, /obj/effect/edge_overlay))
@@ -387,6 +389,8 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs -= src
+		if(istype(A, /area/shuttle))
+			turf_flags |= SHUTTLE_TURF
 	if (!N || !allow)
 		return
 	remove_particles()

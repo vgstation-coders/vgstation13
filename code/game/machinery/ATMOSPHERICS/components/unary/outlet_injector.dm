@@ -158,12 +158,20 @@
 	update_multitool_menu(user)
 
 /obj/machinery/atmospherics/unary/outlet_injector/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
-	return {"
+	var/ret_str= {"
 	<ul>
 		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag","set_id")]</a></li>
 	</ul>
-"}
+	"}
+	if(can_user_modify_via_alarm(user))
+		ret_str+={"<p><b>Settings modification:<br>
+		&emsp;Device Power: <a href="?src=\ref[src];set_device_on=1">[on?"on":"off"]</a><br>
+		&emsp;External Pressure Checking: <a href="?src=\ref[src];set_device_flow_rate=1">[volume_rate]L/s</a><br>
+		"}
+	else
+		ret_str+="<p><b>Unable to authenticate settings modification.</b></p>"
+	return ret_str
 
 /obj/machinery/atmospherics/unary/outlet_injector/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if (!W.is_wrench(user))
@@ -180,3 +188,18 @@
 	id_tag = O.id_tag
 	set_frequency(O.frequency)
 	return 1
+
+
+/obj/machinery/atmospherics/unary/outlet_injector/multitool_topic(var/mob/user, var/list/href_list, var/obj/O)
+	if(can_user_modify_via_alarm(user))
+		if("set_device_on" in href_list)
+			on=!on
+			update_icon()
+		if("set_device_flow_rate" in href_list)
+			var/newp=input(usr,"Specify the new target flow rate (in L/s)",src,CELL_VOLUME) as null|num
+			if(newp==null)
+				return
+			volume_rate=min(max(0,newp),max_rate)
+		broadcast_status()
+		return MT_UPDATE
+	return ..()

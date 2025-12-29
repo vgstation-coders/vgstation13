@@ -90,8 +90,8 @@ const Mechas = (props) => {
             <Input
               value={messageText}
               placeholder="Enter Message"
-              onInput={(e, value) => setMessageText(value)}
-              onChange={(e, value) => {
+              onChange={(value) => setMessageText(value)}
+              onEnter={() => {
                 if (messageText) {
                   act('message', {
                     mechamessage: messageText,
@@ -105,14 +105,14 @@ const Mechas = (props) => {
           </Modal>)}
         <Flex align="center" justify="space-evenly">
           <Flex.Item>
-            <Box
-              as="img"
+            <img
               src={`data:image/jpeg;base64,${mecha.mechaimage}`}
               height="80px"
               width="80px"
-              mx="5px"
               style={{
-                'image-rendering': 'pixelated',
+                imageRendering: 'pixelated',
+                marginLeft: '5px',
+                marginRight: '5px',
               }}
 
             />

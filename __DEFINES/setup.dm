@@ -2006,6 +2006,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PS_BIBLE_PAGE		"Bible Page"
 #define PS_SHADOW_SMOKE		"Shadow Smoke"
 #define PS_SHADOW_SMOKE2	"Shadow Smoke2"
+#define PS_GAS_VENT			"Gas Vent"
 
 //Particles variable defines
 #define PVAR_SPAWNING	"spawning"

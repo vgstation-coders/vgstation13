@@ -60,12 +60,26 @@
 	return
 
 /obj/machinery/atmospherics/binary/dp_vent_pump/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
-	return {"
+	var/ret_str= {"
 	<ul>
 		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
 		<li>[format_tag("ID Tag", "id_tag", "set_id")]</a></li>
 	</ul>
 	"}
+	if(can_user_modify_via_alarm(user))
+		ret_str+={"<p><b>Settings modification:<br>
+		&emsp;Device Power: <a href="?src=\ref[src];set_device_on=1">[on?"on":"off"]</a><br>
+		&emsp;Device Mode: <a href="?src=\ref[src];set_device_mode=1">[pump_direction?"blowing":"siphoning"]</a><br>
+		&emsp;External Pressure Checking: <a href="?src=\ref[src];set_device_pressure_check_external=1">[pressure_checks&1?"enabled":"disabled"]</a><br>
+		&emsp;External Pressure Limit: <a href="?src=\ref[src];set_device_external_pressure=1">[external_pressure_bound]kPa</a><br>
+		&emsp;Minimum Input Pressure Checking: <a href="?src=\ref[src];set_device_pressure_check_input=1">[pressure_checks&2?"enabled":"disabled"]</a><br>
+		&emsp;Minimum Input Pressure Limit: <a href="?src=\ref[src];set_device_input_pressure=1">[input_pressure_min]kPa</a><br>
+		&emsp;Maximum Output Pressure Checking: <a href="?src=\ref[src];set_device_pressure_check_output=1">[pressure_checks&4?"enabled":"disabled"]</a><br>
+		&emsp;Maximum Output Pressure Limit: <a href="?src=\ref[src];set_device_output_pressure=1">[output_pressure_max]kPa</a><br>
+		"}
+	else
+		ret_str+="<p><b>Unable to authenticate settings modification.</b></p>"
+	return ret_str
 
 /obj/machinery/atmospherics/binary/dp_vent_pump/process()
 	. = ..()
@@ -206,3 +220,36 @@
 
 /obj/machinery/atmospherics/binary/dp_vent_pump/toggle_status(var/mob/user)
 	return FALSE
+
+/obj/machinery/atmospherics/binary/dp_vent_pump/multitool_topic(var/mob/user, var/list/href_list, var/obj/O)
+	if(can_user_modify_via_alarm(user))
+		if("set_device_on" in href_list)
+			on=!on
+			update_icon()
+		if("set_device_mode" in href_list)
+			pump_direction=!pump_direction
+			update_icon()
+		if("set_device_pressure_check_external" in href_list)
+			pressure_checks^=1
+		if("set_device_pressure_check_input" in href_list)
+			pressure_checks^=2
+		if("set_device_pressure_check_output" in href_list)
+			pressure_checks^=4
+		if("set_device_external_pressure" in href_list)
+			var/newp=input(usr,"Specify the new pressure for external pressure checks (in kPa)",src,ONE_ATMOSPHERE) as null|num
+			if(newp==null)
+				return
+			external_pressure_bound=max(0,newp)
+		if("set_device_input_pressure" in href_list)
+			var/newp=input(usr,"Specify the new pressure for input pressure checks (in kPa)",src,0.0) as null|num
+			if(newp==null)
+				return
+			input_pressure_min=max(0,newp)
+		if("set_device_output_pressure" in href_list)
+			var/newp=input(usr,"Specify the new maximum output pressure (in kPa)",src,0.0) as null|num
+			if(newp==null)
+				return
+			output_pressure_max=max(0,newp)
+		broadcast_status()
+		return MT_UPDATE
+	return ..()

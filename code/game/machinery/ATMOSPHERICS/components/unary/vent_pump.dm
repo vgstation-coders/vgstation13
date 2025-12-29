@@ -285,12 +285,26 @@
 	update_multitool_menu(user)
 
 /obj/machinery/atmospherics/unary/vent_pump/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
-	return {"
+	var/ret_str= {"
 	<ul>
 		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag","set_id")]</li>
 	</ul>
 	"}
+	
+	if(can_user_modify_via_alarm(user))
+		ret_str+={"<p><b>Settings modification:<br>
+		&emsp;Device Power: <a href="?src=\ref[src];set_device_on=1">[on?"on":"off"]</a><br>
+		&emsp;Device Mode: <a href="?src=\ref[src];set_device_mode=1">[pump_direction?"blowing":"siphoning"]</a><br>
+		&emsp;External Pressure Checking: <a href="?src=\ref[src];set_device_pressure_check_external=1">[pressure_checks&1?"enabled":"disabled"]</a><br>
+		&emsp;External Pressure Limit: <a href="?src=\ref[src];set_device_external_pressure=1">[external_pressure_bound]kPa</a><br>
+		&emsp;Internal Pressure Checking: <a href="?src=\ref[src];set_device_pressure_check_internal=1">[pressure_checks&2?"enabled":"disabled"]</a><br>
+		&emsp;Internal Pressure Limit: <a href="?src=\ref[src];set_device_internal_pressure=1">[internal_pressure_bound]kPa</a><br>
+		"}
+	else
+		ret_str+="<p><b>Unable to authenticate settings modification.</b></p>"
+	
+	return ret_str
 
 /obj/machinery/atmospherics/unary/vent_pump/can_crawl_through()
 	return !welded
@@ -339,7 +353,29 @@
 		broadcast_status()
 
 		return MT_UPDATE
-
+	if(can_user_modify_via_alarm(user))
+		if("set_device_on" in href_list)
+			on=!on
+			update_icon()
+		if("set_device_mode" in href_list)
+			pump_direction=!pump_direction
+			update_icon()
+		if("set_device_pressure_check_external" in href_list)
+			pressure_checks^=1
+		if("set_device_pressure_check_internal" in href_list)
+			pressure_checks^=2
+		if("set_device_external_pressure" in href_list)
+			var/newp=input(usr,"Specify the new pressure for external pressure checks (in kPa)",src,ONE_ATMOSPHERE) as null|num
+			if(newp==null)
+				return
+			external_pressure_bound=max(0,newp)
+		if("set_device_internal_pressure" in href_list)
+			var/newp=input(usr,"Specify the new pressure for internal pressure checks (in kPa)",src,0.0) as null|num
+			if(newp==null)
+				return
+			internal_pressure_bound=max(0,newp)
+		broadcast_status()
+		return MT_UPDATE
 	return ..()
 
 /obj/machinery/atmospherics/unary/vent_pump/change_area(var/area/oldarea, var/area/newarea)

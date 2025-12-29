@@ -1191,3 +1191,51 @@ steam.start() -- spawns the effect
 	. = ..()
 	if(corner)
 		overlays += image(icon, icon_state = overlay_state)
+
+// For area-wide effects like radstorm flashing and stuff
+/obj/effect/area_alert_holder
+	name = "area alert holder"
+	desc = "you shouldn't see this"
+	density = 0
+	anchored = 1
+	plane = LIGHTING_PLANE
+	layer = MAPPING_AREA_LAYER // from areas.dm
+	mouse_opacity = 0
+	icon = 'icons/turf/areas.dmi'
+	var/area/parent_area = null
+
+/obj/effect/area_alert_holder/New(area/A)
+	..()
+	parent_area = A
+
+/obj/effect/area_alert_holder/proc/update()
+	if (!parent_area)
+		return
+
+	var/new_state = null
+	var/new_luminosity = 0
+
+	if (parent_area.areaapc)
+		var/has_power = (!parent_area.requires_power || parent_area.power_environ)
+		if ((parent_area.fire || parent_area.eject || parent_area.party || parent_area.radalert) && has_power)
+			new_luminosity = 1
+			// priority follows original updateicon impl
+			if (parent_area.radalert && !parent_area.fire)
+				new_state = "radiation"
+			else if (parent_area.fire && !parent_area.radalert && !parent_area.eject && !parent_area.party)
+				new_state = "blue"
+			else if (!parent_area.fire && parent_area.eject && !parent_area.party)
+				new_state = "red"
+			else if(parent_area.party && !parent_area.fire && !parent_area.eject)
+				new_state = "party"
+			else
+				new_state = "blue-red"
+
+	icon_state = new_state
+	luminosity = new_luminosity
+
+/obj/effect/area_alert_holder/proc/add_turf(turf/T)
+	T.vis_contents |= src
+
+/obj/effect/area_alert_holder/proc/remove_turf(turf/T)
+    T.vis_contents -= src

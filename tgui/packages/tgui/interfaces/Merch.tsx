@@ -64,7 +64,7 @@ export const MerchUplink = (props) => {
     // Flatten all categories and apply search to it
     && categories
       .flatMap(category => category.items || [])
-      .filter(testSearch)
+      .filter(testSearch || (() => true))
       .filter((item, i) => i < MAX_SEARCH_RESULTS)
     // Select a category and show all items in it
     || categories
@@ -128,7 +128,6 @@ const ItemList = (props) => {
     <Section
       key={item.name}
       title={item.name}
-      level={2}
       buttons={(
         <Box>
           {item.stock !== -1 ? `In stock: ${item.stock} ` : ""}
@@ -146,8 +145,8 @@ const ItemList = (props) => {
           item.path,
         ])}
         style={{
-          'vertical-align': 'middle',
-          'horizontal-align': 'middle',
+          'verticalAlign': 'middle',
+          'textAlign': 'center',
         }} />
       {decodeHtmlEntities(item.desc)}
     </Section>

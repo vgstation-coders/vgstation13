@@ -80,7 +80,7 @@
 
 /datum/design/archive_diskset/after_craft(var/obj/O, var/obj/machinery/r_n_d/fabricator/F)
 	for(var/datum/tech/T in get_list_of_elements(F.linked_console.files.known_tech))
-		if(T.id in list("syndicate", "Nanotrasen", "anomaly"))
+		if(T.id in list("syndicate", "nanotrasen", "anomaly"))
 			continue
 		var/obj/item/weapon/disk/tech_disk/TD = new(O)
 		TD.stored = create_tech(T.id)

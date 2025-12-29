@@ -11,7 +11,7 @@
 	closed_layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite its density.
 	use_power = MACHINE_POWER_USE_NONE
-	machine_flags = SCREWTOGGLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE | WIREJACK
 	icon = 'icons/obj/doors/tabledoor.dmi'
 	icon_state = "metaldoor_closed"
 	prefix = "metal" //Corresponds to the mineral type
@@ -20,6 +20,15 @@
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	sheet_type = /obj/item/stack/sheet/metal
 	sheet_amt = 2
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
+/obj/machinery/door/table/hack_interact(mob/living/silicon/malf)
+	return electronics ? ..() : null
 
 /obj/machinery/door/table/New()
 	. = ..()
@@ -168,14 +177,54 @@
 
 /obj/machinery/door/table/open()
 	playsound(src, soundeffect, 100, 1)
+	state_animate()
 	return ..()
 
 /obj/machinery/door/table/close()
 	playsound(src, soundeffect, 100, 1)
+	state_animate()
 	. = ..()
 	set_opacity(0) //always seethru
 
+/obj/machinery/door/table/proc/state_animate()
+	if(dir & (EAST|WEST))
+		pixel_x -= 2
+	else
+		pixel_y -= 2
+	spawn(2)
+		if(dir & (EAST|WEST))
+			pixel_x += 2
+		else
+			pixel_y += 2
+
 /obj/machinery/door/table/attackby(obj/item/W, mob/user, params)
+	if (density && istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
+		var/obj/item/weapon/grab/G = W
+		if (istype(G.affecting, /mob/living))
+			var/mob/living/M = G.affecting
+			if (G.state < GRAB_AGGRESSIVE)
+				if(user.a_intent == I_HURT)
+					if (!TryToThrowOnTable(user,M))
+						return
+					if (prob(15))
+						M.Knockdown(5)
+						M.Stun(5)
+					M.apply_damage(8,def_zone = LIMB_HEAD)
+					visible_message("<span class='warning'>[user] slams [M]'s face against \the [src]!</span>")
+					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
+					add_attacklogs(user, M, "harmfully tabled", admin_warn = FALSE)
+				else
+					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
+					return
+			else
+				if (!TryToThrowOnTable(user,M))
+					return
+				M.Knockdown(5)
+				M.Stun(5)
+				visible_message("<span class='warning'>[user] puts [M] on \the [src].</span>")
+				add_attacklogs(user, M, "harmlessly tabled", admin_warn = FALSE)
+			qdel(W)
+			return
 
 	if (!electronics)
 		if(W.is_wrench(user))
@@ -196,6 +245,7 @@
 					else
 						req_access = electronics.conf_access
 				electronics.installed = TRUE
+				emagged = FALSE
 				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
 			return
@@ -213,22 +263,31 @@
 				remove_electronics()
 			return
 
-	if(!allowed(user))
-		denied()
-		return
-
 	. = ..()
 
 /obj/machinery/door/table/emag_act(var/mob/user)
 	if (!electronics || emagged)
 		return FALSE
-	electronics.icon_state = "door_electronics_smoked"
 	emagged = TRUE
 	req_access = list()
 	req_one_access = list()
-	spark(loc,2)
-	open()
+	hackOpen(user)
 	return TRUE
+
+/obj/machinery/door/table/npc_tamper_act(mob/living/L)
+	hackOpen(L)
+
+/obj/machinery/door/table/proc/hackOpen(mob/user)
+	if(electronics)
+		electronics.icon_state = "door_electronics_smoked"
+		spark(loc,2)
+	open()
+	add_fingerprint(user)
+	return TRUE
+
+/obj/machinery/door/table/wirejack(var/mob/living/silicon/pai/P)
+	if(electronics && !emagged && ..())
+		SwitchState()
 
 /obj/machinery/door/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)

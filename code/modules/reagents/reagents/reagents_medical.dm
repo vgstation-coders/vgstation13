@@ -489,10 +489,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-3)
-		M.adjustOxyLoss(-3)
-		M.heal_organ_damage(3,3)
-		M.adjustToxLoss(-3)
+		var/multiplier = 1
+		if(M.bodytemperature < 95)
+			multiplier = 2
+		M.adjustCloneLoss(-3 * multiplier)
+		M.adjustOxyLoss(-3 * multiplier)
+		M.heal_organ_damage(3 * multiplier, 3 * multiplier)
+		M.adjustToxLoss(-3 * multiplier)
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
@@ -670,7 +673,7 @@ var/global/list/charcoal_doesnt_remove=list(
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
 	id = CRYOXADONE
-	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly."
+	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly, with an even greater effect at under 95K."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
@@ -683,10 +686,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-1)
-		M.adjustOxyLoss(-1)
-		M.heal_organ_damage(1,1)
-		M.adjustToxLoss(-1)
+		var/multiplier = 1
+		if(M.bodytemperature < 95)
+			multiplier = 2
+		M.adjustCloneLoss(-1 * multiplier)
+		M.adjustOxyLoss(-1 * multiplier)
+		M.heal_organ_damage(1 * multiplier, 1 * multiplier)
+		M.adjustToxLoss(-1 * multiplier)
 
 /datum/reagent/cryptobiolin
 	name = "Cryptobiolin"

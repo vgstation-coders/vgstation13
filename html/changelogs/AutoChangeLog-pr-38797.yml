@@ -1,0 +1,5 @@
+author: Inorien
+delete-after: true
+changes:
+- bugfix: UI colour can once again be set in Character Prefs (no immediate update
+    mid-round)

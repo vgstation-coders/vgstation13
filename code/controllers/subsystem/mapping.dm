@@ -56,7 +56,8 @@ var/datum/subsystem/mapping/SSmapping
 	/// Is scanning disabled globally
 	var/scanning_disabled = FALSE
 	/// World time when scanning can be toggled again
-	var/scanning_toggle_cooldown = 0
+	var/last_lockdown_time = 0
+	var/lockdown_duration = 15 MINUTES
 
 	// Queue-based processing variables
 	/// Start time for generation tracking

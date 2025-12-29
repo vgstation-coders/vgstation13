@@ -558,8 +558,14 @@ var/list/datum/story_theme/story_themes = list()
 		list("id" = Tc_MAGNETS, "name" = "Electromagnetic Research"),
 		list("id" = Tc_PROGRAMMING, "name" = "Data Theory Research")
 	)
-	var/list/chosen_tech = pick(valid_techs)
-	var/tech_level = rand(2, 4)
+	var/list/chosen_tech
+	var/tech_level
+	if(prob(50))
+		chosen_tech = list("id" = Tc_EXPLORATION, "name" = "Exploration Research")
+		tech_level = 1
+	else
+		chosen_tech = pick(valid_techs)
+		tech_level = rand(2, 4)
 
 	var/obj/item/weapon/disk/hdd/disk = new(T)
 	disk.name = "Recovered Data Drive"

@@ -374,7 +374,7 @@
 		return
 	return ..()
 
-/obj/structure/table/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
+/obj/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
 	var/turf/oldloc = get_turf(victim)
 	for (var/atom/A in loc)
 		if (A == src || A == victim || A == user)

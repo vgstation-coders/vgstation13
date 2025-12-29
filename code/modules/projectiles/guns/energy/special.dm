@@ -624,11 +624,6 @@
 	cell_type = "/obj/item/weapon/cell"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 
-/obj/item/weapon/gun/energy/ricochet/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
-	if(defective && prob(30))
-		target = get_ranged_target_turf(user, pick(diagonal), 7)
-	..()
-
 /obj/item/weapon/gun/energy/bison
 	name = "\improper Righteous Bison"
 	desc = "A replica of Lord Cockswain's very own personal ray gun."

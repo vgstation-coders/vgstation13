@@ -91,13 +91,15 @@
 			"label": "tgui: sonar"
 		},
 		{
-			"type": "npm",
-			"script": "install",
-			"path": "tgui",
-			"group": "clean",
-			"problemMatcher": [],
-			"label": "npm: install - tgui",
-			"detail": "install dependencies from package"
+			"type": "shell",
+			"command": "tools/build/build",
+			"args": ["tgui-clean"],
+			"windows": {
+				"command": ".\\tools\\build\\build.bat",
+				"args": ["tgui-clean"]
+			},
+			"group": "build",
+			"label": "tgui: clean",
 		}
 	]
 }

@@ -594,12 +594,6 @@
 			if(I)
 				I.stripped(wearer, stripper)
 
-/obj/item/clothing/become_defective()
-	if(!defective)
-		..()
-		for(var/A in armor)
-			armor[A] -= rand(armor[A]/3, armor[A])
-
 /obj/item/clothing/attack(var/mob/living/M, var/mob/living/user, def_zone, var/originator = null)
 	if (!(iscarbon(user) && user.a_intent == I_HELP && (clothing_flags & CANEXTINGUISH) && ishuman(M) && M.on_fire))
 		..()

@@ -199,30 +199,6 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	prescription_type = /obj/item/clothing/glasses/hud/security/sunglasses/prescription
 
-/obj/item/clothing/glasses/hud/security/sunglasses/become_defective()
-	if(!defective)
-		..()
-		if(prob(15))
-			new /obj/item/weapon/shard(loc)
-			playsound(src, "shatter", 50, 1)
-			qdel(src)
-			return
-		if(prob(15))
-			new/obj/item/clothing/glasses/sunglasses(get_turf(src))
-			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
-			qdel(src)
-			return
-		if(prob(55))
-			eyeprot = 0
-		if(prob(55))
-			if(istype(src.loc, /mob/living/carbon/human))
-				var/mob/living/carbon/human/M = src.loc
-				if(M.glasses == src)
-					for(var/datum/visioneffect/H in stored_huds)
-						M.remove_hud(H)
-			hud_types = null
-			stored_huds = null
-
 /obj/item/clothing/glasses/hud/security/sunglasses/syndishades
 	name = "sunglasses"
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
