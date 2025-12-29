@@ -140,7 +140,7 @@
 	if(authenticated)
 		if(isgripper(I))
 			var/obj/item/weapon/gripper/G = I
-			if(G.wrapped)
+			if(G.wrapped && G.drop_item(I))
 				I = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
 		if(istype(I,/obj/item/weapon/f_card))
 			if(files && files.len)
