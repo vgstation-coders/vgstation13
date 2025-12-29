@@ -283,7 +283,7 @@
 		blood_DNA = list()
 
 /datum/paint_overlay/proc/refresh_paintlights()
-	if (my_turf)
+	if (my_turf && SSlighting?.initialized)
 		my_turf.lighting_overlay.update_overlay()
 
 	for (var/obj/abstract/paint_light/PL in paintlights)
