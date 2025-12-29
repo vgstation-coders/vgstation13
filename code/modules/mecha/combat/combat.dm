@@ -28,60 +28,21 @@
 		return
 	if(!Adjacent(target))
 		return
+	var/image/fist_icon = image(icon = 'icons/mob/screen_spells.dmi', icon_state = "wiz_fist") //wizard fist placeholder for robot fist
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
 		if(src.occupant.a_intent == I_HURT)
 			playsound(src, mecha_punch_sound, 50, 1)
 			if(damtype == "brute")
 				step_away(M,src,15)
-
+			var/target_zone //null is acceptable here, apply_damage will just pick a target if it's necessary
 			if(istype(target, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = target
-
-				var/datum/organ/external/temp = H.get_organ(pick(LIMB_CHEST, LIMB_CHEST, LIMB_CHEST, LIMB_HEAD))
-				if(temp)
-					if (prob(50))//this is still busted but now you have a chance to get out of stunlock
-						H.Paralyse(1)
-					var/update = temp.take_damage(rand(force/2, force), 0)
-					//nothing to my knowledge changes mecha damage type, so this will most likely be the only case to ever proc
-					/*
-					switch(damtype)
-						if("brute")
-							H.Paralyse(1)
-							update |= temp.take_damage(rand(force/2, force), 0)
-						if("fire")
-							update |= temp.take_damage(0, rand(force/2, force))
-						if("tox")
-							if(H.reagents)
-								if(H.reagents.get_reagent_amount(CARPOTOXIN) + force < force*2)
-									H.reagents.add_reagent(CARPOTOXIN, force)
-								if(H.reagents.get_reagent_amount(CRYPTOBIOLIN) + force < force*2)
-									H.reagents.add_reagent(CRYPTOBIOLIN, force)
-					*/
-					if(update)
-						H.UpdateDamageIcon(1)
-				H.updatehealth()
-
-			else
-				if (prob(50))//this is still busted but now you have a chance to get out of stunlock
-					M.Paralyse(1)
-				M.take_overall_damage(rand(force/2, force))
-				//nothing to my knowledge changes mecha damage type, so this will most likely be the only case to ever proc
-				/*
-				switch(damtype)
-					if("brute")
-						M.Paralyse(1)
-						M.take_overall_damage(rand(force/2, force))
-					if("fire")
-						M.take_overall_damage(0, rand(force/2, force))
-					if("tox")
-						if(M.reagents)
-							if(M.reagents.get_reagent_amount(CARPOTOXIN) + force < force*2)
-								M.reagents.add_reagent(CARPOTOXIN, force)
-							if(M.reagents.get_reagent_amount(CRYPTOBIOLIN) + force < force*2)
-								M.reagents.add_reagent(CRYPTOBIOLIN, force)
-				*/
-				M.updatehealth()
+				target_zone = H.get_organ(pick(LIMB_CHEST, LIMB_CHEST, LIMB_CHEST, LIMB_HEAD)) //Mech attacks too unwieldly to directly target
+			var/armor_reduction = 0 //Disabled, use = M.run_armor_check(target_zone, "melee") to have this enabled
+			if (prob(50))//this is still busted but now you have a chance to get out of stunlock
+				M.Paralyse(1)
+			M.apply_damage(rand(force/2, force), damtype, target_zone, armor_reduction, 0, 0) //handles all the damage specifics such as updatehealth()
 			src.occupant_message("You hit [target].")
 			src.visible_message("<span class='red'><b>[src.name] hits [target].</b></span>")
 			message_admins("[key_name_and_info(src.occupant)] mech punched [target] with [src.name] ([formatJumpTo(src)])",0,1)
@@ -90,25 +51,29 @@
 			step_away(M,src)
 			src.occupant_message("You push [target] out of the way.")
 			src.visible_message("[src] pushes [target] out of the way.")
+			fist_icon = image(icon = 'icons/mob/screen_spells.dmi', icon_state = "wiz_push") //wizard hand placeholder for robot hand
+		if(target) //in case target got gibbed, qdel'd, or some other horrible thing
+			do_attack_animation(target, src, fist_icon)
 	else
-		if(damtype == "brute")
-			for(var/target_type in src.destroyable_obj)
-				if(istype(target, target_type) && hascall(target, "attackby"))
-					playsound(src, mecha_punch_sound, 50, 1)
-					src.occupant_message("You hit [target].")
-					src.visible_message("<span class='red'><b>[src.name] hits [target].</b></span>")
-					if(!istype(target, /turf/simulated/wall))
-						target:attackby(src.fist,src.occupant)
-					else if(prob(5))
-						if ((force >= MECHA_FORCE_COMBAT) && !(target:dismantle_wall(1)))
-							//this currently won't do anything to shuttle walls!
-							//also this doesn't account for reinforced walls but whatever, I don't want to deal with this right now
-							src.occupant_message("<span class='notice'>You smash through the wall.</span>")
-							src.visible_message("<b>[src.name] smashes through the wall!</b>")
-							playsound(src, 'sound/effects/stone_crumble.ogg', 50, 1)
-						else
-							src.occupant_message("<span class='notice'>You get a feeling that this [target] isn't gonna break ever.</span>")
-					break
+		for(var/target_type in src.destroyable_obj)
+			if(istype(target, target_type) && hascall(target, "attackby"))
+				playsound(src, mecha_punch_sound, 50, 1)
+				src.occupant_message("You hit [target].")
+				src.visible_message("<span class='red'><b>[src.name] hits [target].</b></span>")
+				if(!istype(target, /turf/simulated/wall))
+					target:attackby(src.fist,src.occupant)
+				else if(prob(5))
+					if ((force >= MECHA_FORCE_COMBAT) && !(target:dismantle_wall(1)))
+						//this currently won't do anything to shuttle walls!
+						//also this doesn't account for reinforced walls but whatever, I don't want to deal with this right now
+						src.occupant_message("<span class='notice'>You smash through the wall.</span>")
+						src.visible_message("<b>[src.name] smashes through the wall!</b>")
+						playsound(src, 'sound/effects/stone_crumble.ogg', 50, 1)
+					else
+						src.occupant_message("<span class='notice'>You get a feeling that this [target] isn't gonna break ever.</span>")
+				if(target) //in case wall got obliterated
+					do_attack_animation(target, src, fist_icon)
+				break
 	occupant.delayNextAttack(MECHA_MELEE_DELAY)
 
 /*
