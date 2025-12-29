@@ -264,7 +264,7 @@
 
 /obj/mecha/proc/add_fist()
 	fist = new
-	fist.name = "[src]'s fist"
+	fist.name = "[src.name]'s fist"
 	fist.force = src.force
 
 /obj/mecha/proc/add_radio()
