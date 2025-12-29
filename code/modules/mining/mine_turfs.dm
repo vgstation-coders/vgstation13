@@ -734,6 +734,7 @@ var/list/icon_state_to_appearance = list()
 	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
 
 /turf/unsimulated/mineral/random/New()
+	edge_overlays = list()
 	if (prob(mineralChance) && !mineral && mineralPool)
 		if(!name_to_mineral)
 			SetupMinerals()

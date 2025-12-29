@@ -223,7 +223,7 @@ var/list/foliage_replacments=list(
 	edge_flags = 0
 	edge_priority = 1
 
-/turf/unsimulated/floor/jungle/mud/New()	
+/turf/unsimulated/floor/jungle/mud/New()
 	footstep_sound = sounds_water
 	footstep_sound_barefoot = sounds_water
 	footstep_sound_claw = sounds_water
@@ -309,9 +309,9 @@ var/list/foliage_replacments=list(
 /turf/unsimulated/floor/jungle/dirt/proc/can_dig_down(var/mob/user=null)
 	var/turf/T=locate(x,y,z==1 ? 2 : 6)
 	if(istype(T,/turf/unsimulated/floor/jungle))
-		return TRUE	
+		return TRUE
 	if(istype(T,/turf/unsimulated/mineral))
-		return TRUE		
+		return TRUE
 	if(user)
 		to_chat(user,"<span class='warning'>Something hard blocks you from digging downwards.</span>")
 	return FALSE
@@ -431,7 +431,7 @@ var/list/foliage_replacments=list(
 	return
 /atom/movable/junglewateroverlay/clean_act(var/cleanliness)
 	return
-	
+
 /turf/unsimulated/floor/jungle/water
 	name="Water"
 	desc="It's about knee-height. Probably not safe to drink from."
@@ -439,7 +439,6 @@ var/list/foliage_replacments=list(
 	icon_state = "water5"
 	turf_speed_multiplier=2.0
 	DIGGING_BLOCKED = "Something tells you that this is a really bad idea."
-	turf_reagents = list(WATER=1.0)
 	reagent_interaction_flags = TURF_REAGENT_ENTER | TURF_REAGENT_FILLS_CONTAINERS
 	turf_reagent_amount = 5
 	turf_flags = NO_FLORA
@@ -447,10 +446,11 @@ var/list/foliage_replacments=list(
 	edge_priority = WATER_EDGE_PRIORITY
 	edge_overlay_type = /obj/effect/edge_overlay/water
 	var/atom/movable/junglewateroverlay/wateroverlay=null
-	
+
 /turf/unsimulated/floor/jungle/water/New()
 	..()
 	update_icon()
+	turf_reagents = list(WATER=1.0)
 	footstep_sound = sounds_water
 	footstep_sound_barefoot = sounds_water
 	footstep_sound_claw = sounds_water
@@ -469,7 +469,6 @@ var/list/foliage_replacments=list(
 	icon_state = "water2"
 	turf_speed_multiplier=2.5
 	DIGGING_BLOCKED = "Something tells you that this is a really bad idea."
-	turf_reagents = list(WATER=1.0)
 	reagent_interaction_flags = TURF_REAGENT_ENTER | TURF_REAGENT_FILLS_CONTAINERS
 	turf_reagent_amount = 10
 	edge_flags = ALL_EDGES
@@ -477,10 +476,11 @@ var/list/foliage_replacments=list(
 	edge_priority = DEEPWATER_EDGE_PRIORITY
 	edge_overlay_type = /obj/effect/edge_overlay/water/deep
 	var/atom/movable/junglewateroverlay/wateroverlay=null
-	
+
 /turf/unsimulated/floor/jungle/water_deep/New()
 	..()
 	update_icon()
+	turf_reagents = list(WATER=1.0)
 	footstep_sound = sounds_water
 	footstep_sound_barefoot = sounds_water
 	footstep_sound_claw = sounds_water
@@ -600,7 +600,7 @@ var/list/foliage_replacments=list(
 
 /turf/unsimulated/mineral/jungle_underground/Bumped(AM)
 	. = ..()
-	
+
 	if(istype(AM,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
 		if(istype(H.get_active_hand(),/obj/item/weapon/pickaxe) || istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe)) //prevents double attacking the same turf because parent proc covers this
@@ -609,7 +609,7 @@ var/list/foliage_replacments=list(
 			attackby(H.get_active_hand(), H)
 		else if(item_terraforming_isshovel(H.get_inactive_hand()) || item_terraforming_ispickaxe(H.get_inactive_hand()))
 			attackby(H.get_inactive_hand(), H)
-			
+
 /turf/unsimulated/mineral/jungle_underground/MineralSpread() //do nothing
 	return
 
@@ -647,7 +647,7 @@ var/list/foliage_replacments=list(
 		overlays+=image('icons/turf/walls.dmi', "j_rfloor_overlay_l")
 	else if(cannot_dig_up())
 		overlays+=image('icons/turf/walls.dmi', "j_rfloor_overlay_d")
-		
+
 
 /turf/unsimulated/floor/jungle/bedrock/attackby(obj/item/C as obj, mob/user as mob)
 	..()
@@ -701,7 +701,7 @@ var/list/foliage_replacments=list(
 	//we reveal the state of surrounding bedrock. there was a better way to do this. how did i forget to use range?
 	for(var/turf/unsimulated/floor/jungle/bedrock/B in orange(1))
 		B.update_icon()
-	
+
 
 /turf/unsimulated/floor/jungle/bedrock/proc/cannot_dig_up()
 	var/turf/T=locate(x,y,z==2 ? 1 : 4)

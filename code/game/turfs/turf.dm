@@ -149,6 +149,7 @@
 	if(skip_turf_init)
 		return
 	..()
+	edge_overlays = list()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
@@ -453,7 +454,7 @@
 		for(var/obj/effect/overlay/puddle/ice/P in src)
 			qdel(P)
 
-	if(edge_overlays.len)
+	if(edge_overlays && edge_overlays.len)
 		for(var/datum/weakref/EO in edge_overlays)
 			var/obj/effect/edge_overlay/E = EO.get()
 			if(E)
@@ -863,6 +864,8 @@
 	if(turf_reagent_amount!=null && (reagent_interaction_flags & TURF_REAGENT_FILLS_CONTAINERS) && istype(I,/obj/item/weapon/reagent_containers))
 		to_chat(user,"<span class='notice'>You fill \the [I] from \the [src]</span>")
 		var/obj/item/weapon/reagent_containers/RC=I
+		if(!turf_reagents)
+			turf_reagents = list()
 		for(var/RID in turf_reagents)
 			RC.reagents.add_reagent(RID,turf_reagents[RID]*RC.amount_per_transfer_from_this)
 		if(turf_reagents_limited!=null)
@@ -895,7 +898,8 @@
 		return
 	if(turf_reagent_amount==null)
 		return
-
+	if(!turf_reagents)
+		turf_reagents = list()
 	for(var/RID in turf_reagents)
 		var/datum/reagent/D = chemical_reagents_list[RID]
 		if(D)
