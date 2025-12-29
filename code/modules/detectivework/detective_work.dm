@@ -61,7 +61,7 @@
 	else
 		suit_fibers |= txt
 
-#define SCAN_STEPS 10
+#define SCAN_STEPS 8
 
 /obj/machinery/computer/forensic_scanning
 	name = "\improper High-Res Forensic Scanning Computer"
