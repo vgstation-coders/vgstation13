@@ -4797,6 +4797,7 @@
 /obj/machinery/alarm{
 	pixel_y = 22
 	},
+/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
 	},
@@ -8017,9 +8018,8 @@
 	icon_state = "warning"
 	},
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "darkred";
-	tag = "icon-darkred (NORTH)"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/security/prison)
 "aoY" = (
@@ -8441,10 +8441,6 @@
 	},
 /area/security/prison)
 "apP" = (
-/obj/machinery/power/apc{
-	name = "_South APC";
-	pixel_y = -24
-	},
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -16543,7 +16539,9 @@
 	req_access_txt = "1"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/plating,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/security/main)
 "aDJ" = (
 /obj/structure/table,
@@ -99933,8 +99931,8 @@
 	icon_state = "warning"
 	},
 /turf/simulated/floor{
-	icon_state = "darkred";
-	tag = "icon-darkred"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/security/prison)
 "rfu" = (
