@@ -22,7 +22,7 @@
 #define SPATIAL_BUCKET_SIZE 15
 
 var/datum/subsystem/mapping/SSmapping
-var/skip_turf_init = FALSE
+var/skip_turf_init = FALSE //NEVER change this var for anything other than incrementing world.maxz it breaks EVERYTHING!!
 
 /datum/subsystem/mapping
 	name       = "Mapping"
