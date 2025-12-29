@@ -133,7 +133,7 @@
 
 
 	dat += {"<b>UI Style:</b> <a href='?_src_=prefs;preference=UI_style;task=input'><b>[get_pref(/datum/preference_setting/string/UI_style)]</b></a><br>
-	<b>Custom UI</b>(recommended for White UI): <span style='border:1px solid #161616; background-color: #[get_pref(/datum/preference_setting/string/UI_style_color)];'>&nbsp;&nbsp;&nbsp;</span><br>Color: <a href='?_src_=prefs;preference=UIcolor'><b>[get_pref(/datum/preference_setting/string/UI_style_color)]</b></a><br>
+	<b>Custom UI</b>(recommended for White UI): <span style='border:1px solid #161616; background-color: #[get_pref(/datum/preference_setting/string/UI_style_color)];'>&nbsp;&nbsp;&nbsp;</span><br>Color: <a href='?_src_=prefs;preference=UI_style_color;task=input'><b>[get_pref(/datum/preference_setting/string/UI_style_color)]</b></a><br>
 	Alpha(transparency): <a href='?_src_=prefs;preference=UI_style_alpha;task=input'><b>[get_pref(/datum/preference_setting/numerical/UI_style_alpha)]</b></a><br>
 	"}
 
