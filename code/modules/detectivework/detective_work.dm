@@ -141,31 +141,32 @@
 		if(isgripper(I))
 			var/obj/item/weapon/gripper/G = I
 			if(G.wrapped && G.drop_item(I))
-				I = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
-		if(istype(I,/obj/item/weapon/f_card))
-			if(files && files.len)
-				card = I
-				if(!card.fingerprints)
-					card.fingerprints = list()
-				if(card.amount > 1 || !card.fingerprints.len)
-					to_chat(usr, "<span class='warning'>ERROR: No prints/too many cards.</span>")
-					if(card.loc == src)
-						card.forceMove(src.loc)
-					card = null
-					return
-				if(user.drop_item(I, src))
-					process_card()
-			else
-				to_chat(usr, "<span class='warning'>No files detected to scan with [I].</span>")
-		if(I && scanning)
-			to_chat(usr, "<span class='warning'>There is already \a [scanning] in the scanning slot!.</span>")
-		else if(istype(I, /obj/item/weapon/storage/evidencebag))
-			if(I.contents.len)
-				var/obj/item/weapon/storage/evidencebag/EVB = I
-				scanning = EVB.contents[1]
-				EVB.remove_from_storage(scanning, src, TRUE, TRUE)
-		else if(user.drop_item(I, src))
-			scanning = I
+				scanning = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
+		else
+			if(istype(I,/obj/item/weapon/f_card))
+				if(files && files.len)
+					card = I
+					if(!card.fingerprints)
+						card.fingerprints = list()
+					if(card.amount > 1 || !card.fingerprints.len)
+						to_chat(usr, "<span class='warning'>ERROR: No prints/too many cards.</span>")
+						if(card.loc == src)
+							card.forceMove(src.loc)
+						card = null
+						return
+					if(user.drop_item(I, src))
+						process_card()
+				else
+					to_chat(usr, "<span class='warning'>No files detected to scan with [I].</span>")
+			if(I && scanning)
+				to_chat(usr, "<span class='warning'>There is already \a [scanning] in the scanning slot!.</span>")
+			else if(istype(I, /obj/item/weapon/storage/evidencebag))
+				if(I.contents.len)
+					var/obj/item/weapon/storage/evidencebag/EVB = I
+					scanning = EVB.contents[1]
+					EVB.remove_from_storage(scanning, src, TRUE, TRUE)
+			else if(user.drop_item(I, src))
+				scanning = I
 		updateUsrDialog()
 
 /obj/machinery/computer/forensic_scanning/Topic(href,href_list)
