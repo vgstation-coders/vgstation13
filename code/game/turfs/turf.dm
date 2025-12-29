@@ -113,9 +113,9 @@
 			GiveReagentsTo(M)
 
 /turf/New()
-	..()
 	if(skip_turf_init)
 		return
+	..()
 
 	//Lazy list inits
 	edge_overlays = list()
@@ -449,7 +449,7 @@
 		for(var/obj/effect/overlay/puddle/ice/P in src)
 			qdel(P)
 
-	if(edge_overlays.len)
+	if(edge_overlays && edge_overlays.len)
 		for(var/datum/weakref/EO in edge_overlays)
 			var/obj/effect/edge_overlay/E = EO.get()
 			if(E)
@@ -487,8 +487,10 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/simulated/W = new N(src)
+		if(defer_edges)
+			W.turf_flags |= DEFER_EDGING
 		if(world.has_round_started())
-			initialize()
+			W.initialize()
 		if(env)
 			W.air = env //Copy the old environment data over if both turfs were simulated
 
@@ -512,6 +514,8 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/W = new N(src)
+		if(defer_edges)
+			W.turf_flags |= DEFER_EDGING
 		if(world.has_round_started())
 			W.initialize()
 
@@ -544,8 +548,9 @@
 	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
-	for(var/turf/adj in range(1,src))
-		adj.update_edges()
+	if(!defer_edges)
+		for(var/turf/adj in range(1,src))
+			adj.update_edges()
 	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
 		if(.)
 			var/turf/NewTurf=.

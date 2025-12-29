@@ -79,9 +79,15 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/finalize_queue = list() // Queue of turfs for edge updates and finalization
 	var/list/feature_buckets = list() // Spatial buckets for features - key is "cellX_cellY", value is list of features in that cell
 	var/list/mob_buckets = list() // Spatial buckets for mobs - key is "cellX_cellY", value is list of mobs in that cell
-	var/turfs_per_tick = 300 // Base turfs processed per tick (adjusted dynamically)
+	var/turfs_per_tick = 100 // Base turfs processed per tick (adjusted dynamically)
 	var/max_turfs_per_tick = 2000 // Maximum turfs to process per tick
 	var/min_turfs_per_tick = 100 // Minimum turfs to process per tick
+
+	// Chunked queue loading variables
+	var/chunk_size = 10000 // Number of turfs to load per chunk
+	var/current_chunk_x = 0 // Current X position for chunk loading
+	var/current_chunk_y = 0 // Current Y position for chunk loading
+	var/total_turfs_queued = 0 // Total turfs added to queue across all chunks
 
 	var/list/ruins_by_type = list()
 
@@ -116,7 +122,7 @@ var/datum/subsystem/mapping/SSmapping
 		if(STAGE_TERRAIN)
 			stage_name = "Terrain"
 			if(terrain_queue.len > 0)
-				progress = round((queue_index / terrain_queue.len) * 100, 1)
+				progress = round((current_chunk_y / current_virtual_z.y_max) * 100, 1)
 		if(STAGE_RUIN)
 			stage_name = "Ruin"
 			progress = clamp(round((1-(current_planet.ruin_budget / initial(current_planet.ruin_budget))) * 100, 1),0,100)
@@ -193,27 +199,42 @@ var/datum/subsystem/mapping/SSmapping
 
 	switch(current_stage)
 		if(STAGE_TERRAIN)
+			// Debug: Check cave data generation time
 			if(!current_mapgen.cave_automaton_data && current_mapgen.mountain_height < 1)
+				var/cave_start = TICK_USAGE_REAL
 				current_mapgen.generate_cave_data()
+				message_admins("DEBUG: generate_cave_data() took [(TICK_USAGE_REAL - cave_start)]ms")
 
-			while(queue_index <= terrain_queue.len && turfs_processed < target_turfs)
+			while(turfs_processed < target_turfs)
+				var/processed_this_tick = 0
+				// Check if we need to load more turfs
+				if(queue_index > terrain_queue.len)
+					if(has_more_terrain_chunks())
+						// Clear processed turfs and load next chunk
+						terrain_queue.Cut()
+						queue_index = 1
+						load_next_terrain_chunk()
+					else
+						// All terrain complete, move to next stage
+						// Build population queue from all generated turfs
+						population_queue = current_virtual_z.get_turfs()
+						finalize_queue = population_queue.Copy()
+						current_stage = STAGE_RUIN
+						queue_index = 1
+						return
+
 				var/turf/T = terrain_queue[queue_index]
 				if(T)
 					current_mapgen.generate_turf(T, current_virtual_z.x_min, current_virtual_z.y_min)
 					T.planet = current_planet
+					T.v = current_virtual_z
 				queue_index++
 				turfs_processed++
+				processed_this_tick++
 
-				if(MC_TICK_CHECK)
+				if(TICK_CHECK && processed_this_tick >= turfs_per_tick)
 					throttle(tick_start, turfs_processed)
 					return
-
-			if(queue_index > terrain_queue.len)
-				current_stage = STAGE_RUIN
-				queue_index = 1
-			else
-				throttle(tick_start, turfs_processed)
-				return
 
 		if(STAGE_RUIN)
 			if(!current_mapgen.spawned_story_ruin)
@@ -246,7 +267,7 @@ var/datum/subsystem/mapping/SSmapping
 				queue_index++
 				turfs_processed++
 
-				if(MC_TICK_CHECK)
+				if(TICK_CHECK)
 					throttle(tick_start, turfs_processed)
 					return
 
@@ -261,7 +282,7 @@ var/datum/subsystem/mapping/SSmapping
 			if(current_planet.climate_type)
 				current_planet.climate = SSweather.set_climate(current_planet.climate_type, current_virtual_z, random_start = TRUE)
 
-			finalize_queue = terrain_queue.Copy()
+			// finalize_queue is already populated at the end of STAGE_TERRAIN
 			current_stage = STAGE_FINALIZE
 			queue_index = 1
 
@@ -295,7 +316,7 @@ var/datum/subsystem/mapping/SSmapping
 				queue_index++
 				turfs_processed++
 
-				if(MC_TICK_CHECK)
+				if(TICK_CHECK)
 					throttle(tick_start, turfs_processed)
 					return
 
@@ -349,17 +370,17 @@ var/datum/subsystem/mapping/SSmapping
 	var/tick_used = world.tick_usage - tick_start
 
 	// Scale up when performing well
-	if(tick_used < 20 && turfs_per_tick < max_turfs_per_tick)
-		turfs_per_tick = min(turfs_per_tick + 200, max_turfs_per_tick)
-	else if(tick_used < 40 && turfs_per_tick < max_turfs_per_tick)
-		turfs_per_tick = min(turfs_per_tick + 100, max_turfs_per_tick)
-	else if(tick_used < 60 && turfs_per_tick < max_turfs_per_tick)
-		turfs_per_tick = min(turfs_per_tick + 50, max_turfs_per_tick)
+	if(tick_used < 75 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 500, max_turfs_per_tick)
+	else if(tick_used < 125 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 250, max_turfs_per_tick)
+	else if(tick_used < 175 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 125, max_turfs_per_tick)
 	// Scale back when approaching limits
-	else if(tick_used > 85 && turfs_per_tick > min_turfs_per_tick)
+	else if(tick_used > 250 && turfs_per_tick > min_turfs_per_tick)
+		turfs_per_tick = max(turfs_per_tick - 300, min_turfs_per_tick)
+	else if(tick_used > 200 && turfs_per_tick > min_turfs_per_tick)
 		turfs_per_tick = max(turfs_per_tick - 150, min_turfs_per_tick)
-	else if(tick_used > 75 && turfs_per_tick > min_turfs_per_tick)
-		turfs_per_tick = max(turfs_per_tick - 75, min_turfs_per_tick)
 
 /datum/subsystem/mapping/proc/get_bucket_key(x, y)
 	return "[round(x / SPATIAL_BUCKET_SIZE)]_[round(y / SPATIAL_BUCKET_SIZE)]"
@@ -520,12 +541,18 @@ var/datum/subsystem/mapping/SSmapping
 		return FALSE
 
 	// Initialize generation state
-	generating = TRUE
 	generation_start_time = world.timeofday
 	stage_start_time = world.timeofday
+
+	var/step_start = TICK_USAGE_REAL
 	current_planet = new planet_datum
-	var/size_to_use = pick(ALLOCATION_SMALL)
+	message_admins("DEBUG spawn_planet: new planet_datum took [(TICK_USAGE_REAL - step_start)]ms")
+
+	var/size_to_use = pick(ALLOCATION_LARGE)
+
+	step_start = TICK_USAGE_REAL
 	current_mapgen = new current_planet.mapgen(size_to_use)
+	message_admins("DEBUG spawn_planet: new mapgen took [(TICK_USAGE_REAL - step_start)]ms")
 
 	// Scale initial processing rate based on planet size
 	switch(size_to_use)
@@ -537,7 +564,11 @@ var/datum/subsystem/mapping/SSmapping
 			turfs_per_tick = 1000
 		else
 			turfs_per_tick = 500
-	current_virtual_z = map.addVLevel(size_to_use)
+
+	step_start = TICK_USAGE_REAL
+	current_virtual_z = map.addVLevel(size_to_use, null, TRUE) // skip_turf_setup = TRUE for planet generation
+	message_admins("DEBUG spawn_planet: addVLevel took [(TICK_USAGE_REAL - step_start)]ms")
+
 	planets += current_planet
 	current_virtual_z.planet = current_planet
 	current_planet.v = current_virtual_z
@@ -558,19 +589,81 @@ var/datum/subsystem/mapping/SSmapping
 	current_mapgen.cave_area.planet = current_planet
 	current_mapgen.cave_area.v = current_virtual_z
 
-	// Populate terrain generation queue
-	terrain_queue = current_virtual_z.get_turfs()
+	// Initialize chunked queue loading - don't load all turfs at once
+	terrain_queue = list()
+	population_queue = list()
+	current_chunk_x = current_virtual_z.x_min
+	current_chunk_y = current_virtual_z.y_min
+	total_turfs_queued = 0
 
-	// Populate population queue with all sector turfs
-	population_queue = terrain_queue.Copy()
+	// Load first chunk
+	load_next_terrain_chunk()
 
 	// Start at terrain generation stage
 	current_stage = STAGE_TERRAIN
 	queue_index = 1
 
-	message_admins("Started generating planet '[current_planet.planet_name]' at v-level [current_virtual_z.id]. [terrain_queue.len] turfs to process.")
+	var/total_turfs = (current_virtual_z.x_max - current_virtual_z.x_min + 1) * (current_virtual_z.y_max - current_virtual_z.y_min + 1)
+	message_admins("Started generating planet '[current_planet.planet_name]' at v-level [current_virtual_z.id]. ~[total_turfs] turfs to process.")
+
+	generating = TRUE
 
 	return TRUE
+
+/**
+ * Loads the next chunk of turfs into the terrain queue
+ *
+ * Loads up to chunk_size turfs at a time to avoid creating massive lists all at once.
+ * Returns TRUE if more chunks remain, FALSE if all turfs have been queued.
+ */
+/datum/subsystem/mapping/proc/load_next_terrain_chunk()
+	var/chunk_start = TICK_USAGE_REAL
+	if(!current_virtual_z)
+		return FALSE
+
+	var/turfs_loaded = 0
+	var/x_min = current_virtual_z.x_min
+	var/x_max = current_virtual_z.x_max
+	var/y_max = current_virtual_z.y_max
+	var/z_level = current_virtual_z.parent_z.z
+
+	// Continue from where we left off
+	var/start_x = current_chunk_x
+	var/start_y = current_chunk_y
+
+	for(var/y = start_y; y <= y_max; y++)
+		for(var/x = (y == start_y ? start_x : x_min); x <= x_max; x++)
+			var/turf/T = locate(x, y, z_level)
+			if(T)
+				terrain_queue += T
+				turfs_loaded++
+				total_turfs_queued++
+
+			if(turfs_loaded >= chunk_size)
+				// Save position for next chunk
+				current_chunk_x = x + 1
+				current_chunk_y = y
+				if(current_chunk_x > x_max)
+					current_chunk_x = x_min
+					current_chunk_y = y + 1
+				message_admins("DEBUG: load_next_terrain_chunk() loaded [turfs_loaded] turfs in [(TICK_USAGE_REAL - chunk_start)]ms")
+				return TRUE
+
+		// Reset x for next row
+		current_chunk_x = x_min
+
+	// All turfs loaded
+	current_chunk_y = y_max + 1 // Mark as complete
+	message_admins("DEBUG: load_next_terrain_chunk() loaded [turfs_loaded] turfs (final) in [(TICK_USAGE_REAL - chunk_start)]ms")
+	return FALSE
+
+/**
+ * Checks if more terrain chunks are available to load
+ */
+/datum/subsystem/mapping/proc/has_more_terrain_chunks()
+	if(!current_virtual_z)
+		return FALSE
+	return current_chunk_y <= current_virtual_z.y_max
 
 #undef STAGE_TERRAIN
 #undef STAGE_RUIN

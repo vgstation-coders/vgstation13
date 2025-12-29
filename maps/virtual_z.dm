@@ -36,7 +36,7 @@
 	var/list/daynight_turfs = list()
 	var/weather_mod = 1 // Weather light modifier
 
-/datum/virtual_z/New(var/datum/zLevel/z, var/input_size_x, var/input_size_y, var/input_x = 0, var/input_y = 0)
+/datum/virtual_z/New(var/datum/zLevel/z, var/input_size_x, var/input_size_y, var/input_x = 0, var/input_y = 0, var/skip_turf_setup = FALSE)
 	. = ..()
 	if(!z)
 		CRASH("Tried creating a virtual zLevel without a parent zLevel!")
@@ -49,22 +49,23 @@
 	y_min = input_y
 	x_max = x_min + size_x - 1
 	y_max = y_min + size_y - 1
-	setup()
+	setup(skip_turf_setup)
 
-/datum/virtual_z/proc/setup()
+/datum/virtual_z/proc/setup(var/skip_turf_setup = FALSE)
 	parent_z.virtual_z_levels |= src
 	map.vLevels |= src
 	id = map.vLevels.len
-	var/list/turf/turfs = get_turfs()
-	for(var/turf/T in turfs)
-		if(!T)
-			continue
-		T.v = src
-		var/area/A = get_area(T)
-		if(!A || isspace(A))
-			continue
-		areas |= A
-		A.v = src
+	if(!skip_turf_setup)
+		var/list/turf/turfs = get_turfs()
+		for(var/turf/T in turfs)
+			if(!T)
+				continue
+			T.v = src
+			var/area/A = get_area(T)
+			if(!A || isspace(A))
+				continue
+			areas |= A
+			A.v = src
 	spawn(0)
 		make_borders()
 

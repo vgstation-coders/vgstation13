@@ -182,7 +182,7 @@ var/skip_turf_init = FALSE
 	return
 
 /turf/space/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
-	return ..(N, tell_universe, 1, allow)
+	return ..(N, tell_universe, 1, allow, defer_edges)
 
 /turf/space/lighting_build_overlay()
 	return

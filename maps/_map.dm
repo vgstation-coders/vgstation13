@@ -164,13 +164,14 @@
 	new_vz.name = level.name
 	return new_vz
 
-/datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null)
+/datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null, var/skip_turf_setup = FALSE)
 	if(!size_y)
 		size_y = size_x
 	var/found_x = 0
 	var/found_y = 0
 
 	var/spacing = ALLOCATION_SPACING_DEFAULT
+	var/step_start = TICK_USAGE_REAL
 
 	// Check existing dynamic zLevels for available space using 2D bin packing
 	var/datum/zLevel/z_to_use = null
@@ -196,7 +197,7 @@
 		found_y = 1
 
 	// Create the new virtual_z
-	var/datum/virtual_z/new_vz = new(z_to_use, size_x, size_y, found_x, found_y)
+	var/datum/virtual_z/new_vz = new(z_to_use, size_x, size_y, found_x, found_y, skip_turf_setup)
 
 	// Add to global vLevels list (map global is set during gameplay)
 	map.vLevels |= new_vz

@@ -35,7 +35,7 @@
 
 // Allocation sizing for virtual z-levels
 #define ALLOCATION_SMALL		92 // can fit 25 in one zlevel
-#define ALLOCATION_MEDIUM		240 // can fit 4 in one zlevel
+#define ALLOCATION_MEDIUM		245 // can fit 4 in one zlevel
 #define ALLOCATION_LARGE		398 // can fit 1 large + 9 small with 8 spacing
 #define ALLOCATION_FULL			500 // takes up the whole zlevel
 
