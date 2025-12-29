@@ -1420,9 +1420,7 @@ var/list/cult_spires = list()
 	if (!direction_to_bloodstone)
 		var/datum/faction/bloodcult/_cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (_cult?.bloodstone)
-			var/_angle = arctan((_cult.bloodstone.y - y) / (_cult.bloodstone.x - x))
-			if ((_cult.bloodstone.x - x) < 0)
-				_angle += 180
+			var/_angle = arctan((_cult.bloodstone.x - x) + (alt ? 0.375 : -0.375), (_cult.bloodstone.y - y))//accounting for the offset
 			var/_x_drift = cos(_angle) / 15
 			var/_y_drift = sin(_angle) / 15
 			direction_to_bloodstone = list(_x_drift - 0.02, _y_drift - 0.02, _x_drift + 0.02, _y_drift + 0.02)

@@ -347,8 +347,8 @@ var/list/particle_string_to_type = list(
 
 //PILLAR BEACON
 /particles/pillar_beacon
-	width = 128
-	height = 128
+	width = 192
+	height = 192
 	count = 18
 	spawning = 0.6
 	color = "#FF281B"

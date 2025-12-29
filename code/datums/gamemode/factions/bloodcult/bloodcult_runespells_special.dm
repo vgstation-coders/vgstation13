@@ -362,7 +362,7 @@
 	R.overlays -= narsie_glint
 	crystals.icon_state = "tear_stones_[min(8, 1 + round(dance_count / (dance_target / 8)))]"
 	top_crystal.icon_state = "tear_stones_1"
-	narsie_glint.alpha = max(0, (dance_count - (dance_target / 2.25))*2)//Nar-Sie's eyes become about visible half-way through the dance
+	narsie_glint.alpha = max(0, ((dance_count - (dance_target / 2)) / (dance_target / 2)) * 255)//Nar-Sie's eyes become about visible half-way through the dance
 	top_crystal.appearance_flags &= ~RESET_COLOR
 	R.overlays += crystals
 	R.overlays += top_crystal
