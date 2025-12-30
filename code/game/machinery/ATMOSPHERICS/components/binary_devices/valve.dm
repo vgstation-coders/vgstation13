@@ -62,11 +62,9 @@
 		update_icon()
 
 		if(network1)
-			if(network1)
-				qdel(network1)
+			qdel(network1)
 		if(network2)
-			if(network1)
-				qdel(network2)
+			qdel(network2)
 
 		build_network()
 
