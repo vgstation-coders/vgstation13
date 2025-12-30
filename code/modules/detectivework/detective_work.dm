@@ -134,6 +134,7 @@
 	var/datum/browser/popup = new(user, "scanner", "Forensic Scanning Computer", 375, 500, src)
 	popup.set_content(dat)
 	popup.open()
+	user.set_machine(src)
 
 /obj/machinery/computer/forensic_scanning/attackby(obj/item/I, mob/user)
 	. = ..()
@@ -513,7 +514,7 @@
 						scan_data += "<br><b><a href='?src=\ref[src];operation=add'>Add to Database?</a></b><br>"
 				else
 					scan_data = null
-		updateUsrDialog()
+			updateUsrDialog()
 
 /obj/machinery/computer/forensic_scanning/ex_act()
 	return
