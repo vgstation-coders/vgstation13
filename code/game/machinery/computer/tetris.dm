@@ -61,7 +61,7 @@ var/list/deleted_machines_tetris_highscores = list()
 			var/score_delta = temp_score - total_score[usr.key]
 			if (score_delta > PERFECT_SCORE)
 				say("CHEATERS NEVER PROSPER.")
-			if (world.time - MINIMAL_SCORE_INTERVAL < last_scored_time[usr.key])
+			if (last_scored_time[usr.key] && last_scored_time[usr.key] != world.time && last_scored_time[usr.key] > world.time - MINIMAL_SCORE_INTERVAL)
 				say("CHEATERS NEVER PROSPER.")
 			if (temp_score < total_score[usr.key]) // Means they restarted!
 				next_tech_threshold[usr.key] = 100
