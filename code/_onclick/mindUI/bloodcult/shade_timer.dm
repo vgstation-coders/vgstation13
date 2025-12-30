@@ -9,7 +9,7 @@
 	uniqueID = "Shade Timer"
 	element_types_to_spawn = list(
 		/obj/abstract/mind_ui_element/shade_timer_count,
-		/obj/abstract/mind_ui_element/shade_timer_gauge,
+		/obj/abstract/mind_ui_element/hoverable/shade_timer_gauge,
 		/obj/abstract/mind_ui_element/shade_timer_front,
 		)
 	display_with_parent = TRUE
@@ -36,7 +36,7 @@
 //------------------------------------------------------------
 
 /obj/abstract/mind_ui_element/shade_timer_count
-	name = "Time left to shade"
+	name = "Time left to turn into a Shade"
 	icon = 'icons/ui/bloodcult/16x16.dmi'
 	icon_state = "blank"
 	offset_x = -13
@@ -87,8 +87,8 @@
 
 //------------------------------------------------------------
 
-/obj/abstract/mind_ui_element/shade_timer_gauge
-	name = "Time left to shade"
+/obj/abstract/mind_ui_element/hoverable/shade_timer_gauge
+	name = "Time left to turn into a Shade"
 	icon = 'icons/ui/bloodcult/288x16.dmi'
 	icon_state = "shade_gauge"
 	layer = MIND_UI_BUTTON
@@ -96,10 +96,16 @@
 	offset_y = 86
 	element_flags = MINDUI_FLAG_PROCESSING
 
+	hover_state = FALSE
+	element_flags = MINDUI_FLAG_TOOLTIP|MINDUI_FLAG_PROCESSING
+	tooltip_title = "Shade Timer"
+	tooltip_content = "For up to one minute following the time of death, cultists can channel one last time the dark energies in their bodies to manifest as a Shade instead of turning into a Ghost.<br><br>Shades are very fragile but they can crawl through vents, and if you reach your fellow cultists they may help you regain a body.<br><br>\[Click to begin the process\]."
+	tooltip_theme = "radial-cult"
+
 	var/image/mask
 	var/image/shade
 
-/obj/abstract/mind_ui_element/shade_timer_gauge/New()
+/obj/abstract/mind_ui_element/hoverable/shade_timer_gauge/New()
 	..()
 	appearance_flags |= KEEP_TOGETHER
 	mask = image(icon, src, "shade_gauge_bg")
@@ -107,14 +113,12 @@
 	shade = image('icons/mob/mob.dmi', src, "shade")
 	add_particles(PS_CULT_GAUGE)
 
-/obj/abstract/mind_ui_element/shade_timer_gauge/process()
+/obj/abstract/mind_ui_element/hoverable/shade_timer_gauge/process()
 	if (invisibility == 101)
 		return
 	UpdateIcon()
 
-/obj/abstract/mind_ui_element/shade_timer_gauge/UpdateIcon()
-
-
+/obj/abstract/mind_ui_element/hoverable/shade_timer_gauge/UpdateIcon()
 	var/mob/M = GetUser()
 	var/timetocheck = M.timeofdeath
 	if (isbrain(M))
@@ -137,7 +141,7 @@
 
 	overlays += shade
 
-/obj/abstract/mind_ui_element/shade_timer_gauge/Click()
+/obj/abstract/mind_ui_element/hoverable/shade_timer_gauge/Click()
 	var/mob/living/L = GetUser()
 	if (istype(L))
 		L.ghost()
@@ -146,7 +150,7 @@
 //------------------------------------------------------------
 
 /obj/abstract/mind_ui_element/shade_timer_front
-	name = "Time left to shade"
+	name = "Time left to turn into a Shade"
 	icon = 'icons/ui/bloodcult/362x229.dmi'
 	icon_state = "foreground_shade"
 	offset_x = -165
