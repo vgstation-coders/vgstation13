@@ -33,6 +33,8 @@
 	if(istype(target, /mob))
 		playsound(src, mecha_punch_sound, 50, 1)
 		step_away(target,src,15)
+		var/image/fist_icon = image(icon = 'icons/obj/items.dmi', icon_state = "bike_horn") //bike horn placeholder for clown fist
+		do_attack_animation(target, src, fist_icon)
 		occupant.delayNextAttack(MECHA_MELEE_DELAY)
 	return
 
