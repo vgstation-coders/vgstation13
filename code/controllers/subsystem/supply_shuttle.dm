@@ -318,7 +318,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			continue
 		var/contcount
 		for(var/atom/movable/MA in T.contents)
-			if(MA.anchored && !ismecha(MA))
+			if(MA.anchored && !istype(MA,/obj/structure/shuttle))
 				continue
 			contcount++
 		if(contcount)
