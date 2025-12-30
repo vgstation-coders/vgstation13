@@ -134,7 +134,7 @@
 	var/datum/browser/popup = new(user, "scanner", "Forensic Scanning Computer", 375, 500, src)
 	popup.set_content(dat)
 	popup.open()
-	user.set_machine(src)
+	onclose(user, "scanner")
 
 /obj/machinery/computer/forensic_scanning/attackby(obj/item/I, mob/user)
 	. = ..()
