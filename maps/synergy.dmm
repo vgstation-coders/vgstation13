@@ -99824,10 +99824,6 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/firedoor/border_only{
-	dir = 8;
-	name = "Firelock West"
-	},
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "quT" = (
