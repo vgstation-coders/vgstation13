@@ -371,20 +371,17 @@
 				return
 			for(var/atom/movable/AA in linked_area)
 				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "to_z" = D.z, "from_z" = linked_port.z)
-				if(istype(AA, /mob/living))
-					var/mob/living/LL = AA
-					if(istype(D,/obj/docking_port/destination/planet_surface))
-						if(istype(linked_port,/obj/docking_port/destination/planet_surface))
-							INVOKE_EVENT(LL, /event/planet_entered, LL, D.planet)
-							INVOKE_EVENT(LL, /event/planet_exited, LL, linked_port.planet)
-							continue
-						LL.register_event(/event/planet_entered, D.planet, "on_mob_entered")
-						LL.register_event(/event/planet_exited, D.planet, "on_mob_exited")
-						INVOKE_EVENT(LL, /event/planet_entered, LL, D.planet)
-					else if(istype(linked_port,/obj/docking_port/destination/planet_surface))
-						INVOKE_EVENT(LL, /event/planet_exited, LL, linked_port.planet)
-						LL.unregister_event(/event/planet_entered, linked_port.planet, "on_mob_entered")
-						LL.unregister_event(/event/planet_exited, linked_port.planet, "on_mob_exited")
+		if(D.get_virtual_z() != linked_port.get_virtual_z())
+			var/datum/virtual_z/to_v = D.get_virtual_z()
+			var/datum/virtual_z/from_v = linked_port.get_virtual_z()
+			for(var/atom/movable/AA in linked_area)
+				if(!istype(AA, /mob/living))
+					continue
+				var/mob/living/LL = AA
+				LL.register_event(/event/virtual_z_entered, to_v, "on_mob_entered")
+				LL.register_event(/event/virtual_z_exited, from_v, "on_mob_exited")
+				INVOKE_EVENT(LL, /event/virtual_z_entered, LL, to_v)
+				INVOKE_EVENT(LL, /event/virtual_z_exited, LL, from_v)
 
 
 		if(transit_port && get_transit_delay())

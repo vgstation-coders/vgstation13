@@ -10,6 +10,7 @@
 	var/size_x = ALLOCATION_SMALL
 	var/size_y = ALLOCATION_SMALL
 	var/datum/zLevel/parent_z
+	var/active = TRUE
 
 	var/list/area/areas = list()
 	var/list/shuttle_landing_zones = list()
@@ -86,6 +87,13 @@
 			var/mob/living/L = M
 			living_players |= L
 	return living_players
+
+/datum/virtual_z/proc/set_status(var/active_state)
+	active = active_state
+	var/list/mob/mobs = get_mobs()
+	for(var/mob/living/L in mobs)
+		if(istype(L))
+			L.paused = !active_state
 
 //////////////////////////////////////
 /////// COORDINATE TRANSLATION ///////

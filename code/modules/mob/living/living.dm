@@ -31,6 +31,8 @@
 	if (istype(dyn_mode))
 		dyn_mode.living_players -= src
 
+	unregister_event(/event/v_transition, src, nameof(src::OnMobVChanged()))
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -1779,3 +1781,7 @@ Thanks.
 			for(var/role in mind.antag_roles)
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
+
+/// Event handler for v_transition events used to activate or pause v-levels.
+/mob/living/proc/OnMobVChanged(mob/living/user, datum/virtual_z/to_v, datum/virtual_z/from_v)
+	SSmapping?.v_pause_check(src, to_v, from_v)

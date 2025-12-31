@@ -666,6 +666,22 @@ var/skip_turf_init = FALSE
 		return FALSE
 	return current_chunk_y <= current_virtual_z.y_max
 
+/**
+ * Checks living mobs with clients are present on a given vLevel and pauses/unpauses it accordingly
+ */
+/datum/subsystem/mapping/proc/v_pause_check(var/mob/living/user, var/datum/virtual_z/to_v, var/datum/virtual_z/from_v)
+	if(!istype(user) || !user.client)
+		return
+	if(to_v) // Unpause destination vLevel
+		to_v.set_status(TRUE)
+	if(from_v) // Check if any living mobs with clients remain on source vLevel
+		var/has_living = FALSE
+		for(var/mob/living/M in from_v.get_living_players())
+			if(M.client)
+				has_living = TRUE
+				break
+		from_v.set_status(has_living)
+
 #undef STAGE_TERRAIN
 #undef STAGE_RUIN
 #undef STAGE_POPULATION
