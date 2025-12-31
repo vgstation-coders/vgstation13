@@ -171,7 +171,6 @@
 	var/found_y = 0
 
 	var/spacing = ALLOCATION_SPACING_DEFAULT
-	var/step_start = TICK_USAGE_REAL
 
 	// Check existing dynamic zLevels for available space using 2D bin packing
 	var/datum/zLevel/z_to_use = null
