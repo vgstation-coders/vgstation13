@@ -562,28 +562,27 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#F5CB42"
 	plantname = "goldapple"
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/crabapple
+/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple
 	name = "crab apple"
 	desc = "An even smaller piece of Eden."
 	potency = 15
-	filling_color = "#DFE88B"
 	plantname = "crabapple"
 	var/alive = TRUE
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/crabapple/after_consume(mob/living/carbon/eater)
+/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/after_consume(mob/living/carbon/eater)
 	if(!alive)
 		return ..()
 	to_chat(eater, "<span class='warning'>The [src] skitters away from your grip!</span>")
 	create_crab(eater, TRUE)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/crabapple/attack_self(mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/attack_self(mob/user as mob)
 	if(!alive)
 		return ..()
 	to_chat(user, "<span class='notice'>You plant the crab apple.</span>")
 	create_crab(user)
 
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/crabapple/proc/create_crab(mob/user as mob, aggro = FALSE)
+/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/proc/create_crab(mob/user as mob, aggro = FALSE)
 	if(istype(user.loc, /turf/space))
 		return FALSE
 	alive = FALSE
@@ -593,10 +592,11 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	T.melee_damage_upper = clamp(potency/10, 1, 15)
 	T.health = clamp(potency/3, 5, 25)
 	T.maxHealth = clamp(potency/3, 5, 25)
-	T.seed = seed
+	T.my_fruit = new type(T)
+	T.my_fruit.seed = seed//doesn't work
 	if(aggro)
 		T.hostile = TRUE
-		T.health -= potency/6
+		T.health -= clamp(potency/6, 2, 12)
 	qdel(src)
 
 

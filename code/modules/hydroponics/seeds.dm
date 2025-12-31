@@ -794,7 +794,7 @@
 	display_name = "apple tree"
 	plant_dmi = 'icons/obj/hydroponics/apple.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
-	mutants = list("poisonapple","goldapple")
+	mutants = list("poisonapple","goldapple", "crabapple")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
 
@@ -810,7 +810,7 @@
 	name = "poisonapple"
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned)
-	mutants = list("crabapple")
+	mutants = null
 	chems = list(CYANIDE = list(1,5))
 
 /datum/seed/apple/gold
@@ -831,9 +831,9 @@
 	seed_name = "crab apple"
 	display_name = "crab apple tree"
 	plant_dmi = 'icons/obj/hydroponics/crabapple.dmi'
-	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/crabapple)
-	mutants = list("apple", "poisonapple",)
-	chems = list(NUTRIMENT = list(1,10))
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple)
+	mutants = null
+	chems = list(NUTRIMENT = list(1,10), TANNIC_ACID = list(1,30))
 
 	maturation = 4
 	production = 4

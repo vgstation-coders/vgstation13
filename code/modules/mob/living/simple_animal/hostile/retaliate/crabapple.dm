@@ -17,7 +17,7 @@
 	melee_damage_lower = 1
 	melee_damage_upper = 1
 	environment_smash_flags = 0
-	var/datum/seed/seed
+	var/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/my_fruit
 
 /mob/living/simple_animal/hostile/retaliate/crabapple/reagent_act(id, method, volume)
 	.=..()
@@ -29,9 +29,18 @@
 /mob/living/simple_animal/hostile/retaliate/crabapple/death(var/gibbed = FALSE)
 	..(TRUE)
 	new /obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat(src.loc)
-	var/obj/item/weapon/reagent_containers/food/snacks/grown/crabapple/T
-	T = new(src.loc)
-	T.alive = FALSE
-	if(seed)
-		T.seed = seed
+	if(!my_fruit)
+		my_fruit = new(loc)
+	my_fruit.forceMove(loc)
+	my_fruit.alive = FALSE
 	qdel(src)
+
+/mob/living/simple_animal/hostile/retaliate/crabapple/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(O.is_wirecutter(user))
+		if(stat == DEAD)
+			return ..()
+		to_chat(user, "<span class='danger'>This kills the crab.</span>")
+		health -= 25
+		death()
+	else
+		return ..()
