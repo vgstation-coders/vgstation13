@@ -88,12 +88,34 @@
 			living_players |= L
 	return living_players
 
+/////////////////////////////////////
+///////// SUBSYSTEM PAUSING /////////
+/////////////////////////////////////
 /datum/virtual_z/proc/set_status(var/active_state)
+	if(id <= 6) // Don't pause core z-levels
+		return
+
 	active = active_state
 	var/list/mob/mobs = get_mobs()
 	for(var/mob/living/L in mobs)
 		if(istype(L))
 			L.paused = !active_state
+
+/datum/virtual_z/proc/mob_entered(var/mob/living/M)
+	if(!M)
+		return
+
+	if(M.client)
+		set_status(TRUE)
+
+/datum/virtual_z/proc/mob_exited(var/mob/living/M)
+	if(!M || !istype(M))
+		return
+
+	if(M.client)
+		var/list/mob/living/players = get_living_players()
+		if(!players.len)
+			set_status(FALSE)
 
 //////////////////////////////////////
 /////// COORDINATE TRANSLATION ///////

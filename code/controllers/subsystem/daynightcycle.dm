@@ -59,6 +59,9 @@ On the map dm file, redefine the following:
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
 	for(var/datum/virtual_z/vz in daynight_v_lvls)
+		if(!vz.active)
+			continue
+
 		if(!vz.daynight_turfs.len)
 			continue
 

@@ -466,42 +466,45 @@ var/area/space_area
 	for(var/mob/mob_in_obj in Obj.contents)
 		if(istype(mob_in_obj))
 			INVOKE_EVENT(mob_in_obj, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
-			if(planet && istype(mob_in_obj, /mob/living))
-				var/mob/living/L = mob_in_obj
-				L.register_event(/event/planet_entered, planet, "on_mob_entered")
-				L.register_event(/event/planet_exited, planet, "on_mob_exited")
-				INVOKE_EVENT(L, /event/planet_entered, L, planet)
+			if(oldArea.v && src.v && (oldArea.v != src.v))
+				var/datum/virtual_z/old_v = oldArea.v
+				var/datum/virtual_z/new_v = src.v
+				if(istype(mob_in_obj, /mob/living))
+					var/mob/living/L = mob_in_obj
+					L.register_event(/event/virtual_z_entered, new_v, "mob_entered")
+					L.register_event(/event/virtual_z_exited, old_v, "mob_exited")
+					INVOKE_EVENT(L, /event/virtual_z_entered, L, new_v)
 
 	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
 		INVOKE_EVENT(M, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
-		if(planet && istype(M, /mob/living))
-			var/mob/living/L = M
-			L.register_event(/event/planet_entered, planet, "on_mob_entered")
-			L.register_event(/event/planet_exited, planet, "on_mob_exited")
-			INVOKE_EVENT(L, /event/planet_entered, L, planet)
+		if(oldArea.v && src.v && (oldArea.v != src.v))
+			var/datum/virtual_z/old_v = oldArea.v
+			var/datum/virtual_z/new_v = src.v
+			if(istype(M, /mob/living))
+				var/mob/living/L = M
+				L.register_event(/event/virtual_z_entered, new_v, "mob_entered")
+				L.register_event(/event/virtual_z_exited, old_v, "mob_exited")
+				INVOKE_EVENT(L, /event/virtual_z_entered, L, new_v)
 		if(narrator)
 			narrator.Crossed(M)
 
 /area/Exited(atom/movable/Obj)
-	if(planet)
-		var/turf/T = get_turf(Obj)
-		var/area/newArea = T ? get_area(T) : null
-		if(!newArea || newArea.planet != planet)
-			Obj.planet = null
-			if(istype(Obj, /mob))
-				var/mob/M = Obj
-				INVOKE_EVENT(M, /event/planet_exited, M, planet)
-				M.unregister_event(/event/planet_entered, planet, "on_mob_entered")
-				M.unregister_event(/event/planet_exited, planet, "on_mob_exited")
-			for(var/atom/movable/thing in get_contents_in_object(Obj))
-				thing.planet = null
-				if(istype(thing, /mob))
-					var/mob/M = thing
-					INVOKE_EVENT(M, /event/planet_exited, M, planet)
-					M.unregister_event(/event/planet_entered, planet, "on_mob_entered")
-					M.unregister_event(/event/planet_exited, planet, "on_mob_exited")
+	var/turf/T = get_turf(Obj)
+	var/datum/virtual_z/new_v = T.v
+	if(!new_v || v != new_v)
+		if(istype(Obj, /mob/living))
+			var/mob/living/L = Obj
+			INVOKE_EVENT(L, /event/virtual_z_exited, L, v)
+			L.unregister_event(/event/virtual_z_entered, v, "mob_entered")
+			L.unregister_event(/event/virtual_z_exited, v, "mob_exited")
+		for(var/atom/movable/thing in get_contents_in_object(Obj))
+			if(istype(thing, /mob/living))
+				var/mob/living/L = thing
+				INVOKE_EVENT(L, /event/virtual_z_exited, L, v)
+				L.unregister_event(/event/virtual_z_entered, v, "mob_entered")
+				L.unregister_event(/event/virtual_z_exited, v, "mob_exited")
 
 	INVOKE_EVENT(src, /event/area_exited, "exiter" = Obj)
 	..()

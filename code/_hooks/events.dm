@@ -21,6 +21,14 @@
 // TODO: docs
 /event/post_z_transition
 
+// Called whenever an atom's v-level changes.
+// Seems to be invoked all over the place, actually. Someone should sort this out.
+// Arguments:
+// atom/movable/user: The atom that moved.
+// to_v: The new v.
+// from_v: The old v.
+/event/v_transition
+
 // Called whenever an /atom/movable moves.
 // Arguments:
 // atom/movable/mover: the movable itself.

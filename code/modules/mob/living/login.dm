@@ -38,4 +38,4 @@
 
 	register_event(/event/v_transition, src, nameof(src::OnMobVChanged()))
 
-	SSmapping?.v_pause_check(src, to_v, from_v)
+	SSmapping?.v_pause_check(src, get_virtual_z(), null)

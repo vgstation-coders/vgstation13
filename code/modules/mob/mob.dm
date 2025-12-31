@@ -22,8 +22,9 @@
 	return RECYK_BIOLOGICAL
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
-	if(planet)
-		planet.on_mob_exited(src, planet)
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(vz)
+		vz.mob_exited(src)
 
 	for(var/datum/mind/mind in heard_by)
 		for(var/M in mind.heard_before)

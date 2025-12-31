@@ -121,6 +121,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 /datum/climate/proc/tick()
 	if(!current_weather)
 		return
+	if(!v.active)
+		return
 	current_weather.tick()
 	if(current_weather.timeleft <= 0)
 		change_weather(forecasts[1],force = TRUE)

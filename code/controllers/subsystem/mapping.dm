@@ -669,8 +669,8 @@ var/skip_turf_init = FALSE
 /**
  * Checks living mobs with clients are present on a given vLevel and pauses/unpauses it accordingly
  */
-/datum/subsystem/mapping/proc/v_pause_check(var/mob/living/user, var/datum/virtual_z/to_v, var/datum/virtual_z/from_v)
-	if(!istype(user) || !user.client)
+/datum/subsystem/mapping/proc/v_pause_check(var/mob/living/user, var/datum/virtual_z/to_v = null, var/datum/virtual_z/from_v = null)
+	if(!istype(user) || !user.client || !(to_v && from_v))
 		return
 	if(to_v) // Unpause destination vLevel
 		to_v.set_status(TRUE)

@@ -17,10 +17,6 @@
 	//Icon shown in the planet scanner.
 	var/icon_state = "moon"
 	var/icon/ico
-	// Player tracking for mob processing optimization
-	var/list/planet_mobs = list() // All mobs on this planet
-	var/list/players = list() // All living player mobs currently on this planet
-	var/process_mobs = FALSE // Whether to process mobs on this planet
 	// Faction for mobs spawned on this planet
 	var/mob_faction
 	// Whether this planet is hidden from the deep space scanner
@@ -42,38 +38,6 @@
 	ico = icon('icons/ui/planet_scanner/128x128.dmi', "bg")
 	var/icon/fg = icon('icons/ui/planet_scanner/64x64.dmi', icon_state)
 	ico.Blend(fg,ICON_OVERLAY,32,32)
-
-/datum/planet_type/proc/add_player(var/mob/living/add_mob)
-	if(!add_mob?.client)
-		return
-	if(!(add_mob in players))
-		players += add_mob
-	process_mobs = players.len ? TRUE : FALSE
-
-/datum/planet_type/proc/remove_player(var/mob/living/rem_mob)
-	if(!rem_mob?.client)
-		return
-	if(rem_mob in players)
-		players -= rem_mob
-	process_mobs = players.len ? TRUE : FALSE
-
-/datum/planet_type/proc/on_mob_entered(mob/living/M, datum/planet_type/planet)
-	if(!M || planet != src)
-		return
-
-	if(M.client)
-		add_player(M)
-	else
-		planet_mobs |= M
-
-/datum/planet_type/proc/on_mob_exited(mob/living/M, datum/planet_type/planet)
-	if(!M || planet != src)
-		return
-
-	if(M.client)
-		remove_player(M)
-	else
-		planet_mobs -= M
 
 /datum/planet_type/proc/generate_planet_name()
 	// Complete planet names
