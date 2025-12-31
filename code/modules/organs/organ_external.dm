@@ -1274,7 +1274,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(is_malfunctioning())
 		// owner.u_equip(c_hand, 1)
 		owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")
-		spark(src, 5, FALSE)
+		spark(owner, 5, FALSE)
 		owner.drop_item(c_hand)
 
 /datum/organ/external/proc/embed(var/obj/item/weapon/W, var/silent = 0)
