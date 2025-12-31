@@ -136,7 +136,7 @@
 			assign_rituals()
 			var/mob/M = antag.current
 			if (M)
-				to_chat(M, "<span class='sinister'>Although you can generate devotion by performing most cult activities, a couple rituals for you to perform are now available. Check the cult panel.</span>")
+				to_chat(M, "<span class='sinister'>Although you can generate devotion by performing most cult activities, a couple rituals for you to perform are now available. Check the cult panel to the left.</span>")
 		if (!antag.current)
 			return
 		switch(cult.stage)
