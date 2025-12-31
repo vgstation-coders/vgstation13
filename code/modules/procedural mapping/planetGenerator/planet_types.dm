@@ -43,7 +43,8 @@
 		GAS_CRYOTHEUM = 0,
 		GAS_RADON = 0
 	)
-  
+	var/list/vents = list()
+
 	// Ruin types available on this planet.
 	var/ruin_whitelist = RUIN_TYPE_GENERIC
 	var/ruin_blacklist = 0

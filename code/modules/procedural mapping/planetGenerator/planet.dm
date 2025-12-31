@@ -84,7 +84,7 @@
 
 	/// Number of gas vents present on the planet
 	var/vent_count = 0
- 
+
 	/// Expanded weighted list of ruins for this planet's type
 	var/list/weighted_ruin_list = list()
 	var/spawned_story_ruin = FALSE
@@ -134,8 +134,9 @@
 			continue
 		var/area/A = get_area(T)
 		if(isopensurface(A) || (istype(A, /area/planet/cave) && !iswall(T)))
-			new /datum/vent(T)
+			var/datum/vent/newvent = new /datum/vent(T)
 			vent_count -= 1
+			allocation.ptype.vents += newvent
 		checked_turfs++
 		if(checked_turfs > 100) //arbitrary limit to prevent infinite loops
 			break
