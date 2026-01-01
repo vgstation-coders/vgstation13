@@ -1076,6 +1076,7 @@ var/global/list/damage_icon_parts = list()
 			else
 				to_chat(src, span_warning("You burst out of \the [wear_suit]!"))
 				drop_from_inventory(wear_suit)
+				return
 		else
 			if(SP.name in wear_suit.species_fit) //Allows clothes to display differently for multiple species
 				if(SP.wear_suit_icons && has_icon(SP.wear_suit_icons, wear_suit.icon_state))
