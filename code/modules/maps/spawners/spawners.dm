@@ -955,7 +955,7 @@
 	name = "abnormality spawner"
 	icon_state = "mob_spider"
 	to_spawn = list(
-		// /mob/living/simple_animal/scp_173, //Uncomment when re-balanced
+		/mob/living/simple_animal/scp_173,
 		/obj/machinery/chem_dispenser/scp_294,
 		/obj/effect/landmark/procedural_mobspawn/forgottenbeast,
 		)
