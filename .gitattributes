@@ -4,7 +4,7 @@
 * text=auto
 
 # dmi icon merger hook
-# needs additional setup, see tools/dmitool/merging.txt
+# Run tools/dmi/Resolve Icon Conflicts.bat after a conflicted merge
 *.dmi merge=merge-dmi
 
 # force changelog merging to use union
