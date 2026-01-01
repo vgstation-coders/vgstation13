@@ -164,7 +164,7 @@
 	new_vz.name = level.name
 	return new_vz
 
-/datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null, var/skip_turf_setup = FALSE)
+/datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null, var/skip_turf_setup = FALSE, var/fill_turf_type = null)
 	if(!size_y)
 		size_y = size_x
 	var/found_x = 0
@@ -195,11 +195,18 @@
 		found_x = 1
 		found_y = 1
 
+	if(fill_turf_type)
+		skip_turf_setup = FALSE
+
 	// Create the new virtual_z
 	var/datum/virtual_z/new_vz = new(z_to_use, size_x, size_y, found_x, found_y, skip_turf_setup)
 
 	// Add to global vLevels list (map global is set during gameplay)
 	map.vLevels |= new_vz
+
+	if(fill_turf_type)
+		for(var/turf/T in new_vz.get_turfs())
+			T.ChangeTurf(fill_turf_type)
 
 	return new_vz
 
@@ -212,6 +219,11 @@
 		t_turf.pushdirection = direction
 		t_turf.update_icon()
 		CHECK_TICK
+	return new_vz
+
+/datum/map/proc/addMapElementVLevel(var/datum/map_element/ME, var/fill_turf = null, var/buffer_size = 5)
+	var/datum/virtual_z/new_vz = src.addVLevel(ME.width + buffer_size * 2, ME.height + buffer_size * 2, fill_turf_type = fill_turf)
+	new_vz.name = "Map Element: [ME.name]"
 	return new_vz
 
 var/global/list/accessable_z_levels = list()

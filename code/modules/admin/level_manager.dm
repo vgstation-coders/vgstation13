@@ -1,119 +1,299 @@
-/datum/admins/proc/level_manager()
-	if (!map.zLevels.len)
-		alert("This map has no z-levels!")
-		return
+/datum/level_manager
+	var/mob/user
 
-	var/dat = {"<html>
-		<head>
-		<style>
-		body {
-			font-family: Arial, Helvetica, sans-serif;
-			margin: 10px;
-		}
-		table {
-			border-collapse: collapse;
-			width: 100%;
-			margin-bottom: 20px;
-		}
-		td, th {
-			border: 1px solid #dddddd;
-			padding: 8px;
-			text-align: left;
-		}
-		tr:nth-child(even) {
-			background-color: #f2f2f2;
-		}
-		.zlevel-header {
-			background-color: #4a90d9;
-			color: white;
-			font-weight: bold;
-		}
-		.vlevel-header {
-			background-color: #5cb85c;
-			color: white;
-			font-weight: bold;
-		}
-		.section-title {
-			background-color: #333;
-			color: white;
-			padding: 10px;
-			margin-top: 15px;
-			margin-bottom: 5px;
-		}
-		.no-vlevels {
-			color: #888;
-			font-style: italic;
-		}
-		.info-cell {
-			font-size: 0.9em;
-			color: #555;
-		}
-		</style>
-		</head>
-		<body>
-		<h2 style="text-align:center">Level Manager</h2>
-		<p style="text-align:center">[map.zLevels.len] Z-Level[map.zLevels.len != 1 ? "s" : ""] | [map.vLevels.len] Virtual Z-Level[map.vLevels.len != 1 ? "s" : ""]</p>
-		"}
+/datum/level_manager/New(mob/M)
+	user = M
+
+/datum/level_manager/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "LevelManager")
+		ui.set_autoupdate(TRUE)
+		ui.open()
+
+/datum/level_manager/ui_data(mob/user)
+	var/list/data = list()
+	data["zLevels"] = list()
 
 	for(var/z_index = 1 to map.zLevels.len)
 		var/datum/zLevel/Z = map.zLevels[z_index]
 		if(!Z)
 			continue
 
-		// Z-Level section header
-		dat += {"<div class="section-title">Z-Level [z_index]: [Z.name] <a href='?_src_=vars;Vars=\ref[Z]'>\[VV\]</a></div>"}
+		var/list/z_data = list()
+		z_data["index"] = z_index
+		z_data["name"] = Z.name
+		z_data["ref"] = "\ref[Z]"
+		z_data["vLevelCount"] = Z.virtual_z_levels.len
+		z_data["vLevels"] = list()
 
-		// Virtual Z-Levels for this Z-Level
-		if(Z.virtual_z_levels.len)
-			dat += {"<table>
-				<tr class="vlevel-header">
-					<th>VZ ID</th>
-					<th>Name</th>
-					<th>Size</th>
-					<th>Offset (X, Y)</th>
-					<th>Planet</th>
-					<th>Mobs</th>
-					<th>Players</th>
-					<th>Actions</th>
-				</tr>"}
+		for(var/datum/virtual_z/V in Z.virtual_z_levels)
+			var/list/v_data = list()
+			v_data["id"] = V.id
+			v_data["name"] = V.name
+			v_data["ref"] = "\ref[V]"
+			v_data["active"] = V.active
+			v_data["sizeX"] = V.size_x
+			v_data["sizeY"] = V.size_y
 
-			for(var/datum/virtual_z/V in Z.virtual_z_levels)
-				var/planet_name = V.planet ? V.planet.name : "<span class='no-vlevels'>None</span>"
-				var/size_name = "Unknown"
-				if(V.size_x == ALLOCATION_FULL && V.size_y == ALLOCATION_FULL)
-					size_name = "Full"
-				else if(V.size_x == V.size_y)
-					switch(V.size_x)
-						if(ALLOCATION_SMALL)
-							size_name = "Small"
-						if(ALLOCATION_MEDIUM)
-							size_name = "Medium"
-						if(ALLOCATION_LARGE)
-							size_name = "Large"
-						else
-							size_name = "[V.size_x]"
+			// Get mobs and count processing/paused
+			var/list/mob/mobs_list = V.get_mobs()
+			var/list/mob/players_list = V.get_players()
+			var/processing_mobs = 0
+			var/paused_mobs = 0
+
+			for(var/mob/living/L in mobs_list)
+				if(L.paused)
+					paused_mobs++
 				else
-					size_name = "[V.size_x]x[V.size_y]"
-				var/list/mobs_list = V.get_mobs()
-				var/list/players_list = V.get_players()
-				dat += {"<tr>
-					<td>[V.id]</td>
-					<td>[V.name] <a href='?_src_=vars;Vars=\ref[V]'>\[VV\]</a></td>
-					<td>[size_name]</td>
-					<td>([V.x_min], [V.y_min])</td>
-					<td>[planet_name]</td>
-					<td>[mobs_list.len]</td>
-					<td>[players_list.len]</td>
-					<td><a href='?src=\ref[src];level_manager_jump=\ref[V]'>Jump To</a></td>
-					</tr>"}
+					processing_mobs++
 
-			dat += "</table>"
-		else
-			dat += {"<p class="no-vlevels">No virtual z-levels on this z-level.</p>"}
+			v_data["players"] = players_list.len
+			v_data["processingMobs"] = processing_mobs
+			v_data["pausedMobs"] = paused_mobs
 
-	dat += {"
-		</body>
-		</html>
-		"}
+			// Planet and shuttle data
+			if(V.planet)
+				v_data["planetRef"] = "\ref[V.planet]"
+				v_data["planetName"] = V.planet.name
+			if(V.linked_shuttle)
+				v_data["shuttleRef"] = "\ref[V.linked_shuttle]"
+				v_data["shuttleName"] = V.linked_shuttle.name
 
-	usr << browse(HTML_SKELETON(dat), "window=levelmanager;size=600x400")
+			z_data["vLevels"] += list(v_data)
+
+		data["zLevels"] += list(z_data)
+
+	return data
+
+/datum/level_manager/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+	. = ..()
+	if(.)
+		return
+
+	switch(action)
+		if("jump")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V))
+				to_chat(usr, "<span class='warning'>Invalid virtual z-level reference.</span>")
+				return FALSE
+			var/center_x = round((V.x_min + V.x_max) / 2)
+			var/center_y = round((V.y_min + V.y_max) / 2)
+			var/turf/T = locate(center_x, center_y, V.parent_z.z)
+			if(T)
+				usr.forceMove(T)
+				log_admin("[key_name(usr)] jumped to vZ-[V.id] ([V.name]) at [center_x],[center_y],[V.parent_z.z].")
+				message_admins("<span class='notice'>[key_name_admin(usr)] jumped to vZ-[V.id] ([V.name]).</span>", 1)
+			return TRUE
+
+		if("toggle_pause")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V))
+				to_chat(usr, "<span class='warning'>Invalid virtual z-level reference.</span>")
+				return FALSE
+			V.set_status(!V.active)
+			log_admin("[key_name(usr)] [V.active ? "activated" : "paused"] vZ-[V.id] ([V.name]).")
+			message_admins("<span class='notice'>[key_name_admin(usr)] [V.active ? "activated" : "paused"] vZ-[V.id] ([V.name]).</span>", 1)
+			return TRUE
+
+		if("vv_zlevel")
+			var/datum/zLevel/Z = locate(params["ref"])
+			if(!Z || !istype(Z))
+				return FALSE
+			usr.client.debug_variables(Z)
+			return TRUE
+
+		if("vv_vlevel")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V))
+				return FALSE
+			usr.client.debug_variables(V)
+			return TRUE
+
+		if("vv_planet")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V) || !V.planet)
+				return FALSE
+			usr.client.debug_variables(V.planet)
+			return TRUE
+
+		if("vv_shuttle")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V) || !V.linked_shuttle)
+				return FALSE
+			usr.client.debug_variables(V.linked_shuttle)
+			return TRUE
+
+		if("create_zlevel")
+			// Build list of available zLevel types
+			var/list/zlevel_types = list(
+				"Dynamic" = /datum/zLevel/dynamic,
+				"Space" = /datum/zLevel/space,
+				"Mining" = /datum/zLevel/mining,
+				"Away" = /datum/zLevel/away
+			)
+			var/type_choice = input(usr, "Select Z-Level type:", "New Z-Level") as null|anything in list("Dynamic", "Space", "Mining", "Away")
+			if(!type_choice)
+				return FALSE
+			var/zlevel_type = zlevel_types[type_choice]
+
+			var/name = input(usr, "Enter a name for the new Z-Level:", "New Z-Level") as null|text
+			if(!name)
+				return FALSE
+
+			// Increment world.maxz and create the new zLevel
+			skip_turf_init = TRUE
+			world.maxz++
+			skip_turf_init = FALSE
+
+			var/datum/zLevel/new_z = new zlevel_type()
+			new_z.name = name
+			new_z.z = world.maxz
+			map.zLevels += new_z
+
+			log_admin("[key_name(usr)] created a new Z-Level: [name] (Z: [world.maxz], Type: [type_choice]).")
+			message_admins("<span class='notice'>[key_name_admin(usr)] created a new Z-Level: [name] (Z: [world.maxz], Type: [type_choice]).</span>", 1)
+			return TRUE
+
+		if("create_vlevel")
+			var/list/vlevel_options = list(
+				"Generate Planet",
+				"Load Map Element",
+				"Create Transit Level",
+				"Manual Creation"
+			)
+			var/vlevel_choice = input(usr, "Select vLevel creation method:", "New vLevel") as null|anything in vlevel_options
+			if(!vlevel_choice)
+				return FALSE
+
+			switch(vlevel_choice)
+				if("Generate Planet")
+					// Open the procedural generation panel
+					var/datum/admins/admin_holder = usr.client?.holder
+					if(admin_holder)
+						admin_holder.procedural_generation_panel()
+					return TRUE
+
+				if("Load Map Element")
+					// Get list of available map elements
+					var/list/map_element_types = subtypesof(/datum/map_element) - /datum/map_element/dungeon - /datum/map_element/ruin - /datum/map_element/fixedvault
+					var/list/map_element_names = list()
+					for(var/path in map_element_types)
+						var/datum/map_element/ME = path
+						var/element_name = initial(ME.name)
+						if(element_name)
+							map_element_names[element_name] = path
+
+					if(!map_element_names.len)
+						to_chat(usr, "<span class='warning'>No map elements available!</span>")
+						return FALSE
+
+					var/element_choice = input(usr, "Select a map element to load:", "Load Map Element") as null|anything in map_element_names
+					if(!element_choice)
+						return FALSE
+
+					// Select buffer size
+					var/buffer_size = input(usr, "Enter buffer size (tiles around map element, 0-50):\n(0 = no buffer, vLevel matches map element size)", "Buffer Size", 10) as null|num
+					if(isnull(buffer_size))
+						buffer_size = 0
+					else if(buffer_size < 0 || buffer_size > 50)
+						return FALSE
+
+					// Select base turf type
+					var/turf_type = null
+					if(alert(usr, "Set a base turf type for the vLevel?", "Base Turf", "Yes", "No") == "Yes")
+						turf_type = input(usr, "Select base turf type:", "Turf Type") as null|anything in typesof(/turf)
+						if(!turf_type)
+							return FALSE
+
+					var/element_path = map_element_names[element_choice]
+					var/datum/map_element/ME = new element_path()
+					ME.assign_dimensions()
+
+					var/datum/virtual_z/new_vz = map.addMapElementVLevel(ME, turf_type, buffer_size)
+					if(new_vz)
+						// Load the actual map element content into the vLevel
+						ME.load(new_vz.x_min + buffer_size - 1, new_vz.y_min + buffer_size - 1, new_vz.parent_z.z, 0, TRUE)
+						log_admin("[key_name(usr)] loaded map element '[element_choice]' as vLevel (vZ: [new_vz.id], Buffer: [buffer_size]).")
+						message_admins("<span class='notice'>[key_name_admin(usr)] loaded map element '[element_choice]' as vLevel (vZ: [new_vz.id]).</span>", 1)
+					return TRUE
+
+				if("Create Transit Level")
+					// Get list of available shuttles
+					var/list/shuttle_names = list()
+					for(var/datum/shuttle/S in shuttles)
+						shuttle_names[S.name] = S
+
+					if(!shuttle_names.len)
+						to_chat(usr, "<span class='warning'>No shuttles available!</span>")
+						return FALSE
+
+					var/shuttle_choice = input(usr, "Select a shuttle for transit level:", "Transit Level") as null|anything in shuttle_names
+					if(!shuttle_choice)
+						return FALSE
+
+					var/datum/shuttle/chosen_shuttle = shuttle_names[shuttle_choice]
+
+					// Get shuttle dimensions and direction
+					var/list/shuttle_size = chosen_shuttle.get_size()
+					if(!shuttle_size || shuttle_size.len < 2)
+						to_chat(usr, "<span class='warning'>Could not determine shuttle size!</span>")
+						return FALSE
+
+					var/shuttle_width = shuttle_size[1]
+					var/shuttle_height = shuttle_size[2]
+
+					// Use shuttle's current direction
+					var/direction = chosen_shuttle.dir
+
+					// Calculate transit area size: shuttle dimensions + 10 on each side
+					var/padding = 10
+					var/transit_width = shuttle_width + (padding * 2)
+					var/transit_height = shuttle_height + (padding * 2)
+
+					var/datum/virtual_z/new_vz = map.addTransitVLevel(transit_width, transit_height, chosen_shuttle, direction)
+					if(new_vz)
+						log_admin("[key_name(usr)] created transit vLevel for shuttle '[shuttle_choice]' (vZ: [new_vz.id], Size: [transit_width]x[transit_height], Dir: [dir2text(direction)]).")
+						message_admins("<span class='notice'>[key_name_admin(usr)] created transit vLevel for shuttle '[shuttle_choice]' (vZ: [new_vz.id]).</span>", 1)
+					return TRUE
+
+				if("Manual Creation")
+					var/name = input(usr, "Enter a name for the new vLevel:", "New vLevel") as null|text
+					if(!name)
+						return FALSE
+
+					var/width = input(usr, "Enter width (tiles, 10-255):", "vLevel Width", 50) as null|num
+					if(!width || width < 10 || width > 255)
+						return FALSE
+
+					var/height = input(usr, "Enter height (tiles, 10-255):", "vLevel Height", 50) as null|num
+					if(!height || height < 10 || height > 255)
+						return FALSE
+
+					var/turf_type = null
+					if(alert(usr, "Set a base turf type for the vLevel?", "Base Turf", "Yes", "No") == "Yes")
+						turf_type = input(usr, "Select base turf type:", "Turf Type") as null|anything in typesof(/turf)
+						if(!turf_type)
+							return FALSE
+
+					var/datum/virtual_z/new_vz = map.addVLevel(width, height, fill_turf_type = turf_type)
+					if(new_vz)
+						new_vz.name = name
+						log_admin("[key_name(usr)] created manual vLevel '[name]' (vZ: [new_vz.id], Size: [width]x[height], Turf: [turf_type]).")
+						message_admins("<span class='notice'>[key_name_admin(usr)] created manual vLevel '[name]' (vZ: [new_vz.id], Size: [width]x[height]).</span>", 1)
+					return TRUE
+
+			return TRUE
+
+	return FALSE
+
+/datum/level_manager/ui_state(mob/user)
+	return global.admin_state
+
+/datum/admins/proc/level_manager()
+	if (!map.zLevels.len)
+		alert("This map has no z-levels!")
+		return
+
+	var/datum/level_manager/LM = new(usr)
+	LM.tgui_interact(usr)

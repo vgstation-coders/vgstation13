@@ -479,7 +479,7 @@ var/area/space_area
 	var/mob/M = Obj
 	if(istype(M))
 		INVOKE_EVENT(M, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
-		if(oldArea.v && src.v && (oldArea.v != src.v))
+		if(oldArea?.v && src.v && (oldArea.v != src.v))
 			var/datum/virtual_z/old_v = oldArea.v
 			var/datum/virtual_z/new_v = src.v
 			if(istype(M, /mob/living))
