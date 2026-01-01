@@ -66,10 +66,16 @@ if [ "$(uname)" = "Linux" ] || [ ! -f "$PythonExe" ]; then
 	fi
 	if [ -f "$PythonDir/bin/python" ]; then
 		PythonExe="$PythonDir/bin/python"
+	elif [ -f "$PythonDir/Scripts/python.exe" ]; then
+		PythonExe="$PythonDir/Scripts/python.exe"
+	elif [ -f "$PythonDir/scripts/python.exe" ]; then
+		PythonExe="$PythonDir/scripts/python.exe"
 	elif [ -f "$PythonDir/scripts/python3.exe" ]; then
-		PythonExe="$PythonDir/scripts/python3.exe";
+		PythonExe="$PythonDir/scripts/python3.exe"
 	else
 		echo "bootstrap/python failed to find the python executable inside its virtualenv"
+		echo "Contents of $PythonDir:"
+		ls -la "$PythonDir" 2>/dev/null || echo "(directory not found)"
 		exit 1
 	fi
 fi
