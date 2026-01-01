@@ -280,11 +280,12 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
  *  gets the current number of 'security' roles currently assigned to the station
  **/
 /datum/controller/occupations/proc/GetSecurityCount()
-	var/datum/job/officer = job_master.GetJob("Security Officer")
-	var/datum/job/warden = job_master.GetJob("Warden")
-	var/datum/job/hos = job_master.GetJob("Head of Security")
-	var/datum/job/detective = job_master.GetJob("Detective")
-	return (officer.current_positions + warden.current_positions + hos.current_positions + detective.current_positions)
+	var/count = 0
+	for (var/job_title in list("Security Officer", "Warden", "Head of Security", "Detective"))
+		var/datum/job/J = job_master.GetJob(job_title)
+		if (J)
+			count += J.current_positions
+	return count
 
 /** Proc DivideOccupations
  *  fills var "assigned_role" for all ready players.
