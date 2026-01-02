@@ -388,12 +388,16 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 										continue
 									var/atom/A = new whatfill(T)
 									A.change_dir(thing.dir)
+									A.relativewall()
+									A.relativewall_neighbours()
 									qdel(thing)
 									CHECK_TICK
 							else
 								var/obj/A = new whatfill(T)
 								if(istype(A))
 									A.change_dir(holder.builddir.dir)
+								A.relativewall()
+								A.relativewall_neighbours()
 					CHECK_TICK
 			if(deletions)
 				to_chat(usr, "<span class='info'>Successfully deleted [deletions] [chosen]'\s</span>")
@@ -644,12 +648,16 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 															continue
 													var/atom/A = new holder.buildmode.objholder(T)
 													A.change_dir(thing.dir)
+													A.relativewall()
+													A.relativewall_neighbours()
 													qdel(thing)
 													CHECK_TICK
 											else
 												var/obj/A = new holder.buildmode.objholder(T)
 												if(istype(A))
 													A.change_dir(holder.builddir.dir)
+												A.relativewall()
+												A.relativewall_neighbours()
 									CHECK_TICK
 							holder.fill_left = null
 							holder.fill_right = null
@@ -663,6 +671,8 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 						T.ChangeTurf(holder.buildmode.copycat.type)
 						spawn(1)
 							T.appearance = holder.buildmode.copycat.appearance
+							T.relativewall()
+							T.relativewall_neighbours()
 					else if(isarea(holder.buildmode.copycat))
 						var/turf/T = get_turf(object)
 						T.set_area(holder.buildmode.copycat)
@@ -672,11 +682,15 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 						if(istype(A))
 							A.appearance = holder.buildmode.copycat.appearance
 							A.change_dir(holder.builddir.dir)
+						A.relativewall()
+						A.relativewall_neighbours()
 					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [formatJumpTo(RT)]")
 				else
 					if(ispath(holder.buildmode.objholder,/turf)) //Handle turf changing
 						var/turf/T = get_turf(object)
 						T.ChangeTurf(holder.buildmode.objholder)
+						T.relativewall()
+						T.relativewall_neighbours()
 					else if(ispath(holder.buildmode.objholder,/area)) //Handle area changing
 						var/area/A = locate(holder.buildmode.objholder)
 						var/turf/T = get_turf(object)
@@ -685,6 +699,8 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 						var/obj/A = new holder.buildmode.objholder (get_turf(object))
 						if(istype(A))
 							A.change_dir(holder.builddir.dir)
+						A.relativewall()
+						A.relativewall_neighbours()
 					log_admin("[key_name(usr)] made a [holder.buildmode.objholder] at [formatJumpTo(RT)]")
 			else if(pa.Find("right"))
 				log_admin("[key_name(usr)] deleted a [object] at [formatJumpTo(RT)]")

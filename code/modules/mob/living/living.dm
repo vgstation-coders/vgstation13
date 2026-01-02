@@ -1014,6 +1014,32 @@ Thanks.
 			var/obj/effect/plantsegment/K = L.locked_to
 			K.manual_unbuckle(L)*/
 
+
+	//Breaking out of a net!
+	if(src.loc && (istype(src.loc, /obj/structure/net)))
+
+
+		var/resist_time = NET_RESIST_TIME
+
+		if(M_HULK in L.mutations)
+			resist_time = NET_RESIST_TIME_HULK
+		if(M_STRONG in L.mutations)
+			resist_time = NET_RESIST_TIME_STRONG
+
+
+		var/obj/structure/net/N = L.loc
+		visible_message("<span class='danger'>[L] starts to tear at the netting!</span>")
+		if(do_after(usr, N, resist_time, 30))
+			if(!N || !L || L.stat != CONSCIOUS || L.loc != N )
+				return
+			if(M_HULK in L.mutations)
+				L.visible_message("<span class='danger'>[L] rips the [src] into pieces!</span>", "<span class='notice'>You rip the [src] into pieces!</span>")
+				N.undo_net(TRUE)
+			else
+				L.visible_message("<span class='danger'>[L] untangles \himself from the [src]!</span>", "<span class='notice'>You untangle yourself from the [src].</span>")
+				N.undo_net()
+
+
 	//Breaking out of a locker?
 	if(src.loc && (istype(src.loc, /obj/structure/closet)))
 		var/breakout_time = 2 //2 minutes by default
@@ -1210,6 +1236,9 @@ Thanks.
 	if(resting) /* If you're somehow already standing up while inside a crate (shouldn't happen), you can still rest. */
 		if(istype(loc, /obj/structure/closet/crate))
 			to_chat(src, "<span class='warning'>There isn't enough room to get up. Open the [loc.name] first!</span>")
+			return
+		if(istype(loc, /obj/structure/net))
+			to_chat(src, "<span class='warning'>You're tangled in the [loc]!</span>")
 			return
 
 	rest_action()

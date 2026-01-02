@@ -58,7 +58,7 @@
 		var/turf/simulated/wall/W = A
 		return src.mineral == W.mineral && !(cannotSmoothWith() && is_type_in_list(A, cannotSmoothWith()))
 	return is_type_in_list(A, canSmoothWith()) && !(cannotSmoothWith() && (is_type_in_list(A, cannotSmoothWith())))
-		
+
 
 /**
  * WALL SMOOTHING SHIT
@@ -149,17 +149,21 @@
 /turf/simulated/wall/vault/relativewall()
 	return
 
+// Why?
 var/list/smoothable_unsims = list(
 	"riveted",
 	"alloy",
 	"rock_rf",
+	"swall",
+	"iron",
+	"sjwall"
 	)
 
 /turf/unsimulated/wall/initialize()
-	if(icon_state in smoothable_unsims)
+	if(walltype in smoothable_unsims)
 		relativewall()
 
 /turf/unsimulated/wall/relativewall()
-	if(icon_state in smoothable_unsims)
+	if(walltype in smoothable_unsims)
 		icon_state = "[walltype][..()]"
 		update_paint_overlay()

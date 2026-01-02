@@ -12,6 +12,7 @@
 	var/chain_datum_path = /datum/chain
 	var/chain_overlay_path = /obj/effect/overlay/chain
 	var/can_tether = TRUE
+	var/breaks_other_tethers = FALSE	// Will break and override other tethers instead of failing to tether
 	var/matrix/projectile_matrix
 
 /obj/item/projectile/hookshot/process_step()
@@ -52,11 +53,7 @@
 			HC.icon_state = "hookshot_new"//blank icon_state since at this point the projectile itself is the head
 
 			if(length >= hookshot.maxlength)
-				HC.icon_state = "[icon_name]_pixel"
-				spawn()
-					if (!hookshot.clockwerk)
-						hookshot.rewind_chain()
-				bullet_die()
+				on_hit_maxlength(HC)
 
 		sleep(sleeptime * projectile_speed)
 
@@ -79,6 +76,36 @@
 		hookshot.hook = null
 	..()
 
+/obj/item/projectile/hookshot/proc/on_hit_maxlength(var/obj/effect/overlay/hookchain/HC)
+	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	HC.icon_state = "[icon_name]_pixel"
+	spawn()
+		if (!hookshot.clockwerk)
+			hookshot.rewind_chain()
+	bullet_die()
+
+/obj/item/projectile/hookshot/proc/on_turf_bump(var/turf/T)
+	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	hookshot.clockwerk_chain(length)
+
+/obj/item/projectile/hookshot/proc/on_hit_adjacent(var/atom/movable/AM)
+	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	AM.CtrlClick(firer)
+	hookshot.cancel_chain()
+	bullet_die()
+
+/obj/item/projectile/hookshot/proc/on_hit_anchored(var/atom/movable/AM)
+	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	hookshot.clockwerk_chain(length)
+
+/obj/item/projectile/hookshot/proc/on_hooked(var/atom/movable/AM)
+	create_chain(AM)
+
+// Called when we hit something we can neither pull ourselves to nor drag to us.
+/obj/item/projectile/hookshot/proc/on_hit_invalid(var/atom/A)
+	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	hookshot.rewind_chain()
+
 /obj/item/projectile/hookshot/to_bump(atom/A as mob|obj|turf|area)
 	if(bumped)
 		return 0
@@ -96,51 +123,24 @@
 		if(held_item_check(A))
 			return
 		if(isturf(A))					//if we hit a wall or an anchored atom, we pull ourselves to it
-			hookshot.clockwerk_chain(length)
+			on_turf_bump(A)
 		else if(istype(A,/atom/movable))
 			var/atom/movable/AM = A
 			if(AM.anchored)
-				hookshot.clockwerk_chain(length)
-			else if(!AM.tether && !firer.tether && !istype(AM,/obj/effect/))	//if we hit something that we can pull, let's tether ourselves to it
-
-				if(length <= 2)		//unless we hit it at melee range, then let's just start pulling it
-					AM.CtrlClick(firer)
-					hookshot.cancel_chain()
-					bullet_die()
+				on_hit_anchored(AM)
+			else if(!istype(AM,/obj/effect/))	//if we hit something that we can pull, let's tether ourselves to it
+				if(breaks_other_tethers)
+					// We break any tethers we or the target already had.
+					AM.tether?.chain_datum.Delete_Chain()
+					firer.tether?.chain_datum.Delete_Chain()
+				else if(AM.tether || firer.tether)		// Otherwise we immediately rewind.
+					hookshot.rewind_chain()
+					return
+				if(length <= 2)		//we sometimes have special behavior for hitting things at melee range.
+					on_hit_adjacent(AM)
 					return
 
-				var/datum/chain/chain_datum = new chain_datum_path()
-				hookshot.chain_datum = chain_datum
-				chain_datum.hookshot = hookshot
-				chain_datum.extremity_A = firer
-				chain_datum.extremity_B = AM
-				var/max_chains = length-1
-				for(var/i = 1; i < max_chains; i++)		//first we create tether links on every turf that has one of the projectile's chain parts.
-					var/obj/effect/overlay/hookchain/HC = hookshot.links["[i]"]
-					if(!HC.loc || (HC.loc == hookshot))
-						max_chains = i
-						break
-					var/obj/effect/overlay/chain/C = new chain_overlay_path(HC.loc)
-					C.chain_datum = chain_datum
-					chain_datum.links["[i]"] = C
-				for(var/i = 1; i < max_chains; i++)		//then we link them together
-					var/obj/effect/overlay/chain/C = chain_datum.links["[i]"]
-					if(i == 1)
-						firer.tether = C
-						C.extremity_A = firer
-						if(max_chains <= 2)
-							C.extremity_B = AM
-							C.update_overlays()
-						else
-							C.extremity_B = chain_datum.links["[i+1]"]
-					else if(i == (max_chains-1))
-						C.extremity_A = chain_datum.links["[i-1]"]
-						C.extremity_B = AM
-						AM.tether = C
-						C.update_overlays()				//once we've placed and linked all the tether's links, we update their sprites
-					else
-						C.extremity_A = chain_datum.links["[i-1]"]
-						C.extremity_B = chain_datum.links["[i+1]"]
+				on_hooked(AM)				// We hit something pullable, create our tether.
 
 				if(istype(firer, /mob) && isliving(AM))
 					var/mob/living/L = AM
@@ -148,12 +148,49 @@
 					L.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> hooked <b>[key_name(L)]</b> with a <b>[type]</b>"
 					firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> hooked <b>[key_name(L)]</b> with a <b>[type]</b>"
 
-				hookshot.cancel_chain()					//then we remove the chain laid by the projectile
 			else
-				hookshot.rewind_chain()
+				on_hit_invalid(AM)
 		else
-			hookshot.rewind_chain()					//hit something that we can neither pull ourselves to nor drag to us? Just retract the chain.
+			on_hit_invalid(A)	//hit something that we can neither pull ourselves to nor drag to us? Just retract the chain.
+
 	bullet_die()
+
+/obj/item/projectile/hookshot/proc/create_chain(var/atom/movable/AM)
+	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	var/datum/chain/chain_datum = new chain_datum_path()
+	hookshot.chain_datum = chain_datum
+	chain_datum.hookshot = hookshot
+	chain_datum.extremity_A = firer
+	chain_datum.extremity_B = AM
+	var/max_chains = length-1
+	for(var/i = 1; i < max_chains; i++)		//first we create tether links on every turf that has one of the projectile's chain parts.
+		var/obj/effect/overlay/hookchain/HC = hookshot.links["[i]"]
+		if(!HC.loc || (HC.loc == hookshot))
+			max_chains = i
+			break
+		var/obj/effect/overlay/chain/C = new chain_overlay_path(HC.loc)
+		C.chain_datum = chain_datum
+		chain_datum.links["[i]"] = C
+	for(var/i = 1; i < max_chains; i++)		//then we link them together
+		var/obj/effect/overlay/chain/C = chain_datum.links["[i]"]
+		if(i == 1)
+			firer.tether = C
+			C.extremity_A = firer
+			if(max_chains <= 2)
+				C.extremity_B = AM
+				C.update_overlays()
+			else
+				C.extremity_B = chain_datum.links["[i+1]"]
+		else if(i == (max_chains-1))
+			C.extremity_A = chain_datum.links["[i-1]"]
+			C.extremity_B = AM
+			AM.tether = C
+			C.update_overlays()				//once we've placed and linked all the tether's links, we update their sprites
+		else
+			C.extremity_A = chain_datum.links["[i-1]"]
+			C.extremity_B = chain_datum.links["[i+1]"]
+
+	hookshot.cancel_chain()					//then we remove the chain laid by the projectile
 
 /obj/item/projectile/hookshot/proc/held_item_check(var/atom/A)	//fleshshot only
 	return

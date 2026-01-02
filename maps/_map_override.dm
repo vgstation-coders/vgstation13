@@ -82,5 +82,9 @@
 		#undef MAP_OVERRIDE
 		#include "horizon.dm"
 		#define MAP_OVERRIDE 18
+	#elif MAP_OVERRIDE == 19
+		#undef MAP_OVERRIDE
+		#include "tgstation-snow.dm"
+		#define MAP_OVERRIDE 19
 	#endif
 #endif

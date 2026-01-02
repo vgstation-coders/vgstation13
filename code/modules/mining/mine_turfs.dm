@@ -522,6 +522,12 @@ var/list/icon_state_to_appearance = list()
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
 
+/turf/unsimulated/floor/asteroid/vox
+	oxygen = 0
+	nitrogen = MOLES_N2STANDARD + MOLES_O2STANDARD
+	temperature = T20C
+
+
 /turf/unsimulated/floor/asteroid/underground
 	name = "cave floor"
 	temperature = T0C-150
@@ -643,6 +649,11 @@ var/list/icon_state_to_appearance = list()
 /turf/simulated/floor/asteroid/air
 	oxygen = MOLES_O2STANDARD
 	nitrogen = MOLES_N2STANDARD
+	temperature = T20C
+
+/turf/simulated/floor/asteroid/vox
+	oxygen=0
+	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD
 	temperature = T20C
 
 /turf/simulated/floor/asteroid/create_floor_tile()

@@ -9,6 +9,7 @@
  * "What do I gain from using advanced over standard prox monitors?"
  * - You can set different effects on edge vs field entrance
  * - You can set effects when the proximity monitor starts and stops tracking a turf
+ * - You can move the field around with better responsiveness
  */
 
 /datum/component/proximity_monitor/advanced
@@ -26,11 +27,12 @@
 /datum/component/proximity_monitor/advanced/initialize(...)
 	..()
 	var/atom/AM = parent
-	old_loc = get_turf(AM)
+	old_loc = AM.loc
 	return TRUE
 
 /datum/component/proximity_monitor/advanced/Destroy()
 	cleanup_field()
+	old_loc = null
 	return ..()
 
 /datum/component/proximity_monitor/advanced/proc/cleanup_field()
@@ -40,6 +42,7 @@
 	for(var/turf/turf as anything in field_turfs)
 		cleanup_field_turf(turf)
 	field_turfs = list()
+
 
 //Call every time the field moves (done automatically if you use update_center) or a setup specification is changed.
 // If full recalc is TRUE, then every turf in the field will have setup called again.
@@ -51,18 +54,26 @@
 	field_turfs = new_turfs[FIELD_TURFS_KEY]
 	edge_turfs = new_turfs[EDGE_TURFS_KEY]
 
-//	if(!full_recalc)
-//		field_turfs = list()
-//		edge_turfs = list()
+	if(full_recalc)
+		field_turfs = list()
+		edge_turfs = list()
 
 	for(var/turf/old_turf as anything in old_field_turfs - field_turfs)
 		if(QDELETED(src))
 			return
 		cleanup_field_turf(old_turf)
+		for(var/atom/movable/AM as obj | mob in old_turf)
+//			to_chat(world, "DEBUG: [AM] field uncross")
+			on_uncrossed(AM, old_turf, old_turf)
+
+
 	for(var/turf/old_turf as anything in old_edge_turfs - edge_turfs)
 		if(QDELETED(src))
 			return
 		cleanup_edge_turf(old_turf)
+		for(var/atom/movable/AM as obj | mob in old_turf)
+	//		to_chat(world, "DEBUG: [AM] edge uncross")
+			on_uncrossed(AM, old_turf, old_turf)
 
 	if(full_recalc)
 		old_field_turfs = list()
@@ -74,34 +85,47 @@
 		if(QDELETED(src))
 			return
 		setup_field_turf(new_turf)
+		for(var/atom/movable/AM as obj | mob in new_turf)
+//			to_chat(world, "DEBUG: [AM] field cross")
+			on_entered(AM, new_turf, new_turf)
 
 	for(var/turf/new_turf as anything in edge_turfs - old_edge_turfs)
 		if(QDELETED(src))
 			return
 		setup_edge_turf(new_turf)
+		for(var/atom/movable/AM as obj | mob in new_turf)
+//			to_chat(world, "DEBUG: [AM] edge cross")
+			on_entered(AM, new_turf, new_turf)
 
 /datum/component/proximity_monitor/advanced/on_entered(atom/movable/mover, turf/location, atom/oldloc)
 	. = ..()
+//	to_chat(world, "DEBUG: [mover] crossed field.")
+//	if(!contained_atoms[mover] || !trigger_once)
 	if(get_dist(mover, parent) == current_range)
 		field_edge_crossed(mover, oldloc, location)
 	else
 		field_turf_crossed(mover, oldloc, location)
+//	contained_atoms[mover] = mover
 
 /datum/component/proximity_monitor/advanced/on_moved(atom/movable/mover)
 	. = ..()
 	if(ignore_if_not_on_turf)
 		//Early return if it's not the host that has moved.
-		if(mover != parent)
-			return
+//		if(mover != parent)
+//			return
 		//Cleanup the field if the host was on a turf but isn't anymore.
 		var/atom/movable/AM = parent
 		if(!isturf(AM.loc))
 			if(isturf(old_loc))
 				cleanup_field()
+			old_loc = AM.loc
 			return
 	recalculate_field(full_recalc = FALSE)
+	old_loc = AM.loc
 
 /datum/component/proximity_monitor/advanced/on_uncrossed(atom/movable/mover, turf/location, atom/newloc)
+//	to_chat(world, "DEBUG: [mover] uncrossed field")
+//	contained_atoms[mover] = null
 	if(get_dist(mover, parent) == current_range)
 		field_edge_uncrossed(mover, location, get_turf(newloc))
 	else
@@ -136,7 +160,7 @@
 	var/turf/center = get_turf(parent)
 	if(current_range > 0)
 		local_field_turfs += RANGE_TURFS(current_range - 1, center)
-	if(current_range > 1)
+//	if(current_range > 1)
 		local_edge_turfs = RANGE_TURFS(current_range, center) - local_field_turfs
 	return list(FIELD_TURFS_KEY = local_field_turfs, EDGE_TURFS_KEY = local_edge_turfs)
 
@@ -179,6 +203,7 @@
 	desc = "Seems to project a colored field!"
 	var/operating = FALSE
 	var/datum/component/proximity_monitor/advanced/debug/current = null
+	var/fieldrange = 5
 
 /obj/item/device/multitool/field_debug/New()
 	..()
@@ -189,7 +214,7 @@
 	return ..()
 
 /obj/item/device/multitool/field_debug/proc/setup_debug_field()
-	current = add_component(/datum/component/proximity_monitor/advanced/debug, src, 5, FALSE)
+	current = add_component(/datum/component/proximity_monitor/advanced/debug, src, fieldrange, FALSE)
 	current.set_fieldturf_color = "#aaffff"
 	current.set_edgeturf_color = "#ffaaff"
 	current.recalculate_field()
@@ -219,6 +244,7 @@
 /datum/component/proximity_monitor/advanced/debug/setup_field_turf(turf/target)
 	. = ..()
 	target.color = set_fieldturf_color
+
 
 /datum/component/proximity_monitor/advanced/debug/cleanup_field_turf(turf/target)
 	. = ..()

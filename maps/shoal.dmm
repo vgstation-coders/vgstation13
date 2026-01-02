@@ -1,0 +1,12734 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ah" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"at" = (
+/obj/structure/transit_tube/station{
+	req_one_access_txt = "32;19;501";
+	reverse_launch = 1;
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"aB" = (
+/turf/space,
+/area)
+"aE" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "dark vault stripe";
+	dir = 1
+	},
+/area/shoal)
+"aJ" = (
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/obj/item/weapon/pitchfork,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"aK" = (
+/obj/structure/railing,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"ba" = (
+/obj/machinery/vending/discount,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"bp" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/table/plastic,
+/obj/item/ashtray/bronze{
+	pixel_x = 7;
+	pixel_y = 8
+	},
+/obj/item/weapon/reagent_containers/food/snacks/risenshiny{
+	pixel_x = -4;
+	pixel_y = 4
+	},
+/obj/effect/decal/cleanable/crumbs,
+/obj/item/trash/cigbutt/bidibutt,
+/obj/item/trash/cigbutt/bidibutt{
+	pixel_y = 12;
+	pixel_x = -2
+	},
+/obj/item/trash/cigbutt/bidibutt{
+	pixel_y = 3;
+	pixel_x = 6
+	},
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"bs" = (
+/turf/unsimulated/wall/fakeglass{
+	dir = 8;
+	walltype = ""
+	},
+/area/shoal)
+"bH" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox,
+/area/shoal)
+"cb" = (
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"cf" = (
+/obj/structure/sign/directions/trader,
+/turf/unsimulated/wall/shoal,
+/area/shoal)
+"ci" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"cw" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"cD" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 5
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine{
+	icon_state = "elevatorshaft";
+	name = "engine floor";
+	oxygen = 0;
+	nitrogen = 103.934
+	},
+/area/fake_z/level1)
+"cE" = (
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"cR" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"df" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"di" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"dm" = (
+/obj/item/weapon/reagent_containers/glass/bucket{
+	pixel_x = -12
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"dN" = (
+/obj/effect/decal/cleanable/generic,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"dP" = (
+/obj/machinery/door/airlock/hatch,
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
+"el" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/grille/invulnerable,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"ep" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"eU" = (
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"fo" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"fp" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"fq" = (
+/obj/structure/railing,
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 6
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"ft" = (
+/obj/structure/sign/directions/evac{
+	dir = 4;
+	pixel_y = -10
+	},
+/turf/unsimulated/wall/shoal,
+/area/shoal)
+"fC" = (
+/turf/unsimulated/wall/fakeglass{
+	dir = 8;
+	icon_state = "fakewindows2";
+	walltype = ""
+	},
+/area/shoal)
+"fI" = (
+/obj/structure/transit_tube{
+	icon_state = "NW-SE";
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"fT" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange";
+	color = "#333333";
+	plane = -32771
+	},
+/area/shoal)
+"fW" = (
+/turf/unsimulated/wall/shoal,
+/area/shoal)
+"gg" = (
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level3)
+"gi" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"gu" = (
+/obj/structure/catwalk,
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"gw" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/bed/chair/folding{
+	dir = 4
+	},
+/obj/item/trash/cigbutt/bidibutt,
+/obj/item/trash/cigbutt/bidibutt{
+	pixel_y = 3;
+	pixel_x = 6
+	},
+/obj/item/trash/cigbutt/bidibutt{
+	pixel_y = 12;
+	pixel_x = -2
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"gE" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/catwalk,
+/obj/prop/ladder/down{
+	pixel_y = 8
+	},
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/transit_tube{
+	invisibility = 101
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"hn" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/hanging_lantern/dim{
+	dir = 4
+	},
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"hq" = (
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area)
+"hv" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"hH" = (
+/obj/structure/railing,
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine{
+	icon_state = "elevatorshaft";
+	name = "engine floor";
+	oxygen = 0;
+	nitrogen = 103.934
+	},
+/area/fake_z/level2)
+"ia" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"id" = (
+/obj/structure/catwalk,
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"in" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "dark vault stripe";
+	dir = 1
+	},
+/area/shoal)
+"iK" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/vox{
+	color = "#555555"
+	},
+/area/shoal)
+"iO" = (
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"iS" = (
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	color = "#777777"
+	},
+/obj/structure/transit_tube{
+	icon_state = "NW-SE";
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"jx" = (
+/obj/structure/catwalk,
+/obj/structure/transit_tube{
+	icon_state = "NW-SE";
+	fake_z_exclude = 1;
+	color = "#555555";
+	plane = -32770;
+	layer = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"jI" = (
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level3)
+"jW" = (
+/turf/simulated/floor/vox{
+	icon_state = "rampbottom";
+	dir = 4
+	},
+/area/fake_z/level1)
+"ka" = (
+/obj/effect/decal/cleanable/blood/stattrack,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"kl" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/ammo_casing/c9mm/empty{
+	pixel_x = -2;
+	pixel_y = -6
+	},
+/obj/effect/decal/cleanable/blood/stattrack{
+	dir = 4
+	},
+/obj/item/ammo_casing/c9mm/empty{
+	pixel_x = 5;
+	pixel_y = -3
+	},
+/obj/item/ammo_casing/c9mm/empty,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"kO" = (
+/turf/unsimulated/floor/vox,
+/area/shoal)
+"lB" = (
+/obj/structure/grille/invulnerable,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"lE" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/grille/invulnerable,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"lX" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/catwalk,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"mb" = (
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area)
+"md" = (
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"me" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox,
+/area/shoal)
+"mf" = (
+/obj/machinery/door/airlock/sandstone{
+	name = "Old Airlock"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area)
+"mi" = (
+/obj/structure/catwalk,
+/turf/unsimulated/floor/vox/abyss,
+/area)
+"mn" = (
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"mp" = (
+/obj/structure/transit_tube{
+	icon_state = "E-NW";
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"mq" = (
+/obj/effect/decal/warning_stripes{
+	color = "#ffff00";
+	icon_state = "pathmarker"
+	},
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
+"mJ" = (
+/obj/effect/decal/warning_stripes{
+	color = "#ffff00";
+	icon_state = "pathmarker"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area/fake_z/level2)
+"mN" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	color = "#777777";
+	plane = -32770;
+	layer = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"na" = (
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
+"nn" = (
+/obj/item/trash/cigbutt/bidibutt{
+	pixel_y = 12;
+	pixel_x = -2
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"nE" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/transit_tube/station{
+	req_access_txt = "47";
+	reverse_launch = 1;
+	invisibility = 101
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"nL" = (
+/obj/structure/closet/crate/trashcart,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"nV" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"oj" = (
+/obj/structure/sign/chinese/access_restricted,
+/turf/unsimulated/wall/shoal,
+/area/fake_z/level1)
+"oE" = (
+/obj/structure/hanging_lantern{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "dark"
+	},
+/area)
+"pk" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 6
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/simulated/floor/engine{
+	icon_state = "elevatorshaft";
+	name = "engine floor";
+	oxygen = 0;
+	nitrogen = 103.934
+	},
+/area/fake_z/level2)
+"pw" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"pG" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"pZ" = (
+/obj/effect/decal/warning_stripes{
+	color = "#ffff00";
+	dir = 1;
+	icon_state = "pathmarker"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area)
+"qd" = (
+/turf/space,
+/area/shoal)
+"qg" = (
+/obj/structure/grille/invulnerable,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"qq" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox,
+/area/shoal)
+"qK" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/engine{
+	icon_state = "elevatorshaft";
+	name = "engine floor";
+	oxygen = 0;
+	nitrogen = 103.934
+	},
+/area/fake_z/level1)
+"qN" = (
+/obj/structure/catwalk,
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	color = "#777777";
+	invisibility = 101
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"qS" = (
+/obj/structure/transit_tube{
+	icon_state = "E-SW";
+	tag = "icon-E-SW";
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"qZ" = (
+/obj/structure/transit_tube{
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"rf" = (
+/obj/structure/railing,
+/obj/item/trash/popcorn,
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"rl" = (
+/turf/unsimulated/wall/shoal,
+/area)
+"rr" = (
+/obj/machinery/vending/discount,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"rz" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level3)
+"rD" = (
+/turf/unsimulated/wall/fakeglass{
+	dir = 8;
+	icon_state = "fakewindows2";
+	walltype = ""
+	},
+/area)
+"rK" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/catwalk,
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"rX" = (
+/obj/structure/hanging_lantern,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"se" = (
+/obj/structure/transit_tube{
+	icon_state = "W-NE";
+	color = "#555555"
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"sh" = (
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"sk" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid/vox{
+	color = "#555555"
+	},
+/area/shoal)
+"sq" = (
+/obj/prop/shoalwindow{
+	icon_state = "shoalwindow"
+	},
+/turf/unsimulated/wall/shoal,
+/area/shoal)
+"sH" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"tg" = (
+/obj/structure/transit_tube{
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"tl" = (
+/obj/effect/decal/papers,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"tm" = (
+/obj/structure/catwalk,
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/transit_tube{
+	invisibility = 101
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"tn" = (
+/turf/unsimulated/wall/fakeglass{
+	dir = 4;
+	walltype = ""
+	},
+/area/shoal)
+"to" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"tz" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/closet/crate/bin,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"ux" = (
+/obj/structure/transit_tube{
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	color = "#777777"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"uz" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"uP" = (
+/obj/machinery/door/airlock/sandstone{
+	name = "Old Airlock"
+	},
+/turf/simulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"vb" = (
+/obj/structure/catwalk,
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"vk" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/grille/invulnerable,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"vm" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/ammo_casing/c9mm/empty,
+/obj/effect/decal/cleanable/blood/stattrack,
+/obj/item/ammo_storage/magazine/mc9mm/empty,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"vL" = (
+/obj/structure/catwalk,
+/obj/structure/railing,
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"wa" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "loading_area";
+	tag = "icon-loading_area (EAST)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "dark vault stripe"
+	},
+/area)
+"wf" = (
+/mob/living/simple_animal/hostile/retaliate/box,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"wm" = (
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"wC" = (
+/obj/item/trash/chips/donitos,
+/obj/effect/decal/cleanable/crumbs,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"wT" = (
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"wV" = (
+/turf/unsimulated/wall/fakeglass{
+	dir = 8;
+	walltype = ""
+	},
+/area)
+"xi" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"xr" = (
+/obj/structure/hanging_lantern{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"xu" = (
+/obj/structure/catwalk,
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"xy" = (
+/obj/structure/bed/chair/comfy/brown{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"xR" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 5
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"xT" = (
+/obj/structure/grille/invulnerable,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"yq" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "loading_area";
+	tag = "icon-loading_area (WEST)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "dark"
+	},
+/area)
+"yu" = (
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox,
+/area/shoal)
+"yw" = (
+/obj/structure/transit_tube{
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/siding{
+	dir = 4
+	},
+/obj/structure/sign/securearea{
+	name = "CAUTION";
+	desc = "A warning sign which reads 'CAUTION'.";
+	layer = 3
+	},
+/turf/simulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"yP" = (
+/obj/structure/railing,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"yR" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"yT" = (
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/catwalk,
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"zf" = (
+/obj/effect/decal/cleanable/crumbs,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"zl" = (
+/obj/structure/railing,
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"zq" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox,
+/area/shoal)
+"zP" = (
+/obj/item/trash/chips/zamitos_o,
+/obj/effect/decal/cleanable/blood/stattrack{
+	dir = 5
+	},
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"Aa" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"Aq" = (
+/obj/item/trash/cigbutt/bidibutt,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"Au" = (
+/obj/structure/catwalk,
+/obj/prop/hanginglight{
+	pixel_y = 32;
+	pixel_x = -16
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/transit_tube{
+	icon_state = "NE-SW";
+	fake_z_exclude = 1;
+	color = "#555555";
+	invisibility = 101;
+	plane = -32770;
+	layer = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"Ay" = (
+/obj/item/trash/waffles,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"AN" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/item/weapon/shard/plasma{
+	pixel_x = 8
+	},
+/obj/item/stack/rods,
+/obj/item/stack/rods,
+/obj/structure/grille/broken,
+/obj/structure/window/barricade/full/block,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"AZ" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"Bd" = (
+/obj/structure/extinguisher_cabinet{
+	pixel_y = -34
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"Bi" = (
+/obj/effect/decal/warning_stripes{
+	color = "#ffff00";
+	dir = 8;
+	icon_state = "pathmarker"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area/fake_z/level2)
+"Bk" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/hanging_lantern{
+	dir = 8;
+	fake_z_exclude = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"Bo" = (
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
+"Bt" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/engine{
+	icon_state = "elevatorshaft";
+	name = "engine floor";
+	oxygen = 0;
+	nitrogen = 103.934
+	},
+/area/fake_z/level1)
+"BE" = (
+/obj/structure/transit_tube/station{
+	req_one_access_txt = "32;19;501";
+	reverse_launch = 1;
+	fake_z_exclude = 1;
+	color = "#777777"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"BK" = (
+/obj/structure/catwalk,
+/obj/prop/hanginglight{
+	pixel_y = 32;
+	pixel_x = -16
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/vox{
+	color = "#555555"
+	},
+/area/shoal)
+"BR" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"Ca" = (
+/obj/machinery/door/poddoor/shutters/rusty{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "dark"
+	},
+/area)
+"Ch" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"Cj" = (
+/obj/structure/grille/invulnerable,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma,
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	invisibility = 101
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"Cl" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 10
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"Cn" = (
+/obj/structure/transit_tube{
+	icon_state = "NE-SW";
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"Cx" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "loading_area";
+	tag = "icon-loading_area (EAST)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "dark"
+	},
+/area)
+"CJ" = (
+/turf/unsimulated/floor/vox/plating/alt{
+	icon_state = "rampbottom"
+	},
+/area)
+"CL" = (
+/obj/structure/closet/crate/bin,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/shard{
+	icon_state = "small";
+	pixel_x = 5;
+	pixel_y = -5
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"CT" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level3)
+"Dl" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 9
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"Do" = (
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox,
+/area/shoal)
+"Dw" = (
+/obj/structure/closet/emcloset/vox,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/hanging_lantern/dim{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"DB" = (
+/obj/structure/transit_tube{
+	icon_state = "NE-SW";
+	fake_z_exclude = 1;
+	color = "#555555";
+	invisibility = 101;
+	plane = -32770;
+	layer = 1
+	},
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"DE" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/grille/invulnerable,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"DF" = (
+/turf/unsimulated/wall/shoal,
+/area/fake_z/level1)
+"DP" = (
+/turf/unsimulated/floor/vox{
+	icon_state = "dark"
+	},
+/area)
+"Ei" = (
+/obj/structure/catwalk,
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/obj/structure/hanging_lantern{
+	fake_z_exclude = 1;
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"Em" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/simulated/floor/vox{
+	icon_state = "rampbottom";
+	dir = 4
+	},
+/area/fake_z/level1)
+"Ex" = (
+/obj/machinery/vending/offlicence,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"EB" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "loading_area";
+	tag = "icon-loading_area (WEST)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "dark vault stripe"
+	},
+/area)
+"EO" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/obj/structure/transit_tube{
+	icon_state = "NW-SE";
+	fake_z_exclude = 1;
+	color = "#555555";
+	plane = -32770;
+	layer = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"ER" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"Fu" = (
+/obj/structure/transit_tube{
+	icon_state = "N-SE";
+	fake_z_exclude = 1;
+	color = "#777777"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"Fv" = (
+/turf/unsimulated/floor/jungle/concrete,
+/area)
+"Fx" = (
+/obj/structure/transit_tube{
+	icon_state = "E-NW";
+	fake_z_exclude = 1;
+	color = "#777777"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"FN" = (
+/obj/machinery/floodlight/on/infinite,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"FU" = (
+/obj/machinery/door/poddoor/shutters/rusty{
+	dir = 2
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"Gz" = (
+/mob/living/simple_animal/hostile/retaliate/box,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"GJ" = (
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	color = "#777777"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"GM" = (
+/obj/structure/catwalk,
+/obj/structure/railing,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"GP" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/grille/invulnerable,
+/obj/structure/window/reinforced/plasma,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"GT" = (
+/obj/structure/grille/invulnerable,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"GW" = (
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"Hg" = (
+/obj/effect/decal/warning_stripes{
+	color = "#ffff00";
+	icon_state = "pathmarker"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area)
+"Hk" = (
+/obj/structure/railing,
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 10
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"Hl" = (
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	invisibility = 101
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"Hv" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange";
+	color = "#333333";
+	plane = -32771
+	},
+/area/shoal)
+"Im" = (
+/obj/structure/transit_tube{
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"Iu" = (
+/obj/structure/railing,
+/turf/unsimulated/floor/vox,
+/area/shoal)
+"Iy" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine{
+	icon_state = "elevatorshaft";
+	name = "engine floor";
+	oxygen = 0;
+	nitrogen = 103.934
+	},
+/area/fake_z/level1)
+"ID" = (
+/obj/structure/catwalk,
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/transit_tube{
+	invisibility = 101
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level2)
+"IE" = (
+/obj/structure/hanging_lantern,
+/turf/unsimulated/floor/vox{
+	icon_state = "dark vault stripe"
+	},
+/area)
+"IQ" = (
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"IZ" = (
+/obj/structure/transit_tube{
+	icon_state = "NW-SE";
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/wall/shoal{
+	plane = -32762
+	},
+/area/shoal)
+"Jb" = (
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"JK" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"JW" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1;
+	invisibility = 101
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area/fake_z/level2)
+"JY" = (
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"Ks" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 9
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine{
+	icon_state = "elevatorshaft";
+	name = "engine floor";
+	oxygen = 0;
+	nitrogen = 103.934
+	},
+/area/fake_z/level1)
+"KH" = (
+/turf/unsimulated/wall/shoal{
+	plane = -32762
+	},
+/area/fake_z/abyss)
+"KX" = (
+/obj/machinery/egg_incubator/box_cloner,
+/obj/effect/gibspawner/blood,
+/obj/effect/gibspawner/blood,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"KZ" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/hanging_lantern/dim{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"Lf" = (
+/obj/structure/transit_tube/station{
+	dir = 4;
+	req_access_txt = "47";
+	reverse_launch = 1;
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"Lu" = (
+/obj/structure/transit_tube/station{
+	dir = 4;
+	req_access_txt = "47";
+	reverse_launch = 1;
+	fake_z_exclude = 1;
+	color = "#777777"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"LB" = (
+/obj/machinery/door/airlock/maintenance_hatch,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"LM" = (
+/obj/structure/railing,
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	invisibility = 101
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"LN" = (
+/obj/structure/catwalk,
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	color = "#555555";
+	invisibility = 101
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"LT" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox,
+/area/shoal)
+"Mb" = (
+/obj/structure/catwalk,
+/obj/prop/hanginglight{
+	pixel_y = 32;
+	pixel_x = -16
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"Mm" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"Mo" = (
+/turf/unsimulated/floor/vox{
+	icon_state = "dark vault stripe"
+	},
+/area)
+"Mq" = (
+/turf/unsimulated/floor/vox/abyss,
+/area)
+"Mt" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/blood/stattrack{
+	dir = 4
+	},
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"Nh" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	invisibility = 101
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"Nr" = (
+/turf/unsimulated/wall/fakeglass{
+	dir = 4;
+	walltype = ""
+	},
+/area)
+"Ny" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"NK" = (
+/obj/structure/transit_tube{
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/obj/effect/decal/warning_stripes/siding,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"NT" = (
+/obj/structure/grille/invulnerable,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"Oi" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"Ok" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"Ol" = (
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/space,
+/area)
+"Om" = (
+/obj/structure/transit_tube{
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/obj/effect/decal/warning_stripes/siding{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"On" = (
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	invisibility = 101
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"Ot" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma,
+/obj/structure/grille/invulnerable,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"Oy" = (
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"OJ" = (
+/obj/structure/bed/chair/folding{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"OR" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/jungle/concrete,
+/area/fake_z/level2)
+"Pa" = (
+/obj/effect/decal/wallpapers,
+/turf/unsimulated/wall/shoal,
+/area/shoal)
+"Pu" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning";
+	tag = "icon-warning (EAST)"
+	},
+/obj/structure/catwalk,
+/obj/prop/ladder/down{
+	pixel_y = 8
+	},
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/transit_tube{
+	invisibility = 101
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level2)
+"Pz" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"PA" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"PE" = (
+/turf/unsimulated/wall/shoal{
+	plane = -32762
+	},
+/area/shoal)
+"PX" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"Qh" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"Qm" = (
+/obj/structure/sign/directions/engineering{
+	pixel_y = 12
+	},
+/turf/unsimulated/wall/shoal,
+/area/fake_z/level1)
+"Qu" = (
+/obj/machinery/portable_atmospherics/hydroponics/soil,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"QJ" = (
+/obj/structure/catwalk,
+/obj/structure/railing,
+/obj/structure/transit_tube{
+	icon_state = "N-S";
+	fake_z_exclude = 1;
+	color = "#777777";
+	plane = -32770;
+	layer = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"Rn" = (
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"RI" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 6
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"So" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 8;
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"SR" = (
+/obj/structure/closet/crate/trashcart,
+/obj/effect/decal/cleanable/generic,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"SV" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"Ta" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"Tk" = (
+/obj/structure/sign/parking,
+/turf/unsimulated/wall/shoal,
+/area/shoal)
+"TG" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"TH" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"TK" = (
+/obj/structure/transit_tube/station{
+	req_one_access_txt = "32;19;501";
+	reverse_launch = 1;
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/obj/effect/decal/warning_stripes/siding,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"TU" = (
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"TW" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/bed/chair/folding{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/crumbs,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"Ub" = (
+/obj/structure/transit_tube{
+	icon_state = "N-SE";
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"Uk" = (
+/obj/prop/shoalwindow{
+	icon_state = "shoalwindow";
+	dir = 4
+	},
+/turf/unsimulated/wall/shoal,
+/area/shoal)
+"Um" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/blood/stattrack,
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"Ur" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"Uu" = (
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/catwalk,
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"UB" = (
+/obj/machinery/firealarm{
+	dir = 1;
+	pixel_y = -25
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"UO" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"UW" = (
+/obj/structure/sign/securearea,
+/turf/unsimulated/wall/shoal,
+/area)
+"VE" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"VK" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"VX" = (
+/obj/effect/decal/papers{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"Wo" = (
+/obj/machinery/bot/farmbot/duey,
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"Wq" = (
+/obj/structure/hanging_lantern{
+	fake_z_exclude = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"Ws" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level3)
+"Wx" = (
+/turf/unsimulated/floor/jungle/concrete{
+	icon = 'icons/turf/floors.dmi'
+	},
+/area/fake_z/level2)
+"WK" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"WN" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/bed/chair/folding{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/crumbs,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"WR" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"WT" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"Xq" = (
+/obj/structure/transit_tube{
+	icon_state = "W-SE";
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/abyss)
+"Yc" = (
+/obj/structure/grille/invulnerable,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/fake_z/level2)
+"Yf" = (
+/obj/structure/sign/directions/podbay{
+	dir = 8
+	},
+/turf/unsimulated/wall/shoal,
+/area/fake_z/level1)
+"Yl" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 5
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"Ym" = (
+/turf/unsimulated/floor/jungle/concrete,
+/area/fake_z/level2)
+"Yn" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/table/plastic,
+/obj/item/trash/plate{
+	pixel_x = -5
+	},
+/obj/item/weapon/paper/crumpled{
+	pixel_x = 8;
+	name = "napkin scrap"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"Yt" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+"Yw" = (
+/obj/structure/catwalk,
+/obj/structure/hanging_lantern{
+	fake_z_exclude = 1;
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"Yy" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine{
+	icon_state = "elevatorshaft";
+	name = "engine floor";
+	oxygen = 0;
+	nitrogen = 103.934
+	},
+/area/fake_z/level1)
+"Zv" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area/fake_z/level1)
+"ZO" = (
+/obj/machinery/door/airlock/sandstone{
+	name = "Old Airlock"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"ZQ" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level3)
+"ZU" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level1)
+
+(1,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(2,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(3,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(4,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(5,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(6,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(7,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(8,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(9,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(10,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(11,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(12,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(13,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(14,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+fW
+Uk
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(15,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+cE
+cE
+nV
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(16,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+fW
+fW
+fW
+fW
+nV
+nV
+nV
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(17,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+sh
+sh
+rX
+fW
+Aa
+fW
+nV
+fW
+Ol
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(18,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+sh
+sh
+sh
+fW
+nV
+nV
+nV
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(19,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+sh
+sh
+sh
+FU
+cE
+cE
+nV
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(20,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+sh
+sh
+sh
+FU
+cE
+cE
+cE
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(21,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+sh
+sh
+sh
+fW
+cE
+cE
+nV
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(22,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+sh
+sh
+rX
+fW
+SV
+fW
+nV
+fW
+Ol
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(23,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+fW
+fW
+fW
+ft
+cE
+cE
+nV
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(24,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+Pa
+tl
+cE
+cE
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(25,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+sq
+nV
+cE
+VX
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(26,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+uP
+uP
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+LB
+LB
+DF
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(27,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Dl
+ER
+ER
+ER
+ER
+ER
+ER
+Bk
+Ny
+GM
+Bk
+ER
+ER
+ER
+ER
+ER
+ER
+Hk
+TH
+IQ
+DF
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(28,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+df
+hv
+hv
+hv
+hv
+hv
+hv
+hv
+Ny
+GM
+hv
+hv
+hv
+hv
+hv
+hv
+hv
+zl
+TH
+IQ
+DF
+DF
+DF
+DF
+DF
+DF
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(29,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Yl
+WT
+WT
+WT
+WT
+WT
+WT
+WT
+Ny
+GM
+WT
+WT
+WT
+WT
+WT
+WT
+WT
+fq
+TH
+TU
+DF
+DF
+JY
+TK
+JY
+DF
+aB
+aB
+aB
+DF
+DF
+DF
+DF
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(30,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Mm
+Mm
+WR
+Mm
+Mm
+nE
+WR
+Mm
+fo
+GM
+Pz
+Pz
+Pz
+fp
+Pz
+Pz
+rK
+lX
+IQ
+IQ
+DF
+DF
+JY
+NK
+JY
+DF
+aB
+aB
+aB
+DF
+JY
+JY
+aK
+iO
+iO
+iO
+iO
+iO
+iO
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(31,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Ks
+qK
+qK
+qK
+qK
+tm
+cR
+cR
+Ny
+GM
+cR
+cR
+cR
+pG
+pG
+pG
+Yt
+Cl
+TH
+UB
+DF
+DF
+UO
+NK
+md
+DF
+aB
+aB
+aB
+DF
+UO
+JY
+aK
+Ch
+Ch
+Ch
+Ch
+Ch
+ci
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(32,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Yy
+Iy
+Iy
+Iy
+Iy
+tm
+hv
+hv
+Ny
+GM
+hv
+hv
+hv
+hv
+hv
+hv
+hv
+ZU
+TH
+Bd
+Qm
+DF
+JY
+NK
+JY
+DF
+DF
+aB
+aB
+DF
+yR
+JY
+aK
+Ch
+Ch
+Ch
+Ch
+Ch
+ci
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(33,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+cD
+Bt
+Bt
+Bt
+Bt
+gE
+ia
+ia
+Ny
+GM
+Ta
+Ta
+Ta
+Ta
+Ta
+Ta
+Ta
+RI
+TH
+TU
+DF
+DF
+JY
+NK
+yR
+Dw
+DF
+DF
+aB
+DF
+yR
+yR
+aK
+Ch
+Ch
+Ch
+Ch
+Ch
+ci
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(34,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+BR
+Ch
+Ch
+Ch
+Ch
+ID
+Ch
+Ch
+fo
+GM
+Ch
+Ch
+Ch
+Ch
+Ch
+Ch
+Ch
+hH
+Em
+jW
+DF
+oj
+JY
+Om
+Ok
+yR
+CL
+DF
+DF
+Yf
+yR
+JY
+xi
+sH
+sH
+sH
+sH
+sH
+VE
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(35,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+xR
+pw
+pw
+pw
+pw
+Pu
+pw
+pw
+Ny
+GM
+pw
+pw
+pw
+pw
+pw
+pw
+pw
+pk
+ep
+Ok
+KZ
+Ok
+Ok
+yw
+wT
+gw
+JY
+JY
+uz
+yR
+yR
+xi
+mn
+mn
+So
+mn
+mn
+So
+mn
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(36,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+mn
+Xq
+mn
+mn
+Qh
+vL
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+yT
+mn
+mn
+mn
+mn
+Im
+wT
+Ot
+Yn
+Ok
+JY
+JY
+xi
+qg
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(37,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+WK
+WK
+gi
+WK
+Zv
+WK
+EO
+WK
+Qh
+vL
+WK
+WK
+WK
+gi
+WK
+WK
+gi
+WK
+Uu
+mn
+mn
+mn
+mn
+qZ
+Jb
+DE
+lB
+Qu
+PA
+xi
+Qu
+xT
+GT
+mn
+mn
+mn
+mn
+mn
+mn
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(38,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+id
+mn
+mn
+IZ
+Ei
+vL
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+se
+dN
+wT
+GP
+Qu
+GW
+GW
+dm
+Qu
+xT
+GT
+mn
+mn
+mn
+mn
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Wq
+fW
+fW
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(39,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+id
+mn
+mn
+PE
+jx
+xu
+AZ
+AZ
+Mb
+AZ
+AZ
+Mb
+AZ
+AZ
+AZ
+Mb
+AZ
+AZ
+Au
+fT
+fT
+fT
+BK
+iK
+iK
+iK
+BK
+iK
+iK
+iK
+Mb
+AZ
+AZ
+AZ
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+AZ
+ZO
+cE
+xr
+cE
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(40,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+vb
+mn
+mn
+PE
+xu
+jx
+Ur
+Ur
+Ur
+Ur
+Ur
+Ur
+Ur
+Ur
+Ur
+Ur
+Ur
+DB
+Ur
+Hv
+Hv
+Hv
+sk
+sk
+sk
+sk
+sk
+sk
+sk
+sk
+Ur
+Ur
+Ur
+Ur
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+mi
+Ur
+ZO
+cE
+cE
+cE
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(41,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+id
+mn
+mn
+PE
+Yw
+vL
+fI
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+Cn
+mn
+mn
+mn
+ZQ
+wT
+vk
+el
+Qu
+wf
+GW
+GW
+aJ
+qg
+mn
+mn
+mn
+mn
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Wq
+fW
+fW
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(42,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+id
+mn
+mn
+mn
+di
+vL
+mn
+fI
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+qS
+mn
+mn
+mn
+mn
+mn
+TG
+yP
+qg
+GW
+GW
+FN
+GW
+Wo
+qg
+mn
+mn
+mn
+mn
+mn
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(43,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Lu
+GJ
+GJ
+GJ
+qN
+GJ
+GJ
+GJ
+mN
+QJ
+GJ
+GJ
+iS
+GJ
+GJ
+GJ
+GJ
+GJ
+GJ
+ux
+GJ
+GJ
+GJ
+GJ
+GJ
+On
+LM
+Cj
+Nh
+Nh
+Hl
+Hl
+Hl
+Cj
+GJ
+GJ
+GJ
+Fu
+mn
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(44,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Lf
+cb
+cb
+cb
+LN
+cb
+cb
+cb
+mN
+QJ
+cb
+Ub
+mn
+fI
+mn
+mn
+mn
+mn
+mn
+tg
+mn
+mn
+mn
+TW
+VK
+SR
+yP
+xT
+GT
+cw
+cw
+wf
+GW
+xT
+Yc
+GT
+mn
+mn
+Fx
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(45,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+id
+mn
+mn
+mn
+Qh
+vL
+mn
+mn
+mp
+mn
+fI
+mn
+mn
+mn
+mn
+tg
+mn
+mn
+mn
+bp
+wT
+nL
+rf
+mn
+AN
+Gz
+cw
+KX
+OJ
+GW
+GW
+qg
+mn
+mn
+tg
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(46,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+id
+mn
+mn
+mn
+di
+vL
+mn
+mn
+tg
+mn
+mn
+fI
+mn
+mn
+mn
+tg
+mn
+mn
+mn
+WN
+PX
+Ay
+yP
+mn
+GP
+cw
+cw
+cw
+cw
+GW
+GW
+qg
+mn
+mn
+tg
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(47,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+WK
+WK
+WK
+gi
+gu
+mn
+mn
+mn
+Qh
+vL
+mn
+mn
+tg
+mn
+mn
+mn
+fI
+mn
+mn
+tg
+mn
+mn
+mn
+mn
+mn
+TG
+yP
+mn
+DE
+lE
+lE
+GT
+cw
+GW
+GW
+qg
+mn
+mn
+tg
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(48,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+Qh
+vL
+mn
+mn
+tg
+mn
+mn
+mn
+mn
+fI
+mn
+tg
+mn
+mn
+mn
+mn
+mn
+Oi
+yP
+mn
+mn
+mn
+mn
+GP
+cw
+wf
+GW
+qg
+mn
+mn
+tg
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(49,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+Qh
+vL
+mn
+mn
+tg
+mn
+mn
+mn
+mn
+mn
+mp
+tg
+mn
+mn
+mn
+mn
+mn
+Oi
+yP
+mn
+mn
+mn
+mn
+GP
+cw
+GW
+GW
+qg
+mn
+mn
+tg
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(50,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+di
+vL
+mn
+mn
+tg
+mn
+mn
+mn
+mn
+mn
+tg
+tg
+mn
+mn
+mn
+mn
+mn
+Oi
+yP
+mn
+mn
+mn
+mn
+GP
+cw
+FN
+GW
+qg
+mn
+mn
+tg
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(51,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+Qh
+vL
+mn
+mn
+tg
+mn
+mn
+mn
+mn
+mn
+tg
+tg
+mn
+mn
+mn
+mn
+mn
+TG
+yP
+mn
+mn
+mn
+mn
+qg
+GW
+GW
+GW
+qg
+mn
+mn
+tg
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(52,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+Qh
+vL
+mn
+mn
+tg
+mn
+mn
+mn
+mn
+mn
+tg
+tg
+mn
+mn
+mn
+mn
+mn
+Oi
+yP
+mn
+mn
+mn
+mn
+qg
+GW
+GW
+GW
+qg
+mn
+mn
+tg
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(53,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+Tk
+ZO
+ZO
+Tk
+KH
+Xq
+mn
+mn
+mn
+mn
+mn
+tg
+tg
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+mn
+NT
+GW
+GW
+GW
+NT
+mn
+mn
+tg
+Oy
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Mq
+Oy
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(54,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+mb
+mb
+rl
+rl
+PE
+fI
+mn
+mn
+mn
+mn
+tg
+tg
+fW
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+mn
+BE
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(55,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+mb
+mb
+rl
+rl
+fW
+PE
+fI
+mn
+mn
+mn
+tg
+tg
+fW
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(56,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+mb
+mb
+rl
+rl
+rl
+fW
+PE
+fI
+mn
+mn
+tg
+tg
+fW
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(57,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+na
+na
+CJ
+CJ
+rl
+mb
+mb
+rl
+rl
+rl
+rl
+fW
+PE
+fI
+mn
+tg
+tg
+fW
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(58,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+na
+na
+CJ
+CJ
+rl
+mb
+mb
+rl
+rl
+rl
+rl
+rl
+fW
+PE
+mp
+tg
+tg
+fW
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(59,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+na
+na
+na
+rl
+rl
+mb
+mb
+rl
+rl
+rl
+rl
+rl
+rl
+fW
+at
+at
+at
+fW
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(60,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+UW
+dP
+dP
+UW
+rl
+mb
+mb
+rl
+rl
+rl
+rl
+rl
+rl
+fW
+fW
+fW
+fW
+fW
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(61,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+hq
+hq
+hq
+hq
+rl
+mb
+mb
+na
+na
+na
+na
+na
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(62,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+hq
+hq
+hq
+hq
+hq
+wV
+mb
+mb
+rl
+rl
+rl
+rl
+na
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(63,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+hq
+hq
+hq
+hq
+hq
+hq
+rD
+mb
+mb
+wV
+rl
+rl
+rl
+na
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(64,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+rD
+mb
+mb
+rD
+hq
+hq
+hq
+Bo
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+cE
+cE
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(65,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+rD
+mb
+mb
+rD
+Fv
+Fv
+Fv
+Bo
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+cE
+cE
+Ex
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(66,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+pZ
+Hg
+pZ
+Hg
+pZ
+Hg
+pZ
+Hg
+pZ
+Hg
+pZ
+Hg
+rD
+mb
+mb
+rD
+pZ
+Hg
+pZ
+mq
+pZ
+Hg
+pZ
+Hg
+pZ
+Hg
+pZ
+Hg
+pZ
+Fv
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+wm
+cE
+rr
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(67,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+rD
+mb
+mb
+rD
+Fv
+Fv
+Fv
+Bo
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+Fv
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+cE
+cE
+xy
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(68,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+rD
+mb
+mb
+Nr
+hq
+hq
+hq
+Bo
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+hq
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+cE
+cE
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(69,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rD
+mb
+mb
+rl
+rl
+rl
+rl
+na
+rl
+hq
+hq
+hq
+rl
+rl
+rl
+rl
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fW
+Ym
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(70,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+mb
+mb
+rl
+aB
+aB
+rl
+na
+rl
+rl
+hq
+hq
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fW
+JW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(71,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+gg
+gg
+rz
+gg
+gg
+gg
+rz
+gg
+gg
+gg
+rz
+gg
+gg
+fW
+mb
+mb
+rl
+aB
+aB
+rl
+aB
+rl
+rl
+hq
+hq
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fW
+Ym
+Ym
+Ym
+Mt
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(72,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+qq
+me
+me
+me
+me
+me
+me
+me
+me
+me
+yu
+gg
+gg
+fW
+mb
+mb
+rl
+aB
+aB
+rl
+aB
+rl
+rl
+hq
+hq
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+bs
+Ym
+mJ
+Ym
+kl
+tz
+cf
+fW
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(73,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+jI
+fW
+mf
+mf
+rl
+aB
+aB
+rl
+aB
+rl
+rl
+aB
+aB
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fC
+Ym
+Ym
+Ym
+zP
+vm
+Um
+Um
+ka
+Wx
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(74,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+CT
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+gg
+Tk
+yq
+EB
+rl
+aB
+aB
+rl
+aB
+rl
+rl
+aB
+aB
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fC
+JW
+Bi
+Ym
+Wx
+Aq
+hn
+to
+Wx
+Wx
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(75,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+gg
+aE
+DP
+IE
+rl
+aB
+aB
+rl
+aB
+rl
+rl
+aB
+aB
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fC
+Ym
+Ym
+Ym
+zf
+wC
+cf
+fW
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(76,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+gg
+aE
+DP
+Mo
+rl
+aB
+aB
+rl
+aB
+rl
+rl
+aB
+aB
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+tn
+Ym
+Bi
+Ym
+Rn
+ba
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(77,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+jI
+aE
+DP
+Mo
+rl
+aB
+aB
+rl
+aB
+rl
+rl
+aB
+aB
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fW
+Ym
+Ym
+Ym
+to
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(78,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+CT
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+gg
+aE
+DP
+Mo
+rl
+aB
+aB
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fW
+JW
+Bi
+OR
+ah
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(79,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+JK
+JK
+in
+DP
+Mo
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fW
+Ym
+Ym
+Ym
+Aq
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(80,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+gg
+aE
+DP
+Mo
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fW
+Ym
+Bi
+Ym
+nn
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(81,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+CT
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+jI
+aE
+DP
+Mo
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+qd
+qd
+fW
+Ym
+Ym
+Ym
+Wx
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(82,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+gg
+aE
+DP
+IE
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+JW
+Bi
+Ym
+eU
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(83,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+gg
+aE
+DP
+Mo
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Ym
+Ym
+Ym
+to
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(84,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+gg
+Tk
+Cx
+wa
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Ym
+Bi
+Ym
+Wx
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(85,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+CT
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+gg
+fW
+Ca
+Ca
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Ym
+Ym
+Ym
+Wx
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(86,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+LT
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+kO
+Iu
+gg
+jI
+fW
+oE
+oE
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+JW
+Bi
+Ym
+eU
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(87,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+zq
+bH
+bH
+bH
+bH
+bH
+bH
+bH
+bH
+bH
+Do
+gg
+gg
+fW
+rl
+rl
+rl
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+Ym
+Ym
+Ym
+Wx
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(88,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+gg
+gg
+Ws
+gg
+gg
+gg
+gg
+Ws
+gg
+gg
+gg
+Ws
+gg
+gg
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+rl
+fW
+fW
+fW
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(89,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+fW
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(90,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(91,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(92,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(93,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(94,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(95,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(96,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(97,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(98,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(99,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}
+(100,1,1) = {"
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+aB
+"}

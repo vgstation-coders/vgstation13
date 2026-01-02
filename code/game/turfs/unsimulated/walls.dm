@@ -119,3 +119,17 @@ var/icon/current_round_splashscreen
 	min_icon_states = 2
 	max_icon_states = 8
 	variance = 80
+
+/turf/unsimulated/wall/shoal
+	name = "rusty metal wall"
+	desc = "It looks sturdy, despite its corrosion."
+	icon_state = "swall"
+	base_icon_state = "swall"
+	walltype = "swall"
+
+/turf/unsimulated/wall/shoal/clean
+	name = "metal wall"
+	desc = "It looks sturdy. "
+	icon_state = "iron"
+	base_icon_state = "iron"
+	walltype = "iron"

@@ -15,6 +15,8 @@
 	icon_state = "catwalk[..()]"
 
 /obj/structure/catwalk/isSmoothableNeighbor(atom/A)
+	if(!fake_z_connected(src,A))
+		return FALSE
 	return !istype(A, /turf/space) && istype(A, /obj/structure/catwalk)
 
 /obj/structure/catwalk/ex_act(severity)

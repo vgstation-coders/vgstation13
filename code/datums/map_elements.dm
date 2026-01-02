@@ -37,6 +37,7 @@ var/list/datum/map_element/map_elements = list()
 
 	for(var/atom/A in objects)
 		A.spawned_by_map_element(src, objects)
+		A.initialize()
 
 
 /datum/map_element/proc/load(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE, clipmin_x=0, clipmax_x=INFINITY, clipmin_y=0, clipmax_y=INFINITY, clipmin_z=0, clipmax_z=INFINITY)

@@ -2,6 +2,7 @@
 	name = "Shutters"
 	icon = 'icons/obj/doors/rapid_pdoor.dmi'
 	icon_state = "shutter1"
+	var/base_icon_state = "shutter"
 	power_channel = ENVIRON
 	var/sound_open = 'sound/machines/shutter_open.ogg'
 	var/sound_close = 'sound/machines/shutter_close.ogg'
@@ -34,7 +35,7 @@
 				if(do_after(user,src,3 SECONDS))
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You finish mending the damage to the [src].</span>")
-					icon_state = "shutter2"
+					icon_state = "[base_icon_state]2"
 					setDensity(TRUE)
 					set_opacity(1)
 					pried_open = FALSE
@@ -46,7 +47,7 @@
 			if(!pried_open)
 				weld(WT,user)
 				to_chat(user, "<span class='notice'>You finish welding the [src].</span>")
-				icon_state = "shutter1"
+				icon_state = "[base_icon_state]1"
 				cut_open = FALSE
 			else
 				to_chat(user, "<span class='notice'>You need to add metal sheets first.</span>")
@@ -58,8 +59,8 @@
 		if(density && (stat & (FORCEDISABLE|NOPOWER)) && !operating)
 			operating = 1
 			spawn(-1)
-				flick("shutterc0", src)
-				icon_state = "shutter0"
+				flick("[base_icon_state]c0", src)
+				icon_state = "[base_icon_state]0"
 				sleep(animation_delay)
 				plane = open_plane
 				layer = open_layer
@@ -69,12 +70,12 @@
 
 /obj/machinery/door/poddoor/shutters/open()
 	if(cut_open && !pried_open)
-		icon_state = "shutter2"
+		icon_state = "[base_icon_state]2"
 		setDensity(TRUE)
 		set_opacity(1)
 		return FALSE
 	if(pried_open)
-		icon_state = "shutter3"
+		icon_state = "[base_icon_state]3"
 		setDensity(FALSE)
 		set_opacity(0)
 		return FALSE
@@ -86,8 +87,8 @@
 		return 0
 	if(!operating) //in case of emag
 		operating = 1
-	flick("shutterc0", src)
-	icon_state = "shutter0"
+	flick("[base_icon_state]c0", src)
+	icon_state = "[base_icon_state]0"
 	playsound(src.loc, sound_open, 100, 1)
 	sleep(animation_delay)
 	plane = open_plane
@@ -105,12 +106,12 @@
 
 /obj/machinery/door/poddoor/shutters/close()
 	if(cut_open && !pried_open)
-		icon_state = "shutter2"
+		icon_state = "[base_icon_state]2"
 		setDensity(TRUE)
 		set_opacity(1)
 		return FALSE
 	if(pried_open)
-		icon_state = "shutter3"
+		icon_state = "[base_icon_state]3"
 		setDensity(FALSE)
 		set_opacity(0)
 		return FALSE
@@ -119,9 +120,9 @@
 	operating = 1
 	plane = closed_plane
 	layer = closed_layer
-	icon_state = "shutter1"
+	icon_state = "[base_icon_state]1"
 	if(!cut_open && !pried_open)
-		flick("shutterc1", src)
+		flick("[base_icon_state]c1", src)
 		playsound(src.loc, sound_close, 100, 1)
 	density = 1
 	if(visible)
@@ -150,7 +151,7 @@
 			return
 		to_chat(user, "<span class='notice'>You finish cutting through \the [src].</span>")
 		cut_open = TRUE
-		icon_state = "shutter2"
+		icon_state = "[base_icon_state]2"
 
 /obj/machinery/door/poddoor/shutters/proc/pry(mob/user as mob)
 	if(istype(user,/mob/living/carbon/human))
@@ -164,7 +165,7 @@
 		playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>You finish prying \the [src] open.</span>")
 		pried_open = TRUE
-		icon_state = "shutter3"
+		icon_state = "[base_icon_state]3"
 		setDensity(FALSE)
 		set_opacity(0)
 

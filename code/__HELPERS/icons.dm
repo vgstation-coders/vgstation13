@@ -52,6 +52,14 @@
 	blank_icon.AddAlphaMask(flat_icon)
 	return blank_icon
 
+/proc/getNettedIcon(icon/A, safety=1)
+	var/icon/flat_icon = safety ? A : new(A)
+	flat_icon.Blend(rgb(255, 255, 255))
+	flat_icon.BecomeAlphaMask()
+	var/icon/netted_icon = new/icon('icons/effects/effects.dmi', "netted_base")
+	netted_icon.AddAlphaMask(flat_icon)
+	return netted_icon
+
 /proc/getLetterImage(atom/A, letter = "", uppercase = 0)
 	if(!A)
 		return

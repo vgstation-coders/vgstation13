@@ -23,7 +23,7 @@
 // roidstation.dm
 //#define MAP_OVERRIDE 4
 // test_tiny.dm:
-//#define MAP_OVERRIDE 6
+#define MAP_OVERRIDE 6
 // tgstation.dm:
 //#define MAP_OVERRIDE 7
 // snaxi.dm
@@ -46,6 +46,10 @@
 //#define MAP_OVERRIDE 16
 // tgstation-sec.dm
 //#define MAP_OVERRIDE 17
+// horizon.dm
+//#define MAP_OVERRIDE 18
+// tgstation-snow.dm
+//#define MAP_OVERRIDE 19
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this

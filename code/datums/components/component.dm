@@ -1,11 +1,16 @@
 /datum/component
 	var/datum/parent
 
+	// If TRUE, when a duplicate component is created, pass the new arguments to the original component, instead of immediately failing.
+	// inherit_component() must be defined if set to TRUE
+	var/passargs = FALSE
+
+
 /datum/component/New(datum/parent, ...)
 	src.parent = parent
 	var/list/arguments = args.Copy(2)
 	if(!initialize(arglist(arguments)))
-		stack_trace("Incompatible [type] assigned to a [parent.type]! args: [json_encode(arguments)]")
+		CRASH("Incompatible [type] assigned to a [parent.type]! args: [json_encode(arguments)]")
 		qdel(src)
 		return
 
@@ -48,6 +53,8 @@
 	_remove_from_parent()
 	parent = null
 
+/datum/component/proc/inherit_component(...)
+	return
 
 /datum/proc/get_component(datum/component/c_type)
 	RETURN_TYPE(c_type)
@@ -62,8 +69,14 @@
 	if(!ispath(new_type))
 		CRASH("add_component called with non-path first argument: [new_type]")
 
-	if(!isnull(get_component(new_type)))
-		CRASH("add_component called but [new_type] already exists")
+	var/datum/component/old_comp = get_component(new_type)
+	if(!isnull(old_comp))
+		if(initial(old_comp.passargs))
+			var/list/arguments = args.Copy(2)
+			old_comp.inherit_component(arglist(arguments))
+		else
+			CRASH("add_component called but [new_type] already exists, and passargs is set to FALSE.")
+
 
 	args[1] = src
 	var/datum/component/new_component = new new_type(arglist(args))

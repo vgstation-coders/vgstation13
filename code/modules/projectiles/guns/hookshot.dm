@@ -337,11 +337,13 @@
 	icon = 'icons/obj/chain.dmi'
 	icon_state = ""
 	animate_movement = 0
+	plane = ABOVE_OBJ_PLANE
 	var/atom/movable/extremity_A = null
 	var/atom/movable/extremity_B = null
 	var/datum/chain/chain_datum = null
 	var/rewinding = 0
 	var/overlay_name = "chain"
+
 
 /obj/effect/overlay/chain/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return 1
@@ -434,6 +436,8 @@
 				var/pass_backup = CH.pass_flags
 				if(chain_datum.rewinding && (istype(CH,/mob/living) || istype(CH,/obj/item)))
 					CH.pass_flags = PASSTABLE | PASSRAILING //mobs can be pulled above tables and railings
+	//				if(istype(CH,/mob/living))
+	//					CH.set_glide_size(DELAY2GLIDESIZE(CH.move_speed))
 				CH.Move(R, get_dir(CH, R))
 				CH.pass_flags = pass_backup
 				CH.tether_pull = 0
@@ -453,6 +457,8 @@
 				C.update_overlays(src)
 			if(CH && (get_dist(loc,CH.loc) > 1))
 				CH.tether_pull = 1
+//				if(istype(CH,/mob/living))
+//					CH.set_glide_size(DELAY2GLIDESIZE(CH.move_speed))
 				CH.Move(R, get_dir(CH, R))
 				CH.tether_pull = 0
 		update_icon()

@@ -83,6 +83,7 @@
 	opacity = FALSE
 	icon = 'icons/turf/voxprobe.dmi'
 	icon_state = "voxairshield_on"
+	use_overlay = FALSE
 
 /turf/simulated/wall/shuttle/unsmoothed/vox
 	name = "neogypsum wall"

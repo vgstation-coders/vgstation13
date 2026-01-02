@@ -77,7 +77,6 @@ var/datum/subsystem/more_init/SSmore_init
 		wizard_apprentice_setups_nanoui += list(list("name" = setup_datum.name, "desc" = setup_datum.generate_description()))
 		wizard_apprentice_setups_by_name[setup_datum.name] = setup_datum
 
-
 /datum/subsystem/more_init/proc/cachedamageicons()
 	var/mob/living/carbon/human/H = new(locate(1,1,2))
 	var/list/datum/species/slist = list(new /datum/species/human, new /datum/species/vox, new /datum/species/diona)

@@ -10,6 +10,8 @@
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
 	var/construction_step = WIRINGSECURE
+	var/use_overlay = TRUE
+
 
 var/obj/effect/airshield_overlay/AO
 
@@ -17,12 +19,13 @@ var/obj/effect/airshield_overlay/AO
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "emancipation_grill_on"
 	plane = FLOAT_PLANE
-	
+
 /obj/structure/airshield/New()
 	..()
 	if(!AO)
 		AO = new
-	vis_contents.Add(AO)
+	if(use_overlay)
+		vis_contents.Add(AO)
 
 /obj/structure/airshield/Destroy()
 	vis_contents.Cut()
