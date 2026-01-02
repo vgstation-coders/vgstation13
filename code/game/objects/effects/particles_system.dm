@@ -27,6 +27,8 @@
 /atom/proc/add_particles(var/particle_string)
 	if (!particle_string)
 		return
+	if (!particle_systems)
+		particle_systems = list()
 	if (particle_string in particle_systems)
 		return
 
