@@ -42,12 +42,10 @@
 	if(burstfire == TRUE)
 		if(!ready_to_fire())
 			return 1
-		var/shots_fired = 0 //haha, I'm so clever
 		var/to_shoot = min(burst_count, getAmmo())
 		for(var/i = 1 to to_shoot)
 			..()
 			burstfiring = 1
-			shots_fired++
 			if(!user.contents.Find(src) || jammed)
 				break
 		recoil = initial(recoil)
