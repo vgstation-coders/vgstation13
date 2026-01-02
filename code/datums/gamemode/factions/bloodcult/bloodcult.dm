@@ -101,7 +101,8 @@
 		if (BLOODCULT_STAGE_ECLIPSE)
 			update_all_parallax()
 			var/datum/zLevel/ZL = map.zLevels[map.zMainStation]
-			ZL.transitionLoops = TRUE
+			var/datum/virtual_z/vz = ZL.virtual_z_levels[1]
+			vz.transitionLoops = TRUE
 			spawn()
 				for (var/mob/dead/observer/O in player_list)
 					O.cultify()
@@ -122,7 +123,8 @@
 		if (BLOODCULT_STAGE_DEFEATED)
 			..()
 			var/datum/zLevel/ZL = map.zLevels[map.zMainStation]
-			ZL.transitionLoops = FALSE
+			var/datum/virtual_z/vz = ZL.virtual_z_levels[1]
+			vz.transitionLoops = TRUE
 			command_alert(/datum/command_alert/eclipse_bloodstone_broken)
 			if (sun.eclipse == ECLIPSE_ONGOING)//destruction of the blood stone instantly ends the Eclipse
 				sun.eclipse_manager.eclipse_end()

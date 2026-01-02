@@ -33,8 +33,8 @@
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
 
-	if(locked_to_z)
-		check_locked_zlevel()
+	if(locked_to_v)
+		check_locked_vlevel()
 
 /mob/living/silicon/robot/proc/clamp_values()
 	SetParalysis(min(paralysis, 30))
@@ -183,14 +183,14 @@
 	canmove = !(paralysis || stunned || knockdown || locked_to || lockdown || anchored)
 	return canmove
 
-/mob/living/silicon/robot/proc/check_locked_zlevel()
-	if(!locked_to_z)
+/mob/living/silicon/robot/proc/check_locked_vlevel()
+	if(!locked_to_v)
 		return
 
-	var/datum/zLevel/current_zlevel = get_z_level(src)
-	if(!current_zlevel)
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(!vz)
 		return
-	if(current_zlevel.z != locked_to_z)
+	if(vz != locked_to_v)
 		to_chat(src, "<span class='userdanger'>Your hardware detects that you have left your intended location. Initiating self-destruct.</span>")
 		spawn(rand(2,7) SECONDS)
 			if(mmi) //no sneaking brains away

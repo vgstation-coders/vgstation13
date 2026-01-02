@@ -29,6 +29,8 @@
 // from_v: The old v.
 /event/v_transition
 
+/event/post_v_transition
+
 // Called whenever an /atom/movable moves.
 // Arguments:
 // atom/movable/mover: the movable itself.

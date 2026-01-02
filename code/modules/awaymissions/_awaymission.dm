@@ -37,17 +37,14 @@ Example of the second method:
 
 	var/generate_randomly = 1 //If 0, don't generate this away mission randomly
 
-	var/datum/zLevel/zLevel
+	var/datum/virtual_z/vLevel
 
 /datum/map_element/away_mission/initialize(list/objects) //objects: list of all atoms in the away mission. This proc is called after the away mission is loaded
 	..()
 
 	existing_away_missions.Add(src)
 
-	var/z = location ? location.z : world.maxz //z coordinate
-
-	if(accessable_z_levels.len >= z)
-		zLevel = accessable_z_levels[z]
+	vLevel = location.get_virtual_z()
 
 	for(var/obj/effect/landmark/L in landmarks_list) //Add all landmarks to away destinations. Also set the away mission's location for admins to jump to
 		if(L.name != "awaystart")
@@ -199,9 +196,9 @@ var/static/list/away_mission_subtypes = subtypesof(/datum/map_element/away_missi
 		if(id == AD.name)
 			return AD
 
-/proc/get_mission_by_z(var/num)
+/proc/get_mission_by_v(var/datum/virtual_z/vz)
 	for(var/datum/map_element/away_mission/AD in existing_away_missions)
-		if(AD.zLevel.z == num)
+		if(AD.vLevel == vz)
 			return AD
 
 

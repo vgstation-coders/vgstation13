@@ -37,6 +37,13 @@
 	var/list/daynight_turfs = list()
 	var/weather_mod = 1 // Weather light modifier
 
+	// Parameters
+	var/gps_allowed = FALSE // Whether regular GPS functions in this vlevel
+	var/teleJammed = VZ_TELEPORTATION_FORBIDDEN //Prevents teleportation into/out of the vlevel
+	var/movementJammed = TRUE //Prevents you from accessing the vlevel by drifting
+	var/movementChance = 10 //Inhereted from parent z (for now)
+	var/transitionLoops = FALSE //if true, transition sends you back to the same v-level
+
 /datum/virtual_z/New(var/datum/zLevel/z, var/input_size_x, var/input_size_y, var/input_x = 0, var/input_y = 0, var/skip_turf_setup = FALSE)
 	. = ..()
 	if(!z)
@@ -57,18 +64,35 @@
 	map.vLevels |= src
 	id = map.vLevels.len
 	if(!skip_turf_setup)
-		var/list/turf/turfs = get_turfs()
-		for(var/turf/T in turfs)
-			if(!T)
-				continue
-			T.v = src
-			var/area/A = get_area(T)
-			if(!A || isspace(A))
-				continue
-			areas |= A
-			A.v = src
+		initialize_turfs()
 	spawn(0)
 		make_borders()
+
+/datum/virtual_z/proc/initialize_turfs()
+	var/list/turf/turfs = get_turfs()
+	for(var/turf/T in turfs)
+		if(!T)
+			continue
+		T.v = src
+		var/area/A = get_area(T)
+		if(!A || isspace(A))
+			continue
+		areas |= A
+		A.v = src
+
+/datum/virtual_z/proc/update_settings()
+	if(!movementJammed)
+		accessable_v_levels += list("[id]" = movementChance)
+	switch(teleJammed)
+		if(VZ_TELEPORTATION_FORBIDDEN)
+			for(var/area/A in areas)
+				A.jammed = 2 //SUPER_JAMMED
+		if(VZ_TELEPORTATION_EXPENSIVE)
+			for(var/area/A in areas)
+				A.jammed = 1 //JAMMED
+		if(VZ_TELEPORTATION_ALLOWED)
+			for(var/area/A in areas)
+				A.jammed = 0
 
 /datum/virtual_z/proc/get_turfs()
 	return block(locate(x_min, y_min, parent_z.z), locate(x_max, y_max, parent_z.z))

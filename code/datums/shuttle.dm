@@ -239,7 +239,8 @@
 	if(A)
 		return A
 	for(var/mob/living/M in get_contents_in_object(linked_area, /mob/living))
-		if(M.locked_to_z && M.locked_to_z != destination_port.z)
+		var/datum/virtual_z/destination_port_vz = destination_port.get_virtual_z()
+		if(M.locked_to_v && M.locked_to_v != destination_port_vz)
 			return M
 	return 0
 

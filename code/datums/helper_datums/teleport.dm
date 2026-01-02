@@ -223,30 +223,17 @@
 	var/turf/curturf = get_turf(teleatom)
 	if(!curturf)
 		return FALSE
-	var/datum/virtual_z/curvz = curturf.get_virtual_z()
-	if(curvz?.planet)
-		if(ismob(teleatom))
-			var/mob/M = teleatom
-			to_chat(M, "<span class='warning'>A mysterious force prevents teleportation from this location!</span>")
-		return FALSE
-	if(destination.z == 7)
-		if(ismob(teleatom))
-			var/mob/M = teleatom
-			to_chat(M, "<span class='warning'>A mysterious force prevents teleportation to that location!</span>")
-		return FALSE
-
 	if(destination.z == map.zCentcomm) //centcomm z-level
 		if(istype(teleatom, /obj/mecha) && (universe.name != "Supermatter Cascade"))
 			var/obj/mecha/MM = teleatom
 			to_chat(MM.occupant, "<span class='danger'>The mech would not survive the jump to a location so far away!</span>")//seriously though, why? who wrote that?
-
 			return FALSE
 		if(!isemptylist(teleatom.search_contents_for(/obj/item/weapon/storage/backpack/holding)))
 			teleatom.visible_message("<span class='danger'>The Bag of Holding bounces off of the portal!</span>")
 			return FALSE
 
-	var/datum/zLevel/L = get_z_level(destination)
-	if (L.teleJammed && !ignore_jamming)
+	var/datum/virtual_z/vz = destination.get_virtual_z()
+	if (vz.teleJammed == VZ_TELEPORTATION_FORBIDDEN && !ignore_jamming)
 		return FALSE
 
 	for (var/mob/M in recursive_type_check(teleatom, /mob))
@@ -258,7 +245,7 @@
 
 		if(istype(M, /mob/living))
 			var/mob/living/MM = M
-			if(MM.locked_to_z != FALSE && destination.z != MM.locked_to_z)
+			if(MM.locked_to_v && vz != MM.locked_to_v)
 				MM.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
 				return FALSE
 

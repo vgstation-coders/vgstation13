@@ -237,13 +237,14 @@
 	if (!(src.can_border_transition))
 		return
 	if(ticker && ticker.mode)
-
 		// Okay, so let's make it so that people can travel z levels but not nuke disks!
 		// if(ticker.mode.name == "nuclear emergency")	return
-		if(A.z > 6)
+		if(v.movementJammed)
 			return
-		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE + 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE + 1))
-
+		if(v.size_x < TRANSITIONEDGE * 2 || v.size_y < TRANSITIONEDGE * 2)
+			v.movementJammed = TRUE // Too small to use any transitioning; fix incorrectly-set param
+			return
+		if (A.vx() <= TRANSITIONEDGE || A.vx() >= (v.x_max - TRANSITIONEDGE) || A.vy() <= TRANSITIONEDGE || A.vy() >= (v.y_max - TRANSITIONEDGE))
 			var/list/contents_brought = list()
 			contents_brought += recursive_type_check(A)
 
@@ -252,12 +253,11 @@
 				if(B.is_locking(B.mob_lock_type))
 					contents_brought += recursive_type_check(B)
 
-			var/locked_to_current_z = FALSE//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
-			var/randomize_drift_position = TRUE // if true, randomizes where you'll end up on the new Z-level
+			var/locked_to_current_v = FALSE//To prevent the moveable atom from leaving this V, examples are DAT DISK and derelict MoMMIs.
+			var/randomize_drift_position = TRUE // if true, randomizes where you'll end up on the new V-level
 
-			var/datum/zLevel/ZL = map.zLevels[z]
-			if(ZL.transitionLoops)
-				locked_to_current_z = TRUE
+			if(v.transitionLoops)
+				locked_to_current_v = TRUE
 
 			var/obj/item/weapon/disk/nuclear/nuclear = locate() in contents_brought
 			if(nuclear)
@@ -271,11 +271,11 @@
 				if(MOB.pulling)
 					was_pulling = MOB.pulling //Store the object to transition later
 
-
-			var/move_to_z = src.z
-
-			if(ZL.transition_crosswrap_z && ZL.transition_crosswrap_z.len>=4)
-				locked_to_current_z=TRUE //prevent shuffling z-level later in the code.
+			var/datum/virtual_z/move_to_v = v
+			var/datum/zLevel/ZL = v.parent_z
+			var/datum/zLevel/move_to_z = null
+			if(ZL.transition_crosswrap_z && ZL.transition_crosswrap_z.len>=4) // transition crosswrap support to be added to vLevels later
+				locked_to_current_v=TRUE //prevent shuffling z-level later in the code.
 				randomize_drift_position=FALSE
 				if(A.y>world.maxy - TRANSITIONEDGE) // NORTH
 					move_to_z=ZL.transition_crosswrap_z[1]
@@ -285,54 +285,57 @@
 					move_to_z=ZL.transition_crosswrap_z[3]
 				else if(A.x<=TRANSITIONEDGE) // WEST
 					move_to_z=ZL.transition_crosswrap_z[4]
-
+				move_to_v = move_to_z.virtual_z_levels[1]
 
 			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
 			for(var/mob/living/L in contents_brought)
-				if(L.locked_to_z != 0)
-					if(src.z == L.locked_to_z)
-						locked_to_current_z = TRUE
+				if(L.locked_to_v)
+					if(src.v == L.locked_to_v)
+						locked_to_current_v = TRUE
 					else
 						to_chat(L, "<span class='warning'>You find your way back.</span>")
-						move_to_z = L.locked_to_z
-
+						move_to_v = L.locked_to_v
 			var/safety = 1
 
-			if(!locked_to_current_z)
-				while(move_to_z == src.z)
-					var/move_to_z_str = pickweight(accessable_z_levels)
-					move_to_z = text2num(move_to_z_str)
+			if(!locked_to_current_v)
+				while(move_to_v == src.v)
+					var/picked = pickweight(accessable_v_levels)
+					var/datum/virtual_z/vz_to_use = map.vLevels[text2num(picked)]
+					if(istype(vz_to_use))
+						move_to_v = vz_to_use
 					safety++
 					if(safety > 10)
 						break
 
-			if(!move_to_z)
+
+			if(!move_to_v)
 				return
 
-			INVOKE_EVENT(A, /event/z_transition, "user" = A, "from_z" = A.z, "to_z" = move_to_z)
+			var/datum/virtual_z/old_v = src.v
+			INVOKE_EVENT(A, /event/v_transition, "user" = A, "from_v" = old_v, "to_v" = move_to_v)
 			for(var/atom/movable/AA in contents_brought)
-				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
-			A.z = move_to_z
+				INVOKE_EVENT(AA, /event/v_transition, "user" = AA, "from_v" = old_v, "to_v" = move_to_v)
+			A.z = move_to_v.z()
 
-			if(src.x <= TRANSITIONEDGE)
-				A.x = world.maxx - TRANSITIONEDGE - 2
+			if(src.vx() <= TRANSITIONEDGE)
+				A.x = move_to_v.x_max - TRANSITIONEDGE - 2
 				if(randomize_drift_position)
-					A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
+					A.y = rand(TRANSITIONEDGE + 2, move_to_v.y_max - TRANSITIONEDGE - 2)
 
-			else if (A.x >= (world.maxx - TRANSITIONEDGE - 1))
+			else if (A.vx() >= (move_to_v.x_max - TRANSITIONEDGE - 1))
 				A.x = TRANSITIONEDGE + 1
 				if(randomize_drift_position)
-					A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
+					A.y = rand(TRANSITIONEDGE + 2, move_to_v.y_max - TRANSITIONEDGE - 2)
 
-			else if (src.y <= TRANSITIONEDGE)
-				A.y = world.maxy - TRANSITIONEDGE -2
+			else if (src.vy() <= TRANSITIONEDGE)
+				A.y = move_to_v.y_max - TRANSITIONEDGE -2
 				if(randomize_drift_position)
-					A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
+					A.x = rand(TRANSITIONEDGE + 2, move_to_v.x_max - TRANSITIONEDGE - 2)
 
-			else if (A.y >= (world.maxy - TRANSITIONEDGE - 1))
+			else if (A.vy() >= (move_to_v.y_max - TRANSITIONEDGE - 1))
 				A.y = TRANSITIONEDGE + 1
 				if(randomize_drift_position)
-					A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
+					A.x = rand(TRANSITIONEDGE + 2, move_to_v.x_max - TRANSITIONEDGE - 2)
 
 			spawn (0)
 				if(was_pulling && MOB) //Carry the object they were pulling over when they transition
@@ -345,9 +348,9 @@
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
 
-			INVOKE_EVENT(A, /event/post_z_transition, "user" = A, "from_z" = A.z, "to_z" = move_to_z)
+			INVOKE_EVENT(A, /event/post_z_transition, "user" = A, "from_v" = old_v, "to_v" = move_to_v)
 			for(var/atom/movable/AA in contents_brought)
-				INVOKE_EVENT(AA, /event/post_z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
+				INVOKE_EVENT(AA, /event/post_z_transition, "user" = AA, "from_v" = old_v, "to_v" = move_to_v)
 
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.

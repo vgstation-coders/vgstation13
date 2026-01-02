@@ -296,7 +296,8 @@ var/list/telesci_warnings = list(
 	var/turf/target = locate(trueX, trueY, z_co)
 	var/area/A=target.loc
 	if(A && A.jammed)
-		if(!telepad.amplifier || A.jammed==SUPER_JAMMED)
+		var/datum/virtual_z/vz = A.v
+		if(!telepad.amplifier || A.jammed==SUPER_JAMMED || vz.teleJammed==VZ_TELEPORTATION_FORBIDDEN)
 			src.visible_message("<span class='warning'>[bicon(src)] \The [src] turns on and the lights dim. You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?", "<span class='warning'>You hear something buzz.</span></span>")
 			return
 

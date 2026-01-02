@@ -59,3 +59,7 @@
 #define STORY_RECENT_THRESHOLD 70 // Threshold in years - stories younger than this spawn hostile mobs, older spawn corpses
 #define STORY_MISSING_CHANCE 25 // Chance that a story landmark spawns nothing (body is missing)
 #define STORY_DISEASE_CHANCE 10 // Chance that a spawned character is infected with a random disease
+
+#define VZ_TELEPORTATION_ALLOWED		1		// Teleportation is allowed
+#define VZ_TELEPORTATION_EXPENSIVE		(1<<1)  // Teleportation is allowed using real Bluespace Crystals
+#define VZ_TELEPORTATION_FORBIDDEN		(1<<2)  // Teleportation is forbidden

@@ -9,6 +9,9 @@
 	immune_system = new (src)
 	oxy_damage_modifier *= (maxHealth / 100) //Scale oxy damage based on the max health of the mob.
 
+	if(locked_to_current_v)
+		locked_to_v = get_virtual_z()
+
 /mob/living/create_reagents(const/max_vol)
 	..(max_vol)
 	addicted_chems = new /datum/reagents(max_vol)

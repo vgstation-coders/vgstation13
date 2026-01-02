@@ -997,10 +997,9 @@ its easier to just keep the beam vertical.
 	if(use_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
 		_preloader.load(src)
 
-	// Lazy list inits to save time in DM's inherent init proc
-	particle_systems = list()
-
 	. = ..()
+
+	particle_systems = list()
 
 	if(ticker && ticker.current_state >= GAME_STATE_PLAYING && canSmoothWith())
 		relativewall()
@@ -1166,15 +1165,21 @@ its easier to just keep the beam vertical.
 
 // Returns the virtual x coordinate of this atom
 /atom/proc/vx()
+	if(z <= 6)
+		return x
 	var/datum/virtual_z/V = get_virtual_z()
 	return V.vx(src)
 
 // Returns the virtual y coordinate of this atom
 /atom/proc/vy()
+	if(z <= 6)
+		return y
 	var/datum/virtual_z/V = get_virtual_z()
 	return V.vy(src)
 
 // Returns the virtual z coordinate of this atom
 /atom/proc/vz()
+	if(z <= 6)
+		return z
 	var/datum/virtual_z/V = get_virtual_z()
 	return V.vz(src)

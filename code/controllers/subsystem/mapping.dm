@@ -142,11 +142,12 @@ var/skip_turf_init = FALSE
 	return ..("[stage_name] [progress]% | TpT:[turfs_per_tick]")
 
 /datum/subsystem/mapping/Initialize(timeofday)
+	var/watch = start_watch()
+
 	if (config.enable_roundstart_away_missions)
 		log_startup_progress("Attempting to generate an away mission...")
 		createRandomZlevel()
 
-	var/watch
 	if (!config.skip_fixedvault_generation)
 		watch = start_watch()
 		log_startup_progress("Placing fixed space structures...")
@@ -177,6 +178,11 @@ var/skip_turf_init = FALSE
 		z.post_mapload()
 		log_debug("Finished with zLevel [z.z] in [stop_watch(watch_prim)]s.", FALSE)
 	log_debug("Finished calling post on zLevels in [stop_watch(watch)]s.", FALSE)
+
+	watch = start_watch()
+	for(var/datum/virtual_z/vz in map.vLevels)
+		vz.initialize_turfs()
+	log_startup_progress("Initialized virtual z-levels in [stop_watch(watch)]s.")
 
 	watch = start_watch()
 	map.map_specific_init()
@@ -337,6 +343,7 @@ var/skip_turf_init = FALSE
 					if(TOD_NIGHTTIME) current_virtual_z.next_firetime = world.time + 36 MINUTES
 
 				daynight_v_lvls |= current_virtual_z
+				current_virtual_z.update_settings()
 				SSDayNight.flags = 0
 				SSDayNight.update_lighting(current_virtual_z, immediate = TRUE)
 
@@ -569,6 +576,7 @@ var/skip_turf_init = FALSE
 	step_start = TICK_USAGE_REAL
 	current_virtual_z = map.addVLevel(size_to_use, null, TRUE) // skip_turf_setup = TRUE for planet generation
 	message_admins("DEBUG spawn_planet: addVLevel took [(TICK_USAGE_REAL - step_start)]ms")
+	current_virtual_z.teleJammed = VZ_TELEPORTATION_EXPENSIVE
 
 	planets += current_planet
 	current_virtual_z.planet = current_planet

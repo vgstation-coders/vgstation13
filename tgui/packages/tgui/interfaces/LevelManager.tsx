@@ -38,7 +38,17 @@ type VLevel = {
   planetName?: string;
   shuttleRef?: string;
   shuttleName?: string;
+  // Settings
+  movementJammed: boolean;
+  gpsAllowed: boolean;
+  teleJammed: number;
+  transitionLoops: boolean;
 };
+
+// Teleportation constants (must match DM defines)
+const VZ_TELEPORTATION_ALLOWED = 1;
+const VZ_TELEPORTATION_EXPENSIVE = 2;
+const VZ_TELEPORTATION_FORBIDDEN = 4;
 
 export const LevelManager = () => {
   const { act, data } = useBackend<Data>();
@@ -123,9 +133,36 @@ const ZLevelEntry = (props: { zLevel: ZLevel }) => {
   );
 };
 
+const getTeleportLabel = (teleJammed: number): string => {
+  switch (teleJammed) {
+    case VZ_TELEPORTATION_ALLOWED:
+      return 'Allowed';
+    case VZ_TELEPORTATION_EXPENSIVE:
+      return 'Expensive';
+    case VZ_TELEPORTATION_FORBIDDEN:
+      return 'Forbidden';
+    default:
+      return 'Unknown';
+  }
+};
+
+const getTeleportColor = (teleJammed: number): string => {
+  switch (teleJammed) {
+    case VZ_TELEPORTATION_ALLOWED:
+      return 'good';
+    case VZ_TELEPORTATION_EXPENSIVE:
+      return 'average';
+    case VZ_TELEPORTATION_FORBIDDEN:
+      return 'bad';
+    default:
+      return 'label';
+  }
+};
+
 const VLevelEntry = (props: { vLevel: VLevel }) => {
   const { act } = useBackend<Data>();
   const { vLevel } = props;
+  const [showSettings, setShowSettings] = useState(false);
 
   const isBaseLevel = vLevel.id <= 6;
 
@@ -176,6 +213,12 @@ const VLevelEntry = (props: { vLevel: VLevel }) => {
             />
           )}
           <Button
+            icon="cog"
+            tooltip="Settings"
+            selected={showSettings}
+            onClick={() => setShowSettings(!showSettings)}
+          />
+          <Button
             icon="search"
             tooltip="View Variables"
             onClick={() => act('vv_vlevel', { ref: vLevel.ref })}
@@ -208,6 +251,51 @@ const VLevelEntry = (props: { vLevel: VLevel }) => {
           </Box>
         </LabeledList.Item>
       </LabeledList>
+      {showSettings && (
+        <Box mt={2}>
+          <Section title="Settings" level={2}>
+            <LabeledList>
+              <LabeledList.Item label="Inter-vZ Movement">
+                <Button
+                  icon={vLevel.movementJammed ? 'lock' : 'unlock'}
+                  color={vLevel.movementJammed ? 'bad' : 'good'}
+                  content={vLevel.movementJammed ? 'Jammed' : 'Allowed'}
+                  onClick={() =>
+                    act('toggle_movement_jam', { ref: vLevel.ref })
+                  }
+                />
+              </LabeledList.Item>
+              <LabeledList.Item label="GPS">
+                <Button
+                  icon={vLevel.gpsAllowed ? 'satellite' : 'satellite-dish'}
+                  color={vLevel.gpsAllowed ? 'good' : 'bad'}
+                  content={vLevel.gpsAllowed ? 'Allowed' : 'Jammed'}
+                  onClick={() => act('toggle_gps', { ref: vLevel.ref })}
+                />
+              </LabeledList.Item>
+              <LabeledList.Item label="Teleportation">
+                <Button
+                  icon="bolt"
+                  color={getTeleportColor(vLevel.teleJammed)}
+                  content={getTeleportLabel(vLevel.teleJammed)}
+                  tooltip="Click to cycle: Allowed → Expensive → Forbidden"
+                  onClick={() => act('cycle_teleport', { ref: vLevel.ref })}
+                />
+              </LabeledList.Item>
+              <LabeledList.Item label="Transition Loops">
+                <Button
+                  icon={vLevel.transitionLoops ? 'sync' : 'random'}
+                  color={vLevel.transitionLoops ? 'average' : 'default'}
+                  content={vLevel.transitionLoops ? 'Enabled' : 'Disabled'}
+                  onClick={() =>
+                    act('toggle_transition_loops', { ref: vLevel.ref })
+                  }
+                />
+              </LabeledList.Item>
+            </LabeledList>
+          </Section>
+        </Box>
+      )}
     </Section>
   );
 };

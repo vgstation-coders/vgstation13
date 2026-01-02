@@ -87,7 +87,7 @@ var/list/all_GPS_list = list()
 		return "ERROR"
 	else if(!device_turf || !device_area)
 		return "UNKNOWN"
-	else if(vz)
+	else if(!vz.gps_allowed)
 		return "SIGNAL JAMMED"
 	else if(device_turf.z > WORLD_X_OFFSET.len)
 		return "[format_text(device_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
@@ -110,8 +110,8 @@ var/list/all_GPS_list = list()
 	data["autorefresh"] = autorefreshing
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
-	var/turf/device_turf = get_turf(src)
-	if(!emped && transmitting && !(device_turf && device_turf.planet))
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(!emped && transmitting && vz.gps_allowed)
 		var/list/ui_list
 		if(view_all)
 			ui_list = all_GPS_list
@@ -171,8 +171,8 @@ var/list/all_GPS_list = list()
 	data["autorefresh"] = autorefreshing
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
-	var/turf/device_turf = get_turf(src)
-	if(!(device_turf && device_turf.planet))
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(!emped && transmitting && vz.gps_allowed)
 		var/list/ui_list
 		if(view_all)
 			ui_list = all_GPS_list

@@ -244,8 +244,8 @@ var/list/special_fruits = list()
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_fruit_teleport(atom/hit_atom, mob/M, var/potency)	//Does this need logging?
-	var/datum/zLevel/L = get_z_level(src)
-	if(!L || L.teleJammed)
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(!vz || vz.teleJammed == VZ_TELEPORTATION_FORBIDDEN)
 		return 0
 	var/picked = pick_rand_tele_turf(hit_atom, potency/15, potency/10) // Does nothing at base potency since inner_radius == 0
 	if(!isturf(picked))

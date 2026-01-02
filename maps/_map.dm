@@ -138,7 +138,7 @@
 /datum/map/proc/loadZLevels(list/levelPaths)
 	for(var/i = 1 to levelPaths.len)
 		var/path = levelPaths[i]
-		addZLevel(new path, i)
+		addZLevel(new path, i, create_virtual_z = TRUE)
 
 /datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0, make_base_turf = FALSE, fast_base_turf = FALSE, create_virtual_z = FALSE)
 	if(!istype(level))
@@ -149,19 +149,23 @@
 	if(z_to_use > zLevels.len)
 		zLevels.len = z_to_use
 	zLevels[z_to_use] = level
-	if(!level.movementJammed)
-		accessable_z_levels += list("[z_to_use]" = level.movementChance)
 	level.z = z_to_use
 	if(!istype(level.base_turf,/turf/space) && make_base_turf)
 		level.reset_base_turf(/turf/space,fast_base_turf)
 
-	if(create_virtual_z || zLevels.len < 7)
+	if(create_virtual_z)
 		linkVLevel(level)
 
 /datum/map/proc/linkVLevel(datum/zLevel/level)
-	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL)
+	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL, 1, 1)
 	new_vz.id = level.z
 	new_vz.name = level.name
+	new_vz.gps_allowed = TRUE
+	new_vz.teleJammed = level.teleJammed ? VZ_TELEPORTATION_FORBIDDEN : VZ_TELEPORTATION_ALLOWED
+	new_vz.movementJammed = level.movementJammed
+	new_vz.movementChance = level.movementChance
+	new_vz.transitionLoops = level.transitionLoops
+	new_vz.update_settings()
 	return new_vz
 
 /datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null, var/skip_turf_setup = FALSE, var/fill_turf_type = null)
@@ -226,7 +230,7 @@
 	new_vz.name = "Map Element: [ME.name]"
 	return new_vz
 
-var/global/list/accessable_z_levels = list()
+var/global/list/accessable_v_levels = list()
 
 /datum/map/proc/map_specific_init()
 

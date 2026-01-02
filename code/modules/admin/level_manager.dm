@@ -60,6 +60,12 @@
 				v_data["shuttleRef"] = "\ref[V.linked_shuttle]"
 				v_data["shuttleName"] = V.linked_shuttle.name
 
+			// Settings data
+			v_data["movementJammed"] = V.movementJammed
+			v_data["gpsAllowed"] = V.gps_allowed
+			v_data["teleJammed"] = V.teleJammed
+			v_data["transitionLoops"] = V.transitionLoops
+
 			z_data["vLevels"] += list(v_data)
 
 		data["zLevels"] += list(z_data)
@@ -122,6 +128,56 @@
 			if(!V || !istype(V) || !V.linked_shuttle)
 				return FALSE
 			usr.client.debug_variables(V.linked_shuttle)
+			return TRUE
+
+		if("toggle_movement_jam")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V))
+				return FALSE
+			V.movementJammed = !V.movementJammed
+			V.update_settings()
+			log_admin("[key_name(usr)] [V.movementJammed ? "enabled" : "disabled"] movement jamming for vZ-[V.id] ([V.name]).")
+			return TRUE
+
+		if("toggle_gps")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V))
+				return FALSE
+			V.gps_allowed = !V.gps_allowed
+			log_admin("[key_name(usr)] [V.gps_allowed ? "enabled" : "disabled"] GPS for vZ-[V.id] ([V.name]).")
+			return TRUE
+
+		if("cycle_teleport")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V))
+				return FALSE
+			// Cycle through: ALLOWED -> EXPENSIVE -> FORBIDDEN -> ALLOWED
+			switch(V.teleJammed)
+				if(VZ_TELEPORTATION_ALLOWED)
+					V.teleJammed = VZ_TELEPORTATION_EXPENSIVE
+				if(VZ_TELEPORTATION_EXPENSIVE)
+					V.teleJammed = VZ_TELEPORTATION_FORBIDDEN
+				if(VZ_TELEPORTATION_FORBIDDEN)
+					V.teleJammed = VZ_TELEPORTATION_ALLOWED
+				else
+					V.teleJammed = VZ_TELEPORTATION_FORBIDDEN
+			var/tele_text
+			switch(V.teleJammed)
+				if(VZ_TELEPORTATION_ALLOWED)
+					tele_text = "allowed"
+				if(VZ_TELEPORTATION_EXPENSIVE)
+					tele_text = "expensive (requires crystals)"
+				if(VZ_TELEPORTATION_FORBIDDEN)
+					tele_text = "forbidden"
+			log_admin("[key_name(usr)] set teleportation to [tele_text] for vZ-[V.id] ([V.name]).")
+			return TRUE
+
+		if("toggle_transition_loops")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V))
+				return FALSE
+			V.transitionLoops = !V.transitionLoops
+			log_admin("[key_name(usr)] [V.transitionLoops ? "enabled" : "disabled"] transition loops for vZ-[V.id] ([V.name]).")
 			return TRUE
 
 		if("create_zlevel")
@@ -192,30 +248,84 @@
 					if(!element_choice)
 						return FALSE
 
-					// Select buffer size
-					var/buffer_size = input(usr, "Enter buffer size (tiles around map element, 0-50):\n(0 = no buffer, vLevel matches map element size)", "Buffer Size", 10) as null|num
-					if(isnull(buffer_size))
-						buffer_size = 0
-					else if(buffer_size < 0 || buffer_size > 50)
-						return FALSE
-
-					// Select base turf type
-					var/turf_type = null
-					if(alert(usr, "Set a base turf type for the vLevel?", "Base Turf", "Yes", "No") == "Yes")
-						turf_type = input(usr, "Select base turf type:", "Turf Type") as null|anything in typesof(/turf)
-						if(!turf_type)
-							return FALSE
-
 					var/element_path = map_element_names[element_choice]
 					var/datum/map_element/ME = new element_path()
 					ME.assign_dimensions()
 
-					var/datum/virtual_z/new_vz = map.addMapElementVLevel(ME, turf_type, buffer_size)
+					var/buffer_size = 0
+					var/turf_type = /turf/space
+					var/teleport_choice = VZ_TELEPORTATION_FORBIDDEN
+					var/gps_allowed = FALSE
+					var/movement_jammed = TRUE
+					var/transition_loops = FALSE
+					var/list/adv_settings_opt = list("Yes", "No")
+					var/adv_settings = input(usr, "Configure advanced settings (buffer size, base turf type, teleportation blocking, etc)?", "Advanced Settings", "No") as null|anything in adv_settings_opt
+					if(adv_settings == "Yes")
+						// Buffer size
+						buffer_size = input(usr, "Enter buffer size (tiles around map element, 0-50):\n(0 = no buffer, vLevel matches map element size)", "Buffer Size", 10) as null|num
+						if(isnull(buffer_size) || buffer_size < 0 || buffer_size > 50)
+							buffer_size = 0
+
+						// Base turf type
+						turf_type = null
+						if(alert(usr, "Set a base turf type for the vLevel?", "Base Turf", "Yes", "No") == "Yes")
+							turf_type = input(usr, "Select base turf type:", "Turf Type") as null|anything in typesof(/turf)
+							if(!turf_type)
+								turf_type = /turf/space
+
+						// Teleportation blocking
+						var/teleport_options = list(
+							"Allowed" = VZ_TELEPORTATION_ALLOWED,
+							"Requires Natural Bluespace Crystals" = VZ_TELEPORTATION_EXPENSIVE,
+							"Forbidden" = VZ_TELEPORTATION_FORBIDDEN
+						)
+						teleport_choice = input(usr, "Select teleportation setting for the vLevel:", "Teleportation Setting") as null|anything in teleport_options
+						if(!teleport_choice)
+							teleport_choice = VZ_TELEPORTATION_FORBIDDEN
+
+						// GPS allowance
+						if(alert(usr, "Allow regular GPS functions in this vLevel?", "GPS Functionality", "Yes", "No") == "Yes")
+							gps_allowed = TRUE
+
+						// Movement jamming
+						if(alert(usr, "Prevent access to this vLevel by drifting?", "Movement Jamming", "Yes", "No") == "No")
+							movement_jammed = FALSE
+
+						// Transition loops
+						if(alert(usr, "Should hitting this vLevel's border send you back to this vLevel?", "Transition Loops", "Yes", "No") == "Yes")
+							transition_loops = TRUE
+
+					// Re-fetch dimensions fresh to avoid any caching issues
+					var/list/fresh_dims = ME.get_dimensions()
+					var/map_width = fresh_dims[1]
+					var/map_height = fresh_dims[2]
+
+					// Validate dimensions
+					if(!map_width || !map_height || map_width < 1 || map_height < 1)
+						to_chat(usr, "<span class='warning'>Could not determine map element dimensions! (Got [map_width]x[map_height])</span>")
+						return FALSE
+
+					// Create vLevel with explicit size calculation
+					var/vlevel_width = map_width + (buffer_size * 2)
+					var/vlevel_height = map_height + (buffer_size * 2)
+					var/datum/virtual_z/new_vz = map.addVLevel(vlevel_width, vlevel_height, FALSE, turf_type)
 					if(new_vz)
+						new_vz.name = "Map Element: [ME.name]"
 						// Load the actual map element content into the vLevel
-						ME.load(new_vz.x_min + buffer_size - 1, new_vz.y_min + buffer_size - 1, new_vz.parent_z.z, 0, TRUE)
-						log_admin("[key_name(usr)] loaded map element '[element_choice]' as vLevel (vZ: [new_vz.id], Buffer: [buffer_size]).")
-						message_admins("<span class='notice'>[key_name_admin(usr)] loaded map element '[element_choice]' as vLevel (vZ: [new_vz.id]).</span>", 1)
+						// The maploader adds 1 to these offsets, so we subtract 1 to compensate
+						var/load_x = new_vz.x_min + buffer_size - 1
+						var/load_y = new_vz.y_min + buffer_size - 1
+						ME.load(load_x, load_y, new_vz.parent_z.z, 0, TRUE)
+
+						if(adv_settings == "Yes")
+							new_vz.gps_allowed = gps_allowed
+							new_vz.teleJammed = teleport_choice
+							new_vz.movementJammed = movement_jammed
+							new_vz.transitionLoops = transition_loops
+							new_vz.update_settings()
+
+						log_admin("[key_name(usr)] loaded map element '[element_choice]' as vLevel (vZ: [new_vz.id], MapSize: [map_width]x[map_height], vLevelSize: [vlevel_width]x[vlevel_height], Buffer: [buffer_size], LoadPos: [load_x],[load_y]).")
+						message_admins("<span class='notice'>[key_name_admin(usr)] loaded map element '[element_choice]' as vLevel (vZ: [new_vz.id], Size: [map_width]x[map_height]).</span>", 1)
 					return TRUE
 
 				if("Create Transit Level")
@@ -233,6 +343,11 @@
 						return FALSE
 
 					var/datum/shuttle/chosen_shuttle = shuttle_names[shuttle_choice]
+
+					// Check if shuttle has a linked port
+					if(!chosen_shuttle.linked_port)
+						to_chat(usr, "<span class='warning'>Shuttle has no linked docking port!</span>")
+						return FALSE
 
 					// Get shuttle dimensions and direction
 					var/list/shuttle_size = chosen_shuttle.get_size()
@@ -253,8 +368,32 @@
 
 					var/datum/virtual_z/new_vz = map.addTransitVLevel(transit_width, transit_height, chosen_shuttle, direction)
 					if(new_vz)
-						log_admin("[key_name(usr)] created transit vLevel for shuttle '[shuttle_choice]' (vZ: [new_vz.id], Size: [transit_width]x[transit_height], Dir: [dir2text(direction)]).")
-						message_admins("<span class='notice'>[key_name_admin(usr)] created transit vLevel for shuttle '[shuttle_choice]' (vZ: [new_vz.id]).</span>", 1)
+						// Create the transit docking port
+						// Get the shuttle docking port's offset from the shuttle's lower left corner
+						var/list/offsets = chosen_shuttle.get_docking_port_offset()
+						if(offsets && offsets.len >= 2)
+							var/port_x = offsets[1]
+							var/port_y = offsets[2]
+
+							// Calculate destination turf for the docking port
+							var/dest_x = new_vz.x_min + padding + port_x
+							var/dest_y = new_vz.y_min + padding + port_y
+							var/turf/destination_turf = get_step(locate(dest_x, dest_y, new_vz.parent_z.z), chosen_shuttle.linked_port.dir)
+
+							// Create the transit docking port
+							var/obj/docking_port/destination/transit/transit_dock = new(destination_turf)
+							transit_dock.dir = turn(chosen_shuttle.linked_port.dir, 180)
+							transit_dock.areaname = "[chosen_shuttle.name] transit"
+							transit_dock.generate_borders = TRUE
+
+							// Link the transit port to the shuttle
+							chosen_shuttle.transit_port = transit_dock
+
+							log_admin("[key_name(usr)] created transit vLevel for shuttle '[shuttle_choice]' (vZ: [new_vz.id], Size: [transit_width]x[transit_height], Dir: [dir2text(direction)]).")
+							message_admins("<span class='notice'>[key_name_admin(usr)] created transit vLevel for shuttle '[shuttle_choice]' (vZ: [new_vz.id]).</span>", 1)
+						else
+							to_chat(usr, "<span class='warning'>Could not determine shuttle docking port offset!</span>")
+							return FALSE
 					return TRUE
 
 				if("Manual Creation")
