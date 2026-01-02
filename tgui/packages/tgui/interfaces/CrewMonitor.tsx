@@ -1,4 +1,4 @@
-// Copyright (c) 2022 /vg/station coders
+// Copyright (c) 2025 /vg/station coders
 // SPDX-License-Identifier: MIT
 
 import { Box, Button, Divider, Dropdown, Flex, Section, Table } from 'tgui-core/components';
@@ -168,6 +168,7 @@ export const CrewMonitor = () => {
                   <Table.Cell bold>
                     <Box
                       inline
+                      color={roleColor}
                       style={{
                         borderLeft: `3px solid ${roleColor}`,
                         paddingLeft: '5px',
