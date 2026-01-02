@@ -31321,7 +31321,6 @@
 /area/bridge)
 "bhf" = (
 /obj/machinery/computer/security/engineering,
-/obj/machinery/computer/gas_extraction,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -115369,12 +115368,6 @@
 	oxygen = 0
 	},
 /area/engineering/atmos)
-"mTI" = (
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/space,
-/area)
 "mUP" = (
 /turf/simulated/wall,
 /area/medical/patient_room2)
@@ -171867,7 +171860,7 @@ aaa
 aaa
 aaa
 aaa
-mTI
+aaa
 aaa
 aaa
 aaa
