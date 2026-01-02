@@ -122,11 +122,13 @@
 		var/mob/living/carbon/human/H = src
 		var/datum/organ/internal/eyes = H.internal_organs_by_name["eyes"]
 
-		if(eyes && (eyes.is_bruised()))
-			var/a = eyes.damage - eyes.min_bruised_damage
-			var/b = eyes.min_broken_damage - eyes.min_bruised_damage
-			//(+0) to (+10) depending on eye damage
-			total += 10 * (a / b)
+		if(eyes)
+			total -= eyes.enhanced_vision
+			if (eyes.is_bruised())
+				var/a = eyes.damage - eyes.min_bruised_damage
+				var/b = eyes.min_broken_damage - eyes.min_bruised_damage
+				//(+0) to (+10) depending on eye damage
+				total += 10 * (a / b)
 
 		if(H.glasses && istype(H.glasses, /obj/item/clothing))
 			//prescription glasses enhance eyesight (-3), welding goggles worsen it (+5)
