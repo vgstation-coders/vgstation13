@@ -246,6 +246,10 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 			planemaster.filters -= filter
 
 
+
+#define IMPAIRED_VISION_RADIUS_OUT_OF_VIEW 	512	//we go this high when impairment is at 0 to prevent it showing up for players with farsight, binoculars, etc
+#define IMPAIRED_VISION_RADIUS_START 		192 //the minimal radius blurriness starts at, when impairment is at least 1
+
 var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 
 /mob
@@ -255,7 +259,7 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	var/_a = 9 - _severity
 	var/_nearsightedness_offset = 0
 	if (_a >= 0)
-		_nearsightedness_offset = min(192, 2 ** (_a))
+		_nearsightedness_offset = min(IMPAIRED_VISION_RADIUS_START, 2 ** (_a))
 
 
 	if (_animate)
@@ -300,17 +304,20 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	spawn(filter_update_delay)
 		for (var/obj/planemaster in perception_filters.perception_planemasters)
 			var/F1 = planemaster.filters["nearsightedness_angular"]
-			animate(F1, size = 0.5, offset = 256, time = 20)
+			animate(F1, size = 0.5, offset = IMPAIRED_VISION_RADIUS_OUT_OF_VIEW, time = 20)
 	filter_update_delay++
 	spawn(filter_update_delay)
 		for (var/obj/planemaster in perception_filters.perception_planemasters)
 			var/F2 = planemaster.filters["nearsightedness_radial"]
-			animate(F2, size = 0.01, offset = 256, time = 20)
+			animate(F2, size = 0.01, offset = IMPAIRED_VISION_RADIUS_OUT_OF_VIEW, time = 20)
 
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
 	var/matrix/M = matrix()
 	M.Scale(40, 40)
 	animate(screen, transform = M, time = 20)
+
+#undef IMPAIRED_VISION_RADIUS_OUT_OF_VIEW
+#undef IMPAIRED_VISION_RADIUS_START
 
 ///mob
 //	var/test_blur_displace = 4
