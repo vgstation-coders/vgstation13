@@ -220,8 +220,8 @@
 	return ..()
 
 /obj/machinery/atmospherics/trinary/tvalve/digital/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/atmospherics/trinary/tvalve/digital/attack_hand(mob/user as mob)
 	if(!src.allowed(user))
