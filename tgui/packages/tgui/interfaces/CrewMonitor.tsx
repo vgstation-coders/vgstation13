@@ -14,6 +14,8 @@ type Data = {
   autoUpdate: boolean;
   detectedCrew: Crewmember[];
   detected: boolean;
+  currentTheme: string;
+  availableThemes: string[];
 };
 
 type Crewmember = {

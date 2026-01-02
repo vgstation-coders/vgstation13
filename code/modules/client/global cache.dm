@@ -397,27 +397,6 @@ var/list/asset_datums = list()
 		"spesspets_arrow_left.png"	=	'icons/pda_icons/spesspets_icons/spesspets_arrow_left.png'
 	)
 
-/datum/asset/simple/cmc_css_icons
-	assets = list(
-		//"cmc.css" = 'html/browser/cmc.css',
-		"cmc_background.png" = 'icons/cmc/css_icons/background.png',
-		"cmc_0.png" = 'icons/cmc/css_icons/0.png',
-		"cmc_1.png" = 'icons/cmc/css_icons/1.png',
-		"cmc_2.png" = 'icons/cmc/css_icons/2.png',
-		"cmc_3.png" = 'icons/cmc/css_icons/3.png',
-		"cmc_4.png" = 'icons/cmc/css_icons/4.png',
-		"cmc_5.png" = 'icons/cmc/css_icons/5.png',
-		"cmc_6.png" = 'icons/cmc/css_icons/6.png',
-		"cmc_7.png" = 'icons/cmc/css_icons/7.png'
-	)
-/*
-/datum/asset/simple/nanoui_maps/New()
-	for(var/z in 1 to world.maxz)
-		if(z == map.zCentcomm)
-			continue
-		assets["[map.nameShort][z].png"] = file("[getMinimapFile(z)].png")
-*/
-
 //Registers HTML I assets.
 /datum/asset/HTML_interface/register()
 	for(var/path in typesof(/datum/html_interface))

@@ -451,7 +451,13 @@ TGUI PROCS
 	var/uid = "\ref[user]"
 	var/list/data = list()
 
-	data["currentZLevel"] = holomap_z[uid]
+	// Ensure we have a valid z-level, defaulting to 1 if not set
+	var/current_z = holomap_z[uid]
+	if(!current_z)
+		current_z = 1
+		holomap_z[uid] = 1
+
+	data["currentZLevel"] = current_z
 	data["zLevels"] = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc)
 	data["holomapEnabled"] = holomap[uid]
 	data["holomapAvailable"] = handle_sanity(user)
@@ -460,7 +466,7 @@ TGUI PROCS
 	// Build crew list for current z-level
 	var/list/crew_data = list()
 	var/count = 0
-	for(var/entry in entries[holomap_z[uid]])
+	for(var/entry in entries[current_z])
 		count++
 		var/list/crew_entry = list()
 
