@@ -148,4 +148,4 @@
 
 	if(total <= 0)
 		return 0
-	return clamp(total,1,9)//impairement is capped at 9 so that it still covers the entire screen of players using binoculars, rifles with sights, or have the farsight gene, etc
+	return clamp(total,1,9.333)//impairement is capped at 9.333 so that it still covers the entire screen of players using binoculars, rifles with sights, or have the farsight gene, etc
