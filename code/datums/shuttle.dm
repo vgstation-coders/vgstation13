@@ -415,8 +415,6 @@
 					spawn()
 						P.shoot_exhaust()
 			for(var/atom/A in linked_area.contents)
-				animate(A)
-				A.pixel_y = initial(A.pixel_y)
 				if(istype(A,/mob/living))
 					var/mob/living/M = A
 					M << sound("sound/machines/hyperspace_progress.ogg", repeat = 0, wait = 1, channel = CHANNEL_AMBIENCE, volume = 75)
@@ -466,44 +464,18 @@
 		return FALSE
 
 /datum/shuttle/proc/animate_liftoff()
-	var/variation = rand(1,2)
 	for(var/atom/A in linked_area.contents)
-		var/skip = FALSE
 		if(istype(A,/obj/structure/shuttle/engine/heater))
 			var/obj/structure/shuttle/engine/heater/H = A
 			H.activate()
 		if(istype(A,/mob/living))
 			var/mob/living/M = A
 			M << sound("sound/machines/hyperspace_begin.ogg", repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE, volume = 50)
-		if(istype(A,/turf))
-			var/turf/T = A
-			for(var/obj/O in T.contents)
-				if(istype(O,/obj/structure/shuttle/diag_wall))
-					skip = TRUE
-					break
-		if(skip)
-			continue
-		var/base_y = initial(A.pixel_y) + 5
-		animate(A, pixel_y = base_y, time = 5, easing = SINE_EASING | EASE_OUT)
-		animate(pixel_y = base_y + variation, time = 10, easing = SINE_EASING, loop = -1)
-		animate(pixel_y = base_y - variation, time = 10, easing = SINE_EASING)
 
 /datum/shuttle/proc/animate_landing()
-	for(var/atom/A in linked_area.contents)
-		var/skip = FALSE
-		if(istype(A,/mob/living))
-			var/mob/living/M = A
+	for(var/mob/living/M in linked_area.contents)
+		if(istype(M))
 			M << sound("sound/machines/hyperspace_end.ogg", repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE, volume = 50)
-		if(istype(A,/turf))
-			var/turf/T = A
-			for(var/obj/O in T.contents)
-				if(istype(O,/obj/structure/shuttle/diag_wall))
-					skip = TRUE
-					break
-		if(skip)
-			continue
-		A.pixel_y = 5
-		animate(A, pixel_y = initial(A.pixel_y), time = 10, easing = SINE_EASING|EASE_OUT)
 	spawn(15)
 		reset_visuals()
 
@@ -512,8 +484,6 @@
 		if(istype(A,/obj/structure/shuttle/engine/heater))
 			var/obj/structure/shuttle/engine/heater/H = A
 			H.deactivate()
-		animate(A)
-		A.pixel_y = initial(A.pixel_y)
 
 //This is the proc you want to use to FORCE a shuttle to move. It always moves it, unless the shuttle or its area don't exist. Transit is skipped, after_flight() is called
 /datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0, var/rotate_after = 0) //A direct proc with no bullshit
@@ -1306,7 +1276,7 @@
 	var/y_min = bounds["y_min"]
 
 	// Create matrix with relative coordinates
-	var/datum/turf_matrix[SECTOR_SIZE][SECTOR_SIZE]
+	var/turf_matrix[SECTOR_SIZE][SECTOR_SIZE]
 	for(var/turf/T in search_turfs)
 		var/rel_x = T.x - x_min + 1
 		var/rel_y = T.y - y_min + 1
