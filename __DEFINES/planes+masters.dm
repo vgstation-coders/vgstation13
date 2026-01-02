@@ -197,7 +197,12 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 /mob/proc/init_perception_filters()
 	perception_filters.perception_filters.len = 0
 
-	//Nearsightedness
+	//////////////////////////////
+	//							//
+	//		Nearsightedness		//
+	//							//
+	//////////////////////////////
+	//By combining an angular and a radial blur, we get kind of a gaussian blur that intensifies in a circle the further away you get from the focal point
 	var/nearsightedness_angular = filter(type="angular_blur", name="nearsightedness_angular", x = 0, y = 0, size = 0, offset = 256)
 	perception_filters.perception_filters += "nearsightedness_angular"
 
@@ -210,11 +215,17 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 
 	overlay_fullscreen("impaired_crit", /obj/abstract/screen/fullscreen/impaired_crit)//displayed right from the start, and scaled up so that its out of view
 
-	//Blurriness
+
+	//////////////////////////////
+	//							//
+	//		Blurriness			//
+	//							//
+	//////////////////////////////
+	//The displacement makes the blurriness "move" a bit.
 	var/bluriness_blur = filter(type="blur", name="blurriness_blur", size=0)
 	perception_filters.perception_filters += "blurriness_blur"
 
-	var/bluriness_displacement = filter(type="displace", name="blurriness_displace", x=0, y=0, size=0, icon='icons/mob/blurry_icon_large.dmi', flags=FILTER_OVERLAY)
+	var/bluriness_displacement = filter(type="displace", name="blurriness_displace", x=0, y=0, size=0, icon='icons/mob/blurry_icon_large_alt.dmi', flags=FILTER_OVERLAY)
 	perception_filters.perception_filters += "blurriness_displace"
 
 	for (var/obj/planemaster in perception_filters.perception_planemasters)
@@ -301,8 +312,10 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	M.Scale(40, 40)
 	animate(screen, transform = M, time = 20)
 
-/mob
-	var/test_blur_displace = 2
+///mob
+//	var/test_blur_displace = 4
+//	var/test_min_blur = 0.4
+//	var/test_max_blur = 1.1
 
 /mob/proc/enable_blurriness(var/_blurriness)
 	//overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
@@ -312,19 +325,15 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	spawn(filter_update_delay)
 		for (var/obj/planemaster in perception_filters.perception_planemasters)
 			var/F1 = planemaster.filters["blurriness_blur"]
-			var/_a = 1.1
-			var/_b = 0.4
-			animate(F1, size = _a, time = 10)
-			animate(size = _b, time = 10)
+			var/_blur_size = clamp(_blurriness / 10, 0.7, 1.1)
+			animate(F1, size = _blur_size, time = 10)
 	filter_update_delay++
 	spawn(filter_update_delay)//seems like it won't work here either unless we wait here
 		for (var/obj/planemaster in perception_filters.perception_planemasters)
 			var/F2 = planemaster.filters["blurriness_displace"]
-			animate(F2, size = test_blur_displace, time = 5)
-			animate(size = -test_blur_displace, time = 10)
+			animate(F2, size = 2, time = 5)//a subtle displacement of 2, barely noticeable
+			animate(size = -2, time = 10)
 			animate(size = 0, time = 5)
-
-
 
 /mob/proc/disable_blurriness()
 	//clear_fullscreen("blurry")

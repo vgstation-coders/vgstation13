@@ -128,6 +128,10 @@
 	icon = 'icons/mob/screen1_blindness.dmi'
 	icon_state = "eye"
 
+/obj/abstract/screen/fullscreen/impaired_crit
+	icon_state = "blackimageoverlay"
+	globalscreen = 1//need this screen object to keep existing
+
 /obj/abstract/screen/fullscreen/impaired_crit/New()
 	..()
 	var/matrix/M = matrix()

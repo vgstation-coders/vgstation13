@@ -592,11 +592,11 @@
 				else if (E.damage >= E.min_bruised_damage)//5
 					//new eye damage at least 5
 					eye_msg(user, 3, "<span class='warning'>Your eyes are really starting to hurt. This can't be good for you!</span>", 	"<span class='warning'>This is too sad! You start to cry.</span>")
-					user.eye_blind = 2//additional vision deterioration that goes off over 3-6 seconds
-					user.eye_blurry = 5
+					user.eye_blind = max(3, user.eye_blind)//additional vision deterioration that goes off over 3-6 seconds
+					user.eye_blurry = max(2, user.eye_blurry)
 				else
-					user.eye_blind = 2//slight vision deterioration that goes off after 1-2 seconds
-					user.eye_blurry = 1
+					user.eye_blind = max(2, user.eye_blind)//slight vision deterioration that goes off after 1-2 seconds
+					user.eye_blurry = max(1, user.eye_blurry)
 
 /obj/item/tool/weldingtool/update_icon()
 	..()

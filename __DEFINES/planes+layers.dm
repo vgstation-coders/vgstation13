@@ -225,6 +225,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define SELF_VISION_LAYER 		   -1
 	#define LIGHTING_LAYER 				0
 
+//We could add a Plane there for beams that'd let us stick some cool displacement filters on them
+
 #define ABOVE_LIGHTING_PLANE	(16)
 	#define ABOVE_LIGHTING_LAYER		0
 	#define SUPERMATTER_WALL_LAYER 		1
