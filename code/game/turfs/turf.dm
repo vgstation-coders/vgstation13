@@ -149,7 +149,6 @@
 	if(skip_turf_init)
 		return
 	..()
-	edge_overlays = list()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
