@@ -120,7 +120,7 @@
 
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
-		var/datum/organ/internal/eyes = H.internal_organs_by_name["eyes"]
+		var/datum/organ/internal/eyes/eyes = H.internal_organs_by_name["eyes"]
 
 		if(eyes)
 			total -= eyes.enhanced_vision
