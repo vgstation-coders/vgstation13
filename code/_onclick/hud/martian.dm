@@ -163,7 +163,7 @@
 	mymob.throw_icon.pointer_to_var = &mymob.throw_icon
 
 	mymob.internals = new /obj/abstract/screen
-	mymob.internals.icon = ui_style
+	mymob.internals.icon = 'icons/mob/screen1.dmi'
 	mymob.internals.icon_state = "internal0"
 	mymob.internals.name = "internal"
 	mymob.internals.screen_loc = ui_internal
