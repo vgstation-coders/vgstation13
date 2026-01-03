@@ -1,6 +1,7 @@
 // Copyright (c) 2025 /vg/station coders
 // SPDX-License-Identifier: MIT
 
+import { useState } from 'react';
 import { Box, Button, Divider, Dropdown, Flex, Section, Table } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
@@ -28,6 +29,7 @@ type Crewmember = {
   icon: string;
   see_x: number | null;
   see_y: number | null;
+  see_z: number | null;
   count: number;
 };
 
@@ -74,6 +76,30 @@ const getVitalsText = (vitals: number): { text: string; color: string } => {
   }
 };
 
+// Role priority for sorting (lower = higher priority)
+const getRolePriority = (role: string): number => {
+  switch (role) {
+    case 'cap': return 0;
+    case 'sec': return 1;
+    case 'med': return 2;
+    case 'sci': return 3;
+    case 'eng': return 4;
+    case 'car': return 5;
+    case 'silicon': return 6;
+    case 'cent': return 7;
+    default: return 8;
+  }
+};
+
+// Get total damage for health sorting
+const getTotalDamage = (crew: Crewmember): number => {
+  if (!crew.damage) return 0;
+  return crew.damage.brute + crew.damage.fire + crew.damage.toxin + crew.damage.oxygen;
+};
+
+type SortOption = 'name' | 'job' | 'health';
+type SortDirection = 'asc' | 'desc';
+
 export const CrewMonitor = () => {
   const { act, data } = useBackend<Data>();
   const {
@@ -85,6 +111,56 @@ export const CrewMonitor = () => {
     detectedCrew,
     detected,
   } = data;
+
+  // Sorting state
+  const [sortBy, setSortBy] = useState<SortOption>('name');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+
+  // Handle sort toggle
+  const handleSort = (field: SortOption) => {
+    if (sortBy === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(field);
+      setSortDirection('asc');
+    }
+  };
+
+  // Get sort icon
+  const getSortIcon = (field: SortOption) => {
+    if (sortBy !== field) return 'sort';
+    return sortDirection === 'asc' ? 'sort-up' : 'sort-down';
+  };
+
+  // Sort crew
+  const processedCrew = [...detectedCrew]
+    .sort((a, b) => {
+      let comparison = 0;
+      switch (sortBy) {
+        case 'name':
+          comparison = a.name.localeCompare(b.name);
+          break;
+        case 'job':
+          comparison = getRolePriority(a.role) - getRolePriority(b.role);
+          if (comparison === 0) {
+            comparison = a.job.localeCompare(b.job);
+          }
+          break;
+        case 'health':
+          // Sort by vitals first (dead last), then by damage
+          if (a.vitals !== b.vitals) {
+            comparison = a.vitals - b.vitals;
+          } else {
+            comparison = getTotalDamage(b) - getTotalDamage(a); // Higher damage first
+          }
+          break;
+      }
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+
+  // Build z-level options with "All" as first option
+  const zLevelOptions = ['All', ...zLevels.map((z) => String(z))];
+  const selectedZLevel = currentZLevel === 0 ? 'All' : String(currentZLevel);
 
   return (
     <Window title="Crew Monitoring Computer" width={900} height={600}>
@@ -112,20 +188,44 @@ export const CrewMonitor = () => {
               </Box>
               <Dropdown
                 width="100px"
-                options={zLevels.map((z) => String(z))}
-                selected={String(currentZLevel)}
-                onSelected={(value) => act('set_zlevel', { zlevel: Number(value) })}
+                options={zLevelOptions}
+                selected={selectedZLevel}
+                onSelected={(value) => act('set_zlevel', { zlevel: value === 'All' ? 0 : Number(value) })}
               />
             </Flex.Item>
           </Flex>
         </Section>
 
-        <Section title="Suit Sensor Signals">
+        <Section title={`Suit Sensor Signals (${processedCrew.length})`}>
           <Table>
             <Table.Row>
-              <Table.Cell bold>Name</Table.Cell>
-              <Table.Cell bold>Occupation</Table.Cell>
-              <Table.Cell bold>Vitals</Table.Cell>
+              <Table.Cell bold>
+                <Button
+                  fluid
+                  color="transparent"
+                  icon={getSortIcon('name')}
+                  onClick={() => handleSort('name')}>
+                  Name
+                </Button>
+              </Table.Cell>
+              <Table.Cell bold>
+                <Button
+                  fluid
+                  color="transparent"
+                  icon={getSortIcon('job')}
+                  onClick={() => handleSort('job')}>
+                  Occupation
+                </Button>
+              </Table.Cell>
+              <Table.Cell bold>
+                <Button
+                  fluid
+                  color="transparent"
+                  icon={getSortIcon('health')}
+                  onClick={() => handleSort('health')}>
+                  Vitals
+                </Button>
+              </Table.Cell>
               <Table.Cell bold>Status</Table.Cell>
               <Table.Cell bold>Location</Table.Cell>
             </Table.Row>
@@ -156,14 +256,14 @@ export const CrewMonitor = () => {
                 </Box>
               </Table.Cell>
             </Table.Row>
-            {detectedCrew.map((crew) => {
+            {processedCrew.map((crew, index) => {
               const vitalsInfo = getVitalsText(crew.vitals);
               const roleColor = getRoleColor(crew.role);
               return (
                 <Table.Row
                   key={crew.count}
                   backgroundColor={
-                    crew.count % 2 ? 'rgba(17,17,17,0.6)' : 'rgba(33,33,33,0.6)'
+                    index % 2 ? 'rgba(17,17,17,0.6)' : 'rgba(33,33,33,0.6)'
                   }>
                   <Table.Cell bold>
                     <Box
@@ -211,7 +311,8 @@ export const CrewMonitor = () => {
                         {crew.area}
                         {crew.see_x !== null &&
                           crew.see_y !== null &&
-                          ` (${crew.see_x}, ${crew.see_y})`}
+                          crew.see_z !== null &&
+                          ` (${crew.see_x}, ${crew.see_y}, ${crew.see_z})`}
                       </Box>
                     ) : (
                       <Box color="label">Unknown</Box>
@@ -221,9 +322,11 @@ export const CrewMonitor = () => {
               );
             })}
           </Table>
-          {!detected && (
+          {processedCrew.length === 0 && (
             <Flex align="center" justify="center" mt={2}>
-              <Box color="label">No detected suit sensors on this Z-level.</Box>
+              <Box color="label">
+                No detected suit sensors.
+              </Box>
             </Flex>
           )}
         </Section>

@@ -124,7 +124,7 @@ GENERAL PROCS
 	holomap_images[uid] = list()
 	holomap_tooltips[uid] = list()
 	freeze[uid] = 0
-	holomap_z[uid] = map.zMainStation
+	holomap_z[uid] = 0 // 0 means show all z-levels
 	textview_updatequeued[uid] = 1
 	holomap[uid] = 0
 	scanCrew() //else the first user has to wait for process to fire
@@ -150,7 +150,8 @@ GENERAL PROCS
 
 	var/list/mapped_and_unmapped = holomap_z_levels_mapped | holomap_z_levels_unmapped
 
-	if(!(holomap_z[uid] in mapped_and_unmapped)) //catching some more unwanted behaviours
+	// 0 means "ALL" z-levels, which is always valid
+	if(holomap_z[uid] != 0 && !(holomap_z[uid] in mapped_and_unmapped)) //catching some more unwanted behaviours
 		if(mapped_and_unmapped.len > 0)
 			holomap_z[uid] = mapped_and_unmapped[1]
 		else
@@ -451,11 +452,11 @@ TGUI PROCS
 	var/uid = "\ref[user]"
 	var/list/data = list()
 
-	// Ensure we have a valid z-level, defaulting to 1 if not set
+	// Get current z-level setting (0 = ALL)
 	var/current_z = holomap_z[uid]
-	if(!current_z)
-		current_z = 1
-		holomap_z[uid] = 1
+	if(isnull(current_z))
+		current_z = 0
+		holomap_z[uid] = 0
 
 	data["currentZLevel"] = current_z
 	data["zLevels"] = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc)
@@ -463,68 +464,75 @@ TGUI PROCS
 	data["holomapAvailable"] = handle_sanity(user)
 	data["autoUpdate"] = textview_updatequeued[uid]
 
-	// Build crew list for current z-level
+	// Build crew list - if current_z is 0, show all z-levels
 	var/list/crew_data = list()
 	var/count = 0
-	for(var/entry in entries[current_z])
-		count++
-		var/list/crew_entry = list()
+	var/list/z_levels_to_scan = current_z == 0 ? (holomap_z_levels_mapped | holomap_z_levels_unmapped) : list(current_z)
 
-		crew_entry["name"] = entry[ENTRY_NAME]
-		crew_entry["job"] = entry[ENTRY_ASSIGNMENT]
-		crew_entry["vitals"] = entry[ENTRY_STAT]
-		crew_entry["area"] = entry[ENTRY_AREA]
+	for(var/z_level in z_levels_to_scan)
+		if(!entries[z_level])
+			continue
+		for(var/entry in entries[z_level])
+			count++
+			var/list/crew_entry = list()
 
-		if(entry[ENTRY_SEE_X] && entry[ENTRY_SEE_Y])
-			crew_entry["see_x"] = entry[ENTRY_SEE_X]
-			crew_entry["see_y"] = entry[ENTRY_SEE_Y]
-		else
-			crew_entry["see_x"] = null
-			crew_entry["see_y"] = null
+			crew_entry["name"] = entry[ENTRY_NAME]
+			crew_entry["job"] = entry[ENTRY_ASSIGNMENT]
+			crew_entry["vitals"] = entry[ENTRY_STAT]
+			crew_entry["area"] = entry[ENTRY_AREA]
 
-		if(entry[ENTRY_DAMAGE])
-			crew_entry["damage"] = list(
-				"oxygen" = entry[ENTRY_DAMAGE][DAMAGE_OXYGEN],
-				"toxin" = entry[ENTRY_DAMAGE][DAMAGE_TOXIN],
-				"fire" = entry[ENTRY_DAMAGE][DAMAGE_FIRE],
-				"brute" = entry[ENTRY_DAMAGE][DAMAGE_BRUTE]
-			)
-		else
-			crew_entry["damage"] = null
-
-		// Determine role category
-		var/ijob = entry[ENTRY_IJOB]
-		var/role
-		switch(ijob)
-			if(0) role = "cap"
-			if(10 to 19) role = "sec"
-			if(20 to 29) role = "med"
-			if(30 to 39) role = "sci"
-			if(40 to 49) role = "eng"
-			if(50 to 59) role = "car"
-			if(60 to 69) role = "silicon"
-			if(200 to 229) role = "cent"
-			else role = "unk"
-		crew_entry["role"] = role
-
-		// Determine icon
-		var/mob/living/carbon/H = entry[ENTRY_MOB]
-		var/stat = entry[ENTRY_STAT]
-		var/icon
-		if(istype(H, /mob/living/carbon/human))
-			if(stat != DEAD)
-				if(entry[ENTRY_DAMAGE])
-					icon = getLifeIcon(entry[ENTRY_DAMAGE])
-				else
-					icon = "0"
+			if(entry[ENTRY_SEE_X] && entry[ENTRY_SEE_Y])
+				crew_entry["see_x"] = entry[ENTRY_SEE_X]
+				crew_entry["see_y"] = entry[ENTRY_SEE_Y]
+				crew_entry["see_z"] = z_level
 			else
-				icon = "6"
-		else
-			icon = "7"
-		crew_entry["icon"] = icon
-		crew_entry["count"] = count
+				crew_entry["see_x"] = null
+				crew_entry["see_y"] = null
+				crew_entry["see_z"] = null
 
-		crew_data += list(crew_entry)
+			if(entry[ENTRY_DAMAGE])
+				crew_entry["damage"] = list(
+					"oxygen" = entry[ENTRY_DAMAGE][DAMAGE_OXYGEN],
+					"toxin" = entry[ENTRY_DAMAGE][DAMAGE_TOXIN],
+					"fire" = entry[ENTRY_DAMAGE][DAMAGE_FIRE],
+					"brute" = entry[ENTRY_DAMAGE][DAMAGE_BRUTE]
+				)
+			else
+				crew_entry["damage"] = null
+
+			// Determine role category
+			var/ijob = entry[ENTRY_IJOB]
+			var/role
+			switch(ijob)
+				if(0) role = "cap"
+				if(10 to 19) role = "sec"
+				if(20 to 29) role = "med"
+				if(30 to 39) role = "sci"
+				if(40 to 49) role = "eng"
+				if(50 to 59) role = "car"
+				if(60 to 69) role = "silicon"
+				if(200 to 229) role = "cent"
+				else role = "unk"
+			crew_entry["role"] = role
+
+			// Determine icon
+			var/mob/living/carbon/H = entry[ENTRY_MOB]
+			var/stat = entry[ENTRY_STAT]
+			var/icon
+			if(istype(H, /mob/living/carbon/human))
+				if(stat != DEAD)
+					if(entry[ENTRY_DAMAGE])
+						icon = getLifeIcon(entry[ENTRY_DAMAGE])
+					else
+						icon = "0"
+				else
+					icon = "6"
+			else
+				icon = "7"
+			crew_entry["icon"] = icon
+			crew_entry["count"] = count
+
+			crew_data += list(crew_entry)
 
 	data["detectedCrew"] = crew_data
 	data["detected"] = crew_data.len > 0
@@ -556,9 +564,10 @@ TGUI PROCS
 			var/num = params["zlevel"]
 			if(!isnum(num))
 				num = text2num(num)
-			if(!num)
+			if(isnull(num))
 				return FALSE
 
+			// 0 means "ALL" z-levels, otherwise must be a valid z-level
 			holomap_z[uid] = num
 			processUser(usr)
 			return TRUE
