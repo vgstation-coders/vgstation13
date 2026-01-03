@@ -33,8 +33,16 @@
 	hud_state = "wiz_fireball"
 
 /spell/targeted/projectile/dumbfire/fireball/prox_cast(var/list/targets, spell_holder)
-	for(var/mob/living/M in targets)
-		apply_spell_damage(M)
+	var/mob/living/wizard = holder
+	for(var/mob/living/target in range(spell_holder, 1)) //Because cast_prox_range is 0 we have to override this because the targets list is empty.
+		//Copypasted some of the code from choose_prox_targets(), defined in code/modules/spells/targeted/projectile/projectile.dm
+		if(target == wizard)
+			continue
+		if(wizard in target.get_arcane_golems())
+			continue
+		if(wizard.shares_arcane_golem_spell(target))
+			continue
+		apply_spell_damage(target)
 	explosion(get_turf(spell_holder), ex_severe, ex_heavy, ex_light, ex_flash, whodunnit = holder)
 	return targets
 

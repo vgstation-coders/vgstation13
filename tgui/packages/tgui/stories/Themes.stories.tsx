@@ -23,7 +23,7 @@ function Story() {
           <Input
             placeholder="theme_name"
             value={theme}
-            onInput={(e, value) => setTheme(value)}
+            onChange={(value) => setTheme(value)}
           />
         </LabeledList.Item>
       </LabeledList>

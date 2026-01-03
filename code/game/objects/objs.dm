@@ -34,7 +34,6 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 
 	plane = OBJ_PLANE
 
-	var/defective = 0
 	var/quality = B_AVERAGE //What level of quality this object is.
 	var/datum/material/material_type //What material this thing is made out of
 	var/sheet_type = /obj/item/stack/sheet/metal
@@ -810,11 +809,6 @@ a {
 			if(istype(U) && U.intact)
 				invisibility = old_invisibility
 				alpha = old_alpha
-
-/obj/proc/become_defective()
-	if(!defective)
-		defective = 1
-		desc += "\nIt doesn't look to be in the best shape."
 
 /obj/proc/clumsy_check(var/mob/living/user)
 	if(istype(user))

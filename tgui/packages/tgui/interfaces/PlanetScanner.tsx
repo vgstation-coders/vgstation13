@@ -169,7 +169,7 @@ export const PlanetScanner = (props) => {
                         border: '2px solid #aa5500',
                         padding: '8px 16px',
                         backgroundColor: '#331100',
-                        borderRadius: '4px'
+                        borderRadius: '4px',
                       }}
                     >
                       AUTHORIZATION REQUIRED
@@ -218,14 +218,14 @@ export const PlanetScanner = (props) => {
                 </Stack.Item>
               )}
 
-              {!!waiting_for_generation && (
+              {!!waiting_for_generation && generation_stage !== null &&(
                 <Stack.Item>
                   <Section title="Generating Planet...">
                     <Stack vertical>
                       <Stack.Item>
                         <Box mb={0.5}>Analyzing Altimetry</Box>
                         <ProgressBar
-                          value={generation_stage >= STAGE_TERRAIN ? (generation_stage > STAGE_TERRAIN ? 100 : generation_progress) : 0}
+                          value={generation_stage >= STAGE_TERRAIN ? (generation_stage > STAGE_TERRAIN ? 100 : (generation_progress ?? 0)) : 0}
                           maxValue={100}
                           color={generation_stage > STAGE_TERRAIN ? "good" : generation_stage === STAGE_TERRAIN ? "average" : "default"}
                         />
@@ -233,7 +233,7 @@ export const PlanetScanner = (props) => {
                       <Stack.Item>
                         <Box mb={0.5}>Classifying Flora & Fauna</Box>
                         <ProgressBar
-                          value={generation_stage >= STAGE_POPULATION ? (generation_stage > STAGE_POPULATION ? 100 : generation_progress) : 0}
+                          value={generation_stage >= STAGE_POPULATION ? (generation_stage > STAGE_POPULATION ? 100 : (generation_progress ?? 0)) : 0}
                           maxValue={100}
                           color={generation_stage > STAGE_POPULATION ? "good" : generation_stage === STAGE_POPULATION ? "average" : "default"}
                         />
@@ -257,8 +257,7 @@ export const PlanetScanner = (props) => {
                     <Stack>
                       <Stack.Item width="280px">
                         <Box textAlign="center">
-                          <Box
-                            as="img"
+                          <img
                             src={currentPlanet ? `data:image/png;base64,${currentPlanet.icon_data}` : undefined}
                             height="256px"
                             width="256px"

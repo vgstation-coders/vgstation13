@@ -113,16 +113,17 @@
 			GiveReagentsTo(M)
 
 /turf/New()
-	if(skip_turf_init)
-		return
-	..()
-
-	//Lazy list inits
+	// Lazy list inits
 	edge_overlays = list()
 	footstep_sound = list()
 	footstep_sound_barefoot = list()
 	footstep_sound_claw = list()
 	turf_reagents = list()
+
+	if(skip_turf_init)
+		return
+
+	..()
 
 	footstep_sound = sounds_floor
 	footstep_sound_barefoot = sounds_floor_barefoot
@@ -131,9 +132,10 @@
 		base_icon_state = icon_state
 	pick_icon_state()
 
-	//fire stuff
+	// Fire stuff
 	if(!thermal_material)
 		flammable = FALSE
+		return
 	else
 		if(!autoignition_temperature)
 			autoignition_temperature = thermal_material.autoignition_temperature
@@ -147,15 +149,13 @@
 
 /turf/initialize()
 	if(skip_turf_init)
-		if(loc)
-			var/area/A = loc
-			A.area_turfs += src
-		flags |= ATOM_INITIALIZED
 		return
 	..()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
+		if (A.alert_holder)
+			A.alert_holder.add_turf(src)
 	for(var/atom/movable/AM in src)
 		src.Entered(AM)
 		if(istype(AM, /obj/effect/edge_overlay))
@@ -166,6 +166,12 @@
 		has_opaque_atom = TRUE
 	if((edge_flags & EDGE_CARDINAL) && !(turf_flags & DEFER_EDGING))
 		update_edges()
+
+	// MultiZ support
+	if(HasBelow(src.z))
+		var/turf/below = GetBelow(src)
+		if(below)
+			below.openspace_update(src)
 
 /turf/ex_act(severity)
 	return 0
@@ -418,6 +424,8 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs -= src
+		if(istype(A, /area/shuttle))
+			turf_flags |= SHUTTLE_TURF
 	if (!N || !allow)
 		return
 	remove_particles()
@@ -867,6 +875,8 @@
 	if(turf_reagent_amount!=null && (reagent_interaction_flags & TURF_REAGENT_FILLS_CONTAINERS) && istype(I,/obj/item/weapon/reagent_containers))
 		to_chat(user,"<span class='notice'>You fill \the [I] from \the [src]</span>")
 		var/obj/item/weapon/reagent_containers/RC=I
+		if(!turf_reagents)
+			turf_reagents = list()
 		for(var/RID in turf_reagents)
 			RC.reagents.add_reagent(RID,turf_reagents[RID]*RC.amount_per_transfer_from_this)
 		if(turf_reagents_limited!=null)
@@ -899,7 +909,8 @@
 		return
 	if(turf_reagent_amount==null)
 		return
-
+	if(!turf_reagents)
+		turf_reagents = list()
 	for(var/RID in turf_reagents)
 		var/datum/reagent/D = chemical_reagents_list[RID]
 		if(D)

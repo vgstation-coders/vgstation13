@@ -25,7 +25,7 @@
 	var/list/ruin_list = list()
 	var/list/added_types = list()
 	if(!whitelist && !blacklist)
-		ruin_list = subtypesof(/datum/map_element/ruin)
+		ruin_list = subtypesof(/datum/map_element/ruin) - typesof(/datum/map_element/ruin/story)
 		for(var/R in ruin_list)
 			ruin_list.Add(new R)
 			ruin_list.Remove(R)

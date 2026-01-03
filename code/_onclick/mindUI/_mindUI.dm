@@ -292,7 +292,8 @@ var/list/mind_ui_ID2type = list()
 	invisibility = 101
 
 /obj/abstract/mind_ui_element/proc/GetUser()
-	ASSERT(parent && parent.mind && parent.mind.current)
+	if (!parent?.mind?.current)
+		return null
 	return parent.mind.current
 
 /obj/abstract/mind_ui_element/proc/UpdateUIScreenLoc()
@@ -342,6 +343,8 @@ var/list/mind_ui_ID2type = list()
 	var/image/ui_image = image(icon, src, icon_state, layer)
 	ui_image.overlays = overlays
 	var/mob/U = GetUser()
+	if (!U)
+		return
 	U.client.images |= ui_image
 	animate(ui_image, pixel_x = new_x - offset_x, pixel_y = new_y - offset_y,  time = duration)
 	spawn(duration)
@@ -442,17 +445,23 @@ var/list/mind_ui_ID2type = list()
 		movement = I
 
 	var/mob/M = GetUser()
+	if (!M)
+		return
 	M.client.mouse_pointer_icon = movement
 	moving = TRUE
 
 /obj/abstract/mind_ui_element/hoverable/movable/MouseUp(location, control, params)
 	var/mob/M = GetUser()
+	if (!M)
+		return
 	M.client.mouse_pointer_icon = initial(M.client.mouse_pointer_icon)
 	if (moving)
 		MoveLoc(params)
 
 /obj/abstract/mind_ui_element/hoverable/movable/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
 	var/mob/M = GetUser()
+	if (!M)
+		return
 	M.client.mouse_pointer_icon = initial(M.client.mouse_pointer_icon)
 	MoveLoc(params)
 

@@ -20,7 +20,5 @@ var/datum/subsystem/sounds/SSsounds
 		for (var/datum/sound_emitter/E in client.listener_context.current_channels_by_emitter)
 			if (done[E]) // only need to run update_active_sound_param once per emitter
 				continue
-			spawn()
-				// recalc volume and such for when player/emitter isn't raising move events
-				E.update_active_sound_param()
-				done[E] = TRUE
+			E.update_active_sound_param()
+			done[E] = TRUE

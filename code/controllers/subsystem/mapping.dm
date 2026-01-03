@@ -22,7 +22,7 @@
 #define SPATIAL_BUCKET_SIZE 15
 
 var/datum/subsystem/mapping/SSmapping
-var/skip_turf_init = FALSE
+var/skip_turf_init = FALSE //NEVER change this var for anything other than incrementing world.maxz it breaks EVERYTHING!!
 
 /datum/subsystem/mapping
 	name       = "Mapping"
@@ -55,7 +55,8 @@ var/skip_turf_init = FALSE
 	/// Is scanning disabled globally
 	var/scanning_disabled = FALSE
 	/// World time when scanning can be toggled again
-	var/scanning_toggle_cooldown = 0
+	var/last_lockdown_time = 0
+	var/lockdown_duration = 15 MINUTES
 
 	// Queue-based processing variables
 	/// Start time for generation tracking
@@ -104,7 +105,7 @@ var/skip_turf_init = FALSE
 	ruins_by_type["[RUIN_TYPE_XENO]"] = list()
 	ruins_by_type["[RUIN_TYPE_WET]"] = list()
 
-	var/list/ruins = subtypesof(/datum/map_element/ruin)
+	var/list/ruins = subtypesof(/datum/map_element/ruin) - typesof(/datum/map_element/ruin/story)
 	for(var/R in ruins)
 		var/datum/map_element/ruin/ME = new R()
 		for(var/type_flag in ruins_by_type)

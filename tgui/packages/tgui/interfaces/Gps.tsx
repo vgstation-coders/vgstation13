@@ -7,7 +7,7 @@ import { useBackend } from '../backend';
 import { Window } from '../layouts';
 
 type Device = {
-  tag: String,
+  tag: string,
   location_text: String,
 }
 
@@ -43,8 +43,7 @@ export const Gps = (props) => {
     <Window
       title="Global Positioning System"
       width={470}
-      height={500}
-      resizable>
+      height={500}>
       {!!emped && (
         <Modal>
           <Flex align="center">
@@ -70,13 +69,13 @@ export const Gps = (props) => {
         ) || (
           <Section title="Settings">
             <Button.Checkbox
-              checked={autorefresh}
+              checked={!!autorefresh}
               onClick={() => act('toggle_refresh')}>
               Auto-update
             </Button.Checkbox>
                 <Button.Input
                     buttonText={"Set tag: "+gpstag}
-                    value={gpstag}
+                    value={gpstag.toString()}
                     onCommit={(value) => (act('set_tag', { new_tag: value }))}
                   />
             {(beacon_ready !== undefined) && (

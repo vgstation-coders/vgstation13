@@ -984,8 +984,8 @@ its easier to just keep the beam vertical.
 /atom/New()
 	if(skip_turf_init)
 		return
-	// Incase any lighting vars are on in the typepath we turn the light on in New().
 
+	// Incase any lighting vars are on in the typepath we turn the light on in New().
 	if (light_power && light_range)
 		update_light()
 
@@ -999,12 +999,11 @@ its easier to just keep the beam vertical.
 
 	. = ..()
 
-	particle_systems = list()
+	particle_systems = list() //Lazy init
 
 	if(ticker && ticker.current_state >= GAME_STATE_PLAYING && canSmoothWith())
 		relativewall()
 		relativewall_neighbours()
-
 
 /atom/initialize()
 	if(skip_turf_init)

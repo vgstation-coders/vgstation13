@@ -268,7 +268,7 @@
 		stuck_count = 0
 
 /datum/meat_blob/proc/set_target(var/turf/T)
-	if (!T || (T.z != blobZ))
+	if (!T || (T.z != blobZ) || !center_blob)
 		return
 	target_tile = T
 	target_dist = abs(abs(center_blob.x - T.x) + abs(center_blob.y - T.y))

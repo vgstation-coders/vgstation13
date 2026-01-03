@@ -97,7 +97,7 @@
 	takeDamage(Proj.damage)
 	return ..()
 
-/obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user, params)
+/obj/structure/cult/attackby(var/obj/item/W, var/mob/user, params)
 	if (istype(W))
 		if(user.a_intent == I_HELP || W.force == 0)
 			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
@@ -1065,75 +1065,6 @@ var/list/cult_spires = list()
 
 	// For now spires work as cult telecomms relay. Eventually they'll serve as a link between the station and the blood realm.
 
-	/*
-	if (!ishuman(user))
-		to_chat(user,"<span class='warning'>Only humans can bear the arcane markings granted by this [name].</span>")
-		return
-
-	var/mob/living/carbon/human/H = user
-	var/datum/role/cultist/C = iscultist(H)
-
-	var/list/available_tattoos = list("tier1","tier2","tier3")
-	for (var/tattoo in C.tattoos)
-		var/datum/cult_tattoo/CT = C.tattoos[tattoo]
-		available_tattoos -= "tier[CT.tier]"
-
-	var/tattoo_tier = 0
-	if (available_tattoos.len <= 0)
-		to_chat(user,"<span class='warning'>You cannot bear any additional mark.</span>")
-		return
-	if ("tier1" in available_tattoos)
-		tattoo_tier = 1
-	else if ("tier2" in available_tattoos)
-		tattoo_tier = 2
-	else if ("tier3" in available_tattoos)
-		tattoo_tier = 3
-
-	if (!tattoo_tier)
-		return
-
-	var/list/choices = list()
-	if (stage >= tattoo_tier)
-		for (var/subtype in subtypesof(/datum/cult_tattoo))
-			var/datum/cult_tattoo/T = new subtype
-			if (T.tier == tattoo_tier)
-				choices += list(list(T.name, "radial_[T.icon_state]", T.desc)) //According to BYOND docs, when adding to a list, "If an argument is itself a list, each item in the list will be added." My solution to that, because I am a genius, is to add a list within a list.
-				to_chat(H, "<span class='danger'>[T.name]</span>: [T.desc]")
-	else
-		to_chat(user,"<span class='warning'>Come back to acquire another mark once your cult is a step closer to its goal.</span>")
-		return
-
-	var/tattoo = show_radial_menu(user,loc,choices,'icons/obj/cult_radial2.dmi',"radial-cult2")//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
-
-	for (var/tat in C.tattoos)
-		var/datum/cult_tattoo/CT = C.tattoos[tat]
-		if (CT.tier == tattoo_tier)//the spire won't let cultists get multiple tattoos of the same tier.
-			return
-
-	if (!Adjacent(user))//stay here you bloke!
-		return
-
-	for (var/subtype in subtypesof(/datum/cult_tattoo))
-		var/datum/cult_tattoo/T = new subtype
-		if (T.name == tattoo)
-			var/datum/cult_tattoo/new_tattoo = T
-			C.tattoos[new_tattoo.name] = new_tattoo
-
-			anim(target = loc, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_send", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
-			spawn (3)
-				C.update_cult_hud()
-				new_tattoo.getTattoo(H)
-				anim(target = H, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
-				sleep(1)
-				H.update_mutations()
-				var/atom/movable/overlay/tattoo_markings = anim(target = H, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[new_tattoo.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
-				animate(tattoo_markings, alpha = 0, time = 30)
-
-			available_tattoos -= "tier[new_tattoo.tier]"
-			if (available_tattoos.len > 0)
-				cultist_act(user)
-			break
-	*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                       //Spawned from the Raise Structure rune
@@ -1443,8 +1374,10 @@ var/list/cult_spires = list()
 	plane = EFFECTS_PLANE
 	layer = BELOW_PROJECTILE_LAYER
 	var/alt = 0
+	var/particle_init = 0
+	var/direction_to_bloodstone = null
 
-/obj/structure/cult/pillar/New()
+/obj/structure/cult/pillar/New(turf/loc, var/marker=1)
 	..()
 	var/turf/T = loc
 	if (!T)
@@ -1463,7 +1396,18 @@ var/list/cult_spires = list()
 	T.ChangeTurf(/turf/simulated/floor/engine/cult)
 	T.turf_animation('icons/effects/effects.dmi',"cultfloor", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
 
+	if (marker)
+		var/datum/holomap_marker/_holomap_marker = new()
+		var/_marker_icon = alt ? HOLOMAP_MARKER_OBSIDIAN_PILLAR_ALT : HOLOMAP_MARKER_OBSIDIAN_PILLAR
+		_holomap_marker.id = _marker_icon
+		_holomap_marker.filter = HOLOMAP_FILTER_CULT
+		_holomap_marker.x = src.x
+		_holomap_marker.y = src.y
+		_holomap_marker.z = src.z
+		holomap_markers[_marker_icon + "_\ref[src]"] = _holomap_marker
+
 /obj/structure/cult/pillar/Destroy()
+	holomap_markers -= HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"//shouldn't be an issue if it was never added
 	new /obj/effect/decal/cleanable/ash(loc)
 	..()
 
@@ -1473,6 +1417,23 @@ var/list/cult_spires = list()
 	alt = 1
 
 /obj/structure/cult/pillar/update_icon()
+	if (!direction_to_bloodstone)
+		var/datum/faction/bloodcult/_cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (_cult?.bloodstone)
+			var/_angle = arctan((_cult.bloodstone.x - x) + (alt ? 0.375 : -0.375), (_cult.bloodstone.y - y))//accounting for the offset
+			var/_x_drift = cos(_angle) / 15
+			var/_y_drift = sin(_angle) / 15
+			direction_to_bloodstone = list(_x_drift - 0.02, _y_drift - 0.02, _x_drift + 0.02, _y_drift + 0.02)
+		else
+			direction_to_bloodstone = list(-0.02, -0.02, 0.02, 0.02)
+
+	if (!particle_init)
+		add_particles(PS_PILLAR_BEACON)
+		adjust_particles(PVAR_DRIFT, 0, PS_PILLAR_BEACON, direction_to_bloodstone)
+		adjust_particles(PVAR_PIXEL_X, alt ? 4 : 30, PS_PILLAR_BEACON)
+		particle_init = 1
+
+
 	icon_state = "pillar[alt ? "alt": ""]2"
 	set_light(1.5, 2.5, LIGHT_COLOR_RED)
 	overlays.len = 0
@@ -1504,8 +1465,8 @@ var/list/cult_spires = list()
 	icon_state = "bloodstone-enter1"
 	icon = 'icons/obj/cult_64x64.dmi'
 	pixel_x = -16 * PIXEL_MULTIPLIER
-	health = 1800
-	maxHealth = 1800
+	health = 1800		//Reminder that melee weapons deal 4x damage, and holy weapons 8x. Reducing its effective hp to 450 and 225 respectively
+	maxHealth = 1800	//This rewards the crew for getting in close and having most likely dispatched the cultists beforehand.
 	sound_damaged = 'sound/effects/stone_hit.ogg'
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	plane = EFFECTS_PLANE
@@ -1578,13 +1539,13 @@ var/list/cult_spires = list()
 		explosion_sound(TR)
 		TR?.pillar_update(2)
 		var/turf/T1 = locate(x-2,y-2,z)
-		pillars += new /obj/structure/cult/pillar(T1)
+		pillars += new /obj/structure/cult/pillar(T1, 0)//the pillars right next to the bloodstone don't appear on the cult holomap as to not hide its own icon
 		var/turf/T2 = locate(x+2,y-2,z)
-		pillars += new /obj/structure/cult/pillar/alt(T2)
+		pillars += new /obj/structure/cult/pillar/alt(T2, 0)
 		var/turf/T3 = locate(x-2,y+2,z)
-		pillars += new /obj/structure/cult/pillar(T3)
+		pillars += new /obj/structure/cult/pillar(T3, 0)
 		var/turf/T4 = locate(x+2,y+2,z)
-		pillars += new /obj/structure/cult/pillar/alt(T4)
+		pillars += new /obj/structure/cult/pillar/alt(T4, 0)
 		sleep(10)
 		icon_state = "bloodstone-enter3"
 		explosion_sound(TR)
@@ -1732,303 +1693,6 @@ var/list/cult_spires = list()
 	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)
 	update_icon()
 
-/*
-
-
-/obj/structure/cult/bloodstone
-	name = "blood stone"
-	icon_state = "bloodstone-enter1"
-	icon = 'icons/obj/cult_64x64.dmi'
-	pixel_x = -16 * PIXEL_MULTIPLIER
-	health = 600
-	maxHealth = 600
-	sound_damaged = 'sound/effects/stone_hit.ogg'
-	sound_destroyed = 'sound/effects/stone_crumble.ogg'
-	plane = EFFECTS_PLANE
-	layer = BELOW_PROJECTILE_LAYER
-	light_color = "#FF0000"
-
-	var/list/watching_mobs = list()
-	var/list/watcher_maps = list()
-	var/datum/station_holomap/holomap_datum
-	var/anchor = FALSE
-
-/obj/structure/cult/bloodstone/New()
-	..()
-	var/datum/holomap_marker/newMarker = new()
-	newMarker.id = HOLOMAP_MARKER_BLOODSTONE
-	newMarker.filter = HOLOMAP_FILTER_CULT
-	newMarker.x = x
-	newMarker.y = y
-	newMarker.z = z
-	holomap_markers[HOLOMAP_MARKER_BLOODSTONE+"_\ref[src]"] = newMarker
-
-	holomap_datum = new /datum/station_holomap/cult()
-	holomap_datum.initialize_holomap(get_turf(src))
-
-	bloodstone_list.Add(src)
-	for (var/obj/O in loc)
-		if (O != src && !istype(O,/obj/item/weapon/melee/soulblade))
-			O.ex_act(2)
-	safe_space()
-	set_light(3)
-	for(var/mob/M in player_list)
-		if (M.z == z && M.client)
-			if (get_dist(M,src)<=20)
-				M.playsound_local(src, get_sfx("explosion"), 50, 1)
-				shake_camera(M, 4, 1)
-			else
-				M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-				shake_camera(M, 1, 1)
-
-	spawn(10)
-		var/list/pillars = list()
-		icon_state = "bloodstone-enter2"
-		for(var/mob/M in player_list)
-			if (M.z == z && M.client)
-				if (get_dist(M,src)<=20)
-					M.playsound_local(src, get_sfx("explosion"), 50, 1)
-					shake_camera(M, 4, 1)
-				else
-					M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-					shake_camera(M, 1, 1)
-		var/turf/T1 = locate(x-2,y-2,z)
-		pillars += new /obj/structure/cult/pillar(T1)
-		var/turf/T2 = locate(x+2,y-2,z)
-		pillars += new /obj/structure/cult/pillar/alt(T2)
-		var/turf/T3 = locate(x-2,y+2,z)
-		pillars += new /obj/structure/cult/pillar(T3)
-		var/turf/T4 = locate(x+2,y+2,z)
-		pillars += new /obj/structure/cult/pillar/alt(T4)
-		sleep(10)
-		icon_state = "bloodstone-enter3"
-		for(var/mob/M in player_list)
-			if (M.z == z && M.client)
-				if (get_dist(M,src)<=20)
-					M.playsound_local(src, get_sfx("explosion"), 50, 1)
-					shake_camera(M, 4, 1)
-				else
-					M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-					shake_camera(M, 1, 1)
-		for (var/obj/structure/cult/pillar/P in pillars)
-			P.update_icon()
-
-/obj/structure/cult/bloodstone/Destroy()
-	bloodstone_list.Remove(src)
-	new /obj/effect/decal/cleanable/ash(loc)
-	new /obj/item/weapon/ectoplasm(loc)
-
-	var/datum/holomap_marker/holomarker = new()
-	holomarker.id = HOLOMAP_MARKER_BLOODSTONE_BROKEN
-	holomarker.filter = HOLOMAP_FILTER_CULT
-	holomarker.x = src.x
-	holomarker.y = src.y
-	holomarker.z = src.z
-	holomap_markers[HOLOMAP_MARKER_BLOODSTONE+"_\ref[src]"] = holomarker
-
-	/* --no need to update the map
-	if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
-		if(map.holomap_offset_x.len >= map.zMainStation)
-			updated_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[map.zMainStation]	, holomarker.y-8+map.holomap_offset_y[map.zMainStation])
-		else
-			updated_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
-	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = updated_map
-	*/
-	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		if (B != src && !B.loc)
-			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
-			qdel(B)
-
-	if (bloodstone_list.len <= 0 || anchor)
-		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (cult)
-			cult.fail()
-		if(anchor)
-			global_anchor_bloodstone = null
-	..()
-
-/obj/structure/cult/bloodstone/attack_construct(var/mob/user)
-	if (!Adjacent(user))
-		return 0
-	cultist_act(user)
-	return 1
-
-/obj/structure/cult/bloodstone/cultist_act(var/mob/user)
-	.=..()
-	if (!.)
-		return
-	if(isliving(user))
-		if(user in watching_mobs)
-			stopWatching(user)
-		else
-			if (anchor)
-				if (user in contributors)
-					return
-				if (!user.checkTattoo(TATTOO_SILENT))
-					if (prob(5))
-						user.say("Let me show you the dance of my people!","C")
-					else
-						user.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
-				contributors.Add(user)
-				if (user.client)
-					update_progbar()
-					user.client.images |= progbar
-			else if(user.hud_used && user.hud_used.holomap_obj)
-				if(!("\ref[user]" in watcher_maps))
-					var/image/personnal_I = prepare_cult_holomap()
-					var/turf/T = get_turf(src)
-					if(map.holomap_offset_x.len >= T.z)
-						holomap_datum.cursor.pixel_x = (T.x-9+map.holomap_offset_x[T.z])*PIXEL_MULTIPLIER
-						holomap_datum.cursor.pixel_y = (T.y-9+map.holomap_offset_y[T.z])*PIXEL_MULTIPLIER
-					else
-						holomap_datum.cursor.pixel_x = (T.x-9)*PIXEL_MULTIPLIER
-						holomap_datum.cursor.pixel_y = (T.y-9)*PIXEL_MULTIPLIER
-					personnal_I.overlays += holomap_datum.cursor
-					watcher_maps["\ref[user]"] = personnal_I
-				var/image/I = watcher_maps["\ref[user]"]
-				I.loc = user.hud_used.holomap_obj
-				I.alpha = 0
-				animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
-				watching_mobs |= user
-				user.client.images |= watcher_maps["\ref[user]"]
-				user.register_event(/event/face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
-
-/obj/structure/cult/bloodstone/proc/checkPosition()
-	for(var/mob/M in watching_mobs)
-		if(get_dist(src,M) > 1)
-			stopWatching(M)
-
-/obj/structure/cult/bloodstone/proc/stopWatching(var/mob/user)
-	if(!user)
-		for(var/mob/M in watching_mobs)
-			if(M.client)
-				spawn(5)//we give it time to fade out
-					M.client.images -= watcher_maps["\ref[M]"]
-				M.unregister_event(/event/face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
-				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
-
-		watching_mobs = list()
-	else
-		if(user.client)
-			spawn(5)//we give it time to fade out
-				if(!(user in watching_mobs))
-					user.client.images -= watcher_maps["\ref[user]"]
-					watcher_maps -= "\ref[user]"
-			user.unregister_event(/event/face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
-			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
-
-			watching_mobs -= user
-
-/obj/structure/cult/bloodstone/update_icon()
-	icon_state = "bloodstone-0"
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (cult)
-		var/datum/objective/bloodcult_bloodbath/O = locate() in cult.objective_holder.objectives
-		if (O)
-			icon_state = "bloodstone-[max(0,min(9,round(cult.bloody_floors.len*100/O.target_bloodspill/10)))]"
-	overlays.len = 0
-	var/image/I_base = image('icons/obj/cult_64x64.dmi',"bloodstone-base")
-	I_base.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
-	overlays += I_base
-	if (health < maxHealth/3)
-		overlays.Add("bloodstone_damage2")
-	else if (health < 2*maxHealth/3)
-		overlays.Add("bloodstone_damage1")
-
-/obj/structure/cult/bloodstone/proc/set_animate()
-	animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)
-	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)
-	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)
-	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)
-	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)
-	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)
-	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)
-	update_icon()
-
-/obj/structure/cult/bloodstone/conceal()
-	return
-
-/obj/structure/cult/bloodstone/takeDamage(var/damage)
-	if(veil_thickness == CULT_EPILOGUE)
-		return
-	var/backup = (health > (2*maxHealth/3)) + (health > (maxHealth/3))
-	health -= damage
-	if (health <= 0)
-		if (sound_destroyed)
-			playsound(src, sound_destroyed, 100, 1)
-		qdel(src)
-	else
-		if (backup > (health > (2*maxHealth/3)) + (health > (maxHealth/3)))
-			summon_backup()
-		update_icon()
-
-/obj/structure/cult/bloodstone/proc/summon_backup()
-	var/list/possible_floors = list()
-	for (var/turf/simulated/floor/F in orange(1,get_turf(src)))
-		possible_floors.Add(F)
-	var/monsters_to_spawn = 1
-	if (health < (maxHealth / 2))
-		monsters_to_spawn++
-	for (var/i = 1 to monsters_to_spawn)
-		if (possible_floors.len <= 0)
-			break
-		var/turf/T = pick(possible_floors)
-		if (T)
-			possible_floors.Remove(T)
-			new /obj/effect/cult_ritual/backup_spawn(T)
-
-/obj/structure/cult/bloodstone/dance_start()
-	while(!gcDestroyed && loc && anchor)
-		for (var/mob/M in contributors)
-			if (!iscultist(M) || get_dist(src,M) > 1 || (M.stat != CONSCIOUS))
-				if (M.client)
-					M.client.images -= progbar
-				contributors.Remove(M)
-				continue
-		if (contributors.len > 0)
-			timeleft -= 1 + round(contributors.len/3)//Additional dancers will complete the ritual faster
-			if (timeleft <= 0)
-				break
-			update_progbar()
-			dance_step()
-			sleep(3)
-			dance_step()
-			sleep(3)
-			dance_step()
-			sleep(6)
-		else
-			timeleft = min(timeleft+1,60)
-			sleep(10)
-	for (var/mob/M in contributors)
-		if (M.client)
-			M.client.images -= progbar
-		contributors.Remove(M)
-	anchor = FALSE
-	for (var/obj/structure/teleportwarp/TW in src.loc)
-		qdel(TW)
-	if (!gcDestroyed && loc)
-		new /obj/machinery/singularity/narsie/large(src.loc)
-		SSpersistence_map.setSavingFilth(FALSE)
-	return 1
-
-/obj/structure/cult/bloodstone/ex_act(var/severity)
-	switch(severity)
-		if (1)
-			takeDamage(250)
-		if (2)
-			takeDamage(50)
-		if (3)
-			takeDamage(10)
-*/
 
 /obj/structure/cult/proc/safe_space()
 	for(var/turf/T in range(5,src))

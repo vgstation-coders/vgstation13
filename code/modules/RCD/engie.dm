@@ -485,3 +485,16 @@
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin/delay(var/mob/user, var/atom/target, var/amount)
 	return TRUE
+
+/obj/item/device/rcd/matter/engineering/mech
+	name = "\improper Mecha Rapid-Construction-Device (RCD)"	//only way to obtain this in item form is rcd emag gambling
+	desc = "An abomination of matter-energy conversion, barely held together by hot glue and nails. You can immediately think of several better ways of creating something like this."
+	matter = INFINITY
+	max_matter = INFINITY
+
+/obj/item/device/rcd/matter/engineering/mech/use_energy(var/amount, var/mob/user)
+	return	//mech charge is used up elsewhere
+	
+/obj/item/device/rcd/matter/engineering/mech/get_energy(var/mob/user)
+	return INFINITY
+	

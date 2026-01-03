@@ -600,6 +600,7 @@
 		/obj/item/clothing/accessory/wristwatch/black,
 		/obj/item/high_roller,
 		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+		/obj/item/weapon/book/library_randomized,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -1441,6 +1442,15 @@
 			new /obj/item/clothing/mask/gas/sexymime(src.loc)
 			new	/obj/item/clothing/under/sexymime(src.loc)
 	qdel(src)
+
+//Library Books
+/obj/abstract/map/spawner/library
+	name = "library book spawner"
+	icon_state = "book"
+	chance = 15
+	to_spawn = list(
+		/obj/item/weapon/book/library_randomized,
+	)
 
 // Spawn all in the turf
 /obj/abstract/spawn_all
