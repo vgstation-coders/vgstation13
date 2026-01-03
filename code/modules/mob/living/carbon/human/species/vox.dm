@@ -69,8 +69,7 @@
 	if(!N)
 		N = H.get_item_by_slot(slot_back)
 	H.internal = N
-	if (H.internals)
-		H.internals.icon_state = "internal1"
+	update_internals()
 
 /datum/species/vox/makeName(var/gender,var/mob/living/carbon/human/H=null)
 	var/sounds = rand(3,8)

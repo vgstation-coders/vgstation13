@@ -51,8 +51,7 @@
 	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.
 	to_chat(H, "<span class='notice'>You are now running on plasma internals from the [H.s_store] in your [tank_slot_name].  You must breathe plasma in order to survive, and are extremely flammable.</span>")
 	H.internal = H.get_item_by_slot(tank_slot)
-	if (H.internals)
-		H.internals.icon_state = "internal1"
+	update_internals()
 
 /datum/species/plasmaman/can_artifact_revive()
 	return 0

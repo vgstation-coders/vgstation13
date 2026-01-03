@@ -30,8 +30,7 @@
 	if(internal)
 		internal.add_fingerprint(user)
 		internal = null
-		if(internals) //This is the HUD icon, these variables have WAY too similar names
-			internals.icon_state = "internal0"
+		update_internals()
 		if(user != src)
 			if(!user.isGoodPickpocket())
 				visible_message("<span class='warning'>\The [user] shuts off \the [src]'s internals!</span>")
@@ -62,8 +61,7 @@
 				return
 		internal = T
 		T.add_fingerprint(user)
-		if(internals)
-			internals.icon_state = "internal1"
+		update_internals()
 		if(user != src)
 			var/gas_contents = T.air_contents.english_contents_list()
 			if(!user.isGoodPickpocket())
@@ -76,10 +74,5 @@
 		return 1
 
 /mob/living/carbon/proc/update_internals()
-	var/new_icon_state
-	if(internal)
-		new_icon_state = "internal1"
-	else
-		new_icon_state = "internal0"
 	if(internals)
-		internals.icon_state = new_icon_state
+		internals.icon_state = "internal-oxy-[internal ? "1" : "0"]"

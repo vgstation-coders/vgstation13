@@ -152,13 +152,9 @@
 		var/obj/item/mask = get_item_by_slot(slot_wear_mask)
 		if(!mask || !(mask.clothing_flags & MASKINTERNALS) )
 			internal = null
+		update_internals()
 		if(internal)
-			if(internals)
-				internals.icon_state = "internal1"
 			return internal.remove_air_volume(volume_needed)
-		else
-			if(internals)
-				internals.icon_state = "internal0"
 	return null
 
 /mob/living/carbon/alien/humanoid/proc/handle_breath(datum/gas_mixture/breath)

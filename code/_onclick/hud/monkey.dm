@@ -211,7 +211,11 @@
 
 	mymob.internals = new /obj/abstract/screen
 	mymob.internals.icon = 'icons/mob/screen1.dmi'
-	mymob.internals.icon_state = "internal0"
+	if(iscarbon(mymob))
+		var/mob/living/carbon/C = mymob
+		C.update_internals()
+	else
+		mymob.internals.icon_state = "internal-oxy-0"
 	mymob.internals.name = "internal"
 	mymob.internals.screen_loc = ui_internal
 

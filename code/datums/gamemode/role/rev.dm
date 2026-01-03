@@ -237,8 +237,7 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 		rev_mob.equip_to_slot_or_del(new /obj/item/weapon/tank/plasma/plasmaman(rev_mob), slot_s_store)
 		rev_mob.equip_or_collect(new /obj/item/clothing/mask/breath(rev_mob), slot_wear_mask)
 		rev_mob.internal = rev_mob.get_item_by_slot(slot_s_store)
-		if (rev_mob.internals)
-			rev_mob.internals.icon_state = "internal1"
+		update_internals()
 		rev_mob.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cargo(rev_mob), slot_head)
 	else if(istype(rev_mob.species, /datum/species/vox))
 		rev_mob.equip_or_collect(new /obj/item/clothing/mask/breath/vox(rev_mob), slot_wear_mask)
@@ -248,9 +247,7 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 		rev_mob.put_in_hands(TN)
 		to_chat(rev_mob, "<span class='notice'>You are now running on nitrogen internals from the [TN] in your hand. Your species finds oxygen toxic, so you must breathe nitrogen (AKA N<sub>2</sub>) only.</span>")
 		rev_mob.internal = TN
-
-		if (rev_mob.internals)
-			rev_mob.internals.icon_state = "internal1"
+		update_internals()
 	else
 		rev_mob.equip_to_slot_or_del(new /obj/item/clothing/head/soft(rev_mob), slot_head) //cargo cap
 

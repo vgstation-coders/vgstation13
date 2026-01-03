@@ -251,13 +251,9 @@
 			internal = null
 		if (!wear_mask || !(wear_mask.clothing_flags|MASKINTERNALS) )
 			internal = null
+		update_internals()
 		if(internal)
-			if (internals)
-				internals.icon_state = "internal1"
 			return internal.remove_air_volume(volume_needed)
-		else
-			if (internals)
-				internals.icon_state = "internal0"
 	return null
 
 /mob/living/carbon/monkey/proc/handle_breath(datum/gas_mixture/breath)
