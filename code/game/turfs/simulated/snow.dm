@@ -46,6 +46,12 @@
 			"<span class='notice'>You dig out some snow with \the [W].</span>")
 			extract_snowballs(5, FALSE, user)
 
+	if(istype(W,/obj/item/stack/sheet/snow))
+		user.visible_message("<span class='notice'>[user] reaches down and gathers more snow.</span>", \
+		"<span class='notice'>You reach down and bolster your snowball.</span>")
+		user.delayNextAttack(10)
+		extract_snowballs(1, TRUE, user, W)
+
 /turf/simulated/floor/plating/snow/CtrlClick(mob/user)
 
 	//Reach down and make a snowball
