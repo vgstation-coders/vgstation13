@@ -142,8 +142,9 @@
 	if(vent_count <= 0)
 		return
 	var/checked_turfs = 0
+	var/list/turf/turfs = virtual_z.get_turfs()
 	while(vent_count > 0)
-		var/turf/unsimulated/T = pick(allocation.turfs)
+		var/turf/unsimulated/T = pick(turfs)
 		if(!istype(T))
 			continue
 		var/area/A = get_area(T)
