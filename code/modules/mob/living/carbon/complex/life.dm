@@ -91,9 +91,8 @@
 	if(breath)
 		loc.assume_air(breath)
 
-/mob/living/carbon/complex/proc/get_breath_from_internal(volume_needed)
+/mob/living/carbon/complex/get_breath_from_internal(volume_needed)
 	return null
-
 
 /mob/living/carbon/complex/proc/handle_breath(datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
