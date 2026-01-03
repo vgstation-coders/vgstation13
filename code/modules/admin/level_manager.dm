@@ -315,7 +315,7 @@
 						// The maploader adds 1 to these offsets, so we subtract 1 to compensate
 						var/load_x = new_vz.x_min + buffer_size - 1
 						var/load_y = new_vz.y_min + buffer_size - 1
-						ME.load(load_x, load_y, new_vz.parent_z.z, 0, TRUE)
+						UNTIL(ME.load(load_x, load_y, new_vz.parent_z.z, 0, TRUE))
 
 						if(adv_settings == "Yes")
 							new_vz.gps_allowed = gps_allowed
@@ -324,6 +324,8 @@
 							new_vz.transitionLoops = transition_loops
 							new_vz.update_settings()
 
+						for(var/turf/T in new_vz.get_turfs())
+							T.v = new_vz
 						log_admin("[key_name(usr)] loaded map element '[element_choice]' as vLevel (vZ: [new_vz.id], MapSize: [map_width]x[map_height], vLevelSize: [vlevel_width]x[vlevel_height], Buffer: [buffer_size], LoadPos: [load_x],[load_y]).")
 						message_admins("<span class='notice'>[key_name_admin(usr)] loaded map element '[element_choice]' as vLevel (vZ: [new_vz.id], Size: [map_width]x[map_height]).</span>", 1)
 					return TRUE

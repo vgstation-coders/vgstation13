@@ -147,7 +147,9 @@
 //Get virtual x from true x
 /datum/virtual_z/proc/vx(var/atom/A = null, var/coord = null)
 	if(A)
-		coord = A.x
+		var/turf/T = get_turf(A)
+		if(T)
+			coord = T.x
 	if(!coord)
 		return null
 	return coord - x_min + 1
@@ -155,7 +157,9 @@
 //Get virtual y from true y
 /datum/virtual_z/proc/vy(var/atom/A = null, var/coord = null)
 	if(A)
-		coord = A.y
+		var/turf/T = get_turf(A)
+		if(T)
+			coord = T.y
 	if(!coord)
 		return null
 	return coord - y_min + 1

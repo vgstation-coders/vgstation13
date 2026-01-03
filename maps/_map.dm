@@ -130,12 +130,16 @@
 	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL, 1, 1)
 	new_vz.id = level.z
 	new_vz.name = level.name
-	new_vz.gps_allowed = TRUE
+	new_vz.gps_allowed = level.z != zCentcomm
 	new_vz.teleJammed = level.teleJammed ? VZ_TELEPORTATION_FORBIDDEN : VZ_TELEPORTATION_ALLOWED
 	new_vz.movementJammed = level.movementJammed
 	new_vz.movementChance = level.movementChance
 	new_vz.transitionLoops = level.transitionLoops
 	new_vz.update_settings()
+
+	WORLD_X_OFFSET += rand(-50,50)
+	WORLD_Y_OFFSET += rand(-50,50)
+
 	return new_vz
 
 /datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null, var/skip_turf_setup = FALSE, var/fill_turf_type = null)
@@ -177,6 +181,10 @@
 
 	// Add to global vLevels list (map global is set during gameplay)
 	map.vLevels |= new_vz
+	var/variance_x = floor(size_x/10)
+	var/variance_y = floor(size_y/10)
+	WORLD_X_OFFSET += rand(-variance_x,variance_x)
+	WORLD_Y_OFFSET += rand(-variance_y,variance_y)
 
 	if(fill_turf_type)
 		for(var/turf/T in new_vz.get_turfs())

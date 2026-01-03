@@ -207,11 +207,8 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 	switch(current_stage)
 		if(STAGE_TERRAIN)
-			// Debug: Check cave data generation time
 			if(!current_mapgen.cave_automaton_data && current_mapgen.mountain_height < 1)
-				var/cave_start = TICK_USAGE_REAL
 				current_mapgen.generate_cave_data()
-				message_admins("DEBUG: generate_cave_data() took [(TICK_USAGE_REAL - cave_start)]ms")
 
 			while(turfs_processed < target_turfs)
 				var/processed_this_tick = 0
@@ -235,7 +232,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 				if(T)
 					current_mapgen.generate_turf(T, current_virtual_z.x_min, current_virtual_z.y_min)
 					T.planet = current_planet
-					T.v = current_virtual_z
 				queue_index++
 				turfs_processed++
 				processed_this_tick++
@@ -302,6 +298,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 			while(queue_index <= finalize_queue.len && turfs_processed < target_turfs)
 				var/turf/T = finalize_queue[queue_index]
 				if(T)
+					T.v = current_virtual_z
 					T.turf_flags &= ~DEFER_EDGING
 					if(T.edge_flags & EDGE_CARDINAL) // Edge turfs that need it
 						T.update_edges()
@@ -553,15 +550,11 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	generation_start_time = world.timeofday
 	stage_start_time = world.timeofday
 
-	var/step_start = TICK_USAGE_REAL
 	current_planet = new planet_datum
-	message_admins("DEBUG spawn_planet: new planet_datum took [(TICK_USAGE_REAL - step_start)]ms")
 
 	var/size_to_use = pick(ALLOCATION_SMALL)
 
-	step_start = TICK_USAGE_REAL
 	current_mapgen = new current_planet.mapgen(size_to_use)
-	message_admins("DEBUG spawn_planet: new mapgen took [(TICK_USAGE_REAL - step_start)]ms")
 
 	// Scale initial processing rate based on planet size
 	switch(size_to_use)
@@ -574,9 +567,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		else
 			turfs_per_tick = 500
 
-	step_start = TICK_USAGE_REAL
 	current_virtual_z = map.addVLevel(size_to_use, null, TRUE) // skip_turf_setup = TRUE for planet generation
-	message_admins("DEBUG spawn_planet: addVLevel took [(TICK_USAGE_REAL - step_start)]ms")
 	current_virtual_z.teleJammed = VZ_TELEPORTATION_EXPENSIVE
 
 	planets += current_planet
@@ -614,7 +605,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	queue_index = 1
 
 	var/total_turfs = (current_virtual_z.x_max - current_virtual_z.x_min + 1) * (current_virtual_z.y_max - current_virtual_z.y_min + 1)
-	message_admins("Started generating planet '[current_planet.planet_name]' at v-level [current_virtual_z.id]. ~[total_turfs] turfs to process.")
+	message_admins("Started generating planet '[current_planet.planet_name]' at v-level [current_virtual_z.id]. [total_turfs] turfs to process.")
 
 	generating = TRUE
 
@@ -627,7 +618,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
  * Returns TRUE if more chunks remain, FALSE if all turfs have been queued.
  */
 /datum/subsystem/mapping/proc/load_next_terrain_chunk()
-	var/chunk_start = TICK_USAGE_REAL
 	if(!current_virtual_z)
 		return FALSE
 
@@ -656,7 +646,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 				if(current_chunk_x > x_max)
 					current_chunk_x = x_min
 					current_chunk_y = y + 1
-				message_admins("DEBUG: load_next_terrain_chunk() loaded [turfs_loaded] turfs in [(TICK_USAGE_REAL - chunk_start)]ms")
 				return TRUE
 
 		// Reset x for next row
@@ -664,7 +653,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 	// All turfs loaded
 	current_chunk_y = y_max + 1 // Mark as complete
-	message_admins("DEBUG: load_next_terrain_chunk() loaded [turfs_loaded] turfs (final) in [(TICK_USAGE_REAL - chunk_start)]ms")
 	return FALSE
 
 /**
