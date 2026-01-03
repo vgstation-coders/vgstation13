@@ -360,9 +360,7 @@
 		if(client_needed && !M.client)
 			continue
 		var/turf/T = get_turf(M)
-		if(T?.z != vz.z())
-			continue
-		if(!turfs.Find(T))
+		if(T?.v != vz)
 			continue
 		mobs_found += M
 	return mobs_found

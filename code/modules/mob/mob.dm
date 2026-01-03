@@ -2251,7 +2251,7 @@ Use this proc preferably at the end of an equipment loadout
 	if (target.isDead())
 		to_chat(src, "You cannot sense the target mind anymore, that's not good...")
 		return null
-	if(target_turf.z != our_turf.z) //Not on the same zlevel as us
+	if(target_turf.v != our_turf.v) //Not on the same vlevel as us
 		to_chat(src, "The target mind is too faint, they must be quite far from you...")
 		return null
 	if(target.stat != CONSCIOUS)
