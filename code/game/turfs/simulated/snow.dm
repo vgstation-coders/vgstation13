@@ -71,7 +71,7 @@
 	var/extract_amount = min(snowballs, snowball_amount)
 
 	for(var/i = 0; i < extract_amount; i++)
-		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(loc)
+		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(src)
 		snowball.pixel_x = rand(-16, 16) * PIXEL_MULTIPLIER //Would be wise to move this into snowball New() down the line
 		snowball.pixel_y = rand(-16, 16) * PIXEL_MULTIPLIER
 
