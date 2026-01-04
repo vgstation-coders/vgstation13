@@ -132,6 +132,7 @@
 	new_vz.name = level.name
 	new_vz.gps_allowed = level.z != zCentcomm
 	new_vz.teleJammed = level.teleJammed ? VZ_TELEPORTATION_FORBIDDEN : VZ_TELEPORTATION_ALLOWED
+	new_vz.bluespace_jammed = level.bluespace_jammed
 	new_vz.movementJammed = level.movementJammed
 	new_vz.movementChance = level.movementChance
 	new_vz.transitionLoops = level.transitionLoops
@@ -435,9 +436,15 @@ var/global/list/accessable_v_levels = list()
 
 //Returns the lowest turf available on a given Z-level, defaults to space.
 
-/proc/get_base_turf(var/z)
-	var/datum/zLevel/L = map.zLevels[z]
-	return L.base_turf
+/proc/get_base_turf(var/input_v_or_z)
+	if(istype(input_v_or_z, /datum/virtual_z))
+		var/datum/virtual_z/vz = input_v_or_z
+		return vz.base_turf
+	else if(isnum(input_v_or_z))
+		var/datum/zLevel/L = map.zLevels[input_v_or_z]
+		return L.base_turf
+	else
+		return /turf/space
 
 //Area that blueprints should erase to
 /proc/get_base_area(var/z)

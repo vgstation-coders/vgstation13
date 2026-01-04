@@ -63,3 +63,10 @@
 #define VZ_TELEPORTATION_ALLOWED		1		// Teleportation is allowed
 #define VZ_TELEPORTATION_EXPENSIVE		(1<<1)  // Teleportation is allowed using real Bluespace Crystals
 #define VZ_TELEPORTATION_FORBIDDEN		(1<<2)  // Teleportation is forbidden
+
+#define VZ_TRANSIT		1		// This v-level is a shuttle transit area
+#define VZ_PARKING		2		// shuttle parking area
+#define VZ_PLANET		3		// planet
+#define VZ_MAP_ELEMENT	4		// vault/ruin/dungeon/away mission/etfc
+#define VZ_CUSTOM		5		// custom level
+#define VZ_DEFAULT		6 		// premapped area (station, centcomm, etc)

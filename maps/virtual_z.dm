@@ -11,6 +11,7 @@
 	var/size_y = ALLOCATION_SMALL
 	var/datum/zLevel/parent_z
 	var/active = TRUE
+	var/level_type = VZ_CUSTOM
 
 	var/list/area/areas = list()
 	var/list/shuttle_landing_zones = list()
@@ -40,6 +41,7 @@
 	// Parameters
 	var/gps_allowed = FALSE // Whether regular GPS functions in this vlevel
 	var/teleJammed = VZ_TELEPORTATION_FORBIDDEN //Prevents teleportation into/out of the vlevel
+	var/bluespace_jammed = FALSE
 	var/movementJammed = TRUE //Prevents you from accessing the vlevel by drifting
 	var/movementChance = 10 //Inhereted from parent z (for now)
 	var/transitionLoops = FALSE //if true, transition sends you back to the same v-level

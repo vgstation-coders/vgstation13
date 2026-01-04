@@ -19,7 +19,8 @@ var/list/existing_vaults = list()
 	..(objects)
 	existing_vaults.Add(src)
 
-	var/zlevel_base_turf_type = get_base_turf(location.z)
+	var/datum/virtual_z/vz = location.get_virtual_z()
+	var/zlevel_base_turf_type = get_base_turf(vz)
 	if(!zlevel_base_turf_type)
 		zlevel_base_turf_type = /turf/space
 

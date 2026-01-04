@@ -180,13 +180,16 @@ var/static/list/away_mission_subtypes = subtypesof(/datum/map_element/away_missi
 	else
 		to_chat(messages, "<span class='danger'>Loading an away mission...</span>")
 
-	log_game("Loading away mission [AM.file_path]")
-
-	if(AM.load())
-		to_chat(messages, "<span class='danger'>Away mission loaded.</span>")
+	if(!fexists(AM.file_path))
+		to_chat(messages, "<span class='danger'>Away mission file [AM.file_path] does not exist!</span>")
 		return
 
-	to_chat(messages, "<span class='danger'>Failed to load away mission [AM.file_path] (file doesn't exist).</span>")
+	log_game("Loading away mission [AM.file_path]")
+
+	UNTIL(AM.load())
+	to_chat(messages, "<span class='danger'>Away mission loaded.</span>")
+	return
+
 
 //Helper procs
 

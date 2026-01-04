@@ -39,7 +39,7 @@
 /obj/item/bluespace_crystal/throw_impact(atom/hit_atom)
 	if(..())
 		return
-	var/datum/zLevel/L = get_z_level(src)
+	var/datum/virtual_z/L = get_virtual_z()
 
 	if(isliving(hit_atom) && L && !L.teleJammed)
 		blink_mob(hit_atom)

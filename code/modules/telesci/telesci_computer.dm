@@ -376,9 +376,9 @@ var/list/telesci_warnings = list(
 
 	x_co = rand(MIN_X, MAX_X)
 	y_co = rand(MIN_Y, MAX_Y)
-	var/new_z = rand(1, map.zLevels.len)
-	if(new_z != map.zCentcomm)
-		z_co = new_z
+	var/datum/virtual_z/new_v = rand(1, map.vLevels.len)
+	if(new_v.id != map.zCentcomm)
+		z_co = new_v.id
 
 	if (cell && cell.charge < teleport_cell_usage)
 		var/direction = pick(DIRECTION_RECEIVE, DIRECTION_SEND)
