@@ -242,7 +242,7 @@
 
 	if (client)
 		//not like it'd make sense to have those enabled on a brain
-		disable_nearsightedness()
+		disable_nearsightedness(list(0,0))
 		disable_blurriness()
 		disable_druggy_overlays()//although...
 

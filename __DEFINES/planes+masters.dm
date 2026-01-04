@@ -308,7 +308,13 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	else
 		screen.transform = M
 
-/mob/proc/disable_nearsightedness()
+/mob/proc/disable_nearsightedness(var/list/_impaired_vision)
+	var/_new_item_modifiers = _impaired_vision[2]
+
+	if (_new_item_modifiers != perception_filters.last_item_nearsightedness_modifiers)
+		perception_filters.last_item_nearsightedness_modifiers = _new_item_modifiers
+		_animate = FALSE
+
 	filter_update_delay++
 	spawn(filter_update_delay)
 		for (var/obj/planemaster in perception_filters.perception_planemasters)
@@ -323,7 +329,10 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
 	var/matrix/M = matrix()
 	M.Scale(40, 40)
-	animate(screen, transform = M, time = 20)
+	if (_animate)
+		animate(screen, transform = M, time = 20)
+	else
+		screen.transform = M
 
 #undef IMPAIRED_VISION_RADIUS_OUT_OF_VIEW
 #undef IMPAIRED_VISION_RADIUS_START

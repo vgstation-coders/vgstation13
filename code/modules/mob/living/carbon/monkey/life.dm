@@ -719,7 +719,7 @@
 		if(impaired_vision[1] > 0)
 			enable_nearsightedness(impaired_vision)
 		else
-			disable_nearsightedness()
+			disable_nearsightedness(impaired_vision)
 
 		if(eye_blurry)
 			enable_blurriness(eye_blurry)
