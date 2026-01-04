@@ -75,6 +75,10 @@
 
 /mob/living/carbon/proc/update_internals()
 	if(internals)
+		internals.icon_state = "internal-oxy-[internal ? "1" : "0"]"
+
+/mob/living/carbon/human/update_internals()
+	if(internals)
 		var/breath_string = "oxy"
 		if(species)
 			switch(species.breath_type)
