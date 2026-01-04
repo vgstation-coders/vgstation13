@@ -348,5 +348,7 @@ var/list/existing_vaults = list()
 	spawn_cost = 1
 
 /datum/map_element/ruin/scp_asteroid
-	file_path = "maps/randomvaults/scp_asteroid.dmm"
+	file_path = "maps/ruins/urban/scp_asteroid.dmm"
 	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY
