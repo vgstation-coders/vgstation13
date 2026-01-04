@@ -46,7 +46,7 @@
 	specific_heat[gas.id] = gas.specific_heat
 	molar_mass[gas.id] = gas.molar_mass
 	flags[gas.id] = gas.flags
-	if(gas.tile_overlay)
+	if(gas.tile_overlay?.len)
 		tile_overlay[gas.id] = gas.tile_overlay
 	if(isnum(gas.overlay_limit))
 		overlay_limit[gas.id] = gas.overlay_limit
