@@ -24,6 +24,8 @@
 
 	var/data = null
 
+	var/reaction_sound = 'sound/effects/bubbles.ogg'
+
 
 /datum/chemical_reaction/proc/log_reaction(var/datum/reagents/holder, var/amt)
 	var/datum/log_controller/I = investigations[I_CHEMS]
@@ -698,6 +700,7 @@
 	result = SODIUMCHLORIDE
 	result_amount = 5
 	quiet = TRUE
+	reaction_sound = 'sound/effects/occult_blood_test.ogg'
 
 /datum/chemical_reaction/occult_blood_test/on_reaction(var/datum/reagents/holder, var/created_volume)
 	for(var/datum/reagent/blood/B in holder.reagent_list)
