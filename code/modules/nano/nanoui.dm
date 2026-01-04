@@ -416,6 +416,7 @@ nanoui is used to open and update nano browser uis
 
 	var/list/send_data = get_send_data(initial_data)
 	var/initial_data_json = url_encode(json_encode(send_data))
+	initial_data_json = replacetext(initial_data_json, "+", "%20") // dont let the window show the spaces as + instead
 
 	var/url_parameters_json = json_encode(list("src" = "\ref[src]"))
 
