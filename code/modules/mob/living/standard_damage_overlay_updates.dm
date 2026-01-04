@@ -91,61 +91,142 @@
 	if(stat != DEAD)
 		filter_update_delay = -1
 
-		if(blinded)
-			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		else
-			clear_fullscreen("blind")
-		var/impaired_vision = get_impaired_vision_range()
-		if(impaired_vision)
+		var/list/impaired_vision = get_impaired_vision_range()
+		if(impaired_vision[1] > 0)
 			enable_nearsightedness(impaired_vision)
 		else
 			disable_nearsightedness()
+
 		if(eye_blurry)
 			enable_blurriness(eye_blurry)
 		else
 			disable_blurriness()
+
 		if(druggy)
 			enable_druggy_overlays()
 		else
 			disable_druggy_overlays()
+
 		if(has_reagent_in_blood(INCENSE_MOONFLOWERS))
 			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
 		else
 			clear_fullscreen("high_red")
 
+
+
 /mob/living/proc/get_impaired_vision_range()
-	var/total = nearsightedness//+3 with NEARSIGHTED
 
-	total += eye_blind
+	var/_modifiers	= get_impaired_vision_modifiers()
+	var/_total 		= _modifiers[1]
+	var/_item_total = _modifiers[2]
+	var/_max_range 	= _modifiers[3]
 
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		var/datum/organ/internal/eyes/eyes = H.internal_organs_by_name["eyes"]
+	_total += _item_total//we're saving the item_total separately to see if it changes, and whether to update the overlay smoothly or not
 
-		if(eyes)
-			total -= eyes.enhanced_vision
+	if (_total <= 0)
+		return 0
+
+	if (client && (client.view > 7))
+		//impairement is capped at on players with extended view so that they can't see outside of the overlay
+		_max_range -= (client.view - 7) / 10
+
+	_total = clamp(_total, 1, _max_range)
+
+	return list(_total, _item_total)
+
+
+/mob/living/proc/get_impaired_vision_modifiers()//used by cyborgs and gondolas
+	var/_total = 0
+
+	if (blinded)
+		_total = 10
+	else
+		_total += eye_blind
+
+	return list(_total, 0, 10)
+
+/mob/living/carbon/complex/martian/get_impaired_vision_modifiers()
+	var/_total = 0
+	var/_item_total = 0
+	var/_max_range = 10
+
+	if (!blinded)
+		if(head && istype(head, /obj/item/clothing))
+			var/obj/item/clothing/hat = head
+			_item_total += hat.nearsighted_modifier
+
+		_total += eye_blind
+	else
+		_total = 10
+
+	for(var/obj/item/W in held_items)
+		if (istype(W, /obj/item/weapon/cane))
+			_max_range = 9.333
+
+	return list(_total, _item_total, _max_range)
+
+/mob/living/carbon/monkey/get_impaired_vision_modifiers()
+	var/_total = 0
+	var/_item_total = 0
+	var/_max_range = 10
+
+	if (!blinded)
+		if(hat && istype(hat, /obj/item/clothing))
+			_item_total += hat.nearsighted_modifier
+
+		if(glasses && istype(glasses, /obj/item/clothing))
+			_item_total += glasses.nearsighted_modifier
+
+		_total += eye_blind
+	else
+		_total = 10
+
+	for(var/obj/item/W in held_items)
+		if (istype(W, /obj/item/weapon/cane))
+			_max_range = 9.333
+
+	return list(_total, _item_total, _max_range)
+
+/mob/living/carbon/human/get_impaired_vision_modifiers()
+	var/_total = 0
+	var/_item_total = 0
+	var/_max_range = 10
+
+	if (species.has_organ["eyes"])
+		//Only species that are supposed to have eyes can be affected by nearsightedness and blindness
+		//As well as by the items they're wearing
+
+		var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
+
+		if(!blinded)//automatically updated in handle_regular_status_updates. Checks for eyes that haven't been removed, as well as the BLIND disability
+			_total += nearsightedness//+3 with NEARSIGHTED
+
+			_total += eye_blind//temporary blindness that decreases over time
+
+			_total -= eyes.enhanced_vision//advanced eyes
+
 			if (eyes.is_bruised())
 				var/a = eyes.damage - eyes.min_bruised_damage
 				var/b = eyes.min_broken_damage - eyes.min_bruised_damage
 				//(+0) to (+10) depending on eye damage
-				total += 10 * (a / b)
+				_total += 10 * (a / b)
 
-		if(H.glasses && istype(H.glasses, /obj/item/clothing))
-			//prescription glasses enhance eyesight (-3), welding goggles worsen it (+5)
-			total += H.glasses.nearsighted_modifier
+			if(glasses && istype(glasses, /obj/item/clothing))
+				//prescription glasses enhance eyesight (-3), welding goggles worsen it (+5)
+				_item_total += glasses.nearsighted_modifier
 
-		if(H.head && istype(H.head, /obj/item/clothing))
-			var/obj/item/clothing/hat = H.head
-			//unathi helmet and welding helmet worsen eyesight (+5)
-			total += hat.nearsighted_modifier
+			if(head && istype(head, /obj/item/clothing))
+				var/obj/item/clothing/hat = head//typecasting because we can have stuff other than actual hats on our heads
+				//unathi helmet and welding helmet worsen eyesight (+5)
+				_item_total += hat.nearsighted_modifier
 
-	if(ismonkey(src))
-		var/mob/living/carbon/monkey/M = src
-		if(M.hat && istype(M.hat, /obj/item/clothing))
-			total += M.hat.nearsighted_modifier
-		if(M.glasses && istype(M.glasses, /obj/item/clothing))
-			total += M.glasses.nearsighted_modifier
+		else
+			//If you don't have eyes even though you're supposed to have eyes, you're just blind mate
+			_total = 10
 
-	if(total <= 0)
-		return 0
-	return clamp(total,1,9.333)//impairement is capped at 9.333 so that it still covers the entire screen of players using binoculars, rifles with sights, or have the farsight gene, etc
+		//Whether you're blind or not however, holding a cane makes it so that you can always see on the tile adjacent to you
+		for(var/obj/item/W in held_items)
+			if (istype(W, /obj/item/weapon/cane))
+				_max_range = 9.333
+
+	return list(_total, _item_total, _max_range)

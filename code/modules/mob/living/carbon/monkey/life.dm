@@ -714,18 +714,18 @@
 		clear_alert(SCREEN_ALARM_TEMPERATURE)
 
 	if(stat != DEAD)
-		if(src.eye_blind || blinded)
-			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
+
+		var/list/impaired_vision = get_impaired_vision_range()
+		if(impaired_vision[1] > 0)
+			enable_nearsightedness(impaired_vision)
 		else
-			clear_fullscreen("blind")
-		if (src.disabilities & NEARSIGHTED)
-			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired, 2)
+			disable_nearsightedness()
+
+		if(eye_blurry)
+			enable_blurriness(eye_blurry)
 		else
-			clear_fullscreen("impaired")
-		if (src.eye_blurry)
-			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-		else
-			clear_fullscreen("blurry")
+			disable_blurriness()
+
 		if(druggy)
 			enable_druggy_overlays()
 		else

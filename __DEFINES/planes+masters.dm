@@ -140,6 +140,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 	var/list/orphan_planemasters = list()
 	var/list/perception_planemasters = list()
 	var/list/perception_filters = list()
+	var/last_item_nearsightedness_modifiers = 0
 
 //Creating new planemasters for every plane that doesn't already have a dedicated planemaster
 //BE SURE TO UPDATE THIS LIST IF YOU ADD OR REMOVE OTHER PLANEMASTERS
@@ -236,8 +237,8 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 /mob/proc/login_perception_filters_update()
 
 /mob/living/login_perception_filters_update()
-	var/impaired_vision = get_impaired_vision_range()
-	if(impaired_vision)
+	var/list/impaired_vision = get_impaired_vision_range()
+	if(impaired_vision[1] > 0)
 		enable_nearsightedness(impaired_vision, FALSE)
 
 /mob/proc/remove_perception_filters()
@@ -255,7 +256,15 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 /mob
 	var/filter_update_delay = -1
 
-/mob/proc/enable_nearsightedness(var/_severity, var/_animate = TRUE)
+/mob/proc/enable_nearsightedness(var/list/_impaired_vision, var/_animate = TRUE)//actually handles blindess too
+
+	var/_severity = _impaired_vision[1]
+	var/_new_item_modifiers = _impaired_vision[2]
+
+	if (_new_item_modifiers != perception_filters.last_item_nearsightedness_modifiers)
+		perception_filters.last_item_nearsightedness_modifiers = _new_item_modifiers
+		_animate = FALSE
+
 	var/_a = 9 - _severity
 	var/_nearsightedness_offset = 0
 	if (_a >= 0)
