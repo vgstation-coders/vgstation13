@@ -115,7 +115,6 @@
 
 
 /mob/living/proc/get_impaired_vision_range()
-
 	var/_modifiers	= get_impaired_vision_modifiers()
 	var/_total 		= _modifiers[1]
 	var/_item_total = _modifiers[2]
@@ -124,7 +123,7 @@
 	_total += _item_total//we're saving the item_total separately to see if it changes, and whether to update the overlay smoothly or not
 
 	if (_total <= 0)
-		return 0
+		return list(0, _item_total)
 
 	if (client && (client.view > 7))
 		//impairement is capped at on players with extended view so that they can't see outside of the overlay
