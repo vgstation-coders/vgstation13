@@ -75,4 +75,11 @@
 
 /mob/living/carbon/proc/update_internals()
 	if(internals)
-		internals.icon_state = "internal-oxy-[internal ? "1" : "0"]"
+		var/breath_string = "oxy"
+		if(species)
+			switch(species.breath_type)
+				if(GAS_NITROGEN)
+					breath_string = "nitro"
+				if(GAS_PLASMA)
+					breath_string = "plasma"
+		internals.icon_state = "internal-[breath_string]-[internal ? "1" : "0"]"
