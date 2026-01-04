@@ -259,11 +259,13 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 /mob/proc/enable_nearsightedness(var/list/_impaired_vision, var/_animate = TRUE)//actually handles blindess too
 
 	var/_severity = _impaired_vision[1]
-	var/_new_item_modifiers = _impaired_vision[2]
 
-	if (_new_item_modifiers != perception_filters.last_item_nearsightedness_modifiers)
-		perception_filters.last_item_nearsightedness_modifiers = _new_item_modifiers
-		_animate = FALSE
+//This caused crashes when putting glasses on/off quickly
+//	var/_new_item_modifiers = _impaired_vision[2]
+
+//	if (_new_item_modifiers != perception_filters.last_item_nearsightedness_modifiers)
+//		perception_filters.last_item_nearsightedness_modifiers = _new_item_modifiers
+//		_animate = FALSE
 
 	var/_a = 9 - _severity
 	var/_nearsightedness_offset = 0
@@ -310,11 +312,13 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 
 /mob/proc/disable_nearsightedness(var/list/_impaired_vision)
 	var/_animate = TRUE
-	var/_new_item_modifiers = _impaired_vision[2]
 
-	if (_new_item_modifiers != perception_filters.last_item_nearsightedness_modifiers)
-		perception_filters.last_item_nearsightedness_modifiers = _new_item_modifiers
-		_animate = FALSE
+//This caused crashes when putting glasses on/off quickly
+//	var/_new_item_modifiers = _impaired_vision[2]
+
+//	if (_new_item_modifiers != perception_filters.last_item_nearsightedness_modifiers)
+//		perception_filters.last_item_nearsightedness_modifiers = _new_item_modifiers
+//		_animate = FALSE
 
 	filter_update_delay++
 	spawn(filter_update_delay)
