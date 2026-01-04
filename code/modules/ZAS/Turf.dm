@@ -14,7 +14,7 @@
 		for(var/obj/O in add_pool)
 			if(O.name in names_already_used)
 				continue
-			to_add += add_pool
+			to_add += O
 			names_already_used += list(O.name)
 		vis_contents += to_add
 	if(graphic_remove && graphic_remove.len)
