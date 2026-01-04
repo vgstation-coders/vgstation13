@@ -1995,6 +1995,8 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PS_CULT_SMOKE2		"Cult Smoke2"
 #define PS_CULT_SMOKE_BOX	"Cult Smoke Box"
 #define PS_PILLAR_BEACON	"Pillar Beacon"
+#define PS_OCCULT_TEST_LARGE "Occult Test Large"
+#define PS_OCCULT_TEST_SMALL "Occult Test Small"
 #define PS_CULT_HALO		"Cult Halo"
 #define PS_SPACE_RUNES		"Space Runes"
 #define PS_NARSIEHASRISEN1	"Nar-SieHasRisen1"
@@ -2013,6 +2015,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 
 //Particles variable defines
 #define PVAR_SPAWNING	"spawning"
+#define PVAR_COUNT		"count"
 #define PVAR_POSITION	"position"
 #define PVAR_VELOCITY	"velocity"
 #define PVAR_ICON_STATE	"icon_state"
