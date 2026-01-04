@@ -309,6 +309,7 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 		screen.transform = M
 
 /mob/proc/disable_nearsightedness(var/list/_impaired_vision)
+	var/_animate = TRUE
 	var/_new_item_modifiers = _impaired_vision[2]
 
 	if (_new_item_modifiers != perception_filters.last_item_nearsightedness_modifiers)
