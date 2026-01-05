@@ -7,19 +7,14 @@
 /turf/var/tmp/list/connection/connections
 
 /turf/simulated/proc/update_graphic(list/graphic_add = null, list/graphic_remove = null)
-	if(graphic_add && graphic_add.len)
-		var/list/add_pool = shuffle(graphic_add)
-		var/list/to_add = list()
-		var/list/names_already_used = list()
-		for(var/obj/O in add_pool)
-			if(O.name in names_already_used)
-				continue
-			to_add += O
-			names_already_used += list(O.name)
-		vis_contents += to_add
-	if(graphic_remove && graphic_remove.len)
-		vis_contents -= graphic_remove
-
+	if(zone?.air?.XGM?.tile_overlay.len)
+		if(graphic_add && graphic_add.len)
+			for(var/to_add in graphic_add)
+				vis_contents += pick(zone.air.XGM.tile_overlay[to_add])
+		if(graphic_remove && graphic_remove.len)
+			for(var/to_remove in graphic_remove)
+				for(var/overlay in zone.air.XGM.tile_overlay[to_remove])
+					vis_contents -= overlay
 /turf/proc/update_air_properties()
 	var/block = c_airblock(src)
 	if(block & AIR_BLOCKED)

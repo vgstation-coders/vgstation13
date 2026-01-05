@@ -316,13 +316,13 @@
 			if(molar_density(g) <= XGM.overlay_limit[g])
 				if(!graphic_remove)
 					graphic_remove = list()
-				graphic_remove += XGM.tile_overlay[g]
+				graphic_remove |= list(g)
 		else
 			//Overlay isn't applied for this gas, check if it's valid and needs to be added.
 			if(molar_density(g) > XGM.overlay_limit[g])
 				if(!graphic_add)
 					graphic_add = list()
-				graphic_add += XGM.tile_overlay[g]
+				graphic_add |= list(g)
 
 	. = 0
 	//Apply changes
