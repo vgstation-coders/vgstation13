@@ -9,8 +9,8 @@
 	var/tmp/list/connection/connections
 
 /turf/simulated/proc/update_graphic(list/graphic_add = null, list/graphic_remove = null)
-	if(!graphics_shown)
-		graphics_shown = list()
+	if(!gases_shown)
+		gases_shown = list()
 	if(zone?.air?.XGM?.tile_overlay?.len)
 		if(graphic_add && graphic_add.len)
 			gases_shown += graphic_add
