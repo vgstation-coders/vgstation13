@@ -311,6 +311,7 @@
 					var/datum/virtual_z/new_vz = map.addVLevel(vlevel_width, vlevel_height, FALSE, turf_type)
 					if(new_vz)
 						new_vz.name = "Map Element: [ME.name]"
+						new_vz.level_type = VZ_MAP_ELEMENT
 						// Load the actual map element content into the vLevel
 						// The maploader adds 1 to these offsets, so we subtract 1 to compensate
 						var/load_x = new_vz.x_min + buffer_size - 1
@@ -390,6 +391,7 @@
 
 							// Link the transit port to the shuttle
 							chosen_shuttle.transit_port = transit_dock
+							new_vz.level_type = VZ_TRANSIT
 
 							log_admin("[key_name(usr)] created transit vLevel for shuttle '[shuttle_choice]' (vZ: [new_vz.id], Size: [transit_width]x[transit_height], Dir: [dir2text(direction)]).")
 							message_admins("<span class='notice'>[key_name_admin(usr)] created transit vLevel for shuttle '[shuttle_choice]' (vZ: [new_vz.id]).</span>", 1)
@@ -420,6 +422,7 @@
 					var/datum/virtual_z/new_vz = map.addVLevel(width, height, fill_turf_type = turf_type)
 					if(new_vz)
 						new_vz.name = name
+						new_vz.level_type = VZ_CUSTOM
 						log_admin("[key_name(usr)] created manual vLevel '[name]' (vZ: [new_vz.id], Size: [width]x[height], Turf: [turf_type]).")
 						message_admins("<span class='notice'>[key_name_admin(usr)] created manual vLevel '[name]' (vZ: [new_vz.id], Size: [width]x[height]).</span>", 1)
 					return TRUE

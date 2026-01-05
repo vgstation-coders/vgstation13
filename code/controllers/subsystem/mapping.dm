@@ -341,6 +341,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 					if(TOD_NIGHTTIME) current_virtual_z.next_firetime = world.time + 36 MINUTES
 
 				daynight_v_lvls |= current_virtual_z
+				current_virtual_z.level_type = VZ_PLANET
 				current_virtual_z.update_settings()
 				SSDayNight.flags = 0
 				SSDayNight.update_lighting(current_virtual_z, immediate = TRUE)
