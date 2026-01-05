@@ -18,13 +18,13 @@
 /obj/machinery/door/poddoor/shutters/attackby(var/obj/item/I, var/mob/user)
 	add_fingerprint(user)
 	if(istype(I,/obj/item/weapon/fireaxe) && I.wielded)
-		var/obj/item/weapon/fireaxe/F = I
 		if(density && !cut_open && !pried_open) //can't cut an open door or already cut door
+			var/obj/item/weapon/fireaxe/F = I
 			cut(F,user)
 			return
 	if(istype(I,/obj/item/tool/crowbar/halligan))
-		var/obj/item/tool/crowbar/halligan/H = I
 		if(density && cut_open && !pried_open) //can only pry after cutting
+			var/obj/item/tool/crowbar/halligan/H = I
 			pry(user)
 			return
 	if(istype(I,/obj/item/stack/sheet/metal))
