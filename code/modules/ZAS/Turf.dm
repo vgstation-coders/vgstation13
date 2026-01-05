@@ -15,7 +15,9 @@
 		gases_shown |= graphic_add
 	if(graphic_remove && graphic_remove.len)
 		gases_shown -= graphic_remove
-	vis_contents.Cut()
+	for(var/gaslist in XGM.tile_overlay)
+		for(var/gas_overlay in XGM.tile_overlay[gaslist])
+			vis_contents -= gas_overlay
 	for(var/overlay in gases_shown)
 		vis_contents += pick(XGM.tile_overlay[overlay])
 
