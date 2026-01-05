@@ -12,7 +12,7 @@
 	if(!gases_shown)
 		gases_shown = list()
 	if(graphic_add && graphic_add.len)
-		gases_shown += graphic_add
+		gases_shown |= graphic_add
 	if(graphic_remove && graphic_remove.len)
 		gases_shown -= graphic_remove
 	vis_contents.Cut()
