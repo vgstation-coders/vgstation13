@@ -24,7 +24,6 @@
 			return
 	if(istype(I,/obj/item/tool/crowbar/halligan))
 		if(density && cut_open && !pried_open) //can only pry after cutting
-			var/obj/item/tool/crowbar/halligan/H = I
 			pry(user)
 			return
 	if(istype(I,/obj/item/stack/sheet/metal))
