@@ -16,8 +16,9 @@
 			gases_shown += graphic_add
 		if(graphic_remove && graphic_remove.len)
 			gases_shown -= graphic_remove
+		vis_contents.Cut()
 		for(var/overlay in gases_shown)
-			vis_contents += zone.air.XGM.tile_overlay[gases_shown])
+			vis_contents += pick(zone.air.XGM.tile_overlay[gases_shown])
 
 /turf/proc/update_air_properties()
 	var/block = c_airblock(src)
