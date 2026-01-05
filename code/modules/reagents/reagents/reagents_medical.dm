@@ -720,8 +720,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 3.9
 	specheatcap = 0.12812
 	custom_metabolism = 0.1
-	fission_time=6000 // 100 minutes (1hr 40)
-	fission_absorbtion=5000
+	fission_time=3000 // 50 minutes
+	fission_absorbtion=10000
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1829,8 +1829,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.58
 	specheatcap = 0.44
-	fission_time=4800 // 80 minutes (1hr 20)
-	fission_absorbtion=3500
+	fission_time=2400 // 40 minutes
+	fission_absorbtion=7000
 
 /datum/reagent/tricordrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1975,8 +1975,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(toxmod==0 || brutemod==0 || firemod==0) //no div 0 here, so sireeeeee, nope.
 		return 1
 
-	var/brut=M.getBruteLoss()
-	var/brn=M.getFireLoss()
+	var/brut=M.getBruteLoss(TRUE)
+	var/brn=M.getFireLoss(TRUE)
 	var/tox=M.getToxLoss()
 
 	var/totaldamage = brut+tox+brn

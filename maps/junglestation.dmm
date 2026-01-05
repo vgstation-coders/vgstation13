@@ -8335,6 +8335,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Private)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "cZN" = (
@@ -22368,6 +22369,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Adult)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "ijS" = (
@@ -24870,6 +24872,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "jfW" = (
@@ -27230,6 +27233,7 @@
 /area/vox_trading_post/atmos)
 "jZC" = (
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "jZK" = (
@@ -34209,6 +34213,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Non-Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "mEG" = (
@@ -48847,6 +48852,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Religious)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "rXu" = (
@@ -52612,6 +52618,7 @@
 /area/centcom/control)
 "trS" = (
 /obj/structure/bookcase/manuals,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "tse" = (

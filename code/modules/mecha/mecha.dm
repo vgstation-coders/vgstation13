@@ -11,6 +11,12 @@
 #define STATE_BOLTSEXPOSED 1
 #define STATE_BOLTSOPENED 2
 
+#define MECHA_FORCE_DEFAULT 10
+#define MECHA_FORCE_WORKING 15
+#define MECHA_FORCE_COMBAT 30
+
+#define MECHA_MELEE_DELAY 10
+
 /obj/mecha
 	name = "Mecha"
 	desc = "Exosuit"
@@ -106,6 +112,18 @@
 
 	var/list/mech_sprites = list() //sprites alternatives for a given mech. Only have to enter the name of the paint scheme
 	var/paintable = 0
+
+	var/mecha_punch_sound = 'sound/weapons/smash.ogg'
+	//---------------------------------------------STUFF THAT WAS MOVED FROM COMBAT.DM BECAUSE LETS ALLOW EVERY MECHA TO PUNCH WHY NOT
+	force = MECHA_FORCE_DEFAULT
+	var/list/destroyable_obj = list(
+		/obj/mecha,
+		/obj/structure/window,
+		/obj/structure/grille,
+		/obj/structure/cult,
+		/turf/simulated/wall,
+		)//This is fucking disgraceful I hate mecha code so much
+	//----------------------------------------------
 
 /obj/mecha/get_cell()
 	return cell
@@ -246,7 +264,7 @@
 
 /obj/mecha/proc/add_fist()
 	fist = new
-	fist.name = "[src]'s fist"
+	fist.name = "[src.name]'s fist"
 	fist.force = src.force
 
 /obj/mecha/proc/add_radio()
@@ -340,8 +358,8 @@
 	return
 
 
-/obj/mecha/proc/melee_action(atom/target)
-	return
+///obj/mecha/proc/melee_action(atom/target)
+//	return now in combat.dm
 
 /obj/mecha/proc/range_action(atom/target)
 	return

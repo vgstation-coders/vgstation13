@@ -31793,6 +31793,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Tactics)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bfB" = (
@@ -31814,6 +31815,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Non-Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bfD" = (
@@ -31826,12 +31828,14 @@
 /obj/structure/bookcase{
 	name = "bookcase (Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bfF" = (
 /obj/structure/bookcase{
 	name = "bookcase (Adult)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bfG" = (
@@ -32464,6 +32468,7 @@
 /obj/item/weapon/book/manual/security_antag_guide,
 /obj/item/weapon/book/manual/hydroponics_pod_people,
 /obj/item/weapon/book/manual/security_space_law,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bgW" = (
@@ -33245,6 +33250,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Religious)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "biw" = (
@@ -33259,6 +33265,7 @@
 "bix" = (
 /obj/structure/table/woodentable,
 /obj/structure/disposalpipe/segment,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "biy" = (
@@ -33280,6 +33287,7 @@
 "biA" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "biB" = (
@@ -34199,6 +34207,7 @@
 	dir = 8;
 	icon_state = "pipe-c"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bjO" = (
@@ -99818,6 +99827,15 @@
 	icon_state = "bluecorner"
 	},
 /area/hallway/primary/central/fore)
+"fLC" = (
+/obj/structure/table/woodentable,
+/obj/item/device/flashlight/lamp/green{
+	pixel_x = 1;
+	pixel_y = 5
+	},
+/obj/abstract/map/spawner/library,
+/turf/simulated/floor/wood,
+/area/library)
 "fLJ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4
@@ -103672,6 +103690,7 @@
 	dir = 8;
 	pixel_x = -29
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "tbW" = (
@@ -104985,6 +105004,7 @@
 /obj/item/weapon/book/manual/chemistry_manual,
 /obj/item/weapon/book/manual/virology_guide,
 /obj/item/weapon/book/manual/engineering_guide,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "wWc" = (
@@ -269736,8 +269756,8 @@ bit
 bjJ
 blo
 bmD
-bgU
-bgU
+fLC
+fLC
 bmD
 bsd
 bsa

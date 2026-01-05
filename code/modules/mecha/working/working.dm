@@ -1,4 +1,5 @@
 /obj/mecha/working
+	force = MECHA_FORCE_WORKING
 	internal_damage_threshold = 60
 	var/list/cargo = new
 	var/cargo_capacity = 15

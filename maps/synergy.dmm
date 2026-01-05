@@ -4797,6 +4797,7 @@
 /obj/machinery/alarm{
 	pixel_y = 22
 	},
+/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
 	},
@@ -8017,9 +8018,8 @@
 	icon_state = "warning"
 	},
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "darkred";
-	tag = "icon-darkred (NORTH)"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/security/prison)
 "aoY" = (
@@ -8441,10 +8441,6 @@
 	},
 /area/security/prison)
 "apP" = (
-/obj/machinery/power/apc{
-	name = "_South APC";
-	pixel_y = -24
-	},
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -16543,7 +16539,9 @@
 	req_access_txt = "1"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/plating,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/security/main)
 "aDJ" = (
 /obj/structure/table,
@@ -52218,6 +52216,7 @@
 /area/crew_quarters/theatre)
 "bPU" = (
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bPV" = (
@@ -53090,6 +53089,7 @@
 /area/library)
 "bRA" = (
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bRB" = (
@@ -57891,11 +57891,13 @@
 /obj/structure/table/woodentable,
 /obj/item/weapon/pen,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "caH" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/paper_bin,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "caI" = (
@@ -58437,6 +58439,7 @@
 "cbR" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/fancy/crayons,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "cbS" = (
@@ -59036,6 +59039,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "cda" = (
@@ -59044,6 +59048,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "cdb" = (
@@ -99410,6 +99415,7 @@
 /obj/structure/table/woodentable,
 /obj/machinery/disk_duplicator,
 /obj/item/weapon/storage/lockbox/diskettebox/large/full,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "nJE" = (
@@ -99826,10 +99832,6 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/firedoor/border_only{
-	dir = 8;
-	name = "Firelock West"
-	},
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "quT" = (
@@ -99933,8 +99935,8 @@
 	icon_state = "warning"
 	},
 /turf/simulated/floor{
-	icon_state = "darkred";
-	tag = "icon-darkred"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/security/prison)
 "rfu" = (
@@ -100152,6 +100154,7 @@
 /obj/structure/bookcase,
 /obj/item/weapon/book/manual/security_space_law,
 /obj/item/weapon/book/manual/security_antag_guide,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "sQI" = (

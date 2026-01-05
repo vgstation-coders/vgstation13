@@ -14,7 +14,6 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	var/sharpness_flags = 0 //Describe in which way this thing is sharp. Shouldn't sharpness be exclusive to obj/item?
 	var/heat_production = 0
 	var/source_temperature = 0
-	var/smoking = FALSE //is the obj emitting smoke particles
 	var/price = 0
 
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
@@ -501,30 +500,6 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	if(..())
 		remove_particles(PS_SMOKE)
 
-/obj/item/checkburn()
-	if(!flammable)
-		CRASH("[src] tried to burn despite not being flammable!")
-	if(on_fire)
-		return
-	if(!smoking)
-		checksmoke()
-	..()
-
-/obj/item/proc/checksmoke()
-	var/datum/gas_mixture/G = return_air()
-	if(!G)
-		return
-	while(G && G.temperature >= (autoignition_temperature * 0.75))
-		if(!smoking)
-			add_particles(PS_SMOKE)
-			smoking = TRUE
-		var/rate = clamp(lerp_generic(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
-		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
-		sleep(10 SECONDS)
-		G = return_air()
-	remove_particles(PS_SMOKE)
-	smoking = FALSE
-
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
 		return
@@ -564,106 +539,8 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
 
-/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/list/context)
-	return 0
-
 /obj/proc/shouldReInitOnMultitoolLink(var/mob/user, var/obj/buffer, var/list/context)
 	return FALSE
-
-/obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
-	return 0
-
-/obj/proc/canLink(var/obj/O, var/list/context)
-	return 0
-
-/obj/proc/isLinkedWith(var/obj/O)
-	return 0
-
-/obj/proc/getLink(var/idx)
-	return null
-
-/obj/proc/canClone(var/obj/O)
-	return 0
-
-/obj/proc/clone(var/obj/O)
-	return 0
-
-/obj/proc/linkMenu(var/obj/O)
-	var/dat=""
-	if(canLink(O, list()))
-		dat += " <a href='?src=\ref[src];link=1'>\[Link\]</a> "
-	return dat
-
-/obj/proc/format_tag(var/label,var/varname, var/act="set_tag")
-	var/value = vars[varname]
-	if(!value || value=="")
-		value="-----"
-	return "<b>[label]:</b> <a href=\"?src=\ref[src];[act]=[varname]\">[value]</a>"
-
-
-/obj/proc/update_multitool_menu(mob/user as mob)
-	var/obj/item/device/multitool/P = get_multitool(user)
-
-	if(!istype(P))
-		return 0
-
-	// Cloning stuff goes here.
-	var/obj/machinery/bufRef = P.buffer?.get();
-	if(P.clone && bufRef) // Cloning is on.
-		if(!canClone(bufRef))
-			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; you cannot clone to this device!</span>")
-			return
-
-		if(!clone(bufRef))
-			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; something went wrong when cloning to this device!</span>")
-			return
-
-		to_chat(user, "<span class='confirm'>A green light flashes on \the [P], confirming the device was cloned to.</span>")
-		return
-
-	var/dat = {"<html>
-	<head>
-		<title>[name] Configuration</title>
-		<style type="text/css">
-html,body {
-	font-family:courier;
-	background:#999999;
-	color:#333333;
-}
-
-a {
-	color:#000000;
-	text-decoration:none;
-	border-bottom:1px solid black;
-}
-		</style>
-	</head>
-	<body>
-		<h3>[name]</h3>
-"}
-	dat += multitool_menu(user,P)
-	if(P)
-		if(bufRef)
-			var/id = null
-			if(istype(bufRef, /obj/machinery/telecomms))
-				var/obj/machinery/telecomms/buffer = bufRef//Casting is better than using colons
-				id = buffer.id
-			else if(bufRef.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
-				id = bufRef:id_tag//sadly, : is needed
-
-			dat += "<p><b>MULTITOOL BUFFER:</b> [bufRef] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
-
-			dat += linkMenu(bufRef)
-
-			if(bufRef)
-				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
-			dat += "</p>"
-		else
-			dat += "<p><b>MULTITOOL BUFFER:</b> <a href='?src=\ref[src];buffer=1'>\[Add Machine\]</a></p>"
-	dat += "</body></html>"
-	user << browse(HTML_SKELETON(dat), "window=mtcomputer")
-	user.set_machine(src)
-	onclose(user, "mtcomputer")
 
 /mob/proc/unset_machine()
 	if(machine)
@@ -749,26 +626,6 @@ a {
 
 /obj/proc/hide(h)
 	return
-
-/obj/proc/container_resist()
-	return
-
-/obj/proc/can_pickup(mob/living/user)
-	return 0
-
-/obj/proc/verb_pickup(mob/living/user)
-	return 0
-
-/obj/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
-	return 0
-
-/client
-	var/last_quick_stored = 0
-
-/obj/proc/quick_store(var/obj/item/I,mob/user) //proc used to handle quick storing
-	if(user?.client)
-		user.client.last_quick_stored = world.time
-	return 0
 
 /**
  * Called when a mob inside this obj's contents logs out.
@@ -922,13 +779,14 @@ a {
 		additional_description = "On \the [src] is a carving, it depicts:\n"
 		var/list/characters = list()
 		for(var/i = 1 to material_mod)
+			var/add_character
 			if(prob(50)) //We're gonna use an atom
 				var/atom/AM = pick(existing_typesof(/mob/living/simple_animal))
-				characters |= initial(AM.name)
+				add_character =  initial(AM.name)
 			else
-				var/strangething = pick("captain","clown","mime","\improper CMO","cargo technician","medical doctor","[user ? user : "stranger"]","octopus","changeling","\improper Nuclear Operative", "[pick("greyshirt", "greytide", "assistant")]", "xenomorph","catbeast","[user && user.mind && user.mind.heard_before.len ? pick(user.mind.heard_before) : "strange thing"]","Central Command","\improper Ian","[ticker.Bible_deity_name]","Nar-Sie","\improper Poly the Parrot","\improper Wizard","vox")
-				characters |= strangething
-			additional_description += "[i == material_mod ? " & a " : "[i > 1 ? ", a ": " A "]"][characters[i]]"
+				add_character = pick("captain","clown","mime","\improper CMO","cargo technician","medical doctor","[user ? user : "stranger"]","octopus","changeling","\improper Nuclear Operative", "[pick("greyshirt", "greytide", "assistant")]", "xenomorph","catbeast","[user && user.mind && user.mind.heard_before.len ? pick(user.mind.heard_before) : "strange thing"]","Central Command","\improper Ian","[ticker.Bible_deity_name]","Nar-Sie","\improper Poly the Parrot","\improper Wizard","vox")
+			characters |= add_character
+			additional_description += "[i == material_mod ? " & a " : "[i > 1 ? ", a ": " A "]"][add_character]"
 		additional_description += ". They are in \the [pick("captains office","Space","mining outpost","vox outpost","a space station","[station_name()]","bar","kitchen","library","Science","void","Bluespace","Hell","Central Command")]"
 		if(material_mod > 2)
 			additional_description += ". They are [pick("[pick("fighting","robusting","attacking","beating up", "abusing")] [pick("each other", pick(characters))]","playing cards","firing lasers at [pick("something",pick(characters))]","crying","laughing","blank faced","screaming","cooking [pick("something", pick(characters))]", "eating [pick("something", pick(characters))]")]. "

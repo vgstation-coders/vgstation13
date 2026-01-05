@@ -1,7 +1,7 @@
 //Because BYOND only lets atoms have 1 type of particles at a given time, we use holders to let atoms stack particle effects
 
 /atom
-	var/list/particle_systems = list()
+	var/list/particle_systems
 
 //-----------------------------------------------
 /atom/proc/add_to_vis(var/stuff)
@@ -27,6 +27,8 @@
 /atom/proc/add_particles(var/particle_string)
 	if (!particle_string)
 		return
+	if (!particle_systems)
+		particle_systems = list()
 	if (particle_string in particle_systems)
 		return
 

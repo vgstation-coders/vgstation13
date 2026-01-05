@@ -22,6 +22,7 @@
 #define SPATIAL_BUCKET_SIZE 15
 
 var/datum/subsystem/mapping/SSmapping
+var/skip_turf_init = FALSE //NEVER change this var for anything other than incrementing world.maxz it breaks EVERYTHING!!
 
 /datum/subsystem/mapping
 	name       = "Mapping"
@@ -450,7 +451,9 @@ var/datum/subsystem/mapping/SSmapping
  * separating each sector. Each sector can hold a different planet.
  */
 /datum/subsystem/mapping/proc/create_procgen_level()
+	skip_turf_init = TRUE
 	world.maxz += 1
+	skip_turf_init = FALSE
 	map.addZLevel(new /datum/zLevel/away, world.maxz, TRUE, TRUE)
 	for(var/x = 1,  x < world.maxx, x++)
 		for(var/y = 1, y < world.maxy, y++)

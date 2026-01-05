@@ -19,6 +19,8 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
+	if(skip_turf_init)
+		return
 	if(!parallax_appearances)
 		parallax_appearances = list()
 		for(var/i in 0 to 25)

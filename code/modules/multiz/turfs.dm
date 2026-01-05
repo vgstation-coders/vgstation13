@@ -140,13 +140,6 @@ var/list/open_overlay_depths
 /turf/proc/openspace_update(var/turf/above) // function for changes in stuff if above is no longer open
 	return
 
-/turf/initialize()
-	. = ..()
-	if(HasBelow(src.z))
-		var/turf/below = GetBelow(src)
-		if(below)
-			below.openspace_update(src)
-
 /turf/unsimulated/floor/snow/openspace_update(var/turf/above)
 	if(above && !isopenspace(above))
 		precip_intensity_override = WEATHER_CALM // should be at least a bit chilly

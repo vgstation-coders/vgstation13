@@ -16,7 +16,7 @@
 	var/edge_priority = 0 // higher priority edges are placed over lower-priority ones
 	var/edge_flags = 0
 	var/edge_overlay_type = /obj/effect/edge_overlay
-	var/list/datum/weakref/edge_overlays = list()
+	var/list/datum/weakref/edge_overlays
 
 	//properties for open tiles (/floor)
 	var/oxygen = 0
@@ -86,12 +86,12 @@
 
 	var/datum/paint_overlay/paint_overlay = null
 
-	var/list/footstep_sound = list()
-	var/list/footstep_sound_barefoot = list()
-	var/list/footstep_sound_claw = list()
+	var/list/footstep_sound
+	var/list/footstep_sound_barefoot
+	var/list/footstep_sound_claw
 
 	//reagent stuff
-	var/list/turf_reagents = list() //a list of reagent ids, associated with their relative amount. eg WATER=1 these numbers should sum to 1, though.
+	var/list/turf_reagents //a list of reagent ids, associated with their relative amount. eg WATER=1 these numbers should sum to 1, though.
 	var/reagent_interaction_flags = 0
 	var/turf_reagent_amount = null // null = do not make any reagents and skip the code
 	var/turf_reagent_method = TOUCH
@@ -111,7 +111,18 @@
 			GiveReagentsTo(M)
 
 /turf/New()
+	// Lazy list inits
+	edge_overlays = list()
+	footstep_sound = list()
+	footstep_sound_barefoot = list()
+	footstep_sound_claw = list()
+	turf_reagents = list()
+
+	if(skip_turf_init)
+		return
+
 	..()
+
 	footstep_sound = sounds_floor
 	footstep_sound_barefoot = sounds_floor_barefoot
 	footstep_sound_claw = sounds_floor_claw
@@ -119,11 +130,24 @@
 		base_icon_state = icon_state
 	pick_icon_state()
 
+	// Fire stuff
+	if(!thermal_material)
+		flammable = FALSE
+		return
+	else
+		if(!autoignition_temperature)
+			autoignition_temperature = thermal_material.autoignition_temperature
+		if(thermal_mass)
+			initial_thermal_mass = thermal_mass
+		fire_protection = world.time
+
 /turf/proc/pick_icon_state()
 	if(base_icon_state && max_icon_states && prob(variance))
 		icon_state = "[base_icon_state][rand(min_icon_states,max_icon_states)]"
 
 /turf/initialize()
+	if(skip_turf_init)
+		return
 	..()
 	if(loc)
 		var/area/A = loc
@@ -140,6 +164,12 @@
 		has_opaque_atom = TRUE
 	if((edge_flags & EDGE_CARDINAL) && !(turf_flags & DEFER_EDGING))
 		update_edges()
+
+	// MultiZ support
+	if(HasBelow(src.z))
+		var/turf/below = GetBelow(src)
+		if(below)
+			below.openspace_update(src)
 
 /turf/ex_act(severity)
 	return 0
@@ -425,7 +455,7 @@
 		for(var/obj/effect/overlay/puddle/ice/P in src)
 			qdel(P)
 
-	if(edge_overlays.len)
+	if(edge_overlays && edge_overlays.len)
 		for(var/datum/weakref/EO in edge_overlays)
 			var/obj/effect/edge_overlay/E = EO.get()
 			if(E)
@@ -835,6 +865,8 @@
 	if(turf_reagent_amount!=null && (reagent_interaction_flags & TURF_REAGENT_FILLS_CONTAINERS) && istype(I,/obj/item/weapon/reagent_containers))
 		to_chat(user,"<span class='notice'>You fill \the [I] from \the [src]</span>")
 		var/obj/item/weapon/reagent_containers/RC=I
+		if(!turf_reagents)
+			turf_reagents = list()
 		for(var/RID in turf_reagents)
 			RC.reagents.add_reagent(RID,turf_reagents[RID]*RC.amount_per_transfer_from_this)
 		if(turf_reagents_limited!=null)
@@ -867,7 +899,8 @@
 		return
 	if(turf_reagent_amount==null)
 		return
-
+	if(!turf_reagents)
+		turf_reagents = list()
 	for(var/RID in turf_reagents)
 		var/datum/reagent/D = chemical_reagents_list[RID]
 		if(D)

@@ -48370,6 +48370,7 @@
 	on = 1
 	},
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bPK" = (
@@ -49510,6 +49511,7 @@
 	icon_state = "4-8"
 	},
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bRR" = (
@@ -49561,6 +49563,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "bRW" = (
@@ -49571,6 +49574,7 @@
 	icon_state = "4-8"
 	},
 /obj/item/voucher/free_item/glowing,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "bRX" = (
@@ -50378,6 +50382,7 @@
 "bTu" = (
 /obj/structure/bookcase,
 /obj/item/weapon/book/manual/security_space_law,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bTv" = (
@@ -114126,6 +114131,7 @@
 /area/crew_quarters/courtroom)
 "qdc" = (
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "qps" = (

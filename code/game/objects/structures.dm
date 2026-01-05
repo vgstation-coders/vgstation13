@@ -72,3 +72,6 @@
 		var/turf/T = get_turf(src)
 		T.extinguish()
 	..()
+
+/obj/structure/proc/container_resist()
+	return

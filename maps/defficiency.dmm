@@ -64868,6 +64868,7 @@
 /area/library)
 "csK" = (
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "csL" = (
@@ -65258,6 +65259,7 @@
 	pixel_x = 22
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "ctG" = (
@@ -66365,6 +66367,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Reference)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "cvW" = (
@@ -66390,6 +66393,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Non-Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "cwa" = (
@@ -66405,6 +66409,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "cwc" = (
@@ -67576,6 +67581,7 @@
 /obj/structure/table/woodentable,
 /obj/item/weapon/paper,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "cyw" = (
@@ -67598,6 +67604,7 @@
 "cyy" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/pen,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "cyz" = (
@@ -110219,6 +110226,7 @@
 	},
 /obj/item/weapon/book/manual/security_antag_guide,
 /obj/item/weapon/book/manual/security_space_law,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "gTm" = (

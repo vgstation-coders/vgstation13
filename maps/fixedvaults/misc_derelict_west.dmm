@@ -74,7 +74,7 @@
 /area/derelict/atmos)
 "dh" = (
 /obj/machinery/door/window{
-	dir = 3
+	dir = 2
 	},
 /turf/simulated/floor,
 /area/derelict/bridge/access)
