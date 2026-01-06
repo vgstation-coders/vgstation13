@@ -21,6 +21,8 @@ type ZLevel = {
   name: string;
   ref: string;
   vLevelCount: number;
+  hasHolomap: boolean;
+  holomapActive: boolean;
   vLevels: VLevel[];
 };
 
@@ -108,11 +110,26 @@ const ZLevelEntry = (props: { zLevel: ZLevel }) => {
         </Box>
       }
       buttons={
-        <Button
-          icon="search"
-          tooltip="View Variables"
-          onClick={() => act('vv_zlevel', { ref: zLevel.ref })}
-        />
+        <>
+          <Button
+            icon="map"
+            selected={zLevel.holomapActive}
+            disabled={zLevel.index <= 6 && !zLevel.hasHolomap}
+            tooltip={
+              zLevel.index <= 6 && !zLevel.hasHolomap
+                ? 'No holomap data available'
+                : zLevel.index <= 6
+                  ? (zLevel.holomapActive ? 'Hide Holomap' : 'Show Holomap')
+                  : (zLevel.holomapActive ? 'Hide Virtual Z-Level Map' : 'Show Virtual Z-Level Map')
+            }
+            onClick={() => act('show_map', { ref: zLevel.ref })}
+          />
+          <Button
+            icon="search"
+            tooltip="View Variables"
+            onClick={() => act('vv_zlevel', { ref: zLevel.ref })}
+          />
+        </>
       }
       onToggle={() => setOpen(!open)}
     >

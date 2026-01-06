@@ -20,6 +20,9 @@
 	var/mob/M = mind.current
 	if (isAdminGhost(M))
 		return TRUE
+	// Also allow any admin (for use from Level Manager)
+	if (M && M.client && M.client.holder && (M.client.holder.rights & (R_ADMIN|R_FUN)))
+		return TRUE
 	return FALSE
 
 /datum/mind_ui/zlevel_map/Display(var/z_id)
@@ -29,7 +32,6 @@
 			elements -= old_vz_disp
 			qdel(old_vz_disp)
 	. = ..()
-	z_id = 7
 	var/datum/zLevel/z_to_show = map.zLevels[z_id]
 	if(!z_to_show)
 		return
@@ -61,7 +63,7 @@
 	. = ..(loc, P)
 
 	// Size and position to match virtual z-level
-	offset_x = -ZMAP_UI_SIZE/2 + floor((v.x_min-1)/2) + ZMAP_UI_PADDING //it's as shrimple as that
+	offset_x = -ZMAP_UI_SIZE/2 + floor((v.x_min-1)/2) + ZMAP_UI_PADDING
 	offset_y = -ZMAP_UI_SIZE/2 + floor((v.y_min-1)/2) + ZMAP_UI_PADDING
 	var/new_width = v.size_x / 2
 	var/new_height = v.size_y / 2

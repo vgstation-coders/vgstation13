@@ -1,8 +1,21 @@
 /datum/level_manager
 	var/mob/user
+	var/datum/station_holomap/active_holomap = null
+	var/active_holomap_z = null  // Only tracks holomaps (z <= 6), not MindUI
 
 /datum/level_manager/New(mob/M)
 	user = M
+
+/datum/level_manager/Destroy()
+	close_holomap()
+	..()
+
+/datum/level_manager/proc/close_holomap()
+	if(active_holomap && user && user.client)
+		user.client.images -= active_holomap.station_map
+		animate(active_holomap.station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
+		QDEL_NULL(active_holomap)
+		active_holomap_z = null
 
 /datum/level_manager/tgui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
@@ -25,6 +38,23 @@
 		z_data["name"] = Z.name
 		z_data["ref"] = "\ref[Z]"
 		z_data["vLevelCount"] = Z.virtual_z_levels.len
+		z_data["hasHolomap"] = ((HOLOMAP_EXTRA_STATIONMAP + "_[Z.z]") in extraMiniMaps)
+
+		// Check if map is active - holomap for z <= 6, MindUI for z > 6
+		var/map_active = FALSE
+		if(Z.z <= 6)
+			map_active = (active_holomap_z == Z.z)
+		else if(user && user.mind && ("zlevel_map" in user.mind.activeUIs))
+			var/datum/mind_ui/zlevel_map/zmap = user.mind.activeUIs["zlevel_map"]
+			// Only consider it active if it's actually showing AND it's showing this z-level
+			// We check the first virtual_z_display element to see which z it's displaying
+			if(zmap && zmap.active)
+				for(var/obj/abstract/mind_ui_element/hoverable/virtual_z_display/vz_disp in zmap.elements)
+					if(vz_disp.v && vz_disp.v.parent_z.z == Z.z)
+						map_active = TRUE
+						break
+
+		z_data["holomapActive"] = map_active
 		z_data["vLevels"] = list()
 
 		for(var/datum/virtual_z/V in Z.virtual_z_levels)
@@ -209,6 +239,99 @@
 
 			log_admin("[key_name(usr)] created a new Z-Level: [name] (Z: [world.maxz], Type: [type_choice]).")
 			message_admins("<span class='notice'>[key_name_admin(usr)] created a new Z-Level: [name] (Z: [world.maxz], Type: [type_choice]).</span>", 1)
+			return TRUE
+
+		if("show_map")
+			var/datum/zLevel/Z = locate(params["ref"])
+			if(!Z || !istype(Z))
+				to_chat(usr, "<span class='warning'>Invalid z-level reference.</span>")
+				return FALSE
+
+			// Check if z <= 6: show holomap, else show MindUI
+			if(Z.z <= 6)
+				// Toggle holomap for base z-levels
+				if(active_holomap_z == Z.z)
+					// Close currently active holomap
+					close_holomap()
+					to_chat(usr, "<span class='notice'>Closed holomap for Z-Level [Z.z]: [Z.name]</span>")
+					log_admin("[key_name(usr)] closed holomap for Z-[Z.z] ([Z.name]).")
+					return TRUE
+
+				// Show holomap for base z-levels
+				if(!usr.client || !usr.hud_used || !usr.hud_used.holomap_obj)
+					to_chat(usr, "<span class='warning'>Cannot display holomap - HUD not available.</span>")
+					return FALSE
+
+				// Check if holomap exists for this z-level
+				var/holomap_key = HOLOMAP_EXTRA_STATIONMAP + "_[Z.z]"
+				if(!(holomap_key in extraMiniMaps))
+					to_chat(usr, "<span class='warning'>No holomap available for Z-Level [Z.z].</span>")
+					return FALSE
+
+				// Close any existing holomap first
+				close_holomap()
+
+				// Create new holomap datum
+				active_holomap = new()
+				active_holomap_z = Z.z
+				var/turf/target_turf = locate(round(world.maxx/2), round(world.maxy/2), Z.z)
+				if(!target_turf)
+					to_chat(usr, "<span class='warning'>Failed to find valid location on Z-Level [Z.z].</span>")
+					close_holomap()
+					return FALSE
+
+				active_holomap.initialize_holomap(target_turf, FALSE, usr)
+				active_holomap.station_map.loc = usr.hud_used.holomap_obj
+				active_holomap.station_map.alpha = 0
+				animate(active_holomap.station_map, alpha = 255, time = 5, easing = LINEAR_EASING)
+
+				usr.client.images |= active_holomap.station_map
+				to_chat(usr, "<span class='notice'>Displaying holomap for Z-Level [Z.z]: [Z.name]</span>")
+				log_admin("[key_name(usr)] opened holomap for Z-[Z.z] ([Z.name]).")
+
+			else
+				// Toggle MindUI for virtual z-levels
+				if(!usr.mind)
+					to_chat(usr, "<span class='warning'>You need a mind to view the virtual z-level map.</span>")
+					return FALSE
+
+				// Check if it's already open for this z-level
+				var/datum/mind_ui/zlevel_map/existing_zmap
+				var/showing_this_z = FALSE
+				if("zlevel_map" in usr.mind.activeUIs)
+					existing_zmap = usr.mind.activeUIs["zlevel_map"]
+					// Check if it's showing this specific z-level
+					if(existing_zmap.active)
+						for(var/obj/abstract/mind_ui_element/hoverable/virtual_z_display/vz_disp in existing_zmap.elements)
+							if(vz_disp.v && vz_disp.v.parent_z.z == Z.z)
+								showing_this_z = TRUE
+								break
+
+				// If already showing this z-level, hide it
+				if(showing_this_z)
+					existing_zmap.Hide()
+					to_chat(usr, "<span class='notice'>Closed virtual z-level map for Z-[Z.z] ([Z.name]).</span>")
+					log_admin("[key_name(usr)] closed virtual z-level map for Z-[Z.z] ([Z.name]).")
+					return TRUE
+
+				// Get or create the zlevel_map UI
+				var/datum/mind_ui/zlevel_map/zmap
+				if(existing_zmap)
+					zmap = existing_zmap
+				else
+					// Create new UI by calling DisplayUI, which will instantiate it
+					usr.DisplayUI("zlevel_map")
+					if("zlevel_map" in usr.mind.activeUIs)
+						zmap = usr.mind.activeUIs["zlevel_map"]
+
+				if(!zmap)
+					to_chat(usr, "<span class='warning'>Failed to initialize z-level map interface.</span>")
+					return FALSE
+
+				// Display with the specific z-level (don't set active_holomap_z - that's only for holomaps)
+				zmap.Display(Z.z)
+				log_admin("[key_name(usr)] opened virtual z-level map for Z-[Z.z] ([Z.name]).")
+
 			return TRUE
 
 		if("create_vlevel")
