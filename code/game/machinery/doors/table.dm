@@ -55,7 +55,7 @@
 	if(!density || operating)
 		return
 
-	var/can_enter = FALSE
+	var/can_enter = emagged
 	if(istype(user,/obj/machinery/bot))
 		var/obj/machinery/bot/bot = user
 		if(check_access(bot.botcard))
@@ -72,7 +72,7 @@
 			can_enter = TRUE
 	else if(allowed(user))
 		can_enter = TRUE
-	if(!emagged && !can_enter)
+	if(!can_enter)
 		denied()
 	else
 		open()
