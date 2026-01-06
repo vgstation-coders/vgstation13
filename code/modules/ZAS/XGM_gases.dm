@@ -70,7 +70,11 @@
 	//and following a N/Z ratio of 1.5, the molar mass of a monatomic gas is:
 	molar_mass = 0.405	// kg/mol
 
-	tile_overlay = newlist(/obj/effect/overlay/gas_overlay/plasma,/obj/effect/overlay/gas_overlay/plasma/two,/obj/effect/overlay/gas_overlay/plasma/three)
+	tile_overlay = newlist(
+			/obj/effect/overlay/gas_overlay/plasma,
+			/obj/effect/overlay/gas_overlay/plasma/two,
+			/obj/effect/overlay/gas_overlay/plasma/three
+		)
 	overlay_limit = MOLES_PLASMA_VISIBLE / CELL_VOLUME
 	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
@@ -94,7 +98,11 @@
 	specific_heat = 40	// J/(mol*K)
 	molar_mass = 0.044	// kg/mol. N₂O
 
-	tile_overlay = newlist(/obj/effect/overlay/gas_overlay/sleeping_agent,/obj/effect/overlay/gas_overlay/sleeping_agent/two,/obj/effect/overlay/gas_overlay/sleeping_agent/three)
+	tile_overlay = newlist(
+			/obj/effect/overlay/gas_overlay/sleeping_agent,
+			/obj/effect/overlay/gas_overlay/sleeping_agent/two,
+			/obj/effect/overlay/gas_overlay/sleeping_agent/three
+		)
 	overlay_limit = 1 / CELL_VOLUME
 	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
@@ -145,7 +153,14 @@
 
 	molar_mass = 0.032
 
-	tile_overlay = newlist(/obj/effect/overlay/gas_overlay/cryotheum)
+	tile_overlay = newlist(
+			/obj/effect/overlay/gas_overlay/cryotheum,
+			/obj/effect/overlay/gas_overlay/cryotheum/two,
+			/obj/effect/overlay/gas_overlay/cryotheum/three,
+			/obj/effect/overlay/gas_overlay/cryotheum/four,
+			/obj/effect/overlay/gas_overlay/cryotheum/five,
+			/obj/effect/overlay/gas_overlay/cryotheum/six
+		)
 	overlay_limit = MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME
 	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
@@ -155,6 +170,21 @@
 /obj/effect/overlay/gas_overlay/cryotheum
 	name = "cryotheum"
 	icon_state = "cryotheum"
+
+/obj/effect/overlay/gas_overlay/cryotheum/two
+	icon_state = "cryotheum2"
+
+/obj/effect/overlay/gas_overlay/cryotheum/three
+	icon_state = "cryotheum3"
+
+/obj/effect/overlay/gas_overlay/cryotheum/four
+	icon_state = "cryotheum4"
+
+/obj/effect/overlay/gas_overlay/cryotheum/five
+	icon_state = "cryotheum5"
+
+/obj/effect/overlay/gas_overlay/cryotheum/six
+	icon_state = "cryotheum6"
 
 /datum/gas/radon
 	id = GAS_RADON
