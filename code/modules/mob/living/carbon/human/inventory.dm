@@ -284,8 +284,7 @@
 		success = 1
 		slot = slot_wear_mask
 		if(internal)
-			internal = null
-			update_internals()
+			equip_internals(null)
 		update_inv_wear_mask()
 	else if (W == wear_id)
 		wear_id = null

@@ -183,14 +183,12 @@
 		if(istype(loc,/mob/living/carbon))
 			var/mob/living/carbon/location = loc
 			if(location.internal == src)
-				location.internal = null
-				location.update_internals()
+				location.equip_internals(null)
 				to_chat(usr, "<span class='notice'>You close the tank release valve.</span>")
 			else
 				if(location.wear_mask && (location.wear_mask.clothing_flags & MASKINTERNALS))
-					location.internal = src
+					location.update_internals(src)
 					to_chat(usr, "<span class='notice'>You open \the [src] valve.</span>")
-					location.update_internals()
 				else
 					to_chat(usr, "<span class='notice'>You need something to connect to \the [src].</span>")
 

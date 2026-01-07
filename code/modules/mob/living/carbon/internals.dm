@@ -29,8 +29,7 @@
 
 	if(internal)
 		internal.add_fingerprint(user)
-		internal = null
-		update_internals()
+		equip_internals(null)
 		if(user != src)
 			if(!user.isGoodPickpocket())
 				visible_message("<span class='warning'>\The [user] shuts off \the [src]'s internals!</span>")
@@ -59,9 +58,8 @@
 				else
 					to_chat(user, "<span class='warning'>You don't have \an [breathes] tank.</span>")
 				return
-		internal = T
 		T.add_fingerprint(user)
-		update_internals()
+		equip_internals(T)
 		if(user != src)
 			var/gas_contents = T.air_contents.english_contents_list()
 			if(!user.isGoodPickpocket())
@@ -72,6 +70,10 @@
 		else
 			to_chat(src, "<span class='notice'>You are now running on internals from \the [T].</span>")
 		return 1
+
+/mob/living/carbon/proc/equip_internals(obj/item/weapon/tank/tank)
+	internal = tank
+	update_internals()
 
 /mob/living/carbon/proc/update_internals()
 	if(internals)

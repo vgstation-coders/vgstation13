@@ -146,8 +146,7 @@
 		H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox(H), slot_wear_mask)
 		var/obj/item/weapon/tank/nitrogen/T = new(H)
 		H.put_in_hands(T)
-		H.internal = T
-		H.update_internals()
+		H.equip_internals(T)
 
 	H.make_all_robot_parts_organic()
 
