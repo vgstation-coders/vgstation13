@@ -5606,16 +5606,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 		if(!istype(S))
 			return
 
-		var/transit_dir = NORTH
-		var/list/dirs = list("north"=NORTH, "west"=WEST, "east"=EAST, "south"=SOUTH)
-		var/choice = input(usr, "Select a direction for the transit area (this should be the direction in which the shuttle is currently facing)", "Transit") as null|anything in dirs
-
-		if(!choice)
-			return
-
-		transit_dir = dirs[choice]
-
-		var/obj/docking_port/destination/D = generate_transit_area(S, transit_dir)
+		var/obj/docking_port/destination/D = generate_transit_area(S)
 		if(!istype(D))
 			to_chat(usr, "<span class='notice'>Transit area generation failed!</span>")
 			return
