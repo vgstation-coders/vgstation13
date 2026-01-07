@@ -176,8 +176,14 @@ export const CrewMonitor = () => {
               <Button
                 icon={holomapEnabled ? 'map-marked-alt' : 'map'}
                 selected={holomapEnabled}
-                disabled={!holomapAvailable}
-                tooltip={!holomapAvailable ? 'Holomap not available' : undefined}
+                disabled={!holomapAvailable || [0, 3, 6].includes(currentZLevel)}
+                tooltip={
+                  !holomapAvailable
+                    ? 'Holomap not available'
+                    : [0, 3, 6].includes(currentZLevel)
+                      ? 'Holomap not available for this z-level'
+                      : undefined
+                }
                 onClick={() => act('toggle_holomap')}>
                 {holomapEnabled ? 'Hide Holomap' : 'Show Holomap'}
               </Button>
