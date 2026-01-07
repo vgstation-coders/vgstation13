@@ -203,15 +203,11 @@
 				_total += 10 * (a / b)
 
 			if(glasses && istype(glasses, /obj/item/clothing))
-				if (!glasses.perfect_sight)
-					if (glasses.nearsighted_modifier > 0)
-						//welding goggles worsen eyesight (+5)
-						_total += nearsightedness
-						_total += glasses.nearsighted_modifier
-					else
-						//prescription glasses enhance it (-3) but only if you are nearsighted (+3), otherwise they make YOU see blurry
-						//TODO: have varying degrees of nearsightedness with stronger glasses. This operation already supports it.
-						_total += abs(nearsightedness - glasses.nearsighted_modifier)
+				if (!glasses.perfect_sight)//this will do for now to handle glasses that need to fit people regardless of eyesight
+					//welding goggles worsen eyesight (+5)
+					//prescription glasses enhance it (-3) but only if you are nearsighted (+3), otherwise they make YOU see blurry
+					//TODO: have varying degrees of nearsightedness with stronger glasses. This operation already supports it.
+					_total += abs(nearsightedness + glasses.nearsighted_modifier)
 			else
 				_total += nearsightedness
 
