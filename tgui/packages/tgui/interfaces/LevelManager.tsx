@@ -45,6 +45,7 @@ type VLevel = {
   gpsAllowed: boolean;
   teleJammed: number;
   transitionLoops: boolean;
+  transitionChannel: string;
   // Crosswrap settings
   hasCrosswrap: boolean;
   crosswrapNorth?: number;
@@ -312,6 +313,16 @@ const VLevelEntry = (props: { vLevel: VLevel }) => {
                   content={vLevel.transitionLoops ? 'Enabled' : 'Disabled'}
                   onClick={() =>
                     act('toggle_transition_loops', { ref: vLevel.ref })
+                  }
+                />
+              </LabeledList.Item>
+              <LabeledList.Item label="Transition Channel">
+                <Button
+                  icon="layer-group"
+                  content={vLevel.transitionChannel}
+                  tooltip="Change which transition channel this vLevel belongs to for space drift"
+                  onClick={() =>
+                    act('change_transition_channel', { ref: vLevel.ref })
                   }
                 />
               </LabeledList.Item>

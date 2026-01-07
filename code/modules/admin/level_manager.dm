@@ -95,6 +95,7 @@
 			v_data["gpsAllowed"] = V.gps_allowed
 			v_data["teleJammed"] = V.teleJammed
 			v_data["transitionLoops"] = V.transitionLoops
+			v_data["transitionChannel"] = V.transition_channel
 
 			// Transition crosswrap data
 			if(V.transition_crosswrap_v && V.transition_crosswrap_v.len >= 4)
@@ -218,6 +219,47 @@
 				return FALSE
 			V.transitionLoops = !V.transitionLoops
 			log_admin("[key_name(usr)] [V.transitionLoops ? "enabled" : "disabled"] transition loops for vZ-[V.id] ([V.name]).")
+			return TRUE
+
+		if("change_transition_channel")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V))
+				return FALSE
+
+			// Build list of existing channels
+			var/list/channel_choices = list()
+			for(var/channel_name in accessable_v_levels)
+				channel_choices += channel_name
+			channel_choices += "Create New Channel..."
+
+			var/old_channel = V.transition_channel
+			var/channel_choice = input(usr, "Select transition channel for vZ-[V.id] ([V.name]):\n(Current: [old_channel])", "Transition Channel") as null|anything in channel_choices
+			if(!channel_choice)
+				return FALSE
+
+			var/new_channel = channel_choice
+			if(channel_choice == "Create New Channel...")
+				new_channel = input(usr, "Enter name for new transition channel:", "New Channel") as null|text
+				if(!new_channel)
+					return FALSE
+				// Create the new channel if it doesn't exist
+				if(!(new_channel in accessable_v_levels))
+					accessable_v_levels[new_channel] = list()
+
+			// Remove from old channel if not movement jammed
+			if(!V.movementJammed && (old_channel in accessable_v_levels))
+				accessable_v_levels[old_channel] -= "[V.id]"
+
+			// Update the channel
+			V.transition_channel = new_channel
+
+			// Add to new channel if not movement jammed
+			if(!V.movementJammed)
+				if(!(new_channel in accessable_v_levels))
+					accessable_v_levels[new_channel] = list()
+				accessable_v_levels[new_channel] += list("[V.id]" = V.movementChance)
+
+			log_admin("[key_name(usr)] changed transition channel for vZ-[V.id] ([V.name]) from '[old_channel]' to '[new_channel]'.")
 			return TRUE
 
 		if("configure_crosswrap")
