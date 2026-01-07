@@ -136,6 +136,9 @@
 	new_vz.movementJammed = level.movementJammed
 	new_vz.movementChance = level.movementChance
 	new_vz.transitionLoops = level.transitionLoops
+	if(level.transition_crosswrap_z.len == 4)
+		for(var/datum/zLevel/zl in level.transition_crosswrap_z)
+			new_vz.transition_crosswrap_v += zl.virtual_z_levels[1]
 	new_vz.update_settings()
 
 	WORLD_X_OFFSET += rand(-50,50)
@@ -209,7 +212,9 @@
 	new_vz.name = "Map Element: [ME.name]"
 	return new_vz
 
-var/global/list/accessable_v_levels = list()
+var/global/list/accessable_v_levels = list(
+	"Default" = list()
+)
 
 /datum/map/proc/map_specific_init()
 

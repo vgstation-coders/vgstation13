@@ -245,6 +245,8 @@
 	if(ticker && ticker.mode)
 		// Okay, so let's make it so that people can travel z levels but not nuke disks!
 		// if(ticker.mode.name == "nuclear emergency")	return
+		if(!v)
+			return
 		if(v.movementJammed)
 			return
 		if(v.size_x < TRANSITIONEDGE * 2 || v.size_y < TRANSITIONEDGE * 2)
@@ -278,20 +280,17 @@
 					was_pulling = MOB.pulling //Store the object to transition later
 
 			var/datum/virtual_z/move_to_v = v
-			var/datum/zLevel/ZL = v.parent_z
-			var/datum/zLevel/move_to_z = null
-			if(ZL.transition_crosswrap_z && ZL.transition_crosswrap_z.len>=4) // transition crosswrap support to be added to vLevels later
+			if(v.transition_crosswrap_v && v.transition_crosswrap_v.len==4)
 				locked_to_current_v=TRUE //prevent shuffling z-level later in the code.
 				randomize_drift_position=FALSE
-				if(A.y>world.maxy - TRANSITIONEDGE) // NORTH
-					move_to_z=ZL.transition_crosswrap_z[1]
-				else if(A.y<=TRANSITIONEDGE) // SOUTH
-					move_to_z=ZL.transition_crosswrap_z[2]
-				else if(A.x>world.maxx - TRANSITIONEDGE) // EAST
-					move_to_z=ZL.transition_crosswrap_z[3]
-				else if(A.x<=TRANSITIONEDGE) // WEST
-					move_to_z=ZL.transition_crosswrap_z[4]
-				move_to_v = move_to_z.virtual_z_levels[1]
+				if(A.vy()>v.y_max - TRANSITIONEDGE) // NORTH
+					move_to_v=v.transition_crosswrap_v[1]
+				else if(A.vy()<=TRANSITIONEDGE) // SOUTH
+					move_to_v=v.transition_crosswrap_v[2]
+				else if(A.vx()>v.x_max - TRANSITIONEDGE) // EAST
+					move_to_v=v.transition_crosswrap_v[3]
+				else if(A.vx()<=TRANSITIONEDGE) // WEST
+					move_to_v=v.transition_crosswrap_v[4]
 
 			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
 			for(var/mob/living/L in contents_brought)
@@ -305,7 +304,7 @@
 
 			if(!locked_to_current_v)
 				while(move_to_v == src.v)
-					var/picked = pickweight(accessable_v_levels)
+					var/picked = pickweight(accessable_v_levels[v.transition_channel])
 					var/datum/virtual_z/vz_to_use = map.vLevels[text2num(picked)]
 					if(istype(vz_to_use))
 						move_to_v = vz_to_use
@@ -316,6 +315,9 @@
 
 			if(!move_to_v)
 				return
+
+			if(isnum(move_to_v)) //DEBUG
+				move_to_v = map.vLevels[move_to_v]
 
 			var/datum/virtual_z/old_v = src.v
 			INVOKE_EVENT(A, /event/v_transition, "user" = A, "from_v" = old_v, "to_v" = move_to_v)

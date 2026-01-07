@@ -45,6 +45,12 @@ type VLevel = {
   gpsAllowed: boolean;
   teleJammed: number;
   transitionLoops: boolean;
+  // Crosswrap settings
+  hasCrosswrap: boolean;
+  crosswrapNorth?: number;
+  crosswrapSouth?: number;
+  crosswrapEast?: number;
+  crosswrapWest?: number;
 };
 
 // Teleportation constants (must match DM defines)
@@ -308,6 +314,30 @@ const VLevelEntry = (props: { vLevel: VLevel }) => {
                     act('toggle_transition_loops', { ref: vLevel.ref })
                   }
                 />
+              </LabeledList.Item>
+              <LabeledList.Item label="Transition Crosswraps">
+                <Box inline>
+                  {vLevel.hasCrosswrap ? (
+                    <Box inline color="label" mr={1}>
+                      N:{vLevel.crosswrapNorth || '-'} S:
+                      {vLevel.crosswrapSouth || '-'} E:
+                      {vLevel.crosswrapEast || '-'} W:
+                      {vLevel.crosswrapWest || '-'}
+                    </Box>
+                  ) : (
+                    <Box inline color="label" mr={1}>
+                      Not configured
+                    </Box>
+                  )}
+                  <Button
+                    icon="arrows-alt"
+                    tooltip="Configure which vLevels to transition to when hitting each edge"
+                    content="Configure"
+                    onClick={() =>
+                      act('configure_crosswrap', { ref: vLevel.ref })
+                    }
+                  />
+                </Box>
               </LabeledList.Item>
             </LabeledList>
           </Section>

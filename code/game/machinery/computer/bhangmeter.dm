@@ -220,10 +220,11 @@ var/list/list/sensed_explosions = list()
 			return//We add a delay between announcements, unless the new explosion is larger than the last one.
 	last_announcement = world.time
 	last_announced_explosion = SE
+	var/datum/virtual_z/vz = vz_at_loc(SE.x,SE.y,SE.z)
 	if (SE.cap)
-		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([SE.x-WORLD_X_OFFSET[SE.z]],[SE.y-WORLD_Y_OFFSET[SE.z]], [SE.z]). \[Theoretical Results\] Epicenter radius: [round(SE.cap*0.25)]. Outer radius: [round(SE.cap*0.5)]. Shockwave radius: [round(SE.cap)]. Temporal displacement of tachyons: [SE.delay] second\s.")
+		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([vz.vx(coord = SE.x)-get_world_x_offset(vz.id)],[vz.vy(coord = SE.y)-get_world_y_offset(vz.id)], [vz.id]). \[Theoretical Results\] Epicenter radius: [round(SE.cap*0.25)]. Outer radius: [round(SE.cap*0.5)]. Shockwave radius: [round(SE.cap)]. Temporal displacement of tachyons: [SE.delay] second\s.")
 	else
-		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([SE.x-WORLD_X_OFFSET[SE.z]],[SE.y-WORLD_Y_OFFSET[SE.z]], [SE.z]). Epicenter radius: [SE.dev]. Outer radius: [SE.heavy]. Shockwave radius: [SE.light]. Temporal displacement of tachyons: [SE.delay] second\s.")
+		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([vz.vx(coord = SE.x)-get_world_x_offset(vz.id)],[vz.vy(coord = SE.y)-get_world_y_offset(vz.id)], [vz.id]). Epicenter radius: [SE.dev]. Outer radius: [SE.heavy]. Shockwave radius: [SE.light]. Temporal displacement of tachyons: [SE.delay] second\s.")
 
 
 /obj/machinery/computer/bhangmeter/proc/announce_meteors(var/datum/meteor_warning/MW)

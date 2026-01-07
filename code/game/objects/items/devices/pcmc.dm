@@ -67,7 +67,7 @@
 	else if(!vz || !vz.gps_allowed)
 		return "SIGNAL JAMMED"
 	else
-		return "[format_text(device_area.name)] ([vx() - WORLD_X_OFFSET[vz.id]], [vy() - WORLD_Y_OFFSET[vz.id]], [vz.id])"
+		return "[format_text(device_area.name)] ([vx() - get_world_x_offset(vz.id)], [vy() - get_world_y_offset(vz.id)], [vz.id])"
 
 
 /obj/item/device/pcmc/proc/get_crew()
@@ -139,8 +139,8 @@
 				// Only show location data if sensor_mode == 3 and not on a planet
 				if(U.sensor_mode == 3 && !entry_vz.planet)
 					player_area = format_text(get_area(H).name)
-					see_x = H.vx() - WORLD_X_OFFSET[entry_vz.id]
-					see_y = H.vy() - WORLD_Y_OFFSET[entry_vz.id]
+					see_x = H.vx() - get_world_x_offset(entry_vz.id)
+					see_y = H.vy() - get_world_y_offset(entry_vz.id)
 					see_z = entry_vz.id
 				else
 					see_x = "?"

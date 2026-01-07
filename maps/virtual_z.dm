@@ -21,6 +21,7 @@
 	var/list/placed_ruins = list()
 
 	var/turf/base_turf = /turf/space
+	var/base_area = null
 
 	var/datum/planet_type/planet = null
 
@@ -44,7 +45,9 @@
 	var/bluespace_jammed = FALSE
 	var/movementJammed = TRUE //Prevents you from accessing the vlevel by drifting
 	var/movementChance = 10 //Inhereted from parent z (for now)
+	var/transition_channel = "Default"
 	var/transitionLoops = FALSE //if true, transition sends you back to the same v-level
+	var/list/transition_crosswrap_v=null // list(z_north,z_south,z_east,z_west). when you hit the edge, instead of drifting to a random zlevel or looping on the current one, teleports you to the corresponding edge on the z-level in the list.
 
 /datum/virtual_z/New(var/datum/zLevel/z, var/input_size_x, var/input_size_y, var/input_x = 0, var/input_y = 0, var/skip_turf_setup = FALSE)
 	. = ..()
@@ -84,7 +87,7 @@
 
 /datum/virtual_z/proc/update_settings()
 	if(!movementJammed)
-		accessable_v_levels += list("[id]" = movementChance)
+		accessable_v_levels[transition_channel] += list("[id]" = movementChance)
 	switch(teleJammed)
 		if(VZ_TELEPORTATION_FORBIDDEN)
 			for(var/area/A in areas)
@@ -518,3 +521,12 @@
 		return
 
 	lz.clear_warnings()
+
+/proc/vz_at_loc(var/x_co,var/y_co,var/z_co)
+	var/datum/zLevel/true_z = map.zLevels[z_co]
+	if(!true_z)
+		return null
+	for(var/datum/virtual_z/VZ in true_z.virtual_z_levels)
+		if(x_co >= VZ.x_min && x_co <= VZ.x_max && y_co >= VZ.y_min && y_co <= VZ.y_max)
+			return VZ
+	return null

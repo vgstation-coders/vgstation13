@@ -670,6 +670,10 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 /datum/subsystem/mapping/proc/v_pause_check(var/mob/living/user, var/datum/virtual_z/to_v = null, var/datum/virtual_z/from_v = null)
 	if(!istype(user) || !user.client || !(to_v && from_v))
 		return
+	if(isnum(to_v))
+		to_v = map.vLevels[to_v]
+	if(isnum(from_v))
+		from_v = map.vLevels[from_v]
 	if(to_v) // Unpause destination vLevel
 		to_v.set_status(TRUE)
 	if(from_v) // Check if any living mobs with clients remain on source vLevel

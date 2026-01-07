@@ -96,6 +96,16 @@
 			v_data["teleJammed"] = V.teleJammed
 			v_data["transitionLoops"] = V.transitionLoops
 
+			// Transition crosswrap data
+			if(V.transition_crosswrap_v && V.transition_crosswrap_v.len >= 4)
+				v_data["crosswrapNorth"] = V.transition_crosswrap_v[1]
+				v_data["crosswrapSouth"] = V.transition_crosswrap_v[2]
+				v_data["crosswrapEast"] = V.transition_crosswrap_v[3]
+				v_data["crosswrapWest"] = V.transition_crosswrap_v[4]
+				v_data["hasCrosswrap"] = TRUE
+			else
+				v_data["hasCrosswrap"] = FALSE
+
 			z_data["vLevels"] += list(v_data)
 
 		data["zLevels"] += list(z_data)
@@ -208,6 +218,50 @@
 				return FALSE
 			V.transitionLoops = !V.transitionLoops
 			log_admin("[key_name(usr)] [V.transitionLoops ? "enabled" : "disabled"] transition loops for vZ-[V.id] ([V.name]).")
+			return TRUE
+
+		if("configure_crosswrap")
+			var/datum/virtual_z/V = locate(params["ref"])
+			if(!V || !istype(V))
+				return FALSE
+
+			// Build list of available vLevels for selection
+			var/list/vlevel_choices = list("None" = null)
+			for(var/datum/virtual_z/vz in map.vLevels)
+				if(vz.id != V.id) // Don't allow self-reference
+					vlevel_choices["vZ-[vz.id]: [vz.name]"] = vz.id
+
+			// Get current values
+			var/current_north = null
+			var/current_south = null
+			var/current_east = null
+			var/current_west = null
+			if(V.transition_crosswrap_v && V.transition_crosswrap_v.len >= 4)
+				current_north = V.transition_crosswrap_v[1]
+				current_south = V.transition_crosswrap_v[2]
+				current_east = V.transition_crosswrap_v[3]
+				current_west = V.transition_crosswrap_v[4]
+
+			// Ask for each direction
+			var/north_choice = input(usr, "Select vLevel to crosswrap NORTH edge to:\n(Current: [current_north ? "vZ-[current_north]" : "None"])", "Crosswrap North") as null|anything in vlevel_choices
+			var/south_choice = input(usr, "Select vLevel to crosswrap SOUTH edge to:\n(Current: [current_south ? "vZ-[current_south]" : "None"])", "Crosswrap South") as null|anything in vlevel_choices
+			var/east_choice = input(usr, "Select vLevel to crosswrap EAST edge to:\n(Current: [current_east ? "vZ-[current_east]" : "None"])", "Crosswrap East") as null|anything in vlevel_choices
+			var/west_choice = input(usr, "Select vLevel to crosswrap WEST edge to:\n(Current: [current_west ? "vZ-[current_west]" : "None"])", "Crosswrap West") as null|anything in vlevel_choices
+
+			// Get the vLevel IDs from the choices
+			var/north_id = vlevel_choices[north_choice]
+			var/south_id = vlevel_choices[south_choice]
+			var/east_id = vlevel_choices[east_choice]
+			var/west_id = vlevel_choices[west_choice]
+
+			// Check if all are null - if so, clear the crosswrap
+			if(!north_id && !south_id && !east_id && !west_id)
+				V.transition_crosswrap_v = null
+				log_admin("[key_name(usr)] cleared transition crosswraps for vZ-[V.id] ([V.name]).")
+			else
+				V.transition_crosswrap_v = list(north_id, south_id, east_id, west_id)
+				log_admin("[key_name(usr)] set transition crosswraps for vZ-[V.id] ([V.name]): N=[north_id], S=[south_id], E=[east_id], W=[west_id].")
+
 			return TRUE
 
 		if("create_zlevel")
@@ -381,6 +435,7 @@
 					var/gps_allowed = FALSE
 					var/movement_jammed = TRUE
 					var/transition_loops = FALSE
+					var/list/transition_crosswrap = null
 					var/list/adv_settings_opt = list("Yes", "No")
 					var/adv_settings = input(usr, "Configure advanced settings (buffer size, base turf type, teleportation blocking, etc)?", "Advanced Settings", "No") as null|anything in adv_settings_opt
 					if(adv_settings == "Yes")
@@ -418,6 +473,26 @@
 						if(alert(usr, "Should hitting this vLevel's border send you back to this vLevel?", "Transition Loops", "Yes", "No") == "Yes")
 							transition_loops = TRUE
 
+						// Transition crosswraps
+						if(alert(usr, "Configure transition crosswraps?\n(Define specific vLevels to transition to when hitting each edge)", "Transition Crosswraps", "Yes", "No") == "Yes")
+							// Build list of existing vLevels for selection
+							var/list/vlevel_choices = list("None" = null)
+							for(var/datum/virtual_z/vz in map.vLevels)
+								vlevel_choices["vZ-[vz.id]: [vz.name]"] = vz.id
+
+							var/north_choice = input(usr, "Select vLevel to crosswrap NORTH edge to:", "Crosswrap North") as null|anything in vlevel_choices
+							var/south_choice = input(usr, "Select vLevel to crosswrap SOUTH edge to:", "Crosswrap South") as null|anything in vlevel_choices
+							var/east_choice = input(usr, "Select vLevel to crosswrap EAST edge to:", "Crosswrap East") as null|anything in vlevel_choices
+							var/west_choice = input(usr, "Select vLevel to crosswrap WEST edge to:", "Crosswrap West") as null|anything in vlevel_choices
+
+							var/north_id = vlevel_choices[north_choice]
+							var/south_id = vlevel_choices[south_choice]
+							var/east_id = vlevel_choices[east_choice]
+							var/west_id = vlevel_choices[west_choice]
+
+							if(north_id || south_id || east_id || west_id)
+								transition_crosswrap = list(north_id, south_id, east_id, west_id)
+
 					// Re-fetch dimensions fresh to avoid any caching issues
 					var/list/fresh_dims = ME.get_dimensions()
 					var/map_width = fresh_dims[1]
@@ -446,6 +521,7 @@
 							new_vz.teleJammed = teleport_choice
 							new_vz.movementJammed = movement_jammed
 							new_vz.transitionLoops = transition_loops
+							new_vz.transition_crosswrap_v = transition_crosswrap
 							new_vz.update_settings()
 
 						for(var/turf/T in new_vz.get_turfs())
@@ -542,10 +618,66 @@
 						if(!turf_type)
 							return FALSE
 
+					// Advanced settings for manual creation
+					var/teleport_choice = VZ_TELEPORTATION_FORBIDDEN
+					var/gps_allowed = FALSE
+					var/movement_jammed = TRUE
+					var/transition_loops = FALSE
+					var/list/transition_crosswrap = null
+
+					if(alert(usr, "Configure advanced settings (teleportation, GPS, movement jamming, crosswraps)?", "Advanced Settings", "Yes", "No") == "Yes")
+						// Teleportation blocking
+						var/teleport_options = list(
+							"Allowed" = VZ_TELEPORTATION_ALLOWED,
+							"Requires Natural Bluespace Crystals" = VZ_TELEPORTATION_EXPENSIVE,
+							"Forbidden" = VZ_TELEPORTATION_FORBIDDEN
+						)
+						teleport_choice = input(usr, "Select teleportation setting for the vLevel:", "Teleportation Setting") as null|anything in teleport_options
+						if(!teleport_choice)
+							teleport_choice = VZ_TELEPORTATION_FORBIDDEN
+
+						// GPS allowance
+						if(alert(usr, "Allow regular GPS functions in this vLevel?", "GPS Functionality", "Yes", "No") == "Yes")
+							gps_allowed = TRUE
+
+						// Movement jamming
+						if(alert(usr, "Prevent access to this vLevel by drifting?", "Movement Jamming", "Yes", "No") == "No")
+							movement_jammed = FALSE
+
+						// Transition loops
+						if(alert(usr, "Should hitting this vLevel's border send you back to this vLevel?", "Transition Loops", "Yes", "No") == "Yes")
+							transition_loops = TRUE
+
+						// Transition crosswraps
+						if(alert(usr, "Configure transition crosswraps?\\n(Define specific vLevels to transition to when hitting each edge)", "Transition Crosswraps", "Yes", "No") == "Yes")
+							// Build list of existing vLevels for selection
+							var/list/vlevel_choices = list("None" = null)
+							for(var/datum/virtual_z/vz in map.vLevels)
+								vlevel_choices["vZ-[vz.id]: [vz.name]"] = vz.id
+
+							var/north_choice = input(usr, "Select vLevel to crosswrap NORTH edge to:", "Crosswrap North") as null|anything in vlevel_choices
+							var/south_choice = input(usr, "Select vLevel to crosswrap SOUTH edge to:", "Crosswrap South") as null|anything in vlevel_choices
+							var/east_choice = input(usr, "Select vLevel to crosswrap EAST edge to:", "Crosswrap East") as null|anything in vlevel_choices
+							var/west_choice = input(usr, "Select vLevel to crosswrap WEST edge to:", "Crosswrap West") as null|anything in vlevel_choices
+
+							var/north_id = vlevel_choices[north_choice]
+							var/south_id = vlevel_choices[south_choice]
+							var/east_id = vlevel_choices[east_choice]
+							var/west_id = vlevel_choices[west_choice]
+
+							if(north_id || south_id || east_id || west_id)
+								transition_crosswrap = list(north_id, south_id, east_id, west_id)
+
 					var/datum/virtual_z/new_vz = map.addVLevel(width, height, fill_turf_type = turf_type)
 					if(new_vz)
 						new_vz.name = name
 						new_vz.level_type = VZ_CUSTOM
+						new_vz.gps_allowed = gps_allowed
+						new_vz.teleJammed = teleport_choice
+						new_vz.movementJammed = movement_jammed
+						new_vz.transitionLoops = transition_loops
+						new_vz.transition_crosswrap_v = transition_crosswrap
+						new_vz.update_settings()
 						log_admin("[key_name(usr)] created manual vLevel '[name]' (vZ: [new_vz.id], Size: [width]x[height], Turf: [turf_type]).")
 						message_admins("<span class='notice'>[key_name_admin(usr)] created manual vLevel '[name]' (vZ: [new_vz.id], Size: [width]x[height]).</span>", 1)
 					return TRUE

@@ -2,6 +2,17 @@ var/list/GPS_list = list()
 var/list/SPS_list = list()
 var/list/all_GPS_list = list()
 
+// Helper procs to safely get world offsets for virtual z-levels
+/proc/get_world_x_offset(var/vz_id)
+	if(vz_id > 0 && vz_id <= WORLD_X_OFFSET.len)
+		return WORLD_X_OFFSET[vz_id]
+	return 0
+
+/proc/get_world_y_offset(var/vz_id)
+	if(vz_id > 0 && vz_id <= WORLD_Y_OFFSET.len)
+		return WORLD_Y_OFFSET[vz_id]
+	return 0
+
 /obj/item/device/gps
 	name = "global positioning system"
 	desc = "Helping lost spacemen find their way through the planets since 2016. Needs to be activated before it can start transmitting."
@@ -90,7 +101,7 @@ var/list/all_GPS_list = list()
 	else if(!vz || !vz.gps_allowed)
 		return "SIGNAL JAMMED"
 	else
-		return "[format_text(device_area.name)] ([vx() - WORLD_X_OFFSET[vz.id]], [vy() - WORLD_Y_OFFSET[vz.id]], [vz.id])"
+		return "[format_text(device_area.name)] ([vx() - get_world_x_offset(vz.id)], [vy() - get_world_y_offset(vz.id)], [vz.id])"
 
 // Begin tgui
 /obj/item/device/gps/tgui_interact(mob/user, datum/tgui/ui)
@@ -279,8 +290,8 @@ var/list/all_GPS_list = list()
 
 /obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead, var/iscommand = FALSE, var/stfu)
 	var/datum/virtual_z/signal_vz = SPS.get_virtual_z()
-	var/x0 = SPS.vx() - WORLD_X_OFFSET[signal_vz.id]
-	var/y0 = SPS.vy() - WORLD_Y_OFFSET[signal_vz.id]
+	var/x0 = SPS.vx() - get_world_x_offset(signal_vz.id)
+	var/y0 = SPS.vy() - get_world_y_offset(signal_vz.id)
 	var/z0 = signal_vz.id
 	var/alerttype = code
 	var/alertarea = get_area(SPS)
@@ -320,9 +331,9 @@ var/list/all_GPS_list = list()
 		else if(prob(33) && dead) // 25% chance if dead, 0% chance if stripped
 			var/datum/virtual_z/death_vz = get_virtual_z()
 			playsound(src, 'sound/items/unitdownat.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(vx() - WORLD_X_OFFSET[death_vz.id],sound_channel,src)
+			playnum(vx() - get_world_x_offset(death_vz.id),sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(vy() - WORLD_Y_OFFSET[death_vz.id],sound_channel,src)
+			playnum(vy() - get_world_y_offset(death_vz.id),sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
 			playnum(death_vz.id,sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
@@ -393,7 +404,7 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 		if(!istype(vz))
 			return "[format_text(device_area.name)] (UNKNOWN)"
 		var/planet_name = vz.planet ? vz.planet.planet_name : "Unknown Planet"
-		return "[format_text(device_area.name)] ([planet_name]: [vx() - WORLD_X_OFFSET[vz.id]], [vy() - WORLD_Y_OFFSET[vz.id]], [vz.id])"
+		return "[format_text(device_area.name)] ([planet_name]: [vx() - get_world_x_offset(vz.id)], [vy() - get_world_y_offset(vz.id)], [vz.id])"
 
 /obj/item/device/gps/planetary/ui_data()
 	var/list/data = list()
@@ -423,7 +434,7 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 					var/planet_name = vz.planet ? vz.planet.planet_name : "Unknown Planet"
 					var/list/device_data = list()
 					device_data["tag"] = "DOCK"
-					device_data["location_text"] = "[port.areaname] ([planet_name]: [port_turf.vx() - WORLD_X_OFFSET[port_vz.id]], [port_turf.vy() - WORLD_Y_OFFSET[port_vz.id]], [port_vz.id])"
+					device_data["location_text"] = "[port.areaname] ([planet_name]: [port_turf.vx() - get_world_x_offset(port_vz.id)], [port_turf.vy() - get_world_y_offset(port_vz.id)], [port_vz.id])"
 					devices += list(device_data)
 
 			// Only show other planetary GPSes on the same planet
@@ -468,7 +479,7 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 			var/area/device_area = get_area(src)
 
 			// station-wide announcement
-			command_alert("Emergency distress beacon activated by GPS unit [gpstag] on planet [planet_name]. Location: [format_text(device_area.name)] ([device_turf.vx() - WORLD_X_OFFSET[vz.id]], [device_turf.vy() - WORLD_Y_OFFSET[vz.id]], [vz.id])", "Planetary Distress Beacon Activated")
+			command_alert("Emergency distress beacon activated by GPS unit [gpstag] on planet [planet_name]. Location: [format_text(device_area.name)] ([device_turf.vx() - get_world_x_offset(vz.id)], [device_turf.vy() - get_world_y_offset(vz.id)], [vz.id])", "Planetary Distress Beacon Activated")
 
 			// cooldown
 			beacon_cooldown = world.time + beacon_cooldown_time
@@ -516,7 +527,7 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 				var/planet_name = vz.planet ? vz.planet.planet_name : "Unknown Planet"
 				var/device_data[0]
 				device_data["tag"] = "DOCK"
-				device_data["location_text"] = "[port.areaname] ([planet_name]: [port_turf.vx() - WORLD_X_OFFSET[port_v.id]], [port_turf.vy() - WORLD_Y_OFFSET[port_v.id]], [port_v.id])"
+				device_data["location_text"] = "[port.areaname] ([planet_name]: [port_turf.vx() - get_world_x_offset(port_v.id)], [port_turf.vy() - get_world_y_offset(port_v.id)], [port_v.id])"
 				devices += list(device_data)
 
 		for(var/D in gps_list)
@@ -566,7 +577,7 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 		var/planet_name = vz.planet ? vz.planet.planet_name : "Unknown Planet"
 		var/area/device_area = get_area(src)
 
-		command_alert("Emergency distress beacon activated by GPS unit [gpstag] on planet [planet_name]. Location: [format_text(device_area.name)] ([vx() - WORLD_X_OFFSET[vz.id]], [vy() - WORLD_Y_OFFSET[vz.id]], [vz.id])", "Planetary Distress Beacon Activated")
+		command_alert("Emergency distress beacon activated by GPS unit [gpstag] on planet [planet_name]. Location: [format_text(device_area.name)] ([vx() - get_world_x_offset(vz.id)], [vy() - get_world_y_offset(vz.id)], [vz.id])", "Planetary Distress Beacon Activated")
 
 		beacon_cooldown = world.time + beacon_cooldown_time
 		beacon_active = TRUE
