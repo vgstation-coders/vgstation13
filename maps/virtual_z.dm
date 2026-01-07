@@ -45,7 +45,7 @@
 	var/bluespace_jammed = FALSE
 	var/movementJammed = TRUE //Prevents you from accessing the vlevel by drifting
 	var/movementChance = 10 //Inhereted from parent z (for now)
-	var/transition_channel = "Default"
+	var/transition_channel = "Default" //The "galaxy" the vlevel is in; can only drift between vlevels in the same channel
 	var/transitionLoops = FALSE //if true, transition sends you back to the same v-level
 	var/list/transition_crosswrap_v=null // list(z_north,z_south,z_east,z_west). when you hit the edge, instead of drifting to a random zlevel or looping on the current one, teleports you to the corresponding edge on the z-level in the list.
 
