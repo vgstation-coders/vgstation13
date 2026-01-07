@@ -99,6 +99,7 @@
 ///////===========SOKOBAN LEVELS============
 
 /datum/map_element/dungeon/sokoban_level
+	name = "Sokoban Level"
 	var/datum/map_element/vault/sokoban/parent
 
 	var/depth = 0

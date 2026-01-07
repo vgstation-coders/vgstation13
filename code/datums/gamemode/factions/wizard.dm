@@ -67,6 +67,7 @@
 		return 1
 
 /datum/map_element/dungeon/wizard_den
+	name = "Wizard Den"
 	file_path = "maps/misc/wizardden1.dmm"
 	unique = TRUE
 

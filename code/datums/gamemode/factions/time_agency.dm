@@ -53,6 +53,7 @@
 			return
 
 /datum/map_element/dungeon/timevoid //small room for the ninja to get oriented
+	name = "Time Void"
 	file_path = "maps/misc/timevoid.dmm"
 	unique = TRUE
 

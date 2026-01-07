@@ -22,6 +22,7 @@
 
 
 /datum/map_element/dungeon/ninja_dojo //small room for the ninja to get oriented
+	name = "Ninja Dojo"
 	file_path = "maps/misc/dojo.dmm"
 	unique = TRUE
 

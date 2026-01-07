@@ -315,6 +315,7 @@ var/list/potential_bonus_items = list(
 	icon_state = "coin_gold"
 
 /datum/map_element/dungeon/vox_shuttle
+	name = "Vox Shuttle"
 	file_path = "maps/misc/voxshuttle.dmm"
 	unique = TRUE
 
