@@ -715,11 +715,11 @@
 
 	if(stat != DEAD)
 
-		var/list/impaired_vision = get_impaired_vision_range()
-		if(impaired_vision[1] > 0)
+		var/impaired_vision = get_impaired_vision_range()
+		if(impaired_vision > 0)
 			enable_nearsightedness(impaired_vision)
 		else if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
-			disable_nearsightedness(impaired_vision)
+			disable_nearsightedness()
 
 		if(eye_blurry)
 			enable_blurriness(eye_blurry)

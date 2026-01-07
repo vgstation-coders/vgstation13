@@ -243,7 +243,7 @@
 	if (client)
 		//not like it'd make sense to have those enabled on a brain
 		if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
-			disable_nearsightedness(list(0,0))
+			disable_nearsightedness()
 
 		if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
 			disable_blurriness()

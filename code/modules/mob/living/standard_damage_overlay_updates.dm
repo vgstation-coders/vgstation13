@@ -91,11 +91,11 @@
 	if(stat != DEAD)
 		filter_update_delay = -1
 
-		var/list/impaired_vision = get_impaired_vision_range()
-		if(impaired_vision[1] > 0)
+		var/impaired_vision = get_impaired_vision_range()
+		if(impaired_vision > 0)
 			enable_nearsightedness(impaired_vision)
 		else if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
-			disable_nearsightedness(impaired_vision)
+			disable_nearsightedness()
 
 		if(eye_blurry)
 			enable_blurriness(eye_blurry)
@@ -117,13 +117,10 @@
 /mob/living/proc/get_impaired_vision_range()
 	var/_modifiers	= get_impaired_vision_modifiers()
 	var/_total 		= _modifiers[1]
-	var/_item_total = _modifiers[2]
-	var/_max_range 	= _modifiers[3]
-
-	_total += _item_total//we're saving the item_total separately to see if it changes, and whether to update the overlay smoothly or not
+	var/_max_range 	= _modifiers[2]
 
 	if (_total <= 0)
-		return list(0, _item_total)
+		return 0
 
 	if (client && (client.view > 7))
 		//impairement is capped at on players with extended view so that they can't see outside of the overlay
@@ -131,7 +128,7 @@
 
 	_total = clamp(_total, 1, _max_range)
 
-	return list(_total, _item_total)
+	return _total
 
 
 /mob/living/proc/get_impaired_vision_modifiers()//used by cyborgs and gondolas
@@ -146,13 +143,12 @@
 
 /mob/living/carbon/complex/martian/get_impaired_vision_modifiers()
 	var/_total = 0
-	var/_item_total = 0
 	var/_max_range = 10
 
 	if (!blinded)
 		if(head && istype(head, /obj/item/clothing))
 			var/obj/item/clothing/hat = head
-			_item_total += hat.nearsighted_modifier
+			_total += hat.nearsighted_modifier
 
 		_total += eye_blind
 	else
@@ -162,19 +158,18 @@
 		if (istype(W, /obj/item/weapon/cane))
 			_max_range = 9.333
 
-	return list(_total, _item_total, _max_range)
+	return list(_total, _max_range)
 
 /mob/living/carbon/monkey/get_impaired_vision_modifiers()
 	var/_total = 0
-	var/_item_total = 0
 	var/_max_range = 10
 
 	if (!blinded)
 		if(hat && istype(hat, /obj/item/clothing))
-			_item_total += hat.nearsighted_modifier
+			_total += hat.nearsighted_modifier
 
 		if(glasses && istype(glasses, /obj/item/clothing))
-			_item_total += glasses.nearsighted_modifier
+			_total += abs(glasses.nearsighted_modifier)//monkeys cannot be nearsighted currently, so glasses always make them see blurry
 
 		_total += eye_blind
 	else
@@ -184,11 +179,10 @@
 		if (istype(W, /obj/item/weapon/cane))
 			_max_range = 9.333
 
-	return list(_total, _item_total, _max_range)
+	return list(_total, _max_range)
 
 /mob/living/carbon/human/get_impaired_vision_modifiers()
 	var/_total = 0
-	var/_item_total = 0
 	var/_max_range = 10
 
 	if (species.has_organ["eyes"])
@@ -198,8 +192,6 @@
 		var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 
 		if(!blinded)//automatically updated in handle_regular_status_updates. Checks for eyes that haven't been removed, as well as the BLIND disability
-			_total += nearsightedness//+3 with NEARSIGHTED
-
 			_total += eye_blind//temporary blindness that decreases over time
 
 			_total -= eyes.enhanced_vision//advanced eyes
@@ -211,13 +203,22 @@
 				_total += 10 * (a / b)
 
 			if(glasses && istype(glasses, /obj/item/clothing))
-				//prescription glasses enhance eyesight (-3), welding goggles worsen it (+5)
-				_item_total += glasses.nearsighted_modifier
+				if (glasses.nearsighted_modifier > 0)
+					//welding goggles worsen eyesight (+5)
+					_total += nearsightedness
+					_total += glasses.nearsighted_modifier
+				else
+					//prescription glasses enhance it (-3) but only if you are nearsighted (+3), otherwise they make YOU see blurry
+					//TODO: have varying degrees of nearsightedness with stronger glasses. This operation already supports it.
+					_total += abs(nearsightedness - glasses.nearsighted_modifier)
+			else
+				_total += nearsightedness
+
 
 			if(head && istype(head, /obj/item/clothing))
 				var/obj/item/clothing/hat = head//typecasting because we can have stuff other than actual hats on our heads
 				//unathi helmet and welding helmet worsen eyesight (+5)
-				_item_total += hat.nearsighted_modifier
+				_total += hat.nearsighted_modifier
 
 		else
 			//If you don't have eyes even though you're supposed to have eyes, you're just blind mate
@@ -228,4 +229,4 @@
 			if (istype(W, /obj/item/weapon/cane))
 				_max_range = 9.333
 
-	return list(_total, _item_total, _max_range)
+	return list(_total, _max_range)

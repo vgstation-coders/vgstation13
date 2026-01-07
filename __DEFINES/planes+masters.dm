@@ -236,8 +236,8 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 /mob/proc/login_perception_filters_update()
 
 /mob/living/login_perception_filters_update()
-	var/list/impaired_vision = get_impaired_vision_range()
-	if(impaired_vision[1] > 0)
+	var/impaired_vision = get_impaired_vision_range()
+	if(impaired_vision > 0)
 		enable_nearsightedness(impaired_vision, FALSE)
 
 /mob/proc/remove_perception_filters()
@@ -303,7 +303,7 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	else
 		screen.transform = M
 
-/mob/proc/disable_nearsightedness(var/list/_impaired_vision)
+/mob/proc/disable_nearsightedness()
 	perception_filters.enabled_filters &= ~P_FILTER_IMPAIRED_VISION
 
 	filter_update_delay++
