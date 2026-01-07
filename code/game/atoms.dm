@@ -1160,6 +1160,8 @@ its easier to just keep the beam vertical.
 // Returns the virtual_z datum for this atom's area, or null if none
 /atom/proc/get_virtual_z()
 	var/turf/T = get_turf(src)
+	if(!T)
+		return null
 	var/datum/virtual_z/vz = T.v
 	if(!vz)
 		for(var/datum/virtual_z/check_vz in map.vLevels)
@@ -1173,6 +1175,8 @@ its easier to just keep the beam vertical.
 	if(z <= initial(map.zLevels))
 		return x
 	var/datum/virtual_z/V = get_virtual_z()
+	if(!V)
+		return x
 	return V.vx(src)
 
 // Returns the virtual y coordinate of this atom
@@ -1180,6 +1184,8 @@ its easier to just keep the beam vertical.
 	if(z <= initial(map.zLevels))
 		return y
 	var/datum/virtual_z/V = get_virtual_z()
+	if(!V)
+		return y
 	return V.vy(src)
 
 // Returns the virtual z coordinate of this atom
@@ -1187,4 +1193,6 @@ its easier to just keep the beam vertical.
 	if(z <= initial(map.zLevels))
 		return z
 	var/datum/virtual_z/V = get_virtual_z()
+	if(!V)
+		return z
 	return V.vz(src)
