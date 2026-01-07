@@ -718,12 +718,12 @@
 		var/list/impaired_vision = get_impaired_vision_range()
 		if(impaired_vision[1] > 0)
 			enable_nearsightedness(impaired_vision)
-		else
+		else if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
 			disable_nearsightedness(impaired_vision)
 
 		if(eye_blurry)
 			enable_blurriness(eye_blurry)
-		else
+		else if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
 			disable_blurriness()
 
 		if(druggy)

@@ -132,6 +132,9 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Adding planemasters for every other relevant planes so we can easily add filters over the whole screen
 
+#define P_FILTER_IMPAIRED_VISION	(1)
+#define P_FILTER_BLURRY_VISION		(1<<1)
+
 /mob
 	var/datum/perception_filters/perception_filters = null
 
@@ -140,7 +143,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 	var/list/orphan_planemasters = list()
 	var/list/perception_planemasters = list()
 	var/list/perception_filters = list()
-	var/last_item_nearsightedness_modifiers = 0
+	var/enabled_filters = 0//bitflags
 
 //Creating new planemasters for every plane that doesn't already have a dedicated planemaster
 //BE SURE TO UPDATE THIS LIST IF YOU ADD OR REMOVE OTHER PLANEMASTERS
@@ -154,7 +157,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 	var/static/list/planes_without_dedicated_planemasters = list(
 		"ABOVE_PARALLAX_PLANE"	= ABOVE_PARALLAX_PLANE,
 		"BELOW_PLATING_PLANE"	= BELOW_PLATING_PLANE,
-		"BELOW_PLATING_PLANE"	= PLATING_PLANE,
+		"PLATING_PLANE"			= PLATING_PLANE,
 		"ABOVE_PLATING_PLANE"	= ABOVE_PLATING_PLANE,
 		"BELOW_TURF_PLANE"		= BELOW_TURF_PLANE,
 		"TURF_PLANE"			= TURF_PLANE,
@@ -188,11 +191,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 		var/P = perception_filters.orphan_planemasters[plane]
 		perception_filters.perception_planemasters += P
 
-	perception_filters.perception_planemasters += client.parallax_spacemaster.filters
-	perception_filters.perception_planemasters += client.parallax_master.filters
-	perception_filters.perception_planemasters += client.parallax_dustmaster.filters
-	perception_filters.perception_planemasters += client.fakecamera_button_planemaster.filters
-	perception_filters.perception_planemasters += client.fakecamera_screen_planemaster.filters
+	//We're not adding filters to the parallax planemasters for now. It's tough to make it look good.
 
 
 /mob/proc/init_perception_filters()
@@ -254,18 +253,12 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 
 /mob
-	var/filter_update_delay = -1
+	var/filter_update_delay = -1//This prevents crashes!! Don't ask me why...
 
 /mob/proc/enable_nearsightedness(var/list/_impaired_vision, var/_animate = TRUE)//actually handles blindess too
+	perception_filters.enabled_filters |= P_FILTER_IMPAIRED_VISION
 
 	var/_severity = _impaired_vision[1]
-
-//This caused crashes when putting glasses on/off quickly
-//	var/_new_item_modifiers = _impaired_vision[2]
-
-//	if (_new_item_modifiers != perception_filters.last_item_nearsightedness_modifiers)
-//		perception_filters.last_item_nearsightedness_modifiers = _new_item_modifiers
-//		_animate = FALSE
 
 	var/_a = 9 - _severity
 	var/_nearsightedness_offset = 0
@@ -311,14 +304,7 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 		screen.transform = M
 
 /mob/proc/disable_nearsightedness(var/list/_impaired_vision)
-	var/_animate = TRUE
-
-//This caused crashes when putting glasses on/off quickly
-//	var/_new_item_modifiers = _impaired_vision[2]
-
-//	if (_new_item_modifiers != perception_filters.last_item_nearsightedness_modifiers)
-//		perception_filters.last_item_nearsightedness_modifiers = _new_item_modifiers
-//		_animate = FALSE
+	perception_filters.enabled_filters &= ~P_FILTER_IMPAIRED_VISION
 
 	filter_update_delay++
 	spawn(filter_update_delay)
@@ -334,22 +320,13 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
 	var/matrix/M = matrix()
 	M.Scale(40, 40)
-	if (_animate)
-		animate(screen, transform = M, time = 20)
-	else
-		screen.transform = M
+	animate(screen, transform = M, time = 20)
 
 #undef IMPAIRED_VISION_RADIUS_OUT_OF_VIEW
 #undef IMPAIRED_VISION_RADIUS_START
 
-///mob
-//	var/test_blur_displace = 4
-//	var/test_min_blur = 0.4
-//	var/test_max_blur = 1.1
-
 /mob/proc/enable_blurriness(var/_blurriness)
-	//overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-	//update_fullscreen_alpha("blurry", clamp(_blurriness * 10, 0, 100), 20)
+	perception_filters.enabled_filters |= P_FILTER_BLURRY_VISION
 
 	filter_update_delay++
 	spawn(filter_update_delay)
@@ -366,15 +343,15 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 			animate(size = 0, time = 5)
 
 /mob/proc/disable_blurriness()
-	//clear_fullscreen("blurry")
+	perception_filters.enabled_filters &= ~P_FILTER_BLURRY_VISION
 
 	filter_update_delay++
 	spawn(filter_update_delay)
 		for (var/obj/planemaster in perception_filters.perception_planemasters)
 			var/F1 = planemaster.filters["blurriness_blur"]
-			animate(F1, size = 0, time = 20)
+			animate(F1, size = 0, time = 60)
 	filter_update_delay++
 	spawn(filter_update_delay)
 		for (var/obj/planemaster in perception_filters.perception_planemasters)
 			var/F2 = planemaster.filters["blurriness_displace"]
-			animate(F2, size = 0, time = 20)
+			animate(F2, size = 0, time = 60)
