@@ -28,7 +28,7 @@ var/list/climatecomps = list()
 	var/dat = list()
 	dat += "<center>"
 	dat += "<div class='modal'><div class='modal-content'><div class='line'><b>Weather Report</b></div><br>"
-	var/datum/climate/C = SSweather.get_climate(src.z)
+	var/datum/climate/C = SSweather.get_climate_from_turf(get_turf(src))
 	if(C?.current_weather)
 		var/datum/weather/W = C.current_weather
 		var/reported_temp = W.temperature - 273.15

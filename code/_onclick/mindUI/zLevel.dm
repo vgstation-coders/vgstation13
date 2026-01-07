@@ -6,6 +6,10 @@
 //					   Z-LEVEL MAP					  //
 //													  //
 ////////////////////////////////////////////////////////
+// Displays a simple map of all virtual z-levels on the current z-level
+// Clicking any of the virtual z-levels will teleport the user to its center
+// Admins can access this via the map button in the Level Manager UI
+
 /datum/mind_ui/zlevel_map
 	uniqueID = "zlevel_map"
 	x = "CENTER"
@@ -18,10 +22,7 @@
 
 /datum/mind_ui/zlevel_map/Valid()
 	var/mob/M = mind.current
-	if (isAdminGhost(M))
-		return TRUE
-	// Also allow any admin (for use from Level Manager)
-	if (M && M.client && M.client.holder && (M.client.holder.rights & (R_ADMIN|R_FUN)))
+	if (M?.client?.holder?.rights & R_ADMIN)
 		return TRUE
 	return FALSE
 

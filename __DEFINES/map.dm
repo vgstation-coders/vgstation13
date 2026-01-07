@@ -35,16 +35,13 @@
 
 // Allocation sizing for virtual z-levels
 #define ALLOCATION_SMALL		92 // can fit 25 in one zlevel
-#define ALLOCATION_MEDIUM		245 // can fit 4 in one zlevel
-#define ALLOCATION_LARGE		398 // can fit 1 large + 9 small with 8 spacing
+#define ALLOCATION_QUADRANT		245 // can fit 4 in one zlevel
 #define ALLOCATION_FULL			500 // takes up the whole zlevel
 
-// Allocation spacing
-#define ALLOCATION_SPACING_DEFAULT	10
-
-// Padding sizes
-#define RUIN_PLACEMENT_PADDING 		5 // Padding around ruins when placing them in sectors to avoid edge issues
-#define LANDING_ZONE_EDGE_BUFFER 	11 // Buffer distance from sector edges for shuttle landing zones
+// Virtual z-level spacing
+#define VIRTUAL_Z_SPACING	10
+#define RUIN_PLACEMENT_PADDING 		5 // Padding around ruins when placing them in vlevels to avoid edge issues
+#define LANDING_ZONE_EDGE_BUFFER 	11 // Buffer distance from vlevel edges for shuttle landing zones
 
 // Story generator defines
 #define STORY_NT		1
@@ -64,8 +61,9 @@
 #define VZ_TELEPORTATION_EXPENSIVE		(1<<1)  // Teleportation is allowed using real Bluespace Crystals
 #define VZ_TELEPORTATION_FORBIDDEN		(1<<2)  // Teleportation is forbidden
 
-#define VZ_TRANSIT		1		// This v-level is a shuttle transit area
-#define VZ_PARKING		2		// shuttle parking area
+// This v-level is a...
+#define VZ_TRANSIT		1		// shuttle transit area
+#define VZ_PARKING		2		// shuttle parking area (unused for now)
 #define VZ_PLANET		3		// planet
 #define VZ_MAP_ELEMENT	4		// vault/ruin/dungeon/away mission/etfc
 #define VZ_CUSTOM		5		// custom level

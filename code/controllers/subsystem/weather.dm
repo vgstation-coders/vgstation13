@@ -19,12 +19,14 @@ var/list/precip_state_to_texture = list()
 	for(var/datum/climate/C in climates)
 		C.tick()
 
+// Gets the climate from a specified virtual z-level
 /datum/subsystem/weather/proc/get_climate(var/datum/virtual_z/vz)
 	for(var/datum/climate/C in climates)
 		if(C.v == vz)
 			return C
 	return null
 
+// Gets the climate from a specific turf
 /datum/subsystem/weather/proc/get_climate_from_turf(var/turf/T)
 	if(!T)
 		return null
@@ -33,6 +35,7 @@ var/list/precip_state_to_texture = list()
 		return null
 	return get_climate(vz)
 
+// Sets a climate on a specific virtual z-level
 /datum/subsystem/weather/proc/set_climate(var/datum/climate/climate_type, var/datum/virtual_z/vz = null, var/datum/zLevel/zLevel = null, var/random_start = FALSE)
 	if(zLevel)
 		vz = zLevel.virtual_z_levels[1]
@@ -43,8 +46,7 @@ var/list/precip_state_to_texture = list()
 	var/datum/climate/C = new climate_type(vz,random_start)
 	climates += C
 
-	// Retroactively register turfs that were created before the climate system
-	// This handles legacy maps where turfs exist before climate is set up
+	// Last remnant of hard-coding required to keep the snow falling in Snaxi
 	var/list/turf/turfs = vz.get_turfs()
 	if(turfs)
 		for(var/turf/unsimulated/floor/snow/S in turfs)

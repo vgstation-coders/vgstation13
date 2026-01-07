@@ -64,7 +64,7 @@
 		return "ERROR"
 	else if(!device_turf || !device_area)
 		return "UNKNOWN"
-	else if(!vz || !vz.gps_allowed)
+	else if(!vz?.gps_allowed)
 		return "SIGNAL JAMMED"
 	else
 		return "[format_text(device_area.name)] ([vx() - get_world_x_offset(vz.id)], [vy() - get_world_y_offset(vz.id)], [vz.id])"
@@ -107,7 +107,7 @@
 
 				// Get virtual z-level and check gps_allowed
 				var/datum/virtual_z/entry_vz = entry_turf.get_virtual_z()
-				if(!entry_vz || !entry_vz.gps_allowed)
+				if(!entry_vz?.gps_allowed)
 					continue
 
 				var/obj/item/weapon/card/id/I = H.wear_id ? H.wear_id.GetID() : null
@@ -137,7 +137,7 @@
 						life_status = CONSCIOUS
 
 				// Only show location data if sensor_mode == 3 and not on a planet
-				if(U.sensor_mode == 3 && !entry_vz.planet)
+				if(U.sensor_mode == 3 && !entry_vz?.planet)
 					player_area = format_text(get_area(H).name)
 					see_x = H.vx() - get_world_x_offset(entry_vz.id)
 					see_y = H.vy() - get_world_y_offset(entry_vz.id)
@@ -163,7 +163,7 @@
 				data["assignment"] = assignment
 				data["vitals"] = life_status
 				data["damage"] = damage
-				if(U.sensor_mode >= 3 && !entry_vz.planet)
+				if(U.sensor_mode >= 3 && !entry_vz?.planet)
 					data["location_text"] = "[format_text(player_area)] ([see_x], [see_y], [see_z])"
 				else
 					data["location_text"] = ""

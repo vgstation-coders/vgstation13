@@ -942,3 +942,12 @@
 
 /turf/proc/mob_life_effects(mob/living/affected) //apply effects to mobs standing on this turf every life() tick
 	return
+
+/turf/get_virtual_z()
+	if(v)
+		return v
+	else
+		for(var/datum/virtual_z/check_vz in map.vLevels)
+			if(check_vz.x_min <= x && check_vz.x_max >= x && check_vz.y_min <= y && check_vz.y_max >= y)
+				return check_vz
+	return null

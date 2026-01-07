@@ -197,30 +197,30 @@
 		"West" = TRUE
 		)
 	var/list/spacing = list(
-		"North" = ALLOCATION_SPACING_DEFAULT,
-		"South" = ALLOCATION_SPACING_DEFAULT,
-		"East" = ALLOCATION_SPACING_DEFAULT,
-		"West" = ALLOCATION_SPACING_DEFAULT
+		"North" = VIRTUAL_Z_SPACING,
+		"South" = VIRTUAL_Z_SPACING,
+		"East" = VIRTUAL_Z_SPACING,
+		"West" = VIRTUAL_Z_SPACING
 	)
-	if(x_min <= ALLOCATION_SPACING_DEFAULT)
+	if(x_min <= VIRTUAL_Z_SPACING)
 		if(x_min == 0)
 			spacing["West"] = 0
 			sides["West"] = FALSE
 		else
 			spacing["West"] = x_min
-	if(y_min <= ALLOCATION_SPACING_DEFAULT)
+	if(y_min <= VIRTUAL_Z_SPACING)
 		if(y_min == 0)
 			spacing["North"] = 0
 			sides["North"] = FALSE
 		else
 			spacing["North"] = y_min
-	if(world.maxx - x_max <= ALLOCATION_SPACING_DEFAULT)
+	if(world.maxx - x_max <= VIRTUAL_Z_SPACING)
 		if(world.maxx - x_max == 0)
 			spacing["East"] = 0
 			sides["East"] = FALSE
 		else
 			spacing["East"] = world.maxx - x_max
-	if(world.maxy - y_max <= ALLOCATION_SPACING_DEFAULT)
+	if(world.maxy - y_max <= VIRTUAL_Z_SPACING)
 		if(world.maxy - y_max == 0)
 			spacing["South"] = 0
 			sides["South"] = FALSE

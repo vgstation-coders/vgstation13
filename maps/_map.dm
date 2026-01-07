@@ -152,7 +152,7 @@
 	var/found_x = 0
 	var/found_y = 0
 
-	var/spacing = ALLOCATION_SPACING_DEFAULT
+	var/spacing = VIRTUAL_Z_SPACING
 
 	// Check existing dynamic zLevels for available space using 2D bin packing
 	var/datum/zLevel/z_to_use = null

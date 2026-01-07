@@ -32,7 +32,7 @@ var/datum/subsystem/mob/SSmob
 		if (!M || M.gcDestroyed || M.timestopped)
 			continue
 
-		// Skip processing non-player mobs on planets without players
+		// Skip processing non-player mobs on virtual z-levels without players
 		if(istype(M,/mob/living))
 			var/mob/living/L = M
 			if (L.paused && !L.client)
