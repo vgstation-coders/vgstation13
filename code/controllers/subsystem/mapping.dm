@@ -563,8 +563,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 			turfs_per_tick = 500
 		if(ALLOCATION_QUADRANT)
 			turfs_per_tick = 750
-		if(ALLOCATION_LARGE)
-			turfs_per_tick = 1000
 		else
 			turfs_per_tick = 500
 
