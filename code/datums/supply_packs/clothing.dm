@@ -145,6 +145,7 @@
 	/obj/item/clothing/glasses/monocle,
 	/obj/item/clothing/glasses/regular,
 	/obj/item/clothing/glasses/regular/hipster,
+	/obj/item/clothing/glasses/regular/cosmetic,
 	/obj/item/clothing/glasses/scanner/science,
 	/obj/item/clothing/glasses/simonglasses,
 	/obj/item/clothing/glasses/sunglasses,

@@ -13,7 +13,7 @@
 	specs = list(
 		// Classic Ballistics setup. C20R rifle with ammo, and Beretta handgun also with ammo as a backup
 		"Ballistics" = list(
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/prescription, //Changed to prescription sunglasses for near-sighted players
+			slot_glasses_str = /obj/item/clothing/glasses/sunglasses, //Automatically swapped with prescription sunglasses as needed by give_disabilities_equipment()
 			slot_belt_str = /obj/item/weapon/gun/projectile/automatic/c20r,
 			slot_in_backpack_str = list(
 				/obj/item/ammo_storage/magazine/a12mm/ops = 2,
@@ -24,7 +24,7 @@
 
 		// Classic alternate setup with a twist. Laser Rifle as a primary, but ion carbine as a backup and extra EMP nades for those ENERGY needs. Zap-zap the borgs
 		"Energy" = list(
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/prescription,
+			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
 			slot_belt_str = /obj/item/weapon/gun/energy/laser/rifle/syndie,
 			slot_in_backpack_str = list(
 				/obj/item/weapon/gun/energy/ionrifle/ioncarbine = 1,
@@ -34,7 +34,7 @@
 
 		// Boom boom, shake the room as the kids say. RPG as primary and grenade launcher as secondary, with C4 and nades reserve. He blows
 		"Demolition" = list(
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/prescription,
+			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
 			slot_s_store_str = /obj/item/weapon/gun/projectile/rocketlauncher, //Only place we can store it, it will drop on the ground for plasmamen
 			slot_belt_str = /obj/item/weapon/gun/grenadelauncher/syndicate,
 			slot_in_backpack_str = list(
@@ -45,7 +45,7 @@
 
 		// Really powerful melee weapons and energy shield, along with random extra goods and eviscerator nades. A dream come true
 		"Melee" = list(
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/prescription,
+			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
 			slot_belt_str = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate,
 			slot_in_backpack_str = list(
 				/obj/item/weapon/melee/energy/sword/dualsaber = 1,
@@ -57,7 +57,7 @@
 
 		 //The good guy who just wants to help their dumb fucking teammates not die horribly. Has some fancy gear like the mobile surgery table. Main gun is a VERY lethal syringe gun
 		"Medical" = list(
-			slot_glasses_str = /obj/item/clothing/glasses/hud/health/prescription,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_belt_str = /obj/item/weapon/gun/syringe/rapidsyringe,
 			slot_in_backpack_str = list(
 				/obj/item/weapon/storage/box/syndisyringes = 1,
@@ -71,7 +71,7 @@
 
 		//Mister deconstruction, C4 and efficient. Engineers have shotguns because stereotype, and eswords for utility
 		"Engineering" = list(
-			slot_glasses_str = /obj/item/clothing/glasses/scanner/meson/prescription,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/meson,
 			slot_s_store_str = /obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
 			slot_in_backpack_str = list(

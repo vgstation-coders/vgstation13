@@ -129,7 +129,7 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 								   /obj/item/weapon/storage/box/handcuffs,
 								   /obj/item/weapon/storage/box/bolas,
 								   /obj/item/weapon/storage/bag/ammo_pouch/rev,
-								   /obj/item/clothing/glasses/sunglasses/prescription,
+								   /obj/item/clothing/glasses/sunglasses,
 								   /obj/item/weapon/melee/telebaton,
 								   /obj/item/weapon/melee/classic_baton,
 								   /obj/item/weapon/reagent_containers/spray/rev
@@ -268,8 +268,10 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 	var/list/possible_gear = revsquad_gear.Copy()
 	while(BP.contents.len < BP.storage_slots)
 		var/tospawn = pick_n_take(possible_gear)
-		if(istype(tospawn,/obj/item/weapon/reagent_containers/spray/rev)&&BP.storage_slots-BP.contents.len==1)
+		if(istype(tospawn,/obj/item/weapon/reagent_containers/spray/rev) && ((BP.storage_slots - BP.contents.len) == 1))
 			continue //don't spawn the lube bottle as our last item because it needs an extra slot for the antilube
+		if(istype(tospawn,/obj/item/clothing/glasses/sunglasses) && (rev_mob.disabilities & NEARSIGHTED))
+			tospawn = /obj/item/clothing/glasses/sunglasses/prescription
 		new tospawn(BP)
 
 	rev_mob.update_icons()

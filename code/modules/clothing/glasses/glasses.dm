@@ -183,6 +183,11 @@ BLIND     // can't see anything
 	item_state = "hipster_glasses"
 	species_fit = list(GREY_SHAPED)
 
+/obj/item/clothing/glasses/regular/cosmetic
+	name = "cosmetic glasses"
+	desc = "The lenses appear to be completely flat. For fake nerds."
+	nearsighted_modifier = 0
+
 /obj/item/clothing/glasses/gglasses
 	name = "green glasses"
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."

@@ -347,6 +347,7 @@
 		/obj/item/clothing/glasses/eyepatch,
 		/obj/item/clothing/glasses/regular,
 		/obj/item/clothing/glasses/regular/hipster,
+		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/glasses/sunglasses/blindfold,
 		/obj/item/clothing/glasses/sunglasses/prescription,
 		/obj/item/clothing/glasses/welding,
