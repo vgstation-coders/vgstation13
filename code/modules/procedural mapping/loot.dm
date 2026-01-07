@@ -161,6 +161,8 @@
 			/obj/item/weapon/melee/lance,
 			/obj/item/weapon/gun/mahoguny,
 			/obj/item/weapon/gun/lolly_lobber,
+			/obj/item/device/bert,
+			/obj/item/device/emshield_projector
 			),
 		RARE_LOOT = list(
 			/obj/item/weapon/banhammer,
@@ -184,6 +186,7 @@
 			/obj/item/weapon/gun/portalgun,
 			/obj/item/weapon/gun/grenadelauncher,
 			/obj/item/weapon/sord,
+			/obj/item/device/pacification_beacon,
 		),
 		VERY_RARE_LOOT = list(
 			/obj/item/weapon/butterflyknife/viscerator,
@@ -262,6 +265,9 @@
 		/obj/item/stack/sheet/metal,
 		/obj/item/stack/sheet/glass,
 		/obj/item/weapon/storage/belt/utility,
+		/obj/item/weapon/circuitboard/holofield,
+		/obj/item/device/shuttle_holopainter,
+		/obj/item/weapon/pinpointer/gas_dowser
 	)
 
 /datum/loot_table/entertainment
@@ -357,7 +363,8 @@
 		/obj/item/weapon/bikehorn/rubberducky/quantum,
 		/obj/item/weapon/bikehorn/skullhorn,
 		/obj/item/weapon/bikehorn/syndicate,
-		/obj/item/clothing/gloves/fyellow/insulted
+		/obj/item/clothing/gloves/fyellow/insulted,
+		/obj/item/device/shuttle_holopainter
 	)
 
 /datum/loot_table/weighted/exotic
@@ -376,6 +383,7 @@
 			/obj/item/clothing/under/grey/grey_scout,
 			/obj/item/dictionary/martian,
 			/obj/item/weapon/blood_tesseract/xenoarchfind,
+			/obj/item/device/bert
 		),
 		RARE_LOOT = list(
 			/obj/item/weapon/robot_spawner/strange/ball,
