@@ -187,7 +187,7 @@
 				to_chat(usr, "<span class='notice'>You close the tank release valve.</span>")
 			else
 				if(location.wear_mask && (location.wear_mask.clothing_flags & MASKINTERNALS))
-					location.update_internals(src)
+					location.equip_internals(src)
 					to_chat(usr, "<span class='notice'>You open \the [src] valve.</span>")
 				else
 					to_chat(usr, "<span class='notice'>You need something to connect to \the [src].</span>")
