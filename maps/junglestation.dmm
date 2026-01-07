@@ -59450,10 +59450,6 @@
 	icon_state = "white"
 	},
 /area/turret_protected/tcomms_control_room)
-"vQO" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "vQV" = (
 /obj/structure/bed/chair/wood/pew/left{
 	dir = 4
@@ -351569,7 +351565,7 @@ ocC
 ocC
 ocC
 ocC
-vQO
+ocC
 ocC
 ocC
 ocC

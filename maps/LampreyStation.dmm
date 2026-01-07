@@ -114547,10 +114547,6 @@
 	},
 /turf/simulated/floor/carpet,
 /area/lamprey/catchall)
-"eMm" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "eMn" = (
 /turf/space/void,
 /area)
@@ -448199,7 +448195,7 @@ aaa
 aaa
 aaa
 aaa
-eMm
+aaa
 aaa
 aaa
 aaa

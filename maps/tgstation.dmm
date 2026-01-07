@@ -82230,10 +82230,6 @@
 /obj/docking_port/destination/vox/south_station,
 /turf/space,
 /area)
-"cWM" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cWN" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
@@ -368134,7 +368130,7 @@ aaa
 aaa
 aaa
 aaa
-cWM
+aaa
 aaa
 aaa
 aaa

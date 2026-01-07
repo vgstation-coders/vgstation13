@@ -23037,10 +23037,6 @@
 	icon_state = "yellow"
 	},
 /area/engineering/break_room)
-"fuK" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "fuN" = (
 /obj/structure/bed/chair{
 	dir = 1
@@ -338570,7 +338566,7 @@ cFY
 cFY
 cFY
 cFY
-fuK
+cFY
 cFY
 cFY
 cFY

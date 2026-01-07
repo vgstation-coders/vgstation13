@@ -61453,10 +61453,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
-"cCY" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cDd" = (
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'FOURTH WALL'.";
@@ -199925,7 +199921,7 @@ ccH
 ccH
 ccH
 ccH
-cCY
+ccH
 ccH
 ccH
 ccH

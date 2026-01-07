@@ -1184,12 +1184,10 @@ fieldset {width:140px;}
 
 	#define ML_CURRENT_LOC  "Use my current location"
 	#define ML_INPUT_COORDS "Input coordinates"
-	#define ML_LOAD_TO_Z2   "Find a suitable location at Z-level 2 (done automatically)"
 	#define ML_LOAD_TO_NEWV "Create a new Virtual Z-level"
 	var/static/list/choices = list(
 	ML_CURRENT_LOC,
 	ML_INPUT_COORDS,
-	ML_LOAD_TO_Z2,
 	ML_LOAD_TO_NEWV
 	)
 	var/dungeoning = FALSE
@@ -1220,13 +1218,6 @@ fieldset {width:140px;}
 
 			x_coord = clamp(x_coord, 1, world.maxx)
 			y_coord = clamp(y_coord, 1, world.maxy)
-
-		if(ML_LOAD_TO_Z2)
-			if(!dungeon_area)
-				to_chat(src, "<span class='warning'>Dungeon area not defined! This map is missing the /obj/effect/landmark/dungeon_area object.</span>")
-				return
-
-			dungeoning = TRUE
 
 		if(ML_LOAD_TO_NEWV)
 			dungeoning = TRUE
@@ -1268,7 +1259,7 @@ fieldset {width:140px;}
 		log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
 		message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
 		if(dungeoning)
-			load_dungeon(ME, rotate, TRUE, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
+			load_dungeon(ME, rotate)
 		else
 			//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
 			ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)

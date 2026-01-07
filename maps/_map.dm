@@ -207,9 +207,18 @@
 		CHECK_TICK
 	return new_vz
 
-/datum/map/proc/addMapElementVLevel(var/datum/map_element/ME, var/fill_turf = null, var/buffer_size = 5)
-	var/datum/virtual_z/new_vz = src.addVLevel(ME.width + buffer_size * 2, ME.height + buffer_size * 2, fill_turf_type = fill_turf)
+/datum/map/proc/addMapElementVLevel(var/datum/map_element/ME, var/rotation = 0, var/fill_turf = null, var/buffer_size = 5)
+	var/ortho = rotation && !(rotation % 180) // Flip width and height if rotated 90 or 270 degrees
+	var/w_to_use = ortho? ME.height : ME.width
+	var/h_to_use = ortho? ME.width : ME.height
+	var/datum/virtual_z/new_vz = src.addVLevel(w_to_use + buffer_size * 2, h_to_use + buffer_size * 2, fill_turf_type = fill_turf)
 	new_vz.name = "Map Element: [ME.name]"
+	new_vz.level_type = VZ_MAP_ELEMENT
+	new_vz.gps_allowed = FALSE
+	new_vz.teleJammed = VZ_TELEPORTATION_FORBIDDEN
+	new_vz.bluespace_jammed = TRUE
+	new_vz.movementJammed = TRUE
+	new_vz.set_status(FALSE)
 	return new_vz
 
 var/global/list/accessable_v_levels = list(
