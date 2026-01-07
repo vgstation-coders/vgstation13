@@ -255,10 +255,8 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 /mob
 	var/filter_update_delay = -1//This prevents crashes!! Don't ask me why...
 
-/mob/proc/enable_nearsightedness(var/list/_impaired_vision, var/_animate = TRUE)//actually handles blindess too
+/mob/proc/enable_nearsightedness(var/_severity, var/_animate = TRUE)//actually handles blindess too
 	perception_filters.enabled_filters |= P_FILTER_IMPAIRED_VISION
-
-	var/_severity = _impaired_vision[1]
 
 	var/_a = 9 - _severity
 	var/_nearsightedness_offset = 0

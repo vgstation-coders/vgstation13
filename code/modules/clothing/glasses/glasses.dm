@@ -18,6 +18,7 @@
 	var/see_in_dark = 0
 	var/seedarkness = TRUE
 	var/prescription_type = null
+	var/perfect_sight = FALSE//if TRUE, will always perfectly correct the player's nearsightedness if they have any
 	min_harm_label = 12
 	harm_label_examine = list("<span class='info'>A label is covering one lens, but doesn't reach the other.</span>","<span class='warning'>A label covers the lenses!</span>")
 	species_restricted = list("exclude","Muton")
@@ -117,7 +118,7 @@ BLIND     // can't see anything
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/hud/health/prescription
-	name = "health scanner glasses"
+	name = "health scanner prescription glasses"
 	desc = "A Health Scanner HUD fitted with prescription lenses."
 	icon_state = "healthglasses"
 	nearsighted_modifier = -3
@@ -422,7 +423,7 @@ BLIND     // can't see anything
 	desc = "Protects your eyes from bright flashes of light."
 	icon_state = "polarized_contact"
 	darkness_view = -1
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	eyeprot = 1
 
 //////////////////

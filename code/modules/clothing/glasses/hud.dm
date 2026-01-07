@@ -85,7 +85,7 @@
 
 /obj/item/clothing/glasses/hud/health/cmo
 	name = "advanced health scanner HUD"
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status as well as reveals pathogens in sight. The tinted glass protects the wearer from bright flashes of light."
 	icon_state = "cmohud"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
@@ -291,7 +291,7 @@
 	item_state = "investigation"
 	darkness_view = -1
 	eyeprot = 1
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	hud_types = list(/datum/visioneffect/security/arrest,
 					/datum/visioneffect/job,
 					/datum/visioneffect/implant)
@@ -355,7 +355,7 @@
 	icon_state = "wagemonocle"
 	species_fit = list(VOX_SHAPED)
 	mech_flags = MECH_SCAN_ILLEGAL
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	hud_types = list(/datum/visioneffect/accountdb/wage,
 					/datum/visioneffect/job)
 
@@ -385,7 +385,7 @@
 	icon_state = "aviators_gold"
 	darkness_view = -1
 	eyeprot = 1
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	hud_types = list(/datum/visioneffect/job)
 
 /*
