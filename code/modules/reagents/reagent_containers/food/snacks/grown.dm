@@ -592,8 +592,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	T.melee_damage_upper = clamp(potency/10, 1, 15)
 	T.health = clamp(potency/3, 5, 25)
 	T.maxHealth = clamp(potency/3, 5, 25)
-	T.my_fruit = new type(T)
-	T.my_fruit.seed = seed//doesn't work
+	T.sneed = seed
 	if(aggro)
 		T.hostile = TRUE
 		T.health -= clamp(potency/6, 2, 12)

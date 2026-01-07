@@ -810,7 +810,6 @@
 	name = "poisonapple"
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned)
-	mutants = null
 	chems = list(CYANIDE = list(1,5))
 
 /datum/seed/apple/gold
@@ -835,8 +834,8 @@
 	mutants = null
 	chems = list(NUTRIMENT = list(1,10), TANNIC_ACID = list(1,30))
 
-	maturation = 4
-	production = 4
+	maturation = 5
+	production = 5
 	yield = 2
 	pest_tolerance = 75
 

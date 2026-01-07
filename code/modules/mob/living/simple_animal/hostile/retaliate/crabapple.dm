@@ -11,13 +11,13 @@
 	response_help  = "prods the"
 	response_disarm = "pushes aside the"
 	response_harm   = "snaps the"
-	attacktext = "pinches"
-	attack_sound = 'sound/weapons/bite.ogg'
+	attacktext = "snips"
+	attack_sound = 'sound/weapons/toolhit.ogg'
 	harm_intent_damage = 1
 	melee_damage_lower = 1
 	melee_damage_upper = 1
 	environment_smash_flags = 0
-	var/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/my_fruit
+	var/datum/seed/sneed = null
 
 /mob/living/simple_animal/hostile/retaliate/crabapple/reagent_act(id, method, volume)
 	.=..()
@@ -28,11 +28,12 @@
 
 /mob/living/simple_animal/hostile/retaliate/crabapple/death(var/gibbed = FALSE)
 	..(TRUE)
-	new /obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat(src.loc)
-	if(!my_fruit)
-		my_fruit = new(loc)
-	my_fruit.forceMove(loc)
-	my_fruit.alive = FALSE
+	new /obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat(loc)
+	if(sneed)
+		var/product_type = pick(sneed.products)
+		var/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/apple = new product_type(loc, custom_plantname = sneed.name)
+		if(istype(apple, /obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple))
+			apple.alive = FALSE
 	qdel(src)
 
 /mob/living/simple_animal/hostile/retaliate/crabapple/attackby(var/obj/item/O as obj, var/mob/user as mob)
