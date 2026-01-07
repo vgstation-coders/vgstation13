@@ -584,7 +584,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/proc/create_crab(mob/user as mob, aggro = FALSE)
 	if(istype(user.loc, /turf/space))
-		return FALSE
+		return
 	alive = FALSE
 	var/mob/living/simple_animal/hostile/retaliate/crabapple/T = new(user.loc)
 	T.harm_intent_damage = clamp(potency/10, 1, 10)
