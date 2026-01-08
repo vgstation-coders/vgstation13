@@ -54,7 +54,7 @@
 /obj/machinery/door/table/Bumped(atom/user)
 	if(!density || operating)
 		return
-	if(!allowed(user) && !emagged)
+	if(!emagged && !allowed(user))
 		denied()
 	else
 		if(istype(user, /obj/structure/bed/chair/vehicle/firebird))
