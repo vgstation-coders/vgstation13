@@ -148,7 +148,6 @@
 			//This isn't really a problem, but if the shuttle moves somewhere it won't be able to return to its starting location
 			. = INIT_NO_START
 
-		src.dir = turn(linked_port.dir, 180)
 	else
 		//No docking port - the shuttle can't be moved (bad but fixable with admin intervention)
 		. = INIT_NO_PORT
@@ -156,6 +155,11 @@
 
 	for(var/obj/docking_port/D in linked_area)
 		docking_ports_aboard |= D
+
+	for(var/obj/structure/shuttle/engine/propulsion/P in linked_area) // Use any shuttle engine to set the shuttle's direction
+		if(istype(P))
+			dir = P.dir
+			break
 
 	for(var/turf/T in linked_area.area_turfs)
 		var/corner = FALSE
