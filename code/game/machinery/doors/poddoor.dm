@@ -93,7 +93,7 @@ var/list/poddoors = list()
 				setDensity(FALSE)
 				operating = FALSE
 
-/obj/machinery/door/poddoor/allowed(mob/M)
+/obj/machinery/door/poddoor/allowed(atom/A)
 	return 0
 
 /obj/machinery/door/poddoor/open()

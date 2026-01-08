@@ -1798,14 +1798,10 @@ Use this proc preferably at the end of an equipment loadout
 	return 1
 
 // Mobs tell access what access levels it has.
-/mob/proc/GetAccess()
+/mob/GetAccess()
 	return list()
 
 /mob/proc/get_visible_id()
-	return 0
-
-// Skip over all the complex list checks.
-/mob/proc/hasFullAccess()
 	return 0
 
 /mob/proc/assess_threat()

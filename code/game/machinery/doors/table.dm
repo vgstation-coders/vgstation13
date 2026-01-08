@@ -54,27 +54,12 @@
 /obj/machinery/door/table/Bumped(atom/user)
 	if(!density || operating)
 		return
-
-	var/can_enter = emagged
-	if(istype(user,/obj/machinery/bot))
-		var/obj/machinery/bot/bot = user
-		if(check_access(bot.botcard))
-			can_enter = TRUE
-	else if(istype(user, /obj/mecha))
-		var/obj/mecha/mecha = user
-		if(mecha.occupant && allowed(mecha.occupant))
-			can_enter = TRUE
-	else if(istype(user, /obj/structure/bed/chair/vehicle))
-		var/obj/structure/bed/chair/vehicle/vehicle = user
-		if(vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
-			if(istype(vehicle, /obj/structure/bed/chair/vehicle/firebird))
-				vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
-			can_enter = TRUE
-	else if(allowed(user))
-		can_enter = TRUE
-	if(!can_enter)
+	if(!allowed(user) && !emagged)
 		denied()
 	else
+		if(istype(user, /obj/structure/bed/chair/vehicle/firebird))
+			var/obj/structure/bed/chair/vehicle/firebird/F = user
+			F.forceMove(get_step(F,F.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 		open()
 		spawn(2 SECONDS)
 			close()

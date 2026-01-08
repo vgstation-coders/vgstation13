@@ -75,38 +75,15 @@
 		to_chat(user, "It is a secure windoor. It's stronger and closes more quickly.")
 
 /obj/machinery/door/window/Bumped(atom/movable/AM)
-	var/sleeptime = normalspeed ? 50 : 20 // secure doors close faster
-	if(!ismob(AM))
-		var/obj/machinery/bot/bot = AM
-		if(istype(bot))
-			if(density && check_access(bot.botcard))
-				open()
-				sleep(sleeptime)
-				close()
-		else if(istype(AM, /obj/mecha))
-			var/obj/mecha/mecha = AM
-			if(density)
-				if(mecha.occupant && allowed(mecha.occupant))
-					open()
-					sleep(sleeptime)
-					close()
-		else if(istype(AM, /obj/structure/bed/chair/vehicle))
-			var/obj/structure/bed/chair/vehicle/vehicle = AM
-			if(density)
-				if(vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
-					if(istype(vehicle, /obj/structure/bed/chair/vehicle/firebird))
-						vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
-					open()
-					spawn(sleeptime)
-						close()
-				else if(!operating)
-					denied()
-		return
 	if(!(ticker))
 		return
 	if(operating)
 		return
 	if(density && allowed(AM))
+		var/sleeptime = normalspeed ? 50 : 20 // secure doors close faster
+		if(istype(AM, /obj/structure/bed/chair/vehicle/firebird))
+			var/obj/structure/bed/chair/vehicle/firebird/F = AM
+			F.forceMove(get_step(F,F.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 		open()
 		spawn(sleeptime)
 			close()
@@ -233,7 +210,7 @@
 	if(operating)
 		return
 	var/dmg=0
-	if(istype(user,/mob/living/simple_animal))	
+	if(istype(user,/mob/living/simple_animal))
 		var/mob/living/simple_animal/M = user
 		if(M.melee_damage_upper <= 0)
 			return

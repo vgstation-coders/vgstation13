@@ -229,9 +229,9 @@
 	if(Adjacent(user))
 		return attack_hand(user)
 
-/obj/item/tape/allowed(mob/user)
-	if(isrobot(user) && !isMoMMI(user))
-		var/mob/living/silicon/robot/R = user
+/obj/item/tape/allowed(atom/A)
+	if(isrobot(A) && !isMoMMI(A))
+		var/mob/living/silicon/robot/R = A
 		return HAS_MODULE_QUIRK(R, robot_compatibility)
 
 	return ..()
