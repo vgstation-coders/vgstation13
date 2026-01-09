@@ -773,3 +773,15 @@
 	if (!ghostmob)
 		return CAN_REVIVE_NO
 	return CAN_REVIVE_GHOSTING
+
+/mob/living/carbon/proc/get_breath_from_internal(volume_needed)
+	if(internal)
+		if(!contents.Find(internal))
+			internal = null
+		var/obj/item/mask = get_item_by_slot(slot_wear_mask)
+		if(!mask || !(mask.clothing_flags & MASKINTERNALS) )
+			internal = null
+		update_internals()
+		if(internal)
+			return internal.remove_air_volume(volume_needed)
+	return null

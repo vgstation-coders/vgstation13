@@ -2096,11 +2096,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	name = "robotic head"
 
 /obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ/external/head/O)
-	origin_body = makeweakref(H)
-
 	..()
 	if(!istype(H)) //It's entirely possible for stuff to call this without a human, such as headpoles with heads in maps for some reason...
 		return
+
+	origin_body = makeweakref(H)
 	src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	if(isgolem(H)) //Golems don't inhabit their severed heads, they turn to dust when they die.
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms()

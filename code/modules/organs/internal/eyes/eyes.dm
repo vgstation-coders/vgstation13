@@ -3,11 +3,13 @@
 	parent_organ = LIMB_HEAD
 	organ_type = "eyes"
 	removed_type = /obj/item/organ/internal/eyes
+	min_bruised_damage = 5
+	min_broken_damage = 35
 
-	var/welding_proof=0
 	var/eyeprot=0
 	var/see_in_dark=2
 	var/list/colourmatrix = list()
+	var/enhanced_vision = 0//counteracts eye damage and other modifiers in get_impaired_vision_range()
 
 /datum/organ/internal/eyes/proc/update_perception(var/mob/living/carbon/human/M)
 	// Bad hack but in 516 any non-zero value of the dark plane will result in glitch for night vision googles
@@ -94,7 +96,10 @@
 
 /datum/organ/internal/eyes/adv_1
 	name = "advanced eyes"
-	welding_proof=1
+	eyeprot=2
 	see_in_dark=5
 	robotic=2
+	min_bruised_damage = 10
+	min_broken_damage = 40
+	enhanced_vision = 2
 	removed_type = /obj/item/organ/internal/eyes/adv_1

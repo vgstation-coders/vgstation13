@@ -373,11 +373,14 @@ HOLOMAP PROCS
 		var/vz_id = holomap_z[uid]
 		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[vz_id]"
 
-		bgmap = holomap_cache[holomap_bgmap]
-		if(bgmap)
-			bgmap.loc = user.hud_used.holomap_obj
-			animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
-			holomap_images[uid] |= bgmap
+		if(z != 0)
+			bgmap = holomap_cache[holomap_bgmap]
+			if(bgmap)
+				bgmap.loc = user.hud_used.holomap_obj
+
+				animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
+
+				holomap_images[uid] |= bgmap
 
 		var/vz_key = "[vz_id]"
 		if(vz_key in entries)

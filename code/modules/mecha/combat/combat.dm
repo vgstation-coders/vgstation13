@@ -1,8 +1,8 @@
+
+
 /obj/mecha/combat
-	force = 30
-	var/melee_cooldown = 10
-	var/melee_can_hit = 1
-	var/list/destroyable_obj = list(/obj/mecha, /obj/structure/window, /obj/structure/grille, /turf/simulated/wall)
+	force = MECHA_FORCE_COMBAT
+	mecha_punch_sound = 'sound/mecha/mechsmash.ogg'
 	internal_damage_threshold = 50
 	light_range_off = 0 //combat mechs leak no cabin light for stealth operation
 	cursor_enabled = 1 //cursor is enabled by default for combat mechs
@@ -21,66 +21,28 @@
 	return
 */
 
-/obj/mecha/combat/melee_action(target as obj|mob|turf)
+/obj/mecha/proc/melee_action(target as obj|mob|turf)
 	if(internal_damage&MECHA_INT_CONTROL_LOST)
 		target = safepick(oview(1,src))
-	if(!melee_can_hit || !istype(target, /atom))
+	if(!istype(target, /atom))
 		return
+	if(!Adjacent(target))
+		return
+	var/image/fist_icon = image(icon = 'icons/mob/screen_spells.dmi', icon_state = "wiz_fist") //wizard fist placeholder for robot fist
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
 		if(src.occupant.a_intent == I_HURT)
-			playsound(src, 'sound/mecha/mechsmash.ogg', 50, 1)
+			playsound(src, mecha_punch_sound, 50, 1)
 			if(damtype == "brute")
 				step_away(M,src,15)
-			/*
-			if(M.stat>1)
-				M.gib()
-				melee_can_hit = 0
-				spawn(meele_cooldown)
-					melee_can_hit = 1
-				return
-			*/
+			var/target_zone //null is acceptable here, apply_damage will just pick a target if it's necessary
 			if(istype(target, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = target
-	//			if (M.health <= 0) return
-
-				var/datum/organ/external/temp = H.get_organ(pick(LIMB_CHEST, LIMB_CHEST, LIMB_CHEST, LIMB_HEAD))
-				if(temp)
-					var/update = 0
-					switch(damtype)
-						if("brute")
-							H.Paralyse(1)
-							update |= temp.take_damage(rand(force/2, force), 0)
-						if("fire")
-							update |= temp.take_damage(0, rand(force/2, force))
-						if("tox")
-							if(H.reagents)
-								if(H.reagents.get_reagent_amount(CARPOTOXIN) + force < force*2)
-									H.reagents.add_reagent(CARPOTOXIN, force)
-								if(H.reagents.get_reagent_amount(CRYPTOBIOLIN) + force < force*2)
-									H.reagents.add_reagent(CRYPTOBIOLIN, force)
-						else
-							return
-					if(update)
-						H.UpdateDamageIcon(1)
-				H.updatehealth()
-
-			else
-				switch(damtype)
-					if("brute")
-						M.Paralyse(1)
-						M.take_overall_damage(rand(force/2, force))
-					if("fire")
-						M.take_overall_damage(0, rand(force/2, force))
-					if("tox")
-						if(M.reagents)
-							if(M.reagents.get_reagent_amount(CARPOTOXIN) + force < force*2)
-								M.reagents.add_reagent(CARPOTOXIN, force)
-							if(M.reagents.get_reagent_amount(CRYPTOBIOLIN) + force < force*2)
-								M.reagents.add_reagent(CRYPTOBIOLIN, force)
-					else
-						return
-				M.updatehealth()
+				target_zone = H.get_organ(pick(LIMB_CHEST, LIMB_CHEST, LIMB_CHEST, LIMB_HEAD)) //Mech attacks too unwieldly to directly target
+			var/armor_reduction = 0 //Disabled, use = M.run_armor_check(target_zone, "melee") to have this enabled
+			if (prob(50))//this is still busted but now you have a chance to get out of stunlock
+				M.Paralyse(1)
+			M.apply_damage(rand(force/2, force), damtype, target_zone, armor_reduction, 0, 0) //handles all the damage specifics such as updatehealth()
 			src.occupant_message("You hit [target].")
 			src.visible_message("<span class='red'><b>[src.name] hits [target].</b></span>")
 			message_admins("[key_name_and_info(src.occupant)] mech punched [target] with [src.name] ([formatJumpTo(src)])",0,1)
@@ -89,30 +51,30 @@
 			step_away(M,src)
 			src.occupant_message("You push [target] out of the way.")
 			src.visible_message("[src] pushes [target] out of the way.")
-
-		melee_can_hit = 0
-		spawn(melee_cooldown)
-			melee_can_hit = 1
-		return
-
+			fist_icon = image(icon = 'icons/mob/screen_spells.dmi', icon_state = "wiz_push") //wizard hand placeholder for robot hand
+		if(target) //in case target got gibbed, qdel'd, or some other horrible thing
+			do_attack_animation(target, src, fist_icon)
 	else
-		if(damtype == "brute")
-			for(var/target_type in src.destroyable_obj)
-				if(istype(target, target_type) && hascall(target, "attackby"))
-					src.occupant_message("You hit [target].")
-					src.visible_message("<span class='red'><b>[src.name] hits [target].</b></span>")
-					if(!istype(target, /turf/simulated/wall))
-						target:attackby(src.fist,src.occupant)
-					else if(prob(5))
-						target:dismantle_wall(1)
+		for(var/target_type in src.destroyable_obj)
+			if(istype(target, target_type) && hascall(target, "attackby"))
+				playsound(src, mecha_punch_sound, 50, 1)
+				src.occupant_message("You hit [target].")
+				src.visible_message("<span class='red'><b>[src.name] hits [target].</b></span>")
+				if(!istype(target, /turf/simulated/wall))
+					target:attackby(src.fist,src.occupant)
+				else if(prob(5))
+					if ((force >= MECHA_FORCE_COMBAT) && !(target:dismantle_wall(1)))
+						//this currently won't do anything to shuttle walls!
+						//also this doesn't account for reinforced walls but whatever, I don't want to deal with this right now
 						src.occupant_message("<span class='notice'>You smash through the wall.</span>")
 						src.visible_message("<b>[src.name] smashes through the wall!</b>")
-						playsound(src, 'sound/weapons/smash.ogg', 50, 1)
-					melee_can_hit = 0
-					spawn(melee_cooldown)
-						melee_can_hit = 1
-					break
-	return
+						playsound(src, 'sound/effects/stone_crumble.ogg', 50, 1)
+					else
+						src.occupant_message("<span class='notice'>You get a feeling that this [target] isn't gonna break ever.</span>")
+				if(target) //in case wall got obliterated
+					do_attack_animation(target, src, fist_icon)
+				break
+	occupant.delayNextAttack(MECHA_MELEE_DELAY)
 
 /*
 /obj/mecha/combat/proc/mega_shake(target)

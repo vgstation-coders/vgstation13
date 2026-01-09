@@ -347,6 +347,7 @@
 		/obj/item/clothing/glasses/eyepatch,
 		/obj/item/clothing/glasses/regular,
 		/obj/item/clothing/glasses/regular/hipster,
+		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/glasses/sunglasses/blindfold,
 		/obj/item/clothing/glasses/sunglasses/prescription,
 		/obj/item/clothing/glasses/welding,
@@ -951,6 +952,15 @@
 	amount = 2
 	chance = 50
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
+
+/obj/abstract/map/spawner/mobs/abnormality
+	name = "abnormality spawner"
+	icon_state = "mob_spider"
+	to_spawn = list(
+		/mob/living/simple_animal/scp_173,
+		/obj/machinery/chem_dispenser/scp_294,
+		/obj/effect/landmark/procedural_mobspawn/forgottenbeast,
+		)
 
 /obj/abstract/map/spawner/mobs/medivault
 	name = "medivault spawner"

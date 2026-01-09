@@ -24,6 +24,8 @@
 
 	var/data = null
 
+	var/reaction_sound = 'sound/effects/bubbles.ogg'
+
 
 /datum/chemical_reaction/proc/log_reaction(var/datum/reagents/holder, var/amt)
 	var/datum/log_controller/I = investigations[I_CHEMS]
@@ -698,6 +700,7 @@
 	result = SODIUMCHLORIDE
 	result_amount = 5
 	quiet = TRUE
+	reaction_sound = 'sound/effects/occult_blood_test.ogg'
 
 /datum/chemical_reaction/occult_blood_test/on_reaction(var/datum/reagents/holder, var/created_volume)
 	for(var/datum/reagent/blood/B in holder.reagent_list)
@@ -709,6 +712,7 @@
 				var/red_flames = 0
 				var/orange_flames = 0
 				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+
 				for (var/datum/role/R in cult.members)
 					var/mob/L = R.antag.current
 					if (isliving(L) && !L.isDead())
@@ -717,13 +721,44 @@
 							red_flames++//human or construct on the current Z level
 						else
 							orange_flames++//either a shade or on another Z level
+
+				holder.my_atom.add_particles(PS_CULT_SMOKE)
+				holder.my_atom.add_particles(PS_CULT_SMOKE2)
+				holder.my_atom.adjust_particles(PVAR_SPAWNING, 1, PS_CULT_SMOKE)
+				holder.my_atom.adjust_particles(PVAR_SPAWNING, 1, PS_CULT_SMOKE2)
+				holder.my_atom.adjust_particles(PVAR_PLANE, OBJ_PLANE, PS_CULT_SMOKE)
+				holder.my_atom.adjust_particles(PVAR_PLANE, OBJ_PLANE, PS_CULT_SMOKE2)
+				holder.my_atom.adjust_particles(PVAR_SCALE, 1, PS_CULT_SMOKE)
+				holder.my_atom.adjust_particles(PVAR_SCALE, 1, PS_CULT_SMOKE2)
+
 				if (red_flames)
+					holder.my_atom.add_particles(PS_OCCULT_TEST_LARGE)
+					holder.my_atom.adjust_particles(PVAR_COUNT, red_flames, PS_OCCULT_TEST_LARGE)
 					T.visible_message("<span class='notice'>You count <font color='red'><b>[(red_flames > 1) ? "[red_flames] distinct" : "a single"]</b></font> bright red flame[(red_flames > 1) ? "s":""].</span>")
+
 				if (orange_flames)
+					holder.my_atom.add_particles(PS_OCCULT_TEST_SMALL)
+					holder.my_atom.adjust_particles(PVAR_COUNT, orange_flames, PS_OCCULT_TEST_SMALL)
 					T.visible_message("<span class='notice'>[red_flames ? "As well as" : "You count"] <font color='orange'><b>[(orange_flames > 1) ? "[orange_flames] distinct" : "a single"]</b></font> dim orange flame[(orange_flames > 1) ? "s":""].</span>")
-				playsound(T, 'sound/effects/bubbles.ogg', 80, 1)
+
+				playsound(T, reaction_sound, (10 * red_flames) + (5 * orange_flames), 1)
 				T.hotspot_expose(500 * red_flames + 100 * orange_flames, SMALL_FLAME)
 				holder.remove_reagent(BLOOD, 5)
+
+				spawn(20)
+					holder.my_atom.adjust_particles(PVAR_SPAWNING, 0, PS_OCCULT_TEST_LARGE)
+					holder.my_atom.adjust_particles(PVAR_SPAWNING, 0, PS_OCCULT_TEST_SMALL)
+					holder.my_atom.adjust_particles(PVAR_SPAWNING, 0.3, PS_CULT_SMOKE)
+					holder.my_atom.adjust_particles(PVAR_SPAWNING, 0.3, PS_CULT_SMOKE2)
+					sleep(10)
+					holder.my_atom.adjust_particles(PVAR_SPAWNING, 0, PS_CULT_SMOKE)
+					holder.my_atom.adjust_particles(PVAR_SPAWNING, 0, PS_CULT_SMOKE2)
+					sleep(10)
+					holder.my_atom.remove_particles(PS_OCCULT_TEST_LARGE)
+					holder.my_atom.remove_particles(PS_OCCULT_TEST_SMALL)
+					holder.my_atom.remove_particles(PS_CULT_SMOKE)
+					holder.my_atom.remove_particles(PS_CULT_SMOKE2)
+
 				return
 
 		T.visible_message("<span class='notice'>[bicon(holder.my_atom)] The salts dissolve into the blood without so much as a reaction.</span>")

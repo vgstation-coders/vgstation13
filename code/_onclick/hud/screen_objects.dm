@@ -202,8 +202,9 @@
 			return 1
 	if(master)
 		var/obj/item/I = usr.get_active_hand()
-		if(I && master.can_quick_store(I))
-			master.quick_store(I, usr)
+		var/obj/item/master_item = master
+		if(I && master_item.can_quick_store(I))
+			master_item.quick_store(I, usr)
 			//usr.next_move = world.time+2
 	return 1
 

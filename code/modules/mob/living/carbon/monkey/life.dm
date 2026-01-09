@@ -244,22 +244,6 @@
 	if(breath)
 		loc.assume_air(breath)
 
-
-/mob/living/carbon/monkey/proc/get_breath_from_internal(volume_needed)
-	if(internal)
-		if (!contents.Find(internal))
-			internal = null
-		if (!wear_mask || !(wear_mask.clothing_flags|MASKINTERNALS) )
-			internal = null
-		if(internal)
-			if (internals)
-				internals.icon_state = "internal1"
-			return internal.remove_air_volume(volume_needed)
-		else
-			if (internals)
-				internals.icon_state = "internal0"
-	return null
-
 /mob/living/carbon/monkey/proc/handle_breath(datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return
@@ -714,18 +698,18 @@
 		clear_alert(SCREEN_ALARM_TEMPERATURE)
 
 	if(stat != DEAD)
-		if(src.eye_blind || blinded)
-			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		else
-			clear_fullscreen("blind")
-		if (src.disabilities & NEARSIGHTED)
-			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired, 2)
-		else
-			clear_fullscreen("impaired")
-		if (src.eye_blurry)
-			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-		else
-			clear_fullscreen("blurry")
+
+		var/impaired_vision = get_impaired_vision_range()
+		if(impaired_vision > 0)
+			enable_nearsightedness(impaired_vision)
+		else if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
+			disable_nearsightedness()
+
+		if(eye_blurry)
+			enable_blurriness(eye_blurry)
+		else if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
+			disable_blurriness()
+
 		if(druggy)
 			enable_druggy_overlays()
 		else

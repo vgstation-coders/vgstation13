@@ -351,31 +351,40 @@
 
 		id_tag = newid
 		broadcast_status()
-
 		return MT_UPDATE
 	if(can_user_modify_via_alarm(user))
 		if("set_device_on" in href_list)
 			on=!on
 			update_icon()
+			broadcast_status()
+			return MT_UPDATE
 		if("set_device_mode" in href_list)
 			pump_direction=!pump_direction
 			update_icon()
+			broadcast_status()
+			return MT_UPDATE
 		if("set_device_pressure_check_external" in href_list)
 			pressure_checks^=1
+			broadcast_status()
+			return MT_UPDATE
 		if("set_device_pressure_check_internal" in href_list)
 			pressure_checks^=2
+			broadcast_status()
+			return MT_UPDATE
 		if("set_device_external_pressure" in href_list)
 			var/newp=input(usr,"Specify the new pressure for external pressure checks (in kPa)",src,ONE_ATMOSPHERE) as null|num
 			if(newp==null)
 				return
 			external_pressure_bound=max(0,newp)
+			broadcast_status()
+			return MT_UPDATE
 		if("set_device_internal_pressure" in href_list)
 			var/newp=input(usr,"Specify the new pressure for internal pressure checks (in kPa)",src,0.0) as null|num
 			if(newp==null)
 				return
 			internal_pressure_bound=max(0,newp)
-		broadcast_status()
-		return MT_UPDATE
+			broadcast_status()
+			return MT_UPDATE
 	return ..()
 
 /obj/machinery/atmospherics/unary/vent_pump/change_area(var/area/oldarea, var/area/newarea)

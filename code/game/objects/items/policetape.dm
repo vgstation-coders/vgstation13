@@ -229,12 +229,13 @@
 	if(Adjacent(user))
 		return attack_hand(user)
 
-/obj/item/tape/allowed(mob/user)
-	if(isrobot(user) && !isMoMMI(user))
-		var/mob/living/silicon/robot/R = user
+/obj/item/tape/allowed(atom/A)
+	if(isrobot(A) && !isMoMMI(A))
+		var/mob/living/silicon/robot/R = A
 		return HAS_MODULE_QUIRK(R, robot_compatibility)
 
-	return ..()
+	if(ismob(A)) // this line was added for atomicity to keep a PR related to bugfixes, remove this if you'd like to see secbots be able to cross this
+		return ..()
 
 /obj/item/tape/attack_paw(mob/user as mob)
 	breaktape(null,user, TRUE)

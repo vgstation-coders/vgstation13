@@ -239,24 +239,16 @@
 			healths.icon_state = "health7"
 
 	update_pull_icon()
-	if (client)
 
-		if(src.eye_blind || blinded)
-			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		else
-			clear_fullscreen("blind")
-		if (src.disabilities & NEARSIGHTED)
-			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
-		else
-			clear_fullscreen("impaired")
-		if (src.eye_blurry)
-			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-		else
-			clear_fullscreen("blurry")
-		if(druggy)
-			enable_druggy_overlays()
-		else
-			disable_druggy_overlays()
+	if (client)
+		//not like it'd make sense to have those enabled on a brain
+		if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
+			disable_nearsightedness()
+
+		if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
+			disable_blurriness()
+
+		disable_druggy_overlays()//although...
 
 	if (stat != 2)
 		if (machine)

@@ -92,6 +92,8 @@
 	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
 
 	var/last_burn
+	var/smoking = FALSE //is the obj emitting smoke particles
+
 	var/vent_use = FALSE //can this be used while ventcrawling
 
 /obj/item/New()
@@ -1080,7 +1082,7 @@ var/global/objects_thrown_when_explode = FALSE
 		return CANNOT_EQUIP //Unsupported slot
 		//END GRINCH
 
-/obj/item/can_pickup(mob/living/user, var/actually_picking_up = TRUE, var/silent = FALSE)
+/obj/item/proc/can_pickup(mob/living/user, var/actually_picking_up = TRUE, var/silent = FALSE)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return FALSE
 	if(actually_picking_up && prepickup(user))
@@ -1101,11 +1103,7 @@ var/global/objects_thrown_when_explode = FALSE
 		return FALSE
 	return TRUE
 
-/obj/item/verb_pickup(mob/living/user)
-	//set src in oview(1)
-	//set category = "Object"
-	//set name = "Pick up"
-
+/obj/item/proc/verb_pickup(mob/living/user)
 	if(!can_pickup(user))
 		return FALSE
 
@@ -1132,6 +1130,15 @@ var/global/objects_thrown_when_explode = FALSE
 	if(istype(user, /mob/living/carbon/monkey))
 		attack_paw(user)
 	return
+
+/obj/item/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
+	return 0
+
+
+/obj/item/proc/quick_store(var/obj/item/I, mob/user) //proc used to handle quick storing
+	if(user?.client)
+		user.client.last_quick_stored = world.time
+	return 0
 
 //Used in twohanding
 /obj/item/proc/wield(mob/user, var/inactive = FALSE)
@@ -1805,3 +1812,27 @@ var/global/objects_thrown_when_explode = FALSE
 		var/mob/living/L = user
 		L.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
 		L.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")
+
+/obj/item/checkburn()
+	if(!flammable)
+		CRASH("[src] tried to burn despite not being flammable!")
+	if(on_fire)
+		return
+	if(!smoking)
+		checksmoke()
+	..()
+
+/obj/item/proc/checksmoke()
+	var/datum/gas_mixture/G = return_air()
+	if(!G)
+		return
+	while(G && G.temperature >= (autoignition_temperature * 0.75))
+		if(!smoking)
+			add_particles(PS_SMOKE)
+			smoking = TRUE
+		var/rate = clamp(lerp_generic(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
+		sleep(10 SECONDS)
+		G = return_air()
+	remove_particles(PS_SMOKE)
+	smoking = FALSE

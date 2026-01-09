@@ -73,16 +73,105 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2026.01.09</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="experiment">Reworked the way impaired vision gets rendered. The &#34;grate&#34; effect has been removed and instead a sphere of darkness and blurriness smoothly closes-in around your character. At low impairment values (1-2), you will only see a bit of blurriness in the corners of your view distance. At max impairment (10), it looks just like when you were blind before.</li>
+				<li class="experiment">Impairment increases based on your eye damage (with default eyes you start seeing effects from 5 damage, but it now takes 35 damage to go fully blind), whether you have the nearsightedness disability (3), whether you are wearing hats or glasses that reduce your vision (welder hat/goggles for instance, 5), and decreases when wearing prescription glasses (-3) or using advanced eyes (-2). It can also increase temporarily from stuff that could previously temporarily blind you. Let it be known that non-nearsighted people can still wear prescription glasses to counteract other sources of vision impairment, such as welder helmets.</li>
+				<li class="tweak">Imidazoline has been greatly enhanced at stopping temporary blindness over a shorter period of time, on top of its previous benefits.</li>
+				<li class="experiment">Reworked the way blurry vision gets rendered. It now makes your whole screen (minus the UI) slightly blurry instead of a white fog appearing over everything (aka cumvision).</li>
+				<li class="bugfix">Fixed being able to see beyond the range of the old blindness sprites when using binoculars, sniper, or farsight gene.</li>
+				<li class="rscadd">Holding a cane now lets you see on the tile adjacent to yours regardless of what type of blindness you have.</li>
+				<li class="rscadd">Prescription Glasses now have the reverse effect for players who are NOT nearsighted. Note that this applies specifically to glasses and scanner that have prescription specified in their name. CMO Medhuds and any other types of glasses that also provided nearsightedness correction still correct the eyesight of nearsighted players, without making it blurry for non-nearsighted ones.</li>
+				<li class="rscadd">The Cheap Glasses cargo crate now also contains a pair of cosmetic glasses. Those look just like regular prescription glasses but with none of the eyesight correction, allowing non-nearsighted player to wear those without seeing things blurry.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Table doors can now check access from bots, mechas and vehicles.</li>
+			</ul>
+			<h3 class="author">gurfan updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">TTV explosions no longer have a max range when occurring outside the station&#39;s Z level.</li>
+			</ul>
+			<h2 class="date">2026.01.08</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The shoal has now started catering to smokers, and have stocked trade outfitters with shoal-created cigarettes and lighters for a &#34;modest&#34; price.</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a second close button to the rune drawing interface that isn&#39;t right on top of your character.</li>
+				<li class="rscadd">Hovering your cursor over the rune glyphs now displays a tooltip telling you their (english) name (which could already be read in the bottom left corner but many never noticed)</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Spades and hatchets are reasonably priced in the autolathe now.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="imageadd">The internals button now looks different if humanoid mobs breathe nitrogen or plasma.</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Converted the CMC UI to TGUI.</li>
+			</ul>
+			<h2 class="date">2026.01.07</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="imageadd">Added particles to the Occult Blood Test chemical reaction that display the flames that were only depicted in flavor text until now.</li>
+				<li class="imageadd">Added a custom sound to the Occult Blood Test chemical reaction that varies in volume depending on how many flames are created.</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">You can now make snowballs from box of winter snow easier without needing to drop your existing snowball first.</li>
+			</ul>
+			<h3 class="author">Inorien updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Pipenets should build more reliably now, fixing strange cases where gas wouldn&#39;t flow through devices</li>
+				<li class="bugfix">AIs can once again state laws containing &#34; without crashing their nanoui</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">wiping off someone else&#39;s make-up now actually works</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed using shovels on snow not producing snowballs.</li>
+			</ul>
+			<h2 class="date">2026.01.04</h2>
+			<h3 class="author">vampirebat74 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds containment cell vaults and the &#34;abnormality&#34; spawner</li>
+			</ul>
 			<h2 class="date">2026.01.03</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">equalizone no longer increases total damage when you have non-organic limbs</li>
+				<li class="tweak">equalizone synthesis is now more efficent</li>
+				<li class="tweak">all fission reactions now take half as long, and make/require double the power</li>
+				<li class="bugfix">Fixed multitools being unable to change frequencies of atmos devices</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">All mechas can now punch mobs, windows and grilles, when they have no weapons equipped, a feat no longer reserved to combat mechas. By default their punchs deal 10 damage to mobs, ripleys and clarkes deal 15, and combat mechas deal 30 (those are still the only one that can break walls).</li>
+				<li class="rscadd">Mecha punchs are now also compatible with attack animations, courtesy of Dilt</li>
+				<li class="rscadd">Honkers punch deal no damage but play the bikehorn sound.</li>
+				<li class="tweak">Unarmed mecha punchs now only have a 50% chance of paralyzing players, down from 100%, giving their victims a chance of escaping.</li>
+				<li class="bugfix">Unarmed mechas on harm intent can now punch down cult structures.</li>
+				<li class="bugfix">Fixed mechas being able to punch mobs and objects through windows.</li>
+			</ul>
 			<h3 class="author">Inorien updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Roundstart open digital/manual valves no longer have a chance to be bricked</li>
+				<li class="bugfix">AIs can once again toggle digital T valves</li>
 			</ul>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Detective scanners, fingerprint cards, evidence bags, and other relevant items can now be placed inside the detective&#39;s forensic computer without fiddling with menus, if logged in and possible to do so.</li>
 				<li class="tweak">Detective forensics computers now auto update their screen when scanning.</li>
 				<li class="tweak">Detective forensic computers now have some actual nice looks to their UI, with some formatting consistency on user messages too.</li>
+				<li class="rscadd">R&amp;D can now make stasis and bluespace vials, both for bluespace 4 and materials 6 research at 250 units of glass, iron, uranium and diamond; 1000 total. Bluespace vials hold double the amount at 50 units, and stasis vials do not allow any reactions. Relevant sprites for the vial boxes have also been added.</li>
+				<li class="imageadd">Vox and plasmamen now have unique suffocation warning sprites, based on the air they breathe.</li>
 			</ul>
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
@@ -92,6 +181,11 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<ul class="changes bgimages16">
 				<li class="rscadd">The library may contain several library books already printed at round start.</li>
 				<li class="rscadd">Library books may now be rarely found in maint.</li>
+			</ul>
+			<h3 class="author">vampirebat74 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed the fact that SCP-173 could not be pushed or pulled.</li>
+				<li class="tweak">SCP-173 invulnerability removed and cooldowns assigned</li>
 			</ul>
 			<h3 class="author">west3436 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1460,166 +1554,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">adacovsk updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">you can see the map name again</li>
-			</ul>
-			<h2 class="date">2025.06.24</h2>
-			<h3 class="author">Blonichu updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes error message while using wirecutters or screwdrivers for ghetto surgery.</li>
-				<li class="tweak">Fixes the value of Sonic &amp; Co. smartboxes to the correct amount</li>
-				<li class="rscadd">Added Charge, a new gene power.</li>
-				<li class="tweak">Adds the sonic costumes to the Autodrobe</li>
-				<li class="bugfix">Fixed a bug with iced beer</li>
-				<li class="rscadd">Sonic &amp; Co. costume boxes, available in the Clown Vendor.</li>
-			</ul>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">added missing things to junglestation</li>
-				<li class="rscadd">more jungle fixes</li>
-				<li class="bugfix">junga</li>
-				<li class="bugfix">some minor jungle fixes and additions</li>
-				<li class="rscadd">NT is now awarding bonuses for the safe return of beloved station pets to centcomm.</li>
-				<li class="bugfix">Fixed some issues with junglestation</li>
-				<li class="rscadd">Added a new canister variant for cryotheum. remember that proper labeling of gasses is required to adhere to workplace safety standards.</li>
-				<li class="rscadd">NanoTrasen has permitted crew stationed on space station 13 to be relocated to NT Colony Gamma-8, located on a terrestrial planet. Stationed employees are advised to remain within the fenced region.</li>
-				<li class="bugfix">jungle has less issues</li>
-				<li class="tweak">reactor parts from cargo now come in flatpack form</li>
-				<li class="tweak">made reactor cargo orders more worthwhile</li>
-				<li class="rscadd">the NanoTrasen board of engineering has designed several fuel mixtures for testing, orderable from cargo.</li>
-				<li class="rscadd">New reagent: thorium. currently only from cargo orders.</li>
-				<li class="rscdel">Reactors can no longer make phazon</li>
-				<li class="tweak">reduced radon&#39;s lifespan</li>
-				<li class="spellcheck">revised fission reactor manual, added a unique name to shielded fuel rods</li>
-				<li class="bugfix">unga bunga junga fixes</li>
-				<li class="bugfix">Fixed more jungle things</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">Nanotrasen now stocks proper Tesla cannon, rather than their Space Temu knock-off, named Telsa.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Bloodstones are now extremely vulnerable to melee damage, especially holy melee damage like the null rod.</li>
-			</ul>
-			<h3 class="author">MercuriusGH updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds new names to the detective&#39;s undercover ID</li>
-			</ul>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Challengers now can roll at 15pop.</li>
-			</ul>
-			<h3 class="author">RealestEstate updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Mech bay recharge ports were given directional sprites.</li>
-				<li class="rscadd">You can now rearrange the mech recharge bay any way you like as long as the recharge port is facing the floor station. You must use the console to link the devices together should you rearrange them.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Screwsolders now accept polytrinic acid for faster soldering, and 1.5x more damage in attacks.</li>
-				<li class="rscadd">Gatling welder tools now accept plasma for faster welding, and 1.5x more damage in attacks, plus emitting a more plasma level natural heat.</li>
-				<li class="rscadd">Welders can now accept fuel from reagent containing items, in order to make refueling them with plasma easier, if possible.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Should fix rogue black squares in TGUI interfaces. Please do make a bug report if you see them appearing again!</li>
-				<li class="tweak">replaced R&amp;D with Tetris and clearing two lines gives you a random research point</li>
-				<li class="bugfix">The CTRL+F and F5 control should now work again in HTML interfaces (and are arguably more modern).</li>
-				<li class="bugfix">Fixes some more HTML interfaces errors (notably, shuttles)</li>
-			</ul>
-			<h3 class="author">Silkizuad updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Shoal now remembered to stock up their safes on Meta and Lowfatbagel.</li>
-				<li class="bugfix">Fixed Derelict RnD server not being properly cooled in some derelicts.</li>
-				<li class="rscadd">Added the new Art Storage room close by dorms in Meta.</li>
-				<li class="tweak">Meta&#39;s Library is back with it&#39;s hidey private chambers.</li>
-				<li class="tweak">Library is back with it&#39;s hallway nook.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added 4 new exotic shotgun shells, available at your local vox trader</li>
-				<li class="rscadd">added pepperball glock ammo, available at the ammolathe</li>
-				<li class="rscadd">you can now craft rock salt shells by putting salt in them and then wadding them with a piece of paper.</li>
-				<li class="tweak">rock-salt shells now penetrate juggernaut shields</li>
-				<li class="bugfix">Fixed the 🆑 maybe?</li>
-				<li class="tweak">Deff: After an unacceptable count of cargo workers &#39;going postal&#39;, this station now has a bay-to-mailroom delivery chute and a vastly expanded mail room.</li>
-				<li class="tweak">box brig: made some adjustments to the briefing and rest areas.</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">fixes some issues with changeling split</li>
-				<li class="bugfix">no more infinite zombies from corpses in wheelchairs</li>
-				<li class="bugfix">ghosts can&#39;t anger the bees/hornets via nests</li>
-			</ul>
-			<h3 class="author">falcon2346 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Kidneys slowly heal toxin damage. Advanced kidneys now purge harmful chemicals.</li>
-			</ul>
-			<h3 class="author">jellyveggie2 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Printed paintings should no longer clutter the round end scoreboard.</li>
-				<li class="tweak">Pipe meters linked to consoles scan now report the same gasses and be configured the same way as gas sensors.</li>
-			</ul>
-			<h3 class="author">mentgah updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Spessmart works again.</li>
-				<li class="bugfix">The shoal will no longer ask vox raiders for the impossible.</li>
-				<li class="bugfix">Clown shoes are 7 range again.</li>
-				<li class="bugfix">People won&#39;t make sounds when they&#39;re on a conveyor belt anymore.</li>
-				<li class="rscadd">You now need to be an AI to be selected for roundstart malf.</li>
-				<li class="rscadd">People now make sounds when they walk.</li>
-				<li class="bugfix">You can no longer interact with synthesizers when they are unwrenched.</li>
-				<li class="tweak">Removed the default trader suit from vox lockers, allowing the other suits to spawn more often.</li>
-				<li class="rscadd">All trader suits are now available in the vox trader vendor.</li>
-				<li class="rscadd">Added a new Vox traitor item, high frequency vox boots, that deal 25 damage on kick and can slice open doors.</li>
-				<li class="bugfix">All phone names are actually distinct now.</li>
-			</ul>
-			<h2 class="date">2025.05.10</h2>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">greatly reduced the cost of fission reactors</li>
-				<li class="tweak">fission reactor part boxes can now be clicked on while in hand to drop their parts on the floor, for assembling convenience.</li>
-			</ul>
-			<h2 class="date">2025.05.07</h2>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Reactors have some more options with the right access.</li>
-				<li class="tweak">disabling autoscram has been moved to the reactor options menu</li>
-				<li class="rscadd">reactors can now be emagged to disable multitool access requirements.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes Simpolinol having seemingly no effects on non-simple mobs. It should correctly have interesting random effects now.</li>
-			</ul>
-			<h3 class="author">mentgah updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Custom admin ladders can now play sounds as well.</li>
-			</ul>
-			<h2 class="date">2025.05.06</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Aminocorydon, made by mixing Aminomicin and Banana Juice, in a jar with a Bananium sheet in it as a catalyst. This is the same mixing mechanism as Midazoline.</li>
-				<li class="rscadd">Aminocoydon reacts with Nutriment and &#34;Nothing&#34; to make Clowns and Mimes respectively.</li>
-				<li class="rscadd">Do NOT mix Aminocorydon with 10 parts Honk Serum.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fire alarms no longer accept shelters if they already have one, making them unretrievable.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes Ankh Horn using all the sand available in a stack instead of just one stack.</li>
-				<li class="experiment">Port the game to BYOND 516 for better features, in particular improved HTML UI responsiveness. Please report any bugs.</li>
-				<li class="imageadd">Norwood curse now has a proper spell icon, courtesy of Blithering.</li>
-				<li class="bugfix">Simple mobs, including grues, can now remove floor tiles</li>
-				<li class="bugfix">Wrapped items should no longer behave erratically after being unwrapped.</li>
-				<li class="tweak">You can now wrap items while holding them.</li>
-			</ul>
-			<h3 class="author">Silkizuad updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Derelict Update - derelict maps are now randomly picked each round.</li>
-				<li class="rscadd">Added a new derelict map.</li>
-				<li class="rscadd">Derelicts are somewhat profitable to visit now.</li>
-				<li class="bugfix">Safes now properly take in items in vaults.</li>
 			</ul>
 		</div>
 		<!--

@@ -1150,4 +1150,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/vox
 	name = "shoal lighter"
 	desc = "A budget lighter. Engineered to be as cheap as possible, and work without oxygen."
+	icon_state = "lighter-vox"
+	light_icon = "lighter-vox-on"
+	color_suffix = null
 	requires_oxygen=FALSE

@@ -1012,9 +1012,11 @@ var/list/icon_state_to_appearance = list()
 
 /turf/unsimulated/mineral/gibtonite/proc/countdown()
 	spawn(0)
-		while(stage == 1 && det_time > 0 && mineral.result_amount >= 1)
+		while(istype(src, /turf/unsimulated/mineral/gibtonite) && stage == 1 && det_time > 0 && mineral.result_amount >= 1)
 			det_time--
 			sleep(5)
+		if (!istype(src, /turf/unsimulated/mineral/gibtonite))
+			return
 		if(stage == 1 && det_time <= 0 && mineral.result_amount >= 1)
 			var/turf/bombturf = get_turf(src)
 			mineral.result_amount = 0

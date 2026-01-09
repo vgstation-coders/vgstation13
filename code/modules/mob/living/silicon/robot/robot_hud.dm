@@ -49,18 +49,17 @@
 
 	update_pull_icon()
 
-	if(eye_blind || blinded)
-		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-	else
-		clear_fullscreen("blind")
-	if(disabilities & NEARSIGHTED)
-		overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
-	else
-		clear_fullscreen("impaired")
+	var/impaired_vision = get_impaired_vision_range()
+	if(impaired_vision > 0)
+		enable_nearsightedness(impaired_vision)
+	else if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
+		disable_nearsightedness()
+
 	if(eye_blurry)
-		overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-	else
-		clear_fullscreen("blurry")
+		enable_blurriness(eye_blurry)
+	else if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
+		disable_blurriness()
+
 	if(druggy)
 		enable_druggy_overlays()
 	else

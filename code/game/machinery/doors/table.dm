@@ -54,10 +54,12 @@
 /obj/machinery/door/table/Bumped(atom/user)
 	if(!density || operating)
 		return
-
 	if(!emagged && !allowed(user))
 		denied()
 	else
+		if(istype(user, /obj/structure/bed/chair/vehicle/firebird))
+			var/obj/structure/bed/chair/vehicle/firebird/F = user
+			F.forceMove(get_step(F,F.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 		open()
 		spawn(2 SECONDS)
 			close()

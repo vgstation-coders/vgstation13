@@ -203,7 +203,7 @@
 
 	var/mob/living/carbon/human/H = M
 
-	if(user.zone_sel.selecting == "head")
+	if(user.zone_sel.selecting == "head" && H.face_style)
 		if(H == user)
 			to_chat(user, "<span class='notice'>You wipe off the face paint with [src].</span>")
 			H.face_style = null
@@ -211,13 +211,13 @@
 		else
 			user.visible_message("<span class='warning'>[user] begins to wipe [H]'s face paint  off with \the [src].</span>", \
 									"<span class='notice'>You begin to wipe off [H]'s face paint .</span>")
-			if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+			if(do_after(user, H, 10))	//user needs to keep their active hand, H does not.
 				user.visible_message("<span class='notice'>[user] wipes [H]'s face paint  off with \the [src].</span>", \
 										"<span class='notice'>You wipe off [H]'s face paint .</span>")
 				H.face_style = null
 				H.update_body()
 
-	else if(user.zone_sel.selecting == "eyes")
+	else if(user.zone_sel.selecting == "eyes" && H.eye_style)
 		if(H == user)
 			to_chat(user, "<span class='notice'>You wipe off the eyeshadow with [src].</span>")
 			H.eye_style = null
@@ -225,13 +225,13 @@
 		else
 			user.visible_message("<span class='warning'>[user] begins to wipe [H]'s eyeshadow off with \the [src].</span>", \
 									"<span class='notice'>You begin to wipe off [H]'s eyeshadow.</span>")
-			if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+			if(do_after(user, H, 10))	//user needs to keep their active hand, H does not.
 				user.visible_message("<span class='notice'>[user] wipes [H]'s eyeshadow off with \the [src].</span>", \
 										"<span class='notice'>You wipe off [H]'s eyeshadow.</span>")
 				H.eye_style = null
 				H.update_body()
 
-	else if(user.zone_sel.selecting == "mouth")
+	else if(user.zone_sel.selecting == "mouth" && H.lip_style)
 		if(H == user)
 			to_chat(user, "<span class='notice'>You wipe off the lipstick with [src].</span>")
 			H.lip_style = null
@@ -239,7 +239,7 @@
 		else
 			user.visible_message("<span class='warning'>[user] begins to wipe [H]'s lipstick off with \the [src].</span>", \
 									"<span class='notice'>You begin to wipe off [H]'s lipstick.</span>")
-			if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+			if(do_after(user, H, 10))	//user needs to keep their active hand, H does not.
 				user.visible_message("<span class='notice'>[user] wipes [H]'s lipstick off with \the [src].</span>", \
 										"<span class='notice'>You wipe off [H]'s lipstick.</span>")
 				H.lip_style = null

@@ -195,11 +195,13 @@
 		if("set_device_on" in href_list)
 			on=!on
 			update_icon()
+			broadcast_status()
+			return MT_UPDATE
 		if("set_device_flow_rate" in href_list)
 			var/newp=input(usr,"Specify the new target flow rate (in L/s)",src,CELL_VOLUME) as null|num
 			if(newp==null)
 				return
 			volume_rate=min(max(0,newp),max_rate)
-		broadcast_status()
-		return MT_UPDATE
+			broadcast_status()
+			return MT_UPDATE
 	return ..()

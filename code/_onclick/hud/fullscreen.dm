@@ -122,10 +122,21 @@
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "blurry"
+	alpha = 0//set to 255 by update_fullscreen_alpha();
 
 /obj/abstract/screen/fullscreen/nearsighted
 	icon = 'icons/mob/screen1_blindness.dmi'
 	icon_state = "eye"
+
+/obj/abstract/screen/fullscreen/impaired_crit
+	icon_state = "blackimageoverlay"
+	globalscreen = 1//need this screen object to keep existing
+
+/obj/abstract/screen/fullscreen/impaired_crit/New()
+	..()
+	var/matrix/M = matrix()
+	M.Scale(40, 40)
+	transform = M
 
 /obj/abstract/screen/fullscreen/flash
 	icon = 'icons/mob/screen1.dmi'
