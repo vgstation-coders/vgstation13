@@ -375,7 +375,7 @@
 				reset_visuals()
 				return
 			for(var/atom/movable/AA in linked_area)
-				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "to_z" = D.z, "from_z" = linked_port.z)
+				INVOKE_EVENT(AA, /event/v_transition, "user" = AA, "to_v" = D.get_virtual_z(), "from_v" = linked_port.get_virtual_z())
 		if(D.get_virtual_z() != linked_port.get_virtual_z())
 			var/datum/virtual_z/to_v = D.get_virtual_z()
 			var/datum/virtual_z/from_v = linked_port.get_virtual_z()

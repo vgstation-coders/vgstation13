@@ -356,9 +356,9 @@
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
 
-			INVOKE_EVENT(A, /event/post_z_transition, "user" = A, "from_v" = old_v, "to_v" = move_to_v)
+			INVOKE_EVENT(A, /event/post_v_transition, "user" = A, "from_v" = old_v, "to_v" = move_to_v)
 			for(var/atom/movable/AA in contents_brought)
-				INVOKE_EVENT(AA, /event/post_z_transition, "user" = AA, "from_v" = old_v, "to_v" = move_to_v)
+				INVOKE_EVENT(AA, /event/post_v_transition, "user" = AA, "from_v" = old_v, "to_v" = move_to_v)
 
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.

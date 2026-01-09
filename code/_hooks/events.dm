@@ -11,25 +11,20 @@
 /event/irradiate
 
 // Called whenever an atom's z-level changes.
-// Seems to be invoked all over the place, actually. Someone should sort this out.
+// Only retained for multiz compat; should use /event/v_transition in all other cases.
 // Arguments:
 // atom/movable/user: The atom that moved.
 // to_z: The new z.
 // from_z: The old z.
 /event/z_transition
 
-// TODO: docs
-/event/post_z_transition
-
 // Called whenever an atom's v-level changes.
-// Seems to be invoked all over the place, actually. Someone should sort this out.
 // Arguments:
 // atom/movable/user: The atom that moved.
 // to_v: The new v.
 // from_v: The old v.
 /event/v_transition
-
-/event/post_v_transition
+/event/post_v_transition // same args as previous
 
 // Called whenever an /atom/movable moves.
 // Arguments:
