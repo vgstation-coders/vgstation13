@@ -1164,7 +1164,7 @@ its easier to just keep the beam vertical.
 		return null
 	var/datum/virtual_z/vz = T.v
 	if(!vz)
-		for(var/datum/virtual_z/check_vz in map.vLevels)
+		for(var/datum/virtual_z/check_vz in map.getAllVLevels())
 			if(check_vz.x_min <= x && check_vz.x_max >= x && check_vz.y_min <= y && check_vz.y_max >= y)
 				vz = check_vz
 				break

@@ -49,7 +49,7 @@
 	var/transitionLoops = FALSE //if true, transition sends you back to the same v-level
 	var/list/transition_crosswrap_v=null // list(z_north,z_south,z_east,z_west). when you hit the edge, instead of drifting to a random zlevel or looping on the current one, teleports you to the corresponding edge on the z-level in the list.
 
-/datum/virtual_z/New(var/datum/zLevel/z, var/input_size_x, var/input_size_y, var/input_x = 0, var/input_y = 0, var/skip_turf_setup = FALSE)
+/datum/virtual_z/New(var/datum/zLevel/z, var/input_size_x, var/input_size_y, var/input_x = 0, var/input_y = 0, var/skip_turf_setup = FALSE, var/system = FALSE)
 	. = ..()
 	if(!z)
 		CRASH("Tried creating a virtual zLevel without a parent zLevel!")
@@ -62,12 +62,17 @@
 	y_min = input_y
 	x_max = x_min + size_x - 1
 	y_max = y_min + size_y - 1
-	setup(skip_turf_setup)
+	setup(skip_turf_setup, system)
 
-/datum/virtual_z/proc/setup(var/skip_turf_setup = FALSE)
+/datum/virtual_z/proc/setup(var/skip_turf_setup = FALSE, var/system = FALSE)
 	parent_z.virtual_z_levels |= src
-	map.vLevels |= src
-	id = map.vLevels.len
+	// System vLevels (station, centcomm, etc) are stored in map.systemVLevels, not map.vLevels
+	// Their IDs are 101+ (SYSTEM_VLEVEL_OFFSET + z-level number)
+	// Regular vLevels are stored in map.vLevels with IDs starting from 1
+	if(!system)
+		map.vLevels |= src
+		id = map.vLevels.len
+	// Note: For system vLevels, the ID is set by linkVLevel() after New() returns
 	if(!skip_turf_setup)
 		initialize_turfs()
 	spawn(0)
@@ -121,7 +126,7 @@
 ///////// SUBSYSTEM PAUSING /////////
 /////////////////////////////////////
 /datum/virtual_z/proc/set_status(var/active_state)
-	if(id <= 6) // Don't pause core z-levels
+	if(id > SYSTEM_VLEVEL_OFFSET) // Don't pause system vLevels (station, centcomm, etc - IDs 101+)
 		return
 
 	active = active_state

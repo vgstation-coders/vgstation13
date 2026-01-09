@@ -68,3 +68,7 @@
 #define VZ_MAP_ELEMENT	4		// vault/ruin/dungeon/away mission/etfc
 #define VZ_CUSTOM		5		// custom level
 #define VZ_DEFAULT		6 		// premapped area (station, centcomm, etc)
+
+// System vLevel offset - system vLevels (station, centcomm, etc) use IDs 101+
+// to differentiate them from dynamically created vLevels which use IDs 1+
+#define SYSTEM_VLEVEL_OFFSET	100

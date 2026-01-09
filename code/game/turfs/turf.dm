@@ -305,7 +305,7 @@
 			if(!locked_to_current_v)
 				while(move_to_v == src.v)
 					var/picked = pickweight(accessable_v_levels[v.transition_channel])
-					var/datum/virtual_z/vz_to_use = map.vLevels[text2num(picked)]
+					var/datum/virtual_z/vz_to_use = map.getVLevel(text2num(picked))
 					if(istype(vz_to_use))
 						move_to_v = vz_to_use
 					safety++
@@ -317,7 +317,7 @@
 				return
 
 			if(isnum(move_to_v)) //DEBUG
-				move_to_v = map.vLevels[move_to_v]
+				move_to_v = map.getVLevel(move_to_v)
 
 			var/datum/virtual_z/old_v = src.v
 			INVOKE_EVENT(A, /event/v_transition, "user" = A, "from_v" = old_v, "to_v" = move_to_v)
@@ -947,7 +947,7 @@
 	if(v)
 		return v
 	else
-		for(var/datum/virtual_z/check_vz in map.vLevels)
+		for(var/datum/virtual_z/check_vz in map.getAllVLevels())
 			if(check_vz.x_min <= x && check_vz.x_max >= x && check_vz.y_min <= y && check_vz.y_max >= y)
 				return check_vz
 	return null

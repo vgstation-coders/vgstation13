@@ -12,6 +12,10 @@ import {
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
 
+// System vLevels (station, centcomm, etc) have IDs 101+
+// Must match SYSTEM_VLEVEL_OFFSET in __DEFINES/map.dm
+const SYSTEM_VLEVEL_OFFSET = 100;
+
 type Data = {
   zLevels: ZLevel[];
 };
@@ -188,7 +192,7 @@ const VLevelEntry = (props: { vLevel: VLevel }) => {
   const { vLevel } = props;
   const [showSettings, setShowSettings] = useState(false);
 
-  const isBaseLevel = vLevel.id <= 6;
+  const isBaseLevel = vLevel.id > SYSTEM_VLEVEL_OFFSET;
 
   return (
     <Section

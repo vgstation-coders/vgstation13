@@ -172,7 +172,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	log_debug("Finished calling post on zLevels in [stop_watch(watch)]s.", FALSE)
 
 	watch = start_watch()
-	for(var/datum/virtual_z/vz in map.vLevels)
+	for(var/datum/virtual_z/vz in map.getAllVLevels())
 		vz.initialize_turfs()
 	log_startup_progress("Initialized virtual z-levels in [stop_watch(watch)]s.")
 
@@ -564,9 +564,9 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	if(!istype(user) || !user.client || !(to_v && from_v))
 		return
 	if(isnum(to_v))
-		to_v = map.vLevels[to_v]
+		to_v = map.getVLevel(to_v)
 	if(isnum(from_v))
-		from_v = map.vLevels[from_v]
+		from_v = map.getVLevel(from_v)
 	if(to_v) // Unpause destination vLevel
 		to_v.set_status(TRUE)
 	if(from_v) // Check if any living mobs with clients remain on source vLevel

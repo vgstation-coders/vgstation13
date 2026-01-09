@@ -269,7 +269,7 @@
 
 			// Build list of available vLevels for selection
 			var/list/vlevel_choices = list("None" = null)
-			for(var/datum/virtual_z/vz in map.vLevels)
+			for(var/datum/virtual_z/vz in map.getAllVLevels())
 				if(vz.id != V.id) // Don't allow self-reference
 					vlevel_choices["vZ-[vz.id]: [vz.name]"] = vz.id
 
@@ -519,7 +519,7 @@
 						if(alert(usr, "Configure transition crosswraps?\n(Define specific vLevels to transition to when hitting each edge)", "Transition Crosswraps", "Yes", "No") == "Yes")
 							// Build list of existing vLevels for selection
 							var/list/vlevel_choices = list("None" = null)
-							for(var/datum/virtual_z/vz in map.vLevels)
+							for(var/datum/virtual_z/vz in map.getAllVLevels())
 								vlevel_choices["vZ-[vz.id]: [vz.name]"] = vz.id
 
 							var/north_choice = input(usr, "Select vLevel to crosswrap NORTH edge to:", "Crosswrap North") as null|anything in vlevel_choices
@@ -694,7 +694,7 @@
 						if(alert(usr, "Configure transition crosswraps?\\n(Define specific vLevels to transition to when hitting each edge)", "Transition Crosswraps", "Yes", "No") == "Yes")
 							// Build list of existing vLevels for selection
 							var/list/vlevel_choices = list("None" = null)
-							for(var/datum/virtual_z/vz in map.vLevels)
+							for(var/datum/virtual_z/vz in map.getAllVLevels())
 								vlevel_choices["vZ-[vz.id]: [vz.name]"] = vz.id
 
 							var/north_choice = input(usr, "Select vLevel to crosswrap NORTH edge to:", "Crosswrap North") as null|anything in vlevel_choices

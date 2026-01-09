@@ -26,6 +26,7 @@
 	var/nameLong = ""
 	var/list/datum/zLevel/zLevels = list()
 	var/list/datum/virtual_z/vLevels = list()
+	var/list/datum/virtual_z/systemVLevels = list() // System vLevels (station, centcomm, etc) - numbered 101+
 	var/zMainStation = 1
 	var/zCentcomm = 2
 	var/zTCommSat = 3
@@ -83,11 +84,12 @@
 
 	src.loadZLevels(src.zLevels)
 
-	// Populate vLevels list from all zLevel virtual_z_levels
+	// Populate systemVLevels list from all zLevel virtual_z_levels
+	// These are system vLevels (station, centcomm, etc) created during map loading
 	// This must be done here because the global 'map' variable isn't set during loadZLevels
 	for(var/datum/zLevel/Z in src.zLevels)
 		for(var/datum/virtual_z/V in Z.virtual_z_levels)
-			src.vLevels |= V
+			src.systemVLevels |= V
 			if(Z.z in daynight_z_lvls)
 				daynight_v_lvls += V
 
@@ -127,8 +129,8 @@
 		linkVLevel(level)
 
 /datum/map/proc/linkVLevel(datum/zLevel/level)
-	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL, 1, 1)
-	new_vz.id = level.z
+	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL, 1, 1, skip_turf_setup = FALSE, system = TRUE)
+	new_vz.id = level.z + SYSTEM_VLEVEL_OFFSET // System vLevels use IDs 101+ (z1=101, z2=102, etc)
 	new_vz.name = level.name
 	new_vz.gps_allowed = level.z != zCentcomm
 	new_vz.teleJammed = level.teleJammed ? VZ_TELEPORTATION_FORBIDDEN : VZ_TELEPORTATION_ALLOWED
@@ -224,6 +226,33 @@
 	new_vz.movementJammed = TRUE
 	new_vz.set_status(FALSE)
 	return new_vz
+
+// Returns the vLevel with the given ID
+/datum/map/proc/getVLevel(var/vlevel_id)
+	if(!vlevel_id)
+		return null
+	if(vlevel_id > SYSTEM_VLEVEL_OFFSET)
+		var/system_index = vlevel_id - SYSTEM_VLEVEL_OFFSET
+		if(system_index >= 1 && system_index <= systemVLevels.len)
+			return systemVLevels[system_index]
+		return null
+	else if(vlevel_id >= 1 && vlevel_id <= vLevels.len)
+		return vLevels[vlevel_id]
+	return null
+
+// Returns TRUE if the given vLevel ID is a system vLevel (station, centcomm, etc)
+/datum/map/proc/isSystemVLevel(var/vlevel_id)
+	return vlevel_id > SYSTEM_VLEVEL_OFFSET
+
+// Returns the system vLevel for the given z-level number (1-6)
+/datum/map/proc/getSystemVLevelByZ(var/z_level)
+	if(!z_level || z_level < 1 || z_level > systemVLevels.len)
+		return null
+	return systemVLevels[z_level]
+
+// Returns all vLevels (both system and regular) as a flat list
+/datum/map/proc/getAllVLevels()
+	return systemVLevels + vLevels
 
 var/global/list/accessable_v_levels = list(
 	"Default" = list()
