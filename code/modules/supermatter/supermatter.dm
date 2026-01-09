@@ -145,8 +145,9 @@
 	if (has_exploded <= 1)
 		if(!istype(universe,/datum/universal_state/supermatter_cascade))
 			var/turf/turff = get_turf(src)
-			new /turf/unsimulated/wall/supermatter(turff)
-			SetUniversalState(/datum/universal_state/supermatter_cascade)
+			if(turff.z == map.zMainStation)
+				new /turf/unsimulated/wall/supermatter(turff)
+				SetUniversalState(/datum/universal_state/supermatter_cascade)
 			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
 			empulse(turff, 100, 200, 1)
 
@@ -209,10 +210,12 @@
 	if(src.fingerprintshidden)
 		prints = ", all touchers: [list2params(src.fingerprintshidden)]"
 	if(current_size == STAGE_SUPER) // and this is to go even further beyond
-		if(!istype(universe,/datum/universal_state/supermatter_cascade))
-			SetUniversalState(/datum/universal_state/supermatter_cascade)
-		S.expand(STAGE_SSGSS, 1)
-		ssgss = TRUE
+		var/turf/T = get_turf(src)
+		if(T.z == map.zMainStation) // no SSGGSSes offstation
+			if(!istype(universe,/datum/universal_state/supermatter_cascade))
+				SetUniversalState(/datum/universal_state/supermatter_cascade)
+			S.expand(STAGE_SSGSS, 1)
+			ssgss = TRUE
 	log_admin("[ssgss ? "New SSGSS made" : "Singularity gained 20000 energy"] by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
 	message_admins("[ssgss ? "New SSGSS made" : "Singularity gained 20000 energy"] by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
@@ -308,7 +311,7 @@
 	var/datum/gas_mixture/removed = env.remove_volume(gasefficency * CELL_VOLUME)
 
 	var/radonenergyfactor=1.0+removed[GAS_RADON]*RADON_EXCITATION_FACTOR //wowza power. prepare your butts for delams.
-	
+
 	var/cryoheatdamping = 1/((removed[GAS_CRYOTHEUM]/CRYOTHEUM_DAMPING_FACTOR)+1)
 
 	power+=emitterpower*radonenergyfactor //radon affects emitter power (as well as temp+atmos related power gen.)

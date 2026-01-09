@@ -4111,6 +4111,10 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				feedback_add_details("admin_secrets_fun_used","SC")
 				var/choice = input("You sure you want to destroy the universe and create a large explosion at your location? Misuse of this could result in removal of flags or hilarity.") in list("NO TIME TO EXPLAIN", "Cancel")
 				if(choice == "NO TIME TO EXPLAIN")
+					var/turf/T = get_turf(usr)
+					if(T.z != map.zMainStation)
+						to_chat(usr, "You must be on the main station z to do this.")
+						return
 					explosion(get_turf(usr), 8, 16, 24, 32, 1, whodunnit = usr)
 					new /turf/unsimulated/wall/supermatter(get_turf(usr))
 					SetUniversalState(/datum/universal_state/supermatter_cascade)
