@@ -61,8 +61,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	// Queue-based processing variables
 	/// Start time for generation tracking
 	var/generation_start_time = 0
-	/// Start time for current stage timing
-	var/stage_start_time = 0
 	/// Current processing stage: STAGE_TERRAIN, STAGE_POPULATION, STAGE_WEATHER, or STAGE_FINALIZE
 	var/current_stage = null
 	/// Queue of turfs for terrain generation
@@ -81,18 +79,10 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	var/list/finalize_queue = list() // Queue of turfs for edge updates and finalization
 	var/list/feature_buckets = list() // Spatial buckets for features - key is "cellX_cellY", value is list of features in that cell
 	var/list/mob_buckets = list() // Spatial buckets for mobs - key is "cellX_cellY", value is list of mobs in that cell
-	var/turfs_per_tick = 100 // Base turfs processed per tick (adjusted dynamically)
+	var/turfs_per_tick = 300 // Base turfs processed per tick (adjusted dynamically)
 	var/max_turfs_per_tick = 2000 // Maximum turfs to process per tick
 	var/min_turfs_per_tick = 100 // Minimum turfs to process per tick
-
-	// Chunked queue loading variables
-	var/chunk_size = 10000 // Number of turfs to load per chunk
-	var/current_chunk_x = 0 // Current X position for chunk loading
-	var/current_chunk_y = 0 // Current Y position for chunk loading
-	var/total_turfs_queued = 0 // Total turfs added to queue across all chunks
-
 	var/list/ruins_by_type = list()
-
 
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)
@@ -124,7 +114,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		if(STAGE_TERRAIN)
 			stage_name = "Terrain"
 			if(terrain_queue.len > 0)
-				progress = round((current_chunk_y / current_virtual_z.y_max) * 100, 1)
+				progress = round((queue_index / terrain_queue.len) * 100, 1)
 		if(STAGE_RUIN)
 			stage_name = "Ruin"
 			progress = "[current_planet.ruin_budget]" / "[initial(current_planet.ruin_budget)]"
@@ -143,7 +133,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	return ..("[stage_name] [progress]% | TpT:[turfs_per_tick]")
 
 /datum/subsystem/mapping/Initialize(timeofday)
-	var/watch = start_watch()
+	var/watch
 
 	if (config.enable_roundstart_away_missions)
 		log_startup_progress("Attempting to generate an away mission...")
@@ -207,38 +197,24 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 	switch(current_stage)
 		if(STAGE_TERRAIN)
-			if(!current_mapgen.cave_automaton_data && current_mapgen.mountain_height < 1)
-				current_mapgen.generate_cave_data()
-
-			while(turfs_processed < target_turfs)
-				var/processed_this_tick = 0
-				// Check if we need to load more turfs
-				if(queue_index > terrain_queue.len)
-					if(has_more_terrain_chunks())
-						// Clear processed turfs and load next chunk
-						terrain_queue.Cut()
-						queue_index = 1
-						load_next_terrain_chunk()
-					else
-						// All terrain complete, move to next stage
-						// Build population queue from all generated turfs
-						population_queue = current_virtual_z.get_turfs()
-						finalize_queue = population_queue.Copy()
-						current_stage = STAGE_RUIN
-						queue_index = 1
-						return
-
+			while(queue_index <= terrain_queue.len && turfs_processed < target_turfs)
 				var/turf/T = terrain_queue[queue_index]
 				if(T)
 					current_mapgen.generate_turf(T, current_virtual_z.x_min, current_virtual_z.y_min)
 					T.planet = current_planet
 				queue_index++
 				turfs_processed++
-				processed_this_tick++
 
-				if(TICK_CHECK && processed_this_tick >= turfs_per_tick)
+				if(TICK_CHECK)
 					throttle(tick_start, turfs_processed)
 					return
+
+			if(queue_index > terrain_queue.len)
+				current_stage = STAGE_RUIN
+				queue_index = 1
+			else
+				throttle(tick_start, turfs_processed)
+				return
 
 		if(STAGE_RUIN)
 			if(!current_mapgen.spawned_story_ruin)
@@ -286,7 +262,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 			if(current_planet.climate_type)
 				current_planet.climate = SSweather.set_climate(current_planet.climate_type, current_virtual_z, random_start = TRUE)
 
-			// finalize_queue is already populated at the end of STAGE_TERRAIN
+			finalize_queue = population_queue.Copy()
 			current_stage = STAGE_FINALIZE
 			queue_index = 1
 
@@ -307,13 +283,12 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 					if(istype(T, /turf/space) && current_planet.default_baseturf)
 						T.ChangeTurf(current_planet.default_baseturf)
 
-					// Weather + daynight registration - use .loc directly instead of get_area() for speed
 					var/area/A = T.loc
 					if(!istype(A, /area/planet/cave))
 						if(isopensurface(A) && current_planet.climate)
 							current_planet.climate.register_weather_turf(T)
 
-						// Build daynight turf list (sampling every other tile for performance)
+						// Build daynight turf list
 						if(IsEven(T.x) && IsEven(T.y))
 							if(isopensurface(A))
 								current_virtual_z.daynight_turfs += T
@@ -476,11 +451,9 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	var/target_x = 1
 	var/target_y = 1
 
-	/// Sanity
 	if(size_x > world.maxx || size_y > world.maxy)
 		CRASH("Tried to find virtual level allocation that cannot possibly fit in a physical level.")
 
-	/// Methodical trial and error method
 	while(TRUE)
 		var/upper_target_x = target_x + size_x
 		var/upper_target_y = target_y + size_y
@@ -496,10 +469,10 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 			if(min_y > target_y)
 				target_y = min_y
-				continue // Re-check with adjusted position
+				continue
 			if(min_x > target_x)
 				target_x = min_x
-				continue // Re-check with adjusted position
+				continue
 
 			return list("x" = target_x, "y" = target_y) // Found valid spot with proper spacing
 
@@ -549,24 +522,9 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 	// Initialize generation state
 	generation_start_time = world.timeofday
-	stage_start_time = world.timeofday
-
 	current_planet = new planet_datum
-
-	var/size_to_use = pick(ALLOCATION_SMALL)
-
-	current_mapgen = new current_planet.mapgen(size_to_use)
-
-	// Scale initial processing rate based on planet size
-	switch(size_to_use)
-		if(ALLOCATION_SMALL)
-			turfs_per_tick = 500
-		if(ALLOCATION_QUADRANT)
-			turfs_per_tick = 750
-		else
-			turfs_per_tick = 500
-
-	current_virtual_z = map.addVLevel(size_to_use, null, TRUE) // skip_turf_setup = TRUE for planet generation
+	current_mapgen = new current_planet.mapgen(ALLOCATION_SMALL)
+	current_virtual_z = map.addVLevel(ALLOCATION_SMALL, null, TRUE)
 	current_virtual_z.teleJammed = VZ_TELEPORTATION_EXPENSIVE
 
 	planets += current_planet
@@ -574,32 +532,24 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	current_planet.v = current_virtual_z
 	current_virtual_z.name = current_planet.planet_name
 
-	// Set scanner visibility
 	if(hide_from_scanner)
 		current_planet.hidden = TRUE
 
-	// Set base_turf_type on areas so explosions reveal the correct turf
+	// Baseturf
 	if(current_planet.default_baseturf)
 		current_mapgen.primary_area.base_turf_type = current_planet.default_baseturf
 		current_mapgen.cave_area.base_turf_type = current_planet.default_baseturf
 
-	// Set planet and v on the shared areas (done once here instead of per-turf)
+	// Set planet and v on the shared areas
 	current_mapgen.primary_area.planet = current_planet
 	current_mapgen.primary_area.v = current_virtual_z
 	current_mapgen.cave_area.planet = current_planet
 	current_mapgen.cave_area.v = current_virtual_z
 
-	// Initialize chunked queue loading - don't load all turfs at once
-	terrain_queue = list()
-	population_queue = list()
-	current_chunk_x = current_virtual_z.x_min
-	current_chunk_y = current_virtual_z.y_min
-	total_turfs_queued = 0
 
-	// Load first chunk
-	load_next_terrain_chunk()
-
-	// Start at terrain generation stage
+	// Prepare terrain queue
+	terrain_queue = current_virtual_z.get_turfs()
+	population_queue = terrain_queue.Copy()
 	current_stage = STAGE_TERRAIN
 	queue_index = 1
 
@@ -609,58 +559,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	generating = TRUE
 
 	return TRUE
-
-/**
- * Loads the next chunk of turfs into the terrain queue
- *
- * Loads up to chunk_size turfs at a time to avoid creating massive lists all at once.
- * Returns TRUE if more chunks remain, FALSE if all turfs have been queued.
- */
-/datum/subsystem/mapping/proc/load_next_terrain_chunk()
-	if(!current_virtual_z)
-		return FALSE
-
-	var/turfs_loaded = 0
-	var/x_min = current_virtual_z.x_min
-	var/x_max = current_virtual_z.x_max
-	var/y_max = current_virtual_z.y_max
-	var/z_level = current_virtual_z.parent_z.z
-
-	// Continue from where we left off
-	var/start_x = current_chunk_x
-	var/start_y = current_chunk_y
-
-	for(var/y = start_y; y <= y_max; y++)
-		for(var/x = (y == start_y ? start_x : x_min); x <= x_max; x++)
-			var/turf/T = locate(x, y, z_level)
-			if(T)
-				terrain_queue += T
-				turfs_loaded++
-				total_turfs_queued++
-
-			if(turfs_loaded >= chunk_size)
-				// Save position for next chunk
-				current_chunk_x = x + 1
-				current_chunk_y = y
-				if(current_chunk_x > x_max)
-					current_chunk_x = x_min
-					current_chunk_y = y + 1
-				return TRUE
-
-		// Reset x for next row
-		current_chunk_x = x_min
-
-	// All turfs loaded
-	current_chunk_y = y_max + 1 // Mark as complete
-	return FALSE
-
-/**
- * Checks if more terrain chunks are available to load
- */
-/datum/subsystem/mapping/proc/has_more_terrain_chunks()
-	if(!current_virtual_z)
-		return FALSE
-	return current_chunk_y <= current_virtual_z.y_max
 
 /**
  * Checks living mobs with clients are present on a given vLevel and pauses/unpauses it accordingly
