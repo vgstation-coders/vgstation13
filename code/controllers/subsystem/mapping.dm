@@ -80,6 +80,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	var/list/feature_buckets = list() // Spatial buckets for features - key is "cellX_cellY", value is list of features in that cell
 	var/list/mob_buckets = list() // Spatial buckets for mobs - key is "cellX_cellY", value is list of mobs in that cell
 	var/turfs_per_tick = 300 // Base turfs processed per tick (adjusted dynamically)
+	var/turfs_processed = 0 // Turfs processed in the current tick
 	var/max_turfs_per_tick = 2000 // Maximum turfs to process per tick
 	var/min_turfs_per_tick = 100 // Minimum turfs to process per tick
 	var/list/ruins_by_type = list()
@@ -117,7 +118,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 				progress = round((queue_index / terrain_queue.len) * 100, 1)
 		if(STAGE_RUIN)
 			stage_name = "Ruin"
-			progress = "[current_planet.ruin_budget]" / "[initial(current_planet.ruin_budget)]"
+			progress = "[initial(current_planet.ruin_budget) - current_planet.ruin_budget]/[initial(current_planet.ruin_budget)]"
 		if(STAGE_POPULATION)
 			stage_name = "Population"
 			if(population_queue.len > 0)
@@ -130,7 +131,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 			if(finalize_queue.len > 0)
 				progress = round((queue_index / finalize_queue.len) * 100, 1)
 
-	return ..("[stage_name] [progress]% | TpT:[turfs_per_tick]")
+	return ..("[stage_name] [progress]% | Tp:[turfs_processed]")
 
 /datum/subsystem/mapping/Initialize(timeofday)
 	var/watch
@@ -192,7 +193,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		return
 
 	var/tick_start = world.tick_usage
-	var/turfs_processed = 0
+	turfs_processed = 0
 	var/target_turfs = turfs_per_tick
 
 	switch(current_stage)
@@ -204,10 +205,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 					T.planet = current_planet
 				queue_index++
 				turfs_processed++
-
-				if(TICK_CHECK)
-					throttle(tick_start, turfs_processed)
-					return
 
 			if(queue_index > terrain_queue.len)
 				current_stage = STAGE_RUIN
@@ -347,22 +344,22 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 
 // Adjusts the turfs_per_tick based on current tick usage
-// Aggressively scales up when performing well, scales back when approaching limits
+// Increases rate if we're using less than 50% of tick, decreases if using more than 80%
 /datum/subsystem/mapping/proc/throttle(tick_start, turfs_processed)
 	var/tick_used = world.tick_usage - tick_start
 
 	// Scale up when performing well
-	if(tick_used < 75 && turfs_per_tick < max_turfs_per_tick)
-		turfs_per_tick = min(turfs_per_tick + 500, max_turfs_per_tick)
-	else if(tick_used < 125 && turfs_per_tick < max_turfs_per_tick)
-		turfs_per_tick = min(turfs_per_tick + 250, max_turfs_per_tick)
-	else if(tick_used < 175 && turfs_per_tick < max_turfs_per_tick)
-		turfs_per_tick = min(turfs_per_tick + 125, max_turfs_per_tick)
+	if(tick_used < 20 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 200, max_turfs_per_tick)
+	else if(tick_used < 40 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 100, max_turfs_per_tick)
+	else if(tick_used < 60 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 50, max_turfs_per_tick)
 	// Scale back when approaching limits
-	else if(tick_used > 250 && turfs_per_tick > min_turfs_per_tick)
-		turfs_per_tick = max(turfs_per_tick - 300, min_turfs_per_tick)
-	else if(tick_used > 200 && turfs_per_tick > min_turfs_per_tick)
+	else if(tick_used > 85 && turfs_per_tick > min_turfs_per_tick)
 		turfs_per_tick = max(turfs_per_tick - 150, min_turfs_per_tick)
+	else if(tick_used > 75 && turfs_per_tick > min_turfs_per_tick)
+		turfs_per_tick = max(turfs_per_tick - 75, min_turfs_per_tick)
 
 /datum/subsystem/mapping/proc/get_bucket_key(x, y)
 	return "[round(x / SPATIAL_BUCKET_SIZE)]_[round(y / SPATIAL_BUCKET_SIZE)]"

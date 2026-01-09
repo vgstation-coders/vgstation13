@@ -610,7 +610,7 @@
 					var/transit_width = shuttle_width + (padding * 2)
 					var/transit_height = shuttle_height + (padding * 2)
 
-					var/datum/virtual_z/new_vz = map.addTransitVLevel(transit_width, transit_height, chosen_shuttle, direction)
+					var/datum/virtual_z/new_vz = map.addTransitVLevel(chosen_shuttle)
 					if(new_vz)
 						// Create the transit docking port
 						// Get the shuttle docking port's offset from the shuttle's lower left corner

@@ -99,7 +99,7 @@
 
 	// Store generation size for deferred cave data generation
 	cave_generation_size = generation_size
-	// Note: cave_automaton_data is generated lazily via generate_cave_data() to avoid blocking
+	cave_automaton_data = rustg_cnoise_generate("[initial_closed_chance]", "[smoothing_iterations]", "[birth_limit]", "[death_limit]", "[cave_generation_size]", "[cave_generation_size]")
 
 	// Initialize area instances
 	primary_area = new primary_area_type
@@ -110,17 +110,6 @@
 
 	vent_count = rand(0,5)
 	return ..()
-
-/// Generates the cellular automaton data for caves. Called lazily to avoid blocking during spawn_planet().
-/datum/planetGenerator/proc/generate_cave_data()
-	if(cave_automaton_data)
-		return // Already generated
-	if(mountain_height >= 1)
-		return // Caves disabled
-	if(!cave_generation_size)
-		return // No size set
-
-	cave_automaton_data = rustg_cnoise_generate("[initial_closed_chance]", "[smoothing_iterations]", "[birth_limit]", "[death_limit]", "[cave_generation_size]", "[cave_generation_size]")
 
 /datum/planetGenerator/proc/generate_turf(turf/gen_turf, x_offset = 0, y_offset = 0)
 	// Use .loc directly instead of get_area() for speed
