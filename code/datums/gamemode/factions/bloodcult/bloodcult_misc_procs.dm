@@ -141,7 +141,7 @@ var/static/list/valid_cultpower_slots = list(
 			var/delay = 0
 			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 			if (cult && cult.implant_pop == CULT_IMPLANT_POP_DELAYED)
-				to_chat(src, "<span class='userdanger'>It will visibly pop out in one minute!</span>")
+				to_chat(src, "<span class='userdanger'>It feels like it will be expelled from your body any minute now!</span>")
 				delay = 60 SECONDS
 			spawn(delay)
 				if (I.remove())
