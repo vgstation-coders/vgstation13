@@ -181,14 +181,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	log_debug("Finished calling post on zLevels in [stop_watch(watch)]s.", FALSE)
 
 	watch = start_watch()
-	for(var/datum/shuttle/shuttle in shuttles)
-		shuttle.initialize()
-		if(!shuttle.linked_port)
-			continue
-		generate_transit_area(shuttle)
-	log_debug("Finished generating shuttle transit areas in [stop_watch(watch)]s.")
-
-	watch = start_watch()
 	for(var/datum/virtual_z/vz in map.vLevels)
 		vz.initialize_turfs()
 	log_startup_progress("Initialized virtual z-levels in [stop_watch(watch)]s.")
