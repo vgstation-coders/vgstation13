@@ -295,18 +295,6 @@
 // oldarea: the old area being left
 /event/mob_area_changed
 
-// Called when a mob enters a virtual z-level
-// Arguments:
-// mob/living/M: the mob entering the virtual z-level
-// datum/virtual_z/vz: the virtual z-level being entered
-/event/virtual_z_entered
-
-// Called when a mob exits a virtual z-level
-// Arguments:
-// mob/living/M: the mob exiting the virtual z-level
-// datum/virtual_z/vz: the virtual z-level being exited
-/event/virtual_z_exited
-
 // Note: the following are used by datum/component/ai subtypes to give instructions to each other.
 // AI components are expected to INVOKE_EVENT these to send commands to other components
 // on the same datum without having to hold references to them.

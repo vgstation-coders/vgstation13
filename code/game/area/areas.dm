@@ -449,9 +449,7 @@ var/area/space_area
 				var/datum/virtual_z/new_v = src.v
 				if(istype(mob_in_obj, /mob/living))
 					var/mob/living/L = mob_in_obj
-					L.register_event(/event/virtual_z_entered, new_v, "mob_entered")
-					L.register_event(/event/virtual_z_exited, old_v, "mob_exited")
-					INVOKE_EVENT(L, /event/virtual_z_entered, L, new_v)
+					new_v.mob_entered(L)
 					INVOKE_EVENT(L, /event/v_transition, "user" = L, "from_v" = old_v, "to_v" = new_v)
 
 	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
@@ -463,9 +461,7 @@ var/area/space_area
 			var/datum/virtual_z/new_v = src.v
 			if(istype(M, /mob/living))
 				var/mob/living/L = M
-				L.register_event(/event/virtual_z_entered, new_v, "mob_entered")
-				L.register_event(/event/virtual_z_exited, old_v, "mob_exited")
-				INVOKE_EVENT(L, /event/virtual_z_entered, L, new_v)
+				new_v.mob_entered(L)
 				INVOKE_EVENT(L, /event/v_transition, "user" = L, "from_v" = old_v, "to_v" = new_v)
 		if(narrator)
 			narrator.Crossed(M)
@@ -476,17 +472,13 @@ var/area/space_area
 	if(!new_v || v != new_v)
 		if(istype(Obj, /mob/living))
 			var/mob/living/L = Obj
-			INVOKE_EVENT(L, /event/virtual_z_exited, L, v)
+			v.mob_exited(L)
 			INVOKE_EVENT(L, /event/v_transition, "user" = L, "from_v" = v, "to_v" = new_v)
-			L.unregister_event(/event/virtual_z_entered, v, "mob_entered")
-			L.unregister_event(/event/virtual_z_exited, v, "mob_exited")
 		for(var/atom/movable/thing in get_contents_in_object(Obj))
 			if(istype(thing, /mob/living))
 				var/mob/living/L = thing
-				INVOKE_EVENT(L, /event/virtual_z_exited, L, v)
+				v.mob_exited(L)
 				INVOKE_EVENT(L, /event/v_transition, "user" = L, "from_v" = v, "to_v" = new_v)
-				L.unregister_event(/event/virtual_z_entered, v, "mob_entered")
-				L.unregister_event(/event/virtual_z_exited, v, "mob_exited")
 
 	INVOKE_EVENT(src, /event/area_exited, "exiter" = Obj)
 	..()

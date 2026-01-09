@@ -383,10 +383,8 @@
 				if(!istype(AA, /mob/living))
 					continue
 				var/mob/living/LL = AA
-				LL.register_event(/event/virtual_z_entered, to_v, "on_mob_entered")
-				LL.register_event(/event/virtual_z_exited, from_v, "on_mob_exited")
-				INVOKE_EVENT(LL, /event/virtual_z_entered, LL, to_v)
-				INVOKE_EVENT(LL, /event/virtual_z_exited, LL, from_v)
+				to_v.mob_entered(LL)
+				from_v.mob_exited(LL)
 
 
 		if(transit_port && get_transit_delay())
