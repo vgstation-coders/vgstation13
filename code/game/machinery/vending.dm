@@ -2247,6 +2247,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/dionanode = 3,
 		/obj/item/seeds/soyaseed = 3,
 		/obj/item/seeds/sunflowerseed = 3,
+		/obj/item/seeds/roseseed = 3,
 		/obj/item/seeds/tomatoseed = 3,
 		/obj/item/seeds/towermycelium = 3,
 		/obj/item/seeds/wheatseed = 3,

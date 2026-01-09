@@ -357,6 +357,16 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	plantname = "dandelions"
 	fragrance = INCENSE_LEAFY
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/rose
+	name = "rose"
+	desc = "A symbol of peace and love."
+	potency = 1
+	filling_color = "#660531"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "rose"
+	plantname = "roses"
+	fragrance = INCENSE_ROSES
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
 	desc = "Store in a location at least 50 yards away from werewolves."
