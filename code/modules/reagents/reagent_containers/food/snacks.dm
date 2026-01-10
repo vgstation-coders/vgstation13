@@ -1983,9 +1983,13 @@
 		else if (isinsectoid(M))
 			race_prefix = "insect"
 
-		M.eye_blind = 2
+		M.eye_blind = 12
+
+		overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)//cumvision
+
 		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		sleep(55)
+		clear_fullscreen("blurry")
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 		sleep(120)
