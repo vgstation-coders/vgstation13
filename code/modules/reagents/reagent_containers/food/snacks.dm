@@ -1972,7 +1972,7 @@
 	if(..())
 		return
 	if(isliving(hit_atom))
-		var/mob/M = hit_atom
+		var/mob/living/M = hit_atom
 		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
 
 		var/race_prefix = ""
