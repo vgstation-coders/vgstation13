@@ -1,6 +1,7 @@
 #define MOB_SPACEDRUGS_HALLUCINATING 5
 #define MOB_MINDBREAKER_HALLUCINATING 100
 
+
 /mob
 	plane = MOB_PLANE
 	pass_flags_self = PASSMOB
