@@ -78,6 +78,127 @@ jobs:
       - name: Run OpenDream
         run: ./DMCompiler_linux-x64/DMCompiler vgstation13.dme --suppress-unimplemented --define=CIBUILDING --version=516.1655 | bash tools/ci/annotate_od.sh
 
+  check-dmi-conflicts:
+    name: Check DMI conflicts
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Setup Python
+        run: tools/bootstrap/python -c ''
+
+      - name: Attempt merge
+        id: merge
+        run: |
+          git config user.email "ci@vgstation.local"
+          git config user.name "CI Bot"
+          git fetch origin ${{ github.base_ref }}
+
+          if git merge origin/${{ github.base_ref }} --no-commit --no-ff 2>/dev/null; then
+            echo "No conflicts detected"
+            echo "has_conflicts=false" >> $GITHUB_OUTPUT
+            git merge --abort 2>/dev/null || true
+          else
+            echo "Conflicts detected, checking for DMI conflicts..."
+            if git diff --name-only --diff-filter=U | grep -q '\.dmi$'; then
+              echo "has_dmi_conflicts=true" >> $GITHUB_OUTPUT
+            else
+              echo "has_dmi_conflicts=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Test DMI conflict resolution
+        if: steps.merge.outputs.has_dmi_conflicts == 'true'
+        id: resolve
+        env:
+          PYTHONPATH: ${{ github.workspace }}/tools
+        run: |
+          cd ${{ github.workspace }}
+          if tools/bootstrap/python -m dmi.merge_driver --posthoc 2>&1 | tee /tmp/dmi_output.txt; then
+            echo "resolvable=true" >> $GITHUB_OUTPUT
+          else
+            echo "resolvable=false" >> $GITHUB_OUTPUT
+          fi
+          echo "output<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/dmi_output.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR (resolvable)
+        if: steps.merge.outputs.has_dmi_conflicts == 'true' && steps.resolve.outputs.resolvable == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## DMI Conflict Check: Auto-resolvable
+
+            This PR has DMI conflicts that can be automatically resolved.
+
+            To resolve locally, run:
+            \`\`\`
+            git fetch origin ${{ github.base_ref }}
+            git merge origin/${{ github.base_ref }}
+            tools\\dmi\\\"Resolve Icon Conflicts.bat\"
+            # Then commit the DMIs, e.g.:
+            git add -A
+            git commit -m "Resolve DMI conflicts"
+            \`\`\`
+
+            <details>
+            <summary>Merge driver output</summary>
+
+            \`\`\`
+            ${{ steps.resolve.outputs.output }}
+            \`\`\`
+            </details>`
+            })
+
+      - name: Comment on PR (unresolvable)
+        if: steps.merge.outputs.has_dmi_conflicts == 'true' && steps.resolve.outputs.resolvable == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## DMI Conflict Check: Manual Resolution Required
+
+            This PR has DMI conflicts that **can not** be automatically resolved.
+
+            You will need to manually resolve these conflicts by:
+            1. Backing up your local modified DMI
+            2. Downloading the latest DMI from Bleeding-Edge
+            3. Redoing your changes to the latest DMI
+
+            <details>
+            <summary>Conflict details</summary>
+
+            \`\`\`
+            ${{ steps.resolve.outputs.output }}
+            \`\`\`
+            </details>`
+            })
+
+      - name: Fail on DMI conflicts
+        if: steps.merge.outputs.has_dmi_conflicts == 'true'
+        run: |
+          if [ "${{ steps.resolve.outputs.resolvable }}" == "true" ]; then
+            echo "::error::DMI conflicts detected. Run the resolution commands above, then push."
+          else
+            echo "::error::DMI conflicts can not  be automatically resolved, you have to resolve them manually the hard way"
+          fi
+          echo "Conflict details:"
+          cat /tmp/dmi_output.txt
+          exit 1
+
+
   build:
     name: ${{matrix.job-name}}
     runs-on: ubuntu-latest
