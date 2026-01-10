@@ -75,8 +75,9 @@
 	// Note: For system vLevels, the ID is set by linkVLevel() after New() returns
 	if(!skip_turf_setup)
 		initialize_turfs()
-	spawn(0)
-		make_borders()
+	if(size_x != ALLOCATION_FULL && size_y != ALLOCATION_FULL)
+		spawn(0)
+			make_borders()
 
 /datum/virtual_z/proc/initialize_turfs()
 	var/list/turf/turfs = get_turfs()
