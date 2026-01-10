@@ -1989,10 +1989,10 @@
 
 		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		sleep(55)
-		M.clear_fullscreen("blurry")
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 		sleep(120)
+		M.clear_fullscreen("blurry")
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 
 		if(luckiness)
