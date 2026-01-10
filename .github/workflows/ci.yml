@@ -91,24 +91,32 @@ jobs:
       - name: Setup Python
         run: tools/bootstrap/python -c ''
 
-      - name: Attempt merge
+      - name: Detect conflicting DMIs
         id: merge
         run: |
-          git config user.email "ci@vgstation.local"
-          git config user.name "CI Bot"
           git fetch origin ${{ github.base_ref }}
 
-          if git merge origin/${{ github.base_ref }} --no-commit --no-ff 2>/dev/null; then
-            echo "No conflicts detected"
-            echo "has_conflicts=false" >> $GITHUB_OUTPUT
-            git merge --abort 2>/dev/null || true
+          MERGE_BASE=$(git merge-base HEAD origin/${{ github.base_ref }})
+
+          # changed in PR branch
+          PR_DMIS=$(git diff --name-only "$MERGE_BASE" HEAD -- '*.dmi' | sort)
+
+          # changed in Bleeding-Edge
+          BASE_DMIS=$(git diff --name-only "$MERGE_BASE" origin/${{ github.base_ref }} -- '*.dmi' | sort)
+
+          # find union of above
+          CONFLICTING_DMIS=$(comm -12 <(echo "$PR_DMIS") <(echo "$BASE_DMIS"))
+
+          if [ -n "$CONFLICTING_DMIS" ]; then
+            echo "The following DMIs are in conflict:"
+            echo "$CONFLICTING_DMIS"
+            echo "has_dmi_conflicts=true" >> $GITHUB_OUTPUT
+            echo "conflicting_files<<EOF" >> $GITHUB_OUTPUT
+            echo "$CONFLICTING_DMIS" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
           else
-            echo "Conflicts detected, checking for DMI conflicts..."
-            if git diff --name-only --diff-filter=U | grep -q '\.dmi$'; then
-              echo "has_dmi_conflicts=true" >> $GITHUB_OUTPUT
-            else
-              echo "has_dmi_conflicts=false" >> $GITHUB_OUTPUT
-            fi
+            echo "No DMI conflicts detected"
+            echo "has_dmi_conflicts=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Test DMI conflict resolution
