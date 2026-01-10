@@ -185,7 +185,7 @@
 		else if(mouth_covered)	//Reduced effects if partially protected
 			H << "<span class='warning'>Your [mouth_covered] protects your mouth from the pepperspray!</span>"
 			H.eye_blurry = max(M.eye_blurry, 15)
-			H.eye_blind = max(M.eye_blind, 15)
+			H.instant_blindness(15)
 			H.Paralyse(1)
 			H.drop_item()
 			return
