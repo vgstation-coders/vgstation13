@@ -263,7 +263,7 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	var/_modifiers	= get_impaired_vision_modifiers()
 	if (_modifiers[1] > 0)//only do the thing if our mob actually can get blinded
 		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		spawn(20)
+		spawn(40)
 		clear_fullscreen("blind")
 
 /mob/proc/enable_nearsightedness(var/_severity, var/_animate = TRUE)//actually handles blindess too
