@@ -194,7 +194,7 @@
 	if(allowed(AM))
 		var/turf/T = get_turf(src)
 		for(var/atom/A in T) //Check to see if there's anything solid on the tape's turf (it's possible to build on it)
-			if(A != AM && A.density)
+			if(A.density && A != AM)
 				return
 		if (T) // no sending things into nullspace!
 			AM.forceMove(T)
