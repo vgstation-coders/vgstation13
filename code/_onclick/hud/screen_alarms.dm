@@ -187,6 +187,7 @@ var/global/list/screen_alarms_locs = list(
 		return usr.client.Click(master, location, control, params)
 
 /obj/abstract/screen/alert/MouseEntered(location,control,params)
+	. = ..()
 	if(!gcDestroyed)
 		//openToolTip(usr, src, params, title = name, content = desc, theme = alerttooltipstyle)
 		usr.client?.tooltips.show(src, mouse=params, title=name, content=desc, theme = alerttooltipstyle)

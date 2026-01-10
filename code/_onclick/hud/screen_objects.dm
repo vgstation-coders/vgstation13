@@ -209,6 +209,7 @@
 	return 1
 
 /obj/abstract/screen/nocontext/MouseEntered(location, control, params)
+	. = ..()
 	usr?.client?.show_popup_menus = FALSE
 
 /obj/abstract/screen/nocontext/MouseExited(location, control, params)
@@ -243,6 +244,7 @@
 	screen_loc = ui_gun_select
 
 /obj/abstract/screen/gun/MouseEntered(location,control,params)
+	. = ..()
 	//openToolTip(usr,src,params,title = name,content = desc)
 	usr.client?.tooltips?.show(src, mouse=params, title=name, content=desc)
 

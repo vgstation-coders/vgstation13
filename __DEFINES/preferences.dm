@@ -20,6 +20,12 @@
 #define HEADSET_SOUND_TRANSMIT 1
 #define HEADSET_SOUND_ALL 2
 
+// Screentip settings
+#define SCREENTIP_DISABLED 0
+#define SCREENTIP_SIZE_SMALL 1
+#define SCREENTIP_SIZE_MEDIUM 2
+#define SCREENTIP_SIZE_LARGE 3
+
 // list("None", "White Briefs", "Green Briefs", "Blue Briefs", "Black Briefs", "Grey Briefs", "Mankini", "Love-Hearts Boxers", "Black Boxers", "Grey Boxers", "Stripey Boxers", "Kinky", "Freedom Boxers", "Tea Boxers", "Communist Boxers", "Cowprint Boxers", "Green Wifebeater", "White Wifebeater", "Black Wifebeater")
 // Curse whoever made male/female underwear different colours
 #define UNDERWEAR_MALE_NONE 1

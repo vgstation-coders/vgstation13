@@ -34,6 +34,9 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	var/obj/abstract/screen/movable/action_button/hide_toggle/hide_actions_toggle
 	var/action_buttons_hidden = FALSE
 
+	/// UI for screentips that appear when you mouse over things
+	var/obj/abstract/screen/screentip/screentip_text
+
 	var/list/adding
 	var/list/other
 	var/obj/abstract/screen/holomap/holomap_obj
@@ -45,10 +48,13 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	hide_actions_toggle = new
 	hide_actions_toggle.InitialiseIcon(src)
 
+	screentip_text = new(null, src)
+
 	instantiate()
 	..()
 
 /datum/hud/Destroy()
+	QDEL_NULL(screentip_text)
 	grab_intent = null
 	hurt_intent = null
 	disarm_intent = null
@@ -280,6 +286,9 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	holomap_obj.pointer_to_var = &holomap_obj
 
 	mymob.client.screen += src.holomap_obj
+
+	if(screentip_text)
+		mymob.client.screen += screentip_text
 
 	reload_fullscreen()
 	update_parallax_existence()

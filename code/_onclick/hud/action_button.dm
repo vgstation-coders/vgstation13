@@ -62,6 +62,7 @@
 
 
 /obj/abstract/screen/movable/action_button/MouseEntered(location,control,params)
+	. = ..()
 	//openToolTip(usr,src,params,title = name,content = desc,theme = actiontooltipstyle)
 	usr.client?.tooltips.show(src, mouse=params, title=name, content=desc)
 

@@ -260,6 +260,12 @@
 	<b>Show Tooltips:</b>
 	<a href='?_src_=prefs;preference=tooltips;task=input'><b>[get_pref(/datum/preference_setting/toggle/tooltips) ? "Yes" : "No"]</b></a><br>
 
+	<b>Screentips:</b>
+	<a href='?_src_=prefs;preference=screentip_size;task=input'><b>[list("Disabled", "Small", "Medium", "Large")[get_pref(/datum/preference_setting/enum/screentip_size) + 1]]</b></a><br>
+
+	<b>Screentip Color:</b>
+	<a href='?_src_=prefs;preference=screentip_color;task=input'><b><font color='[get_pref(/datum/preference_setting/string/screentip_color)]'>[get_pref(/datum/preference_setting/string/screentip_color)]</font></b></a><br>
+
 	<b>Adminhelp Special Tab:</b>
 	<a href='?_src_=prefs;preference=special;task=input'><b>[special_popup_text2num[get_pref(/datum/preference_setting/enum/special_popup)+1]]</b></a><br>
 

@@ -1156,3 +1156,23 @@ its easier to just keep the beam vertical.
 
 /atom/proc/silicate_act(var/atom/A, var/mob/user)
 	return FALSE
+
+// Update the screentip and status bar to reflect what we're hovering over
+/atom/MouseEntered(location, control, params)
+	. = ..()
+	if(!usr?.client)
+		return
+
+	// Status bar
+	status_bar_set_text(usr, name)
+
+	// Screentips
+	if(!usr.client.prefs || !usr.hud_used?.screentip_text)
+		return
+	var/screentip_size = usr.client.prefs.get_pref(/datum/preference_setting/enum/screentip_size)
+	if(!screentip_size || (flags & NO_SCREENTIPS))
+		usr.hud_used.screentip_text.maptext = ""
+	else
+		var/screentip_color = usr.client.prefs.get_pref(/datum/preference_setting/string/screentip_color)
+		var/font_size = usr.hud_used.screentip_text.get_size(screentip_size)
+		usr.hud_used.screentip_text.maptext = "<span style='text-align: center; font-size: [font_size]; color: [screentip_color];'>[html_encode(name)]</span>"

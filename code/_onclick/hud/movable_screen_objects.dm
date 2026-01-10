@@ -13,6 +13,7 @@
 	var/moved = FALSE
 
 /obj/abstract/screen/movable/MouseEntered(location,control,params)
+	. = ..()
 	usr.client?.tooltips.show(src, mouse=params, title=name, content=desc)
 
 /obj/abstract/screen/movable/MouseExited()

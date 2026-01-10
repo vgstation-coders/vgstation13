@@ -205,7 +205,7 @@ var/MAX_EXPLOSION_RANGE = 32
 #define TIMELESS				(1<<14) // Immune to time manipulation.
 #define SILENTCONTAINER			(1<<15) //reactions inside make no noise
 #define ATOM_INITIALIZED 		(1<<16) // initialize() was called
-//define <>						(1<<17)
+#define NO_SCREENTIPS			(1<<17) // Atom should not display screentips when moused over
 //define <>						(1<<18)
 //define <>						(1<<19)
 //define <>				 		(1<<20)

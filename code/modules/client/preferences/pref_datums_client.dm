@@ -228,6 +228,34 @@
 
 	default_setting = TRUE
 
+/datum/preference_setting/string/screentip_color
+	name = "Screentip Color"
+	sql_name = "screentip_color"
+	sql_table = "client"
+	enabled = TRUE
+
+	default_setting = "#ffd391"
+
+/datum/preference_setting/string/screentip_color/choose_setting(var/mob/user)
+	var/new_screentip_color = input(user, "Choose your screentip color:", "Game Preference", setting) as color|null
+	if(new_screentip_color)
+		setting = new_screentip_color
+
+/datum/preference_setting/enum/screentip_size
+	name = "Screentips"
+	sql_name = "screentip_size"
+	sql_table = "client"
+	enabled = TRUE
+
+	default_setting = SCREENTIP_DISABLED
+	allowed_values = list(SCREENTIP_DISABLED, SCREENTIP_SIZE_SMALL, SCREENTIP_SIZE_MEDIUM, SCREENTIP_SIZE_LARGE)
+
+/datum/preference_setting/enum/screentip_size/choose_setting(mob/user)
+	var/static/list/size_names = list("Disabled", "Small", "Medium", "Large")
+	var/choice = input(user, "Choose screentip setting:", "Game Preference") as null|anything in size_names
+	if(choice)
+		setting = size_names.Find(choice) - 1
+
 /datum/preference_setting/toggle/stumble
 	name = "Stumble"
 	sql_name = "stumble"
