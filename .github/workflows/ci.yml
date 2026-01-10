@@ -15,6 +15,10 @@ on:
     - '**.dmi'
     - 'vgstation13.dme'
     - '.github/workflows/**'
+  pull_request_target:
+    branches: [ Bleeding-Edge ]
+    paths:
+    - '**.dmi'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
