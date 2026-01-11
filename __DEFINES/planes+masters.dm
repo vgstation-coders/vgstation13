@@ -308,8 +308,9 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	var/matrix/M = matrix()
 	M.Scale(_nearsightedness_scale, _nearsightedness_scale)
 	if (_animate)
-		animate(screen, transform = M, time = 20)
+		animate(screen, transform = M, alpha = 255, time = 20)
 	else
+		screen.alpha = 255
 		screen.transform = M
 
 /mob/proc/disable_nearsightedness()
@@ -329,7 +330,7 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
 	var/matrix/M = matrix()
 	M.Scale(40, 40)
-	animate(screen, transform = M, time = 20)
+	animate(screen, transform = M, alpha = 0, time = 20)
 
 #undef IMPAIRED_VISION_RADIUS_OUT_OF_VIEW
 #undef IMPAIRED_VISION_RADIUS_START
