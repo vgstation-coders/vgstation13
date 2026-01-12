@@ -122,7 +122,7 @@
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "blurry"
-	alpha = 0//set to 255 by update_fullscreen_alpha();
+	//alpha = 0//set to 255 by update_fullscreen_alpha(); //not anymore, currently only used when getting pie'd
 
 /obj/abstract/screen/fullscreen/nearsighted
 	icon = 'icons/mob/screen1_blindness.dmi'

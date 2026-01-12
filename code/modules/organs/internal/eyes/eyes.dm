@@ -20,7 +20,7 @@
 
 /datum/organ/internal/eyes/process() //Eye damage replaces the old eye_stat var.
 	if(is_broken())
-		owner.eye_blind = max(2, owner.eye_blind)
+		owner.eye_blind = max(12, owner.eye_blind)
 //	if(is_bruised())
 //		owner.eye_blurry = max(2, owner.eye_blurry)
 //  stop eyeblur because we're already shortening the vision

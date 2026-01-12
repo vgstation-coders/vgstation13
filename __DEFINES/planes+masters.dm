@@ -255,6 +255,17 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 /mob
 	var/filter_update_delay = -1//This prevents crashes!! Don't ask me why...
 
+//use when setting eye_blind if you want your mob to be immediately blinded without waiting for enable_nearsightedness() and animate() to do their job
+//remember that only _blind values of 10 and above cover the whole screen.
+/mob/living/proc/instant_blindness(var/_blind)
+	eye_blind = max(eye_blind, _blind)
+
+	var/_modifiers	= get_impaired_vision_modifiers()
+	if (_modifiers[1] > 0)//only do the thing if our mob actually can get blinded
+		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
+		spawn(40)
+		clear_fullscreen("blind")
+
 /mob/proc/enable_nearsightedness(var/_severity, var/_animate = TRUE)//actually handles blindess too
 	perception_filters.enabled_filters |= P_FILTER_IMPAIRED_VISION
 
@@ -297,8 +308,9 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	var/matrix/M = matrix()
 	M.Scale(_nearsightedness_scale, _nearsightedness_scale)
 	if (_animate)
-		animate(screen, transform = M, time = 20)
+		animate(screen, transform = M, alpha = 255, time = 20)
 	else
+		screen.alpha = 255
 		screen.transform = M
 
 /mob/proc/disable_nearsightedness()
@@ -318,7 +330,7 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
 	var/matrix/M = matrix()
 	M.Scale(40, 40)
-	animate(screen, transform = M, time = 20)
+	animate(screen, transform = M, alpha = 0, time = 20)
 
 #undef IMPAIRED_VISION_RADIUS_OUT_OF_VIEW
 #undef IMPAIRED_VISION_RADIUS_START

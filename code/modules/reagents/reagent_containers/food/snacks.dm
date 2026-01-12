@@ -1971,8 +1971,8 @@
 	set waitfor = FALSE
 	if(..())
 		return
-	if(ismob(hit_atom))
-		var/mob/M = hit_atom
+	if(isliving(hit_atom))
+		var/mob/living/M = hit_atom
 		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
 
 		var/race_prefix = ""
@@ -1983,12 +1983,16 @@
 		else if (isinsectoid(M))
 			race_prefix = "insect"
 
-		M.eye_blind = 2
+		M.instant_blindness(12)
+
+		M.overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)//cumvision
+
 		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		sleep(55)
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 		sleep(120)
+		M.clear_fullscreen("blurry")
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 
 		if(luckiness)

@@ -208,6 +208,12 @@
 	if(istype(O, /obj/item/weapon/card/shuttle_pass))
 		use_pass(O, user)
 
+	if(istype(O,/obj/item/device/shuttle_holopainter))
+		if(do_after(user, src, 1 SECONDS, needhand = TRUE))
+			shuttle.update_appearance(O, user)
+			if(O.emagged)
+				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
+				visible_message("<span class='notice'>\The [O] honks pensively.</span>", user)
 	..()
 
 /obj/machinery/computer/shuttle_control/attack_hand(mob/user as mob)

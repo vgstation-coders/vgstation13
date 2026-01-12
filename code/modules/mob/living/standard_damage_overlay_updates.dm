@@ -111,8 +111,11 @@
 			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
 		else
 			clear_fullscreen("high_red")
-
-
+	else
+		if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
+			disable_nearsightedness()
+		if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
+			disable_blurriness()
 
 /mob/living/proc/get_impaired_vision_range()
 	var/_modifiers	= get_impaired_vision_modifiers()

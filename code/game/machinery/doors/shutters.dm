@@ -17,15 +17,15 @@
 
 /obj/machinery/door/poddoor/shutters/attackby(var/obj/item/I, var/mob/user)
 	add_fingerprint(user)
+	if(istype(I,/obj/item/weapon/fireaxe) && I.wielded)
+		if(density && !cut_open && !pried_open) //can't cut an open door or already cut door
+			var/obj/item/weapon/fireaxe/F = I
+			cut(F,user)
+			return
 	if(istype(I,/obj/item/tool/crowbar/halligan))
-		var/obj/item/tool/crowbar/halligan/H = I
-		if(density && !pried_open) //can't cut an open door open
-			if(cut_open)
-				pry(user)
-				return
-			else
-				cut(H,user)
-				return
+		if(density && cut_open && !pried_open) //can only pry after cutting
+			pry(user)
+			return
 	if(istype(I,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = I
 		if(pried_open)
@@ -134,12 +134,12 @@
 /obj/machinery/door/poddoor/shutters/examine(mob/user)
 	..()
 	if(cut_open && !pried_open)
-		to_chat(user, "<span class='info'>A hole has been cut into \the [src]. It still needs to be pried open with a Halligan bar.</span>")
+		to_chat(user, "<span class='info'>A hole has been cut into \the [src] with a fire axe. It still needs to be pried open with a Halligan bar.</span>")
 		return
 	else if(pried_open)
 		to_chat(user, "<span class='info'>A hole has been cut into \the [src]. It can be repaired with metal and a welding tool.</span>")
 
-/obj/machinery/door/poddoor/shutters/proc/cut(var/obj/item/tool/crowbar/halligan/T, mob/user as mob)
+/obj/machinery/door/poddoor/shutters/proc/cut(var/obj/item/weapon/fireaxe/T, mob/user as mob)
 	if(istype(user,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
 		var/breaktime = 30 SECONDS

@@ -483,6 +483,12 @@
 	gender = FEMALE
 	additional_accessories = 1
 
+/datum/sprite_accessory/hair/sailormoon
+	name = "Sailor Moon"
+	icon_state = "hair_sailormoon"
+	gender = FEMALE
+	additional_accessories = 1
+
 /datum/sprite_accessory/hair/joestar
 	name = "Joestar"
 	icon_state = "hair_joestar"

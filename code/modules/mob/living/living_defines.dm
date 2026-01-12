@@ -90,3 +90,4 @@
 	var/rested_jitter_reduce = 5
 
 	var/paused = FALSE
+	var/pacify_aura = FALSE

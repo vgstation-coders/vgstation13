@@ -137,7 +137,7 @@
 			H.visible_message("<span class='warning'>[H] is blinded by the [src]!</span>", \
 				"<span class='warning'>\The [src] flies into your eyes!</span>")
 			H.eye_blurry = max(H.eye_blurry, rand(3,8))
-			H.eye_blind = max(H.eye_blind, rand(1,3))
+			H.instant_blindness(rand(11,13))
 			H.drop_hands(get_turf(H))
 		log_attack("<font color='red'>[M] ([H ? H.ckey : "what"]) was pocketsanded by ([holder.my_atom.fingerprintslast])</font>")
 	M.extinguish()
