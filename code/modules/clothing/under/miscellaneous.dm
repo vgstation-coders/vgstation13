@@ -1142,4 +1142,4 @@
 	item_state = "lepre"
 	_color = "lepre"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
