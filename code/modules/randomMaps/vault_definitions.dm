@@ -142,7 +142,7 @@ var/list/existing_vaults = list()
 	spawn_cost = 1
 
 /datum/map_element/vault/spacepond/pre_load()
-	load_dungeon(/datum/map_element/dungeon/wine_cellar,rotation)
+	load_dungeon(/datum/map_element/dungeon/wine_cellar,rotation,TRUE)
 
 /datum/map_element/dungeon/wine_cellar
 	name = "Wine Cellar"
@@ -191,7 +191,7 @@ var/list/existing_vaults = list()
 	spawn_cost = 2
 
 /datum/map_element/vault/prison/pre_load()
-	load_dungeon(/datum/map_element/dungeon/prison,rotation)
+	load_dungeon(/datum/map_element/dungeon/prison,rotation,TRUE)
 
 /datum/map_element/dungeon/prison
 	name = "Prison"
@@ -285,7 +285,7 @@ var/list/existing_vaults = list()
 	spawn_cost = 3
 
 /datum/map_element/vault/spy_sat/pre_load()
-	load_dungeon(/datum/map_element/dungeon/satellite_deployment,rotation)
+	load_dungeon(/datum/map_element/dungeon/satellite_deployment,rotation,TRUE)
 
 /datum/map_element/dungeon/satellite_deployment
 	name = "Satellite Deployment"
@@ -348,7 +348,7 @@ var/list/existing_vaults = list()
 	spawn_cost = 3
 
 /datum/map_element/vault/laundromat/pre_load()
-	load_dungeon(/datum/map_element/dungeon/laundromat_drug_lab,rotation)
+	load_dungeon(/datum/map_element/dungeon/laundromat_drug_lab,rotation,TRUE)
 
 /datum/map_element/dungeon/laundromat_drug_lab
 	name = "Laundromat Drug Lab"

@@ -16,7 +16,7 @@
 
 /datum/faction/time_agent/New()
 	..()
-	load_dungeon(/datum/map_element/dungeon/timevoid)
+	load_dungeon(/datum/map_element/dungeon/timevoid, 0, TRUE)
 
 /datum/faction/time_agent/forgeObjectives()
 	return

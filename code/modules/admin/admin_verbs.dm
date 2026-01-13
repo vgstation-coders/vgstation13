@@ -1332,7 +1332,7 @@ fieldset {width:140px;}
 	if(!O || !O.key)
 		return
 	if(!(/datum/map_element/dungeon/hell in existing_dungeons))
-		load_dungeon(/datum/map_element/dungeon/hell)
+		load_dungeon(/datum/map_element/dungeon/hell, 0, TRUE)
 	var/datum/map_element/dungeon/hell/H = locate(/datum/map_element/dungeon/hell) in existing_dungeons
 	var/list/turf/turfs = list()
 	for(var/turf/T in H.spawned_atoms)

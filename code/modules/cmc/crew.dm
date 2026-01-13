@@ -136,7 +136,7 @@ GENERAL PROCS
 
 	// Build list of valid vLevel IDs (those with gps_allowed)
 	var/list/valid_vlevels = list()
-	for(var/datum/virtual_z/V in map.getAllVLevels())
+	for(var/datum/virtual_z/V in map.vLevels)
 		if(V.gps_allowed)
 			valid_vlevels += V.id
 
@@ -175,7 +175,7 @@ GENERAL PROCS
 /obj/machinery/computer/crew/proc/scanCrew()
 	//clearing all vLevel entries
 	entries = list()
-	for(var/datum/virtual_z/V in map.getAllVLevels())
+	for(var/datum/virtual_z/V in map.vLevels)
 		if(V.gps_allowed)
 			entries["[V.id]"] = list()
 
@@ -288,7 +288,7 @@ HOLOMAP PROCS
 //initializes the holomap
 /obj/machinery/computer/crew/proc/openHolomap(var/mob/user)
 	// Create holomap images for each vLevel with gps_allowed
-	for(var/datum/virtual_z/V in map.getAllVLevels())
+	for(var/datum/virtual_z/V in map.vLevels)
 		if(!V.gps_allowed)
 			continue
 		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[V.id]"
@@ -473,7 +473,7 @@ TGUI PROCS
 
 	// Build list of vLevels with gps_allowed and their holomap availability
 	var/list/vlevel_data = list()
-	for(var/datum/virtual_z/V in map.getAllVLevels())
+	for(var/datum/virtual_z/V in map.vLevels)
 		if(V.gps_allowed)
 			var/real_z = V.parent_z.z
 			var/has_holomap = (holoMiniMaps.len >= real_z) && (holoMiniMaps[real_z] != null)
@@ -493,7 +493,7 @@ TGUI PROCS
 	var/count = 0
 	var/list/vlevels_to_scan = list()
 	if(current_z == 0)
-		for(var/datum/virtual_z/V in map.getAllVLevels())
+		for(var/datum/virtual_z/V in map.vLevels)
 			if(V.gps_allowed)
 				vlevels_to_scan += "[V.id]"
 	else

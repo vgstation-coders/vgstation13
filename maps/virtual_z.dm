@@ -66,13 +66,24 @@
 
 /datum/virtual_z/proc/setup(var/skip_turf_setup = FALSE, var/system = FALSE)
 	parent_z.virtual_z_levels |= src
-	// System vLevels (station, centcomm, etc) are stored in map.systemVLevels, not map.vLevels
-	// Their IDs are 101+ (SYSTEM_VLEVEL_OFFSET + z-level number)
-	// Regular vLevels are stored in map.vLevels with IDs starting from 1
-	if(!system)
-		map.vLevels |= src
-		id = map.vLevels.len
-	// Note: For system vLevels, the ID is set by linkVLevel() after New() returns
+	// System vLevels (centcomm dungeons) are stored in map.systemVLevels, not map.vLevels
+	// Their IDs are 100 * parent_z + # of system vLevels on the parent z
+	if(map)
+		if(system)
+			map.systemVLevels += src
+			var/count = 0
+			for(var/datum/virtual_z/VZ in map.systemVLevels)
+				if(VZ.parent_z == parent_z)
+					count++
+			id = count + SYSTEM_VLEVEL_OFFSET * parent_z.z
+		else
+			map.vLevels += src
+			id = map.vLevels.len
+			var/variance_x = floor(size_x/10)
+			var/variance_y = floor(size_y/10)
+			WORLD_X_OFFSET += rand(-variance_x,variance_x)
+			WORLD_Y_OFFSET += rand(-variance_y,variance_y)
+
 	if(!skip_turf_setup)
 		initialize_turfs()
 	if(size_x != ALLOCATION_FULL && size_y != ALLOCATION_FULL)
@@ -127,7 +138,7 @@
 ///////// SUBSYSTEM PAUSING /////////
 /////////////////////////////////////
 /datum/virtual_z/proc/set_status(var/active_state)
-	if(id > SYSTEM_VLEVEL_OFFSET) // Don't pause system vLevels (station, centcomm, etc - IDs 101+)
+	if(id <= 6) // Don't pause system vLevels (station, centcomm, etc - IDs 101+)
 		return
 
 	active = active_state

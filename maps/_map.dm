@@ -87,16 +87,16 @@
 	// Populate systemVLevels list from all zLevel virtual_z_levels
 	// These are system vLevels (station, centcomm, etc) created during map loading
 	// This must be done here because the global 'map' variable isn't set during loadZLevels
-	for(var/datum/zLevel/Z in src.zLevels)
+	for(var/datum/zLevel/Z in zLevels)
 		for(var/datum/virtual_z/V in Z.virtual_z_levels)
-			src.systemVLevels |= V
+			vLevels |= V
 			if(Z.z in daynight_z_lvls)
 				daynight_v_lvls += V
 
 	//The spawn below is needed
 	spawn()
 		for(var/T in load_map_elements)
-			load_dungeon(T)
+			load_dungeon(T, 0, TRUE)
 
 /datum/map/proc/map_ruleset(var/datum/dynamic_ruleset/DR)
 	return TRUE //If false, fails Ready()
@@ -129,8 +129,8 @@
 		linkVLevel(level)
 
 /datum/map/proc/linkVLevel(datum/zLevel/level)
-	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL, 1, 1, skip_turf_setup = FALSE, system = TRUE)
-	new_vz.id = level.z + SYSTEM_VLEVEL_OFFSET // System vLevels use IDs 101+ (z1=101, z2=102, etc)
+	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL, 1, 1, skip_turf_setup = FALSE)
+	new_vz.id = level.z
 	new_vz.name = level.name
 	new_vz.gps_allowed = level.z != zCentcomm
 	new_vz.teleJammed = level.teleJammed ? VZ_TELEPORTATION_FORBIDDEN : VZ_TELEPORTATION_ALLOWED
@@ -143,12 +143,9 @@
 			new_vz.transition_crosswrap_v += zl.virtual_z_levels[1]
 	new_vz.update_settings()
 
-	WORLD_X_OFFSET += rand(-50,50)
-	WORLD_Y_OFFSET += rand(-50,50)
-
 	return new_vz
 
-/datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null, var/skip_turf_setup = FALSE, var/fill_turf_type = null)
+/datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null, var/skip_turf_setup = FALSE, var/fill_turf_type = null, var/system = FALSE)
 	if(!size_y)
 		size_y = size_x
 	var/found_x = 0
@@ -183,14 +180,7 @@
 		skip_turf_setup = FALSE
 
 	// Create the new virtual_z
-	var/datum/virtual_z/new_vz = new(z_to_use, size_x, size_y, found_x, found_y, skip_turf_setup)
-
-	// Add to global vLevels list (map global is set during gameplay)
-	map.vLevels |= new_vz
-	var/variance_x = floor(size_x/10)
-	var/variance_y = floor(size_y/10)
-	WORLD_X_OFFSET += rand(-variance_x,variance_x)
-	WORLD_Y_OFFSET += rand(-variance_y,variance_y)
+	var/datum/virtual_z/new_vz = new(z_to_use, size_x, size_y, found_x, found_y, skip_turf_setup, system)
 
 	if(fill_turf_type)
 		for(var/turf/T in new_vz.get_turfs())
@@ -213,11 +203,11 @@
 		CHECK_TICK
 	return new_vz
 
-/datum/map/proc/addMapElementVLevel(var/datum/map_element/ME, var/rotation = 0, var/fill_turf = null, var/buffer_size = 5)
+/datum/map/proc/addMapElementVLevel(var/datum/map_element/ME, var/rotation = 0, var/fill_turf = null, var/buffer_size = 5, var/system = FALSE)
 	var/ortho = rotation && !(rotation % 180) // Flip width and height if rotated 90 or 270 degrees
 	var/w_to_use = ortho? ME.height : ME.width
 	var/h_to_use = ortho? ME.width : ME.height
-	var/datum/virtual_z/new_vz = src.addVLevel(w_to_use + buffer_size * 2, h_to_use + buffer_size * 2, fill_turf_type = fill_turf)
+	var/datum/virtual_z/new_vz = src.addVLevel(w_to_use + buffer_size * 2, h_to_use + buffer_size * 2, fill_turf_type = fill_turf, system = system)
 	new_vz.name = "Map Element: [ME.name]"
 	new_vz.level_type = VZ_MAP_ELEMENT
 	new_vz.gps_allowed = FALSE

@@ -127,7 +127,7 @@
 	cost = RUIN_COST_HEAVY
 
 /datum/map_element/ruin/laundromat/pre_load()
-	load_dungeon(/datum/map_element/dungeon/laundromat_drug_lab,rotation)
+	load_dungeon(/datum/map_element/dungeon/laundromat_drug_lab,rotation, TRUE)
 
 /datum/map_element/ruin/podstation
 	file_path = "maps/ruins/generic/podstation_ruin.dmm"
@@ -146,7 +146,7 @@
 	cost = RUIN_COST_HEAVY
 
 /datum/map_element/ruin/prison/pre_load()
-	load_dungeon(/datum/map_element/dungeon/prison,rotation)
+	load_dungeon(/datum/map_element/dungeon/prison,rotation, TRUE)
 
 /datum/map_element/ruin/soulblade_sanctum
 	file_path = "maps/ruins/generic/soulblade_sanctum_ruin.dmm"
@@ -165,4 +165,4 @@
 	cost = RUIN_COST_HEAVY
 
 /datum/map_element/ruin/spacepond/pre_load()
-	load_dungeon(/datum/map_element/dungeon/wine_cellar,rotation)
+	load_dungeon(/datum/map_element/dungeon/wine_cellar,rotation, TRUE)
