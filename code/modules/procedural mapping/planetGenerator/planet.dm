@@ -140,7 +140,7 @@
 		if(isopensurface(A) || (istype(A, /area/planet/cave) && !iswall(T)))
 			var/datum/vent/newvent = new /datum/vent(T)
 			vent_count -= 1
-			allocation.ptype.vents += newvent
+			virtual_z.planet.vents += newvent
 		checked_turfs++
 		if(checked_turfs > 100) //arbitrary limit to prevent infinite loops
 			break
