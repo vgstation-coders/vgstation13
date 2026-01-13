@@ -1157,22 +1157,31 @@ its easier to just keep the beam vertical.
 /atom/proc/silicate_act(var/atom/A, var/mob/user)
 	return FALSE
 
-// Update the screentip and status bar to reflect what we're hovering over
+// Register hover with the mouse entered subsystem (see mouse_entered.dm).
 /atom/MouseEntered(location, control, params)
 	. = ..()
-	if(!usr?.client)
+	if(usr?.client)
+		SSmouse_entered.hovers[usr.client] = src
+
+// Called by SSmouse_entered on the tick after MouseEntered. Handles the actual screentip and status bar updates.
+/atom/proc/on_mouse_enter(client/hovering_client)
+	if(!hovering_client?.mob)
 		return
+
+	var/mob/user = hovering_client.mob
 
 	// Status bar
-	status_bar_set_text(usr, name)
+	status_bar_set_text(user, name)
 
 	// Screentips
-	if(!usr.client.prefs || !usr.hud_used?.screentip_text)
+	if(!hovering_client.prefs || !user.hud_used?.screentip_text)
 		return
-	var/screentip_size = usr.client.prefs.get_pref(/datum/preference_setting/enum/screentip_size)
+
+	var/screentip_size = hovering_client.prefs.get_pref(/datum/preference_setting/enum/screentip_size)
 	if(!screentip_size || (flags & NO_SCREENTIPS))
-		usr.hud_used.screentip_text.maptext = ""
+		user.hud_used.screentip_text.maptext = ""
 	else
-		var/screentip_color = usr.client.prefs.get_pref(/datum/preference_setting/string/screentip_color)
-		var/font_size = usr.hud_used.screentip_text.get_size(screentip_size)
-		usr.hud_used.screentip_text.maptext = "<span style='text-align: center; font-size: [font_size]; color: [screentip_color];'>[html_encode(name)]</span>"
+		var/screentip_color = hovering_client.prefs.get_pref(/datum/preference_setting/string/screentip_color)
+		var/font_size = user.hud_used.screentip_text.get_size(screentip_size)
+		var/display_name = capitalize(html_encode(name))
+		user.hud_used.screentip_text.maptext = "<span class='black_outline' style=\"text-align: center; font-size: [font_size]; color: [screentip_color];\">[display_name]</span>"
