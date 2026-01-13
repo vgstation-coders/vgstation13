@@ -1,4 +1,4 @@
-/*
+				/*
 
 ### This file contains a list of all the areas in your station. Format is as follows:
 
@@ -1589,6 +1589,10 @@ var/global/list/adminbusteleportlocs = list()
 /area/medical/paramedics
 	name = "\improper Paramedic Station"
 	icon_state = "paramedics"
+
+/area/medical/eva
+    name = "\improper Emergency Rescue Unit"
+    icon_state = "rescue_unit"
 
 //Security
 /area/security
