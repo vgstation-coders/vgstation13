@@ -20768,14 +20768,14 @@
 	pixel_y = -1
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/item/ashtray/glass{
-	pixel_y = 7;
-	pixel_x = 14
-	},
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup{
 	desc = "Kingston's personal cup.";
 	pixel_y = 10;
 	pixel_x = -2
+	},
+/obj/item/ashtray/glass{
+	pixel_y = 7;
+	pixel_x = 14
 	},
 /turf/simulated/floor{
 	icon_state = "dark_navy";
@@ -48249,13 +48249,13 @@
 	icon_state = "floor2"
 	},
 /obj/item/weapon/reagent_containers/glass/rag,
+/obj/effect/nmpi{
+	dir = 10;
+	tag = "icon-maintguide (SOUTHWEST)"
+	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "bLJ" = (
-/obj/effect/nmpi{
-	dir = 6;
-	tag = "icon-maintguide (SOUTHEAST)"
-	},
 /obj/machinery/firealarm{
 	dir = 4;
 	pixel_x = 26
@@ -48695,11 +48695,6 @@
 /area/hallway/primary/port)
 "bMy" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
-/obj/effect/nmpi,
-/obj/effect/nmpi{
-	dir = 10;
-	tag = "icon-maintguide (SOUTHWEST)"
-	},
 /obj/machinery/door/airlock/maintenance,
 /turf/simulated/floor/plating,
 /area/security/vacantoffice)
@@ -49457,7 +49452,10 @@
 	dir = 5;
 	tag = "icon-maintguide (NORTHEAST)"
 	},
-/obj/effect/nmpi,
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)"
+	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "bNK" = (
@@ -49520,6 +49518,10 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
+	},
+/obj/effect/nmpi{
+	dir = 5;
+	tag = "icon-maintguide (NORTHEAST)"
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
@@ -69223,9 +69225,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
 	},
-/obj/structure/bed/chair{
-	dir = 8
-	},
+/obj/structure/bed/chair,
 /obj/structure/cable/yellow{
 	d1 = 2;
 	d2 = 4;
@@ -110855,6 +110855,10 @@
 	dir = 4
 	},
 /obj/effect/decal/cleanable/blood,
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)"
+	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "kTl" = (
@@ -111588,16 +111592,6 @@
 /obj/item/tool/screwdriver,
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
-"qWb" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/obj/effect/nmpi{
-	dir = 4;
-	tag = "icon-maintguide (EAST)"
-	},
-/turf/simulated/wall,
-/area/security/vacantoffice)
 "qYU" = (
 /obj/structure/table/woodentable,
 /obj/item/device/taperecorder,
@@ -232867,7 +232861,7 @@ isn
 isn
 isn
 isn
-qWb
+bLH
 kRT
 bEm
 bPy
