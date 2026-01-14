@@ -19670,6 +19670,11 @@
 /area/science/storage)
 "aLJ" = (
 /obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup{
+	desc = "Kingston's personal cup.";
+	pixel_y = 9;
+	pixel_x = -10
+	},
 /turf/simulated/floor{
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy"
@@ -20768,14 +20773,9 @@
 	pixel_y = -1
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup{
-	desc = "Kingston's personal cup.";
-	pixel_y = 10;
-	pixel_x = -2
-	},
 /obj/item/ashtray/glass{
 	pixel_y = 7;
-	pixel_x = 14
+	pixel_x = -4
 	},
 /turf/simulated/floor{
 	icon_state = "dark_navy";
@@ -26331,7 +26331,7 @@
 /obj/machinery/newscaster{
 	pixel_y = -28
 	},
-/obj/machinery/vending/snack,
+/obj/machinery/vending/discount,
 /turf/simulated/floor,
 /area/hallway/primary/fore)
 "aXD" = (
@@ -42116,6 +42116,7 @@
 /area/supply/storage)
 "bzI" = (
 /obj/structure/filingcabinet/filingcabinet,
+/obj/item/weapon/folder/orange,
 /turf/simulated/floor,
 /area/supply/storage)
 "bzJ" = (
@@ -61031,7 +61032,9 @@
 /area/security/detectives_office)
 "clb" = (
 /obj/structure/flora/pottedplant/random,
-/turf/simulated/floor/carpet,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
 /area/security/detectives_office)
 "clc" = (
 /turf/simulated/floor,
@@ -61637,7 +61640,7 @@
 /area/lawoffice)
 "cmo" = (
 /obj/machinery/atmospherics/unary/vent_pump/on{
-	dir = 8;
+	dir = 4;
 	icon_state = "out";
 	tag = "icon-out (WEST)"
 	},
@@ -61646,9 +61649,6 @@
 	},
 /area/security/detectives_office)
 "cmp" = (
-/obj/machinery/light/small{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
 	},
@@ -62357,6 +62357,9 @@
 /obj/item/weapon/reagent_containers/food/drinks/flask/detflask{
 	pixel_x = -5;
 	pixel_y = -2
+	},
+/obj/machinery/light/small{
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -65369,6 +65372,9 @@
 /area/hallway/primary/aft)
 "ctK" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/light{
+	dir = 1
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "bluecorner"
@@ -65381,9 +65387,6 @@
 /turf/simulated/floor,
 /area/hallway/primary/aft)
 "ctM" = (
-/obj/machinery/light{
-	dir = 1
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor{
 	dir = 4;
@@ -68596,9 +68599,6 @@
 /obj/machinery/alarm{
 	pixel_y = 23
 	},
-/obj/machinery/light{
-	dir = 4
-	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "darkred"
@@ -69228,7 +69228,7 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 8
+	dir = 4
 	},
 /obj/structure/bed/chair,
 /obj/structure/cable/yellow{
@@ -111136,6 +111136,9 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/machinery/light{
+	dir = 1
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "darkred"
@@ -111940,6 +111943,15 @@
 	},
 /turf/simulated/floor/wood,
 /area/research_outpost/breakroom)
+"sJz" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/light,
+/turf/simulated/floor{
+	icon_state = "bluecorner"
+	},
+/area/hallway/primary/aft)
 "sNl" = (
 /obj/structure/bed/chair/shuttle,
 /obj/effect/landmark/start{
@@ -218412,7 +218424,7 @@ cpA
 cqy
 crE
 bKx
-csV
+ctQ
 cuT
 csV
 cxs
@@ -225942,7 +225954,7 @@ ciq
 cqJ
 crN
 cdV
-ctQ
+csV
 cve
 cwj
 cxy
@@ -226446,7 +226458,7 @@ crN
 cdV
 ctR
 csV
-cwg
+sJz
 cxy
 cxy
 czK
@@ -233464,8 +233476,8 @@ cgv
 chD
 ciz
 cjH
+ckY
 clb
-cgv
 cnD
 cfu
 bHO
