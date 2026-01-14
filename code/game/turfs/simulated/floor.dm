@@ -164,7 +164,45 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 				icon_state = "grass[pick("1","2","3","4")]"
 	else if(is_carpet_floor())
 		if(!broken && !burnt)
-			relativefloor("carpet")
+			var/connectdir = 0
+			for(var/direction in cardinal)
+				if(istype(get_step(src,direction),/turf/simulated/floor))
+					var/turf/simulated/floor/FF = get_step(src,direction)
+					if(FF.is_carpet_floor())
+						connectdir |= direction
+
+			//Check the diagonal connections for corners, where you have, for example, connections both north and east. In this case it checks for a north-east connection to determine whether to add a corner marker or not.
+			var/diagonalconnect = 0 //1 = NE; 2 = SE; 4 = NW; 8 = SW
+
+			//Northeast
+			if(connectdir & NORTH && connectdir & EAST)
+				if(istype(get_step(src,NORTHEAST),/turf/simulated/floor))
+					var/turf/simulated/floor/FF = get_step(src,NORTHEAST)
+					if(FF.is_carpet_floor())
+						diagonalconnect |= 1
+
+			//Southeast
+			if(connectdir & SOUTH && connectdir & EAST)
+				if(istype(get_step(src,SOUTHEAST),/turf/simulated/floor))
+					var/turf/simulated/floor/FF = get_step(src,SOUTHEAST)
+					if(FF.is_carpet_floor())
+						diagonalconnect |= 2
+
+			//Northwest
+			if(connectdir & NORTH && connectdir & WEST)
+				if(istype(get_step(src,NORTHWEST),/turf/simulated/floor))
+					var/turf/simulated/floor/FF = get_step(src,NORTHWEST)
+					if(FF.is_carpet_floor())
+						diagonalconnect |= 4
+
+			//Southwest
+			if(connectdir & SOUTH && connectdir & WEST)
+				if(istype(get_step(src,SOUTHWEST),/turf/simulated/floor))
+					var/turf/simulated/floor/FF = get_step(src,SOUTHWEST)
+					if(FF.is_carpet_floor())
+						diagonalconnect |= 8
+
+			icon_state = "carpet[connectdir]-[diagonalconnect]"
 	else if(is_arcade_floor())
 		if(!broken && !burnt)
 			icon_state = "arcade"
@@ -744,39 +782,3 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		else
 			to_chat(user, "<span class='warning'>\The [src] is missing a maintenance hatch!</span>")
 
-
-/turf/simulated/floor/proc/relativefloor(var/base)
-		var/connectdir = 0
-		for(var/direction in cardinal)
-			var/turf/simulated/floor/FF = get_step(src,direction)
-			if(istype(FF,/turf/simulated/floor) && istype(FF.floor_tile,src.floor_tile))
-					connectdir |= direction
-
-		//Check the diagonal connections for corners, where you have, for example, connections both north and east. In this case it checks for a north-east connection to determine whether to add a corner marker or not.
-		var/diagonalconnect = 0 //1 = NE; 2 = SE; 4 = NW; 8 = SW
-
-		//Northeast
-		if(connectdir & NORTH && connectdir & EAST)
-			var/turf/simulated/floor/FF = get_step(src,NORTHEAST)
-			if(istype(FF) && istype(FF.floor_tile,src.floor_tile))
-					diagonalconnect |= 1
-
-		//Southeast
-		if(connectdir & SOUTH && connectdir & EAST)
-			var/turf/simulated/floor/FF = get_step(src,SOUTHEAST)
-			if(istype(FF) && istype(FF.floor_tile,src.floor_tile))
-					diagonalconnect |= 2
-
-		//Northwest
-		if(connectdir & NORTH && connectdir & WEST)
-			var/turf/simulated/floor/FF = get_step(src,NORTHWEST)
-			if(istype(FF) && istype(FF.floor_tile,src.floor_tile))
-					diagonalconnect |= 4
-
-		//Southwest
-		if(connectdir & SOUTH && connectdir & WEST)
-			var/turf/simulated/floor/FF = get_step(src,SOUTHWEST)
-			if(istype(FF) && istype(FF.floor_tile,src.floor_tile))
-					diagonalconnect |= 8
-
-		icon_state = "[base][connectdir]-[diagonalconnect]"

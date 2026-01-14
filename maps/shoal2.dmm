@@ -30,6 +30,16 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
+"ae" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 4
+	},
+/obj/structure/railing/plasteel/pglass,
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
 "ak" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
@@ -55,29 +65,37 @@
 	name = "wooden vox floor"
 	},
 /area/shoal)
+"aJ" = (
+/obj/structure/rack,
+/obj/item/clothing/head/helmet/space/plasmaman/prisoner,
+/obj/item/clothing/suit/space/plasmaman/prisoner,
+/obj/item/clothing/suit/space/plasmaman/prisoner{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/obj/item/clothing/head/helmet/space/plasmaman/prisoner{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
 "aT" = (
 /obj/structure/sign/securearea{
 	pixel_y = -32
 	},
 /turf/unsimulated/wall/shoal,
 /area)
-"be" = (
-/obj/structure/railing{
-	dir = 4
+"bb" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
 	},
-/obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/asteroid/vox,
-/area/shoal)
-"bg" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
 	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "bi" = (
 /obj/item/trash/popcorn,
@@ -103,29 +121,6 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"bt" = (
-/obj/machinery/door/airlock/hatch,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area/shoal)
-"by" = (
-/obj/item/weapon/stool,
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
-"bA" = (
-/obj/machinery/bot/farmbot{
-	desc = "Serving 25 to life for drowning a botanist.";
-	name = "Prisoner 545"
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "bC" = (
 /obj/structure/railing{
 	dir = 1
@@ -140,16 +135,6 @@
 	dir = 1
 	},
 /area/shoal)
-"bD" = (
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete";
-	icon = 'icons/turf/new_snow.dmi'
-	},
-/area/fake_z/level2)
 "bE" = (
 /obj/structure/closet/crate/bin,
 /obj/structure/hanging_lantern/dim{
@@ -169,6 +154,13 @@
 	},
 /turf/simulated/floor/vox/shuttle,
 /area/shoal)
+"bM" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "loading_area";
+	tag = "icon-loading_area (EAST)"
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
 "bN" = (
 /obj/structure/railing{
 	dir = 1
@@ -178,18 +170,22 @@
 	dir = 4
 	},
 /area/fake_z/level1)
+"bR" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/grille,
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Warden Privacy"
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
 "bU" = (
 /obj/machinery/computer/fluff/communications,
 /turf/unsimulated/floor/vox/plating/alt,
-/area/shoal)
-"bY" = (
-/obj/machinery/biogenerator,
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
 /area/shoal)
 "cg" = (
 /obj/structure/railing{
@@ -197,9 +193,36 @@
 	},
 /turf/unsimulated/floor/vox,
 /area/shoal)
+"ci" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 4
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/table/plastic,
+/obj/machinery/computer/security/telescreen{
+	network = list("SS13");
+	name = "Detainee Entertainment Monitor"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "cn" = (
 /obj/prop/coolerfan,
 /turf/unsimulated/wall/shoal,
+/area/shoal)
+"cq" = (
+/obj/machinery/portable_atmospherics/hydroponics/plastic,
+/obj/structure/hanging_lantern/dim{
+	dir = 1;
+	invisibility = 101
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
 /area/shoal)
 "ct" = (
 /obj/effect/decal/warning_stripes{
@@ -215,21 +238,6 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level2)
-"cw" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/wc/toilet{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
 "cx" = (
 /obj/structure/railing{
 	dir = 8
@@ -240,6 +248,21 @@
 /obj/structure/catwalk,
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
+"cC" = (
+/obj/machinery/flasher{
+	id_tag = "Shoal Cell 2";
+	name = "floor-mounted vision suppressor"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
+"cD" = (
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area/shoal)
 "cI" = (
 /obj/structure/closet/emcloset/vox,
 /obj/effect/decal/cleanable/dirt,
@@ -258,13 +281,47 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/fake_z/level1)
-"cX" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
+"cT" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 8
 	},
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area)
+"cU" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area)
+"cY" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area)
+"cZ" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"da" = (
+/obj/structure/dispenser,
 /turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
+	icon_state = "pattern_bluer"
 	},
 /area)
 "db" = (
@@ -273,23 +330,6 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"de" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/table/plastic,
-/obj/machinery/computer/security/telescreen{
-	network = list("SS13");
-	name = "Detainee Entertainment Monitor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "dg" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/vox{
@@ -298,37 +338,14 @@
 	icon = 'icons/turf/new_snow.dmi'
 	},
 /area)
-"dn" = (
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area/shoal)
-"dv" = (
-/obj/structure/table/plastic,
-/obj/machinery/computer/security/telescreen{
-	network = list("SS13");
-	name = "Detainee Entertainment Monitor"
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area/shoal)
-"dA" = (
-/obj/structure/hanging_lantern/dim,
+"do" = (
+/obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
-	name = "concrete"
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
-"dC" = (
-/obj/machinery/door/airlock/hatch,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
+/area/shoal)
 "dD" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/blood/stattrack,
@@ -343,18 +360,11 @@
 	dir = 8
 	},
 /area/shoal)
-"dQ" = (
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/bed/chair/plastic/plastic_chair{
-	dir = 1
-	},
+"dU" = (
+/obj/structure/table/plastic,
+/obj/item/weapon/storage/fancy/beer_box,
 /turf/unsimulated/floor/asteroid/vox,
-/area)
+/area/shoal)
 "dX" = (
 /obj/structure/transit_tube{
 	fake_z_exclude = 1;
@@ -380,6 +390,12 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"eg" = (
+/obj/machinery/computer/security,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area/shoal)
 "eh" = (
 /obj/structure/railing,
 /obj/effect/decal/warning_stripes{
@@ -395,6 +411,21 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
+"ej" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
+"el" = (
+/obj/machinery/vending/voxseeds,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area/shoal)
 "en" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -421,40 +452,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level3)
-"eD" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)";
-	dir = 10
-	},
-/obj/prop/fan,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/obj/structure/railing,
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "elevatorshaft"
-	},
-/area/fake_z/level2)
-"eG" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/obj/structure/bed,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
-"eK" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/abyss,
-/area)
 "eL" = (
 /obj/structure/catwalk,
 /obj/structure/railing,
@@ -463,20 +460,28 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/fake_z/level1)
-"eV" = (
-/obj/machinery/door/airlock/hatch,
-/turf/space,
-/area/shoal)
-"eY" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
+"eN" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
 	},
-/obj/structure/window/reinforced/plasma{
+/area/shoal)
+"eO" = (
+/obj/structure/railing/plasteel/pglass{
 	dir = 4
 	},
-/turf/unsimulated/floor/vox/plating/alt,
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/table/plastic,
+/obj/machinery/computer/security/telescreen{
+	network = list("SS13");
+	name = "Detainee Entertainment Monitor"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
 /area)
 "fc" = (
 /obj/structure/table/woodentable,
@@ -512,12 +517,18 @@
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
 "fe" = (
-/obj/structure/railing/plasteel/pglass,
+/obj/structure/bed/chair/folding,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area)
+"ff" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "techfloor";
 	icon = 'icons/shoal/techfloor.dmi'
 	},
-/area/shoal)
+/area)
 "fj" = (
 /obj/prop/shoalwindow{
 	icon_state = "shoalwindow";
@@ -537,12 +548,6 @@
 "fq" = (
 /turf/unsimulated/wall/shoal,
 /area/shoal)
-"fs" = (
-/obj/structure/dispenser,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "fu" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -550,15 +555,6 @@
 	},
 /turf/unsimulated/floor/vox,
 /area/shoal)
-"fx" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "fz" = (
 /obj/prop/metalwear5{
 	pixel_x = -4
@@ -597,17 +593,40 @@
 	},
 /turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
-"ga" = (
-/obj/structure/bed/chair/folding{
+"fI" = (
+/obj/machinery/seed_extractor,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area)
+"fJ" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
+/obj/prop/hanginglight{
+	pixel_y = 32;
+	pixel_x = -16
 	},
+/turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"ge" = (
-/obj/machinery/computer/security,
+"fT" = (
+/obj/machinery/bot/farmbot{
+	desc = "Serving 25 to life for drowning a botanist.";
+	name = "Prisoner 545"
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area)
+"gd" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "loading_area";
+	tag = "icon-loading_area"
+	},
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_bluer"
 	},
@@ -630,6 +649,19 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"gn" = (
+/obj/machinery/biogenerator,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area)
+"gv" = (
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/asteroid/vox,
+/area)
 "gy" = (
 /obj/structure/railing{
 	dir = 8
@@ -664,22 +696,11 @@
 	nitrogen = 103.934
 	},
 /area/fake_z/level1)
-"gK" = (
-/obj/structure/table/reinforced,
-/obj/machinery/door_control{
-	id_tag = "Shoal Warden Privacy";
-	name = "Privacy Shutters";
-	pixel_x = -4;
-	pixel_y = 8
+"gJ" = (
+/obj/structure/hanging_lantern{
+	fake_z_exclude = 1
 	},
-/obj/item/device/megaphone{
-	pixel_y = -2;
-	pixel_x = 5;
-	name = "communication device"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
+/turf/unsimulated/floor/vox/abyss,
 /area/shoal)
 "gN" = (
 /obj/structure/bed/chair/comfy/couch/mid/lime{
@@ -720,6 +741,26 @@
 	},
 /turf/simulated/floor/vox/shuttle,
 /area/shoal)
+"gZ" = (
+/obj/machinery/flasher{
+	id_tag = "Shoal Cell 1";
+	name = "floor-mounted vision suppressor"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
+"hd" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
+	},
+/obj/structure/bed,
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
 "hf" = (
 /obj/structure/railing{
 	dir = 4
@@ -773,16 +814,6 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
-"hu" = (
-/obj/machinery/flasher{
-	id_tag = "Shoal Cell 2";
-	name = "floor-mounted vision suppressor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
 "hv" = (
 /obj/structure/railing{
 	dir = 8
@@ -792,6 +823,21 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
+"hA" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 4
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/wc/toilet{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
 "hC" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault corner";
@@ -825,12 +871,43 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level2)
+"hM" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/abyss,
+/area)
 "hR" = (
 /obj/structure/sign/directions/evac{
 	dir = 4;
 	pixel_y = -10
 	},
 /turf/unsimulated/wall/shoal,
+/area/shoal)
+"hS" = (
+/obj/machinery/flasher_button{
+	pixel_y = 24;
+	pixel_x = 6;
+	id_tag = "Shoal Cell 2"
+	},
+/obj/machinery/door_control{
+	pixel_x = -6;
+	pixel_y = 24;
+	id_tag = "Shoal Cell 2 Door";
+	name = "Entertainment Area Shutters"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
 /area/shoal)
 "hT" = (
 /obj/prop/fan,
@@ -859,22 +936,6 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"ie" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/bed/chair/folding{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
-"ii" = (
-/obj/structure/table/plastic,
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "ik" = (
 /obj/structure/railing{
 	dir = 4
@@ -898,30 +959,18 @@
 	icon = 'icons/turf/new_snow.dmi'
 	},
 /area)
-"im" = (
-/obj/structure/catwalk,
-/obj/structure/railing{
-	dir = 4
+"in" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
 	},
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/abyss,
-/area/shoal)
-"io" = (
-/obj/prop/fan,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
 	},
 /turf/unsimulated/floor/vox{
-	icon_state = "elevatorshaft"
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
 	},
-/area/fake_z/level2)
+/area)
 "is" = (
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -939,6 +988,15 @@
 	},
 /turf/unsimulated/wall/shoal,
 /area/fake_z/level1)
+"iy" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/shoal)
 "iA" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/ammo_casing/c9mm/empty{
@@ -964,16 +1022,14 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"iQ" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
+"iS" = (
+/obj/structure/railing{
+	dir = 8
 	},
-/obj/structure/railing/plasteel/pglass,
 /turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
+	icon_state = "pattern_orange"
 	},
-/area)
+/area/fake_z/level1)
 "iW" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -983,6 +1039,10 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level2)
+"iZ" = (
+/obj/machinery/door/airlock/hatch,
+/turf/space,
+/area)
 "ja" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault stripe";
@@ -993,12 +1053,6 @@
 /obj/structure/railing,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
-	},
-/area/shoal)
-"je" = (
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
 	},
 /area/shoal)
 "jj" = (
@@ -1017,19 +1071,6 @@
 	dir = 1
 	},
 /turf/space,
-/area)
-"jn" = (
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Cell 1 Door"
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
 /area)
 "jq" = (
 /obj/effect/decal/cleanable/crumbs,
@@ -1057,6 +1098,12 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
+"jF" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area)
 "jN" = (
 /obj/structure/bed/chair/comfy/brown{
 	dir = 1
@@ -1085,6 +1132,28 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"jX" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Warden Privacy"
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
+"kq" = (
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area)
 "kr" = (
 /obj/machinery/vending/discount,
 /turf/unsimulated/floor/vox{
@@ -1093,6 +1162,12 @@
 	icon = 'icons/turf/new_snow.dmi'
 	},
 /area)
+"kw" = (
+/obj/prop/metalwear2,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
 "kz" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/chips/donitos,
@@ -1101,16 +1176,6 @@
 	name = "concrete"
 	},
 /area/fake_z/level2)
-"kB" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/obj/structure/bed,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "kG" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
@@ -1126,6 +1191,21 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
+"kM" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 4
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/wc/toilet{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "kN" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -1133,18 +1213,31 @@
 	},
 /turf/unsimulated/floor/vox,
 /area/shoal)
-"kQ" = (
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
-	},
-/area/fake_z/level1)
 "kS" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "hexacrete-203";
 	icon = 'icons/shoal/hexacrete.dmi'
+	},
+/area/shoal)
+"kX" = (
+/obj/item/clothing/mask/breath,
+/obj/structure/rack,
+/obj/item/clothing/mask/breath{
+	pixel_x = -2;
+	pixel_y = 2
+	},
+/obj/item/clothing/mask/breath{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area/shoal)
+"kY" = (
+/obj/machinery/door/airlock/hatch,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
 	},
 /area/shoal)
 "kZ" = (
@@ -1178,12 +1271,43 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"lq" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area)
+"lr" = (
+/obj/machinery/portable_atmospherics/hydroponics/plastic,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area)
 "lt" = (
 /obj/structure/railing{
 	dir = 8
 	},
 /turf/unsimulated/floor/vox,
 /area/shoal)
+"lx" = (
+/obj/item/clothing/mask/breath,
+/obj/structure/rack,
+/obj/item/clothing/mask/breath{
+	pixel_x = -2;
+	pixel_y = 2
+	},
+/obj/item/clothing/mask/breath{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
 "lz" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
@@ -1205,12 +1329,6 @@
 	nitrogen = 103.934
 	},
 /area/fake_z/level2)
-"lA" = (
-/obj/machinery/portable_atmospherics/hydroponics/plastic,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "lB" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -1222,38 +1340,48 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"lE" = (
-/obj/structure/catwalk,
-/obj/structure/railing{
+"lC" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/grille,
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Warden Privacy"
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
+"lG" = (
+/obj/machinery/flasher_button{
+	pixel_y = 24;
+	pixel_x = 6;
+	id_tag = "Shoal Cell 2"
+	},
+/obj/machinery/door_control{
+	pixel_x = -6;
+	pixel_y = 24;
+	id_tag = "Shoal Cell 2 Door";
+	name = "Entertainment Area Shutters"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
+"lI" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
 	dir = 8
 	},
-/obj/structure/railing{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox/abyss,
-/area)
-"lO" = (
-/obj/machinery/flasher{
-	id_tag = "Shoal Cell 1";
-	name = "floor-mounted vision suppressor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
-"lU" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/hanging_lantern/dim{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
-"lX" = (
-/obj/structure/window/reinforced/plasma,
 /obj/machinery/door/poddoor/shutters/rusty/preopen{
 	dir = 2;
 	id_tag = "Shoal Warden Privacy"
@@ -1263,11 +1391,28 @@
 	dir = 1
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area)
-"md" = (
-/obj/machinery/door/airlock/hatch,
-/turf/space,
-/area)
+/area/shoal)
+"lK" = (
+/obj/structure/closet/crate/hydroponics,
+/obj/item/weapon/minihoe,
+/obj/item/weapon/storage/bag/plants,
+/obj/item/device/analyzer/plant_analyzer,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area/shoal)
+"lL" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "me" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -1310,21 +1455,6 @@
 	icon_state = "rusty_reinforced_wall-12"
 	},
 /area/shoal)
-"mh" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/bed/chair/folding{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "mj" = (
 /obj/structure/railing{
 	dir = 4
@@ -1334,15 +1464,6 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"mp" = (
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "mt" = (
 /obj/machinery/door/airlock/hatch,
 /turf/unsimulated/floor/vox/plating/alt,
@@ -1389,15 +1510,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level3)
-"mH" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "mK" = (
 /obj/structure/hanging_lantern/dim,
 /turf/unsimulated/floor/vox/abyss,
@@ -1405,12 +1517,6 @@
 "mP" = (
 /obj/structure/curtain/open/bed,
 /turf/unsimulated/wall/fakeglass,
-/area/shoal)
-"mT" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/abyss,
 /area/shoal)
 "mW" = (
 /obj/structure/catwalk,
@@ -1429,15 +1535,6 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/fake_z/level1)
-"mX" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "nn" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -1450,21 +1547,55 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
-"np" = (
-/obj/structure/railing{
-	dir = 8
+"no" = (
+/obj/machinery/door/window/plasma/secure{
+	dir = 2
 	},
-/obj/structure/railing,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
 	},
-/area/fake_z/level1)
+/area/shoal)
+"np" = (
+/obj/structure/bed/chair/office/dark{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
 "nq" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
 	tag = "icon-warning (NORTH)"
 	},
 /turf/simulated/floor/vox/shuttle,
+/area/shoal)
+"ns" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 10
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"nw" = (
+/obj/structure/table/plastic,
+/obj/machinery/computer/security/telescreen{
+	network = list("SS13");
+	name = "Detainee Entertainment Monitor"
+	},
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "nz" = (
 /obj/structure/lattice{
@@ -1479,18 +1610,6 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"nE" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "nU" = (
 /obj/structure/railing{
 	dir = 4
@@ -1529,11 +1648,6 @@
 	icon_state = "pattern_orange"
 	},
 /area)
-"oe" = (
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "of" = (
 /obj/item/trash/chips/zamitos_o,
 /obj/effect/decal/cleanable/blood/stattrack{
@@ -1543,12 +1657,12 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"oh" = (
-/obj/structure/holohoop,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+"om" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 8
 	},
-/area)
+/turf/unsimulated/floor/vox/abyss,
+/area/shoal)
 "ot" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -1563,6 +1677,27 @@
 	icon_state = "dark"
 	},
 /area/shoal)
+"ou" = (
+/obj/machinery/flasher_button{
+	pixel_y = 24;
+	pixel_x = -6;
+	id_tag = "Shoal Cell 1"
+	},
+/obj/machinery/door_control{
+	pixel_x = 6;
+	pixel_y = 24;
+	id_tag = "Shoal Cell 1 Door";
+	name = "Entertainment Area Shutters"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area/shoal)
 "ox" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -1572,21 +1707,20 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level3)
-"oB" = (
-/obj/machinery/portable_atmospherics/hydroponics/plastic,
-/obj/structure/hanging_lantern/dim{
-	dir = 1;
-	invisibility = 101
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+"oz" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
 	},
 /area/shoal)
-"oD" = (
-/obj/structure/rack,
-/obj/item/binoculars,
+"oF" = (
+/obj/structure/railing{
+	dir = 8
+	},
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
+	icon_state = "concrete";
+	name = "concrete"
 	},
 /area/shoal)
 "oG" = (
@@ -1598,18 +1732,6 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"oN" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 8
-	},
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
 "oO" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault stripe"
@@ -1617,20 +1739,21 @@
 /area)
 "oR" = (
 /obj/structure/catwalk,
+/obj/prop/hanginglight{
+	pixel_y = 32
+	},
 /obj/structure/railing{
 	dir = 4
 	},
 /obj/structure/railing{
 	dir = 8
 	},
+/obj/structure/railing,
+/obj/prop/ladder/down{
+	pixel_y = 8
+	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level2)
-"oU" = (
-/obj/machinery/vending/hydronutrients,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "oY" = (
 /obj/structure/transit_tube{
 	fake_z_exclude = 1;
@@ -1656,12 +1779,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"oZ" = (
-/obj/machinery/vending/voxseeds,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "pa" = (
 /obj/prop/latticemess{
 	color = "#222222"
@@ -1698,25 +1815,25 @@
 	},
 /area/fake_z/level1)
 "pr" = (
-/obj/structure/holohoop{
-	dir = 1
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
 	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
-"pt" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/hanging_lantern/dim{
-	dir = 8
-	},
-/obj/structure/railing{
-	dir = 8
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
 	},
 /turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
+	icon_state = "elevatorshaft"
 	},
+/area/fake_z/level2)
+"pt" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "pu" = (
 /obj/structure/bed/chair/comfy/black{
@@ -1727,11 +1844,6 @@
 	dir = 4
 	},
 /area/shoal)
-"pv" = (
-/obj/prop/ladder/up,
-/obj/structure/railing,
-/turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
 "pD" = (
 /obj/structure/railing,
 /obj/effect/decal/warning_stripes{
@@ -1765,27 +1877,6 @@
 	icon_state = "pattern_orange"
 	},
 /area)
-"pS" = (
-/obj/structure/table/reinforced,
-/obj/machinery/door_control{
-	id_tag = "Shoal Warden Privacy";
-	name = "Privacy Shutters";
-	pixel_x = -4;
-	pixel_y = 8
-	},
-/obj/item/device/megaphone{
-	pixel_y = -2;
-	pixel_x = 5;
-	name = "communication device"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
-"pT" = (
-/obj/structure/table/plastic,
-/turf/unsimulated/floor/asteroid/vox,
-/area/shoal)
 "pU" = (
 /obj/structure/closet/crate/bin,
 /obj/effect/decal/cleanable/dirt,
@@ -1803,24 +1894,27 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"qz" = (
-/obj/structure/railing{
-	dir = 4
+"pY" = (
+/obj/machinery/bot/farmbot{
+	desc = "Serving 25 to life for drowning a botanist.";
+	name = "Prisoner 545"
 	},
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/structure/bed/chair/plastic/plastic_chair{
-	dir = 4
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
-"qB" = (
-/obj/machinery/vending/hydronutrients,
 /turf/simulated/floor/plating/vox{
 	icon_state = "asteroidplating"
 	},
 /area/shoal)
+"qd" = (
+/turf/unsimulated/floor/asteroid/vox,
+/area)
+"qs" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area)
 "qC" = (
 /obj/structure/transit_tube{
 	icon_state = "E-NW";
@@ -1844,11 +1938,6 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"qO" = (
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "qQ" = (
 /obj/structure/railing{
 	dir = 4
@@ -1871,14 +1960,23 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level2)
-"qW" = (
-/obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/asteroid/vox,
-/area/shoal)
 "qX" = (
 /obj/prop/panelbroken,
 /turf/unsimulated/wall/shoal,
 /area/shoal)
+"rd" = (
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Cell 2 Door"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
 "re" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -1889,33 +1987,6 @@
 	icon_state = "dark"
 	},
 /area)
-"rf" = (
-/obj/machinery/flasher{
-	id_tag = "Shoal Cell 1";
-	name = "floor-mounted vision suppressor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
-"rg" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/table/plastic,
-/obj/machinery/computer/security/telescreen{
-	network = list("SS13");
-	name = "Detainee Entertainment Monitor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
 "rq" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 1
@@ -1924,9 +1995,17 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"ru" = (
-/obj/structure/sign/securearea,
-/turf/unsimulated/wall/shoal,
+"rs" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
 /area/shoal)
 "ry" = (
 /obj/machinery/firealarm{
@@ -1944,11 +2023,28 @@
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
 "rG" = (
-/obj/structure/railing{
+/obj/structure/window/reinforced/plasma,
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Warden Privacy"
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"rN" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/bed/chair/folding{
 	dir = 4
 	},
-/obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/asteroid/vox,
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
 /area)
 "rU" = (
 /obj/structure/transit_tube{
@@ -1983,10 +2079,10 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
-"sg" = (
+"sf" = (
 /obj/structure/window/reinforced/plasma,
 /obj/structure/window/reinforced/plasma{
-	dir = 8
+	dir = 4
 	},
 /obj/machinery/door/poddoor/shutters/rusty/preopen{
 	dir = 2;
@@ -1998,6 +2094,61 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
+"sj" = (
+/obj/structure/window/reinforced/plasma,
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Warden Privacy"
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
+"so" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Warden Privacy"
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
+"sv" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/bed/chair/folding{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
+"sx" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/bed/chair/plastic/plastic_chair{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area)
 "sz" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -2050,44 +2201,19 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
-"sM" = (
+"sQ" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/grille,
 /obj/machinery/door/poddoor/shutters/rusty/preopen{
 	dir = 2;
-	id_tag = "Shoal Cell 2 Door"
+	id_tag = "Shoal Warden Privacy"
 	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
-"sN" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 1;
-	invisibility = 101
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area/shoal)
-"sY" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/obj/prop/fan,
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "elevatorshaft"
-	},
-/area/fake_z/level2)
-"sZ" = (
-/obj/structure/railing,
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/shoal)
 "td" = (
 /turf/unsimulated/wall/shoal,
 /area/fake_z/level1)
@@ -2123,12 +2249,26 @@
 	icon_state = "dark"
 	},
 /area/shoal)
-"tJ" = (
-/obj/machinery/computer/arcade,
-/obj/effect/decal/cleanable/dirt,
+"tG" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 8
+	},
+/obj/structure/railing{
+	dir = 8
+	},
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
 	name = "concrete"
+	},
+/area/shoal)
+"tI" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 4
+	},
+/obj/structure/bed,
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area)
 "tK" = (
@@ -2145,23 +2285,6 @@
 	icon_state = "dark"
 	},
 /area/shoal)
-"tN" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/table/plastic,
-/obj/machinery/computer/security/telescreen{
-	network = list("SS13");
-	name = "Detainee Entertainment Monitor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "tQ" = (
 /obj/structure/railing{
 	dir = 1
@@ -2217,26 +2340,6 @@
 	},
 /area)
 "tY" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/obj/structure/railing/plasteel/pglass,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
-"ud" = (
-/obj/effect/gibspawner/blood{
-	bloodcolor = "#2299FC"
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area)
-"uh" = (
 /obj/structure/railing{
 	dir = 8
 	},
@@ -2247,6 +2350,43 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
+"tZ" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"ub" = (
+/obj/structure/holohoop{
+	dir = 1
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area)
+"uc" = (
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area)
+"ud" = (
+/obj/effect/gibspawner/blood{
+	bloodcolor = "#2299FC"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area)
 "ul" = (
 /obj/structure/window/reinforced{
 	dir = 4
@@ -2270,11 +2410,12 @@
 	dir = 4
 	},
 /area/fake_z/level1)
-"uy" = (
-/obj/machinery/portable_atmospherics/hydroponics/plastic,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+"uz" = (
+/obj/structure/bed/chair/office/dark{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
 	},
 /area/shoal)
 "uB" = (
@@ -2286,6 +2427,16 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
+"uC" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 4
+	},
+/obj/structure/railing/plasteel/pglass,
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "uS" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 8
@@ -2293,16 +2444,45 @@
 /turf/unsimulated/floor/vox/abyss,
 /area/fake_z/level3)
 "uT" = (
-/obj/structure/catwalk,
+/obj/structure/table/plastic,
+/obj/machinery/computer/security/telescreen{
+	network = list("SS13");
+	name = "Detainee Entertainment Monitor"
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area)
+"uV" = (
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
 /obj/structure/railing{
-	dir = 8
+	dir = 4
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32;
-	pixel_x = -16
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 6
 	},
-/turf/unsimulated/floor/vox/abyss,
-/area/shoal)
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
+"uX" = (
+/obj/prop/ladder/down{
+	pixel_y = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
+	},
+/area/fake_z/level2)
 "uY" = (
 /obj/structure/sign/chinese/access_restricted,
 /turf/unsimulated/wall/shoal,
@@ -2327,35 +2507,6 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
-"ve" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area/shoal)
-"vf" = (
-/obj/machinery/bot/farmbot{
-	desc = "Serving 25 to life for drowning a botanist.";
-	name = "Prisoner 545"
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area/shoal)
-"vi" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/bed/chair/folding{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "vj" = (
 /obj/item/device/flashlight/lantern/on{
 	invisibility = 101;
@@ -2378,29 +2529,27 @@
 	},
 /area)
 "vq" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
+/obj/structure/railing{
+	dir = 4
 	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
-"vr" = (
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/asteroid/vox,
+/area/shoal)
+"vC" = (
 /obj/structure/railing/plasteel/pglass{
 	dir = 1
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/bed/chair/folding{
+	dir = 8
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "techfloor";
 	icon = 'icons/shoal/techfloor.dmi'
 	},
-/area/shoal)
-"vC" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/railing,
-/turf/unsimulated/floor/asteroid/vox,
-/area/shoal)
+/area)
 "vG" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/wall/shoal,
@@ -2413,16 +2562,10 @@
 	icon_state = "pattern_bluer"
 	},
 /area/shoal)
-"vW" = (
-/obj/structure/closet/crate/hydroponics,
-/obj/item/weapon/minihoe,
-/obj/item/weapon/storage/bag/plants,
-/obj/item/device/analyzer/plant_analyzer,
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+"vO" = (
+/obj/machinery/computer/security,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
 	},
 /area)
 "wa" = (
@@ -2431,26 +2574,20 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"wd" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/wc/toilet{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "wf" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
 /area)
+"wg" = (
+/obj/machinery/biogenerator,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area/shoal)
 "wk" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -2482,11 +2619,27 @@
 	name = "wooden vox floor"
 	},
 /area/shoal)
-"wI" = (
+"ww" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+/obj/structure/hanging_lantern/dim{
+	dir = 4
 	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area)
+"wJ" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/bed/chair/plastic/plastic_chair{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid/vox,
 /area)
 "wK" = (
 /obj/structure/lattice{
@@ -2501,31 +2654,12 @@
 	walltype = ""
 	},
 /area/shoal)
-"wN" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
-"wP" = (
-/obj/structure/bed/chair/folding,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
 "wS" = (
 /obj/structure/hanging_lantern/dim,
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"wU" = (
-/obj/prop/metalwear2,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
-	},
-/area/shoal)
 "wY" = (
 /obj/prop/latticemess{
 	color = "#222222"
@@ -2535,6 +2669,18 @@
 	},
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"xa" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"xb" = (
+/obj/structure/railing,
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "xg" = (
 /obj/structure/transit_tube/station{
@@ -2557,36 +2703,6 @@
 /obj/structure/sign/directions/trader,
 /turf/unsimulated/wall/shoal,
 /area/shoal)
-"xx" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
-"xA" = (
-/obj/structure/rack,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area/shoal)
-"xE" = (
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
 "xF" = (
 /obj/structure/bed/chair/comfy/couch/left/lime{
 	dir = 1
@@ -2595,18 +2711,6 @@
 	icon_state = "shagcarpet-dark";
 	name = "shag carpet"
 	},
-/area/shoal)
-"xL" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/structure/bed/chair/plastic/plastic_chair{
-	dir = 4
-	},
-/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "xN" = (
 /obj/structure/railing{
@@ -2633,6 +2737,10 @@
 	nitrogen = 103.934
 	},
 /area/fake_z/level1)
+"xS" = (
+/obj/structure/railing,
+/turf/unsimulated/floor/asteroid/vox,
+/area)
 "xV" = (
 /obj/structure/extinguisher_cabinet{
 	pixel_y = -30
@@ -2641,6 +2749,12 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
+"xX" = (
+/obj/structure/holohoop,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area)
 "xY" = (
 /obj/structure/catwalk,
 /obj/prop/hanginglight{
@@ -2681,14 +2795,33 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level3)
-"yj" = (
-/obj/structure/table/plastic,
-/obj/machinery/computer/security/telescreen{
-	network = list("SS13");
-	name = "Detainee Entertainment Monitor"
+"yf" = (
+/obj/machinery/flasher{
+	id_tag = "Shoal Cell 2";
+	name = "floor-mounted vision suppressor"
 	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
+"yg" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
+	},
+/area/fake_z/level2)
+"yj" = (
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
+	},
+/area/shoal)
 "yk" = (
 /obj/structure/railing{
 	dir = 4
@@ -2716,6 +2849,18 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"yo" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/bed/chair/folding{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "yD" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -2726,54 +2871,49 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
-"yR" = (
-/obj/structure/sign/securearea,
-/turf/unsimulated/wall/shoal,
-/area)
-"yU" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 1;
-	invisibility = 101
+"yJ" = (
+/obj/structure/railing{
+	dir = 8
 	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
+/obj/structure/railing,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/fake_z/level1)
+"yK" = (
+/obj/item/weapon/stool,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area/shoal)
 "za" = (
 /obj/machinery/door/poddoor/shutters/rusty{
 	dir = 2
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
-"ze" = (
-/obj/machinery/seed_extractor,
-/obj/machinery/light/he{
-	dir = 1
+"zp" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
 	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+/obj/structure/railing{
+	dir = 8
 	},
+/turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"zf" = (
-/obj/structure/railing,
-/turf/unsimulated/floor/asteroid/vox,
-/area/shoal)
-"zg" = (
-/obj/structure/closet/crate/hydroponics,
-/obj/item/weapon/minihoe,
-/obj/item/weapon/storage/bag/plants,
-/obj/item/device/analyzer/plant_analyzer,
+"zs" = (
 /obj/structure/railing{
 	dir = 1
 	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+/obj/structure/railing{
+	dir = 8
 	},
-/area/shoal)
-"zm" = (
-/obj/item/weapon/beach_ball/holoball{
-	desc = "If you can't slam with the best, then jam with the rest."
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
 	},
 /area/shoal)
 "zu" = (
@@ -2782,7 +2922,9 @@
 	},
 /area/fake_z/level3)
 "zw" = (
-/obj/structure/dispenser,
+/obj/machinery/door/window{
+	dir = 8
+	},
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_bluer"
 	},
@@ -2810,12 +2952,25 @@
 	},
 /turf/simulated/floor/vox/shuttle,
 /area/shoal)
-"zL" = (
-/obj/machinery/computer/security,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
+"zT" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/hanging_lantern/dim{
+	dir = 8
 	},
-/area)
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area/shoal)
+"zV" = (
+/obj/machinery/portable_atmospherics/hydroponics/plastic,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area/shoal)
 "zX" = (
 /obj/machinery/door/airlock/sandstone{
 	name = "Old Airlock"
@@ -2892,18 +3047,6 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level2)
-"Ar" = (
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "loading_area";
-	tag = "icon-loading_area (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete";
-	icon = 'icons/turf/new_snow.dmi'
-	},
-/area)
 "As" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -2932,8 +3075,34 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/fake_z/level1)
+"AC" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/wc/toilet{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
 "AE" = (
 /turf/space,
+/area/shoal)
+"AH" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "AJ" = (
 /turf/unsimulated/wall/fakeglass{
@@ -2942,13 +3111,6 @@
 /area/shoal)
 "AK" = (
 /turf/unsimulated/floor/vox/plating/alt,
-/area)
-"AO" = (
-/obj/structure/rack,
-/obj/item/binoculars,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
 /area)
 "AP" = (
 /obj/structure/hanging_lantern/dim{
@@ -2959,12 +3121,30 @@
 	name = "concrete"
 	},
 /area)
+"AQ" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area/shoal)
 "Bc" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "hexacrete-239";
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
+"Bi" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
 "Bl" = (
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
@@ -2979,6 +3159,36 @@
 	icon_state = "dark"
 	},
 /area)
+"Bq" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/table/plastic,
+/obj/machinery/computer/security/telescreen{
+	network = list("SS13");
+	name = "Detainee Entertainment Monitor"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
+"Bz" = (
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Cell 1 Door"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
 "BE" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/folder/green{
@@ -2990,6 +3200,10 @@
 	name = "wooden vox floor"
 	},
 /area/shoal)
+"BH" = (
+/obj/structure/disposaloutlet/no_deconstruct/abysschute,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
 "BL" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -3000,14 +3214,10 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/fake_z/level1)
-"BU" = (
-/obj/machinery/door/airlock/maintenance_hatch,
-/turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
-"BV" = (
+"BS" = (
 /obj/machinery/door/poddoor/shutters/rusty/preopen{
 	dir = 2;
-	id_tag = "Shoal Cell 2 Door"
+	id_tag = "Shoal Cell 1 Door"
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -3017,6 +3227,10 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
+"BU" = (
+/obj/machinery/door/airlock/maintenance_hatch,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
 "Cc" = (
 /obj/structure/bed/chair/comfy/couch/turn/inward/lime{
 	dir = 8
@@ -3043,6 +3257,14 @@
 	icon_state = "dark vault stripe"
 	},
 /area)
+"Cj" = (
+/obj/machinery/computer/arcade,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area/shoal)
 "Cm" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -3057,6 +3279,16 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
+"Cp" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
+	},
+/obj/structure/bed,
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "Cx" = (
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -3089,6 +3321,18 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"CD" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area/shoal)
 "CF" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -3097,6 +3341,10 @@
 /obj/prop/hanginglight{
 	pixel_y = 32
 	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"CG" = (
+/obj/machinery/door/window,
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "CH" = (
@@ -3110,6 +3358,16 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
 	name = "concrete"
+	},
+/area)
+"CL" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
+	},
+/obj/structure/railing/plasteel/pglass,
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area)
 "CP" = (
@@ -3147,18 +3405,6 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"Dg" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 1
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
 "Dn" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -3167,64 +3413,40 @@
 /obj/structure/catwalk,
 /turf/unsimulated/floor/vox/abyss,
 /area/fake_z/level1)
+"Do" = (
+/obj/machinery/portable_atmospherics/hydroponics/plastic,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area)
 "Dr" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault corner"
 	},
 /area/shoal)
-"Dv" = (
-/obj/machinery/flasher_button{
-	pixel_y = 24;
-	pixel_x = -6;
-	id_tag = "Shoal Cell 1"
+"DI" = (
+/obj/structure/rack,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
 	},
+/area)
+"DJ" = (
+/obj/structure/table/reinforced,
 /obj/machinery/door_control{
-	pixel_x = 6;
-	pixel_y = 24;
-	id_tag = "Shoal Cell 1 Door";
-	name = "Entertainment Area Shutters"
+	id_tag = "Shoal Warden Privacy";
+	name = "Privacy Shutters";
+	pixel_x = -4;
+	pixel_y = 8
 	},
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
-"DA" = (
-/obj/prop/fan,
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)";
-	dir = 6
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "elevatorshaft"
-	},
-/area/fake_z/level2)
-"DE" = (
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
+/obj/item/device/megaphone{
+	pixel_y = -2;
+	pixel_x = 5;
+	name = "communication device"
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_bluer"
 	},
-/area)
+/area/shoal)
 "DL" = (
 /obj/structure/transit_tube{
 	icon_state = "E-SW";
@@ -3235,66 +3457,16 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"DM" = (
-/obj/item/clothing/mask/breath,
+"DQ" = (
 /obj/structure/rack,
-/obj/item/clothing/mask/breath{
-	pixel_x = -2;
-	pixel_y = 2
-	},
-/obj/item/clothing/mask/breath{
-	pixel_x = 2;
-	pixel_y = -2
-	},
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_bluer"
 	},
-/area)
-"DN" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
-"DS" = (
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "DT" = (
 /obj/structure/hanging_lantern/dim,
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
-"DU" = (
-/obj/machinery/computer/arcade,
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
-"DV" = (
-/obj/structure/closet/secure_closet/brig{
-	req_access = null
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "DZ" = (
 /obj/structure/transit_tube{
 	icon_state = "N-SE";
@@ -3304,41 +3476,10 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"Ea" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area/shoal)
 "Eh" = (
 /obj/structure/railing,
 /obj/structure/railing{
 	dir = 1
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
-"Em" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area)
@@ -3354,6 +3495,13 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level3)
+"Ew" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1;
+	invisibility = 101
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area)
 "Ez" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -3388,24 +3536,6 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"EL" = (
-/obj/item/weapon/stool,
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area)
-"EN" = (
-/obj/machinery/flasher{
-	id_tag = "Shoal Cell 2";
-	name = "floor-mounted vision suppressor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "EP" = (
 /obj/structure/hanging_lantern{
 	dir = 1
@@ -3425,10 +3555,24 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"EX" = (
-/obj/machinery/portable_atmospherics/hydroponics/plastic,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+"ER" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1;
+	invisibility = 101
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/shoal)
+"ET" = (
+/obj/structure/railing,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level1)
+"Ff" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
 "Fj" = (
@@ -3460,45 +3604,11 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"Fu" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "loading_area";
-	tag = "icon-loading_area"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
-"FF" = (
-/obj/machinery/door/window/plasma/secure{
-	dir = 2
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "FK" = (
 /obj/prop/shoalwindow{
 	icon_state = "shoalwindow"
 	},
 /turf/unsimulated/wall/shoal,
-/area/shoal)
-"FL" = (
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Cell 1 Door"
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
 /area/shoal)
 "FN" = (
 /obj/structure/window/reinforced{
@@ -3548,38 +3658,13 @@
 	icon_state = "rusty_reinforced_wall-10"
 	},
 /area/shoal)
-"FW" = (
-/obj/item/clothing/mask/breath,
-/obj/structure/rack,
-/obj/item/clothing/mask/breath{
-	pixel_x = -2;
-	pixel_y = 2
-	},
-/obj/item/clothing/mask/breath{
-	pixel_x = 2;
-	pixel_y = -2
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area/shoal)
-"FX" = (
+"FY" = (
 /obj/structure/railing{
 	dir = 4
 	},
-/obj/structure/railing,
+/obj/structure/hanging_lantern/dim,
 /turf/unsimulated/floor/asteroid/vox,
 /area)
-"Gd" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/obj/structure/railing/plasteel/pglass,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
 "Gm" = (
 /obj/structure/hanging_lantern,
 /turf/unsimulated/floor/vox{
@@ -3659,26 +3744,6 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"Hd" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
-"Hn" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area/shoal)
 "Hq" = (
 /obj/machinery/door/airlock/sandstone{
 	name = "Old Airlock"
@@ -3702,23 +3767,6 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"Hz" = (
-/obj/structure/catwalk,
-/obj/prop/hanginglight{
-	pixel_y = 32
-	},
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/railing{
-	dir = 8
-	},
-/obj/structure/railing,
-/obj/prop/ladder/down{
-	pixel_y = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level2)
 "HD" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -3736,11 +3784,17 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level2)
-"HI" = (
-/obj/structure/table/plastic,
-/obj/item/weapon/storage/fancy/beer_box,
-/turf/unsimulated/floor/asteroid/vox,
-/area)
+"HJ" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
 "HK" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -3770,12 +3824,29 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"HQ" = (
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
 "HS" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
 	dir = 8
 	},
 /turf/unsimulated/floor/vox/abyss,
+/area/shoal)
+"HU" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/bed/chair/plastic/plastic_chair{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "Ia" = (
 /obj/structure/disposaloutlet/no_deconstruct/abysschute,
@@ -3800,21 +3871,6 @@
 	},
 /turf/simulated/floor/vox/shuttle,
 /area/shoal)
-"Ie" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
 "Ig" = (
 /obj/item/trash/chips/donitos,
 /turf/unsimulated/floor/vox{
@@ -3823,27 +3879,20 @@
 	icon = 'icons/turf/new_snow.dmi'
 	},
 /area)
-"Io" = (
-/obj/machinery/flasher_button{
-	pixel_y = 24;
-	pixel_x = -6;
-	id_tag = "Shoal Cell 1"
-	},
-/obj/machinery/door_control{
-	pixel_x = 6;
-	pixel_y = 24;
-	id_tag = "Shoal Cell 1 Door";
-	name = "Entertainment Area Shutters"
-	},
+"Ij" = (
 /obj/effect/decal/warning_stripes{
-	dir = 8;
+	icon_state = "bot"
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/railing,
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
+	icon_state = "elevatorshaft"
 	},
-/area/shoal)
+/area/fake_z/level2)
 "Iw" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 1
@@ -3852,10 +3901,31 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
-"IL" = (
-/obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/asteroid/vox,
+"IH" = (
+/obj/structure/closet/crate/hydroponics,
+/obj/item/weapon/minihoe,
+/obj/item/weapon/storage/bag/plants,
+/obj/item/device/analyzer/plant_analyzer,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
 /area)
+"IK" = (
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Cell 2 Door"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "IR" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
@@ -3876,29 +3946,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
-"IW" = (
-/obj/structure/rack,
-/obj/item/clothing/head/helmet/space/plasmaman/prisoner,
-/obj/item/clothing/suit/space/plasmaman/prisoner,
-/obj/item/clothing/suit/space/plasmaman/prisoner{
-	pixel_x = 2;
-	pixel_y = -2
-	},
-/obj/item/clothing/head/helmet/space/plasmaman/prisoner{
-	pixel_x = 2;
-	pixel_y = -2
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area/shoal)
-"Ji" = (
-/obj/structure/railing/plasteel/pglass,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "Jl" = (
 /turf/unsimulated/wall/shoal,
 /area)
@@ -3916,6 +3963,13 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"Jw" = (
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area/shoal)
 "JB" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 1;
@@ -3930,6 +3984,14 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"JH" = (
+/obj/machinery/computer/arcade,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area)
 "JK" = (
 /obj/structure/railing{
 	dir = 4
@@ -3947,12 +4009,6 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
-"JN" = (
-/turf/simulated/floor/vox{
-	icon_state = "ramptop";
-	dir = 8
-	},
-/area/fake_z/level1)
 "JW" = (
 /obj/structure/lattice{
 	fake_z_exclude = 1
@@ -3966,6 +4022,15 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"JX" = (
+/obj/machinery/seed_extractor,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area/shoal)
 "Ka" = (
 /obj/machinery/door/airlock/sandstone{
 	name = "Old Airlock"
@@ -3974,51 +4039,20 @@
 	icon_state = "pattern_orange"
 	},
 /area)
-"Kd" = (
-/obj/structure/rack,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
+"Kc" = (
+/obj/machinery/portable_atmospherics/hydroponics/plastic,
+/obj/structure/hanging_lantern/dim{
+	dir = 1;
+	invisibility = 101
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
 	},
 /area)
-"Ke" = (
-/obj/machinery/door/window/plasma/secure{
-	dir = 2
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
 "Kh" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "hexacrete-157";
 	icon = 'icons/shoal/hexacrete.dmi'
-	},
-/area/shoal)
-"Ki" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
-	},
-/area/fake_z/level1)
-"Kj" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/bed/chair/folding{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
 "Km" = (
@@ -4027,13 +4061,6 @@
 	walltype = ""
 	},
 /area)
-"Ko" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
 "Kq" = (
 /turf/space,
 /area)
@@ -4077,20 +4104,21 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
-"KG" = (
-/obj/structure/railing/plasteel/pglass{
+"KI" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
+/obj/structure/grille,
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Warden Privacy"
 	},
-/obj/structure/wc/toilet{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
+/turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "KM" = (
 /obj/structure/railing{
@@ -4128,25 +4156,24 @@
 	walltype = ""
 	},
 /area/shoal)
-"KU" = (
+"KY" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 1;
 	pixel_y = 1
 	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
+/obj/structure/window/reinforced{
+	dir = 8
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/shoal)
-"Lc" = (
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
+/area)
+"Lf" = (
+/obj/structure/rack,
+/obj/item/binoculars,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_bluer"
 	},
@@ -4166,6 +4193,31 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"Lq" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/asteroid/vox,
+/area)
+"Ls" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 10
+	},
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
 "Lx" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -4197,6 +4249,17 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
+"LD" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
 "LE" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -4209,42 +4272,11 @@
 	nitrogen = 103.934
 	},
 /area/fake_z/level1)
-"LF" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/obj/prop/fan,
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)";
-	dir = 10
-	},
+"LH" = (
+/obj/prop/ladder/up,
 /obj/structure/railing,
-/turf/unsimulated/floor/vox{
-	icon_state = "elevatorshaft"
-	},
-/area/fake_z/level2)
-"LL" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area)
-"LM" = (
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
+/area/fake_z/level1)
 "LU" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -4254,14 +4286,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
-"LW" = (
-/obj/structure/bed/chair/office/dark{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "Mf" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -4295,20 +4319,31 @@
 	dir = 1
 	},
 /area/shoal)
-"Mr" = (
-/obj/structure/rack,
-/obj/item/weapon/storage/box/handcuffs{
-	pixel_x = 4;
-	pixel_y = -4
+"Mu" = (
+/obj/structure/table/plastic,
+/turf/unsimulated/floor/asteroid/vox,
+/area/shoal)
+"My" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
 	},
-/obj/item/clothing/head/warden{
-	pixel_x = -2
-	},
-/obj/item/weapon/melee/classic_baton,
+/obj/structure/railing/plasteel/pglass,
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
 	},
-/area)
+/area/shoal)
+"Mz" = (
+/obj/structure/sign/deathsposal{
+	pixel_y = 32
+	},
+/obj/structure/rack,
+/obj/item/weapon/storage/firstaid/regular{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
 "MD" = (
 /obj/structure/transit_tube{
 	icon_state = "E-NW";
@@ -4318,6 +4353,15 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"ME" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area)
 "MK" = (
 /obj/machinery/vending/offlicence,
 /obj/effect/decal/warning_stripes{
@@ -4351,28 +4395,8 @@
 	plane = -32762
 	},
 /area/shoal)
-"MX" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area/shoal)
 "Na" = (
 /turf/unsimulated/floor/vox/carpet,
-/area/shoal)
-"Nb" = (
-/obj/structure/rack,
-/obj/item/weapon/storage/box/handcuffs{
-	pixel_x = 4;
-	pixel_y = -4
-	},
-/obj/item/clothing/head/warden{
-	pixel_x = -2
-	},
-/obj/item/weapon/melee/classic_baton,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
 /area/shoal)
 "Nc" = (
 /obj/structure/catwalk,
@@ -4387,26 +4411,14 @@
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
 "Nd" = (
-/obj/prop/metalwear3,
+/obj/structure/dispenser,
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
+	icon_state = "pattern_bluer"
 	},
 /area/shoal)
 "Ng" = (
 /turf/unsimulated/floor/vox/abyss,
 /area)
-"Nh" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
 "Nl" = (
 /obj/prop/latticemess{
 	color = "#333333"
@@ -4423,6 +4435,17 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
+"Nr" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
 "Ns" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "hexacrete-110";
@@ -4454,20 +4477,11 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
-"Ny" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/wc/toilet{
+"NH" = (
+/obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
+/turf/unsimulated/floor/asteroid/vox,
 /area)
 "NI" = (
 /obj/effect/decal/warning_stripes{
@@ -4535,11 +4549,19 @@
 	},
 /turf/space,
 /area/fake_z/level2)
-"Oe" = (
+"Oa" = (
 /obj/structure/table/plastic,
-/obj/item/weapon/storage/fancy/beer_box,
 /turf/unsimulated/floor/asteroid/vox,
-/area/shoal)
+/area)
+"Oc" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
 "Og" = (
 /obj/item/device/flashlight/lantern/on{
 	invisibility = 101;
@@ -4598,6 +4620,12 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
+"Om" = (
+/obj/prop/metalwear3,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
 "Oq" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -4612,6 +4640,16 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
+"Os" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
 "Ot" = (
 /obj/structure/railing{
 	dir = 4
@@ -4631,6 +4669,23 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
+"Ow" = (
+/obj/structure/table/reinforced,
+/obj/machinery/door_control{
+	id_tag = "Shoal Warden Privacy";
+	name = "Privacy Shutters";
+	pixel_x = -4;
+	pixel_y = 8
+	},
+/obj/item/device/megaphone{
+	pixel_y = -2;
+	pixel_x = 5;
+	name = "communication device"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
 "OB" = (
 /obj/structure/lattice{
 	fake_z_exclude = 1
@@ -4654,18 +4709,19 @@
 	name = "wooden vox floor"
 	},
 /area/shoal)
-"OD" = (
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/structure/railing{
-	dir = 8
-	},
+"OH" = (
+/obj/structure/railing/plasteel/pglass,
 /turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
+"OJ" = (
+/turf/simulated/floor/vox{
+	icon_state = "ramptop";
+	dir = 8
+	},
+/area/fake_z/level1)
 "ON" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -4692,18 +4748,20 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
+"OT" = (
+/obj/structure/closet/secure_closet/brig{
+	req_access = null
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
 "OX" = (
 /obj/item/trash/cigbutt/bidibutt,
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"OZ" = (
-/obj/structure/holohoop,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area/shoal)
 "Pg" = (
 /obj/structure/flora/pottedplant/random,
 /obj/effect/decal/warning_stripes/siding,
@@ -4735,13 +4793,6 @@
 /obj/effect/decal/wallpapers,
 /turf/unsimulated/wall/shoal,
 /area/shoal)
-"PB" = (
-/obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
 "PC" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
@@ -4749,15 +4800,6 @@
 	icon_state = "concrete";
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
-	},
-/area)
-"PH" = (
-/obj/machinery/biogenerator,
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
 	},
 /area)
 "PM" = (
@@ -4772,59 +4814,60 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
+"PQ" = (
+/obj/machinery/door/airlock/hatch,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
+"PT" = (
+/obj/machinery/vending/voxseeds,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area)
+"PU" = (
+/obj/structure/rack,
+/obj/item/clothing/head/helmet/space/plasmaman/prisoner,
+/obj/item/clothing/suit/space/plasmaman/prisoner,
+/obj/item/clothing/suit/space/plasmaman/prisoner{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/obj/item/clothing/head/helmet/space/plasmaman/prisoner{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area/shoal)
 "PV" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "shagcarpet-dark";
 	name = "shag carpet"
 	},
 /area/shoal)
-"PW" = (
-/obj/machinery/flasher_button{
-	pixel_y = 24;
-	pixel_x = 6;
-	id_tag = "Shoal Cell 2"
+"Qg" = (
+/obj/structure/catwalk,
+/obj/prop/hanginglight{
+	pixel_y = 32
 	},
-/obj/machinery/door_control{
-	pixel_x = -6;
-	pixel_y = 24;
-	id_tag = "Shoal Cell 2 Door";
-	name = "Entertainment Area Shutters"
+/obj/structure/railing{
+	dir = 4
 	},
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
+/obj/structure/railing{
+	dir = 8
 	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level2)
+"Qk" = (
+/obj/structure/railing/plasteel/pglass,
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area)
-"Qb" = (
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "loading_area";
-	tag = "icon-loading_area (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete";
-	icon = 'icons/turf/new_snow.dmi'
-	},
-/area/shoal)
-"Ql" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/obj/prop/fan,
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/obj/structure/railing,
-/turf/unsimulated/floor/vox{
-	icon_state = "elevatorshaft"
-	},
-/area/fake_z/level2)
 "Qo" = (
 /obj/machinery/camera{
 	network = list("SHOAL")
@@ -4841,15 +4884,6 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"Qs" = (
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
 "Qt" = (
 /obj/structure/transit_tube{
 	icon_state = "NE-SW";
@@ -4865,12 +4899,16 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"Qv" = (
-/obj/structure/railing{
-	dir = 1
+"Qu" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 4
 	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
+/obj/structure/bed,
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "Qw" = (
 /obj/structure/railing{
 	dir = 4
@@ -4883,14 +4921,6 @@
 "QC" = (
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
-"QJ" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete";
-	icon = 'icons/turf/new_snow.dmi'
-	},
-/area/shoal)
 "QK" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 8
@@ -4899,19 +4929,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"QN" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
 "QX" = (
 /obj/structure/bed/chair/comfy/black{
 	dir = 1
@@ -4921,6 +4938,18 @@
 	dir = 1
 	},
 /area/shoal)
+"QZ" = (
+/obj/machinery/door/window/plasma/secure{
+	dir = 2
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
 "Rb" = (
 /obj/machinery/vending/coffee,
 /obj/effect/decal/warning_stripes/siding,
@@ -4935,22 +4964,16 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"Rh" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/hanging_lantern/dim{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area)
 "Ri" = (
 /obj/structure/railing,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level3)
+"Rm" = (
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/asteroid/vox,
+/area/shoal)
 "Ro" = (
 /obj/structure/catwalk,
 /obj/structure/railing,
@@ -4962,18 +4985,20 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
+"Rp" = (
+/obj/machinery/door/airlock/hatch,
+/turf/space,
+/area/shoal)
 "Rr" = (
 /turf/unsimulated/wall/shoal{
 	plane = -32762
 	},
 /area/fake_z/abyss)
-"Ry" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
+"RC" = (
+/obj/structure/bed/chair/folding,
 /turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
+	icon_state = "concrete";
+	name = "concrete"
 	},
 /area/shoal)
 "RF" = (
@@ -4992,12 +5017,6 @@
 	name = "wooden vox floor"
 	},
 /area/shoal)
-"RH" = (
-/obj/structure/hanging_lantern{
-	fake_z_exclude = 1
-	},
-/turf/unsimulated/floor/vox/abyss,
-/area/shoal)
 "RK" = (
 /obj/structure/bed/chair{
 	dir = 1
@@ -5006,14 +5025,40 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
-"RN" = (
-/obj/structure/bed/chair/office/dark{
+"RL" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
 	dir = 1
 	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
+"RR" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
+	},
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
+"RT" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/table/plastic,
+/obj/machinery/computer/security/telescreen{
+	network = list("SS13");
+	name = "Detainee Entertainment Monitor"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area)
 "Se" = (
 /obj/item/device/flashlight/lantern/on,
 /turf/unsimulated/floor/asteroid/vox,
@@ -5025,31 +5070,13 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"Sj" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area/shoal)
-"Sm" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "loading_area";
-	tag = "icon-loading_area"
-	},
+"Ss" = (
+/obj/structure/rack,
+/obj/item/binoculars,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_bluer"
 	},
-/area/shoal)
+/area)
 "Su" = (
 /obj/machinery/door/airlock/sandstone{
 	name = "Information Retrieval Office"
@@ -5057,6 +5084,18 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
+/area/shoal)
+"Sy" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/bed/chair/plastic/plastic_chair{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "SD" = (
 /obj/structure/transit_tube{
@@ -5107,29 +5146,45 @@
 	},
 /turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
-"Tc" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+"Tg" = (
+/obj/machinery/flasher_button{
+	pixel_y = 24;
+	pixel_x = -6;
+	id_tag = "Shoal Cell 1"
 	},
-/obj/structure/window/reinforced{
-	dir = 8
+/obj/machinery/door_control{
+	pixel_x = 6;
+	pixel_y = 24;
+	id_tag = "Shoal Cell 1 Door";
+	name = "Entertainment Area Shutters"
 	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor/vox/plating/alt,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
+"Th" = (
+/obj/structure/holohoop,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
 /area/shoal)
-"Td" = (
+"Ti" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "loading_area";
+	tag = "icon-loading_area (NORTH)"
+	},
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area/shoal)
+/area)
 "Tj" = (
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
@@ -5141,6 +5196,16 @@
 	},
 /turf/simulated/floor/vox/shuttle,
 /area/shoal)
+"Tp" = (
+/obj/machinery/flasher{
+	id_tag = "Shoal Cell 1";
+	name = "floor-mounted vision suppressor"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "Tq" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/vox{
@@ -5148,16 +5213,9 @@
 	name = "concrete"
 	},
 /area/fake_z/level2)
-"Tt" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
+"Tv" = (
+/obj/structure/sign/securearea,
+/turf/unsimulated/wall/shoal,
 /area)
 "Tx" = (
 /turf/unsimulated/floor/vox{
@@ -5175,13 +5233,16 @@
 /obj/structure/sign/parking,
 /turf/unsimulated/wall/shoal,
 /area/shoal)
-"TK" = (
-/obj/structure/bed/chair/folding,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
+"TM" = (
+/obj/structure/catwalk,
+/obj/structure/railing{
+	dir = 4
 	},
-/area)
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/fake_z/level2)
 "TN" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -5214,16 +5275,32 @@
 	icon_state = "rusty_reinforced_wall-9"
 	},
 /area/shoal)
-"TY" = (
-/obj/machinery/portable_atmospherics/hydroponics/plastic,
-/obj/structure/hanging_lantern/dim{
-	dir = 1;
-	invisibility = 101
+"Ub" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
 	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"Uc" = (
+/obj/structure/table/plastic,
+/obj/item/weapon/storage/fancy/beer_box,
+/turf/unsimulated/floor/asteroid/vox,
 /area)
+"Um" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/wc/toilet{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "Uv" = (
 /turf/unsimulated/wall/fakeglass{
 	dir = 8;
@@ -5290,47 +5367,26 @@
 	icon_state = "dark vault stripe"
 	},
 /area/shoal)
-"Vg" = (
+"Vm" = (
 /obj/structure/rack,
-/obj/item/clothing/head/helmet/space/plasmaman/prisoner,
-/obj/item/clothing/suit/space/plasmaman/prisoner,
-/obj/item/clothing/suit/space/plasmaman/prisoner{
-	pixel_x = 2;
-	pixel_y = -2
+/obj/item/weapon/storage/box/handcuffs{
+	pixel_x = 4;
+	pixel_y = -4
 	},
-/obj/item/clothing/head/helmet/space/plasmaman/prisoner{
-	pixel_x = 2;
-	pixel_y = -2
+/obj/item/clothing/head/warden{
+	pixel_x = -2
 	},
+/obj/item/weapon/melee/classic_baton,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_bluer"
 	},
-/area)
-"Vt" = (
-/obj/structure/holohoop{
-	dir = 1
-	},
+/area/shoal)
+"Vw" = (
+/obj/machinery/vending/hydronutrients,
 /turf/simulated/floor/plating/vox{
 	icon_state = "asteroidplating"
 	},
-/area/shoal)
-"Vz" = (
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/obj/prop/fan,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "elevatorshaft"
-	},
-/area/fake_z/level2)
+/area)
 "VD" = (
 /obj/prop/ladder/down{
 	pixel_y = 8
@@ -5345,27 +5401,25 @@
 	icon = 'icons/turf/new_snow.dmi'
 	},
 /area)
-"VF" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/table/plastic,
-/obj/machinery/computer/security/telescreen{
-	network = list("SS13");
-	name = "Detainee Entertainment Monitor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
 "VH" = (
 /obj/structure/reagent_dispensers/water_cooler,
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
+"VI" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Warden Privacy"
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area)
 "VK" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark"
@@ -5377,19 +5431,16 @@
 	icon_state = "fakewindows2"
 	},
 /area/shoal)
-"VQ" = (
-/obj/structure/catwalk,
-/obj/prop/hanginglight{
-	pixel_y = 32
+"VV" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
 	},
-/obj/structure/railing{
-	dir = 4
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
 	},
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level2)
+/area/shoal)
 "VX" = (
 /obj/item/ammo_storage/magazine/mc9mm/empty,
 /turf/unsimulated/floor/vox{
@@ -5399,21 +5450,15 @@
 	},
 /area)
 "Wa" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/hanging_lantern/dim{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
 	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
+/area/shoal)
 "Wi" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
@@ -5456,16 +5501,6 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
-"WF" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/obj/structure/railing/plasteel/pglass,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "WI" = (
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
@@ -5482,21 +5517,26 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"WL" = (
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+"WN" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
+"WO" = (
+/obj/machinery/recharger/defibcharger{
+	pixel_y = 32
+	},
+/obj/structure/disposaloutlet/no_deconstruct/abysschute,
+/obj/structure/disposaloutlet/no_deconstruct/abysschute,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
 	},
 /area/shoal)
-"WO" = (
-/obj/structure/catwalk,
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/abyss,
-/area)
 "WP" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -5522,27 +5562,9 @@
 	icon_state = "dark"
 	},
 /area)
-"WW" = (
-/obj/prop/ladder/down{
-	pixel_y = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete";
-	icon = 'icons/turf/new_snow.dmi'
-	},
-/area/fake_z/level2)
-"WZ" = (
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/bed/chair/plastic/plastic_chair{
-	dir = 1
-	},
-/turf/unsimulated/floor/asteroid/vox,
+"WV" = (
+/obj/structure/sign/securearea,
+/turf/unsimulated/wall/shoal,
 /area/shoal)
 "Xa" = (
 /obj/structure/hanging_lantern/dim{
@@ -5550,18 +5572,6 @@
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/fake_z/level3)
-"Xc" = (
-/obj/structure/window/reinforced/plasma,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area/shoal)
 "Xe" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "techfloor";
@@ -5569,12 +5579,11 @@
 	},
 /area/shoal)
 "Xk" = (
-/obj/machinery/seed_extractor,
-/obj/machinery/light/he{
-	dir = 1
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+/obj/item/weapon/stool,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
 	},
 /area)
 "Xp" = (
@@ -5589,6 +5598,15 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
+"Xr" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "loading_area";
+	tag = "icon-loading_area"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area)
 "Xu" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -5615,15 +5633,6 @@
 	},
 /turf/unsimulated/floor/vox,
 /area/shoal)
-"Xy" = (
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area/shoal)
 "Xz" = (
 /obj/machinery/recharger/defibcharger{
 	pixel_y = 32
@@ -5631,6 +5640,15 @@
 /obj/structure/disposaloutlet/no_deconstruct/abysschute,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"XG" = (
+/obj/structure/bed/chair/folding{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
 	},
 /area/shoal)
 "XJ" = (
@@ -5681,16 +5699,23 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"XY" = (
-/obj/machinery/vending/voxseeds,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+"XW" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
 	},
-/area/shoal)
-"XZ" = (
-/obj/structure/railing,
-/turf/unsimulated/floor/asteroid/vox,
-/area)
+/obj/prop/fan,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "elevatorshaft"
+	},
+/area/fake_z/level2)
 "Yb" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark"
@@ -5716,6 +5741,14 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
+"Yt" = (
+/obj/item/weapon/beach_ball/holoball{
+	desc = "If you can't slam with the best, then jam with the rest."
+	},
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area/shoal)
 "Yw" = (
 /obj/machinery/vending/discount,
 /obj/effect/decal/warning_stripes{
@@ -5723,30 +5756,6 @@
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
-	},
-/area/shoal)
-"YF" = (
-/turf/unsimulated/floor/asteroid/vox,
-/area)
-"YH" = (
-/obj/machinery/flasher_button{
-	pixel_y = 24;
-	pixel_x = 6;
-	id_tag = "Shoal Cell 2"
-	},
-/obj/machinery/door_control{
-	pixel_x = -6;
-	pixel_y = 24;
-	id_tag = "Shoal Cell 2 Door";
-	name = "Entertainment Area Shutters"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
 	},
 /area/shoal)
 "YL" = (
@@ -5765,6 +5774,20 @@
 /obj/item/device/flashlight/lantern/on,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_bluer"
+	},
+/area/shoal)
+"YO" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"YQ" = (
+/obj/machinery/vending/hydronutrients,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
 	},
 /area/shoal)
 "YR" = (
@@ -5792,6 +5815,18 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
+"YU" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "loading_area";
+	tag = "icon-loading_area (NORTH)"
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
+	},
+/area/shoal)
 "YX" = (
 /obj/prop/latticemess{
 	color = "#444444"
@@ -5799,29 +5834,23 @@
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
-"YZ" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
+"YY" = (
+/obj/structure/holohoop{
+	dir = 1
 	},
-/obj/structure/bed,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area/shoal)
+"Za" = (
 /turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
+	icon_state = "concrete";
+	name = "concrete"
 	},
-/area)
+/area/shoal)
 "Zf" = (
 /turf/unsimulated/floor/vox/abyss,
 /area/fake_z/level3)
-"Zl" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/obj/structure/bed,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area/shoal)
 "Zn" = (
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -5833,6 +5862,22 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area)
+"Zw" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/grille,
+/obj/machinery/door/poddoor/shutters/rusty/preopen{
+	dir = 2;
+	id_tag = "Shoal Warden Privacy"
+	},
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
 "Zz" = (
 /obj/structure/transit_tube{
 	fake_z_exclude = 1;
@@ -5846,15 +5891,27 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"ZE" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 1
+"ZC" = (
+/obj/structure/rack,
+/obj/item/weapon/storage/box/handcuffs{
+	pixel_x = 4;
+	pixel_y = -4
 	},
+/obj/item/clothing/head/warden{
+	pixel_x = -2
+	},
+/obj/item/weapon/melee/classic_baton,
 /turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
+	icon_state = "pattern_bluer"
 	},
 /area)
+"ZG" = (
+/obj/machinery/portable_atmospherics/hydroponics/plastic,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
+/area/shoal)
 "ZR" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -5879,13 +5936,6 @@
 	icon_state = "dark"
 	},
 /area/shoal)
-"ZY" = (
-/obj/machinery/portable_atmospherics/hydroponics/plastic,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 
 (1,1,1) = {"
 Kq
@@ -13961,7 +14011,7 @@ JC
 JC
 JC
 JC
-Mh
+JC
 Mh
 Mh
 Mh
@@ -14263,7 +14313,7 @@ JC
 JC
 JC
 JC
-Mh
+JC
 Mh
 Mh
 Mh
@@ -14565,7 +14615,7 @@ JC
 JC
 JC
 JC
-Mh
+JC
 Mh
 Mh
 Mh
@@ -14856,6 +14906,18 @@ Kq
 Kq
 Kq
 fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
@@ -14871,18 +14933,6 @@ Mh
 Mh
 Mh
 Mh
-Mh
-AE
-AE
-AE
-AE
-AE
-AE
-AE
-AE
-AE
-AE
-AE
 fq
 fq
 fq
@@ -14897,7 +14947,7 @@ Jl
 Jl
 fq
 fq
-bD
+yg
 Wi
 VL
 Ns
@@ -15157,32 +15207,32 @@ Kq
 Kq
 Kq
 Kq
-Kq
+fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-OD
-xE
-oN
-xE
-xE
-oN
-xE
-xE
-pt
+zs
+oF
+tG
+oF
+oF
+tG
+oF
+oF
+zT
 jS
 jS
 fq
@@ -15199,7 +15249,7 @@ Jl
 Jl
 fq
 fq
-WW
+uX
 Wi
 AJ
 WQ
@@ -15459,34 +15509,34 @@ Kq
 Kq
 Kq
 Kq
-Kq
+fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Qs
-WL
-WL
-WL
-WL
-WL
-WL
-MX
-MX
-WL
-je
+AQ
+cD
+cD
+cD
+cD
+cD
+cD
+eN
+eN
+cD
+Za
 fq
 Jl
 Jl
@@ -15761,34 +15811,34 @@ Kq
 Kq
 Kq
 Kq
-Kq
+fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Qs
-WL
-WL
-WL
-WL
-WL
-MX
-MX
-WL
-WL
-je
+AQ
+cD
+cD
+cD
+cD
+cD
+eN
+eN
+cD
+cD
+Za
 fq
 fq
 fq
@@ -16063,34 +16113,34 @@ Kq
 Kq
 Kq
 Kq
-Kq
+fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Dg
-OZ
-WL
-WL
-WL
-zm
-WL
-WL
-WL
-Vt
-PB
+CD
+Th
+cD
+cD
+cD
+Yt
+cD
+cD
+cD
+YY
+Jw
 fq
 Mh
 Mh
@@ -16100,10 +16150,10 @@ Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
+fq
+fq
+fq
+fq
 fq
 lf
 lf
@@ -16365,34 +16415,34 @@ Kq
 Kq
 Kq
 Kq
-Kq
+fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Qs
-WL
-WL
-WL
-MX
-WL
-WL
-WL
-MX
-WL
-je
+AQ
+cD
+cD
+cD
+eN
+cD
+cD
+cD
+eN
+cD
+Za
 fq
 Mh
 Mh
@@ -16402,10 +16452,10 @@ Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
+fq
+BH
+bM
+Ub
 fq
 lf
 lf
@@ -16667,47 +16717,47 @@ Kq
 Kq
 Kq
 Kq
-Kq
+fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Qs
-WL
-MX
-MX
-WL
-WL
-WL
-WL
-WL
-MX
-Ko
+AQ
+cD
+eN
+eN
+cD
+cD
+cD
+cD
+cD
+eN
+oz
 fq
 Mh
 Mh
-KG
-Ry
-Gd
+Um
+RR
+My
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
+fq
+Mz
+QC
+QC
 fq
 lf
 lf
@@ -16969,47 +17019,47 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
 fq
-je
-Ko
-lU
-Ko
-je
-je
-Td
-ga
-ga
-je
-Ko
+Za
+oz
+Wa
+oz
+Za
+Za
+yj
+XG
+XG
+Za
+oz
 fq
 Mh
 Mh
-Nh
+rs
 Xe
-fe
+OH
 Mh
 Mh
 fq
 fq
 fq
-fq
-fq
+CG
+cZ
 fq
 lf
 lf
@@ -17046,9 +17096,9 @@ lf
 lf
 lf
 lf
-wU
+kw
 lf
-Nd
+Om
 lf
 lf
 fq
@@ -17271,19 +17321,19 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
@@ -17291,28 +17341,28 @@ fq
 fq
 fq
 fq
-qB
-Td
-Td
-Td
-je
-je
-Td
-Qb
-FL
+YQ
+yj
+yj
+yj
+Za
+Za
+yj
+YU
+BS
 jU
 jU
 Xe
-lO
-Ke
+Tp
+no
 jU
 jU
-bt
-Sm
+kY
+gd
 Tx
 Tx
 Tx
-eV
+Rp
 lf
 lf
 fq
@@ -17573,19 +17623,19 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
@@ -17593,26 +17643,26 @@ Mh
 fq
 fq
 fq
-XY
-MX
-QJ
-Td
-Td
-Td
-Td
-PB
+el
+eN
+do
+yj
+yj
+yj
+yj
+Jw
 fq
 Mh
 Mh
-ie
+yo
 Xe
-fe
+OH
 Mh
 Mh
 fq
-Io
-Lc
-Lc
+ou
+bb
+bb
 fq
 fq
 lf
@@ -17875,19 +17925,19 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+fq
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
@@ -17896,27 +17946,27 @@ Mh
 fq
 fq
 fq
-vf
-uy
-uy
-EX
-Td
-Td
-je
-Hn
+pY
+ZG
+ZG
+zV
+yj
+yj
+Za
+HJ
 Mh
 Mh
-VF
-eG
-tY
+ci
+Qu
+uC
 Mh
 Mh
-sg
-oD
+lI
+Lf
 Tx
 Tx
-IW
-Tc
+PU
+KI
 lf
 lf
 Xe
@@ -18177,19 +18227,19 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Mh
-Mh
-uh
-kQ
-np
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+fq
+JC
+JC
+tY
+iS
+yJ
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
@@ -18199,13 +18249,13 @@ Mh
 fq
 fq
 fq
-oB
-uy
-EX
-Td
-Td
-wP
-ve
+cq
+ZG
+zV
+yj
+yj
+RC
+YO
 Mh
 Mh
 Mh
@@ -18213,12 +18263,12 @@ Mh
 Mh
 Mh
 Mh
-Xc
-ge
-RN
+rG
+eg
+uz
 Tx
-FW
-KU
+kX
+sQ
 lf
 lf
 Xe
@@ -18479,19 +18529,19 @@ Kq
 Kq
 Kq
 Kq
-Kq
-uh
-kQ
+fq
+tY
+iS
 gf
-Ki
+xa
 gf
-np
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+yJ
+JC
+JC
+JC
+JC
+JC
+JC
 Mh
 Mh
 Mh
@@ -18501,13 +18551,13 @@ Mh
 Mh
 fq
 fq
-ze
-QJ
-QJ
-Td
-Td
-wP
-ve
+JX
+do
+do
+yj
+yj
+RC
+YO
 Mh
 Mh
 Mh
@@ -18515,13 +18565,13 @@ Mh
 Mh
 Mh
 Mh
-Xc
-gK
+rG
+DJ
 Tx
 Tx
-zw
-KU
-ru
+Nd
+sQ
+WV
 lf
 lf
 lf
@@ -18781,7 +18831,7 @@ Kq
 Kq
 Kq
 Kq
-Kq
+fq
 pd
 gf
 gf
@@ -18789,10 +18839,11 @@ td
 gf
 gf
 td
-Vz
-Vz
-Vz
-eD
+XW
+XW
+XW
+Ls
+JC
 Mh
 Mh
 Mh
@@ -18800,29 +18851,28 @@ Mh
 Mh
 Mh
 Mh
+om
 Mh
-mT
-Mh
-bY
-QJ
-DU
-by
-Td
-je
-bg
-Mh
-Mh
-rg
-Zl
-Gd
+wg
+do
+Cj
+yK
+yj
+Za
+AH
 Mh
 Mh
-Ea
-Nb
+Bq
+Cp
+My
+Mh
+Mh
+sf
+Vm
 Tx
 Tx
-xA
-Sj
+DQ
+Zw
 lf
 lf
 lf
@@ -19095,8 +19145,8 @@ en
 en
 en
 en
-Vz
-eD
+XW
+Ls
 Mh
 Mh
 Mh
@@ -19105,24 +19155,24 @@ Mh
 Mh
 Mh
 Mh
-zg
-Td
-DU
-by
-Td
-PB
+lK
+yj
+Cj
+yK
+yj
+Jw
 fq
 Mh
 Mh
-Kj
+sv
 Xe
-fe
+OH
 Mh
 Mh
 fq
-YH
-dn
-dn
+hS
+VV
+VV
 fq
 fq
 lf
@@ -19399,7 +19449,7 @@ en
 en
 en
 en
-eD
+Ls
 Mh
 Mh
 Mh
@@ -19409,24 +19459,24 @@ Mh
 Mh
 fE
 rX
-Td
-QJ
-QJ
-Qb
-BV
+yj
+do
+do
+YU
+IK
 jU
 jU
 Xe
-hu
-Ke
-im
-im
-bt
-Sm
+yf
+no
+zp
+zp
+kY
+gd
 Tx
 Tx
 Tx
-eV
+Rp
 lf
 lf
 lf
@@ -19688,46 +19738,46 @@ gf
 Zz
 gf
 td
-sZ
+ET
 gf
 gf
 td
 gf
 gf
 pV
+TM
+TM
+TM
+Qg
+TM
+TM
+TM
 oR
-oR
-oR
-VQ
-oR
-oR
-oR
-Hz
 Mh
 Mh
 Mh
 Mh
 Mh
-Xy
+iy
 rX
-dv
-Oe
-pT
-Ko
-Ko
+nw
+dU
+Mu
+oz
+oz
 fq
 Mh
 Mh
-vr
+Ff
 Xe
-fe
+OH
 Mh
 Mh
 fq
 fq
 fq
-bt
-DN
+zw
+cZ
 fq
 lf
 lf
@@ -19990,39 +20040,39 @@ rq
 Zz
 Es
 td
-pv
-JN
-JN
+LH
+OJ
+OJ
 td
 rq
 gf
 pV
-io
-io
-io
-io
-io
-io
-sY
-LF
+pr
+pr
+pr
+pr
+pr
+pr
+tZ
+ns
 Mh
 Mh
 Mh
 Mh
 Mh
-WZ
+Sy
 rX
 rX
 rX
 rX
-je
-Ko
+Za
+oz
 fq
 Mh
 Mh
-cw
-Hd
-tY
+kM
+lL
+uC
 Mh
 Mh
 Mh
@@ -20031,7 +20081,7 @@ vM
 Tx
 Tx
 fq
-ru
+WV
 lf
 wf
 Jl
@@ -20293,8 +20343,8 @@ Zz
 gf
 td
 td
-JN
-JN
+OJ
+OJ
 td
 wa
 gf
@@ -20306,7 +20356,7 @@ en
 en
 en
 iW
-Ql
+Ij
 Mh
 Mh
 Mh
@@ -20314,11 +20364,11 @@ Mh
 Mh
 Mh
 hF
-qW
+Rm
 fq
-sN
+ER
 Hu
-be
+vq
 fq
 Mh
 Mh
@@ -20618,7 +20668,7 @@ Mh
 Mh
 hF
 rX
-zf
+xb
 Mh
 Mh
 fq
@@ -20908,7 +20958,7 @@ fD
 fD
 fD
 fD
-DA
+uV
 JC
 Pi
 Mh
@@ -20919,8 +20969,8 @@ Mh
 Mh
 Mh
 Mh
-xL
-vC
+HU
+pt
 Mh
 Mh
 fq
@@ -22138,7 +22188,7 @@ Mh
 Mh
 Mh
 Mh
-RH
+gJ
 fq
 lf
 lf
@@ -22422,15 +22472,15 @@ xY
 HS
 HS
 HS
-uT
+fJ
 HS
 HS
 HS
-uT
+fJ
 HS
 HS
 HS
-uT
+fJ
 HS
 HS
 HS
@@ -24255,7 +24305,7 @@ QC
 QC
 fq
 fq
-Xz
+WO
 lf
 lf
 Na
@@ -27292,15 +27342,15 @@ Kq
 Kq
 Jl
 CI
-oe
-oe
-oe
-oe
-oe
-oe
-wI
-wI
-oe
+uc
+uc
+uc
+uc
+uc
+uc
+cU
+cU
+uc
 CI
 Jl
 Kq
@@ -27594,15 +27644,15 @@ Kq
 Kq
 Jl
 CI
-oe
-oe
-oe
-oe
-oe
-wI
-wI
-oe
-oe
+uc
+uc
+uc
+uc
+uc
+cU
+cU
+uc
+uc
 CI
 Jl
 Jl
@@ -27895,17 +27945,17 @@ Kq
 Kq
 Kq
 Jl
-ZE
-oh
-oe
-oe
-oe
-oe
-oe
-oe
-oe
-pr
-dA
+lq
+xX
+uc
+uc
+uc
+uc
+uc
+uc
+uc
+ub
+kq
 Jl
 Ng
 Ng
@@ -28198,15 +28248,15 @@ Kq
 Kq
 Jl
 CI
-oe
-oe
-oe
-wI
-oe
-oe
-oe
-wI
-oe
+uc
+uc
+uc
+cU
+uc
+uc
+uc
+cU
+uc
 CI
 Jl
 Ng
@@ -28500,22 +28550,22 @@ Kq
 Kq
 Jl
 CI
-oe
-wI
-wI
-oe
-oe
-oe
-oe
-oe
-wI
+uc
+cU
+cU
+uc
+uc
+uc
+uc
+uc
+cU
 SV
 Jl
 Ng
 Ng
-Ny
-mH
-WF
+AC
+Bi
+CL
 Ng
 Ng
 Ng
@@ -28803,7 +28853,7 @@ Kq
 Jl
 CI
 SV
-Rh
+ww
 SV
 CI
 CI
@@ -28815,9 +28865,9 @@ SV
 Jl
 Ng
 Ng
-nE
-LM
-Ji
+in
+ff
+Qk
 Ng
 Ng
 Jl
@@ -29106,29 +29156,29 @@ Jl
 Jl
 Jl
 Jl
-oU
+Vw
 ak
 ak
 ak
 CI
 CI
 ak
-Ar
-jn
-lE
-lE
-LM
-rf
-FF
-lE
-lE
-dC
-Fu
-qO
-qO
-qO
-md
-qO
+Ti
+Bz
+cT
+cT
+ff
+gZ
+QZ
+cT
+cT
+PQ
+Xr
+HQ
+HQ
+HQ
+iZ
+HQ
 wf
 Kq
 Kq
@@ -29408,29 +29458,29 @@ Kq
 Kq
 Kq
 Jl
-oZ
-wI
+PT
+cU
 dg
 ak
 ak
 ak
 ak
-dA
+kq
 Jl
 Ng
 Ng
-vi
-LM
-Ji
+rN
+ff
+Qk
 Ng
 Ng
 Jl
-Dv
-DE
-DE
+Tg
+Os
+Os
 Jl
 Jl
-yR
+Tv
 wf
 Kq
 Kq
@@ -29711,27 +29761,27 @@ Kq
 Kq
 Jl
 Jl
-bA
-ZY
-ZY
-lA
+fT
+lr
+lr
+Do
 ak
 ak
 CI
-Tt
+Nr
 Ng
 Ng
-de
-YZ
-iQ
+eO
+tI
+ae
 Ng
 Ng
-xx
-AO
-qO
-qO
-Vg
-Em
+VI
+Ss
+HQ
+HQ
+aJ
+so
 wf
 wf
 Kq
@@ -30014,13 +30064,13 @@ Kq
 Jl
 Jl
 Jl
-TY
-ZY
-lA
+Kc
+lr
+Do
 ak
 ak
-TK
-vq
+fe
+RL
 Ng
 Ng
 Ng
@@ -30028,12 +30078,12 @@ Ng
 Ng
 Ng
 Ng
-lX
-zL
-LW
-qO
-DM
-QN
+sj
+vO
+np
+HQ
+lx
+bR
 wf
 wf
 Kq
@@ -30316,13 +30366,13 @@ Kq
 Kq
 Jl
 Jl
-Xk
+fI
 dg
 dg
 ak
 ak
-TK
-vq
+fe
+RL
 Ng
 Ng
 Ng
@@ -30330,12 +30380,12 @@ Ng
 Ng
 Ng
 Ng
-lX
-pS
-qO
-qO
-fs
-QN
+sj
+Ow
+HQ
+HQ
+da
+bR
 wf
 wf
 Kq
@@ -30616,28 +30666,28 @@ Kq
 Kq
 Kq
 Kq
-eK
+cY
 Ng
-PH
+gn
 dg
-tJ
-EL
+JH
+Xk
 ak
 CI
-eY
+LD
 Ng
 Ng
-tN
-kB
-WF
+RT
+hd
+CL
 Ng
 Ng
-LL
-Mr
-qO
-qO
-Kd
-Wa
+jX
+ZC
+HQ
+HQ
+DI
+lC
 wf
 wf
 Kq
@@ -30920,27 +30970,27 @@ Kq
 Kq
 Ng
 Ng
-vW
+IH
 ak
-tJ
-EL
+JH
+Xk
 ak
-dA
+kq
 Jl
 Ng
 Ng
-mh
-LM
-Ji
+vC
+ff
+Qk
 Ng
 Ng
 Jl
-PW
-DS
-DS
+lG
+WN
+WN
 Jl
 Jl
-yR
+Tv
 wf
 Kq
 Kq
@@ -31222,27 +31272,27 @@ Kq
 Kq
 Ng
 Ng
-Qv
-YF
+jF
+qd
 ak
 dg
 dg
-Ar
-sM
-lE
-lE
-LM
-EN
-FF
-WO
-WO
-dC
-Fu
-qO
-qO
-qO
-md
-qO
+Ti
+rd
+cT
+cT
+ff
+cC
+QZ
+hM
+hM
+PQ
+Xr
+HQ
+HQ
+HQ
+iZ
+HQ
 wf
 Kq
 Kq
@@ -31523,26 +31573,26 @@ Kq
 Kq
 Kq
 Ng
-mp
-YF
-yj
-HI
-ii
+qs
+qd
+uT
+Uc
+Oa
 SV
 SV
 Jl
 Ng
 Ng
-cX
-LM
-Ji
+Oc
+ff
+Qk
 Ng
 Ng
 Jl
 Jl
 Jl
-dC
-Ie
+PQ
+KY
 Jl
 wf
 wf
@@ -31825,26 +31875,26 @@ Kq
 Kq
 Kq
 Ng
-dQ
-YF
-YF
-YF
-YF
+wJ
+qd
+qd
+qd
+qd
 CI
 SV
 Jl
 Ng
 Ng
-wd
-fx
-iQ
+hA
+ej
+ae
 Ng
 Ng
 Ng
 Jl
-DV
-qO
-qO
+OT
+HQ
+HQ
 Jl
 Kq
 Kq
@@ -32128,12 +32178,12 @@ Kq
 Kq
 Ng
 Ng
-mX
-IL
+ME
+gv
 Jl
-yU
-wN
-rG
+Ew
+NH
+FY
 Jl
 Ng
 Ng
@@ -32144,9 +32194,9 @@ Ng
 Ng
 Ng
 Jl
-DV
-qO
-qO
+OT
+HQ
+HQ
 Jl
 Kq
 Kq
@@ -32431,9 +32481,9 @@ Kq
 Ng
 Ng
 Ng
-mX
-YF
-XZ
+ME
+qd
+xS
 Ng
 Ng
 Jl
@@ -32446,9 +32496,9 @@ Ng
 Ng
 Ng
 Jl
-DV
-qO
-qO
+OT
+HQ
+HQ
 Jl
 Kq
 Kq
@@ -32734,8 +32784,8 @@ Ng
 Ng
 Ng
 Ng
-qz
-FX
+sx
+Lq
 Ng
 Ng
 Jl

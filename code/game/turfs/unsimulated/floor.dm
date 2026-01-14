@@ -6,10 +6,6 @@
 
 	holomap_draw_override = HOLOMAP_DRAW_PATH
 
-	var/floortype = ""
-
-
-
 /turf/unsimulated/floor/ex_act(severity)
 	switch(severity)
 		if(1.0)
