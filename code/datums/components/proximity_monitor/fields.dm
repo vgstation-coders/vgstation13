@@ -109,12 +109,12 @@
 
 /datum/component/proximity_monitor/advanced/on_moved(atom/movable/mover)
 	. = ..()
+	var/atom/movable/AM = parent
 	if(ignore_if_not_on_turf)
 		//Early return if it's not the host that has moved.
 //		if(mover != parent)
 //			return
 		//Cleanup the field if the host was on a turf but isn't anymore.
-		var/atom/movable/AM = parent
 		if(!isturf(AM.loc))
 			if(isturf(old_loc))
 				cleanup_field()

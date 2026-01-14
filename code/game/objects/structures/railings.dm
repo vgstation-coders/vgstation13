@@ -61,12 +61,15 @@
 	if(O == user)
 		hurdle(user)
 
-/obj/structure/railing/proc/hurdle(atom/movable/jumper)
+/obj/structure/railing/proc/hurdle(atom/movable/jumper, var/forced = FALSE)
 	if(!Adjacent(jumper))
 		return
 	var/turf/T = get_turf(src)
 	if(get_turf(jumper) == T)
 		T = get_step(src,dir)
+	if(istype(T, /turf/unsimulated/floor/vox/abyss) && !forced)
+		if(!do_after(jumper, src, 3 SECONDS))
+			return
 	hurdler = jumper
 	jumper.Move(T)
 	hurdler = null
@@ -191,6 +194,23 @@
 /obj/structure/railing/attackby(var/obj/item/C, var/mob/user)
 	if(..())
 		return 1
+
+	if (istype(C, /obj/item/weapon/grab))		// We can toss people over railings if we have a good enough grab.
+		var/obj/item/weapon/grab/G = C
+		if (istype(G.affecting, /mob/living))
+			var/mob/living/M = G.affecting
+			if (G.state <= GRAB_AGGRESSIVE)
+				to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
+				return
+			else if(do_after(user, src, 10))
+				user.visible_message("<span class='warning'>[user] tosses [M] over the [src]!</span>")
+				hurdle(M, TRUE)			// Throw them over!
+				M.Knockdown(3)
+				M.Stun(3)
+				qdel(C)
+				return
+			else
+				return
 	if(C.is_wrench(user))
 		user.visible_message("<span class='notice'>[user] starts to [anchored ? "un" : ""]anchor [src] with \a [C].</span>",\
 		"<span class='notice'>You begin to [anchored ? "un" : ""]anchor [src] with \the [C].</span>")

@@ -405,6 +405,7 @@
 #include "code\datums\gamemode\factions\shoal\shoalprops.dm"
 #include "code\datums\gamemode\factions\shoal\gear\cloakdevice.dm"
 #include "code\datums\gamemode\factions\shoal\gear\netgun.dm"
+#include "code\datums\gamemode\factions\shoal\gear\takyitlocator.dm"
 #include "code\datums\gamemode\factions\syndicate\nukeops.dm"
 #include "code\datums\gamemode\factions\syndicate\rev.dm"
 #include "code\datums\gamemode\factions\syndicate\traitor.dm"

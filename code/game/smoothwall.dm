@@ -156,8 +156,13 @@ var/list/smoothable_unsims = list(
 	"rock_rf",
 	"swall",
 	"iron",
-	"sjwall"
+	"sjwall",
+	"hexacrete"
 	)
+
+/turf/unsimulated/floor/initialize()
+	if(floortype in smoothable_unsims)
+		relativewall()
 
 /turf/unsimulated/wall/initialize()
 	if(walltype in smoothable_unsims)
