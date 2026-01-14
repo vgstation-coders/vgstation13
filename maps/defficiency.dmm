@@ -61030,12 +61030,6 @@
 	icon_state = "grimy"
 	},
 /area/security/detectives_office)
-"clb" = (
-/obj/structure/flora/pottedplant/random,
-/turf/simulated/floor{
-	icon_state = "grimy"
-	},
-/area/security/detectives_office)
 "clc" = (
 /turf/simulated/floor,
 /area/crew_quarters/locker)
@@ -233477,7 +233471,7 @@ chD
 ciz
 cjH
 ckY
-clb
+cgv
 cnD
 cfu
 bHO
