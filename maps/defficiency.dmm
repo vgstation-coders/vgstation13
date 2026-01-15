@@ -44092,7 +44092,7 @@
 	},
 /obj/machinery/conveyor{
 	dir = 6;
-	id_tag = "QMLoad2"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -110506,6 +110506,18 @@
 	},
 /turf/simulated/floor,
 /area/hallway/primary/central)
+"iLl" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/machinery/conveyor_switch/oneway{
+	convdir = -1;
+	id_tag = "QMLoad3"
+	},
+/turf/simulated/floor,
+/area/supply/storage)
 "iNl" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
@@ -241587,7 +241599,7 @@ bwZ
 bwZ
 byI
 bDk
-bxd
+iLl
 btE
 bGF
 bIN
