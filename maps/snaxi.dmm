@@ -17894,7 +17894,7 @@
 /area/supply/qm)
 "aOT" = (
 /obj/machinery/conveyor_switch/oneway{
-	id_tag = "QMLoad"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -18321,6 +18321,9 @@
 	supply_display = 1
 	},
 /obj/machinery/light/small,
+/obj/machinery/conveyor_switch/oneway{
+	id_tag = "QMLoad"
+	},
 /turf/simulated/floor{
 	icon_state = "warning"
 	},
@@ -30360,7 +30363,7 @@
 "btf" = (
 /obj/machinery/conveyor{
 	dir = 6;
-	id_tag = "QMLoad"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -83958,7 +83961,7 @@
 "oQc" = (
 /obj/machinery/conveyor{
 	dir = 4;
-	id_tag = "QMLoad"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -86490,6 +86493,10 @@
 	d1 = 1;
 	d2 = 8;
 	icon_state = "1-8"
+	},
+/obj/machinery/conveyor_switch/oneway{
+	convdir = -1;
+	id_tag = "QMLoad2"
 	},
 /turf/simulated/floor{
 	icon_state = "warning"
@@ -146692,9 +146699,9 @@ aUQ
 aHW
 aJA
 aLh
-bgW
-pzJ
 mnD
+pzJ
+bgW
 srz
 bsI
 ila
@@ -148202,9 +148209,9 @@ aOW
 bqr
 aJF
 aMC
-aOW
-aOW
 aOT
+aOW
+aOW
 aPQ
 aQy
 ila
