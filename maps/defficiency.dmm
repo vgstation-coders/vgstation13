@@ -75991,13 +75991,14 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/item/weapon/pen,
-/obj/item/weapon/stamp/warden,
 /obj/item/weapon/paper_bin/red{
 	pixel_x = -3;
 	pixel_y = 7
 	},
 /obj/effect/decal/warning_stripes/siding,
+/obj/item/weapon/pen{
+	pixel_x = -5
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -76036,8 +76037,13 @@
 	name = "Brig Control Desk";
 	req_access_txt = "3"
 	},
-/obj/item/weapon/folder/red,
+/obj/item/weapon/folder/red{
+	pixel_x = -6
+	},
 /obj/effect/decal/warning_stripes/siding,
+/obj/item/weapon/stamp/warden{
+	pixel_x = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -80821,7 +80827,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
 "cVy" = (
-/obj/machinery/vending/coffee,
+/obj/structure/reagent_dispensers/water_cooler,
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "darkred";
@@ -80849,7 +80855,11 @@
 /obj/machinery/newscaster/security_unit{
 	pixel_y = -30
 	},
-/obj/structure/reagent_dispensers/water_cooler,
+/obj/structure/table,
+/obj/machinery/chem_dispenser/brewer/mapping{
+	pixel_y = 3;
+	pixel_x = -1
+	},
 /turf/simulated/floor{
 	icon_state = "darkred";
 	tag = "icon-darkred"
@@ -80857,6 +80867,19 @@
 /area/security/main)
 "cVC" = (
 /obj/machinery/light,
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/brasilcup{
+	pixel_x = 1;
+	pixel_y = 5
+	},
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/brasilcup{
+	pixel_x = 5;
+	pixel_y = 1
+	},
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/brasilcup{
+	pixel_x = -3;
+	pixel_y = 1
+	},
 /turf/simulated/floor{
 	icon_state = "darkred";
 	tag = "icon-darkred"
@@ -82213,12 +82236,21 @@
 /area/security/hos)
 "cXW" = (
 /obj/structure/table/woodentable,
-/obj/item/weapon/folder/red,
-/obj/item/weapon/stamp/hos,
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug{
+	pixel_y = 10;
+	pixel_x = 11
+	},
+/obj/item/weapon/folder/red{
+	pixel_x = -7
+	},
+/obj/item/weapon/stamp/hos{
+	pixel_y = 3;
+	pixel_x = -6
 	},
 /turf/simulated/floor/carpet,
 /area/security/hos)
