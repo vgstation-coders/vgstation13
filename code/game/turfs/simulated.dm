@@ -68,8 +68,8 @@
 
 			if (bloodDNA)
 				AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor,H.luminous_feet()) // Coming
-				var/turf/simulated/from = get_step(H,opposite_dirs[H.dir])
-				if(istype(from) && from)
+				if(istype(OL, /turf/simulated) && Adjacent(OL))
+					var/turf/simulated/from = OL
 					from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor,H.luminous_feet()) // Going
 
 			bloodDNA = null

@@ -2,9 +2,6 @@
 	..()
 	observers += src
 
-	var/obj/abstract/screen/fullscreen/impaired_screen = screens["impaired_crit"]
-	impaired_screen.alpha = 0
-
 	client.show_popup_menus = TRUE
 
 	if(src.check_rights(R_ADMIN|R_FUN))
