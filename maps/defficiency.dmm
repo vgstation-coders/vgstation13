@@ -60992,9 +60992,6 @@
 	},
 /area/security/detectives_office)
 "clb" = (
-/obj/structure/extinguisher_cabinet{
-	pixel_x = 24
-	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -65465,11 +65462,6 @@
 	},
 /area/hallway/primary/aft)
 "cub" = (
-/obj/item/device/radio/intercom{
-	dir = 1;
-	name = "Station Intercom (General)";
-	pixel_y = 24
-	},
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 4;
 	icon_state = "out";
@@ -65740,22 +65732,27 @@
 	},
 /area/security/prison)
 "cuz" = (
-/obj/structure/closet,
-/obj/item/clothing/gloves/boxing,
-/obj/item/clothing/gloves/boxing,
 /obj/effect/decal/warning_stripes/siding{
 	dir = 10
+	},
+/obj/structure/punching_bag/clown,
+/obj/machinery/camera/hearing{
+	name = "Prison Center View";
+	network = list("Lobby");
+	failure_chance = 0
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/security/prison)
 "cuA" = (
+/obj/effect/decal/warning_stripes/siding,
 /obj/machinery/light{
 	dir = 1
 	},
-/obj/structure/punching_bag/clown,
-/obj/effect/decal/warning_stripes/siding,
+/obj/structure/closet,
+/obj/item/clothing/gloves/boxing,
+/obj/item/clothing/gloves/boxing,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -66214,13 +66211,14 @@
 /area/security/lobby)
 "cvw" = (
 /obj/structure/bed/chair{
-	dir = 8
+	dir = 4
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'HIGH VOLTAGE'";
-	icon_state = "shock";
-	name = "HIGH VOLTAGE";
-	pixel_y = 32
+/obj/machinery/computer/security/telescreen{
+	desc = "Used for watching Prison Wing holding areas.";
+	name = "Prison Monitor";
+	network = list("Lobby");
+	pixel_y = 26;
+	pixel_x = 2
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -66243,12 +66241,11 @@
 /turf/simulated/floor/plating/airless,
 /area/security/prison)
 "cvy" = (
-/obj/item/device/radio/intercom{
-	name = "Station Intercom (General)";
-	pixel_y = 22
-	},
 /obj/machinery/camera{
 	name = "Security Lobby"
+	},
+/obj/structure/extinguisher_cabinet{
+	pixel_y = 28
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -66771,7 +66768,7 @@
 /area/security/lobby)
 "cwH" = (
 /obj/structure/bed/chair{
-	dir = 8
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -66883,18 +66880,6 @@
 	dir = 1;
 	icon_state = "dark floor stripe";
 	tag = "icon-dark floor stripe (NORTH)"
-	},
-/area/security/prison)
-"cwT" = (
-/obj/machinery/camera/arena{
-	name = "Prison Court";
-	network = list("thunder")
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
 	},
 /area/security/prison)
 "cwU" = (
@@ -67315,7 +67300,13 @@
 /area/security/lobby)
 "cxS" = (
 /obj/structure/bed/chair{
-	dir = 8
+	dir = 4
+	},
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'HIGH VOLTAGE'";
+	icon_state = "shock";
+	name = "HIGH VOLTAGE";
+	pixel_y = -32
 	},
 /turf/simulated/floor{
 	dir = 6;
@@ -68567,6 +68558,10 @@
 "cAp" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
+	},
+/obj/item/device/radio/intercom{
+	name = "Station Intercom (General)";
+	pixel_x = 28
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -69870,11 +69865,6 @@
 	},
 /area/security/lobby)
 "cCO" = (
-/obj/item/device/radio/intercom{
-	frequency = 1475;
-	name = "Station Intercom (Security)";
-	pixel_x = -30
-	},
 /obj/item/device/camera{
 	desc = "A one use - polaroid camera. 30 photos left.";
 	name = "detectives camera";
@@ -69891,6 +69881,11 @@
 	pixel_x = -6
 	},
 /obj/structure/table,
+/obj/item/device/radio/intercom{
+	frequency = 1475;
+	name = "Station Intercom (Security)";
+	pixel_x = -30
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -70780,6 +70775,9 @@
 /area/crew_quarters/hop)
 "cDY" = (
 /obj/structure/filingcabinet,
+/obj/machinery/light{
+	dir = 1
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "cDZ" = (
@@ -71666,6 +71664,7 @@
 	dir = 4
 	},
 /obj/machinery/account_database,
+/obj/machinery/light/small,
 /turf/simulated/floor,
 /area/crew_quarters/hop)
 "cFJ" = (
@@ -72456,6 +72455,9 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/suit_storage_unit/captain,
 /obj/item/weapon/tank/jetpack/oxygen,
+/obj/machinery/ai_status_display{
+	pixel_x = 32
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "cHn" = (
@@ -73977,9 +73979,6 @@
 /turf/simulated/floor/carpet,
 /area/bridge)
 "cJU" = (
-/obj/machinery/light{
-	dir = 8
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
@@ -74052,12 +74051,6 @@
 	pixel_x = 24
 	},
 /turf/simulated/floor/wood,
-/area/crew_quarters/captain)
-"cKc" = (
-/obj/structure/painting/random{
-	pixel_x = 32
-	},
-/turf/simulated/wall/r_wall,
 /area/crew_quarters/captain)
 "cKd" = (
 /obj/machinery/door/window{
@@ -75799,6 +75792,9 @@
 	dir = 4;
 	pixel_x = -24
 	},
+/obj/structure/painting/random{
+	pixel_y = -32
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "cMW" = (
@@ -76595,15 +76591,10 @@
 /turf/simulated/floor,
 /area/bridge)
 "cOt" = (
-/obj/machinery/status_display{
-	pixel_y = -32
-	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
 "cOu" = (
-/obj/machinery/ai_status_display{
-	pixel_y = -32
-	},
+/obj/machinery/light,
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
 "cOv" = (
@@ -78961,6 +78952,7 @@
 	icon_state = "1-2"
 	},
 /obj/effect/nmpi,
+/obj/abstract/map/spawner/floorpill,
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
 "cSj" = (
@@ -79463,6 +79455,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
 	},
+/obj/abstract/map/spawner/floorpill,
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
 "cTd" = (
@@ -79526,6 +79519,7 @@
 /obj/structure/sign/crime{
 	pixel_y = 32
 	},
+/obj/abstract/map/spawner/floorpill,
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
 "cTi" = (
@@ -110458,6 +110452,13 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /turf/simulated/floor,
 /area/maintenance/apmaint)
+"hfy" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/light/small,
+/turf/simulated/floor/plating,
+/area/maintenance/maintcentral)
 "hmN" = (
 /obj/structure/bed/chair/shuttle/red{
 	dir = 1
@@ -110851,6 +110852,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
+/obj/abstract/map/spawner/floorpill/guaranteed,
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
 "jXi" = (
@@ -110890,7 +110892,7 @@
 	icon_state = "1-2"
 	},
 /obj/effect/nmpi,
-/obj/abstract/map/spawner/floorpill,
+/obj/abstract/map/spawner/floorpill/guaranteed,
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
 "kwn" = (
@@ -111553,6 +111555,15 @@
 	icon_state = "yellow"
 	},
 /area/engineering/engine)
+"qgv" = (
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 4
+	},
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/maintenance/maintcentral)
 "qkJ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -112472,6 +112483,12 @@
 	},
 /turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
+"wYm" = (
+/obj/machinery/status_display{
+	pixel_y = -32
+	},
+/turf/simulated/floor/wood,
+/area/crew_quarters/captain)
 "xfd" = (
 /obj/machinery/light{
 	dir = 8
@@ -230942,7 +230959,7 @@ cHl
 cJX
 cLA
 cLA
-cOu
+cOv
 cxD
 aaa
 aaf
@@ -231444,7 +231461,7 @@ cIF
 cJX
 cLB
 cMY
-cOv
+cOu
 cxD
 aaf
 cSg
@@ -232448,10 +232465,10 @@ cIE
 cJY
 cLz
 cHl
-cHl
+wYm
 cxD
 cRa
-cRa
+qgv
 cSX
 cxI
 cUN
@@ -233449,7 +233466,7 @@ cxD
 cxD
 cxD
 cJZ
-cKc
+cxD
 cLD
 cMZ
 cOw
@@ -233950,7 +233967,7 @@ cyO
 cyO
 cyO
 cyO
-cTa
+hfy
 cxD
 cxD
 cxD
@@ -234455,7 +234472,7 @@ jTo
 nEt
 cKa
 cLC
-cLC
+cHj
 cHj
 cLC
 cRc
@@ -249001,7 +249018,7 @@ csl
 cth
 cuz
 cvE
-cwT
+cwU
 cyb
 czh
 cAy
