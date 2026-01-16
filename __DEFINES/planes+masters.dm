@@ -311,7 +311,7 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
 
 	if (!istype(screen))//might need to re-create if clear_fullscreens() was called.
-		overlay_fullscreen("impaired_crit", /obj/abstract/screen/fullscreen/impaired_crit)
+		screen = overlay_fullscreen("impaired_crit", /obj/abstract/screen/fullscreen/impaired_crit)
 
 	var/matrix/M = matrix()
 	M.Scale(_nearsightedness_scale, _nearsightedness_scale)
@@ -338,7 +338,7 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
 
 	if (!istype(screen))//might need to re-create if clear_fullscreens() was called.
-		overlay_fullscreen("impaired_crit", /obj/abstract/screen/fullscreen/impaired_crit)
+		screen = overlay_fullscreen("impaired_crit", /obj/abstract/screen/fullscreen/impaired_crit)
 
 	var/matrix/M = matrix()
 	M.Scale(40, 40)
