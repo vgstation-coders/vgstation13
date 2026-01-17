@@ -2,13 +2,13 @@
 "c" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/fancy/beer_box,
-/turf/unsimulated/floor/jungle/path,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "h" = (
 /turf/template_noop,
 /area/template_noop)
 "y" = (
-/turf/unsimulated/floor/jungle/path,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "G" = (
 /obj/item/clothing/glasses/sunglasses{
@@ -23,12 +23,12 @@
 	pixel_y = 7;
 	pixel_x = -6
 	},
-/turf/unsimulated/floor/jungle/path,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "O" = (
 /obj/effect/landmark/corpse,
 /obj/structure/bed/chair/wood/normal,
-/turf/unsimulated/floor/jungle/path,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 
 (1,1,1) = {"

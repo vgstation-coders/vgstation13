@@ -48,7 +48,7 @@
 /area/vault/asteroid)
 "al" = (
 /obj/structure/catwalk,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "am" = (
 /obj/item/stack/tile/metal,

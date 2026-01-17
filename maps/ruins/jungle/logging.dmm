@@ -1,13 +1,13 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "b" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "loading_area";
 	tag = "icon-loading_area"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "d" = (
 /obj/effect/decal/warning_stripes{
@@ -15,16 +15,16 @@
 	icon_state = "warning_corner"
 	},
 /obj/abstract/loot_spawner/combat,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "f" = (
 /obj/structure/fence/cut/medium{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "h" = (
-/turf/unsimulated/floor/jungle/path,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "i" = (
 /obj/abstract/loot_spawner/medical,
@@ -32,7 +32,7 @@
 /area/exposed_ruin)
 "k" = (
 /obj/structure/fence,
-/turf/unsimulated/floor/jungle/path,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "l" = (
 /obj/structure/rack,
@@ -45,24 +45,24 @@
 /area/exposed_ruin)
 "m" = (
 /obj/structure/fence/cut/medium,
-/turf/unsimulated/floor/jungle/path,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "o" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "s" = (
 /obj/structure/fence/corner,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "t" = (
 /obj/structure/fence/cut/large{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "w" = (
 /turf/template_noop,
@@ -71,7 +71,7 @@
 /obj/structure/fence/cut/large{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "z" = (
 /turf/unsimulated/floor/planetary/dirt,
@@ -114,7 +114,7 @@
 	pixel_x = 12;
 	pixel_y = 8
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "G" = (
 /obj/structure/rack,
@@ -129,7 +129,7 @@
 /obj/structure/fence/corner{
 	dir = 8
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "I" = (
 /obj/structure/flora/tree_stump,
@@ -139,18 +139,18 @@
 /obj/structure/fence{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "K" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "warning"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "M" = (
 /obj/structure/fence,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "N" = (
 /obj/structure/rack,
@@ -163,10 +163,10 @@
 /area/exposed_ruin)
 "O" = (
 /obj/structure/fence/cut/medium,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "R" = (
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "S" = (
 /obj/effect/decal/warning_stripes{
@@ -174,13 +174,13 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (NORTH)"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "T" = (
 /obj/structure/fence{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "U" = (
 /obj/effect/decal/warning_stripes{
@@ -188,14 +188,14 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (EAST)"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "X" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "warning"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "Y" = (
 /mob/living/complex_animal/panther{
@@ -211,7 +211,7 @@
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 
 (1,1,1) = {"

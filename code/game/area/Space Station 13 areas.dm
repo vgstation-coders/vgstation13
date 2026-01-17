@@ -2186,7 +2186,7 @@ var/global/list/adminbusteleportlocs = list()
 /area/surface/jungle/landing
 	name = "\improper Landing Area"
 	icon_state="jungle_landing"
-	base_turf_type=/turf/unsimulated/floor/jungle/concrete
+	base_turf_type=/turf/unsimulated/floor/planetary/concrete/jungle
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
 //DJSTATION
