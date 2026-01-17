@@ -151,7 +151,7 @@
 									new /obj/effect/decal/warning_stripes/pathmarkers(T, EAST)
 
 	// potholes (midwest reference)
-	for(var/turf/unsimulated/floor/planetary/concrete/jungle/C in allocation.turfs)
+	for(var/turf/unsimulated/floor/planetary/concrete/jungle/C in all_turfs)
 		if(prob(12)) // the most magical of all numbers
 			var/decay_options = list(
 				/turf/unsimulated/floor/planetary/wasteland,
