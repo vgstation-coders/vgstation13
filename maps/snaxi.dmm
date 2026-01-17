@@ -7796,7 +7796,6 @@
 	},
 /area/crew_quarters/sleep)
 "atM" = (
-/obj/machinery/light,
 /obj/machinery/newscaster/security_unit{
 	dir = 1;
 	pixel_y = -32
@@ -9240,9 +9239,6 @@
 	},
 /area/crew_quarters/hop)
 "awT" = (
-/obj/machinery/light{
-	dir = 1
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 8;
@@ -9274,6 +9270,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
+	},
+/obj/machinery/light{
+	dir = 1
 	},
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
@@ -11733,6 +11732,7 @@
 	},
 /obj/item/weapon/storage/box/PDAs,
 /obj/item/clothing/suit/storage/wintercoat/hop,
+/obj/machinery/light,
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
 	},
@@ -12409,9 +12409,6 @@
 /turf/simulated/floor,
 /area/engineering/supermatter_room)
 "aCQ" = (
-/obj/machinery/power/terminal{
-	dir = 1
-	},
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
@@ -16011,7 +16008,6 @@
 /turf/simulated/floor/plating,
 /area/engineering/burn_chamber)
 "aKm" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction,
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -35816,11 +35812,22 @@
 	name = "Security Access";
 	normaldoorcontrol = 1;
 	pixel_y = 25;
-	range = 3;
-	req_access_txt = "63"
+	range = 4;
+	req_access_txt = "63";
+	pixel_x = -7
 	},
 /obj/structure/bed/chair{
 	dir = 4
+	},
+/obj/machinery/door_control{
+	desc = "A remote control switch for the brig foyer.";
+	id_tag = "BrigFoyerFront";
+	name = "Security Access";
+	normaldoorcontrol = 1;
+	pixel_y = 25;
+	range = 4;
+	req_access_txt = "63";
+	pixel_x = 7
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -78644,7 +78651,6 @@
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "hRr" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction,
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
