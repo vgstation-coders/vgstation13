@@ -18278,6 +18278,11 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/machinery/requests_console{
+	department = "Medbay";
+	phone_name = "Medbay Lobby";
+	pixel_x = 30
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whitegreen"
@@ -23895,6 +23900,13 @@
 	c_tag = "Medbay South";
 	dir = 1
 	},
+/obj/machinery/requests_console{
+	department = "Medbay";
+	departmentType = 1;
+	name = "Medbay RC";
+	pixel_y = -30;
+	phone_name = "Medbay Storage"
+	},
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
@@ -28844,6 +28856,11 @@
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "boA" = (
+/obj/machinery/requests_console{
+	department = "Genetics";
+	name = "Genetics Requests Console";
+	pixel_x = -30
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "whitepurple"
@@ -77467,9 +77484,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/supply/storage)
 "gef" = (
@@ -87741,6 +87756,11 @@
 /area/engineering/atmos)
 "ufV" = (
 /obj/structure/curtain/medical,
+/obj/machinery/requests_console{
+	department = "Chemistry";
+	departmentType = 2;
+	pixel_y = 30
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whiteyellow"
