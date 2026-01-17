@@ -62,6 +62,7 @@
 	y_min = input_y
 	x_max = x_min + size_x - 1
 	y_max = y_min + size_y - 1
+	active = FALSE
 	setup(skip_turf_setup, system)
 
 /datum/virtual_z/proc/setup(var/skip_turf_setup = FALSE, var/system = FALSE)
@@ -529,7 +530,7 @@
 
 	lz.spawn_warnings()
 
-/datum/virtual_z/proc/clear_lz_warnings(var/datum/shuttle/shuttle, var/list/size, var/obj/docking_port/port)
+/datum/virtual_z/proc/clear_lz_warnings(var/datum/shuttle/shuttle)
 	if(!shuttle)
 		return
 

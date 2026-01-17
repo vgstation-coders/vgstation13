@@ -188,12 +188,12 @@
 
 	return new_vz
 
-/datum/map/proc/addTransitVLevel(datum/shuttle/shuttle)
+/datum/map/proc/addTransitVLevel(datum/shuttle/shuttle, var/system = FALSE)
 	var/buffer = world.view
 	var/list/dims = shuttle.get_size()
 	var/shuttle_width = dims[1]
 	var/shuttle_height = dims[2]
-	var/datum/virtual_z/new_vz = src.addVLevel(shuttle_width + 2*buffer, shuttle_height + 2*buffer)
+	var/datum/virtual_z/new_vz = addVLevel(shuttle_width + 2*buffer, shuttle_height + 2*buffer, system = system)
 	new_vz.name = "[shuttle.name] - transit area"
 	new_vz.linked_shuttle = shuttle
 	for(var/turf/T in new_vz.get_turfs(FALSE))

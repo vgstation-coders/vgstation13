@@ -1025,7 +1025,7 @@
 	//Kill all lz warning effects
 	if(istype(dest_v))
 		var/size = get_size()
-		dest_v.clear_lz_warnings(src, size, null)
+		dest_v.clear_lz_warnings(src)
 
 	return 1
 
