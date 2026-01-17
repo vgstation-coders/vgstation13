@@ -148,7 +148,7 @@
 			L.paused = !active_state
 
 /datum/virtual_z/proc/mob_entered(var/mob/living/M)
-	if(!M)
+	if(!M || !istype(M))
 		return
 
 	if(M.client)
