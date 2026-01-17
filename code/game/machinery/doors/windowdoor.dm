@@ -216,10 +216,6 @@
 			return
 		dmg=M.melee_damage_upper
 		visible_message("<span class='warning'>\The [M.name] [M.attacktext] against \the [name].</span>", 1)
-	else if(istype(user,/mob/living/complex_animal))
-		var/mob/living/complex_animal/M = user
-		dmg= M.base_damage+rand(-M.damage_variance ,M.damage_variance )
-		visible_message("<span class='warning'>\The [M.name] smacks against \the [name].</span>", 1)
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
 	playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)

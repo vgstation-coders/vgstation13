@@ -1,21 +1,21 @@
 //things that try to kill you.
 var/list/junglemobs_hostile=list(
-	/mob/living/complex_animal/dinosaur,
-	/mob/living/complex_animal/panther,
-	/mob/living/complex_animal/bear,
+	/mob/living/simple_animal/complex/dinosaur,
+	/mob/living/simple_animal/complex/panther,
+	/mob/living/simple_animal/complex/bear,
 )
 
 
 //things that won't attack you
 var/list/junglemobs_passive=list(
-/mob/living/complex_animal/frog,
-/mob/living/complex_animal/frog/poison,
-/mob/living/complex_animal/parrot,
+/mob/living/simple_animal/complex/frog,
+/mob/living/simple_animal/complex/frog/poison,
+/mob/living/simple_animal/complex/parrot,
 /mob/living/carbon/monkey,
 )
 //they don't kill you, but also are less frequent. capy bappies are here because the pacify aura is quite strong and funny. so we limit that, because we HATE fun.
 var/list/junglemobs_passive_rare=list(
-/mob/living/complex_animal/capybara_wild,
+/mob/living/simple_animal/complex/capybara_wild,
 )
 
 //any wildlife, be it fren-shaped or not.
@@ -34,7 +34,7 @@ var/list/junglemobs_passive_rare=list(
 	else
 		amount=rand(2,5)
 		to_spawn = pick(junglemobs_hostile)
-		if(to_spawn==/mob/living/complex_animal/panther) //being carnivores only, they need a bit of help to get the population ball rolling. also they spread out a lot.
+		if(to_spawn==/mob/living/simple_animal/complex/panther) //being carnivores only, they need a bit of help to get the population ball rolling. also they spread out a lot.
 			amount+=2
 	..()
 

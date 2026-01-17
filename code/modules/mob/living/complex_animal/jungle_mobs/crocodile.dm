@@ -1,4 +1,4 @@
-/mob/living/complex_animal/crocodile
+/mob/living/simple_animal/complex/crocodile
 	name = "\improper Crocodile"
 	desc = "Not to be confused with an alligator, or even a gharial."
 	icon_state="crocodile"
@@ -10,8 +10,8 @@
 	armor=list(melee=35,bullet=10,laser=15,energy=0,bomb=0,bio=0,rad=0)
 	max_food=100
 	food_flags = ANIMAL_CARNIVORE
-	base_damage = 20
-	damage_variance = 5
+	melee_damage_upper=25
+	melee_damage_lower=15
 	behavior_flags = ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_RETALIATE | ANIMAL_BEHAVIOR_DESTRUCTIVE | ANIMAL_BEHAVIOR_TERRITORIAL
 	movespeed=5
 	max_local_population = 3
@@ -19,47 +19,46 @@
 	food_per_tick = 0.0001
 	var/stuntracker=FALSE //prevents being stunlocked
 	
-/mob/living/complex_animal/crocodile/tick_state_idle() //we like water.
+/mob/living/simple_animal/complex/crocodile/tick_state_idle() //we like water.
 	.=..()
 	if(prob(50))
 		return
 	var/list/watertiles=list()
-	for(var/turf/unsimulated/floor/jungle/water/W in cache_objects_in_view)
+	for(var/turf/unsimulated/floor/planetary/water/jungle/W in cache_objects_in_view)
 		watertiles+=W
 	if(!watertiles.len)
 		return
-	var/turf/unsimulated/floor/jungle/water/waterspot = pick(watertiles)
+	var/turf/unsimulated/floor/planetary/water/jungle/waterspot = pick(watertiles)
 	walk_to(src,waterspot)
 
-/mob/living/complex_animal/crocodile/attack(var/victim)
+/mob/living/simple_animal/complex/crocodile/attack(var/victim)
 	.=..()
 	if(. && istype(victim,/mob/living/carbon) )
 		var/mob/living/carbon/C=victim
 		if(!stuntracker)
-			if (!C.knockdown)
-				visible_message("<b>\The [src]</b> knocks \the [target] off their feet!")
-				C.stop_pulling()
-				C.Knockdown(1)
-				stuntracker=TRUE
+			C.Knockdown(2)
+			C.stop_pulling()
+			visible_message("<b>\The [src]</b> knocks <b>\the [target]</b> off their feet!")
+			stuntracker=TRUE
 		else
 			stuntracker=FALSE
-/mob/living/complex_animal/crocodile/get_attack_msg(var/individual)
+/mob/living/simple_animal/complex/crocodile/get_attack_msg(var/individual)
 	emote("me", MESSAGE_SEE, "[prob(50) ? "bites" : "chomps"] \the [individual]!")
 
-/mob/living/complex_animal/crocodile/get_idle_sounds()
+/mob/living/simple_animal/complex/crocodile/get_idle_sounds()
 	if(prob(10))
 		var/i=rand(1,2)
 		switch(i)
 			if(1)
 				emote("me", MESSAGE_HEAR, "growls.")
 			if(2)
-				if(loc.type==/turf/unsimulated/floor/jungle/water)
+				if(loc.type==/turf/unsimulated/floor/planetary/water/jungle)
 					emote("me", MESSAGE_HEAR, "splashes.")
 				else
 					emote("me", MESSAGE_HEAR, "growls.")
 
 
-/mob/living/complex_animal/crocodile/schnapps
+/mob/living/simple_animal/complex/crocodile/schnapps
 	name = "Schnapps"
 	desc = "Definitely the coolest croc on the planet."
 	icon_state="schnapps"
@@ -73,13 +72,13 @@
 	armor=list(melee=35,bullet=15,laser=20,energy=0,bomb=10,bio=0,rad=0)
 	petable=TRUE
 
-/mob/living/complex_animal/crocodile/schnapps/get_offspring_cost()
+/mob/living/simple_animal/complex/crocodile/schnapps/get_offspring_cost()
 	return 0 //no infinite schnapps.	
-/mob/living/complex_animal/crocodile/schnapps/can_offspring()
+/mob/living/simple_animal/complex/crocodile/schnapps/can_offspring()
 	return FALSE
 
 
-/mob/living/complex_animal/crocodile/schnapps/tick_state_attacking()
+/mob/living/simple_animal/complex/crocodile/schnapps/tick_state_attacking()
 	.=..()
 	if(. && ticks_this_state>4) //forgives you after 10 seconds
 		emote("me",MESSAGE_SEE,"looks more calm.")

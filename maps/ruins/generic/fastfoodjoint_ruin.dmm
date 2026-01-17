@@ -132,7 +132,7 @@
 /obj/machinery/light/small/broken{
 	dir = 8
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/vault/fastfood/dining)
 "ch" = (
 /obj/machinery/gibber,
@@ -446,7 +446,7 @@
 /area/exposed_ruin)
 "iK" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "iP" = (
 /obj/machinery/chem_master/snackbar_machine,
@@ -742,7 +742,7 @@
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "rB" = (
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "rC" = (
 /obj/structure/cable/yellow{
@@ -767,7 +767,7 @@
 	pixel_x = -28;
 	broadcasting = 1
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/vault/fastfood/dining)
 "sn" = (
 /obj/structure/wc/urinal{
@@ -1824,7 +1824,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/vault/fastfood/dining)
 "ME" = (
 /obj/structure/railing{
@@ -1840,7 +1840,7 @@
 "MU" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "Nf" = (
 /obj/item/weapon/stool/bar,
@@ -2361,7 +2361,7 @@
 	},
 /area/vault/fastfood/kitchen)
 "YF" = (
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/vault/fastfood/dining)
 "YQ" = (
 /obj/effect/decal/cleanable/crayon,

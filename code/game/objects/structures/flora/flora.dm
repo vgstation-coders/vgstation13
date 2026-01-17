@@ -11,12 +11,9 @@
 	update_icon()
 
 /obj/structure/flora/Destroy()
-	if(istype(loc,/turf/unsimulated/floor/jungle/grass))
-		var/turf/unsimulated/floor/jungle/grass/G=loc
+	if(istype(loc,/turf/unsimulated/floor/planetary/grass/jungle))
+		var/turf/unsimulated/floor/planetary/grass/jungle/G=loc
 		G.turf_speed_multiplier=1.0
-		if(SSFoliageRegrow)
-			turfs_to_regrow +=G
-			G.regrowticks=world.time
 	..()
 
 /obj/structure/flora/update_icon()

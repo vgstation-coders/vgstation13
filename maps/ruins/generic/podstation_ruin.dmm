@@ -76,11 +76,11 @@
 /area/vault/podstation/interior)
 "aM" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "aN" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	icon_state = "asteroidwarning"
 	},
 /area/exposed_ruin)
@@ -88,11 +88,11 @@
 /obj/effect/decal/cleanable/blood/oil{
 	icon_state = "floor2"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "aW" = (
 /obj/machinery/floodlight/on/infinite,
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
@@ -102,12 +102,12 @@
 	icon_state = "bot"
 	},
 /obj/abstract/loot_spawner/engineering,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "ba" = (
 /obj/structure/cable/yellow,
 /obj/machinery/power/port_gen/pacman,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "bB" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
@@ -169,7 +169,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "cq" = (
 /mob/living/simple_animal/cockroach,
@@ -181,7 +181,7 @@
 /area/vault/podstation/interior)
 "cx" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
@@ -238,7 +238,7 @@
 /area/vault/podstation/interior)
 "dU" = (
 /obj/structure/fence/door,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "ev" = (
 /mob/living/simple_animal/hostile/bigroach,
@@ -276,7 +276,7 @@
 /area/vault/podstation/interior)
 "eZ" = (
 /obj/structure/lattice,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "fx" = (
 /obj/structure/table/reinforced,
@@ -302,7 +302,7 @@
 	},
 /area/vault/podstation/interior)
 "fJ" = (
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
@@ -318,7 +318,7 @@
 /area/vault/podstation/interior)
 "gm" = (
 /obj/structure/hanging_lantern,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "gp" = (
 /mob/living/simple_animal/cockroach,
@@ -378,7 +378,7 @@
 	name = "Pod Station Northwest";
 	network = list("PODSTATION")
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/podstation/interior)
 "hd" = (
 /obj/item/trash/lollipopstick,
@@ -389,7 +389,7 @@
 	name = "Pod Station Northeast";
 	network = list("PODSTATION")
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/podstation/interior)
 "hs" = (
 /obj/structure/closet/crate/freezer,
@@ -411,7 +411,7 @@
 	},
 /obj/item/weapon/reagent_containers/food/condiment/spacemilk,
 /obj/item/weapon/reagent_containers/food/condiment/spacemilk,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "hw" = (
 /obj/item/weapon/reagent_containers/glass/bottle/insecticide,
@@ -423,7 +423,7 @@
 	icon_state = "bot"
 	},
 /obj/item/weapon/reagent_containers/glass/bottle/insecticide,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "hD" = (
 /mob/living/simple_animal/cockroach,
@@ -446,12 +446,12 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "hL" = (
 /obj/effect/decal/warning_stripes/pathmarkers,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "hQ" = (
 /obj/structure/closet/crate/freezer,
@@ -468,7 +468,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "if" = (
 /mob/living/simple_animal/hostile/bigroach,
@@ -544,7 +544,7 @@
 	icon_state = "bot"
 	},
 /obj/machinery/portable_atmospherics/canister/air,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "kb" = (
 /obj/machinery/floodlight/on/infinite,
@@ -557,7 +557,7 @@
 	},
 /obj/item/weapon/cell/high/empty,
 /obj/item/weapon/cell/high/empty,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "kq" = (
 /mob/living/simple_animal/cockroach,
@@ -641,7 +641,7 @@
 "lt" = (
 /obj/item/weapon/barricade_kit,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
@@ -653,7 +653,7 @@
 /obj/structure/rack,
 /obj/item/device/crank_charger,
 /obj/item/device/crank_charger,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "lz" = (
 /obj/structure/table/woodentable,
@@ -833,11 +833,11 @@
 /area/vault/podstation/interior)
 "or" = (
 /obj/structure/signpost,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "oZ" = (
 /obj/effect/decal/cleanable/blood/oil,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "pn" = (
 /obj/structure/bed/chair{
@@ -970,20 +970,20 @@
 /obj/structure/fence{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "ru" = (
 /obj/structure/reagent_dispensers/silicate,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "rx" = (
 /obj/structure/fence/corner{
 	dir = 1
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "rF" = (
 /mob/living/simple_animal/cockroach,
@@ -1018,19 +1018,19 @@
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
 /area/exposed_ruin)
 "sX" = (
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 10;
 	icon_state = "asteroidwarning"
 	},
 /area/exposed_ruin)
 "tc" = (
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 6;
 	icon_state = "asteroidwarning"
 	},
@@ -1039,12 +1039,12 @@
 /obj/structure/bed/chair,
 /obj/item/trash/cigbutt,
 /obj/item/trash/cigbutt,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "uy" = (
 /obj/structure/bed/chair,
 /obj/item/weapon/storage/fancy/cigarettes/spaceports,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "uF" = (
 /obj/structure/sign/securearea,
@@ -1137,7 +1137,7 @@
 "wh" = (
 /obj/item/trash/tray,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "wi" = (
 /obj/machinery/camera{
@@ -1145,7 +1145,7 @@
 	name = "Pod Station Southwest";
 	network = list("PODSTATION")
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/podstation/interior)
 "wu" = (
 /obj/item/trash/plate,
@@ -1215,7 +1215,7 @@
 	dir = 1
 	},
 /obj/structure/lattice,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "zs" = (
 /mob/living/simple_animal/cockroach,
@@ -1349,13 +1349,13 @@
 /turf/simulated/floor,
 /area/vault/podstation/interior)
 "CY" = (
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 9;
 	icon_state = "asteroidwarning"
 	},
 /area/exposed_ruin)
 "Db" = (
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	icon_state = "asteroidwarning";
 	dir = 1
 	},
@@ -1369,7 +1369,7 @@
 "Dx" = (
 /obj/item/trash/bustanuts,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 5;
 	icon_state = "asteroidwarning"
 	},
@@ -1379,14 +1379,14 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "DR" = (
 /obj/item/weapon/storage/toolbox/emergency,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "DW" = (
 /obj/structure/lattice,
@@ -1397,17 +1397,17 @@
 	name = "Discount Dan's Sauce Barrel"
 	},
 /obj/effect/decal/cleanable/greenglow,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "Eu" = (
 /obj/effect/decal/cleanable/greenglow,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "Fe" = (
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "FB" = (
 /obj/machinery/door/airlock/freezer,
@@ -1451,7 +1451,7 @@
 "Ga" = (
 /obj/item/trash/chicken_bucket,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
@@ -1466,7 +1466,7 @@
 	},
 /obj/item/weapon/reagent_containers/glass/bottle/sacid,
 /obj/item/weapon/reagent_containers/glass/bottle/sacid,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "GO" = (
 /obj/structure/wc/sink/kitchen,
@@ -1485,22 +1485,22 @@
 	pixel_x = 1;
 	pixel_y = 1
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "HJ" = (
 /obj/structure/fence/corner{
 	dir = 8
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "HV" = (
 /obj/structure/fence/door/opened,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "HW" = (
 /obj/effect/decal/cleanable/ash,
 /obj/item/trash/cigbutt/cigarbutt,
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
@@ -1559,7 +1559,7 @@
 	icon_state = "bot"
 	},
 /obj/abstract/loot_spawner/trash,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "Kg" = (
 /obj/machinery/light/small{
@@ -1603,11 +1603,11 @@
 /area/vault/podstation/interior)
 "KC" = (
 /obj/effect/decal/warning_stripes/pathmarkers,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "Li" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
@@ -1617,7 +1617,7 @@
 	icon_state = "bot"
 	},
 /obj/item/device/silicate_sprayer,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "LD" = (
 /obj/structure/table,
@@ -1676,7 +1676,7 @@
 	icon_state = "bot"
 	},
 /obj/machinery/cryopod,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "Nl" = (
 /obj/structure/catwalk,
@@ -1687,19 +1687,19 @@
 /area/exposed_ruin)
 "Np" = (
 /obj/structure/fence,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "NA" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
 /obj/abstract/loot_spawner/module,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "NF" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/packet/mayo,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "NS" = (
 /obj/structure/closet/crate/trashcart,
@@ -1711,7 +1711,7 @@
 /obj/item/trash/zam_notraisins,
 /obj/item/weapon/newspaper,
 /obj/item/weapon/storage/fancy/cigarettes/ntstandard,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "Ov" = (
 /obj/machinery/light/small{
@@ -1916,7 +1916,7 @@
 	icon_state = "bot"
 	},
 /obj/machinery/portable_atmospherics/canister/oxygen,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "Sn" = (
 /obj/structure/bed/chair{
@@ -1932,7 +1932,7 @@
 	icon_state = "bot"
 	},
 /obj/structure/dispenser/oxygen,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "Ti" = (
 /obj/structure/bed/chair{
@@ -1948,7 +1948,7 @@
 "Ts" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "TM" = (
 /obj/item/weapon/shard,
@@ -1959,21 +1959,21 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "TV" = (
 /turf/template_noop,
 /area/exposed_ruin)
 "Uc" = (
 /obj/abstract/loot_spawner/structure,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "Uk" = (
 /obj/item/tool/wrench,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "UN" = (
 /obj/structure/window/barricade/full/block,
@@ -1990,16 +1990,16 @@
 	icon_state = "bot"
 	},
 /obj/structure/reagent_dispensers/fueltank,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "VJ" = (
 /obj/structure/fence/corner{
 	dir = 10
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "VP" = (
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
@@ -2014,13 +2014,13 @@
 /obj/structure/fence{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "VW" = (
 /obj/structure/fence/corner{
 	dir = 5
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "VX" = (
 /obj/machinery/camera{
@@ -2029,12 +2029,12 @@
 	name = "Pod Station North";
 	network = list("PODSTATION")
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/podstation/interior)
 "VY" = (
 /obj/item/trash/cigbutt,
 /obj/item/weapon/storage/bag/trash,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "Wu" = (
 /obj/machinery/cryopod,
@@ -2059,7 +2059,7 @@
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "Xi" = (
 /obj/effect/decal/cleanable/dirt,
@@ -2198,7 +2198,7 @@
 /turf/simulated/floor/plating,
 /area/vault/podstation/interior)
 "Yx" = (
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "YD" = (
 /obj/structure/cable/yellow{
@@ -2224,7 +2224,7 @@
 /area/vault/podstation/interior)
 "YT" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "Zo" = (
 /obj/structure/rack,
@@ -2247,10 +2247,10 @@
 	},
 /area/vault/podstation/interior)
 "Zy" = (
-/turf/unsimulated/floor/jungle/concrete,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "ZI" = (
-/turf/unsimulated/floor/jungle/path_plated{
+/turf/unsimulated/floor/planetary/path/jungle_plated{
 	icon_state = "asteroidwarning"
 	},
 /area/exposed_ruin)

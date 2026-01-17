@@ -32,7 +32,7 @@
 #define ANIMAL_STATE_MATING 5	//the birds and the birds. why would they try it with a bee? you sicken me.
 #define ANIMAL_STATE_SPECIAL 6 //for special behaviors for the mob to do
 
-/mob/living/complex_animal
+/mob/living/simple_animal/complex
 	size=0
 	icon='icons/mob/animal.dmi'
 	can_butcher=TRUE
@@ -52,67 +52,53 @@
 	var/atom/target = null
 	var/turf/territory=null //turf location
 	var/list/family = list() //list of mobs. avoid attacking them and whatnot. also can be used for taming.
-	var/base_damage=2
-	var/damage_variance=1
+	environment_smash_flags = 0xFFFFFF
 	var/movespeed=5 //lower=faster.
 	var/kin_check_type_path=null //for mobs with many subtypes. set to the parent mob type. leave null if not needed
 	var/petable=FALSE
 	var/lastmate=0
 	var/matingcooldown=60 //2 minutes
 	var/max_local_population=6 //to prevent total overpopulation
-	var/icon_living = ""
-	var/icon_dead = ""
 	var/healthregen=0.01
 	var/lasthealth=0.0
 	var/ticks_dead=0
-
-	//these are here because we, for some reason that i don't know, call attack_animal. that sounds good, until you realize that attack_animal wants a simple_animal. this causes a lot of runtimes, and i can't find where attack_animal is actually called, or why it's called when we're not even a simple_animal, so instead, we define some of the important variables here so it doesn't totally break. it's still a good practice to revise the code, as was done with most of the common objects that will be broken, like windows and lockers.
-	var/environment_smash_flags = 0xFFFFFF
-	var/melee_damage_upper=0
-	var/melee_damage_lower=0
-
-
-
+	
 	//cache vars. we use this for extra SPEEEEEED. so you can ignore it for vving stuff.
 	var/list/cache_objects_in_view=list()
 
 
-/mob/living/complex_animal/New(var/loc)
+/mob/living/simple_animal/complex/New(var/loc)
 	..()
-	create_reagents(100)
 	nutrition = rand(ceil(max_food*0.75),max_food)
 	gender="female"
 	if(prob(50))
 		gender="male"
 	territory=locate(x,y,z) //store turf where we were born/created
 
-	melee_damage_upper=base_damage+damage_variance
-	melee_damage_lower=base_damage-damage_variance
 
-
-/mob/living/complex_animal/proc/allow_msg()
+/mob/living/simple_animal/complex/proc/allow_msg()
 	for(var/mob/m in range(src,11)) //only do emotes/say things if a player is nearby. this is to reduce log spam and make obsgang not want to die, even though they should just play the game.
 		if(m.client)
 			return TRUE
 	return FALSE
 
-/mob/living/complex_animal/emote(act, m_type = null, message = null, ignore_status = FALSE, var/arguments)
+/mob/living/simple_animal/complex/emote(act, m_type = null, message = null, ignore_status = FALSE, var/arguments)
+	if(allow_msg())
+		return ..()
+	return null
+	
+/mob/living/simple_animal/complex/say(message, var/datum/language/speaking, var/atom/movable/radio=src, var/class)
 	if(allow_msg())
 		return ..()
 	return null
 
-/mob/living/complex_animal/say(message, var/datum/language/speaking, var/atom/movable/radio=src, var/class)
-	if(allow_msg())
-		return ..()
-	return null
-
-/mob/living/complex_animal/update_icon()
+/mob/living/simple_animal/complex/update_icon()
 	..()
 	icon_state=icon_living
 	if (stat==DEAD)
 		icon_state=icon_dead
 
-/mob/living/complex_animal/Life()
+/mob/living/simple_animal/complex/Life()
 	update_icon()
 	if(!..())
 		return 0
@@ -193,7 +179,7 @@
 	return 1
 
 //runs independently of other states so we won't starve to death running away.
-/mob/living/complex_animal/proc/interrupt_hunger()
+/mob/living/simple_animal/complex/proc/interrupt_hunger()
 	if(behavior_state==ANIMAL_STATE_HUNTING || behavior_state==ANIMAL_STATE_ATTACKING || behavior_state==ANIMAL_STATE_DEFENDING)
 		return FALSE
 	if(nutrition<max_food*0.5)
@@ -203,7 +189,7 @@
 		return TRUE
 
 //so we aren't too busy to run from a bear.
-/mob/living/complex_animal/proc/interrupt_fear()
+/mob/living/simple_animal/complex/proc/interrupt_fear()
 	if(behavior_state==ANIMAL_STATE_HUNTING || behavior_state==ANIMAL_STATE_ATTACKING || behavior_state==ANIMAL_STATE_DEFENDING)
 		return FALSE
 	for(var/mob/living/M in cache_objects_in_view) //check for danger and flee
@@ -215,7 +201,7 @@
 			return TRUE
 
 //defend our /turf before other stuff
-/mob/living/complex_animal/proc/interrupt_territory()
+/mob/living/simple_animal/complex/proc/interrupt_territory()
 	if(behavior_state==ANIMAL_STATE_HUNTING || behavior_state==ANIMAL_STATE_ATTACKING || behavior_state==ANIMAL_STATE_DEFENDING)
 		return FALSE
 	if(!(behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL))
@@ -229,7 +215,7 @@
 			return TRUE
 
 //state functions return TRUE if the behavior_state is unchanged, and FALSE if not. basically just do if(..())
-/mob/living/complex_animal/proc/tick_state_idle()
+/mob/living/simple_animal/complex/proc/tick_state_idle()
 	abort_target()
 
 	//attempt reproduction only while full
@@ -247,12 +233,12 @@
 
 	if(territory && prob(25)) //randomly move the territory
 		if(behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) //move our territory closer to pack members
-			var/list/mob/living/complex_animal/members=list()
-			for(var/mob/living/complex_animal/M in cache_objects_in_view)
+			var/list/mob/living/simple_animal/complex/members=list()
+			for(var/mob/living/simple_animal/complex/M in cache_objects_in_view)
 				if(is_kin(M))
 					members+=M
 			if(members.len)
-				var/mob/living/complex_animal/M = pick(members) //pick a random member to move territory towards
+				var/mob/living/simple_animal/complex/M = pick(members) //pick a random member to move territory towards
 				var/traversedir = get_dir(territory,M.territory)
 				for(var/i=0,i<4,i++) //4 steps ensures that we will overshoot regularly, which adds a bit of random flavor to the pack position
 					var/turf/T=get_step(M.territory,traversedir)
@@ -265,7 +251,7 @@
 		territory=locate(x,y,z)
 	return TRUE
 
-/mob/living/complex_animal/proc/tick_state_hunting()
+/mob/living/simple_animal/complex/proc/tick_state_hunting()
 	if(nutrition>max_food*0.75)
 		abort_target()
 		return FALSE
@@ -300,7 +286,7 @@
 			tryeat(target)
 	return TRUE
 
-/mob/living/complex_animal/proc/tick_state_defending()
+/mob/living/simple_animal/complex/proc/tick_state_defending()
 	if(!verify_target(target))
 		abort_target()
 		return FALSE
@@ -315,7 +301,7 @@
 			attack(target)
 	return TRUE
 
-/mob/living/complex_animal/proc/tick_state_attacking()
+/mob/living/simple_animal/complex/proc/tick_state_attacking()
 	if(!verify_target(target,15))
 		abort_target()
 		return FALSE
@@ -328,7 +314,7 @@
 			attack(target)
 	return TRUE
 
-/mob/living/complex_animal/proc/tick_state_fleeing()
+/mob/living/simple_animal/complex/proc/tick_state_fleeing()
 	if(!verify_target(target,10))
 		abort_target()
 		return FALSE
@@ -337,11 +323,11 @@
 		walk_away(src,target,10,movespeed)
 	return TRUE
 
-/mob/living/complex_animal/proc/tick_state_mating()
+/mob/living/simple_animal/complex/proc/tick_state_mating()
 	if(!verify_target(target,8))
 		for(var/atom/A in cache_objects_in_view)
-			if(istype(A,/mob/living/complex_animal))
-				var/mob/living/complex_animal/CA=A
+			if(istype(A,/mob/living/simple_animal/complex))
+				var/mob/living/simple_animal/complex/CA=A
 				if(can_offspring(CA) && CA.can_offspring(src) && CA.behavior_state==ANIMAL_STATE_MATING && !CA.target) //you better believe we're going to enforce the communicative property.
 					visible_message("<b>\the [src]</b> looks lovingly at \the [CA].")
 					target=CA
@@ -351,10 +337,10 @@
 			abort_target()
 			return FALSE
 	else
-		if(!istype(target,/mob/living/complex_animal)) //something has gone terribly wrong
+		if(!istype(target,/mob/living/simple_animal/complex)) //something has gone terribly wrong
 			abort_target()
 			return FALSE
-		var/mob/living/complex_animal/M = target
+		var/mob/living/simple_animal/complex/M = target
 		if(get_dist(src,M)>1)
 			walk_to(src,M,0,movespeed)
 		else
@@ -371,12 +357,12 @@
 					return FALSE
 	return TRUE
 
-/mob/living/complex_animal/proc/tick_state_special()
+/mob/living/simple_animal/complex/proc/tick_state_special()
 	return TRUE
 
 
 //checks our target variable and returns if it's valid.
-/mob/living/complex_animal/proc/verify_target(var/atom/targ,var/max_distance=-1,var/allow_dead=FALSE)
+/mob/living/simple_animal/complex/proc/verify_target(var/atom/targ,var/max_distance=-1,var/allow_dead=FALSE)
 	if(!targ)
 		return FALSE
 	if(max_distance>=0)
@@ -390,13 +376,13 @@
 			return FALSE
 	return TRUE
 
-/mob/living/complex_animal/proc/abort_target(var/reset_state=TRUE)
+/mob/living/simple_animal/complex/proc/abort_target(var/reset_state=TRUE)
 	target=null
 	walk(src,0)
 	if(reset_state)
 		behavior_state=ANIMAL_STATE_IDLE
 
-/mob/living/complex_animal/proc/is_kin(var/mob/target)
+/mob/living/simple_animal/complex/proc/is_kin(var/mob/target)
 	if(!istype(target,/mob))
 		return FALSE
 	if(target in family)
@@ -412,7 +398,7 @@
 	return FALSE
 
 //return a list of valid salad
-/mob/living/complex_animal/proc/get_food()
+/mob/living/simple_animal/complex/proc/get_food()
 	var/list/foodsources=list()
 	for(var/atom/A in cache_objects_in_view)
 		if(A==src) //do not eat ourselves
@@ -421,7 +407,7 @@
 			if(istype(A,/obj/structure/flora) && !istype(A,/obj/structure/flora/tree) && !istype(A,/obj/structure/flora/rock))
 				foodsources+=A
 				continue
-			if(istype(A,/turf/unsimulated/floor/jungle/grass))
+			if(istype(A,/turf/unsimulated/floor/planetary/grass/jungle))
 				foodsources+=A
 				continue
 		if(food_flags & ANIMAL_FRUGIVORE)
@@ -431,7 +417,7 @@
 					foodsources+=A
 					continue
 		if(food_flags & ANIMAL_CARNIVORE)
-			if(istype(A,/mob/living/carbon) || istype(A,/mob/living/simple_animal) || istype(A,/mob/living/complex_animal))
+			if(istype(A,/mob/living/carbon) || istype(A,/mob/living/simple_animal) || istype(A,/mob/living/simple_animal/complex))
 				var/mob/living/M=A
 				if(M.stat!=DEAD)
 					if(!is_pacified() && behavior_flags & ANIMAL_BEHAVIOR_PREDATORY)
@@ -454,7 +440,7 @@
 	return foodsources
 
 //take the list from get_food, and create an associated list ranking our affinity for them
-/mob/living/complex_animal/proc/rank_foodsources(var/list/sources)
+/mob/living/simple_animal/complex/proc/rank_foodsources(var/list/sources)
 	var/list/out=list() //associate list time!!!!!!!!!! I LOVE BYOND!!!!111!
 	for(var/atom/A in sources)
 		var/p=rand(-2,2) // randomize it for a bit of spice
@@ -474,8 +460,8 @@
 				var/mob/living/simple_animal/SA=A
 				if(SA.is_poisonous)
 					p+=ANIMAL_FOODPRIORITY_UNDESIRABLE
-			if(istype(A,/mob/living/complex_animal))
-				var/mob/living/complex_animal/CA=A
+			if(istype(A,/mob/living/simple_animal/complex))
+				var/mob/living/simple_animal/complex/CA=A
 				if(CA.behavior_flags & ANIMAL_BEHAVIOR_UNDESIRABLE)
 					p+=ANIMAL_FOODPRIORITY_UNDESIRABLE
 		if(istype(A,/obj/item/weapon/reagent_containers/food/snacks))
@@ -486,12 +472,13 @@
 	return out
 
 
-/mob/living/complex_animal/UnarmedAttack(var/atom/A, var/proximity_flag, var/params)
+/mob/living/simple_animal/complex/UnarmedAttack(var/atom/A, var/proximity_flag, var/params)
 	if(attack_delayer.next_allowed<=world.time)
-		..()
+		.=..()
 		delayNextAttack(2 SECONDS) //fixes hitting same object multiple times rapidly
+			
 
-/mob/living/complex_animal/proc/aggro_drawn(var/victim,var/state=ANIMAL_STATE_ATTACKING,var/skipsmg=FALSE)
+/mob/living/simple_animal/complex/proc/aggro_drawn(var/victim,var/state=ANIMAL_STATE_ATTACKING,var/skipsmg=FALSE)
 	if(!victim)
 		return
 	if(!skipsmg && target!=victim && state!=behavior_state)
@@ -503,14 +490,14 @@
 	if(istype(target,/mob/living))
 		var/mob/living/T=target
 		if(T.stat!=DEAD)
-			for(var/mob/living/complex_animal/M in cache_objects_in_view)
+			for(var/mob/living/simple_animal/complex/M in cache_objects_in_view)
 				if( (behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) || (M in family))
 					if(is_kin(M) && !M.is_kin(target)) //rally the pack to us, if the target is not kin
 						if(M.behavior_state!=state) //if the pack member is not engaged in similar activity
 							M.aggro_drawn(victim,state) //do this recursively for each. don't kick the bee hive.
 
 
-/mob/living/complex_animal/proc/attack(var/victim)
+/mob/living/simple_animal/complex/proc/attack(var/victim)
 	if(!verify_target(victim,1,TRUE))
 		return FALSE
 	if(is_pacified())
@@ -518,10 +505,13 @@
 	if(!victim)
 		return FALSE
 	if(istype(victim,/mob))
-		return unarmed_attack_mob(victim)
-	return UnarmedAttack(victim,Adjacent(victim))
+		.= unarmed_attack_mob(victim)
+	else
+		.= UnarmedAttack(victim,Adjacent(victim))
+	if(.)
+		get_attack_msg(victim)
 
-/mob/living/complex_animal/proc/tryeat(var/victim)
+/mob/living/simple_animal/complex/proc/tryeat(var/victim)
 	if(!victim)
 		return FALSE
 	if(!verify_target(victim,1,TRUE))
@@ -574,7 +564,7 @@
 	return TRUE
 
 //stolen from simple_animal/hostile
-/mob/living/complex_animal/proc/escape()
+/mob/living/simple_animal/complex/proc/escape()
 	if(!(behavior_flags & ANIMAL_BEHAVIOR_AVOID_CAPTURE))
 		return
 	if(locked_to)
@@ -584,7 +574,7 @@
 		UnarmedAttack(A, Adjacent(A))
 
 //stolen from simple_animal/hostile
-/mob/living/complex_animal/proc/fuckshitup()
+/mob/living/simple_animal/complex/proc/fuckshitup()
 	if(!target)
 		return
 	if(!(behavior_flags & ANIMAL_BEHAVIOR_DESTRUCTIVE))
@@ -621,7 +611,7 @@
 
 
 //only fired when the mob is within our territory, and we have the TERRITORIAL flag
-/mob/living/complex_animal/proc/determine_tresspass(var/mob/trespasser)
+/mob/living/simple_animal/complex/proc/determine_tresspass(var/mob/trespasser)
 	if(!verify_target(trespasser))
 		return FALSE
 	if(is_pacified())
@@ -630,14 +620,14 @@
 		var/mob/living/simple_animal/A=trespasser
 		if(A.pacify_aura)
 			return FALSE
-	if(istype(trespasser,/mob/living/complex_animal))
-		var/mob/living/complex_animal/A=trespasser
+	if(istype(trespasser,/mob/living/simple_animal/complex))
+		var/mob/living/simple_animal/complex/A=trespasser
 		if(A.pacify_aura || (A.behavior_flags & ANIMAL_BEHAVIOR_UNDESIRABLE) )
 			return FALSE
 	return !is_kin(trespasser)
 
 //only fired when the mob is seen by us, and we have the AVOID_PRED flag
-/mob/living/complex_animal/proc/determine_isthreat(var/mob/individual)
+/mob/living/simple_animal/complex/proc/determine_isthreat(var/mob/individual)
 	if(!verify_target(individual))
 		return FALSE
 	if(is_pacified())
@@ -651,46 +641,46 @@
 			return !(behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL)
 		if(istype(individual,/mob/living/simple_animal))
 			return istype(individual,/mob/living/simple_animal/hostile)
-		if(istype(individual,/mob/living/complex_animal))
-			var/mob/living/complex_animal/A = individual
+		if(istype(individual,/mob/living/simple_animal/complex))
+			var/mob/living/simple_animal/complex/A = individual
 			return A.behavior_flags & (ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_TERRITORIAL)
 	return FALSE
 
 
-/mob/living/complex_animal/proc/get_aggro_msg(var/individual)
+/mob/living/simple_animal/complex/proc/get_aggro_msg(var/individual)
 	emote("me",MESSAGE_SEE,"stares alertly at \the [individual].")
 
-/mob/living/complex_animal/proc/get_flee_msg(var/individual)
+/mob/living/simple_animal/complex/proc/get_flee_msg(var/individual)
 	emote("me",MESSAGE_SEE,"stares at \the [individual] and runs away.")
 
-/mob/living/complex_animal/proc/get_tesspass_msg(var/individual)
+/mob/living/simple_animal/complex/proc/get_tesspass_msg(var/individual)
 	emote("me",MESSAGE_SEE,"stares alertly at \the [individual].")
 
-/mob/living/complex_animal/proc/get_hunting_msg(var/individual)
+/mob/living/simple_animal/complex/proc/get_hunting_msg(var/individual)
 	if(istype(individual,/mob))
 		emote("me",MESSAGE_SEE,"stares hungrily at \the [individual].")
 	else
 		visible_message("<b>\The [src]</b> stares hungrily at <b>\the [individual]</b>.")
 
-/mob/living/complex_animal/proc/get_attack_msg(var/individual)
+/mob/living/simple_animal/complex/proc/get_attack_msg(var/individual)
 	emote("me",MESSAGE_SEE,"attacks \the [individual]!")
 
-/mob/living/complex_animal/proc/get_idle_sounds()
+/mob/living/simple_animal/complex/proc/get_idle_sounds()
 	if(prob(10))
 		emote("me",MESSAGE_HEAR, "vocalizes.")
 
 
-/mob/living/complex_animal/proc/get_offspring_cost()
+/mob/living/simple_animal/complex/proc/get_offspring_cost()
 	return size*7.5
 
 // if you don't want offspring, then return FALSE here.
-/mob/living/complex_animal/proc/can_offspring(var/mob/living/complex_animal/mate)
+/mob/living/simple_animal/complex/proc/can_offspring(var/mob/living/simple_animal/complex/mate)
 	if(!mate)
 		return FALSE
 	if(mate.type!=src.type)
 		return FALSE
 	var/localcount=0
-	for(var/mob/living/complex_animal/A in cache_objects_in_view)
+	for(var/mob/living/simple_animal/complex/A in cache_objects_in_view)
 		if(A.type==src.type && A.stat!=DEAD)
 			localcount++
 	if(localcount>max_local_population)
@@ -704,8 +694,8 @@
 	return FALSE
 
 //this proc is ran on the mother only.
-/mob/living/complex_animal/proc/generate_offspring(var/mob/living/complex_animal/father)
-	var/mob/living/complex_animal/child=new src.type(loc)
+/mob/living/simple_animal/complex/proc/generate_offspring(var/mob/living/simple_animal/complex/father)
+	var/mob/living/simple_animal/complex/child=new src.type(loc)
 	if(!child)
 		return FALSE
 	child.faction=faction
@@ -715,38 +705,9 @@
 	child.family+=src
 	child.family+=father
 	return child
+	
 
-
-/mob/living/complex_animal/get_unarmed_damage(var/atom/victim)
-	return base_damage+ (damage_variance ? rand(-damage_variance,damage_variance) : 0)
-
-
-
-/mob/living/complex_animal/init_butchering_list()
-	if(butchering_drops && butchering_drops.len) //Already initialized
-		return
-
-	butchering_drops = list()
-	var/list/animal_butchering_products = get_butchering_products()
-	if(animal_butchering_products.len > 0)
-		for(var/butchering_type in animal_butchering_products)
-			butchering_drops += new butchering_type()
-
-/mob/living/complex_animal/death(gibbed) //stolen from simple_animal
-	..()
-	init_butchering_list()
-	if((status_flags & BUDDHAMODE) || stat == DEAD)
-		return
-
-	if(!gibbed)
-		emote("deathgasp", message = TRUE)
-	health = 0
-	stat = DEAD
-	update_icon()
-	walk(src,0)
-	setDensity(FALSE)
-
-/mob/living/complex_animal/attack_hand(var/mob/living/carbon/human/H)
+/mob/living/simple_animal/complex/attack_hand(var/mob/living/carbon/human/H)
 	H.delayNextAttack(2 SECONDS)
 	if(H.a_intent==I_HURT)
 		H.unarmed_attack_mob(src)
@@ -767,33 +728,14 @@
 			return
 	..()
 
-/mob/living/complex_animal/proc/trypet(var/mob/living/carbon/human/H)
+/mob/living/simple_animal/complex/proc/trypet(var/mob/living/carbon/human/H)
 	if(petable)
 		H.emote("me",MESSAGE_SEE,"pets \the [src].")
 		var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 		heart.plane = ABOVE_HUMAN_PLANE
 		flick_overlay(heart, list(H.client), 20)
 
-/mob/living/complex_animal/attackby(var/obj/item/I, var/mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
-	if(user.a_intent == I_HELP)
-		user.visible_message("<span class='notice'>[user] [pick(list("pokes","prods","taps"))] \the [src] with \the [I].</span>")
-		to_chat(user, "<span class='notice'>You [pick(list("poke","prod","tap"))] \the [src] with \the [I].</span>")
-	else
-		..()
-		user.visible_message("<span class='danger'>[user] hits \the [src] with \the [I]!</span>")
-		to_chat(user, "<span class='danger'>You hit \the [src] with \the [I]!</span>")
-		if(health<=0)
-			death()
-		if(behavior_flags & ANIMAL_BEHAVIOR_RETALIATE)
-			behavior_state=behavior_state=ANIMAL_STATE_ATTACKING
-			aggro_drawn(user,ANIMAL_STATE_ATTACKING)
-		else
-			get_flee_msg(user)
-			behavior_state = ANIMAL_STATE_FLEEING
-			target=user
-
-
-/mob/living/complex_animal/assaulted_by(var/mob/M,var/weak_assault=FALSE)
+/mob/living/simple_animal/complex/assaulted_by(var/mob/M,var/weak_assault=FALSE)
 	if(!weak_assault)
 		if(behavior_flags & ANIMAL_BEHAVIOR_RETALIATE)
 			behavior_state=ANIMAL_STATE_ATTACKING
@@ -804,7 +746,7 @@
 			target=M
 	return ..()
 
-/mob/living/complex_animal/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
+/mob/living/simple_animal/complex/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
 	if(behavior_flags & ANIMAL_BEHAVIOR_RETALIATE)
 		behavior_state=behavior_state=ANIMAL_STATE_ATTACKING
 		aggro_drawn(attacker,ANIMAL_STATE_ATTACKING)
@@ -814,16 +756,20 @@
 		target=attacker
 	return ..()
 
-/mob/living/complex_animal/getarmor(var/def_zone, var/type)
+/mob/living/simple_animal/complex/getarmor(var/def_zone, var/type)
 	return armor[type] || 0
 
-/mob/living/complex_animal/beartrap_act(var/obj/item/weapon/beartrap/trap)
+/mob/living/simple_animal/complex/death()
+	..()
+	walk(src,0)
+
+/mob/living/simple_animal/complex/beartrap_act(var/obj/item/weapon/beartrap/trap)
 	if(flying)
 		return FALSE
-	if(size>SIZE_TINY)
+	if(size<=SIZE_TINY)
 		return FALSE
 	trap.trapped = 1
-	trap.trappedcanimal = src
+	trap.trappedbear = src
 	trap.armed = 0
 	playsound(trap, 'sound/effects/snap.ogg', 60, 1)
 	trap.lock_atom(src, /datum/locking_category/beartrap)
