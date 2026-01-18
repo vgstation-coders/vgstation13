@@ -142,7 +142,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 
 //Storing those in a datum to not crowd up the View Variable window even further
 /datum/perception_filters
-	var/list/orphan_planemasters = list()
+	var/list/planemasters = list()
 	var/list/perception_planemasters = list()
 	var/list/perception_filters = list()
 	var/enabled_filters = 0//bitflags
@@ -150,14 +150,13 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 //Creating new planemasters for every plane that doesn't already have a dedicated planemaster
 //BE SURE TO UPDATE THIS LIST IF YOU ADD OR REMOVE OTHER PLANEMASTERS
 /mob/proc/create_orphan_planemasters()
-	for (var/planemaster in perception_filters.orphan_planemasters)
-		var/obj/abstract/screen/plane_master/PM = perception_filters.orphan_planemasters[planemaster]
+	for (var/planemaster in perception_filters.planemasters)
+		var/obj/abstract/screen/plane_master/PM = perception_filters.planemasters[planemaster]
 		client.screen -= PM
-		perception_filters.orphan_planemasters -= planemaster
+		perception_filters.planemasters -= planemaster
 		qdel(PM)
 
-	var/static/list/planes_without_dedicated_planemasters = list(
-		"ABOVE_PARALLAX_PLANE"	= ABOVE_PARALLAX_PLANE,
+	var/static/list/normal_planemasters = list(
 		"BELOW_PLATING_PLANE"	= BELOW_PLATING_PLANE,
 		"PLATING_PLANE"			= PLATING_PLANE,
 		"ABOVE_PLATING_PLANE"	= ABOVE_PLATING_PLANE,
@@ -180,18 +179,29 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 		"ABOVE_LIGHTING_PLANE"	= ABOVE_LIGHTING_PLANE,
 		)
 
-	for (var/orphan_plane in planes_without_dedicated_planemasters)
+	for (var/normal_plane in normal_planemasters)
 		var/obj/abstract/screen/plane_master/PM = new(client)
-		PM.plane = planes_without_dedicated_planemasters[orphan_plane]
-		perception_filters.orphan_planemasters[orphan_plane] = PM
+		PM.plane = normal_planemasters[normal_plane]
+		perception_filters.planemasters[normal_plane] = PM
+		client.screen += PM
+
+	var/static/list/additive_planemasters = list(
+		"ABOVE_LIGHTING_PLANE_ADDITIVE"	= ABOVE_LIGHTING_PLANE_ADDITIVE,
+		)
+
+	for (var/additive_plane in additive_planemasters)
+		var/obj/abstract/screen/plane_master/PM = new(client)
+		PM.plane = additive_planemasters[additive_plane]
+		PM.blend_mode = BLEND_ADD
+		perception_filters.planemasters[additive_plane] = PM
 		client.screen += PM
 
 //Adding all the planemasters we want to add filters on top to a single list so it's easier to manipulate
 /mob/proc/list_perception_planemasters()
 	perception_filters.perception_planemasters.len = 0
 
-	for (var/plane in perception_filters.orphan_planemasters)
-		var/P = perception_filters.orphan_planemasters[plane]
+	for (var/plane in perception_filters.planemasters)
+		var/P = perception_filters.planemasters[plane]
 		perception_filters.perception_planemasters += P
 
 	//We're not adding filters to the parallax planemasters for now. It's tough to make it look good.
@@ -385,7 +395,7 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 //Since blood gets draw on this plane, this is necessary to allow other filters to get applied to blood
 
 /mob/proc/enable_noir()
-	var/obj/abstract/screen/plane_master/PM = perception_filters.orphan_planemasters["NOIR_BLOOD_PLANE"]
+	var/obj/abstract/screen/plane_master/PM = perception_filters.planemasters["NOIR_BLOOD_PLANE"]
 	PM.color =  list("#0000",
 					 "#0000",
 					 "#0000",
@@ -394,6 +404,6 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	PM.appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER//NO_CLIENT_COLOR sadly doesn't prevent the blood itself from turning grey, which is why it has to be recolored with the above matrix
 
 /mob/proc/disable_noir()
-	var/obj/abstract/screen/plane_master/PM = perception_filters.orphan_planemasters["NOIR_BLOOD_PLANE"]
+	var/obj/abstract/screen/plane_master/PM = perception_filters.planemasters["NOIR_BLOOD_PLANE"]
 	PM.color = null
 	PM.appearance_flags = PLANE_MASTER

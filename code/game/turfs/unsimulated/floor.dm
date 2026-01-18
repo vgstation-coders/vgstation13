@@ -109,7 +109,7 @@
 				if(prob(20))
 					ChangeTurf(soil_turf_type)
 		..()
-	
+
 /turf/unsimulated/floor/mars
 	name = "surface"
 	icon_state = "ironsand1"
@@ -172,7 +172,7 @@
 	var/image/fire = image('icons/effects/fire.dmi', "[rand(1,3)]")
 	fire.blend_mode = BLEND_ADD
 	fire.layer = TURF_FIRE_LAYER
-	fire.plane = ABOVE_TURF_PLANE
+	fire.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 	overlays += fire
 
 /turf/unsimulated/floor/brimstone/Destroy()

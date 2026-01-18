@@ -71,7 +71,7 @@
 					var/image/I = image(icon, src, "[icon_state]-flamin")
 					I.blend_mode = BLEND_ADD
 					if (isturf(loc))
-						I.plane = ABOVE_LIGHTING_PLANE
+						I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 					else
 						I.plane = ABOVE_HUD_PLANE // inventory
 					overlays += I
