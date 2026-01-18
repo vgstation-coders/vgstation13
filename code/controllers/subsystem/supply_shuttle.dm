@@ -33,7 +33,11 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	var/list/supply_consoles = list()
 	//shuttle movement
 	var/at_station = 0
+#ifdef DEVELOPER_MODE
+	var/movetime = 2 SECONDS
+#else
 	var/movetime = 2 MINUTES
+#endif
 	var/moving = 0
 	var/eta_timeofday
 	var/eta
@@ -175,6 +179,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	for (var/obj/effect/rune/R in cargo_shuttle.linked_area)
 		qdel(R)
 
+var/list/static/acceptable_cargo_stamps = list(/obj/item/weapon/stamp,/obj/item/weapon/stamp/hop,/obj/item/weapon/stamp/captain)
+
 /datum/subsystem/supply_shuttle/proc/sell()
 
 	if(!cargo_shuttle || !cargo_shuttle.linked_area)
@@ -279,6 +285,21 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 				log_debug("CARGO FORWARDING: [CF] denied: Manifest was in [get_area(CF.associated_manifest)], not in [cargo_shuttle.linked_area]")
 		if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
 			reason = "Manifest was not stamped"
+		if(CF.associated_manifest)
+			var/stamp_found = FALSE
+			for(var/type in CF.associated_manifest.stamped)
+				if(type == /obj/item/weapon/stamp/clown)
+					stamp_found = prob(10)
+				else if(CF.name != CF.real_name)
+					if(type == /obj/item/weapon/stamp/denied)
+						stamp_found = TRUE
+						break
+				else
+					if(type in acceptable_cargo_stamps)
+						stamp_found = TRUE
+						break
+			if(!stamp_found)
+				reason = "Incorrect stamp applied"
 		if(istype(CF.associated_crate,/obj/structure/closet))
 			var/obj/structure/closet/CL = CF.associated_crate
 			if(CL.broken)
@@ -447,6 +468,18 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 					10;/datum/cargo_forwarding/vendotron_stack,
 				)
 				var/datum/cargo_forwarding/NCF = new cratetype
+				if(prob(25))
+					var/faketype = pick(
+						750;/datum/cargo_forwarding/from_supplypack,
+						150;/datum/cargo_forwarding/from_centcomm_order,
+						40;/datum/cargo_forwarding/janicart,
+						40;/datum/cargo_forwarding/gokart,
+						10;/datum/cargo_forwarding/random_mob,
+						10;/datum/cargo_forwarding/vendotron_stack,
+					)
+					var/datum/cargo_forwarding/FCF = new faketype
+					NCF.name = FCF.name
+					qdel(FCF)
 				new_forwards.Add(NCF)
 
 		for(var/datum/cargo_forwarding/CF in new_forwards)

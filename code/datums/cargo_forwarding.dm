@@ -4,6 +4,7 @@
 
 /datum/cargo_forwarding
 	var/name = ""
+	var/real_name = ""
 	var/datum/money_account/acct // account we pay to
 	var/acct_by_string = "Cargo"
 	var/list/contains = list()
@@ -31,6 +32,7 @@
 
 /datum/cargo_forwarding/New(var/sender = "", var/station = "", var/supply_type = null, var/do_not_add = FALSE)
 	..()
+	real_name = name
 	if (acct_by_string)
 		acct = department_accounts[acct_by_string]
 	else
