@@ -1376,7 +1376,7 @@
 "apj" = (
 /obj/structure/table,
 /obj/item/weapon/reagent_containers/food/snacks/greygreens,
-/obj/item/weapon/kitchen/utensil/fork/teflon,
+/obj/item/weapon/kitchen/utensil/fork/plastic/teflon,
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched"
 	},
