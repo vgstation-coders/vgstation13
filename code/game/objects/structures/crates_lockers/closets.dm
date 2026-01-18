@@ -673,8 +673,17 @@
 		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 
+/obj/structure/closet/t_scanner_expose()
+	if(opened)
+		return
+	for(var/obj/O in contents)
+		var/image/overlay = image(O.icon,loc,O.icon_state,layer,O.dir)
+		overlay.alpha = 127
+		overlays += overlay
 
-
+	spawn(1 SECONDS)
+		overlays.len = 0
+		update_icon()
 
 // -- Vox raiders.
 
