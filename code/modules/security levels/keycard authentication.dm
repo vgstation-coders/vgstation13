@@ -254,17 +254,18 @@ var/global/list/all_access_list = list()
 
 /proc/make_doors_all_access(var/list/accesses, var/announce = TRUE)
 	all_access_list.Add(accesses)
+	for(var/obj/machinery/door/airlock/AL in world)
+		if(AL.check_access_list(accesses))
+			AL.enable_emergency_access_override()
 	if(announce)
 		to_chat(world, "<font size=4 color='red'>Attention!</font>")
 		to_chat(world, "<span class='red'>The [get_access_desc_list(accesses)] access requirement has been revoked on all airlocks.</span>")
 
 /proc/revoke_doors_all_access(var/list/accesses, var/announce = TRUE)
 	all_access_list.Remove(accesses)
+	for(var/obj/machinery/door/airlock/AL in world)
+		if(AL.check_access_list(accesses))
+			AL.disable_emergency_access_override()
 	if(announce)
 		to_chat(world, "<font size=4 color='red'>Attention!</font>")
 		to_chat(world, "<span class='red'>The [get_access_desc_list(accesses)] access requirement has been readded on all airlocks.</span>")
-
-/obj/machinery/door/airlock/allowed(mob/M)
-	if(check_access_list(all_access_list))
-		return 1
-	return ..(M)
