@@ -179,7 +179,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	for (var/obj/effect/rune/R in cargo_shuttle.linked_area)
 		qdel(R)
 
-var/list/static/acceptable_cargo_stamps = list(/obj/item/weapon/stamp,/obj/item/weapon/stamp/hop,/obj/item/weapon/stamp/captain)
+var/list/static/universal_cargo_stamps = list(/obj/item/weapon/stamp/hop,/obj/item/weapon/stamp/captain)
 
 /datum/subsystem/supply_shuttle/proc/sell()
 
@@ -288,14 +288,17 @@ var/list/static/acceptable_cargo_stamps = list(/obj/item/weapon/stamp,/obj/item/
 		if(CF.associated_manifest)
 			var/stamp_found = FALSE
 			for(var/type in CF.associated_manifest.stamped)
-				if(type == /obj/item/weapon/stamp/clown)
+				if(type in universal_cargo_stamps)
+					stamp_found = TRUE
+					break
+				else if(type == /obj/item/weapon/stamp/clown)
 					stamp_found = prob(10)
 				else if(CF.name != CF.real_name)
 					if(type == /obj/item/weapon/stamp/denied)
 						stamp_found = TRUE
 						break
 				else
-					if(type in acceptable_cargo_stamps)
+					if(type == /obj/item/weapon/stamp)
 						stamp_found = TRUE
 						break
 			if(!stamp_found)
