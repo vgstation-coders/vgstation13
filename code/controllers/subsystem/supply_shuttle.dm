@@ -294,13 +294,17 @@ var/list/static/universal_cargo_stamps = list(/obj/item/weapon/stamp/hop,/obj/it
 				else if(type == /obj/item/weapon/stamp/clown)
 					stamp_found = prob(10)
 				else if(CF.name != CF.real_name)
-					if(type == /obj/item/weapon/stamp/denied)
-						stamp_found = TRUE
-						break
-				else
 					if(type == /obj/item/weapon/stamp)
-						stamp_found = TRUE
+						stamp_found = FALSE
 						break
+					else if(type == /obj/item/weapon/stamp/denied)
+						stamp_found = TRUE
+				else
+					if(type == /obj/item/weapon/stamp/denied)
+						stamp_found = FALSE
+						break
+					else if(type == /obj/item/weapon/stamp)
+						stamp_found = TRUE
 			if(!stamp_found)
 				reason = "Incorrect stamp applied"
 		if(istype(CF.associated_crate,/obj/structure/closet))
