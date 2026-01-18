@@ -146,6 +146,7 @@
 	if(source_dart.loc != src)											// If our source dart isn't already inside us, move it to us.
 		source_dart.forceMove(src)
 	source_dart.BB = new source_dart.projectile_type(source_dart)		// Reload the dart with a new projectile, so that it can be fired again when it was retrieved.
+	..()
 
 
 /obj/item/projectile/dart/on_hit(atom/A as mob|obj|turf|area)

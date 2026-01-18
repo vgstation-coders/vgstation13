@@ -133,11 +133,7 @@
 
 	spawn(1 SECONDS + 1)
 		if(human_list.len != 0)					// If AM is a human or contains a human, it gets collected by any corpse chutes.
-			var/list/valid_chutes = list()
-			for(var/obj/structure/disposaloutlet/no_deconstruct/abysschute/D in abyss_chutes)	// First, we try to pick a chute with a matching tag.
-				if(D.abyss_link_tag == abyss_link_tag)											// If the tags match, add the chute to the list of possible picks.
-					valid_chutes += D
-			var/obj/structure/disposaloutlet/D = pick(valid_chutes)			// Then we pick one of the valid chutes.
+			var/obj/structure/disposaloutlet/D = get_connected_chute()
 			var/obj/structure/disposalholder/H
 			if(D)
 				H = new(D)
@@ -194,6 +190,16 @@
 				qdel(M)			// We want to delete any mobs first so their ghosts (if they're player-controlled) end up in the spot where they fell.
 			AM.loc = null
 			qdel(AM)
+
+/turf/unsimulated/abyss/proc/get_connected_chute()
+	var/list/valid_chutes = list()
+	for(var/obj/structure/disposaloutlet/no_deconstruct/abysschute/D in abyss_chutes)	// First, we try to pick a chute with a matching tag.
+		if(D.abyss_link_tag == abyss_link_tag)											// If the tags match, add the chute to the list of possible picks.
+			valid_chutes += D
+	var/obj/structure/disposaloutlet/D = null
+	if(valid_chutes.len)
+		D = pick(valid_chutes)			// Then we pick one of the valid chutes.
+	return D
 
 
 var/global/list/abyss_chutes = list()
