@@ -385,6 +385,15 @@
 	icon_state = "dark vault corner"
 	},
 /area/shoal)
+"ee" = (
+/obj/prop/latticemess{
+	color = "#333333"
+	},
+/obj/structure/lattice{
+	fake_z_exclude = 1
+	},
+/turf/unsimulated/floor/abyss/vox,
+/area/shoal)
 "eg" = (
 /obj/machinery/computer/security,
 /turf/unsimulated/floor/vox{
@@ -559,7 +568,6 @@
 	dir = 8
 	},
 /obj/prop/big/hanginglight{
-	pixel_y = 48;
 	pixel_x = -16
 	},
 /turf/unsimulated/floor/abyss/vox,
@@ -662,12 +670,6 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"gY" = (
-/obj/prop/latticemess{
-	color = "#222222"
-	},
-/turf/unsimulated/floor/abyss/vox,
-/area/shoal)
 "gZ" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
@@ -1641,6 +1643,12 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
+"pa" = (
+/obj/prop/latticemess{
+	color = "#222222"
+	},
+/turf/unsimulated/floor/abyss/vox,
+/area/shoal)
 "pd" = (
 /obj/structure/railing{
 	dir = 1
@@ -2389,6 +2397,12 @@
 	name = "wooden vox floor"
 	},
 /area/shoal)
+"wF" = (
+/obj/prop/latticemess{
+	color = "#444444"
+	},
+/turf/unsimulated/floor/abyss/vox,
+/area/shoal)
 "wK" = (
 /obj/structure/lattice{
 	fake_z_exclude = 1
@@ -2493,7 +2507,6 @@
 "xY" = (
 /obj/structure/catwalk,
 /obj/prop/big/hanginglight{
-	pixel_y = 48;
 	pixel_x = -16
 	},
 /obj/structure/railing{
@@ -2721,15 +2734,6 @@
 	icon_state = "dark vault corner";
 	dir = 1
 	},
-/area/shoal)
-"Ac" = (
-/obj/prop/latticemess{
-	color = "#333333"
-	},
-/obj/structure/lattice{
-	fake_z_exclude = 1
-	},
-/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Ag" = (
 /obj/structure/transit_tube{
@@ -3666,7 +3670,6 @@
 /area/fake_z/level1)
 "JC" = (
 /obj/effect/abysslinker/prisonarea,
-/obj/effect/abysslinker/prisonarea,
 /turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "JH" = (
@@ -3961,6 +3964,7 @@
 /area/shoal)
 "Mh" = (
 /obj/effect/abysslinker/prisonarea,
+/obj/effect/abysslinker/prisonarea,
 /turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Mk" = (
@@ -4116,7 +4120,6 @@
 /area/shoal)
 "Nv" = (
 /obj/prop/big/hanginglight{
-	pixel_y = 48;
 	pixel_x = -16
 	},
 /turf/unsimulated/floor/vox{
@@ -4955,7 +4958,6 @@
 "UL" = (
 /obj/structure/catwalk,
 /obj/prop/big/hanginglight{
-	pixel_y = 48;
 	pixel_x = -16
 	},
 /obj/structure/railing{
@@ -5400,12 +5402,6 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area/shoal)
-"YX" = (
-/obj/prop/latticemess{
-	color = "#444444"
-	},
-/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "YY" = (
 /obj/structure/holohoop{
@@ -7537,11 +7533,11 @@ Bl
 UE
 UE
 CP
-YX
+wF
 AA
 AA
 AA
-YX
+wF
 Gq
 UE
 UE
@@ -7836,17 +7832,17 @@ nq
 nq
 Bl
 TV
-YX
-YX
-YX
-YX
+wF
+wF
+wF
+wF
 Nl
 hk
 Nl
-YX
-YX
-YX
-YX
+wF
+wF
+wF
+wF
 FT
 lb
 nq
@@ -8138,17 +8134,17 @@ nq
 Bl
 CP
 AA
-YX
+wF
 Nl
 Nl
-Ac
-Ac
+ee
+ee
 yl
-Ac
-Ac
+ee
+ee
 Nl
 Nl
-YX
+wF
 AA
 Gq
 lb
@@ -8441,15 +8437,15 @@ TV
 AA
 AA
 Nl
-Ac
+ee
 wY
 wY
-gY
+pa
 qF
-gY
+pa
 wY
 wY
-Ac
+ee
 Nl
 AA
 AA
@@ -8739,23 +8735,23 @@ nq
 nq
 nq
 mg
-YX
+wF
 Nl
 gk
 hk
 qF
-gY
+pa
 Yl
 Yl
 WO
 Yl
 Yl
-gY
+pa
 qF
 hk
 hk
-YX
-YX
+wF
+wF
 mg
 nq
 nq
@@ -9041,10 +9037,10 @@ nq
 nq
 nq
 mg
-YX
+wF
 Nl
 wY
-gY
+pa
 nz
 Yl
 Yl
@@ -9054,10 +9050,10 @@ Yl
 Yl
 Yl
 qF
-gY
-Ac
+pa
+ee
 Nl
-YX
+wF
 mg
 nq
 nq
@@ -9343,8 +9339,8 @@ nq
 nq
 Og
 CP
-YX
-Ac
+wF
+ee
 wY
 Yl
 WO
@@ -9356,10 +9352,10 @@ Yl
 WO
 OB
 wK
-gY
+pa
 my
-Ac
-YX
+ee
+wF
 FT
 lb
 nq
@@ -9644,10 +9640,10 @@ nq
 nq
 nq
 mg
-YX
-YX
-Ac
-gY
+wF
+wF
+ee
+pa
 Yl
 Yl
 WO
@@ -9659,9 +9655,9 @@ WO
 Yl
 Yl
 Yl
-gY
-Ac
-YX
+pa
+ee
+wF
 PM
 mg
 Ni
@@ -9946,10 +9942,10 @@ nq
 nq
 nq
 mg
-YX
+wF
 Nl
-Ac
-gY
+ee
+pa
 Yl
 Yl
 Yl
@@ -10550,10 +10546,10 @@ nq
 nq
 nq
 mg
-YX
+wF
 Nl
-Ac
-gY
+ee
+pa
 Yl
 Yl
 Yl
@@ -10852,10 +10848,10 @@ nq
 nq
 nq
 mg
-YX
-YX
-Ac
-gY
+wF
+wF
+ee
+pa
 Yl
 Yl
 WO
@@ -10867,9 +10863,9 @@ WO
 Yl
 Yl
 Yl
-gY
-Ac
-YX
+pa
+ee
+wF
 Xp
 mg
 nf
@@ -11155,10 +11151,10 @@ nq
 nq
 FT
 lb
-YX
-Ac
+wF
+ee
 wY
-gY
+pa
 WO
 WO
 Yl
@@ -11168,10 +11164,10 @@ Yl
 WO
 OB
 WO
-gY
+pa
 my
-Ac
-YX
+ee
+wF
 Og
 CP
 nq
@@ -11457,10 +11453,10 @@ nq
 nq
 nq
 mg
-YX
+wF
 Nl
-Ac
-gY
+ee
+pa
 qF
 Yl
 Yl
@@ -11470,10 +11466,10 @@ Yl
 Yl
 Yl
 qF
-gY
-Ac
+pa
+ee
 Nl
-YX
+wF
 mg
 nq
 nq
@@ -11759,23 +11755,23 @@ nq
 nq
 nq
 mg
-YX
-YX
+wF
+wF
 hk
 hk
 qF
-gY
+pa
 Yl
 Yl
 WO
 Yl
 Yl
-gY
+pa
 qF
 hk
 hk
-YX
-YX
+wF
+wF
 mg
 nq
 nq
@@ -12065,15 +12061,15 @@ vj
 AA
 AA
 Nl
-Ac
+ee
 wY
 wY
-gY
+pa
 qF
-gY
+pa
 wY
 wY
-Ac
+ee
 Nl
 AA
 AA
@@ -12366,17 +12362,17 @@ nq
 Gq
 lb
 AA
-YX
+wF
 Nl
 Nl
-Ac
-Ac
+ee
+ee
 yl
-Ac
-Ac
+ee
+ee
 Nl
 Nl
-YX
+wF
 AA
 Bl
 CP
@@ -12668,17 +12664,17 @@ nq
 nq
 Gq
 vj
-YX
-YX
-YX
-YX
+wF
+wF
+wF
+wF
 Nl
 hk
 Nl
-YX
-YX
-YX
-YX
+wF
+wF
+wF
+wF
 Og
 CP
 nq
@@ -12973,11 +12969,11 @@ Gq
 UE
 UE
 lb
-YX
+wF
 AA
 AA
 AA
-YX
+wF
 Bl
 UE
 UE
@@ -13885,12 +13881,12 @@ nq
 nq
 nq
 nq
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+JC
+JC
+JC
+JC
+JC
+JC
 nq
 nq
 nq
@@ -14184,19 +14180,19 @@ nq
 nq
 nq
 nq
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 nq
 nq
 nq
@@ -14485,19 +14481,19 @@ nq
 nq
 nq
 nq
-Mh
 JC
 Mh
-Mh
-Mh
+JC
+JC
+JC
 in
 oF
 fq
 oF
 ff
-Mh
-Mh
-Mh
+JC
+JC
+JC
 fq
 fq
 fq
@@ -14787,8 +14783,8 @@ nq
 nq
 nq
 nq
-Mh
-Mh
+JC
+JC
 zs
 oF
 oF
@@ -15088,9 +15084,9 @@ nq
 nq
 nq
 nq
-Mh
-Mh
-Mh
+JC
+JC
+JC
 AQ
 cD
 cD
@@ -15390,8 +15386,8 @@ nq
 nq
 nq
 nq
-Mh
-Mh
+JC
+JC
 in
 Za
 cD
@@ -15692,7 +15688,7 @@ nq
 nq
 nq
 nq
-Mh
+JC
 fq
 CY
 Za
@@ -15707,14 +15703,14 @@ cD
 YY
 Jw
 fq
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 fq
 fq
 fq
@@ -15994,8 +15990,8 @@ nq
 nq
 nq
 nq
-Mh
-Mh
+JC
+JC
 Ul
 Za
 cD
@@ -16010,12 +16006,12 @@ cD
 Za
 fq
 jX
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+JC
+JC
+JC
+JC
+JC
+JC
 cT
 fq
 BH
@@ -16296,9 +16292,9 @@ nq
 nq
 nq
 nq
-Mh
-Mh
-Mh
+JC
+JC
+JC
 AQ
 cD
 eN
@@ -16311,14 +16307,14 @@ cD
 eN
 oz
 fq
-Mh
-Mh
+JC
+JC
 Um
 RR
 My
-Mh
-Mh
-Mh
+JC
+JC
+JC
 fq
 Mz
 QC
@@ -16598,8 +16594,8 @@ nq
 nq
 nq
 nq
-Mh
-Mh
+JC
+JC
 fq
 CY
 oz
@@ -16614,11 +16610,11 @@ Za
 oz
 fq
 fo
-Mh
+JC
 rs
 Xe
 OH
-Mh
+JC
 jb
 fq
 fq
@@ -16900,8 +16896,8 @@ nq
 nq
 nq
 nq
-Mh
-Mh
+JC
+JC
 fq
 fq
 fq
@@ -17202,9 +17198,9 @@ nq
 nq
 nq
 nq
-Mh
 JC
 Mh
+JC
 fq
 fq
 fq
@@ -17217,13 +17213,13 @@ yj
 yj
 Jw
 fq
-Mh
-Mh
+JC
+JC
 yo
 Xe
 OH
-Mh
-Mh
+JC
+JC
 fq
 ou
 bb
@@ -17505,9 +17501,9 @@ nq
 nq
 nq
 nq
-Mh
-Mh
-Mh
+JC
+JC
+JC
 fq
 fq
 fq
@@ -17519,13 +17515,13 @@ yj
 yj
 Za
 HJ
-Mh
-Mh
+JC
+JC
 ci
 Qu
 uC
-Mh
-Mh
+JC
+JC
 lI
 Lf
 Tx
@@ -17808,9 +17804,9 @@ nq
 nq
 nq
 nq
-Mh
-Mh
-Mh
+JC
+JC
+JC
 fq
 fq
 fq
@@ -17821,13 +17817,13 @@ yj
 yj
 RC
 YO
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 rG
 eg
 uz
@@ -18112,8 +18108,8 @@ nq
 nq
 nq
 nq
-JC
 Mh
+JC
 fq
 fq
 JX
@@ -18123,13 +18119,13 @@ yj
 yj
 RC
 YO
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 rG
 DJ
 Tx
@@ -18415,9 +18411,9 @@ nq
 nq
 nq
 nq
-Mh
-Mh
-Mh
+JC
+JC
+JC
 wg
 do
 Cj
@@ -18425,13 +18421,13 @@ yK
 yj
 Za
 AH
-Mh
-Mh
+JC
+JC
 Bq
 Cp
 My
-Mh
-Mh
+JC
+JC
 sf
 Vm
 Tx
@@ -18718,8 +18714,8 @@ nq
 nq
 nq
 nq
-Mh
-Mh
+JC
+JC
 lK
 yj
 Cj
@@ -18727,13 +18723,13 @@ yK
 yj
 Jw
 fq
-Mh
-Mh
+JC
+JC
 sv
 Xe
 OH
-Mh
-Mh
+JC
+JC
 fq
 hS
 VV
@@ -19019,9 +19015,9 @@ nq
 nq
 nq
 nq
-Mh
 JC
 Mh
+JC
 fE
 yj
 yj
@@ -19321,8 +19317,8 @@ oR
 ae
 nq
 nq
-Mh
-Mh
+JC
+JC
 iy
 rX
 nw
@@ -19332,11 +19328,11 @@ oz
 oz
 fq
 fo
-Mh
+JC
 Ff
 Xe
 OH
-Mh
+JC
 jb
 fq
 fq
@@ -19623,8 +19619,8 @@ ns
 nq
 nq
 nq
-Mh
-Mh
+JC
+JC
 Sy
 rX
 rX
@@ -19633,14 +19629,14 @@ cD
 cD
 eN
 fq
-Mh
-Mh
+JC
+JC
 kM
 lL
 uC
-Mh
-Mh
-Mh
+JC
+JC
+JC
 fq
 vM
 Tx
@@ -19925,9 +19921,9 @@ Ij
 nq
 nq
 nq
-Mh
-Mh
-Mh
+JC
+JC
+JC
 hF
 Rm
 AN
@@ -19936,12 +19932,12 @@ Hu
 vq
 fq
 jX
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+JC
+JC
+JC
+JC
+JC
+JC
 cT
 fq
 vM
@@ -20228,23 +20224,23 @@ nq
 nq
 nq
 nq
-Mh
 JC
 Mh
+JC
 hF
 rX
 xb
-Mh
-Mh
+JC
+JC
 fq
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+JC
+JC
+JC
+JC
+JC
+JC
+JC
+JC
 fq
 vM
 cU
@@ -20532,12 +20528,12 @@ nq
 nq
 nq
 nq
-Mh
-Mh
+JC
+JC
 HU
 pt
-Mh
-Mh
+JC
+JC
 fq
 fq
 fq
@@ -20834,12 +20830,12 @@ nq
 nq
 nq
 nq
+Mh
+Mh
 JC
 JC
-Mh
-Mh
-Mh
-Mh
+JC
+JC
 nq
 nq
 nq

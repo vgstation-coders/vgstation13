@@ -104,7 +104,7 @@
 		if(M.client)
 			if(M.pulledby) 		// If we have a client, we add attack logs
 				add_logs(M.pulledby, M, "pulled into an abyss", TRUE, src, get_coordinates_string(src))
-				message_admins("[M] was pulled into an abyss by [pulledby].")
+				message_admins("[M] was pulled into an abyss by [M.pulledby].")
 			else if(M.last_bumped_by_timestamp - 0.1 SECONDS <= world.time <= M.last_bumped_by_timestamp + 0.1 SECONDS) // If got bumped into a supermatter
 				var/mob/hostile = M.last_bumped_by.get()
 				add_logs(hostile, M, "bumped into an abyss", TRUE, src, get_coordinates_string(src))
@@ -122,13 +122,14 @@
 		to_chat(M, "<span class='danger'>Everything turns dark as you tumble down the pit...</span>")
 		M.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)
 		M.update_fullscreen_alpha("blindblack", 255, 10)
-		M.audible_scream()
+		if(prob(5) || Holiday == APRIL_FOOLS_DAY)
+			playsound(M, 'sound/effects/kirbyfall.ogg', 25, 0)
+		else
+			M.audible_scream()
 		M.captured = TRUE
 		M.Knockdown(10)
 		M.Stun(10)
 		M.update_canmove()
-
-
 
 	spawn(1 SECONDS + 1)
 		if(human_list.len != 0)					// If AM is a human or contains a human, it gets collected by any corpse chutes.
@@ -149,19 +150,23 @@
 			for(var/mob/living/carbon/human/M in human_list)
 				M.captured = FALSE
 
-				var/total_damage = 100 		// Always enough to knock the person into crit.
-				var/datum/organ/external/lleg = M.pick_usable_organ(LIMB_LEFT_LEG)
-				var/datum/organ/external/rleg = M.pick_usable_organ(LIMB_RIGHT_LEG)
-				var/datum/organ/external/chest = M.pick_usable_organ(LIMB_CHEST)
+				var/total_damage = 100 		// Falling always enough to knock the person into crit.
 
-				if(lleg)
-					var/dam = rand(40, 60)
-					lleg.take_damage(dam, 0)
+				// Damage is dealt onto every lower limb, with any remaining damage getting splashed onto the torso.
+				var/limbs_to_damage = list()
+				limbs_to_damage += M.pick_usable_organ(LIMB_LEFT_LEG)
+				limbs_to_damage += M.pick_usable_organ(LIMB_RIGHT_LEG)
+				limbs_to_damage += M.pick_usable_organ(LIMB_RIGHT_FOOT)
+				limbs_to_damage += M.pick_usable_organ(LIMB_LEFT_FOOT)
+
+				for(var/datum/organ/external/O in limbs_to_damage)
+					if(total_damage < O.min_broken_damage - 10)
+						continue
+					var/dam = rand(O.min_broken_damage - 10, min(O.min_broken_damage+10, total_damage))
+					O.take_damage(dam, 0)
 					total_damage -= dam
-				if(rleg)
-					var/dam = rand(40,min(60, total_damage))
-					rleg.take_damage(dam,0)
-					total_damage -= dam
+
+				var/datum/organ/external/chest = M.pick_usable_organ(LIMB_CHEST)
 				if(chest)
 					chest.take_damage(total_damage,0)	// Any remaining damage gets splashed to the chest.
 				else
