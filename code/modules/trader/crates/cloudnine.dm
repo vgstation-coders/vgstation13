@@ -79,7 +79,6 @@ var/global/list/cloudnine_stuff = list(
 			delayNextMove(HAMSTER_MOVEDELAY)
 			sleep(HAMSTER_MOVEDELAY)
 			repeat--
-		sleep(20 * HAMSTER_MOVEDELAY) //rest period
 		is_wheeling = FALSE
 
 /mob/living/simple_animal/hamster/attack_hand(mob/living/carbon/human/M)
