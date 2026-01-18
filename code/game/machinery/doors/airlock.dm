@@ -56,6 +56,7 @@
 	penetration_dampening = 10
 	var/image/shuttle_warning_lights
 	var/list/remote_control_access = list(/mob/living/silicon, /mob/living/simple_animal/hostile/pulse_demon) //Mobs with access to directly controlling the airlock
+	var/emergency_access_override = FALSE	//enabled via department heads request consoles
 	explosion_block = 1
 
 	emag_cost = 1 // in MJ
@@ -490,7 +491,10 @@ About the new airlock wires panel:
 		if(locked && lights)
 			icon_state = "door_locked"
 		else
-			icon_state = "door_closed"
+			if(emergency_access_override)
+				icon_state = "waiting_for_sprites_to_materialise" //maybe it'll materialise as an overlay instead so this might need to be reworked
+			else
+				icon_state = "door_closed"
 		if (panel_open || welded)
 			var/L[0]
 			if (panel_open)
@@ -1648,3 +1652,16 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/tackled(mob/living/carbon/human/user)
 	if(ishuman(user))
 		emag_check(user.wear_id,user)
+	
+/obj/machinery/door/airlock/proc/enable_emergency_access_override()
+	emergency_access_override = TRUE
+	update_icon()
+	
+/obj/machinery/door/airlock/proc/disable_emergency_access_override()
+	emergency_access_override = FALSE
+	update_icon()
+	
+/obj/machinery/door/airlock/allowed(mob/M)
+	if(emergency_access_override)
+		return 1
+	return ..(M)
