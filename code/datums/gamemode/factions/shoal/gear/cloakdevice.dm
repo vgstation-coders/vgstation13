@@ -1,7 +1,8 @@
 /obj/item/device/cloaker
 	name = "cloaking device"
 	desc = "A device that refracts light around the user, making them blend in with their environment. The illusion is broken if observers get too close. "
-	icon_state = "radio_jammer0"	//temp
+	icon_state = "remy_device_off"
+	icon = 'icons/obj/shoal.dmi'
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -38,7 +39,7 @@
 	update_icon()
 
 /obj/item/device/cloaker/update_icon()
-	icon_state = "radio_jammer[enabled ? 1 : 0]"
+	icon_state = "remy_device_[enabled ? "on" : "off"]"
 
 
 /obj/item/device/cloaker/proc/setup_field()

@@ -31,22 +31,19 @@
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "ae" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
+/obj/structure/hanging_lantern/dim{
+	dir = 1;
+	fake_z_exclude = 1;
+	color = "#555555"
 	},
-/obj/structure/railing/plasteel/pglass,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
+/turf/unsimulated/floor/abyss/vox,
+/area/shoal)
+"au" = (
+/obj/structure/sign/voxsmallmed{
+	pixel_x = -6
 	},
-/area)
-"ak" = (
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete";
-	icon = 'icons/turf/new_snow.dmi'
-	},
-/area)
+/turf/unsimulated/wall/shoal,
+/area/shoal)
 "ax" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/ammo_casing/c9mm/empty,
@@ -60,33 +57,38 @@
 /obj/effect/decal/warning_stripes/siding{
 	dir = 8
 	},
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
 /turf/unsimulated/floor/vox{
 	icon_state = "wood";
 	name = "wooden vox floor"
 	},
 /area/shoal)
-"aJ" = (
-/obj/structure/rack,
-/obj/item/clothing/head/helmet/space/plasmaman/prisoner,
-/obj/item/clothing/suit/space/plasmaman/prisoner,
-/obj/item/clothing/suit/space/plasmaman/prisoner{
-	pixel_x = 2;
-	pixel_y = -2
+"aT" = (
+/obj/structure/table,
+/obj/item/tool/scalpel{
+	pixel_y = -7
 	},
-/obj/item/clothing/head/helmet/space/plasmaman/prisoner{
-	pixel_x = 2;
-	pixel_y = -2
+/obj/item/tool/cautery{
+	pixel_y = 1
+	},
+/obj/item/tool/hemostat{
+	pixel_x = -5;
+	pixel_y = 4
+	},
+/obj/item/tool/retractor{
+	pixel_x = 5;
+	pixel_y = 5
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
 	},
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
+	icon_state = "showroomfloor"
 	},
-/area)
-"aT" = (
-/obj/structure/sign/securearea{
-	pixel_y = -32
-	},
-/turf/unsimulated/wall/shoal,
-/area)
+/area/shoal)
 "bb" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -99,8 +101,8 @@
 /area/shoal)
 "bi" = (
 /obj/item/trash/popcorn,
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
@@ -119,7 +121,22 @@
 	dir = 1;
 	fake_z_exclude = 1
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
+/area/shoal)
+"bu" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "bC" = (
 /obj/structure/railing{
@@ -127,7 +144,7 @@
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
-	icon_state = "warning";
+	icon_state = "warning-asteroid";
 	tag = "icon-warning (NORTH)"
 	},
 /turf/unsimulated/floor/vox{
@@ -145,19 +162,22 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "bL" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)";
-	dir = 9
+/obj/structure/hanging_lantern/dim{
+	dir = 8
 	},
-/turf/simulated/floor/vox/shuttle,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
 /area/shoal)
 "bM" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "loading_area";
 	tag = "icon-loading_area (EAST)"
+	},
+/obj/structure/hanging_lantern/dim{
+	dir = 8
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
@@ -170,19 +190,6 @@
 	dir = 4
 	},
 /area/fake_z/level1)
-"bR" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
 "bU" = (
 /obj/machinery/computer/fluff/communications,
 /turf/unsimulated/floor/vox/plating/alt,
@@ -191,7 +198,7 @@
 /obj/structure/railing{
 	dir = 1
 	},
-/turf/unsimulated/floor/vox,
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "ci" = (
 /obj/structure/railing/plasteel/pglass{
@@ -224,6 +231,12 @@
 	icon_state = "asteroidplating"
 	},
 /area/shoal)
+"cs" = (
+/obj/structure/sign/voxsmallbulb{
+	pixel_x = 6
+	},
+/turf/unsimulated/wall/shoal,
+/area/shoal)
 "ct" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -238,6 +251,14 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level2)
+"cw" = (
+/obj/structure/sign/voxmediumtorture,
+/obj/structure/sign/arrow{
+	dir = 8;
+	pixel_y = -4
+	},
+/turf/unsimulated/wall/shoal,
+/area/shoal)
 "cx" = (
 /obj/structure/railing{
 	dir = 8
@@ -248,16 +269,6 @@
 /obj/structure/catwalk,
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
-"cC" = (
-/obj/machinery/flasher{
-	id_tag = "Shoal Cell 2";
-	name = "floor-mounted vision suppressor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "cD" = (
 /turf/simulated/floor/plating/vox{
 	icon_state = "asteroidplating"
@@ -279,30 +290,37 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
 "cT" = (
-/obj/structure/catwalk,
-/obj/structure/railing{
-	dir = 8
-	},
-/obj/structure/railing{
+/obj/structure/hanging_lantern/dim,
+/obj/effect/abysslinker/prisonarea,
+/turf/unsimulated/floor/abyss/vox,
+/area/shoal)
+"cU" = (
+/obj/structure/hanging_lantern/dim{
 	dir = 4
 	},
-/turf/unsimulated/floor/vox/abyss,
-/area)
-"cU" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
 	},
-/area)
+/area/shoal)
 "cY" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 8
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor/vox/abyss,
-/area)
+/obj/structure/sign/voxmediumtorture{
+	pixel_y = 32
+	},
+/obj/prop/big/hanginglight{
+	pixel_y = 48
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "cZ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -318,26 +336,12 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
-"da" = (
-/obj/structure/dispenser,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "db" = (
 /obj/effect/decal/cleanable/crumbs,
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"dg" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete";
-	icon = 'icons/turf/new_snow.dmi'
-	},
-/area)
 "do" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/vox{
@@ -363,15 +367,16 @@
 "dU" = (
 /obj/structure/table/plastic,
 /obj/item/weapon/storage/fancy/beer_box,
-/turf/unsimulated/floor/asteroid/vox,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
 /area/shoal)
 "dX" = (
 /obj/structure/transit_tube{
 	fake_z_exclude = 1;
 	color = "#777777"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "dZ" = (
 /obj/structure/table/reinforced,
@@ -379,16 +384,6 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault corner"
 	},
-/area/shoal)
-"ee" = (
-/obj/prop/latticemess{
-	color = "#333333"
-	},
-/obj/structure/lattice{
-	fake_z_exclude = 1
-	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
 /area/shoal)
 "eg" = (
 /obj/machinery/computer/security,
@@ -411,15 +406,6 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
-"ej" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "el" = (
 /obj/machinery/vending/voxseeds,
 /turf/simulated/floor/plating/vox{
@@ -458,7 +444,7 @@
 /obj/structure/railing{
 	dir = 1
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
 "eN" = (
 /obj/effect/decal/cleanable/dirt,
@@ -466,37 +452,20 @@
 	icon_state = "asteroidplating"
 	},
 /area/shoal)
-"eO" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/table/plastic,
-/obj/machinery/computer/security/telescreen{
-	network = list("SS13");
-	name = "Detainee Entertainment Monitor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "fc" = (
 /obj/structure/table/woodentable,
 /obj/item/device/flashlight/lamp/green{
 	pixel_x = 16;
 	pixel_y = 11
 	},
-/obj/machinery/computer/fluff{
-	icon = 'icons/obj/library.dmi';
-	icon_state = "accounting";
-	pixel_x = -2;
-	pixel_y = 8
-	},
 /obj/effect/decal/warning_stripes/siding{
 	dir = 8
+	},
+/obj/machinery/computer/fluff/communications{
+	icon = 'icons/obj/library.dmi';
+	icon_state = "accounting";
+	pixel_y = 6;
+	pixel_x = -3
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "wood";
@@ -511,24 +480,21 @@
 	dir = 4
 	},
 /obj/structure/catwalk,
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
-"fe" = (
-/obj/structure/bed/chair/folding,
+"ff" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/railing,
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area)
-"ff" = (
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
+/area/shoal)
 "fj" = (
 /obj/prop/shoalwindow{
 	icon_state = "shoalwindow";
@@ -537,13 +503,11 @@
 /turf/unsimulated/wall/shoal,
 /area/shoal)
 "fo" = (
-/obj/structure/railing,
-/obj/structure/railing{
-	dir = 8
+/obj/structure/sign/voxfall{
+	pixel_y = 32
 	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
-	},
+/obj/effect/abysslinker/prisonarea,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "fq" = (
 /turf/unsimulated/wall/shoal,
@@ -553,7 +517,7 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/vox,
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "fz" = (
 /obj/prop/metalwear5{
@@ -564,12 +528,6 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"fB" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 8;
-	walltype = ""
-	},
-/area)
 "fD" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -591,37 +549,21 @@
 /obj/structure/railing{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/vox,
-/area/shoal)
-"fI" = (
-/obj/machinery/seed_extractor,
-/obj/machinery/light/he{
-	dir = 1
-	},
 /turf/simulated/floor/plating/vox{
 	icon_state = "asteroidplating"
 	},
-/area)
+/area/shoal)
 "fJ" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
 	dir = 8
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32;
+/obj/prop/big/hanginglight{
+	pixel_y = 48;
 	pixel_x = -16
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
-"fT" = (
-/obj/machinery/bot/farmbot{
-	desc = "Serving 25 to life for drowning a botanist.";
-	name = "Prisoner 545"
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "gd" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "loading_area";
@@ -646,21 +588,14 @@
 /obj/prop/latticemess{
 	color = "#333333"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
-"gn" = (
-/obj/machinery/biogenerator,
-/obj/structure/railing{
-	dir = 1
+"gt" = (
+/obj/item/device/plugin/sleeper/trader,
+/obj/structure/rack,
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
 	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
-"gv" = (
-/obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/asteroid/vox,
 /area)
 "gy" = (
 /obj/structure/railing{
@@ -675,7 +610,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "gz" = (
 /obj/structure/railing{
 	dir = 4
@@ -696,12 +631,6 @@
 	nitrogen = 103.934
 	},
 /area/fake_z/level1)
-"gJ" = (
-/obj/structure/hanging_lantern{
-	fake_z_exclude = 1
-	},
-/turf/unsimulated/floor/vox/abyss,
-/area/shoal)
 "gN" = (
 /obj/structure/bed/chair/comfy/couch/mid/lime{
 	dir = 1
@@ -734,42 +663,46 @@
 	},
 /area/fake_z/level2)
 "gY" = (
-/obj/effect/decal/warning_stripes{
+/obj/prop/latticemess{
+	color = "#222222"
+	},
+/turf/unsimulated/floor/abyss/vox,
+/area/shoal)
+"gZ" = (
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area/fake_z/level1)
+"hc" = (
+/obj/structure/table,
+/obj/item/tool/bonesetter,
+/obj/item/tool/bonegel{
+	pixel_y = 8
+	},
+/obj/item/tool/surgicaldrill,
+/obj/item/tool/FixOVein{
+	pixel_x = 13
+	},
+/obj/structure/window/reinforced{
 	dir = 1;
+	pixel_y = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
+	},
+/area/shoal)
+"hf" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
 	icon_state = "warning-asteroid";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/simulated/floor/vox/shuttle,
-/area/shoal)
-"gZ" = (
-/obj/machinery/flasher{
-	id_tag = "Shoal Cell 1";
-	name = "floor-mounted vision suppressor"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
-"hd" = (
-/obj/structure/railing/plasteel/pglass{
+/obj/effect/decal/warning_stripes/siding/gold{
 	dir = 8
 	},
-/obj/structure/bed,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
+/turf/simulated/floor/vox/shuttle,
 /area)
-"hf" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox,
-/area/shoal)
 "hh" = (
 /obj/structure/railing{
 	dir = 8
@@ -787,8 +720,7 @@
 /obj/prop/latticemess{
 	color = "#333333"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "hl" = (
 /obj/structure/extinguisher_cabinet{
@@ -823,21 +755,6 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"hA" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/wc/toilet{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "hC" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault corner";
@@ -871,16 +788,6 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level2)
-"hM" = (
-/obj/structure/catwalk,
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/abyss,
-/area)
 "hR" = (
 /obj/structure/sign/directions/evac{
 	dir = 4;
@@ -928,13 +835,16 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
+"hW" = (
+/obj/structure/reagent_dispensers/watertank,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
 "ib" = (
 /obj/structure/transit_tube{
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "ik" = (
 /obj/structure/railing{
@@ -958,19 +868,19 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "in" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
+/obj/structure/railing{
+	dir = 8
 	},
-/obj/structure/railing/plasteel/pglass{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
+	icon_state = "concrete";
+	name = "concrete"
 	},
-/area)
+/area/shoal)
 "is" = (
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -981,7 +891,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "iu" = (
 /obj/structure/sign/directions/podbay{
 	dir = 8
@@ -1012,15 +922,14 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area)
+/area/fake_z/level2)
 "iE" = (
 /obj/structure/transit_tube{
 	icon_state = "N-SE";
 	fake_z_exclude = 1;
 	color = "#777777"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "iS" = (
 /obj/structure/railing{
@@ -1039,10 +948,6 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level2)
-"iZ" = (
-/obj/machinery/door/airlock/hatch,
-/turf/space,
-/area)
 "ja" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault stripe";
@@ -1050,10 +955,11 @@
 	},
 /area/shoal)
 "jb" = (
-/obj/structure/railing,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
+/obj/structure/sign/voxfall{
+	pixel_y = -32
 	},
+/obj/effect/abysslinker/prisonarea,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "jj" = (
 /obj/structure/catwalk,
@@ -1079,6 +985,12 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
+/area/fake_z/level2)
+"js" = (
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
+	},
 /area)
 "jt" = (
 /obj/effect/decal/cleanable/blood/stattrack,
@@ -1098,12 +1010,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"jF" = (
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "jN" = (
 /obj/structure/bed/chair/comfy/brown{
 	dir = 1
@@ -1130,30 +1036,16 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "jX" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
+/obj/structure/hanging_lantern/dim{
+	dir = 1;
+	invisibility = 101
 	},
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
-"kq" = (
-/obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area)
+/obj/effect/abysslinker/prisonarea,
+/turf/unsimulated/floor/abyss/vox,
+/area/shoal)
 "kr" = (
 /obj/machinery/vending/discount,
 /turf/unsimulated/floor/vox{
@@ -1161,7 +1053,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "kw" = (
 /obj/prop/metalwear2,
 /turf/unsimulated/floor/vox{
@@ -1175,7 +1067,7 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area/fake_z/level2)
+/area/fake_z/level1)
 "kG" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
@@ -1211,7 +1103,7 @@
 /obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/vox,
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "kS" = (
 /turf/unsimulated/floor/vox{
@@ -1247,7 +1139,8 @@
 "lb" = (
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
-	icon_state = "rusty_reinforced_wall-5"
+	icon_state = "rusty_reinforced_wall-5";
+	walltype = ""
 	},
 /area/shoal)
 "lf" = (
@@ -1255,59 +1148,48 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
-"lo" = (
-/turf/unsimulated/floor/vox{
-	icon_state = "wood";
-	name = "wooden vox floor"
+"lh" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
 	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"lo" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
+	},
+/turf/simulated/floor/vox/shuttle,
 /area)
 "lp" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
 	dir = 1
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
-"lq" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area)
-"lr" = (
-/obj/machinery/portable_atmospherics/hydroponics/plastic,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "lt" = (
 /obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/vox,
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
-"lx" = (
-/obj/item/clothing/mask/breath,
-/obj/structure/rack,
-/obj/item/clothing/mask/breath{
-	pixel_x = -2;
-	pixel_y = 2
-	},
-/obj/item/clothing/mask/breath{
-	pixel_x = 2;
-	pixel_y = -2
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "lz" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
@@ -1340,43 +1222,14 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"lC" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
 "lG" = (
-/obj/machinery/flasher_button{
-	pixel_y = 24;
-	pixel_x = 6;
-	id_tag = "Shoal Cell 2"
-	},
-/obj/machinery/door_control{
-	pixel_x = -6;
-	pixel_y = 24;
-	id_tag = "Shoal Cell 2 Door";
-	name = "Entertainment Area Shutters"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
+/obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level1)
 "lI" = (
 /obj/structure/window/reinforced/plasma,
 /obj/structure/window/reinforced/plasma{
@@ -1400,6 +1253,7 @@
 /obj/structure/railing{
 	dir = 1
 	},
+/obj/item/weapon/reagent_containers/food/snacks/grown/poppy,
 /turf/simulated/floor/plating/vox{
 	icon_state = "asteroidplating"
 	},
@@ -1431,28 +1285,13 @@
 	},
 /area/fake_z/level2)
 "mf" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty{
-	icon_state = "rustshutter0";
-	opacity = 0;
-	density = 0;
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area/shoal)
+/turf/simulated/floor/vox/shuttle,
+/area)
 "mg" = (
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
-	icon_state = "rusty_reinforced_wall-12"
+	icon_state = "rusty_reinforced_wall-12";
+	walltype = ""
 	},
 /area/shoal)
 "mj" = (
@@ -1467,7 +1306,7 @@
 "mt" = (
 /obj/machinery/door/airlock/hatch,
 /turf/unsimulated/floor/vox/plating/alt,
-/area)
+/area/fake_z/level2)
 "mu" = (
 /obj/prop/floorpanel{
 	icon_state = "floorpanel_old"
@@ -1494,17 +1333,17 @@
 	invisibility = 101;
 	light_color = "#9fc9cf";
 	color = "#ff0000";
-	anchored = 1
+	anchored = 1;
+	name = "invisible light"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "mD" = (
 /obj/structure/railing{
 	dir = 1
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
@@ -1512,11 +1351,13 @@
 /area/fake_z/level3)
 "mK" = (
 /obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level3)
 "mP" = (
 /obj/structure/curtain/open/bed,
-/turf/unsimulated/wall/fakeglass,
+/turf/unsimulated/wall/fakeglass{
+	walltype = ""
+	},
 /area/shoal)
 "mW" = (
 /obj/structure/catwalk,
@@ -1524,8 +1365,8 @@
 /obj/structure/railing{
 	dir = 1
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /obj/structure/transit_tube{
 	icon_state = "N-S";
@@ -1533,8 +1374,35 @@
 	color = "#555555";
 	invisibility = 101
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
+"nf" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/sign/voxelectricshock{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "hexacrete-203";
+	icon = 'icons/shoal/hexacrete.dmi'
+	},
+/area/shoal)
+"nk" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
 "nn" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -1559,20 +1427,8 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
-"np" = (
-/obj/structure/bed/chair/office/dark{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "nq" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor/vox/shuttle,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "ns" = (
 /obj/effect/decal/warning_stripes{
@@ -1595,7 +1451,9 @@
 	network = list("SS13");
 	name = "Detainee Entertainment Monitor"
 	},
-/turf/unsimulated/floor/asteroid/vox,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
 /area/shoal)
 "nz" = (
 /obj/structure/lattice{
@@ -1607,8 +1465,7 @@
 /obj/prop/latticemess{
 	color = "#222222"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "nU" = (
 /obj/structure/railing{
@@ -1640,14 +1497,6 @@
 	icon_state = "dark"
 	},
 /area/shoal)
-"od" = (
-/obj/structure/bed/chair/comfy/brown{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
-	},
-/area)
 "of" = (
 /obj/item/trash/chips/zamitos_o,
 /obj/effect/decal/cleanable/blood/stattrack{
@@ -1657,12 +1506,6 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"om" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/abyss,
-/area/shoal)
 "ot" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -1736,11 +1579,11 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault stripe"
 	},
-/area)
+/area/shoal)
 "oR" = (
 /obj/structure/catwalk,
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /obj/structure/railing{
 	dir = 4
@@ -1754,6 +1597,16 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level2)
+"oT" = (
+/obj/prop/carpetlong{
+	dir = 8;
+	pixel_y = -16;
+	pixel_x = -16
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
 "oY" = (
 /obj/structure/transit_tube{
 	fake_z_exclude = 1;
@@ -1779,12 +1632,14 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"pa" = (
-/obj/prop/latticemess{
-	color = "#222222"
+"oZ" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
 /area/shoal)
 "pd" = (
 /obj/structure/railing{
@@ -1868,15 +1723,6 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"pM" = (
-/obj/machinery/vending/discount,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
-	},
-/area)
 "pU" = (
 /obj/structure/closet/crate/bin,
 /obj/effect/decal/cleanable/dirt,
@@ -1887,7 +1733,7 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area)
+/area/fake_z/level2)
 "pV" = (
 /obj/structure/railing,
 /turf/unsimulated/floor/vox{
@@ -1903,17 +1749,11 @@
 	icon_state = "asteroidplating"
 	},
 /area/shoal)
-"qd" = (
-/turf/unsimulated/floor/asteroid/vox,
-/area)
-"qs" = (
-/obj/structure/railing{
-	dir = 1
+"qq" = (
+/obj/structure/bed/chair/office/dark,
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
 	},
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/asteroid/vox,
 /area)
 "qC" = (
 /obj/structure/transit_tube{
@@ -1921,8 +1761,7 @@
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "qD" = (
 /obj/structure/table/reinforced,
@@ -1935,8 +1774,7 @@
 /obj/prop/latticemess{
 	color = "#222222"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "qQ" = (
 /obj/structure/railing{
@@ -1964,17 +1802,10 @@
 /obj/prop/panelbroken,
 /turf/unsimulated/wall/shoal,
 /area/shoal)
-"rd" = (
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Cell 2 Door"
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
+"rb" = (
+/obj/machinery/bodyscanner,
 /turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
+	icon_state = "showroomfloor"
 	},
 /area)
 "re" = (
@@ -1986,7 +1817,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "dark"
 	},
-/area)
+/area/shoal)
 "rq" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 1
@@ -2008,19 +1839,24 @@
 	},
 /area/shoal)
 "ry" = (
-/obj/machinery/firealarm{
-	pixel_y = 24
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 4
 	},
-/area/shoal)
+/turf/simulated/floor/vox/shuttle,
+/area)
 "rD" = (
 /obj/structure/hanging_lantern{
 	fake_z_exclude = 1
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/obj/structure/sign/voxfall{
+	pixel_y = -32
+	},
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "rG" = (
 /obj/structure/window/reinforced/plasma,
@@ -2034,18 +1870,6 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
-"rN" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/bed/chair/folding{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "rU" = (
 /obj/structure/transit_tube{
 	fake_z_exclude = 1;
@@ -2054,13 +1878,26 @@
 /obj/effect/decal/warning_stripes/siding{
 	dir = 4
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "rV" = (
-/obj/structure/railing,
-/turf/unsimulated/floor/vox,
-/area/shoal)
+/obj/structure/table,
+/obj/machinery/recharger/defibcharger/wallcharger{
+	pixel_x = 5;
+	pixel_y = -28
+	},
+/obj/item/weapon/storage/firstaid/regular{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/obj/item/weapon/storage/firstaid/fire{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
+	},
+/area)
 "rX" = (
 /turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
@@ -2094,34 +1931,6 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
-"sj" = (
-/obj/structure/window/reinforced/plasma,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
-"so" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
 "sv" = (
 /obj/structure/railing/plasteel/pglass{
 	dir = 1
@@ -2137,51 +1946,50 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
-"sx" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/structure/bed/chair/plastic/plastic_chair{
-	dir = 4
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "sz" = (
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/glass/bottle/rezadone{
+	pixel_x = -7
 	},
-/obj/machinery/door/poddoor/shutters/rusty{
-	dir = 8
+/obj/item/weapon/reagent_containers/glass/bottle/nitrogen,
+/obj/item/weapon/reagent_containers/glass/bottle/nitrogen{
+	pixel_x = 5
 	},
-/turf/simulated/floor/vox/shuttle,
-/area/shoal)
+/obj/item/weapon/reagent_containers/dropper{
+	pixel_x = 20;
+	pixel_y = 8
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/antitoxin{
+	pixel_x = -1;
+	pixel_y = 10
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/antitoxin{
+	pixel_x = -6;
+	pixel_y = 10
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/stoxin{
+	pixel_y = 10;
+	pixel_x = 6
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
+	},
+/area)
 "sA" = (
 /obj/structure/railing{
 	dir = 8
+	},
+/obj/structure/sign/voxfall{
+	pixel_y = -32
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "hexacrete-21";
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"sC" = (
-/obj/structure/lattice{
-	fake_z_exclude = 1
-	},
-/obj/prop/latticemess{
-	color = "#111111"
-	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
-/area/shoal)
 "sD" = (
 /obj/structure/catwalk,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "sF" = (
 /obj/effect/decal/warning_stripes{
@@ -2217,10 +2025,33 @@
 "td" = (
 /turf/unsimulated/wall/shoal,
 /area/fake_z/level1)
+"tf" = (
+/obj/structure/closet/walllocker/defiblocker/south,
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/syringe{
+	pixel_x = -12;
+	pixel_y = 7
+	},
+/obj/item/weapon/reagent_containers/syringe{
+	pixel_x = -12;
+	pixel_y = -1
+	},
+/obj/item/weapon/reagent_containers/syringe{
+	pixel_x = -12;
+	pixel_y = 3
+	},
+/obj/item/clothing/glasses/hud/health{
+	pixel_y = 4
+	},
+/obj/item/clothing/accessory/stethoscope,
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
+	},
+/area)
 "tg" = (
 /obj/structure/catwalk,
 /obj/structure/railing,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "tu" = (
 /obj/prop/panel,
@@ -2253,24 +2084,11 @@
 /obj/structure/hanging_lantern/dim{
 	dir = 8
 	},
-/obj/structure/railing{
-	dir = 8
-	},
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
 	name = "concrete"
 	},
 /area/shoal)
-"tI" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 4
-	},
-/obj/structure/bed,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "tK" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -2316,8 +2134,8 @@
 	pixel_y = 3;
 	pixel_x = 6
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
@@ -2338,7 +2156,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "dark"
 	},
-/area)
+/area/shoal)
 "tY" = (
 /obj/structure/railing{
 	dir = 8
@@ -2365,16 +2183,9 @@
 	},
 /area/fake_z/level2)
 "ub" = (
-/obj/structure/holohoop{
-	dir = 1
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
-"uc" = (
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+/obj/machinery/iv_drip,
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
 	},
 /area)
 "ud" = (
@@ -2386,23 +2197,12 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area)
+/area/fake_z/level2)
 "ul" = (
-/obj/structure/window/reinforced{
-	dir = 4
+/obj/prop/carpetbig,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
 	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty{
-	icon_state = "rustshutter0";
-	opacity = 0;
-	density = 0;
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "uv" = (
 /turf/simulated/floor/vox{
@@ -2441,16 +2241,8 @@
 /obj/structure/hanging_lantern/dim{
 	dir = 8
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level3)
-"uT" = (
-/obj/structure/table/plastic,
-/obj/machinery/computer/security/telescreen{
-	network = list("SS13");
-	name = "Detainee Entertainment Monitor"
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "uV" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -2482,7 +2274,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area/fake_z/level2)
+/area/fake_z/level1)
 "uY" = (
 /obj/structure/sign/chinese/access_restricted,
 /turf/unsimulated/wall/shoal,
@@ -2502,8 +2294,8 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
@@ -2512,22 +2304,15 @@
 	invisibility = 101;
 	light_color = "#9fc9cf";
 	color = "#ff0000";
-	anchored = 1
+	anchored = 1;
+	name = "invisible light"
 	},
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
-	icon_state = "rusty_reinforced_wall-5"
+	icon_state = "rusty_reinforced_wall-5";
+	walltype = ""
 	},
 /area/shoal)
-"vm" = (
-/obj/machinery/vending/offlicence,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
-	},
-/area)
 "vq" = (
 /obj/structure/railing{
 	dir = 4
@@ -2536,49 +2321,28 @@
 /turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "vC" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/bed/chair/folding{
-	dir = 8
-	},
 /turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level1)
 "vG" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/wall/shoal,
 /area/shoal)
 "vM" = (
-/obj/structure/closet/secure_closet/brig{
-	req_access = null
-	},
+/obj/structure/closet,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_bluer"
 	},
 /area/shoal)
-"vO" = (
-/obj/machinery/computer/security,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "wa" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"wf" = (
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
-	},
-/area)
 "wg" = (
 /obj/machinery/biogenerator,
 /obj/structure/railing{
@@ -2598,17 +2362,23 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
+/area/fake_z/level2)
+"wq" = (
+/obj/machinery/sleeper,
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
+	},
 /area)
 "ws" = (
 /obj/structure/catwalk,
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /obj/structure/hanging_lantern/dim{
 	dir = 1;
 	fake_z_exclude = 1
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "wt" = (
 /obj/effect/decal/warning_stripes/siding{
@@ -2619,34 +2389,11 @@
 	name = "wooden vox floor"
 	},
 /area/shoal)
-"ww" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/hanging_lantern/dim{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area)
-"wJ" = (
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/bed/chair/plastic/plastic_chair{
-	dir = 1
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "wK" = (
 /obj/structure/lattice{
 	fake_z_exclude = 1
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "wL" = (
 /turf/unsimulated/wall/fakeglass{
@@ -2667,8 +2414,7 @@
 /obj/structure/lattice{
 	fake_z_exclude = 1
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "xa" = (
 /obj/structure/hanging_lantern/dim{
@@ -2690,8 +2436,7 @@
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "xs" = (
 /obj/structure/sign/directions/engineering{
@@ -2737,10 +2482,6 @@
 	nitrogen = 103.934
 	},
 /area/fake_z/level1)
-"xS" = (
-/obj/structure/railing,
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "xV" = (
 /obj/structure/extinguisher_cabinet{
 	pixel_y = -30
@@ -2749,22 +2490,16 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
-"xX" = (
-/obj/structure/holohoop,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "xY" = (
 /obj/structure/catwalk,
-/obj/prop/hanginglight{
-	pixel_y = 32;
+/obj/prop/big/hanginglight{
+	pixel_y = 48;
 	pixel_x = -16
 	},
 /obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "ya" = (
 /obj/effect/decal/cleanable/dirt,
@@ -2795,10 +2530,24 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level3)
+"yd" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 6
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 6
+	},
+/turf/simulated/floor/vox/shuttle,
+/area)
 "yf" = (
 /obj/machinery/flasher{
 	id_tag = "Shoal Cell 2";
 	name = "floor-mounted vision suppressor"
+	},
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "techfloor";
@@ -2814,7 +2563,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area/fake_z/level2)
+/area/fake_z/level1)
 "yj" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
@@ -2844,10 +2593,10 @@
 	invisibility = 101;
 	light_color = "#9fc9cf";
 	color = "#ff0000";
-	anchored = 1
+	anchored = 1;
+	name = "invisible light"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "yo" = (
 /obj/structure/railing/plasteel/pglass{
@@ -2902,7 +2651,7 @@
 /obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "zs" = (
 /obj/structure/railing{
@@ -2939,32 +2688,17 @@
 /turf/unsimulated/floor/vox/plating/alt{
 	icon_state = "rampbottom"
 	},
-/area)
+/area/fake_z/level2)
 "zH" = (
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor/vox/shuttle,
-/area/shoal)
-"zT" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/hanging_lantern/dim{
-	dir = 8
-	},
-/obj/structure/railing{
-	dir = 8
+/obj/structure/fence{
+	dir = 4
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
-	name = "concrete"
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
 	},
-/area/shoal)
+/area/fake_z/level1)
 "zV" = (
 /obj/machinery/portable_atmospherics/hydroponics/plastic,
 /turf/simulated/floor/plating/vox{
@@ -2989,7 +2723,13 @@
 	},
 /area/shoal)
 "Ac" = (
-/turf/unsimulated/floor/vox,
+/obj/prop/latticemess{
+	color = "#333333"
+	},
+/obj/structure/lattice{
+	fake_z_exclude = 1
+	},
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Ag" = (
 /obj/structure/transit_tube{
@@ -3002,8 +2742,7 @@
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Ah" = (
 /obj/effect/decal/warning_stripes{
@@ -3052,7 +2791,7 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Ay" = (
 /obj/prop/panelwires,
@@ -3065,31 +2804,15 @@
 /obj/prop/latticemess{
 	color = "#444444"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "AB" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
-"AC" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/wc/toilet{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "AE" = (
 /turf/space,
 /area/shoal)
@@ -3105,13 +2828,26 @@
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "AJ" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 4
+/obj/structure/sign/arrow{
+	dir = 8;
+	pixel_y = -4;
+	pixel_x = 2
 	},
+/obj/structure/sign/voxsmalltorture{
+	pixel_x = 8
+	},
+/obj/structure/sign/voxsmallmed{
+	pixel_x = -8
+	},
+/turf/unsimulated/wall/shoal,
 /area/shoal)
 "AK" = (
 /turf/unsimulated/floor/vox/plating/alt,
-/area)
+/area/fake_z/level2)
+"AN" = (
+/obj/structure/sign/voxplaque,
+/turf/unsimulated/wall/shoal,
+/area/shoal)
 "AP" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 8
@@ -3120,7 +2856,7 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area)
+/area/fake_z/level2)
 "AQ" = (
 /obj/structure/railing{
 	dir = 1
@@ -3136,19 +2872,11 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"Bi" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "Bl" = (
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
-	icon_state = "rusty_reinforced_wall-6"
+	icon_state = "rusty_reinforced_wall-6";
+	walltype = ""
 	},
 /area/shoal)
 "Bn" = (
@@ -3158,7 +2886,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "dark"
 	},
-/area)
+/area/shoal)
 "Bq" = (
 /obj/structure/railing/plasteel/pglass{
 	dir = 8
@@ -3176,19 +2904,6 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
-"Bz" = (
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Cell 1 Door"
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "BE" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/folder/green{
@@ -3201,7 +2916,9 @@
 	},
 /area/shoal)
 "BH" = (
-/obj/structure/disposaloutlet/no_deconstruct/abysschute,
+/obj/structure/disposaloutlet/no_deconstruct/abysschute{
+	abyss_link_tag = "prisonarea"
+	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "BL" = (
@@ -3212,7 +2929,7 @@
 /obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
 "BS" = (
 /obj/machinery/door/poddoor/shutters/rusty/preopen{
@@ -3240,13 +2957,6 @@
 	name = "shag carpet"
 	},
 /area/shoal)
-"Ce" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 8;
-	icon_state = "fakewindows2";
-	walltype = ""
-	},
-/area)
 "Cf" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -3256,7 +2966,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault stripe"
 	},
-/area)
+/area/shoal)
 "Cj" = (
 /obj/machinery/computer/arcade,
 /obj/effect/decal/cleanable/dirt,
@@ -3301,7 +3011,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "CA" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/hanging_lantern/dim{
@@ -3311,35 +3021,22 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area)
+/area/fake_z/level2)
 "CB" = (
 /obj/structure/transit_tube{
 	icon_state = "W-SE";
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
-/area/shoal)
-"CD" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 1
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "CF" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
 	dir = 1
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
@@ -3354,34 +3051,21 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"CI" = (
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area)
-"CL" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/obj/structure/railing/plasteel/pglass,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "CP" = (
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
-	icon_state = "rusty_reinforced_wall-9"
+	icon_state = "rusty_reinforced_wall-9";
+	walltype = ""
 	},
 /area/shoal)
 "CY" = (
-/obj/machinery/alarm{
-	pixel_y = 23
+/obj/structure/hanging_lantern/dim{
+	dir = 1;
+	fake_z_exclude = 1
 	},
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
+	icon_state = "concrete";
+	name = "concrete"
 	},
 /area/shoal)
 "Dc" = (
@@ -3405,31 +3089,27 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
+"Di" = (
+/obj/structure/fence/corner,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
+	},
+/area/fake_z/level1)
 "Dn" = (
 /obj/structure/railing,
 /obj/structure/railing{
 	dir = 4
 	},
 /obj/structure/catwalk,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
-"Do" = (
-/obj/machinery/portable_atmospherics/hydroponics/plastic,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "Dr" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault corner"
 	},
 /area/shoal)
-"DI" = (
-/obj/structure/rack,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "DJ" = (
 /obj/structure/table/reinforced,
 /obj/machinery/door_control{
@@ -3454,8 +3134,7 @@
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "DQ" = (
 /obj/structure/rack,
@@ -3467,14 +3146,22 @@
 /obj/structure/hanging_lantern/dim,
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
+"DW" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1;
+	fake_z_exclude = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
 "DZ" = (
 /obj/structure/transit_tube{
 	icon_state = "N-SE";
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Eh" = (
 /obj/structure/railing,
@@ -3482,7 +3169,7 @@
 	dir = 1
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area)
+/area/shoal)
 "Es" = (
 /obj/structure/hanging_lantern/dim,
 /turf/unsimulated/floor/vox{
@@ -3495,13 +3182,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level3)
-"Ew" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 1;
-	invisibility = 101
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "Ez" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -3530,11 +3210,19 @@
 	},
 /area/fake_z/level3)
 "EG" = (
-/obj/structure/hanging_lantern/dim{
-	dir = 8
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/obj/structure/closet/crate/bin,
+/obj/item/weapon/reagent_containers/blood/OMinus,
+/obj/item/weapon/reagent_containers/blood/OMinus,
+/obj/item/weapon/reagent_containers/blood/OPlus,
+/obj/item/weapon/reagent_containers/blood/AMinus,
+/obj/item/weapon/reagent_containers/blood/BMinus,
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
+	},
 /area/shoal)
 "EP" = (
 /obj/structure/hanging_lantern{
@@ -3552,8 +3240,7 @@
 	fake_z_exclude = 1;
 	color = "#777777"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "ER" = (
 /obj/structure/hanging_lantern/dim{
@@ -3574,6 +3261,21 @@
 	icon_state = "techfloor";
 	icon = 'icons/shoal/techfloor.dmi'
 	},
+/area/shoal)
+"Fg" = (
+/obj/structure/rack,
+/obj/item/weapon/mop,
+/obj/item/weapon/reagent_containers/glass/bucket,
+/obj/item/weapon/storage/box/mousetraps,
+/obj/item/weapon/beartrap{
+	pixel_x = 2;
+	pixel_y = 8
+	},
+/obj/item/weapon/beartrap{
+	pixel_x = 2;
+	pixel_y = 8
+	},
+/turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "Fj" = (
 /obj/machinery/camera{
@@ -3597,7 +3299,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "Fr" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "hexacrete-255";
@@ -3611,20 +3313,10 @@
 /turf/unsimulated/wall/shoal,
 /area/shoal)
 "FN" = (
-/obj/structure/window/reinforced{
-	dir = 4
+/obj/machinery/door/airlock/silver,
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
 	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor/shutters/rusty{
-	icon_state = "rustshutter0";
-	opacity = 0;
-	density = 0;
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
 "FR" = (
 /obj/effect/decal/cleanable/dirt,
@@ -3636,7 +3328,7 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area/fake_z/level2)
+/area/fake_z/level1)
 "FS" = (
 /obj/structure/railing{
 	dir = 8
@@ -3644,37 +3336,29 @@
 /obj/structure/railing{
 	dir = 1
 	},
-/turf/unsimulated/floor/vox,
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "FT" = (
 /obj/item/device/flashlight/lantern/on{
 	invisibility = 101;
 	light_color = "#9fc9cf";
 	color = "#ff0000";
-	anchored = 1
+	anchored = 1;
+	name = "invisible light"
 	},
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
-	icon_state = "rusty_reinforced_wall-10"
+	icon_state = "rusty_reinforced_wall-10";
+	walltype = ""
 	},
 /area/shoal)
-"FY" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "Gm" = (
 /obj/structure/hanging_lantern,
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault stripe"
 	},
-/area)
+/area/shoal)
 "Gp" = (
-/obj/machinery/recharger{
-	pixel_x = 28
-	},
 /obj/structure/displaycase,
 /turf/unsimulated/floor/vox{
 	icon_state = "wood";
@@ -3684,7 +3368,8 @@
 "Gq" = (
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
-	icon_state = "rusty_reinforced_wall-10"
+	icon_state = "rusty_reinforced_wall-10";
+	walltype = ""
 	},
 /area/shoal)
 "Gs" = (
@@ -3730,13 +3415,13 @@
 	},
 /area/shoal)
 "GW" = (
-/obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete";
-	icon = 'icons/turf/new_snow.dmi'
+/obj/structure/mopbucket,
+/obj/structure/hanging_lantern/dim{
+	dir = 1;
+	invisibility = 101
 	},
-/area/fake_z/level2)
+/turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
 "Ha" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/closet/crate/bin,
@@ -3764,8 +3449,7 @@
 	fake_z_exclude = 1;
 	color = "#777777"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "HD" = (
 /obj/effect/decal/warning_stripes{
@@ -3814,6 +3498,15 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
+"HN" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "HO" = (
 /obj/structure/transit_tube/station{
 	req_one_access_txt = "32;19;501";
@@ -3821,20 +3514,14 @@
 	fake_z_exclude = 1;
 	color = "#777777"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
-"HQ" = (
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "HS" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "HU" = (
 /obj/structure/railing{
@@ -3862,15 +3549,13 @@
 	},
 /area/shoal)
 "Id" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
+/obj/structure/fence,
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
 	},
-/obj/machinery/door/poddoor/shutters/rusty{
-	dir = 8
-	},
-/turf/simulated/floor/vox/shuttle,
-/area/shoal)
+/area/fake_z/level1)
 "Ig" = (
 /obj/item/trash/chips/donitos,
 /turf/unsimulated/floor/vox{
@@ -3878,7 +3563,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "Ij" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -3893,6 +3578,17 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level2)
+"Iu" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/unsimulated/floor/asteroid/vox,
+/area/shoal)
 "Iw" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 1
@@ -3901,18 +3597,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
-"IH" = (
-/obj/structure/closet/crate/hydroponics,
-/obj/item/weapon/minihoe,
-/obj/item/weapon/storage/bag/plants,
-/obj/item/device/analyzer/plant_analyzer,
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "IK" = (
 /obj/machinery/door/poddoor/shutters/rusty/preopen{
 	dir = 2;
@@ -3961,7 +3645,7 @@
 	plane = -32770;
 	layer = 1
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Jw" = (
 /obj/structure/hanging_lantern/dim,
@@ -3979,19 +3663,30 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area/fake_z/level2)
+/area/fake_z/level1)
 "JC" = (
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/obj/effect/abysslinker/prisonarea,
+/obj/effect/abysslinker/prisonarea,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "JH" = (
-/obj/machinery/computer/arcade,
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
-/area)
+/turf/unsimulated/floor/vox{
+	icon_state = "hexacrete-157";
+	icon = 'icons/shoal/hexacrete.dmi'
+	},
+/area/shoal)
+"JI" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 8
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
+/area/shoal)
 "JK" = (
 /obj/structure/railing{
 	dir = 4
@@ -4009,6 +3704,12 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
+"JM" = (
+/obj/prop/carpet,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
 "JW" = (
 /obj/structure/lattice{
 	fake_z_exclude = 1
@@ -4017,50 +3718,23 @@
 	invisibility = 101;
 	light_color = "#9fc9cf";
 	color = "#ff0000";
-	anchored = 1
+	anchored = 1;
+	name = "invisible light"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "JX" = (
 /obj/machinery/seed_extractor,
-/obj/machinery/light/he{
-	dir = 1
-	},
 /turf/simulated/floor/plating/vox{
 	icon_state = "asteroidplating"
 	},
 /area/shoal)
-"Ka" = (
-/obj/machinery/door/airlock/sandstone{
-	name = "Old Airlock"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
-	},
-/area)
-"Kc" = (
-/obj/machinery/portable_atmospherics/hydroponics/plastic,
-/obj/structure/hanging_lantern/dim{
-	dir = 1;
-	invisibility = 101
-	},
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "Kh" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "hexacrete-157";
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"Km" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 4;
-	walltype = ""
-	},
-/area)
 "Kq" = (
 /turf/space,
 /area)
@@ -4073,7 +3747,7 @@
 	plane = -32770;
 	layer = 1
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Kt" = (
 /obj/item/weapon/caution/cone,
@@ -4147,7 +3821,7 @@
 /obj/structure/hanging_lantern/dim{
 	dir = 4
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level3)
 "KR" = (
 /turf/unsimulated/wall/fakeglass{
@@ -4157,20 +3831,14 @@
 	},
 /area/shoal)
 "KY" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+/turf/unsimulated/floor/vox{
+	icon_state = "hexacrete-255";
+	icon = 'icons/shoal/hexacrete.dmi'
 	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
+/area/shoal)
 "Lf" = (
 /obj/structure/rack,
 /obj/item/binoculars,
@@ -4190,16 +3858,8 @@
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
-"Lq" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/railing,
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "Ls" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
@@ -4249,17 +3909,6 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
-"LD" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
 "LE" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -4285,7 +3934,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/shoal)
+/area/fake_z/level3)
 "Mf" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -4300,7 +3949,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "Mg" = (
 /obj/machinery/door/airlock/sandstone{
 	name = "Information Retrieval"
@@ -4311,17 +3960,21 @@
 	},
 /area/shoal)
 "Mh" = (
-/turf/unsimulated/floor/vox/abyss,
+/obj/effect/abysslinker/prisonarea,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Mk" = (
 /obj/structure/curtain/open/bed,
 /turf/unsimulated/wall/fakeglass{
-	dir = 1
+	dir = 1;
+	walltype = ""
 	},
 /area/shoal)
 "Mu" = (
 /obj/structure/table/plastic,
-/turf/unsimulated/floor/asteroid/vox,
+/turf/simulated/floor/plating/vox{
+	icon_state = "asteroidplating"
+	},
 /area/shoal)
 "My" = (
 /obj/structure/railing/plasteel/pglass{
@@ -4350,18 +4003,8 @@
 	fake_z_exclude = 1;
 	color = "#777777"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
-"ME" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "MK" = (
 /obj/machinery/vending/offlicence,
 /obj/effect/decal/warning_stripes{
@@ -4371,6 +4014,17 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
+"ML" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 10
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 10
+	},
+/turf/simulated/floor/vox/shuttle,
+/area)
 "MP" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -4379,10 +4033,10 @@
 /obj/structure/railing{
 	dir = 8
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
 "MQ" = (
 /obj/effect/decal/papers,
@@ -4408,7 +4062,7 @@
 	plane = -32770;
 	layer = 1
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Nd" = (
 /obj/structure/dispenser,
@@ -4417,14 +4071,33 @@
 	},
 /area/shoal)
 "Ng" = (
-/turf/unsimulated/floor/vox/abyss,
-/area)
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_bluer"
+	},
+/area/shoal)
+"Ni" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/sign/voxelectricshock{
+	pixel_y = 32
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "hexacrete-55";
+	icon = 'icons/shoal/hexacrete.dmi'
+	},
+/area/shoal)
 "Nl" = (
 /obj/prop/latticemess{
 	color = "#333333"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Nq" = (
 /obj/machinery/door/airlock/silver{
@@ -4435,17 +4108,6 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
-"Nr" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
 "Ns" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "hexacrete-110";
@@ -4453,7 +4115,10 @@
 	},
 /area/shoal)
 "Nv" = (
-/obj/structure/hanging_lantern/dim,
+/obj/prop/big/hanginglight{
+	pixel_y = 48;
+	pixel_x = -16
+	},
 /turf/unsimulated/floor/vox{
 	icon_state = "hexacrete-157";
 	icon = 'icons/shoal/hexacrete.dmi'
@@ -4477,22 +4142,17 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
-"NH" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/turf/unsimulated/floor/asteroid/vox,
-/area)
 "NI" = (
+/obj/prop/loadingdecal{
+	pixel_y = -23;
+	pixel_x = -16
+	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
-	icon_state = "warning";
+	icon_state = "warning-asteroid";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor/vox{
-	icon_state = "dark vault stripe";
-	dir = 1
-	},
+/turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
 "NL" = (
 /obj/structure/catwalk,
@@ -4500,10 +4160,10 @@
 /obj/structure/railing{
 	dir = 1
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
 "NP" = (
 /obj/prop/monitor,
@@ -4515,7 +4175,7 @@
 	dir = 1
 	},
 /obj/structure/catwalk,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
 "NU" = (
 /obj/structure/transit_tube/station{
@@ -4524,8 +4184,7 @@
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "NV" = (
 /obj/structure/railing,
@@ -4550,28 +4209,32 @@
 /turf/space,
 /area/fake_z/level2)
 "Oa" = (
-/obj/structure/table/plastic,
-/turf/unsimulated/floor/asteroid/vox,
-/area)
+/obj/structure/sign/voxplaque/flashing,
+/turf/unsimulated/wall/shoal,
+/area/shoal)
 "Oc" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/hanging_lantern/dim,
 /turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
+	icon_state = "pattern_bluer"
 	},
-/area)
+/area/shoal)
 "Og" = (
 /obj/item/device/flashlight/lantern/on{
 	invisibility = 101;
 	light_color = "#9fc9cf";
 	color = "#ff0000";
-	anchored = 1
+	anchored = 1;
+	name = "invisible light"
 	},
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
-	icon_state = "rusty_reinforced_wall-6"
+	icon_state = "rusty_reinforced_wall-6";
+	walltype = ""
 	},
 /area/shoal)
 "Oh" = (
@@ -4591,6 +4254,20 @@
 	nitrogen = 103.934
 	},
 /area/fake_z/level1)
+"Oi" = (
+/obj/structure/sign/voxsmallprison{
+	pixel_x = 8
+	},
+/obj/structure/sign/arrow{
+	dir = 8;
+	pixel_y = -4;
+	pixel_x = 2
+	},
+/obj/structure/sign/voxsmallbulb{
+	pixel_x = -8
+	},
+/turf/unsimulated/wall/shoal,
+/area/shoal)
 "Oj" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
@@ -4612,7 +4289,7 @@
 	color = "#777777";
 	invisibility = 101
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
 "Ol" = (
 /obj/structure/flora/pottedplant/random,
@@ -4640,16 +4317,6 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
-"Os" = (
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "Ot" = (
 /obj/structure/railing{
 	dir = 4
@@ -4669,23 +4336,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"Ow" = (
-/obj/structure/table/reinforced,
-/obj/machinery/door_control{
-	id_tag = "Shoal Warden Privacy";
-	name = "Privacy Shutters";
-	pixel_x = -4;
-	pixel_y = 8
-	},
-/obj/item/device/megaphone{
-	pixel_y = -2;
-	pixel_x = 5;
-	name = "communication device"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "OB" = (
 /obj/structure/lattice{
 	fake_z_exclude = 1
@@ -4697,10 +4347,10 @@
 	invisibility = 101;
 	light_color = "#9fc9cf";
 	color = "#ff0000";
-	anchored = 1
+	anchored = 1;
+	name = "invisible light"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "OC" = (
 /obj/effect/decal/warning_stripes/siding,
@@ -4723,13 +4373,16 @@
 	},
 /area/fake_z/level1)
 "ON" = (
+/obj/prop/fan,
 /obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
+	icon_state = "bot"
 	},
-/turf/simulated/floor/vox/shuttle,
-/area/shoal)
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
+	},
+/area/fake_z/level1)
 "OP" = (
 /turf/space,
 /area/fake_z/level2)
@@ -4748,14 +4401,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"OT" = (
-/obj/structure/closet/secure_closet/brig{
-	req_access = null
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "OX" = (
 /obj/item/trash/cigbutt/bidibutt,
 /turf/unsimulated/floor/jungle/concrete{
@@ -4776,12 +4421,21 @@
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Pq" = (
 /obj/structure/hanging_lantern,
 /turf/unsimulated/floor/vox/plating/alt,
+/area/shoal)
+"Pt" = (
+/obj/machinery/optable,
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
+	},
 /area/shoal)
 "Px" = (
 /obj/prop/floorpanel,
@@ -4801,7 +4455,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "PM" = (
 /obj/structure/railing{
 	dir = 1
@@ -4814,17 +4468,16 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
-"PQ" = (
-/obj/machinery/door/airlock/hatch,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "PT" = (
-/obj/machinery/vending/voxseeds,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 9
 	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 9
+	},
+/turf/simulated/floor/vox/shuttle,
 /area)
 "PU" = (
 /obj/structure/rack,
@@ -4850,8 +4503,8 @@
 /area/shoal)
 "Qg" = (
 /obj/structure/catwalk,
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /obj/structure/railing{
 	dir = 4
@@ -4861,29 +4514,24 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level2)
-"Qk" = (
-/obj/structure/railing/plasteel/pglass,
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "Qo" = (
-/obj/machinery/camera{
-	network = list("SHOAL")
-	},
-/obj/structure/disposaloutlet/no_deconstruct/abysschute,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
-	},
-/area/shoal)
-"Qq" = (
-/obj/structure/hanging_lantern/dim{
+/obj/structure/fence/corner{
 	dir = 4
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
-/area/shoal)
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
+	},
+/area/fake_z/level1)
+"Qq" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/siding/gold,
+/turf/simulated/floor/vox/shuttle,
+/area)
 "Qt" = (
 /obj/structure/transit_tube{
 	icon_state = "NE-SW";
@@ -4897,7 +4545,7 @@
 /obj/structure/railing{
 	dir = 4
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Qu" = (
 /obj/structure/railing/plasteel/pglass{
@@ -4938,21 +4586,12 @@
 	dir = 1
 	},
 /area/shoal)
-"QZ" = (
-/obj/machinery/door/window/plasma/secure{
-	dir = 2
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
-	},
-/area)
 "Rb" = (
 /obj/machinery/vending/coffee,
 /obj/effect/decal/warning_stripes/siding,
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
 /turf/unsimulated/floor/vox{
 	icon_state = "wood";
 	name = "wooden vox floor"
@@ -4986,14 +4625,25 @@
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
 "Rp" = (
-/obj/machinery/door/airlock/hatch,
-/turf/space,
-/area/shoal)
-"Rr" = (
-/turf/unsimulated/wall/shoal{
-	plane = -32762
+/obj/structure/hanging_lantern{
+	dir = 8;
+	fake_z_exclude = 1
 	},
-/area/fake_z/abyss)
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
+"Rq" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/hanging_lantern/dim{
+	dir = 4
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
+	},
+/area/fake_z/level1)
 "RC" = (
 /obj/structure/bed/chair/folding,
 /turf/unsimulated/floor/vox{
@@ -5017,6 +4667,10 @@
 	name = "wooden vox floor"
 	},
 /area/shoal)
+"RI" = (
+/obj/structure/sign/voxmediummed,
+/turf/unsimulated/wall/shoal,
+/area/shoal)
 "RK" = (
 /obj/structure/bed/chair{
 	dir = 1
@@ -5025,14 +4679,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
-"RL" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
 "RR" = (
 /obj/structure/railing/plasteel/pglass{
 	dir = 8
@@ -5042,23 +4688,12 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
-"RT" = (
-/obj/structure/railing/plasteel/pglass{
-	dir = 8
-	},
-/obj/structure/railing/plasteel/pglass{
-	dir = 1
-	},
-/obj/structure/table/plastic,
-/obj/machinery/computer/security/telescreen{
-	network = list("SS13");
-	name = "Detainee Entertainment Monitor"
-	},
+"RS" = (
+/obj/prop/carpetlong,
 /turf/unsimulated/floor/vox{
-	icon_state = "techfloor";
-	icon = 'icons/shoal/techfloor.dmi'
+	icon_state = "pattern_orange"
 	},
-/area)
+/area/shoal)
 "Se" = (
 /obj/item/device/flashlight/lantern/on,
 /turf/unsimulated/floor/asteroid/vox,
@@ -5068,15 +4703,15 @@
 /obj/structure/railing{
 	dir = 1
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "Ss" = (
-/obj/structure/rack,
-/obj/item/binoculars,
+/obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
+	icon_state = "concrete";
+	name = "concrete"
 	},
-/area)
+/area/fake_z/level1)
 "Su" = (
 /obj/machinery/door/airlock/sandstone{
 	name = "Information Retrieval Office"
@@ -5133,73 +4768,39 @@
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
-"SV" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area)
 "SW" = (
 /obj/prop/loadingdecal{
 	pixel_y = -17
 	},
 /turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
-"Tg" = (
-/obj/machinery/flasher_button{
-	pixel_y = 24;
-	pixel_x = -6;
-	id_tag = "Shoal Cell 1"
-	},
-/obj/machinery/door_control{
-	pixel_x = 6;
-	pixel_y = 24;
-	id_tag = "Shoal Cell 1 Door";
-	name = "Entertainment Area Shutters"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "Th" = (
 /obj/structure/holohoop,
 /turf/simulated/floor/plating/vox{
 	icon_state = "asteroidplating"
 	},
 /area/shoal)
-"Ti" = (
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "loading_area";
-	tag = "icon-loading_area (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete";
-	icon = 'icons/turf/new_snow.dmi'
-	},
-/area)
 "Tj" = (
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
 /area/fake_z/level2)
 "Tn" = (
-/obj/machinery/door/poddoor/shutters/rusty{
-	dir = 8
+/obj/machinery/door/airlock/sandstone{
+	name = "Old Airlock"
 	},
-/turf/simulated/floor/vox/shuttle,
+/turf/unsimulated/floor/vox{
+	icon_state = "techfloor";
+	icon = 'icons/shoal/techfloor.dmi'
+	},
 /area/shoal)
 "Tp" = (
 /obj/machinery/flasher{
 	id_tag = "Shoal Cell 1";
 	name = "floor-mounted vision suppressor"
+	},
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "techfloor";
@@ -5214,9 +4815,13 @@
 	},
 /area/fake_z/level2)
 "Tv" = (
-/obj/structure/sign/securearea,
-/turf/unsimulated/wall/shoal,
-/area)
+/obj/structure/hanging_lantern/dim{
+	dir = 4;
+	fake_z_exclude = 1;
+	color = "#555555"
+	},
+/turf/unsimulated/floor/abyss/vox,
+/area/shoal)
 "Tx" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_bluer"
@@ -5230,7 +4835,7 @@
 	},
 /area/shoal)
 "TG" = (
-/obj/structure/sign/parking,
+/obj/structure/sign/voxparking,
 /turf/unsimulated/wall/shoal,
 /area/shoal)
 "TM" = (
@@ -5268,11 +4873,13 @@
 	invisibility = 101;
 	light_color = "#9fc9cf";
 	color = "#ff0000";
-	anchored = 1
+	anchored = 1;
+	name = "invisible light"
 	},
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
-	icon_state = "rusty_reinforced_wall-9"
+	icon_state = "rusty_reinforced_wall-9";
+	walltype = ""
 	},
 /area/shoal)
 "Ub" = (
@@ -5281,11 +4888,18 @@
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
-"Uc" = (
-/obj/structure/table/plastic,
-/obj/item/weapon/storage/fancy/beer_box,
-/turf/unsimulated/floor/asteroid/vox,
-/area)
+"Ul" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete"
+	},
+/area/shoal)
 "Um" = (
 /obj/structure/railing/plasteel/pglass{
 	dir = 8
@@ -5310,7 +4924,8 @@
 "UE" = (
 /turf/unsimulated/wall{
 	icon = 'icons/shoal/rusty_reinforced_wall.dmi';
-	icon_state = "rusty_reinforced_wall-3"
+	icon_state = "rusty_reinforced_wall-3";
+	walltype = ""
 	},
 /area/shoal)
 "UF" = (
@@ -5319,8 +4934,7 @@
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "UG" = (
 /obj/structure/hanging_lantern/dim{
@@ -5330,19 +4944,18 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area)
+/area/fake_z/level2)
 "UK" = (
 /obj/structure/transit_tube{
 	icon_state = "W-NE";
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "UL" = (
 /obj/structure/catwalk,
-/obj/prop/hanginglight{
-	pixel_y = 32;
+/obj/prop/big/hanginglight{
+	pixel_y = 48;
 	pixel_x = -16
 	},
 /obj/structure/railing{
@@ -5356,7 +4969,7 @@
 	plane = -32770;
 	layer = 1
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "UQ" = (
 /obj/structure/bed/chair/shuttle/gamer,
@@ -5381,12 +4994,6 @@
 	icon_state = "pattern_bluer"
 	},
 /area/shoal)
-"Vw" = (
-/obj/machinery/vending/hydronutrients,
-/turf/simulated/floor/plating/vox{
-	icon_state = "asteroidplating"
-	},
-/area)
 "VD" = (
 /obj/prop/ladder/down{
 	pixel_y = 8
@@ -5400,36 +5007,10 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "VH" = (
 /obj/structure/reagent_dispensers/water_cooler,
 /turf/unsimulated/floor/vox/plating/alt,
-/area/shoal)
-"VI" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/machinery/door/poddoor/shutters/rusty/preopen{
-	dir = 2;
-	id_tag = "Shoal Warden Privacy"
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/turf/unsimulated/floor/vox/plating/alt,
-/area)
-"VK" = (
-/turf/unsimulated/floor/vox{
-	icon_state = "dark"
-	},
-/area)
-"VL" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 8;
-	icon_state = "fakewindows2"
-	},
 /area/shoal)
 "VV" = (
 /obj/effect/decal/warning_stripes{
@@ -5448,17 +5029,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
-"Wa" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/hanging_lantern/dim{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area/shoal)
+/area/fake_z/level2)
 "Wi" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
@@ -5501,6 +5072,16 @@
 	icon_state = "elevatorshaft"
 	},
 /area/fake_z/level1)
+"WA" = (
+/obj/structure/fence/corner{
+	dir = 9
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "concrete";
+	name = "concrete";
+	icon = 'icons/turf/new_snow.dmi'
+	},
+/area/fake_z/level1)
 "WI" = (
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
@@ -5514,28 +5095,16 @@
 	fake_z_exclude = 1;
 	color = "#777777"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
-"WN" = (
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning-asteroid";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "WO" = (
-/obj/machinery/recharger/defibcharger{
-	pixel_y = 32
+/obj/structure/lattice{
+	fake_z_exclude = 1
 	},
-/obj/structure/disposaloutlet/no_deconstruct/abysschute,
-/obj/structure/disposaloutlet/no_deconstruct/abysschute,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
+/obj/prop/latticemess{
+	color = "#111111"
 	},
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "WP" = (
 /obj/structure/railing,
@@ -5547,13 +5116,6 @@
 	icon = 'icons/shoal/hexacrete.dmi'
 	},
 /area/shoal)
-"WQ" = (
-/obj/item/trash/chips/donitos,
-/turf/unsimulated/floor/vox{
-	icon_state = "hexacrete-110";
-	icon = 'icons/shoal/hexacrete.dmi'
-	},
-/area/shoal)
 "WU" = (
 /obj/machinery/door/poddoor/shutters/rusty{
 	dir = 8
@@ -5561,16 +5123,16 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "dark"
 	},
-/area)
+/area/shoal)
 "WV" = (
-/obj/structure/sign/securearea,
+/obj/structure/sign/voxsecurearea,
 /turf/unsimulated/wall/shoal,
 /area/shoal)
 "Xa" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 1
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level3)
 "Xe" = (
 /turf/unsimulated/floor/vox{
@@ -5578,14 +5140,6 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
-"Xk" = (
-/obj/item/weapon/stool,
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/vox{
-	icon_state = "concrete";
-	name = "concrete"
-	},
-/area)
 "Xp" = (
 /obj/structure/railing{
 	dir = 1
@@ -5598,15 +5152,6 @@
 	icon = 'icons/shoal/techfloor.dmi'
 	},
 /area/shoal)
-"Xr" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "loading_area";
-	tag = "icon-loading_area"
-	},
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "Xu" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -5615,8 +5160,8 @@
 /obj/structure/railing{
 	dir = 8
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /obj/structure/transit_tube{
 	icon_state = "NW-SE";
@@ -5625,23 +5170,13 @@
 	plane = -32770;
 	layer = 1
 	},
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level1)
 "Xv" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/turf/unsimulated/floor/vox,
-/area/shoal)
-"Xz" = (
-/obj/machinery/recharger/defibcharger{
-	pixel_y = 32
-	},
-/obj/structure/disposaloutlet/no_deconstruct/abysschute,
 /turf/unsimulated/floor/vox{
-	icon_state = "pattern_orange"
+	icon_state = "showroomfloor"
 	},
-/area/shoal)
+/area)
 "XG" = (
 /obj/structure/bed/chair/folding{
 	dir = 8
@@ -5672,6 +5207,10 @@
 	},
 /turf/space,
 /area/fake_z/level2)
+"XL" = (
+/obj/structure/sign/voxmediumprison,
+/turf/unsimulated/wall/shoal,
+/area/shoal)
 "XN" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/ammo_casing/c9mm/empty{
@@ -5696,8 +5235,7 @@
 	fake_z_exclude = 1;
 	color = "#555555"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "XW" = (
 /obj/effect/decal/warning_stripes{
@@ -5729,8 +5267,8 @@
 /obj/structure/railing{
 	dir = 8
 	},
-/obj/prop/hanginglight{
-	pixel_y = 32
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /turf/unsimulated/floor/vox/plating/alt,
 /area/fake_z/level1)
@@ -5738,9 +5276,24 @@
 /obj/prop/latticemess{
 	color = "#111111"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
+"Yo" = (
+/obj/item/stack/medical/advanced/bruise_pack{
+	pixel_x = -4;
+	pixel_y = 4
+	},
+/obj/item/stack/medical/advanced/bruise_pack{
+	pixel_x = -4;
+	pixel_y = 4
+	},
+/obj/item/stack/medical/advanced/ointment,
+/obj/item/stack/medical/advanced/ointment,
+/obj/structure/rack,
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
+	},
+/area)
 "Yt" = (
 /obj/item/weapon/beach_ball/holoball{
 	desc = "If you can't slam with the best, then jam with the rest."
@@ -5758,6 +5311,25 @@
 	icon_state = "pattern_orange"
 	},
 /area/shoal)
+"YF" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 5
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 5
+	},
+/turf/simulated/floor/vox/shuttle,
+/area)
+"YK" = (
+/obj/machinery/camera{
+	network = list("SHOAL")
+	},
+/turf/unsimulated/floor/vox{
+	icon_state = "pattern_orange"
+	},
+/area/shoal)
 "YL" = (
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -5769,7 +5341,7 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area)
+/area/fake_z/level2)
 "YN" = (
 /obj/item/device/flashlight/lantern/on,
 /turf/unsimulated/floor/vox{
@@ -5786,15 +5358,17 @@
 /area/shoal)
 "YQ" = (
 /obj/machinery/vending/hydronutrients,
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
 /turf/simulated/floor/plating/vox{
 	icon_state = "asteroidplating"
 	},
 /area/shoal)
 "YR" = (
 /obj/structure/bed/chair/e_chair,
-/obj/prop/hanginglight{
-	pixel_y = 32;
-	set_range = 4
+/obj/prop/big/hanginglight{
+	pixel_y = 48
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "techfloor";
@@ -5831,8 +5405,7 @@
 /obj/prop/latticemess{
 	color = "#444444"
 	},
-/obj/effect/abyss,
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/shoal)
 "YY" = (
 /obj/structure/holohoop{
@@ -5842,6 +5415,12 @@
 	icon_state = "asteroidplating"
 	},
 /area/shoal)
+"YZ" = (
+/obj/structure/bed/roller,
+/turf/unsimulated/floor/vox{
+	icon_state = "showroomfloor"
+	},
+/area)
 "Za" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
@@ -5849,7 +5428,7 @@
 	},
 /area/shoal)
 "Zf" = (
-/turf/unsimulated/floor/vox/abyss,
+/turf/unsimulated/floor/abyss/vox,
 /area/fake_z/level3)
 "Zn" = (
 /obj/effect/decal/warning_stripes{
@@ -5861,7 +5440,7 @@
 	dir = 1
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area)
+/area/shoal)
 "Zw" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -5891,20 +5470,6 @@
 	icon_state = "pattern_orange"
 	},
 /area/fake_z/level1)
-"ZC" = (
-/obj/structure/rack,
-/obj/item/weapon/storage/box/handcuffs{
-	pixel_x = 4;
-	pixel_y = -4
-	},
-/obj/item/clothing/head/warden{
-	pixel_x = -2
-	},
-/obj/item/weapon/melee/classic_baton,
-/turf/unsimulated/floor/vox{
-	icon_state = "pattern_bluer"
-	},
-/area)
 "ZG" = (
 /obj/machinery/portable_atmospherics/hydroponics/plastic,
 /obj/effect/decal/cleanable/dirt,
@@ -5921,7 +5486,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault stripe"
 	},
-/area)
+/area/shoal)
 "ZU" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
@@ -6752,52 +6317,52 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -6826,10 +6391,10 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
+fq
+fq
+fq
+fq
 Kq
 Kq
 Kq
@@ -7054,52 +6619,52 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -7128,10 +6693,10 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+fq
 Kq
 Kq
 Kq
@@ -7356,52 +6921,52 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -7430,10 +6995,10 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
+Ay
+lf
+se
+fq
 Kq
 Kq
 Kq
@@ -7658,17 +7223,17 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Og
 UE
 UE
@@ -7676,34 +7241,34 @@ UE
 UE
 UE
 vj
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -7732,10 +7297,10 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
+qX
+lf
+lf
+fq
 Kq
 Kq
 Kq
@@ -7960,14 +7525,14 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Bl
 UE
 UE
@@ -7981,31 +7546,31 @@ Gq
 UE
 UE
 lb
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -8034,10 +7599,10 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
+tu
+lf
+lf
+fq
 Kq
 Kq
 Kq
@@ -8262,13 +7827,13 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Bl
 TV
 YX
@@ -8284,30 +7849,30 @@ YX
 YX
 FT
 lb
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -8324,25 +7889,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+NP
+lf
+lf
+fq
+fq
+fq
+fq
 Kq
 Kq
 Kq
@@ -8564,52 +8129,52 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
 Bl
 CP
 AA
 YX
 Nl
 Nl
-ee
-ee
+Ac
+Ac
 yl
-ee
-ee
+Ac
+Ac
 Nl
 Nl
 YX
 AA
 Gq
 lb
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -8626,25 +8191,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+fq
 Kq
 Kq
 Kq
@@ -8866,52 +8431,52 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 Bl
 TV
 AA
 AA
 Nl
-ee
+Ac
 wY
 wY
-pa
+gY
 qF
-pa
+gY
 wY
 wY
-ee
+Ac
 Nl
 AA
 AA
 FT
 lb
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -8928,25 +8493,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+se
+lf
+lf
+lf
+lf
+se
+lf
+fq
+lf
+fq
 Kq
 Kq
 Kq
@@ -9168,52 +8733,52 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 mg
 YX
 Nl
 gk
 hk
 qF
-pa
+gY
 Yl
 Yl
-sC
+WO
 Yl
 Yl
-pa
+gY
 qF
 hk
 hk
 YX
 YX
 mg
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -9230,25 +8795,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+se
+lf
+lf
+JM
+lf
+lf
+lf
+kw
+lf
+Om
+lf
+lf
+fq
+lf
+fq
 Kq
 Kq
 Kq
@@ -9470,52 +9035,52 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 mg
 YX
 Nl
 wY
-pa
+gY
 nz
 Yl
 Yl
 Yl
-sC
+WO
 Yl
 Yl
 Yl
 qF
-pa
-ee
+gY
+Ac
 Nl
 YX
 mg
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -9532,25 +9097,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+lf
+lf
+lf
+ul
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+fq
+lf
+fq
 Kq
 Kq
 Kq
@@ -9772,52 +9337,52 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 Og
 CP
 YX
-ee
+Ac
 wY
 Yl
-sC
-sC
+WO
+WO
 Yl
 Yl
 OB
 Yl
-sC
+WO
 OB
 wK
-pa
+gY
 my
-ee
+Ac
 YX
 FT
 lb
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -9834,25 +9399,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+Fr
+Fr
+lf
+lf
+fq
+lf
+fq
 Kq
 Kq
 Kq
@@ -10074,52 +9639,52 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 mg
 YX
 YX
-ee
-pa
+Ac
+gY
 Yl
 Yl
-sC
-sC
-sC
-sC
-sC
-sC
+WO
+WO
+WO
+WO
+WO
+WO
 Yl
 Yl
 Yl
-pa
-ee
+gY
+Ac
 YX
 PM
 mg
-hv
+Ni
 hh
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -10136,25 +9701,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+lf
+lf
+lf
+RS
+lf
+lf
+lf
+Fr
+Fr
+mu
+Fr
+lf
+lf
+lf
+fq
 Kq
 Kq
 Kq
@@ -10376,19 +9941,19 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 mg
 YX
 Nl
-ee
-pa
+Ac
+gY
 Yl
 Yl
 Yl
-sC
+WO
 Xe
 Xe
 Xe
@@ -10438,25 +10003,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+se
+lf
+lf
+lf
+lf
+lf
+se
+lf
+Tx
+Tx
+Tx
+Tx
+lf
+lf
+lf
+fq
 Kq
 Kq
 Kq
@@ -10678,19 +10243,19 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 mg
 AA
 hk
 JW
 qF
-sC
-sC
+WO
+WO
 OB
-sC
+WO
 Xe
 YR
 Xe
@@ -10703,27 +10268,27 @@ Xe
 Xe
 Xe
 mg
-Ah
+cY
 Fr
 Fr
 Fr
+KY
 Fr
 Fr
 Fr
+KY
 Fr
 Fr
 Fr
+KY
 Fr
 Fr
 Fr
+KY
 Fr
 Fr
 Fr
-Fr
-Fr
-Fr
-Fr
-Kh
+JH
 fq
 Jl
 Jl
@@ -10740,25 +10305,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+lf
+yb
+yb
+Tx
+Tx
+Px
+Tx
+lf
+lf
+se
+fq
 Kq
 Kq
 Kq
@@ -10980,19 +10545,19 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 mg
 YX
 Nl
-ee
-pa
+Ac
+gY
 Yl
 Yl
 Yl
-sC
+WO
 Xe
 hq
 Xe
@@ -11042,25 +10607,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+lf
+fq
+fq
+fq
+fq
+cn
+yb
+Tx
+Tx
+Tx
+Tx
+Tx
+lf
+lf
+fq
 Kq
 Kq
 Kq
@@ -11282,41 +10847,41 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 mg
 YX
 YX
-ee
-pa
+Ac
+gY
 Yl
 Yl
-sC
-sC
-sC
-sC
-sC
-sC
+WO
+WO
+WO
+WO
+WO
+WO
 Yl
 Yl
 Yl
-pa
-ee
+gY
+Ac
 YX
 Xp
 mg
-mj
+nf
 WP
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 fq
 fq
@@ -11344,25 +10909,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+lf
+fq
+QC
+QC
+QC
+QC
+lf
+YN
+Tx
+Tx
+Tx
+lf
+lf
+lf
+fq
 Kq
 Kq
 Kq
@@ -11584,47 +11149,47 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 FT
 lb
 YX
-ee
+Ac
 wY
-pa
-sC
-sC
+gY
+WO
+WO
 Yl
 Yl
 OB
 Yl
-sC
+WO
 OB
-sC
-pa
+WO
+gY
 my
-ee
+Ac
 YX
 Og
 CP
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 lf
 lf
 lf
 lf
-lf
+Rp
 lf
 Ol
 fq
@@ -11646,25 +11211,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+lf
+fq
+QC
+rX
+QC
+QC
+QC
+lf
+lf
+Fr
+fz
+Xe
+lf
+lf
+fq
 Kq
 Kq
 Kq
@@ -11886,41 +11451,41 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 mg
 YX
 Nl
-ee
-pa
+Ac
+gY
 qF
 Yl
 Yl
 Yl
-sC
+WO
 Yl
 Yl
 Yl
 qF
-pa
-ee
+gY
+Ac
 Nl
 YX
 mg
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 lf
 wt
@@ -11931,7 +11496,7 @@ lf
 lf
 fq
 Ns
-Kh
+Nv
 fq
 Jl
 Jl
@@ -11948,25 +11513,25 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+se
+lf
+lf
+fq
+QC
+rX
+SW
+QC
+QC
+QC
+lf
+Fr
+fz
+lf
+lf
+fq
+fq
 Kq
 Kq
 Kq
@@ -12188,41 +11753,41 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 mg
 YX
 YX
 hk
 hk
 qF
-pa
+gY
 Yl
 Yl
-sC
+WO
 Yl
 Yl
-pa
+gY
 qF
 hk
 hk
 YX
 YX
 mg
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 aH
 ey
@@ -12250,24 +11815,24 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+lf
+lf
+lf
+lf
+fq
+QC
+Se
+rX
+QC
+QC
+QC
+lf
+lf
+lf
+se
+lf
+fq
 Kq
 Kq
 Kq
@@ -12490,41 +12055,41 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 Gq
 vj
 AA
 AA
 Nl
-ee
+Ac
 wY
 wY
-pa
+gY
 qF
-pa
+gY
 wY
 wY
-ee
+Ac
 Nl
 AA
 AA
 Og
 CP
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Ib
 Gp
@@ -12537,7 +12102,7 @@ fq
 Ns
 Kh
 fq
-Lh
+gZ
 fq
 Jl
 Jl
@@ -12552,24 +12117,24 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
 Kq
 Kq
 Kq
@@ -12792,41 +12357,41 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
 Gq
 lb
 AA
 YX
 Nl
 Nl
-ee
-ee
+Ac
+Ac
 yl
-ee
-ee
+Ac
+Ac
 Nl
 Nl
 YX
 AA
 Bl
 CP
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 fq
 fq
@@ -12839,7 +12404,7 @@ fq
 Ns
 Kh
 fq
-Lh
+gZ
 fq
 Jl
 Jl
@@ -13094,13 +12659,13 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Gq
 vj
 YX
@@ -13116,19 +12681,19 @@ YX
 YX
 Og
 CP
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Jl
 Jl
@@ -13139,9 +12704,9 @@ PV
 gN
 fq
 Ns
-Kh
+Nv
 fq
-Lh
+gZ
 fq
 Jl
 Jl
@@ -13396,14 +12961,14 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Gq
 UE
 UE
@@ -13417,20 +12982,20 @@ Bl
 UE
 UE
 CP
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Jl
 Jl
@@ -13698,17 +13263,17 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 FT
 UE
 UE
@@ -13716,23 +13281,23 @@ UE
 UE
 UE
 TV
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Jl
 Jl
@@ -13745,13 +13310,13 @@ fq
 Ns
 Kh
 fq
-Tq
+Ss
 fq
-Jl
-Jl
-Jl
-Jl
-Jl
+fq
+fq
+fq
+fq
+fq
 Jl
 Kq
 Kq
@@ -14000,60 +13565,60 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Jl
 Jl
 Jl
 vG
-Tq
-Lh
-Lh
+Ss
+gZ
+gZ
 fq
 Ns
 Kh
 fq
-ya
+lG
 fq
-Jl
-Jl
-Jl
-Jl
-Jl
+ON
+ON
+ON
+ON
+fq
 Jl
 Kq
 Kq
@@ -14302,60 +13867,60 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Jl
 Jl
 Jl
 fq
 kz
-Lh
-Lh
+gZ
+gZ
 fq
 Ns
-Kh
+Nv
 fq
-Wi
+vC
 fq
-Jl
-Jl
-Jl
-Jl
-Jl
+ON
+ON
+ON
+ON
+fq
 Jl
 Kq
 Kq
@@ -14604,18 +14169,21 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 Mh
@@ -14629,16 +14197,13 @@ Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Jl
 Jl
@@ -14646,19 +14211,19 @@ Jl
 fq
 fq
 FR
-Wi
+vC
 Uv
 Ns
 Kh
 Uv
-Wi
-fq
+vC
+zH
+ON
+ON
+ON
+ON
 fq
 Jl
-Jl
-Jl
-Jl
-Jl
 Kq
 Kq
 Kq
@@ -14681,10 +14246,10 @@ Kq
 Kq
 Kq
 Kq
-fq
-fq
-fq
-fq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -14906,30 +14471,30 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+Mh
 JC
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+in
+oF
+fq
+oF
+ff
 Mh
 Mh
 Mh
@@ -14946,21 +14511,21 @@ Jl
 Jl
 Jl
 fq
-fq
+WV
 yg
-Wi
-VL
+vC
+KR
 Ns
 Kh
-VL
-Wi
-Lh
-fq
+KR
+vC
+Qo
+Id
+WA
+ON
+ON
 fq
 Jl
-Jl
-Jl
-Jl
 Kq
 Kq
 Kq
@@ -14983,10 +14548,10 @@ Kq
 Kq
 Kq
 Kq
-fq
-lf
-lf
-fq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -15208,31 +14773,31 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 zs
 oF
+oF
+Za
+Za
 tG
-oF
-oF
-tG
-oF
-oF
-zT
+Za
+Za
+jS
 jS
 jS
 fq
@@ -15250,19 +14815,19 @@ Jl
 fq
 fq
 uX
-Wi
-AJ
-WQ
+vC
+wL
+Ns
 Kh
-AJ
-ya
-Wi
-GW
-fq
+wL
+lG
+gZ
+gZ
+zH
+ON
+ON
 fq
 Jl
-Jl
-Jl
 Kq
 Kq
 Kq
@@ -15285,10 +14850,10 @@ Kq
 Kq
 Kq
 Kq
-Ay
-lf
-se
-fq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -15510,19 +15075,19 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 Mh
@@ -15558,13 +15123,13 @@ Ns
 Nv
 fq
 fq
-ya
-ya
-Lh
-fq
+Rq
+Ss
+Di
+Id
+Id
 fq
 Jl
-Jl
 Kq
 Kq
 Kq
@@ -15587,10 +15152,10 @@ Kq
 Kq
 Kq
 Kq
-qX
-lf
-lf
-fq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -15812,23 +15377,23 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
-Mh
-Mh
-AQ
+in
+Za
 cD
 cD
 cD
@@ -15861,10 +15426,10 @@ Kh
 fq
 fq
 fq
-fq
-ya
-Tq
-fq
+vC
+Ss
+Ss
+gZ
 fq
 Jl
 Kq
@@ -15889,10 +15454,10 @@ Kq
 Kq
 Kq
 Kq
-tu
-lf
-lf
-fq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -16114,23 +15679,23 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
-Mh
-Mh
-Mh
-CD
+fq
+CY
+Za
 Th
 cD
 cD
@@ -16155,18 +15720,18 @@ fq
 fq
 fq
 fq
-lf
-lf
+hW
+QC
 fq
 Ns
 Kh
 fq
 Kq
 fq
-fq
-fq
-Lh
-Wi
+vC
+gZ
+gZ
+gZ
 fq
 fq
 Kq
@@ -16179,25 +15744,25 @@ Kq
 Kq
 Kq
 Kq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-NP
-lf
-lf
-fq
-fq
-fq
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -16416,23 +15981,23 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
-Mh
-Mh
-AQ
+Ul
+Za
 cD
 cD
 cD
@@ -16444,32 +16009,32 @@ eN
 cD
 Za
 fq
+jX
 Mh
 Mh
 Mh
 Mh
 Mh
 Mh
-Mh
-Mh
+cT
 fq
 BH
 bM
 Ub
 fq
-lf
-lf
+GW
+QC
 fq
 Ns
 Kh
 fq
 Kq
-Kq
-Kq
 fq
+vC
+gZ
 fq
-Lh
-Lh
+gZ
+gZ
 fq
 Kq
 Kq
@@ -16481,25 +16046,25 @@ Kq
 Kq
 Kq
 Kq
-fq
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -16718,19 +16283,19 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 Mh
@@ -16759,20 +16324,24 @@ Mz
 QC
 QC
 fq
-lf
-lf
+Fg
+QC
 fq
 Ns
-Kh
+Nv
+fq
+Kq
+fq
+vC
+gZ
+fq
+fq
+fq
 fq
 Kq
 Kq
 Kq
 Kq
-fq
-fq
-fq
-fq
 Kq
 Kq
 Kq
@@ -16783,25 +16352,21 @@ Kq
 Kq
 Kq
 Kq
-fq
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-se
-lf
-lf
-lf
-lf
-se
-lf
-fq
-lf
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -17020,25 +16585,25 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 fq
-Za
+CY
 oz
-Wa
+oz
 oz
 Za
 Za
@@ -17048,62 +16613,62 @@ XG
 Za
 oz
 fq
-Mh
+fo
 Mh
 rs
 Xe
 OH
 Mh
-Mh
+jb
 fq
 fq
 fq
 CG
 cZ
 fq
-lf
-lf
+cs
+zX
 fq
 Ns
 Kh
 fq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
 fq
-lf
-lf
-lf
-se
-lf
-lf
-lf
-lf
-lf
-lf
-kw
-lf
-Om
-lf
-lf
 fq
-lf
 fq
+fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -17322,19 +16887,19 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 fq
@@ -17362,9 +16927,9 @@ gd
 Tx
 Tx
 Tx
-Rp
-lf
-lf
+kY
+Xe
+Xe
 fq
 Ns
 Kh
@@ -17387,25 +16952,25 @@ Kq
 Kq
 Kq
 Kq
-fq
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-fq
-lf
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -17624,21 +17189,21 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
-Mh
-Mh
+JC
 Mh
 fq
 fq
@@ -17662,16 +17227,16 @@ Mh
 fq
 ou
 bb
-bb
+Oc
 fq
-fq
+XL
 lf
-lf
-fq
+Xe
+cw
 Mg
 oG
+WV
 fq
-Jl
 Kq
 Kq
 Kq
@@ -17689,25 +17254,25 @@ Kq
 Kq
 Kq
 Kq
-fq
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-Fr
-Fr
-lf
-lf
-fq
-lf
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -17926,20 +17491,20 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 Mh
@@ -17968,48 +17533,48 @@ Tx
 PU
 KI
 lf
-lf
 Xe
+JI
 Dc
 lB
 Xe
-Jl
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
 fq
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-Fr
-Fr
-mu
-Fr
-lf
-lf
-lf
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -18228,21 +17793,21 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
+nq
+nq
 tY
 iS
 yJ
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 Mh
@@ -18270,48 +17835,48 @@ Tx
 kX
 sQ
 lf
-lf
 Xe
 Xe
 Xe
 Xe
-Jl
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+Xe
 fq
-lf
-lf
-se
-lf
-lf
-lf
-lf
-lf
-se
-lf
-Tx
-Tx
-Tx
-Tx
-lf
-lf
-lf
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -18536,18 +18101,18 @@ gf
 xa
 gf
 yJ
+nq
+nq
+Tv
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 JC
-JC
-JC
-JC
-JC
-JC
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
 Mh
 fq
 fq
@@ -18571,49 +18136,49 @@ Tx
 Tx
 Nd
 sQ
-WV
+lf
+Xe
 lf
 lf
 lf
 lf
-lf
-Jl
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
 fq
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-lf
-yb
-yb
-Tx
-Tx
-Px
-Tx
-lf
-lf
-se
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -18843,15 +18408,15 @@ XW
 XW
 XW
 Ls
-JC
+ae
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-om
 Mh
 wg
 do
@@ -18874,48 +18439,48 @@ Tx
 DQ
 Zw
 lf
-lf
-lf
-lf
-lf
-lf
-Jl
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-fq
+Xe
 lf
 lf
 lf
 lf
 fq
-fq
-fq
-fq
-cn
-yb
-Tx
-Tx
-Tx
-Tx
-Tx
-lf
-lf
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -19147,12 +18712,12 @@ en
 en
 XW
 Ls
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 lK
@@ -19172,52 +18737,52 @@ Mh
 fq
 hS
 VV
-VV
+Ng
 fq
-fq
+XL
 lf
-lf
-lf
-lf
-lf
-lf
-Jl
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-fq
+Xe
 lf
 lf
 lf
 lf
 fq
-QC
-QC
-QC
-QC
-lf
-YN
-Tx
-Tx
-Tx
-lf
-lf
-lf
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -19450,15 +19015,15 @@ en
 en
 en
 Ls
+nq
+nq
+nq
+nq
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+JC
 Mh
 fE
-rX
+yj
 yj
 do
 do
@@ -19476,50 +19041,50 @@ gd
 Tx
 Tx
 Tx
-Rp
-lf
-lf
-lf
-lf
-lf
-lf
-Jl
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-fq
-lf
-lf
-lf
-lf
-fq
-QC
-rX
-QC
-QC
-QC
-lf
-lf
-Fr
-fz
+kY
 Xe
-lf
-lf
+Xe
+HN
+Xe
+Xe
+oZ
 fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -19753,9 +19318,9 @@ TM
 TM
 TM
 oR
-Mh
-Mh
-Mh
+ae
+nq
+nq
 Mh
 Mh
 iy
@@ -19766,62 +19331,62 @@ Mu
 oz
 oz
 fq
-Mh
+fo
 Mh
 Ff
 Xe
 OH
 Mh
-Mh
+jb
 fq
 fq
 fq
 zw
 cZ
 fq
-lf
-lf
-wf
-Jl
-Jl
-Jl
-Jl
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
 fq
-lf
-se
-lf
-lf
+Tn
 fq
-QC
-rX
-SW
-QC
-QC
-QC
-lf
-Fr
-fz
-lf
-lf
+RI
+lh
+FN
 fq
-fq
+Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -20055,18 +19620,18 @@ pr
 pr
 tZ
 ns
-Mh
-Mh
-Mh
+nq
+nq
+nq
 Mh
 Mh
 Sy
 rX
 rX
 rX
-rX
-Za
-oz
+cD
+cD
+eN
 fq
 Mh
 Mh
@@ -20081,9 +19646,13 @@ vM
 Tx
 Tx
 fq
-WV
-lf
-wf
+bL
+Xe
+bL
+nk
+Xv
+Xv
+gt
 Jl
 Kq
 Kq
@@ -20105,24 +19674,20 @@ Kq
 Kq
 Kq
 Kq
-fq
-lf
-lf
-lf
-lf
-fq
-QC
-Se
-rX
-QC
-QC
-QC
-lf
-lf
-lf
-se
-lf
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -20357,35 +19922,39 @@ en
 en
 iW
 Ij
-Mh
-Mh
-Mh
+nq
+nq
+nq
 Mh
 Mh
 Mh
 hF
 Rm
-fq
+AN
 ER
 Hu
 vq
 fq
+jX
 Mh
 Mh
 Mh
 Mh
 Mh
 Mh
-Mh
-Mh
+cT
 fq
 vM
 Tx
 Tx
 fq
 lf
+Xe
 lf
-wf
+hc
+Xv
+Xv
+sz
 Jl
 Kq
 Kq
@@ -20407,24 +19976,20 @@ Kq
 Kq
 Kq
 Kq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
-fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -20659,12 +20224,12 @@ en
 en
 me
 hK
+nq
+nq
+nq
+nq
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+JC
 Mh
 hF
 rX
@@ -20682,17 +20247,17 @@ Mh
 Mh
 fq
 vM
-Tx
+cU
 Tx
 fq
 lf
+Xe
 lf
-wf
+Pt
+Xv
+qq
+tf
 Jl
-Kq
-Kq
-Kq
-Kq
 Kq
 Kq
 Kq
@@ -20959,14 +20524,14 @@ fD
 fD
 fD
 uV
-JC
+nq
 Pi
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
 Mh
 Mh
 HU
@@ -20988,13 +20553,13 @@ fq
 fq
 fq
 lf
+Xe
 lf
-wf
+aT
+Xv
+Xv
+rV
 Jl
-Kq
-Kq
-Kq
-Kq
 Kq
 Kq
 Kq
@@ -21246,7 +20811,7 @@ ik
 SE
 SE
 oY
-JC
+nq
 KM
 gf
 gf
@@ -21254,44 +20819,49 @@ QK
 wa
 wa
 Qw
-JC
-JC
+nq
+nq
 Pi
-JC
-JC
+nq
+nq
 Pi
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 JC
 JC
-JC
 Mh
 Mh
 Mh
 Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
+Ia
 lf
 lf
 lf
 lf
 lf
+Xe
 lf
-lf
-wf
+EG
+Xv
+js
+Jl
+Jl
 Jl
 Kq
 Kq
@@ -21312,11 +20882,6 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-lo
-lo
 Kq
 Kq
 Kq
@@ -21524,82 +21089,82 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 CB
-JC
-JC
+nq
+nq
 Sh
 tg
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 NR
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 rU
-JC
-JC
+nq
+nq
 Ot
 SE
 gf
 gf
 Qw
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
+Ia
 lf
 lf
 lf
+Na
 lf
+Xe
 lf
-lf
-lf
-wf
+bu
+Xv
+ub
+YZ
+YZ
 Jl
-Kq
-Kq
-Kq
-Kq
-Kq
 Kq
 Kq
 Kq
@@ -21845,63 +21410,63 @@ BL
 MP
 BL
 Dn
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 ib
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 yk
 Qw
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 fq
 fq
-fq
+Oi
 lf
+Na
 lf
-lf
-lf
-wf
+Xe
+oZ
+FN
+Xv
+Xv
+Xv
+Xv
 Jl
-Kq
-Kq
-Kq
-Kq
-Kq
 Kq
 Kq
 Kq
@@ -22128,82 +21693,82 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 eL
-JC
-JC
+nq
+nq
 nV
 ws
 tg
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 UK
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-Mh
-gJ
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+rD
 fq
 lf
 lf
+AJ
+DW
+Na
+lf
 fq
-lf
-lf
-lf
+au
 fq
+Yo
+Xv
+rb
+wq
 Jl
-Jl
-Kq
-Kq
-Kq
-Kq
-Kq
 Kq
 Kq
 Kq
@@ -22430,13 +21995,13 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 eL
-JC
-JC
+nq
+nq
 MW
 Kr
 sD
@@ -22492,7 +22057,7 @@ xY
 HS
 HS
 zX
-lf
+oT
 lf
 lf
 lf
@@ -22500,12 +22065,12 @@ Na
 lf
 fq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+Jl
+Jl
+Jl
+Jl
+Jl
+Jl
 Kq
 Kq
 Kq
@@ -22732,13 +22297,13 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 NL
-JC
-JC
+nq
+nq
 MW
 sD
 Kr
@@ -22794,7 +22359,7 @@ As
 As
 As
 zX
-lf
+oT
 lf
 lf
 lf
@@ -23034,72 +22599,72 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 eL
-JC
-JC
+nq
+nq
 MW
 bp
 tg
 XT
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Lj
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 rD
 fq
 lf
 lf
 fq
-lf
+DW
 Na
 lf
 fq
@@ -23336,72 +22901,72 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 eL
-JC
-JC
-JC
+nq
+nq
+nq
 lp
 tg
-JC
+nq
 XT
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 DL
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 fq
 fq
 fq
-CY
+lf
 Na
 lf
 fq
@@ -23676,34 +23241,34 @@ Hy
 Hy
 Hy
 iE
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-Qq
-JC
-JC
-JC
-JC
-JC
-Qq
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+fq
+fq
+Nx
+Aj
+Aj
+Aj
+ad
 fq
 fq
 fq
 fq
-ry
+lf
+lf
 Na
 xV
 fq
@@ -23952,58 +23517,58 @@ Jo
 Nc
 UF
 DZ
-JC
+nq
 XT
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 ib
-JC
-JC
-JC
+nq
+nq
+nq
 EE
 xN
 eB
 ox
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 MD
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 fq
-Nx
-Aj
-Aj
-Aj
-ad
+QC
+QC
+QC
+QC
+QC
+QC
+QC
+QC
 fq
-fq
-fq
-fq
-Xz
+Oa
 lf
 lf
 Na
@@ -24242,71 +23807,71 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 eL
-JC
-JC
-JC
+nq
+nq
+nq
 Sh
 tg
-JC
-JC
+nq
+nq
 qC
-JC
+nq
 XT
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 ib
-JC
-JC
-JC
+nq
+nq
+nq
 tV
 zu
 zu
 bi
-fo
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+ox
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 dX
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
-fq
+QC
+QC
+Na
+Na
+Yb
+Na
+Na
 QC
 QC
 QC
 QC
-QC
-QC
-QC
-QC
-fq
-fq
-WO
-lf
+tK
 lf
 Na
 lf
@@ -24317,11 +23882,11 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+PT
+hf
+hf
+hf
+ML
 Kq
 Kq
 Kq
@@ -24544,72 +24109,72 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 eL
-JC
-JC
-JC
+nq
+nq
+nq
 lp
 tg
-JC
-JC
+nq
+nq
 ib
-JC
-JC
+nq
+nq
 XT
-JC
-JC
-JC
+nq
+nq
+nq
 ib
-JC
-JC
-JC
+nq
+nq
+nq
 yc
 nU
 Et
 zu
-jb
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+Ri
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 dX
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
-QC
+bU
 QC
 Na
+dZ
+ob
+pu
 Na
 Yb
-Na
-Na
-QC
-QC
-QC
-QC
-tK
-lf
-lf
+Dr
+ja
+ja
+ja
+ZU
 Na
 lf
 fq
@@ -24619,11 +24184,11 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+lo
+mf
+mf
+mf
+Qq
 Kq
 Kq
 Kq
@@ -24851,67 +24416,67 @@ BL
 BL
 MP
 cO
-JC
-JC
-JC
+nq
+nq
+nq
 Sh
 tg
-JC
-JC
+nq
+nq
 ib
-JC
-JC
-JC
+nq
+nq
+nq
 XT
-JC
-JC
+nq
+nq
 ib
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 mD
 zu
-jb
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+Ri
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 dX
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 bU
-QC
-Na
-dZ
-ob
-pu
-Na
+zB
 Yb
-Dr
-ja
-ja
-ja
-ZU
-lf
+UQ
+TA
+QX
+Yb
+Yb
+Yb
+Yb
+Yb
+Yb
+Oj
 Na
 lf
 fq
@@ -24921,11 +24486,11 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+lo
+mf
+mf
+mf
+Qq
 Kq
 Kq
 Kq
@@ -25148,72 +24713,72 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Sh
 tg
-JC
-JC
+nq
+nq
 ib
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 XT
-JC
+nq
 ib
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 tQ
 zu
 LU
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 dX
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 bU
-zB
+QC
+Na
+bk
+dN
+zZ
+Na
 Yb
-UQ
-TA
-QX
-Yb
-Yb
-Yb
-Yb
-Yb
-Yb
-Oj
-lf
+hC
+TQ
+TQ
+TQ
+ty
 Na
 lf
 fq
@@ -25223,11 +24788,11 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+lo
+mf
+mf
+mf
+Qq
 Kq
 Kq
 Kq
@@ -25450,71 +25015,71 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Sh
 tg
-JC
-JC
+nq
+nq
 ib
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 qC
 ib
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 tQ
 Ri
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 dX
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
-bU
+Fj
 QC
 Na
-bk
-dN
-zZ
 Na
 Yb
-hC
-TQ
-TQ
-TQ
-ty
+Na
+Na
+QC
+QC
+QC
+QC
+ot
 lf
 Na
 lf
@@ -25525,11 +25090,11 @@ Kq
 Kq
 Kq
 Kq
-Kq
-Kq
-Kq
-Kq
-Kq
+YF
+ry
+ry
+ry
+yd
 Kq
 Kq
 Kq
@@ -25752,71 +25317,71 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 lp
 tg
-JC
-JC
+nq
+nq
 ib
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 ib
 ib
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 tQ
 Ri
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 dX
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
-Fj
-QC
-Na
-Na
-Yb
-Na
-Na
+fq
 QC
 QC
 QC
 QC
-ot
-lf
+QC
+QC
+VH
+qD
+QC
+QC
+YK
 lf
 lf
 lf
@@ -26054,70 +25619,70 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Sh
 tg
-JC
-JC
+nq
+nq
 ib
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 ib
 ib
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 mD
 Ri
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 dX
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 fq
-QC
-QC
-QC
-QC
-QC
-QC
-VH
-qD
 fq
 fq
-Qo
+fq
+fq
+fq
+fq
+fq
+QC
+QC
 lf
 lf
 lf
@@ -26356,74 +25921,74 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 Sh
 tg
-JC
-JC
+nq
+nq
 ib
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 ib
 ib
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 tQ
 Ri
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 dX
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+gT
+gT
+gT
+gT
+gT
+gT
 fq
-fq
-mf
-FN
-FN
-FN
-ul
-fq
-fq
-fq
-fq
-Ia
-lf
-bL
-ON
-zH
+QC
+QC
+QC
+gT
+gT
+gT
 fq
 Kq
 Kq
@@ -26669,13 +26234,13 @@ TG
 zX
 zX
 TG
-Rr
+MW
 CB
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
 ib
 ib
 fq
@@ -26688,44 +26253,45 @@ fq
 fq
 fq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 dX
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-EG
-JC
-JC
-JC
-JC
-JC
-EG
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+gT
+gT
+gT
+gT
+gT
+gT
 fq
 fq
 fq
 fq
-sz
-Tn
-Id
+gT
+gT
+gT
+fq
 fq
 Kq
 Kq
@@ -26736,19 +26302,18 @@ Kq
 Kq
 Kq
 Kq
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -26967,17 +26532,17 @@ Jl
 Jl
 Jl
 Jl
-Jl
-wf
-wf
-Jl
-Jl
+fq
+lf
+lf
+fq
+fq
 MW
 XT
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
 ib
 ib
 fq
@@ -26997,7 +26562,7 @@ fq
 fq
 fq
 fq
-JC
+nq
 HO
 fq
 fq
@@ -27008,26 +26573,27 @@ fq
 fq
 fq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-fq
-Kq
-Kq
-fq
-gY
-gT
 nq
+nq
+nq
+nq
+nq
+nq
+nq
+gT
+gT
+gT
+gT
+gT
+gT
+fq
+gT
+gT
+gT
+gT
+gT
+gT
+gT
 fq
 Kq
 Kq
@@ -27038,19 +26604,18 @@ Kq
 Kq
 Kq
 Kq
-Jl
-CI
-CI
-AP
-CI
-CI
-AP
-CI
-CI
-CA
-SV
-SV
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -27269,67 +26834,68 @@ Jl
 Jl
 Jl
 Jl
-Jl
-wf
-wf
-Jl
-Jl
+fq
+lf
+lf
+fq
+fq
 fq
 MW
 XT
-JC
-JC
-JC
-ib
-ib
-fq
-Jl
-Jl
-Jl
-Jl
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-fq
-fq
-fq
-fq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-fq
-Kq
-Kq
-fq
-gY
-gT
 nq
+nq
+nq
+ib
+ib
+fq
+Jl
+Jl
+Jl
+Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+fq
+fq
+fq
+fq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+fq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+gT
+gT
+gT
+gT
+gT
+gT
+fq
+gT
+gT
+gT
+gT
+gT
+gT
+gT
 fq
 Kq
 Kq
@@ -27340,19 +26906,18 @@ Kq
 Kq
 Kq
 Kq
-Jl
-CI
-uc
-uc
-uc
-uc
-uc
-uc
-cU
-cU
-uc
-CI
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -27566,72 +27131,73 @@ Jl
 Jl
 Jl
 Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-wf
-wf
-vm
-Jl
+fq
+fq
+fq
+fq
+fq
+fq
+lf
+lf
+MK
+fq
 Jl
 fq
 MW
 XT
-JC
-JC
-ib
-ib
-fq
-Jl
-Jl
-Jl
-Jl
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-Kq
-fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-fq
-Kq
-Kq
-fq
-gY
-gT
 nq
+nq
+ib
+ib
+fq
+Jl
+Jl
+Jl
+Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+fq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+gT
+gT
+gT
+gT
+gT
+gT
+fq
+gT
+gT
+gT
+gT
+gT
+gT
+gT
 fq
 Kq
 Kq
@@ -27642,32 +27208,31 @@ Kq
 Kq
 Kq
 Kq
-Jl
-CI
-uc
-uc
-uc
-uc
-uc
-cU
-cU
-uc
-uc
-CI
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -27868,22 +27433,22 @@ Jl
 Jl
 Jl
 Jl
-Jl
+fq
 AK
 AK
 zC
 zC
-Jl
-wf
-wf
-pM
-Jl
+fq
+lf
+lf
+Yw
+fq
 Jl
 Jl
 fq
 MW
 XT
-JC
+nq
 ib
 ib
 fq
@@ -27914,27 +27479,30 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+gT
+gT
+gT
+gT
+gT
+gT
+fq
+gT
+gT
+gT
+gT
+gT
+gT
+gT
 fq
 Kq
 Kq
-fq
-fq
-fq
-fq
-fq
 Kq
 Kq
 Kq
@@ -27944,32 +27512,29 @@ Kq
 Kq
 Kq
 Kq
-Jl
-lq
-xX
-uc
-uc
-uc
-uc
-uc
-uc
-uc
-ub
-kq
-Jl
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -28170,16 +27735,16 @@ Jl
 Jl
 Jl
 Jl
-Jl
+fq
 AK
 AK
 zC
 zC
-Jl
-wf
-wf
-od
-Jl
+fq
+lf
+lf
+jN
+fq
 Jl
 Jl
 Jl
@@ -28216,19 +27781,27 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+fq
+gT
+gT
+gT
+gT
+gT
+gT
+gT
 fq
 Kq
 Kq
@@ -28246,32 +27819,24 @@ Kq
 Kq
 Kq
 Kq
-Jl
-CI
-uc
-uc
-uc
-cU
-uc
-uc
-uc
-cU
-uc
-CI
-Jl
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -28472,16 +28037,16 @@ Jl
 Jl
 Jl
 Jl
-Jl
+fq
 AK
 AK
 AK
-Jl
-Jl
-wf
-wf
-Jl
-Jl
+fq
+fq
+lf
+lf
+fq
+fq
 Jl
 Jl
 Jl
@@ -28518,19 +28083,27 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+fq
+gT
+gT
+gT
+gT
+gT
+gT
+gT
 fq
 Kq
 Kq
@@ -28548,32 +28121,24 @@ Kq
 Kq
 Kq
 Kq
-Jl
-CI
-uc
-cU
-cU
-uc
-uc
-uc
-uc
-uc
-cU
-SV
-Jl
-Ng
-Ng
-AC
-Bi
-CL
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -28774,25 +28339,25 @@ Jl
 Jl
 Jl
 Jl
-Jl
-aT
+fq
+WV
 mt
 mt
-aT
-Jl
-wf
-wf
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
+WV
+fq
+lf
+lf
 fq
 fq
 fq
 fq
 fq
+fq
+fq
+fq
+fq
+fq
+fq
 Jl
 Jl
 Jl
@@ -28820,19 +28385,27 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
 fq
 Kq
 Kq
@@ -28850,34 +28423,26 @@ Kq
 Kq
 Kq
 Kq
-Jl
-CI
-SV
-ww
-SV
-CI
-CI
-ak
-CI
-CI
-CI
-SV
-Jl
-Ng
-Ng
-in
-ff
-Qk
-Ng
-Ng
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-wf
-wf
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -29075,21 +28640,21 @@ Jl
 Jl
 Jl
 Jl
-Jl
-Jl
+fq
+fq
 Fp
 wk
 wk
 Mf
-Jl
-wf
-wf
-AK
-AK
-AK
-AK
-AK
-Jl
+fq
+lf
+lf
+QC
+QC
+QC
+QC
+QC
+fq
 Jl
 Jl
 Jl
@@ -29122,19 +28687,19 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -29152,34 +28717,34 @@ Kq
 Kq
 Kq
 Kq
-Jl
-Jl
-Jl
-Jl
-Vw
-ak
-ak
-ak
-CI
-CI
-ak
-Ti
-Bz
-cT
-cT
-ff
-gZ
-QZ
-cT
-cT
-PQ
-Xr
-HQ
-HQ
-HQ
-iZ
-HQ
-wf
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -29376,22 +28941,22 @@ Jl
 Jl
 Jl
 Jl
-Jl
-Jl
+fq
+fq
 kr
-dg
-CI
-CI
-dg
-fB
-wf
-wf
-Jl
-Jl
-Jl
-Jl
-AK
-Jl
+ya
+Lh
+Lh
+ya
+Uv
+lf
+lf
+fq
+fq
+fq
+fq
+QC
+fq
 Jl
 Jl
 Jl
@@ -29424,19 +28989,19 @@ Kq
 Kq
 Kq
 fq
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
-JC
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
+nq
 fq
 Kq
 Kq
@@ -29457,31 +29022,31 @@ Kq
 Kq
 Kq
 Kq
-Jl
-PT
-cU
-dg
-ak
-ak
-ak
-ak
-kq
-Jl
-Ng
-Ng
-rN
-ff
-Qk
-Ng
-Ng
-Jl
-Tg
-Os
-Os
-Jl
-Jl
-Tv
-wf
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -29672,38 +29237,38 @@ Kq
 Kq
 Kq
 Kq
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
+fq
+fq
+fq
+fq
+fq
+fq
+fq
 bE
 Ig
 jq
 jq
-CI
-CI
-Ce
-wf
-wf
-fB
-Jl
-Jl
-Jl
-AK
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
+Lh
+Lh
+KR
+lf
+lf
+Uv
+fq
+fq
+fq
+QC
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
+fq
 Kq
 Kq
 Kq
@@ -29759,31 +29324,31 @@ Kq
 Kq
 Kq
 Kq
-Jl
-Jl
-fT
-lr
-lr
-Do
-ak
-ak
-CI
-Nr
-Ng
-Ng
-eO
-tI
-ae
-Ng
-Ng
-VI
-Ss
-HQ
-HQ
-aJ
-so
-wf
-wf
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -29974,38 +29539,38 @@ Kq
 Kq
 Kq
 Kq
-Jl
-CI
-CI
+fq
+Lh
+Lh
 AP
-CI
-CI
-CI
-CI
-CI
-SV
-SV
-CI
-CI
-Ce
-wf
-wf
-Ce
-SV
+Lh
+Lh
+Lh
+Lh
+Lh
+Tq
+Tq
+Lh
+Lh
+KR
+lf
+lf
+KR
+Tq
 CA
-CI
+Lh
 Eh
-CI
+Lh
 AP
-CI
-CI
-CI
+Lh
+Lh
+Lh
 AP
-CI
-CI
-CI
-CI
-Jl
+Lh
+Lh
+Lh
+Lh
+fq
 Kq
 Kq
 Kq
@@ -30061,31 +29626,31 @@ Kq
 Kq
 Kq
 Kq
-Jl
-Jl
-Jl
-Kc
-lr
-Do
-ak
-ak
-fe
-RL
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-sj
-vO
-np
-HQ
-lx
-bR
-wf
-wf
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -30276,38 +29841,38 @@ Kq
 Kq
 Kq
 Kq
-Jl
-ak
-ak
-ak
-ak
-ak
-ak
-ak
-ak
-ak
-dg
+fq
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+ya
 PC
-ak
-Ce
-wf
-wf
-Ce
-ak
-ak
-ak
+Wi
+KR
+lf
+lf
+KR
+Wi
+Wi
+Wi
 Eh
-ak
-ak
-ak
-ak
-ak
-ak
-ak
-ak
-ak
-ak
-Jl
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+fq
 Kq
 Kq
 Kq
@@ -30364,30 +29929,30 @@ Kq
 Kq
 Kq
 Kq
-Jl
-Jl
-fI
-dg
-dg
-ak
-ak
-fe
-RL
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-sj
-Ow
-HQ
-HQ
-da
-bR
-wf
-wf
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -30578,7 +30143,7 @@ Kq
 Kq
 Kq
 Kq
-Jl
+fq
 YL
 is
 YL
@@ -30591,10 +30156,10 @@ YL
 il
 Cx
 is
-Ce
-wf
-wf
-Ce
+KR
+lf
+lf
+KR
 YL
 is
 YL
@@ -30608,8 +30173,8 @@ is
 YL
 is
 YL
-ak
-Jl
+Wi
+fq
 Kq
 Kq
 Kq
@@ -30666,30 +30231,30 @@ Kq
 Kq
 Kq
 Kq
-cY
-Ng
-gn
-dg
-JH
-Xk
-ak
-CI
-LD
-Ng
-Ng
-RT
-hd
-CL
-Ng
-Ng
-jX
-ZC
-HQ
-HQ
-DI
-lC
-wf
-wf
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -30880,38 +30445,38 @@ Kq
 Kq
 Kq
 Kq
-Jl
-ak
-ak
-ak
-ak
-ak
-ak
-ak
-dg
-ak
-ak
-ak
-ak
-Ce
-wf
-wf
-Ce
-ak
-ak
-ak
+fq
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+ya
+Wi
+Wi
+Wi
+Wi
+KR
+lf
+lf
+KR
+Wi
+Wi
+Wi
 Eh
-ak
-ak
+Wi
+Wi
 VX
-ak
-ak
-ak
-ak
-ak
-ak
-ak
-Jl
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+Wi
+fq
 Kq
 Kq
 Kq
@@ -30968,30 +30533,30 @@ Kq
 Kq
 Kq
 Kq
-Ng
-Ng
-IH
-ak
-JH
-Xk
-ak
-kq
-Jl
-Ng
-Ng
-vC
-ff
-Qk
-Ng
-Ng
-Jl
-lG
-WN
-WN
-Jl
-Jl
-Tv
-wf
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -31182,38 +30747,38 @@ Kq
 Kq
 Kq
 Kq
-Jl
-CI
-CI
+fq
+Lh
+Lh
 UG
-CI
-CI
-SV
-SV
-SV
-CI
-CI
+Lh
+Lh
+Tq
+Tq
+Tq
+Lh
+Lh
 UG
-CI
-Ce
-wf
-wf
-Km
-CI
+Lh
+KR
+lf
+lf
+wL
+Lh
 UG
-CI
+Lh
 Eh
-SV
+Tq
 ud
-CI
+Lh
 iA
-CI
+Lh
 UG
-CI
-CI
-CI
-CI
-Jl
+Lh
+Lh
+Lh
+Lh
+fq
 Kq
 Kq
 Kq
@@ -31270,30 +30835,30 @@ Kq
 Kq
 Kq
 Kq
-Ng
-Ng
-jF
-qd
-ak
-dg
-dg
-Ti
-rd
-cT
-cT
-ff
-cC
-QZ
-hM
-hM
-PQ
-Xr
-HQ
-HQ
-HQ
-iZ
-HQ
-wf
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -31484,38 +31049,38 @@ Kq
 Kq
 Kq
 Kq
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-dg
+fq
+fq
+fq
+fq
+fq
+fq
+ya
 gy
 VD
-Jl
-Jl
-Jl
-Jl
-Ce
-wf
-wf
-Jl
-Jl
-Jl
-Jl
-AK
-Jl
+fq
+fq
+fq
+fq
+KR
+lf
+lf
+fq
+fq
+fq
+fq
+QC
+fq
 pU
-CI
-CI
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
+Lh
+Lh
+fq
+fq
+fq
+fq
+fq
+fq
+fq
 Kq
 Kq
 Kq
@@ -31572,30 +31137,30 @@ Kq
 Kq
 Kq
 Kq
-Ng
-qs
-qd
-uT
-Uc
-Oa
-SV
-SV
-Jl
-Ng
-Ng
-Oc
-ff
-Qk
-Ng
-Ng
-Jl
-Jl
-Jl
-PQ
-KY
-Jl
-wf
-wf
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -31793,25 +31358,25 @@ fq
 fq
 fq
 fq
+WV
 fq
 fq
 fq
 fq
 fq
 fq
+lf
+lf
 fq
-wf
-wf
 Jl
 Jl
-Jl
-Jl
-AK
-Jl
-Jl
-CI
-CI
-Jl
+fq
+QC
+fq
+fq
+Lh
+Lh
+fq
 Kq
 Kq
 Kq
@@ -31874,28 +31439,28 @@ Kq
 Kq
 Kq
 Kq
-Ng
-wJ
-qd
-qd
-qd
-qd
-CI
-SV
-Jl
-Ng
-Ng
-hA
-ej
-ae
-Ng
-Ng
-Ng
-Jl
-OT
-HQ
-HQ
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -32102,18 +31667,18 @@ uS
 Zf
 Zf
 fq
-wf
-wf
+lf
+lf
+fq
 Jl
 Jl
-Jl
-Jl
-Kq
-Jl
-Jl
-CI
-CI
-Jl
+fq
+fq
+fq
+fq
+Lh
+Lh
+fq
 Kq
 Kq
 Kq
@@ -32176,28 +31741,28 @@ Kq
 Kq
 Kq
 Kq
-Ng
-Ng
-ME
-gv
-Jl
-Ew
-NH
-FY
-Jl
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Jl
-OT
-HQ
-HQ
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -32404,18 +31969,18 @@ kN
 Zf
 Zf
 fq
-wf
-wf
-Jl
+lf
+lf
+fq
 Jl
 Jl
 Jl
 Kq
 Jl
-Jl
-CI
-CI
-Jl
+fq
+Lh
+Lh
+fq
 Kq
 Kq
 Kq
@@ -32478,28 +32043,28 @@ Kq
 Kq
 Kq
 Kq
-Ng
-Ng
-Ng
-ME
-qd
-xS
-Ng
-Ng
-Jl
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Jl
-OT
-HQ
-HQ
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -32693,31 +32258,31 @@ Kq
 fq
 Zf
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 mK
 fq
-Ka
-Ka
-Jl
+zX
+zX
+fq
 Jl
 Jl
 Jl
 Kq
 Jl
-Jl
-CI
-CI
-Jl
+fq
+Lh
+Lh
+fq
 Kq
 Kq
 Kq
@@ -32780,28 +32345,28 @@ Kq
 Kq
 Kq
 Kq
-Ng
-Ng
-Ng
-Ng
-sx
-Lq
-Ng
-Ng
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -32995,31 +32560,31 @@ Kq
 fq
 Xa
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 Zf
 TG
 re
 ZR
-Jl
+fq
 Jl
 Jl
 Jl
 Kq
 Jl
-Jl
-Kq
-Kq
-Jl
+fq
+fq
+fq
+fq
 Kq
 Kq
 Kq
@@ -33083,14 +32648,14 @@ Kq
 Kq
 Kq
 Kq
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Ng
-Jl
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
+Kq
 Kq
 Kq
 Kq
@@ -33297,22 +32862,22 @@ Kq
 fq
 Zf
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 Zf
 bC
-VK
+Yb
 Gm
-Jl
+fq
 Jl
 Jl
 Jl
@@ -33599,22 +33164,22 @@ Kq
 fq
 Zf
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 Zf
 bC
-VK
+Yb
 oO
-Jl
+fq
 Jl
 Jl
 Jl
@@ -33901,22 +33466,22 @@ Kq
 fq
 Zf
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 mK
-bC
-VK
+Iu
+Yb
 oO
-Jl
+fq
 Jl
 Jl
 Jl
@@ -34203,22 +33768,22 @@ Kq
 fq
 Xa
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 Zf
-bC
-VK
+Iu
+rX
 oO
-Jl
+fq
 Kq
 Kq
 Jl
@@ -34505,22 +34070,22 @@ Kq
 fq
 Zf
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
 jU
 jU
 NI
-VK
+rX
 oO
-Jl
+fq
 Kq
 Kq
 Kq
@@ -34807,22 +34372,22 @@ Kq
 fq
 Zf
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 Zf
-bC
-VK
+Iu
+rX
 oO
-Jl
+fq
 Kq
 Kq
 Kq
@@ -35109,22 +34674,22 @@ Kq
 fq
 Xa
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 mK
 bC
-VK
+Yb
 oO
-Jl
+fq
 Kq
 Kq
 Kq
@@ -35411,22 +34976,22 @@ Kq
 fq
 Zf
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 Zf
 bC
-VK
+Yb
 Gm
-Jl
+fq
 Kq
 Kq
 Kq
@@ -35713,22 +35278,22 @@ Kq
 fq
 Zf
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 Zf
 bC
-VK
+Yb
 oO
-Jl
+fq
 Kq
 Kq
 Kq
@@ -36015,22 +35580,22 @@ Kq
 fq
 Zf
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 Zf
 TG
 tX
 Cf
-Jl
+fq
 Kq
 Kq
 Kq
@@ -36317,22 +35882,22 @@ Kq
 fq
 Xa
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 Zf
 fq
 WU
 WU
-Jl
+fq
 Kq
 Kq
 Kq
@@ -36619,22 +36184,22 @@ Kq
 fq
 Zf
 cg
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-Ac
-rV
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+rX
+xb
 Zf
 mK
 fq
 Bn
 Bn
-Jl
+fq
 Kq
 Kq
 Kq
@@ -36920,23 +36485,23 @@ Kq
 Kq
 fq
 Zf
-hf
-Xv
-Xv
-Xv
-Xv
-Xv
-Xv
-Xv
-Xv
-Xv
+hF
+Hu
+Hu
+Hu
+Hu
+Hu
+Hu
+Hu
+Hu
+Hu
 fu
 Zf
 Zf
 fq
-Jl
-Jl
-Jl
+fq
+fq
+fq
 Kq
 Kq
 Kq

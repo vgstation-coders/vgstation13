@@ -187,6 +187,14 @@
 	desc = "\"To be robust is not an action or a way of life, but a mental state. Only those with the force of will strong enough to act during a crisis, saving friend from foe, acting when everyone else may think and act against you, are truly robust. Stay robust, my friends.\""
 	icon_state = "goldenplaque"
 
+/obj/structure/sign/voxplaque
+	name = "The High Award for Gathering Coin"
+	desc = "It's inscription is translated from Pidgin: \"The urge to gather coin shines through in even the most dire of circumstances.\""
+	icon_state = "voxgoldenplaque"
+
+/obj/structure/sign/voxplaque/flashing
+	icon_state = "voxgoldenplaque_lights"
+
 /obj/structure/sign/shiggymemorial
 	name = "Shiggypiggy Memorial"
 	desc = "Vranovian Baccarat creator. Hippocrates' strongest esculap. Rest in peace, ShiggyPiggy."
@@ -360,3 +368,115 @@
 	name = "TAXI"
 	desc = "A sign designating the way to a public shuttle for transport into space."
 	icon_state = "taxi"
+
+// BEGIN SHOAL SIGNS
+
+/obj/structure/sign/voxparking
+	name = "TAKKXIT TIHK"
+	desc = "A sign which indicates that this is a designated area for parking shoddy vehicles."
+	icon_state = "voxparking"
+
+/obj/structure/sign/yespox
+	name = "VOX ALLOWED"
+	icon_state = "yesvox"
+	desc = "A sign which reads '#@#-- VOX ALLOWED'."
+
+/obj/structure/sign/voxsecurearea
+	name = "KITH KYAHKI"
+	desc = "A rusted warning sign that reads 'SECURE AREA' ."
+	icon_state = "voxsecurearea"
+
+/obj/structure/sign/voxelectricshock
+	name = "KITH KISHKA"
+	desc = "A rusted, high voltage warning sign."
+	icon_state = "voxshock"
+
+/obj/structure/sign/voxfall
+	name = "AHIKA"
+	desc = "A warning sign depicting a Vox falling off a railing."
+	icon_state = "voxfall"
+
+/obj/structure/sign/voxspace
+	name = "AHIKY"
+	desc = "A warning sign depicting a Vox falling getting sucked out into space."
+	icon_state = "voxspace"
+
+/obj/structure/sign/voxshuttle1
+	name = "SHAJAK HAKI"
+	desc = "A sign which indicates that the area is a shuttle dock."
+	icon_state = "voxshuttle1"
+
+/obj/structure/sign/voxshuttle2
+	name = "SHAJAK!"
+	desc = "A sign which warns about incoming shuttles."
+	icon_state = "voxshuttle2"
+
+/obj/structure/sign/voxsmallmed
+	name = "YHI"
+	desc = "A small sign indicating the presence of a medical station."
+	icon_state = "smallsign_med"
+
+/obj/structure/sign/voxmediummed
+	name = "YHI"
+	desc = "A sign indicating the presence of a medical station."
+	icon_state = "mediumsign_med"
+
+/obj/structure/sign/voxsmallarmory
+	name = "HKA"
+	desc = "A small sign indicating the presence of an armory."
+	icon_state = "smallsign_armory"
+
+/obj/structure/sign/voxmediumarmory
+	name = "HKA"
+	desc = "A sign indicating the presence of an armory."
+	icon_state = "mediumsign_armory"
+
+/obj/structure/sign/voxsmallprison
+	name = "TAK"
+	desc = "A small sign indicating the presence of a prison."
+	icon_state = "smallsign_prison"
+
+/obj/structure/sign/voxmediumprison
+	name = "TAK"
+	desc = "A sign indicating the presence of a prison."
+	icon_state = "mediumsign_prison"
+
+/obj/structure/sign/voxsmalltorture
+	name = "KIH"
+	desc = "A small sign indicating the presence of a 'processing room'."
+	icon_state = "smallsign_torture"
+
+/obj/structure/sign/voxmediumtorture
+	name = "KIH"
+	desc = "A sign indicating the presence of a 'processing room'."
+	icon_state = "mediumsign_torture"
+
+/obj/structure/sign/voxsmallbulb
+	name = "KIYI"
+	desc = "A small sign indicating the presence of a storage closet."
+	icon_state = "smallsign_bulb"
+
+/obj/structure/sign/voxmediumbulb
+	name = "KIYI"
+	desc = "A sign indicating the presence of a storage closet."
+	icon_state = "mediumsign_bulb"
+
+/obj/structure/sign/voxsmalldock
+	name = "HY"
+	desc = "A small sign indicating the presence of a shuttle dock."
+	icon_state = "smallsign_dock"
+
+/obj/structure/sign/voxmediumdock
+	name = "HY"
+	desc = "A sign indicating the presence of a shuttle dock."
+	icon_state = "mediumsign_dock"
+
+/obj/structure/sign/arrow/
+	name = "directional arrow"
+	desc = "It points. In a direction."
+	icon_state = "arrow_up"
+
+/obj/structure/sign/arrow/flashing
+	name = "flashing directional arrow"
+	desc = "It points. In a direction. Now with built-in lights!"
+	icon_state = "arrow_up_lights"

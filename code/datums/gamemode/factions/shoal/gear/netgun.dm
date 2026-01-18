@@ -175,7 +175,7 @@
 /////////////////////////////////////
 
 /obj/item/weapon/gun/hookshot/netgun
-	name = "net gun"
+	name = "N4B-U net gun"
 	icon_state = "netgun"
 	item_state = "netgun"
 	fire_sound = 'sound/weapons/netgun_fire.ogg'

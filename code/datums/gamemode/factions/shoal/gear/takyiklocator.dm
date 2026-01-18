@@ -3,7 +3,8 @@
 	desc = "A Shoalish engineer's attempt to recreate Nanotrasen technology and the backbone of raiding parties everywhere. \
 			Much like a Nanotrasen's own pinpointer, it tracks identifiable spatial distortions created by certain objects. \
 			Unlike Nanotrasen's pinpointer, this device is capable of tracking a lot more than a nuclear disk, but it seems like the Vox haven't invented a display screen yet."
-	icon_state = "radio_jammer0"	//temp
+	icon_state = "takyik-akya_off"
+	icon = 'icons/obj/shoal.dmi'
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -28,6 +29,10 @@
 /obj/item/device/takyiklocator/New()
 	..()
 	setup_sound()
+
+/obj/item/device/takyiklocator/update_icon()
+	icon_state = "takyik-akya_[active ? "on" : "off"]"
+
 
 /obj/item/device/takyiklocator/attack_self()
 	if(!active)

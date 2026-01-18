@@ -160,10 +160,6 @@ var/list/smoothable_unsims = list(
 	"hexacrete"
 	)
 
-/turf/unsimulated/floor/initialize()
-	if(floortype in smoothable_unsims)
-		relativewall()
-
 /turf/unsimulated/wall/initialize()
 	if(walltype in smoothable_unsims)
 		relativewall()

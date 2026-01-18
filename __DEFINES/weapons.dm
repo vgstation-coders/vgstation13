@@ -22,6 +22,7 @@
 #define PULSE "pulse"
 #define GAUGE12 "12 gauge"
 #define GAUGEFLARE "flare"
+#define DART "dart"
 
 /* Lawgiver */
 #define LAWGIVER_MODE_KIND_ENERGY "energy"

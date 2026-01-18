@@ -717,3 +717,9 @@
 	..()
 	buckle_overlay = image("icons/obj/stools-chairs-beds.dmi", "[icon_state]_armrest", CHAIR_ARMREST_LAYER)
 	buckle_overlay.plane = relative_plane(ABOVE_HUMAN_PLANE)
+
+/obj/structure/bed/chair/vox
+	name = "vox chair"
+	desc = "You sit in this. Either by will or force. Has a hole for tails."
+	icon = 'icons/obj/shoal.dmi'
+	icon_state = "voxchair"

@@ -143,43 +143,8 @@
 
 	layer += rangevalue * (1 - (y + 0.5 * (x & 1)) / world.maxy)
 
-	update_transparency()
+	add_component(/datum/component/see_behind, 2)
 
-	for(var/turf/T in circlerange(src,2))
-		if(T.y > y)
-			T.register_event(/event/entered, src, nameof(src::give_transparency()))
-			T.register_event(/event/exited, src, nameof(src::remove_transparency()))
-
-
-/obj/structure/flora/tree/Destroy()
-	for(var/turf/T in circlerange(src,2))
-		if(T.y > y)
-			T.unregister_event(/event/entered, src, nameof(src::give_transparency()))
-			T.unregister_event(/event/exited, src, nameof(src::remove_transparency()))
-	..()
-
-/obj/structure/flora/tree/proc/update_transparency()
-	transparent = image(icon,src,icon_state)
-	transparent.color = "[color ? color : "#FFFFFF"]"+"7F"
-	transparent.override = TRUE
-
-/obj/structure/flora/tree/proc/give_transparency(mover, location, oldloc)
-	if(!ismob(mover))
-		return
-	var/mob/M = mover
-	if(!M.client)
-		return
-	var/client/C = M.client
-	C.images += transparent
-
-/obj/structure/flora/tree/proc/remove_transparency(mover, location, newloc)
-	if(!ismob(mover))
-		return
-	var/mob/M = mover
-	if(!M.client)
-		return
-	var/client/C = M.client
-	C.images -= transparent
 
 /obj/structure/flora/tree/examine(mob/user)
 	.=..()
@@ -262,7 +227,6 @@
 /obj/structure/flora/tree/pine/New()
 	..()
 	icon_state = "pine_[rand(1, 3)]"
-	update_transparency()
 
 /obj/structure/flora/tree/pine/xmas
 	name = "xmas tree"
@@ -275,7 +239,6 @@
 /obj/structure/flora/tree/pine/xmas/New()
 	..()
 	icon_state = "pine_c"
-	update_transparency()
 
 
 /obj/structure/flora/tree/dead
@@ -289,7 +252,6 @@
 /obj/structure/flora/tree/dead/New()
 	..()
 	icon_state = "tree_[rand(1, 6)]"
-	update_transparency()
 
 /obj/structure/flora/tree_stump
 	name = "tree stump"
@@ -885,7 +847,6 @@
 	. = ..()
 	color = pick( "#846996", "#7b4e99", "#924fab")
 	icon_state = "barren_large"
-	update_transparency()
 
 /obj/structure/flora/tree/dead/hell
 	name = "crimson tree"
@@ -899,7 +860,6 @@
 /obj/structure/flora/tree/dead/hell/New()
 	. = ..()
 	icon_state = "tree_[rand(1,6)]"
-	update_transparency()
 
 /obj/structure/flora/tree/dead_pine
 	name = "dead pine"
@@ -926,7 +886,7 @@
 /obj/structure/flora/tree/dead/tall/New()
 	. = ..()
 	icon_state = "[base_icon_state]_[rand(1,3)]"
-	update_transparency()
+
 
 /obj/structure/flora/tree/dead/tall/grey
 	name = "petrified trunk"
@@ -941,4 +901,3 @@
 /obj/structure/flora/tree/dead/tall/living/New()
 	. = ..()
 	icon_state = pick("pine_1","pine_2","bald")
-	update_transparency()

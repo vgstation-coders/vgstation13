@@ -39,7 +39,7 @@
 	var/list/silencer_offset = list() //x,y coords to bump silencer overlay to FROM (4,13) (use barrel end pixel position)
 	var/list/gun_part_overlays = list() //holds copy of overlays to allow for sane manipulation
 	var/recoil = 0
-	var/ejectshell = 1
+	var/ejectshell = 1					// THIS VARIABLE ISN'T EVEN USED.
 
 	var/clumsy_check = 1				//Whether the gun disallows clumsy users from firing it.
 	var/honor_check = 1                 // Same, but highlanders and bombermen.

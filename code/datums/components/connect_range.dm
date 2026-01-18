@@ -93,7 +93,7 @@
 		old_loc = target.loc
 		return
 	var/list/old_turfs = turfs
-	turfs = RANGE_TURFS(range, current_turf)
+	turfs = get_turfs(current_turf)
 	unregister_events(old_turf, old_turfs - turfs)
 	if(loc_is_movable)
 		//Keep track of possible movement of all movables the target is in.
@@ -126,5 +126,6 @@
 /datum/component/connect_range/proc/on_moved(atom/movable/mover)
 	update_events(tracked)
 
-
+/datum/component/connect_range/proc/get_turfs(var/turf/current_turf)
+	return RANGE_TURFS(range, current_turf)
 

@@ -108,6 +108,7 @@ var/list/impact_master = list()
 	var/rotate = 1 //whether the projectile is rotated based on angle or not
 	var/travel_range = 0	//if set, the projectile will be deleted when its distance from the firing location exceeds this
 	var/decay_type = null	//if set, along with travel range, will drop a new item of this type when the projectile exceeds its course
+							//if set to an object instance instead of a typepath, it will drop that item
 	var/special_collision = PROJECTILE_COLLISION_DEFAULT
 	var/has_special_suicide = FALSE //when set to true will invoke a custom_mouthshot() in place of the standard mouthshot effect.
 
@@ -573,7 +574,7 @@ var/list/impact_master = list()
 		var/turf/T = get_turf(src)
 		if(get_exact_dist(starting, T) > travel_range)
 			if (decay_type)
-				new decay_type(T)
+				ispath(decay_type) ? new decay_type(T) : forceMove(decay_type)
 			bullet_die()
 			return 1
 	total_steps++
