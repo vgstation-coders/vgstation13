@@ -771,186 +771,193 @@ var/global/floorIsLava = 0
 		return
 
 	var/dat = "<B>The first rule of adminbuse is: you don't talk about the adminbuse.</B><HR>"
-
 	if(check_rights(R_FUN,0) || check_rights(R_ADMINBUS,0))
-		dat += {"
-			<B>Fourth-Wall Demolition</B><BR>
-			<BR>
-			"}
-	if(check_rights(R_ADMINBUS,0))
-		dat += {"
-			<A href='?src=\ref[src];secretsfun=spawnadminbus'>Spawn an Adminbus</A><BR>
-			"}
-	if(check_rights(R_FUN,0))
-		dat += {"
-			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
-			<A href='?src=\ref[src];secretsfun=spawnselfdummyoutfit'>Spawn yourself as a Test Dummy with a Custom Outfit</A><BR>
-			<BR>
-			<BR>
-			"}
-
+		dat += "<A href='?src=\ref[src];secretspage=1'>Fourth-wall</A>"
 	if(check_rights(R_ADMIN,0))
-		dat += {"
-			<B>Admin Secrets</B><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsadmin=manifest'>Show Crew Manifest</A><BR>
-			<A href='?src=\ref[src];secretsadmin=showgm'>Show Game Mode</A><BR>
-			<A href='?src=\ref[src];secretsadmin=check_antagonist'>Show current traitors and objectives</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsadmin=DNA'>List DNA (Blood)</A><BR>
-			<A href='?src=\ref[src];secretsadmin=fingerprints'>List Fingerprints</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsadmin=clear_bombs'>Remove all bombs currently in existence</A><BR>
-			<A href='?src=\ref[src];secretsadmin=list_bombers'>Bombing List</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsadmin=showailaws'>Show AI Laws</A><BR>
-			<A href='?src=\ref[src];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsadmin=settime'>Set round time offset</A><BR>
-			<BR>
-			<BR>
-			"}
-
-
-	if(check_rights(R_ADMIN,0))
-		dat += {"
-			<B>Strike Teams</B><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-deathsquad'>Send in a Death Squad!</A><BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-ert'>Send in an Emergency Response Team!</A><BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-syndi'>Send in a Syndicate Elite Strike Team!</A><BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team!</A><BR>
-			<BR>
-			<BR>
-			"}
-
-	/*Anything on this list should have a justifcation to be its own button instead of just the pickevent
-	Parenthesis usually specify the feature that makes this different than just spawning the event
-	Bus Only are events that don't trigger on their own, or were never actually made into event datums
-	*/
+		dat += "<A href='?src=\ref[src];secretspage=2'>Admin Secrets</A>"
+		dat += "<A href='?src=\ref[src];secretspage=3'>Strike Teams</A>"
 	if(check_rights(R_FUN,0))
-		dat += {"
-			<B>Dynamic Events</B><BR>
-			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a specific Dynamic Event</A><BR>
-			<a href='?src=\ref[src];secretsfun=roll_event'>Roll a random Dynamic Event</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=vermin_infestation'>Vermin infestation (specify type and location)</A><BR>
-			<A href='?src=\ref[src];secretsfun=hostile_infestation'>Monster infestation (specify type and location)</A><BR>
-			<A href='?src=\ref[src];secretsfun=virus'>Virus Outbreak (lesser, greater, or custom)</A><BR>
-			<A href='?src=\ref[src];secretsfun=comms_blackout'>Communications blackout (silent or announced)</A><BR>
-			<A href='?src=\ref[src];secretsfun=breaklink'>Break the station's link with Central Command (indefinitely)</A><BR>
-			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
-			<BR>
-			<B>Bus-Only Events</B>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=gravity'>Toggle station artificial gravity</A><BR>
-			<A href='?src=\ref[src];secretsfun=gravanomalies'>Spawn a gravitational anomaly (aka lagitational anomolag)</A><BR>
-			<A href='?src=\ref[src];secretsfun=timeanomalies'>Spawn wormholes</A><BR>
-			<A href='?src=\ref[src];secretsfun=mobswarm'>Any mob infestation (specify type only)</A><BR>
-			<BR>
-			<B>Fun Secrets</B><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=hardcore_mode'>[ticker&&ticker.hardcore_mode ? "Disable" : "Enable"] hardcore mode (makes starvation kill!)</A><BR>
-			<A href='?src=\ref[src];secretsfun=tripleAI'>Triple AI mode (needs to be used in the lobby)</A><BR>
-			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode (removes access on doors except for Command and Security)</A><BR>
-			<A href='?src=\ref[src];secretsfun=RandomizedLawset'>Give the AIs a randomly generated Lawset.</A><BR>
-			<A href='?src=\ref[src];secretsfun=buddha_mode_everyone'>Toggle Buddha Mode on/off for everyone</A><BR>
-			<A href='?src=\ref[src];secretsfun=spawn_custom_turret'>Spawn a customizable turret</A><BR>
-			<A href='?src=\ref[src];secretsfun=spawn_meat_blob'>Spawn a Meat Blob</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=power'>Make all areas powered</A><BR>
-			<A href='?src=\ref[src];secretsfun=unpower'>Make all areas unpowered</A><BR>
-			<A href='?src=\ref[src];secretsfun=quickpower'>Power all SMES</A><BR>
-			<A href='?src=\ref[src];secretsfun=breaklink'>Break the station's link with Central Command</A><BR>
-			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
-			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
-			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
-			<A href='?src=\ref[src];secretsfun=switchoff'>Flip all (ALL Z-LEVELS) light switches to off</A><BR>
-			<A href='?src=\ref[src];secretsfun=switchon'>Flip all (ALL Z-LEVELS) light switches to on</A><BR>
-			<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=athfthrowing'>Toggle thrown items exploding on stop</A><BR>
-			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
-			<A href='?src=\ref[src];secretsfun=fakebooms'>Create fake explosions around the station</A><BR>
-			<A href='?src=\ref[src];secretsfun=fakenews'>Create a preset news announcement</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
-			<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>
-			<A href='?src=\ref[src];secretsfun=bloodstone'>Spawn a cult Blood Stone</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
-			<A href='?src=\ref[src];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
-			<A href='?src=\ref[src];secretsfun=experimentalguns'>Distribute experimental guns to the crew</A><BR>
-			<A href='?src=\ref[src];secretsfun=flicklights'>Ghost Mode</A><BR>
-			<A href='?src=\ref[src];secretsfun=monkey'>Turn all humans into monkeys</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=mass_equip_outfit'>Equip outfit on all player humans</A><BR>
-			<A href='?src=\ref[src];secretsfun=sec_all_clothes'>Remove ALL clothing</A><BR>
-			<A href='?src=\ref[src];secretsfun=retardify'>Make all players retarded</A><BR>
-			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns (traitor revolvers)</A><BR>
-			<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
-			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (WARNING: extremely lame and DANGEROUS!)</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=togglerunescapepvp'>Toggle Maint-Only PvP</A><BR>
-			<A href='?src=\ref[src];secretsfun=togglerunescapeskull'>Toggle Skull icon appearing over aggressors</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=massbomber'>Turn all players into Bomberman</A><BR>
-			<A href='?src=\ref[src];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>
-			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
-			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
-			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=mechanics_motivator'>Incentivize Mechanics to do their job</A><BR>
-			<BR>
-			<B>Major Station Transformations</B><BR>
-			<A href='?src=\ref[src];secretsfun=naturify'>Return the station to nature</A><BR>
-			<A href='?src=\ref[src];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
-			<BR>
-			<B>Final Solutions</B><BR>
-			<I>(Warning, these will end the round!)</I><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=hellonearth'>Summon Nar-Sie</A><BR>
-			<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
-			<A href='?src=\ref[src];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
-			<A href='?src=\ref[src];secretsfun=halloween'>Trigger the blood moon</A><BR>
-			"}
-
+		dat += "<A href='?src=\ref[src];secretspage=4'>Dynamic Events</A>"
+		dat += "<A href='?src=\ref[src];secretspage=5'>!Fun!</A>"
 	if(check_rights(R_SERVER,0))
+		dat += "<A href='?src=\ref[src];secretspage=6'>Server</A>"
+	dat += "<A href='?src=\ref[src];secretspage=7'>Coders</A><BR><BR>"
 
-		dat += {"
-			<BR>
-			<B>Server</B><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=togglebombcap'>Toggle bomb cap</A><BR>
-			<A href='?src=\ref[src];secretsfun=togglebombmethod'>Toggle explosion method</A><BR>
-			"}
+	switch(secrets_page)
+		if(1)
+			if(check_rights(R_FUN,0) || check_rights(R_ADMINBUS,0))
+				dat += {"
+					<B>Fourth-Wall Demolition</B><BR>
+					<BR>
+					"}
+				if(check_rights(R_ADMINBUS,0))
+					dat += {"
+						<A href='?src=\ref[src];secretsfun=spawnadminbus'>Spawn an Adminbus</A><BR>
+						"}
+				if(check_rights(R_FUN,0))
+					dat += {"
+						<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
+						<A href='?src=\ref[src];secretsfun=spawnselfdummyoutfit'>Spawn yourself as a Test Dummy with a Custom Outfit</A><BR>
+						"}
 
-	dat += "<BR>"
+		if(2)
+			if(check_rights(R_ADMIN,0))
+				dat += {"
+					<B>Admin Secrets</B><BR>
+					<BR>
+					<A href='?src=\ref[src];secretsadmin=manifest'>Show Crew Manifest</A><BR>
+					<A href='?src=\ref[src];secretsadmin=showgm'>Show Game Mode</A><BR>
+					<A href='?src=\ref[src];secretsadmin=check_antagonist'>Show current traitors and objectives</A><BR>
+					<BR>
+					<A href='?src=\ref[src];secretsadmin=DNA'>List DNA (Blood)</A><BR>
+					<A href='?src=\ref[src];secretsadmin=fingerprints'>List Fingerprints</A><BR>
+					<BR>
+					<A href='?src=\ref[src];secretsadmin=clear_bombs'>Remove all bombs currently in existence</A><BR>
+					<A href='?src=\ref[src];secretsadmin=list_bombers'>Bombing List</A><BR>
+					<BR>
+					<A href='?src=\ref[src];secretsadmin=showailaws'>Show AI Laws</A><BR>
+					<A href='?src=\ref[src];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
+					<BR>
+					<A href='?src=\ref[src];secretsadmin=settime'>Set round time offset</A><BR>
+					"}
 
-	if(check_rights(R_FUN,0))
-		dat += {"
-			<B>Security Level Elevated</B><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=maint_access_engiebrig'>Change all maintenance doors to engie/brig access only</A><BR>
-			<A href='?src=\ref[src];secretsfun=maint_access_brig'>Change all maintenance doors to brig access only</A><BR>
-			<A href='?src=\ref[src];secretsfun=infinite_sec'>Remove cap on security officers</A><BR>
-			<BR>
-			"}
-	dat +=	{"
-		<B>Coder Secrets</B><BR>
-		<BR>
-		<A href='?src=\ref[src];secretsadmin=list_job_debug'>Show Job Debug</A><BR>
-		<A href='?src=\ref[src];secretsadmin=show_admin_log'>Admin Log</A><BR>
-		<BR>
-		"}
+		if(3)
+			if(check_rights(R_ADMIN,0))
+				dat += {"
+					<B>Strike Teams</B><BR>
+					<BR>
+					<A href='?src=\ref[src];secretsfun=striketeam-deathsquad'>Send in a Death Squad!</A><BR>
+					<A href='?src=\ref[src];secretsfun=striketeam-ert'>Send in an Emergency Response Team!</A><BR>
+					<A href='?src=\ref[src];secretsfun=striketeam-syndi'>Send in a Syndicate Elite Strike Team!</A><BR>
+					<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team!</A><BR>
+					"}
 
+		if(4)
+			if(check_rights(R_FUN,0))
+				dat += {"
+					<B>Dynamic Events</B><BR>
+					<a href='?src=\ref[src];secretsfun=pick_event'>Pick a specific Dynamic Event</A><BR>
+					<a href='?src=\ref[src];secretsfun=roll_event'>Roll a random Dynamic Event</A><BR>
+					<BR>
+					<A href='?src=\ref[src];secretsfun=vermin_infestation'>Vermin infestation (specify type and location)</A><BR>
+					<A href='?src=\ref[src];secretsfun=hostile_infestation'>Monster infestation (specify type and location)</A><BR>
+					<A href='?src=\ref[src];secretsfun=virus'>Virus Outbreak (lesser, greater, or custom)</A><BR>
+					<A href='?src=\ref[src];secretsfun=comms_blackout'>Communications blackout (silent or announced)</A><BR>
+					<A href='?src=\ref[src];secretsfun=breaklink'>Break the station's link with Central Command (indefinitely)</A><BR>
+					<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
+					<BR>
+					<B>Bus-Only Events</B>
+					<BR>
+					<A href='?src=\ref[src];secretsfun=gravity'>Toggle station artificial gravity</A><BR>
+					<A href='?src=\ref[src];secretsfun=gravanomalies'>Spawn a gravitational anomaly (aka lagitational anomolag)</A><BR>
+					<A href='?src=\ref[src];secretsfun=timeanomalies'>Spawn wormholes</A><BR>
+					<A href='?src=\ref[src];secretsfun=mobswarm'>Any mob infestation (specify type only)</A><BR>
+					<BR>"}
 
-	usr << browse(HTML_SKELETON(dat), "window=secrets")
-	return
+		if(5)
+			/*Anything on this list should have a justifcation to be its own button instead of just the pickevent
+			Parenthesis usually specify the feature that makes this different than just spawning the event
+			Bus Only are events that don't trigger on their own, or were never actually made into event datums
+			*/
+			if(check_rights(R_FUN,0))
+				dat += {"<B>Fun Secrets</B><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=hardcore_mode'>[ticker&&ticker.hardcore_mode ? "Disable" : "Enable"] hardcore mode (makes starvation kill!)</A><BR>
+						<A href='?src=\ref[src];secretsfun=tripleAI'>Triple AI mode (needs to be used in the lobby)</A><BR>
+						<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode (removes access on doors except for Command and Security)</A><BR>
+						<A href='?src=\ref[src];secretsfun=RandomizedLawset'>Give the AIs a randomly generated Lawset.</A><BR>
+						<A href='?src=\ref[src];secretsfun=buddha_mode_everyone'>Toggle Buddha Mode on/off for everyone</A><BR>
+						<A href='?src=\ref[src];secretsfun=spawn_custom_turret'>Spawn a customizable turret</A><BR>
+						<A href='?src=\ref[src];secretsfun=spawn_meat_blob'>Spawn a Meat Blob</A><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=power'>Make all areas powered</A><BR>
+						<A href='?src=\ref[src];secretsfun=unpower'>Make all areas unpowered</A><BR>
+						<A href='?src=\ref[src];secretsfun=quickpower'>Power all SMES</A><BR>
+						<A href='?src=\ref[src];secretsfun=breaklink'>Break the station's link with Central Command</A><BR>
+						<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
+						<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
+						<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
+						<A href='?src=\ref[src];secretsfun=switchoff'>Flip all (ALL Z-LEVELS) light switches to off</A><BR>
+						<A href='?src=\ref[src];secretsfun=switchon'>Flip all (ALL Z-LEVELS) light switches to on</A><BR>
+						<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=athfthrowing'>Toggle thrown items exploding on stop</A><BR>
+						<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
+						<A href='?src=\ref[src];secretsfun=fakebooms'>Create fake explosions around the station</A><BR>
+						<A href='?src=\ref[src];secretsfun=fakenews'>Create a preset news announcement</A><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
+						<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>
+						<A href='?src=\ref[src];secretsfun=bloodstone'>Spawn a cult Blood Stone</A><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
+						<A href='?src=\ref[src];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
+						<A href='?src=\ref[src];secretsfun=experimentalguns'>Distribute experimental guns to the crew</A><BR>
+						<A href='?src=\ref[src];secretsfun=flicklights'>Ghost Mode</A><BR>
+						<A href='?src=\ref[src];secretsfun=monkey'>Turn all humans into monkeys</A><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=mass_equip_outfit'>Equip outfit on all player humans</A><BR>
+						<A href='?src=\ref[src];secretsfun=sec_all_clothes'>Remove ALL clothing</A><BR>
+						<A href='?src=\ref[src];secretsfun=retardify'>Make all players retarded</A><BR>
+						<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns (traitor revolvers)</A><BR>
+						<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
+						<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (WARNING: extremely lame and DANGEROUS!)</A><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=togglerunescapepvp'>Toggle Maint-Only PvP</A><BR>
+						<A href='?src=\ref[src];secretsfun=togglerunescapeskull'>Toggle Skull icon appearing over aggressors</A><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=massbomber'>Turn all players into Bomberman</A><BR>
+						<A href='?src=\ref[src];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>
+						<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
+						<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
+						<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=mechanics_motivator'>Incentivize Mechanics to do their job</A><BR>
+						<BR>
+						<B>Major Station Transformations</B><BR>
+						<A href='?src=\ref[src];secretsfun=naturify'>Return the station to nature</A><BR>
+						<A href='?src=\ref[src];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
+						<BR>
+						<B>Security Level Elevated</B><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=maint_access_engiebrig'>Change all maintenance doors to engie/brig access only</A><BR>
+						<A href='?src=\ref[src];secretsfun=maint_access_brig'>Change all maintenance doors to brig access only</A><BR>
+						<A href='?src=\ref[src];secretsfun=infinite_sec'>Remove cap on security officers</A><BR>
+						<BR>
+						<B>Final Solutions</B><BR>
+						<I>(Warning, these will end the round!)</I><BR>
+						<BR>
+						<A href='?src=\ref[src];secretsfun=hellonearth'>Summon Nar-Sie</A><BR>
+						<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
+						<A href='?src=\ref[src];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
+						<A href='?src=\ref[src];secretsfun=halloween'>Trigger the blood moon</A><BR>
+						"}
+
+		if(6)
+			if(check_rights(R_SERVER,0))
+				dat += {"
+					<B>Server</B><BR>
+					<BR>
+					<A href='?src=\ref[src];secretsfun=togglebombcap'>Toggle bomb cap</A><BR>
+					<A href='?src=\ref[src];secretsfun=togglebombmethod'>Toggle explosion method</A><BR>
+					"}
+
+		if(7)
+			dat +=	{"
+				<B>Coder Secrets</B><BR>
+				<BR>
+				<A href='?src=\ref[src];secretsadmin=list_job_debug'>Show Job Debug</A><BR>
+				<A href='?src=\ref[src];secretsadmin=show_admin_log'>Admin Log</A><BR>
+				<BR>
+				"}
+
+	var/datum/browser/popup = new(usr, "secrets", "Admin Secrets", 640, 480, src)
+	popup.set_content(dat)
+	popup.open()
 
 /datum/admins/var/datum/shuttle/selected_shuttle
 /datum/admins/proc/shuttle_magic()

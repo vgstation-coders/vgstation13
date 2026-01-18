@@ -3584,6 +3584,10 @@
 					break
 		return
 
+	else if(href_list["secretspage"])
+		secrets_page = text2num(href_list["secretspage"])
+		Secrets()
+
 	else if(href_list["secretsfun"])
 		if(!check_rights(R_FUN))
 			return

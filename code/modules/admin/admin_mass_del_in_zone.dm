@@ -7,6 +7,7 @@
 	var/y_max_del = 0
 	var/z_del = 0
 	var/type_del = null
+	var/secrets_page = 1
 
 /datum/admins/proc/mass_delete_in_zone()
 	set category = "Server"
@@ -17,7 +18,7 @@
 		return FALSE
 
 	src = usr.client.holder // why lummox why
-	
+
 	var/list/dat = list()
 	dat += {"<h3>Mass deletion in a zone</h3>"
 	"Delete all the atoms of a given type in a zone given by z, x, and y coordinates."
