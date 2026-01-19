@@ -85,11 +85,11 @@
 			if (blood_level > 1)
 				H.bloody_body(target, 0)//potentially spreads diseases from them to us, wear a bio suit, or at least a labcoat!
 				target.spray_blood(get_dir(target, user), 1)
-				target.playsound(src, get_sfx("gib"), 30, 1)
+				playsound(target, get_sfx("gib"), 30, 1)
 				if(duration > 15)
 					spawn(rand(15,duration))
 						target.spray_blood(get_dir(H,target), 1)	// Again!
-						target.playsound(src, get_sfx("gib"), 30, 1)
+						playsound(target, get_sfx("gib"), 30, 1)
 
 	if(istype(tool,/obj/item/tool/scalpel/laser) || istype(tool,/obj/item/tool/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_on"
