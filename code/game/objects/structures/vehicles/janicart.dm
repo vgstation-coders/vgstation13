@@ -65,6 +65,7 @@
 			qdel(W)
 			to_chat(user, "<span class='notice'>You upgrade \the [nick].</span>")
 			upgraded = 1
+			verbs += /obj/structure/bed/chair/vehicle/janicart/proc/toggle_cleanmode
 			name = "upgraded [name]"
 			icon_state = "pussywagon_upgraded"
 	else if(istype(W, /obj/item/weapon/storage/bag/trash))
