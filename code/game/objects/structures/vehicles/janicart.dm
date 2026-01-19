@@ -179,6 +179,15 @@
 							cleaned_human.clean_act(CLEANLINESS_SPACECLEANER)
 							to_chat(cleaned_human, "<span class='warning'>[src] cleans your face!</span>")
 
+/obj/structure/bed/chair/vehicle/janicart/upgraded
+	name = "upgraded janicart"
+	icon_state = "pussywagon_upgraded"
+	upgraded = 1
+
+/obj/structure/bed/chair/vehicle/janicart/upgraded/New()
+	. = ..()
+	verbs += /obj/structure/bed/chair/vehicle/janicart/proc/toggle_cleanmode
+
 /obj/effect/decal/mecha_wreckage/vehicle/janicart
 	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "pussywagon_destroyed"
