@@ -10,6 +10,7 @@
 		/obj/item/tool/wirecutters = 75,
 	)
 	duration = 10 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/pluck/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	// Only Vox, only chest

@@ -14,8 +14,8 @@
 
 	// evil infection stuff that will make everyone hate me
 	var/can_infect = 0
-	//How much blood this step can get on surgeon. 1 - hands, 2 - full body.
-	var/blood_level = 0
+	//How much blood this step can get on surgeon. 0 - Bloodless, 1 - hands, 2 - full body.
+	var/blood_level = 1
 	//Whether or not the sound played will be a digging sound or the surgery sound designated by the tools used.
 	var/digging = FALSE
 
@@ -81,8 +81,13 @@
 			var/mob/living/carbon/human/H = user
 			if (blood_level)
 				H.bloody_hands(target, 2)//potentially spreads diseases from them to us, wear latex gloves!
+				tool.add_blood(target, tool.surgery_blood_overlay)
 			if (blood_level > 1)
 				H.bloody_body(target, 0)//potentially spreads diseases from them to us, wear a bio suit, or at least a labcoat!
+				target.spray_blood(get_dir(H,target), 1)
+				if(duration > 15)
+					spawn(rand(15,duration))
+						target.spray_blood(get_dir(H,target), 1)	// Again!
 
 	if(istype(tool,/obj/item/tool/scalpel/laser) || istype(tool,/obj/item/tool/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_on"

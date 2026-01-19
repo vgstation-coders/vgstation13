@@ -2,6 +2,9 @@
 	name = "item"
 	icon = 'icons/obj/items.dmi'
 	var/image/blood_overlay = null //this saves our blood splatter overlay, which will be processed not to go over the edges of the sprite
+	var/custom_blood_overlay = ""		// If set, items will use this bespoke overlay when covered in blood.
+	var/surgery_blood_overlay = ""		// If set, items will use this bespoke overlay when covered in blood through surgical operations.
+
 	var/abstract = FALSE
 	var/item_state = null
 	var/list/inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
@@ -1291,10 +1294,10 @@ var/global/objects_thrown_when_explode = FALSE
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
 
-/obj/item/add_blood(var/mob/living/carbon/human/M)
+/obj/item/add_blood(var/mob/living/carbon/human/M, overlay_override)
 	if (!..())
 		return FALSE
-	set_blood_overlay()
+	set_blood_overlay(override_icon = overlay_override)
 	//if this blood isn't already in the list, add it
 	if(!M)
 		return
@@ -1349,16 +1352,21 @@ var/global/objects_thrown_when_explode = FALSE
 	had_blood = TRUE
 	set_blood_overlay()
 
-/obj/item/proc/set_blood_overlay(passed_color = blood_color, forced = FALSE)
+/obj/item/proc/set_blood_overlay(passed_color = blood_color, forced = FALSE, override_icon = "")
 	REMOVE_KEEP_TOGETHER(src, "bloody_item")
 	cut_overlay(blood_overlay)
-	var/mutable_appearance/item_blood_overlay = mutable_appearance('icons/effects/blood.dmi', "itemblood", appearance_flags = RESET_COLOR|RESET_ALPHA)
-	item_blood_overlay.blend_mode = BLEND_INSET_OVERLAY
-	item_blood_overlay.color = passed_color
-	blood_overlay = item_blood_overlay
+	if(override_icon && (override_icon != "itemblood"))
+		blood_overlay = mutable_appearance('icons/effects/itemblood.dmi', override_icon, appearance_flags = RESET_COLOR|RESET_ALPHA)
+	else if(custom_blood_overlay)
+		blood_overlay = mutable_appearance('icons/effects/itemblood.dmi', custom_blood_overlay, appearance_flags = RESET_COLOR|RESET_ALPHA)
+	else
+		blood_overlay = mutable_appearance('icons/effects/blood.dmi', "itemblood", appearance_flags = RESET_COLOR|RESET_ALPHA)
+	blood_overlay.blend_mode = BLEND_INSET_OVERLAY
+	blood_overlay.color = passed_color
 	if(forced || is_blood_stained(src))
 		ADD_KEEP_TOGETHER(src, "bloody_item")
 		add_overlay(blood_overlay)
+
 
 /obj/item/apply_luminol()
 	if(!..())
