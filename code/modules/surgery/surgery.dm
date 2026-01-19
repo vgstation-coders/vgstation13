@@ -84,12 +84,13 @@
 				tool.add_blood(target, tool.surgery_blood_overlay)
 			if (blood_level > 1)
 				H.bloody_body(target, 0)//potentially spreads diseases from them to us, wear a bio suit, or at least a labcoat!
-				target.spray_blood(get_dir(target, user), 1)
+				target.spray_blood(get_dir(target, user), rand(2,3))
 				playsound(target, get_sfx("gib"), 30, 1)
 				if(duration > 15)
 					spawn(rand(15,duration))
-						target.spray_blood(get_dir(H,target), 1)	// Again!
-						playsound(target, get_sfx("gib"), 30, 1)
+						if(H in doing_surgery)		// Did we cancel the step early?
+							target.spray_blood(get_dir(target,user), rand(2,3))	// Again!
+							playsound(target, get_sfx("gib"), 30, 1)
 
 	if(istype(tool,/obj/item/tool/scalpel/laser) || istype(tool,/obj/item/tool/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_on"

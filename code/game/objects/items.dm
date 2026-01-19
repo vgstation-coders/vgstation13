@@ -1286,9 +1286,9 @@ var/global/objects_thrown_when_explode = FALSE
 	. = ..()
 	remove_disease2()
 	REMOVE_KEEP_TOGETHER(src, "bloody_item")
-	if(blood_overlays)
-		for(var/A in blood_overlays)
-			overlays -= A
+	if(blood_overlays.len)
+		for(var/B in blood_overlays)
+			cut_overlay(blood_overlays[B])
 	if(had_blood)
 		clear_luminol()
 	if(istype(src, /obj/item/clothing/gloves))
