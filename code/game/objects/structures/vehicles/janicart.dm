@@ -106,10 +106,13 @@
 		switch(cleanmode)
 			if(JANICLEAN_NONE)
 				msg = "nothing"
+				icon_state = "pussywagon_upgraded_off"
 			if(JANICLEAN_NOGRAFFITI)
 				msg = "everything except floor art"
+				icon_state = "pussywagon_upgraded"
 			if(JANICLEAN_ALL)
 				msg = "everything"
+				icon_state = "pussywagon_upgraded"
 		to_chat(usr,"<span class='notice'>[src] is now set to clean [msg].</span>")
 
 /obj/structure/bed/chair/vehicle/janicart/setup_wreckage(var/obj/effect/decal/mecha_wreckage/wreck)
