@@ -34430,9 +34430,9 @@
 	},
 /obj/structure/closet/paramedic,
 /turf/simulated/floor{
-	dir = 4;
-	icon_state = "dark_navy_corner";
-	tag = "icon-dark_navy_corner (EAST)"
+	dir = 1;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (NORTH)"
 	},
 /area/medical/paramedics)
 "bly" = (
@@ -36787,8 +36787,8 @@
 	},
 /turf/simulated/floor{
 	dir = 4;
-	icon_state = "dark_navy_corner";
-	tag = "icon-dark_navy_corner (EAST)"
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (EAST)"
 	},
 /area/medical/paramedics)
 "bpF" = (
@@ -36804,8 +36804,7 @@
 "bpG" = (
 /obj/structure/closet/wardrobe/chemistry_white,
 /turf/simulated/floor{
-	icon_state = "dark brown corner";
-	tag = "icon-dark brown corner (SOUTHEAST)"
+	icon_state = "darkyellow"
 	},
 /area/medical/chemistry)
 "bpH" = (
@@ -111731,9 +111730,9 @@
 	pixel_y = 1
 	},
 /turf/simulated/floor{
-	icon_state = "dark brown corner";
-	tag = "icon-dark brown corner (SOUTHEAST)";
-	dir = 1
+	icon_state = "darkyellow";
+	tag = "icon-darkyellow (EAST)";
+	dir = 8
 	},
 /area/medical/chemistry)
 "pPL" = (
@@ -112550,10 +112549,6 @@
 	},
 /area/engineering/engine)
 "vMn" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 4;
-	on = 1
-	},
 /obj/structure/table/glass,
 /obj/item/tool/bonesetter{
 	pixel_y = 6
