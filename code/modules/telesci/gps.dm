@@ -521,6 +521,7 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	data["beacon_cooldown"] = max(0, round((beacon_cooldown - world.time) / 10))
 	data["beacon_time_remaining"] = beacon_active ? max(0, round((beacon_cooldown - world.time) / 10)) : 0
 	var/list/devices = list()
+	var/turf/device_turf = get_turf(src)
 	var/datum/virtual_z/vz = device_turf.get_virtual_z()
 
 	if(istype(vz))
