@@ -349,7 +349,7 @@
 /datum/reagent/minttoxin
 	name = "Mint Toxin"
 	id = MINTTOXIN
-	description = "A strong toxin against plants, mushrooms and animals. Useful for dealing with undesirable customers."
+	description = "Mint essence distilled to its purest form, a strong toxin against plants, mushrooms and animals. Useful for dealing with undesirable customers."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	density = 0.898
@@ -420,7 +420,7 @@
 /datum/reagent/minttoxin/essence
 	name = "Mint Essence"
 	id = MINTESSENCE
-	description = "Mint oil on a 10x dilution, safe minty freshness!"
+	description = "The raw, unrefined essence of freshness!"
 	custom_metabolism = 0.2 //toxin lasts 10x as long
 	concentrated = FALSE
 	plant_pests = -2
