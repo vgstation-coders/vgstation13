@@ -421,7 +421,7 @@
 	name = "Mint Essence"
 	id = MINTESSENCE
 	description = "The raw, unrefined essence of freshness!"
-	custom_metabolism = 0.2 //toxin lasts 10x as long
+	custom_metabolism = 0.1 //toxin lasts 10x as long
 	concentrated = FALSE
 	plant_pests = -2
 	plant_weeds = -1
