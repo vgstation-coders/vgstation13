@@ -347,7 +347,7 @@
 	M.hallucination += 10
 
 /datum/reagent/minttoxin
-	name = "Mint Oil"
+	name = "Mint Toxin"
 	id = MINTTOXIN
 	description = "A strong toxin against plants, mushrooms and animals. Useful for dealing with undesirable customers."
 	reagent_state = REAGENT_STATE_LIQUID
