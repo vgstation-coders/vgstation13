@@ -4422,12 +4422,13 @@
 	required_reagents = list(GRAVY = 1, TRICORDRAZINE = 1)
 	result_amount = 2
 
-/datum/chemical_reaction/mintdilution
-	name = "Mint Essence"
-	id = MINTESSENCE
-	result = MINTESSENCE
-	required_reagents = list(MINTTOXIN = 1, ETHANOL = 9)
-	result_amount = 10
+/datum/chemical_reaction/mintconcentration
+	name = "Mint Toxin"
+	id = MINTTOXIN
+	result = MINTTOXIN
+	required_reagents = list(MINTESSENCE = 10)
+	required_temp = T0C + 100 //closest we can get to a vacuum distilation with our ghetto ass systems
+	result_amount = 1
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
