@@ -4422,5 +4422,12 @@
 	required_reagents = list(GRAVY = 1, TRICORDRAZINE = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/mintdilution
+	name = "Mint Essence"
+	id = MINTESSENCE
+	result = MINTESSENCE
+	required_reagents = list(MINTTOXIN = 1, ETHANOL = 9)
+	result_amount = 10
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
