@@ -238,7 +238,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 	var/bluriness_blur = filter(type="blur", name="blurriness_blur", size=0)
 	perception_filters.perception_filters += "blurriness_blur"
 
-	var/bluriness_displacement = filter(type="displace", name="blurriness_displace", x=0, y=0, size=0, icon='icons/mob/blurry_icon_large_alt.dmi', flags=FILTER_OVERLAY)
+	var/bluriness_displacement = UNLINT(filter(type="displace", name="blurriness_displace", x=0, y=0, size=0, icon='icons/mob/blurry_icon_large_alt.dmi', flags=FILTER_OVERLAY))
 	perception_filters.perception_filters += "blurriness_displace"
 
 	for (var/obj/planemaster in perception_filters.perception_planemasters)
