@@ -216,10 +216,10 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 	//							//
 	//////////////////////////////
 	//By combining an angular and a radial blur, we get kind of a gaussian blur that intensifies in a circle the further away you get from the focal point
-	var/nearsightedness_angular = filter(type="angular_blur", name="nearsightedness_angular", x = 0, y = 0, size = 0, offset = 256)
+	var/nearsightedness_angular = UNLINT(filter(type="angular_blur", name="nearsightedness_angular", x = 0, y = 0, size = 0, offset = 256))
 	perception_filters.perception_filters += "nearsightedness_angular"
 
-	var/nearsightedness_radial = filter(type="radial_blur", name="nearsightedness_radial", x = 0, y = 0, size = 0, offset = 256)
+	var/nearsightedness_radial = UNLINT(filter(type="radial_blur", name="nearsightedness_radial", x = 0, y = 0, size = 0, offset = 256))
 	perception_filters.perception_filters += "nearsightedness_radial"
 
 	for (var/obj/planemaster in perception_filters.perception_planemasters)
