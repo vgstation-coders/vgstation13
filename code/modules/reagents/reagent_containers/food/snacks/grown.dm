@@ -1248,6 +1248,13 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#7E80DE"
 	plantname = "flax"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/mint
+	name = "mint"
+	desc = "The essence of pure freshness in plant form."
+	potency = 20
+	filling_color = "#7edeae"
+	plantname = "mint"
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle
 	icon = 'icons/obj/hydroponics/berry.dmi'
 	icon_state = "produce2"
