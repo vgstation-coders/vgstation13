@@ -191,9 +191,9 @@ var/global/list/atmos_controllers = list()
 			alarm_data["danger"] = max(alarm.local_danger_level, alarm_area.atmosalm-1)
 			alarm_data["name"] = "[alarm]"
 			alarm_data["area"] = get_area(alarm)
-			alarm_data["x"] = pos.x
-			alarm_data["y"] = pos.y
-			alarm_data["z"] = pos.z
+			alarm_data["x"] = pos.vx()
+			alarm_data["y"] = pos.vy()
+			alarm_data["z"] = pos.vz()
 			alarms+=list(alarm_data)
 		data["alarms"]=alarms
 
@@ -234,9 +234,9 @@ var/global/list/atmos_controllers = list()
 	for(var/obj/machinery/atmospherics/unary/cap/bluespace/bscap in bspipe_list)
 		var/list/pipe_data = list()
 		pipe_data["name"] = bscap.name
-		pipe_data["x"] = bscap.x - WORLD_X_OFFSET[bscap.z]
-		pipe_data["y"] = bscap.y - WORLD_Y_OFFSET[bscap.z]
-		pipe_data["z"] = bscap.z
+		pipe_data["x"] = bscap.vx() - get_world_x_offset(bscap.vz())
+		pipe_data["y"] = bscap.vy() - get_world_y_offset(bscap.vz())
+		pipe_data["z"] = bscap.vz()
 		bspipes += list(pipe_data)
 	data["bspipes"]=bspipes
 

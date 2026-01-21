@@ -164,10 +164,16 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		if (prob(33))
 			generate_hoboshack()
 
+	//load all roundstart dungeons
+	for(var/T in map.load_map_elements)
+		load_dungeon(T, 0, TRUE)
+
 	watch = start_watch()
 	for(var/datum/zLevel/z in map.zLevels)
 		var/watch_prim = start_watch()
 		z.post_mapload()
+		if(!istype(z, /datum/zLevel/dynamic))
+			map.linkVLevel(z)
 		log_debug("Finished with zLevel [z.z] in [stop_watch(watch_prim)]s.", FALSE)
 	log_debug("Finished calling post on zLevels in [stop_watch(watch)]s.", FALSE)
 

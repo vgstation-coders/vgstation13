@@ -69,27 +69,36 @@
 	parent_z.virtual_z_levels |= src
 	// System vLevels (centcomm dungeons) are stored in map.systemVLevels, not map.vLevels
 	// Their IDs are 100 * parent_z + # of system vLevels on the parent z
-	if(map)
-		if(system)
-			map.systemVLevels += src
-			var/count = 0
-			for(var/datum/virtual_z/VZ in map.systemVLevels)
-				if(VZ.parent_z == parent_z)
-					count++
-			id = count + SYSTEM_VLEVEL_OFFSET * parent_z.z
-		else
-			map.vLevels += src
-			id = map.vLevels.len
-			var/variance_x = floor(size_x/10)
-			var/variance_y = floor(size_y/10)
-			WORLD_X_OFFSET += rand(-variance_x,variance_x)
-			WORLD_Y_OFFSET += rand(-variance_y,variance_y)
+	if(system)
+		map.systemVLevels += src
+		var/count = 0
+		for(var/datum/virtual_z/VZ in map.systemVLevels)
+			if(VZ.parent_z == parent_z)
+				count++
+		id = count + SYSTEM_VLEVEL_OFFSET * parent_z.z
+		WORLD_X_OFFSET += list("[id]" = 0)
+		WORLD_Y_OFFSET += list("[id]" = 0)
+	else
+		map.vLevels += src
+		id = map.vLevels.len
+		var/variance_x = floor(size_x/10)
+		var/variance_y = floor(size_y/10)
+		WORLD_X_OFFSET += list("[id]" = rand(-variance_x,variance_x))
+		WORLD_Y_OFFSET += list("[id]" = rand(-variance_y,variance_y))
 
 	if(!skip_turf_setup)
 		initialize_turfs()
 	if(size_x != ALLOCATION_FULL && size_y != ALLOCATION_FULL)
 		spawn(0)
 			make_borders()
+
+/proc/list_world_offsets()
+	var/listlen = WORLD_X_OFFSET.len
+	message_admins("len: [listlen]")
+	var/i = 1
+	while(i <= listlen)
+		message_admins("vz.id: [i], x offset: [WORLD_X_OFFSET[i]], y offset: [WORLD_Y_OFFSET[i]] ")
+		i++
 
 /datum/virtual_z/proc/initialize_turfs()
 	var/list/turf/turfs = get_turfs()

@@ -81,22 +81,7 @@
 
 /datum/map/New()
 	. = ..()
-
 	src.loadZLevels(src.zLevels)
-
-	// Populate systemVLevels list from all zLevel virtual_z_levels
-	// These are system vLevels (station, centcomm, etc) created during map loading
-	// This must be done here because the global 'map' variable isn't set during loadZLevels
-	for(var/datum/zLevel/Z in zLevels)
-		for(var/datum/virtual_z/V in Z.virtual_z_levels)
-			vLevels |= V
-			if(Z.z in daynight_z_lvls)
-				daynight_v_lvls += V
-
-	//The spawn below is needed
-	spawn()
-		for(var/T in load_map_elements)
-			load_dungeon(T, 0, TRUE)
 
 /datum/map/proc/map_ruleset(var/datum/dynamic_ruleset/DR)
 	return TRUE //If false, fails Ready()
@@ -110,9 +95,9 @@
 /datum/map/proc/loadZLevels(list/levelPaths)
 	for(var/i = 1 to levelPaths.len)
 		var/path = levelPaths[i]
-		addZLevel(new path, i, create_virtual_z = TRUE)
+		addZLevel(new path, i)
 
-/datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0, make_base_turf = FALSE, fast_base_turf = FALSE, create_virtual_z = FALSE)
+/datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0, make_base_turf = FALSE, fast_base_turf = FALSE)
 	if(!istype(level))
 		warning("ERROR: addZLevel received [level ? "a bad level of type [ispath(level) ? "[level]" : "[level.type]" ]" : "no level at all!"]")
 		return
@@ -125,13 +110,12 @@
 	if(!istype(level.base_turf,/turf/space) && make_base_turf)
 		level.reset_base_turf(/turf/space,fast_base_turf)
 
-	if(create_virtual_z)
-		linkVLevel(level)
-
 /datum/map/proc/linkVLevel(datum/zLevel/level)
 	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL, 1, 1, skip_turf_setup = FALSE)
 	new_vz.id = level.z
 	new_vz.name = level.name
+	if(level.z in daynight_z_lvls)
+		daynight_v_lvls += new_vz
 	new_vz.gps_allowed = level.z != zCentcomm
 	new_vz.teleJammed = level.teleJammed ? VZ_TELEPORTATION_FORBIDDEN : VZ_TELEPORTATION_ALLOWED
 	new_vz.bluespace_jammed = level.bluespace_jammed
@@ -142,7 +126,7 @@
 		for(var/datum/zLevel/zl in level.transition_crosswrap_z)
 			new_vz.transition_crosswrap_v += zl.virtual_z_levels[1]
 	new_vz.update_settings()
-
+	vLevels |= new_vz
 	return new_vz
 
 /datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null, var/skip_turf_setup = FALSE, var/fill_turf_type = null, var/system = FALSE)
@@ -232,16 +216,6 @@
 	else if(vlevel_id >= 1 && vlevel_id <= vLevels.len)
 		return vLevels[vlevel_id]
 	return null
-
-// Returns TRUE if the given vLevel ID is a system vLevel (station, centcomm, etc)
-/datum/map/proc/isSystemVLevel(var/vlevel_id)
-	return vlevel_id > SYSTEM_VLEVEL_OFFSET
-
-// Returns the system vLevel for the given z-level number (1-6)
-/datum/map/proc/getSystemVLevelByZ(var/z_level)
-	if(!z_level || z_level < 1 || z_level > systemVLevels.len)
-		return null
-	return systemVLevels[z_level]
 
 // Returns all vLevels (both system and regular) as a flat list
 /datum/map/proc/getAllVLevels()

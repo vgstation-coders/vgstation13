@@ -31,7 +31,7 @@
 		return TRUE
 
 /datum/objective/time_agent_extract/format_explanation()
-	return "Escape through \the [anomaly], located in [format_text(get_area(anomaly).name)] ([anomaly.x-WORLD_X_OFFSET[anomaly.z]], [anomaly.y-WORLD_Y_OFFSET[anomaly.z]], [anomaly.z]). Use your jump charge to activate it."
+	return "Escape through \the [anomaly], located in [format_text(get_area(anomaly).name)] ([anomaly.x-get_world_x_offset(anomaly.vz())], [anomaly.y-get_world_y_offset(anomaly.vz())], [anomaly.vz()]). Use your jump charge to activate it."
 
 /obj/effect/time_anomaly
 	name = "anomaly"

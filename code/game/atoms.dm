@@ -1172,7 +1172,7 @@ its easier to just keep the beam vertical.
 
 // Returns the virtual x coordinate of this atom
 /atom/proc/vx()
-	if(z <= initial(map.zLevels))
+	if(z <= 6)
 		return x
 	var/datum/virtual_z/V = get_virtual_z()
 	if(!V)
@@ -1181,7 +1181,7 @@ its easier to just keep the beam vertical.
 
 // Returns the virtual y coordinate of this atom
 /atom/proc/vy()
-	if(z <= initial(map.zLevels))
+	if(z <= 6)
 		return y
 	var/datum/virtual_z/V = get_virtual_z()
 	if(!V)
@@ -1190,7 +1190,7 @@ its easier to just keep the beam vertical.
 
 // Returns the virtual z coordinate of this atom
 /atom/proc/vz()
-	if(z <= initial(map.zLevels))
+	if(z <= 6)
 		return z
 	var/datum/virtual_z/V = get_virtual_z()
 	if(!V)
