@@ -1,7 +1,10 @@
-#define CHARACTER_SETUP 0
-#define UI_SETUP 1
-#define GENERAL_SETUP 2
-#define SPECIAL_ROLES_SETUP 3
+#define CHARACTER_SETUP     0
+#define GRAPHICS_SETUP      1
+#define UI_SETUP            2
+#define AUDIO_SETUP         3
+#define GENERAL_SETUP       4
+#define SPECIAL_ROLES_SETUP 5
+#define ADMIN_SETUP         6
 
 var/list/preferences_datums = list()
 var/global/list/special_roles = list(

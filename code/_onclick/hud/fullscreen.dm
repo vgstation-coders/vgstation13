@@ -130,6 +130,11 @@
 	icon_state = "blurry"
 	//alpha = 0//set to 255 by update_fullscreen_alpha(); //not anymore, currently only used when getting pie'd
 
+
+/obj/abstract/screen/fullscreen/blurry/alt
+	color = "#808080"
+	alpha = 0
+
 /obj/abstract/screen/fullscreen/nearsighted
 	icon = 'icons/mob/screen1_blindness.dmi'
 	icon_state = "eye"

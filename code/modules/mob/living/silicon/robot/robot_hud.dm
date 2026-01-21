@@ -49,6 +49,8 @@
 
 	update_pull_icon()
 
+	filter_update_delay = -1
+
 	var/impaired_vision = get_impaired_vision_range()
 	if(impaired_vision > 0)
 		enable_nearsightedness(impaired_vision)
