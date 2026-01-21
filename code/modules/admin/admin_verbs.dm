@@ -1312,8 +1312,8 @@ fieldset {width:140px;}
 			override = 1
 
 	to_chat(src, "Attempting to load [AM.name] ([AM.file_path])...")
-	createRandomZlevel(override, AM, usr)
-	to_chat(src, "The away mission has been generated on z-level [world.maxz] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
+	var/datum/virtual_z/vz = createRandomZlevel(override, AM, usr)
+	to_chat(src, "The away mission has been generated on v-level [vz.id] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
 
 /client/proc/send_to_heck(var/mob/dead/observer/O in dead_mob_list)
 	set name = "Send to hell"

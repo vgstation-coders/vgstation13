@@ -208,7 +208,10 @@
 	var/w_to_use = ortho? ME.height : ME.width
 	var/h_to_use = ortho? ME.width : ME.height
 	var/datum/virtual_z/new_vz = src.addVLevel(w_to_use + buffer_size * 2, h_to_use + buffer_size * 2, fill_turf_type = fill_turf, system = system)
-	new_vz.name = "Map Element: [ME.name]"
+	var/prefix = "Map Element: "
+	if(istype(ME, /datum/map_element/away_mission))
+		prefix = "Away Mission: "
+	new_vz.name = "[prefix][ME.name]"
 	new_vz.level_type = VZ_MAP_ELEMENT
 	new_vz.gps_allowed = FALSE
 	new_vz.teleJammed = VZ_TELEPORTATION_FORBIDDEN
