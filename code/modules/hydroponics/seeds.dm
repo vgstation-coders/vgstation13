@@ -2101,7 +2101,7 @@
 	display_name = "mint"
 	plant_dmi = 'icons/obj/hydroponics/mint.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mint)
-	chems = list(MINTTOXIN = list(2,20)) //2u every 20 potency - TO DO: add a PROPER system that switches the produced chems based on potency so it makes mint essence when low potency and mint tox when high potency
+	chems = list(MINTESSENCE = list(2,4)) //TO DO: add a PROPER system that switches the produced chems based on potency so it makes mint essence when low potency and mint tox when high potency
 	lifespan = 150
 	maturation = 2
 	production = 8
