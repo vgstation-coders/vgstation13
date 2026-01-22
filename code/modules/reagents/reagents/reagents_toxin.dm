@@ -401,21 +401,21 @@
 					playsound(H, 'sound/effects/toothshatter.ogg', 50, 1)
 					H.audible_scream()
 					H.adjustBruteLoss(50) //imagine all your teeth violently exploding, shrapnel and shit
+		if(concentrated)
+			if(isdiona(H) || ismushroom(H)) //technically more toxic to shrooms than plants but this is good enough
+				H.adjustToxLoss(4)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a sharp cold pain in your stems!</span>")
 
-		if(isdiona(H) || ismushroom(H)) //technically more toxic to shrooms than plants but this is good enough
-			H.adjustToxLoss(1+(concentrated*3))
-			if(prob(1))
-				to_chat(H, "<span class='warning'>You feel a sharp cold pain in your stems!</span>")
+			if(isinsectoid(H)) //more toxic to bugs than to plants
+				H.adjustToxLoss(6)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a cold stabing pain burn your carapace from within!</span>")
 
-		if(isinsectoid(H)) //more toxic to bugs than to plants
-			H.adjustToxLoss(2+(concentrated*4))
-			if(prob(1))
-				to_chat(H, "<span class='warning'>You feel a cold stabing pain burn your carapace from within!</span>")
-
-		if(iscatbeast(H)) //pet cats are immune it's space magic ain't gotta explain shit
-			H.adjustToxLoss(4+(concentrated*6))
-			if(prob(1))
-				to_chat(H, "<span class='warning'>You feel a sharp pain in your liver!</span>")
+			if(iscatbeast(H)) //pet cats are immune it's space magic ain't gotta explain shit
+				H.adjustToxLoss(10)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a sharp pain in your liver!</span>")
 
 /datum/reagent/minttoxin/essence
 	name = "Mint Essence"
