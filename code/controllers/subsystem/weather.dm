@@ -51,15 +51,15 @@ var/list/precip_state_to_texture = list()
 
 	// Retroactively register turfs that were created before the climate system
 	// This handles legacy maps where turfs exist before climate is set up
-	if(A && A.turfs)
+	if(A?.turfs)
 		// Use allocation's turfs list for procedurally generated planets
 		for(var/turf/unsimulated/floor/snow/S in A.turfs)
 			C.register_weather_turf(S)
 	else
-		// For legacy maps without allocations, scan the z-level
-		for(var/turf/unsimulated/floor/snow/S in block(locate(1, 1, z), locate(world.maxx, world.maxy, z)))
-			C.register_weather_turf(S)
-
+		for(var/area/surface/A in world)
+			if(istype(A) && A.z == z)
+				for(var/turf/T in A.turflist)
+					C.register_weather_turf(T)
 	return C
 
 // Restart a specific climate in case it gets corrupted
