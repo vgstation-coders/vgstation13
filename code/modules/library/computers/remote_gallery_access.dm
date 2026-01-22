@@ -16,7 +16,7 @@
 	pass_flags = PASSTABLE
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK
 
-	library_section_names = list("14x14", "24x24", "24x14", "14x24")
+	library_section_names = list("14x14", "14x24", "24x14", "24x24", "32x32")
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
@@ -141,15 +141,17 @@
 	var/datum/custom_painting/painting_data = json2painting(newbook.content, newbook.title, newbook.author, newbook.description)
 
 	//pick a canvas that fits the bitmap size.
-	if (painting_data.bitmap_width == 24)
-		if (painting_data.bitmap_height == 24)
-			C = new/obj/item/mounted/frame/painting/custom/large(get_turf(src))
+	if(painting_data.bitmap_height == 32 || painting_data.bitmap_width == 32)
+		C = new /obj/item/mounted/frame/painting/custom/huge(get_turf(src))
+	else if (painting_data.bitmap_width == 24)
+			if (painting_data.bitmap_height == 24)
+				C = new/obj/item/mounted/frame/painting/custom/large(get_turf(src))
+			else
+				C = new/obj/item/mounted/frame/painting/custom/landscape(get_turf(src))
+		else if(painting_data.bitmap_height == 24)
+			C = new/obj/item/mounted/frame/painting/custom/portrait(get_turf(src))
 		else
-			C = new/obj/item/mounted/frame/painting/custom/landscape(get_turf(src))
-	else if(painting_data.bitmap_height == 24)
-		C = new/obj/item/mounted/frame/painting/custom/portrait(get_turf(src))
-	else
-		C = new/obj/item/mounted/frame/painting/custom(get_turf(src))
+			C = new/obj/item/mounted/frame/painting/custom(get_turf(src))
 
 	C.name = "[newbook.title] by [newbook.author]"
 	C.desc = newbook.description
