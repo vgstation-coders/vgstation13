@@ -139,12 +139,15 @@
 
 	// Framing
 	if (istype(W, /obj/item/stack/sheet/wood) && !framed)
-		framed = TRUE
-		to_chat(usr, "<span class='notice'>You frame \the [name].</span>")
-		update_painting()
-		var/obj/item/stack/sheet/wood/WS = W
-		WS.use(1)
-		materials.addAmount(WS.mat_type, WS.perunit)
+		if(painting_height == 32 || painting_width == 32 )
+			to_chat(usr, "<span class='notice'>\The [name] is too big to properly frame.</span>")
+		else
+			framed = TRUE
+			to_chat(usr, "<span class='notice'>You frame \the [name].</span>")
+			update_painting()
+			var/obj/item/stack/sheet/wood/WS = W
+			WS.use(1)
+			materials.addAmount(WS.mat_type, WS.perunit)
 
 	if (iscrowbar(W) && framed)
 		to_chat(usr, "<span class='warning'>You struggle to pop \the [name] out of it's frame.</span>")
@@ -575,6 +578,36 @@
 	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
+
+/obj/item/mounted/frame/painting/custom/huge
+	name = "huge canvas"
+	base_name = "huge canvas"
+	desc = "For those whose artistic thirst goes beyond the limits of mere large canvas paintings."
+	base_desc = "For those whose artistic thirst goes beyond the limits of mere large canvas paintings."
+	base_icon_state = "blank_huge"
+	frame_icon_state = "purposefully_nonexisting_icon_name"
+	painting_height = 32
+	painting_width = 32
+	painting_offset_x = 0
+	painting_offset_y = 0
+	// Material data
+	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 7)
+
+/obj/structure/painting/custom/huge
+	name = "huge canvas"
+	base_name = "huge canvas"
+	desc = "For those whose artistic thirst goes beyond the limits of mere large canvas paintings."
+	base_desc = "For those whose artistic thirst goes beyond the limits of mere large canvas paintings."
+	icon_state = "blank_huge"
+	base_icon_state = "blank_huge"
+	frame_icon_state = "purposefully_nonexisting_icon_name"
+	painting_height = 32
+	painting_width = 32
+	painting_offset_x = 0
+	painting_offset_y = 0
+	// Material data
+	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 7)
+
 
 // Random painting from remote gallery
 /obj/item/mounted/frame/painting/custom/random
