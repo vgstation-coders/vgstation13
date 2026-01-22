@@ -58,6 +58,7 @@
 
 
 /datum/map/active/map_specific_init()
+	SSweather.set_climate(/datum/climate/tropical, map.zMainStation)
 	generate_mapvaults()
 	//replace all the asteroid turfs that are generated randomly with the tunnel generation (i don't even know where) with the proper tiles.
 	var/num_ass_replacments=0
