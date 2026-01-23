@@ -585,7 +585,7 @@
 	desc = "For those whose artistic thirst goes beyond the limits of mere large canvas paintings."
 	base_desc = "For those whose artistic thirst goes beyond the limits of mere large canvas paintings."
 	base_icon_state = "blank_huge"
-	frame_icon_state = "purposefully_nonexisting_icon_name"
+	frame_icon_state = "purposefully_blank_frame"
 	painting_height = 32
 	painting_width = 32
 	painting_offset_x = 0
@@ -600,7 +600,7 @@
 	base_desc = "For those whose artistic thirst goes beyond the limits of mere large canvas paintings."
 	icon_state = "blank_huge"
 	base_icon_state = "blank_huge"
-	frame_icon_state = "purposefully_nonexisting_icon_name"
+	frame_icon_state = "purposefully_blank_frame"
 	painting_height = 32
 	painting_width = 32
 	painting_offset_x = 0
