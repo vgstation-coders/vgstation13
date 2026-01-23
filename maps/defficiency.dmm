@@ -100678,7 +100678,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/sign/poster{
 	icon_state = "bsposter10";
-	pixel_x = 32
+	pixel_x = -32
 	},
 /obj/structure/closet/vox_raiders/trader,
 /turf/simulated/floor/vox{
