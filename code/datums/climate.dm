@@ -196,6 +196,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 			qdel(current_weather)
 			current_weather = weather
 			current_weather.execute()
+			current_weather.update_weather_sounds()
 		else
 			var/datum/weather/W = weather
 			weather_transitions[current_weather.type] = list()
@@ -535,9 +536,11 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	return playerlist
 
 /datum/weather/proc/update_weather_sounds()
+	if(!weather_sound)
+		return
 	var/list/affected_players = get_weather_affected_players()
 	for(var/mob/living/M in affected_players)
-		M.update_weather_sounds(FALSE)
+		M << sound(weather_sound, repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = weather_sound_volume)
 
 /datum/weather/proc/stop_weather_sounds()
 	var/list/affected_players = get_weather_affected_players()

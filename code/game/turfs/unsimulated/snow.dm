@@ -311,6 +311,12 @@
 	edge_flags = EDGE_CARDINAL
 	edge_priority = SAND_EDGE_PRIORITY
 
+/turf/unsimulated/floor/concrete
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "concrete"
+	name = "concrete"
+	desc = "Concrete is a substantially stronger, more resistant vehicle surface than asphalt, though it grips somewhat less making it better suited for short, low-speed drives."
+
 /turf/unsimulated/floor/snow/cave
 	name = "snowy cave floor"
 	desc = "Sheltered from blizzards outside, but still cold."

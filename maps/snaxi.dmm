@@ -12786,7 +12786,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/simulated/floor/engine/concrete,
+/turf/unsimulated/floor/concrete,
 /area/surface/snow)
 "aDx" = (
 /obj/effect/decal/cleanable/blood/oil,
@@ -41673,7 +41673,7 @@
 	icon_state = "bot"
 	},
 /obj/structure/bed/chair/vehicle/snowmobile/universal,
-/turf/simulated/floor/engine/concrete,
+/turf/unsimulated/floor/concrete,
 /area/surface/snow)
 "bNe" = (
 /obj/structure/cable{
@@ -86915,7 +86915,7 @@
 /obj/structure/bed/chair/vehicle/snowmobile/universal{
 	dir = 4
 	},
-/turf/simulated/floor/engine/concrete,
+/turf/unsimulated/floor/concrete,
 /area/surface/snow)
 "sYJ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{

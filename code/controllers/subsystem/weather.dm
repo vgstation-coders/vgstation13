@@ -25,9 +25,8 @@ var/list/precip_state_to_texture = list()
 		if(C.z == z)
 			if(A && C.allocation == A)
 				return C
-			else if(!A && !C.allocation)
+			else if(!A)
 				return C
-	return null
 
 // Get the climate for a specific turf by checking its allocation or z-level
 /datum/subsystem/weather/proc/get_climate_from_turf(var/turf/T)
@@ -56,10 +55,12 @@ var/list/precip_state_to_texture = list()
 		for(var/turf/unsimulated/floor/snow/S in A.turfs)
 			C.register_weather_turf(S)
 	else
-		for(var/area/surface/A in world)
-			if(istype(A) && A.z == z)
-				for(var/turf/T in A.turflist)
-					C.register_weather_turf(T)
+		for(var/turf/unsimulated/floor/F in block(locate(1, 1, z), locate(world.maxx, world.maxy, z)))
+			if(!isfloor(F))
+				continue
+			var/area/surface/surface_area = F.loc
+			if(isopensurface(surface_area))
+				C.register_weather_turf(F)
 	return C
 
 // Restart a specific climate in case it gets corrupted
