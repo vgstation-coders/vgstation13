@@ -527,7 +527,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 		new/datum/stack_recipe("portrait canvas",	/obj/item/mounted/frame/painting/custom/portrait,	3,	time = 15									),
 		new/datum/stack_recipe("landscape canvas",	/obj/item/mounted/frame/painting/custom/landscape,	3,	time = 15									),
 		new/datum/stack_recipe("large canvas",		/obj/item/mounted/frame/painting/custom/large,		5,	time = 15									),
-		new/datum/stack_recipe("huge canvas",		/obj/item/mounted/frame/painting/custom/huge,		7,	time = 15									)
+		new/datum/stack_recipe("huge canvas",		/obj/item/mounted/frame/painting/custom/huge,		7,	time = 15									),
 		new/datum/stack_recipe("palette",			/obj/item/palette,							3,	time = 15									),
 		new/datum/stack_recipe("easel",				/obj/structure/easel,								3,	time = 15									),
 	)),
