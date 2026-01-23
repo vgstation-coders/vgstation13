@@ -281,7 +281,7 @@
 	src.interface = new/datum/html_interface/nanotrasen(src, "Canvas", 600, 600, head)
 
 	// Setup contents
-	if (bitmap_height < 32)
+	if (bitmap_height < 32 || offset_x == 0)
 		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
 	else
 		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas_tile.tmpl"))
