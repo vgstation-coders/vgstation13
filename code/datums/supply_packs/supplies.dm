@@ -393,10 +393,10 @@
 					/obj/item/palette,
 					/obj/structure/easel,
 					/obj/item/mounted/frame/painting/custom,
-					/obj/item/mounted/frame/painting/custom,
 					/obj/item/mounted/frame/painting/custom/landscape,
 					/obj/item/mounted/frame/painting/custom/portrait,
 					/obj/item/mounted/frame/painting/custom/large,
+					/obj/item/mounted/frame/painting/custom/huge,
 					/obj/item/stack/sheet/wood/bigstack,
 					)
 	cost = 50
