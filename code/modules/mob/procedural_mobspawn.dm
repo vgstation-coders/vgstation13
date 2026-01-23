@@ -218,10 +218,13 @@ var/list/procgen_loot = list(//path, # of items
 		if(TOXIN)
 			mybreath.damage_type = TOX
 
-/datum/procedural_mobspawn/proc/PickVapors()
-	var/list/all_reagents = subtypesof(/datum/reagent)
+/datum/procedural_mobspawn/proc/PickVapors(var/datum/reagent/my_chemical)
+	if(!my_chemical)
+		var/list/all_reagents = subtypesof(/datum/reagent)
+		vapors = pick(all_reagents)
+	else
+		vapors = my_chemical
 	var/vapornoun = pick("vapors", "gas", "smoke", "mist", "fog", "clouds")
-	vapors = pick(all_reagents)
 	desc += (" Beware its deadly [vapors.name] [vapornoun]!")
 
 /datum/procedural_mobspawn/proc/gen_monster(var/target)

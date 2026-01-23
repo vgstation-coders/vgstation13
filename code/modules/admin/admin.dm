@@ -1789,26 +1789,28 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 		"}
 
 	for(var/datum/procedural_mobspawn/ID in procgen_mob_datums)
-		var/abilityname = "None"
-		var/passivename = ""
+		var/projectile_name = ""
+		var/breath_name = ""
+		var/passive_name = ""
+		var/radioactive = ""
 		if(ID.ranged)
 			if(ID.mybreath)
-				abilityname = "Breath: [ID.mybreath.name]"
+				projectile_name = "Breath: [ID.mybreath.name]\n"
 			else if(ID.projectiletype)
-				abilityname = "Projectile: [ID.projectiletype.name]"
+				breath_name = "Projectile: [ID.projectiletype.name]\n"
 		if(ID.radioactive)
-			passivename += "Radiation Pulse"
+			radioactive = "Radiation Pulse"
 		if(ID.vapors)
-			passivename += "[ID.vapors.name] Smoke"
+			passive_name = "[ID.vapors.name] Smoke"
 
 		dat += {"<tr>
 			<td>[bicon(ID)]</td>
 			<td>[ID.name]</td>
 			<td><a href='?_src_=vars;Vars=\ref[ID]'>\[VV\]</a> <a href='?_src_=vars;mark_object=\ref[ID]'>\[mark datum\]</a></td>
-			<td>[abilityname]<br>[passivename]</br></td>
+			<td>[projectile_name][breath_name][radioactive]<br>[passive_name]</br></td>
 			<td><a href='?src=\ref[src];create_megabeast=\ref[ID]'>Spawn</a></td><!-- Spawn this FB specifically.-->
 			</tr>
-			"}//<FONT SIZE=2><A href='?src=\ref[src];ac_censor_channel_author=\ref[src.admincaster_feed_channel]'>[(src.admincaster_feed_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>
+			"}
 
 	dat += {"</table>
 		</body>
@@ -1817,7 +1819,7 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 
 	usr << browse(HTML_SKELETON(dat), "window=beastspanel;size=840x450")
 
-/datum/admins/proc/create_megabeast(var/datum/procedural_mobspawn/add_template)
+/datum/admins/proc/create_megabeast(var/datum/procedural_mobspawn/add_template)//Since megabeasts are generated on initialize, they may have descriptions that don't match their traits when generated. Good thing admins can varedit the FB datum before spawning it! -Mr. Heavenly
 	if(!check_rights(R_SPAWN))
 		return
 
@@ -1858,12 +1860,15 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 								my_monster.PickBreath(x[1])
 				if(alert(usr, "Make it radioactive?", "Megabeast panel", "Yes", "No") == "Yes")
 					my_monster.radioactive = TRUE
+					return
 				else
 					my_monster.radioactive = FALSE
 
 				if(alert(usr, "Assign vapors?", "Megabeast panel", "Yes", "No") == "Yes")
-					return
-					//do the vapor thing here
+					var/datum/reagent/my_chemical = filter_typelist_input("Please select the projectile.", "Projectile selection", typesof(/datum/reagent))
+					my_monster.PickVapors(my_chemical)
+				else
+					my_monster.vapors = FALSE
 		else
 			new /datum/procedural_mobspawn()
 		return
