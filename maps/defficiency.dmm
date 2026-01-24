@@ -44283,7 +44283,7 @@
 	},
 /obj/machinery/conveyor{
 	dir = 6;
-	id_tag = "QMLoad2"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -112706,6 +112706,18 @@
 /obj/effect/decal/cleanable/greenglow,
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
+"vRo" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/machinery/conveyor_switch/oneway{
+	convdir = -1;
+	id_tag = "QMLoad3"
+	},
+/turf/simulated/floor,
+/area/supply/storage)
 "vRK" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
@@ -242346,7 +242358,7 @@ bwZ
 bwZ
 byI
 bDk
-bxd
+vRo
 btE
 bGF
 bIN
