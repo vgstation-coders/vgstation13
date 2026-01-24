@@ -153,6 +153,7 @@
 	..()
 
 /obj/structure/bookcase/update_icon()
+	overlays.len = 0
 	var/x_offset = 0
 	var/y_offset = 0
 	for(var/obj/item/I in contents)
