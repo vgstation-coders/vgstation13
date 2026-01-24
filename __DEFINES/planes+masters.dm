@@ -37,6 +37,7 @@ var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
 
 var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
 
+/* Now managed by the new perception_filters planemasters, each mob has their own
 // NOIR
 // Immutable, so we use a singleton implementation
 // (only one planemaster for everybody, they gain or lose the unique planemaster depending on whether they want the effect or not)
@@ -56,6 +57,7 @@ var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
 	plane = NOIR_BLOOD_PLANE
 
 var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /obj/abstract/screen/plane_master/noir_dummy())
+*/
 
 // GHOST PLANEMASTER
 // One planemaster for each client, which they gain during mob/login()
@@ -140,7 +142,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 
 //Storing those in a datum to not crowd up the View Variable window even further
 /datum/perception_filters
-	var/list/orphan_planemasters = list()
+	var/list/planemasters = list()
 	var/list/perception_planemasters = list()
 	var/list/perception_filters = list()
 	var/enabled_filters = 0//bitflags
@@ -148,14 +150,13 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 //Creating new planemasters for every plane that doesn't already have a dedicated planemaster
 //BE SURE TO UPDATE THIS LIST IF YOU ADD OR REMOVE OTHER PLANEMASTERS
 /mob/proc/create_orphan_planemasters()
-	for (var/planemaster in perception_filters.orphan_planemasters)
-		var/obj/abstract/screen/plane_master/PM = perception_filters.orphan_planemasters[planemaster]
+	for (var/planemaster in perception_filters.planemasters)
+		var/obj/abstract/screen/plane_master/PM = perception_filters.planemasters[planemaster]
 		client.screen -= PM
-		perception_filters.orphan_planemasters -= planemaster
+		perception_filters.planemasters -= planemaster
 		qdel(PM)
 
-	var/static/list/planes_without_dedicated_planemasters = list(
-		"ABOVE_PARALLAX_PLANE"	= ABOVE_PARALLAX_PLANE,
+	var/static/list/normal_planemasters = list(
 		"BELOW_PLATING_PLANE"	= BELOW_PLATING_PLANE,
 		"PLATING_PLANE"			= PLATING_PLANE,
 		"ABOVE_PLATING_PLANE"	= ABOVE_PLATING_PLANE,
@@ -163,6 +164,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 		"TURF_PLANE"			= TURF_PLANE,
 		"GLASSTILE_PLANE"		= GLASSTILE_PLANE,
 		"ABOVE_TURF_PLANE"		= ABOVE_TURF_PLANE,
+		"NOIR_BLOOD_PLANE"		= NOIR_BLOOD_PLANE,
 		"HIDING_MOB_PLANE"		= HIDING_MOB_PLANE,
 		"OBJ_PLANE"				= OBJ_PLANE,
 		"LYING_MOB_PLANE"		= LYING_MOB_PLANE,
@@ -177,18 +179,29 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 		"ABOVE_LIGHTING_PLANE"	= ABOVE_LIGHTING_PLANE,
 		)
 
-	for (var/orphan_plane in planes_without_dedicated_planemasters)
+	for (var/normal_plane in normal_planemasters)
 		var/obj/abstract/screen/plane_master/PM = new(client)
-		PM.plane = planes_without_dedicated_planemasters[orphan_plane]
-		perception_filters.orphan_planemasters[orphan_plane] = PM
+		PM.plane = normal_planemasters[normal_plane]
+		perception_filters.planemasters[normal_plane] = PM
+		client.screen += PM
+
+	var/static/list/additive_planemasters = list(
+		"ABOVE_LIGHTING_PLANE_ADDITIVE"	= ABOVE_LIGHTING_PLANE_ADDITIVE,
+		)
+
+	for (var/additive_plane in additive_planemasters)
+		var/obj/abstract/screen/plane_master/PM = new(client)
+		PM.plane = additive_planemasters[additive_plane]
+		PM.blend_mode = BLEND_ADD
+		perception_filters.planemasters[additive_plane] = PM
 		client.screen += PM
 
 //Adding all the planemasters we want to add filters on top to a single list so it's easier to manipulate
 /mob/proc/list_perception_planemasters()
 	perception_filters.perception_planemasters.len = 0
 
-	for (var/plane in perception_filters.orphan_planemasters)
-		var/P = perception_filters.orphan_planemasters[plane]
+	for (var/plane in perception_filters.planemasters)
+		var/P = perception_filters.planemasters[plane]
 		perception_filters.perception_planemasters += P
 
 	//We're not adding filters to the parallax planemasters for now. It's tough to make it look good.
@@ -203,10 +216,10 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 	//							//
 	//////////////////////////////
 	//By combining an angular and a radial blur, we get kind of a gaussian blur that intensifies in a circle the further away you get from the focal point
-	var/nearsightedness_angular = filter(type="angular_blur", name="nearsightedness_angular", x = 0, y = 0, size = 0, offset = 256)
+	var/nearsightedness_angular = UNLINT(filter(type="angular_blur", name="nearsightedness_angular", x = 0, y = 0, size = 0, offset = 256))
 	perception_filters.perception_filters += "nearsightedness_angular"
 
-	var/nearsightedness_radial = filter(type="radial_blur", name="nearsightedness_radial", x = 0, y = 0, size = 0, offset = 256)
+	var/nearsightedness_radial = UNLINT(filter(type="radial_blur", name="nearsightedness_radial", x = 0, y = 0, size = 0, offset = 256))
 	perception_filters.perception_filters += "nearsightedness_radial"
 
 	for (var/obj/planemaster in perception_filters.perception_planemasters)
@@ -225,7 +238,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 	var/bluriness_blur = filter(type="blur", name="blurriness_blur", size=0)
 	perception_filters.perception_filters += "blurriness_blur"
 
-	var/bluriness_displacement = filter(type="displace", name="blurriness_displace", x=0, y=0, size=0, icon='icons/mob/blurry_icon_large_alt.dmi', flags=FILTER_OVERLAY)
+	var/bluriness_displacement = UNLINT(filter(type="displace", name="blurriness_displace", x=0, y=0, size=0, icon='icons/mob/blurry_icon_large_alt.dmi', flags=FILTER_OVERLAY))
 	perception_filters.perception_filters += "blurriness_displace"
 
 	for (var/obj/planemaster in perception_filters.perception_planemasters)
@@ -245,7 +258,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 		for (var/filter in perception_filters.perception_filters)
 			planemaster.filters -= filter
 
-
+//----------------------------------------------------------------------------------------------
 
 #define IMPAIRED_VISION_RADIUS_OUT_OF_VIEW 	512	//we go this high when impairment is at 0 to prevent it showing up for players with farsight, binoculars, etc
 #define IMPAIRED_VISION_RADIUS_START 		192 //the minimal radius blurriness starts at, when impairment is at least 1
@@ -304,7 +317,12 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	if (_b > 0)
 		_nearsightedness_scale = min(40, 3 * _b)
 
+
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
+
+	if (!istype(screen))//might need to re-create if clear_fullscreens() was called.
+		screen = overlay_fullscreen("impaired_crit", /obj/abstract/screen/fullscreen/impaired_crit)
+
 	var/matrix/M = matrix()
 	M.Scale(_nearsightedness_scale, _nearsightedness_scale)
 	if (_animate)
@@ -328,12 +346,18 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 			animate(F2, size = 0.01, offset = IMPAIRED_VISION_RADIUS_OUT_OF_VIEW, time = 20)
 
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
+
+	if (!istype(screen))//might need to re-create if clear_fullscreens() was called.
+		screen = overlay_fullscreen("impaired_crit", /obj/abstract/screen/fullscreen/impaired_crit)
+
 	var/matrix/M = matrix()
 	M.Scale(40, 40)
 	animate(screen, transform = M, alpha = 0, time = 20)
 
 #undef IMPAIRED_VISION_RADIUS_OUT_OF_VIEW
 #undef IMPAIRED_VISION_RADIUS_START
+
+//----------------------------------------------------------------------------------------------
 
 /mob/proc/enable_blurriness(var/_blurriness)
 	perception_filters.enabled_filters |= P_FILTER_BLURRY_VISION
@@ -365,3 +389,21 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 		for (var/obj/planemaster in perception_filters.perception_planemasters)
 			var/F2 = planemaster.filters["blurriness_displace"]
 			animate(F2, size = 0, time = 60)
+
+//----------------------------------------------------------------------------------------------
+//Everyone gets their own noir planemaster now instead of there being one shared by everyone.
+//Since blood gets draw on this plane, this is necessary to allow other filters to get applied to blood
+
+/mob/proc/enable_noir()
+	var/obj/abstract/screen/plane_master/PM = perception_filters.planemasters["NOIR_BLOOD_PLANE"]
+	PM.color =  list("#0000",
+					 "#0000",
+					 "#0000",
+					 "#000F",
+					 "#A110")//turns everything in the plane to the color human blood. unfortunate side effect is the loss of detail on gibs
+	PM.appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER//NO_CLIENT_COLOR sadly doesn't prevent the blood itself from turning grey, which is why it has to be recolored with the above matrix
+
+/mob/proc/disable_noir()
+	var/obj/abstract/screen/plane_master/PM = perception_filters.planemasters["NOIR_BLOOD_PLANE"]
+	PM.color = null
+	PM.appearance_flags = PLANE_MASTER

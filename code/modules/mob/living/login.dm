@@ -1,6 +1,10 @@
 
 /mob/living/Login()
 	..()
+
+	init_perception_filters()//nearsightedness, blurriness, etc
+	login_perception_filters_update()//apply the effects instantly without animate()
+
 	standard_damage_overlay_updates()
 
 	//Mind updates

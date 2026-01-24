@@ -50,6 +50,7 @@ var/global/list/cloudnine_stuff = list(
 	speak_chance = 2
 	emote_hear = list("squeaks deeply")
 	var/obj/my_wheel
+	var/is_wheeling = FALSE
 
 /mob/living/simple_animal/hamster/Life()
 	if(!..())
@@ -65,16 +66,20 @@ var/global/list/cloudnine_stuff = list(
 		hamsterwheel(20)
 
 /mob/living/simple_animal/hamster/proc/hamsterwheel(var/repeat)
-	if(repeat < 1 || stat)
+	if(is_wheeling)
 		return
-	if(!my_wheel || my_wheel.loc != loc) //no longer share a tile with our wheel
-		wander = TRUE
-		my_wheel = null
-		return
-	step(src,my_wheel.dir)
-	delayNextMove(HAMSTER_MOVEDELAY)
-	sleep(HAMSTER_MOVEDELAY)
-	hamsterwheel(repeat-1)
+	is_wheeling = TRUE
+	spawn(0)
+		while(repeat > 0 && !stat)
+			if(!my_wheel || my_wheel.loc != loc) //no longer share a tile with our wheel
+				wander = TRUE
+				my_wheel = null
+				break
+			step(src,my_wheel.dir)
+			delayNextMove(HAMSTER_MOVEDELAY)
+			sleep(HAMSTER_MOVEDELAY)
+			repeat--
+		is_wheeling = FALSE
 
 /mob/living/simple_animal/hamster/attack_hand(mob/living/carbon/human/M)
 	. = ..()

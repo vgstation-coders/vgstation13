@@ -38,11 +38,14 @@
 		animate(screen, alpha = a, time = t)
 		client.screen += screen
 
-/mob/proc/clear_fullscreen(category, animate = 10)
+/mob/proc/clear_fullscreen(category, animate = 10, var/dead_mob = FALSE)
 	set waitfor = 0
 	var/obj/abstract/screen/fullscreen/screen = screens[category]
 	if(!screen)
 		screens -= category
+		return
+
+	if (dead_mob && screen.keep_on_death)
 		return
 
 	if(animate)
@@ -57,8 +60,7 @@
 
 /mob/proc/clear_fullscreens(var/dead_mob = FALSE, var/animate = 10)
 	for(var/category in screens)
-		if (!dead_mob || ((category != "brute") && (category != "oxy")))
-			clear_fullscreen(category, animate)
+		clear_fullscreen(category, animate, dead_mob)
 
 /datum/hud/proc/reload_fullscreen()
 	if(mymob && mymob.client && mymob.stat != DEAD)
@@ -89,6 +91,7 @@
 	var/anim_state
 	var/clear_after_length // also doubles as the length of the animation
 	var/scaling = 1
+	var/keep_on_death = 0 //prevents deletion by clear_fullscreens() when it gets called from death()
 
 /obj/abstract/screen/fullscreen/Destroy()
 	severity = 0
@@ -97,10 +100,12 @@
 /obj/abstract/screen/fullscreen/brute
 	icon_state = "brutedamageoverlay"
 	layer = DAMAGE_HUD_LAYER
+	keep_on_death = 1
 
 /obj/abstract/screen/fullscreen/oxy
 	icon_state = "oxydamageoverlay"
 	layer = DAMAGE_HUD_LAYER
+	keep_on_death = 1
 
 /obj/abstract/screen/fullscreen/numb
 	icon_state = "numboverlay"
@@ -117,6 +122,7 @@
 /obj/abstract/screen/fullscreen/impaired
 	icon_state = "impairedoverlay"
 	layer = IMPAIRED_LAYER
+	keep_on_death = 1
 
 /obj/abstract/screen/fullscreen/blurry
 	icon = 'icons/mob/screen1.dmi'

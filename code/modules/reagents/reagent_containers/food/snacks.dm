@@ -271,7 +271,7 @@
 			M.appearance_flags = RESET_COLOR
 			M.blend_mode = BLEND_ADD
 			if (isturf(loc))
-				M.plane = ABOVE_LIGHTING_PLANE
+				M.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 			else
 				M.plane = ABOVE_HUD_PLANE // inventory
 			overlays += M
@@ -282,7 +282,7 @@
 			I.blend_mode = BLEND_ADD
 			I.pixel_y = candle_offset_y
 			if (isturf(loc))
-				I.plane = ABOVE_LIGHTING_PLANE
+				I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 			else
 				I.plane = ABOVE_HUD_PLANE // inventory
 			overlays += I
