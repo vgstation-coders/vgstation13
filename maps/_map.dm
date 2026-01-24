@@ -26,7 +26,7 @@
 	var/nameLong = ""
 	var/list/datum/zLevel/zLevels = list()
 	var/list/datum/virtual_z/vLevels = list()
-	var/list/datum/virtual_z/systemVLevels = list() // System vLevels (station, centcomm, etc) - numbered 101+
+	var/list/datum/virtual_z/systemVLevels = list() // System vLevels (holodeck, transit levels, dungeons, etc) - numbered 101+
 	var/zMainStation = 1
 	var/zCentcomm = 2
 	var/zTCommSat = 3

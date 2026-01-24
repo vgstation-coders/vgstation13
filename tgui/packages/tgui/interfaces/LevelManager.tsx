@@ -192,7 +192,8 @@ const VLevelEntry = (props: { vLevel: VLevel }) => {
   const { vLevel } = props;
   const [showSettings, setShowSettings] = useState(false);
 
-  const isBaseLevel = vLevel.id > SYSTEM_VLEVEL_OFFSET;
+  // Base vLevels (IDs 1-6) should never be paused
+  const isBaseLevel = vLevel.id >= 1 && vLevel.id <= 6;
 
   return (
     <Section
@@ -310,50 +311,54 @@ const VLevelEntry = (props: { vLevel: VLevel }) => {
                   onClick={() => act('cycle_teleport', { ref: vLevel.ref })}
                 />
               </LabeledList.Item>
-              <LabeledList.Item label="Transition Loops">
-                <Button
-                  icon={vLevel.transitionLoops ? 'sync' : 'random'}
-                  color={vLevel.transitionLoops ? 'average' : 'default'}
-                  content={vLevel.transitionLoops ? 'Enabled' : 'Disabled'}
-                  onClick={() =>
-                    act('toggle_transition_loops', { ref: vLevel.ref })
-                  }
-                />
-              </LabeledList.Item>
-              <LabeledList.Item label="Transition Channel">
-                <Button
-                  icon="layer-group"
-                  content={vLevel.transitionChannel}
-                  tooltip="Change which transition channel this vLevel belongs to for space drift"
-                  onClick={() =>
-                    act('change_transition_channel', { ref: vLevel.ref })
-                  }
-                />
-              </LabeledList.Item>
-              <LabeledList.Item label="Transition Crosswraps">
-                <Box inline>
-                  {vLevel.hasCrosswrap ? (
-                    <Box inline color="label" mr={1}>
-                      N:{vLevel.crosswrapNorth || '-'} S:
-                      {vLevel.crosswrapSouth || '-'} E:
-                      {vLevel.crosswrapEast || '-'} W:
-                      {vLevel.crosswrapWest || '-'}
+              {!vLevel.movementJammed && (
+                <>
+                  <LabeledList.Item label="Transition Loops">
+                    <Button
+                      icon={vLevel.transitionLoops ? 'sync' : 'random'}
+                      color={vLevel.transitionLoops ? 'average' : 'default'}
+                      content={vLevel.transitionLoops ? 'Enabled' : 'Disabled'}
+                      onClick={() =>
+                        act('toggle_transition_loops', { ref: vLevel.ref })
+                      }
+                    />
+                  </LabeledList.Item>
+                  <LabeledList.Item label="Transition Channel">
+                    <Button
+                      icon="layer-group"
+                      content={vLevel.transitionChannel}
+                      tooltip="Change which transition channel this vLevel belongs to for space drift"
+                      onClick={() =>
+                        act('change_transition_channel', { ref: vLevel.ref })
+                      }
+                    />
+                  </LabeledList.Item>
+                  <LabeledList.Item label="Transition Crosswraps">
+                    <Box inline>
+                      {vLevel.hasCrosswrap ? (
+                        <Box inline color="label" mr={1}>
+                          N:{vLevel.crosswrapNorth || '-'} S:
+                          {vLevel.crosswrapSouth || '-'} E:
+                          {vLevel.crosswrapEast || '-'} W:
+                          {vLevel.crosswrapWest || '-'}
+                        </Box>
+                      ) : (
+                        <Box inline color="label" mr={1}>
+                          Not configured
+                        </Box>
+                      )}
+                      <Button
+                        icon="arrows-alt"
+                        tooltip="Configure which vLevels to transition to when hitting each edge"
+                        content="Configure"
+                        onClick={() =>
+                          act('configure_crosswrap', { ref: vLevel.ref })
+                        }
+                      />
                     </Box>
-                  ) : (
-                    <Box inline color="label" mr={1}>
-                      Not configured
-                    </Box>
-                  )}
-                  <Button
-                    icon="arrows-alt"
-                    tooltip="Configure which vLevels to transition to when hitting each edge"
-                    content="Configure"
-                    onClick={() =>
-                      act('configure_crosswrap', { ref: vLevel.ref })
-                    }
-                  />
-                </Box>
-              </LabeledList.Item>
+                  </LabeledList.Item>
+                </>
+              )}
             </LabeledList>
           </Section>
         </Box>

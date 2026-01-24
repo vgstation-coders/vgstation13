@@ -6,17 +6,12 @@
 /obj/item/weapon/implant/exile
 	name = "exile"
 	desc = "Prevents returning to where you were implanted."
-	var/illegalZ = null
-	var/siteOfImplant = null
+	var/illegalV = null
+	var/turf/siteOfImplant = null
 	var/beingDeported = FALSE
 	var/beenSpaced = FALSE
 	var/disablePhrase = ""
-	var/list/zlevels = list()
-
-/obj/item/weapon/implant/exile/New()
-	..()
-	if(!zlevels.len)
-		zlevels = list(map.zMainStation, map.zTCommSat, map.zDerelict, map.zAsteroid, map.zDeepSpace)
+	var/list/vlevels = list()
 
 /obj/item/weapon/implant/exile/get_data()
 	return {"
@@ -27,22 +22,28 @@
 
 /obj/item/weapon/implant/exile/implanted(mob/implanter)
 	..()
+	if(!vlevels.len)
+		vlevels = map.vLevels.Copy()
+		for(var/datum/virtual_z/vz in vlevels)
+			if(vz.teleJammed == VZ_TELEPORTATION_FORBIDDEN || vz.level_type == VZ_TRANSIT || vz.level_type == VZ_PARKING || vz.level_type == VZ_MAP_ELEMENT) // Can't visit Centcomm but can still end up on a planet
+				vlevels.Remove(vz)
 	disablePhrase = stripped_input(implanter, "Choose a phrase that disables the implant:")
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
 	disablePhrase = sanitize_simple(disablePhrase, replacechars)
 	addHear()
-	illegalZ = imp_in.z
 	siteOfImplant = get_turf(imp_in)
-	zlevels -= illegalZ
+	illegalV = siteOfImplant.get_virtual_z()
+	vlevels -= illegalV
 	to_chat(imp_in, "<span class='notice'>You shiver as you feel a weak, unsettling film surround you.</span>")
 	imp_in.register_event(/event/moved, src, nameof(src::zBan()))
 
 /obj/item/weapon/implant/exile/proc/zBan(atom/movable/mover)
 	var/turf/T = get_turf(src)
+	var/datum/virtual_z/vz = T.get_virtual_z()
 	if(!beenSpaced)
-		if(T.z != illegalZ)
+		if(vz != illegalV)
 			beenSpaced = TRUE
-	else if((T.z == illegalZ) && (!beingDeported))
+	else if((vz == illegalV) && (!beingDeported))
 		beingDeported = TRUE
 		teleDeport()
 
@@ -50,15 +51,15 @@
 	to_chat(imp_in, "<span class='notice'>Your insides churn and your skin tingles. Something inside your body is emitting a low hum.</span>")
 	spawn(10 SECONDS)
 		var/turf/T = get_turf(src)
-		if(T.z == illegalZ)
-			var/warpZ = pick(zlevels)
-			var/warpTo = locate(rand(TRANSITIONEDGE,world.maxx - TRANSITIONEDGE), rand(TRANSITIONEDGE, world.maxy - TRANSITIONEDGE), warpZ)
-			var/W = get_turf(warpTo)
-			if(!istype(W, /turf/space))
-				to_chat(imp_in, "<span class='notice'>Something inside your body buzzes. The tingling stops.</span>")
-				sleep(3 SECONDS)
-				beingDeported = FALSE
-				return
+		var/datum/virtual_z/vz = T.get_virtual_z()
+		if(vz == illegalV)
+			var/datum/virtual_z/warpV = pick(vlevels)
+			var/x_low = warpV.x_min + ceil(warpV.size_x / 10)
+			var/y_low = warpV.y_min + ceil(warpV.size_y / 10)
+			var/x_high = warpV.x_max - ceil(warpV.size_x / 10)
+			var/y_high = warpV.y_max - ceil(warpV.size_y / 10)
+			var/warpZ = warpV.z()
+			var/turf/warpTo = locate(rand(x_low,x_high), rand(y_low,y_high), warpZ)
 			do_teleport(imp_in, warpTo, 1)
 			imp_in.Knockdown(3)
 			imp_in.Stun(3)
@@ -79,7 +80,13 @@
 		if(FREEDOM)
 			freeFromExile()
 		if(RANDOM_TELEPORT)
-			var/empLoc = locate(rand(TRANSITIONEDGE,world.maxx - TRANSITIONEDGE), rand(TRANSITIONEDGE, world.maxy - TRANSITIONEDGE), pick(zlevels))
+			var/datum/virtual_z/warpV = pick(vlevels)
+			var/x_low = warpV.x_min + ceil(warpV.size_x / 10)
+			var/y_low = warpV.y_min + ceil(warpV.size_y / 10)
+			var/x_high = warpV.x_max - ceil(warpV.size_x / 10)
+			var/y_high = warpV.y_max - ceil(warpV.size_y / 10)
+			var/warpZ = warpV.z()
+			var/turf/empLoc = locate(rand(x_low,x_high), rand(y_low,y_high), warpZ)
 			var/W = get_turf(empLoc)
 			if(!istype(W, /turf/space))
 				empLoc = siteOfImplant

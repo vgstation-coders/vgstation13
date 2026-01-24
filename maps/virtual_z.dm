@@ -92,6 +92,10 @@
 		spawn(0)
 			make_borders()
 
+	// Base vLevels (IDs 1-6) should always start active
+	if(id <= 6)
+		active = TRUE
+
 /proc/list_world_offsets()
 	var/listlen = WORLD_X_OFFSET.len
 	message_admins("len: [listlen]")

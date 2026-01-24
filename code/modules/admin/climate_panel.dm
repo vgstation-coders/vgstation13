@@ -30,8 +30,7 @@
 		<h2 style="text-align:center">Climate Panel - [climates.len] Climate[climates.len > 1 ? "s" : ""]</h2>
 		<table>
 		<tr class="climate-header">
-		<th>Z-Level</th>
-		<th>Sector</th>
+		<th>vLevel</th>
 		<th>Climate Type</th>
 		<th>Current Weather</th>
 		<th>Time Remaining</th>
@@ -57,8 +56,8 @@
 		var/weather_display = W ? "[W.name] <a href='?_src_=vars;Vars=\ref[W]'>\[VV\]</A>" : "<font color='red'>ERROR: NULL</font>"
 		var/timeleft_display = W ? "<a href='?src=\ref[src];climate_timeleft=\ref[W]'>[formatTimeDuration(W.timeleft)]</A>" : "<font color='red'>N/A</font>"
 		dat += {"<tr>
-			<td>Z-[C.v.id]</td>
-			<td>[C.name] <a href='?_src_=vars;Vars=\ref[C]'>\[VV\]</A></td>
+			<td>vZ-[C.v.id]</td>
+			<td>[C.name]<a href='?_src_=vars;Vars=\ref[C]'>\[VV\]</A></td>
 			<td>[weather_display]</td>
 			<td>[timeleft_display]</td>
 			<td><a href='?src=\ref[src];climate_weather=\ref[C]'>Change Weather</A> | <a href='?src=\ref[src];climate_restart=\ref[C]'>Restart</A></td>
