@@ -14,7 +14,7 @@
 /obj/structure/bookcase
 	name = "bookcase"
 	icon = 'icons/obj/library.dmi'
-	icon_state = "book-0"
+	icon_state = "bookcase"
 	anchored = 1
 	density = 1
 	opacity = 1
@@ -153,10 +153,22 @@
 	..()
 
 /obj/structure/bookcase/update_icon()
-	if(contents.len < 5)
-		icon_state = "book-[contents.len]"
-	else
-		icon_state = "book-5"
+	var/x_offset = 0
+	var/y_offset = 0
+	for(var/obj/item/I in contents)
+		var/image/bookoverlay = image(icon,loc,"bookoverlay",layer,dir,x_offset,y_offset)
+		if(istype(I,/obj/item/weapon/book))
+			var/obj/item/weapon/book/B = I
+			bookoverlay.color = B.spine_color
+		else
+			bookoverlay.color = "#840"
+		overlays += bookoverlay
+		x_offset += 4
+		if(x_offset > 20)
+			x_offset = 0
+			y_offset -= 12
+		if(y_offset < -12)
+			break
 
 /obj/structure/bookcase/manuals/medical
 	name = "Medical Manuals bookcase"
@@ -227,6 +239,7 @@
 
 	var/book_width = 600
 	var/book_height = 800
+	var/spine_color = "#444"
 
 /obj/item/weapon/book/New()
 	..()
@@ -424,6 +437,7 @@
 	name = "The King in Yellow"
 	title = "The King in Yellow"
 	occult = 1
+	spine_color = "#400"
 	var/possible_names = list("The King in Yellow", "The Locksmith's Dream", "The Tantra of Worms", "Infinite Jest", "The Legacy of Totalitarianism in a Tundra", "The Rose of Hypatia",
 	"Gravity's Rainbow", "Aristotle's Poetics", "The Geminiad", "My Diary", "The War of the Roads", "The Courier's Tragedy", "The Burning of the Unburnt God", "Love's Labour's Won",
 	"The Necronomicon", "The Funniest Joke in the World", "Woody Got Wood", "Peggy's Revenge", "House of Leaves", "A True and Accurate History of the Shadowless Kings", "The Book of Nod",
@@ -475,7 +489,25 @@
 	if(newbook.cover)
 		icon_state = newbook.cover
 	else
-		icon_state = "book[rand(1,9)]"
+		var/picked_num = rand(1,9)
+		icon_state = "book[picked_num]"
+		switch(picked_num)
+			if(2)
+				spine_color = "#b00"
+			if(3)
+				spine_color = "#880"
+			if(4)
+				spine_color = "#088"
+			if(5)
+				spine_color = "#080"
+			if(6)
+				spine_color = "#808"
+			if(7)
+				spine_color = "#fff"
+			if(8)
+				spine_color = "#000"
+			if(9)
+				spine_color = "#840"
 	item_state = icon_state
 
 /*
