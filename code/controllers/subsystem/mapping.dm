@@ -180,6 +180,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	watch = start_watch()
 	for(var/datum/virtual_z/vz in map.getAllVLevels())
 		vz.initialize_turfs()
+	SSDayNight.get_turflist() //vlevels are ready now
 	log_startup_progress("Initialized virtual z-levels in [stop_watch(watch)]s.")
 
 	watch = start_watch()

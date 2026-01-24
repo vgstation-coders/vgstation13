@@ -38,6 +38,8 @@ var/list/precip_state_to_texture = list()
 // Sets a climate on a specific virtual z-level
 /datum/subsystem/weather/proc/set_climate(var/datum/climate/climate_type, var/datum/virtual_z/vz = null, var/datum/zLevel/zLevel = null, var/random_start = FALSE)
 	if(zLevel)
+		if(!istype(zLevel))
+			zLevel = map.zLevels[zLevel]
 		vz = zLevel.virtual_z_levels[1]
 	if(!vz)
 		CRASH("Failed to set climate: virtual_z was null.")

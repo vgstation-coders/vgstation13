@@ -131,7 +131,11 @@
 				A.jammed = 0
 
 /datum/virtual_z/proc/get_turfs()
-	return block(locate(x_min, y_min, parent_z.z), locate(x_max, y_max, parent_z.z))
+	var/effective_x_max = min(x_max, world.maxx)
+	var/effective_y_max = min(y_max, world.maxy)
+	var/turf/corner1 = locate(x_min, y_min, parent_z.z)
+	var/turf/corner2 = locate(effective_x_max, effective_y_max, parent_z.z)
+	return block(corner1, corner2)
 
 /datum/virtual_z/proc/get_mobs()
 	return mobs_in_vlevel(src, FALSE, mob_list)

@@ -117,6 +117,8 @@
 
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
+	if(!currentrun)
+		currentrun = list()
 	if(world.time >= next_firetime)
 		if(lighting_update_lights_lowpriority.len) //prevent overwriting current lighting changes by not updating lighting until we're done.
 			message_admins("day/night subsystem was fired, when there are still [lighting_update_lights_lowpriority.len] unprocessed lighting updates remaining. Is the server lagging, or was it force-fired? Delaying fire for 15 seconds...")
@@ -139,10 +141,6 @@
 
 		if(MC_TICK_CHECK)
 			return
-
-		if(!resumed)
-			for(var/datum/virtual_z/vz in daynight_v_lvls)
-				currentrun += vz.daynight_turfs.Copy()
 
 
 /datum/subsystem/daynightcycle/advance_time()

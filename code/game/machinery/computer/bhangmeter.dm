@@ -37,7 +37,10 @@ var/list/list/sensed_explosions = list()
 		original_vLevel = forced_vLevel
 	else
 		var/datum/virtual_z/vz = get_virtual_z()
-		original_vLevel = vz.z()
+		if(vz)
+			original_vLevel = vz.z()
+		else
+			original_vLevel = z
 	bhangmeters += src
 	if(ticker && holomaps_initialized)
 		initialize()
