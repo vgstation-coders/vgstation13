@@ -472,13 +472,14 @@
 	if(!newbook || !newbook.id)
 		//failed to find a book. Likely not using a SQL DB. This is a failsafe.
 		//Picks a random useful manual!
-		var/Btype = pick(typesof(/obj/item/weapon/book/manual)-/obj/item/weapon/book/manual)
+		var/Btype = pick(subtypesof(/obj/item/weapon/book/manual))
 		var/obj/item/weapon/book/B = new Btype
 		name = B.name
 		title = B.title
 		author = B.author
 		dat = B.dat
 		icon_state = B.icon_state
+		spine_color = B.spine_color
 		item_state = icon_state
 		qdel(B)
 		return
@@ -492,8 +493,10 @@
 		var/picked_num = rand(1,9)
 		icon_state = "book[picked_num]"
 		switch(picked_num)
+			if(1)
+				spine_color = "#888"
 			if(2)
-				spine_color = "#b00"
+				spine_color = "#800"
 			if(3)
 				spine_color = "#880"
 			if(4)
@@ -505,7 +508,7 @@
 			if(7)
 				spine_color = "#fff"
 			if(8)
-				spine_color = "#000"
+				spine_color = "#444"
 			if(9)
 				spine_color = "#840"
 	item_state = icon_state
