@@ -3527,17 +3527,6 @@
 	icon_state = "dark"
 	},
 /area/medical/virology)
-"ahl" = (
-/obj/effect/landmark/start{
-	name = "Virologist"
-	},
-/obj/structure/bed/chair/office/light{
-	dir = 8
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/medical/virology)
 "ahm" = (
 /obj/machinery/disease2/diseaseanalyser,
 /obj/item/weapon/book/manual/virology_encyclopedia,
@@ -4205,11 +4194,19 @@
 	},
 /area/medical/virology)
 "aiN" = (
-/obj/machinery/atmospherics/unary/vent_scrubber/on,
-/turf/simulated/floor{
-	icon_state = "dark"
+/obj/machinery/door/firedoor/border_only{
+	dir = 4;
+	name = "Firelock East"
 	},
-/area/medical/virology)
+/obj/effect/landmark/start{
+	name = "Medical Doctor"
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (EAST)"
+	},
+/area/medical/sleeper)
 "aiO" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -9659,6 +9656,10 @@
 /obj/item/weapon/storage/box/monkeycubes{
 	pixel_y = 1
 	},
+/obj/item/clothing/mask/muzzle{
+	pixel_x = 9;
+	pixel_y = 7
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark_navy";
@@ -11114,10 +11115,6 @@
 	},
 /obj/item/clothing/suit/strait_jacket{
 	pixel_x = 13;
-	pixel_y = 7
-	},
-/obj/item/clothing/mask/muzzle{
-	pixel_x = 9;
 	pixel_y = 7
 	},
 /obj/item/weapon/folder/white{
@@ -15773,6 +15770,11 @@
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
 	},
+/obj/machinery/light_switch{
+	dir = 4;
+	pixel_x = 24;
+	pixel_y = -8
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -16834,9 +16836,6 @@
 /obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
-	},
-/obj/machinery/light_switch{
-	pixel_y = -24
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable/yellow{
@@ -21202,18 +21201,13 @@
 	},
 /area/medical/sleeper)
 "aNT" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/effect/landmark/start{
 	name = "Medical Doctor"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/medical/sleeper)
+/area/medical/storage)
 "aNU" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -21885,7 +21879,7 @@
 	},
 /area/science/mixing)
 "aPc" = (
-/obj/machinery/atmospherics/unary/vent_scrubber/on,
+/obj/machinery/hologram/holopad,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -25807,7 +25801,10 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 1
 	},
-/obj/machinery/hologram/holopad,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -26367,13 +26364,18 @@
 /turf/simulated/floor/engine/airless,
 /area/science/mixing)
 "aXk" = (
-/obj/effect/landmark/start{
-	name = "Medical Doctor"
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 1
 	},
 /turf/simulated/floor{
-	icon_state = "dark"
+	icon_state = "white"
 	},
-/area/medical/sleeper)
+/area/science/hallway)
 "aXl" = (
 /obj/structure/table,
 /obj/item/weapon/lighter/random{
@@ -27034,10 +27036,10 @@
 /turf/simulated/floor/engine/airless,
 /area/science/mixing)
 "aYG" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -29643,15 +29645,17 @@
 	},
 /area/science/lab)
 "bdl" = (
+/obj/structure/bed/chair/office/light{
+	dir = 8
+	},
+/obj/effect/landmark/start{
+	name = "Virologist"
+	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
 /turf/simulated/floor{
-	dir = 4;
-	icon_state = "whitepurplecorner"
+	icon_state = "dark"
 	},
-/area/science/hallway)
+/area/medical/virology)
 "bdm" = (
 /obj/structure/disposalpipe/segment{
 	dir = 2;
@@ -30629,8 +30633,8 @@
 	},
 /area/science/hallway)
 "beR" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 1
 	},
 /obj/structure/cable/yellow{
 	d1 = 2;
@@ -31814,12 +31818,16 @@
 	dir = 5
 	},
 /obj/structure/table/glass,
-/obj/item/weapon/storage/toolbox/emergency,
-/obj/item/clothing/mask/gas,
+/obj/item/weapon/lighter/random{
+	pixel_x = 3;
+	pixel_y = 12
+	},
 /obj/item/weapon/storage/fancy/cigarettes/dromedaryco{
 	pixel_x = 10;
 	pixel_y = 10
 	},
+/obj/item/weapon/storage/toolbox/emergency,
+/obj/item/clothing/mask/gas,
 /obj/item/weapon/storage/firstaid/o2{
 	pixel_x = -2;
 	pixel_y = 4
@@ -96636,9 +96644,7 @@
 /turf/space,
 /area)
 "dTT" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	on = 1
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark purple stripe";
@@ -111724,6 +111730,9 @@
 	},
 /area/medical/eva)
 "oUX" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 10
+	},
 /turf/simulated/floor{
 	icon_state = "dark purple corner";
 	tag = "icon-dark purple corner (WEST)"
@@ -221288,8 +221297,8 @@ aVS
 pjd
 aNL
 bbO
-bdl
-beL
+bdi
+beK
 bgC
 gst
 bin
@@ -221792,7 +221801,7 @@ bao
 bbO
 bdi
 beR
-bgB
+aXk
 aIt
 bgB
 bln
@@ -225801,8 +225810,8 @@ aPl
 aPm
 aUp
 bap
+aDc
 bap
-aXk
 aUj
 aYI
 bax
@@ -226298,12 +226307,12 @@ aGK
 bgU
 bdn
 aLT
-aNT
+aYI
 aPo
 aQO
 aBH
 bap
-aDc
+bap
 aEH
 aYH
 bau
@@ -226805,7 +226814,7 @@ aPn
 aQQ
 aSE
 aUr
-aUr
+aiN
 aXo
 bbR
 baw
@@ -227780,9 +227789,9 @@ afk
 afG
 agi
 aid
-ahl
 aid
-aiN
+bdl
+aka
 akd
 akK
 alx
@@ -229800,7 +229809,7 @@ anR
 afH
 aql
 auT
-arT
+aNT
 auQ
 wTa
 aye
