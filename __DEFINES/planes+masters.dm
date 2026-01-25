@@ -315,11 +315,12 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	if(client?.prefs.get_pref(/datum/preference_setting/toggle/plane_filters))
 		perception_filters.enabled_filters |= P_FILTER_IMPAIRED_VISION
 
-		var/_a = 9 - _severity
-		var/_nearsightedness_offset = 0
-		if (_a >= 0)
-			_nearsightedness_offset = min(IMPAIRED_VISION_RADIUS_START, 2 ** (_a))
+		var/_exponent = 9 - _severity
 
+		var/_nearsightedness_offset = 0
+
+		if (_exponent >= 0)
+			_nearsightedness_offset = min(IMPAIRED_VISION_RADIUS_START, 2 ** (_exponent))
 
 		if (_animate)
 			filter_update_delay++
@@ -345,10 +346,11 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 					F2:offset = _nearsightedness_offset
 
 	else
-		var/_b = 10 - min(10, _severity * 2)
+		var/_inverse_severity = 10 - min(10, _severity * 2)
+
 		var/_nearsightedness_scale = 1
-		if (_b > 0)
-			_nearsightedness_scale = min(40, 3 * _b)
+		if (_inverse_severity > 0)
+			_nearsightedness_scale = min(40, 3 * _inverse_severity)
 
 
 		var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit_alt"]
@@ -365,10 +367,10 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 			screen.transform = M
 
 
-	var/_b = 10 - _severity
+	var/_inverse_severity = 10 - _severity
 	var/_nearsightedness_scale = 1
-	if (_b > 0)
-		_nearsightedness_scale = min(40, 3 * _b)
+	if (_inverse_severity > 0)
+		_nearsightedness_scale = min(40, 3 * _inverse_severity)
 
 
 	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
