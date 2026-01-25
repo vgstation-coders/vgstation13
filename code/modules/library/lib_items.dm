@@ -166,11 +166,7 @@
 	var/y_offset = 0
 	for(var/obj/item/I in contents)
 		var/image/bookoverlay = image(icon,loc,"bookoverlay",layer,dir,x_offset,y_offset)
-		if(istype(I,/obj/item/weapon/book))
-			var/obj/item/weapon/book/B = I
-			bookoverlay.color = B.spine_color
-		else
-			bookoverlay.color = "#840"
+		bookoverlay.color = I:spine_color || "#840"
 		overlays += bookoverlay
 		x_offset += 4
 		if(x_offset > 20)
