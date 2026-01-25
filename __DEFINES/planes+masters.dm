@@ -281,6 +281,12 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 				var/F2 = planemaster.filters["nearsightedness_radial"]
 				animate(F2, size = 0.01, offset = IMPAIRED_VISION_RADIUS_OUT_OF_VIEW, time = 20)
 
+		var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit_alt"]
+		if (istype(screen))
+			var/matrix/M = matrix()
+			M.Scale(40, 40)
+			animate(screen, transform = M, alpha = 0, time = 20)
+
 	if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
 		perception_filters.enabled_filters &= ~P_FILTER_BLURRY_VISION
 
@@ -294,6 +300,10 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 			for (var/obj/planemaster in perception_filters.perception_planemasters)
 				var/F2 = planemaster.filters["blurriness_displace"]
 				animate(F2, size = 0, time = 60)
+
+		var/obj/abstract/screen/fullscreen/screen = screens["blurry_alt"]
+		if (istype(screen))
+			animate(screen, alpha = 0, time = 20)
 
 var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 
@@ -312,8 +322,9 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 		clear_fullscreen("blind")
 
 /mob/proc/enable_nearsightedness(var/_severity, var/_animate = TRUE)//actually handles blindess too
+	perception_filters.enabled_filters |= P_FILTER_IMPAIRED_VISION
+
 	if(client?.prefs.get_pref(/datum/preference_setting/toggle/plane_filters))
-		perception_filters.enabled_filters |= P_FILTER_IMPAIRED_VISION
 
 		var/_exponent = 9 - _severity
 
@@ -426,8 +437,9 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 //----------------------------------------------------------------------------------------------
 
 /mob/proc/enable_blurriness(var/_blurriness)
+	perception_filters.enabled_filters |= P_FILTER_BLURRY_VISION
+
 	if(client?.prefs.get_pref(/datum/preference_setting/toggle/plane_filters))
-		perception_filters.enabled_filters |= P_FILTER_BLURRY_VISION
 
 		filter_update_delay++
 		spawn(filter_update_delay)
