@@ -65273,7 +65273,9 @@
 /turf/simulated/wall,
 /area/security/prison)
 "cti" = (
-/obj/machinery/atmospherics/unary/vent_scrubber/on,
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "vault";
@@ -65281,6 +65283,9 @@
 	},
 /area/security/brig)
 "ctj" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "vault";
@@ -65950,11 +65955,8 @@
 	icon_state = "dark"
 	},
 /area/security/prison)
-"cuB" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/wall,
-/area/security/brig)
 "cuC" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/door/airlock/glass_security{
 	name = "Solitary Confinement";
 	req_access_txt = "2"
@@ -66512,7 +66514,6 @@
 	},
 /area/security/prison)
 "cvH" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "darkred";
@@ -66520,6 +66521,7 @@
 	},
 /area/security/brig)
 "cvI" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "darkred";
@@ -67080,8 +67082,8 @@
 	},
 /area/security/prison)
 "cwV" = (
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 8
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 6
 	},
 /obj/structure/extinguisher_cabinet{
 	pixel_x = -28
@@ -67093,9 +67095,7 @@
 	},
 /area/security/brig)
 "cwW" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /obj/machinery/hologram/holopad,
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -68006,9 +68006,6 @@
 	},
 /area/security/prison)
 "cyW" = (
-/obj/machinery/light{
-	dir = 8
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
@@ -71168,7 +71165,11 @@
 /obj/machinery/flasher{
 	id_tag = "Security Entrance";
 	pixel_x = -24;
-	range = 1
+	range = 1;
+	pixel_y = 7
+	},
+/obj/machinery/light/small{
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -72672,9 +72673,6 @@
 "cHo" = (
 /obj/machinery/light{
 	dir = 8
-	},
-/obj/structure/extinguisher_cabinet{
-	pixel_x = -28
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -75318,16 +75316,6 @@
 	tag = "icon-darkred"
 	},
 /area/security/brig)
-"cLQ" = (
-/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "darkred";
-	tag = "icon-darkred"
-	},
-/area/security/brig)
 "cLR" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -76085,7 +76073,6 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/cable/yellow{
 	d2 = 2;
 	icon_state = "0-2"
@@ -76093,10 +76080,6 @@
 /turf/simulated/floor/plating,
 /area/security/main)
 "cNj" = (
-/obj/machinery/door/airlock/glass_security{
-	name = "Security Office";
-	req_one_access_txt = "1;4"
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
@@ -76106,6 +76089,11 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 1;
 	name = "Firelock North"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/door/airlock/glass_security{
+	name = "Security Office";
+	req_one_access_txt = "1;4"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -76815,6 +76803,9 @@
 	},
 /area/security/rec_room)
 "cOy" = (
+/obj/structure/extinguisher_cabinet{
+	pixel_y = -28
+	},
 /turf/simulated/floor{
 	icon_state = "neutral"
 	},
@@ -76958,7 +76949,9 @@
 	dir = 4;
 	icon_state = "pipe-c"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 4;
@@ -76993,6 +76986,9 @@
 	d1 = 1;
 	d2 = 4;
 	icon_state = "1-4"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 9
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -81144,6 +81140,9 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 6
+	},
 /turf/simulated/floor{
 	icon_state = "darkred";
 	tag = "icon-darkred"
@@ -81151,7 +81150,7 @@
 /area/security/main)
 "cVF" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 6
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "darkred";
@@ -81503,10 +81502,6 @@
 	name = "Security Equipment Storage"
 	})
 "cWr" = (
-/obj/machinery/door/airlock/command{
-	name = "Head of Security's Office";
-	req_access_txt = "58"
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
@@ -81516,6 +81511,11 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 1;
 	name = "Firelock North"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/door/airlock/command{
+	name = "Head of Security's Office";
+	req_access_txt = "58"
 	},
 /turf/simulated/floor/carpet,
 /area/security/main)
@@ -81863,10 +81863,10 @@
 	dir = 1;
 	icon_state = "pipe-c"
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/carpet,
 /area/security/hos)
 "cWT" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 8;
@@ -82231,10 +82231,10 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/carpet,
 /area/security/hos)
 "cXB" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -82490,6 +82490,7 @@
 	pixel_y = 3;
 	pixel_x = -6
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/carpet,
 /area/security/hos)
 "cXX" = (
@@ -82498,7 +82499,6 @@
 	pixel_x = 10;
 	pixel_y = 15
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/computer/med_data/laptop,
 /turf/simulated/floor/carpet,
 /area/security/hos)
@@ -82778,13 +82778,16 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 5
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/security/hos)
 "cYw" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 5
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -241435,7 +241438,7 @@ cFX
 cHv
 cIQ
 cnQ
-cLQ
+cMa
 cNi
 cOK
 cPX
@@ -252466,7 +252469,7 @@ cqf
 crm
 csn
 cti
-cuB
+ctl
 cvH
 cwV
 cyd
