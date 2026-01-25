@@ -71968,6 +71968,9 @@
 /turf/simulated/floor,
 /area/crew_quarters/courtroom)
 "cFS" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "neutral"
@@ -74305,6 +74308,9 @@
 /obj/structure/table/woodentable,
 /obj/item/weapon/gavelblock,
 /obj/item/weapon/gavelhammer,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
 /turf/simulated/floor,
 /area/crew_quarters/courtroom)
 "cKh" = (
@@ -74318,16 +74324,21 @@
 /obj/item/weapon/book/manual/security_space_law{
 	pixel_y = 6
 	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
 /turf/simulated/floor,
 /area/crew_quarters/courtroom)
 "cKi" = (
 /obj/structure/table/woodentable,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/item/weapon/paper_bin/black{
 	pixel_y = 6
 	},
 /obj/item/weapon/folder/black,
 /obj/item/weapon/pen,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5
+	},
 /turf/simulated/floor,
 /area/crew_quarters/courtroom)
 "cKj" = (
@@ -74340,7 +74351,9 @@
 	},
 /area/crew_quarters/courtroom)
 "cKm" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -75161,9 +75174,6 @@
 	dir = 1;
 	name = "Judge"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /obj/machinery/camera{
 	dir = 1;
 	name = "Courtroom"
@@ -75178,9 +75188,6 @@
 	},
 /area/crew_quarters/courtroom)
 "cLH" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /obj/machinery/firealarm{
 	dir = 1;
 	pixel_y = -24
@@ -75193,9 +75200,6 @@
 /obj/structure/bed/chair{
 	dir = 1;
 	name = "Judge"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 5
 	},
 /obj/structure/painting{
 	icon_state = "justice";
@@ -75210,9 +75214,6 @@
 /obj/structure/bed/chair{
 	dir = 1;
 	name = "Judge"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -75231,9 +75232,6 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /obj/machinery/door/poddoor{
 	density = 0;
 	icon_state = "pdoor0";
@@ -75253,7 +75251,9 @@
 	dir = 1;
 	icon_state = "pipe-c"
 	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5
+	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 8;
@@ -75272,9 +75272,6 @@
 	},
 /area/security/brig)
 "cLM" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /obj/machinery/light_switch{
 	pixel_y = -24
 	},
@@ -75287,9 +75284,6 @@
 	},
 /area/crew_quarters/courtroom)
 "cLN" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /obj/structure/closet/secure_closet/courtroom,
 /turf/simulated/floor{
 	dir = 6;
@@ -75337,8 +75331,8 @@
 	dir = 4;
 	tag = "icon-pipe-j1s (EAST)"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "darkred";
@@ -110550,6 +110544,12 @@
 	icon_state = "dark"
 	},
 /area/medical/medbay)
+"fAr" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/crew_quarters/courtroom)
 "fBE" = (
 /obj/structure/table/glass,
 /obj/item/weapon/paper_bin/green{
@@ -111377,6 +111377,9 @@
 /obj/machinery/door/airlock/glass_security{
 	name = "Courtroom";
 	req_one_access_txt = "38;63"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -238942,7 +238945,7 @@ cEj
 vUt
 gEG
 cIM
-cyP
+fAr
 cLH
 cOF
 bDn
@@ -239444,7 +239447,7 @@ cEj
 cFT
 cHs
 cIM
-cyP
+fAr
 cLM
 cOF
 cOG
