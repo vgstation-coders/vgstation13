@@ -30,6 +30,14 @@
 								/obj/item/weapon/spellbook, \
 								/obj/item/weapon/storage/bible, \
 								/obj/item/dictionary)
+	var/list/starting_books
+
+/obj/structure/bookcase/New()
+	. = ..()
+	if(starting_books?.len)
+		for(var/obj/item/I in starting_books)
+			contents += I
+		update_icon()
 
 /obj/structure/bookcase/cultify()
 	return
@@ -173,37 +181,27 @@
 
 /obj/structure/bookcase/manuals/medical
 	name = "Medical Manuals bookcase"
-
-/obj/structure/bookcase/manuals/medical/New()
-	..()
-	new /obj/item/weapon/book/manual/medical_cloning(src)
-	new /obj/item/weapon/book/manual/chemistry_manual(src)
-	new /obj/item/weapon/book/manual/virology_guide(src)
-	new /obj/item/weapon/book/manual/virology_encyclopedia(src)
-	update_icon()
-
+	starting_books = list(
+		/obj/item/weapon/book/manual/medical_cloning,
+		/obj/item/weapon/book/manual/chemistry_manual,
+		/obj/item/weapon/book/manual/virology_guide,
+		/obj/item/weapon/book/manual/virology_encyclopedia
+	)
 
 /obj/structure/bookcase/manuals/engineering
 	name = "Engineering Manuals bookcase"
-
-/obj/structure/bookcase/manuals/engineering/New()
-	..()
-	new /obj/item/weapon/book/manual/engineering_construction(src)
-	new /obj/item/weapon/book/manual/engineering_particle_accelerator(src)
-	new /obj/item/weapon/book/manual/engineering_hacking(src)
-	new /obj/item/weapon/book/manual/engineering_guide(src)
-	new /obj/item/weapon/book/manual/engineering_singularity_safety(src)
-	new /obj/item/weapon/book/manual/robotics_cyborgs(src)
-	update_icon()
+	starting_books = list(
+		/obj/item/weapon/book/manual/engineering_construction,
+		/obj/item/weapon/book/manual/engineering_particle_accelerator,
+		/obj/item/weapon/book/manual/engineering_hacking,
+		/obj/item/weapon/book/manual/engineering_guide,
+		/obj/item/weapon/book/manual/engineering_singularity_safety,
+		/obj/item/weapon/book/manual/robotics_cyborgs
+	)
 
 /obj/structure/bookcase/manuals/research_and_development
 	name = "R&D Manuals bookcase"
-
-/obj/structure/bookcase/manuals/research_and_development/New()
-	..()
-	new /obj/item/weapon/book/manual/research_and_development(src)
-	update_icon()
-
+	starting_books = list(/obj/item/weapon/book/manual/research_and_development)
 
 /*
  * Book
