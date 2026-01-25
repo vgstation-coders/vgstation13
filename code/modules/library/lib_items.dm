@@ -35,8 +35,8 @@
 /obj/structure/bookcase/New()
 	. = ..()
 	if(starting_books?.len)
-		for(var/obj/item/I in starting_books)
-			contents += I
+		for(var/type in starting_books)
+			new I(src)
 		update_icon()
 
 /obj/structure/bookcase/cultify()
