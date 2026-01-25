@@ -406,6 +406,9 @@
 	if(!destination_port)
 		return
 
+	var/datum/virtual_z/vz = destination_port.get_virtual_z()
+	if(vz.planet)
+		vz.spawn_lz_warnings(src)
 	if(transit_port && get_transit_delay())
 		if(transit_check())
 			close_all_doors()
@@ -521,6 +524,9 @@
 	if(!linked_port)
 		return
 
+	// Track source virtual_z before moving for departure event (use current_port, not linked_port)
+	var/datum/virtual_z/source_vz = current_port?.get_virtual_z()
+
 	//List of all shuttles docked to this shuttle. They will be moved together with their parent.
 	//In the list, shuttles are associated with the docking port they are docked to
 	var/list/docked_shuttles = list()
@@ -589,6 +595,12 @@
 
 		current_port = D
 
+		if(source_vz)
+			INVOKE_EVENT(src, /event/shuttle_departed, "vz" = source_vz, "shuttle" = src)
+		var/datum/virtual_z/dest_vz = D.get_virtual_z()
+		if(dest_vz)
+			INVOKE_EVENT(src, /event/shuttle_arrived, "vz" = dest_vz, "shuttle" = src)
+
 		after_flight() //Shake the shuttle, weaken unbuckled mobs, etc.
 
 		return 1
@@ -606,6 +618,9 @@
 
 //Shakes cameras for mobs
 /datum/shuttle/proc/after_flight()
+	var/datum/virtual_z/vz = current_port.get_virtual_z()
+	if(vz.planet)
+		vz.clear_lz_warnings(src)
 	for(var/atom/movable/AM in linked_area)
 		if(AM.anchored)
 			continue
@@ -1022,10 +1037,6 @@
 	if(source_v.daynight_turfs.len)
 		SSDayNight.update_turf_lighting(old_turfs, source_v)
 
-	//Kill all lz warning effects
-	if(istype(dest_v))
-		dest_v.clear_lz_warnings(src)
-
 	return 1
 
 /datum/shuttle/proc/move_atom(var/atom/movable/AM, var/new_turf, var/rotate)
@@ -1307,9 +1318,14 @@
 	var/list/turf/turf_list = list()
 	var/datum/weakref/shuttle_ref
 	var/datum/weakref/planet_ref
+	var/datum/virtual_z/vz
 	var/obj/docking_port/destination/planet_surface/docking_port
-	var/width = 0
-	var/height = 0
+	var/min_x = 0
+	var/min_y = 0
+	var/max_x = 0
+	var/max_y = 0
+	var/port_x = 0
+	var/port_y = 0
 
 /datum/landing_zone/New(var/datum/shuttle/shuttle, var/datum/planet_type/planet)
 	. = ..()
@@ -1321,7 +1337,7 @@
 		qdel(src)
 		return
 
-	var/datum/virtual_z/vz = planet.v
+	vz = planet.v
 	if(!vz)
 		qdel(src)
 		return
@@ -1329,30 +1345,31 @@
 	shuttle_ref = makeweakref(shuttle)
 	planet_ref = makeweakref(planet)
 
-	var/list/size = get_size(shuttle)
+	var/list/size = shuttle.get_size()
 	if(!size)
 		qdel(src)
 		return
 
-	width = size[1]
-	height = size[2]
+	var/width = size[1]
+	var/height = size[2]
 
-	var/list/landing_info = find_landing_location(shuttle, vz, width, height)
+	var/list/landing_info = find_landing_location(shuttle, width, height)
 	if(!landing_info)
 		qdel(src)
 		return
 
 	var/turf/bottom_left = landing_info["bottom_left"]
+	min_x = bottom_left.x
+	min_y = bottom_left.y
+	max_x = bottom_left.x + width - 1
+	max_y = bottom_left.y + height - 1
 	var/turf/port_turf = landing_info["port_turf"]
+	port_x = port_turf.x
+	port_y = port_turf.y
 	var/port_dir = landing_info["port_dir"]
 
 	// Populate turf list
-	for(var/dx = 0; dx < width; dx++)
-		for(var/dy = 0; dy < height; dy++)
-			var/turf/T = locate(bottom_left.x + dx, bottom_left.y + dy, vz.z())
-			if(!T)
-				CRASH("Landing zone creation failed - turf not found at expected location ([bottom_left.x + dx];[bottom_left.y + dy];[vz.z()])")
-			turf_list += T
+	turf_list = block(locate(min_x, min_y, vz.z()), locate(max_x, max_y, vz.z()))
 
 	// Create the docking port
 	docking_port = new(port_turf)
@@ -1363,27 +1380,10 @@
 	if(planet.default_baseturf)
 		docking_port.base_turf_type = planet.default_baseturf
 
-/datum/landing_zone/proc/get_size(var/datum/shuttle/shuttle)
-	if(!shuttle?.linked_area)
-		return null
+/datum/landing_zone/proc/update_turfs()
+	turf_list = block(locate(min_x, min_y, vz.z()), locate(max_x, max_y, vz.z()))
 
-	var/low_x = world.maxx
-	var/low_y = world.maxy
-	var/high_x = 0
-	var/high_y = 0
-
-	for(var/turf/T in shuttle.linked_area)
-		if(T.x < low_x) low_x = T.x
-		if(T.y < low_y) low_y = T.y
-		if(T.x > high_x) high_x = T.x
-		if(T.y > high_y) high_y = T.y
-
-	if(high_x < low_x || high_y < low_y)
-		return null
-
-	return list(high_x - low_x + 1, high_y - low_y + 1)
-
-/datum/landing_zone/proc/find_landing_location(var/datum/shuttle/shuttle, var/datum/virtual_z/vz, var/x_dim, var/y_dim)
+/datum/landing_zone/proc/find_landing_location(var/datum/shuttle/shuttle, var/x_dim, var/y_dim)
 	if(!shuttle?.linked_port || !vz)
 		return null
 
@@ -1468,9 +1468,20 @@
 		new /obj/effect/landing_zone(T, corner = is_corner)
 
 /datum/landing_zone/proc/clear_warnings()
+	update_turfs()
 	for(var/turf/T in turf_list)
 		for(var/obj/effect/landing_zone/overlay in T)
 			qdel(overlay)
+
+/datum/landing_zone/proc/reset_turfs()
+	var/datum/climate/C = SSweather.get_climate(vz)
+	for(var/turf/T in turf_list)
+		C?.register_weather_turf(T, TRUE)
+		var/area/A = T.loc
+		if(isopensurface(A))
+			vz.daynight_turfs |= T
+	if(turf_list.len && vz)
+		SSDayNight.update_turf_lighting(turf_list, vz)
 
 /datum/landing_zone/proc/is_corner_turf(var/turf/T)
 	if(!turf_list.len || !T)
@@ -1498,13 +1509,6 @@
 	shuttle_ref = null
 	planet_ref = null
 	return ..()
-
-/datum/landing_zone/proc/get_shuttle()
-	return shuttle_ref?.get()
-
-/datum/landing_zone/proc/get_planet()
-	return planet_ref?.get()
-
 
 #undef INIT_SUCCESS
 #undef INIT_NO_AREA

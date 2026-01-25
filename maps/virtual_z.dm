@@ -35,6 +35,7 @@
 
 	// Daynight cycle support
 	var/current_timeOfDay = TOD_DAYTIME
+	var/current_light_power = 1
 	var/next_firetime = 0
 	var/list/daynight_turfs = list()
 	var/weather_mod = 1 // Weather light modifier
@@ -518,30 +519,30 @@
 		return null
 
 	// Check if this shuttle already has a landing zone on this planet
-	if(shuttle_landing_zones[shuttle.type])
-		var/datum/landing_zone/existing_lz = shuttle_landing_zones[shuttle.type]
+	if(shuttle_landing_zones[shuttle])
+		var/datum/landing_zone/existing_lz = shuttle_landing_zones[shuttle]
 		if(existing_lz?.docking_port?.loc)
-			existing_lz.spawn_warnings()
 			return existing_lz.docking_port
 		else
-			shuttle_landing_zones -= shuttle.type
+			shuttle_landing_zones -= shuttle
+			shuttle.unregister_event(/event/shuttle_arrived, src, nameof(src::on_shuttle_arrived()))
+			shuttle.unregister_event(/event/shuttle_departed, src, nameof(src::on_shuttle_departed()))
 
 	var/datum/landing_zone/new_lz = new(shuttle, planet)
 	if(!new_lz || !new_lz.docking_port)
 		return
+	shuttle_landing_zones[shuttle] = new_lz
 
-	// Remember this landing zone for this shuttle type
-	shuttle_landing_zones[shuttle.type] = new_lz
-
-	new_lz.spawn_warnings()
+	shuttle.register_event(/event/shuttle_arrived, src, nameof(src::on_shuttle_arrived()))
+	shuttle.register_event(/event/shuttle_departed, src, nameof(src::on_shuttle_departed()))
 
 	return new_lz.docking_port
 
-/datum/virtual_z/proc/spawn_lz_warnings(var/datum/shuttle/shuttle, var/list/size, var/obj/docking_port/port)
+/datum/virtual_z/proc/spawn_lz_warnings(var/datum/shuttle/shuttle)
 	if(!shuttle)
 		return
 
-	var/datum/landing_zone/lz = shuttle_landing_zones[shuttle.type]
+	var/datum/landing_zone/lz = shuttle_landing_zones[shuttle]
 	if(!lz)
 		return
 
@@ -551,11 +552,37 @@
 	if(!shuttle)
 		return
 
-	var/datum/landing_zone/lz = shuttle_landing_zones[shuttle.type]
+	var/datum/landing_zone/lz = shuttle_landing_zones[shuttle]
 	if(!lz)
 		return
 
 	lz.clear_warnings()
+
+/datum/virtual_z/proc/reset_lz_turfs(var/datum/shuttle/shuttle)
+	if(!shuttle)
+		return
+
+	var/datum/landing_zone/lz = shuttle_landing_zones[shuttle]
+	if(!lz)
+		return
+
+	lz.reset_turfs()
+
+// Called when shuttle arrives at a virtual_z
+/datum/virtual_z/proc/on_shuttle_arrived(var/datum/virtual_z/vz, var/datum/shuttle/shuttle)
+	if(vz != src)
+		return
+	if(!shuttle)
+		return
+	clear_lz_warnings(shuttle)
+
+// Called when shuttle departs from a virtual_z
+/datum/virtual_z/proc/on_shuttle_departed(var/datum/virtual_z/vz, var/datum/shuttle/shuttle)
+	if(vz != src)
+		return
+	if(!shuttle)
+		return
+	reset_lz_turfs(shuttle)
 
 /proc/vz_at_loc(var/x_co,var/y_co,var/z_co)
 	var/datum/zLevel/true_z = map.zLevels[z_co]

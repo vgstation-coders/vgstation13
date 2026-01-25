@@ -131,8 +131,9 @@ On the map dm file, redefine the following:
 		return
 
 	// Use the same light power calculation as global cycle
-	var/light_power = (vz.current_timeOfDay == TOD_NIGHTTIME) ? 3 : 10
-	light_power *= vz.weather_mod // Apply planet-specific weather modifier
+	vz.current_light_power = (vz.current_timeOfDay == TOD_NIGHTTIME) ? 3 : 10
+	vz.current_light_power *= vz.weather_mod // Apply planet-specific weather modifier
+	var/light_power = vz.current_light_power
 	var/lowpriority = !immediate
 
 	for(var/turf/T in vz.daynight_turfs)
@@ -146,8 +147,7 @@ On the map dm file, redefine the following:
 		return
 
 	var/timeOfDay = vz.current_timeOfDay
-	var/light_power = (timeOfDay == TOD_NIGHTTIME) ? 3 : 10
-	light_power *= vz.weather_mod
+	var/light_power = vz.current_light_power
 
 	for(var/turf/T in turfs)
 		T.set_light(next_light_range, light_power, timeOfDay, lowpriority = FALSE)

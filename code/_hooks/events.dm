@@ -283,6 +283,18 @@
 // direction: shuttle direction
 /event/shuttletimer
 
+// Called when a shuttle arrives at a virtual_z (after all turfs have been placed)
+// Arguments:
+// datum/virtual_z/vz: the virtual z-level the shuttle arrived at
+// datum/shuttle/shuttle: the shuttle that arrived
+/event/shuttle_arrived
+
+// Called when a shuttle departs from a virtual_z (after all turfs have been replaced with base turfs)
+// Arguments:
+// datum/virtual_z/vz: the virtual z-level the shuttle departed from
+// datum/shuttle/shuttle: the shuttle that departed
+/event/shuttle_departed
+
 // Called by miscellaneous functions not covered by entered, equipped and unequipped events for cameranet updates
 // Arguments:
 // atom/movable/mover: the atom changing status on the cameranet

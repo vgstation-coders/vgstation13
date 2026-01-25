@@ -1043,10 +1043,13 @@ var/global/floorIsLava = 0
 			// Check landing zone status
 			var/landing_zone_status = ""
 			var/is_generating = SSmapping.generating && (SSmapping.current_planet == planet)
-
+			var/datum/shuttle/exploration/E
+			for(var/datum/shuttle/S in shuttles)
+				if(istype(S, /datum/shuttle/exploration))
+					E = S
 			if(is_generating)
 				landing_zone_status = "<i>Generating...</i>"
-			else if(vz.shuttle_landing_zones[/datum/shuttle/exploration])
+			else if(E && vz.shuttle_landing_zones[E])
 				landing_zone_status = "Active"
 			else
 				landing_zone_status = "<A href='?_src_=holder;procgen_add_landing_zone=\ref[planet]'>Add Landing Zone</A>"

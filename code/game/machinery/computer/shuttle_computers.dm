@@ -337,10 +337,7 @@
 
 	if(istype(selected_port, /obj/docking_port/destination/planet_surface))
 		var/obj/docking_port/destination/planet_surface/surface_port = selected_port
-		var/list/shuttle_size = shuttle.get_size()
 		var/datum/virtual_z/vz = surface_port.get_virtual_z()
-		if(shuttle_size && vz)
-			vz.spawn_lz_warnings(shuttle, shuttle_size, surface_port)
 
 		// Reuse existing transit port if valid, otherwise create a new one
 		var/obj/docking_port/destination/transit/transit_port = shuttle.transit_port
