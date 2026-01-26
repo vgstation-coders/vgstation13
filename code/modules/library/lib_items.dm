@@ -525,8 +525,7 @@
 
 /obj/item/weapon/barcodescanner/attack_self(mob/user as mob)
 	mode = (mode + 1) % 4
-	to_chat(user, "<span class='notice'>[src] status display shows: Mode [mode] - [get_mode_desc()]</span>")
-	computer_status(user)
+	show_status(user)
 
 /obj/item/weapon/barcodescanner/proc/get_mode_desc()
 	switch(mode)
@@ -541,7 +540,8 @@
 		else
 			return "ERROR"
 
-/obj/item/weapon/barcodescanner/proc/computer_status(mob/user)
+/obj/item/weapon/barcodescanner/proc/show_status(mob/user)
+	to_chat(user,"<span class='notice'>[src] is set to mode [mode] - [get_mode_desc()]</span>")
 	if(src.computer)
 		to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
 	else
@@ -549,8 +549,7 @@
 
 /obj/item/weapon/barcodescanner/examine(mob/user, size, show_name)
 	. = ..()
-	to_chat(user,"<span class='notice'>[src] is set to mode [mode] - [get_mode_desc()]</span>")
-	computer_status(user)
+	show_status(user)
 
 /obj/item/weapon/barcodescanner/Destroy()
 	book = null
