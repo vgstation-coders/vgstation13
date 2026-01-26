@@ -294,6 +294,25 @@ var/global/datum/library_catalog/library_catalog = new()
 		book_state = input(usr,"Select a book icon","Book icon") as null|anything in list("book1","book2","book3","book4","book5","book6","book7","book8","book9")
 		if(!book_state)
 			book_state = "book1"
+		switch(book_state)
+			if("book1")
+				spine_color = "#888888"
+			if("book2")
+				spine_color = "#880000"
+			if("book3")
+				spine_color = "#888800"
+			if("book4")
+				spine_color = "#008888"
+			if("book5")
+				spine_color = "#008800"
+			if("book6")
+				spine_color = "#880088"
+			if("book7")
+				spine_color = "#ffffff"
+			if("book8")
+				spine_color = "#444444"
+			if("book9")
+				spine_color = "#884400"
 	else if(href_list["spine"])
 		spine_color = input(usr,"Set a spine color","Spine color",spine_color) as color
 	else if(href_list["remove"])
