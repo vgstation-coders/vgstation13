@@ -524,28 +524,33 @@
 	var/mode = 0 					// 0 - Scan only, 1 - Scan and Set Buffer, 2 - Scan and Attempt to Check In, 3 - Scan and Attempt to Add to Inventory
 
 /obj/item/weapon/barcodescanner/attack_self(mob/user as mob)
-	mode += 1
-	if(mode > 3)
-		mode = 0
-	to_chat(user, "[src] Status Display:")
-	var/modedesc
+	mode = (mode + 1) % 4
+	to_chat(user, "<span class='notice'>[src] status display shows: Mode [mode] - [get_mode_desc()]</span>")
+	computer_status(user)
+
+/obj/item/weapon/barcodescanner/proc/get_mode_desc()
 	switch(mode)
 		if(0)
-			modedesc = "Scan book to local buffer."
+			return "Scan book to local buffer."
 		if(1)
-			modedesc = "Scan book to local buffer and set associated computer buffer to match."
+			return "Scan book to local buffer and set associated computer buffer to match."
 		if(2)
-			modedesc = "Scan book to local buffer, attempt to check in scanned book."
+			return "Scan book to local buffer, attempt to check in scanned book."
 		if(3)
-			modedesc = "Scan book to local buffer, attempt to add book to general inventory."
+			return "Scan book to local buffer, attempt to add book to general inventory."
 		else
-			modedesc = "ERROR"
-	to_chat(user, " - Mode [mode] : [modedesc]")
+			return "ERROR"
+
+/obj/item/weapon/barcodescanner/proc/computer_status(mob/user)
 	if(src.computer)
 		to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
 	else
 		to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
-	to_chat(user, "\n")
+
+/obj/item/weapon/barcodescanner/examine(mob/user, size, show_name)
+	. = ..()
+	to_chat(user,"<span class='notice'>[src] is set to mode [mode] - [get_mode_desc()]</span>")
+	computer_status(user)
 
 /obj/item/weapon/barcodescanner/Destroy()
 	book = null
