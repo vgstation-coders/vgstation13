@@ -28153,7 +28153,8 @@
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
-	icon_state = "dark"
+	icon_state = "dark_navy_full";
+	tag = "icon-dark_navy_full"
 	},
 /area/medical/medbay2)
 "baA" = (
@@ -28988,7 +28989,8 @@
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
-	icon_state = "dark"
+	icon_state = "dark_navy_full";
+	tag = "icon-dark_navy_full"
 	},
 /area/medical/medbay2)
 "bbY" = (
@@ -37376,6 +37378,9 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "bqF" = (
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
 /obj/machinery/door/airlock/glass_medical{
 	name = "Paramedic Station";
 	req_access_txt = "500"
@@ -112127,7 +112132,7 @@
 /obj/item/clothing/accessory/storage/webbing/paramed,
 /obj/machinery/light_switch{
 	pixel_x = -22;
-	pixel_y = -5
+	pixel_y = -9
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -226816,7 +226821,7 @@ bio
 bio
 bio
 bof
-aUy
+bpL
 bpL
 buo
 bvB
@@ -228824,7 +228829,7 @@ aLQ
 aBD
 bpE
 aBw
-bpL
+aUy
 sRx
 buo
 bvD
