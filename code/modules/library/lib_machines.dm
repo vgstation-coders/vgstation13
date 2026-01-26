@@ -243,9 +243,10 @@ var/global/datum/library_catalog/library_catalog = new()
 /obj/machinery/bookbinder/New()
 	. = ..()
 	component_parts = newlist(
-		//obj/item/weapon/circuitboard/bookbinder,
+		/obj/item/weapon/circuitboard/bookbinder,
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/console_screen
 	)
 	RefreshParts()
 
