@@ -12875,6 +12875,10 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/machinery/firealarm{
+	dir = 1;
+	pixel_y = -24
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark purple stripe";
@@ -12922,10 +12926,6 @@
 	},
 /area/medical/medbay)
 "azK" = (
-/obj/machinery/firealarm{
-	dir = 4;
-	pixel_x = 24
-	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 4
 	},
@@ -14916,7 +14916,9 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
+	},
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark floor stripe";
@@ -15871,11 +15873,11 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/obj/item/device/radio/intercom{
-	name = "Station Intercom (General)";
-	pixel_x = 29
-	},
 /obj/structure/disposalpipe/segment,
+/obj/machinery/firealarm{
+	dir = 4;
+	pixel_x = 24
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16893,8 +16895,8 @@
 	pixel_y = 24;
 	pixel_x = 3
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 10
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -18022,9 +18024,6 @@
 	pixel_x = 24;
 	pixel_y = -8
 	},
-/obj/machinery/atmospherics/unary/vent_pump{
-	on = 1
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
@@ -19062,7 +19061,9 @@
 	},
 /area/medical/surgery)
 "aKn" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1
+	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -19939,6 +19940,7 @@
 	desc = "Someone has crossed out the Space from Space Cleaner and written in Surgery. 'Do not remove under punishment of death!!!' is scrawled on the back.";
 	name = "Surgery Cleaner"
 	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -19960,7 +19962,7 @@
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 10
 	},
-/obj/structure/bed/roller/deff,
+/obj/structure/closet/paramedic,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark_navy";
@@ -21125,6 +21127,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
 /area/medical/surgery)
 "aNN" = (
@@ -21943,7 +21946,7 @@
 	dir = 1
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 10
+	dir = 9
 	},
 /turf/simulated/floor{
 	icon_state = "dark neutral corner";
@@ -21963,14 +21966,16 @@
 	},
 /area/medical/surgery)
 "aPk" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/recharger/defibcharger/wallcharger{
-	pixel_x = -24
-	},
 /obj/machinery/camera{
 	name = "Medbay - Cryogenics";
 	dir = 4;
 	pixel_y = 5
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/light_switch{
+	dir = 4;
+	pixel_x = -22;
+	pixel_y = -10
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -22022,11 +22027,11 @@
 	},
 /area/medical/sleeper)
 "aPq" = (
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	initialize_directions = 11
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	initialize_directions = 11
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -22762,7 +22767,7 @@
 /area/medical/surgery)
 "aQM" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 10
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark floor stripe";
@@ -22771,15 +22776,9 @@
 /area/medical/surgery)
 "aQN" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/firealarm{
-	dir = 8;
-	pixel_x = -26;
+/obj/machinery/recharger/defibcharger/wallcharger{
+	pixel_x = -24;
 	pixel_y = -4
-	},
-/obj/machinery/light_switch{
-	dir = 4;
-	pixel_x = -22;
-	pixel_y = 10
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -22939,12 +22938,12 @@
 	},
 /area/medical/medbay2)
 "aRa" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -23736,21 +23735,6 @@
 	icon_state = "dark floor full";
 	tag = "icon-dark floor full"
 	},
-/area/medical/surgery)
-"aSB" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
 /area/medical/surgery)
 "aSC" = (
 /obj/machinery/door/firedoor/border_only{
@@ -24811,10 +24795,7 @@
 /turf/simulated/floor/engine,
 /area/science/telescience)
 "aUl" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark floor stripe";
@@ -24822,9 +24803,6 @@
 	},
 /area/medical/sleeper)
 "aUm" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 5
-	},
 /obj/machinery/bioprinter,
 /turf/simulated/floor{
 	dir = 4;
@@ -24833,11 +24811,8 @@
 	},
 /area/medical/sleeper)
 "aUo" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 10
-	},
-/obj/machinery/alarm{
-	pixel_y = 22
+/obj/machinery/firealarm{
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -25653,7 +25628,7 @@
 /turf/simulated/floor/engine/airless,
 /area/science/mixing)
 "aVP" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
 	},
 /turf/simulated/floor{
@@ -25695,6 +25670,10 @@
 /area/science/telescience)
 "aVT" = (
 /obj/machinery/bioprinter/prosthetics,
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -23
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -26391,11 +26370,6 @@
 	pixel_y = 10
 	},
 /obj/item/weapon/storage/firstaid/regular,
-/obj/machinery/firealarm{
-	dir = 8;
-	pixel_x = -26;
-	pixel_y = 5
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -31844,9 +31818,8 @@
 	},
 /area/medical/paramedics)
 "bgG" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -33471,14 +33444,6 @@
 	icon_state = "dark"
 	},
 /area/medical/paramedics)
-"bjL" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/medical/sleeper)
 "bjN" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -34534,15 +34499,10 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 8
 	},
-/obj/machinery/power/apc{
-	dir = 8;
-	pixel_x = -24
+/obj/structure/closet/walllocker/defiblocker{
+	pixel_x = -32
 	},
-/obj/structure/cable/yellow{
-	icon_state = "0-4";
-	tag = "icon-0-4"
-	},
-/obj/structure/closet/paramedic,
+/obj/structure/bed/roller/deff,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark_navy";
@@ -34573,11 +34533,6 @@
 	},
 /area/science/lab)
 "blz" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/machinery/atmospherics/binary/volume_pump{
 	dir = 8;
 	name = "Emergency Vacuum Pump"
@@ -34585,6 +34540,11 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/landmark/start{
 	name = "Paramedic"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -35477,13 +35437,6 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (NORTH)"
 	},
-/obj/machinery/requests_console{
-	department = "Science";
-	departmentType = 2;
-	name = "Science Requests Console";
-	phone_name = "Research And Development";
-	pixel_x = 28
-	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -35492,6 +35445,11 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 1;
 	on = 1
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -36807,9 +36765,12 @@
 	},
 /area/science/lab)
 "bpy" = (
-/obj/machinery/firealarm{
-	dir = 1;
-	pixel_y = -24
+/obj/machinery/requests_console{
+	department = "Science";
+	departmentType = 2;
+	name = "Science Requests Console";
+	phone_name = "Research And Development";
+	pixel_y = -28
 	},
 /turf/simulated/floor{
 	dir = 6;
@@ -37442,9 +37403,6 @@
 /turf/simulated/floor/plating,
 /area/medical/paramedics)
 "bqH" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /obj/structure/cable/yellow{
 	d1 = 2;
 	d2 = 8;
@@ -37452,6 +37410,9 @@
 	},
 /obj/machinery/alarm{
 	pixel_y = 23
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -67870,10 +67831,10 @@
 /turf/simulated/floor,
 /area/hallway/primary/aft)
 "cyE" = (
-/obj/machinery/light,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/machinery/light,
 /turf/simulated/floor,
 /area/hallway/primary/aft)
 "cyF" = (
@@ -81032,7 +80993,10 @@
 	},
 /area/security/range)
 "cVs" = (
-/obj/structure/bed/chair/office/dark,
+/obj/machinery/hologram/holopad{
+	holo_range = 10
+	},
+/obj/machinery/station_map,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark-markings"
@@ -81048,16 +81012,6 @@
 /obj/machinery/computer/secure_data,
 /turf/simulated/floor{
 	icon_state = "dark"
-	},
-/area/bridge)
-"cVv" = (
-/obj/machinery/hologram/holopad{
-	holo_range = 10
-	},
-/obj/machinery/station_map,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark-markings"
 	},
 /area/bridge)
 "cVw" = (
@@ -111287,6 +111241,10 @@
 	tag = "icon-warning (WEST)"
 	},
 /obj/structure/disposalpipe/segment,
+/obj/item/device/radio/intercom{
+	name = "Station Intercom (General)";
+	pixel_x = 29
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -111445,6 +111403,13 @@
 	icon_state = "bluecorner"
 	},
 /area/hallway/primary/fore)
+"mtM" = (
+/obj/structure/bed/chair/office/dark,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "dark-markings"
+	},
+/area/bridge)
 "mut" = (
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 9
@@ -112137,6 +112102,10 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -112153,8 +112122,17 @@
 /area/shuttle/mining/station)
 "rTt" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/power/apc{
+	dir = 8;
+	pixel_x = -26;
+	pixel_y = -1
+	},
 /obj/structure/closet/secure_closet/paramedic,
 /obj/item/clothing/accessory/storage/webbing/paramed,
+/obj/structure/cable/yellow{
+	icon_state = "0-4";
+	tag = "icon-0-4"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -223311,7 +223289,7 @@ vMn
 aNK
 aPj
 aQM
-aSB
+aGA
 aUm
 aVT
 aQX
@@ -224819,7 +224797,7 @@ aPk
 aQN
 aSC
 aXw
-bjL
+aXw
 bbN
 aRa
 aXw
@@ -226409,7 +226387,7 @@ cSb
 cSb
 cTU
 cUK
-cVs
+mtM
 cWa
 cWF
 cXm
@@ -227915,7 +227893,7 @@ cOq
 nil
 cTZ
 cUL
-cVv
+cVs
 cWg
 cWF
 cXm
@@ -229421,7 +229399,7 @@ cSf
 cSf
 cUa
 cUM
-cVs
+mtM
 cWi
 cWF
 cXm
