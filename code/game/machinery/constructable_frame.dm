@@ -720,7 +720,7 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/micro_laser = 1,
 							/obj/item/weapon/stock_parts/console_screen = 2,)
 
-/obj/item/weapon/circuitboard/book_binder
+/obj/item/weapon/circuitboard/bookbinder
 	name = "Circuit board (Book Binder)"
 	desc = "A circuit board for running a machine that binds paper into books."
 	build_path = /obj/machinery/bookbinder
