@@ -252,8 +252,10 @@ var/global/datum/library_catalog/library_catalog = new()
 
 /obj/machinery/bookbinder/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+	for(var/obj/item/weapon/stock_parts/micro_laser/SP in component_parts)
 		T += SP.rating
+	for(var/obj/item/weapon/stock_parts/manipulator/SP2 in component_parts)
+		T += SP2.rating
 	bind_time = 12/T
 
 /obj/machinery/bookbinder/attackby(var/obj/O as obj, var/mob/user as mob)
