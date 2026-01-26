@@ -19920,6 +19920,10 @@
 	pixel_x = 8;
 	pixel_y = 6
 	},
+/obj/item/tool/cautery{
+	pixel_x = 2;
+	pixel_y = 3
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
