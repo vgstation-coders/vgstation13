@@ -226,33 +226,73 @@ var/global/datum/library_catalog/library_catalog = new()
  * Book binder
  */
 /obj/machinery/bookbinder
-	name = "Book Binder"
+	name = "\improper Book Binder"
 	desc = "Used in binding ordinary paper into a book that could be archived."
 	icon = 'icons/obj/library.dmi'
 	icon_state = "binder"
 	anchored = 1
 	density = 1
 	machine_flags = WRENCHMOVE | FIXED2WORK
+	var/list/obj/item/weapon/paper/sheets = list()
+	var/book_name = "Print Job"
+	var/book_state = "book1"
 
 /obj/machinery/bookbinder/attackby(var/obj/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/paper) || istype(O, /obj/item/weapon/paper/nano))
+	if(istype(O, /obj/item/weapon/paper))
 		if(user.drop_item(O, src))
 			user.visible_message("[user] loads some paper into [src].", "You load some paper into [src].")
-			visible_message("[src] begins to hum as it warms up its printing drums.")
-			playsound(loc, 'sound/machines/electric_loom.ogg', 50, 1)
-			spawn(3 SECONDS)
-				playsound(loc, 'sound/machines/electric_loom.ogg', 50, 1)
-			anim(target = src, a_icon = 'icons/obj/library.dmi', flick_anim = "binder_ani", sleeptime = 6 SECONDS)
-			sleep(6 SECONDS)
-			visible_message("[src] whirs as it prints and binds a new book.")
-			var/obj/item/weapon/book/b = new(loc)
-			b.dat = O:info
-			b.name = "Print Job #[rand(100, 999)]"
-			b.icon_state = "book[rand(1,9)]"
-			b.item_state = b.icon_state
-			QDEL_NULL(O)
+			sheets += O
 	else
 		return ..()
+
+/obj/machinery/bookbinder/attack_hand(mob/user as mob)
+	user.set_machine(src)
+
+	var/dat = {"Book name: <A href='?src=\ref[src];name=1'>[book_name]</A><BR>
+	Book icon: <A href='?src=\ref[src];icon=1'>[book_state]</A><BR>
+	Current number of sheets: <A href='?src=\ref[src];remove=1'>[sheets.len]</A><BR>
+	<A href='?src=\ref[src];bind=1'>Bind sheets</A>"}
+
+	var/datum/browser/popup = new(user, "bookbinder", "Book Binder", 375, 500, src)
+	popup.set_content(dat)
+	popup.open()
+	onclose(user, "bookbinder")
+
+/obj/machinery/bookbinder/Topic(href,href_list)
+	. = ..()
+	if(.)
+		return
+
+	if(href_list["name"])
+		book_name = input(usr,"Set a book name","Book name",book_name)
+	else if(href_list["icon"])
+		book_state = input(usr,"Select a book icon","Book icon") as null|anything in list("book1","book2","book3","book4","book5","book6","book7","book8","book9")
+		if(!book_state)
+			book_state = "book1"
+	else if(href_list["remove"])
+		if(sheets.len)
+			for(var/obj/item/weapon/paper/sheet in sheets)
+				sheet.forceMove(loc)
+				sheets -= sheet
+			to_chat(usr,"<span class='notice'>You empty all of the sheets out of [src].</span>")
+	else if(href_list["bind"])
+		visible_message("[src] begins to hum as it warms up its printing drums.")
+		playsound(loc, 'sound/machines/electric_loom.ogg', 50, 1)
+		spawn(3 SECONDS)
+			playsound(loc, 'sound/machines/electric_loom.ogg', 50, 1)
+		anim(target = src, a_icon = 'icons/obj/library.dmi', flick_anim = "binder_ani", sleeptime = 6 SECONDS)
+		sleep(6 SECONDS)
+		visible_message("[src] whirs as it prints and binds a new book.")
+		var/obj/item/weapon/book/b = new(loc)
+		b.dat = ""
+		for(var/obj/item/weapon/paper/sheet in sheets)
+			b.dat += (sheet.info + "<BR>")
+			sheets -= sheet
+			QDEL_NULL(sheet)
+		b.name = book_name
+		b.icon_state = book_state
+		b.item_state = b.icon_state
+	updateUsrDialog()
 
 var/global/datum/research/research_archive_datum
 var/list/important_archivists = list()
