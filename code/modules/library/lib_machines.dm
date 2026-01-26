@@ -251,7 +251,7 @@ var/global/datum/library_catalog/library_catalog = new()
 
 	var/dat = {"Book name: <A href='?src=\ref[src];name=1'>[book_name]</A><BR>
 	Book author: <A href='?src=\ref[src];author=1'>[book_author]</A><BR>
-	Book icon: <A href='?src=\ref[src];icon=1'>[book_state]</A><BR>
+	Book icon: <A href='?src=\ref[src];icon=1'><img class='icon misc' src='data:image/png;base64,[icon2base64(icon(icon,book_state))]'></A><BR>
 	Current number of sheets: <A href='?src=\ref[src];remove=1'>[sheets.len]</A><BR>
 	<A href='?src=\ref[src];bind=1'>Bind sheets</A>"}
 
@@ -294,6 +294,7 @@ var/global/datum/library_catalog/library_catalog = new()
 			sheets -= sheet
 			QDEL_NULL(sheet)
 		b.name = book_name
+		b.title = book_name
 		b.author = book_author
 		b.icon_state = book_state
 		b.item_state = b.icon_state
