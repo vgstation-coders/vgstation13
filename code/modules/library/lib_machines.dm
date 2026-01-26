@@ -235,6 +235,7 @@ var/global/datum/library_catalog/library_catalog = new()
 	machine_flags = WRENCHMOVE | FIXED2WORK
 	var/list/obj/item/weapon/paper/sheets = list()
 	var/book_name = "Print Job"
+	var/book_author = "Alan Smithee"
 	var/book_state = "book1"
 
 /obj/machinery/bookbinder/attackby(var/obj/O as obj, var/mob/user as mob)
@@ -249,6 +250,7 @@ var/global/datum/library_catalog/library_catalog = new()
 	user.set_machine(src)
 
 	var/dat = {"Book name: <A href='?src=\ref[src];name=1'>[book_name]</A><BR>
+	Book author: <A href='?src=\ref[src];name=1'>[book_author]</A><BR>
 	Book icon: <A href='?src=\ref[src];icon=1'>[book_state]</A><BR>
 	Current number of sheets: <A href='?src=\ref[src];remove=1'>[sheets.len]</A><BR>
 	<A href='?src=\ref[src];bind=1'>Bind sheets</A>"}
@@ -265,6 +267,8 @@ var/global/datum/library_catalog/library_catalog = new()
 
 	if(href_list["name"])
 		book_name = input(usr,"Set a book name","Book name",book_name)
+	if(href_list["author"])
+		book_author = input(usr,"Set a book author","Book author",book_author)
 	else if(href_list["icon"])
 		book_state = input(usr,"Select a book icon","Book icon") as null|anything in list("book1","book2","book3","book4","book5","book6","book7","book8","book9")
 		if(!book_state)
@@ -290,6 +294,7 @@ var/global/datum/library_catalog/library_catalog = new()
 			sheets -= sheet
 			QDEL_NULL(sheet)
 		b.name = book_name
+		b.author = book_author
 		b.icon_state = book_state
 		b.item_state = b.icon_state
 	updateUsrDialog()
