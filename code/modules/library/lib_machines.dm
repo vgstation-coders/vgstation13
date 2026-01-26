@@ -233,10 +233,27 @@ var/global/datum/library_catalog/library_catalog = new()
 	anchored = 1
 	density = 1
 	machine_flags = WRENCHMOVE | FIXED2WORK
+	var/bind_time = 6
 	var/list/obj/item/weapon/paper/sheets = list()
 	var/book_name = "Print Job"
 	var/book_author = "Alan Smithee"
 	var/book_state = "book1"
+	var/spine_color = "#888888"
+
+/obj/machinery/bookbinder/New()
+	. = ..()
+	component_parts = newlist(
+		//obj/item/weapon/circuitboard/bookbinder,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/manipulator,
+	)
+	RefreshParts()
+
+/obj/machinery/bookbinder/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		T += SP.rating
+	bind_time = 12/T
 
 /obj/machinery/bookbinder/attackby(var/obj/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/paper))
@@ -252,6 +269,7 @@ var/global/datum/library_catalog/library_catalog = new()
 	var/dat = {"Book name: <A href='?src=\ref[src];name=1'>[book_name]</A><BR>
 	Book author: <A href='?src=\ref[src];author=1'>[book_author]</A><BR>
 	Book icon: <A href='?src=\ref[src];icon=1'><img class='icon misc' src='data:image/png;base64,[icon2base64(icon(icon,book_state))]'></A><BR>
+	Book spine color: <A href='?src=\ref[src];spine=1'>[spine_color]</A><BR>
 	Current number of sheets: <A href='?src=\ref[src];remove=1'>[sheets.len]</A><BR>
 	<A href='?src=\ref[src];bind=1'>Bind sheets</A>"}
 
@@ -273,6 +291,8 @@ var/global/datum/library_catalog/library_catalog = new()
 		book_state = input(usr,"Select a book icon","Book icon") as null|anything in list("book1","book2","book3","book4","book5","book6","book7","book8","book9")
 		if(!book_state)
 			book_state = "book1"
+	else if(href_list["spine"])
+		spine_color = input(usr,"Set a spine color","Spine color",spine_color) as color
 	else if(href_list["remove"])
 		if(sheets.len)
 			for(var/obj/item/weapon/paper/sheet in sheets)
@@ -280,12 +300,14 @@ var/global/datum/library_catalog/library_catalog = new()
 				sheets -= sheet
 			to_chat(usr,"<span class='notice'>You empty all of the sheets out of [src].</span>")
 	else if(href_list["bind"])
+		if(!sheets.len)
+			to_chat(usr,"<span class='warning'>[src] refuses to start, no sheets of paper are loaded.</span>")
 		visible_message("[src] begins to hum as it warms up its printing drums.")
 		playsound(loc, 'sound/machines/electric_loom.ogg', 50, 1)
-		spawn(3 SECONDS)
+		spawn((bind_time/2) SECONDS)
 			playsound(loc, 'sound/machines/electric_loom.ogg', 50, 1)
 		anim(target = src, a_icon = 'icons/obj/library.dmi', flick_anim = "binder_ani", sleeptime = 6 SECONDS)
-		sleep(6 SECONDS)
+		sleep(bind_time SECONDS)
 		visible_message("[src] whirs as it prints and binds a new book.")
 		var/obj/item/weapon/book/b = new(loc)
 		b.dat = ""
@@ -298,6 +320,7 @@ var/global/datum/library_catalog/library_catalog = new()
 		b.author = book_author
 		b.icon_state = book_state
 		b.item_state = b.icon_state
+		b.spine_color = spine_color
 	updateUsrDialog()
 
 var/global/datum/research/research_archive_datum
