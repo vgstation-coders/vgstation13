@@ -267,7 +267,7 @@ var/global/datum/library_catalog/library_catalog = new()
 
 	if(href_list["name"])
 		book_name = input(usr,"Set a book name","Book name",book_name)
-	if(href_list["author"])
+	else if(href_list["author"])
 		book_author = input(usr,"Set a book author","Book author",book_author)
 	else if(href_list["icon"])
 		book_state = input(usr,"Select a book icon","Book icon") as null|anything in list("book1","book2","book3","book4","book5","book6","book7","book8","book9")
