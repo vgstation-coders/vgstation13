@@ -250,7 +250,7 @@ var/global/datum/library_catalog/library_catalog = new()
 	user.set_machine(src)
 
 	var/dat = {"Book name: <A href='?src=\ref[src];name=1'>[book_name]</A><BR>
-	Book author: <A href='?src=\ref[src];name=1'>[book_author]</A><BR>
+	Book author: <A href='?src=\ref[src];author=1'>[book_author]</A><BR>
 	Book icon: <A href='?src=\ref[src];icon=1'>[book_state]</A><BR>
 	Current number of sheets: <A href='?src=\ref[src];remove=1'>[sheets.len]</A><BR>
 	<A href='?src=\ref[src];bind=1'>Bind sheets</A>"}
