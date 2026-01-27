@@ -574,7 +574,11 @@ var/list/impact_master = list()
 		var/turf/T = get_turf(src)
 		if(get_exact_dist(starting, T) > travel_range)
 			if (decay_type)
-				ispath(decay_type) ? new decay_type(T) : forceMove(decay_type)
+				if(ispath(decay_type))
+					new decay_type(T)
+				else
+					var/obj/item/I = decay_type
+					I.forceMove(loc)
 			bullet_die()
 			return 1
 	total_steps++

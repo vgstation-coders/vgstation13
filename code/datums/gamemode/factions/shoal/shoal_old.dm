@@ -1,49 +1,4 @@
-var/list/low_score_items = list(
-	/obj/item/stack,
-	/obj/item/clothing,
-	/obj/item/weapon/reagent_containers,
-	/obj/item/trash,
-	/obj/item/weapon/stock_parts/,
-	/obj/item/weapon/cell,
-	/obj/item/clothing/gloves/yellow,
-)
 
-var/list/medium_score_items = list(
-	/obj/item/weapon/disk/,
-	/obj/item/clothing/shoes/magboots,
-	/obj/item/weapon/storage/belt/utility,
-	/obj/item/weapon/circuitboard,
-	/obj/item/stack/sheet/mineral/diamond,
-	/obj/item/stack/sheet/mineral/gold,
-	/obj/item/weapon/gun,
-	/obj/item/weapon/melee,
-	/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
-	/obj/item/weapon/switchtool,
-	/obj/item/device/am_shielding_container,
-	/obj/item/ammo_storage,
-)
-
-var/list/high_score_items = list(
-	/obj/item/weapon/pinpointer,
-	/obj/item/weapon/disk/nuclear,
-	/obj/item/weapon/hand_tele,
-	/obj/item/clothing/suit/space/rig/captain,
-	/obj/item/clothing/shoes/magboots/elite,
-	/obj/item/weapon/planning_frame,
-	/obj/item/weapon/storage/belt/utility/chief,
-	/obj/item/weapon/switchtool/holo,
-	/obj/item/weapon/circuitboard/telesci_computer,
-	/obj/item/weapon/card/emag,
-	/obj/item/weapon/am_containment,
-)
-
-var/list/potential_bonus_items = list(
-	/obj/item/weapon/pinpointer,
-	/obj/item/weapon/bikehorn/rubberducky,
-	/obj/item/weapon/circuitboard/borgupload,
-	/obj/item/weapon/stock_parts/subspace/amplifier,
-	/obj/item/clothing/mask/gas/clown_hat,
-)
 
 /datum/faction/vox_shoal
 	name = "Vox Shoal"
@@ -59,23 +14,14 @@ var/list/potential_bonus_items = list(
 	default_admin_voice = "Vox Shoal"
 	admin_voice_style = "vox"
 
-	var/time_left = (60 MINUTES)/10
-	var/completed = FALSE
-	var/results = "The Shoal didn't return yet."
-	var/list/dept_objective = list()
-	var/list/bonus_items_of_the_day = list()
 
-	var/complete_failure = FALSE // Set to TRUE when a non-raider uses the shuttle to return home.
 
-	var/got_personnel = 0
-	var/got_items = 0
-	var/list/people_to_steal = list()
-	var/list/people_to_steal_counters = list()
-	var/total_points = 0
-	var/list/our_bounty_lockers = list()
 
 /datum/faction/vox_shoal/New()
 	..()
+
+	new /datum/planet_type/shoal					// This creates the shoal planet.
+
 	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
 	vox_shuttle.initialize() //As the area isn't loaded until the above call, its docking ports aren't populated until we call this
 
@@ -389,3 +335,51 @@ var/list/potential_bonus_items = list(
 		/obj/item/weapon/storage/box/large/vox_equipment/engineer = 2,
 		/obj/item/weapon/storage/box/large/vox_equipment/raider = 2
 	)
+
+
+var/list/low_score_items = list(
+	/obj/item/stack,
+	/obj/item/clothing,
+	/obj/item/weapon/reagent_containers,
+	/obj/item/trash,
+	/obj/item/weapon/stock_parts/,
+	/obj/item/weapon/cell,
+	/obj/item/clothing/gloves/yellow,
+)
+
+var/list/medium_score_items = list(
+	/obj/item/weapon/disk/,
+	/obj/item/clothing/shoes/magboots,
+	/obj/item/weapon/storage/belt/utility,
+	/obj/item/weapon/circuitboard,
+	/obj/item/stack/sheet/mineral/diamond,
+	/obj/item/stack/sheet/mineral/gold,
+	/obj/item/weapon/gun,
+	/obj/item/weapon/melee,
+	/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
+	/obj/item/weapon/switchtool,
+	/obj/item/device/am_shielding_container,
+	/obj/item/ammo_storage,
+)
+
+var/list/high_score_items = list(
+	/obj/item/weapon/pinpointer,
+	/obj/item/weapon/disk/nuclear,
+	/obj/item/weapon/hand_tele,
+	/obj/item/clothing/suit/space/rig/captain,
+	/obj/item/clothing/shoes/magboots/elite,
+	/obj/item/weapon/planning_frame,
+	/obj/item/weapon/storage/belt/utility/chief,
+	/obj/item/weapon/switchtool/holo,
+	/obj/item/weapon/circuitboard/telesci_computer,
+	/obj/item/weapon/card/emag,
+	/obj/item/weapon/am_containment,
+)
+
+var/list/potential_bonus_items = list(
+	/obj/item/weapon/pinpointer,
+	/obj/item/weapon/bikehorn/rubberducky,
+	/obj/item/weapon/circuitboard/borgupload,
+	/obj/item/weapon/stock_parts/subspace/amplifier,
+	/obj/item/clothing/mask/gas/clown_hat,
+)

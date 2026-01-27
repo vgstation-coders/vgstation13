@@ -83,6 +83,8 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	data[itsthecurrentyear] = num2text(text2num(data[itsthecurrentyear]) + 1)
 	write_file(data)
 
+/*
+
 // -- Vox raiders
 /datum/persistence_task/vox_raiders
 	execute = TRUE
@@ -114,6 +116,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		data["YY"] = time2text(world.realtime,"YY")
 		write_file(data)
 
+*/
 /datum/persistence_task/forwards_fulfilled
 	execute = TRUE
 	name = "Cargo forwards fulfilled"

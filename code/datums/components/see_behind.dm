@@ -31,6 +31,8 @@
 	transparent.override = TRUE
 
 /datum/component/see_behind/proc/give_transparency(mover, location, oldloc)
+	if(!transparent)
+		update_transparency()
 	if(!ismob(mover))
 		return
 	var/mob/M = mover

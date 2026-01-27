@@ -21,6 +21,7 @@ If you are doing something involving /actual/ multi-z, don't use any of this.
 
 /area/fake_z/
 	var/darkening_color = "#FFFFFF"
+	var/initialized
 	icon_state = "yellow"
 
 /area/fake_z/level1
@@ -39,7 +40,9 @@ If you are doing something involving /actual/ multi-z, don't use any of this.
 
 /area/fake_z/initialize()
 	..()
-//	to_chat(world, "Setting up Fake-Z Area")
+	if(initialized)
+		return
+	initialized = TRUE
 	for(var/turf/T in contents)
 		new /atom/movable/fake_openspace(T, darkening_color)
 

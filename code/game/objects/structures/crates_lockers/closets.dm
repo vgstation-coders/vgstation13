@@ -679,17 +679,3 @@
 				return
 		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
-
-
-
-
-// -- Vox raiders.
-
-/obj/structure/closet/loot
-	name = "Loot closet"
-	desc = "Store the valuables here for a direct transfer to the shoal. We make much bluespace."
-
-/obj/structure/closet/loot/Destroy()
-	for (var/datum/faction/vox_shoal/VS in ticker.mode.factions)
-		VS.our_bounty_lockers -= src
-	return ..()

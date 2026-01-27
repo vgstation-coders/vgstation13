@@ -420,6 +420,5 @@
 	C.access = list(access_syndicate, access_trade)
 	var/obj/item/weapon/storage/wallet/W = new
 	W.handle_item_insertion(C)
-	W.handle_item_insertion(new /obj/item/weapon/coin/raider)
 	H.equip_to_slot_or_del(W, slot_wear_id)
 	return 1

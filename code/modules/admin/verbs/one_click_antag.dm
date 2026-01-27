@@ -259,8 +259,9 @@
 
 	return new_syndicate_commando
 
-/datum/admins/proc/makeVoxRaiders()
 
+/*
+/datum/admins/proc/makeVoxRaiders()
 
 // To fix...
 
@@ -295,3 +296,4 @@
 	v.post_equip(new_vox)
 
 	return new_vox
+*/

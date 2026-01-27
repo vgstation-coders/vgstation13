@@ -20,8 +20,10 @@
 	var/abyss_link_tag = ""								// Sends any mob that falls into the abyss to a corpse chute with a matching tag.
 	var/initialized = FALSE
 	var/list/exclude_types = list(						// Mobs and objects in this list should never fall. Mobs/Objects locked to atoms in this list won't fall either.
-		/obj/structure/bed/chair/vehicle/adminbus/, 	// NOPE!
-		/obj/structure/catwalk
+		/obj/structure/bed/chair/vehicle/adminbus, 		// NOPE!
+		/obj/machinery/media/jukebox/superjuke/adminbus,
+		/obj/structure/teleportwarp,
+		/obj/structure/catwalk,
 //		/obj/structure/bed/chair/vehicle/firebird/,		// See can_fall() comment.
 	)
 	var/list/prevents_fall = list(						// Objects in this list prevent things from falling.
@@ -46,13 +48,15 @@
 	for(var/atom/A in contents)
 		if(is_type_in_list(A, prevents_fall))
 			return FALSE
-	if(!isobj(AM) && !isliving(AM))				// Objects and living mobs only!
+	if(!(istype(AM,/obj) || istype(AM,/mob/living)))			// Objects and living mobs only!		// WHY DOES ISOBJ() RETURN TRUE FOR /ATOM/MOVABLE ????
 		return FALSE
 	if(is_type_in_list(AM, exclude_types))
 		return FALSE
 	if(is_type_in_list(AM.locked_to, exclude_types))
 		return FALSE
 
+
+	return TRUE
 	// 		I thought about allowing players to flying things like powered jetpacks and firebirds to traverse the abyss.
 	// 		but this just invites a headache because of the out-of-bounds "fake-z" areas, which are not meant to be accessible.
 	// 		What should happen if someone's jetpack runs out of fuel or someone exits their firebird above one of those areas?
@@ -68,7 +72,7 @@
 				return FALSE
 	*/
 
-	return TRUE
+
 
 /turf/unsimulated/floor/abyss/Crossed(var/atom/movable/AM)
 	if(AM.abyssfall || !initialized || !can_abyssfall(AM))
@@ -97,7 +101,6 @@
 	for(var/mob/living/M in mob_list)
 		M.Knockdown(10)
 		M.Stun(10)
-		M.captured = TRUE	// The captured var exists for other things like mannequins and the adminbus, but it works perfectly fine here.
 		M.update_canmove()
 
 	for(var/mob/living/carbon/human/M in human_list)
@@ -126,7 +129,6 @@
 			playsound(M, 'sound/effects/kirbyfall.ogg', 25, 0)
 		else
 			M.audible_scream()
-		M.captured = TRUE
 		M.Knockdown(10)
 		M.Stun(10)
 		M.update_canmove()
@@ -144,8 +146,6 @@
 				CRASH("no abyss corpse chutes exist in the world OR no chutes exist with a matching abyss_link_tag var!")
 
 			for(var/mob/living/carbon/human/M in human_list)
-				M.captured = FALSE
-
 				var/total_damage = 100 		// Falling always enough to knock the person into crit.
 
 				// Damage is dealt onto every lower limb, with any remaining damage getting splashed onto the torso.
@@ -177,7 +177,6 @@
 				M.Life()		// Update just about everything else.
 
 			for(var/mob/living/M in mob_list)
-				M.captured = TRUE
 				M.death()							// Kill any non-humans instantly.
 
 			AM.color = color_cache
@@ -191,7 +190,7 @@
 			AM.loc = null
 			qdel(AM)
 
-/turf/unsimulated/abyss/proc/get_connected_chute()
+/turf/unsimulated/floor/abyss/proc/get_connected_chute()
 	var/list/valid_chutes = list()
 	for(var/obj/structure/disposaloutlet/no_deconstruct/abysschute/D in abyss_chutes)	// First, we try to pick a chute with a matching tag.
 		if(D.abyss_link_tag == abyss_link_tag)											// If the tags match, add the chute to the list of possible picks.

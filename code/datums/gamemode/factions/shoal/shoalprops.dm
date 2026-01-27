@@ -67,6 +67,11 @@
 	icon = 'icons/obj/props_64x64.dmi'
 	icon_state = "carpetlong"
 
+/obj/prop/papers
+	name = "papers"
+	icon = 'icons/obj/props.dmi'
+	icon_state = "papers"
+	mouse_opacity = 0
 
 /obj/prop/floorpanel
 	name = "floorpanel"
@@ -273,90 +278,3 @@
 /obj/machinery/door/poddoor/shutters/rusty/attackby(var/obj/item/I, var/mob/user)
 	return
 
-
-/obj/effect/decal/papers
-	name = "papers"
-	icon = 'icons/obj/props.dmi'
-	icon_state = "papers"
-	mouse_opacity = 0
-
-/obj/effect/decal/wallpapers
-	name = "wall papers"
-	icon = 'icons/obj/props.dmi'
-	icon_state = "papers_wall"
-	mouse_opacity = 0
-
-
-
-/*
-// Applies the open space overlay. //NOT FOR ACTUAL MULTI-Z
-/obj/effect/fake_open_space
-	icon = 'icons/turf/open_space_64x64.dmi'
-	var/base_icon_state = "black_open"
-	icon_state = "black_open_base"
-	anchored = TRUE
-	density = TRUE
-	mouse_opacity = 0
-	plane = ABOVE_LIGHTING_PLANE
-	pixel_x = -16 * PIXEL_MULTIPLIER
-	pixel_y = -16 * PIXEL_MULTIPLIER
-
-// same as above, just darker
-/obj/effect/fake_open_space/deep
-	base_icon_state = "black_open_deep"
-	icon_state = "black_open_deep_base"
-
-// same as above, just ever darker
-/obj/effect/fake_open_space/deeper
-	base_icon_state = "black_open_deeper"
-	icon_state = "black_open_deeper_base"
-
-/obj/effect/fake_open_space/New()
-	var/turf/T = get_turf(src)
-	T.density = TRUE
-	T.opacity = FALSE
-	T.lighting_overlay.update_overlay()
-	T.filters += filter(type="drop_shadow", x=0, y=-2, size=4, color="#04080FAA")
-//	T.filters += filter(type="blur", size=1)
-
-	spawn()
-		for(var/obj/O in T)
-			O.filters += filter(type="drop_shadow", x=0, y=-2, size=4, color="#04080FAA")
-	//		O.filters += filter(type="blur", size=1)
-
-		var/walled_dirs = 0
-		for(var/cdir in cardinal)
-			var/turf/terf = get_step(src,cdir)
-			if(!iswall(terf) || is_type_in_list(type, terf.contents))
-				continue
-			walled_dirs |= cdir
-			overlays += image(icon, src, base_icon_state, layer, cdir)
-
-		// Probably not the best way to do this.
-		if(walled_dirs & EAST && walled_dirs & NORTH)
-			overlays += image(icon, src, base_icon_state, layer, NORTHEAST)
-		if(walled_dirs & WEST && walled_dirs & NORTH)
-			overlays += image(icon, src, base_icon_state, layer, NORTHWEST)
-		if(walled_dirs & EAST && walled_dirs & SOUTH)
-			overlays += image(icon, src, base_icon_state, layer, SOUTHEAST)
-		if(walled_dirs & WEST && walled_dirs & SOUTH)
-			overlays += image(icon, src, base_icon_state, layer, SOUTHWEST)
-
-
-// Applies a drop shadow to shit on the tile and then deletes itself.
-/obj/effect/landmark/drop_shadow
-	layer = 100
-	plane = 100
-	//So that it's more visible in the map editor
-
-/obj/effect/landmark/drop_shadow/New()
-	var/turf/T = get_turf(src)
-	T.filters += filter(type="drop_shadow", x=0, y=-2, size=4, color="#04080FAA")
-
-	spawn()
-		for(var/obj/O in T)
-			O.filters += filter(type="drop_shadow", x=0, y=-2, size=4, color="#04080FAA")
-
-	qdel(src)
-
-*/

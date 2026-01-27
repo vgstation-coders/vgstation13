@@ -567,9 +567,6 @@
 	prob_slip = round(prob_slip)
 	return(prob_slip)
 
-/mob/can_be_pulled(mob/user)
-	return !captured
-
 /mob/proc/Move_Pulled(var/atom/dest, var/atom/movable/target = pulling)
 	if(!canmove || restrained() || !has_hand_check())
 		return

@@ -246,14 +246,6 @@
 	icon_state = "floor4"
 	},
 /area/shuttle/vox/station)
-"aQ" = (
-/obj/effect/landmark{
-	name = "voxstart"
-	},
-/turf/simulated/floor/shuttle/vox{
-	icon_state = "floor4"
-	},
-/area/shuttle/vox/station)
 "aR" = (
 /obj/structure/closet/emcloset/vox,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
@@ -343,13 +335,8 @@
 	icon_state = "floor4"
 	},
 /area/shuttle/vox/station)
-"bi" = (
-/obj/effect/landmark/vox_locker,
-/turf/simulated/floor/shuttle/plating/vox,
-/area/shuttle/vox/station)
 "bj" = (
 /obj/machinery/light/small,
-/obj/effect/landmark/vox_locker,
 /turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "bk" = (
@@ -857,12 +844,6 @@
 /obj/docking_port/destination/vox/station,
 /turf/space,
 /area)
-"cv" = (
-/obj/machinery/vending/raider,
-/turf/simulated/floor/shuttle/vox{
-	icon_state = "floor4"
-	},
-/area/shuttle/vox/station)
 
 (1,1,1) = {"
 aa
@@ -1544,7 +1525,7 @@ aL
 ba
 aD
 aS
-bi
+aS
 aD
 bv
 bE
@@ -1578,9 +1559,9 @@ ab
 bs
 aH
 aM
-aQ
-aQ
-aQ
+aL
+aL
+aL
 aD
 aS
 bj
@@ -1626,7 +1607,7 @@ aS
 aO
 aL
 aL
-cv
+aL
 aL
 aL
 bY
@@ -1656,9 +1637,9 @@ ab
 bs
 aJ
 aM
-aQ
-aQ
-aQ
+aL
+aL
+aL
 aD
 aS
 bj
@@ -1700,7 +1681,7 @@ aL
 ba
 aD
 aS
-bi
+aS
 aD
 bx
 bx

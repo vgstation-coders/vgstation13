@@ -1149,7 +1149,7 @@
 	return
 
 /atom/movable/proc/can_be_pulled(var/mob/user)
-	return TRUE
+	return !abyssfall
 
 /atom/movable/proc/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
 	if(anchored)

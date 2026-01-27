@@ -703,33 +703,32 @@
 	required_candidates = 5
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Vox"
-	cost = 25
-	requirements = list(50,50,50,30,30,30,30,20,10,10)
+	cost = 20
+	requirements = list(50,45,40,35,30,25,25,20,10,10)
 	high_population_requirement = 35
-	var/vox_cap = list(2,2,3,3,4,5,5,5,5,5)
+	var/vox_cap = list(2,3,3,4,4,5,5,5,5,5)
 	logo = "vox-logo"
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/ready(var/forced = 0)
-	var/indice_pop = min(10,round(living_players.len/5)+1)
-	required_candidates = vox_cap[indice_pop]
 	if (forced)
 		required_candidates = 1
 		return ..()
-	if (required_candidates > (dead_players.len + list_observers.len))
-		return 0
-	. = ..()
-	required_candidates = initial(required_candidates)
+	var/indice_pop = min(10,round(living_players.len/5)+1)
+	required_candidates = vox_cap[indice_pop]
+	return ..()
+
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/vox_shoal/shoal = find_active_faction_by_type(/datum/faction/vox_shoal)
+	if(!shoal)
+		shoal = ticker.mode.CreateFaction(/datum/faction/vox_shoal, null, 1)
 	shoal.forgeObjectives()
 
 	var/list/turf/vox_spawn = list()
 
 	for(var/obj/effect/landmark/A in landmarks_list)
-		if(A.name == "voxstart")
+		if(A.name == "raiderstart")
 			vox_spawn += get_turf(A)
-			continue
 
 	var/spawn_count = index
 	if(spawn_count > vox_spawn.len)
@@ -1175,4 +1174,3 @@
 	to_chat(G, "<span class='notice'>You have been granted the \"Spawn as Divergent Clone\" ghost spell. Use this near a cloning pod to spawn in as a divergent clone of someone who was cloned, or is currently being cloned, in that pod.</span>")
 	to_chat(G, "<span class='notice'>Using this spell on an unoccupied cloning pod will allow you to choose a record of a person previously cloned in that pod. Using it on an occupied pod will cause you to become a twin of the person currently in the pod, and be ejected from the pod at the same time as them.</span>")
 	to_chat(G, "<span class='notice'>Remember: you can only use this spell once, and re-entering your corpse will remove it permanently. In fact, for your convenience we have removed your ability to re-enter your corpse.</span>")
-

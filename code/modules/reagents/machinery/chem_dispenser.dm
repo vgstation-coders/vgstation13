@@ -332,8 +332,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return
 	return ..()
 
-/obj/machinery/chem_dispenser/proc/can_insert(var/obj/item/I)
-	return istype(I, /obj/item/weapon/reagent_containers/glass) || istype(I, /obj/item/weapon/reagent_containers/food/drinks)
+/obj/machinery/chem_dispenser/proc/can_insert(var/obj/C)
+	return istype(C, /obj/item/weapon/reagent_containers/glass) || istype(C, /obj/item/weapon/reagent_containers/food/drinks)
 
 /obj/machinery/chem_dispenser/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(can_insert(AM))

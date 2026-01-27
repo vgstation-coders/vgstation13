@@ -560,7 +560,6 @@ var/global/list/paper_folding_results = list ( \
 		/obj/item/weapon/paper/talisman,
 		/obj/item/weapon/paper/sokoban,
 		/obj/item/weapon/paper/tomb_notes,
-		/obj/item/weapon/paper/vox_paper,
 		)
 
 /obj/item/weapon/paper/random/New()

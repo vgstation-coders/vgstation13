@@ -1027,3 +1027,29 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
+
+/datum/outfit/special/vox_raider
+	outfit_name = "Vox Raider"
+	give_disabilities_equipment = TRUE
+
+	items_to_spawn = list(
+		/datum/species/vox = list(
+			slot_ears_str = /obj/item/device/radio/headset/raider/pretuned,
+			slot_w_uniform_str = /obj/item/clothing/under/vox/vox_robes,
+			slot_shoes_str = /obj/item/clothing/shoes/magboots/vox,
+			slot_gloves_str = /obj/item/clothing/gloves/yellow/vox,
+		)
+	)
+
+
+/datum/outfit/special/vox_raider/pre_equip(var/mob/living/carbon/human/H)
+	// Alternate.
+	if(prob(50))
+		items_to_spawn = list(
+			/datum/species/vox = list(
+				slot_ears_str = /obj/item/device/radio/headset/raider/pretuned,
+				slot_w_uniform_str = /obj/item/clothing/under/vox/vox_casual,
+				slot_shoes_str = /obj/item/clothing/shoes/magboots/vox,
+				slot_gloves_str = /obj/item/clothing/gloves/yellow/vox,
+			)
+		)

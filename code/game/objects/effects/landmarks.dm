@@ -94,12 +94,6 @@
 		if("hobostart")
 			hobostart += loc
 
-		if("voxstart")
-			voxstart += loc
-
-		if("voxlocker")
-			voxlocker += loc
-
 		if("ninjastart")
 			ninjastart += loc
 
@@ -151,9 +145,6 @@
 /obj/effect/landmark/xtra_cleanergrenades
 	name = "xtra_cleanergrenades"
 
-/obj/effect/landmark/vox_locker
-	name = "vox_locker"
-
 /obj/effect/landmark/hobostart
 	name = "hobostart"
 
@@ -172,44 +163,44 @@ var/list/map_landmarks = list()
 /obj/effect/landmark/map_element/Destroy()
 	map_landmarks -= src
 	. = ..()
-	
+
 /obj/effect/landmark/map_element/proc/mapload()
 	if(maptype)
 		var/datum/map_element/ME = new maptype
 		if(istype(ME))
 			ME.load(src.x-1,src.y-1,src.z,(rotatable && map.nameShort == "xoq" ? 180 : 0), override_can_rotate = (rotatable && map.nameShort == "xoq"))
 	qdel(src)
-			
+
 /obj/effect/landmark/map_element/whiteship
 	maptype = /datum/map_element/fixedvault/whiteship
-    
+
 /obj/effect/landmark/map_element/abandonted_aitele
 	maptype = /datum/map_element/fixedvault/abandoned_aitele
-    
+
 /obj/effect/landmark/map_element/salvage_shuttle
 	maptype = /datum/map_element/fixedvault/salvage_shuttle
 	rotatable = FALSE
-	
+
 /obj/effect/landmark/map_element/salvage_shuttle_spiders
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_spiders
 	rotatable = FALSE
-	
+
 /obj/effect/landmark/map_element/salvage_shuttle_bears
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_bears
 	rotatable = FALSE
-	
+
 /obj/effect/landmark/map_element/salvage_shuttle_cockroaches
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_cockroaches
 	rotatable = FALSE
-	
+
 /obj/effect/landmark/map_element/salvage_shuttle_skrites
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_skrites
 	rotatable = FALSE
-	
+
 /obj/effect/landmark/map_element/salvage_shuttle_pets
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_pets
 	rotatable = FALSE
-    
+
 /obj/effect/landmark/map_element/deepspaceruin
 	maptype = /datum/map_element/fixedvault/deepspaceruin
 
@@ -228,17 +219,17 @@ var/list/map_landmarks = list()
 /obj/effect/landmark/map_element/djsat
 	maptype = /datum/map_element/fixedvault/djsat
 	rotatable = FALSE
-	
+
 /obj/effect/landmark/map_element/djsat_notail
 	maptype = /datum/map_element/fixedvault/djsat_notail
 	rotatable = FALSE
 
 /obj/effect/landmark/map_element/derelict_tele
 	maptype = /datum/map_element/fixedvault/derelict_tele
-	
+
 /obj/effect/landmark/map_element/spacegym
 	maptype = /datum/map_element/fixedvault/spacegym
-	
+
 /obj/effect/landmark/map_element/medship
 	maptype = /datum/map_element/fixedvault/medship
 	rotatable = FALSE
@@ -251,7 +242,7 @@ var/list/map_landmarks = list()
 
 /obj/effect/landmark/map_element/deepspaceroid
 	maptype = /datum/map_element/fixedvault/deepspaceroid
-	
+
 /obj/effect/landmark/start/trader_also_latejoin
 	name = "Trader"
 	override_latejoin_behavior=TRUE
