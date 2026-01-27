@@ -15,6 +15,7 @@
 	// Only Vox, only chest
 	var/datum/butchering_product/feathers/vox/F = locate(/datum/butchering_product/feathers/vox) in target.butchering_drops
 	if(!isvox(target) || F.amount == 0) return 0
+	if(user.a_intent != I_GRAB) return 0 // So that they don't accidentally pluck someone while trying to help them.
 	return target_zone == LIMB_CHEST
 
 /datum/surgery_step/pluck/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
