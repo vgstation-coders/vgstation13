@@ -1,0 +1,266 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/template_noop)
+"b" = (
+/obj/item/device/flashlight/lantern,
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"g" = (
+/obj/item/weapon/caution/cone,
+/turf/template_noop,
+/area/exposed_ruin)
+"h" = (
+/obj/item/stack/rods,
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"i" = (
+/obj/item/weapon/pickaxe/shovel,
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"q" = (
+/obj/structure/fence/corner{
+	dir = 1
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"y" = (
+/obj/structure/fence/door,
+/obj/item/tape/engineering{
+	icon_state = "engineering_door"
+	},
+/turf/unsimulated/floor/snow/asphalt,
+/area/exposed_ruin)
+"A" = (
+/obj/item/weapon/caution/cone,
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"C" = (
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"D" = (
+/obj/abstract/loot_spawner/engineering,
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"E" = (
+/obj/machinery/constructable_frame/machine_frame,
+/obj/item/stack/cable_coil/random,
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"M" = (
+/obj/item/weapon/grown/log/tree,
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"N" = (
+/obj/structure/closet/crate{
+	icon_state = "crateopen";
+	opened = 1
+	},
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/blueprints/construction_permit,
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"P" = (
+/obj/abstract/loot_spawner/trash,
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"R" = (
+/obj/structure/fence/corner,
+/turf/template_noop,
+/area/exposed_ruin)
+"S" = (
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/hatchet,
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"W" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/unsimulated/floor/snow/permafrost,
+/area/exposed_ruin)
+"Y" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'CONSTRUCTION'.";
+	name = "CONSTRUCTION"
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"Z" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+
+(1,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+a
+a
+a
+C
+a
+C
+a
+a
+"}
+(3,1,1) = {"
+a
+a
+a
+C
+a
+C
+g
+C
+C
+q
+"}
+(4,1,1) = {"
+a
+a
+a
+C
+C
+C
+C
+C
+A
+Z
+"}
+(5,1,1) = {"
+a
+C
+a
+C
+h
+C
+M
+C
+C
+Z
+"}
+(6,1,1) = {"
+a
+C
+A
+E
+i
+b
+C
+h
+C
+W
+"}
+(7,1,1) = {"
+a
+a
+C
+D
+M
+C
+C
+C
+C
+Y
+"}
+(8,1,1) = {"
+a
+a
+C
+N
+C
+M
+C
+C
+C
+y
+"}
+(9,1,1) = {"
+a
+C
+C
+C
+C
+h
+S
+h
+C
+Z
+"}
+(10,1,1) = {"
+a
+A
+C
+h
+C
+C
+M
+C
+M
+W
+"}
+(11,1,1) = {"
+a
+C
+a
+A
+C
+a
+A
+C
+P
+W
+"}
+(12,1,1) = {"
+a
+a
+a
+C
+a
+a
+C
+a
+C
+R
+"}
+(13,1,1) = {"
+a
+a
+a
+C
+a
+a
+a
+a
+a
+a
+"}
+(14,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}

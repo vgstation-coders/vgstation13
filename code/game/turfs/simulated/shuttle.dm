@@ -136,7 +136,8 @@
 				break
 		if(climate_added)
 			break
-	var/datum/climate/Cnew = SSweather.get_climate(T.z)
+	var/datum/allocation/A = SSmapping.get_allocation(trf = T)
+	var/datum/climate/Cnew = SSweather.get_climate(T.z,A)
 	if(climate_added && Cnew)
 		Cnew.register_weather_turf(T, TRUE)
 		plane = EFFECTS_PLANE

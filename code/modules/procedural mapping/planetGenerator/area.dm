@@ -4,6 +4,8 @@
 	flags = NO_PERSISTENCE|CAVES_ALLOWED|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
 	requires_power = 0
 	dynamic_lighting = 1
+	construction_zone = TRUE
+	forbid_apc = TRUE
 	var/silent_weather = FALSE
 
 /area/planet/Entered(atom/movable/Obj, atom/OldLoc)

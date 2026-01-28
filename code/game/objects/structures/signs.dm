@@ -480,3 +480,7 @@
 	name = "flashing directional arrow"
 	desc = "It points. In a direction. Now with built-in lights!"
 	icon_state = "arrow_up_lights"
+/obj/structure/sign/bodydisposal
+    name = "Body Disposal"
+    desc = "The pride and joy of both medical doctors and scientists, an injured man being thrown out of a tube."
+    icon_state = "medchute"

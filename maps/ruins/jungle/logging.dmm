@@ -1,0 +1,437 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/jungle/concrete,
+/area/exposed_ruin)
+"b" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "loading_area";
+	tag = "icon-loading_area"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area/exposed_ruin)
+"d" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning_corner"
+	},
+/obj/abstract/loot_spawner/combat,
+/turf/unsimulated/floor/jungle/concrete,
+/area/exposed_ruin)
+"f" = (
+/obj/structure/fence/cut/medium{
+	dir = 4
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"h" = (
+/turf/unsimulated/floor/jungle/path,
+/area/exposed_ruin)
+"i" = (
+/obj/abstract/loot_spawner/medical,
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+"k" = (
+/obj/structure/fence,
+/turf/unsimulated/floor/jungle/path,
+/area/exposed_ruin)
+"l" = (
+/obj/structure/rack,
+/obj/item/weapon/grown/log/tree,
+/obj/item/weapon/grown/log/tree,
+/obj/item/weapon/grown/log/tree,
+/obj/item/weapon/grown/log/tree,
+/obj/item/weapon/grown/log/tree,
+/turf/template_noop,
+/area/exposed_ruin)
+"m" = (
+/obj/structure/fence/cut/medium,
+/turf/unsimulated/floor/jungle/path,
+/area/exposed_ruin)
+"o" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area/exposed_ruin)
+"s" = (
+/obj/structure/fence/corner,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"t" = (
+/obj/structure/fence/cut/large{
+	dir = 4
+	},
+/turf/unsimulated/floor/jungle/path,
+/area/exposed_ruin)
+"w" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"x" = (
+/obj/structure/fence/cut/large{
+	dir = 4
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"z" = (
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+"B" = (
+/obj/item/ammo_casing/c38,
+/obj/item/ammo_casing/c38{
+	pixel_y = -6;
+	pixel_x = -3
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = 7;
+	pixel_y = -5
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = 6;
+	pixel_y = 7
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"D" = (
+/obj/item/ammo_casing/c38,
+/obj/item/ammo_casing/c38{
+	pixel_x = 6;
+	pixel_y = 10
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = -6;
+	pixel_y = -3
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = -10;
+	pixel_y = 6
+	},
+/obj/item/ammo_casing/c38{
+	pixel_y = -8;
+	pixel_x = 5
+	},
+/obj/item/ammo_casing/c38{
+	pixel_x = 12;
+	pixel_y = 8
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"G" = (
+/obj/structure/rack,
+/obj/item/weapon/hatchet,
+/obj/item/weapon/hatchet{
+	pixel_x = -3;
+	pixel_y = -4
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"H" = (
+/obj/structure/fence/corner{
+	dir = 8
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"I" = (
+/obj/structure/flora/tree_stump,
+/turf/template_noop,
+/area/exposed_ruin)
+"J" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"K" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area/exposed_ruin)
+"M" = (
+/obj/structure/fence,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"N" = (
+/obj/structure/rack,
+/obj/item/weapon/hatchet,
+/obj/item/weapon/hatchet{
+	pixel_x = -5;
+	pixel_y = -3
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"O" = (
+/obj/structure/fence/cut/medium,
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"R" = (
+/turf/unsimulated/floor/jungle/path_plated,
+/area/exposed_ruin)
+"S" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (NORTH)"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area/exposed_ruin)
+"T" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/unsimulated/floor/jungle/path,
+/area/exposed_ruin)
+"U" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (EAST)"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area/exposed_ruin)
+"X" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area/exposed_ruin)
+"Y" = (
+/mob/living/complex_animal/panther{
+	health = 0;
+	ticks_dead = -1800;
+	stat = 2;
+	icon_state = "panther_dead"
+	},
+/turf/template_noop,
+/area/exposed_ruin)
+"Z" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning";
+	tag = "icon-warning"
+	},
+/turf/unsimulated/floor/jungle/concrete,
+/area/exposed_ruin)
+
+(1,1,1) = {"
+w
+w
+w
+w
+w
+w
+H
+m
+M
+k
+M
+O
+k
+M
+H
+"}
+(2,1,1) = {"
+w
+w
+I
+w
+w
+w
+J
+i
+a
+X
+X
+X
+a
+U
+J
+"}
+(3,1,1) = {"
+w
+w
+w
+w
+w
+l
+J
+Z
+a
+a
+a
+z
+a
+z
+x
+"}
+(4,1,1) = {"
+w
+w
+w
+w
+w
+l
+t
+a
+z
+a
+a
+a
+a
+o
+J
+"}
+(5,1,1) = {"
+w
+w
+w
+Y
+w
+w
+J
+Z
+a
+a
+z
+a
+a
+o
+T
+"}
+(6,1,1) = {"
+w
+I
+w
+w
+w
+w
+J
+a
+z
+a
+a
+a
+a
+a
+x
+"}
+(7,1,1) = {"
+w
+w
+w
+I
+w
+B
+h
+Z
+a
+a
+a
+a
+a
+o
+J
+"}
+(8,1,1) = {"
+w
+w
+w
+w
+w
+w
+R
+b
+a
+z
+a
+a
+a
+o
+J
+"}
+(9,1,1) = {"
+w
+w
+w
+w
+w
+w
+D
+z
+a
+a
+a
+a
+a
+o
+T
+"}
+(10,1,1) = {"
+w
+w
+Y
+w
+w
+w
+T
+Z
+a
+a
+a
+a
+z
+a
+J
+"}
+(11,1,1) = {"
+w
+w
+w
+w
+I
+G
+f
+a
+a
+a
+a
+a
+a
+o
+f
+"}
+(12,1,1) = {"
+w
+I
+w
+w
+w
+N
+J
+d
+a
+z
+a
+K
+a
+S
+J
+"}
+(13,1,1) = {"
+w
+w
+w
+w
+w
+w
+s
+M
+O
+k
+M
+M
+m
+k
+s
+"}

@@ -70090,8 +70090,8 @@
 	},
 /area/library)
 "eQD" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light,
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "fkA" = (
@@ -70972,10 +70972,10 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fore)
 "lfs" = (
-/obj/machinery/suit_storage_unit,
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "lkd" = (
@@ -72222,7 +72222,7 @@
 	},
 /area/gateway)
 "uaP" = (
-/obj/machinery/suit_storage_unit,
+/obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "ubC" = (

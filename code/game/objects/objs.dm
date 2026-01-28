@@ -448,7 +448,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 /obj/item/updateUsrDialog()
 	if(in_use)
 		var/is_in_use = 0
-		if(usr)
+		if(_using && usr)
 			_using |= usr
 		if(_using && _using.len)
 			for(var/mob/M in _using) // Only check things actually messing with us.

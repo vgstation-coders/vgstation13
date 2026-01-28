@@ -47,9 +47,9 @@ export const selectReligions = (religions: Religion[], searchText = ''): Religio
       [religion.name,
       (religion.keywords || [])].join(' ')
     ): null;
-  
+
   if (testSearch)
-    religions = filter(religions, testSearch);
+    { religions = filter(religions, testSearch); }
   religions = sort(religions);
   return religions;
 };
@@ -65,7 +65,7 @@ const capitalize = (str) => {
 
 export const ChooseReligion = (props) => {
   const { act, data } = useBackend<Data>();
-  const [useCustomReligion, setUseCustomReligion] = useState("useCustomReligion", false);
+  const [useCustomReligion, setUseCustomReligion] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [selectedReligion, setSelectedReligion] = useState<Religion | null>(null);
   return (
@@ -79,7 +79,7 @@ export const ChooseReligion = (props) => {
             direction={"column"}>
             <Flex.Item>
               <Button
-                selected={useCustomReligion}
+                selected={!!useCustomReligion}
                 onClick={() => setUseCustomReligion(!useCustomReligion)}
                 textAlign="center" width="100%">
                 {useCustomReligion ? "Use the defined religion list instead" : "Create a custom religion"}
@@ -184,8 +184,7 @@ export const DefinedReligionData = ({ religion }) => {
                   religion.possibleDeityNames
                 }
                 onSelected={value => setSelectedDeity(value)}
-                onCommit={value => setSelectedDeity(value)}
-                />
+              />
             ) : religion.deityName}
           </LabeledList.Item>
           <LabeledList.Item key="Sacred text" label="Sacred text">
@@ -198,7 +197,7 @@ export const DefinedReligionData = ({ religion }) => {
                   religion.possibleBibleNames
                 }
                 onSelected={value => setSelectedBible(value)}
-                onCommit={value => setSelectedBible(value)} />
+              />
             ) : religion.bibleName}
             <span
               className={classes([
@@ -206,7 +205,7 @@ export const DefinedReligionData = ({ religion }) => {
                 religion.bibleStyleIcon,
               ])}
               style={{
-                'vertical-align': 'middle',
+                'verticalAlign': 'middle',
                 'display': 'inline-block',
               }} />
           </LabeledList.Item>
@@ -248,7 +247,7 @@ export const CustomReligion = () => {
   const [
     chosenData,
     setChosenData,
-  ] = useState("chosenData", {
+  ] = useState({
     name: "Christianity",
     deityName: "God",
     bibleName: "The Bible",
@@ -259,44 +258,38 @@ export const CustomReligion = () => {
         <LabeledList>
           <LabeledList.Item key="Name" label="Name">
           <Input
-          autoFocus
-          expensive
-          fluid
-          mt={1}
-          placeholder="Christianity"
-          onCommit={(_, value) => !isBlank(value)
-            && setChosenData({ ...chosenData, name: value })}
-          onInput={(_, value) => !isBlank(value)
-            && setChosenData({ ...chosenData, name: value })}
-          value={chosenData.name}
-        />
+            autoFocus
+            expensive
+            fluid
+            mt={1}
+            placeholder="Christianity"
+            onEnter={(value) => !isBlank(value) && setChosenData({ ...chosenData, name: value })}
+            onChange={(value) => !isBlank(value) && setChosenData({ ...chosenData, name: value })}
+            value={chosenData.name}
+          />
           </LabeledList.Item>
           <LabeledList.Item key="Deity name" label="Deity name">
           <Input
-          fluid
-          mt={1}
-          placeholder="Space Jesus"
-          onCommit={(_, value) => !isBlank(value)
-            && setChosenData({ ...chosenData, deityName: value })}
-          onInput={(_, value) => !isBlank(value)
-            && setChosenData({ ...chosenData, deityName: value })}
-          value={chosenData.deityName}
-        />
+            fluid
+            mt={1}
+            placeholder="Space Jesus"
+            onEnter={(value) => !isBlank(value) && setChosenData({ ...chosenData, deityName: value })}
+            onChange={(value) => !isBlank(value) && setChosenData({ ...chosenData, deityName: value })}
+            value={chosenData.deityName}
+          />
           </LabeledList.Item>
           <LabeledList.Item key="Sacred text" label="Sacred text">
           <Input
-          fluid
-          mt={1}
-          placeholder="Holy Bible"
-          onCommit={(_, value) => !isBlank(value)
-            && setChosenData({ ...chosenData, bibleName: value })}
-          onInput={(_, value) => !isBlank(value)
-            && setChosenData({ ...chosenData, bibleName: value })}
-          value={chosenData.bibleName}
-        />
+            fluid
+            mt={1}
+            placeholder="Holy Bible"
+            onEnter={(value) => !isBlank(value) && setChosenData({ ...chosenData, bibleName: value })}
+            onChange={(value) => !isBlank(value) && setChosenData({ ...chosenData, bibleName: value })}
+            value={chosenData.bibleName}
+          />
             <LabeledList.Item key="Bible style" label="Bible style">
               {iconMenuOpen ?
-              <Box width="200px" height={`${32*4}px`} backgroundColor="grey" padding="5px">
+              <Box width="200px" height={`${32*4}px`} backgroundColor="grey" p="1px">
                   <Stack vertical fill>
                     <Stack.Item overflowX="hidden" overflowY="hidden">
                       <Flex wrap>
@@ -317,8 +310,8 @@ export const CustomReligion = () => {
                                     style.iconName,
                                   ])}
                                   style={{
-                                    'vertical-align': 'middle',
-                                    'horizontal-align': 'middle',
+                                    'verticalAlign': 'middle',
+                                    'textAlign': 'center',
                                   }} />
                               </Button>
                             </Flex.Item>);
@@ -335,8 +328,8 @@ export const CustomReligion = () => {
                       bibleStyles.find(entry => entry.name === chosenData.bibleStyle)?.iconName || bibleStyles[0].iconName,
                     ])}
                     style={{
-                      'vertical-align': 'middle',
-                      'horizontal-align': 'middle',
+                      'verticalAlign': 'middle',
+                      'textAlign': 'center',
                     }} />
                 </Button>
             </LabeledList.Item>

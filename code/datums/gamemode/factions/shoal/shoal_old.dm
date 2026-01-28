@@ -167,7 +167,7 @@
 				count_score(O)
 
 		// -- Thirdly, let's compare the score.
-		var/vox_raider_data = SSpersistence_misc.read_data(/datum/persistence_task/vox_raiders)
+		var/vox_raider_data = SSpersistence_tasks.read_data(/datum/persistence_task/vox_raiders)
 		var/score_to_beat = text2num(vox_raider_data["best_score"])
 
 		if (total_points > score_to_beat)
@@ -248,7 +248,7 @@
 	name = "Shoal objectives"
 
 /obj/item/weapon/paper/vox_paper/initialize()
-	var/vox_raider_data = SSpersistence_misc.read_data(/datum/persistence_task/vox_raiders)
+	var/vox_raider_data = SSpersistence_tasks.read_data(/datum/persistence_task/vox_raiders)
 	var/score_to_beat = vox_raider_data["best_score"]
 	var/best_team = vox_raider_data["winning_team"]
 	info = {"<h4>The shoal needs us to gather resources. </h4>

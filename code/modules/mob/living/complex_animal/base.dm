@@ -11,11 +11,15 @@
 #define ANIMAL_CARNIVORE	(1<<1)	//we can eat meat. combine with ANIMAL_HERBIVORE for an omnivore. you also need ANIMAL_BEHAVIOR_PREDATORY if you want it to hunt, otherwise it's just an opportunistic carnivore.
 #define ANIMAL_FRUGIVORE	(1<<2 ) //fruits (jungle berry bushes). implied with HERBIVORE, but can be used on its own.
 
+#define ANIMAL_FLAG_NEVER_STARVE	(1<<0)
+#define ANIMAL_FLAG_NEVER_AGE	(1<<1)
+#define ANIMAL_FLAG_IMMORTAL	ANIMAL_FLAG_NEVER_STARVE | ANIMAL_FLAG_NEVER_AGE
+
 #define ANIMAL_FOODPRIORITY_CANNIBAL -5	//she rips out my bones just like i'm an animal
 #define ANIMAL_FOODPRIORITY_PRECOOKED 5	//why would you eat a plant when you could eat a tasty donut or burger?
-#define ANIMAL_FOODPRIORITY_PLANTS 2	//omnivores prefer not picking a fight. mildly, because we still want some action
+#define ANIMAL_FOODPRIORITY_PLANTS 1	//omnivores prefer not picking a fight. mildly, because we still want some action
 #define ANIMAL_FOODPRIORITY_CORPSES 3	//no need to beat a dead horse. we should be eating it instead.
-#define ANIMAL_FOODPRIORITY_SIZEDIFF_LARGER -5	//bigger=more dangerous, right?
+#define ANIMAL_FOODPRIORITY_SIZEDIFF_LARGER -4	//bigger=more dangerous, right?
 #define ANIMAL_FOODPRIORITY_SIZEDIFF_SMALLER -2	//prefer bigger meals
 #define ANIMAL_FOODPRIORITY_FAMILY -5	//hi ma :)
 #define ANIMAL_FOODPRIORITY_UNDESIRABLE -5	//poison... poison... tasty fish!
@@ -40,6 +44,7 @@
 	var/food_per_tick = 0.0005 //how much of max_food should be deducted from food per tick. This number gives us about 4000 seconds until we starve
 	var/food_flags = 0
 	var/behavior_state = ANIMAL_STATE_IDLE
+	var/animal_flags = 0
 	var/last_state = -1
 	var/ticks_this_state=0
 	var/mob_age = 0
@@ -144,13 +149,13 @@
 		nutrition-=max_food*food_per_tick*0.25 //use extra food when regaining health
 	lasthealth=health
 	
-	if(nutrition<0 && prob(20))
+	if(nutrition<0 && prob(20) && !(animal_flags&ANIMAL_FLAG_NEVER_STARVE) )
 		emote("deathgasp")
 		health=0
 	if(health<=0 && stat != DEAD)
 		death()
 		return 0
-	if(mob_max_age && mob_age > mob_max_age)
+	if(mob_max_age && mob_age > mob_max_age && !(animal_flags&ANIMAL_FLAG_NEVER_AGE) )
 		var/chancetokeelover = (mob_age-mob_max_age)/mob_max_age
 		chancetokeelover = 1-(1/(chancetokeelover+1))
 		// math formula: 1-\frac{1}{\frac{\left(x-m\right)}{m}+1}
@@ -214,13 +219,15 @@
 /mob/living/complex_animal/proc/interrupt_territory()
 	if(behavior_state==ANIMAL_STATE_HUNTING || behavior_state==ANIMAL_STATE_ATTACKING || behavior_state==ANIMAL_STATE_DEFENDING)
 		return FALSE
+	if(!(behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL))
+		return FALSE
 	for(var/mob/living/M in cache_objects_in_view) //if not, check for trespassers
-		if(behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL && get_dist(M,territory)<10 && determine_tresspass(M) )
+		if(get_dist(M,territory)<5 && determine_tresspass(M) )
 			get_tesspass_msg(M)
 			abort_target()
 			behavior_state = ANIMAL_STATE_DEFENDING
 			target=M
-			return FALSE
+			return TRUE
 
 //state functions return TRUE if the behavior_state is unchanged, and FALSE if not. basically just do if(..())
 /mob/living/complex_animal/proc/tick_state_idle()
@@ -700,14 +707,14 @@
 //this proc is ran on the mother only.
 /mob/living/complex_animal/proc/generate_offspring(var/mob/living/complex_animal/father)
 	var/mob/living/complex_animal/child=new src.type(loc)
+	if(!child)
+		return FALSE
 	child.faction=faction
 	child.nutrition=child.max_food*0.5
 	family+=child
 	father.family+=child
 	child.family+=src
 	child.family+=father
-	if(!child)
-		return FALSE
 	return child
 	
 	
@@ -787,14 +794,15 @@
 			target=user
 
 
-/mob/living/complex_animal/assaulted_by(var/mob/M,var/weak_assault=FALSE)	
-	if(behavior_flags & ANIMAL_BEHAVIOR_RETALIATE)
-		behavior_state=behavior_state=ANIMAL_STATE_ATTACKING
-		aggro_drawn(M,ANIMAL_STATE_ATTACKING)
-	else
-		get_flee_msg(M)
-		behavior_state = ANIMAL_STATE_FLEEING
-		target=M
+/mob/living/complex_animal/assaulted_by(var/mob/M,var/weak_assault=FALSE)
+	if(!weak_assault)
+		if(behavior_flags & ANIMAL_BEHAVIOR_RETALIATE)
+			behavior_state=ANIMAL_STATE_ATTACKING
+			aggro_drawn(M,ANIMAL_STATE_ATTACKING)
+		else
+			get_flee_msg(M)
+			behavior_state = ANIMAL_STATE_FLEEING
+			target=M
 	return ..()
 
 /mob/living/complex_animal/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)

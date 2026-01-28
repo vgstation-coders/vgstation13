@@ -273,6 +273,13 @@ var/global/list/hidden_tech = list(
 	id = "anomaly"
 	max_level=6
 
+/datum/tech/exploration
+	name = "Exploration Research"
+	desc = "The study of deep space exploration technologies."
+	id = "exploration"
+	goal_level=0 // Doesn't count towards maxed research, since it's bonus.
+	max_level=1
+
 /*
 datum/tech/arcane
 	name = "Arcane Research"

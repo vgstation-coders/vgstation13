@@ -1,0 +1,276 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/wall/mineral/wood,
+/area/ruin)
+"c" = (
+/obj/structure/grille,
+/obj/structure/window{
+	dir = 4
+	},
+/obj/structure/window{
+	dir = 8
+	},
+/obj/structure/window{
+	dir = 1
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"d" = (
+/obj/structure/grille,
+/obj/structure/window{
+	dir = 4
+	},
+/obj/structure/window{
+	dir = 8
+	},
+/obj/structure/window,
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"f" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/book/manual/engineering_hacking{
+	pixel_x = 7;
+	pixel_y = 3
+	},
+/obj/item/toy/cards{
+	pixel_x = -9;
+	pixel_y = -1
+	},
+/obj/abstract/loot_spawner/entertainment,
+/turf/simulated/floor/wood,
+/area/ruin)
+"j" = (
+/obj/structure/bed/chair/wood/normal,
+/turf/simulated/floor/wood,
+/area/ruin)
+"m" = (
+/obj/structure/grille,
+/obj/structure/window,
+/obj/structure/window{
+	dir = 1
+	},
+/obj/structure/window{
+	dir = 8
+	},
+/obj/structure/window{
+	dir = 4
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"n" = (
+/obj/structure/grille,
+/obj/structure/window,
+/obj/structure/window{
+	dir = 1
+	},
+/obj/structure/window{
+	dir = 8
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"o" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/paper{
+	pixel_x = 7;
+	pixel_y = -4
+	},
+/obj/item/weapon/pen/quill{
+	pixel_x = -7;
+	pixel_y = 3;
+	color = "#DD3333"
+	},
+/obj/item/weapon/paper{
+	pixel_x = 7;
+	pixel_y = 5
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"r" = (
+/obj/structure/closet/cabinet,
+/obj/item/clothing/under/color/prisoner,
+/obj/item/clothing/under/color/prisoner,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/turf/simulated/floor/wood,
+/area/ruin)
+"u" = (
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+"v" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/green,
+/obj/structure/curtain/open/bed,
+/turf/simulated/floor/wood,
+/area/ruin)
+"z" = (
+/obj/machinery/space_heater/campfire,
+/obj/machinery/cooking/grill/spit,
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+"B" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"F" = (
+/turf/simulated/floor/wood,
+/area/ruin)
+"H" = (
+/turf/template_noop,
+/area/template_noop)
+"N" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/hatchet{
+	pixel_y = 7;
+	pixel_x = -3
+	},
+/obj/item/weapon/reagent_containers/glass/mortar{
+	pixel_x = 5;
+	pixel_y = -5
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"O" = (
+/obj/structure/grille,
+/obj/structure/window,
+/obj/structure/window{
+	dir = 1
+	},
+/obj/structure/window{
+	dir = 4
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"P" = (
+/obj/structure/grille,
+/obj/structure/window,
+/obj/structure/window{
+	dir = 1
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"R" = (
+/obj/structure/table/woodentable,
+/obj/abstract/loot_spawner/combat,
+/turf/simulated/floor/wood,
+/area/ruin)
+"S" = (
+/obj/machinery/door/mineral/wood{
+	name = "Wooden Door"
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"T" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/abstract/loot_spawner/food_or_drink,
+/turf/simulated/floor/wood,
+/area/ruin)
+"X" = (
+/obj/structure/reagent_dispensers/watertank,
+/turf/simulated/floor/wood,
+/area/ruin)
+"Z" = (
+/obj/structure/grille,
+/obj/structure/window{
+	dir = 4
+	},
+/obj/structure/window{
+	dir = 8
+	},
+/obj/structure/window,
+/obj/structure/window{
+	dir = 1
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+
+(1,1,1) = {"
+H
+H
+u
+H
+H
+H
+H
+"}
+(2,1,1) = {"
+a
+Z
+S
+a
+a
+a
+a
+"}
+(3,1,1) = {"
+n
+X
+F
+F
+j
+f
+m
+"}
+(4,1,1) = {"
+P
+F
+F
+F
+F
+F
+a
+"}
+(5,1,1) = {"
+O
+T
+F
+F
+F
+F
+a
+"}
+(6,1,1) = {"
+a
+a
+S
+a
+R
+N
+a
+"}
+(7,1,1) = {"
+n
+r
+F
+a
+c
+d
+a
+"}
+(8,1,1) = {"
+P
+F
+F
+a
+B
+B
+B
+"}
+(9,1,1) = {"
+O
+v
+o
+a
+B
+z
+B
+"}
+(10,1,1) = {"
+a
+c
+d
+a
+B
+B
+B
+"}

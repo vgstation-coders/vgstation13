@@ -83,3 +83,7 @@
 	var/braindamagespeechcooldown = FALSE //used to avoid braindamage proc spamming when checking the like 80 replacements
 
 	var/list/luminosity_sources = list()
+	var/standard_dizzy_reduce = 1
+	var/standard_jitter_reduce = 1
+	var/rested_dizzy_reduce = 5
+	var/rested_jitter_reduce = 5

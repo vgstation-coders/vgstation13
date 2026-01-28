@@ -53,6 +53,9 @@
 		overlay.pixel_y = -2 * PIXEL_MULTIPLIER
 		overlays += overlay;
 
+/obj/item/weapon/paper/envelope/slime_act(primarytype, mob/user)
+	return open ? FALSE : ..() //hotfixes slimes being messy with this
+
 /obj/item/weapon/paper/envelope/attackby(obj/item/weapon/P, mob/user)
 	. = ..()
 	if(.)

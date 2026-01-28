@@ -57,7 +57,7 @@ export const MSGS = (props) => {
                   setLocalPressure(value);
                   act('set_pressure', { 'new_pressure': localPressure });
                 }}
-                ondrag={(value) => {
+                onDrag={(value) => {
                   setLocalPressure(value);
                   act('set_pressure', { 'new_pressure': localPressure });
                 }} />

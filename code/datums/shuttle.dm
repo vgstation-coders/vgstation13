@@ -1,6 +1,7 @@
 #define NO_TRANSIT 0 //Don't use transit areas
 #define TRANSIT_ACROSS_Z_LEVELS 1 //Only use transit areas if moving to another z-level
 #define TRANSIT_ALWAYS 2 //Always use transit areas
+#define CHEAP_TRANSIT 3 //Only use transit areas when moving to another z-level, with free travel between the station and roid
 
 //Whether this shuttle can be linked to a shuttle control console.
 #define LINK_FREE 0
@@ -370,6 +371,21 @@
 				return
 			for(var/atom/movable/AA in linked_area)
 				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "to_z" = D.z, "from_z" = linked_port.z)
+				if(istype(AA, /mob/living))
+					var/mob/living/LL = AA
+					if(istype(D,/obj/docking_port/destination/planet_surface))
+						if(istype(linked_port,/obj/docking_port/destination/planet_surface))
+							INVOKE_EVENT(LL, /event/planet_entered, LL, D.planet)
+							INVOKE_EVENT(LL, /event/planet_exited, LL, linked_port.planet)
+							continue
+						LL.register_event(/event/planet_entered, D.planet, "on_mob_entered")
+						LL.register_event(/event/planet_exited, D.planet, "on_mob_exited")
+						INVOKE_EVENT(LL, /event/planet_entered, LL, D.planet)
+					else if(istype(linked_port,/obj/docking_port/destination/planet_surface))
+						INVOKE_EVENT(LL, /event/planet_exited, LL, linked_port.planet)
+						LL.unregister_event(/event/planet_entered, linked_port.planet, "on_mob_entered")
+						LL.unregister_event(/event/planet_exited, linked_port.planet, "on_mob_exited")
+
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -391,22 +407,63 @@
 		return
 
 	if(transit_port && get_transit_delay())
-		if(use_transit == TRANSIT_ALWAYS || (use_transit == TRANSIT_ACROSS_Z_LEVELS && (linked_area.z != destination_port.z)))
+		if(transit_check())
 			close_all_doors()
 			move_to_dock(transit_port)
 			spawn(max(1,get_transit_delay()-5))
 				for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
 					spawn()
 						P.shoot_exhaust()
-			animate_transit()
-			sleep(get_transit_delay())
+			for(var/atom/A in linked_area.contents)
+				animate(A)
+				A.pixel_y = initial(A.pixel_y)
+				if(istype(A,/mob/living))
+					var/mob/living/M = A
+					M << sound("sound/machines/hyperspace_progress.ogg", repeat = 0, wait = 1, channel = CHANNEL_AMBIENCE, volume = 75)
+			spawn(get_transit_delay())
+				complete_flight()
+			return
 
+	complete_flight()
+
+/datum/shuttle/proc/complete_flight()
 	if(destination_port)
 		animate_landing()
 		move_to_dock(destination_port)
 		destination_port = null
 
 	moving = 0
+
+/datum/shuttle/proc/transit_check()
+	if(use_transit == NO_TRANSIT) // no transit
+		return FALSE
+	else if(use_transit == TRANSIT_ALWAYS) // always transit
+		return TRUE
+	else if(linked_area.z == destination_port.z) // same z-level
+		if(istype(destination_port,/obj/docking_port/destination/planet_surface) || istype(linked_port,/obj/docking_port/destination/planet_surface)) //transit to/from a planet
+			return TRUE
+		else
+			return FALSE
+	else if(use_transit == CHEAP_TRANSIT) // station <-> roid no transit
+		if(linked_area.z == map.zMainStation) // no transit from station to the roid
+			if(destination_port.z == map.zAsteroid)
+				return FALSE
+			else
+				return TRUE
+		else if(destination_port.z == map.zMainStation) // no transit from roid to station
+			if(linked_area.z == map.zAsteroid)
+				return FALSE
+			else
+				return TRUE
+		else
+			return TRUE
+	else if(use_transit == TRANSIT_ACROSS_Z_LEVELS) // transit across a z-level
+		if(linked_area.z != destination_port.z)
+			return TRUE
+		else
+			return FALSE
+	else
+		return FALSE
 
 /datum/shuttle/proc/animate_liftoff()
 	var/variation = rand(1,2)
@@ -415,9 +472,9 @@
 		if(istype(A,/obj/structure/shuttle/engine/heater))
 			var/obj/structure/shuttle/engine/heater/H = A
 			H.activate()
-		if(istype(A,/mob))
-			var/mob/M = A
-			M << sound("sound/machines/hyperspace_begin.ogg", repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE, volume = 75)
+		if(istype(A,/mob/living))
+			var/mob/living/M = A
+			M << sound("sound/machines/hyperspace_begin.ogg", repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE, volume = 50)
 		if(istype(A,/turf))
 			var/turf/T = A
 			for(var/obj/O in T.contents)
@@ -431,33 +488,12 @@
 		animate(pixel_y = base_y + variation, time = 10, easing = SINE_EASING, loop = -1)
 		animate(pixel_y = base_y - variation, time = 10, easing = SINE_EASING)
 
-/datum/shuttle/proc/animate_transit()
-	var/variation = rand(1,2)
-	for(var/atom/A in linked_area.contents)
-		var/skip = FALSE
-		A.pixel_y = initial(A.pixel_y)
-		if(istype(A,/mob))
-			var/mob/M = A
-			M << sound("sound/machines/hyperspace_progress.ogg", repeat = 0, wait = 1, channel = CHANNEL_AMBIENCE, volume = 75)
-		if(istype(A,/turf))
-			var/turf/T = A
-			for(var/obj/O in T.contents)
-				if(istype(O,/obj/structure/shuttle/diag_wall))
-					skip = TRUE
-					break
-		if(skip)
-			continue
-		var/base_y = initial(A.pixel_y)
-		animate(A, pixel_y = base_y , time = 10, easing = SINE_EASING|EASE_OUT, loop = -1)
-		animate(pixel_y = base_y - variation, time = 10, easing = SINE_EASING)
-		animate(pixel_y = base_y + variation, time = 10, easing = SINE_EASING)
-
 /datum/shuttle/proc/animate_landing()
 	for(var/atom/A in linked_area.contents)
 		var/skip = FALSE
-		if(istype(A,/mob))
-			var/mob/M = A
-			M << sound("sound/machines/hyperspace_end.ogg", repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE, volume = 75)
+		if(istype(A,/mob/living))
+			var/mob/living/M = A
+			M << sound("sound/machines/hyperspace_end.ogg", repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE, volume = 50)
 		if(istype(A,/turf))
 			var/turf/T = A
 			for(var/obj/O in T.contents)
@@ -968,6 +1004,8 @@
 		dest_climate = SSweather.get_climate(new_center.z, null)
 
 	for(var/turf/T in linked_area.contents)
+		for(var/obj/effect/edge_overlay/E in T)
+			qdel(E)
 		if(T in corner_turfs)
 			continue
 		if(source_climate)
@@ -976,8 +1014,6 @@
 			dest_climate.unregister_weather_turf(T)
 		for(var/obj/effect/weather_holder/WH in T.vis_contents)
 			T.vis_contents -= WH
-		for(var/obj/effect/edge_overlay/E in T)
-			qdel(E)
 
 	// Re-register turfs left behind by the shuttle with the source climate
 	if(source_climate)
@@ -1222,6 +1258,7 @@
 	docking_port = new(port_turf)
 	docking_port.dir = port_dir
 	docking_port.areaname = "[planet.planet_name] surface"
+	docking_port.planet = planet
 
 	if(planet.default_baseturf)
 		docking_port.base_turf_type = planet.default_baseturf
@@ -1289,7 +1326,7 @@
 	for(var/rel_x = safe_x_min; rel_x <= safe_x_max; rel_x++)
 		for(var/rel_y = safe_y_min; rel_y <= safe_y_max; rel_y++)
 			var/turf/T = turf_matrix[rel_x][rel_y]
-			if(T && !iswall(T) && !istype(T, /turf/unsimulated/mineral))
+			if(T && !iswall(T) && !istype(T, /turf/unsimulated/mineral) && istype(T.loc, /area/planet) && !istype(T, /turf/unsimulated/beach/water) && !istype(T,/turf/unsimulated/floor/planetary/lava))
 				search_positions += T
 
 	// Shuffle the search positions for randomization

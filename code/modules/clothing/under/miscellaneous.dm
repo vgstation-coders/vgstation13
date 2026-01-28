@@ -899,6 +899,20 @@
 	item_state = "callum_suit"
 	_color = "callum_suit"
 
+/obj/item/clothing/under/tian
+	name = "tian dress"
+	desc = "Custom-made for a warrior, long long ago."
+	icon_state = "tian_dress"
+	item_state = "tian_dress"
+	_color = "tian_dress"
+
+/obj/item/clothing/under/matsuda
+	name = "disheveled jumpsuit"
+	desc = "A rolled down jumpsuit and undershirt combo, styled after old Martian actress."
+	icon_state = "matsuda"
+	item_state = "matsuda"
+	_color = "matsuda"
+
 /obj/item/clothing/under/clownsuit
 	name = "formal clown outfit"
 	desc = "For clowns living in a society."

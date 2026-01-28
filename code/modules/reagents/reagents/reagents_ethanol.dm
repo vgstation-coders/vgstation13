@@ -38,7 +38,7 @@
 			if(isnum(A.tick))
 				common_tick += A.tick
 
-	M.dizziness += dizzy_adj
+	M.AdjustDizzy(M.standard_dizzy_reduce + dizzy_adj)
 	if(common_tick >= slur_start && tick < pass_out)
 		if(!M.slurring)
 			M.slurring = 1
@@ -744,7 +744,7 @@
 			if(M.getToxLoss() && prob(50))
 				M.adjustToxLoss(-2)
 			if(M.dizziness != 0)
-				M.dizziness = max(0, M.dizziness - 15)
+				M.AdjustDizzy(-15)
 			if(M.confused != 0)
 				M.remove_confused(5)
 

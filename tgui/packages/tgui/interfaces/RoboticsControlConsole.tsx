@@ -18,6 +18,7 @@ type Cyborg = {
   name: string,
   locked_down: number,
   status: number, // ss13, 0 = alive, etc
+  location: string,
   charge: number,
   module: string,
   master: string,
@@ -28,7 +29,7 @@ type Cyborg = {
 
 export const RoboticsControlConsole = (props) => {
   const { act, data } = useBackend<Data>();
-  const [tab, setTab] = useState();
+  const [tab, setTab] = useState<number>(2);
   const {
     can_hack,
     sequence_activated,
@@ -116,13 +117,12 @@ const Cyborgs = (props) => {
         )}>
         <Flex>
           <Flex.Item>
-            <Box
-              as="img"
+            <img
               src={`data:image/jpeg;base64,${cyborg.borgimage}`}
               height="64px"
               width="64px"
               style={{
-                'image-rendering': 'pixelated',
+                imageRendering: 'pixelated',
               }}
             />
           </Flex.Item>
@@ -141,6 +141,9 @@ const Cyborgs = (props) => {
                       ? 'Locked Down'
                       : 'Nominal'}
                 </Box>
+              </LabeledList.Item>
+              <LabeledList.Item label="Location">
+                {cyborg.location}
               </LabeledList.Item>
               <LabeledList.Item label="Cell Charge">
                 <Box color={cyborg.charge <= 30
@@ -177,8 +180,7 @@ const SelfDestruct = (props) => {
 
   return (
     <NoticeBox
-      info={sequence_activated ? false : true}
-      danger={sequence_activated ? true : false}
+      danger={!!sequence_activated}
       textAlign="center">
 
       Cyborg Emergency Killswitch<br /><br />

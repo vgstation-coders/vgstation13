@@ -23,11 +23,12 @@ export const formatMoney = (value, precision = 0) => {
     return value;
   }
   // Round the number and make it fixed precision
-  let fixed = round(value, precision);
+  let fixed: string;
   if (precision > 0) {
     fixed = toFixed(value, precision);
+  } else {
+    fixed = String(round(value, precision))
   }
-  fixed = String(fixed);
   // Place thousand separators
   const length = fixed.length;
   let indexOfPoint = fixed.indexOf('.');
@@ -161,7 +162,8 @@ export const GenericUplink = (props) => {
             content={compactMode ? 'Compact' : 'Detailed'}
             onClick={() => act('compact_toggle')} />
           <Button.Input
-            buttonText={<Box><Icon name="coins" /> Withdraw</Box>}
+            icon="coins"
+            buttonText=" Withdraw"
             onCommit={(value) => act('get_tc', { 'amount': value })} />
 
           {!!lockable && (
@@ -208,7 +210,7 @@ export const GenericUplink = (props) => {
   );
 };
 
-const ItemList = (props, context) => {
+const ItemList = (props) => {
   const {
     compactMode,
     currencyAmount,
@@ -218,7 +220,7 @@ const ItemList = (props, context) => {
   const [
     hoveredItem,
     setHoveredItem,
-  ] = useState({});
+  ] = useState<UplinkItem | null>(null);
   const hoveredCost = hoveredItem && hoveredItem.cost || 0;
   // Append extra hover data to items
   const items = props.items.map(item => {
@@ -248,8 +250,8 @@ const ItemList = (props, context) => {
                 disabled={item.disabled}
                 tooltip={item.desc}
                 tooltipPosition="left"
-                onmouseover={() => setHoveredItem(item)}
-                onmouseout={() => setHoveredItem({})}
+                onMouseOver={() => setHoveredItem(item)}
+                onMouseLeave={() => setHoveredItem(null)}
                 onClick={() => act('buy', {
                   name: item.name,
                 })} />
@@ -263,13 +265,12 @@ const ItemList = (props, context) => {
     <Section
       key={item.name}
       title={item.name}
-      level={2}
       buttons={(
         <Button
           content={formatMoneyWithDiscount(item.cost, item.base_cost) + ' ' + currencySymbol}
           disabled={item.disabled}
-          onmouseover={() => setHoveredItem(item)}
-          onmouseout={() => setHoveredItem({})}
+          onMouseOver={() => setHoveredItem(item)}
+          onMouseLeave={() => setHoveredItem(null)}
           onClick={() => act('buy', {
             name: item.name,
           })} />
