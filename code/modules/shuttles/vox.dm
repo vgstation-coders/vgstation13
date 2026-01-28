@@ -76,13 +76,14 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 		returned_home = 1	//If the round type is heist, this will cause the round to end
 							//See code/game/gamemodes/heist/heist.dm, 294
 
-/*
-/datum/shuttle/vox/actually_travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
+
+/datum/shuttle/vox/after_flight()
 	. = ..()
-	if (!(user.mind.GetRole(VOXRAIDER)) && (D == dock_home))
-		var/datum/faction/vox_shoal/our_raiders = find_active_faction_by_type(/datum/faction/vox_shoal)
-		our_raiders.complete_failure = TRUE // they completely failed if a non-raider manages to access the shuttle.
-*/
+	var/datum/faction/vox_shoal/raider_faction = find_active_faction_by_type(/datum/faction/vox_shoal)
+	raider_faction?.OnShuttleMove()
+
+
+
 
 /obj/machinery/computer/shuttle_control/vox
 	icon_state = "syndishuttle"

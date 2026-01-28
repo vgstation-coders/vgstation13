@@ -28,6 +28,10 @@
 		return TRUE
 	return FALSE
 
+////////////////////
+
+//////// TODO: FIX THIS RETURNING TRUE FOR SUBTYPES
+
 /datum/objective/raider/steal/proc/LocateObjective()
 	if(!locate(target_type))
 		message_admins("VOX RAIDERS: [name] couldn't be picked as its objective wasn't located in the world.")

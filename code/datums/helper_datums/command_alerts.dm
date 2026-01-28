@@ -863,6 +863,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Trade Probe Rerouted"
 	message = "A Vox trade probe rerouted away from the station after determining that employee wages were too low to justify a visit."
 
+/datum/command_alert/vox_raid_detected
+	alert_title = "Unauthorized Shoal Contact"
+
+//temp
+/datum/command_alert/vox_raid_detected/announce()
+	message = "The loss prevention department has detected the loss of one or more high priority assets as a result of Vox Shoal-associated activity not authorized under Section-XXV of the Trade and Other Contacts Binding Agreement. [shoalPlanet ? "Bluespace-tracking has traced their location back to somewhere within the vicinity of Port [shoalPlanet.sector]. Destination disks can be printed at your station's deep space scanner." : ""]  Please remember that station assets are not up for donation."
+	..()
+
 /datum/command_alert/archive_thanks
 	alert_title = "Science Thanks You"
 

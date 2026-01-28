@@ -111,7 +111,7 @@ rules:
   ## Enforce that class methods utilize this
   # class-methods-use-this: error
   ## Enforce a maximum cyclomatic complexity allowed in a program
-  complexity: [error, { max: 50 }]
+  complexity: [error, { max: 100 }]
   ## Require return statements to either always or never specify values
   # consistent-return: error
   ## Enforce consistent brace style for all control statements

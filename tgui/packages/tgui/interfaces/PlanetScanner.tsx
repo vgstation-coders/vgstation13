@@ -10,6 +10,11 @@ type BeaconData = {
   location: string;
 };
 
+type ShuttlePortData = {
+  name: string;
+  port_index: number;
+}
+
 type PlanetData = {
   name: string;
   desc: string;
@@ -17,6 +22,8 @@ type PlanetData = {
   procedural_name: string;
   icon_data: string;
   beacons: BeaconData[];
+  shuttle_ports: ShuttlePortData[];
+  ports_need_scan: boolean;
   has_active_beacon: boolean;
 };
 
@@ -24,6 +31,7 @@ type Data = {
   anchored: boolean;
   powered: boolean;
   scanning: boolean;
+  searching_for_port: number;
   scans_completed: number;
   max_scans: number;
   progress: number;
@@ -54,6 +62,7 @@ export const PlanetScanner = (props) => {
     anchored,
     powered,
     scanning,
+    searching_for_port,
     scans_completed,
     max_scans,
     progress,
@@ -169,7 +178,7 @@ export const PlanetScanner = (props) => {
                         border: '2px solid #aa5500',
                         padding: '8px 16px',
                         backgroundColor: '#331100',
-                        borderRadius: '4px'
+                        borderRadius: '4px',
                       }}
                     >
                       AUTHORIZATION REQUIRED
@@ -210,7 +219,7 @@ export const PlanetScanner = (props) => {
                 </Section>
               </Stack.Item>
 
-              {!!scanning && !waiting_for_generation && (
+              {!!scanning && !searching_for_port && !waiting_for_generation && (
                 <Stack.Item>
                   <Section title="Scanning Progress">
                     <ProgressBar value={progress} maxValue={100} />
@@ -251,7 +260,7 @@ export const PlanetScanner = (props) => {
                 </Stack.Item>
               )}
 
-              {!!has_discoveries && !scanning && !waiting_for_generation && (
+              {!!has_discoveries && (!scanning || searching_for_port) && !waiting_for_generation && (
                 <Stack.Item grow>
                   <Section title="Discovered Planets">
                     <Stack>
@@ -332,17 +341,51 @@ export const PlanetScanner = (props) => {
                                 />
                               </Stack.Item>
                               <Stack.Item grow />
-                              <Stack.Item>
-                                <Button
-                                  icon="save"
-                                  content="Print Destination Disk"
-                                  disabled={!currentPlanet}
-                                  onClick={() => act('print_disk', { planet_index: currentPlanetIndex })}
-                                  tooltip="Create a destination disk for this planet"
-                                />
-                              </Stack.Item>
+                              {currentPlanet?.shuttle_ports.length === 0 ?
+                                (
+                                <Stack.Item>
+                                  <Button
+                                    icon="save"
+                                    content="Print Destination Disk"
+                                    onClick={() => act('print_disk', { planet_index: currentPlanetIndex })}
+                                    tooltip="Create a destination disk for this planet"
+                                  />
+                                </Stack.Item>
+                                ) : "" }
                             </Stack>
                           </Stack.Item>
+                            {currentPlanet?.shuttle_ports.length ?
+                              currentPlanet.ports_need_scan ?
+                                searching_for_port-1 === currentPlanetIndex ?
+                                  (
+                                  <Stack.Item>
+                                    <ProgressBar value={progress} maxValue={100} />
+                                  </Stack.Item>
+                                  ) :
+                                  (
+                                    <Button
+                                      icon="satellite-dish"
+                                      content="Scan for Docking Ports"
+                                      disabled={searching_for_port !== 0}
+                                      onClick={() => act('search_for_port', { planet_index: currentPlanetIndex })}
+                                      tooltip="Search for docking ports on this planet"
+                                    />
+                                  )
+
+                                : (currentPlanet.shuttle_ports.map(port => {
+                                  return (
+                                  <Stack.Item key={port.port_index} >
+                                    <Button
+                                      icon="save"
+                                      content={"Destination: " + port.name}
+                                      onClick={() => act('print_port_disk', { planet_index: currentPlanetIndex, port_index: port.port_index })}
+                                      tooltip="Create a destination disk for this planet"
+                                    />
+                                  </Stack.Item>
+                                  );
+                                })
+                                )
+                            : "" }
                         </Stack>
                       </Stack.Item>
                     </Stack>

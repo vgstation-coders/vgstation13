@@ -1,5 +1,4 @@
 // Configuration constants
-#define PLANET_SCANNER_MAX_SCANS 25
 #define PLANET_SCANNER_BASE_ENERGY_COST 1000000 // Base energy cost in Joules
 #define PLANET_SCANNER_ENERGY_EXPONENT 2 // Exponential growth factor for scan costs
 #define PLANET_SCANNER_SCAN_MODULE_EFFICIENCY 0.75 // Energy efficiency per scanning module tier
@@ -28,14 +27,14 @@
 
 	// Scanning state
 	var/scanning = FALSE
-	var/scans_completed = 0
-	var/current_scan_energy = 0 // Current energy accumulated in Joules
-	var/required_scan_energy = 0 // Required energy for current scan in Joules
-	var/waiting_for_generation = FALSE // Waiting for planet generation to complete
+	var/current_scan_energy = 0 		// Current energy accumulated in Joules
+	var/required_scan_energy = 0 		// Required energy for current scan in Joules
+	var/waiting_for_generation = FALSE 	// Waiting for planet generation to complete
+	var/searching_for_port				// Our scan is searching for a port on an already-generated planet.
 
 	// Upgrade modifiers
-	var/max_power = POWER_T1 // Maximum power consumption in Watts (modified by upgrades)
-	var/energy_efficiency_modifier = 1.0 // Modifier for energy requirements (lower = more efficient)
+	var/max_power = POWER_T1 				// Maximum power consumption in Watts (modified by upgrades)
+	var/energy_efficiency_modifier = 1.0 	// Modifier for energy requirements (lower = more efficient)
 
 	// Cooldown tracking
 	var/last_disk_print_time = 0 // World time of last disk print
@@ -102,7 +101,7 @@
 /// Calculate the energy required for the next scan
 /// Energy requirement doubles with each completed scan, modified by efficiency upgrades
 /obj/machinery/planet_scanner/proc/calculate_required_energy()
-	required_scan_energy = round(PLANET_SCANNER_BASE_ENERGY_COST * (PLANET_SCANNER_ENERGY_EXPONENT ** scans_completed) * energy_efficiency_modifier)
+	required_scan_energy = round(PLANET_SCANNER_BASE_ENERGY_COST * (PLANET_SCANNER_ENERGY_EXPONENT ** SSmapping.scans_completed) * energy_efficiency_modifier)
 
 /// Get the amount of power available from the area's APC
 /// Returns: Available power in Watts, or 0 if no APC is available
@@ -157,9 +156,10 @@
 	data["anchored"] = anchored
 	data["powered"] = !(stat & (BROKEN|NOPOWER))
 	data["scanning"] = scanning
-	data["scans_completed"] = scans_completed
-	data["max_scans"] = PLANET_SCANNER_MAX_SCANS
-	data["at_scan_limit"] = scans_completed >= PLANET_SCANNER_MAX_SCANS
+	data["searching_for_port"] = searching_for_port
+	data["scans_completed"] = SSmapping.scans_completed
+	data["max_scans"] = SSmapping.max_planet_scans
+	data["at_scan_limit"] = SSmapping.scans_completed >= SSmapping.max_planet_scans
 	data["can_scan"] = can_start_scan()
 	data["waiting_for_generation"] = waiting_for_generation
 	data["other_scan_in_progress"] = (SSmapping?.scanning || SSmapping?.generating) && !scanning && !waiting_for_generation
@@ -181,14 +181,20 @@
 		data["generation_progress"] = null
 
 	// Planet discoveries
-	data["has_discoveries"] = SSmapping?.planets.len > 0
-	data["discovered_planets"] = get_planet_list_data()
+	var/list/planet_list_data = get_planet_list_data()
+	data["has_discoveries"] = planet_list_data?.len ? TRUE : FALSE
+ 	data["discovered_planets"] = planet_list_data
 
 	return data
 
 /// Check if the scanner is ready to start a new scan
 /obj/machinery/planet_scanner/proc/can_start_scan()
-	return anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && scans_completed < PLANET_SCANNER_MAX_SCANS && !SSmapping?.scanning && !SSmapping?.generating && !SSmapping.scanning_disabled
+	return anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && SSmapping.scans_completed < SSmapping.max_planet_scans && !SSmapping?.scanning && !SSmapping?.generating && !SSmapping.scanning_disabled
+
+
+/// Check if the scanner is ready to start searching for docking ports on a planet.
+/obj/machinery/planet_scanner/proc/can_search_for_port()
+	return anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && !SSmapping?.scanning
 
 /// Get the current scan progress as a percentage (0-100), or null if not scanning
 /obj/machinery/planet_scanner/proc/get_scan_progress()
@@ -234,6 +240,18 @@
 		planet_info["procedural_name"] = planet.planet_name
 		planet_info["icon_data"] = icon2base64(planet.ico)
 
+		// Get all shuttle ports on this planet
+		var/list/shuttle_ports = list()
+		if(planet.shuttle_ports)
+			for(var/i = 1 to planet.shuttle_ports.len)
+				var/obj/docking_port/destination/port = planet.shuttle_ports[i]
+				var/list/port_info = list()
+				port_info["name"] = port.areaname
+				port_info["port_index"] = i
+				shuttle_ports += list(port_info)
+		planet_info["shuttle_ports"] = shuttle_ports
+		planet_info["ports_need_scan"] = planet.ports_require_scan
+
 		// Get all beacons on this planet
 		var/list/beacons = list()
 		var/has_active_beacon = FALSE
@@ -270,6 +288,18 @@
 				return FALSE
 			start_scan(usr)
 			return TRUE
+		if("search_for_port")
+			if(!can_search_for_port())
+				return FALSE
+			search_for_port(params["planet_index"],usr)
+			return TRUE
+		if("print_port_disk")
+			var/planet_index = text2num(params["planet_index"])
+			var/port_index = text2num(params["port_index"])
+			if(!validate_port_index(planet_index, port, usr))
+				return FALSE
+			print_port_destination_disk(usr, planet_index, port_index)
+			return TRUE
 		if("print_disk")
 			var/planet_index = text2num(params["planet_index"])
 			if(!validate_planet_index(planet_index, usr))
@@ -295,6 +325,30 @@
 
 	return TRUE
 
+
+/// Validate that a port index from the UI is valid
+/// Args:
+///   planet_index - 0-indexed planet index from the frontend
+///   port_index - 1-indexed planet index from the frontend
+///   user - The mob to send error messages to
+/// Returns: TRUE if valid, FALSE otherwise
+/obj/machinery/planet_scanner/proc/validate_port_index(planet_index, port_index, mob/user)
+	if(!validate_planet_index(planet_index))
+		return FALSE
+
+	// Planet indices from the UI are 0-indexed
+	var/dm_index = planet_index + 1
+	var/datum/planet_type/planet = get_planet_by_index(dm_index)
+	if(planet.ports_require_scan)
+		if(user)
+			to_chat(user, "<span class='warning'>These docking ports haven't been scanned yet.</span>")
+		return FALSE
+	if(port_index < 1 || port_index > planet.shuttle_ports.len)
+		if(user)
+			to_chat(user, "<span class='warning'>Invalid docking port selected.</span>")
+		return FALSE
+	return TRUE
+
 /obj/machinery/planet_scanner/ui_state(mob/user)
 	return default_state
 
@@ -306,6 +360,31 @@
 	SSmapping.scanning = TRUE
 	update_icon()
 	return TRUE
+
+/// Start a new planet scan
+/obj/machinery/planet_scanner/proc/search_for_port(var/planet_index, mob/user)
+	scanning = TRUE
+	current_scan_energy = 0
+	required_scan_energy = PLANET_SCANNER_BASE_ENERGY_COST * 5
+	use_power = MACHINE_POWER_USE_ACTIVE
+	SSmapping.scanning = TRUE
+
+	// Convert from 0-indexed frontend to 1-indexed DM list
+	var/dm_index = planet_index + 1
+
+	searching_for_port = dm_index 		// Save the index of the planet when we mark that we're searching for a port.
+
+	var/datum/planet_type/planet = get_planet_by_index(dm_index)
+	if(!planet)
+		to_chat(user, "<span class='warning'>Planet data corrupted or invalid.</span>")
+		return FALSE
+
+	to_chat(user, "<span class='notice'>Searching for docking locations at... [planet.planet_name]...</span>")
+	playsound(src, 'sound/effects/dotmatrixprinter.ogg', 40, 1)
+	update_icon()
+
+	return TRUE
+
 
 /obj/machinery/planet_scanner/process()
 	if(!anchored)
@@ -340,7 +419,10 @@
 
 	// Check if scan is complete
 	if(current_scan_energy >= required_scan_energy)
-		complete_scan()
+		if(searching_for_port)
+			find_docking_ports()
+		else
+			complete_scan()
 
 /// Accumulate energy for the current scan based on power consumed
 /// Energy (Joules) = Power (Watts) × Time (seconds)
@@ -352,12 +434,33 @@
 /obj/machinery/planet_scanner/proc/abort_scan(reason)
 	visible_message("<span class='warning'>[src] stops scanning due to [reason]!</span>")
 	scanning = FALSE
+	searching_for_port = FALSE
 	waiting_for_generation = FALSE
 	current_scan_energy = 0
 	use_power = MACHINE_POWER_USE_IDLE
 	SSmapping.scanning = FALSE
 	playsound(src, 'sound/machines/alert.ogg', 50, 1)
 	update_icon()
+
+/// Complete the current scan and find any ports (energy requirement met)
+/obj/machinery/planet_scanner/proc/find_docking_ports(mob/user)
+	use_power = MACHINE_POWER_USE_IDLE 		// Stop consuming power
+	SSmapping.scanning = FALSE
+	scanning = FALSE
+	searching_for_port = FALSE
+	waiting_for_generation = FALSE
+
+	var/datum/planet_type/planet = get_planet_by_index(searching_for_port)
+	if(!planet)
+		visible_message("<span class='warning'>[src] buzzes. Planet data corrupted or invalid.</span>")
+		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 1)
+		return FALSE
+
+	planet.ports_require_scan = FALSE
+	playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
+	visible_message("<span class='notice'>[src] completes its scan and displays the results.</span>")
+	update_icon()
+	calculate_required_energy() 		// For our next scan.
 
 /// Complete the current scan and spawn a new planet (energy requirement met)
 /obj/machinery/planet_scanner/proc/complete_scan()
@@ -369,8 +472,9 @@
 /// Finalize the scan after planet generation is complete
 /obj/machinery/planet_scanner/proc/finalize_scan()
 	scanning = FALSE
+	searching_for_port = FALSE
 	waiting_for_generation = FALSE
-	scans_completed++
+	SSmapping.scans_completed++
 	playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
 	visible_message("<span class='notice'>[src] completes its scan and displays the results.</span>")
 	calculate_required_energy()
@@ -429,6 +533,34 @@
 
 	return TRUE
 
+/obj/machinery/planet_scanner/proc/print_port_destination_disk(mob/user, planet_index, port_index)
+	if(world.time < last_disk_print_time + PLANET_SCANNER_DISK_PRINT_COOLDOWN)
+		to_chat(user, "<span class='warning'>Disk printer is still cooling down! Please wait [(last_disk_print_time + PLANET_SCANNER_DISK_PRINT_COOLDOWN - world.time)] seconds.</span>")
+		return FALSE
+
+	// Convert from 0-indexed frontend to 1-indexed DM list
+	var/dm_index = planet_index + 1
+	var/datum/planet_type/planet = get_planet_by_index(dm_index)
+	if(!planet)
+		to_chat(user, "<span class='warning'>Planet data corrupted or invalid.</span>")
+		return FALSE
+
+	var/obj/docking_port/destination/destination = planet.shuttle_ports[port_index]
+	if(!destination)
+		to_chat(user, "<span class='warning'>Docking destination data corrupted or invalid.</span>")
+		return FALSE
+
+	to_chat(user, "<span class='notice'>Printing destination disk for [planet.planet_name]...</span>")
+	playsound(src, 'sound/effects/dotmatrixprinter.ogg', 40, 1)
+
+	var/obj/item/weapon/disk/shuttle_coords/disk = new(get_turf(src))
+	disk.destination = planet.shuttle_ports[port_index]
+	disk.header = "[destination.areaname]"
+
+	last_disk_print_time = world.time
+
+	return TRUE
+
 /// Get a planet from the discovered planets list by 1-indexed position
 /// Returns: The planet datum, or null if invalid
 /obj/machinery/planet_scanner/proc/get_planet_by_index(dm_index)
@@ -442,7 +574,6 @@
 
 
 // Cleanup defines
-#undef PLANET_SCANNER_MAX_SCANS
 #undef PLANET_SCANNER_BASE_ENERGY_COST
 #undef PLANET_SCANNER_ENERGY_EXPONENT
 #undef PLANET_SCANNER_SCAN_MODULE_EFFICIENCY

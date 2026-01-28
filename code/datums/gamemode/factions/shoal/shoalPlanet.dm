@@ -1,3 +1,6 @@
+var/datum/zLevel/shoal/shoalZLevel = null
+var/datum/planet_type/shoal/shoalPlanet = null
+
 /datum/zLevel/shoal
 	name = "vox shoal"
 	movementJammed = 1 		// no drifting here
@@ -20,15 +23,20 @@
 	loot_type = 0
 	climate_type = null
 	icon_state = "moon"
-	hidden = FALSE
+	hidden = TRUE
+	use_shuttle_ports = TRUE
+	ports_require_scan = TRUE
+
+	var/sector = ""
 
 /datum/planet_type/shoal/build_daynight_turflist()
 	return
 
 /datum/planet_type/shoal/New()
 	..()
+	shoalPlanet = src
 	world.maxz += 1
-	var/datum/zLevel/shoal/shoalZLevel = new
+	shoalZLevel = new
 	map.addZLevel(shoalZLevel, world.maxz, TRUE, TRUE)
 	message_admins("Generating unique planet '[planet_name]' at z-level [world.maxz]")
 	SSmapping.planets += src
@@ -114,7 +122,8 @@
 		"West"
 	)
 
-	return "Vox Shoal (Sector [pick(sector_names)]-[pick(suffixes)])"
+	sector = "Sector [pick(sector_names)]-[pick(suffixes)]"
+	return "Vox Shoal ([sector])"
 
 
 /datum/map_element/shoal
@@ -136,3 +145,12 @@
 	requires_power = 0
 	dynamic_lighting = 1
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+
+
+/obj/docking_port/destination/shoal
+	areaname = "shoal docking port"
+
+/obj/docking_port/destination/shoal/New()
+	..()
+	areaname = "shoal docking port #[rand(1,999)]"
+	shoalPlanet.shuttle_ports += src		// temp? check to see shoalPlanet exists

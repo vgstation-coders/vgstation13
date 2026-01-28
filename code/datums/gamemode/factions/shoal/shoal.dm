@@ -25,6 +25,22 @@
 	vox_shuttle.initialize() 									//As the area isn't loaded until the above call, its docking ports aren't populated until we call this
 
 
+/datum/faction/vox_shoal/proc/OnShuttleMove()
+	if(vox_shuttle)
+		return
+	if(vox_shuttle.linked_area.z == shoalZLevel.z)		// We've moved back to the shoal.
+		var/threat_count = 0
+		for(var/datum/objective/raider/steal/obj in objective_holder.GetObjectives())
+			if(obj.CheckShuttleForObjectives())
+				threat_count += obj.threat
+		if(threat_count >= 5)
+			DetectRaid()
+
+
+/datum/faction/vox_shoal/proc/DetectRaid()
+	shoalPlanet.hidden = FALSE 									// Now we can be seen on the planet scanner.
+	command_alert(/datum/command_alert/vox_raid_detected)
+
 /datum/faction/vox_shoal/forgeObjectives()
 	..()
 
@@ -34,7 +50,7 @@
 	message_admins("DEBUG: Vox Raiders Objectives. Threat: [threat], Risk: [risk]. Starting time [world.time]")
 
 	var/list/possible_objectives = list()
-	for(var/jectie in subtypesof(/datum/objective/raider))
+	for(var/jectie in subtypesof(/datum/objective/raider) - /datum/objective/raider/steal)
 		possible_objectives += new jectie
 
  	while(possible_objectives.len > 1 && threat > 0 && risk > 0 && objective_holder.objectives.len < max_objectives)
@@ -93,6 +109,7 @@
 
 	var/x = max(1, floor(crew/5) + enemies + floor(threat/10) + voxes)
 	message_admins("DEBUG: Vox Raiders, center x = [x].")
+
 	x = x*2 // Temp for now until I can think of some better math.
 	return rand(x-3,x+3)
 

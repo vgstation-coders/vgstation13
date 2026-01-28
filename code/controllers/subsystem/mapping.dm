@@ -18,7 +18,10 @@
 #define STAGE_WEATHER 4
 #define STAGE_FINALIZE 5
 
+#define PLANET_SCANNER_MAX_SCANS 25
+
 var/datum/subsystem/mapping/SSmapping
+var/datum/zLevel/away/zProcGen
 
 /datum/subsystem/mapping
 	name       = "Mapping"
@@ -44,6 +47,10 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/allocations = list()
 	/// Whether a planet scanner is currently scanning
 	var/scanning = FALSE
+	/// How many planets can be scanned by deep space scanners
+	var/max_planet_scans = PLANET_SCANNER_MAX_SCANS
+	/// How many planets have been generated through scanning?
+	var/scans_completed = 0
 	/// Whether a planet is currently being generated
 	var/generating = FALSE
 	/// The planet currently being generated
@@ -337,7 +344,9 @@ var/datum/subsystem/mapping/SSmapping
  */
 /datum/subsystem/mapping/proc/create_procgen_level()
 	world.maxz += 1
-	map.addZLevel(new /datum/zLevel/away, world.maxz, TRUE, TRUE)
+	zProcGen = new /datum/zLevel/away
+	map.addZLevel(zProcGen, world.maxz, TRUE, TRUE)
+	log_startup_progress("Created new procgen z-level at z=[world.maxz].")
 	for(var/x = 1,  x < world.maxx, x++)
 		for(var/y = 1, y < world.maxy, y++)
 			if(!(x % SECTOR_SIZE) || !(y % SECTOR_SIZE))
@@ -376,13 +385,17 @@ var/datum/subsystem/mapping/SSmapping
 	if(generating)
 		message_admins("Planet generation already in progress! Please wait for '[current_planet.planet_name]' to complete.")
 		return FALSE
+	if(!zProcGen)
+		message_admins("No ProcGen Z Level found! Failed to spawn planet.")
+		return FALSE
 
 	// Initialize generation state
 	generating = TRUE
 	generation_start_time = world.timeofday
 	current_planet = new planet_datum
 	current_mapgen = new current_planet.mapgen
-	current_allocation = assign_allocation(current_planet, world.maxz)
+
+	current_allocation = assign_allocation(current_planet, zProcGen.z)
 	current_ruin_type = ruin_type
 	planets += current_planet
 
@@ -731,3 +744,5 @@ var/datum/subsystem/mapping/SSmapping
 #undef STAGE_POPULATION
 #undef STAGE_WEATHER
 #undef STAGE_FINALIZE
+
+#undef PLANET_SCANNER_MAX_SCANS

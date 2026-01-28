@@ -35,6 +35,13 @@
 	// Whether this planet is hidden from the deep space scanner
 	var/hidden = FALSE
 
+	// Any shuttle ports generated on the planet. Planet scanners will have the ability to print destination disks to these.
+	var/list/shuttle_ports = list()
+	// Whether or not to let people using the planet scanner print destination disks to the shuttle_ports, or a general planetside destination disk.
+	var/use_shuttle_ports = FALSE
+	// Whether this planet's ports are visible on the scanner or whether they require a scan. Does nothing if use_shuttle_ports is FALSE.
+	var/ports_require_scan = FALSE
+
 /**
  * Builds the list of turfs affected by day/night cycle for this planet
  *
