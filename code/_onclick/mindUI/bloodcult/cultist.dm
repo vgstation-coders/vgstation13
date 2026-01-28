@@ -306,6 +306,8 @@
 	if(!required_tattoo)
 		return TRUE
 	var/mob/living/M = GetUser()
+	if (!M)
+		return
 	if(M.checkTattoo(required_tattoo))
 		return iscarbon(M)
 	return FALSE
@@ -327,6 +329,8 @@
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/pool/UpdateIcon(var/appear = FALSE)
 	var/mob/living/M = GetUser()
+	if (!M)
+		return
 	var/datum/role/cultist/C = iscultist(M)
 	icon_state = "power_pool[C.blood_pool ? "" : "_off"]"
 	base_icon_state = icon_state
@@ -340,6 +344,8 @@
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/pool/Click()
 	var/mob/living/M = GetUser()
+	if (!M)
+		return
 	var/datum/role/cultist/C = iscultist(M)
 
 	C.blood_pool = !C.blood_pool
@@ -380,6 +386,8 @@
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/Click()
 	var/mob/living/M = GetUser()
+	if (!M)
+		return
 
 	if(talisman)
 		talisman.trigger(M)
@@ -410,6 +418,8 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/Click()
 
 	var/mob/living/carbon/user = GetUser()
+	if (!user)
+		return
 
 	if(!dagger)  // dagger not pulled out
 
@@ -483,6 +493,8 @@
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/sigil/Click()
 	var/mob/living/M = GetUser()
+	if (!M)
+		return
 
 	to_chat(M, "<span class='notice'>Click an adjacent wall to manifest a sigil on top of it.</span>")
 
@@ -1661,6 +1673,8 @@
 	..()
 	cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	var/mob/M = GetUser()
+	if (!M)
+		return
 	cultist = iscultist(M)
 
 	//This horseshit magically lets have screen objects use animate(). Maybe I should make it a default mindUI feature at some point. -Deity
@@ -1678,7 +1692,7 @@
 	..()
 	//we constantly remove ourself from client.screen, as the holder we spawned in New() takes care of displaying us in our animate()'d glory
 	var/mob/M = GetUser()
-	if (!M.client)
+	if (!M?.client)
 		return
 	M.client.screen -= src
 
@@ -1854,7 +1868,7 @@
 	..()
 	//we constantly remove ourself from client.screen, as the holder we spawned in New() takes care of displaying us in our animate()'d glory
 	var/mob/M = GetUser()
-	if (!M.client)
+	if (!M?.client)
 		return
 	M.client.screen -= src
 

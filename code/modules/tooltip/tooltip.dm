@@ -47,7 +47,8 @@
 	/// Send browser assets to the client
 
 /datum/tooltips/proc/loadAssets()
-
+	if (!owner)
+		return
 	register_asset("tooltip.css", 'code/modules/tooltip/tooltip.css')
 	send_asset(owner, "tooltip.css")
 	register_asset("eta.min.js", 'code/modules/tooltip/eta.min.js')

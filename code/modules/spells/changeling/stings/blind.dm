@@ -13,7 +13,7 @@
 
 	if(target.disabilities & NEARSIGHTED)
 		to_chat(target, "<span class='userdanger'>Your eyes burn terribly!</span>")
-		target.eye_blind = 10
+		target.instant_blindness(20)
 		target.eye_blurry = 20
 		return
 
@@ -22,6 +22,6 @@
 	spawn(300)
 		target.disabilities &= ~NEARSIGHTED
 
-	target.eye_blind = 10
+	target.instant_blindness(20)
 	target.eye_blurry = 20
 	feedback_add_details("changeling_powers", "BS")

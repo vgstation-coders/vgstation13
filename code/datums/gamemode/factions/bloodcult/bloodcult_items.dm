@@ -1994,7 +1994,7 @@ var/list/arcane_tomes = list()
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.blend_mode = BLEND_ADD
 		if (isturf(loc))
-			I.plane = ABOVE_LIGHTING_PLANE
+			I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		else
 			I.plane = ABOVE_HUD_PLANE // inventory
 		overlays += I
@@ -2003,9 +2003,9 @@ var/list/arcane_tomes = list()
 		var/image/left_I = image(inhand_states["left_hand"], src, "bloodcandle_lit")
 		var/image/right_I = image(inhand_states["right_hand"], src, "bloodcandle_lit")
 		left_I.blend_mode = BLEND_ADD
-		left_I.plane = ABOVE_LIGHTING_PLANE
+		left_I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		right_I.blend_mode = BLEND_ADD
-		right_I.plane = ABOVE_LIGHTING_PLANE
+		right_I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 

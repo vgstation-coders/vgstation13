@@ -918,9 +918,7 @@ Suit and assorted
 	spaceninja.equip_to_slot_or_del(new /obj/item/stack/shuriken(spaceninja,10), slot_l_store)
 	spaceninja.equip_to_slot_or_del(new /obj/item/device/radio/headset, slot_ears)
 	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen/double(spaceninja), slot_r_store)
-	spaceninja.internal = spaceninja.get_item_by_slot(slot_r_store)
-	if (spaceninja.internals)
-		spaceninja.internals.icon_state = "internal1"
+	spaceninja.equip_internals(spaceninja.get_item_by_slot(slot_r_store))
 
 	spaceninja.see_in_dark_override = 8
 	spaceninja.dark_plane_alpha_override = 155

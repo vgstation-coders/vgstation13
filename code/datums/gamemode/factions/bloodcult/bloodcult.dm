@@ -84,14 +84,18 @@
 
 	var/countdown_to_first_rituals = 5
 
+	var/implant_pop = CULT_IMPLANT_POP_NONE
+
 /datum/faction/bloodcult/stage(var/value)
 	stage = value
 	switch(stage)
 		if (BLOODCULT_STAGE_READY)
+			implant_pop = CULT_IMPLANT_POP_IMMEDIATE
 			eclipse_trigger_cult()
 			for(var/obj/structure/cult/spire/S in cult_spires)
 				S.upgrade(3)
 		if (BLOODCULT_STAGE_MISSED)
+			implant_pop = CULT_IMPLANT_POP_NONE
 			for (var/datum/role/cultist in members)
 				var/mob/M = cultist.antag.current
 				if (M)
@@ -99,6 +103,7 @@
 			for(var/obj/structure/cult/spire/S in cult_spires)
 				S.upgrade(1)
 		if (BLOODCULT_STAGE_ECLIPSE)
+			implant_pop = CULT_IMPLANT_POP_IMMEDIATE
 			update_all_parallax()
 			var/datum/zLevel/ZL = map.zLevels[map.zMainStation]
 			ZL.transitionLoops = TRUE
@@ -363,7 +368,8 @@
 			for (var/datum/role/R in members)
 				var/mob/M = R.antag.current
 				calculate_eclipse_rate()
-				if (isliving(M) && !M.isDead())
+				if (isliving(M) && !M.isDead() && !M.occult_muted())
+					//if at least one cultist is alive, and not suffering from holliness
 					//we calculate the progress relative to the time since the last process so the overall time is independant from server lag and shit
 					delta = 1
 					if (last_process_time && (last_process_time < world.time))//carefully dealing with midnight rollover
@@ -373,6 +379,20 @@
 					last_process_time = world.time
 
 					eclipse_progress += max(0.1, eclipse_increments) * delta
+
+					if (implant_pop == CULT_IMPLANT_POP_NONE)
+						var/eclipse_remaining = eclipse_target - eclipse_progress
+						var/eclipse_ticks_to_go_at_current_rate = eclipse_remaining / max(0.1, eclipse_increments)
+						if(SSticker.initialized)
+							eclipse_ticks_to_go_at_current_rate *= (SSticker.wait / 10)//converting to seconds
+						var/minutes_to_go = floor(eclipse_ticks_to_go_at_current_rate / 60)
+						if (minutes_to_go < 10)
+							implant_pop = CULT_IMPLANT_POP_DELAYED
+							for (var/datum/role/RR in members)
+								var/mob/living/carbon/MM = RR.antag.current
+								if (istype(MM))
+									MM.implant_pop()//if there's no loyalty implant, this does nothing
+
 					if (eclipse_progress >= eclipse_target)
 						stage(BLOODCULT_STAGE_READY)
 					break

@@ -224,14 +224,14 @@ var/global/list/accessable_z_levels = list()
 //for junglestation
 /datum/zLevel/junglesurface
 	name = "jungle surface"
-	base_turf = /turf/unsimulated/floor/jungle/dirt
+	base_turf = /turf/unsimulated/floor/planetary/dirt/jungle
 	base_area = /area/surface/jungle/landing //hacky workaround.
 	movementJammed = TRUE
 	planetside = TRUE
 
 /datum/zLevel/jungleunderground
 	name = "jungle underground"
-	base_turf = /turf/unsimulated/floor/jungle/bedrock
+	base_turf = /turf/unsimulated/floor/planetary/cave/jungle
 	base_area = /area/surface/jungle/underground
 	movementJammed = TRUE
 	planetside = TRUE
@@ -356,3 +356,11 @@ var/global/list/accessable_z_levels = list()
 		feedback_add_details("admin_verb", "BTC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		message_admins("[key_name_admin(usr)] has set the base turf for Z-level [choice] to [get_base_turf(choice)]. This will affect all destroyed turfs from now on.")
 		log_admin("[key_name(usr)] has set the base turf for Z-level [choice] to [get_base_turf(choice)]. This will affect all destroyed turfs from now on.")
+
+/proc/increment_z()
+	var/target_z = world.maxz + 1
+	skip_turf_init = TRUE
+	spawn(0)
+		world.maxz++
+	UNTIL(world.maxz == target_z)
+	skip_turf_init = FALSE

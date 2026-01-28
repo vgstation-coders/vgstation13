@@ -1,6 +1,6 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "aa" = (
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/ironchef)
 "ab" = (
 /turf/simulated/wall/r_wall,
@@ -661,7 +661,7 @@
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/fancy/cigarettes,
 /obj/item/ashtray/bronze,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/ironchef)
 "bN" = (
 /obj/structure/table/woodentable,
@@ -749,17 +749,17 @@
 "cb" = (
 /obj/structure/table/woodentable,
 /obj/abstract/loot_spawner/food_or_drink,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/ironchef)
 "cc" = (
 /obj/structure/bed/chair/wood/normal{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/ironchef)
 "cd" = (
 /obj/structure/railing/wood/glass,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/ironchef)
 "ce" = (
 /obj/machinery/cart/cargo,
@@ -786,7 +786,7 @@
 /obj/structure/railing/wood/glass{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/ironchef)
 "ci" = (
 /obj/machinery/light/small{
@@ -794,7 +794,7 @@
 	},
 /obj/structure/railing/wood/glass,
 /obj/abstract/loot_spawner/trash,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/ironchef)
 "cj" = (
 /obj/structure/table,
@@ -810,7 +810,7 @@
 /obj/structure/railing/wood/glass{
 	dir = 4
 	},
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/ironchef)
 "dt" = (
 /obj/structure/grille/window_spawner/reinforced,
@@ -845,7 +845,7 @@
 "Rc" = (
 /obj/structure/table/woodentable,
 /obj/abstract/loot_spawner/entertainment,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/vault/ironchef)
 "Rr" = (
 /obj/machinery/smartfridge/condiments,

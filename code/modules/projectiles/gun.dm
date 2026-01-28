@@ -247,10 +247,6 @@
 	if (!istype(targloc) || !istype(curloc))
 		return
 
-	if(defective)
-		target = get_inaccuracy(originaltarget, 1+recoil)
-		targloc = get_turf(target)
-
 	if(!special_check(user))
 		return
 
@@ -267,9 +263,7 @@
 
 	if(!in_chamber)
 		return
-	if(defective)
-		if(!failure_check(user))
-			return
+
 	if(!istype(src, /obj/item/weapon/gun/energy/tag))
 		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [originaltarget] [ismob(target) ? "([originaltarget:ckey])" : ""] ([originaltarget.x],[originaltarget.y],[originaltarget.z])[struggle ? " due to being disarmed." :""]" )
 	in_chamber.firer = user
@@ -361,13 +355,6 @@
 	update_icon()
 
 	user.update_inv_hand(user.active_hand)
-
-	if(defective && recoil && prob(3))
-		var/throwturf = get_ranged_target_turf(user, pick(alldirs), 7)
-		user.drop_item()
-		user.visible_message("\The [src] jumps out of [user]'s hands!","\The [src] jumps out of your hands!")
-		throw_at(throwturf, rand(3, 6), 3)
-		return 1
 
 	return 1
 

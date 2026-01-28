@@ -124,6 +124,30 @@
 	qdel(query)
 	return null
 
+//Returns a random library book's cachedbook. Only functions if SQL is enabled and working. If not, returns null.
+/datum/library_catalog/proc/getRandomItem(var/worksafe = TRUE)
+	if(!SSdbcore || !SSdbcore.IsConnected())
+		return
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, author, title, content, category, description, ckey FROM `library` [worksafe ? "WHERE category <> 'Adult'" : ""] ORDER BY RAND() LIMIT 1")
+	if(!query.Execute())
+		message_admins("Error: [query.ErrorMsg()]")
+		log_sql("Error: [query.ErrorMsg()]")
+		qdel(query)
+		return
+	var/datum/cachedbook/CB = new()
+	query.NextRow()
+	CB.LoadFromRow(list(
+		"id"      =query.item[1],
+		"author"  =query.item[2],
+		"title"   =query.item[3],
+		"content" = query.item[4],
+		"category"=query.item[5],
+		"description" =query.item[6],
+		"ckey"    =query.item[7]
+	))
+	qdel(query)
+	return CB
+
 var/global/datum/library_catalog/library_catalog = new()
 
 /** Scanner **/

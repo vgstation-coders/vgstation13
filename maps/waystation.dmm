@@ -2682,6 +2682,7 @@
 	pixel_y = -29
 	},
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "aHM" = (
@@ -17193,6 +17194,7 @@
 /area/engineering/engine)
 "ecy" = (
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet/shag,
 /area/library)
 "ecz" = (
@@ -18298,6 +18300,7 @@
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 9
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/wall,
 /area/library)
 "eqS" = (
@@ -22714,6 +22717,7 @@
 	pixel_x = 4;
 	pixel_y = -2
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "foh" = (
@@ -27562,6 +27566,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Non-Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet/shag,
 /area/library)
 "gzU" = (
@@ -27935,6 +27940,7 @@
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 1
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "gGx" = (
@@ -29436,6 +29442,7 @@
 	pixel_y = 32
 	},
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet/shag,
 /area/library)
 "gYW" = (
@@ -39120,6 +39127,7 @@
 /obj/structure/table/woodentable,
 /obj/item/weapon/folder,
 /obj/item/weapon/pen,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "jvt" = (
@@ -60366,6 +60374,7 @@
 "oDP" = (
 /obj/structure/table/woodentable,
 /obj/item/clothing/mask/cigarette/pipe/cobpipe,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "oEg" = (
@@ -77383,6 +77392,7 @@
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 1
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/wall,
 /area/library)
 "vhR" = (

@@ -398,7 +398,9 @@ Subject's pulse: ??? BPM"})
 			var/moles = scanned[id]
 			var/concentration = moles / total_moles
 			var/datum/gas/gas = XGM.gases[id]
-
+			
+			if(!(gas.flags & XGM_GAS_NOTEWORTHY))
+				continue
 			if (concentration < 0.01)
 				continue
 

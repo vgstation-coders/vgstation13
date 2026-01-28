@@ -226,6 +226,104 @@ Class Procs:
 	set waitfor = FALSE
 	return PROCESS_KILL
 
+/obj/machinery/proc/linkWith(var/mob/user, var/obj/machinery/buffer, var/list/context)
+	return 0
+
+/obj/machinery/proc/unlinkFrom(var/mob/user, var/obj/machinery/buffer)
+	return 0
+
+/obj/machinery/proc/canLink(var/obj/machinery/O, var/list/context)
+	return 0
+
+/obj/machinery/proc/isLinkedWith(var/obj/machinery/O)
+	return 0
+
+/obj/machinery/proc/getLink(var/idx)
+	return null
+
+/obj/machinery/proc/canClone(var/obj/machinery/O)
+	return 0
+
+/obj/machinery/proc/clone(var/obj/machinery/O)
+	return 0
+
+/obj/machinery/proc/linkMenu(var/obj/machinery/O)
+	var/dat=""
+	if(canLink(O, list()))
+		dat += " <a href='?src=\ref[src];link=1'>\[Link\]</a> "
+	return dat
+
+/obj/machinery/proc/format_tag(var/label,var/varname, var/act="set_tag")
+	var/value = vars[varname]
+	if(!value || value=="")
+		value="-----"
+	return "<b>[label]:</b> <a href=\"?src=\ref[src];[act]=[varname]\">[value]</a>"
+
+
+/obj/machinery/proc/update_multitool_menu(mob/user as mob)
+	var/obj/item/device/multitool/P = get_multitool(user)
+
+	if(!istype(P))
+		return 0
+
+	// Cloning stuff goes here.
+	var/obj/machinery/bufRef = P.buffer?.get();
+	if(P.clone && bufRef) // Cloning is on.
+		if(!canClone(bufRef))
+			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; you cannot clone to this device!</span>")
+			return
+
+		if(!clone(bufRef))
+			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; something went wrong when cloning to this device!</span>")
+			return
+
+		to_chat(user, "<span class='confirm'>A green light flashes on \the [P], confirming the device was cloned to.</span>")
+		return
+
+	var/dat = {"<html>
+	<head>
+		<title>[name] Configuration</title>
+		<style type="text/css">
+html,body {
+	font-family:courier;
+	background:#999999;
+	color:#333333;
+}
+
+a {
+	color:#000000;
+	text-decoration:none;
+	border-bottom:1px solid black;
+}
+		</style>
+	</head>
+	<body>
+		<h3>[name]</h3>
+"}
+	dat += multitool_menu(user,P)
+	if(P)
+		if(bufRef)
+			var/id = null
+			if(istype(bufRef, /obj/machinery/telecomms))
+				var/obj/machinery/telecomms/buffer = bufRef//Casting is better than using colons
+				id = buffer.id
+			else if(bufRef.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
+				id = bufRef:id_tag//sadly, : is needed
+
+			dat += "<p><b>MULTITOOL BUFFER:</b> [bufRef] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
+
+			dat += linkMenu(bufRef)
+
+			if(bufRef)
+				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
+			dat += "</p>"
+		else
+			dat += "<p><b>MULTITOOL BUFFER:</b> <a href='?src=\ref[src];buffer=1'>\[Add Machine\]</a></p>"
+	dat += "</body></html>"
+	user << browse(HTML_SKELETON(dat), "window=mtcomputer")
+	user.set_machine(src)
+	onclose(user, "mtcomputer")
+
 /obj/machinery/emp_act(severity)
 	malf_disrupt(MALF_DISRUPT_TIME)
 	if(use_power != MACHINE_POWER_USE_NONE && stat == 0)

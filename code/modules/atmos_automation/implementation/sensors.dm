@@ -36,7 +36,7 @@
 
 	if(href_list["set_field"])
 		var/options = list("temperature", "pressure")
-		for(var/gas_ID in XGM.gases)
+		for(var/gas_ID in XGM.noteworthy_gases)
 			options += gas_ID
 		field = input("Select a sensor output:", "Sensor Data", field) as null | anything in options
 		parent.updateUsrDialog()

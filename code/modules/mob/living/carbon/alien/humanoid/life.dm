@@ -144,23 +144,6 @@
 	if(breath)
 		loc.assume_air(breath)
 
-
-/mob/living/carbon/alien/humanoid/proc/get_breath_from_internal(volume_needed)
-	if(internal)
-		if(!contents.Find(internal))
-			internal = null
-		var/obj/item/mask = get_item_by_slot(slot_wear_mask)
-		if(!mask || !(mask.clothing_flags & MASKINTERNALS) )
-			internal = null
-		if(internal)
-			if(internals)
-				internals.icon_state = "internal1"
-			return internal.remove_air_volume(volume_needed)
-		else
-			if(internals)
-				internals.icon_state = "internal0"
-	return null
-
 /mob/living/carbon/alien/humanoid/proc/handle_breath(datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return

@@ -24,6 +24,7 @@
 
 var/datum/subsystem/mapping/SSmapping
 var/datum/zLevel/away/zProcGen
+var/skip_turf_init = FALSE //NEVER change this var for anything other than incrementing world.maxz it breaks EVERYTHING!!
 
 /datum/subsystem/mapping
 	name       = "Mapping"
@@ -456,7 +457,9 @@ var/datum/zLevel/away/zProcGen
  * separating each sector. Each sector can hold a different planet.
  */
 /datum/subsystem/mapping/proc/create_procgen_level()
+	skip_turf_init = TRUE
 	world.maxz += 1
+	skip_turf_init = FALS
 	zProcGen = new /datum/zLevel/away
 	map.addZLevel(zProcGen, world.maxz, TRUE, TRUE)
 	log_startup_progress("Created new procgen z-level at z=[world.maxz].")

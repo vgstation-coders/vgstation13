@@ -133,7 +133,7 @@
 						if(istype(T, /turf/unsimulated/floor/planetary/cave) || istype(T, /turf/unsimulated/mineral))
 							continue
 						if(!prob(decay_chance))
-							T.ChangeTurf(/turf/unsimulated/floor/jungle/concrete)
+							T.ChangeTurf(/turf/unsimulated/floor/planetary/concrete/jungle)
 							road_turfs += T
 
 							// lane markers
@@ -157,14 +157,14 @@
 						if(istype(T, /turf/unsimulated/floor/planetary/cave) || istype(T, /turf/unsimulated/mineral))
 							continue
 						if(!prob(decay_chance))
-							T.ChangeTurf(/turf/unsimulated/floor/jungle/concrete)
+							T.ChangeTurf(/turf/unsimulated/floor/planetary/concrete/jungle)
 							road_turfs += T
 							if(road_width >= 3 && w == round(road_width / 2))
 								if(prob(70))
 									new /obj/effect/decal/warning_stripes/pathmarkers(T, EAST)
 
 	// potholes (midwest reference)
-	for(var/turf/unsimulated/floor/jungle/concrete/C in allocation.turfs)
+	for(var/turf/unsimulated/floor/planetary/concrete/jungle/C in allocation.turfs)
 		if(prob(12)) // the most magical of all numbers
 			var/decay_options = list(
 				/turf/unsimulated/floor/planetary/wasteland,
@@ -197,7 +197,7 @@
 				if(!istype(check_area, /area/planet/urban))
 					can_place = FALSE
 					break
-				if(istype(check_turf, /turf/unsimulated/floor/jungle/concrete) || istype(check_turf, /turf/unsimulated/floor/planetary/cave) || istype(check_turf, /turf/unsimulated/mineral))
+				if(istype(check_turf, /turf/unsimulated/floor/planetary/concrete/jungle) || istype(check_turf, /turf/unsimulated/floor/planetary/cave) || istype(check_turf, /turf/unsimulated/mineral))
 					can_place = FALSE
 					break
 			if(!can_place)

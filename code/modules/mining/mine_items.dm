@@ -335,7 +335,7 @@
 	sharpness = 0.8
 	throwforce = 7.0
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 2.5) // costs less than a full pick, come on man it's a tiny ass shovel
+	starting_materials = list(MAT_IRON = 65)
 	toolspeed = 0.6 //slower than the large shovel
 
 

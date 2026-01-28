@@ -383,3 +383,17 @@ Pipelines + Other Objects -> Pipe network
 // Only needs to be overridden if a pipe can connect on different layers
 /obj/machinery/atmospherics/proc/get_layer_of_dir(var/direction)
 	return piping_layer
+
+/obj/machinery/atmospherics/proc/can_user_modify_via_alarm(var/mob/user)
+	// if(frequency == 1439) do not even think about doing this, or if you do, just delete the access checking. multitools can change device frequency, so it'd be way too easy to bypass this check right here.
+	var/area/this_area = get_area(src)
+	if(this_area) //if there's an, check it for air alarms
+		var/user_allowed=TRUE //use TRUE because if there's no air alarms, we allow the user.
+		for(var/obj/machinery/alarm/A in this_area) //of course, there could be multiple air alarms.
+			user_allowed=FALSE //set to false here so we know we iterated through at least 1 air alarm.
+			if(A.allowed(user))
+				user_allowed=TRUE
+				break
+		if(!user_allowed)
+			return FALSE
+	return TRUE

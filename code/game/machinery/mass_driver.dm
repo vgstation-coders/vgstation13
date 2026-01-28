@@ -14,7 +14,7 @@ var/list/mass_drivers = list()
 	var/power = 1.0
 	var/code = 1.0
 	id_tag = "default"
-	var/drive_range = 50 //this is mostly irrelevant since current mass drivers throw into space, but you could make a lower-range mass driver for interstation transport or something I guess.
+	var/drive_range = 150 //this is mostly irrelevant since current mass drivers throw into space, but you could make a lower-range mass driver for interstation transport or something I guess.
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,

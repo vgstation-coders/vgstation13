@@ -76,12 +76,6 @@
 		junction = 0
 	return junction // PREVIOUSLY DID NOTHING, NOW INHERITS THIS FOR COMMON BEHAVIOUR.
 
-/atom/New()
-	. = ..()
-	if(ticker && ticker.current_state >= GAME_STATE_PLAYING && canSmoothWith())
-		relativewall()
-		relativewall_neighbours()
-
 /*
  * SEE?  NOW WE ONLY HAVE TO PROGRAM THIS SHIT INTO WHAT WE WANT TO SMOOTH
  * INSTEAD OF BEING DUMB AND HAVING A BIG FUCKING IFTREE WITH TYPECHECKS

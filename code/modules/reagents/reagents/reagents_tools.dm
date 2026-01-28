@@ -484,7 +484,7 @@
 				H.audible_scream()
 				to_chat(H,"<span class='danger'>You are sprayed directly in the eyes with bleach!</span>")
 				H.eye_blurry = max(M.eye_blurry, 15)
-				H.eye_blind = max(M.eye_blind, 5)
+				H.instant_blindness(15)
 				H.adjustBruteLoss(2)
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 				E.take_damage(5, 1)

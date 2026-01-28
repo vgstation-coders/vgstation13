@@ -246,6 +246,8 @@
 	if(flags & HEAR_ALWAYS)
 		virtualhearer = new /mob/virtualhearer(src)
 
+	perception_filters = new
+
 	update_colour(0)
 
 	register_event(/event/z_transition, src, nameof(src::update_multi_z_verbs()))
@@ -1029,7 +1031,7 @@ Use this proc preferably at the end of an equipment loadout
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
-			M.assaulted_by(usr, TRUE)
+			M.assaulted_by(src, TRUE)
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -1157,7 +1159,7 @@ Use this proc preferably at the end of an equipment loadout
 						else
 							to_chat(M, "<span class='info'><b>\The [L]</b> looks at [A].</span>")
 
-/mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
+/mob/living/verb/verb_pickup(obj/item/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"
 	set category = "Object"
 
@@ -1167,7 +1169,7 @@ Use this proc preferably at the end of an equipment loadout
 /proc/acquirable_objects_in_view(var/mob/living/L, var/range)
 	var/list/obj_list = list()
 	for(var/turf/T in view(L, range))
-		for(var/obj/I in T)
+		for(var/obj/item/I in T)
 			if(I.can_pickup(L, FALSE, TRUE))
 				obj_list.Add(I)
 	return obj_list
@@ -1798,14 +1800,10 @@ Use this proc preferably at the end of an equipment loadout
 	return 1
 
 // Mobs tell access what access levels it has.
-/mob/proc/GetAccess()
+/mob/GetAccess()
 	return list()
 
 /mob/proc/get_visible_id()
-	return 0
-
-// Skip over all the complex list checks.
-/mob/proc/hasFullAccess()
 	return 0
 
 /mob/proc/assess_threat()
@@ -1960,7 +1958,7 @@ Use this proc preferably at the end of an equipment loadout
 	var/init_deaf = ear_deaf
 	overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 	blinded = 1
-	eye_blind = 1
+	eye_blind = 11
 	ear_deaf = 1
 
 	..()
@@ -2204,12 +2202,7 @@ Use this proc preferably at the end of an equipment loadout
 				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")
 			return TRUE
 
-	for(var/mob/living/simple_animal/P in view(src))
-		if(P.isDead() || !P.pacify_aura)
-			continue
-		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
-		return TRUE
-	for(var/mob/living/complex_animal/P in view(src))
+	for(var/mob/living/P in view(src))
 		if(P.isDead() || !P.pacify_aura)
 			continue
 		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")

@@ -20,6 +20,78 @@
 	oxygen = MOLES_O2STANDARD
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
+	can_border_transition=TRUE //allows zlevel transitions. you must also enable it in the zlevel.
+	var/plated_icon_override_icon=null //set to an icon path to be used when you plate a tile
+	var/plated_icon_override_state=null //ditto.
+	var/pickaxe_conversion_turf=null
+	var/pickaxe_conversion_time=0
+	var/shovel_conversion_turf=null
+	var/shovel_conversion_time=0
+
+/turf/unsimulated/floor/planetary/canBuildLattice()
+	if(!(locate(/obj/structure/lattice) in contents))
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/unsimulated/floor/planetary/canBuildPlating()
+	if(locate(/obj/structure/lattice) in contents)
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/unsimulated/floor/planetary/canBuildCatwalk()
+	if(locate(/obj/structure/lattice) in contents)
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/unsimulated/floor/planetary/proc/item_shovel_ability(var/obj/item/I,var/mob/user) // returns a number in the form of a divisor applied to turf manipulation duration. this means that lower numbers are worse. 0 means it just can't do it, and should be ignored, also because div 0.
+	if(!I || !user)
+		return 0.0
+	if(istype(I,/obj/item/weapon/pickaxe/shovel))
+		return (1/I.toolspeed)/2.5
+	if(istype(I,/obj/item/weapon/kitchen/utensil/spoon) || istype(I,/obj/item/weapon/kitchen/utensil/spork))  //because it's funny.
+		return 0.1
+	return 0.0
+	
+/turf/unsimulated/floor/planetary/proc/item_pickaxe_ability(var/obj/item/I,var/mob/user) //see above
+	if(!I || !user)
+		return 0.0
+	if(istype(I,/obj/item/weapon/pickaxe) && !istype(I,/obj/item/weapon/pickaxe/shovel))
+		return (1/I.toolspeed)/2.5 //default toolspeed is 0.4. do this math because lower=faster, but we want higher=faster.
+	if(istype(I,/obj/item/tool/crowbar))
+		if(istype(I,/obj/item/tool/crowbar/halligan)) //halligans have a pick end.
+			return 0.75
+		return 0.5
+	if(istype(I,/obj/item/weapon/kitchen/utensil/knife))
+		return 0.1
+	return 0.0
+
+/turf/unsimulated/floor/planetary/proc/shovel_modify(var/obj/item/I,var/mob/user,var/speedfactor=1.0)
+	to_chat(user, "<span class='notice'>You start digging into \the [src]</span>")
+	if(do_after(user, src, shovel_conversion_time/speedfactor ))
+		ChangeTurf(shovel_conversion_turf)
+		return TRUE
+	else
+		return FALSE
+
+/turf/unsimulated/floor/planetary/proc/pickaxe_modify(var/obj/item/I,var/mob/user,var/speedfactor=1.0)
+	to_chat(user, "<span class='notice'>You start breaking up \the [src]</span>")
+	if(do_after(user, src, pickaxe_conversion_time/speedfactor ))
+		ChangeTurf(pickaxe_conversion_turf)
+		return TRUE
+	else
+		return FALSE
+	
+
+/turf/unsimulated/floor/planetary/attackby(var/obj/item/I, var/mob/user)
+	if(pickaxe_conversion_turf)
+		var/pickaxe_factor=item_pickaxe_ability(I,user)
+		if(pickaxe_factor)
+			return pickaxe_modify(I,user,pickaxe_factor)
+	if(shovel_conversion_turf)
+		var/shovel_factor=item_shovel_ability(I,user)
+		if(shovel_factor)
+			return shovel_modify(I,user,shovel_factor)
+	return ..()
 
 //Caves
 /turf/unsimulated/floor/planetary/cave
@@ -65,6 +137,31 @@
 	variance = 40
 	edge_priority = GRASS_EDGE_PRIORITY
 	edge_flags = ALL_EDGES
+
+/turf/unsimulated/floor/planetary/grass/New()
+	..()
+	footstep_sound = sounds_grass
+	footstep_sound_barefoot = sounds_grass
+	footstep_sound_claw = sounds_grass
+
+/turf/unsimulated/floor/planetary/grass/pickaxe_modify(var/obj/item/I,var/mob/user)
+	.=..()
+	if(.)
+		new /obj/item/stack/tile/grass(src,1)
+
+/turf/unsimulated/floor/planetary/grass/ex_act(severity)
+	if(shovel_conversion_turf)
+		switch(severity)
+			if(1.0)
+				ChangeTurf(shovel_conversion_turf)
+			if(2.0)
+				if(prob(65))
+					ChangeTurf(shovel_conversion_turf)
+			if(3.0)
+				if(prob(20))
+					ChangeTurf(shovel_conversion_turf)
+		..()
+
 
 /turf/unsimulated/floor/planetary/dirt
 	name = "dirt"
@@ -229,6 +326,104 @@
 	max_icon_states = 0
 	edge_flags = EDGE_CARDINAL|EDGE_OUTER_DIAGONAL
 	edge_priority = SAND_EDGE_PRIORITY
+
+
+/obj/effect/overlay/water_turf
+	icon = 'icons/misc/beach.dmi'
+	icon_state = "water5"
+	anchored      = TRUE
+	name=""	
+	plane            = ABOVE_OBJ_PLANE
+	mouse_opacity    = 0
+	invisibility     = INVISIBILITY_LIGHTING
+
+/obj/effect/overlay/water_turf/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	if(harderforce)
+		. = ..()
+/obj/effect/overlay/water_turf/ex_act(severity)
+	return 0
+/obj/effect/overlay/water_turf/shuttle_act()
+	return 0
+/obj/effect/overlay/water_turf/can_shuttle_move()
+	return 0
+/obj/effect/overlay/water_turf/send_to_future(var/duration)
+	return
+/obj/effect/overlay/water_turf/send_to_past(var/duration)
+	return
+/obj/effect/overlay/water_turf/clean_act(var/cleanliness)
+	return
+	
+/turf/unsimulated/floor/planetary/water
+	name = "water"
+	desc = "Of course it's wet, are you stupid?"
+	icon = 'icons/misc/beach.dmi'
+	icon_state = "water5"
+	turf_reagents = list(WATER=1.0)
+	reagent_interaction_flags = TURF_REAGENT_ENTER | TURF_REAGENT_FILLS_CONTAINERS
+	turf_reagent_amount = 5
+	turf_flags = NO_FLORA
+	edge_flags = ALL_EDGES
+	edge_priority = WATER_EDGE_PRIORITY
+	edge_overlay_type = /obj/effect/edge_overlay/water
+	turf_speed_multiplier=2.0
+	var/water_overlay_icon='icons/misc/beach.dmi' //water uses a 2 sprite system. 1 sprite lays on the turf layer as the "base"
+	var/water_overlay_state="water5" //the second sprite lays above the turf, and can layer over other objects
+	var/backing_trurf_icon=null //this gives the illusion that the water has depth, and looks quite nice
+	var/backing_trurf_state=null //it's also very flexible, since you can use any icon on either, as long as water_overlay_icon has trasparency.
+	var/obj/effect/overlay/water_turf/wateroverlay=null
+
+/turf/unsimulated/floor/planetary/water/New()
+	..()
+	update_icon()
+	footstep_sound = sounds_water
+	footstep_sound_barefoot = sounds_water
+	footstep_sound_claw = sounds_water
+	icon=backing_trurf_icon ? backing_trurf_icon : icon
+	icon_state = backing_trurf_state ? backing_trurf_state : icon_state
+	wateroverlay=new(src)
+	wateroverlay.icon = water_overlay_icon ? water_overlay_icon : icon
+	wateroverlay.icon_state = water_overlay_state ? water_overlay_state : icon_state
+
+/turf/unsimulated/floor/planetary/water/Destroy()
+	qdel(wateroverlay)
+	..()
+
+
+/turf/unsimulated/floor/planetary/sand
+	name="Sand"
+	desc="Rocks which have been eroded over countless centuries into a fine powder. A wonderful material for castles!"
+	icon = 'icons/misc/beach.dmi'
+	icon_state = "sand"
+	
+/turf/unsimulated/floor/planetary/sand/New()
+	..()
+	footstep_sound = sounds_sand
+	footstep_sound_barefoot = sounds_sand
+	footstep_sound_claw = sounds_sand
+
+
+/turf/unsimulated/floor/planetary/mud
+	name="Mud"
+	desc="A viscous mixture of water and soil."
+	icon='icons/turf/planetary/jungle.dmi'
+	icon_state = "mud"
+	edge_flags = 0
+	edge_priority = 1
+	turf_speed_multiplier=1.75 //mud is difficult to travel over
+
+/turf/unsimulated/floor/planetary/mud/New()	
+	..()
+	footstep_sound = sounds_water
+	footstep_sound_barefoot = sounds_water
+	footstep_sound_claw = sounds_water
+
+
+/turf/unsimulated/floor/planetary/concrete
+	name="Concrete"
+	desc="Or is it asphalt?"
+	icon='icons/turf/new_snow.dmi'
+	icon_state = "concrete"
+
 
 ///////// Gas Vents /////////
 var/list/datum/vent/gas_vents = list() // Global list of all gas vents

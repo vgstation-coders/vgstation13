@@ -1692,18 +1692,20 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_BHANGMAP					"bhangmap"
 #define HOLOMAP_EXTRA_BHANGBASEMAP				"bhangbasemap"
 
-#define HOLOMAP_MARKER_SMES				"smes"
-#define HOLOMAP_MARKER_DISK				"diskspawn"
-#define HOLOMAP_MARKER_SKIPJACK			"skipjack"
-#define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
-#define HOLOMAP_MARKER_TEARREALITY		"tearreality"
-#define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
-#define HOLOMAP_MARKER_CULT_ALTAR		"altar"
-#define HOLOMAP_MARKER_CULT_FORGE		"forge"
-#define HOLOMAP_MARKER_CULT_SPIRE		"spire"
-#define HOLOMAP_MARKER_CULT_ENTRANCE	"path_entrance"
-#define HOLOMAP_MARKER_CULT_EXIT		"path_exit"
-#define HOLOMAP_MARKER_CULT_RUNE		"rune"
+#define HOLOMAP_MARKER_SMES					"smes"
+#define HOLOMAP_MARKER_DISK					"diskspawn"
+#define HOLOMAP_MARKER_SKIPJACK				"skipjack"
+#define HOLOMAP_MARKER_SYNDISHUTTLE			"syndishuttle"
+#define HOLOMAP_MARKER_TEARREALITY			"tearreality"
+#define HOLOMAP_MARKER_BLOODSTONE			"bloodstone"
+#define HOLOMAP_MARKER_OBSIDIAN_PILLAR		"obsidian_pillar"
+#define HOLOMAP_MARKER_OBSIDIAN_PILLAR_ALT	"obsidian_pillar_alt"
+#define HOLOMAP_MARKER_CULT_ALTAR			"altar"
+#define HOLOMAP_MARKER_CULT_FORGE			"forge"
+#define HOLOMAP_MARKER_CULT_SPIRE			"spire"
+#define HOLOMAP_MARKER_CULT_ENTRANCE		"path_entrance"
+#define HOLOMAP_MARKER_CULT_EXIT			"path_exit"
+#define HOLOMAP_MARKER_CULT_RUNE			"rune"
 
 #define HOLOMAP_DRAW_NORMAL		0
 #define HOLOMAP_DRAW_FULL		1
@@ -1992,6 +1994,9 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PS_CULT_SMOKE		"Cult Smoke"
 #define PS_CULT_SMOKE2		"Cult Smoke2"
 #define PS_CULT_SMOKE_BOX	"Cult Smoke Box"
+#define PS_PILLAR_BEACON	"Pillar Beacon"
+#define PS_OCCULT_TEST_LARGE "Occult Test Large"
+#define PS_OCCULT_TEST_SMALL "Occult Test Small"
 #define PS_CULT_HALO		"Cult Halo"
 #define PS_SPACE_RUNES		"Space Runes"
 #define PS_NARSIEHASRISEN1	"Nar-SieHasRisen1"
@@ -2010,6 +2015,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 
 //Particles variable defines
 #define PVAR_SPAWNING	"spawning"
+#define PVAR_COUNT		"count"
 #define PVAR_POSITION	"position"
 #define PVAR_VELOCITY	"velocity"
 #define PVAR_ICON_STATE	"icon_state"
@@ -2021,6 +2027,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PVAR_PIXEL_Y	"pixel_y"
 #define PVAR_LIFESPAN	"lifespan"
 #define PVAR_FADE		"fade"
+#define PVAR_DRIFT		"drift"
 
 #define ZAS_DUST_TURFS_PER_TICK	20
 

@@ -183,17 +183,12 @@
 		if(istype(loc,/mob/living/carbon))
 			var/mob/living/carbon/location = loc
 			if(location.internal == src)
-				location.internal = null
-				location.internals.icon_state = "internal0"
+				location.equip_internals(null)
 				to_chat(usr, "<span class='notice'>You close the tank release valve.</span>")
-				if (location.internals)
-					location.internals.icon_state = "internal0"
 			else
 				if(location.wear_mask && (location.wear_mask.clothing_flags & MASKINTERNALS))
-					location.internal = src
+					location.equip_internals(src)
 					to_chat(usr, "<span class='notice'>You open \the [src] valve.</span>")
-					if (location.internals)
-						location.internals.icon_state = "internal1"
 				else
 					to_chat(usr, "<span class='notice'>You need something to connect to \the [src].</span>")
 
@@ -259,9 +254,10 @@
 		pressure = air_contents.return_pressure()
 		var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 		score.largest_TTV = max(score.largest_TTV, range)
-		if(range > MAX_EXPLOSION_RANGE)
+		if(range > MAX_EXPLOSION_RANGE && get_z_level(src) == map.zMainStation)
 			cap = range
-		range = min(range, MAX_EXPLOSION_RANGE)		// was 8 - - - Changed to a configurable define -- TLE
+		if(get_z_level(src) == map.zMainStation)
+			range = min(range, MAX_EXPLOSION_RANGE)		// was 8 - - - Changed to a configurable define -- TLE
 		var/turf/epicenter = get_turf(loc)
 
 //		to_chat(world, "<span class='notice'>Exploding Pressure: [pressure] kPa, intensity: [range]</span>")
