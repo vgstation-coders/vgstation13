@@ -276,7 +276,8 @@ var/global/datum/library_catalog/library_catalog = new()
 
 	var/dat = {"Book name: <A href='?src=\ref[src];name=1'>[book_name]</A><BR>
 	Book author: <A href='?src=\ref[src];author=1'>[book_author]</A><BR>
-	Book icon: <A href='?src=\ref[src];icon=1'><img class='icon misc' src='data:image/png;base64,[icon2base64(icon(icon,book_state))]'></A><BR>
+	Book icon: <A href='?src=\ref[src];icon=1' class="linkIconWrapper">
+	<div class="linkIcon"><img class='icon misc' src='data:image/png;base64,[icon2base64(icon(icon,book_state))]'></div></A><BR>
 	Book spine color: <A href='?src=\ref[src];spine=1'>[spine_color]</A><BR>
 	Current number of sheets: <A href='?src=\ref[src];remove=1'>[sheets.len]</A><BR>
 	<A href='?src=\ref[src];bind=1'>Bind sheets</A>"}
