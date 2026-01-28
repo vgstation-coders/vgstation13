@@ -1,5 +1,6 @@
 
 // -- Vox raiders
+/*
 /datum/persistence_task/vox_raiders
 	execute = TRUE
 	name = "Vox raiders best team"
@@ -29,3 +30,4 @@
 		data["MM"] = time2text(world.realtime,"MM")
 		data["YY"] = time2text(world.realtime,"YY")
 		write_file(data)
+*/

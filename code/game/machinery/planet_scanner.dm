@@ -296,7 +296,7 @@
 		if("print_port_disk")
 			var/planet_index = text2num(params["planet_index"])
 			var/port_index = text2num(params["port_index"])
-			if(!validate_port_index(planet_index, port, usr))
+			if(!validate_port_index(planet_index, port_index, usr))
 				return FALSE
 			print_port_destination_disk(usr, planet_index, port_index)
 			return TRUE

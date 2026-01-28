@@ -20,7 +20,6 @@ var/datum/planet_type/shoal/shoalPlanet = null
 
 	default_baseturf = /turf/unsimulated/wall/shoal
 
-	loot_type = 0
 	climate_type = null
 	icon_state = "moon"
 	hidden = TRUE
@@ -28,9 +27,6 @@ var/datum/planet_type/shoal/shoalPlanet = null
 	ports_require_scan = TRUE
 
 	var/sector = ""
-
-/datum/planet_type/shoal/build_daynight_turflist()
-	return
 
 /datum/planet_type/shoal/New()
 	..()
