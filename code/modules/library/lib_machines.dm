@@ -250,13 +250,18 @@ var/global/datum/library_catalog/library_catalog = new()
 	)
 	RefreshParts()
 
+/obj/machinery/bookbinder/Destroy()
+	QDEL_LIST_NULL(sheets)
+	. = ..()
+
 /obj/machinery/bookbinder/RefreshParts()
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/micro_laser/SP in component_parts)
 		T += SP.rating
 	for(var/obj/item/weapon/stock_parts/manipulator/SP2 in component_parts)
 		T += SP2.rating
-	bind_time = 12/T
+	if(T > 0)
+		bind_time = 12/T
 
 /obj/machinery/bookbinder/attackby(var/obj/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/paper))

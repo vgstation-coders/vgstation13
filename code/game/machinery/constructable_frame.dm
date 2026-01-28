@@ -728,7 +728,7 @@ to destroy them and players will be able to make replacements.
 	req_components = list (
 							/obj/item/weapon/stock_parts/manipulator = 1,
 							/obj/item/weapon/stock_parts/micro_laser = 1,
-							/obj/item/weapon/stock_parts/console_screen = 1,)
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/cryo
 	name = "Circuit Board (Cryo)"
