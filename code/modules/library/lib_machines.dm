@@ -283,7 +283,7 @@ var/global/datum/library_catalog/library_catalog = new()
 	<A href='?src=\ref[src];bind=1'>Bind sheets</A>"}
 
 	var/datum/browser/popup = new(user, "bookbinder", "Book Binder", 375, 500, src)
-	popup.add_stylesheet("chemmaster", 'html/browser/bookbinder.css')
+	popup.add_stylesheet("bookbinder", 'html/browser/bookbinder.css')
 	popup.set_content(dat)
 	popup.open()
 	onclose(user, "bookbinder")
