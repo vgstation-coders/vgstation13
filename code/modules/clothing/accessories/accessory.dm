@@ -573,3 +573,11 @@
 	icon_state = "gold_medal"
 	_color = "gold_medal"
 
+/obj/item/clothing/accessory/rose
+	name = "rose"
+	desc = "A red flower"
+	icon = 'icons/obj/hydroponics/rose.dmi'
+	icon_state = "produce"
+	_color = "rose"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "rose"
