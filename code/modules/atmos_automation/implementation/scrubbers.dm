@@ -122,7 +122,8 @@
 	var/txt = "Set Scrubber <a href=\"?src=\ref[src];set_scrubber=1\">[fmtString(scrubber)]</a> to scrub "
 	for(var/gas in gasses)
 		var/datum/gas/gas_datum = XGM.gases[gas]
-		txt += " [gas_datum.short_name || gas_datum.name] (<a href=\"?src=\ref[src];tog_gas=[gas]\">[gasses[gas] ? "on" : "off"]</a>),"
+		if(gas_datum.flags & XGM_GAS_NOTEWORTHY)
+			txt += " [gas_datum.short_name || gas_datum.name] (<a href=\"?src=\ref[src];tog_gas=[gas]\">[gasses[gas] ? "on" : "off"]</a>),"
 	return txt
 
 /datum/automation/set_scrubber_gasses/Topic(href,href_list)

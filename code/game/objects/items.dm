@@ -1,7 +1,10 @@
 /obj/item
 	name = "item"
 	icon = 'icons/obj/items.dmi'
-	var/image/blood_overlay = null //this saves our blood splatter overlay, which will be processed not to go over the edges of the sprite
+	var/list/image/blood_overlays = list()  //this saves our blood splatter overlays, which will be processed not to go over the edges of the sprite
+	var/custom_blood_overlay = ""			// If set, items will use this bespoke overlay when covered in blood.
+	var/surgery_blood_overlay = ""			// If set, items will use this bespoke overlay when covered in blood through surgical operations.
+
 	var/abstract = FALSE
 	var/item_state = null
 	var/list/inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
@@ -1283,20 +1286,21 @@ var/global/objects_thrown_when_explode = FALSE
 	. = ..()
 	remove_disease2()
 	REMOVE_KEEP_TOGETHER(src, "bloody_item")
-	if(blood_overlay)
-		overlays -= blood_overlay
+	if(blood_overlays.len)
+		for(var/B in blood_overlays)
+			cut_overlay(blood_overlays[B])
 	if(had_blood)
 		clear_luminol()
 	if(istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
 
-/obj/item/add_blood(var/mob/living/carbon/human/M)
+/obj/item/add_blood(var/mob/living/carbon/human/M, overlay_override)
 	if (!..())
 		return FALSE
-	set_blood_overlay()
 	//if this blood isn't already in the list, add it
 	if(!M)
+		set_blood_overlay(override_icon = overlay_override)
 		return
 
 	if (M.virus2?.len)
@@ -1313,6 +1317,7 @@ var/global/objects_thrown_when_explode = FALSE
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 	had_blood = TRUE
+	set_blood_overlay(override_icon = overlay_override)
 	return TRUE //we applied blood to the item
 
 
@@ -1342,23 +1347,34 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/proc/copy_blood_from_item(var/obj/item/other_item)
 	virus2 = virus_copylist(other_item.virus2)
-	if (!other_item.blood_overlay || !other_item.blood_color)
+	if (!other_item.blood_overlays.len || !other_item.blood_color)
 		return
 	blood_color = other_item.blood_color
 	blood_DNA = other_item.blood_DNA?.Copy()
 	had_blood = TRUE
 	set_blood_overlay()
 
-/obj/item/proc/set_blood_overlay(passed_color = blood_color, forced = FALSE)
+/obj/item/proc/set_blood_overlay(passed_color = blood_color, forced = FALSE, override_icon = "")
 	REMOVE_KEEP_TOGETHER(src, "bloody_item")
-	cut_overlay(blood_overlay)
-	var/mutable_appearance/item_blood_overlay = mutable_appearance('icons/effects/blood.dmi', "itemblood", appearance_flags = RESET_COLOR|RESET_ALPHA)
-	item_blood_overlay.blend_mode = BLEND_INSET_OVERLAY
-	item_blood_overlay.color = passed_color
-	blood_overlay = item_blood_overlay
+	var/mutable_appearance/blood_overlay = null
+	if(override_icon && (override_icon != "itemblood"))						// We can define an override icon to use.
+		cut_overlay(blood_overlays[override_icon])
+		blood_overlay = mutable_appearance('icons/effects/itemblood.dmi', override_icon, appearance_flags = RESET_COLOR|RESET_ALPHA)
+		blood_overlays[blood_overlay.icon_state] = blood_overlay
+	else if(custom_blood_overlay)											// Otherwise we use a custom icon we set.
+		cut_overlay(blood_overlays["custom"])
+		blood_overlay = mutable_appearance('icons/effects/itemblood.dmi', custom_blood_overlay, appearance_flags = RESET_COLOR|RESET_ALPHA)
+		blood_overlays["custom"] = blood_overlay
+	else																	// Otherwise we use genetic itemblood.
+		cut_overlay(blood_overlays["itemblood"])
+		blood_overlay = mutable_appearance('icons/effects/blood.dmi', "itemblood", appearance_flags = RESET_COLOR|RESET_ALPHA)
+		blood_overlays["itemblood"] = blood_overlay
+	blood_overlay.blend_mode = BLEND_INSET_OVERLAY
+	blood_overlay.color = passed_color
 	if(forced || is_blood_stained(src))
 		ADD_KEEP_TOGETHER(src, "bloody_item")
-		add_overlay(blood_overlay)
+		add_overlay(blood_overlay)	// And add the new
+
 
 /obj/item/apply_luminol()
 	if(!..())

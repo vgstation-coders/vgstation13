@@ -371,7 +371,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped,//18 nutriments
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
-		/obj/item/weapon/kitchen/utensil/fork/teflon,
+		/obj/item/weapon/kitchen/utensil/spork/plastic/teflon,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea,//tea you can't trust
 		/obj/item/weapon/reagent_containers/food/condiment/small/zammild,
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
@@ -381,7 +381,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped,//15 nutriments
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
-		/obj/item/weapon/kitchen/utensil/fork/teflon,
+		/obj/item/weapon/kitchen/utensil/spork/plastic/teflon,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz,//yum yum melts my tum
 		/obj/item/weapon/reagent_containers/food/condiment/small/zammild,
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
@@ -391,7 +391,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped,//12 nutriments
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
-		/obj/item/weapon/kitchen/utensil/fork/teflon,
+		/obj/item/weapon/kitchen/utensil/spork/plastic/teflon,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,
 		/obj/item/weapon/reagent_containers/food/condiment/small/zammild,
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
