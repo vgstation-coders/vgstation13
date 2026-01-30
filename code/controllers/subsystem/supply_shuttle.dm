@@ -287,12 +287,13 @@ var/list/static/universal_cargo_stamps = list(/obj/item/weapon/stamp/hop,/obj/it
 			reason = "Manifest was not stamped"
 		if(CF.associated_manifest)
 			var/stamp_found = FALSE
-			for(var/type in CF.associated_manifest.stamped)
+			for(var/type in reverseRange(CF.associated_manifest.stamped.Copy()))
 				if(type in universal_cargo_stamps)
 					stamp_found = TRUE
 					break
 				else if(type == /obj/item/weapon/stamp/clown)
-					stamp_found = prob(10)
+					stamp_found = prob(50)
+					break
 				else if(CF.name != CF.real_name)
 					if(type == /obj/item/weapon/stamp)
 						stamp_found = FALSE
