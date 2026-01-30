@@ -315,14 +315,10 @@
 			if(graphic & gas2show[g])
 				//Overlay is already applied for this gas, check if it's still valid.
 				if(molar_density(g) <= XGM.overlay_limit[g])
-					if(!graphic_remove)
-						graphic_remove = 0
 					graphic_remove |= gas2show[g]
 			else
 				//Overlay isn't applied for this gas, check if it's valid and needs to be added.
 				if(molar_density(g) > XGM.overlay_limit[g])
-					if(!graphic_add)
-						graphic_add = 0
 					graphic_add |= gas2show[g]
 
 	. = 0
