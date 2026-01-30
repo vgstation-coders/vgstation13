@@ -307,29 +307,6 @@
 //Procedures used for very specific events//
 ////////////////////////////////////////////
 
-//Rechecks the gas_mixture and adjusts the graphic list if needed.
-//Two lists can be passed by reference if you need know specifically which graphics were added and removed.
-/datum/gas_mixture/proc/check_tile_graphic(graphic_add = 0, graphic_remove = 0)
-	for(var/g in XGM.overlay_limit)
-		if(g in gas2show)
-			if(graphic & gas2show[g])
-				//Overlay is already applied for this gas, check if it's still valid.
-				if(molar_density(g) <= XGM.overlay_limit[g])
-					graphic_remove |= gas2show[g]
-			else
-				//Overlay isn't applied for this gas, check if it's valid and needs to be added.
-				if(molar_density(g) > XGM.overlay_limit[g])
-					graphic_add |= gas2show[g]
-
-	. = 0
-	//Apply changes
-	if(graphic_add)
-		graphic |= graphic_add
-		. = 1
-	if(graphic_remove)
-		graphic &= ~graphic_remove
-		. = 1
-
 /datum/gas_mixture/proc/react(atom/dump_location)
 	//Purpose: Calculating if it is possible for a fire to occur in the airmix
 	//Called by: Air mixes updating?

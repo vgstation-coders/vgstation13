@@ -171,7 +171,7 @@ Class Procs:
 /zone/proc/tick()
 	check_for_events()
 	air.reaction_tick()
-	if(air.check_tile_graphic(graphic_add, graphic_remove))
+	if(check_tile_graphic())
 		for(var/turf/simulated/T in contents)
 			T.update_graphic(graphic_add, graphic_remove)
 		graphic_add = 0
@@ -180,6 +180,29 @@ Class Procs:
 	for(var/connection_edge/E in edges)
 		if(E.sleeping)
 			E.recheck()
+
+//Rechecks the gas_mixture and adjusts the graphic list if needed.
+//Two lists can be passed by reference if you need know specifically which graphics were added and removed.
+/zone/proc/check_tile_graphic()
+	for(var/g in XGM.overlay_limit)
+		if(g in gas2show)
+			if(air.graphic & gas2show[g])
+				//Overlay is already applied for this gas, check if it's still valid.
+				if(air.molar_density(g) <= XGM.overlay_limit[g])
+					graphic_remove |= gas2show[g]
+			else
+				//Overlay isn't applied for this gas, check if it's valid and needs to be added.
+				if(air.molar_density(g) > XGM.overlay_limit[g])
+					graphic_add |= gas2show[g]
+
+	. = 0
+	//Apply changes
+	if(graphic_add)
+		air.graphic |= graphic_add
+		. = 1
+	if(graphic_remove)
+		air.graphic &= ~graphic_remove
+		. = 1
 
 /zone/proc/dbg_data(mob/M)
 	to_chat(M, name)
