@@ -182,7 +182,6 @@ Class Procs:
 			E.recheck()
 
 //Rechecks the gas_mixture and adjusts the graphic list if needed.
-//Two lists can be passed by reference if you need know specifically which graphics were added and removed.
 /zone/proc/check_tile_graphic()
 	for(var/g in XGM.overlay_limit)
 		if(g in gas2show)
