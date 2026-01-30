@@ -591,6 +591,7 @@ var/list/datum/stack_recipe/cloth_recipes_with_tool = list (
 	new/datum/stack_recipe/cloth("Villager Dress",			/obj/item/clothing/under/villager_dress,		5,	time = 200),
 	"Suits",
 	new/datum/stack_recipe/cloth("Labcoat",					/obj/item/clothing/suit/storage/labcoat/linen,	3,	time = 120),
+	new/datum/stack_recipe/cloth("Suit Jacket",				/obj/item/clothing/suit/suitjacket,				3,	time = 120),
 	"Hats",
 	new/datum/stack_recipe/cloth("Soft Cap",				/obj/item/clothing/head/soft/linen,				2,	time = 80),
 	new/datum/stack_recipe/cloth("Flat Cap",				/obj/item/clothing/head/flatcap/linen,			2,	time = 80),

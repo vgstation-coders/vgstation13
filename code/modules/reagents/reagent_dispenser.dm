@@ -668,6 +668,10 @@
 
 	var/allows_dyeing = TRUE
 
+/obj/structure/reagent_dispensers/cauldron/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>Use Help intent to pour reagent into \the [name], and other intents to remove reagent from it.</span>")
+
 /obj/structure/reagent_dispensers/cauldron/attempt_heating()
 	return // for now
 
