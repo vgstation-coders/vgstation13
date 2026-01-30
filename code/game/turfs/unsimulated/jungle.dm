@@ -328,6 +328,7 @@ var/list/foliage_replacments=list(
 	nitrogen = MOLES_JUNGLE_N2_STD
 	carbon_dioxide = MOLES_JUNGLE_CO2_STD
 	mineral=null
+	mined_type = /turf/unsimulated/floor/planetary/cave/jungle
 
 /turf/unsimulated/mineral/jungle_underground/New()
 	..()

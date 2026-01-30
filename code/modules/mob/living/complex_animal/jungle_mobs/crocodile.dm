@@ -65,7 +65,7 @@
 	icon_living="schnapps"
 	icon_dead="schnapps-dead"
 	behavior_flags = ANIMAL_BEHAVIOR_RETALIATE
-	animal_flags = ANIMAL_FLAG_IMMORTAL
+	animal_flags = ANIMAL_FLAG_IMMORTAL | ANIMAL_FLAG_NEVER_ROT
 	movespeed=6
 	health=120
 	maxHealth=120

@@ -1590,6 +1590,10 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Paramedic Station"
 	icon_state = "paramedics"
 
+/area/medical/eva
+    name = "\improper Emergency Rescue Unit"
+    icon_state = "rescue_unit"
+
 //Security
 /area/security
 	holomap_color = HOLOMAP_AREACOLOR_SECURITY

@@ -171,6 +171,8 @@ var/list/tgui_religion_data
 			new_bible.desc = data["desc"]
 		if(data["damtype"])
 			new_bible.damtype = data["damtype"]
+		if(data["spine_color"])
+			new_bible.spine_color = data["spine_color"]
 	else
 		new_bible.icon_state = data
 		new_bible.item_state = data
@@ -363,30 +365,30 @@ var/list/tgui_religion_data
 	return
 
 var/list/all_bible_styles = list(
-	"Bible" = list("icon" = "bible", "desc" = "Apply to head repeatedly.", "damtype" = BRUTE),
-	"Koran" = "koran",
-	"Scrapbook" = "scrapbook",
-	"Creeper" = "creeper",
-	"White Bible" = "white",
-	"Holy Light" = "holylight",
-	"Atheist" = "athiest",
-	"Tome" = list("icon" = "bible-tome", "desc" = "A Nanotrasen-approved heavily revised interpretation of Nar-Sie's teachings. Apply to head repeatedly."),
-	"The King in Yellow" = "kingyellow",
-	"Ithaqua" = "ithaqua",
-	"Scientology" = "scientology",
-	"The Bible melts" = "melted",
-	"Unaussprechlichen Kulten" = "kulten",
-	"Necronomicon" = "necronomicon",
-	"Book of Shadows" = "shadows",
-	"Torah" = "torah",
-	"Burning" = list("icon" = "burning", "damtype" = BURN),
-	"Honk" = "honkbook",
-	"Ianism" = "ianism",
-	"The Guide" = "guide",
-	"Slab" = list("icon" = "slab", "desc" = "A bizarre, ticking device... That looks broken."),
-	"The Dokument" = "gunbible",
-	"Holy Grimoire" = list("icon" = "holygrimoire", "desc" = "A version of the Christian Bible with several apocryphal sections appended which detail how to combat evil forces of the night. Apply to head repeatedly."),
-	"The Loop" = list("icon" = "loop", "desc" = "The combined efforts of a thousand timelines fill this book, explaining the nature of the Loop and how to survive it. Apply to head in a cyclical way.")
+	"Bible" = list("icon" = "bible", "spine_color" = "#888", "desc" = "Apply to head repeatedly.", "damtype" = BRUTE),
+	"Koran" = list("icon" = "koran", "spine_color" = "#444"),
+	"Scrapbook" = list("icon" = "scrapbook", "spine_color" = "#444"),
+	"Creeper" = list("icon" = "creeper", "spine_color" = "#484"),
+	"White Bible" = list("icon" = "white", "spine_color" = "#fff"),
+	"Holy Light" = list("icon" = "holylight", "spine_color" = "#bbb"),
+	"Atheist" = list("icon" = "athiest", "spine_color" = "#844"),
+	"Tome" = list("icon" = "bible-tome", "spine_color" = "#888", "desc" = "A Nanotrasen-approved heavily revised interpretation of Nar-Sie's teachings. Apply to head repeatedly."),
+	"The King in Yellow" = list("icon" = "kingyellow", "spine_color" = "#880"),
+	"Ithaqua" = list("icon" = "ithaqua", "spine_color" = "#088"),
+	"Scientology" = list("icon" = "scientology", "spine_color" = "#0ff"),
+	"The Bible melts" = list("icon" = "melted", "spine_color" = "#888"),
+	"Unaussprechlichen Kulten" = list("icon" = "kulten", "spine_color" = "#888"),
+	"Necronomicon" = list("icon" = "necronomicon", "spine_color" = "#444"),
+	"Book of Shadows" = list("icon" = "shadows", "spine_color" = "#484"),
+	"Torah" = list("icon" = "torah", "spine_color" = "#864"),
+	"Burning" = list("icon" = "burning", "spine_color" = "#f80", "damtype" = BURN),
+	"Honk" = list("icon" = "honkbook", "spine_color" = "#f0f"),
+	"Ianism" = list("icon" = "ianism", "spine_color" = "#fff"),
+	"The Guide" = list("icon" = "guide", "spine_color" = "#444"),
+	"Slab" = list("icon" = "slab", "spine_color" = "#860", "desc" = "A bizarre, ticking device... That looks broken."),
+	"The Dokument" = list("icon" = "gunbible", "spine_color" = "#bb0"),
+	"Holy Grimoire" = list("icon" = "holygrimoire", "spine_color" = "#b60", "desc" = "A version of the Christian Bible with several apocryphal sections appended which detail how to combat evil forces of the night. Apply to head repeatedly."),
+	"The Loop" = list("icon" = "loop", "spine_color" = "#0bb", "desc" = "The combined efforts of a thousand timelines fill this book, explaining the nature of the Loop and how to survive it. Apply to head in a cyclical way.")
 )
 
 /proc/chooseBible(var/datum/religion/R, var/mob/user, var/noinput = FALSE) //Noinput if they just wanted the defaults

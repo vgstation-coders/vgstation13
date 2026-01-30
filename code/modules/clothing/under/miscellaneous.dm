@@ -1134,3 +1134,12 @@
 	_color = "sonicmansuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/under/lepre
+	name = "Leprechaun outfit"
+	desc = "Shipping off to Boston!"
+	icon_state = "lepre"
+	item_state = "lepre"
+	_color = "lepre"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)

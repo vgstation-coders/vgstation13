@@ -72,8 +72,7 @@
 			if(P.bloodied)
 				..()
 		set_tiny_label(user)
-	attempt_heating(W, user)
-	process_temperature()
+	..()
 
 /obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
 	return 1

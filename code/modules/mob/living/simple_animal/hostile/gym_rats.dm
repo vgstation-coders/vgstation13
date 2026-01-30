@@ -41,6 +41,7 @@
 	var/obj/my_wheel
 	var/list/gym_equipments = list(/obj/structure/stacklifter, /obj/structure/punching_bag, /obj/structure/weightlifter, /obj/machinery/power/treadmill)
 	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks)
+	var/is_wheeling = FALSE
 
 	var/scalerate = 1
 	var/translaterate = 4.5 //it is multiplied by the current scalerate, and we want a final value of 9
@@ -173,29 +174,34 @@
 				wander = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/gymratwheel(var/repeat)
-	if(repeat < 1 || stat)
+	if(is_wheeling)
+		return
+	is_wheeling = TRUE
+	spawn(0)
+		while(repeat > 0 && !stat)
+			if(my_wheel)
+				if(istype(my_wheel, /obj/structure/stacklifter))
+					var/obj/structure/stacklifter/S = my_wheel
+					S.attack_hand(src, 0, S.Adjacent(src))
+				else if(istype(my_wheel, /obj/structure/punching_bag))
+					var/obj/structure/punching_bag/P = my_wheel
+					P.attack_hand(src, 0, P.Adjacent(src))
+				else if(istype(my_wheel, /obj/structure/weightlifter))
+					var/obj/structure/weightlifter/W = my_wheel
+					W.attack_hand(src, 0, W.Adjacent(src))
+				else if(istype(my_wheel, /obj/machinery/power/treadmill) && my_wheel.loc == loc)
+					step(src,my_wheel.dir)
+				step_towards(src,my_wheel)
+			else
+				wander = TRUE
+				break
+			delayNextMove(speed)
+			sleep(speed)
+			repeat--
+		sleep(20 * speed) //rest period
 		wander = TRUE
 		my_wheel = null
-		return
-	if(my_wheel)
-		if(istype(my_wheel, /obj/structure/stacklifter))
-			var/obj/structure/stacklifter/S = my_wheel
-			S.attack_hand(src, 0, S.Adjacent(src))
-		else if(istype(my_wheel, /obj/structure/punching_bag))
-			var/obj/structure/punching_bag/P = my_wheel
-			P.attack_hand(src, 0, P.Adjacent(src))
-		else if(istype(my_wheel, /obj/structure/weightlifter))
-			var/obj/structure/weightlifter/W = my_wheel
-			W.attack_hand(src, 0, W.Adjacent(src))
-		else if(istype(my_wheel, /obj/machinery/power/treadmill) && my_wheel.loc == loc)
-			step(src,my_wheel.dir)
-		step_towards(src,my_wheel)
-	else
-		wander = TRUE
-
-	delayNextMove(speed)
-	sleep(speed)
-	gymratwheel(repeat-1)
+		is_wheeling = FALSE
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/Calm()
 	enemies.Cut()

@@ -952,7 +952,7 @@ var/global/list/air_alarms = list()
 	data["scrubbers"]=scrubbers
 
 	var/list/gas_datums=list()
-	for(var/gas_id in XGM.gases)
+	for(var/gas_id in XGM.noteworthy_gases)
 		var/datum/gas/gas_datum = XGM.gases[gas_id]
 		var/list/datum_data = list()
 		datum_data["id"] = gas_id

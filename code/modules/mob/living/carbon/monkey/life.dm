@@ -697,28 +697,6 @@
 	else
 		clear_alert(SCREEN_ALARM_TEMPERATURE)
 
-	if(stat != DEAD)
-		var/impaired_vision = get_impaired_vision_range()
-		if(impaired_vision > 0)
-			enable_nearsightedness(impaired_vision)
-		else if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
-			disable_nearsightedness()
-
-		if(eye_blurry)
-			enable_blurriness(eye_blurry)
-		else if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
-			disable_blurriness()
-
-		if(druggy)
-			enable_druggy_overlays()
-		else
-			disable_druggy_overlays()
-	else
-		if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
-			disable_nearsightedness()
-		if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
-			disable_blurriness()
-
 	if (stat != 2)
 		if (machine)
 			if (!( machine.check_eye(src) ))

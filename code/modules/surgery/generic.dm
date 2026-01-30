@@ -41,6 +41,7 @@
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
 	duration = 4 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/generic/cut_with_laser/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -88,6 +89,7 @@
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
 	duration = 8 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/generic/incision_manager/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -339,6 +341,7 @@
 		/obj/item/weapon/hatchet = 75,
 		)
 	duration = 11 SECONDS
+	blood_level = 2
 
 /datum/surgery_step/generic/cut_limb/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (target_zone == "eyes")	//there are specific steps for eye surgery
@@ -390,6 +393,7 @@
 
 	priority = 0.1 //Tries to inject biofoam before other steps
 	duration = 1 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/generic/injectfoam/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())

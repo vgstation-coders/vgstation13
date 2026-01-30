@@ -14,7 +14,7 @@
 /obj/structure/bookcase
 	name = "bookcase"
 	icon = 'icons/obj/library.dmi'
-	icon_state = "book-0"
+	icon_state = "bookcase"
 	anchored = 1
 	density = 1
 	opacity = 1
@@ -30,6 +30,14 @@
 								/obj/item/weapon/spellbook, \
 								/obj/item/weapon/storage/bible, \
 								/obj/item/dictionary)
+	var/list/starting_books
+
+/obj/structure/bookcase/New()
+	. = ..()
+	if(starting_books?.len)
+		for(var/type in starting_books)
+			new type(src)
+		update_icon()
 
 /obj/structure/bookcase/cultify()
 	return
@@ -153,44 +161,43 @@
 	..()
 
 /obj/structure/bookcase/update_icon()
-	if(contents.len < 5)
-		icon_state = "book-[contents.len]"
-	else
-		icon_state = "book-5"
+	overlays.len = 0
+	var/x_offset = 0
+	var/y_offset = 0
+	for(var/obj/item/I in contents)
+		var/image/bookoverlay = image(icon,loc,"bookoverlay",layer,dir,x_offset,y_offset)
+		bookoverlay.color = I:spine_color || "#840"
+		overlays += bookoverlay
+		x_offset += 4
+		if(x_offset > 20)
+			x_offset = 0
+			y_offset -= 12
+		if(y_offset < -12)
+			break
 
 /obj/structure/bookcase/manuals/medical
 	name = "Medical Manuals bookcase"
-
-/obj/structure/bookcase/manuals/medical/New()
-	..()
-	new /obj/item/weapon/book/manual/medical_cloning(src)
-	new /obj/item/weapon/book/manual/chemistry_manual(src)
-	new /obj/item/weapon/book/manual/virology_guide(src)
-	new /obj/item/weapon/book/manual/virology_encyclopedia(src)
-	update_icon()
-
+	starting_books = list(
+		/obj/item/weapon/book/manual/medical_cloning,
+		/obj/item/weapon/book/manual/chemistry_manual,
+		/obj/item/weapon/book/manual/virology_guide,
+		/obj/item/weapon/book/manual/virology_encyclopedia
+	)
 
 /obj/structure/bookcase/manuals/engineering
 	name = "Engineering Manuals bookcase"
-
-/obj/structure/bookcase/manuals/engineering/New()
-	..()
-	new /obj/item/weapon/book/manual/engineering_construction(src)
-	new /obj/item/weapon/book/manual/engineering_particle_accelerator(src)
-	new /obj/item/weapon/book/manual/engineering_hacking(src)
-	new /obj/item/weapon/book/manual/engineering_guide(src)
-	new /obj/item/weapon/book/manual/engineering_singularity_safety(src)
-	new /obj/item/weapon/book/manual/robotics_cyborgs(src)
-	update_icon()
+	starting_books = list(
+		/obj/item/weapon/book/manual/engineering_construction,
+		/obj/item/weapon/book/manual/engineering_particle_accelerator,
+		/obj/item/weapon/book/manual/engineering_hacking,
+		/obj/item/weapon/book/manual/engineering_guide,
+		/obj/item/weapon/book/manual/engineering_singularity_safety,
+		/obj/item/weapon/book/manual/robotics_cyborgs
+	)
 
 /obj/structure/bookcase/manuals/research_and_development
 	name = "R&D Manuals bookcase"
-
-/obj/structure/bookcase/manuals/research_and_development/New()
-	..()
-	new /obj/item/weapon/book/manual/research_and_development(src)
-	update_icon()
-
+	starting_books = list(/obj/item/weapon/book/manual/research_and_development)
 
 /*
  * Book
@@ -227,6 +234,7 @@
 
 	var/book_width = 600
 	var/book_height = 800
+	var/spine_color = "#444"
 
 /obj/item/weapon/book/New()
 	..()
@@ -424,6 +432,7 @@
 	name = "The King in Yellow"
 	title = "The King in Yellow"
 	occult = 1
+	spine_color = "#400"
 	var/possible_names = list("The King in Yellow", "The Locksmith's Dream", "The Tantra of Worms", "Infinite Jest", "The Legacy of Totalitarianism in a Tundra", "The Rose of Hypatia",
 	"Gravity's Rainbow", "Aristotle's Poetics", "The Geminiad", "My Diary", "The War of the Roads", "The Courier's Tragedy", "The Burning of the Unburnt God", "Love's Labour's Won",
 	"The Necronomicon", "The Funniest Joke in the World", "Woody Got Wood", "Peggy's Revenge", "House of Leaves", "A True and Accurate History of the Shadowless Kings", "The Book of Nod",
@@ -458,13 +467,14 @@
 	if(!newbook || !newbook.id)
 		//failed to find a book. Likely not using a SQL DB. This is a failsafe.
 		//Picks a random useful manual!
-		var/Btype = pick(typesof(/obj/item/weapon/book/manual)-/obj/item/weapon/book/manual)
+		var/Btype = pick(subtypesof(/obj/item/weapon/book/manual))
 		var/obj/item/weapon/book/B = new Btype
 		name = B.name
 		title = B.title
 		author = B.author
 		dat = B.dat
 		icon_state = B.icon_state
+		spine_color = B.spine_color
 		item_state = icon_state
 		qdel(B)
 		return
@@ -475,7 +485,27 @@
 	if(newbook.cover)
 		icon_state = newbook.cover
 	else
-		icon_state = "book[rand(1,9)]"
+		var/picked_num = rand(1,9)
+		icon_state = "book[picked_num]"
+		switch(picked_num)
+			if(1)
+				spine_color = "#888"
+			if(2)
+				spine_color = "#800"
+			if(3)
+				spine_color = "#880"
+			if(4)
+				spine_color = "#088"
+			if(5)
+				spine_color = "#080"
+			if(6)
+				spine_color = "#808"
+			if(7)
+				spine_color = "#fff"
+			if(8)
+				spine_color = "#444"
+			if(9)
+				spine_color = "#840"
 	item_state = icon_state
 
 /*

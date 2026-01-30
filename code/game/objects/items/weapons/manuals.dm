@@ -15,12 +15,14 @@
 	title = "Station Repairs and Construction"
 	wiki_page = "Guide_to_Construction"
 	id = 1
+	spine_color = "#880"
 
 /obj/item/weapon/book/manual/engineering_particle_accelerator
 	name = "Particle Accelerator User's Guide"
 	icon_state ="bookParticleAccelerator"
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Particle Accelerator User's Guide"
+	spine_color = "#888"
 //big pile of shit below.
 	id = 2
 
@@ -66,6 +68,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Hacking"
 	wiki_page = "Hacking"
+	spine_color = "#800"
 	id = 3
 
 /obj/item/weapon/book/manual/engineering_singularity_safety
@@ -73,6 +76,7 @@
 	icon_state ="bookEngineeringSingularitySafety"
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Singularity Safety in Special Circumstances"
+	spine_color = "#444"
 //big pile of shit below.
 	id = 4
 	dat = {"<html>
@@ -123,6 +127,7 @@
 	author = "Farmer John"
 	title = "Growing Dionae and YOU! A book on growing your new best friends!"
 	id = 5
+	spine_color = "#080"
 	dat = {"<html>
 				<head>
 				<style>
@@ -157,6 +162,7 @@
 	author = "Medical Journal, volume 3"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Cloning techniques of the 26th century"
 	wiki_page = "Guide_to_Cloning"
+	spine_color = "#8fb"
 	id = 6
 
 /obj/item/weapon/book/manual/chemistry_manual
@@ -166,6 +172,7 @@
 	author = "SpaceChem Inc."
 	title = "Chemistry 101"
 	wiki_page = "Guide_to_Chemistry"
+	spine_color = "#808"
 	id = 7
 
 /obj/item/weapon/book/manual/ripley_build_and_repair
@@ -173,6 +180,7 @@
 	icon_state ="book"
 	author = "Weyland-Yutani Corp"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "APLU \"Ripley\" Construction and Operation Manual"
+	spine_color = "#444"
 	id = 8
 //big pile of shit below.
 
@@ -250,6 +258,7 @@
 	icon_state = "rdbook"
 	author = "Dr. L. Ight"
 	title = "Research and Development 101"
+	spine_color = "#8fb"
 	id = 9
 	dat = {"<html>
 				<head>
@@ -301,6 +310,7 @@
 	icon_state = "borgbook"
 	author = "XISC"
 	title = "Cyborgs for Dummies"
+	spine_color = "#888"
 	id = 10
 	dat = {"<html>
 				<head>
@@ -507,6 +517,7 @@
 	author = "Nanotrasen"
 	title = "Space Law"
 	wiki_page = "Space_Law"
+	spine_color = "#b00"
 	id = 11
 
 /obj/item/weapon/book/manual/security_antag_guide	//if you wanna edit, just copypaste the dat into https://www.w3schools.com/html/tryit.asp?filename=tryhtml_default
@@ -516,6 +527,7 @@
 	item_state = "bookAntagGuide"
 	author = "Nanotrasen"
 	title = "Enemies of Nanotrasen: A Quick Overview"
+	spine_color = "#b00"
 	id = 12
 	book_width = 692
 
@@ -683,6 +695,7 @@
 	author = "Engineering Encyclopedia"
 	title = "Engineering Textbook"
 	wiki_page = "Guide_to_Engineering"
+	spine_color = "#88f"
 	id = 13
 
 /obj/item/weapon/book/manual/rust
@@ -691,6 +704,7 @@
 	author = "NanoTrasen"
 	title = "R-UST User Manual"
 	wiki_page = "R-UST"
+	spine_color = "#88f"
 	id = 14
 
 /obj/item/weapon/book/manual/chef_recipes
@@ -700,6 +714,7 @@
 	author = "Lord Frenrir Cageth"
 	title = "Chef Recipes"
 	wiki_page = "Guide_to_Food_and_Drinks"
+	spine_color = "#fff"
 	id = 15
 
 /obj/item/weapon/book/manual/barman_recipes
@@ -709,6 +724,7 @@
 	author = "Sir John Rose"
 	title = "Barman Recipes"
 	wiki_page = "Barman_recipes"
+	spine_color = "#088"
 	id = 16
 
 /obj/item/weapon/book/manual/detective
@@ -718,6 +734,7 @@
 	author = "Nanotrasen"
 	title = "The Film Noir: proper Procedures for Investigations"
 	wiki_page = "Guide_to_Forensics"
+	spine_color = "#b00"
 	id = 17
 
 /obj/item/weapon/book/manual/nuclear
@@ -727,6 +744,7 @@
 	author = "Syndicate"
 	title = "Fission Mailed: Nuclear Sabotage 101"
 	wiki_page = "Nuclear_Agent"
+	spine_color = "#444"
 	forbidden = 2 // Only available to emagged terminals.
 	id = 18
 
@@ -736,6 +754,7 @@
 	icon_state = "bookDummy"
 	author = "David Alcubierre"
 	wiki_page = "Ship_Building"
+	spine_color = "#ff0"
 	id = 19
 
 /obj/item/weapon/book/manual/mailing_guide
@@ -743,6 +762,7 @@
 	icon_state ="book"     // a proper icon would be nice
 	author = "Ulyanovsk Logistics Division"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Guide to disposal mailing system"
+	spine_color = "#888"
 	id = 20
 	dat = {"<html>
 				<head>
@@ -808,6 +828,7 @@
 	title = "A Crash Course in Virology"
 	book_width = 819
 	book_height = 516
+	spine_color = "#bbb"
 	id = 25
 	dat = {"<html>
 				<head>
@@ -1006,6 +1027,7 @@ var/virology_encyclopedia = ""
 	item_state ="bookVirologyEncyclopedia"
 	author = "Frederick Chapman Montagnier"
 	title = "Symptom Encyclopedia"
+	spine_color = "#bbb"
 	dat = ""
 	id = 21
 	book_width = 819
@@ -1115,6 +1137,7 @@ var/virology_encyclopedia = ""
 	item_state ="snow"
 	author = "The Abominable Snowman"
 	title = "Snow Survival Guide"
+	spine_color = "#fff"
 	id = 22
 	wiki_page = "Guide_to_Snow_Map"
 	desc = "A guide to surviving on the surface of a snow planet. It even comes with a magnesium strip to ignite for emergency heating when applied to snow!</span>"
@@ -1142,6 +1165,7 @@ var/virology_encyclopedia = ""
 	item_state = "bookSupermatter"
 	author = "Ashley Burns"
 	title = "Introduction to Supermatter: Delamination (Not) Imminent"
+	spine_color = "#ff0"
 	id = 23
 	wiki_page = "Supermatter"
 
@@ -1151,6 +1175,7 @@ var/virology_encyclopedia = ""
 	item_state = "bookSupermatter2"
 	author = "Eris Bay"
 	title = "Engine technician's notes"
+	spine_color = "#840"
 	id = 24
 	dat = {"<html>
 			<head>
@@ -1262,6 +1287,7 @@ var/virology_encyclopedia = ""
 	item_state = "bookCarnegie"
 	author = "Dale Carnegie"
 	title = "A Primer on How to Win Friends and Influence People"
+	spine_color = "#0ff"
 	id = 25
 
 	dat = {"<html>
@@ -1300,6 +1326,7 @@ var/virology_encyclopedia = ""
 	icon_state ="bookEngineering2"
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Fission Reactor User's Guide"
+	spine_color = "#88f"
 	//big pile of shit below.
 	id = 26
 	dat= {"<html>
@@ -1385,8 +1412,8 @@ color:white;
 </style>
 </head>
 <body>
-	
-<h1>Fission Reactors: A Quick Guide</h1>	
+
+<h1>Fission Reactors: A Quick Guide</h1>
 <p>
 Though often said to be old, outdated technology, fission power should not be underestimated. Even a modest reactor is capable of powering a medium-sized station for several hours with no upkeep, and the dismissal of fission technology has delayed the uncovering of more recent discoveries in material sciences which may have been known decades earlier.
 </p>
@@ -1432,7 +1459,7 @@ building a reactor is an expensive endeavor, costing a lot of both time and reso
 		<li>Install 2 plasteel sheets as external plating</li>
 		<li>Weld the external plating to the frame</li>
 	</ol>
-	
+
 	<h3>Control & Fuel Rod Assembly</h3>
 	<ol>
 		<li>Use 5 plasteel to construct a reinforced machine frame in the desired location</li>
@@ -1442,8 +1469,8 @@ building a reactor is an expensive endeavor, costing a lot of both time and reso
 		<li>Add a matter bin to the frame</li>
 		<li><b>If control rod:</b> Add a micro-manipulator<br><b>If fuel rod:</b> Add a scanning module</li>
 		<li>Use a screwdriver to finish assembly</li>
-	</ol>	
-	
+	</ol>
+
 	<h3>Reactor Controller</h3>
 	<ol>
 		<li>Use 5 plasteel to construct a reinforced machine frame in the desired location</li>
@@ -1452,8 +1479,8 @@ building a reactor is an expensive endeavor, costing a lot of both time and reso
 		<li>Insert 2 metal rods inside of the frame</li>
 		<li>Add a matter bin, micro-manipulator, scanning module, and a console screen to the frame</li>
 		<li>Use a screwdriver to finish assembly</li>
-	</ol>	
-	
+	</ol>
+
 	<h3>Isotopic Separational Combiner</h3>
 	<ol>
 		<li>Use 5 metal to construct a machine frame in the desired location</li>
@@ -1464,7 +1491,7 @@ building a reactor is an expensive endeavor, costing a lot of both time and reso
 		<li>Use a screwdriver to finish assembly</li>
 	</ol>
 
-<h2>Design Considerations</h2>	
+<h2>Design Considerations</h2>
 <p>
 The design of a nuclear reactor is very important. Build it wrong, and you may find yourself with a meltdown.
 
@@ -1478,13 +1505,13 @@ The design of a nuclear reactor is very important. Build it wrong, and you may f
 	Fuel rods should be placed in the interior of the reactor. For each cardinally-adjacent fuel rod, a fuel rod will gain bonus power production without affecting fuel duration. Fuel duration is only affected by the number of fuel rod assemblies.
 	<h3>Control Rods</h3>
 	Control rods are able to affect fuel rods in every ordinal direction around them. If a control rod is not affecting a fuel rod, then the reaction in that rod cannot be stopped. It is recommended to have all fuel rods be controlled for safety reasons.
-	
-	
 
-	
-	
+
+
+
+
 	<h3>Example Designs</h3>
-	
+
 	<div style='border:2px black solid;background-color:LightSteelBlue;'>
 	<h3 style='text-decoration:underline;'>key</h3>
 	<ul style='list-style-type: none;font-size:1.5em;padding:0;margin:0;margin-bottom:2px;'>
@@ -1495,7 +1522,7 @@ The design of a nuclear reactor is very important. Build it wrong, and you may f
 		<li><span class='r_crod'>&nbsp;&nbsp;&nbsp;</span>control rod</li>
 	</ul>
 	</div>
-	
+
 	<br>
 	<table class='reactor_schematic'>
 		<tr>
@@ -1524,7 +1551,7 @@ The design of a nuclear reactor is very important. Build it wrong, and you may f
 		Fissile speed: 100%<br>
 		Fuel reactivity: 100%<br>
 	</div>
-	
+
 	<table class='reactor_schematic'>
 		<tr>
 			<td class='r_case'>&nbsp;&nbsp;</td>
@@ -1558,7 +1585,7 @@ The design of a nuclear reactor is very important. Build it wrong, and you may f
 		Fissile speed: 300%<br>
 		Fuel reactivity: 700%<br>
 	</div>
-	
+
 		<table class='reactor_schematic'>
 		<tr>
 			<td class='r_case'>&nbsp;&nbsp;</td>
@@ -1609,7 +1636,7 @@ The design of a nuclear reactor is very important. Build it wrong, and you may f
 			<td class='r_frod'>&nbsp;&nbsp;</td>
 			<td class='r_frod'>&nbsp;&nbsp;</td>
 			<td class='r_case'>&nbsp;&nbsp;</td>
-		</tr>		
+		</tr>
 		<tr>
 			<td class='r_port'>&nbsp;&nbsp;</td>
 			<td class='r_frod'>&nbsp;&nbsp;</td>
@@ -1669,7 +1696,7 @@ Different sizes of fuel reservoirs exist, with the starter kit coming with a fai
 
 
 <h2>How to Disassemble</h2>
-	
+
 	<span style='font-weight:bold;color:red;font-size:125%;'>IMPORTANT: Before disassembling a reactor, drain all coolant first, and make sure that it is not currently undergoing fission. Failure to do so may result in injury, destruction of property, or even death.</span>
 
 	<h3>Reactor Casing</h3>
@@ -1681,22 +1708,22 @@ Different sizes of fuel reservoirs exist, with the starter kit coming with a fai
 		<li>Use wirecutters to remove the rods</li>
 		<li>Use a wrench to disassemble the frame</li>
 	</ol>
-	
+
 	<h3>Control & Fuel Rod Assembly, Reactor controller</h3>
 	<ol>
 		<li>Use a welder to detach the external plating from the frame</li>
 		<li>Use a crowbar to remove the internal components from the frame</li>
 		<li>Use wirecutters to remove the wiring from the frame</li>
 		<li>Use a wrench to disassemble the frame</li>
-	</ol>	
-	
+	</ol>
+
 	<h3>Isotopic separational combiner</h3>
 	<ol>
 		<li>Use a screwdriver to open the maintenance hatch</li>
 		<li>Use a crowbar to pry out the electronics</li>
 		<li>Use wirecutters to remove the wiring from the frame</li>
 		<li>Use a wrench to disassemble the frame</li>
-		
+
 	</ol>
 
 <h2>Other notes</h2>
@@ -1739,7 +1766,7 @@ Different sizes of fuel reservoirs exist, with the starter kit coming with a fai
 </tr>
 
 </table>
-	
+
 </body>
 </html>"}
 
@@ -1750,4 +1777,5 @@ Different sizes of fuel reservoirs exist, with the starter kit coming with a fai
 	author = "NanoTrasen"
 	title = "Explorer's Field Manual"
 	wiki_page = "Guide to Planetary Exploration"
+	spine_color = "#840"
 	id = 26
