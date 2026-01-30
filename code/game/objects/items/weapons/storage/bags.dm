@@ -618,3 +618,8 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	"/obj/item/weapon/spellbook","/obj/item/weapon/paper","/obj/item/weapon/paper/nano","/obj/item/weapon/barcodescanner",
 	"obj/item/weapon/pen","obj/item/weapon/folder", "/obj/item/dictionary", "/obj/item/weapon/storage/bible")
 
+/obj/item/weapon/storage/bag/bookbag/attackby(obj/item/W, mob/user)
+	. = ..()
+	if(istype(W,/obj/item/weapon/barcodescanner))
+		for(var/obj/item/weapon/book/B in src)
+			. |= B.attackby(W,user)
