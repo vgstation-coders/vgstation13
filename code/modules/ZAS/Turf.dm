@@ -1,26 +1,25 @@
 /turf/simulated
 	var/zone/zone
 	var/open_directions
-	var/list/gases_shown
+	var/gases_shown = 0
 
 /turf
 	var/needs_air_update = 0
 	var/datum/gas_mixture/air
 	var/tmp/list/connection/connections
 
-/turf/simulated/proc/update_graphic(list/graphic_add = null, list/graphic_remove = null)
-	if((graphic_add && graphic_add.len) || (graphic_remove && graphic_remove.len))
-		if(!gases_shown)
-			gases_shown = list()
-		if(graphic_add && graphic_add.len)
+/turf/simulated/proc/update_graphic(graphic_add = 0, graphic_remove = 0)
+	if(graphic_add || graphic_remove)
+		if(graphic_add)
 			gases_shown |= graphic_add
-		if(graphic_remove && graphic_remove.len)
-			gases_shown -= graphic_remove
+		if(graphic_remove)
+			gases_shown &= ~graphic_remove
 		for(var/gaslist in XGM.tile_overlay)
 			for(var/gas_overlay in XGM.tile_overlay[gaslist])
 				vis_contents -= gas_overlay
-		for(var/overlay in gases_shown)
-			vis_contents += pick(XGM.tile_overlay[overlay])
+		for(var/overlay in gas2show)
+			if(gases_shown & gas2show[overlay])
+				vis_contents += pick(XGM.tile_overlay[overlay])
 
 /turf/proc/update_air_properties()
 	var/block = c_airblock(src)

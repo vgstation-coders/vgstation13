@@ -17,8 +17,8 @@
 
 	var/temperature = 0 //in Kelvin
 
-	//List of active tile overlays for this gas_mixture.  Updated by check_tile_graphic()
-	var/list/graphic = list()
+	//Flags of active tile overlays for this gas_mixture.  Updated by check_tile_graphic()
+	var/graphic = 0
 
 	var/pressure = 0
 
@@ -309,28 +309,29 @@
 
 //Rechecks the gas_mixture and adjusts the graphic list if needed.
 //Two lists can be passed by reference if you need know specifically which graphics were added and removed.
-/datum/gas_mixture/proc/check_tile_graphic(list/graphic_add = null, list/graphic_remove = null)
+/datum/gas_mixture/proc/check_tile_graphic(graphic_add = 0, graphic_remove = 0)
 	for(var/g in XGM.overlay_limit)
-		if(graphic.Find(XGM.tile_overlay[g]))
-			//Overlay is already applied for this gas, check if it's still valid.
-			if(molar_density(g) <= XGM.overlay_limit[g])
-				if(!graphic_remove)
-					graphic_remove = list()
-				graphic_remove |= list(g)
-		else
-			//Overlay isn't applied for this gas, check if it's valid and needs to be added.
-			if(molar_density(g) > XGM.overlay_limit[g])
-				if(!graphic_add)
-					graphic_add = list()
-				graphic_add |= list(g)
+		if(g in gas2show)
+			if(graphic & gas2show[g])
+				//Overlay is already applied for this gas, check if it's still valid.
+				if(molar_density(g) <= XGM.overlay_limit[g])
+					if(!graphic_remove)
+						graphic_remove = 0
+					graphic_remove |= gas2show[g]
+			else
+				//Overlay isn't applied for this gas, check if it's valid and needs to be added.
+				if(molar_density(g) > XGM.overlay_limit[g])
+					if(!graphic_add)
+						graphic_add = 0
+					graphic_add |= gas2show[g]
 
 	. = 0
 	//Apply changes
-	if(graphic_add && graphic_add.len)
+	if(graphic_add)
 		graphic |= graphic_add
 		. = 1
-	if(graphic_remove && graphic_remove.len)
-		graphic -= graphic_remove
+	if(graphic_remove)
+		graphic &= ~graphic_remove
 		. = 1
 
 /datum/gas_mixture/proc/react(atom/dump_location)

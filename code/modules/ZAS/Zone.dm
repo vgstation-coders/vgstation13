@@ -49,8 +49,8 @@ Class Procs:
 	var/list/edges = list()
 	var/datum/gas_mixture/air = new
 
-	var/list/graphic_add = list()
-	var/list/graphic_remove = list()
+	var/graphic_add = 0
+	var/graphic_remove = 0
 
 	#ifdef ZAS_COLOR
 	var/turf_color
@@ -174,8 +174,8 @@ Class Procs:
 	if(air.check_tile_graphic(graphic_add, graphic_remove))
 		for(var/turf/simulated/T in contents)
 			T.update_graphic(graphic_add, graphic_remove)
-		graphic_add.len = 0
-		graphic_remove.len = 0
+		graphic_add = 0
+		graphic_remove = 0
 
 	for(var/connection_edge/E in edges)
 		if(E.sleeping)
