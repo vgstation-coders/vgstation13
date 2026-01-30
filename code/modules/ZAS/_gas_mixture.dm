@@ -17,9 +17,6 @@
 
 	var/temperature = 0 //in Kelvin
 
-	//Flags of active tile overlays for this gas_mixture.  Updated by check_tile_graphic()
-	var/graphic = 0
-
 	var/pressure = 0
 
 	var/tmp/fuel_burnt = 0
