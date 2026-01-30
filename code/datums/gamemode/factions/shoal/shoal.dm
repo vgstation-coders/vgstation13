@@ -21,7 +21,7 @@
 	..()
 
 	new /datum/planet_type/shoal								// This creates the shoal planet.
-	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
+//	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
 	vox_shuttle.initialize() 									//As the area isn't loaded until the above call, its docking ports aren't populated until we call this
 
 
@@ -153,7 +153,7 @@
 
 
 /datum/map_element/dungeon/vox_shuttle
-	file_path = "maps/misc/voxshuttle.dmm"
+	file_path = "maps/misc/skipjack.dmm"
 	unique = TRUE
 
 /obj/effect/landmark/raiderstart

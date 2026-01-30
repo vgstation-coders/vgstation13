@@ -1,3 +1,6 @@
+// Since most overlays will be the same, we can just generate one for each type of turf instead of recalculating average colors each time.
+var/list/abyss_overlay_cache = list()
+
 
 // Abyss tiles!
 // Objects and mobs walking over an abyss fall into it, unless there's an object like a catwalk placed on top!
@@ -36,13 +39,28 @@
 
 /atom/movable
 	// Adding a variable for this probably isn't the best approach, but it's the easiest.
-	// This variable ensures that the falling sequence only starts once, in case an object is thrown across an abyss.
+	// This variable ensures that the falling sequence only starts onc e, in case an object is thrown across an abyss.
 	var/abyssfall = FALSE
 
 
 /turf/unsimulated/floor/abyss/initialize()
 	. = ..()
 	initialized = TRUE
+
+	// Generate a cosmetic overlay using the average color of the (non-abyss) turf above it.
+	// One limitation is that the overlay wont be remade if the turf above it changes.
+	var/turf/T = get_step(src, NORTH)
+	if(abyss_overlay_cache[T.type])
+		overlays += abyss_overlay_cache[T.type]
+	else if(!istype(T, /turf/unsimulated/floor/abyss))
+		message_admins("DEBUG: Generating abyss overlay.")
+		var/image/I = image('icons/turf/walls.dmi', "abyssoverlay")
+		I.color = AverageColor(getFlatIcon(T))
+		abyss_overlay_cache[T.type] = I
+		overlays += I
+
+
+
 
 /turf/unsimulated/floor/abyss/proc/can_abyssfall(var/atom/movable/AM)
 	for(var/atom/A in contents)

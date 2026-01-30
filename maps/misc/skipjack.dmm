@@ -1,0 +1,986 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aF" = (
+/obj/structure/closet/toolcloset,
+/obj/item/weapon/storage/toolbox/electrical{
+	pixel_y = -6
+	},
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"bH" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"cW" = (
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"dl" = (
+/obj/item/trash/oldempirebar,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"en" = (
+/obj/structure/shuttle/engine/propulsion/left{
+	dir = 4
+	},
+/turf/template_noop,
+/area/shuttle/vox/station)
+"eF" = (
+/turf/simulated/wall/shuttle/skipjack,
+/area/shuttle/vox/station)
+"eT" = (
+/turf/template_noop,
+/area/shuttle/vox/station)
+"gx" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack{
+	dir = 8
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"gR" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack{
+	dir = 4
+	},
+/turf/template_noop,
+/area/shuttle/vox/station)
+"ie" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"ii" = (
+/obj/machinery/flasher{
+	id_tag = "vox_flasher"
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"ix" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"jJ" = (
+/obj/machinery/door/airlock/hatch{
+	aiControlDisabled = 1;
+	req_access_txt = "150"
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"lc" = (
+/obj/item/weapon/tank/oxygen,
+/obj/effect/decal/cleanable/vomit,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"lN" = (
+/obj/structure/bed/chair,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"no" = (
+/obj/machinery/computer/crew{
+	holomap_filter = 16
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"rM" = (
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"tt" = (
+/obj/structure/window/full/reinforced/plasma/vox/skipjack,
+/turf/space,
+/area/shuttle/vox/station)
+"tA" = (
+/obj/machinery/flasher_button{
+	id_tag = "vox_flasher";
+	pixel_y = 25
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"uH" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack{
+	dir = 1
+	},
+/turf/template_noop,
+/area/shuttle/vox/station)
+"uI" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"vB" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"vN" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"wf" = (
+/obj/structure/rack,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"yh" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/obj/item/trash/sosjerky,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"zD" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack{
+	dir = 1
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"BF" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/obj/structure/rack,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"Cd" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"CB" = (
+/obj/structure/table,
+/obj/item/weapon/storage/firstaid/regular,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"EM" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"ER" = (
+/obj/structure/hanging_lantern/dim,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"GC" = (
+/obj/structure/shuttle/engine/heater{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"HI" = (
+/turf/template_noop,
+/area)
+"HY" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack{
+	dir = 8
+	},
+/turf/template_noop,
+/area/shuttle/vox/station)
+"Il" = (
+/obj/item/clothing/suit/unathi/robe,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"IC" = (
+/obj/structure/hanging_lantern/dim,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"IG" = (
+/obj/item/trash/chips/danitos,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"IL" = (
+/obj/machinery/computer/security,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"IN" = (
+/obj/structure/window/full/reinforced/plasma/vox/skipjack,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"Jl" = (
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"JR" = (
+/obj/structure/shuttle/engine/propulsion/horizon/huge_engine{
+	dir = 4
+	},
+/turf/template_noop,
+/area/shuttle/vox/station)
+"Lg" = (
+/obj/structure/table,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"MF" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack,
+/turf/template_noop,
+/area/shuttle/vox/station)
+"NA" = (
+/obj/machinery/sleeper{
+	dir = 4
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"Ob" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"OH" = (
+/obj/item/weapon/tank/oxygen{
+	pixel_x = 12;
+	pixel_y = -9
+	},
+/obj/item/trash/semki,
+/obj/item/trash/chips/danitos,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"Pa" = (
+/obj/structure/shuttle/engine/propulsion/left{
+	dir = 4
+	},
+/turf/space,
+/area/shuttle/vox/station)
+"QG" = (
+/obj/item/weapon/tank/oxygen{
+	pixel_x = 12;
+	pixel_y = -9
+	},
+/obj/item/trash/semki,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"QP" = (
+/obj/machinery/door/window/brigdoor{
+	base_state = "left";
+	req_access = null;
+	dir = 8
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"QQ" = (
+/obj/structure/table,
+/obj/abstract/map/spawner/voxfood,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"QR" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 4
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"TZ" = (
+/obj/structure/bed/chair/shuttle/red{
+	dir = 8
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"VF" = (
+/obj/machinery/door/airlock/external,
+/obj/docking_port/shuttle{
+	dir = 2
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"VS" = (
+/obj/structure/closet/emcloset/vox,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"Xk" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/computer/arcade,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"XM" = (
+/obj/machinery/computer/shuttle_control/vox,
+/obj/structure/hanging_lantern/dim{
+	dir = 8
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"XO" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+
+(1,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+"}
+(2,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+MF
+tt
+gR
+HI
+HI
+HI
+HI
+HI
+HI
+"}
+(3,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+MF
+IN
+XM
+IN
+gR
+HI
+HI
+HI
+HI
+HI
+"}
+(4,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+eF
+zD
+TZ
+gx
+eF
+HI
+HI
+HI
+HI
+HI
+"}
+(5,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+MF
+eF
+no
+rM
+rM
+eF
+gR
+HI
+HI
+HI
+HI
+"}
+(6,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+MF
+eF
+IN
+eF
+eF
+IL
+bH
+rM
+eF
+eF
+IN
+eF
+gR
+HI
+"}
+(7,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+eF
+wf
+rM
+rM
+eF
+Lg
+rM
+rM
+eF
+NA
+CB
+NA
+eF
+HI
+"}
+(8,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+IN
+wf
+rM
+rM
+jJ
+QR
+rM
+QR
+jJ
+rM
+rM
+rM
+IN
+HI
+"}
+(9,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+eF
+BF
+rM
+aF
+eF
+eF
+jJ
+eF
+eF
+rM
+rM
+ER
+eF
+HI
+"}
+(10,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HY
+eF
+jJ
+eF
+eF
+rM
+rM
+rM
+eF
+eF
+jJ
+eF
+uH
+HI
+"}
+(11,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+eF
+IC
+eF
+Cd
+rM
+ix
+rM
+ER
+eF
+vB
+eF
+HI
+HI
+"}
+(12,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+ie
+Jl
+jJ
+rM
+lN
+QQ
+bH
+rM
+jJ
+Jl
+VF
+HI
+HI
+"}
+(13,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+eF
+VS
+eF
+rM
+rM
+uI
+rM
+rM
+eF
+VS
+eF
+HI
+HI
+"}
+(14,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HY
+GC
+eF
+tA
+rM
+rM
+rM
+cW
+eF
+GC
+uH
+HI
+HI
+"}
+(15,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+en
+eF
+Xk
+EM
+QP
+EM
+EM
+eF
+Pa
+HI
+HI
+HI
+"}
+(16,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+IN
+vN
+Jl
+Jl
+Il
+Jl
+IN
+HI
+HI
+HI
+HI
+"}
+(17,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+eF
+yh
+QG
+ii
+IG
+IC
+eF
+HI
+HI
+HI
+HI
+"}
+(18,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+eF
+Ob
+lc
+OH
+dl
+XO
+eF
+HI
+HI
+HI
+HI
+"}
+(19,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HY
+eF
+Ob
+Jl
+XO
+eF
+uH
+HI
+HI
+HI
+HI
+"}
+(20,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HY
+GC
+GC
+GC
+uH
+HI
+HI
+HI
+HI
+HI
+"}
+(21,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+eT
+eT
+JR
+HI
+HI
+HI
+HI
+HI
+HI
+"}
+(22,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+eT
+eT
+eT
+HI
+HI
+HI
+HI
+HI
+HI
+"}
+(23,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+"}
+(24,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+"}
+(25,1,1) = {"
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+HI
+"}

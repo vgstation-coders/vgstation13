@@ -6,9 +6,28 @@
 "au" = (
 /turf/space,
 /area)
+"bi" = (
+/obj/item/weapon/tank/oxygen{
+	pixel_x = 12;
+	pixel_y = -9
+	},
+/obj/item/trash/semki,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bT" = (
+/obj/structure/closet/toolcloset,
+/obj/item/weapon/storage/toolbox/electrical{
+	pixel_y = -6
+	},
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "cv" = (
-/obj/machinery/computer/shuttle_control/vox,
-/turf/simulated/floor/shuttle/vox,
+/turf/template_noop,
+/area)
+"cF" = (
+/obj/structure/rack,
+/turf/simulated/floor/vox/shuttle,
 /area/shuttle/vox/station)
 "cH" = (
 /obj/machinery/computer/shuttle_control/vox,
@@ -17,7 +36,7 @@
 	},
 /area)
 "db" = (
-/obj/structure/grille/window_spawner/reinforced/full,
+/obj/structure/window/full/reinforced/plasma/vox/skipjack,
 /turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "dl" = (
@@ -46,6 +65,10 @@
 	icon_state = "floor4"
 	},
 /area)
+"fj" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "fr" = (
 /obj/item/trash/pistachios,
 /obj/structure/table,
@@ -78,6 +101,12 @@
 /obj/item/trash/chips/danitos,
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"il" = (
+/obj/machinery/flasher{
+	id_tag = "vox_flasher"
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "it" = (
 /turf/template_noop,
 /area/shuttle/vox/station)
@@ -90,6 +119,13 @@
 	icon_state = "floor4"
 	},
 /area)
+"iD" = (
+/obj/machinery/computer/shuttle_control/vox,
+/obj/structure/hanging_lantern/dim{
+	dir = 8
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "jD" = (
 /obj/machinery/light{
 	dir = 1
@@ -112,6 +148,12 @@
 	},
 /turf/template_noop,
 /area/shuttle/vox/station)
+"lg" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 4
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "lh" = (
 /obj/structure/shuttle/engine/propulsion/left,
 /turf/space,
@@ -125,6 +167,10 @@
 /obj/item/weapon/paper/crumpled,
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"nc" = (
+/obj/item/clothing/suit/unathi/robe,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "nG" = (
 /obj/structure/closet{
 	name = "loot closet"
@@ -133,6 +179,17 @@
 	icon_state = "floor4"
 	},
 /area)
+"nN" = (
+/obj/machinery/computer/crew{
+	holomap_filter = 16
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"nR" = (
+/obj/item/weapon/tank/oxygen,
+/obj/effect/decal/cleanable/vomit,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "nU" = (
 /obj/structure/table/reinforced,
 /obj/machinery/light{
@@ -164,6 +221,12 @@
 	icon_state = "diagonalWall3"
 	},
 /area)
+"pV" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "qh" = (
 /obj/machinery/sleeper,
 /obj/structure/window/reinforced{
@@ -209,6 +272,12 @@
 	icon_state = "floor4"
 	},
 /area)
+"rX" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "sj" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -230,6 +299,16 @@
 /area)
 "sz" = (
 /turf/simulated/wall/shuttle/skipjack,
+/area/shuttle/vox/station)
+"sE" = (
+/turf/space,
+/area/shuttle/vox/station)
+"tZ" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/computer/arcade,
+/turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "uj" = (
 /obj/structure/rack,
@@ -330,6 +409,32 @@
 	},
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"xL" = (
+/obj/structure/table,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"xT" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/obj/item/trash/sosjerky,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"za" = (
+/obj/item/weapon/tank/oxygen{
+	pixel_x = 12;
+	pixel_y = -9
+	},
+/obj/item/trash/semki,
+/obj/item/trash/chips/danitos,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"zU" = (
+/obj/structure/shuttle/engine/propulsion/horizon/huge_engine{
+	dir = 4
+	},
+/turf/template_noop,
+/area/shuttle/vox/station)
 "zW" = (
 /turf/space,
 /turf/simulated/wall/shuttle/unsmoothed{
@@ -337,6 +442,10 @@
 	icon_state = "diagonalWall3"
 	},
 /area)
+"Ac" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "An" = (
 /obj/structure/table/reinforced,
 /obj/item/device/multitool,
@@ -350,10 +459,15 @@
 /turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "Bc" = (
-/obj/structure/shuttle/engine/heater{
-	dir = 4
-	},
+/obj/structure/closet/emcloset/vox,
 /turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"Br" = (
+/obj/machinery/door/airlock/hatch{
+	aiControlDisabled = 1;
+	req_access_txt = "150"
+	},
+/turf/simulated/floor/vox/shuttle,
 /area/shuttle/vox/station)
 "Bw" = (
 /obj/machinery/cloning/clonepod/full,
@@ -367,12 +481,22 @@
 	},
 /turf/template_noop,
 /area/shuttle/vox/station)
+"BT" = (
+/obj/structure/shuttle/engine/propulsion/left{
+	dir = 4
+	},
+/turf/space,
+/area/shuttle/vox/station)
 "Cc" = (
 /obj/machinery/sleeper,
 /turf/simulated/floor/shuttle/vox{
 	icon_state = "floor4"
 	},
 /area)
+"Cq" = (
+/obj/item/trash/oldempirebar,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "Cr" = (
 /obj/item/weapon/tank/oxygen,
 /turf/simulated/floor/shuttle/plating/vox,
@@ -384,6 +508,16 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"De" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"Dl" = (
+/obj/structure/hanging_lantern/dim,
 /turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "Dr" = (
@@ -452,6 +586,15 @@
 	},
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"EU" = (
+/obj/structure/shuttle/engine/heater{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area)
 "Fd" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/storage/backpack/industrial,
@@ -473,12 +616,28 @@
 	icon_state = "floor4"
 	},
 /area)
+"Fv" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "Fy" = (
 /obj/structure/closet/emcloset/vox,
 /turf/simulated/floor/shuttle/vox{
 	icon_state = "floor4"
 	},
 /area)
+"Fz" = (
+/obj/structure/window/full/reinforced/plasma/vox/skipjack,
+/turf/space,
+/area/shuttle/vox/station)
+"FL" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Gc" = (
 /obj/machinery/light/small,
 /turf/simulated/floor/shuttle/plating/vox,
@@ -544,6 +703,12 @@
 /obj/machinery/light,
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"HU" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Io" = (
 /obj/item/weapon/tank/oxygen{
 	pixel_x = 12;
@@ -562,6 +727,10 @@
 	},
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"It" = (
+/obj/item/trash/chips/danitos,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "Iu" = (
 /obj/machinery/flasher_button{
 	id_tag = "vox_flasher";
@@ -576,6 +745,10 @@
 	},
 /turf/space,
 /area)
+"Km" = (
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Lu" = (
 /obj/machinery/light{
 	dir = 1
@@ -588,6 +761,13 @@
 	icon_state = "diagonalWall3"
 	},
 /area)
+"Ne" = (
+/obj/machinery/flasher_button{
+	id_tag = "vox_flasher";
+	pixel_y = 25
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Nl" = (
 /obj/machinery/computer/crew{
 	holomap_filter = 16
@@ -608,6 +788,12 @@
 	icon_state = "floor4"
 	},
 /area)
+"NE" = (
+/obj/machinery/sleeper{
+	dir = 4
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Oi" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/storage/firstaid/toxin,
@@ -633,14 +819,32 @@
 	},
 /turf/template_noop,
 /area/shuttle/vox/station)
+"Pt" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack{
+	dir = 1
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Pv" = (
 /obj/item/trash/plate,
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"PK" = (
+/obj/machinery/door/airlock/external,
+/obj/docking_port/shuttle{
+	dir = 2
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "Qc" = (
 /obj/item/trash/syndi_cakes,
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"Qj" = (
+/obj/structure/table,
+/obj/item/weapon/storage/firstaid/regular,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Re" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/shuttle/plating/vox,
@@ -668,6 +872,10 @@
 	icon_state = "floor4"
 	},
 /area)
+"Sn" = (
+/obj/structure/bed/chair,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Sx" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/c4{
@@ -679,7 +887,7 @@
 	},
 /area)
 "SJ" = (
-/turf/simulated/floor/shuttle/vox,
+/turf/simulated/floor/vox/shuttle,
 /area/shuttle/vox/station)
 "SU" = (
 /obj/structure/window/reinforced{
@@ -690,12 +898,29 @@
 	},
 /turf/simulated/floor/airless,
 /area)
+"SZ" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/obj/structure/rack,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"Te" = (
+/obj/structure/hanging_lantern/dim,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Tp" = (
 /obj/machinery/computer/security,
 /turf/simulated/floor/shuttle/vox{
 	icon_state = "floor4"
 	},
 /area)
+"TH" = (
+/obj/structure/shuttle/diag_wall/smooth/skipjack{
+	dir = 8
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Up" = (
 /obj/machinery/door/airlock/hatch{
 	aiControlDisabled = 1;
@@ -703,6 +928,12 @@
 	},
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"Uu" = (
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "Ux" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -739,6 +970,12 @@
 	icon_state = "floor4"
 	},
 /area)
+"WT" = (
+/obj/structure/bed/chair/shuttle/red{
+	dir = 8
+	},
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "Xb" = (
 /obj/machinery/light/small{
 	dir = 4
@@ -747,6 +984,18 @@
 /obj/item/stack/medical/bruise_pack/bandaid,
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"Xk" = (
+/obj/machinery/computer/security,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
+"Xv" = (
+/obj/machinery/door/window/brigdoor{
+	base_state = "left";
+	req_access = null;
+	dir = 8
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
 "XS" = (
 /obj/machinery/door/airlock/glass{
 	id_tag = "RAIDER_BRIG";
@@ -775,6 +1024,11 @@
 	},
 /turf/simulated/floor/shuttle/plating/vox,
 /area)
+"Zy" = (
+/obj/structure/table,
+/obj/abstract/map/spawner/voxfood,
+/turf/simulated/floor/vox/shuttle,
+/area/shuttle/vox/station)
 "ZO" = (
 /obj/docking_port/destination/vox/station,
 /turf/space,
@@ -816,21 +1070,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
 "}
 (2,1,1) = {"
 au
@@ -868,21 +1122,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
-it
-it
-it
-it
-it
-it
-it
-it
-au
+cv
+cv
+cv
+cv
+cv
+cv
+gX
+Fz
+BA
+cv
+cv
+cv
+cv
+cv
+cv
 "}
 (3,1,1) = {"
 au
@@ -920,21 +1174,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
-it
+cv
+cv
+cv
+cv
+cv
 gX
 db
-db
+iD
 db
 BA
-it
-it
-au
+cv
+cv
+cv
+cv
+cv
 "}
 (4,1,1) = {"
 au
@@ -972,21 +1226,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
-it
-sz
-SJ
 cv
-SJ
+cv
+cv
+cv
+cv
 sz
-it
-it
-au
+Pt
+WT
+TH
+sz
+cv
+cv
+cv
+cv
+cv
 "}
 (5,1,1) = {"
 au
@@ -1024,21 +1278,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
+cv
+cv
+cv
+cv
 gX
 sz
-sz
+nN
 SJ
 SJ
-SJ
-sz
 sz
 BA
-au
+cv
+cv
+cv
+cv
 "}
 (6,1,1) = {"
 au
@@ -1076,21 +1330,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-vm
-AK
-AK
+cv
+gX
+sz
+db
+sz
+sz
+Xk
+De
 SJ
-SJ
-SJ
-AK
-AK
-vm
-au
+sz
+sz
+db
+sz
+BA
+cv
 "}
 (7,1,1) = {"
 au
@@ -1128,21 +1382,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-Pp
-CH
+cv
 sz
-SJ
+cF
 SJ
 SJ
 sz
-CH
-jP
-au
+xL
+SJ
+SJ
+sz
+NE
+Qj
+NE
+sz
+cv
 "}
 (8,1,1) = {"
 au
@@ -1180,21 +1434,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
-GR
-sz
+cv
+db
+cF
+SJ
+SJ
+Br
+lg
+SJ
+lg
+Br
 SJ
 SJ
 SJ
-sz
-GR
-it
-au
+db
+cv
 "}
 (9,1,1) = {"
 au
@@ -1232,21 +1486,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
-it
+cv
+sz
+SZ
+SJ
+bT
+sz
+sz
+Br
+sz
 sz
 SJ
 SJ
-SJ
+Te
 sz
-it
-it
-au
+cv
 "}
 (10,1,1) = {"
 au
@@ -1284,21 +1538,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
-it
+cv
+Pp
+sz
+Br
+sz
 sz
 SJ
 SJ
 SJ
 sz
-it
-it
-au
+sz
+Br
+sz
+jP
+cv
 "}
 (11,1,1) = {"
 au
@@ -1336,21 +1590,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
+cv
+cv
 sz
+Dl
 sz
+FL
 SJ
+HU
 SJ
-SJ
+Te
 sz
+Uu
 sz
-it
-au
+cv
+cv
 "}
 (12,1,1) = {"
 au
@@ -1388,21 +1642,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
-sz
+cv
+cv
+vm
+AK
+Br
 SJ
+Sn
+Zy
+De
 SJ
-SJ
-SJ
-SJ
-sz
-it
-au
+Br
+AK
+PK
+cv
+cv
 "}
 (13,1,1) = {"
 au
@@ -1440,21 +1694,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
-it
-Bc
-Bc
+cv
+cv
 sz
 Bc
+sz
+SJ
+SJ
+pV
+SJ
+SJ
+sz
 Bc
-it
-it
-au
+sz
+cv
+cv
 "}
 (14,1,1) = {"
 au
@@ -1492,21 +1746,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
-it
-GR
-GR
-it
-GR
-GR
-it
-it
-au
+cv
+cv
+Pp
+CH
+sz
+Ne
+SJ
+SJ
+SJ
+Km
+sz
+CH
+jP
+cv
+cv
 "}
 (15,1,1) = {"
 au
@@ -1544,21 +1798,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-it
-it
-it
-it
-it
-it
-it
-it
-it
-au
+cv
+cv
+cv
+GR
+sz
+tZ
+rX
+Xv
+rX
+rX
+sz
+BT
+cv
+cv
+cv
 "}
 (16,1,1) = {"
 au
@@ -1596,21 +1850,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
+cv
+cv
+cv
+cv
+db
+Ac
+AK
+AK
+nc
+AK
+db
+cv
+cv
+cv
+cv
 "}
 (17,1,1) = {"
 au
@@ -1648,21 +1902,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
+cv
+cv
+cv
+cv
+sz
+xT
+bi
+il
+It
+Dl
+sz
+cv
+cv
+cv
+cv
 "}
 (18,1,1) = {"
 au
@@ -1700,21 +1954,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
+cv
+cv
+cv
+cv
+sz
+Fv
+nR
+za
+Cq
+fj
+sz
+cv
+cv
+cv
+cv
 "}
 (19,1,1) = {"
 au
@@ -1752,21 +2006,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
+cv
+cv
+cv
+cv
+Pp
+sz
+Fv
+AK
+fj
+sz
+jP
+cv
+cv
+cv
+cv
 "}
 (20,1,1) = {"
 au
@@ -1804,21 +2058,21 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
+cv
+cv
+cv
+cv
+cv
+Pp
+CH
+CH
+CH
+jP
+cv
+cv
+cv
+cv
+cv
 "}
 (21,1,1) = {"
 au
@@ -1856,6 +2110,214 @@ au
 au
 au
 au
+cv
+cv
+cv
+cv
+cv
+cv
+it
+it
+zU
+cv
+cv
+cv
+cv
+cv
+cv
+"}
+(22,1,1) = {"
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+cv
+cv
+cv
+cv
+cv
+cv
+it
+it
+it
+cv
+cv
+cv
+cv
+cv
+cv
+"}
+(23,1,1) = {"
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+cv
+cv
+cv
+cv
+cv
+cv
+it
+it
+it
+cv
+cv
+cv
+cv
+cv
+cv
+"}
+(24,1,1) = {"
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+cv
+"}
+(25,1,1) = {"
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
 au
 au
 au
@@ -1872,9 +2334,215 @@ au
 au
 au
 "}
-(22,1,1) = {"
+(26,1,1) = {"
 au
 au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+"}
+(27,1,1) = {"
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+"}
+(28,1,1) = {"
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+"}
+(29,1,1) = {"
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+au
+"}
+(30,1,1) = {"
 au
 au
 au
@@ -1923,10 +2591,10 @@ au
 au
 au
 au
+au
+au
 "}
-(23,1,1) = {"
-au
-au
+(31,1,1) = {"
 au
 au
 au
@@ -1975,10 +2643,10 @@ au
 au
 au
 au
+au
+au
 "}
-(24,1,1) = {"
-au
-au
+(32,1,1) = {"
 au
 au
 au
@@ -2027,10 +2695,10 @@ au
 au
 au
 au
+au
+au
 "}
-(25,1,1) = {"
-au
-au
+(33,1,1) = {"
 au
 au
 au
@@ -2079,10 +2747,10 @@ au
 au
 au
 au
+au
+au
 "}
-(26,1,1) = {"
-au
-au
+(34,1,1) = {"
 au
 au
 au
@@ -2131,10 +2799,10 @@ au
 au
 au
 au
+au
+au
 "}
-(27,1,1) = {"
-au
-au
+(35,1,1) = {"
 au
 au
 au
@@ -2183,10 +2851,10 @@ au
 au
 au
 au
+au
+au
 "}
-(28,1,1) = {"
-au
-au
+(36,1,1) = {"
 au
 au
 au
@@ -2235,10 +2903,10 @@ Lx
 au
 au
 au
+au
+au
 "}
-(29,1,1) = {"
-au
-au
+(37,1,1) = {"
 au
 au
 au
@@ -2287,10 +2955,10 @@ vx
 Lx
 au
 au
+au
+au
 "}
-(30,1,1) = {"
-au
-au
+(38,1,1) = {"
 au
 au
 au
@@ -2335,14 +3003,14 @@ vx
 ut
 ut
 wW
-xo
+EU
 lh
 au
 au
+au
+au
 "}
-(31,1,1) = {"
-au
-au
+(39,1,1) = {"
 au
 au
 au
@@ -2391,10 +3059,10 @@ xo
 jI
 ZO
 au
+au
+au
 "}
-(32,1,1) = {"
-au
-au
+(40,1,1) = {"
 au
 au
 au
@@ -2443,10 +3111,10 @@ xo
 ao
 au
 au
+au
+au
 "}
-(33,1,1) = {"
-au
-au
+(41,1,1) = {"
 au
 au
 au
@@ -2495,10 +3163,10 @@ vx
 zW
 au
 au
+au
+au
 "}
-(34,1,1) = {"
-au
-au
+(42,1,1) = {"
 au
 au
 au
@@ -2547,10 +3215,10 @@ zW
 au
 au
 au
+au
+au
 "}
-(35,1,1) = {"
-au
-au
+(43,1,1) = {"
 au
 au
 au
@@ -2599,10 +3267,10 @@ au
 au
 au
 au
+au
+au
 "}
-(36,1,1) = {"
-au
-au
+(44,1,1) = {"
 au
 au
 au
@@ -2651,8 +3319,10 @@ au
 au
 au
 au
+au
+au
 "}
-(37,1,1) = {"
+(45,1,1) = {"
 au
 au
 au
@@ -2664,17 +3334,15 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
+sE
+sE
+sE
+sE
+sE
+sE
+sE
+sE
+sE
 au
 au
 au
@@ -2703,8 +3371,10 @@ au
 au
 au
 au
+au
+au
 "}
-(38,1,1) = {"
+(46,1,1) = {"
 au
 au
 au
@@ -2716,17 +3386,15 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
+sE
+sE
+sE
+sE
+sE
+sE
+sE
+sE
+sE
 au
 au
 au
@@ -2755,8 +3423,10 @@ au
 au
 au
 au
+au
+au
 "}
-(39,1,1) = {"
+(47,1,1) = {"
 au
 au
 au
@@ -2768,17 +3438,15 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
+sE
+sE
+sE
+sE
+sE
+sE
+sE
+sE
+sE
 au
 au
 au
@@ -2796,420 +3464,6 @@ DB
 Oi
 xo
 ao
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-"}
-(40,1,1) = {"
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-Pl
-vx
-vx
-vx
-vx
-Re
-Re
-Re
-vx
-zW
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-"}
-(41,1,1) = {"
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-"}
-(42,1,1) = {"
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-"}
-(43,1,1) = {"
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-"}
-(44,1,1) = {"
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-"}
-(45,1,1) = {"
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-"}
-(46,1,1) = {"
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-"}
-(47,1,1) = {"
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
 au
 au
 au
@@ -3252,16 +3506,16 @@ au
 au
 au
 au
-au
-au
-au
-au
-au
-au
-au
-au
-au
-au
+Pl
+vx
+vx
+vx
+vx
+Re
+Re
+Re
+vx
+zW
 au
 au
 au

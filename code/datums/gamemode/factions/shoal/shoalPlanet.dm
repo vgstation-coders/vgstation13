@@ -145,6 +145,8 @@ var/datum/planet_type/shoal/shoalPlanet = null
 
 /obj/docking_port/destination/shoal
 	areaname = "shoal docking port"
+	base_turf_type = /turf/unsimulated/floor/asteroid/vox
+	base_turf_override = TRUE
 
 /obj/docking_port/destination/shoal/New()
 	..()
