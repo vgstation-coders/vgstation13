@@ -943,17 +943,17 @@
 		if(I_DISARM)
 			disarm_mob(user)
 
-/mob/living/silicon/robot/proc/allowed(mob/M)
+/mob/living/silicon/robot/proc/allowed(atom/A)
 	//check if it doesn't require any access at all
 	if(check_access(null))
 		return TRUE
-	if(istype(M, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = M
+	if(istype(A, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = A
 		//if they are holding or wearing a card that has access, that works
 		if(check_access(H.get_active_hand()) || check_access(H.wear_id))
 			return TRUE
-	else if(istype(M, /mob/living/carbon/monkey))
-		var/mob/living/carbon/monkey/george = M
+	else if(istype(A, /mob/living/carbon/monkey))
+		var/mob/living/carbon/monkey/george = A
 		//they can only hold things :(
 		if(istype(george.get_active_hand(), /obj/item))
 			return check_access(george.get_active_hand())

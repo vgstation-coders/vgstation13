@@ -171,8 +171,10 @@ var/runechat_icon = null
 	message.maptext_x = (CHAT_MESSAGE_WIDTH - owner.bound_width) * -0.5
 	message.maptext = complete_text
 
-	if (is_holder_of(owner, target)) // Special case, holding an atom speaking (pAI, recorder...)
-		message.plane = ABOVE_HUD_PLANE
+	//if (is_holder_of(owner, target)) // Special case, holding an atom speaking (pAI, recorder...)
+	message.plane = ABOVE_HUD_PLANE//hotfix because runechat no longer shows up on other people or objects without that
+									//might be related or not to planemasters I'm not sure.
+									//also it might look better this way. It'd make sense that people find where a voice comes from in a dark room
 
 	// View the message
 	if (owned_by)
@@ -213,7 +215,7 @@ var/runechat_icon = null
 	// Check for virtual speakers (aka hearing a message through a radio)
 	if (existing_extra_classes.Find("radio"))
 		return
-	
+
 	if(loneliness_affected(speaker,TRUE))
 		return
 

@@ -55,7 +55,6 @@
 	world.name = "NT Colony Gamma-8"
 	station_name="NT Colony Gamma-8"
 	daynight_z_lvls=list(1,4)
-	turfs_to_regrow=list()
 
 
 /datum/map/active/map_specific_init()
@@ -64,7 +63,7 @@
 	var/num_ass_replacments=0
 	for(var/area/surface/jungle/mining/unexplored/A in areas)
 		for(var/turf/unsimulated/floor/asteroid/T in A.contents)
-			new /turf/unsimulated/floor/jungle/path(T)
+			new /turf/unsimulated/floor/planetary/path/jungle(T)
 			num_ass_replacments++
 	world.log << "replaced [num_ass_replacments] asteroid tiles to be jungle."
 
@@ -100,7 +99,7 @@
 		if(!istype(A,/area/surface/jungle/roid/vaults))
 			return 0
 	for(var/turf/S in surroundings) //avoid nearby locations.
-		if(S.type!=/turf/unsimulated/floor/jungle/grass)
+		if(S.type!=/turf/unsimulated/floor/planetary/grass/jungle)
 			return 0
 	return 1
 
@@ -265,28 +264,6 @@
 
 /datum/subsystem/daynightcycle/play_globalsound()
 	return
-
-
-/datum/subsystem/foliage_regrow
-	growth_chance=95
-	var/growth_delay=5 MINUTES
-
-
-/datum/subsystem/foliage_regrow/regrow_turf(var/turf/T)
-	if(!T)
-		return null
-	if (T.type!=/turf/unsimulated/floor/jungle/grass)
-		return null
-	if(/obj/structure/flora in T.contents)
-		return null
-	var/turf/unsimulated/floor/jungle/grass/G=T
-	if(G.regrowticks <= world.time-growth_delay)
-		var/created=G.generate_foliage()
-		if(!created)
-			turfs_to_regrow+=G
-		return created
-	else
-		turfs_to_regrow+=G
 
 
 ////////////////////////////////////////////////////////////////

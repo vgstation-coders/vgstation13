@@ -1,3 +1,5 @@
+
+
 /datum/role/cultist
 	id = CULTIST
 	name = "Cultist"
@@ -134,7 +136,7 @@
 			assign_rituals()
 			var/mob/M = antag.current
 			if (M)
-				to_chat(M, "<span class='sinister'>Although you can generate devotion by performing most cult activities, a couple rituals for you to perform are now available. Check the cult panel.</span>")
+				to_chat(M, "<span class='sinister'>Although you can generate devotion by performing most cult activities, a couple rituals for you to perform are now available. Check the cult panel to the left.</span>")
 		if (!antag.current)
 			return
 		switch(cult.stage)
@@ -272,13 +274,13 @@
 
 /datum/role/cultist/ExtraScoreboard()
 	switch(devotion)
-		if (2000 to INFINITY)
+		if (DEVOTION_REQ_4 to INFINITY)
 			return " <font color='#FF0000'>[devotion]</font>"
-		if (1000 to 2000)
+		if (DEVOTION_REQ_3 to DEVOTION_REQ_4)
 			return " <font color='#FF8800'>[devotion]</font>"
-		if (500 to 1000)
+		if (DEVOTION_REQ_2 to DEVOTION_REQ_3)
 			return " <font color='#FFFF00'>[devotion]</font>"
-		if (100 to 500)
+		if (DEVOTION_REQ_1 to DEVOTION_REQ_2)
 			return " <font color='#88FF00'>[devotion]</font>"
 		else
 			return " <font color='#00FF00'>[devotion]</font>"
@@ -374,15 +376,15 @@
 
 /datum/role/cultist/proc/get_devotion_rank()
 	switch(devotion)
-		if (2000 to INFINITY)
+		if (DEVOTION_REQ_4 to INFINITY)
 			return DEVOTION_TIER_4
-		if (1000 to 2000)
+		if (DEVOTION_REQ_3 to DEVOTION_REQ_4)
 			return DEVOTION_TIER_3
-		if (500 to 1000)
+		if (DEVOTION_REQ_2 to DEVOTION_REQ_3)
 			return DEVOTION_TIER_2
-		if (100 to 500)
+		if (DEVOTION_REQ_1 to DEVOTION_REQ_2)
 			return DEVOTION_TIER_1
-		if (0 to 100)
+		if (0 to DEVOTION_REQ_1)
 			return DEVOTION_TIER_0
 
 /datum/role/cultist/proc/gain_devotion(var/acquired_devotion = 0, var/tier = DEVOTION_TIER_0, var/key, var/extra)
@@ -536,13 +538,13 @@
 		if (DEVOTION_TIER_0)
 			return 0.10
 		if (DEVOTION_TIER_1)
-			return 0.10 + (devotion-100)*0.000375
+			return 0.10 + (devotion - DEVOTION_REQ_1) * 0.000375
 		if (DEVOTION_TIER_2)
-			return 0.25 + (devotion-500)*0.0003
+			return 0.25 + (devotion - DEVOTION_REQ_2) * 0.0003
 		if (DEVOTION_TIER_3)
-			return 0.40 + (devotion-1000)*0.0001
+			return 0.40 + (devotion - DEVOTION_REQ_3) * 0.0001
 		if (DEVOTION_TIER_4)
-			return 0.50 + (devotion-2000)*0.00005
+			return 0.50 + (devotion - DEVOTION_REQ_4) * 0.00005
 
 /datum/role/cultist/handle_reagent(var/reagent_id)
 	var/mob/living/carbon/human/H = antag.current
@@ -569,7 +571,7 @@
 			to_chat(H, "<span class='danger'>The burning touch of sacred water sears your skin.</span>")
 
 	switch(reagent_id)
-		if (HOLYWATER,INCENSE_HAREBELLS,SACREDWATER)
+		if (HOLYWATER, INCENSE_HAREBELLS, SACREDWATER)
 			H.eye_blurry = max(H.eye_blurry, 12)
 			H.Dizzy(12)
 			H.stuttering = max(H.stuttering, 12)

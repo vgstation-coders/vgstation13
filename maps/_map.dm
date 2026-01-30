@@ -224,14 +224,14 @@ var/global/list/accessable_z_levels = list()
 //for junglestation
 /datum/zLevel/junglesurface
 	name = "jungle surface"
-	base_turf = /turf/unsimulated/floor/jungle/dirt
+	base_turf = /turf/unsimulated/floor/planetary/dirt/jungle
 	base_area = /area/surface/jungle/landing //hacky workaround.
 	movementJammed = TRUE
 	planetside = TRUE
 
 /datum/zLevel/jungleunderground
 	name = "jungle underground"
-	base_turf = /turf/unsimulated/floor/jungle/bedrock
+	base_turf = /turf/unsimulated/floor/planetary/cave/jungle
 	base_area = /area/surface/jungle/underground
 	movementJammed = TRUE
 	planetside = TRUE

@@ -154,8 +154,9 @@
 		var/image/W = image('icons/obj/fitness.dmi',"fitnessweight-w")
 		W.layer = MOB_LAYER + 0.1
 		overlays += W
-		var/bragmessage = pick("pushing it to the limit","going into overdrive","burning with determination","rising up to the challenge", "getting strong now","getting ripped")
-		user.visible_message("<B>[user] is [bragmessage]!</B>")
+		if(user.client)
+			var/bragmessage = pick("pushing it to the limit","going into overdrive","burning with determination","rising up to the challenge", "getting strong now","getting ripped")
+			user.visible_message("<B>[user] is [bragmessage]!</B>")
 		user.pixel_y = 5 * PIXEL_MULTIPLIER
 		for(var/reps = 1 to 6)
 			if (user.loc != loc)

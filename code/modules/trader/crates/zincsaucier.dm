@@ -326,7 +326,7 @@ var/global/global_cricket_population = 0
 	desc = "A heads-up display that displays information on plants and farm animals. It appears to feature corrective lenses too."
 	icon_state = "hydrohud"
 	item_state = "rwelding-g"
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	var/obj/item/device/analyzer/plant_analyzer/my_analyzer
 
 /obj/item/clothing/glasses/hud/hydro/New()

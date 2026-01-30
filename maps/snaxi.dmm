@@ -7796,7 +7796,6 @@
 	},
 /area/crew_quarters/sleep)
 "atM" = (
-/obj/machinery/light,
 /obj/machinery/newscaster/security_unit{
 	dir = 1;
 	pixel_y = -32
@@ -9240,9 +9239,6 @@
 	},
 /area/crew_quarters/hop)
 "awT" = (
-/obj/machinery/light{
-	dir = 1
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 8;
@@ -9274,6 +9270,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
+	},
+/obj/machinery/light{
+	dir = 1
 	},
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
@@ -11733,6 +11732,7 @@
 	},
 /obj/item/weapon/storage/box/PDAs,
 /obj/item/clothing/suit/storage/wintercoat/hop,
+/obj/machinery/light,
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
 	},
@@ -12409,9 +12409,6 @@
 /turf/simulated/floor,
 /area/engineering/supermatter_room)
 "aCQ" = (
-/obj/machinery/power/terminal{
-	dir = 1
-	},
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
@@ -16011,7 +16008,6 @@
 /turf/simulated/floor/plating,
 /area/engineering/burn_chamber)
 "aKm" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction,
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -17894,7 +17890,7 @@
 /area/supply/qm)
 "aOT" = (
 /obj/machinery/conveyor_switch/oneway{
-	id_tag = "QMLoad"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -18282,6 +18278,11 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/machinery/requests_console{
+	department = "Medbay";
+	phone_name = "Medbay Lobby";
+	pixel_x = 30
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whitegreen"
@@ -18321,6 +18322,9 @@
 	supply_display = 1
 	},
 /obj/machinery/light/small,
+/obj/machinery/conveyor_switch/oneway{
+	id_tag = "QMLoad"
+	},
 /turf/simulated/floor{
 	icon_state = "warning"
 	},
@@ -23899,6 +23903,13 @@
 	c_tag = "Medbay South";
 	dir = 1
 	},
+/obj/machinery/requests_console{
+	department = "Medbay";
+	departmentType = 1;
+	name = "Medbay RC";
+	pixel_y = -30;
+	phone_name = "Medbay Storage"
+	},
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
@@ -28848,6 +28859,11 @@
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "boA" = (
+/obj/machinery/requests_console{
+	department = "Genetics";
+	name = "Genetics Requests Console";
+	pixel_x = -30
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "whitepurple"
@@ -30360,7 +30376,7 @@
 "btf" = (
 /obj/machinery/conveyor{
 	dir = 6;
-	id_tag = "QMLoad"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -35816,11 +35832,22 @@
 	name = "Security Access";
 	normaldoorcontrol = 1;
 	pixel_y = 25;
-	range = 3;
-	req_access_txt = "63"
+	range = 4;
+	req_access_txt = "63";
+	pixel_x = -7
 	},
 /obj/structure/bed/chair{
 	dir = 4
+	},
+/obj/machinery/door_control{
+	desc = "A remote control switch for the brig foyer.";
+	id_tag = "BrigFoyerFront";
+	name = "Security Access";
+	normaldoorcontrol = 1;
+	pixel_y = 25;
+	range = 4;
+	req_access_txt = "63";
+	pixel_x = 7
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -77460,9 +77487,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/supply/storage)
 "gef" = (
@@ -78644,7 +78669,6 @@
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "hRr" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction,
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -83958,7 +83982,7 @@
 "oQc" = (
 /obj/machinery/conveyor{
 	dir = 4;
-	id_tag = "QMLoad"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -86491,6 +86515,10 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
+/obj/machinery/conveyor_switch/oneway{
+	convdir = -1;
+	id_tag = "QMLoad2"
+	},
 /turf/simulated/floor{
 	icon_state = "warning"
 	},
@@ -87735,6 +87763,11 @@
 /area/engineering/atmos)
 "ufV" = (
 /obj/structure/curtain/medical,
+/obj/machinery/requests_console{
+	department = "Chemistry";
+	departmentType = 2;
+	pixel_y = 30
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whiteyellow"
@@ -146692,9 +146725,9 @@ aUQ
 aHW
 aJA
 aLh
-bgW
-pzJ
 mnD
+pzJ
+bgW
 srz
 bsI
 ila
@@ -148202,9 +148235,9 @@ aOW
 bqr
 aJF
 aMC
-aOW
-aOW
 aOT
+aOW
+aOW
 aPQ
 aQy
 ila

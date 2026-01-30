@@ -351,3 +351,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/gas_extractor
+
+/datum/design/holofield_generator
+	name = "Circuit Design (Holofield Generator)"
+	desc = "Allows for the construction of circuit boards used to build a Holofield Generator."
+	id = "holofield_generator"
+	req_tech = list(Tc_MAGNETS = 2, Tc_BLUESPACE = 3, Tc_EXPLORATION = 1)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/holofield

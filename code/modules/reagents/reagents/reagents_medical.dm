@@ -922,8 +922,10 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(..())
 		return 1
 
-	M.eye_blurry = max(M.eye_blurry - 5, 0)
-	M.eye_blind = max(M.eye_blind - 5, 0)
+	//Imidazoline will immediately cap eye_blurry and eye_blind at 10, allowing them to fade out over the next few seconds
+	M.eye_blurry = max(min(10,M.eye_blurry--), 0)
+	M.eye_blind = max(min(10,M.eye_blind--), 0)
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]

@@ -43,7 +43,8 @@
 		GAS_CRYOTHEUM = 0,
 		GAS_RADON = 0
 	)
-  
+	var/list/vents = list()
+
 	// Ruin types available on this planet.
 	var/ruin_whitelist = RUIN_TYPE_GENERIC
 	var/ruin_blacklist = 0
@@ -282,7 +283,7 @@
 	name = "jungle planet"
 	desc = "A hot, humid planet teeming with exotic flora and fauna."
 	mapgen = /datum/planetGenerator/jungle
-	default_baseturf = /turf/unsimulated/floor/jungle/grass
+	default_baseturf = /turf/unsimulated/floor/planetary/grass/jungle
 	ruin_whitelist = RUIN_TYPE_JUNGLE|RUIN_TYPE_TROPICAL
 	preferred_ruin_type = RUIN_TYPE_JUNGLE
 	climate_type = /datum/climate/tropical

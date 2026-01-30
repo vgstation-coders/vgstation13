@@ -6,6 +6,8 @@
 /datum/surgery_step/eye
 	priority = 2
 	can_infect = 1
+	blood_level = 0
+
 /datum/surgery_step/eye/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!hasorgans(target))
 		return 0

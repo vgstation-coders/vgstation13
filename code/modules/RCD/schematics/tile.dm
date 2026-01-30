@@ -280,19 +280,40 @@
 	name = "Escape"
 
 /datum/rcd_schematic/tile/dark
-	name = "Dark"
+	name = "Dark and light grey"
 
-/datum/rcd_schematic/tile/dark_red
-	name = "Dark red"
+/datum/rcd_schematic/tile/darklight
+	name = "Dark and dark grey"
 
-/datum/rcd_schematic/tile/dark_blue
-	name = "Dark blue"
+/datum/rcd_schematic/tile/dark_light_red
+	name = "Dark and light red"
 
-/datum/rcd_schematic/tile/dark_green
-	name = "Dark green"
+/datum/rcd_schematic/tile/dark_dark_red
+	name = "Dark and dark red"
 
-/datum/rcd_schematic/tile/dark_purple
-	name = "Dark purple"
+/datum/rcd_schematic/tile/dark_light_blue
+	name = "Dark and light blue"
+
+/datum/rcd_schematic/tile/dark_dark_blue
+	name = "Dark and dark blue"
+
+/datum/rcd_schematic/tile/dark_light_green
+	name = "Dark and light green"
+
+/datum/rcd_schematic/tile/dark_dark_green
+	name = "Dark and dark green"
+
+/datum/rcd_schematic/tile/dark_light_purple
+	name = "Dark and light purple"
+
+/datum/rcd_schematic/tile/dark_dark_purple
+	name = "Dark and dark purple"
+
+/datum/rcd_schematic/tile/dark_light_brown
+	name = "Dark and light brown"
+
+/datum/rcd_schematic/tile/dark_dark_brown
+	name = "Dark and dark brown"
 
 /datum/rcd_schematic/tile/dark_yellow
 	name = "Dark yellow"
@@ -555,43 +576,85 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info(DIR_ALL,		"escape")
 	),
 
-	"Dark" = list(
-		new /datum/paint_info(DIR_ONE,		"dark"),
+	"Dark and light grey" = list(
+		new /datum/paint_info(DIR_ONE,		"dark neutral full"),
+		new /datum/paint_info(DIR_ALL,		"dark neutral stripe"),
+		new /datum/paint_info(DIR_ORTHO,	"dark neutral corner")
+	),
+
+	"Dark and dark grey" = list(
+		new /datum/paint_info(DIR_ONE,		"dark floor full"),
 		new /datum/paint_info(DIR_ALL,		"dark floor stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark floor corner")
 	),
 
-	"Dark red" = list(
+	"Dark and light red" = list(
 		new /datum/paint_info(DIR_ONE,		"dark red full"),
 		new /datum/paint_info(DIR_ALL,		"dark red stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark red corner")
 	),
 
-	"Dark blue" = list(
+	"Dark and dark red" = list(
+		new /datum/paint_info(DIR_ONE,		"darkredfull"),
+		new /datum/paint_info(DIR_ALL,		"darkred"),
+		new /datum/paint_info(DIR_ORTHO,	"darkredcorners")
+	),
+
+	"Dark and light blue" = list(
 		new /datum/paint_info(DIR_ONE,		"dark blue full"),
 		new /datum/paint_info(DIR_ALL,		"dark blue stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark blue corner")
 	),
 
-	"Dark green" = list(
+	"Dark and dark blue" = list(
+		new /datum/paint_info(DIR_ONE,		"darkbluefull"),
+		new /datum/paint_info(DIR_ALL,		"darkblue"),
+		new /datum/paint_info(DIR_ORTHO,	"darkbluecorners")
+	),
+
+	"Dark and light green" = list(
 		new /datum/paint_info(DIR_ONE,		"dark green full"),
 		new /datum/paint_info(DIR_ALL,		"dark green stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark green corner")
 	),
 
-	"Dark purple" = list(
+	"Dark and dark green" = list(
+		new /datum/paint_info(DIR_ONE,		"darkgreenfull"),
+		new /datum/paint_info(DIR_ALL,		"darkgreen"),
+		new /datum/paint_info(DIR_ORTHO,	"darkgreencorners")
+	),
+
+	"Dark and light purple" = list(
 		new /datum/paint_info(DIR_ONE,		"dark purple full"),
 		new /datum/paint_info(DIR_ALL,		"dark purple stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark purple corner")
 	),
 
-	"Dark yellow" = list(
+	"Dark and dark purple" = list(
+		new /datum/paint_info(DIR_ONE,		"darkpurplefull"),
+		new /datum/paint_info(DIR_ALL,		"darkpurple"),
+		new /datum/paint_info(DIR_ORTHO,	"darkpurplecorners")
+	),
+
+	"Dark and light brown" = list(
+		new /datum/paint_info(DIR_ONE,		"dark brown full"),
+		new /datum/paint_info(DIR_ALL,		"dark brown stripe"),
+		new /datum/paint_info(DIR_ORTHO,	"dark brown corner")
+	),
+
+	"Dark and dark brown" = list(
+		new /datum/paint_info(DIR_ONE,		"darkbrownfull"),
+		new /datum/paint_info(DIR_ALL,		"darkbrown"),
+		new /datum/paint_info(DIR_ORTHO,	"darkbrowncorners")
+	),
+
+	"Dark and yellow" = list(
 		new /datum/paint_info(DIR_ONE,		"dark yellow full"),
 		new /datum/paint_info(DIR_ALL,		"dark yellow stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark yellow corner")
 	),
 
-	"Dark orange" = list(
+	"Dark and orange" = list(
 		new /datum/paint_info(DIR_ONE,		"dark orange full"),
 		new /datum/paint_info(DIR_ALL,		"dark orange stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark orange corner")

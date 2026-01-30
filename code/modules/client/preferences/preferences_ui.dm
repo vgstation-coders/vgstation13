@@ -129,46 +129,115 @@
 
 	return dat
 
+/datum/preferences/proc/setup_graphics(var/dat, var/user)
+
+
+	dat += {"
+	<h1>Parallax Settings</h1>
+
+		<b>Space Parallax:</b>
+		<a href='?_src_=prefs;preference=space_parallax;task=input'><b>[get_pref(/datum/preference_setting/toggle/space_parallax) ? "Enabled" : "Disabled"]</b></a><br>
+
+		<b>Parallax Speed:</b>
+		<a href='?_src_=prefs;preference=parallax_speed;task=input'><b>[get_pref(/datum/preference_setting/numerical/parallax_speed) ]</b></a><br>
+
+		<b>Space Dust:</b>
+		<a href='?_src_=prefs;preference=space_dust;task=input'><b>[get_pref(/datum/preference_setting/toggle/space_dust) ? "Yes" : "No"]</b></a><br>
+
+	<h1>Misc Graphics Settings</h1>
+
+		<b>Attack Animations:<b>
+		<a href='?_src_=prefs;preference=attack_animation;task=input'><b>[get_pref(/datum/preference_setting/enum/attack_animations) ? (get_pref(/datum/preference_setting/enum/attack_animations) == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
+
+		<b>Fancy Visual Filters:<b>
+		<a href='?_src_=prefs;preference=plane_filters;task=input'><b>[get_pref(/datum/preference_setting/toggle/plane_filters) ? "Enabled" : "Disabled"]</b></a><br>
+	"}
+
+	return dat
+
 /datum/preferences/proc/setup_UI(var/dat, var/user)
 
 
-	dat += {"<b>UI Style:</b> <a href='?_src_=prefs;preference=UI_style;task=input'><b>[get_pref(/datum/preference_setting/string/UI_style)]</b></a><br>
-	<b>Custom UI</b>(recommended for White UI): <span style='border:1px solid #161616; background-color: #[get_pref(/datum/preference_setting/string/UI_style_color)];'>&nbsp;&nbsp;&nbsp;</span><br>Color: <a href='?_src_=prefs;preference=UI_style_color;task=input'><b>[get_pref(/datum/preference_setting/string/UI_style_color)]</b></a><br>
-	Alpha(transparency): <a href='?_src_=prefs;preference=UI_style_alpha;task=input'><b>[get_pref(/datum/preference_setting/numerical/UI_style_alpha)]</b></a><br>
+	dat += {"
+	<h1>HUD Settings</h1>
+
+		<b>UI Style:</b> <a href='?_src_=prefs;preference=UI_style;task=input'><b>[get_pref(/datum/preference_setting/string/UI_style)]</b></a><br>
+		<b>Custom UI</b>(recommended for White UI): <span style='border:1px solid #161616; background-color: #[get_pref(/datum/preference_setting/string/UI_style_color)];'>&nbsp;&nbsp;&nbsp;</span><br>Color: <a href='?_src_=prefs;preference=UI_style_color;task=input'><b>[get_pref(/datum/preference_setting/string/UI_style_color)]</b></a><br>
+		Alpha(transparency): <a href='?_src_=prefs;preference=UI_style_alpha;task=input'><b>[get_pref(/datum/preference_setting/numerical/UI_style_alpha)]</b></a><br>
+
+	<h1>Runechat Settings</h1>
+
+		<b>Mob messages visible on map:</b>
+		<a href='?_src_=prefs;preference=mob_chat_on_map;task=input'>[get_pref(/datum/preference_setting/toggle/mob_chat_on_map) ? "Enabled" : "Disabled"]</a><br>
+
+		<b>Object messages visible on map:</b>
+		<a href='?_src_=prefs;preference=obj_chat_on_map;task=input'>[get_pref(/datum/preference_setting/toggle/obj_chat_on_map)  ? "Enabled" : "Disabled"]</a><br>
+
+		<b>Message character limit on map:</b>
+		<a href='?_src_=prefs;preference=max_chat_length;task=input'>[get_pref(/datum/preference_setting/numerical/max_chat_length)]</a><br>
+
+	<h1>Misc UI Settings</h1>
+
+		<b>Hide object messages from chat window:</b>
+		<a href='?_src_=prefs;preference=no_goonchat_for_obj;task=input'>[get_pref(/datum/preference_setting/toggle/no_goonchat_for_obj) ? "Enabled" : "Disabled"]</a><br>
+
+		<b>Say bubbles:</b>
+		<a href='?_src_=prefs;preference=typing_indicator;task=input'><b>[get_pref(/datum/preference_setting/toggle/typing_indicator) ? "Active" : "Inactive"]</b></a><br>
+
+		<b>Progress Bars:</b>
+		<a href='?_src_=prefs;preference=progress_bars;task=input'><b>[get_pref(/datum/preference_setting/toggle/progress_bars) ? "Yes" : "No"]</b></a><br>
+
+		<b>Window Flashing</b>
+		<a href='?_src_=prefs;preference=window_flashing;task=input'><b>[get_pref(/datum/preference_setting/toggle/window_flashing) ? "Yes":"No"]</b></a><br>
+
+		<b>Fancy tgui:</b>
+		<a href='?_src_=prefs;preference=tgui_fancy;task=input'>[get_pref(/datum/preference_setting/toggle/tgui_fancy) ? "Enabled" : "Disabled"]</a><br>
+
+	"}
+
+	return dat
+
+/datum/preferences/proc/setup_audio(var/dat, var/user)
+	dat += {"
+		<b>Play admin midis:</b>
+		<a href='?_src_=prefs;preference=toggles;task=input;toggle=[SOUND_MIDI]'><b>[(get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_MIDI) ? "Yes" : "No"]</b></a><br>
+
+		<b>Play lobby music:</b>
+		<a href='?_src_=prefs;preference=toggles;task=input;toggle=[SOUND_LOBBY]'><b>[(get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>
+
+		<b>Play Ambience:</b>
+		<a href='?_src_=prefs;preference=toggles;task=input;toggle=[SOUND_AMBIENCE]'><b>[(get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_AMBIENCE) ? "Yes" : "No"]</b></a><br>
+		[(get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_AMBIENCE)? \
+		"<b>Ambience Volume:</b><a href='?_src_=prefs;preference=ambience_volume;task=input'><b>[get_pref(/datum/preference_setting/numerical/ambience_volume)]</b></a><br>":""]
+
+		<b>Radio Headset Sounds:</b>
+		<a href='?_src_=prefs;preference=headset_sound;task=input'><b>[headset_sound_text2num[get_pref(/datum/preference_setting/numerical/headset_sound)+1]]</b></a><br>
+
+		<b>Hear streamed media:</b>
+		<a href='?_src_=prefs;preference=toggles;task=input;toggle=[SOUND_STREAMING]'><b>[(get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_STREAMING) ? "Yes" : "No"]</b></a><br>
+
+		<b>Streaming Program:</b>
+		<a href='?_src_=prefs;preference=usewmp;task=input'><b>[get_pref(/datum/preference_setting/toggle/usewmp) ? "WMP (compatibility)" : "VLC (requires plugin)"]</b></a><br>
+
+		<b>Streaming Volume</b>
+		<a href='?_src_=prefs;preference=volume;task=input'><b>[get_pref(/datum/preference_setting/numerical/volume) ]</b></a><br>
+
+		<b>Hear player voices</b>
+		<a href='?_src_=prefs;preference=hear_voicesound;task=input'><b>[(get_pref(/datum/preference_setting/toggle/hear_voicesound)) ? "Yes" : "No"]</b></a><br>
+
+		<b>Hear instruments</b>
+		<a href='?_src_=prefs;preference=hear_instruments;task=input'><b>[(get_pref(/datum/preference_setting/toggle/hear_instruments)) ? "Yes":"No"]</b></a><br>
+
+		<b>Server Shutdown Jingle <span title='These jingles will only play if credits don&#39;t roll for you that round. &#39;Classics&#39; will only play &#39;APC Destroyed&#39; and &#39;Banging Donk&#39;, &#39;All&#39; will play the previous plus retro videogame sounds.'>(?):</span><b>
+		<a href='?_src_=prefs;preference=jingle;task=input'><b>[get_pref(/datum/preference_setting/enum/jingle)]</b></a><br>
+		<b>Credits/Jingle Volume:</b>
+		<a href='?_src_=prefs;preference=credits_volume;task=input'><b>[get_pref(/datum/preference_setting/numerical/credits_volume)]</b></a><br>
+
 	"}
 
 	return dat
 
 /datum/preferences/proc/setup_special(var/dat, var/mob/user)
-	if(user.client.holder)
-		dat += {"
-		<h1><font color=red>Admin Only Settings</font></h1>
-
-	<div id="container" style="border:1px solid #000; width:96%; padding-left:2%; padding-right:2%; overflow:auto; padding-top:5px; padding-bottom:5px;">
-	  <div id="leftDiv" style="width:50%;height:100%;float:left;">
-		<b>Toggle Adminhelp Sound</b>
-		<a href='?_src_=prefs;preference=toggles;task=input;toggle=[SOUND_ADMINHELP]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_ADMINHELP ? "Enabled" : "Disabled"]</b></a><br>
-
-		<b>Toggle Prayers</b>
-		<a href='?_src_=prefs;preference=toggles;task=input;toggle=[CHAT_PRAYER]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_PRAYER ? "Enabled" : "Disabled"]</b></a><br>
-
-		<b>Toggle Hear Radio</b>
-		<a href='?_src_=prefs;preference=toggles;task=input;toggle=[CHAT_GHOSTRADIO]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_GHOSTRADIO ? "Enabled" : "Disabled"]</b></a><br>
-	  </div>
-
-	  <div id="rightDiv" style="width:50%;height:100%;float:right;">
-		<b>Toggle Attack Logs</b>
-		<a href='?_src_=prefs;preference=toggles;task=input;toggle=[CHAT_ATTACKLOGS]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_ATTACKLOGS ? "Enabled" : "Disabled"]</b></a><br>
-
-		<b>Toggle Debug Logs</b>
-		<a href='?_src_=prefs;preference=toggles;task=input;toggle=[CHAT_DEBUGLOGS]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEBUGLOGS ? "Enabled" : "Disabled"]</b></a><br>
-
-		<b>De-admin on login</b>
-		<a href='?_src_=prefs;preference=toggles;task=input;toggle=[AUTO_DEADMIN]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & AUTO_DEADMIN ? "Enabled" : "Disabled"]</b></a><br>
-
-	  </div>
-	</div>"}
-
 	dat += {"
 	<h1>General Settings</h1>
 <div id="container" style="border:1px solid #000; width:96; padding-left:2%; padding-right:2%; overflow:auto; padding-top:5px; padding-bottom:5px;">
@@ -176,47 +245,6 @@
 
 	<b>FPS:</b>
 	<a href='?_src_=prefs;preference=fps;task=input'><b>[get_pref(/datum/preference_setting/numerical/fps)]</b></a><br>
-
-	<b>Space Parallax:</b>
-	<a href='?_src_=prefs;preference=space_parallax;task=input'><b>[get_pref(/datum/preference_setting/toggle/space_parallax) ? "Enabled" : "Disabled"]</b></a><br>
-
-	<b>Parallax Speed:</b>
-	<a href='?_src_=prefs;preference=parallax_speed;task=input'><b>[get_pref(/datum/preference_setting/numerical/parallax_speed) ]</b></a><br>
-
-	<b>Space Dust:</b>
-	<a href='?_src_=prefs;preference=space_dust;task=input'><b>[get_pref(/datum/preference_setting/toggle/space_dust) ? "Yes" : "No"]</b></a><br>
-
-	<b>Play admin midis:</b>
-	<a href='?_src_=prefs;preference=toggles;task=input;toggle=[SOUND_MIDI]'><b>[(get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_MIDI) ? "Yes" : "No"]</b></a><br>
-
-	<b>Play lobby music:</b>
-	<a href='?_src_=prefs;preference=toggles;task=input;toggle=[SOUND_LOBBY]'><b>[(get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>
-
-	<b>Play Ambience:</b>
-	<a href='?_src_=prefs;preference=toggles;task=input;toggle=[SOUND_AMBIENCE]'><b>[(get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_AMBIENCE) ? "Yes" : "No"]</b></a><br>
-	[(get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_AMBIENCE)? \
-	"<b>Ambience Volume:</b><a href='?_src_=prefs;preference=ambience_volume;task=input'><b>[get_pref(/datum/preference_setting/numerical/ambience_volume)]</b></a><br>":""]
-
-	<b>Radio Headset Sounds:</b>
-	<a href='?_src_=prefs;preference=headset_sound;task=input'><b>[headset_sound_text2num[get_pref(/datum/preference_setting/numerical/headset_sound)+1]]</b></a><br>
-
-	<b>Hear streamed media:</b>
-	<a href='?_src_=prefs;preference=toggles;task=input;toggle=[SOUND_STREAMING]'><b>[(get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_STREAMING) ? "Yes" : "No"]</b></a><br>
-
-	<b>Streaming Program:</b>
-	<a href='?_src_=prefs;preference=usewmp;task=input'><b>[get_pref(/datum/preference_setting/toggle/usewmp) ? "WMP (compatibility)" : "VLC (requires plugin)"]</b></a><br>
-
-	<b>Streaming Volume</b>
-	<a href='?_src_=prefs;preference=volume;task=input'><b>[get_pref(/datum/preference_setting/numerical/volume) ]</b></a><br>
-
-	<b>Hear player voices</b>
-	<a href='?_src_=prefs;preference=hear_voicesound;task=input'><b>[(get_pref(/datum/preference_setting/toggle/hear_voicesound)) ? "Yes" : "No"]</b></a><br>
-
-	<b>Hear instruments</b>
-	<a href='?_src_=prefs;preference=hear_instruments;task=input'><b>[(get_pref(/datum/preference_setting/toggle/hear_instruments)) ? "Yes":"No"]</b></a><br>
-
-	<b>Progress Bars:</b>
-	<a href='?_src_=prefs;preference=progress_bars;task=input'><b>[get_pref(/datum/preference_setting/toggle/progress_bars) ? "Yes" : "No"]</b></a><br>
 
 	<b>Pause after first step:</b>
 	<a href='?_src_=prefs;preference=stumble;task=input'><b>[get_pref(/datum/preference_setting/toggle/stumble) ? "Yes" : "No"]</b></a><br>
@@ -226,9 +254,6 @@
 
 	<b>Solo Antag Objectives:</b>
 	<a href='?_src_=prefs;preference=antag_objectives;task=input'><b>[get_pref(/datum/preference_setting/toggle/antag_objectives) ? "Standard" : "Freeform"]</b></a><br>
-
-	<b>Say bubbles:</b>
-	<a href='?_src_=prefs;preference=typing_indicator;task=input'><b>[get_pref(/datum/preference_setting/toggle/typing_indicator) ? "Active" : "Inactive"]</b></a><br>
   </div>
 
   <div id="rightDiv" style="width:50%;height:100%;float:right;">
@@ -263,37 +288,12 @@
 	<b>Adminhelp Special Tab:</b>
 	<a href='?_src_=prefs;preference=special;task=input'><b>[special_popup_text2num[get_pref(/datum/preference_setting/enum/special_popup)+1]]</b></a><br>
 
-	<b>Attack Animations:<b>
-	<a href='?_src_=prefs;preference=attack_animation;task=input'><b>[get_pref(/datum/preference_setting/enum/attack_animations) ? (get_pref(/datum/preference_setting/enum/attack_animations) == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
-
 	<b>Show Credits <span title='&#39;No Reruns&#39; will roll credits only if an admin customized something about this round&#39;s credits, or if a rare and exclusive episode name was selected thanks to something uncommon happening that round.'>(?):</span><b>
 	<a href='?_src_=prefs;preference=credits;task=input'><b>[get_pref(/datum/preference_setting/enum/credits)]</b></a><br>
 
-	<b>Server Shutdown Jingle <span title='These jingles will only play if credits don&#39;t roll for you that round. &#39;Classics&#39; will only play &#39;APC Destroyed&#39; and &#39;Banging Donk&#39;, &#39;All&#39; will play the previous plus retro videogame sounds.'>(?):</span><b>
-	<a href='?_src_=prefs;preference=jingle;task=input'><b>[get_pref(/datum/preference_setting/enum/jingle)]</b></a><br>
-	<b>Credits/Jingle Volume:</b>
 
-	<a href='?_src_=prefs;preference=credits_volume;task=input'><b>[get_pref(/datum/preference_setting/numerical/credits_volume)]</b></a><br>
 
-	<b>Window Flashing</b>
-	<a href='?_src_=prefs;preference=window_flashing;task=input'><b>[get_pref(/datum/preference_setting/toggle/window_flashing) ? "Yes":"No"]</b></a><br>
 
-	<b>Fancy tgui:</b>
-	<a href='?_src_=prefs;preference=tgui_fancy;task=input'>[get_pref(/datum/preference_setting/toggle/tgui_fancy) ? "Enabled" : "Disabled"]</a><br>
-
-	<center>Runechat prefererences</center>
-
-	<b>Chat on map for mobs:</b>
-	<a href='?_src_=prefs;preference=mob_chat_on_map;task=input'>[get_pref(/datum/preference_setting/toggle/mob_chat_on_map) ? "Enabled" : "Disabled"]</a><br>
-
-	<b>Chat on map for objects:</b>
-	<a href='?_src_=prefs;preference=obj_chat_on_map;task=input'>[get_pref(/datum/preference_setting/toggle/obj_chat_on_map)  ? "Enabled" : "Disabled"]</a><br>
-
-	<b>No goonchat messages for objects:</b>
-	<a href='?_src_=prefs;preference=no_goonchat_for_obj;task=input'>[get_pref(/datum/preference_setting/toggle/no_goonchat_for_obj) ? "Enabled" : "Disabled"]</a><br>
-
-	<b>Runechat message char limit:</b>
-	<a href='?_src_=prefs;preference=max_chat_length;task=input'>[get_pref(/datum/preference_setting/numerical/max_chat_length)]</a><br>
   </div>
 </div>"}
 
@@ -301,6 +301,38 @@
 		dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'> Edit </a><br>"
 
 	return dat
+
+/datum/preferences/proc/setup_admin(var/dat, var/mob/user)
+	if(user.client.holder)
+		dat += {"
+		<h1><font color=red>Admin Only Settings</font></h1>
+
+		<div id="container" style="border:1px solid #000; width:96%; padding-left:2%; padding-right:2%; overflow:auto; padding-top:5px; padding-bottom:5px;">
+		  <div id="leftDiv" style="width:50%;height:100%;float:left;">
+			<b>Toggle Adminhelp Sound</b>
+			<a href='?_src_=prefs;preference=toggles;task=input;toggle=[SOUND_ADMINHELP]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_ADMINHELP ? "Enabled" : "Disabled"]</b></a><br>
+
+			<b>Toggle Prayers</b>
+			<a href='?_src_=prefs;preference=toggles;task=input;toggle=[CHAT_PRAYER]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_PRAYER ? "Enabled" : "Disabled"]</b></a><br>
+
+			<b>Toggle Hear Radio</b>
+			<a href='?_src_=prefs;preference=toggles;task=input;toggle=[CHAT_GHOSTRADIO]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_GHOSTRADIO ? "Enabled" : "Disabled"]</b></a><br>
+		  </div>
+
+		  <div id="rightDiv" style="width:50%;height:100%;float:right;">
+			<b>Toggle Attack Logs</b>
+			<a href='?_src_=prefs;preference=toggles;task=input;toggle=[CHAT_ATTACKLOGS]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_ATTACKLOGS ? "Enabled" : "Disabled"]</b></a><br>
+
+			<b>Toggle Debug Logs</b>
+			<a href='?_src_=prefs;preference=toggles;task=input;toggle=[CHAT_DEBUGLOGS]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEBUGLOGS ? "Enabled" : "Disabled"]</b></a><br>
+
+			<b>De-admin on login</b>
+			<a href='?_src_=prefs;preference=toggles;task=input;toggle=[AUTO_DEADMIN]'><b>[get_pref(/datum/preference_setting/binary_flag/toggles) & AUTO_DEADMIN ? "Enabled" : "Disabled"]</b></a><br>
+
+		  </div>
+		</div>"}
+	return dat
+
 
 /datum/preferences/proc/getPrefLevelText(var/datum/job/job)
 	var/list/jobs = get_pref(/datum/preference_setting/assoc_list_setting/jobs)
@@ -472,9 +504,15 @@
 		dat += "Please create an account to save your preferences."
 
 	dat += "<center><a href='?_src_=prefs;action=tab;tab=0' [current_tab == CHARACTER_SETUP ? "class='linkOn'" : ""]>Character Settings</a> | "
-	dat += "<a href='?_src_=prefs;action=tab;tab=1' [current_tab == UI_SETUP ? "class='linkOn'" : ""]>UI Settings</a> | "
-	dat += "<a href='?_src_=prefs;action=tab;tab=2' [current_tab == GENERAL_SETUP ? "class='linkOn'" : ""]>General Settings</a> | "
-	dat += "<a href='?_src_=prefs;action=tab;tab=3' [current_tab == SPECIAL_ROLES_SETUP ? "class='linkOn'" : ""]>Special Roles</a></center><br>"
+	dat += "<a href='?_src_=prefs;action=tab;tab=1' [current_tab == GRAPHICS_SETUP ? "class='linkOn'" : ""]>Graphics Settings</a> | "
+	dat += "<a href='?_src_=prefs;action=tab;tab=2' [current_tab == UI_SETUP ? "class='linkOn'" : ""]>UI Settings</a> | "
+	dat += "<a href='?_src_=prefs;action=tab;tab=3' [current_tab == AUDIO_SETUP ? "class='linkOn'" : ""]>Audio Settings</a> | "
+	dat += "<a href='?_src_=prefs;action=tab;tab=4' [current_tab == GENERAL_SETUP ? "class='linkOn'" : ""]>General Settings</a> | "
+	dat += "<a href='?_src_=prefs;action=tab;tab=5' [current_tab == SPECIAL_ROLES_SETUP ? "class='linkOn'" : ""]>Special Roles</a>"
+	if(user.client.holder)
+		dat += " | <a href='?_src_=prefs;action=tab;tab=6' [current_tab == ADMIN_SETUP ? "class='linkOn'" : ""]>Admin-Only Settings</a>"
+
+	dat += "</center><br>"
 
 	if(appearance_isbanned(user))
 		dat += "<b>You are banned from using custom names and appearances. You can continue to adjust your characters, but you will be randomised once you join the game.</b><br>"
@@ -482,12 +520,18 @@
 	switch(current_tab)
 		if(CHARACTER_SETUP)
 			dat = setup_character_options(dat, user)
+		if(GRAPHICS_SETUP)
+			dat = setup_graphics(dat, user)
 		if(UI_SETUP)
 			dat = setup_UI(dat, user)
+		if(AUDIO_SETUP)
+			dat = setup_audio(dat, user)
 		if(GENERAL_SETUP)
 			dat = setup_special(dat, user)
 		if(SPECIAL_ROLES_SETUP)
 			dat = configure_special_roles(dat, user)
+		if(ADMIN_SETUP)
+			dat = setup_admin(dat, user)
 
 	dat += "<div style='float:none;'><br><hr><center>"
 

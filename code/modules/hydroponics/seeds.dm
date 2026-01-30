@@ -347,6 +347,11 @@
 	seed_type = "goldapple"
 	vending_cat = "fruits"
 
+/obj/item/seeds/crabappleseed
+	name = "packet of crab apple seeds"
+	seed_type = "crabapple"
+	vending_cat = "fruits"
+
 /obj/item/seeds/ambrosiavulgarisseed
 	name = "packet of ambrosia vulgaris seeds"
 	seed_type = "ambrosia"
@@ -789,7 +794,7 @@
 	display_name = "apple tree"
 	plant_dmi = 'icons/obj/hydroponics/apple.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
-	mutants = list("poisonapple","goldapple")
+	mutants = list("poisonapple","goldapple", "crabapple")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
 
@@ -819,6 +824,20 @@
 	maturation = 10
 	production = 10
 	yield = 3
+
+/datum/seed/apple/crab
+	name = "crabapple"
+	seed_name = "crab apple"
+	display_name = "crab apple tree"
+	plant_dmi = 'icons/obj/hydroponics/crabapple.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple)
+	mutants = null
+	chems = list(NUTRIMENT = list(1,10), TANNIC_ACID = list(1,30))
+
+	maturation = 5
+	production = 5
+	yield = 2
+	pest_tolerance = 75
 
 //Ambrosia/varieties.
 /datum/seed/ambrosia

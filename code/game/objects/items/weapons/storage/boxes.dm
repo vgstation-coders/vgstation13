@@ -1493,6 +1493,15 @@
 	new	/obj/item/clothing/shoes/sonicman(src)
 	..()
 
+/obj/item/weapon/storage/box/smartbox/clothing_box/lepresuit
+	name = "Leprechaun costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lepresuit/New()
+	new /obj/item/clothing/head/lepre(src)
+	new /obj/item/clothing/under/lepre(src)
+	new /obj/item/clothing/shoes/lepre(src)
+	..()
+
 /obj/item/weapon/storage/box/large/utensils_plastic
 	name = "Plastic Utensils"
 	desc = "For your picnic needs"

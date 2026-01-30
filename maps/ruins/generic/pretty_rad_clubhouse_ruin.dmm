@@ -47,7 +47,7 @@
 "k" = (
 /obj/item/pod_parts/armor,
 /obj/structure/table,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "l" = (
 /obj/structure/flora/pottedplant{
@@ -81,7 +81,7 @@
 "p" = (
 /obj/item/pod_parts/core,
 /obj/structure/table,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "r" = (
 /obj/item/stack/sheet/metal/bigstack,
@@ -92,7 +92,7 @@
 /area/vault/mechclubhouse)
 "t" = (
 /obj/abstract/loot_spawner/structure,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "u" = (
 /obj/item/stack/sheet/mineral/uranium,
@@ -104,7 +104,7 @@
 /turf/simulated/floor/mineral/plastic,
 /area/vault/mechclubhouse)
 "v" = (
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "w" = (
 /obj/machinery/washing_machine,
@@ -117,7 +117,7 @@
 /area/vault/mechclubhouse)
 "z" = (
 /obj/machinery/vending/mining,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "A" = (
 /obj/machinery/light{
@@ -214,7 +214,7 @@
 /area/vault/mechclubhouse)
 "T" = (
 /obj/structure/vendomatpack/mining,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "U" = (
 /obj/structure/table/glass,
@@ -232,7 +232,7 @@
 /area/vault/mechclubhouse)
 "X" = (
 /obj/machinery/suit_storage_unit/engie,
-/turf/unsimulated/floor/jungle/path_plated,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "Y" = (
 /obj/structure/wc/toilet{

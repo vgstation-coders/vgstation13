@@ -124,11 +124,11 @@ GENERAL PROCS
 	holomap_images[uid] = list()
 	holomap_tooltips[uid] = list()
 	freeze[uid] = 0
-	holomap_z[uid] = map.zMainStation
+	holomap_z[uid] = 0 // 0 means show all z-levels
 	textview_updatequeued[uid] = 1
 	holomap[uid] = 0
 	scanCrew() //else the first user has to wait for process to fire
-	updateTextView(user)
+	tgui_interact(user)
 
 //ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
@@ -143,25 +143,22 @@ GENERAL PROCS
 
 /obj/machinery/computer/crew/proc/processUser(var/mob/user)
 	var/uid = "\ref[user]"
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
+	var/datum/tgui/ui = SStgui.get_open_ui(user, src)
 	if(!ui)
 		deactivate(user)
 		return
 
 	var/list/mapped_and_unmapped = holomap_z_levels_mapped | holomap_z_levels_unmapped
 
-	if(!(holomap_z[uid] in mapped_and_unmapped)) //catching some more unwanted behaviours
+	// 0 means "ALL" z-levels, which is always valid
+	if(holomap_z[uid] != 0 && !(holomap_z[uid] in mapped_and_unmapped)) //catching some more unwanted behaviours
 		if(mapped_and_unmapped.len > 0)
 			holomap_z[uid] = mapped_and_unmapped[1]
 		else
 			deactivate(user)
 
-	//apparently STATUS_INTERACTIVE is undefined, so we are gonna use 2
-	if(ui.status < 2) //we are not updating YOUR window
-		return
-
 	if(textview_updatequeued[uid])
-		updateTextView(user)
+		SStgui.update_uis(src)
 
 	if(!freeze[uid])
 		updateVisuals(user)
@@ -369,12 +366,14 @@ HOLOMAP PROCS
 		var/z = holomap_z[uid]
 		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z]"
 
-		bgmap = holomap_cache[holomap_bgmap]
-		bgmap.loc = user.hud_used.holomap_obj
+		if(z != 0)
+			bgmap = holomap_cache[holomap_bgmap]
+			if(bgmap)
+				bgmap.loc = user.hud_used.holomap_obj
 
-		animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
+				animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
 
-		holomap_images[uid] |= bgmap
+				holomap_images[uid] |= bgmap
 
 		for(var/entry in entries[holomap_z[uid]])
 			//can only be our z, so i'm not checking that, only if we have a pos
@@ -441,118 +440,146 @@ HOLOMAP PROCS
 	holomap_tooltips[user_uid] |= I
 
 /*
-TEXTVIEW PROCS
+TGUI PROCS
 */
-/obj/machinery/computer/crew/Topic(href, href_list)
-	var/uid = "\ref[usr]"
-	if(href_list["close"])
-		deactivate(usr)
-	else if(href_list["toggle"])
-		textview_updatequeued[uid] = !textview_updatequeued[uid]
-		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
-		if(ui)
-			ui.send_message("toggleUpdatebtn", list2params(list(json_encode(textview_updatequeued[uid])))) //using the actual setting sorts out any btn icon sync issues
-		updateTextView(usr)
-	else if(href_list["holo"])
-		if(holomap[uid])
-			closeHolomap(usr)
-		else
-			if(handle_sanity(usr))
-				openHolomap(usr)
-				processUser(usr)
-	else if(href_list["setZ"])
-		var/num = href_list["setZ"]
-		if(!isnum(num))
-			num = text2num(num)
-			if(!num)
-				return 1//something fucked up
-
-		holomap_z[uid] = num
-		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
-		if(ui)
-			ui.send_message("levelSet", list2params(list(num))) //feedback
-		processUser(usr) //we need to update both the holomap AND the textview
-	var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
-	if(ui)
-		ui.send_message("messageReceived") //to stop that loading button shit
-	return 1
-
-//updates/opens the textview
-/obj/machinery/computer/crew/proc/updateTextView(var/mob/user)
-	var/uid = "\ref[user]"
-
-	//adding table rows
-	var/list/all_data = list()
-	for(var/entry in entries[holomap_z[uid]])
-		var/list/data = list()
-		if(entry[ENTRY_SEE_X] && entry[ENTRY_SEE_Y])
-			data["see"] = list()
-			data["see"]["x"] = entry[ENTRY_SEE_X]
-			data["see"]["y"] = entry[ENTRY_SEE_Y]
-		data["name"] = entry[ENTRY_NAME]
-		data["job"] = entry[ENTRY_ASSIGNMENT]
-		if(entry[ENTRY_DAMAGE])
-			data["damage"] = list()
-			data["damage"]["oxygen"] = entry[ENTRY_DAMAGE][DAMAGE_OXYGEN]
-			data["damage"]["toxin"] = entry[ENTRY_DAMAGE][DAMAGE_TOXIN]
-			data["damage"]["fire"] = entry[ENTRY_DAMAGE][DAMAGE_FIRE]
-			data["damage"]["brute"] = entry[ENTRY_DAMAGE][DAMAGE_BRUTE]
-		data["area"] = entry[ENTRY_AREA]
-
-		var/ijob = entry[ENTRY_IJOB]
-		var/role
-		switch(ijob)
-			if(0)	role = "cap" // captain
-			if(10 to 19) role = "sec" // security
-			if(20 to 29) role = "med" // medical
-			if(30 to 39) role = "sci"	 // science
-			if(40 to 49) role = "eng" // engineering
-			if(50 to 59) role = "car" // cargo
-			if(60 to 69) role = "silicon" //silicon
-			if(200 to 229) role = "cent"
-			else role = "unk"
-		data["role"] = role
-
-		var/mob/living/carbon/H = entry[ENTRY_MOB]
-		var/stat = entry[ENTRY_STAT]
-		var/icon
-		if(istype(H, /mob/living/carbon/human))
-			if(stat != 2)
-				if(entry[ENTRY_DAMAGE])
-					icon = getLifeIcon(entry[ENTRY_DAMAGE])
-				else
-					icon = "0"
-			else
-				icon = "6"
-		else
-			icon = "7"
-		data["icon"] = icon
-
-		all_data["[all_data.len+1]"] = data
-
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
-	if (!ui)
-		if(user.client)
-			var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
-			send_asset_list(user.client, C.assets)
-
-		ui = new(user, src, "textview", "cmc.tmpl", "Crew Monitoring", 900, 600)
-		ui.add_stylesheet("cmc.css")
-		var/list/i_data = list()
-		i_data["update"] = textview_updatequeued[uid]
-		i_data["levels"] = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc)
-		ui.set_initial_data(i_data)
+/obj/machinery/computer/crew/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "CrewMonitor")
 		ui.open()
+	var/uid = "\ref[user]"
+	ui.set_autoupdate(textview_updatequeued[uid])
 
-	if(all_data.len) //sending an empty list seems to create some fuckery
-		ui.send_message("populateTable", list2params(list(json_encode(all_data))))
-	else
-		ui.send_message("noData")
+/obj/machinery/computer/crew/ui_data(mob/user)
+	var/uid = "\ref[user]"
+	var/list/data = list()
+
+	// Get current z-level setting (0 = ALL)
+	var/current_z = holomap_z[uid]
+	if(isnull(current_z))
+		current_z = 0
+		holomap_z[uid] = 0
+
+	data["currentZLevel"] = current_z
+	data["zLevels"] = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc)
+	data["holomapEnabled"] = holomap[uid]
+	data["holomapAvailable"] = handle_sanity(user)
+	data["autoUpdate"] = textview_updatequeued[uid]
+
+	// Build crew list - if current_z is 0, show all z-levels
+	var/list/crew_data = list()
+	var/count = 0
+	var/list/z_levels_to_scan = current_z == 0 ? (holomap_z_levels_mapped | holomap_z_levels_unmapped) : list(current_z)
+
+	for(var/z_level in z_levels_to_scan)
+		if(!entries[z_level])
+			continue
+		for(var/entry in entries[z_level])
+			count++
+			var/list/crew_entry = list()
+
+			crew_entry["name"] = entry[ENTRY_NAME]
+			crew_entry["job"] = entry[ENTRY_ASSIGNMENT]
+			crew_entry["vitals"] = entry[ENTRY_STAT]
+			crew_entry["area"] = entry[ENTRY_AREA]
+
+			if(entry[ENTRY_SEE_X] && entry[ENTRY_SEE_Y])
+				crew_entry["see_x"] = entry[ENTRY_SEE_X]
+				crew_entry["see_y"] = entry[ENTRY_SEE_Y]
+				crew_entry["see_z"] = z_level
+			else
+				crew_entry["see_x"] = null
+				crew_entry["see_y"] = null
+				crew_entry["see_z"] = null
+
+			if(entry[ENTRY_DAMAGE])
+				crew_entry["damage"] = list(
+					"oxygen" = entry[ENTRY_DAMAGE][DAMAGE_OXYGEN],
+					"toxin" = entry[ENTRY_DAMAGE][DAMAGE_TOXIN],
+					"fire" = entry[ENTRY_DAMAGE][DAMAGE_FIRE],
+					"brute" = entry[ENTRY_DAMAGE][DAMAGE_BRUTE]
+				)
+			else
+				crew_entry["damage"] = null
+
+			// Determine role category
+			var/ijob = entry[ENTRY_IJOB]
+			var/role
+			switch(ijob)
+				if(0) role = "cap"
+				if(10 to 19) role = "sec"
+				if(20 to 29) role = "med"
+				if(30 to 39) role = "sci"
+				if(40 to 49) role = "eng"
+				if(50 to 59) role = "car"
+				if(60 to 69) role = "silicon"
+				if(200 to 229) role = "cent"
+				else role = "unk"
+			crew_entry["role"] = role
+
+			// Determine icon
+			var/mob/living/carbon/H = entry[ENTRY_MOB]
+			var/stat = entry[ENTRY_STAT]
+			var/icon
+			if(istype(H, /mob/living/carbon/human))
+				if(stat != DEAD)
+					if(entry[ENTRY_DAMAGE])
+						icon = getLifeIcon(entry[ENTRY_DAMAGE])
+					else
+						icon = "0"
+				else
+					icon = "6"
+			else
+				icon = "7"
+			crew_entry["icon"] = icon
+			crew_entry["count"] = count
+
+			crew_data += list(crew_entry)
+
+	data["detectedCrew"] = crew_data
+	data["detected"] = crew_data.len > 0
+
+	return data
+
+/obj/machinery/computer/crew/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+	if(..())
+		return
+
+	var/uid = "\ref[usr]"
+
+	switch(action)
+		if("toggle_update")
+			textview_updatequeued[uid] = !textview_updatequeued[uid]
+			ui.set_autoupdate(textview_updatequeued[uid])
+			return TRUE
+
+		if("toggle_holomap")
+			if(holomap[uid])
+				closeHolomap(usr)
+			else
+				if(handle_sanity(usr))
+					openHolomap(usr)
+					processUser(usr)
+			return TRUE
+
+		if("set_zlevel")
+			var/num = params["zlevel"]
+			if(!isnum(num))
+				num = text2num(num)
+			if(isnull(num))
+				return FALSE
+
+			// 0 means "ALL" z-levels, otherwise must be a valid z-level
+			holomap_z[uid] = num
+			processUser(usr)
+			return TRUE
+
+	return FALSE
 
 //makes sure everything is set for us to have a closed window and keep it that way
 /obj/machinery/computer/crew/proc/closeTextview(var/mob/user)
 	textview_updatequeued["\ref[user]"] = 0
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
+	var/datum/tgui/ui = SStgui.get_open_ui(user, src)
 	if(ui)
 		ui.close()
 

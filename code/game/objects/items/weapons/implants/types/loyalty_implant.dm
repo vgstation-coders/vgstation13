@@ -29,10 +29,12 @@
 		qdel(src)
 		return
 	if(iscultist(imp_in))
-		to_chat(imp_in, "<span class='danger'>You feel the corporate tendrils of Nanotrasen trying to invade your mind!</span>")
-		var/mob/living/carbon/host = imp_in
-		if(istype(host))
-			host.implant_pop()
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult?.implant_pop)
+			to_chat(imp_in, "<span class='danger'>You feel the corporate tendrils of Nanotrasen trying to invade your mind!</span>")
+			var/mob/living/carbon/host = imp_in
+			if(istype(host))
+				host.implant_pop()
 	if(isrevnothead(imp_in))
 		var/datum/role/R = imp_in.mind.GetRole(REV)
 		R.Drop()

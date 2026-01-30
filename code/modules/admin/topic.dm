@@ -4176,8 +4176,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				feedback_add_details("admin_secrets_fun_used","TD")
 				var/newname = ""
 				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
-				if (!newname)
-					newname = "Admin"
+				if(!newname) //cancel case
+					return
 				var/turf/T = get_turf(usr)
 				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
 				var/obj/item/weapon/card/id/admin/admin_id = new(D)
@@ -4199,8 +4199,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				feedback_add_details("admin_secrets_fun_used","TDO")
 				var/newname = ""
 				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
-				if (!newname)
-					newname = "Admin"
+				if(!newname) //cancel case
+					return
 				var/choice = alert("Edit appearance on spawn?", "Admin", "Yes", "No")
 				var/outfit_type = select_loadout()
 				if(!outfit_type || !ispath(outfit_type))

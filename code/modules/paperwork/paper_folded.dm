@@ -117,14 +117,14 @@
 				if (src.nano)
 					to_chat(H, "<span class='warning'>OW! Something sharp stabs your [pick("right","left")] eye!</span>")
 					H.eye_blurry = max(H.eye_blurry, rand(10,15))
-					H.eye_blind = max(H.eye_blind, 2)
+					H.instant_blindness(12)
 					H.Stun(2)
 					var/datum/organ/internal/eyes/eyes = H.internal_organs_by_name["eyes"]
 					eyes.damage += 3
 				else
 					to_chat(H, "<span class='warning'>\The [src] flies right into your [pick("right","left")] eye!</span>")
 					H.eye_blurry = max(H.eye_blurry, rand(3,6))
-					H.eye_blind = max(H.eye_blind, src.nano)
+					H.instant_blindness(11)
 //at last, my block at a rest, bereft of all mortal doubts, I have been enlightened, touched by the sage wisdom, my undying gratitude goes to Comic in this emotional moment
 /obj/item/weapon/p_folded/plane/throw_at(var/atom/A, throw_range, throw_speed)
 	if (A.x > src.x)

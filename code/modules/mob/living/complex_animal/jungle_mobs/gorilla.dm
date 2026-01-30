@@ -1,4 +1,4 @@
-/mob/living/complex_animal/gorilla
+/mob/living/simple_animal/complex/gorilla
 	name="\improper Gorilla"
 	desc="Gorillas are some of the largest primates. Strong, intelligent, and loyal; they should be treated with care."
 	icon_state="spacegorilla"
@@ -11,11 +11,11 @@
 	food_flags = ANIMAL_HERBIVORE
 	behavior_flags = ANIMAL_BEHAVIOR_PACK_DYNAMICS | ANIMAL_BEHAVIOR_RETALIATE | ANIMAL_BEHAVIOR_DESTRUCTIVE
 	movespeed=5
-	base_damage=20 //gorilla grip strong as shit
-	damage_variance=4
+	melee_damage_upper=24 //gorilla grip strong as shit
+	melee_damage_lower=16 
 
 
-/mob/living/complex_animal/gorilla/get_idle_sounds()
+/mob/living/simple_animal/complex/gorilla/get_idle_sounds()
 	if(prob(10))
 		var/i=rand(1,3)
 		switch(i)
@@ -27,7 +27,7 @@
 				say("Ook.")
 
 
-/mob/living/complex_animal/bear/get_attack_msg(var/individual)
+/mob/living/simple_animal/complex/bear/get_attack_msg(var/individual)
 	var/i=rand(1,3)
 	switch(i)
 		if(1)

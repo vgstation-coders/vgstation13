@@ -107,7 +107,7 @@
 			//		if(can_be_infected(M))
 			//			spread_disease_to(src,M)
 */
-/mob/living/carbon/human/proc/get_breath_from_internal(volume_needed)
+/mob/living/carbon/human/get_breath_from_internal(volume_needed)
 	if(internal)
 		if(!contents.Find(internal))
 			if(wear_suit && isrig(wear_suit)) //But what if he's wearing a rigsuit?
@@ -118,10 +118,9 @@
 				internal = null
 		if(!wear_mask || !(wear_mask.clothing_flags & MASKINTERNALS))
 			internal = null
+		update_internals()
 		if(internal)
 			return internal.remove_air_volume(volume_needed)
-		else if(internals)
-			internals.icon_state = "internal0"
 	return null
 
 /mob/living/carbon/human/proc/handle_breath(var/datum/gas_mixture/breath)

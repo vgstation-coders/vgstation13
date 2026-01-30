@@ -98,13 +98,23 @@
 			animate(word_overlay, alpha = 255, time = 5)
 		overlays += word_overlay
 
-/obj/abstract/mind_ui_element/hoverable/rune_word/StartHovering()
+/obj/abstract/mind_ui_element/hoverable/rune_word/StartHovering(var/location,var/control,var/params)
 	hovering = TRUE
 	UpdateIcon()
+
+	if (element_flags & MINDUI_FLAG_TOOLTIP)//copied from _mindUI.dm
+		var/mob/M = GetUser()
+		if (M)
+			M.client?.tooltips.show(src,mouse=params,title = tooltip_title, content=tooltip_content, theme=tooltip_theme)
 
 /obj/abstract/mind_ui_element/hoverable/rune_word/StopHovering()
 	hovering = FALSE
 	UpdateIcon()
+
+	if (element_flags & MINDUI_FLAG_TOOLTIP)
+		var/mob/M = GetUser()
+		if (M)
+			M.client?.tooltips.hide()
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -116,6 +126,7 @@
 	uniqueID = "Bloodcult Runes"
 	element_types_to_spawn = list(
 		/obj/abstract/mind_ui_element/hoverable/rune_close,
+		/obj/abstract/mind_ui_element/hoverable/rune_close_corner,
 		/obj/abstract/mind_ui_element/hoverable/rune_word/rune_travel,
 		/obj/abstract/mind_ui_element/hoverable/rune_word/rune_blood,
 		/obj/abstract/mind_ui_element/hoverable/rune_word/rune_join,
@@ -183,11 +194,43 @@
 
 //------------------------------------------------------------
 
+/obj/abstract/mind_ui_element/hoverable/rune_close_corner
+	name = "Hide Interface"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "return"
+	layer = MIND_UI_BUTTON
+	offset_x = 96
+	offset_y = -76
+
+/obj/abstract/mind_ui_element/hoverable/rune_close_corner/StartHovering()
+	hovering = TRUE
+	UpdateIcon()
+
+/obj/abstract/mind_ui_element/hoverable/rune_close_corner/StopHovering()
+	hovering = FALSE
+	UpdateIcon()
+
+/obj/abstract/mind_ui_element/hoverable/rune_close_corner/Click()
+	parent.Hide()
+	var/datum/mind_ui/bloodcult_runes/P = parent
+	P.queued_rune = null
+
+/obj/abstract/mind_ui_element/hoverable/rune_close_corner/UpdateIcon()
+	overlays.len = 0
+	if (hovering)
+		overlays += "select"
+
+//------------------------------------------------------------
+
 /obj/abstract/mind_ui_element/hoverable/rune_word/rune_travel
 	name = "Travel"
 	word = "travel"
 	offset_x = -61
 	offset_y = 19
+	tooltip_title = "Travel"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 //------------------------------------------------------------
 
@@ -196,6 +239,10 @@
 	word = "blood"
 	offset_x = -37
 	offset_y = 52
+	tooltip_title = "Blood"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 //------------------------------------------------------------
 
@@ -204,6 +251,10 @@
 	word = "join"
 	offset_x = 0
 	offset_y = 64
+	tooltip_title = "Join"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 //------------------------------------------------------------
 
@@ -212,6 +263,10 @@
 	word = "hell"
 	offset_x = 37
 	offset_y = 52
+	tooltip_title = "Hell"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 //------------------------------------------------------------
 
@@ -220,6 +275,10 @@
 	word = "destroy"
 	offset_x = 61
 	offset_y = 19
+	tooltip_title = "Destroy"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 //------------------------------------------------------------
 
@@ -228,6 +287,10 @@
 	word = "technology"
 	offset_x = 61
 	offset_y = -19
+	tooltip_title = "Technology"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 //------------------------------------------------------------
 
@@ -236,6 +299,10 @@
 	word = "self"
 	offset_x = 37
 	offset_y = -52
+	tooltip_title = "Self"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 //------------------------------------------------------------
 
@@ -244,6 +311,10 @@
 	word = "see"
 	offset_x = 0
 	offset_y = -64
+	tooltip_title = "See"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 //------------------------------------------------------------
 
@@ -252,6 +323,10 @@
 	word = "other"
 	offset_x = -37
 	offset_y = -52
+	tooltip_title = "Other"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 //------------------------------------------------------------
 
@@ -260,5 +335,9 @@
 	word = "hide"
 	offset_x = -61
 	offset_y = -19
+	tooltip_title = "Hide"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 //------------------------------------------------------------

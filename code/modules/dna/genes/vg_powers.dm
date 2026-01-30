@@ -172,7 +172,7 @@ Obviously, requires DNA2.
 	if(..())
 		M.update_colour(NOIR_ANIM_TIME)
 		if(M.client)
-			M.client.screen -= noir_master
+			M.disable_noir()
 
 //CHARGE
 

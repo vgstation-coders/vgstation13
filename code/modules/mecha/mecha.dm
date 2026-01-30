@@ -1621,6 +1621,9 @@
 				return 1
 	return 1
 
+/obj/mecha/GetAccess()
+	if(occupant)
+		return occupant.GetAccess()
 
 ////////////////////////////////////
 ///// Rendering stats window ///////
