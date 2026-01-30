@@ -276,9 +276,11 @@ var/global/datum/library_catalog/library_catalog = new()
 
 	var/dat = {"Book name: <A href='?src=\ref[src];name=1'>[book_name]</A><BR>
 	Book author: <A href='?src=\ref[src];author=1'>[book_author]</A><BR>
-	Book icon: <A href='?src=\ref[src];icon=1' class="bookIconWrapper">
-	<div class="bookIcon"><img class='icon misc' src='data:image/png;base64,[icon2base64(icon(icon,book_state))]'></div></A><BR>
-	Book spine color: <A href='?src=\ref[src];spine=1'>[spine_color]</A><BR>
+	Book icon:<BR>"}
+	for(var/i in 1 to 9)
+		dat += {"<A href='?src=\ref[src];icon=[i]' class="bookIconWrapper[book_state == "book[i]" ? " linkOnMinimal" : ""]">
+		<div class="bookIcon"><img class='icon misc' src='data:image/png;base64,[icon2base64(icon(icon,"book[i]"))]'></div></A>"}
+	dat += {"<BR>Book spine color: <A href='?src=\ref[src];spine=1'>[spine_color]</A><BR>
 	Current number of sheets: <A href='?src=\ref[src];remove=1'>[sheets.len]</A><BR>
 	<A href='?src=\ref[src];bind=1'>Bind sheets</A>"}
 
@@ -298,27 +300,28 @@ var/global/datum/library_catalog/library_catalog = new()
 	else if(href_list["author"])
 		book_author = input(usr,"Set a book author","Book author",book_author)
 	else if(href_list["icon"])
-		book_state = input(usr,"Select a book icon","Book icon") as null|anything in list("book1","book2","book3","book4","book5","book6","book7","book8","book9")
-		if(!book_state)
+		book_state = "book[href_list["icon"]]"
+		var/icon_num = text2num(href_list["icon"])
+		if(icon_num < 1 || icon_num > 9)
 			book_state = "book1"
-		switch(book_state)
-			if("book1")
+		switch(icon_num)
+			if(1)
 				spine_color = "#888888"
-			if("book2")
+			if(2)
 				spine_color = "#880000"
-			if("book3")
+			if(3)
 				spine_color = "#888800"
-			if("book4")
+			if(4)
 				spine_color = "#008888"
-			if("book5")
+			if(5)
 				spine_color = "#008800"
-			if("book6")
+			if(6)
 				spine_color = "#880088"
-			if("book7")
+			if(7)
 				spine_color = "#ffffff"
-			if("book8")
+			if(8)
 				spine_color = "#444444"
-			if("book9")
+			if(9)
 				spine_color = "#884400"
 	else if(href_list["spine"])
 		spine_color = input(usr,"Set a spine color","Spine color",spine_color) as color
