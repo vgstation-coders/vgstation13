@@ -1284,7 +1284,7 @@ var/list/tag_suits_list = list()
 	..()
 
 /obj/item/clothing/suit/suitjacket/verb/toggle()
-	set name = "Toggle Labcoat Buttons"
+	set name = "Toggle Jacket Buttons"
 	set category = "Object"
 	set src in usr
 
