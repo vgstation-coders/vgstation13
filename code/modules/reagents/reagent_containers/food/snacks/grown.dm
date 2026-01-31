@@ -367,6 +367,12 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	plantname = "roses"
 	fragrance = INCENSE_ROSES
 
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rose/attack_self(mob/user as mob)
+	Destroy(/obj/item/weapon/reagent_containers/food/snacks/grown/rose)
+	new/obj/item/clothing/accessory/rose(user.loc)
+	to_chat(user, "<span class='notice'>You fold a pin into the rose.</span>")
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
 	desc = "Store in a location at least 50 yards away from werewolves."
