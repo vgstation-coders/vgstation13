@@ -68,9 +68,14 @@
 		return
 	if(istype(O,/obj/item/weapon/storage/bag/bookbag))
 		var/obj/item/weapon/storage/S = O
-		for(var/obj/item/I in S.contents)
-			if(is_type_in_list(I, valid_types))
-				S.remove_from_storage(I, src)
+		if(!S.contents.len)
+			for(var/obj/item/I in contents)
+				if(S.can_be_inserted(I))
+					S.handle_item_insertion(I)
+		else
+			for(var/obj/item/I in S.contents)
+				if(is_type_in_list(I, valid_types))
+					S.remove_from_storage(I, src)
 		update_icon()
 	else if(is_type_in_list(O, valid_types))
 		user.drop_item(O, src)
