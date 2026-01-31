@@ -34,6 +34,8 @@
 	var/blade_harm = TRUE
 	var/mob/master = null
 
+	var/soulblade_ritual = FALSE
+
 	blooded = FALSE
 
 /mob/living/simple_animal/shade/New()
@@ -149,6 +151,14 @@
 	if(!client)
 		to_chat(user, "<span class='warning'>It appears to be dormant.</span>")
 
+/mob/living/simple_animal/shade/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
+	var/datum/role/cultist/C = iscultist(src)
+	if (C && damage && !iscultist(target) && !target.isDead())
+		if (target.mind)
+			C.gain_devotion(30, DEVOTION_TIER_3, "attack_shade", target)
+		else
+			C.gain_devotion(30, DEVOTION_TIER_2, "attack_shade_nomind", target)
+
 ////////////////HUD//////////////////////
 
 /mob/living/simple_animal/shade/regular_hud_updates()
@@ -243,6 +253,25 @@
 		if (BS)
 			BS.perform(src)
 			return
+	..()
+
+/mob/living/simple_animal/shade/mode()
+	set name = "Activate Held Object"
+	set category = "IC"
+	set src = usr
+	set hidden = TRUE
+	if (istype(loc, /obj/item/weapon/melee/soulblade))
+		var/spell/soulblade/blade_spin/BS = locate() in spell_list
+		if (BS)
+			BS.perform(src)
+			return
+	..()
+
+/mob/living/simple_animal/shade/toggle_throw_mode()
+	if (istype(loc, /obj/item/weapon/melee/soulblade))
+		var/spell/soulblade/blade_perforate/BP = locate() in spell_list
+		if(BP)
+			BP.perform(src)
 	..()
 
 /mob/living/simple_animal/shade/noncult

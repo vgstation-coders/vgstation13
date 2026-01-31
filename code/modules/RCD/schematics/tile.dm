@@ -2,6 +2,7 @@
 #define PAINT_FLOOR      1
 #define PAINT_PLATING    2
 #define PAINT_REINFORCED 3
+#define PAINT_WALL       4
 
 #define DIR_ONE   1   // For those tiles with only one direction.
 #define DIR_ORTHO 2   // Orthogonal (south, west, north, east).
@@ -97,25 +98,24 @@
 			return 1
 
 		selected_dir = dir
+		master.update_options_menu()
 
 /datum/rcd_schematic/tile/attack(var/atom/A, var/mob/user)
 	if (!selection)
 		return 1
 
-	if (!selection.validate(A))
-		return "maybe you're using it on the wrong floor type?"
+	var/error = selection.validate(A)
+	if(error)
+		return "[error]"
 
 	var/nname = selection.name
 	var/thisdir = selected_dir
-
 	var/ndesc = ""
 	if (selection.flags & PAINT_ASK_DESC)
 		ndesc = sanitize(input(user, "What do you want to be described on this [nname]?", "[capitalize(nname)] description"))
-
 	to_chat(user, "Painting floor...")
 	//playsound(master, 'sound/AI/animes.ogg', 50, 1)
 	playsound(master, 'sound/effects/spray3.ogg', 15, 1)
-
 	selection.apply(A, nname, ndesc, thisdir)
 
 //Gets the list of paint info datums.
@@ -155,22 +155,29 @@
 				name = "plating"
 
 //This is used to give the user a hint that he's a massive retard for using a floor painter on the carpet
-/datum/paint_info/proc/validate(var/turf/simulated/floor/test)
+/datum/paint_info/proc/validate(atom/test)
 	switch (ftype)
 		if (PAINT_FLOOR)
-			if (!(istype(test.floor_tile,/obj/item/stack/tile/metal)))
-				return 0 //if it's carpet, wood or some other stuff, we aren't going to paint that
-			if (istype(test, /turf/simulated/floor/engine) && !test.floor_tile)
-				return 0 	//for reinforced floors with (actual) plasteel tiles on them
+			var/turf/simulated/floor/maybe_turf = test
+			if (istype(maybe_turf, /turf/simulated/floor))
+				if ((!istype(maybe_turf.floor_tile, /obj/item/stack/tile/metal)))
+					return "Maybe this is the wrong kind of floor?"
+				if (!istype(maybe_turf, /turf/simulated/floor/engine) && !maybe_turf.floor_tile)
+					return "Maybe this is the wrong kind of floor?"
+			else
+				return "Maybe you should try on a floor?"
 		if (PAINT_PLATING)
-			if (!istype(test,/turf/simulated/floor/plating))
-				return 0
-
+			var/turf/simulated/floor/maybe_turf = test
+			if (!isturf(maybe_turf) || !maybe_turf.is_plating() || istype(maybe_turf, /turf/simulated/floor/engine))
+				return "Maybe plating warnings should go on platings?"
 		if (PAINT_REINFORCED)
-			if (!istype(test,/turf/simulated/floor/engine))
-				return 0
+			if (!istype(test, /turf/simulated/floor/engine))
+				return "Maybe the reinforced warning should be on reinforced floors?"
+		if (PAINT_WALL)
+			if (!istype(test, /turf/simulated/wall))
+				return "Maybe the wall signs should go on a wall?"
 
-	return 1
+	return 0
 
 /datum/paint_info/proc/apply(var/turf/simulated/floor/T, var/pname, var/pdesc, var/dir)
 	T.icon_state = icon_state
@@ -191,8 +198,18 @@
 /datum/paint_info/decal/apply(var/turf/simulated/floor/T, var/pname, var/pdesc, var/dir)
 	T.AddDecal(image(icon, icon_state = icon_state, dir = dir))
 
+/datum/paint_info/wall_signs
+	icon		= 'icons/effects/floor_decals.dmi'
+	ftype		= PAINT_WALL
+	file_name	= "tile_painter_d_"
+
+/datum/paint_info/wall_signs/apply(var/turf/simulated/wall/T, var/pname, var/pdesc, var/dir)
+	T.AddDecal(image(icon, icon_state = icon_state, dir = dir))
+
 //The list of all available floor design groups.
 
+/datum/rcd_schematic/tile/wall_signs
+	name = "Wall Signs"
 /datum/rcd_schematic/tile/gray
 	name = "Gray"
 
@@ -263,19 +280,40 @@
 	name = "Escape"
 
 /datum/rcd_schematic/tile/dark
-	name = "Dark"
+	name = "Dark and light grey"
 
-/datum/rcd_schematic/tile/dark_red
-	name = "Dark red"
+/datum/rcd_schematic/tile/darklight
+	name = "Dark and dark grey"
 
-/datum/rcd_schematic/tile/dark_blue
-	name = "Dark blue"
+/datum/rcd_schematic/tile/dark_light_red
+	name = "Dark and light red"
 
-/datum/rcd_schematic/tile/dark_green
-	name = "Dark green"
+/datum/rcd_schematic/tile/dark_dark_red
+	name = "Dark and dark red"
 
-/datum/rcd_schematic/tile/dark_purple
-	name = "Dark purple"
+/datum/rcd_schematic/tile/dark_light_blue
+	name = "Dark and light blue"
+
+/datum/rcd_schematic/tile/dark_dark_blue
+	name = "Dark and dark blue"
+
+/datum/rcd_schematic/tile/dark_light_green
+	name = "Dark and light green"
+
+/datum/rcd_schematic/tile/dark_dark_green
+	name = "Dark and dark green"
+
+/datum/rcd_schematic/tile/dark_light_purple
+	name = "Dark and light purple"
+
+/datum/rcd_schematic/tile/dark_dark_purple
+	name = "Dark and dark purple"
+
+/datum/rcd_schematic/tile/dark_light_brown
+	name = "Dark and light brown"
+
+/datum/rcd_schematic/tile/dark_dark_brown
+	name = "Dark and dark brown"
 
 /datum/rcd_schematic/tile/dark_yellow
 	name = "Dark yellow"
@@ -303,19 +341,6 @@
 
 /datum/rcd_schematic/tile/warning_plating
 	name = "Plating warning"
-
-/datum/rcd_schematic/tile/siding
-	name = "Siding"
-
-/datum/rcd_schematic/tile/siding_gold
-	name = "Wood siding"
-
-/datum/rcd_schematic/tile/siding_full
-	name = "Siding"
-
-/datum/rcd_schematic/tile/siding_gold_full
-	name = "Wood siding"
-
 /datum/rcd_schematic/tile/chapel
 	name = "Chapel"
 
@@ -393,8 +418,35 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info/decal(DIR_ALL,	"siding"),
 		new /datum/paint_info/decal(DIR_ONE,	"siding_full"),
 		new /datum/paint_info/decal(DIR_ALL,	"wood_siding"),
-		new /datum/paint_info/decal(DIR_ONE,	"wood_siding_full")
+		new /datum/paint_info/decal(DIR_ONE,	"wood_siding_full"),
+		new /datum/paint_info/decal(DIR_ONE,	"radiation"),
+		new /datum/paint_info/decal(DIR_ONE,	"radiation_huge"),
 	),
+
+	"Wall Signs" = list(
+		// Things to be only painted on walls
+		new /datum/paint_info/wall_signs(DIR_ORTHO,	"direction_eng"),
+		new /datum/paint_info/wall_signs(DIR_ORTHO,	"direction_evac"),
+		new /datum/paint_info/wall_signs(DIR_ORTHO,	"direction_med"),
+		new /datum/paint_info/wall_signs(DIR_ORTHO,	"direction_sci"),
+		new /datum/paint_info/wall_signs(DIR_ORTHO,	"direction_sec"),
+		new /datum/paint_info/wall_signs(DIR_ORTHO,	"direction_trad"),
+		new /datum/paint_info/wall_signs(DIR_ORTHO,	"direction_pod"),
+		new /datum/paint_info/wall_signs(DIR_ORTHO,	"direction_chap"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"fire"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"securearea"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"shock"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"space"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"xenobio"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"nosmoking2"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"deathsposal"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"pods"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"shard_b"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"crime"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"crime_p"),
+		new /datum/paint_info/wall_signs(DIR_ONE,	"voxtrade")
+	),
+
 	"Gray" = list(
 		new /datum/paint_info(DIR_ONE,		"floor"),
 		new /datum/paint_info(DIR_ALL,		"black"),
@@ -524,43 +576,85 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info(DIR_ALL,		"escape")
 	),
 
-	"Dark" = list(
-		new /datum/paint_info(DIR_ONE,		"dark"),
+	"Dark and light grey" = list(
+		new /datum/paint_info(DIR_ONE,		"dark neutral full"),
+		new /datum/paint_info(DIR_ALL,		"dark neutral stripe"),
+		new /datum/paint_info(DIR_ORTHO,	"dark neutral corner")
+	),
+
+	"Dark and dark grey" = list(
+		new /datum/paint_info(DIR_ONE,		"dark floor full"),
 		new /datum/paint_info(DIR_ALL,		"dark floor stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark floor corner")
 	),
 
-	"Dark red" = list(
+	"Dark and light red" = list(
 		new /datum/paint_info(DIR_ONE,		"dark red full"),
 		new /datum/paint_info(DIR_ALL,		"dark red stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark red corner")
 	),
 
-	"Dark blue" = list(
+	"Dark and dark red" = list(
+		new /datum/paint_info(DIR_ONE,		"darkredfull"),
+		new /datum/paint_info(DIR_ALL,		"darkred"),
+		new /datum/paint_info(DIR_ORTHO,	"darkredcorners")
+	),
+
+	"Dark and light blue" = list(
 		new /datum/paint_info(DIR_ONE,		"dark blue full"),
 		new /datum/paint_info(DIR_ALL,		"dark blue stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark blue corner")
 	),
 
-	"Dark green" = list(
+	"Dark and dark blue" = list(
+		new /datum/paint_info(DIR_ONE,		"darkbluefull"),
+		new /datum/paint_info(DIR_ALL,		"darkblue"),
+		new /datum/paint_info(DIR_ORTHO,	"darkbluecorners")
+	),
+
+	"Dark and light green" = list(
 		new /datum/paint_info(DIR_ONE,		"dark green full"),
 		new /datum/paint_info(DIR_ALL,		"dark green stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark green corner")
 	),
 
-	"Dark purple" = list(
+	"Dark and dark green" = list(
+		new /datum/paint_info(DIR_ONE,		"darkgreenfull"),
+		new /datum/paint_info(DIR_ALL,		"darkgreen"),
+		new /datum/paint_info(DIR_ORTHO,	"darkgreencorners")
+	),
+
+	"Dark and light purple" = list(
 		new /datum/paint_info(DIR_ONE,		"dark purple full"),
 		new /datum/paint_info(DIR_ALL,		"dark purple stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark purple corner")
 	),
 
-	"Dark yellow" = list(
+	"Dark and dark purple" = list(
+		new /datum/paint_info(DIR_ONE,		"darkpurplefull"),
+		new /datum/paint_info(DIR_ALL,		"darkpurple"),
+		new /datum/paint_info(DIR_ORTHO,	"darkpurplecorners")
+	),
+
+	"Dark and light brown" = list(
+		new /datum/paint_info(DIR_ONE,		"dark brown full"),
+		new /datum/paint_info(DIR_ALL,		"dark brown stripe"),
+		new /datum/paint_info(DIR_ORTHO,	"dark brown corner")
+	),
+
+	"Dark and dark brown" = list(
+		new /datum/paint_info(DIR_ONE,		"darkbrownfull"),
+		new /datum/paint_info(DIR_ALL,		"darkbrown"),
+		new /datum/paint_info(DIR_ORTHO,	"darkbrowncorners")
+	),
+
+	"Dark and yellow" = list(
 		new /datum/paint_info(DIR_ONE,		"dark yellow full"),
 		new /datum/paint_info(DIR_ALL,		"dark yellow stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark yellow corner")
 	),
 
-	"Dark orange" = list(
+	"Dark and orange" = list(
 		new /datum/paint_info(DIR_ONE,		"dark orange full"),
 		new /datum/paint_info(DIR_ALL,		"dark orange stripe"),
 		new /datum/paint_info(DIR_ORTHO,	"dark orange corner")
@@ -703,6 +797,7 @@ var/global/list/paint_variants = list(
 #undef PAINT_FLOOR
 #undef PAINT_PLATING
 #undef PAINT_REINFORCED
+#undef PAINT_WALL
 
 #undef DIR_ONE
 #undef DIR_ORTHO

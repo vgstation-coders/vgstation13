@@ -7,15 +7,20 @@
 	var/construction_length = 40
 	pass_flags_self = PASSGIRDER
 
-/obj/structure/girder/attack_animal(var/mob/living/simple_animal/M)
+/obj/structure/girder/attack_animal(var/mob/living/M)
 	M.delayNextAttack(8)
-	if(M.environment_smash_flags & SMASH_WALLS)
-		if(prob(25)) // Not the best solution, but this should allow for better feedback so the player realizes the mob is trying to break through and has time to retreat
-			playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
-			M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
-			"<span class='attack'>You smash through \the [src].</span>")
-			drop_stack(material, get_turf(src), 2)
-			qdel(src)
+	if(istype(M,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = M
+		if(SA.environment_smash_flags & SMASH_WALLS)
+			if(prob(25)) // Not the best solution, but this should allow for better feedback so the player realizes the mob is trying to break through and has time to retreat
+				playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+				M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
+				"<span class='attack'>You smash through \the [src].</span>")
+				drop_stack(material, get_turf(src), 2)
+				qdel(src)
+			else
+				M.visible_message("<span class='danger'>[M] smashes against \the [src].</span>", \
+				"<span class='attack'>You smash against \the [src].</span>")
 		else
 			M.visible_message("<span class='danger'>[M] smashes against \the [src].</span>", \
 			"<span class='attack'>You smash against \the [src].</span>")
@@ -33,13 +38,19 @@
 
 /obj/structure/girder/wood/attackby(var/obj/item/W, var/mob/user)
 	if(W.sharpness_flags & CHOPWOOD)
-		playsound(src, 'sound/effects/woodcuttingshort.ogg', 50, 1)
-		user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
-							"<span class='notice'>You smash through \the [src].</span>",\
-							"<span class='warning'>You hear the sound of wood being cut</span>"
-							)
-		qdel(src)
-		new material(get_turf(src), 2)
+		user.visible_message("<span class='notice'>[user] starts chopping at \the [src] with \the [W].</span>", \
+				"<span class='notice'>You start chopping at \the [src] with \the [W].</span>", \
+				"<span class='warning'>You hear the sound of wood being cut.</span>")
+		W.playtoolsound(src, 100)
+		var/choptime = 50
+		if(istype(W, /obj/item/weapon/fireaxe))
+			choptime = 10
+		if(do_after(user, src, choptime))
+			user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
+						"<span class='notice'>You smash through \the [src].</span>")
+			W.playtoolsound(src, 100)
+			new material(get_turf(src), 2)
+			qdel(src)
 	else
 		..()
 
@@ -99,7 +110,7 @@
 		"<span class='notice'>You start [PK.drill_verb] \the [src] with \the [PK]</span>")
 		if(do_after(user, src, 30))
 			user.visible_message("<span class='warning'>[user] destroys \the [src]!</span>", \
-			"<span class='notice'>Your [PK] tears through the last of \the [src]!</span>")
+			"<span class='notice'>Your \the [PK] tears through the last of \the [src]!</span>")
 			new material(get_turf(src))
 			qdel(src)
 
@@ -236,7 +247,7 @@
 						S.use(use_amount)
 						user.visible_message("<span class='warning'>[user] creates a false reinforced wall!</span>", \
 						"<span class='notice'>You create a false reinforced wall. Push on it to open or close the passage.</span>")
-						var/obj/structure/falserwall/FW = new /obj/structure/falserwall(src.loc)
+						var/obj/structure/falsewall/rwall/FW = new /obj/structure/falsewall/rwall(src.loc)
 						FW.add_hiddenprint(user)
 						FW.add_fingerprint(user)
 						qdel(src)
@@ -449,6 +460,11 @@
 	name = "reinforced girder"
 	icon_state = "reinforced"
 	state = 2
+
+/obj/structure/girder/reinforced/displaced
+	name = "displaced reinforced girder"
+	icon_state = "r_displaced"
+	anchored = 0
 
 /obj/structure/cultgirder
 	name = "cult girder"

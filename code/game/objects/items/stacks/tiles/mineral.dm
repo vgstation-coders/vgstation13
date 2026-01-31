@@ -200,9 +200,11 @@
 /obj/item/stack/tile/mineral/gingerbread
 	name = "gingerbread tile"
 	singular_name ="gingerbread floor tile"
-	desc = "gingerbread architecture is more complicated than just baking some cookies and sticking them together. There are other processes involved."
+	desc = "Gingerbread architecture is more complicated than just baking some cookies and sticking them together. There are other processes involved."
 	icon_state = "tile-gingerbread"
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 3
@@ -210,6 +212,6 @@
 	max_amount = 60
 
 	material  = "gingerbread"
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 

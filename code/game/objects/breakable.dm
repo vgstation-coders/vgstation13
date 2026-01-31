@@ -136,14 +136,7 @@
 
 /obj/item/transfer_obj_blood_data(obj/item/A, obj/item/B)
 	..()
-	if(!blood_overlays[B.type]) //If there isn't a precreated blood overlay make one
-		B.set_blood_overlay()
-	if(B.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-		B.overlays.Remove(B.blood_overlay)
-	else
-		B.blood_overlay = blood_overlays["[B.type][B.icon_state]"]
-	B.blood_overlay.color = B.blood_color
-	B.overlays += B.blood_overlay
+	B.set_blood_overlay()
 
 /obj/proc/generate_break_text(glanced = FALSE, suppress_glance_text) //Generates text for when an object is hit.
 	if(glanced)
@@ -232,7 +225,7 @@
 		var/glanced=!take_damage(W.force, damage_type = W.damtype == BURN ? "energy" : "melee", skip_break = TRUE)
 		if(W.hitsound)
 			playsound(src, W.hitsound, 50, 1)
-		user.visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [shift_verb_tense(pick(W.attack_verb))] \the [src] with \the [W][generate_break_text(glanced)]<span>")
+		user.visible_message("<span class='warning'>\The [user] [W.attack_verb?.len ? pick(W.attack_verb) : "attacks"] \the [src] with \the [W][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [W.attack_verb?.len ? shift_verb_tense(pick(W.attack_verb)) : "attack"] \the [src] with \the [W][generate_break_text(glanced)]<span>")
 		try_break()
 		//Break the weapon as well, if applicable, based on its own force.
 		if(W.breakable_flags & BREAKABLE_AS_MELEE && W.damtype == BRUTE)
@@ -243,17 +236,20 @@
 
 //Simple animals attacking the object
 
-/obj/attack_animal(mob/living/simple_animal/M)
-	if(M.melee_damage_upper && M.a_intent == I_HURT && breakable_flags & BREAKABLE_UNARMED)
-		M.do_attack_animation(src, M)
-		M.delayNextAttack(1 SECONDS)
-		var/glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper), skip_break = TRUE)
-		if(M.attack_sound)
-			playsound(src, M.attack_sound, 50, 1)
-		M.visible_message("<span class='warning'>\The [M] [M.attacktext] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [shift_verb_tense(M.attacktext)] \the [src][generate_break_text(glanced)]</span>")
-		try_break()
-	else
-		. = ..()
+/obj/attack_animal(mob/living/L)
+	if(istype(L,/mob/living/simple_animal))
+		var/mob/living/simple_animal/M=L
+		if(M.melee_damage_upper && M.a_intent == I_HURT && breakable_flags & BREAKABLE_UNARMED)
+			M.do_attack_animation(src, M)
+			M.delayNextAttack(1 SECONDS)
+			var/glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper), skip_break = TRUE)
+			if(M.attack_sound)
+				playsound(src, M.attack_sound, 50, 1)
+			M.visible_message("<span class='warning'>\The [M] [M.attacktext] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [shift_verb_tense(M.attacktext)] \the [src][generate_break_text(glanced)]</span>")
+			try_break()
+		else
+			. = ..()
+	
 
 //Object ballistically colliding with something
 

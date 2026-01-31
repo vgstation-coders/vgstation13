@@ -53,9 +53,14 @@ var/explosion_shake_message_cooldown = 0
 				message_admins("If uncapped, its size would have been ([round(true_range*0.25)], [round(true_range*0.5)], [round(true_range)])")
 				log_game("If uncapped, its size would have been ([round(true_range*0.25)], [round(true_range*0.5)], [round(true_range)])")
 
-		//Pause the lighting updates for a bit.
+		//Pause some updates for a bit.
 		var/postponeCycles = max(round(devastation_range/8),1)
-		SSlighting.postpone(postponeCycles)
+		if(postponeCycles)
+			SSlighting.postpone(postponeCycles)
+			SSair.postpone(postponeCycles)
+			SSburnable.postpone(postponeCycles)
+			SSpower.postpone(postponeCycles)
+			SSpipenet.postpone(postponeCycles)
 
 		var/x0 = epicenter.x
 		var/y0 = epicenter.y
@@ -115,7 +120,10 @@ var/explosion_shake_message_cooldown = 0
 						skip_shake = 1
 
 				if(!explosion_shake_message_cooldown && !skip_shake)
-					to_chat(M, "<span class='danger'>You feel the station's structure shaking all around you.</span>")
+					if(map.zLevels[M.z]?.planetside)
+						to_chat(M, "<span class='danger'>You feel the ground shudder beneath your feet.</span>")
+					else
+						to_chat(M, "<span class='danger'>You feel the station's structure shaking all around you.</span>")
 					explosion_shake_message_cooldown = 1
 					spawn(50)
 						explosion_shake_message_cooldown = 0

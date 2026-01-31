@@ -435,12 +435,6 @@
 /turf/space,
 /area)
 "lK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
 	id_tag = "ufobridge";
 	name = "Blast Shield Shutters"
@@ -448,6 +442,7 @@
 /obj/docking_port/shuttle{
 	dir = 2
 	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor{
 	icon_state = "white";
 	tag = "icon-white"
@@ -587,16 +582,11 @@
 	},
 /area/shuttle/brokeufo/start)
 "xT" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
 	id_tag = "ufobridge";
 	name = "Blast Shield Shutters"
 	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor{
 	icon_state = "white";
 	tag = "icon-white"
@@ -754,25 +744,6 @@
 	tag = "icon-white"
 	},
 /area/shuttle/brokeufo/start)
-"Us" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	id_tag = "ufobridge";
-	name = "Blast Shield Shutters"
-	},
-/turf/simulated/floor{
-	icon_state = "white";
-	tag = "icon-white"
-	},
-/area/shuttle/brokeufo/start)
 "UW" = (
 /obj/machinery/light,
 /obj/structure/rack,
@@ -827,7 +798,7 @@
 /area/shuttle/brokeufo/start)
 "YX" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	pixel_y = 28
 	},
 /turf/simulated/floor/carpet,
@@ -1009,7 +980,7 @@ aZ
 iU
 ZA
 Zo
-Us
+xT
 aa
 "}
 (9,1,1) = {"

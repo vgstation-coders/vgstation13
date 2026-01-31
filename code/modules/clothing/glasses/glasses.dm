@@ -7,7 +7,9 @@
 	w_class = W_CLASS_SMALL
 	body_parts_covered = EYES
 	slot_flags = SLOT_EYES
-	autoignition_temperature = 0
+	flammable = FALSE
+	w_type = RECYK_GLASS
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS/4)
 	var/vision_flags = 0
 	var/darkness_view = 0//Base human is 2
 	var/invisa_view = 0
@@ -16,6 +18,7 @@
 	var/see_in_dark = 0
 	var/seedarkness = TRUE
 	var/prescription_type = null
+	var/perfect_sight = FALSE//if TRUE, will always perfectly correct the player's nearsightedness if they have any
 	min_harm_label = 12
 	harm_label_examine = list("<span class='info'>A label is covering one lens, but doesn't reach the other.</span>","<span class='warning'>A label covers the lenses!</span>")
 	species_restricted = list("exclude","Muton")
@@ -115,7 +118,7 @@ BLIND     // can't see anything
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/hud/health/prescription
-	name = "health scanner glasses"
+	name = "health scanner prescription glasses"
 	desc = "A Health Scanner HUD fitted with prescription lenses."
 	icon_state = "healthglasses"
 	nearsighted_modifier = -3
@@ -180,12 +183,17 @@ BLIND     // can't see anything
 	item_state = "hipster_glasses"
 	species_fit = list(GREY_SHAPED)
 
+/obj/item/clothing/glasses/regular/cosmetic
+	name = "cosmetic glasses"
+	desc = "The lenses appear to be completely flat. For fake nerds."
+	nearsighted_modifier = 0
+
 /obj/item/clothing/glasses/gglasses
 	name = "green glasses"
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."
 	icon_state = "gglasses"
 	item_state = "gglasses"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses
 	name = "sunglasses"
@@ -247,6 +255,17 @@ BLIND     // can't see anything
 	name = "purple sunglasses"
 	icon_state = "sun_purple"
 	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/glasses/sunglasses/purple/equipped(mob/M, slot)
+	if(slot == slot_glasses)
+		M.overlay_fullscreen("purple", /obj/abstract/screen/fullscreen/science)
+	return ..()
+
+/obj/item/clothing/glasses/sunglasses/purple/unequipped(mob/living/carbon/human/M, from_slot)
+	if(from_slot == slot_glasses)
+		M.clear_fullscreen("purple",0)
+	return ..()
+
 
 /obj/item/clothing/glasses/sunglasses/star
 	name = "star-shaped sunglasses"
@@ -326,7 +345,7 @@ BLIND     // can't see anything
 
 /obj/item/clothing/glasses/welding/superior
 	name = "superior welding goggles"
-	desc = "Welding goggles made from more expensive materials, strangely smells like potatoes. Allows for better vision than normal goggles.."
+	desc = "Welding goggles made from more expensive materials, strangely smells like potatoes. Allows for better vision than normal goggles."
 	icon_state = "rwelding-g"
 	item_state = "rwelding-g"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
@@ -363,16 +382,38 @@ BLIND     // can't see anything
 	desc = "Just who the hell do you think I am?"
 	icon_state = "simonglasses"
 	item_state = "simonglasses"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	species_fit = list(GREY_SHAPED)
 	cover_hair = 1
+
+/obj/item/clothing/glasses/simonglasses/attack_self(var/mob/living/user)
+	var/obj/item/weapon/boomerang/kaminaglasses/simonglasses/boomerang = new(user.loc)
+	user.drop_item(src, boomerang)
+	boomerang.KG = src
+	boomerang.overlays += overlays
+	user.put_in_active_hand(boomerang)
+	playsound(user.loc,'sound/effects/lagann_eyecatch.ogg', 30, 0)
+	if (!user.in_throw_mode)
+		user.throw_mode_on()
 
 /obj/item/clothing/glasses/kaminaglasses
 	name = "Kamina's glasses"
 	desc = "I'm going to tell you something important now, so you better dig the wax out of those huge ears of yours and listen! The reputation of Team Gurren echoes far and wide. When they talk about its badass leader - the man of indomitable spirit and masculinity - they're talking about me! The mighty Kamina!"
 	icon_state = "kaminaglasses"
 	item_state = "kaminaglasses"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	species_fit = list(GREY_SHAPED)
 	cover_hair = 1
+
+/obj/item/clothing/glasses/kaminaglasses/attack_self(var/mob/living/user)
+	var/obj/item/weapon/boomerang/kaminaglasses/boomerang = new(user.loc)
+	user.drop_item(src, boomerang)
+	boomerang.KG = src
+	boomerang.overlays += overlays
+	user.put_in_active_hand(boomerang)
+	playsound(user.loc,'sound/effects/lagann_eyecatch.ogg', 30, 0)
+	if (!user.in_throw_mode)
+		user.throw_mode_on()
 
 /obj/item/clothing/glasses/contacts
 	name = "contact lenses"
@@ -387,7 +428,7 @@ BLIND     // can't see anything
 	desc = "Protects your eyes from bright flashes of light."
 	icon_state = "polarized_contact"
 	darkness_view = -1
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	eyeprot = 1
 
 //////////////////

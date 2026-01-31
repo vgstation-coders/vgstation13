@@ -128,21 +128,24 @@
 
 	return power_is_good_enough || enough_machines_were_upgraded
 
-/obj/item/clothing/mask/necklace/xeno_claw
+/obj/item/clothing/accessory/necklace/xeno_claw
 	name = "xeno necklace"
 	desc = "A necklace made out of some cable coils and a xenomorph's claws."
 	icon_state = "xeno_necklace"
+	_color = "xeno_necklace"
 	species_fit = list(INSECT_SHAPED)
 
-/obj/item/clothing/mask/necklace/teeth
+/obj/item/clothing/accessory/necklace/teeth
 	name = "teeth necklace"
 	desc = "A necklace made out of a bunch of teeth."
-	icon_state = "tooth-necklace"
+	icon_state = "tooth_necklace"
+	_color = "tooth_necklace"
+
 
 	var/mob/animal_type
 	var/teeth_amount = 10
 
-/obj/item/clothing/mask/necklace/teeth/attackby(obj/item/W, mob/user)
+/obj/item/clothing/accessory/necklace/teeth/attackby(obj/item/W, mob/user)
 	.=..()
 
 	if(istype(W, /obj/item/stack/teeth))
@@ -155,7 +158,7 @@
 		to_chat(user, "<span class='info'>You add [T.amount] [T] to \the [src].</span>")
 		T.use(T.amount)
 
-/obj/item/clothing/mask/necklace/teeth/proc/update_name()
+/obj/item/clothing/accessory/necklace/teeth/proc/update_name()
 	var/animal_name = "teeth"
 	if(animal_type)
 		if(ispath(animal_type, /mob/living/carbon/human))

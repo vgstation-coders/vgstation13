@@ -26,11 +26,11 @@
 		msg += "Its utility claw is gripping [bicon(I)] [I.gender==PLURAL?"some":"a"] [I.name].\n"
 
 	if(opened)
-		msg += "<span class='warning'>Its cover is open and the power cell is [cell ? "installed" : "missing"].</span>\n"
+		msg += "<span class='warning'>Its cover is open and the power cell is [get_cell() ? "installed" : "missing"].</span>\n"
 	else
 		msg += "Its cover is closed.\n"
 
-	if(cell && cell.charge <= 0)
+	if(get_cell_charge(src) <= 0)
 		msg += "<span class='warning'>Its battery indicator is blinking red!</span>\n"
 
 	switch(src.stat)

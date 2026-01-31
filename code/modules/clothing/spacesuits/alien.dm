@@ -322,9 +322,9 @@
     step_sound = "clownstep"
 
 /obj/item/clothing/suit/space/vox/civ/trader/stealth/step_action()
-    if(ishuman(loc)&&Holiday == APRIL_FOOLS_DAY)
-        var/mob/living/carbon/human/H = loc
-        playsound(H, step_sound, 20, 1)
+	if(ishuman(loc)&&Holiday == APRIL_FOOLS_DAY)
+		var/mob/living/carbon/human/H = loc
+		playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "alien stealth helmet"
@@ -487,6 +487,7 @@
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 	name = "vox atmos pressure helmet"
@@ -495,6 +496,7 @@
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 	_color = "atmos"
 
 /obj/item/clothing/suit/space/vox/civ/engineer/ce
@@ -504,6 +506,7 @@
 	armor = list(melee = 10, bullet = 5, laser = 10, energy = 5, bomb = 10, bio = 100, rad = 50)
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
 	name = "vox chief engineer pressure helmet"
@@ -511,6 +514,7 @@
 	desc = "A very alien-looking helmet for vox crewmembers. Has some radiation and heat protection."
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 	_color = "ce"
 
 //Science
@@ -754,6 +758,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	body_parts_covered = FULL_HEAD|IGNORE_INV
 	species_restricted = list("Martian")
+	blocks_tracking = TRUE
 	var/obj/item/weapon/tank/tank
 
 /obj/item/clothing/head/helmet/space/martian/attackby(obj/item/W,mob/user)
@@ -787,7 +792,7 @@
 
 /obj/item/clothing/head/helmet/space/skrell/black
 	name = "skrell combat helmet"
-	desc = "a military Skrell space helmet."
+	desc = "A military Skrell space helmet."
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
 	species_restricted = list(SKRELL_SHAPED)
 	species_fit = list(SKRELL_SHAPED)
@@ -797,7 +802,7 @@
 
 /obj/item/clothing/suit/space/skrell/black
 	name = "skrell combat suit"
-	desc = "a military Skrell space suit."
+	desc = "A military Skrell space suit."
 	icon_state = "skrell_black"
 	item_state = "syndicate-black"
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
@@ -820,7 +825,7 @@
 
 /obj/item/clothing/head/helmet/space/skrell/white
 	name = "skrell space helmet"
-	desc = "a civilian Skrell space helmet."
+	desc = "A civilian Skrell space helmet."
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
 	species_restricted = list(SKRELL_SHAPED)
 	species_fit = list(SKRELL_SHAPED)
@@ -830,7 +835,7 @@
 
 /obj/item/clothing/suit/space/skrell/white
 	name = "skrell space suit"
-	desc = "a civilian Skrell space suit."
+	desc = "A civilian Skrell space suit."
 	icon_state = "skrell_white"
 	item_state = "medical_hardsuit"
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)

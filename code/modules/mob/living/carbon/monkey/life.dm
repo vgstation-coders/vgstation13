@@ -244,22 +244,6 @@
 	if(breath)
 		loc.assume_air(breath)
 
-
-/mob/living/carbon/monkey/proc/get_breath_from_internal(volume_needed)
-	if(internal)
-		if (!contents.Find(internal))
-			internal = null
-		if (!wear_mask || !(wear_mask.clothing_flags|MASKINTERNALS) )
-			internal = null
-		if(internal)
-			if (internals)
-				internals.icon_state = "internal1"
-			return internal.remove_air_volume(volume_needed)
-		else
-			if (internals)
-				internals.icon_state = "internal0"
-	return null
-
 /mob/living/carbon/monkey/proc/handle_breath(datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return
@@ -535,11 +519,8 @@
 			Paralyse(5)
 
 	remove_confused(1)
-	// decrement dizziness counter, clamped to 0
-	if(resting)
-		dizziness = max(0, dizziness - 5)
-	else
-		dizziness = max(0, dizziness - 1)
+	handle_dizziness()
+	handle_jitteriness()
 
 	updatehealth()
 	return //TODO: DEFERRED
@@ -716,24 +697,6 @@
 	else
 		clear_alert(SCREEN_ALARM_TEMPERATURE)
 
-	if(stat != DEAD)
-		if(src.eye_blind || blinded)
-			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		else
-			clear_fullscreen("blind")
-		if (src.disabilities & NEARSIGHTED)
-			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired, 2)
-		else
-			clear_fullscreen("impaired")
-		if (src.eye_blurry)
-			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-		else
-			clear_fullscreen("blurry")
-		if (src.druggy)
-			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
-		else
-			clear_fullscreen("high")
-
 	if (stat != 2)
 		if (machine)
 			if (!( machine.check_eye(src) ))
@@ -749,6 +712,23 @@
 		spawn(0)
 			emote("scratch")
 			return
+
+/**
+ * Returns a number between -2 to 2.
+ * TODO: What's the default return value?
+ */
+/mob/living/carbon/monkey/eyecheck()
+	. = 0
+	var/obj/item/clothing/head/headwear = src.hat
+	var/obj/item/clothing/glasses/eyewear = src.glasses
+
+	if (istype(headwear))
+		. += headwear.eyeprot
+
+	if (istype(eyewear))
+		. += eyewear.eyeprot
+
+	return clamp(., -2, 2)
 
 ///FIRE CODE
 /mob/living/carbon/monkey/handle_fire()

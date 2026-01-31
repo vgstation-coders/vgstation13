@@ -122,6 +122,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define BLOOD_LAYER					17
 	#define GIBS_OVERLAY_LAYER			18 //Holy fuck I'm so fucking mad it took me this long to figure it out. If you suspect an overlay isn't showing TRY GIVING IT A REALLY HIGH LAYER
 	#define CREEPER_LAYER				19
+	#define EDGE_LAYER					69
 	#define WEED_LAYER					420
 
 #define NOIR_BLOOD_PLANE 		(2 + FLOAT_PLANE)		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
@@ -131,10 +132,16 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define OBJ_PLANE 				(4 + FLOAT_PLANE)			// For objects which appear below humans.
 
 	#define BELOW_TABLE_LAYER			0
+	#define CARGO_CART_OFFSET			0.1
 	#define TABLE_LAYER					0.5
 	#define OPEN_DOOR_LAYER				1
 	#define BELOW_OBJ_LAYER				2
 	#define MACHINERY_LAYER				2.5
+	#define HYDROPONIC_TRAY_LAYER		2.5
+	#define HYDROPONIC_TRAY_BACK_LID_LAYER		2.501
+	#define HYDROPONIC_TRAY_PLANT_LAYER			2.502
+	#define HYDROPONIC_TRAY_ATMOS_LAYER			2.503
+	#define HYDROPONIC_TRAY_FRONT_LID_LAYER		2.504
 	// OBJ_LAYER 	 					3
 	#define ABOVE_OBJ_LAYER				4
 	#define SIDE_WINDOW_LAYER			5
@@ -169,16 +176,16 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define CHAIR_ARMREST_LAYER 		0
 	#define DISPOSALS_CHUTE_LAYER 		0
 	#define EASEL_LAYER					0
-	#define RAILING_BACK_LAYER 			0.1
-	#define RAILING_MID_LAYER 			0.2
 	#define CANVAS_LAYER				1					// So that canvas always appear above easels
 	#define EASEL_OVERLAY_LAYER			2					// So that the easel bits that hold a canvas in place always appear above a canvas
-	#define RAILING_FRONT_LAYER 		0.3
 	#define WINDOOR_LAYER 				1
 	#define OPEN_CURTAIN_LAYER			2
-	#define CLOSED_CURTAIN_LAYER		3
-	#define CLOSED_FIREDOOR_LAYER		4
-	#define POTTED_PLANT_LAYER			5
+	#define POTTED_PLANT_LAYER			3
+	#define RAILING_BACK_LAYER 			3.1
+	#define RAILING_MID_LAYER 			3.2
+	#define RAILING_FRONT_LAYER 		3.3
+	#define CLOSED_CURTAIN_LAYER		4
+	#define CLOSED_FIREDOOR_LAYER		5
 	#define LIGHT_FIXTURE_LAYER			6
 	#define CHAT_LAYER					7
 
@@ -195,6 +202,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define EFFECTS_PLANE 			(12 + FLOAT_PLANE)			// For special effects.
 
+	#define BLOODSTONE_BASE		 		2
 	#define BELOW_PROJECTILE_LAYER 		3
 	#define PROJECTILE_LAYER 			4
 	#define ABOVE_PROJECTILE_LAYER 		5
@@ -211,11 +219,13 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define GHOST_LAYER 				1
 
-#define FAKE_CAMERA_PLANE		(14)
+#define FAKE_CAMERA_BUTTONS_PLANE		(14)
 
 #define LIGHTING_PLANE 			(15)	// Don't put anything other than lighting_overlays in there please
 	#define SELF_VISION_LAYER 		   -1
 	#define LIGHTING_LAYER 				0
+
+//We could add a Plane there for beams that'd let us stick some cool displacement filters on them
 
 #define ABOVE_LIGHTING_PLANE	(16)
 	#define ABOVE_LIGHTING_LAYER		0
@@ -223,33 +233,37 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define SUPER_PORTAL_LAYER			2
 	#define NARSIE_GLOW 				3
 
+#define ABOVE_LIGHTING_PLANE_ADDITIVE	(17)
+
 
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
-#define OPEN_OVERLAY_PLANE	(17 + FLOAT_PLANE) // This one won't behave either
+#define FAKE_CAMERA_SCREEN_PLANE 18
 
-#define BASE_PLANE 				(18 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
+#define OPEN_OVERLAY_PLANE	(18 + FLOAT_PLANE) // This one won't behave either
 
-#define MISC_HUD_MARKERS_PLANE	19
+#define BASE_PLANE 				(19 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-#define ANTAG_HUD_PLANE		 	20
+#define NARSIE_PLANE			20
 
-#define STATIC_PLANE 			21		// For AI's static.
+#define ANTAG_HUD_PLANE		 	21
+
+#define STATIC_PLANE 			22		// For AI's static.
 
 	#define HACK_LAYER 					1
 	#define STATIC_LAYER				2
 	#define REACTIVATE_CAMERA_LAYER		3
 
-#define FULLSCREEN_PLANE		22		// for fullscreen overlays that do not cover the hud.
+#define FULLSCREEN_PLANE		23		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 		0
 	#define DAMAGE_HUD_LAYER 			1
-	#define IMPAIRED_LAYER 				2
+	#define IMPAIRED_LAYER				2
 	#define BLIND_LAYER					3
 	#define CRIT_LAYER 					4
 	#define HALLUCINATION_LAYER 		5
 
-#define HUD_PLANE 				23		// For the Head-Up Display
+#define HUD_PLANE 				24		// For the Head-Up Display
 
 	#define UNDER_HUD_LAYER 			0
 	#define HUD_BASE_LAYER		 		1
@@ -261,7 +275,12 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define MIND_UI_BUTTON 				11
 	#define MIND_UI_FRONT 				12
 
-#define ABOVE_HUD_PLANE 		24		// For being above the Head-Up Display
+	#define MIND_UI_GROUP_A 			0
+	#define MIND_UI_GROUP_B 			3
+	#define MIND_UI_GROUP_C 			6
+	#define MIND_UI_GROUP_D 			9
+
+#define ABOVE_HUD_PLANE 		25		// For being above the Head-Up Display
 
 
 /atom/proc/hud_layerise()
@@ -275,133 +294,3 @@ Why is FLOAT_PLANE added to a bunch of these?
 //Adjusts plane/layer for contained mobs when their reset_layer() is called. Should probably be extended to all movables at some point but I'm just making a quick fix right now
 /atom/proc/adjust_layer(mob/M)
 	return
-
-/obj/abstract/screen/plane_master
-	appearance_flags = PLANE_MASTER
-	screen_loc = "CENTER,CENTER"
-	icon_state = "blank"
-	globalscreen = 1
-
-// CLICKMASTER
-// Singleton implementation
-// One planemaster for everybody, everybody always has it, they gain it during mob/login()
-/obj/abstract/screen/plane_master/clickmaster
-	plane = BASE_PLANE
-	mouse_opacity = 0
-
-var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
-
-/obj/abstract/screen/plane_master/clickmaster_dummy
-	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
-	alpha = 0
-	appearance_flags = 0
-	plane = BASE_PLANE
-
-var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
-
-// NOIR
-// Immutable, so we use a singleton implementation
-// (only one planemaster for everybody, they gain or lose the unique planemaster depending on whether they want the effect or not)
-/obj/abstract/screen/plane_master/noir_master
-	plane = NOIR_BLOOD_PLANE
-	color = list("#0000",
-				 "#0000",
-				 "#0000",
-				 "#000F",
-				 "#A110")//turns everything in the plane to the color human blood. unfortunate side effect is the loss of detail on gibs
-	appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER//NO_CLIENT_COLOR sadly doesn't prevent the blood itself from turning grey, which is why it has to be recolored with the above matrix
-
-/obj/abstract/screen/plane_master/noir_dummy
-	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
-	alpha = 0
-	appearance_flags = 0
-	plane = NOIR_BLOOD_PLANE
-
-var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /obj/abstract/screen/plane_master/noir_dummy())
-
-// GHOST PLANEMASTER
-// One planemaster for each client, which they gain during mob/login()
-// By default their planemaster has no changes, if we modify a person's planemaster, it will affect only them
-/obj/abstract/screen/plane_master/ghost_planemaster
-	plane = GHOST_PLANE
-
-/obj/abstract/screen/plane_master/ghost_planemaster_dummy
-	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
-	alpha = 0
-	appearance_flags = 0
-	plane = GHOST_PLANE
-
-/client/proc/initialize_ghost_planemaster()
-	//We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
-	if(ghost_planemaster)
-		screen -= ghost_planemaster
-		qdel(ghost_planemaster)
-	if(ghost_planemaster_dummy)
-		screen -= ghost_planemaster_dummy
-		qdel(ghost_planemaster_dummy)
-	ghost_planemaster = new /obj/abstract/screen/plane_master/ghost_planemaster
-	screen |= ghost_planemaster
-	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
-	screen |= ghost_planemaster_dummy
-
-// OVERDARKNESS PLANEMASTER
-// Used to move the BYOND darkness plane from SEE_BLACKNESS to a different plane so it covers things on desired planes above 0
-/obj/abstract/screen/plane_master/overdark_planemaster
-	plane = 0
-	render_target = "*overdark"
-
-var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster = new()
-
-/obj/abstract/screen/plane_master/overdark_planemaster_target
-	appearance_flags = 0
-	plane = BASE_PLANE
-	mouse_opacity = 0
-	screen_loc = "CENTER,CENTER"
-	render_source = "*overdark"
-
-var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planemaster_target = new()
-
-// DARKNESS PLANEMASTER
-// One planemaster for each client, which they gain during mob/login()
-/obj/abstract/screen/plane_master/darkness_planemaster
-	plane = LIGHTING_PLANE
-	blend_mode = BLEND_MULTIPLY
-
-/obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	alpha = 0
-	appearance_flags = 0
-	plane = LIGHTING_PLANE
-
-/client/proc/initialize_darkness_planemaster()
-	if(darkness_planemaster)
-		screen -= darkness_planemaster
-		qdel(darkness_planemaster)
-	if(darkness_planemaster_dummy)
-		screen -= darkness_planemaster_dummy
-		qdel(darkness_planemaster_dummy)
-	darkness_planemaster = new /obj/abstract/screen/plane_master/darkness_planemaster
-	screen |= darkness_planemaster
-	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	screen |= darkness_planemaster_dummy
-
-
-/obj/abstract/screen/plane_master/fakecamera_planemaster
-	plane = FAKE_CAMERA_PLANE
-	alpha = 0
-
-/obj/abstract/screen/plane_master/fakecamera_planemaster_dummy
-	alpha = 0
-	appearance_flags = 0
-	plane = FAKE_CAMERA_PLANE
-
-/client/proc/initialize_fakecamera_planemaster()
-	if(fakecamera_planemaster)
-		screen -= fakecamera_planemaster
-		qdel(fakecamera_planemaster)
-	if(fakecamera_planemaster_dummy)
-		screen -= fakecamera_planemaster_dummy
-		qdel(fakecamera_planemaster_dummy)
-	fakecamera_planemaster = new /obj/abstract/screen/plane_master/fakecamera_planemaster
-	screen |= fakecamera_planemaster
-	fakecamera_planemaster_dummy = new /obj/abstract/screen/plane_master/fakecamera_planemaster_dummy
-	screen |= fakecamera_planemaster_dummy

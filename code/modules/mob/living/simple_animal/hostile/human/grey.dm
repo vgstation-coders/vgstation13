@@ -357,7 +357,7 @@
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/regular/Life()
 	..()
 	if(scramble == 0)
-		projectiletype = /obj/item/projectile/beam/immolationray
+		projectiletype = /obj/item/projectile/beam/scorchray/immolationray
 		projectilesound = 'sound/weapons/ray1.ogg'
 		icon_state = "greysoldier"
 		icon_living = "greysoldier"
@@ -397,7 +397,7 @@
 	melee_damage_upper = 20 // Decent melee damage, but the stun is the real danger
 	move_to_delay = 1.8 // This is what he trained for! To fill the unforgiving minute with sixty seconds of distance sprinting
 
-	items_to_drop = list(/obj/item/weapon/melee/stunprobe)
+	items_to_drop = list(/obj/item/weapon/melee/baton/stunprobe)
 
 	attacktext = "beats"
 	attack_sound = 'sound/weapons/genhit1.ogg'
@@ -543,7 +543,7 @@
 	waterproof = 1
 	var/shield_up = 0
 
-	projectiletype = /obj/item/projectile/beam/immolationray
+	projectiletype = /obj/item/projectile/beam/scorchray/immolationray
 	projectilesound = 'sound/weapons/ray1.ogg'
 	retreat_distance = 3
 	minimum_distance = 3
@@ -658,7 +658,7 @@
 	melee_damage_upper = 20 // Decent melee damage, but the stun is the real danger
 	move_to_delay = 1.8 // This is what he trained for! To fill the unforgiving minute with sixty seconds of distance sprinting
 
-	items_to_drop = list(/obj/item/weapon/melee/stunprobe)
+	items_to_drop = list(/obj/item/weapon/melee/baton/stunprobe)
 
 	attacktext = "beats"
 	attack_sound = 'sound/weapons/genhit1.ogg'
@@ -707,7 +707,7 @@
 	speak = list("Sweeping sector, prepared for EVA maneuvers.","Praise the mothership, and all hail the Chairman.","Air supply capacity check is green.","Terminate all unauthorized personnel and unidentified xenofauna.")
 	speak_chance = 1
 
-	projectiletype = /obj/item/projectile/beam/immolationray
+	projectiletype = /obj/item/projectile/beam/scorchray/immolationray
 	projectilesound = 'sound/weapons/ray1.ogg'
 	retreat_distance = 5
 	minimum_distance = 5
@@ -1041,7 +1041,7 @@
 
 	faction = "mothership"
 
-	projectiletype = /obj/item/projectile/beam/atomizationray
+	projectiletype = /obj/item/projectile/beam/scorchray/atomizationray
 	projectilesound = 'sound/weapons/ray1.ogg'
 	retreat_distance = 8
 	minimum_distance = 8

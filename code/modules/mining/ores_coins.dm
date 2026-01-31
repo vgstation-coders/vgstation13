@@ -49,6 +49,36 @@
 	name = "cave sand"
 	icon_state = "cavesand"
 
+// Handles sand pouring in containers
+/obj/item/stack/ore/glass/afterattack(atom/target, var/mob/user, var/adjacency_flag, var/click_params)
+	var/static/list/allowed_targets = list(/obj/item/weapon/reagent_containers, /obj/structure/reagent_dispensers/cauldron)
+	if(!adjacency_flag || !is_type_in_list(target, allowed_targets) || !target.is_open_container())
+		return
+
+	if(materials.getAmount(MAT_GLASS) <= 0)
+		to_chat(user, "<span class='notice'>\The [src] seems to be empty, somehow. It dissolves away.</span>")
+		qdel(src)
+
+	if(target.reagents.is_full())
+		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
+		return
+
+	var/datum/material/mat = materials.getMaterial(MAT_GLASS)
+	var/tx_amount = U_PER_SHEET * materials.getAmount(MAT_GLASS)/mat.cc_per_sheet
+	if(tx_amount <= 0)
+		to_chat(user, "<span class='warning'>You can't seem to be able to pour \the [src] into \the [target]. Make a bug report!</span>")
+		return
+
+	target.reagents.add_reagent(SILICA,tx_amount)
+	materials.removeAmount(MAT_GLASS,tx_amount*mat.cc_per_sheet)
+	if(materials.getAmount(MAT_GLASS) <= 0)
+		user.visible_message("<span class='warning'>[user] pours \the [src] into \the [target].</span>", \
+			self_message = "<span class='notice'>You pour \the [src] into \the [target].[target.reagents.is_full()? " It is now full." : ""]</span>", range = 2)
+		qdel(src)
+	else
+		user.visible_message("<span class='warning'>[user] pours \the [src] into \the [target].</span>", \
+			self_message = "<span class='notice'>You partially pour \the [src] into \the [target].[target.reagents.is_full()? " It is now full." : ""]</span>", range = 2)
+
 /obj/item/stack/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
 	var/turf/T //turf to extinguish
@@ -75,18 +105,20 @@
 		for(var/atom/atm in T) //extinguishing things
 			if(isliving(atm)) // For extinguishing mobs on fire
 				var/mob/living/M = atm
-				M.ExtinguishMob()
+				M.extinguish()
 			if(atm.on_fire) // For extinguishing objects on fire
 				atm.extinguish()
 
-/obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
-	var/location = get_turf(user)
-	for(var/obj/item/stack/ore/glass/sandToConvert in location)
-		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, sandToConvert.amount, user)
-		sandToConvert.use(sandToConvert.amount)
+/obj/item/stack/ore/glass/New(var/loc, var/amount=null)
+	recipes = sand_recipes
+	..()
 
-	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-	use(1)
+/obj/item/stack/ore/glass/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W))
+		var/obj/item/weapon/bikehorn/honker = W
+		if(honker.can_honk_baton)
+			user.create_in_hands(honker, /obj/item/weapon/bikehorn/ankhhorn, src, uses=1, msg = "<span class='notice'>You call upon the blessings of the Sun God as you cover \the [W] with \the [src].</span>")
 
 /obj/item/stack/ore/plasma
 	name = "\improper plasma ore"
@@ -396,6 +428,7 @@
 	throwforce = 1
 	w_class = W_CLASS_TINY
 	w_type = RECYK_METAL
+	quick_equip_priority = list(slot_wear_id)
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
@@ -514,7 +547,7 @@
 	credits = 1000
 
 /obj/item/weapon/coin/mythril
-	material="mythril"
+	material=MAT_MYTHRIL
 	name = "mythril coin"
 	desc = "An expensive coin minted long ago from extremely rare, light, non-conductive metal."
 	icon_state = "coin_mythril"
@@ -537,7 +570,7 @@
 		string_attached = 1
 		to_chat(user, "<span class='notice'>You attach a string to \the [name].</span>")
 		CC.use(1)
-	else if(istype(W,/obj/item/tool/wirecutters) )
+	else if(W.is_wirecutter(user))
 		if(!string_attached)
 			..()
 			return

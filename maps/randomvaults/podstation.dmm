@@ -459,7 +459,7 @@
 /area/vault/podstation/exterior)
 "hD" = (
 /mob/living/simple_animal/cockroach,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -516,7 +516,7 @@
 /area/vault/podstation/interior)
 "iv" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	dir = 4;
 	pixel_x = -30
 	},
@@ -1044,7 +1044,7 @@
 /area/vault/podstation/interior)
 "sb" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/mayo_packet,
+/obj/item/trash/packet/mayo,
 /obj/machinery/light/small/broken{
 	dir = 4
 	},
@@ -1566,7 +1566,7 @@
 	},
 /area/vault/podstation/exterior)
 "GO" = (
-/obj/structure/sink/kitchen,
+/obj/structure/wc/sink/kitchen,
 /turf/simulated/wall,
 /area/vault/podstation/interior)
 "Hg" = (
@@ -1800,7 +1800,7 @@
 /area/vault/podstation/exterior)
 "NF" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/mayo_packet,
+/obj/item/trash/packet/mayo,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -1808,7 +1808,7 @@
 "NS" = (
 /obj/structure/closet/crate/trashcart,
 /obj/item/trash/chips,
-/obj/item/trash/donitos_coolranch,
+/obj/item/trash/chips/donitos_coolranch,
 /obj/item/trash/fries_punet,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/storage/fancy/cigarettes/shoalsticks,
@@ -2193,8 +2193,8 @@
 /obj/item/weapon/storage/wallet,
 /obj/item/trash/fries_cone,
 /obj/item/trash/fries_cone,
-/obj/item/trash/ketchup_packet,
-/obj/item/trash/vinegar_packet,
+/obj/item/trash/packet/ketchup,
+/obj/item/trash/packet/vinegar,
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/hanging_lantern{
 	dir = 4
@@ -2399,7 +2399,7 @@
 	},
 /area/vault/podstation/exterior)
 "ZP" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/effect/decal/cleanable/vomit/pre_dry,

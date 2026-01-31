@@ -250,9 +250,9 @@
 		if(items_transferred == 0 && !is_full())
 			return FALSE
 	else
-		if(isliving(AM))
-			var/mob/living/L = AM
-			if(!L.lying)
+		if(ishuman(AM))
+			var/mob/living/carbon/human/H = AM
+			if(!H.lying)
 				return FALSE
 		var/datum/food_processor_process/P = select_recipe(AM)
 		if (!P)

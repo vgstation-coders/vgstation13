@@ -39,6 +39,7 @@
 		if(iscarbon(M) && glasses == slot_glasses)
 			for(var/datum/visioneffect/H in stored_huds)
 				M.apply_hud(H)
+				M.update_perception()
 	..()
 
 /obj/item/clothing/glasses/scanner/unequipped(mob/living/carbon/M, var/from_slot = null)
@@ -46,6 +47,7 @@
 		for(var/datum/visioneffect/H in stored_huds)
 			M.remove_hud(H)
 	//the parent calls for a full redraw of the hud
+	M.update_perception()
 	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()
@@ -71,6 +73,7 @@
 
 	update_icon()
 	C.update_inv_glasses()
+	C.update_perception()
 
 /obj/item/clothing/glasses/scanner/proc/enable(var/mob/living/carbon/C)
 	on = TRUE
@@ -184,7 +187,7 @@
 	actions_types = list(/datum/action/item_action/toggle_meson_scanner, /datum/action/item_action/alt/toggle_material_scanner)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	glasses_fit = TRUE
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	hud_types = list(/datum/visioneffect/meson,/datum/visioneffect/material)
 
 /obj/item/clothing/glasses/scanner/dual/chiefengineer/examine(mob/user)
@@ -239,7 +242,7 @@
 
 /obj/item/clothing/glasses/scanner/science
 	name = "science goggles"
-	desc = "almost nothing."
+	desc = "Almost nothing."
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"

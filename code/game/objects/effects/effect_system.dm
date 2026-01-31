@@ -11,8 +11,9 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = 0
 	flags = 0
+	density = 0
 	w_type = NOT_RECYCLABLE
-	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
+	pass_flags = PASSTABLE | PASSGRILLE | PASSMACHINE | PASSGIRDER | PASSRAILING
 
 /obj/effect/dissolvable()
 	return 0
@@ -28,25 +29,14 @@ would spawn and follow the beaker, even if it is carried or thrown.
 
 /obj/effect/water/New()
 	. = ..()
-	//var/turf/T = src.loc
-	//if (istype(T, /turf))
-	//	T.firelevel = 0 //TODO: FIX
 
 	spawn(70)
 		qdel(src)
 
 /obj/effect/water/Destroy()
-	//var/turf/T = src.loc
-	//if (istype(T, /turf))
-	//	T.firelevel = 0 //TODO: FIX
-
 	..()
 
 /obj/effect/water/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	//var/turf/T = src.loc
-	//if (istype(T, /turf))
-	//	T.firelevel = 0 //TODO: FIX
-
 	if (--life < 1)
 		//SN src = null
 		qdel(src)
@@ -88,6 +78,9 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	return 0
 
 /obj/effect/blob_act()
+	return
+
+/obj/effect/ignite()
 	return
 
 /////////////////////////////////////////////
@@ -151,10 +144,11 @@ steam.start() -- spawns the effect
 /////////////////////////////////////////////
 
 #define SPARK_TEMP 500
+#define SPARK_TURF_LIMIT 8
 
 /obj/effect/sparks
 	name = "sparks"
-	desc = "it's a spark what do you need to know?"
+	desc = "It's a spark, what do you need to know?"
 	icon_state = "sparks"
 	anchored = 1
 
@@ -167,33 +161,19 @@ steam.start() -- spawns the effect
 
 /obj/effect/sparks/New(var/travel_dir)
 	..()
-	var/turf/T = loc
-	if(istype(T))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 /obj/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	move_dir=travel_dir
 	energy=rand(1,max_energy)
 	processing_objects.Add(src)
-	var/turf/T = loc
-	if (istype(T, /turf))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 /obj/effect/sparks/Destroy()
 	processing_objects.Remove(src)
-	var/turf/T = src.loc
-
-	if (istype(T, /turf))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
-
 	..()
 
 /obj/effect/sparks/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
-	var/turf/T = src.loc
-	if (istype(T, /turf))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
-	return
+
 
 /obj/effect/sparks/process()
 	if(energy==0)
@@ -201,6 +181,7 @@ steam.start() -- spawns the effect
 		qdel(src)
 		return
 	else
+		try_hotspot_expose(SPARK_TEMP, SMALL_FLAME, surfaceburn)
 		step(src,move_dir)
 	energy--
 
@@ -213,7 +194,7 @@ steam.start() -- spawns the effect
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/spark_spread/start(surfaceburn = TRUE)
+/datum/effect/system/spark_spread/start(surfaceburn = TRUE, silent = FALSE)
 	if (holder)
 		location = get_turf(holder)
 	if(!location)
@@ -224,7 +205,8 @@ steam.start() -- spawns the effect
 	else
 		directions = alldirs.Copy()
 
-	playsound(location, "sparks", 100, 1)
+	if(!silent)
+		playsound(location, "sparks", 100, 1)
 	for (var/i = 1 to number)
 		var/nextdir=pick_n_take(directions)
 		if(nextdir)
@@ -234,14 +216,30 @@ steam.start() -- spawns the effect
 			else
 				var/obj/effect/sparks/nosurfaceburn/sparks = new /obj/effect/sparks/nosurfaceburn(location)
 				sparks.start(nextdir)
-// This sparks.
-/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = TRUE) //surfaceburn means the sparks can ignite things on the ground. set it to false to keep eg. portals like in the time agent event from burning down the station
+/**
+  * This sparks.
+  *
+  * Generates some sparks at specified location
+  * Arguments:
+  * * atom/loc - where the sparks are set off
+  * * amount - how many sparks, default 3
+  * * cardinals - if true, sparks will not spread diagonally, default TRUE
+  * * surfaceburn - if it starts fires, default FALSE
+  * * silent - if TRUE, the initial spark won't make noise, default FALSE
+  */
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE, var/silent = FALSE)
 	loc = get_turf(loc)
+	var/tally = -1 //Prevent the sparks from starting if there are already too many sparks on the same tile. -1 to exclude itself
+	for(var/obj/effect/sparks/S in loc.contents)
+		tally++
+	if(tally >= SPARK_TURF_LIMIT)
+		return
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
-	S.start(surfaceburn)
+	S.start(surfaceburn, silent)
 
 #undef SPARK_TEMP
+#undef SPARK_TURF_LIMIT
 
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS
@@ -379,37 +377,6 @@ steam.start() -- spawns the effect
 	R.burn_skin(2)
 	R.bodytemperature = min(60, R.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
-/////////////////////////////////////////////
-// Fire Smoke
-/////////////////////////////////////////////
-
-
-/obj/effect/smoke/fire
-	name = "fire smoke"
-	icon_state = "firesmoke"
-
-/obj/effect/smoke/fire/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	..()
-	for(var/mob/living/carbon/human/R in get_turf(src))
-		affect(R)
-
-/obj/effect/smoke/fire/affect(var/mob/living/carbon/human/R)
-	if (!..())
-		return 0
-	if (R.wear_suit != null)
-		return 0
-	R.burn_skin(0.75)
-	if (R.resting)	//crawling prevents suffocation but not burning
-		return 0
-	R.adjustOxyLoss(1)
-	if (R.coughedtime != 1)
-		R.coughedtime = 1
-		R.emote("gasp", null, null, TRUE)
-		spawn (20)
-			R.coughedtime = 0
-	R.updatehealth()
-	return
-
 /obj/effect/smoke/transparent
 	opacity = FALSE
 
@@ -476,9 +443,6 @@ steam.start() -- spawns the effect
 /datum/effect/system/smoke_spread/transparent
 	smoke_type = /obj/effect/smoke/transparent
 
-/datum/effect/system/smoke_spread/fire
-	smoke_type = /obj/effect/smoke/fire
-
 /////////////////////////////////////////////
 // Chem smoke
 /////////////////////////////////////////////
@@ -510,9 +474,7 @@ steam.start() -- spawns the effect
 /datum/effect/system/smoke_spread/chem/New()
 	..()
 	chemholder = new/obj()
-	var/datum/reagents/R = new/datum/reagents(500)
-	chemholder.reagents = R
-	R.my_atom = chemholder
+	chemholder.create_reagents(500)
 
 /datum/effect/system/smoke_spread/chem/set_up(var/datum/reagents/carry = null, n = 5, c = 0, loca, direct)
 	if(n > 20)
@@ -669,6 +631,8 @@ steam.start() -- spawns the effect
 	if(src.processing)
 		src.processing = 0
 		spawn(0)
+			if(!holder)
+				return
 			var/turf/T = get_turf(src.holder)
 			if(currloc != T)
 				switch(holder.dir)
@@ -1148,3 +1112,130 @@ steam.start() -- spawns the effect
 
 		if(dmglevel<4)
 			holder.ex_act(dmglevel)
+
+//Weather Holders
+/obj/effect/weather_holder
+	name = "weather holder"
+	desc = "you shouldn't see this"
+	density = 0
+	anchored = 1
+	plane = ABOVE_TURF_PLANE
+	mouse_opacity = 0
+	var/datum/climate/parent_climate = null
+	var/list/precip_overlays = list()
+	var/list/overlay_counts = list()
+	var/overlay_icon = 'icons/turf/weatherfx.dmi'
+
+/obj/effect/weather_holder/New(var/datum/climate/climate_ref = null)
+	..()
+	parent_climate = climate_ref
+	if(map && parent_climate && parent_climate.current_weather)
+		UpdatePrecipitation(parent_climate.current_weather.precip_intensity)
+	else
+		UpdatePrecipitation(WEATHER_CALM)
+
+/obj/effect/weather_holder/proc/UpdatePrecipitation(var/weather_state)
+	var/cache_key = "[type]_[weather_state]"
+	if(!precip_state_to_texture[cache_key])
+		cache_weather_tile(weather_state)
+	appearance = precip_state_to_texture[cache_key]
+
+/obj/effect/weather_holder/proc/cache_weather_tile(var/weather_state)
+	overlays.Cut()
+	for(var/i = 1 to overlay_counts[weather_state+1])
+		var/image/precipfx = image(overlay_icon, "[precip_overlays[weather_state+1]][i]", SNOW_OVERLAY_LAYER)
+		precipfx.plane = EFFECTS_PLANE
+		overlays += precipfx
+	var/cache_key = "[type]_[weather_state]"
+	precip_state_to_texture[cache_key] = appearance
+
+/obj/effect/weather_holder/blizzard
+	precip_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
+	overlay_counts = list(2,2,2,3)
+
+/obj/effect/weather_holder/blizzard/heavy
+
+/obj/effect/weather_holder/temperate
+	precip_overlays = list("clear","rain_average","rain_hard","rain_storm")
+	overlay_counts = list(1,1,1,3)
+
+/obj/effect/weather_holder/tropical
+	precip_overlays = list("clear","rain_average","rain_average","rain_storm")
+	overlay_counts = list(1,1,1,3)
+
+/obj/effect/weather_holder/desert
+	precip_overlays = list("clear","dust","sand","clear")
+	overlay_counts = list(1,2,3,1)
+
+/obj/effect/weather_holder/lava
+	precip_overlays = list("clear","ash","ash_storm")
+	overlay_counts = list(1,2,1)
+
+/obj/effect/weather_holder/fallout
+	precip_overlays = list("clear","rad","rad_storm","toxic_rain","toxic_rain_hard")
+	overlay_counts = list(1,1,1,1,1)
+
+/obj/effect/weather_holder/xeno
+	precip_overlays = list("clear","acid_rain","acid_rain_hard")
+	overlay_counts = list(1,1,1)
+
+/obj/effect/landing_zone
+	name = "landing zone"
+	icon_state = "LZ_scan"
+	density = 0
+	anchored = 1
+	mouse_opacity = 0
+	var/overlay_state = "LZ_warn"
+
+/obj/effect/landing_zone/New(loc, var/corner = FALSE)
+	. = ..()
+	if(corner)
+		overlays += image(icon, icon_state = overlay_state)
+
+// For area-wide effects like radstorm flashing and stuff
+/obj/effect/area_alert_holder
+	name = "area alert holder"
+	desc = "you shouldn't see this"
+	density = 0
+	anchored = 1
+	plane = LIGHTING_PLANE
+	layer = MAPPING_AREA_LAYER // from areas.dm
+	mouse_opacity = 0
+	icon = 'icons/turf/areas.dmi'
+	var/area/parent_area = null
+
+/obj/effect/area_alert_holder/New(area/A)
+	..()
+	parent_area = A
+
+/obj/effect/area_alert_holder/proc/update()
+	if (!parent_area)
+		return
+
+	var/new_state = null
+	var/new_luminosity = 0
+
+	if (parent_area.areaapc)
+		var/has_power = (!parent_area.requires_power || parent_area.power_environ)
+		if ((parent_area.fire || parent_area.eject || parent_area.party || parent_area.radalert) && has_power)
+			new_luminosity = 1
+			// priority follows original updateicon impl
+			if (parent_area.radalert && !parent_area.fire)
+				new_state = "radiation"
+			else if (parent_area.fire && !parent_area.radalert && !parent_area.eject && !parent_area.party)
+				new_state = "blue"
+			else if (!parent_area.fire && parent_area.eject && !parent_area.party)
+				new_state = "red"
+			else if(parent_area.party && !parent_area.fire && !parent_area.eject)
+				new_state = "party"
+			else
+				new_state = "blue-red"
+
+	icon_state = new_state
+	luminosity = new_luminosity
+
+/obj/effect/area_alert_holder/proc/add_turf(turf/T)
+	T.vis_contents |= src
+
+/obj/effect/area_alert_holder/proc/remove_turf(turf/T)
+    T.vis_contents -= src

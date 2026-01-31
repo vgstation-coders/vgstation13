@@ -808,11 +808,13 @@
 		add_avail(power)
 		return
 	for(var/mob/living/carbon/human/H in loc)
-		if(iswizard(H) && !H.stat)
+		if(H.mind.wizard_spells.len && !H.stat)
 			power += FIRE_CARBON_ENERGY_RELEASED*H.health/H.maxHealth
 			H.adjustFireLoss(3)
 			if(prob(10))
 				H.audible_scream()
+		if(H.reagents?.has_reagent(ENGNANOBOTS))
+			power += ARBITRARILY_LARGE_NUMBER * multiplier * (1+(H.reagents.total_volume/100)) //10000
 	add_avail(power)
 
 /obj/machinery/power/conduction_plate/proc/check_tank()

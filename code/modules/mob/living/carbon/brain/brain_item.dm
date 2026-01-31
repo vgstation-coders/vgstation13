@@ -62,8 +62,6 @@
 	..()
 
 	var/mob/living/carbon/human/H = target
-	for(var/spell/spell in H.mind.wizard_spells)
-		H.remove_spell(spell)
 	H.dropBorers()
 	var/obj/item/organ/internal/brain/B = src
 	if(istype(B) && istype(H))

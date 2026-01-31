@@ -117,7 +117,7 @@
 		dat += "Ignore Empty Trays : <A href='?src=\ref[src];ignoreEmpty=1'>[src.setting_ignoreEmpty ? "Yes" : "No"]</A><BR>"
 		dat += "</TT>"
 
-	user << browse("<HEAD><TITLE>Farmbot v1.0 controls</TITLE></HEAD>[dat]", "window=autofarm")
+	user << browse(HTML_SKELETON_TITLE("Farmbot v1.0 controls", dat), "window=autofarm")
 	onclose(user, "autofarm")
 
 /obj/machinery/bot/farmbot/Topic(href, href_list)
@@ -248,7 +248,7 @@
 		target = null
 		return
 
-	if (!emagged && !istype(target,/obj/machinery/portable_atmospherics/hydroponics) && !istype(target,/obj/structure/sink) ) // Humans are not plants!
+	if (!emagged && !istype(target,/obj/machinery/portable_atmospherics/hydroponics) && !istype(target,/obj/structure/wc/sink) ) // Humans are not plants!
 		mode = 0
 		target = null
 		return
@@ -285,7 +285,7 @@
 		return 0
 	else
 		if(setting_refill && tank && tank.reagents.total_volume < 500 )
-			for(var/obj/structure/sink/source in view(7,src) )
+			for(var/obj/structure/wc/sink/source in view(7,src) )
 				target = source
 				mode = FARMBOT_MODE_REFILL
 				return 1
@@ -407,7 +407,7 @@
 			mode = 0
 
 /obj/machinery/bot/farmbot/proc/refill()
-	if ( !tank || !tank.reagents.total_volume > 600 || !istype(target,/obj/structure/sink) )
+	if ( !tank || !tank.reagents.total_volume > 600 || !istype(target,/obj/structure/wc/sink) )
 		mode = 0
 		target = null
 		return

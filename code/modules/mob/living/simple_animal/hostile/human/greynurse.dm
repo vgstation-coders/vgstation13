@@ -186,6 +186,10 @@
 	var/dash_dir = null
 	var/turf/crashing = null
 
+/mob/living/simple_animal/hostile/humanoid/nurseunit/special_thrown_behaviour()
+	dash_dir = dir
+	throwing = 2//dashing through windows and grilles
+
 /mob/living/simple_animal/hostile/humanoid/nurseunit/Aggro()
 	..()
 	say(pick("Unauthorized personnel detected, neutralizing.","Unit can no longer interface with disintegrator, proceeding with manual termination.","Source of greyling distress detected. Erasing."), all_languages[LANGUAGE_GREY])

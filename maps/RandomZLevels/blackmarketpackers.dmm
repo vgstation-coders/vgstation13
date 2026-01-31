@@ -708,7 +708,7 @@
 	},
 /area/awaymission/BMPship2)
 "cG" = (
-/obj/structure/sink,
+/obj/structure/wc/sink,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "yellow"
@@ -2920,7 +2920,7 @@
 	},
 /area/awaymission/BMPship1)
 "iv" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/machinery/light/small{
@@ -2950,7 +2950,7 @@
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
 "iA" = (
-/obj/structure/sink,
+/obj/structure/wc/sink,
 /turf/simulated/floor{
 	icon_state = "cafeteria"
 	},

@@ -37,8 +37,8 @@
 	icon_state = "echair[on]"
 	to_chat(usr, "<span class='notice'>You switch [on ? "on" : "off"] [src].</span>")
 
-/obj/structure/bed/chair/e_chair/rotate()
-	..()
+/obj/structure/bed/chair/e_chair/change_dir(new_dir, changer)
+	. = ..()
 	overlays.len = 0
 	var/image/electric_chair_overlay = image('icons/obj/objects.dmi', src, "echair_over")
 	electric_chair_overlay.plane = ABOVE_HUMAN_PLANE
@@ -68,11 +68,11 @@
 			if(istype(target) && target.locked_to == src)
 				target.electrocute_act(34, src, incapacitation_duration = 24 SECONDS)
 				to_chat(target, "<span class='danger'>You feel a deep shock course through your body!</span>")
-			spark(src, 12, FALSE)
+			spark(src, 8, FALSE)
 			sleep(10)
 
 		A.power_light = light
 		A.updateicon()
 	else
-		spark(src, 12, FALSE) //just something to let them know it works
+		spark(src, 8, FALSE) //just something to let them know it works
 	return

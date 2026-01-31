@@ -26,6 +26,8 @@
 		for(var/datum/radial_menu/R in client.radial_menus)
 			R.finish()
 
+	remove_perception_filters()
+	perception_filters.perception_planemasters.len = 0
 	remove_screen_objs() //Used to remove hud elements
 
 	if (src in science_goggles_wearers)
@@ -42,6 +44,7 @@
 
 	if(client && client.media)
 		client.media.stop_music()
+
 
 	unregister_event(/event/mob_area_changed, src, nameof(src::OnMobAreaChanged()))
 

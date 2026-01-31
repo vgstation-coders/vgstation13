@@ -70,3 +70,10 @@
 	desc = "A huge chunk of reinforced metal and anchored rods used to seperate rooms and keep all but the most equipped crewmen out."
 	icon_state = "r_wall"
 	walltype = "rwall"
+
+/turf/simulated/wall/invulnerable/gold
+	name = "invulnerable gold wall"
+	desc = "A wall with gold plating. Swag! Powerful magic prevents its destruction."
+	icon_state = "gold0"
+	walltype = "gold"
+	mineral = "gold"

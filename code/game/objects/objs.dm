@@ -1,4 +1,7 @@
-var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE, LUBE)
+//reagents that should adminwarn upon transfer
+var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE, LUBE, CHEFSPECIAL, AMANITIN)
+//dangerous reagents that should always be logged upon transfer no matter what
+var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECIAL, AMANITIN)
 
 /obj
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
@@ -30,7 +33,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	plane = OBJ_PLANE
 
-	var/defective = 0
 	var/quality = B_AVERAGE //What level of quality this object is.
 	var/datum/material/material_type //What material this thing is made out of
 	var/sheet_type = /obj/item/stack/sheet/metal
@@ -48,8 +50,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/current_glue_state = GLUE_STATE_NONE
 	var/last_glue_application = 0
 
-	//Does this item have a slime installed?
-	var/has_slime = 0
+	//Does this item have slimes installed? Bitflag for each type.
+	var/has_slimes = 0
+	var/slimeadd_message = "You add the slime extract to SRCTAG"
+	var/slimeadd_success_message
+	var/slimes_accepted = 0
 
 	var/on_armory_manifest = FALSE // Does this get included in the armory manifest paper?
 	var/holds_armory_items = FALSE // Does this check inside the object for stuff to include?
@@ -58,19 +63,39 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/is_cooktop //If true, the object can be used in conjunction with a cooking vessel, eg. a frying pan, to cook food.
 	var/obj/item/weapon/reagent_containers/pan/cookvessel //The vessel being used to cook food in. If generalized out to other types of vessels, make sure to also generalize the frying pan's cook_start(), etc. as well.
 
+	var/verb_rotates = FALSE
+	var/alt_click_rotates = FALSE
+	var/ghost_can_rotate = FALSE
+	var/rotates_anchored = FALSE
+	var/rotate_type = null
+
 /obj/New()
 	..()
 	if(breakable_flags)
 		breakable_init()
 	if(is_cooktop)
 		add_component(/datum/component/cooktop)
-//Disabled because autoignition would too often turn rooms into firestorms due to a chain reaction
-//where one item would burn up, increase the room temperature (in code/ZAS/Fire.dm, proc/burnFireFuel()) and cause
-//other items to burn up.
-
-//To re-enable, un-comment the lines of code.
-	// if(autoignition_temperature)
-	// 	burnableatoms+=src
+	if(!thermal_mass)
+		switch(w_class)
+			if(W_CLASS_TINY, W_CLASS_SMALL)
+				thermal_mass = 0.1
+			if(W_CLASS_MEDIUM)
+				thermal_mass = 1.0
+			if(W_CLASS_LARGE)
+				thermal_mass = 5.0
+			if(W_CLASS_HUGE)
+				thermal_mass = 20.0
+			if(W_CLASS_GIANT)
+				thermal_mass = 50.0
+	if(thermal_mass)
+		initial_thermal_mass = thermal_mass
+	if(flammable)
+		var/turf/simulated/T = get_turf(src)
+		if(istype(T))
+			T.zone?.burnable_atoms |= src
+	if(verb_rotates)
+		verbs += /obj/proc/rotate_cw
+		verbs += /obj/proc/rotate_ccw
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.
@@ -94,11 +119,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		cookvesselimage.pixel_x = offset_x
 		cookvesselimage.pixel_y = offset_y
 		overlays += cookvesselimage
-		if (particles)
-			particles.position = list(offset_x,offset_y)
+		adjust_particles(PVAR_POSITION, list(offset_x,offset_y))
 	else
-		if (particles)
-			particles.position = 0
+		adjust_particles(PVAR_POSITION, 0)
 
 /obj/proc/cook_temperature() //Returns the temperature the object cooks at.
 	return COOKTEMP_DEFAULT
@@ -140,7 +163,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
 
-/obj/proc/blocks_doors()
+/obj/proc/blocks_doors(var/obj/machinery/door/D)
 	return 0
 
 /obj/proc/install_pai(obj/item/device/paicard/P)
@@ -156,6 +179,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	if(handle_item_attack(W, user))
 		return
+
+	if(emag_check(W,user))
+		. = 1
 
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
@@ -215,7 +241,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 0
 	else
 		delayNextpAIMove(getpAIMovementDelay())
-		if (user.client.prefs.stumble && ((world.time - user.last_movement) > 5) && getpAIMovementDelay() < 2)
+		if (user.client.prefs.get_pref(/datum/preference_setting/toggle/stumble) && ((world.time - user.last_movement) > 5) && getpAIMovementDelay() < 2)
 			delayNextpAIMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 		user.last_movement=world.time
 		return 1
@@ -258,6 +284,50 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		QDEL_NULL(pAImove_delayer)
 		return P
 	return 0
+
+/obj/AltClick(mob/user)
+	if(alt_click_rotates & Adjacent(user))
+		rotate_ccw()
+	return ..()
+
+/obj/proc/rotate_cw()
+	set name = "Rotate Clockwise"
+	set category = "Object"
+	set src in oview(1)
+
+	rotate(270)
+	return 1
+
+/obj/proc/rotate_ccw()
+	set name = "Rotate Counter Clockwise"
+	set category = "Object"
+	set src in oview(1)
+
+	rotate(90)
+	return 1
+
+/obj/proc/rotate(var/angle = 90)
+	if(ghost_can_rotate && isobserver(usr))
+		var/mob/dead/observer/ghost = usr
+		if(ghost.last_obj_spin <= world.time - 5) //do not spam this
+			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+		ghost.last_obj_spin = world.time
+	else if (usr.incapacitated())
+		to_chat(usr, "<span class='warning'>You cannot rotate this while incapacitated!</span>")
+		return 0
+	if(!rotates_anchored && anchored)
+		var/turf/T = loc
+		if(T)
+			for(var/obj/O in T)
+				var/rotated_type = rotate_type || src.type
+				if(istype(O,rotated_type) && !O.anchored && O.dir == src.dir)
+					O.rotate(angle)
+					return 0
+		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
+		return 0
+
+	change_dir(turn(dir, angle))
+	return 1
 
 /obj/recycle(var/datum/materials/rec)
 	if(..())
@@ -373,6 +443,22 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					attack_hand(M, TRUE)
 		in_use = is_in_use
 
+/obj/item/updateUsrDialog()
+	if(in_use)
+		var/is_in_use = 0
+		if(_using && usr)
+			_using |= usr
+		if(_using && _using.len)
+			for(var/mob/M in _using) // Only check things actually messing with us.
+				if (!M || !M.client || !in_range(loc,M))  // NOT ON MOB
+					_using.Remove(M)
+					continue
+				is_in_use = 1
+				src.attack_self(M)
+
+		// check for TK users
+		in_use = is_in_use
+
 /obj/proc/updateDialog()
 	// Check that people are actually using the machine. If not, don't update anymore.
 	if(in_use)
@@ -397,7 +483,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/suicide_act(var/mob/living/user)
 	if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
-		user.IgniteMob()
+		user.ignite()
 		return SUICIDE_ACT_FIRELOSS
 	else if (sharpness >= 1)
 		user.visible_message("<span class='danger'>[user] impales himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -409,6 +495,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			playsound(user, 'sound/items/trayhit2.ogg', 50, 1)
 		user.visible_message("<span class='danger'>[user] strikes his head on \the [src]! It looks like \he's trying to commit suicide.</span>")
 		return SUICIDE_ACT_BRUTELOSS
+
+/obj/ignite()
+	if(..())
+		remove_particles(PS_SMOKE)
 
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
@@ -422,9 +512,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	return qdel(src)
 
 /obj/slime_act(primarytype, mob/user)
-	if(has_slime)
-		to_chat(user, "\the [src] already has a slime extract attached.")
+	if(has_slimes & primarytype)
+		to_chat(user, "\the [src] already has this kind of slime extract attached.")
 		return FALSE
+	has_slimes |= primarytype
+	slimeadd_message = replacetext(slimeadd_message,"SRCTAG","\the [src]")
+	to_chat(user, "[slimeadd_message][slimeadd_success_message && (slimes_accepted & primarytype) ? ". [slimeadd_success_message]" : ""].")
+	return TRUE
 
 /obj/singularity_pull(S, current_size, repel = FALSE)
 	INVOKE_EVENT(src, /event/before_move)
@@ -445,109 +539,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
 
-/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/list/context)
-	return 0
-
 /obj/proc/shouldReInitOnMultitoolLink(var/mob/user, var/obj/buffer, var/list/context)
 	return FALSE
-
-/obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
-	return 0
-
-/obj/proc/canLink(var/obj/O, var/list/context)
-	return 0
-
-/obj/proc/isLinkedWith(var/obj/O)
-	return 0
-
-/obj/proc/getLink(var/idx)
-	return null
-
-/obj/proc/canClone(var/obj/O)
-	return 0
-
-/obj/proc/clone(var/obj/O)
-	return 0
-
-/obj/proc/linkMenu(var/obj/O)
-	var/dat=""
-	if(canLink(O, list()))
-		dat += " <a href='?src=\ref[src];link=1'>\[Link\]</a> "
-	return dat
-
-/obj/proc/format_tag(var/label,var/varname, var/act="set_tag")
-	var/value = vars[varname]
-	if(!value || value=="")
-		value="-----"
-	return "<b>[label]:</b> <a href=\"?src=\ref[src];[act]=[varname]\">[value]</a>"
-
-
-/obj/proc/update_multitool_menu(mob/user as mob)
-	var/obj/item/device/multitool/P = get_multitool(user)
-
-	if(!istype(P))
-		return 0
-
-	// Cloning stuff goes here.
-	var/obj/machinery/bufRef = P.buffer?.get();
-	if(P.clone && bufRef) // Cloning is on.
-		if(!canClone(bufRef))
-			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; you cannot clone to this device!</span>")
-			return
-
-		if(!clone(bufRef))
-			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; something went wrong when cloning to this device!</span>")
-			return
-
-		to_chat(user, "<span class='confirm'>A green light flashes on \the [P], confirming the device was cloned to.</span>")
-		return
-
-	var/dat = {"<html>
-	<head>
-		<title>[name] Configuration</title>
-		<style type="text/css">
-html,body {
-	font-family:courier;
-	background:#999999;
-	color:#333333;
-}
-
-a {
-	color:#000000;
-	text-decoration:none;
-	border-bottom:1px solid black;
-}
-		</style>
-	</head>
-	<body>
-		<h3>[name]</h3>
-"}
-	dat += multitool_menu(user,P)
-	if(P)
-		if(bufRef)
-			var/id = null
-			if(istype(bufRef, /obj/machinery/telecomms))
-				var/obj/machinery/telecomms/buffer = bufRef//Casting is better than using colons
-				id = buffer.id
-			else if(bufRef.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
-				id = bufRef:id_tag//sadly, : is needed
-
-			dat += "<p><b>MULTITOOL BUFFER:</b> [bufRef] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
-
-			dat += linkMenu(bufRef)
-
-			if(bufRef)
-				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
-			dat += "</p>"
-		else
-			dat += "<p><b>MULTITOOL BUFFER:</b> <a href='?src=\ref[src];buffer=1'>\[Add Machine\]</a></p>"
-	dat += "</body></html>"
-	user << browse(dat, "window=mtcomputer")
-	user.set_machine(src)
-	onclose(user, "mtcomputer")
-
-/obj/update_icon()
-	return
 
 /mob/proc/unset_machine()
 	if(machine)
@@ -612,6 +605,13 @@ a {
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 								"<span class='notice'>You hear a ratchet.</span>")
+		if(verb_rotates)
+			if(anchored)
+				verbs |= /obj/proc/rotate_cw
+				verbs |= /obj/proc/rotate_ccw
+			else
+				verbs -= /obj/proc/rotate_cw
+				verbs -= /obj/proc/rotate_ccw
 		return TRUE
 	return FALSE
 
@@ -626,21 +626,6 @@ a {
 
 /obj/proc/hide(h)
 	return
-
-/obj/proc/container_resist()
-	return
-
-/obj/proc/can_pickup(mob/living/user)
-	return 0
-
-/obj/proc/verb_pickup(mob/living/user)
-	return 0
-
-/obj/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
-	return 0
-
-/obj/proc/quick_store(var/obj/item/I,mob/user) //proc used to handle quick storing
-	return 0
 
 /**
  * Called when a mob inside this obj's contents logs out.
@@ -682,17 +667,12 @@ a {
 				invisibility = old_invisibility
 				alpha = old_alpha
 
-/obj/proc/become_defective()
-	if(!defective)
-		defective = 1
-		desc += "\nIt doesn't look to be in the best shape."
-
 /obj/proc/clumsy_check(var/mob/living/user)
 	if(istype(user))
 		if(isrobot(user))
 			var/mob/living/silicon/robot/R = user
 			return HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN)
-		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA) || user.reagents.has_reagent(HONKSERUM) || arcanetampered
+		return (M_CLUMSY in user.mutations) || (user.reagents?.has_reagent(INCENSE_BANANA)) || (user.reagents?.has_reagent(HONKSERUM)) || arcanetampered
 	return 0
 
 //Proc that handles NPCs (gremlins) "tampering" with this object.
@@ -799,13 +779,14 @@ a {
 		additional_description = "On \the [src] is a carving, it depicts:\n"
 		var/list/characters = list()
 		for(var/i = 1 to material_mod)
+			var/add_character
 			if(prob(50)) //We're gonna use an atom
 				var/atom/AM = pick(existing_typesof(/mob/living/simple_animal))
-				characters |= initial(AM.name)
+				add_character =  initial(AM.name)
 			else
-				var/strangething = pick("captain","clown","mime","\improper CMO","cargo technician","medical doctor","[user ? user : "stranger"]","octopus","changeling","\improper Nuclear Operative", "[pick("greyshirt", "greytide", "assistant")]", "xenomorph","catbeast","[user && user.mind && user.mind.heard_before.len ? pick(user.mind.heard_before) : "strange thing"]","Central Command","\improper Ian","[ticker.Bible_deity_name]","Nar-Sie","\improper Poly the Parrot","\improper Wizard","vox")
-				characters |= strangething
-			additional_description += "[i == material_mod ? " & a " : "[i > 1 ? ", a ": " A "]"][characters[i]]"
+				add_character = pick("captain","clown","mime","\improper CMO","cargo technician","medical doctor","[user ? user : "stranger"]","octopus","changeling","\improper Nuclear Operative", "[pick("greyshirt", "greytide", "assistant")]", "xenomorph","catbeast","[user && user.mind && user.mind.heard_before.len ? pick(user.mind.heard_before) : "strange thing"]","Central Command","\improper Ian","[ticker.Bible_deity_name]","Nar-Sie","\improper Poly the Parrot","\improper Wizard","vox")
+			characters |= add_character
+			additional_description += "[i == material_mod ? " & a " : "[i > 1 ? ", a ": " A "]"][add_character]"
 		additional_description += ". They are in \the [pick("captains office","Space","mining outpost","vox outpost","a space station","[station_name()]","bar","kitchen","library","Science","void","Bluespace","Hell","Central Command")]"
 		if(material_mod > 2)
 			additional_description += ". They are [pick("[pick("fighting","robusting","attacking","beating up", "abusing")] [pick("each other", pick(characters))]","playing cards","firing lasers at [pick("something",pick(characters))]","crying","laughing","blank faced","screaming","cooking [pick("something", pick(characters))]", "eating [pick("something", pick(characters))]")]. "
@@ -817,7 +798,7 @@ a {
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
 
-/obj/proc/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
+/obj/proc/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality = 0)
 	if(mat)
 		/*var/icon/original = icon(icon, icon_state) Icon operations keep making mustard gas
 		if(mat.color)
@@ -872,18 +853,16 @@ a {
 			if(ishuman(AM))
 				var/mob/living/carbon/human/H = AM
 				var/danger = FALSE
+				var/datum/organ/external/foot = H.has_vulnerable_foot()
+				if(foot)
+					danger = TRUE
 
-				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
-				if(foot && !H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
-					if(foot.is_organic())
-						danger = TRUE
-
-						if(!H.lying && H.feels_pain())
-							H.Knockdown(knockdown)
-							H.Stun(knockdown)
-						if(foot.take_damage(damage, 0))
-							H.UpdateDamageIcon()
-						H.updatehealth()
+					if(!H.lying && H.feels_pain())
+						H.Knockdown(knockdown)
+						H.Stun(knockdown)
+					if(foot.take_damage(damage, 0))
+						H.UpdateDamageIcon()
+					H.updatehealth()
 
 				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")
 
@@ -896,10 +875,10 @@ a {
  * Arguments:
  * * ID- An ID card representing what access we have (and thus if we can open things like airlocks or windows to pass through them). The ID card's physical location does not matter, just the reference
  * * to_dir- What direction we're trying to move in, relevant for things like directional windows that only block movement in certain directions
- * * caller- The movable we're checking pass flags for, if we're making any such checks
+ * * astar_caller- The movable we're checking pass flags for, if we're making any such checks
  **/
-/obj/proc/CanAStarPass(obj/item/weapon/card/id/ID, to_dir, atom/movable/caller)
-	if(istype(caller) && (caller.pass_flags & pass_flags_self))
+/obj/proc/CanAStarPass(obj/item/weapon/card/id/ID, to_dir, atom/movable/astar_caller)
+	if(istype(astar_caller) && (astar_caller.pass_flags & pass_flags_self))
 		return TRUE
 	. = !density
 

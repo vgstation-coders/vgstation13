@@ -18,8 +18,10 @@ var/datum/subsystem/ambientsound/SSambience
 	if(config.no_ambience)
 		return
 	for (var/client/C in clients)
-		if(C && (C.prefs.toggles & SOUND_AMBIENCE))
-			C.handle_ambience()
+		if(C && (C.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_AMBIENCE))
+			var/mob/new_player/NP = C.mob
+			if(!istype(NP))
+				C.handle_ambience()
 
 /*
 Ambience system.
@@ -57,7 +59,7 @@ Ambience system.
 		if(prob(initial(picked_ambience_datum.prob_fire)))
 			ambience_buffer = world.timeofday+initial(picked_ambience_datum.length)
 			last_ambient_noise = initial(picked_ambience_datum.sound)
-			src << sound(last_ambient_noise, 0, 0, CHANNEL_AMBIENCE, prefs.ambience_volume)
+			src << sound(last_ambient_noise, 0, 0, CHANNEL_AMBIENCE, prefs.get_pref(/datum/preference_setting/numerical/ambience_volume))
 
 /client/proc/get_ambience()
 	var/list/personal = mob.get_personal_ambience()
@@ -65,7 +67,7 @@ Ambience system.
 		return personal
 	var/area/A = get_area(mob)//other overrides can go in here. eg: overrides for weather. or for cult.
 	if(A)
-		return A.get_ambience_list()
+		return A.get_ambience_list(mob)
 
 /datum/ambience
 	var/length = 0 MINUTES //doesn't need to be 100% accurate. should be in the ballpark though.

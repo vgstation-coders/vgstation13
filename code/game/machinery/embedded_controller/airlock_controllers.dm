@@ -245,6 +245,8 @@
 			clean = 1
 		if("force_int")
 			clean = 1
+		if("secure")
+			clean = 1
 		if("abort")
 			clean = 1
 

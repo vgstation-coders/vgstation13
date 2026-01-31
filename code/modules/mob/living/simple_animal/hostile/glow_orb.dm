@@ -50,6 +50,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 /mob/living/simple_animal/hostile/glow_orb/New()
 	..()
 	set_light(4,1,"#0068B2")
+	filters += filter(type="bloom", name="orb_glow", threshold=rgb(221,221,221), size=2, offset=2, alpha=255)
 
 /mob/living/simple_animal/hostile/glow_orb/Life()
 	..()

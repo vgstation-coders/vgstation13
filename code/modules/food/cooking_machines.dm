@@ -92,12 +92,13 @@ var/global/ingredientLimit = 10
 	..()
 
 /obj/machinery/cooking/New()
-	if (ticker)
+	if(SSobj && SSobj.initialized)
 		initialize()
 
 	return ..()
 
 /obj/machinery/cooking/initialize()
+	..()
 	if (foodChoices)
 		var/obj/item/food
 
@@ -339,6 +340,9 @@ var/global/ingredientLimit = 10
 	if (cooking_temperature && (new_food.reagents.chem_temp < cooking_temperature))
 		new_food.reagents.chem_temp = cooking_temperature
 	new_food.update_icon()
+	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube))
+		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube/H = ingredient
+		qdel(H.contained_mob)
 	ingredient = null
 	return new_food
 
@@ -443,7 +447,7 @@ var/global/ingredientLimit = 10
 	if(cooks_in_reagents)
 		transfer_reagents_to_food(C) //add the stuff from the machine
 	C.name = "[ingredient.name] cereal"
-	var/image/I = image(getFlatIcon(ingredient, ingredient.dir, 0))
+	var/image/I = image(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ingredient)), override_dir = ingredient.dir))
 	I.transform *= 0.7
 	C.extra_food_overlay.overlays += I
 	C.update_icon()
@@ -522,6 +526,8 @@ var/global/ingredientLimit = 10
 			. = "It's already deep-fried."
 		else if(findtext(I.name,"grilled"))
 			. = "It's already grilled."
+	if(istype(I,/obj/item/device/plugin/sleeper/dan))
+		. = "valid"
 	return
 
 /obj/machinery/cooking/deepfryer/flush_reagents()
@@ -544,6 +550,9 @@ var/global/ingredientLimit = 10
 
 		for(var/obj/item/embedded in ingredient.contents)
 			embedded.forceMove(ingredient)
+	else if(istype(src.ingredient,/obj/item/device/plugin/sleeper/dan))
+		qdel(src.ingredient)
+		new /obj/item/device/plugin/sleeper/clown(get_turf(src))
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
 		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(loc)
 		if(cooks_in_reagents)
@@ -716,7 +725,7 @@ var/global/ingredientLimit = 10
 				if(use_power != MACHINE_POWER_USE_NONE)
 					playsound(src,cookSound,100,1)
 				else
-					visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
+					visible_message("<span class='notice'>\The [foodname] looks ready to eat!</span>")
 	active = 0
 	update_icon()
 	return
@@ -755,7 +764,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/spit
 	name = "spit"
-	desc = "the prime in clown cooking technology."
+	desc = "The prime in clown cooking technology."
 	density = 0
 	icon_state = "spit"
 	icon_state_on = "spit"
@@ -807,7 +816,7 @@ var/global/ingredientLimit = 10
 	var/icon_state_on = "oven_on"
 	idle_power_usage = 200
 	active_power_usage = 5000
-	heat_production = 1500
+	heat_production = 15000
 	source_temperature = T0C+180
 	density = 1
 	anchored = 1

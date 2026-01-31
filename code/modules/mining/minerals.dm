@@ -20,6 +20,8 @@ var/list/name_to_mineral
 	var/spread = 1
 	///Chance of spreading in any direction
 	var/spread_chance
+	///Fortune multiplier for pyrite extract pickaxes
+	var/fortune_multiplier
 
 	///Path to the resultant ore.
 	var/ore
@@ -39,16 +41,18 @@ var/list/name_to_mineral
 		O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
 	if(istype(O, /obj/item/stack/ore))
 		var/obj/item/stack/ore/OR = O
-		if(!T.geologic_data)
-			T.geologic_data = new/datum/geosample(T)
-		T.geologic_data.UpdateNearbyArtifactInfo(T)
-		OR.geologic_data = T.geologic_data
+		if(T.finddatum)
+			if(!T.finddatum.geologic_data)
+				T.finddatum.geologic_data = new/datum/geosample(T)
+			T.finddatum.geologic_data.UpdateNearbyArtifactInfo(T)
+			OR.geologic_data = T.finddatum.geologic_data
 	return O
 
 /mineral/uranium
 	name = "Uranium"
 	result_amount = 5
 	spread_chance = 10
+	fortune_multiplier = 2
 	ore = /obj/item/stack/ore/uranium
 
 /mineral/iron
@@ -61,24 +65,28 @@ var/list/name_to_mineral
 	name = "Diamond"
 	result_amount = 5
 	spread_chance = 10
+	fortune_multiplier = 4
 	ore = /obj/item/stack/ore/diamond
 
 /mineral/gold
 	name = "Gold"
 	result_amount = 5
 	spread_chance = 10
+	fortune_multiplier = 2
 	ore = /obj/item/stack/ore/gold
 
 /mineral/silver
 	name = "Silver"
 	result_amount = 5
 	spread_chance = 10
+	fortune_multiplier = 2
 	ore = /obj/item/stack/ore/silver
 
 /mineral/electrum
 	name = "Electrum"
 	result_amount = 5
 	spread_chance = 10
+	fortune_multiplier = 2
 	ore = /obj/item/stack/ore/electrum
 
 /mineral/plasma
@@ -98,6 +106,7 @@ var/list/name_to_mineral
 	name = "Clown"
 	result_amount = 3
 	spread = 0
+	fortune_multiplier = 8
 	ore = /obj/item/stack/ore/clown
 
 /mineral/phazon
@@ -105,6 +114,7 @@ var/list/name_to_mineral
 	name = "Phazon"
 	result_amount = 3
 	spread = 0
+	fortune_multiplier = 8
 	ore = /obj/item/stack/ore/phazon
 
 /mineral/pharosium
@@ -159,6 +169,7 @@ var/list/name_to_mineral
 	name = "Telecrystal"
 	result_amount = 1
 	spread_chance = 5
+	fortune_multiplier = 8
 	ore = /obj/item/stack/ore/telecrystal
 
 /mineral/mauxite
@@ -193,11 +204,18 @@ var/list/name_to_mineral
 	ore = /obj/item/weapon/gibtonite
 
 /mineral/gibtonite/UpdateTurf(var/turf/unsimulated/mineral/T)
+	var/needs_edges = FALSE
 	if(!istype(T,/turf/unsimulated/mineral/gibtonite))
 		var/old_state = T.icon_state
+		if(istype(T,/turf/unsimulated/mineral/underground) || istype(T,/turf/unsimulated/mineral/random/cave)) //gross but it is what it is ok
+			needs_edges = TRUE
 		var/turf/unsimulated/mineral/newturf = T.ChangeTurf(/turf/unsimulated/mineral/gibtonite)
 		newturf.base_icon_state = old_state
 		newturf.icon_state = old_state
+		if(needs_edges)
+			newturf.edge_priority = ROCK_EDGE_PRIORITY
+			newturf.edge_flags = ALL_EDGES
+			newturf.update_edges()
 	else
 		..()
 
@@ -237,4 +255,5 @@ var/list/name_to_mineral
 	name = "Mythril"
 	result_amount = 4
 	spread = 2
+	fortune_multiplier = 8
 	ore = /obj/item/stack/ore/mythril

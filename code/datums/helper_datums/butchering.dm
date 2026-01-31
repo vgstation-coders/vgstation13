@@ -6,7 +6,6 @@
 /datum/butchering_product
 	var/obj/item/result
 	//What item this is for
-
 	var/verb_name
 	//Something like "skin", don't name this "Butcher" please
 
@@ -25,6 +24,9 @@
 	var/radial_icon = "radial_butcher"
 	//Icon in the radial menu
 
+	/// Optional name to use instead of the result name
+	var/product_name
+
 /datum/butchering_product/New()
 	..()
 
@@ -38,6 +40,9 @@
 //This is added to the description of dead mobs! It's important to add a space at the end (like this: "It has been skinned. ").
 /datum/butchering_product/proc/desc_modifier(mob/parent, mob/user) //User - the guy who is looking at Parent
 	return
+
+/datum/butchering_product/proc/get_product_name()
+	return product_name || result.name
 
 //==============Teeth============
 
@@ -242,17 +247,145 @@
 	if(amount < 8)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
 
-//=============Alien claws========
 
-/datum/butchering_product/xeno_claw
-	result = /obj/item/xenos_claw
+/datum/butchering_product/spider_legs/sleeperclown
+	result = /obj/item/weapon/reagent_containers/food/snacks/meat/clownleg
+
+/datum/butchering_product/spider_legs/sleeperclown/New()
+	amount = rand(6,10) * 2 //yeah uhhh.. yeah. honk honk honk
+
+/datum/butchering_product/spider_legs/sleeperclown/spawn_result(location, mob/parent)
+	if (..() && amount % 2)
+		return new /obj/item/clothing/shoes/clown_shoes(location)
+
+/datum/butchering_product/spider_legs/sleeperclown/desc_modifier()
+	if(amount >= 8)
+		return "It has legs for days."
+	..()
+
+//=============Feathers========
+/datum/butchering_product/feathers
+	result = /obj/item/stack/sheet/feather
+	verb_name = "pluck"
+	verb_gerund = "plucking"
+	radial_icon = "radial_pluck"
+
+/datum/butchering_product/feathers/vox
+	result = /obj/item/stack/sheet/feather
+	amount = 6
+	initial_amount = 6
+
+/datum/butchering_product/feathers/vox/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+	amount--
+	var/obj/item/stack/sheet/feather/F = new result(location)
+	var/mob/living/carbon/human/vox/V = parent
+	if(isvox(parent))
+		var/color_key = get_vox_color_key(V.my_appearance.s_tone)
+		var/list/color_data = feather_colors[color_key]
+		if(color_data)
+			F.color = color_data["hex"]
+			F.name = "[color_data["name"]] feather"
+	if(amount >= 5) // Stores original tone when the first feather is plucked.
+		if(!V.original_vox_tone)
+			V.original_vox_tone = V.my_appearance.s_tone
+	if(amount == 0)
+		V.my_appearance.s_tone = VOXPLUCKED
+		to_chat(V, "<span class='notice'>Your plumage is looking a bit bare...</span>")
+		V.species.updatespeciescolor(V)
+		V.update_cold_levels()
+		V.regenerate_icons()
+	return F
+
+/datum/butchering_product/feathers/chicken
+	result = /obj/item/stack/sheet/feather
+	amount = 3
+	initial_amount = 3
+
+/datum/butchering_product/feathers/chicken/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+	amount--
+	var/obj/item/stack/sheet/feather/F = new result(location)
+	var/mob/living/simple_animal/chicken/C = parent
+	if(istype(parent, /mob/living/simple_animal/chicken))
+		var/color_key = C.body_color
+		// Only allow brown, black, or white
+		if(!(color_key in list("brown", "black", "white")))
+			color_key = "brown" // fallback
+		var/list/color_data = feather_colors[color_key]
+		if(color_data)
+			F.color = color_data["hex"]
+			F.name = "[color_data["name"]] feather"
+		if(amount == 0)
+			if(!C.original_body_color)
+				C.original_body_color = C.body_color
+			C.icon_living = "chicken_plucked"
+			C.icon_dead = "chicken_plucked_dead"
+			if(C.stat == DEAD)
+				C.icon_state = "chicken_plucked_dead"
+			else
+				C.icon_state = "chicken_plucked"
+			C.update_icon()
+	return F
+
+/datum/butchering_product/feathers/voxchicken
+	result = /obj/item/stack/sheet/feather
+	amount = 3
+	initial_amount = 3
+
+/datum/butchering_product/feathers/voxchicken/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+	amount--
+	var/obj/item/stack/sheet/feather/F = new result(location)
+	var/mob/living/carbon/monkey/vox/V = parent
+	// Exclude certain colors
+	var/list/excluded = list("brown", "white", "gray")
+	var/list/color_keys = list()
+	for(var/key in feather_colors)
+		if(!(key in excluded))
+			color_keys += key
+	var/color_key = pick(color_keys)
+	var/list/color_data = feather_colors[color_key]
+	if(color_data)
+		F.color = color_data["hex"]
+		F.name = "[color_data["name"]] feather"
+	if(amount == 0)
+		if(istype(parent, /mob/living/carbon/monkey/vox))
+			V.icon_state = "chickengreen_plucked"
+			V.update_icon()
+	return F
+//=============Claws========
+
+/datum/butchering_product/claws
 	verb_name = "declaw"
 	verb_gerund = "declawing"
 	radial_icon = "radial_xclaw"
 
-/datum/butchering_product/xeno_claw/desc_modifier()
+/datum/butchering_product/claws/desc_modifier()
 	if(!amount)
 		return "Its claws have been cut off. "
+
+/datum/butchering_product/claws/xeno
+	result = /obj/item/xenos_claw
+
+/datum/butchering_product/claws/crab
+	product_name = "claws"
+	/// The path for subtypes
+	var/claw_path
+
+/datum/butchering_product/claws/crab/spawn_result(location, mob/parent)
+	while(amount > 0)
+		var/left_claw = text2path("/obj/item/organ/external/l_hand/crab[claw_path]")
+		var/right_claw = text2path("/obj/item/organ/external/r_hand/crab[claw_path]")
+		new left_claw(location)
+		new right_claw(location)
+		amount--
+
+/datum/butchering_product/claws/crab/megamad
+	claw_path = "/megamad"
 
 //======frog legs
 
@@ -263,6 +396,7 @@
 	radial_icon = "radial_fleg"
 	amount = 2 //not a magic number, frogs have 2 legs
 	butcher_time = 10
+
 
 /datum/butchering_product/frog_leg/desc_modifier()
 	if(amount < 2)
@@ -286,6 +420,10 @@
 
 /datum/butchering_product/hivelord_core/heart
 	result = /obj/item/organ/internal/heart/hivelord
+
+/datum/butchering_product/hivelord_core/sleeperclown
+	result = /obj/item/weapon/circuitboard/sleeper
+	butcher_time = 20
 
 //======deer head
 

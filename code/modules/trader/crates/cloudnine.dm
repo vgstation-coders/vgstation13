@@ -50,6 +50,7 @@ var/global/list/cloudnine_stuff = list(
 	speak_chance = 2
 	emote_hear = list("squeaks deeply")
 	var/obj/my_wheel
+	var/is_wheeling = FALSE
 
 /mob/living/simple_animal/hamster/Life()
 	if(!..())
@@ -65,16 +66,20 @@ var/global/list/cloudnine_stuff = list(
 		hamsterwheel(20)
 
 /mob/living/simple_animal/hamster/proc/hamsterwheel(var/repeat)
-	if(repeat < 1 || stat)
+	if(is_wheeling)
 		return
-	if(!my_wheel || my_wheel.loc != loc) //no longer share a tile with our wheel
-		wander = TRUE
-		my_wheel = null
-		return
-	step(src,my_wheel.dir)
-	delayNextMove(HAMSTER_MOVEDELAY)
-	sleep(HAMSTER_MOVEDELAY)
-	hamsterwheel(repeat-1)
+	is_wheeling = TRUE
+	spawn(0)
+		while(repeat > 0 && !stat)
+			if(!my_wheel || my_wheel.loc != loc) //no longer share a tile with our wheel
+				wander = TRUE
+				my_wheel = null
+				break
+			step(src,my_wheel.dir)
+			delayNextMove(HAMSTER_MOVEDELAY)
+			sleep(HAMSTER_MOVEDELAY)
+			repeat--
+		is_wheeling = FALSE
 
 /mob/living/simple_animal/hamster/attack_hand(mob/living/carbon/human/M)
 	. = ..()
@@ -158,21 +163,16 @@ var/global/list/cloudnine_stuff = list(
 		return ..()
 	return FALSE
 
-var/list/decelerators = list()
 /obj/item/weapon/am_containment/decelerator
 	name = "antimatter decelerator"
-	desc = "Acts as a 'filter' to trap antiparticles emitted by radiation. In function, it can be used to power an antimatter engine and refuel itself with nearby radiation."
+	desc = "A large experimental antimatter tank that refuels 25x faster than its regular counterparts."
+	icon_state = "jar_big"
+	fuel = 10000
+	fuel_max = 10000
+	gauge_offset = 2
 
-/obj/item/weapon/am_containment/decelerator/New()
-	..()
-	decelerators += src
-
-/obj/item/weapon/am_containment/decelerator/Destroy()
-	decelerators -= src
-	..()
-
-/obj/item/weapon/am_containment/decelerator/proc/receive_pulse(power)
-	fuel = min(fuel_max, fuel + round(power/100))
+/obj/item/weapon/am_containment/decelerator/receive_pulse(power)
+	fuel = min(fuel_max, fuel + round(power))
 
 #define OMNIMODE_WIRE 0
 #define OMNIMODE_TOOL 1
@@ -185,16 +185,17 @@ var/list/decelerators = list()
 	force = 6
 	req_access = list(access_engine_minor)
 	var/mode = OMNIMODE_TOOL
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_ELECTRONIC
+	flammable = TRUE
 
 /obj/item/device/multitool/omnitool/attack_self(mob/user)
 	mode = !mode
 	to_chat(user, "<span class='notice'>You toggle the tool into [mode ? "multitool" : "wirecutter"] mode.</span>")
 
-/obj/item/device/multitool/omnitool/is_wirecutter()
+/obj/item/device/multitool/omnitool/is_wirecutter(mob/user)
 	return !mode
 
-/obj/item/device/multitool/omnitool/is_multitool()
+/obj/item/device/multitool/omnitool/is_multitool(mob/user)
 	return mode
 
 var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
@@ -239,7 +240,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	icon = 'icons/obj/items_weird.dmi'
 	icon_state = "toxiccereal"
 	flags = FPRINT | OPENCONTAINER
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/wasteos/New()
 	..()

@@ -32,35 +32,6 @@
 		/datum/job/cyborg,
 		/datum/job/mommi)
 
-	default_tagger_locations = list(
-		DISP_DISPOSALS,
-		DISP_CARGO_BAY,
-		DISP_QM_OFFICE,
-		DISP_ENGINEERING,
-		DISP_CE_OFFICE,
-		DISP_ATMOSPHERICS,
-		null,
-		null,
-		DISP_MEDBAY,
-		DISP_CMO_OFFICE,
-		DISP_CHEMISTRY,
-		DISP_RESEARCH,
-		DISP_RD_OFFICE,
-		DISP_ROBOTICS,
-		DISP_HOP_OFFICE,
-		DISP_LIBRARY,
-		DISP_CHAPEL,
-		DISP_THEATRE,
-		DISP_BAR,
-		DISP_KITCHEN,
-		DISP_HYDROPONICS,
-		DISP_JANITOR_CLOSET,
-		DISP_GENETICS,
-		DISP_TELECOMMS,
-		DISP_MECHANICS,
-		DISP_TELESCIENCE
-	)
-
 	unavailable_items = list(/obj/item/clothing/under/rank/head_of_security)
 
 	load_map_elements = list(
@@ -72,7 +43,6 @@
 
 	center_x = 226
 	center_y = 254
-	can_have_robots = FALSE
 
 /datum/map/active/ruleset_multiplier(var/datum/dynamic_ruleset/DR)
 	if(istype(DR, /datum/dynamic_ruleset/roundstart/nuclear))

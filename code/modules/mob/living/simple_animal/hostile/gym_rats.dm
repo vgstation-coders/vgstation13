@@ -34,11 +34,14 @@
 	melee_damage_lower = 1
 	melee_damage_upper = 5
 
+	var/meleelowerdata = null //simplest way to remember the actual value so it doesn't go into a loop of ever decreasing numbers as you toggle standing up and on all fours
+	var/meleeupperdata = null
 	var/health_cap = 100 // Eating protein can pack on a whopping 233% increase in max health. GAINZ
 	var/icon_eat = "gymrat-eat"
 	var/obj/my_wheel
 	var/list/gym_equipments = list(/obj/structure/stacklifter, /obj/structure/punching_bag, /obj/structure/weightlifter, /obj/machinery/power/treadmill)
 	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks)
+	var/is_wheeling = FALSE
 
 	var/scalerate = 1
 	var/translaterate = 4.5 //it is multiplied by the current scalerate, and we want a final value of 9
@@ -88,7 +91,7 @@
 				to_chat(src, text("<span class='warning'>You find something!</span>"))
 				new /obj/item/weapon/reagent_containers/food/snacks/meat/scraps(src.loc)
 
-	if(is_type_in_list(A, edibles)) // If we click on something edible, it's time to chow down!
+	if(is_type_in_list(A, edibles) && A != loc) // If we click on something edible, it's time to chow down! // dumb hotfix so they don't eat themselves inside an animal cube
 		delayNextAttack(10)
 		chowdown(A)
 	if(is_type_in_list(A, gym_equipments)) // If we click on gym equipment, it's time to work out!
@@ -143,10 +146,14 @@
 	if(maxHealth < 60)
 		melee_damage_lower = 1
 		melee_damage_upper = 5
+		meleelowerdata = 1
+		meleeupperdata = 5
 		environment_smash_flags &= ~OPEN_DOOR_STRONG
 	else
 		melee_damage_lower = 5
 		melee_damage_upper = 10
+		meleelowerdata = 5
+		meleeupperdata = 10
 		environment_smash_flags |= OPEN_DOOR_STRONG
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/Life() // Copied from hammy wheel running code
@@ -167,29 +174,34 @@
 				wander = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/gymratwheel(var/repeat)
-	if(repeat < 1 || stat)
+	if(is_wheeling)
+		return
+	is_wheeling = TRUE
+	spawn(0)
+		while(repeat > 0 && !stat)
+			if(my_wheel)
+				if(istype(my_wheel, /obj/structure/stacklifter))
+					var/obj/structure/stacklifter/S = my_wheel
+					S.attack_hand(src, 0, S.Adjacent(src))
+				else if(istype(my_wheel, /obj/structure/punching_bag))
+					var/obj/structure/punching_bag/P = my_wheel
+					P.attack_hand(src, 0, P.Adjacent(src))
+				else if(istype(my_wheel, /obj/structure/weightlifter))
+					var/obj/structure/weightlifter/W = my_wheel
+					W.attack_hand(src, 0, W.Adjacent(src))
+				else if(istype(my_wheel, /obj/machinery/power/treadmill) && my_wheel.loc == loc)
+					step(src,my_wheel.dir)
+				step_towards(src,my_wheel)
+			else
+				wander = TRUE
+				break
+			delayNextMove(speed)
+			sleep(speed)
+			repeat--
+		sleep(20 * speed) //rest period
 		wander = TRUE
 		my_wheel = null
-		return
-	if(my_wheel)
-		if(istype(my_wheel, /obj/structure/stacklifter))
-			var/obj/structure/stacklifter/S = my_wheel
-			S.attack_hand(src, 0, S.Adjacent(src))
-		else if(istype(my_wheel, /obj/structure/punching_bag))
-			var/obj/structure/punching_bag/P = my_wheel
-			P.attack_hand(src, 0, P.Adjacent(src))
-		else if(istype(my_wheel, /obj/structure/weightlifter))
-			var/obj/structure/weightlifter/W = my_wheel
-			W.attack_hand(src, 0, W.Adjacent(src))
-		else if(istype(my_wheel, /obj/machinery/power/treadmill) && my_wheel.loc == loc)
-			step(src,my_wheel.dir)
-		step_towards(src,my_wheel)
-	else
-		wander = TRUE
-
-	delayNextMove(speed)
-	sleep(speed)
-	gymratwheel(repeat-1)
+		is_wheeling = FALSE
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/Calm()
 	enemies.Cut()
@@ -210,18 +222,23 @@
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/verb/stand_up() // Allows the gym rat to toggle poses. They can stand upright, or walk around like a typical mouse
 	set name = "Stand Up / Lie Down"
-	set desc = "Stand up and show off your guns, or walk on all fours to not embarrass the nerds."
+	set desc = "Stand up and punch harder, or walk on all fours and run faster."
 	set category = "GymRat"
 
 	if(all_fours == TRUE)
 		all_fours = FALSE
 		to_chat(src, text("<span class='notice'>You are now standing upright.</span>"))
 		update_icon()
-
+		speed = 1.35
+		melee_damage_lower = ceil(meleelowerdata*1.5)
+		melee_damage_upper = ceil(meleeupperdata*1.5)
 	else
 		all_fours = TRUE
 		to_chat(src, text("<span class='notice'>You are now moving on all fours.</span>"))
 		update_icon()
+		speed = 0.7
+		melee_damage_lower = ceil(meleelowerdata*0.5)
+		melee_damage_upper = ceil(meleeupperdata*0.5)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/verb/info() // Tells the gym rat how to gym rat
 	set name = "How 2 Gainz"
@@ -264,6 +281,8 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/New() // speaks mouse
 	..()
 	languages += all_languages[LANGUAGE_MOUSE]
+	meleelowerdata = melee_damage_lower
+	meleeupperdata = melee_damage_upper
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/mothership // Mothership faction version, so it doesn't get attacked by the vault dwellers
 	faction = "mothership"
@@ -304,10 +323,14 @@
 	if(maxHealth < 80)
 		melee_damage_lower = 1
 		melee_damage_upper = 6
+		meleelowerdata = 1
+		meleeupperdata = 6
 		environment_smash_flags &= ~OPEN_DOOR_STRONG
 	else
 		melee_damage_lower = 6
 		melee_damage_upper = 12
+		meleelowerdata = 6
+		meleeupperdata = 12
 		environment_smash_flags |= OPEN_DOOR_STRONG
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat/Life()
@@ -447,10 +470,14 @@
 	if(maxHealth < 200)
 		melee_damage_lower = 10
 		melee_damage_upper = 20
+		meleelowerdata = 10
+		meleeupperdata = 20
 		environment_smash_flags &= ~SMASH_WALLS
 	else
 		melee_damage_lower = 20
 		melee_damage_upper = 30
+		meleelowerdata = 20
+		meleeupperdata = 30
 		environment_smash_flags |= SMASH_WALLS
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/Life() // Copied from hammy wheel running code

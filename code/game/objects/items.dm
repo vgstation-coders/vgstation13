@@ -1,7 +1,10 @@
 /obj/item
 	name = "item"
 	icon = 'icons/obj/items.dmi'
-	var/image/blood_overlay = null //this saves our blood splatter overlay, which will be processed not to go over the edges of the sprite
+	var/list/image/blood_overlays = list()  //this saves our blood splatter overlays, which will be processed not to go over the edges of the sprite
+	var/custom_blood_overlay = ""			// If set, items will use this bespoke overlay when covered in blood.
+	var/surgery_blood_overlay = ""			// If set, items will use this bespoke overlay when covered in blood through surgical operations.
+
 	var/abstract = FALSE
 	var/item_state = null
 	var/list/inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
@@ -18,7 +21,7 @@
 	var/slot_flags = 0		//This is used to determine on which slots an item can fit.
 	var/clothing_flags = 0
 	var/obj/item/offhand/wielded = null
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	pressure_resistance = 5
 //	causeerrorheresoifixthis
 	var/obj/item/master = null//apparently used by device assemblies to track the object they are attached to.
@@ -87,10 +90,18 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+	var/blocks_tracking = FALSE //Blocks mind and AI tracking
+
+	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
+
+	var/last_burn
+	var/smoking = FALSE //is the obj emitting smoke particles
+
+	var/vent_use = FALSE //can this be used while ventcrawling
 
 /obj/item/New()
 	..()
-	fire_fuel = autoignition_temperature ? w_class : 0 //If the item has an autoignition temperature, use the size as the fuel amount. If not, provide no fuel amount.
+
 	for(var/path in actions_types)
 		new path(src)
 
@@ -107,6 +118,11 @@
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
 	for(var/x in actions)
 		qdel(x)
+	if(istype(loc, /obj/item/weapon/storage)) //Update the storage screen for current users.
+		var/obj/item/weapon/storage/S = loc
+		spawn() //Allows properly removing the item from storage so that there's not an unused slot in the middle of its inventory until next refresh.
+			if(S && !S.gcDestroyed) //Double check to see if the storage still exists.
+				S.refresh_all()
 	..()
 
 
@@ -125,8 +141,8 @@
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
-/obj/item/acid_melt()
-	var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
+/obj/item/acid_melt(atom/customloc = null)
+	var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(customloc || loc)
 	I.desc = "Looks like this was \a [src] some time ago."
 	visible_message("<span class='warning'>\The [src] melts.</span>")
 	qdel(src)
@@ -189,7 +205,7 @@
 			return SUICIDE_ACT_BRUTELOSS
 	else if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
-		user.IgniteMob()
+		user.ignite()
 		return SUICIDE_ACT_FIRELOSS
 	else if (force >= 10)
 		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -222,6 +238,10 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
 	..()
+	if(isliving(impacted_atom))
+		var/mob/living/L = impacted_atom
+		if(!L.tangibility)
+			return 1
 	if(isturf(impacted_atom))
 		var/turf/T = impacted_atom
 		if(objects_thrown_when_explode || (T.arcanetampered && T.arcanetampered != user))
@@ -248,7 +268,7 @@ var/global/objects_thrown_when_explode = FALSE
 	add_hiddenprint(usr)
 	return FALSE
 
-/obj/item/proc/restock() //used for borg recharging
+/obj/item/proc/restock(nanobots = FALSE) //used for borg recharging and engi nanites
 	return
 
 /obj/item/proc/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)
@@ -430,12 +450,12 @@ var/global/objects_thrown_when_explode = FALSE
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	
+
 	if(on_fire)
 		if(user.a_intent && user.a_intent == I_DISARM)
 			extinguish_with_hands(user)
 			return //don't pick it up immediately, you have to click it again after it's extinguished
-	
+
 	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
@@ -443,10 +463,13 @@ var/global/objects_thrown_when_explode = FALSE
 	disease_contact(user)
 
 	if(on_fire)
+		if(world.time - last_burn <= 5 SECONDS)
+			return //no spam clicking burning items to seppuku
 		var/mob/living/L = user
 		L.visible_message("<span class='warning'>\The [src] burns [L]'s hands!</span>", "<span class='warning'>Your hands are burned by \the [src]!</span>")
 		L.drop_item(src, force_drop = 1)
 		L.apply_damage(10,BURN,L.get_active_hand_organ())
+		last_burn = world.time
 
 /obj/item/requires_dexterity(mob/user)
 	return TRUE
@@ -467,6 +490,8 @@ var/global/objects_thrown_when_explode = FALSE
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.Remove(user)
+	if (sound_emitter)
+		sound_emitter.update_source(src)
 
 ///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
 /obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
@@ -483,6 +508,8 @@ var/global/objects_thrown_when_explode = FALSE
 
 // called after an item is picked up (loc has already changed)
 /obj/item/proc/pickup(mob/user)
+	if (sound_emitter)
+		sound_emitter.update_source(user)
 	return
 
 // called before an item is passed to another person through the give proc - TRUE allows the give, see carbon/give.dm
@@ -680,21 +707,21 @@ var/global/objects_thrown_when_explode = FALSE
 						return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_gloves)
-				if( !(slot_flags & SLOT_GLOVES) )
+				if(!(slot_flags & SLOT_GLOVES))
 					return CANNOT_EQUIP
-
-				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
-					if(!OE.species) //Organ has same species as body
-						if(H.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL)) //Use the body's base species
-							if(!disable_warning)
-								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
-							return CANNOT_EQUIP
-					else //Organ's species is different from body
-						if(OE.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
-							if(!disable_warning)
-								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
-							return CANNOT_EQUIP
-
+				for(var/datum/organ/external/hand_datum in get_organs_by_slot(slot, H))
+					var/obj/item/organ/external/hand_obj = new hand_datum.generic_type()
+					var/failed_gloves_equip = FALSE
+					var/datum/species/checked_species = hand_datum.species || H.species
+					if(!(clothing_flags & ONESIZEFITSALL))
+						if(checked_species.anatomy_flags & IS_BULKY)
+							failed_gloves_equip = TRUE
+						if(hand_obj.forbid_gloves)
+							failed_gloves_equip = TRUE
+					if(failed_gloves_equip)
+						if(!disable_warning)
+							to_chat(H, span_warning("You can't get \the [src] to fasten around your bulky fingers!"))
+						return CANNOT_EQUIP
 				if(H.gloves)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -1058,7 +1085,7 @@ var/global/objects_thrown_when_explode = FALSE
 		return CANNOT_EQUIP //Unsupported slot
 		//END GRINCH
 
-/obj/item/can_pickup(mob/living/user, var/actually_picking_up = TRUE, var/silent = FALSE)
+/obj/item/proc/can_pickup(mob/living/user, var/actually_picking_up = TRUE, var/silent = FALSE)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return FALSE
 	if(actually_picking_up && prepickup(user))
@@ -1079,11 +1106,7 @@ var/global/objects_thrown_when_explode = FALSE
 		return FALSE
 	return TRUE
 
-/obj/item/verb_pickup(mob/living/user)
-	//set src in oview(1)
-	//set category = "Object"
-	//set name = "Pick up"
-
+/obj/item/proc/verb_pickup(mob/living/user)
 	if(!can_pickup(user))
 		return FALSE
 
@@ -1110,6 +1133,15 @@ var/global/objects_thrown_when_explode = FALSE
 	if(istype(user, /mob/living/carbon/monkey))
 		attack_paw(user)
 	return
+
+/obj/item/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
+	return 0
+
+
+/obj/item/proc/quick_store(var/obj/item/I, mob/user) //proc used to handle quick storing
+	if(user?.client)
+		user.client.last_quick_stored = world.time
+	return 0
 
 //Used in twohanding
 /obj/item/proc/wield(mob/user, var/inactive = FALSE)
@@ -1198,11 +1230,7 @@ var/global/objects_thrown_when_explode = FALSE
 	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
 	msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])") //BS12 EDIT ALG
 	log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	add_fingerprint(user)
 	//if(clumsy_check(user) && prob(50))
@@ -1257,33 +1285,22 @@ var/global/objects_thrown_when_explode = FALSE
 /obj/item/clean_blood()
 	. = ..()
 	remove_disease2()
-	if (blood_overlay)
-		overlays.Remove(blood_overlay)
-	if (had_blood)
+	REMOVE_KEEP_TOGETHER(src, "bloody_item")
+	if(blood_overlays.len)
+		for(var/B in blood_overlays)
+			cut_overlay(blood_overlays[B])
+	if(had_blood)
 		clear_luminol()
-	if (istype(src, /obj/item/clothing/gloves))
+	if(istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
 
-
-/obj/item/add_blood(var/mob/living/carbon/human/M)
+/obj/item/add_blood(var/mob/living/carbon/human/M, overlay_override)
 	if (!..())
 		return FALSE
-
-	//if we haven't made our blood_overlay already
-	if(!blood_overlays["[type][icon_state]"])
-		set_blood_overlay()
-
-	if(!blood_overlay)
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	else
-		overlays.Remove(blood_overlay)
-
-	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
-	blood_overlay.color = blood_color
-	overlays += blood_overlay
 	//if this blood isn't already in the list, add it
 	if(!M)
+		set_blood_overlay(override_icon = overlay_override)
 		return
 
 	if (M.virus2?.len)
@@ -1300,25 +1317,14 @@ var/global/objects_thrown_when_explode = FALSE
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 	had_blood = TRUE
+	set_blood_overlay(override_icon = overlay_override)
 	return TRUE //we applied blood to the item
 
 
 /obj/item/add_blood_from_data(var/list/blood_data)
 	if (!..())
 		return FALSE
-
-	//if we haven't made our blood_overlay already
-	if(!blood_overlays["[type][icon_state]"])
-		set_blood_overlay()
-
-	if(!blood_overlay)
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	else
-		overlays.Remove(blood_overlay)
-
-	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
-	blood_overlay.color = blood_color
-	overlays += blood_overlay
+	set_blood_overlay()
 	//if this blood isn't already in the list, add it
 	if(!blood_data)
 		return
@@ -1341,55 +1347,39 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/proc/copy_blood_from_item(var/obj/item/other_item)
 	virus2 = virus_copylist(other_item.virus2)
-	if (!other_item.blood_overlay)
+	if (!other_item.blood_overlays.len || !other_item.blood_color)
 		return
 	blood_color = other_item.blood_color
-	blood_DNA = other_item.blood_DNA.Copy()
+	blood_DNA = other_item.blood_DNA?.Copy()
 	had_blood = TRUE
-	if(!blood_overlays["[type][icon_state]"])
-		set_blood_overlay()
-	if(!blood_overlay)
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	else
-		overlays.Remove(blood_overlay)
-	blood_overlay.color = blood_color
-	overlays += blood_overlay
+	set_blood_overlay()
 
-var/global/list/image/blood_overlays = list()
-/obj/item/proc/set_blood_overlay() /* If your item needs to update its blood overlay when its icon_state changes, use this one. update_blood_overlay() is simply a helper proc for this one. */
-	if(update_blood_overlay())
-		return
+/obj/item/proc/set_blood_overlay(passed_color = blood_color, forced = FALSE, override_icon = "")
+	REMOVE_KEEP_TOGETHER(src, "bloody_item")
+	var/mutable_appearance/blood_overlay = null
+	if(override_icon && (override_icon != "itemblood"))						// We can define an override icon to use.
+		cut_overlay(blood_overlays[override_icon])
+		blood_overlay = mutable_appearance('icons/effects/itemblood.dmi', override_icon, appearance_flags = RESET_COLOR|RESET_ALPHA)
+		blood_overlays[blood_overlay.icon_state] = blood_overlay
+	else if(custom_blood_overlay)											// Otherwise we use a custom icon we set.
+		cut_overlay(blood_overlays["custom"])
+		blood_overlay = mutable_appearance('icons/effects/itemblood.dmi', custom_blood_overlay, appearance_flags = RESET_COLOR|RESET_ALPHA)
+		blood_overlays["custom"] = blood_overlay
+	else																	// Otherwise we use genetic itemblood.
+		cut_overlay(blood_overlays["itemblood"])
+		blood_overlay = mutable_appearance('icons/effects/blood.dmi', "itemblood", appearance_flags = RESET_COLOR|RESET_ALPHA)
+		blood_overlays["itemblood"] = blood_overlay
+	blood_overlay.blend_mode = BLEND_INSET_OVERLAY
+	blood_overlay.color = passed_color
+	if(forced || is_blood_stained(src))
+		ADD_KEEP_TOGETHER(src, "bloody_item")
+		add_overlay(blood_overlay)	// And add the new
 
-	var/icon/I = new /icon(icon, icon_state)
-	I.Blend(rgb(255,255,255),ICON_ADD) //fills the icon_state with white (except where it's transparent)
-	I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
-
-	var/image/img = image(I)
-	img.name = "blood_overlay"
-	img.appearance_flags = RESET_COLOR|RESET_ALPHA
-	blood_overlays["[type][icon_state]"] = img
-	update_blood_overlay()
-
-/obj/item/proc/update_blood_overlay() /* See comment on set_blood_overlay() - this shouldn't be used outside of that proc! */
-	if(blood_overlays["[type][icon_state]"] && blood_overlay)
-		overlays -= blood_overlay
-		blood_overlay = blood_overlays["[type][icon_state]"]
-		blood_overlay.color = blood_color
-		overlays += blood_overlay
-		return 1
 
 /obj/item/apply_luminol()
 	if(!..())
 		return FALSE
-	if(!blood_overlays["[type][icon_state]"]) //Blood overlay generation if it lacks one.
-		set_blood_overlay()
-	if(blood_overlay)
-		overlays.Remove(blood_overlay)
-	else
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	var/image/luminol_overlay = blood_overlay
-	luminol_overlay.color = LIGHT_COLOR_CYAN
-	overlays += luminol_overlay
+	set_blood_overlay(LIGHT_COLOR_CYAN, TRUE)
 	var/obj/effect/decal/cleanable/blueglow/BG
 	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
 		BG = had_blood
@@ -1578,11 +1568,7 @@ var/global/list/image/blood_overlays = list()
 
 	M.attack_log += text("\[[time_stamp()]] <span style='color: orange'>Has been restrained (attempt) by [user.name] ([user.ckey]) with \the [src].</span>")
 	user.attack_log += text("\[[time_stamp()]] <span style='color: red'>Attempted to restrain [M.name] ([M.ckey]) with \the [src].</span>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
 	return TRUE
 
@@ -1691,7 +1677,7 @@ var/global/list/image/blood_overlays = list()
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
 
-/obj/item/proc/pre_throw(atom/movable/target)
+/obj/item/proc/pre_throw(var/atom/movable/target,var/mob/living/user)
 	return
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
@@ -1734,6 +1720,7 @@ var/global/list/image/blood_overlays = list()
 		armor["melee"] = min(90, armor["melee"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 		armor["bullet"] = min(90, armor["bullet"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 		armor["laser"] = min(90, armor["laser"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+	toolspeed = fancytrunc(toolspeed * (0.6687**(quality-4)),2)
 
 /////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
 
@@ -1780,13 +1767,30 @@ var/global/list/image/blood_overlays = list()
 				perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")
 
 /obj/item/proc/playtoolsound(atom/A, var/volume = 75, vary = TRUE, extrarange = null)
-	if(A && toolsounds)
-		var/tool_sound = pick(toolsounds)
-		playsound(A, tool_sound, volume, TRUE, vary)
+	if(!A)
+		return
+	var/tool_sound
+	if(toolsounds)
+		tool_sound = pick(toolsounds)
+	else if(surgerysound)
+		tool_sound = surgerysound
+	else if(hitsound)
+		tool_sound = hitsound
+	if(tool_sound)
+		playsound(A, tool_sound, volume, vary, extrarange)
 
 /obj/item/proc/playsurgerysound(atom/A, var/volume = 75)
-	if(A && surgerysound)
-		playsound(A, surgerysound, volume, vary = TRUE)
+	if(!A)
+		return
+	var/tool_sound
+	if(surgerysound)
+		tool_sound = surgerysound
+	else if(toolsounds)
+		tool_sound = pick(toolsounds)
+	else if(hitsound)
+		tool_sound = hitsound
+	if(tool_sound)
+		playsound(A, tool_sound, volume, vary = TRUE)
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE
@@ -1803,7 +1807,7 @@ var/global/list/image/blood_overlays = list()
 	extinguish_with_hands(user)
 
 /obj/item/proc/extinguish_with_hands(var/mob/user)
-	if(!isliving(user))
+	if(user.stat || !Adjacent(user, src) || !isliving(user))
 		return
 	if(src.on_fire)
 		extinguish()
@@ -1824,3 +1828,27 @@ var/global/list/image/blood_overlays = list()
 		var/mob/living/L = user
 		L.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
 		L.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")
+
+/obj/item/checkburn()
+	if(!flammable)
+		CRASH("[src] tried to burn despite not being flammable!")
+	if(on_fire)
+		return
+	if(!smoking)
+		checksmoke()
+	..()
+
+/obj/item/proc/checksmoke()
+	var/datum/gas_mixture/G = return_air()
+	if(!G)
+		return
+	while(G && G.temperature >= (autoignition_temperature * 0.75))
+		if(!smoking)
+			add_particles(PS_SMOKE)
+			smoking = TRUE
+		var/rate = clamp(lerp_generic(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
+		sleep(10 SECONDS)
+		G = return_air()
+	remove_particles(PS_SMOKE)
+	smoking = FALSE

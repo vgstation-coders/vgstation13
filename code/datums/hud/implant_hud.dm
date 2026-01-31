@@ -16,7 +16,7 @@
 		offset = 4
 	offset = offset * PIXEL_MULTIPLIER
 	T = get_turf(M)
-	for(var/mob/living/carbon/human/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	for(var/mob/living/carbon/human/perp in (M.loneliness_affected() ? list(M) : range(C.view+DATAHUD_RANGE_OVERHEAD,T)))
 		if(!check_HUD_visibility(perp, M))
 			continue
 		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.

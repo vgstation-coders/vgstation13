@@ -170,8 +170,7 @@ var/list/virusdishes = list()
 
 /obj/item/weapon/virusdish/New(loc)
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 	virusdishes.Add(src)
 
 /obj/item/weapon/virusdish/Destroy()
@@ -281,11 +280,11 @@ var/list/virusdishes = list()
 			if (success > 0)
 				to_chat(user, "<span class='notice'>You transfer [success] units of the solution to \the [A].</span>")
 
-		if (istype(A,/obj/structure/toilet))
-			var/obj/structure/toilet/T = A
+		if (istype(A,/obj/structure/wc/toilet))
+			var/obj/structure/wc/toilet/T = A
 			if (T.open)
 				empty(user,A)
-		if (istype(A,/obj/structure/urinal)||istype(A,/obj/structure/sink))
+		if (istype(A,/obj/structure/wc/urinal)||istype(A,/obj/structure/wc/sink))
 			empty(user,A)
 
 /obj/item/weapon/virusdish/proc/empty(var/mob/user,var/atom/A)

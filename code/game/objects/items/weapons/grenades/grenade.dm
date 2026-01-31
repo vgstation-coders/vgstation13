@@ -68,7 +68,7 @@
 	return
 
 
-/obj/item/weapon/grenade/proc/activate(mob/user as mob)
+/obj/item/weapon/grenade/proc/activate(mob/user as mob, var/modulatesound = TRUE)
 	if(active)
 		return
 
@@ -79,7 +79,7 @@
 
 	icon_state = initial(icon_state) + "_active"
 	active = 1
-	playsound(loc, armsound, 75, 1, -3)
+	playsound(loc, armsound, 75, modulatesound, -3)
 
 	spawn(det_time)
 		if(gcDestroyed)
@@ -91,7 +91,7 @@
 //	playsound(loc, 'sound/items/Welder2.ogg', 25, 1)
 	var/turf/T = get_turf(src)
 	if(T)
-		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
+		try_hotspot_expose(700,SMALL_FLAME,1)
 
 /obj/item/weapon/grenade/proc/update_mob()
 	if(ismob(loc))

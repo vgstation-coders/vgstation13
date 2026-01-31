@@ -47,8 +47,8 @@
 	if(ticker.achievements.len)
 		completions += "<br>[achievement_declare_completion()]"
 
-	score.money_leaderboard = SSpersistence_misc.tasks["/datum/persistence_task/highscores"]
-	score.shoal_leaderboard = SSpersistence_misc.tasks["/datum/persistence_task/highscores/trader"]
+	score.money_leaderboard = SSpersistence_tasks.tasks["/datum/persistence_task/highscores"]
+	score.shoal_leaderboard = SSpersistence_tasks.tasks["/datum/persistence_task/highscores/trader"]
 	var/list/rich_escapes = list()
 	var/list/rich_shoals = list()
 
@@ -71,7 +71,7 @@
 			for(var/obj/item/weapon/spacecash/C2 in get_contents_in_object(player, /obj/item/weapon/spacecash))
 				cashscore += (C2.amount * C2.worth)
 
-			var/datum/record/money/record = new(player.key, player.job, cashscore)
+			var/datum/data/record/money/record = new(player.key, player.job, cashscore)
 			rich_escapes += record
 
 			if(cashscore > score.richestcash)
@@ -91,7 +91,7 @@
 				if(TR.source_name == player.real_name)
 					shoal_amount += text2num(TR.amount)
 			if(shoal_amount > 0)
-				var/datum/record/money/record = new(player.key, player.job, shoal_amount)
+				var/datum/data/record/money/record = new(player.key, player.job, shoal_amount)
 				rich_shoals += record
 				if(shoal_amount > score.biggestshoalcash)
 					score.biggestshoalcash = shoal_amount
@@ -124,6 +124,17 @@
 	for(var/mob/living/simple_animal/SA in dead_mob_list)
 		if(SA.is_pet)
 			score.deadpets++
+	for(var/mob/living/simple_animal/SA in mob_list)
+		if(SA.is_pet && SA.stat != DEAD)
+			var/turf/T = get_turf(SA)
+			if(!T)
+				continue
+			if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
+				score.rescuedpets++
+				if(SA.type==/mob/living/simple_animal/corgi/Ian) //VIC (very important corgi)
+					score.rescueianbonus=100
+	score.crewscore+=score.rescueianbonus
+	score.crewscore+=score.rescuedpets*50
 
 	score.time = round(world.time/10) //One point for every five seconds. One minute is 12 points, one hour 720 points
 	if(is_research_fully_archived())
@@ -140,5 +151,8 @@
 	for(var/x in arena_leaderboard)
 		if(arena_leaderboard[x] == arena_top_score)
 			score.arenabest += "[x] "
+
+	if(score.badmin_score)
+		score.crewscore = score.badmin_score + (score.badmin_override ? 0 : score.crewscore)
 
 	return completions

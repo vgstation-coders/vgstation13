@@ -52,6 +52,7 @@
 	name = "wizard hat"
 	desc = "It has WIZZARD written across it in sequins. Comes with a cool beard."
 	icon_state = "wizard-fake"
+	species_fit = list(VOX_SHAPED)
 
 	clothing_flags = 0
 	vertical_offset = 0
@@ -62,6 +63,7 @@
 	desc = "Strange-looking hat-wear, makes you want to cast fireballs."
 	icon_state = "marisa"
 	siemens_coefficient = 0.8
+	species_fit = list(VOX_SHAPED)
 
 	clothing_flags = 0
 	dyeable_parts = list()
@@ -185,7 +187,7 @@
 	gas_transfer_coefficient = 0.01 // IT'S MAGICAL OKAY JEEZ +1 TO NOT DIE
 	permeability_coefficient = 0.01
 	armor = list(melee = 30, bullet = 20, laser = 20,energy = 20, bomb = 20, bio = 20, rad = 20)
-	allowed = list(/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
+	allowed = list(/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff,/obj/item/weapon/staff)
 	siemens_coefficient = 0.8
 	clothing_flags = ONESIZEFITSALL|COLORS_OVERLAY
 	wizard_garb = 1
@@ -210,7 +212,7 @@
 	desc = "Magic is all about the spell power, ZE!"
 	icon_state = "marisa"
 	item_state = "marisarobe"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/wizrobe/magusblue
@@ -252,7 +254,7 @@
 	item_state = "wizrobe"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 1.0
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/wizrobe/necro
@@ -279,6 +281,7 @@
 	icon_state = "marisa"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 1.0
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/marisa/fake
 	name = "Witch Robe"
@@ -287,7 +290,7 @@
 	item_state = "marisarobe"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 1.0
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 
 /obj/item/clothing/suit/wizrobe/magician

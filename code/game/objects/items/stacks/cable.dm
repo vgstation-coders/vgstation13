@@ -5,7 +5,7 @@
 ////////////////////////////////
 // Definitions
 ////////////////////////////////
-/datum/stack_recipe/cable_cuffs/finish_building(var/mob/usr, var/obj/item/stack/cable_coil/S, var/obj/item/weapon/handcuffs/cable/C)
+/datum/stack_recipe/cable_cuffs/finish_building(var/mob/user, var/obj/item/stack/cable_coil/S, var/obj/item/weapon/handcuffs/cable/C)
 	C.color = S.color
 
 var/global/list/datum/stack_recipe/cable_recipes = list ( \
@@ -32,7 +32,6 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
 	flags =  FPRINT
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	siemens_coefficient = 1.5 //Extra conducting
 	slot_flags = SLOT_BELT
 	attack_verb = list("whips", "lashes", "disciplines", "flogs")

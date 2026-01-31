@@ -1,9 +1,9 @@
-/proc/dopage(src,target)
+/proc/dopage(source,target)
 	var/href_list
 	var/href
-	href_list = params2list("src=\ref[src]&[target]=1")
-	href = "src=\ref[src];[target]=1"
-	src:Topic(href, href_list)
+	href_list = params2list("src=\ref[source]&[target]=1")
+	href = "src=\ref[source];[target]=1"
+	source:Topic(href, href_list)
 	return null
 
 /proc/get_area(const/atom/O)
@@ -336,6 +336,33 @@
 		if(client_needed && !M.client)
 			continue
 		if(our_area != get_area(M))
+			continue
+		mobs_found += M
+	return mobs_found
+
+/proc/mobs_in_zlevel(var/target_z, var/client_needed=0, var/moblist=mob_list)
+	var/list/mobs_found = list()
+	for(var/mob/M in moblist)
+		if(client_needed && !M.client)
+			continue
+		var/turf/T = get_turf(M)
+		if(T?.z != target_z)
+			continue
+		mobs_found += M
+	return mobs_found
+
+/proc/mobs_in_allocation(var/datum/allocation/alloc, var/client_needed=0, var/moblist=mob_list)
+	var/list/mobs_found = list()
+	if(!alloc)
+		return mobs_found
+	for(var/mob/M in moblist)
+		if(client_needed && !M.client)
+			continue
+		var/turf/T = get_turf(M)
+		if(T?.z != alloc.z)
+			continue
+		var/datum/allocation/A = SSmapping.get_allocation(trf = T)
+		if(A != alloc)
 			continue
 		mobs_found += M
 	return mobs_found

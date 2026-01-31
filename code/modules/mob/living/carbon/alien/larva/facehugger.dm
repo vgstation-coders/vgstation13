@@ -294,8 +294,7 @@
 		forceMove(target)
 		target.equip_to_slot(src, slot_wear_mask)
 		target.update_inv_wear_mask()
-		target.internal = had_internal //Try to keep the host ALIVE
-		target.update_internals()
+		target.equip_internals(had_internal) //Try to keep the host ALIVE
 
 		if(!sterile && target.hasmouth)
 			L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings

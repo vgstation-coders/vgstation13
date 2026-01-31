@@ -220,23 +220,6 @@
 	if (istype(receptacle, /obj/item/soulstone/gem))
 		gem = TRUE
 
-	var/mob/victim
-	if (iscarbon(target))
-		victim = target
-	else if (istype(target, /obj/item/organ/external/head))
-		var/obj/item/organ/external/head/target_head = target
-		victim = target_head.brainmob
-
-	if (victim)
-		//First off let's check that the cult isn't bypassing its convertee cap
-		if (iscultist(user))
-			if (!iscultist(victim))
-				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-				if (cult && !cult.CanConvert())
-					if (!blade || victim.isDead())
-						to_chat(user, "<span class='danger'>The cult has too many members already, \the [soul_receptacle] won't let you take their soul.</span>")
-					return
-
 	if (iscarbon(target))
 		init_body(target,user)
 
@@ -459,6 +442,8 @@
 		shadeMob = new /mob/living/simple_animal/shade/noncult(receptacle)
 	shadeMob.status_flags |= GODMODE //So they won't die inside the stone somehow
 	shadeMob.canmove = 0//Can't move out of the soul stone
+	if (suicide)
+		shadeMob.soulblade_ritual = TRUE
 	shadeMob.name = "[true_name] the Shade"
 	shadeMob.real_name = "[true_name]"
 	mind.transfer_to(shadeMob)
@@ -500,6 +485,13 @@
 				newCultist.OnPostSetup()
 				newCultist.Greet(GREET_SOULSTONE)
 				newCultist.conversion["soulstone"] = user
+				if (!(shadeMob.mind in cult.previously_converted))
+					cult.previously_made_prisoner |= shadeMob.mind
+					var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+					if (shadeMob.mind in cult.previously_made_prisoner)
+						C.gain_devotion(50, DEVOTION_TIER_4, "soulstone_prisoner", shadeMob)//making someone prisoner already grants 250 devotion on top.
+					else
+						C.gain_devotion(300, DEVOTION_TIER_4, "soulstone", shadeMob)
 
 		else
 			if (iscultist(shadeMob))
@@ -650,6 +642,10 @@
 	if (!new_construct)
 		return
 
+	if (iscultist(new_construct))
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		cult.check_ritual("build_construct", new_construct)
+
 	if(islegacycultist(user))//legacy cult stuff
 		var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(user.mind.GetRole(LEGACY_CULTIST))
 		if(istype(cult_round))
@@ -657,9 +653,6 @@
 
 	new_construct.real_name = soul.real_name
 	new_construct.name = "[new_construct.real_name] the [construct_class]"
-
-	if(iscultist(user))
-		TriggerCultRitual(ritualtype = /datum/bloodcult_ritual/build_construct, extrainfo = list("perfect" = perfect))
 
 	for(var/atom/A in stone)//we get rid of the empty shade once we've transferred its mind to the construct, so it isn't dropped on the floor when the soulstone is destroyed.
 		qdel(A)

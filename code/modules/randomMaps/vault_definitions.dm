@@ -149,6 +149,14 @@ var/list/existing_vaults = list()
 	can_rotate = TRUE
 	spawn_cost = 2
 
+/datum/map_element/vault/asteroids_random
+	file_path = "maps/randomvaults/asteroids_random_clown.dmm"
+	can_rotate = TRUE
+	spawn_cost = 2
+
+/datum/map_element/vault/asteroids_random/pre_load()
+	file_path = "maps/randomvaults/asteroids_random[pick("_clown","_plating")].dmm"
+
 /datum/map_element/vault/listening
 	file_path = "maps/randomvaults/listening.dmm"
 	spawn_cost = 3
@@ -296,3 +304,51 @@ var/list/existing_vaults = list()
 
 /datum/map_element/dungeon/laundromat_drug_lab
 	file_path = "maps/randomvaults/dungeons/laundromat_drug_lab.dmm"
+
+/datum/map_element/vault/thestranger
+	file_path = "maps/randomvaults/thestranger.dmm"
+	spawn_cost = 2
+
+/area/vault/thestranger
+	name = "The Stranger"
+
+/datum/map_element/vault/poddock_crash
+	file_path = "maps/randomvaults/pod_dock_crash.dmm"
+	spawn_cost = 1
+
+/area/vault/dockruins
+	name = "Ruined Pod Dock"
+
+/datum/map_element/vault/radioactivedust
+	file_path = "maps/randomvaults/ButtonPusher.dmm"
+	spawn_cost = 2
+
+/area/vault/radioactivelab
+	name = "Material Synthesis Research"
+	requires_power = 1
+
+/area/vault/radioactivecatwalk
+	name = "Research Laboratory Catwalk"
+	dynamic_lighting = 0
+
+/datum/map_element/vault/croesus_vault
+	file_path = "maps/randomvaults/croesus_vault.dmm"
+	spawn_cost = 3
+
+/area/vault/forsakenreactor
+	name = "Forsaken Reactor"
+
+/datum/map_element/vault/forsakenreactor
+	file_path = "maps/randomvaults/forsakenreactor.dmm"
+	spawn_cost = 2
+
+/datum/map_element/vault/scp_space
+	file_path = "maps/randomvaults/scp_space.dmm"
+	can_rotate = TRUE
+	spawn_cost = 1
+
+/datum/map_element/ruin/scp_asteroid
+	file_path = "maps/ruins/urban/scp_asteroid.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY

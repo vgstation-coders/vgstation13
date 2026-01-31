@@ -22,4 +22,5 @@
 #include "supermatter_airflow.dm"
 #include "languages.dm"
 #include "hour_calculations.dm"
+#include "sqlite_prefs.dm"
 #endif

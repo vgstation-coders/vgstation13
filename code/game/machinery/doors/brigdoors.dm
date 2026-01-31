@@ -154,7 +154,7 @@
 
 	dat += {"<br/><br/><a href='?src=\ref[user];mach_close=computer'>Close</a>
 			</TT></BODY></HTML>"}
-	user << browse(dat, "window=computer;size=400x500")
+	user << browse(HTML_SKELETON(dat), "window=computer;size=400x500")
 	onclose(user, "computer")
 
 

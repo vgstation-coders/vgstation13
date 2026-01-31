@@ -89,6 +89,7 @@ var/global/list/all_docking_ports = list()
 	for(var/obj/machinery/door/airlock/A in range(1,src))
 		if(!A.shuttle_warning_lights)
 			A.shuttle_warning_lights = image('icons/obj/doors/Doorint.dmi', src, "warning_lights")
+			A.shuttle_warning_lights.plane = ABOVE_LIGHTING_PLANE
 		A.overlays += A.shuttle_warning_lights
 	for(var/obj/machinery/docklight/D in dockinglights)
 		if(D.id_tag == areaname)
@@ -237,6 +238,9 @@ var/global/list/all_docking_ports = list()
 						new teleporter_typepath(check)
 
 		generate_borders = 0
+
+/obj/docking_port/destination/planet_surface
+	areaname = "planet surface"
 
 //SILLY PROC
 /proc/select_port_from_list(var/mob/user, var/message="Select a docking port", var/title="Admin abuse", var/list/list) //like input

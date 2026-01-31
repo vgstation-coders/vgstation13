@@ -3,6 +3,7 @@
 	w_class = W_CLASS_MEDIUM
 	icon = 'icons/obj/inflatable.dmi'
 	w_type = RECYK_PLASTIC
+	flammable = FALSE
 	melt_temperature = MELTPOINT_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 1.5*CC_PER_SHEET_MISC)
 
@@ -446,6 +447,8 @@
 	..()
 
 /obj/structure/inflatable/shelter/container_resist(var/mob/user,var/turf/dest)
+	if (user.stat || !user.canmove)
+		return
 	if (user.loc != src)
 		exiting -= user
 		to_chat(user,"<span class='warning'>You cannot climb out of something you aren't even in!</span>")

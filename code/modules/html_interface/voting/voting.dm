@@ -209,7 +209,7 @@ var/global/datum/controller/vote/vote = new()
 	return text
 
 /datum/controller/vote/proc/persistent()
-	var/datum/persistence_task/vote/task = SSpersistence_misc.tasks["/datum/persistence_task/vote"]
+	var/datum/persistence_task/vote/task = SSpersistence_tasks.tasks["/datum/persistence_task/vote"]
 	task.insert_counts(tally)
 	task.on_shutdown()
 	return majority()
@@ -378,7 +378,7 @@ var/global/datum/controller/vote/vote = new()
 				var/msg = "A map vote was initiated with these options: [english_list(get_list_of_keys(maps))]."
 				send2maindiscord(msg)
 				send2mainirc(msg)
-				send2ickdiscord("**A round has ended.** You can discuss it at https://boards.4chan.org/vg/catalog#s=ss13g. A new round will begin soon.")
+				send2ickdiscord("**A round has ended.** You can discuss it at https://boards.4chan.org/vm/catalog#s=ss13g. A new round will begin soon.")
 			else
 				return 0
 
@@ -390,7 +390,7 @@ var/global/datum/controller/vote/vote = new()
 		choices = shuffle(choices)
 		//initialize tally
 		if(config.toggle_vote_method == PERSISTENT && mode == "map")
-			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks["/datum/persistence_task/vote"]
+			var/datum/persistence_task/vote/task = SSpersistence_tasks.tasks["/datum/persistence_task/vote"]
 			for(var/i = 1; i <= choices.len; i++)
 				if(isnull(task.data[choices[i]]))
 					tally += choices[i]
@@ -489,7 +489,7 @@ var/global/datum/controller/vote/vote = new()
 		interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", 400, 400, vote_head)
 		interface.updateContent("content", "<div id='vote_main'></div><div id='vote_choices'></div><div id='vote_admin'></div>")
 
-	if(world.time < last_update + 2)
+	if(world.time < last_update + 0.2 SECONDS)
 		return
 	last_update = world.time
 	status_data.len = 0

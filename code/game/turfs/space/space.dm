@@ -19,19 +19,20 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
+	if(skip_turf_init)
+		return
 	if(!parallax_appearances)
 		parallax_appearances = list()
 		for(var/i in 0 to 25)
-			var/I = "[i]"
-			icon_state = I
-			var/image/parallax_overlay = image('icons/turf/space_parallax1.dmi', I)
+			icon_state = "[i]"
+			var/image/parallax_overlay = image('icons/turf/space_parallax1.dmi', icon_state)
 			parallax_overlay.plane = SPACE_DUST_PLANE
 			parallax_overlay.alpha = 80
 			parallax_overlay.blend_mode = BLEND_ADD
 			overlays += parallax_overlay
-			parallax_appearances[I] = appearance
+			parallax_appearances += appearance
 			overlays.Cut()
-	appearance = parallax_appearances["[((x + y) ^ ~(x * y) + z) % 26]"]
+	appearance = parallax_appearances[rand(1,26)]
 
 /turf/space/spawned_by_map_element(var/datum/map_element/ME, var/list/objects)
 	initialize()
@@ -178,7 +179,7 @@
 /turf/space/singularity_act()
 	return
 
-/turf/space/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/space/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	return ..(N, tell_universe, 1, allow)
 
 /turf/space/lighting_build_overlay()

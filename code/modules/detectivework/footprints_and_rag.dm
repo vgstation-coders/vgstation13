@@ -24,8 +24,8 @@
 	body_parts_covered = MOUTH
 	goes_in_mouth = TRUE
 	is_muzzle = MUZZLE_SOFT
-	autoignition_temperature = AUTOIGNITION_FABRIC
 	w_type = RECYK_FABRIC
+	flammable = TRUE
 	starting_materials = list(MAT_FABRIC = 50)
 	var/mob/current_target = null
 
@@ -106,7 +106,7 @@
 		return  //we used the rag as a bandage
 	if(!proximity_flag)
 		return 0 // Not adjacent
-	if (istype(target,/obj/structure/sink))
+	if (istype(target,/obj/structure/wc/sink))
 		return	// We're here to fill the rag, not use it pointlessly
 	if(reagents.total_volume < 1)
 		to_chat(user, "<span class='notice'>Your rag is dry!</span>")
@@ -143,3 +143,10 @@
 /obj/item/weapon/reagent_containers/glass/rag/unequipped(mob/living/carbon/human/user, from_slot = null)
 	..()
 	processing_objects.Remove(src)
+
+/obj/item/weapon/reagent_containers/glass/rag/attackby(var/obj/item/I, var/mob/user)
+	if(I.is_hot())
+		user.drop_item(src,get_turf(src))
+		ignite()
+		return
+	..()

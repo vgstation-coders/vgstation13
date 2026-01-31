@@ -7,7 +7,7 @@
 	var/food_candle = "foodcandle"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/candles.dmi', "right_hand" = 'icons/mob/in-hand/right/candles.dmi')
 	w_class = W_CLASS_TINY
-	heat_production = 1000
+	heat_production = 5000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	w_type = RECYK_WAX
@@ -41,6 +41,8 @@
 		lit = 0
 		update_icon()
 		set_light(0)
+		remove_particles(PS_CANDLE)
+		remove_particles(PS_CANDLE2)
 
 /obj/item/candle/update_icon()
 	overlays.len = 0
@@ -58,13 +60,13 @@
 		icon_state = "candle[i]"
 	wick.icon_state = "[icon_state]-wick"
 	overlays += wick
-	update_blood_overlay()
+	set_blood_overlay()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.appearance_flags = RESET_COLOR
 		I.blend_mode = BLEND_ADD
 		if (isturf(loc))
-			I.plane = ABOVE_LIGHTING_PLANE
+			I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		else
 			I.plane = ABOVE_HUD_PLANE // inventory
 		overlays += I
@@ -74,10 +76,10 @@
 		var/image/right_I = image(inhand_states["right_hand"], src, "candle_lit")
 		left_I.appearance_flags = RESET_COLOR
 		left_I.blend_mode = BLEND_ADD
-		left_I.plane = ABOVE_LIGHTING_PLANE
+		left_I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		right_I.appearance_flags = RESET_COLOR
 		right_I.blend_mode = BLEND_ADD
-		right_I.plane = ABOVE_LIGHTING_PLANE
+		right_I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 	if(iscarbon(loc))
@@ -106,8 +108,13 @@
 		if(!quiet)
 			visible_message(flavor_text)
 		set_light(CANDLE_LUM)
+		add_particles(PS_CANDLE)
+		add_particles(PS_CANDLE2)
 		processing_objects.Add(src)
 		update_icon()
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
 
 /obj/item/candle/proc/flicker(var/amount = rand(5, 15))
 	if(flickering)
@@ -117,7 +124,7 @@
 		for(var/i = 0; i < amount; i++)
 			if(prob(95))
 				if(prob(30))
-					lit = 0
+					extinguish()
 				else
 					var/candleflick = pick(0.5, 0.7, 0.9, 1, 1.3, 1.5, 2)
 					set_light(candleflick * CANDLE_LUM)
@@ -125,7 +132,7 @@
 				set_light(5 * CANDLE_LUM)
 				if(source_temperature == 0) //only holocandles don't have source temp, using this so I don't add a new var
 					wax = 0.8 * wax //jury rigged so the wax reduction doesn't nuke the holocandles if flickered
-				visible_message("<span class='warning'>The [src]'s flame starts roaring unnaturally!</span>")
+				visible_message("<span class='warning'>\The [src]'s flame starts roaring unnaturally!</span>")
 			update_icon()
 			sleep(rand(5,8))
 			set_light(CANDLE_LUM)
@@ -151,8 +158,7 @@
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
-		src.lit = 0
-		set_light(0)
+		extinguish()
 		processing_objects.Remove(src)
 		update_icon()
 		return
@@ -164,13 +170,11 @@
 		return
 	update_icon()
 	if(istype(T)) //Start a fire if possible
-		T.hotspot_expose(source_temperature, 5, surfaces = 0)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, 0)
 
 /obj/item/candle/attack_self(mob/user as mob)
 	if(lit)
-		lit = 0
-		update_icon()
-		set_light(0)
+		extinguish()
 		to_chat(user, "<span class='warning'>You pinch \the [src]'s wick.</span>")
 		if(iscarbon(loc))
 			var/mob/living/carbon/M = loc
@@ -266,7 +270,7 @@
 	I_stick.blend_mode = BLEND_ADD
 	I_stick.alpha = 200
 	if (isturf(loc))
-		I_stick.plane = ABOVE_LIGHTING_PLANE
+		I_stick.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 	else
 		I_stick.plane = ABOVE_HUD_PLANE
 	overlays += I_stick

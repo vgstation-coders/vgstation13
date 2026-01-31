@@ -9,6 +9,12 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = ARBITRARILY_LARGE_NUMBER
 	specheatcap = ARBITRARILY_LARGE_NUMBER
+	plant_nutrition = 2
+	plant_watering = 2
+	plant_pests = -5
+	plant_weeds = -5
+	plant_toxins = -5
+	plant_health = 50
 
 /datum/reagent/adminordrazine/on_mob_life(var/mob/living/carbon/M)
 	if(..())
@@ -73,14 +79,26 @@
 		if(D2.stage < 1)
 			D2.cure(M)
 
-/datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+/datum/reagent/panacea
+	name = "Panacea"
+	id = PANACEA
+	description = "A variant of Adminordrazine that has been subjected to medical sciences to make it incredibly potent. It's magic, stolen from the gods."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#EECE19" //rgb: 238, 206, 25
+	density = ARBITRARILY_LARGE_NUMBER
+	specheatcap = ARBITRARILY_LARGE_NUMBER
+
+/datum/reagent/panacea/on_mob_life(mob/living/M, alien)
 	..()
-	T.add_nutrientlevel(2)
-	T.add_waterlevel(2)
-	T.add_weedlevel(5)
-	T.add_pestlevel(5)
-	T.add_toxinlevel(5)
-	T.add_planthealth(50)
+	if(volume >= 0.2)
+		M.rejuvenate()
+		M.mind?.suiciding = 0
+
+/datum/reagent/panacea/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+	..()
+	if((method == INGEST) && (volume >= 0.2))
+		M.rejuvenate()
+		M.mind?.suiciding = 0 //If they suicided then bring them back! Also making sure the mind exists in the first place.
 
 /datum/reagent/albuterol
 	name = "Albuterol"
@@ -184,8 +202,8 @@
 /datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
 	..()
 
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(M.bodytemperature < BODYTEMP_DEFAULT)
+		M.bodytemperature = min(BODYTEMP_DEFAULT, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 //natural antipathogenic, found in garlic and kudzu
 /datum/reagent/antipathogenic/allicin
@@ -276,6 +294,7 @@
 	density = 1.49033
 	specheatcap = 0.55536
 	overdose_am = 60
+	plant_toxins = -10
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -322,14 +341,10 @@
 				H.dizziness = max(H.dizziness, 10)
 				if(prob(5))
 					to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
-			if(75 to INFINITY)
+			if(76 to INFINITY)
 				H.dizziness = max(H.dizziness, 20)
 				if(prob(10))
 					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
-
-/datum/reagent/anti_toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(-10)
 
 /datum/reagent/arithrazine
 	name = "Arithrazine"
@@ -356,7 +371,7 @@
 	id = BICARIDINE
 	description = "Bicaridine is an analgesic medication and can be used to treat blunt trauma."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#5962F8" //rgb: 89, 98, 248
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.96
 	specheatcap = 0.57
@@ -385,11 +400,10 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_ECOLOGY)
-			T.reagents.remove_reagent(id, 1)
-		if(prob(15))
-			T.mutate(GENE_ECOLOGY)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -425,7 +439,7 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	var/found_any = FALSE
 	for(var/datum/reagent/reagent in holder.reagent_list)
-		if(reagent.id in charcoal_doesnt_remove)
+		if((reagent.flags & CHEMFLAG_NOTREMOVABLE) || (reagent.id in charcoal_doesnt_remove))
 			continue
 		holder.remove_reagent(reagent.id, 15*REM)
 		found_any = TRUE
@@ -467,21 +481,24 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
+	plant_toxins = -5
+	plant_health = 5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-3)
-		M.adjustOxyLoss(-3)
-		M.heal_organ_damage(3,3)
-		M.adjustToxLoss(-3)
+		var/multiplier = 1
+		if(M.bodytemperature < 95)
+			multiplier = 2
+		M.adjustCloneLoss(-3 * multiplier)
+		M.adjustOxyLoss(-3 * multiplier)
+		M.heal_organ_damage(3 * multiplier, 3 * multiplier)
+		M.adjustToxLoss(-3 * multiplier)
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_toxinlevel(-5)
-	T.add_planthealth(5)
 	if(T.seed && !T.dead)
 		var/datum/seed/S = T.seed
 		var/deviation
@@ -535,13 +552,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	switch(volume)
-		if(1 to 4.5)
+		if(1 to 4.59)
 			M.Jitter(5)
 			if(prob(10))
 				to_chat(M, "You feel slightly energized, but nothing happens")
 			if(has_been_armstrong>0) //Added in case person metabolizes below 5 units to prevent infinite hulk
 				dehulk(M)
-		if(4.5 to 15)
+		if(4.60 to 15)
 			if(ishuman(M)) //Does nothing to non-humans.
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona") //Dionae are broken as fuck
@@ -571,29 +588,111 @@ var/global/list/charcoal_doesnt_remove=list(
 		H.update_body()
 		to_chat(H, "The nanobots burn themselves out in your body.")
 
+/datum/reagent/engnanobots
+	name = "Energetic Nanobots"
+	id = ENGNANOBOTS
+	description = "Microscopic robots intended for use in humans. Configured for rapid recharging of electrical systems."
+	reagent_state = REAGENT_STATE_SOLID
+	dupeable = FALSE
+	color = "#80805F" //rgb: 52, 63, 66
+	overdose_am = 15
+	custom_metabolism = 0.1
+	density = 134.21
+	specheatcap = 0.19999
+
+/datum/reagent/engnanobots/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	var/obj/item/weapon/cell/possible_cell = M.get_cell()
+	if(possible_cell)
+		possible_cell.give(200 * REM)
+	for(var/obj/item/I in M)
+		I.restock()
+	M.radiation = max(M.radiation - 5 * REM, 0)
+
+/datum/reagent/engnanobots/on_overdose(var/mob/living/M)
+	var/obj/structure/cable/C = locate() in get_turf(M)
+	if(electrocute_mob(M, C, C, 1))
+		spark(M)
+		return
+
+/datum/reagent/engnanobots/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(isitem(O))
+		var/obj/item/I = O
+		I.restock(TRUE)
+
+/datum/reagent/engnanobots/reaction_mob(mob/living/M, method, volume, list/zone_sels, allow_permeability, list/splashplosion)
+	if(..())
+		return 1
+
+	var/obj/item/weapon/cell/possible_cell = M.get_cell()
+	if(possible_cell)
+		possible_cell.give(volume*10)
+	for(var/obj/item/I in M)
+		I.restock()
+
+/datum/reagent/engnanobots/reaction_turf(turf/simulated/T, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	emitted_harvestable_radiation(T, volume, volume/10)
+
+/datum/reagent/cargonanobots
+	name = "Cargonian Nanobots"
+	id = CARGONANOBOTS
+	description = "Microscopic robots intended for use in humans. Configured for departmental seccession and overthrowals."
+	reagent_state = REAGENT_STATE_SOLID
+	dupeable = FALSE
+	color = "#A05F3F" //rgb: 52, 63, 66
+	custom_metabolism = 0.1
+	density = 96.64
+	specheatcap = 5.14318
+
+/datum/reagent/cargonanobots/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(prob(10))
+		to_chat(M, "You feel [pick("as if your department needs to secede",\
+									"like proudly proclaiming your department allegiance",\
+									"the need to move a lot of crates around")].")
+	if(prob(5))
+		M.say("[pick("Hail cargonia","Move freight","Miners, [pick("don't die on me","bring me my materials")]")]!")
+
+/datum/reagent/cargonanobots/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(istype(O,/obj/structure/closet/crate))
+		O.health -= volume
+
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
 	id = CRYOXADONE
-	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly."
+	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly, with an even greater effect at under 95K."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
+	plant_toxins = -3
+	plant_health = 3
 
 /datum/reagent/cryoxadone/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-1)
-		M.adjustOxyLoss(-1)
-		M.heal_organ_damage(1,1)
-		M.adjustToxLoss(-1)
-
-/datum/reagent/cryoxadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(-3)
-	T.add_planthealth(3)
+		var/multiplier = 1
+		if(M.bodytemperature < 95)
+			multiplier = 2
+		M.adjustCloneLoss(-1 * multiplier)
+		M.adjustOxyLoss(-1 * multiplier)
+		M.heal_organ_damage(1 * multiplier, 1 * multiplier)
+		M.adjustToxLoss(-1 * multiplier)
 
 /datum/reagent/cryptobiolin
 	name = "Cryptobiolin"
@@ -621,6 +720,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 3.9
 	specheatcap = 0.12812
 	custom_metabolism = 0.1
+	fission_time=3000 // 50 minutes
+	fission_absorbtion=10000
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -668,7 +769,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = DEXALIN
 	description = "Dexalin is used in the treatment of oxygen deprivation."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#4CE9FF" //rgb: 74, 230, 252
 	density = 2.28
 	specheatcap = 0.91
 
@@ -690,9 +791,10 @@ var/global/list/charcoal_doesnt_remove=list(
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_XENOPHYSIOLOGY)
-			T.reagents.remove_reagent(id, 1)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -701,7 +803,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = DEXALINP
 	description = "Dexalin Plus is used in the treatment of oxygen deprivation. Its highly effective."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#4CE9FF" //rgb: 74, 230, 252
 	density = 4.14
 	specheatcap = 0.29
 
@@ -713,6 +815,21 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	if(holder.has_any_reagents(LEXORINS))
 		holder.remove_reagents(LEXORINS, 2 * REM)
+
+/datum/reagent/dexalinp/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(30))
+			T.mutate(GENE_XENOPHYSIOLOGY)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/dietine
 	name = "Dietine"
@@ -805,8 +922,10 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(..())
 		return 1
 
-	M.eye_blurry = max(M.eye_blurry - 5, 0)
-	M.eye_blind = max(M.eye_blind - 5, 0)
+	//Imidazoline will immediately cap eye_blurry and eye_blind at 10, allowing them to fade out over the next few seconds
+	M.eye_blurry = max(min(10,M.eye_blurry--), 0)
+	M.eye_blind = max(min(10,M.eye_blind--), 0)
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
@@ -824,13 +943,15 @@ var/global/list/charcoal_doesnt_remove=list(
 			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
 			if(eyes_covered)
 				return
-			else //eyedrops, why not
+			if(TARGET_EYES in zone_sels) /* If you're targeting eyes specifically, splashing the reagent into them will also work. */
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 				if(istype(E) && !E.robotic)
 					M.eye_blurry = 0
 					M.eye_blind = 0
 					if(E.damage > 0)
 						E.damage = 0 //cosmic technologies
+					if(M.sdisabilities & BLIND)
+						M.sdisabilities ^= BLIND
 					to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/imidazoline/reaction_dropper_mob(var/mob/living/M)
@@ -847,6 +968,8 @@ var/global/list/charcoal_doesnt_remove=list(
 				M.eye_blind = 0
 				if(E.damage > 0)
 					E.damage = 0 //cosmic technologies
+				if(M.sdisabilities & BLIND)
+					M.sdisabilities ^= BLIND
 				to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/inacusiate
@@ -865,6 +988,8 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.ear_damage = 0
 	M.ear_deaf = 0
+	if(M.sdisabilities & DEAF)
+		M.sdisabilities ^= DEAF
 
 /datum/reagent/inaprovaline
 	name = "Inaprovaline"
@@ -892,7 +1017,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = KELOTANE
 	description = "Kelotane is a drug used to treat burns."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#C2733F" //rgb: 94, 15, 63
 	density = 2.3
 	specheatcap = 0.51
 
@@ -911,11 +1036,10 @@ var/global/list/charcoal_doesnt_remove=list(
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_ECOPHYSIOLOGY)
-			T.reagents.remove_reagent(id, 1)
-		if(prob(15))
-			T.mutate(GENE_ECOPHYSIOLOGY)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -983,6 +1107,20 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.overeatduration = 0
 
+/datum/reagent/mahkoexpitol
+	name = "Mahkoexpitol"
+	id = MAHKOEXPITOL
+	description = "An unusual chemical that annihilates other chemicals on contact."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#808080" //rgb: 128, 128, 128
+	specheatcap = 1.23
+	density = 0.968
+
+/datum/reagent/mahkoexpitol/on_introduced(var/data)
+	..()
+	playsound(holder, "sound/effects/bubbles.ogg", 75, 1)
+	holder.clear_reagents()
+
 //Great healing powers. Metabolizes extremely slowly, but gets used up when it heals damage.
 //Dangerous in amounts over 5 units, healing that occurs while over 5 units adds to a counter. That counter affects gib chance. Guaranteed gib over 20 units.
 /datum/reagent/mednanobots
@@ -1008,13 +1146,17 @@ var/global/list/charcoal_doesnt_remove=list(
 			for(var/datum/wound/internal_bleeding/W in E.wounds)
 				W.heal_damage(0.8, TRUE)
 				holder.remove_reagent(MEDNANOBOTS, 0.25)
+			if (E.status & ORGAN_BROKEN)
+				E.status &= ~ORGAN_BROKEN //What do I owe you?
+				E.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
+				holder.remove_reagent(MEDNANOBOTS, 0.10)
+			if (E.status & ORGAN_BLEEDING)
+				E.status &= ~ORGAN_BLEEDING //FOR FREE?!
+				holder.remove_reagent(MEDNANOBOTS, 0.10)
 		for(var/datum/organ/internal/I in H.internal_organs)
 			if(I.damage)
 				I.damage = max(0, I.damage - 5) //Heals a whooping 5 organ damage.
 				holder.remove_reagent(MEDNANOBOTS, 0.10) //Less so it doesn't vanish the nanobot supply
-			I.status &= ~ORGAN_BROKEN //What do I owe you?
-			I.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
-			I.status &= ~ORGAN_BLEEDING //FOR FREE?!
 	if(M.getOxyLoss() || M.getBruteLoss(TRUE) || M.getToxLoss() || M.getFireLoss(TRUE) || M.getCloneLoss())
 		M.adjustOxyLoss(-5)
 		M.heal_organ_damage(5, 5) //Heals Brute and Burn. It heals the mob, not individual organs.
@@ -1022,7 +1164,7 @@ var/global/list/charcoal_doesnt_remove=list(
 		M.adjustCloneLoss(-5) //Repairs DNA!
 		holder.remove_reagent(MEDNANOBOTS, 0.25) //Consumes a quarter of an unit every time it heals.
 	if(M.dizziness)
-		M.dizziness = max(0, M.dizziness - 15)
+		M.AdjustDizzy(-15)
 	if(M.confused)
 		M.remove_confused(5)
 	for(var/datum/disease/D in M.viruses) //Diseases that work under the second rework of viruses, or "Viro 3"
@@ -1044,7 +1186,7 @@ var/global/list/charcoal_doesnt_remove=list(
 				if(prob(20))
 					to_chat(M, pick("You feel more like yourself again."))
 
-		if(5 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
+		if(6 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
 			percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
 			if(prob(20))
 				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
@@ -1052,7 +1194,7 @@ var/global/list/charcoal_doesnt_remove=list(
 			if(prob(percent_machine))
 				holder.add_reagent(MEDNANOBOTS, 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
-		if(20 to INFINITY) //Now you've done it.
+		if(21 to INFINITY) //Now you've done it.
 			if(istype(M, /mob/living/simple_animal/hostile/monster/cyber_horror))
 				return
 			spawning_horror = 1
@@ -1095,6 +1237,37 @@ var/global/list/charcoal_doesnt_remove=list(
 /datum/reagent/methylin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 	M.adjustBrainLoss(1)
+
+/datum/reagent/morathial
+	name = "Morathial"
+	id = MORATHIAL
+	description = "A very powerful healing chemical, made to be used in small doses."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#285a35"
+	overdose_tick = 101 //triggers immediately after 20u have been processed
+	specheatcap = 1.23
+	density = 0.968
+
+/datum/reagent/morathial/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		for(var/datum/organ/external/E in H.organs)
+			for(var/datum/wound/W in E.wounds)
+				if(istype(W,/datum/wound/internal_bleeding))
+					W.heal_damage(0.3, TRUE)
+				else
+					W.heal_damage(0.2, TRUE)
+
+/datum/reagent/morathial/on_overdose(var/mob/living/M)
+	..()
+	M.adjustToxLoss(2)
+	M.adjustCloneLoss(2)
+	var/mob/living/carbon/human/H = M
+	if(istype(H) && prob(20))
+		H.custom_pain("Your entire body feels like it's melting!", 1, scream = TRUE)
 
 /datum/reagent/nanobots
 	name = "Nanobots"
@@ -1339,6 +1512,36 @@ var/global/list/charcoal_doesnt_remove=list(
 		C.adjustToxLoss(-2 * REM)
 		C.heal_organ_damage(0, 2 * REM)
 
+/datum/reagent/priaxate
+	name = "Priaxate"
+	id = PRIAXATE
+	description = "Priaxate is a broad spectrum medication formulated for the unique biology of vox. While still effective on other species, some of its effects are less potent."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#CD8471" //rgb: 205, 132, 113
+	density = 1.29
+	specheatcap = 0.72
+	custom_metabolism = 0.4
+
+/datum/reagent/priaxate/on_mob_life(var/mob/living/M, var/alien)
+	if(..())
+		return 1
+
+	if(M.getOxyLoss())
+		M.adjustOxyLoss(-3 * REM)
+	if(M.getBruteLoss())
+		M.heal_organ_damage(3 * REM, 0)
+	if(M.getFireLoss())
+		M.heal_organ_damage(0, 3 * REM)
+	if(M.getToxLoss())
+		M.adjustToxLoss(-3 * REM)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species?.name == "Vox")
+			if(M.getOxyLoss())
+				M.adjustOxyLoss(-2 * REM)
+			if(M.getToxLoss())
+				M.adjustToxLoss(-2 * REM)
+
 /datum/reagent/rezadone
 	name = "Rezadone"
 	id = REZADONE
@@ -1358,7 +1561,7 @@ var/global/list/charcoal_doesnt_remove=list(
 		if(1 to 15)
 			M.adjustCloneLoss(-1)
 			M.heal_organ_damage(1, 1)
-		if(15 to 35)
+		if(16 to 35)
 			M.adjustCloneLoss(-2)
 			M.heal_organ_damage(2, 1)
 			if(ishuman(M))
@@ -1414,7 +1617,8 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.alpha = 255
 	M.disabilities = 0
-	M.sdisabilities = 0
+	if(M.sdisabilities & MUTE) /* We don't want other sdisabilities (damage-induced blindness & deafness) to be cured since they're not genetic, but muteness gets a pass. */
+		M.sdisabilities ^= MUTE
 
 	//Makes it more obvious that it worked.
 	M.remove_jitter()
@@ -1443,12 +1647,14 @@ var/global/list/charcoal_doesnt_remove=list(
 		return
 	var/mob/living/carbon/human/H = M
 
+
 	if(!H.ckey)
 		H.adjustToxLoss(5)
 	if((!H.client) || H.client.is_afk())
 		if(prob(30))
 			H.vomit(0,1)
 		return
+
 
 	randomized_reagents[SIMPOLINOL].on_human_life(H, tick)
 
@@ -1475,11 +1681,17 @@ var/global/list/charcoal_doesnt_remove=list(
 	switch(tick)
 		if(1 to 5)
 			M.eye_blurry = max(M.eye_blurry, 10) //Eyes get blurry immediately
-		if(5 to INFINITY)
+		if(6 to INFINITY)
 			M.drowsyness  = max(M.drowsyness, 10) //Drowsiness even outside of the sleeper
 
 	//This handles sleeper/cryo vs out of sleeper/cryo behaviors
-	if (istype(M.loc,/obj/machinery/sleeper) || M.bodytemperature < 170)
+	var/obj/machinery/sleeper/my_sleeper = M.loc
+	if (istype(my_sleeper) || M.bodytemperature < 170)
+		//Specific upgraded sleepers speed up the effects of stoxin2
+		if(istype(my_sleeper))
+			for(var/plugin in my_sleeper.plugins)
+				if(istype(plugin, /obj/item/device/plugin/sleeper/ntbasic))
+					tick += 1
 		//If the patient is in a sleeper/cryo and it's been at least 20 seconds...
 		if(tick >= 10)
 			M.sleeping = max(M.sleeping, 15) //Put to sleep, lasts 30 seconds from exiting the sleeper/running out
@@ -1619,6 +1831,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.58
 	specheatcap = 0.44
+	fission_time=2400 // 40 minutes
+	fission_absorbtion=7000
 
 /datum/reagent/tricordrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1697,3 +1911,87 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#899613" //rgb: 137, 150, 19
 	density = 0.67
 	specheatcap = 4.18
+
+
+/datum/reagent/regenerate_calcium
+	name = "Regenerate Calcium"
+	description = "Highly irradiated degenerate calcium whose structure has been altered, causing it to fuse and set bones with far more efficiency and grace than the original chemical, albeit with the cost of being extremely volatile once introduced into the body, not to mention its production process leaving it with lingering radioactivity."
+	id = REGENERATECALCIUM
+	density = 4.1
+	specheatcap = 0.15
+	custom_metabolism= 0.5 //the candle the burns twice as bright...
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#088c2e"
+
+/datum/reagent/regenerate_calcium/on_mob_life(var/mob/living/M) //burns half as long...
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		M.apply_radiation(0.5, RAD_INTERNAL) //it is made in a reactor, after all.
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & NO_BONES)
+			return
+
+		var/remaininghealing=2
+		for(var/datum/organ/external/E in H.organs)
+			if(!E.is_organic())
+				continue
+
+			for(var/datum/wound/W in E.wounds)
+				if(W.damage_type==CUT || W.damage_type==BRUISE) //fixes limb brute damage
+					remaininghealing=W.heal_damage(remaininghealing,1)
+					if(!remaininghealing)
+						break
+
+			if(E.brute_dam<=E.max_damage*0.5)
+				if(E.status&ORGAN_BROKEN)
+					H.custom_pain("You feel a flash of pain as the bones in your [E.display_name] rapidly set into their correct place.",50)
+					playsound(H.loc, "fracture", 100, 1, -2)
+					H.pain_level +=100
+					E.status&= ~ORGAN_BROKEN //fixes broken limbs
+			if(!remaininghealing)
+				return 1
+
+
+
+/datum/reagent/equalizone
+	name = "Equalizone"
+	description = "An experimental drug synthesized through subjecting particular chemicals to high levels of neutron radiation. Effects while inside the system are still being studied, and are highly unpredictable. Subjects report wounds of different types appearing and disappearing at incredible rates, or falling ill after trials."
+	id = EQUALIZONE
+	density = 2.78
+	specheatcap = 0.103
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#4ee7e6"
+
+/datum/reagent/equalizone/on_mob_life(var/mob/living/M)
+	var/efficacy=0.5 //how much this thing does what it does per tick.
+
+	if(..())
+		return 1
+
+	var/toxmod=M.tox_damage_modifier
+	var/brutemod=M.brute_damage_modifier
+	var/firemod=M.burn_damage_modifier
+
+	if(toxmod==0 || brutemod==0 || firemod==0) //no div 0 here, so sireeeeee, nope.
+		return 1
+
+	var/brut=M.getBruteLoss(TRUE)
+	var/brn=M.getFireLoss(TRUE)
+	var/tox=M.getToxLoss()
+
+	var/totaldamage = brut+tox+brn
+	if(totaldamage>0.0) //no need to do anything if no damage.
+		totaldamage/=3.0 //average it
+
+		var/tox_target = tox*(1-efficacy) + efficacy*totaldamage //linear interpolation to get the damage.
+		var/brute_target = brut*(1-efficacy) + efficacy*totaldamage
+		var/burn_target = brn*(1-efficacy) + efficacy*totaldamage
+
+
+		M.adjustToxLoss(  0.2*ceil(  5.0*((tox_target-tox)/toxmod) )   )
+		M.adjustBruteLoss( 0.2*ceil(  5.0*( (brute_target-brut)/brutemod) ) ) //we divide by the damage modifier, because adjust_loss will multiply by it. we don't want that.
+		M.adjustFireLoss( 0.2*ceil(  5.0*( (burn_target-brn)/firemod) ) ) //why are we rounding to .2? because the damage system acts funky with low fractional numbers, so we avoid that. why ceil instead of floor? fuck you, that's why.
+
+		M.updatehealth()

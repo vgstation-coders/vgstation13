@@ -1,9 +1,10 @@
 /obj/structure/siege_cannon
-	name = "Siege Cannon"
+	name = "\improper Siege Cannon"
 	desc = "A heavy-duty cannon. Capable of knocking down walls and fortifications when loaded with the right munitions."
 	icon = 'icons/obj/siege_cannon.dmi'
 	icon_state = "siege_cannon"
 	density = TRUE
+	verb_rotates = TRUE
 	var/obj/item/loadedItem = null
 	var/mob/living/loadedMob = null
 	var/wFuel = 0
@@ -33,7 +34,7 @@
 	if(istype(W, /obj/item/weapon/reagent_containers))
 		fillCannon(W, user)
 		return 1
-	if(W.is_wrench())
+	if(W.is_wrench(user))
 		wrenchAnchor(user, W, 5)	//Half a second to wrench. Being able to turn it via verb while anchored is intentional.
 	else if((istype(W, /obj/item/weapon/stamp/clown) || istype(W, /obj/item/toy/crayon/rainbow)) && !beenClowned)
 		becomeClownnon(W, user)
@@ -53,7 +54,7 @@
 		loadCannon(G, user)
 		return
 	if(wFuel >= maxFuel)
-		to_chat(user,"<span class='warning'>The [src] is already full.</span>" )
+		to_chat(user,"<span class='warning'>\The [src] is already full.</span>" )
 		return
 	for(var/datum/reagent/R in G.reagents.reagent_list)
 		if(R.id != FUEL)
@@ -81,7 +82,7 @@
 		if(istype(cAmmo, /obj/item/anvil))
 			to_chat(user,"<span class='warning'>You force \the [cAmmo] into \the [src], somehow.</span>")	//Terrifying
 		else
-			to_chat(user,"<span class='warning'>The [cAmmo] is too large to fit in \the [src].</span>")
+			to_chat(user,"<span class='warning'>\The [cAmmo] is too large to fit in \the [src].</span>")
 			return
 	if(user.drop_item(cAmmo, src))
 		loadedItem = cAmmo
@@ -180,22 +181,6 @@
 		beenClowned = TRUE
 		icon_state = "clownnon"
 		name = "circus cannon"
-
-/obj/structure/siege_cannon/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/structure/siege_cannon/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	src.dir = turn(src.dir, 90)
-	return 1
 
 
 //CANNONBALLS/////
@@ -296,7 +281,7 @@
 //Fuse bomb//////// -Refactored as cannonball by kanef, was originally a device for some reason. Nothing needed to be changed since icon state is the only unique var in that type, and it's set here anyways
 /obj/item/cannonball/fuse_bomb
 	name = "fuse bomb"
-	desc = "fshhhhhhhh BOOM!"
+	desc = "Fshhhhhhhh BOOM!"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "fuse_bomb_5"
 	item_state = "fuse_bomb"
@@ -347,7 +332,7 @@
 				assembled = 2
 				to_chat(user, "<span  class='notice'>You wire the [src].</span>")
 				name = "fuse bomb"
-				desc = "fshhhhhhhh BOOM!"
+				desc = "Fshhhhhhhh BOOM!"
 				update_icon()
 	else if(assembled == 2)
 		if(!fuse_lit)

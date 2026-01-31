@@ -12,7 +12,7 @@
     for(var/law in to_state)
         if(!law["enabled"])
             continue
-        say("[radiokey][law["text"]]")
+        say("[radiokey][html_decode(law["text"])]")
         sleep(10)
 
 //Smelly UI code below
@@ -157,10 +157,10 @@
 		state_laws_ui.freeform = FALSE
 	if(state_laws_ui.freeform_editing_unlocked == null)
 		state_laws_ui.freeform_editing_unlocked = FALSE
-	
+
 	if(state_laws_ui.freeform == FALSE)
 		state_laws_ui.freeform_editing_unlocked = FALSE //can't edit if not in freeform mode
-	
+
 	if(state_laws_ui.radio_key == null)
 		state_laws_ui.radio_key = ""
 

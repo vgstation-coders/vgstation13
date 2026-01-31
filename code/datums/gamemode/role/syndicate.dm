@@ -39,7 +39,7 @@
 	.=..()
 
 /datum/role/traitor/ForgeObjectives()
-	if(!antag.current.client.prefs.antag_objectives)
+	if(!antag.current.client.prefs.get_pref(/datum/preference_setting/toggle/antag_objectives))
 		AppendObjective(/datum/objective/freeform/syndicate)
 		return
 	if(istype(antag.current, /mob/living/silicon))
@@ -50,34 +50,61 @@
 		if(prob(10))
 			AppendObjective(/datum/objective/block)
 
-	else
-		AppendObjective(/datum/objective/target/assassinate/delay_medium)// 10 minutes
-		AppendObjective(/datum/objective/target/steal)
-		switch(rand(1,100))
-			if(1 to 30) // Die glorious death
-				if(!(locate(/datum/objective/die) in objectives.GetObjectives()) && !(locate(/datum/objective/target/steal) in objectives.GetObjectives()))
-					AppendObjective(/datum/objective/die)
-				else
-					if(prob(85))
-						if (!(locate(/datum/objective/escape) in objectives.GetObjectives()))
-							AppendObjective(/datum/objective/escape)
-					else
-						if(prob(50))
-							if (!(locate(/datum/objective/hijack) in objectives.GetObjectives()))
-								AppendObjective(/datum/objective/hijack)
+	else //generates 2 to 5 objectives, reducing duplicates
+		var/list/dupecheck[13]
+		var/it1
+		for(it1=1, it1<=dupecheck.len, it1++)
+			dupecheck[it1] = it1
+		var/objcount = rand(2,5)
+		var/i
+		for(i=0; i<=objcount; i++)
+			var/chooseobj = rand(1,dupecheck.len)
+			var/chosenobj = dupecheck[chooseobj]
+			dupecheck.Remove(chosenobj)
+			switch(chosenobj)
+				if(1 to 2)
+					AppendObjective(/datum/objective/target/brig)
+				if(3)
+					AppendObjective(/datum/objective/target/skulls)
+				if(4 to 7)
+					AppendObjective(/datum/objective/target/steal)
+				if(8 to 9)
+					AppendObjective(/datum/objective/target/harm)
+				if(10 to 11)
+					switch(rand(1,3))
+						if(1)
+							AppendObjective(/datum/objective/target/assassinate/)
+						if(2)
+							AppendObjective(/datum/objective/target/assassinate/delay_short)
 						else
-							if (!(locate(/datum/objective/minimize_casualties) in objectives.GetObjectives()))
-								AppendObjective(/datum/objective/minimize_casualties)
-			if(31 to 90)
-				if (!(locate(/datum/objective/escape) in objectives.objectives))
-					AppendObjective(/datum/objective/escape)
+							AppendObjective(/datum/objective/target/assassinate/delay_medium)
+				else
+					AppendObjective(/datum/objective/target/assassinate/orexile)
+	switch(rand(1,100))
+		if(1 to 30) // Die glorious death
+			if(!(locate(/datum/objective/die) in objectives.GetObjectives()) && !(locate(/datum/objective/target/steal) in objectives.GetObjectives()))
+				AppendObjective(/datum/objective/die)
 			else
-				if(prob(50))
-					if (!(locate(/datum/objective/hijack) in objectives.objectives))
-						AppendObjective(/datum/objective/hijack)
-				else // Honk
-					if (!(locate(/datum/objective/minimize_casualties) in objectives.GetObjectives()))
-						AppendObjective(/datum/objective/minimize_casualties)
+				if(prob(85))
+					if (!(locate(/datum/objective/escape) in objectives.GetObjectives()))
+						AppendObjective(/datum/objective/escape)
+				else
+					if(prob(50))
+						if (!(locate(/datum/objective/hijack) in objectives.GetObjectives()))
+							AppendObjective(/datum/objective/hijack)
+					else
+						if (!(locate(/datum/objective/minimize_casualties) in objectives.GetObjectives()))
+							AppendObjective(/datum/objective/minimize_casualties)
+		if(31 to 90)
+			if (!(locate(/datum/objective/escape) in objectives.objectives))
+				AppendObjective(/datum/objective/escape)
+		else
+			if(prob(50))
+				if (!(locate(/datum/objective/hijack) in objectives.objectives))
+					AppendObjective(/datum/objective/hijack)
+			else // Honk
+				if (!(locate(/datum/objective/minimize_casualties) in objectives.GetObjectives()))
+					AppendObjective(/datum/objective/minimize_casualties)
 
 /datum/role/traitor/extraPanelButtons()
 	var/dat = ""
@@ -128,15 +155,14 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
-/datum/role/traitor/GetScoreboard()
-	. = ..()
+/datum/role/traitor/GetBought()
 	if(can_be_smooth)
 		if(uplink_items_bought?.len)
-			. += "The traitor bought:<BR>"
+			. = "The traitor bought:<BR>"
 			for(var/entry in uplink_items_bought)
 				. += "[entry]<BR>"
 		else
-			. += "The traitor was a smooth operator this round.<BR>"
+			return "The traitor was a smooth operator this round.<BR>"
 
 /datum/role/traitor/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/uses = 20)
 	. = FALSE
@@ -151,7 +177,7 @@
 	var/obj/item/device/pda/found_pda = locate() in contents
 	if(found_pda)
 		new_uplink = found_pda.add_component(/datum/component/uplink)
-		traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([found_pda.name]).")
+		traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([found_pda.name]).", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 		traitor_mob.mind.total_TC += new_uplink.telecrystals
 		to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [found_pda.name]. Simply enter the code \"[new_uplink.unlock_code]\" as its ringtone to unlock its hidden features.")
 		. = TRUE
@@ -159,7 +185,7 @@
 		var/obj/item/device/radio/found_radio = locate() in contents
 		if(found_radio)
 			new_uplink = found_radio.add_component(/datum/component/uplink)
-			traitor_mob.mind.store_memory("<B>Uplink frequency:</B> [format_frequency(new_uplink.unlock_frequency)] ([found_radio.name]).")
+			traitor_mob.mind.store_memory("<B>Uplink frequency:</B> [format_frequency(new_uplink.unlock_frequency)] ([found_radio.name]).", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 			traitor_mob.mind.total_TC += new_uplink.telecrystals
 			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [found_radio.name]. Simply dial the frequency [format_frequency(new_uplink.unlock_frequency)] to unlock its hidden features.")
 			. = TRUE

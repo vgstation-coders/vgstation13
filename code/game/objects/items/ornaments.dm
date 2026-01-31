@@ -16,8 +16,7 @@
 /obj/item/ornament/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/toy/crayon) || istype(W, /obj/item/weapon/pen))
-		var/obj/item/ornament/O
-		var/type_to_spawn
+		var/obj/item/ornament/type_to_make
 		var/color_string = null
 		if(istype(W, /obj/item/toy/crayon))
 			var/obj/item/toy/crayon/C = W
@@ -28,24 +27,20 @@
 					color_string = "a deep pink"
 				if("mime")
 					return
-			type_to_spawn = ornaments_list[C.colourName]
-			O = new type_to_spawn(get_turf(src))
+			if(!(C.colourName in ornaments_list))
+				return
+			type_to_make = ornaments_list[C.colourName]
 			if(!color_string)
 				color_string = C.colourName
 		else
-			type_to_spawn = ornaments_list["gray"]
-			O = new type_to_spawn(get_turf(src))
-		if(O)
-			O.canremove = canremove
-			O.cant_drop = cant_drop
-			if(loc == user)
-				user.drop_item(src, force_drop = 1)
-				user.put_in_hands(O)
-			qdel(src)
-			if(color_string)
-				to_chat(user, "You color \the [src] [color_string].")
-			else
-				to_chat(user, "You lightly shade \the [src] with \the [W] until it appears silver.")
+			type_to_make = ornaments_list["gray"]
+		if(color_string)
+			to_chat(user, "You color \the [src] [color_string].")
+		else
+			to_chat(user, "You lightly shade \the [src] with \the [W] until it appears silver.")
+		name = initial(type_to_make.name)
+		desc = initial(type_to_make.desc)
+		icon_state = initial(type_to_make.icon_state)
 
 /obj/item/ornament/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)

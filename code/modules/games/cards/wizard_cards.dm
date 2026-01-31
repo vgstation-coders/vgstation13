@@ -75,9 +75,11 @@ var/global/list/wizard_cards_normal = list(
 		overlays -= char_image
 		icon_state = "wizcard_down"
 		name = "card"
+		desc = "A collectable trading card depicting various magical entities."
 	else
 		src.icon_state = initial(icon_state)
 		src.name = initial(src.name)
+		src.desc = initial(src.desc)
 		src.overlays += char_image
 
 /obj/item/toy/singlecard/wizard/attack_self(mob/user, params)

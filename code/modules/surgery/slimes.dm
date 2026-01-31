@@ -3,6 +3,8 @@
 //////////////////////////////////////////////////////////////////
 
 /datum/surgery_step/slime
+	blood_level = 0
+
 /datum/surgery_step/slime/is_valid_mutantrace(mob/living/carbon/slime/target)
 	return istype(target, /mob/living/carbon/slime/)
 
@@ -12,7 +14,7 @@
 
 
 //////CUT FLESH//////
-/datum/surgery_step/slime/cut_flesh/tool_quality(obj/item/tool)
+/datum/surgery_step/slime/cut_flesh/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -49,7 +51,7 @@
 
 
 //////CUT INNARDS///////
-/datum/surgery_step/slime/cut_innards/tool_quality(obj/item/tool)
+/datum/surgery_step/slime/cut_innards/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0

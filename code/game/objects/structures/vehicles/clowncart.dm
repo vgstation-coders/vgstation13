@@ -34,7 +34,6 @@
 	var/trail //Trail from banana pie
 	var/colour1 = "#000000" //Change it by using stamps
 	var/colour2 = "#3D3D3D" //Default is boring black
-	var/emagged = 0			//Does something maybe
 	var/honk				//Timer to prevent spamming honk
 
 /obj/structure/bed/chair/vehicle/clowncart/process()
@@ -193,7 +192,7 @@
 					to_chat(user, "<span class='notice'>Set to paint the floor!</span>")
 				else
 					to_chat(user, "<span class='notice'>Set to print the following text: [printing_text].</span>")
-	else if(istype(W, /obj/item/toy/waterflower)) //Water flower
+	else if(istype(W, /obj/item/clothing/accessory/waterflower)) //Water flower
 		to_chat(user, "<span class='notice'>You plug [W] into [src]!</span>")//Using it on the clown cart will transfer anything in the fuel tank (other than banana juice) into the flower
 
 		if(max_health >= HEALTH_FOR_FLOWER_RECHARGE)
@@ -209,10 +208,8 @@
 				reagents.add_reagent(BANANA, bananas) //adding banan back
 		else
 			to_chat(user, "<span class='warning'>The HONKTech pump is not strong enough to do that yet. Reinforce it with more bananium sheets first.</span>")
-	else if(istype(W, /obj/item/weapon/card/emag)) //emag
-		if(!emagged)
-			emagged = 1
-			visible_message("<span class='warning'>[src]'s eyes glow eerily red for a second.</span>")
+	else if(emag_check(W,user)) //emag
+		return
 	else if(istype(W, /obj/item/weapon/stamp/))
 		if(mode == MODE_DRAWING)
 			if(istype(W, /obj/item/weapon/stamp/captain))
@@ -260,6 +257,11 @@
 				colour2 = "#6D6D6D"
 				to_chat(user, "Selected color: Boring Black")
 
+/obj/structure/bed/chair/vehicle/clowncart/emag_act(mob/user)
+	if(!emagged)
+		emagged = 1
+		visible_message("<span class='warning'>[src]'s eyes glow eerily red for a second.</span>")
+
 /obj/structure/bed/chair/vehicle/clowncart/relaymove(mob/user, direction)
 	if(user.incapacitated())
 		unlock_atom(user)
@@ -299,10 +301,14 @@
 			draw_graffiti(old_pos)
 		else if(mode == MODE_PEELS)
 			if(!emagged)
-				new /obj/item/weapon/bananapeel/(old_pos)
+				var/atom/peel = new /obj/item/weapon/bananapeel/(old_pos)
+				peel.pixel_x = rand(-12,12)
+				peel.pixel_y = rand(-12,12)
 				reagents.remove_reagent(BANANA,BANANA_FOR_NORMAL_PEEL)
 			else
-				new /obj/item/weapon/bananapeel/traitorpeel/(old_pos)
+				var/atom/peel = new /obj/item/weapon/bananapeel/traitorpeel/(old_pos)
+				peel.pixel_x = rand(-12,12)
+				peel.pixel_y = rand(-12,12)
 				reagents.remove_reagent(BANANA,BANANA_FOR_TRAITOR_PEEL)
 	else
 		if(can_warn())

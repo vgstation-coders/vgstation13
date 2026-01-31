@@ -71,6 +71,15 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 					{{:helper.link('Open Trader Port','key',{'operation':'SetPortRestriction'},null,'linkOn')}}
 				{{/if}}
 			</div>
+			{{if data.authenticated==2}}
+				<div class="line">
+					{{if data.exploration_terminated}}
+						{{:helper.link('Reactivate Exploration Program','power',{'operation':'ToggleExplorationProgram'},null,'linkOn')}}
+					{{else}}
+						{{:helper.link('Suspend Exploration Program','cancel',{'operation':'ToggleExplorationProgram'},null,'redBackground')}}
+					{{/if}}
+				</div>
+			{{/if}}
 			{{if data.str_security_level == "red" || data.str_security_level == "delta"}}
 				<div class="line">
 					{{:helper.link('Request Response Team','alert',{'operation':'emergency_screen'})}}

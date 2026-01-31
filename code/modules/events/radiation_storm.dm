@@ -69,18 +69,19 @@
 			var/irradiationThisBurst = rand(15,25) //everybody gets the same rads this radiation burst
 			for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 				var/turf/T = get_turf(R)
-				if(!T)
-					continue
-				if(T.z != map.zMainStation || is_safe_zone(T.loc))
+				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
 				R.receive_pulse(irradiationThisBurst * 50)
 			for(var/obj/item/weapon/am_containment/decelerator/D in decelerators)
 				var/turf/T = get_turf(D)
-				if(!T)
-					continue
-				if(T.z != map.zMainStation || is_safe_zone(T.loc))
+				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
 				D.receive_pulse(irradiationThisBurst * 50)
+			for(var/obj/machinery/portable_atmospherics/hydroponics/tray in hydro_trays)
+				var/turf/T = get_turf(tray)
+				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc))
+					continue
+				tray.receive_pulse(irradiationThisBurst * 50)
 
 			var/randomMutation
 			var/badMutation

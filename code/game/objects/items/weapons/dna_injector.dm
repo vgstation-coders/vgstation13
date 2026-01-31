@@ -167,11 +167,7 @@
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to inject [M.name] ([M.ckey])</font>")
 	log_attack("[user.name] ([user.ckey]) used the [name] to inject [M.name] ([M.ckey])")
 
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	if(inuse)
 		return 0
@@ -626,7 +622,7 @@
 
 /obj/item/weapon/dnainjector/nofail/antijumpy
 	name = "DNA-Injector (Anti-Jumpy)"
-	desc = "Awwe.."
+	desc = "Awwe."
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 2

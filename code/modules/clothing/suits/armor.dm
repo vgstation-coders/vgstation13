@@ -21,11 +21,8 @@
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.6
-	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	on_armory_manifest = TRUE
-
-	autoignition_temperature = 0
-	fire_fuel = 0
+	flammable = FALSE
 
 
 /obj/item/clothing/suit/armor/vest
@@ -334,16 +331,6 @@
 	basereflectchance = 300
 
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
-
-/obj/item/clothing/suit/armor/laserproof/become_defective()
-	if(!defective)
-		..()
-		if(prob(75))
-			basereflectchance -= rand(basereflectchance/3, basereflectchance)
-		if(prob(50))
-			slowdown++
-		if(prob(50))
-			slowdown++
 
 /obj/item/clothing/suit/armor/swat/officer
 	name = "officer jacket"

@@ -36,7 +36,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/goat/New()
 	if(gives_milk)
-		udder = new(50)
+		udder = new(100)
 		udder.my_atom = src
 	..()
 
@@ -53,8 +53,8 @@
 			Calm()
 
 		if(stat == CONSCIOUS)
-			if(udder && prob(5))
-				udder.add_reagent(MILK, rand(5, 10))
+			if(udder && prob(15))
+				udder.add_reagent(MILK, rand(10, 15))
 
 		if(locate(/obj/effect/plantsegment) in loc)
 			var/obj/effect/plantsegment/SV = locate(/obj/effect/plantsegment) in loc
@@ -93,7 +93,7 @@
 		if(istype(O, /obj/item/weapon/reagent_containers/glass))
 			user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 			var/obj/item/weapon/reagent_containers/glass/G = O
-			var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
+			var/transfered = udder.trans_id_to(G, MILK, rand(15,25))
 			if(G.reagents.total_volume >= G.volume)
 				to_chat(user, "<span class='warning'>[O] is full.</span>")
 			if(!transfered)
@@ -136,19 +136,29 @@
 
 	size = SIZE_BIG
 	holder_type = /obj/item/weapon/holder/animal/cow
+	var/milktype = MILK
+	var/datum/reagents/milkable_reagents
+	var/min_reagent_regen_per_tick = 10
+	var/max_reagent_regen_per_tick = 15
+	var/reagent_regen_chance_per_tick = 25
 
 /mob/living/simple_animal/cow/splashable()
 	return FALSE
 
 /mob/living/simple_animal/cow/New()
 	..()
-	reagents.maximum_volume = 50
+	milkable_reagents = new(150)
+	milkable_reagents.my_atom = src
+
+/mob/living/simple_animal/cow/Destroy()
+	QDEL_NULL(milkable_reagents)
+	return ..()
 
 /mob/living/simple_animal/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = O
-		var/transfered = reagents.trans_id_to(G, MILK, rand(5,10))
+		var/transfered = milkable_reagents.trans_id_to(G, milktype, rand(15,25))
 		if(G.reagents.total_volume >= G.volume)
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
 		if(!transfered)
@@ -161,8 +171,14 @@
 		return 0 //under effects of time magick
 	. = ..()
 	if(stat == CONSCIOUS)
-		if(reagents && prob(5))
-			reagents.add_reagent(MILK, rand(5, 10))
+		if(milkable_reagents && prob(reagent_regen_chance_per_tick))
+			milkable_reagents.add_reagent(milktype, rand(min_reagent_regen_per_tick, max_reagent_regen_per_tick))
+	if(src.reagents.has_reagent(PHAZON) && milktype != PHAZON) //if you roll the 1 in around 540 chances, you deserve your fountain of infinite phazon, godspeed
+		var/list/blocked_chems = list(ADMINORDRAZINE, PROCIZINE)
+		milktype = pick((chemical_reagents_list - blocked_chems)) //paismoke reacts instantly inside the cow, so it just constantly makes a smoke cloud harmlessly
+		name = "[lowertext(milktype)] cow"
+		desc = "It smells faintly of grass and [milktype]."
+		milkable_reagents.clear_reagents()
 
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
@@ -179,6 +195,16 @@
 				to_chat(M, pick(responses))
 	else
 		..()
+
+/mob/living/simple_animal/cow/chocolate
+	name = "chocolate cow"
+	desc = "Where did you think chocolate milk came from? We don't talk about strawberry milk."
+	icon_state = "choco_cow"
+	icon_living = "choco_cow"
+	icon_dead = "choco_cow_dead"
+	icon_gib = "choco_cow_gib"
+	holder_type = /obj/item/weapon/holder/animal/chocolatecow
+	milktype = CHOCOLATEMILK
 
 /mob/living/simple_animal/chick
 	name = "chick"
@@ -244,6 +270,8 @@
 	health = 10
 	var/eggsleft = 0
 	var/body_color
+	var/feather_regen = 0
+	var/original_body_color = null
 	pass_flags = PASSTABLE
 	size = SIZE_SMALL
 	speak_override = TRUE
@@ -262,11 +290,12 @@
 	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
+	init_butchering_list()
+
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
 		if(!stat && eggsleft < 8)
-			if(!user.drop_item(O))
-				user << "<span class='notice'>You can't let go of \the [O]!</span>"
+			if(!user.drop_item(O, failmsg = TRUE))
 				return
 
 			user.visible_message("<span class='notice'>[user] feeds [O] to [name]! It clucks happily.</span>","<span class='notice'>You feed [O] to [name]! It clucks happily.</span>")
@@ -278,6 +307,18 @@
 	else if(istype(O, /obj/item/weapon/dnainjector))
 		var/obj/item/weapon/dnainjector/I = O
 		I.inject(src, user)
+	else
+		..()
+
+/mob/living/simple_animal/chicken/attack_hand(mob/living/carbon/M as mob)
+	if(!stat && M.a_intent == I_GRAB)
+		// Only allow if there are feathers left to pluck
+		for(var/datum/butchering_product/feathers/chicken/F in butchering_drops)
+			if(F.amount > 0)
+				M.visible_message("<span class='warning'>[M] plucks a feather from [src]!</span>", "<span class='notice'>You pluck a feather from [src].</span>")
+				F.spawn_result(get_turf(src), src)
+				return
+		to_chat(M, "<span class='notice'>[src] has no feathers left to pluck!</span>")
 	else
 		..()
 
@@ -296,9 +337,30 @@
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
 
+	//feather regeneration
+	for(var/datum/butchering_product/feathers/chicken/F in butchering_drops)
+		if(F.amount <= 2)
+			feather_regen += 1 SECONDS
+			if(feather_regen == 2 SECONDS) //it would constantly spam if I didn't do this.
+				visible_message("<span class='notice'>[src] starts to regrow some feathers.</span>")
+		if(feather_regen >= 5 MINUTES)
+			F.amount = F.initial_amount
+			visible_message("<span class='notice'>[src] regrows their feathers.</span>")
+			feather_regen = 0
+			if(original_body_color)
+				body_color = original_body_color
+				original_body_color = null
+			icon_state = "chicken_[body_color]"
+			icon_living = "chicken_[body_color]"
+			icon_dead = "chicken_[body_color]_dead"
+			update_icon()
+
 /mob/living/simple_animal/chicken/pomf
 	name = "Pomf chicken"
 	body_color = "white"
+
+/mob/living/simple_animal/chicken/get_butchering_products()
+	return list(/datum/butchering_product/feathers/chicken)
 
 #define BOX_GROWTH_BAR 200
 /mob/living/simple_animal/hostile/retaliate/box
@@ -386,8 +448,7 @@
 /mob/living/simple_animal/hostile/retaliate/box/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom)) //Pigs like mushrooms
 		if(!stat && size < SIZE_BIG)
-			if(!user.drop_item(O))
-				user << "<span class='notice'>You can't let go of \the [O]!</span>"
+			if(!user.drop_item(O, failmsg = TRUE))
 				return
 
 			user.visible_message("<span class='notice'>[user] feeds [O] to [name].</span>","<span class='notice'>You feed [O] to [name].</span>")

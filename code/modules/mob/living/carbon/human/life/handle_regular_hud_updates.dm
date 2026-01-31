@@ -42,8 +42,6 @@
 				see_in_dark = 3
 				see_invisible = SEE_INVISIBLE_LEVEL_ONE
 			if("shadow")
-				if(client)
-					client.darkness_planemaster.alpha = 100
 				see_in_dark = 8
 				see_invisible = SEE_INVISIBLE_LEVEL_ONE
 	if(M_THERMALS in mutations)
@@ -130,7 +128,7 @@
 		temperature_alert = TEMP_ALARM_HEAT_STRONG
 	else if(has_reagent_in_blood(FROSTOIL))
 		temperature_alert = TEMP_ALARM_COLD_STRONG
-	else if(!(get_thermal_loss(loc.return_air()) > 0.1) || bodytemperature > T0C + 50)
+	else if(!(get_thermal_loss(loc.return_air()) > 0.1) || bodytemperature > T0C + 50 || undergoing_hypothermia() || undergoing_hyperthermia())
 		switch(bodytemperature) //310.055 optimal body temp
 			if(370 to INFINITY)
 				temperature_alert = TEMP_ALARM_HEAT_STRONG
@@ -165,7 +163,14 @@
 	else
 		clear_alert(SCREEN_ALARM_PRESSURE)
 	if(hal_screwyhud == 3 || oxygen_alert)
-		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath)
+		var/alert_type = /obj/abstract/screen/alert/carbon/breath
+		if(species)
+			switch(species.breath_type)
+				if(GAS_NITROGEN)
+					alert_type = /obj/abstract/screen/alert/carbon/breath/vox
+				if(GAS_PLASMA)
+					alert_type = /obj/abstract/screen/alert/carbon/breath/plasma
+		throw_alert(SCREEN_ALARM_BREATH, alert_type)
 	else
 		clear_alert(SCREEN_ALARM_BREATH)
 	if(hal_screwyhud == 4 || toxins_alert)

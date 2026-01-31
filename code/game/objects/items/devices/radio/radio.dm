@@ -4,7 +4,6 @@
 	suffix = "\[3\]"
 	icon_state = "walkietalkie"
 	item_state = "walkietalkie"
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/on = 1 // 0 for off
 	var/last_transmission
 	var/frequency = 1459
@@ -32,6 +31,7 @@
 	starting_materials = list(MAT_IRON = 75, MAT_GLASS = 25)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
+	flammable = TRUE
 
 	var/const/TRANSMISSION_DELAY = 5 // only 2/second/radio
 	var/const/FREQ_LISTENING = 1
@@ -107,7 +107,7 @@
 	for (var/ch_name in channels)
 		dat+=text_sec_channel(ch_name, channels[ch_name])
 	dat+={"[text_wires()]</TT></body></html>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 	return
 
@@ -492,7 +492,7 @@
 */
 
 
-/obj/item/device/radio/proc/receive_range(freq, level)
+/obj/item/device/radio/proc/receive_range(freq, level, list/allocations = null)
 	// check if this radio can receive on the given frequency, and if so,
 	// what the range is in which mobs will hear the radio
 	// returns: -1 if can't receive, range otherwise
@@ -505,6 +505,15 @@
 		var/turf/position = get_turf(src)
 		if(!position || !(position.z in level))
 			return -1
+		// If we're on the procgen z-level and allocations exist, check if our allocation is allowed
+		if(position.z == map.zProcGen && allocations?.len)
+			var/alloc = SSmapping.get_allocation(trf = position)
+			if(istype(alloc, /datum/allocation))
+				if(!(alloc in allocations))
+					return -1
+			else
+				// Radio is on procgen z-level but not in any allocation
+				return -1
 	if(freq == SYND_FREQ)
 		if(!(src.syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
 			return -1
@@ -614,7 +623,7 @@
 		dat += "Channel: <A href='byond://?src=\ref[src];toggle_channel=1'>Responder</A> <b>Command</b>"
 
 	dat+={"</TT></body></html>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 
 /obj/item/device/radio/phone/Topic(href, href_list)
@@ -692,7 +701,7 @@
 
 	dat += "Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>"
 	dat+={"</TT></body></html>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 
 /obj/item/device/radio/phone/surveillance/Topic(href, href_list)
@@ -708,6 +717,9 @@
 /obj/item/device/radio/phone/surveillance/attackby(obj/item/I, mob/user)
 	cigbox.attackby(I,user)
 
+/obj/item/device/radio/phone/surveillance/MouseDropFrom(obj/over_object)
+	cigbox.MouseDropFrom(over_object)
+
 /obj/item/device/radio/bug
 	name = "cigarette butt"
 	desc = "A manky old cigarette butt."
@@ -715,7 +727,7 @@
 	icon_state = "cigbutt"
 	w_class = W_CLASS_TINY
 	throwforce = 1
-	autoignition_temperature = 0 //The filter doesn't burn
+	flammable = FALSE
 	broadcasting = 1
 	listening = 0
 	always_talk = 1

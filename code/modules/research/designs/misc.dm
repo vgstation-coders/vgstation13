@@ -6,7 +6,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500, MAT_URANIUM = 500)
 	category = "Misc"
-	build_path = /obj/item/weapon/gun/energy/floragun
+	build_path = /obj/item/floral_somatoray
 
 /datum/design/janicart_upgrade
 	name = "Janicart Upgrade Module"
@@ -88,6 +88,16 @@
 	materials = list(MAT_GLASS = 300, MAT_IRON = 500)
 	category = "Misc"
 
+/datum/design/lockbox
+	name = "Empty Lockbox"
+	desc = "An empty lockbox with pre installed access electronics."
+	id = "lockbox"
+	req_tech = list(Tc_MATERIALS = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_PLASMA = 1000, MAT_IRON = 1875)
+	category = "Misc"
+	build_path = /obj/item/weapon/storage/lockbox/unlockable
+
 /datum/design/dses
 	name = "Deep Space Exploration System"
 	desc = "A GPS with a high-gain radio antenna and broadcaster for locating proximity objects in space, the explorers friend."
@@ -167,3 +177,23 @@
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_DIAMOND = 500)
 	category = "Misc"
 	build_path = /obj/item/clothing/glasses/hud/tracking
+
+/datum/design/pacification_beacon
+	name = "Pacification Beacon"
+	desc = "A device that emits a calming field, reducing aggression against the holder in nearby creatures. Psyonic batteries only permit a total active time of two minutes before rendering the device inert."
+	id = "pacification_beacon"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_BIOTECH = 3, Tc_EXPLORATION = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 2000, MAT_PLASMA = 1000, MAT_DIAMOND = 500)
+	category = "Misc"
+	build_path = /obj/item/device/pacification_beacon
+
+/datum/design/shuttle_holopainter
+	name = "Shuttle Holopainter"
+	desc = "A handheld device that installs a holographic color overlay on the shuttle's surfaces."
+	id = "shuttle_holopainter"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_EXPLORATION = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 1000, MAT_PLASMA = 1000)
+	category = "Misc"
+	build_path = /obj/item/device/shuttle_holopainter

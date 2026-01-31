@@ -19,20 +19,13 @@
 /obj/item/weapon/implanter/attack(atom/target, mob/user)
 	if(!user)
 		return
-	var/mob/living/carbon/M = target
 	if(!istype(target))
 		return
 	if(!imp)
-		if(istype(target, /obj/item/weapon/implant))
-			var/obj/item/weapon/implant/timp = target
-			timp.forceMove(src)
-			user.show_message("<span class='warning'>You load \the [timp] into \the [src].</span>")
-			imp = timp
-			update()
-			return
 		if(ismob(target))
 			user.show_message("<span class='warning'>There is no implant in \the [src].</span>")
 			return
+	var/mob/living/carbon/M = target
 	if(M)
 		M.visible_message("<span class='warning'>[user] is attempting to implant [M].</span>")
 		add_attacklogs(user, M, "attempted to implant", imp)

@@ -533,7 +533,8 @@
 		var/http = file2text(_http["CONTENT"])
 		if(!http)
 			return*/
-		usr << browse("<TT><I>[PVB.title] by [PVB.author].</I></TT> <BR>" + "[PVB.content]", "window=[PVB.title];size=600x800")
+		var/book_text = "<TT><I>[PVB.title] by [PVB.author].</I></TT> <BR>[PVB.content]"
+		usr << browse(HTML_SKELETON(book_text), "window=[PVB.title];size=600x800")
 
 	if(href_list["delqueue"])
 		var/slot = text2num(href_list["delqueue"])

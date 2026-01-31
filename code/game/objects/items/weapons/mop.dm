@@ -9,7 +9,8 @@
 	throw_speed = 5
 	throw_range = 3
 	w_class = W_CLASS_MEDIUM
-	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	flags = FPRINT
 	attack_verb = list("mops", "bashes", "bludgeons", "whacks", "slaps", "whips")
 
@@ -55,6 +56,8 @@
 		return
 	if(A.mop_act(src, user))
 		update_icon()
+		return
+	if(!src)
 		return
 	if(istype(A, /mob/living))
 		if(!(reagents.total_volume < 1)) //Slap slap slap

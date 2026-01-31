@@ -58,6 +58,7 @@
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.9
 
+//NASA spacesuit
 /obj/item/clothing/suit/space/ancient //slightly better then an anomalist's space suit
 	name = "ancient space suit"
 	icon_state = "nasa"
@@ -95,7 +96,6 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	allowed = list(/obj/item/weapon/reagent_containers/food/snacks/grown/banana, /obj/item/weapon/bananapeel, /obj/item/weapon/soap, /obj/item/weapon/reagent_containers/spray, /obj/item/weapon/tank)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
-
 	var/step_sound = "clownstep"
 	var/footstep = 1	//used for squeeks whilst walking
 

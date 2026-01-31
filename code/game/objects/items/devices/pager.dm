@@ -22,10 +22,15 @@ var/list/pager_list = list()
 	var/last_alert_time = 0
 	var/alert_delay = 10 SECONDS
 	var/last_alert = ""
+	var/list/covered_areas = list()
 
 /obj/item/device/pager/New()
 	..()
 	pager_list += src
+	var/blockedtypes = typesof(/area/derelict,/area/djstation,/area/vox_trading_post,/area/tcommsat)
+	for(var/atype in (typesof(/area) - blockedtypes))
+		var/area/B = locate(atype) in areas
+		covered_areas += B
 	//default pager settings
 	prefs["Power"] = "quiet"
 	prefs["Fire"] = "loud"
@@ -107,6 +112,8 @@ var/list/pager_list = list()
 	update_icon()
 
 /obj/item/device/pager/proc/triggerAlarm(var/class, area/A)
+	if(!(A in covered_areas))
+		return
 	if(muted)
 		return
 	var/alarmlevel = prefs[class]

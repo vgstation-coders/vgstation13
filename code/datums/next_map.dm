@@ -59,7 +59,6 @@
 /datum/next_map/deff
 	name = "Defficiency"
 	path = "Defficiency"
-	min_players = 25
 
 /datum/next_map/dorf
 	name = "DorfStation"
@@ -116,7 +115,6 @@
 /datum/next_map/metaclub
 	name = "Meta Club"
 	path = "Metaclub"
-	min_players = 20
 
 /datum/next_map/packed
 	name = "Packed Station"
@@ -126,12 +124,10 @@
 /datum/next_map/roid
 	name = "Asteroid Station"
 	path = "RoidStation"
-	min_players = 25
 
 /datum/next_map/snaxi
 	name = "Snow Station"
 	path = "Snow Taxi"
-	min_players = 30
 
 /datum/next_map/snaxi/is_votable()
 	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
@@ -178,15 +174,14 @@
 		return FALSE
 	return ..()
 
-/datum/next_map/nerve
-	name = "Nerve Station"
-	path = "nervestation"
-	min_players = 20
-
 /datum/next_map/wheelstation
 	name = "Wheelstation"
 	path = "wheelstation"
 	min_players = 30
+
+/datum/next_map/junglestation
+	name = "Jungle Station" //NT Colony Gamma-8 - the trve name.
+	path = "junglestation"
 
 /proc/get_votable_maps()
 	var/list/votable_maps = list()

@@ -155,7 +155,8 @@
 
 /obj/effect/blob/core/attack_ghost(var/mob/user)
 	if (no_ghosts_allowed)
-		to_chat(user, "<span class='warning'>This [src] cannot be controlled by ghosts.</span>")
+		var/formatted_name = "\proper [src]"
+		to_chat(user, "<span class='warning'>This [formatted_name] cannot be controlled by ghosts.</span>")
 		return
 	if (!overmind)
 		var/confirm = alert("Take control of this blob core?", "Take Control", "Yes", "No")

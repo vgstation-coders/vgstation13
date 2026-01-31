@@ -13,19 +13,10 @@
 	var/thing = new typepath(merchcomp.loc)
 	var/turf/T = get_turf(merchcomp)
 	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = EFFECTS_PLANE)
-	if(istype(typepath,/obj/item/weapon/storage))
+	if(ispath(typepath,/obj/item/weapon/storage))
 		var/obj/item/weapon/storage/S = thing
 		if(station_does_not_tip)
-			var/list/additional_types = list(
-				IRRADIATEDBEANS,
-				MUTATEDBEANS,
-				CHEESYGLOOP,
-				DIABEETUSOL,
-				HORSEMEAT,
-				BEFF,
-				TOXICWASTE,
-				MOONROCKS,
-			)
+			var/list/additional_types = list()
 			if(istype(S,/obj/item/weapon/storage/bag/zam_food/))
 				additional_types.Add(WATER) //Bad for greys
 			for(var/obj/item/weapon/reagent_containers/food/snacks/F in S)
@@ -108,10 +99,10 @@
 	category = "Tools"
 
 /datum/storeitem/swiss_army_knife
-	name = "Swiss Army Knife"
-	desc = "A multitool for everyday tasks."
-	typepath = /obj/item/weapon/switchtool/swiss_army_knife
-	cost = 50
+	name = "Collectable Swiss Army Knife"
+	desc = "A multitool for everyday tasks. Comes in a variety of brands and styles!"
+	typepath = /obj/item/collectible_switchtool
+	cost = 100
 	category = "Tools"
 
 
@@ -151,7 +142,7 @@
 /////////////////////////////
 /datum/storeitem/snap_pops
 	name = "Snap-Pops"
-	desc = "Ten-thousand-year-old chinese fireworks: IN SPACE"
+	desc = "Ten-thousand-year-old chinese fireworks: IN SPACE!"
 	typepath = /obj/item/weapon/storage/box/snappops
 	cost = 10
 	category = "Toys"
@@ -268,8 +259,8 @@
 	category = "Luxury"
 
 /datum/storeitem/critter_cage
-	name = "small cage"
-	desc = "A cage where to keep tiny animals safe. Fit with a drinking bottle that can be refilled.."
+	name = "Small Cage"
+	desc = "A cage that keeps tiny animals safe. Fit with a drinking bottle that can be refilled."
 	typepath = /obj/item/critter_cage
 	cost = 60
 	category = "Luxury"

@@ -42,23 +42,12 @@
 	if(burstfire == TRUE)
 		if(!ready_to_fire())
 			return 1
-		var/shots_fired = 0 //haha, I'm so clever
 		var/to_shoot = min(burst_count, getAmmo())
-		if(defective && prob(20))
-			to_shoot = getAmmo()
 		for(var/i = 1 to to_shoot)
 			..()
 			burstfiring = 1
-			shots_fired++
 			if(!user.contents.Find(src) || jammed)
 				break
-			if(defective && shots_fired > burst_count)
-				recoil = 1 + min(shots_fired - burst_count, 6)
-			if(defective && prob(max(0, shots_fired - burst_count * 4)))
-				to_chat(user, "<span class='danger'>\The [src] explodes!.</span>")
-				explosion(get_turf(loc), -1, 0, 2)
-				user.drop_item(src, force_drop = 1)
-				qdel(src)
 		recoil = initial(recoil)
 		burstfiring = 0
 		return 1
@@ -260,7 +249,7 @@
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/force_removeMag() //special because of its cover
 	if(!cover_open)
-		to_chat(usr, "<span class='rose'>The [src]'s cover has to be open to do that!</span>")
+		to_chat(usr, "<span class='rose'>\The [src]'s cover has to be open to do that!</span>")
 		return
 	..()
 

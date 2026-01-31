@@ -8,6 +8,9 @@
 	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 100 //Watts, I hope.  Just enough to do the computer and display things.
 
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
+
 	var/thermal_efficiency = 0.65
 
 	var/tmp/obj/machinery/atmospherics/binary/circulator/circ1
@@ -206,23 +209,3 @@
 /obj/machinery/power/generator/power_change()
 	..()
 	update_icon()
-
-/obj/machinery/power/generator/verb/rotate_clock()
-	set category = "Object"
-	set name = "Rotate Generator (Clockwise)"
-	set src in view(1)
-
-	if (usr.isUnconscious() || usr.restrained()  || anchored)
-		return
-
-	src.dir = turn(src.dir, -90)
-
-/obj/machinery/power/generator/verb/rotate_anticlock()
-	set category = "Object"
-	set name = "Rotate Generator (Counterclockwise)"
-	set src in view(1)
-
-	if (usr.isUnconscious() || usr.restrained()  || anchored)
-		return
-
-	src.dir = turn(src.dir, 90)

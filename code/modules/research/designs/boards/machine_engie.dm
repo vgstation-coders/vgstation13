@@ -50,9 +50,9 @@
 	id = "cellcharger"
 	req_tech = list(Tc_MATERIALS = 2, Tc_ENGINEERING = 2, Tc_POWERSTORAGE = 3)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 3)
+	materials = list(MAT_GLASS = 1000, SACID = 3)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/cell_charger
+	build_path = /obj/item/weapon/circuitboard/small/cell_charger
 
 /datum/design/tracker_electronics
 	name = "Circuit Design (Tracker Electronics)"
@@ -100,6 +100,28 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/pacman/mrs
+
+/datum/design/babypacman
+	name = "BABYPACMAN-type Generator Board"
+	desc = "The circuit board that for a BABYPACMAN-type portable generator."
+	id = "babypacman"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_POWERSTORAGE = 6, Tc_ENGINEERING = 5)
+	build_type = IMPRINTER
+	reliability_base = 74
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/pacman/baby
+
+/datum/design/professorpacman
+	name = "PROFESSORPACMAN-type Generator Board"
+	desc = "The circuit board that for a PROFESSORPACMAN-type portable generator."
+	id = "professorpacman"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_POWERSTORAGE = 7, Tc_ENGINEERING = 5)
+	build_type = IMPRINTER
+	reliability_base = 74
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/pacman/professor
 
 //
 //ATMOSPHERIC MACHINERY.
@@ -154,6 +176,16 @@
 	materials = list (MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
 	build_path = /obj/item/weapon/circuitboard/airshield
+
+/datum/design/firefoam_popper
+	name = "Circuit Design (Firefoam Popper)"
+	desc = "Allows for the construction of circuit boards used to build a firefoam popper."
+	id = "fire_popper"
+	req_tech = list(Tc_ENGINEERING = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 1000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/small/firefoam_popper
 
 //
 //MECHANICS MACHINES.
@@ -283,3 +315,49 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 2000)
 	build_path = /obj/item/weapon/circuitboard/shield_cap
+
+// fission (machine) boards.
+
+
+
+
+/datum/design/fission_control_rod
+	name = "Internal circuitry (Control rod)"
+	desc = "Allows for the construction of circuit boards used to build control rods for a fission reactor."
+	id = "fission_control_rod"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/fission_control_rod
+
+/datum/design/fission_fuel_rod
+	name = "Internal circuitry (Fuel rod)"
+	desc = "Allows for the construction of circuit boards used to build fuel rods for a fission reactor."
+	id = "fission_fuel_rod"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/fission_fuel_rod
+
+
+/datum/design/gas_extractor
+	name = "Circuit Design (Gas Extractor)"
+	desc = "Allows for the construction of circuit boards used to build a surface gas extractor."
+	id = "gas_extractor"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_EXPLORATION = 1)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/gas_extractor
+
+/datum/design/holofield_generator
+	name = "Circuit Design (Holofield Generator)"
+	desc = "Allows for the construction of circuit boards used to build a Holofield Generator."
+	id = "holofield_generator"
+	req_tech = list(Tc_MAGNETS = 2, Tc_BLUESPACE = 3, Tc_EXPLORATION = 1)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/holofield

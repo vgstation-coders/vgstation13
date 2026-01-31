@@ -65,8 +65,8 @@ interactions:
 	// Materials stuff
 	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_WOOD = 245) //25cm wide disc, 0.5cm thick. Roughly the size of a DIN A4 piece of paper
-	autoignition_temperature = AUTOIGNITION_WOOD
 	w_type = RECYK_WOOD
+	flammable = TRUE
 	siemens_coefficient = 0
 
 	// Paint stuff

@@ -14,10 +14,12 @@
 	var/start_unanchored = 0
 	var/z_up_required = 0
 	var/z_down_required = 0
+	//This allows the speed of a stack recipe to be boosted with cargo nanobots
+	var/cargonia_boost = 0
 	var/list/other_reqs = list()
 	var/list/extra_data = list()
 
-/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), z_up_required = 0, z_down_required = 0)
+/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), z_up_required = 0, z_down_required = 0, cargonia_boost = 0)
 	src.title = title
 	src.result_type = result_type
 	src.req_amount = req_amount
@@ -30,40 +32,43 @@
 	src.other_reqs = other_reqs
 	src.z_up_required = z_up_required
 	src.z_down_required = z_down_required
+	src.cargonia_boost = cargonia_boost
 
-/datum/stack_recipe/proc/can_build_here(var/mob/usr, var/turf/T)
+/datum/stack_recipe/proc/can_build_here(var/mob/user, var/turf/T)
 	if(one_per_turf && locate(result_type) in T)
-		to_chat(usr, "<span class='warning'>There is another [title] here!</span>")
+		to_chat(user, "<span class='warning'>There is another [title] here!</span>")
 		return 0
 	if(on_floor && (istype(T, /turf/space)))
-		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
+		to_chat(user, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
 	return 1
 
-/datum/stack_recipe/proc/finish_building(var/mob/usr, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
+/datum/stack_recipe/proc/finish_building(var/mob/user, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
 	return R
 
 /datum/stack_recipe/proc/before_build(var/mob/user)
 	return TRUE
 
-/datum/stack_recipe/proc/build(var/mob/usr, var/obj/item/stack/S, var/multiplier = 1, var/turf/construct_loc)
-	if (!before_build(usr))
+/datum/stack_recipe/proc/build(var/mob/user, var/obj/item/stack/S, var/multiplier = 1, var/turf/construct_loc)
+	if (!before_build(user))
 		return
 	if (S.amount < req_amount*multiplier)
 		if (res_amount*multiplier>1)
-			to_chat(usr, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build [res_amount*multiplier] [title]\s!</span>")
+			to_chat(user, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build [res_amount*multiplier] [title]\s!</span>")
 		else
-			to_chat(usr, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build \the [title]!</span>")
+			to_chat(user, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build \the [title]!</span>")
 		return
 	if(!construct_loc)
-		construct_loc = usr.loc
-	if (!can_build_here(usr, construct_loc))
+		construct_loc = user.loc
+	if (!can_build_here(user, construct_loc))
 		return
 	var/current_work = round(world.time)
 	S.last_work = current_work
 	if (time)
 		var/actual_time = S.time_modifier(time)
-		if (!do_after(usr, get_turf(S), actual_time))
+		if(cargonia_boost && user?.reagents.has_reagent(CARGONANOBOTS))
+			actual_time = round(actual_time/2)
+		if (!do_after(user, get_turf(S), actual_time, (actual_time < 10 ? actual_time : 10)))
 			S.stop_build(current_work == S.last_work)
 			return
 	if (S.amount < req_amount*multiplier)
@@ -77,17 +82,17 @@
 			var/found = FALSE
 			if(ispath(looking_for, /obj/item/stack))
 				req_amount = other_reqs[looking_for]
-			if(ispath(usr.get_inactive_hand(), looking_for))
+			if(ispath(user.get_inactive_hand(), looking_for))
 				found = TRUE
 				if(req_amount) //It's of a stack/sheet subtype
-					var/obj/item/stack/SS = usr.get_inactive_hand()
+					var/obj/item/stack/SS = user.get_inactive_hand()
 					if(SS.amount < req_amount)
 						found = FALSE
 					else
 						stacks_to_consume.Add(SS)
 						stacks_to_consume[S] = req_amount
 					continue
-			for(var/obj/I in range(get_turf(usr),1))
+			for(var/obj/I in range(get_turf(user),1))
 				if(ispath(looking_for, I))
 					found = TRUE
 					if(req_amount) //It's of a stack/sheet subtype
@@ -102,7 +107,7 @@
 				return
 	var/atom/O
 	if(ispath(result_type, /obj/item/stack))
-		O = drop_stack(result_type, construct_loc, (max_res_amount>1 ? res_amount*multiplier : 1), usr)
+		O = drop_stack(result_type, construct_loc, (max_res_amount>1 ? res_amount*multiplier : 1), user)
 		var/obj/item/stack/SS = O
 		SS.update_materials()
 	else
@@ -110,25 +115,25 @@
 			O = new result_type(construct_loc)
 
 	S.stop_build(current_work == S.last_work)
-	O.change_dir(usr.dir)
+	O.change_dir(user.dir)
 	if(start_unanchored)
 		var/obj/A = O
 		A.anchored = 0
-	var/put_in_hand = finish_building(usr, S, O)
+	var/put_in_hand = finish_building(user, S, O)
 
 	//if (R.max_res_amount>1)
 	//	var/obj/item/stack/new_item = O
 	//	new_item.amount = R.res_amount*multiplier
-	//	//new_item.add_to_stacks(usr)
+	//	//new_item.add_to_stacks(user)
 
 	S.use(req_amount*multiplier)
 	for(var/obj/item/stack/SS in stacks_to_consume)
 		SS.use(stacks_to_consume[SS])
 	if (S.amount<=0)
-		usr.before_take_item(S)
+		user.before_take_item(S)
 		if(put_in_hand && istype(O,/obj/item))
-			usr.put_in_hands(O)
-	O.add_fingerprint(usr)
+			user.put_in_hands(O)
+	O.add_fingerprint(user)
 	//BubbleWrap - so newly formed boxes are empty //This is pretty shitcode but I'm not fixing it because even if sloth is a sin I am already going to hell anyways
 	if (istype(O, /obj/item/weapon/storage) )
 		for(var/obj/item/I in O)
@@ -150,28 +155,28 @@
 /* =====================================================================
 							METAL RECIPES
 ===================================================================== */
-/datum/stack_recipe/chair/can_build_here(var/mob/usr, var/turf/T)
+/datum/stack_recipe/chair/can_build_here(var/mob/user, var/turf/T)
 	if(one_per_turf)
 		for(var/atom/movable/AM in T)
 			if(istype(AM, /obj/structure/bed/chair/vehicle)) //Bandaid to allow people in vehicles (and wheelchairs) build chairs
 				continue
 			else if(istype(AM, /obj/structure/bed/chair))
-				to_chat(usr, "<span class='warning'>There is already a chair here!</span>")
+				to_chat(user, "<span class='warning'>There is already a chair here!</span>")
 				return 0
 	if(on_floor && (istype(T, /turf/space)))
-		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
+		to_chat(user, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
 	return 1
 
-/datum/stack_recipe/chair/finish_building(var/mob/usr, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
+/datum/stack_recipe/chair/finish_building(var/mob/user, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
 	var/obj/structure/bed/chair/new_chair = R
 	if (istype(new_chair))
 		new_chair.handle_layer()
 	return R
 
-/datum/stack_recipe/conveyor_frame/can_build_here(var/mob/usr, var/turf/T)
+/datum/stack_recipe/conveyor_frame/can_build_here(var/mob/user, var/turf/T)
 	if(on_floor && (istype(T, /turf/space)))
-		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
+		to_chat(user, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
 	return 1
 
@@ -185,7 +190,7 @@
 	src.gen_quality = gen_quality
 
 
-/datum/stack_recipe/dorf/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
+/datum/stack_recipe/dorf/finish_building(mob/user, var/obj/item/stack/S, var/obj/R)
 	if(inherit_material)
 		var/datum/material/mat
 		var/datum/materials/materials_list = new
@@ -216,6 +221,29 @@
 		R.dorfify(mat)
 	return 1
 
+/datum/stack_recipe/table_door
+	var/dirs_found = 0
+
+/datum/stack_recipe/table_door/can_build_here(mob/user, turf/T)
+	var/turf/T2
+	dirs_found = 0
+	for(var/direction in cardinal)
+		T2 = get_step(T,direction)
+		if(T2.density || (locate(/obj/structure/table) in T2))
+			dirs_found |= direction
+			break
+	if(!dirs_found)
+		to_chat(user, "<span class='warning'>\The [title] must be constructed next to a table or wall!</span>")
+		return 0
+	return ..()
+
+/datum/stack_recipe/table_door/finish_building(mob/user, var/obj/item/stack/S, var/obj/R)
+	if(!(dirs_found & clockwise_perpendicular_dirs(R.dir)))
+		for(var/direction in cardinal)
+			if(dirs_found & clockwise_perpendicular_dirs(direction))
+				R.dir = direction
+				break
+	return R
 
 /datum/stack_recipe/blacksmithing
 	var/req_strikes = 15
@@ -224,7 +252,7 @@
 	..()
 	src.req_strikes = required_strikes
 
-/datum/stack_recipe/blacksmithing/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
+/datum/stack_recipe/blacksmithing/finish_building(mob/user, var/obj/item/stack/S, var/obj/R)
 	// Figure out main material from stack
 	if(istype(S, /obj/item/stack/sheet/))
 		var/obj/item/stack/sheet/SS = S
@@ -251,9 +279,9 @@
 			R.materials.addRatioFrom(A.materials, other_reqs[req]/res_amount)
 
 	//Yeah nah let's put you in a blacksmith_placeholder
-	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc, S, R, req_strikes)
+	var/obj/item/I = new /obj/item/smithing_placeholder(user.loc, S, R, req_strikes)
 	I.name = "unforged [R.name]"
-	return 0
+	return I
 
 var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(
 	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
@@ -273,7 +301,8 @@ var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes",
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/metal, 1, 4, 60),
 	new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),
-	new/datum/stack_recipe("conveyor belt", /obj/item/stack/conveyor_assembly, 2, 1, 20),
+	new/datum/stack_recipe("conveyor belt", /obj/item/stack/conveyor_assembly, 2, 1, 20, cargonia_boost = 1),
+	new/datum/stack_recipe("plated catwalk frame", /obj/item/stack/tile/plated_catwalk, 1, 4, 60),
 	//new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
 	null,
 	new/datum/stack_recipe("computer frame", /obj/structure/computerframe,                      5, time = 25, one_per_turf = 1			    ),
@@ -281,8 +310,9 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("railings",   /obj/structure/railing/loose,             				2, time = 25, on_floor = 1),
 	new/datum/stack_recipe("firelock frame", /obj/item/firedoor_frame,                          5, time = 50),
 	new/datum/stack_recipe("machine frame",  /obj/machinery/constructable_frame/machine_frame,  5, time = 25, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("small machine frame",  /obj/machinery/constructable_frame/machine_frame/small,  2, time = 10, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("mirror frame",   /obj/structure/mirror_frame,                       5, time = 25, one_per_turf = 1, on_floor = 1),
-	new/datum/stack_recipe("turret frame",   /obj/machinery/porta_turret_construct,             5, time = 25, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("turret frame",   /obj/machinery/porta_turret_construct,             5, time = 25, one_per_turf = 1, on_floor = 1, cargonia_boost = 1),
 	new/datum/stack_recipe("solar assembly",   /obj/machinery/power/solar_assembly,             5, time = 25),
 	null,
 	new/datum/stack_recipe_list("chairs and beds",list(
@@ -338,11 +368,13 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("red couch inwards turn",    /obj/structure/bed/chair/comfy/couch/turn/inward/red,    2, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("red couch outwards turn",   /obj/structure/bed/chair/comfy/couch/turn/outward/red,   2, one_per_turf = 1, on_floor = 1),
 		), 2),
+	new/datum/stack_recipe/table_door("table door", /obj/machinery/door/table, 					  2, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("table parts", /obj/item/weapon/table_parts,                           2                                ),
 	new/datum/stack_recipe("rack parts",  /obj/item/weapon/rack_parts,                                                             ),
+	new/datum/stack_recipe("crate shelf parts", /obj/item/weapon/rack_parts/shelf,                5                                ),
 	new/datum/stack_recipe("filing cabinet", /obj/structure/filingcabinet/filingcabinet,						  2, one_per_turf = 1, time = 15   ),
 	new/datum/stack_recipe("closet",      /obj/structure/closet/basic,                            2, one_per_turf = 1, time = 15   ),
-	new/datum/stack_recipe("metal crate", /obj/structure/closet/crate/basic,                      2, one_per_turf = 1, time = 15   ),
+	new/datum/stack_recipe("metal crate", /obj/structure/closet/crate/basic,                      2, one_per_turf = 1, time = 15, cargonia_boost = 1),
 	null,
 	new/datum/stack_recipe_list("airlock assemblies", list(
 		new/datum/stack_recipe("standard airlock assembly",      /obj/structure/door_assembly,                            4, time = 50, one_per_turf = 1, on_floor = 1),
@@ -411,6 +443,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("cannonball", /obj/item/cannonball/iron, 20, time = 4 SECONDS, one_per_turf = 0, on_floor = 1),
 	new/datum/stack_recipe("frying pan", /obj/item/weapon/reagent_containers/pan, 10, time = 4 SECONDS, one_per_turf = 0, on_floor = 0),
 	new/datum/stack_recipe("lunch box", /obj/item/weapon/storage/lunchbox/metal, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
+	new/datum/stack_recipe("lockless coinbox", /obj/item/weapon/storage/lockbox/coinbox/nolock, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0, cargonia_boost = 1),
 	null,
 	blacksmithing_recipes,
 	null,
@@ -422,6 +455,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 ======================================================================== */
 var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("reinforced floor tile", /obj/item/stack/tile/metal/plasteel, 1, 4, 60),
+	new/datum/stack_recipe/table_door("reinforced table door", /obj/machinery/door/table/reinforced, 			2, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("plasteel bolts",				/obj/item/stack/bolts,								1,	time = 20),
 	new/datum/stack_recipe("railings",   					/obj/structure/railing/plasteel/loose,             	2, time = 50, on_floor = 1),
 	new/datum/stack_recipe("AI core",						/obj/structure/AIcore,								4,	time = 50,	one_per_turf = 1				),
@@ -433,6 +467,8 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("Tank dispenser",				/obj/structure/dispenser/empty,						2,	time = 10,	one_per_turf = 1				),
 	new/datum/stack_recipe("Fireaxe cabinet",				/obj/item/mounted/frame/fireaxe_cabinet_frame,		2,	time = 50									),
 	null,
+	new/datum/stack_recipe("lockless lockbox", /obj/item/weapon/storage/lockbox/nolock, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
+	null,
 	new/datum/stack_recipe("Vault Door assembly",			/obj/structure/door_assembly/door_assembly_vault,	8,	time = 50,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 	null,
@@ -443,6 +479,12 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 		new/datum/stack_recipe("shuttle bed",                      /obj/structure/bed/racecar/shuttle,                    2, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe("fire truck bed",                      /obj/structure/bed/racecar/firetruck,                    2, one_per_turf = 1, on_floor = 1),
 		)),
+	null,
+	new/datum/stack_recipe("Reinforced machine frame",	/obj/machinery/constructable_frame/machine_frame/reinforced,	5,  time = 40, one_per_turf = 1	),
+	null,
+	new/datum/stack_recipe("Reactor casing frame",	/obj/structure/girder/reactor,	3,  time = 30, one_per_turf = 1	),
+	new/datum/stack_recipe("Reactor fuel reservoir",	/obj/item/weapon/fuelrod,	2,	time = 25),
+	new/datum/stack_recipe("Small reactor fuel reservoir",	/obj/item/weapon/fuelrod/small,	1,	time = 10),
 	)
 
 /* ====================================================================
@@ -456,6 +498,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("railings",   		/obj/structure/railing/wood/loose,      2,		time = 25, on_floor = 1),
 	null,
 	new/datum/stack_recipe("barrel",            /obj/structure/reagent_dispensers/cauldron/barrel/wood, 20, time = 5 SECONDS, one_per_turf = 1   ),
+	new/datum/stack_recipe/table_door("table door", /obj/machinery/door/table/wood, 	2, 					  one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("table parts",		/obj/item/weapon/table_parts/wood,		2													),
 	new/datum/stack_recipe("wooden chair",		/obj/structure/bed/chair/wood/normal,	1,		time = 10,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
@@ -471,7 +514,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	null,
 	new/datum/stack_recipe("apiary",			/obj/item/apiary,						10,		time = 25,	one_per_turf = 0,	on_floor = 0),
 	new/datum/stack_recipe("trophy mount",		/obj/item/mounted/frame/trophy_mount,	2,		time = 15									),
-	new/datum/stack_recipe("notice board",		/obj/structure/noticeboard,				2,		time = 15,	one_per_turf = 1,	on_floor = 1),
+	new/datum/stack_recipe("notice board",		/obj/structure/noticeboard,				2,		time = 15,	one_per_turf = 1,	on_floor = 1, cargonia_boost = 1),
 	null,
 	//Painting
 	new/datum/stack_recipe("knitting needles",	/obj/item/knitting_needles,				1,		time = 10,	one_per_turf = 0,	on_floor = 0),
@@ -492,6 +535,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("peg limb",			/obj/item/weapon/peglimb,				2,		time = 50									),
 	new/datum/stack_recipe("clipboard",			/obj/item/weapon/storage/bag/clipboard,	1													),
 	new/datum/stack_recipe("bowl",				/obj/item/trash/bowl,					1													),
+	new/datum/stack_recipe("wooden bucket",		/obj/item/weapon/reagent_containers/glass/bucket/wooden,2,time = 50							),
 	null,
 	new/datum/stack_recipe("boomerang",			/obj/item/weapon/boomerang,				6,		time = 50									),
 	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50									),
@@ -499,6 +543,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("sword handle",		/obj/item/sword_handle,					1,2,10,	time = 2 SECONDS,							other_reqs = list(/obj/item/stack/sheet/metal = 1)),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
 	new/datum/stack_recipe("baseball bat",		/obj/item/weapon/bat,					10,		time = 8 SECONDS							),
+	new/datum/stack_recipe("wooden club",		/obj/item/weapon/melee/wooden_club,					8,		time = 8 SECONDS					),
 	)
 
 /* =========================================================================
@@ -599,11 +644,11 @@ var/list/datum/stack_recipe/cloth_recipes_with_tool = list (
 
 	return TRUE
 
-/datum/stack_recipe/cloth/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)
+/datum/stack_recipe/cloth/finish_building(var/mob/user, var/obj/item/stack/S, var/obj/R)
 	R.color = S.color
 	return R
 
-/datum/stack_recipe/cloth/composite/finish_building(var/mob/usr, var/obj/item/stack/S, var/R)
+/datum/stack_recipe/cloth/composite/finish_building(var/mob/user, var/obj/item/stack/S, var/R)
 	var/obj/item/clothing/under/composite/new_clothing = R
 	new_clothing.color = S.color
 	new_clothing.permanent_parts =  extra_data.Copy()
@@ -618,7 +663,7 @@ var/list/datum/stack_recipe/wax_recipes = list (
 	new/datum/stack_recipe/wax("candle",                           /obj/item/candle                            ),
 	)
 
-/datum/stack_recipe/wax/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)
+/datum/stack_recipe/wax/finish_building(var/mob/user, var/obj/item/stack/S, var/obj/R)
 	R.color = S.color
 	if (R.color in colors_all)
 		R.name = "[colors_all[R.color]] [R.name]"
@@ -627,7 +672,7 @@ var/list/datum/stack_recipe/wax_recipes = list (
 /* ========================================================================
 							LEATHER RECIPES
 ======================================================================== */
-/datum/stack_recipe/leather/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)
+/datum/stack_recipe/leather/finish_building(var/mob/user, var/obj/item/stack/S, var/obj/R)
 	if(istype(S, /obj/item/stack/sheet/leather))
 		var/obj/item/stack/sheet/leather/L = S
 		if(findtext(lowertext(R.name), "leather"))
@@ -658,6 +703,7 @@ var/list/datum/stack_recipe/leather_recipes = list (
 
 var/list/datum/stack_recipe/brass_recipes = list (
 	new/datum/stack_recipe("brass table parts", /obj/item/weapon/table_parts/clockwork, 4),
+	new/datum/stack_recipe/table_door("brass table door", /obj/machinery/door/table/brass, 4, one_per_turf = 1, on_floor = 1),
 	null,
 	new/datum/stack_recipe("clockwork airlock", /obj/structure/door_assembly/clockwork, 4, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 4)),
 	new/datum/stack_recipe("clockwork girders", /obj/structure/girder/clockwork, 3, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 3)),
@@ -682,3 +728,33 @@ var/list/datum/stack_recipe/ralloy_recipes = list (
 	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	)
+
+/* ========================================================================
+							SAND RECIPES
+======================================================================== */
+
+var/list/datum/stack_recipe/sand_recipes = list (
+	new/datum/stack_recipe("sandstone", /obj/item/stack/sheet/mineral/sandstone, 1, 1, 50),
+	)
+
+/* ========================================================================
+							FEATHER RECIPES
+======================================================================== */
+
+/datum/stack_recipe/feather/finish_building(var/mob/user, var/obj/item/stack/sheet/feather/S, var/obj/R)
+	if(S.color)
+		R.color = S.color
+	if(S.name)
+		R.name = "[S.name] [R.name]"
+	return R
+
+var/list/datum/stack_recipe/feather_recipes = list(
+	new/datum/stack_recipe/feather("feather coat", /obj/item/clothing/suit/feathercoat, 6, time = 50),
+	new/datum/stack_recipe/feather("feather vest", /obj/item/clothing/suit/feathervest, 4, time = 30),
+	new/datum/stack_recipe/feather("headdress", /obj/item/clothing/head/headdress, 3, time = 60),
+	new/datum/stack_recipe/feather("pillow", /obj/item/weapon/pillow, 2, time = 30),
+	new /datum/stack_recipe/feather("feather duster", /obj/item/weapon/featherduster, 2, time = 20),
+	new /datum/stack_recipe/feather("quill pen", /obj/item/weapon/pen/quill, 1, time = 10),
+	new /datum/stack_recipe/feather("feather wreath", /obj/item/mounted/frame/wreath/featherwreath, 4, time = 50),
+	new /datum/stack_recipe/feather("dreamcatcher", /obj/item/mounted/frame/wreath/dreamcatcher, 4, time = 50)
+)

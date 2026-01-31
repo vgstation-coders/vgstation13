@@ -7,7 +7,7 @@
 	melt_temperature = 0 // Doesn't melt.
 	flags = INVULNERABLE
 	walltype = "swall"
-
+	hardness = 100 // nohulkz
 
 /turf/simulated/wall/shuttle/canSmoothWith()
 	var/static/list/smoothables = list(
@@ -24,8 +24,7 @@
 /turf/simulated/wall/shuttle/isSmoothableNeighbor(atom/A)
 	if (get_area(A) != get_area(src))
 		return 0
-
-	return ..()
+	return is_type_in_list(A, canSmoothWith()) && !(cannotSmoothWith() && (is_type_in_list(A, cannotSmoothWith())))
 
 /turf/simulated/wall/shuttle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
@@ -44,7 +43,10 @@
 /turf/simulated/wall/shuttle/ex_act(severity)
 	return
 
-/turf/simulated/wall/shuttle/mech_drill_act(severity)
+/turf/simulated/wall/shuttle/dismantle_wall(devastated, explode)
+	return 1
+
+/turf/simulated/wall/shuttle/attack_rotting(mob/user)
 	return
 
 /turf/simulated/wall/shuttle/attack_animal(var/mob/living/simple_animal/M)
@@ -82,9 +84,12 @@
 /obj/structure/shuttle/diag_wall/initialize()
 	var/turf/T = get_turf(src)
 	if(T)
+		if(!T.dynamic_lighting)
+			update_moody_light('icons/lighting/moody_lights.dmi', "diag_wall")
 		T.dynamic_lighting = 1
 		if(SSlighting && SSlighting.initialized && !T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)
+		update_weather_overlays(T)
 
 /obj/structure/shuttle/diag_wall/New()
 	..()
@@ -103,12 +108,40 @@
 	if(istype(T,/turf/space))
 		T.dynamic_lighting = 0
 		T.lighting_clear_overlay()
+	var/datum/climate/Cold = SSweather.get_climate(T.z)
+	if(Cold)
+		Cold.unregister_weather_turf(T, TRUE)
+		plane = initial(plane)
+		layer = initial(layer)
 	..()
 	T = get_turf(destination)
 	if(T)
+		kill_moody_light()
+		if(!T.dynamic_lighting)
+			update_moody_light('icons/lighting/moody_lights.dmi', "diag_wall")
 		T.dynamic_lighting = 1
 		if(!T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)
+		update_weather_overlays(T)
+
+/obj/structure/shuttle/diag_wall/proc/update_weather_overlays(var/turf/T)
+	var/climate_added = FALSE
+	for(var/turf/adjT in range(1, T))
+		if(adjT == T)
+			continue
+		if(istype(adjT, T.type))
+			for(var/obj/effect/weather_holder/WH in adjT.vis_contents)
+				T.vis_contents |= WH
+				climate_added = TRUE
+				break
+		if(climate_added)
+			break
+	var/datum/allocation/A = SSmapping.get_allocation(trf = T)
+	var/datum/climate/Cnew = SSweather.get_climate(T.z,A)
+	if(climate_added && Cnew)
+		Cnew.register_weather_turf(T, TRUE)
+		plane = EFFECTS_PLANE
+		layer = SNOW_OVERLAY_LAYER + 1
 
 /obj/structure/shuttle/diag_wall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
@@ -209,6 +242,7 @@
 
 /obj/machinery/podcomputer/Destroy()
 	linked_pod?.podcomputer = null
+	linked_pod?.crashing_this_pod = FALSE
 	..()
 
 /obj/machinery/podcomputer/process()

@@ -23,7 +23,6 @@
 	//var/lasers = 0
 
 	var/threatlevel = 0
-//var/emagged = 0 //Emagged Secbots view everyone as a criminal
 	var/check_records = 1 //Does it check security records?
 	var/arrest_type = 0 //If true, don't handcuff
 
@@ -40,7 +39,6 @@
 		/obj/item/weapon/gun/energy/tag,
 		/obj/item/weapon/gun/energy/laser/practice,
 		/obj/item/weapon/gun/hookshot,
-		/obj/item/weapon/gun/energy/floragun,
 		/obj/item/weapon/melee/defibrillator
 		)
 
@@ -144,7 +142,7 @@ Auto Patrol: []"},
 "<A href='?src=\ref[src];operation=patrol'>[auto_patrol ? "On" : "Off"]</A>" )
 
 
-	user << browse("<HEAD><TITLE>Securitron v2.5 controls</TITLE></HEAD>[dat]", "window=autosec")
+	user << browse(HTML_SKELETON_TITLE("Securiton v2.5 controls", dat), "window=autosec")
 	onclose(user, "autosec")
 	return
 

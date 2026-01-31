@@ -88,7 +88,7 @@
 	ID = JUSTICE_DEPARTMENT
 	initial_role = JUDGE
 	late_role = JUDGE
-	desc = "I AM THE LAW"
+	desc = "I AM THE LAW!"
 	logo_state = "gun-logo"
 	initroletype = /datum/role/judge
 	roletype = /datum/role/judge

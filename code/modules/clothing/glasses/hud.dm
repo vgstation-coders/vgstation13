@@ -73,30 +73,19 @@
 /obj/item/clothing/glasses/hud/health/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/glasses/hud/security/scouter))
-		var/worn = FALSE
-		if(user.is_wearing_item(src, slot_glasses))
-			worn = TRUE
 		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src)
-			if(!user.drop_item(W))
-				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
-				return
-			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(hhud = src, shud = W)
-			W.transfer_fingerprints_to(I)
-			I.base_health = src
-			I.base_sec = W
-			W.forceMove(I)
-			src.forceMove(I)
+			var/worn = FALSE
+			if(user.is_wearing_item(src, slot_glasses))
+				worn = TRUE
+			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(loc, src, W)
+			user.create_in_hands(src, I, W, move_in = TRUE, msg = "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
 			var/mob/living/carbon/human/H = user
 			if(worn && istype(H))
 				H.equip_to_slot_if_possible(I,slot_glasses,EQUIP_FAILACTION_DROP)
-			else
-				user.put_in_hands(I)
-			to_chat(user, "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
 
 /obj/item/clothing/glasses/hud/health/cmo
 	name = "advanced health scanner HUD"
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status as well as reveals pathogens in sight. The tinted glass protects the wearer from bright flashes of light."
 	icon_state = "cmohud"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
@@ -179,26 +168,7 @@
 /obj/item/clothing/glasses/hud/security/scouter/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/glasses/hud/health))
-		var/worn = FALSE
-		if(user.is_wearing_item(src, slot_glasses))
-			worn = TRUE
-		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src)
-			if(!user.drop_item(W))
-				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
-				return
-			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(hhud = W, shud = src)
-			W.transfer_fingerprints_to(I)
-			I.base_health = W
-			I.base_sec = src
-			W.forceMove(I)
-			src.forceMove(I)
-			var/mob/living/carbon/human/H = user
-			if(worn && istype(H))
-				H.equip_to_slot_if_possible(I,slot_glasses,EQUIP_FAILACTION_DROP)
-			else
-				user.put_in_hands(I)
-			to_chat(user, "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
+		W.attackby(src, user)
 
 
 /obj/item/clothing/glasses/hud/security/jensenshades
@@ -228,30 +198,6 @@
 	eyeprot = 1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	prescription_type = /obj/item/clothing/glasses/hud/security/sunglasses/prescription
-
-/obj/item/clothing/glasses/hud/security/sunglasses/become_defective()
-	if(!defective)
-		..()
-		if(prob(15))
-			new /obj/item/weapon/shard(loc)
-			playsound(src, "shatter", 50, 1)
-			qdel(src)
-			return
-		if(prob(15))
-			new/obj/item/clothing/glasses/sunglasses(get_turf(src))
-			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
-			qdel(src)
-			return
-		if(prob(55))
-			eyeprot = 0
-		if(prob(55))
-			if(istype(src.loc, /mob/living/carbon/human))
-				var/mob/living/carbon/human/M = src.loc
-				if(M.glasses == src)
-					for(var/datum/visioneffect/H in stored_huds)
-						M.remove_hud(H)
-			hud_types = null
-			stored_huds = null
 
 /obj/item/clothing/glasses/hud/security/sunglasses/syndishades
 	name = "sunglasses"
@@ -321,7 +267,7 @@
 	item_state = "investigation"
 	darkness_view = -1
 	eyeprot = 1
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	hud_types = list(/datum/visioneffect/security/arrest,
 					/datum/visioneffect/job,
 					/datum/visioneffect/implant)
@@ -385,7 +331,7 @@
 	icon_state = "wagemonocle"
 	species_fit = list(VOX_SHAPED)
 	mech_flags = MECH_SCAN_ILLEGAL
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	hud_types = list(/datum/visioneffect/accountdb/wage,
 					/datum/visioneffect/job)
 
@@ -415,7 +361,7 @@
 	icon_state = "aviators_gold"
 	darkness_view = -1
 	eyeprot = 1
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	hud_types = list(/datum/visioneffect/job)
 
 /*
@@ -437,7 +383,7 @@
 		var/mob/living/carbon/human/M = src.loc
 		to_chat(M, "<span class='warning'>\The [src] overloads and blinds you!</span>")
 		if(M.glasses == src)
-			M.eye_blind = 3
+			M.instant_blindness(13)
 			M.eye_blurry = 5
 			M.disabilities |= NEARSIGHTED
 			spawn(100)

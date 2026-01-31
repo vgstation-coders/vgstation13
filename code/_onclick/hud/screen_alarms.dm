@@ -77,11 +77,11 @@
 // PRIVATE = only edit, use, or override these if you're editing the system as a whole
 
 var/global/list/screen_alarms_locs = list(
-	1 = ui_alert1,
-	2 = ui_alert2,
-	3 = ui_alert3,
-	4 = ui_alert4,
-	5 = ui_alert5
+	ui_alert1,
+	ui_alert2,
+	ui_alert3,
+	ui_alert4,
+	ui_alert5
 	)
 
 //Re-render all alerts
@@ -103,7 +103,7 @@ var/global/list/screen_alarms_locs = list(
 		var/obj/abstract/screen/alert/alert = mobalerts[mobalerts[i]]
 		if(alert.icon_state == "template")
 			if(!icon_pref)
-				icon_pref = ui_style2icon(mymob.client.prefs.UI_style)
+				icon_pref = ui_style2icon(mymob.client.prefs.get_pref(/datum/preference_setting/string/UI_style))
 			alert.icon = icon_pref
 		alert.screen_loc = screen_alarms_locs[i]
 		mymob.client.screen |= alert
@@ -188,10 +188,11 @@ var/global/list/screen_alarms_locs = list(
 
 /obj/abstract/screen/alert/MouseEntered(location,control,params)
 	if(!gcDestroyed)
-		openToolTip(usr, src, params, title = name, content = desc, theme = alerttooltipstyle)
+		//openToolTip(usr, src, params, title = name, content = desc, theme = alerttooltipstyle)
+		usr.client?.tooltips.show(src, mouse=params, title=name, content=desc, theme = alerttooltipstyle)
 
 /obj/abstract/screen/alert/MouseExited()
-	closeToolTip(usr)
+	usr.client?.tooltips.hide()
 
 
 //Object Alarms
@@ -230,6 +231,12 @@ var/global/list/screen_alarms_locs = list(
 	name = "Suffocating"
 	desc = "Find some good air before you pass out!"
 	icon_state = "carbon_oxy"
+
+/obj/abstract/screen/alert/carbon/breath/vox
+	icon_state = "carbon_nitro"
+
+/obj/abstract/screen/alert/carbon/breath/plasma
+	icon_state = "carbon_plasma"
 
 /obj/abstract/screen/alert/tox
 	name = "Toxins"

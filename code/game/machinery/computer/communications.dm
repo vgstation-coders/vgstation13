@@ -405,6 +405,18 @@ var/list/shuttle_log = list()
 					to_chat(usr, "<span class='warning'>This action requires either a red alert or head of security authorization.</span>")
 			else
 				to_chat(usr, "<span class='warning'>You must wear an ID for this function.</span>")
+		if("ToggleExplorationProgram")
+			if(authenticated == AUTH_CAPT || isAdminGhost(usr))
+				var/action = SSmapping.scanning_disabled ? "reactivate" : "suspend"
+				var/message = SSmapping.scanning_disabled ? "reactivate the exploration program and re-enable deep space scanning?" : "suspend the exploration program? This will recall the exploration shuttle to Central Command and disable deep space scanning!"
+				var/response = alert(usr, "Are you sure you wish to [message]", "[action == "suspend" ? "Suspend" : "Reactivate"] Exploration Program", "Yes", "No")
+				if(response == "Yes")
+					if(!usr.Adjacent(src) && !issilicon(usr) && !isAdminGhost(usr))
+						return
+					toggle_exploration_program(usr)
+			else
+				to_chat(usr, "<span class='warning'>You need Captain-level access to control the exploration program.</span>")
+			setMenuState(usr, COMM_SCREEN_MAIN)
 		if("ViewShuttleLog")
 			setMenuState(usr, COMM_SCREEN_SHUTTLE_LOG)
 	return 1
@@ -466,6 +478,7 @@ var/list/shuttle_log = list()
 	)
 	data["portopen"] = ports_open
 	data["ert_sent"] = sentStrikeTeams(TEAM_ERT)
+	data["exploration_terminated"] = SSmapping.scanning_disabled
 
 	var/msg_data[0]
 	for(var/i=1;i<=src.messagetext.len;i++)
@@ -593,7 +606,10 @@ var/list/shuttle_log = list()
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
 	if(!isobserver(user))
-		shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)] ([user.x-WORLD_X_OFFSET[user.z]], [user.y-WORLD_Y_OFFSET[user.z]], [user.z])."
+		if (user)
+			shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)] ([user.x-WORLD_X_OFFSET[user.z]], [user.y-WORLD_Y_OFFSET[user.z]], [user.z])."
+		else
+			shuttle_log += "\[[worldtime2text()]] Called by game."
 	if (user)
 		log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
 		message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
@@ -606,6 +622,8 @@ var/list/shuttle_log = list()
 
 	return 1
 
+// -- Nota Bene: UNUSED, Baycode-era crew transfer vote.
+// Trivia : for how-many-years (at least 12) there was a math error ; the minimal shift length was supposed to be 30 minutes. It was, instead, 90.
 /proc/init_shift_change(var/mob/user, var/force = 0)
 	if (!ticker)
 		return
@@ -641,8 +659,8 @@ var/list/shuttle_log = list()
 		//	to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
 		//	return
 
-		if(world.time < 54000) // 30 minute grace period to let the game get going
-			to_chat(user, "The shuttle is refueling. Please wait another [round((54000-world.time)/600)] minutes before trying again.")//may need to change "/600"
+		if(world.time < 90 MINUTES) // 90 minute grace period to let the game get going
+			to_chat(user, "The shuttle is refueling. Please wait another [round((90 MINUTES-world.time)/(60 SECONDS))] minutes before trying again.")//may need to change "/600"
 
 			return
 
@@ -676,6 +694,46 @@ var/list/shuttle_log = list()
 		log_game("[key_name(user)] has recalled the shuttle.")
 		message_admins("[key_name_admin(user)] has recalled the shuttle - [formatJumpTo(user)].", 1)
 	return
+
+/proc/toggle_exploration_program(var/mob/user, var/bypass_cooldown = FALSE)
+	if(!bypass_cooldown && world.time < (SSmapping.last_lockdown_time + SSmapping.lockdown_duration))
+		var/time_left = (SSmapping.last_lockdown_time + SSmapping.lockdown_duration) - world.time
+		to_chat(user, "<span class='warning'>[SSmapping.scanning_disabled?"Exploration shuttle":"Centcomm shuttle dock"] is undergoing maintenance. [round(time_left/10/60,0.1)] minutes remaining.</span>")
+		return FALSE
+
+	if(SSmapping.scanning_disabled)
+		SSmapping.scanning_disabled = FALSE
+		if(!bypass_cooldown)
+			SSmapping.last_lockdown_time = world.time
+
+		var/obj/docking_port/destination/exploration/station/station_dock = exploration_shuttle.add_dock(/obj/docking_port/destination/exploration/station)
+		if(!station_dock)
+			to_chat(user, "<span class='warning'>Error: Station exploration dock not found!</span>")
+			return FALSE
+
+		if(exploration_shuttle.current_port != station_dock)
+			exploration_shuttle.travel_to(station_dock, null, user)
+			exploration_shuttle.remove_dock(/obj/docking_port/destination/exploration/centcom)
+
+		message_admins("[key_name_admin(user)] has re-enabled planet scanning and recalled the exploration shuttle to the station.")
+		command_alert("The exploration program has been reactivated. The exploration shuttle is returning to the station. Deep space scanning is now available.", "Exploration Program Reactivated")
+		return TRUE
+	else
+		SSmapping.scanning_disabled = TRUE
+		if(!bypass_cooldown)
+			SSmapping.last_lockdown_time = world.time
+
+		var/obj/docking_port/destination/exploration/centcom/centcom_dock = exploration_shuttle.add_dock(/obj/docking_port/destination/exploration/centcom)
+		if(!centcom_dock)
+			to_chat(user, "<span class='warning'>Error: Centcom exploration dock not found!</span>")
+			return FALSE
+
+		if(exploration_shuttle.current_port != centcom_dock)
+			exploration_shuttle.travel_to(centcom_dock, null, user, eject = TRUE)
+
+		message_admins("[key_name_admin(user)] has recalled the exploration shuttle to centcom and disabled planet scanning.")
+		command_alert("The exploration shuttle has been recalled to Central Command. Deep space scanning has been disabled.", "Exploration Program Suspended")
+		return TRUE
 
 /obj/machinery/computer/communications/proc/post_status(var/command, var/data1, var/data2)
 

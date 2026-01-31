@@ -1,3 +1,5 @@
+#define CLICKDRAG_DELAY_WINDOW 2 //Set this in deciseconds (1/10th of a second) for how long a player is allowed to drag to a tile to click the target
+
 /*
 	MouseDrop:
 
@@ -8,6 +10,8 @@
 /atom/MouseDrop(atom/over_object,src_location,over_location,src_control,over_control,params)
 	if(!over_object) //Dragged to the stat panel
 		return
+	if(src == over_object) //Click-dragged onto the same entity
+		return Click(src, over_control, params)
 	var/list/params_list = params2list(params)
 	if(params_list["ctrl"]) //More modifiers can be added - check click.dm
 		spawn(0)
@@ -25,6 +29,19 @@
 // receive a mousedrop
 /atom/proc/MouseDropTo(atom/over_object,mob/user,src_location,over_location,src_control,over_control,params)
 	return
+
+/mob/living/MouseDrop(atom/over_object, src_location, over_location, src_control, over_control, params)
+	if(istype(over_object, /turf))
+		var/current_time = world.timeofday
+		var/client/C = usr.client
+		//This compares a client variable, click_held_down_time, that gets set by MouseDown() equal to the world.timeofday back then
+		//to MouseDrop's current world.timeofday. If click_held_down_time plus the delay is smaller than
+		//the present world.timeofday then the player is allowed to click-drag their target into the
+		//floor to click them, which allows better hitting during twitchy combat scenarios
+		if((current_time < C.click_held_down_time + CLICKDRAG_DELAY_WINDOW))
+			if(Adjacent(over_object)) //A turf near it.
+				return Click(src, over_control, params)
+	..()
 
 /obj/MouseDropTo(atom/over_object, mob/user)
 	if(material_type)

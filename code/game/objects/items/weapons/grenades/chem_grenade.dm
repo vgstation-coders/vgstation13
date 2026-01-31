@@ -28,6 +28,7 @@
 	var/obj/item/slime_extract/secondExtract = null	//for Ex grenades
 	var/obj/item/weapon/reagent_containers/glass/beaker/noreactgrenade/reservoir = null
 	var/mob/primed_by = "N/A" //"name (ckey)". For logging purposes
+	var/disguised = FALSE //use this to hide if the device has an assembly, such as with disguised lipstick grenades...
 	mech_flags = null
 	det_time =0 //recycling this variable to be used by the grenade launcher's timer override function since chemnades use their assembly's timer instead.
 
@@ -104,16 +105,8 @@
 		name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 		stage = GRENADE_STAGE_ASSEMBLY_INSERTED
 	else if(istype(W,/obj/item/stack/cable_coil) && !beakers.len)
-		var/obj/item/stack/cable_coil/coil = W
-		if(coil.amount < 2)
-			return
-		coil.use(2)
-		var/obj/item/weapon/electrolyzer/E = new /obj/item/weapon/electrolyzer
-		to_chat(user, "<span class='notice'>You tightly coil the wire around the metal casing.</span>")
 		W.playtoolsound(src, 30, TRUE, -2)
-		user.before_take_item(src)
-		user.put_in_hands(E)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/electrolyzer, W, 2, "<span class='notice'>You tightly coil the wire around the metal casing.</span>")
 	else if(W.is_screwdriver(user) && path != PATH_STAGE_COMPLETE)
 		if(stage == GRENADE_STAGE_ASSEMBLY_INSERTED )
 			path = PATH_STAGE_CONTAINER_INSERTED
@@ -181,20 +174,12 @@
 	else if(iscrowbar(W))
 		to_chat(user, "You begin pressing \the [W] into \the [src].")
 		if(do_after(user, src, 30))
-			to_chat(user, "You poke a hole in \the [src].")
 			eject_contents()
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/fuel_reservoir/I = new (get_turf(user))
-				user.put_in_hands(I)
-				qdel(src)
-			else
-				new /obj/item/weapon/fuel_reservoir(get_turf(src.loc))
-				qdel(src)
+			user.create_in_hands(src, /obj/item/weapon/fuel_reservoir, msg = "You poke a hole in \the [src].")
 
 /obj/item/weapon/grenade/chem_grenade/examine(mob/user)
 	..()
-	if(detonator)
+	if(detonator && !disguised)
 		to_chat(user, "<span class='info'>With an attached [detonator.name]</span>")
 
 /obj/item/weapon/grenade/chem_grenade/Crossed(AM as mob|obj)
@@ -267,26 +252,26 @@
 	for(var/obj/item/slime_extract/S in beakers)		//checking for reagents inside the slime extracts
 		S.reagents.trans_to(reservoir, S.reagents.total_volume)
 	if (firstExtract != null)
-		while(firstExtract && firstExtract.Uses)//<-------//exception for slime extracts injected with steroids. The grenade will repeat its checks untill all its remaining uses are gone
-			var/init_uses = firstExtract.Uses
+		while(firstExtract && firstExtract.uses)//<-------//exception for slime extracts injected with steroids. The grenade will repeat its checks untill all its remaining uses are gone
+			var/init_uses = firstExtract.uses
 			for(var/reagent in firstExtract.reactive_reagents) //If the grenade contains a slime extract, the grenade will check in this order
 				if (reservoir.reagents.has_reagent(reagent, 5))
 					reservoir.reagents.trans_id_to(firstExtract, reagent, 5) //and inject 5u of it into the slime extract.
 				if (!firstExtract)
 					break
-			if(!firstExtract || init_uses == firstExtract.Uses) //Nothing happened, get outta here
+			if(!firstExtract || init_uses == firstExtract.uses) //Nothing happened, get outta here
 				break
 		if(firstExtract && firstExtract.reagents && firstExtract.reagents.total_volume)	//<-------//exception for slime reactions that produce new reagents. The grenade checks if any
 			firstExtract.reagents.trans_to(reservoir, firstExtract.reagents.total_volume)	//reagents are left in the slime extracts after the slime reactions occured
 		if (secondExtract != null)
-			while(secondExtract && secondExtract.Uses)	//why don't anyone ever uses "while" directives anyway? //we do now
-				var/init_uses = secondExtract.Uses
+			while(secondExtract && secondExtract.uses)	//why don't anyone ever uses "while" directives anyway? //we do now
+				var/init_uses = secondExtract.uses
 				for(var/reagent2 in secondExtract.reactive_reagents)
 					if (reservoir.reagents.has_reagent(reagent2, 5))
 						reservoir.reagents.trans_id_to(secondExtract, reagent2, 5)
 					if (!secondExtract)
 						break
-				if(!secondExtract || init_uses == secondExtract.Uses)
+				if(!secondExtract || init_uses == secondExtract.uses)
 					break
 			if(secondExtract && secondExtract.reagents && secondExtract.reagents.total_volume)
 				secondExtract.reagents.trans_to(reservoir, secondExtract.reagents.total_volume)
@@ -296,6 +281,10 @@
 	investigation_log(I_CHEMS, "has detonated, containing [reservoir.reagents.get_reagent_ids(1)] - Primed by: [primed_by]")
 
 	reservoir.reagents.trans_to(src, reservoir.reagents.total_volume)
+
+	if (QDELETED(src) || !reagents || !reagents.total_volume)
+		// incase the grenade was explosive and the explosion already qdel'd the grenade
+		return
 
 	if(reagents.total_volume) //The possible reactions didnt use up all reagents.
 		reagents.splashplosion(affected_area)

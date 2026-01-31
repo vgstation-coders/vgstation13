@@ -105,6 +105,10 @@
 				if (H.z == 0 && !pos)
 					continue
 
+				// Block suit sensors location on z-level 7 (procedurally-generated planets)
+				if(pos && pos.z == map.zProcGen)
+					pos = null
+
 				var/obj/item/weapon/card/id/I = H.wear_id ? H.wear_id.GetID() : null
 
 				if (I)
@@ -199,6 +203,7 @@
 			transmitting = TRUE
 			set_light(1)
 			update_icon()
+			SStgui.try_update_ui(ui.user, src, ui)
 			return TRUE
 		if("turn_off")
 			if(emped || !transmitting || !Adjacent(usr) || usr.incapacitated())
@@ -206,13 +211,16 @@
 			transmitting = FALSE
 			set_light(0)
 			update_icon()
+			SStgui.try_update_ui(ui.user, src, ui)
 			return TRUE
 		if("toggle_refresh")
 			autorefreshing = !autorefreshing
+			SStgui.try_update_ui(ui.user, src, ui)
 			return TRUE
 		if("toggle_injury")
 			if(fullmode)
 				injuryonly = !injuryonly
+				SStgui.try_update_ui(ui.user, src, ui)
 				return TRUE
 			else
 				return FALSE

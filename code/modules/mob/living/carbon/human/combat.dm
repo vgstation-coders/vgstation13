@@ -81,10 +81,15 @@
 	talked |= break_grabs(target)
 
 	if(!talked)
-		target.drop_item()
+		var/obj/item/dropped_item = target.drop_item()
+		if (dropped_item)
+			dropped_item.on_disarm_drop(src)
 		visible_message("<span class='danger'>[src] has disarmed [target]!</span>")
 	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 	return 1
+
+/obj/item/proc/on_disarm_drop(mob/user)
+	return
 
 /mob/living/carbon/human/proc/get_organ_species(organ)
 	var/datum/organ/external/OE
@@ -105,43 +110,61 @@
 
 //Returns true if organ (which can be a string ID or a reference) has the mutation
 /mob/living/carbon/human/proc/organ_has_mutation(organ, mutation)
+	var/found_mutation = FALSE
+	if(istype(organ, /datum/organ/external))
+		var/datum/organ/external/datum_organ = organ
+		if(datum_organ.can_grasp)
+			var/obj/item/organ/external/hand_obj_type = new datum_organ.generic_type
+			var/list/hand_object_mutations = hand_obj_type.mutations
+			found_mutation = hand_object_mutations.Find(mutation)
 	var/datum/species/S = get_organ_species(organ)
-
 	if(istype(S))
-		return S.default_mutations.Find(mutation)
+		found_mutation ||= S.default_mutations.Find(mutation)
 	else
-		return src.mutations.Find(mutation)
+		found_mutation ||= mutations.Find(mutation)
+	return found_mutation
+
+/mob/living/carbon/human/proc/get_hand_attack_verb()
+	var/hand_obj_text
+	var/datum/organ/external/active_hand_organ_datum = get_active_hand_organ()
+	var/obj/item/organ/external/hand_obj_type = new active_hand_organ_datum.generic_type
+	hand_obj_text = hand_obj_type.attack_verb_text
+	var/datum/species/hand_species = get_organ_species(active_hand_organ_datum)
+	return hand_obj_text || hand_species.attack_verb
+
+/mob/living/carbon/human/proc/get_hand_punch_damage()
+	var/hand_obj_damage
+	var/datum/organ/external/active_hand_organ_datum = get_active_hand_organ()
+	var/obj/item/organ/external/hand_obj_type = new active_hand_organ_datum.generic_type
+	hand_obj_damage = hand_obj_type.attack_punch_damage
+	var/datum/species/hand_species = get_organ_species(active_hand_organ_datum)
+	return hand_obj_damage || hand_species.punch_damage
 
 /mob/living/carbon/human/get_unarmed_verb()
 	if(istype(gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		if(G.attack_verb_override)
 			return G.attack_verb_override
-
-	var/datum/species/S = get_organ_species(get_active_hand_organ())
-	return S.attack_verb
+	return get_hand_attack_verb()
 
 /mob/living/carbon/human/get_unarmed_hit_sound()
 	if(istype(gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		return G.get_hitsound_added()
-	var/datum/species/S = get_organ_species(get_active_hand_organ())
-	return (S.attack_verb == "punches" ? "punch" : 'sound/weapons/slice.ogg')
+	return (get_hand_attack_verb() == "punches" ? "punch" : 'sound/weapons/slice.ogg')
 
 /mob/living/carbon/human/get_unarmed_miss_sound()
-	var/datum/species/S = get_organ_species(get_active_hand_organ())
-	return (S.attack_verb == "punches" ? 'sound/weapons/punchmiss.ogg' : 'sound/weapons/slashmiss.ogg')
+	return (get_hand_attack_verb() == "punches" ? 'sound/weapons/punchmiss.ogg' : 'sound/weapons/slashmiss.ogg')
 
 /mob/living/carbon/human/get_unarmed_damage_type(mob/living/target)
 	if(ishuman(target) && istype(gloves , /obj/item/clothing/gloves/boxing/hologlove))
 		return HALLOSS
 	return ..()
 
-/mob/living/carbon/human/get_unarmed_damage(var/atom/victim)
+/mob/living/carbon/human/get_unarmed_damage(atom/victim)
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
-
 	var/damage = rand(0, S.max_hurt_damage)
-	damage += S.punch_damage
+	damage += get_hand_punch_damage()
 
 	if(mutations.Find(M_HULK))
 		damage += 5
@@ -254,12 +277,14 @@
 			to_chat(src, "<span class='notice'><B>They don't have a mouth!</B></span>")
 			return 0
 	if(src.check_body_part_coverage(MOUTH))
-		to_chat(src, "<span class='notice'><B>Remove your [src.get_body_part_coverage(MOUTH)]!</B></span>")
+		var/obj/item/I = src.get_body_part_coverage(MOUTH)
+		to_chat(src, "<span class='notice'><B>Remove your [I.name]!</B></span>")
 		return 0
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
 		if(H.check_body_part_coverage(MOUTH))
-			to_chat(src, "<span class='notice'><B>Remove their [H.get_body_part_coverage(MOUTH)]!</B></span>")
+			var/obj/item/I = H.get_body_part_coverage(MOUTH)
+			to_chat(src, "<span class='notice'><B>Remove their [I.name]!</B></span>")
 			return 0
 
 	if(!target.cpr_time)
@@ -287,6 +312,8 @@
 			tF += C.offenseTackleBonus()
 	if(species)
 		tF += species.tacklePower
+	if(reagents.has_reagent(SQUASH))
+		tF *= 1.5
 	return tF
 
 /mob/living/carbon/human/bonusTackleDefense(var/tD = 0)
@@ -295,6 +322,8 @@
 			tD += C.defenseTackleBonus()
 	if(species)
 		tD += species.tacklePower
+	if(reagents.has_reagent(SQUASH))
+		tD *= 1.5
 	return tD
 
 /mob/living/carbon/human/bonusTackleRange(var/tR = 0)
@@ -307,7 +336,9 @@
 		var/obj/item/slowSuit = wear_suit
 		if(slowSuit.slowdown > NO_SLOWDOWN)
 			tR -= 1
-	if(reagents.get_sportiness()>=10)	//Not as easy as just a swig of sport drink
+	if(reagents.has_reagent(SQUASH))
+		tR *= 2
+	if(reagents.get_sportiness()>=5)
 		tR += 1
 	return max(0, tR)
 
@@ -320,3 +351,12 @@
 		knock_out_teeth()
 	..(hurtAmount, knockAmount, hurtSound)
 
+/mob/living/carbon/human/get_attacker_accuracy_increase()
+	var/accuracy_bonus = 0
+	if(isninja(src)) //Ninjas are expert combatants
+		accuracy_bonus = 50
+	return accuracy_bonus
+
+/mob/living/carbon/human/get_defender_accuracy_decrease()
+	var/accuracy = 0
+	return accuracy

@@ -3,10 +3,18 @@
 	name = "flora"
 	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
 	var/shovelaway = FALSE
+	var/pollen = null
+	var/plantname = null
 
 /obj/structure/flora/New()
 	..()
 	update_icon()
+
+/obj/structure/flora/Destroy()
+	if(istype(loc,/turf/unsimulated/floor/planetary/grass/jungle))
+		var/turf/unsimulated/floor/planetary/grass/jungle/G=loc
+		G.turf_speed_multiplier=1.0
+	..()
 
 /obj/structure/flora/update_icon()
 	clicked = new/icon(src.icon, src.icon_state, src.dir)
@@ -61,6 +69,27 @@
 		user.put_in_active_hand(I)
 		overlays -= overlays[overlays.len]
 
+/obj/structure/flora/wind_act(var/differential, var/list/connecting_turfs)
+	if (!pollen)
+		return
+	var/turf/T = get_turf(src)
+	var/turf/U = get_step(T,get_dir(T,pick(connecting_turfs)))
+	var/log_differential = log(abs(differential) * 3)
+	if (U)
+		if (differential > 0)
+			T.flying_pollen(U,log_differential, pollen)
+		else
+			T.flying_pollen(U,-log_differential, pollen)
+		T.adjust_particles(PVAR_SPAWNING, 0.5, pollen)
+	spawn(10)
+		for (var/obj/machinery/portable_atmospherics/hydroponics/other_tray in U)//TODO: have it work on grass
+			if (!other_tray.seed)
+				other_tray.seed = SSplant.seeds[plantname]
+				other_tray.add_planthealth(other_tray.seed.endurance)
+				other_tray.lastcycle = world.time
+				other_tray.weedlevel = 0
+				other_tray.update_icon()
+
 /obj/structure/flora/tree
 	name = "tree"
 	anchored = 1
@@ -81,7 +110,7 @@
 
 	var/falling_dir = 0 //Direction in which spawned logs are thrown.
 
-	var/const/randomize_on_creation = 1
+	var/randomize_on_creation = 1
 	var/const/log_type = /obj/item/weapon/grown/log/tree
 	var/holo = FALSE
 	var/image/transparent
@@ -165,7 +194,7 @@
 /obj/structure/flora/tree/attackby(obj/item/W, mob/living/user)
 	..()
 
-	if(istype(W, /obj/item/weapon))
+	if(istype(W, /obj/item))
 		if(W.sharpness_flags & (CHOPWOOD|SERRATED_BLADE))
 			health -= (user.get_strength() * W.force)
 			playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
@@ -410,7 +439,10 @@
 // /vg/
 /obj/structure/flora/pottedplant/random/New()
 	..()
-	icon_state = "plant-[rand(1,26)]"
+	var/potted_plant_type = "[rand(1,26)]"
+	icon_state = "plant-[potted_plant_type]"
+	if (potted_plant_type in list("7","9","20"))
+		update_moody_light_index("plant", icon, "[icon_state]-moody")
 
 /obj/structure/flora/pottedplant/claypot
 	name = "clay pot"
@@ -420,6 +452,8 @@
 	anchored = 0
 	density = FALSE
 	var/plant_name = ""
+	var/image/plant_image = null
+	var/list/paint_layers = list("paint-full" = null, "paint-rim" = null, "paint-stripe" = null)
 
 /obj/structure/flora/pottedplant/claypot/examine(mob/user)
 	..()
@@ -445,14 +479,72 @@
 				I.forceMove(loc)
 			var/obj/item/claypot/C = new(loc)
 			transfer_fingerprints(src, C)
+			C.paint_layers = paint_layers.Copy()
+			C.update_icon()
 			qdel(src)
 
 	else if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
 		to_chat(user, "<span class='warning'>There is already a plant in \the [src]</span>")
 
+	else if(istype(O, /obj/item/painting_brush))
+		var/obj/item/painting_brush/P = O
+		if (P.paint_color)
+			paint_act(P.paint_color,user, P.nano_paint != PAINTLIGHT_NONE)
+		else
+			to_chat(user, "<span class='warning'>There is no paint on \the [P].</span>")
+		return 1
+	else if(istype(O, /obj/item/paint_roller))
+		var/obj/item/paint_roller/P = O
+		if (P.paint_color)
+			paint_act(P.paint_color,user, P.nano_paint != PAINTLIGHT_NONE)
+		else
+			to_chat(user, "<span class='warning'>There is no paint on \the [P].</span>")
+		return 1
+
 	else
 		..()
 
+/obj/structure/flora/pottedplant/claypot/proc/paint_act(var/_color, var/mob/user, var/nano_paint)
+	var/list/choices = list("Full" = "paint-full", "Rim" = "paint-rim", "Stripe" = "paint-stripe")
+	var/paint_target = input("Which part do you want to paint?","Clay Pot Painting",1) as null|anything in choices
+	if (!paint_target)
+		return
+	switch(paint_target)
+		if ("Full")
+			to_chat(user, "<span class='notice'>You begin to cover the pot in paint.</span>")
+		if ("Rim")
+			to_chat(user, "<span class='notice'>You begin to paint the pot's rim.</span>")
+		if ("Stripe")
+			to_chat(user, "<span class='notice'>You begin to paint a stripe on the pot.</span>")
+	playsound(loc, "mop", 10, 1)
+	if (do_after(user, src, 20))
+		if (_color == "#FFFFFF")
+			_color = "#FEFEFE" //null color prevention
+		if (paint_target == "Full")
+			paint_layers["paint-rim"] = null
+			paint_layers["paint-stripe"] = null
+		paint_layers[choices[paint_target]]	= list(_color, nano_paint)
+		update_icon()
+
+/obj/structure/flora/pottedplant/claypot/update_icon()
+	overlays.len = 0
+	for (var/entry in paint_layers)
+		if (!paint_layers[entry])
+			kill_moody_light_index(entry)
+		else
+			var/list/paint_layer = paint_layers[entry]
+			var/image/I = image(icon, src, "[icon_state]-[entry]")
+			I.color = paint_layer[1]
+			overlays += I
+			if (paint_layer[2])
+				update_moody_light_index(entry, image_override = I)
+			else
+				kill_moody_light_index(entry)
+	overlays += plant_image
+	if ("plant" in moody_lights)
+		overlays += moody_lights["plant"]
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 //newbushes
 
@@ -603,3 +695,247 @@
 /obj/structure/flora/rock/pile/snow/New()
 	..()
 	icon_state = "srockpile[rand(1,5)]"
+
+
+/obj/structure/flora/jungle_berries
+	name = "Berry Bush"
+	desc = "I eated the purple berries."
+	icon = 'icons/obj/hydroponics/berry.dmi'
+	icon_state="stage-6"
+	var/hasberries=FALSE
+	var/tickssincelastgrowth=0
+
+/obj/structure/flora/jungle_berries/New()
+	..()
+	processing_objects+=src
+	if(prob(25))
+		hasberries=TRUE
+	if(hasberries)
+		icon_state = "harvest"
+
+/obj/structure/flora/jungle_berries/Destroy()
+	..()
+	processing_objects-=src
+
+/obj/structure/flora/jungle_berries/attack_hand(var/mob/user)
+	if(hasberries)
+		to_chat(user,"<span class='notice'>You pick some berries from \the [src]</span>")
+		hasberries=FALSE
+		tickssincelastgrowth=0
+		var/i=3
+		while(i)
+			new/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle(loc,user)
+			i--
+			if(user.lucky_prob_rand()<0.5) //luckier people get more berries.
+				i=0
+		icon_state="stage-6"
+	else
+		to_chat(user,"<span class='notice'>There's nothing grown yet.</span>")
+		..()
+
+/obj/structure/flora/jungle_berries/process()
+	if(!hasberries)
+		if(rand()<0.0284 && tickssincelastgrowth>5) //this gives us a regrow time of around 60 seconds for half of them to get there.
+			hasberries=TRUE
+			icon_state = "harvest"
+		tickssincelastgrowth++
+	..()
+	processing_objects+=src // flora is not normally an object which calls this proc, so we have to manually re-add it every cycle.
+
+//lavaland lmao
+/obj/structure/flora/firebush
+	name = "flaming bush"
+	desc = "A bush being consumed by flames. Maybe it'll rise from its ashes like a phoenix?"
+	icon = 'icons/obj/flora/hellflora.dmi'
+	icon_state = "hell_bush"
+	density = FALSE
+	light_color = "#e08300"
+	light_power = 2
+	light_range = 3
+
+/obj/structure/flora/ausbushes/fullgrass/hell
+	name = "thick hellish grass"
+	desc = "A thick patch of grass tinted red."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_range = 2
+	light_power = 3
+	gender = PLURAL
+
+/obj/structure/flora/ausbushes/fullgrass/hell/New()
+	. = ..()
+	icon_state = "fullgrass_[rand(1, 3)]"
+	light_color = pick("#e87800", "#780606")
+
+/obj/structure/flora/ausbushes/sparsegrass/hell
+	name = "sparse hellish grass"
+	desc = "A sparse patch of grass tinted red."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_range = 2
+	light_power = 3
+	gender = PLURAL
+
+/obj/structure/flora/ausbushes/sparsegrass/hell/New()
+	. = ..()
+	icon_state = "sparsegrass_[rand(1, 3)]"
+	light_color = pick("#e87800", "#780606")
+
+/obj/structure/flora/ausbushes/grassybush/hell
+	name = "crimson bush"
+	desc = "A crimson bush, native to lava planets."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_color = "#c70404"
+	light_range = 2
+	light_power = 3
+
+/obj/structure/flora/ausbushes/hell
+	name = "smouldering bush"
+	desc = "Some kind of orange plant that appears to be slowly burning."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_range = 2
+	light_power = 1
+
+/obj/structure/flora/ausbushes/hell/New()
+	. = ..()
+	if(icon_state == "firstbush_1")
+		icon_state = "firstbush_[rand(1, 4)]"
+	light_color = pick("#e87800", "#780606")
+
+/obj/structure/flora/ausbushes/fernybush/hell
+	name = "hellish fern"
+	desc = "Some kind of orange fern."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_range = 2
+	light_power = 1
+
+/obj/structure/flora/ausbushes/fernybush/hell/New()
+	. = ..()
+	icon_state = "fernybush_[rand(1, 3)]"
+	light_color = pick("#e87800", "#780606")
+
+/obj/structure/flora/ausbushes/genericbush/hell
+	name = "hellish bush"
+	desc = "A small crimson bush."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_range = 2
+	light_power = 2
+
+/obj/structure/flora/ausbushes/genericbush/hell/New()
+	. = ..()
+	icon_state = "genericbush_[rand(1, 4)]"
+	light_color = pick("#e87800", "#780606")
+
+/obj/structure/flora/ausbushes/ywflowers/hell
+	name = "lavablossom"
+	desc = "Some red and orange flowers. They appear to be faintly glowing."
+	icon = 'icons/obj/flora/hellflora.dmi'
+	light_color = "#aba507"
+	light_power = 3
+	light_range = 2
+	gender = PLURAL
+
+/obj/structure/flora/rock/lava
+	name = "lavatic rock"
+	desc = "A volcanic rock. Lava is gushing from it. "
+	icon = 'icons/obj/flora/lavarocks.dmi'
+	icon_state = "basalt1"
+	var/base_icon_state = "basalt"
+	light_color = "#ab4907"
+	light_power = 3
+	light_range = 2
+
+/obj/structure/flora/rock/lava/New()
+	. = ..()
+	icon_state = "[base_icon_state][rand(1,3)]"
+
+/obj/structure/flora/rock/pile/lava
+	name = "rock shards"
+	desc = "Jagged shards of volcanic rock protuding from the ground."
+	icon = 'icons/obj/flora/lavarocks.dmi'
+	icon_state = "lavarocks1"
+	var/base_icon_state = "lavarocks"
+	gender = PLURAL
+
+/obj/structure/flora/rock/pile/lava/New()
+	. = ..()
+	icon_state = "[base_icon_state][rand(1,3)]"
+
+/obj/structure/flora/rock/asteroid
+	name = "pebbles"
+	desc = "Some small pebbles, sheared off a larger rock."
+	icon_state = "asteroid0"
+	var/base_icon_state = "asteroid"
+	density = FALSE
+	gender = PLURAL
+
+/obj/structure/flora/rock/asteroid/New()
+	. = ..()
+	icon_state = "[base_icon_state][rand(0,9)]"
+
+/obj/structure/flora/tree/dead/barren
+	name = "petrified tree"
+	desc = "An ancient trunk, mummified by the passage of time. This one still has some purple to it."
+	color = "#846996"
+	icon = 'icons/obj/flora/barren_tree.dmi'
+	icon_state = "barren_large"
+
+/obj/structure/flora/tree/dead/barren/New()
+	. = ..()
+	color = pick( "#846996", "#7b4e99", "#924fab")
+	icon_state = "barren_large"
+	update_transparency()
+
+/obj/structure/flora/tree/dead/hell
+	name = "crimson tree"
+	desc = "A crimson tree with lava oozing from it, providing a slight glow."
+	icon = 'icons/obj/flora/lavatrees.dmi'
+	pixel_x = -16
+	light_color = LIGHT_COLOR_RED
+	light_range = 2
+	light_power = 0.85
+
+/obj/structure/flora/tree/dead/hell/New()
+	. = ..()
+	icon_state = "tree_[rand(1,6)]"
+	update_transparency()
+
+/obj/structure/flora/tree/dead_pine
+	name = "dead pine"
+	desc = "A dead pine tree, its leaves stripped away."
+	icon = 'icons/obj/flora/bigtrees.dmi'
+	icon_state = "med_pine_dead"
+	pixel_x = -16
+
+/obj/structure/flora/tree/dead_acacia
+	name = "dead acacia"
+	desc = "A dead acacia tree, its leaves stripped away."
+	icon = 'icons/obj/flora/bigtrees.dmi'
+	icon_state = "african_acacia_dead"
+	pixel_x = -16
+
+/obj/structure/flora/tree/dead/tall
+	name = "dead tall tree"
+	desc = "The last vestiges of an once majestic tree."
+	icon = 'icons/obj/flora/tall_trees.dmi'
+	icon_state = "tree_1"
+	var/base_icon_state = "tree"
+	pixel_x = -16
+
+/obj/structure/flora/tree/dead/tall/New()
+	. = ..()
+	icon_state = "[base_icon_state]_[rand(1,3)]"
+	update_transparency()
+
+/obj/structure/flora/tree/dead/tall/grey
+	name = "petrified trunk"
+	desc = "An ancient tree was carbonized in fire and ash. Only a skeleton remains."
+	icon = 'icons/obj/flora/tall_trees_dead.dmi'
+
+/obj/structure/flora/tree/dead/tall/living //lol
+	name = "tall pine tree"
+	desc = "A majestic pine tree."
+	icon_state = "pine_1"
+
+/obj/structure/flora/tree/dead/tall/living/New()
+	. = ..()
+	icon_state = pick("pine_1","pine_2","bald")
+	update_transparency()

@@ -32,7 +32,7 @@
 //This a random vault spawns somewhere in this area. Then this area is replaced with space!
 /area/random_vault
 	name = "random vault area"
-	desc = "Spawn a vault in there somewhere"
+	desc = "Spawn a vault in there somewhere."
 	icon_state = "random_vault"
 	flags = NO_PERSISTENCE|NO_PACIFICATION
 
@@ -64,6 +64,11 @@
 				continue
 
 	return list_of_vaults
+
+/proc/generate_fixedvaults()
+	while(map_landmarks.len)
+		for(var/obj/effect/landmark/map_element/M in map_landmarks)
+			M.mapload()
 
 /proc/generate_vaults()
 	var/area/space = get_space_area()
@@ -329,6 +334,7 @@
 
 	return start_turf && (start_turf.z <= map.zDeepSpace)
 
+	
 //Proc that populates a single area with many vaults, randomly
 //A is the area OR a list of turfs where the placement happens
 //map_element_objects is a list of vaults that have to be placed. Defaults to subtypes of /datum/map_element/vault (meaning all vaults are spawned)
@@ -455,7 +461,7 @@
 			if(amount <= 0)
 				break
 		else
-			message_admins("<span class='danger'>Can't find [ME.file_path]!</span>")
+			message_admins("<span class='danger'>[ME.file_path] could not be loaded!</span>")
 
 		CHECK_TICK
 
