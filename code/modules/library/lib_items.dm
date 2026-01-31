@@ -381,12 +381,12 @@
 		else
 			if(!(src in scanner.computer.inventory))
 				scanner.computer.inventory.Add(src)
-				to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'")
+				to_chat(user, "[W]'s screen flashes: 'Title added to general inventory.'")
 				return
 			for(var/datum/borrowbook/b in scanner.computer.checkouts)
 				if(b.bookname == src.name)
 					scanner.computer.checkouts.Remove(b)
-					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Book has been checked in.'")
+					to_chat(user, "[W]'s screen flashes: 'Book has been checked in.'")
 					return
 			if(!scanner.book)
 				scanner.book = src
@@ -512,15 +512,12 @@
 	var/obj/machinery/computer/library/checkout/computer // Associated computer - Modes 1 to 3 use this
 	var/obj/item/weapon/book/book	 //  Currently scanned book
 
-/obj/item/weapon/barcodescanner/proc/show_status(mob/user)
+/obj/item/weapon/barcodescanner/examine(mob/user, size, show_name)
+	. = ..()
 	if(src.computer)
 		to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
 	else
 		to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
-
-/obj/item/weapon/barcodescanner/examine(mob/user, size, show_name)
-	. = ..()
-	show_status(user)
 
 /obj/item/weapon/barcodescanner/Destroy()
 	book = null
