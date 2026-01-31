@@ -89,7 +89,7 @@ var/static/list/bad_procs = list(
 	if(!procname)
 		return
 
-	var/argnum = input("Number of arguments","Number:",argnum) as num|null
+	var/argnum = input("Number of arguments","Number:",procargs.len) as num|null
 	if(!argnum && (argnum!=0))
 		return
 
