@@ -377,23 +377,23 @@
 	else if(istype(W, /obj/item/weapon/barcodescanner))
 		var/obj/item/weapon/barcodescanner/scanner = W
 		if(!scanner.computer)
-			to_chat(user, "[W]'s screen flashes: 'No associated computer found!'")
+			to_chat(user, "<span class='warning'>[W]'s screen flashes: 'No associated computer found!'</span>")
 		else
 			if(!(src in scanner.computer.inventory))
 				scanner.computer.inventory.Add(src)
-				to_chat(user, "[W]'s screen flashes: 'Title added to general inventory.'")
+				to_chat(user, "<span class='notice'>[W]'s screen flashes: 'Title added to general inventory.'</span>")
 				return
 			for(var/datum/borrowbook/b in scanner.computer.checkouts)
 				if(b.bookname == src.name)
 					scanner.computer.checkouts.Remove(b)
-					to_chat(user, "[W]'s screen flashes: 'Book has been checked in.'")
+					to_chat(user, "<span class='notice'>[W]'s screen flashes: 'Book has been checked in.'</span>")
 					return
 			if(!scanner.book)
 				scanner.book = src
 				scanner.computer.buffer_book = src.name
 				scanner.computer.screenstate = CHECKOUT_BOOK
 				scanner.computer.updateUsrDialog()
-				to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Book title stored in associated computer buffer.'")
+				to_chat(user, "<span class='notice'>[W]'s screen flashes: 'Book stored in buffer. Book title stored in associated computer buffer.'</span>")
 	else if(istype(W, /obj/item/weapon/paper/talisman))
 		var/obj/item/weapon/paper/talisman/talisman = W
 		if(runestun)
