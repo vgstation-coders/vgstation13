@@ -85,11 +85,11 @@ var/static/list/bad_procs = list(
 		to_chat(user,"<span class='warning'>You do not have the divine authority to modify what this grenade does.</span>")
 		return
 
-	procname = input("Proc path to call on affected, eg: /proc/fake_blood","Path:", null) as text|null
+	procname = input("Proc path to call on affected, eg: /proc/fake_blood","Path:",procname) as text|null
 	if(!procname)
 		return
 
-	var/argnum = input("Number of arguments","Number:",0) as num|null
+	var/argnum = input("Number of arguments","Number:",argnum) as num|null
 	if(!argnum && (argnum!=0))
 		return
 
@@ -107,7 +107,7 @@ var/static/list/bad_procs = list(
 	var/ourtype = texttype ? filter_list_input("Select an atom type", "Type filter", get_matching_types(texttype, /atom)) : /atom
 	typefilter = ourtype || /atom
 
-	affected_area = input("Range to affect","Range", 2) as num|null
+	affected_area = input("Range to affect","Range", affected_area) as num|null
 	if(!affected_area)
 		affected_area = world.view
 
