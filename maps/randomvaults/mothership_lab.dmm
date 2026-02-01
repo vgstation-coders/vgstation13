@@ -1249,7 +1249,7 @@
 /area/vault/mothership_lab/asteroid)
 "sK" = (
 /obj/structure/fence/door/secure{
-	dir = 8
+	dir = 4
 	},
 /turf/unsimulated/floor/asteroid/plating,
 /area/vault/mothership_lab/asteroid)
