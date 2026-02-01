@@ -98,10 +98,7 @@
 	"}
 
 /datum/browser/proc/open(var/use_onclose = 1)
-	var/window_size = ""
-	if (width && height)
-		window_size = "size=[width]x[height];"
-	user << browse(get_content(), "window=[window_id];[window_size][window_options]")
+	user << browse(get_content(), "window=[window_id];[window_options]")
 	if (width && height)
 		var/dpi = text2num(winget(user, window_id, "dpi")) || 1
 		winset(user, window_id, "size=[width*dpi]x[height*dpi]")
