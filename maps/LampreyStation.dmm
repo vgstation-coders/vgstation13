@@ -61587,7 +61587,9 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/effect/decal/cleanable/dirt,
 /obj/item/device/camera,
 /turf/simulated/floor{
@@ -119805,7 +119807,9 @@
 /area)
 "eXd" = (
 /obj/structure/table/reinforced,
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/item/stack/sheet/metal{
 	amount = 50;
 	pixel_x = 5
@@ -163417,7 +163421,9 @@
 /obj/item/stack/sheet/plasteel{
 	amount = 20
 	},
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -171043,7 +171049,9 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /turf/space,
 /area)
 "haY" = (
@@ -186171,7 +186179,9 @@
 	},
 /area/derelict/teleporter)
 "hCS" = (
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /turf/space,
 /area)
 "hCT" = (

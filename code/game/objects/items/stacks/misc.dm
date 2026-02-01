@@ -113,11 +113,6 @@
 
 	. = ..()
 
-/obj/item/stack/rods/bigstack/New()
-	..()
-	new /obj/item/stack/rods(loc, 50)
-	qdel(src)
-
 /obj/item/stack/chains
 	name = "chain"
 	desc = "Link by link, my chain got longer."

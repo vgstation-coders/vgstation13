@@ -32784,7 +32784,9 @@
 	amount = 50;
 	pixel_x = 2
 	},
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/machinery/computer/security/telescreen/entertainment{
 	pixel_y = 32
 	},
@@ -78382,7 +78384,9 @@
 /area/mine/explored)
 "pqw" = (
 /obj/structure/table/reinforced,
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/item/stack/sheet/metal{
 	amount = 50;
 	pixel_x = 5

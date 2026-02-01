@@ -32255,7 +32255,9 @@
 /obj/item/stack/sheet/plasteel{
 	amount = 50
 	},
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 9
 	},
@@ -37901,8 +37903,12 @@
 	pixel_x = -2;
 	pixel_y = 2
 	},
-/obj/item/stack/rods/bigstack,
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
+/obj/item/stack/rods{
+	amount = 50
+	},
 /turf/simulated/floor,
 /area/storage/eva)
 "boh" = (
@@ -67957,7 +67963,9 @@
 	},
 /area/science/mixing)
 "ctu" = (
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},

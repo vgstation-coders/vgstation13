@@ -22287,7 +22287,9 @@
 	pixel_x = 2;
 	pixel_y = 3
 	},
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/structure/extinguisher_cabinet{
 	pixel_x = 27
 	},
@@ -31193,7 +31195,9 @@
 /area/storage/tools)
 "bgS" = (
 /obj/structure/table,
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
@@ -36739,7 +36743,9 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "brN" = (
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -72375,7 +72381,9 @@
 /area/engineering/break_room)
 "cFt" = (
 /obj/structure/table,
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/machinery/requests_console{
 	department = "Engineering";
 	departmentType = 4;
@@ -81849,7 +81857,9 @@
 /area/engineering/supermatter_room)
 "cVZ" = (
 /obj/structure/lattice,
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /turf/space,
 /area)
 "cWa" = (

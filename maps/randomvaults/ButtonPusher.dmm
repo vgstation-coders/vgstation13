@@ -1370,7 +1370,9 @@
 /obj/item/stack/sheet/metal{
 	amount = 50
 	},
-/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods{
+	amount = 50
+	},
 /obj/item/stack/sheet/glass/glass{
 	amount = 50;
 	pixel_x = -3;
