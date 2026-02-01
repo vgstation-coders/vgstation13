@@ -20,14 +20,15 @@
 	pass_flags_self = PASSGRILLE
 	icon = 'icons/obj/structures/fence.dmi'
 	icon_state = "straight"
-	var/cut_time = 50
+	sheet_type = /obj/item/stack/rods
+	sheet_amt = 2
 
+	var/cut_time = 50
 	var/cuttable = TRUE
 	var/hole_size= NO_HOLE
 
 /obj/structure/fence/New()
 	..()
-
 	update_cut_status()
 
 /obj/structure/fence/examine(mob/user)
@@ -72,7 +73,7 @@
 		if(do_after(user, src, 2 SECONDS))
 			user.visible_message("<span class='notice'>\The [user] cuts through \the [src] with \the [W].</span>",
 							"<span class='info'>You cut \the [src] back into rods with \the [W].</span>")
-			dismantle()
+			dismantle(user)
 		return
 
 	if(W.sharpness >= 1 && !shock(user, 100, W.siemens_coefficient))
@@ -105,7 +106,7 @@
 						visible_message("<span class='notice'>\The [user] completely cuts through \the [src].</span>")
 						to_chat(user, "<span class='info'>\The [src] is now rods again.</span>")
 
-				update_cut_status()
+				update_cut_status(user)
 		return
 
 	if(hole_size && istype(W,/obj/item/stack/rods))
@@ -113,7 +114,7 @@
 		if(R.use(1))
 			to_chat(user, "<span class='info'>You repair \the [src] with a rod.</span>")
 			hole_size = NO_HOLE
-			update_cut_status()
+			update_cut_status(user)
 			return
 
 	if(hole_size >= SMALL_HOLE)
@@ -125,14 +126,14 @@
 			user.do_attack_animation(src, user)
 			visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 			user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-			dismantle()
+			dismantle(user)
 
 /obj/structure/fence/attack_alien(mob/living/user)
 	if(prob(50))
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] slices [src] apart!</span>")
 		playsound(src, 'sound/effects/fence_smash.ogg', 100, 1)
-		dismantle()
+		dismantle(user)
 
 /obj/structure/fence/attack_animal(mob/living/simple_animal/user)
 	if(user.environment_smash_flags & SMASH_WALLS)
@@ -140,7 +141,7 @@
 			user.do_attack_animation(src, user)
 			visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 			playsound(src, 'sound/effects/fence_smash.ogg', 100, 1)
-			dismantle()
+			dismantle(user)
 
 /obj/structure/fence/attack_hand(mob/user)
 	if(user.a_intent == I_HURT)
@@ -169,7 +170,7 @@
 
 	return 1
 
-/obj/structure/fence/proc/update_cut_status()
+/obj/structure/fence/proc/update_cut_status(mob/user)
 	if(!cuttable)
 		return
 
@@ -186,12 +187,12 @@
 			icon_state = "straight_cut3"
 			setDensity(FALSE)
 		if(CUT_THROUGH)
-			dismantle()
+			dismantle(user)
 
 	cut_time = hole_size < LARGE_HOLE ? initial(cut_time) : 0
 
-/obj/structure/fence/proc/dismantle()
-	new /obj/item/stack/rods(loc,2)
+/obj/structure/fence/proc/dismantle(mob/user)
+	drop_stack(sheet_type,get_turf(src),sheet_amt,user)
 	qdel(src)
 
 /obj/structure/fence/Bumped(atom/user)
