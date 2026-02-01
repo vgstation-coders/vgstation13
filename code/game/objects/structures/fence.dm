@@ -188,7 +188,7 @@
 		if(CUT_THROUGH)
 			dismantle()
 
-	cut_time = hole_size < LARGE_HOLE ? 200 : 0
+	cut_time = hole_size < LARGE_HOLE ? initial(cut_time) : 0
 
 /obj/structure/fence/proc/dismantle()
 	new /obj/item/stack/rods(loc,2)
