@@ -4,7 +4,7 @@
 
 //Fence smashing sound downloaded from http://freesound.org/people/hintringer/sounds/274768/
 
-#define CLIMB_TIME (10 SECONDS)
+#define CLIMB_TIME (20 SECONDS)
 
 #define NO_HOLE 0 //section is intact
 #define SMALL_HOLE 1 //small hole in the section - can pass small items through.
@@ -23,7 +23,7 @@
 	sheet_type = /obj/item/stack/sheet/plasteel
 	sheet_amt = 2
 
-	var/cut_time = 50
+	var/cut_time = 200
 	var/cuttable = TRUE
 	var/hole_size= NO_HOLE
 
