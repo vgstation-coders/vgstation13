@@ -60790,9 +60790,7 @@
 /area)
 "lzc" = (
 /obj/structure/table,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/machinery/requests_console{
 	department = "Engineering";
 	departmentType = 4;
@@ -79398,9 +79396,7 @@
 	pixel_x = 2;
 	pixel_y = 3
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
@@ -95207,9 +95203,7 @@
 /area/research_outpost/gearstore)
 "uZO" = (
 /obj/structure/table,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},

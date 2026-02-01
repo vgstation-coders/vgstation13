@@ -298,6 +298,17 @@ var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes",
 	))
 
 
+var/list/datum/stack_recipe/rod_recipes = list (
+	new/datum/stack_recipe("grille", /obj/structure/grille, 2, time = 10, one_per_turf = 1),
+	null,
+	new/datum/stack_recipe("fence", /obj/structure/fence, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe("fence end", /obj/structure/fence/end, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe("fence corner", /obj/structure/fence/corner, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe("fence post", /obj/structure/fence/post, 2, time = 50, one_per_turf = 1),
+	null,
+	new/datum/stack_recipe("fence door", /obj/structure/fence/door, 2, time = 50, one_per_turf = 1)
+	)
+
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/metal, 1, 4, 60),
 	new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),

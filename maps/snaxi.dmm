@@ -8404,9 +8404,7 @@
 /obj/item/stack/sheet/plasteel{
 	amount = 10
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor,
 /area/engine/locker{
 	name = "\improper Engineering Foyer"

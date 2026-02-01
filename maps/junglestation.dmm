@@ -49824,9 +49824,7 @@
 /area/crew_quarters/bar_backroom)
 "ssC" = (
 /obj/structure/table,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},

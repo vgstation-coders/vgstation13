@@ -44435,9 +44435,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/hop)
 "fhF" = (
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -77873,9 +77871,7 @@
 /area/hallway/secondary/entry)
 "nYj" = (
 /obj/structure/table,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/machinery/requests_console{
 	department = "Engineering";
 	departmentType = 4;

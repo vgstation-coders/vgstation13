@@ -42665,9 +42665,7 @@
 /obj/machinery/light_switch{
 	pixel_x = 28
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
@@ -49791,9 +49789,7 @@
 /turf/simulated/floor,
 /area/storage/primary)
 "bMy" = (
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -61243,9 +61239,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/southern/ssbmaint)
 "cgW" = (
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor/plating,
 /area/maintenance/abandonedwarehouse)
 "cgX" = (
@@ -64755,9 +64749,7 @@
 /obj/item/stack/sheet/metal{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/structure/extinguisher_cabinet{
 	pixel_x = 32
 	},
@@ -67866,9 +67858,7 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "yellow"
@@ -100274,9 +100264,7 @@
 /obj/item/stack/sheet/metal{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/machinery/light,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning"

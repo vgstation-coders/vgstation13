@@ -5911,12 +5911,8 @@
 /area/engineering/atmos)
 "amq" = (
 /obj/structure/table/reinforced,
-/obj/item/stack/rods{
-	amount = 50
-	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods/bigstack,
 /obj/machinery/atmospherics/pipe/simple/yellow/visible,
 /turf/simulated/floor,
 /area/engineering/atmos)
@@ -13320,9 +13316,7 @@
 	},
 /area/storage/primary)
 "aAj" = (
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
@@ -37066,9 +37060,7 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "yellow"
@@ -39103,9 +39095,7 @@
 /obj/item/stack/sheet/metal{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
@@ -45960,9 +45950,7 @@
 	dir = 8
 	},
 /obj/item/stack/sheet/cardboard,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -74865,9 +74853,7 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},

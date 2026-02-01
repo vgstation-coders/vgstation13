@@ -18012,9 +18012,7 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/structure/extinguisher_cabinet{
 	pixel_y = -32
 	},
@@ -21120,9 +21118,7 @@
 	},
 /area/supply/sorting)
 "aPJ" = (
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -53409,9 +53405,7 @@
 /obj/machinery/camera{
 	name = "Auxiliary Tool Storage"
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor,
 /area/storage/tools)
 "bWI" = (
@@ -59284,9 +59278,7 @@
 /area/maintenance/starboard)
 "chl" = (
 /obj/structure/rack,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/stack/sheet/metal{
 	amount = 50
 	},
@@ -59302,9 +59294,7 @@
 /obj/item/stack/sheet/plasteel{
 	amount = 30
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor/carpet{
 	icon_state = "bcarpet05"
 	},
@@ -62434,9 +62424,7 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/stack/sheet/metal{
 	amount = 50
 	},
@@ -68141,9 +68129,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor,
 /area/storage/primary)
 "cwv" = (

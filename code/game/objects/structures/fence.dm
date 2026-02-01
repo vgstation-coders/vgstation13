@@ -4,14 +4,13 @@
 
 //Fence smashing sound downloaded from http://freesound.org/people/hintringer/sounds/274768/
 
-#define CUT_TIME (20 SECONDS)
-#define CLIMB_TIME (20 SECONDS)
+#define CLIMB_TIME (10 SECONDS)
 
 #define NO_HOLE 0 //section is intact
 #define SMALL_HOLE 1 //small hole in the section - can pass small items through.
 #define MEDIUM_HOLE 2 //medium hole in the section - can climb through (takes 20 seconds)
 #define LARGE_HOLE 3 //large hole in the section - can walk through
-#define MAX_HOLE_SIZE LARGE_HOLE
+#define CUT_THROUGH 4 //entirely gone!
 
 /obj/structure/fence
 	name = "fence"
@@ -21,10 +20,10 @@
 	pass_flags_self = PASSGRILLE
 	icon = 'icons/obj/structures/fence.dmi'
 	icon_state = "straight"
+	var/cut_time = 50
 
 	var/cuttable = TRUE
 	var/hole_size= NO_HOLE
-	var/invulnerable = FALSE
 
 /obj/structure/fence/New()
 	..()
@@ -72,18 +71,12 @@
 			to_chat(user, "<span class='notice'>This section of the fence can't be cut.</span>")
 			return
 
-		if(invulnerable)
-			to_chat(user, "<span class='notice'>This fence is too strong to cut through.</span>")
-			return
-
 		var/current_stage = hole_size
-		if(current_stage >= MAX_HOLE_SIZE)
-			return
 
 		user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
 		"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
 
-		if(do_after(user, src, CUT_TIME))
+		if(do_after(user, src, cut_time))
 			if(current_stage == hole_size)
 
 				switch(++hole_size)
@@ -97,14 +90,55 @@
 						else
 							to_chat(user, "<span class='info'>You could probably fit yourself through that hole now. Although climbing through would be much faster if you made it even bigger.</span>")
 					if(LARGE_HOLE)
-						visible_message("<span class='notice'>\The [user] completely cuts through \the [src].</span>")
+						visible_message("<span class='notice'>\The [user] cuts into \the [src] even more.</span>")
 						to_chat(user, "<span class='info'>The hole in \the [src] is now big enough to walk through.</span>")
+					if(CUT_THROUGH)
+						visible_message("<span class='notice'>\The [user] completely cuts through \the [src].</span>")
+						to_chat(user, "<span class='info'>\The [src] is now rods again.</span>")
 
 				update_cut_status()
 		return
 
+	if(istype(W,/obj/item/weapon/pickaxe/drill))
+		user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
+							"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
+		if(do_after(user, src, 2 SECONDS))
+			user.visible_message("<span class='notice'>\The [user] cuts through \the [src] with \the [W].</span>",
+							"<span class='info'>You cut \the [src] back into rods with \the [W].</span>")
+			dismantle()
+
+	if(hole_size && istype(W,/obj/item/stack/rods))
+		var/obj/item/stack/rods/R = W
+		if(R.use(1))
+			to_chat(user, "<span class='info'>You repair \the [src] with a rod.</span>")
+			hole_size = NO_HOLE
+			update_cut_status()
+
 	if(hole_size >= SMALL_HOLE)
 		user.drop_item(W, get_turf(src))
+
+/obj/structure/fence/attack_paw(mob/user)
+	if(M_HULK in user.mutations)
+		if(prob(50))
+			user.do_attack_animation(src, user)
+			visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
+			user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+			dismantle()
+
+/obj/structure/fence/attack_alien(mob/living/user)
+	if(prob(50))
+		user.do_attack_animation(src, user)
+		visible_message("<span class='danger'>[user] slices [src] apart!</span>")
+		playsound(src, 'sound/effects/fence_smash.ogg', 100, 1)
+		dismantle()
+
+/obj/structure/fence/attack_animal(mob/living/simple_animal/user)
+	if(user.environment_smash_flags & SMASH_WALLS)
+		if(prob(50))
+			user.do_attack_animation(src, user)
+			visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
+			playsound(src, 'sound/effects/fence_smash.ogg', 100, 1)
+			dismantle()
 
 /obj/structure/fence/attack_hand(mob/user)
 	if(user.a_intent == I_HURT)
@@ -116,6 +150,7 @@
 		user.visible_message("<span class='danger'>\The [user] hits \the [src]!</span>")
 		playsound(src, 'sound/effects/fence_smash.ogg', 30 * strength, 1) //Sound is louder the stronger you are
 		shock(user, 100)
+		attack_paw(user)
 		return 1
 
 	if(hole_size == MEDIUM_HOLE)
@@ -148,6 +183,14 @@
 		if(LARGE_HOLE)
 			icon_state = "straight_cut3"
 			setDensity(FALSE)
+		if(CUT_THROUGH)
+			dismantle()
+
+	cut_time = hole_size < LARGE_HOLE ? 200 : 0
+
+/obj/structure/fence/proc/dismantle()
+	new /obj/item/stack/rods(loc,2)
+	qdel(src)
 
 /obj/structure/fence/Bumped(atom/user)
 	if(ismob(user))
@@ -182,6 +225,19 @@
 		else
 			return 0
 	return 0
+
+/obj/structure/fence/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+			return
+		if(2.0)
+			if(prob(50))
+				new /obj/item/stack/rods(loc,1)
+				qdel(src)
+				return
+		if(3.0)
+			return
 
 //FENCE DOORS
 
@@ -261,11 +317,10 @@
 		to_chat(user, "<span class='warning'>You can't reach the door latch from here!</span>")
 		return FALSE
 
-#undef CUT_TIME
 #undef CLIMB_TIME
 
 #undef NO_HOLE
 #undef SMALL_HOLE
 #undef MEDIUM_HOLE
 #undef LARGE_HOLE
-#undef MAX_HOLE_SIZE
+#undef CUT_THROUGH

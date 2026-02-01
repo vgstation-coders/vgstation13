@@ -9505,9 +9505,7 @@
 	pixel_x = 2;
 	pixel_y = 3
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/structure/extinguisher_cabinet{
 	pixel_x = 27
 	},
@@ -18689,9 +18687,7 @@
 /area/storage/tools)
 "aNc" = (
 /obj/structure/table,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
@@ -24256,9 +24252,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "aXT" = (
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -59336,9 +59330,7 @@
 /area/engineering/break_room)
 "clN" = (
 /obj/structure/table,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/machinery/requests_console{
 	department = "Engineering";
 	departmentType = 4;
@@ -68503,9 +68495,7 @@
 /area/engineering/supermatter_room)
 "cCc" = (
 /obj/structure/lattice,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/space,
 /area)
 "cCd" = (

@@ -4353,9 +4353,7 @@
 /area/engineering/supermatter_room)
 "ale" = (
 /obj/structure/lattice,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /turf/space,
 /area)
 "alf" = (
@@ -12722,9 +12720,7 @@
 /area/engineering/engine)
 "aCn" = (
 /obj/structure/table,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/tool/wrench,
 /obj/item/weapon/storage/box/lights/mixed,
 /obj/effect/decal/warning_stripes{
@@ -14939,9 +14935,7 @@
 	dir = 8
 	},
 /obj/item/stack/sheet/cardboard,
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/weapon/paper,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -15421,9 +15415,7 @@
 /obj/item/stack/sheet/metal{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
@@ -23683,9 +23675,7 @@
 /obj/item/stack/sheet/metal{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/device/flashlight,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -49228,9 +49218,7 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
 	},
@@ -50968,12 +50956,8 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods/bigstack,
 /obj/item/tool/wrench,
 /obj/item/tool/crowbar,
 /obj/effect/decal/warning_stripes{
@@ -52137,15 +52121,9 @@
 	pixel_y = 24
 	},
 /obj/structure/table,
-/obj/item/stack/rods{
-	amount = 50
-	},
-/obj/item/stack/rods{
-	amount = 50
-	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods/bigstack,
+/obj/item/stack/rods/bigstack,
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
@@ -72487,9 +72465,7 @@
 	name = "\improper Toxins Lab"
 	})
 "cBQ" = (
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},

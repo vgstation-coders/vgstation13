@@ -1084,9 +1084,7 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 50
 	},
-/obj/item/stack/rods{
-	amount = 50
-	},
+/obj/item/stack/rods/bigstack,
 /obj/item/tool/weldingtool/hugetank/empty,
 /turf/simulated/floor/plating/airless,
 /area/vault/supermarket/restricted)
