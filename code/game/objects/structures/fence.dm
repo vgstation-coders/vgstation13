@@ -20,7 +20,7 @@
 	pass_flags_self = PASSGRILLE
 	icon = 'icons/obj/structures/fence.dmi'
 	icon_state = "straight"
-	sheet_type = /obj/item/stack/rods
+	sheet_type = /obj/item/stack/sheet/plasteel
 	sheet_amt = 2
 
 	var/cut_time = 50
@@ -109,9 +109,9 @@
 				update_cut_status(user)
 		return
 
-	if(hole_size && istype(W,/obj/item/stack/rods))
-		var/obj/item/stack/rods/R = W
-		if(R.use(1))
+	if(hole_size && istype(W,sheet_type))
+		var/obj/item/stack/S = W
+		if(S.use(1))
 			to_chat(user, "<span class='info'>You repair \the [src] with a rod.</span>")
 			hole_size = NO_HOLE
 			update_cut_status(user)

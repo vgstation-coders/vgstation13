@@ -17,10 +17,6 @@
 	melt_temperature = MELTPOINT_STEEL
 	var/active = 0
 
-/obj/item/stack/rods/New(loc, amount)
-	. = ..()
-	recipes = rod_recipes
-
 /obj/item/stack/rods/Destroy()
 	..()
 	if(active)
@@ -106,12 +102,38 @@
 
 	if(!active) //Start click drag construction
 		active = new /obj/abstract/screen/draggable(src, user)
-		to_chat(user, "Beginning lattice construction mode, click and hold to use. Use rods again for stack recipes.")
+		to_chat(user, "Beginning lattice construction mode, click and hold to use. Use rods again to create grille.")
 		return
 	else //End click drag construction, create grille
 		qdel(active)
 
-	. = ..()
+	if(!istype(user.loc, /turf))
+		return 0
+
+	if(locate(/obj/structure/grille, user.loc))
+		for(var/obj/structure/grille/G in user.loc)
+			if(G.broken)
+				G.health = initial(G.health)
+				G.healthcheck()
+				use(1)
+			else
+				return 1
+	else
+		if(amount < 2)
+			to_chat(user, "<span class='notice'>You need at least two rods to do this.</span>")
+			return
+
+		to_chat(user, "<span class='notice'>Assembling grille...</span>")
+
+		if(!do_after(user, get_turf(src), 10))
+			return
+
+		var/obj/structure/grille/Grille = new /obj/structure/grille(user.loc)
+		if(!Grille)
+			Grille = new(user.loc)
+		to_chat(user, "<span class='notice'>You assembled a grille!</span>")
+		Grille.add_fingerprint(user)
+		use(2)
 
 /obj/item/stack/chains
 	name = "chain"
