@@ -2274,6 +2274,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/peanutseed = 3,
 		/obj/item/seeds/mustardplantseed = 3,
 		/obj/item/seeds/flaxseed = 3,
+		/obj/item/seeds/mintseed = 3,
 		)//,/obj/item/seeds/synthmeatseed = 3)
 	contraband = list(
 		/obj/item/seeds/amanitamycelium = 2,
@@ -2392,13 +2393,11 @@ var/global/num_vending_terminals = 1
 	name = "\improper Dinnerware"
 	desc = "A vending machine containing kitchen and restaurant equipment."
 	product_ads = list(
-		"Mm, food stuffs!",
+		"Mm, condiments...",
 		"Food and food accessories.",
-		"Get your plates!",
-		"You like forks?",
-		"I like forks.",
-		"Woo, utensils.",
-		"You don't really need these..."
+		"Plate up!",
+		"Get Forked!",
+		"Salt-N-Pepa's here."
 	)
 	icon_state = "dinnerware"
 	moody_state = "overlay_vending_dinnerware"
@@ -2420,13 +2419,16 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/bag/food = 5
 		)
 	contraband = list(
-		/obj/item/weapon/kitchen/utensil/spoon = 2,
-		/obj/item/weapon/kitchen/utensil/knife = 2,
+		/obj/item/weapon/kitchen/utensil/spork = 10,
 		/obj/item/weapon/kitchen/rollingpin = 2,
 		/obj/item/weapon/kitchen/utensil/knife/large/butch = 2,
+		/obj/item/trash/plate/clean/stack = 5,
 		)
 	premium = list(
-		/obj/item/weapon/kitchen/utensil/spork = 10,
+		/obj/item/weapon/kitchen/utensil/spork/plastic/teflon = 3,
+		/obj/item/weapon/kitchen/utensil/spoon/plastic/teflon = 3,
+		/obj/item/weapon/kitchen/utensil/knife/plastic/teflon = 3,
+		/obj/item/weapon/kitchen/utensil/fork/plastic/teflon = 3,
 		/obj/item/weapon/reagent_containers/dropper/baster = 1)
 
 	pack = /obj/structure/vendomatpack/dinnerware
@@ -2715,6 +2717,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/lepresuit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/clothing/head/beret = 3,
 		/obj/item/clothing/suit/wcoat = 3,
 		/obj/item/clothing/under/suit_jacket = 3,
@@ -3351,6 +3354,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/carapace = 3,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/aqua = 3,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/stealth = 3,
+		/obj/item/weapon/storage/fancy/cigarettes/shoalsticks = 4,
+		/obj/item/weapon/lighter/vox = 2,
 		)
 
 	prices = list(
@@ -3368,6 +3373,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/carapace = 30,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/aqua = 30,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/stealth = 30,
+		/obj/item/weapon/storage/fancy/cigarettes/shoalsticks = 20,
+		/obj/item/weapon/lighter/vox = 15,
 		)
 	slogan_languages = list(LANGUAGE_VOX)
 

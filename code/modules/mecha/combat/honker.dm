@@ -14,6 +14,7 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/honker
 	add_req_access = 0
 	max_equip = 3
+	mecha_punch_sound = 'sound/items/bikehorn.ogg'
 	var/squeak = 0
 
 /*
@@ -29,10 +30,12 @@
 
 
 /obj/mecha/combat/honker/melee_action(target)
-	if(!melee_can_hit)
-		return
-	else if(istype(target, /mob))
+	if(istype(target, /mob))
+		playsound(src, mecha_punch_sound, 50, 1)
 		step_away(target,src,15)
+		var/image/fist_icon = image(icon = 'icons/obj/items.dmi', icon_state = "bike_horn") //bike horn placeholder for clown fist
+		do_attack_animation(target, src, fist_icon)
+		occupant.delayNextAttack(MECHA_MELEE_DELAY)
 	return
 
 /obj/mecha/combat/honker/get_stats_part()

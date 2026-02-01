@@ -91,7 +91,6 @@
 	override_icon = 'icons/obj/food_seasonal.dmi'
 
 /spell/strooigoed/cast(list/targets, mob/user)
-	to_chat(world,"cast")
 	..()
 	user.drop_hands(force_drop = 1)
 	var/kruid = new /obj/item/weapon/reagent_containers/food/snacks/kruidnoten(user.get_active_hand())
@@ -101,5 +100,4 @@
 	return list(user)
 
 /spell/strooigoed/perform(mob/user = usr, skipcharge = 0, list/target_override)
-	to_chat(world,"perform")
 	..()

@@ -247,6 +247,8 @@
 /*
  * Welding Tool
  */
+ #define WELDINGTOOL_MSG_DELAY	(4 SECONDS)
+
 /obj/item/tool/weldingtool
 	name = "welding tool"
 	desc = "Ensure the switch is safely in the off position before refueling."
@@ -288,6 +290,9 @@
 	var/eye_damaging = TRUE	//Whether the welder damages unprotected eyes.
 	var/weld_speed = 1 //How much faster this welder is at welding. Higher number = faster
 	var/accepts_plasma = FALSE //Accepts plasma as fuel?
+
+	var/last_message_time = 0
+	var/last_message_severity = 0
 	toolsounds = list('sound/items/Welder.ogg', 'sound/items/Welder2.ogg')
 
 /obj/item/tool/weldingtool/New()
@@ -538,6 +543,13 @@
 	if (welding)
 		setWelding(FALSE)
 
+/obj/item/tool/weldingtool/proc/eye_msg(var/mob/user, var/severity, var/message, var/hallucination = null)
+	if ((world.time >= (last_message_time + WELDINGTOOL_MSG_DELAY)) || (severity > last_message_severity))
+		last_message_severity = severity
+		last_message_time = world.time
+		user.simple_message(message, hallucination)
+
+
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
 //Note: This should probably be moved to mob
 /obj/item/tool/weldingtool/proc/eyecheck(mob/user as mob)
@@ -550,44 +562,41 @@
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 		if(!E)
 			return
-		if(E.welding_proof)
-			user.simple_message("<span class='notice'>Your eyelenses darken to accommodate for the welder's glow.</span>")
-			return
-		if(safety < 2 && eye_damaging && !(user.sdisabilities & BLIND))
-			switch(safety)
-				if(1)
-					user.simple_message("<span class='warning'>Your eyes sting a little.</span>",\
-						"<span class='warning'>You shed a tear.</span>")
-					E.damage += rand(1, 2)
-					if(E.damage > 12)
-						user.eye_blurry += rand(3,6)
-				if(0)
-					user.simple_message("<span class='warning'>Your eyes burn.</span>",\
-						"<span class='warning'>Some tears fall down from your eyes.</span>")
-					E.damage += rand(2, 4)
-					if(E.damage > 10)
-						E.damage += rand(4,10)
-				if(-1)
-					var/obj/item/clothing/to_blame = H.head //blame the hat
-					if(!to_blame || (istype(to_blame) && H.glasses && H.glasses.eyeprot < to_blame.eyeprot)) //if we don't have a hat, the issue is the glasses. Otherwise, if the glasses are worse, blame the glasses
-						to_blame = H.glasses
-					user.simple_message("<span class='warning'>Your [to_blame] intensifies the welder's glow. Your eyes itch and burn severely.</span>",\
-						"<span class='warning'>Somebody's cutting onions.</span>")
-					user.eye_blurry += rand(12,20)
-					E.damage += rand(12, 16)
-			if(E.damage > 10 && safety < 2)
-				user.simple_message("<span class='warning'>Your eyes are really starting to hurt. This can't be good for you!</span>",\
-					"<span class='warning'>This is too sad! You start to cry.</span>")
-			if (E.damage >= E.min_broken_damage)
-				user.simple_message("<span class='warning'>You go blind!</span>","<span class='warning'>Somebody turns the lights off.</span>")
-				user.sdisabilities |= BLIND
-			else if (E.damage >= E.min_bruised_damage)
-				user.simple_message("<span class='warning'>You go blind!</span>","<span class='warning'>Somebody turns the lights off.</span>")
-				user.eye_blind = 5
-				user.eye_blurry = 5
-				user.disabilities |= NEARSIGHTED
-				spawn(100)
-					user.disabilities &= ~NEARSIGHTED
+		if(eye_damaging && !(user.sdisabilities & BLIND))
+			if (safety >= 2)
+				if(E.eyeprot > 0)
+					eye_msg(user, 0, "<span class='notice'>Your eyelenses darken to accommodate for the welder's glow.</span>")
+				else
+					var/obj/item/clothing/to_thank = H.head
+					if(!to_thank || (istype(to_thank) && H.glasses && H.glasses.eyeprot > to_thank.eyeprot))
+						to_thank = H.glasses
+					eye_msg(user, 0, "<span class='notice'>Your [to_thank] protects you the welder's glow.</span>")
+			else
+				switch(safety)
+					if(1)
+						eye_msg(user, 0, "<span class='warning'>Your eyes sting a little.</span>", "<span class='warning'>You shed a tear.</span>")
+						E.damage += rand(1, 2)
+					if(0)
+						eye_msg(user, 1, "<span class='warning'>Your eyes burn.</span>", "<span class='warning'>Some tears fall down from your eyes.</span>")
+						E.damage += rand(2, 4)
+					if(-1)
+						var/obj/item/clothing/to_blame = H.head //blame the hat
+						if(!to_blame || (istype(to_blame) && H.glasses && H.glasses.eyeprot < to_blame.eyeprot)) //if we don't have a hat, the issue is the glasses. Otherwise, if the glasses are worse, blame the glasses
+							to_blame = H.glasses
+						eye_msg(user, 2, "<span class='warning'>Your [to_blame] intensifies the welder's glow. Your eyes itch and burn severely.</span>", 	"<span class='warning'>Somebody's cutting onions.</span>")
+						E.damage += rand(12, 16)
+
+				if (E.damage >= E.min_broken_damage)
+					//new eye damage at least 35
+					eye_msg(user, 4, "<span class='warning'>You go blind!</span>", 	"<span class='warning'>Somebody turns the lights off.</span>")
+				else if (E.damage >= E.min_bruised_damage)//5
+					//new eye damage at least 5
+					eye_msg(user, 3, "<span class='warning'>Your eyes are really starting to hurt. This can't be good for you!</span>", 	"<span class='warning'>This is too sad! You start to cry.</span>")
+					user.eye_blind = max(3, user.eye_blind)//additional vision deterioration that goes off over 3-6 seconds
+					user.eye_blurry = max(2, user.eye_blurry)
+				else
+					user.eye_blind = max(2, user.eye_blind)//slight vision deterioration that goes off after 1-2 seconds
+					user.eye_blurry = max(1, user.eye_blurry)
 
 /obj/item/tool/weldingtool/update_icon()
 	..()
@@ -665,6 +674,7 @@
 	..()
 	reagents.add_reagent(FUEL, 5)
 
+ #undef WELDINGTOOL_MSG_DELAY
 /**
 /obj/item/tool/weldingtool/experimental/proc/fuel_gen()//Proc to make the experimental welder generate fuel, optimized as fuck -Sieve
 	var/gen_amount = ((world.time-last_gen)/25)          //Too bad it's not actually implemented

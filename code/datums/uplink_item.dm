@@ -380,6 +380,14 @@ var/list/discounted_items_of_the_round = list()
 	item = /obj/item/weapon/soap/syndie
 	cost = 1
 
+/datum/uplink_item/stealthy_weapons/cola
+	name = "Cryo-Cola"
+	desc = "A can containing soda that has been chemically engineered to react highly endothermically once ingested, causing the rapid onset of hypothermia. This results in whoever drank it to pass out from cold shock within seconds of consumption. Mixing drinks with the liquid is unadvised and can result in loss of efficacy. Disguised as an ordinary can of Space Cola."
+	item = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cryocola
+	cost = 4
+	discounted_cost = 3
+	jobs_with_discount = list("Bartender", "Botanist", "Chef")
+
 // STEALTHY TOOLS
 // Any Syndicate item that helps with concealing one's identity, avoiding detection or fleeing if caught, without lethal or stun applications
 

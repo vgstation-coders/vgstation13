@@ -5,6 +5,7 @@
 	desc = "A remote control switch for a mass driver."
 	id_tag = "default"
 	var/active = 0
+	var/door_delay = 5 SECONDS 				// Delay before shutting pod doors after opening.
 	anchored = 1.0
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2

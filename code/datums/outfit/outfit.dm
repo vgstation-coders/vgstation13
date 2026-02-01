@@ -322,14 +322,17 @@
 		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
 		W.buckle_mob(H,H)
 
+	replace_glasses_with_prescriptions(H)
+
+	return 1
+
+/datum/outfit/proc/replace_glasses_with_prescriptions(var/mob/living/carbon/human/H)
 	if ((H.disabilities & NEARSIGHTED) && H.glasses && (H.glasses.nearsighted_modifier >= 0) && H.glasses.prescription_type)
 		var/obj/item/clothing/glasses/prescription = new H.glasses.prescription_type(H)
 		var/obj/prev_glasses = H.glasses
 		H.u_equip(H.glasses,1)
 		qdel(prev_glasses)
 		H.equip_to_slot_or_drop(prescription, slot_glasses)
-
-	return 1
 
 // Special snowflakes : handle special cases for a given title and a given slot
 /datum/outfit/proc/special_equip(var/title, var/slot, var/mob/living/carbon/human/H)
@@ -340,7 +343,7 @@
 // Then, call "equip_special_items(player)" to give him the items associated.
 
 /datum/outfit/striketeam/
-	give_disabilities_equipment = FALSE
+	give_disabilities_equipment = TRUE//why was this set to FALSE anyway? that's an issue since nuke ops are handled like a striketeam.
 	var/is_leader = FALSE
 
 	var/list/specs = list()

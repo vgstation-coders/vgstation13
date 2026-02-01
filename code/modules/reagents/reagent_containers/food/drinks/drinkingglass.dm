@@ -71,7 +71,7 @@
 					var/image/I = image(icon, src, "[icon_state]-flamin")
 					I.blend_mode = BLEND_ADD
 					if (isturf(loc))
-						I.plane = ABOVE_LIGHTING_PLANE
+						I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 					else
 						I.plane = ABOVE_HUD_PLANE // inventory
 					overlays += I
@@ -79,6 +79,8 @@
 					desc += " Damn that looks hot!"
 				else
 					can_be_lit = 1
+			if(reagents.has_reagent(ICE) && R.id!=ICE)
+				name+=" on the rocks"
 	else
 		icon_state = "glass_empty"
 		item_state = "glass_empty"

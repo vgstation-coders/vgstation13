@@ -2,17 +2,6 @@
  * Library Computer
  */
 
-#define MAIN_MENU 0
-#define INVENTORY 1
-#define CHECKED_OUT 2
-#define CHECKOUT_BOOK 3
-#define EXTERNAL_ARCHIVE 4
-#define UPLOAD_NEW_TITLE 5
-#define PRINT_BIBLE 6
-#define PRINT_MANUAL 7
-#define FORBIDDEN_LORE 8
-#define PRINT_QUEUE 9
-
 /obj/machinery/computer/library/checkout
 	name = "Check-In/Out Computer"
 	icon = 'icons/obj/library.dmi'

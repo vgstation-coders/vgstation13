@@ -580,7 +580,7 @@
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 	var/disabled = 0 //malf
 	var/obj/item/device/rcd/rpd/mech/RPD
-	var/obj/item/device/rcd/mech/RCD
+	var/obj/item/device/rcd/matter/engineering/mech/RCD
 	var/obj/item/tool/wrench/socket/sock
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
@@ -612,17 +612,23 @@
 		if((istype(target, /obj/machinery/atmospherics) && !istype(R.selected, /datum/rcd_schematic/paint_pipes)) || (istype(target, /obj/item/pipe) && !istype(R.selected, /datum/rcd_schematic/decon_pipes)))
 			target.attackby(sock, chassis.occupant)
 			return
-	if(!R.selected)
-		return
-	R.busy  = TRUE // Busy to prevent switching schematic while it's in use.
-	var/t = R.selected.attack(target, chassis.occupant)
-	if(!t) // No errors
-		if(device)
+		if(!R.selected)
+			return
+		R.busy  = TRUE // Busy to prevent switching schematic while it's in use.
+		var/t = R.selected.attack(target, chassis.occupant)
+		if(!t) // No errors
 			chassis.use_power(energy_drain/5)
 		else
-			chassis.use_power(energy_drain)
+			occupant_message("<span class='warning'>\The [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
 	else
-		occupant_message("<span class='warning'>\The [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
+		if(!R.selected_schem)
+			return
+		R.busy  = TRUE
+		var/c = R.selected_schem.build(target, chassis.occupant)
+		if(c) //why is it the other way around
+			chassis.use_power(energy_drain)
+		else
+			occupant_message("<span class='warning'>\The [src]'s error light flickers.</span>")
 
 	R.busy = FALSE
 

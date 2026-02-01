@@ -113,6 +113,7 @@ CREATE TABLE client (
     space_parallax INTEGER,
     space_dust     INTEGER,
     parallax_speed INTEGER,
+    plane_filters  INTEGER,
     stumble        INTEGER,
     attack_animation INTEGER,
     pulltoggle     INTEGER,

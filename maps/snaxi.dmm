@@ -4435,10 +4435,8 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/disposalpipe/sortjunction{
-	dir = 4;
-	icon_state = "pipe-j2s";
-	sort_tag = "Disposals"
+/obj/structure/disposalpipe/sortjunction/Disposals/mirrored{
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/hallway/primary/aft{
@@ -7798,7 +7796,6 @@
 	},
 /area/crew_quarters/sleep)
 "atM" = (
-/obj/machinery/light,
 /obj/machinery/newscaster/security_unit{
 	dir = 1;
 	pixel_y = -32
@@ -9242,9 +9239,6 @@
 	},
 /area/crew_quarters/hop)
 "awT" = (
-/obj/machinery/light{
-	dir = 1
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 8;
@@ -9276,6 +9270,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
+	},
+/obj/machinery/light{
+	dir = 1
 	},
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
@@ -10557,9 +10554,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/disposalpipe/sortjunction{
-	sort_tag = "Disposals"
-	},
+/obj/structure/disposalpipe/sortjunction/Disposals,
 /turf/simulated/floor,
 /area/hallway/primary/fore{
 	name = "\improper Taxi Civilian Dock"
@@ -11737,6 +11732,7 @@
 	},
 /obj/item/weapon/storage/box/PDAs,
 /obj/item/clothing/suit/storage/wintercoat/hop,
+/obj/machinery/light,
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
 	},
@@ -12413,9 +12409,6 @@
 /turf/simulated/floor,
 /area/engineering/supermatter_room)
 "aCQ" = (
-/obj/machinery/power/terminal{
-	dir = 1
-	},
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
@@ -14430,9 +14423,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/disposalpipe/sortjunction/Engineering/mirrored{
-	sort_tag = "Mechanics"
-	},
+/obj/structure/disposalpipe/sortjunction/Mechanics/mirrored,
 /turf/simulated/floor,
 /area/hallway/primary/fore{
 	name = "\improper Taxi Civilian Dock"
@@ -16017,7 +16008,6 @@
 /turf/simulated/floor/plating,
 /area/engineering/burn_chamber)
 "aKm" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction,
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -17900,7 +17890,7 @@
 /area/supply/qm)
 "aOT" = (
 /obj/machinery/conveyor_switch/oneway{
-	id_tag = "QMLoad"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -18288,6 +18278,11 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/machinery/requests_console{
+	department = "Medbay";
+	phone_name = "Medbay Lobby";
+	pixel_x = 30
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whitegreen"
@@ -18327,6 +18322,9 @@
 	supply_display = 1
 	},
 /obj/machinery/light/small,
+/obj/machinery/conveyor_switch/oneway{
+	id_tag = "QMLoad"
+	},
 /turf/simulated/floor{
 	icon_state = "warning"
 	},
@@ -23905,6 +23903,13 @@
 	c_tag = "Medbay South";
 	dir = 1
 	},
+/obj/machinery/requests_console{
+	department = "Medbay";
+	departmentType = 1;
+	name = "Medbay RC";
+	pixel_y = -30;
+	phone_name = "Medbay Storage"
+	},
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
@@ -28854,6 +28859,11 @@
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "boA" = (
+/obj/machinery/requests_console{
+	department = "Genetics";
+	name = "Genetics Requests Console";
+	pixel_x = -30
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "whitepurple"
@@ -30366,7 +30376,7 @@
 "btf" = (
 /obj/machinery/conveyor{
 	dir = 6;
-	id_tag = "QMLoad"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -34503,7 +34513,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/structure/disposalpipe/segment,
+/obj/structure/disposalpipe/sortjunction/IAA/mirrored,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "neutralcorner"
@@ -34533,6 +34543,10 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 2;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -34554,6 +34568,9 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 8;
 	name = "Firelock West"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/lawoffice)
@@ -35010,6 +35027,7 @@
 /obj/structure/bed/chair{
 	dir = 4
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -35385,6 +35403,10 @@
 	name = "\improper Central Security Hallway"
 	})
 "bCH" = (
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk{
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -35810,11 +35832,22 @@
 	name = "Security Access";
 	normaldoorcontrol = 1;
 	pixel_y = 25;
-	range = 3;
-	req_access_txt = "63"
+	range = 4;
+	req_access_txt = "63";
+	pixel_x = -7
 	},
 /obj/structure/bed/chair{
 	dir = 4
+	},
+/obj/machinery/door_control{
+	desc = "A remote control switch for the brig foyer.";
+	id_tag = "BrigFoyerFront";
+	name = "Security Access";
+	normaldoorcontrol = 1;
+	pixel_y = 25;
+	range = 4;
+	req_access_txt = "63";
+	pixel_x = 7
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -37878,13 +37911,13 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/structure/disposalpipe/sortjunction/Warden/mirrored{
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -38634,6 +38667,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -39103,12 +39137,18 @@
 	dir = 4;
 	on = 1
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/security/interrogation)
 "bIq" = (
 /obj/structure/bed/chair,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -39129,6 +39169,9 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -39136,6 +39179,9 @@
 "bIs" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -39391,6 +39437,9 @@
 /obj/effect/landmark/start{
 	name = "Warden"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -39419,6 +39468,9 @@
 /obj/item/weapon/paper_bin/red{
 	pixel_x = -3;
 	pixel_y = 7
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -39937,6 +39989,7 @@
 	dir = 8;
 	on = 1
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -41253,6 +41306,7 @@
 /area/science/xenobiology)
 "bMn" = (
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bMo" = (
@@ -42367,12 +42421,18 @@
 	name = "Security Blast Door";
 	opacity = 0
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
 /area/security/detectives_office)
 "bOv" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
+/obj/structure/disposalpipe/segment{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -42825,6 +42885,10 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
 "bPl" = (
@@ -42880,6 +42944,10 @@
 	icon_state = "1-8";
 	tag = ""
 	},
+/obj/structure/disposalpipe/trunk{
+	dir = 1
+	},
+/obj/machinery/disposal,
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
 "bPp" = (
@@ -44380,6 +44448,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "bRL" = (
@@ -62260,6 +62329,15 @@
 /turf/space,
 /turf/unsimulated/wall,
 /area/centcom)
+"cGc" = (
+/obj/structure/disposalpipe/segment{
+	dir = 8;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/interrogation)
 "cGd" = (
 /obj/structure/shuttle/diag_wall/black{
 	dir = 8
@@ -76667,6 +76745,20 @@
 /area/hallway/primary/starboard{
 	name = "\improper Central Medical Hallway"
 	})
+"fbH" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "neutralcorner"
+	},
+/area/hallway/primary/central{
+	name = "\improper Central Security Hallway"
+	})
 "fcn" = (
 /obj/structure/table,
 /obj/machinery/recharger{
@@ -77395,9 +77487,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/supply/storage)
 "gef" = (
@@ -78579,7 +78669,6 @@
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "hRr" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction,
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -80377,6 +80466,15 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
 /area/science/storage)
+"kgs" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/warden)
 "kgu" = (
 /obj/structure/window/reinforced{
 	icon = 'icons/obj/objects.dmi';
@@ -80388,6 +80486,7 @@
 /area/science/lab)
 "kjg" = (
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet/shag,
 /area/library)
 "kjy" = (
@@ -83506,6 +83605,10 @@
 	dir = 1;
 	pixel_y = -32
 	},
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk{
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -83879,7 +83982,7 @@
 "oQc" = (
 /obj/machinery/conveyor{
 	dir = 4;
-	id_tag = "QMLoad"
+	id_tag = "QMLoad3"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -84121,6 +84224,15 @@
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/mining/station)
+"pkS" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/interrogation)
 "pnd" = (
 /obj/structure/fence/corner,
 /turf/unsimulated/floor/snow,
@@ -85888,6 +86000,22 @@
 	icon_state = "floorgrime"
 	},
 /area/storage/auxillary)
+"rNV" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 4
+	},
+/obj/structure/disposalpipe/sortjunction/Detective/mirrored{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/hallway/primary/central{
+	name = "\improper Central Security Hallway"
+	})
 "rOm" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -86386,6 +86514,10 @@
 	d1 = 1;
 	d2 = 8;
 	icon_state = "1-8"
+	},
+/obj/machinery/conveyor_switch/oneway{
+	convdir = -1;
+	id_tag = "QMLoad2"
 	},
 /turf/simulated/floor{
 	icon_state = "warning"
@@ -87588,6 +87720,10 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 8;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -87627,6 +87763,11 @@
 /area/engineering/atmos)
 "ufV" = (
 /obj/structure/curtain/medical,
+/obj/machinery/requests_console{
+	department = "Chemistry";
+	departmentType = 2;
+	pixel_y = 30
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whiteyellow"
@@ -88813,6 +88954,7 @@
 /area/medical/medbay)
 "wmN" = (
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "wnW" = (
@@ -132459,7 +132601,7 @@ bEZ
 bGj
 bHs
 bIn
-bIW
+kgs
 bJT
 olf
 bLK
@@ -133364,8 +133506,8 @@ bEb
 bFa
 bLJ
 pqL
-bKR
-bKR
+pkS
+cGc
 bKR
 bKR
 bLJ
@@ -138505,7 +138647,7 @@ bBX
 bAr
 bAr
 bAr
-bOx
+fbH
 bAr
 bPL
 bQx
@@ -138807,7 +138949,7 @@ bza
 bza
 bza
 bza
-bOw
+rNV
 bza
 bPK
 bQw
@@ -146583,9 +146725,9 @@ aUQ
 aHW
 aJA
 aLh
-bgW
-pzJ
 mnD
+pzJ
+bgW
 srz
 bsI
 ila
@@ -148093,9 +148235,9 @@ aOW
 bqr
 aJF
 aMC
-aOW
-aOW
 aOT
+aOW
+aOW
 aPQ
 aQy
 ila

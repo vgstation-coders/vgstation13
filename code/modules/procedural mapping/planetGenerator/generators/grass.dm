@@ -118,7 +118,6 @@
 		/mob/living/simple_animal/hostile/wendigo/human = 5,
 	)
 	loot_spawners = list(
-		/obj/abstract/loot_spawner/bedsheet = 1,
 		/obj/abstract/loot_spawner/bureaucracy = 1,
 		/obj/abstract/loot_spawner/clothing = 1,
 		/obj/abstract/loot_spawner/decoration = 1,
@@ -337,8 +336,8 @@
 
 /datum/biome/cave/grass/wet
 	open_turf_types = list(
-		/turf/unsimulated/floor/jungle/mud = 3,
-		/turf/unsimulated/floor/jungle/water = 2,
+		/turf/unsimulated/floor/planetary/mud= 3,
+		/turf/unsimulated/floor/planetary/water= 2,
 		/turf/unsimulated/floor/planetary/dirt = 20,
 		)
 	flora_spawn_chance = 50

@@ -47,7 +47,8 @@
 	/// Send browser assets to the client
 
 /datum/tooltips/proc/loadAssets()
-
+	if (!owner)
+		return
 	register_asset("tooltip.css", 'code/modules/tooltip/tooltip.css')
 	send_asset(owner, "tooltip.css")
 	register_asset("eta.min.js", 'code/modules/tooltip/eta.min.js')
@@ -204,6 +205,10 @@
 	var/atom/refTarget = target.get()
 	var/pixloc/clientLoc = bound_pixloc(holder.owner.virtual_eye, SOUTHWEST)
 	var/pixloc/targetLoc = bound_pixloc(refTarget, SOUTHWEST)
+	if (!targetLoc || !clientLoc)
+		// eg. if hovering over infowindow targetLoc can be null
+		return
+
 	var/tilesLeft = clientView["x"] + 1 - ((clientLoc.x - targetLoc.x) / iconSize["width"])
 	var/tilesBottom = clientView["y"] + 1 - ((clientLoc.y - targetLoc.y) / iconSize["height"])
 	options.mouse = alist(

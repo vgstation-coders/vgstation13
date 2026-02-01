@@ -190,6 +190,14 @@
 	w_type = RECYK_PLASTIC
 	flammable = TRUE
 
+/obj/item/weapon/kitchen/utensil/spoon/plastic/teflon
+	name = "teflon spoon"
+	desc = "Less likely to dissolve when scooping up a bowl of mothership stew."
+	icon_state = "tspoon"
+
+/obj/item/weapon/kitchen/utensil/spoon/plastic/teflon/dissolvable()
+	return FALSE
+
 /*
  * Sporks
  */
@@ -295,6 +303,7 @@
 	name = "teflon spork"
 	desc = "Tlork!"
 	icon_state = "tspork"
+	flammable = FALSE
 
 /obj/item/weapon/kitchen/utensil/spork/plastic/teflon/dissolvable()
 	return FALSE
@@ -388,12 +397,14 @@
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 
-/obj/item/weapon/kitchen/utensil/fork/teflon
+/obj/item/weapon/kitchen/utensil/fork/plastic/teflon
 	name = "teflon fork"
-	desc = "Less likely to dissolve when picking up a forkful of mothership stew."
+	desc = "Tork!"
 	icon_state = "tfork"
-	melt_temperature = MELTPOINT_PLASTIC
-	flammable = TRUE
+	flammable = FALSE
+
+/obj/item/weapon/kitchen/utensil/fork/plastic/teflon/dissolvable()
+	return FALSE
 
 /*
  * Knives
@@ -432,6 +443,18 @@
 	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
+
+/obj/item/weapon/kitchen/utensil/knife/plastic/teflon
+	name = "teflon knife"
+	desc = "More suited for cutting through mothership meals."
+	force = 3 //Yes, it's plastic, but it's SUPER plastic
+	throwforce = 5
+	sharpness = 1
+	icon_state = "tknife"
+	flammable = FALSE
+
+/obj/item/weapon/kitchen/utensil/knife/plastic/teflon/dissolvable()
+	return FALSE
 
 /obj/item/weapon/kitchen/utensil/knife/nazi
 	name = "nazi knife"

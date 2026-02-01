@@ -44,7 +44,7 @@
 	return
 
 /turf/simulated/wall/shuttle/dismantle_wall(devastated, explode)
-	return
+	return 1
 
 /turf/simulated/wall/shuttle/attack_rotting(mob/user)
 	return

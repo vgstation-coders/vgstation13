@@ -678,7 +678,7 @@ var/bloodstone_backup = 0
 		visible_message("<span class='warning'>\The [src] nails \the [A] to \the [T].</span>")
 
 ///////////////////////////////////CULT DANCE////////////////////////////////////
-//used by the cultdance emote. other cult dances have their own procs
+//used by the cultdance emote as well as the Tear Reality ritual
 /obj/effect/cult_ritual/dance
 	var/list/dancers = list()
 	var/list/extras = list()
@@ -732,8 +732,9 @@ var/bloodstone_backup = 0
 			sleep(3)
 			dance_move()
 			if (tear.dance_count < tear.dance_target+10)
-				adjust_particles(PVAR_SPAWNING, clamp(0.1 + 0.00375 * tear.dance_count,0.1,1), PS_TEAR_REALITY)
-				var/scale = clamp(1 + 0.00416 * tear.dance_count,1,1.9)
+				//can't quite remember my original math here but adding *2 to both operations to account for the halved dance duration of #36433
+				adjust_particles(PVAR_SPAWNING, clamp(0.1 + 0.00375 * 2 * tear.dance_count,0.1,1), PS_TEAR_REALITY)
+				var/scale = clamp(1 + 0.00416 * 2 * tear.dance_count,1,1.9)
 				adjust_particles(PVAR_SCALE, list(scale, scale), PS_TEAR_REALITY)
 			else
 				remove_particles(PS_TEAR_REALITY)

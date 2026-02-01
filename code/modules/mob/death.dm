@@ -79,6 +79,8 @@ var/global/firstblood = FALSE
 			var/rendered = "\proper[formatFollow(src)] <span class='game deadsay'> \The <span class='name'>[mindname][died_as]</span> has died at \the <span class='name'>[get_area(place_of_death)]</span>.</span>"
 			to_chat(M, rendered)
 		log_game("[key_name(src)] has died at [get_area(place_of_death)]. Coordinates: ([get_coordinates_string(src)])")
+		if (iscultist(src))
+			DisplayUI("Shade Timer")
 	is_dying = FALSE
 
 /mob/proc/transmog_death()

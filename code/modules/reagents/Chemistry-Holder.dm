@@ -405,7 +405,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	for (var/datum/reagent/current_reagent in reagent_list)
 		if(! (current_reagent.flags & CHEMFLAG_NOTREMOVABLE))
 			var/amt = (get_reagent_amount(current_reagent.id)*transfer_frac) + transfer_flat
-			total_transfered += trans_id_to(target, current_reagent.id, amt) 
+			total_transfered += trans_id_to(target, current_reagent.id, amt)
 	return total_transfered
 
 /datum/reagents/proc/metabolize(var/mob/living/M, var/alien)
@@ -566,7 +566,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
 				C.log_reaction(src, created_volume)
 			if(!(my_atom.flags & SILENTCONTAINER))
-				playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
+				playsound(my_atom, C.reaction_sound, 80, 1)
 
 		C.on_reaction(src, created_volume)
 		if(C.react_discretely)

@@ -453,8 +453,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	var/trapped = 0
 	var/datum/organ/external/trappedorgan //The limb currently trapped, it must be a leg
 	var/mob/living/carbon/human/trappeduser
-	var/mob/living/simple_animal/hostile/bear/trappedbear
-	var/mob/living/complex_animal/trappedcanimal
+	var/mob/living/simple_animal/trappedbear
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 	var/image/ied_overlay
 	health=60 //so animals don't break it in 1 hit if they attack it.
@@ -475,9 +474,6 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	if (trappedbear)
 		unlock_atom(trappedbear)
 	trappedbear = null
-	if (trappedcanimal)
-		unlock_atom(trappedcanimal)
-	trappedcanimal=null
 	if (IED)
 		qdel(IED)
 	IED = null
@@ -609,38 +605,22 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 					trappedbear.update_icon()
 					trappedbear = null
 					anchored = FALSE
+					
+					if(istype(trappedbear,/mob/living/simple_animal/complex))
+						var/mob/living/simple_animal/complex/CA=trappedbear
+						CA.family+=user
+						to_chat(user,"<span class='notice'>\The [trappedbear] seems appreciative.</span>")
 					return
 				else
 					user.visible_message("<span class='warning'>\The [H] fails to pry \the [src] off of \the [trappedbear], and crushes their leg even more!</span>", \
 					"<span class='warning'>You fail to pry \the [src] off of \the [trappedbear], and you crush their leg even more!</span>")
 					trappedbear.adjustBruteLoss(5)
 					return
-			else if (trappedcanimal)
-				user.visible_message("<span class='notice'>[H] tries to pry \the [src] off of \the [trappedcanimal]!</span>", \
-				"<span class='notice'>You try to pry open \the [src] with your bare hands.</span>")
-
-				if(do_after(user, src, 40) && prob(60))
-					user.visible_message("<span class='notice'>\The [H] managed to pry \the [src] off of \the [trappedcanimal]!</span>", \
-					"<span class='notice'>You manage to pry \the [src] off!</span>")
-					playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
-					trapped = 0
-					unlock_atom(trappedcanimal)
-					trappedcanimal.update_icon()
-					trappedcanimal = null
-					anchored = FALSE
-					trappedcanimal.family+=user
-					to_chat(user,"<span class='notice'>\The [trappedcanimal] seems appreciative.</span>")
-					return
-				else
-					user.visible_message("<span class='warning'>\The [H] fails to pry \the [src] off of \the [trappedcanimal], and crushes their leg even more!</span>", \
-					"<span class='warning'>You fail to pry \the [src] off of \the [trappedcanimal], and you crush their leg even more!</span>")
-					trappedcanimal.adjustBruteLoss(5)
-					return
 	..()
 
 /obj/item/weapon/beartrap/try_break(datum/throwparams/propelparams, hit_atom)
 	if(health <= 0)
-		if(trappeduser || trappedbear || trappedcanimal)
+		if(trappeduser || trappedbear)
 			armed = 0
 			anchored = FALSE
 			update_icon()
@@ -654,10 +634,6 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 				unlock_atom(trappedbear)
 				trappedbear.update_icon()
 				trappedbear = null
-			if(trappedcanimal)
-				unlock_atom(trappedcanimal)
-				trappedcanimal.update_icon()
-				trappedcanimal = null
 			return FALSE
 
 		visible_message("\the [src] is smashed apart into nothing but metal...")
@@ -725,21 +701,10 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 				unlock_atom(trappedbear)
 				trappedbear.update_icon()
 				trappedbear = null
-		else if (trappedcanimal)
-			user.visible_message("<span class='notice'>[user] tries to pry \the [src] off of \the [trappedcanimal]!</span>", \
-			"<span class='notice'>You try to pry open \the [src] with \the [I.name].</span>")
-			if(do_after(user, src, 30))
-				user.visible_message("<span class='notice'>\The [user] managed to pry \the [src] off of \the [trappedcanimal]!</span>", \
-				"<span class='notice'>You pry open the bear trap with \the [I.name].</span>")
-				playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
-				trapped = 0
-				unlock_atom(trappedcanimal)
-				trappedcanimal.update_icon()
-				trappedcanimal = null
-				anchored = FALSE
-				trappedcanimal.family+=user
-				to_chat(user,"<span class='notice'>\The [trappedcanimal] seems appreciative.</span>")
-				return
+				if(istype(trappedbear,/mob/living/simple_animal/complex))
+					var/mob/living/simple_animal/complex/CA=trappedbear
+					CA.family+=user
+					to_chat(user,"<span class='notice'>\The [trappedbear] seems appreciative.</span>")
 	else
 		to_chat(user, "<span class='notice'>You carefully set the bear trap off with \the [I.name].</span>")
 		playsound(src, 'sound/effects/snap.ogg', 60, 1)
@@ -768,7 +733,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 
 			else if (istype(AM,/mob/living/simple_animal/hostile/bear))
 				trap(AM)
-			else if (istype(AM,/mob/living/complex_animal))
+			else if (istype(AM,/mob/living/simple_animal/complex))
 				trap(AM)
 			else if(isanimal(AM))
 				armed = 0
@@ -821,13 +786,6 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 			trappedbear.gib()
 			trapped = 0
 			trappedbear = null
-			anchored = FALSE
-		
-		if(trappedcanimal)
-			unlock_atom(trappedcanimal)
-			trappedcanimal.gib()
-			trapped = 0
-			trappedcanimal = null
 			anchored = FALSE
 
 // Called when the dude is moved from the trap on way or the other.

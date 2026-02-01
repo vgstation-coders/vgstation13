@@ -376,16 +376,15 @@
 	calculate_required_energy()
 	update_icon()
 
-/// Spawn a new planet with random type and ruin
+/// Spawn a new planet with random type
 /// Returns: The planet type that was spawned
 /obj/machinery/planet_scanner/proc/spawn_new_planet()
 	if(!SSmapping)
 		CRASH("New planet spawn attempted before mapping subsystem initialized")
 
 	var/selected_planet_type = select_random_planet_type()
-	var/selected_ruin_type = select_random_ruin_type()
 
-	SSmapping.spawn_planet(selected_planet_type, selected_ruin_type)
+	SSmapping.spawn_planet(selected_planet_type)
 
 	return selected_planet_type
 
@@ -393,17 +392,6 @@
 /obj/machinery/planet_scanner/proc/select_random_planet_type()
 	var/list/available_planets = SSmapping.planet_types.Copy()
 	return pick(available_planets)
-
-/// Select a random ruin type from available mining ruins
-/// Returns: A ruin type path, or null if no ruins are available
-/obj/machinery/planet_scanner/proc/select_random_ruin_type()
-	var/list/available_ruins = list()
-	for(var/ruin_path in subtypesof(/datum/map_element/ruin))
-		available_ruins += ruin_path
-
-	if(available_ruins.len)
-		return pick(available_ruins)
-	return null
 
 /obj/machinery/planet_scanner/proc/print_destination_disk(mob/user, planet_index)
 	if(world.time < last_disk_print_time + PLANET_SCANNER_DISK_PRINT_COOLDOWN)

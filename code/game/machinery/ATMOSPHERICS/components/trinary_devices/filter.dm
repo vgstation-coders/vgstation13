@@ -116,7 +116,7 @@
 			<b>Filtering: </b>[current_filter_name]<br><HR>
 			<h4>Set Filter Type:</h4>"}
 
-	for(var/gas_ID in XGM.gases)
+	for(var/gas_ID in XGM.noteworthy_gases)
 		var/datum/gas/gas_datum = XGM.gases[gas_ID]
 		dat += "<A href='?src=\ref[src];filterset=" + gas_ID + "'>" + gas_datum.name + "</A><BR>"
 

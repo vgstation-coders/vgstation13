@@ -667,7 +667,7 @@ var/global/mulebot_count = 0
 		AM.forceMove(src.loc)
 	mode = MODE_IDLE
 
-/obj/machinery/bot/mulebot/on_path_step(var/turf/simulated/next)
+/obj/machinery/bot/mulebot/on_path_step(var/turf/next)
 	if (istype(next))
 		var/goingdir=0
 		var/newdir = get_dir(next, loc)
@@ -680,8 +680,9 @@ var/global/mulebot_count = 0
 			else if(newdir == (EAST + WEST))
 				newdir = EAST
 			goingdir = newdir
-		if(bloodiness)
-			next.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
+		if(bloodiness && istype(next,/turf/simulated) )
+			var/turf/simulated/n=next
+			n.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
 			bloodiness--
 
 // starts bot moving to current destination

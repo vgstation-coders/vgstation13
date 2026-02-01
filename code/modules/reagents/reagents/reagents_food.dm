@@ -185,7 +185,7 @@
 		else if(mouth_covered)	//Reduced effects if partially protected
 			H << "<span class='warning'>Your [mouth_covered] protects your mouth from the pepperspray!</span>"
 			H.eye_blurry = max(M.eye_blurry, 15)
-			H.eye_blind = max(M.eye_blind, 5)
+			H.instant_blindness(15)
 			H.Paralyse(1)
 			H.drop_item()
 			return
@@ -198,7 +198,7 @@
 			H.audible_scream()
 			to_chat(H, "<span class='danger'>You are sprayed directly in the eyes with pepperspray!</span>")
 			H.eye_blurry = max(M.eye_blurry, 25)
-			H.eye_blind = max(M.eye_blind, 10)
+			H.instant_blindness(20)
 			H.Paralyse(1)
 			H.drop_item()
 
@@ -208,7 +208,7 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		H.eye_blurry = max(M.eye_blurry, 25)
-		H.eye_blind = max(M.eye_blind, 10)
+		H.instant_blindness(20)
 		H.Paralyse(1)
 		H.drop_item()
 	return ..()
@@ -587,8 +587,8 @@
 	if(..())
 		return 1
 
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (10 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(M.bodytemperature < BODYTEMP_DEFAULT)
+		M.bodytemperature = min(BODYTEMP_DEFAULT, M.bodytemperature + (10 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/ketchup
 	name = "Ketchup"

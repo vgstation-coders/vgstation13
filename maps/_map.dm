@@ -59,36 +59,6 @@
 	//If 1, only spawn vaults that are exclusive to this map (other vaults aren't spawned). For more info, see code/modules/randomMaps/vault_definitions.dm
 	var/only_spawn_map_exclusive_vaults = 0
 
-	// List of package tagger locations. Due to legacy shitcode you can only append or replace ones with null, or you'll break stuff.
-	var/list/default_tagger_locations = list(
-		DISP_DISPOSALS,
-		DISP_CARGO_BAY,
-		DISP_QM_OFFICE,
-		DISP_ENGINEERING,
-		DISP_CE_OFFICE,
-		DISP_ATMOSPHERICS,
-		DISP_SECURITY,
-		DISP_HOS_OFFICE,
-		DISP_MEDBAY,
-		DISP_CMO_OFFICE,
-		DISP_CHEMISTRY,
-		DISP_RESEARCH,
-		DISP_RD_OFFICE,
-		DISP_ROBOTICS,
-		DISP_HOP_OFFICE,
-		DISP_LIBRARY,
-		DISP_CHAPEL,
-		DISP_THEATRE,
-		DISP_BAR,
-		DISP_KITCHEN,
-		DISP_HYDROPONICS,
-		DISP_JANITOR_CLOSET,
-		DISP_GENETICS,
-		DISP_TELECOMMS,
-		DISP_MECHANICS,
-		DISP_TELESCIENCE
-	)
-
 	var/list/enabled_jobs = list() //Jobs that require enabling that are enabled on this map
 	var/list/disabled_jobs = list() //Jobs that are disabled on this map
 
@@ -254,14 +224,14 @@ var/global/list/accessable_z_levels = list()
 //for junglestation
 /datum/zLevel/junglesurface
 	name = "jungle surface"
-	base_turf = /turf/unsimulated/floor/jungle/dirt
+	base_turf = /turf/unsimulated/floor/planetary/dirt/jungle
 	base_area = /area/surface/jungle/landing //hacky workaround.
 	movementJammed = TRUE
 	planetside = TRUE
 
 /datum/zLevel/jungleunderground
 	name = "jungle underground"
-	base_turf = /turf/unsimulated/floor/jungle/bedrock
+	base_turf = /turf/unsimulated/floor/planetary/cave/jungle
 	base_area = /area/surface/jungle/underground
 	movementJammed = TRUE
 	planetside = TRUE
@@ -386,3 +356,11 @@ var/global/list/accessable_z_levels = list()
 		feedback_add_details("admin_verb", "BTC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		message_admins("[key_name_admin(usr)] has set the base turf for Z-level [choice] to [get_base_turf(choice)]. This will affect all destroyed turfs from now on.")
 		log_admin("[key_name(usr)] has set the base turf for Z-level [choice] to [get_base_turf(choice)]. This will affect all destroyed turfs from now on.")
+
+/proc/increment_z()
+	var/target_z = world.maxz + 1
+	skip_turf_init = TRUE
+	spawn(0)
+		world.maxz++
+	UNTIL(world.maxz == target_z)
+	skip_turf_init = FALSE

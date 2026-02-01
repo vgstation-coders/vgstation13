@@ -15,21 +15,12 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/energy
 	name = "\improper General Energy Weapon"
 
-/obj/item/mecha_parts/mecha_equipment/weapon/energy/become_defective()
-	if(!defective)
-		..()
-		equip_cooldown = rand(equip_cooldown*1.5, equip_cooldown*2.5)
-		energy_drain = rand(energy_drain*3, energy_drain*5)
-
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/action(atom/target)
 	if(!action_checks(target))
 		return
 	var/originaltarget = target
 	var/turf/curloc = chassis.loc
 	var/atom/targloc = get_turf(target)
-	if(defective)
-		target = get_inaccuracy(originaltarget, 1, chassis)
-		targloc = get_turf(target)
 	if (!targloc || !istype(targloc, /turf) || !curloc)
 		return
 	if (targloc == curloc)
@@ -174,15 +165,6 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/alt_action()
 	rearm()
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/become_defective()
-	if(!defective)
-		..()
-		equip_cooldown = rand(equip_cooldown*2, equip_cooldown*3)
-		projectile_energy_cost = rand(projectile_energy_cost*1.5, projectile_energy_cost*3)
-		max_projectiles = rand(max_projectiles/4, max_projectiles*0.75)
-		if(max_projectiles < projectiles)
-			projectiles = max_projectiles
-
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/action_checks(atom/target)
 	if(..())
 		if(projectiles > 0)
@@ -237,9 +219,6 @@
 //	targloc = null
 	for(var/i=1 to min(projectiles, projectiles_per_shot))
 //		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
-		if(defective)
-			target = get_inaccuracy(originaltarget, 2, chassis)
-			targloc = get_turf(target)
 		if(!targloc || targloc == curloc)
 			break
 		playsound(chassis, fire_sound, 80, 1)
@@ -287,9 +266,6 @@
 			break
 		var/turf/curloc = get_turf(chassis)
 //		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
-		if(defective)
-			target = get_inaccuracy(originaltarget, 2, chassis)
-			targloc = get_turf(target)
 		if (!targloc || !curloc)
 			continue
 		if (targloc == curloc)
@@ -333,8 +309,6 @@
 	M.primed = 1
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
-	if(defective)
-		target = get_inaccuracy(originaltarget, 2, chassis)
 	M.throw_at(target, missile_range, missile_speed)
 	projectiles--
 	log_message("Fired from [src.name], targeting [originaltarget].")
@@ -383,8 +357,6 @@
 	grenade = G
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
-	if(defective)
-		target = get_inaccuracy(originaltarget, 3, chassis)
 	G.throw_at(target, missile_range, missile_speed)
 	projectiles--
 	log_message("Fired from [src.name], targeting [originaltarget].")
@@ -586,8 +558,6 @@
 	var/obj/item/weapon/legcuffs/bolas/mech/M = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
-	if(defective)
-		target = get_inaccuracy(originaltarget, 1, chassis)
 	M.throw_at(target, missile_range, missile_speed)
 	playsound(src,'sound/weapons/whip.ogg', 20, 1) //because mechs play the sound anyways
 	projectiles--

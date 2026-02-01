@@ -42,6 +42,8 @@
 
 /obj/abstract/mind_ui_element/malf_power_gauge/UpdateIcon()
 	var/mob/living/silicon/ai/A = GetUser()
+	if (!A)
+		return
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
 		return
@@ -57,7 +59,7 @@
 	gauge.transform = gauge_matrix
 	gauge.layer = MIND_UI_BUTTON
 	gauge.pixel_y = round(-79 + 100 * (M.processing_power/M.max_processing_power))
-	
+
 
 	overlays = 0
 	overlays += cover
@@ -74,6 +76,8 @@
 
 /obj/abstract/mind_ui_element/malf_power_count/UpdateIcon()
 	var/mob/living/silicon/ai/A = GetUser()
+	if (!A)
+		return
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(M) || !istype(A))
 		return
@@ -104,15 +108,17 @@
 		/obj/abstract/mind_ui_element/hoverable/malf_win/nuke
 		)
 	display_with_parent = TRUE
-	
+
 
 /datum/mind_ui/malf_win_panel/Valid()
 	var/mob/living/silicon/ai/A = GetUser()
+	if (!A)
+		return
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(M) || !istype(A))
-		return FALSE			
+		return FALSE
 	if(!M.takeover)
-		return FALSE			
+		return FALSE
 	return TRUE
 
 //------------------------------------------------------------
@@ -121,9 +127,11 @@
 	icon = 'icons/ui/malf/48x32.dmi'
 	icon_state = ""
 	layer = MIND_UI_FRONT+1
-	
+
 /obj/abstract/mind_ui_element/hoverable/malf_win/UpdateIcon()
 	var/mob/living/silicon/ai/A = GetUser()
+	if (!A)
+		return
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(M.destroyed_station)
 		color = grayscale
@@ -139,6 +147,8 @@
 
 /obj/abstract/mind_ui_element/hoverable/malf_win/Click()
 	var/mob/living/silicon/ai/A = GetUser()
+	if (!A)
+		return
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(M) || !istype(A))
 		return FALSE			// HAHA NOPE
@@ -148,7 +158,7 @@
 
 
 
-// The idea was to overload just about every machine on station but explosions are super slow 
+// The idea was to overload just about every machine on station but explosions are super slow
 // I'm leaving this as a comment in case anyone wants to optimize this
 
 /*
@@ -183,7 +193,7 @@
 			machine.shake_animation(4, 4, 0.2 SECONDS, 20)
 			spawn(4 SECONDS)
 				if(machine)
-					explosion(get_turf(machine), 1, 3, 5, 5) 
+					explosion(get_turf(machine), 1, 3, 5, 5)
 					qdel(machine)
 		CHECK_TICK
 
@@ -198,8 +208,10 @@
 	if(!..())
 		return
 	var/mob/living/silicon/ai/A = GetUser()
+	if (!A)
+		return
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
-	
+
 	for(var/obj/machinery/nuclearbomb/N in nuclear_bombs)
 		if(N.z != map.zMainStation)
 			continue

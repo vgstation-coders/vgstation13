@@ -341,3 +341,14 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/forsakenreactor
 	file_path = "maps/randomvaults/forsakenreactor.dmm"
 	spawn_cost = 2
+
+/datum/map_element/vault/scp_space
+	file_path = "maps/randomvaults/scp_space.dmm"
+	can_rotate = TRUE
+	spawn_cost = 1
+
+/datum/map_element/ruin/scp_asteroid
+	file_path = "maps/ruins/urban/scp_asteroid.dmm"
+	can_rotate = TRUE
+	ruin_type = RUIN_TYPE_URBAN
+	cost = RUIN_COST_HEAVY

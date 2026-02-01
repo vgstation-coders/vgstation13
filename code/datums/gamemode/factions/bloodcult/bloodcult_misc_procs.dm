@@ -137,8 +137,13 @@ var/static/list/valid_cultpower_slots = list(
 /mob/living/carbon/proc/implant_pop()
 	for(var/obj/item/weapon/implant/loyalty/I in src)
 		if (I.imp_in)
-			to_chat(src, "<span class='sinister'>Your blood pushes back against the loyalty implant, it will visibly pop out within seconds!</span>")
-			spawn(10 SECONDS)
+			to_chat(src, "<span class='userdanger'>As the veil grows thinner, the dark energies in your body disrupt \the [I.name].")
+			var/delay = 0
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			if (cult && cult.implant_pop == CULT_IMPLANT_POP_DELAYED)
+				to_chat(src, "<span class='userdanger'>It feels like it will be expelled from your body any minute now!</span>")
+				delay = 60 SECONDS
+			spawn(delay)
 				if (I.remove())
 					visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
 

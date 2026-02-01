@@ -202,8 +202,8 @@
 /datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
 	..()
 
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(M.bodytemperature < BODYTEMP_DEFAULT)
+		M.bodytemperature = min(BODYTEMP_DEFAULT, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 //natural antipathogenic, found in garlic and kudzu
 /datum/reagent/antipathogenic/allicin
@@ -489,10 +489,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-3)
-		M.adjustOxyLoss(-3)
-		M.heal_organ_damage(3,3)
-		M.adjustToxLoss(-3)
+		var/multiplier = 1
+		if(M.bodytemperature < 95)
+			multiplier = 2
+		M.adjustCloneLoss(-3 * multiplier)
+		M.adjustOxyLoss(-3 * multiplier)
+		M.heal_organ_damage(3 * multiplier, 3 * multiplier)
+		M.adjustToxLoss(-3 * multiplier)
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
@@ -670,7 +673,7 @@ var/global/list/charcoal_doesnt_remove=list(
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
 	id = CRYOXADONE
-	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly."
+	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly, with an even greater effect at under 95K."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
@@ -683,10 +686,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-1)
-		M.adjustOxyLoss(-1)
-		M.heal_organ_damage(1,1)
-		M.adjustToxLoss(-1)
+		var/multiplier = 1
+		if(M.bodytemperature < 95)
+			multiplier = 2
+		M.adjustCloneLoss(-1 * multiplier)
+		M.adjustOxyLoss(-1 * multiplier)
+		M.heal_organ_damage(1 * multiplier, 1 * multiplier)
+		M.adjustToxLoss(-1 * multiplier)
 
 /datum/reagent/cryptobiolin
 	name = "Cryptobiolin"
@@ -714,8 +720,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 3.9
 	specheatcap = 0.12812
 	custom_metabolism = 0.1
-	fission_time=6000 // 100 minutes (1hr 40)
-	fission_absorbtion=5000
+	fission_time=3000 // 50 minutes
+	fission_absorbtion=10000
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -916,8 +922,10 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(..())
 		return 1
 
-	M.eye_blurry = max(M.eye_blurry - 5, 0)
-	M.eye_blind = max(M.eye_blind - 5, 0)
+	//Imidazoline will immediately cap eye_blurry and eye_blind at 10, allowing them to fade out over the next few seconds
+	M.eye_blurry = max(min(10,M.eye_blurry--), 0)
+	M.eye_blind = max(min(10,M.eye_blind--), 0)
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
@@ -1823,8 +1831,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.58
 	specheatcap = 0.44
-	fission_time=4800 // 80 minutes (1hr 20)
-	fission_absorbtion=3500
+	fission_time=2400 // 40 minutes
+	fission_absorbtion=7000
 
 /datum/reagent/tricordrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1969,8 +1977,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(toxmod==0 || brutemod==0 || firemod==0) //no div 0 here, so sireeeeee, nope.
 		return 1
 
-	var/brut=M.getBruteLoss()
-	var/brn=M.getFireLoss()
+	var/brut=M.getBruteLoss(TRUE)
+	var/brn=M.getFireLoss(TRUE)
 	var/tox=M.getToxLoss()
 
 	var/totaldamage = brut+tox+brn

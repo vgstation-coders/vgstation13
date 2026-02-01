@@ -62,11 +62,9 @@
 		update_icon()
 
 		if(network1)
-			if(network1)
-				qdel(network1)
+			qdel(network1)
 		if(network2)
-			if(network1)
-				qdel(network2)
+			qdel(network2)
 
 		build_network()
 
@@ -92,20 +90,25 @@
 /obj/machinery/atmospherics/binary/valve/investigation_log(var/subject, var/message)
 	activity_log += ..()
 
+/obj/machinery/atmospherics/binary/valve/build_network()
+	..()
+	// due to init order the valve can end up in a bad state if it
+	//  initialises before its neighbouring pipes
+	if (open && network1 && network2)
+		network1.merge(network2)
+		network2 = network1
+
 /obj/machinery/atmospherics/binary/valve/initialize()
 	normalize_dir()
 
 	findAllConnections(initialize_directions)
 
-	build_network()
-
 	if(openDuringInit)
-		close()
-		open()
+		open = TRUE
 		openDuringInit = 0
 
-	else
-		update_icon()
+	build_network()
+	update_icon()
 
 /obj/machinery/atmospherics/binary/valve/digital		// can be controlled by AI
 	name = "digital valve"

@@ -709,7 +709,7 @@
 						for(var/mob/living/target in range(7, get_turf(mob)))
 							if (target == mob)
 								continue
-							target.eye_blind += 10
+							target.instant_blindness(20)
 							target.eye_blurry += 20
 							target.disabilities |= DISABILITY_FLAG_NEARSIGHTED
 							spawn(300)
@@ -1209,7 +1209,7 @@
 					mob.client.images += I
 					null_images += I
 					animate(I, alpha = 0, time = 20)
-	
+
 /datum/disease2/effect/loneliness/side_effect(var/mob/living/mob)
 	if(mob && mob.client && world.time - activated > 20)
 		QDEL_LIST_CUT(null_images)

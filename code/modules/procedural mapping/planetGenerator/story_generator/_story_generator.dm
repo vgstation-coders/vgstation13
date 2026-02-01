@@ -484,15 +484,23 @@ var/list/datum/story_theme/story_themes = list()
 	var/character_name = ""
 	var/ruin_name = ""
 
+/obj/machinery/old_database/examine(mob/user)
+	..()
+	if(activating)
+		to_chat(user, "<span class='warning'>It is currently rebooting.</span>")
+	else
+		to_chat(user, "<span class='notice'>It is powered off. You can attempt to activate it to recover any stored data.</span>")
+
 /obj/machinery/old_database/attack_hand(mob/user)
-	if(isobserver(user))
-		to_chat(user, "<span class='rose'>Your ghostly hand goes right through!</span>")
+	if(..())
+		return
+	if(isobserver(user) && !isAdminGhost(user))
+		to_chat(user, "<span class='warning'>Your ghostly limb passes right through \the [src].</span>")
 		return
 
 	if(activated)
 		to_chat(user, "<span class='notice'>\The [src] has already been activated and its data retrieved.</span>")
 		return
-
 	if(activating)
 		to_chat(user, "<span class='warning'>\The [src] is already in the process of rebooting!</span>")
 		return
@@ -550,8 +558,14 @@ var/list/datum/story_theme/story_themes = list()
 		list("id" = Tc_MAGNETS, "name" = "Electromagnetic Research"),
 		list("id" = Tc_PROGRAMMING, "name" = "Data Theory Research")
 	)
-	var/list/chosen_tech = pick(valid_techs)
-	var/tech_level = rand(2, 4)
+	var/list/chosen_tech
+	var/tech_level
+	if(prob(50))
+		chosen_tech = list("id" = Tc_EXPLORATION, "name" = "Exploration Research")
+		tech_level = 1
+	else
+		chosen_tech = pick(valid_techs)
+		tech_level = rand(2, 4)
 
 	var/obj/item/weapon/disk/hdd/disk = new(T)
 	disk.name = "Recovered Data Drive"

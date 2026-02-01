@@ -347,6 +347,11 @@
 	seed_type = "goldapple"
 	vending_cat = "fruits"
 
+/obj/item/seeds/crabappleseed
+	name = "packet of crab apple seeds"
+	seed_type = "crabapple"
+	vending_cat = "fruits"
+
 /obj/item/seeds/ambrosiavulgarisseed
 	name = "packet of ambrosia vulgaris seeds"
 	seed_type = "ambrosia"
@@ -539,6 +544,10 @@
 /obj/item/seeds/flaxseed
 	name = "packet of flax seeds"
 	seed_type = "flax"
+
+/obj/item/seeds/mintseed
+	name = "packet of mint seeds"
+	seed_type = "weeds"
 
 // Chili plants/variants.
 /datum/seed/chili
@@ -789,7 +798,7 @@
 	display_name = "apple tree"
 	plant_dmi = 'icons/obj/hydroponics/apple.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
-	mutants = list("poisonapple","goldapple")
+	mutants = list("poisonapple","goldapple", "crabapple")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
 
@@ -819,6 +828,20 @@
 	maturation = 10
 	production = 10
 	yield = 3
+
+/datum/seed/apple/crab
+	name = "crabapple"
+	seed_name = "crab apple"
+	display_name = "crab apple tree"
+	plant_dmi = 'icons/obj/hydroponics/crabapple.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple)
+	mutants = null
+	chems = list(NUTRIMENT = list(1,10), TANNIC_ACID = list(1,30))
+
+	maturation = 5
+	production = 5
+	yield = 2
+	pest_tolerance = 75
 
 //Ambrosia/varieties.
 /datum/seed/ambrosia
@@ -2071,3 +2094,20 @@
 	ideal_light = 8
 	nutrient_consumption = 2
 	constrained = 1
+
+/datum/seed/mint //somewhat realistic mint stats
+	name = "mint"
+	seed_name = "mint"
+	display_name = "mint"
+	plant_dmi = 'icons/obj/hydroponics/mint.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mint)
+	chems = list(MINTESSENCE = list(2,4)) //TO DO: add a PROPER system that switches the produced chems based on potency so it makes mint essence when low potency and mint tox when high potency
+	lifespan = 150
+	maturation = 2
+	production = 8
+	yield = 6
+	potency = 5
+	fluid_consumption = 5
+	nutrient_consumption = 0.05
+	growth_stages = 2
+	voracious = 1

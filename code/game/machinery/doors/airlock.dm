@@ -1176,8 +1176,6 @@ About the new airlock wires panel:
 		if(SA.environment_smash_flags & OPEN_DOOR_STRONG)
 			level_of_door_opening = 2
 		dooropendelay=SA.force_airlock_time
-	else if(istype(M,/mob/living/complex_animal))
-		level_of_door_opening = 1
 	
 	
 	

@@ -895,3 +895,11 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+
+/obj/item/clothing/head/lepre
+	name = "leprechaun hat"
+	icon_state = "lepre"
+	item_state = "lepre"
+	desc = "Kiss me I'm Irish!"
+	flags = FPRINT
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)

@@ -14,7 +14,7 @@
 /obj/structure/bookcase
 	name = "bookcase"
 	icon = 'icons/obj/library.dmi'
-	icon_state = "book-0"
+	icon_state = "bookcase"
 	anchored = 1
 	density = 1
 	opacity = 1
@@ -30,6 +30,14 @@
 								/obj/item/weapon/spellbook, \
 								/obj/item/weapon/storage/bible, \
 								/obj/item/dictionary)
+	var/list/starting_books
+
+/obj/structure/bookcase/New()
+	. = ..()
+	if(starting_books?.len)
+		for(var/type in starting_books)
+			new type(src)
+		update_icon()
 
 /obj/structure/bookcase/cultify()
 	return
@@ -153,44 +161,43 @@
 	..()
 
 /obj/structure/bookcase/update_icon()
-	if(contents.len < 5)
-		icon_state = "book-[contents.len]"
-	else
-		icon_state = "book-5"
+	overlays.len = 0
+	var/x_offset = 0
+	var/y_offset = 0
+	for(var/obj/item/I in contents)
+		var/image/bookoverlay = image(icon,loc,"bookoverlay",layer,dir,x_offset,y_offset)
+		bookoverlay.color = I:spine_color || "#840"
+		overlays += bookoverlay
+		x_offset += 4
+		if(x_offset > 20)
+			x_offset = 0
+			y_offset -= 12
+		if(y_offset < -12)
+			break
 
 /obj/structure/bookcase/manuals/medical
 	name = "Medical Manuals bookcase"
-
-/obj/structure/bookcase/manuals/medical/New()
-	..()
-	new /obj/item/weapon/book/manual/medical_cloning(src)
-	new /obj/item/weapon/book/manual/chemistry_manual(src)
-	new /obj/item/weapon/book/manual/virology_guide(src)
-	new /obj/item/weapon/book/manual/virology_encyclopedia(src)
-	update_icon()
-
+	starting_books = list(
+		/obj/item/weapon/book/manual/medical_cloning,
+		/obj/item/weapon/book/manual/chemistry_manual,
+		/obj/item/weapon/book/manual/virology_guide,
+		/obj/item/weapon/book/manual/virology_encyclopedia
+	)
 
 /obj/structure/bookcase/manuals/engineering
 	name = "Engineering Manuals bookcase"
-
-/obj/structure/bookcase/manuals/engineering/New()
-	..()
-	new /obj/item/weapon/book/manual/engineering_construction(src)
-	new /obj/item/weapon/book/manual/engineering_particle_accelerator(src)
-	new /obj/item/weapon/book/manual/engineering_hacking(src)
-	new /obj/item/weapon/book/manual/engineering_guide(src)
-	new /obj/item/weapon/book/manual/engineering_singularity_safety(src)
-	new /obj/item/weapon/book/manual/robotics_cyborgs(src)
-	update_icon()
+	starting_books = list(
+		/obj/item/weapon/book/manual/engineering_construction,
+		/obj/item/weapon/book/manual/engineering_particle_accelerator,
+		/obj/item/weapon/book/manual/engineering_hacking,
+		/obj/item/weapon/book/manual/engineering_guide,
+		/obj/item/weapon/book/manual/engineering_singularity_safety,
+		/obj/item/weapon/book/manual/robotics_cyborgs
+	)
 
 /obj/structure/bookcase/manuals/research_and_development
 	name = "R&D Manuals bookcase"
-
-/obj/structure/bookcase/manuals/research_and_development/New()
-	..()
-	new /obj/item/weapon/book/manual/research_and_development(src)
-	update_icon()
-
+	starting_books = list(/obj/item/weapon/book/manual/research_and_development)
 
 /*
  * Book
@@ -227,6 +234,7 @@
 
 	var/book_width = 600
 	var/book_height = 800
+	var/spine_color = "#444"
 
 /obj/item/weapon/book/New()
 	..()
@@ -369,33 +377,23 @@
 	else if(istype(W, /obj/item/weapon/barcodescanner))
 		var/obj/item/weapon/barcodescanner/scanner = W
 		if(!scanner.computer)
-			to_chat(user, "[W]'s screen flashes: 'No associated computer found!'")
+			to_chat(user, "<span class='warning'>[W]'s screen flashes: 'No associated computer found!'</span>")
 		else
-			switch(scanner.mode)
-				if(0)
-					scanner.book = src
-					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer.'")
-				if(1)
-					scanner.book = src
-					scanner.computer.buffer_book = src.name
-					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Book title stored in associated computer buffer.'")
-				if(2)
-					scanner.book = src
-					for(var/datum/borrowbook/b in scanner.computer.checkouts)
-						if(b.bookname == src.name)
-							scanner.computer.checkouts.Remove(b)
-							to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Book has been checked in.'")
-							return
-					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. No active check-out record found for current title.'")
-				if(3)
-					scanner.book = src
-					for(var/obj/item/weapon/book in scanner.computer.inventory)
-						if(book == src)
-							to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title already present in inventory, aborting to avoid duplicate entry.'")
-							return
-					scanner.computer.inventory.Add(src)
-					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'")
-
+			if(!(src in scanner.computer.inventory))
+				scanner.computer.inventory.Add(src)
+				to_chat(user, "<span class='notice'>[W]'s screen flashes: 'Title added to general inventory.'</span>")
+				return
+			for(var/datum/borrowbook/b in scanner.computer.checkouts)
+				if(b.bookname == src.name)
+					scanner.computer.checkouts.Remove(b)
+					to_chat(user, "<span class='notice'>[W]'s screen flashes: 'Book has been checked in.'</span>")
+					return
+			if(!scanner.book)
+				scanner.book = src
+				scanner.computer.buffer_book = src.name
+				scanner.computer.screenstate = CHECKOUT_BOOK
+				scanner.computer.updateUsrDialog()
+				to_chat(user, "<span class='notice'>[W]'s screen flashes: 'Book stored in buffer. Book title stored in associated computer buffer.'</span>")
 	else if(istype(W, /obj/item/weapon/paper/talisman))
 		var/obj/item/weapon/paper/talisman/talisman = W
 		if(runestun)
@@ -424,6 +422,7 @@
 	name = "The King in Yellow"
 	title = "The King in Yellow"
 	occult = 1
+	spine_color = "#400"
 	var/possible_names = list("The King in Yellow", "The Locksmith's Dream", "The Tantra of Worms", "Infinite Jest", "The Legacy of Totalitarianism in a Tundra", "The Rose of Hypatia",
 	"Gravity's Rainbow", "Aristotle's Poetics", "The Geminiad", "My Diary", "The War of the Roads", "The Courier's Tragedy", "The Burning of the Unburnt God", "Love's Labour's Won",
 	"The Necronomicon", "The Funniest Joke in the World", "Woody Got Wood", "Peggy's Revenge", "House of Leaves", "A True and Accurate History of the Shadowless Kings", "The Book of Nod",
@@ -434,6 +433,70 @@
 	name = pick(possible_names)
 	title = name
 	icon_state = "book[rand(1, 9)]"
+
+
+/*
+ * Random Library Books, from the Library!
+ */
+
+/obj/item/weapon/book/library_randomized/
+	var/worksafe = TRUE
+
+/obj/item/weapon/book/library_randomized/dangerous/
+	//not safe
+	worksafe = FALSE
+
+/obj/item/weapon/book/library_randomized/New()
+	. = ..()
+	if(SSobj && SSobj.initialized)
+		initialize()
+
+/obj/item/weapon/book/library_randomized/initialize()
+	. = ..()
+	var/datum/cachedbook/newbook = library_catalog.getRandomItem(worksafe)
+	if(!newbook || !newbook.id)
+		//failed to find a book. Likely not using a SQL DB. This is a failsafe.
+		//Picks a random useful manual!
+		var/Btype = pick(subtypesof(/obj/item/weapon/book/manual))
+		var/obj/item/weapon/book/B = new Btype
+		name = B.name
+		title = B.title
+		author = B.author
+		dat = B.dat
+		icon_state = B.icon_state
+		spine_color = B.spine_color
+		item_state = icon_state
+		qdel(B)
+		return
+	name = "Book: [newbook.title]"
+	title = newbook.title
+	author = newbook.author
+	dat = newbook.content
+	if(newbook.cover)
+		icon_state = newbook.cover
+	else
+		var/picked_num = rand(1,9)
+		icon_state = "book[picked_num]"
+		switch(picked_num)
+			if(1)
+				spine_color = "#888"
+			if(2)
+				spine_color = "#800"
+			if(3)
+				spine_color = "#880"
+			if(4)
+				spine_color = "#088"
+			if(5)
+				spine_color = "#080"
+			if(6)
+				spine_color = "#808"
+			if(7)
+				spine_color = "#fff"
+			if(8)
+				spine_color = "#444"
+			if(9)
+				spine_color = "#840"
+	item_state = icon_state
 
 /*
  * Barcode Scanner
@@ -448,31 +511,13 @@
 	flags = FPRINT
 	var/obj/machinery/computer/library/checkout/computer // Associated computer - Modes 1 to 3 use this
 	var/obj/item/weapon/book/book	 //  Currently scanned book
-	var/mode = 0 					// 0 - Scan only, 1 - Scan and Set Buffer, 2 - Scan and Attempt to Check In, 3 - Scan and Attempt to Add to Inventory
 
-/obj/item/weapon/barcodescanner/attack_self(mob/user as mob)
-	mode += 1
-	if(mode > 3)
-		mode = 0
-	to_chat(user, "[src] Status Display:")
-	var/modedesc
-	switch(mode)
-		if(0)
-			modedesc = "Scan book to local buffer."
-		if(1)
-			modedesc = "Scan book to local buffer and set associated computer buffer to match."
-		if(2)
-			modedesc = "Scan book to local buffer, attempt to check in scanned book."
-		if(3)
-			modedesc = "Scan book to local buffer, attempt to add book to general inventory."
-		else
-			modedesc = "ERROR"
-	to_chat(user, " - Mode [mode] : [modedesc]")
+/obj/item/weapon/barcodescanner/examine(mob/user, size, show_name)
+	. = ..()
 	if(src.computer)
 		to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
 	else
 		to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
-	to_chat(user, "\n")
 
 /obj/item/weapon/barcodescanner/Destroy()
 	book = null

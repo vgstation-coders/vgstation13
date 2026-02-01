@@ -1,0 +1,56 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/template_noop)
+"g" = (
+/obj/machinery/space_heater/campfire{
+	burntime = 5
+	},
+/obj/machinery/cooking/grill/spit,
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+"E" = (
+/obj/abstract/loot_spawner/food_or_drink{
+	containers = list(/obj/item/weapon/storage/box,/obj/item/weapon/storage/box/large)
+	},
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+"M" = (
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+
+(1,1,1) = {"
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+E
+a
+a
+"}
+(3,1,1) = {"
+a
+M
+g
+M
+a
+"}
+(4,1,1) = {"
+a
+a
+M
+a
+a
+"}
+(5,1,1) = {"
+a
+a
+a
+a
+a
+"}

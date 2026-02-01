@@ -164,7 +164,7 @@
 	repeat = 0
 	ui_interact(user)
 
-/datum/song/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null, var/force_open=NANOUI_FOCUS)
+/datum/song/ui_interact(mob/user, ui_key="instrument", datum/nanoui/ui=null, var/force_open=NANOUI_FOCUS)
 	var/data = list(
 		"repeat" = repeat,
 		"ticklag" = world.tick_lag,
