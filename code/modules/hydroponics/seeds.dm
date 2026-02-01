@@ -544,10 +544,12 @@
 /obj/item/seeds/flaxseed
 	name = "packet of flax seeds"
 	seed_type = "flax"
+	vending_cat = "flowers"
 
 /obj/item/seeds/mintseed
 	name = "packet of mint seeds"
-	seed_type = "weeds"
+	seed_type = "mint"
+	vending_cat = "weeds"
 
 // Chili plants/variants.
 /datum/seed/chili
