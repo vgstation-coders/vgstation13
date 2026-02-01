@@ -2291,6 +2291,13 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/hydroseeds
+	var/fourtwentied = FALSE
+
+/obj/machinery/vending/hydroseeds/process()
+	. = ..()
+	if(time2text(world.timeofday, "hh") >= 16 && time2text(world.timeofday, "mm") >= 20 && !fourtwentied)
+		fourtwentied = TRADE_SHUTTLE_COOLDOWN
+		products[/obj/item/seeds/ambrosiavulgarisseed] = min(products[/obj/item/seeds/ambrosiavulgarisseed],3)
 
 /obj/machinery/vending/voxseeds
 	name = "\improper Vox Seed 'n' Feed"
