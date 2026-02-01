@@ -418,6 +418,27 @@
 	else
 		..()
 
+/obj/item/weapon/book/update_icon()
+	switch(icon_state)
+		if("book1")
+			spine_color = "#888"
+		if("book2")
+			spine_color = "#800"
+		if("book3")
+			spine_color = "#880"
+		if("book4")
+			spine_color = "#088"
+		if("book5")
+			spine_color = "#080"
+		if("book6")
+			spine_color = "#808"
+		if("book7")
+			spine_color = "#fff"
+		if("book8")
+			spine_color = "#444"
+		if("book9")
+			spine_color = "#840"
+
 /*
  * Traitor Ooccult Books
  */
@@ -482,25 +503,7 @@
 	else
 		var/picked_num = rand(1,9)
 		icon_state = "book[picked_num]"
-		switch(picked_num)
-			if(1)
-				spine_color = "#888"
-			if(2)
-				spine_color = "#800"
-			if(3)
-				spine_color = "#880"
-			if(4)
-				spine_color = "#088"
-			if(5)
-				spine_color = "#080"
-			if(6)
-				spine_color = "#808"
-			if(7)
-				spine_color = "#fff"
-			if(8)
-				spine_color = "#444"
-			if(9)
-				spine_color = "#840"
+		update_icon()
 	item_state = icon_state
 
 /*

@@ -669,6 +669,7 @@
 		else
 			B.icon_state = "book[rand(1,9)]"
 	B.item_state = B.icon_state
+	B.update_icon()
 	printbook(B, forceprint)
 
 #undef MAIN_MENU
