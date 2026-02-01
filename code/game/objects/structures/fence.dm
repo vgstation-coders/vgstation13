@@ -1,5 +1,5 @@
 //Chain link fences
-//Can be cut with wirecutters up to 3 times, cutting takes 20 seconds
+//Can be cut with wirecutters up to 3 times, cutting takes 5 seconds
 //If there's a wire placed under the fence, the fence is electrified and can't be touched/cut without gloves
 
 //Fence smashing sound downloaded from http://freesound.org/people/hintringer/sounds/274768/
@@ -66,7 +66,16 @@
 	hole_size = LARGE_HOLE
 
 /obj/structure/fence/attackby(obj/item/W, mob/user)
-	if(W.is_wirecutter(user) && !shock(user, 100, W.siemens_coefficient))
+	if(istype(W,/obj/item/weapon/pickaxe/drill))
+		user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
+							"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
+		if(do_after(user, src, 2 SECONDS))
+			user.visible_message("<span class='notice'>\The [user] cuts through \the [src] with \the [W].</span>",
+							"<span class='info'>You cut \the [src] back into rods with \the [W].</span>")
+			dismantle()
+		return
+
+	if(W.sharpness >= 1 && !shock(user, 100, W.siemens_coefficient))
 		if(!cuttable)
 			to_chat(user, "<span class='notice'>This section of the fence can't be cut.</span>")
 			return
@@ -76,7 +85,7 @@
 		user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
 		"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
 
-		if(do_after(user, src, cut_time))
+		if(do_after(user, src, cut_time/W.sharpness))
 			if(current_stage == hole_size)
 
 				switch(++hole_size)
@@ -99,20 +108,13 @@
 				update_cut_status()
 		return
 
-	if(istype(W,/obj/item/weapon/pickaxe/drill))
-		user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
-							"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
-		if(do_after(user, src, 2 SECONDS))
-			user.visible_message("<span class='notice'>\The [user] cuts through \the [src] with \the [W].</span>",
-							"<span class='info'>You cut \the [src] back into rods with \the [W].</span>")
-			dismantle()
-
 	if(hole_size && istype(W,/obj/item/stack/rods))
 		var/obj/item/stack/rods/R = W
 		if(R.use(1))
 			to_chat(user, "<span class='info'>You repair \the [src] with a rod.</span>")
 			hole_size = NO_HOLE
 			update_cut_status()
+			return
 
 	if(hole_size >= SMALL_HOLE)
 		user.drop_item(W, get_turf(src))
