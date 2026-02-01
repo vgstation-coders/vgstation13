@@ -82,16 +82,15 @@
 			T.ChangeTurf(T.get_underlying_turf())
 			return cost
 
-	else if(istype(A, /obj/machinery/door/airlock) && options["decon_airlocks"])
-		var/obj/machinery/door/airlock/D = A
-		to_chat(user, "Deconstructing \the [D]...")
-		if(linked_rcd.delay(user, D, 5 SECONDS))
+	else if(is_type_in_list(A, list(/obj/machinery/door/airlock,/obj/structure/fence)) && options["decon_airlocks"])
+		to_chat(user, "Deconstructing \the [A]...")
+		if(linked_rcd.delay(user, A, 5 SECONDS))
 			if(linked_rcd.get_energy(user) < cost)
 				return 0
 
 			playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
-			D.investigation_log(I_RCD,"was deconstructed by [user]")
-			qdel(D)
+			A.investigation_log(I_RCD,"was deconstructed by [user]")
+			qdel(A)
 			return cost
 
 	else if(istype(A,/obj/structure/window) && options["decon_windows"])
