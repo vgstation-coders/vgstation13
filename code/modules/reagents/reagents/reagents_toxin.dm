@@ -241,7 +241,7 @@
 	if(..())
 		return 1
 
-	empulse(get_turf(M), 1, 2, 1)
+	empulse(get_turf(M), 100, 200, 1)
 
 	return
 
