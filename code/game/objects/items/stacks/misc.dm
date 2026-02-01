@@ -135,6 +135,7 @@
 		Grille.add_fingerprint(user)
 		use(2)
 
+
 /obj/item/stack/chains
 	name = "chain"
 	desc = "Link by link, my chain got longer."

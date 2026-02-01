@@ -1,5 +1,5 @@
 //Chain link fences
-//Can be cut with wirecutters up to 3 times, cutting takes 5 seconds
+//Can be cut with wirecutters up to 3 times, cutting takes 20 seconds
 //If there's a wire placed under the fence, the fence is electrified and can't be touched/cut without gloves
 
 //Fence smashing sound downloaded from http://freesound.org/people/hintringer/sounds/274768/
