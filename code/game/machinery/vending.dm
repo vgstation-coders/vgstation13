@@ -2296,7 +2296,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/hydroseeds/process()
 	. = ..()
 	if(time2text(world.timeofday, "hh") >= 16 && time2text(world.timeofday, "mm") >= 20 && !fourtwentied)
-		fourtwentied = TRADE_SHUTTLE_COOLDOWN
+		fourtwentied = TRUE
 		products[/obj/item/seeds/ambrosiavulgarisseed] = min(products[/obj/item/seeds/ambrosiavulgarisseed],3)
 
 /obj/machinery/vending/voxseeds
