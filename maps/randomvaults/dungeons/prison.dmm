@@ -602,7 +602,7 @@
 	},
 /area/vault/prison)
 "bH" = (
-/obj/structure/fence/door/secure/from_north,
+/obj/structure/fence/door/secure,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
@@ -698,7 +698,7 @@
 	},
 /area/vault/prison)
 "bV" = (
-/obj/structure/fence/door/secure/from_east{
+/obj/structure/fence/door/secure{
 	dir = 4
 	},
 /obj/effect/decal/cleanable/blood/drip,

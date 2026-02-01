@@ -82,7 +82,7 @@
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "J" = (
-/obj/structure/fence/door/secure/from_south,
+/obj/structure/fence/door/secure,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "K" = (

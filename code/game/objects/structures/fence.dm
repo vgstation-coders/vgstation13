@@ -297,23 +297,9 @@
 	name = "secure fence door"
 	desc = "A fence door with a door latch. It can only be opened and closed from one direction."
 
-	var/permitted_direction = SOUTH
-
-/obj/structure/fence/door/secure/from_south
-	permitted_direction = SOUTH
-
-/obj/structure/fence/door/secure/from_north
-	permitted_direction = NORTH
-
-/obj/structure/fence/door/secure/from_east
-	permitted_direction = EAST
-
-/obj/structure/fence/door/secure/from_west
-	permitted_direction = WEST
-
 /obj/structure/fence/door/secure/can_open(mob/user)
 	//User must be standing in the permitted direction from the door, or must have telekinesis
-	if((M_TK in usr.mutations) || (get_dir(src, user) == permitted_direction))
+	if((M_TK in usr.mutations) || (get_dir(src, user) == dir))
 		return TRUE
 	else
 		to_chat(user, "<span class='warning'>You can't reach the door latch from here!</span>")
