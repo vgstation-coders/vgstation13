@@ -306,7 +306,8 @@ var/list/datum/stack_recipe/rod_recipes = list (
 	new/datum/stack_recipe("fence corner", /obj/structure/fence/corner, 2, time = 50, one_per_turf = 1),
 	new/datum/stack_recipe("fence post", /obj/structure/fence/post, 2, time = 50, one_per_turf = 1),
 	null,
-	new/datum/stack_recipe("fence door", /obj/structure/fence/door, 2, time = 50, one_per_turf = 1)
+	new/datum/stack_recipe("fence door", /obj/structure/fence/door, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe("secure fence door", /obj/structure/fence/door/secure, 2, time = 50, one_per_turf = 1)
 	)
 
 var/list/datum/stack_recipe/metal_recipes = list (
