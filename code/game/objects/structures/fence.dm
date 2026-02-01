@@ -70,7 +70,7 @@
 	if(istype(W,/obj/item/weapon/pickaxe/drill))
 		user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
 							"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
-		if(do_after(user, src, 2 SECONDS))
+		if(do_after(user, src, cut_time/2))
 			user.visible_message("<span class='notice'>\The [user] cuts through \the [src] with \the [W].</span>",
 							"<span class='info'>You cut \the [src] back into rods with \the [W].</span>")
 			dismantle(user)
