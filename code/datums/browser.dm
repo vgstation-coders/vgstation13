@@ -102,6 +102,11 @@
 	if (width && height)
 		window_size = "size=[width]x[height];"
 	user << browse(get_content(), "window=[window_id];[window_size][window_options]")
+	if (width && height)
+		var/dpi = winget(user, window_id, "dpi")
+		if(!dpi)
+			dpi = 1
+		winset(user, window_id, "size=[width*dpi]x[height*dpi]")
 	if (use_onclose)
 		onclose(user, window_id, ref)
 
