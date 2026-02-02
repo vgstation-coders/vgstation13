@@ -100,6 +100,29 @@
 			},
 			"group": "build",
 			"label": "tgui: clean",
+		},
+		{
+		    "type": "shell",
+		    "label": "Background: Wait for DreamDaemon",
+		    "command": "start",
+		    "args": ["\"Waiting for DreamDaemon\"", "powershell", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\bin\\connect-to-local-wait.ps1"],
+		    "options": {
+		        "shell": {
+		            "executable": "cmd.exe", // it needs to detach so vscode can actually launch dreamdaemon before we start waiting for it
+		            "args": ["/c"]
+		        }
+		    },
+		    "presentation": {
+		        "reveal": "silent"
+		    },
+		    "problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "Build and Launch Server",
+			"dependsOn": ["Build All", "Background: Wait for DreamDaemon"],
+			"dependsOrder": "parallel",
+			"problemMatcher": []
 		}
 	]
 }
