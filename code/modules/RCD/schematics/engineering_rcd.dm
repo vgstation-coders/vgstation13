@@ -152,6 +152,8 @@
 	register_asset("girder_RCD.png", new/icon('icons/obj/structures.dmi', "girder" ))
 	send_asset(client, "girder_RCD.png")
 
+	register_asset("fence_RCD.png", new/icon('icons/obj/structures/fence.dmi', "straight" ))
+	send_asset(client, "fence_RCD.png")
 
 	register_asset("RCD_HEADER_WALLS.png", new/icon('icons/turf/walls.dmi', "metal0" ))
 	send_asset(client, "RCD_HEADER_WALLS.png")
@@ -332,6 +334,39 @@
 	var/a="<a href='?src=\ref[linked_rcd.interface];set_schematic=[name];'>"
 	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='girder_RCD.png'></a></td><td>[a][cost+1]</a></td><td>[a]2</a></td><td>[a]<img src='floor_RCD.png'></a></td></tr>"
 
+/datum/rcd_grouped_schematic/fence
+	name="fence"
+	cost=1
+
+/datum/rcd_grouped_schematic/fence/build(var/atom/A, var/mob/user)
+	var/turf/T=get_turf(A)
+	var/truecost=0
+	if(istype(T,/turf/space) || istype(T,/turf/unsimulated/floor))
+		truecost=cost+1
+	else if(istype(T,/turf/simulated/floor) )
+		truecost=cost
+	else
+		to_chat(user, "You cannot build a [name] here!")
+		return 0
+
+	for(var/atom/A2 in T.contents)
+		if(A2.type==/obj/structure/fence )
+			to_chat(user, "There's already a [name] here!")
+			return 0
+	playsound(linked_rcd, 'sound/machines/click.ogg', 50, 1)
+	if(linked_rcd.delay(user, A, 1 SECONDS))
+		if(linked_rcd.get_energy(user) < truecost)
+			to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
+			return 0
+		playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
+		var/obj/structure/fence/F = new(T)
+		F.dir = user.dir
+		return truecost
+	return 0
+
+/datum/rcd_grouped_schematic/fence/generate_html()
+	var/a="<a href='?src=\ref[linked_rcd.interface];set_schematic=[name];'>"
+	return "<tr class='[linked_rcd.selected_schem==src ? "schem_selected" : "schem"]'><td>[a]<img src='fence_RCD.png'></a></td><td>[a][cost+1]</a></td><td>[a]2</a></td><td>[a]<img src='floor_RCD.png'></a></td></tr>"
 
 /datum/rcd_scematic_grouping/build_floors
 	name="floors"
