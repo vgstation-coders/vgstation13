@@ -23,7 +23,7 @@
 	sheet_type = /obj/item/stack/sheet/plasteel
 	sheet_amt = 2
 
-	var/cut_time = 200
+	var/cut_time = 100
 	var/cuttable = TRUE
 	var/hole_size= NO_HOLE
 
