@@ -5,7 +5,8 @@
 	item_state = "excavation"
 	author = "Professor Patrick Mason, Curator of the Antiquities Museum on Ichar VII"
 	title = "Out on the dig, 2nd Edition"
-	spine_color = "#808"
+	spine_color = "#fff"
+	spine_overlay = "#808"
 	id = 26
 	dat = {"<html>
 				<head>
@@ -104,6 +105,7 @@
 	author = "Professor Patrick Mason, Curator of the Antiquities Museum on Ichar VII"
 	title = "Out on the dig, 1st Edition"
 	spine_color = "#808"
+	spine_overlay = "#000"
 	id = 27
 	dat = {"<html>
 				<head>
@@ -219,6 +221,7 @@
 	author = "Winton Rice, Chief Mass Spectrometry Technician at the Institute of Applied Sciences on Arcadia"
 	title = "High powered mass spectrometry, a comprehensive guide"
 	spine_color = "#808"
+	spine_overlay = "#444"
 	id = 28
 	dat = {"<html>
 				<head>
@@ -292,6 +295,7 @@
 	author = "Doctor Martin Boyle, Director Research at the Lower Hydrolian Sector Listening Array"
 	title = "Spectroscopy: Analysing the anomalies of the cosmos"
 	spine_color = "#808"
+	spine_overlay = "#00f"
 	id = 29
 	dat = {"<html>
 				<head>
@@ -318,6 +322,7 @@
 	author = "Jasper Pascal, Senior Lecturer in Materials Analysis at the University of Jol'Nar"
 	title = "Materials analysis and the chemical implications"
 	spine_color = "#808"
+	spine_overlay = "#ff0"
 	id = 30
 	dat = {"<html>
 				<head>
@@ -347,6 +352,7 @@
 	author = "Norman York, formerly of the Tyrolion Institute on Titan"
 	title = "Anomalous materials and energies"
 	spine_color = "#808"
+	spine_overlay = "#fff"
 	id = 31
 	dat = {"<html>
 				<head>
@@ -427,6 +433,7 @@
 	author = "Elvin Schmidt"
 	title = "Cellular suspension, the new Cryogenics?"
 	spine_color = "#808"
+	spine_overlay = "#0ff"
 	id = 32
 	dat = {"<html>
 				<head>
