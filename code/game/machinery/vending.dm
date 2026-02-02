@@ -2294,10 +2294,10 @@ var/global/num_vending_terminals = 1
 	var/fourtwentied = FALSE
 
 /obj/machinery/vending/hydroseeds/New()
-	. = ..()
 	if(Get_Holiday() == FOUR_TWENTY)
 		products[/obj/item/seeds/ambrosiavulgarisseed] = 420
 		premium[/obj/item/seeds/ambrosiadeusseed] = 420
+	. = ..()
 
 /obj/machinery/vending/hydroseeds/process()
 	. = ..()
