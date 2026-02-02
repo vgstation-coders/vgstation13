@@ -2303,7 +2303,10 @@ var/global/num_vending_terminals = 1
 	. = ..()
 	if(time2text(world.timeofday, "hh") == 16 && time2text(world.timeofday, "mm") == 20 && !fourtwentied)
 		fourtwentied = TRUE
-		products[/obj/item/seeds/ambrosiavulgarisseed] = min(products[/obj/item/seeds/ambrosiavulgarisseed],3)
+		for(var/datum/data/vending_product/V in product_records)
+			if(V.product_path == /obj/item/seeds/ambrosiavulgarisseed)
+				V.amount = min(V.amount, 3)
+				break
 
 /obj/machinery/vending/voxseeds
 	name = "\improper Vox Seed 'n' Feed"
