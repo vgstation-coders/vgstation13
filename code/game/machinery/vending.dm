@@ -2305,7 +2305,7 @@ var/global/num_vending_terminals = 1
 		fourtwentied = TRUE
 		for(var/datum/data/vending_product/V in product_records)
 			if(V.product_path == /obj/item/seeds/ambrosiavulgarisseed)
-				V.amount = min(V.amount, 3)
+				V.amount = max(V.amount, V.original_amount)
 				break
 
 /obj/machinery/vending/voxseeds
