@@ -105,6 +105,8 @@
 					if(CUT_THROUGH)
 						visible_message("<span class='notice'>\The [user] completely cuts through \the [src].</span>")
 						to_chat(user, "<span class='info'>\The [src] is now rods again.</span>")
+						dismantle(user)
+						return
 
 				update_cut_status(user)
 		return
@@ -186,8 +188,6 @@
 		if(LARGE_HOLE)
 			icon_state = "straight_cut3"
 			setDensity(FALSE)
-		if(CUT_THROUGH)
-			dismantle(user)
 
 	cut_time = hole_size < LARGE_HOLE ? initial(cut_time) : 0
 
