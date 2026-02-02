@@ -175,7 +175,7 @@
 		overlays += bookoverlay
 		if(I:spine_overlay)
 			var/image/bookoveroverlay = image(icon,loc,"bookoveroverlay",layer,dir,x_offset,y_offset)
-			bookoverlay.color = I:spine_overlay
+			bookoveroverlay.color = I:spine_overlay
 			overlays += bookoveroverlay
 		x_offset += 4
 		if(x_offset > 20)
