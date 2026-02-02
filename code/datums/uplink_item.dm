@@ -1034,7 +1034,7 @@ var/list/discounted_items_of_the_round = list()
 	item = /obj/item/seeds/ambrosiacruciatusseed
 	cost = 6
 	discounted_cost = 2
-	discount_on_month = "4"
+	discount_on_month = "04"
 	discount_on_day = "20"
 	jobs_with_discount = list("Botanist")
 
