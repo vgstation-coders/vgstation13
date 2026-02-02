@@ -16,7 +16,7 @@
 	wiki_page = "Guide_to_Construction"
 	id = 1
 	spine_color = "#880"
-	spine_overlay = "#ccc"
+	spine_overlay = "#bbb"
 
 /obj/item/weapon/book/manual/engineering_particle_accelerator
 	name = "Particle Accelerator User's Guide"
@@ -24,7 +24,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Particle Accelerator User's Guide"
 	spine_color = "#888"
-	spine_overlay = "#ccc"
+	spine_overlay = "#bbb"
 //big pile of shit below.
 	id = 2
 
@@ -71,7 +71,7 @@
 	title = "Hacking"
 	wiki_page = "Hacking"
 	spine_color = "#800"
-	spine_overlay = "#ccc"
+	spine_overlay = "#bbb"
 	id = 3
 
 /obj/item/weapon/book/manual/engineering_singularity_safety
@@ -132,7 +132,7 @@
 	title = "Growing Dionae and YOU! A book on growing your new best friends!"
 	id = 5
 	spine_color = "#080"
-	spine_overlay = "#cc6"
+	spine_overlay = "#bb6"
 	dat = {"<html>
 				<head>
 				<style>
@@ -179,7 +179,7 @@
 	title = "Chemistry 101"
 	wiki_page = "Guide_to_Chemistry"
 	spine_color = "#808"
-	spine_overlay = "#ccc"
+	spine_overlay = "#bbb"
 	id = 7
 
 /obj/item/weapon/book/manual/ripley_build_and_repair
@@ -319,7 +319,7 @@
 	author = "XISC"
 	title = "Cyborgs for Dummies"
 	spine_color = "#888"
-	spine_overlay = "#ccc"
+	spine_overlay = "#bbb"
 	id = 10
 	dat = {"<html>
 				<head>
@@ -527,7 +527,7 @@
 	title = "Space Law"
 	wiki_page = "Space_Law"
 	spine_color = "#b00"
-	spine_overlay = "#fc0"
+	spine_overlay = "#fb0"
 	id = 11
 
 /obj/item/weapon/book/manual/security_antag_guide	//if you wanna edit, just copypaste the dat into https://www.w3schools.com/html/tryit.asp?filename=tryhtml_default
@@ -538,7 +538,7 @@
 	author = "Nanotrasen"
 	title = "Enemies of Nanotrasen: A Quick Overview"
 	spine_color = "#b00"
-	spine_overlay = "#c80"
+	spine_overlay = "#b80"
 	id = 12
 	book_width = 692
 
@@ -707,7 +707,7 @@
 	title = "Engineering Textbook"
 	wiki_page = "Guide_to_Engineering"
 	spine_color = "#88f"
-	spine_overlay = "#cc0"
+	spine_overlay = "#bb0"
 	id = 13
 
 /obj/item/weapon/book/manual/rust
@@ -717,7 +717,7 @@
 	title = "R-UST User Manual"
 	wiki_page = "R-UST"
 	spine_color = "#88f"
-	spine_overlay = "#cc0"
+	spine_overlay = "#bb0"
 	id = 14
 
 /obj/item/weapon/book/manual/chef_recipes
@@ -739,7 +739,7 @@
 	title = "Barman Recipes"
 	wiki_page = "Barman_recipes"
 	spine_color = "#088"
-	spine_overlay = "#8cc"
+	spine_overlay = "#8bb"
 	id = 16
 
 /obj/item/weapon/book/manual/detective
@@ -1047,7 +1047,7 @@ var/virology_encyclopedia = ""
 	author = "Frederick Chapman Montagnier"
 	title = "Symptom Encyclopedia"
 	spine_color = "#bbb"
-	spine_overlay = "#8c0"
+	spine_overlay = "#8b0"
 	dat = ""
 	id = 21
 	book_width = 819
@@ -1198,7 +1198,7 @@ var/virology_encyclopedia = ""
 	author = "Eris Bay"
 	title = "Engine technician's notes"
 	spine_color = "#840"
-	spine_overlay = "#c80"
+	spine_overlay = "#b80"
 	id = 24
 	dat = {"<html>
 			<head>
@@ -1351,7 +1351,7 @@ var/virology_encyclopedia = ""
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Fission Reactor User's Guide"
 	spine_color = "#88f"
-	spine_overlay = "#cc0"
+	spine_overlay = "#bb0"
 	//big pile of shit below.
 	id = 26
 	dat= {"<html>
@@ -1803,5 +1803,5 @@ Different sizes of fuel reservoirs exist, with the starter kit coming with a fai
 	title = "Explorer's Field Manual"
 	wiki_page = "Guide to Planetary Exploration"
 	spine_color = "#840"
-	spine_overlay = "#fc0"
+	spine_overlay = "#fb0"
 	id = 26
