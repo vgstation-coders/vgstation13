@@ -669,6 +669,8 @@ var/list/global/id_cards = list()
 
 /obj/item/weapon/card/id/admin/New()
 	access = get_absolutely_all_accesses()
+	if(station_account)
+		associated_account_number = station_account.account_number
 	..()
 
 /obj/item/weapon/card/id/centcom
@@ -680,6 +682,8 @@ var/list/global/id_cards = list()
 
 /obj/item/weapon/card/id/centcom/New()
 	access = get_all_centcom_access()
+	if(station_account)
+		associated_account_number = station_account.account_number
 	..()
 
 /obj/item/weapon/card/id/salvage_captain
