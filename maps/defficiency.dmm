@@ -70039,6 +70039,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/table,
 /obj/item/weapon/paper_bin/red{
 	pixel_x = -3;
 	pixel_y = 7
@@ -70048,7 +70049,6 @@
 	pixel_x = 7;
 	pixel_y = 8
 	},
-/obj/structure/table,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -77666,10 +77666,6 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
 	name = "Firelock East"
-	},
-/obj/machinery/door/airlock/security{
-	name = "Interrogation";
-	req_access_txt = "63"
 	},
 /obj/machinery/door/airlock/security{
 	name = "Interrogation";
