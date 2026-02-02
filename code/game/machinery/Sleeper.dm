@@ -818,7 +818,7 @@
 		base_icon = "galo"
 		icon_state = "galo_open"
 		galize = 1
-	else if(map.nameShort == "deff")
+	else if(!galize && map.nameShort == "deff")
 		icon = 'maps/defficiency/medbay.dmi'
 	update_icon()
 
