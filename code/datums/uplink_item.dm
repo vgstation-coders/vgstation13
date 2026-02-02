@@ -102,8 +102,9 @@ var/list/discounted_items_of_the_round = list()
 	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
 /datum/uplink_item/proc/gives_discount(var/user_job)
-	if(discount_on_month && time2text(world.realtime,"MM") == discount_on_month && discount_on_day && time2text(world.realtime,"DD") == discount_on_day)
-		return TRUE
+	if(discount_on_month && time2text(world.realtime,"MM") == discount_on_month)
+		if(!discount_on_day || time2text(world.realtime,"DD") == discount_on_day)
+			return TRUE
 	return user_job && jobs_with_discount.len && jobs_with_discount.Find(user_job)
 
 /datum/uplink_item/proc/available_for_job(var/user_job)
