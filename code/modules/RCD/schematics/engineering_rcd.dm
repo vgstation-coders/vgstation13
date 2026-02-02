@@ -1419,6 +1419,7 @@
 	schematics+= new /datum/rcd_grouped_schematic/normalwall(rcdtouse)
 	schematics+= new /datum/rcd_grouped_schematic/woodwall(rcdtouse)
 	schematics+= new /datum/rcd_grouped_schematic/girder(rcdtouse)
+	schematics+= new /datum/rcd_grouped_schematic/fence(rcdtouse)
 
 
 /datum/rcd_scematic_grouping/build_wall/engi_std/CE //for the ARCD
