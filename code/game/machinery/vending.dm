@@ -2301,7 +2301,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/hydroseeds/process()
 	. = ..()
-	if(time2text(world.timeofday, "hh") == 16 && time2text(world.timeofday, "mm") == 20 && !fourtwentied)
+	if(time2text(world.timeofday, "hh") == "16" && time2text(world.timeofday, "mm") == "20" && !fourtwentied)
 		fourtwentied = TRUE
 		for(var/datum/data/vending_product/V in product_records)
 			if(V.product_path == /obj/item/seeds/ambrosiavulgarisseed)
