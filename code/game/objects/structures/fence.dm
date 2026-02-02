@@ -76,15 +76,16 @@
 			dismantle(user)
 		return
 
-	if(W.sharpness >= 1 && !shock(user, 100, W.siemens_coefficient))
+	if((W.sharpness_flags & SHARP_BLADE) && !shock(user, 100, W.siemens_coefficient))
 		if(!cuttable)
 			to_chat(user, "<span class='notice'>This section of the fence can't be cut.</span>")
 			return
 
 		var/current_stage = hole_size
 
-		user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
-		"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
+		if(cut_time)
+			user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
+			"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
 
 		if(do_after(user, src, cut_time/W.sharpness))
 			if(current_stage == hole_size)
