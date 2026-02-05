@@ -519,6 +519,12 @@
 /turf/simulated/floor/plating/damaged
 	var/broken_prob = 75
 
+/turf/simulated/floor/plating/damaged/broken
+	broken_prob = 100
+
+/turf/simulated/floor/plating/damaged/burnt
+	broken_prob = 0
+
 /turf/simulated/floor/plating/damaged/pick_icon_state()
 	if(prob(broken_prob))
 		break_tile()
