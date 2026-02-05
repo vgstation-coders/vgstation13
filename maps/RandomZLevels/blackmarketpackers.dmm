@@ -2504,16 +2504,10 @@
 /turf/simulated/floor/plating/damaged/airless/broken,
 /area/awaymission/BMPship3)
 "he" = (
-/turf/simulated/floor{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/awaymission/BMPship2)
 "hf" = (
-/turf/simulated/floor{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/awaymission/BMPship2)
 "hg" = (
 /obj/machinery/door/airlock/silver{
