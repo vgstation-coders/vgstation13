@@ -44193,8 +44193,8 @@
 	},
 /area/prison/solitary)
 "daS" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "daT" = (
@@ -44496,8 +44496,8 @@
 /area/shuttle/administration/centcom)
 "dbG" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dbH" = (
@@ -84729,10 +84729,7 @@
 /turf/simulated/floor/plating,
 /area/station/garage)
 "lUH" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "lUP" = (
 /obj/machinery/power/apc{
@@ -99808,10 +99805,7 @@
 /area/engineering/burn_chamber)
 "rpI" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "rpJ" = (
 /obj/machinery/door/unpowered/shuttle,
@@ -102912,10 +102906,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/singularity_engine)
 "sDw" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/atmos)
 "sDz" = (
 /obj/machinery/atmospherics/binary/pump{

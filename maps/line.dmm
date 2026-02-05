@@ -1377,9 +1377,7 @@
 /obj/structure/table,
 /obj/item/weapon/reagent_containers/food/snacks/greygreens,
 /obj/item/weapon/kitchen/utensil/fork/plastic/teflon,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint2)
 "apm" = (
 /obj/machinery/power/solar/panel/tracker,
@@ -1580,9 +1578,7 @@
 	dir = 4
 	},
 /obj/machinery/disposal,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/shuttle/salvage/derelict)
 "arb" = (
 /obj/effect/landmark/start{
@@ -7068,9 +7064,7 @@
 /area/medical/virology_break)
 "bQP" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelictparts/library)
 "bQS" = (
 /obj/structure/cable{
@@ -9900,10 +9894,7 @@
 "cId" = (
 /obj/structure/window/barricade/full,
 /obj/effect/spider/stickyweb,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint)
 "cIw" = (
 /obj/structure/grille,
@@ -10091,9 +10082,7 @@
 /obj/structure/table,
 /obj/item/trash/used_tray,
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspices,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint2)
 "cKT" = (
 /obj/machinery/computer/teleporter,
@@ -10576,10 +10565,7 @@
 /obj/effect/decal/cleanable/blood/oil{
 	icon_state = "floor5"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/bridge/ai_upload)
 "cQV" = (
 /obj/effect/landmark/map_element/deepspaceruin,
@@ -14363,8 +14349,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "dgA" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dgB" = (
@@ -14746,8 +14732,8 @@
 /area/prison/solitary)
 "dhF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dhG" = (
@@ -36796,9 +36782,7 @@
 /obj/effect/decal/cleanable/generic,
 /obj/machinery/space_heater,
 /obj/item/weapon/stock_parts/manipulator,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint)
 "esN" = (
 /obj/item/seeds/bananaseed,
@@ -42503,9 +42487,7 @@
 	amount = 5
 	},
 /obj/item/tool/crowbar,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/port)
 "eGD" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -45473,9 +45455,7 @@
 /area/construction/mommi_nest)
 "fyY" = (
 /obj/structure/morgue,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint)
 "fze" = (
 /obj/item/weapon/shard{
@@ -46119,9 +46099,7 @@
 	},
 /obj/abstract/map/spawner/floorpill,
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/apmaint2)
 "fLH" = (
 /obj/item/weapon/storage/bag/trash,
@@ -46961,9 +46939,7 @@
 	},
 /area/hydroponics)
 "fXT" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint)
 "fXU" = (
 /obj/effect/decal/cleanable/generic,
@@ -48856,10 +48832,7 @@
 	name = "Power Substation"
 	})
 "gxE" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/bridge/ai_upload)
 "gxF" = (
 /obj/structure/cable{
@@ -53254,9 +53227,7 @@
 /area/derelict/bar)
 "hIg" = (
 /obj/item/weapon/stock_parts/capacitor,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint)
 "hIi" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -53816,9 +53787,7 @@
 /obj/effect/decal/cleanable/generic,
 /obj/effect/decal/cleanable/cobweb2,
 /obj/item/weapon/stock_parts/manipulator,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint)
 "hSK" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
@@ -54853,9 +54822,7 @@
 /obj/structure/rack,
 /obj/item/weapon/storage/toolbox/mechanical,
 /obj/item/weapon/pen,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint)
 "ieM" = (
 /obj/structure/closet/l3closet/scientist,
@@ -56615,9 +56582,7 @@
 /area/science/hallway)
 "iEv" = (
 /obj/machinery/light_construct/small,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelictparts/library)
 "iEJ" = (
 /obj/machinery/door/window{
@@ -58299,9 +58264,7 @@
 "jjz" = (
 /obj/structure/bed/chair/folding,
 /obj/item/trash/packet/zammild,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint2)
 "jjA" = (
 /obj/machinery/atmospherics/unary/portables_connector{
@@ -58523,10 +58486,7 @@
 /area/security/armory)
 "jmD" = (
 /obj/effect/spider/stickyweb,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint)
 "jmE" = (
 /turf/simulated/floor/engine,
@@ -59732,9 +59692,7 @@
 	icon_state = "coil_red1";
 	name = "cable piece"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint)
 "jCM" = (
 /obj/structure/cable{
@@ -59812,9 +59770,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fore)
 "jED" = (
 /obj/machinery/door/window{
@@ -60815,10 +60771,7 @@
 "jQP" = (
 /mob/living/simple_animal/hostile/giant_spider/spiderling,
 /obj/effect/decal/cleanable/spiderling_remains,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint)
 "jRc" = (
 /obj/structure/window/reinforced,
@@ -61861,9 +61814,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "kdG" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fore)
 "kdJ" = (
 /obj/machinery/camera{
@@ -64465,9 +64416,7 @@
 /turf/simulated/floor,
 /area/engine)
 "kLf" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint2)
 "kLg" = (
 /obj/structure/grille,
@@ -64833,9 +64782,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint2)
 "kRJ" = (
 /obj/structure/cable{
@@ -66481,9 +66428,7 @@
 /area/hallway/secondary/entry)
 "lkv" = (
 /obj/item/tool/weldingtool,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint3)
 "lky" = (
 /obj/machinery/space_heater/campfire/stove/fireplace,
@@ -70177,9 +70122,7 @@
 /area/medical/medbay)
 "mem" = (
 /obj/effect/decal/cleanable/generic,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint2)
 "met" = (
 /obj/machinery/firealarm{
@@ -70210,9 +70153,7 @@
 /area/maintenance/asmaint2)
 "meK" = (
 /obj/item/clothing/gloves/black,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint2)
 "meR" = (
 /obj/machinery/disposal/deliveryChute,
@@ -72441,9 +72382,7 @@
 /area/maintenance/disposal)
 "mIM" = (
 /obj/item/weapon/pen,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint)
 "mIN" = (
 /obj/structure/disposalpipe/segment{
@@ -73713,9 +73652,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/shuttle/salvage/derelict)
 "mZo" = (
 /obj/machinery/vending/games,
@@ -79786,9 +79723,7 @@
 /area/hallway/secondary/entry)
 "oyS" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint2)
 "ozb" = (
 /obj/machinery/artifact_analyser,
@@ -92185,9 +92120,7 @@
 /obj/item/clothing/gloves/yellow,
 /obj/item/weapon/storage/belt/utility/full,
 /obj/item/device/flashlight,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint2)
 "rDi" = (
 /obj/item/device/radio/intercom{
@@ -99335,10 +99268,7 @@
 	},
 /area/security/hos)
 "tqW" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint)
 "tqY" = (
 /obj/structure/catwalk{
@@ -100541,9 +100471,7 @@
 /area/storage/tech)
 "tHx" = (
 /obj/structure/grille,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint2)
 "tHO" = (
 /obj/machinery/door/airlock/highsecurity{
@@ -100766,9 +100694,7 @@
 	dir = 1
 	},
 /obj/structure/reagent_dispensers/fueltank,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint2)
 "tJu" = (
 /obj/machinery/portable_atmospherics/canister/air,
@@ -100833,9 +100759,7 @@
 	},
 /area/science/hallway)
 "tJQ" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint2)
 "tJX" = (
 /obj/machinery/shieldgen,
@@ -106207,9 +106131,7 @@
 	pixel_y = -3
 	},
 /obj/item/tool/screwdriver,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint2)
 "uZv" = (
 /obj/machinery/vending/coffee,
@@ -109854,9 +109776,7 @@
 /area/maintenance/apmaint2)
 "vPA" = (
 /obj/structure/grille,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/apmaint2)
 "vPW" = (
 /obj/machinery/door/airlock/maintenance{
@@ -116768,9 +116688,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/shuttle/salvage/derelict)
 "xpz" = (
 /obj/effect/decal/cleanable/dirt,
@@ -118320,9 +118238,7 @@
 /area/maintenance/asmaint2)
 "xFm" = (
 /obj/structure/grille,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint3)
 "xFn" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{

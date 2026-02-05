@@ -562,10 +562,7 @@
 /turf/simulated/floor/engine,
 /area/mining_bar)
 "bR" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/mining_bar)
 "bS" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,

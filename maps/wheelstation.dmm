@@ -76865,8 +76865,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "cPQ" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPR" = (
@@ -77248,8 +77248,8 @@
 /area/prison/solitary)
 "cQV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cQW" = (

@@ -837,9 +837,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/taxi_engi/engine)
 "bV" = (
 /obj/structure/cable{
@@ -1434,9 +1432,7 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cV" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/taxi_engi/engine)
 "cW" = (
 /obj/effect/decal/cleanable/cobweb2,
@@ -3022,9 +3018,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/taxi_engi/engine)
 "gn" = (
 /obj/structure/cable{
@@ -3212,9 +3206,7 @@
 /area/vault/taxi_engi/podbay)
 "gJ" = (
 /obj/effect/decal/cleanable/blood/tracks/footprints/vox,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/taxi_engi/podbay)
 "gK" = (
 /turf/simulated/floor/plating/damaged/broken,

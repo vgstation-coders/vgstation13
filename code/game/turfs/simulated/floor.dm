@@ -1,5 +1,5 @@
 //This is so damaged or burnt tiles or platings don't get remembered as the default tile
-var/list/icons_to_ignore_at_floor_init = list("panelscorched","plating","light_on","light_on_flicker1","light_on_flicker2",
+var/list/icons_to_ignore_at_floor_init = list("plating","light_on","light_on_flicker1","light_on_flicker2",
 				"light_on_clicker3","light_on_clicker4","light_on_clicker5","light_broken",
 				"light_on_broken","light_off","wall_thermite","grass1","grass2","grass3","grass4",
 				"asteroid","asteroid_dug",

@@ -84341,8 +84341,8 @@
 	},
 /area/prison/solitary)
 "dfI" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dfJ" = (
@@ -84499,8 +84499,8 @@
 /area/prison/solitary)
 "dgj" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dgk" = (

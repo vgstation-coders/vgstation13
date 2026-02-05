@@ -7034,9 +7034,7 @@
 /obj/item/weapon/newspaper,
 /obj/item/device/radio,
 /obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint2)
 "amp" = (
 /obj/structure/grille,
@@ -32883,9 +32881,7 @@
 	name = "Ghostly Gym"
 	})
 "bdX" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint)
 "bdY" = (
 /obj/structure/window/reinforced/tinted{
@@ -47562,8 +47558,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "bFO" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bFP" = (
@@ -47993,8 +47989,8 @@
 /area/prison/solitary)
 "bHa" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bHb" = (

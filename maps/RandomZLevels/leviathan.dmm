@@ -460,9 +460,7 @@
 /area/awaymission/leviathan/mining)
 "bF" = (
 /obj/structure/ore_box,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/awaymission/leviathan/mining)
 "bG" = (
 /obj/machinery/light/small{
@@ -484,9 +482,7 @@
 /area/awaymission/leviathan/mining)
 "bJ" = (
 /obj/structure/closet/secure_closet/miner,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/awaymission/leviathan/mining)
 "bK" = (
 /obj/structure/grille,
@@ -925,9 +921,7 @@
 /obj/machinery/power/battery/smes{
 	charge = 5e+006
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/awaymission/leviathan/mining)
 "cO" = (
 /obj/item/weapon/storage/box/lights/mixed,
@@ -938,9 +932,7 @@
 /turf/simulated/floor/plating,
 /area/awaymission/leviathan/mining)
 "cQ" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/awaymission/leviathan/mining)
 "cR" = (
 /obj/structure/closet/emcloset,
@@ -1017,9 +1009,7 @@
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/awaymission/leviathan/mining)
 "de" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,

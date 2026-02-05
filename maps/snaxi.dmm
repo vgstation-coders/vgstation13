@@ -51589,8 +51589,8 @@
 	},
 /area/prison/solitary)
 "ceI" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ceJ" = (
@@ -51854,8 +51854,8 @@
 /area/prison/solitary)
 "cfu" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cfv" = (
@@ -64212,9 +64212,7 @@
 /area/derelict/secret)
 "drl" = (
 /obj/structure/ore_box,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/secret)
 "drm" = (
 /obj/machinery/door/airlock{
@@ -64259,9 +64257,7 @@
 /area/derelict/secret)
 "drs" = (
 /obj/structure/closet/secure_closet/miner,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/secret)
 "drt" = (
 /obj/structure/bed/chair{
@@ -65393,9 +65389,7 @@
 	},
 /area/derelict/secret)
 "dtZ" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/secret)
 "dua" = (
 /obj/structure/cable{
@@ -65422,9 +65416,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/secret)
 "dud" = (
 /obj/machinery/light/small{
@@ -65947,9 +65939,7 @@
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/secret)
 "dvc" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,

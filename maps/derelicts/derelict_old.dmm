@@ -1054,10 +1054,7 @@
 /turf/space,
 /area)
 "lC" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/atmos)
 "lF" = (
 /obj/structure/grille,
@@ -2593,10 +2590,7 @@
 /turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "BS" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "BY" = (
 /obj/structure/grille/window_spawner/reinforced/full,
@@ -3620,10 +3614,7 @@
 	},
 /area/derelict/hallway/secondary)
 "NH" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "NI" = (
 /obj/structure/table,

@@ -34893,8 +34893,8 @@
 	},
 /area/prison/solitary)
 "isZ" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ita" = (
@@ -36630,8 +36630,8 @@
 /area/engineering/engine)
 "iQC" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "iRb" = (

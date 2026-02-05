@@ -3570,8 +3570,8 @@
 	},
 /area/surface/jungle/vault)
 "bqY" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "brf" = (
@@ -22347,8 +22347,8 @@
 /area/vox_trading_post/kitchen)
 "ikV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ild" = (

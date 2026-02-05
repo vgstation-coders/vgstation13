@@ -99,10 +99,7 @@
 /obj/machinery/door/airlock/silver{
 	locked = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/awaymission/BMPship1)
 "aD" = (
 /obj/structure/shuttle/diag_wall/smooth{
@@ -344,10 +341,7 @@
 /turf/simulated/floor/plating/damaged/airless/broken,
 /area/awaymission/BMPship1)
 "bu" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/awaymission/BMPship1)
 "bv" = (
 /obj/structure/cable{
@@ -2229,10 +2223,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/awaymission/BMPship2)
 "gp" = (
 /obj/structure/kitchenspike,
@@ -2343,10 +2334,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/awaymission/BMPship3)
 "gG" = (
 /obj/structure/cable{
@@ -2492,10 +2480,7 @@
 /obj/structure/computerframe{
 	anchored = 1
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/awaymission/BMPship3)
 "hd" = (
 /obj/structure/computerframe{
@@ -2838,10 +2823,7 @@
 /turf/simulated/wall/shuttle,
 /area/awaymission/BMPship3)
 "iq" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/awaymission)
 "ir" = (
 /obj/effect/decal/remains/human,

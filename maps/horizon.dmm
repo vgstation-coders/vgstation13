@@ -45488,8 +45488,8 @@
 	},
 /area/prison/solitary)
 "bOC" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bOD" = (
@@ -45935,8 +45935,8 @@
 /area/prison/solitary)
 "bPP" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bPQ" = (

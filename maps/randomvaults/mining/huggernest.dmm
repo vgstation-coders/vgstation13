@@ -132,9 +132,7 @@
 /area/mining_surprise)
 "G" = (
 /obj/effect/alien/resin/wall,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/mining_surprise)
 "H" = (
 /obj/structure/window/reinforced{

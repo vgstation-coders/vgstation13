@@ -32,16 +32,10 @@
 /area/vault/asteroid)
 "aj" = (
 /obj/structure/cult/forge,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/vault/asteroid)
 "ak" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/vault/asteroid)
 "al" = (
 /obj/structure/catwalk,

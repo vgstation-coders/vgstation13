@@ -16828,8 +16828,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "dgA" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dgB" = (
@@ -17212,8 +17212,8 @@
 /area/prison/solitary)
 "dhF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dhG" = (
@@ -30581,10 +30581,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/bridge/access)
 "dMy" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/atmos)
 "dMA" = (
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe{
@@ -70771,10 +70768,7 @@
 	},
 /area/vox_trading_post/hallway)
 "olp" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "olt" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -101489,10 +101483,7 @@
 /area/science/chargebay)
 "wOh" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "wOq" = (
 /obj/machinery/portable_atmospherics/pump,

@@ -65,7 +65,6 @@ var/list/paint_overlay_override_floors = list(
 	"cautioncorner" = "floor",
 	"floorgrime" = "floor",
 	"freezerfloor" = "floor",
-	"panelscorched" = "plating",
 	"delivery" = "floor",
 	"bot" = "floor",
 	"hydrofloor" = "floor",

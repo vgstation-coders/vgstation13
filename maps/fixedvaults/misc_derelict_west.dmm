@@ -52,9 +52,7 @@
 	},
 /area/derelict/atmos)
 "cW" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/atmos)
 "cZ" = (
 /obj/structure/cable{

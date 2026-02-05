@@ -73200,8 +73200,8 @@
 	},
 /area/prison/solitary)
 "cOz" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cOA" = (
@@ -73587,8 +73587,8 @@
 /area/prison/solitary)
 "cPF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPG" = (
@@ -84995,10 +84995,7 @@
 /turf/space,
 /area/derelict/atmos)
 "dwu" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/atmos)
 "dwv" = (
 /turf/simulated/floor,
@@ -88321,10 +88318,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/hallway/secondary)
 "dFX" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "dFY" = (
 /turf/simulated/floor/plating/airless,
@@ -88447,10 +88441,7 @@
 /area/derelict/hallway/secondary)
 "dGt" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "dGu" = (
 /obj/structure/lattice,

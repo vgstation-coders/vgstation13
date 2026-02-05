@@ -450,9 +450,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/storage/engine_storage{
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"
@@ -554,9 +552,7 @@
 /area/derelict/holodeck)
 "cy" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/storage/engine_storage{
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"
@@ -1214,9 +1210,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker{
 	pixel_x = -3
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
@@ -1644,9 +1638,7 @@
 /obj/machinery/door_control/taxi/abandoned{
 	pixel_y = -26
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/arrival)
 "jx" = (
 /obj/structure/cable{
@@ -2716,9 +2708,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/hallway/primary)
 "op" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/arrival)
 "ou" = (
 /obj/item/weapon/circuitboard/atmos_alert,
@@ -4379,9 +4369,7 @@
 	name = "Derelict Fore Maintenance"
 	})
 "yl" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/hallway/primary)
 "yn" = (
 /obj/structure/computerframe{
@@ -5202,9 +5190,7 @@
 	})
 "DL" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -5397,9 +5383,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
@@ -6236,9 +6220,7 @@
 	name = "Derelict Starboard Maintenance"
 	})
 "Js" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/storage/engine_storage{
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"
@@ -7594,9 +7576,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/storage/engine_storage{
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"
@@ -7901,9 +7881,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
@@ -8954,9 +8932,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -9028,9 +9004,7 @@
 /turf/simulated/floor,
 /area/derelict/hallway/primary)
 "XM" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -9240,9 +9214,7 @@
 /area/derelict/crew_quarters)
 "Zb" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"

@@ -76705,8 +76705,8 @@
 	},
 /area/prison/solitary)
 "cRc" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cRd" = (
@@ -77180,8 +77180,8 @@
 /area/prison/solitary)
 "cSz" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cSA" = (
