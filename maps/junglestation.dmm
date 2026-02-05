@@ -2919,8 +2919,8 @@
 /area/surface/jungle/underground)
 "bfL" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bfM" = (
@@ -4687,8 +4687,8 @@
 	},
 /area/centcom/living)
 "bLb" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bLk" = (
@@ -28198,8 +28198,8 @@
 /area/centcom/control)
 "kuV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "kvg" = (
@@ -58966,8 +58966,8 @@
 	},
 /area/bridge)
 "vJj" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "vJm" = (

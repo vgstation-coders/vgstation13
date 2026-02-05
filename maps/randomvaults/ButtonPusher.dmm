@@ -282,10 +282,7 @@
 /obj/item/weapon/shard,
 /obj/item/trash/liquidfood,
 /obj/structure/closet/crate/trashcart,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivelab)
 "gJ" = (
 /obj/structure/rack,
@@ -586,10 +583,7 @@
 /obj/item/stack/sheet/mineral/diamond{
 	amount = 10
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivelab)
 "mN" = (
 /obj/effect/landmark/corpse/skellington{
@@ -669,10 +663,7 @@
 	icon_state = "1-8";
 	tag = ""
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivecatwalk)
 "oN" = (
 /obj/structure/catwalk{
@@ -830,9 +821,7 @@
 	dir = 4
 	},
 /obj/structure/cable,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivecatwalk)
 "rY" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1670,10 +1659,7 @@
 	},
 /area/vault/radioactivelab)
 "Lj" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivelab)
 "Ln" = (
 /obj/effect/decal/cleanable/soot,
@@ -1854,10 +1840,7 @@
 /area/vault/radioactivecatwalk)
 "NY" = (
 /obj/effect/decal/cleanable/ash,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivelab)
 "Ov" = (
 /obj/effect/decal/cleanable/dirt,
@@ -2102,10 +2085,7 @@
 /area/vault/radioactivelab)
 "Uc" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivecatwalk)
 "Ux" = (
 /obj/machinery/portable_atmospherics/scrubber,
@@ -2124,10 +2104,7 @@
 	icon = 'icons/obj/doors/Doorplasma.dmi'
 	},
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivelab)
 "UM" = (
 /obj/structure/table,

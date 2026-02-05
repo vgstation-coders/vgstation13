@@ -33407,10 +33407,7 @@
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "cHj" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -36696,10 +36693,7 @@
 	},
 /area/centcom/test)
 "dCz" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "dCE" = (
 /obj/effect/decal{
@@ -36788,10 +36782,7 @@
 	dir = 10
 	},
 /obj/structure/catwalk,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "dEi" = (
 /obj/effect/landmark/start{
@@ -44275,10 +44266,7 @@
 	dir = 5
 	},
 /obj/structure/catwalk,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "fIv" = (
 /obj/structure/cable{
@@ -49552,10 +49540,7 @@
 /area/tdome/tdome1)
 "hcA" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "hcH" = (
 /obj/structure/rack,
@@ -63174,8 +63159,8 @@
 	},
 /area/medical/medbay)
 "kYU" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "kYW" = (
@@ -76613,10 +76598,7 @@
 /area/security/perma)
 "oLO" = (
 /obj/structure/grille/window_spawner/reinforced_plasma/full,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "oLW" = (
 /obj/machinery/media/transmitter/broadcast/shuttle,
@@ -78366,8 +78348,8 @@
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "pqd" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "pqu" = (
@@ -84317,10 +84299,7 @@
 "rcb" = (
 /obj/machinery/atmospherics/pipe/simple/yellow,
 /obj/structure/lattice,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "rcc" = (
 /obj/structure/closet/firecloset,
@@ -91698,10 +91677,7 @@
 	dir = 8;
 	icon_state = "warning"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "tjE" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -92190,8 +92166,8 @@
 /area/maintenance/asmaint)
 "trP" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "tsh" = (
@@ -93913,8 +93889,8 @@
 /area/maintenance/fpmaint)
 "tWv" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "tWw" = (
@@ -102934,10 +102910,7 @@
 /area/medical/medbay)
 "wCf" = (
 /obj/structure/lattice,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "wCn" = (
 /obj/item/device/radio/intercom{
@@ -104448,10 +104421,7 @@
 /area/engineering/atmos)
 "xaS" = (
 /obj/structure/catwalk,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "xaT" = (
 /obj/machinery/vending/wallmed1{

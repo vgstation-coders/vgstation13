@@ -44182,8 +44182,8 @@
 /area/prison/solitary)
 "daQ" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "daR" = (
@@ -44202,8 +44202,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "daU" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "daV" = (
@@ -44477,13 +44477,13 @@
 /area/centcom/living)
 "dbD" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dbE" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dbF" = (
@@ -66549,10 +66549,7 @@
 /obj/machinery/atmospherics/unary/cap/visible{
 	dir = 1
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/atmos)
 "fBh" = (
 /obj/structure/bed/chair{
@@ -92742,10 +92739,7 @@
 	},
 /area/station/garage)
 "oKY" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "oLa" = (
 /obj/structure/cable{
@@ -114328,10 +114322,7 @@
 	},
 /area/science/lab)
 "wBQ" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/hallway/secondary)
 "wBS" = (
 /obj/structure/cable{
@@ -116139,9 +116130,7 @@
 /area/surface/snow)
 "xiq" = (
 /obj/structure/bed/chair,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "xiz" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
@@ -117352,10 +117341,7 @@
 /turf/simulated/floor/bluegrid,
 /area/turret_protected/ai)
 "xGD" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "xGH" = (
 /obj/structure/catwalk,

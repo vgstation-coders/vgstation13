@@ -105,10 +105,7 @@
 	},
 /obj/machinery/door/mineral/resin,
 /obj/effect/alien/weeds,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_surprise)
 "z" = (
 /obj/item/weapon/storage/toolbox/syndicate,
@@ -118,10 +115,7 @@
 /area/mining_surprise)
 "B" = (
 /obj/structure/girder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_surprise)
 "C" = (
 /obj/effect/alien/weeds,
@@ -147,9 +141,7 @@
 	dir = 1
 	},
 /obj/effect/alien/resin/wall,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_surprise)
 "J" = (
 /obj/item/weapon/table_parts/reinforced,

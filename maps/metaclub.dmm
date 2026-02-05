@@ -1761,10 +1761,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "afb" = (
 /obj/structure/cable/yellow{
@@ -2923,10 +2920,7 @@
 	},
 /area/security/detectives_office)
 "ahW" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "ahX" = (
 /obj/item/trash/cigbutt,
@@ -3731,10 +3725,7 @@
 "ajM" = (
 /obj/structure/bed,
 /obj/effect/decal/remains/human,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -4372,10 +4363,7 @@
 	name = "Port Maintenance"
 	})
 "alg" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -5015,10 +5003,7 @@
 	})
 "amC" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -6373,10 +6358,7 @@
 /turf/simulated/floor/wood,
 /area/maintenance/ghettobar)
 "apn" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -6818,10 +6800,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "aqk" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -7996,10 +7975,7 @@
 	dir = 4;
 	on = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/ghettobar)
 "ash" = (
 /obj/structure/closet/crate{
@@ -8027,10 +8003,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -8141,10 +8114,7 @@
 	dir = 1;
 	icon_state = "pipe-c"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -8577,10 +8547,7 @@
 /turf/simulated/floor/wood,
 /area/maintenance/ghettobar)
 "atA" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/ghettobar)
 "atB" = (
 /obj/item/weapon/stool,
@@ -8688,10 +8655,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -9445,10 +9409,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2)
 "avk" = (
 /obj/structure/cable/yellow{
@@ -10011,10 +9972,7 @@
 	name = "Port Maintenance"
 	})
 "awo" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -10888,10 +10846,7 @@
 	},
 /area/crew_quarters/sleep)
 "ayu" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "ayv" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -11494,10 +11449,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "azJ" = (
 /obj/structure/disposalpipe/segment{
@@ -12180,10 +12132,7 @@
 /turf/simulated/floor/wood,
 /area/maintenance/ghettobar)
 "aBf" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/ghettobar)
 "aBg" = (
 /obj/structure/bed/chair/shuttle/yellow{
@@ -12564,10 +12513,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "aBZ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -14480,10 +14426,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "aFH" = (
 /obj/machinery/door/airlock{
@@ -17039,10 +16982,7 @@
 /area/crew_quarters/sleep)
 "aKa" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "aKb" = (
 /obj/machinery/shieldgen,
@@ -18872,10 +18812,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -25133,10 +25070,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "aYj" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -28032,10 +27966,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -28633,10 +28564,7 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "bex" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -40163,10 +40091,7 @@
 /area/crew_quarters/bar)
 "byy" = (
 /turf/simulated/floor/plating,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "byz" = (
 /obj/structure/extinguisher_cabinet{
@@ -45195,10 +45120,7 @@
 	})
 "bHQ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "bHR" = (
 /obj/machinery/door/poddoor{
@@ -46787,10 +46709,7 @@
 	name = "\improper Auxiliary Restrooms"
 	})
 "bKy" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bKz" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -47976,10 +47895,7 @@
 /turf/simulated/floor/wood,
 /area/security/vacantoffice)
 "bMl" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bMm" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -49101,10 +49017,7 @@
 	dir = 4
 	},
 /obj/structure/closet/emcloset,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/maintcentral)
 "bOp" = (
 /obj/machinery/firealarm{
@@ -49411,10 +49324,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "bOQ" = (
 /turf/simulated/wall/r_wall,
@@ -49887,10 +49797,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
 "bPP" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/maintcentral)
 "bPQ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -50371,10 +50278,7 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bQN" = (
 /obj/machinery/suit_storage_unit/standard_unit,
@@ -54160,10 +54064,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bXq" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -55472,10 +55373,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "bZE" = (
 /obj/structure/disposalpipe/segment{
@@ -55521,10 +55419,7 @@
 /obj/effect/landmark{
 	name = "blobstart"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "bZI" = (
 /obj/machinery/disposal,
@@ -56669,10 +56564,7 @@
 	dir = 4
 	},
 /obj/structure/reagent_dispensers/watertank,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "cbT" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -57991,10 +57883,7 @@
 	dir = 8;
 	initialize_directions = 11
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "ceo" = (
 /obj/structure/reagent_dispensers/silicate,
@@ -59296,10 +59185,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "cgH" = (
 /obj/machinery/camera{
@@ -60843,10 +60729,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "cjl" = (
 /obj/structure/cable/yellow{
@@ -61666,10 +61549,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/starboard)
 "ckC" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "ckD" = (
 /obj/item/weapon/storage/toolbox/emergency,
@@ -63022,10 +62902,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/starboard)
 "cmU" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "cmV" = (
 /obj/effect/decal/warning_stripes{
@@ -63271,10 +63148,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "cnn" = (
 /obj/structure/reagent_dispensers/fueltank,
@@ -66307,10 +66181,7 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/floor/plating,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "cso" = (
 /obj/structure/table,
@@ -68931,10 +68802,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cwn" = (
 /obj/structure/disposalpipe/segment{
@@ -77662,10 +77530,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/virology_maint)
 "cKv" = (
 /obj/structure/grille,
@@ -78218,10 +78083,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cLk" = (
 /obj/structure/window/reinforced{
@@ -79260,10 +79122,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/virology_maint)
 "cMU" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/virology_maint)
 "cMV" = (
 /obj/structure/grille,
@@ -79348,10 +79207,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cNb" = (
 /obj/structure/disposalpipe/segment,
@@ -79876,10 +79732,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cNU" = (
 /obj/structure/disposalpipe/segment{
@@ -79912,10 +79765,7 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cNX" = (
 /obj/structure/disposalpipe/segment{
@@ -79926,10 +79776,7 @@
 /area/maintenance/aft)
 "cNY" = (
 /turf/simulated/floor/plating,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cNZ" = (
 /obj/machinery/alarm{
@@ -80346,10 +80193,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cOM" = (
 /obj/structure/cable/yellow{
@@ -80540,10 +80384,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cPc" = (
 /obj/structure/cable/yellow{
@@ -80580,10 +80421,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cPf" = (
 /obj/structure/closet/crate,
@@ -81012,10 +80850,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/virology_maint)
 "cPT" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/virology_maint)
 "cPU" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -81796,10 +81631,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cRp" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -89640,8 +89472,8 @@
 /area/centcom/striketeam)
 "diU" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "diV" = (
@@ -89669,8 +89501,8 @@
 	},
 /area/prison/solitary)
 "dja" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "djb" = (
@@ -90045,13 +89877,13 @@
 /area/centcom/striketeam)
 "dkd" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dke" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dkf" = (
@@ -115697,16 +115529,10 @@
 /area)
 "eGE" = (
 /obj/structure/girder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "eGF" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "eGG" = (
 /obj/item/weapon/shard{
@@ -115729,10 +115555,7 @@
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "eGK" = (
 /turf/simulated/floor/damaged,
@@ -115818,16 +115641,10 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "eGY" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "eGZ" = (
 /obj/machinery/detector,
@@ -115889,10 +115706,7 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "eHj" = (
 /obj/structure/rack,
@@ -116042,10 +115856,7 @@
 "eHH" = (
 /obj/structure/girder,
 /obj/item/stack/sheet/plasteel,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "eHI" = (
 /obj/structure/grille/broken,
@@ -116153,10 +115964,7 @@
 /area)
 "eHW" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "eHZ" = (
 /obj/machinery/light{

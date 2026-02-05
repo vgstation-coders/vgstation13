@@ -1317,9 +1317,7 @@
 	})
 "hA" = (
 /turf/simulated/floor/plating,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/engine_storage{
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"
@@ -2297,9 +2295,7 @@
 	})
 "mp" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -2558,9 +2554,7 @@
 	name = "\improper Derelict Central Maintenance"
 	})
 "nq" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -2975,9 +2969,7 @@
 "pD" = (
 /obj/effect/decal/cleanable/greenglow,
 /turf/simulated/floor/plating,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/engine_storage{
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"
@@ -7013,9 +7005,7 @@
 	name = "\improper Derelict Game Room"
 	})
 "Nn" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/engine_storage{
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"

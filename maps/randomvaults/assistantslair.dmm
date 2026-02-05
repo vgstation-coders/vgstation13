@@ -273,10 +273,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/bustanuts,
 /obj/item/weapon/reagent_containers/food/snacks/bustanuts,
 /obj/structure/rack,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "aX" = (
 /obj/effect/decal/cleanable/dirt,
@@ -581,9 +578,7 @@
 /area/vault/assistantlair)
 "bZ" = (
 /turf/simulated/floor/plating,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "ca" = (
 /obj/effect/mine/stun,
@@ -659,10 +654,7 @@
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "cl" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "cm" = (
 /obj/structure/table,
@@ -704,10 +696,7 @@
 "cs" = (
 /obj/structure/table,
 /obj/item/clothing/head/kitty,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "ct" = (
 /obj/effect/mine/stun,

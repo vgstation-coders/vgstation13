@@ -1105,9 +1105,7 @@
 /area/derelict/maintenance/maintenance_fore)
 "hA" = (
 /turf/simulated/floor/plating,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/maintenance/maintenance_starboard)
 "hD" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -1913,9 +1911,7 @@
 /area/derelict/kitchen)
 "mp" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/maintenance/maintenance_fore)
 "mq" = (
 /obj/effect/decal/cleanable/dirt,
@@ -2165,9 +2161,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/maintenance/maintenance_central)
 "nq" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/maintenance/maintenance_fore)
 "nr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -2506,9 +2500,7 @@
 "pD" = (
 /obj/effect/decal/cleanable/greenglow,
 /turf/simulated/floor/plating,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/maintenance/maintenance_starboard)
 "pF" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -6006,9 +5998,7 @@
 /turf/simulated/floor,
 /area/derelict/game_room)
 "Nn" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/maintenance/maintenance_starboard)
 "NB" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,

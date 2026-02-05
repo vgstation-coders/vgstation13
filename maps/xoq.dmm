@@ -52497,9 +52497,7 @@
 /area/construction)
 "bVR" = (
 /obj/structure/bed/chair,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bVS" = (
 /obj/structure/closet/emcloset/vox,
@@ -61753,10 +61751,7 @@
 	},
 /area/hallway/primary/aft)
 "cnw" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cnx" = (
 /obj/machinery/computer/telecomms/server{
@@ -84335,8 +84330,8 @@
 /area/prison/solitary)
 "dfG" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dfH" = (
@@ -84355,8 +84350,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "dfK" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dfL" = (
@@ -84493,13 +84488,13 @@
 /area/centcom/suppy)
 "dgh" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dgi" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dgj" = (
@@ -114398,10 +114393,7 @@
 /area/maintenance/aft)
 "ePE" = (
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "ePF" = (
 /obj/structure/grille/broken,

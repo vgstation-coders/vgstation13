@@ -120,10 +120,7 @@
 /area)
 "bm" = (
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "bo" = (
 /obj/structure/sign/science,
@@ -1012,10 +1009,7 @@
 /turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "ld" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/hallway/secondary)
 "lf" = (
 /obj/structure/dispenser,
@@ -2363,10 +2357,7 @@
 /obj/machinery/atmospherics/unary/cap/visible{
 	dir = 1
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/atmos)
 "yW" = (
 /obj/structure/grille,
@@ -2586,10 +2577,7 @@
 /turf/simulated/wall/r_wall,
 /area/derelict/hallway/primary)
 "BF" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "BJ" = (
 /obj/structure/closet/wardrobe,
@@ -3654,10 +3642,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/research)
 "Of" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "Og" = (
 /obj/structure/girder,

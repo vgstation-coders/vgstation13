@@ -21,10 +21,7 @@
 /turf/simulated/floor/plating/airless,
 /area/vault/asteroid)
 "ag" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/vault/asteroid)
 "ah" = (
 /turf/simulated/floor/plating/airless,
@@ -52,10 +49,7 @@
 /area/vault/asteroid)
 "am" = (
 /obj/item/stack/tile/metal,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/vault/asteroid)
 "an" = (
 /obj/machinery/door/mineral/wood,

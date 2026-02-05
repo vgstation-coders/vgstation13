@@ -943,9 +943,7 @@
 /obj/item/ammo_casing,
 /obj/item/ammo_casing,
 /obj/item/ammo_casing,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/lobby)
 "cg" = (
 /turf/space,
@@ -1302,9 +1300,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "cK" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
@@ -1341,9 +1337,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "cN" = (
 /obj/structure/cable{
@@ -2402,9 +2396,7 @@
 /area/vault/taxi_engi/mechanics)
 "fb" = (
 /obj/item/stack/sheet/plasteel,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/storage)
 "fc" = (
 /obj/item/weapon/circuitboard/powermonitor{
@@ -2889,9 +2881,7 @@
 /turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "fX" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "fY" = (
 /obj/structure/cable{
@@ -3105,9 +3095,7 @@
 	},
 /area/vault/taxi_engi/podbay)
 "gu" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/podbay)
 "gv" = (
 /turf/space,

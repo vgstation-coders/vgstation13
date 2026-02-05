@@ -285,8 +285,8 @@
 /obj/structure/closet/walllocker/emerglocker{
 	pixel_x = -30
 	},
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "fz" = (
@@ -1141,8 +1141,8 @@
 /area/vault/mothership_lab/entrance)
 "qZ" = (
 /obj/structure/catwalk/invulnerable,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "ra" = (
@@ -1333,8 +1333,8 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "tN" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "ug" = (
@@ -1351,8 +1351,8 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "un" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "uo" = (
@@ -2913,8 +2913,8 @@
 /area/vault/mothership_lab/raidtunnel_upper)
 "SD" = (
 /obj/effect/mine/stun,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "SS" = (

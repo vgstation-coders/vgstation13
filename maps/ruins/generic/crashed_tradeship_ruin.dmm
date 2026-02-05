@@ -312,10 +312,7 @@
 /area/ruin)
 "Dc" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/ruin)
 "Dh" = (
 /obj/structure/window/reinforced{
@@ -434,10 +431,7 @@
 /area/ruin)
 "SD" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/ruin)
 "SR" = (
 /obj/item/weapon/shard{
@@ -537,9 +531,7 @@
 /area/ruin)
 "Zb" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/ruin)
 "Zc" = (
 /obj/structure/table/reinforced,

@@ -42624,9 +42624,7 @@
 /area/hallway/primary/central)
 "bHC" = (
 /obj/structure/bed/chair,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bHD" = (
 /obj/structure/closet/emcloset/vox,
@@ -45590,10 +45588,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "bNe" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bNf" = (
 /obj/effect/decal/cleanable/ash,
@@ -51064,10 +51059,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "bWY" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bWZ" = (
 /turf/simulated/wall/r_wall,
@@ -73197,8 +73189,8 @@
 /area/prison/solitary)
 "cOx" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cOy" = (
@@ -73217,8 +73209,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "cOB" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cOC" = (
@@ -73584,13 +73576,13 @@
 /area/centcom/suppy)
 "cPD" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPE" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPF" = (
@@ -84968,10 +84960,7 @@
 /obj/machinery/atmospherics/unary/cap/visible{
 	dir = 1
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/atmos)
 "dwn" = (
 /obj/structure/lattice,
@@ -88302,10 +88291,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/hallway/secondary)
 "dFS" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/hallway/secondary)
 "dFT" = (
 /obj/machinery/door/airlock/maintenance{

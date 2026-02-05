@@ -38190,9 +38190,7 @@
 	dir = 4
 	},
 /mob/living/carbon/monkey,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fsmaint)
 "bss" = (
 /obj/structure/bed/chair/wood/normal{
@@ -57936,9 +57934,7 @@
 	pixel_y = 5
 	},
 /obj/item/clothing/glasses/hud/health,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "cfQ" = (
 /obj/structure/table,
@@ -62551,9 +62547,7 @@
 /obj/structure/rack,
 /obj/item/weapon/storage/belt/utility,
 /obj/item/tool/weldingtool,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/aft)
 "cpk" = (
 /obj/effect/decal/cleanable/blood/gibs/robot{
@@ -63123,9 +63117,7 @@
 /area/derelictparts/aft)
 "cqv" = (
 /obj/item/weapon/newspaper,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/aft)
 "cqw" = (
 /obj/item/weapon/stool,
@@ -64278,9 +64270,7 @@
 /area/derelictparts/aft)
 "csE" = (
 /obj/item/weapon/cell/hyper,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/aft)
 "csF" = (
 /obj/structure/closet,
@@ -78553,9 +78543,7 @@
 	},
 /obj/item/clothing/glasses/scanner/meson,
 /turf/space,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/aft)
 "cSA" = (
 /obj/structure/cable/yellow{
@@ -85937,8 +85925,8 @@
 /area/centcom/living)
 "diw" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dix" = (
@@ -85966,8 +85954,8 @@
 	},
 /area/prison/solitary)
 "diC" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "diD" = (
@@ -86279,13 +86267,13 @@
 /area/centcom/living)
 "djw" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "djx" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "djy" = (

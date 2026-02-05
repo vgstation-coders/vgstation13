@@ -8303,10 +8303,7 @@
 	dir = 4
 	},
 /obj/structure/largecrate/mule,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "asO" = (
 /obj/effect/decal/cleanable/dirt,
@@ -8992,9 +8989,7 @@
 	pixel_y = 5
 	},
 /obj/item/clothing/glasses/hud/health,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aua" = (
 /obj/effect/decal/cleanable/dirt,
@@ -12875,9 +12870,7 @@
 "aBz" = (
 /obj/structure/mannequin/wood,
 /turf/simulated/floor/plating,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "aBA" = (
 /obj/structure/bed/chair/wood/pew/left,
@@ -62192,10 +62185,7 @@
 	dir = 1;
 	invisibility = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -63319,18 +63309,12 @@
 	name = "Station Zoo"
 	})
 "con" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
 "coo" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -64355,9 +64339,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -64503,10 +64485,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -64519,9 +64498,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -65780,10 +65757,7 @@
 /obj/machinery/door/airlock/maintenance{
 	req_access_txt = "12"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -65853,9 +65827,7 @@
 "csP" = (
 /obj/machinery/space_heater,
 /obj/machinery/light/small,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -67247,10 +67219,7 @@
 	dir = 4;
 	tag = "icon-maintguide (EAST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -67286,10 +67255,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -67321,10 +67287,7 @@
 /obj/effect/landmark{
 	name = "blobstart"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -68433,10 +68396,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -74405,10 +74365,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "cHO" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cHP" = (
 /obj/structure/hanging_lantern{
@@ -74483,10 +74440,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cHY" = (
 /obj/structure/closet/crate,
@@ -74508,10 +74462,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "cIa" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cIb" = (
 /obj/structure/closet/crate,
@@ -75272,9 +75223,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "cJD" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cJE" = (
 /obj/structure/hanging_lantern,
@@ -77734,10 +77683,7 @@
 "cOH" = (
 /obj/effect/decal/cleanable/cobweb2,
 /obj/structure/closet/emcloset,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cOI" = (
 /obj/structure/table,
@@ -79338,10 +79284,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cRS" = (
 /obj/structure/grille,
@@ -79832,18 +79775,14 @@
 /turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
 "cSM" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
 "cSN" = (
 /turf/simulated/floor/damaged,
 /area/maintenance/starboard2)
 "cSO" = (
 /obj/structure/boulder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
 "cSP" = (
 /obj/effect/decal/cleanable/generic,
@@ -80048,10 +79987,7 @@
 /area/maintenance/apmaint)
 "cTm" = (
 /obj/item/weapon/caution,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cTn" = (
 /obj/structure/grille,
@@ -80412,9 +80348,7 @@
 	icon_state = "loading_area";
 	tag = "icon-loading_area (EAST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cTZ" = (
 /obj/structure/rack{
@@ -80721,9 +80655,7 @@
 /area/derelictparts/library)
 "cUF" = (
 /obj/structure/window/barricade/full,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
 "cUG" = (
 /turf/unsimulated/mineral/internal/air,
@@ -80989,10 +80921,7 @@
 /area/maintenance/apmaint)
 "cVf" = (
 /obj/structure/boulder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cVg" = (
 /obj/structure/grille,
@@ -81432,10 +81361,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "cWc" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cWd" = (
 /obj/machinery/door/airlock/external{
@@ -82219,9 +82145,7 @@
 	},
 /area/maintenance/aft)
 "cXF" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cXG" = (
 /obj/structure/grille,
@@ -82761,10 +82685,7 @@
 	name = "Abandoned Mining Outlook"
 	})
 "cYF" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mine/abandoned{
 	name = "Abandoned Mining Outlook"
 	})
@@ -83359,9 +83280,7 @@
 /area/maintenance/starboard2)
 "cZR" = (
 /obj/abstract/map/spawner/misc/seeds,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
 "cZS" = (
 /obj/structure/boulder,
@@ -87765,9 +87684,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
 "djf" = (
 /obj/structure/hanging_lantern{
@@ -88378,9 +88295,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
 "dkt" = (
 /obj/structure/cable{
@@ -88848,10 +88763,7 @@
 /turf/simulated/floor/plating,
 /area/asteroid/artifactroom)
 "dlA" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/asteroid/artifactroom)
 "dlB" = (
 /obj/structure/cable{
@@ -89196,10 +89108,7 @@
 	},
 /area/asteroid/artifactroom)
 "dmp" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/asteroid/artifactroom)
 "dmq" = (
 /obj/structure/grille,
@@ -91057,10 +90966,7 @@
 /obj/effect/decal/cleanable/blood/oil{
 	icon_state = "floor6"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/asteroid/artifactroom)
 "dpK" = (
 /obj/machinery/camera{
@@ -91700,9 +91606,7 @@
 	icon_state = "gib6"
 	},
 /obj/item/clothing/glasses/scanner/meson,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "dqR" = (
 /obj/effect/decal/cleanable/blood/gibs/robot{
@@ -91831,10 +91735,7 @@
 /obj/machinery/light/small/broken{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/asteroid/artifactroom)
 "drc" = (
 /obj/effect/decal/remains/robot{
@@ -91995,9 +91896,7 @@
 /obj/structure/rack,
 /obj/item/weapon/storage/belt/utility,
 /obj/item/tool/weldingtool,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "drv" = (
 /obj/structure/rack,
@@ -92414,10 +92313,7 @@
 "dsk" = (
 /obj/machinery/turret/portable/AIvault,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/asteroid/artifactroom)
 "dsl" = (
 /turf/simulated/floor/plating{
@@ -93004,9 +92900,7 @@
 /area/mine/explored)
 "dtt" = (
 /turf/simulated/wall,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint2)
 "dtu" = (
 /obj/structure/window/barricade/full/block,
@@ -93339,10 +93233,7 @@
 "dtQ" = (
 /obj/structure/rack,
 /obj/item/weapon/storage/toolbox/mechanical,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "dtR" = (
 /obj/structure/grille,
@@ -93439,10 +93330,7 @@
 	},
 /area/maintenance/apmaint2)
 "dub" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint2)
 "duc" = (
 /obj/structure/largecrate/skele_stand,
@@ -93830,10 +93718,7 @@
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor2"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint2)
 "duP" = (
 /obj/structure/table,
@@ -93845,9 +93730,7 @@
 	dir = 8
 	},
 /obj/abstract/map/spawner/floorpill/guaranteed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint2)
 "duQ" = (
 /obj/item/organ/internal/kidneys,
@@ -94193,10 +94076,7 @@
 /area/science/xenobiology)
 "dvv" = (
 /obj/structure/boulder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint2)
 "dvw" = (
 /obj/structure/closet/crate{
@@ -116564,8 +116444,8 @@
 /area/centcom/striketeam)
 "eiP" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "eiQ" = (
@@ -116593,8 +116473,8 @@
 	},
 /area/prison/solitary)
 "eiV" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "eiW" = (
@@ -117003,13 +116883,13 @@
 /area/centcom/striketeam)
 "ekd" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "eke" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ekf" = (
@@ -130465,9 +130345,7 @@
 /area/medical/coldstorage)
 "fUE" = (
 /obj/structure/spinning_wheel,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "fXM" = (
 /obj/structure/catwalk,
@@ -132060,10 +131938,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/engineering/engineering_auxiliary)
 "qco" = (
 /obj/machinery/portable_atmospherics/hydroponics,
@@ -132801,9 +132676,7 @@
 /obj/machinery/door/mineral/sandstone{
 	name = "The Maelstrom"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/singularity_engine)
 "vns" = (
 /obj/effect/decal/cleanable/soot,

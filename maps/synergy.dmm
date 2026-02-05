@@ -36847,10 +36847,7 @@
 /obj/item/device/assembly/voice,
 /obj/item/tool/weldingtool/hugetank,
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
 "bmd" = (
 /obj/structure/grille,
@@ -53362,10 +53359,7 @@
 /obj/abstract/map/spawner/maint/lowchance,
 /obj/structure/rack,
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "bSi" = (
 /turf/simulated/floor{
@@ -60874,10 +60868,7 @@
 /area/chapel/main)
 "cgK" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "cgL" = (
 /obj/structure/grille,
@@ -74683,8 +74674,8 @@
 /area/prison/solitary)
 "cIl" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cIm" = (
@@ -74703,8 +74694,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "cIp" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cIq" = (
@@ -75070,13 +75061,13 @@
 /area/centcom/suppy)
 "cJr" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cJs" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cJt" = (
@@ -99748,9 +99739,7 @@
 /area/crew_quarters/captain)
 "pMX" = (
 /obj/abstract/map/spawner/floorpill,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "pPH" = (
 /obj/machinery/hologram/holopad,
@@ -99841,10 +99830,7 @@
 /area/crew_quarters/fitness)
 "qEt" = (
 /obj/abstract/map/spawner/floorpill,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "qFn" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -100372,10 +100358,7 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "vcp" = (
 /obj/machinery/light{
@@ -100642,10 +100625,7 @@
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "xAa" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "xAR" = (
 /obj/machinery/vending/cigarette,
