@@ -336,7 +336,7 @@
 
 /datum/rcd_grouped_schematic/fence
 	name="fence"
-	cost=1
+	cost=4
 
 /datum/rcd_grouped_schematic/fence/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
