@@ -3254,7 +3254,7 @@
 	network = list("Toxins");
 	pixel_y = 32
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/detoxins)
 "ahz" = (
 /obj/structure/window/reinforced{
@@ -3330,7 +3330,7 @@
 	dir = 4;
 	name = "Science - Toxins Testing Launch Room"
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/detoxins)
 "ahI" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -3375,7 +3375,7 @@
 	dir = 4;
 	light_range = 2.5
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/detoxins)
 "ahM" = (
 /obj/effect/decal/cleanable/soot,
@@ -3509,7 +3509,7 @@
 /area/lamprey/detoxins)
 "aif" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/detoxins)
 "aig" = (
 /turf/simulated/floor/damaged/broken,
@@ -3991,7 +3991,7 @@
 	},
 /area/lamprey/warzonemaintenanceblob)
 "ajp" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/warzonemaintenanceblob)
 "ajq" = (
 /obj/effect/decal/cleanable/dirt,
@@ -4727,7 +4727,7 @@
 /area/lamprey/detoxins)
 "alc" = (
 /obj/structure/closet/coffin,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/warzonemaintenanceblob)
 "ald" = (
 /obj/structure/closet/coffin,
@@ -5045,7 +5045,7 @@
 "alP" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/door/airlock/external,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/warzonemaintenanceblob)
 "alQ" = (
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider{
@@ -5323,7 +5323,7 @@
 /area/lamprey/warzonemaintenanceblob)
 "amw" = (
 /obj/item/tool/surgicaldrill,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/warzonemaintenanceblob)
 "amx" = (
 /obj/effect/decal/cleanable/dirt,
@@ -6428,7 +6428,7 @@
 "apf" = (
 /obj/structure/table,
 /obj/abstract/map/spawner/voxfood,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/kitchen)
 "apg" = (
 /turf/simulated/floor/plating,
@@ -7255,7 +7255,7 @@
 /area/lamprey/kitchen)
 "arn" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/kitchen)
 "aro" = (
 /obj/structure/catwalk{
@@ -9508,7 +9508,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/toprung)
 "awr" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/toprung)
 "aws" = (
 /obj/machinery/door/firedoor/border_only{
@@ -14499,7 +14499,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/voxtradepost)
 "aIB" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/foreporthallways)
 "aIC" = (
 /obj/machinery/vending/offlicence,
@@ -20893,7 +20893,7 @@
 	name = "Firelock West"
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/voxtradepost)
 "aYd" = (
 /obj/effect/decal/warning_stripes{
@@ -31210,7 +31210,7 @@
 /area/lamprey/organ)
 "buH" = (
 /obj/machinery/portable_atmospherics/canister/old/oxygen,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "buI" = (
 /obj/machinery/atmospherics/unary/tank/oxygen,
@@ -33512,7 +33512,7 @@
 	dir = 5;
 	name = "Lamprey security camera"
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/tinyroomzone)
 "bAf" = (
 /obj/structure/window/reinforced{
@@ -34393,7 +34393,7 @@
 "bBU" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/tinyroomzone)
 "bBV" = (
 /obj/structure/bed,
@@ -37245,7 +37245,7 @@
 /area/lamprey/organ)
 "bIj" = (
 /obj/item/device/flashlight/flare,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/organ)
 "bIk" = (
 /obj/item/weapon/storage/toolbox/electrical,
@@ -39043,7 +39043,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bMh" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/tinyroomzone)
 "bMi" = (
 /obj/structure/window{
@@ -41224,7 +41224,7 @@
 /obj/structure/disposalpipe/junction{
 	dir = 8
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/catchall)
 "bRo" = (
 /obj/structure/bed/chair{
@@ -44493,7 +44493,7 @@
 /area/lamprey/centralhallways)
 "bYO" = (
 /obj/structure/closet/secure_closet/chemical,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/medbay)
 "bYP" = (
 /obj/effect/decal/cleanable/dirt,
@@ -46455,7 +46455,7 @@
 /area/lamprey/tinyroomzone)
 "cdt" = (
 /obj/effect/decal/cleanable/mucus,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/tinyroomzone)
 "cdu" = (
 /obj/effect/decal/warning_stripes{
@@ -50225,7 +50225,7 @@
 /obj/effect/decal/cleanable/blood/gibs/robot{
 	icon_state = "gib5"
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/botanymaintenanceblob)
 "clR" = (
 /obj/structure/table/reinforced,
@@ -51022,7 +51022,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (EAST)"
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/tinyroomzone)
 "cnH" = (
 /obj/structure/bed/chair{
@@ -51044,7 +51044,7 @@
 	dir = 1;
 	icon_state = "warning"
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/tinyroomzone)
 "cnJ" = (
 /obj/structure/bed/chair{
@@ -51109,7 +51109,7 @@
 	dir = 1;
 	icon_state = "warning"
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/tinyroomzone)
 "cnO" = (
 /obj/structure/bed/chair{
@@ -51429,7 +51429,7 @@
 /area/lamprey/darkfarm)
 "coA" = (
 /obj/structure/reagent_dispensers/corn_oil_tank,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/botanymaintenanceblob)
 "coB" = (
 /obj/effect/decal/cleanable/blood/gibs/robot{
@@ -55249,7 +55249,7 @@
 /area/lamprey/moon)
 "cxJ" = (
 /obj/machinery/vending/cigarette,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/tinyroomzone)
 "cxK" = (
 /obj/effect/decal/cleanable/dirt,
@@ -55812,7 +55812,7 @@
 /turf/simulated/floor,
 /area/lamprey/tinyroomzone)
 "cyU" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/tinyroomzone)
 "cyV" = (
 /obj/effect/landmark/corpse/assistant,
@@ -61969,7 +61969,7 @@
 	icon_state = "2-4"
 	},
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/botanymaintenanceblob)
 "cMI" = (
 /obj/structure/table/glass,
@@ -64656,7 +64656,7 @@
 /turf/simulated/floor,
 /area/lamprey/centralhallways)
 "cSR" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/centralhallways)
 "cSS" = (
 /obj/structure/shuttle/engine/propulsion/right,
@@ -76898,7 +76898,7 @@
 /area/lamprey/bottomrung)
 "drz" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/bottomrung)
 "drA" = (
 /turf/simulated/floor{
@@ -77687,7 +77687,7 @@
 /area/lamprey/bottomrung)
 "dtf" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/bottomrung)
 "dtg" = (
 /obj/machinery/atmospherics/miner/toxins,
@@ -85645,7 +85645,7 @@
 /area/lamprey/thebelt)
 "dIT" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/thebelt)
 "dIU" = (
 /obj/effect/decal/cleanable/dirt,
@@ -105933,7 +105933,7 @@
 	},
 /area)
 "ezZ" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area)
 "eAa" = (
 /turf/simulated/floor,
@@ -106030,7 +106030,7 @@
 /turf/simulated/floor/damaged,
 /area/lamprey/detoxins)
 "eAr" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/detoxins)
 "eAs" = (
 /obj/structure/flora/pottedplant/random,
@@ -106051,7 +106051,7 @@
 /obj/item/clothing/gloves/black,
 /obj/item/weapon/extinguisher,
 /obj/item/weapon/tank/oxygen/red,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "eAv" = (
 /obj/item/ice_crystal,
@@ -106794,7 +106794,7 @@
 	},
 /area/lamprey/arrivals)
 "eCk" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/arrivals)
 "eCl" = (
 /obj/item/weapon/tank/oxygen,
@@ -107405,7 +107405,7 @@
 	name = "Firelock West"
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/lamprey/arrivals)
 "eDu" = (
 /obj/effect/decal/cleanable/dirt,

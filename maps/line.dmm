@@ -49875,7 +49875,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/shuttle/salvage/derelict)
 "gLd" = (
 /obj/effect/landmark{
@@ -56206,7 +56206,7 @@
 "iyR" = (
 /obj/structure/table,
 /obj/item/weapon/book/manual/barman_recipes,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/port)
 "iyT" = (
 /obj/machinery/computer/telecomms/server{
@@ -57827,7 +57827,7 @@
 /obj/item/stack/medical/ointment,
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket,
 /obj/item/weapon/reagent_containers/syringe,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/shuttle/salvage/derelict)
 "jbq" = (
 /obj/structure/window/reinforced{
@@ -100574,7 +100574,7 @@
 	pixel_y = -1
 	},
 /obj/item/device/radio,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/asmaint2)
 "tIG" = (
 /obj/structure/table,
@@ -101962,7 +101962,7 @@
 /obj/item/stack/sheet/metal{
 	amount = 23
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/asmaint2)
 "tXm" = (
 /obj/item/tool/wirecutters,
@@ -112637,7 +112637,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/shuttle/salvage/derelict)
 "wxw" = (
 /turf/simulated/wall/r_wall,
@@ -112697,7 +112697,7 @@
 	},
 /area/security/perma)
 "wxP" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/asmaint2)
 "wxZ" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
@@ -116821,7 +116821,7 @@
 /obj/structure/rack,
 /obj/item/tool/weldingtool,
 /obj/item/tool/crowbar,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/asmaint2)
 "xqK" = (
 /obj/item/device/radio/intercom{
@@ -118953,7 +118953,7 @@
 /area/security/medical)
 "xMa" = (
 /mob/living/simple_animal/hostile/necro/zombie,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/shuttle/salvage/derelict)
 "xMd" = (
 /obj/structure/sign/securearea{

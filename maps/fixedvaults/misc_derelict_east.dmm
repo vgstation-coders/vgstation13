@@ -1361,7 +1361,7 @@
 	name = "\improper Derelict Relaxation Room"
 	})
 "hL" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"

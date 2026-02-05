@@ -1135,7 +1135,7 @@
 /turf/simulated/floor/damaged/burnt,
 /area/derelict/relax)
 "hL" = (
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/maintenance/maintenance_central)
 "hM" = (
 /obj/machinery/shower{

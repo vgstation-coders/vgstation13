@@ -7654,7 +7654,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/derelictparts/fore)
 "art" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
@@ -7667,7 +7667,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/derelictparts/fore)
 "arv" = (
 /obj/effect/decal/cleanable/dirt,
@@ -8972,7 +8972,7 @@
 /obj/item/trash/candy,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/derelictparts/fore)
 "atZ" = (
 /obj/structure/table,
@@ -9543,7 +9543,7 @@
 /area/maintenance/fpmaint)
 "avq" = (
 /obj/structure/boulder,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/fpmaint)
 "avr" = (
 /obj/effect/decal/cleanable/dirt,
@@ -9570,7 +9570,7 @@
 	dir = 8;
 	pixel_x = -7
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/fpmaint)
 "avu" = (
 /obj/structure/cable{
@@ -11015,7 +11015,7 @@
 	pixel_y = -6
 	},
 /obj/machinery/meter,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/incinerator)
 "ays" = (
 /obj/machinery/atmospherics/pipe/simple/general/visible{
@@ -11044,7 +11044,7 @@
 /area/maintenance/incinerator)
 "ayu" = (
 /obj/machinery/atmospherics/pipe/manifold/general/visible,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/incinerator)
 "ayv" = (
 /obj/machinery/atmospherics/unary/portables_connector{
@@ -11684,7 +11684,7 @@
 	icon_state = "4-8"
 	},
 /mob/living/simple_animal/mouse/common/gray,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/incinerator)
 "azH" = (
 /obj/effect/decal/cleanable/dirt,
@@ -14460,7 +14460,7 @@
 "aEw" = (
 /obj/structure/table,
 /obj/item/weapon/book/manual/barman_recipes,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/fpmaint)
 "aEx" = (
 /obj/structure/hanging_lantern,
@@ -71325,7 +71325,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/apmaint)
 "cCG" = (
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana{
@@ -72331,7 +72331,7 @@
 /area/maintenance/apmaint)
 "cEu" = (
 /mob/living/carbon/monkey,
-/turf/simulated/floor/scorched,
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/apmaint)
 "cEv" = (
 /mob/living/simple_animal/hostile/carp,
