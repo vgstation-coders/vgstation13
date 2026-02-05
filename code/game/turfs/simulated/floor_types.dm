@@ -202,8 +202,7 @@
 		floor_tile.forceMove(src)
 		floor_tile = null
 	intact = 0
-	broken = 0
-	burnt = 0
+	fix_floor()
 	material = "metal"
 
 	update_icon()

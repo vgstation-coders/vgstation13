@@ -428,8 +428,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	set_light(0)
 	floor_tile = null
 	intact = 0
-	broken = 0
-	burnt = 0
+	fix_floor()
 	remove_paint_overlay()
 	paint_overlay = plating_paint
 	//No longer phazon, not a teleport destination
@@ -653,10 +652,15 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 					to_chat(user, "<span class='warning'>You fix some dents on the broken plating.</span>")
 					welder.playtoolsound(src, 80)
 					icon_state = "plating"
-					burnt = 0
-					broken = 0
+					fix_floor()
 				else
 					return
+
+/turf/simulated/floor/proc/fix_floor()
+	burnt = 0
+	broken = 0
+	if(broken_overlay)
+		overlays -= broken_overlay
 
 /turf/simulated/floor/Entered(var/atom/movable/AM)
 	.=..()
