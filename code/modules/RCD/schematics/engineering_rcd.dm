@@ -354,7 +354,7 @@
 			to_chat(user, "There's already a [name] here!")
 			return 0
 	playsound(linked_rcd, 'sound/machines/click.ogg', 50, 1)
-	if(linked_rcd.delay(user, A, 1 SECONDS))
+	if(linked_rcd.delay(user, A, 3 SECONDS))
 		if(linked_rcd.get_energy(user) < truecost)
 			to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
 			return 0
