@@ -304,6 +304,13 @@
 	required_reagents = list(WATER = 2, SILICA = 3, SILICON = 1)
 	result_amount = 8
 
+/datum/chemical_reaction/cherrylube
+	name = "Cherry-Flavored Lube"
+	id = CHERRYLUBE
+	result = CHERRYLUBE
+	required_reagents = list(LUBE = 1, CHERRYJELLY = 1)
+	result_amount = 1
+
 /datum/chemical_reaction/sodium_polyacrylate
 	name = "Sodium Polyacrylate"
 	id = SODIUM_POLYACRYLATE

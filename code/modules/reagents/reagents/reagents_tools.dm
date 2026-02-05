@@ -141,6 +141,14 @@
 	if(volume >= 1)
 		T.wet(800, TURF_WET_LUBE)
 
+/datum/reagent/lube/cherry
+	name = "Cherry-Flavored Lube"
+	id = CHERRYLUBE
+	description = "Your favorite."
+	color = "#FF80B0"
+	density = 1.11775
+	specheatcap = 2.71388
+
 /datum/reagent/luminol
 	name = "Luminol"
 	id = LUMINOL
