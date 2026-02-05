@@ -61,9 +61,7 @@
 /area/mining_surprise)
 "o" = (
 /obj/machinery/door/mineral/resin,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_surprise)
 "p" = (
 /obj/structure/sign/russian/caution,
@@ -132,9 +130,7 @@
 "E" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_surprise)
 "F" = (
 /obj/structure/girder,
@@ -178,9 +174,7 @@
 /area/mining_surprise)
 "L" = (
 /obj/structure/girder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_surprise)
 "M" = (
 /obj/effect/alien/weeds,
@@ -199,9 +193,7 @@
 	icon_state = "medium"
 	},
 /obj/effect/alien/weeds,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_surprise)
 "Q" = (
 /obj/item/weapon/shard,
@@ -242,9 +234,7 @@
 "W" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_surprise)
 "X" = (
 /obj/effect/alien/weeds,

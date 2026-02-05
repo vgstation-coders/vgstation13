@@ -3105,7 +3105,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "agV" = (
 /obj/structure/cable{
@@ -34543,7 +34543,7 @@
 	tag = "icon-warning"
 	},
 /obj/effect/landmark/corpse/assistant,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "cYh" = (
 /obj/structure/cable{
@@ -36191,9 +36191,7 @@
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/asmaint)
 "duq" = (
 /obj/machinery/door/airlock/glass_command{
@@ -39511,7 +39509,7 @@
 	dir = 4;
 	on = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "eoK" = (
 /obj/structure/cable/yellow{
@@ -43806,7 +43804,7 @@
 /area/storage/tech)
 "fAF" = (
 /obj/machinery/newscaster,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "fAY" = (
 /obj/machinery/vending/groans,
@@ -45435,7 +45433,7 @@
 /obj/machinery/recharger{
 	pixel_x = 29
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "gai" = (
 /obj/machinery/door/airlock/centcom{
@@ -55532,7 +55530,7 @@
 /area/medical/surgery)
 "iTC" = (
 /obj/structure/closet/walllocker/emerglocker/east,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "iTP" = (
 /obj/structure/window/reinforced{
@@ -58134,7 +58132,7 @@
 /area/maintenance/starboard)
 "jFM" = (
 /obj/structure/weightlifter,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "jFY" = (
 /obj/machinery/door/airlock/medical{
@@ -60161,7 +60159,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "khG" = (
 /obj/machinery/light{
@@ -60847,7 +60845,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "krD" = (
 /obj/effect/overlay/palmtree_l,
@@ -61412,7 +61410,7 @@
 	default_scrubbed_gases = list("plasma");
 	dir = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "kxY" = (
 /obj/machinery/optable,
@@ -61491,7 +61489,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "kzW" = (
 /obj/structure/catwalk,
@@ -61898,7 +61896,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "kGR" = (
 /obj/machinery/door/window{
@@ -65789,7 +65787,7 @@
 	pixel_x = 7
 	},
 /obj/effect/decal/cleanable/blood,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "lHM" = (
 /obj/machinery/atmospherics/binary/valve/digital{
@@ -66844,7 +66842,7 @@
 	},
 /obj/structure/window/full/reinforced/plasma,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "mbp" = (
 /turf/unsimulated/floor{
@@ -68209,7 +68207,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "mvc" = (
 /turf/simulated/floor/shuttle{
@@ -69704,7 +69702,7 @@
 /obj/item/device/flashlight/lantern,
 /obj/item/device/flashlight/lantern,
 /obj/item/clothing/glasses/scanner/meson,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "mPU" = (
 /obj/structure/bed/chair/comfy/black,
@@ -73230,7 +73228,7 @@
 	dir = 4;
 	name = "Firelock East"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "nTt" = (
 /obj/machinery/teleport/station,
@@ -74509,7 +74507,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "oiV" = (
 /obj/effect/decal{
@@ -76854,7 +76852,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "oQH" = (
 /obj/structure/bed/chair/shuttle/gamer{
@@ -78378,7 +78376,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "pqw" = (
 /obj/structure/table/reinforced,
@@ -78866,7 +78864,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "pxW" = (
 /obj/structure/table,
@@ -80187,7 +80185,7 @@
 /area/science/storage)
 "pRg" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "pRj" = (
 /obj/structure/grille,
@@ -80363,7 +80361,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "pUg" = (
 /obj/machinery/door/firedoor/border_only{
@@ -88181,7 +88179,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "smX" = (
 /obj/item/weapon/hatchet,
@@ -91549,7 +91547,7 @@
 	icon_state = "4-8"
 	},
 /obj/item/clothing/suit/strait_jacket,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "thH" = (
 /obj/structure/cable/orange{
@@ -97054,7 +97052,7 @@
 	dir = 8
 	},
 /obj/structure/table/glass,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "uON" = (
 /obj/structure/closet/wardrobe/chemistry_white,
@@ -102198,7 +102196,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "wsL" = (
 /obj/machinery/atmospherics/unary/portables_connector,
@@ -103743,7 +103741,7 @@
 /area/engineering/atmos_control)
 "wMN" = (
 /obj/machinery/status_display,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "wNa" = (
 /obj/machinery/recharger{
@@ -107224,7 +107222,7 @@
 	pixel_x = 24;
 	req_access_txt = "2"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "xMT" = (
 /obj/structure/bed,
@@ -109072,7 +109070,7 @@
 	},
 /area/mine/production)
 "ylW" = (
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "yme" = (
 /obj/machinery/power/apc{

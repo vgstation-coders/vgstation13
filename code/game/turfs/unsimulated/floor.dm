@@ -54,6 +54,10 @@
 	. = ..()
 	overlays += image(icon,src,"scorched[rand(1,2)]")
 
+/turf/unsimulated/floor/broken/New()
+	. = ..()
+	overlays += image(icon,src,"damaged[rand(1,3)]")
+
 /turf/unsimulated/floor/grass
 	name = "grass"
 	icon_state = "grass1"

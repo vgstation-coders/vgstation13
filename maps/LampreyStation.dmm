@@ -283,9 +283,7 @@
 /area/lamprey/arrivals)
 "aaR" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "aaS" = (
 /obj/structure/grille,
@@ -544,9 +542,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "aby" = (
 /obj/structure/grille,
@@ -583,9 +579,7 @@
 /obj/machinery/door/airlock/external{
 	name = "Arrival Airlock"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "abC" = (
 /obj/structure/grille,
@@ -606,9 +600,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "abE" = (
 /obj/structure/cable{
@@ -646,9 +638,7 @@
 /turf/simulated/floor/damaged/burnt,
 /area/lamprey/arrivals)
 "abH" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/catchall)
 "abI" = (
 /obj/structure/grille,
@@ -845,9 +835,7 @@
 /turf/space,
 /area/centcom/evac)
 "acb" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/virology)
 "acc" = (
 /obj/structure/lattice,
@@ -900,18 +888,14 @@
 /area)
 "acj" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "ack" = (
 /obj/item/stack/ore/iron,
 /turf/space,
 /area)
 "acl" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/catchall)
 "acm" = (
 /turf/unsimulated/mineral/hyperdense,
@@ -942,9 +926,7 @@
 	},
 /area/lamprey/detoxins)
 "acs" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "act" = (
 /obj/effect/landmark/corpse/chef,
@@ -1378,9 +1360,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
 "adk" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/mining)
 "adl" = (
 /obj/machinery/door/airlock/external{
@@ -1390,9 +1370,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
 "adm" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/mining)
 "adn" = (
 /obj/structure/closet/crate,
@@ -2665,9 +2643,7 @@
 	},
 /area/lamprey/catchall)
 "afY" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg2"
 	},
@@ -2838,9 +2814,7 @@
 	id_tag = "toxinsdriver";
 	name = "toxins launcher bay door"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/lamprey/detoxins)
 "agu" = (
 /obj/machinery/door/airlock/external{
@@ -2951,9 +2925,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/lamprey/detoxins)
 "agE" = (
 /obj/effect/decal/cleanable/soot,
@@ -3210,9 +3182,7 @@
 /obj/structure/disposaloutlet{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/lamprey/detoxins)
 "ahj" = (
 /obj/machinery/mass_driver{
@@ -3224,9 +3194,7 @@
 	name = "Mass Driver Door";
 	req_access_txt = "7"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/lamprey/detoxins)
 "ahk" = (
 /obj/structure/grille,
@@ -3248,9 +3216,7 @@
 "ahm" = (
 /obj/effect/decal/cleanable/soot,
 /obj/structure/cable,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "ahn" = (
 /obj/structure/morgue{
@@ -4069,9 +4035,7 @@
 	flickering = 1;
 	invisibility = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "ajm" = (
 /obj/machinery/newscaster{
@@ -4303,9 +4267,7 @@
 /area/lamprey/warzonemaintenanceblob)
 "ajM" = (
 /obj/structure/closet/coffin,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "ajN" = (
 /obj/structure/grille,
@@ -4406,9 +4368,7 @@
 /area/lamprey/warzonemaintenanceblob)
 "ajY" = (
 /obj/structure/closet/crate/secure/plasma/prefilled,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "ajZ" = (
 /obj/effect/decal/cleanable/dirt,
@@ -4719,9 +4679,7 @@
 /area/lamprey/warzonemaintenanceblob)
 "akN" = (
 /obj/abstract/map/spawner/engi/machinery,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "akO" = (
 /obj/effect/decal/cleanable/dirt,
@@ -5005,9 +4963,7 @@
 /area/lamprey/warzonemaintenanceblob)
 "alt" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "alu" = (
 /obj/structure/closet/coffin,
@@ -5358,9 +5314,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/warzonemaintenanceblob)
 "ami" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "amj" = (
 /obj/effect/decal/warning_stripes{
@@ -5587,9 +5541,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "amL" = (
 /obj/structure/grille,
@@ -6227,9 +6179,7 @@
 	icon_state = "gib3"
 	},
 /obj/structure/inflatable/wall,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/kitchen)
 "aol" = (
 /obj/structure/grille,
@@ -6513,9 +6463,7 @@
 /obj/effect/landmark/start{
 	name = "Assistant"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "aoU" = (
 /obj/structure/grille,
@@ -6656,9 +6604,7 @@
 /turf/space,
 /area)
 "apo" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/kitchen)
 "app" = (
 /obj/structure/grille/broken,
@@ -6691,9 +6637,7 @@
 /area/lamprey/kitchen)
 "apv" = (
 /obj/item/robot_parts/robot_component/diagnosis_unit/reinforced,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/kitchen)
 "apw" = (
 /obj/effect/decal/cleanable/dirt,
@@ -7598,9 +7542,7 @@
 	icon_state = "1-2"
 	},
 /obj/item/tool/crowbar,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "arC" = (
 /obj/structure/grille,
@@ -13271,9 +13213,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/warzonemaintenanceblob)
 "aEu" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/darkfarm)
 "aEv" = (
 /obj/item/weapon/stool/bar,
@@ -13731,9 +13671,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/kitchen)
 "aFH" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "aFI" = (
 /turf/simulated/floor/plating,
@@ -14111,9 +14049,7 @@
 /obj/machinery/door/airlock/external{
 	name = "Escape Airlock"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "aGG" = (
 /obj/structure/cable{
@@ -15275,9 +15211,7 @@
 	icon_state = "coil_red1";
 	name = "cable piece"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "aJD" = (
 /obj/structure/grille,
@@ -15596,9 +15530,7 @@
 /obj/item/trash/tray,
 /obj/abstract/map/spawner/space/supply,
 /obj/abstract/map/spawner/space/drinks,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "aKv" = (
 /obj/effect/decal/cleanable/dirt,
@@ -15753,9 +15685,7 @@
 /area/lamprey/foreporthallways)
 "aKN" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "aKO" = (
 /obj/item/stack/sheet/glass/glass,
@@ -16618,9 +16548,7 @@
 /area/lamprey/warzonemaintenanceblob)
 "aNa" = (
 /obj/item/weapon/reagent_containers/syringe/giant/chloral,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "aNb" = (
 /obj/structure/cable{
@@ -16996,9 +16924,7 @@
 /area/lamprey/bronxmaintenanceblob)
 "aNZ" = (
 /obj/item/device/assembly/mousetrap,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "aOa" = (
 /obj/structure/table,
@@ -18144,9 +18070,7 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/voxtradepost)
 "aQJ" = (
 /obj/effect/decal/cleanable/dirt,
@@ -19235,9 +19159,7 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "aTf" = (
 /obj/effect/decal/cleanable/dirt,
@@ -19671,9 +19593,7 @@
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/blue,
 /obj/effect/landmark/corpse/doctor,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/voxtradepost)
 "aUl" = (
 /obj/structure/grille,
@@ -21614,9 +21534,7 @@
 /area/lamprey/bronxmaintenanceblob)
 "aYD" = (
 /obj/effect/decal/cleanable/mucus,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "aYE" = (
 /obj/machinery/light/small{
@@ -22923,9 +22841,7 @@
 	pixel_y = -32
 	},
 /obj/effect/gibspawner/xeno,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "bbr" = (
 /obj/structure/window/full/reinforced/tinted,
@@ -23355,9 +23271,7 @@
 /area/lamprey/warzonemaintenanceblob)
 "bcu" = (
 /obj/structure/foamedmetal,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "bcv" = (
 /obj/structure/grille,
@@ -23393,9 +23307,7 @@
 "bcx" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/greenglow,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "bcy" = (
 /obj/machinery/door/airlock/maintenance,
@@ -24100,9 +24012,7 @@
 /area/lamprey/warzonemaintenanceblob)
 "bee" = (
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "bef" = (
 /obj/structure/foamedmetal,
@@ -24405,9 +24315,7 @@
 /obj/effect/landmark/start{
 	name = "Assistant"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "beW" = (
 /obj/item/weapon/stool/bar,
@@ -24669,9 +24577,7 @@
 /area/lamprey/warzonemaintenanceblob)
 "bfx" = (
 /obj/structure/girder/reinforced,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "bfy" = (
 /obj/structure/hanging_lantern/hook,
@@ -25191,9 +25097,7 @@
 	icon_state = "0-8"
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "bgB" = (
 /obj/structure/grille/broken,
@@ -25516,9 +25420,7 @@
 /area/lamprey/security)
 "bhm" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/security)
 "bhn" = (
 /obj/structure/grille,
@@ -25990,9 +25892,7 @@
 	dir = 10;
 	name = "Lamprey security camera"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "bie" = (
 /obj/item/weapon/stool/bar,
@@ -26025,9 +25925,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
 "bij" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "bik" = (
 /obj/machinery/light/small{
@@ -26167,9 +26065,7 @@
 /turf/simulated/floor,
 /area/lamprey/warzonemaintenanceblob)
 "biC" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "biD" = (
 /obj/structure/closet/hydrant{
@@ -26206,9 +26102,7 @@
 "biH" = (
 /obj/structure/grille,
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/warzonemaintenanceblob)
 "biI" = (
 /obj/effect/decal/cleanable/dirt,
@@ -26963,9 +26857,7 @@
 /area/lamprey/middlerung)
 "bkd" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "bke" = (
 /obj/structure/girder,
@@ -27054,9 +26946,7 @@
 /obj/abstract/map/spawner/maint,
 /obj/abstract/map/spawner/maint,
 /obj/item/device/radio,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "bkm" = (
 /obj/structure/window/full/reinforced/tinted,
@@ -27797,9 +27687,7 @@
 /area/lamprey/bronxmaintenanceblob)
 "blR" = (
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "blS" = (
 /obj/structure/cable{
@@ -27855,9 +27743,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "blX" = (
 /obj/structure/cable{
@@ -28400,9 +28286,7 @@
 	},
 /area/lamprey/security)
 "bnf" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/security)
 "bng" = (
 /obj/structure/inflatable/shelter,
@@ -28750,9 +28634,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "bnO" = (
 /obj/structure/closet/wardrobe/mixed,
@@ -28797,9 +28679,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "bnS" = (
 /obj/machinery/light/small{
@@ -29301,9 +29181,7 @@
 	name = "Roberto Jahns (Chief Engineer)";
 	wander = 0
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "bpc" = (
 /obj/machinery/door/window/brigdoor{
@@ -30512,9 +30390,7 @@
 /area/lamprey/foreporthallways)
 "brF" = (
 /obj/item/clothing/head/cardborg,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "brG" = (
 /obj/machinery/door/airlock/glass{
@@ -30529,9 +30405,7 @@
 "brH" = (
 /obj/item/weapon/book/manual/stasis,
 /obj/item/weapon/rack_parts,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "brI" = (
 /obj/structure/table/reinforced,
@@ -30576,9 +30450,7 @@
 "brO" = (
 /obj/item/tool/wrench,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/centralhallways)
 "brP" = (
 /obj/machinery/door/airlock/external,
@@ -31216,9 +31088,7 @@
 /area/lamprey/voxtradepost)
 "btl" = (
 /obj/effect/landmark/corpse/mutilated,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "btm" = (
 /obj/item/weapon/storage/fancy/egg_box/empty,
@@ -31317,14 +31187,10 @@
 /area/lamprey/medbaywarehousemaintenanceblob)
 "btC" = (
 /obj/structure/reagent_dispensers/fueltank,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "btD" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "btE" = (
 /obj/machinery/light/small{
@@ -31707,9 +31573,7 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "bun" = (
 /obj/machinery/computer/secure_data,
@@ -31803,9 +31667,7 @@
 /area/lamprey/middlerung)
 "buv" = (
 /obj/item/clothing/suit/raincoat,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bronxmaintenanceblob)
 "buw" = (
 /obj/effect/decal/cleanable/dirt,
@@ -31879,9 +31741,7 @@
 /area/lamprey/centralhallways)
 "buE" = (
 /obj/item/device/flashlight/flare,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/centralhallways)
 "buF" = (
 /obj/machinery/floodlight/on,
@@ -31917,9 +31777,7 @@
 	icon_state = "gib7"
 	},
 /obj/item/weapon/stock_parts/capacitor,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "buM" = (
 /obj/machinery/camera{
@@ -32709,9 +32567,7 @@
 	icon_state = "coil_red1";
 	name = "cable piece"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bwx" = (
 /obj/item/weapon/broken_bottle,
@@ -33256,9 +33112,7 @@
 /area)
 "bxG" = (
 /obj/item/weapon/rack_parts,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bxH" = (
 /obj/effect/decal/cleanable/generic,
@@ -33316,9 +33170,7 @@
 	},
 /area/lamprey/escape)
 "bxR" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/escape)
 "bxS" = (
 /obj/machinery/door/mineral/wood{
@@ -36254,9 +36106,7 @@
 "bEo" = (
 /obj/item/clothing/head/helmet,
 /obj/item/weapon/melee/baton,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/originmaintenanceblob)
 "bEp" = (
 /obj/structure/bed/chair{
@@ -37084,9 +36934,7 @@
 /obj/structure/window{
 	dir = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bGn" = (
 /obj/effect/decal/cleanable/greenglow,
@@ -38118,9 +37966,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bIy" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/tinyroomzone)
 "bIz" = (
 /obj/structure/grille,
@@ -38134,9 +37980,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/tinyroomzone)
 "bIA" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/escape)
 "bIB" = (
 /turf/simulated/floor/plating{
@@ -39035,9 +38879,7 @@
 "bKt" = (
 /obj/machinery/vending/snack,
 /obj/structure/disposalpipe/trunk,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/tinyroomzone)
 "bKu" = (
 /obj/effect/decal/warning_stripes{
@@ -39451,9 +39293,7 @@
 	desc = "Yummy! It's rotten and covered in small stones that look like maggots.";
 	name = "delicious meal"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/catchall)
 "bLm" = (
 /obj/item/crossbowframe,
@@ -40073,9 +39913,7 @@
 /obj/structure/window/reinforced/tinted{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/security)
 "bMF" = (
 /obj/effect/decal/cleanable/dirt,
@@ -41336,9 +41174,7 @@
 /obj/structure/window{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bPD" = (
 /turf/simulated/floor{
@@ -41374,9 +41210,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bPK" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bPL" = (
 /obj/machinery/vending/coffee,
@@ -42747,9 +42581,7 @@
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bSL" = (
 /obj/item/weapon/stool,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bSM" = (
 /obj/item/weapon/stool,
@@ -42776,9 +42608,7 @@
 /obj/structure/window/barricade{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bSR" = (
 /obj/structure/window/reinforced{
@@ -42867,9 +42697,7 @@
 "bTa" = (
 /obj/structure/grille/broken,
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/virology)
 "bTb" = (
 /obj/effect/decal/cleanable/greenglow,
@@ -43776,9 +43604,7 @@
 /area/lamprey/escape)
 "bUX" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/escape)
 "bUY" = (
 /obj/structure/grille,
@@ -43813,9 +43639,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/item/trash/cigbutt/cigarbutt,
 /mob/living/simple_animal/mouse/balbc,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/virology)
 "bVd" = (
 /obj/effect/gibspawner/blood,
@@ -44202,9 +44026,7 @@
 	pixel_x = 13;
 	pixel_y = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbay)
 "bVU" = (
 /obj/structure/table,
@@ -45378,18 +45200,14 @@
 /turf/simulated/floor,
 /area/lamprey/porthallways)
 "bYx" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/porthallways)
 "bYy" = (
 /obj/structure/bed/chair/comfy/beige,
 /obj/effect/landmark/corpse/assistant/robust,
 /obj/effect/landmark/corpse/assistant/robust,
 /obj/abstract/map/spawner/misc/gym,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/porthallways)
 "bYz" = (
 /obj/structure/bed/chair/comfy/beige,
@@ -45447,9 +45265,7 @@
 /area/lamprey/originmaintenanceblob)
 "bYH" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "bYI" = (
 /obj/machinery/door/airlock/maintenance{
@@ -45809,9 +45625,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (EAST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "bZv" = (
 /turf/simulated/floor{
@@ -45877,9 +45691,7 @@
 /area/lamprey/originmaintenanceblob)
 "bZD" = (
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "bZE" = (
 /obj/machinery/door/airlock/maintenance,
@@ -46174,18 +45986,14 @@
 /area/lamprey/catchall)
 "car" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/catchall)
 "cas" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "air"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/escape)
 "cat" = (
 /turf/simulated/wall/r_wall,
@@ -46445,9 +46253,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/closet/crate/secure/large/reinforced/shard,
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cba" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -47252,9 +47058,7 @@
 /area/lamprey/botaneva)
 "ccM" = (
 /obj/structure/displaycase/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "ccN" = (
 /obj/effect/decal/cleanable/soot,
@@ -47456,9 +47260,7 @@
 "cdj" = (
 /obj/item/trash/candle,
 /obj/machinery/atmospherics/pipe/manifold/insulated/visible/blue,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cdk" = (
 /obj/machinery/atmospherics/pipe/manifold/insulated/visible/blue,
@@ -47656,9 +47458,7 @@
 /area/lamprey/researchwarehousemaintenanceblob)
 "cdG" = (
 /obj/machinery/vending,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cdH" = (
 /obj/machinery/door/airlock/research{
@@ -47809,9 +47609,7 @@
 "cec" = (
 /obj/item/weapon/pickaxe/shovel/spade,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "ced" = (
 /obj/item/weapon/storage/bag/plants,
@@ -48398,9 +48196,7 @@
 /obj/structure/grille/broken,
 /obj/item/weapon/reagent_containers/glass/bucket,
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cfu" = (
 /obj/effect/decal/cleanable/dirt,
@@ -48595,9 +48391,7 @@
 	name = "Connector Port (Air Supply)"
 	},
 /obj/item/trash/candy,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cfU" = (
 /obj/structure/bed/chair/office/light,
@@ -48660,9 +48454,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/escape)
 "cgb" = (
 /obj/effect/decal/warning_stripes{
@@ -48694,9 +48486,7 @@
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/escape)
 "cgf" = (
 /obj/effect/decal/warning_stripes{
@@ -48977,9 +48767,7 @@
 /obj/item/stack/rods,
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit,
 /obj/effect/landmark/corpse/vox/crossbow/space,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cgL" = (
 /obj/item/tool/wirecutters/clippers,
@@ -49241,9 +49029,7 @@
 /obj/effect/landmark/start{
 	name = "Assistant"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "chp" = (
 /turf/simulated/floor/plating,
@@ -50224,9 +50010,7 @@
 /area/lamprey/botaneva)
 "cjt" = (
 /obj/structure/girder/reinforced,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cju" = (
 /turf/simulated/floor/plating{
@@ -50677,9 +50461,7 @@
 	},
 /area/lamprey/botaneva)
 "ckr" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cks" = (
 /obj/effect/decal/cleanable/dirt,
@@ -51568,9 +51350,7 @@
 /obj/abstract/map/spawner/maint,
 /obj/structure/rack,
 /obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cmf" = (
 /obj/effect/decal/cleanable/crayon/fuckyou,
@@ -52143,9 +51923,7 @@
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cny" = (
 /obj/item/tool/bonesetter,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cnz" = (
 /obj/effect/decal/cleanable/generic,
@@ -52429,9 +52207,7 @@
 "cod" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "coe" = (
 /obj/machinery/camera{
@@ -52547,9 +52323,7 @@
 /obj/structure/cage/autoclose,
 /obj/effect/decal/cleanable/dirt,
 /mob/living/simple_animal/hostile/humanoid/russian,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/originmaintenanceblob)
 "cos" = (
 /obj/structure/grille,
@@ -53001,9 +52775,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/porthallways)
 "cpB" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/originmaintenanceblob)
 "cpC" = (
 /obj/structure/cable{
@@ -53231,9 +53003,7 @@
 /area/lamprey/centralhallways)
 "cpW" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/centralhallways)
 "cpX" = (
 /obj/effect/decal/cleanable/dirt,
@@ -53344,9 +53114,7 @@
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cqk" = (
 /obj/structure/reagent_dispensers/fueltank,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cql" = (
 /obj/structure/girder/reinforced,
@@ -53538,9 +53306,7 @@
 	dir = 1
 	},
 /obj/structure/window/full/reinforced/plasma,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/originmaintenanceblob)
 "cqK" = (
 /obj/structure/grille,
@@ -54455,9 +54221,7 @@
 /area/lamprey/aftstarboardhallways)
 "csN" = (
 /obj/item/tool/circular_saw,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "csO" = (
 /obj/structure/closet/hydrant{
@@ -54726,9 +54490,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "ctz" = (
 /obj/structure/grille,
@@ -55148,9 +54910,7 @@
 /obj/machinery/light_construct/small,
 /obj/item/weapon/coin/silver,
 /obj/item/device/multitool,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cuv" = (
 /obj/item/crossbowframe,
@@ -56224,9 +55984,7 @@
 	tag = "icon-warning"
 	},
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/originmaintenanceblob)
 "cwU" = (
 /obj/structure/cable{
@@ -56544,9 +56302,7 @@
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cxG" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cxH" = (
 /obj/item/stack/rods,
@@ -56706,9 +56462,7 @@
 /area/lamprey/losspital)
 "cyb" = (
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cyc" = (
 /obj/machinery/camera{
@@ -56721,9 +56475,7 @@
 /area/lamprey/researchwarehousemaintenanceblob)
 "cyd" = (
 /obj/item/clothing/mask/gas,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cye" = (
 /obj/structure/fireaxecabinet{
@@ -57071,9 +56823,7 @@
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cyL" = (
 /obj/item/weapon/storage/toolbox/mechanical,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cyM" = (
 /obj/structure/grille,
@@ -58951,9 +58701,7 @@
 /obj/item/stack/rods,
 /obj/item/weapon/shard,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cCM" = (
 /obj/structure/bed/chair/office/light{
@@ -59147,15 +58895,11 @@
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cDn" = (
 /obj/item/weapon/bananapeel,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cDo" = (
 /obj/effect/gibspawner/xeno,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cDp" = (
 /obj/item/weapon/bikehorn,
@@ -59232,9 +58976,7 @@
 	pixel_y = 32
 	},
 /obj/machinery/vending,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/hellmaintenanceblob)
 "cDz" = (
 /obj/effect/decal/cleanable/dirt,
@@ -59393,9 +59135,7 @@
 	},
 /area/lamprey/researchwarehousemaintenanceblob)
 "cDO" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cDP" = (
 /obj/effect/decal/warning_stripes{
@@ -59689,9 +59429,7 @@
 "cEC" = (
 /obj/structure/rack,
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cED" = (
 /obj/item/weapon/shard{
@@ -59741,9 +59479,7 @@
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cEI" = (
 /obj/item/ammo_storage/magazine/uzi45,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cEJ" = (
 /turf/simulated/floor{
@@ -59807,9 +59543,7 @@
 	icon_state = "4-8"
 	},
 /obj/effect/decal/cleanable/blood/stattrack,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/hellmaintenanceblob)
 "cER" = (
 /obj/effect/decal/cleanable/dirt,
@@ -59951,9 +59685,7 @@
 /area/lamprey/losspital)
 "cFf" = (
 /obj/abstract/map/spawner/floorpill,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cFg" = (
 /obj/effect/decal/warning_stripes{
@@ -60060,9 +59792,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/door/firedoor,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cFr" = (
 /obj/effect/decal/cleanable/soot,
@@ -60072,9 +59802,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/door/firedoor,
 /obj/structure/closet/emcloset/vox,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cFs" = (
 /obj/effect/decal/cleanable/dirt,
@@ -60141,9 +59869,7 @@
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cFz" = (
 /obj/machinery/status_display,
@@ -60609,9 +60335,7 @@
 "cGB" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/closet/crate/secure/weapon/experimental/spur,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cGC" = (
 /obj/effect/decal/cleanable/dirt,
@@ -60622,9 +60346,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/closet/secure_closet/miner,
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cGE" = (
 /obj/effect/decal/cleanable/dirt,
@@ -60643,9 +60365,7 @@
 /area/lamprey/botaneva)
 "cGG" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cGH" = (
 /obj/effect/decal/cleanable/dirt,
@@ -61245,9 +60965,7 @@
 	dir = 4
 	},
 /obj/item/weapon/shard,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cHT" = (
 /obj/effect/decal/cleanable/dirt,
@@ -61260,9 +60978,7 @@
 "cHU" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cHV" = (
 /obj/structure/grille,
@@ -61357,9 +61073,7 @@
 /obj/structure/closet/secure_closet/vault/vault,
 /obj/abstract/map/spawner/maint,
 /obj/item/potion/random,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cIg" = (
 /obj/machinery/door/airlock/maintenance{
@@ -61960,9 +61674,7 @@
 /obj/effect/decal/cleanable/blood/stattrack{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cJw" = (
 /obj/effect/decal/cleanable/blood/stattrack{
@@ -61979,9 +61691,7 @@
 /obj/effect/decal/cleanable/blood/stattrack{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cJy" = (
 /obj/effect/decal/cleanable/blood/stattrack{
@@ -62299,9 +62009,7 @@
 /obj/structure/closet,
 /obj/item/weapon/storage/belt/utility,
 /obj/item/weapon/tank/emergency_oxygen,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cKh" = (
 /obj/structure/closet,
@@ -62314,9 +62022,7 @@
 "cKi" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/girder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cKj" = (
 /obj/structure/girder,
@@ -62646,9 +62352,7 @@
 "cKT" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cKU" = (
 /obj/effect/decal/cleanable/dirt,
@@ -62666,9 +62370,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/closet/lawcloset,
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cKX" = (
 /obj/structure/grille,
@@ -62718,9 +62420,7 @@
 	},
 /area/lamprey/botaneva)
 "cLc" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cLd" = (
 /obj/effect/decal/cleanable/dirt,
@@ -62897,9 +62597,7 @@
 	pixel_x = -6;
 	pixel_y = 5
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cLy" = (
 /obj/effect/decal/cleanable/dirt,
@@ -63368,9 +63066,7 @@
 /obj/structure/grille/broken,
 /obj/structure/window/reinforced,
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/botaneva)
 "cMA" = (
 /obj/structure/grille/broken,
@@ -63597,9 +63293,7 @@
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cNb" = (
 /obj/structure/grille,
@@ -64386,9 +64080,7 @@
 "cOH" = (
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/researchwarehousemaintenanceblob)
 "cOI" = (
 /obj/effect/decal/cleanable/mucus,
@@ -64685,9 +64377,7 @@
 "cPn" = (
 /obj/item/weapon/circuitboard/teleporter,
 /obj/effect/decal/cleanable/mucus,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cPo" = (
 /obj/machinery/readybutton{
@@ -64738,9 +64428,7 @@
 "cPu" = (
 /obj/structure/table,
 /obj/machinery/reagentgrinder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cPv" = (
 /obj/effect/decal/warning_stripes{
@@ -64881,9 +64569,7 @@
 	name = "chlown";
 	wander = 0
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cPL" = (
 /mob/living/simple_animal/hostile/mimic,
@@ -64931,9 +64617,7 @@
 "cPR" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/landmark/corpse/assistant,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/losspital)
 "cPS" = (
 /obj/effect/decal/cleanable/dirt,
@@ -65292,9 +64976,7 @@
 "cQI" = (
 /obj/item/blueprints/construction_permit,
 /obj/machinery/power/treadmill,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cQJ" = (
 /obj/structure/mirror_frame,
@@ -67410,9 +67092,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/barndgo)
 "cVm" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/hellmaintenanceblob)
 "cVn" = (
 /obj/machinery/portable_atmospherics/scrubber/huge,
@@ -68612,9 +68292,7 @@
 "cYd" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "cYe" = (
 /obj/machinery/door/mineral/silver,
@@ -69538,9 +69216,7 @@
 /obj/structure/rack,
 /obj/item/tool/wrench,
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "dal" = (
 /obj/effect/decal/warning_stripes{
@@ -70050,9 +69726,7 @@
 	icon_state = "loading_area";
 	tag = "icon-loading_area (EAST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/centralhallways)
 "dbw" = (
 /obj/machinery/door/unpowered/shuttle,
@@ -70485,9 +70159,7 @@
 /turf/simulated/floor/wood,
 /area/lamprey/bridge)
 "dcs" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bridge)
 "dct" = (
 /obj/machinery/camera{
@@ -70648,9 +70320,7 @@
 	},
 /area/lamprey/escape)
 "dcM" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/headofpersonnelline)
 "dcN" = (
 /obj/effect/decal/cleanable/soot,
@@ -71515,9 +71185,7 @@
 /obj/structure/window/reinforced,
 /obj/item/weapon/shard,
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/theater)
 "deI" = (
 /obj/effect/decal/cleanable/dirt,
@@ -71690,9 +71358,7 @@
 	dir = 8;
 	light_range = 2.5
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineering)
 "dfc" = (
 /obj/machinery/door/airlock/glass_engineering{
@@ -72340,9 +72006,7 @@
 /obj/effect/decal/cleanable/generic,
 /obj/machinery/space_heater,
 /obj/item/weapon/stock_parts/manipulator,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/theater)
 "dgp" = (
 /obj/effect/decal/cleanable/dirt,
@@ -73330,9 +72994,7 @@
 /area/lamprey/engineering)
 "dig" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineering)
 "dih" = (
 /obj/effect/decal/cleanable/dirt,
@@ -73966,9 +73628,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/grille/broken,
 /obj/item/tool/wrench,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/theater)
 "djk" = (
 /obj/structure/grille,
@@ -75287,9 +74947,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineering)
 "dlB" = (
 /obj/structure/cable{
@@ -75355,9 +75013,7 @@
 /obj/effect/landmark/start{
 	name = "Station Engineer"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineering)
 "dlG" = (
 /obj/structure/cable{
@@ -75509,9 +75165,7 @@
 	icon_state = "2-4"
 	},
 /obj/abstract/map/spawner/floorpill/guaranteed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dlV" = (
 /obj/structure/cable{
@@ -76030,9 +75684,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/liquid_fuel,
 /obj/structure/conveyor_assembly,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineering)
 "dmQ" = (
 /obj/structure/cable{
@@ -76887,9 +76539,7 @@
 	tag = "icon-warning"
 	},
 /obj/structure/inflatable/shelter,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineering)
 "dou" = (
 /obj/effect/decal/cleanable/dirt,
@@ -78560,9 +78210,7 @@
 	},
 /area/lamprey/bridge)
 "drr" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bridge)
 "drs" = (
 /obj/machinery/door/airlock/command{
@@ -81302,9 +80950,7 @@
 	},
 /area/lamprey/centralhallways)
 "dwB" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/centralhallways)
 "dwC" = (
 /obj/machinery/door/airlock/maintenance{
@@ -81519,9 +81165,7 @@
 /obj/item/weapon/coin/clown,
 /obj/structure/grille/broken,
 /obj/mecha/combat/honker,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "dxf" = (
 /obj/structure/window/reinforced,
@@ -82018,9 +81662,7 @@
 /area/lamprey/centralhallways)
 "dyd" = (
 /obj/structure/bed/chair/folding,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/centralhallways)
 "dye" = (
 /turf/simulated/floor/plating,
@@ -84624,9 +84266,7 @@
 	dir = 1
 	},
 /obj/structure/closet/coffin,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dDo" = (
 /obj/structure/cage/autoclose,
@@ -84668,9 +84308,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dDt" = (
 /obj/structure/window/smart{
@@ -85314,9 +84952,7 @@
 /area/lamprey/centralhallways)
 "dEv" = (
 /obj/item/weapon/table_parts/wood,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/centralhallways)
 "dEw" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -85398,9 +85034,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dEF" = (
 /obj/effect/decal/cleanable/dirt,
@@ -85412,9 +85046,7 @@
 /obj/structure/rack,
 /obj/abstract/map/spawner/maint,
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dEG" = (
 /obj/effect/decal/cleanable/dirt,
@@ -86134,9 +85766,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dGf" = (
 /obj/machinery/door/airlock/maintenance,
@@ -86161,9 +85791,7 @@
 /area/lamprey/xenobiomaintenanceblob)
 "dGj" = (
 /obj/effect/landmark/corpse/assistant,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dGk" = (
 /obj/item/weapon/table_parts,
@@ -86762,9 +86390,7 @@
 /area/lamprey/thebelt)
 "dHs" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dHt" = (
 /turf/simulated/floor/plating{
@@ -89240,9 +88866,7 @@
 	icon_state = "1-8"
 	},
 /obj/structure/closet/firecloset,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dMq" = (
 /obj/structure/rack,
@@ -90053,9 +89677,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dNV" = (
 /obj/effect/decal/cleanable/dirt,
@@ -91125,9 +90747,7 @@
 /obj/structure/window/loose{
 	dir = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dPU" = (
 /obj/structure/cable{
@@ -91141,9 +90761,7 @@
 	icon_state = "1-8"
 	},
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dPV" = (
 /obj/structure/grille,
@@ -91498,9 +91116,7 @@
 /area/lamprey/xenobiomaintenanceblob)
 "dQK" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dQL" = (
 /obj/structure/disposalpipe/segment,
@@ -91615,9 +91231,7 @@
 	icon_state = "4-8"
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dQW" = (
 /obj/structure/cable{
@@ -91728,9 +91342,7 @@
 "dRf" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/curtain/black,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineeringmaintenanceblob)
 "dRg" = (
 /obj/structure/grille,
@@ -92286,9 +91898,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/mucus,
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dSo" = (
 /obj/structure/sign/nosmoking_2,
@@ -92333,9 +91943,7 @@
 "dSu" = (
 /obj/effect/decal/cleanable/dirt,
 /mob/living/simple_animal/hostile/lizard,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dSv" = (
 /obj/machinery/door/airlock/maintenance,
@@ -92918,9 +92526,7 @@
 "dTu" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/cigbutt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dTv" = (
 /obj/effect/decal/cleanable/dirt,
@@ -93165,9 +92771,7 @@
 	icon_state = "1-2"
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/xenobiomaintenanceblob)
 "dTT" = (
 /obj/effect/decal/warning_stripes{
@@ -93448,9 +93052,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/mucus,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dUw" = (
 /obj/structure/flora/pottedplant/random,
@@ -93650,9 +93252,7 @@
 /area/shuttle/escape_pod4)
 "dUS" = (
 /obj/structure/disposalpipe/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/bridge)
 "dUT" = (
 /turf/unsimulated/wall/other,
@@ -93833,9 +93433,7 @@
 "dVl" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/vending/cigarette,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dVm" = (
 /obj/structure/table/reinforced,
@@ -94575,9 +94173,7 @@
 	icon_state = "small"
 	},
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dWQ" = (
 /obj/structure/grille,
@@ -94619,9 +94215,7 @@
 	pixel_y = 32
 	},
 /obj/structure/reagent_dispensers/fueltank,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dWW" = (
 /obj/effect/landmark/corpse/librarian,
@@ -95104,9 +94698,7 @@
 /obj/abstract/map/spawner/maint,
 /obj/abstract/map/spawner/maint,
 /obj/structure/rack,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dYf" = (
 /obj/machinery/door/airlock/maintenance,
@@ -95120,9 +94712,7 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dYh" = (
 /obj/structure/bed/chair/comfy/black{
@@ -95476,9 +95066,7 @@
 /area/lamprey/engineeringmaintenanceblob)
 "dYZ" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineeringmaintenanceblob)
 "dZa" = (
 /obj/machinery/light/small,
@@ -95539,9 +95127,7 @@
 "dZh" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/landmark/corpse/securityofficer,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "dZi" = (
 /obj/item/weapon/broken_bottle,
@@ -95774,9 +95360,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/table/woodentable/poker,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/enginerooms)
 "dZO" = (
 /obj/structure/catwalk,
@@ -96158,9 +95742,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/cigbutt/cigarbutt,
 /obj/item/weapon/gun/projectile/flare,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "eaN" = (
 /obj/item/trash/pietin,
@@ -96503,9 +96085,7 @@
 	dir = 8
 	},
 /obj/structure/window,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "ebE" = (
 /obj/structure/grille/broken,
@@ -96733,9 +96313,7 @@
 "ece" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/reagent_dispensers/fueltank,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "ecf" = (
 /obj/effect/decal/cleanable/dirt,
@@ -96748,9 +96326,7 @@
 /area/lamprey/thebelt)
 "ecg" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "ech" = (
 /obj/machinery/space_heater,
@@ -96775,9 +96351,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/thebelt)
 "ecl" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "ecm" = (
 /obj/item/weapon/pickaxe/hand,
@@ -97240,9 +96814,7 @@
 	dir = 4
 	},
 /obj/item/gun_part/silencer,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "edt" = (
 /obj/item/trash/pietin,
@@ -97287,9 +96859,7 @@
 /area)
 "edA" = (
 /obj/item/clothing/head/helmet,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineeringmaintenanceblob)
 "edB" = (
 /obj/structure/grille,
@@ -97316,9 +96886,7 @@
 /obj/structure/window/barricade,
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/space_heater,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/enginerooms)
 "edE" = (
 /obj/effect/decal/cleanable/liquid_fuel,
@@ -97362,9 +96930,7 @@
 "edJ" = (
 /obj/effect/decal/cleanable/soot,
 /obj/item/device/flashlight/lantern/on/dim,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "edK" = (
 /obj/effect/decal/cleanable/soot,
@@ -97557,9 +97123,7 @@
 /area/lamprey/engineeringmaintenanceblob)
 "eem" = (
 /obj/item/tool/screwdriver,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineeringmaintenanceblob)
 "een" = (
 /obj/structure/sign/poster{
@@ -97714,9 +97278,7 @@
 	},
 /area/lamprey/bridge)
 "eeL" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineeringmaintenanceblob)
 "eeM" = (
 /obj/item/stack/sheet/cardboard,
@@ -97894,9 +97456,7 @@
 "eff" = (
 /obj/item/toy/crayon/purple,
 /obj/effect/decal/cleanable/ash,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "efg" = (
 /obj/item/toy/gun,
@@ -98102,9 +97662,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/theater)
 "efL" = (
 /obj/structure/cable{
@@ -99067,9 +98625,7 @@
 /area/lamprey/theater)
 "ehM" = (
 /turf/simulated/floor/plating/airless,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "ehN" = (
 /obj/machinery/door/airlock/research{
@@ -99889,9 +99445,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/soap/deluxe,
 /obj/abstract/map/spawner/misc/syndiecargo,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "ejp" = (
 /obj/structure/table,
@@ -100148,9 +99702,7 @@
 /obj/item/organ/internal/liver,
 /obj/item/organ/internal/lungs,
 /obj/item/organ/external/head/with_teeth,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/thebelt)
 "ejO" = (
 /obj/machinery/light{
@@ -103462,9 +103014,7 @@
 "erc" = (
 /obj/effect/decal/cleanable/dirt,
 /mob/living/simple_animal/hostile/giant_spider/hunter,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/engineeringmaintenanceblob)
 "erd" = (
 /obj/machinery/door/airlock/maintenance{
@@ -106548,9 +106098,7 @@
 /turf/simulated/floor/damaged/airless/broken,
 /area)
 "exo" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "exp" = (
 /obj/structure/table,
@@ -106726,9 +106274,7 @@
 /turf/simulated/floor/plating/airless,
 /area)
 "exB" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "exC" = (
 /obj/effect/decal/warning_stripes{
@@ -107545,9 +107091,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (SOUTHWEST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg2";
 	tag = "icon-platingdmg2"
@@ -110371,18 +109915,14 @@
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
 "eFe" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "eFf" = (
 /obj/structure/bed/chair/comfy/beige,
 /obj/effect/landmark/corpse/assistant/robust,
 /obj/effect/landmark/corpse/assistant/robust,
 /obj/abstract/map/spawner/misc/gym,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "eFg" = (
 /obj/structure/bed/chair/comfy/beige,
@@ -110711,9 +110251,7 @@
 /obj/structure/cage/autoclose,
 /obj/effect/decal/cleanable/dirt,
 /mob/living/simple_animal/hostile/humanoid/russian,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "eFQ" = (
 /obj/structure/cage/autoclose,
@@ -110737,9 +110275,7 @@
 	dir = 1
 	},
 /obj/structure/window/full/reinforced/plasma,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/arrivals)
 "eFU" = (
 /obj/structure/grille,
@@ -111450,9 +110986,7 @@
 	},
 /area/lamprey/catchall)
 "eHo" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/lamprey/catchall)
 "eHp" = (
 /obj/effect/decal/cleanable/dirt,
@@ -111491,9 +111025,7 @@
 /area/lamprey/catchall)
 "eHt" = (
 /turf/simulated/floor/plating/airless,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/lamprey/catchall)
 "eHu" = (
 /obj/structure/mirror{
@@ -111527,9 +111059,7 @@
 /turf/simulated/floor/plating/airless,
 /area/lamprey/catchall)
 "eHz" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/lamprey/catchall)
 "eHA" = (
 /obj/item/weapon/bananapeel,
@@ -131789,9 +131319,7 @@
 /area/centcom/evac)
 "fAs" = (
 /obj/structure/closet,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/centcom/evac)
 "fAt" = (
 /obj/machinery/vending/cigarette,

@@ -155,9 +155,7 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/ioufort)
 "z" = (
 /obj/effect/decal/cleanable/blood/gibs{

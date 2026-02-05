@@ -30849,9 +30849,7 @@
 	pixel_y = 32
 	},
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/asmaint)
 "baB" = (
 /obj/effect/decal/cleanable/dirt,

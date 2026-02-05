@@ -101,9 +101,7 @@
 	name = "\improper Derelict Game Room"
 	})
 "aA" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
@@ -147,9 +145,7 @@
 	name = "Derelict Starboard Maintenance"
 	})
 "aN" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/hallway/primary)
 "aO" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -1819,9 +1815,7 @@
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -2431,9 +2425,7 @@
 	name = "\improper Derelict Central Maintenance"
 	})
 "mP" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -2552,9 +2544,7 @@
 	},
 /area/derelict/singularity_engine)
 "no" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -2901,9 +2891,7 @@
 	icon_state = "1-2"
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
@@ -3456,9 +3444,7 @@
 /area/derelict/crew_quarters)
 "tc" = (
 /obj/item/weapon/coin/silver,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
@@ -3637,9 +3623,7 @@
 /area/derelict/crew_quarters)
 "ud" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -4049,9 +4033,7 @@
 /turf/simulated/floor/damaged/broken,
 /area/derelict/hallway/primary)
 "wk" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/eva{
 	icon_state = "kitchen";
 	name = "Derelict Kitchen"
@@ -4150,9 +4132,7 @@
 	name = "Derelict Port Maintenance"
 	})
 "wN" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/hallway/primary)
 "wO" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -4495,9 +4475,7 @@
 	},
 /area/derelict/bar)
 "yL" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/engine_storage{
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"
@@ -5061,9 +5039,7 @@
 	})
 "Cv" = (
 /obj/structure/closet,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -5950,9 +5926,7 @@
 	},
 /area/derelict/crew_quarters)
 "Hu" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/arrival)
 "Hv" = (
 /obj/item/seeds/potatoseed,
@@ -6139,9 +6113,7 @@
 	},
 /area/derelict/crew_quarters)
 "IM" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/singularity_engine)
 "IU" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -6865,9 +6837,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/equipment{
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
@@ -6976,9 +6946,7 @@
 /obj/machinery/door_control/taxi/abandoned{
 	pixel_y = -26
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/arrival)
 "MZ" = (
 /obj/structure/cable{
@@ -7360,9 +7328,7 @@
 	name = "\improper Derelict Game Room"
 	})
 "Pc" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/arrival)
 "Pj" = (
 /obj/structure/cable{
@@ -7611,9 +7577,7 @@
 /area/derelict/hallway/primary)
 "QL" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
@@ -7703,9 +7667,7 @@
 	name = "\improper Derelict Theatre"
 	})
 "Rf" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/bar)
 "Rh" = (
 /obj/machinery/vending/suitdispenser,
@@ -8244,9 +8206,7 @@
 /turf/space,
 /area)
 "TF" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
@@ -8312,9 +8272,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/storage/engine_storage{
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"
@@ -8946,9 +8904,7 @@
 /area/derelict/bar)
 "WR" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/singularity_engine)
 "WS" = (
 /obj/effect/decal/cleanable/dirt,

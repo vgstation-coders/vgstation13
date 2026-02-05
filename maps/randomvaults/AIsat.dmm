@@ -67,7 +67,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "ao" = (
 /obj/machinery/r_n_d/fabricator/mech,
@@ -210,14 +210,14 @@
 	dir = 8;
 	flickering = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "aE" = (
 /obj/effect/landmark/corpse/engineer/rig,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "aF" = (
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "aG" = (
 /obj/effect/decal/cleanable/dirt,
@@ -225,7 +225,7 @@
 /area/vault/AIsat)
 "aH" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "aI" = (
 /obj/machinery/light/small{
@@ -377,7 +377,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "aZ" = (
 /obj/structure/cable{
@@ -467,7 +467,7 @@
 /area/vault/AIsat)
 "bj" = (
 /obj/item/stack/rods,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "bk" = (
 /obj/structure/closet/crate{
@@ -543,17 +543,17 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "bq" = (
 /obj/machinery/power/solar/control/vault_listening,
 /obj/structure/cable,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "br" = (
 /obj/structure/cable,
 /obj/machinery/power/battery/smes/vault_listening,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "bs" = (
 /obj/structure/cable,
@@ -580,7 +580,7 @@
 "bv" = (
 /obj/machinery/turret/portable/AIvault,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/AIsat)
 "bw" = (
 /obj/effect/gibspawner/robot,

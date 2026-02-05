@@ -516,10 +516,10 @@
 	max_icon_states = 15
 	variance = 100
 
-/turf/simulated/floor/plating/airless/damaged
+/turf/simulated/floor/plating/damaged
 	var/broken_prob = 75
 
-/turf/simulated/floor/plating/airless/damaged/pick_icon_state()
+/turf/simulated/floor/plating/damaged/pick_icon_state()
 	if(prob(broken_prob))
 		break_tile()
 	else // Burnt states.
@@ -527,10 +527,16 @@
 
 	. = ..()
 
-/turf/simulated/floor/plating/airless/damaged/broken
+/turf/simulated/floor/plating/damaged/airless
+	name = "airless plating"
+	oxygen = 0.01
+	nitrogen = 0.01
+	temperature = TCMB
+
+/turf/simulated/floor/plating/damaged/airless/broken
 	broken_prob = 100
 
-/turf/simulated/floor/plating/airless/damaged/burnt
+/turf/simulated/floor/plating/damaged/airless/burnt
 	broken_prob = 0
 
 //syndie themed

@@ -1030,9 +1030,7 @@
 /area/vault/black_site_prism)
 "ng" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/black_site_prism)
 "nh" = (
 /turf/simulated/wall/invulnerable,

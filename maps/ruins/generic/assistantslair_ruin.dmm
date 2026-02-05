@@ -62,9 +62,7 @@
 	},
 /area/vault/assistantlair)
 "an" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "ao" = (
 /turf/simulated/floor/plating,
@@ -76,9 +74,7 @@
 /area/vault/assistantlair)
 "aq" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "ar" = (
 /obj/effect/decal/cleanable/dirt,
@@ -98,15 +94,11 @@
 /area/vault/assistantlair)
 "at" = (
 /obj/item/trash/discountchocolate,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "au" = (
 /obj/item/trash/chicken_bucket,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "av" = (
 /obj/machinery/light/small{
@@ -188,9 +180,7 @@
 /obj/structure/closet/emcloset,
 /obj/effect/decal/cleanable/cobweb2,
 /obj/item/clothing/gloves/anchor_arms,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "aH" = (
 /obj/structure/sign/poster,
@@ -244,9 +234,7 @@
 	pixel_y = -5
 	},
 /obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "aR" = (
 /obj/effect/decal/cleanable/dirt,
@@ -324,9 +312,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "bd" = (
 /obj/structure/table,
@@ -379,9 +365,7 @@
 "bm" = (
 /obj/structure/table,
 /obj/item/clothing/mask/scarf/blue,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "bn" = (
 /obj/structure/reagent_dispensers/fueltank,
@@ -611,9 +595,7 @@
 "cb" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "cc" = (
 /obj/structure/bed,
@@ -633,9 +615,7 @@
 /area/vault/assistantlair)
 "cf" = (
 /obj/structure/closet/firecloset,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "cg" = (
 /obj/effect/decal/cleanable/dirt,
@@ -846,9 +826,7 @@
 /area/vault/assistantlair)
 "cJ" = (
 /obj/effect/decal/cleanable/egg_smudge,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "cK" = (
 /obj/structure/closet/emcloset,
@@ -875,9 +853,7 @@
 /area/vault/assistantlair)
 "cO" = (
 /obj/structure/kitchenspike,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "cP" = (
 /obj/structure/closet,
@@ -952,16 +928,12 @@
 /obj/item/tool/crowbar,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/cigbutt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "da" = (
 /obj/structure/closet/emcloset,
 /obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "db" = (
 /obj/abstract/map/spawner/misc/seeds,
@@ -987,9 +959,7 @@
 	},
 /obj/item/trash/cigbutt,
 /mob/living/carbon/monkey,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "dg" = (
 /obj/structure/rack,

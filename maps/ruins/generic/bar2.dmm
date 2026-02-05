@@ -331,9 +331,7 @@
 	},
 /area/mining_bar)
 "aX" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_bar)
 "aY" = (
 /obj/structure/table/woodentable,

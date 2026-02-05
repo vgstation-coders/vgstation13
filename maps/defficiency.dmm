@@ -1989,9 +1989,7 @@
 /obj/structure/bed/chair{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/stripclub)
 "adW" = (
 /obj/structure/window/reinforced{
@@ -2150,9 +2148,7 @@
 	dir = 4
 	},
 /obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/stripclub)
 "aen" = (
 /obj/structure/window/reinforced{
@@ -2306,9 +2302,7 @@
 /area/maintenance/fpmaint)
 "aeK" = (
 /obj/item/trash/cigbutt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/stripclub)
 "aeL" = (
 /obj/structure/bed/chair{
@@ -2548,9 +2542,7 @@
 /obj/machinery/door/airlock/maintenance{
 	name = "Derelict Strip Club"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/stripclub)
 "afo" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -2995,9 +2987,7 @@
 /area/derelictparts/stripclub)
 "agp" = (
 /obj/structure/closet,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/stripclub)
 "agq" = (
 /obj/effect/decal/cleanable/generic,
@@ -7062,9 +7052,7 @@
 /area/engine/rust_control)
 "aoD" = (
 /obj/machinery/power/gyrotron,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/engine/rust_control)
 "aoE" = (
 /obj/machinery/power/gyrotron,
@@ -8533,9 +8521,7 @@
 /obj/machinery/portable_atmospherics/canister/air{
 	volume = 4000
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "ars" = (
 /turf/simulated/floor{
@@ -10651,9 +10637,7 @@
 	dir = 10
 	},
 /obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "avG" = (
 /obj/item/weapon/folder,
@@ -11663,9 +11647,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fport)
 "axx" = (
 /obj/structure/cable/yellow{
@@ -11703,15 +11685,11 @@
 "axA" = (
 /obj/structure/closet,
 /obj/item/weapon/storage/firstaid/regular,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "axB" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "axC" = (
 /obj/effect/decal/cleanable/dirt,
@@ -11759,9 +11737,7 @@
 	amount = 28
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "axI" = (
 /turf/simulated/floor/plating,
@@ -12551,9 +12527,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fport)
 "azg" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -13773,15 +13747,11 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fport)
 "aBb" = (
 /obj/structure/bed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aBc" = (
 /obj/effect/decal/cleanable/dirt,
@@ -13864,9 +13834,7 @@
 	dir = 4;
 	tag = "icon-maintguide (EAST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "aBk" = (
 /obj/machinery/door/airlock/maintenance{
@@ -14612,9 +14580,7 @@
 /obj/item/trash/cigbutt{
 	pixel_x = 6
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aCz" = (
 /obj/structure/bed/chair{
@@ -14710,9 +14676,7 @@
 	dir = 1;
 	name = "Science - Toxins Maintenance West (Bottom)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "aCH" = (
 /obj/structure/table,
@@ -16684,9 +16648,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fport)
 "aGg" = (
 /obj/structure/grille,
@@ -17642,14 +17604,10 @@
 /turf/simulated/floor/plating/airless,
 /area/solar/fport)
 "aHO" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fport)
 "aHP" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fport)
 "aHQ" = (
 /obj/structure/cable/yellow{
@@ -19742,9 +19700,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fport)
 "aLv" = (
 /obj/structure/cable/yellow{
@@ -19801,9 +19757,7 @@
 /area/derelictparts/fore)
 "aLz" = (
 /obj/structure/grille,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aLA" = (
 /obj/effect/decal/cleanable/dirt,
@@ -20873,9 +20827,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fport)
 "aNu" = (
 /obj/item/weapon/caution/cone,
@@ -20893,9 +20845,7 @@
 "aNw" = (
 /obj/structure/rack,
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aNx" = (
 /obj/structure/bed,
@@ -20903,9 +20853,7 @@
 	name = "xeno_spawn";
 	pixel_x = -1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aNy" = (
 /obj/structure/table/reinforced,
@@ -22550,9 +22498,7 @@
 /turf/simulated/floor/plating,
 /area/derelictparts/fore)
 "aQu" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aQv" = (
 /obj/effect/decal/cleanable/dirt,
@@ -22572,17 +22518,13 @@
 /area/derelictparts/fore)
 "aQw" = (
 /obj/structure/closet/emcloset,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aQx" = (
 /obj/machinery/space_heater,
 /obj/item/tool/wrench,
 /obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aQy" = (
 /obj/structure/disposalpipe/segment,
@@ -23484,9 +23426,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fport)
 "aSc" = (
 /obj/item/weapon/shard{
@@ -23496,9 +23436,7 @@
 /area/derelictparts/fore)
 "aSd" = (
 /obj/machinery/space_heater,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aSe" = (
 /obj/effect/decal/cleanable/dirt,
@@ -23507,9 +23445,7 @@
 	},
 /obj/item/trash/cigbutt,
 /mob/living/carbon/monkey,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aSf" = (
 /obj/structure/cable/yellow{
@@ -25498,9 +25434,7 @@
 /obj/structure/closet,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/storage/belt/slim,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aVD" = (
 /obj/structure/disposalpipe/segment,
@@ -26211,9 +26145,7 @@
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aWY" = (
 /obj/item/weapon/pen,
@@ -26886,9 +26818,7 @@
 /area)
 "aYp" = (
 /obj/item/trash/cigbutt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aYq" = (
 /obj/item/weapon/stock_parts/matter_bin,
@@ -26902,9 +26832,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/rods,
 /obj/item/clothing/glasses/scanner/meson,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aYt" = (
 /obj/structure/door_assembly/door_assembly_mai{
@@ -27734,9 +27662,7 @@
 /area/derelictparts/fore)
 "aZX" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aZY" = (
 /obj/effect/decal/cleanable/dirt,
@@ -27748,9 +27674,7 @@
 /turf/simulated/wall,
 /area/derelictparts/fore)
 "baa" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "bab" = (
 /obj/structure/cable/yellow{
@@ -28591,9 +28515,7 @@
 /obj/structure/rack,
 /obj/item/device/paicard,
 /obj/item/weapon/stock_parts/capacitor,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "bbt" = (
 /turf/simulated/wall,
@@ -32942,9 +32864,7 @@
 	},
 /obj/structure/disposalpipe/segment,
 /obj/effect/nmpi,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fsmaint)
 "biM" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -34050,9 +33970,7 @@
 	dir = 4
 	},
 /obj/item/weapon/camera_assembly,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/library)
 "bkM" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -34092,9 +34010,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Non-Fiction)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/library)
 "bkS" = (
 /obj/machinery/light_construct/small{
@@ -34110,9 +34026,7 @@
 	dir = 1
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/library)
 "bkU" = (
 /obj/structure/grille,
@@ -35051,16 +34965,12 @@
 /obj/structure/bed/chair/comfy/black{
 	dir = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/library)
 "bmu" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/library)
 "bmv" = (
 /obj/item/trash/cigbutt{
@@ -37781,9 +37691,7 @@
 /turf/simulated/floor/plating,
 /area/derelictparts/library)
 "brr" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/library)
 "brs" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -38427,9 +38335,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 6
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/library)
 "bsK" = (
 /obj/effect/decal/cleanable/generic,
@@ -38456,9 +38362,7 @@
 	pixel_x = 1;
 	pixel_y = 5
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/library)
 "bsN" = (
 /obj/structure/bed/chair/comfy/black{
@@ -38473,9 +38377,7 @@
 	dir = 1
 	},
 /obj/machinery/disposal,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/library)
 "bsP" = (
 /obj/structure/disposalpipe/segment,
@@ -41253,9 +41155,7 @@
 /obj/structure/rack,
 /obj/item/weapon/pen,
 /obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -41290,9 +41190,7 @@
 	})
 "bxE" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -41319,9 +41217,7 @@
 	name = "Aft Port Derelict"
 	})
 "bxI" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -41899,9 +41795,7 @@
 	name = "xeno_spawn";
 	pixel_x = -1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "byS" = (
 /turf/simulated/floor{
@@ -41971,9 +41865,7 @@
 "byZ" = (
 /obj/structure/closet,
 /obj/item/weapon/circuitboard/air_alarm,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -41986,18 +41878,14 @@
 "bzb" = (
 /obj/effect/decal/cleanable/generic,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
 "bzc" = (
 /obj/structure/rack,
 /obj/item/weapon/spacecash,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -42014,9 +41902,7 @@
 	})
 "bze" = (
 /obj/machinery/space_heater,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -42443,9 +42329,7 @@
 /obj/item/clothing/mask/gas,
 /obj/item/device/multitool,
 /obj/item/clothing/glasses/scanner/science,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bzW" = (
 /obj/item/weapon/shard{
@@ -42586,9 +42470,7 @@
 "bAj" = (
 /obj/structure/table,
 /obj/item/clothing/glasses/scanner/science,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -42627,9 +42509,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -42662,9 +42542,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -42783,9 +42661,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -43161,9 +43037,7 @@
 	dir = 1
 	},
 /obj/structure/window/reinforced/tinted,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bBf" = (
 /obj/structure/door_assembly/door_assembly_mai{
@@ -43173,9 +43047,7 @@
 /area/derelictparts/fsderelict)
 "bBg" = (
 /obj/structure/reagent_dispensers/watertank,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bBh" = (
 /obj/structure/girder,
@@ -43183,9 +43055,7 @@
 /area/derelictparts/fsderelict)
 "bBi" = (
 /obj/structure/reagent_dispensers/fueltank,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bBj" = (
 /obj/effect/decal/cleanable/dirt,
@@ -43274,9 +43144,7 @@
 	dir = 10
 	},
 /mob/living/simple_animal/mouse/common/gray,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -43732,9 +43600,7 @@
 /obj/structure/table,
 /obj/item/weapon/folder,
 /obj/item/weapon/pen,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bCj" = (
 /obj/effect/decal/cleanable/dirt,
@@ -43747,18 +43613,14 @@
 /obj/structure/closet/crate,
 /obj/item/weapon/book/manual/engineering_construction,
 /obj/item/weapon/coin/silver,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bCl" = (
 /obj/effect/decal/cleanable/blood/gibs/robot{
 	icon_state = "gib7"
 	},
 /obj/item/weapon/stock_parts/capacitor,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bCm" = (
 /obj/item/trash/cigbutt,
@@ -43898,9 +43760,7 @@
 	name = "Aft Port Derelict"
 	})
 "bCC" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -44376,9 +44236,7 @@
 "bDv" = (
 /obj/item/stack/sheet/cardboard,
 /obj/item/weapon/storage/fancy/matchbox,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bDw" = (
 /obj/item/tool/crowbar,
@@ -44404,9 +44262,7 @@
 "bDA" = (
 /obj/item/device/radio,
 /obj/item/device/flashlight,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bDB" = (
 /obj/item/stack/sheet/cardboard,
@@ -44442,9 +44298,7 @@
 	})
 "bDF" = (
 /obj/structure/table,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -44472,9 +44326,7 @@
 "bDI" = (
 /obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -44490,9 +44342,7 @@
 	})
 "bDK" = (
 /obj/structure/grille,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -44509,9 +44359,7 @@
 	pixel_x = -1
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -44966,9 +44814,7 @@
 "bEG" = (
 /obj/item/weapon/stock_parts/manipulator,
 /obj/machinery/space_heater/air_conditioner,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bEH" = (
 /obj/item/tool/wirecutters,
@@ -44976,9 +44822,7 @@
 	dir = 8
 	},
 /obj/effect/decal/cleanable/generic,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bEI" = (
 /obj/effect/decal/cleanable/dirt,
@@ -45006,9 +44850,7 @@
 	name = "Aft Port Derelict"
 	})
 "bEN" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "bEO" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -45084,9 +44926,7 @@
 "bET" = (
 /obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -45119,9 +44959,7 @@
 	icon_state = "gibdown"
 	},
 /obj/item/tool/screwdriver,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -45160,9 +44998,7 @@
 	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
 	pixel_y = 32
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -45367,9 +45203,7 @@
 /turf/simulated/floor/plating,
 /area/derelictparts/fsderelict)
 "bFx" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bFy" = (
 /obj/structure/closet/emcloset/vox,
@@ -45385,9 +45219,7 @@
 /area/derelictparts/fsderelict)
 "bFA" = (
 /obj/item/weapon/broken_bottle,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bFB" = (
 /obj/effect/decal/cleanable/dirt,
@@ -45402,9 +45234,7 @@
 /obj/structure/table,
 /obj/effect/decal/cleanable/cobweb,
 /obj/abstract/map/spawner/floorpill,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bFD" = (
 /obj/effect/decal/cleanable/dirt,
@@ -45476,9 +45306,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (WEST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -45503,9 +45331,7 @@
 	dir = 4;
 	pixel_x = -22
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -45618,9 +45444,7 @@
 	pixel_x = -10;
 	pixel_y = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -46040,28 +45864,20 @@
 /area/derelictparts/fsderelict)
 "bGT" = (
 /obj/item/seeds/deathnettleseed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bGU" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/grille/broken,
 /obj/effect/decal/cleanable/ash,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bGV" = (
 /obj/structure/grille,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
 "bGW" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "bGX" = (
 /turf/simulated/wall/shuttle,
@@ -46693,9 +46509,7 @@
 	})
 "bIg" = (
 /obj/machinery/constructable_frame/machine_frame,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -46703,9 +46517,7 @@
 /obj/structure/table,
 /obj/item/weapon/paper_bin,
 /obj/item/weapon/pen,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -47062,18 +46874,14 @@
 	dir = 1;
 	tag = "icon-maintguide (NORTH)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "bIU" = (
 /obj/machinery/door/poddoor{
 	id_tag = "trash";
 	name = "disposal bay door"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "bIV" = (
 /obj/structure/shuttle/diag_wall/smooth,
@@ -47165,9 +46973,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -47619,9 +47425,7 @@
 	id_tag = "trash";
 	name = "disposal bay door"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "bKf" = (
 /obj/structure/cable/yellow{
@@ -47637,9 +47441,7 @@
 /obj/docking_port/destination/elite_syndie/in_station{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "bKg" = (
 /obj/machinery/door/poddoor{
@@ -47681,9 +47483,7 @@
 /obj/item/trash/snack_bowl,
 /obj/item/trash/candy,
 /obj/item/trash/chips,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -47774,9 +47574,7 @@
 "bKs" = (
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -48022,9 +47820,7 @@
 	dir = 1;
 	tag = "icon-maintguide (NORTH)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area)
 "bLa" = (
 /obj/effect/landmark/start{
@@ -48043,9 +47839,7 @@
 "bLc" = (
 /obj/item/weapon/camera_assembly,
 /obj/item/weapon/camera_assembly,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -48053,9 +47847,7 @@
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
 /obj/machinery/space_heater/air_conditioner,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -48077,9 +47869,7 @@
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -48087,9 +47877,7 @@
 /obj/machinery/door/airlock{
 	name = "Unit 5"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -48128,9 +47916,7 @@
 /obj/machinery/light_construct/small{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -48657,9 +48443,7 @@
 /turf/simulated/wall/r_wall,
 /area/derelictparts/port)
 "bMm" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bMn" = (
 /obj/effect/decal/cleanable/vomit,
@@ -49095,9 +48879,7 @@
 	dir = 1
 	},
 /obj/machinery/portable_atmospherics/canister/air,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -49109,9 +48891,7 @@
 	pixel_x = 5;
 	pixel_y = 3
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -49161,9 +48941,7 @@
 	dir = 4
 	},
 /obj/item/device/assembly/prox_sensor,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -49876,9 +49654,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fstarboard)
 "bOj" = (
 /obj/structure/cable/yellow{
@@ -49967,9 +49743,7 @@
 	dir = 1;
 	on = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -50217,9 +49991,7 @@
 /obj/structure/closet,
 /obj/item/mounted/poster,
 /obj/item/mounted/poster,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -50276,9 +50048,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fstarboard)
 "bPb" = (
 /obj/machinery/vending/assist,
@@ -50688,9 +50458,7 @@
 	icon_state = "2-4"
 	},
 /obj/item/weapon/folder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -50748,9 +50516,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -50807,9 +50573,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "bPY" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fstarboardsolar)
 "bPZ" = (
 /obj/structure/grille,
@@ -50930,9 +50694,7 @@
 /obj/item/weapon/stool,
 /obj/item/weapon/storage/toolbox/mechanical,
 /obj/item/weapon/storage/box,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -51052,9 +50814,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bQw" = (
 /turf/simulated/wall,
@@ -51090,16 +50850,12 @@
 	desc = "IT'S NOT MAINTENANCE";
 	name = "Kuma"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bQC" = (
 /obj/abstract/map/spawner/maint,
 /obj/item/voucher/free_item/glowing,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bQD" = (
 /obj/structure/grille,
@@ -51374,9 +51130,7 @@
 "bRi" = (
 /obj/structure/closet/crate,
 /obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -51462,9 +51216,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fstarboardsolar)
 "bRr" = (
 /obj/structure/cable/yellow{
@@ -51493,9 +51245,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fstarboard)
 "bRu" = (
 /obj/structure/cable/yellow{
@@ -51545,9 +51295,7 @@
 /area/solar/fstarboard)
 "bRA" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fstarboard)
 "bRB" = (
 /obj/structure/cable/yellow{
@@ -51602,9 +51350,7 @@
 	icon_state = "0-2";
 	pixel_y = 1
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fstarboard)
 "bRG" = (
 /obj/structure/cable/yellow{
@@ -51627,9 +51373,7 @@
 /obj/item/stack/rods,
 /obj/structure/reagent_dispensers/watertank,
 /obj/item/weapon/circuitboard/telecomms/receiver,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
@@ -51696,9 +51440,7 @@
 	pixel_x = 2;
 	pixel_y = 9
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bRS" = (
 /obj/structure/closet,
@@ -51732,9 +51474,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bRV" = (
 /obj/structure/kitchenspike,
@@ -51796,9 +51536,7 @@
 "bSe" = (
 /obj/item/stack/rods,
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bSf" = (
 /obj/machinery/door/airlock/maintenance{
@@ -51808,9 +51546,7 @@
 	},
 /obj/structure/window/barricade/full/block,
 /obj/effect/decal/cleanable/blood/drip,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bSg" = (
 /obj/effect/decal/cleanable/pie_smudge{
@@ -52525,9 +52261,7 @@
 /obj/structure/closet,
 /obj/item/weapon/storage/fancy/cigarettes/dromedaryco,
 /obj/item/weapon/pen,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "bTF" = (
 /obj/item/trash/cigbutt{
@@ -52551,9 +52285,7 @@
 	icon_state = "gib3"
 	},
 /obj/effect/decal/cleanable/ash,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -52678,9 +52410,7 @@
 /obj/structure/sign/deathsposal{
 	pixel_y = 32
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/incinerator)
 "bTV" = (
 /obj/structure/grille,
@@ -52713,9 +52443,7 @@
 	name = "Gas Pump";
 	on = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/incinerator)
 "bTX" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -52740,9 +52468,7 @@
 "bUa" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/diner)
 "bUb" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -52785,9 +52511,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/diner)
 "bUg" = (
 /obj/structure/table,
@@ -53073,9 +52797,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "bUL" = (
 /obj/structure/cable/yellow{
@@ -53213,9 +52935,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -53351,9 +53071,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fstarboard)
 "bVh" = (
 /obj/structure/cable/yellow{
@@ -53361,9 +53079,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fstarboard)
 "bVi" = (
 /obj/structure/disposalpipe/segment{
@@ -53441,9 +53157,7 @@
 /obj/structure/sign/nosmoking_2{
 	pixel_x = -28
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/incinerator)
 "bVs" = (
 /obj/effect/decal/cleanable/dirt,
@@ -53591,16 +53305,12 @@
 	},
 /obj/item/weapon/storage/bag/plants,
 /obj/item/weapon/cell/high,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bVL" = (
 /obj/effect/decal/cleanable/ash,
 /obj/structure/vendomatpack/hydronutrients,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bVM" = (
 /obj/machinery/light/small{
@@ -53902,9 +53612,7 @@
 /area/solar/fstarboard)
 "bWw" = (
 /obj/item/stack/sheet/cardboard,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bWx" = (
 /obj/structure/grille,
@@ -53977,9 +53685,7 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/insulated/visible,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/incinerator)
 "bWE" = (
 /obj/machinery/atmospherics/pipe/simple/general/visible{
@@ -54047,9 +53753,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bWM" = (
 /obj/item/weapon/stool,
@@ -54104,9 +53808,7 @@
 /area/derelictparts/port)
 "bWT" = (
 /obj/structure/table,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/diner)
 "bWU" = (
 /obj/structure/grille,
@@ -54311,9 +54013,7 @@
 	icon_state = "1-2"
 	},
 /obj/item/tool/crowbar,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -54626,9 +54326,7 @@
 	dir = 4
 	},
 /obj/item/trash/cigbutt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bYd" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil{
@@ -54778,9 +54476,7 @@
 /area/crew_quarters/fitness)
 "bYv" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -54820,9 +54516,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -55012,9 +54706,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fstarboard)
 "bYU" = (
 /obj/structure/cable/yellow{
@@ -55033,15 +54725,11 @@
 /turf/simulated/floor/plating/airless,
 /area/solar/fstarboard)
 "bYV" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bYW" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bYX" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible{
@@ -55119,9 +54807,7 @@
 /obj/machinery/atmospherics/unary/portables_connector{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/incinerator)
 "bZe" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible{
@@ -55181,9 +54867,7 @@
 	name = "Station Intercom (General)";
 	pixel_y = -29
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/diner)
 "bZl" = (
 /obj/effect/decal/cleanable/dirt,
@@ -55301,9 +54985,7 @@
 	tag = "icon-warning (EAST)"
 	},
 /obj/item/seeds/cherryseed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "bZx" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -55432,9 +55114,7 @@
 	name = "Derelict Parts Access";
 	req_access_txt = "12"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -55650,9 +55330,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cah" = (
 /obj/structure/grille,
@@ -55678,9 +55356,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cak" = (
 /obj/structure/grille,
@@ -56181,9 +55857,7 @@
 	pixel_y = 1
 	},
 /obj/item/tool/wrench,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "cbi" = (
 /obj/structure/cable/yellow{
@@ -56211,9 +55885,7 @@
 "cbk" = (
 /obj/structure/rack,
 /obj/item/clothing/suit/ianshirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cbl" = (
 /obj/machinery/constructable_frame/machine_frame,
@@ -56235,9 +55907,7 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cbn" = (
 /obj/item/clothing/gloves/black,
@@ -56432,9 +56102,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cbC" = (
 /obj/abstract/map/spawner/theater/costumes,
@@ -56721,9 +56389,7 @@
 /area/crew_quarters/fitness)
 "cch" = (
 /obj/structure/bed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -56747,9 +56413,7 @@
 /obj/structure/bed/chair/office/light{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "ccl" = (
 /turf/simulated/floor/damaged,
@@ -56811,9 +56475,7 @@
 	dir = 4;
 	on = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "ccv" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
@@ -56880,9 +56542,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "ccE" = (
 /obj/structure/closet,
@@ -57168,30 +56828,22 @@
 	icon_state = "1-2"
 	},
 /obj/item/weapon/light/bulb,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
 "cdn" = (
 /obj/structure/table/reinforced,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "cdo" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "cdp" = (
 /obj/structure/bed/chair{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "cdq" = (
 /obj/effect/decal/cleanable/dirt,
@@ -57266,9 +56918,7 @@
 	icon_state = "gibleg"
 	},
 /obj/structure/kitchenspike,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -57280,9 +56930,7 @@
 	icon_state = "gibmid3"
 	},
 /obj/structure/kitchenspike,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -57293,9 +56941,7 @@
 /obj/effect/decal/cleanable/blood/gibs{
 	icon_state = "gib2"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -57332,9 +56978,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cdH" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -57350,9 +56994,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cdJ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -57364,9 +57006,7 @@
 "cdK" = (
 /obj/item/weapon/stool,
 /obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cdL" = (
 /obj/structure/reagent_dispensers/watertank,
@@ -57382,9 +57022,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cdM" = (
 /obj/effect/decal/cleanable/dirt,
@@ -57418,9 +57056,7 @@
 	icon_state = "poster8";
 	pixel_y = 32
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cdQ" = (
 /turf/simulated/floor/damaged,
@@ -57676,9 +57312,7 @@
 /obj/effect/decal/cleanable/generic,
 /obj/item/weapon/reagent_containers/glass/rag,
 /obj/item/tool/wrench,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -57702,9 +57336,7 @@
 	})
 "cex" = (
 /obj/item/tool/wirecutters,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -57734,18 +57366,14 @@
 "ceC" = (
 /obj/structure/table,
 /obj/abstract/map/spawner/floorpill/guaranteed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "ceD" = (
 /obj/structure/table,
 /obj/item/tool/hemostat,
 /obj/item/weapon/storage/box/labels,
 /obj/item/weapon/hand_labeler,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "ceE" = (
 /obj/effect/decal/cleanable/blood{
@@ -57755,9 +57383,7 @@
 	icon_state = "gibdown1"
 	},
 /mob/living/simple_animal/hostile/scarybat/cult,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -57769,9 +57395,7 @@
 	icon_state = "gib4"
 	},
 /mob/living/simple_animal/hostile/scarybat/cult,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -57806,9 +57430,7 @@
 /area/derelictparts/port)
 "ceJ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "ceK" = (
 /obj/item/stack/rods,
@@ -57878,9 +57500,7 @@
 /area/derelictparts/port)
 "ceS" = (
 /obj/structure/bed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "ceT" = (
 /obj/structure/table,
@@ -57914,9 +57534,7 @@
 /obj/structure/closet,
 /obj/item/device/multitool,
 /obj/item/clothing/glasses/sunglasses,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "ceY" = (
 /obj/structure/grille,
@@ -58298,9 +57916,7 @@
 "cfN" = (
 /obj/structure/table,
 /obj/item/weapon/storage/firstaid/fire,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "cfO" = (
 /obj/structure/table,
@@ -58341,9 +57957,7 @@
 /obj/effect/decal/cleanable/blood/gibs{
 	icon_state = "gibtorso"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -58368,9 +57982,7 @@
 	icon_state = "gibhead"
 	},
 /obj/effect/decal/cleanable/crayon/fuckyou,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -58396,9 +58008,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cfY" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -58413,9 +58023,7 @@
 /obj/item/stack/cable_coil/yellow{
 	amount = 6
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cga" = (
 /obj/item/weapon/stock_parts/matter_bin,
@@ -58455,9 +58063,7 @@
 "cgf" = (
 /obj/item/weapon/stool,
 /obj/item/trash/cigbutt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cgg" = (
 /obj/item/weapon/pen,
@@ -58743,9 +58349,7 @@
 /obj/effect/decal/cleanable/blood/gibs/robot{
 	icon_state = "gibdown"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -58783,9 +58387,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "cgO" = (
 /obj/machinery/door/airlock/glass_medical{
@@ -58868,15 +58470,11 @@
 "cha" = (
 /obj/effect/decal/cleanable/generic,
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "chb" = (
 /obj/structure/grille,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "chc" = (
 /obj/item/weapon/stool,
@@ -59211,9 +58809,7 @@
 	},
 /obj/effect/decal/cleanable/generic,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -59230,9 +58826,7 @@
 	name = "Aft Starboard Derelict"
 	})
 "chL" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -59260,9 +58854,7 @@
 "chO" = (
 /obj/structure/table,
 /obj/machinery/reagentgrinder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "chP" = (
 /obj/machinery/constructable_frame/machine_frame,
@@ -59320,9 +58912,7 @@
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor6"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -59376,9 +58966,7 @@
 "cic" = (
 /obj/structure/rack,
 /obj/item/weapon/circuitboard/arcade,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cid" = (
 /obj/structure/bed,
@@ -59433,9 +59021,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cik" = (
 /obj/structure/grille,
@@ -59452,18 +59038,14 @@
 	name = "Station Intercom (General)";
 	pixel_y = -29
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/vault)
 "cim" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/space_heater,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/item/weapon/stock_parts/micro_laser,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/vault)
 "cin" = (
 /obj/item/weapon/stool,
@@ -59780,9 +59362,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "ciW" = (
 /obj/item/tool/crowbar,
@@ -59899,9 +59479,7 @@
 /obj/item/clothing/mask/gas,
 /obj/item/weapon/extinguisher,
 /obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cjm" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -59974,9 +59552,7 @@
 	dir = 4
 	},
 /obj/structure/grille,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/vault)
 "cju" = (
 /obj/machinery/door/airlock{
@@ -60268,9 +59844,7 @@
 	dir = 4;
 	tag = "icon-maintguide (EAST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cjW" = (
 /obj/structure/cable/yellow{
@@ -60337,9 +59911,7 @@
 	dir = 5;
 	tag = "icon-maintguide (NORTHEAST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cka" = (
 /obj/machinery/door/firedoor/border_only{
@@ -60501,9 +60073,7 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -60538,9 +60108,7 @@
 	pixel_x = -6;
 	pixel_y = 5
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cks" = (
 /obj/effect/decal/cleanable/blood/gibs/robot{
@@ -60572,9 +60140,7 @@
 "ckw" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/girder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "ckx" = (
 /obj/structure/cable/yellow{
@@ -60677,9 +60243,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "ckD" = (
 /obj/item/stack/sheet/cardboard,
@@ -60788,9 +60352,7 @@
 /obj/item/tool/crowbar,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/cigbutt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/vault)
 "ckO" = (
 /obj/effect/decal/cleanable/dirt,
@@ -61044,9 +60606,7 @@
 	pixel_y = -4
 	},
 /obj/item/clothing/glasses/scanner/meson,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -61114,9 +60674,7 @@
 	icon_state = "gib7"
 	},
 /obj/item/weapon/stock_parts/micro_laser,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -61144,9 +60702,7 @@
 /area/derelictparts/medbay)
 "clC" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -61206,9 +60762,7 @@
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "clM" = (
 /obj/item/seeds/bananaseed,
@@ -61227,9 +60781,7 @@
 /obj/machinery/light_construct/small,
 /obj/item/weapon/coin/silver,
 /obj/item/clothing/glasses/scanner/science,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "clO" = (
 /obj/effect/decal/cleanable/dirt,
@@ -61801,9 +61353,7 @@
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor6"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
 "cmN" = (
 /mob/living/simple_animal/hostile/bigroach,
@@ -62935,9 +62485,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -62957,9 +62505,7 @@
 	dir = 4
 	},
 /obj/item/weapon/reagent_containers/syringe,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -63013,9 +62559,7 @@
 /obj/effect/decal/cleanable/blood/gibs/robot{
 	icon_state = "gib5"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "cpl" = (
 /obj/effect/decal/cleanable/generic,
@@ -63034,9 +62578,7 @@
 /obj/item/tool/wrench,
 /obj/item/tool/crowbar/red,
 /obj/item/device/silicate_sprayer/empty,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/aft)
 "cpn" = (
 /obj/effect/decal/cleanable/dirt,
@@ -63116,9 +62658,7 @@
 /obj/structure/closet,
 /obj/item/weapon/storage/belt/utility,
 /obj/item/weapon/tank/emergency_oxygen,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "cpz" = (
 /obj/effect/decal/cleanable/dirt,
@@ -63498,9 +63038,7 @@
 	})
 "cqi" = (
 /obj/item/device/flashlight,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -63581,9 +63119,7 @@
 /obj/structure/window/reinforced/tinted{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/aft)
 "cqv" = (
 /obj/item/weapon/newspaper,
@@ -63593,9 +63129,7 @@
 /area/derelictparts/aft)
 "cqw" = (
 /obj/item/weapon/stool,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/aft)
 "cqx" = (
 /turf/simulated/wall,
@@ -64151,9 +63685,7 @@
 /obj/structure/closet,
 /obj/item/weapon/dice,
 /obj/item/weapon/stock_parts/scanning_module,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -64168,9 +63700,7 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 7
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/aft)
 "crs" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -64323,9 +63853,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "crK" = (
 /obj/machinery/light_switch{
@@ -64448,9 +63976,7 @@
 	},
 /obj/machinery/space_heater,
 /obj/item/weapon/stock_parts/manipulator,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "csa" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -64711,9 +64237,7 @@
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "csA" = (
 /obj/structure/window/reinforced,
@@ -65027,9 +64551,7 @@
 /obj/structure/bed/chair{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
@@ -65107,9 +64629,7 @@
 /area/derelictparts/aft)
 "ctw" = (
 /obj/structure/grille,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/aft)
 "ctx" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -66900,9 +66420,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/aport)
 "cxh" = (
 /obj/structure/rack,
@@ -67443,9 +66961,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/aport)
 "cyp" = (
 /obj/structure/grille,
@@ -67958,9 +67474,7 @@
 	dir = 4
 	},
 /obj/item/trash/chips/cheesie,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/aft)
 "czy" = (
 /obj/structure/bed/chair/office/dark{
@@ -69373,9 +68887,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/aport)
 "cCc" = (
 /obj/structure/grille,
@@ -69977,9 +69489,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/aport)
 "cDg" = (
 /obj/structure/cable/yellow{
@@ -71121,9 +70631,7 @@
 /turf/simulated/floor/plating/airless,
 /area/solar/aport)
 "cEP" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/aport)
 "cEQ" = (
 /obj/structure/cable/yellow{
@@ -71160,9 +70668,7 @@
 /obj/effect/landmark{
 	name = "bluespacerift"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/aport)
 "cES" = (
 /turf/simulated/floor/plating,
@@ -71983,9 +71489,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/aport)
 "cGv" = (
 /obj/structure/grille,
@@ -72679,9 +72183,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/aport)
 "cHN" = (
 /obj/structure/cable/yellow{
@@ -74394,9 +73896,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/aport)
 "cKM" = (
 /obj/structure/grille,
@@ -83171,9 +82671,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/astarboard)
 "cZD" = (
 /obj/structure/cable/yellow{
@@ -83191,9 +82689,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/astarboard)
 "cZE" = (
 /obj/structure/cable/yellow{
@@ -83276,9 +82772,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/astarboard)
 "cZJ" = (
 /obj/structure/cable/yellow,
@@ -83309,9 +82803,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/astarboard)
 "cZN" = (
 /obj/structure/cable/yellow{
@@ -83329,9 +82821,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/astarboard)
 "cZO" = (
 /obj/structure/cable/yellow{
@@ -83339,9 +82829,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/astarboard)
 "cZP" = (
 /obj/structure/cable/yellow{
@@ -83367,9 +82855,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/astarboard)
 "cZR" = (
 /obj/structure/cable/yellow{
@@ -83382,9 +82868,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/astarboard)
 "cZS" = (
 /obj/docking_port/destination/elite_syndie/near_station{
@@ -83395,9 +82879,7 @@
 "cZT" = (
 /obj/structure/cable/yellow,
 /obj/machinery/power/solar/panel/tracker,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/astarboard)
 "cZU" = (
 /obj/docking_port/destination/syndicate/southeast,
@@ -109349,9 +108831,7 @@
 	dir = 1
 	},
 /obj/machinery/recharge_station,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/secret)
 "evW" = (
 /obj/item/stack/rods,
@@ -109426,9 +108906,7 @@
 /area/derelict/secret)
 "ewh" = (
 /obj/structure/ore_box,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/secret)
 "ewi" = (
 /obj/effect/decal/cleanable/dirt,
@@ -109751,9 +109229,7 @@
 	name = "Mining Station Maintenance";
 	req_access_txt = "48"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "ewT" = (
 /obj/structure/sign/securearea{
@@ -109864,9 +109340,7 @@
 	icon_state = "4-8"
 	},
 /obj/item/weapon/storage/box/lights/mixed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "exf" = (
 /obj/machinery/light/small{
@@ -109892,15 +109366,11 @@
 	},
 /area/derelict/secret)
 "exi" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "exj" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "exk" = (
 /obj/machinery/power/terminal{
@@ -109914,9 +109384,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/secret)
 "exl" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "exm" = (
 /obj/structure/table,
@@ -109970,9 +109438,7 @@
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "ext" = (
 /obj/structure/cable/yellow{
