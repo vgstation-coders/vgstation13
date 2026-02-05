@@ -85787,10 +85787,6 @@
 	name = "plating"
 	},
 /area/prison/solitary)
-"dgF" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "dgG" = (
 /obj/item/weapon/storage/fancy/cigarettes,
 /obj/structure/table/reinforced,
@@ -86137,11 +86133,6 @@
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"dhE" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/prison/solitary)
 "dhF" = (
 /obj/structure/bed,
 /turf/unsimulated/floor/scorched{
@@ -86191,9 +86182,6 @@
 	icon_state = "dark neutral stripe"
 	},
 /area/centcom/suppy)
-"dhM" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "dhN" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
@@ -404892,7 +404880,7 @@ dgw
 dgV
 dgm
 dgE
-dhM
+dhN
 dgm
 aaa
 aaa
@@ -406397,7 +406385,7 @@ dgm
 dgA
 dgB
 dgm
-dhE
+dgC
 dgB
 dgm
 aaa
@@ -411916,7 +411904,7 @@ aaa
 aaa
 aaa
 dgm
-dgF
+dgx
 dgW
 dgm
 dhG
@@ -412422,7 +412410,7 @@ dgE
 dgB
 dgm
 dgB
-dhE
+dgC
 dgm
 aaa
 aaa

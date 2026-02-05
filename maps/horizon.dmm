@@ -45471,10 +45471,6 @@
 	name = "plating"
 	},
 /area/centcom/striketeam)
-"bOz" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "bOA" = (
 /obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor/broken{
@@ -45928,11 +45924,6 @@
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"bPO" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/prison/solitary)
 "bPP" = (
 /obj/structure/bed,
 /turf/unsimulated/floor/scorched{
@@ -45982,9 +45973,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/striketeam)
-"bPW" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "bPX" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
@@ -366791,7 +366779,7 @@ aaa
 aaa
 aaa
 bOj
-bOz
+bOH
 bPc
 bOj
 bPN
@@ -367297,7 +367285,7 @@ bOA
 bPd
 bOj
 bOI
-bPW
+bPX
 bOj
 aaa
 aaa
@@ -368802,7 +368790,7 @@ bOj
 bOC
 bOF
 bOj
-bPO
+bOE
 bOF
 bOj
 aaa
@@ -374827,7 +374815,7 @@ bOI
 bOF
 bOj
 bOF
-bPO
+bOE
 bOj
 aaa
 aaa

@@ -6943,9 +6943,6 @@
 	icon_state = "yellowfull"
 	},
 /area/maintenance/fportsolar)
-"bNG" = (
-/turf/simulated/floor/damaged/airless/burnt,
-/area/mine/abandoned)
 "bNT" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
@@ -6999,9 +6996,6 @@
 	},
 /turf/space,
 /area/solar/aport)
-"bPa" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelictparts/library)
 "bPy" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -10727,14 +10721,6 @@
 /area/maintenance/ghettomorgue{
 	name = "Abandoned Smithy"
 	})
-"cUz" = (
-/obj/effect/alien/weeds,
-/turf/simulated/floor/damaged/airless/broken,
-/area/mine/abandoned)
-"cUX" = (
-/obj/effect/alien/weeds,
-/turf/simulated/floor/damaged/airless/burnt,
-/area/mine/abandoned)
 "cVq" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -14334,10 +14320,6 @@
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"dgx" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "dgy" = (
 /obj/structure/bed,
 /turf/unsimulated/floor{
@@ -14356,11 +14338,6 @@
 "dgB" = (
 /turf/unsimulated/floor{
 	name = "plating"
-	},
-/area/prison/solitary)
-"dgC" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dgD" = (
@@ -14779,9 +14756,6 @@
 	icon_state = "dark neutral stripe"
 	},
 /area/centcom/suppy)
-"dhM" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "dhN" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
@@ -43500,9 +43474,6 @@
 	tag = "icon-darkred (NORTH)"
 	},
 /area/security/brig)
-"eVD" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/shuttle/salvage/derelict)
 "eVE" = (
 /obj/structure/table,
 /obj/item/weapon/aiModule/standard/protectStation,
@@ -54964,9 +54935,6 @@
 	},
 /turf/simulated/floor,
 /area/supply/qm)
-"ihO" = (
-/turf/simulated/floor/damaged,
-/area/mine/abandoned)
 "ihQ" = (
 /turf/simulated/floor,
 /area/supply/qm)
@@ -58448,9 +58416,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
-"jlT" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/fsmaint)
 "jlV" = (
 /obj/machinery/disposal,
 /obj/structure/disposalpipe/trunk{
@@ -61800,9 +61765,6 @@
 	icon_state = "dark"
 	},
 /area/security/hos)
-"kdl" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/fore)
 "kds" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/cable/yellow{
@@ -73765,9 +73727,6 @@
 	temperature = 80
 	},
 /area/derelict/bridge/ai_upload)
-"naH" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelict/bridge/ai_upload)
 "naS" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -78997,9 +78956,6 @@
 	},
 /turf/simulated/floor/wood,
 /area/maintenance/apmaint)
-"opu" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/fsmaint)
 "opv" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -87413,10 +87369,6 @@
 	icon_state = "white"
 	},
 /area/medical/medbay)
-"qts" = (
-/obj/structure/table,
-/turf/simulated/floor/damaged/airless/burnt,
-/area/mine/abandoned)
 "qtA" = (
 /obj/machinery/account_database,
 /turf/simulated/floor,
@@ -89279,11 +89231,6 @@
 /obj/structure/reagent_dispensers/watertank,
 /turf/simulated/floor,
 /area/hydroponics)
-"qTr" = (
-/obj/effect/decal/remains/xeno,
-/obj/effect/alien/weeds,
-/turf/simulated/floor/damaged/airless/broken,
-/area/mine/abandoned)
 "qTy" = (
 /obj/machinery/status_display{
 	pixel_y = 32
@@ -92779,9 +92726,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/salvage/derelict)
-"rJT" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/port)
 "rKc" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 1;
@@ -101988,9 +101932,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
-"tXX" = (
-/turf/simulated/floor/damaged,
-/area/maintenance/asmaint2)
 "tYa" = (
 /obj/structure/closet/crate,
 /obj/item/weapon/stock_parts/matter_bin{
@@ -104079,9 +104020,6 @@
 	},
 /turf/simulated/floor,
 /area/engineering/engine)
-"uAm" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelict/bridge/ai_upload)
 "uAs" = (
 /obj/machinery/light,
 /obj/machinery/vending/discount,
@@ -105487,9 +105425,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /turf/simulated/floor,
 /area/engineering/atmos)
-"uRu" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/mine/abandoned)
 "uRA" = (
 /obj/machinery/atmospherics/unary/vent_pump/high_volume{
 	canSpawnMice = 0;
@@ -106289,9 +106224,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
 /area/hallway/secondary/exit)
-"vcd" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/mine/abandoned)
 "vck" = (
 /obj/machinery/power/emitter,
 /obj/machinery/light/small{
@@ -113369,10 +113301,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/security/detectives_office)
-"wGg" = (
-/obj/effect/alien/weeds,
-/turf/simulated/floor/damaged/airless/broken,
-/area/mine/abandoned)
 "wGp" = (
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -186067,7 +185995,7 @@ uSy
 pmW
 vqE
 vJX
-eVD
+jJi
 ari
 iOL
 luF
@@ -187057,7 +186985,7 @@ wuh
 obY
 yeN
 goQ
-rJT
+jqW
 goQ
 rGZ
 goQ
@@ -189063,7 +188991,7 @@ urg
 goQ
 rnP
 oIi
-rJT
+jqW
 rnP
 qdX
 hmb
@@ -190067,7 +189995,7 @@ rnP
 rnP
 rnP
 oIi
-rJT
+jqW
 rnP
 rnP
 rnP
@@ -225663,12 +225591,12 @@ cJX
 cZL
 euF
 cZC
-kdl
+kGy
 bxs
 bxs
 bxs
 bxs
-kdl
+kGy
 nFi
 bxs
 bxs
@@ -256780,12 +256708,12 @@ aaa
 aaa
 crW
 cMz
-bPa
+hRw
 cMz
 cMz
 cEJ
 hRw
-bPa
+hRw
 bxS
 dws
 kLf
@@ -259295,7 +259223,7 @@ chk
 grZ
 cFI
 cET
-bPa
+hRw
 dui
 dws
 dws
@@ -270853,8 +270781,8 @@ sHL
 sHL
 pLo
 psy
-jlT
-jlT
+bEQ
+bEQ
 sHL
 sHL
 oPV
@@ -271355,7 +271283,7 @@ sHL
 sHL
 mIM
 sHL
-jlT
+bEQ
 gJi
 gJi
 gJi
@@ -276365,7 +276293,7 @@ fYD
 fYD
 fYD
 iTr
-opu
+bEQ
 yiL
 yiL
 yiL
@@ -276870,7 +276798,7 @@ sHL
 sHL
 sHL
 esM
-opu
+bEQ
 oQY
 sHL
 sHL
@@ -277425,7 +277353,7 @@ xVU
 xVU
 xVU
 pDG
-tXX
+uWH
 urQ
 uXy
 xWg
@@ -278362,7 +278290,7 @@ gJi
 sHL
 sHL
 hSB
-opu
+bEQ
 oQY
 eHm
 sHL
@@ -290461,7 +290389,7 @@ aaa
 aaa
 aaa
 dTI
-naH
+iuk
 xwr
 qBa
 pbD
@@ -290963,7 +290891,7 @@ aaa
 aaa
 aaa
 dTI
-uAm
+iuk
 cVI
 qBa
 pbD
@@ -409039,7 +408967,7 @@ aaa
 aaa
 aaa
 dgm
-dgx
+dgF
 dgW
 dgm
 dhD
@@ -409545,7 +409473,7 @@ dgw
 dgV
 dgm
 dgE
-dhM
+dhN
 dgm
 aaa
 aaa
@@ -412553,11 +412481,11 @@ aaa
 aaa
 aaa
 dgm
-dgC
+dhE
 dgV
 dgm
 dgV
-dgC
+dhE
 dgm
 aaa
 dif
@@ -414062,7 +413990,7 @@ dgm
 dgB
 dgE
 dgm
-dgC
+dhE
 dgB
 dgm
 aaa
@@ -415568,7 +415496,7 @@ dgm
 dgD
 dgA
 dgm
-dgC
+dhE
 dgB
 dgm
 aaa
@@ -418578,7 +418506,7 @@ aaa
 aaa
 dgm
 dgB
-dgC
+dhE
 dgm
 dgE
 dhN
@@ -1217161,7 +1217089,7 @@ aaj
 dUS
 fou
 nmh
-ihO
+rfR
 nfK
 rfR
 fou
@@ -1218665,7 +1218593,7 @@ qif
 pNp
 sDc
 tfT
-qts
+tfT
 xAP
 uQI
 lhr
@@ -1219165,9 +1219093,9 @@ aaa
 aaj
 iFa
 pTB
-vcd
 tKj
-bNG
+tKj
+sYD
 cqe
 uQI
 uQI
@@ -1220171,14 +1220099,14 @@ iFa
 tfM
 rZr
 rBu
-cUz
+raD
 fou
 uQI
 raD
 qvx
 uQI
 lhr
-cUX
+lhr
 mdr
 jEM
 fou
@@ -1220672,11 +1220600,11 @@ uSn
 fIk
 rZr
 fIk
-wGg
-cUX
+raD
+lhr
 mpL
 sWD
-cUz
+raD
 mdr
 uQI
 vED
@@ -1221170,14 +1221098,14 @@ aaa
 aaa
 aaj
 fIk
-uRu
+tKj
 fIk
 fIk
-uRu
-bNG
+tKj
+sYD
 lhr
 fou
-cUX
+lhr
 uQI
 lhr
 uQI
@@ -1221672,9 +1221600,9 @@ aaa
 aaj
 afV
 cJQ
-bNG
+sYD
 tKj
-cUz
+raD
 unC
 xxJ
 bPZ
@@ -1221683,8 +1221611,8 @@ raD
 uQI
 mdr
 oEL
-cUz
-wGg
+raD
+raD
 mdr
 jEM
 fou
@@ -1222173,15 +1222101,15 @@ aaa
 aaj
 aaj
 jYW
-qts
+tfT
 irI
-cUX
 lhr
-cUX
+lhr
+lhr
 gQF
 qsx
 qvx
-qTr
+vxr
 uQI
 qvx
 uQI
@@ -1222677,7 +1222605,7 @@ uMs
 akg
 tfT
 sYD
-cUX
+lhr
 lhr
 uQI
 qsx
@@ -1222686,7 +1222614,7 @@ qvx
 uQI
 oEL
 qvx
-wGg
+raD
 uQI
 lhr
 mdr
@@ -1223185,7 +1223113,7 @@ fou
 bBY
 gLv
 fou
-cUX
+lhr
 uQI
 qvx
 qvx
@@ -1223680,13 +1223608,13 @@ xas
 xCj
 uQI
 raD
-cUz
+raD
 uQI
-cUz
+raD
 lhr
 uAW
 uQI
-cUX
+lhr
 raD
 uQI
 uQI
@@ -1224176,23 +1224104,23 @@ bBY
 iCn
 bdb
 pVe
-uRu
+tKj
 pVe
 pVe
-cUz
+raD
 qPJ
-cUz
+raD
 uQI
 lhr
 uQI
 vxr
-cUX
+lhr
 uQI
 uQI
 tKj
 uQI
 uQI
-cUX
+lhr
 uQI
 fou
 fou
@@ -1225693,10 +1225621,10 @@ njS
 fou
 pVe
 uQI
-uRu
+tKj
 pVe
 lhr
-cUX
+lhr
 oEL
 swI
 jZv
@@ -1226193,7 +1226121,7 @@ fou
 fou
 fou
 fou
-cUX
+lhr
 uQI
 uQI
 oEL
@@ -1226698,7 +1226626,7 @@ fou
 kWA
 kWA
 kWA
-cUX
+lhr
 uQI
 uQI
 lhr

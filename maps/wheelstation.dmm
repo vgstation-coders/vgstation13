@@ -76850,10 +76850,6 @@
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"cPN" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "cPO" = (
 /obj/structure/bed,
 /turf/unsimulated/floor{
@@ -76872,11 +76868,6 @@
 "cPR" = (
 /turf/unsimulated/floor{
 	name = "plating"
-	},
-/area/prison/solitary)
-"cPS" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPT" = (
@@ -77295,9 +77286,6 @@
 	icon_state = "dark neutral stripe"
 	},
 /area/centcom/suppy)
-"cRc" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "cRd" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
@@ -392855,7 +392843,7 @@ aaa
 aaa
 aaa
 cPC
-cPN
+cPV
 cQm
 cPC
 cQT
@@ -393361,7 +393349,7 @@ cPM
 cQl
 cPC
 cPU
-cRc
+cRd
 cPC
 aaa
 aaa
@@ -396369,11 +396357,11 @@ aaa
 aaa
 aaa
 cPC
-cPS
+cQU
 cQl
 cPC
 cQl
-cPS
+cQU
 cPC
 aaa
 cRv
@@ -397878,7 +397866,7 @@ cPC
 cPR
 cPU
 cPC
-cPS
+cQU
 cPR
 cPC
 aaa
@@ -399384,7 +399372,7 @@ cPC
 cPT
 cPQ
 cPC
-cPS
+cQU
 cPR
 cPC
 aaa
@@ -402394,7 +402382,7 @@ aaa
 aaa
 cPC
 cPR
-cPS
+cQU
 cPC
 cPU
 cRd

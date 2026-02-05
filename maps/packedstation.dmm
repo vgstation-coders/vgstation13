@@ -47543,10 +47543,6 @@
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"bFL" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "bFM" = (
 /obj/structure/bed,
 /turf/unsimulated/floor{
@@ -47565,11 +47561,6 @@
 "bFP" = (
 /turf/unsimulated/floor{
 	name = "plating"
-	},
-/area/prison/solitary)
-"bFQ" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bFR" = (
@@ -48035,9 +48026,6 @@
 	},
 /area/centcom/striketeam)
 "bHh" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
-"bHi" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bHj" = (
@@ -360224,7 +360212,7 @@ aaa
 aaa
 aaa
 bFu
-bFL
+bFT
 bGo
 bFu
 bGY
@@ -363738,11 +363726,11 @@ aaa
 aaa
 aaa
 bFu
-bFQ
+bGZ
 bGn
 bFu
 bGn
-bFQ
+bGZ
 bFu
 aaa
 bHA
@@ -365247,7 +365235,7 @@ bFu
 bFP
 bFS
 bFu
-bFQ
+bGZ
 bFP
 bFu
 aaa
@@ -366753,7 +366741,7 @@ bFu
 bFR
 bFO
 bFu
-bFQ
+bGZ
 bFP
 bFu
 aaa
@@ -369763,10 +369751,10 @@ aaa
 aaa
 bFu
 bFP
-bFQ
+bGZ
 bFu
 bFS
-bHi
+bHh
 bFu
 aaa
 aaa

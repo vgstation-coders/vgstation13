@@ -2919,9 +2919,6 @@
 	icon_state = "grimy"
 	},
 /area/security/detectives_office)
-"ahW" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/fore)
 "ahX" = (
 /obj/item/trash/cigbutt,
 /turf/simulated/floor/plating,
@@ -4359,11 +4356,6 @@
 	dir = 8
 	},
 /turf/simulated/floor/plating,
-/area/maintenance/fpmaint2{
-	name = "Port Maintenance"
-	})
-"alg" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fpmaint2{
 	name = "Port Maintenance"
 	})
@@ -6351,11 +6343,6 @@
 	},
 /turf/simulated/floor/wood,
 /area/maintenance/ghettobar)
-"apn" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/fpmaint2{
-	name = "Port Maintenance"
-	})
 "apo" = (
 /obj/item/clothing/gloves/rainbow,
 /obj/item/clothing/shoes/rainbow,
@@ -6783,12 +6770,6 @@
 	dir = 4
 	},
 /turf/simulated/floor/plating,
-/area/maintenance/fore)
-"aqj" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/fore)
 "aqk" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -12103,9 +12084,6 @@
 /obj/item/weapon/reagent_containers/food/drinks/ale,
 /obj/structure/table/woodentable,
 /turf/simulated/floor/wood,
-/area/maintenance/ghettobar)
-"aBf" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/ghettobar)
 "aBg" = (
 /obj/structure/bed/chair/shuttle/yellow{
@@ -46663,9 +46641,6 @@
 /area/crew_quarters/toilet{
 	name = "\improper Auxiliary Restrooms"
 	})
-"bKy" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/aft)
 "bKz" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -50226,15 +50201,6 @@
 	icon_state = "enginedelivery"
 	},
 /area/science/podbay)
-"bQM" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/aft)
 "bQN" = (
 /obj/machinery/suit_storage_unit/standard_unit,
 /turf/simulated/floor{
@@ -61487,9 +61453,6 @@
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
-/area/maintenance/starboard)
-"ckC" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard)
 "ckD" = (
 /obj/item/weapon/storage/toolbox/emergency,
@@ -79052,9 +79015,6 @@
 /obj/item/device/radio/headset/headset_med,
 /turf/simulated/floor/plating,
 /area/maintenance/virology_maint)
-"cMU" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/virology_maint)
 "cMV" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -80111,17 +80071,6 @@
 	icon_state = "pipe-c"
 	},
 /turf/simulated/floor/plating,
-/area/maintenance/aft)
-"cOL" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cOM" = (
 /obj/structure/cable/yellow{
@@ -89445,10 +89394,6 @@
 	name = "plating"
 	},
 /area/prison/solitary)
-"djd" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "dje" = (
 /obj/item/weapon/storage/fancy/cigarettes,
 /obj/structure/table/reinforced,
@@ -89809,11 +89754,6 @@
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"dke" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/prison/solitary)
 "dkf" = (
 /obj/structure/bed,
 /turf/unsimulated/floor/scorched{
@@ -89855,9 +89795,6 @@
 	},
 /area/centcom/living)
 "dkl" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
-"dkm" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dkn" = (
@@ -101147,9 +101084,6 @@
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating/airless,
 /area/mine/abandoned)
-"eaY" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/mine/abandoned)
 "eaZ" = (
 /obj/item/weapon/shard{
 	icon_state = "medium"
@@ -101319,14 +101253,6 @@
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating/airless,
 /area/mine/abandoned)
-"ebA" = (
-/obj/structure/table,
-/turf/simulated/floor/damaged/airless/burnt,
-/area/mine/abandoned)
-"ebB" = (
-/obj/effect/alien/weeds,
-/turf/simulated/floor/damaged/airless/broken,
-/area/mine/abandoned)
 "ebC" = (
 /obj/machinery/door/airlock/external{
 	req_access_txt = "47";
@@ -101461,9 +101387,6 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/mine/abandoned)
-"ebU" = (
-/turf/simulated/floor/damaged/airless/burnt,
-/area/mine/abandoned)
 "ebV" = (
 /obj/structure/lattice,
 /obj/structure/transit_tube{
@@ -101563,9 +101486,6 @@
 /obj/effect/alien/weeds,
 /turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
-"eck" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/mine/abandoned)
 "ecl" = (
 /obj/item/weapon/shard,
 /obj/structure/lattice,
@@ -101575,10 +101495,6 @@
 /obj/effect/decal/remains/xeno,
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating/airless,
-/area/mine/abandoned)
-"ecn" = (
-/obj/effect/alien/weeds,
-/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ecp" = (
 /obj/structure/lattice,
@@ -101965,10 +101881,6 @@
 	icon_state = "whitegreen"
 	},
 /area/research_outpost/xenobot)
-"edv" = (
-/obj/effect/alien/weeds,
-/turf/simulated/floor/damaged/airless/broken,
-/area/mine/abandoned)
 "edw" = (
 /obj/effect/alien/weeds/node,
 /turf/simulated/floor/damaged/airless/burnt,
@@ -102728,9 +102640,6 @@
 /obj/machinery/atmospherics/pipe/simple/cyan/visible,
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
-"efn" = (
-/turf/simulated/floor/damaged,
-/area/mine/abandoned)
 "efo" = (
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -102745,11 +102654,6 @@
 "efq" = (
 /obj/effect/alien/weeds/node,
 /turf/simulated/floor/airless,
-/area/mine/abandoned)
-"efr" = (
-/obj/effect/decal/remains/xeno,
-/obj/effect/alien/weeds,
-/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "efs" = (
 /obj/structure/table,
@@ -115563,9 +115467,6 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/plating/damaged/broken,
-/area)
-"eGY" = (
 /turf/simulated/floor/plating/damaged/broken,
 /area)
 "eGZ" = (
@@ -205341,7 +205242,7 @@ awl
 axv
 apk
 aAa
-aBf
+atA
 aBK
 aDT
 aFa
@@ -206835,7 +206736,7 @@ afr
 ahf
 aeo
 afr
-alg
+awo
 amA
 anU
 apl
@@ -207390,7 +207291,7 @@ bIA
 bIA
 bIA
 bPs
-bQM
+cNW
 bBy
 bBy
 bBy
@@ -207896,7 +207797,7 @@ bFj
 bSj
 bQY
 bFj
-bKy
+bMl
 bXm
 bYr
 bZL
@@ -208846,7 +208747,7 @@ afr
 afr
 afr
 alh
-apn
+awo
 afr
 amI
 aoc
@@ -210947,7 +210848,7 @@ cJq
 cKz
 cKt
 cMo
-cMU
+cPT
 cKt
 cKt
 cKt
@@ -216429,7 +216330,7 @@ bBy
 bBy
 bBy
 bBy
-bQM
+cNW
 bBy
 bXw
 bYw
@@ -218892,7 +218793,7 @@ afr
 atO
 afr
 afr
-alg
+awo
 afr
 aAm
 aAm
@@ -219972,7 +219873,7 @@ caY
 aJg
 bFj
 bQY
-bKy
+bMl
 aJg
 aJg
 bIM
@@ -222400,7 +222301,7 @@ aaa
 aeo
 ajJ
 apC
-apn
+awo
 aeo
 afr
 avn
@@ -228017,7 +227918,7 @@ bFj
 bFj
 bFj
 aJg
-cOL
+cPe
 cPy
 cQo
 cRb
@@ -243047,7 +242948,7 @@ bXV
 bXV
 bXV
 ccX
-ckC
+cmU
 clI
 clI
 clI
@@ -247500,7 +247401,7 @@ nYQ
 bxJ
 pYE
 brJ
-aqj
+aYi
 arC
 atf
 auu
@@ -249589,7 +249490,7 @@ cvE
 cvE
 cAQ
 cBL
-ckC
+cmU
 cAU
 cEw
 cFp
@@ -251541,7 +251442,7 @@ aSL
 aUx
 aVG
 aLw
-aqj
+aYi
 adX
 ahX
 bcD
@@ -255048,7 +254949,7 @@ aqi
 adX
 aLx
 aMS
-ahW
+ayu
 adX
 aAI
 aSQ
@@ -411803,7 +411704,7 @@ diI
 diY
 diZ
 diI
-dke
+dja
 diZ
 diI
 aaa
@@ -417322,7 +417223,7 @@ aaa
 aaa
 aaa
 diI
-djd
+diV
 djx
 diI
 dkg
@@ -417828,7 +417729,7 @@ djc
 diZ
 diI
 diZ
-dke
+dja
 diI
 aaa
 aaa
@@ -419334,7 +419235,7 @@ diZ
 dja
 diI
 djc
-dkm
+dkl
 diI
 aaa
 aaa
@@ -1224871,7 +1224772,7 @@ aam
 eaH
 eaV
 eev
-efn
+egb
 ega
 egb
 eaV
@@ -1226374,11 +1226275,11 @@ cKs
 ecl
 ecK
 ecZ
-ebA
+ebv
 ebv
 ecW
 ebm
-ecn
+ecj
 egM
 eho
 egM
@@ -1226876,7 +1226777,7 @@ aam
 ebQ
 ecJ
 ecY
-eck
+ecY
 ebO
 eez
 ebm
@@ -1227884,10 +1227785,10 @@ edy
 ebf
 eaV
 ebm
-ebB
+ebf
 eey
 ebm
-ecn
+ecj
 ecj
 egL
 egM
@@ -1228382,7 +1228283,7 @@ ebu
 ebt
 ecI
 ebt
-edv
+ebf
 ecj
 ecM
 efq
@@ -1228880,16 +1228781,16 @@ aaa
 aaa
 aam
 ebt
-eaY
+ecY
 ebt
 ebt
-eaY
+ecY
 ebO
-ecn
+ecj
 eaV
 ecj
 ebm
-ecn
+ecj
 ebm
 ehQ
 ebm
@@ -1229383,18 +1229284,18 @@ aam
 ebj
 ebw
 ebO
-eck
+ecY
 ebf
 ecX
 edx
 edZ
 eey
-ebB
+ebf
 ebm
 egL
 eeA
 ebf
-edv
+ebf
 egL
 egM
 eaV
@@ -1229886,12 +1229787,12 @@ ebi
 ebv
 ebN
 ecj
-ecn
+ecj
 ecj
 edw
 edA
 eey
-efr
+edb
 ebm
 eey
 ebm
@@ -1230385,10 +1230286,10 @@ aaa
 aam
 ebe
 ebk
-ebA
-ebU
+ebv
+ebO
 ecj
-ecn
+ecj
 ebm
 edA
 edA
@@ -1230396,9 +1230297,9 @@ eey
 ebm
 eeA
 eey
-edv
+ebf
 ebm
-ecn
+ecj
 egL
 egM
 eaV
@@ -1231389,15 +1231290,15 @@ eba
 ebc
 ebg
 ebm
-ebB
+ebf
 ebf
 ebm
 ebf
-ecn
+ecj
 edB
 ebm
 ecj
-ebB
+ebf
 ebm
 ebm
 efq
@@ -1231886,20 +1231787,20 @@ eaM
 eaO
 eaT
 eaP
-eaY
+ecY
 eaP
 eaP
 ebf
 ebl
 ebf
 ebm
-ecn
+ecj
 ebm
 edb
 ecj
 ebm
 ebm
-eck
+ecY
 ebm
 ebm
 ecj
@@ -1233403,9 +1233304,9 @@ ecm
 eaV
 eaP
 ebm
-eaY
+ecY
 eaP
-ecn
+ecj
 ecj
 eeA
 ehr
@@ -1234411,7 +1234312,7 @@ edc
 ecj
 ebm
 ebm
-ecn
+ecj
 ehs
 ehW
 eiD
@@ -1478026,7 +1477927,7 @@ eGp
 eGp
 eGF
 eGI
-eGY
+eGF
 eGI
 eHs
 eGz

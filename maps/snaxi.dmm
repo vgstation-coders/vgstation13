@@ -51613,10 +51613,6 @@
 	name = "plating"
 	},
 /area/prison/solitary)
-"ceN" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "ceO" = (
 /obj/effect/decal/cleanable/blood,
 /turf/unsimulated/floor{
@@ -51847,11 +51843,6 @@
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"cft" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/prison/solitary)
 "cfu" = (
 /obj/structure/bed,
 /turf/unsimulated/floor/scorched{
@@ -51886,9 +51877,6 @@
 	name = "plating"
 	},
 /area/centcom/living)
-"cfz" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "cfB" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
@@ -65674,9 +65662,6 @@
 /area/derelict/secret)
 "duz" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelict/secret)
-"duA" = (
 /turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "duB" = (
@@ -199626,7 +199611,7 @@ ceG
 cfd
 cBS
 ceO
-cfz
+cfB
 cBS
 ccH
 ccH
@@ -200531,7 +200516,7 @@ cBS
 ceI
 ceL
 cBS
-cft
+ceK
 ceL
 cBS
 ccH
@@ -203850,7 +203835,7 @@ ccH
 ccH
 ccH
 cBS
-ceN
+ceF
 cfc
 cBS
 cfv
@@ -204156,7 +204141,7 @@ ceO
 ceL
 cBS
 ceL
-cft
+ceK
 cBS
 ccH
 ccH
@@ -620208,7 +620193,7 @@ dqx
 dte
 dpy
 dtZ
-duA
+duB
 dva
 dpy
 doU

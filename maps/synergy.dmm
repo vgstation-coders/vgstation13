@@ -74668,10 +74668,6 @@
 	name = "plating"
 	},
 /area/centcom/suppy)
-"cIk" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "cIl" = (
 /obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor/broken{
@@ -74692,11 +74688,6 @@
 "cIo" = (
 /obj/effect/decal/cleanable/blood,
 /turf/unsimulated/wall,
-/area/prison/solitary)
-"cIp" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
 /area/prison/solitary)
 "cIq" = (
 /turf/unsimulated/floor{
@@ -75120,9 +75111,6 @@
 	},
 /area/centcom/suppy)
 "cJA" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
-"cJB" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cJC" = (
@@ -99828,10 +99816,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/fitness)
-"qEt" = (
-/obj/abstract/map/spawner/floorpill,
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/port)
 "qFn" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -197914,7 +197898,7 @@ blb
 aUs
 bnm
 bnn
-qEt
+pMX
 bnn
 bnn
 bnn
@@ -388273,7 +388257,7 @@ aaa
 aaa
 aaa
 cIa
-cIk
+cIs
 cIJ
 cIa
 cJr
@@ -391787,11 +391771,11 @@ aaa
 aaa
 aaa
 cIa
-cIp
+cJs
 cIK
 cIa
 cIK
-cIp
+cJs
 cIa
 aaa
 cJT
@@ -393296,7 +393280,7 @@ cIa
 cIq
 cIt
 cIa
-cIp
+cJs
 cIq
 cIa
 aaa
@@ -394802,7 +394786,7 @@ cIa
 cIr
 cIn
 cIa
-cIp
+cJs
 cIq
 cIa
 aaa
@@ -397812,10 +397796,10 @@ aaa
 aaa
 cIa
 cIq
-cIp
+cJs
 cIa
 cIt
-cJB
+cJA
 cIa
 aaa
 aaa

@@ -76713,11 +76713,6 @@
 /obj/effect/decal/cleanable/blood,
 /turf/unsimulated/wall,
 /area/prison/solitary)
-"cRe" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/prison/solitary)
 "cRf" = (
 /turf/unsimulated/floor{
 	name = "plating"
@@ -76728,10 +76723,6 @@
 /turf/unsimulated/floor{
 	name = "plating"
 	},
-/area/prison/solitary)
-"cRh" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cRi" = (
 /obj/effect/decal/cleanable/blood,
@@ -77241,9 +77232,6 @@
 	},
 /area/centcom/striketeam)
 "cSM" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
-"cSN" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cSO" = (
@@ -405744,11 +405732,11 @@ aaa
 aaa
 aaa
 cQI
-cRe
+cSy
 cRE
 cQI
 cRE
-cRe
+cSy
 cQI
 aaa
 cTj
@@ -407253,7 +407241,7 @@ cQI
 cRf
 cRi
 cQI
-cRe
+cSy
 cRf
 cQI
 aaa
@@ -408759,7 +408747,7 @@ cQI
 cRg
 cRc
 cQI
-cRe
+cSy
 cRf
 cQI
 aaa
@@ -409760,7 +409748,7 @@ aaa
 aaa
 aaa
 cQI
-cRh
+cQZ
 cRD
 cQI
 cSA
@@ -411769,10 +411757,10 @@ aaa
 aaa
 cQI
 cRf
-cRe
+cSy
 cQI
 cRi
-cSN
+cSM
 cQI
 aaa
 aaa

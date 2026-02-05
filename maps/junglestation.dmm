@@ -4686,11 +4686,6 @@
 	icon_state = "bar"
 	},
 /area/centcom/living)
-"bLb" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/prison/solitary)
 "bLk" = (
 /obj/item/tool/circular_saw{
 	pixel_y = 4
@@ -18661,10 +18656,6 @@
 	},
 /turf/simulated/floor,
 /area/mine/production)
-"gRo" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "gRt" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
@@ -62475,9 +62466,6 @@
 /obj/structure/closet/crate/bin,
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/fenced)
-"xad" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "xag" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -320502,7 +320490,7 @@ ocC
 ocC
 ocC
 llQ
-gRo
+epl
 wxE
 llQ
 kuV
@@ -320858,7 +320846,7 @@ bfL
 amC
 llQ
 czW
-xad
+sSO
 llQ
 ocC
 ocC
@@ -322966,11 +322954,11 @@ ocC
 ocC
 ocC
 llQ
-bLb
+vJj
 amC
 llQ
 amC
-bLb
+vJj
 llQ
 ocC
 xTB
@@ -324025,7 +324013,7 @@ llQ
 rOb
 czW
 llQ
-bLb
+vJj
 rOb
 llQ
 ocC
@@ -325081,7 +325069,7 @@ llQ
 wfm
 bqY
 llQ
-bLb
+vJj
 rOb
 llQ
 ocC
@@ -327191,7 +327179,7 @@ ocC
 ocC
 llQ
 rOb
-bLb
+vJj
 llQ
 czW
 sSO

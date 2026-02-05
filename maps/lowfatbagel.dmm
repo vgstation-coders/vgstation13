@@ -78278,11 +78278,6 @@
 /obj/structure/ore_box,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
-"pqd" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/prison/solitary)
 "pqu" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -98674,9 +98669,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/engineering/mechanics)
-"vqR" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "vrb" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/simulated/floor/plating,
@@ -103706,10 +103698,6 @@
 "wQZ" = (
 /turf/simulated/floor/plating/airless,
 /area/engineering/engine)
-"wRa" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "wRl" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -396473,7 +396461,7 @@ aaa
 aaa
 aaa
 rSj
-wRa
+uML
 tYF
 rSj
 tWv
@@ -396979,7 +396967,7 @@ trP
 iYF
 rSj
 mHz
-vqR
+cpO
 rSj
 aaa
 aaa
@@ -399987,11 +399975,11 @@ aaa
 aaa
 aaa
 rSj
-pqd
+kYU
 iYF
 rSj
 iYF
-pqd
+kYU
 rSj
 aaa
 dOg
@@ -401496,7 +401484,7 @@ rSj
 nGS
 mHz
 rSj
-pqd
+kYU
 nGS
 rSj
 aaa
@@ -403002,7 +402990,7 @@ rSj
 hKK
 eAO
 rSj
-pqd
+kYU
 nGS
 rSj
 aaa
@@ -406012,7 +406000,7 @@ aaa
 aaa
 rSj
 nGS
-pqd
+kYU
 rSj
 mHz
 cpO

@@ -7595,9 +7595,6 @@
 "arh" = (
 /turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
-"ari" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelictparts/fore)
 "arj" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/damaged/broken,
@@ -7940,9 +7937,6 @@
 	dir = 8
 	},
 /turf/simulated/floor/plating,
-/area/derelictparts/fore)
-"arU" = (
-/turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
 "arV" = (
 /obj/machinery/light,
@@ -63289,11 +63283,6 @@
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
-"coo" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/mine/cafeteria{
-	name = "Station Zoo"
-	})
 "cop" = (
 /obj/item/weapon/storage/toolbox/mechanical,
 /obj/structure/rack,
@@ -64403,11 +64392,6 @@
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
-"cqy" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/mine/cafeteria{
-	name = "Station Zoo"
-	})
 "cqz" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -64450,19 +64434,6 @@
 	name = "Station Zoo"
 	})
 "cqC" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/plating/damaged/broken,
-/area/mine/cafeteria{
-	name = "Station Zoo"
-	})
-"cqD" = (
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -65699,11 +65670,6 @@
 "csG" = (
 /obj/structure/closet,
 /turf/simulated/floor/plating/damaged/broken,
-/area/mine/cafeteria{
-	name = "Station Zoo"
-	})
-"csH" = (
-/turf/simulated/floor/plating/damaged/burnt,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -74419,9 +74385,6 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
-"cIa" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/apmaint)
 "cIb" = (
 /obj/structure/closet/crate,
 /obj/effect/decal/cleanable/dirt,
@@ -74981,9 +74944,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/science/server)
-"cJg" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/starboard2)
 "cJh" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -75177,9 +75137,6 @@
 	amount = 50
 	},
 /turf/simulated/floor/plating,
-/area/maintenance/apmaint)
-"cJD" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint)
 "cJE" = (
 /obj/structure/hanging_lantern,
@@ -79718,15 +79675,8 @@
 	},
 /turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
-"cSM" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/starboard2)
 "cSN" = (
 /turf/simulated/floor/damaged,
-/area/maintenance/starboard2)
-"cSO" = (
-/obj/structure/boulder,
-/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
 "cSP" = (
 /obj/effect/decal/cleanable/generic,
@@ -81274,9 +81224,6 @@
 	icon_state = "carpetnoconnect"
 	},
 /area/crew_quarters/sleep)
-"cVX" = (
-/turf/simulated/floor/plating/damaged/burnt,
-/area/maintenance/aft)
 "cVY" = (
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
@@ -81292,9 +81239,6 @@
 	},
 /obj/structure/window/barricade/full/block,
 /turf/simulated/floor/plating,
-/area/maintenance/aft)
-"cWc" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cWd" = (
 /obj/machinery/door/airlock/external{
@@ -82074,9 +82018,6 @@
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
 	},
-/area/maintenance/aft)
-"cXF" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cXG" = (
 /obj/structure/grille,
@@ -83811,10 +83752,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/starboard2)
-"dbo" = (
-/obj/abstract/map/spawner/misc/seeds,
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/starboard2)
 "dbp" = (
 /turf/simulated/floor/asteroid/air,
 /area/maintenance/starboard2)
@@ -84912,9 +84849,6 @@
 /area/maintenance/apmaint2)
 "ddQ" = (
 /obj/item/weapon/boomerang,
-/turf/simulated/floor/plating/damaged/broken,
-/area/maintenance/apmaint2)
-"ddR" = (
 /turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/apmaint2)
 "ddS" = (
@@ -88684,9 +88618,6 @@
 /obj/structure/girder/reinforced,
 /turf/simulated/floor/plating,
 /area/asteroid/artifactroom)
-"dlA" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/asteroid/artifactroom)
 "dlB" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -89028,9 +88959,6 @@
 	oxygen = 0;
 	temperature = 80
 	},
-/area/asteroid/artifactroom)
-"dmp" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/asteroid/artifactroom)
 "dmq" = (
 /obj/structure/grille,
@@ -89780,9 +89708,6 @@
 	oxygen = 0;
 	temperature = 80
 	},
-/area/asteroid/artifactroom)
-"dnM" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/asteroid/artifactroom)
 "dnN" = (
 /obj/effect/decal/cleanable/blood/oil{
@@ -116380,10 +116305,6 @@
 	name = "plating"
 	},
 /area/prison/solitary)
-"eiY" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "eiZ" = (
 /obj/item/weapon/storage/fancy/cigarettes,
 /obj/structure/table/reinforced,
@@ -116778,11 +116699,6 @@
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"eke" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/prison/solitary)
 "ekf" = (
 /obj/structure/bed,
 /turf/unsimulated/floor/scorched{
@@ -116831,9 +116747,6 @@
 	},
 /area/centcom/striketeam)
 "ekm" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
-"ekn" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "eko" = (
@@ -129169,9 +129082,6 @@
 /turf/simulated/floor{
 	icon_state = "warning"
 	},
-/area/derelict/secret)
-"ftW" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "ftX" = (
 /turf/simulated/floor{
@@ -187420,7 +187330,7 @@ aaa
 aaa
 aqE
 aqm
-arU
+arh
 aqE
 aaa
 aaa
@@ -187922,7 +187832,7 @@ aaa
 aaa
 aqF
 aqm
-ari
+arh
 aqF
 aai
 aai
@@ -188925,7 +188835,7 @@ aaa
 aaa
 aai
 aqF
-ari
+arh
 arj
 aqF
 afl
@@ -189929,7 +189839,7 @@ aaa
 aaa
 aai
 apk
-ari
+arh
 arW
 aqf
 ant
@@ -191436,7 +191346,7 @@ ant
 afl
 aqE
 apE
-arU
+arh
 aqE
 afl
 ant
@@ -191937,7 +191847,7 @@ ant
 afl
 afl
 aqF
-ari
+arh
 apE
 aqF
 afl
@@ -195517,7 +195427,7 @@ cAP
 cAP
 cGa
 cHP
-cJD
+cHO
 cLh
 cnl
 cOD
@@ -197047,8 +196957,8 @@ ant
 djQ
 afl
 dkQ
-dlA
-dmp
+dml
+dml
 dnb
 dmo
 doO
@@ -198054,7 +197964,7 @@ ant
 cWu
 dmn
 dna
-dnM
+dml
 doP
 dpH
 dmZ
@@ -205054,7 +204964,7 @@ cAS
 cCG
 cEu
 cGi
-cIa
+cHO
 cJJ
 cAP
 cnl
@@ -209586,7 +209496,7 @@ cYP
 daw
 cQp
 dcP
-ddR
+dub
 dau
 mPO
 dau
@@ -237172,7 +237082,7 @@ bZL
 cbZ
 bZL
 clV
-coo
+con
 cqx
 cjr
 cvj
@@ -238696,7 +238606,7 @@ cPm
 cQO
 cjr
 cTY
-cVX
+cZz
 cVY
 cVY
 bSW
@@ -239199,7 +239109,7 @@ cQQ
 cjr
 cUa
 cVY
-cXF
+dow
 cZz
 cjr
 ant
@@ -239701,7 +239611,7 @@ cQR
 cjr
 cUb
 cVY
-cVX
+cZz
 cjr
 cjr
 aqC
@@ -241206,7 +241116,7 @@ ant
 ant
 bSW
 cUd
-cVX
+cZz
 bSW
 ant
 aaa
@@ -242194,7 +242104,7 @@ bVp
 bXy
 bXu
 bXv
-csH
+csN
 cvm
 cxr
 bXv
@@ -243214,7 +243124,7 @@ aaa
 aaa
 aaa
 bSW
-cWc
+dow
 bSW
 aaa
 aaa
@@ -244703,7 +244613,7 @@ cgS
 bVp
 bXu
 bZL
-cqy
+con
 cqA
 cvq
 cxu
@@ -248719,7 +248629,7 @@ cgV
 cjv
 clY
 ccc
-cqD
+cqC
 csP
 cvu
 cxz
@@ -267806,7 +267716,7 @@ cBX
 cBX
 bYn
 cKP
-cJg
+cOi
 cJi
 cPL
 bYn
@@ -268318,7 +268228,7 @@ cWn
 cXZ
 cZP
 dbm
-cSO
+cWo
 cBX
 cBX
 cBX
@@ -268808,7 +268718,7 @@ cCa
 ccJ
 cFr
 caD
-cJg
+cOi
 bYn
 cME
 bYn
@@ -269310,7 +269220,7 @@ cCd
 ccJ
 cFu
 caG
-cJg
+cOi
 cKR
 cMG
 cJi
@@ -269823,7 +269733,7 @@ bYn
 cJi
 bYn
 cZS
-dbo
+cZR
 cBX
 bYn
 cBX
@@ -270822,7 +270732,7 @@ bYn
 bYn
 bYn
 bYn
-cJg
+cOi
 cUD
 cWp
 cYc
@@ -271324,7 +271234,7 @@ bYn
 cOh
 cPQ
 cRu
-cSO
+cWo
 bYn
 bYn
 cYe
@@ -272328,7 +272238,7 @@ bYn
 cOg
 cPO
 cPR
-cSM
+cOi
 cBX
 cBX
 cBX
@@ -274851,7 +274761,7 @@ dcy
 dbp
 dbp
 cKT
-cSO
+cWo
 djd
 djM
 dkt
@@ -422470,7 +422380,7 @@ eiz
 eiT
 eiU
 eiz
-eke
+eiV
 eiU
 eiz
 aaa
@@ -427989,7 +427899,7 @@ aaa
 aaa
 aaa
 eiz
-eiY
+eiQ
 ejt
 eiz
 ekg
@@ -428495,7 +428405,7 @@ eiX
 eiU
 eiz
 eiU
-eke
+eiV
 eiz
 aaa
 aaa
@@ -430001,7 +429911,7 @@ eiU
 eiV
 eiz
 eiX
-ekn
+ekm
 eiz
 aaa
 aaa
@@ -1313363,7 +1313273,7 @@ fsc
 fty
 frV
 ftM
-ftW
+ftR
 ftR
 frV
 aaa

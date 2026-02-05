@@ -2741,10 +2741,6 @@
 	icon_state = "bar"
 	},
 /area/derelictparts/stripclub)
-"afJ" = (
-/obj/item/weapon/stool,
-/turf/simulated/floor/damaged,
-/area/derelictparts/stripclub)
 "afK" = (
 /obj/item/weapon/stool,
 /turf/simulated/floor/damaged,
@@ -12499,24 +12495,6 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/solar/fport)
-"azf" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/fport)
 "azg" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/decal/cleanable/blood/writing,
@@ -17586,9 +17564,6 @@
 "aHO" = (
 /turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fport)
-"aHP" = (
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/fport)
 "aHQ" = (
 /obj/structure/cable/yellow{
 	d1 = 2;
@@ -20787,24 +20762,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/engineering/supermatter_room)
-"aNt" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/fport)
 "aNu" = (
 /obj/item/weapon/caution/cone,
 /turf/simulated/floor/plating{
@@ -22472,9 +22429,6 @@
 "aQt" = (
 /obj/structure/reagent_dispensers/fueltank,
 /turf/simulated/floor/plating,
-/area/derelictparts/fore)
-"aQu" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fore)
 "aQv" = (
 /obj/effect/decal/cleanable/dirt,
@@ -43701,11 +43655,6 @@
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
-"bCC" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelictparts/asderelict{
-	name = "Aft Port Derelict"
-	})
 "bCD" = (
 /obj/machinery/door/airlock{
 	name = "Unit 1"
@@ -44855,13 +44804,6 @@
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
-"bET" = (
-/obj/structure/grille,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelictparts/asderelict{
-	name = "Aft Port Derelict"
-	})
 "bEU" = (
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
@@ -45800,9 +45742,6 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/fsderelict)
-"bGW" = (
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area)
 "bGX" = (
 /turf/simulated/wall/shuttle,
 /area/shuttle/escape_pod5)
@@ -46791,13 +46730,6 @@
 /obj/effect/nmpi{
 	dir = 1;
 	tag = "icon-maintguide (NORTH)"
-	},
-/turf/simulated/floor/plating/damaged/broken,
-/area)
-"bIU" = (
-/obj/machinery/door/poddoor{
-	id_tag = "trash";
-	name = "disposal bay door"
 	},
 /turf/simulated/floor/plating/damaged/broken,
 /area)
@@ -50563,11 +50495,6 @@
 /area/derelictparts/asderelict{
 	name = "Aft Port Derelict"
 	})
-"bQj" = (
-/turf/simulated/floor/damaged,
-/area/derelictparts/asderelict{
-	name = "Aft Port Derelict"
-	})
 "bQk" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/device/assembly/timer{
@@ -51129,14 +51056,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fstarboardsolar)
-"bRt" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/fstarboard)
 "bRu" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -51350,16 +51269,6 @@
 	icon_state = "cafeteria"
 	},
 /area/derelictparts/diner)
-"bRU" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/disposalpipe/segment,
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelictparts/port)
 "bRV" = (
 /obj/structure/kitchenspike,
 /obj/effect/decal/cleanable/blood/splatter,
@@ -52941,14 +52850,6 @@
 	},
 /turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/fstarboard)
-"bVh" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/fstarboard)
 "bVi" = (
 /obj/structure/disposalpipe/segment{
 	dir = 1;
@@ -53598,10 +53499,6 @@
 	icon_state = "bar"
 	},
 /area/derelictparts/diner)
-"bWK" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/damaged,
-/area/derelictparts/diner)
 "bWL" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/decal/cleanable/dirt,
@@ -53895,9 +53792,6 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/damaged,
-/area/derelictparts/medbay)
-"bXy" = (
-/turf/simulated/floor/damaged/burnt,
 /area/derelictparts/medbay)
 "bXz" = (
 /obj/effect/decal/cleanable/dirt,
@@ -54580,9 +54474,6 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/airless,
 /area/solar/fstarboard)
-"bYV" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelictparts/port)
 "bYW" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating/damaged/broken,
@@ -56253,9 +56144,6 @@
 	},
 /turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/medbay)
-"ccl" = (
-/turf/simulated/floor/damaged,
-/area/derelictparts/medbay)
 "ccm" = (
 /turf/simulated/floor{
 	dir = 4;
@@ -56808,12 +56696,6 @@
 /obj/structure/mopbucket,
 /turf/simulated/floor/plating,
 /area/derelictparts/port)
-"cdG" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelictparts/port)
 "cdH" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -57188,13 +57070,6 @@
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
-"ceA" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/damaged,
-/area/derelictparts/medbay)
-"ceB" = (
-/turf/simulated/floor/damaged,
-/area/derelictparts/medbay)
 "ceC" = (
 /obj/structure/table,
 /obj/abstract/map/spawner/floorpill/guaranteed,
@@ -57255,10 +57130,6 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/space_heater,
 /turf/simulated/floor/plating,
-/area/derelictparts/port)
-"ceJ" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/port)
 "ceK" = (
 /obj/item/stack/rods,
@@ -59087,9 +58958,6 @@
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/derelictparts/medbay)
-"ciO" = (
-/turf/simulated/floor/damaged,
 /area/derelictparts/medbay)
 "ciP" = (
 /obj/effect/decal/cleanable/blood{
@@ -66697,24 +66565,6 @@
 	},
 /turf/simulated/floor/plating/damaged/airless/burnt,
 /area/solar/aport)
-"cyo" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/aport)
 "cyp" = (
 /obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -69235,14 +69085,6 @@
 	icon_state = "dark"
 	},
 /area/security/evidence)
-"cDf" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/aport)
 "cDg" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -73626,24 +73468,6 @@
 /area/derelictparts/apderelict{
 	name = "Aft Starboard Derelict"
 	})
-"cKL" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/aport)
 "cKM" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -82405,14 +82229,6 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/solar/astarboard)
-"cZC" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/astarboard)
 "cZD" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -82494,24 +82310,6 @@
 	},
 /turf/simulated/floor/plating/damaged/airless/burnt,
 /area/solar/astarboard)
-"cZI" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/astarboard)
 "cZJ" = (
 /obj/structure/cable/yellow,
 /obj/machinery/power/solar/panel{
@@ -82538,24 +82336,6 @@
 	d1 = 2;
 	d2 = 4;
 	icon_state = "2-4"
-	},
-/turf/simulated/floor/plating/damaged/airless/broken,
-/area/solar/astarboard)
-"cZN" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating/damaged/airless/broken,
 /area/solar/astarboard)
@@ -85718,10 +85498,6 @@
 	name = "plating"
 	},
 /area/prison/solitary)
-"diF" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "diG" = (
 /obj/item/weapon/storage/fancy/cigarettes,
 /obj/structure/table/reinforced,
@@ -86019,11 +85795,6 @@
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"djx" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/prison/solitary)
 "djy" = (
 /obj/structure/bed,
 /turf/unsimulated/floor/scorched{
@@ -86065,9 +85836,6 @@
 	},
 /area/centcom/living)
 "djE" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
-"djF" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "djG" = (
@@ -109092,9 +108860,6 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/derelict/secret)
-"exi" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "exj" = (
 /obj/effect/decal/cleanable/dirt,
@@ -189134,7 +188899,7 @@ aaa
 aaa
 aaf
 aaf
-aHP
+aHO
 aaa
 aaa
 aaa
@@ -190136,12 +189901,12 @@ axw
 azd
 aBa
 aze
-azf
+aBa
 aGe
 aHQ
 aGe
 aLu
-aNt
+aLu
 aLv
 aLw
 aSa
@@ -192150,7 +191915,7 @@ aHQ
 aGe
 aLv
 aLw
-aNt
+aLu
 aLw
 aSb
 aaa
@@ -194149,7 +193914,7 @@ aaa
 aup
 aaa
 axy
-azf
+aBa
 aze
 aBa
 aze
@@ -194229,10 +193994,10 @@ aup
 aaf
 cxe
 cyn
-cyo
+cCb
 czq
 czq
-cDf
+cGu
 cEQ
 cGu
 cHM
@@ -196236,13 +196001,13 @@ aaa
 aup
 aaf
 cxg
-cyo
+cCb
 czq
 cyn
 czq
 cDg
 cER
-cDf
+cGu
 cHN
 cHM
 cJu
@@ -198246,14 +198011,14 @@ aaf
 cxe
 cyn
 czq
-cyo
+cCb
 cCb
 cDg
 cEQ
 cDg
 cHN
 cJu
-cKL
+cHM
 cHN
 cNH
 aaa
@@ -200183,7 +199948,7 @@ aJW
 aLz
 aNv
 aOV
-aQu
+baa
 aSe
 aTO
 asQ
@@ -201252,7 +201017,7 @@ aaa
 aaa
 aaa
 csz
-bGW
+bEN
 aaa
 aaa
 aaa
@@ -202727,7 +202492,7 @@ bFM
 bxA
 bIg
 bxF
-bCC
+bxI
 bLe
 bxA
 bxA
@@ -203228,7 +202993,7 @@ bCx
 bFP
 bxA
 bId
-bCC
+bxI
 bza
 bLb
 bxA
@@ -203242,7 +203007,7 @@ bTN
 bVj
 bWw
 bRN
-bYV
+bMm
 caf
 cbj
 ccu
@@ -203726,7 +203491,7 @@ bAk
 bBt
 bCB
 bxA
-bCC
+bxI
 bxF
 bxA
 bIe
@@ -203749,7 +203514,7 @@ cag
 bUm
 ccv
 bUm
-ceJ
+bYW
 cfW
 bLk
 chX
@@ -204226,7 +203991,7 @@ aEt
 aEt
 bAn
 bBu
-bCC
+bxI
 bxG
 bES
 bza
@@ -204239,7 +204004,7 @@ bxA
 bNe
 bOt
 bPf
-bQj
+bOs
 bRL
 bxA
 bLk
@@ -207240,7 +207005,7 @@ bAt
 bBw
 bCG
 bDI
-bET
+bDI
 bFQ
 bHf
 bIi
@@ -208254,7 +208019,7 @@ bxA
 bza
 bNm
 bOx
-bCC
+bxI
 bCx
 bCx
 bTa
@@ -209270,7 +209035,7 @@ bZa
 bTa
 cbm
 ccA
-cdG
+cdI
 ceL
 bLk
 cgT
@@ -210286,7 +210051,7 @@ cmW
 coi
 cps
 bLk
-bGW
+bEN
 aaa
 cqx
 cuN
@@ -212272,7 +212037,7 @@ bNq
 aaa
 bKq
 bQv
-bRU
+cij
 bTd
 bUc
 bVw
@@ -212286,7 +212051,7 @@ cdN
 ceS
 bLk
 cgY
-bYV
+bMm
 bLk
 bMi
 clQ
@@ -213782,7 +213547,7 @@ bRT
 bTc
 bUb
 bVv
-bWK
+bXS
 bVv
 bZh
 bQw
@@ -213791,7 +213556,7 @@ bLk
 bLk
 ccz
 bLk
-bYV
+bMm
 bRQ
 cjf
 ckA
@@ -214797,7 +214562,7 @@ ceU
 bLk
 chb
 cik
-bYV
+bMm
 ckD
 bRQ
 bRO
@@ -229772,7 +229537,7 @@ adV
 aeo
 aeN
 afo
-afJ
+afK
 agm
 ahq
 aii
@@ -233419,7 +233184,7 @@ cZB
 cZJ
 aaf
 cZw
-cZN
+cZD
 cZJ
 aaf
 cZw
@@ -233917,7 +233682,7 @@ aaf
 aaa
 aaf
 aaf
-cZC
+cZO
 aaf
 aaf
 aaa
@@ -233925,7 +233690,7 @@ cZO
 aaa
 aaa
 aaf
-cZC
+cZO
 aaf
 aaf
 aaf
@@ -234921,7 +234686,7 @@ aaf
 aaf
 aaf
 aaa
-cZC
+cZO
 aaf
 aaf
 aaf
@@ -236435,7 +236200,7 @@ cZQ
 cZJ
 aaf
 cZw
-cZI
+cZQ
 cZJ
 aaa
 aaf
@@ -236929,7 +236694,7 @@ aaa
 aup
 aaf
 cZw
-cZI
+cZQ
 cZJ
 aaf
 cZw
@@ -249413,7 +249178,7 @@ aZq
 aZq
 bIS
 bKe
-bIU
+bKe
 aZq
 bMa
 aZq
@@ -250415,7 +250180,7 @@ bnv
 aZq
 aZq
 aZq
-bIU
+bKe
 bKg
 bKe
 aZq
@@ -250432,7 +250197,7 @@ bVa
 bYC
 bZR
 caW
-ccl
+ccn
 cdp
 cey
 cfJ
@@ -250940,7 +250705,7 @@ cey
 cfK
 cgM
 chQ
-ciO
+ccn
 cey
 cly
 eRl
@@ -252939,12 +252704,12 @@ bSR
 bVc
 bWr
 bVa
-bXy
+cgM
 bZW
 caZ
 ccp
 cdt
-ceA
+cfM
 cfM
 cgP
 bVa
@@ -255454,7 +255219,7 @@ bZX
 cba
 ccq
 cdu
-ceB
+ccn
 cfN
 bVa
 bVa
@@ -257451,12 +257216,12 @@ aaa
 aaf
 aaf
 aaf
-bRt
+bYT
 aaa
 aaa
 aaf
 bVa
-bXy
+cgM
 bYL
 caa
 cbe
@@ -258455,7 +258220,7 @@ bMX
 bOg
 uPm
 aaf
-bRt
+bYT
 aaa
 abb
 aaa
@@ -262474,7 +262239,7 @@ aaa
 bRF
 bSX
 bPa
-bVh
+bPa
 bWv
 bXD
 bYU
@@ -401621,7 +401386,7 @@ diq
 diA
 diB
 diq
-djx
+diC
 diB
 diq
 aaa
@@ -407140,7 +406905,7 @@ aaa
 aaa
 aaa
 diq
-diF
+dix
 diU
 diq
 djz
@@ -407646,7 +407411,7 @@ diE
 diB
 diq
 diB
-djx
+diC
 diq
 aaa
 aaa
@@ -409152,7 +408917,7 @@ diB
 diC
 diq
 diE
-djF
+djE
 diq
 aaa
 aaa
@@ -1283610,7 +1283375,7 @@ evp
 ewJ
 evi
 exb
-exi
+exl
 exl
 evi
 aaa

@@ -34850,10 +34850,6 @@
 	name = "plating"
 	},
 /area/centcom/striketeam)
-"ise" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "isp" = (
 /obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor/broken{
@@ -34930,11 +34926,6 @@
 /obj/structure/closet/secure_closet/freezer/fridge,
 /turf/simulated/floor/plating,
 /area/derelictparts/diner)
-"itr" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/prison/solitary)
 "itu" = (
 /turf/unsimulated/floor{
 	name = "plating"
@@ -36852,9 +36843,6 @@
 /turf/simulated/floor/plating,
 /area/engineering/atmos)
 "iTL" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
-"iUa" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "iUn" = (
@@ -374329,7 +374317,7 @@ cFY
 cFY
 cFY
 iny
-ise
+iuk
 iCJ
 iny
 iPn
@@ -377843,11 +377831,11 @@ cFY
 cFY
 cFY
 iny
-itr
+iPo
 iCO
 iny
 iCO
-itr
+iPo
 iny
 cFY
 jbj
@@ -379352,7 +379340,7 @@ iny
 itu
 iuV
 iny
-itr
+iPo
 itu
 iny
 cFY
@@ -380858,7 +380846,7 @@ iny
 itI
 isZ
 iny
-itr
+iPo
 itu
 iny
 cFY
@@ -383868,10 +383856,10 @@ cFY
 cFY
 iny
 itu
-itr
+iPo
 iny
 iuV
-iUa
+iTL
 iny
 cFY
 cFY
