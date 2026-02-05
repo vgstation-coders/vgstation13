@@ -34852,9 +34852,7 @@
 /area/centcom/striketeam)
 "ise" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "isp" = (
 /obj/effect/decal/cleanable/cobweb2,
@@ -35001,9 +34999,7 @@
 	})
 "iuk" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "ius" = (
 /obj/structure/cable/green{
@@ -36856,14 +36852,10 @@
 /turf/simulated/floor/plating,
 /area/engineering/atmos)
 "iTL" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "iUa" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "iUn" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{

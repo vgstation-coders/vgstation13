@@ -715,10 +715,7 @@
 /turf/simulated/floor,
 /area/awaymission/spacebattle/cruiser)
 "cc" = (
-/turf/simulated/floor{
-	tag = "icon-damaged5";
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "cd" = (
 /obj/machinery/computer/pod{
@@ -748,10 +745,7 @@
 /turf/simulated/floor,
 /area/awaymission/spacebattle/cruiser)
 "cj" = (
-/turf/simulated/floor{
-	tag = "icon-damaged5";
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "diagonalWall3"
 	},
@@ -766,10 +760,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/awaymission/spacebattle/cruiser)
 "cl" = (
-/turf/simulated/floor{
-	tag = "icon-damaged4";
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 4;
 	icon_state = "diagonalWall3"
@@ -780,41 +771,26 @@
 /turf/simulated/floor,
 /area/awaymission/spacebattle/cruiser)
 "cn" = (
-/turf/simulated/floor{
-	tag = "icon-damaged2";
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "diagonalWall3"
 	},
 /area/awaymission/spacebattle/cruiser)
 "co" = (
-/turf/simulated/floor{
-	tag = "icon-damaged4";
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "cp" = (
-/turf/simulated/floor{
-	tag = "icon-damaged3";
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "cq" = (
-/turf/simulated/floor{
-	tag = "icon-damaged5";
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 4;
 	icon_state = "diagonalWall3"
 	},
 /area/awaymission/spacebattle/cruiser)
 "cr" = (
-/turf/simulated/floor{
-	tag = "icon-damaged1";
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "cs" = (
 /obj/effect/landmark/corpse/engineer{
@@ -838,10 +814,7 @@
 "cy" = (
 /obj/item/ammo_casing/a12mm,
 /obj/item/ammo_casing/a12mm,
-/turf/simulated/floor{
-	tag = "icon-damaged2";
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "cz" = (
 /obj/item/stack/sheet/metal,
@@ -932,10 +905,7 @@
 /turf/simulated/floor,
 /area/awaymission/spacebattle/cruiser)
 "cP" = (
-/turf/simulated/floor{
-	tag = "icon-damaged2";
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "cQ" = (
 /obj/effect/landmark{
@@ -1095,10 +1065,7 @@
 /turf/simulated/wall/shuttle,
 /area/awaymission/spacebattle/cruiser)
 "ds" = (
-/turf/simulated/floor{
-	tag = "icon-damaged4";
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "diagonalWall3"
 	},
@@ -1113,10 +1080,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/awaymission/spacebattle/cruiser)
 "du" = (
-/turf/simulated/floor{
-	tag = "icon-damaged1";
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged/broken,
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 4;
 	icon_state = "diagonalWall3"
@@ -1222,10 +1186,7 @@
 /turf/simulated/floor/engine,
 /area/awaymission/spacebattle/cruiser)
 "dL" = (
-/turf/simulated/floor{
-	tag = "icon-damaged3";
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 4;
 	icon_state = "diagonalWall3"
@@ -1345,10 +1306,7 @@
 	mobname = "Clay Dawson";
 	name = "Clay Dawson"
 	},
-/turf/simulated/floor{
-	tag = "icon-damaged5";
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "ee" = (
 /obj/structure/grille,
@@ -2815,10 +2773,7 @@
 "iy" = (
 /obj/effect/landmark/corpse/syndicatesoldier,
 /obj/item/weapon/gun/projectile/automatic/c20r,
-/turf/simulated/floor{
-	tag = "icon-damaged2";
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "iz" = (
 /obj/structure/shuttle/engine/propulsion{

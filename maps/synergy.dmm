@@ -74679,9 +74679,7 @@
 /area/centcom/suppy)
 "cIk" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cIl" = (
 /obj/effect/decal/cleanable/cobweb2,
@@ -74722,9 +74720,7 @@
 /area/prison/solitary)
 "cIs" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cIt" = (
 /obj/effect/decal/cleanable/blood,
@@ -75133,14 +75129,10 @@
 	},
 /area/centcom/suppy)
 "cJA" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cJB" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cJC" = (
 /obj/machinery/dna_scannernew,

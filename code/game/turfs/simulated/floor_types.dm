@@ -480,31 +480,33 @@
 	floor_tile = new /obj/item/stack/tile/carpet/shag(null)
 
 /turf/simulated/floor/damaged
-	icon_state = "damaged1"
-	base_icon_state = "damaged"
-	min_icon_states = 1
-	max_icon_states = 2
-	variance = 100
+	var/broken_prob = 71
 
 /turf/simulated/floor/damaged/pick_icon_state()
-	broken = prob(71) // 5 of the icon states are "damaged" icons, 2 are burned.
-	burnt  = !broken
-
-	if(broken)
-		base_icon_state = "damaged"
-		max_icon_states = 5
-
+	if(prob(broken_prob))
+		break_tile()
 	else // Burnt states.
-		base_icon_state = "floorscorched"
-		max_icon_states = 2
+		burn_tile()
 
 	. = ..()
+
+/turf/simulated/floor/damaged/broken
+	broken_prob = 100
+
+/turf/simulated/floor/damaged/burnt
+	broken_prob = 0
 
 /turf/simulated/floor/damaged/airless
 	name        = "airless floor"
 	oxygen      = 0.01
 	nitrogen    = 0.01
 	temperature = TCMB
+
+/turf/simulated/floor/damaged/airless/broken
+	broken_prob = 100
+
+/turf/simulated/floor/damaged/airless/burnt
+	broken_prob = 0
 
 /turf/simulated/floor/plating/ironsand
 	name = "Iron Sand"
@@ -515,23 +517,21 @@
 	variance = 100
 
 /turf/simulated/floor/plating/airless/damaged
-	icon_state = "platingdmg1"
-	base_icon_state = "platingdmg"
-	min_icon_states = 1
-	max_icon_states = 3
-	variance = 100
+	var/broken_prob = 75
 
 /turf/simulated/floor/plating/airless/damaged/pick_icon_state()
-	broken = prob(75) // 3 of the icon states are "damaged" icons, 1 is burned.
-	burnt  = !broken
+	if(prob(broken_prob))
+		break_tile()
+	else // Burnt states.
+		burn_tile()
 
-	if(broken)
-		base_icon_state = "platingdmg"
-		max_icon_states = 3
-		..()
+	. = ..()
 
-	else // Burnt state.
-		icon_state = "panelscorched"
+/turf/simulated/floor/plating/airless/damaged/broken
+	broken_prob = 100
+
+/turf/simulated/floor/plating/airless/damaged/burnt
+	broken_prob = 0
 
 //syndie themed
 /turf/simulated/floor/dark

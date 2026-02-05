@@ -45473,9 +45473,7 @@
 /area/centcom/striketeam)
 "bOz" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bOA" = (
 /obj/effect/decal/cleanable/cobweb2,
@@ -45516,9 +45514,7 @@
 /area/prison/solitary)
 "bOH" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bOI" = (
 /obj/effect/decal/cleanable/blood,
@@ -45987,14 +45983,10 @@
 	},
 /area/centcom/striketeam)
 "bPW" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bPX" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bPY" = (
 /obj/machinery/dna_scannernew,

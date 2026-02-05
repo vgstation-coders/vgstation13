@@ -40,10 +40,7 @@
 	},
 /area/derelict/crew_quarters)
 "al" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/hallway/primary)
 "am" = (
 /obj/structure/rack,
@@ -115,10 +112,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/crew_quarters)
 "aD" = (
 /turf/space,
@@ -445,10 +439,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/arrival)
 "cc" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/medical/morgue{
 	name = "\improper Derelict Relaxation Room"
 	})
@@ -607,10 +598,7 @@
 	name = "\improper Derelict Central Maintenance"
 	})
 "cF" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/medical{
 	icon_state = "hydro";
 	name = "Derelict Hydroponics"
@@ -800,10 +788,7 @@
 /turf/simulated/wall,
 /area/derelict/bar)
 "dW" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/singularity_engine)
 "dX" = (
 /obj/item/tool/hemostat,
@@ -943,10 +928,7 @@
 /area/derelict/crew_quarters)
 "fe" = (
 /obj/item/weapon/paper,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/medical/chapel{
 	icon_state = "library";
 	name = "\improper Derelict Game Room"
@@ -988,10 +970,7 @@
 	})
 "fr" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/singularity_engine)
 "ft" = (
 /obj/item/weapon/table_parts/wood,
@@ -1017,10 +996,7 @@
 	name = "\improper Derelict Central Maintenance"
 	})
 "fx" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/bar)
 "fy" = (
 /obj/structure/grille,
@@ -1392,17 +1368,12 @@
 	name = "Derelict Starboard Maintenance"
 	})
 "hJ" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/medical/morgue{
 	name = "\improper Derelict Relaxation Room"
 	})
 "hL" = (
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
@@ -1431,10 +1402,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/crew_quarters)
 "hX" = (
 /obj/item/trash/cigbutt,
@@ -1572,10 +1540,7 @@
 	dir = 4
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/crew_quarters)
 "iU" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -1750,10 +1715,7 @@
 	},
 /area/derelict/crew_quarters)
 "jJ" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/crew_quarters)
 "jL" = (
 /obj/machinery/door/airlock{
@@ -1792,10 +1754,7 @@
 	})
 "jS" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/hallway/primary)
 "jT" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -1811,10 +1770,7 @@
 	})
 "jV" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/medical{
 	icon_state = "hydro";
 	name = "Derelict Hydroponics"
@@ -1857,10 +1813,7 @@
 	})
 "jZ" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/hallway/primary)
 "ka" = (
 /obj/item/weapon/shard{
@@ -2400,10 +2353,7 @@
 	name = "\improper Derelict Central Maintenance"
 	})
 "mA" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/medical{
 	icon_state = "hydro";
 	name = "Derelict Hydroponics"
@@ -2941,10 +2891,7 @@
 	name = "Derelict Port Maintenance"
 	})
 "oY" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/arrival)
 "pa" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -2963,10 +2910,7 @@
 	})
 "pc" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/arrival)
 "pg" = (
 /obj/structure/lattice,
@@ -3004,10 +2948,7 @@
 /turf/simulated/floor,
 /area/derelict/hallway/primary)
 "pr" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/crew_quarters)
 "pv" = (
 /obj/item/weapon/dice,
@@ -3155,10 +3096,7 @@
 	},
 /area/derelict/singularity_engine)
 "qF" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/medical/chapel{
 	icon_state = "library";
 	name = "\improper Derelict Game Room"
@@ -3350,10 +3288,7 @@
 	name = "Derelict Port Maintenance"
 	})
 "rS" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/bridge/ai_upload{
 	name = "\improper Derelict Holodeck"
 	})
@@ -3500,10 +3435,7 @@
 	external_pressure_bound = 101;
 	on = 1
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/medical/chapel{
 	icon_state = "library";
 	name = "\improper Derelict Game Room"
@@ -3642,10 +3574,7 @@
 	pixel_x = 25;
 	specialfunctions = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/crew_quarters)
 "tS" = (
 /turf/simulated/floor/plating,
@@ -3694,10 +3623,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/eva{
 	icon_state = "kitchen";
 	name = "Derelict Kitchen"
@@ -3802,10 +3728,7 @@
 	name = "Derelict Fore Maintenance"
 	})
 "uy" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/arrival)
 "uz" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -4123,10 +4046,7 @@
 	})
 "wf" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/hallway/primary)
 "wk" = (
 /turf/simulated/floor/plating{
@@ -4154,10 +4074,7 @@
 	},
 /area/derelict/singularity_engine)
 "wo" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/hallway/primary)
 "wt" = (
 /obj/item/weapon/pen,
@@ -4239,10 +4156,7 @@
 /area/derelict/hallway/primary)
 "wO" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/medical/chapel{
 	icon_state = "library";
 	name = "\improper Derelict Game Room"
@@ -4388,10 +4302,7 @@
 /obj/item/weapon/shard{
 	icon_state = "small"
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/crew_quarters)
 "xI" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
@@ -4411,10 +4322,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/storage/storage_access{
 	icon_state = "pmaint";
 	name = "Derelict Port Maintenance"
@@ -4601,16 +4509,10 @@
 	name = "\improper Derelict Central Maintenance"
 	})
 "yT" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/singularity_engine)
 "yU" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/medical{
 	icon_state = "hydro";
 	name = "Derelict Hydroponics"
@@ -4660,10 +4562,7 @@
 	name = "\improper Derelict Central Maintenance"
 	})
 "zf" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/medical/morgue{
 	name = "\improper Derelict Relaxation Room"
 	})
@@ -4994,10 +4893,7 @@
 	})
 "Bf" = (
 /obj/item/weapon/rack_parts,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/singularity_engine)
 "Bi" = (
 /obj/structure/rack,
@@ -5058,10 +4954,7 @@
 /turf/simulated/floor,
 /area/derelict/hallway/primary)
 "BD" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/arrival)
 "BG" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -5201,10 +5094,7 @@
 	})
 "CP" = (
 /obj/item/weapon/camera_assembly,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/arrival)
 "CQ" = (
 /turf/simulated/floor,
@@ -5282,10 +5172,7 @@
 	name = "Derelict Hydroponics"
 	})
 "Dm" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/eva{
 	icon_state = "kitchen";
 	name = "Derelict Kitchen"
@@ -5336,10 +5223,7 @@
 	})
 "DA" = (
 /obj/structure/closet/secure_closet/personal,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/crew_quarters)
 "DH" = (
 /obj/structure/lattice,
@@ -5510,10 +5394,7 @@
 	name = "Derelict Starboard Maintenance"
 	})
 "Ey" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/singularity_engine)
 "Ez" = (
 /obj/structure/cable{
@@ -5652,10 +5533,7 @@
 	name = "\improper Derelict Theatre"
 	})
 "Fl" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/hallway/primary)
 "Fn" = (
 /turf/simulated/floor{
@@ -5696,10 +5574,7 @@
 	})
 "Fw" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/bar)
 "Fy" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -5770,10 +5645,7 @@
 	name = "Derelict Fore Maintenance"
 	})
 "FO" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/hallway/primary)
 "FR" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -5857,10 +5729,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/arrival)
 "Gj" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -6528,10 +6397,7 @@
 "JY" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/medical/chapel{
 	icon_state = "library";
 	name = "\improper Derelict Game Room"
@@ -6588,10 +6454,7 @@
 	pixel_x = 25;
 	specialfunctions = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/crew_quarters)
 "Kw" = (
 /obj/structure/reagent_dispensers/beerkeg,
@@ -6712,10 +6575,7 @@
 	})
 "KX" = (
 /obj/item/trash/cigbutt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/arrival)
 "Lc" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -7070,10 +6930,7 @@
 	},
 /area/derelict/singularity_engine)
 "MN" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/medical/chapel{
 	icon_state = "library";
 	name = "\improper Derelict Game Room"
@@ -7359,10 +7216,7 @@
 	})
 "Ok" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/hallway/primary)
 "Or" = (
 /obj/machinery/power/battery/smes,
@@ -7533,10 +7387,7 @@
 	name = "Derelict Fore Maintenance"
 	})
 "Pr" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/medical/chapel{
 	icon_state = "library";
 	name = "\improper Derelict Game Room"
@@ -7604,10 +7455,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/arrival)
 "PR" = (
 /obj/structure/cable{
@@ -7759,10 +7607,7 @@
 	})
 "QK" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelict/hallway/primary)
 "QL" = (
 /obj/effect/decal/cleanable/dirt,
@@ -8418,10 +8263,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/crew_quarters)
 "TH" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/bridge/ai_upload{
 	name = "\improper Derelict Holodeck"
 	})
@@ -8538,10 +8380,7 @@
 	name = "Derelict Starboard Maintenance"
 	})
 "Up" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/bar)
 "Uq" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -9365,10 +9204,7 @@
 	name = "Derelict Starboard Maintenance"
 	})
 "Ym" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/crew_quarters)
 "Yq" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -9454,10 +9290,7 @@
 	name = "Derelict Starboard Maintenance"
 	})
 "Za" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/crew_quarters)
 "Zb" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -9532,10 +9365,7 @@
 	name = "Derelict Fore Maintenance"
 	})
 "Zx" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelict/arrival)
 "Zy" = (
 /obj/structure/window/barricade/full/block,

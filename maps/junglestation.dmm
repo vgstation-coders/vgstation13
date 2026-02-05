@@ -12161,9 +12161,7 @@
 /area/shuttle/escape/centcom)
 "epl" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "epp" = (
 /turf/simulated/wall,
@@ -18665,9 +18663,7 @@
 /area/mine/production)
 "gRo" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "gRt" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -51128,9 +51124,7 @@
 	},
 /area/science/chargebay)
 "sSO" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "sSS" = (
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
@@ -62482,9 +62476,7 @@
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/fenced)
 "xad" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "xag" = (
 /obj/structure/grille,

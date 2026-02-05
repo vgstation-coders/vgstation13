@@ -15,21 +15,15 @@
 /turf/simulated/floor/plating,
 /area/awaymission/challenge/start)
 "ae" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "af" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "ag" = (
 /obj/item/clothing/suit/space/syndicate/blue,
 /obj/item/clothing/head/helmet/space/syndicate/blue,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "ah" = (
 /turf/simulated/floor/airless,
@@ -45,15 +39,11 @@
 /obj/effect/landmark{
 	name = "awaystart"
 	},
-/turf/simulated/floor/airless{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "ak" = (
 /obj/effect/decal/remains/human,
-/turf/simulated/floor/airless{
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "al" = (
 /obj/effect/landmark{
@@ -64,14 +54,10 @@
 "am" = (
 /obj/item/clothing/suit/space/syndicate/green,
 /obj/item/clothing/head/helmet/space/syndicate/green,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "an" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "ao" = (
 /obj/item/clothing/suit/space/syndicate/orange,
@@ -92,9 +78,7 @@
 /area/awaymission/challenge/start)
 "as" = (
 /obj/effect/decal/remains/robot,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "at" = (
 /obj/structure/girder,
@@ -104,16 +88,12 @@
 /turf/simulated/wall,
 /area/awaymission/challenge/start)
 "av" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "aw" = (
 /obj/item/stack/rods,
 /obj/effect/decal/cleanable/blood/splatter,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "ax" = (
 /obj/effect/decal/cleanable/blood/oil,
@@ -127,9 +107,7 @@
 "az" = (
 /obj/item/clothing/suit/space/syndicate/black,
 /obj/item/clothing/head/helmet/space/syndicate/black,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/start)
 "aA" = (
 /turf/simulated/wall/shuttle/unsmoothed{
@@ -144,9 +122,7 @@
 /turf/simulated/floor/plating,
 /area/awaymission/challenge/main)
 "aD" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/main)
 "aE" = (
 /turf/simulated/wall,
@@ -155,9 +131,7 @@
 /turf/simulated/floor/plating/airless,
 /area/awaymission/challenge/main)
 "aG" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/main)
 "aH" = (
 /turf/simulated/floor/airless,

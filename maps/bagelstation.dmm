@@ -76690,9 +76690,7 @@
 /area/centcom/striketeam)
 "cQZ" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cRa" = (
 /obj/effect/decal/cleanable/cobweb2,
@@ -76733,9 +76731,7 @@
 /area/prison/solitary)
 "cRh" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cRi" = (
 /obj/effect/decal/cleanable/blood,
@@ -77245,14 +77241,10 @@
 	},
 /area/centcom/striketeam)
 "cSM" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cSN" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cSO" = (
 /obj/structure/shuttle/window{

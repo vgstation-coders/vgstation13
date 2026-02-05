@@ -1,7 +1,5 @@
 //This is so damaged or burnt tiles or platings don't get remembered as the default tile
-var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","damaged4",
-				"damaged5","panelscorched","floorscorched1","floorscorched2","platingdmg1","platingdmg2",
-				"platingdmg3","plating","light_on","light_on_flicker1","light_on_flicker2",
+var/list/icons_to_ignore_at_floor_init = list("panelscorched","plating","light_on","light_on_flicker1","light_on_flicker2",
 				"light_on_clicker3","light_on_clicker4","light_on_clicker5","light_broken",
 				"light_on_broken","light_off","wall_thermite","grass1","grass2","grass3","grass4",
 				"asteroid","asteroid_dug",
@@ -42,6 +40,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	var/attack_sound = 'sound/items/bikehorn.ogg'
 	var/obj/item/stack/tile/floor_tile
 	var/image/floor_overlay
+	var/image/broken_overlay
 
 	melt_temperature = 1643.15 // Melting point of steel
 	thermal_mass = 1
@@ -336,13 +335,17 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	if(broken)
 		return
 	if(is_metal_floor())
-		src.icon_state = "damaged[pick(1,2,3,4,5)]"
+		overlays -= broken_overlay
+		broken_overlay = image(icon,src,"damaged[rand(1,5)]")
+		overlays += broken_overlay
 		broken = 1
 	else if(is_light_floor())
 		src.icon_state = "light_broken"
 		broken = 1
 	else if(is_plating())
-		src.icon_state = "platingdmg[pick(1,2,3)]"
+		overlays -= broken_overlay
+		broken_overlay = image(icon,src,"damaged[rand(1,3)]")
+		overlays += broken_overlay
 		broken = 1
 	else if(is_wood_floor())
 		src.icon_state = "wood-broken"
@@ -351,7 +354,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		src.icon_state = "carpet-broken"
 		broken = 1
 	else if(is_grass_floor())
-		src.icon_state = "sand[pick("1","2","3")]"
+		src.icon_state = "sand[rand(1,3)]"
 		broken = 1
 	else if(is_slime_floor())
 		spawn(rand(2,10))
@@ -380,10 +383,14 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			new /obj/effect/decal/cleanable/soot(src)
 		burnt = 1
 	else if(is_metal_floor())
-		icon_state = "damaged[pick(1,2,3,4,5)]"
+		overlays -= broken_overlay
+		broken_overlay = image(icon,src,"damaged[rand(1,5)]")
+		overlays += broken_overlay
 		burnt = 1
 	else if(is_plating())
-		icon_state = "panelscorched"
+		overlays -= broken_overlay
+		broken_overlay = image(icon,src,"scorched[rand(1,2)]")
+		overlays += broken_overlay
 		burnt = 1
 	else if(is_wood_floor())
 		icon_state = "wood-broken"

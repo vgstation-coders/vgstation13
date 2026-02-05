@@ -4,10 +4,7 @@
 /turf/space,
 /area)
 "c" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/teleporter)
 "k" = (
 /obj/machinery/computer/teleporter,
@@ -38,10 +35,7 @@
 /obj/machinery/light_construct/small{
 	dir = 1
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/teleporter)
 "C" = (
 /obj/machinery/teleport/hub,
@@ -61,10 +55,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/teleporter)
 "O" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/teleporter)
 "S" = (
 /turf/simulated/wall/r_wall,

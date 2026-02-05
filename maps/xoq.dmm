@@ -84331,9 +84331,7 @@
 /area/shuttle/supply)
 "dfF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dfG" = (
 /obj/effect/decal/cleanable/cobweb2,
@@ -84374,9 +84372,7 @@
 /area/prison/solitary)
 "dfN" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dfO" = (
 /obj/effect/decal/cleanable/blood,
@@ -84626,14 +84622,10 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
 "dgB" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dgC" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dgD" = (
 /obj/docking_port/destination/supply/centcom{

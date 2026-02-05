@@ -7593,23 +7593,14 @@
 /turf/simulated/floor,
 /area/derelictparts/fore)
 "arh" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
 "ari" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
 "arj" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
 "ark" = (
 /obj/effect/decal/cleanable/dirt,
@@ -7624,10 +7615,7 @@
 /area/derelictparts/fore)
 "arl" = (
 /obj/item/weapon/camera_assembly,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelictparts/fore)
 "arm" = (
 /obj/structure/boulder,
@@ -7643,10 +7631,7 @@
 "aro" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/light/bulb,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
 "arp" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -7673,9 +7658,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/scorched,
 /area/derelictparts/fore)
 "art" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
@@ -7690,9 +7673,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/derelictparts/fore)
 "arv" = (
 /obj/effect/decal/cleanable/dirt,
@@ -7967,10 +7948,7 @@
 /turf/simulated/floor/plating,
 /area/derelictparts/fore)
 "arU" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
 "arV" = (
 /obj/machinery/light,
@@ -7985,10 +7963,7 @@
 	name = "Arrivals Access"
 	},
 /obj/structure/window/barricade/full/block,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
 "arY" = (
 /obj/effect/decal/cleanable/dirt,
@@ -8012,10 +7987,7 @@
 /area/derelictparts/fore)
 "asc" = (
 /obj/item/trash/cigbutt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
 "asd" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -8028,19 +8000,14 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
 "asf" = (
 /obj/effect/decal/cleanable/blood/splatter,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/derelictparts/fore)
 "asg" = (
 /obj/effect/decal/cleanable/dirt,
@@ -9030,9 +8997,7 @@
 /obj/item/trash/candy,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/derelictparts/fore)
 "atZ" = (
 /obj/structure/table,
@@ -9360,10 +9325,7 @@
 /obj/item/trash/cigbutt,
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/boulder,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/fpmaint)
 "auK" = (
 /obj/structure/table,
@@ -9372,9 +9334,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/media/receiver/boombox,
-/turf/simulated/floor{
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/fpmaint)
 "auL" = (
 /obj/effect/decal/cleanable/dirt,
@@ -9415,9 +9375,7 @@
 	},
 /area/derelictparts/fore)
 "auO" = (
-/turf/simulated/floor{
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged,
 /area/derelictparts/fore)
 "auP" = (
 /obj/structure/table,
@@ -9620,17 +9578,12 @@
 /area/maintenance/fpmaint)
 "avq" = (
 /obj/structure/boulder,
-/turf/simulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/fpmaint)
 "avr" = (
 /obj/effect/decal/cleanable/dirt,
 /mob/living/carbon/monkey,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/fpmaint)
 "avs" = (
 /obj/effect/decal/cleanable/ash,
@@ -9652,9 +9605,7 @@
 	dir = 8;
 	pixel_x = -7
 	},
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/fpmaint)
 "avu" = (
 /obj/structure/cable{
@@ -9686,10 +9637,7 @@
 "avw" = (
 /obj/machinery/sleeper,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/derelictparts/fore)
 "avx" = (
 /obj/structure/table,
@@ -9703,10 +9651,7 @@
 /obj/machinery/light,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/glowshroom,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelictparts/fore)
 "avz" = (
 /obj/structure/table,
@@ -10106,10 +10051,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/incinerator)
 "awr" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -10135,9 +10077,7 @@
 /obj/machinery/alarm{
 	pixel_y = 23
 	},
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/incinerator)
 "awu" = (
 /turf/unsimulated/mineral/internal,
@@ -10562,16 +10502,11 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/closet/emcloset,
 /obj/item/toy/gasha/maniac,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/incinerator)
 "axq" = (
 /obj/item/stack/sheet/metal,
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/incinerator)
 "axr" = (
 /obj/structure/window/barricade/full,
@@ -10618,10 +10553,7 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/fpmaint)
 "axv" = (
 /obj/effect/decal/warning_stripes{
@@ -10690,10 +10622,7 @@
 "axB" = (
 /obj/structure/kitchenspike,
 /obj/effect/decal/cleanable/blood/splatter,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/fpmaint)
 "axC" = (
 /obj/effect/decal/cleanable/dirt,
@@ -11139,9 +11068,7 @@
 	pixel_y = -6
 	},
 /obj/machinery/meter,
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/incinerator)
 "ays" = (
 /obj/machinery/atmospherics/pipe/simple/general/visible{
@@ -11172,9 +11099,7 @@
 /area/maintenance/incinerator)
 "ayu" = (
 /obj/machinery/atmospherics/pipe/manifold/general/visible,
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/incinerator)
 "ayv" = (
 /obj/machinery/atmospherics/unary/portables_connector{
@@ -11196,9 +11121,7 @@
 /area/maintenance/incinerator)
 "ayx" = (
 /obj/machinery/atmospherics/pipe/manifold/general/visible,
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/incinerator)
 "ayy" = (
 /obj/effect/decal/cleanable/dirt,
@@ -11304,10 +11227,7 @@
 	},
 /area/maintenance/fpmaint)
 "ayI" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/fpmaint)
 "ayJ" = (
 /obj/structure/kitchenspike,
@@ -11331,16 +11251,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat{
 	desc = "A slab of meat. You're not exactly sure where this came from."
 	},
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/fpmaint)
 "ayL" = (
 /obj/effect/decal/cleanable/generic,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/fpmaint)
 "ayM" = (
 /obj/structure/window/barricade/full,
@@ -11767,9 +11682,7 @@
 /turf/simulated/floor/engine/vacuum,
 /area/maintenance/incinerator)
 "azA" = (
-/turf/simulated/floor{
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/incinerator)
 "azB" = (
 /obj/machinery/atmospherics/binary/valve,
@@ -11808,9 +11721,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/incinerator)
 "azF" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -11832,9 +11743,7 @@
 	icon_state = "4-8"
 	},
 /mob/living/simple_animal/mouse/common/gray,
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/incinerator)
 "azH" = (
 /obj/effect/decal/cleanable/dirt,
@@ -12780,10 +12689,7 @@
 	is_critical = 1;
 	pixel_y = -24
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/incinerator)
 "aAZ" = (
 /obj/machinery/atmospherics/binary/pump{
@@ -12837,9 +12743,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light/small,
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/incinerator)
 "aBe" = (
 /obj/structure/cable{
@@ -12961,18 +12865,12 @@
 "aBq" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/camera_assembly,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/fpmaint)
 "aBr" = (
 /obj/structure/rack,
 /obj/item/weapon/light/bulb,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/fpmaint)
 "aBs" = (
 /turf/simulated/floor/asteroid,
@@ -13343,10 +13241,7 @@
 "aCj" = (
 /obj/structure/table,
 /obj/item/weapon/reagent_containers/glass/rag,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/fpmaint)
 "aCk" = (
 /obj/effect/decal/warning_stripes{
@@ -13954,19 +13849,13 @@
 	pixel_x = 2;
 	pixel_y = -2
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/fpmaint)
 "aDk" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/fpmaint)
 "aDl" = (
 /obj/structure/disposalpipe/segment{
@@ -14641,17 +14530,12 @@
 	dir = 8
 	},
 /obj/effect/decal/cleanable/generic,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/fpmaint)
 "aEw" = (
 /obj/structure/table,
 /obj/item/weapon/book/manual/barman_recipes,
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/fpmaint)
 "aEx" = (
 /obj/structure/hanging_lantern,
@@ -17830,10 +17714,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/ghettobar)
 "aJM" = (
 /obj/machinery/disposal,
@@ -20445,10 +20326,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/ghettobar)
 "aOH" = (
 /obj/structure/grille,
@@ -22507,9 +22385,7 @@
 /obj/structure/window/barricade{
 	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/ghettobar)
 "aSo" = (
 /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,
@@ -67460,9 +67336,7 @@
 	name = "Station Zoo"
 	})
 "cvo" = (
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -67525,9 +67399,7 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/turf/simulated/floor{
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -69894,9 +69766,7 @@
 	})
 "czE" = (
 /obj/structure/bed/chair,
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/cafeteria{
 	name = "Station Zoo"
 	})
@@ -71588,17 +71458,13 @@
 /area/maintenance/apmaint)
 "cCE" = (
 /mob/living/carbon/monkey,
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/apmaint)
 "cCF" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/turf/simulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/apmaint)
 "cCG" = (
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana{
@@ -72604,9 +72470,7 @@
 /area/maintenance/apmaint)
 "cEu" = (
 /mob/living/carbon/monkey,
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/apmaint)
 "cEv" = (
 /mob/living/simple_animal/hostile/carp,
@@ -73735,9 +73599,7 @@
 	req_access_txt = "5"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/apmaint)
 "cGk" = (
 /obj/structure/disposalpipe/segment,
@@ -80057,9 +79919,7 @@
 	},
 /area/maintenance/starboard2)
 "cSN" = (
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/starboard2)
 "cSO" = (
 /obj/structure/boulder,
@@ -80069,10 +79929,7 @@
 /area/maintenance/starboard2)
 "cSP" = (
 /obj/effect/decal/cleanable/generic,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/starboard2)
 "cSQ" = (
 /obj/effect/decal/cleanable/generic,
@@ -88327,15 +88184,11 @@
 "djH" = (
 /obj/item/weapon/stool,
 /obj/effect/decal/cleanable/blood,
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/derelictparts/diner)
 "djI" = (
 /obj/item/weapon/stool,
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/derelictparts/diner)
 "djJ" = (
 /obj/item/weapon/stool,
@@ -88800,10 +88653,7 @@
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor3"
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/derelictparts/diner)
 "dkK" = (
 /obj/effect/decal/cleanable/cockroach_remains,
@@ -89047,9 +88897,7 @@
 /area/derelictparts/diner)
 "dlp" = (
 /obj/structure/boulder,
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/derelictparts/diner)
 "dlq" = (
 /turf/simulated/wall/r_wall,
@@ -92716,9 +92564,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/apmaint2)
 "dsn" = (
 /obj/effect/decal/cleanable/blood{
@@ -92727,9 +92573,7 @@
 /obj/effect/decal/cleanable/blood/gibs{
 	icon_state = "gibleg"
 	},
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/apmaint2)
 "dso" = (
 /turf/simulated/wall/r_wall,
@@ -116864,9 +116708,7 @@
 /area/prison/solitary)
 "eiQ" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "eiR" = (
 /obj/structure/bed,
@@ -116907,9 +116749,7 @@
 /area/prison/solitary)
 "eiY" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "eiZ" = (
 /obj/item/weapon/storage/fancy/cigarettes,
@@ -117358,14 +117198,10 @@
 	},
 /area/centcom/striketeam)
 "ekm" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "ekn" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "eko" = (
 /obj/machinery/dna_scannernew,

@@ -32040,9 +32040,7 @@
 	},
 /area/hallway/primary/upperstarboard)
 "cpO" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cpT" = (
 /obj/structure/bed/chair/shuttle/red,
@@ -96937,9 +96935,7 @@
 /area/hallway/primary/port)
 "uML" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "uMM" = (
 /turf/simulated/floor/shuttle,
@@ -98816,9 +98812,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/mechanics)
 "vqR" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "vrb" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -103857,9 +103851,7 @@
 /area/engineering/engine)
 "wRa" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "wRl" = (
 /obj/structure/cable{

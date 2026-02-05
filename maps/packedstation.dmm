@@ -47551,9 +47551,7 @@
 /area/prison/solitary)
 "bFL" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bFM" = (
 /obj/structure/bed,
@@ -47594,9 +47592,7 @@
 /area/prison/solitary)
 "bFT" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bFU" = (
 /obj/item/weapon/storage/fancy/cigarettes,
@@ -48045,14 +48041,10 @@
 	},
 /area/centcom/striketeam)
 "bHh" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bHi" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bHj" = (
 /obj/machinery/dna_scannernew,

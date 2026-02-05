@@ -6963,9 +6963,7 @@
 	},
 /area/maintenance/fportsolar)
 "bNG" = (
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "bNT" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -7564,9 +7562,7 @@
 /area/turret_protected/ai)
 "bXb" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "bXc" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -9845,10 +9841,7 @@
 /area/hallway/primary/port)
 "cHb" = (
 /obj/item/trash/cigbutt,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/shuttle/salvage/derelict)
 "cHd" = (
 /obj/structure/disposalpipe/segment,
@@ -10772,15 +10765,11 @@
 	})
 "cUz" = (
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "cUX" = (
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "cVq" = (
 /obj/structure/grille,
@@ -14385,9 +14374,7 @@
 /area/prison/solitary)
 "dgx" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dgy" = (
 /obj/structure/bed,
@@ -14428,9 +14415,7 @@
 /area/prison/solitary)
 "dgF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dgG" = (
 /obj/item/weapon/storage/fancy/cigarettes,
@@ -14833,14 +14818,10 @@
 	},
 /area/centcom/suppy)
 "dhM" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dhN" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dhO" = (
 /obj/machinery/dna_scannernew,
@@ -42570,10 +42551,7 @@
 "eGH" = (
 /obj/structure/rack,
 /obj/item/weapon/light/bulb,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/port)
 "eGJ" = (
 /obj/structure/disposalpipe/segment{
@@ -42616,10 +42594,7 @@
 /area/maintenance/port)
 "eGS" = (
 /obj/item/weapon/reagent_containers/glass/rag,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/port)
 "eGT" = (
 /obj/effect/decal/cleanable/dirt,
@@ -42908,9 +42883,7 @@
 /area/maintenance/incinerator)
 "eJo" = (
 /obj/machinery/vending/assist,
-/turf/simulated/floor{
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/asmaint2)
 "eJr" = (
 /obj/structure/bed/chair,
@@ -43961,9 +43934,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/fsmaint)
 "eZQ" = (
 /obj/machinery/atmospherics/unary/tank/air{
@@ -44371,9 +44342,7 @@
 /area/hydroponics)
 "fgo" = (
 /obj/effect/decal/remains/human,
-/turf/simulated/floor/airless{
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "fgq" = (
 /obj/item/stack/sheet/cardboard,
@@ -46230,9 +46199,7 @@
 /area/medical/surgery)
 "fMg" = (
 /obj/item/stack/rods,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "fMh" = (
 /obj/effect/decal/cleanable/dirt,
@@ -49994,9 +49961,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/scorched,
 /area/shuttle/salvage/derelict)
 "gLd" = (
 /obj/effect/landmark{
@@ -50363,9 +50328,7 @@
 /area/library)
 "gQF" = (
 /obj/effect/alien/weeds/node,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "gQH" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -51946,9 +51909,7 @@
 /obj/item/stack/sheet/glass/glass{
 	amount = 18
 	},
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/asmaint2)
 "hnJ" = (
 /obj/structure/table,
@@ -55111,9 +55072,7 @@
 /turf/simulated/floor,
 /area/supply/qm)
 "ihO" = (
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/abandoned)
 "ihQ" = (
 /turf/simulated/floor,
@@ -55724,9 +55683,7 @@
 /area/engineering/atmos)
 "irI" = (
 /obj/item/organ/internal/heart,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "irS" = (
 /obj/effect/decal/cleanable/dirt,
@@ -56358,9 +56315,7 @@
 "iyR" = (
 /obj/structure/table,
 /obj/item/weapon/book/manual/barman_recipes,
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/port)
 "iyT" = (
 /obj/machinery/computer/telecomms/server{
@@ -57678,9 +57633,7 @@
 /obj/item/stack/sheet/mineral/sandstone{
 	amount = 30
 	},
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/abandoned)
 "iVc" = (
 /obj/machinery/door/firedoor/border_only{
@@ -57997,9 +57950,7 @@
 /obj/item/stack/medical/ointment,
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket,
 /obj/item/weapon/reagent_containers/syringe,
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/shuttle/salvage/derelict)
 "jbq" = (
 /obj/structure/window/reinforced{
@@ -59619,10 +59570,7 @@
 "jAu" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/camera_assembly,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/burnt,
 /area/maintenance/port)
 "jAv" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -64361,9 +64309,7 @@
 /area/tcomms/chamber)
 "kGN" = (
 /obj/effect/alien/weeds/node,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "kGX" = (
 /obj/structure/disposalpipe/junction{
@@ -66364,9 +66310,7 @@
 /area/science/xenobiology/specimen_3)
 "lhr" = (
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "lhL" = (
 /obj/machinery/atmospherics/pipe/simple/cyan/visible,
@@ -70096,10 +70040,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/shuttle/salvage/derelict)
 "mbo" = (
 /obj/effect/decal/warning_stripes{
@@ -73857,9 +73798,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/shuttle/salvage/derelict)
 "mYT" = (
 /obj/item/device/radio/intercom{
@@ -74419,9 +74358,7 @@
 /area/tcomms/chamber)
 "nfK" = (
 /mob/living/simple_animal/hostile/alien/drone,
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/abandoned)
 "ngc" = (
 /obj/structure/table,
@@ -77030,9 +76967,7 @@
 "nOk" = (
 /obj/item/weapon/storage/toolbox/syndicate,
 /obj/effect/alien/weeds/node,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "nOy" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
@@ -77246,9 +77181,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
 	},
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/shuttle/salvage/derelict)
 "nQH" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -82776,10 +82709,7 @@
 	pixel_x = -3;
 	pixel_y = -7
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/asmaint2)
 "pjk" = (
 /obj/machinery/portable_atmospherics/hydroponics,
@@ -85949,9 +85879,7 @@
 "pTI" = (
 /obj/effect/alien/weeds,
 /obj/structure/bed/nest,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "pTQ" = (
 /obj/effect/decal/warning_stripes{
@@ -87699,9 +87627,7 @@
 /area/medical/medbay)
 "qts" = (
 /obj/structure/table,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "qtA" = (
 /obj/machinery/account_database,
@@ -89327,9 +89253,7 @@
 "qPJ" = (
 /obj/effect/decal/remains/xeno,
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "qPY" = (
 /obj/effect/decal/warning_stripes{
@@ -89358,9 +89282,7 @@
 /area/maintenance/incinerator)
 "qQj" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "qQm" = (
 /obj/machinery/vending,
@@ -89574,9 +89496,7 @@
 "qTr" = (
 /obj/effect/decal/remains/xeno,
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "qTy" = (
 /obj/machinery/status_display{
@@ -90128,9 +90048,7 @@
 /area/supply/office)
 "raD" = (
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "raO" = (
 /obj/structure/window/reinforced,
@@ -90487,9 +90405,7 @@
 	},
 /area/tcomms/chamber)
 "rfR" = (
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/abandoned)
 "rfU" = (
 /obj/structure/table,
@@ -93260,10 +93176,7 @@
 /area/science/hallway)
 "rMB" = (
 /obj/effect/decal/cleanable/generic,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/port)
 "rMQ" = (
 /obj/structure/table,
@@ -98267,9 +98180,7 @@
 	},
 /area/science/xenobiology)
 "sYD" = (
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "sZe" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -98745,9 +98656,7 @@
 /area/mine/abandoned)
 "tfT" = (
 /obj/structure/table,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "tgd" = (
 /obj/machinery/vending/cigarette,
@@ -99421,9 +99330,7 @@
 /obj/structure/closet/crate/medical,
 /obj/item/stack/medical/bruise_pack,
 /obj/abstract/map/spawner/floorpill,
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/shuttle/salvage/derelict)
 "tod" = (
 /obj/structure/grille,
@@ -100907,9 +100814,7 @@
 	pixel_y = -1
 	},
 /obj/item/device/radio,
-/turf/simulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/asmaint2)
 "tIG" = (
 /obj/structure/table,
@@ -100917,9 +100822,7 @@
 /obj/item/tool/wirecutters,
 /obj/item/device/multitool,
 /obj/abstract/map/spawner/floorpill,
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/asmaint2)
 "tII" = (
 /obj/structure/cable/yellow{
@@ -101168,9 +101071,7 @@
 /turf/simulated/floor,
 /area/hallway/primary/central)
 "tKj" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "tKl" = (
 /obj/structure/cable/yellow{
@@ -102278,9 +102179,7 @@
 /obj/item/tool/screwdriver{
 	pixel_y = 16
 	},
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/asmaint2)
 "tWS" = (
 /obj/structure/reagent_dispensers/watertank,
@@ -102313,9 +102212,7 @@
 /obj/item/stack/sheet/metal{
 	amount = 23
 	},
-/turf/simulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/asmaint2)
 "tXm" = (
 /obj/item/tool/wirecutters,
@@ -102344,9 +102241,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "tXX" = (
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/asmaint2)
 "tYa" = (
 /obj/structure/closet/crate,
@@ -103655,9 +103550,7 @@
 /area/maintenance/disposal)
 "unC" = (
 /obj/effect/decal/remains/xeno,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "unH" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{
@@ -104508,9 +104401,7 @@
 "uAW" = (
 /obj/effect/alien/weeds,
 /obj/item/alien_embryo,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "uAX" = (
 /turf/simulated/wall/r_wall,
@@ -105858,9 +105749,7 @@
 /turf/simulated/floor,
 /area/engineering/atmos)
 "uRu" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "uRA" = (
 /obj/machinery/atmospherics/unary/vent_pump/high_volume{
@@ -106339,9 +106228,7 @@
 /turf/simulated/wall/r_wall,
 /area/science/xenobiology/specimen_3)
 "uWH" = (
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/asmaint2)
 "uWL" = (
 /obj/structure/window/reinforced{
@@ -106394,9 +106281,7 @@
 /obj/structure/rack,
 /obj/item/weapon/tank/air,
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor{
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/asmaint2)
 "uXE" = (
 /obj/structure/window/reinforced,
@@ -106668,9 +106553,7 @@
 /turf/simulated/floor,
 /area/hallway/secondary/exit)
 "vcd" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "vck" = (
 /obj/machinery/power/emitter,
@@ -107356,10 +107239,7 @@
 "vmm" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/light/bulb,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/shuttle/salvage/derelict)
 "vmx" = (
 /obj/structure/disposalpipe/segment{
@@ -108478,9 +108358,7 @@
 "vxr" = (
 /obj/effect/decal/remains/xeno,
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "vxE" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
@@ -113026,9 +112904,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/shuttle/salvage/derelict)
 "wxw" = (
 /turf/simulated/wall/r_wall,
@@ -113088,9 +112964,7 @@
 	},
 /area/security/perma)
 "wxP" = (
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/asmaint2)
 "wxZ" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
@@ -113764,9 +113638,7 @@
 /area/security/detectives_office)
 "wGg" = (
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "wGp" = (
 /turf/simulated/floor{
@@ -117149,10 +117021,7 @@
 	pixel_y = -2
 	},
 /obj/item/weapon/reagent_containers/glass/rag,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/maintenance/port)
 "xql" = (
 /obj/structure/bed,
@@ -117225,9 +117094,7 @@
 /obj/structure/rack,
 /obj/item/tool/weldingtool,
 /obj/item/tool/crowbar,
-/turf/simulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/scorched,
 /area/maintenance/asmaint2)
 "xqK" = (
 /obj/item/device/radio/intercom{
@@ -117931,9 +117798,7 @@
 	stat = 2
 	},
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "xxM" = (
 /obj/structure/table/woodentable,
@@ -119365,9 +119230,7 @@
 /area/security/medical)
 "xMa" = (
 /mob/living/simple_animal/hostile/necro/zombie,
-/turf/simulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/scorched,
 /area/shuttle/salvage/derelict)
 "xMd" = (
 /obj/structure/sign/securearea{

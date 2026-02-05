@@ -89646,9 +89646,7 @@
 /area/prison/solitary)
 "diV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "diW" = (
 /obj/structure/bed,
@@ -89689,9 +89687,7 @@
 /area/prison/solitary)
 "djd" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dje" = (
 /obj/item/weapon/storage/fancy/cigarettes,
@@ -90099,14 +90095,10 @@
 	},
 /area/centcom/living)
 "dkl" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dkm" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dkn" = (
 /obj/machinery/dna_scannernew,
@@ -101382,9 +101374,7 @@
 /area/mine/abandoned)
 "eaW" = (
 /obj/item/stack/rods,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "eaX" = (
 /obj/structure/grille,
@@ -101398,9 +101388,7 @@
 /turf/simulated/floor/plating/airless,
 /area/mine/abandoned)
 "eaY" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "eaZ" = (
 /obj/item/weapon/shard{
@@ -101410,9 +101398,7 @@
 /area/mine/abandoned)
 "eba" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "ebb" = (
 /obj/item/stack/rods,
@@ -101443,9 +101429,7 @@
 /area)
 "ebf" = (
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "ebg" = (
 /obj/item/clothing/mask/facehugger{
@@ -101492,9 +101476,7 @@
 "ebl" = (
 /obj/effect/decal/remains/xeno,
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ebm" = (
 /obj/effect/alien/weeds,
@@ -101554,9 +101536,7 @@
 /area/mine/abandoned)
 "ebv" = (
 /obj/structure/table,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ebw" = (
 /obj/structure/grille,
@@ -101581,15 +101561,11 @@
 /area/mine/abandoned)
 "ebA" = (
 /obj/structure/table,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ebB" = (
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "ebC" = (
 /obj/machinery/door/airlock/external{
@@ -101687,14 +101663,10 @@
 /area/research_outpost/hallway)
 "ebN" = (
 /obj/item/organ/internal/heart,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ebO" = (
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ebP" = (
 /obj/item/weapon/shard{
@@ -101730,9 +101702,7 @@
 /turf/simulated/floor/plating/airless,
 /area/mine/abandoned)
 "ebU" = (
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ebV" = (
 /obj/structure/lattice,
@@ -101831,14 +101801,10 @@
 /area/research_outpost/hallway)
 "ecj" = (
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "eck" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "ecl" = (
 /obj/item/weapon/shard,
@@ -101852,9 +101818,7 @@
 /area/mine/abandoned)
 "ecn" = (
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ecp" = (
 /obj/structure/lattice,
@@ -102090,14 +102054,10 @@
 /area/mine/abandoned)
 "ecX" = (
 /obj/effect/decal/remains/xeno,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ecY" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "ecZ" = (
 /obj/structure/grille,
@@ -102114,9 +102074,7 @@
 "edb" = (
 /obj/effect/decal/remains/xeno,
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "edc" = (
 /obj/structure/rack,
@@ -102249,15 +102207,11 @@
 /area/research_outpost/xenobot)
 "edv" = (
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "edw" = (
 /obj/effect/alien/weeds/node,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "edx" = (
 /obj/item/clothing/mask/facehugger{
@@ -102265,9 +102219,7 @@
 	stat = 2
 	},
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "edy" = (
 /obj/effect/decal/cleanable/blood/xeno,
@@ -102275,9 +102227,7 @@
 /area/mine/abandoned)
 "edz" = (
 /obj/effect/decal/remains/human,
-/turf/simulated/floor/airless{
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "edA" = (
 /obj/structure/table,
@@ -102287,9 +102237,7 @@
 "edB" = (
 /obj/effect/alien/weeds,
 /obj/item/alien_embryo,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "edC" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -102470,9 +102418,7 @@
 /area/mine/abandoned)
 "eea" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "eeb" = (
 /turf/unsimulated/floor/asteroid,
@@ -103023,9 +102969,7 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
 "efn" = (
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/abandoned)
 "efo" = (
 /turf/simulated/floor{
@@ -103045,9 +102989,7 @@
 "efr" = (
 /obj/effect/decal/remains/xeno,
 /obj/effect/alien/weeds,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "efs" = (
 /obj/structure/table,
@@ -103352,14 +103294,10 @@
 /area/research_outpost/atmos)
 "ega" = (
 /mob/living/simple_animal/hostile/alien/drone,
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/abandoned)
 "egb" = (
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/abandoned)
 "egc" = (
 /obj/structure/ore_box,
@@ -103634,9 +103572,7 @@
 /obj/item/stack/sheet/mineral/sandstone{
 	amount = 30
 	},
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/mine/abandoned)
 "egL" = (
 /obj/effect/alien/resin/wall,
@@ -104072,9 +104008,7 @@
 /area/mine/explored)
 "ehQ" = (
 /obj/effect/alien/weeds/node,
-/turf/simulated/floor/airless{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/mine/abandoned)
 "ehR" = (
 /obj/effect/decal/remains/human,
@@ -104084,9 +104018,7 @@
 "ehS" = (
 /obj/effect/alien/weeds,
 /obj/structure/bed/nest,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ehT" = (
 /obj/item/weapon/table_parts,
@@ -105162,9 +105094,7 @@
 "ejX" = (
 /obj/item/weapon/storage/toolbox/syndicate,
 /obj/effect/alien/weeds/node,
-/turf/simulated/floor/airless{
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/mine/abandoned)
 "ejY" = (
 /turf/simulated/floor/airless{

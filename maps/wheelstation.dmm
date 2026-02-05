@@ -76852,9 +76852,7 @@
 /area/prison/solitary)
 "cPN" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cPO" = (
 /obj/structure/bed,
@@ -76895,9 +76893,7 @@
 /area/prison/solitary)
 "cPV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cPW" = (
 /obj/item/weapon/storage/fancy/cigarettes,
@@ -77300,14 +77296,10 @@
 	},
 /area/centcom/suppy)
 "cRc" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cRd" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cRe" = (
 /obj/machinery/dna_scannernew,

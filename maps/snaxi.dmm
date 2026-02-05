@@ -48034,9 +48034,7 @@
 	icon_state = "1-8";
 	tag = ""
 	},
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/auxsolarstarboard{
 	name = "Southeast Solar Control"
 	})
@@ -48374,9 +48372,7 @@
 	name = "Southeast Solar Control"
 	})
 "bYX" = (
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/auxsolarstarboard{
 	name = "Southeast Solar Control"
 	})
@@ -51578,9 +51574,7 @@
 /area/shuttle/administration/centcom)
 "ceF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "ceG" = (
 /obj/effect/decal/cleanable/cobweb2,
@@ -51621,9 +51615,7 @@
 /area/prison/solitary)
 "ceN" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "ceO" = (
 /obj/effect/decal/cleanable/blood,
@@ -51895,14 +51887,10 @@
 	},
 /area/centcom/living)
 "cfz" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cfB" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cfC" = (
 /obj/machinery/dna_scannernew,
@@ -79202,9 +79190,7 @@
 	external_pressure_bound = 101;
 	on = 1
 	},
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/engine/aux_control{
 	name = "Engineering Medical"
 	})
@@ -86752,9 +86738,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/engine/aux_control{
 	name = "Engineering Medical"
 	})

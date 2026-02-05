@@ -85756,9 +85756,7 @@
 /area/prison/solitary)
 "dgx" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dgy" = (
 /obj/structure/bed,
@@ -85799,9 +85797,7 @@
 /area/prison/solitary)
 "dgF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dgG" = (
 /obj/item/weapon/storage/fancy/cigarettes,
@@ -86204,14 +86200,10 @@
 	},
 /area/centcom/suppy)
 "dhM" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dhN" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dhO" = (
 /obj/machinery/dna_scannernew,
