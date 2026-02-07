@@ -81,7 +81,7 @@ var/list/one_way_windows
 		icon = I
 	else
 		icon_state = initial(icon_state)
-		icon = initial(icon)
+		icon = initial(icon) // this just werks for some reason
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
