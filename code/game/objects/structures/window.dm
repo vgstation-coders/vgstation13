@@ -70,11 +70,11 @@ var/list/one_way_windows
 
 /obj/structure/window/relativewall()
 	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
-	var/icon/I = new('icons/obj/structures/window.dmi', icon_state)
+	var/icon/I = new('icons/obj/structures/window.dmi', icon_state, dir)
 	if(!is_fulltile)
 		var/cmasknumber = findSmoothingOnTurf()
 		if(cmasknumber)
-			var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]")
+			var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]", dir)
 			I.Blend(mask, ICON_OVERLAY)
 			I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
 	icon = I
