@@ -14,17 +14,33 @@
 	var/allz = alert("Do you wish to generate a specific zlevel or all zlevels?", "Generate what levels?", "All", "Specific", "Cancel")
 
 	var/zlevel = 1
-	if(allz == "Cancel")
-		return
-	else if(allz == "Specific")
-		zlevel = input("Input zlevel you wish to render") as num
+	var/all_z = FALSE
+	switch(allz)
+		if("Cancel")
+			return
+		if("Specific")
+			zlevel = input("Input zlevel you wish to render") as num
+		if("All")
+			all_z = TRUE
+
+	var/area_rendered = alert("Do you wish to generate a specific area?", "Generate what area?", "All", "Specific", "Cancel")
+	switch(area_rendered)
+		if("Cancel")
+			return
+		if("Specific")
+			area_rendered = input("Input area type") as text
+			area_rendered = filter_list_input("Select an area type", "Area type", get_matching_types(area_rendered, /area))
+			if(!area_rendered)
+				area_rendered = /area
+		if("All")
+			area_rendered = /area
 
 	message_admins("[ckey]/[src] started rendering maps")
 	log_admin("[ckey]/[src] started rendering maps")
 
-	maprenders(zlevel, allz == "All" ? 1 : 0)
+	maprenders(zlevel, all_z, area_rendered)
 
-/client/proc/maprenders(var/currentz = 1, var/allz = 0)
+/client/proc/maprenders(var/currentz = 1, var/allz = 0, var/render_area)
 
 	to_chat(world, "Map Render: <B>GENERATE MAP FOR [allz? "ALL ZLEVELS" : "LEVEL [currentz]"]</B>")
 	var/mapname = replacetext(map.nameLong, " ", "")
