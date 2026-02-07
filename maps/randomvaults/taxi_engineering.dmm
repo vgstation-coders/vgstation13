@@ -543,14 +543,6 @@
 /obj/structure/lattice,
 /turf/space,
 /area/vault/taxi_engi/engine)
-"bn" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating/damaged/broken,
-/area/vault/taxi_engi/engine)
 "bo" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -2876,17 +2868,6 @@
 	},
 /turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
-"fX" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/vault/taxi_engi/engine)
-"fY" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/damaged/broken,
-/area/vault/taxi_engi/engine)
 "fZ" = (
 /turf/simulated/wall,
 /area/vault/taxi_engi/podbay)
@@ -3208,9 +3189,6 @@
 /obj/effect/decal/cleanable/blood/tracks/footprints/vox,
 /turf/simulated/floor/plating/damaged/burnt,
 /area/vault/taxi_engi/podbay)
-"gK" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/vault/taxi_engi/podbay)
 "gL" = (
 /obj/machinery/atmospherics/miner/nitrogen{
 	on = 0
@@ -3281,9 +3259,6 @@
 	icon_state = "dark vault corner";
 	tag = "icon-dark vault corner (EAST)"
 	},
-/area/vault/taxi_engi/podbay)
-"gU" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/podbay)
 "gV" = (
 /obj/structure/girder,
@@ -3528,7 +3503,7 @@ eJ
 fH
 gd
 gv
-gK
+gu
 gT
 gv
 "}
@@ -3552,7 +3527,7 @@ fI
 gd
 gw
 gw
-gU
+gu
 gF
 "}
 (11,1,1) = {"
@@ -3700,7 +3675,7 @@ al
 aM
 bi
 bC
-bn
+aR
 aB
 cM
 dm
@@ -3907,7 +3882,7 @@ am
 aS
 aB
 bI
-bn
+aR
 cv
 cV
 du
@@ -4043,7 +4018,7 @@ aa
 aa
 aa
 aa
-bn
+aR
 am
 am
 aa
@@ -4101,7 +4076,7 @@ aa
 aa
 bM
 aa
-bn
+aR
 aa
 aa
 aa
@@ -4307,7 +4282,7 @@ bk
 bN
 bN
 dk
-fX
+dk
 aS
 aa
 aa
@@ -4330,7 +4305,7 @@ dx
 fV
 dx
 fD
-fY
+fD
 bZ
 aa
 aa

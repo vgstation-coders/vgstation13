@@ -1346,11 +1346,6 @@
 	},
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
-"un" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
-/area/vault/mothership_lab/entrance)
 "uo" = (
 /obj/structure/rack,
 /obj/machinery/light/small{
@@ -1766,9 +1761,6 @@
 	},
 /obj/structure/closet/crate/ayy2,
 /turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/entrance)
-"zk" = (
-/turf/unsimulated/floor/lab_underplating/broken,
 /area/vault/mothership_lab/entrance)
 "zr" = (
 /turf/space,
@@ -4399,7 +4391,7 @@ Rj
 Rj
 HZ
 BB
-zk
+Dk
 BB
 BB
 BB
@@ -4634,7 +4626,7 @@ Rj
 Rj
 nl
 BB
-zk
+Dk
 BB
 aM
 QI
@@ -5624,7 +5616,7 @@ BB
 Ei
 BB
 vt
-un
+tN
 fG
 gn
 vt
@@ -5820,7 +5812,7 @@ Dk
 Yo
 Ei
 Ei
-zk
+Dk
 aI
 BB
 BB
@@ -6013,7 +6005,7 @@ nj
 Rj
 WP
 du
-un
+tN
 Yx
 BB
 BB
