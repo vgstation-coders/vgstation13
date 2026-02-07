@@ -164,7 +164,7 @@
 /datum/chemical_reaction/emp_pulse
 	name = "EMP Pulse"
 	id = "emp_pulse"
-	result = null
+	result = FERROURANIUM
 	required_reagents = list(URANIUM = 1, IRON = 1) // Yes, laugh, it's the best recipe I could think of that makes a little bit of sense
 	result_amount = 2
 
@@ -174,7 +174,6 @@
 	//200 created volume = 8 heavy range & 14 light range. 4 tiles larger than traitor EMP grenades.
 	empulse(location, round(created_volume / 24), round(created_volume / 14), 1)
 	holder.clear_reagents(TRUE)
-	holder.add_reagent(FERROURANIUM,created_volume/10)
 
 /datum/chemical_reaction/silica
 	name = "Silica"
