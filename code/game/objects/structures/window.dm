@@ -69,14 +69,19 @@ var/list/one_way_windows
 		return O.anchored && ..()
 
 /obj/structure/window/relativewall()
-	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
-	var/icon/I = new('icons/obj/structures/window.dmi', icon_state, dir)
-	if(!is_fulltile)
-		var/cmasknumber = findSmoothingOnTurf()
-		if(cmasknumber)
-			var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]", dir)
-			I.Blend(mask, ICON_OVERLAY)
-			I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
+	var/icon/I
+	if(anchored && density)
+		icon_state = "[base_state][..()]"
+		I = new('icons/obj/structures/window.dmi', icon_state, dir)
+		if(!is_fulltile)
+			var/cmasknumber = findSmoothingOnTurf()
+			if(cmasknumber)
+				var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]", dir)
+				I.Blend(mask, ICON_OVERLAY)
+				I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
+	else
+		icon_state = initial(icon_state)
+		I = new('icons/obj/structures/window.dmi', icon_state)
 	icon = I
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
