@@ -147,9 +147,6 @@
 	},
 /turf/simulated/floor/wood,
 /area/mining_bar)
-"aw" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/mining_bar)
 "ax" = (
 /obj/item/weapon/stool,
 /turf/simulated/floor/wood,
@@ -983,7 +980,7 @@ bW
 as
 bN
 bc
-aw
+aX
 aX
 bl
 br

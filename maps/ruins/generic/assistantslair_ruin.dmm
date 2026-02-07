@@ -638,17 +638,10 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
-"cl" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/vault/assistantlair)
 "cm" = (
 /obj/structure/table,
 /obj/item/clothing/head/batman,
 /turf/simulated/floor/plating,
-/area/vault/assistantlair)
-"cn" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/assistantlair)
 "co" = (
 /obj/structure/bed,
@@ -1288,7 +1281,7 @@ bF
 ah
 ao
 ah
-cl
+an
 ah
 bg
 aa
@@ -1384,7 +1377,7 @@ ah
 ao
 aA
 ah
-cn
+aZ
 ct
 ah
 aa

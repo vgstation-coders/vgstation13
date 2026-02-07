@@ -46,9 +46,6 @@
 /obj/machinery/door/window,
 /turf/simulated/floor/airless,
 /area/awaymission/northblock)
-"am" = (
-/turf/simulated/floor/damaged/airless/burnt,
-/area/awaymission/northblock)
 "an" = (
 /turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/northblock)
@@ -60,9 +57,6 @@
 /area/awaymission/northblock)
 "ap" = (
 /turf/simulated/floor/airless,
-/area/awaymission/northblock)
-"aq" = (
-/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/northblock)
 "ar" = (
 /obj/machinery/door/window{
@@ -149,12 +143,6 @@
 "aE" = (
 /obj/machinery/door/airlock/engineering,
 /turf/simulated/floor/plating/airless,
-/area/awaymission/northblock)
-"aF" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/awaymission/northblock)
-"aG" = (
-/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/northblock)
 "aH" = (
 /obj/effect/decal/remains/robot,
@@ -379,10 +367,6 @@
 "bw" = (
 /turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/research)
-"bx" = (
-/obj/structure/girder/reinforced,
-/turf/simulated/floor/damaged/airless/broken,
-/area/awaymission/research)
 "by" = (
 /turf/simulated/wall/r_wall,
 /area/awaymission/research)
@@ -435,9 +419,6 @@
 	icon_state = "diagonalWall3"
 	},
 /area/awaymission/syndishuttle)
-"bG" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/awaymission/research)
 "bH" = (
 /turf/simulated/floor{
 	dir = 9;
@@ -1385,14 +1366,6 @@
 	},
 /turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/northblock)
-"dU" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/damaged/airless/burnt,
-/area/awaymission/northblock)
 "dV" = (
 /obj/structure/window/reinforced{
 	dir = 4
@@ -1602,22 +1575,6 @@
 	},
 /turf/simulated/floor,
 /area/awaymission/northblock)
-"ex" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/damaged/airless/burnt,
-/area/awaymission/northblock)
-"ey" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/damaged/airless/broken,
-/area/awaymission/northblock)
 "ez" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -1748,14 +1705,6 @@
 	dir = 1;
 	icon_state = "blue"
 	},
-/area/awaymission/northblock)
-"eO" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/northblock)
 "eP" = (
 /obj/structure/table,
@@ -2024,14 +1973,6 @@
 /area/awaymission/midblock)
 "fu" = (
 /turf/simulated/floor/damaged/airless/broken,
-/area/awaymission/midblock)
-"fv" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/damaged/airless/burnt,
 /area/awaymission/midblock)
 "fw" = (
 /obj/structure/table,
@@ -2688,9 +2629,6 @@
 	icon_state = "red"
 	},
 /area/awaymission/arrivalblock)
-"hd" = (
-/turf/simulated/floor/damaged/airless/burnt,
-/area/awaymission/midblock)
 "he" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/blue,
@@ -3392,9 +3330,6 @@
 	},
 /area/awaymission/arrivalblock)
 "iS" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/awaymission/arrivalblock)
-"iT" = (
 /turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/arrivalblock)
 "iU" = (
@@ -5281,9 +5216,9 @@ aa
 af
 af
 af
-aG
-aF
-aG
+an
+an
+an
 ej
 fh
 aj
@@ -5412,11 +5347,11 @@ aK
 aC
 af
 dx
-aF
+an
 ae
-aF
-aG
-aF
+an
+an
+an
 fj
 aj
 aa
@@ -5479,9 +5414,9 @@ af
 aj
 dy
 dO
-aF
-aG
-aG
+an
+an
+an
 eZ
 ei
 aj
@@ -5673,8 +5608,8 @@ bn
 aC
 af
 af
-aq
-aF
+an
+an
 af
 dQ
 eg
@@ -5806,7 +5741,7 @@ aC
 af
 af
 ae
-aG
+an
 aj
 dR
 ei
@@ -5825,7 +5760,7 @@ hM
 id
 is
 iK
-iT
+iS
 jh
 js
 jG
@@ -5871,12 +5806,12 @@ aC
 bF
 af
 cQ
-aq
-aG
+an
+an
 aj
 dS
 ei
-ex
+eA
 dw
 fc
 aj
@@ -5935,14 +5870,14 @@ bn
 aC
 bF
 af
-aq
+an
 af
 an
 an
 aj
 dT
 ei
-ey
+ev
 dw
 fb
 aj
@@ -5951,7 +5886,7 @@ fG
 fs
 fs
 fs
-hd
+ft
 hB
 ft
 if
@@ -5995,18 +5930,18 @@ ag
 ak
 ak
 aa
-aG
+an
 aK
 bn
 aC
 af
 ci
-aG
+an
 cR
 an
 dn
 aj
-am
+aB
 ej
 ez
 ee
@@ -6124,25 +6059,25 @@ aj
 al
 av
 af
-aF
+an
 af
 aj
-am
+aB
 aC
 bn
 aK
-aq
-aF
 an
-aF
-am
-am
-am
-aq
+an
+an
+an
+aB
+aB
+aB
+an
 ek
 eA
-aF
-aG
+an
+an
 aB
 fu
 fI
@@ -6187,30 +6122,30 @@ aa
 aa
 aa
 aj
-am
+aB
 aw
-aF
-aF
+an
+an
 af
 aj
-aG
+an
 bt
 bv
 bF
-aF
-aF
+an
+an
 cE
-aq
-aq
+an
+an
 do
 dA
-dU
-dU
+fd
+fd
 eB
-eO
+dA
 fd
 fd
-fv
+gi
 fJ
 fW
 gk
@@ -6255,14 +6190,14 @@ aa
 aj
 an
 ax
-aG
-am
-aG
+an
+aB
+an
 aj
-aq
-am
+an
+aB
 bw
-bG
+bw
 bY
 by
 by
@@ -6321,13 +6256,13 @@ aa
 aj
 ao
 ay
-am
-aG
+aB
+an
 aR
 aj
-am
-aq
-bx
+aB
+an
+bY
 bH
 bZ
 cj
@@ -6388,11 +6323,11 @@ aj
 ap
 af
 af
-aF
+an
 aS
 aj
-am
-aq
+aB
+an
 by
 bI
 ca
@@ -6451,14 +6386,14 @@ aa
 aa
 aa
 aj
-aq
+an
 az
 aH
-am
-aF
+aB
+an
 bb
 ap
-am
+aB
 by
 bJ
 cb
@@ -6520,10 +6455,10 @@ aj
 ar
 aA
 ap
-am
-aF
+aB
+an
 bc
-aG
+an
 ap
 by
 bK
@@ -6651,7 +6586,7 @@ aa
 aj
 as
 aB
-aq
+an
 aL
 aU
 aj
@@ -6716,9 +6651,9 @@ aa
 aa
 aj
 at
-aq
+an
 af
-am
+aB
 aB
 aj
 aa
@@ -6785,7 +6720,7 @@ au
 aB
 an
 aB
-am
+aB
 aj
 aa
 aa
@@ -6848,8 +6783,8 @@ aa
 aa
 aj
 au
-am
-am
+aB
+aB
 aM
 aV
 aj

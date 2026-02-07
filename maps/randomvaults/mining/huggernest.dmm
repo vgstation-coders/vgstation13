@@ -162,10 +162,6 @@
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
 /area/mining_surprise)
-"L" = (
-/obj/structure/girder,
-/turf/simulated/floor/plating/damaged/broken,
-/area/mining_surprise)
 "M" = (
 /obj/effect/alien/weeds,
 /obj/item/clothing/mask/facehugger,
@@ -221,11 +217,6 @@
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
 /area/mining_surprise)
-"W" = (
-/obj/effect/alien/weeds,
-/obj/effect/alien/egg,
-/turf/simulated/floor/plating/damaged/broken,
-/area/mining_surprise)
 "X" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
@@ -257,7 +248,7 @@ o
 G
 F
 B
-L
+B
 a
 "}
 (3,1,1) = {"
@@ -266,7 +257,7 @@ c
 U
 f
 E
-W
+E
 H
 G
 c

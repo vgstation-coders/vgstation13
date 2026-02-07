@@ -967,9 +967,6 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
 /area/awaymission/leviathan/mining)
-"cW" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/awaymission/leviathan/mining)
 "cX" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/damaged/broken,
@@ -43850,7 +43847,7 @@ aW
 aW
 cG
 cO
-cW
+cY
 dd
 aQ
 aa
@@ -44607,7 +44604,7 @@ cw
 aQ
 cQ
 cY
-cW
+cY
 aQ
 aa
 aa

@@ -283,10 +283,6 @@
 /obj/structure/curtain/black,
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
-"aZ" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/damaged/burnt,
-/area/vault/assistantlair)
 "ba" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/abstract/map/nest/spider/limited,
@@ -637,9 +633,6 @@
 	dir = 4
 	},
 /turf/simulated/floor/plating,
-/area/vault/assistantlair)
-"cl" = (
-/turf/simulated/floor/plating/damaged/broken,
 /area/vault/assistantlair)
 "cm" = (
 /obj/structure/table,
@@ -1266,7 +1259,7 @@ bF
 ah
 ao
 ah
-cl
+an
 ah
 bg
 aa
@@ -1384,7 +1377,7 @@ am
 aD
 ao
 ah
-aZ
+cn
 aa
 aa
 aa

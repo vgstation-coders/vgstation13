@@ -54,9 +54,6 @@
 	},
 /turf/simulated/floor/airless,
 /area/derelict/teleporter)
-"O" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/derelict/teleporter)
 "S" = (
 /turf/simulated/wall/r_wall,
 /area/derelict/teleporter)
@@ -201,7 +198,7 @@ a
 a
 V
 S
-O
+c
 r
 C
 r
@@ -232,7 +229,7 @@ S
 p
 r
 v
-O
+c
 S
 p
 "}

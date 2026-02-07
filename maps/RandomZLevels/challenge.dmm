@@ -14,12 +14,6 @@
 "ad" = (
 /turf/simulated/floor/plating,
 /area/awaymission/challenge/start)
-"ae" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/awaymission/challenge/start)
-"af" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/awaymission/challenge/start)
 "ag" = (
 /obj/item/clothing/suit/space/syndicate/blue,
 /obj/item/clothing/head/helmet/space/syndicate/blue,
@@ -87,9 +81,6 @@
 "au" = (
 /turf/simulated/wall,
 /area/awaymission/challenge/start)
-"av" = (
-/turf/simulated/floor/damaged/airless/broken,
-/area/awaymission/challenge/start)
 "aw" = (
 /obj/item/stack/rods,
 /obj/effect/decal/cleanable/blood/splatter,
@@ -120,9 +111,6 @@
 /area/awaymission/challenge/main)
 "aC" = (
 /turf/simulated/floor/plating,
-/area/awaymission/challenge/main)
-"aD" = (
-/turf/simulated/floor/damaged/airless/broken,
 /area/awaymission/challenge/main)
 "aE" = (
 /turf/simulated/wall,
@@ -1787,7 +1775,7 @@ bM
 (8,1,1) = {"
 ab
 ac
-af
+an
 an
 ah
 ad
@@ -1856,9 +1844,9 @@ ad
 aj
 an
 ao
-af
 an
-av
+an
+an
 aA
 aA
 aA
@@ -1918,13 +1906,13 @@ bM
 "}
 (10,1,1) = {"
 ab
-ae
+an
 ak
 al
-af
+an
 ad
 aw
-av
+an
 aB
 aC
 aJ
@@ -1984,12 +1972,12 @@ bM
 "}
 (11,1,1) = {"
 ab
-af
+an
 al
 ah
-af
+an
 at
-af
+an
 an
 aC
 aG
@@ -2055,9 +2043,9 @@ ah
 al
 ap
 au
-af
+an
 ay
-aD
+aG
 aC
 aL
 aR
@@ -2186,8 +2174,8 @@ ai
 ah
 al
 ar
-af
-av
+an
+an
 ad
 aA
 aA
@@ -2252,9 +2240,9 @@ ah
 am
 ad
 as
-av
-ae
-av
+an
+an
+an
 aA
 aF
 aN

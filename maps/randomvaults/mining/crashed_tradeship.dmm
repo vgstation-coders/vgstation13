@@ -535,10 +535,6 @@
 	icon_state = "floor3"
 	},
 /area/asteroid)
-"Zb" = (
-/obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating/damaged/broken,
-/area/asteroid)
 "Zc" = (
 /obj/structure/table/reinforced,
 /turf/simulated/floor/shuttle{
@@ -743,7 +739,7 @@ ab
 ab
 ab
 Yk
-Zb
+Dc
 zj
 LV
 fQ

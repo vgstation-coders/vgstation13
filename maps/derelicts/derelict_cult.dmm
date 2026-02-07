@@ -2,7 +2,6 @@
 "ax" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating/airless,/area/derelict/bar)
 "ay" = (/turf/simulated/wall,/area/derelict/bar)
 "az" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/engine/vacuum,/area/derelict/atmos)
-"aB" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/storage/tech_storage)
 "aD" = (/obj/machinery/chem_dispenser/mapping,/obj/machinery/light{dir = 4},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "aJ" = (/turf/simulated/wall,/area/derelict/kitchen)
 "aO" = (/obj/structure/bookcase,/turf/simulated/floor/plating/airless,/area/derelict/library)
@@ -152,7 +151,6 @@
 "ot" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/floor/plating/damaged/airless/burnt,/area/derelict/atmos)
 "ov" = (/turf/space,/area/derelict/storage/tech_storage)
 "ox" = (/obj/item/stack/rods,/turf/space,/area/derelict/security)
-"oF" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/storage/tech_storage)
 "oP" = (/obj/item/weapon/rack_parts,/turf/simulated/floor/plating/airless,/area)
 "oU" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/storage/tech_storage)
 "oX" = (/turf/simulated/wall,/area/derelict/security)
@@ -233,7 +231,6 @@
 "wB" = (/obj/structure/cable/yellow{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor/airless,/area/derelict/security)
 "wC" = (/obj/effect/decal/cleanable/blood{icon_state = "floor4-old"},/turf/simulated/floor{icon_state = "dark"},/area/derelict/library)
 "wD" = (/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken6"},/area/derelict/bar)
-"wP" = (/turf/simulated/floor/plating/damaged/airless/broken,/area/derelict/research)
 "wU" = (/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating/damaged/airless/broken,/area/derelict/crew_quarters)
 "wX" = (/obj/structure/bookcase,/turf/simulated/floor{icon_state = "dark"},/area/derelict/library)
 "xg" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/machinery/atmospherics/pipe/simple/general/hidden,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating/airless,/area/derelict/atmos)
@@ -340,7 +337,6 @@
 "GM" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/airless,/area/derelict/atmos)
 "GO" = (/turf/simulated/floor,/area/derelict/solar_control)
 "GQ" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
-"Hb" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
 "He" = (/obj/structure/bed/chair,/turf/space,/area/derelict/security)
 "Ht" = (/obj/effect/decal/cleanable/blood{icon_state = "floor5-old"},/turf/simulated/floor/plating/airless,/area/derelict/security)
 "HE" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating/airless,/area/derelict/bar)
@@ -463,7 +459,6 @@
 "Tz" = (/obj/effect/decal/cleanable/blood{icon_state = "gibup1-old"},/obj/effect/decal/cleanable/blood{icon_state = "floor2-old"},/turf/simulated/floor/plating/airless,/area/derelict/security)
 "TC" = (/obj/item/tool/bonesetter,/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "TF" = (/turf/simulated/wall,/area/derelict/medical/medbay)
-"TI" = (/turf/simulated/floor/plating/damaged/airless/burnt,/area/derelict/atmos)
 "TN" = (/turf/simulated/floor/plating/airless,/area/derelict/medical/morgue)
 "TO" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/derelict/solar_control)
 "TQ" = (/obj/effect/decal/warning_stripes{dir = 10; icon_state = "warning"; tag = "icon-warning (SOUTHWEST)"},/turf/simulated/floor/airless,/area/derelict/storage/tech_storage)
@@ -482,7 +477,6 @@
 "UO" = (/obj/machinery/door/airlock/maintenance{name = "Bar & Kitchen Access"},/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating,/area/derelict/bar)
 "UP" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/space,/area)
 "UT" = (/turf/simulated/wall,/area/derelict/crew_quarters)
-"Vd" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/medical/medbay)
 "Vi" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/turf/space,/area/derelict/bar)
 "Vj" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor6"},/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "Vv" = (/obj/structure/girder,/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
@@ -502,7 +496,6 @@
 "Wf" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/turf/space,/area)
 "Wi" = (/obj/machinery/computer/library/checkout/remote_gallery,/obj/structure/table,/turf/simulated/floor{dir = 1; icon_state = "darkblue"; tag = "icon-darkblue (NORTH)"},/area/derelict/library)
 "Wl" = (/obj/machinery/door/airlock/research{name = "Research and Development"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
-"Wq" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/storage/aux_storage)
 "Wr" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/turf/space,/area/derelict/bar)
 "Ws" = (/obj/structure/cable/yellow{d2 = 4; icon_state = "0-4"},/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/plating,/area/derelict/solar_control)
 "Wt" = (/obj/machinery/floodlight,/turf/simulated/floor/airless,/area/derelict/storage/aux_storage)
@@ -560,13 +553,13 @@ ZdZdZdZdZdZdZdmZTjZdZdZdZdZdZdZdZdZdZdZdZdZdTjTjmZmZTjUoUoUoUoUoTFTFGeAfAfGeTFTF
 ZdZdZdZdZdZdZdTjZdZdZdZdZdZdZdZdZdZdZdZdTjTjZdTjTjTjTFTFTFTFTFTFTFhKAfAfAfAfAfTFTFYSYSmoVOumZdZdZdZdmZZdZdZdZdZdZdZdmZTjZdZdZdZdZdZdZdZdZdZd
 ZdZdZdZdZdUfTjZdZdZdZdZdZdZdZdZdZdZdZdUfZdTjZdTjpcUoTFAfsyKfiEaPsZAfAfAfAfAfAfAfTFGrOyOyOyKsTjUfZdZdTjTjgHZdZdZdZdZdZdTjTjZdZdZdZdZdZdZdZdZd
 ZdZdZdZdZdTjmZZdZdZdZdZdZdZdZdZdZdZdZdmZTjTjpcpcTjVXFTJYWYAfxTAfAfNRAfAfAfAfAfAfTFOyOyOyOyTNTjTjZdZdZdUoTjZdTjZdZdZdZdTjTjZdZdZdZdZdZdZdZdZd
-ZdZdZdZdmZTjZdZdZdZdZdZdZdZdZdZdZdTjZdTjTjZdZdZdTjTjTFVdyNZuFyJYRwqehIgPJYJYJYJYiAsOsOsOsOAaTjZdZdZdZdTjTjUoDlZdZdZdTjmZZdZdZdZdZdZdZdZdZdZd
-ZdZdZdZdmZTjZdZdZdZddHdHdHdHdHdHNsPkNsTjpcpcZdUfZdTjTFFwVdZFAfAfZVVSYqZFAfAfAfVATFOyOyOyOyTNTjZdUfKaZdZdUoTjTjZdZdZdmZZdZdZdZdZdZdZdZdZdZdZd
-ZdZdZdZdTjZdZdZdZdZddHdHdHdHyyNssCsCNspcZdZdZdZdZdZdsVVdAfZFAfAfAfAfAfZFAfAfAfAfTFGrOyOyTNTNTjTjTjUoUoTjZdZdTjZdZdZdZdZdZdZdZdZdZdZdZdZdZdZd
-ZdZdZdZdTjZdZdZdZdZddHdHdHdHdHsCsCNsPkTjUfZdZdZdZdUoTjQHUIzkVdTCSdBIAfZFXFXFXFAfTFYSYSKsKsjOTjeIUfUoUoUoTjUfTjmZZdZdZdZdZdZdZdZdZdZdZdZdZdZd
+ZdZdZdZdmZTjZdZdZdZdZdZdZdZdZdZdZdTjZdTjTjZdZdZdTjTjTFUIyNZuFyJYRwqehIgPJYJYJYJYiAsOsOsOsOAaTjZdZdZdZdTjTjUoDlZdZdZdTjmZZdZdZdZdZdZdZdZdZdZd
+ZdZdZdZdmZTjZdZdZdZddHdHdHdHdHdHNsPkNsTjpcpcZdUfZdTjTFFwUIZFAfAfZVVSYqZFAfAfAfVATFOyOyOyOyTNTjZdUfKaZdZdUoTjTjZdZdZdmZZdZdZdZdZdZdZdZdZdZdZd
+ZdZdZdZdTjZdZdZdZdZddHdHdHdHyyNssCsCNspcZdZdZdZdZdZdsVUIAfZFAfAfAfAfAfZFAfAfAfAfTFGrOyOyTNTNTjTjTjUoUoTjZdZdTjZdZdZdZdZdZdZdZdZdZdZdZdZdZdZd
+ZdZdZdZdTjZdZdZdZdZddHdHdHdHdHsCsCNsPkTjUfZdZdZdZdUoTjQHUIzkUITCSdBIAfZFXFXFXFAfTFYSYSKsKsjOTjeIUfUoUoUoTjUfTjmZZdZdZdZdZdZdZdZdZdZdZdZdZdZd
 ZdZdZdTjmZZdZdZdZdZddHdHdHNsNsPksCsCsCeIZdZdZdZdZdZdOdTjiqecAfAfFwTFkoCHTFTFTFkSTFoPoPTjZdZdTjTjZdUolXlXlXTjTjTjTjTjZdZdZdZdZdZdUfZdZdZdZdZd
 ZdZdmZTjZdZdZdZdZdZddHdHCidHDkzazazawUTjADgHZdUPZdZdyQgHTjsgiqJVbwTFAfZFVPaDTFUoUoUoTjTjZdZdTjUoTjUoMAMAlXUoTjZdZdZdZdZdZdZdZdZdTjZdZdZdZdZd
-ZdZdTjZdUfZdZdZdZdZddHdHdHPkUTUTjVUTUTTjFGZdZdZdZdZdJKTjUoTjQHiqVdgiAfyNJYwxTFUoUoTjeITjUoZdUoUoUoLlMAMAlXUoTjZdZdZdZdZdZdZdZdZdTjTjZdZdZdZd
+ZdZdTjZdUfZdZdZdZdZddHdHdHPkUTUTjVUTUTTjFGZdZdZdZdZdJKTjUoTjQHiqUIgiAfyNJYwxTFUoUoTjeITjUoZdUoUoUoLlMAMAlXUoTjZdZdZdZdZdZdZdZdZdTjTjZdZdZdZd
 ZdmZTjZdZdZdZdZdZdZddHdHNssCUTokMSsCUTgBUoZdZdZdZdZdZdxYUoTjTjiqTFTFnxJGAfwkTFUoTjZdTjZdZdTjUoUoUoHLMAMAlXMAUoTjZdZdZdZdZdZdZdZdmZTjmZZdZdZd
 ZdmZTjZdZdZdZdZdZdZdNsNssCsCUTbTMSFdUTEYcNUPmZZdZdZdLCZdZdgHTjUoUoTFTFTFTFTFTFUoTjZdZdZdZdTjTjTjMAHLMAMAlXMAUoUoTjZdZdZdZdZdZdZdZdZdTjZdZdZd
 ZdZdZdZdZdZdZdZdZdZdaJaJaJaJaJaJaJaJaJbcTjTjUfZdZdZdZdZdZdZdUPZdTjUoUoUoUoUoUfTjZdZdZdZdZdTjoXoXFnLNFnoXoXoXQqQqfjTjTjTjZdZdZdZdZdZdTjUfZdZd
@@ -577,33 +570,33 @@ ZdZdZdZdZdZdZdZdZdayayEAaywrwrEpEpwrayAkViWrZdZdZdZdZdZdZdZdZdZdZdZdTjTjTjTjTjZd
 ZdZdZdZdZdZdZdZdZdayxrzmayMvfgfxMvMvmndVmqUsZdZdZdZdZdZdZdZdZdTjTjZdZdZdUoTjTjUoZdZdZdZdZdoXoXQdQdQdQdQdoXQqfjfjQqQqQqfjZdTjZdZdZdZdZdZdZdZd
 ZdZdZdZdZdZdZdZdZdSVuyObsMlqccwDeMyjvrXnnHUsZdZdZdZdZdZdZdVziFVzhxnhnhnhcnUEUoyRTjUfZdZdZdoXQdQdQdQdQdQdQdoXQqQqYyQdQqfjZdTjZdZdZdZdZdZdZdZd
 ZdZdZdZdZdZdZdZdZdAZMvuysMvRBFMvHVsXzfccslNCZdZdZdZdZdZdUFiFiFOsZvWyTnZvrRUEpXeIZdTjZdZdZdZAQdINfrfrfrQdQdPLQqQqQdQdQdQqTjTjZdZdZdZdZdZdZdZd
-ZdZdZdUfZdZdZdZdZdAZuyuybsfIDZriXkBflqccRnaxZdZdZdZdZdiFiFeAiFFtGkHbyzqqWzUEVzUEZdZdZdZdZdhdQdQdbVbVQdBrQqQqoxvQnzzYQdQqTjTjTjZdZdZdZdZdZdZd
+ZdZdZdUfZdZdZdZdZdAZuyuybsfIDZriXkBflqccRnaxZdZdZdZdZdiFiFeAiFFtGkKcyzqqWzUEVzUEZdZdZdZdZdhdQdQdbVbVQdBrQqQqoxvQnzzYQdQqTjTjTjZdZdZdZdZdZdZd
 ZdZdZdmZZdZdZdZdZdPQuysMuyfxfglqQkccyPEuBFHEUPZdZdZdZdVzUEVveAeGJbGQGQWzNQiFZvMmZdZdZdZdZdhdnJQdbaYyfjfjfjclclQqTzHtfGQTQTfjZdZdZdZdZdZdZdZd
 ZdZdTjmZZdZdZdZdZdayLUuqnddFccfxMvJJKAMvwDHEZdZdZdZdZdVzUEuobIiFiFNQlDQCiFXWWySvZdZdZdZdZdocrqrqhGQTfjclfjHeclclfjfjQqQqQqfjZdZdZdZdZdZdZdZd
 ZdmZTjUfZdZdZdZddDayUOayayayfUayayYYcJcJvLQtgHZdZdZdZdVNWMnNNQCAiFEiVzVziFPRCwSvZdZdZdZdZdZdZdZdZdZdgHZdQTYyUkQqcdQqfjfjfjfjZdZdZdZdZdZdZdZd
 ZdTjTjZdZdZdZdZddDyqzHoYMaoYoYdDTjZdZdZdUPZdZdZdZdZdZdJcbDOPVjxKiFVzVzVzPqlpuoVzZdZdZdZdZdZdZdZdTjeIUoZdQTQdQdQqQqfjfjQqAloXZdZdZdZdZdZdZdZd
 ZdTjTjZdZdZdZdZddDVyyfoYoYOBoYOBTjZdZdZdZdZdZdZdZdZdUPqqKGUERcVzVzVzVzVzVzVziFeAUPZdZdZdZdZdZdmZmZTjZdUooXQdQdQdQqQqhwQdQdZAZdZdZdZdZdZdZdmZ
-ZdUfTjZdZdZdZdZddDzHoYqpqpFvYTJRZdZdZdZdZdZdZdZdTjZdZdJcHbheVviFVzVzroVzMyCbNQiFZdZdZdZdZdZdZdZdTjTjTjTjoXoXoXoXQdQdQdQdQdhdZdZdZdZdZdZdTjmZ
+ZdUfTjZdZdZdZdZddDzHoYqpqpFvYTJRZdZdZdZdZdZdZdZdTjZdZdJcKcheVviFVzVzroVzMyCbNQiFZdZdZdZdZdZdZdZdTjTjTjTjoXoXoXoXQdQdQdQdQdhdZdZdZdZdZdZdTjmZ
 ZdmZTjZdZdZdZdZddDQKdDdDdDdDJRjfZdTjZdZdZdZdZdZdZdTjZdiFUEheVzVziFVzVziFiFNQKcKlUPZdZdZdZdZdZdZdZdTjTjTjTjTjTjoXoXoXoXoXANBiZdZdZdZdZdUfTjmZ
 ZdmZTjZdZdZdZdZddDHOdDZdZdZdZdTjTjZdTjZdZdZdZdZdZdZdZdigUEeAqqiFVzVzVzVzcLMmvGUEZdZdZdZdZdZdZdTjZdeITjTjTjZdTjTjTjZdZdZdZdZdZdZdZdZdZdZdTjZd
 ZdZdTjTjZdZdZdZddDqJdDZdZdZdZdZdZdZdZdZdZdZdZdZdZdTjTjZdVziFVzcBbIVzeAKXeAiFPtZdTjZdZdZdZdZdmZTjTjmZTjmZTjTjTjmZTjTjTjZdZdZdZdZdZdZdZdZdZdZd
-ZdZdZdmZZdZdZdZdZdpcZdUfZdZdZdZdZdZdZdZdZdZdZdZdZdZdTjeITjUEheHbVveAiFyIlthkWAZdTjZdZdZdZdTjzUUoUoUoUoUoUoUoTjTjTjZdZdZdZdZdZdZdZdZdZdUfZdZd
+ZdZdZdmZZdZdZdZdZdpcZdUfZdZdZdZdZdZdZdZdZdZdZdZdZdZdTjeITjUEheKcVveAiFyIlthkWAZdTjZdZdZdZdTjzUUoUoUoUoUoUoUoTjTjTjZdZdZdZdZdZdZdZdZdZdUfZdZd
 ZdZdZdZdZdZdZdZdZdpcTjmZZdZdZdZdZdZdZdZdZdZdZdZdZdmZTjyRTjQfUoUojxBzZdTjUoZdZdZdTjTjcIcIRtjijijijijiPJPJCYPJPJUoTjTjZdmZZdZdZdZdZdZdZdZdTjZd
 ZdZdZdZdZdZdZdmZTjZdTjZdZdZdZdZdZdZdZdZdTjTjZdTjZdZdmZUoZdTjZdUoUoZdrNUoZdZdZdTjTjTjszszDdUwdRdRttttPJgosFgoPJpVpVpVTjmZZdZdZdZdZdZdZdZdTjZd
 ZdZdZdZdZdZdZdZdZdUfZdZdZdZdZdZdZdZdZdZdZdZdZdTjTjZdTjZdZdUfZdZdTjTjZdZdUPZdmZTjTjTjqCGJjXsRsRsRsRWtPJcYJigoPJjWqVuQjdTjmZZdZdZdZdZdZdZdTjmZ
-ZdZdZdZdZdZdZdZdmZTjpcpcpcZdZdZdZdZdZdZdZdZdZdZdUfyRUoTjTjZdZdZdZdZdZdZdZdmZTjUoTjTjjiMUWqsRihsRsRWtPJeKmKNTPJTQwtREoFSITjTjZdZdZdZdZdZdTjmZ
-ZdZdZdZdZdZdZdZdmZTjTjZlwoZlZlZlZlZdZdZdZdZdZdZdZdTjZdTjmZZdZdZdZdZdZdZdZdTjmZTjTjUojiICICICjiICICICPJxgYCQOPJBaBaBaaBoFTjZdTjZdZdZdZdZdTjZd
+ZdZdZdZdZdZdZdZdmZTjpcpcpcZdZdZdZdZdZdZdZdZdZdZdUfyRUoTjTjZdZdZdZdZdZdZdZdmZTjUoTjTjjiMUjXsRihsRsRWtPJeKmKNTPJTQwtREoUSITjTjZdZdZdZdZdZdTjmZ
+ZdZdZdZdZdZdZdZdmZTjTjZlwoZlZlZlZlZdZdZdZdZdZdZdZdTjZdTjmZZdZdZdZdZdZdZdZdTjmZTjTjUojiICICICjiICICICPJxgYCQOPJBaBaBaoUoUTjZdTjZdZdZdZdZdTjZd
 ZdZdZdZdZdZdZdZdZdZdZdZllGzWWiETZlZlZlZlZlZlFeXGLxwoZlTjmZZdZdZdZdZdZdZdTjZdmZFmeRJhKQJhJhJhUtJhJhJhJhtjFqtjJhBaBaBafRjdTjZdTjTjZdZdZdZdTjmZ
-ZdZdZdZdZdZdZdZdZdZdZdZlUjDiDiSiKeJqOCOChqWHWHdCpOpOZlTjTjTjTjZdZdTjTjTjTjZdTjJhholdJhJhJhrlEnjFjFjFjFjFjFjFGMqXaBBaStjdTjZdZdTjTjZdZdUfTjmZ
-ZdZdZdZdZdZdZdZdZdZdZdZlbRpSDiEJMWDiwXwXMHqYqYqYqYqYqYqYZdZdZdZdTjZdZdZdZdTjUfJhliWCzoRITIYAJhMoylMoPhMoFxMoJhBaoUoFoFSIZdZdZdZdTjZdZdZdTjmZ
-ZdmZZdZdZdZdZdZdZdZdZdZlZlUjDiDSDSDiDiDiNMqYkBkBtDkBmTqYZdZdZdZdZdZdZdZdZdZdTjJhliIdPJvxzootPJxgYCQOPJxgYCQOPJoFBajwSISIZdZdZdZdTjZdZdZdTjZd
-ZdZdZdZdZdZdZdZdZdZdZdZdZlaYpSmHmHwCaOaOMHqYkBlSlSlSKbqYZdZdZdZdZdZdZdZdZdZdeIJhliJhPJTIWCsGPJbNtyRYPJVQbjGpPJOnjwpbSIovZdZdZdZdZdZdZdTjTjUf
+ZdZdZdZdZdZdZdZdZdZdZdZlUjDiDiSiKeJqOCOChqWHWHdCpOpOZlTjTjTjTjZdZdTjTjTjTjZdTjJhholdJhJhJhrlEnjFjFjFjFjFjFjFGMqXoUBaStjdTjZdZdTjTjZdZdUfTjmZ
+ZdZdZdZdZdZdZdZdZdZdZdZlbRpSDiEJMWDiwXwXMHqYqYqYqYqYqYqYZdZdZdZdTjZdZdZdZdTjUfJhliWCzoRIzoYAJhMoylMoPhMoFxMoJhBaoUoUoUSIZdZdZdZdTjZdZdZdTjmZ
+ZdmZZdZdZdZdZdZdZdZdZdZlZlUjDiDSDSDiDiDiNMqYkBkBtDkBmTqYZdZdZdZdZdZdZdZdZdZdTjJhliIdPJvxzootPJxgYCQOPJxgYCQOPJoUBajwSISIZdZdZdZdTjZdZdZdTjZd
+ZdZdZdZdZdZdZdZdZdZdZdZdZlaYpSmHmHwCaOaOMHqYkBlSlSlSKbqYZdZdZdZdZdZdZdZdZdZdeIJhliJhPJzoWCsGPJbNtyRYPJVQbjGpPJOnjwpbSIovZdZdZdZdZdZdZdTjTjUf
 mZUfZdZdZdZdZdZdZdZdZdZdkvffaYpSDiDiDiDixmqYlSlSrrlSZPqYTjZdZdZdZdZdZdZdZdTjUoJhliJhmLgozSazPJgoGoazPJgoLsazPJOnOnSIovZdZdZdZdZdZdZdTjTjmZZd
 mZTjZdZdZdZdZdZdZdZdZdZdZdkDffaYpSDiIjDSwmqYkBlSlSlSKbqYUoUfZdZdZdZdZdZdTjWFplQIZTeLPJgoCEgoPJgodhgoPJgoiPgoPJpVjdovZdZdZdZdZdZdZdZdZdTjmZZd
 ZdZdTjZdZdZdZdZdZdZdZdZdZdZdkDffaYpSIjDSWbqYdkVElSkBKbqYUoTjZdZdZdZdZdZdZdWFvAmbBnwyPJPJPJPJPJPJewPJPJPJRzPJPJZdZdZdZdZdZdZdZdZdZdZdfzTjmZZd
 ZdZdmZmZZdZdZdZdZdZdZdZdZdZdZdkDffaYpSDixmqYQaKIQaQaKIqaIazGiTZdZdZdZdZdZdWFGOymTOGONLfKGOymWFDzDzDzDzDzDzprTjZdZdZdZdZdZdZdZdZdZdZdTjmZZdZd
 ZdZdZdTjZdZdZdZdZdZdZdZdZdZdZdZdkDffaYpSxmdAuzxVsssstUfvfvlcIoZdZdZdZdZdWFWFGOGOTOGOGOTOORsTIAEZDzDzDzDzmZTjZdZdZdZdZdZdZdZdZdZdZdZdTjZdZdZd
-ZdZdZdmZTjZdZdUfZdZdZdZdZdZdZdZdZdkDffaYodWlLovJwPXAmYFhNzlczGZdZdZdTjTjtAGOGOjRkdpnipWsQPVBWFGyDzDzDzTjTjmZZdZdZdZdZdZdZdZdZdZdZdZdTjZdZdZd
+ZdZdZdmZTjZdZdUfZdZdZdZdZdZdZdZdZdkDffaYodWlLovJvJXAmYFhNzlczGZdZdZdTjTjtAGOGOjRkdpnipWsQPVBWFGyDzDzDzTjTjmZZdZdZdZdZdZdZdZdZdZdZdZdTjZdZdZd
 ZdZdZdZdTjTjZdZdZdZdZdZdZdZdZdZdZdZdkDWWZldAlKfvfvfvSWojUxmYfNgHZdZdZdTjmNGOfCTOGOGOGOGOlPWFWFGyDzTjTjZdZdZdZdZdZdZdZdZdZdZdZdZdZdTjmZZdZdZd
 ZdZdZdZdZdmZTjmZmZZdZdZdZdZdZdZdZdZdZdZdTjdAkaVxXjrFbCmVNobCfNZdZdZdZdZdAbjRCuEHwjwjwjWFWFWFTjGyTjmeWSTTZdmeWSTTZdZdZdZdZdZdZdZdZdZdmZZdZdZd
 ZdZdZdZdZdZdZdTjTjZdZdZdUfZdZdZdZdZdZdZdZdIoIaIadAdADwNgnwbCQUFGTjZdZdZdWFTOWFWFpliuQIWFZdTjTjGyZdmeyvTTZdmeyvTTZdZdZdZdZdZdZdZdZdZdZdZdZdZd

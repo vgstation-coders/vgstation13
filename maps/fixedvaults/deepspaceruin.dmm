@@ -57,9 +57,6 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating/airless,
 /area)
-"F" = (
-/turf/simulated/floor/damaged/airless/burnt,
-/area)
 "I" = (
 /obj/item/clothing/shoes/mime/biker,
 /turf/space,
@@ -182,7 +179,7 @@ a
 a
 w
 Z
-F
+b
 K
 d
 w

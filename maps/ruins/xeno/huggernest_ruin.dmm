@@ -123,10 +123,6 @@
 /obj/abstract/loot_spawner/exotic,
 /turf/simulated/floor,
 /area/ruin)
-"B" = (
-/obj/structure/girder,
-/turf/simulated/floor/plating/damaged/broken,
-/area/ruin)
 "C" = (
 /obj/effect/alien/weeds,
 /turf/template_noop,
@@ -231,11 +227,6 @@
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
 /area/ruin)
-"W" = (
-/obj/effect/alien/weeds,
-/obj/effect/alien/egg,
-/turf/simulated/floor/plating/damaged/broken,
-/area/ruin)
 "X" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
@@ -261,12 +252,12 @@ a
 (2,1,1) = {"
 a
 Z
-B
-B
+L
+L
 o
 G
 F
-B
+L
 L
 a
 "}
@@ -276,7 +267,7 @@ c
 U
 b
 E
-W
+E
 H
 G
 c

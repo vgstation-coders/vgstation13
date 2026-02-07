@@ -434,11 +434,6 @@
 /obj/item/weapon/light/bulb,
 /turf/simulated/floor/plating,
 /area/derelict/arrival)
-"cc" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/medical/morgue{
-	name = "\improper Derelict Relaxation Room"
-	})
 "cf" = (
 /obj/item/tool/weldingtool/hugetank,
 /turf/simulated/floor/plating,
@@ -1797,10 +1792,6 @@
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
 	})
-"jZ" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/damaged/broken,
-/area/derelict/hallway/primary)
 "ka" = (
 /obj/item/weapon/shard{
 	icon_state = "small"
@@ -2285,13 +2276,6 @@
 	icon_state = "kitchen";
 	name = "Derelict Kitchen"
 	})
-"mp" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelict/storage/equipment{
-	icon_state = "fmaint";
-	name = "Derelict Fore Maintenance"
-	})
 "mq" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
@@ -2333,12 +2317,6 @@
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
-	})
-"mA" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/medical{
-	icon_state = "hydro";
-	name = "Derelict Hydroponics"
 	})
 "mB" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -2531,12 +2509,6 @@
 	icon_state = "dark vault corner"
 	},
 /area/derelict/singularity_engine)
-"no" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelict/storage/equipment{
-	icon_state = "fmaint";
-	name = "Derelict Fore Maintenance"
-	})
 "np" = (
 /obj/structure/table,
 /obj/item/weapon/dice/d20,
@@ -2544,12 +2516,6 @@
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
-	})
-"nq" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelict/storage/equipment{
-	icon_state = "fmaint";
-	name = "Derelict Fore Maintenance"
 	})
 "nr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -2864,9 +2830,6 @@
 	icon_state = "pmaint";
 	name = "Derelict Port Maintenance"
 	})
-"oY" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/arrival)
 "pa" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable{
@@ -2919,9 +2882,6 @@
 	},
 /turf/simulated/floor,
 /area/derelict/hallway/primary)
-"pr" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/crew_quarters)
 "pv" = (
 /obj/item/weapon/dice,
 /turf/simulated/floor/plating,
@@ -3256,11 +3216,6 @@
 /area/derelict/storage/storage_access{
 	icon_state = "pmaint";
 	name = "Derelict Port Maintenance"
-	})
-"rS" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/bridge/ai_upload{
-	name = "\improper Derelict Holodeck"
 	})
 "rY" = (
 /obj/structure/cable{
@@ -4113,9 +4068,6 @@
 	icon_state = "pmaint";
 	name = "Derelict Port Maintenance"
 	})
-"wN" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelict/hallway/primary)
 "wO" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/damaged/broken,
@@ -4454,21 +4406,12 @@
 	icon_state = "bar"
 	},
 /area/derelict/bar)
-"yL" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelict/storage/engine_storage{
-	icon_state = "smaint";
-	name = "Derelict Starboard Maintenance"
-	})
 "yQ" = (
 /turf/simulated/wall,
 /area/derelict/hallway/secondary{
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
 	})
-"yT" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/singularity_engine)
 "yU" = (
 /turf/simulated/floor/damaged/broken,
 /area/derelict/medical{
@@ -5484,9 +5427,6 @@
 /area/derelict/hallway{
 	name = "\improper Derelict Theatre"
 	})
-"Fl" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/hallway/primary)
 "Fn" = (
 /turf/simulated/floor{
 	dir = 4;
@@ -5596,9 +5536,6 @@
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
 	})
-"FO" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/hallway/primary)
 "FR" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -5901,9 +5838,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/derelict/crew_quarters)
-"Hu" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelict/arrival)
 "Hv" = (
 /obj/item/seeds/potatoseed,
 /turf/simulated/floor/plating,
@@ -6873,12 +6807,6 @@
 	icon_state = "dark"
 	},
 /area/derelict/singularity_engine)
-"MN" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/medical/chapel{
-	icon_state = "library";
-	name = "\improper Derelict Game Room"
-	})
 "MO" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 9
@@ -8173,12 +8101,6 @@
 /obj/item/stack/rods,
 /turf/space,
 /area)
-"TF" = (
-/turf/simulated/floor/plating/damaged/broken,
-/area/derelict/hallway/secondary{
-	icon_state = "maintcentral";
-	name = "\improper Derelict Central Maintenance"
-	})
 "TG" = (
 /obj/structure/wc/urinal{
 	pixel_y = 32
@@ -9209,9 +9131,6 @@
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"
 	})
-"Za" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/crew_quarters)
 "Zb" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/plating/damaged/burnt,
@@ -9282,9 +9201,6 @@
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
 	})
-"Zx" = (
-/turf/simulated/floor/damaged/broken,
-/area/derelict/arrival)
 "Zy" = (
 /obj/structure/window/barricade/full/block,
 /obj/structure/grille/window_spawner/reinforced,
@@ -10656,7 +10572,7 @@ nF
 GG
 AO
 hP
-yT
+Ey
 hP
 AO
 Qe
@@ -10788,7 +10704,7 @@ GX
 en
 GG
 ve
-yT
+Ey
 GG
 GG
 GG
@@ -10876,7 +10792,7 @@ rK
 YI
 hP
 YI
-yT
+Ey
 YI
 eP
 uH
@@ -10926,7 +10842,7 @@ aD
 gc
 gc
 DH
-mp
+ud
 Mx
 Gu
 Gu
@@ -10942,7 +10858,7 @@ ET
 iv
 lI
 At
-yT
+Ey
 At
 At
 MM
@@ -11003,22 +10919,22 @@ gc
 DH
 mh
 QM
-no
+mP
 vO
 HT
 qJ
 JE
 GG
-yT
+Ey
 ts
 qM
 ET
 QB
 qp
-yT
+Ey
 Ey
 GZ
-yT
+Ey
 MM
 hP
 Rk
@@ -11074,7 +10990,7 @@ Cz
 gc
 DH
 ka
-nq
+mP
 mh
 QM
 QM
@@ -11147,7 +11063,7 @@ aD
 aD
 jM
 mP
-no
+mP
 gz
 mh
 FL
@@ -11236,7 +11152,7 @@ AO
 tH
 ET
 At
-yT
+Ey
 vg
 tH
 hP
@@ -11248,7 +11164,7 @@ Wu
 ET
 hP
 dW
-yT
+Ey
 tH
 hP
 Ui
@@ -11375,11 +11291,11 @@ QM
 Fd
 cP
 vO
-nq
+mP
 zy
 Ep
 uN
-yT
+Ey
 AO
 Qo
 ET
@@ -11572,7 +11488,7 @@ tJ
 aD
 Yg
 CQ
-oY
+BD
 Wn
 aD
 aD
@@ -11600,7 +11516,7 @@ hd
 CY
 QM
 UQ
-FO
+al
 yl
 lM
 FY
@@ -11617,7 +11533,7 @@ lM
 lM
 FY
 FY
-FO
+al
 lM
 lM
 wo
@@ -11682,7 +11598,7 @@ FY
 FY
 FY
 on
-Fl
+al
 Wp
 gA
 FY
@@ -11751,14 +11667,14 @@ UQ
 pJ
 FY
 FY
-jZ
+jS
 FY
 FY
 FY
 pJ
 fJ
-wN
-FO
+aN
+al
 pJ
 FY
 lM
@@ -11932,7 +11848,7 @@ Zz
 rZ
 qF
 Pr
-MN
+Pr
 Sh
 Sh
 Sh
@@ -11993,7 +11909,7 @@ WP
 Ef
 dC
 Ok
-Fl
+al
 ru
 UQ
 Wb
@@ -12014,7 +11930,7 @@ Sh
 Yg
 Fy
 bV
-Zx
+BD
 ZV
 ZV
 lu
@@ -12045,7 +11961,7 @@ GX
 jE
 UQ
 pJ
-FO
+al
 aN
 QE
 oF
@@ -12090,7 +12006,7 @@ kj
 ZV
 BD
 ZV
-Hu
+Pc
 Wn
 aD
 aD
@@ -12238,7 +12154,7 @@ BK
 ZV
 ZV
 ZV
-Hu
+Pc
 vK
 aD
 aD
@@ -12290,7 +12206,7 @@ Ef
 XT
 FY
 ln
-wN
+aN
 UQ
 Wb
 sc
@@ -12311,7 +12227,7 @@ Yg
 xw
 xw
 ZV
-oY
+BD
 ZV
 vK
 aD
@@ -12414,9 +12330,9 @@ SN
 GX
 jE
 UQ
-wN
+aN
 lM
-Fl
+al
 QE
 Mh
 Tr
@@ -12458,7 +12374,7 @@ Sh
 Yg
 ZV
 ZV
-Zx
+BD
 ZV
 jv
 lu
@@ -12488,7 +12404,7 @@ vO
 GX
 jY
 UQ
-wN
+aN
 lM
 pv
 QE
@@ -12510,7 +12426,7 @@ bA
 Ef
 bA
 UQ
-wN
+aN
 wo
 ln
 UQ
@@ -12563,7 +12479,7 @@ UP
 kQ
 ff
 BL
-wN
+aN
 al
 oc
 Tr
@@ -12607,7 +12523,7 @@ CQ
 CQ
 ZV
 ZV
-oY
+BD
 ZV
 xn
 un
@@ -12712,7 +12628,7 @@ vO
 UQ
 FY
 lM
-FO
+al
 QE
 Tr
 fG
@@ -12776,7 +12692,7 @@ aD
 aD
 vO
 mP
-no
+mP
 vO
 QM
 Rl
@@ -12829,7 +12745,7 @@ Yg
 CQ
 uy
 mq
-oY
+BD
 ZV
 vK
 aD
@@ -12850,7 +12766,7 @@ aD
 aD
 vO
 cC
-no
+mP
 vO
 Fd
 Fd
@@ -13187,10 +13103,10 @@ ec
 mG
 cm
 Ym
-Za
+Ym
 hv
 hv
-Za
+Ym
 hv
 hv
 aX
@@ -13261,12 +13177,12 @@ mG
 Ds
 jJ
 cm
-pr
+Ym
 rx
 cm
 Ym
 cm
-Za
+Ym
 rx
 HD
 TG
@@ -13377,7 +13293,7 @@ QM
 QM
 UQ
 FY
-FO
+al
 lM
 UQ
 gq
@@ -13692,7 +13608,7 @@ gq
 jf
 yQ
 tc
-TF
+aA
 yQ
 Wk
 fu
@@ -13785,7 +13701,7 @@ Rn
 FG
 nc
 Ym
-Za
+Ym
 vl
 ns
 gR
@@ -13901,7 +13817,7 @@ Dj
 Dj
 yU
 Dj
-mA
+yU
 oO
 Dj
 gX
@@ -14012,7 +13928,7 @@ Lv
 UM
 sz
 HD
-yL
+Nn
 pD
 Gb
 aD
@@ -14043,7 +13959,7 @@ Wd
 Dw
 UQ
 FY
-FO
+al
 lM
 fm
 uq
@@ -14112,7 +14028,7 @@ vO
 qC
 QM
 vO
-no
+mP
 ap
 KE
 UQ
@@ -14197,7 +14113,7 @@ FY
 FY
 FY
 al
-FO
+al
 lM
 lM
 FY
@@ -14262,7 +14178,7 @@ QM
 vO
 QM
 sA
-no
+mP
 UQ
 FY
 FY
@@ -14348,7 +14264,7 @@ JJ
 JJ
 JJ
 lM
-FO
+al
 al
 pJ
 al
@@ -14426,7 +14342,7 @@ lM
 lM
 lM
 lM
-FO
+al
 al
 al
 Bz
@@ -14570,7 +14486,7 @@ JJ
 SO
 SO
 SO
-cc
+zf
 SO
 Oz
 oG
@@ -14719,10 +14635,10 @@ SO
 SO
 dp
 dp
-cc
+zf
 Oz
 TH
-rS
+TH
 Os
 Os
 oG
@@ -15089,7 +15005,7 @@ JJ
 SO
 SO
 lj
-cc
+zf
 JJ
 hV
 hZ
@@ -15161,9 +15077,9 @@ BX
 LC
 JJ
 hJ
-cc
+zf
 lj
-cc
+zf
 JJ
 hV
 hZ
@@ -15602,7 +15518,7 @@ aD
 tJ
 Uo
 UA
-yL
+Nn
 dd
 Gb
 aD

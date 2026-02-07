@@ -310,10 +310,6 @@
 	icon_state = "floor3"
 	},
 /area/ruin)
-"Dc" = (
-/obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating/damaged/broken,
-/area/ruin)
 "Dh" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -769,7 +765,7 @@ ab
 Yk
 oY
 qV
-Dc
+Zb
 SD
 TS
 Zv

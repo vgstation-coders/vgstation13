@@ -2,7 +2,6 @@
 "ak" = (/turf/simulated/wall,/area/derelict/eva)
 "ao" = (/obj/structure/bed/chair/office/dark{dir = 8},/turf/simulated/floor/airless,/area/derelict/bridge/bridge)
 "aM" = (/obj/structure/morgue{dir = 8},/turf/simulated/floor/airless,/area/derelict/medical/morgue)
-"aU" = (/turf/simulated/floor/plating/damaged/airless/burnt,/area/derelict/hallway/primary)
 "aW" = (/obj/item/clothing/shoes/magboots,/turf/simulated/floor/airless,/area/derelict/eva)
 "aX" = (/obj/machinery/iv_drip,/turf/simulated/floor/airless,/area/derelict/medical/medbay)
 "aZ" = (/obj/structure/rack,/obj/item/clothing/shoes/magboots,/turf/simulated/floor/airless,/area/derelict/eva)
@@ -38,7 +37,6 @@
 "gg" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/cable{d2 = 4; icon_state = "0-4"},/obj/structure/cable{d2 = 2; icon_state = "0-2"},/turf/simulated/floor/plating/airless,/area/solar/derelict_starboard)
 "gk" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/full/reinforced,/obj/structure/grille,/turf/simulated/floor/plating/airless,/area/derelict/research)
 "gl" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1; pixel_y = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating/airless,/area/derelict/eva)
-"gx" = (/turf/simulated/floor/plating/damaged/airless/broken,/area/derelict/hallway/primary)
 "gy" = (/obj/structure/closet/gimmick/russian,/turf/simulated/floor/airless,/area/derelict/crew_quarters)
 "gI" = (/obj/structure/bed/chair/shuttle,/turf/simulated/floor/plating/airless,/area)
 "gN" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/space,/area)
@@ -81,7 +79,6 @@
 "kR" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"; tag = ""},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"; tag = ""},/turf/simulated/floor,/area/derelict/solar_control)
 "la" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
 "lk" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1; pixel_y = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating/airless,/area/derelict/kitchen)
-"lo" = (/obj/structure/girder,/turf/simulated/floor/plating/damaged/airless/broken,/area)
 "ly" = (/obj/item/stack/cable_coil{amount = 1; icon_state = "coil_red1"},/turf/simulated/floor/plating/damaged/airless/broken,/area/derelict/hallway/primary)
 "lF" = (/obj/machinery/power/apc{cell_type = 0; icon_state = "apc1"; opened = 1; pixel_y = -24},/turf/simulated/floor/plating/airless,/area/derelict/bar)
 "lZ" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"; tag = ""},/turf/simulated/floor,/area/derelict/solar_control)
@@ -155,7 +152,6 @@
 "xa" = (/turf/simulated/wall,/area/derelict/research)
 "xh" = (/obj/structure/table,/obj/machinery/recharger{pixel_y = 7},/obj/item/weapon/spacecash/c10,/obj/item/weapon/spacecash/c10,/turf/simulated/floor/airless,/area/derelict/bridge/bridge)
 "xm" = (/obj/effect/decal/warning_stripes{icon_state = "warning"; tag = "icon-warning"},/turf/simulated/floor/airless{icon_state = "solarpanel"},/area/derelict/research)
-"xn" = (/turf/simulated/floor/plating/damaged/airless/broken,/area)
 "xC" = (/obj/item/device/flash/synthetic,/obj/item/ammo_casing/a762,/turf/simulated/floor/airless,/area/derelict/medical/medbay)
 "xD" = (/obj/machinery/iv_drip,/obj/effect/decal/cleanable/blood{icon_state = "floor5"},/turf/simulated/floor/airless,/area/derelict/medical/medbay)
 "yg" = (/obj/structure/computerframe,/turf/simulated/floor/airless,/area/derelict/eva)
@@ -164,7 +160,6 @@
 "yF" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating,/area/solar/derelict_starboard)
 "yN" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor/airless,/area/derelict/eva)
 "yY" = (/obj/machinery/atmospherics/unary/outlet_injector{frequency = 1438; icon_state = "on"; id_tag = "tox_in"; on = 1},/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor/engine/vacuum,/area/derelict/atmos)
-"yZ" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/crew_quarters)
 "zo" = (/obj/item/ammo_casing/a762,/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
 "zz" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/item/weapon/shard{icon_state = "small"; pixel_x = 5; pixel_y = -5},/turf/simulated/floor/plating/airless,/area/derelict/eva)
 "zN" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "nitrogen"},/turf/simulated/floor/engine/vacuum,/area/derelict/atmos)
@@ -382,17 +377,17 @@ DCDCDCDCDCDCDCDCDCDCDCDCDCqCUPdivVLgAiaXWWIVemAiAiiUAiLgakHGygaZyqMNygHGakiQiQiQ
 DCDCDCDCDCDCVgDCDCDCDCDCDCtMtMdiADAiQFAiQAAiAihAaXhOhOLgakeIeIeIeIeIeIeIgliQLucrcrcrcrcrcrcrkdiQcREqDCDCtMtMtMtMAVAVAVtMtMAVAVtMtMAVAVAVAVAVDCDC
 DCDCDCDCDCDCDCDCVgDCVgDCwqtMjodiADoXAicoAihOqXuXAiTdPBxCakRheIeIyNeIrPaWBIiQPAiQiQiQiQiQiQiQiQiQiQEqDCDCDCtMDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
 DCDCDCDCDCDCDCVgVgDCQMVgQMjotMdivVLgAiLghOAiiZAiSDLgAiMSakYCeIeIeIeIeIeIRtiQPAiQRERERERELnREREREREREDCDCDCtMDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
-DCDCVgDCDCDCDCDCDCDCDCtMVgVgjodivVLgaXUuKjAiAiAioXLgxDLgakoeeIrPeIeINReIakgxKfiQREUjHCimAJAJAJnynyREDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
+DCDCVgDCDCDCDCDCDCDCDCtMVgVgjodivVLgaXUuKjAiAiAioXLgxDLgakoeeIrPeIeINReIakYDKfiQREUjHCimAJAJAJnynyREDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
 DCDCDCDCDCDCVgtMtMVgtMtMVgjhdiuwvVtqBOtqWpXFXFXFWpnNMGRQakakzzVITkerLmVIakiQKfJHREAJAJAJHCfBUjAJLpREDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
 DCDCDCtaDCDCDCtMDCQMVgVgjodiuwuwEqJHJHJHJHiQVyTSYDiQYDiQiQiQoIiQiQiQiQiQGoJHlyiQREnyTInyAJAJDIcQAJeQDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
 DCDCDCVgDCDCDCDCVgVgtMQMjodiuwdiEqJHJHiQOwbUiQiriQiQYDiQiQiQbniQgUiQoIJHGoiQiQiQREnynynynyAJAJHCYknyDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
-DCDCDCDCVgDCtMxncFxnVguwAHAHuwuwEqiQVyiQiQiQiQiQiQiriQiQiQiQiQiQiQiQbnTSGoGQJHiQCeunVZnynynynynynyKKDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
+DCDCDCDCVgDCtMjocFjoVguwAHAHuwuwEqiQVyiQiQiQiQiQiQiriQiQiQiQiQiQiQiQbnTSGoGQJHiQCeunVZnynynynynynyKKDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
 DCDCDCDCDCVgVgjoQMjodidiuwdiuwuwEqYDiQYDzZzZcXcXOEAdcXzZSvSvMPHgseHgbvlkSviQTSiQREununnynyFqnyunnynyDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
-DCDCDCDCVgVADCxnLvnploEqEqEqEqEqEqGoGoGozZdfKaKayZnEuggySvJKkcAPAPHgAPAPSviQiQiQXYnynyHCnynynyJunynyDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
-DCVgDCDCDCVgDCtMtMtMjogxuTuTuTuTuThmaUuTieKadfcXcXyZOEOESvAPAPZiiOAPHgAPSviQiriQnynynynyAJAJHCnynyKKDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
-DCDCDCVgDCDCDCDCtMVgjoaUaUuTuTuTuTuTuTuTKacXoLoLoLcXchOESvRJHgHgAPNcsWAPSviQiQiQXYnyunnyAMAJHcnywoFnDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
-DCDCVgDCDCVgDCVgVgVgjoaUuTuTuTuTuTuTuTuTieoLoLoLoLoLcXOESvLlHgHgHgHgAPhqSviQbUirREnynynyAJHCjbAJAJREDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
-DCDCDCDCDCDCDCUPdiUPLSEquTEqEqEquTEqEqEqzZoLoLoLoLoLcXyZSvNIAPBMHgLDAPAPSviQiriQREnyTIUAlFAJSNAJimREDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
+DCDCDCDCVgVADCjoLvnpnpEqEqEqEqEqEqGoGoGozZdfKaKanEnEuggySvJKkcAPAPHgAPAPSviQiQiQXYnynyHCnynynyJunynyDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
+DCVgDCDCDCVgDCtMtMtMjoYDuTuTuTuTuThmbnuTieKadfcXcXnEOEOESvAPAPZiiOAPHgAPSviQiriQnynynynyAJAJHCnynyKKDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
+DCDCDCVgDCDCDCDCtMVgjobnbnuTuTuTuTuTuTuTKacXoLoLoLcXchOESvRJHgHgAPNcsWAPSviQiQiQXYnyunnyAMAJHcnywoFnDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
+DCDCVgDCDCVgDCVgVgVgjobnuTuTuTuTuTuTuTuTieoLoLoLoLoLcXOESvLlHgHgHgHgAPhqSviQbUirREnynynyAJHCjbAJAJREDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
+DCDCDCDCDCDCDCUPdiUPLSEquTEqEqEquTEqEqEqzZoLoLoLoLoLcXnESvNIAPBMHgLDAPAPSviQiriQREnyTIUAlFAJSNAJimREDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
 taDCDCDCDCDCDCqCVgDCDCEqReEqDCEqReEqDCDCoLoLoLoLoLoLzZzZSvSvSvHgPHHgSvSvSvRzRzRzREREREREREREREREREREDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
 DCDCDCDCDCDCDCDCHuXcDCUHdoUHDCUHdoUHDCDCDCDCDCDCDCDCDCDCDCDCtMDCtMtMtMtMRLOmVOVORLtMtMtMtMDCtMDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
 DCDCDCDCDCDCXcDCgIXcDCUHLAUHDCUHLAUHDCDCDCDCDCDCDCDCDCDCDCDCtMDCDCDCRLRLRLWrdgWrRLRLRLDCDCDCtMDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCDC
