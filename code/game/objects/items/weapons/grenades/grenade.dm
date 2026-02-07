@@ -93,6 +93,9 @@
 	if(T)
 		try_hotspot_expose(700,SMALL_FLAME,1)
 
+/obj/item/weapon/grenade/assembly_pulse(var/obj/item/device/assembly/A)
+	prime()
+
 /obj/item/weapon/grenade/proc/update_mob()
 	if(ismob(loc))
 		var/mob/M = loc

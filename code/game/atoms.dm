@@ -1157,6 +1157,9 @@ its easier to just keep the beam vertical.
 /atom/proc/silicate_act(var/atom/A, var/mob/user)
 	return FALSE
 
+/atom/proc/assembly_pulse(var/obj/item/device/assembly/A)
+	return
+
 // Returns the virtual_z datum for this atom's area, or null if none
 /atom/proc/get_virtual_z()
 	var/turf/T = get_turf(src)
