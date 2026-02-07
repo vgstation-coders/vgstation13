@@ -611,6 +611,7 @@ var/list/one_way_windows
 /obj/structure/window/change_dir(new_dir, changer)
 	update_nearby_tiles() //Compel updates before
 	. = ..()
+	relativewall()
 	update_nearby_tiles()
 
 /obj/structure/window/Destroy()
