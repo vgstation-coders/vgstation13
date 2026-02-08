@@ -27,7 +27,6 @@
 
 /datum/visioneffect/material/proc/get_images(var/turf/T, var/view)
 	. = list()
-	for (var/turf/TT in trange(view, T))
+	for (var/turf/TT in trange(getviewsize(view)[1], T, getviewsize(view)[2]))
 		if (TT.holomap_data)
 			. += TT.holomap_data
-			

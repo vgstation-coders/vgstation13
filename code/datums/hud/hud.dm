@@ -182,6 +182,13 @@ Helper procs and procs used in mobs
 		if(!M.client)
 			continue
 		var/client/C = M.client
-		if(get_dist(get_turf(M), get_turf(target)) <= (C.view + DATAHUD_RANGE_OVERHEAD))
+		if(target in range(get_extended_hud_view(C), M))
 			M.clean_up_hud()
 			M.handle_hud_vision_updates()
+
+/proc/get_extended_hud_view(client/hud_holder)
+	var/list/client_view_dimensions = getviewsize(hud_holder.view)
+	var/modified_view[2]
+	modified_view[1] = client_view_dimensions[1] + DATAHUD_RANGE_OVERHEAD
+	modified_view[2] = client_view_dimensions[2] + DATAHUD_RANGE_OVERHEAD
+	return view_dimensions_list_to_string(modified_view)

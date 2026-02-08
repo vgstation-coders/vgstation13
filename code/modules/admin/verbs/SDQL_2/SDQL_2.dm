@@ -22,11 +22,6 @@
 	vars[var_name] = new_value
 	return 1
 
-// Because /client isn't a subtype of /datum...
-/client/proc/SDQL_update(var/const/var_name, var/new_value)
-	vars[var_name] = new_value
-	return 1
-
 /client/proc/SDQL2_query(var/query_text as message)
 	set category = "Debug"
 

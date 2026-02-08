@@ -1,16 +1,14 @@
 //TODO: Flash range does nothing currently
 
-/proc/trange(var/Dist = 0, var/turf/Center = null)//alternative to range (ONLY processes turfs and thus less intensive)
-	if (isnull(Center))
+/proc/trange(horizontal_distance = 0, turf/center_turf, vertical_distance = horizontal_distance)//alternative to range (ONLY processes turfs and thus less intensive)
+	if(isnull(center_turf))
 		return
-
-	//var/x1 = ((Center.x-Dist) < 1 ? 1 : Center.x - Dist)
-	//var/y1 = ((Center.y-Dist) < 1 ? 1 : Center.y - Dist)
-	//var/x2 = ((Center.x+Dist) > world.maxx ? world.maxx : Center.x + Dist)
-	//var/y2 = ((Center.y+Dist) > world.maxy ? world.maxy : Center.y + Dist)
-
-	var/turf/x1y1 = locate(((Center.x - Dist) < 1 ? 1 : Center.x - Dist), ((Center.y - Dist) < 1 ? 1 : Center.y - Dist), Center.z)
-	var/turf/x2y2 = locate(((Center.x + Dist) > world.maxx ? world.maxx : Center.x + Dist), ((Center.y + Dist) > world.maxy ? world.maxy : Center.y + Dist), Center.z)
+	var/x1 = max(1, center_turf.x - horizontal_distance)
+	var/y1 = max(1, center_turf.y - vertical_distance)
+	var/x2 = min(world.maxx, center_turf.x + horizontal_distance)
+	var/y2 = min(world.maxy, center_turf.y + vertical_distance)
+	var/turf/x1y1 = locate(x1, y1, center_turf.z)
+	var/turf/x2y2 = locate(x2, y2, center_turf.z)
 	return block(x1y1, x2y2)
 
 /**

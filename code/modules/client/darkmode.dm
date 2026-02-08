@@ -7,7 +7,7 @@
 	winset(src, "mainwindow", 		"background-color = [COLOR_WHITEMODE_BACKGROUND]")
 	winset(src, "outputwindow", 	"background-color = [COLOR_WHITEMODE_BACKGROUND];text-color = [COLOR_WHITEMODE_TEXT]")
 	winset(src, "browseroutput", 	"background-color = [COLOR_WHITEMODE_BACKGROUND];text-color = [COLOR_WHITEMODE_TEXT]")
-	winset(src, "mainvsplit", 		"background-color = [COLOR_WHITEMODE_BACKGROUND]")
+	winset(src, "split", 		"background-color = [COLOR_WHITEMODE_BACKGROUND]")
 
 	//Buttons
 	winset(src, "textb", 					"background-color = [COLOR_WHITEMODE_BACKGROUND];text-color = [COLOR_WHITEMODE_TEXT]")
@@ -36,7 +36,7 @@
 	winset(src, "mainwindow", 		"background-color = [COLOR_DARKMODE_BACKGROUND]")
 	winset(src, "outputwindow", 	"background-color = [COLOR_DARKMODE_BACKGROUND];text-color = [COLOR_DARKMODE_TEXT]")
 	winset(src, "browseroutput", 	"background-color = [COLOR_DARKMODE_BACKGROUND];text-color = [COLOR_DARKMODE_TEXT]")
-	winset(src, "mainvsplit", 		"background-color = [COLOR_DARKMODE_BACKGROUND]")
+	winset(src, "split", 		"background-color = [COLOR_DARKMODE_BACKGROUND]")
 
 	//Buttons
 	winset(src, "textb", 					"background-color = [COLOR_DARKMODE_BUTTONBACKGROUND];text-color = [COLOR_DARKMODE_TEXT]")

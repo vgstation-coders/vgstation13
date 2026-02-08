@@ -177,11 +177,11 @@ var/updated_stats = 0
 		message_admins("[key]/[ckey] has connected with an out of date client! Their version: [byond_version]. They will be kicked shortly.")
 		alert(src,"Your BYOND client is out of date. Please make sure you have have at least version [MIN_CLIENT_VERSION] installed. Check for a beta update if necessary.", "Update Yo'Self", "OK")
 		spawn(5 SECONDS)
-			del(src)
+			qdel(src)
 
 	if(!guests_allowed && IsGuestKey(key))
 		alert(src,"This server doesn't allow guest accounts to play. Please go to http://www.byond.com/ and register for a key.","Guest","OK")
-		del(src)
+		qdel(src)
 		return
 
 	// Change the way they should download resources.
@@ -277,6 +277,9 @@ var/updated_stats = 0
 
 	send_resources()
 
+	apply_clickcatcher()
+
+
 	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype, unbanned, unbanned_ckey, unbanned_datetime FROM erro_ban WHERE (ckey = :ckey [address ? "OR ip = :address" : ""]  [computer_id ? "OR computerid = :computer_id" : ""]) AND unbanned_notification = 0;",
 		list(
 			"ckey" = ckey,
@@ -360,6 +363,11 @@ var/updated_stats = 0
 		tooltips = new /datum/tooltips(src)
 
 	fps = (prefs.get_pref(/datum/preference_setting/numerical/fps) < 0) ? RECOMMENDED_CLIENT_FPS : prefs.get_pref(/datum/preference_setting/numerical/fps)
+	view_size = new(src)
+	view_size.resetFormat()
+	view_size.setZoomMode()
+	view_size.apply()
+	fully_created = TRUE
 
 // This is wrapped so that if the winset fucks up somehow, this doesn't crash the entire client login proc.
 /client/proc/winset_wrapper(control_id, params)
@@ -368,14 +376,14 @@ var/updated_stats = 0
 	//////////////
 	//DISCONNECT//
 	//////////////
-/client/Del()
+/client/Destroy()
 	if(holder)
 		holder.owner = null
 		admins -= src
 	directory -= ckey
 	clients -= src
-
-	return ..()
+	..()
+	return QDEL_HINT_HARDDEL_NOW
 
 /client/proc/log_client_to_db()
 	if(IsGuestKey(key))
@@ -444,7 +452,7 @@ var/updated_stats = 0
 		//src << link(s.url)
 		world.log << "Denying [src.key] access due to panic bunker."
 		sleep(30)
-		del(src)
+		qdel(src)
 		return
 
 	var/admin_rank = "Player"
@@ -717,36 +725,48 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		colour_to = default_colour_matrix
 	animate(src, color=colour_to, time=time, easing=SINE_EASING)
 
-/client/proc/changeView(var/newView)
-	if(!newView)
-		view = world.view
-	else
-		view = newView
-
+/client/proc/change_view(new_size)
+	if(isnull(new_size))
+		CRASH("change_view called without argument.")
+	view = new_size
+	apply_clickcatcher()
+	mob.reload_fullscreen()
+	if(isliving(mob))
+		var/mob/living/M = mob
+		M.standard_damage_overlay_updates()
 	if(mob.dark_plane)
 		mob.dark_plane.transform = null
 		var/matrix/M = matrix()
-		M.Scale(view*2.2)
+		M.Scale(getviewsize(view)[1]*2.2, getviewsize(view)[2]*2.2)
 		mob.dark_plane.transform = M
-
-	if(mob && ishuman(mob))
+	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
 		var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
 		if(istype(U))
 			for(var/obj/item/clothing/accessory/holomap_chip/HC in U.accessories)
 				HC.update_holomap()
+	mob.UpdateUIScreenLoc()
+	attempt_auto_fit_viewport()
 
-	if(mob)
-		mob.UpdateUIScreenLoc()
+/client/proc/generate_clickcatcher()
+	if(!void)
+		void = new()
+	if(!(void in screen))
+		screen += void
+
+/client/proc/apply_clickcatcher()
+	generate_clickcatcher()
+	var/list/actualview = getviewsize(view)
+	void.UpdateGreed(actualview[1],actualview[2])
 
 /client/verb/SwapSides()
 	set name = "swapsides"
 	set hidden = 1
-	var/newsplit = 100 - text2num(winget(usr, "mainwindow.mainvsplit", "splitter"))
-	if(winget(usr, "mainwindow.mainvsplit", "right") == "rpane")
-		winset(usr, "mainwindow.mainvsplit", "right=mapwindow;left=rpane;splitter=[newsplit]")
+	var/newsplit = 100 - text2num(winget(usr, "mainwindow.split", "splitter"))
+	if(winget(usr, "mainwindow.split", "right") == "rpane")
+		winset(usr, "mainwindow.split", "right=mapwindow;left=rpane;splitter=[newsplit]")
 	else
-		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
+		winset(usr, "mainwindow.split", "right=rpane;left=mapwindow;splitter=[newsplit]")
 
 /client/verb/removeClick()
 	set name = ".click"
@@ -757,10 +777,10 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	if(prefs.get_pref(/datum/preference_setting/toggle/space_parallax))	//Updating parallax for clients that have parallax turned on.
 		if(parallax_initialized)
 			mob.hud_used.update_parallax_values()
-
+	var/list/client_view_dimensions = getviewsize(view)
 	if(!istype(mob, /mob/dead/observer) && !(M_XRAY in mob.mutations))	//If they are neither an observer nor someone with X-ray vision
 		for(var/obj/structure/window/W in one_way_windows)
-			if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
+			if(abs((W.x - mob.x) <= view_tiles_after_center(client_view_dimensions[1])) && abs((W.y - mob.y) <= view_tiles_after_center(client_view_dimensions[2])))
 				update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in the range of its view.
 				break
 

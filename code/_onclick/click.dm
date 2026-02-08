@@ -469,3 +469,41 @@
 //Currently used to allow a little bit of freedom in click-dragging for melee combat in _onclick/drag_drop.dm
 /mob/living/MouseDown(location, control, params, var/past_time)
 	usr.client.click_held_down_time = world.timeofday
+
+/obj/abstract/screen/click_catcher
+	appearance_flags = APPEARANCE_UI
+	icon = 'icons/mob/screen1.dmi'
+	icon_state = "blank"
+	plane = CLICKCATCHER_PLANE
+	mouse_opacity = MOUSE_OPACITY_OPAQUE
+	screen_loc = "CENTER"
+
+#define MAX_SAFE_BYOND_ICON_SCALE_TILES (MAX_SAFE_BYOND_ICON_SCALE_PX / ICON_SIZE_ALL)
+#define MAX_SAFE_BYOND_ICON_SCALE_PX (33 * 32) //Not using world.icon_size on purpose. //Ok well I trust you
+
+/obj/abstract/screen/click_catcher/proc/UpdateGreed(view_size_x = 15, view_size_y = 15)
+	var/icon/newicon = icon('icons/mob/screen1.dmi', "blank")
+	var/ox = min(MAX_SAFE_BYOND_ICON_SCALE_TILES, view_size_x)
+	var/oy = min(MAX_SAFE_BYOND_ICON_SCALE_TILES, view_size_y)
+	var/px = view_size_x * ICON_SIZE_X
+	var/py = view_size_y * ICON_SIZE_Y
+	var/sx = min(MAX_SAFE_BYOND_ICON_SCALE_PX, px)
+	var/sy = min(MAX_SAFE_BYOND_ICON_SCALE_PX, py)
+	newicon.Scale(sx, sy)
+	icon = newicon
+	screen_loc = "CENTER-[(ox-1)*0.5],CENTER-[(oy-1)*0.5]"
+	var/matrix/M = new
+	M.Scale(px/sx, py/sy)
+	transform = M
+
+/obj/abstract/screen/click_catcher/Click(location, control, params)
+	var/list/modifiers = params2list(params)
+	if(LAZYACCESS(modifiers, MIDDLE_CLICK) && iscarbon(usr))
+		var/mob/living/carbon/C = usr
+		C.swap_hand()
+	else
+		var/turf/click_turf = parse_caught_click_modifiers(modifiers, get_turf(usr.client ? usr.client.eye : usr), usr.client)
+		if (click_turf)
+			modifiers["catcher"] = TRUE
+			click_turf.Click(click_turf, control, list2params(modifiers))
+	. = 1

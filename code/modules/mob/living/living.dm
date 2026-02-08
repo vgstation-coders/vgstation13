@@ -644,7 +644,7 @@ Thanks.
 	// make the icons look correct
 	regenerate_icons()
 	update_canmove()
-
+	reload_fullscreen()
 	clear_fullscreens()
 
 	hud_updateflag |= 1 << HEALTH_HUD

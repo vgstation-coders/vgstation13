@@ -18,11 +18,8 @@
 	if(client)
 		if(screen.anim_state)
 			flick("[screen.anim_state][severity]",screen)
+		screen.update_for_view(client.view)
 		client.screen += screen
-		if (screen.screen_loc == "CENTER-7,CENTER-7" && screen.view != client.view && screen.scaling)
-			var/scale = (1 + 2 * client.view) / 15
-			screen.view = client.view
-			screen.transform = matrix(scale, 0, 0, 0, scale, 0)
 		if(screen.clear_after_length)
 			spawn(screen.clear_after_length)
 				clear_fullscreen(category, animate = 0)
@@ -38,46 +35,46 @@
 		animate(screen, alpha = a, time = t)
 		client.screen += screen
 
-/mob/proc/clear_fullscreen(category, animate = 10, var/dead_mob = FALSE)
+/mob/proc/clear_fullscreen(category, animate = 10)
 	set waitfor = 0
 	var/obj/abstract/screen/fullscreen/screen = screens[category]
 	if(!screen)
-		screens -= category
 		return
 
-	if (dead_mob && screen.keep_on_death)
-		return
+	screens -= category
 
 	if(animate)
 		animate(screen, alpha = 0, time = animate)
 		sleep(animate)
 
-	screens[category] = null
-	screens -= category
 	if(client)
 		client.screen -= screen
 	qdel(screen)
 
-/mob/proc/clear_fullscreens(var/dead_mob = FALSE, var/animate = 10)
+/mob/proc/clear_fullscreens(animate = 10)
 	for(var/category in screens)
-		clear_fullscreen(category, animate, dead_mob)
+		clear_fullscreen(category, animate)
 
-/datum/hud/proc/reload_fullscreen()
-	if(mymob && mymob.client && mymob.stat != DEAD)
-		var/list/screens = mymob.screens
+/mob/proc/reload_fullscreen()
+	if(client)
+		var/obj/abstract/screen/fullscreen/screen
 		for(var/category in screens)
-			var/obj/A = screens[category]
-			if(!A)
-				log_debug("screens\[[category]\] is null on [mymob]")
+			screen = screens[category]
+			if(!screen)
+				log_debug("screens\[[category]\] is null on [src]")
 				continue
-			if(istype(A, /atom))
-				if(!istype(A, /obj/abstract/screen))
-					log_debug("Wrong type of object in screens, type [A.type] [mymob]")
+			if(isatom(screen))
+				if(!istype(screen, /obj/abstract/screen))
+					log_debug("Wrong type of object in screens, type [screen.type] [src]")
 					continue
 			else // not even an atom, shouldnt go in list anyway
-				log_debug("screens\[[category]\] is a non-atom, WHY IS THIS IN SCREENS [mymob]")
+				log_debug("screens\[[category]\] is a non-atom, WHY IS THIS IN SCREENS [src]")
 				continue
-			mymob.client.screen |= A
+			if(screen.should_show_to(src))
+				screen.update_for_view(client.view)
+				client.screen |= screen
+			else
+				client.screen -= screen
 
 /obj/abstract/screen/fullscreen
 	icon = 'icons/mob/screen1_full.dmi'
@@ -88,10 +85,22 @@
 	mouse_opacity = 0
 	var/view = 7
 	var/severity = 0
+	var/show_when_dead = FALSE
 	var/anim_state
 	var/clear_after_length // also doubles as the length of the animation
 	var/scaling = 1
-	var/keep_on_death = 0 //prevents deletion by clear_fullscreens() when it gets called from death()
+	var/special_handling = FALSE
+
+/obj/abstract/screen/fullscreen/proc/update_for_view(client_view)
+	if(screen_loc == "CENTER-7,CENTER-7" && view != client_view && scaling && !special_handling)
+		var/list/actualview = getviewsize(client_view)
+		view = client_view
+		transform = matrix(actualview[1]/FULLSCREEN_OVERLAY_RESOLUTION_X, 0, 0, 0, actualview[2]/FULLSCREEN_OVERLAY_RESOLUTION_Y, 0)
+
+/obj/abstract/screen/fullscreen/proc/should_show_to(mob/mymob)
+	if(!show_when_dead && mymob.stat == DEAD)
+		return FALSE
+	return TRUE
 
 /obj/abstract/screen/fullscreen/Destroy()
 	severity = 0
@@ -100,12 +109,12 @@
 /obj/abstract/screen/fullscreen/brute
 	icon_state = "brutedamageoverlay"
 	layer = DAMAGE_HUD_LAYER
-	keep_on_death = 1
+	show_when_dead = TRUE
 
 /obj/abstract/screen/fullscreen/oxy
 	icon_state = "oxydamageoverlay"
 	layer = DAMAGE_HUD_LAYER
-	keep_on_death = 1
+	show_when_dead = TRUE
 
 /obj/abstract/screen/fullscreen/numb
 	icon_state = "numboverlay"
@@ -122,7 +131,7 @@
 /obj/abstract/screen/fullscreen/impaired
 	icon_state = "impairedoverlay"
 	layer = IMPAIRED_LAYER
-	keep_on_death = 1
+	show_when_dead = TRUE
 
 /obj/abstract/screen/fullscreen/blurry
 	icon = 'icons/mob/screen1.dmi'
@@ -142,6 +151,7 @@
 /obj/abstract/screen/fullscreen/impaired_crit
 	icon_state = "blackimageoverlay"
 	globalscreen = 1//need this screen object to keep existing
+	special_handling = TRUE
 
 /obj/abstract/screen/fullscreen/impaired_crit/New()
 	..()

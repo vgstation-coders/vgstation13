@@ -34,7 +34,7 @@
 	var/turf/T
 	T = get_turf(M)
 
-	for(var/mob/living/carbon/human/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	for(var/mob/living/carbon/human/perp in range(get_extended_hud_view(C),T))
 		if(!check_HUD_visibility(perp, M))
 			continue
 		holder = perp.hud_list[ID_HUD]
@@ -69,7 +69,7 @@
 	var/turf/T
 	var/icon/S
 	T = get_turf(M)
-	for(var/mob/living/carbon/human/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	for(var/mob/living/carbon/human/perp in range(get_extended_hud_view(C),T))
 		if(!check_HUD_visibility(perp, M))
 			continue
 		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.

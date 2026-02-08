@@ -595,3 +595,64 @@
 	enabled = FALSE
 
 	default_setting = FALSE
+
+/datum/preference_setting/toggle/auto_fit_viewport
+	name = "auto_fit_viewport"
+	sql_name = "auto_fit_viewport"
+
+	sql_table = "client"
+
+	enabled = TRUE
+
+	default_setting = TRUE
+
+/datum/preference_setting/toggle/auto_fit_viewport/choose_setting(mob/user)
+	. = ..()
+	INVOKE_ASYNC(parent.client, TYPE_VERB_REF(/client, fit_viewport))
+
+/datum/preference_setting/numerical/pixel_size
+	name = "pixel_size"
+	sql_name = "pixel_size"
+	sql_table = "client"
+	default_setting = 0
+	min_value = 0
+	max_value = 9
+	enabled = TRUE
+
+
+/datum/preference_setting/numerical/pixel_size/choose_setting(mob/user)
+	var/new_pixel_size = input(user, "Enter the new pixel size you wish to use. (0-9 in steps of 0.5). 0 will stretch to fit.","Pixel Size Preferences", setting)
+	setting = clamp(round(new_pixel_size, 0.5), min_value, max_value)
+	parent.client?.view_size?.resetFormat()
+
+/datum/preference_setting/enum/scaling_method
+	name = "scaling_method"
+	sql_name = "scaling_method"
+	sql_table = "client"
+	default_setting = SCALING_METHOD_DISTORT
+	allowed_values = list(SCALING_METHOD_BLUR, SCALING_METHOD_DISTORT, SCALING_METHOD_NORMAL)
+	enabled = TRUE
+
+/datum/preference_setting/enum/scaling_method/choose_setting(mob/user)
+	switch(setting)
+		if(SCALING_METHOD_DISTORT)
+			setting = SCALING_METHOD_BLUR
+		if(SCALING_METHOD_BLUR)
+			setting = SCALING_METHOD_NORMAL
+		if(SCALING_METHOD_NORMAL)
+			setting = SCALING_METHOD_DISTORT
+	parent.client.view_size?.setZoomMode()
+
+/datum/preference_setting/toggle/widescreen
+	name = "widescreen"
+	sql_name = "widescreen"
+
+	sql_table = "client"
+
+	enabled = TRUE
+
+	default_setting = TRUE
+
+/datum/preference_setting/toggle/widescreen/choose_setting(mob/user)
+	. = ..()
+	parent.client.view_size?.setDefault(VIEWPORT_USE_PREF)

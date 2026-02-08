@@ -13,7 +13,7 @@
 	var/image/holder
 	var/turf/T
 	T = get_turf(M)
-	var/list/patientlist = M.loneliness_affected() ? list(M) : range(C.view+DATAHUD_RANGE_OVERHEAD,T)
+	var/list/patientlist = M.loneliness_affected() ? list(M) : range(get_extended_hud_view(C),T)
 	for(var/mob/living/simple_animal/mouse/patient in patientlist)
 		if(!check_HUD_visibility(patient, M))
 			continue

@@ -3,7 +3,6 @@
 	Used to show and hide huds for all the different mob types,
 	including inventories and item quick actions.
 */
-var/global/obj/abstract/screen/clicker/catcher = new()
 
 /datum/hud
 	var/mob/mymob
@@ -281,7 +280,6 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 	mymob.client.screen += src.holomap_obj
 
-	reload_fullscreen()
 	update_parallax_existence()
 
 //Triggered when F12 is pressed (Unless someone changed something in the DMF)

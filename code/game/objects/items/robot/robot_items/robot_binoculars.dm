@@ -22,8 +22,8 @@
 				R.register_event(/event/moved, src, nameof(src::mob_moved()))
 				R.visible_message("[R]'s camera lens focuses loudly.","Your camera lens focuses loudly.")
 				R.regenerate_icons()
-				C.changeView(C.view + 4)
+				C.view_size.addTo("8x8")
 			else
 				R.unregister_event(/event/moved, src, nameof(src::moved()))
 				R.regenerate_icons()
-				C.changeView(C.view - 4)
+				C.view_size.addTo("-8x-8")

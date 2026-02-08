@@ -1458,13 +1458,32 @@ Game Mode config tags:
 	log_admin("[update_station ? "World" : "Non-station"] radio frequency [name] is now [freqs[name]][user ? " set by [key_name(user)]": ""]")
 	message_admins("[update_station ? "World" : "Non-station"] radio frequency [color ? "<font color=[freqtocolor["[freqs[name]]"]]>" : ""][name][color ? "</font color>" : ""] is now [freqs[name]][user ? " set by [key_name(user)] ([formatJumpTo(user, "JMP")])" : ""]")
 
-/proc/getviewsize(view)
+/proc/getviewsize(view = world.view)
+	SHOULD_BE_PURE(TRUE)
+
 	if(isnum(view))
+		//resetting back to 0- this is the same as just checking !view but we want to be clear the point of the check.
+		if(view == 0)
+			return list(0, 0)
 		var/totalviewrange = (view < 0 ? -1 : 1) + 2 * view
 		return list(totalviewrange, totalviewrange)
 	else
-		var/list/viewrangelist = splittext(view,"x")
+		var/list/viewrangelist = splittext(view, "x")
 		return list(text2num(viewrangelist[1]), text2num(viewrangelist[2]))
+
+/proc/view_tiles_after_center(view_dimension)///How many tiles are in view, like a radius excluding the center.
+	return (view_dimension - 1)/2
+
+/proc/view_dimensions_list_to_string(list/view_dimensions)
+	return jointext(view_dimensions, "x")
+
+/proc/add_view_strings(view1, view2)
+	var/list/view1_dimensions = getviewsize(view1)
+	var/list/view2_dimensions = getviewsize(view2)
+	var/list/final_view_dimensions
+	for(var/i in 1 to 2)
+		LAZYADD(final_view_dimensions, (view1_dimensions[i] + view2_dimensions[i]))
+	return view_dimensions_list_to_string(final_view_dimensions)
 
 /**
  * Get a bounding box of a list of atoms.

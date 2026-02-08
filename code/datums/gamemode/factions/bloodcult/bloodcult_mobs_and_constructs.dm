@@ -643,7 +643,7 @@ var/list/astral_projections = list()
 		client.images -= propension
 		propension.len = 0
 
-		for(var/mob/living/carbon/C in range(client.view+DATAHUD_RANGE_OVERHEAD, get_turf(src)))
+		for(var/mob/living/carbon/C in range(get_extended_hud_view(client), get_turf(src)))
 			C.update_convertibility()
 			propension += C.hud_list[CONVERSION_HUD]
 

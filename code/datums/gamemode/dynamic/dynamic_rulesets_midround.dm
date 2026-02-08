@@ -1034,7 +1034,7 @@
 	var/mob/living/carbon/human/H = new(get_turf(chair))
 	H.key = applicant.key
 	chair.buckle_mob(H, H)
-	H.client.changeView()
+	H.client.view_size.resetToDefault()
 
 	var/species = pickweight(list(
 		"Human" 	= 4,

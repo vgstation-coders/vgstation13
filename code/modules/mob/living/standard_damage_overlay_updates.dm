@@ -124,10 +124,10 @@
 
 	if (_total <= 0)
 		return 0
-
-	if (client && (client.view > 7))
+	var/list/client_view_dimensions = getviewsize(client?.view)
+	if(client && view_tiles_after_center(client_view_dimensions[1]) > 7)
 		//impairement is capped at on players with extended view so that they can't see outside of the overlay
-		_max_range -= (client.view - 7) / 10
+		_max_range -= (view_tiles_after_center(client_view_dimensions[1]) - 7) / 10
 
 	_total = clamp(_total, 1, _max_range)
 

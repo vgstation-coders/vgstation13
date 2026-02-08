@@ -1,4 +1,26 @@
 /client
+
+	/**
+	 * This line makes clients parent type be a datum
+	 *
+	 * By default in byond if you define a proc on datums, that proc will exist on nearly every single type
+	 * from icons to images to atoms to mobs to objs to turfs to areas, it won't however, appear on client
+	 *
+	 * instead by default they act like their own independent type so while you can do isdatum(icon)
+	 * and have it return true, you can't do isdatum(client), it will always return false.
+	 *
+	 * This makes writing oo code hard, when you have to consider this extra special case
+	 *
+	 * This line prevents that, and has never appeared to cause any ill effects, while saving us an extra
+	 * pain to think about
+	 *
+	 * This line is widely considered black fucking magic, and the fact it works is a puzzle to everyone
+	 * involved, including the current engine developer, lummox
+	 *
+	 * If you are a future developer and the engine source is now available and you can explain why this
+	 * is the way it is, please do update this comment
+	 */
+	parent_type = /datum
 		////////////////
 		//ADMIN THINGS//
 		////////////////
@@ -25,6 +47,12 @@
 	var/list/radial_menus = list()
 	var/click_held_down_time //Used by MouseDown in _onclick/click.dm
 
+	/// datum wrapper for client view
+	var/datum/view_data/view_size
+
+	/// If this client has been fully initialized or not
+	var/fully_created = FALSE
+
 		///////////////
 		//SOUND STUFF//
 		///////////////
@@ -50,6 +78,8 @@
 	//This breaks a lot of shit.  - N3X
 	preload_rsc = 1 // This is 0 on the host server so we can set it to an URL once the player logs in and have them download the resources from a different server.
 
+	var/obj/abstract/screen/click_catcher/void
+
 	// Used by html_interface module.
 	var/hi_last_pos
 
@@ -59,7 +89,7 @@
 	var/datum/media_manager/media = null
 
 	var/filling = 0 //SOME STUPID SHIT POMF IS DOING
-	var/haszoomed = 0
+	var/haszoomed = FALSE
 
 	// Their chat window, sort of important.
 	// See /goon/code/datums/browserOutput.dm
@@ -110,9 +140,6 @@
 
 	// Last Round Scoreboard images have been sent
 	var/received_last_round_images = FALSE
-
-	// Duplicate from /datum
-	var/list/active_timers = list()
 
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

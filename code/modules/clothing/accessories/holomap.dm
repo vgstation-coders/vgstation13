@@ -198,9 +198,9 @@ var/list/holomap_cache = list()
 
 	//Prevents the map background from sliding across the screen when the map is enabled for the first time.
 	if(!bgmap.pixel_x)
-		bgmap.pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
+		bgmap.pixel_x = -1*T.x + view_tiles_after_center(getviewsize(activator.client.view)[1])*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
 	if(!bgmap.pixel_y)
-		bgmap.pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
+		bgmap.pixel_y = -1*T.y + view_tiles_after_center(getviewsize(activator.client.view)[2])*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
 
 
 	for(var/marker in holomap_markers)

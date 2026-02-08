@@ -118,8 +118,7 @@ Obviously, requires DNA2.
 
 /datum/dna/gene/basic/grant_spell/farsight/deactivate(var/mob/M,var/connected,var/flags)
 	if(..())
-		if(M.client && M.client.view == world.view + 2)
-			M.client.changeView()
+		M.client?.view_size.resetToDefault()
 
 /spell/targeted/farsight
 	name = "Far Sight"
@@ -138,11 +137,12 @@ Obviously, requires DNA2.
 /spell/targeted/farsight/cast(list/targets, mob/user)
 	for(var/mob/living/carbon/human/F in targets)
 		if(!active)
-			F.client.changeView(max(F.client.view, world.view+2))
+			F.client.view_size.setWidth(max(F.client.view_size.width, 4))
+			F.client.view_size.setHeight(max(F.client.view_size.height, 4))
 			to_chat(F, "<span class='notice'>You focus your eyes to see farther.</span>")
 			active = 1
 		else
-			F.client.changeView()
+			F.client.view_size.resetToDefault()
 			to_chat(F, "<span class='notice'>You no longer focus your eyes.</span>")
 			active = 0
 

@@ -13,7 +13,7 @@
 	var/image/holder
 	var/turf/T = get_turf(M)
 
-	for(var/mob/living/silicon/robot/borg in (M.loneliness_affected() ? list(M) : range(C.view+DATAHUD_RANGE_OVERHEAD,T)))
+	for(var/mob/living/silicon/robot/borg in (M.loneliness_affected() ? list(M) : range(get_extended_hud_view(C),T)))
 		if(!check_HUD_visibility(borg, M))
 			continue
 
@@ -35,7 +35,7 @@
 				var/charge_ratio = borg_cell.charge / borg_cell.maxcharge
 				holder.icon_state = power_cell_charge_to_icon_state(charge_ratio)
 
-	for(var/obj/mecha/exosuit in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	for(var/obj/mecha/exosuit in range(get_extended_hud_view(C),T))
 		if(!check_HUD_visibility(exosuit, M))
 			continue
 

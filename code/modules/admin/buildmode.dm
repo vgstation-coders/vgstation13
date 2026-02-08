@@ -268,11 +268,14 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 /client/MouseWheel(object,delta_x,delta_y,location,control,params)
 	if(istype(mob,/mob/dead/observer) || buildmode) //DEAD FAGS CAN ZOOM OUT THIS WILL END POORLY
 		if(delta_y > 0)
-			changeView(view - 1)
+			if(getviewsize(view_size.getView())[1] > 1)
+				view_size.addToWidth(-1)
+			if(getviewsize(view_size.getView())[2] > 1)
+				view_size.addToHeight(-1)
 		else
-			changeView(view + 1)
-		changeView(max(view,1))
-		haszoomed = 1
+			view_size.addToWidth(1)
+			view_size.addToHeight(1)
+		haszoomed = TRUE
 	..()
 
 /client/MouseDrop(src_object,over_object,src_location,over_location,src_control,over_control,params)

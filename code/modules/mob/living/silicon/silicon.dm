@@ -324,7 +324,7 @@
 /mob/living/silicon/html_mob_check(var/typepath)
 	for(var/atom/movable/AM in html_machines)
 		if(typepath == AM.type)
-			if(max(abs(AM.x-src.x),abs(AM.y-src.y)) <= client.view)
+			if((abs(AM.x-src.x) <= getviewsize(client.view)[1]) && (abs(AM.y-src.y) <= getviewsize(client.view)[2]))
 				return 1
 	return 0
 

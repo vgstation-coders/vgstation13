@@ -339,7 +339,7 @@ var/list/forbidden_varedit_object_types = list(
 
 	return M
 
-/client/proc/can_edit_var(var/tocheck, var/type_to_check)
+/client/can_edit_var(var/tocheck, var/type_to_check)
 	if (is_type_in_list(type_to_check, forbidden_varedit_object_types))
 		to_chat(usr, "Editing this variable is forbidden.")
 		return FALSE

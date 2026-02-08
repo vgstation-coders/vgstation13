@@ -5,8 +5,8 @@
 	//Check the global list of butchering drops for our species.
 	//See code/datums/helper_datums/butchering.dm
 	init_butchering_list()
-
-	clear_fullscreens(TRUE)
+	reload_fullscreen()
+	clear_fullscreens()
 	handle_symptom_on_death()
 	..()
 	standard_damage_overlay_updates()

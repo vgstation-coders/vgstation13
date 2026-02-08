@@ -64,7 +64,7 @@
 			var/T = get_turf(user)
 			if(isobserver(M) && M.client && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_GHOSTSIGHT) && !(M in viewers(T)))
 				M.show_message(formatFollow(user) + " " + msg)
-				if (user.client && M?.client?.prefs.get_pref(/datum/preference_setting/toggle/mob_chat_on_map) && get_dist(M, user) < M?.client.view)
+				if (user.client && M?.client?.prefs.get_pref(/datum/preference_setting/toggle/mob_chat_on_map) && (user in range(M.client.view)))
 					M.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
 	if(emote_type & EMOTE_VISIBLE)

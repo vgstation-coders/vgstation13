@@ -69,6 +69,7 @@
 	icon_state = null
 	plane = EFFECTS_PLANE
 	smooths = 0
+	pixel_x = -64
 
 // Global var for fade-in
 var/icon/current_round_splashscreen
@@ -87,6 +88,16 @@ var/icon/current_round_splashscreen
 			filenames -= filename
 	icon = file("[path][pick(filenames)]")
 	current_round_splashscreen = icon
+	handle_generic_titlescreen_sizes()
+
+///helper proc that will center the screen if the icon is changed to a generic width, to make admins have to fudge around with pixel_x less. returns null
+/turf/unsimulated/wall/splashscreen/proc/handle_generic_titlescreen_sizes()
+	var/icon/size_check = icon(current_round_splashscreen, icon_state)
+	var/width = size_check.Width()
+	if(width == 480) // 480x480 is nonwidescreen
+		pixel_x = 0
+	else if(width == 608) // 608x480 is widescreen
+		pixel_x = -64
 
 /turf/unsimulated/wall/other
 	icon_state = "r_wall"

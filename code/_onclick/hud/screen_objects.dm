@@ -323,20 +323,6 @@
 	overlays.len = 0
 	overlays += image('icons/mob/zone_sel.dmi', "[selecting]")
 
-/obj/abstract/screen/clicker
-	icon = 'icons/mob/screen1.dmi'
-	icon_state = "blank"
-	plane = CLICKCATCHER_PLANE
-	mouse_opacity = 2
-	globalscreen = 1
-	screen_loc = ui_entire_screen
-
-/obj/abstract/screen/clicker/Click(location, control, params)
-	var/list/modifiers = params2list(params)
-	var/turf/T = screen_loc2turf(modifiers["screen-loc"], get_turf(usr), usr)
-	T.Click(location, control, params)
-	return 1
-
 /proc/screen_loc2turf(scr_loc, turf/origin, mob/user)
 	var/list/screenxy = splittext(scr_loc, ",")
 	var/list/screenx = splittext(screenxy[1], ":")

@@ -67,9 +67,8 @@
 
 	client.reset_screen()				//remove hud items just in case
 	hud_used = new /datum/hud(src)
-	client.screen += catcher //Catcher of clicks
-	client.screen += clickmaster // click catcher planesmaster on plane 0 with mouse opacity 0 - allows click catcher to work with SEE_BLACKNESS
-	client.screen += clickmaster_dummy // honestly fuck you lummox
+	reload_fullscreen() // Reload any fullscreen overlays this mob has.
+	add_click_catcher()
 	client.screen += overdark_planemaster
 	client.screen += overdark_planemaster_target
 	client.initialize_ghost_planemaster() //We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
@@ -79,6 +78,9 @@
 
 	create_orphan_planemasters()
 	list_perception_planemasters()
+
+	if(client)
+		client.view_size?.resetToDefault() // Resets the client.view in case it was changed.
 
 	regular_hud_updates()
 
@@ -111,7 +113,8 @@
 			client.verbs += /client/proc/readmin
 
 		if(M_FARSIGHT in mutations)
-			client.changeView(max(client.view, world.view+1))
+			client.view_size.setWidth(max(client.view_size.width, 2))
+			client.view_size.setHeight(max(client.view_size.height, 2))
 
 	/* Handle media initialization */
 	client.media = new /datum/media_manager(src)
@@ -130,8 +133,8 @@
 		location.on_login(src)
 
 	if(client && client.haszoomed)
-		client.changeView()
-		client.haszoomed = 0
+		client.view_size.resetToDefault()
+		client.haszoomed = FALSE
 
 	update_colour()
 	if (client.byond_version >= 516)
@@ -145,4 +148,4 @@
 	if(iscluwnebanned(src) && (timeofdeath > 0 || !iscluwne(src)))
 		log_admin("Cluwnebanned player [key_name(src)] attempted to join and was kicked.")
 		message_admins("<span class='notice'>Cluwnebanned player [key_name(src)] attempted to join and was kicked.</span>", 1)
-		del(client)
+		qdel(client)

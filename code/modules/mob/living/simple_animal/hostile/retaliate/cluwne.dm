@@ -146,7 +146,7 @@
 	if(client && iscluwnebanned(src))
 		to_chat(src, "<big><span class='danger'>You have died, and will not be able to rejoin the game until the next round.</span><big>")
 		sleep(1)
-		del(client)
+		qdel(client)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/goblin
 	name = "clown goblin"

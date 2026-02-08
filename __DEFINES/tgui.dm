@@ -57,6 +57,3 @@
  * evaluates to a string equal to "X", but compile errors if X isn't a var on datum.
  **/
 #define NAMEOF(datum, X) (#X || ##datum.##X)
-
-/// Call by name proc reference, checks if the proc exists on either the given type or as a global proc
-#define TYPE_PROC_REF(TYPE, X) (nameof(##TYPE.proc/##X))

@@ -262,7 +262,7 @@ var/auxtools_path
 					if(!istype(C.mob, /mob/dead))
 						log_access("AFK: [key_name(C)]")
 						to_chat(C, "<span class='warning'>You have been inactive for more than 10 minutes and have been disconnected.</span>")
-						del(C)
+						qdel(C)
 //#undef INACTIVITY_KICK
 
 

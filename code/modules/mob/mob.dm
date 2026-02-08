@@ -1133,11 +1133,13 @@ Use this proc preferably at the end of an equipment loadout
 	if (src in confusion_victims)
 		to_chat(src, "<span class='sinister'>[pick("Oh god what's this even?","Paranoia and panic prevent you from calmly observing whatever this is.")]</span>")
 		return
-
-	if(get_dist(A,client.eye) > client.view)
-		to_chat(src, "<span class='notice'>It is too far away to make out.</span>")
+	var/turf/client_eye_turf = get_turf(client.eye)
+	var/examined_x_distance = abs(A.x - client_eye_turf.x)
+	var/examined_y_distance = abs(A.y - client_eye_turf.y)
+	var/list/client_view_dimensions = getviewsize(client.view)
+	if(examined_x_distance > view_tiles_after_center(client_view_dimensions[1]) || examined_y_distance > view_tiles_after_center(client_view_dimensions[2]))
+		to_chat(src, span_notice("It is too far away to make out."))
 		return
-
 	face_atom(A)
 	A.examine(src)
 	if(A.admin_desc && src.client?.holder?.admin_examine)
@@ -1235,7 +1237,8 @@ Use this proc preferably at the end of an equipment loadout
 	if(!client)
 		log_game("[usr.key] AM failed due to disconnect.")
 		return
-	client.screen.len = 0
+	client.screen.Cut()
+	client.screen += client.void
 	if(!client)
 		log_game("[usr.key] AM failed due to disconnect.")
 		return

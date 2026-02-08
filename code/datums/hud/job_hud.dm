@@ -17,7 +17,7 @@
 	offset = offset * PIXEL_MULTIPLIER
 	T = get_turf(M)
 
-	var/list/perplist = M.loneliness_affected() ? list(M) : range(C.view+DATAHUD_RANGE_OVERHEAD,T)
+	var/list/perplist = M.loneliness_affected() ? list(M) : range(get_extended_hud_view(C),T)
 	for(var/mob/living/simple_animal/astral_projection/perp in perplist)
 		if(!check_HUD_visibility(perp, M))
 			continue

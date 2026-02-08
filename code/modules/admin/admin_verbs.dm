@@ -600,7 +600,7 @@ var/list/admin_verbs_mod = list(
 		holder.DB_ban_record(BANTYPE_TEMP, null, bantime, "[reason] - [warn_reason]", , ,warned_ckey)
 		feedback_inc("ban_warn",1)
 		D.save_preferences_sqlite(C, C.ckey)
-		del(C)
+		qdel(C)
 	else
 		var/warnbans = D.get_pref(/datum/preference_setting/numerical/warnbans)
 		if(C)

@@ -47,7 +47,7 @@
 
 /obj/effect/mine/kick/trigger(mob/AM)
 	spark(src)
-	del(AM.client)
+	qdel(AM.client)
 	qdel(src)
 
 /obj/effect/mine/stun

@@ -267,7 +267,7 @@
 		if(user && user.client)
 			user.regenerate_icons()
 			var/client/C = user.client
-			C.changeView(C.view + 7)
+			C.view_size.addTo("14x14")
 	else
 		user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 		user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
@@ -276,4 +276,4 @@
 		if(user && user.client)
 			user.regenerate_icons()
 			var/client/C = user.client
-			C.changeView(C.view - 7)
+			C.view_size.addTo("-14x-14")

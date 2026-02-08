@@ -153,7 +153,7 @@
 			QDEL_NULL(eviltwinrecruiter)
 			var/mob/living/carbon/human/H = new /mob/living/carbon/human(pick(timeagentstart))
 			H.ckey = player.ckey
-			H.client.changeView()
+			H.client.view_size.resetToDefault()
 			var/datum/role/time_agent/eviltwin/twin = new /datum/role/time_agent/eviltwin(H.mind, fac = src.faction)
 			twin.erase_target = src
 			twin.Greet(GREET_DEFAULT)

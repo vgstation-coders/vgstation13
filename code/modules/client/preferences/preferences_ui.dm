@@ -129,9 +129,8 @@
 
 	return dat
 
-/datum/preferences/proc/setup_graphics(var/dat, var/user)
-
-
+/datum/preferences/proc/setup_graphics(dat, user)
+	var/alist/scaling_method_names = alist(SCALING_METHOD_NORMAL = "Point Sampling", SCALING_METHOD_DISTORT = "Nearest Neighbor", SCALING_METHOD_BLUR = "Bilinear")
 	dat += {"
 	<h1>Parallax Settings</h1>
 
@@ -151,6 +150,18 @@
 
 		<b>Fancy Visual Filters:<b>
 		<a href='?_src_=prefs;preference=plane_filters;task=input'><b>[get_pref(/datum/preference_setting/toggle/plane_filters) ? "Enabled" : "Disabled"]</b></a><br>
+
+		<b>Pixel Size:</b>
+		<a href='?_src_=prefs;preference=pixel_size;task=input'><b>[get_pref(/datum/preference_setting/numerical/pixel_size) ? "[get_pref(/datum/preference_setting/numerical/pixel_size)]x" : "Stretch To Fit"]</b></a><br>
+
+		<b>Scaling Method:</b>
+		<a href='?_src_=prefs;preference=scaling_method;task=input'><b>[scaling_method_names[get_pref(/datum/preference_setting/enum/scaling_method)]]</b></a><br>
+
+		<b>Widescreen:</b>
+		<a href='?_src_=prefs;preference=widescreen;task=input'><b>[get_pref(/datum/preference_setting/toggle/widescreen) ? "Enabled" : "Disabled"]</b></a><br>
+
+		<b>Auto-Fit Viewport:</b>
+		<a href='?_src_=prefs;preference=auto_fit_viewport;task=input'><b>[get_pref(/datum/preference_setting/toggle/auto_fit_viewport) ? "Enabled" : "Disabled"]</b></a><br>
 	"}
 
 	return dat

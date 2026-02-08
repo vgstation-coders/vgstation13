@@ -35,7 +35,7 @@
 			var/log = "[key_name(my_client)] has been kicked for failing to activate hardware acceleration on their client."
 			message_admins(log)
 			log_game(log)
-			del(my_client)
+			qdel(my_client)
 		else
 			my_client << 'sound/effects/adminhelp.ogg'
 			to_chat(my_client, "<span class='danger big'>Your client has hardware acceleration disabled in Dream Seeker's options menu. You will be kicked if you do not enable hardware acceleration.<br>To enable HW acceleration: left click the SS13 icon at the very top left of the game window -> client -> preferences..., tick the checkbox reading 'Use graphics hardware for displaying maps.'</span>")

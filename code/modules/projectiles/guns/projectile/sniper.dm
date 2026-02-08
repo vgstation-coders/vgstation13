@@ -17,7 +17,8 @@
 	max_shells = 1
 	load_method = 0
 	slowdown = 2
-	var/backup_view = 7
+	var/view_multiplier = 2
+	var/added_view_dimensions[2]
 
 /obj/item/weapon/gun/projectile/hecate/isHandgun()
 	return FALSE
@@ -38,15 +39,12 @@
 		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_64x64.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_64x64.dmi')
 		if(user && user.client)
 			user.regenerate_icons()
-			var/client/C = user.client
-			backup_view = C.view
-			C.changeView(C.view * 2)
+			handle_view(user)
 	else
 		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 		if(user && user.client)
 			user.regenerate_icons()
-			var/client/C = user.client
-			C.changeView(backup_view)
+			handle_view(user, TRUE)
 
 /obj/item/weapon/gun/projectile/hecate/attack_self(mob/user)
 	if(wielded)
@@ -55,6 +53,22 @@
 	else
 		slowdown = 10
 		wield(user)
+
+/obj/item/weapon/gun/projectile/hecate/proc/handle_view(mob/user, resetting = FALSE)
+	if(!resetting)
+		var/client/C = user.client
+		var/list/client_view_dimensions = getviewsize(C.view_size.getView())
+		var/bigger_dimensions[2]
+		bigger_dimensions[1] = client_view_dimensions[1]*view_multiplier
+		bigger_dimensions[2] = client_view_dimensions[2]*view_multiplier
+		added_view_dimensions[1] = (bigger_dimensions[1] - getviewsize(C.view_size.default)[1] - C.view_size.width)
+		added_view_dimensions[2] = (bigger_dimensions[2] - getviewsize(C.view_size.default)[2] - C.view_size.height)
+		C.view_size.addToWidth(added_view_dimensions[1])
+		C.view_size.addToHeight(added_view_dimensions[2])
+	else
+		var/client/C = user.client
+		C.view_size.addToWidth(-(added_view_dimensions[1]))
+		C.view_size.addToHeight(-(added_view_dimensions[2]))
 
 /obj/item/weapon/gun/projectile/hecate/hunting
 	name = "hunting rifle"
@@ -77,6 +91,7 @@
 	var/obj/item/ammo_casing/current_shell = null
 	var/list/gun_overlay = list()
 	actions_types = list(/datum/action/item_action/toggle_wielding)
+	view_multiplier = 1.5
 
 /obj/item/weapon/gun/projectile/hecate/hunting/bullet_hitting(var/obj/item/projectile/P,var/atom/atarget)
 	if(ishuman(atarget))
@@ -189,15 +204,12 @@
 	if(wielded)
 		user.regenerate_icons()
 		var/client/C = user.client
-		C.changeView()
+		C.view_size.resetToDefault()
 		if(user && user.client)
 			if(scoped && scope_toggled)
 				user.regenerate_icons()
-				//var/client/C = user.client
-				backup_view = C.view
-				C.changeView(C.view * 1.5)
+				handle_view(user)
 	else
 		if(user && user.client)
 			user.regenerate_icons()
-			var/client/C = user.client
-			C.changeView(backup_view)
+			handle_view(user, TRUE)

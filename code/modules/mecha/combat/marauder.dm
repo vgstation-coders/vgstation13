@@ -229,15 +229,15 @@
 		Marauder.log_message("Toggled zoom mode.")
 		Marauder.occupant_message("<font color='[Marauder.zoom?"blue":"red"]'>Zoom mode [Marauder.zoom?"en":"dis"]abled.</font>")
 		if(Marauder.zoom)
-			Marauder.occupant.client.changeView(12)
+			Marauder.occupant.client.view_size.addTo("10x10")
 			Marauder.occupant << sound('sound/mecha/imag_enh.ogg',volume=50)
 		else
-			Marauder.occupant.client.changeView()//world.view - default mob view size
+			Marauder.occupant.client.view_size.resetToDefault()
 	return
 
 /obj/mecha/combat/marauder/go_out()
 	if(src.occupant && src.occupant.client)
-		src.occupant.client.changeView()
+		src.occupant.client.view_size.resetToDefault()
 		src.zoom = 0
 	..()
 	return

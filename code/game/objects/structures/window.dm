@@ -82,7 +82,7 @@ var/list/one_way_windows
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
 		if(!istype(C.mob, /mob/dead/observer) && !(M_XRAY in C.mob.mutations))
-			if(((x >= (C.mob.x - C.view)) && (x <= (C.mob.x + C.view))) && ((y >= (C.mob.y - C.view)) && (y <= (C.mob.y + C.view))))
+			if(((x >= (C.mob.x - view_tiles_after_center(getviewsize(C.view)[1]))) && (x <= (C.mob.x + view_tiles_after_center(getviewsize(C.view)[1])))) && ((y >= (C.mob.y - view_tiles_after_center(getviewsize(C.view)[2]))) && (y <= (C.mob.y + view_tiles_after_center(getviewsize(C.view)[2])))))
 				C.update_one_way_windows(view(C.view,C.mob))
 
 /obj/structure/window/projectile_check()

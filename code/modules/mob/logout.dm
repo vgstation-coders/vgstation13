@@ -18,7 +18,7 @@
 
 	log_access("Logout: [key_name(src)] ([formatLocation(loc)])")
 
-	clear_fullscreens(FALSE, 0)
+	clear_fullscreens(0)
 
 	RemoveAllUIs() // Removes mind UIs
 

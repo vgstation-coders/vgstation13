@@ -228,7 +228,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 		return FALSE
 	if(!allowed(user))
 		return FALSE
-	return get_dist(target,src) <= C.view
+	return (target in range(C.view_size.getView(), user))
 
 #undef OMNIMODE_WIRE
 #undef OMNIMODE_TOOL

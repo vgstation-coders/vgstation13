@@ -237,34 +237,45 @@ List of hard deletions:"}
 		return
 	usr << browse(HTML_SKELETON(jointext(L, "")),"window=harddellogs")
 
+//this is mainly to separate things profile wise.
+/datum/subsystem/garbage/proc/HardDelete(datum/D)
+	++dels_count
+	++hard_dels
+	del(D)
+
 /*
  * NEVER USE THIS FOR /atom OTHER THAN /atom/movable
  * BASE ATOMS CANNOT BE QDEL'D BECAUSE THEIR LOC IS LOCKED.
  */
-/proc/qdel(const/datum/D)
-	if(isnull(D))
+/proc/qdel(datum/to_delete, force = FALSE)
+	if(isnull(to_delete))
 		return
 
-	if(D.being_sent_to_past())
+	if(to_delete.being_sent_to_past())
 		return
 
 	if(isnull(SSgarbage))
-		del(D)
+		del(to_delete)
 		return
 
-	if(istype(D, /atom) && !istype(D, /atom/movable))
-		del(D)
+	if(isatom(to_delete) && !ismovable(to_delete))
+		del(to_delete)
 		SSgarbage.hard_dels++
 		SSgarbage.dels_count++
-		CRASH("qdel() passed object of type [D.type]. qdel() cannot handle unmovable atoms.")
+		CRASH("qdel() passed object of type [to_delete.type]. qdel() cannot handle unmovable atoms.")
+	if(!isnull(to_delete.gcDestroyed))
+		if(to_delete.gcDestroyed == GC_CURRENTLY_BEING_QDELETED)
+			CRASH("[to_delete.type] destroy proc was called multiple times, likely due to a qdel loop in the Destroy logic")
+		return
+	to_delete.gcDestroyed = GC_CURRENTLY_BEING_QDELETED
+	var/hint = to_delete.Destroy(force) // Let our friend know they're about to get fucked up.
+	switch(hint)
+		if(QDEL_HINT_QUEUE)
+			SSgarbage.addTrash(to_delete)
+		if(QDEL_HINT_HARDDEL_NOW) //qdel should assume this object won't gc, and hard del it post haste.
+			SSgarbage.HardDelete(to_delete)
 
-	if(isnull(D.gcDestroyed))
-		// Let our friend know they're about to get fucked up.
-		D.Destroy()
-
-		SSgarbage.addTrash(D)
-
-/datum/proc/Destroy()
+/datum/proc/Destroy(force = FALSE)
 	SHOULD_CALL_PARENT(TRUE)
 	registered_events = null
 	gcDestroyed = "Bye, world!"
@@ -273,6 +284,7 @@ List of hard deletions:"}
 	for(var/component_type in datum_components)
 		qdel(datum_components[component_type])
 	datum_components = null
+	return QDEL_HINT_QUEUE //qdel hints are not fully implemented yet
 
 /datum/var/gcDestroyed
 
