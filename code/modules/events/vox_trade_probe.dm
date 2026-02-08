@@ -41,7 +41,7 @@
 /datum/event/tradeprobe/setup()
 	//Lock trade shuttle so that it can't crush the probe
 	trade_shuttle.lockdown = "The trade shuttle has been temporarily locked while a pod is in port. The pod will depart after 10 minutes."
-	load_dungeon(/datum/map_element/dungeon/tradeprobe, 0, TRUE)
+	load_dungeon(/datum/map_element/dungeon/tradeprobe, 0, TRUE, FALSE) //Don't spawn teleporters, since the probe will be moving to the station, not random locations
 	tradeprobe = new(starting_area = /area/shuttle/tradeprobe)
 	tradeprobe.initialize()
 	tradeprobe.move()

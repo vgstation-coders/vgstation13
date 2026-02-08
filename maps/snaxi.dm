@@ -130,6 +130,8 @@
 		for (var/y = center_y; y >= center_y - center_y/3; y = y - 10)
 			gaussian_geyser(x, y)
 			CHECK_TICK
+	for(var/obj/machinery/computer/climate/CC in climatecomps)
+		CC.link_climate()
 
 #define MIN_REGIONAL_VAULTS 2
 #define MAX_REGIONAL_VAULTS 4
