@@ -1140,6 +1140,7 @@
 	fluid_consumption = 0.5
 	nutrient_consumption = 0.5
 	large = 0
+	thorny = 1
 
 /datum/seed/flower/sunflower/moonflower
 	name = "moonflowers"
