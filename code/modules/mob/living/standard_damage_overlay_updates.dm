@@ -116,6 +116,11 @@
 			overlay_fullscreen("high_love", /obj/abstract/screen/fullscreen/high/love, /obj/abstract/screen/fullscreen/high/hearts)
 		else
 			clear_fullscreen("high_love")
+	else
+		if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
+			disable_nearsightedness()
+		if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
+			disable_blurriness()
 
 /mob/living/proc/get_impaired_vision_range()
 	var/_modifiers	= get_impaired_vision_modifiers()
