@@ -182,11 +182,6 @@
 /datum/next_map/junglestation
 	name = "Jungle Station" //NT Colony Gamma-8 - the trve name.
 	path = "junglestation"
-	min_players=1 //placeholders - adjust later. Or don't. maybe it'll be fun in deadpop and highpop.
-	max_players=99
-//disabled voting. re-enable when jungle is good to run full time. should still be able to be bussed like this.
-/datum/next_map/junglestation/is_votable()
-	return FALSE
 
 /proc/get_votable_maps()
 	var/list/votable_maps = list()

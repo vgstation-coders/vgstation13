@@ -9,7 +9,7 @@ var/datum/subsystem/mob/SSmob
 	display_order = SS_DISPLAY_MOB
 
 	var/list/currentrun
-	var/paused = 0 // Count of mobs skipped due to planet optimization
+	var/paused = 0 // Count of mobs skipped due to inactive virtual z-levels
 
 
 /datum/subsystem/mob/New()
@@ -32,9 +32,10 @@ var/datum/subsystem/mob/SSmob
 		if (!M || M.gcDestroyed || M.timestopped)
 			continue
 
-		// Skip processing non-player mobs on planets without players
-		if (M.planet && !M.client)
-			if (!M.planet.process_mobs)
+		// Skip processing non-player mobs on virtual z-levels without players
+		if(istype(M,/mob/living))
+			var/mob/living/L = M
+			if (L.paused && !L.client)
 				paused++
 				continue
 

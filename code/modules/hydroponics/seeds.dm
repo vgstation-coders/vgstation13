@@ -549,6 +549,12 @@
 /obj/item/seeds/flaxseed
 	name = "packet of flax seeds"
 	seed_type = "flax"
+	vending_cat = "flowers"
+
+/obj/item/seeds/mintseed
+	name = "packet of mint seeds"
+	seed_type = "mint"
+	vending_cat = "weeds"
 
 // Chili plants/variants.
 /datum/seed/chili
@@ -2116,3 +2122,20 @@
 	ideal_light = 8
 	nutrient_consumption = 2
 	constrained = 1
+
+/datum/seed/mint //somewhat realistic mint stats
+	name = "mint"
+	seed_name = "mint"
+	display_name = "mint"
+	plant_dmi = 'icons/obj/hydroponics/mint.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mint)
+	chems = list(MINTESSENCE = list(2,4)) //TO DO: add a PROPER system that switches the produced chems based on potency so it makes mint essence when low potency and mint tox when high potency
+	lifespan = 150
+	maturation = 2
+	production = 8
+	yield = 6
+	potency = 5
+	fluid_consumption = 5
+	nutrient_consumption = 0.05
+	growth_stages = 2
+	voracious = 1

@@ -383,7 +383,7 @@
 		var/mob/living/carbon/human/M = src.loc
 		to_chat(M, "<span class='warning'>\The [src] overloads and blinds you!</span>")
 		if(M.glasses == src)
-			M.eye_blind = 3
+			M.instant_blindness(13)
 			M.eye_blurry = 5
 			M.disabilities |= NEARSIGHTED
 			spawn(100)

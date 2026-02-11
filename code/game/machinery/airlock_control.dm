@@ -331,6 +331,7 @@
 	var/datum/radio_frequency/radio_connection
 
 	var/on = 1
+	var/master_active = 1 // Tracks the state of the linked master device
 
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
@@ -358,8 +359,12 @@
 
 /obj/machinery/access_button/update_icon()
 	if(on)
-		icon_state = "access_button_standby"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_button_standby")
+		if(master_active)
+			icon_state = "access_button_standby"
+			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_button_standby")
+		else
+			icon_state = "access_button_off"
+			kill_moody_light()
 	else
 		icon_state = "access_button_off"
 		kill_moody_light()
@@ -371,18 +376,20 @@
 	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		playsound(src, 'sound/machines/buzz-two.ogg', 20, 0, -1)
+		return
 
-	else if(radio_connection)
+	if(radio_connection)
 		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = master_tag
 		signal.data["command"] = command
 
 		radio_connection.post_signal(src, signal, range = AIRLOCK_CONTROL_RANGE, filter = customfilter)
+
 	flick("access_button_cycle", src)
 	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_button_cycle")
 	spawn(10)
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_button_standby")
+		update_icon()
 
 
 
@@ -408,6 +415,15 @@
 		return
 	set_frequency(frequency)
 
+/obj/machinery/access_button/receive_signal(datum/signal/signal)
+	if(!signal || signal.encryption)
+		return
+	if(signal.data["tag"] != master_tag)
+		return
+	// Update our state based on the master device's status
+	if("active" in signal.data)
+		master_active = signal.data["active"]
+		update_icon()
 
 /obj/machinery/access_button/New()
 	..()

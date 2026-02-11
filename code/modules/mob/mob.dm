@@ -22,8 +22,9 @@
 	return RECYK_BIOLOGICAL
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
-	if(planet)
-		planet.on_mob_exited(src, planet)
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(vz)
+		vz.mob_exited(src)
 
 	for(var/datum/mind/mind in heard_by)
 		for(var/M in mind.heard_before)
@@ -1958,7 +1959,7 @@ Use this proc preferably at the end of an equipment loadout
 	var/init_deaf = ear_deaf
 	overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 	blinded = 1
-	eye_blind = 1
+	eye_blind = 11
 	ear_deaf = 1
 
 	..()
@@ -2202,12 +2203,7 @@ Use this proc preferably at the end of an equipment loadout
 				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")
 			return TRUE
 
-	for(var/mob/living/simple_animal/P in view(src))
-		if(P.isDead() || !P.pacify_aura)
-			continue
-		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
-		return TRUE
-	for(var/mob/living/complex_animal/P in view(src))
+	for(var/mob/living/P in view(src))
 		if(P.isDead() || !P.pacify_aura)
 			continue
 		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
@@ -2248,7 +2244,7 @@ Use this proc preferably at the end of an equipment loadout
 	if (target.isDead())
 		to_chat(src, "You cannot sense the target mind anymore, that's not good...")
 		return null
-	if(target_turf.z != our_turf.z) //Not on the same zlevel as us
+	if(target_turf.v != our_turf.v) //Not on the same vlevel as us
 		to_chat(src, "The target mind is too faint, they must be quite far from you...")
 		return null
 	if(target.stat != CONSCIOUS)

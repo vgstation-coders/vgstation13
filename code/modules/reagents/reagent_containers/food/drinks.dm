@@ -901,6 +901,16 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cryocola //looks identical to space cola.
+	name = "Space Cola"
+	desc = "Cola. in space."
+	icon_state = "cola"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cryocola/New()
+	..()
+	reagents.add_reagent(CRYOCOLA, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/tonic
 	name = "T-Borg's Tonic Water"
 	desc = "Quinine tastes funny, but at least it'll keep that Space Malaria away."
@@ -2207,6 +2217,8 @@
 		if(reagents.total_volume)
 			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
 			D.dip(src, user)
+			return
+	..()
 
 /obj/item/weapon/reagent_containers/food/drinks/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(!(molotov == 1))

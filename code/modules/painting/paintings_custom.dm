@@ -221,7 +221,7 @@
 			icon = painting_data.render_on(icon(base_icon, base_icon_state))
 			nanomap = painting_data.render_nanomap(icon(base_icon, "[base_icon_state]-nano"))
 			nanomap.blend_mode = BLEND_ADD
-		nanomap.plane = ABOVE_LIGHTING_PLANE
+		nanomap.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		overlays += nanomap
 	else
 		name = base_name

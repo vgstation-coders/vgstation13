@@ -70,8 +70,8 @@
 	if(..())
 		return 1
 
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(M.bodytemperature < BODYTEMP_DEFAULT)
+		M.bodytemperature = min(BODYTEMP_DEFAULT, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/drink/hot_coco/subhuman
 	id = HOT_COCO_SUBHUMAN
@@ -360,6 +360,7 @@
 	adj_drowsy = -3
 	adj_sleepy = -2
 	adj_temp = 20
+	max_temp_adj=20
 	custom_metabolism = 0.1
 	var/causes_jitteriness = 1
 	glass_desc = "Careful, it's hot!"
@@ -380,6 +381,7 @@
 	description = "Coffee and ice. Refreshing and cool."
 	color = "#102838" //rgb: 16, 40, 56
 	adj_temp = -1.5
+	max_temp_adj = 1.5
 	glass_icon_state = "icedcoffeeglass"
 	glass_desc = "For when you need a coffee without the warmth."
 
@@ -448,6 +450,7 @@
 	description = "Like tea, but refreshes rather than relaxes."
 	color = "#104038" //rgb: 16, 64, 56
 	adj_temp = -1.5
+	max_temp_adj = 1.5
 	density = 1
 	specheatcap = 1
 	glass_icon_state = "icedteaglass"
@@ -458,6 +461,7 @@
 	description = "Known as half and half to some. A mix of ice tea and lemonade."
 	color = "#104038" //rgb: 16, 64, 56
 	adj_temp = -1.5
+	max_temp_adj = 1.5
 	adj_sleepy = -3
 	adj_dizzy = -1
 	adj_drowsy = -3
@@ -486,6 +490,7 @@
 	id = EXPLICITLY_INVALID_REAGENT_ID
 	name = "Cold Drink"
 	adj_temp = -1.5
+	max_temp_adj = 1.5
 
 /datum/reagent/drink/cold/tonic
 	name = "Tonic Water"
@@ -519,6 +524,7 @@
 	glass_icon_state = "iceglass"
 	glass_desc = "Generally, you're supposed to put something else in there too..."
 	adj_temp = -5//drinking ice directly may give you some mild hypothermia
+	max_temp_adj = 4
 
 /datum/reagent/drink/cold/space_cola
 	name = "Cola"
@@ -581,7 +587,6 @@
 	id = SPACE_UP
 	description = "Tastes like a hull breach in your mouth."
 	color = "#202800" //rgb: 32, 40, 0
-	adj_temp = -1.5
 	glass_icon_state = "space-up_glass"
 	glass_desc = "Space-up. It helps keep your cool."
 
@@ -590,7 +595,6 @@
 	description = "A tangy substance made of 0.5% natural citrus!"
 	id = LEMON_LIME
 	color = "#878F00" //rgb: 135, 40, 0
-	adj_temp = -1.5
 
 /datum/reagent/drink/cold/lemonade
 	name = "Lemonade"
@@ -612,7 +616,6 @@
 	description = "Its not what it sounds like..."
 	id = BROWNSTAR
 	color = "#9F3400" //rgb: 159, 052, 000
-	adj_temp = -1.5
 	glass_icon_state = "brownstar"
 	glass_name = "\improper Brown Star"
 
@@ -622,6 +625,7 @@
 	id = MILKSHAKE
 	color = "#AEE5E4" //rgb" 174, 229, 228
 	adj_temp = -1.5
+	max_temp_adj = 3
 	custom_metabolism = FOOD_METABOLISM
 	glass_icon_state = "milkshake"
 	glass_desc = "Brings all the boys to the yard."
@@ -677,7 +681,6 @@
 	description = "Tastes like a science fair experiment."
 	id = DIY_SODA
 	color = "#7566FF" //rgb: 117, 102, 255
-	adj_temp = -1.5
 	adj_drowsy = -6
 
 /datum/reagent/drink/cold/diy_soda/on_mob_life(var/mob/living/M)
@@ -685,6 +688,16 @@
 		return 1
 
 	M.Jitter(5)
+
+/datum/reagent/drink/cold/cryo_cola
+	name = "Cola"
+	id = CRYOCOLA
+	description = "Ice cold, no matter the day."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#6e6450" //rgb: 110, 100, 80
+	glass_desc = "Temperature seems safe..."
+	adj_temp=-2.5
+	max_temp_adj=10
 
 /datum/reagent/drink/doctor_delight
 	name = "The Doctor's Delight"
@@ -1106,6 +1119,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 1.8
 	specheatcap = 3
 	adj_temp = 40
+	max_temp_adj = 40
 	custom_metabolism = 1 //goes through you fast
 
 /datum/reagent/drink/blisterol/on_mob_life(var/mob/living/M)

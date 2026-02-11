@@ -279,7 +279,7 @@ var/list/particle_string_to_type = list(
 
 	appearance_flags = RESET_COLOR
 	blend_mode = BLEND_ADD
-	plane = ABOVE_LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 
 /particles/candle_alt
 	width = 32
@@ -298,7 +298,7 @@ var/list/particle_string_to_type = list(
 
 	appearance_flags = RESET_COLOR
 	blend_mode = BLEND_ADD
-	plane = ABOVE_LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 
 //CULT GAUGE
 /particles/cult_gauge
@@ -589,7 +589,7 @@ var/list/particle_string_to_type = list(
 
 	appearance_flags = RESET_COLOR|RESET_ALPHA
 	blend_mode = BLEND_ADD
-	plane = ABOVE_LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 
 
 /particles/cross_orb
@@ -667,7 +667,7 @@ var/list/particle_string_to_type = list(
 
 	appearance_flags = RESET_COLOR
 	blend_mode = BLEND_ADD
-	plane = ABOVE_LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 
 /particles/ash
 	width = 64

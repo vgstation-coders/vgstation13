@@ -206,6 +206,21 @@
 	var/p_speed = input(user, "Enter a number between 0 and 5 included (default=2)","Parallax Speed Preferences",setting)
 	setting = clamp(p_speed, min_value, max_value)
 
+/datum/preference_setting/toggle/plane_filters
+	name = "Plane filters"
+	sql_name = "plane_filters"
+	sql_table = "client"
+	enabled = TRUE
+
+	default_setting = TRUE
+
+/datum/preference_setting/toggle/plane_filters/choose_setting(var/mob/user)
+	. = ..()
+	if(user && isliving(user) && user.client)
+		var/mob/living/L = user
+		if (!L.client.prefs.get_pref(/datum/preference_setting/toggle/plane_filters))
+			L.disable_all_visual_filters()
+
 /datum/preference_setting/enum/special_popup
 	name = "Special popup"
 	sql_name = "special" // HISTORICAL REASONS :tm:

@@ -13,7 +13,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "G" = (
-/turf/unsimulated/floor/jungle/water_deep,
+/turf/unsimulated/floor/planetary/water/jungle/deep,
 /area/exposed_ruin)
 "O" = (
 /obj/structure/bed/chair/folding,
@@ -36,7 +36,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "R" = (
-/turf/unsimulated/floor/jungle/water,
+/turf/unsimulated/floor/planetary/water/jungle,
 /area/exposed_ruin)
 
 (1,1,1) = {"

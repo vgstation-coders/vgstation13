@@ -17,6 +17,10 @@
 	icon = 'icons/obj/module.dmi'
 	icon_state = "cyborg_upgrade"
 
+#define JANICLEAN_NONE 0
+#define JANICLEAN_NOGRAFFITI 1
+#define JANICLEAN_ALL 2
+
 /obj/structure/bed/chair/vehicle/janicart
 	name = "janicart"
 	icon_state = "pussywagon"
@@ -26,7 +30,7 @@
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/janicart
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
 	var/obj/item/weapon/storage/bag/trash/mybag	= null
-
+	var/cleanmode = JANICLEAN_ALL
 	var/upgraded = 0
 
 /obj/structure/bed/chair/vehicle/janicart/New()
@@ -61,6 +65,7 @@
 			qdel(W)
 			to_chat(user, "<span class='notice'>You upgrade \the [nick].</span>")
 			upgraded = 1
+			verbs += /obj/structure/bed/chair/vehicle/janicart/proc/toggle_cleanmode
 			name = "upgraded [name]"
 			icon_state = "pussywagon_upgraded"
 	else if(istype(W, /obj/item/weapon/storage/bag/trash))
@@ -90,6 +95,26 @@
 		usr.put_in_hands(mybag)
 		mybag = null
 
+/obj/structure/bed/chair/vehicle/janicart/proc/toggle_cleanmode()
+	set name = "Toggle Clean Mode"
+	set category = "Object"
+	set src in oview(1)
+
+	if(upgraded && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
+		cleanmode = (cleanmode+1)%3
+		var/msg = ""
+		switch(cleanmode)
+			if(JANICLEAN_NONE)
+				msg = "nothing"
+				icon_state = "pussywagon_upgraded_off"
+			if(JANICLEAN_NOGRAFFITI)
+				msg = "everything except floor art"
+				icon_state = "pussywagon_upgraded"
+			if(JANICLEAN_ALL)
+				msg = "everything"
+				icon_state = "pussywagon_upgraded"
+		to_chat(usr,"<span class='notice'>[src] is now set to clean [msg].</span>")
+
 /obj/structure/bed/chair/vehicle/janicart/setup_wreckage(var/obj/effect/decal/mecha_wreckage/wreck)
 	// Add janicart upgrade to wreck, if it passes the roll.
 	if(upgraded)
@@ -116,7 +141,7 @@
 
 /obj/structure/bed/chair/vehicle/janicart/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
-	if(upgraded)
+	if(upgraded && cleanmode > JANICLEAN_NONE)
 		var/turf/tile = loc
 		if(isturf(tile))
 			if(arcanetampered)
@@ -125,7 +150,7 @@
 			else
 				tile.clean_act(CLEANLINESS_SPACECLEANER)
 
-				if (istype(tile, /turf/simulated))
+				if (cleanmode > JANICLEAN_NOGRAFFITI && istype(tile, /turf/simulated))
 					var/turf/simulated/F = tile
 					if (F.advanced_graffiti)
 						F.overlays -= F.advanced_graffiti_overlay
@@ -157,8 +182,21 @@
 							cleaned_human.clean_act(CLEANLINESS_SPACECLEANER)
 							to_chat(cleaned_human, "<span class='warning'>[src] cleans your face!</span>")
 
+/obj/structure/bed/chair/vehicle/janicart/upgraded
+	name = "upgraded janicart"
+	icon_state = "pussywagon_upgraded"
+	upgraded = 1
+
+/obj/structure/bed/chair/vehicle/janicart/upgraded/New()
+	. = ..()
+	verbs += /obj/structure/bed/chair/vehicle/janicart/proc/toggle_cleanmode
+
 /obj/effect/decal/mecha_wreckage/vehicle/janicart
 	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "pussywagon_destroyed"
 	name = "janicart wreckage"
 	desc = "Guess it's back to the mop."
+
+#undef JANICLEAN_NONE
+#undef JANICLEAN_NOGRAFFITI
+#undef JANICLEAN_ALL

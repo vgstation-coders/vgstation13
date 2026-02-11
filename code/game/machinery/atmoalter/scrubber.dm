@@ -175,7 +175,7 @@
 	data["rate"] = round(volume_rate)
 	data["on"] = on ? 1 : 0
 	var/list/scrub_toggles = list()
-	for(var/gas_id in XGM.gases)
+	for(var/gas_id in XGM.noteworthy_gases)
 		var/datum/gas/gas_datum = XGM.gases[gas_id]
 		var/list/gas_info = list(list("name" = gas_datum.short_name || gas_datum.name, "id" = gas_id, "active" = scrubbed_gases[gas_datum.id]))
 		scrub_toggles += gas_info

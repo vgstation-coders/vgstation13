@@ -170,7 +170,7 @@
 		/mob/living/simple_animal/hostile/frog/centurion = 8,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 10,
 		/mob/living/simple_animal/cockroach = 20,
-		/mob/living/complex_animal/panther = 8,
+		/mob/living/simple_animal/complex/panther = 8,
 		/mob/living/simple_animal/cricket = 20,
 		/mob/living/simple_animal/mouse/common = 12,
 		/mob/living/simple_animal/snail = 15,
@@ -205,7 +205,7 @@
 		/mob/living/simple_animal/hostile/frog/javelineer = 5,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 15,
 		/mob/living/simple_animal/cockroach = 25,
-		/mob/living/complex_animal/panther = 10,
+		/mob/living/simple_animal/complex/panther = 10,
 		/mob/living/simple_animal/hostile/giant_spider = 8,
 		/mob/living/simple_animal/cricket = 20,
 		/mob/living/simple_animal/mouse/common = 10,
@@ -242,9 +242,9 @@
 		/mob/living/simple_animal/hostile/frog/javelineer = 8,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 18,
 		/mob/living/simple_animal/cockroach = 30,
-		/mob/living/complex_animal/panther = 15,
+		/mob/living/simple_animal/complex/panther = 15,
 		/mob/living/simple_animal/hostile/giant_spider = 10,
-		/mob/living/complex_animal/dinosaur = 5,
+		/mob/living/simple_animal/complex/dinosaur = 5,
 		/mob/living/simple_animal/cricket = 20,
 		/mob/living/simple_animal/mouse/common = 10,
 		/mob/living/simple_animal/snail = 20,
@@ -281,9 +281,9 @@
 		/mob/living/simple_animal/hostile/frog/javelineer = 10,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 20,
 		/mob/living/simple_animal/cockroach = 35,
-		/mob/living/complex_animal/panther = 18,
+		/mob/living/simple_animal/complex/panther = 18,
 		/mob/living/simple_animal/hostile/giant_spider = 15,
-		/mob/living/complex_animal/dinosaur = 8,
+		/mob/living/simple_animal/complex/dinosaur = 8,
 		/mob/living/simple_animal/hostile/bear/brownbear = 8,
 		/mob/living/simple_animal/cricket = 25,
 		/mob/living/simple_animal/snail = 22,
@@ -294,8 +294,8 @@
 /datum/biome/jungle/swamp
 	open_turf_types = list(
 		/turf/unsimulated/floor/planetary/grass = 7,
-		/turf/unsimulated/floor/jungle/mud = 2,
-		/turf/unsimulated/floor/jungle/water = 1
+		/turf/unsimulated/floor/planetary/mud/jungle = 2,
+		/turf/unsimulated/floor/planetary/water/jungle = 1
 	)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 25,
@@ -322,9 +322,9 @@
 		/mob/living/simple_animal/hostile/frog/javelineer = 12,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 25,
 		/mob/living/simple_animal/cockroach = 40,
-		/mob/living/complex_animal/panther = 15,
+		/mob/living/simple_animal/complex/panther = 15,
 		/mob/living/simple_animal/hostile/giant_spider = 18,
-		/mob/living/complex_animal/dinosaur = 10,
+		/mob/living/simple_animal/complex/dinosaur = 10,
 		/mob/living/simple_animal/hostile/bear/brownbear = 10,
 		/mob/living/simple_animal/cricket = 25,
 		/mob/living/simple_animal/snail = 25,
@@ -336,7 +336,7 @@
 // Cave biomes
 /datum/biome/cave/jungle
 	biome_temperature = T20C + 10
-	open_turf_types = list(/turf/unsimulated/floor/jungle/wasteland = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/wasteland/jungle = 1)
 	closed_turf_types = list(
 		/turf/unsimulated/mineral/random/cave = 5,
 		/turf/unsimulated/mineral/random/high_chance/cave = 1,
@@ -412,8 +412,8 @@
 
 /datum/biome/cave/jungle/wet
 	open_turf_types = list(
-		/turf/unsimulated/floor/jungle/mud = 8,
-		/turf/unsimulated/floor/jungle/water = 2
+		/turf/unsimulated/floor/planetary/mud/jungle = 8,
+		/turf/unsimulated/floor/planetary/water/jungle = 2
 	)
 	flora_spawn_chance = 35
 	flora_spawn_list = list(
@@ -445,9 +445,9 @@
 
 /datum/biome/cave/jungle/underground_river
 	open_turf_types = list(
-		/turf/unsimulated/floor/jungle/mud = 6,
-		/turf/unsimulated/floor/jungle/water = 3,
-		/turf/unsimulated/floor/jungle/water_deep = 1
+		/turf/unsimulated/floor/planetary/mud/jungle = 6,
+		/turf/unsimulated/floor/planetary/water/jungle = 3,
+		/turf/unsimulated/floor/planetary/water/jungle/deep = 1
 	)
 	flora_spawn_chance = 20
 	flora_spawn_list = list(
@@ -505,7 +505,7 @@
 		/mob/living/simple_animal/hostile/frog/centurion = 10,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 12,
 		/mob/living/simple_animal/cockroach = 20,
-		/mob/living/complex_animal/panther = 8,
+		/mob/living/simple_animal/complex/panther = 8,
 		/mob/living/simple_animal/hostile/giant_spider = 10,
 		/mob/living/simple_animal/crab = 15,
 		/mob/living/simple_animal/cricket = 20,

@@ -56,10 +56,6 @@ var/auxtools_path
 
 	src.InitTgs()
 
-	for(var/i=1, i<=map.zLevels.len, i++)
-		WORLD_X_OFFSET += rand(-50,50)
-		WORLD_Y_OFFSET += rand(-50,50)
-
 	// logs
 
 	InitializeLogs()

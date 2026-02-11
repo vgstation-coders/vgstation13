@@ -12,6 +12,9 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 
+	var/spine_color = "#420"
+	var/spine_overlay = "#840" //optional, adds another sprite if set to a color
+
 	var/list/all_spells = list()
 	var/list/offensive_spells = list()
 	var/list/defensive_spells = list()

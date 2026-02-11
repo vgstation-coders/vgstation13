@@ -720,6 +720,16 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/micro_laser = 1,
 							/obj/item/weapon/stock_parts/console_screen = 2,)
 
+/obj/item/weapon/circuitboard/bookbinder
+	name = "Circuit Board (Book Binder)"
+	desc = "A circuit board for running a machine that binds paper into books."
+	build_path = /obj/machinery/bookbinder
+	origin_tech = Tc_ENGINEERING + "=2;" + Tc_MATERIALS + "=2"
+	req_components = list (
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
+
 /obj/item/weapon/circuitboard/cryo
 	name = "Circuit Board (Cryo)"
 	desc = "A circuit board used to run a medical cryogenics cell."

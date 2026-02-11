@@ -202,8 +202,8 @@
 /datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
 	..()
 
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(M.bodytemperature < BODYTEMP_DEFAULT)
+		M.bodytemperature = min(BODYTEMP_DEFAULT, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 //natural antipathogenic, found in garlic and kudzu
 /datum/reagent/antipathogenic/allicin
@@ -644,7 +644,7 @@ var/global/list/charcoal_doesnt_remove=list(
 /datum/reagent/cargonanobots
 	name = "Cargonian Nanobots"
 	id = CARGONANOBOTS
-	description = "Microscopic robots intended for use in humans. Configured for departmental seccession and overthrowals."
+	description = "Microscopic robots intended for use in humans. Configured for departmental secession and overthrowals."
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#A05F3F" //rgb: 52, 63, 66

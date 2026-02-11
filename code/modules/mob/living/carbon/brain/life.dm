@@ -145,7 +145,7 @@
 				if(31 to INFINITY)
 					emp_damage = 30//Let's not overdo it
 				if(21 to 30)//High level of EMP damage, unable to see, hear, or speak
-					eye_blind = 1
+					eye_blind = 11
 					blinded = 1
 					ear_deaf = 1
 					silent = 1

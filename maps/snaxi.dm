@@ -46,15 +46,14 @@
 **	See: daynightcycle.dm  **
 ****************************/
 /datum/map/active/New()
+	daynight_z_lvls = list(zMainStation)
 	. = ..()
-
 	research_shuttle.name = "Southern Station Shuttle"
 	research_shuttle.req_access = list()
 	mining_shuttle.name = "Northwest Station Shuttle"
 	mining_shuttle.req_access = list()
 	security_shuttle.name = "Northeast Station Shuttle"
 	security_shuttle.req_access = list()
-	daynight_z_lvls = list(zMainStation)
 
 /datum/map/active/special_ui(var/obj/abstract/screen/S, mob/user)
 	if(!user)
@@ -114,7 +113,7 @@
 // This makes (100*100)/(10*10) = 100 nodes
 
 /datum/map/active/map_specific_init()
-	SSweather.set_climate(/datum/climate/arctic, map.zMainStation)
+	SSweather.set_climate(/datum/climate/arctic, zLevel = map.zMainStation)
 	generate_mapvaults()
 
 	for (var/x = center_x; x <= center_x + center_x/3; x = x + 10)
@@ -131,6 +130,8 @@
 		for (var/y = center_y; y >= center_y - center_y/3; y = y - 10)
 			gaussian_geyser(x, y)
 			CHECK_TICK
+	for(var/obj/machinery/computer/climate/CC in climatecomps)
+		CC.link_climate()
 
 #define MIN_REGIONAL_VAULTS 2
 #define MAX_REGIONAL_VAULTS 4

@@ -1091,7 +1091,7 @@ var/list/converted_minds = list()
 				if (istype(victim.handcuffed,/obj/item/weapon/handcuffs/cult))
 					victim.drop_from_inventory(victim.handcuffed)
 				//and their loyalty implants are removed, so they can't mislead security, not that the conversion should even go through
-				victim.implant_pop()
+				victim.implant_pop()//but it does prevent funny players from implanting people right before the ritual concludes
 				for(var/obj/item/weapon/implant/holy/H in victim)
 					to_chat(victim, "<span class='warning'>The ritual's energies have completely fried the holy implant that was lodged in your skull.</span>")
 					qdel(H)

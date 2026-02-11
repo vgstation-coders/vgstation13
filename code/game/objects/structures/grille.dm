@@ -162,14 +162,6 @@
 						  "<span class='warning'>You smash against \the [src].</span>", \
 						  "You hear twisting metal.")
 		health -= rand(SA.melee_damage_lower, SA.melee_damage_upper)
-	else if(istype(M,/mob/living/complex_animal))
-		var/mob/living/complex_animal/CA = M
-		M.delayNextAttack(8)
-		M.do_attack_animation(src, M)
-		M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
-						  "<span class='warning'>You smash against \the [src].</span>", \
-						  "You hear twisting metal.")
-		health -= CA.base_damage  + rand(-CA.damage_variance , CA.damage_variance )
 	healthcheck(hitsound = 1)
 	shock(M, 100)
 

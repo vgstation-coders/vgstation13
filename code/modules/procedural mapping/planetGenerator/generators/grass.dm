@@ -336,8 +336,8 @@
 
 /datum/biome/cave/grass/wet
 	open_turf_types = list(
-		/turf/unsimulated/floor/jungle/mud = 3,
-		/turf/unsimulated/floor/jungle/water = 2,
+		/turf/unsimulated/floor/planetary/mud= 3,
+		/turf/unsimulated/floor/planetary/water= 2,
 		/turf/unsimulated/floor/planetary/dirt = 20,
 		)
 	flora_spawn_chance = 50

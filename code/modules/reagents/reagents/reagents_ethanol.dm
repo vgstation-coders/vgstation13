@@ -1582,8 +1582,8 @@
 	if(..())
 		return 1
 
-	if(M.bodytemperature < 360)
-		M.bodytemperature = min(360, M.bodytemperature + 50) //310 is the normal bodytemp. 310.055
+	if(M.bodytemperature < BODYTEMP_DEFAULT+50)
+		M.bodytemperature = min(BODYTEMP_DEFAULT+50, M.bodytemperature + 50)
 
 /datum/reagent/ethanol/drink/devilskiss
 	name = "Devil's Kiss"
@@ -1618,6 +1618,7 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "iced_beerglass"
 	adj_temp = -4
+	max_temp_adj = 5
 
 /datum/reagent/ethanol/drink/grog
 	name = "Grog"

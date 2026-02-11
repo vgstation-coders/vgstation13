@@ -20,6 +20,10 @@
 #define HEADSET_SOUND_TRANSMIT 1
 #define HEADSET_SOUND_ALL 2
 
+// /datum/preferences/var/plane_filters
+#define PLANE_FILTERS_DISABLED 0
+#define PLANE_FILTERS_ENABLED  1
+
 // list("None", "White Briefs", "Green Briefs", "Blue Briefs", "Black Briefs", "Grey Briefs", "Mankini", "Love-Hearts Boxers", "Black Boxers", "Grey Boxers", "Stripey Boxers", "Kinky", "Freedom Boxers", "Tea Boxers", "Communist Boxers", "Cowprint Boxers", "Green Wifebeater", "White Wifebeater", "Black Wifebeater")
 // Curse whoever made male/female underwear different colours
 #define UNDERWEAR_MALE_NONE 1

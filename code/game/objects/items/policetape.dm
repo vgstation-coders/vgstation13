@@ -190,21 +190,12 @@
 		return FALSE
 	return TRUE
 
-/obj/item/tape/Bumped(var/atom/movable/AM)
-	if(allowed(AM))
-		var/turf/T = get_turf(src)
-		for(var/atom/A in T) //Check to see if there's anything solid on the tape's turf (it's possible to build on it)
-			if(A.density)
-				return
-		if (T) // no sending things into nullspace!
-			AM.forceMove(T)
-
 /obj/item/tape/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(!density)
 		return 1
 	if(air_group || (height == 0))
 		return 1
-	if((mover.checkpass(pass_flags_self) || istype(mover, /obj/item/projectile/meteor) || mover.throwing == 1))
+	if(mover.checkpass(pass_flags_self) || istype(mover, /obj/item/projectile/meteor) || mover.throwing == 1 || allowed(mover))
 		return 1
 	else
 		return 0
@@ -234,8 +225,7 @@
 		var/mob/living/silicon/robot/R = A
 		return HAS_MODULE_QUIRK(R, robot_compatibility)
 
-	if(ismob(A)) // this line was added for atomicity to keep a PR related to bugfixes, remove this if you'd like to see secbots be able to cross this
-		return ..()
+	return ..()
 
 /obj/item/tape/attack_paw(mob/user as mob)
 	breaktape(null,user, TRUE)

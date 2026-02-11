@@ -161,8 +161,18 @@
 	name = "Expedition Tracker"
 	desc = "A specialized GPS device designed for planetary exploration. Only tracks other devices on the same planet. Features an emergency distress beacon."
 	id = "p_gps"
-	req_tech = list(Tc_BLUESPACE = 3, Tc_MAGNETS = 3)
+	req_tech = list(Tc_BLUESPACE = 3, Tc_MAGNETS = 3, Tc_EXPLORATION = 1)
 	build_type = PROTOLATHE
 	materials = list(MAT_DIAMOND = 250, MAT_IRON = 250, MAT_GLASS = 250, MAT_URANIUM = 250)
 	category = "Bluespace"
 	build_path = /obj/item/device/gps/planetary
+
+/datum/design/bert
+	name = "Bluespace Emergency Recall Tool"
+	desc = "A single-use device that sends the user back to their point of origin when activated. Useful for escaping dangerous situations."
+	id = "bert"
+	req_tech = list(Tc_BLUESPACE = 3, Tc_EXPLORATION = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_DIAMOND = 250, MAT_IRON = 250)
+	category = "Bluespace"
+	build_path = /obj/item/device/bert

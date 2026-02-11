@@ -1376,7 +1376,7 @@
 "apj" = (
 /obj/structure/table,
 /obj/item/weapon/reagent_containers/food/snacks/greygreens,
-/obj/item/weapon/kitchen/utensil/fork/teflon,
+/obj/item/weapon/kitchen/utensil/fork/plastic/teflon,
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched"
 	},
@@ -10869,10 +10869,6 @@
 	},
 /turf/simulated/floor,
 /area/maintenance/fsmaint)
-"cWM" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cWN" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
@@ -373190,7 +373186,7 @@ aaa
 aaa
 aaa
 aaa
-cWM
+aaa
 aaa
 aaa
 aaa

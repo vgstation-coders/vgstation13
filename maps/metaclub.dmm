@@ -86339,10 +86339,6 @@
 /obj/docking_port/destination/syndicate/south,
 /turf/space,
 /area)
-"cZv" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cZw" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
@@ -118063,6 +118059,15 @@
 /obj/structure/shuttle/diag_wall/smooth,
 /turf/space,
 /area)
+"frw" = (
+/obj/machinery/conveyor_switch/oneway{
+	convdir = -1;
+	id_tag = "QMLoad3"
+	},
+/turf/simulated/floor{
+	dir = 8
+	},
+/area/supply/storage)
 "fxM" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable/yellow{
@@ -120916,6 +120921,13 @@
 /area/security/range{
 	name = "\improper Security E.V.A"
 	})
+"qJa" = (
+/obj/machinery/conveyor{
+	dir = 1;
+	id_tag = "QMLoad3"
+	},
+/turf/simulated/floor/plating,
+/area/supply/storage)
 "qMh" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -214224,7 +214236,7 @@ aOO
 aNk
 aNk
 aNk
-aNk
+qJa
 aQo
 aQt
 aSa
@@ -214723,10 +214735,10 @@ aNm
 aNm
 aNm
 aNm
-aNm
-aNm
 aNp
 aNm
+aNm
+frw
 aNm
 aNm
 baN
@@ -373854,7 +373866,7 @@ aaa
 aaa
 aaa
 aaa
-cZv
+aaa
 aaa
 aaa
 aaa

@@ -232,6 +232,15 @@
 #define DEVOTION_TIER_3		3
 #define DEVOTION_TIER_4		4
 
+#define DEVOTION_REQ_1		100
+#define DEVOTION_REQ_2		500
+#define DEVOTION_REQ_3		1000
+#define DEVOTION_REQ_4		2000
+
+#define CULT_IMPLANT_POP_NONE		0
+#define CULT_IMPLANT_POP_DELAYED	1
+#define CULT_IMPLANT_POP_IMMEDIATE	2
+
 #define RITUAL_CULTIST_1	"first_ritual"
 #define RITUAL_CULTIST_2	"second_ritual"
 
