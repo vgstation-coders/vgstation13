@@ -108,7 +108,7 @@
 			disable_druggy_overlays()
 
 		if(has_reagent_in_blood(INCENSE_MOONFLOWERS))
-			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/love)
+			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
 		else
 			clear_fullscreen("high_red")
 
