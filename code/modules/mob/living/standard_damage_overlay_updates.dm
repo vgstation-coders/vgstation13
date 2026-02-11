@@ -113,11 +113,9 @@
 			clear_fullscreen("high_red")
 
 		if(has_reagent_in_blood(INCENSE_ROSES))
-			overlay_fullscreen("high_love", /obj/abstract/screen/fullscreen/high/love)
-			overlay_fullscreen("high_hearts", /obj/abstract/screen/fullscreen/high/hearts)
+			overlay_fullscreen("high_love", /obj/abstract/screen/fullscreen/high/love, /obj/abstract/screen/fullscreen/high/hearts)
 		else
 			clear_fullscreen("high_love")
-			clear_fullscreen("high_hearts")
 
 /mob/living/proc/get_impaired_vision_range()
 	var/_modifiers	= get_impaired_vision_modifiers()

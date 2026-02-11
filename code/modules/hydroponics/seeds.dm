@@ -1128,7 +1128,7 @@
 	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/rose.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/rose)
-	chems = list(NUTRIMENT = list(1,20), BLOOD = list(1,10))
+	chems = list(NUTRIMENT = list(1,20))
 
 	lifespan = 60
 	potency = 20
