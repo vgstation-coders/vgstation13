@@ -65,9 +65,11 @@ jobs:
 
       - name: Fallback if master build fails
         if: steps.build-dreamchecker.outcome == 'failure'
+        env:
+          SPACEMAN_DMM_VERSION: suite-1.11
         run: |
           echo "Dreamchecker master build failed, falling back to release version"
-          wget -O ~/dreamchecker "https://github.com/SpaceManiac/SpacemanDMM/releases/download/suite-1.11/dreamchecker"
+          wget -O ~/dreamchecker "https://github.com/SpaceManiac/SpacemanDMM/releases/download/$SPACEMAN_DMM_VERSION/dreamchecker"
           chmod +x ~/dreamchecker
 
       - name: Run dreamchecker
