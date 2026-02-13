@@ -46,11 +46,25 @@ jobs:
         run: |
           tools/bootstrap/python -c ''
 
-        #TODO: Cache Dreamchecker install
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache SpacemanDMM
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ~/SpacemanDMM -> target
+          cache-on-failure: true
+
+      - name: Build Dreamchecker from master
+        run: |
+          git clone --depth 1 https://github.com/SpaceManiac/SpacemanDMM.git ~/SpacemanDMM
+          cd ~/SpacemanDMM
+          cargo build --release --bin dreamchecker
+
       - name: Run dreamchecker
         run: |
-          SPACEMAN_DMM_GIT_TAG="suite-1.11" tools/travis/install_spaceman_dmm.sh dreamchecker
-          ~/dreamchecker 2>&1 | bash tools/ci/annotate_dm.sh
+          ~/SpacemanDMM/target/release/dreamchecker --version
+          ~/SpacemanDMM/target/release/dreamchecker 2>&1 | bash tools/ci/annotate_dm.sh
 
       - name: Run map checker
         run: python tools/travis/check_map_files.py maps/
