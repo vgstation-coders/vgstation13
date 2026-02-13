@@ -52,7 +52,7 @@ jobs:
       - name: Cache SpacemanDMM
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: ~/SpacemanDMM -> target
+          workspaces: ${{ github.workspace }}/../SpacemanDMM -> target
           cache-on-failure: true
 
       - name: Build Dreamchecker from master
