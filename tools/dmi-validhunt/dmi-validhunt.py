@@ -18,7 +18,7 @@ def file_contains_duplicate_icon_states(filename: str):
     except:
         print(f"{filename}: An error occurred opening this file.")
         return True # whatever, you get the point, something's wrong
-    desc = image.info["Description"]
+    desc = image.info.get("Description")
     if desc is None:
         print(f"{filename}: No Description metadata (invalid DMI?)")
         return False

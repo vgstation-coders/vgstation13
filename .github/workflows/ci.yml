@@ -59,7 +59,7 @@ jobs:
       - name: Validhunt DMIs
         run: |
           pip install Pillow
-          echo "this is it, luigi"
+          echo "i wonder whats for dinner"
           python tools/dmi-validhunt/dmi-validhunt.py icons/ || true
       - name: Make sure test maps or vaults aren't ticked
         run: find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*|\.dmm/ { exit 1 }'
