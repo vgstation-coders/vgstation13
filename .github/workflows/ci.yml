@@ -56,7 +56,7 @@ jobs:
           cache-on-failure: true
 
       - name: Build Dreamchecker from master
-        if: build-dreamchecker
+        id: build-dreamchecker
         run: |
           git clone --depth 1 https://github.com/SpaceManiac/SpacemanDMM.git ~/SpacemanDMM
           cd ~/SpacemanDMM
