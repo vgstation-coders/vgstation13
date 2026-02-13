@@ -56,15 +56,24 @@ jobs:
           cache-on-failure: true
 
       - name: Build Dreamchecker from master
+        if: build-dreamchecker
         run: |
           git clone --depth 1 https://github.com/SpaceManiac/SpacemanDMM.git ~/SpacemanDMM
           cd ~/SpacemanDMM
           cargo build --release --bin dreamchecker
+          cp target/release/dreamchecker ~/dreamchecker
+
+      - name: Fallback if master build fails
+        if: steps.build-dreamchecker.outcome == 'failure'
+        run: |
+          echo "Dreamchecker master build failed, falling back to release version"
+          wget -O ~/dreamchecker "https://github.com/SpaceManiac/SpacemanDMM/releases/download/suite-1.11/dreamchecker"
+          chmod +x ~/dreamchecker
 
       - name: Run dreamchecker
         run: |
-          ~/SpacemanDMM/target/release/dreamchecker --version
-          ~/SpacemanDMM/target/release/dreamchecker 2>&1 | bash tools/ci/annotate_dm.sh
+          ~/dreamchecker --version
+          ~/dreamchecker 2>&1 | bash tools/ci/annotate_dm.sh
 
       - name: Run map checker
         run: python tools/travis/check_map_files.py maps/
