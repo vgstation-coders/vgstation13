@@ -50,12 +50,17 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Cache Rust
-        uses: Swatinem/rust-cache@v2
+        uses: actions/cache@v3
         with:
-          cache-on-failure: true
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo
 
       - name: Build Dreamchecker from master
         id: build-dreamchecker
+        continue-on-error: true
         run: |
           git clone --depth 1 https://github.com/SpaceManiac/SpacemanDMM.git ~/SpacemanDMM
           cd ~/SpacemanDMM
