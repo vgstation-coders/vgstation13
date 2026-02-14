@@ -5,6 +5,7 @@
 	icon_state = "disk"
 
 	var/siphon_time = 2 SECONDS		// change this later
+	var/operating = FALSE
 	var/datum/research/our_files
 
 /obj/item/device/techsiphon/New()
@@ -20,7 +21,7 @@
 
 /obj/item/device/techsiphon/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	. = ..()
-	if(istype(target, /obj/machinery/r_n_d/server))
+	if(!operating && istype(target, /obj/machinery/r_n_d/server))
 		var/obj/machinery/r_n_d/server/server = target
 		if(!server.panel_open)
 			to_chat(user, "<span class='warning'>You need to open the panel first.</span>")
@@ -28,6 +29,7 @@
 		visible_message("<span class='notice'>[src] flashes and lets out a beep as it begins loading stored research onto itself.</span>")
 		playsound(server, 'sound/machines/twobeep.ogg', 50, 1)
 		var/cancelled = FALSE
+		operating = TRUE
 		for(var/ID in server.files.known_tech)
 			if(do_after(user, server, siphon_time))
 				var/datum/tech/server_tech  = server.files.known_tech[ID]
@@ -47,4 +49,5 @@
 		if(!cancelled)
 			playsound(loc, "sound/machines/paistartup.ogg", 50, 1)
 			to_chat(user, "<span class='notice'>Transfer complete. Caw.</span>")
+		operating = FALSE
 

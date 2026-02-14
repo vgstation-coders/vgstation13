@@ -606,7 +606,7 @@ steam.start() -- spawns the effect
 		spawn(0)
 			var/turf/T = get_turf(src.holder)
 			if(T != src.oldposition)
-				if(istype(T, /turf/space) || istype(T, /turf/simulated/open))
+				if(istype(T, /turf/space) || istype(T, /turf/simulated/open) || istype(T, /turf/unsimulated/abyss))
 					var/obj/effect/trails/I = new trail_type(src.oldposition)
 					src.oldposition = T
 					I.dir = src.holder.dir

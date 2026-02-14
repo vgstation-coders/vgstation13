@@ -6,7 +6,7 @@ var/list/abyss_overlay_cache = list()
 // Objects and mobs walking over an abyss fall into it, unless there's an object like a catwalk placed on top!
 // Abyss tiles are unsimmed floors, meaning they always have the same gas contents. However, they also block airflow, so they're safe use them with simmed tiles.
 
-/turf/unsimulated/floor/abyss
+/turf/unsimulated/abyss
 	name = "abyss"
 	desc = "You can't see the bottom."
 	icon_state = "blackpit"
@@ -18,7 +18,7 @@ var/list/abyss_overlay_cache = list()
 	// On the other hand, unsimmed tiles with gas flow would cause problems if gas is allowed to flow between two unsimmed tiles with different gas contents.
 	// i.e. (snow floor -> simmed floor -> space tile) = endless ZASflow
 	blocks_air = TRUE
-
+	density = FALSE
 
 	var/abyss_link_tag = ""								// Sends any mob that falls into the abyss to a corpse chute with a matching tag.
 	var/initialized = FALSE
@@ -33,7 +33,7 @@ var/list/abyss_overlay_cache = list()
 		/obj/structure/catwalk,
 	)
 
-/turf/unsimulated/floor/abyss/vox
+/turf/unsimulated/abyss/vox
 	oxygen=0
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD
 
@@ -43,7 +43,7 @@ var/list/abyss_overlay_cache = list()
 	var/abyssfall = FALSE
 
 
-/turf/unsimulated/floor/abyss/initialize()
+/turf/unsimulated/abyss/initialize()
 	. = ..()
 	initialized = TRUE
 
@@ -52,7 +52,7 @@ var/list/abyss_overlay_cache = list()
 	var/turf/T = get_step(src, NORTH)
 	if(abyss_overlay_cache[T.type])
 		overlays += abyss_overlay_cache[T.type]
-	else if(!istype(T, /turf/unsimulated/floor/abyss))
+	else if(!istype(T, /turf/unsimulated/abyss))
 		message_admins("DEBUG: Generating abyss overlay.")
 		var/image/I = image('icons/turf/walls.dmi', "abyssoverlay")
 		I.color = AverageColor(getFlatIcon(T))
@@ -62,44 +62,36 @@ var/list/abyss_overlay_cache = list()
 
 
 
-/turf/unsimulated/floor/abyss/proc/can_abyssfall(var/atom/movable/AM)
+/turf/unsimulated/abyss/proc/can_abyssfall(var/atom/movable/AM)
 	for(var/atom/A in contents)
 		if(is_type_in_list(A, prevents_fall))
 			return FALSE
-	if(!(istype(AM,/obj) || istype(AM,/mob/living)))			// Objects and living mobs only!		// WHY DOES ISOBJ() RETURN TRUE FOR /ATOM/MOVABLE ????
+	if(!(istype(AM,/obj) || istype(AM,/mob/living)))			// Objects and living mobs only!... WHY DOES ISOBJ() RETURN TRUE FOR /ATOM/MOVABLE ????
 		return FALSE
 	if(is_type_in_list(AM, exclude_types))
 		return FALSE
 	if(is_type_in_list(AM.locked_to, exclude_types))
 		return FALSE
 
-
-	return TRUE
-	// 		I thought about allowing players to flying things like powered jetpacks and firebirds to traverse the abyss.
-	// 		but this just invites a headache because of the out-of-bounds "fake-z" areas, which are not meant to be accessible.
-	// 		What should happen if someone's jetpack runs out of fuel or someone exits their firebird above one of those areas?
-	//		It's a lot of extra complexity for a niche interaction. If I can find out what to do about those OOB areas, I'll implement this.
-	//		The adminbus remains excluded because the adminbus don't care
-
-	/*
-	var/mob/living/carbon/human/H
+	var/mob/living/carbon/human/H = AM
 	if(ishuman(H))
 		if(istype(H.back, /obj/item/weapon/tank/jetpack))
 			var/obj/item/weapon/tank/jetpack/J = H.back
 			if((J.allow_thrust(0.01, src)))
 				return FALSE
-	*/
+
+	return TRUE
 
 
 
-/turf/unsimulated/floor/abyss/Crossed(var/atom/movable/AM)
-	if(AM.abyssfall || !initialized || !can_abyssfall(AM))
+/turf/unsimulated/abyss/Crossed(var/atom/movable/AM)
+	if(!initialized || AM.abyssfall || AM.throwing || !can_abyssfall(AM))
 		..()
 	else
 		abyssfall(AM)
 
 
-/turf/unsimulated/floor/abyss/proc/abyssfall(var/atom/movable/AM)
+/turf/unsimulated/abyss/proc/abyssfall(var/atom/movable/AM)
 	AM.abyssfall = TRUE
 	AM.visible_message("<span class='warning'>[AM] falls down into the abyss, disappearing from view!</span>")
 	var/color_cache = AM.color
@@ -208,7 +200,7 @@ var/list/abyss_overlay_cache = list()
 			AM.loc = null
 			qdel(AM)
 
-/turf/unsimulated/floor/abyss/proc/get_connected_chute()
+/turf/unsimulated/abyss/proc/get_connected_chute()
 	var/list/valid_chutes = list()
 	for(var/obj/structure/disposaloutlet/no_deconstruct/abysschute/D in abyss_chutes)	// First, we try to pick a chute with a matching tag.
 		if(D.abyss_link_tag == abyss_link_tag)											// If the tags match, add the chute to the list of possible picks.
@@ -247,8 +239,8 @@ var/global/list/abyss_chutes = list()
 
 /obj/effect/abysslinker/New()
 	..()
-	if(istype(loc, /turf/unsimulated/floor/abyss))
-		var/turf/unsimulated/floor/abyss/A = loc
+	if(istype(loc, /turf/unsimulated/abyss))
+		var/turf/unsimulated/abyss/A = loc
 		A.abyss_link_tag = abyss_link_tag
 	qdel(src) // Then we die!
 
@@ -269,7 +261,7 @@ var/global/list/abyss_chutes = list()
 
 /obj/effect/abyssdecor/New()
 	..()
-	if(istype(loc, /turf/unsimulated/floor/abyss))
+	if(istype(loc, /turf/unsimulated/abyss))
 		var/turf/T = loc
 		for(var/obj/O in loc)
 			T.overlays += O.appearance

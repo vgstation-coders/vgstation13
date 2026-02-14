@@ -176,8 +176,6 @@
 
 // TODO - Sample of Supermatter
 
-
-
 /datum/objective/raider/steal/research
 	name = "\[Vox Raider\] Steal Nanotrasen Research."
 	target_type = /obj/item/weapon/disk/tech_disk
@@ -244,4 +242,45 @@
 			return FALSE
 
 	// All good? Mark as complete.
+	return TRUE
+
+
+/datum/objective/raider/steal/power
+	name = "\[Vox Raider\] Steal Power."
+	target_type = /obj/machinery/ghettopowersink
+
+	// You can steal the SMES too I guess, but they won't have nearly as much capacity.
+	// If you can get a real powersink and not have it explode, that works too!
+	other_valid_types = list(/obj/machinery/power/battery, /obj/item/device/powersink)
+
+	required_jobs = list("Station Engineer", "Atmospheric Technician", "Chief Engineer")
+	required_job_count = 1
+
+	risk = RAIDERS_RISK_HIGH
+	threat = RAIDERS_THREAT_MEDIUM
+
+	skip_locate = FALSE 						// Nothing to check for, we bring our own equipment.
+
+	var/required_power = 1e8
+
+
+/datum/objective/raider/steal/power/format_explanation()
+	return "Siphon at least [format_watts(required_power)] of power using your equipment and bring the stored power to the rendezvous location."
+
+
+// Knock down the required power for each ghetto powersink / SMES / real powersink they extracted with.
+/datum/objective/raider/steal/power/AdditionalChecks(var/obj/O)
+	if(istype(O, /obj/machinery/ghettopowersink))
+		var/obj/machinery/ghettopowersink/G = O
+		required_power -= G.power_drained
+	if(istype(O, /obj/item/device/powersink))
+		var/obj/item/device/powersink/P = O
+		required_power -= P.power_drained
+	if(istype(O, /obj/machinery/power/battery))
+		var/obj/machinery/power/batter/B = O
+		required_power -= B.charge
+
+	// If we have enough charge, mark the objective as complete.
+	if(required_power > 0)
+		return FALSE
 	return TRUE
