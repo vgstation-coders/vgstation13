@@ -19,7 +19,7 @@
 		if((flow_flags & ON_BORDER) && !bordersmooth_override && (dir == cdir || opposite_dirs[dir] == cdir))
 			continue
 		var/turf/T = get_step(src,cdir)
-		if(isSmoothableNeighbor(T))
+		if(isSmoothableNeighbor(T) /*&& pseudo_z_connected(src, T)*/)
 			. |= cdir
 			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
@@ -103,7 +103,7 @@
 					A.relativewall()
 		for(var/cdir in cardinal)
 			var/turf/T = get_step(src,cdir)
-			if(isSmoothableNeighbor(T) && T.canSmoothWith())
+			if(isSmoothableNeighbor(T) && T.canSmoothWith() /*&& pseudo_z_connected(src, T)*/)
 				T.relativewall()
 			for(var/atom/A in T)
 				if(isSmoothableNeighbor(A))

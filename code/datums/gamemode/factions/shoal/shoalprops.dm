@@ -165,7 +165,6 @@
 /obj/prop/latticemess
 	icon_state = "pcat_base"
 	icon = 'icons/turf/catwalks.dmi'
-	fake_z_exclude = TRUE
 	plane = ABOVE_PLATING_PLANE
 	layer = CATWALK_LAYER
 	density = FALSE

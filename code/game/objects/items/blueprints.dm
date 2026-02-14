@@ -220,7 +220,8 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		/area/wizard_station,
 		/area/prison,
 		/area/vault,
-		/area/surface/blizzard
+		/area/surface/blizzard,
+//		/area/pseudo_z
 	)
 	for (var/type in SPECIALS)
 		if ( istype(A,type) )

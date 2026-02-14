@@ -159,8 +159,6 @@
 	return 1
 
 /obj/structure/railing/isSmoothableNeighbor(atom/A)
-	if(!fake_z_connected(src,A))
-		return FALSE
 	if(A?.dir == src.dir && istype(A,/obj/structure/railing))
 		var/atom/movable/O = A
 		return O.anchored

@@ -254,3 +254,23 @@ var/global/list/abyss_chutes = list()
 
 /obj/effect/abysslinker/prisonarea
 	abyss_link_tag = "prisonarea"
+
+
+
+//This takes any objects mapped with it and turns them into overlays for the abyss.
+
+/obj/effect/abyssdecor
+	name = "abyss overlay"
+	icon = 'icons/mob/screen1.dmi'
+	icon_state = "x2"
+	anchored = 1
+	w_type=NOT_RECYCLABLE
+	invisibility = 101
+
+/obj/effect/abyssdecor/New()
+	..()
+	if(istype(loc, /turf/unsimulated/floor/abyss))
+		var/turf/T = loc
+		for(var/obj/O in loc)
+			T.overlays += O.appearance
+	qdel(src)

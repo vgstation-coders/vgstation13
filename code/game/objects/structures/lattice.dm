@@ -29,8 +29,6 @@
 /obj/structure/lattice/isSmoothableNeighbor(atom/A)
 	if (istype(A, /turf/space))
 		return 0
-	if(!fake_z_connected(src,A))
-		return FALSE
 
 	return ..()
 

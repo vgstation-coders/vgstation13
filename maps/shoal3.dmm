@@ -13,7 +13,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "ak" = (
 /obj/effect/gibspawner/blood{
 	bloodcolor = "#2299FC"
@@ -31,7 +31,7 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "aT" = (
 /obj/structure/sign/securearea{
 	pixel_y = -32
@@ -47,11 +47,11 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "bp" = (
 /obj/structure/catwalk,
 /obj/structure/hanging_lantern{
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	dir = 1
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -73,7 +73,7 @@
 "bL" = (
 /obj/machinery/floodlight/on/infinite,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "bN" = (
 /obj/structure/railing{
 	dir = 1
@@ -82,7 +82,7 @@
 	icon_state = "rampbottom";
 	dir = 4
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "bU" = (
 /obj/structure/grille/invulnerable,
 /obj/structure/window/reinforced/plasma,
@@ -90,7 +90,7 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "cg" = (
 /obj/structure/railing{
 	dir = 1
@@ -118,7 +118,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "cx" = (
 /obj/structure/railing{
 	dir = 8
@@ -128,7 +128,7 @@
 	},
 /obj/structure/catwalk,
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "cI" = (
 /obj/structure/closet/emcloset/vox,
 /obj/effect/decal/cleanable/dirt,
@@ -138,7 +138,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "cO" = (
 /obj/structure/catwalk,
 /obj/structure/railing,
@@ -146,16 +146,16 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "db" = (
 /obj/effect/decal/cleanable/crumbs,
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "dg" = (
 /obj/structure/lattice{
-	fake_z_exclude = 1
+	pseudo_z_exclude = 1
 	},
 /obj/prop/latticemess{
 	color = "#111111"
@@ -169,19 +169,19 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "dN" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	invisibility = 101
 	},
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "dX" = (
 /obj/structure/transit_tube{
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -193,7 +193,7 @@
 	icon_state = "pathmarker"
 	},
 /turf/unsimulated/floor/jungle/concrete,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "eh" = (
 /obj/structure/railing,
 /obj/effect/decal/warning_stripes{
@@ -208,7 +208,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "en" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -217,13 +217,13 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "ev" = (
 /obj/structure/lattice{
-	fake_z_exclude = 1
+	pseudo_z_exclude = 1
 	},
 /obj/structure/lattice{
-	fake_z_exclude = 1
+	pseudo_z_exclude = 1
 	},
 /obj/prop/latticemess{
 	color = "#222222"
@@ -237,7 +237,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "eI" = (
 /obj/structure/flora/pottedplant/random,
 /turf/unsimulated/floor/vox{
@@ -251,7 +251,7 @@
 	dir = 1
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "fd" = (
 /obj/structure/railing{
 	dir = 8
@@ -264,7 +264,7 @@
 	pixel_y = 32
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "fj" = (
 /obj/prop/shoalwindow{
 	icon_state = "shoalwindow";
@@ -304,14 +304,14 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "fE" = (
 /obj/machinery/egg_incubator/box_cloner,
 /obj/effect/gibspawner/blood,
 /obj/effect/gibspawner/blood,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "fL" = (
 /obj/structure/bed/chair/comfy/lime,
 /turf/unsimulated/floor/vox{
@@ -323,7 +323,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "gz" = (
 /obj/structure/railing{
 	dir = 4
@@ -343,7 +343,7 @@
 	oxygen = 0;
 	nitrogen = 103.934
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "gR" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -353,10 +353,10 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "gT" = (
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "gU" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "shagcarpet-dark";
@@ -371,12 +371,12 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "gY" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil,
 /obj/item/weapon/pitchfork,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "hf" = (
 /obj/structure/railing{
 	dir = 4
@@ -399,17 +399,17 @@
 	pixel_y = -34
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "hC" = (
 /obj/structure/closet/crate/trashcart,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "hK" = (
 /mob/living/simple_animal/hostile/retaliate/box,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "hR" = (
 /obj/structure/sign/directions/evac{
 	dir = 4;
@@ -435,10 +435,10 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "ib" = (
 /obj/structure/transit_tube{
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -453,17 +453,17 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "iu" = (
 /obj/structure/sign/directions/podbay{
 	dir = 8
 	},
 /turf/unsimulated/wall/shoal,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "iE" = (
 /obj/structure/transit_tube{
 	icon_state = "N-SE";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -489,7 +489,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "jb" = (
 /obj/structure/window/reinforced/plasma{
 	dir = 1
@@ -499,7 +499,7 @@
 	},
 /obj/structure/grille/invulnerable,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "je" = (
 /obj/machinery/vending/coffee,
 /obj/effect/decal/warning_stripes/siding,
@@ -518,7 +518,7 @@
 	invisibility = 101
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "jl" = (
 /obj/structure/hanging_lantern{
 	dir = 1
@@ -536,13 +536,13 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "jt" = (
 /obj/effect/decal/cleanable/blood/stattrack,
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "ju" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "hexacrete-191";
@@ -560,7 +560,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "jN" = (
 /obj/structure/bed/chair/comfy/brown{
 	dir = 1
@@ -593,7 +593,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "kN" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -675,7 +675,7 @@
 	oxygen = 0;
 	nitrogen = 103.934
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "lE" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -691,7 +691,7 @@
 	color = "#333333"
 	},
 /obj/structure/lattice{
-	fake_z_exclude = 1
+	pseudo_z_exclude = 1
 	},
 /obj/effect/abyss,
 /turf/unsimulated/floor/vox/abyss,
@@ -718,7 +718,7 @@
 	dir = 1
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "mD" = (
 /obj/structure/railing{
 	dir = 1
@@ -729,11 +729,11 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "mK" = (
 /obj/structure/hanging_lantern/dim,
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "mM" = (
 /obj/item/device/flashlight/lantern/on{
 	invisibility = 101;
@@ -742,7 +742,7 @@
 	anchored = 1
 	},
 /turf/unsimulated/wall{
-	icon = 'icons/shoal/rusty_reinforced_wall.dmi";\ticon_state = "rusty_reinforced_wall-5"\t},/area/shoal)"vm" = (/obj/machinery/vending/offlicence,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area)"vG" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/wall/shoal,/area/shoal)"wa" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/fake_z/level1)"wf" = (/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area)"wk" = (/obj/effect/decal/warning_stripes{\tdir = 8;\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete"\t},/area)"ws" = (/obj/structure/catwalk,/obj/prop/hanginglight{\tpixel_y = 32\t},/obj/structure/hanging_lantern/dim{\tdir = 1;\tfake_z_exclude = 1\t},/turf/unsimulated/floor/vox/abyss,/area/shoal)"wt" = (/obj/effect/decal/warning_stripes/siding{\tdir = 9\t},/turf/unsimulated/floor/vox{\ticon_state = "wood";\tname = "woodenvoxfloor"\t},/area/shoal)"wK" = (/obj/structure/lattice{\tfake_z_exclude = 1\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"wL" = (/turf/unsimulated/wall/fakeglass{\tdir = 4;\twalltype = ""\t},/area/shoal)"wS" = (/obj/structure/hanging_lantern/dim,/turf/unsimulated/floor/jungle/concrete{\ticon = 'icons/turf/floors.dmi'\t},/area/fake_z/level2)"wY" = (/obj/prop/latticemess{\tcolor = "#222222"\t},/obj/structure/lattice{\tfake_z_exclude = 1\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"xg" = (/obj/structure/transit_tube/station{\tdir = 4;\treq_access_txt = "47";\treverse_launch = 1;\tfake_z_exclude = 1;\tcolor = "#555555"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"xs" = (/obj/structure/sign/directions/engineering{\tpixel_y = 12\t},/turf/unsimulated/wall/shoal,/area/fake_z/level1)"xt" = (/obj/structure/sign/directions/trader,/turf/unsimulated/wall/shoal,/area/shoal)"xF" = (/obj/structure/bed/chair/comfy/couch/left/lime{\tdir = 1\t},/turf/unsimulated/floor/vox{\ticon_state = "shagcarpet-dark";\tname = "shagcarpet"\t},/area/shoal)"xN" = (/obj/structure/railing{\tdir = 8\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/fake_z/level3)"xO" = (/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/obj/effect/decal/warning_stripes{\tdir = 8;\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/turf/simulated/floor/engine{\ticon_state = "elevatorshaft";\tname = "enginefloor";\toxygen = 0;\tnitrogen = 103.934\t},/area/fake_z/level1)"xV" = (/obj/structure/extinguisher_cabinet{\tpixel_y = -30\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"xY" = (/obj/structure/catwalk,/obj/prop/hanginglight{\tpixel_y = 32;\tpixel_x = -16\t},/obj/structure/railing{\tdir = 8\t},/turf/unsimulated/floor/vox/abyss,/area/shoal)"ya" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete";\ticon = 'icons/turf/new_snow.dmi'\t},/area/fake_z/level2)"yb" = (/obj/prop/coolerfan,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"yc" = (/obj/structure/railing{\tdir = 1\t},/obj/structure/railing{\tdir = 4\t},/obj/structure/bed/chair/folding{\tdir = 1\t},/obj/effect/decal/cleanable/crumbs,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/fake_z/level3)"yj" = (/obj/structure/railing,/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/fake_z/level2)"yk" = (/obj/structure/railing{\tdir = 4\t},/obj/structure/railing{\tdir = 1\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/fake_z/level1)"yl" = (/obj/structure/lattice{\tfake_z_exclude = 1\t},/obj/prop/latticemess{\tcolor = "#222222"\t},/obj/item/device/flashlight/lantern/on{\tinvisibility = 101;\tlight_color = "#9fc9cf";\tcolor = "#ff0000";\tanchored = 1\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"yD" = (/obj/structure/catwalk,/obj/structure/railing{\tdir = 8\t},/obj/structure/railing{\tdir = 4\t},/turf/unsimulated/floor/vox/plating/alt,/area/fake_z/level1)"za" = (/obj/machinery/door/poddoor/shutters/rusty{\tdir = 2\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"zu" = (/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/fake_z/level3)"zB" = (/obj/structure/bed/chair/shuttle/gamer{\tdir = 1\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"zC" = (/turf/unsimulated/floor/vox/plating/alt{\ticon_state = "rampbottom"\t},/area)"zH" = (/obj/effect/decal/warning_stripes{\tdir = 8;\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/turf/simulated/floor/vox/shuttle,/area/shoal)"zX" = (/obj/machinery/door/airlock/sandstone{\tname = "OldAirlock"\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"zZ" = (/obj/structure/bed/chair/comfy/black{\tdir = 1\t},/turf/unsimulated/floor/vox{\ticon_state = "darkvaultcorner";\tdir = 1\t},/area/shoal)"Ac" = (/turf/unsimulated/floor/vox,/area/shoal)"Ag" = (/obj/structure/transit_tube{\ticon_state = "N-S";\tfake_z_exclude = 1;\tcolor = "#777777"\t},/obj/structure/transit_tube{\ticon_state = "NW-SE";\tfake_z_exclude = 1;\tcolor = "#555555"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"Ah" = (/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/turf/unsimulated/floor/vox{\ticon_state = "techfloor";\ticon = 'icons/shoal/techfloor.dmi'\t},/area/shoal)"Aj" = (/obj/structure/window/reinforced{\tdir = 8\t},/obj/structure/window/reinforced{\tdir = 4\t},/obj/structure/grille,/obj/machinery/door/poddoor/shutters/rusty{\ticon_state = "rustshutter0";\topacity = 0;\tdensity = 0\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"Ao" = (/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)";\tdir = 5\t},/obj/structure/railing{\tdir = 4\t},/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/fake_z/level2)"As" = (/obj/structure/catwalk,/obj/structure/railing{\tdir = 4\t},/turf/unsimulated/floor/vox/abyss,/area/shoal)"Ay" = (/obj/prop/panelwires,/turf/unsimulated/wall/shoal,/area/shoal)"AA" = (/obj/structure/lattice{\tfake_z_exclude = 1\t},/obj/prop/latticemess{\tcolor = "#444444"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"AB" = (/obj/structure/catwalk,/obj/structure/railing{\tdir = 8\t},/turf/unsimulated/floor/vox/abyss,/area/fake_z/level1)"AE" = (/turf/space,/area/shoal)"AJ" = (/turf/unsimulated/wall/fakeglass{\tdir = 4\t},/area/shoal)"AK" = (/turf/unsimulated/floor/vox/plating/alt,/area)"AP" = (/obj/structure/hanging_lantern/dim{\tdir = 8\t},/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete"\t},/area)"Bc" = (/turf/unsimulated/floor/vox{\ticon_state = "hexacrete-239";\ticon = 'icons/shoal/hexacrete.dmi'\t},/area/shoal)"Bl" = (/turf/unsimulated/wall{\ticon = 'icons/shoal/rusty_reinforced_wall.dmi";
+	icon = 'icons/shoal/rusty_reinforced_wall.dmi";\ticon_state = "rusty_reinforced_wall-5"\t},/area/shoal)"vm" = (/obj/machinery/vending/offlicence,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area)"vG" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/wall/shoal,/area/shoal)"wa" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/pseudo_z/level1)"wf" = (/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area)"wk" = (/obj/effect/decal/warning_stripes{\tdir = 8;\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete"\t},/area)"ws" = (/obj/structure/catwalk,/obj/prop/hanginglight{\tpixel_y = 32\t},/obj/structure/hanging_lantern/dim{\tdir = 1;\tpseudo_z_exclude = 1\t},/turf/unsimulated/floor/vox/abyss,/area/shoal)"wt" = (/obj/effect/decal/warning_stripes/siding{\tdir = 9\t},/turf/unsimulated/floor/vox{\ticon_state = "wood";\tname = "woodenvoxfloor"\t},/area/shoal)"wK" = (/obj/structure/lattice{\tpseudo_z_exclude = 1\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"wL" = (/turf/unsimulated/wall/fakeglass{\tdir = 4;\twalltype = ""\t},/area/shoal)"wS" = (/obj/structure/hanging_lantern/dim,/turf/unsimulated/floor/jungle/concrete{\ticon = 'icons/turf/floors.dmi'\t},/area/pseudo_z/level2)"wY" = (/obj/prop/latticemess{\tcolor = "#222222"\t},/obj/structure/lattice{\tpseudo_z_exclude = 1\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"xg" = (/obj/structure/transit_tube/station{\tdir = 4;\treq_access_txt = "47";\treverse_launch = 1;\tpseudo_z_exclude = 1;\tcolor = "#555555"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"xs" = (/obj/structure/sign/directions/engineering{\tpixel_y = 12\t},/turf/unsimulated/wall/shoal,/area/pseudo_z/level1)"xt" = (/obj/structure/sign/directions/trader,/turf/unsimulated/wall/shoal,/area/shoal)"xF" = (/obj/structure/bed/chair/comfy/couch/left/lime{\tdir = 1\t},/turf/unsimulated/floor/vox{\ticon_state = "shagcarpet-dark";\tname = "shagcarpet"\t},/area/shoal)"xN" = (/obj/structure/railing{\tdir = 8\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/pseudo_z/level3)"xO" = (/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/obj/effect/decal/warning_stripes{\tdir = 8;\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/turf/simulated/floor/engine{\ticon_state = "elevatorshaft";\tname = "enginefloor";\toxygen = 0;\tnitrogen = 103.934\t},/area/pseudo_z/level1)"xV" = (/obj/structure/extinguisher_cabinet{\tpixel_y = -30\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"xY" = (/obj/structure/catwalk,/obj/prop/hanginglight{\tpixel_y = 32;\tpixel_x = -16\t},/obj/structure/railing{\tdir = 8\t},/turf/unsimulated/floor/vox/abyss,/area/shoal)"ya" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete";\ticon = 'icons/turf/new_snow.dmi'\t},/area/pseudo_z/level2)"yb" = (/obj/prop/coolerfan,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"yc" = (/obj/structure/railing{\tdir = 1\t},/obj/structure/railing{\tdir = 4\t},/obj/structure/bed/chair/folding{\tdir = 1\t},/obj/effect/decal/cleanable/crumbs,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/pseudo_z/level3)"yj" = (/obj/structure/railing,/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/pseudo_z/level2)"yk" = (/obj/structure/railing{\tdir = 4\t},/obj/structure/railing{\tdir = 1\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/pseudo_z/level1)"yl" = (/obj/structure/lattice{\tpseudo_z_exclude = 1\t},/obj/prop/latticemess{\tcolor = "#222222"\t},/obj/item/device/flashlight/lantern/on{\tinvisibility = 101;\tlight_color = "#9fc9cf";\tcolor = "#ff0000";\tanchored = 1\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"yD" = (/obj/structure/catwalk,/obj/structure/railing{\tdir = 8\t},/obj/structure/railing{\tdir = 4\t},/turf/unsimulated/floor/vox/plating/alt,/area/pseudo_z/level1)"za" = (/obj/machinery/door/poddoor/shutters/rusty{\tdir = 2\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"zu" = (/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/pseudo_z/level3)"zB" = (/obj/structure/bed/chair/shuttle/gamer{\tdir = 1\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"zC" = (/turf/unsimulated/floor/vox/plating/alt{\ticon_state = "rampbottom"\t},/area)"zH" = (/obj/effect/decal/warning_stripes{\tdir = 8;\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/turf/simulated/floor/vox/shuttle,/area/shoal)"zX" = (/obj/machinery/door/airlock/sandstone{\tname = "OldAirlock"\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"zZ" = (/obj/structure/bed/chair/comfy/black{\tdir = 1\t},/turf/unsimulated/floor/vox{\ticon_state = "darkvaultcorner";\tdir = 1\t},/area/shoal)"Ac" = (/turf/unsimulated/floor/vox,/area/shoal)"Ag" = (/obj/structure/transit_tube{\ticon_state = "N-S";\tpseudo_z_exclude = 1;\tcolor = "#777777"\t},/obj/structure/transit_tube{\ticon_state = "NW-SE";\tpseudo_z_exclude = 1;\tcolor = "#555555"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"Ah" = (/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/turf/unsimulated/floor/vox{\ticon_state = "techfloor";\ticon = 'icons/shoal/techfloor.dmi'\t},/area/shoal)"Aj" = (/obj/structure/window/reinforced{\tdir = 8\t},/obj/structure/window/reinforced{\tdir = 4\t},/obj/structure/grille,/obj/machinery/door/poddoor/shutters/rusty{\ticon_state = "rustshutter0";\topacity = 0;\tdensity = 0\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"Ao" = (/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)";\tdir = 5\t},/obj/structure/railing{\tdir = 4\t},/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/pseudo_z/level2)"As" = (/obj/structure/catwalk,/obj/structure/railing{\tdir = 4\t},/turf/unsimulated/floor/vox/abyss,/area/shoal)"Ay" = (/obj/prop/panelwires,/turf/unsimulated/wall/shoal,/area/shoal)"AA" = (/obj/structure/lattice{\tpseudo_z_exclude = 1\t},/obj/prop/latticemess{\tcolor = "#444444"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"AB" = (/obj/structure/catwalk,/obj/structure/railing{\tdir = 8\t},/turf/unsimulated/floor/vox/abyss,/area/pseudo_z/level1)"AE" = (/turf/space,/area/shoal)"AJ" = (/turf/unsimulated/wall/fakeglass{\tdir = 4\t},/area/shoal)"AK" = (/turf/unsimulated/floor/vox/plating/alt,/area)"AP" = (/obj/structure/hanging_lantern/dim{\tdir = 8\t},/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete"\t},/area)"Bc" = (/turf/unsimulated/floor/vox{\ticon_state = "hexacrete-239";\ticon = 'icons/shoal/hexacrete.dmi'\t},/area/shoal)"Bl" = (/turf/unsimulated/wall{\ticon = 'icons/shoal/rusty_reinforced_wall.dmi";
 	icon_state = "rusty_reinforced_wall-6"
 	},
 /area/shoal)
@@ -757,18 +757,18 @@
 	},
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555";
 	invisibility = 101
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "nl" = (
 /obj/structure/railing,
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "nn" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -780,7 +780,7 @@
 	invisibility = 101
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "nq" = (
 /obj/structure/grille/invulnerable,
 /obj/structure/window/reinforced/plasma{
@@ -788,7 +788,7 @@
 	},
 /obj/structure/window/reinforced/plasma,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "nU" = (
 /obj/structure/railing{
 	dir = 4
@@ -796,11 +796,11 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "nV" = (
 /obj/structure/transit_tube{
 	icon_state = "NW-SE";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/wall/shoal{
@@ -829,7 +829,7 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "ot" = (
 /obj/structure/railing{
 	dir = 4
@@ -847,7 +847,7 @@
 	},
 /obj/structure/grille/invulnerable,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "oO" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark vault stripe"
@@ -857,10 +857,10 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "oY" = (
 /obj/structure/transit_tube{
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /obj/structure/railing{
@@ -882,7 +882,7 @@
 /turf/simulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "pa" = (
 /obj/structure/railing{
 	dir = 8
@@ -899,7 +899,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "ph" = (
 /obj/structure/railing{
 	dir = 4
@@ -919,7 +919,7 @@
 	oxygen = 0;
 	nitrogen = 103.934
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "pi" = (
 /obj/machinery/door/airlock/sandstone{
 	name = "Information Retrieval"
@@ -951,14 +951,14 @@
 	oxygen = 0;
 	nitrogen = 103.934
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "pL" = (
 /obj/effect/decal/cleanable/crumbs,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "pM" = (
 /obj/machinery/vending/discount,
 /obj/effect/decal/warning_stripes{
@@ -974,17 +974,17 @@
 	name = "concrete";
 	icon = 'icons/turf/new_snow.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "pV" = (
 /obj/structure/railing,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "qC" = (
 /obj/structure/transit_tube{
 	icon_state = "E-NW";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -996,7 +996,7 @@
 	},
 /obj/structure/window/reinforced/plasma,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "qE" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -1006,7 +1006,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "qF" = (
 /obj/machinery/door/airlock/hatch{
 	name = "Information Retrieval"
@@ -1037,14 +1037,14 @@
 	invisibility = 101
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "qU" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/vox{
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "re" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -1062,16 +1062,16 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "rD" = (
 /obj/structure/hanging_lantern{
-	fake_z_exclude = 1
+	pseudo_z_exclude = 1
 	},
 /turf/unsimulated/floor/vox/abyss,
 /area/shoal)
 "rU" = (
 /obj/structure/transit_tube{
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /obj/structure/railing{
@@ -1083,7 +1083,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "rV" = (
 /obj/structure/railing,
 /turf/unsimulated/floor/vox,
@@ -1093,18 +1093,18 @@
 	dir = 1
 	},
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "sz" = (
 /obj/structure/railing,
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	invisibility = 101
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "sB" = (
 /obj/effect/decal/warning_stripes/siding{
 	dir = 10
@@ -1116,7 +1116,7 @@
 /area/shoal)
 "sC" = (
 /turf/unsimulated/wall{
-	icon = 'icons/shoal/rusty_reinforced_wall.dmi";\ticon_state = "rusty_reinforced_wall-5"\t},/area/shoal)"lf" = (/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"lo" = (/turf/unsimulated/floor/vox{\ticon_state = "wood";\tname = "woodenvoxfloor"\t},/area)"lp" = (/obj/structure/catwalk,/obj/structure/railing{\tdir = 1\t},/obj/prop/hanginglight{\tpixel_y = 32\t},/turf/unsimulated/floor/vox/abyss,/area/shoal)"lt" = (/obj/structure/railing{\tdir = 8\t},/turf/unsimulated/floor/vox,/area/shoal)"lz" = (/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)";\tdir = 6\t},/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/obj/structure/railing,/obj/structure/railing{\tdir = 4\t},/turf/simulated/floor/engine{\ticon_state = "elevatorshaft";\tname = "enginefloor";\toxygen = 0;\tnitrogen = 103.934\t},/area/fake_z/level2)"lB" = (/turf/unsimulated/floor/vox{\ticon_state = "hexacrete-137";\ticon = 'icons/shoal/hexacrete.dmi'\t},/area/shoal)"me" = (/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/obj/structure/railing{\tdir = 4\t},/obj/prop/fan,/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/fake_z/level2)"mf" = (/obj/structure/window/reinforced{\tdir = 4\t},/obj/structure/window/reinforced{\tdir = 8\t},/obj/structure/window/reinforced{\tdir = 1\t},/obj/structure/grille,/obj/machinery/door/poddoor/shutters/rusty{\ticon_state = "rustshutter0";\topacity = 0;\tdensity = 0;\tdir = 8\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"mg" = (/turf/unsimulated/wall{\ticon = 'icons/shoal/rusty_reinforced_wall.dmi";
+	icon = 'icons/shoal/rusty_reinforced_wall.dmi";\ticon_state = "rusty_reinforced_wall-5"\t},/area/shoal)"lf" = (/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"lo" = (/turf/unsimulated/floor/vox{\ticon_state = "wood";\tname = "woodenvoxfloor"\t},/area)"lp" = (/obj/structure/catwalk,/obj/structure/railing{\tdir = 1\t},/obj/prop/hanginglight{\tpixel_y = 32\t},/turf/unsimulated/floor/vox/abyss,/area/shoal)"lt" = (/obj/structure/railing{\tdir = 8\t},/turf/unsimulated/floor/vox,/area/shoal)"lz" = (/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)";\tdir = 6\t},/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/obj/structure/railing,/obj/structure/railing{\tdir = 4\t},/turf/simulated/floor/engine{\ticon_state = "elevatorshaft";\tname = "enginefloor";\toxygen = 0;\tnitrogen = 103.934\t},/area/pseudo_z/level2)"lB" = (/turf/unsimulated/floor/vox{\ticon_state = "hexacrete-137";\ticon = 'icons/shoal/hexacrete.dmi'\t},/area/shoal)"me" = (/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/obj/structure/railing{\tdir = 4\t},/obj/prop/fan,/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/pseudo_z/level2)"mf" = (/obj/structure/window/reinforced{\tdir = 4\t},/obj/structure/window/reinforced{\tdir = 8\t},/obj/structure/window/reinforced{\tdir = 1\t},/obj/structure/grille,/obj/machinery/door/poddoor/shutters/rusty{\ticon_state = "rustshutter0";\topacity = 0;\tdensity = 0;\tdir = 8\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"mg" = (/turf/unsimulated/wall{\ticon = 'icons/shoal/rusty_reinforced_wall.dmi";
 	icon_state = "rusty_reinforced_wall-12"
 	},
 /area/shoal)
@@ -1136,15 +1136,15 @@
 	},
 /obj/structure/hanging_lantern{
 	dir = 8;
-	fake_z_exclude = 1
+	pseudo_z_exclude = 1
 	},
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "td" = (
 /turf/unsimulated/wall/shoal,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "tg" = (
 /obj/structure/catwalk,
 /obj/structure/railing,
@@ -1202,7 +1202,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "tV" = (
 /obj/structure/railing{
 	dir = 1
@@ -1232,13 +1232,13 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "tW" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "tX" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -1276,13 +1276,13 @@
 /obj/structure/window/reinforced/plasma,
 /obj/structure/grille/invulnerable,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "uv" = (
 /turf/simulated/floor/vox{
 	icon_state = "rampbottom";
 	dir = 4
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "uB" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/hanging_lantern/dim{
@@ -1291,17 +1291,17 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "uS" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 8
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "uY" = (
 /obj/structure/sign/chinese/access_restricted,
 /turf/unsimulated/wall/shoal,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "vd" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -1314,7 +1314,7 @@
 	pixel_y = 32
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "vj" = (
 /obj/effect/decal/cleanable/crumbs,
 /obj/effect/decal/cleanable/dirt,
@@ -1358,7 +1358,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "wb" = (
 /obj/machinery/door/airlock/sandstone{
 	name = "Information Retrieval Office"
@@ -1396,7 +1396,7 @@
 	pixel_y = 32
 	},
 /obj/structure/hanging_lantern{
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	dir = 1
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -1413,7 +1413,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "wL" = (
 /turf/unsimulated/wall/fakeglass{
 	dir = 4;
@@ -1425,7 +1425,7 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "wY" = (
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -1439,7 +1439,7 @@
 	dir = 4;
 	req_access_txt = "47";
 	reverse_launch = 1;
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -1449,7 +1449,7 @@
 	pixel_y = 12
 	},
 /turf/unsimulated/wall/shoal,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "xt" = (
 /obj/structure/sign/directions/trader,
 /turf/unsimulated/wall/shoal,
@@ -1461,7 +1461,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "xO" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -1478,10 +1478,10 @@
 	oxygen = 0;
 	nitrogen = 103.934
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "xQ" = (
 /obj/structure/lattice{
-	fake_z_exclude = 1
+	pseudo_z_exclude = 1
 	},
 /obj/prop/latticemess{
 	color = "#333333"
@@ -1496,7 +1496,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "xY" = (
 /obj/structure/catwalk,
 /obj/prop/hanginglight{
@@ -1529,7 +1529,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "yj" = (
 /turf/unsimulated/floor/asteroid/vox,
 /area/shoal)
@@ -1543,7 +1543,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "yD" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -1553,7 +1553,7 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "za" = (
 /obj/machinery/door/poddoor/shutters/rusty{
 	dir = 2
@@ -1564,13 +1564,13 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "zB" = (
 /obj/item/weapon/reagent_containers/glass/bucket{
 	pixel_x = -12
 	},
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "zC" = (
 /turf/unsimulated/floor/vox/plating/alt{
 	icon_state = "rampbottom"
@@ -1590,12 +1590,12 @@
 "Ag" = (
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777"
 	},
 /obj/structure/transit_tube{
 	icon_state = "NW-SE";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -1610,7 +1610,7 @@
 	},
 /obj/structure/window/reinforced/plasma,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Ao" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning-asteroid";
@@ -1627,7 +1627,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "As" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -1652,7 +1652,7 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "AE" = (
 /turf/space,
 /area/shoal)
@@ -1682,7 +1682,7 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "BT" = (
 /obj/structure/curtain/open/bed,
 /turf/unsimulated/wall/fakeglass,
@@ -1690,7 +1690,7 @@
 "BU" = (
 /obj/machinery/door/airlock/maintenance_hatch,
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Ce" = (
 /turf/unsimulated/wall/fakeglass{
 	dir = 8;
@@ -1716,7 +1716,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Cm" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -1730,11 +1730,11 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "CB" = (
 /obj/structure/transit_tube{
 	icon_state = "W-SE";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -1755,7 +1755,7 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "CI" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
@@ -1764,7 +1764,7 @@
 "CP" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/jungle/concrete,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Db" = (
 /obj/structure/railing{
 	dir = 8
@@ -1783,7 +1783,7 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Dn" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -1791,7 +1791,7 @@
 	},
 /obj/structure/catwalk,
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Dr" = (
 /obj/structure/window/reinforced/plasma{
 	dir = 1
@@ -1804,7 +1804,7 @@
 /obj/structure/grille/broken,
 /obj/structure/window/barricade/full/block,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Dw" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -1823,7 +1823,7 @@
 /obj/structure/transit_tube{
 	icon_state = "E-SW";
 	tag = "icon-E-SW";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -1831,11 +1831,11 @@
 "DT" = (
 /obj/structure/hanging_lantern/dim,
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "DZ" = (
 /obj/structure/transit_tube{
 	icon_state = "N-SE";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -1852,7 +1852,7 @@
 	color = "#222222"
 	},
 /obj/structure/lattice{
-	fake_z_exclude = 1
+	pseudo_z_exclude = 1
 	},
 /obj/item/device/flashlight/lantern/on{
 	invisibility = 101;
@@ -1868,13 +1868,13 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Et" = (
 /obj/item/trash/waffles,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "Ez" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -1901,7 +1901,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "EG" = (
 /obj/machinery/station_map/strategic,
 /turf/unsimulated/floor/vox{
@@ -1929,7 +1929,7 @@
 	dir = 4;
 	req_access_txt = "47";
 	reverse_launch = 1;
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -1943,7 +1943,7 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Fz" = (
 /obj/structure/bed/chair/comfy/couch/turn/inward/lime{
 	dir = 8
@@ -1964,7 +1964,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "FR" = (
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -2010,7 +2010,7 @@
 	oxygen = 0;
 	nitrogen = 103.934
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Gy" = (
 /obj/effect/decal/warning_stripes/siding,
 /turf/unsimulated/floor/vox{
@@ -2038,7 +2038,7 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Hq" = (
 /obj/machinery/door/airlock/sandstone{
 	name = "Old Airlock"
@@ -2050,15 +2050,15 @@
 "Hu" = (
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	invisibility = 101
 	},
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Hy" = (
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	invisibility = 101
 	},
 /obj/structure/railing{
@@ -2067,7 +2067,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "HD" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -2084,7 +2084,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "HK" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -2103,12 +2103,12 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "HO" = (
 /obj/structure/transit_tube/station{
 	req_one_access_txt = "32;19;501";
 	reverse_launch = 1;
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -2141,7 +2141,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "IU" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/vox{
@@ -2158,7 +2158,7 @@
 	},
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777";
 	plane = -32770;
 	layer = 1
@@ -2180,7 +2180,7 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "JD" = (
 /obj/structure/railing{
 	dir = 4
@@ -2206,7 +2206,7 @@
 	invisibility = 101
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Ka" = (
 /obj/machinery/door/airlock/sandstone{
 	name = "Old Airlock"
@@ -2217,7 +2217,7 @@
 /area)
 "Kh" = (
 /turf/unsimulated/wall{
-	icon = 'icons/shoal/rusty_reinforced_wall.dmi";\ticon_state = "rusty_reinforced_wall-9"\t},/area/shoal)"CY" = (/obj/machinery/alarm{\tpixel_y = 23\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"Dc" = (/turf/unsimulated/floor/vox{\ticon_state = "hexacrete-74";\ticon = 'icons/shoal/hexacrete.dmi'\t},/area/shoal)"Dd" = (/obj/item/trash/cigbutt/bidibutt{\tpixel_y = 12;\tpixel_x = -2\t},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/jungle/concrete{\ticon = 'icons/turf/floors.dmi'\t},/area/fake_z/level2)"Dn" = (/obj/structure/railing,/obj/structure/railing{\tdir = 4\t},/obj/structure/catwalk,/turf/unsimulated/floor/vox/abyss,/area/fake_z/level1)"Dr" = (/turf/unsimulated/floor/vox{\ticon_state = "darkvaultcorner"\t},/area/shoal)"DL" = (/obj/structure/transit_tube{\ticon_state = "E-SW";\ttag = "icon-E-SW";\tfake_z_exclude = 1;\tcolor = "#555555"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"DT" = (/obj/structure/hanging_lantern/dim,/turf/unsimulated/floor/vox/plating/alt,/area/fake_z/level1)"DZ" = (/obj/structure/transit_tube{\ticon_state = "N-SE";\tfake_z_exclude = 1;\tcolor = "#555555"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"Eh" = (/obj/structure/railing,/obj/structure/railing{\tdir = 1\t},/turf/unsimulated/floor/vox/plating/alt,/area)"Es" = (/obj/structure/hanging_lantern/dim,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/fake_z/level1)"Et" = (/obj/item/trash/waffles,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/fake_z/level3)"Ez" = (/obj/structure/catwalk,/obj/structure/railing{\tdir = 1\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"EC" = (/obj/structure/catwalk,/obj/structure/railing,/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"EE" = (/obj/structure/railing{\tdir = 1\t},/obj/structure/railing{\tdir = 8\t},/obj/structure/bed/chair/folding{\tdir = 1\t},/obj/effect/decal/cleanable/crumbs,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/fake_z/level3)"EG" = (/obj/structure/hanging_lantern/dim{\tdir = 8\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"EP" = (/obj/structure/hanging_lantern{\tdir = 1\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"EQ" = (/obj/structure/transit_tube/station{\tdir = 4;\treq_access_txt = "47";\treverse_launch = 1;\tfake_z_exclude = 1;\tcolor = "#777777"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"Fj" = (/obj/machinery/camera{\tnetwork = list("SHOAL");\tdir = 9\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"Fp" = (/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)";\tdir = 9\t},/obj/effect/decal/cleanable/dirt,/obj/structure/hanging_lantern/dim{\tdir = 8\t},/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete";\ticon = 'icons/turf/new_snow.dmi'\t},/area)"Fr" = (/turf/unsimulated/floor/vox{\ticon_state = "hexacrete-255";\ticon = 'icons/shoal/hexacrete.dmi'\t},/area/shoal)"FK" = (/obj/prop/shoalwindow{\ticon_state = "shoalwindow"\t},/turf/unsimulated/wall/shoal,/area/shoal)"FN" = (/obj/structure/window/reinforced{\tdir = 4\t},/obj/structure/window/reinforced{\tdir = 8\t},/obj/structure/grille,/obj/machinery/door/poddoor/shutters/rusty{\ticon_state = "rustshutter0";\topacity = 0;\tdensity = 0;\tdir = 8\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"FR" = (/obj/effect/decal/cleanable/dirt,/obj/structure/hanging_lantern/dim{\tdir = 1;\tfake_z_exclude = 1\t},/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete"\t},/area/fake_z/level2)"FS" = (/obj/structure/railing{\tdir = 8\t},/obj/structure/railing{\tdir = 1\t},/turf/unsimulated/floor/vox,/area/shoal)"FT" = (/obj/item/device/flashlight/lantern/on{\tinvisibility = 101;\tlight_color = "#9fc9cf";\tcolor = "#ff0000";\tanchored = 1\t},/turf/unsimulated/wall{\ticon = 'icons/shoal/rusty_reinforced_wall.dmi";
+	icon = 'icons/shoal/rusty_reinforced_wall.dmi";\ticon_state = "rusty_reinforced_wall-9"\t},/area/shoal)"CY" = (/obj/machinery/alarm{\tpixel_y = 23\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"Dc" = (/turf/unsimulated/floor/vox{\ticon_state = "hexacrete-74";\ticon = 'icons/shoal/hexacrete.dmi'\t},/area/shoal)"Dd" = (/obj/item/trash/cigbutt/bidibutt{\tpixel_y = 12;\tpixel_x = -2\t},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/jungle/concrete{\ticon = 'icons/turf/floors.dmi'\t},/area/pseudo_z/level2)"Dn" = (/obj/structure/railing,/obj/structure/railing{\tdir = 4\t},/obj/structure/catwalk,/turf/unsimulated/floor/vox/abyss,/area/pseudo_z/level1)"Dr" = (/turf/unsimulated/floor/vox{\ticon_state = "darkvaultcorner"\t},/area/shoal)"DL" = (/obj/structure/transit_tube{\ticon_state = "E-SW";\ttag = "icon-E-SW";\tpseudo_z_exclude = 1;\tcolor = "#555555"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"DT" = (/obj/structure/hanging_lantern/dim,/turf/unsimulated/floor/vox/plating/alt,/area/pseudo_z/level1)"DZ" = (/obj/structure/transit_tube{\ticon_state = "N-SE";\tpseudo_z_exclude = 1;\tcolor = "#555555"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"Eh" = (/obj/structure/railing,/obj/structure/railing{\tdir = 1\t},/turf/unsimulated/floor/vox/plating/alt,/area)"Es" = (/obj/structure/hanging_lantern/dim,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/pseudo_z/level1)"Et" = (/obj/item/trash/waffles,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/pseudo_z/level3)"Ez" = (/obj/structure/catwalk,/obj/structure/railing{\tdir = 1\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"EC" = (/obj/structure/catwalk,/obj/structure/railing,/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"EE" = (/obj/structure/railing{\tdir = 1\t},/obj/structure/railing{\tdir = 8\t},/obj/structure/bed/chair/folding{\tdir = 1\t},/obj/effect/decal/cleanable/crumbs,/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/pseudo_z/level3)"EG" = (/obj/structure/hanging_lantern/dim{\tdir = 8\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"EP" = (/obj/structure/hanging_lantern{\tdir = 1\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"EQ" = (/obj/structure/transit_tube/station{\tdir = 4;\treq_access_txt = "47";\treverse_launch = 1;\tpseudo_z_exclude = 1;\tcolor = "#777777"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"Fj" = (/obj/machinery/camera{\tnetwork = list("SHOAL");\tdir = 9\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"Fp" = (/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)";\tdir = 9\t},/obj/effect/decal/cleanable/dirt,/obj/structure/hanging_lantern/dim{\tdir = 8\t},/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete";\ticon = 'icons/turf/new_snow.dmi'\t},/area)"Fr" = (/turf/unsimulated/floor/vox{\ticon_state = "hexacrete-255";\ticon = 'icons/shoal/hexacrete.dmi'\t},/area/shoal)"FK" = (/obj/prop/shoalwindow{\ticon_state = "shoalwindow"\t},/turf/unsimulated/wall/shoal,/area/shoal)"FN" = (/obj/structure/window/reinforced{\tdir = 4\t},/obj/structure/window/reinforced{\tdir = 8\t},/obj/structure/grille,/obj/machinery/door/poddoor/shutters/rusty{\ticon_state = "rustshutter0";\topacity = 0;\tdensity = 0;\tdir = 8\t},/turf/unsimulated/floor/vox/plating/alt,/area/shoal)"FR" = (/obj/effect/decal/cleanable/dirt,/obj/structure/hanging_lantern/dim{\tdir = 1;\tpseudo_z_exclude = 1\t},/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete"\t},/area/pseudo_z/level2)"FS" = (/obj/structure/railing{\tdir = 8\t},/obj/structure/railing{\tdir = 1\t},/turf/unsimulated/floor/vox,/area/shoal)"FT" = (/obj/item/device/flashlight/lantern/on{\tinvisibility = 101;\tlight_color = "#9fc9cf";\tcolor = "#ff0000";\tanchored = 1\t},/turf/unsimulated/wall{\ticon = 'icons/shoal/rusty_reinforced_wall.dmi";
 	icon_state = "rusty_reinforced_wall-10"
 	},
 /area/shoal)
@@ -2234,7 +2234,7 @@
 /obj/structure/catwalk,
 /obj/structure/transit_tube{
 	icon_state = "NW-SE";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555";
 	plane = -32770;
 	layer = 1
@@ -2247,7 +2247,7 @@
 	pixel_y = -25
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Ky" = (
 /obj/structure/railing,
 /obj/effect/decal/warning_stripes{
@@ -2262,7 +2262,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "KM" = (
 /obj/structure/railing{
 	dir = 1
@@ -2285,13 +2285,13 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "KQ" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 4
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "KR" = (
 /turf/unsimulated/wall/fakeglass{
 	dir = 8;
@@ -2301,8 +2301,8 @@
 /area/shoal)
 "KT" = (
 /turf/unsimulated/wall{
-	icon = 'icons/shoal/rusty_reinforced_wall.dmi";\ticon_state = "rusty_reinforced_wall-10"\t},/area/shoal)"Gs" = (/obj/structure/bed/chair/comfy/couch/right/lime{\tdir = 8\t},/turf/unsimulated/floor/vox{\ticon_state = "shagcarpet-dark";\tname = "shagcarpet"\t},/area/shoal)"Gw" = (/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)";\tdir = 9\t},/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/turf/simulated/floor/engine{\ticon_state = "elevatorshaft";\tname = "enginefloor";\toxygen = 0;\tnitrogen = 103.934\t},/area/fake_z/level1)"GA" = (/obj/effect/decal/papers{\tdir = 8\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"GJ" = (/obj/structure/bookcase,/obj/effect/decal/warning_stripes/siding,/turf/unsimulated/floor/vox{\ticon_state = "wood";\tname = "woodenvoxfloor"\t},/area/shoal)"GW" = (/obj/structure/hanging_lantern/dim,/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete";\ticon = 'icons/turf/new_snow.dmi'\t},/area/fake_z/level2)"Ha" = (/obj/effect/decal/cleanable/dirt,/obj/structure/closet/crate/bin,/turf/unsimulated/floor/jungle/concrete{\ticon = 'icons/turf/floors.dmi'\t},/area/fake_z/level2)"Hq" = (/obj/machinery/door/airlock/sandstone{\tname = "OldAirlock"\t},/turf/simulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"Hu" = (/obj/structure/railing{\tdir = 4\t},/turf/unsimulated/floor/asteroid/vox,/area/shoal)"Hy" = (/obj/structure/transit_tube{\ticon_state = "N-S";\tfake_z_exclude = 1;\tcolor = "#777777"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"HD" = (/obj/effect/decal/warning_stripes{\tdir = 4;\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/obj/structure/railing{\tdir = 4\t},/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/fake_z/level2)"HK" = (/obj/prop/fan,/obj/effect/decal/warning_stripes{\tdir = 8;\ticon_state = "warning";\ttag = "icon-warning(WEST)"\t},/obj/effect/decal/warning_stripes{\tdir = 8;\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/fake_z/level1)"HO" = (/obj/structure/transit_tube/station{\treq_one_access_txt = "32;
-	 = 501";\treverse_launch = 1;\tfake_z_exclude = 1;\tcolor = "#555555"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"NV" = (/obj/structure/railing,/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/fake_z/level1)"NZ" = (/obj/effect/decal/warning_stripes{\tcolor = "#ffff00";\tdir = 8;\ticon_state = "pathmarker"\t},/turf/space,/area/fake_z/level2)"Og" = (/obj/item/device/flashlight/lantern/on{\tinvisibility = 101;\tlight_color = "#9fc9cf";\tcolor = "#ff0000";\tanchored = 1\t},/turf/unsimulated/wall{\ticon = 'icons/shoal/rusty_reinforced_wall.dmi";
+	icon = 'icons/shoal/rusty_reinforced_wall.dmi";\ticon_state = "rusty_reinforced_wall-10"\t},/area/shoal)"Gs" = (/obj/structure/bed/chair/comfy/couch/right/lime{\tdir = 8\t},/turf/unsimulated/floor/vox{\ticon_state = "shagcarpet-dark";\tname = "shagcarpet"\t},/area/shoal)"Gw" = (/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)";\tdir = 9\t},/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/turf/simulated/floor/engine{\ticon_state = "elevatorshaft";\tname = "enginefloor";\toxygen = 0;\tnitrogen = 103.934\t},/area/pseudo_z/level1)"GA" = (/obj/effect/decal/papers{\tdir = 8\t},/turf/unsimulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"GJ" = (/obj/structure/bookcase,/obj/effect/decal/warning_stripes/siding,/turf/unsimulated/floor/vox{\ticon_state = "wood";\tname = "woodenvoxfloor"\t},/area/shoal)"GW" = (/obj/structure/hanging_lantern/dim,/turf/unsimulated/floor/vox{\ticon_state = "concrete";\tname = "concrete";\ticon = 'icons/turf/new_snow.dmi'\t},/area/pseudo_z/level2)"Ha" = (/obj/effect/decal/cleanable/dirt,/obj/structure/closet/crate/bin,/turf/unsimulated/floor/jungle/concrete{\ticon = 'icons/turf/floors.dmi'\t},/area/pseudo_z/level2)"Hq" = (/obj/machinery/door/airlock/sandstone{\tname = "OldAirlock"\t},/turf/simulated/floor/vox{\ticon_state = "pattern_orange"\t},/area/shoal)"Hu" = (/obj/structure/railing{\tdir = 4\t},/turf/unsimulated/floor/asteroid/vox,/area/shoal)"Hy" = (/obj/structure/transit_tube{\ticon_state = "N-S";\tpseudo_z_exclude = 1;\tcolor = "#777777"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"HD" = (/obj/effect/decal/warning_stripes{\tdir = 4;\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/obj/structure/railing{\tdir = 4\t},/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/pseudo_z/level2)"HK" = (/obj/prop/fan,/obj/effect/decal/warning_stripes{\tdir = 8;\ticon_state = "warning";\ttag = "icon-warning(WEST)"\t},/obj/effect/decal/warning_stripes{\tdir = 8;\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/pseudo_z/level1)"HO" = (/obj/structure/transit_tube/station{\treq_one_access_txt = "32;
+	 = 501";\treverse_launch = 1;\tpseudo_z_exclude = 1;\tcolor = "#555555"\t},/obj/effect/abyss,/turf/unsimulated/floor/vox/abyss,/area/shoal)"NV" = (/obj/structure/railing,/obj/effect/decal/warning_stripes{\ticon_state = "warning-asteroid";\ttag = "icon-warning(NORTH)"\t},/obj/prop/fan,/obj/effect/decal/warning_stripes{\ticon_state = "bot"\t},/turf/unsimulated/floor/vox{\ticon_state = "elevatorshaft"\t},/area/pseudo_z/level1)"NZ" = (/obj/effect/decal/warning_stripes{\tcolor = "#ffff00";\tdir = 8;\ticon_state = "pathmarker"\t},/turf/space,/area/pseudo_z/level2)"Og" = (/obj/item/device/flashlight/lantern/on{\tinvisibility = 101;\tlight_color = "#9fc9cf";\tcolor = "#ff0000";\tanchored = 1\t},/turf/unsimulated/wall{\ticon = 'icons/shoal/rusty_reinforced_wall.dmi";
 	icon_state = "rusty_reinforced_wall-6"
 	},
 /area/shoal)
@@ -2320,7 +2320,7 @@
 "Lj" = (
 /obj/structure/transit_tube{
 	icon_state = "NE-SW";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -2338,7 +2338,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "LB" = (
 /obj/structure/railing{
 	dir = 4
@@ -2355,7 +2355,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "LE" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -2367,7 +2367,7 @@
 	oxygen = 0;
 	nitrogen = 103.934
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "LQ" = (
 /obj/structure/grille/invulnerable,
 /obj/structure/window/reinforced/plasma{
@@ -2377,7 +2377,7 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "LS" = (
 /obj/machinery/recharger{
 	pixel_x = 28
@@ -2391,7 +2391,7 @@
 "LU" = (
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -2406,7 +2406,7 @@
 "MD" = (
 /obj/structure/transit_tube{
 	icon_state = "E-NW";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -2432,7 +2432,7 @@
 	pixel_y = 32
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "MQ" = (
 /obj/effect/decal/papers,
 /turf/unsimulated/floor/vox{
@@ -2452,17 +2452,17 @@
 /obj/structure/window/reinforced/plasma,
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	invisibility = 101
 	},
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Nc" = (
 /obj/structure/catwalk,
 /obj/structure/railing,
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777";
 	plane = -32770;
 	layer = 1
@@ -2542,7 +2542,7 @@
 	pixel_y = 32
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "NR" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -2550,12 +2550,12 @@
 	},
 /obj/structure/catwalk,
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "NU" = (
 /obj/structure/transit_tube/station{
 	req_one_access_txt = "32;19;501";
 	reverse_launch = 1;
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -2573,7 +2573,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "NZ" = (
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
@@ -2611,11 +2611,11 @@
 	oxygen = 0;
 	nitrogen = 103.934
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Oj" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Ok" = (
 /obj/structure/catwalk,
 /obj/structure/railing,
@@ -2624,12 +2624,12 @@
 	},
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777";
 	invisibility = 101
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Ot" = (
 /obj/structure/railing{
 	dir = 4
@@ -2648,11 +2648,11 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "ON" = (
 /obj/machinery/bot/farmbot/duey,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "OP" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/folder/green{
@@ -2668,7 +2668,7 @@
 /obj/structure/transit_tube/station{
 	req_one_access_txt = "32;19;501";
 	reverse_launch = 1;
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /obj/effect/decal/warning_stripes/siding,
@@ -2678,13 +2678,13 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "OX" = (
 /obj/item/trash/cigbutt/bidibutt,
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Pb" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/chips/donitos,
@@ -2692,7 +2692,7 @@
 	icon_state = "concrete";
 	name = "concrete"
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Pg" = (
 /obj/prop/ladder/down{
 	pixel_y = 8
@@ -2706,7 +2706,7 @@
 "Pi" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 8;
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -2738,7 +2738,7 @@
 /mob/living/simple_animal/hostile/retaliate/box,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Qq" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -2759,7 +2759,7 @@
 "Qt" = (
 /obj/structure/transit_tube{
 	icon_state = "NE-SW";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555";
 	invisibility = 101;
 	plane = -32770;
@@ -2779,7 +2779,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "QC" = (
 /turf/unsimulated/floor/vox/plating/alt,
 /area/shoal)
@@ -2790,13 +2790,13 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Ri" = (
 /obj/structure/railing,
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "Ro" = (
 /obj/structure/catwalk,
 /obj/structure/railing,
@@ -2807,12 +2807,12 @@
 	invisibility = 101
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Rr" = (
 /turf/unsimulated/wall/shoal{
 	plane = -32762
 	},
-/area/fake_z/abyss)
+/area/pseudo_z/abyss)
 "Sh" = (
 /obj/structure/catwalk,
 /obj/structure/railing{
@@ -2834,7 +2834,7 @@
 /area)
 "SD" = (
 /obj/structure/transit_tube{
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /obj/effect/decal/warning_stripes/siding{
@@ -2844,7 +2844,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "SE" = (
 /obj/structure/railing{
 	dir = 4
@@ -2852,7 +2852,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "SL" = (
 /obj/prop/fan,
 /obj/effect/decal/warning_stripes{
@@ -2861,13 +2861,13 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "SP" = (
 /obj/machinery/vending/discount,
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "SV" = (
 /obj/item/ammo_storage/magazine/mc9mm/empty,
 /turf/unsimulated/floor/jungle/concrete,
@@ -2876,7 +2876,7 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Tn" = (
 /obj/structure/catwalk,
 /obj/prop/hanginglight{
@@ -2907,11 +2907,11 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "TQ" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "TV" = (
 /obj/structure/window/reinforced/plasma,
 /obj/structure/window/reinforced/plasma{
@@ -2919,7 +2919,7 @@
 	},
 /obj/structure/grille/invulnerable,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Uv" = (
 /turf/unsimulated/wall/fakeglass{
 	dir = 8;
@@ -2939,7 +2939,7 @@
 "UF" = (
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -2955,7 +2955,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "UL" = (
 /obj/structure/catwalk,
 /obj/prop/hanginglight{
@@ -2967,7 +2967,7 @@
 	},
 /obj/structure/transit_tube{
 	icon_state = "NE-SW";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555";
 	invisibility = 101;
 	plane = -32770;
@@ -2982,7 +2982,7 @@
 /obj/structure/grille/invulnerable,
 /obj/structure/window/reinforced/plasma,
 /turf/unsimulated/floor/asteroid/vox,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "VD" = (
 /obj/prop/latticemess{
 	color = "#111111"
@@ -2992,7 +2992,7 @@
 /area/shoal)
 "VH" = (
 /obj/structure/transit_tube{
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /obj/structure/railing{
@@ -3001,7 +3001,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "VK" = (
 /turf/unsimulated/floor/vox{
 	icon_state = "dark"
@@ -3018,7 +3018,7 @@
 /area/shoal)
 "Wa" = (
 /obj/structure/lattice{
-	fake_z_exclude = 1
+	pseudo_z_exclude = 1
 	},
 /obj/prop/latticemess{
 	color = "#111111"
@@ -3053,14 +3053,14 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Wq" = (
 /obj/item/trash/chips/donitos,
 /obj/effect/decal/cleanable/crumbs,
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Wr" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -3074,18 +3074,18 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "WI" = (
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "WK" = (
 /obj/structure/transit_tube{
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /obj/structure/transit_tube{
 	icon_state = "N-S";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#777777"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -3096,7 +3096,7 @@
 	icon_state = "pathmarker"
 	},
 /turf/unsimulated/floor/jungle/concrete,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "WU" = (
 /obj/machinery/door/poddoor/shutters/rusty{
 	dir = 8
@@ -3110,7 +3110,7 @@
 	dir = 1
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "Xe" = (
 /obj/item/device/flashlight/lantern/on{
 	invisibility = 101;
@@ -3136,13 +3136,13 @@
 	},
 /obj/structure/transit_tube{
 	icon_state = "NW-SE";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555";
 	plane = -32770;
 	layer = 1
 	},
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Xv" = (
 /obj/structure/railing{
 	dir = 4
@@ -3162,7 +3162,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "XN" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/ammo_casing/c9mm/empty{
@@ -3180,11 +3180,11 @@
 /turf/unsimulated/floor/jungle/concrete{
 	icon = 'icons/turf/floors.dmi'
 	},
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "XT" = (
 /obj/structure/transit_tube{
 	icon_state = "NW-SE";
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /turf/unsimulated/floor/vox/abyss,
@@ -3206,7 +3206,7 @@
 	pixel_y = 32
 	},
 /turf/unsimulated/floor/vox/plating/alt,
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "Yl" = (
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -3227,7 +3227,7 @@
 /area/shoal)
 "YL" = (
 /obj/structure/lattice{
-	fake_z_exclude = 1
+	pseudo_z_exclude = 1
 	},
 /obj/prop/latticemess{
 	color = "#222222"
@@ -3237,7 +3237,7 @@
 /area/shoal)
 "YR" = (
 /turf/unsimulated/floor/jungle/concrete,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "YT" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -3251,17 +3251,17 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "elevatorshaft"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "YX" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 1;
 	invisibility = 101
 	},
 /turf/unsimulated/floor/jungle/concrete,
-/area/fake_z/level2)
+/area/pseudo_z/level2)
 "Zf" = (
 /turf/unsimulated/floor/vox/abyss,
-/area/fake_z/level3)
+/area/pseudo_z/level3)
 "Zn" = (
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -3275,7 +3275,7 @@
 /area)
 "Zz" = (
 /obj/structure/transit_tube{
-	fake_z_exclude = 1;
+	pseudo_z_exclude = 1;
 	color = "#555555"
 	},
 /obj/effect/decal/warning_stripes/siding,
@@ -3285,7 +3285,7 @@
 /turf/unsimulated/floor/vox{
 	icon_state = "pattern_orange"
 	},
-/area/fake_z/level1)
+/area/pseudo_z/level1)
 "ZH" = (
 /obj/structure/lattice{
 	fake_z_exclude = 1

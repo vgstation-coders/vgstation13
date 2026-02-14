@@ -147,7 +147,7 @@
 
 	//Clicked on an adjacent atom
 	// - Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
-	if(A.Adjacent(src, MAX_ITEM_DEPTH) && fake_z_connected(src, A)) // see adjacent.dm
+	if(A.Adjacent(src, MAX_ITEM_DEPTH) /*&& pseudo_z_connected(src, A)*/) // see adjacent.dm
 		if(held_item)
 			item_attack_delay = held_item.attack_delay
 			var/resolved = held_item.preattack(A, src, 1, params)
