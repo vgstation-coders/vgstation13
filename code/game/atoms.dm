@@ -1156,3 +1156,43 @@ its easier to just keep the beam vertical.
 
 /atom/proc/silicate_act(var/atom/A, var/mob/user)
 	return FALSE
+
+// Returns the virtual_z datum for this atom's area, or null if none
+/atom/proc/get_virtual_z()
+	var/turf/T = get_turf(src)
+	if(!T)
+		return null
+	var/datum/virtual_z/vz = T.v
+	if(!vz)
+		for(var/datum/virtual_z/check_vz in map.getAllVLevels())
+			if(check_vz.x_min <= x && check_vz.x_max >= x && check_vz.y_min <= y && check_vz.y_max >= y)
+				vz = check_vz
+				break
+	return vz
+
+// Returns the virtual x coordinate of this atom
+/atom/proc/vx()
+	if(z <= 6)
+		return x
+	var/datum/virtual_z/V = get_virtual_z()
+	if(!V)
+		return x
+	return V.vx(src)
+
+// Returns the virtual y coordinate of this atom
+/atom/proc/vy()
+	if(z <= 6)
+		return y
+	var/datum/virtual_z/V = get_virtual_z()
+	if(!V)
+		return y
+	return V.vy(src)
+
+// Returns the virtual z coordinate of this atom
+/atom/proc/vz()
+	if(z <= 6)
+		return z
+	var/datum/virtual_z/V = get_virtual_z()
+	if(!V)
+		return z
+	return V.vz(src)

@@ -37,17 +37,14 @@ Example of the second method:
 
 	var/generate_randomly = 1 //If 0, don't generate this away mission randomly
 
-	var/datum/zLevel/zLevel
+	var/datum/virtual_z/vLevel
 
 /datum/map_element/away_mission/initialize(list/objects) //objects: list of all atoms in the away mission. This proc is called after the away mission is loaded
 	..()
 
 	existing_away_missions.Add(src)
 
-	var/z = location ? location.z : world.maxz //z coordinate
-
-	if(accessable_z_levels.len >= z)
-		zLevel = accessable_z_levels[z]
+	vLevel = location.get_virtual_z()
 
 	for(var/obj/effect/landmark/L in landmarks_list) //Add all landmarks to away destinations. Also set the away mission's location for admins to jump to
 		if(L.name != "awaystart")
@@ -66,78 +63,106 @@ Example of the second method:
 
 /datum/map_element/away_mission/empty_space
 	name = "empty space"
-	file_path = "maps/RandomZLevels/space.dmm" //1x1 space tile. It changes its size according to the map's dimensions
+	file_path = "maps/RandomZLevels/space.dmm"
 	generate_randomly = 0
+	width = 500
+	height = 500
 
 /datum/map_element/away_mission/empty_space/New()
 	..()
-	desc = "[world.maxx]x[world.maxy] tiles of pure space. No structures, no humans, absolutely nothing. Not even a gateway - you'll have to spawn one yourself."
+	desc = "500x500 tiles of pure space. No structures, no humans, absolutely nothing. Not even a gateway - you'll have to spawn one yourself."
 
 /datum/map_element/away_mission/arcticwasteland
 	name = "arctic wasteland"
 	file_path = "maps/RandomZLevels/arcticwaste.dmm"
 	desc = "A 200x200  frozen wasteland with some trees, some wolves, and a bunker in a cave. Features a gateway."
+	width = 200
+	height = 200
 
 /datum/map_element/away_mission/assistantchamber
 	name = "assistant chamber"
 	file_path = "maps/RandomZLevels/assistantChamber.dmm"
 	desc = "A tiny unbreachable room full of angry turrets and loot."
 	generate_randomly = 0
+	width = 12
+	height = 12
 
 /datum/map_element/away_mission/challenge
 	name = "emitter hell"
 	file_path = "maps/RandomZLevels/challenge.dmm"
 	desc = "A long hallway featuring emitters, turrets and syndicate agents. Features loot and a gateway."
+	width = 22
+	height = 64
 
 /datum/map_element/away_mission/spacebattle
 	name = "space battle"
 	file_path = "maps/RandomZLevels/spacebattle.dmm"
 	desc = "A large ship being attacked by smaller syndicate ones in an asteroid field, featuring a bluespace artillery gun on the main ship."
+	width = 255
+	height = 255
 
 /datum/map_element/away_mission/spaceship
 	name = "stranded spaceship"
 	file_path = "maps/RandomZLevels/blackmarketpackers.dmm"
 	desc = "A mysteriously empty shuttle crashed into the asteroid."
+	width = 128
+	height = 128
 
 /datum/map_element/away_mission/academy
 	name = "academy"
 	file_path = "maps/RandomZLevels/Academy.dmm"
+	width = 128
+	height = 128
 
 /datum/map_element/away_mission/beach
 	name = "beach"
 	file_path = "maps/RandomZLevels/beach.dmm"
 	desc = "A small, comfy seaside area with a bar."
 	generate_randomly = 0
+	width = 40
+	height = 25
 
 /datum/map_element/away_mission/listeningpost
 	name = "listening post"
 	file_path = "maps/RandomZLevels/listeningpost.dmm"
 	desc = "A large asteroid with a hidden syndicate listening post. Don't forget to bring pickaxes!"
+	width = 100
+	height = 100
 
 /datum/map_element/away_mission/leviathan
 	name = "leviathan"
 	file_path = "maps/RandomZLevels/leviathan.dmm"
 	desc = "A large asteroid in the shape of a mythical creature with an abandoned mining outpost, functional research outpost and hidden rare minerals in the center."
+	width = 250
+	height = 250
 
 /datum/map_element/away_mission/stationcollision
 	name = "station collision"
 	file_path = "maps/RandomZLevels/stationCollision.dmm"
 	desc = "A shuttlecraft crashed into a small space station, bringing aboard aliens and cultists. Features the Lord Nar-Sie himself."
+	width = 64
+	height = 64
 
 /datum/map_element/away_mission/wildwest
 	name = "wild west"
 	file_path = "maps/RandomZLevels/wildwest.dmm"
 	desc = "An exciting adventure for the toughest adventures your station can offer. Those who defeat all of the final area's guardians will find a wish granter."
+	width = 170
+	height = 130
 
 /datum/map_element/away_mission/tomb
 	name = "tomb of Rafid"
 	file_path = "maps/RandomZLevels/tomb.dmm"
 	desc = "On a distant planet, an ancient civilization built a great pyramid to bury their leader. After a team of archaeologists disappeared while attempting to unlock the tomb, a gateway was set up and a rescue team requested."
+	width = 176
+	height = 100
 
 /datum/map_element/away_mission/snowplanet
 	name = "Snow Planet"
 	file_path = "maps/RandomZLevels/snowplanet.dmm"
 	desc = "A small little planetoid with a cold atmosphere and a wooden cabin with a gateway. Be sure to pack some sweaters!"
+	width = 62
+	height = 62
 
 var/static/list/away_mission_subtypes = subtypesof(/datum/map_element/away_mission)
 
@@ -183,13 +208,17 @@ var/static/list/away_mission_subtypes = subtypesof(/datum/map_element/away_missi
 	else
 		to_chat(messages, "<span class='danger'>Loading an away mission...</span>")
 
-	log_game("Loading away mission [AM.file_path]")
-
-	if(AM.load())
-		to_chat(messages, "<span class='danger'>Away mission loaded.</span>")
+	if(!fexists(AM.file_path))
+		to_chat(messages, "<span class='danger'>Away mission file [AM.file_path] does not exist!</span>")
 		return
 
-	to_chat(messages, "<span class='danger'>Failed to load away mission [AM.file_path] (file doesn't exist).</span>")
+	log_game("Loading away mission [AM.file_path]")
+	var/datum/virtual_z/vz = map.addMapElementVLevel(AM,buffer_size = 0)
+	UNTIL(AM.load(vz.x_min - 1, vz.y_min - 1, vz.parent_z.z))
+	AM.vLevel = vz
+	to_chat(messages, "<span class='danger'>Away mission loaded.</span>")
+	return vz
+
 
 //Helper procs
 
@@ -199,9 +228,9 @@ var/static/list/away_mission_subtypes = subtypesof(/datum/map_element/away_missi
 		if(id == AD.name)
 			return AD
 
-/proc/get_mission_by_z(var/num)
+/proc/get_mission_by_v(var/datum/virtual_z/vz)
 	for(var/datum/map_element/away_mission/AD in existing_away_missions)
-		if(AD.zLevel.z == num)
+		if(AD.vLevel == vz)
 			return AD
 
 

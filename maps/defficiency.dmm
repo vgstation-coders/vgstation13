@@ -62001,40 +62001,26 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "cmG" = (
+/turf/simulated/floor/plating,
+/area/security/prison)
+"cmH" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
 /obj/structure/cable/yellow{
 	d1 = 2;
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/obj/structure/grille,
 /obj/structure/window/reinforced/plasma{
 	dir = 8
 	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/simulated/wall/r_wall,
-/area/security/prison)
-"cmH" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/simulated/wall/r_wall,
+/turf/simulated/floor/plating,
 /area/security/prison)
 "cmI" = (
 /obj/structure/grille/broken,
@@ -62062,7 +62048,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/wall/r_wall,
+/turf/simulated/floor/plating,
 /area/security/prison)
 "cmK" = (
 /obj/structure/grille,
@@ -62079,7 +62065,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/wall/r_wall,
+/turf/simulated/floor/plating,
 /area/security/prison)
 "cmL" = (
 /obj/structure/cable/yellow{
@@ -62097,7 +62083,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "0-8"
 	},
-/turf/simulated/wall/r_wall,
+/turf/simulated/floor/plating,
 /area/security/prison)
 "cmM" = (
 /obj/effect/decal/cleanable/blood{
@@ -62588,30 +62574,33 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "cnK" = (
-/obj/structure/cable/yellow,
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
 /obj/structure/window/reinforced/plasma{
 	dir = 4
 	},
+/obj/structure/grille,
 /obj/structure/window/reinforced/plasma,
-/turf/simulated/wall/r_wall,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/cable/yellow,
+/turf/simulated/floor/plating,
 /area/security/prison)
 "cnL" = (
-/obj/structure/table,
-/obj/item/weapon/book/manual/chef_recipes{
-	pixel_x = 4;
-	pixel_y = 8
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
-/obj/item/weapon/reagent_containers/food/condiment/enzyme{
-	pixel_x = -8;
-	pixel_y = -9
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
 	},
+/turf/simulated/floor/plating,
 /area/security/prison)
 "cnM" = (
 /obj/machinery/vending/hydroseeds,
@@ -62695,7 +62684,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/cable/yellow,
-/turf/simulated/wall/r_wall,
+/turf/simulated/floor/plating,
 /area/security/prison)
 "cnV" = (
 /obj/item/stack/sheet/cardboard,
@@ -63685,12 +63674,20 @@
 /area/security/prison)
 "cpW" = (
 /obj/structure/table,
+/obj/item/weapon/reagent_containers/food/condiment/enzyme{
+	pixel_x = -8;
+	pixel_y = 5
+	},
+/obj/item/weapon/book/manual/chef_recipes{
+	pixel_x = 4;
+	pixel_y = 15
+	},
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker{
-	pixel_x = -3;
+	pixel_x = 1;
 	pixel_y = 1
 	},
 /obj/item/weapon/reagent_containers/food/condiment/peppermill{
-	pixel_x = 2;
+	pixel_x = 6;
 	pixel_y = 1
 	},
 /obj/item/weapon/reagent_containers/glass/beaker{
@@ -63778,7 +63775,7 @@
 	},
 /obj/structure/window/reinforced/plasma,
 /obj/structure/cable/yellow,
-/turf/simulated/wall/r_wall,
+/turf/simulated/floor/plating,
 /area/security/prison)
 "cqg" = (
 /obj/item/weapon/stock_parts/matter_bin,
@@ -70039,6 +70036,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/table,
 /obj/item/weapon/paper_bin/red{
 	pixel_x = -3;
 	pixel_y = 7
@@ -70048,7 +70046,6 @@
 	pixel_x = 7;
 	pixel_y = 8
 	},
-/obj/structure/table,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -77671,10 +77668,6 @@
 	name = "Interrogation";
 	req_access_txt = "63"
 	},
-/obj/machinery/door/airlock/security{
-	name = "Interrogation";
-	req_access_txt = "63"
-	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -83722,10 +83715,6 @@
 /area)
 "cZZ" = (
 /obj/docking_port/destination/syndicate/south,
-/turf/space,
-/area)
-"daa" = (
-/obj/effect/landmark/dungeon_area,
 /turf/space,
 /area)
 "dac" = (
@@ -110408,7 +110397,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "0-8"
 	},
-/turf/simulated/wall/r_wall,
+/turf/simulated/floor/plating,
 /area/security/prison)
 "eXW" = (
 /obj/structure/cable/yellow{
@@ -111893,7 +111882,7 @@
 	dir = 1
 	},
 /obj/structure/cable/yellow,
-/turf/simulated/wall/r_wall,
+/turf/simulated/floor/plating,
 /area/security/prison)
 "pES" = (
 /obj/structure/particle_accelerator/particle_emitter/center{
@@ -246539,7 +246528,7 @@ ciJ
 cjZ
 cln
 cmG
-cnK
+crm
 coQ
 cpV
 crc
@@ -247041,8 +247030,8 @@ bEm
 bNR
 clo
 cmH
+cnK
 coR
-cnL
 cpW
 crd
 csg
@@ -248546,7 +248535,7 @@ bMT
 bMT
 ckb
 clq
-cmH
+cnL
 cnP
 coU
 cpZ
@@ -249048,7 +249037,7 @@ chJ
 bMT
 ckc
 clr
-cmH
+cnL
 cnN
 coU
 cqa
@@ -249550,7 +249539,7 @@ bMT
 bMT
 bUO
 bXu
-cmH
+cnL
 cnS
 coX
 cqe
@@ -364448,7 +364437,7 @@ aaa
 aaa
 aaa
 aaa
-daa
+aaa
 aaa
 aaa
 aaa

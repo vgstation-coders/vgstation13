@@ -1252,3 +1252,54 @@ var/list/tag_suits_list = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
 	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/suitjacket
+	name = "suit jacket"
+	desc = "A jacket for the trendy office worker."
+	icon_state = "suitjacket"
+	item_state = "suitjacket"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	body_parts_covered = FULL_TORSO|ARMS
+
+	blood_overlay_type = "coat"
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("buttons")
+	dye_base_iconstate_override = "suitjacket"
+
+	var/open = 0
+
+/obj/item/clothing/suit/suitjacket/New()
+	. = ..()
+	update_icon()
+
+/obj/item/clothing/suit/suitjacket/update_icon()
+	if(open)
+		icon_state = "suitjacket_open"
+		dye_base_iconstate_override = "suitjacket_open"
+	else
+		icon_state = "suitjacket"
+		dye_base_iconstate_override = "suitjacket"
+	..()
+
+/obj/item/clothing/suit/suitjacket/verb/toggle()
+	set name = "Toggle Jacket Buttons"
+	set category = "Object"
+	set src in usr
+
+	var/mob/user = usr
+
+	if(user.incapacitated())
+		return 0
+
+	if(open)
+		to_chat(usr, "You button up the jacket.")
+		body_parts_covered |= IGNORE_INV
+	else
+		to_chat(usr, "You unbutton the jacket.")
+		body_parts_covered ^= IGNORE_INV
+
+	open = !open
+	update_icon()
+	user.update_inv_wear_suit()

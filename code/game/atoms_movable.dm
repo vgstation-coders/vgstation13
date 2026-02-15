@@ -524,8 +524,8 @@
 
 	var/turf/from_turf = get_turf(old_loc)
 	var/turf/to_turf = get_turf(destination)
-	if(from_turf && to_turf && (from_turf.z != to_turf.z))
-		INVOKE_EVENT(src, /event/z_transition, "user" = src, "from_z" = from_turf.z, "to_z" = to_turf.z)
+	if(from_turf && to_turf && (from_turf.get_virtual_z() != to_turf.get_virtual_z()))
+		INVOKE_EVENT(src, /event/v_transition, "user" = src, "from_v" = from_turf.get_virtual_z(), "to_v" = to_turf.get_virtual_z())
 
 	INVOKE_EVENT(src, /event/after_move)
 	return 1

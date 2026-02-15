@@ -70,6 +70,8 @@
 
 	/// Cellular automaton output string used during cave generation
 	var/cave_automaton_data
+	/// Size used for cave cellular automaton generation
+	var/cave_generation_size
 
 	/// Temporary list storing features created during population phase (cleared after use)
 	var/list/created_features = list()
@@ -89,15 +91,15 @@
 	var/list/weighted_ruin_list = list()
 	var/spawned_story_ruin = FALSE
 
-/datum/planetGenerator/New()
+/datum/planetGenerator/New(var/generation_size)
 	// Initialize perlin noise seeds with random values
 	height_seed = rand(0, 50000)
 	humidity_seed = rand(0, 50000)
 	heat_seed = rand(0, 50000)
 
-	// Generate cellular automaton data for caves if they are enabled
-	if(mountain_height < 1)
-		cave_automaton_data = rustg_cnoise_generate("[initial_closed_chance]", "[smoothing_iterations]", "[birth_limit]", "[death_limit]", "[SECTOR_SIZE]", "[SECTOR_SIZE]")
+	// Store generation size for deferred cave data generation
+	cave_generation_size = generation_size
+	cave_automaton_data = rustg_cnoise_generate("[initial_closed_chance]", "[smoothing_iterations]", "[birth_limit]", "[death_limit]", "[cave_generation_size]", "[cave_generation_size]")
 
 	// Initialize area instances
 	primary_area = new primary_area_type
@@ -109,8 +111,9 @@
 	vent_count = rand(0,5)
 	return ..()
 
-/datum/planetGenerator/proc/generate_turf(turf/gen_turf)
-	var/area/turf_area = get_area(gen_turf)
+/datum/planetGenerator/proc/generate_turf(turf/gen_turf, x_offset = 0, y_offset = 0)
+	// Use .loc directly instead of get_area() for speed
+	var/area/turf_area = gen_turf.loc
 	if(!(turf_area.flags & CAVES_ALLOWED))
 		return
 
@@ -118,25 +121,26 @@
 
 	// Determine which area to use based on biome type
 	var/area/used_area = istype(turf_biome, /datum/biome/cave) ? cave_area : primary_area
-	turf_biome.generate_turf(gen_turf, used_area, cave_automaton_data)
+	turf_biome.generate_turf(gen_turf, used_area, cave_automaton_data, cave_generation_size, x_offset, y_offset)
 
 /datum/planetGenerator/proc/populate_turf(turf/gen_turf, created_features, created_mobs, planet_loot, planet_faction = null)
 	var/datum/biome/turf_biome = get_biome(gen_turf)
 	turf_biome.populate_turf(gen_turf, created_features, created_mobs, planet_loot, planet_faction)
 
-/datum/planetGenerator/proc/post_process(datum/allocation/allocation)
+/datum/planetGenerator/proc/post_process(datum/virtual_z/virtual_z)
 	if(vent_count <= 0)
 		return
 	var/checked_turfs = 0
+	var/list/turf/turfs = virtual_z.get_turfs()
 	while(vent_count > 0)
-		var/turf/unsimulated/T = pick(allocation.turfs)
+		var/turf/unsimulated/T = pick(turfs)
 		if(!istype(T))
 			continue
 		var/area/A = get_area(T)
 		if(isopensurface(A) || (istype(A, /area/planet/cave) && !iswall(T)))
 			var/datum/vent/newvent = new /datum/vent(T)
 			vent_count -= 1
-			allocation.ptype.vents += newvent
+			virtual_z.planet.vents += newvent
 		checked_turfs++
 		if(checked_turfs > 100) //arbitrary limit to prevent infinite loops
 			break

@@ -337,25 +337,16 @@
 
 	if(istype(selected_port, /obj/docking_port/destination/planet_surface))
 		var/obj/docking_port/destination/planet_surface/surface_port = selected_port
-		var/datum/allocation/alloc = SSmapping.get_allocation(trf = get_turf(surface_port))
-		if(istype(alloc))
-			var/list/shuttle_size = shuttle.get_size()
-			if(shuttle_size)
-				SSmapping.spawn_lz_warnings(alloc, shuttle, shuttle_size, surface_port)
+		var/datum/virtual_z/vz = surface_port.get_virtual_z()
 
-			// Set up transit for planet surface travel
-			var/engine_dir = SOUTH
-			for(var/obj/structure/shuttle/engine/propulsion/engine in shuttle.linked_area)
-				engine_dir = engine.dir
-				break
-			// Reuse existing transit port if valid, otherwise create a new one
-			var/obj/docking_port/destination/transit/transit_port = shuttle.transit_port
-			if(!transit_port)
-				transit_port = generate_transit_area(shuttle, engine_dir, 1)
-				shuttle.set_transit_dock(transit_port)
-			if(transit_port)
-				transit_port.areaname = "transit to [alloc.ptype?.planet_name || "planet surface"]"
-				transit_port.generate_borders = 1
+		// Reuse existing transit port if valid, otherwise create a new one
+		var/obj/docking_port/destination/transit/transit_port = shuttle.transit_port
+		if(!transit_port)
+			transit_port = generate_transit_area(shuttle)
+			shuttle.set_transit_dock(transit_port)
+		if(transit_port)
+			transit_port.areaname = "transit to [vz?.planet?.planet_name]" || "planet surface"
+			transit_port.generate_borders = 1
 
 	//Send a message to the shuttle to move
 	shuttle.travel_to(selected_port, src, user)
@@ -365,7 +356,7 @@
 	updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/proc/travel_to_planet(datum/planet_type/planet, mob/user)
-	if(!(planet?.allocation))
+	if(!(planet?.v))
 		to_chat(user, "<span class='warning'>Planet data unavailable.</span>")
 		return
 
@@ -375,13 +366,13 @@
 		return
 
 	if(istype(shuttle.current_port, /obj/docking_port/destination/planet_surface))
-		var/datum/allocation/current_alloc = SSmapping.get_allocation(trf = get_turf(shuttle.current_port))
-		if(current_alloc == planet.allocation)
+		var/datum/virtual_z/vz = shuttle.current_port.get_virtual_z()
+		if(vz == planet.v)
 			to_chat(user, "<span class='warning'>The shuttle is already on [planet.planet_name].</span>")
 			return
 
 	// Get or create a landing zone for this shuttle
-	var/obj/docking_port/destination/planet_surface/surface_port = SSmapping.get_shuttle_landing_zone(planet.allocation, shuttle, shuttle_size)
+	var/obj/docking_port/destination/planet_surface/surface_port = planet.v.get_shuttle_landing_zone(shuttle, shuttle_size)
 	if(!surface_port)
 		to_chat(user, "<span class='warning'>No suitable landing zone found on [planet.planet_name].</span>")
 		return
@@ -391,16 +382,10 @@
 		var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
 		proc_disk.destination = surface_port
 
-	// Get shuttle engine direction for proper transit orientation using the first found engine's direction
-	var/engine_dir = SOUTH
-	for(var/obj/structure/shuttle/engine/propulsion/engine in shuttle.linked_area)
-		engine_dir = engine.dir
-		break
-
 	// Reuse existing transit port if valid, otherwise create a new one
 	var/obj/docking_port/destination/transit/transit_port = shuttle.transit_port
 	if(!transit_port)
-		transit_port = generate_transit_area(shuttle, engine_dir, 1)
+		transit_port = generate_transit_area(shuttle)
 		if(!transit_port)
 			to_chat(user, "<span class='warning'>Failed to create transit area.</span>")
 			return

@@ -244,13 +244,13 @@ var/list/special_fruits = list()
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_fruit_teleport(atom/hit_atom, mob/M, var/potency)	//Does this need logging?
-	var/datum/zLevel/L = get_z_level(src)
-	if(!L || L.teleJammed)
-		return 0
 	var/picked = pick_rand_tele_turf(hit_atom, potency/15, potency/10) // Does nothing at base potency since inner_radius == 0
 	if(!isturf(picked))
 		return 0
 	var/turf/hit_turf = get_turf(hit_atom)
+	var/datum/virtual_z/vz_hit = hit_turf.get_virtual_z()
+	if(!vz_hit || vz_hit.teleJammed == VZ_TELEPORTATION_FORBIDDEN)
+		return 0
 	var/turf_has_mobs = locate(/mob) in hit_turf
 	if((!istype(M) || prob(50)) && turf_has_mobs) //50% chance to teleport the person who was hit by the fruit
 		spark(hit_atom)

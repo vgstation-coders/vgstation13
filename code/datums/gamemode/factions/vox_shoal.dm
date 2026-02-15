@@ -76,7 +76,7 @@ var/list/potential_bonus_items = list(
 
 /datum/faction/vox_shoal/New()
 	..()
-	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
+	load_dungeon(/datum/map_element/dungeon/vox_shuttle, 0, TRUE)
 	vox_shuttle.initialize() //As the area isn't loaded until the above call, its docking ports aren't populated until we call this
 
 	var/list/all_depts = list(
@@ -315,6 +315,7 @@ var/list/potential_bonus_items = list(
 	icon_state = "coin_gold"
 
 /datum/map_element/dungeon/vox_shuttle
+	name = "Vox Shuttle"
 	file_path = "maps/misc/voxshuttle.dmm"
 	unique = TRUE
 

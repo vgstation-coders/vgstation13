@@ -59,14 +59,15 @@
 /obj/item/device/pcmc/proc/get_location_name()
 	var/turf/device_turf = get_turf(src)
 	var/area/device_area = get_area(src)
+	var/datum/virtual_z/vz = get_virtual_z()
 	if (emped)
 		return "ERROR"
 	else if(!device_turf || !device_area)
 		return "UNKNOWN"
-	else if(device_turf.z > WORLD_X_OFFSET.len)
-		return "[format_text(device_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
+	else if(!vz?.gps_allowed)
+		return "SIGNAL JAMMED"
 	else
-		return "[format_text(device_area.name)] ([device_turf.x-WORLD_X_OFFSET[device_turf.z]], [device_turf.y-WORLD_Y_OFFSET[device_turf.z]], [device_turf.z])"
+		return "[format_text(device_area.name)] ([vx() - get_world_x_offset(vz.id)], [vy() - get_world_y_offset(vz.id)], [vz.id])"
 
 
 /obj/item/device/pcmc/proc/get_crew()
@@ -75,10 +76,6 @@
 	for(var/mob/living/carbon/human/H in mob_list)
 		//Check if they're a map-spawned corpse vs an actual player corpse
 		if(H.iscorpse)
-			continue
-		//No ability to see Centcomm's level
-		var/datum/zLevel/L = get_z_level(H)
-		if(istype(L, /datum/zLevel/centcomm))
 			continue
 
 		var/name
@@ -94,20 +91,24 @@
 		var/see_y = "?"
 		var/see_z = "?"
 
-		// z == 0 means mob is inside object, check is they are wearing a uniform
+		// z == 0 means mob is inside object, check if they are wearing a uniform
 		if(istype(H.w_uniform, /obj/item/clothing/under))
 			var/obj/item/clothing/under/U = H.w_uniform
 
 			if (U.has_sensor && U.sensor_mode)
-				var/turf/pos = H.z == 0 || U.sensor_mode == 3 ? get_turf(H) : null
-
-				// Special case: If the mob is inside an object confirm the z-level on turf level.
-				if (H.z == 0 && !pos)
+				// Always get the turf to check gps_allowed
+				var/turf/entry_turf = get_turf(H)
+				if(!entry_turf)
 					continue
 
-				// Block suit sensors location on z-level 7 (procedurally-generated planets)
-				if(pos && pos.z == map.zProcGen)
-					pos = null
+				// Special case: If the mob is inside an object confirm the z-level on turf level.
+				if (H.z == 0 && entry_turf.z != z)
+					continue
+
+				// Get virtual z-level and check gps_allowed
+				var/datum/virtual_z/entry_vz = entry_turf.get_virtual_z()
+				if(!entry_vz?.gps_allowed)
+					continue
 
 				var/obj/item/weapon/card/id/I = H.wear_id ? H.wear_id.GetID() : null
 
@@ -135,11 +136,12 @@
 					else if (U.sensor_mode >= 2 && H.health > config.health_threshold_crit)
 						life_status = CONSCIOUS
 
-				if(pos)
+				// Only show location data if sensor_mode == 3 and not on a planet
+				if(U.sensor_mode == 3 && !entry_vz?.planet)
 					player_area = format_text(get_area(H).name)
-					see_x = pos.x - WORLD_X_OFFSET[pos.z]
-					see_y = pos.y - WORLD_Y_OFFSET[pos.z]
-					see_z = pos.z
+					see_x = H.vx() - get_world_x_offset(entry_vz.id)
+					see_y = H.vy() - get_world_y_offset(entry_vz.id)
+					see_z = entry_vz.id
 				else
 					see_x = "?"
 					see_y = "?"
@@ -161,7 +163,7 @@
 				data["assignment"] = assignment
 				data["vitals"] = life_status
 				data["damage"] = damage
-				if(U.sensor_mode >= 3)
+				if(U.sensor_mode >= 3 && !entry_vz?.planet)
 					data["location_text"] = "[format_text(player_area)] ([see_x], [see_y], [see_z])"
 				else
 					data["location_text"] = ""

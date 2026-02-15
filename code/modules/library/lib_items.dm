@@ -68,9 +68,14 @@
 		return
 	if(istype(O,/obj/item/weapon/storage/bag/bookbag))
 		var/obj/item/weapon/storage/S = O
-		for(var/obj/item/I in S.contents)
-			if(is_type_in_list(I, valid_types))
-				S.remove_from_storage(I, src)
+		if(!S.contents.len)
+			for(var/obj/item/I in contents)
+				if(S.can_be_inserted(I))
+					S.handle_item_insertion(I)
+		else
+			for(var/obj/item/I in S.contents)
+				if(is_type_in_list(I, valid_types))
+					S.remove_from_storage(I, src)
 		update_icon()
 	else if(is_type_in_list(O, valid_types))
 		user.drop_item(O, src)
@@ -168,6 +173,10 @@
 		var/image/bookoverlay = image(icon,loc,"bookoverlay",layer,dir,x_offset,y_offset)
 		bookoverlay.color = I:spine_color || "#840"
 		overlays += bookoverlay
+		if(I:spine_overlay)
+			var/image/bookoveroverlay = image(icon,loc,"bookoveroverlay",layer,dir,x_offset,y_offset)
+			bookoveroverlay.color = I:spine_overlay
+			overlays += bookoveroverlay
 		x_offset += 4
 		if(x_offset > 20)
 			x_offset = 0
@@ -235,6 +244,7 @@
 	var/book_width = 600
 	var/book_height = 800
 	var/spine_color = "#444"
+	var/spine_overlay //optional, adds another sprite if set to a color
 
 /obj/item/weapon/book/New()
 	..()
@@ -413,6 +423,27 @@
 	else
 		..()
 
+/obj/item/weapon/book/update_icon()
+	switch(icon_state)
+		if("book1")
+			spine_color = "#888"
+		if("book2")
+			spine_color = "#800"
+		if("book3")
+			spine_color = "#880"
+		if("book4")
+			spine_color = "#088"
+		if("book5")
+			spine_color = "#080"
+		if("book6")
+			spine_color = "#808"
+		if("book7")
+			spine_color = "#fff"
+		if("book8")
+			spine_color = "#444"
+		if("book9")
+			spine_color = "#840"
+
 /*
  * Traitor Ooccult Books
  */
@@ -477,25 +508,7 @@
 	else
 		var/picked_num = rand(1,9)
 		icon_state = "book[picked_num]"
-		switch(picked_num)
-			if(1)
-				spine_color = "#888"
-			if(2)
-				spine_color = "#800"
-			if(3)
-				spine_color = "#880"
-			if(4)
-				spine_color = "#088"
-			if(5)
-				spine_color = "#080"
-			if(6)
-				spine_color = "#808"
-			if(7)
-				spine_color = "#fff"
-			if(8)
-				spine_color = "#444"
-			if(9)
-				spine_color = "#840"
+		update_icon()
 	item_state = icon_state
 
 /*

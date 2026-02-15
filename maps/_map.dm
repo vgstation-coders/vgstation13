@@ -25,13 +25,14 @@
 	var/nameShort = ""
 	var/nameLong = ""
 	var/list/datum/zLevel/zLevels = list()
+	var/list/datum/virtual_z/vLevels = list()
+	var/list/datum/virtual_z/systemVLevels = list() // System vLevels (holodeck, transit levels, dungeons, etc) - numbered 101+
 	var/zMainStation = 1
 	var/zCentcomm = 2
 	var/zTCommSat = 3
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
-	var/zProcGen = 7 //temporary until dynamic z levels are implemented
 
 	var/zAdditionalStationZlevel = 0 // 0 because surely nothing will ever go to Z 0, right? why not null? because nullspace
 
@@ -76,15 +77,11 @@
 	var/broken_lights = TRUE //broken lights roundstart
 	var/can_have_robots = TRUE
 
+	var/list/daynight_z_lvls = list() //Z-levels that participate in the day/night cycle
+
 /datum/map/New()
 	. = ..()
-
 	src.loadZLevels(src.zLevels)
-
-	//The spawn below is needed
-	spawn()
-		for(var/T in load_map_elements)
-			load_dungeon(T)
 
 /datum/map/proc/map_ruleset(var/datum/dynamic_ruleset/DR)
 	return TRUE //If false, fails Ready()
@@ -96,15 +93,11 @@
 	return 0
 
 /datum/map/proc/loadZLevels(list/levelPaths)
-
-
 	for(var/i = 1 to levelPaths.len)
 		var/path = levelPaths[i]
 		addZLevel(new path, i)
 
 /datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0, make_base_turf = FALSE, fast_base_turf = FALSE)
-
-
 	if(!istype(level))
 		warning("ERROR: addZLevel received [level ? "a bad level of type [ispath(level) ? "[level]" : "[level.type]" ]" : "no level at all!"]")
 		return
@@ -113,13 +106,124 @@
 	if(z_to_use > zLevels.len)
 		zLevels.len = z_to_use
 	zLevels[z_to_use] = level
-	if(!level.movementJammed)
-		accessable_z_levels += list("[z_to_use]" = level.movementChance)
 	level.z = z_to_use
 	if(!istype(level.base_turf,/turf/space) && make_base_turf)
 		level.reset_base_turf(/turf/space,fast_base_turf)
 
-var/global/list/accessable_z_levels = list()
+/datum/map/proc/linkVLevel(datum/zLevel/level)
+	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL, 1, 1, skip_turf_setup = FALSE)
+	new_vz.id = level.z
+	new_vz.name = level.name
+	if(level.z in daynight_z_lvls)
+		daynight_v_lvls += new_vz
+	new_vz.gps_allowed = level.z != zCentcomm
+	new_vz.teleJammed = level.teleJammed ? VZ_TELEPORTATION_FORBIDDEN : VZ_TELEPORTATION_ALLOWED
+	new_vz.bluespace_jammed = level.bluespace_jammed
+	new_vz.movementJammed = level.movementJammed
+	new_vz.movementChance = level.movementChance
+	new_vz.transitionLoops = level.transitionLoops
+	if(level.transition_crosswrap_z && level.transition_crosswrap_z.len == 4)
+		for(var/datum/zLevel/zl in level.transition_crosswrap_z)
+			new_vz.transition_crosswrap_v += zl.virtual_z_levels[1]
+	new_vz.update_settings()
+	vLevels |= new_vz
+	return new_vz
+
+/datum/map/proc/addVLevel(var/size_x = ALLOCATION_SMALL, var/size_y = null, var/skip_turf_setup = FALSE, var/fill_turf_type = null, var/system = FALSE)
+	if(!size_y)
+		size_y = size_x
+	var/found_x = 0
+	var/found_y = 0
+
+	var/spacing = VIRTUAL_Z_SPACING
+
+	// Check existing dynamic zLevels for available space using 2D bin packing
+	var/datum/zLevel/z_to_use = null
+	for(var/datum/zLevel/check_z in zLevels)
+		if(istype(check_z, /datum/zLevel/dynamic))
+			var/list/placement = SSmapping.try_place_vz(check_z, size_x, size_y, spacing)
+			if(placement)
+				z_to_use = check_z
+				found_x = placement["x"]
+				found_y = placement["y"]
+				break
+
+	// Create a new dynamic zLevel if no suitable one was found
+	if(!z_to_use)
+		z_to_use = new /datum/zLevel/dynamic()
+		// Skip turf initialization during z-level creation to avoid lag
+		skip_turf_init = TRUE
+		world.maxz++
+		skip_turf_init = FALSE
+		z_to_use.z = world.maxz
+		map.zLevels += z_to_use
+		found_x = 1
+		found_y = 1
+
+	if(fill_turf_type)
+		skip_turf_setup = FALSE
+
+	// Create the new virtual_z
+	var/datum/virtual_z/new_vz = new(z_to_use, size_x, size_y, found_x, found_y, skip_turf_setup, system)
+
+	if(fill_turf_type)
+		for(var/turf/T in new_vz.get_turfs())
+			T.ChangeTurf(fill_turf_type)
+
+	return new_vz
+
+/datum/map/proc/addTransitVLevel(datum/shuttle/shuttle, var/system = FALSE)
+	var/buffer = world.view
+	var/list/dims = shuttle.get_size()
+	var/shuttle_width = dims[1]
+	var/shuttle_height = dims[2]
+	var/datum/virtual_z/new_vz = addVLevel(shuttle_width + 2*buffer, shuttle_height + 2*buffer, system = system)
+	new_vz.name = "[shuttle.name] - transit area"
+	new_vz.linked_shuttle = shuttle
+	for(var/turf/T in new_vz.get_turfs(FALSE))
+		var/turf/space/transit/t_turf = T.ChangeTurf(/turf/space/transit,0,0,1,0)
+		t_turf.pushdirection = shuttle.dir
+		t_turf.update_icon()
+		CHECK_TICK
+	return new_vz
+
+/datum/map/proc/addMapElementVLevel(var/datum/map_element/ME, var/rotation = 0, var/fill_turf = null, var/buffer_size = 5, var/system = FALSE)
+	var/ortho = rotation && !(rotation % 180) // Flip width and height if rotated 90 or 270 degrees
+	var/w_to_use = ortho? ME.height : ME.width
+	var/h_to_use = ortho? ME.width : ME.height
+	var/datum/virtual_z/new_vz = src.addVLevel(w_to_use + buffer_size * 2, h_to_use + buffer_size * 2, fill_turf_type = fill_turf, system = system)
+	var/prefix = "Map Element: "
+	if(istype(ME, /datum/map_element/away_mission))
+		prefix = "Away Mission: "
+	new_vz.name = "[prefix][ME.name]"
+	new_vz.level_type = VZ_MAP_ELEMENT
+	new_vz.gps_allowed = FALSE
+	new_vz.teleJammed = VZ_TELEPORTATION_FORBIDDEN
+	new_vz.bluespace_jammed = TRUE
+	new_vz.movementJammed = TRUE
+	new_vz.set_status(FALSE)
+	return new_vz
+
+// Returns the vLevel with the given ID
+/datum/map/proc/getVLevel(var/vlevel_id)
+	if(!vlevel_id)
+		return null
+	if(vlevel_id > SYSTEM_VLEVEL_OFFSET)
+		var/system_index = vlevel_id - SYSTEM_VLEVEL_OFFSET
+		if(system_index >= 1 && system_index <= systemVLevels.len)
+			return systemVLevels[system_index]
+		return null
+	else if(vlevel_id >= 1 && vlevel_id <= vLevels.len)
+		return vLevels[vlevel_id]
+	return null
+
+// Returns all vLevels (both system and regular) as a flat list
+/datum/map/proc/getAllVLevels()
+	return systemVLevels + vLevels
+
+var/global/list/accessable_v_levels = list(
+	"Default" = list()
+)
 
 /datum/map/proc/map_specific_init()
 
@@ -165,6 +269,8 @@ var/global/list/accessable_z_levels = list()
 	var/list/transition_crosswrap_z=null // list(z_north,z_south,z_east,z_west). when you hit the edge, instead of drifting to a random zlevel or looping on the current one, teleports you to the corresponding edge on the z-level in the list.
 	var/planetside=FALSE //if the z-level is supposed to represent being on a planet, surface or underground.
 
+	var/list/virtual_z_levels = list() //list of virtual z-levels that use this z-level as their base
+
 /datum/zLevel/proc/post_mapload()
 	return
 
@@ -179,6 +285,38 @@ var/global/list/accessable_z_levels = list()
 
 /datum/zLevel/proc/blur_holomap(var/area/aera, var/turf/truf)
 	return FALSE
+
+/datum/zLevel/proc/is_box_free(low_x, low_y, high_x, high_y)
+	for(var/datum/virtual_z/vlevel in virtual_z_levels)
+		if(low_x <= vlevel.x_max && vlevel.x_min <= high_x && low_y <= vlevel.y_max && vlevel.y_min <= high_y)
+			return FALSE
+	return TRUE
+
+// Returns the minimum Y position that would have at least 'spacing' turfs of separation from all existing vlevels
+// Returns 0 if no adjustment needed
+/datum/zLevel/proc/get_min_valid_y(low_x, high_x, low_y, spacing)
+	var/min_y = 0
+	for(var/datum/virtual_z/vlevel in virtual_z_levels)
+		// Check if we overlap in X (meaning we need Y separation)
+		if(low_x <= vlevel.x_max && vlevel.x_min <= high_x)
+			// Calculate minimum Y to have 'spacing' turfs of gap from this vlevel
+			var/required_y = vlevel.y_max + spacing + 1
+			if(required_y > low_y && required_y > min_y)
+				min_y = required_y
+	return min_y
+
+// Returns the minimum X position that would have at least 'spacing' turfs of separation from all existing vlevels
+// Returns 0 if no adjustment needed
+/datum/zLevel/proc/get_min_valid_x(low_y, high_y, low_x, spacing)
+	var/min_x = 0
+	for(var/datum/virtual_z/vlevel in virtual_z_levels)
+		// Check if we overlap in Y (meaning we need X separation)
+		if(low_y <= vlevel.y_max && vlevel.y_min <= high_y)
+			// Calculate minimum X to have 'spacing' turfs of gap from this vlevel
+			var/required_x = vlevel.x_max + spacing + 1
+			if(required_x > low_x && required_x > min_x)
+				min_x = required_x
+	return min_x
 
 ////////////////////////////////
 
@@ -284,6 +422,11 @@ var/global/list/accessable_z_levels = list()
 		var/generator = pick(typesof(/obj/structure/radial_gen/movable/snow_nature/snow_forest) + typesof(/obj/structure/radial_gen/movable/snow_nature/snow_grass))
 		new generator(T)
 
+/datum/zLevel/dynamic
+	name = "dynamic zLevel"
+	movementJammed = TRUE
+	transitionLoops = FALSE
+
 // Debug ///////////////////////////////////////////////////////
 
 /*
@@ -307,9 +450,15 @@ var/global/list/accessable_z_levels = list()
 
 //Returns the lowest turf available on a given Z-level, defaults to space.
 
-/proc/get_base_turf(var/z)
-	var/datum/zLevel/L = map.zLevels[z]
-	return L.base_turf
+/proc/get_base_turf(var/input_v_or_z)
+	if(istype(input_v_or_z, /datum/virtual_z))
+		var/datum/virtual_z/vz = input_v_or_z
+		return vz.base_turf
+	else if(isnum(input_v_or_z))
+		var/datum/zLevel/L = map.zLevels[input_v_or_z]
+		return L.base_turf
+	else
+		return /turf/space
 
 //Area that blueprints should erase to
 /proc/get_base_area(var/z)

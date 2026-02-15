@@ -9,6 +9,9 @@
 	immune_system = new (src)
 	oxy_damage_modifier *= (maxHealth / 100) //Scale oxy damage based on the max health of the mob.
 
+	if(locked_to_current_v)
+		locked_to_v = get_virtual_z()
+
 /mob/living/create_reagents(const/max_vol)
 	..(max_vol)
 	addicted_chems = new /datum/reagents(max_vol)
@@ -30,6 +33,8 @@
 	var/datum/gamemode/dynamic/dyn_mode = ticker?.mode
 	if (istype(dyn_mode))
 		dyn_mode.living_players -= src
+
+	unregister_event(/event/v_transition, src, nameof(src::OnMobVChanged()))
 
 	. = ..()
 
@@ -1779,3 +1784,7 @@ Thanks.
 			for(var/role in mind.antag_roles)
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
+
+/// Event handler for v_transition events used to activate or pause v-levels.
+/mob/living/proc/OnMobVChanged(mob/living/user, datum/virtual_z/to_v, datum/virtual_z/from_v)
+	SSmapping?.v_pause_check(src, to_v, from_v)

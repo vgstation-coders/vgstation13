@@ -68875,10 +68875,6 @@
 /obj/docking_port/destination/vox/south_station,
 /turf/space,
 /area)
-"cCP" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cCQ" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
@@ -361896,7 +361892,7 @@ aaa
 aaa
 aaa
 aaa
-cCP
+aaa
 aaa
 aaa
 aaa

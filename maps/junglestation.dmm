@@ -24699,7 +24699,6 @@
 /obj/structure/table/woodentable,
 /obj/item/clothing/accessory/storage/bandolier,
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel,
-/obj/machinery/reagentgrinder,
 /obj/item/stack/sheet/metal{
 	amount = 50
 	},
@@ -31312,15 +31311,12 @@
 /area/surface/jungle/vault)
 "lEP" = (
 /obj/structure/closet/secure_closet/freezer/meat,
-/obj/machinery/alarm{
-	pixel_y = 23
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
-/obj/structure/wc/sink/kitchen{
-	pixel_y = 28;
-	dir = 1
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
 	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -37978,6 +37974,10 @@
 	},
 /obj/machinery/camera{
 	dir = 6
+	},
+/obj/structure/wc/sink/kitchen{
+	pixel_y = 28;
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -47560,7 +47560,7 @@
 /obj/machinery/door_control{
 	id_tag = "kitchen";
 	name = "Kitchen Shutters Control";
-	pixel_y = -30;
+	pixel_y = -22;
 	req_access_txt = "28"
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
@@ -59357,10 +59357,6 @@
 	icon_state = "white"
 	},
 /area/turret_protected/tcomms_control_room)
-"vQO" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "vQV" = (
 /obj/structure/bed/chair/wood/pew/left{
 	dir = 4
@@ -351496,7 +351492,7 @@ ocC
 ocC
 ocC
 ocC
-vQO
+ocC
 ocC
 ocC
 ocC

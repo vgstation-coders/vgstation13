@@ -74,8 +74,8 @@
 		var/borg_location = get_area_name(R)
 		var/turf/A = get_turf(R)
 		if(!isnull(A))
-			var/borg_x = A.x - WORLD_X_OFFSET[A.z]
-			var/borg_y = A.y - WORLD_Y_OFFSET[A.z]
+			var/borg_x = A.x - get_world_x_offset(A.vz())
+			var/borg_y = A.y - get_world_y_offset(A.vz())
 			var/borg_z = A.z
 			borg_location += "([borg_x], [borg_y], [borg_z])"
 		var/list/cyborg_data = list(

@@ -7,9 +7,15 @@ import { Box, Button, Divider, Dropdown, Flex, Section, Table } from 'tgui-core/
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
 
+type ZLevel = {
+  id: number;
+  name: string;
+  hasHolomap: boolean;
+};
+
 type Data = {
   currentZLevel: number;
-  zLevels: number[];
+  zLevels: ZLevel[];
   holomapEnabled: boolean;
   holomapAvailable: boolean;
   autoUpdate: boolean;
@@ -158,9 +164,20 @@ export const CrewMonitor = () => {
       return sortDirection === 'asc' ? comparison : -comparison;
     });
 
-  // Build z-level options with "All" as first option
-  const zLevelOptions = ['All', ...zLevels.map((z) => String(z))];
+  // Build z-level options with "All" as first option, using IDs
+  const zLevelOptions = ['All', ...zLevels.map((z) => String(z.id))];
   const selectedZLevel = currentZLevel === 0 ? 'All' : String(currentZLevel);
+
+  // Check if current z-level has holomap available
+  // "All" mode (0) does not support holomap display - must select a specific level
+  const currentZLevelHasHolomap = currentZLevel === 0
+    ? false
+    : (zLevels.find((z) => z.id === currentZLevel)?.hasHolomap || false);
+
+  const holomapDisabled = !holomapAvailable || !currentZLevelHasHolomap;
+  const holomapTooltip = !holomapAvailable
+    ? 'Holomap not available'
+    : (currentZLevel === 0 ? 'Select a specific level to view holomap' : (!currentZLevelHasHolomap ? 'No holomap data for this level' : undefined));
 
   return (
     <Window title="Crew Monitoring Computer" width={900} height={600}>
@@ -176,27 +193,23 @@ export const CrewMonitor = () => {
               <Button
                 icon={holomapEnabled ? 'map-marked-alt' : 'map'}
                 selected={holomapEnabled}
-                disabled={!holomapAvailable || [0, 3, 6].includes(currentZLevel)}
-                tooltip={
-                  !holomapAvailable
-                    ? 'Holomap not available'
-                    : [0, 3, 6].includes(currentZLevel)
-                      ? 'Holomap not available for this z-level'
-                      : undefined
-                }
+                disabled={holomapDisabled}
+                tooltip={holomapTooltip}
                 onClick={() => act('toggle_holomap')}>
                 {holomapEnabled ? 'Hide Holomap' : 'Show Holomap'}
               </Button>
             </Flex.Item>
             <Flex.Item>
               <Box inline mr={1}>
-                Z-Level:
+                Level:
               </Box>
               <Dropdown
                 width="100px"
                 options={zLevelOptions}
                 selected={selectedZLevel}
-                onSelected={(value) => act('set_zlevel', { zlevel: value === 'All' ? 0 : Number(value) })}
+                onSelected={(value) => {
+                  act('set_zlevel', { zlevel: value === 'All' ? 0 : Number(value) });
+                }}
               />
             </Flex.Item>
           </Flex>

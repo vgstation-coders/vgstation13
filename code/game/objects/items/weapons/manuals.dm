@@ -16,6 +16,7 @@
 	wiki_page = "Guide_to_Construction"
 	id = 1
 	spine_color = "#880"
+	spine_overlay = "#bbb"
 
 /obj/item/weapon/book/manual/engineering_particle_accelerator
 	name = "Particle Accelerator User's Guide"
@@ -23,6 +24,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Particle Accelerator User's Guide"
 	spine_color = "#888"
+	spine_overlay = "#bbb"
 //big pile of shit below.
 	id = 2
 
@@ -69,6 +71,7 @@
 	title = "Hacking"
 	wiki_page = "Hacking"
 	spine_color = "#800"
+	spine_overlay = "#bbb"
 	id = 3
 
 /obj/item/weapon/book/manual/engineering_singularity_safety
@@ -77,6 +80,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Singularity Safety in Special Circumstances"
 	spine_color = "#444"
+	spine_overlay = "#f0f"
 //big pile of shit below.
 	id = 4
 	dat = {"<html>
@@ -128,6 +132,7 @@
 	title = "Growing Dionae and YOU! A book on growing your new best friends!"
 	id = 5
 	spine_color = "#080"
+	spine_overlay = "#bb6"
 	dat = {"<html>
 				<head>
 				<style>
@@ -163,6 +168,7 @@
 	title = "Cloning techniques of the 26th century"
 	wiki_page = "Guide_to_Cloning"
 	spine_color = "#8fb"
+	spine_overlay = "#f40"
 	id = 6
 
 /obj/item/weapon/book/manual/chemistry_manual
@@ -173,6 +179,7 @@
 	title = "Chemistry 101"
 	wiki_page = "Guide_to_Chemistry"
 	spine_color = "#808"
+	spine_overlay = "#bbb"
 	id = 7
 
 /obj/item/weapon/book/manual/ripley_build_and_repair
@@ -259,6 +266,7 @@
 	author = "Dr. L. Ight"
 	title = "Research and Development 101"
 	spine_color = "#8fb"
+	spine_overlay = "#00f"
 	id = 9
 	dat = {"<html>
 				<head>
@@ -311,6 +319,7 @@
 	author = "XISC"
 	title = "Cyborgs for Dummies"
 	spine_color = "#888"
+	spine_overlay = "#bbb"
 	id = 10
 	dat = {"<html>
 				<head>
@@ -518,6 +527,7 @@
 	title = "Space Law"
 	wiki_page = "Space_Law"
 	spine_color = "#b00"
+	spine_overlay = "#fb0"
 	id = 11
 
 /obj/item/weapon/book/manual/security_antag_guide	//if you wanna edit, just copypaste the dat into https://www.w3schools.com/html/tryit.asp?filename=tryhtml_default
@@ -528,6 +538,7 @@
 	author = "Nanotrasen"
 	title = "Enemies of Nanotrasen: A Quick Overview"
 	spine_color = "#b00"
+	spine_overlay = "#b80"
 	id = 12
 	book_width = 692
 
@@ -696,6 +707,7 @@
 	title = "Engineering Textbook"
 	wiki_page = "Guide_to_Engineering"
 	spine_color = "#88f"
+	spine_overlay = "#bb0"
 	id = 13
 
 /obj/item/weapon/book/manual/rust
@@ -705,6 +717,7 @@
 	title = "R-UST User Manual"
 	wiki_page = "R-UST"
 	spine_color = "#88f"
+	spine_overlay = "#bb0"
 	id = 14
 
 /obj/item/weapon/book/manual/chef_recipes
@@ -715,6 +728,7 @@
 	title = "Chef Recipes"
 	wiki_page = "Guide_to_Food_and_Drinks"
 	spine_color = "#fff"
+	spine_overlay = "#c00"
 	id = 15
 
 /obj/item/weapon/book/manual/barman_recipes
@@ -725,6 +739,7 @@
 	title = "Barman Recipes"
 	wiki_page = "Barman_recipes"
 	spine_color = "#088"
+	spine_overlay = "#8bb"
 	id = 16
 
 /obj/item/weapon/book/manual/detective
@@ -735,6 +750,7 @@
 	title = "The Film Noir: proper Procedures for Investigations"
 	wiki_page = "Guide_to_Forensics"
 	spine_color = "#b00"
+	spine_overlay = "#444"
 	id = 17
 
 /obj/item/weapon/book/manual/nuclear
@@ -745,6 +761,7 @@
 	title = "Fission Mailed: Nuclear Sabotage 101"
 	wiki_page = "Nuclear_Agent"
 	spine_color = "#444"
+	spine_overlay = "#8f0"
 	forbidden = 2 // Only available to emagged terminals.
 	id = 18
 
@@ -755,6 +772,7 @@
 	author = "David Alcubierre"
 	wiki_page = "Ship_Building"
 	spine_color = "#ff0"
+	spine_overlay = "#000"
 	id = 19
 
 /obj/item/weapon/book/manual/mailing_guide
@@ -829,6 +847,7 @@
 	book_width = 819
 	book_height = 516
 	spine_color = "#bbb"
+	spine_overlay = "#480"
 	id = 25
 	dat = {"<html>
 				<head>
@@ -1028,6 +1047,7 @@ var/virology_encyclopedia = ""
 	author = "Frederick Chapman Montagnier"
 	title = "Symptom Encyclopedia"
 	spine_color = "#bbb"
+	spine_overlay = "#8b0"
 	dat = ""
 	id = 21
 	book_width = 819
@@ -1138,6 +1158,7 @@ var/virology_encyclopedia = ""
 	author = "The Abominable Snowman"
 	title = "Snow Survival Guide"
 	spine_color = "#fff"
+	spine_overlay = "#8ff"
 	id = 22
 	wiki_page = "Guide_to_Snow_Map"
 	desc = "A guide to surviving on the surface of a snow planet. It even comes with a magnesium strip to ignite for emergency heating when applied to snow!</span>"
@@ -1166,6 +1187,7 @@ var/virology_encyclopedia = ""
 	author = "Ashley Burns"
 	title = "Introduction to Supermatter: Delamination (Not) Imminent"
 	spine_color = "#ff0"
+	spine_overlay = "#000"
 	id = 23
 	wiki_page = "Supermatter"
 
@@ -1176,6 +1198,7 @@ var/virology_encyclopedia = ""
 	author = "Eris Bay"
 	title = "Engine technician's notes"
 	spine_color = "#840"
+	spine_overlay = "#b80"
 	id = 24
 	dat = {"<html>
 			<head>
@@ -1288,6 +1311,7 @@ var/virology_encyclopedia = ""
 	author = "Dale Carnegie"
 	title = "A Primer on How to Win Friends and Influence People"
 	spine_color = "#0ff"
+	spine_overlay = "#80f"
 	id = 25
 
 	dat = {"<html>
@@ -1327,6 +1351,7 @@ var/virology_encyclopedia = ""
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Fission Reactor User's Guide"
 	spine_color = "#88f"
+	spine_overlay = "#bb0"
 	//big pile of shit below.
 	id = 26
 	dat= {"<html>
@@ -1778,4 +1803,5 @@ Different sizes of fuel reservoirs exist, with the starter kit coming with a fai
 	title = "Explorer's Field Manual"
 	wiki_page = "Guide to Planetary Exploration"
 	spine_color = "#840"
+	spine_overlay = "#fb0"
 	id = 26

@@ -389,7 +389,7 @@
 	if(..())
 		return 1
 
-	if(volume >= 1)
+	if ((volume >= 1) || (clean_level >= CLEANLINESS_BLEACH))
 		for (var/obj/effect/decal/cleanable/C in T)
 			qdel(C)
 
@@ -397,8 +397,6 @@
 			T.overlays -= T.advanced_graffiti_overlay
 			T.advanced_graffiti_overlay = null
 			qdel(T.advanced_graffiti)
-
-		T.clean_blood()
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5, 10))

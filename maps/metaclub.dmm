@@ -86339,10 +86339,6 @@
 /obj/docking_port/destination/syndicate/south,
 /turf/space,
 /area)
-"cZv" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cZw" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
@@ -373870,7 +373866,7 @@ aaa
 aaa
 aaa
 aaa
-cZv
+aaa
 aaa
 aaa
 aaa

@@ -71,6 +71,7 @@
 	maxHealth=120
 	armor=list(melee=35,bullet=15,laser=20,energy=0,bomb=10,bio=0,rad=0)
 	petable=TRUE
+	is_pet=TRUE
 
 /mob/living/simple_animal/complex/crocodile/schnapps/get_offspring_cost()
 	return 0 //no infinite schnapps.	

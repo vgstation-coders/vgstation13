@@ -83,7 +83,7 @@
 			var/current_loc_itt
 			for(var/datum/dses_find/D in positive_locations)
 				current_loc_itt ++
-				t += {"<BR>\the [D.name] in [D.location_name] at [D.x-WORLD_X_OFFSET[D.z]] - [D.y-WORLD_Y_OFFSET[D.z]] - [D.z]
+				t += {"<BR>\the [D.name] in [D.location_name] at [D.x-get_world_x_offset(D.z)] - [D.y-get_world_y_offset(D.z)] - [D.z]
 				 : <A href='?src=\ref[src];wipe=[current_loc_itt]'>Wipe log</A>"}
 			t += "<BR><A href='?src=\ref[src];wipe=0'>Wipe All</A>"
 		t += "<BR><B><HR>Modules installed</HR></B>"
@@ -314,4 +314,4 @@
 	name = "DSES ping distance approximation system"
 	module_name = GETDISTANCEMODULE
 	desc = "A small mathematic system that calculates signal decay between transmission and sending, to approximate distance."
-	origin_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 3) 
+	origin_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 3)

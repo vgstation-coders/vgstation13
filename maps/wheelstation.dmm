@@ -73230,10 +73230,6 @@
 /obj/docking_port/destination/vox/southeast_station,
 /turf/space,
 /area)
-"cGk" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cGl" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
@@ -356596,7 +356592,7 @@ aaa
 aaa
 aaa
 aaa
-cGk
+aaa
 aaa
 aaa
 aaa

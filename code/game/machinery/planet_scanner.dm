@@ -237,14 +237,14 @@
 		// Get all beacons on this planet
 		var/list/beacons = list()
 		var/has_active_beacon = FALSE
-		if(planet.allocation)
-			var/datum/allocation/alloc = planet.allocation
+		if(planet.v)
+			var/datum/virtual_z/vz = planet.v
 			for(var/obj/item/device/gps/planetary/gps in GPS_list)
 				var/turf/gps_turf = get_turf(gps)
-				if(!gps_turf || gps_turf.z != map.zProcGen)
+				var/datum/virtual_z/gps_vz = gps_turf.get_virtual_z()
+				if(!gps_vz)
 					continue
-				var/datum/allocation/gps_alloc = SSmapping.get_allocation(trf = gps_turf)
-				if(gps_alloc == alloc && gps.transmitting)
+				if(gps_vz == vz && gps.transmitting)
 					var/list/beacon_info = list()
 					beacon_info["tag"] = gps.gpstag
 					beacon_info["active"] = gps.beacon_active

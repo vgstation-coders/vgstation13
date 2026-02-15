@@ -223,7 +223,7 @@
 	if(bound_soul)
 		QDEL_NULL(revive_action)
 		bound_soul.unregister_event(/event/death, src, nameof(src::revive_soul()))
-		bound_soul.unregister_event(/event/z_transition, src, nameof(src::z_block()))
+		bound_soul.unregister_event(/event/v_transition, src, nameof(src::v_block()))
 		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS))
 			bound_soul.dust()
@@ -315,14 +315,14 @@
 
 /obj/item/phylactery/proc/unbind()
 	if(bound_soul)
-		bound_soul.unregister_event(/event/z_transition, src, nameof(src::z_block()))
+		bound_soul.unregister_event(/event/v_transition, src, nameof(src::v_block()))
 		bound_soul.unregister_event(/event/death, src, nameof(src::revive_soul()))
 	bound_soul = null
 	update_icon()
 
 /obj/item/phylactery/proc/bind(var/mob/to_bind)
 	to_bind.register_event(/event/death, src, nameof(src::revive_soul()))
-	to_bind.register_event(/event/z_transition, src, nameof(src::z_block()))
+	to_bind.register_event(/event/v_transition, src, nameof(src::v_block()))
 	bound_soul = to_bind
 
 /obj/item/phylactery/proc/unbind_mind()
@@ -339,20 +339,20 @@
 	bind(bound_mind.current)
 	update_icon()
 
-/obj/item/phylactery/proc/z_block(mob/user, to_z, from_z)
+/obj/item/phylactery/proc/v_block(mob/user, var/datum/virtual_z/to_v, var/datum/virtual_z/from_v)
 	if(user != bound_soul)
 		unbind()
 		return
 	if(is_holder_of(user, src))
 		return //We're in their pocket, you ash-happy bottle of soul!
 	var/turf/T = get_turf(src)
-	if(to_z != T.z)
+	if(to_v != T.get_virtual_z())
 		to_chat(user, "<span class = 'warning'><b>As you stray further and further away from \the [src], you feel your form unravel!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS)) //Mr. Wizman, I don't feel so good
 			if(user.gcDestroyed)
 				return
 			T = get_turf(src)
-			if(user.z != T.z || is_holder_of(user, src))
+			if(user.get_virtual_z() != T.get_virtual_z() || is_holder_of(user, src))
 				user.dust()
 
 /obj/item/clothing/shoes/blindingspeed
