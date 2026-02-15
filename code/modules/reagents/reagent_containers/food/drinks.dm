@@ -1657,7 +1657,7 @@
 	icon_state = "mug_empty"
 	isGlass = 0
 	amount_per_transfer_from_this = 10
-	volume = 30
+	volume = 50
 	starting_materials = list(MAT_IRON = 500)
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/on_reagent_change()
@@ -1673,100 +1673,73 @@
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup
 	name = "\improper cup"
 	desc = "A cup with the British flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "britcup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/americup
 	name = "\improper cup"
 	desc = "A cup with the American flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "americup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/francecup
 	name = "\improper cup"
 	desc = "A cup with the French flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "francecup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/italycup
 	name = "\improper cup"
 	desc = "A cup with the Italian flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "italycup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/germancup
 	name = "\improper cup"
 	desc = "A cup with the German flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "germancup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/spanishcup
 	name = "\improper cup"
 	desc = "A cup with the Spanish flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "spanishcup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/irelandcup
 	name = "\improper cup"
 	desc = "A cup with the Irish flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "irelandcup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/uruguaycup
 	name = "\improper cup"
 	desc = "A cup with the Uruguayan flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "uruguaycup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/argentinacup
 	name = "\improper cup"
 	desc = "A cup with the Argentine flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "argentinacup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/brasilcup
 	name = "\improper cup"
 	desc = "A cup with the Brasilian flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "brasilcup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/chilecup
 	name = "\improper cup"
 	desc = "A cup with the Chilean flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "chilecup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/uncup
 	name = "\improper cup"
 	desc = "A cup with the United Nations flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "uncup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/eucup
 	name = "\improper cup"
 	desc = "A cup with the European flag emblazoned on it."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "eucup"
-	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/gromitmug
 	name = "\improper Gromit Mug"
 	desc = "Gromit Mug."
-	icon = 'icons/obj/cafe.dmi'
 	icon_state = "gromitmug"
-	volume = 30
+	volume = 100
 
 ///////////////////////////////////////////////Alchohol bottles! -Agouri //////////////////////////
 //Functionally identical to regular drinks. The only difference is that the default bottle size is 100. - Darem
