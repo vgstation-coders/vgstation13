@@ -218,7 +218,7 @@
 	item_state = "mug_empty"
 	isGlass = 0
 	amount_per_transfer_from_this = 10
-	volume = 30
+	volume = 50
 	starting_materials = list(MAT_IRON = 500)
 
 /obj/item/weapon/reagent_containers/food/drinks/mug/on_reagent_change()
