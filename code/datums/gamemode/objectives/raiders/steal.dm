@@ -2,10 +2,10 @@
 /datum/objective/raider/steal
 	name = "\[Vox Raider\] Steal <target>"
 
-	var/atom/movable/target_type = null					// The theft objective.
+	var/atom/movable/target_type = null		// The theft objective.
 	var/other_valid_types = list()			// These types are valid for completion, but won't be checked to ensure they're on the station.
 	var/skip_locate = FALSE					// If TRUE, this will skip the check that ensures that target_type is on station.
-
+	var/strict_type = FALSE 				// If TRUE, this will ignore objects that are subtypes of target_type
 	var/extracted_with_target = FALSE		// This is set when the raiding team extracts with the target item.
 
 
@@ -24,19 +24,42 @@
 	. = ..()
 	if(!.)
 		return FALSE
-	if(!skip_locate || LocateObjective())
+	if(do_not_pick)
+		return FALSE
+	if(!skip_locate)
 		return TRUE
+	var/list/found = LocateObjectiveInWorld()
+	if(found.len)
+		return TRUE
+	else
+		message_admins("VOX RAIDERS: [name] couldn't be picked as its objective wasn't located in the world.")
 	return FALSE
 
 ////////////////////
 
 //////// TODO: FIX THIS RETURNING TRUE FOR SUBTYPES
 
-/datum/objective/raider/steal/proc/LocateObjective()
-	if(!locate(target_type))
-		message_admins("VOX RAIDERS: [name] couldn't be picked as its objective wasn't located in the world.")
-		return FALSE
-	return TRUE
+/datum/objective/raider/steal/proc/LocateObjectiveInWorld()
+	var/found = list()
+	if(ispath(target_type, /mob))
+		for(var/mob/m in world)
+			if(istype(m, target_type))
+				if(strict_type && is_type_in_list(m, subtypesof(target_type)))
+					continue
+				found += m
+	else if(ispath(type, /obj))
+		for(var/obj/o in world)
+			if(istype(o, target_type))
+				if(strict_type && is_type_in_list(o, subtypesof(target_type)))
+					continue
+				found += o
+	else if(ispath(type, /atom))
+		for(var/atom/a in world)
+			if(istype(a, target_type))
+				if(strict_type && is_type_in_list(a, subtypesof(target_type)))
+					continue
+				found += a
+	return found
 
 // This proc is called once the raiders leave to extract, and finalizes the objective.
 /datum/objective/raider/steal/proc/OnExtraction()
@@ -55,7 +78,10 @@
 	var/list/found_objs = list()
 	for(var/atom/movable/AM in vox_shuttle.linked_area)
 		if(istype(AM, target_type) || is_type_in_list(AM,other_valid_types))
+			if(strict_type && is_type_in_list(AM, subtypesof(target_type)))
+				continue
 			found_objs += AM
+
 	if(!found_objs.len)
 		return FALSE
 	return found_objs
@@ -158,9 +184,12 @@
 /datum/objective/raider/steal/supermatter_crystal
 	name = "\[Vox Raider\] Steal Supermatter Crystal."
 	target_type = /obj/machinery/power/supermatter
+	strict_type = TRUE
 
 	risk = RAIDERS_RISK_HIGH
 	threat = RAIDERS_THREAT_MAXIMUM
+
+	exclusive_with = list(/datum/objective/raider/steal/supermatter_shard)
 
 /datum/objective/raider/steal/supermatter_shard
 	name = "\[Vox Raider\] Steal Supermatter Shard."
@@ -171,6 +200,8 @@
 
 	risk = RAIDERS_RISK_MEDIUM
 	threat = RAIDERS_THREAT_MEDIUM
+
+	exclusive_with = list(/datum/objective/raider/steal/supermatter_crystal)
 
 	skip_locate = TRUE			// Can be reasonably sure that there will always be one of these.
 
@@ -277,10 +308,131 @@
 		var/obj/item/device/powersink/P = O
 		required_power -= P.power_drained
 	if(istype(O, /obj/machinery/power/battery))
-		var/obj/machinery/power/batter/B = O
+		var/obj/machinery/power/battery/B = O
 		required_power -= B.charge
 
 	// If we have enough charge, mark the objective as complete.
 	if(required_power > 0)
+		return FALSE
+	return TRUE
+
+/datum/objective/raider/steal/seeds
+	name = "\[Vox Raider\] Steal Seed Samples."
+	target_type = /obj/item/seeds
+
+	required_jobs = list("Botanist")
+	required_job_count = 1
+
+	risk = RAIDERS_RISK_MINIMUM
+	threat = RAIDERS_THREAT_MINIMUM
+
+	skip_locate = TRUE
+
+	var/seeds_left
+	var/list/collected_strains = list()
+
+/datum/objective/raider/steal/seeds/New()
+	..()
+	seeds_left = rand(5,12)
+
+/datum/objective/raider/steal/seeds/format_explanation()
+	return "Steal at least [seeds_left] unique plant seed samples from the station. Samples must be from different non-Vox strains."
+
+/datum/objective/raider/steal/seeds/AdditionalChecks(var/obj/O)
+	var/obj/item/seeds/S = O
+	if(!(S.hydroflags & HYDRO_VOX) && !is_type_in_list(S, collected_strains))
+		collected_strains += S.type
+		seeds_left--
+	if(seeds_left > 0)
+		return FALSE
+	return TRUE
+
+
+/datum/objective/raider/steal/mineral
+	name = "\[Vox Raider\] Steal Minerals."
+	target_type = /obj/item/stack/sheet/mineral
+
+	risk = RAIDERS_RISK_MINIMUM
+	threat = RAIDERS_THREAT_MINIMUM
+
+	do_not_pick = TRUE
+	exclusive_with = list(/datum/objective/raider/steal/mineral)		// Exclusive with itself.
+
+	var/percentage_to_steal = 0.3 		// What percentage of this station's minerals (up to the max stack count) do we need to steal?
+	var/max_stacks = 1
+	var/sheets_to_steal
+
+/datum/objective/raider/steal/mineral/LocateObjectiveInWorld()
+	var/list/found = ..()
+	if(!found.len)
+		return found
+	var/amount_found = 0
+	for(var/obj/item/stack/sheet/mineral/sheet in found)
+		amount_found += sheet.amount
+
+	sheets_to_steal = clamp((floor(amount_found*percentage_to_steal)), 1, 50*max_stacks)
+	return found
+
+/datum/objective/raider/steal/mineral/AdditionalChecks(var/obj/O)
+	var/obj/item/stack/sheet/mineral/S = O
+	sheets_to_steal -= S.amount
+	if(sheets_to_steal > 0)
+		return FALSE
+	return TRUE
+
+/datum/objective/raider/steal/mineral/format_explanation()
+	return "Steal at least [sheets_to_steal] sheets of [initial(target_type.name)]."
+
+/datum/objective/raider/steal/mineral/phazon
+	do_not_pick = FALSE
+	target_type = /obj/item/stack/sheet/mineral/phazon
+	percentage_to_steal = 0.5
+
+/datum/objective/raider/steal/mineral/silver
+	do_not_pick = FALSE
+	target_type = /obj/item/stack/sheet/mineral/silver
+	percentage_to_steal = 0.3
+
+/datum/objective/raider/steal/mineral/gold
+	do_not_pick = FALSE
+	target_type = /obj/item/stack/sheet/mineral/gold
+	percentage_to_steal = 0.4
+
+/datum/objective/raider/steal/mineral/plasma
+	do_not_pick = FALSE
+	target_type = /obj/item/stack/sheet/mineral/plasma
+	percentage_to_steal = 0.7
+	max_stacks = 2
+
+
+/datum/objective/raider/steal/money
+	name = "\[Vox Raider\] Steal Money."
+	target_type = /obj/item/weapon/spacecash
+	skip_locate = TRUE
+
+	risk = RAIDERS_RISK_LOW
+	threat = RAIDERS_THREAT_LOW
+
+	var/cash_left
+
+/datum/objective/raider/steal/money/New()
+	..()
+	var/crew = 0
+	for (var/mob/living/carbon/human/M in player_list)
+		if (M.stat == DEAD)
+			continue // Dead players can't count.
+		var/turf/T = get_turf(M)
+		if(T?.z == map.zMainStation)
+			crew++
+
+	cash_left = rand(150,250)*(crew + rand(-3, 3))
+
+/datum/objective/raider/steal/money/format_explanation()
+	return "Bag at least [cash_left] credits from the station. Funds collected in the offshore Raiding account are counted."
+
+/datum/objective/raider/steal/money/AdditionalChecks(var/obj/O)
+	var/obj/item/weapon/spacecash/S
+	cash_left -= S.amount*S.worth
+	if(cash_left - raider_account.money > 0)
 		return FALSE
 	return TRUE

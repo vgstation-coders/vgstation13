@@ -422,6 +422,8 @@
 #include "code\datums\gamemode\factions\shoal\shoalProps.dm"
 #include "code\datums\gamemode\factions\shoal\gear\cloakdevice.dm"
 #include "code\datums\gamemode\factions\shoal\gear\darts.dm"
+#include "code\datums\gamemode\factions\shoal\gear\ghettopowersink.dm"
+#include "code\datums\gamemode\factions\shoal\gear\moneyscraper.dm"
 #include "code\datums\gamemode\factions\shoal\gear\netgun.dm"
 #include "code\datums\gamemode\factions\shoal\gear\sugarcopier.dm"
 #include "code\datums\gamemode\factions\shoal\gear\takyiklocator.dm"

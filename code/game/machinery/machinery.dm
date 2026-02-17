@@ -814,6 +814,21 @@ a {
 			update_multitool_menu(user)
 			return 1
 
+	if(machine_flags & MONEYSCRAPABLE && istype(O, /obj/item/device/money_scraper))
+		if(!panel_open && machine_flags & SCREWTOGGLE)
+			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be opened first.</span>")
+			return 0
+		if(money_scraper)
+			to_chat(user, "<span class='warning'>There's already something installed!</span>")
+			return 0
+		user.visible_message("<span class='warning'>[user] slides something into [src]'s circuitry...</span>", \
+			"<span class='notice'>You insert [O] into [src]'s wiring.</span>", \
+			drugged_message = "<span class='warning'>[user] imbues a curse upon [src]!</span>", \
+			range = 3)
+		money_scraper = O
+		forceMove(src, O)
+		to_chat()
+		return 1
 
 	if(!anchored && machine_flags & FIXED2WORK)
 		return to_chat(user, "<span class='warning'>\The [src] must be anchored first!</span>")

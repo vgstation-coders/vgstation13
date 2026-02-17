@@ -24,6 +24,10 @@
 	var/list/required_jobs = list()
 	var/required_job_count = 0
 
+	var/do_not_pick = FALSE						// For parent types. If TRUE, will never be picked.
+	var/exclusive_with = list()				// Will never be picked with other objectives in this list.
+
+
 /datum/objective/raider/New()
 	..()
 	explanation_text = format_explanation()
@@ -31,11 +35,17 @@
 /datum/objective/raider/format_explanation()
 	return explanation_text
 
-/datum/objective/raider/proc/CanBePicked()
+/datum/objective/raider/proc/CanBePicked(var/datum/faction/vox_shoal/shoal)
+	if(do_not_pick)
+		return FALSE
 	if(!CheckRequiredJobs())
 		return FALSE
 	if(!AdditionalRequirements())
 		return FALSE
+	if(shoal)
+		for(var/datum/objective/obj in shoal.objective_holder.GetObjectives())
+			if(is_type_in_list(obj, exclusive_with))
+				return FALSE
 	return TRUE
 
 /datum/objective/raider/proc/CheckRequiredJobs()

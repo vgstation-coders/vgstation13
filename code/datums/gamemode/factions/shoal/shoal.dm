@@ -1,6 +1,9 @@
 #define RAIDERS_DEFAULT_RISK 		10
 #define RAIDERS_DEFAULT_THREAT 		10
 
+
+var/datum/money_account/raider_account
+
 /datum/faction/vox_shoal
 	name = "Vox Shoal"
 	desc = "In short supply of money, organs, experts, and rubber duckies."
@@ -24,6 +27,8 @@
 //	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
 	vox_shuttle.initialize() 									//As the area isn't loaded until the above call, its docking ports aren't populated until we call this
 
+	if(!raider_account)
+		raider_account = create_account("Vox Shoal", starting_funds = 0, source_db=null, wage_payout=0, security_pref=1, ratio_pref=0, makehidden=TRUE, isStationAccount=FALSE)
 
 /datum/faction/vox_shoal/proc/OnShuttleMove()
 	if(vox_shuttle)

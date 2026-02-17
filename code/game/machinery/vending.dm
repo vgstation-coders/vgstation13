@@ -78,7 +78,7 @@ var/global/num_vending_terminals = 1
 
 	var/machine_id = "#"
 
-	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | MONEYSCRAPABLE
 
 	light_power_on = 0.5
 	light_range_on = 1.4

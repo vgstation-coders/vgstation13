@@ -226,43 +226,63 @@ var/global/no_pin_for_debit = TRUE
 				card_id.update_virtual_wallet()
 				primary_money_account = card_id.virtual_wallet
 
-		if(primary_money_account && primary_money_account.virtual)
-			// The card contains a virtual wallet, so lets use it.
-			// We'll charge the virtual wallet first.
-			if(primary_money_account.money < transaction_amount)
-				// Not enough funds in the virtual wallet so we'll need the bank account.
-				var/datum/money_account/bank_acc_check = linked_db.get_account(card.associated_account_number)
-				if(!bank_acc_check)
-					to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
-					return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
-				if((bank_acc_check.money + primary_money_account.money) < transaction_amount)
-					to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
-					return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
-				// But if they don't have enough money to begin with, even with a bank account, reject the whole thing.
-				if(primary_money_account.money > 0 && alert(user, "Not enough funds in \the [card]'s virtual wallet. Do you want to charge the virtual wallet's remaining balance of $[num2septext(primary_money_account.money)] before charging the rest to your bank account?", "Card Transaction", "Yes", "No") == "Yes")
-					// But lets check if there's an amount on the virtual card and ask if the user would like to apply that balance.
-					if(user_loc != user.loc)
-						to_chat(user, "[bicon(src)] <span class='warning'>You have to keep still to enter information.</span>")
-						return CARD_CAPTURE_FAILURE_USER_CANCELED
-					secondary_money_account = primary_money_account
-					// Set our secondary payment to be the virtual wallet.
-					transaction_amount_secondary = secondary_money_account.money
-					// Apply the full balance of the virtual wallet.
-					transaction_amount_primary -= transaction_amount_secondary
-					// Adjust the primary.
-					to_chat(user, "[bicon(src)] <span class='notice'>Using remaining virtual wallet on \the [bicon(card)] [card] with a balance of $[num2septext(transaction_amount_secondary)]</span>")
+		// A money scraper is connected and it has an account linked to it.
+		if(money_scraper && money_scraper.linked_account)
+			// First we'll drain everything out of the card's virtual wallet.
+			if(primary_money_account && primary_money_account.virtual & primary_money_account.money)
+				var/bal = primary_money_account.money
+				primary_money_account.charge(bal, money_scraper.linked_account, money_scraper.purpose(), Gibberish(terminal_name,8), terminal_id, Gibberish(dest_name,8), Gibberish(authorized,8))
+				to_chat(user, "[bicon(src)] [money_scraper.drained_wallet(card, bal)]")
+			// Then we'll ask to drain everything out of their bank account.
+			var/datum/money_account/bank_acc = linked_db.get_account(card.associated_account_number)
+			if(bank_acc && bank_acc.money)
+				//If they're stupid enough to hit yes, we keep going
+				if(!money_scraper.AskForAccountAuth(user, card, num2septext(bank_acc.money)))
+					return
+		else
+			if(primary_money_account && primary_money_account.virtual)
+				// The card contains a virtual wallet, so lets use it.
+				// We'll charge the virtual wallet first.
+				if(primary_money_account.money < transaction_amount)
+					// Not enough funds in the virtual wallet so we'll need the bank account.
+					var/datum/money_account/bank_acc_check = linked_db.get_account(card.associated_account_number)
+					if(!bank_acc_check)
+						if(money_scraper)
+							to_chat(user, "[bicon(src)] <span class='warning'>[money_scraper.no_money()]</span>")
+						else
+							to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
+						return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
+					if((bank_acc_check.money + primary_money_account.money) < transaction_amount)
+						if(money_scraper)
+							to_chat(user, "[bicon(src)] <span class='warning'>[money_scraper.no_money()]</span>")
+						else
+							to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
+						return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
+					// But if they don't have enough money to begin with, even with a bank account, reject the whole thing.
+					if(primary_money_account.money > 0 && alert(user, "Not enough funds in \the [card]'s virtual wallet. Do you want to charge the virtual wallet's remaining balance of $[num2septext(primary_money_account.money)] before charging the rest to your bank account?", "Card Transaction", "Yes", "No") == "Yes")
+						// But lets check if there's an amount on the virtual card and ask if the user would like to apply that balance.
+						if(user_loc != user.loc)
+							to_chat(user, "[bicon(src)] <span class='warning'>You have to keep still to enter information.</span>")
+							return CARD_CAPTURE_FAILURE_USER_CANCELED
+						secondary_money_account = primary_money_account
+						// Set our secondary payment to be the virtual wallet.
+						transaction_amount_secondary = secondary_money_account.money
+						// Apply the full balance of the virtual wallet.
+						transaction_amount_primary -= transaction_amount_secondary
+						// Adjust the primary.
+						to_chat(user, "[bicon(src)] <span class='notice'>Using remaining virtual wallet on \the [bicon(card)] [card] with a balance of $[num2septext(transaction_amount_secondary)]</span>")
 
-				primary_money_account = null
-				// We need another source.
+					primary_money_account = null
+					// We need another source.
 
-		if(!primary_money_account)
-			// There wasn't enough funds in the virtual wallet, so lets get the bank account.
-			primary_money_account = linked_db.get_account(card.associated_account_number)
-			// Using the associated account number, get the account.
 			if(!primary_money_account)
-				// Couldn't find a matching account so fail.
-				to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination.</span>")
-				return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
+				// There wasn't enough funds in the virtual wallet, so lets get the bank account.
+				primary_money_account = linked_db.get_account(card.associated_account_number)
+				// Using the associated account number, get the account.
+				if(!primary_money_account)
+					// Couldn't find a matching account so fail.
+					to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination.</span>")
+					return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
 	else
 		// The card was not found, so prompt the user for account information.
 		var/account_number = input(user, "Enter account number", "Card Transaction") as null|num
@@ -284,8 +304,11 @@ var/global/no_pin_for_debit = TRUE
 			return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
 
 	if(primary_money_account.virtual)
-		// If our primary is a virtual wallet we don't have to do any security checks.
-		to_chat(user, "[bicon(src)] <span class='notice'>Using virtual wallet on \the [bicon(card)] [card] to charge $[num2septext(transaction_amount_primary)]</span>")
+		if(money_scraper && money_scraper.linked_account && primary_money_account.money)
+			var/bal = primary_money_account.money
+			primary_money_account.charge(bal, money_scraper.linked_account, money_scraper.purpose(), Gibberish(terminal_name,8), terminal_id, Gibberish(dest_name,8), Gibberish(authorized,8))
+			to_chat(user, "[bicon(src)] [money_scraper.drained_bank(primary_money_account.account_number, bal)]")
+
 	else
 		// Otherwise we'll need to fulfill the security checks.
 		if(card)
@@ -300,12 +323,18 @@ var/global/no_pin_for_debit = TRUE
 			return security_check
 
 	if(!secondary_money_account && PRIMARY_NO_FUNDS && !PRIMARY_SAME_AS_DEST)
-		//If we aren't using a secondary account, make sure we've got enough money in the primary (assuming it's not our destination)
-		to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
+		if(money_scraper)
+			to_chat(user, "[bicon(src)] <span class='warning'>[money_scraper.no_money()]</span>")
+		else
+			//If we aren't using a secondary account, make sure we've got enough money in the primary (assuming it's not our destination)
+			to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
 		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 	if(secondary_money_account && SECONDARY_NO_FUNDS && !SECONDARY_SAME_AS_DEST)
-		//Secondary only exists if partially paying with both. If that's the case, make sure they can cover the remaining balance there.
-		to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
+		if(money_scraper)
+			to_chat(user, "[bicon(src)] <span class='warning'>[money_scraper.no_money()]</span>")
+		else
+			//Secondary only exists if partially paying with both. If that's the case, make sure they can cover the remaining balance there.
+			to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
 		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 
 	if(card && istype(card, /obj/item/weapon/card/debit))
@@ -314,13 +343,18 @@ var/global/no_pin_for_debit = TRUE
 		authorized = debit_card.authorized_name
 
 	if(transaction_amount_secondary)
+		if(money_scraper && money_scraper.linked_account)
+			var/bal = secondary_money_account.money
+			secondary_money_account.charge(secondary_money_account.money, money_scraper.linked_account, money_scraper.purpose(), Gibberish(terminal_name,8), terminal_id, Gibberish(dest_name,8), Gibberish(authorized,8))
+			to_chat(user, "[bicon(src)] [money_scraper.drained_bank(secondary_money_account.account_number, bal)]")
+			return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 		// If we have a vaild secondary amount, charge the secondary payment method.
-		if(!secondary_money_account.charge(transaction_amount_secondary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized))
+		else if(!secondary_money_account.charge(transaction_amount_secondary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized))
 			return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 			// imagine fixing the bug where they dispensed money out of their PDA before buying an expensive item with a secure bank account
 
 	if(!primary_money_account.charge(transaction_amount_primary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized))
-		if(transaction_amount_secondary)
+		if(transaction_amount_secondary && !(money_scraper && money_scraper.linked_account))
 			to_chat(user, "[bicon(src)] <span class='warning'>Refunding virtual wallet.</span>")
 			secondary_money_account.charge(-1 * transaction_amount_secondary, dest, "Refund due to lack of funds on secondary payment", terminal_name, terminal_id, dest_name, authorized)
 		// If they can't afford it, refund their initial virtual wallet

@@ -67,7 +67,7 @@
 	var/turf/T = get_turf(src)
 	if(get_turf(jumper) == T)
 		T = get_step(src,dir)
-	if(istype(T, /turf/unsimulated/floor/abyss) && !forced)
+	if(istype(T, /turf/unsimulated/abyss) && !forced)
 		if(!do_after(jumper, src, 3 SECONDS))
 			return
 	hurdler = jumper
