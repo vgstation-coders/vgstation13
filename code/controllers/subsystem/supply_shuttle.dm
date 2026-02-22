@@ -477,17 +477,19 @@ var/list/static/universal_cargo_stamps = list(/obj/item/weapon/stamp/hop,/obj/it
 				)
 				var/datum/cargo_forwarding/NCF = new cratetype
 				if(prob(25))
-					var/faketype = pick(
-						750;/datum/cargo_forwarding/from_supplypack,
-						150;/datum/cargo_forwarding/from_centcomm_order,
-						40;/datum/cargo_forwarding/janicart,
-						40;/datum/cargo_forwarding/gokart,
-						10;/datum/cargo_forwarding/random_mob,
-						10;/datum/cargo_forwarding/vendotron_stack,
-					)
-					var/datum/cargo_forwarding/FCF = new faketype
-					NCF.name = FCF.name
-					qdel(FCF)
+					do
+						var/faketype = pick(
+							750;/datum/cargo_forwarding/from_supplypack,
+							150;/datum/cargo_forwarding/from_centcomm_order,
+							40;/datum/cargo_forwarding/janicart,
+							40;/datum/cargo_forwarding/gokart,
+							10;/datum/cargo_forwarding/random_mob,
+							10;/datum/cargo_forwarding/vendotron_stack,
+						)
+						var/datum/cargo_forwarding/FCF = new faketype
+						NCF.name = FCF.name
+						qdel(FCF)
+					while(NCF.real_name == NCF.name)
 				new_forwards.Add(NCF)
 
 		for(var/datum/cargo_forwarding/CF in new_forwards)
