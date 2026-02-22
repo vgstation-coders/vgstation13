@@ -15,6 +15,7 @@
 		/obj/item/trash/scrap                 = list(IRON,10),
 		/obj/item/stack/sheet/metal           = list(IRON,U_PER_SHEET),
 		/obj/item/stack/sheet/glass           = list(SILICA,U_PER_SHEET),
+		/obj/item/stack/sheet/wood            = list(SAWDUST,U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA,U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/uranium = list(URANIUM,U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/clown   = list(BANANA,U_PER_SHEET),

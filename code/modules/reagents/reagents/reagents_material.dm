@@ -166,6 +166,38 @@
 	if(volume >= U_PER_SHEET)
 		drop_stack(/obj/item/stack/ore/glass,T,floor(volume/U_PER_SHEET))
 
+/datum/reagent/sawdust
+	name = "Sawdust"
+	id = SAWDUST
+	description = "Tiny chips of wood particles."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#FFBB88"
+	density = 2.2
+	specheatcap = 0.7
+
+/datum/reagent/pulp
+	name = "Pulp"
+	id = PULP
+	description = "Finely juiced organic matter made of cellulose."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFBB88"
+	density = 2.2
+	specheatcap = 0.7
+
+/datum/reagent/pykrete
+	name = "Pykrete"
+	id = PYKRETE
+	description = "A tough, sturdy mixture of ice and fine wood particles."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#FFBB88"
+	density = 2.2
+	specheatcap = 0.7
+
+/datum/reagent/pykrete/super
+	name = "Super pykrete"
+	id = SUPERPYKRETE
+	description = "A tougher, sturdier mixture of ice and wood pulp."
+
 /datum/reagent/silicate
 	name = "Silicate"
 	id = SILICATE

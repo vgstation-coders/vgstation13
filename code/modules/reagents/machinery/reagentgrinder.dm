@@ -14,6 +14,10 @@ var/global/list/juice_items = list (
 	/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet = list(PLUMPHJUICE = 0),
+	/obj/item/stack/sheet/wood = list(PULP = U_PER_SHEET),
+	/obj/item/weapon/paper = list(PULP = 1),
+	/obj/item/weapon/newspaper = list(PULP = 2),
+	/obj/item/weapon/book = list(PULP = 5),
 	)
 
 /obj/machinery/reagentgrinder
@@ -37,6 +41,7 @@ var/global/list/juice_items = list (
 		//Sheets
 		/obj/item/stack/sheet/metal           = list(IRON = U_PER_SHEET),
 		/obj/item/stack/sheet/glass           = list(SILICA = U_PER_SHEET),
+		/obj/item/stack/sheet/wood            = list(SAWDUST = U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/uranium = list(URANIUM = U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/clown   = list(BANANA = U_PER_SHEET),

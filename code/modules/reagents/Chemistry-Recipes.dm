@@ -1119,6 +1119,16 @@
 /datum/chemical_reaction/solidification/plastic/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/plastic
 
+/datum/chemical_reaction/solidification/wood
+	name = "Solid Wood"
+	id = "solidwood"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PULP = U_PER_SHEET)
+	result_amount = 1 //amount of sheets created per the above reagents
+
+/datum/chemical_reaction/solidification/wood/product_to_spawn()
+	return /obj/item/stack/sheet/wood
+
 /datum/chemical_reaction/condensedcapsaicin
 	name = "Condensed Capsaicin"
 	id = CONDENSEDCAPSAICIN
@@ -2681,6 +2691,22 @@
 		var/mob/M = holder.my_atom
 		M.bodytemperature -= rand(10,20)
 
+/datum/chemical_reaction/pykrete
+	name = "Pykrete"
+	id = PYKRETE
+	result = PYKRETE
+	required_reagents = list(ICE = 7, SAWDUST = 1)
+	result_amount = 8
+	required_temp = T0C-15
+
+/datum/chemical_reaction/superpykrete
+	name = "Super pykrete"
+	id = SUPERPYKRETE
+	result = SUPERPYKRETE
+	required_reagents = list(ICE = 7, PULP = 1)
+	result_amount = 8
+	required_temp = T0C-20
+
 /datum/chemical_reaction/ice2
 	name = "Frozen water"
 	id = ICE
@@ -2699,6 +2725,16 @@
 	required_temp = T20C+5
 	result_amount = 1
 	quiet = 1
+
+/datum/chemical_reaction/ice_to_water/pykrete
+	name = "Melted pykrete"
+	id = "meltedpykrete"
+	required_reagents = list(PYKRETE = 1) // only the regular kind melts
+
+/datum/chemical_reaction/ice_to_water/pykrete/on_reaction(datum/reagents/holder, created_volume)
+	. = ..()
+	holder.add_reagent(SAWDUST,created_volume/8) // swap it out
+	holder.remove_reagent(WATER,created_volume/8)
 
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 
