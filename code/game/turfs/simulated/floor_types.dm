@@ -451,6 +451,10 @@
 /turf/simulated/floor/carpet/cultify()
 	return
 
+/turf/simulated/floor/carpet/broken/New()
+	. = ..()
+	break_tile()
+
 /turf/simulated/floor/arcade
 	name = "Arcade Carpet"
 	icon_state = "arcade"
@@ -466,14 +470,6 @@
 	name = "Shag Carpet"
 	icon_state = "shagcarpet-dark"
 	has_siding = FALSE
-
-/turf/simulated/floor/carpet/shag/update_icon()
-	if(broken || burnt)
-		icon_state = "carpet-broken"
-	else if(is_plating())
-		icon_state = icon_plating
-	else
-		icon_state = initial(icon_state)
 
 /turf/simulated/floor/carpet/shag/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/carpet/shag(null)

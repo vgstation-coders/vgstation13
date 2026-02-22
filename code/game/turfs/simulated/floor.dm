@@ -351,7 +351,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		src.icon_state = "wood-broken"
 		broken = 1
 	else if((is_carpet_floor()) || (is_arcade_floor()))
-		src.icon_state = "carpet-broken"
+		overlays -= broken_overlay
+		broken_overlay = image(icon,src,"carpet-broken")
+		overlays += broken_overlay
 		broken = 1
 	else if(is_grass_floor())
 		src.icon_state = "sand[rand(1,3)]"

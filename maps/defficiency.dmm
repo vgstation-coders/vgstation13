@@ -1609,9 +1609,7 @@
 /turf/simulated/floor/carpet,
 /area/derelictparts/stripclub)
 "adt" = (
-/turf/simulated/floor/carpet{
-	icon_state = "carpet-broken"
-	},
+/turf/simulated/floor/carpet/broken,
 /area/derelictparts/stripclub)
 "adu" = (
 /obj/effect/decal/warning_stripes{
@@ -36919,9 +36917,7 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/carpet{
-	icon_state = "carpet-broken"
-	},
+/turf/simulated/floor/carpet/broken,
 /area/derelictparts/library)
 "bqj" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
@@ -36964,9 +36960,7 @@
 	icon_state = "1-4"
 	},
 /obj/item/weapon/cell,
-/turf/simulated/floor/carpet{
-	icon_state = "carpet-broken"
-	},
+/turf/simulated/floor/carpet/broken,
 /area/derelictparts/library)
 "bqo" = (
 /obj/structure/disposalpipe/segment,
@@ -37614,9 +37608,7 @@
 /turf/simulated/floor/carpet,
 /area/derelictparts/library)
 "brt" = (
-/turf/simulated/floor/carpet{
-	icon_state = "carpet-broken"
-	},
+/turf/simulated/floor/carpet/broken,
 /area/derelictparts/library)
 "bru" = (
 /obj/machinery/door/airlock/glass{

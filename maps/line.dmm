@@ -9679,9 +9679,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/sleep)
 "cET" = (
-/turf/simulated/floor/carpet{
-	icon_state = "carpet-broken"
-	},
+/turf/simulated/floor/carpet/broken,
 /area/derelictparts/library)
 "cEY" = (
 /obj/item/weapon/newspaper,
@@ -51011,9 +51009,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet-broken"
-	},
+/turf/simulated/floor/carpet/broken,
 /area/derelictparts/library)
 "hcl" = (
 /obj/structure/grille,
