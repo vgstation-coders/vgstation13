@@ -45,6 +45,7 @@
 /obj/structure/fence/canSmoothWith()
 	var/static/list/smoothables = list(
 		/obj/structure/fence,
+		/turf/simulated/wall,
 	)
 	return smoothables
 
@@ -52,11 +53,11 @@
 	. = ..()
 	if(junction & NORTH)
 		dir = WEST
-	if(junction & SOUTH)
+	else if(junction & SOUTH)
 		dir = WEST
-	if(junction & EAST)
+	else if(junction & EAST)
 		dir = NORTH
-	if(junction & WEST)
+	else if(junction & WEST)
 		dir = NORTH
 
 /obj/structure/fence/end
