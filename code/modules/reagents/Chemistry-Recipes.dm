@@ -2695,7 +2695,7 @@
 	name = "Pykrete"
 	id = PYKRETE
 	result = PYKRETE
-	required_reagents = list(ICE = 7, SAWDUST = 1)
+	required_reagents = list(ICE = 6, SAWDUST = 1)
 	result_amount = 8
 	required_temp = T0C-15
 
@@ -2703,7 +2703,7 @@
 	name = "Super pykrete"
 	id = SUPERPYKRETE
 	result = SUPERPYKRETE
-	required_reagents = list(ICE = 7, PULP = 1)
+	required_reagents = list(ICE = 6, PULP = 1)
 	result_amount = 8
 	required_temp = T0C-20
 
