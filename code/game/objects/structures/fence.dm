@@ -45,6 +45,7 @@
 /obj/structure/fence/canSmoothWith()
 	var/static/list/smoothables = list(
 		/obj/structure/fence,
+		/obj/structure/grille,
 		/turf/simulated/wall,
 	)
 	return smoothables
