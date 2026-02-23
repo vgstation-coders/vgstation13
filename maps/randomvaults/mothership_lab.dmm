@@ -1246,9 +1246,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/asteroid)
 "sK" = (
-/obj/structure/fence/door/secure{
-	dir = 4
-	},
+/obj/structure/fence/door/secure,
 /turf/unsimulated/floor/asteroid/plating,
 /area/vault/mothership_lab/asteroid)
 "sN" = (

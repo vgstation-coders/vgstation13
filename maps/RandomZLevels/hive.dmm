@@ -1806,9 +1806,7 @@
 /turf/unsimulated/floor/evil,
 /area/awaymission/hive/secure)
 "gY" = (
-/obj/structure/fence/door/secure{
-	dir = 4
-	},
+/obj/structure/fence/door/secure,
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "gZ" = (

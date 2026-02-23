@@ -66,9 +66,7 @@
 	},
 /area/medical/genetics)
 "abO" = (
-/obj/structure/fence/door{
-	dir = 4
-	},
+/obj/structure/fence/door,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/roid_prep)
 "acg" = (
@@ -2623,9 +2621,7 @@
 	},
 /area/centcom/control)
 "bar" = (
-/obj/structure/fence/door{
-	dir = 4
-	},
+/obj/structure/fence/door,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "baB" = (
@@ -14471,9 +14467,7 @@
 	},
 /area/medical/cmo)
 "fnn" = (
-/obj/structure/fence/door{
-	dir = 4
-	},
+/obj/structure/fence/door,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/dump)
 "fns" = (
@@ -14547,7 +14541,6 @@
 	})
 "fpx" = (
 /obj/structure/fence/door{
-	dir = 4;
 	req_access_txt = "35";
 	name = "Garden"
 	},
@@ -15516,7 +15509,6 @@
 	tag = "icon-loading_area (EAST)"
 	},
 /obj/structure/fence/door{
-	dir = 4;
 	req_access_txt = "2"
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
@@ -31404,9 +31396,7 @@
 /turf/simulated/floor/engine/n20,
 /area/surface/jungle/zoned/atmos_outside)
 "lHP" = (
-/obj/structure/fence/door{
-	dir = 4
-	},
+/obj/structure/fence/door,
 /obj/machinery/door/poddoor/shutters/preopen{
 	name = "Entrance Lockdown";
 	id_tag = "entergatelockext"
@@ -39672,9 +39662,7 @@
 	},
 /area/surface/jungle/underground/zoned/ghetto_morgue)
 "oJc" = (
-/obj/structure/fence/door{
-	dir = 4
-	},
+/obj/structure/fence/door,
 /obj/machinery/door/poddoor/shutters/preopen{
 	name = "Entrance Lockdown";
 	id_tag = "entergatelock"
@@ -50375,9 +50363,7 @@
 /turf/simulated/floor/wood,
 /area/surface/jungle/vault)
 "sGm" = (
-/obj/structure/fence/door{
-	dir = 4
-	},
+/obj/structure/fence/door,
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/vault)
 "sGy" = (
@@ -53066,9 +53052,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "tCN" = (
-/obj/structure/fence/door{
-	req_access_txt = "10;24"
-	},
+/obj/structure/fence/door,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/atmos_outside)
 "tCU" = (

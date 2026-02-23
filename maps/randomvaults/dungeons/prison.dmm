@@ -684,9 +684,7 @@
 	},
 /area/vault/prison)
 "bV" = (
-/obj/structure/fence/door/secure{
-	dir = 4
-	},
+/obj/structure/fence/door/secure,
 /obj/effect/decal/cleanable/blood/drip,
 /turf/simulated/floor{
 	icon_state = "pattern_red"

@@ -84135,9 +84135,7 @@
 	},
 /area/derelict/medical)
 "lHF" = (
-/obj/structure/fence/door{
-	dir = 4
-	},
+/obj/structure/fence/door,
 /turf/unsimulated/floor/snow/permafrost,
 /area/surface/snow)
 "lHN" = (

@@ -50,8 +50,11 @@
 	return smoothables
 
 /obj/structure/fence/relativewall()
-	icon_state = "straight"
 	. = ..()
+	update_junction()
+
+/obj/structure/fence/proc/update_junction()
+	icon_state = initial(icon_state)
 	switch(junction)
 		if(NORTH|SOUTH)
 			dir = WEST
@@ -270,6 +273,12 @@
 	..()
 	set_up_access()
 	update_door_status()
+
+/obj/structure/fence/door/update_junction()
+	if((junction & NORTH) || (junction & SOUTH))
+		dir = WEST
+	if((junction & EAST) || (junction & WEST))
+		dir = NORTH
 
 /obj/structure/fence/door/opened
 	icon_state = "door_opened"
