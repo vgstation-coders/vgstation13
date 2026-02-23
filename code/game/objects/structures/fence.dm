@@ -61,12 +61,8 @@
 			dir = WEST
 		if(EAST|WEST,NORTH|EAST|WEST,SOUTH|EAST|WEST)
 			dir = NORTH
-		if(NORTH,SOUTH,EAST,WEST)
-			icon_state = "end"
-			cuttable = FALSE
-			dir = junction
-		if(NORTH|EAST,SOUTH|EAST,NORTH|WEST,SOUTH|WEST)
-			icon_state = "corner"
+		if(NORTH,SOUTH,EAST,WEST,NORTH|EAST,SOUTH|EAST,NORTH|WEST,SOUTH|WEST)
+			icon_state = "endcorner"
 			cuttable = FALSE
 			dir = junction
 	update_cut_status()
