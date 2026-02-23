@@ -2696,7 +2696,7 @@
 	id = PYKRETE
 	result = PYKRETE
 	required_reagents = list(ICE = 6, SAWDUST = 1)
-	result_amount = 8
+	result_amount = 7
 	required_temp = T0C-15
 
 /datum/chemical_reaction/superpykrete
@@ -2704,7 +2704,7 @@
 	id = SUPERPYKRETE
 	result = SUPERPYKRETE
 	required_reagents = list(ICE = 6, PULP = 1)
-	result_amount = 8
+	result_amount = 7
 	required_temp = T0C-20
 
 /datum/chemical_reaction/ice2
@@ -2733,8 +2733,8 @@
 
 /datum/chemical_reaction/ice_to_water/pykrete/on_reaction(datum/reagents/holder, created_volume)
 	. = ..()
-	holder.add_reagent(SAWDUST,created_volume/8) // swap it out
-	holder.remove_reagent(WATER,created_volume/8)
+	holder.add_reagent(SAWDUST,created_volume/7) // swap it out
+	holder.remove_reagent(WATER,created_volume/7)
 
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 
