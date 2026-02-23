@@ -67407,7 +67407,7 @@
 /turf/simulated/floor/plating,
 /area/storage/tech)
 "mjS" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/simulated/floor/asteroid/air,
 /area/security/perma)
 "mjT" = (
@@ -108698,9 +108698,7 @@
 	},
 /area/tdome/tdomeadmin)
 "yhu" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "yhx" = (

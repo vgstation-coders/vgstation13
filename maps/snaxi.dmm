@@ -1118,15 +1118,11 @@
 /turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "ade" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "adf" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "adg" = (
@@ -1222,7 +1218,7 @@
 /turf/simulated/wall/mineral/wood,
 /area/surface/junkyard)
 "adB" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "adC" = (
@@ -1398,9 +1394,7 @@
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/junkyard)
 "aee" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "aef" = (
@@ -24185,9 +24179,7 @@
 /turf/simulated/floor/engine/concrete,
 /area/surface/snow)
 "bdP" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "bdQ" = (
@@ -24311,7 +24303,7 @@
 /turf/simulated/wall,
 /area/supply/lobby)
 "bdZ" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
@@ -29175,9 +29167,7 @@
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "bpy" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "bpz" = (
@@ -29245,9 +29235,7 @@
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "bpF" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
@@ -29647,9 +29635,7 @@
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "brb" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable,
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
@@ -29977,9 +29963,7 @@
 	name = "\improper Central Medical Hallway"
 	})
 "bsk" = (
-/obj/structure/fence/end{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "bsl" = (
@@ -30324,9 +30308,7 @@
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "bsZ" = (
-/obj/structure/fence/end{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "bta" = (
@@ -60274,9 +60256,7 @@
 	},
 /area/centcom/holding)
 "czH" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "czI" = (
@@ -75936,7 +75916,7 @@
 /turf/simulated/floor/engine/concrete,
 /area/medical/paramedics)
 "dTR" = (
-/obj/structure/fence/end,
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "dUv" = (
@@ -79090,9 +79070,7 @@
 	},
 /area/hallway/primary/port)
 "iwM" = (
-/obj/structure/fence/end{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	dir = 10;
 	icon_state = "warning";
@@ -82826,7 +82804,7 @@
 	},
 /area/security/checkpoint/supply)
 "noa" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "noj" = (
@@ -84208,7 +84186,7 @@
 	},
 /area/security/interrogation)
 "pnd" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "pnI" = (
@@ -85933,9 +85911,7 @@
 	name = "Brig Dormitories"
 	})
 "rLW" = (
-/obj/structure/fence/end{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "rMY" = (
@@ -86548,9 +86524,7 @@
 	name = "\improper Central Medical Hallway"
 	})
 "svV" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /obj/structure/cable,
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
@@ -87642,7 +87616,7 @@
 /turf/simulated/floor,
 /area/science/chargebay)
 "ubg" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
@@ -89707,7 +89681,7 @@
 /turf/simulated/floor/server,
 /area/tcomms/chamber)
 "xAd" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
@@ -90343,9 +90317,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;

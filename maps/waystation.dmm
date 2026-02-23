@@ -59925,9 +59925,7 @@
 	},
 /area/crew_quarters/toilet)
 "ovH" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "ovQ" = (

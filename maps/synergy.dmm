@@ -47925,13 +47925,11 @@
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "bHO" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "bHP" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "bHQ" = (
@@ -83096,9 +83094,7 @@
 	},
 /area/centcom/holding)
 "dcg" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dch" = (

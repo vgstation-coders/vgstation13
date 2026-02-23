@@ -173,9 +173,7 @@
 /turf/simulated/floor/engine,
 /area/prison/solitary)
 "v" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -193,9 +191,7 @@
 	},
 /area/prison/solitary)
 "y" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -228,9 +224,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "E" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -242,7 +236,7 @@
 	},
 /area/prison/solitary)
 "G" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},

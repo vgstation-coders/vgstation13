@@ -55431,9 +55431,7 @@
 	},
 /area/centcom/holding)
 "bYc" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "bYd" = (

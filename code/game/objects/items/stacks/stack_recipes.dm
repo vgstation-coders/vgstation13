@@ -467,8 +467,6 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("Fireaxe cabinet",				/obj/item/mounted/frame/fireaxe_cabinet_frame,		2,	time = 50									),
 	null,
 	new/datum/stack_recipe("fence", /obj/structure/fence, 2, time = 50, one_per_turf = 1),
-	new/datum/stack_recipe("fence end", /obj/structure/fence/end, 2, time = 50, one_per_turf = 1),
-	new/datum/stack_recipe("fence corner", /obj/structure/fence/corner, 2, time = 50, one_per_turf = 1),
 	new/datum/stack_recipe("fence post", /obj/structure/fence/post, 2, time = 50, one_per_turf = 1),
 	null,
 	new/datum/stack_recipe("fence door", /obj/structure/fence/door, 2, time = 50, one_per_turf = 1),

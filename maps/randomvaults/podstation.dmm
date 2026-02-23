@@ -1026,9 +1026,7 @@
 	},
 /area/vault/podstation/exterior)
 "rx" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -1586,9 +1584,7 @@
 	},
 /area/vault/podstation/exterior)
 "HJ" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -2117,9 +2113,7 @@
 	},
 /area/vault/podstation/exterior)
 "VJ" = (
-/obj/structure/fence/corner{
-	dir = 10
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -2147,9 +2141,7 @@
 	},
 /area/vault/podstation/exterior)
 "VW" = (
-/obj/structure/fence/corner{
-	dir = 5
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},

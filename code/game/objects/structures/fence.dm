@@ -50,44 +50,34 @@
 	return smoothables
 
 /obj/structure/fence/relativewall()
+	icon_state = "straight"
 	. = ..()
-	if(junction & NORTH)
-		dir = WEST
-	else if(junction & SOUTH)
-		dir = WEST
-	else if(junction & EAST)
-		dir = NORTH
-	else if(junction & WEST)
-		dir = NORTH
-
-/obj/structure/fence/end
-	icon_state = "end"
-	cuttable = FALSE
-
-/obj/structure/fence/end/canSmoothWith()
-	return
-
-/obj/structure/fence/corner
-	icon_state = "corner"
-	cuttable = FALSE
-
-/obj/structure/fence/corner/canSmoothWith()
-	return
+	switch(junction)
+		if(NORTH|SOUTH)
+			dir = WEST
+		if(EAST|WEST)
+			dir = NORTH
+		if(NORTH,SOUTH,EAST,WEST)
+			icon_state = "end"
+			cuttable = FALSE
+			dir = junction
+		if(NORTH|EAST,SOUTH|EAST,NORTH|WEST,SOUTH|WEST)
+			icon_state = "corner"
+			cuttable = FALSE
+			dir = junction
+	update_cut_status()
 
 /obj/structure/fence/post
 	icon_state = "post"
 	cuttable = FALSE
 
 /obj/structure/fence/cut/small
-	icon_state = "straight_cut1"
 	hole_size = SMALL_HOLE
 
 /obj/structure/fence/cut/medium
-	icon_state = "straight_cut2"
 	hole_size = MEDIUM_HOLE
 
 /obj/structure/fence/cut/large
-	icon_state = "straight_cut3"
 	hole_size = LARGE_HOLE
 
 /obj/structure/fence/attackby(obj/item/W, mob/user)
@@ -133,7 +123,7 @@
 						dismantle(user)
 						return
 
-				update_cut_status(user)
+				update_cut_status()
 		return
 
 	if(hole_size && istype(W,sheet_type))
@@ -141,7 +131,7 @@
 		if(S.use(1))
 			to_chat(user, "<span class='info'>You repair \the [src] with a rod.</span>")
 			hole_size = NO_HOLE
-			update_cut_status(user)
+			update_cut_status()
 			return
 
 	if(hole_size >= SMALL_HOLE)
@@ -197,7 +187,7 @@
 
 	return 1
 
-/obj/structure/fence/proc/update_cut_status(mob/user)
+/obj/structure/fence/proc/update_cut_status()
 	if(!cuttable)
 		return
 

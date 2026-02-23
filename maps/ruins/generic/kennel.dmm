@@ -28,10 +28,8 @@
 	},
 /area/vault/kennel)
 "m" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/obj/structure/fence/corner,
+/obj/structure/fence,
+/obj/structure/fence,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "o" = (

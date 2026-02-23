@@ -1,8 +1,6 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "b" = (
@@ -137,7 +135,7 @@
 	},
 /area/exposed_ruin)
 "L" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "M" = (

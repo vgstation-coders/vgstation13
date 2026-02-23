@@ -52797,9 +52797,7 @@
 	},
 /area/centcom/holding)
 "dvn" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dvo" = (
@@ -76116,9 +76114,7 @@
 	},
 /area/storage/nuke_storage)
 "iRb" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/permafrost,
 /area/surface/snow)
 "iRg" = (
@@ -86837,7 +86833,7 @@
 /turf/simulated/floor,
 /area/derelict/solar_control)
 "mIw" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/permafrost,
 /area/surface/snow)
 "mIN" = (

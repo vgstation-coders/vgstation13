@@ -3,7 +3,7 @@
 /turf/template_noop,
 /area/template_noop)
 "b" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "k" = (
@@ -14,9 +14,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "p" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "r" = (
@@ -40,9 +38,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "C" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "E" = (
@@ -85,9 +81,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "W" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 

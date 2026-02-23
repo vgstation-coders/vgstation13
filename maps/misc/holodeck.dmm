@@ -2295,9 +2295,7 @@
 	},
 /area/holodeck/source_library)
 "gP" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	icon_state = "grass1";
 	name = "Holodeck Projector Floor"
@@ -2331,7 +2329,7 @@
 	},
 /area/holodeck/source_medieval)
 "gU" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	icon_state = "grass1";
 	name = "Holodeck Projector Floor"
@@ -3264,7 +3262,7 @@
 	},
 /area/holodeck/source_library)
 "jB" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	icon_state = "asteroid"
 	},

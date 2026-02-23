@@ -848,9 +848,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
 "abY" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1";
 	tag = "icon-platingdmg1"
@@ -886,7 +884,7 @@
 	},
 /area/lamprey/detoxins)
 "acf" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1";
 	tag = ""
@@ -132209,9 +132207,7 @@
 	},
 /area/centcom/holding)
 "fAi" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "fAj" = (

@@ -19,9 +19,7 @@
 /turf/unsimulated/floor/snow/permafrost,
 /area/exposed_ruin)
 "q" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "y" = (
@@ -65,7 +63,7 @@
 /turf/unsimulated/floor/snow/permafrost,
 /area/exposed_ruin)
 "R" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "S" = (

@@ -53,7 +53,7 @@
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "s" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "t" = (
@@ -120,9 +120,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "H" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "I" = (

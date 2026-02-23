@@ -978,9 +978,7 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "rx" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "rF" = (
@@ -1486,9 +1484,7 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "HJ" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "HV" = (
@@ -1991,9 +1987,7 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "VJ" = (
-/obj/structure/fence/corner{
-	dir = 10
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "VP" = (
@@ -2013,9 +2007,7 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "VW" = (
-/obj/structure/fence/corner{
-	dir = 5
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "VX" = (
