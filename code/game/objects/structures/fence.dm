@@ -19,7 +19,8 @@
 	anchored = 1
 	pass_flags_self = PASSGRILLE
 	icon = 'icons/obj/structures/fence.dmi'
-	icon_state = "straight"
+	icon_state = "straight0"
+	var/uncut_state = "straight"
 	sheet_type = /obj/item/stack/sheet/plasteel
 	sheet_amt = 2
 
@@ -55,15 +56,14 @@
 	update_junction()
 
 /obj/structure/fence/proc/update_junction()
-	icon_state = initial(icon_state)
+	uncut_state = "straight"
 	switch(junction)
 		if(NORTH|SOUTH,NORTH|SOUTH|EAST,NORTH|SOUTH|WEST)
 			dir = WEST
 		if(EAST|WEST,NORTH|EAST|WEST,SOUTH|EAST|WEST)
 			dir = NORTH
 		if(NORTH,SOUTH,EAST,WEST,NORTH|EAST,SOUTH|EAST,NORTH|WEST,SOUTH|WEST)
-			icon_state = "endcorner"
-			cuttable = FALSE
+			uncut_state = "endcorner"
 			dir = junction
 	update_cut_status()
 
@@ -193,16 +193,9 @@
 
 	density = 1
 
-	switch(hole_size)
-		if(NO_HOLE)
-			icon_state = initial(icon_state)
-		if(SMALL_HOLE)
-			icon_state = "straight_cut1"
-		if(MEDIUM_HOLE)
-			icon_state = "straight_cut2"
-		if(LARGE_HOLE)
-			icon_state = "straight_cut3"
-			setDensity(FALSE)
+	icon_state = "[uncut_state][hole_size]"
+	if(hole_size == LARGE_HOLE)
+		setDensity(FALSE)
 
 	cut_time = hole_size < LARGE_HOLE ? initial(cut_time) : 0
 
