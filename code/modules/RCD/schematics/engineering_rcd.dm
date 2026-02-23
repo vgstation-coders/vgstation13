@@ -360,7 +360,6 @@
 			return 0
 		playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
 		var/obj/structure/fence/F = new(T)
-		F.dir = user.dir
 		return truecost
 	return 0
 
