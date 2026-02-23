@@ -188,10 +188,11 @@
 	return 1
 
 /obj/structure/fence/proc/update_cut_status()
-	if(!cuttable)
-		return
+	setDensity(TRUE)
 
-	density = 1
+	if(!cuttable)
+		icon_state = "[uncut_state]0"
+		return
 
 	icon_state = "[uncut_state][hole_size]"
 	if(hole_size == LARGE_HOLE)
