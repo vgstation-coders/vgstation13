@@ -57,9 +57,9 @@
 /obj/structure/fence/proc/update_junction()
 	icon_state = initial(icon_state)
 	switch(junction)
-		if(NORTH|SOUTH)
+		if(NORTH|SOUTH,NORTH|SOUTH|EAST,NORTH|SOUTH|WEST)
 			dir = WEST
-		if(EAST|WEST)
+		if(EAST|WEST,NORTH|EAST|WEST,SOUTH|EAST|WEST)
 			dir = NORTH
 		if(NORTH,SOUTH,EAST,WEST)
 			icon_state = "end"
