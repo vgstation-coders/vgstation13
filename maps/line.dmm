@@ -22018,9 +22018,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dzI" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dzJ" = (

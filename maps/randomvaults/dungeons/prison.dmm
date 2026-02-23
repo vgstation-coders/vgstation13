@@ -15,15 +15,11 @@
 /turf/unsimulated/floor/mars/border,
 /area)
 "ae" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/mars/border,
 /area)
 "af" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /turf/unsimulated/floor/mars/border,
 /area)
 "ag" = (
@@ -594,9 +590,7 @@
 /turf/simulated/wall/r_wall,
 /area/vault/prison)
 "bG" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
@@ -608,9 +602,7 @@
 	},
 /area/vault/prison)
 "bI" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
@@ -879,15 +871,11 @@
 /turf/unsimulated/floor/mars,
 /area)
 "cs" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/mars,
 /area)
 "ct" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /turf/unsimulated/floor/mars,
 /area)
 "cu" = (

@@ -55437,9 +55437,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "bYd" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "bYe" = (

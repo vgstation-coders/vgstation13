@@ -40,9 +40,7 @@
 	},
 /area/vault/kennel)
 "p" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "s" = (

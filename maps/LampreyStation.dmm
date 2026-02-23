@@ -857,9 +857,7 @@
 	},
 /area/lamprey/detoxins)
 "abZ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/lamprey/detoxins)
 "aca" = (
@@ -882,9 +880,7 @@
 /turf/simulated/floor/wood,
 /area/lamprey/detoxins)
 "ace" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/wood{
 	icon_state = "wood-broken6"
 	},
@@ -88937,9 +88933,7 @@
 	},
 /area/lamprey/enginerooms)
 "dLi" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/lamprey/thebelt)
 "dLj" = (
@@ -105528,9 +105522,7 @@
 /turf/simulated/floor/plating/airless,
 /area/lamprey/moon)
 "euH" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating/airless,
 /area/lamprey/moon)
 "euI" = (
@@ -132223,9 +132215,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "fAj" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "fAk" = (
@@ -155251,9 +155241,7 @@
 	},
 /area)
 "gxl" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/space,
 /area)
 "gxm" = (
@@ -191277,9 +191265,7 @@
 	},
 /area/lamprey/excavationtunnels)
 "hOv" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},

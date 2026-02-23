@@ -614,9 +614,7 @@
 	},
 /area/holodeck/source_dining)
 "bN" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/holofloor/grass,
 /area/holodeck/source_zoo)
 "bO" = (
@@ -1382,9 +1380,7 @@
 	},
 /area/holodeck/source_chess)
 "ee" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/fence,
 /turf/simulated/floor/holofloor/grass,
 /area/holodeck/source_zoo)
@@ -2308,18 +2304,14 @@
 	},
 /area/holodeck/source_medieval)
 "gQ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	dir = 4;
 	icon_state = "asteroid2"
 	},
 /area/holodeck/source_medieval)
 "gR" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	icon_state = "grass1";
 	name = "Holodeck Projector Floor"
@@ -2333,9 +2325,7 @@
 	},
 /area/holodeck/source_medieval)
 "gT" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	icon_state = "asteroid"
 	},
@@ -2358,6 +2348,7 @@
 /area/holodeck/source_catnip)
 "gW" = (
 /obj/structure/fence{
+	dir = 4;
 	density = 0;
 	desc = "It's a pole.";
 	name = "pole"
@@ -2591,6 +2582,7 @@
 /area/holodeck/source_catnip)
 "hE" = (
 /obj/structure/fence{
+	dir = 4;
 	density = 0;
 	desc = "It's a pole.";
 	name = "pole"
@@ -2612,6 +2604,7 @@
 "hH" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/fence{
+	dir = 4;
 	density = 0;
 	desc = "It's a pole.";
 	name = "pole"
@@ -2624,6 +2617,7 @@
 /area/holodeck/source_catnip)
 "hI" = (
 /obj/structure/fence{
+	dir = 4;
 	density = 0;
 	desc = "It's a pole.";
 	name = "pole"
@@ -3116,6 +3110,7 @@
 /area/holodeck/source_medieval)
 "ji" = (
 /obj/structure/fence{
+	dir = 4;
 	density = 0;
 	desc = "It's a pole.";
 	name = "pole"

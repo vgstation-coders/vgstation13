@@ -967,9 +967,7 @@
 /area/vault/podstation/interior)
 "rh" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "ru" = (
@@ -2011,9 +2009,7 @@
 /turf/simulated/floor,
 /area/vault/podstation/interior)
 "VU" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "VW" = (

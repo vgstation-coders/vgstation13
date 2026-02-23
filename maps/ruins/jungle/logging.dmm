@@ -18,9 +18,7 @@
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "f" = (
-/obj/structure/fence/cut/medium{
-	dir = 4
-	},
+/obj/structure/fence/cut/medium,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "h" = (
@@ -59,18 +57,14 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "t" = (
-/obj/structure/fence/cut/large{
-	dir = 4
-	},
+/obj/structure/fence/cut/large,
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "w" = (
 /turf/template_noop,
 /area/exposed_ruin)
 "x" = (
-/obj/structure/fence/cut/large{
-	dir = 4
-	},
+/obj/structure/fence/cut/large,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "z" = (
@@ -136,9 +130,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "J" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "K" = (
@@ -177,9 +169,7 @@
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
 "T" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "U" = (

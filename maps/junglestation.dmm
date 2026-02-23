@@ -2024,9 +2024,7 @@
 	},
 /area/shuttle/nuclearops)
 "aOm" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/vault)
 "aOp" = (
@@ -2394,15 +2392,11 @@
 	},
 /area/surface/jungle/zoned/atmos_outside)
 "aUs" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/landing)
 "aUE" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/directions/science{
 	pixel_y = -5;
 	dir = 1
@@ -2780,9 +2774,7 @@
 /turf/simulated/floor,
 /area/security/perma)
 "bcJ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable/yellow{
 	d2 = 4;
 	icon_state = "0-4"
@@ -5830,9 +5822,7 @@
 	},
 /area/vox_trading_post/atmos)
 "cfw" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	name = "DANGER: PREDATORY ANIMALS";
 	icon_state = "fauna2"
@@ -5851,9 +5841,7 @@
 /turf/simulated/floor/server,
 /area/science/server)
 "cge" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/atmos_outside)
 "cgo" = (
@@ -8512,9 +8500,7 @@
 /turf/simulated/floor,
 /area/mine/production)
 "ddk" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/camera{
 	dir = 8
 	},
@@ -10804,9 +10790,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/aifenced)
 "dTU" = (
@@ -11816,9 +11800,7 @@
 /turf/unsimulated/floor/planetary/cave/jungle,
 /area/surface/jungle/underground)
 "elI" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable/yellow{
 	d2 = 4;
 	icon_state = "0-4"
@@ -15781,9 +15763,7 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/crew_quarters/bar)
 "fMu" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/fenced)
 "fMy" = (
@@ -17616,9 +17596,7 @@
 /area/surface/jungle/fenced)
 "guA" = (
 /obj/structure/disposalpipe/segment,
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle)
 "guB" = (
@@ -22324,9 +22302,7 @@
 /turf/simulated/floor,
 /area/mine/production)
 "ikh" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable/yellow{
 	d2 = 4;
 	icon_state = "0-4"
@@ -23250,9 +23226,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/hop)
 "iDR" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/directions/trader{
 	dir = 8
 	},
@@ -23940,9 +23914,7 @@
 /turf/unsimulated/floor/snow,
 /area/centcom/holding)
 "iRw" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle)
 "iRG" = (
@@ -24306,9 +24278,7 @@
 	},
 /area/centcom/control)
 "iXF" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced/trader/solars)
 "iXH" = (
@@ -24783,9 +24753,7 @@
 /turf/simulated/floor,
 /area/surface/jungle/zoned/storage_shed)
 "jfo" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	name = "DANGER: BOMB RANGE";
 	desc = "A warning sign which reads 'DANGER: BOMB RANGE'."
@@ -25861,9 +25829,7 @@
 /turf/unsimulated/wall,
 /area/centcom/test)
 "jBj" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/bombrange)
 "jBk" = (
@@ -27052,9 +27018,7 @@
 	},
 /area/security/evidence)
 "jWG" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/sme_outside)
 "jWK" = (
@@ -31628,9 +31592,7 @@
 	name = "Toxins"
 	})
 "lJA" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/zoned/cargogarage)
 "lKb" = (
@@ -32353,9 +32315,7 @@
 /turf/simulated/floor/vox,
 /area/vox_trading_post/docking)
 "lVj" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/dump)
 "lVw" = (
@@ -32736,9 +32696,7 @@
 	},
 /area/turret_protected/ai)
 "mdi" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/reactor_outside)
 "mdo" = (
@@ -32762,9 +32720,7 @@
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
 "mdB" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/mining)
 "mdI" = (
@@ -34275,18 +34231,14 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/hallway)
 "mGY" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/camera{
 	dir = 4
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "mHk" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/camera{
 	dir = 5
 	},
@@ -34947,9 +34899,7 @@
 /turf/simulated/floor,
 /area/research_outpost/dorm1)
 "mUo" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "mUv" = (
@@ -35033,9 +34983,7 @@
 /turf/simulated/floor/vox,
 /area/vox_trading_post/eva)
 "mVO" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/dorms_patio)
 "mWh" = (
@@ -35731,9 +35679,7 @@
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/zoned/atmos_outside)
 "niw" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable/yellow{
 	icon_state = "1-8"
 	},
@@ -35936,9 +35882,7 @@
 	},
 /area/medical/sleeper)
 "nmb" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/camera{
 	pixel_y = -3
 	},
@@ -36032,9 +35976,7 @@
 /turf/simulated/floor/greengrid,
 /area/turret_protected/ai_upload)
 "noe" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/camera{
 	dir = 4
 	},
@@ -36674,9 +36616,7 @@
 /turf/simulated/floor/engine,
 /area/science/xenobiology/specimen_4)
 "nCZ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced/trader)
 "nDb" = (
@@ -37550,9 +37490,7 @@
 /turf/simulated/wall,
 /area/vox_trading_post/vault)
 "nTf" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/botanty_outside)
 "nTn" = (
@@ -40834,9 +40772,7 @@
 	},
 /area/centcom/living)
 "pfZ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/camera{
 	pixel_y = -3;
 	dir = 4
@@ -42979,9 +42915,7 @@
 	},
 /area/security/main)
 "pWq" = (
-/obj/structure/fence/cut/large{
-	dir = 4
-	},
+/obj/structure/fence/cut/large,
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/vault)
 "pWt" = (
@@ -44757,9 +44691,7 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/dorms_patio)
 "qCg" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'CAUTION: ELECTRIC FENCE'";
 	icon_state = "shock";
@@ -48543,9 +48475,7 @@
 /turf/simulated/floor/server/bluegrid,
 /area/science/server)
 "rTY" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable/yellow{
 	d1 = 2;
 	d2 = 8;
@@ -51949,9 +51879,7 @@
 /turf/simulated/floor,
 /area/supply/sorting)
 "thr" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/solars)
 "tht" = (
@@ -52604,9 +52532,7 @@
 /turf/unsimulated/wall,
 /area/start)
 "ttk" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/directions/engineering{
 	dir = 4
 	},
@@ -53056,9 +52982,7 @@
 	},
 /area/centcom/test)
 "tAL" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/pox{
 	icon_state = "voxcross";
 	name = "Vox Crossing - Beware";
@@ -53722,9 +53646,7 @@
 	},
 /area/centcom/test)
 "tMC" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
 	name = "KEEP CLEAR: DOCKING AREA";
@@ -54817,9 +54739,7 @@
 	},
 /area/supply/storage)
 "ukS" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/directions/evac,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
@@ -56645,9 +56565,7 @@
 /turf/simulated/floor,
 /area/mine/production)
 "uWi" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
 	name = "KEEP CLEAR: DOCKING AREA";
@@ -57988,9 +57906,7 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "vsB" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
 	name = "KEEP CLEAR: DOCKING AREA";
@@ -59295,9 +59211,7 @@
 	},
 /area/engineering/atmos)
 "vPP" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable/yellow{
 	d2 = 4;
 	icon_state = "0-4"
@@ -60356,9 +60270,7 @@
 /turf/unsimulated/floor/planetary/grass/jungle,
 /area/surface/jungle/fenced)
 "wlz" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/vault)
 "wlC" = (
@@ -61246,9 +61158,7 @@
 	},
 /area/crew_quarters/kitchen)
 "wCK" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
 	name = "KEEP CLEAR: DOCKING AREA";
@@ -63215,9 +63125,7 @@
 	},
 /area/surface/jungle/underground/zoned/ghetto_morgue)
 "xnZ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/centcom/holding)
 "xob" = (
@@ -65178,9 +65086,7 @@
 	},
 /area/vox_trading_post/kitchen)
 "xYO" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
 	name = "KEEP CLEAR: DOCKING AREA";

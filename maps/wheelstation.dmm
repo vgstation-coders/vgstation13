@@ -84832,9 +84832,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "diG" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "diH" = (

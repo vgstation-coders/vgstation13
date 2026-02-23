@@ -152,9 +152,7 @@
 /turf/unsimulated/floor/asteroid/air,
 /area/exposed_ruin)
 "Q" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "S" = (

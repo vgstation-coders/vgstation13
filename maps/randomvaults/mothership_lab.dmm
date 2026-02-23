@@ -276,9 +276,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "fs" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/vault/mothership_lab/asteroid)
 "fx" = (

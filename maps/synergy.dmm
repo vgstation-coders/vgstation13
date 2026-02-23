@@ -47916,15 +47916,11 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "bHM" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "bHN" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
 /area/hallway/primary/port)
@@ -47939,9 +47935,7 @@
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "bHQ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor,
 /area/hallway/primary/port)
@@ -83108,9 +83102,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dch" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dci" = (

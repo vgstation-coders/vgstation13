@@ -52731,9 +52731,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "cgv" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "cgw" = (

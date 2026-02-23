@@ -98271,9 +98271,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dDB" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dDC" = (
@@ -110275,9 +110273,7 @@
 /turf/simulated/wall/r_wall,
 /area/mine/maintenance)
 "eub" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "euc" = (

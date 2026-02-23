@@ -74,15 +74,11 @@
 /turf/unsimulated/floor/snow/permafrost,
 /area/exposed_ruin)
 "W" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/permafrost,
 /area/exposed_ruin)
 "Y" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'CONSTRUCTION'.";
 	name = "CONSTRUCTION"
@@ -90,9 +86,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "Z" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 

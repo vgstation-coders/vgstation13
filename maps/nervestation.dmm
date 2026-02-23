@@ -25204,9 +25204,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dzI" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dzJ" = (
@@ -93135,9 +93133,7 @@
 	},
 /area/research_outpost/hallway)
 "uyR" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "uze" = (

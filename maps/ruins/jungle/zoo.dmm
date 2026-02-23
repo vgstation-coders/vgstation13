@@ -83,9 +83,7 @@
 /turf/unsimulated/floor/planetary/grass/jungle,
 /area/exposed_ruin)
 "z" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "A" = (

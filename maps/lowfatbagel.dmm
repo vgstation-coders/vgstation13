@@ -3260,9 +3260,7 @@
 	},
 /area/hallway/primary/starboard)
 "ahg" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "ahh" = (
@@ -6753,9 +6751,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "apM" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "apN" = (
@@ -39193,9 +39189,7 @@
 /turf/space,
 /area)
 "ejR" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/asteroid/air,
 /area/security/perma)
 "ejT" = (
@@ -50549,9 +50543,7 @@
 /turf/simulated/floor/plating,
 /area/crew_quarters/heads/ce)
 "hsx" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "hsC" = (
@@ -51192,9 +51184,7 @@
 	},
 /area/medical/paramedics)
 "hBF" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "hBJ" = (
@@ -69922,9 +69912,7 @@
 /turf/simulated/floor/wood,
 /area/medical/break_room)
 "mTe" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/starboard)
 "mTm" = (
@@ -72638,9 +72626,7 @@
 	},
 /area/prison/solitary)
 "nHd" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/research_outpost/maintstore2)
 "nHi" = (
@@ -77486,9 +77472,7 @@
 	},
 /area/mine/production)
 "pcR" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
 "pdd" = (
@@ -92176,9 +92160,7 @@
 	},
 /area/mine/explored)
 "tqA" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "trI" = (
@@ -100481,9 +100463,7 @@
 	},
 /area/centcom/test)
 "vQp" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "vQt" = (

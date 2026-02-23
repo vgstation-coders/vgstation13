@@ -49671,9 +49671,7 @@
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomms_control_room)
 "bQa" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "bQb" = (
@@ -108663,9 +108661,7 @@
 /turf/simulated/floor/plating,
 /area/prison/cell_block/A)
 "dSt" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/camera{
 	dir = 4;
 	name = "Prison Mining Airlocks";
@@ -108678,9 +108674,7 @@
 /turf/simulated/floor/plating,
 /area/prison/cell_block/A)
 "dSv" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "dSw" = (
@@ -125221,9 +125215,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "eCw" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "eCx" = (

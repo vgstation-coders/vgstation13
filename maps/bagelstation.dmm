@@ -24567,9 +24567,7 @@
 /turf/simulated/floor/plating,
 /area/bridge)
 "aYm" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aYn" = (
@@ -69273,9 +69271,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "cBg" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "cBh" = (
@@ -84195,9 +84191,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "djD" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "djE" = (
@@ -89627,9 +89621,7 @@
 	},
 /area/prison/hallway/fore)
 "dVq" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "dVr" = (
@@ -100306,9 +100298,7 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/maintstore2)
 "epZ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/research_outpost/maintstore2)
 "eqa" = (

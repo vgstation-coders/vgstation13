@@ -53,9 +53,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "I" = (
-/obj/structure/fence/cut/large{
-	dir = 4
-	},
+/obj/structure/fence/cut/large,
 /turf/template_noop,
 /area/exposed_ruin)
 "K" = (
@@ -63,9 +61,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "M" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "Q" = (

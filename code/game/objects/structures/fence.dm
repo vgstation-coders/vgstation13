@@ -42,13 +42,36 @@
 		if(LARGE_HOLE)
 			user.show_message("\The [src] has been completely cut through.", MESSAGE_SEE)
 
+/obj/structure/fence/canSmoothWith()
+	var/static/list/smoothables = list(
+		/obj/structure/fence,
+	)
+	return smoothables
+
+/obj/structure/fence/relativewall()
+	. = ..()
+	if(junction & NORTH)
+		dir = WEST
+	if(junction & SOUTH)
+		dir = WEST
+	if(junction & EAST)
+		dir = NORTH
+	if(junction & WEST)
+		dir = NORTH
+
 /obj/structure/fence/end
 	icon_state = "end"
 	cuttable = FALSE
 
+/obj/structure/fence/end/canSmoothWith()
+	return
+
 /obj/structure/fence/corner
 	icon_state = "corner"
 	cuttable = FALSE
+
+/obj/structure/fence/corner/canSmoothWith()
+	return
 
 /obj/structure/fence/post
 	icon_state = "post"

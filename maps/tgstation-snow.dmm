@@ -537,9 +537,7 @@
 /turf/unsimulated/floor/snow/asphalt/mine,
 /area/mine/explored)
 "abx" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt/mine,
 /area/mine/explored)
 "abz" = (
@@ -746,9 +744,7 @@
 /turf/simulated/floor/plating,
 /area/prison/cell_block/A)
 "abQ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/camera{
 	dir = 4;
 	name = "Prison Mining Airlocks";
@@ -28439,9 +28435,7 @@
 	},
 /area/medical/paramedics)
 "bNx" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
@@ -33045,9 +33039,7 @@
 	},
 /area/vox_trading_post/eva)
 "cdF" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
@@ -52811,9 +52803,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dvo" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dvp" = (
@@ -62398,9 +62388,7 @@
 	},
 /area/security/lobby)
 "evt" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "evy" = (
@@ -81888,9 +81876,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
@@ -85952,9 +85938,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/engineering/engineering_auxiliary)
 "msL" = (
@@ -86349,9 +86333,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
@@ -88899,9 +88881,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "nvC" = (
@@ -105147,9 +105127,7 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "tlS" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/permafrost,
 /area/surface/snow)
 "tmb" = (
@@ -111633,9 +111611,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/hallway/secondary/entry)
 "vDW" = (

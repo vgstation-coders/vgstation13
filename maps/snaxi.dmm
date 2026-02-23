@@ -1114,9 +1114,7 @@
 /turf/simulated/floor/wood,
 /area/surface/forest/deer)
 "add" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "ade" = (
@@ -1392,9 +1390,7 @@
 /turf/simulated/wall/mineral/wood,
 /area/surface/outer/ne)
 "aed" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
@@ -1838,9 +1834,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/forest/north)
 "afT" = (
@@ -16229,9 +16223,7 @@
 	},
 /area/medical/patient_room1)
 "aKK" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
@@ -17621,9 +17613,7 @@
 /turf/simulated/floor/plating,
 /area/surface/forest/north)
 "aOj" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "aOl" = (
@@ -19501,9 +19491,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "aSC" = (
@@ -29391,9 +29379,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "bqm" = (
@@ -29403,9 +29389,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "bqn" = (
@@ -29605,9 +29589,7 @@
 	name = "Engineering Coat Storage"
 	})
 "bqU" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable,
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
@@ -30628,9 +30610,7 @@
 	name = "\improper Engineering Storage"
 	})
 "btO" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
@@ -34288,9 +34268,7 @@
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/forest/south)
 "bAN" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2"
@@ -60302,9 +60280,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "czI" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "czJ" = (
@@ -80500,9 +80476,7 @@
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "kkb" = (
@@ -84566,9 +84540,7 @@
 /turf/simulated/wall/mineral/wood/log,
 /area/surface/forest/south)
 "pBN" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
@@ -84838,9 +84810,7 @@
 	d2 = 2;
 	icon_state = "0-2"
 	},
-/obj/structure/fence/cut/small{
-	dir = 4
-	},
+/obj/structure/fence/cut/small,
 /obj/item/tape/police{
 	icon_state = "police_door";
 	tag = "icon-police_door"
@@ -88356,9 +88326,7 @@
 	name = "\improper Central Medical Hallway"
 	})
 "vqD" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
@@ -88997,9 +88965,7 @@
 /turf/simulated/floor/plating,
 /area/storage/auxillary)
 "wrE" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable,
 /obj/structure/cable,
 /turf/unsimulated/floor/snow,

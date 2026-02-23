@@ -80,9 +80,7 @@
 /turf/simulated/floor,
 /area/prison/solitary)
 "j" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
@@ -90,9 +88,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "k" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -105,9 +101,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "l" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 8;
@@ -121,9 +115,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "n" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -133,9 +125,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "o" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable,
 /obj/structure/cable{
 	d2 = 4;
@@ -144,9 +134,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "p" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -193,17 +181,13 @@
 	},
 /area/prison/solitary)
 "w" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
 /area/prison/solitary)
 "x" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -268,33 +252,23 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "I" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "J" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "K" = (
-/obj/structure/fence/cut/large{
-	dir = 4
-	},
+/obj/structure/fence/cut/large,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "L" = (
-/obj/structure/fence/cut/medium{
-	dir = 4
-	},
+/obj/structure/fence/cut/medium,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "M" = (
-/obj/structure/fence/cut/small{
-	dir = 4
-	},
+/obj/structure/fence/cut/small,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "N" = (

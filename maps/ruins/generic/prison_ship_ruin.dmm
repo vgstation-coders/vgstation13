@@ -67,9 +67,7 @@
 /turf/simulated/floor/shuttle/brig,
 /area/vault/prison_ship)
 "q" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/prison_ship)
 "r" = (
