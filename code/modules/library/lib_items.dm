@@ -173,6 +173,10 @@
 		var/image/bookoverlay = image(icon,loc,"bookoverlay",layer,dir,x_offset,y_offset)
 		bookoverlay.color = I:spine_color || "#840"
 		overlays += bookoverlay
+		if(I:spine_overlay)
+			var/image/bookoveroverlay = image(icon,loc,"bookoveroverlay",layer,dir,x_offset,y_offset)
+			bookoveroverlay.color = I:spine_overlay
+			overlays += bookoveroverlay
 		x_offset += 4
 		if(x_offset > 20)
 			x_offset = 0
@@ -240,6 +244,7 @@
 	var/book_width = 600
 	var/book_height = 800
 	var/spine_color = "#444"
+	var/spine_overlay //optional, adds another sprite if set to a color
 
 /obj/item/weapon/book/New()
 	..()

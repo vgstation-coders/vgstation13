@@ -44145,10 +44145,6 @@
 /obj/docking_port/destination/vox/south_station,
 /turf/space,
 /area)
-"bwj" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "bwk" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
@@ -324467,7 +324463,7 @@ aaa
 aaa
 aaa
 aaa
-bwj
+aaa
 aaa
 aaa
 aaa

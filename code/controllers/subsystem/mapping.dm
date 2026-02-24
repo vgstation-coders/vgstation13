@@ -44,16 +44,14 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	)
 	/// All spawned planets
 	var/list/planets = list()
-	/// All sector allocations for planets
-	var/list/allocations = list()
 	/// Whether a planet scanner is currently scanning
 	var/scanning = FALSE
 	/// Whether a planet is currently being generated
 	var/generating = FALSE
 	/// The planet currently being generated
 	var/datum/planet_type/current_planet
-	/// The allocation for the current planet
-	var/datum/allocation/current_allocation
+	/// The virtual_z for the current planet
+	var/datum/virtual_z/current_virtual_z
 	/// Is scanning disabled globally
 	var/scanning_disabled = FALSE
 	/// World time when scanning can be toggled again
@@ -82,11 +80,10 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	var/list/feature_buckets = list() // Spatial buckets for features - key is "cellX_cellY", value is list of features in that cell
 	var/list/mob_buckets = list() // Spatial buckets for mobs - key is "cellX_cellY", value is list of mobs in that cell
 	var/turfs_per_tick = 300 // Base turfs processed per tick (adjusted dynamically)
+	var/turfs_processed = 0 // Turfs processed in the current tick
 	var/max_turfs_per_tick = 2000 // Maximum turfs to process per tick
 	var/min_turfs_per_tick = 100 // Minimum turfs to process per tick
-
 	var/list/ruins_by_type = list()
-
 
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)
@@ -118,30 +115,31 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		if(STAGE_TERRAIN)
 			stage_name = "Terrain"
 			if(terrain_queue.len > 0)
-				progress = round((queue_index / terrain_queue.len) * 100, 0.1)
+				progress = round((queue_index / terrain_queue.len) * 100, 1)
 		if(STAGE_RUIN)
 			stage_name = "Ruin"
-			progress = 100
+			progress = "[initial(current_planet.ruin_budget) - current_planet.ruin_budget]/[initial(current_planet.ruin_budget)]"
 		if(STAGE_POPULATION)
 			stage_name = "Population"
 			if(population_queue.len > 0)
-				progress = round((queue_index / population_queue.len) * 100, 0.1)
+				progress = round((queue_index / population_queue.len) * 100, 1)
 		if(STAGE_WEATHER)
 			stage_name = "Weather"
 			progress = 100
 		if(STAGE_FINALIZE)
 			stage_name = "Finalize"
 			if(finalize_queue.len > 0)
-				progress = round((queue_index / finalize_queue.len) * 100, 0.1)
+				progress = round((queue_index / finalize_queue.len) * 100, 1)
 
-	return ..("[stage_name] [progress]% | TpT:[turfs_per_tick]")
+	return ..("[stage_name] [progress]% | Tp:[turfs_processed]")
 
 /datum/subsystem/mapping/Initialize(timeofday)
+	var/watch
+
 	if (config.enable_roundstart_away_missions)
 		log_startup_progress("Attempting to generate an away mission...")
 		createRandomZlevel()
 
-	var/watch
 	if (!config.skip_fixedvault_generation)
 		watch = start_watch()
 		log_startup_progress("Placing fixed space structures...")
@@ -166,12 +164,24 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		if (prob(33))
 			generate_hoboshack()
 
+	//load all roundstart dungeons
+	for(var/T in map.load_map_elements)
+		load_dungeon(T, 0, TRUE)
+
 	watch = start_watch()
 	for(var/datum/zLevel/z in map.zLevels)
 		var/watch_prim = start_watch()
 		z.post_mapload()
+		if(!istype(z, /datum/zLevel/dynamic))
+			map.linkVLevel(z)
 		log_debug("Finished with zLevel [z.z] in [stop_watch(watch_prim)]s.", FALSE)
 	log_debug("Finished calling post on zLevels in [stop_watch(watch)]s.", FALSE)
+
+	watch = start_watch()
+	for(var/datum/virtual_z/vz in map.getAllVLevels())
+		vz.initialize_turfs()
+	SSDayNight.get_turflist() //vlevels are ready now
+	log_startup_progress("Initialized virtual z-levels in [stop_watch(watch)]s.")
 
 	watch = start_watch()
 	map.map_specific_init()
@@ -181,7 +191,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 	watch = start_watch()
 	initialize_biomes()
-	create_procgen_level()
 	log_startup_progress("Finished initializing procgen in [stop_watch(watch)]s.")
 
 	..()
@@ -191,7 +200,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		return
 
 	var/tick_start = world.tick_usage
-	var/turfs_processed = 0
+	turfs_processed = 0
 	var/target_turfs = turfs_per_tick
 
 	switch(current_stage)
@@ -199,17 +208,10 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 			while(queue_index <= terrain_queue.len && turfs_processed < target_turfs)
 				var/turf/T = terrain_queue[queue_index]
 				if(T)
-					current_mapgen.generate_turf(T)
+					current_mapgen.generate_turf(T, current_virtual_z.x_min, current_virtual_z.y_min)
 					T.planet = current_planet
-					var/area/A = get_area(T)
-					if(A)
-						A.planet = current_planet
 				queue_index++
 				turfs_processed++
-
-				if(MC_TICK_CHECK)
-					throttle(tick_start, turfs_processed)
-					return
 
 			if(queue_index > terrain_queue.len)
 				current_stage = STAGE_RUIN
@@ -220,7 +222,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 		if(STAGE_RUIN)
 			if(!current_mapgen.spawned_story_ruin)
-				place_story_ruins(current_allocation)
+				current_virtual_z.place_story_ruins()
 				current_mapgen.spawned_story_ruin = TRUE
 			if(current_planet.ruin_budget <= 0)
 				current_stage = STAGE_POPULATION
@@ -238,7 +240,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 				for(var/ruin_entry in current_mapgen.weighted_ruin_list)
 					if(ruin_entry == used_ruin)
 						current_mapgen.weighted_ruin_list.Remove(ruin_entry)
-				place_ruin_in_allocation(used_ruin, current_allocation)
+				current_virtual_z.place_ruin(used_ruin)
 				current_planet.ruin_budget -= used_ruin.cost
 
 		if(STAGE_POPULATION)
@@ -249,7 +251,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 				queue_index++
 				turfs_processed++
 
-				if(MC_TICK_CHECK)
+				if(TICK_CHECK)
 					throttle(tick_start, turfs_processed)
 					return
 
@@ -262,20 +264,21 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 		if(STAGE_WEATHER)
 			if(current_planet.climate_type)
-				current_planet.climate = SSweather.set_climate(current_planet.climate_type, world.maxz, current_allocation, random_start = TRUE)
+				current_planet.climate = SSweather.set_climate(current_planet.climate_type, current_virtual_z, random_start = TRUE)
 
-			finalize_queue = current_allocation.turfs.Copy()
+			finalize_queue = population_queue.Copy()
 			current_stage = STAGE_FINALIZE
 			queue_index = 1
 
 		if(STAGE_FINALIZE)
 			if(current_mapgen)
-				current_mapgen.post_process(current_allocation)
+				current_mapgen.post_process(current_virtual_z)
 				current_mapgen = null
 
 			while(queue_index <= finalize_queue.len && turfs_processed < target_turfs)
 				var/turf/T = finalize_queue[queue_index]
 				if(T)
+					T.v = current_virtual_z
 					T.turf_flags &= ~DEFER_EDGING
 					if(T.edge_flags & EDGE_CARDINAL) // Edge turfs that need it
 						T.update_edges()
@@ -284,8 +287,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 					if(istype(T, /turf/space) && current_planet.default_baseturf)
 						T.ChangeTurf(current_planet.default_baseturf)
 
-					// Weather + daynight registration
-					var/area/A = get_area(T)
+					var/area/A = T.loc
 					if(!istype(A, /area/planet/cave))
 						if(isopensurface(A) && current_planet.climate)
 							current_planet.climate.register_weather_turf(T)
@@ -293,38 +295,42 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 						// Build daynight turf list
 						if(IsEven(T.x) && IsEven(T.y))
 							if(isopensurface(A))
-								current_planet.daynight_turfs += T
+								current_virtual_z.daynight_turfs += T
 
 				queue_index++
 				turfs_processed++
 
-				if(MC_TICK_CHECK)
+				if(TICK_CHECK)
 					throttle(tick_start, turfs_processed)
 					return
 
-			if(queue_index > finalize_queue.len) // Cleanup
+			if(queue_index > finalize_queue.len)
 				if(current_planet.climate)
 					SSweather.fire()
 
 				var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
-				current_planet.current_timeOfDay = pick(possible_times)
+				current_virtual_z.current_timeOfDay = pick(possible_times)
 
-				switch(current_planet.current_timeOfDay)
-					if(TOD_MORNING) current_planet.next_firetime = world.time + 5 MINUTES
-					if(TOD_SUNRISE) current_planet.next_firetime = world.time + 3 MINUTES
-					if(TOD_DAYTIME) current_planet.next_firetime = world.time + 14 MINUTES
-					if(TOD_AFTERNOON) current_planet.next_firetime = world.time + 15 MINUTES
-					if(TOD_SUNSET) current_planet.next_firetime = world.time + 3 MINUTES
-					if(TOD_NIGHTTIME) current_planet.next_firetime = world.time + 36 MINUTES
+				switch(current_virtual_z.current_timeOfDay)
+					if(TOD_MORNING) current_virtual_z.next_firetime = world.time + 5 MINUTES
+					if(TOD_SUNRISE) current_virtual_z.next_firetime = world.time + 3 MINUTES
+					if(TOD_DAYTIME) current_virtual_z.next_firetime = world.time + 14 MINUTES
+					if(TOD_AFTERNOON) current_virtual_z.next_firetime = world.time + 15 MINUTES
+					if(TOD_SUNSET) current_virtual_z.next_firetime = world.time + 3 MINUTES
+					if(TOD_NIGHTTIME) current_virtual_z.next_firetime = world.time + 36 MINUTES
 
-				SSDayNight.update_planet_lighting(current_planet, immediate = TRUE)
+				daynight_v_lvls |= current_virtual_z
+				current_virtual_z.level_type = VZ_PLANET
+				current_virtual_z.update_settings()
+				SSDayNight.flags = 0
+				SSDayNight.update_lighting(current_virtual_z, immediate = TRUE)
 
 				var/total_time = (world.timeofday - generation_start_time) / 10
-				message_admins("Planet '[current_planet.planet_name]' generated successfully at z-level [world.maxz] in [total_time]s")
+				message_admins("Planet '[current_planet.planet_name]' generated successfully at v-level [current_virtual_z.id] in [total_time]s")
 
 				generating = FALSE
 				current_planet = null
-				current_allocation = null
+				current_virtual_z = null
 				current_stage = null
 				current_mapgen = null
 				terrain_queue = list()
@@ -444,22 +450,47 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 	SSmapping.spawn_planet(chosen_planet_type, hide_from_scanner)
 
-/**
- * Creates a grid of 25 99x99 sectors for procedural generation
- *
- * Adds a new z-level and creates a grid structure with border turfs
- * separating each sector. Each sector can hold a different planet.
- */
-/datum/subsystem/mapping/proc/create_procgen_level()
-	skip_turf_init = TRUE
-	world.maxz += 1
-	skip_turf_init = FALSE
-	map.addZLevel(new /datum/zLevel/away, world.maxz, TRUE, TRUE)
-	for(var/x = 1,  x < world.maxx, x++)
-		for(var/y = 1, y < world.maxy, y++)
-			if(!(x % SECTOR_SIZE) || !(y % SECTOR_SIZE))
-				var/turf/T = locate(x,y,world.maxz)
-				T.ChangeTurf(/turf/unsimulated/border)
+// Tries to place a new virtual zLevel of given size within the specified zLevel
+/datum/subsystem/mapping/proc/try_place_vz(var/datum/zLevel/check_z, var/size_x, var/size_y, var/spacing)
+	var/target_x = 1
+	var/target_y = 1
+
+	if(size_x > world.maxx || size_y > world.maxy)
+		CRASH("Tried to find virtual level allocation that cannot possibly fit in a physical level.")
+
+	while(TRUE)
+		var/upper_target_x = target_x + size_x
+		var/upper_target_y = target_y + size_y
+
+		var/out_of_bounds = FALSE
+		if((target_x < 1 || upper_target_x > world.maxx) || (target_y < 1 || upper_target_y > world.maxy))
+			out_of_bounds = TRUE
+
+		if(!out_of_bounds && check_z.is_box_free(target_x, target_y, upper_target_x, upper_target_y))
+			// Found non-overlapping position, now ensure minimum spacing
+			var/min_y = check_z.get_min_valid_y(target_x, upper_target_x, target_y, spacing)
+			var/min_x = check_z.get_min_valid_x(target_y, upper_target_y, target_x, spacing)
+
+			if(min_y > target_y)
+				target_y = min_y
+				continue
+			if(min_x > target_x)
+				target_x = min_x
+				continue
+
+			return list("x" = target_x, "y" = target_y) // Found valid spot with proper spacing
+
+		if(upper_target_x > world.maxx) // If we can't increment x, then the search is over
+			break
+
+		var/increments_y = TRUE
+		if(upper_target_y > world.maxy)
+			target_y = 1
+			increments_y = FALSE
+		if(increments_y)
+			target_y += spacing
+		else
+			target_x += spacing
 
 /**
  * Initialize all biomes
@@ -494,493 +525,64 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		return FALSE
 
 	// Initialize generation state
-	generating = TRUE
 	generation_start_time = world.timeofday
 	current_planet = new planet_datum
-	current_mapgen = new current_planet.mapgen
-	current_allocation = assign_allocation(current_planet, world.maxz)
-	planets += current_planet
+	current_mapgen = new current_planet.mapgen(ALLOCATION_SMALL)
+	current_virtual_z = map.addVLevel(ALLOCATION_SMALL, null, TRUE)
+	current_virtual_z.teleJammed = VZ_TELEPORTATION_EXPENSIVE
 
-	// Set scanner visibility
+	planets += current_planet
+	current_virtual_z.planet = current_planet
+	current_planet.v = current_virtual_z
+	current_virtual_z.name = current_planet.planet_name
+
 	if(hide_from_scanner)
 		current_planet.hidden = TRUE
 
-	// Set base_turf_type on areas so explosions reveal the correct turf
+	// Baseturf
 	if(current_planet.default_baseturf)
 		current_mapgen.primary_area.base_turf_type = current_planet.default_baseturf
 		current_mapgen.cave_area.base_turf_type = current_planet.default_baseturf
 
-	// Populate terrain generation queue
-	terrain_queue = current_allocation.turfs.Copy()
+	// Set planet and v on the shared areas
+	current_mapgen.primary_area.planet = current_planet
+	current_mapgen.primary_area.v = current_virtual_z
+	current_mapgen.cave_area.planet = current_planet
+	current_mapgen.cave_area.v = current_virtual_z
 
-	// Populate population queue with all sector turfs
-	population_queue = turfs_from_sector(current_allocation.sector, world.maxz)
 
-	// Start at terrain generation stage
+	// Prepare terrain queue
+	terrain_queue = current_virtual_z.get_turfs()
+	population_queue = terrain_queue.Copy()
 	current_stage = STAGE_TERRAIN
 	queue_index = 1
 
-	message_admins("Started generating planet '[current_planet.planet_name]' at z-level [world.maxz] (Sector [current_allocation.sector[1]],[current_allocation.sector[2]]). [terrain_queue.len] turfs to process.")
+	var/total_turfs = (current_virtual_z.x_max - current_virtual_z.x_min + 1) * (current_virtual_z.y_max - current_virtual_z.y_min + 1)
+	message_admins("Started generating planet '[current_planet.planet_name]' at v-level [current_virtual_z.id]. [total_turfs] turfs to process.")
+
+	generating = TRUE
 
 	return TRUE
 
 /**
- * Registers open turfs from a planet with its climate for weather overlays
- *
- * Iterates through all turfs in the allocation and registers those in open surface areas
- * with the climate system for weather effects.
- *
- * Arguments:
- * * climate - The climate datum to register turfs with
- * * allocation - The allocation containing the planet's turfs
+ * Checks living mobs with clients are present on a given vLevel and pauses/unpauses it accordingly
  */
-/datum/subsystem/mapping/proc/register_weather_turfs(var/datum/climate/climate, var/datum/allocation/allocation)
-	if(!climate || !allocation)
+/datum/subsystem/mapping/proc/v_pause_check(var/mob/living/user, var/datum/virtual_z/to_v = null, var/datum/virtual_z/from_v = null)
+	if(!istype(user) || !user.client || !(to_v && from_v))
 		return
-
-	// Register all turfs in open surface areas
-	for(var/turf/T in allocation.turfs)
-		var/area/A = get_area(T)
-		if(isopensurface(A))
-			climate.register_weather_turf(T)
-
-/**
- * Post-processes ruin turfs to match the planet environment
- *
- * After a ruin is placed on a planet, this proc replaces generic asteroid floors
- * and mineral walls with planet-appropriate turf types to ensure visual consistency.
- *
- * Arguments:
- * * ruin - The map element/ruin that was placed
- * * allocation - The sector allocation containing planet information
- * * spawned_objects - List of all objects spawned by the ruin template
- */
-/datum/subsystem/mapping/proc/post_process_ruin_turfs(datum/map_element/ruin/ruin_to_use, datum/allocation/allocation, list/spawned_objects)
-	if(!ruin_to_use || !allocation || !allocation.ptype)
-		return
-
-	var/datum/planet_type/planet = allocation.ptype
-	var/default_baseturf = planet.default_baseturf
-
-	// Get the first closed turf type from the planet generator
-	var/datum/planetGenerator/mapgen = new planet.mapgen
-	var/mineral_replacement = null
-
-	// Find the first closed turf type from any biome in the cave_biome_table
-	if(mapgen.cave_biome_table && mapgen.cave_biome_table.len)
-		for(var/temp_key in mapgen.cave_biome_table)
-			var/list/humidity_list = mapgen.cave_biome_table[temp_key]
-			for(var/humidity_key in humidity_list)
-				var/biome_type = humidity_list[humidity_key]
-				var/datum/biome/cave_biome = SSmapping.biomes[biome_type]
-				if(cave_biome && istype(cave_biome, /datum/biome/cave))
-					var/datum/biome/cave/cave_biome_casted = cave_biome
-					if(cave_biome_casted.closed_turf_types && cave_biome_casted.closed_turf_types.len)
-						// Get the first closed turf type (highest weighted)
-						mineral_replacement = cave_biome_casted.closed_turf_types[1]
-						break
-			if(mineral_replacement)
+	if(isnum(to_v))
+		to_v = map.getVLevel(to_v)
+	if(isnum(from_v))
+		from_v = map.getVLevel(from_v)
+	if(to_v) // Unpause destination vLevel
+		to_v.set_status(TRUE)
+	if(from_v) // Check if any living mobs with clients remain on source vLevel
+		var/has_living = FALSE
+		for(var/mob/living/M in from_v.get_living_players())
+			if(M.client)
+				has_living = TRUE
 				break
-
-	// Fallback to a default mineral type if none found
-	if(!mineral_replacement)
-		mineral_replacement = /turf/unsimulated/mineral/random
-
-	// Process all turfs in the spawned objects
-	for(var/atom/A in spawned_objects)
-		if(isturf(A))
-			var/turf/T = A
-
-			// Set the area's baseturf if not already set
-			var/area/AA = get_area(T)
-			if(AA?.base_turf_type != default_baseturf)
-				AA.base_turf_type = default_baseturf
-
-			// Replace floor turfs with planet's default baseturf
-			if(istype(T, /turf/unsimulated/floor/asteroid))
-				if(default_baseturf)
-					T.ChangeTurf(default_baseturf)
-
-			// Replace mineral turfs with planet's mineral type
-			else if(istype(T, /turf/unsimulated/mineral))
-				T.ChangeTurf(mineral_replacement)
-
-/**
- * Places a ruin within an allocation's sector boundaries
- *
- * Finds a safe random location within the sector for the ruin, loads the ruin template,
- * and post-processes the turfs to match the planet environment.
- *
- * Arguments:
- * * ruin - The map element/ruin to place
- * * allocation - The sector allocation to place the ruin in
- *
- * Returns:
- * * A list containing "turf" (placement location) and "objects" (spawned objects) on success, or null on failure
- */
-/datum/subsystem/mapping/proc/place_ruin_in_allocation(datum/map_element/ruin/ruin_to_use, datum/allocation/allocation)
-	if(!ruin_to_use || !allocation)
-		return null
-
-	// Initialize the dimensions of the map element before using them
-	ruin_to_use.assign_dimensions()
-
-	// Calculate sector boundaries for proper placement within allocation
-	var/list/bounds = get_sector_bounds(allocation.sector)
-
-	// Calculate safe placement bounds within the sector, with padding
-	var/safe_x_min = bounds["x_min"] + RUIN_PLACEMENT_PADDING
-	var/safe_x_max = bounds["x_max"] - ruin_to_use.width - RUIN_PLACEMENT_PADDING
-	var/safe_y_min = bounds["y_min"] + RUIN_PLACEMENT_PADDING
-	var/safe_y_max = bounds["y_max"] - ruin_to_use.height - RUIN_PLACEMENT_PADDING
-
-	// Ensure we have valid placement area
-	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
-		CRASH("Warning: Ruin [ruin_to_use.name] ([ruin_to_use.width]x[ruin_to_use.height]) too large for sector [allocation.sector[1]],[allocation.sector[2]] - skipping ruin placement")
-	// Try up to 20 times to find a valid placement location
-	var/max_attempts = 20
-	var/turf/ruin_turf = null
-
-	var/ruin_separation = 10 // Minimum turfs between ruins
-
-	for(var/attempt = 1; attempt <= max_attempts; attempt++)
-		// Find random placement location within safe bounds
-		var/turf/candidate_turf = locate(
-			rand(safe_x_min, safe_x_max),
-			rand(safe_y_min, safe_y_max),
-			allocation.z
-		)
-
-		// Check if any turfs in the ruin footprint have NO_RUINS flag
-		var/valid_location = TRUE
-		for(var/dx = 0; dx < ruin_to_use.width; dx++)
-			for(var/dy = 0; dy < ruin_to_use.height; dy++)
-				var/turf/check_turf = locate(candidate_turf.x + dx, candidate_turf.y + dy, allocation.z)
-				if(check_turf && (check_turf.turf_flags & NO_RUINS))
-					valid_location = FALSE
-					break
-			if(!valid_location)
-				break
-
-		// Check for minimum separation from other placed ruins
-		if(valid_location)
-			for(var/list/placed in allocation.placed_ruins)
-				var/placed_x = placed[1]
-				var/placed_y = placed[2]
-				var/placed_w = placed[3]
-				var/placed_h = placed[4]
-				var/new_x_min = candidate_turf.x - ruin_separation
-				var/new_x_max = candidate_turf.x + ruin_to_use.width + ruin_separation
-				var/new_y_min = candidate_turf.y - ruin_separation
-				var/new_y_max = candidate_turf.y + ruin_to_use.height + ruin_separation
-				var/placed_x_max = placed_x + placed_w
-				var/placed_y_max = placed_y + placed_h
-				if(!(new_x_max < placed_x || new_x_min > placed_x_max || new_y_max < placed_y || new_y_min > placed_y_max))
-					valid_location = FALSE
-					break
-
-		if(valid_location)
-			ruin_turf = candidate_turf
-			break
-		else if(attempt == max_attempts)
-			return null
-
-	if(!ruin_turf)
-		return null
-
-	// Note: load() adds +1 to x and y coordinates, so we subtract 1 to place at exact location
-	var/load_result = ruin_to_use.load(ruin_turf.x - 1, ruin_turf.y - 1, allocation.z, 0, TRUE, TRUE)
-
-	if(load_result)
-		// Record this ruin's position for separation checking
-		allocation.placed_ruins += list(list(ruin_turf.x, ruin_turf.y, ruin_to_use.width, ruin_to_use.height))
-		post_process_ruin_turfs(ruin_to_use, allocation, load_result)
-		return list("turf" = ruin_turf, "objects" = load_result)
-	else
-		CRASH("Failed to load ruin [ruin_to_use.name] at [ruin_turf.x], [ruin_turf.y]")
-
-/datum/subsystem/mapping/proc/place_story_ruins(datum/allocation/allocation)
-	if(!allocation || !allocation.ptype)
-		return
-
-	var/list/story_ruin_types = subtypesof(/datum/map_element/ruin/story)
-
-	var/ruin_type = pick(story_ruin_types)
-	var/datum/map_element/ruin/story/story_ruin = new ruin_type()
-	var/datum/story_theme/theme = get_compatible_story_theme(story_ruin.theme)
-
-	var/max_age = 200
-	var/story_year = game_year - rand(1, max_age)
-
-	var/character_name = theme.generate_character_name()
-
-	var/disease_type = null
-	if(prob(STORY_DISEASE_CHANCE))
-		var/list/allowed_disease_types = list(
-			/datum/disease2/disease/virus,
-			/datum/disease2/disease/bacteria,
-			/datum/disease2/disease/prion,
-			/datum/disease2/disease/fungus,
-			/datum/disease2/disease/parasite
-		)
-		disease_type = pick(allowed_disease_types)
-		var/datum/disease2/disease/temp_disease = new disease_type()
-		theme.disease_log_entry = theme.get_disease_entry(temp_disease.form)
-		qdel(temp_disease)
-
-	story_ruin.assigned_theme = theme
-	story_ruin.story_year = story_year
-
-	var/list/result = place_ruin_in_allocation(story_ruin, allocation)
-	if(!result)
-		qdel(story_ruin)
-		return
-
-	var/list/spawned_objects = result["objects"]
-
-	var/loot_type = pick_story_loot(spawned_objects, story_ruin)
-	if(loot_type)
-		theme.stashed_loot_type = loot_type
-		spawn_story_loot(spawned_objects, story_ruin, loot_type)
-
-	for(var/atom/A in spawned_objects)
-		if(istype(A, /obj/effect/landmark/story))
-			var/obj/effect/landmark/story/landmark = A
-			landmark.assigned_theme = theme
-			landmark.story_year = story_year
-			landmark.character_name = character_name
-			landmark.disease_type = disease_type
-			landmark.spawn_story_entity()
-		else if(istype(A, /obj/machinery/old_database))
-			var/obj/machinery/old_database/db = A
-			db.assigned_theme = theme
-			db.story_year = story_year
-			db.character_name = character_name
-
-/datum/subsystem/mapping/proc/pick_story_loot(list/spawned_objects, datum/map_element/ruin/story/story_ruin)
-	if(!spawned_objects || !story_ruin)
-		return null
-
-	var/list/loot_table_types = subtypesof(/datum/loot_table)
-	if(!loot_table_types.len)
-		return null
-
-	return pick(loot_table_types)
-
-// Places a loot container in the story vault adjacent to a wall, not adjacent to a doorway, and not on top of an existing structure.
-/datum/subsystem/mapping/proc/spawn_story_loot(list/spawned_objects, datum/map_element/ruin/story/story_ruin, loot_type)
-	if(!spawned_objects || !story_ruin || !loot_type)
-		return
-
-	var/list/ruin_turfs = list()
-	for(var/atom/A in spawned_objects)
-		ruin_turfs |= get_turf(A)
-
-	var/list/valid_turfs = list()
-	for(var/turf/T in ruin_turfs)
-		if(!isfloor(T))
-			continue
-
-		var/has_structure = FALSE
-		for(var/obj/O in T)
-			if(istype(O,/obj/structure) || istype(O,/obj/machinery))
-				has_structure = TRUE
-				break
-		if(has_structure)
-			continue
-
-		var/adj_wall = FALSE
-		var/adj_door = FALSE
-		for(var/turf/adj in orange(1, T))
-			if(iswall(adj))
-				adj_wall = TRUE
-			for(var/obj/machinery/door/D in adj)
-				adj_door = TRUE
-				break
-			if(adj_door)
-				break
-
-		if(!adj_wall || adj_door)
-			continue
-
-		valid_turfs += T
-
-	if(!valid_turfs.len)
-		return
-
-	var/turf/chosen_turf = pick(valid_turfs)
-	new /obj/abstract/loot_spawner/story(chosen_turf, loot_type, story_ruin.loot_containers)
-
-/**
- * Assigns a planet to a sector
- *
- * Allocates a sector in the procgen grid for a planet, calculates the sector coordinates,
- * and retrieves all turfs within that sector.
- *
- * Arguments:
- * * planet_type - The planet type to assign to the sector
- * * z_id - The z-level ID where the sector exists
- *
- * Returns:
- * * The newly created allocation datum
- */
-/datum/subsystem/mapping/proc/assign_allocation(var/datum/planet_type/planet_type, z_id)
-	var/datum/allocation/A = new
-	var/sector_count = allocations.len + 1
-	A.sector = list((sector_count - 1) % 5 + 1, ceil(sector_count / 5))
-	A.ptype = planet_type
-	A.z = z_id
-	A.turfs = turfs_from_sector(A.sector, z_id)
-	allocations += A
-	planet_type.allocation = A
-	return A
-
-/**
- * Calculates the coordinate bounds for a sector
- *
- * Helper function to avoid duplicating sector bound calculation logic.
- *
- * Arguments:
- * * sector - List containing [x, y] sector coordinates
- *
- * Returns:
- * * An associative list with keys: "x_min", "x_max", "y_min", "y_max"
- */
-/datum/subsystem/mapping/proc/get_sector_bounds(var/list/sector)
-	var/sector_x = sector[1]
-	var/sector_y = sector[2]
-	return list(
-		"x_min" = 1 + (sector_x - 1) * SECTOR_SIZE,
-		"x_max" = sector_x * SECTOR_SIZE - 1,
-		"y_min" = 1 + (sector_y - 1) * SECTOR_SIZE,
-		"y_max" = sector_y * SECTOR_SIZE - 1
-	)
-
-/**
- * Gets all turfs within a sector
- *
- * Calculates the bounds of a sector in the procgen grid and returns all turfs within it.
- *
- * Arguments:
- * * sector - List containing [x, y] sector coordinates
- * * z_in - The z-level to get turfs from
- *
- * Returns:
- * * A list of all turfs in the sector
- */
-/datum/subsystem/mapping/proc/turfs_from_sector(var/list/sector, var/z_in)
-	var/list/bounds = get_sector_bounds(sector)
-	return block(locate(bounds["x_min"], bounds["y_min"], z_in), locate(bounds["x_max"], bounds["y_max"], z_in))
-
-/**
- * Gets all turfs from a planet's allocation
- *
- * Arguments:
- * * planet - The planet type to get turfs from
- *
- * Returns:
- * * A list of all turfs in the planet's allocated sector, or an empty list if no allocation
- */
-/datum/subsystem/mapping/proc/turfs_from_planet(var/datum/planet_type/planet)
-	if(!planet || !planet.allocation)
-		return list()
-	var/datum/allocation/A = planet.allocation
-	return A.turfs
-
-/**
- * Gets the allocation at given coordinates or turf
- *
- * Looks up which sector allocation contains the specified coordinates.
- *
- * Arguments:
- * * x - X coordinate (optional if trf provided)
- * * y - Y coordinate (optional if trf provided)
- * * z - Z level (defaults to 7, optional if trf provided)
- * * trf - Turf to look up allocation for (takes priority over x/y/z)
- *
- * Returns:
- * * The allocation datum for the sector, or null if none found
- */
-/datum/subsystem/mapping/proc/get_allocation(var/x = 0, var/y = 0, var/z = 7, var/turf/trf = null)
-	if(trf)
-		x = trf.x
-		y = trf.y
-		z = trf.z
-	var/sector_x = ceil(x / SECTOR_SIZE)
-	var/sector_y = ceil(y / SECTOR_SIZE)
-	for(var/datum/allocation/A in allocations)
-		if(A.sector[1] == sector_x && A.sector[2] == sector_y && A.z == z)
-			return A
-	return z //return the z level if no allocation found
-
-/datum/subsystem/mapping/proc/get_shuttle_landing_zone(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size)
-	if(!alloc || !shuttle)
-		return null
-
-	// Check if this shuttle already has a landing zone on this planet
-	if(alloc.shuttle_landing_zones[shuttle.type])
-		var/datum/landing_zone/existing_lz = alloc.shuttle_landing_zones[shuttle.type]
-		if(existing_lz?.docking_port?.loc)
-			existing_lz.spawn_warnings()
-			return existing_lz.docking_port
-		else
-			alloc.shuttle_landing_zones -= shuttle.type
-
-	var/datum/landing_zone/new_lz = new(shuttle, alloc.ptype)
-	if(!new_lz || !new_lz.docking_port)
-		return
-
-	// Remember this landing zone for this shuttle type
-	alloc.shuttle_landing_zones[shuttle.type] = new_lz
-
-	new_lz.spawn_warnings()
-
-	return new_lz.docking_port
-
-/datum/subsystem/mapping/proc/spawn_lz_warnings(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size, var/obj/docking_port/port)
-	if(!alloc || !shuttle)
-		return
-
-	var/datum/landing_zone/lz = alloc.shuttle_landing_zones[shuttle.type]
-	if(!lz)
-		return
-
-	lz.spawn_warnings()
-
-/datum/subsystem/mapping/proc/clear_lz_warnings(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size, var/obj/docking_port/port)
-	if(!alloc || !shuttle)
-		return
-
-	var/datum/landing_zone/lz = alloc.shuttle_landing_zones[shuttle.type]
-	if(!lz)
-		return
-
-	lz.clear_warnings()
-
-/**
- * # Allocation Datum
- *
- * Represents a sector allocation for a planet in the procedural generation grid.
- *
- * Contains information about which sector a planet occupies, what turfs are in that sector,
- * and which planet type is assigned to it. Also tracks shuttle landing zones for persistent
- * shuttle landings on the planet.
- *
- * NOTE: To be replaced with virtual z-levels in the future.
- */
-/datum/allocation
-	/// Sector coordinates as [x, y] in the procgen grid
-	var/list/sector = list(1,1)
-	var/z = 7
-	var/datum/planet_type/ptype
-	var/list/turf/turfs = list()
-	/// Tracks persistent shuttle landing zones - associative list: shuttle_type -> /datum/landing_zone
-	var/list/shuttle_landing_zones = list()
-	var/obj/machinery/telecomms/relay/planetary/comms_relay
-	/// The main ruin placed on this allocation
-	var/datum/map_element/ruin/placed_ruin
-	/// Tracks placed ruins as list of lists: list(x, y, width, height) for separation checking
-	var/list/placed_ruins = list()
+		from_v.set_status(has_living)
 
 #undef STAGE_TERRAIN
 #undef STAGE_RUIN

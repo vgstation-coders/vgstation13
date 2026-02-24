@@ -75980,10 +75980,6 @@
 /obj/docking_port/destination/syndicate/south,
 /turf/space,
 /area)
-"cPe" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cPf" = (
 /turf/space{
 	icon_state = "black"
@@ -365947,7 +365943,7 @@ aaa
 aaa
 aaa
 aaa
-cPe
+aaa
 aaa
 aaa
 aaa

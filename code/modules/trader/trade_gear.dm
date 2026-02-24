@@ -23,6 +23,7 @@
 
 	var/busy = FALSE
 	var/spine_color = "#ff0"
+	var/spine_overlay = "#000"
 	var/mob/living/owner
 	var/datum/language/tongue
 	var/progress = 0

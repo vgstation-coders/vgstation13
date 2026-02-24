@@ -25,16 +25,16 @@
     if (!cl)
         menu += "ERROR: Unable to determine current location."
     else
-        menu += "Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]], [cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>"
+        menu += "Current Orbital Location: <b>\[[cl.vx()-get_world_x_offset(cl.vz())], [cl.vy()-get_world_y_offset(cl.vz())]\]</b>"
         menu += "<h4>Located Mops:</h4>"
         var/ldat
         for (var/obj/item/weapon/mop/M in mop_list)
             var/turf/ml = get_turf(M)
             if(ml)
-                if (ml.z != cl.z)
+                if (ml.vz() != cl.vz())
                     continue
                 var/direction = get_dir(cl, M)
-                ldat += "Mop - <b>\[[ml.x-WORLD_X_OFFSET[ml.z]], [ml.y-WORLD_Y_OFFSET[ml.z]] ([uppertext(dir2text_short(direction))])\]</b> - [M.reagents.total_volume ? "Wet" : "Dry"]<br>"
+                ldat += "Mop - <b>\[[ml.vx()-get_world_x_offset(ml.vz())], [ml.vy()-get_world_y_offset(ml.vz())] ([uppertext(dir2text_short(direction))])</b> - [M.reagents.total_volume ? "Wet" : "Dry"]<br>"
         if (!ldat)
             menu += "None"
         else
@@ -44,10 +44,10 @@
         for (var/obj/structure/mopbucket/B in mopbucket_list)
             var/turf/bl = get_turf(B)
             if(bl)
-                if (bl.z != cl.z)
+                if (bl.vz() != cl.vz())
                     continue
                 var/direction = get_dir(cl, B)
-                ldat += "Bucket - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b> - Water level: [B.reagents.total_volume]/100<br>"
+                ldat += "Bucket - <b>\[[bl.vx()-get_world_x_offset(bl.vz())], [bl.vy()-get_world_y_offset(bl.vz())] ([uppertext(dir2text_short(direction))])\]</b> - Water level: [B.reagents.total_volume]/100<br>"
         if (!ldat)
             menu += "None"
         else
@@ -57,10 +57,10 @@
         for (var/obj/machinery/bot/cleanbot/B in cleanbot_list)
             var/turf/bl = get_turf(B)
             if(bl)
-                if (bl.z != cl.z)
+                if (bl.vz() != cl.vz())
                     continue
                 var/direction = get_dir(cl, B)
-                ldat += "Cleanbot - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b> - [B.on ? "Online" : "Offline"]<br>"
+                ldat += "Cleanbot - <b>\[[bl.vx()-get_world_x_offset(bl.vz())], [bl.vy()-get_world_y_offset(bl.vz())] ([uppertext(dir2text_short(direction))])\]</b> - [B.on ? "Online" : "Offline"]<br>"
         if (!ldat)
             menu += "None"
         else
@@ -70,10 +70,10 @@
         for (var/obj/structure/bed/chair/vehicle/janicart/J in janicart_list)
             var/turf/bl = get_turf(J)
             if(bl)
-                if (bl.z != cl.z)
+                if (bl.vz() != cl.vz())
                     continue
                 var/direction = get_dir(cl, J)
-                ldat += "Jani-Cart - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b> - [J.upgraded ? "Upgraded" : "Unupgraded"]<br>"
+                ldat += "Jani-Cart - <b>\[[bl.vx()-get_world_x_offset(bl.vz())], [bl.vy()-get_world_y_offset(bl.vz())] ([uppertext(dir2text_short(direction))])\]</b> - [J.upgraded ? "Upgraded" : "Unupgraded"]<br>"
         if (!ldat)
             menu += "None"
         else
@@ -82,10 +82,10 @@
         for (var/obj/item/key/janicart/K in janikeys_list)
             var/turf/bl = get_turf(K)
             if(bl)
-                if (bl.z != cl.z)
+                if (bl.vz() != cl.vz())
                     continue
                 var/direction = get_dir(cl, K)
-                ldat += "Keys - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b><br>"
+                ldat += "Keys - <b>\[[bl.vx()-get_world_x_offset(bl.vz())], [bl.vy()-get_world_y_offset(bl.vz())] ([uppertext(dir2text_short(direction))])\]</b><br>"
         if (!ldat)
             menu += "None"
         else

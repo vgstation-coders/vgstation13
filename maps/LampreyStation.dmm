@@ -12746,7 +12746,7 @@
 	harm_intent_damage = 0;
 	health = 1;
 	heat_damage_per_tick = 0;
-	locked_to_z = 1;
+	locked_to_current_v = 1;
 	luminosity = 3;
 	maxHealth = 1;
 	melee_damage_lower = 45;
@@ -77155,7 +77155,7 @@
 	harm_intent_damage = 0;
 	health = 1;
 	heat_damage_per_tick = 0;
-	locked_to_z = 1;
+	locked_to_current_v = 1;
 	luminosity = 3;
 	maxHealth = 1;
 	melee_damage_lower = 45;
@@ -114537,10 +114537,6 @@
 	},
 /turf/simulated/floor/carpet,
 /area/lamprey/catchall)
-"eMm" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "eMn" = (
 /turf/space/void,
 /area)
@@ -448181,7 +448177,7 @@ aaa
 aaa
 aaa
 aaa
-eMm
+aaa
 aaa
 aaa
 aaa

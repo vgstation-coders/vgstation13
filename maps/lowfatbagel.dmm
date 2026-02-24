@@ -6778,10 +6778,6 @@
 	},
 /turf/space/transit/west,
 /area)
-"apQ" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "apR" = (
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -360329,7 +360325,7 @@ aaa
 aaa
 aaa
 aaa
-apQ
+aaa
 aaa
 aaa
 aaa

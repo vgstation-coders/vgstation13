@@ -644,7 +644,7 @@ var/global/list/charcoal_doesnt_remove=list(
 /datum/reagent/cargonanobots
 	name = "Cargonian Nanobots"
 	id = CARGONANOBOTS
-	description = "Microscopic robots intended for use in humans. Configured for departmental seccession and overthrowals."
+	description = "Microscopic robots intended for use in humans. Configured for departmental secession and overthrowals."
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#A05F3F" //rgb: 52, 63, 66

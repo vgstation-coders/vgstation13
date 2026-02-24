@@ -71347,10 +71347,6 @@
 /obj/docking_port/destination/syndicate/south,
 /turf/space,
 /area)
-"czo" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "czp" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
@@ -352022,7 +352018,7 @@ aaa
 aaa
 aaa
 aaa
-czo
+aaa
 aaa
 aaa
 aaa

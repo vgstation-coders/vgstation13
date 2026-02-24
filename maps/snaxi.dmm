@@ -61436,10 +61436,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
-"cCY" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cDd" = (
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'FOURTH WALL'.";
@@ -63705,7 +63701,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/obj/machinery/computer/climate,
+/obj/machinery/computer/climate/long_range,
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "dpV" = (
@@ -65058,7 +65054,7 @@
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
-/obj/machinery/computer/climate,
+/obj/machinery/computer/climate/long_range,
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "dtv" = (
@@ -66615,7 +66611,7 @@
 	name = "Outpost Mining Dock"
 	})
 "dwy" = (
-/obj/machinery/computer/climate,
+/obj/machinery/computer/climate/long_range,
 /turf/simulated/floor,
 /area/mine/eva{
 	name = "Outpost Mining Dock"
@@ -199896,7 +199892,7 @@ ccH
 ccH
 ccH
 ccH
-cCY
+ccH
 ccH
 ccH
 ccH

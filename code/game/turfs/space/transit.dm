@@ -51,7 +51,7 @@
 		icon_state = "speedspace_[dira]_[i]"
 
 /turf/space/transit/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 0, var/defer_edges = FALSE)
-	return ..(N, tell_universe, 1, allow)
+	return ..(N, tell_universe, 1, allow, defer_edges)
 
 //Overwrite because we dont want people building rods in space.
 /turf/space/transit/attackby(obj/O as obj, mob/user as mob)
@@ -93,7 +93,7 @@
 	icon_state="debug-north"
 
 /turf/space/transit/horizon/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
-    return ..(N, tell_universe, 1, allow)
+    return ..(N, tell_universe, 1, allow, defer_edges)
 
 /turf/space/transit/horizon/canBuildCatwalk()
 	if(locate(/obj/structure/catwalk) in contents)
@@ -134,7 +134,7 @@
 	icon_state="debug-north"
 
 /turf/space/transit/faketransit/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
-    return ..(N, tell_universe, 1, allow)
+    return ..(N, tell_universe, 1, allow, defer_edges)
 
 /turf/space/transit/faketransit/canBuildCatwalk()
 	if(locate(/obj/structure/catwalk) in contents)

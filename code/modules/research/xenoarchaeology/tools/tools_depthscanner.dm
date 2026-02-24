@@ -34,7 +34,7 @@
 				playsound(user, 'sound/machines/info.ogg', 20, 1)
 				//create a new scanlog entry
 				var/datum/depth_scan/D = new()
-				D.coords = "[M.x-WORLD_X_OFFSET[M.z]].[rand(0,9)]:[M.y-WORLD_Y_OFFSET[M.z]].[rand(0,9)]:[10 * M.z].[rand(0,9)]"
+				D.coords = "[M.x-get_world_x_offset(M.vz())].[rand(0,9)]:[M.y-get_world_y_offset(M.vz())].[rand(0,9)]:[10 * M.vz()]. [rand(0,9)]"
 				D.time = worldtime2text()
 				D.record_index = positive_locations.len + 1
 				D.material = "Rock"
@@ -73,7 +73,7 @@
 			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
-			D.coords = "[10 * (B.x-WORLD_X_OFFSET[B.z])].[rand(0,9)]:[10 * (B.y-WORLD_Y_OFFSET[B.z])].[rand(0,9)]:[10 * B.z].[rand(0,9)]"
+			D.coords = "[10 * (B.x-get_world_x_offset(B.vz()))].[rand(0,9)]:[10 * (B.y-get_world_y_offset(B.vz()))].[rand(0,9)]:[10 * B.vz()]. [rand(0,9)]"
 			D.time = worldtime2text()
 			D.record_index = positive_locations.len + 1
 
