@@ -1643,7 +1643,7 @@
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "gs" = (
-/obj/structure/fence/door/secure,
+/obj/structure/fence/door/secure/inverted,
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "gt" = (
@@ -1806,7 +1806,7 @@
 /turf/unsimulated/floor/evil,
 /area/awaymission/hive/secure)
 "gY" = (
-/obj/structure/fence/door/secure,
+/obj/structure/fence/door/secure/inverted,
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "gZ" = (

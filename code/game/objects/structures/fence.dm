@@ -260,6 +260,7 @@
 	icon_state = "door_closed"
 	cuttable = FALSE
 	var/open = FALSE
+	var/inverted = FALSE //for relativewalling
 
 /obj/structure/fence/door/New()
 	..()
@@ -268,9 +269,9 @@
 
 /obj/structure/fence/door/update_junction()
 	if((junction & NORTH) || (junction & SOUTH))
-		dir = WEST
+		dir = inverted ? EAST : WEST
 	if((junction & EAST) || (junction & WEST))
-		dir = NORTH
+		dir = inverted ? SOUTH : NORTH
 
 /obj/structure/fence/door/opened
 	icon_state = "door_opened"
@@ -313,6 +314,9 @@
 /obj/structure/fence/door/secure
 	name = "secure fence door"
 	desc = "A fence door with a door latch. It can only be opened and closed from one direction."
+
+/obj/structure/fence/door/secure/inverted
+	inverted = TRUE
 
 /obj/structure/fence/door/secure/can_open(mob/user)
 	//User must be standing in the permitted direction from the door, or must have telekinesis

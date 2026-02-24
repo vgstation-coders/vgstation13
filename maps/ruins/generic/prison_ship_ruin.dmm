@@ -71,7 +71,7 @@
 /turf/simulated/floor/shuttle/brig,
 /area/vault/prison_ship)
 "r" = (
-/obj/structure/fence/door/secure,
+/obj/structure/fence/door/secure/inverted,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/prison_ship)
 "s" = (

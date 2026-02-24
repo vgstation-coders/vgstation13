@@ -230,7 +230,7 @@
 	},
 /area/prison/solitary)
 "F" = (
-/obj/structure/fence/door/secure,
+/obj/structure/fence/door/secure/inverted,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -266,7 +266,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "N" = (
-/obj/structure/fence/door/secure,
+/obj/structure/fence/door/secure/inverted,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 

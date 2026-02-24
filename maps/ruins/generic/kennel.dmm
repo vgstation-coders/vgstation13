@@ -29,7 +29,6 @@
 /area/vault/kennel)
 "m" = (
 /obj/structure/fence,
-/obj/structure/fence,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "o" = (
@@ -78,7 +77,7 @@
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "J" = (
-/obj/structure/fence/door/secure,
+/obj/structure/fence/door/secure/inverted,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "K" = (
