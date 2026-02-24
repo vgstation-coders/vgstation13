@@ -847,13 +847,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
-"abY" = (
-/obj/structure/fence,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
-/area/lamprey/detoxins)
 "abZ" = (
 /obj/structure/fence,
 /turf/simulated/floor/plating,
@@ -132201,14 +132194,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"fAi" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"fAj" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "fAk" = (
 /obj/structure/fence/door/opened,
@@ -292986,7 +292971,7 @@ aiW
 aaa
 aaa
 acc
-abY
+acr
 alb
 acr
 acw
@@ -402047,7 +402032,7 @@ aaa
 aaa
 aaa
 acc
-abY
+acr
 alb
 acr
 acw
@@ -503584,7 +503569,7 @@ fxJ
 fxK
 fxP
 fzO
-fAi
+fAO
 fAO
 fAO
 fBQ
@@ -504086,7 +504071,7 @@ fxK
 fxK
 fxP
 fxM
-fAj
+fAO
 fAP
 fxK
 fBR
@@ -504588,7 +504573,7 @@ fxL
 fxJ
 fxP
 fxL
-fAj
+fAO
 fAP
 fxK
 fBR
@@ -505592,7 +505577,7 @@ fxJ
 fxM
 fxP
 fzP
-fAj
+fAO
 fxP
 fxP
 fBR
@@ -506094,7 +506079,7 @@ fxN
 fxK
 fxP
 fxN
-fAj
+fAO
 fxP
 fxP
 fBS
@@ -506596,7 +506581,7 @@ fxN
 fxK
 fxP
 fxJ
-fAj
+fAO
 fxP
 fBp
 fBR
@@ -507098,7 +507083,7 @@ fxL
 fyD
 fxP
 fxN
-fAj
+fAO
 fAQ
 fyB
 fBR
@@ -507600,7 +507585,7 @@ fxO
 fxN
 fxP
 fxJ
-fAj
+fAO
 fxP
 fBp
 fBR
@@ -508102,7 +508087,7 @@ fxN
 fxM
 fxP
 fxL
-fAj
+fAO
 fxP
 fBp
 fBR
@@ -508604,7 +508589,7 @@ fxO
 fxL
 fxP
 fxJ
-fAj
+fAO
 fAQ
 fyB
 fBR
@@ -509106,7 +509091,7 @@ fxP
 fxP
 fxP
 fxJ
-fAj
+fAO
 fxP
 fBp
 fBT

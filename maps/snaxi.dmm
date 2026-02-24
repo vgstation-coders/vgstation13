@@ -1117,14 +1117,6 @@
 /obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/junkyard)
-"ade" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/junkyard)
-"adf" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/junkyard)
 "adg" = (
 /obj/structure/flora/bush,
 /obj/structure/hanging_lantern{
@@ -1145,10 +1137,6 @@
 "adj" = (
 /obj/structure/rack,
 /obj/item/clothing/under/greypants,
-/turf/unsimulated/floor/snow,
-/area/surface/junkyard)
-"adk" = (
-/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "adl" = (
@@ -1216,10 +1204,6 @@
 /area/surface/junkyard)
 "adA" = (
 /turf/simulated/wall/mineral/wood,
-/area/surface/junkyard)
-"adB" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "adC" = (
 /obj/effect/decal/warning_stripes{
@@ -1392,10 +1376,6 @@
 	tag = "icon-warning"
 	},
 /turf/unsimulated/floor/snow/asphalt,
-/area/surface/junkyard)
-"aee" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "aef" = (
 /obj/structure/fence/door/opened,
@@ -17606,10 +17586,6 @@
 /obj/structure/closet/toolcloset,
 /turf/simulated/floor/plating,
 /area/surface/forest/north)
-"aOj" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
 "aOl" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -20378,13 +20354,6 @@
 	icon_state = "brown"
 	},
 /area/supply/sorting)
-"aUH" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/obj/structure/fence,
-/turf/unsimulated/floor/snow/asphalt,
-/area/surface/snow)
 "aUI" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -23612,10 +23581,6 @@
 	},
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
-"bcF" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
 "bcG" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -24178,10 +24143,6 @@
 /obj/structure/bed/chair/vehicle/snowmobile/security,
 /turf/simulated/floor/engine/concrete,
 /area/surface/snow)
-"bdP" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
 "bdQ" = (
 /turf/simulated/floor,
 /area/station/garage)
@@ -29234,14 +29195,6 @@
 	},
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
-"bpF" = (
-/obj/structure/fence,
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
 "bpM" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -29436,10 +29389,6 @@
 	},
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
-"bqy" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
 "bqz" = (
 /obj/structure/bed/chair,
 /obj/machinery/light{
@@ -29576,11 +29525,6 @@
 /area/engineering/engine_storage{
 	name = "Engineering Coat Storage"
 	})
-"bqU" = (
-/obj/structure/fence,
-/obj/structure/cable,
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
 "bqV" = (
 /obj/machinery/space_heater/air_conditioner,
 /turf/simulated/floor/plating,
@@ -29962,10 +29906,6 @@
 /area/hallway/primary/starboard{
 	name = "\improper Central Medical Hallway"
 	})
-"bsk" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
 "bsl" = (
 /obj/machinery/door/airlock/glass{
 	id_tag = "";
@@ -30306,10 +30246,6 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/snow/asphalt,
-/area/surface/snow)
-"bsZ" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
 /area/surface/snow)
 "bta" = (
 /turf/simulated/floor{
@@ -60259,10 +60195,6 @@
 /obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
-"czI" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "czJ" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/mars/air,
@@ -60373,10 +60305,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"czX" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "czY" = (
 /obj/structure/closet,
@@ -75911,10 +75839,6 @@
 	},
 /turf/simulated/floor/engine/concrete,
 /area/medical/paramedics)
-"dTR" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
 "dUv" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced/plasma{
@@ -82799,10 +82723,6 @@
 	icon_state = "red"
 	},
 /area/security/checkpoint/supply)
-"noa" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
 "noj" = (
 /obj/structure/sign/taxi{
 	dir = 1
@@ -85906,10 +85826,6 @@
 /area/security/toilet{
 	name = "Brig Dormitories"
 	})
-"rLW" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
 "rMY" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 8
@@ -86519,11 +86435,6 @@
 /area/hallway/primary/starboard{
 	name = "\improper Central Medical Hallway"
 	})
-"svV" = (
-/obj/structure/fence,
-/obj/structure/cable,
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
 "sxc" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable{
@@ -111648,7 +111559,7 @@ aYZ
 aYZ
 aYZ
 aYZ
-bdP
+bpy
 bgV
 bgV
 bgV
@@ -111949,7 +111860,7 @@ aYZ
 aYZ
 bdN
 aYZ
-bdP
+bpy
 ubg
 bhe
 bnO
@@ -111960,7 +111871,7 @@ bnO
 bnO
 bnO
 boK
-bpF
+bgV
 bpy
 aYZ
 aYZ
@@ -112250,7 +112161,7 @@ aYZ
 aYZ
 aYZ
 aYZ
-bdP
+bpy
 xAd
 uOh
 bhd
@@ -112264,7 +112175,7 @@ naM
 bqt
 bpE
 ykv
-svV
+brb
 aYZ
 aYZ
 aYZ
@@ -112566,7 +112477,7 @@ naM
 naM
 aYZ
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -112868,7 +112779,7 @@ bnP
 naM
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -113155,7 +113066,7 @@ aYZ
 aYZ
 aYZ
 aYZ
-bdP
+bpy
 bdZ
 bfL
 bgv
@@ -113473,7 +113384,7 @@ naM
 naM
 bqt
 bra
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -113775,7 +113686,7 @@ jXU
 naM
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -114077,7 +113988,7 @@ rbR
 naM
 naM
 brc
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -114379,7 +114290,7 @@ pFH
 naM
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -114681,7 +114592,7 @@ mmi
 naM
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -114983,7 +114894,7 @@ bmZ
 bmZ
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -115285,7 +115196,7 @@ boN
 bpM
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -115587,7 +115498,7 @@ xvu
 bpR
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -115889,7 +115800,7 @@ teL
 bmZ
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -116189,9 +116100,9 @@ bmZ
 bmZ
 bmZ
 bmZ
-bqy
+bpy
 vFw
-noa
+bpy
 aYZ
 aYZ
 aYZ
@@ -124958,7 +124869,7 @@ xxU
 bqR
 bqR
 tet
-bsZ
+pnd
 aBX
 aYZ
 aYZ
@@ -125261,7 +125172,7 @@ bqR
 tet
 bvd
 bNd
-aOj
+pnd
 aYZ
 aYZ
 aYZ
@@ -125563,7 +125474,7 @@ aQx
 buK
 bvd
 bNd
-aOj
+pnd
 aYZ
 aYZ
 aYZ
@@ -125865,7 +125776,7 @@ aAo
 buK
 bvd
 aDv
-aOj
+pnd
 aYZ
 aYZ
 aYZ
@@ -125886,7 +125797,7 @@ bvy
 bMs
 aYZ
 aYZ
-bdP
+bpy
 bgV
 bgV
 bgV
@@ -126167,7 +126078,7 @@ aAo
 buK
 bvd
 aDv
-aOj
+pnd
 aYZ
 aYZ
 aYZ
@@ -126468,7 +126379,7 @@ xec
 heK
 fwo
 buK
-bsZ
+pnd
 pnd
 bbD
 aAo
@@ -126494,7 +126405,7 @@ qaR
 hCU
 xPD
 hCU
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -133074,7 +132985,7 @@ aAo
 aAo
 aAo
 aBX
-dTR
+pnd
 aBV
 uZS
 fzl
@@ -133375,7 +133286,7 @@ aAo
 aAo
 aAo
 aAo
-aOj
+pnd
 aDv
 baf
 uZS
@@ -133677,7 +133588,7 @@ aAo
 aAo
 aAo
 aAo
-aOj
+pnd
 aDv
 baf
 uZS
@@ -133979,7 +133890,7 @@ aAo
 aAo
 aAo
 aAo
-aOj
+pnd
 aDv
 baf
 uZS
@@ -133990,10 +133901,10 @@ aAo
 aAo
 aAo
 aCe
-aUH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
+aSB
 aCe
 aJi
 aAo
@@ -134281,7 +134192,7 @@ aAo
 aAo
 aAo
 aAo
-bsk
+pnd
 aDv
 baf
 uZS
@@ -139404,7 +139315,7 @@ adY
 adY
 adY
 adY
-aOj
+pnd
 aDv
 aFc
 aGE
@@ -139706,7 +139617,7 @@ aCV
 aCV
 aKg
 aAo
-aOj
+pnd
 aDv
 aFc
 aGE
@@ -139750,7 +139661,7 @@ aAo
 aAo
 aBV
 aBV
-bsZ
+pnd
 btC
 btZ
 bux
@@ -140008,7 +139919,7 @@ aEN
 aHG
 aKh
 aKg
-aOj
+pnd
 aDv
 aFc
 aGE
@@ -143370,26 +143281,26 @@ aAo
 bpu
 aSz
 aTF
-aUH
-aUH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
+aSB
+aSB
 btH
 bug
 btH
 bue
 btH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
 btH
 bue
 bwQ
 bue
 bwQ
-aUH
-aUH
+aSB
+aSB
 bvN
 bsd
 bxH
@@ -145459,11 +145370,11 @@ bsm
 cgC
 lBb
 aTF
-aUH
-aUH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
+aSB
+aSB
 rEV
 aSz
 wek
@@ -146994,26 +146905,26 @@ aAo
 bpw
 aSz
 aTF
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
 bvN
 aSz
 bwm
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
 bvN
 aSz
 aQx
@@ -152410,12 +152321,12 @@ aVM
 aXO
 aXO
 aQx
-rLW
+pnd
 sXv
 sXv
 aDv
 aDv
-rLW
+pnd
 aAo
 aOI
 aAo
@@ -152713,10 +152624,10 @@ aWJ
 aXO
 aAo
 aBX
-bcF
-bcF
-bcF
-bcF
+pnd
+pnd
+pnd
+pnd
 pnd
 aAo
 aAo
@@ -155361,10 +155272,10 @@ aab
 aab
 aab
 aab
-ade
-adk
-adk
-aee
+add
+add
+add
+add
 aem
 aab
 aab
@@ -156566,16 +156477,16 @@ aab
 aab
 aab
 aab
-ade
-adk
-adk
-adB
+add
+add
+add
+add
 adp
 adT
-adf
+add
 aep
-adk
-aee
+add
+add
 aab
 aab
 aat
@@ -159888,16 +159799,16 @@ aab
 aab
 aab
 aab
-adf
-adk
-adk
-adk
-adk
-adk
-adk
-adk
-adk
-adB
+add
+add
+add
+add
+add
+add
+add
+add
+add
+add
 aab
 aab
 aat
@@ -210827,8 +210738,8 @@ cyx
 cyC
 czx
 czH
-czX
-czX
+czH
+czH
 cAU
 cBm
 cBm
@@ -211128,7 +211039,7 @@ cyx
 cyx
 cyC
 cyz
-czI
+czH
 czY
 cyx
 cAV
@@ -211430,7 +211341,7 @@ cyy
 cyw
 cyC
 cyy
-czI
+czH
 czY
 cyx
 cAV
@@ -212034,7 +211945,7 @@ cyw
 cyz
 cyC
 czy
-czI
+czH
 cyC
 cyC
 cAV
@@ -212336,7 +212247,7 @@ cyA
 cyx
 cyC
 cyA
-czI
+czH
 cyC
 cyC
 cAW
@@ -212638,7 +212549,7 @@ cyA
 cyx
 cyC
 cyw
-czI
+czH
 cyC
 cAu
 cAV
@@ -212940,7 +212851,7 @@ cyy
 cyV
 cyC
 cyA
-czI
+czH
 czZ
 cyT
 cAV
@@ -213242,7 +213153,7 @@ cyB
 cyA
 cyC
 cyw
-czI
+czH
 cyC
 cAu
 cAV
@@ -213544,7 +213455,7 @@ cyA
 cyz
 cyC
 cyy
-czI
+czH
 cyC
 cAu
 cAV
@@ -213846,7 +213757,7 @@ cyB
 cyy
 cyC
 cyw
-czI
+czH
 czZ
 cyT
 cAV
@@ -214148,7 +214059,7 @@ cyC
 cyC
 cyC
 cyw
-czI
+czH
 cyC
 cAu
 cAX

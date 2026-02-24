@@ -47915,17 +47915,9 @@
 /obj/structure/reagent_dispensers/beerkeg,
 /turf/simulated/floor/plating,
 /area/maintenance/port)
-"bHM" = (
-/obj/structure/fence,
-/turf/simulated/floor,
-/area/hallway/primary/port)
 "bHN" = (
 /obj/structure/fence,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor,
-/area/hallway/primary/port)
-"bHO" = (
-/obj/structure/fence,
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "bHP" = (
@@ -83093,10 +83085,6 @@
 /obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
-"dch" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "dci" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/mars/air,
@@ -83164,10 +83152,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"dcs" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dct" = (
 /obj/structure/closet,
@@ -194427,7 +194411,7 @@ bBS
 bDi
 bEC
 bGj
-bHM
+bHP
 bVh
 bkr
 bBS
@@ -194929,7 +194913,7 @@ bkr
 bDj
 bED
 bGk
-bHM
+bHP
 bkr
 bkr
 bkr
@@ -195431,7 +195415,7 @@ bkr
 bkr
 bkr
 bkr
-bHM
+bHP
 bkr
 bkr
 bLZ
@@ -196435,7 +196419,7 @@ bkr
 bkr
 bkr
 bkr
-bHO
+bHP
 bJe
 bKE
 bMa
@@ -198443,7 +198427,7 @@ bkr
 bkr
 bkr
 bkr
-bHM
+bHP
 bJh
 bKH
 bkr
@@ -198945,7 +198929,7 @@ bkr
 bDk
 bEF
 bGn
-bHM
+bHP
 bJi
 bKH
 bkr
@@ -199447,7 +199431,7 @@ bBT
 bDl
 bEG
 bGo
-bHM
+bHP
 bJi
 bKH
 bkr
@@ -407414,8 +407398,8 @@ daU
 daZ
 dca
 dcg
-dcs
-dcs
+dcg
+dcg
 ddb
 ddk
 ddk
@@ -407915,7 +407899,7 @@ daU
 daU
 daZ
 daW
-dch
+dcg
 dct
 daU
 ddc
@@ -408417,7 +408401,7 @@ daV
 daT
 daZ
 daV
-dch
+dcg
 dct
 daU
 ddc
@@ -409421,7 +409405,7 @@ daT
 daW
 daZ
 dcb
-dch
+dcg
 daZ
 daZ
 ddc
@@ -409923,7 +409907,7 @@ daX
 daU
 daZ
 daX
-dch
+dcg
 daZ
 daZ
 ddd
@@ -410425,7 +410409,7 @@ daX
 daU
 daZ
 daT
-dch
+dcg
 daZ
 dcM
 ddc
@@ -410927,7 +410911,7 @@ daV
 dbA
 daZ
 daX
-dch
+dcg
 dcu
 dby
 ddc
@@ -411429,7 +411413,7 @@ daY
 daX
 daZ
 daT
-dch
+dcg
 daZ
 dcM
 ddc
@@ -411931,7 +411915,7 @@ daX
 daW
 daZ
 daV
-dch
+dcg
 daZ
 dcM
 ddc
@@ -412433,7 +412417,7 @@ daY
 daV
 daZ
 daT
-dch
+dcg
 dcu
 dby
 ddc
@@ -412935,7 +412919,7 @@ daZ
 daZ
 daZ
 daT
-dch
+dcg
 daZ
 dcM
 dde

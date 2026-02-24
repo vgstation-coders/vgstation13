@@ -59920,10 +59920,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/crew_quarters/toilet)
-"ovH" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "ovQ" = (
 /obj/structure/fence,
 /turf/unsimulated/floor/grass,
@@ -60077,10 +60073,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"oyt" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "oyz" = (
 /obj/structure/closet,
@@ -393457,9 +393449,9 @@ nYY
 nZb
 oaJ
 otQ
-ovH
-oyt
-oyt
+ovQ
+ovQ
+ovQ
 oGS
 oLx
 oLx

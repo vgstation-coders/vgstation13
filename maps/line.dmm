@@ -22007,10 +22007,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"dzH" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "dzI" = (
 /obj/structure/fence,
 /turf/unsimulated/floor/grass,
@@ -22134,10 +22130,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"dAb" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dAc" = (
 /obj/structure/closet,
@@ -428577,9 +428569,9 @@ dye
 dyk
 dyo
 dzt
-dzH
-dAb
-dAb
+dzI
+dzI
+dzI
 dAS
 dBd
 dBd

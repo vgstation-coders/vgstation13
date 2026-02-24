@@ -84180,10 +84180,6 @@
 /obj/machinery/newscaster,
 /turf/unsimulated/wall,
 /area/centcom/holding)
-"djC" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "djD" = (
 /obj/structure/fence,
 /turf/unsimulated/floor/grass,
@@ -113114,10 +113110,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"eOr" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "eOs" = (
 /obj/structure/closet,
@@ -421350,9 +421342,9 @@ diB
 diC
 diH
 djv
-djC
-eOr
-eOr
+djD
+djD
+djD
 dkg
 eOx
 eOx

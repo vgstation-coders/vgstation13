@@ -94589,14 +94589,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"dBb" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"dBc" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "dBd" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/mars/air,
@@ -419840,7 +419832,7 @@ dAa
 dAg
 dAk
 dAW
-dBb
+dBm
 dBm
 dBm
 dBM
@@ -420342,7 +420334,7 @@ dAg
 dAg
 dAk
 dAe
-dBc
+dBm
 dBn
 dAg
 dBO
@@ -420844,7 +420836,7 @@ dAf
 dAa
 dAk
 dAf
-dBc
+dBm
 dBn
 dAg
 dBO
@@ -421848,7 +421840,7 @@ dAa
 dAe
 dAk
 dAX
-dBc
+dBm
 dAk
 dAk
 dBO
@@ -422350,7 +422342,7 @@ dAi
 dAg
 dAk
 dAi
-dBc
+dBm
 dAk
 dAk
 dBP
@@ -422852,7 +422844,7 @@ dAi
 dAg
 dAk
 dAa
-dBc
+dBm
 dAk
 dBA
 dBO
@@ -423354,7 +423346,7 @@ dAf
 dAA
 dAk
 dAi
-dBc
+dBm
 dBo
 dAz
 dBO
@@ -423856,7 +423848,7 @@ dAh
 dAi
 dAk
 dAa
-dBc
+dBm
 dAk
 dBA
 dBO
@@ -424358,7 +424350,7 @@ dAi
 dAe
 dAk
 dAf
-dBc
+dBm
 dAk
 dBA
 dBO
@@ -424860,7 +424852,7 @@ dAh
 dAf
 dAk
 dAa
-dBc
+dBm
 dBo
 dAz
 dBO
@@ -425362,7 +425354,7 @@ dAk
 dAk
 dAk
 dAa
-dBc
+dBm
 dAk
 dBA
 dBQ

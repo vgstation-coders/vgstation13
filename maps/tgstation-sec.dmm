@@ -81029,14 +81029,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"dhq" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"dhr" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "dhs" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/mars/air,
@@ -417283,7 +417275,7 @@ dfV
 dfW
 dgb
 dhd
-dhq
+dhI
 dhI
 dhI
 diu
@@ -417785,7 +417777,7 @@ dfW
 dfW
 dgb
 dfY
-dhr
+dhI
 dhJ
 dfW
 div
@@ -418287,7 +418279,7 @@ dfX
 dfV
 dgb
 dfX
-dhr
+dhI
 dhJ
 dfW
 div
@@ -419291,7 +419283,7 @@ dfV
 dfY
 dgb
 dhe
-dhr
+dhI
 dgb
 dgb
 div
@@ -419793,7 +419785,7 @@ dfZ
 dfW
 dgb
 dfZ
-dhr
+dhI
 dgb
 dgb
 diw
@@ -420295,7 +420287,7 @@ dfZ
 dfW
 dgb
 dfV
-dhr
+dhI
 dgb
 dib
 div
@@ -420797,7 +420789,7 @@ dfX
 dgw
 dgb
 dfZ
-dhr
+dhI
 dhK
 dgu
 div
@@ -421299,7 +421291,7 @@ dga
 dfZ
 dgb
 dfV
-dhr
+dhI
 dgb
 dib
 div
@@ -421801,7 +421793,7 @@ dfZ
 dfY
 dgb
 dfX
-dhr
+dhI
 dgb
 dib
 div
@@ -422303,7 +422295,7 @@ dga
 dfX
 dgb
 dfV
-dhr
+dhI
 dhK
 dgu
 div
@@ -422805,7 +422797,7 @@ dgb
 dgb
 dgb
 dfV
-dhr
+dhI
 dgb
 dib
 dix

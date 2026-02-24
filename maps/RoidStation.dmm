@@ -125204,10 +125204,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"eCv" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "eCw" = (
 /obj/structure/fence,
 /turf/unsimulated/floor/grass,
@@ -125323,10 +125319,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"eCK" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "eCL" = (
 /obj/structure/closet,
@@ -440137,9 +440129,9 @@ eBg
 eBm
 eBq
 eCq
-eCv
-eCK
-eCK
+eCw
+eCw
+eCw
 eDk
 eDt
 eDt

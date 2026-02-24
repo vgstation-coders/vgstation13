@@ -84821,14 +84821,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"diF" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"diG" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "diH" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/mars/air,
@@ -411983,7 +411975,7 @@ dhi
 dho
 dhs
 dir
-diF
+diZ
 diZ
 diZ
 djK
@@ -412485,7 +412477,7 @@ dho
 dho
 dhs
 dhm
-diG
+diZ
 dja
 dho
 djM
@@ -412987,7 +412979,7 @@ dhn
 dhi
 dhs
 dhn
-diG
+diZ
 dja
 dho
 djM
@@ -413991,7 +413983,7 @@ dhi
 dhm
 dhs
 dis
-diG
+diZ
 dhs
 dhs
 djM
@@ -414493,7 +414485,7 @@ dhq
 dho
 dhs
 dhq
-diG
+diZ
 dhs
 dhs
 djN
@@ -414995,7 +414987,7 @@ dhq
 dho
 dhs
 dhi
-diG
+diZ
 dhs
 djs
 djM
@@ -415497,7 +415489,7 @@ dhn
 dhM
 dhs
 dhq
-diG
+diZ
 djb
 dhL
 djM
@@ -415999,7 +415991,7 @@ dhp
 dhq
 dhs
 dhi
-diG
+diZ
 dhs
 djs
 djM
@@ -416501,7 +416493,7 @@ dhq
 dhm
 dhs
 dhn
-diG
+diZ
 dhs
 djs
 djM
@@ -417003,7 +416995,7 @@ dhp
 dhn
 dhs
 dhi
-diG
+diZ
 djb
 dhL
 djM
@@ -417505,7 +417497,7 @@ dhs
 dhs
 dhs
 dhi
-diG
+diZ
 dhs
 djs
 djO
