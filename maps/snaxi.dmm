@@ -1215,14 +1215,9 @@
 /area/surface/junkyard)
 "adD" = (
 /obj/structure/hanging_lantern{
-	dir = 8
+	dir = 1
 	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/unsimulated/floor/snow/asphalt,
+/turf/unsimulated/floor/snow/permafrost,
 /area/surface/junkyard)
 "adE" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1273,13 +1268,10 @@
 /turf/unsimulated/floor/snow/permafrost,
 /area/surface/junkyard)
 "adM" = (
-/obj/structure/hanging_lantern{
-	dir = 1
-	},
 /obj/effect/decal/cleanable/blood/oil{
 	icon_state = "floor2"
 	},
-/turf/unsimulated/floor/snow/permafrost,
+/turf/unsimulated/floor/snow/asphalt,
 /area/surface/junkyard)
 "adN" = (
 /obj/effect/decal/cleanable/dirt,
@@ -82346,6 +82338,18 @@
 	icon_state = "wood-broken6"
 	},
 /area/icebar)
+"mUw" = (
+/obj/structure/hanging_lantern{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/snow/asphalt,
+/area/surface/junkyard)
 "mVD" = (
 /obj/machinery/atmospherics/unary/cold_sink/freezer{
 	current_temperature = 273
@@ -156480,8 +156484,8 @@ aab
 add
 add
 add
-add
-adp
+adA
+adD
 adT
 add
 aep
@@ -156782,7 +156786,7 @@ aab
 add
 adj
 adu
-adA
+mUw
 adM
 adS
 adw
@@ -157084,7 +157088,7 @@ aab
 add
 adm
 adp
-adD
+adC
 adO
 adS
 aeg
