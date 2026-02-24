@@ -39,3 +39,7 @@
 				if(e.count > 0 && e.type == /datum/disease2/effect/loneliness)
 					e.side_effect(src)
 					return
+
+	register_event(/event/v_transition, src, nameof(src::OnMobVChanged()))
+
+	SSmapping?.v_pause_check(src, get_virtual_z(), null)

@@ -82413,10 +82413,6 @@
 /obj/docking_port/destination/syndicate/south,
 /turf/space,
 /area)
-"daa" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "dac" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
@@ -363088,7 +363084,7 @@ aaa
 aaa
 aaa
 aaa
-daa
+aaa
 aaa
 aaa
 aaa

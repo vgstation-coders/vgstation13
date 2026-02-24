@@ -88,7 +88,7 @@
 	var/list/tempL = L
 	var/attempt = null
 	var/success = 0
-	var/prev_z = user.z
+	var/prev_v = user.get_virtual_z()
 	if(istype(thearea,/area/turret_protected/ai) && ishuman(user))
 		var/aifound = FALSE
 		for(var/mob/living/M in player_list)
@@ -100,7 +100,7 @@
 		if(!aifound)
 			var/mob/living/carbon/human/H = user
 			H.make_fake_ai()
-			INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
+			INVOKE_EVENT(user, /event/v_transition, "user" = user, "to_v" = user.get_virtual_z(), "from_v" = prev_v)
 			smoke.start()
 			src.uses -= 1
 			log_game("[key_name(user)] teleported to [thearea.name] using a scroll.")
@@ -111,12 +111,12 @@
 		if(!success)
 			tempL.Remove(attempt)
 		else
-			INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
+			INVOKE_EVENT(user, /event/v_transition, "user" = user, "to_v" = user.get_virtual_z(), "from_v" = prev_v)
 			break
 
 	if(!success)
 		user.forceMove(pick(L))
-		INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
+		INVOKE_EVENT(user, /event/v_transition, "user" = user, "to_v" = user.get_virtual_z(), "from_v" = prev_v)
 
 	smoke.start()
 	src.uses -= 1

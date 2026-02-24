@@ -288,28 +288,30 @@ var/list/telesci_warnings = list(
 	if (!telepad)
 		return
 
-	var/trueX = x_co + x_off - x_player_off + WORLD_X_OFFSET[z_co]
-	var/trueY = y_co + y_off - y_player_off + WORLD_Y_OFFSET[z_co]
-	trueX = clamp(trueX, 1, world.maxx)
-	trueY = clamp(trueY, 1, world.maxy)
+	var/trueX = x_co + x_off - x_player_off + get_world_x_offset(z_co)
+	var/trueY = y_co + y_off - y_player_off + get_world_y_offset(z_co)
+	var/datum/virtual_z/vz = map.getVLevel(z_co)
+	trueX = clamp(vz.x(trueX), vz.x_min, vz.x_max)
+	trueY = clamp(vz.y(trueY), vz.y_min, vz.y_max)
 
-	var/turf/target = locate(trueX, trueY, z_co)
+	var/turf/target = locate(trueX, trueY, vz.z())
 	var/area/A=target.loc
 	if(A && A.jammed)
-		if(!telepad.amplifier || A.jammed==SUPER_JAMMED)
+		if(!telepad.amplifier || A.jammed==SUPER_JAMMED || vz.teleJammed==VZ_TELEPORTATION_FORBIDDEN)
+			message_admins("A.jammed = [A.jammed], telepad.amplifier = [telepad.amplifier], vz.teleJammed = [vz.teleJammed]")
 			src.visible_message("<span class='warning'>[bicon(src)] \The [src] turns on and the lights dim. You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?", "<span class='warning'>You hear something buzz.</span></span>")
 			return
 
 		if(prob(25))
 			QDEL_NULL(telepad.amplifier)
 			src.visible_message("[bicon(src)]<span class='notice'>You hear something shatter.</span>","[bicon(src)]<span class='notice'>You hear something shatter.</span>")
-
 	spark(telepad, 5)
 	flick("pad-beam", telepad)
 	to_chat(user, "<span class='caution'>Teleport successful.</span>")
 	spark(target, 5)
 	var/turf/source = target
 	var/turf/dest = get_turf(telepad)
+	var/datum/virtual_z/vz_source = source.get_virtual_z()
 	if(direction == DIRECTION_SEND)
 		source = dest
 		dest = target
@@ -333,6 +335,17 @@ var/list/telesci_warnings = list(
 
 		log_admin(log)
 		do_teleport(ROI, dest, 0, aijamming=ignores_jamming)
+		if(vz.teleJammed==VZ_TELEPORTATION_EXPENSIVE || vz_source.teleJammed==VZ_TELEPORTATION_EXPENSIVE) //Ouch!
+			if(isliving(user))
+				var/mob/living/L = user
+				if(prob(50))
+					L.adjustCloneLoss(rand(5, 15))
+					to_chat(L, "<span class='warning'>You feel your cells tearing apart as the telepad struggles to reconstruct you!</span>")
+				if(prob(40))
+					L.dizziness += rand(10, 30)
+				if(prob(30) && ishuman(L))
+					var/mob/living/carbon/human/H = L
+					H.vomit()
 		if(telepad.arcanetampered) // i have done nothing but arcane tamper telepads for 3 days!
 			breadtype = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread))
 			new breadtype(dest)
@@ -375,9 +388,9 @@ var/list/telesci_warnings = list(
 
 	x_co = rand(MIN_X, MAX_X)
 	y_co = rand(MIN_Y, MAX_Y)
-	var/new_z = rand(1, map.zLevels.len)
-	if(new_z != map.zCentcomm)
-		z_co = new_z
+	var/datum/virtual_z/new_v = rand(1, map.vLevels.len)
+	if(new_v.id != map.zCentcomm)
+		z_co = new_v.id
 
 	if (cell && cell.charge < teleport_cell_usage)
 		var/direction = pick(DIRECTION_RECEIVE, DIRECTION_SEND)

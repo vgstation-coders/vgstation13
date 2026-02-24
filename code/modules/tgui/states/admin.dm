@@ -10,6 +10,7 @@
  */
 
 var/list/datum/ui_state/admin_state/admin_states = list()
+var/datum/ui_state/admin_state/admin_state = new
 
 /datum/ui_state/admin_state
 	/// The specific admin permissions required for the UI using this state.

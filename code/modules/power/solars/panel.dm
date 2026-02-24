@@ -254,7 +254,7 @@
 		else if(obscured || !sun)
 			icon_state += "-dark"
 		else
-			if(SSDayNight?.overwrite_solars && (src.z in daynight_z_lvls) )
+			if(SSDayNight?.overwrite_solars && (src.get_virtual_z() in daynight_v_lvls) )
 				glow.transform = turn(matrix(), (SSDayNight.nearest_star_angle + 180) % 360)
 			else
 				glow.transform = turn(matrix(), (sun.angle + 180) % 360)
@@ -267,7 +267,7 @@
 	if(!sun)
 		obscured = 1
 
-	if(SSDayNight?.overwrite_solars && (src.z in daynight_z_lvls) )
+	if(SSDayNight?.overwrite_solars && (src.get_virtual_z() in daynight_v_lvls) )
 		use_daynight_ss=TRUE
 		obscured=0
 

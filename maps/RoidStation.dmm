@@ -114471,10 +114471,6 @@
 	},
 /turf/space,
 /area/vault)
-"eed" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "eee" = (
 /obj/effect/step_trigger/teleporter/random{
 	affect_ghosts = 1;
@@ -384058,7 +384054,7 @@ aaa
 aaa
 aaa
 aaa
-eed
+aaa
 aaa
 aaa
 aaa

@@ -51704,10 +51704,6 @@
 	icon_state = "floor3"
 	},
 /area/shuttle/escape/centcom)
-"dsr" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "dss" = (
 /obj/structure/window/reinforced{
 	dir = 4
@@ -319493,7 +319489,7 @@ dvd
 dvd
 dvd
 dvd
-dsr
+dvd
 dvd
 dvd
 dvd

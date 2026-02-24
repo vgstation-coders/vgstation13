@@ -81306,10 +81306,6 @@
 /obj/docking_port/destination/syndicate/south,
 /turf/space,
 /area)
-"cWr" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cWs" = (
 /obj/effect/step_trigger/teleporter/random{
 	affect_ghosts = 1;
@@ -365990,7 +365986,7 @@ aaa
 aaa
 aaa
 aaa
-cWr
+aaa
 aaa
 aaa
 aaa

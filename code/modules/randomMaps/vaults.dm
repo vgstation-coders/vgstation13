@@ -48,11 +48,6 @@
 
 	//Compare all objects with the map and remove non-compactible ones
 	for(var/datum/map_element/vault/V in list_of_vaults)
-		//See code/modules/randomMaps/dungeons.dm
-		if(V.require_dungeons && !dungeon_area)
-			list_of_vaults.Remove(V)
-			continue
-
 		if(map.only_spawn_map_exclusive_vaults || V.exclusive_to_maps.len) //Remove this vault if it isn't exclusive to this map
 			if(!V.exclusive_to_maps.Find(map.nameShort) && !V.exclusive_to_maps.Find(map.nameLong))
 				list_of_vaults.Remove(V)
@@ -334,7 +329,7 @@
 
 	return start_turf && (start_turf.z <= map.zDeepSpace)
 
-	
+
 //Proc that populates a single area with many vaults, randomly
 //A is the area OR a list of turfs where the placement happens
 //map_element_objects is a list of vaults that have to be placed. Defaults to subtypes of /datum/map_element/vault (meaning all vaults are spawned)

@@ -195,7 +195,8 @@ var/list/particle_string_to_type = list(
 	PS_BIBLE_PAGE = /particles/bible_page,
 	PS_SHADOW_SMOKE = /particles/cult_smoke,
 	PS_SHADOW_SMOKE2 = /particles/cult_smoke/alt,
-	PS_GAS_VENT = /particles/gas_vent
+	PS_GAS_VENT = /particles/gas_vent,
+	PS_CIG_SMOKE = /particles/cigsmoke,
 	)
 
 /particles
@@ -489,6 +490,23 @@ var/list/particle_string_to_type = list(
 	drift = generator("box", list(-0.5,-0.1), list(0.5,0.1))
 	scale = list(0.5, 0.5)
 	grow = list(0.08, 0.08)
+
+/particles/cigsmoke //copied from /steam, mostly.
+	width = 64
+	height = 64
+	count = 20
+	spawning = 1
+	lifespan = 1 SECONDS
+	fade = 1 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "steam"
+	color = "#FFFFFF99"
+	position = 0
+	velocity = 1
+	scale = list(0.3, 0.3)
+	grow = list(0.05, 0.05)
+	rotation = generator("num", 0,360)
+	pixel_y=10
 
 /turf
 	var/last_dust_time = 0

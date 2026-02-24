@@ -12,6 +12,7 @@ var/datum/money_account/vendor_account
 var/list/all_money_accounts = list()
 var/list/all_station_accounts = list()
 var/datum/money_account/trader_account
+var/datum/money_account/centcomm_account
 
 var/station_allowance = 0//This is what Nanotrasen will send to the Station Account after every salary, as provision for the next salary.
 var/latejoiner_allowance = 0//Added to station_allowance and reset before every wage payout.

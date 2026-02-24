@@ -669,6 +669,9 @@ var/list/global/id_cards = list()
 
 /obj/item/weapon/card/id/admin/New()
 	access = get_absolutely_all_accesses()
+	if(!centcomm_account)
+		centcomm_account = create_account("Centcomm Account", starting_funds = INFINITY, source_db=null, wage_payout=0, security_pref=1, ratio_pref=0, makehidden=TRUE, isStationAccount=FALSE)
+	associated_account_number = centcomm_account.account_number
 	..()
 
 /obj/item/weapon/card/id/centcom
@@ -680,6 +683,9 @@ var/list/global/id_cards = list()
 
 /obj/item/weapon/card/id/centcom/New()
 	access = get_all_centcom_access()
+	if(!centcomm_account)
+		centcomm_account = create_account("Centcomm Account", starting_funds = INFINITY, source_db=null, wage_payout=0, security_pref=1, ratio_pref=0, makehidden=TRUE, isStationAccount=FALSE)
+	associated_account_number = centcomm_account.account_number
 	..()
 
 /obj/item/weapon/card/id/salvage_captain

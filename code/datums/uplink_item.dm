@@ -83,6 +83,8 @@ var/list/discounted_items_of_the_round = list()
 	var/available_for_nuke_ops = TRUE
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
+	var/discount_on_month	//two-digit month as string
+	var/discount_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
 	var/times_bought = 0
 	var/refundable = FALSE
@@ -100,6 +102,9 @@ var/list/discounted_items_of_the_round = list()
 	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
 /datum/uplink_item/proc/gives_discount(var/user_job)
+	if(discount_on_month && time2text(world.realtime,"MM") == discount_on_month)
+		if(!discount_on_day || time2text(world.realtime,"DD") == discount_on_day)
+			return TRUE
 	return user_job && jobs_with_discount.len && jobs_with_discount.Find(user_job)
 
 /datum/uplink_item/proc/available_for_job(var/user_job)
@@ -1030,6 +1035,8 @@ var/list/discounted_items_of_the_round = list()
 	item = /obj/item/seeds/ambrosiacruciatusseed
 	cost = 6
 	discounted_cost = 2
+	discount_on_month = "04"
+	discount_on_day = "20"
 	jobs_with_discount = list("Botanist")
 
 /datum/uplink_item/jobspecific/service/vinesuit

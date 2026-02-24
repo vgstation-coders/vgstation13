@@ -59,7 +59,7 @@
 	var/data[0]
 	data["error"] = error_message
 
-	var/datum/climate/C = SSweather.get_climate(src.z)
+	var/datum/climate/C = SSweather.get_climate_from_turf(get_turf(src))
 	if(C)
 		var/datum/weather/CW = C.current_weather
 		var/forecast_dat
@@ -91,14 +91,14 @@
 /obj/machinery/weathercontrol/Topic(href, href_list)
 	if(..())
 		return
-	if(usr.incapacitated() || (!Adjacent(usr)&&!isAdminGhost(usr)) || !usr.dexterity_check() || !SSweather.get_climate(src.z))
+	if(usr.incapacitated() || (!Adjacent(usr)&&!isAdminGhost(usr)) || !usr.dexterity_check() || !SSweather.get_climate_from_turf(get_turf(src)))
 		return
 	if(!allowed(usr) && !emagged)
 		to_chat(usr,"<span class='warning'>Access denied.</span>")
 		return
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
-	var/datum/climate/C = SSweather.get_climate(src.z)
+	var/datum/climate/C = SSweather.get_climate_from_turf(get_turf(src))
 	var/datum/weather/CW = C.current_weather
 
 	var/feedback = NOFIRE

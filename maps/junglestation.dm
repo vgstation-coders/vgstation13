@@ -45,6 +45,7 @@
 	center_y = 163
 
 /datum/map/active/New()
+	daynight_z_lvls = list(zMainStation,zAsteroid)
 	..()
 	//linking roid and station
 	zLevels[zMainStation].transition_crosswrap_z=list(zAsteroid,zAsteroid,zAsteroid,zAsteroid)
@@ -54,7 +55,6 @@
 	zLevels[zSecondunderground].transition_crosswrap_z=list(zAdditionalStationZlevel,zAdditionalStationZlevel,zAdditionalStationZlevel,zAdditionalStationZlevel)
 	world.name = "NT Colony Gamma-8"
 	station_name="NT Colony Gamma-8"
-	daynight_z_lvls=list(1,4)
 
 
 /datum/map/active/map_specific_init()
@@ -117,6 +117,8 @@
 
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
+	if(!currentrun)
+		currentrun = list()
 	if(world.time >= next_firetime)
 		if(lighting_update_lights_lowpriority.len) //prevent overwriting current lighting changes by not updating lighting until we're done.
 			message_admins("day/night subsystem was fired, when there are still [lighting_update_lights_lowpriority.len] unprocessed lighting updates remaining. Is the server lagging, or was it force-fired? Delaying fire for 15 seconds...")
@@ -125,7 +127,8 @@
 
 		advance_time()
 		if(!resumed)
-			currentrun = daynight_turfs.Copy()
+			for(var/datum/virtual_z/vz in daynight_v_lvls)
+				currentrun += vz.daynight_turfs.Copy()
 
 	while(currentrun.len)
 		var/turf/T = currentrun[currentrun.len]
@@ -138,9 +141,6 @@
 
 		if(MC_TICK_CHECK)
 			return
-
-		if(!resumed)
-			currentrun = daynight_turfs.Copy()
 
 
 /datum/subsystem/daynightcycle/advance_time()

@@ -33,9 +33,15 @@
 #define RUIN_BUDGET_PLANET  10 //max per planet
 #define RUIN_BUDGET_JUNGLE  20 //max for junglestation
 
-#define SECTOR_SIZE 100 //max width/height of a sector in turfs. temporary - will be dynamic later
-#define RUIN_PLACEMENT_PADDING 5 // Padding around ruins when placing them in sectors to avoid edge issues
-#define LANDING_ZONE_EDGE_BUFFER 11 // Buffer distance from sector edges for shuttle landing zones
+// Allocation sizing for virtual z-levels
+#define ALLOCATION_SMALL		92 // can fit 25 in one zlevel
+#define ALLOCATION_QUADRANT		245 // can fit 4 in one zlevel
+#define ALLOCATION_FULL			500 // takes up the whole zlevel
+
+// Virtual z-level spacing
+#define VIRTUAL_Z_SPACING	10
+#define RUIN_PLACEMENT_PADDING 		5 // Padding around ruins when placing them in vlevels to avoid edge issues
+#define LANDING_ZONE_EDGE_BUFFER 	11 // Buffer distance from vlevel edges for shuttle landing zones
 
 // Story generator defines
 #define STORY_NT		1
@@ -50,3 +56,19 @@
 #define STORY_RECENT_THRESHOLD 70 // Threshold in years - stories younger than this spawn hostile mobs, older spawn corpses
 #define STORY_MISSING_CHANCE 25 // Chance that a story landmark spawns nothing (body is missing)
 #define STORY_DISEASE_CHANCE 10 // Chance that a spawned character is infected with a random disease
+
+#define VZ_TELEPORTATION_ALLOWED		1		// Teleportation is allowed
+#define VZ_TELEPORTATION_EXPENSIVE		(1<<1)  // Teleportation is allowed using real Bluespace Crystals
+#define VZ_TELEPORTATION_FORBIDDEN		(1<<2)  // Teleportation is forbidden
+
+// This v-level is a...
+#define VZ_TRANSIT		1		// shuttle transit area
+#define VZ_PARKING		2		// shuttle parking area (unused for now)
+#define VZ_PLANET		3		// planet
+#define VZ_MAP_ELEMENT	4		// vault/ruin/dungeon/away mission/etfc
+#define VZ_CUSTOM		5		// custom level
+#define VZ_DEFAULT		6 		// premapped area (station, centcomm, etc)
+
+// System vLevel offset - system vLevels (station, centcomm, etc) use IDs 101+
+// to differentiate them from dynamically created vLevels which use IDs 1+
+#define SYSTEM_VLEVEL_OFFSET	100

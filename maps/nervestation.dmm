@@ -13497,10 +13497,6 @@
 	},
 /turf/simulated/floor/engine/vacuum,
 /area/maintenance/incinerator)
-"cWM" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cWN" = (
 /turf/simulated/wall/shuttle{
 	dir = 1;
@@ -20964,9 +20960,6 @@
 /area/centcom/ert)
 "dqc" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/sunglasses/sechud{
-	pixel_y = 8
-	},
 /obj/item/weapon/gun/energy/taser,
 /turf/unsimulated/floor{
 	icon_state = "dark"
@@ -21786,13 +21779,7 @@
 /obj/item/clothing/head/bio_hood/janitor,
 /obj/item/device/radio/headset/ert,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
 /obj/effect/decal/cleanable/dirt,
-/obj/item/clothing/glasses/science{
-	pixel_x = -2;
-	pixel_y = -2
-	},
-/obj/item/clothing/glasses/science,
 /turf/unsimulated/floor{
 	icon_state = "dark purple stripe"
 	},
@@ -27464,10 +27451,6 @@
 /obj/docking_port/destination/salvage/abandoned_ship{
 	dir = 2
 	},
-/turf/space,
-/area)
-"dFS" = (
-/obj/item/trash/cheesie,
 /turf/space,
 /area)
 "dFT" = (
@@ -37604,14 +37587,6 @@
 	pixel_x = -2;
 	pixel_y = 6
 	},
-/obj/item/clothing/glasses/science{
-	pixel_x = -2;
-	pixel_y = 17
-	},
-/obj/item/clothing/glasses/science{
-	pixel_x = 2;
-	pixel_y = 14
-	},
 /obj/machinery/camera{
 	dir = 4;
 	name = "Medbay - Chemistry";
@@ -38256,14 +38231,6 @@
 /obj/item/clothing/glasses/hud/health,
 /obj/item/clothing/glasses/hud/health,
 /obj/item/clothing/glasses/hud/health,
-/obj/item/clothing/glasses/science{
-	pixel_x = 2;
-	pixel_y = 14
-	},
-/obj/item/clothing/glasses/science{
-	pixel_x = -2;
-	pixel_y = 12
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -42399,18 +42366,6 @@
 /area/security/detectives_office)
 "gvA" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/science{
-	pixel_x = 2;
-	pixel_y = 6
-	},
-/obj/item/clothing/glasses/science{
-	pixel_x = 2;
-	pixel_y = 6
-	},
-/obj/item/clothing/glasses/science{
-	pixel_x = 2;
-	pixel_y = 6
-	},
 /obj/item/device/gps/science,
 /obj/item/device/gps/science,
 /obj/item/device/gps/science,
@@ -58502,7 +58457,6 @@
 /obj/item/weapon/extinguisher,
 /obj/item/clothing/head/hardhat/red,
 /obj/item/clothing/glasses/scanner/meson,
-/obj/item/clothing/glasses/science,
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "kTb" = (
@@ -60543,10 +60497,6 @@
 /obj/item/weapon/storage/box/beakers{
 	pixel_x = -3;
 	pixel_y = -2
-	},
-/obj/item/clothing/glasses/science{
-	pixel_x = 4;
-	pixel_y = -12
 	},
 /obj/item/weapon/reagent_containers/glass/bottle/mutagen{
 	pixel_x = 9
@@ -69288,7 +69238,6 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
 /obj/item/clothing/gloves/latex,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
@@ -70456,7 +70405,6 @@
 "ogn" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 8;
-	default_scrubbed_gases = list("plasma");
 	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor/engine,
@@ -82099,7 +82047,6 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
 /obj/item/clothing/gloves/latex,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
@@ -97361,19 +97308,6 @@
 	icon_state = "dark"
 	},
 /area/crew_quarters/courtroom)
-"vJb" = (
-/obj/structure/rack{
-	dir = 1
-	},
-/obj/item/clothing/suit/fire/firefighter,
-/obj/item/weapon/tank/oxygen,
-/obj/item/clothing/mask/gas,
-/obj/item/weapon/extinguisher,
-/obj/item/clothing/head/hardhat/red,
-/obj/item/clothing/glasses/scanner/meson,
-/obj/item/clothing/glasses/science,
-/turf/simulated/floor/plating,
-/area/maintenance/starboard)
 "vJi" = (
 /obj/machinery/firealarm{
 	dir = 4;
@@ -98256,7 +98190,6 @@
 /obj/item/weapon/tank/oxygen,
 /obj/item/weapon/storage/belt/utility,
 /obj/item/weapon/storage/box/lights/mixed,
-/obj/item/clothing/glasses/science,
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "vVM" = (
@@ -104883,7 +104816,6 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
 /obj/item/clothing/gloves/latex,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
@@ -267297,7 +267229,7 @@ uCG
 eLr
 ozk
 epb
-vJb
+exl
 sPb
 wif
 wif
@@ -358635,7 +358567,7 @@ aaa
 aaa
 aaa
 aaa
-cWM
+aaa
 aaa
 aaa
 aaa
@@ -624746,7 +624678,7 @@ aaa
 aaa
 aaa
 aaa
-dFS
+aaa
 aaa
 aaa
 aaa

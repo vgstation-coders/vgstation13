@@ -1441,10 +1441,6 @@
 "dX" = (
 /turf/unsimulated/floor,
 /area)
-"dY" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "dZ" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/storage/belt/utility/chief/full,
@@ -1754,7 +1750,7 @@ aa
 aa
 aa
 aa
-dY
+aa
 "}
 (2,1,1) = {"
 aa

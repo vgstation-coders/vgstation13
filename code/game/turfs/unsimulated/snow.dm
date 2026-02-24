@@ -25,8 +25,7 @@
 	var/list/existing_prints = list()
 
 /turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
-	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
-	var/datum/climate/C = SSweather.get_climate(src.z, A)
+	var/datum/climate/C = SSweather.get_climate(get_virtual_z()) // Using the proc instead of the v var here in case this happens early in map load
 	if(C)
 		C.unregister_weather_turf(src)
 	ClearSnowprints()
@@ -47,8 +46,7 @@
 	footstep_sound_claw = sounds_snow
 
 /turf/unsimulated/floor/snow/Destroy()
-	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
-	var/datum/climate/C = SSweather.get_climate(src.z, A)
+	var/datum/climate/C = SSweather.get_climate(v)
 	if(C)
 		C.unregister_weather_turf(src)
 	..()
@@ -63,8 +61,7 @@
 
 /turf/unsimulated/floor/snow/proc/get_snow_state()
 	. = precip_intensity_override
-	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
-	var/datum/climate/C = SSweather.get_climate(src.z, A)
+	var/datum/climate/C = SSweather.get_climate(v)
 	if(map && C && istype(C.current_weather,/datum/weather/snow))
 		var/datum/weather/snow/S = C.current_weather
 		if(!.)
@@ -127,8 +124,7 @@
 				H.overlay_fullscreen("snowfall_blizzard", /obj/abstract/screen/fullscreen/snowfall_blizzard)
 		if(H.client)
 			if(!istype(OL,/turf/unsimulated/floor/snow))
-				var/datum/allocation/A_alloc = SSmapping.get_allocation(trf = src)
-				var/datum/climate/C = SSweather.get_climate(src.z, A_alloc)
+				var/datum/climate/C = SSweather.get_climate(v)
 				if(C?.current_weather?.weather_sound)
 					H << sound(C.current_weather.weather_sound, repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = C.current_weather.weather_sound_volume)
 

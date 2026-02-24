@@ -185,6 +185,22 @@
 	plane = FULLSCREEN_PLANE
 	alpha = 255
 
+/obj/abstract/screen/fullscreen/high/love
+	color = "#660531"
+	alpha = 255
+	blend_mode = BLEND_MULTIPLY
+	plane = FULLSCREEN_PLANE
+	alpha = 225
+
+/obj/abstract/screen/fullscreen/high/hearts
+	icon = 'icons/mob/animal.dmi'
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	icon_state = "heart-ani2"
+	anim_state = "heart-ani2"
+	alpha = 255
+	blend_mode = BLEND_MULTIPLY
+	plane = FULLSCREEN_PLANE
+
 /obj/abstract/screen/fullscreen/hackview_border
 	icon_state = "malfview"
 	layer = HALLUCINATION_LAYER

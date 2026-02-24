@@ -1422,6 +1422,14 @@ var/global/blood_virus_spreading_disabled = 0
 		log_admin("[key_name(usr)] checked the Climate Panel.")
 	feedback_add_details("admin_verb","CLI")
 
+/client/proc/level_manager()
+	set name = "Level Manager"
+	set category = "Admin"
+	if(holder)
+		holder.level_manager()
+		log_admin("[key_name(usr)] checked the Level Manager.")
+	feedback_add_details("admin_verb","LVM")
+
 
 /client/proc/start_line_profiling()
 	set category = "Profile"

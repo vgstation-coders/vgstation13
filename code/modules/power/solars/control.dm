@@ -133,7 +133,7 @@
 	user.set_machine(src)
 
 	var/t=""
-	if(SSDayNight?.overwrite_solars && (src.z in daynight_z_lvls) )
+	if(SSDayNight?.overwrite_solars && (src.get_virtual_z() in daynight_v_lvls) )
 		t = {"<TT><B>Solar Generator Control</B><HR><PRE>
 <B>Generated power</B> : [round(lastgen)] W<BR>
 Planet Rotational Period : [abs(SSDayNight.solar_orbit_period)] minutes<BR>

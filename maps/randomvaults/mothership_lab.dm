@@ -7,8 +7,8 @@
 
 /datum/map_element/vault/mothership_lab/pre_load()
 	// Load the two other levels
-	load_dungeon(/datum/map_element/dungeon/habitation)
-	load_dungeon(/datum/map_element/dungeon/research)
+	load_dungeon(/datum/map_element/dungeon/habitation, 0, TRUE)
+	load_dungeon(/datum/map_element/dungeon/research, 0, TRUE)
 
 //////////////////////////////
 // AREAS

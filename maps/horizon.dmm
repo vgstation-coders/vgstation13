@@ -43972,10 +43972,6 @@
 	},
 /turf/space/transit/west,
 /area)
-"bKr" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "bKs" = (
 /obj/docking_port/destination/syndicate/transit,
 /turf/space/transit/north,
@@ -331002,7 +330998,7 @@ aaa
 aaa
 aaa
 aaa
-bKr
+aaa
 aaa
 aaa
 aaa

@@ -15531,7 +15531,8 @@
 /area/shuttle/escape/centcom)
 "fHC" = (
 /obj/docking_port/destination/escape/shuttle/station{
-	dir = 4
+	dir = 4;
+	base_turf_type = /turf/unsimulated/floor/planetary/concrete/jungle
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -18652,7 +18653,8 @@
 	req_access_txt = "48"
 	},
 /obj/docking_port/destination/mining/outpost{
-	dir = 8
+	dir = 8;
+	base_turf_type = /turf/unsimulated/floor/planetary/path/jungle
 	},
 /turf/simulated/floor,
 /area/mine/production)
@@ -19750,7 +19752,8 @@
 	icon_state = "warning"
 	},
 /obj/docking_port/destination/transport/station{
-	dir = 8
+	dir = 8;
+	base_turf_type = /turf/unsimulated/floor/planetary/concrete/jungle
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/landing)
@@ -24686,7 +24689,6 @@
 /obj/structure/table/woodentable,
 /obj/item/clothing/accessory/storage/bandolier,
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel,
-/obj/machinery/reagentgrinder,
 /obj/item/stack/sheet/metal{
 	amount = 50
 	},
@@ -31299,15 +31301,12 @@
 /area/surface/jungle/vault)
 "lEP" = (
 /obj/structure/closet/secure_closet/freezer/meat,
-/obj/machinery/alarm{
-	pixel_y = 23
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
-/obj/structure/wc/sink/kitchen{
-	pixel_y = 28;
-	dir = 1
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
 	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -37966,6 +37965,10 @@
 /obj/machinery/camera{
 	dir = 6
 	},
+/obj/structure/wc/sink/kitchen{
+	pixel_y = 28;
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -38029,7 +38032,8 @@
 /area/chapel/main)
 "oaG" = (
 /obj/docking_port/destination/mining/station{
-	dir = 8
+	dir = 8;
+	base_turf_type = /turf/unsimulated/floor/planetary/concrete/jungle
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -43353,7 +43357,8 @@
 /area/centcom/ert)
 "qdn" = (
 /obj/docking_port/destination/ert/station{
-	dir = 8
+	dir = 8;
+	base_turf_type = /turf/unsimulated/floor/planetary/concrete/jungle
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -43671,7 +43676,8 @@
 /area/centcom/control)
 "qjp" = (
 /obj/docking_port/destination/pod1/station{
-	dir = 4
+	dir = 4;
+	base_turf_type = /turf/unsimulated/floor/planetary/concrete/jungle
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -45911,7 +45917,8 @@
 	icon_state = "warning"
 	},
 /obj/docking_port/destination/pod2/station{
-	dir = 4
+	dir = 4;
+	base_turf_type = /turf/unsimulated/floor/planetary/concrete/jungle
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/zoned/roid_prep)
@@ -47547,7 +47554,7 @@
 /obj/machinery/door_control{
 	id_tag = "kitchen";
 	name = "Kitchen Shutters Control";
-	pixel_y = -30;
+	pixel_y = -22;
 	req_access_txt = "28"
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
@@ -50772,7 +50779,8 @@
 	tag = "icon-warning (WEST)"
 	},
 /obj/docking_port/destination/supply/station{
-	dir = 8
+	dir = 8;
+	base_turf_type = /turf/unsimulated/floor/planetary/concrete/jungle
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/landing)
@@ -59342,10 +59350,6 @@
 	icon_state = "white"
 	},
 /area/turret_protected/tcomms_control_room)
-"vQO" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "vQV" = (
 /obj/structure/bed/chair/wood/pew/left{
 	dir = 4
@@ -64669,7 +64673,9 @@
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/zoned/atmos_outside)
 "xPT" = (
-/obj/docking_port/destination/arrival/station,
+/obj/docking_port/destination/arrival/station{
+	base_turf_type = /turf/unsimulated/floor/planetary/concrete/jungle
+	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
@@ -351476,7 +351482,7 @@ ocC
 ocC
 ocC
 ocC
-vQO
+ocC
 ocC
 ocC
 ocC

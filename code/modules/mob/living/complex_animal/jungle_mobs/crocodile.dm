@@ -52,7 +52,7 @@
 			if(1)
 				emote("me", MESSAGE_HEAR, "growls.")
 			if(2)
-				if(loc.type==/turf/unsimulated/floor/planetary/water/jungle)
+				if(loc?.type==/turf/unsimulated/floor/planetary/water/jungle)
 					emote("me", MESSAGE_HEAR, "splashes.")
 				else
 					emote("me", MESSAGE_HEAR, "growls.")
@@ -71,6 +71,7 @@
 	maxHealth=120
 	armor=list(melee=35,bullet=15,laser=20,energy=0,bomb=10,bio=0,rad=0)
 	petable=TRUE
+	is_pet=TRUE
 
 /mob/living/simple_animal/complex/crocodile/schnapps/get_offspring_cost()
 	return 0 //no infinite schnapps.	
