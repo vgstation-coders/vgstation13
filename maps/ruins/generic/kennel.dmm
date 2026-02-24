@@ -27,10 +27,6 @@
 	icon_state = "dark"
 	},
 /area/vault/kennel)
-"m" = (
-/obj/structure/fence,
-/turf/simulated/floor/engine/concrete,
-/area/vault/kennel)
 "o" = (
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
@@ -70,10 +66,6 @@
 /area/exposed_ruin)
 "D" = (
 /obj/structure/fence/cut/large,
-/turf/simulated/floor/engine/concrete,
-/area/vault/kennel)
-"H" = (
-/obj/structure/fence,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "J" = (
@@ -185,8 +177,8 @@ a
 g
 a
 D
-H
-m
+p
+p
 N
 Y
 a

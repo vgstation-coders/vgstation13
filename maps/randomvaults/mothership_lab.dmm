@@ -275,10 +275,6 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
-"fs" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/asteroid,
-/area/vault/mothership_lab/asteroid)
 "fx" = (
 /obj/structure/closet/walllocker/emerglocker{
 	pixel_x = -30
@@ -6663,7 +6659,7 @@ XO
 GL
 eQ
 GL
-fs
+Wf
 ZW
 GL
 GL
@@ -6757,7 +6753,7 @@ Nq
 GL
 GL
 GL
-fs
+Wf
 Xd
 GL
 ly

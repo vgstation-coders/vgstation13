@@ -1805,10 +1805,6 @@
 /obj/item/weapon/handcuffs,
 /turf/unsimulated/floor/evil,
 /area/awaymission/hive/secure)
-"gY" = (
-/obj/structure/fence/door/secure/inverted,
-/turf/unsimulated/floor/evil/breathing,
-/area/awaymission/hive)
 "gZ" = (
 /obj/effect/decal/cleanable/blood/drip,
 /obj/effect/trap/fire_trap,
@@ -3484,10 +3480,10 @@ ab
 ab
 aq
 ab
-gY
+gs
 ab
 ab
-gY
+gs
 ab
 ar
 ab

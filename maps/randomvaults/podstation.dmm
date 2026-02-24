@@ -1025,12 +1025,6 @@
 	icon_state = "asteroidfloor"
 	},
 /area/vault/podstation/exterior)
-"rx" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/podstation/exterior)
 "rF" = (
 /mob/living/simple_animal/cockroach,
 /turf/simulated/floor{
@@ -1583,12 +1577,6 @@
 	icon_state = "asteroidfloor"
 	},
 /area/vault/podstation/exterior)
-"HJ" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/podstation/exterior)
 "HV" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/airless{
@@ -1779,12 +1767,6 @@
 	dir = 1
 	},
 /turf/space,
-/area/vault/podstation/exterior)
-"Np" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
 /area/vault/podstation/exterior)
 "NA" = (
 /obj/effect/decal/warning_stripes{
@@ -2112,12 +2094,6 @@
 	icon_state = "asteroidfloor"
 	},
 /area/vault/podstation/exterior)
-"VJ" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/podstation/exterior)
 "VP" = (
 /turf/unsimulated/floor/airless{
 	dir = 8;
@@ -2134,12 +2110,6 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /turf/simulated/floor,
 /area/vault/podstation/interior)
-"VU" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/podstation/exterior)
 "VW" = (
 /obj/structure/fence,
 /turf/unsimulated/floor/airless{
@@ -2432,9 +2402,9 @@ pU
 pU
 ES
 ES
-HJ
-Np
-VJ
+VW
+VW
+VW
 ES
 VS
 aI
@@ -2479,7 +2449,7 @@ ES
 Yx
 HV
 Yx
-VU
+VW
 ES
 ES
 VS
@@ -2525,8 +2495,8 @@ En
 cE
 Yx
 VW
-Np
-rx
+VW
+VW
 ES
 pU
 pU

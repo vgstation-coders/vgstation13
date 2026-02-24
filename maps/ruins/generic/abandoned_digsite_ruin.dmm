@@ -1,8 +1,4 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
-"a" = (
-/obj/structure/fence,
-/turf/template_noop,
-/area/exposed_ruin)
 "b" = (
 /obj/machinery/suspension_gen{
 	dir = 4
@@ -149,14 +145,6 @@
 /obj/item/weapon/pickaxe/shovel,
 /turf/unsimulated/floor/asteroid/air,
 /area/exposed_ruin)
-"Q" = (
-/obj/structure/fence,
-/turf/template_noop,
-/area/exposed_ruin)
-"S" = (
-/obj/structure/fence,
-/turf/template_noop,
-/area/exposed_ruin)
 "T" = (
 /obj/structure/bed/chair/folding{
 	dir = 1
@@ -194,13 +182,13 @@
 /area/exposed_ruin)
 
 (1,1,1) = {"
-a
-S
-S
-S
-S
-S
-a
+L
+L
+L
+L
+L
+L
+L
 X
 X
 X
@@ -210,13 +198,13 @@ X
 X
 "}
 (2,1,1) = {"
-Q
+L
 k
 j
 W
 b
 b
-Q
+L
 X
 G
 G
@@ -226,13 +214,13 @@ X
 X
 "}
 (3,1,1) = {"
-Q
+L
 k
 j
 k
 k
 j
-Q
+L
 E
 B
 l
@@ -242,13 +230,13 @@ X
 X
 "}
 (4,1,1) = {"
-Q
+L
 k
 k
 A
 V
 k
-Q
+L
 E
 Z
 q
@@ -258,7 +246,7 @@ d
 X
 "}
 (5,1,1) = {"
-Q
+L
 y
 k
 K
@@ -274,13 +262,13 @@ T
 X
 "}
 (6,1,1) = {"
-Q
+L
 k
 e
 V
 A
 j
-Q
+L
 o
 H
 X
@@ -290,13 +278,13 @@ F
 X
 "}
 (7,1,1) = {"
-Q
+L
 j
 k
 v
 w
 k
-Q
+L
 o
 X
 X
@@ -306,13 +294,13 @@ X
 X
 "}
 (8,1,1) = {"
-Q
+L
 j
 j
 k
 k
 P
-Q
+L
 I
 X
 X
@@ -323,11 +311,11 @@ X
 "}
 (9,1,1) = {"
 L
-S
-S
-S
-S
-S
+L
+L
+L
+L
+L
 L
 u
 X

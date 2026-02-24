@@ -17,10 +17,6 @@
 /obj/abstract/loot_spawner/combat,
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
-"f" = (
-/obj/structure/fence/cut/medium,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/exposed_ruin)
 "h" = (
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
@@ -119,17 +115,9 @@
 	},
 /turf/template_noop,
 /area/exposed_ruin)
-"H" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/exposed_ruin)
 "I" = (
 /obj/structure/flora/tree_stump,
 /turf/template_noop,
-/area/exposed_ruin)
-"J" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "K" = (
 /obj/effect/decal/warning_stripes{
@@ -137,10 +125,6 @@
 	icon_state = "warning"
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
-/area/exposed_ruin)
-"M" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "N" = (
 /obj/structure/rack,
@@ -166,10 +150,6 @@
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
-"T" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/path/jungle,
-/area/exposed_ruin)
 "U" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -184,15 +164,6 @@
 	icon_state = "warning"
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
-/area/exposed_ruin)
-"Y" = (
-/mob/living/complex_animal/panther{
-	health = 0;
-	ticks_dead = -1800;
-	stat = 2;
-	icon_state = "panther_dead"
-	},
-/turf/template_noop,
 /area/exposed_ruin)
 "Z" = (
 /obj/effect/decal/warning_stripes{
@@ -209,15 +180,15 @@ w
 w
 w
 w
-H
+s
 m
-M
+s
 k
-M
+s
 O
 k
-M
-H
+s
+s
 "}
 (2,1,1) = {"
 w
@@ -226,7 +197,7 @@ I
 w
 w
 w
-J
+s
 i
 a
 X
@@ -234,7 +205,7 @@ X
 X
 a
 U
-J
+s
 "}
 (3,1,1) = {"
 w
@@ -243,7 +214,7 @@ w
 w
 w
 l
-J
+s
 Z
 a
 a
@@ -268,16 +239,16 @@ a
 a
 a
 o
-J
+s
 "}
 (5,1,1) = {"
 w
 w
 w
-Y
 w
 w
-J
+w
+s
 Z
 a
 a
@@ -285,7 +256,7 @@ z
 a
 a
 o
-T
+k
 "}
 (6,1,1) = {"
 w
@@ -294,7 +265,7 @@ w
 w
 w
 w
-J
+s
 a
 z
 a
@@ -319,7 +290,7 @@ a
 a
 a
 o
-J
+s
 "}
 (8,1,1) = {"
 w
@@ -336,7 +307,7 @@ a
 a
 a
 o
-J
+s
 "}
 (9,1,1) = {"
 w
@@ -353,16 +324,16 @@ a
 a
 a
 o
-T
+k
 "}
 (10,1,1) = {"
 w
 w
-Y
 w
 w
 w
-T
+w
+k
 Z
 a
 a
@@ -370,7 +341,7 @@ a
 a
 z
 a
-J
+s
 "}
 (11,1,1) = {"
 w
@@ -379,7 +350,7 @@ w
 w
 I
 G
-f
+O
 a
 a
 a
@@ -387,7 +358,7 @@ a
 a
 a
 o
-f
+O
 "}
 (12,1,1) = {"
 w
@@ -396,7 +367,7 @@ w
 w
 w
 N
-J
+s
 d
 a
 z
@@ -404,7 +375,7 @@ a
 K
 a
 S
-J
+s
 "}
 (13,1,1) = {"
 w
@@ -414,11 +385,11 @@ w
 w
 w
 s
-M
+s
 O
 k
-M
-M
+s
+s
 m
 k
 s
