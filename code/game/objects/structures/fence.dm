@@ -28,10 +28,6 @@
 	var/cuttable = TRUE
 	var/hole_size= NO_HOLE
 
-/obj/structure/fence/New()
-	..()
-	update_cut_status()
-
 /obj/structure/fence/examine(mob/user)
 	.=..()
 
@@ -55,6 +51,10 @@
 	. = ..()
 	update_junction()
 
+/obj/structure/fence/change_dir(new_dir, changer)
+	. = ..()
+	relativewall()
+
 /obj/structure/fence/proc/update_junction()
 	uncut_state = "straight"
 	switch(junction)
@@ -68,7 +68,8 @@
 	update_cut_status()
 
 /obj/structure/fence/post
-	icon_state = "post"
+	icon_state = "post0"
+	uncut_state = "post"
 	cuttable = FALSE
 
 /obj/structure/fence/cut/small
