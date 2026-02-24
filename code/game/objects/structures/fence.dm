@@ -56,7 +56,7 @@
 	relativewall()
 
 /obj/structure/fence/proc/update_junction()
-	uncut_state = "straight"
+	uncut_state = initial(uncut_state)
 	switch(junction)
 		if(NORTH|SOUTH,NORTH|SOUTH|EAST,NORTH|SOUTH|WEST)
 			dir = WEST
