@@ -11970,6 +11970,9 @@
 	},
 /turf/simulated/floor,
 /area/engineering/atmos)
+"eoa" = (
+/turf/simulated/wall/r_wall,
+/area/surface/jungle/fenced)
 "eoh" = (
 /obj/structure/mirror{
 	pixel_y = 28
@@ -29063,14 +29066,12 @@
 /turf/simulated/floor/vox,
 /area/vox_trading_post/docking)
 "kSb" = (
-/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
 	name = "KEEP CLEAR: DOCKING AREA";
 	icon_state = "shuttle2"
 	},
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/wall/r_wall,
 /area/surface/jungle/fenced)
 "kSn" = (
 /obj/structure/sign/securearea{
@@ -34213,6 +34214,13 @@
 /obj/effect/glowshroom/single,
 /turf/simulated/floor/vox,
 /area/vox_trading_post/vault)
+"mLg" = (
+/obj/structure/fence{
+	icon_state = "endcorner0";
+	dir = 9
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/reactor_outside)
 "mLk" = (
 /obj/structure/ore_box,
 /turf/simulated/floor/shuttle,
@@ -38124,6 +38132,13 @@
 /obj/structure/sign/securearea,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
+"oij" = (
+/obj/structure/sign/securearea{
+	name = "DANGER: BOMB RANGE";
+	desc = "A warning sign which reads 'DANGER: BOMB RANGE'."
+	},
+/turf/simulated/wall/r_wall,
+/area/surface/jungle/zoned/bombrange)
 "oiw" = (
 /obj/item/weapon/storage/fancy/beer_box,
 /turf/unsimulated/floor/planetary/cave/jungle,
@@ -42252,13 +42267,12 @@
 	},
 /area/surface/jungle/zoned/atmos_outside)
 "pPP" = (
-/obj/structure/fence,
 /obj/structure/sign/pox{
 	icon_state = "voxtrade";
 	name = "VOX RESERVATION";
 	desc = "A sign which reads 'USE CAUTION: VOX RESERVATION'."
 	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/wall/r_wall,
 /area/surface/jungle/fenced/trader)
 "pPX" = (
 /obj/structure/table,
@@ -42500,6 +42514,9 @@
 /obj/machinery/computer/slot_machine,
 /turf/simulated/floor/wood,
 /area/surface/jungle/underground/zoned/casino)
+"pUi" = (
+/turf/simulated/wall/r_wall,
+/area/surface/jungle)
 "pUx" = (
 /obj/structure/table,
 /obj/item/weapon/storage/firstaid/toxin{
@@ -44579,6 +44596,13 @@
 	icon_state = "white"
 	},
 /area/medical/medbay)
+"qEK" = (
+/obj/structure/sign/securearea{
+	name = "DANGER: PREDATORY ANIMALS";
+	icon_state = "fauna2"
+	},
+/turf/simulated/wall/r_wall,
+/area/surface/jungle)
 "qFa" = (
 /obj/structure/cable/yellow{
 	d1 = 2;
@@ -47649,12 +47673,11 @@
 	},
 /area/centcom/specops)
 "rIU" = (
-/obj/structure/fence,
 /obj/structure/sign/securearea{
 	name = "DANGER: PREDATORY ANIMALS";
 	icon_state = "fauna2"
 	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/wall/r_wall,
 /area/surface/jungle/fenced)
 "rIX" = (
 /turf/unsimulated/floor{
@@ -47976,10 +47999,8 @@
 	},
 /area/engineering/reactor_room)
 "rRT" = (
-/obj/structure/fence,
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/atmos_outside)
+/turf/simulated/wall/r_wall,
+/area/surface/jungle/zoned/sme_outside)
 "rRX" = (
 /obj/structure/table,
 /obj/item/weapon/storage/firstaid/fire,
@@ -49510,6 +49531,17 @@
 	icon_state = "white"
 	},
 /area/medical/genetics)
+"stK" = (
+/obj/structure/fence/cut/large,
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
+	name = "KEEP CLEAR: DOCKING AREA";
+	icon_state = "shuttle2";
+	pixel_y = -3;
+	pixel_x = -5
+	},
+/turf/unsimulated/floor/planetary/concrete/jungle,
+/area/surface/jungle/vault)
 "stN" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
 	dir = 9
@@ -64258,13 +64290,12 @@
 	},
 /area/medical/sleeper)
 "xSh" = (
-/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
 	name = "KEEP CLEAR: DOCKING AREA";
 	icon_state = "shuttle2"
 	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/wall/r_wall,
 /area/surface/jungle/fenced/trader)
 "xSi" = (
 /obj/machinery/atmospherics/unary/vent/high_volume{
@@ -105330,7 +105361,7 @@ lIK
 lIK
 lIK
 lIK
-cfw
+qEK
 knp
 lHP
 knp
@@ -105681,7 +105712,7 @@ opc
 opc
 opc
 opc
-ank
+pUi
 opc
 xor
 xor
@@ -106385,7 +106416,7 @@ vcQ
 vcQ
 vcQ
 vcQ
-aOh
+eoa
 vcQ
 xor
 xor
@@ -107421,7 +107452,7 @@ wld
 wld
 wld
 wld
-wFg
+kSb
 vcQ
 vcQ
 vcQ
@@ -107437,7 +107468,7 @@ vcQ
 vcQ
 vcQ
 vcQ
-wFg
+kSb
 xor
 xor
 xor
@@ -112349,7 +112380,7 @@ wld
 wld
 wld
 wld
-bEw
+kSb
 vcQ
 snf
 snf
@@ -112357,7 +112388,7 @@ snf
 snf
 snf
 vcQ
-bEw
+kSb
 xFu
 wdA
 wdA
@@ -112365,7 +112396,7 @@ qdn
 wdA
 wdA
 sRR
-wFg
+kSb
 xor
 xor
 xor
@@ -113753,7 +113784,7 @@ snf
 vcQ
 wld
 wld
-wFg
+kSb
 jnP
 vRV
 vcQ
@@ -113778,7 +113809,7 @@ vcQ
 vcQ
 vRV
 jnP
-wFg
+kSb
 maR
 iMQ
 xMH
@@ -118681,7 +118712,7 @@ snf
 vcQ
 wld
 wld
-bEw
+kSb
 vcQ
 onm
 vcQ
@@ -118706,7 +118737,7 @@ cub
 onm
 vcQ
 vcQ
-wFg
+kSb
 maR
 iMQ
 xMH
@@ -118933,7 +118964,7 @@ dFK
 dFK
 dFK
 dFK
-tfO
+dFK
 lIK
 lIK
 lIK
@@ -119637,7 +119668,7 @@ aPo
 mqz
 bRe
 bRe
-dFK
+tfO
 lIK
 lIK
 lIK
@@ -120444,7 +120475,7 @@ vcQ
 vcQ
 vcQ
 jnP
-wFg
+kSb
 wld
 wld
 wld
@@ -121148,7 +121179,7 @@ rki
 rki
 dgj
 jgk
-aOh
+eoa
 vcQ
 vcQ
 vcQ
@@ -121158,7 +121189,7 @@ vcQ
 vcQ
 vcQ
 vcQ
-wFg
+kSb
 xor
 xor
 xor
@@ -130176,7 +130207,7 @@ rnF
 rnF
 rnF
 rnF
-xYO
+dFK
 dFK
 dFK
 pWq
@@ -130528,7 +130559,7 @@ rnF
 rnF
 rnF
 rnF
-pWq
+stK
 bRe
 vfF
 kor
@@ -144811,7 +144842,7 @@ wnC
 hkB
 hbi
 hbi
-hbi
+mLg
 hbi
 lIK
 lIK
@@ -149017,7 +149048,7 @@ hXG
 tcI
 qLW
 jsN
-jyd
+sSo
 hML
 hML
 oTY
@@ -149369,7 +149400,7 @@ aUl
 nuy
 pPM
 jsN
-jyd
+sSo
 hML
 hML
 chi
@@ -149698,7 +149729,7 @@ lIK
 lIK
 lIK
 jyd
-jyd
+sSo
 jyd
 jyd
 jyd
@@ -149721,19 +149752,19 @@ hFZ
 lgL
 gqv
 jsN
+sSo
+wbS
+wbS
+wbS
+wbS
+wbS
+wbS
+wbS
+wbS
+wbS
+wbS
+wbS
 rRT
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
 wbS
 lIK
 lIK
@@ -150073,7 +150104,7 @@ jsN
 jsN
 jsN
 jsN
-jyd
+sSo
 wbS
 wbS
 wbS
@@ -150362,11 +150393,11 @@ vcQ
 vcQ
 vcQ
 vcQ
-aOh
+eoa
 vcQ
 vcQ
 vcQ
-vcQ
+eoa
 opc
 lIK
 lIK
@@ -440766,7 +440797,7 @@ fvU
 fvU
 fvU
 fvU
-wWI
+oij
 vav
 vav
 vav
@@ -440824,7 +440855,7 @@ vav
 vav
 vav
 vav
-wWI
+oij
 fvU
 fvU
 way
@@ -458776,7 +458807,7 @@ vav
 vav
 vav
 vav
-wWI
+oij
 fvU
 fvU
 fvU
