@@ -326,6 +326,13 @@
 		to_chat(user, "<span class='warning'>You can't reach the door latch from here!</span>")
 		return FALSE
 
+/obj/structure/fence/door/secure/AltClick(mob/user)
+	// must be open and standing on same turf
+	if(open && !user.incapacitated() && get_turf(user) == get_turf(src) && user.dexterity_check() && allowed(user))
+		inverted = !inverted
+		to_chat(user, "<span class='notice'>You flip the door latch to the other side of the door.</span>")
+	. = ..()
+
 #undef CLIMB_TIME
 
 #undef NO_HOLE
