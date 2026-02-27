@@ -183,6 +183,11 @@
 	name = "Jungle Station" //NT Colony Gamma-8 - the trve name.
 	path = "junglestation"
 
+/datum/next_map/syndistation
+	name = "Syndicate Station"
+	path = "syndistation"
+	min_players = 100
+
 /proc/get_votable_maps()
 	var/list/votable_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))

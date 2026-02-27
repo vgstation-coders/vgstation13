@@ -82,5 +82,9 @@
 		#undef MAP_OVERRIDE
 		#include "junglestation.dm"
 		#define MAP_OVERRIDE 18
+	#elif MAP_OVERRIDE == 18
+		#undef MAP_OVERRIDE
+		#include "syndistation.dm"
+		#define MAP_OVERRIDE 19
 	#endif
 #endif
