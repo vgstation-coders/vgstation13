@@ -2029,8 +2029,10 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#660099"
 	alpha = 64
+	glass_icon_state = "junglejuice"
 	glass_desc = "It's quite tart, with earthy undertones."
 	nutriment_factor = 0.5 * REAGENTS_METABOLISM
+
 
 /datum/reagent/ethanol/drink/junglejuice/real //the intended variant of jungle juice which you make from poisounous berries (or the ones found on jungle). this one includes the special effects, as well as higher nutriment content.
 	id = JUNGLEJUICE
