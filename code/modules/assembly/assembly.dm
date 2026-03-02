@@ -242,7 +242,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 		if(holder && (wires & WIRE_PULSE_SPECIAL))
 			holder.process_activation(src, 0, 1)
 
-	if(istype(loc))
+	if(loc)
 		//if(radio && (wires & WIRE_RADIO_PULSE)) //TODO: uncomment this? only kept here to make a PR atomic
 		loc.assembly_pulse(src)
 
