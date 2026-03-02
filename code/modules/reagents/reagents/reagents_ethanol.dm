@@ -2020,3 +2020,29 @@
 	if(ishuman(M) && prob(5))
 		var/mob/living/carbon/human/H = M
 		H.vomit()
+
+
+/datum/reagent/ethanol/drink/junglejuice //this only exists to reduce confusion about why some berry juice might not be able to make the drink. of course, because this is made from safe berries, you don't get the "cool" effect.
+	name = "Jungle Juice"
+	id = FAKEJUNGLEJUICE
+	description = "Booze mixed with blended up wild berries."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#660099"
+	alpha = 64
+	glass_icon_state = "junglejuice"
+	glass_desc = "It's quite tart, with earthy undertones."
+	nutriment_factor = 0.5 * REAGENTS_METABOLISM
+
+
+/datum/reagent/ethanol/drink/junglejuice/real //the intended variant of jungle juice which you make from poisounous berries (or the ones found on jungle). this one includes the special effects, as well as higher nutriment content.
+	id = JUNGLEJUICE
+	glass_desc = "It's quite tart, with earthy undertones. Better hope the berries were safe."
+	nutriment_factor = 1.25 * REAGENTS_METABOLISM
+
+/datum/reagent/ethanol/drink/junglejuice/real/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(M.toxloss<15)
+		M.toxloss=min(M.toxloss+2.5,15)
+	else
+		M.toxloss = max(M.toxloss-1.5,15)

@@ -1275,6 +1275,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	icon = 'icons/obj/hydroponics/berry.dmi'
 	icon_state = "produce2"
 	desc = "They taste like... burning."
+	plantname=null
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle/New(var/loc,var/mob/berry_picker=null)
 	..(loc)

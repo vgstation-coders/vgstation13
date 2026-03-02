@@ -243,6 +243,15 @@
 			else
 				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
 
+
+/turf/unsimulated/floor/lab_underplating/broken/New()
+	. = ..()
+	overlays += image(icon,src,"damaged[rand(1,3)]")
+
+/turf/unsimulated/floor/lab_underplating/scorched/New()
+	. = ..()
+	overlays += image(icon,src,"scorched[rand(1,2)]")
+
 /turf/unsimulated/floor/lab_sterile
 	name = "sterile tile floor"
 	icon = 'icons/turf/floors.dmi'

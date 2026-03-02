@@ -1,10 +1,4 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
-"aa" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
-/area/derelict/storage/aux_storage)
 "ac" = (
 /obj/item/taperoll/engineering,
 /turf/simulated/floor/plating/airless,
@@ -115,10 +109,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "bj" = (
 /obj/structure/catwalk,
@@ -126,10 +117,7 @@
 /area)
 "bm" = (
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "bo" = (
 /obj/structure/sign/science,
@@ -242,10 +230,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "ce" = (
 /obj/structure/cable/yellow{
@@ -360,12 +345,6 @@
 	},
 /turf/simulated/floor,
 /area/derelict/eva)
-"cZ" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
-/area/derelict/hallway/primary)
 "dc" = (
 /turf/simulated/wall,
 /area/derelict/medical/medbay)
@@ -423,12 +402,6 @@
 /obj/structure/closet/emcloset,
 /turf/simulated/floor,
 /area/derelict/arrival)
-"dJ" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
-/area)
 "dL" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -512,15 +485,6 @@
 	icon_state = "white"
 	},
 /area/derelict/research)
-"eN" = (
-/obj/item/weapon/shard{
-	icon_state = "medium"
-	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
-/area/derelict/singularity_engine)
 "eR" = (
 /obj/machinery/vending/engineering,
 /turf/simulated/wall/r_wall,
@@ -565,13 +529,6 @@
 "fu" = (
 /turf/simulated/floor/airless,
 /area/derelict/storage/aux_storage)
-"fz" = (
-/obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
-/area/derelict/singularity_engine)
 "fE" = (
 /obj/structure/cable,
 /obj/machinery/power/apc{
@@ -824,10 +781,7 @@
 "iy" = (
 /obj/item/weapon/table_parts/reinforced,
 /obj/item/weapon/table_parts/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "iH" = (
 /obj/structure/grille,
@@ -854,10 +808,7 @@
 /area)
 "iK" = (
 /obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "iR" = (
 /obj/machinery/door/airlock/maintenance{
@@ -920,12 +871,6 @@
 /obj/item/weapon/stool,
 /turf/simulated/floor/airless,
 /area/derelict/crew_quarters)
-"jK" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
-/area/derelict/hallway/primary)
 "jL" = (
 /obj/machinery/light/small{
 	dir = 1
@@ -954,20 +899,6 @@
 	},
 /turf/simulated/floor,
 /area/derelict/bridge/access)
-"ki" = (
-/obj/item/weapon/shard,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
-/area/derelict/singularity_engine)
-"kk" = (
-/obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
-/area/derelict/singularity_engine)
 "kq" = (
 /obj/machinery/atmospherics/unary/cold_sink/freezer{
 	current_temperature = 80;
@@ -1023,17 +954,6 @@
 	icon_state = "derelict14"
 	},
 /area/derelict/hallway/secondary)
-"kT" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
-/area/derelict/hallway/primary)
 "kU" = (
 /turf/simulated/wall/r_wall,
 /area/derelict/singularity_engine)
@@ -1043,23 +963,14 @@
 /area/derelict/arrival)
 "kW" = (
 /obj/item/weapon/table_parts/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "ld" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/hallway/secondary)
 "lf" = (
 /obj/structure/dispenser,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "lj" = (
 /obj/machinery/door/airlock/maintenance{
@@ -1081,10 +992,7 @@
 /area/derelict/medical/medbay)
 "ll" = (
 /obj/machinery/portable_atmospherics/canister/plasma,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "lx" = (
 /obj/structure/window/reinforced,
@@ -1103,10 +1011,7 @@
 /turf/space,
 /area)
 "lC" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/atmos)
 "lF" = (
 /obj/structure/grille,
@@ -1229,13 +1134,6 @@
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating/airless,
 /area/derelict/singularity_engine)
-"mD" = (
-/obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
-/area/derelict/singularity_engine)
 "mG" = (
 /turf/simulated/floor/plating/airless,
 /area/derelict/atmos)
@@ -1280,12 +1178,6 @@
 	},
 /turf/simulated/floor/airless,
 /area)
-"nt" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
-/area/derelict/singularity_engine)
 "nA" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -1318,12 +1210,6 @@
 	},
 /turf/simulated/floor,
 /area/derelict/bridge/bridge)
-"nU" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
-/area/derelict/storage/aux_storage)
 "od" = (
 /turf/simulated/floor/airless{
 	icon_state = "floorgrime"
@@ -1483,10 +1369,7 @@
 /area/derelict/storage/tech_storage)
 "pB" = (
 /obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "pN" = (
 /obj/structure/window/reinforced,
@@ -1771,10 +1654,7 @@
 /turf/simulated/floor,
 /area/derelict/bridge/bridge)
 "su" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/secondary)
 "sw" = (
 /obj/structure/window{
@@ -1992,12 +1872,6 @@
 /obj/item/weapon/cell,
 /turf/simulated/floor/airless,
 /area/derelict/crew_quarters)
-"un" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
-/area/derelict/storage/aux_storage)
 "uq" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -2007,10 +1881,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/storage/tech_storage)
 "uu" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/storage/aux_storage)
 "uS" = (
 /obj/structure/girder/reinforced,
@@ -2042,10 +1913,7 @@
 	},
 /area/derelict/medical/medbay)
 "vg" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/crew_quarters)
 "vy" = (
 /obj/machinery/atmospherics/unary/outlet_injector{
@@ -2084,10 +1952,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/storage/tech_storage)
 "vG" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/bridge/ai_upload)
 "vI" = (
 /obj/structure/window/reinforced{
@@ -2108,10 +1973,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "vN" = (
 /turf/simulated/wall/r_wall,
@@ -2243,10 +2105,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/solar_control)
 "wQ" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/hallway/primary)
 "xf" = (
 /obj/structure/grille,
@@ -2389,10 +2248,7 @@
 /area/derelict/singularity_engine)
 "yp" = (
 /obj/structure/table,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "ys" = (
 /obj/structure/cable/yellow{
@@ -2424,26 +2280,17 @@
 /area)
 "yF" = (
 /obj/machinery/light/small,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "yK" = (
 /obj/item/stack/medical/bruise_pack,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical/medbay)
 "yP" = (
 /obj/machinery/atmospherics/unary/cap/visible{
 	dir = 1
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/atmos)
 "yW" = (
 /obj/structure/grille,
@@ -2552,10 +2399,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "Ar" = (
 /obj/structure/grille,
@@ -2667,10 +2511,7 @@
 /turf/simulated/wall/r_wall,
 /area/derelict/hallway/primary)
 "BF" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "BJ" = (
 /obj/structure/closet/wardrobe,
@@ -2683,16 +2524,10 @@
 /area/derelict/medical/chapel)
 "BR" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "BS" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "BY" = (
 /obj/structure/grille/window_spawner/reinforced/full,
@@ -2736,12 +2571,6 @@
 	},
 /turf/simulated/floor/airless,
 /area/derelict/medical/chapel)
-"Cp" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
-/area)
 "Cz" = (
 /turf/simulated/wall,
 /area/derelict/bridge/bridge)
@@ -2844,10 +2673,7 @@
 /obj/machinery/door/airlock/glass{
 	name = "Arrivals Access"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/hallway/primary)
 "Ef" = (
 /obj/structure/cable/yellow{
@@ -2944,10 +2770,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "Fa" = (
 /obj/structure/grille,
@@ -2986,10 +2809,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "Fw" = (
 /obj/structure/window{
@@ -3069,10 +2889,7 @@
 	icon_state = "door_electronics_smoked"
 	},
 /obj/structure/door_assembly,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/crew_quarters)
 "Gn" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
@@ -3093,10 +2910,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical/medbay)
 "Gr" = (
 /turf/simulated/wall,
@@ -3133,10 +2947,7 @@
 /area/derelict/medical/chapel)
 "GL" = (
 /obj/item/stack/medical/ointment,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical/medbay)
 "GQ" = (
 /obj/item/weapon/pen,
@@ -3196,10 +3007,7 @@
 	name = "Engineering Access";
 	req_access_txt = "11"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "Hr" = (
 /obj/structure/cable/yellow{
@@ -3220,12 +3028,6 @@
 /obj/machinery/vending/engivend,
 /turf/simulated/floor,
 /area/derelict/solar_control)
-"HM" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
-/area/derelict/singularity_engine)
 "HN" = (
 /obj/machinery/vending/tool,
 /turf/simulated/floor,
@@ -3341,10 +3143,7 @@
 /area/derelict/arrival)
 "IN" = (
 /obj/structure/girder,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "IR" = (
 /obj/item/tool/screwdriver,
@@ -3365,12 +3164,6 @@
 /obj/structure/grille/broken,
 /turf/simulated/floor/plating/airless,
 /area/derelict/medical/medbay)
-"Jk" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
-/area)
 "Jp" = (
 /obj/item/weapon/shard{
 	icon_state = "medium"
@@ -3392,10 +3185,7 @@
 	},
 /area/derelict/medical/medbay)
 "Jz" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/crew_quarters)
 "JI" = (
 /obj/machinery/r_n_d/fabricator/protolathe,
@@ -3447,10 +3237,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "Kf" = (
 /turf/simulated/wall,
@@ -3489,10 +3276,7 @@
 /obj/item/weapon/circuitboard/airlock{
 	icon_state = "door_electronics_smoked"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/hallway/primary)
 "KC" = (
 /obj/structure/grille,
@@ -3646,10 +3430,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "LL" = (
 /obj/structure/window/reinforced,
@@ -3673,10 +3454,7 @@
 /area/derelict/singularity_engine)
 "Md" = (
 /obj/item/stack/rods,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "Me" = (
 /obj/structure/grille,
@@ -3757,10 +3535,7 @@
 	},
 /area/derelict/hallway/secondary)
 "NH" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "NI" = (
 /obj/structure/table,
@@ -3779,10 +3554,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/research)
 "Of" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "Og" = (
 /obj/structure/girder,
@@ -3867,18 +3639,9 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/derelict/hallway/secondary)
-"ON" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
-/area/derelict/singularity_engine)
 "OS" = (
 /obj/item/stack/sheet/metal,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/crew_quarters)
 "OX" = (
 /obj/structure/table,
@@ -3954,10 +3717,7 @@
 /area/derelict/hallway/secondary)
 "PL" = (
 /obj/machinery/light/small,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "PO" = (
 /obj/machinery/computer/general_air_control/large_tank_control{
@@ -3982,10 +3742,7 @@
 /turf/simulated/wall/r_wall,
 /area/derelict/bridge/ai_upload)
 "PZ" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical/medbay)
 "Qf" = (
 /obj/item/weapon/stool,
@@ -4025,10 +3782,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/crew_quarters)
 "Qn" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "Qo" = (
 /obj/structure/window{
@@ -4099,10 +3853,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "Rl" = (
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{
@@ -4137,10 +3888,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "Rs" = (
 /obj/machinery/door/airlock/security{
@@ -4275,10 +4023,7 @@
 	info = "The Syndicate have cunningly disguised a Syndicate Uplink as your PDA. Simply enter the code \"678 Bravo\" into the ringtone select to unlock its hidden features. <br><br><b>Objective #1</b>. Kill the God damn AI in a fire blast that it rocks the station. <b>Success!</b>  <br><b>Objective #2</b>. Escape alive. <b>Failed.</b>";
 	name = "Mission Objectives"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/bridge/ai_upload)
 "SX" = (
 /obj/machinery/light{
@@ -4310,10 +4055,7 @@
 /area/derelict/arrival)
 "Tg" = (
 /obj/item/weapon/storage/toolbox/syndicate,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "Tp" = (
 /turf/simulated/wall,
@@ -4323,10 +4065,7 @@
 	info = "<b>Objective #1</b>: Destroy the station with a nuclear device.";
 	name = "Objectives of a Nuclear Operative"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "Tv" = (
 /obj/structure/table,
@@ -4400,12 +4139,6 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/derelict/atmos)
-"UD" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
-/area/derelict/medical/medbay)
 "UJ" = (
 /obj/structure/cable/yellow{
 	d2 = 8;
@@ -4453,10 +4186,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/arrival)
 "Vk" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "Vn" = (
 /obj/structure/cable/yellow{
@@ -4493,12 +4223,6 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/derelict/singularity_engine)
-"Wb" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
-/area)
 "Wc" = (
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
@@ -4514,12 +4238,6 @@
 	icon_state = "dark"
 	},
 /area/derelict/medical/morgue)
-"Wo" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
-/area/derelict/crew_quarters)
 "Wq" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -4577,10 +4295,7 @@
 /turf/simulated/floor/plating/airless,
 /area/solar/derelict_aft)
 "Xd" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "Xe" = (
 /obj/structure/grille,
@@ -4626,10 +4341,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/hallway/secondary)
 "XA" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area)
 "XC" = (
 /obj/machinery/door/airlock/command{
@@ -4642,10 +4354,7 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "XH" = (
 /obj/structure/grille,
@@ -4695,10 +4404,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical/medbay)
 "Yl" = (
 /obj/structure/grille,
@@ -4828,10 +4534,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "ZN" = (
 /turf/space,
@@ -6607,7 +6310,7 @@ qY
 qY
 qY
 qY
-Wo
+Jz
 OS
 UO
 UO
@@ -7442,7 +7145,7 @@ UO
 ZN
 ZN
 Jj
-UD
+PZ
 PZ
 PZ
 SE
@@ -7537,10 +7240,10 @@ UO
 UO
 kU
 kU
-ON
 Qn
-HM
-ON
+Qn
+Qn
+Qn
 lf
 kU
 kU
@@ -7549,8 +7252,8 @@ ZN
 tv
 Fg
 Fg
-UD
-UD
+PZ
+PZ
 PZ
 yK
 ME
@@ -7643,11 +7346,11 @@ kU
 kU
 kU
 kU
-fz
+iK
 Rw
 Qn
 Qn
-ON
+Qn
 kU
 kU
 kU
@@ -7657,7 +7360,7 @@ KQ
 Fg
 Fg
 Fg
-UD
+PZ
 PZ
 SE
 HW
@@ -7749,7 +7452,7 @@ kU
 kU
 kU
 kU
-mD
+iK
 Hl
 Ha
 Ha
@@ -7850,19 +7553,19 @@ kU
 ll
 tO
 Rw
-ON
 Qn
-ON
-ON
-ON
-ON
-ON
-nt
-ON
 Qn
-ON
 Qn
-HM
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
 Rw
 Rw
 Fe
@@ -7870,14 +7573,14 @@ UO
 Fg
 Fg
 Fg
-UD
+PZ
 PZ
 Yk
 yX
 yd
 vK
 GA
-kT
+vK
 QJ
 JW
 qY
@@ -7888,8 +7591,8 @@ AF
 jC
 qY
 WM
-un
-aa
+uu
+uu
 oG
 Hk
 oG
@@ -7953,22 +7656,22 @@ Pb
 UO
 kU
 kU
-HM
-Xe
-ON
-nt
-HM
 Qn
-ON
-ON
-ON
-nt
-nt
-HM
-nt
-ON
+Xe
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
 XD
-nt
+Qn
 yl
 HU
 UO
@@ -7977,8 +7680,8 @@ Fg
 Fg
 Fg
 Fg
-UD
-UD
+PZ
+PZ
 PZ
 zM
 Vk
@@ -8059,17 +7762,17 @@ EV
 kU
 kU
 Qn
-nt
+Qn
 Xe
-ON
-HM
+Qn
+Qn
 Qn
 me
 Yl
 Yl
 VH
-ON
-nt
+Qn
+Qn
 nL
 nA
 rw
@@ -8084,7 +7787,7 @@ ZN
 xU
 Fg
 Fg
-UD
+PZ
 PZ
 dc
 cU
@@ -8105,9 +7808,9 @@ fu
 oG
 fu
 oA
-aa
+uu
 oG
-aa
+uu
 bN
 Wd
 Wd
@@ -8164,18 +7867,18 @@ ZN
 UO
 kU
 kU
-nt
+Qn
 iy
 Xe
-ON
+Qn
 Qn
 Ne
-ON
+Qn
 ZJ
-ON
+Qn
 Qn
 Rw
-HM
+Qn
 hm
 Rw
 Rw
@@ -8190,7 +7893,7 @@ UO
 ZN
 FT
 Fg
-UD
+PZ
 PZ
 dc
 cU
@@ -8206,10 +7909,10 @@ qY
 qY
 qY
 WM
-nU
+uu
 fu
 fu
-aa
+uu
 oA
 fu
 uu
@@ -8270,15 +7973,15 @@ ZN
 UO
 kU
 ea
-HM
-nt
+Qn
+Qn
 ju
 Tg
 Tu
 CW
 XU
-nt
-nt
+Qn
+Qn
 Rw
 Rw
 Rw
@@ -8289,7 +7992,7 @@ Qn
 Rw
 nL
 Rw
-ON
+Qn
 kU
 kU
 UO
@@ -8379,7 +8082,7 @@ kU
 Kb
 Qn
 Rw
-nt
+Qn
 Qn
 dh
 hz
@@ -8391,11 +8094,11 @@ Rw
 Rw
 Rw
 Qn
-HM
+Qn
 Qn
 HU
-ki
-ON
+BR
+Qn
 kU
 kU
 kU
@@ -8422,7 +8125,7 @@ Fx
 Fx
 Fx
 Fx
-Wb
+Xd
 Fx
 qn
 ZN
@@ -8486,7 +8189,7 @@ Qn
 Qn
 yW
 Qn
-HM
+Qn
 nL
 Rw
 Rw
@@ -8500,9 +8203,9 @@ Rw
 Rw
 Rw
 dL
-ON
 Qn
-ON
+Qn
+Qn
 kU
 kU
 kU
@@ -8605,9 +8308,9 @@ ZN
 Rw
 Rw
 Qn
-ON
 Qn
-nt
+Qn
+Qn
 yF
 kU
 bJ
@@ -8697,7 +8400,7 @@ xr
 Rw
 Rw
 cj
-ON
+Qn
 Rw
 BR
 Rw
@@ -8710,11 +8413,11 @@ ZN
 ZN
 Rw
 Rw
-nt
-ON
 Qn
-nt
-HM
+Qn
+Qn
+Qn
+Qn
 Rw
 Rw
 kU
@@ -8815,11 +8518,11 @@ ZN
 ZN
 ZN
 Rw
-nt
-HM
-ON
+Qn
+Qn
+Qn
 Md
-nt
+Qn
 Qn
 kU
 Rw
@@ -8827,7 +8530,7 @@ kU
 NH
 Fx
 Fx
-Jk
+Xd
 Gr
 cU
 cU
@@ -8909,8 +8612,8 @@ St
 cj
 cj
 kU
-ON
-ON
+Qn
+Qn
 Rw
 Rw
 Rw
@@ -8922,18 +8625,18 @@ ZN
 ZN
 Rw
 Qn
-nt
+Qn
 oN
-ON
 Qn
-ON
+Qn
+Qn
 kU
 kU
 kU
 UO
 NH
 Fx
-Wb
+Xd
 Gr
 cU
 cU
@@ -9015,7 +8718,7 @@ kU
 Rw
 ZJ
 Rw
-ON
+Qn
 Qn
 LV
 Rw
@@ -9030,8 +8733,8 @@ Rw
 Rw
 Qn
 Xe
-ON
-ON
+Qn
+Qn
 kU
 kU
 kU
@@ -9120,7 +8823,7 @@ kU
 kU
 Qn
 Qn
-ON
+Qn
 Qn
 Qn
 xf
@@ -9134,10 +8837,10 @@ Rw
 Rw
 Rw
 Rw
-nt
+Qn
 Xe
 Qn
-ON
+Qn
 kU
 kU
 UO
@@ -9146,7 +8849,7 @@ UO
 UO
 jl
 Fx
-Wb
+Xd
 Gr
 cU
 cU
@@ -9224,10 +8927,10 @@ ZN
 UO
 kU
 kU
-HM
 Qn
-HM
-nt
+Qn
+Qn
+Qn
 Qn
 mz
 Rw
@@ -9242,7 +8945,7 @@ Rw
 LJ
 Rw
 ju
-nt
+Qn
 Qn
 kU
 kU
@@ -9251,7 +8954,7 @@ ZN
 ZN
 UO
 Fx
-Wb
+Xd
 Gb
 Gr
 cU
@@ -9332,10 +9035,10 @@ kU
 kU
 Qn
 Qn
-ON
-nt
 Qn
-ON
+Qn
+Qn
+Qn
 Hl
 Ha
 Ha
@@ -9348,8 +9051,8 @@ Aw
 Aw
 co
 Qn
-HM
-nt
+Qn
+Qn
 kU
 kU
 UO
@@ -9438,23 +9141,23 @@ UO
 kU
 kU
 xh
-ON
-ON
-HM
-nt
 Qn
-ON
-Rw
-Rw
-ON
-ON
-Rw
-ON
-nt
-HM
-nt
 Qn
-ON
+Qn
+Qn
+Qn
+Qn
+Rw
+Rw
+Qn
+Qn
+Rw
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
 kU
 kU
 UO
@@ -9545,22 +9248,22 @@ kU
 kU
 qk
 Rw
-ON
 Qn
-HM
-nt
-kk
-ON
-ON
-eN
+Qn
+Qn
+Qn
+iK
+Qn
+Qn
+XD
 Md
-ON
-ON
-nt
-ON
-nt
-ON
-ON
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
+Qn
 kU
 kU
 ec
@@ -9569,14 +9272,14 @@ zV
 ZN
 ZN
 ZX
-Jk
-Wb
+Xd
+Xd
 Gr
 Et
 QB
 cU
 xg
-Wb
+Xd
 Fx
 lz
 UO
@@ -9682,7 +9385,7 @@ cU
 QB
 cU
 xg
-Wb
+Xd
 Fx
 UO
 UO
@@ -9763,9 +9466,9 @@ kU
 kU
 kU
 kU
-ON
-nt
-nt
+Qn
+Qn
+Qn
 Rw
 Qn
 kU
@@ -9872,8 +9575,8 @@ kU
 Rw
 Qn
 Qn
-HM
-ON
+Qn
+Qn
 kU
 kU
 ZN
@@ -9882,7 +9585,7 @@ ZN
 ZN
 En
 En
-cZ
+Vk
 Vk
 cU
 cU
@@ -9894,7 +9597,7 @@ cU
 QB
 cU
 xg
-Jk
+Xd
 Fx
 go
 UO
@@ -9989,8 +9692,8 @@ xZ
 xZ
 vK
 vK
-kT
-kT
+vK
+vK
 GA
 GA
 GA
@@ -10000,8 +9703,8 @@ Qg
 wJ
 cU
 xg
-Wb
-Wb
+Xd
+Xd
 Fx
 UO
 ZN
@@ -10091,8 +9794,8 @@ UO
 cK
 oI
 En
-cZ
-cZ
+Vk
+Vk
 Vk
 Vk
 Vk
@@ -10108,7 +9811,7 @@ cU
 Rs
 ud
 ud
-Wb
+Xd
 Fx
 Fx
 Fx
@@ -10133,7 +9836,7 @@ UO
 UO
 Lp
 Fx
-Wb
+Xd
 Pb
 ZN
 ZN
@@ -10195,7 +9898,7 @@ cK
 xZ
 xZ
 oI
-cZ
+Vk
 Gr
 Gr
 Vk
@@ -10238,7 +9941,7 @@ Fx
 UO
 Fx
 Fx
-Jk
+Xd
 DJ
 ZN
 ZN
@@ -10323,7 +10026,7 @@ QS
 fO
 QS
 QS
-Wb
+Xd
 DA
 UO
 UO
@@ -10343,7 +10046,7 @@ ZN
 uS
 Fx
 Fx
-Jk
+Xd
 QS
 QS
 Pb
@@ -10439,7 +10142,7 @@ UO
 ZN
 ZN
 Fx
-Wb
+Xd
 bN
 Wd
 Wd
@@ -10508,7 +10211,7 @@ TW
 et
 lj
 Vk
-cZ
+Vk
 wQ
 BF
 En
@@ -10537,7 +10240,7 @@ QS
 QS
 QS
 DA
-Wb
+Xd
 Fx
 Fx
 lz
@@ -10650,7 +10353,7 @@ Fx
 Pb
 ec
 Fx
-Wb
+Xd
 QS
 bN
 Wd
@@ -10752,10 +10455,10 @@ DA
 QS
 QS
 QS
-Wb
+Xd
 Pb
 Fx
-Wb
+Xd
 QS
 QS
 bN
@@ -10940,12 +10643,12 @@ cU
 cU
 cU
 wQ
-jK
+Vk
 xg
-Jk
-Cp
-Cp
-dJ
+Xd
+XA
+XA
+Xd
 xg
 cU
 QB
@@ -11049,7 +10752,7 @@ wQ
 Kq
 xg
 Fx
-dJ
+Xd
 Xd
 Fx
 xg
@@ -11150,12 +10853,12 @@ Gr
 cU
 cU
 Vk
-jK
+Vk
 Vk
 En
 xg
-Jk
-Cp
+Xd
+XA
 UO
 ZN
 Fx
@@ -11260,7 +10963,7 @@ Gr
 Eb
 En
 xg
-dJ
+Xd
 Fx
 ZN
 ZN
@@ -11469,7 +11172,7 @@ UO
 ZN
 UO
 UO
-Cp
+XA
 Fx
 UO
 UO
@@ -11575,7 +11278,7 @@ Fx
 ZN
 UO
 AV
-Wb
+Xd
 UO
 UO
 ZN
@@ -11681,7 +11384,7 @@ UO
 UO
 Fx
 qn
-dJ
+Xd
 UO
 ZN
 ZN
@@ -11893,7 +11596,7 @@ UO
 ZN
 Fx
 Pt
-Cp
+XA
 UO
 ZN
 ZN
@@ -11997,7 +11700,7 @@ ZN
 ZN
 Fx
 Fx
-Cp
+XA
 qn
 Fx
 Fx
@@ -12102,12 +11805,12 @@ ZN
 ZN
 Fx
 Fx
-Wb
+Xd
 QS
 qn
-Cp
+XA
 Fx
-Wb
+Xd
 ZN
 ZN
 ZN
@@ -12207,11 +11910,11 @@ ZN
 ZN
 ZN
 Fx
-Cp
+XA
 QS
 QS
 qn
-Jk
+Xd
 Fx
 Pb
 Xd
@@ -12317,11 +12020,11 @@ qn
 qn
 qn
 qn
-Jk
+Xd
 Fx
 Pb
 Fx
-dJ
+Xd
 ZN
 ZN
 UO
@@ -12426,9 +12129,9 @@ HO
 Fx
 Fx
 Pb
-dJ
+Xd
 UO
-Jk
+Xd
 Xd
 Fx
 qn
@@ -12630,7 +12333,7 @@ ZN
 ZN
 Fx
 Fx
-Wb
+Xd
 QS
 RY
 Pd
@@ -12737,7 +12440,7 @@ UO
 Fx
 Fx
 Fx
-Cp
+XA
 RY
 ir
 Pd
@@ -12843,7 +12546,7 @@ Fx
 Fx
 Fx
 XA
-Wb
+Xd
 RY
 QG
 Pd
@@ -12947,9 +12650,9 @@ ZN
 Fx
 Fx
 QS
-Cp
+XA
 QS
-Jk
+Xd
 RY
 hG
 QG
@@ -13265,7 +12968,7 @@ ZN
 Fx
 Fx
 Fx
-Wb
+Xd
 QS
 QS
 kr

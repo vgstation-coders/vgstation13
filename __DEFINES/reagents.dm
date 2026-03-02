@@ -215,6 +215,7 @@
 #define LIMEJUICE 			"limejuice"
 #define CARROTJUICE 			"carrotjuice"
 #define BERRYJUICE 			"berryjuice"
+#define BERRYJUICEJUNGLE 			"berryjuicejungle"
 #define POISONBERRYJUICE 			"poisonberryjuice"
 #define WATERMELONJUICE 			"watermelonjuice"
 #define APPLEJUICE 			"applejuice"
@@ -496,6 +497,8 @@
 #define BLOB_ESSENCE	"blob_essence"
 #define METHAMPHETAMINE "methamphetamine"
 #define GRUGZONE		"grugzone"
+#define JUNGLEJUICE		"junglejuice"
+#define FAKEJUNGLEJUICE		"fakejunglejuice"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

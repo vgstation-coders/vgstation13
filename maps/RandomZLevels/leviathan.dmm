@@ -460,18 +460,14 @@
 /area/awaymission/leviathan/mining)
 "bF" = (
 /obj/structure/ore_box,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/awaymission/leviathan/mining)
 "bG" = (
 /obj/machinery/light/small{
 	dir = 1
 	},
 /obj/machinery/recharge_station,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/awaymission/leviathan/mining)
 "bH" = (
 /obj/structure/closet/secure_closet/miner,
@@ -486,9 +482,7 @@
 /area/awaymission/leviathan/mining)
 "bJ" = (
 /obj/structure/closet/secure_closet/miner,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/awaymission/leviathan/mining)
 "bK" = (
 /obj/structure/grille,
@@ -536,9 +530,7 @@
 /area/awaymission/leviathan/mining)
 "bR" = (
 /obj/structure/ore_box,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/awaymission/leviathan/mining)
 "bS" = (
 /obj/effect/decal/cleanable/dirt,
@@ -873,9 +865,7 @@
 	name = "Mining Station Maintenance";
 	req_access_txt = "48"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/awaymission/leviathan/mining)
 "cI" = (
 /obj/structure/grille,
@@ -931,24 +921,18 @@
 /obj/machinery/power/battery/smes{
 	charge = 5e+006
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/awaymission/leviathan/mining)
 "cO" = (
 /obj/item/weapon/storage/box/lights/mixed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/awaymission/leviathan/mining)
 "cP" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
 /area/awaymission/leviathan/mining)
 "cQ" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/awaymission/leviathan/mining)
 "cR" = (
 /obj/structure/closet/emcloset,
@@ -983,21 +967,12 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
 /area/awaymission/leviathan/mining)
-"cW" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
-/area/awaymission/leviathan/mining)
 "cX" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/awaymission/leviathan/mining)
 "cY" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/awaymission/leviathan/mining)
 "cZ" = (
 /obj/structure/ore_box,
@@ -1025,17 +1000,13 @@
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/awaymission/leviathan/mining)
 "dd" = (
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/awaymission/leviathan/mining)
 "de" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -43876,7 +43847,7 @@ aW
 aW
 cG
 cO
-cW
+cY
 dd
 aQ
 aa
@@ -44633,7 +44604,7 @@ cw
 aQ
 cQ
 cY
-cW
+cY
 aQ
 aa
 aa

@@ -3477,7 +3477,7 @@
 	name = "Sex on The Beach"
 	id = SEXONTHEBEACH
 	result = SEXONTHEBEACH
-	required_reagents = list(SCREWDRIVERCOCKTAIL = 1, SCHNAPPS = 1, BERRYJUICE = 1)
+	required_reagents = list(FAKEJUNGLEJUICE = 2, SCHNAPPS = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/americano
@@ -4429,6 +4429,28 @@
 	required_reagents = list(MINTESSENCE = 10)
 	required_temp = T0C + 100 //closest we can get to a vacuum distilation with our ghetto ass systems
 	result_amount = 1
+
+/datum/chemical_reaction/junglejuice //the intended route for JJ, also from poison berries (see below).
+	name = "Jungle Juice"
+	id = JUNGLEJUICE
+	result = JUNGLEJUICE
+	required_reagents = list(BERRYJUICEJUNGLE = 1, SCREWDRIVERCOCKTAIL=1)
+	result_amount = 2
+
+/datum/chemical_reaction/junglejuice_fake //this exists to make JJ more accessible and reduce confusion about why some berries can't make it. that being said, this varient does not have the special effects, for better or worse.
+	name = "Jungle Juice"
+	id = FAKEJUNGLEJUICE
+	result = FAKEJUNGLEJUICE
+	required_reagents = list(BERRYJUICE = 1, SCREWDRIVERCOCKTAIL=1)
+	result_amount = 2
+
+/datum/chemical_reaction/junglejuice_frompoison
+	name = "Jungle Juice"
+	id = "junglejuicepoison"
+	result = JUNGLEJUICE
+	required_reagents = list(POISONBERRYJUICE = 1, SCREWDRIVERCOCKTAIL=1)
+	result_amount = 2
+
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
