@@ -36847,10 +36847,7 @@
 /obj/item/device/assembly/voice,
 /obj/item/tool/weldingtool/hugetank,
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/starboard2)
 "bmd" = (
 /obj/structure/grille,
@@ -53362,10 +53359,7 @@
 /obj/abstract/map/spawner/maint/lowchance,
 /obj/structure/rack,
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "bSi" = (
 /turf/simulated/floor{
@@ -60874,10 +60868,7 @@
 /area/chapel/main)
 "cgK" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "cgL" = (
 /obj/structure/grille,
@@ -74673,16 +74664,10 @@
 	name = "plating"
 	},
 /area/centcom/suppy)
-"cIk" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "cIl" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cIm" = (
@@ -74692,18 +74677,13 @@
 	},
 /area/prison/solitary)
 "cIn" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cIo" = (
 /obj/effect/decal/cleanable/blood,
 /turf/unsimulated/wall,
-/area/prison/solitary)
-"cIp" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
-	},
 /area/prison/solitary)
 "cIq" = (
 /turf/unsimulated/floor{
@@ -74718,9 +74698,7 @@
 /area/prison/solitary)
 "cIs" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cIt" = (
 /obj/effect/decal/cleanable/blood,
@@ -75070,19 +75048,19 @@
 /area/centcom/suppy)
 "cJr" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cJs" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cJt" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cJu" = (
@@ -75129,14 +75107,7 @@
 	},
 /area/centcom/suppy)
 "cJA" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
-"cJB" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cJC" = (
 /obj/machinery/dna_scannernew,
@@ -99752,9 +99723,7 @@
 /area/crew_quarters/captain)
 "pMX" = (
 /obj/abstract/map/spawner/floorpill,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "pPH" = (
 /obj/machinery/hologram/holopad,
@@ -99843,13 +99812,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/fitness)
-"qEt" = (
-/obj/abstract/map/spawner/floorpill,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
-/area/maintenance/port)
 "qFn" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -100376,10 +100338,7 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "vcp" = (
 /obj/machinery/light{
@@ -100646,10 +100605,7 @@
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "xAa" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/port)
 "xAR" = (
 /obj/machinery/vending/cigarette,
@@ -197938,7 +197894,7 @@ blb
 aUs
 bnm
 bnn
-qEt
+pMX
 bnn
 bnn
 bnn
@@ -388297,7 +388253,7 @@ aaa
 aaa
 aaa
 cIa
-cIk
+cIs
 cIJ
 cIa
 cJr
@@ -391811,11 +391767,11 @@ aaa
 aaa
 aaa
 cIa
-cIp
+cJs
 cIK
 cIa
 cIK
-cIp
+cJs
 cIa
 aaa
 cJT
@@ -393320,7 +393276,7 @@ cIa
 cIq
 cIt
 cIa
-cIp
+cJs
 cIq
 cIa
 aaa
@@ -394826,7 +394782,7 @@ cIa
 cIr
 cIn
 cIa
-cIp
+cJs
 cIq
 cIa
 aaa
@@ -397836,10 +397792,10 @@ aaa
 aaa
 cIa
 cIq
-cIp
+cJs
 cIa
 cIt
-cJB
+cJA
 cIa
 aaa
 aaa

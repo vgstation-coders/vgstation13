@@ -312,6 +312,11 @@
 	seed_type = "sunflowers"
 	vending_cat = "flowers"
 
+/obj/item/seeds/roseseed
+	name = "packet of rose seeds"
+	seed_type = "roses"
+	vending_cat = "flowers"
+
 /obj/item/seeds/mustardplantseed
 	name = "packet of mustardplant seeds"
 	seed_type = "mustardplants"
@@ -1121,6 +1126,27 @@
 	fluid_consumption = 6
 	nutrient_consumption = 2
 	large = 0
+
+/datum/seed/flower/rose
+	name = "roses"
+	seed_name = "rose"
+	display_name = "roses"
+	plural = 1
+	plant_dmi = 'icons/obj/hydroponics/rose.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/rose)
+	chems = list(NUTRIMENT = list(1,20))
+
+	lifespan = 60
+	potency = 20
+	maturation = 6
+	production = 6
+	yield = 6
+	growth_stages = 3
+	ideal_light = 8
+	fluid_consumption = 0.5
+	nutrient_consumption = 0.5
+	large = 0
+	thorny = 1
 
 /datum/seed/flower/sunflower/moonflower
 	name = "moonflowers"

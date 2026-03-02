@@ -52,7 +52,7 @@
 			if(1)
 				emote("me", MESSAGE_HEAR, "growls.")
 			if(2)
-				if(loc.type==/turf/unsimulated/floor/planetary/water/jungle)
+				if(loc?.type==/turf/unsimulated/floor/planetary/water/jungle)
 					emote("me", MESSAGE_HEAR, "splashes.")
 				else
 					emote("me", MESSAGE_HEAR, "growls.")

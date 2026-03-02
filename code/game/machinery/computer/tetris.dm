@@ -14,6 +14,7 @@ var/list/deleted_machines_tetris_highscores = list()
 	circuit = "/obj/item/weapon/circuitboard/tetris"
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	light_color = LIGHT_COLOR_GREEN
+	moody_state = "overlay_arcade"
 
 	var/total_score = list()
 	var/next_tech_threshold = list()

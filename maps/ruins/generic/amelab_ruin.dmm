@@ -444,10 +444,7 @@
 /obj/machinery/atmospherics/unary/vent{
 	dir = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/amelab/lab)
 "vM" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
@@ -574,10 +571,7 @@
 	looks = "AME_new";
 	name = "antimatter containment jar"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/amelab/lab)
 "AX" = (
 /obj/structure/table,
@@ -594,10 +588,7 @@
 /obj/structure/grille{
 	opacity = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/amelab/lab)
 "Cr" = (
 /turf/simulated/floor/plating,

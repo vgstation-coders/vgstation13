@@ -1,7 +1,5 @@
 //This is so damaged or burnt tiles or platings don't get remembered as the default tile
-var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","damaged4",
-				"damaged5","panelscorched","floorscorched1","floorscorched2","platingdmg1","platingdmg2",
-				"platingdmg3","plating","light_on","light_on_flicker1","light_on_flicker2",
+var/list/icons_to_ignore_at_floor_init = list("plating","light_on","light_on_flicker1","light_on_flicker2",
 				"light_on_clicker3","light_on_clicker4","light_on_clicker5","light_broken",
 				"light_on_broken","light_off","wall_thermite","grass1","grass2","grass3","grass4",
 				"asteroid","asteroid_dug",
@@ -12,7 +10,7 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 				"ironsand6", "ironsand7", "ironsand8", "ironsand9", "ironsand10", "ironsand11",
 				"ironsand12", "ironsand13", "ironsand14", "ironsand15","engine")
 
-var/list/plating_icons = list("plating","platingdmg1","platingdmg2","platingdmg3","asteroid","asteroid_dug",
+var/list/plating_icons = list("plating","asteroid","asteroid_dug",
 				"ironsand1", "ironsand2", "ironsand3", "ironsand4", "ironsand5", "ironsand6", "ironsand7",
 				"ironsand8", "ironsand9", "ironsand10", "ironsand11",
 				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
@@ -42,6 +40,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	var/attack_sound = 'sound/items/bikehorn.ogg'
 	var/obj/item/stack/tile/floor_tile
 	var/image/floor_overlay
+	var/image/broken_overlay
 
 	melt_temperature = 1643.15 // Melting point of steel
 	thermal_mass = 1
@@ -336,22 +335,28 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	if(broken)
 		return
 	if(is_metal_floor())
-		src.icon_state = "damaged[pick(1,2,3,4,5)]"
+		overlays -= broken_overlay
+		broken_overlay = image(icon,src,"damaged[rand(1,5)]")
+		overlays += broken_overlay
 		broken = 1
 	else if(is_light_floor())
 		src.icon_state = "light_broken"
 		broken = 1
 	else if(is_plating())
-		src.icon_state = "platingdmg[pick(1,2,3)]"
+		overlays -= broken_overlay
+		broken_overlay = image(icon,src,"damaged[rand(1,3)]")
+		overlays += broken_overlay
 		broken = 1
 	else if(is_wood_floor())
 		src.icon_state = "wood-broken"
 		broken = 1
 	else if((is_carpet_floor()) || (is_arcade_floor()))
-		src.icon_state = "carpet-broken"
+		overlays -= broken_overlay
+		broken_overlay = image(icon,src,"carpet-broken")
+		overlays += broken_overlay
 		broken = 1
 	else if(is_grass_floor())
-		src.icon_state = "sand[pick("1","2","3")]"
+		src.icon_state = "sand[rand(1,3)]"
 		broken = 1
 	else if(is_slime_floor())
 		spawn(rand(2,10))
@@ -380,10 +385,14 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			new /obj/effect/decal/cleanable/soot(src)
 		burnt = 1
 	else if(is_metal_floor())
-		icon_state = "damaged[pick(1,2,3,4,5)]"
+		overlays -= broken_overlay
+		broken_overlay = image(icon,src,"damaged[rand(1,5)]")
+		overlays += broken_overlay
 		burnt = 1
 	else if(is_plating())
-		icon_state = "panelscorched"
+		overlays -= broken_overlay
+		broken_overlay = image(icon,src,"scorched[rand(1,2)]")
+		overlays += broken_overlay
 		burnt = 1
 	else if(is_wood_floor())
 		icon_state = "wood-broken"
@@ -421,8 +430,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	set_light(0)
 	floor_tile = null
 	intact = 0
-	broken = 0
-	burnt = 0
+	fix_floor()
 	remove_paint_overlay()
 	paint_overlay = plating_paint
 	//No longer phazon, not a teleport destination
@@ -646,10 +654,15 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 					to_chat(user, "<span class='warning'>You fix some dents on the broken plating.</span>")
 					welder.playtoolsound(src, 80)
 					icon_state = "plating"
-					burnt = 0
-					broken = 0
+					fix_floor()
 				else
 					return
+
+/turf/simulated/floor/proc/fix_floor()
+	burnt = 0
+	broken = 0
+	if(broken_overlay)
+		overlays -= broken_overlay
 
 /turf/simulated/floor/Entered(var/atom/movable/AM)
 	.=..()

@@ -52,9 +52,7 @@
 	},
 /area/derelict/atmos)
 "cW" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/atmos)
 "cZ" = (
 /obj/structure/cable{
@@ -1589,9 +1587,7 @@
 /obj/machinery/atmospherics/unary/cap/visible{
 	dir = 1
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/atmos)
 "ZM" = (
 /obj/structure/cable{

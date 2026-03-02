@@ -111,6 +111,13 @@
 			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
 		else
 			clear_fullscreen("high_red")
+
+		if(has_reagent_in_blood(INCENSE_ROSES))
+			overlay_fullscreen("high_love", /obj/abstract/screen/fullscreen/high/love)
+			overlay_fullscreen("high_hearts", /obj/abstract/screen/fullscreen/high/hearts)
+		else
+			clear_fullscreen("high_love")
+			clear_fullscreen("high_hearts")
 	else
 		if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
 			disable_nearsightedness()

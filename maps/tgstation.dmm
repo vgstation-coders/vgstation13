@@ -56090,9 +56090,7 @@
 /area/maintenance/aft)
 "cbv" = (
 /obj/structure/bed/chair,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cbw" = (
 /obj/machinery/light/small{
@@ -59059,10 +59057,7 @@
 /area/maintenance/aft)
 "cgY" = (
 /obj/item/stack/rods,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cgZ" = (
 /obj/effect/decal/cleanable/ash,
@@ -64287,10 +64282,7 @@
 /turf/simulated/wall/r_wall,
 /area/tcomms/storage)
 "cqR" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "cqS" = (
 /obj/structure/grille,
@@ -85746,15 +85738,13 @@
 /area/centcom/suppy)
 "dgw" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dgx" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dgy" = (
 /obj/structure/bed,
@@ -85767,8 +85757,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "dgA" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dgB" = (
@@ -85777,8 +85767,8 @@
 	},
 /area/prison/solitary)
 "dgC" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dgD" = (
@@ -85791,12 +85781,6 @@
 /obj/effect/decal/cleanable/blood,
 /turf/unsimulated/floor{
 	name = "plating"
-	},
-/area/prison/solitary)
-"dgF" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
 	},
 /area/prison/solitary)
 "dgG" = (
@@ -86141,19 +86125,14 @@
 /area/centcom/suppy)
 "dhD" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
-	},
-/area/prison/solitary)
-"dhE" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dhF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dhG" = (
@@ -86199,15 +86178,8 @@
 	icon_state = "dark neutral stripe"
 	},
 /area/centcom/suppy)
-"dhM" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "dhN" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dhO" = (
 /obj/machinery/dna_scannernew,
@@ -404903,7 +404875,7 @@ dgw
 dgV
 dgm
 dgE
-dhM
+dhN
 dgm
 aaa
 aaa
@@ -406408,7 +406380,7 @@ dgm
 dgA
 dgB
 dgm
-dhE
+dgC
 dgB
 dgm
 aaa
@@ -411927,7 +411899,7 @@ aaa
 aaa
 aaa
 dgm
-dgF
+dgx
 dgW
 dgm
 dhG
@@ -412433,7 +412405,7 @@ dgE
 dgB
 dgm
 dgB
-dhE
+dgC
 dgm
 aaa
 aaa

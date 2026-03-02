@@ -8,6 +8,7 @@ var/list/climatecomps = list()
 	moody_state = "overlay_climate-wall"
 	light_color = LIGHT_COLOR_CYAN
 	circuit = "/obj/item/weapon/circuitboard/labor"
+	var/datum/virtual_z/linked_vz
 
 /obj/machinery/computer/climate/wall
 	density = FALSE
@@ -16,10 +17,16 @@ var/list/climatecomps = list()
 /obj/machinery/computer/climate/New()
 	..()
 	climatecomps += src
+	link_climate()
 
 /obj/machinery/computer/climate/Destroy()
 	climatecomps -= src
 	..()
+
+/obj/machinery/computer/climate/proc/link_climate()
+	var/datum/vz = get_virtual_z()
+	if(vz)
+		linked_vz = vz
 
 /obj/machinery/computer/climate/attack_hand(var/mob/user as mob)
 	if(..())
@@ -28,7 +35,7 @@ var/list/climatecomps = list()
 	var/dat = list()
 	dat += "<center>"
 	dat += "<div class='modal'><div class='modal-content'><div class='line'><b>Weather Report</b></div><br>"
-	var/datum/climate/C = SSweather.get_climate_from_turf(get_turf(src))
+	var/datum/climate/C = SSweather.get_climate(linked_vz)
 	if(C?.current_weather)
 		var/datum/weather/W = C.current_weather
 		var/reported_temp = W.temperature - 273.15
@@ -48,3 +55,10 @@ var/list/climatecomps = list()
 	popup.set_content(dat)
 	popup.open()
 	onclose(user, "climate")
+
+/obj/machinery/computer/climate/long_range
+	name = "long-range climate monitoring console"
+	desc = "A computer designed to report on the weather conditions in a distant location."
+
+/obj/machinery/computer/climate/link_climate()
+	linked_vz = map.getVLevel(map.zMainStation)

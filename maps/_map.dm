@@ -111,7 +111,7 @@
 		level.reset_base_turf(/turf/space,fast_base_turf)
 
 /datum/map/proc/linkVLevel(datum/zLevel/level)
-	var/datum/virtual_z/new_vz = new(level, ALLOCATION_FULL, ALLOCATION_FULL, 1, 1, skip_turf_setup = FALSE)
+	var/datum/virtual_z/new_vz = new(level, world.maxx, world.maxy, 1, 1, skip_turf_setup = FALSE)
 	new_vz.id = level.z
 	new_vz.name = level.name
 	if(level.z in daynight_z_lvls)
@@ -123,8 +123,7 @@
 	new_vz.movementChance = level.movementChance
 	new_vz.transitionLoops = level.transitionLoops
 	if(level.transition_crosswrap_z && level.transition_crosswrap_z.len == 4)
-		for(var/datum/zLevel/zl in level.transition_crosswrap_z)
-			new_vz.transition_crosswrap_v += zl.virtual_z_levels[1]
+		new_vz.transition_crosswrap_v = level.transition_crosswrap_z.Copy()
 	new_vz.update_settings()
 	vLevels |= new_vz
 	return new_vz
@@ -364,14 +363,12 @@ var/global/list/accessable_v_levels = list(
 	name = "jungle surface"
 	base_turf = /turf/unsimulated/floor/planetary/dirt/jungle
 	base_area = /area/surface/jungle/landing //hacky workaround.
-	movementJammed = TRUE
 	planetside = TRUE
 
 /datum/zLevel/jungleunderground
 	name = "jungle underground"
 	base_turf = /turf/unsimulated/floor/planetary/cave/jungle
 	base_area = /area/surface/jungle/underground
-	movementJammed = TRUE
 	planetside = TRUE
 
 /datum/zLevel/junglesurface/mining

@@ -393,10 +393,7 @@
 	},
 /area/vault/black_site_prism)
 "be" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "bh" = (
 /obj/machinery/light{
@@ -1030,9 +1027,7 @@
 /area/vault/black_site_prism)
 "ng" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/black_site_prism)
 "nh" = (
 /turf/simulated/wall/invulnerable,
@@ -1465,10 +1460,7 @@
 	dir = 5
 	},
 /obj/effect/decal/cleanable/blood,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "tK" = (
 /obj/structure/bed,
@@ -2135,10 +2127,7 @@
 "Bs" = (
 /obj/effect/decal/cleanable/blood/stattrack,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "Bx" = (
 /obj/structure/bed/chair{
@@ -2397,10 +2386,7 @@
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor6"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "Gr" = (
 /obj/effect/decal/cleanable/blood/stattrack{
@@ -2427,10 +2413,7 @@
 "GC" = (
 /obj/effect/decal/cleanable/blood,
 /obj/item/weapon/soap/deluxe,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "GH" = (
 /obj/effect/alien/weeds,
@@ -2502,10 +2485,7 @@
 /obj/effect/decal/cleanable/blood/stattrack{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "HP" = (
 /obj/effect/decal/cleanable/blood/stattrack{
@@ -3207,10 +3187,7 @@
 /area/vault/black_site_prism)
 "PB" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "PE" = (
 /turf/simulated/floor/carpet{

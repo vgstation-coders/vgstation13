@@ -42624,9 +42624,7 @@
 /area/hallway/primary/central)
 "bHC" = (
 /obj/structure/bed/chair,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bHD" = (
 /obj/structure/closet/emcloset/vox,
@@ -45590,10 +45588,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "bNe" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bNf" = (
 /obj/effect/decal/cleanable/ash,
@@ -51064,10 +51059,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "bWY" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "bWZ" = (
 /turf/simulated/wall/r_wall,
@@ -73189,14 +73181,12 @@
 /area/centcom/suppy)
 "cOw" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cOx" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cOy" = (
@@ -73206,8 +73196,8 @@
 	},
 /area/prison/solitary)
 "cOz" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cOA" = (
@@ -73215,8 +73205,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "cOB" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cOC" = (
@@ -73232,9 +73222,7 @@
 /area/prison/solitary)
 "cOE" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cOF" = (
 /obj/effect/decal/cleanable/blood,
@@ -73584,19 +73572,19 @@
 /area/centcom/suppy)
 "cPD" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPE" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPG" = (
@@ -73643,14 +73631,10 @@
 	},
 /area/centcom/suppy)
 "cPM" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cPN" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cPO" = (
 /obj/machinery/dna_scannernew,
@@ -84972,10 +84956,7 @@
 /obj/machinery/atmospherics/unary/cap/visible{
 	dir = 1
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/atmos)
 "dwn" = (
 /obj/structure/lattice,
@@ -85010,10 +84991,7 @@
 /turf/space,
 /area/derelict/atmos)
 "dwu" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/atmos)
 "dwv" = (
 /turf/simulated/floor,
@@ -85907,10 +85885,7 @@
 	name = "Engineering Access";
 	req_access_txt = "10"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dyD" = (
 /obj/structure/sign/securearea{
@@ -85981,32 +85956,20 @@
 /turf/simulated/floor,
 /area/derelict/bridge)
 "dyO" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dyP" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dyQ" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dyR" = (
 /obj/item/stack/cable_coil/cut,
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dyS" = (
 /turf/simulated/floor/plating/airless,
@@ -86039,49 +86002,31 @@
 "dyZ" = (
 /obj/structure/window/reinforced,
 /obj/machinery/portable_atmospherics/canister/plasma,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dza" = (
 /obj/structure/window/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzb" = (
 /obj/structure/window/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzc" = (
 /obj/structure/window/reinforced,
 /obj/item/weapon/table_parts/reinforced,
 /obj/item/weapon/table_parts/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzd" = (
 /obj/structure/window/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dze" = (
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzf" = (
 /obj/machinery/power/emitter{
@@ -86147,10 +86092,7 @@
 /turf/simulated/wall,
 /area/derelict/singularity_engine)
 "dzp" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzq" = (
 /obj/machinery/door/window{
@@ -86178,17 +86120,11 @@
 /area/derelict/bridge)
 "dzu" = (
 /obj/item/weapon/storage/toolbox/syndicate,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzv" = (
 /obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzw" = (
 /obj/structure/cable/yellow{
@@ -86243,10 +86179,7 @@
 	info = "<b>Objective #1</b>: Destroy the station with a nuclear device.";
 	name = "Objectives of a Nuclear Operative"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzC" = (
 /obj/structure/window/reinforced{
@@ -86300,10 +86233,7 @@
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
 	name = "Syndicate agent remains"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzK" = (
 /obj/item/clothing/suit/space/syndicate,
@@ -86315,10 +86245,7 @@
 /area/derelict/singularity_engine)
 "dzM" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzN" = (
 /obj/structure/grille,
@@ -86373,10 +86300,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dzW" = (
 /obj/item/clothing/head/helmet/tactical/swat,
@@ -86429,10 +86353,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAe" = (
 /obj/structure/window/reinforced{
@@ -86452,10 +86373,7 @@
 /area/derelict/singularity_engine)
 "dAg" = (
 /obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAh" = (
 /turf/simulated/floor/airless,
@@ -86550,17 +86468,11 @@
 /area/derelict/bridge/access)
 "dAu" = (
 /obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAv" = (
 /obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAw" = (
 /obj/structure/grille,
@@ -86568,29 +86480,20 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAx" = (
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAy" = (
 /turf/simulated/floor/plating/airless,
 /area/derelict/bridge/access)
 "dAz" = (
 /obj/structure/table,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAA" = (
 /obj/item/weapon/shard{
@@ -86602,33 +86505,21 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAC" = (
 /obj/structure/grille,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAD" = (
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAE" = (
 /obj/structure/dispenser,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAF" = (
 /obj/machinery/door/airlock/maintenance{
@@ -86649,10 +86540,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAI" = (
 /obj/structure/closet/crate/secure/large/reinforced/shard,
@@ -86664,10 +86552,7 @@
 /area/derelict/singularity_engine)
 "dAK" = (
 /obj/item/stack/rods,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAL" = (
 /obj/item/weapon/shard{
@@ -86681,10 +86566,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAN" = (
 /turf/simulated/wall,
@@ -86695,26 +86577,17 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "dAP" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "dAQ" = (
 /turf/simulated/floor/airless,
 /area/derelict/hallway/primary)
 "dAR" = (
 /obj/item/weapon/table_parts/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dAS" = (
 /obj/item/stack/ore/slag,
@@ -86742,10 +86615,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/hallway/primary)
 "dAX" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "dAY" = (
 /obj/structure/window{
@@ -86757,10 +86627,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dBa" = (
 /obj/structure/grille,
@@ -86810,16 +86677,10 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "dBf" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/hallway/primary)
 "dBg" = (
 /obj/machinery/light/small,
@@ -86833,16 +86694,10 @@
 /turf/simulated/floor/plating/airless,
 /area)
 "dBi" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area)
 "dBj" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "dBk" = (
 /obj/structure/grille,
@@ -86861,19 +86716,13 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/hallway/primary)
 "dBm" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area)
 "dBn" = (
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dBo" = (
 /obj/structure/grille/broken,
@@ -86883,10 +86732,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dBq" = (
 /turf/simulated/floor/plating/airless,
@@ -86900,10 +86746,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/hallway/primary)
 "dBt" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "dBu" = (
 /obj/item/weapon/shard{
@@ -86953,10 +86796,7 @@
 /area/derelict/singularity_engine)
 "dBB" = (
 /obj/machinery/light/small,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "dBC" = (
 /obj/structure/window/full,
@@ -87005,10 +86845,7 @@
 /area/derelict/singularity_engine)
 "dBM" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dBN" = (
 /obj/structure/lattice,
@@ -87016,19 +86853,13 @@
 /turf/space,
 /area)
 "dBO" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/arrival)
 "dBP" = (
 /turf/simulated/floor/plating/airless,
 /area/derelict/arrival)
 "dBQ" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/arrival)
 "dBR" = (
 /turf/simulated/floor{
@@ -87088,10 +86919,7 @@
 /turf/simulated/floor/plating/airless,
 /area)
 "dCb" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "dCc" = (
 /obj/machinery/door/window{
@@ -87111,16 +86939,10 @@
 	},
 /area/derelict/medical)
 "dCf" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical)
 "dCg" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical)
 "dCh" = (
 /obj/machinery/light{
@@ -87130,10 +86952,7 @@
 /area/derelict/medical)
 "dCi" = (
 /obj/machinery/light/small,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "dCj" = (
 /obj/structure/window{
@@ -87183,10 +87002,7 @@
 	},
 /area/derelict/medical)
 "dCq" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "dCr" = (
 /obj/structure/table,
@@ -87216,10 +87032,7 @@
 /turf/simulated/floor/plating/airless,
 /area)
 "dCw" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "dCx" = (
 /obj/structure/bed/chair{
@@ -87276,10 +87089,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "dCF" = (
 /obj/structure/window/reinforced{
@@ -87319,17 +87129,11 @@
 /area/derelict/medical)
 "dCK" = (
 /obj/item/stack/medical/bruise_pack,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical)
 "dCL" = (
 /obj/item/stack/medical/ointment,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical)
 "dCM" = (
 /obj/machinery/light{
@@ -87512,10 +87316,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical)
 "dDj" = (
 /obj/structure/closet/wardrobe/genetics_white,
@@ -87786,10 +87587,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "dDU" = (
 /obj/structure/cable/yellow{
@@ -88268,10 +88066,7 @@
 /turf/simulated/floor,
 /area/derelict/arrival)
 "dFk" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/hallway/primary)
 "dFl" = (
 /obj/structure/cable/yellow{
@@ -88313,10 +88108,7 @@
 	},
 /area/derelict/hallway/primary)
 "dFr" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "dFs" = (
 /obj/structure/table,
@@ -88492,10 +88284,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/hallway/secondary)
 "dFS" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/hallway/secondary)
 "dFT" = (
 /obj/machinery/door/airlock/maintenance{
@@ -88525,10 +88314,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/hallway/secondary)
 "dFX" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "dFY" = (
 /turf/simulated/floor/plating/airless,
@@ -88651,10 +88437,7 @@
 /area/derelict/hallway/secondary)
 "dGt" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "dGu" = (
 /obj/structure/lattice,
@@ -88812,10 +88595,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/bridge/ai_upload)
 "dGP" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/bridge/ai_upload)
 "dGQ" = (
 /turf/simulated/floor/airless,
@@ -88869,10 +88649,7 @@
 	info = "The Syndicate have cunningly disguised a Syndicate Uplink as your PDA. Simply enter the code \"678 Bravo\" into the ringtone select to unlock its hidden features. <br><br><b>Objective #1</b>. Kill the God damn AI in a fire blast that it rocks the station. <b>Success!</b>  <br><b>Objective #2</b>. Escape alive. <b>Failed.</b>";
 	name = "Mission Objectives"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/bridge/ai_upload)
 "dGX" = (
 /obj/machinery/light/small{
@@ -89084,19 +88861,13 @@
 /turf/simulated/floor/airless,
 /area/derelict/teleporter)
 "dHw" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/teleporter)
 "dHx" = (
 /obj/machinery/light_construct/small{
 	dir = 1
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/teleporter)
 "dHy" = (
 /obj/machinery/computer/teleporter,
@@ -89125,10 +88896,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/teleporter)
 "dHD" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/teleporter)
 "dHE" = (
 /obj/machinery/power/apc{
@@ -109107,10 +108875,7 @@
 /area)
 "evC" = (
 /obj/structure/computerframe,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "evD" = (
 /obj/structure/table,
@@ -109123,10 +108888,7 @@
 /area)
 "evF" = (
 /obj/structure/dispenser/oxygen,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "evG" = (
 /obj/item/clothing/head/helmet/biker,
@@ -109150,10 +108912,7 @@
 /area)
 "evL" = (
 /obj/structure/grille,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area)
 "evM" = (
 /obj/item/clothing/gloves/bikergloves,

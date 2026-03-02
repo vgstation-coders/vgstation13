@@ -333,8 +333,7 @@ var/global/list/floorbot_targets=list()
 					repairing = 0
 					// Cheap, and does the job.
 					F.icon_state = "plating"
-					F.burnt = 0
-					F.broken = 0
+					F.fix_floor()
 
 /obj/machinery/bot/floorbot/proc/eattile(var/obj/item/stack/tile/metal/T)
 	if(!istype(T, /obj/item/stack/tile/metal))

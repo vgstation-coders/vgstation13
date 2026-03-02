@@ -357,6 +357,22 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	plantname = "dandelions"
 	fragrance = INCENSE_LEAFY
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/rose
+	name = "rose"
+	desc = "A symbol of peace and love."
+	potency = 1
+	throwforce = 1
+	filling_color = "#660531"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "rose"
+	plantname = "roses"
+	fragrance = INCENSE_ROSES
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rose/attack_self(mob/user as mob)
+	Destroy(/obj/item/weapon/reagent_containers/food/snacks/grown/rose)
+	new/obj/item/clothing/accessory/rose(user.loc)
+	to_chat(user, "<span class='notice'>You fold a pin into the rose.</span>")
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
 	desc = "Store in a location at least 50 yards away from werewolves."
@@ -1259,6 +1275,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	icon = 'icons/obj/hydroponics/berry.dmi'
 	icon_state = "produce2"
 	desc = "They taste like... burning."
+	plantname=null
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle/New(var/loc,var/mob/berry_picker=null)
 	..(loc)

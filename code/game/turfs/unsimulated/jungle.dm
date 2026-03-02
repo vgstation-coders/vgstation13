@@ -104,6 +104,7 @@ var/list/foliage_replacments=list(
 	desc="A mixture of sediments, clays, and decomposed matter."
 	icon='icons/turf/floors.dmi'
 	icon_state = "ironsand1"
+	base_icon_state=null
 	temperature = T_JUNGLE
 	oxygen = MOLES_JUNGLE_O2_STD
 	nitrogen = MOLES_JUNGLE_N2_STD
