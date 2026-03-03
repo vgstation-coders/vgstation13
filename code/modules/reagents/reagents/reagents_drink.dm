@@ -1156,5 +1156,3 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	
 	M.reagents.add_reagent(MINTESSENCE, 0.1)
-	if(M.has_reagent("capsaicin"))
-		M.remove_reagent("capsaicin", 1)
