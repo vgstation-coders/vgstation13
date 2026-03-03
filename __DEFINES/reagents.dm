@@ -499,6 +499,11 @@
 #define GRUGZONE		"grugzone"
 #define JUNGLEJUICE		"junglejuice"
 #define FAKEJUNGLEJUICE		"fakejunglejuice"
+#define FROSTBITE 		"frostbite"
+#define MINTYMULE		"mintymule"
+#define OLDCUBAN		"oldcuban"
+#define CAIPIRINHA		"caipirinha"
+#define ENGLISHGARDEN	"englishgarden"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
