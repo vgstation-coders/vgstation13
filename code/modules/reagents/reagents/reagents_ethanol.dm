@@ -2105,4 +2105,4 @@
 		return 1
 
 	if(prob(4))
-		M.say(pick("COME ON [pick("ENGLAND","INGERLAND","ENGERLAND","INGLAND")]!", "SCORE SOM FAKIN GOALS!!", "'ate scots...", "'ate the irish...", "'ate freedumbs...", "Luv islams...", "Luv engerland", "Luv Norf FC", "Simple as!" "Simple ass!"))
+		M.say(pick("COME ON [pick("ENGLAND","INGERLAND","ENGERLAND","INGLAND")]!", "SCORE SOM FAKIN GOALS!!", "'ate scots...", "'ate the irish...", "'ate freedumbs...", "Luv islams...", "Luv engerland", "Luv Norf FC", "Simple as!", "Simple ass!"))
