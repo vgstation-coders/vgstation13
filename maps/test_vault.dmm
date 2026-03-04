@@ -83,10 +83,6 @@
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor,
 /area/shuttle/arrival/station)
-"Q" = (
-/obj/effect/landmark/dungeon_area,
-/turf/unsimulated/floor/grass,
-/area)
 "R" = (
 /turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
@@ -107,7 +103,7 @@ R
 R
 "}
 (2,1,1) = {"
-Q
+a
 a
 R
 t

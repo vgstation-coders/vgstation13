@@ -569,8 +569,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			call(/datum/game_mode/proc/equip_syndicate)(new_character)
 		if("Death Commando")//Leaves them at late-join spawn.
 			new_character.equip_death_commando()
-			new_character.internal = new_character.s_store
-			new_character.internals.icon_state = "internal1"
+			new_character.equip_internals(new_character.s_store)
 		else//They may also be a cyborg or AI.
 			switch(new_character.mind.assigned_role)
 				if("AI")
@@ -1134,7 +1133,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 /proc/select_loadout()
 	var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Equip Outfit") as null|text
-	var/outfit_type = filter_list_input("Outfit Type","Equip Outfit", get_matching_types(object, /datum/outfit) - /datum/outfit/ - /datum/outfit/striketeam/)
+	var/outfit_type = filter_typelist_input("Outfit Type","Equip Outfit", get_matching_types(object, /datum/outfit) - /datum/outfit/ - /datum/outfit/striketeam/)
 	if(!outfit_type || !ispath(outfit_type))
 		return
 	return outfit_type

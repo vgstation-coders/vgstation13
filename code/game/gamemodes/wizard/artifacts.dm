@@ -5,7 +5,7 @@
 	var/abbreviation //For feedback
 	var/one_use = FALSE
 	var/list/spawned_items = list()
-	var/price = Sp_BASE_PRICE
+	var/price = SP_BASE_PRICE
 
 /datum/spellbook_artifact/proc/purchased(mob/living/user)
 	to_chat(user, "<span class='info'>You have purchased [name].</span>")
@@ -24,7 +24,7 @@
 	name = "Staff of Change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
 	abbreviation = "ST"
-	price = 2 * Sp_BASE_PRICE
+	price = 2 * SP_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
 /datum/spellbook_artifact/staff_of_polymorph
@@ -36,7 +36,7 @@
 
 /datum/spellbook_artifact/staff_of_swapping
 	name = "Staff of Swapping"
-	desc = "An artefact that fires a glowing bolt of energy which transfers the caster and targets position in space. Wielding in it both hands increases the power of the staff, and allows it to pass through certain objects.."
+	desc = "An artefact that fires a glowing bolt of energy which transfers the caster and targets position in space. Wielding in it both hands increases the power of the staff, and allows it to pass through certain objects."
 	abbreviation = "SW"
 	price = 20
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/swapper)
@@ -88,9 +88,9 @@
 
 /datum/spellbook_artifact/staff_of_necro
 	name = "Staff of Necromancy"
-	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
+	desc = "An arcane staff capable of summoning undying minions from the corpses of your organic enemies. Stores 3 charges, and takes 20 seconds to gain a charge. Recharges twice as fast and provides a slight brute-healing effect when wielded by a lich."
 	abbreviation = "SN"
-	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
+	spawned_items = list(/obj/item/weapon/staff/necro)
 
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
@@ -102,14 +102,14 @@
 	name = "Spellbook Bundle"
 	desc = "Feeling adventurous? Buy this bundle and receive seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
 	abbreviation = "SB"
-	price = 4 * Sp_BASE_PRICE
+	price = 4 * SP_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/storage/box/spellbook)
 
 /datum/spellbook_artifact/potion_bundle
 	name = "Potion bundle"
 	desc = "As a dead wizard once said, life is a bag of potions. You never know what you're gonna get."
 	abbreviation = "PB"
-	price = 4 * Sp_BASE_PRICE
+	price = 4 * SP_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/storage/bag/potion/bundle)
 
 /datum/spellbook_artifact/lesser_potion_bundle
@@ -122,7 +122,7 @@
 	name = "Predicted potion bundle"
 	desc = "Contains 40 potions. I like the blue ones myself."
 	abbreviation = "LPB"
-	price = 4 * Sp_BASE_PRICE
+	price = 4 * SP_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/storage/bag/potion/predicted_potion_bundle)
 
 /datum/spellbook_artifact/lesser_predicted_potion_bundle
@@ -194,6 +194,12 @@
 
 	H.rightandwrong("guns")
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
+	score.summon_guns_count++
+	if(prob(20) || ((score.summon_guns_count % 5) == 0)) // 20% chance, or every time guns are summoned 5 times.
+		for(var/mob/M in player_list)
+			if(!M.client)
+				continue
+			M.playsound_local(M, 'sound/misc/ak47.ogg', 50)
 
 //SUMMON MAGIC
 /datum/spellbook_artifact/summon_magic
@@ -232,7 +238,7 @@
 	name = "Summon Artifacts"
 	desc = "Share the secrets of the ancient world and bring peace to the station. Or chaos."
 	abbreviation = "SA"
-	price = Sp_BASE_PRICE*2
+	price = SP_BASE_PRICE*2
 
 /datum/spellbook_artifact/summon_artifacts/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, blades, or artifacts
@@ -280,7 +286,7 @@
 /datum/spellbook_artifact/santa_bundle
 	name = "Become Santa Claus"
 	desc = "Guess which station is on the naughty list?"
-	price = 3 * Sp_BASE_PRICE
+	price = 3 * SP_BASE_PRICE
 
 /datum/spellbook_artifact/santa_bundle/purchased(mob/living/carbon/human/H)
 	..()
@@ -333,7 +339,7 @@
 	abbreviation = "TS-D"
 	desc = "Exploits the magic of futurescience, tapping into the unfortunate target station's APCs, allowing you to destroy the stations lighting en-masse."
 	one_use = TRUE
-	price = 0.25*Sp_BASE_PRICE
+	price = 0.25*SP_BASE_PRICE
 	spawned_items = list(/obj/item/clothing/head/pumpkinhead)
 
 /datum/spellbook_artifact/darkness/purchased(mob/living/carbon/human/H)
@@ -347,7 +353,7 @@
 	name = "Prestidigitation Bundle"
 	abbreviation = "PTDB"
 	desc = "A group of spells for general utility."
-	price = Sp_BASE_PRICE
+	price = SP_BASE_PRICE
 
 /datum/spellbook_artifact/prestidigitation/purchased(mob/living/carbon/human/H)
 	..()
@@ -364,14 +370,14 @@
 	name = "Boots of Blinding Speed"
 	abbreviation = "BS"
 	desc = "Makes you much faster, but blinds you while you move."
-	price = 0.75 * Sp_BASE_PRICE
+	price = 0.75 * SP_BASE_PRICE
 	spawned_items = list(/obj/item/clothing/shoes/blindingspeed)
 
 /datum/spellbook_artifact/nogunallowed
 	name = "No Gun Allowed"
 	abbreviation = "NGA"
 	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation. Non-refundable."
-	price = -1 * Sp_BASE_PRICE
+	price = -1 * SP_BASE_PRICE
 	one_use = TRUE
 
 /datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)

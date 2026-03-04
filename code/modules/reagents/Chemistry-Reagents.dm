@@ -23,6 +23,7 @@
 	var/nutriment_factor = 0
 	var/pain_resistance = 0
 	var/sport = SPORTINESS_NONE //High sport helps you show off on a treadmill. Multiplicative
+	var/harms_animal_type //What kind of animal does this harm?
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/overdose_am = 0
 	var/overdose_tick = 0
@@ -48,12 +49,22 @@
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 	var/paint_light = PAINTLIGHT_NONE
 	var/adj_temp = 0//keep between -1.5,20 to prevent people from freezing/burning themselves
+	var/max_temp_adj = 20 //how much this reagent is allowed to move the body temp. pair with above var. 0=no change allowed relative to 310K. set to 20 to prevent burning
+	var/fission_time = null //null means it will have no effect on fuel lifetime. unit is in seconds. this is assuming a 1 rod reactor with 0% insertion (this will never happen.).
+	var/fission_power= 0 //watts of power. how much ooomph does it have?
+	var/fission_absorbtion=0 //watts. how much energy does this sap to facilitate its reactions?
+
+	//adjusts the values of hydro trays and soils by this value per process
+	var/plant_nutrition = 0
+	var/plant_watering = 0
+	var/plant_pests = 0
+	var/plant_weeds = 0
+	var/plant_toxins = 0
+	var/plant_health = 0
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS, var/allow_permeability = TRUE, var/list/splashplosion=list())
 	set waitfor = 0
 
-	if(!holder)
-		return 1
 	if(!istype(M))
 		return 1
 	if((src.id in M.tolerated_chems) && M.tolerated_chems[src.id] && M.tolerated_chems[src.id] >= volume)
@@ -63,7 +74,7 @@
 	src = null
 
 	//If the chemicals are in a smoke cloud, do not let the chemicals "penetrate" into the mob's system (balance station 13) -- Doohl
-	if(self.holder && allow_permeability && !istype(self.holder.my_atom, /obj/effect/smoke/chem))
+	if(allow_permeability && !istype(self.holder?.my_atom, /obj/effect/smoke/chem))
 		if(method == TOUCH)
 
 			var/chance = 1
@@ -84,7 +95,7 @@
 
 			chance = chance * 100
 
-			if(self.id == HOLYWATER && istype(self.holder.my_atom, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater))
+			if(self.id == HOLYWATER && istype(self.holder?.my_atom, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater))
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, min(5,self.volume/2)) //holy water flasks only splash 5u at a time. But for deconversion purposes they will always be ingested.
 			else if(prob(chance) && !block)
@@ -94,7 +105,7 @@
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			R.handle_splashed_reagent(self.id)
+			R.handle_splashed_reagent(self.id, method, volume)
 
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
@@ -110,7 +121,7 @@
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			R.handle_splashed_reagent(self.id)
+			R.handle_splashed_reagent(self.id, method, volume)
 
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
@@ -130,6 +141,9 @@
 	src = null
 
 	M.reagent_act(self.id, method, volume)
+
+	if(self.harms_animal_type && istype(M,self.harms_animal_type))
+		M.atepoison()
 
 /datum/reagent/proc/reaction_obj(var/obj/O, var/volume, var/list/splashplosion=list())
 	set waitfor = 0
@@ -201,10 +215,10 @@
 	if(M.nutrition < 0) //Prevent from going into negatives
 		M.nutrition = 0
 
-	if(adj_temp > 0 && M.bodytemperature <= 325) //310 is the normal bodytemp. 310.055, keeping possible temp adjust effect below a total of 350 will keep the screen alarm weak
-		M.bodytemperature = max(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
-	else if(adj_temp < 0 && M.bodytemperature >= 309.5)
-		M.bodytemperature = min(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(adj_temp > 0 && M.bodytemperature<BODYTEMP_DEFAULT+max_temp_adj)
+		M.bodytemperature = min(BODYTEMP_DEFAULT+max_temp_adj, M.bodytemperature+adj_temp*TEMPERATURE_DAMAGE_COEFFICIENT )
+	else if(adj_temp < 0 && M.bodytemperature>BODYTEMP_DEFAULT-max_temp_adj)
+		M.bodytemperature = max(BODYTEMP_DEFAULT-max_temp_adj, M.bodytemperature+adj_temp*TEMPERATURE_DAMAGE_COEFFICIENT )
 
 /datum/reagent/proc/is_overdosing() //Too much chems, or been in your system too long
 	return (overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)
@@ -218,6 +232,14 @@
 		return
 
 	holder.remove_reagent(src.id, 1)
+
+	T.add_nutrientlevel(plant_nutrition, id == BLOOD)
+	T.add_waterlevel(plant_watering)
+	T.add_pestlevel(plant_pests)
+	T.add_weedlevel(plant_weeds)
+	T.add_toxinlevel(plant_toxins)
+	T.add_planthealth(plant_health)
+
 
 //Called after add_reagents creates a new reagent
 /datum/reagent/proc/on_introduced(var/data)

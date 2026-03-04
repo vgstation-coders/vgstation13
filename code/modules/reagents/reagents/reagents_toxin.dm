@@ -39,7 +39,7 @@
 				H.adjustToxLoss(0.1)
 				if(prob(8))
 					H.vomit()
-		if(600 to INFINITY)	//Ded in 10 minutes with a minimum of 6 units
+		if(601 to INFINITY)	//Ded in 10 minutes with a minimum of 6 units
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(20))
@@ -148,6 +148,7 @@
 /datum/reagent/chefspecial/on_overdose(var/mob/living/M)
 	M.death(0)
 	M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
+	log_attack("[key_name(M)] was killed by Chef Excellence's Special Sauce (CHEFSPECIAL).")
 
 //Otherwise known as a "Mickey Finn"
 /datum/reagent/chloralhydrate
@@ -348,16 +349,19 @@
 /datum/reagent/minttoxin
 	name = "Mint Toxin"
 	id = MINTTOXIN
-	description = "Useful for dealing with undesirable customers. The undiluted version of Mint Extract."
+	description = "Mint essence distilled to its purest form, a strong toxin against plants, mushrooms and animals. Useful for dealing with undesirable customers."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	density = 0.898
 	specheatcap = 3.58
-	custom_metabolism = 0.01 //so it lasts 10x as long as regular minttox
-	var/fatgokaboom = TRUE
+	custom_metabolism = 0.01 //so it lasts 10x as long as dilute essence
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM //about as nutritious as sugar
-	sport = SPORTINESS_SUGAR //a small performance boost from being COOL AND FRESH
+	sport = 2*SPORTINESS_SUGAR //a moderate performance boost from being COOL AND FRESH
+	plant_pests = -8
+	plant_weeds = -6
+	plant_toxins = 2
 	var/chillcounter = 0
+	var/concentrated = TRUE //also used to reduce the toxin damage done with the dilute version
 
 /datum/reagent/minttoxin/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -369,7 +373,7 @@
 	if(M.bodytemperature > 310) //copypasted from the cold drinks check so I don't have to change minttox internally and maybe most certainly break shit in the process
 		M.bodytemperature = max(310, M.bodytemperature + (-5 * TEMPERATURE_DAMAGE_COEFFICIENT)) //that minty freshness my dude, chill out
 
-	if(fatgokaboom && (M_FAT in M.mutations))
+	if(concentrated && (M_FAT in M.mutations))
 		M.gib()
 
 	if(ishuman(M))
@@ -397,13 +401,31 @@
 					playsound(H, 'sound/effects/toothshatter.ogg', 50, 1)
 					H.audible_scream()
 					H.adjustBruteLoss(50) //imagine all your teeth violently exploding, shrapnel and shit
+		if(concentrated)
+			if(isdiona(H) || ismushroom(H)) //technically more toxic to shrooms than plants but this is good enough
+				H.adjustToxLoss(4)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a sharp cold pain in your stems!</span>")
+
+			if(isinsectoid(H)) //more toxic to bugs than to plants
+				H.adjustToxLoss(6)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a cold stabing pain burn your carapace from within!</span>")
+
+			if(iscatbeast(H)) //pet cats are immune it's space magic ain't gotta explain shit
+				H.adjustToxLoss(10)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a sharp pain in your liver!</span>")
 
 /datum/reagent/minttoxin/essence
 	name = "Mint Essence"
 	id = MINTESSENCE
-	description = "Minty freshness in liquid form!"
+	description = "The raw, unrefined essence of freshness!"
 	custom_metabolism = 0.1 //toxin lasts 10x as long
-	fatgokaboom = FALSE
+	concentrated = FALSE
+	plant_pests = -2
+	plant_weeds = -1
+	plant_toxins = 0
 
 /datum/reagent/mutagen
 	name = "Unstable Mutagen"
@@ -448,9 +470,10 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_PHYTOCHEMISTRY)
-			T.reagents.remove_reagent(id, 1)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -477,6 +500,64 @@
 		I.desc = "Looks like this was \an [O] some time ago."
 		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		qdel(O)
+
+/datum/reagent/mutagen/metastable
+	name = "Metastable Mutagen"
+	id = METASTABLE_MUTAGEN
+	description = "A modified variant of Unstable Mutagen that causes controlled mutations in plants and accelerates the onset of symptoms due to radiation poisoning."
+
+/datum/reagent/mutagen/metastable/on_mob_life(var/mob/living/M)
+	if(!M.dna)
+		return //No robots, AIs, aliens, Ians or other mobs should be affected by this.
+	if(!M)
+		M = holder.my_atom
+	if(..())
+		return 1
+	M.apply_radiation(3,RAD_INTERNAL)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.rad_tick += 20 * REM //QUICKLY advances the rad_tick
+
+/datum/reagent/mutagen/metastable/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(30))
+			T.mutate(GENE_PHYTOCHEMISTRY, PLANT_CHEMICAL)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
+
+/datum/reagent/mutagen/metastable/metatable
+	name = "Metatable Mutagen"
+	id = METATABLE_MUTAGEN
+	description = "Causes controlled mutations in plants and tables, and accelerates the onset of radiation symptoms."
+
+/datum/reagent/mutagen/metastable/metatable/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(!(O.dissolvable() == PACID))
+		return
+	var/list/tabletypes = list(/obj/structure/table,
+								/obj/structure/table/woodentable,
+								/obj/structure/table/woodentable/poker,
+								/obj/structure/table/glass,
+								/obj/structure/table/glass/plasma,
+								/obj/structure/table/plastic,
+								/obj/structure/table/reinforced,
+								/obj/structure/table/reinforced/clockwork
+								)
+	if(istype(O,/obj/structure/table))
+		var/selectedtable = pick(tabletypes)
+		O.visible_message("<span class='warning'>\The [O] suddenly changes shape!</span>")
+		new selectedtable(O.loc) //the new call for tables automatically deletes the previous one, so no need for a qdel here
 
 /datum/reagent/nanites
 	name = "Nanites"
@@ -605,14 +686,14 @@
 		return 1
 
 	switch(tick)
-		if(1 to 15)
+		if (1 to 15)
 			M.eye_blurry = max(M.eye_blurry, 10)
-		if(15 to 25)
+		if (16 to 25)
 			M.drowsyness  = max(M.drowsyness, 20)
-		if (25 to 240)
+		if (26 to 240)
 			M.Paralyse(20)
 			M.drowsyness  = max(M.drowsyness, 30)
-		if(240 to INFINITY) // 8 minutes
+		if (241 to INFINITY) // 8 minutes
 			var/mob/living/carbon/human/H = M
 			var/datum/organ/internal/heart/damagedheart = H.get_heart()
 			damagedheart.damage += 10
@@ -645,6 +726,7 @@
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	density = 1.4 //Let's just assume it's alpha-solanine
+	plant_toxins = 2
 
 /datum/reagent/toxin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -652,10 +734,6 @@
 
 	//Toxins are really weak, but without being treated, last very long
 	M.adjustToxLoss(0.2)
-
-/datum/reagent/toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(2)
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"

@@ -112,7 +112,7 @@
 		if(C.use(5))
 			user.drop_item(src, force_drop = 1)
 
-			var/obj/item/clothing/mask/necklace/xeno_claw/X = new(get_turf(src))
+			var/obj/item/clothing/accessory/necklace/xeno_claw/X = new(get_turf(src))
 			user.put_in_active_hand(X)
 			to_chat(user, "<span class='info'>You create a necklace out of \the [src] and \the [C].</span>")
 
@@ -229,7 +229,7 @@
 
 		else
 			//visible message on mobs is defined as visible_message(var/message, var/self_message, var/blind_message)
-			user.visible_message("<span class='notice'>\the [usr] starts cutting hair off \the [src].</span>", "<span class='notice'>You start cutting the hair off \the [src].</span>", "You hear the sound of a knife rubbing against flesh.")
+			user.visible_message("<span class='notice'>\The [usr] starts cutting hair off \the [src].</span>", "<span class='notice'>You start cutting the hair off \the [src].</span>", "You hear the sound of a knife rubbing against flesh.")
 
 			spawn()
 				if(do_after(user, src, 5 SECONDS))

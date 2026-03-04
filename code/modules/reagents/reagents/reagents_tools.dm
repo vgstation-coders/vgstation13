@@ -8,11 +8,8 @@
 	color = "#404030" //rgb: 64, 64, 48
 	density = 0.51
 	specheatcap = 14.38
-
-/datum/reagent/ammonia/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(10)
-	T.add_planthealth(1)
+	plant_nutrition = 10
+	plant_health = 1
 
 /datum/reagent/fuel
 	name = "Welding Fuel"
@@ -169,12 +166,14 @@
 /datum/reagent/pacid
 	name = "Polytrinic Acid"
 	id = PACID
-	description = "Polytrinic acid is a an extremely corrosive chemical substance."
+	description = "Polytrinic acid is an extremely corrosive chemical substance."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8E18A9" //rgb: 142, 24, 169
 	custom_metabolism = 0.5
 	density = 1.98
 	specheatcap = 1.39
+	plant_toxins = 20
+	plant_health = -5
 
 /datum/reagent/pacid/on_mob_life(var/mob/living/M)
 	if(..())
@@ -260,10 +259,6 @@
 		var/obj/effect/dummy/chameleon/projection = O
 		projection.disrupt()
 
-/datum/reagent/pacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(20)
-
 /datum/reagent/sacid
 	name = "Sulphuric Acid"
 	id = SACID
@@ -273,6 +268,7 @@
 	custom_metabolism = 0.5
 	density = 1.84
 	specheatcap = 1.38
+	plant_toxins = 2
 
 /datum/reagent/sacid/on_mob_life(var/mob/living/M)
 	if(..())
@@ -353,10 +349,6 @@
 		var/obj/effect/dummy/chameleon/projection = O
 		projection.disrupt()
 
-/datum/reagent/sacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(2)
-
 /datum/reagent/sodium_polyacrylate
 	name = "Sodium Polyacrylate"
 	id = SODIUM_POLYACRYLATE
@@ -397,7 +389,7 @@
 	if(..())
 		return 1
 
-	if(volume >= 1)
+	if ((volume >= 1) || (clean_level >= CLEANLINESS_BLEACH))
 		for (var/obj/effect/decal/cleanable/C in T)
 			qdel(C)
 
@@ -405,8 +397,6 @@
 			T.overlays -= T.advanced_graffiti_overlay
 			T.advanced_graffiti_overlay = null
 			qdel(T.advanced_graffiti)
-
-		T.clean_blood()
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5, 10))
@@ -462,7 +452,7 @@
 	switch(tick)
 		if(1 to 10)
 			M.adjustBruteLoss(3 * REM) //soft tissue damage
-		if(10 to INFINITY)
+		if(11 to INFINITY)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(5))
@@ -492,7 +482,7 @@
 				H.audible_scream()
 				to_chat(H,"<span class='danger'>You are sprayed directly in the eyes with bleach!</span>")
 				H.eye_blurry = max(M.eye_blurry, 15)
-				H.eye_blind = max(M.eye_blind, 5)
+				H.instant_blindness(15)
 				H.adjustBruteLoss(2)
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 				E.take_damage(5, 1)

@@ -16,9 +16,9 @@
 	id="recharger"
 	req_tech = list(Tc_POWERSTORAGE = 2, Tc_COMBAT = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 3)
+	materials = list(MAT_GLASS = 1000, SACID = 3)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/recharger
+	build_path = /obj/item/weapon/circuitboard/small/recharger
 
 
 /datum/design/photocopier
@@ -31,15 +31,25 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/photocopier
 
+/datum/design/book_binder
+	name = "Circuit Design (Book Binder)"
+	desc = "Allows for the construction of circuit boards to build book binders."
+	id = "photocopier"
+	req_tech = list ("powerstorage" = 2, "engineering" = 2, "programming" = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/bookbinder
+
 /datum/design/fax
 	name = "Circuit Design (Fax)"
 	desc = "Allows for the construction of circuit boards to build fax machines."
 	id = "fax"
 	req_tech = list ("bluespace" = 2, "materials" = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 1000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/fax
+	build_path = /obj/item/weapon/circuitboard/small/fax
 
 /datum/design/condimaster
 	name = "Circuit Design (CondiMaster)"

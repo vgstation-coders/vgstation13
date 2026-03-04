@@ -11,6 +11,8 @@
 	uses = 1
 	max_uses = 1
 	desc = "This template spellbook was never meant for the eyes of man..."
+	spine_color = "#fff"
+	spine_overlay = "#fff"
 	var/disabled_from_bundle //if 1, this will not appear in the spellbook bundle
 
 /obj/item/weapon/spellbook/oneuse/New()
@@ -57,6 +59,7 @@
 	spellname = "fireball"
 	icon_state ="bookfireball"
 	desc = "This book feels warm to the touch."
+	spine_overlay = "#f08"
 
 /obj/item/weapon/spellbook/oneuse/fireball/recoil(mob/user)
 	..()
@@ -68,6 +71,7 @@
 	spellname = "smoke"
 	icon_state ="booksmoke"
 	desc = "This book is overflowing with the dank arts."
+	spine_overlay = "#bbb"
 
 /obj/item/weapon/spellbook/oneuse/smoke/recoil(mob/living/user as mob)
 	..()
@@ -80,17 +84,19 @@
 	spellname = "blind"
 	icon_state ="bookblind"
 	desc = "This book looks blurry, no matter how you look at it."
+	spine_overlay = "#000"
 
-/obj/item/weapon/spellbook/oneuse/blind/recoil(mob/user)
+/obj/item/weapon/spellbook/oneuse/blind/recoil(mob/living/user)
 	..()
 	to_chat(user, "<span class='warning'>You go blind!</span>")
-	user.eye_blind = 10
+	user.instant_blindness(20)
 
 /obj/item/weapon/spellbook/oneuse/mindswap
 	spell = /spell/targeted/mind_transfer
 	spellname = "mindswap"
 	icon_state ="bookmindswap"
 	desc = "This book's cover is pristine, though its pages look ragged and torn."
+	spine_overlay = "#f8f"
 	var/mob/stored_swap = null //Used in used book recoils to store an identity for mindswaps
 
 /obj/item/weapon/spellbook/oneuse/mindswap/onlearned()
@@ -108,6 +114,7 @@
 	spellname = "forcewall"
 	icon_state ="bookforcewall"
 	desc = "This book has a dedication to mimes everywhere inside the front cover."
+	spine_overlay = "#8ff"
 
 /obj/item/weapon/spellbook/oneuse/forcewall/recoil(mob/user)
 	..()
@@ -121,6 +128,7 @@
 	spellname = "unwall"
 	icon_state ="bookforcewall"
 	desc = "This book has a dedication to finger gun-toting mimes everywhere inside the front cover."
+	spine_overlay = "#8ff"
 	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/unwall/attack_self(mob/user)
@@ -145,6 +153,7 @@
 	spellname = "knock"
 	icon_state ="bookknock"
 	desc = "This book is hard to hold closed properly."
+	spine_overlay = "#f08"
 
 /obj/item/weapon/spellbook/oneuse/knock/recoil(mob/user)
 	..()
@@ -156,6 +165,7 @@
 	spellname = "hangman"
 	icon_state ="bookhangman"
 	desc = "This book has some letters blanked out in the words."
+	spine_overlay = "#444"
 
 /obj/item/weapon/spellbook/oneuse/hangman/recoil(mob/user)
 	..()
@@ -169,6 +179,7 @@
 	spellname = "arcane tamper"
 	icon_state ="bookarctam"
 	desc = "This book is strange."
+	spine_overlay = "#80f"
 
 /obj/item/weapon/spellbook/oneuse/arcanetamper/recoil(mob/user)
 	..()
@@ -184,6 +195,7 @@
 	spellname = "horses"
 	icon_state ="bookhorses"
 	desc = "This book is more horse than your mind has room for."
+	spine_overlay = "#0b0"
 
 /obj/item/weapon/spellbook/oneuse/horsemask/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -203,6 +215,7 @@
 	icon_state ="bookcharge"
 	desc = "This book is made of 100% post-consumer wizard."
 	disabled_from_bundle = 1
+	spine_overlay = "#8ff"
 
 /obj/item/weapon/spellbook/oneuse/charge/recoil(mob/user)
 	..()
@@ -214,6 +227,7 @@
 	spellname = "clowning"
 	icon_state = "bookclown"
 	desc = "This book is comedy gold!"
+	spine_overlay = "#fb0"
 
 /obj/item/weapon/spellbook/oneuse/clown/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -232,6 +246,7 @@
 	spellname = "miming"
 	icon_state = "bookmime"
 	desc = "This book is entirely in french."
+	spine_overlay = "#fff"
 
 /obj/item/weapon/spellbook/oneuse/mime/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -247,6 +262,7 @@
 	spellname = "shoe snatching"
 	icon_state = "bookshoe"
 	desc = "This book will knock you off your feet."
+	spine_overlay = "#40f"
 
 /obj/item/weapon/spellbook/oneuse/shoesnatch/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -264,6 +280,7 @@
 	spellname = "robe summoning"
 	icon_state = "bookrobe"
 	desc = "This book is full of helpful fashion tips for apprentice wizards."
+	spine_overlay = "#0b0"
 
 /obj/item/weapon/spellbook/oneuse/robesummon/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -280,6 +297,7 @@
 	spellname = "disable tech"
 	icon_state = "bookdisabletech"
 	desc = "This book was written with luddites in mind."
+	spine_overlay = "#80b"
 
 /obj/item/weapon/spellbook/oneuse/disabletech/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -292,6 +310,7 @@
 	spellname = "magic missle"
 	icon_state = "bookmm"
 	desc = "This book is a perfect prop for LARPers."
+	spine_overlay = "#fb0"
 
 /obj/item/weapon/spellbook/oneuse/magicmissle/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -305,6 +324,7 @@
 	spellname = "mutating"
 	icon_state = "bookmutate"
 	desc = "All the pages in this book are ripped."
+	spine_overlay = "#f44"
 
 /obj/item/weapon/spellbook/oneuse/mutate/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -319,6 +339,7 @@
 	spellname  = "highlander power"
 	icon_state = "bookhighlander"
 	desc = "You can hear the bagpipes playing already."
+	spine_overlay = "#00f"
 	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/disorient
@@ -326,6 +347,7 @@
 	spellname = "disorient"
 	icon_state = "bookdisorient"
 	desc = "This book makes you feel dizzy."
+	spine_overlay = "#444"
 
 /obj/item/weapon/spellbook/oneuse/disorient/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -338,6 +360,7 @@
 	spellname = "teleportation"
 	icon_state = "booktele"
 	desc = "This book will really take you places."
+	spine_overlay = "#8ff"
 
 /obj/item/weapon/spellbook/oneuse/teleport/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -363,6 +386,7 @@
 	spellname = "ass magic"
 	icon_state = "bookbutt"
 	desc = "You feel as if your ass could explode at any moment, just by looking at this."
+	spine_overlay = "#840"
 
 /obj/item/weapon/spellbook/oneuse/buttbot/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -375,6 +399,7 @@
 	spellname = "lightning"
 	icon_state = "booklightning"
 	desc = "You can hear it crackle with malevolent electricity."
+	spine_overlay = "#088"
 
 /obj/item/weapon/spellbook/oneuse/lightning/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -394,6 +419,7 @@
 	spellname = "time stopping"
 	icon_state = "booktimestop"
 	desc = "A rare, vintage copy of 'WizzWizz's Magical Adventures."
+	spine_overlay = "#ff0"
 
 /obj/item/weapon/spellbook/oneuse/timestop/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -410,16 +436,18 @@
 	spellname = "sculpting"
 	icon_state = "bookstatue"
 	desc = "This book is as dense as a rock."
+	spine_overlay = "#888"
 
 /obj/item/weapon/spellbook/oneuse/ringoffire
 	spell = /spell/aoe_turf/ring_of_fire
 	spellname = "ring of fire"
 	icon_state = "bookring"
 	desc = "The cover of this book is much warmer than the pages within."
+	spine_overlay = "#f80"
 
 /obj/item/weapon/spellbook/oneuse/ringoffire/recoil(mob/living/carbon/user as mob)
 	user.adjust_fire_stacks(10)
-	user.IgniteMob()
+	user.ignite()
 	to_chat(user, "<span class = 'warning'>The book sets you alight!</span>")
 
 /obj/item/weapon/spellbook/oneuse/mirror_of_pain
@@ -427,6 +455,7 @@
 	spellname = "pain mirror"
 	icon_state = "bookmirror"
 	desc = "The cover of the book seems to stare back at you."
+	spine_overlay = "#b88"
 
 /obj/item/weapon/spellbook/oneuse/mirror_of_pain/recoil(mob/living/carbon/user as mob)
 	scramble(1, user, 100)
@@ -437,6 +466,7 @@
 	spellname = "binding"
 	icon_state = "bookbound"
 	desc = "This book seems like it's already in your hands."
+	spine_overlay = "#bb8"
 
 /obj/item/weapon/spellbook/oneuse/bound_object/recoil(mob/living/carbon/user as mob)
 	to_chat(user, "<span class = 'warning'>Your surroundings are drawn to you!</span>")
@@ -452,23 +482,26 @@
 	spellname = "forge arcane golem"
 	icon_state = "bookgolem"
 	desc = "This book has several completely blank pages."
+	spine_overlay = "#800"
 
 /obj/item/weapon/spellbook/oneuse/firebreath
 	spell = /spell/targeted/projectile/dumbfire/firebreath
 	spellname = "fire breath"
 	icon_state = "bookfirebreath"
 	desc = "This book's pages are singed."
+	spine_overlay = "#f80"
 
 /obj/item/weapon/spellbook/oneuse/firebreath/recoil(mob/living/carbon/user)
 	to_chat(user, "<span class = 'warning'>You burst into flames!</span>")
 	user.adjust_fire_stacks(0.5)
-	user.IgniteMob()
+	user.ignite()
 
 /obj/item/weapon/spellbook/oneuse/snakes
 	spell = /spell/aoe_turf/conjure/snakes
 	spellname = "become snakes"
 	icon_state = "booksnakes"
 	desc = "This book is bound in snake skin."
+	spine_overlay = "#0f0"
 
 /obj/item/weapon/spellbook/oneuse/snakes/recoil(mob/living/carbon/user)
 	to_chat(user, "<span class = 'warning'>You transform into a snake!</span>")
@@ -481,6 +514,7 @@
 	spellname = "dimensional push"
 	icon_state = "bookpush"
 	desc = "This book seems like it moves away as you get closer to it."
+	spine_overlay = "#f00"
 
 /obj/item/weapon/spellbook/oneuse/push/recoil(mob/living/carbon/user)
 	user.drop_item(src, force_drop = 1)	//no taking the transportation device with you
@@ -526,6 +560,7 @@
 	spellname = "Summon Pastry"
 	icon_state = "cooked_bookold"
 	desc = "This book smells lightly of lemon meringue."
+	spine_overlay = "#fff"
 
 /obj/item/weapon/spellbook/oneuse/pie/recoil(mob/living/carbon/user)
 	..()
@@ -540,6 +575,7 @@
 	spellname = "Ice Barrage"
 	desc = "Cold to the touch."
 	icon_state = "bookAncient"
+	spine_overlay = "#8b8"
 
 /obj/item/weapon/spellbook/oneuse/ice_barrage/recoil(mob/living/carbon/user)
 	..()
@@ -551,6 +587,7 @@
 	spellname = "Street Alchemy"
 	desc = "The letters are all in different hand writing and the ink varies in colour."
 	icon_state = "bookalch"
+	spine_overlay = "#80f"
 
 /obj/item/weapon/spellbook/oneuse/alchemy/recoil(mob/living/carbon/user)
 	..()
@@ -563,8 +600,18 @@
 	spellname = "absorb"
 	icon_state ="bookabsorb"
 	desc = "This book glows with sinister energy."
+	spine_overlay = "#00f"
 	disabled_from_bundle = 1
 
+
+///// Norwood curse ////
+
+/obj/item/weapon/spellbook/oneuse/norwood
+	spell = /spell/targeted/norwood_curse
+	spellname = "norwood"
+	icon_state ="booknorwood"
+	desc = "This book suddenly stops about 29 pages in. After, it is written 'it's over' in every language that has ever existed, will ever exist, and even in some which shouldn't theoretically exist."
+	spine_overlay = "#ff0"
 
 ///// ANCIENT SPELLBOOK /////
 
@@ -574,6 +621,7 @@
 	icon_state = "book"
 	desc = "A book of lost and forgotten knowledge."
 	spellname = "forgotten knowledge"
+	spine_overlay = "#444"
 
 /obj/item/weapon/spellbook/oneuse/ancient/New()
 	..()
@@ -591,6 +639,7 @@
 	icon_state = "winter"
 	desc = "A book of festive knowledge."
 	spellname = "winter"
+	spine_overlay = "#080"
 
 /obj/item/weapon/spellbook/oneuse/ancient/winter/recoil(mob/living/carbon/user)
 	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from Santa!</span>")

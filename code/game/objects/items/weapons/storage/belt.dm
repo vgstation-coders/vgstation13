@@ -162,7 +162,9 @@
 		"/obj/item/weapon/reagent_containers/glass/bottle",
 		"/obj/item/weapon/reagent_containers/pill",
 		"/obj/item/weapon/reagent_containers/syringe",
-		"/obj/item/weapon/reagent_containers/glass/dispenser",
+		"/obj/item/weapon/reagent_containers/blood",
+		"/obj/item/weapon/reagent_containers/spray",
+		"/obj/item/weapon/reagent_containers/food/snacks/monkeycube",
 		"/obj/item/weapon/lighter/zippo",
 		"/obj/item/weapon/storage/fancy/cigarettes",
 		"/obj/item/weapon/storage/pill_bottle",
@@ -170,6 +172,7 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
+		"/obj/item/clothing/accessory/stethoscope",
 		"/obj/item/device/mass_spectrometer",
 		"/obj/item/device/reagent_scanner",
 		"/obj/item/device/gps/paramedic",
@@ -177,10 +180,23 @@
 		"/obj/item/weapon/switchtool/surgery",
 		"/obj/item/weapon/grenade/chem_grenade",
 		"/obj/item/weapon/electrolyzer",
-		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro",
+		"/obj/item/weapon/autopsy_scanner",
 		"/obj/item/weapon/depocket_wand/suit",
+		"/obj/item/weapon/thermometer",
 		"/obj/item/taperoll/viro",
-		"/obj/item/taperoll/syndie/viro"
+		"/obj/item/taperoll/syndie/viro",
+		"/obj/item/tool/cautery",
+		"/obj/item/tool/surgicaldrill",
+		"/obj/item/tool/FixOVein",
+		"/obj/item/tool/hemostat",
+		"/obj/item/tool/scalpel",
+		"/obj/item/tool/bonegel",
+		"/obj/item/tool/retractor",
+		"/obj/item/tool/bonesetter",
+		"/obj/item/tool/circular_saw",
+		"/obj/item/weapon/storage/bag/chem",
+		"/obj/item/clothing/glasses/hud/health",
+		"/obj/item/clothing/glasses/scanner/science",
 	)
 
 /obj/item/weapon/storage/belt/slim
@@ -529,7 +545,7 @@
 		"/obj/item/weapon/minihoe",
 		"/obj/item/weapon/hatchet",
 		"/obj/item/weapon/bee_net",
-		"/obj/item/weapon/gun/energy/floragun",
+		"/obj/item/floral_somatoray",
 		"/obj/item/weapon/fishtools",
 		"/obj/item/fish_eggs")
 

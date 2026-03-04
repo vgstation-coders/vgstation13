@@ -1,0 +1,176 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/floor/wood,
+/area/ruin)
+"i" = (
+/obj/item/clothing/suit/wizrobe{
+	color = "#22ff22";
+	pixel_y = -6
+	},
+/obj/item/clothing/head/wizard/fake{
+	color = "#22ff22";
+	pixel_y = 10
+	},
+/obj/item/clothing/shoes/black{
+	pixel_y = -19
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"j" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/spellbook/oneuse/snakes{
+	pixel_y = 8
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"p" = (
+/obj/abstract/loot_spawner/exotic,
+/turf/simulated/floor/wood,
+/area/ruin)
+"q" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/tinted/frosted,
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 1
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"r" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/tinted/frosted,
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 1
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 8
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"x" = (
+/mob/living/simple_animal/cat/snek{
+	name = "Tylenol the Foolish"
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"C" = (
+/turf/simulated/wall/mineral/wood,
+/area/ruin)
+"I" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/green,
+/turf/simulated/floor/wood,
+/area/ruin)
+"K" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"L" = (
+/obj/structure/bed/chair/comfy/lime{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/ruin)
+"P" = (
+/turf/template_noop,
+/area/template_noop)
+"S" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/tinted/frosted,
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 4
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 1
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"T" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 1
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 4
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 8
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"V" = (
+/turf/unsimulated/floor/planetary/dirt,
+/area/exposed_ruin)
+"X" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/tinted/frosted,
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 4
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	dir = 8
+	},
+/turf/simulated/floor/plating/deck,
+/area/ruin)
+"Z" = (
+/obj/structure/closet/cabinet,
+/obj/item/clothing/suit/wizrobe{
+	color = "#22ff22";
+	pixel_y = -6
+	},
+/obj/item/clothing/suit/wizrobe{
+	color = "#22ff22";
+	pixel_y = -6
+	},
+/obj/item/clothing/head/wizard/fake{
+	color = "#22ff22";
+	pixel_y = 10
+	},
+/obj/item/clothing/head/wizard/fake{
+	color = "#22ff22";
+	pixel_y = 10
+	},
+/obj/item/clothing/shoes/black,
+/obj/abstract/loot_spawner/clothing,
+/turf/simulated/floor/wood,
+/area/ruin)
+
+(1,1,1) = {"
+C
+T
+X
+C
+C
+P
+"}
+(2,1,1) = {"
+r
+j
+L
+a
+C
+P
+"}
+(3,1,1) = {"
+q
+x
+i
+a
+K
+V
+"}
+(4,1,1) = {"
+S
+I
+Z
+p
+C
+P
+"}
+(5,1,1) = {"
+C
+T
+X
+C
+C
+P
+"}

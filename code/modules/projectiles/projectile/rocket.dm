@@ -139,7 +139,6 @@
 	var/obj/item/weapon/gun/projectile/rocketlauncher/nikita/nikita = null
 	var/steps_since_last_turn = 0
 	var/last_dir = null
-	var/emagged = 0//the value is set by the Nikita when it fires it
 
 /obj/item/projectile/rocket/nikita/OnFired()
 	nikita = shot_from
@@ -171,7 +170,7 @@
 /obj/item/projectile/rocket/nikita/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
-			detonate()
+			detonate(get_turf(src))
 	return ..()
 
 /obj/item/projectile/rocket/nikita/Destroy()
@@ -219,7 +218,7 @@
 	if(!emagged)
 		kill_count--
 	if(!kill_count)
-		detonate()
+		detonate(get_turf(src))
 
 	if(kill_count == (initial(kill_count)/5))
 		mob.playsound_local(mob, 'sound/machines/twobeep.ogg', 30, 1)

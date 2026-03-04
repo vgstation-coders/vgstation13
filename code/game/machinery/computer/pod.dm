@@ -170,7 +170,7 @@
 	dat += "<BR><A href='?src=\ref[src];add=1'>add another id_tag</A>"
 
 	dat += "<BR><BR><A href='?src=\ref[user];mach_close=computer'>Close</A></TT></BODY></HTML>"
-	user << browse(dat, "window=computer;size=400x500")
+	user << browse(HTML_SKELETON(dat), "window=computer;size=400x500")
 	add_fingerprint(usr)
 	onclose(user, "computer")
 	return

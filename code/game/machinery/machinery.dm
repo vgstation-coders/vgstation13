@@ -124,7 +124,6 @@ Class Procs:
 	penetration_dampening = 5
 
 	var/stat = 0
-	var/emagged = 0
 	var/use_power = MACHINE_POWER_USE_IDLE
 		//0 = dont run the auto
 		//1 = run auto, use idle
@@ -154,11 +153,7 @@ Class Procs:
 	 * Machine construction/destruction/emag flags.
 	 */
 	var/machine_flags = 0
-
-	/**
-	 * Emag energy cost (in MJ).
-	 */
-	var/emag_cost = 1
+	emag_cost = 1
 
 	var/inMachineList = 1 // For debugging.
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
@@ -209,10 +204,12 @@ Class Procs:
 			AM.forceMove(loc)
 			component_parts -= AM
 */
-	component_parts = null
+	for(var/part in component_parts)
+		remove_part(part)
 	for(var/datum/malfhack_ability/MH in hack_abilities)
 		MH.machine = null
 		qdel(MH)
+	hack_abilities = null
 	qdel(hack_overlay)
 
 	..()
@@ -228,6 +225,104 @@ Class Procs:
 /obj/machinery/process() // If you dont use process or power why are you here
 	set waitfor = FALSE
 	return PROCESS_KILL
+
+/obj/machinery/proc/linkWith(var/mob/user, var/obj/machinery/buffer, var/list/context)
+	return 0
+
+/obj/machinery/proc/unlinkFrom(var/mob/user, var/obj/machinery/buffer)
+	return 0
+
+/obj/machinery/proc/canLink(var/obj/machinery/O, var/list/context)
+	return 0
+
+/obj/machinery/proc/isLinkedWith(var/obj/machinery/O)
+	return 0
+
+/obj/machinery/proc/getLink(var/idx)
+	return null
+
+/obj/machinery/proc/canClone(var/obj/machinery/O)
+	return 0
+
+/obj/machinery/proc/clone(var/obj/machinery/O)
+	return 0
+
+/obj/machinery/proc/linkMenu(var/obj/machinery/O)
+	var/dat=""
+	if(canLink(O, list()))
+		dat += " <a href='?src=\ref[src];link=1'>\[Link\]</a> "
+	return dat
+
+/obj/machinery/proc/format_tag(var/label,var/varname, var/act="set_tag")
+	var/value = vars[varname]
+	if(!value || value=="")
+		value="-----"
+	return "<b>[label]:</b> <a href=\"?src=\ref[src];[act]=[varname]\">[value]</a>"
+
+
+/obj/machinery/proc/update_multitool_menu(mob/user as mob)
+	var/obj/item/device/multitool/P = get_multitool(user)
+
+	if(!istype(P))
+		return 0
+
+	// Cloning stuff goes here.
+	var/obj/machinery/bufRef = P.buffer?.get();
+	if(P.clone && bufRef) // Cloning is on.
+		if(!canClone(bufRef))
+			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; you cannot clone to this device!</span>")
+			return
+
+		if(!clone(bufRef))
+			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; something went wrong when cloning to this device!</span>")
+			return
+
+		to_chat(user, "<span class='confirm'>A green light flashes on \the [P], confirming the device was cloned to.</span>")
+		return
+
+	var/dat = {"<html>
+	<head>
+		<title>[name] Configuration</title>
+		<style type="text/css">
+html,body {
+	font-family:courier;
+	background:#999999;
+	color:#333333;
+}
+
+a {
+	color:#000000;
+	text-decoration:none;
+	border-bottom:1px solid black;
+}
+		</style>
+	</head>
+	<body>
+		<h3>[name]</h3>
+"}
+	dat += multitool_menu(user,P)
+	if(P)
+		if(bufRef)
+			var/id = null
+			if(istype(bufRef, /obj/machinery/telecomms))
+				var/obj/machinery/telecomms/buffer = bufRef//Casting is better than using colons
+				id = buffer.id
+			else if(bufRef.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
+				id = bufRef:id_tag//sadly, : is needed
+
+			dat += "<p><b>MULTITOOL BUFFER:</b> [bufRef] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
+
+			dat += linkMenu(bufRef)
+
+			if(bufRef)
+				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
+			dat += "</p>"
+		else
+			dat += "<p><b>MULTITOOL BUFFER:</b> <a href='?src=\ref[src];buffer=1'>\[Add Machine\]</a></p>"
+	dat += "</body></html>"
+	user << browse(HTML_SKELETON(dat), "window=mtcomputer")
+	user.set_machine(src)
+	onclose(user, "mtcomputer")
 
 /obj/machinery/emp_act(severity)
 	malf_disrupt(MALF_DISRUPT_TIME)
@@ -498,6 +593,9 @@ Class Procs:
 
 /obj/machinery/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
+	//If the APC has been used recently by a pulse demon, lock the silicons out, the proc itself is in pulsedemon.dm
+	if(is_pulselocked(user)) //Message is handled in the proc
+		return
 	if(isrobot(user))
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.
@@ -559,12 +657,18 @@ Class Procs:
 	gl_uid++
 
 /obj/machinery/proc/dropFrame()
-	var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+	var/frame_type = /obj/machinery/constructable_frame/machine_frame
+	for(var/obj/I in component_parts)
+		if(istype(I,/obj/item/weapon/circuitboard/small))
+			frame_type = /obj/machinery/constructable_frame/machine_frame/small
+			break
+	var/obj/machinery/constructable_frame/machine_frame/M = new frame_type(src.loc)
 	M.set_build_state(2)
 	M.state = 1
 
 /obj/machinery/proc/spillContents(var/destroy_chance = 0)
 	for(var/obj/I in component_parts)
+		remove_part(I)
 		if(prob(destroy_chance))
 			qdel(I)
 		else
@@ -661,29 +765,16 @@ Class Procs:
 	machine_flags &= ~EMAGGABLE
 	spark(src)
 
-
-/**
- * Returns the cost of emagging this machine (emag_cost by default)
- * @param user /mob The mob that used the emag.
- * @param emag /obj/item/weapon/card/emag The emag used on this device.
- * @return number Cost to emag.
- */
-/obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
-	return emag_cost
+/obj/machinery/can_emag()
+	return machine_flags & EMAGGABLE
 
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
-	..()
+	. = ..()
 
 	add_fingerprint(user)
 
 	if(O.is_cookvessel && is_cooktop)
 		return 1
-
-	if(isEmag(O) && machine_flags & EMAGGABLE)
-		var/obj/item/weapon/card/emag/E = O
-		if(E.canUse(user,src))
-			emag_act(user)
-			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
@@ -814,8 +905,8 @@ Class Procs:
 						if(B.get_rating() > A.get_rating())
 							W.remove_from_storage(B, src)
 							W.handle_item_insertion(A, 1)
-							component_parts -= A
-							component_parts += B
+							remove_part(A)
+							add_part(B)
 							B.forceMove(null)
 							to_chat(user, "<span class='notice'>[A.name] replaced with [B.name].</span>")
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
@@ -829,6 +920,16 @@ Class Procs:
 				to_chat(user, "<span class='notice'>    [C.name]</span>")
 		return 1
 	return 0
+
+/obj/machinery/proc/add_part(obj/item/weapon/stock_parts/S, atom/location)
+	component_parts += S
+	if(!(machine_flags & UPGRADENOSCORE) && istype(S) && (S.rating > 1))
+		score.machineupgrades += (S.rating - 1)
+
+/obj/machinery/proc/remove_part(obj/item/weapon/stock_parts/S)
+	component_parts -= S
+	if(!(machine_flags & UPGRADENOSCORE) && istype(S) && (S.rating > 1))
+		score.machineupgrades -= (S.rating - 1)
 
 //exclusively for use with machines being made from the flatpacker
 //works like the parts exchange but because we only call this from a certain location
@@ -851,8 +952,8 @@ Class Procs:
 			for(var/obj/item/B in M)
 				if(istype(B, P) && istype(A, P))
 					if(B.get_rating() > A.get_rating()) //base rating parts should not be added (they already shouldn't be in this list, but whatever)
-						component_parts -= A
-						component_parts += B
+						remove_part(A)
+						add_part(B)
 						M -= B //if you don't remove the part, one upgraded part will replace everything in the recipe
 						B.forceMove(null)
 						break

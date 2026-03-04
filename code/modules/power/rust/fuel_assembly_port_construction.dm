@@ -30,8 +30,7 @@
 	if (building)
 		dir = ndir
 	else
-		has_electronics = 3
-		opened = 0
+		construct_progress = 3
 		icon_state = "port0"
 
 	//20% easier to read than apc code
@@ -42,68 +41,66 @@
 
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
-	if (iscrowbar(W))
-		if(opened)
-			if(has_electronics & 1)
-				W.playtoolsound(src, 50)
-				to_chat(user, "You begin removing the circuitboard")//lpeters - fixed grammar issues
-
-				if(do_after(user, src, 50))
-					user.visible_message(\
-						"<span class='warning'>[user.name] has removed the circuitboard from [src.name]!</span>",\
-						"<span class='notice'>You remove the circuitboard.</span>")
-					has_electronics = 0
-					new /obj/item/weapon/module/rust_fuel_port(loc)
-					has_electronics &= ~1
-			else
-				opened = 0
-				icon_state = "port0"
-				to_chat(user, "<span class='notice'>You close the maintenance cover.</span>")
-		else
-			if(cur_assembly)
-				to_chat(user, "<span class='warning'>You cannot open the cover while there is a fuel assembly inside.</span>")
-			else
-				opened = 1
-				to_chat(user, "<span class='notice'>You open the maintenance cover.</span>")
-				icon_state = "port2"
+	if (iscrowbar(W) && construct_progress == 1)
+		W.playtoolsound(src, 50)
+		to_chat(user, "You begin removing the circuitboard.")
+		if(do_after(user, src, 50))
+			user.visible_message(\
+				"<span class='warning'>[user.name] has removed the circuitboard from [src.name]!</span>",\
+				"<span class='notice'>You remove the circuitboard board.</span>")
+			new /obj/item/weapon/module/rust_fuel_port(loc)
+			construct_progress = 0
 		return
-
-	else if (istype(W, /obj/item/stack/cable_coil) && opened && !(has_electronics & 2))
+	else if (W.is_screwdriver(user) && construct_progress >= 2)
+		if(cur_assembly)
+			to_chat(user, "<span class='warning'>You cannot open the cover while there is a fuel assembly inside.</span>")
+			return
+		if(construct_progress == 3)
+			to_chat(user, "<span class='notice'>You open the maintenance cover.</span>")
+			construct_progress = 2
+			icon_state = "port2"
+		else
+			to_chat(user, "<span class='notice'>You close the maintenance cover.</span>")
+			construct_progress = 3
+			icon_state = "port0"
+		W.playtoolsound(src, 50)
+		return
+	else if (istype(W, /obj/item/stack/cable_coil) && construct_progress == 1)
 		var/obj/item/stack/cable_coil/C = W
 		if(C.amount < 10)
 			to_chat(user, "<span class='warning'>You need more wires.</span>")
 			return
 		to_chat(user, "You start adding cables to the frame...")
-		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		if(do_after(user, src, 20) && C.amount >= 10)
 			C.use(10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] has added cables to the port frame!</span>",\
 				"You add cables to the port frame.")
-			has_electronics &= 2
+			construct_progress = 2
 		return
 
-	else if (W.is_wirecutter(user) && opened && (has_electronics & 2))
+	else if (W.is_wirecutter(user) && construct_progress == 2)
 		to_chat(user, "You begin to cut the cables...")
-		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		if(do_after(user, src, 50))
 			new /obj/item/stack/cable_coil(loc,10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] cut the cabling inside the port.</span>",\
 				"You cut the cabling inside the port.")
-			has_electronics &= ~2
+			construct_progress = 1
 		return
 
-	else if (istype(W, /obj/item/weapon/module/rust_fuel_port) && opened && !(has_electronics & 1))
+	else if (istype(W, /obj/item/weapon/module/rust_fuel_port) && construct_progress == 0)
 		to_chat(user, "You try to insert the port control board into the frame...")
-		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		if(do_after(user, src, 10))
-			has_electronics &= 1
+			construct_progress = 1
 			to_chat(user, "You place the port control board inside the frame.")
 			qdel(W)
 		return
 
-	else if (iswelder(W) && opened && !has_electronics)
+	else if (iswelder(W) && construct_progress == 0)
 		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You start welding the port frame...")
 		if (WT.do_weld(user, src, 50, 3))

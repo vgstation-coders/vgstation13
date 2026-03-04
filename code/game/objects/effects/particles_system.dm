@@ -1,7 +1,7 @@
 //Because BYOND only lets atoms have 1 type of particles at a given time, we use holders to let atoms stack particle effects
 
 /atom
-	var/list/particle_systems = list()
+	var/list/particle_systems
 
 //-----------------------------------------------
 /atom/proc/add_to_vis(var/stuff)
@@ -27,6 +27,8 @@
 /atom/proc/add_particles(var/particle_string)
 	if (!particle_string)
 		return
+	if (!particle_systems)
+		particle_systems = list()
 	if (particle_string in particle_systems)
 		return
 
@@ -52,6 +54,17 @@
 	if (holder.main_holder == src)
 		qdel(holder)
 	particle_systems -= particle_string
+
+//-----------------------------------------------
+/atom/proc/stop_particles(var/particle_string)
+	if (!particle_string) //If we don't specify which particle we want to stop, just stop all of them
+		for (var/string in particle_systems)
+			stop_particles(string)
+	if (!(particle_string in particle_systems))
+		return
+
+	var/obj/abstract/particles_holder/holder = particle_systems[particle_string]
+	holder.particles.spawning = 0
 
 //-----------------------------------------------
 /atom/proc/transfer_particles(var/atom/target, var/particle_string)
@@ -93,7 +106,7 @@
 	target.add_to_vis(holder)
 
 //-----------------------------------------------
-/atom/proc/adjust_particles(var/adjustment, var/new_value, var/particle_string)
+/atom/proc/adjust_particles(var/adjustment, var/new_value, var/particle_string, var/new_drift = list(0,0,0,0))
 	if (!particle_string) //If we don't specify which particle we want to shift, just shift all of them
 		for (var/string in particle_systems)
 			adjust_particles(adjustment ,new_value, string)
@@ -106,6 +119,8 @@
 	switch(adjustment)
 		if (PVAR_SPAWNING)
 			holder.particles.spawning = new_value
+		if (PVAR_COUNT)
+			holder.particles.count = new_value
 		if (PVAR_POSITION)
 			holder.particles.position = new_value
 		if (PVAR_VELOCITY)
@@ -128,6 +143,9 @@
 			holder.pixel_x = new_value
 		if (PVAR_PIXEL_Y)
 			holder.pixel_y = new_value
+		if (PVAR_DRIFT)
+			//new_drift is an array whose value correspond to (min_x, min_y, max_x, max_y)
+			holder.particles.drift = generator("box", list(new_drift[1], new_drift[2]), list(new_drift[3], new_drift[4]))
 		//add more as needed
 
 //HOLDER
@@ -160,12 +178,25 @@ var/list/particle_string_to_type = list(
 	PS_CULT_SMOKE = /particles/cult_smoke,
 	PS_CULT_SMOKE2 = /particles/cult_smoke/alt,
 	PS_CULT_SMOKE_BOX = /particles/cult_smoke/box,
+	PS_PILLAR_BEACON = /particles/pillar_beacon,
+	PS_OCCULT_TEST_LARGE = /particles/occult_blood_test,
+	PS_OCCULT_TEST_SMALL = /particles/occult_blood_test/small,
 	PS_CULT_HALO = /particles/cult_halo,
 	PS_SPACE_RUNES = /particles/space_runes,
 	PS_NARSIEHASRISEN1 = /particles/narsie_has_risen,
 	PS_NARSIEHASRISEN2 = /particles/narsie_has_risen/next,
 	PS_NARSIEHASRISEN3 = /particles/narsie_has_risen/last,
 	PS_ZAS_DUST = /particles/zas_dust,
+	PS_DANDELIONS = /particles/dandelions,
+	PS_CROSS_DUST = /particles/cross_dust,
+	PS_CROSS_ORB = /particles/cross_orb,
+	PS_SACRED_FLAME = /particles/sacred_flame,
+	PS_SACRED_FLAME2 = /particles/sacred_flame/alt,
+	PS_BIBLE_PAGE = /particles/bible_page,
+	PS_SHADOW_SMOKE = /particles/cult_smoke,
+	PS_SHADOW_SMOKE2 = /particles/cult_smoke/alt,
+	PS_GAS_VENT = /particles/gas_vent,
+	PS_CIG_SMOKE = /particles/cigsmoke,
 	)
 
 /particles
@@ -249,7 +280,7 @@ var/list/particle_string_to_type = list(
 
 	appearance_flags = RESET_COLOR
 	blend_mode = BLEND_ADD
-	plane = ABOVE_LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 
 /particles/candle_alt
 	width = 32
@@ -268,7 +299,7 @@ var/list/particle_string_to_type = list(
 
 	appearance_flags = RESET_COLOR
 	blend_mode = BLEND_ADD
-	plane = ABOVE_LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 
 //CULT GAUGE
 /particles/cult_gauge
@@ -320,6 +351,53 @@ var/list/particle_string_to_type = list(
 	drift = generator("box", list(-0.2,0), list(0.2,0))
 
 	plane = FLOAT_PLANE
+
+//PILLAR BEACON
+/particles/pillar_beacon
+	width = 192
+	height = 192
+	count = 18
+	spawning = 0.6
+	color = "#FF281B"
+
+	lifespan = 20
+	fadein = 3
+	fade = 5
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "blood_gauge"
+
+	position = list(0, 36)
+	scale = list(2, 2)
+	grow = list(-0.03, -0.03)
+	drift = generator("box", list(-0.02,-0.02), list(0.02,0.02))
+
+	plane = ABOVE_LIGHTING_PLANE
+
+
+//OCCULT_BLOOD_TEST
+/particles/occult_blood_test
+	width = 64
+	height = 96
+	count = 0
+	spawning = 2
+
+	lifespan = 3 SECONDS
+	fade = 0.3 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "occult_test_flame_large"
+	position = generator("box", list(-1,-1), list(1,1))
+	velocity = list(0,2)
+	friction = 0.3
+	drift = generator("box", list(-0.3,-0.35), list(0.3,0.35))
+
+	appearance_flags = RESET_COLOR
+	plane = ABOVE_LIGHTING_PLANE
+
+/particles/occult_blood_test/small
+	icon_state = "occult_test_flame_small"
+	velocity = list(0,1.5)
+	friction = 0.4
+	drift = generator("box", list(-0.25,-0.35), list(0.25,0.35))
 
 //CULT HALO
 /particles/cult_halo
@@ -394,6 +472,42 @@ var/list/particle_string_to_type = list(
 	position = generator("box", list(-15,-15), list(15,15))
 	velocity = list(0,0)
 
+//Gas vents
+/particles/gas_vent
+	width = 96
+	height = 96
+	count = 20
+	spawning = 2
+
+	color = "#FFFFFF99"
+	lifespan = 1 SECONDS
+	fade = 0.5 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "gas"
+	position = generator("box", list(-3,12), list(3,12))
+	velocity = generator("box", list(-0.8,1.5), list(0.8,2.5))
+	friction = 0.15
+	drift = generator("box", list(-0.5,-0.1), list(0.5,0.1))
+	scale = list(0.5, 0.5)
+	grow = list(0.08, 0.08)
+
+/particles/cigsmoke //copied from /steam, mostly.
+	width = 64
+	height = 64
+	count = 20
+	spawning = 1
+	lifespan = 1 SECONDS
+	fade = 1 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "steam"
+	color = "#FFFFFF99"
+	position = 0
+	velocity = 1
+	scale = list(0.3, 0.3)
+	grow = list(0.05, 0.05)
+	rotation = generator("num", 0,360)
+	pixel_y=10
+
 /turf
 	var/last_dust_time = 0
 	var/last_dust_strength = 0
@@ -437,3 +551,180 @@ var/list/particle_string_to_type = list(
 			return list(-wind_strength,-wind_strength)
 		else
 			return list(0,0)
+
+
+//DANDELIONS
+/particles/dandelions
+	width = 96
+	height = 96
+	count = 10
+	spawning = 1
+
+	lifespan = 3 SECONDS
+	fadein = 0.3 SECONDS
+	fade = 0.5 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "dandelions"
+	position = generator("box", list(-12,-12), list(12,12))
+	velocity = list(0,0)
+	friction = 0.1
+	drift = generator("box", list(-0.1,-0.1), list(0.1,0.1))
+
+	plane = ABOVE_HUMAN_PLANE
+
+/turf
+	var/last_pollen_time = 0
+
+/turf/proc/flying_pollen(var/turf/dest, var/wind_strength = 3, var/pollen = PS_DANDELIONS)
+	if (last_pollen_time == world.time)
+		return
+	last_pollen_time = world.time
+	var/this_pollen_time = last_pollen_time
+
+	add_particles(pollen)
+	adjust_particles(PVAR_SPAWNING, 1, pollen)
+	adjust_particles(PVAR_VELOCITY, dir2dust(dest,wind_strength), pollen)
+
+	spawn(SSair.wait)
+		if (last_pollen_time == this_pollen_time)
+			adjust_particles(PVAR_SPAWNING, 0, pollen)
+
+//CROSS DUST & ORBB
+/particles/cross_dust
+	width = 64
+	height = 64
+	count = 10
+
+	lifespan = 10
+	fade = 2
+	spawning = 1.5
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("cross_dust_1","cross_dust_2","cross_dust_3")
+	position = generator("box", list(-12,-12), list(12,12))
+	velocity = list(0,-2)
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+
+	appearance_flags = RESET_COLOR|RESET_ALPHA
+	blend_mode = BLEND_ADD
+	plane = ABOVE_LIGHTING_PLANE_ADDITIVE
+
+
+/particles/cross_orb
+	count = 2
+
+	lifespan = 10
+	spawning = 0.5
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("cross_orb")
+	position = generator("box", list(-12,-12), list(12,12))
+	velocity = list(0,-2)
+	friction = 0.1
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+	grow = list(-0.2, -0.2)
+
+	appearance_flags = RESET_COLOR|RESET_ALPHA
+	plane = ABOVE_LIGHTING_PLANE
+
+//SACRED FLAME
+/particles/sacred_flame
+	width = 96
+	height = 96
+	count = 30
+
+	lifespan = 10
+	fade = 5
+	spawning = 1.5
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "sacred_flame"
+	position = generator("box", list(-15,-15), list(15,15))
+	friction = 0.1
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+	scale = list(0.6, 0.6)
+	grow = list(0.1, 0.1)
+
+/particles/sacred_flame/alt
+	plane = LIGHTING_PLANE
+
+//BIBLE PAGE
+/particles/bible_page
+	width = 96
+	height = 96
+	count = 1
+
+	lifespan = 10
+	fade = 5
+	spawning = 0//we set the spawning after velocity has been adjusted
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "bible_page"
+	rotation = generator("num", 0,360)
+	spin = 10
+	grow = generator("box", list(-0.3,-0.3), list(0,0))
+
+	appearance_flags = RESET_COLOR|RESET_ALPHA
+	plane = ABOVE_LIGHTING_PLANE
+
+/particles/rain
+	width = 32
+	height = 32
+	count = 20
+
+	lifespan = 2
+	fade = 1
+	spawning = 0
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("rain_1","rain_2","rain_3")
+	position = generator("box", list(-1,12), list(1,12))
+	velocity = list(0,10)
+	friction = 0.1
+	drift = generator("box", list(-0.2,0), list(0.2,0))
+
+	appearance_flags = RESET_COLOR
+	blend_mode = BLEND_ADD
+	plane = ABOVE_LIGHTING_PLANE_ADDITIVE
+
+/particles/ash
+	width = 64
+	height = 64
+	count = 20
+
+	lifespan = 5
+	fade = 2
+	spawning = 1
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("ash_1","ash_2","ash_3")
+	position = generator("box", list(-15,-15), list(15,15))
+	velocity = generator("box", list(-1,2), list(1,2))
+	friction = 0.1
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+	scale = list(0.6, 0.6)
+	grow = list(0.05, 0.05)
+
+	appearance_flags = RESET_COLOR
+	plane = ABOVE_LIGHTING_PLANE
+
+/particles/fallout
+	width = 64
+	height = 64
+	count = 20
+
+	lifespan = 10
+	fade = 5
+	spawning = 1
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("fallout_1","fallout_2","fallout_3")
+	position = generator("box", list(-15,-15), list(15,15))
+	velocity = generator("box", list(-1,1), list(1,1))
+	friction = 0.1
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+	scale = list(0.6, 0.6)
+	grow = list(0.05, 0.05)
+
+	appearance_flags = RESET_COLOR
+	plane = ABOVE_LIGHTING_PLANE

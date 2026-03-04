@@ -16,7 +16,6 @@
 	req_one_access = list(access_security, access_forensics_lockers)
 	control_filter = RADIO_SECBOT
 	var/check_records = 1
-//	var/emagged = 0 //Emagged Secbots view everyone as a criminal
 
 	var/idcheck = 0 //If true, arrest people with no IDs
 	var/weaponscheck = 0 //If true, arrest people for weapons if they lack access	var/check_records = 1 //Does it check security records?
@@ -38,7 +37,6 @@
 		/obj/item/weapon/gun/energy/tag,
 		/obj/item/weapon/gun/energy/laser/practice,
 		/obj/item/weapon/gun/hookshot,
-		/obj/item/weapon/gun/energy/floragun,
 		/obj/item/weapon/melee/defibrillator
 		)
 
@@ -135,7 +133,7 @@ Auto Patrol: []"},
 "<A href='?src=\ref[src];operation=patrol'>[auto_patrol ? "On" : "Off"]</A>" )
 
 
-	user << browse("<HEAD><TITLE>Securitron v1.3 controls</TITLE></HEAD>[dat]", "window=autosec")
+	user << browse(HTML_SKELETON_TITLE("Securitron v1.3 controls", dat), "window=autosec")
 	onclose(user, "autosec")
 	return
 
@@ -348,7 +346,7 @@ Auto Patrol: []"},
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
 			threatcount += PERP_LEVEL_ARREST/2
 
-		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
+		if(!isjusthuman(perp))
 			threatcount += PERP_LEVEL_ARREST/2
 		var/visible_id = perp.get_visible_id()
 		if(!visible_id)
@@ -381,7 +379,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/proc/speak(var/message)
 	visible_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",\
-		drugged_message="<span class='game say'><span class='name'>[src]</span> beeps, \"[pick("Wait! Let's be friends!","Wait for me!","You're so cool!","Who's your favourite pony?","I-It's not like I like you or anything...","Wanna see a magic trick?","Let's go have fun, assistant-kun~")]\"")
+		drugged_message="<span class='game say'><span class='name'>[src]</span> beeps, \"[pick("Wait! Let's be friends!","Wait for me!","You're so cool!","I-It's not like I like you or anything...","Wanna see a magic trick?","Let's go have fun, assistant-kun~")]\"")
 	return
 
 /obj/machinery/bot/secbot/explode()
@@ -652,7 +650,7 @@ Auto Patrol: []"},
 
 /obj/item/weapon/secbot_assembly/britsky
 	name = "custodian signaler assembly"
-	desc = "some sort of british assembly."
+	desc = "Some sort of british assembly."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "bhelmet_signaler"
 	build_step = 0

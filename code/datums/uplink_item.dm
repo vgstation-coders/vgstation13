@@ -17,6 +17,8 @@ var/list/discounted_items_of_the_round = list()
 	var/list/possible_picks = list()
 	for (var/thing in traitor_items)
 		var/datum/uplink_item/u_item = thing
+		if(initial(u_item.cost) <= 1) // no point discounting these
+			continue
 		if (thing in forbidden_items)
 			continue
 		if (initial(u_item.item))
@@ -26,7 +28,7 @@ var/list/discounted_items_of_the_round = list()
 		var/picked = pick(possible_picks)
 		possible_picks -= picked
 		item_list += picked
-		world.log << "Picked: [picked]"
+		//world.log << "Picked: [picked]" //this lasted 19 months before getting silenced
 
 	discounted_items_of_the_round = item_list
 
@@ -81,6 +83,8 @@ var/list/discounted_items_of_the_round = list()
 	var/available_for_nuke_ops = TRUE
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
+	var/discount_on_month	//two-digit month as string
+	var/discount_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
 	var/times_bought = 0
 	var/refundable = FALSE
@@ -98,6 +102,9 @@ var/list/discounted_items_of_the_round = list()
 	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
 /datum/uplink_item/proc/gives_discount(var/user_job)
+	if(discount_on_month && time2text(world.realtime,"MM") == discount_on_month)
+		if(!discount_on_day || time2text(world.realtime,"DD") == discount_on_day)
+			return TRUE
 	return user_job && jobs_with_discount.len && jobs_with_discount.Find(user_job)
 
 /datum/uplink_item/proc/available_for_job(var/user_job)
@@ -138,7 +145,7 @@ var/list/discounted_items_of_the_round = list()
 
 	// If the uplink's holder is in the user's contents
 	var/obj/item/holder = U.parent
-	if ((holder in user.contents || (in_range(holder, user) && istype(holder.loc, /turf))))
+	if ((holder in user.contents) || (in_range(holder, user) && istype(holder.loc, /turf)))
 		user.set_machine(U)
 		if(get_cost(U.job, U.species) > U.telecrystals)
 			return 0
@@ -362,7 +369,7 @@ var/list/discounted_items_of_the_round = list()
 
 /datum/uplink_item/stealthy_weapons/framecart
 	name = "F.R.A.M.E PDA Cartridge"
-	desc = "When inserted into a PDA, gives you four charges allowing you to create a fake uplink on PDAs of crewmembers who have messaging enabled. The fake uplinks will use the same unlock code as your uplink if applicable, or else generate a new one. TC can also be inserted into the cartridge to send to the PDA"
+	desc = "When inserted into a PDA, gives you four charges allowing you to create a fake uplink on PDAs of crewmembers who have messaging enabled. The fake uplinks will use the same unlock code as your uplink if applicable, or else generate a new one. TC can also be inserted into the cartridge to send to the PDA."
 	item = /obj/item/weapon/cartridge/syndifake
 	cost = 6
 
@@ -377,6 +384,14 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A sinister-looking bar of surfactant used to clean blood stains and other traces of misdoings and interfere with DNA collection. Doubles as a tool of Syndicate hygiene and a slipping hazard for split-second takedowns."
 	item = /obj/item/weapon/soap/syndie
 	cost = 1
+
+/datum/uplink_item/stealthy_weapons/cola
+	name = "Cryo-Cola"
+	desc = "A can containing soda that has been chemically engineered to react highly endothermically once ingested, causing the rapid onset of hypothermia. This results in whoever drank it to pass out from cold shock within seconds of consumption. Mixing drinks with the liquid is unadvised and can result in loss of efficacy. Disguised as an ordinary can of Space Cola."
+	item = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cryocola
+	cost = 4
+	discounted_cost = 3
+	jobs_with_discount = list("Bartender", "Botanist", "Chef")
 
 // STEALTHY TOOLS
 // Any Syndicate item that helps with concealing one's identity, avoiding detection or fleeing if caught, without lethal or stun applications
@@ -554,7 +569,7 @@ var/list/discounted_items_of_the_round = list()
 
 /datum/uplink_item/sabotage_tools/does_not_tip_note
 	name = "\"Does Not Tip\" database backdoor"
-	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the Cargo workers at Central Command. Ensures that all pizza orders will be poisoned from the moment the screen flashes red, without giving any obvious hints to such. Appears as a PDA until inspected more closely."
+	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the Cargo workers at Central Command. Ensures that all pizza and beer orders will be poisoned from the moment the screen flashes red, without giving any obvious hints to such. Appears as a PDA until inspected more closely."
 	item = /obj/item/device/does_not_tip_backdoor
 	num_in_stock = 1
 	cost = 10
@@ -565,6 +580,14 @@ var/list/discounted_items_of_the_round = list()
 	item = /obj/item/device/loic_remote
 	cost = 8
 	discounted_cost = 6
+	jobs_with_discount = SCIENCE_POSITIONS
+
+/datum/uplink_item/sabotage_tools/seismic_remote
+	name = "Seismic Artillery Remote"
+	desc = "This device can periodically fire a remote syndicate bluespace artillery, detonating a seismic impact on direct intercept with the station, superficially resembling a real explosion and even alerting nearby bhangmeters as if legitimate."
+	item = /obj/item/device/seismic_remote
+	cost = 2
+	discounted_cost = 1
 	jobs_with_discount = SCIENCE_POSITIONS
 
 /datum/uplink_item/sabotage_tools/radstorm_remote
@@ -707,6 +730,12 @@ var/list/discounted_items_of_the_round = list()
  	name = "Raincoat"
  	desc = "It's hip to be square! Fireaxe not included."
  	item = /obj/item/clothing/suit/raincoat
+ 	cost = 1
+
+/datum/uplink_item/badass/killbot
+ 	name = "KILLbot"
+ 	desc = "A phrase spouting device perfectly suited for the loud spree killer's ego."
+ 	item = /obj/item/device/roganbot/killbot
  	cost = 1
 
 /datum/uplink_item/badass/experimental_gear
@@ -1006,6 +1035,8 @@ var/list/discounted_items_of_the_round = list()
 	item = /obj/item/seeds/ambrosiacruciatusseed
 	cost = 6
 	discounted_cost = 2
+	discount_on_month = "04"
+	discount_on_day = "20"
 	jobs_with_discount = list("Botanist")
 
 /datum/uplink_item/jobspecific/service/vinesuit
@@ -1063,6 +1094,14 @@ var/list/discounted_items_of_the_round = list()
 	cost = 12
 	discounted_cost = 10
 	jobs_with_discount = list("Chef")
+
+/datum/uplink_item/jobspecific/service/kitchengun
+	name = "Kitchen Gun"
+	desc = "An otherwise ordinary glock that also has the power to completely clean the surface of anything it's fired on in three shots. Causes the holder to shout their speech loudly while held. Comes with night vision goggles for after dark cleaning."
+	item = /obj/item/weapon/storage/box/syndie_kit/kitchengun
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Chef","Janitor")
 
 /datum/uplink_item/jobspecific/service/cautionsign
 	name = "Proximity Mine Wet Floor Sign"
@@ -1154,14 +1193,29 @@ var/list/discounted_items_of_the_round = list()
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray
 	name = "Can of Invisible Spray"
 	desc = "Spray something to render it invisible for five minutes! Can only be used once. Permanence not guaranteed when exposed to water, may not render all parts invisible, especially for humans."
-	item = /obj/item/weapon/invisible_spray
+	item = /obj/item/weapon/syndie_spray/invisible_spray
+	cost = 6
+	jobs_excluded = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/silent_spray
+	name = "Can of Silencing Spray"
+	desc = "Spray something to render it silent for five minutes! Can only be used once. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/syndie_spray/silent_spray
 	cost = 6
 	jobs_excluded = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray/permanent
 	name = "Can of Permanent Invisible Spray"
 	desc = "Spray something to render it permanently invisible! Can only be used once. Permanence not guaranteed when exposed to water, may not render all parts invisible, especially for humans."
-	item = /obj/item/weapon/invisible_spray/permanent
+	item = /obj/item/weapon/syndie_spray/invisible_spray/permanent
+	cost = 4
+	jobs_excluded = list()
+	jobs_exclusive = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/silent_spray/permanent
+	name = "Can of Permanent Silencing Spray"
+	desc = "Spray something to render it permanently silent! Can only be used once. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/syndie_spray/silent_spray/permanent
 	cost = 4
 	jobs_excluded = list()
 	jobs_exclusive = list("Clown", "Mime")
@@ -1316,6 +1370,15 @@ var/list/discounted_items_of_the_round = list()
 	discounted_cost = 6
 	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
 	jobs_with_discount = list("Trader","Cargo Technician","Quartermaster")
+
+/datum/uplink_item/jobspecific/trader/hfboots
+	name = "High Frequency Vox Boots"
+	desc = "A modified pair of Vox boots, its magnetic grip technology replaced with high frequency talon blades that can kick doors open."
+	item = /obj/item/clothing/shoes/knifeboot/vox
+	cost = 7
+	discounted_cost = 5
+	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
+	jobs_with_discount = list("Trader")
 
 /datum/uplink_item/jobspecific/cannedmatter
 	category = "Skrell Specials"

@@ -35,4 +35,5 @@ var/list/dyeable_part_to_name = list(
 	"visor" = "Visor",
 	"primary" = "Primary",
 	"secondary" = "Secondary",
+	"buttons" = "Buttons",
 	)

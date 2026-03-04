@@ -142,7 +142,8 @@
 					continue
 			if(!skip_sum) //means there is a window between the two tiles in this direction
 				var/obj/structure/table/T = locate(/obj/structure/table,get_step(src,direction))
-				if(T && !T.flipped)
+				var/obj/machinery/door/table/DT = locate(/obj/machinery/door/table,get_step(src,direction))
+				if((T && !T.flipped) || (DT && DT.density))
 					if(direction <5)
 						dir_sum += direction
 					else
@@ -292,8 +293,8 @@
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
 	destroy()
 
-/obj/structure/table/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+/obj/structure/table/attack_animal(var/mob/living/simple_animal/user)
+	if(istype(user,/mob/living/simple_animal) && user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
@@ -373,7 +374,7 @@
 		return
 	return ..()
 
-/obj/structure/table/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
+/obj/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
 	var/turf/oldloc = get_turf(victim)
 	for (var/atom/A in loc)
 		if (A == src || A == victim || A == user)
@@ -873,11 +874,13 @@
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
 	destroy()
 
-/obj/structure/rack/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
-		user.do_attack_animation(src, user)
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
-		destroy()
+/obj/structure/rack/attack_animal(mob/living/user)
+	if(istype(user,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA=user
+		if(SA.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+			user.do_attack_animation(src, user)
+			visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
+			destroy()
 
 /obj/structure/rack/attack_tk() // no telehulk sorry
 	return

@@ -1,4 +1,3 @@
-//scp_173
 //SCP-173, nothing more need be said
 /mob/living/simple_animal/scp_173
 	name = "SCP-173"
@@ -7,6 +6,8 @@
 	icon_state = "sculpture"
 	icon_living = "sculpture"
 	icon_dead = "sculpture"
+	health = 500
+	maxHealth = 500
 	emote_hear = list("makes a faint scraping sound")
 	emote_see = list("twitches slightly", "shivers")
 	response_help  = "touches the"
@@ -26,11 +27,12 @@
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent //Graciously stolen from spider code
 	var/turf/target_turf
 
+	var/scare_cooldown
+	var/scare_cooldown_time = 5 SECONDS
 	blooded = FALSE
 
 /mob/living/simple_animal/scp_173/New()
 	. = ..()
-	flags |= INVULNERABLE
 
 /mob/living/simple_animal/scp_173/Life()
 	if(timestopped)
@@ -69,6 +71,9 @@
 	else
 		handle_idle()
 
+/mob/living/simple_animal/scp_173/death(var/gibbed = FALSE)
+	if(!gibbed)
+		gib()
 
 //Check if any human mob can see SPC-173, including darkness exception
 /mob/living/simple_animal/scp_173/proc/check_los()
@@ -111,13 +116,17 @@
 
 /mob/living/simple_animal/scp_173/proc/handle_target(var/atom/target)
 
+	if(scare_cooldown > world.time)
+		return
+
 	if(!istype(target)) //Sanity
 		return
 
 	if(!check_los())
 		return
 
-	//Send the warning that SPC is homing in
+	canmove = 0
+	//Send the warning that SCP is homing in
 	target_turf = get_turf(target)
 	if(!scare_played && ishuman(target)) //Let's minimize the spam
 		playsound(src, pick(scare_sound), 100, 1, -1)
@@ -161,12 +170,19 @@
 			next_turf = get_step(src, get_dir(next_turf,target))
 			num_turfs--
 		target_turf = null
+		canmove = 1
+
+	scare_cooldown = world.time + scare_cooldown_time
 
 /mob/living/simple_animal/scp_173/proc/handle_idle()
 
 	if(!check_los())
 		return
 
+	if(scare_cooldown > world.time)
+		return
+
+	scare_cooldown = world.time + scare_cooldown_time
 	//If we're not strangling anyone, take a stroll
 	if(prob(25)) //1 in 4 chance of checking out something new
 		var/list/turfs = new/list()
@@ -250,6 +266,7 @@
 		else
 			entry_vent = null
 
+
 //This performs an immediate neck snap check, meant to avoid people cheesing SCP-173 by just running faster than Life() refresh
 /mob/living/simple_animal/scp_173/proc/check_snap_neck()
 	//See if we're able to strangle anyone
@@ -283,11 +300,6 @@
 		log_admin("[target] ([target.ckey]) has had his neck snapped by an active [src].")
 		message_admins("ALERT: <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>[target.real_name]</a> has had his neck snapped by an active [src].")
 
-/mob/living/simple_animal/scp_173/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	..()
-
-/mob/living/simple_animal/scp_173/Topic(href, href_list)
-	..()
 
 /mob/living/simple_animal/scp_173/to_bump(atom/movable/AM as mob)
 	if(!check_los())
@@ -297,9 +309,6 @@
 /mob/living/simple_animal/scp_173/Bumped(atom/movable/AM as mob, yes)
 	if(!check_los())
 		snap_neck(AM)
-
-//You cannot destroy SCP-173, fool!
-/mob/living/simple_animal/scp_173/ex_act(var/severity)
 
 // player control funstuffs below
 /mob/living/simple_animal/scp_173/movement_tally_multiplier()
@@ -314,8 +323,10 @@
 			handle_target(A)
 
 /mob/living/simple_animal/scp_173/Move(NewLoc, Dir, step_x, step_y, glide_size_override)
-	if(check_los() && !target_turf)
-		..()
+	if(mind || client || key || ckey) // AI movement already checks LoS
+		if(!check_los())
+			return
+	..()
 
 /mob/living/simple_animal/scp_173/verb/ventcrawl()
 	set name = "Crawl through Vent"

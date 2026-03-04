@@ -1,6 +1,6 @@
 /obj/structure/easel
 	name = "easel"
-	desc = "Painters' best friend, always there to support their art"
+	desc = "Painters' best friend, always there to support their art."
 	icon = 'icons/obj/painting_items.dmi'
 	icon_state = "easel"
 	density = 1

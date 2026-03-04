@@ -173,7 +173,7 @@
 	room_size_max=7
 
 	spawntypes = list(
-		/obj/item/weapon/gun/energy/floragun=1,
+		/obj/item/floral_somatoray=1,
 		//obj/item/seeds/novaflowerseed=2,
 		/obj/item/seeds/bluespacetomatoseed=2,
 		// /vg/:

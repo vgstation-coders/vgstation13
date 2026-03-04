@@ -41,7 +41,6 @@ var/datum/controller/gameticker/ticker
 
 	var/explosion_in_progress
 	var/station_was_nuked
-	var/no_life_on_station
 	var/revolutionary_victory //If on, Castle can be voted if the conditions are right
 	var/malfunctioning_AI_victory //If on, will play a different credits song
 
@@ -53,9 +52,6 @@ var/datum/controller/gameticker/ticker
 	// Tag mode!
 	var/tag_mode_enabled = FALSE
 
-
-#define LOBBY_TICKING 1
-#define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
 	var/path = "sound/music/login/"
 	if(Holiday == APRIL_FOOLS_DAY)
@@ -86,13 +82,27 @@ var/datum/controller/gameticker/ticker
 			pregame_timeleft = world.timeofday + delay_timetotal
 			to_chat(world, "<B><span class='notice'>Welcome to the pre-game lobby!</span></B>")
 			to_chat(world, "Please, setup your character and select ready. Game will start in [(delay_timetotal) / 10] seconds.")
+		#ifndef UNIT_TESTS_AUTORUN
+		var/noplayers = FALSE
+		#endif
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
 				sleep(1)
 				vote.process()
 				watchdog.check_for_update()
+		#ifndef UNIT_TESTS_AUTORUN
+			if(!player_list.len)
+				going = LOBBY_TICKING_STOPPED
+				noplayers = TRUE
+				continue
+			else if(!going && noplayers)
+				going = LOBBY_TICKING
+				pregame_timeleft = world.timeofday + delay_timetotal
+				noplayers = FALSE
+		#endif
 			if (world.timeofday < (863800 -  delay_timetotal) &&  pregame_timeleft > 863950) // having a remaining time > the max of time of day is bad....
 				pregame_timeleft -= 864000
+				time_taken_in_lobby -= 864000
 			if(!going && !remaining_time)
 				remaining_time = pregame_timeleft - world.timeofday
 			if(going == LOBBY_TICKING_RESTARTED)
@@ -102,8 +112,6 @@ var/datum/controller/gameticker/ticker
 			if(going && world.timeofday >= pregame_timeleft)
 				current_state = GAME_STATE_SETTING_UP
 	while (!setup())
-#undef LOBBY_TICKING
-#undef LOBBY_TICKING_RESTARTED
 
 /datum/controller/gameticker/proc/IsThematic(var/playlist)
 	if(!theme)
@@ -463,33 +471,6 @@ var/datum/controller/gameticker/ticker
 	if(cinematic)
 		qdel(cinematic)		//end the cinematic
 
-/datum/controller/gameticker/proc/station_nolife_cinematic(var/override = null)
-	if( cinematic )
-		return	//already a cinematic in progress!
-
-	for (var/datum/html_interface/hi in html_interfaces)
-		hi.closeAll()
-
-	//initialise our cinematic screen object
-	cinematic = new(src)
-	cinematic.icon = 'icons/effects/station_explosion.dmi'
-	cinematic.icon_state = "station_nolife"
-	cinematic.plane = HUD_PLANE
-	cinematic.mouse_opacity = 0
-	cinematic.screen_loc = "1,0"
-
-	//actually turn everything off
-	power_failure(0)
-
-	//If its actually the end of the round, wait for it to end.
-	//Otherwise if its a verb it will continue on afterwards.
-	sleep(300)
-
-	if(cinematic)
-		qdel(cinematic)		//end the cinematic
-
-	no_life_on_station = TRUE
-
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)
 		return 0
@@ -687,6 +668,7 @@ var/datum/controller/gameticker/ticker
 	return roles
 
 /datum/controller/gameticker/proc/post_roundstart()
+	usr = null
 	//Handle all the cyborg syncing
 	var/list/active_ais = active_ais()
 	if(active_ais.len)
@@ -726,6 +708,7 @@ var/datum/controller/gameticker/ticker
 
 		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
 		roundstart_timestamp = world.time
+		time_taken_in_lobby = world.timeofday - time_taken_in_lobby
 
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
@@ -759,6 +742,12 @@ var/datum/controller/gameticker/ticker
 			play_vox_sound(sound,map.zMainStation,null)
 
 	create_random_orders(3) //Populate the order system so cargo has something to do
+	if(istype(mode, /datum/gamemode/dynamic))
+		var/datum/gamemode/dynamic/D = mode
+		if(D.living_players.len < 6) // Fill all the SMES to capacity if there's 5 or less players, to give players more time to set up the power.
+			for(var/obj/machinery/power/battery/smes/S in power_machines)
+				if(S.charge) //Only do this if the SMES has any charge in the first place
+					S.charge = S.capacity
 
 // -- Tag mode!
 /datum/controller/gameticker/proc/tag_mode(var/mob/user)

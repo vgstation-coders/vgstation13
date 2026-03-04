@@ -49,6 +49,8 @@
 
 	//How often wounds should be updated, a higher number means less often
 	var/wound_update_accuracy = 1
+	//Cache for if limb has a bleeding wound. If true, will force-process the limb's wounds regardless of damage.
+	var/internally_bleeding = FALSE
 
 	var/has_fat = 0 //Has a _fat variant
 	var/cosmetic_only = FALSE
@@ -107,6 +109,9 @@
 			to_chat(owner, "<span class = 'warning'>Your [display_name] malfunctions!</span>")
 	take_damage(damage, 0, 1, used_weapon = "EMP")
 
+/**
+ * This returns the amount of DAMAGE on the limb, unlike what the proc suggests
+ */
 /datum/organ/external/proc/get_health()
 	return (burn_dam + brute_dam)
 
@@ -169,6 +174,11 @@
 	if(!is_existing()) //No limb there
 		return 0
 
+	//These are here to prevent a 'weakness cascade' from dealing unfair damage amounts to species with weaknesses
+	var/bonus_brute_damage = 0
+	var/bonus_burn_damage = 0
+	var/original_brute = brute
+	var/original_burn = burn
 	if(!no_damage_modifier)
 		if(!is_organic())
 			brute *= 0.66 //~2/3 damage for ROBOLIMBS
@@ -180,6 +190,11 @@
 					brute *= species.brute_mod
 				if(species.burn_mod)
 					burn *= species.burn_mod
+	//We only care about weaknesses, not resists
+	if(original_brute < brute)
+		bonus_brute_damage = brute - original_brute
+	if(original_burn < burn)
+		bonus_burn_damage = burn - original_burn
 
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
@@ -260,7 +275,11 @@
 				//How much burn damage is left to inflict
 				burn = max(0, burn - can_inflict)
 		//If there are still hurties to dispense
-		if(burn || brute)
+		//Then we need to be fair and remove the damage weaknesses applied for this limb
+		//After all, other limbs can have different weaknesses/resists
+		brute -= bonus_brute_damage
+		burn -= bonus_burn_damage
+		if(burn > 0 || brute > 0)
 			if(!is_organic())
 				droplimb(1) //Non-organic limbs just drop off with no further complications
 			else
@@ -381,6 +400,7 @@
 		if(!internal_bleeding)
 			var/datum/wound/internal_bleeding/I = new (15)
 			wounds += I
+			internally_bleeding = TRUE
 			owner.custom_pain("You feel something rip in your [display_name]!", 1)
 
 	//Check whether we can add the wound to an existing wound
@@ -434,6 +454,8 @@
 
 /datum/organ/external/proc/need_process()
 	if(status && !is_organic()) //If it's non-organic, that's fine it will have a status.
+		return 1
+	if(internally_bleeding)
 		return 1
 	if(brute_dam || burn_dam)
 		return 1
@@ -631,10 +653,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 		return
 
 	var/datum/species/species = src.species || owner.species
+	internally_bleeding = FALSE
 
 	for(var/datum/wound/W in wounds)
 		//Internal wounds get worse over time, and you lose blood
 		if(W.internal && !W.is_treated() && !(species && species.anatomy_flags & NO_BLOOD))
+			internally_bleeding = TRUE
 			var/blood_factor = owner.calcbloodloss() //Calls helper function to determine amount of blood loss.
 
 			owner.vessel.remove_reagent(BLOOD, W.damage * wound_update_accuracy * 0.07 * max(0, blood_factor))
@@ -645,7 +669,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		// slow healing
 		var/heal_amt = 0
 
-		if(W.damage < 15 || (M_REGEN in owner.mutations && W.damage <= 50)) //This thing's edges are not in day's travel of each other, what healing?
+		if(W.damage < 15 || ((M_REGEN in owner.mutations) && W.damage <= 50)) //This thing's edges are not in day's travel of each other, what healing?
 			heal_amt += 0.2
 
 		if(W.is_treated() && W.damage < 50) //Whoa, not even magical band aid can hold it together
@@ -1189,6 +1213,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	else if(is_robotic())
 		baseicon = 'icons/mob/human_races/o_robot.dmi'
+		icon_state = icon_name
 	if(forced_icon_file)
 		baseicon = forced_icon_file
 	return icon(baseicon, icon_state)
@@ -1249,7 +1274,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(is_malfunctioning())
 		// owner.u_equip(c_hand, 1)
 		owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")
-		spark(src, 5, FALSE)
+		spark(owner, 5, FALSE)
 		owner.drop_item(c_hand)
 
 /datum/organ/external/proc/embed(var/obj/item/weapon/W, var/silent = 0)
@@ -1362,6 +1387,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 						icon_name = "grey"
 					if(VOXBROWN)
 						icon_name = "brown"
+					if(VOXPLUCKED)
+						icon_name = "plucked"
 					else
 						icon_name = "green"
 			if("tajaran")
@@ -1687,6 +1714,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		return ..()
 
 	var/baseicon = (species ? species.icobase : owner.race_icon)
+	var/icon_state = "[icon_name]_[gender]"
 	if(status & ORGAN_MUTATED)
 		baseicon = (species ? species.deform : owner.deform_icon)
 
@@ -1694,7 +1722,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	if(is_robotic())
 		baseicon = 'icons/mob/human_races/o_robot.dmi'
-	return new /icon(baseicon, "[icon_name]_[gender]")
+		icon_state = icon_name
+	return icon(baseicon, icon_state)
 
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list(), no_damage_modifier, spread_damage)
 	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs, no_damage_modifier, spread_damage)
@@ -2067,11 +2096,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 	name = "robotic head"
 
 /obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ/external/head/O)
-	origin_body = makeweakref(H)
-
-	if(istype(H))
-		src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	..()
+	if(!istype(H)) //It's entirely possible for stuff to call this without a human, such as headpoles with heads in maps for some reason...
+		return
+
+	origin_body = makeweakref(H)
+	src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	if(isgolem(H)) //Golems don't inhabit their severed heads, they turn to dust when they die.
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms()
 		if(B)
@@ -2103,20 +2133,18 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 				overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
 
-	if(H && istype(H))
-		var/mob/living/simple_animal/borer/B = H.has_brain_worms()
-		if(B)
-			B.infest_limb(src)
+	var/mob/living/simple_animal/borer/B = H.has_brain_worms()
+	if(B)
+		B.infest_limb(src)
 
-	if(H)
-		transfer_identity(H)
+	transfer_identity(H)
 
-		if (!O || !O.disfigured)
-			name = "[H.real_name]'s head"
-		else
-			name = "disfigured head"
+	if (!O || !O.disfigured)
+		name = "[H.real_name]'s head"
+	else
+		name = "disfigured head"
 
-		H.regenerate_icons()
+	H.regenerate_icons()
 
 	if(brainmob)
 		brainmob.stat = 2

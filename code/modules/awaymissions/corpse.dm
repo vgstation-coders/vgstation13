@@ -1328,6 +1328,8 @@
 
 	var/mob/M = .
 	if(M.gender == FEMALE)
+		if(!islist(corpseuniform))
+			corpseuniform = list(corpseuniform)
 		corpseuniform += existing_typesof(/obj/item/clothing/under/dress)
 
 	if(prob(50))
@@ -1364,6 +1366,14 @@
 		corpsesuit = null
 	if(prob(50))
 		corpseglasses = null
+
+/obj/effect/landmark/corpse/ninja
+	name = "Ninja"
+	corpseuniform = /obj/item/clothing/under/color/black
+	corpsesuit = /obj/item/clothing/suit/space/ninja/apprentice
+	corpseshoes = /obj/item/clothing/shoes/ninja/apprentice
+	corpsegloves = /obj/item/clothing/gloves/ninja
+	corpsemask = /obj/item/clothing/mask/gas/voice/ninja
 
 #undef G_MALE
 #undef G_FEMALE

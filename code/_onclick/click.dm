@@ -97,6 +97,9 @@
 	if(modifiers["right"])
 		RightClickOn(A)
 		return
+	// Equivalent to button M4/M5 on gaming mouses.
+	if(modifiers["xbutton1"] || modifiers["xbutton2"])
+		return
 
 	if(attempt_crawling(A))
 		return
@@ -110,7 +113,8 @@
 		return
 //	to_chat(world, "next_attack is [next_attack] and world.time is [world.time]")
 	if(istype(loc,/obj/mecha))
-		if(!locate(/turf) in list(A,A.loc)) // Prevents inventory from being drilled
+		// Prevents inventory from being drilled and handles a crate shelf special case
+		if((!locate(/turf) in list(A,A.loc)) && !istype(A.loc,/obj/structure/rack/crate_shelf))
 			return
 		var/obj/mecha/M = loc
 		return M.click_action(A,src)

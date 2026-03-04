@@ -1,0 +1,88 @@
+doctype html
+html
+  head
+    title= app.name + ' - ' + app.description
+    
+    meta(charset='utf-8')
+    meta(name='description', content=app.meta_description)
+    
+    link(rel='shortcut icon', href='favicon.ico')
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Press+Start+2P', type='text/css')
+    link(rel='stylesheet', href='css/tetris.css?v=' + cache_tag('public/css/tetris.css'), type='text/css')
+    
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+    script(src='js/main.js?v=' + cache_tag('public/js/main.js'))
+  
+  body
+  
+    .container
+      
+      #game-start
+        h1= app.name
+        
+        table#controls(cellpadding='0', cellspacing='0', width='100%')
+          tbody
+            tr
+              td Right arrow
+              td Move right 
+            tr
+              td Left arrow
+              td Move left
+            tr
+              td Up arrow
+              td Rotate
+            tr
+              td Down arrow
+              td Move down
+            tr
+              td Space
+              td Fast drop
+            tr
+              td P
+              td Pause
+      
+      #game-loading
+      
+      script.
+        $('#game-loading').text('Game loading...')
+      
+      noscript
+        .error.
+          Error! Your web browser has Javascript disabled.
+      
+      .status-container(style='display:none')
+        table(border='0', cellpadding='5')
+          tbody
+            tr
+              td(colspan="2", align="center", width="100")
+                #preview
+            tr
+              td Level
+              td: #level
+            tr
+              td Score
+              td: #score
+            tr
+              td Lines
+              td: #lines
+    
+      .game-container(style='display:none')
+        #game.game(style='width:300px; height: 600px;')
+        #menu.overlay
+    
+    audio#collapse1-sound(src='sounds/beep1.mp3?v=' + cache_tag('public/sounds/beep1.mp3'), preload='auto')
+    audio#collapse2-sound(src='sounds/beep2.mp3?v=' + cache_tag('public/sounds/beep2.mp3'), preload='auto')
+    audio#collapse3-sound(src='sounds/beep3.mp3?v=' + cache_tag('public/sounds/beep3.mp3'), preload='auto')
+    audio#collapse4-sound(src='sounds/beep4.mp3?v=' + cache_tag('public/sounds/beep4.mp3'), preload='auto')
+    
+    a(href='https://github.com/gdaws/tetris/')
+      img(style='position: absolute; top: 0; right: 0; border: 0;', src='https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png', alt='Fork me on GitHub')
+    
+    script.
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', '#{app.ga_tracking_code}', 'auto');
+      ga('send', 'pageview');

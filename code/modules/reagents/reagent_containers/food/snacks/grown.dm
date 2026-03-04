@@ -244,13 +244,13 @@ var/list/special_fruits = list()
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_fruit_teleport(atom/hit_atom, mob/M, var/potency)	//Does this need logging?
-	var/datum/zLevel/L = get_z_level(src)
-	if(!L || L.teleJammed)
-		return 0
 	var/picked = pick_rand_tele_turf(hit_atom, potency/15, potency/10) // Does nothing at base potency since inner_radius == 0
 	if(!isturf(picked))
 		return 0
 	var/turf/hit_turf = get_turf(hit_atom)
+	var/datum/virtual_z/vz_hit = hit_turf.get_virtual_z()
+	if(!vz_hit || vz_hit.teleJammed == VZ_TELEPORTATION_FORBIDDEN)
+		return 0
 	var/turf_has_mobs = locate(/mob) in hit_turf
 	if((!istype(M) || prob(50)) && turf_has_mobs) //50% chance to teleport the person who was hit by the fruit
 		spark(hit_atom)
@@ -342,14 +342,44 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "\"I'll sweeten thy sad grave: thou shalt not lack the flower that's like thy face, pale primrose, nor the azured hare-bell, like thy veins; no, nor the leaf of eglantine, whom not to slander, out-sweeten’d not thy breath.\""
 	potency = 1
 	filling_color = "#D4B2C9"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "harebell"
 	plantname = "harebells"
 	fragrance = INCENSE_HAREBELLS
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/dandelion
+	name = "dandelion"
+	desc = "A vibrant yellow flower, but smells like a wet dog."
+	potency = 1
+	filling_color = "#FECC23"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "dandelion"
+	plantname = "dandelions"
+	fragrance = INCENSE_LEAFY
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rose
+	name = "rose"
+	desc = "A symbol of peace and love."
+	potency = 1
+	throwforce = 1
+	filling_color = "#660531"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "rose"
+	plantname = "roses"
+	fragrance = INCENSE_ROSES
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rose/attack_self(mob/user as mob)
+	Destroy(/obj/item/weapon/reagent_containers/food/snacks/grown/rose)
+	new/obj/item/clothing/accessory/rose(user.loc)
+	to_chat(user, "<span class='notice'>You fold a pin into the rose.</span>")
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
 	desc = "Store in a location at least 50 yards away from werewolves."
 	potency = 25
 	filling_color = "#E6E6FA"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "moonflower"
 	plantname = "moonflowers"
 	fragrance = INCENSE_MOONFLOWERS
 	slot_flags = SLOT_HEAD
@@ -380,6 +410,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "Nutritious!"
 	filling_color = "#A332AD"
 	plantname = "grapes"
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes
 	name = "bunch of green grapes"
@@ -387,6 +418,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	filling_color = "#A6FFA3"
 	plantname = "greengrapes"
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/peanut
 	name = "peanut"
@@ -394,6 +426,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "857e27"
 	potency = 25
 	plantname = "peanut"
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/rocknut
 	name = "rocknut"
@@ -472,6 +505,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 50
 	filling_color = "#9C8E54"
 	plantname = "cocoa"
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane
 	name = "sugarcane"
@@ -543,6 +577,43 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#F5CB42"
 	plantname = "goldapple"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple
+	name = "crab apple"
+	desc = "An even smaller piece of Eden."
+	potency = 15
+	plantname = "crabapple"
+	var/alive = TRUE
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/after_consume(mob/living/carbon/eater)
+	if(!alive)
+		return ..()
+	to_chat(eater, "<span class='warning'>The [src] skitters away from your grip!</span>")
+	create_crab(eater, TRUE)
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/attack_self(mob/user as mob)
+	if(!alive)
+		return ..()
+	to_chat(user, "<span class='notice'>You plant the crab apple.</span>")
+	create_crab(user)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/proc/create_crab(mob/user as mob, aggro = FALSE)
+	if(istype(user.loc, /turf/space))
+		return
+	alive = FALSE
+	var/mob/living/simple_animal/hostile/retaliate/crabapple/T = new(user.loc)
+	T.harm_intent_damage = clamp(potency/10, 1, 10)
+	T.melee_damage_lower = clamp(potency/20, 1, 5)
+	T.melee_damage_upper = clamp(potency/10, 1, 15)
+	T.health = clamp(potency/3, 5, 25)
+	T.maxHealth = clamp(potency/3, 5, 25)
+	T.sneed = seed
+	if(aggro)
+		T.hostile = TRUE
+		T.health -= clamp(potency/6, 2, 12)
+	qdel(src)
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/watermelon
 	name = "watermelon"
@@ -888,6 +959,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "EDEDE1"
 	plantname = "garlic"
 	hydroflags = HYDRO_VOX
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/breadfruit
 	name = "breadfruit"
@@ -1027,6 +1099,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	icon = 'icons/obj/hydroponics/avocado.dmi'
 	filling_color = "#EAE791"
 	plantname = "avocado"
+	harmfultocorgis = TRUE
 	var/cant_eat_msg = "'s skin is much too tough to chew."
 	var/cut = FALSE
 
@@ -1040,12 +1113,19 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	..()
 	if(W.sharpness_flags & SHARP_BLADE)
 		if(cut && cant_eat_msg)
-			new /obj/item/seeds/avocadoseed/whole(loc)
-			new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(loc)
-			user.create_in_hands(src, /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted, vismsg = "\The [user] removes the pit from \the [src] with \the [W].", msg = "You remove the pit from \the [src] with \the [W].")
+			var/obj/item/seeds/avocadoseed/whole/sneed = new(get_turf(src))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted/slice = new(get_turf(src))
+			reagents.trans_to(slice, reagents.total_volume)
+			sneed.seed = seed
+			sneed.update_seed()
+			user.create_in_hands(src, slice, vismsg = "\The [user] removes the pit from \the [src] with \the [W].", msg = "You remove the pit from \the [src] with \the [W].")
 		else if(!cut)
-			var/list/halves = list(new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut(get_turf(src)), new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src)))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/mypit = new(get_turf(src))
+			var/list/halves = list(new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src)), mypit)
+			for(var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cado in halves)
+				reagents.trans_to(cado, (reagents.total_volume/2))
 			user.create_in_hands(src, pick(halves), vismsg = "\The [user] slices \the [src] in half with \the [W].", msg = "You slice \the [src] in half with \the [W].")
+			mypit.seed = seed
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut
 	name = "avocado half"
@@ -1183,3 +1263,25 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#7E80DE"
 	plantname = "flax"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/mint
+	name = "mint"
+	desc = "The essence of pure freshness in plant form."
+	potency = 20
+	filling_color = "#7edeae"
+	plantname = "mint"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle
+	icon = 'icons/obj/hydroponics/berry.dmi'
+	icon_state = "produce2"
+	desc = "They taste like... burning."
+	plantname=null
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle/New(var/loc,var/mob/berry_picker=null)
+	..(loc)
+	icon_state = "produce2" //the icon state is set in ..()
+	reagents.add_reagent(NUTRIMENT,1) //we want 3 total. there's already 2 from ..()
+	bitesize=3 //consume it in 1 bite.
+	if(berry_picker ? (berry_picker.lucky_prob_rand() < 0.3333) : prob(33) ) //33% base chance to be poison, improved by luck
+		reagents.add_reagent(TOXIN,1)
+		bitesize=4

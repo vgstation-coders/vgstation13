@@ -296,7 +296,7 @@
 	src.add_fingerprint(usr)
 	src.update_icon()
 
-/obj/item/weapon/reagent_containers/syringe/restock()
+/obj/item/weapon/reagent_containers/syringe/restock(nanobots = FALSE)
 	if(mode == 2) //SYRINGE_BROKEN
 		mode = 0 //SYRINGE_DRAW
 		update_icon()
@@ -407,6 +407,15 @@
 	reagents.add_reagent(CYANIDE, 5)
 	reagents.add_reagent(CHLORALHYDRATE, 5)
 	reagents.add_reagent(LEXORIN, 5)
+	mode = SYRINGE_INJECT
+	update_icon()
+
+/obj/item/weapon/reagent_containers/syringe/nitrogen
+	name = "syringe (nitrogen)"
+	desc = "Contains nitrogen - used to stabilize vox."
+/obj/item/weapon/reagent_containers/syringe/nitrogen/New()
+	..()
+	reagents.add_reagent(NITROGEN, 15)
 	mode = SYRINGE_INJECT
 	update_icon()
 

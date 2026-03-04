@@ -4,7 +4,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "ai" = (
-/obj/structure/acidtoilet{
+/obj/structure/wc/toilet/acid{
 	dir = 4
 	},
 /turf/unsimulated/floor/lab_sterile,
@@ -54,9 +54,9 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "au" = (
-/obj/item/weapon/melee/stunprobe,
-/obj/item/weapon/melee/stunprobe,
-/obj/item/weapon/melee/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
 /obj/structure/closet/secure_closet/ayy2{
 	anchored = 1;
 	req_access_txt = "162";
@@ -140,7 +140,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "aT" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 8
 	},
 /obj/machinery/door/window{
@@ -283,7 +283,7 @@
 /turf/unsimulated/floor/grey_sand,
 /area/vault/mothership_lab/research)
 "cn" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 8
 	},
 /obj/structure/curtain/open/shower/left,
@@ -377,7 +377,7 @@
 	dir = 8;
 	name = "Shower"
 	},
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 8
 	},
 /turf/unsimulated/floor/lab_sterile,
@@ -531,7 +531,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/research)
 "eb" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /obj/machinery/door/window{
@@ -543,8 +543,8 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "em" = (
@@ -584,7 +584,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "eC" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 8
 	},
 /obj/item/weapon/card/id/mothership_laborer,
@@ -747,7 +747,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "gE" = (
-/obj/structure/acidtoilet{
+/obj/structure/wc/toilet/acid{
 	dir = 8
 	},
 /obj/machinery/light/small/broken{
@@ -889,8 +889,8 @@
 /area/vault/mothership_lab/maintenance)
 "hJ" = (
 /mob/living/simple_animal/hostile/necro/zombie/putrid,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/research)
 "hK" = (
@@ -1013,8 +1013,8 @@
 /obj/effect/decal/cleanable/blood/gibs/robot{
 	icon_state = "gibdown"
 	},
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/research)
 "jo" = (
@@ -1054,8 +1054,8 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "jC" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/research)
 "jH" = (
@@ -1155,8 +1155,8 @@
 	basecolor = "#2299FC";
 	blood_color = "#2299FC"
 	},
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/research)
 "kY" = (
@@ -1263,7 +1263,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "mq" = (
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -1276,9 +1276,7 @@
 /obj/item/stack/sheet/plasteel,
 /obj/item/stack/sheet/plasteel,
 /obj/item/weapon/shard/plasma,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/mothership_lab/research)
 "mu" = (
 /obj/machinery/computer/secure_data{
@@ -1295,12 +1293,12 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "mw" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/research)
 "mK" = (
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -1349,7 +1347,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "nb" = (
-/obj/structure/acidtoilet{
+/obj/structure/wc/toilet/acid{
 	dir = 4
 	},
 /turf/unsimulated/floor/ayy/maint,
@@ -1406,8 +1404,8 @@
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "nL" = (
@@ -1628,8 +1626,8 @@
 /area/vault/mothership_lab/research)
 "pN" = (
 /obj/structure/window/barricade/full,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "qb" = (
@@ -1646,8 +1644,8 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "qd" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "qi" = (
@@ -1788,8 +1786,8 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "ry" = (
@@ -1880,7 +1878,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "sr" = (
-/obj/structure/acidtoilet,
+/obj/structure/wc/toilet/acid,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "sA" = (
@@ -1893,8 +1891,8 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "sF" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/research)
 "sK" = (
@@ -1984,8 +1982,8 @@
 /turf/unsimulated/floor/grey_sand,
 /area/vault/mothership_lab/research)
 "uy" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "uC" = (
@@ -2075,8 +2073,8 @@
 	blood_color = "#CFAAAA"
 	},
 /obj/item/device/flashlight/flare/ever_bright,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "vm" = (
@@ -2098,7 +2096,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "vt" = (
-/obj/structure/acidtoilet,
+/obj/structure/wc/toilet/acid,
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
@@ -2199,7 +2197,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "wz" = (
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -2401,8 +2399,8 @@
 "yA" = (
 /obj/structure/girder,
 /obj/structure/window/barricade/full/block,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "yD" = (
@@ -2654,7 +2652,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "BR" = (
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},
@@ -2693,7 +2691,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/armory)
 "Cw" = (
-/obj/structure/acidtoilet,
+/obj/structure/wc/toilet/acid,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/research)
 "CC" = (
@@ -2810,8 +2808,8 @@
 /obj/machinery/recharger,
 /obj/machinery/recharger,
 /obj/machinery/recharger,
-/obj/item/weapon/circuitboard/recharger,
-/obj/item/weapon/circuitboard/recharger,
+/obj/item/weapon/circuitboard/small/recharger,
+/obj/item/weapon/circuitboard/small/recharger,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/armory)
 "DG" = (
@@ -2872,8 +2870,8 @@
 /area/vault/mothership_lab/armory)
 "Et" = (
 /obj/item/weapon/shard/plasma,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/research)
 "Eu" = (
@@ -2940,7 +2938,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/maintenance)
 "ET" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	pixel_y = 16
 	},
 /obj/structure/curtain/open/shower,
@@ -3012,8 +3010,8 @@
 /obj/item/stack/sheet/plasteel,
 /obj/item/stack/sheet/plasteel,
 /obj/item/weapon/shard/plasma,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/research)
 "Gq" = (
@@ -3161,8 +3159,8 @@
 "HS" = (
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "HY" = (
@@ -3336,8 +3334,8 @@
 /obj/structure/table/flipped{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "Kv" = (
@@ -3362,7 +3360,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Ky" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /obj/effect/landmark/corpse/grey/worker,
@@ -3379,7 +3377,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/maintenance)
 "KI" = (
-/obj/structure/acidtoilet,
+/obj/structure/wc/toilet/acid,
 /obj/machinery/light/small{
 	dir = 1
 	},
@@ -3420,7 +3418,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Lc" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /obj/item/device/device_analyser/advanced,
@@ -3476,7 +3474,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "Lz" = (
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},
@@ -3508,11 +3506,11 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/samplestorage)
 "LM" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "LR" = (
@@ -3595,8 +3593,8 @@
 /area/vault/mothership_lab/research)
 "MG" = (
 /obj/item/device/flashlight/flare/ever_bright,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "MI" = (
@@ -3612,8 +3610,8 @@
 /obj/machinery/light/he/broken{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "MO" = (
@@ -3680,7 +3678,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Nv" = (
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -3737,8 +3735,8 @@
 /obj/effect/decal/cleanable/blood/gibs/robot{
 	icon_state = "gib3"
 	},
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/research)
 "NW" = (
@@ -3915,7 +3913,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "PJ" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /obj/structure/curtain/open/shower/right,
@@ -4089,7 +4087,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "Ra" = (
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -4106,8 +4104,8 @@
 /obj/machinery/light/he/broken{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "Rm" = (
@@ -4325,7 +4323,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/armory)
 "Tc" = (
-/obj/structure/acidtoilet,
+/obj/structure/wc/toilet/acid,
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
@@ -4364,8 +4362,8 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "TE" = (
@@ -4619,7 +4617,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "Ws" = (
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -4639,8 +4637,8 @@
 /area/vault/mothership_lab/research)
 "Ww" = (
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "Wx" = (
@@ -4772,7 +4770,7 @@
 /obj/machinery/door/window{
 	name = "Shower"
 	},
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /turf/unsimulated/floor/lab_sterile,
@@ -4862,7 +4860,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/maintenance)
 "YA" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /obj/structure/curtain/open/shower/right,
@@ -4948,7 +4946,7 @@
 	icon_state = "gib4"
 	},
 /obj/machinery/light/he/broken,
-/obj/item/weapon/melee/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "Zs" = (
@@ -4973,12 +4971,12 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "ZA" = (
-/obj/structure/acidtoilet,
+/obj/structure/wc/toilet/acid,
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/maintenance)
 "ZC" = (

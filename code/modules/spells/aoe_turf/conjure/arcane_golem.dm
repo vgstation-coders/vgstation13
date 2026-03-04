@@ -6,15 +6,15 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSUTILITY
 
-	charge_max = 20 SECONDS
+	charge_cooldown_max = 20 SECONDS
 	cooldown_min = 1 SECONDS
 
-	spell_levels = list(Sp_SPEED = 0, Sp_AMOUNT = 0)
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 1, Sp_AMOUNT = 2) //each level of power grants 1 additional target.
+	spell_levels = list(SP_SPEED = 0, SP_AMOUNT = 0)
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 1, SP_AMOUNT = 2) //each level of power grants 1 additional target.
 
 	spell_flags = NEEDSCLOTHES | Z2NOCAST | IS_HARMFUL
 	invocation = "ARCANUM VIRIUM CONGREGABO"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 0
 
 	summon_type = list(/mob/living/simple_animal/hostile/arcane_golem)
@@ -103,8 +103,8 @@
 //UPGRADES
 /spell/aoe_turf/conjure/arcane_golem/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_AMOUNT)
-			spell_levels[Sp_AMOUNT]++
+		if(SP_AMOUNT)
+			spell_levels[SP_AMOUNT]++
 			golem_limit += ADDITIONAL_GOLEMS_PER_UPGRADE_LEVEL
 
 			return "You can now sustain [golem_limit] golems at once."
@@ -115,8 +115,8 @@
 
 /spell/aoe_turf/conjure/arcane_golem/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_AMOUNT)
-			if(spell_levels[Sp_AMOUNT] >= level_max[Sp_AMOUNT])
+		if(SP_AMOUNT)
+			if(spell_levels[SP_AMOUNT] >= level_max[SP_AMOUNT])
 				return "You can already sustain the maximum about of golems!"
 			return "Gain the ability to sustain [golem_limit + ADDITIONAL_GOLEMS_PER_UPGRADE_LEVEL] golems at once."
 

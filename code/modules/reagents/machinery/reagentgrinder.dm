@@ -3,6 +3,7 @@ var/global/list/juice_items = list (
 	/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = list(CARROTJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/grapes = list(GRAPEJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes = list(GGRAPEJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle = list(BERRYJUICEJUNGLE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/berries = list(BERRYJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/banana = list(BANANA = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/potato = list(POTATO = 0),
@@ -32,22 +33,25 @@ var/global/list/juice_items = list (
 	var/speed_multiplier = 1
 	var/list/blend_items = list (
 
+		/obj/item/trash/scrap                 = list(IRON = 10),
+
 		//Sheets
-		/obj/item/stack/sheet/metal           = list(IRON = 20),
-		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = 20),
-		/obj/item/stack/sheet/mineral/uranium = list(URANIUM = 20),
-		/obj/item/stack/sheet/mineral/clown   = list(BANANA = 20),
-		/obj/item/stack/sheet/mineral/silver  = list(SILVER = 20),
-		/obj/item/stack/sheet/mineral/gold    = list(GOLD = 20),
-		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
+		/obj/item/stack/sheet/metal           = list(IRON = U_PER_SHEET),
+		/obj/item/stack/sheet/glass           = list(SILICA = U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/uranium = list(URANIUM = U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/clown   = list(BANANA = U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/silver  = list(SILVER = U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/gold    = list(GOLD = U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
 		/obj/item/stack/sheet/wax			  = list(WAX = 5),
 		/obj/item/candle					  = list(WAX = 1.25),
 		/obj/item/trash/candle				  = list(WAX = 1),
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),
-		/obj/item/stack/sheet/charcoal        = list("charcoal" = 20),
-		/obj/item/stack/sheet/bone	          = list(BONEMARROW = 20),
+		/obj/item/stack/sheet/charcoal        = list(CHARCOAL = U_PER_SHEET),
+		/obj/item/stack/sheet/bone	          = list(BONEMARROW = U_PER_SHEET),
 
 		//Blender Stuff
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list(SOYMILK = -10), //I have no fucking idea what most of these numbers mean and I hate them.
@@ -72,6 +76,11 @@ var/global/list/juice_items = list (
 		/obj/item/weapon/reagent_containers/food = list(),
 		/obj/item/ice_crystal                = list(ICE = 10),
 		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 10),
+		/obj/item/device/flashlight/flare     = list(SULFUR = 10),
+		/obj/item/stack/cable_coil            = list(COPPER = 10),
+		/obj/item/weapon/cell                 = list(LITHIUM = 10),
+		/obj/item/clothing/head/butt          = list(MERCURY = 10),
+		/obj/item/weapon/match                = list(PHOSPHORUS = 2),
 	)
 
 
@@ -86,7 +95,7 @@ var/global/list/juice_items = list (
 	beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large(src)
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/reagentgrinder,
+		/obj/item/weapon/circuitboard/small/reagentgrinder,
 		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/micro_laser,

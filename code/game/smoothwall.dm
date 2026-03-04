@@ -30,35 +30,35 @@
 // OTHER FUNCTION SOME BORDER ITEMS MIGHT LIKE TO USE
 /atom/proc/findSmoothingOnTurf()
 	. = 0
+	var/turf/T = get_turf(src)
+	if(!T)
+		return 0
 	for(var/cdir in cardinal)
 		if((flow_flags & ON_BORDER) && !bordersmooth_override && (dir == cdir || opposite_dirs[dir] == cdir))
 			continue
-		var/turf/T = get_turf(src)
-		if(isSmoothableNeighbor(T,0) && T.dir == cdir)
+		if(T.dir == cdir && isSmoothableNeighbor(T,0))
 			. |= cdir
+			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
-			if(isSmoothableNeighbor(A,0) && A.dir == cdir)
+			if(A.dir == cdir && isSmoothableNeighbor(A,0))
 				. |= cdir
+				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 
 /atom/proc/isSmoothableNeighbor(atom/A, bordercheck = TRUE)
 	if(!A)
 		return 0
 	if(bordercheck && (flow_flags & ON_BORDER) && (A.flow_flags & ON_BORDER) && !bordersmooth_override && A.dir != dir)
 		return 0
-	return is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith()))
+	return is_type_in_list(A, canSmoothWith()) && !(cannotSmoothWith() && (is_type_in_list(A, cannotSmoothWith())))
 
 /turf/simulated/wall/isSmoothableNeighbor(atom/A)
 	if(!A)
 		return 0
-	if(is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith())))
-		if(istype(A, /turf/simulated/wall))
-			var/turf/simulated/wall/W = A
-			if(src.mineral == W.mineral)
-				return 1
-		else
-			return 1
+	if(istype(A, /turf/simulated/wall))
+		var/turf/simulated/wall/W = A
+		return src.mineral == W.mineral && !(cannotSmoothWith() && is_type_in_list(A, cannotSmoothWith()))
+	return is_type_in_list(A, canSmoothWith()) && !(cannotSmoothWith() && (is_type_in_list(A, cannotSmoothWith())))
 
-	return 0
 
 /**
  * WALL SMOOTHING SHIT
@@ -75,12 +75,6 @@
 	else
 		junction = 0
 	return junction // PREVIOUSLY DID NOTHING, NOW INHERITS THIS FOR COMMON BEHAVIOUR.
-
-/atom/New()
-	. = ..()
-	if(ticker && ticker.current_state >= GAME_STATE_PLAYING && canSmoothWith())
-		relativewall()
-		relativewall_neighbours()
 
 /*
  * SEE?  NOW WE ONLY HAVE TO PROGRAM THIS SHIT INTO WHAT WE WANT TO SMOOTH

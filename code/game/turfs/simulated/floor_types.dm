@@ -66,6 +66,12 @@
 	thermal_material = new/datum/thermal_material/wood()
 	thermal_mass = 5
 
+/turf/simulated/floor/wood/New()
+	..()
+	footstep_sound = sounds_wood
+	footstep_sound_barefoot = sounds_wood_barefoot
+	footstep_sound_claw = sounds_wood_claw
+
 /turf/simulated/floor/wood/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/wood(null)
 
@@ -196,8 +202,7 @@
 		floor_tile.forceMove(src)
 		floor_tile = null
 	intact = 0
-	broken = 0
-	burnt = 0
+	fix_floor()
 	material = "metal"
 
 	update_icon()
@@ -400,20 +405,19 @@
 	flammable = TRUE
 	thermal_material = new/datum/thermal_material/wood()
 	thermal_mass = 5
+	base_icon_state = "grass"
+	min_icon_states = 2
+	max_icon_states = 4
+	variance = 50
 
 /turf/simulated/floor/grass/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/grass(null)
 
 /turf/simulated/floor/grass/New()
-	icon_state = "grass[pick("1","2","3","4")]"
 	..()
-	spawn(4)
-		if(src)
-			update_icon()
-			for(var/direction in cardinal)
-				if(istype(get_step(src,direction),/turf/simulated/floor))
-					var/turf/simulated/floor/FF = get_step(src,direction)
-					FF.update_icon() //so siding get updated properly
+	footstep_sound = sounds_grass
+	footstep_sound_barefoot = sounds_grass
+	footstep_sound_claw = sounds_grass
 
 /turf/simulated/floor/carpet
 	name = "Carpet"
@@ -430,6 +434,7 @@
 	if(!icon_state)
 		icon_state = initial(icon_state)
 	..()
+
 	if(has_siding)
 		spawn(4)
 			if(src)
@@ -439,8 +444,16 @@
 						var/turf/simulated/floor/FF = get_step(src,direction)
 						FF.update_icon() //so siding get updated properly
 
+	footstep_sound = sounds_carpet
+	footstep_sound_barefoot = sounds_carpet_barefoot
+	footstep_sound_claw = sounds_carpet_barefoot
+
 /turf/simulated/floor/carpet/cultify()
 	return
+
+/turf/simulated/floor/carpet/broken/New()
+	. = ..()
+	break_tile()
 
 /turf/simulated/floor/arcade
 	name = "Arcade Carpet"
@@ -458,31 +471,25 @@
 	icon_state = "shagcarpet-dark"
 	has_siding = FALSE
 
-/turf/simulated/floor/carpet/shag/update_icon()
-	if(broken || burnt)
-		icon_state = "carpet-broken"
-	else if(is_plating())
-		icon_state = icon_plating
-	else
-		icon_state = initial(icon_state)
-
 /turf/simulated/floor/carpet/shag/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/carpet/shag(null)
 
 /turf/simulated/floor/damaged
-	icon_state = "damaged1"
+	var/broken_prob = 71
 
-/turf/simulated/floor/damaged/New()
-	broken = prob(71) // 5 of the icon states are "damaged" icons, 2 are burned.
-	burnt  = !broken
-
-	if(broken)
-		icon_state = pick("damaged1", "damaged2", "damaged3", "damaged4", "damaged5")
-
+/turf/simulated/floor/damaged/pick_icon_state()
+	if(prob(broken_prob))
+		break_tile()
 	else // Burnt states.
-		icon_state = pick("floorscorched1", "floorscorched2")
+		burn_tile()
 
 	. = ..()
+
+/turf/simulated/floor/damaged/broken
+	broken_prob = 100
+
+/turf/simulated/floor/damaged/burnt
+	broken_prob = 0
 
 /turf/simulated/floor/damaged/airless
 	name        = "airless floor"
@@ -490,25 +497,48 @@
 	nitrogen    = 0.01
 	temperature = TCMB
 
-/turf/simulated/floor/plating/ironsand/New()
-	..()
+/turf/simulated/floor/damaged/airless/broken
+	broken_prob = 100
+
+/turf/simulated/floor/damaged/airless/burnt
+	broken_prob = 0
+
+/turf/simulated/floor/plating/ironsand
 	name = "Iron Sand"
-	icon_state = "ironsand[rand(1,15)]"
+	icon_state = "ironsand1"
+	base_icon_state = "ironsand"
+	min_icon_states = 1
+	max_icon_states = 15
+	variance = 100
 
-/turf/simulated/floor/plating/airless/damaged
-	icon_state = "platingdmg1"
+/turf/simulated/floor/plating/damaged
+	var/broken_prob = 75
 
-/turf/simulated/floor/plating/airless/damaged/New()
-	broken = prob(75) // 3 of the icon states are "damaged" icons, 1 is burned.
-	burnt  = !broken
+/turf/simulated/floor/plating/damaged/broken
+	broken_prob = 100
 
-	if(broken)
-		icon_state = pick("platingdmg1", "platingdmg2", "platigndmg3")
+/turf/simulated/floor/plating/damaged/burnt
+	broken_prob = 0
 
-	else // Burnt state.
-		icon_state = "panelscorched"
+/turf/simulated/floor/plating/damaged/pick_icon_state()
+	if(prob(broken_prob))
+		break_tile()
+	else // Burnt states.
+		burn_tile()
 
 	. = ..()
+
+/turf/simulated/floor/plating/damaged/airless
+	name = "airless plating"
+	oxygen = 0.01
+	nitrogen = 0.01
+	temperature = TCMB
+
+/turf/simulated/floor/plating/damaged/airless/broken
+	broken_prob = 100
+
+/turf/simulated/floor/plating/damaged/airless/burnt
+	broken_prob = 0
 
 //syndie themed
 /turf/simulated/floor/dark
@@ -540,3 +570,20 @@
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 	//icon = 'icons/turf/shuttle-debug.dmi'
+
+// Plated catwalks
+/turf/simulated/floor/plated_catwalk
+	icon = 'icons/turf/catwalks.dmi'
+	icon_state = "pcat0"
+	name = "plated catwalk"
+	desc = "A hybrid floor tile-catwalk which provides visibility and easy access to pipes and wires beneath it."
+	plane = TURF_PLANE
+	layer = PAINT_LAYER
+	hatch_installed = TRUE
+	hatch_open = FALSE
+
+/turf/simulated/floor/plated_catwalk/New()
+	..()
+	overlays.Cut()
+	overlays += mutable_appearance(icon='icons/turf/floors.dmi', icon_state="plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
+	overlays += mutable_appearance(icon='icons/turf/catwalks.dmi', icon_state="[icon_state]_olay", layer = PAINT_LAYER, plane = TURF_PLANE)

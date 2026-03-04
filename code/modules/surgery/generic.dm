@@ -28,7 +28,7 @@
 
 
 //////CUT WITH LASER(cut+clamp)//////////
-/datum/surgery_step/generic/cut_with_laser/tool_quality(obj/item/tool)
+/datum/surgery_step/generic/cut_with_laser/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -41,6 +41,7 @@
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
 	duration = 4 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/generic/cut_with_laser/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -88,6 +89,7 @@
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
 	duration = 8 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/generic/incision_manager/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -130,7 +132,7 @@
 
 
 ////////CUT OPEN/////////
-/datum/surgery_step/generic/cut_open/tool_quality(obj/item/tool)
+/datum/surgery_step/generic/cut_open/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -284,12 +286,11 @@
 
 
 /////////CAUTERIZE///////
-/datum/surgery_step/generic/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/generic/cauterize/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/generic/cauterize
 	allowed_tools = list(
 	/obj/item/tool/cautery = 100,
@@ -340,6 +341,7 @@
 		/obj/item/weapon/hatchet = 75,
 		)
 	duration = 11 SECONDS
+	blood_level = 2
 
 /datum/surgery_step/generic/cut_limb/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (target_zone == "eyes")	//there are specific steps for eye surgery
@@ -379,7 +381,7 @@
 
 
 /////////BIOFOAM INJECTION///////
-/datum/surgery_step/generic/injectfoam/tool_quality(obj/item/tool)
+/datum/surgery_step/generic/injectfoam/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -391,6 +393,7 @@
 
 	priority = 0.1 //Tries to inject biofoam before other steps
 	duration = 1 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/generic/injectfoam/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())

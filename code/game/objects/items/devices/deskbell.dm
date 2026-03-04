@@ -2,7 +2,7 @@
 
 /obj/item/device/deskbell
 	name = "desk bell"
-	desc = "ding. ding."
+	desc = "Ding. Ding."
 	icon_state = "deskbell_2"
 	force = 5
 	throwforce = 5
@@ -269,7 +269,7 @@
 					to_chat(user, "<span class='warning'>You must add wires first.</span>")
 					return
 			if(1)
-				if(istype(W,/obj/item/tool/wirecutters))
+				if(W.is_wirecutter(user))
 					if(has_signaler)
 						to_chat(user, "<span class='warning'>You must remove the signaler first.</span>")
 						return

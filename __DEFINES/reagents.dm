@@ -9,6 +9,7 @@
 #define CHEMFLAG_DISHONORABLE 1
 #define CHEMFLAG_OBSCURING	2
 #define CHEMFLAG_PIGMENT	4
+#define CHEMFLAG_NOTREMOVABLE	8 //cannot be rid of by charcoal (or other reagent tomfoolery means).
 
 #define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
 
@@ -38,7 +39,9 @@
 #define STOXIN 			"stoxin"
 #define INAPROVALINE 			"inaprovaline"
 #define HOLYWATER 			"holywater"
+#define SACREDWATER 		"sacredwater"
 #define SEROTROTIUM 			"serotrotium"
+#define SILICA 			"silica"
 #define SILICATE 			"silicate"
 #define OXYGEN 			"oxygen"
 #define COPPER 			"copper"
@@ -74,6 +77,7 @@
 #define GOLD 			"gold"
 #define SILVER 			"silver"
 #define URANIUM 			"uranium"
+#define FERROURANIUM 		"ferrouranium"
 #define DIAMONDDUST		"diamond"
 #define PHAZON 			"phazon"
 #define ALUMINUM 			"aluminum"
@@ -141,6 +145,8 @@
 #define NANOBOTS 			"nanobots"
 #define MEDNANOBOTS 			"mednanobots"
 #define COMNANOBOTS 			"comnanobots"
+#define ENGNANOBOTS 			"engnanobots"
+#define CARGONANOBOTS 			"cargonanobots"
 #define FLUOROSURFACTANT 			"fluorosurfactant"
 #define PICCOLYN			"piccolyn"
 #define NICOTINE 			"nicotine"
@@ -165,6 +171,7 @@
 #define HOLYSALTS 			"holysalts"
 #define CREATINE 			"creatine"
 #define CARPPHEROMONES 			"carppheromones"
+#define KILLERPHEROMONES 		"killerpheromones"
 #define BLACKPEPPER 			"blackpepper"
 #define CINNAMON 			"cinnamon"
 #define ZAMSPICES			"zamspices"
@@ -208,6 +215,7 @@
 #define LIMEJUICE 			"limejuice"
 #define CARROTJUICE 			"carrotjuice"
 #define BERRYJUICE 			"berryjuice"
+#define BERRYJUICEJUNGLE 			"berryjuicejungle"
 #define POISONBERRYJUICE 			"poisonberryjuice"
 #define WATERMELONJUICE 			"watermelonjuice"
 #define APPLEJUICE 			"applejuice"
@@ -230,6 +238,7 @@
 #define SODAWATER 			"sodawater"
 #define ICE 			"ice"
 #define COLA 			"cola"
+#define CRYOCOLA		"cryocola"
 #define SPACEMOUNTAINWIND 			"spacemountainwind"
 #define LEMONADE 			"lemonade"
 #define KIRASPECIAL 			"kiraspecial"
@@ -239,6 +248,9 @@
 #define HIPPIESDELIGHT 			"hippiesdelight"
 #define ETHANOL 			"ethanol"
 #define BEER 			"beer"
+#define CIDER 			"cider"
+#define STOUT 			"stout"
+#define SNAKEBITE 		"snakebite"
 #define WHISKEY 			"whiskey"
 #define SPECIALWHISKEY 			"specialwhiskey"
 #define GIN 			"gin"
@@ -257,6 +269,7 @@
 #define BLUECURACAO "bluecuracao"
 #define TRIPLESEC		"triplesec"
 #define BITTERS 		"bitters"
+#define CHUMPARI 		"chumpari"
 #define SCHNAPPS		"schnapps"
 #define ALE 			"ale"
 #define THIRTEENLOKO 			"thirteenloko"
@@ -433,6 +446,8 @@
 #define MUSTARD			"mustard"
 #define RELISH			"relish"
 #define UNTABLE_MUTAGEN		"untable"
+#define METATABLE_MUTAGEN	"metatable"
+#define METASTABLE_MUTAGEN	"metastable"
 #define ELECTRIC_SHEEP		"electric_sheep"
 #define SCIENTISTS_SERENDIPITY		"scientists_serendipity"
 #define METABUDDY		"metabuddy"
@@ -460,6 +475,7 @@
 #define GEOMETER		"geometer"
 #define EGG_YOLK		"egg_yolk"
 #define PANCAKE			"pancake"
+#define PAINCAKE		"paincake"
 #define SPAGHETTI		"spaghetti"
 #define MUSTARD_POWDER	"mustard_powder"
 #define MAYO			"mayo"
@@ -480,6 +496,9 @@
 #define BLOBANINE		"blobanine"
 #define BLOB_ESSENCE	"blob_essence"
 #define METHAMPHETAMINE "methamphetamine"
+#define GRUGZONE		"grugzone"
+#define JUNGLEJUICE		"junglejuice"
+#define FAKEJUNGLEJUICE		"fakejunglejuice"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -491,6 +510,13 @@
 #define LOCUTOGEN		"locutogen"
 #define BUMCIVILIAN		"bumcivilian"
 #define PUNCTUALITE		"punctualite"
+#define MAHKOEXPITOL	"mahkoexpitol"
+#define MORATHIAL		"morathial"
+
+#define ALIENORIGIN		"alienorigin"
+#define UNKNOWNALPHA	"unknownalpha"
+#define UNKNOWNDELTA	"unknowndelta"
+#define UNKNOWNOMEGA	"unknownomega"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
@@ -521,6 +547,7 @@
 #define AMINOMICIAN		"aminomician"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
 #define AMINOBLATELLA	"aminoblatella"
+#define AMINOCORYDON	"aminocorydon"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
 #define CAFFEINE		"caffeine"
@@ -528,12 +555,24 @@
 #define LEMONDROP		"lemondrop"
 #define FEVERFEW		"feverfew"
 #define SQUASH			"squash"
+#define PRIAXATE		"priaxate"
 
 #define ACRYLIC			"acrylic"
 #define ACETONE			"acetone"
 #define NANOPAINT		"nano_paint"
 #define FLAXOIL			"flax_oil"
 #define WAX				"wax"
+
+#define PLUTONIUM		"plutonium"
+#define RADON			"radon"
+#define LEAD			"lead"
+#define THALLIUM		"thallium"
+#define THORIUM			"thorium"
+#define REGENERATECALCIUM	"regeneratecalcium"
+#define EQUALIZONE		"equalizone"
+#define AGENT_W		"agentw"
+
+#define DYE_DANDELIONS	"dandelion_dye"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -588,18 +627,21 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define ALLNANITES list(NANITES, AUTISTNANITES)
 #define SUGARS list(SUGAR, CORNSYRUP)
 #define GUNKS list(CHEMICAL_WASTE, TOXICWASTE, VOMIT, TOXIN, SOLANINE, RADIUM, MUTAGEN, UNTABLE_MUTAGEN, SPIDERS)
-#define COLDDRINKS list(ICECOFFEE, ICETEA, ARNOLDPALMER, TONIC, SODAWATER, ICE, COLA, NUKA_COLA, GEOMETER, SPACEMOUNTAINWIND, DR_GIBB, SPACE_UP, LEMON_LIME, LEMONADE, KIRASPECIAL, MILKSHAKE, BROWNSTAR, REWRITER, DIY_SODA)
+#define COLDDRINKS list(ICECOFFEE, ICETEA, ICED_BEER, ARNOLDPALMER, TONIC, SODAWATER, ICE, COLA, NUKA_COLA, GEOMETER, SPACEMOUNTAINWIND, DR_GIBB, SPACE_UP, LEMON_LIME, LEMONADE, KIRASPECIAL, MILKSHAKE, BROWNSTAR, REWRITER, DIY_SODA, CRYOCOLA)
 #define HOTDRINKS list(COFFEE, SOY_LATTE, TEA, GATORMIX, HOT_COCO, HOT_COCO_SUBHUMAN, CREAMY_HOT_COCO) //Blisterol not included as that's medicine, not a warm drink
 //HOT and COLD drinks defines used for the mint toxin/mint essence checks for tooth pain and shit, maybe you can find another use for it
+//Useful reagents for looting
+#define LOOT_REAGENTS list(BEER, WHISKEY, TEQUILA,VODKA, VERMOUTH, RUM, COGNAC, WINE, SAKE, TRIPLESEC, BITTERS, CINNAMONWHISKY, SCHNAPPS, BLUECURACAO, KAHLUA, ALE,	CHAMPAGNE, PWINE, WATER, GIN, SODAWATER, COLA, CREAM, TOMATOJUICE, ORANGEJUICE, LIMEJUICE, TONIC, SPACEMOUNTAINWIND, LEMON_LIME, DR_GIBB, TEA, GREENTEA, REDTEA, COFFEE, MILK, HOT_COCO, SOYMILK, SPORTDRINK, REFRIEDBEANS, BEFF, HORSEMEAT, CORNSYRUP, OFFCOLORCHEESE, BONEMARROW,	GREENRAMEN, DEEPFRIEDRAMEN, DISCOUNT, NUTRIMENT, SUGAR, CORNOIL, LIPOZINE, INAPROVALINE, ANTI_TOXIN, BLISTEROL, KELOTANE, DEXALIN, LEPORAZINE, COCAINE, HYPERZINE, OPIUM, SPACE_DRUGS, ZAMMILD, ZAMSPICES, BLOOD, PANCAKE, FLOUR, MANNITOL, TRICORDRAZINE, HONKSERUM, AMINOMICIN, AMINOBLATELLA, MUTAGEN, KARMOTRINE, OXYCODONE)
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"
 #define INCENSE_SUNFLOWERS	"sunflowers"
+#define INCENSE_ROSES		"roses"
 #define INCENSE_MOONFLOWERS	"moonflowers"
 #define INCENSE_NOVAFLOWERS	"novaflowers"
 #define INCENSE_BANANA		"bananas"
 #define INCENSE_BOOZE		"helmets"
-#define INCENSE_LEAFY		"cabbage"
+#define INCENSE_LEAFY		"leafy"
 #define INCENSE_VAPOR		"vaporsacs"
 #define INCENSE_DENSE		"grasses"
 #define INCENSE_CRAVE		"vales"

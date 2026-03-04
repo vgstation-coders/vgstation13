@@ -49,7 +49,7 @@
 	},
 /area/mining_bar)
 "ah" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -146,11 +146,6 @@
 	pixel_y = 11
 	},
 /turf/simulated/floor/wood,
-/area/mining_bar)
-"aw" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
 /area/mining_bar)
 "ax" = (
 /obj/item/weapon/stool,
@@ -263,7 +258,6 @@
 "aP" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 4;
-	default_scrubbed_gases = list("plasma");
 	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor/carpet,
@@ -304,7 +298,6 @@
 "aU" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 4;
-	default_scrubbed_gases = list("plasma");
 	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor{
@@ -332,9 +325,7 @@
 	},
 /area/mining_bar)
 "aX" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_bar)
 "aY" = (
 /obj/structure/table/woodentable,
@@ -568,10 +559,7 @@
 /turf/simulated/floor/engine,
 /area/mining_bar)
 "bR" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/mining_bar)
 "bS" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -600,17 +588,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
 	},
-/turf/simulated/floor/plating,
-/area/mining_bar)
-"bZ" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/mining_bar)
 "cb" = (
@@ -643,17 +620,6 @@
 	},
 /turf/simulated/wall/invulnerable/r_wall,
 /area/mining_bar)
-"qC" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/mining_bar)
 "tr" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 1;
@@ -662,11 +628,7 @@
 /turf/simulated/floor/plating,
 /area/mining_bar)
 "Da" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced_plasma,
 /turf/simulated/floor/plating,
 /area/mining_bar)
 "Iz" = (
@@ -907,7 +869,7 @@ ae
 ax
 bc
 bc
-bZ
+Da
 bW
 bW
 bW
@@ -943,7 +905,7 @@ bc
 bc
 bc
 bR
-qC
+Da
 bW
 bW
 bW
@@ -992,7 +954,7 @@ bX
 as
 bN
 bc
-aw
+aX
 aX
 bl
 br

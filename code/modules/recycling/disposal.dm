@@ -149,7 +149,7 @@
 	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !isgripper(user.get_active_hand()) && !isMoMMI(user) )
 		return
 
-	if(istype(I, /obj/item/weapon/storage/bag/))
+	if(istype(I, /obj/item/weapon/storage/bag))
 		var/obj/item/weapon/storage/bag/B = I
 		if(B.contents.len == 0)
 			if(user.drop_item(I, src))
@@ -158,6 +158,19 @@
 		to_chat(user, "<span class='notice'>You empty \the [B].</span>")
 		B.mass_remove(src)
 		B.update_icon()
+		update_icon()
+		return
+
+	if(istype(I, /obj/item/ashtray))
+		var/obj/item/ashtray/A = I
+		if(A.contents.len == 0)
+			if(user.drop_item(I, src))
+				to_chat(user, "<span class='notice'>You throw away \the empty [A].</span>")
+				return
+		to_chat(user, "<span class='notice'>You empty \the [A].</span>")
+		for (var/obj/item/O in A.contents)
+			O.forceMove(src)
+		A.update_icon()
 		update_icon()
 		return
 
@@ -257,6 +270,16 @@
 		// Make the UI auto-update.
 		ui.set_auto_update(1)
 
+/obj/machinery/disposal/AltClick(mob/user)
+	if(user.loc == src)
+		to_chat(user, "<span class='warning'>You cannot reach the controls from inside.</span>")
+	else if(mode==-1)
+		to_chat(user, "<span class='warning'>The disposal units power is disabled.</span>")
+	else if(!user.incapacitated() && Adjacent(user))
+		flush = !flush
+		to_chat(user, "<span class='notice'>The disposal handle is now [flush ? "" : "dis"]engaged.</span>")
+	return ..()
+
 // handle machine interaction
 /obj/machinery/disposal/Topic(href, href_list)
 	if(usr.loc == src)
@@ -298,11 +321,16 @@
 	return
 
 // eject the contents of the disposal unit
-/obj/machinery/disposal/proc/eject()
-	for(var/atom/movable/AM in src)
-		AM.forceMove(src.loc)
-		AM.pipe_eject(0)
-	update_icon()
+/obj/machinery/disposal/proc/eject(var/atom/location = loc)
+	if(Adjacent(location))
+		if(location != loc)
+			var/turf/T = get_turf(location)
+			if(!T || is_blocked_turf(T,src))
+				location = loc
+		for(var/atom/movable/AM in src)
+			AM.forceMove(location)
+			AM.pipe_eject(0)
+		update_icon()
 
 // update the icon & overlays to reflect mode & status
 /obj/machinery/disposal/update_icon()
@@ -456,18 +484,16 @@
 		qdel(H)
 
 /obj/machinery/disposal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if (istype(mover,/obj/item) && mover.throwing)
+	if (istype(mover,/obj/item) && mover.throwing && Adjacent(mover))
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
 		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
 		if(prob(75) || (mob?.reagents?.get_sportiness()>=5))
 			I.forceMove(src)
-			for(var/mob/M in viewers(src))
-				M.show_message("\the [I] lands in \the [src].", 1)
+			visible_message("\The [I] lands in \the [src].")
 		else
-			for(var/mob/M in viewers(src))
-				M.show_message("\the [I] bounces off of \the [src]'s rim!", 1)
+			visible_message("\The [I] bounces off of \the [src]'s rim!")
 		return 0
 	else
 		return ..(mover, target, height, air_group)
@@ -496,6 +522,7 @@
 
 			attackby(dropping, user)
 		else if(istype(dropping, /obj/structure/closet/crate) && can_load_crates())
+			to_chat(user,"<span class='notice'>You begin lifting \the [dropping] into \the [src].</span>")
 			if(do_after(user,src,20))
 				if(dropping.locked_to || !user.canmove || user.incapacitated() || !isturf(dropping.loc))
 					return
@@ -547,6 +574,20 @@
 	add_fingerprint(user)
 	target.forceMove(src)
 	update_icon()
+
+/obj/machinery/disposal/MouseDropFrom(atom/over_object, src_location, over_location, src_control, over_control, params)
+	if(isAI(usr))
+		return
+
+	//We are restrained or can't move, this will compromise taking out the trash
+	if(usr.restrained() || !usr.canmove || usr.incapacitated())
+		return
+	if(!Adjacent(usr) || !Adjacent(over_location))
+		return
+	if(!usr.canMouseDrag())
+		return
+
+	eject(over_location)
 
 // virtual disposal object
 // travels through pipes in lieu of actual items
@@ -611,6 +652,8 @@
 		AM.forceMove(src)
 		if(istype(AM, /obj/item/delivery/large) && !hasmob)
 			var/obj/item/delivery/large/T = AM
+			for(var/obj/structure/closet/crate/my_box in T.contents)
+				my_box.jiggle_all(W_CLASS_SMALL) //Properly packaged, less shaking!
 			src.destinationTag = T.sortTag
 		if(istype(AM, /obj/item/delivery) && !hasmob)
 			var/obj/item/delivery/T = AM
@@ -618,6 +661,9 @@
 		if(istype(AM, /obj/item/weapon/paper/envelope) && !hasmob)
 			var/obj/item/weapon/paper/envelope/E = AM
 			src.destinationTag = E.sortTag
+		if(istype(AM, /obj/structure/closet/crate))
+			var/obj/structure/closet/crate/my_box = AM
+			my_box.jiggle_all(W_CLASS_MEDIUM)
 
 // start the movement process
 // argument is the disposal unit the holder started in
@@ -1084,11 +1130,12 @@
 		else
 			return mask & (~setbit)
 
+var/list/obj/structure/disposalpipe/sortjunction/sort_junctions = list()
+
 //a three-way junction that sorts objects
 /obj/structure/disposalpipe/sortjunction
 	icon_state = "pipe-j1s"
-	var/sortType = 0 //Deprecated, here for legacy support.
-	var/sort_tag //Replacement of the above, more construction friendly.
+	var/list/sort_tags = list() //Replacement of the above, more construction friendly.
 
 	var/posdir = 0
 	var/negdir = 0
@@ -1096,8 +1143,8 @@
 
 /obj/structure/disposalpipe/sortjunction/proc/updatedesc()
 	desc = "An underfloor disposal pipe with a package sorting mechanism."
-	if(sort_tag)
-		desc += "\nIt's tagged with [sort_tag]."
+	if(sort_tags.len)
+		desc += "\nIt's tagged with [english_list(sort_tags)]."
 
 /obj/structure/disposalpipe/sortjunction/update_dir()
 	posdir = dir
@@ -1116,24 +1163,29 @@
 
 /obj/structure/disposalpipe/sortjunction/New()
 	. = ..()
-	if(sortType && !sort_tag)
-		sort_tag = uppertext(map.default_tagger_locations[sortType])
-
-	else if(sort_tag)
-		sort_tag = uppertext(sort_tag)
-
+	sort_junctions += src
+	if(sort_tags.len)
+		for(var/idx in 1 to sort_tags.len) //has to be like this or it won't modify
+			sort_tags[idx] = uppertext(sort_tags[idx])
 	update_dir()
 	updatedesc()
 	update()
+
+/obj/structure/disposalpipe/sortjunction/Destroy()
+	sort_junctions -= src
+	. = ..()
 
 /obj/structure/disposalpipe/sortjunction/attackby(var/obj/item/I, var/mob/user)
 	if(istype(I, /obj/item/device/destTagger))
 		var/obj/item/device/destTagger/O = I
 
 		if(O.currTag)// Tag set
-			sort_tag = uppertext(O.destinations[O.currTag])
+			if(O.add_tag)
+				sort_tags |= list(uppertext(O.destinations[O.currTag]))
+			else
+				sort_tags = list(uppertext(O.destinations[O.currTag]))
 			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
-			to_chat(user, "<span class='notice'>Changed filter to [sort_tag]</span>")
+			to_chat(user, "<span class='notice'>Changed filter to [english_list(sort_tags)]</span>")
 			updatedesc()
 		return 1
 
@@ -1147,7 +1199,7 @@
 	//var/flipdir = turn(fromdir, 180)
 	if(fromdir != sortdir)	// probably came from the negdir
 
-		if(sort_tag == sortTag) //if destination matches filtered type...
+		if(sortTag in sort_tags) //if destination matches filtered type...
 			return sortdir		// exit through sortdirection
 		else
 			return posdir
@@ -1177,157 +1229,199 @@
 ////////////////// SortJunctionSubtypes//////////////////
 
 /obj/structure/disposalpipe/sortjunction/Disposals
-	sort_tag = DISP_DISPOSALS
+	sort_tags = list(DISP_DISPOSALS)
 
 /obj/structure/disposalpipe/sortjunction/Disposals/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Cargo
-	sort_tag = DISP_CARGO_BAY
+	sort_tags = list(DISP_CARGO_BAY)
 
 /obj/structure/disposalpipe/sortjunction/Cargo/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/QM
-	sort_tag = DISP_QM_OFFICE
+	sort_tags = list(DISP_QM_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/QM/mirrored
 	icon_state = "pipe-j2s"
 
+/obj/structure/disposalpipe/sortjunction/GenEngineering
+	sort_tags = list(DISP_ENGINEERING,DISP_CE_OFFICE,DISP_ATMOSPHERICS)
+
+/obj/structure/disposalpipe/sortjunction/GenEngineering/mirrored
+	icon_state = "pipe-j2s"
+
 /obj/structure/disposalpipe/sortjunction/Engineering
-	sort_tag = DISP_ENGINEERING
+	sort_tags = list(DISP_ENGINEERING)
 
 /obj/structure/disposalpipe/sortjunction/Engineering/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/CE
-	sort_tag = DISP_CE_OFFICE
+	sort_tags = list(DISP_CE_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/CE/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Atmos
-	sort_tag = DISP_ATMOSPHERICS
+	sort_tags = list(DISP_ATMOSPHERICS)
 
 /obj/structure/disposalpipe/sortjunction/Atmos/mirrored
 	icon_state = "pipe-j2s"
 
+/obj/structure/disposalpipe/sortjunction/GenSecurity
+	sort_tags = list(DISP_SECURITY,DISP_HOS_OFFICE,DISP_DETECTIVE,DISP_WARDEN,DISP_IAA)
+
+/obj/structure/disposalpipe/sortjunction/GenSecurity/mirrored
+	icon_state = "pipe-j2s"
+
 /obj/structure/disposalpipe/sortjunction/Security
-	sort_tag = DISP_SECURITY
+	sort_tags = list(DISP_SECURITY)
 
 /obj/structure/disposalpipe/sortjunction/Security/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/HoS
-	sort_tag = DISP_HOS_OFFICE
+	sort_tags = list(DISP_HOS_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/HoS/mirrored
 	icon_state = "pipe-j2s"
 
+/obj/structure/disposalpipe/sortjunction/Warden
+	sort_tags = list(DISP_WARDEN)
+
+/obj/structure/disposalpipe/sortjunction/Warden/mirrored
+	icon_state = "pipe-j2s"
+
+/obj/structure/disposalpipe/sortjunction/Detective
+	sort_tags = list(DISP_DETECTIVE)
+
+/obj/structure/disposalpipe/sortjunction/Detective/mirrored
+	icon_state = "pipe-j2s"
+
+/obj/structure/disposalpipe/sortjunction/IAA
+	sort_tags = list(DISP_IAA)
+
+/obj/structure/disposalpipe/sortjunction/IAA/mirrored
+	icon_state = "pipe-j2s"
+
+/obj/structure/disposalpipe/sortjunction/GenMedbay
+	sort_tags = list(DISP_MEDBAY,DISP_CMO_OFFICE,DISP_CHEMISTRY)
+
+/obj/structure/disposalpipe/sortjunction/GenMedbay/mirrored
+	icon_state = "pipe-j2s"
+
 /obj/structure/disposalpipe/sortjunction/Medbay
-	sort_tag = DISP_MEDBAY
+	sort_tags = list(DISP_MEDBAY)
 
 /obj/structure/disposalpipe/sortjunction/Medbay/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/CMO
-	sort_tag = DISP_CMO_OFFICE
+	sort_tags = list(DISP_CMO_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/CMO/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Chemistry
-	sort_tag = DISP_CHEMISTRY
+	sort_tags = list(DISP_CHEMISTRY)
 
 /obj/structure/disposalpipe/sortjunction/Chemistry/mirrored
 	icon_state = "pipe-j2s"
 
+/obj/structure/disposalpipe/sortjunction/GenResearch
+	sort_tags = list(DISP_RESEARCH,DISP_RD_OFFICE,DISP_ROBOTICS)
+
+/obj/structure/disposalpipe/sortjunction/GenResearch/mirrored
+	icon_state = "pipe-j2s"
+
 /obj/structure/disposalpipe/sortjunction/Research
-	sort_tag = DISP_RESEARCH
+	sort_tags = list(DISP_RESEARCH)
 
 /obj/structure/disposalpipe/sortjunction/Research/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/RD
-	sort_tag = DISP_RD_OFFICE
+	sort_tags = list(DISP_RD_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/RD/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Robotics
-	sort_tag = DISP_ROBOTICS
+	sort_tags = list(DISP_ROBOTICS)
 
 /obj/structure/disposalpipe/sortjunction/Robotics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/HoP
-	sort_tag = DISP_HOP_OFFICE
+	sort_tags = list(DISP_HOP_OFFICE)
 
 /obj/structure/disposalpipe/sortjunction/HoP/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Library
-	sort_tag = DISP_LIBRARY
+	sort_tags = list(DISP_LIBRARY)
 
 /obj/structure/disposalpipe/sortjunction/Library/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Chapel
-	sort_tag = DISP_CHAPEL
+	sort_tags = list(DISP_CHAPEL)
 
 /obj/structure/disposalpipe/sortjunction/Chapel/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Theatre
-	sort_tag = DISP_THEATRE
+	sort_tags = list(DISP_THEATRE)
 
 /obj/structure/disposalpipe/sortjunction/Theatre/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Bar
-	sort_tag = DISP_BAR
+	sort_tags = list(DISP_BAR)
 
 /obj/structure/disposalpipe/sortjunction/Bar/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Kitchen
-	sort_tag = DISP_KITCHEN
+	sort_tags = list(DISP_KITCHEN)
 
 /obj/structure/disposalpipe/sortjunction/Kitchen/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Hydroponics
-	sort_tag = DISP_HYDROPONICS
+	sort_tags = list(DISP_HYDROPONICS)
 
 /obj/structure/disposalpipe/sortjunction/Hydroponics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Janitor
-	sort_tag = DISP_JANITOR_CLOSET
+	sort_tags = list(DISP_JANITOR_CLOSET)
 
 /obj/structure/disposalpipe/sortjunction/Janitor/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Genetics
-	sort_tag = DISP_GENETICS
+	sort_tags = list(DISP_GENETICS)
 
 /obj/structure/disposalpipe/sortjunction/Genetics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Telecomms
-	sort_tag = DISP_TELECOMMS
+	sort_tags = list(DISP_TELECOMMS)
 
 /obj/structure/disposalpipe/sortjunction/Telecomms/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Mechanics
-	sort_tag = DISP_MECHANICS
+	sort_tags = list(DISP_MECHANICS)
 
 /obj/structure/disposalpipe/sortjunction/Mechanics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Telescience
-	sort_tag = DISP_TELESCIENCE
+	sort_tags = list(DISP_TELESCIENCE)
 
 /obj/structure/disposalpipe/sortjunction/Telescience/mirrored
 	icon_state = "pipe-j2s"
@@ -1541,7 +1635,7 @@
 	// for broken pipe, remove and turn into scrap
 
 /obj/structure/disposalpipe/broken/welded()
-//	var/obj/item/scrap/S = new(src.loc)
+//	var/obj/item/trash/scrap/S = new(src.loc)
 //	S.set_components(200,0,0)
 	qdel(src)
 

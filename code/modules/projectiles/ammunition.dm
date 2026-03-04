@@ -97,7 +97,7 @@
 		if((exact && (AC.type == text2path(ammo_type))) || (!exact && (AC.caliber == caliber)))
 			accepted = 1
 		else
-			to_chat(user, "<span class='warning'>\the [AC] does not fit into [src]. </span>")
+			to_chat(user, "<span class='warning'>\The [AC] does not fit into [src]. </span>")
 			return
 		if(AC.BB && accepted && stored_ammo.len < max_ammo)
 			if(user.drop_item(A, src, failmsg = TRUE))
@@ -166,6 +166,8 @@
 			break
 		if (!do_after(usr, target, reload_delay, 5))
 			return fumbleLoad(bullets_from, target)
+		if (PW.loaded.len + PW.refuse.len >= PW.max_shells)
+			return fumbleLoad(bullets_from, target)
 
 		bullets_from.stored_ammo -= loading
 		PW.loaded += loading
@@ -199,6 +201,8 @@
 		if (!((AS.exact && (loading.type == text2path(AS.ammo_type))) || (!AS.exact && (bullets_from.caliber == caliber)))) // If not exact, check if same caliber
 			break
 		if (!do_after(usr, target, 5, 5))
+			return fumbleLoad(bullets_from, target)
+		if (AS.stored_ammo.len >= AS.max_ammo)
 			return fumbleLoad(bullets_from, target)
 
 		bullets_from.stored_ammo -= loading

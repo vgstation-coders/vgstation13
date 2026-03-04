@@ -9,6 +9,7 @@ var/list/obj/abstract/screen/interface/tooltip/CrewIcon/cmc_holomap_cache = list
 #define ENTRY_AREA 8
 #define ENTRY_IJOB 9
 #define ENTRY_POS 10
+#define ENTRY_SEE_Z 11
 
 #define DAMAGE_OXYGEN 1
 #define DAMAGE_TOXIN 2
@@ -86,15 +87,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//DO touch, for mappers to varedit
 	var/holomap_filter //can make the cmc display syndie/vox hideout
-	var/list/holomap_z_levels_mapped = list() //all z-level which should be mapped
-	var/list/holomap_z_levels_unmapped = list() //all z-levels which should not be mapped but should still be scanned for people
-
-/obj/machinery/computer/crew/New()
-	..()
-	if(!holomap_z_levels_mapped.len)
-		holomap_z_levels_mapped = list(map.zMainStation, map.zAsteroid, map.zDerelict)
-	if(!holomap_z_levels_unmapped.len)
-		holomap_z_levels_unmapped = list(map.zTCommSat, map.zDeepSpace)
 
 /obj/machinery/computer/crew/Destroy()
 	deactivateAll()
@@ -118,11 +110,11 @@ GENERAL PROCS
 	holomap_images[uid] = list()
 	holomap_tooltips[uid] = list()
 	freeze[uid] = 0
-	holomap_z[uid] = map.zMainStation
+	holomap_z[uid] = 0 // 0 means show all z-levels
 	textview_updatequeued[uid] = 1
 	holomap[uid] = 0
 	scanCrew() //else the first user has to wait for process to fire
-	updateTextView(user)
+	tgui_interact(user)
 
 //ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
@@ -137,25 +129,26 @@ GENERAL PROCS
 
 /obj/machinery/computer/crew/proc/processUser(var/mob/user)
 	var/uid = "\ref[user]"
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
+	var/datum/tgui/ui = SStgui.get_open_ui(user, src)
 	if(!ui)
 		deactivate(user)
 		return
 
-	var/list/mapped_and_unmapped = holomap_z_levels_mapped | holomap_z_levels_unmapped
+	// Build list of valid vLevel IDs (those with gps_allowed)
+	var/list/valid_vlevels = list()
+	for(var/datum/virtual_z/V in map.vLevels)
+		if(V.gps_allowed)
+			valid_vlevels += V.id
 
-	if(!(holomap_z[uid] in mapped_and_unmapped)) //catching some more unwanted behaviours
-		if(mapped_and_unmapped.len > 0)
-			holomap_z[uid] = mapped_and_unmapped[1]
+	// 0 means "ALL" vLevels, which is always valid
+	if(holomap_z[uid] != 0 && !(holomap_z[uid] in valid_vlevels)) //catching some more unwanted behaviours
+		if(valid_vlevels.len > 0)
+			holomap_z[uid] = valid_vlevels[1]
 		else
 			deactivate(user)
 
-	//apparently STATUS_INTERACTIVE is undefined, so we are gonna use 2
-	if(ui.status < 2) //we are not updating YOUR window
-		return
-
 	if(textview_updatequeued[uid])
-		updateTextView(user)
+		SStgui.update_uis(src)
 
 	if(!freeze[uid])
 		updateVisuals(user)
@@ -180,11 +173,11 @@ GENERAL PROCS
 
 //scans every crewmember/mmi and puts them into their respective entrylist
 /obj/machinery/computer/crew/proc/scanCrew()
-	//clearing all z-level entries
-	var/list/all_tracked_z_levels = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_dsc) //z-levels sorted by num
-	entries.len = all_tracked_z_levels[1]
-	for(var/level in all_tracked_z_levels)
-		entries[level] = list()
+	//clearing all vLevel entries
+	entries = list()
+	for(var/datum/virtual_z/V in map.vLevels)
+		if(V.gps_allowed)
+			entries["[V.id]"] = list()
 
 	//looping though carbons
 	for(var/mob/living/carbon/human/H in mob_list)
@@ -199,16 +192,25 @@ GENERAL PROCS
 		var/ijob
 		var/see_x
 		var/see_y
+		var/see_z
 
-		// z == 0 means mob is inside object, check is they are wearing a uniform
+		// z == 0 means mob is inside object, check if they are wearing a uniform
 		if(istype(H.w_uniform, /obj/item/clothing/under))
 			var/obj/item/clothing/under/U = H.w_uniform
 
 			if (U.has_sensor && U.sensor_mode)
-				var/turf/pos = H.z == 0 || U.sensor_mode == 3 ? get_turf(H) : null
+				// Always get the turf to check gps_allowed
+				var/turf/entry_turf = get_turf(H)
+				if(!entry_turf)
+					continue
 
 				// Special case: If the mob is inside an object confirm the z-level on turf level.
-				if (H.z == 0 && (!pos || pos.z != z))
+				if (H.z == 0 && entry_turf.z != z)
+					continue
+
+				// Get virtual z-level and check gps_allowed
+				var/datum/virtual_z/entry_vz = entry_turf.get_virtual_z()
+				if(!entry_vz || !entry_vz.gps_allowed)
 					continue
 
 				var/obj/item/weapon/card/id/I = H.wear_id ? H.wear_id.GetID() : null
@@ -228,15 +230,16 @@ GENERAL PROCS
 				if (U.sensor_mode >= 2)
 					damage = list(round(H.getOxyLoss(),1), round(H.getToxLoss(),1), round(H.getFireLoss(),1), round(H.getBruteLoss(),1))
 
-				if(pos)
+				// Only show location data if sensor_mode == 3 and not on a planet
+				if(U.sensor_mode == 3 && !entry_vz.planet)
 					player_area = format_text(get_area(H).name)
-					see_x = pos.x - WORLD_X_OFFSET[pos.z]
-					see_y = pos.y - WORLD_Y_OFFSET[pos.z]
+					see_x = H.vx() - get_world_x_offset(entry_vz.id)
+					see_y = H.vy() - get_world_y_offset(entry_vz.id)
+					see_z = entry_vz.id
 
-				//incase we dont get a pos
-				var/turf/entry_z = get_turf(H)
-				if(entry_z.z in all_tracked_z_levels)
-					entries[entry_z.z][++entries[entry_z.z].len] = list(see_x, see_y, H, name, assignment, life_status, damage, player_area, ijob, pos)
+				var/vz_key = "[entry_vz.id]"
+				if(vz_key in entries)
+					entries[vz_key][++entries[vz_key].len] = list(see_x, see_y, H, name, assignment, life_status, damage, player_area, ijob, entry_turf, see_z)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
@@ -250,10 +253,14 @@ GENERAL PROCS
 			continue
 
 		var/turf/pos = get_turf(B)
-		if(!isnull(pos) && (pos.z in all_tracked_z_levels) && istype(M) && M.brainmob == B && !isrobot(M.loc))
-			var/see_x = pos.x - WORLD_X_OFFSET[pos.z]
-			var/see_y = pos.y - WORLD_Y_OFFSET[pos.z]
-			entries[pos.z][++entries[pos.z].len] = list(see_x, see_y, B, "[B]", "MMI", null, null, parea, 60, pos)
+		var/datum/virtual_z/vz = pos?.get_virtual_z()
+		if(!isnull(pos) && vz && vz.gps_allowed && istype(M) && M.brainmob == B && !isrobot(M.loc))
+			var/see_x = pos.x - get_world_x_offset(vz.id)
+			var/see_y = pos.y - get_world_y_offset(vz.id)
+			var/see_z = vz.id
+			var/vz_key = "[vz.id]"
+			if(vz_key in entries)
+				entries[vz_key][++entries[vz_key].len] = list(see_x, see_y, B, "[B]", "MMI", null, null, parea, 60, pos, see_z)
 
 //helper to get healthstate, used in both holomap and textview
 /obj/machinery/computer/crew/proc/getLifeIcon(var/list/damage)
@@ -280,17 +287,21 @@ HOLOMAP PROCS
 */
 //initializes the holomap
 /obj/machinery/computer/crew/proc/openHolomap(var/mob/user)
-	var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
-	for(var/z_level in all_ui_z_levels)
-		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z_level]"
+	// Create holomap images for each vLevel with gps_allowed
+	for(var/datum/virtual_z/V in map.vLevels)
+		if(!V.gps_allowed)
+			continue
+		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[V.id]"
 		if(!(holomap_bgmap in holomap_cache))
 			var/image/background = image('icons/480x480.dmi', "stationmap_blue")
-			if(z_level in holomap_z_levels_mapped)
-				if(z_level == map.zMainStation || z_level == map.zAsteroid || z_level == map.zDerelict)
-					var/image/station_outline = image(holoMiniMaps[z_level])
+			var/real_z = V.parent_z.z
+			// Check if we have a holomap for the real z-level
+			if((holoMiniMaps.len >= real_z) && (holoMiniMaps[real_z] != null))
+				if(real_z == map.zMainStation || real_z == map.zAsteroid || real_z == map.zDerelict)
+					var/image/station_outline = image(holoMiniMaps[real_z])
 					station_outline.color = "#DEE7FF"
 					station_outline.alpha = 200
-					var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[z_level]"])
+					var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[real_z]"])
 					station_areas.alpha = 150
 					background.overlays += station_areas
 					background.overlays += station_outline
@@ -299,19 +310,22 @@ HOLOMAP PROCS
 			background.layer = HUD_BASE_LAYER
 			holomap_cache[holomap_bgmap] = background
 
-	//z2 override if nukeops or voxraider
+	//nukeops or voxraider override for centcomm vLevels
 	if(holomap_filter & (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
-		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_2"
-		var/image/background = image('icons/480x480.dmi', "stationmap_blue")
-		var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
-		station_outline.color = "#DEE7FF"
-		station_outline.alpha = 200
-		background.overlays += station_outline
-		background.alpha = 0
-		background.plane = HUD_PLANE
-		background.layer = HUD_BASE_LAYER
-		holomap_cache[holomap_bgmap] = background
-		holomap_z_levels_unmapped |= map.zCentcomm
+		// Find the centcomm vLevel
+		for(var/datum/virtual_z/V in map.getAllVLevels())
+			if(V.parent_z.z == map.zCentcomm && V.gps_allowed)
+				var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[V.id]"
+				var/image/background = image('icons/480x480.dmi', "stationmap_blue")
+				var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
+				station_outline.color = "#DEE7FF"
+				station_outline.alpha = 200
+				background.overlays += station_outline
+				background.alpha = 0
+				background.plane = HUD_PLANE
+				background.layer = HUD_BASE_LAYER
+				holomap_cache[holomap_bgmap] = background
+				break
 
 	holomap["\ref[user]"] = 1
 
@@ -356,20 +370,24 @@ HOLOMAP PROCS
 		holomap_tooltips[uid] = new()
 
 		var/image/bgmap
-		var/z = holomap_z[uid]
-		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z]"
+		var/vz_id = holomap_z[uid]
+		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[vz_id]"
 
-		bgmap = holomap_cache[holomap_bgmap]
-		bgmap.loc = user.hud_used.holomap_obj
+		if(z != 0)
+			bgmap = holomap_cache[holomap_bgmap]
+			if(bgmap)
+				bgmap.loc = user.hud_used.holomap_obj
 
-		animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
+				animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
 
-		holomap_images[uid] |= bgmap
+				holomap_images[uid] |= bgmap
 
-		for(var/entry in entries[holomap_z[uid]])
-			//can only be our z, so i'm not checking that, only if we have a pos
-			if(entry[ENTRY_POS])
-				addCrewMarker(user, entry[ENTRY_SEE_X], entry[ENTRY_SEE_Y], entry[ENTRY_MOB], entry[ENTRY_NAME], entry[ENTRY_ASSIGNMENT], entry[ENTRY_STAT], entry[ENTRY_DAMAGE], entry[ENTRY_AREA], entry[ENTRY_POS])
+		var/vz_key = "[vz_id]"
+		if(vz_key in entries)
+			for(var/entry in entries[vz_key])
+				//can only be our vz, so i'm not checking that, only if we have a pos
+				if(entry[ENTRY_POS])
+					addCrewMarker(user, entry[ENTRY_SEE_X], entry[ENTRY_SEE_Y], entry[ENTRY_MOB], entry[ENTRY_NAME], entry[ENTRY_ASSIGNMENT], entry[ENTRY_STAT], entry[ENTRY_DAMAGE], entry[ENTRY_AREA], entry[ENTRY_POS])
 
 		user.client.images |= holomap_images[uid]
 		user.client.screen |= holomap_tooltips[uid]
@@ -431,118 +449,165 @@ HOLOMAP PROCS
 	holomap_tooltips[user_uid] |= I
 
 /*
-TEXTVIEW PROCS
+TGUI PROCS
 */
-/obj/machinery/computer/crew/Topic(href, href_list)
-	var/uid = "\ref[usr]"
-	if(href_list["close"])
-		deactivate(usr)
-	else if(href_list["toggle"])
-		textview_updatequeued[uid] = !textview_updatequeued[uid]
-		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
-		if(ui)
-			ui.send_message("toggleUpdatebtn", list2params(list(json_encode(textview_updatequeued[uid])))) //using the actual setting sorts out any btn icon sync issues
-		updateTextView(usr)
-	else if(href_list["holo"])
-		if(holomap[uid])
-			closeHolomap(usr)
-		else
-			if(handle_sanity(usr))
-				openHolomap(usr)
-				processUser(usr)
-	else if(href_list["setZ"])
-		var/num = href_list["setZ"]
-		if(!isnum(num))
-			num = text2num(num)
-			if(!num)
-				return 1//something fucked up
-
-		holomap_z[uid] = num
-		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
-		if(ui)
-			ui.send_message("levelSet", list2params(list(num))) //feedback
-		processUser(usr) //we need to update both the holomap AND the textview
-	var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
-	if(ui)
-		ui.send_message("messageReceived") //to stop that loading button shit
-	return 1
-
-//updates/opens the textview
-/obj/machinery/computer/crew/proc/updateTextView(var/mob/user)
-	var/uid = "\ref[user]"
-
-	//adding table rows
-	var/list/all_data = list()
-	for(var/entry in entries[holomap_z[uid]])
-		var/list/data = list()
-		if(entry[ENTRY_SEE_X] && entry[ENTRY_SEE_Y])
-			data["see"] = list()
-			data["see"]["x"] = entry[ENTRY_SEE_X]
-			data["see"]["y"] = entry[ENTRY_SEE_Y]
-		data["name"] = entry[ENTRY_NAME]
-		data["job"] = entry[ENTRY_ASSIGNMENT]
-		if(entry[ENTRY_DAMAGE])
-			data["damage"] = list()
-			data["damage"]["oxygen"] = entry[ENTRY_DAMAGE][DAMAGE_OXYGEN]
-			data["damage"]["toxin"] = entry[ENTRY_DAMAGE][DAMAGE_TOXIN]
-			data["damage"]["fire"] = entry[ENTRY_DAMAGE][DAMAGE_FIRE]
-			data["damage"]["brute"] = entry[ENTRY_DAMAGE][DAMAGE_BRUTE]
-		data["area"] = entry[ENTRY_AREA]
-
-		var/ijob = entry[ENTRY_IJOB]
-		var/role
-		switch(ijob)
-			if(0)	role = "cap" // captain
-			if(10 to 19) role = "sec" // security
-			if(20 to 29) role = "med" // medical
-			if(30 to 39) role = "sci"	 // science
-			if(40 to 49) role = "eng" // engineering
-			if(50 to 59) role = "car" // cargo
-			if(60 to 69) role = "silicon" //silicon
-			if(200 to 229) role = "cent"
-			else role = "unk"
-		data["role"] = role
-
-		var/mob/living/carbon/H = entry[ENTRY_MOB]
-		var/stat = entry[ENTRY_STAT]
-		var/icon
-		if(istype(H, /mob/living/carbon/human))
-			if(stat != 2)
-				if(entry[ENTRY_DAMAGE])
-					icon = getLifeIcon(entry[ENTRY_DAMAGE])
-				else
-					icon = "0"
-			else
-				icon = "6"
-		else
-			icon = "7"
-		data["icon"] = icon
-
-		all_data["[all_data.len+1]"] = data
-
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
-	if (!ui)
-		if(user.client)
-			var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
-			send_asset_list(user.client, C.assets)
-
-		ui = new(user, src, "textview", "cmc.tmpl", "Crew Monitoring", 900, 600)
-		ui.add_stylesheet("cmc.css")
-		var/list/i_data = list()
-		i_data["update"] = textview_updatequeued[uid]
-		i_data["levels"] = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc)
-		ui.set_initial_data(i_data)
+/obj/machinery/computer/crew/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "CrewMonitor")
 		ui.open()
+	var/uid = "\ref[user]"
+	ui.set_autoupdate(textview_updatequeued[uid])
 
-	if(all_data.len) //sending an empty list seems to create some fuckery
-		ui.send_message("populateTable", list2params(list(json_encode(all_data))))
+/obj/machinery/computer/crew/ui_data(mob/user)
+	var/uid = "\ref[user]"
+	var/list/data = list()
+
+	// Get current vLevel setting (0 = ALL)
+	var/current_z = holomap_z[uid]
+	if(isnull(current_z))
+		current_z = 0
+		holomap_z[uid] = 0
+
+	data["currentZLevel"] = current_z
+
+	// Build list of vLevels with gps_allowed and their holomap availability
+	var/list/vlevel_data = list()
+	for(var/datum/virtual_z/V in map.vLevels)
+		if(V.gps_allowed)
+			var/real_z = V.parent_z.z
+			var/has_holomap = (holoMiniMaps.len >= real_z) && (holoMiniMaps[real_z] != null)
+			vlevel_data += list(list(
+				"id" = V.id,
+				"name" = V.name,
+				"hasHolomap" = has_holomap
+			))
+
+	data["zLevels"] = vlevel_data
+	data["holomapEnabled"] = holomap[uid]
+	data["holomapAvailable"] = handle_sanity(user)
+	data["autoUpdate"] = textview_updatequeued[uid]
+
+	// Build crew list - if current_z is 0, show all vLevels
+	var/list/crew_data = list()
+	var/count = 0
+	var/list/vlevels_to_scan = list()
+	if(current_z == 0)
+		for(var/datum/virtual_z/V in map.vLevels)
+			if(V.gps_allowed)
+				vlevels_to_scan += "[V.id]"
 	else
-		ui.send_message("noData")
+		vlevels_to_scan += "[current_z]"
+
+	for(var/vz_key in vlevels_to_scan)
+		if(!(vz_key in entries))
+			continue
+		for(var/entry in entries[vz_key])
+			count++
+			var/list/crew_entry = list()
+
+			crew_entry["name"] = entry[ENTRY_NAME]
+			crew_entry["job"] = entry[ENTRY_ASSIGNMENT]
+			crew_entry["vitals"] = entry[ENTRY_STAT]
+			crew_entry["area"] = entry[ENTRY_AREA]
+
+			if(entry[ENTRY_SEE_X] && entry[ENTRY_SEE_Y])
+				crew_entry["see_x"] = entry[ENTRY_SEE_X]
+				crew_entry["see_y"] = entry[ENTRY_SEE_Y]
+				crew_entry["see_z"] = entry[ENTRY_SEE_Z]
+			else
+				crew_entry["see_x"] = null
+				crew_entry["see_y"] = null
+				crew_entry["see_z"] = null
+
+			if(entry[ENTRY_DAMAGE])
+				crew_entry["damage"] = list(
+					"oxygen" = entry[ENTRY_DAMAGE][DAMAGE_OXYGEN],
+					"toxin" = entry[ENTRY_DAMAGE][DAMAGE_TOXIN],
+					"fire" = entry[ENTRY_DAMAGE][DAMAGE_FIRE],
+					"brute" = entry[ENTRY_DAMAGE][DAMAGE_BRUTE]
+				)
+			else
+				crew_entry["damage"] = null
+
+			// Determine role category
+			var/ijob = entry[ENTRY_IJOB]
+			var/role
+			switch(ijob)
+				if(0) role = "cap"
+				if(10 to 19) role = "sec"
+				if(20 to 29) role = "med"
+				if(30 to 39) role = "sci"
+				if(40 to 49) role = "eng"
+				if(50 to 59) role = "car"
+				if(60 to 69) role = "silicon"
+				if(200 to 229) role = "cent"
+				else role = "unk"
+			crew_entry["role"] = role
+
+			// Determine icon
+			var/mob/living/carbon/H = entry[ENTRY_MOB]
+			var/stat = entry[ENTRY_STAT]
+			var/icon
+			if(istype(H, /mob/living/carbon/human))
+				if(stat != DEAD)
+					if(entry[ENTRY_DAMAGE])
+						icon = getLifeIcon(entry[ENTRY_DAMAGE])
+					else
+						icon = "0"
+				else
+					icon = "6"
+			else
+				icon = "7"
+			crew_entry["icon"] = icon
+			crew_entry["count"] = count
+
+			crew_data += list(crew_entry)
+
+	data["detectedCrew"] = crew_data
+	data["detected"] = crew_data.len > 0
+
+	return data
+
+/obj/machinery/computer/crew/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+	if(..())
+		return
+
+	var/uid = "\ref[usr]"
+
+	switch(action)
+		if("toggle_update")
+			textview_updatequeued[uid] = !textview_updatequeued[uid]
+			ui.set_autoupdate(textview_updatequeued[uid])
+			return TRUE
+
+		if("toggle_holomap")
+			if(holomap[uid])
+				closeHolomap(usr)
+			else
+				if(handle_sanity(usr))
+					openHolomap(usr)
+					processUser(usr)
+			return TRUE
+
+		if("set_zlevel")
+			var/num = params["zlevel"]
+			if(!isnum(num))
+				num = text2num(num)
+			if(isnull(num))
+				return FALSE
+
+			// 0 means "ALL" z-levels, otherwise must be a valid z-level
+			holomap_z[uid] = num
+			processUser(usr)
+			return TRUE
+
+	return FALSE
 
 //makes sure everything is set for us to have a closed window and keep it that way
 /obj/machinery/computer/crew/proc/closeTextview(var/mob/user)
 	textview_updatequeued["\ref[user]"] = 0
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
+	var/datum/tgui/ui = SStgui.get_open_ui(user, src)
 	if(ui)
 		ui.close()
 
@@ -561,10 +626,11 @@ Tooltip interface
 	parseAdd = A
 
 /obj/abstract/screen/interface/tooltip/MouseEntered(location,control,params)
-	openToolTip(user, src, params, title = title, content = content)
+	//openToolTip(user, src, params, title = title, content = content)
+	usr.client?.tooltips.show(src, mouse=params, title=title, content=content)
 
 /obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
-	closeToolTip(user)
+	usr.client?.tooltips.hide()
 
 /obj/abstract/screen/interface/tooltip/Click(location,control,params)
 	..()
@@ -607,6 +673,7 @@ Tooltip interface
 #undef ENTRY_AREA
 #undef ENTRY_IJOB
 #undef ENTRY_POS
+#undef ENTRY_SEE_Z
 #undef DAMAGE_OXYGEN
 #undef DAMAGE_TOXIN
 #undef DAMAGE_FIRE

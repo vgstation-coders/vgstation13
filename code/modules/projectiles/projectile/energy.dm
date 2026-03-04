@@ -2,12 +2,12 @@
 	name = "energy"
 	icon_state = "spark"
 	damage = 0
-	layer = PROJECTILE_LAYER
+	layer = ABOVE_LIGHTING_LAYER
 	damage_type = BURN
 	flag = "energy"
 	fire_sound = 'sound/weapons/Taser.ogg'
-	plane = EFFECTS_PLANE
-
+	plane = ABOVE_LIGHTING_PLANE
+	luminosity = 2
 
 /obj/item/projectile/energy/electrode
 	name = "electrode"
@@ -19,6 +19,8 @@
 	jittery = 20
 	agony = 10
 	hitsound = 'sound/weapons/taserhit.ogg'
+	var/movement_speed_reduction = 0.75
+	var/speed_reduction_duration = 30
 
 /obj/item/projectile/energy/electrode/hit_apply(var/mob/living/X, var/blocked)
 	if (ismanifested(X))
@@ -29,9 +31,9 @@
 	X.apply_effects(stutter = stutter, blocked = blocked, agony = agony)
 	X.audible_scream()
 	if(X.tazed == 0)
-		X.movement_speed_modifier -= 0.75
-		spawn(30)
-			X.movement_speed_modifier += 0.75
+		X.movement_speed_modifier -= movement_speed_reduction
+		spawn(speed_reduction_duration)
+			X.movement_speed_modifier += movement_speed_reduction
 	X.tazed = 1
 	spawn(30)
 		X.tazed = 0
@@ -40,9 +42,9 @@
 /obj/item/projectile/energy/electrode/robot_on_hit(var/mob/living/atarget, var/blocked)
 	QDEL_NULL(tracker_datum)
 	if(atarget.tazed == 0)
-		atarget.movement_speed_modifier -= 0.75
-		spawn(30)
-			atarget.movement_speed_modifier += 0.75
+		atarget.movement_speed_modifier -= movement_speed_reduction
+		spawn(speed_reduction_duration)
+			atarget.movement_speed_modifier += movement_speed_reduction
 	atarget.tazed = 1
 	spawn(30)
 		atarget.tazed = 0
@@ -286,3 +288,22 @@
 			P.OnFired(T)
 			P.process()
 	..()
+
+//Mooninite laser gun "bullet", moves 1 tile every 3ish seconds, but only "hits" if you are on its target tile
+//you cannot walk into the bullet, the bullet must slowly bleep towards you
+/obj/item/projectile/energy/plasma/mooninite
+	name = "laser bullet"
+	desc = "The bullet is enormous, there is no escaping!"
+	damage = 100 //OH GOD MY BACK!
+	irradiate = 10
+	knockdown_chance = 80
+	icon_state = "mooninite"
+	projectile_speed = 50 //it takes a while
+	lock_angle = 1
+	bounce_sound = 'sound/effects/mooninitebleep.ogg'
+	bounce_type = PROJREACT_WALLS
+	bounces = -1
+
+/obj/item/projectile/energy/plasma/mooninite/process_step()
+	..()
+	playsound(src,'sound/effects/mooninitebleep.ogg',100)

@@ -48,9 +48,9 @@
 
 #define islich(A)  (ishuman(A) && istype(A:species, /datum/species/lich))
 
-#define istruelich(A) ((islich(A) && (iswizard(A) || iswearinglichcrown(A))
+#define istruelich(A) (islich(A) && (iswizard(A) || iswearinglichcrown(A)))
 
-#define iswearinglichcrown(A) (ishuman(A) && (istype(A:head, /obj/item/clothing/head/wizard/skelelich)) //|| istype(A:head, /obj/item/clothing
+#define iswearinglichcrown(A) (ishuman(A) && (istype(A:head, /obj/item/clothing/head/wizard/skelelich))) //|| istype(A:head, /obj/item/clothing
 
 #define ishologram(A) (istype(A, /mob/living/simple_animal/hologram/advanced))
 
@@ -65,6 +65,8 @@
 #define isaliendrone(A)	istype(A, /mob/living/carbon/alien/humanoid/drone)
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
+
+#define ishostile(A) (istype(A, /mob/living/simple_animal/hostile))
 
 #define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
 
@@ -206,7 +208,11 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
+#define isholyweapon(I) (istype(I, /obj/item/weapon/storage/bible)\
+						 || istype(I, /obj/item/weapon/nullrod)\
+						 || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller/true)\
+						 || istype(I, /obj/item/projectile/hookshot/whip/vampkiller/true)\
+						 || istype(I, /obj/item/weapon/boomerang/cross))
 
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
@@ -222,7 +228,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()) || istype(A,/obj/effect/ash))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -236,7 +242,9 @@
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
 
-#define iswall(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall))
+#define iswall(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall) || istype(A, /turf/unsimulated/mineral))
+
+#define isopensurface(A) ((istype(A, /area/surface) || istype(A, /area/planet) || istype(A, /area/exposed_ruin)) && !istype(A, /area/planet/cave))
 
 #define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
 
@@ -328,6 +336,8 @@
 #define isloosecatbeast(H) (H.mind && H.mind.GetRole(CATBEAST))
 
 #define istimeagent(H) (H.mind && (H.mind.GetRole(TIMEAGENT) || (H.mind.GetRole(TIMEAGENTTWIN))))
+
+#define isdivergentclone(H) (H.mind && (H.mind.GetRole(DIVERGENTCLONE)))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
@@ -433,3 +443,8 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 #define OMNI_LINK(A,B) isliving(A) && A:omnitool_connect(B)
 
 #define is_real_champion(A) ismob(A) && A.is_wearing_item(/obj/item/weapon/storage/belt/champion) && A.is_wearing_item(/obj/item/clothing/mask/luchador)
+
+// Call by name proc references, checks if the proc exists on either this type () (AND ONLY THIS TYPE) or as a global proc.
+#define PROC_REF(X) (nameof(.proc/##X))
+
+#define has_initialized_sound_emitter(A) (isatom(A) && A.sound_emitter)

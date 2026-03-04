@@ -3,9 +3,9 @@
 	name = "(vox raiders) Abduct personnel"
 	var/num
 
-/datum/objective/abduct/New(var/dept)
+/datum/objective/abduct/New(var/dept, var/max_abduct=1)
 	. = ..()
-	num = rand(1, 3)
+	num = rand(1, max_abduct)
 	explanation_text = "Abduct [num] qualified personnel from the [dept] departement."
 
 /datum/objective/abduct/IsFulfilled()

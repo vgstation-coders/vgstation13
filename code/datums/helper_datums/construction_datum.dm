@@ -100,7 +100,7 @@
 		text = replacetext(text, "{es}", "es")
 		text = replacetext(text, "{ies}", "ies")
 		text = replacetext(text,"{USER}","[user]")
-	text = replacetext(text,"{HOLDER}","[holder]")
+	text = replacetext(text,"{HOLDER}","\the [holder.name]")
 	return text
 
 /datum/construction/proc/construct_message(step, mob/user, atom/movable/used_atom)

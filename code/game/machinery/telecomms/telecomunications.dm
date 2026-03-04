@@ -108,7 +108,9 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 				"rquote" = signal.data["rquote"],
 				"message_classes" = signal.data["message_classes"],
 				"wrapper_classes" = signal.data["wrapper_classes"],
-				"trace" = signal.data["trace"]
+				"trace" = signal.data["trace"],
+				"virtual_z" = signal.data["virtual_z"],
+				"source_virtual_z" = signal.data["source_virtual_z"]
 			)
 
 			// Keep the "original" signal constant
@@ -498,6 +500,93 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(!can(signal))
 		return 0
 	return receiving
+
+/obj/machinery/telecomms/relay/planetary
+	name = "planetary telecommunications relay"
+	desc = "A relay which provides telecommunications coverage for a planet."
+	icon_state = "relay"
+	on = FALSE
+	toggled = FALSE
+	use_power = MACHINE_POWER_USE_NONE
+	hide = TRUE
+	network = "tcommsat"
+	var/activated = FALSE
+
+/obj/machinery/telecomms/relay/planetary/post_ruin_load()
+	..()
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(!vz)
+		CRASH("Planetary relay spawned on turf without virtual_z at [x],[y],[z]")
+	vz.comms_relay = src
+	var/datum/planet_type/P = vz.planet
+	if(!P)
+		CRASH("Planetary relay spawned on virtual_z without planet at [x],[y],[z]")
+	var/p_name = P.planet_name
+	p_name = replacetext(p_name, " ", "_")
+	autolinkers = list("[p_name]_relay")
+	for(var/obj/machinery/telecomms/hub/H in telecomms_list)
+		H.autolinkers |= list("[p_name]_relay")
+		H.add_link(src)
+
+/obj/machinery/telecomms/relay/planetary/update_power()
+	// Once activated, the relay operates indefinitely without power
+	if(activated)
+		on = TRUE
+		return
+	on = FALSE
+
+/obj/machinery/telecomms/relay/planetary/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
+	if(can(signal) && broadcasting)
+		var/datum/virtual_z/vz = get_virtual_z()
+		signal.data["level"] |= listening_level
+		if(!signal.data["virtual_z"])
+			signal.data["virtual_z"] = list()
+		signal.data["virtual_z"] |= vz
+
+/obj/machinery/telecomms/relay/planetary/can_send(datum/signal/signal)
+	if(!can(signal))
+		return 0
+	if(!broadcasting)
+		return 0
+	return in_virtual_z(signal)
+
+/obj/machinery/telecomms/relay/planetary/can_receive(datum/signal/signal)
+	if(!can(signal))
+		return 0
+	if(!receiving)
+		return 0
+	return in_virtual_z(signal)
+
+/// Checks if the signal originated from the same virtual z as this relay
+/obj/machinery/telecomms/relay/planetary/proc/in_virtual_z(datum/signal/signal)
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(!vz)
+		return FALSE
+
+	var/datum/virtual_z/signal_virtual_z = signal.data["source_virtual_z"]
+	if(signal_virtual_z)
+		return signal_virtual_z == vz
+
+	var/mob/M = signal.data["mob"]
+	if(!M)
+		return FALSE
+
+	var/datum/virtual_z/mob_vz = M.get_virtual_z()
+	if(!mob_vz)
+		return FALSE
+
+	return mob_vz == vz
+
+/obj/machinery/telecomms/relay/planetary/proc/activate()
+	if(activated)
+		return FALSE
+	activated = TRUE
+	toggled = TRUE
+	update_power_and_icon()
+	return TRUE
+
+/obj/machinery/telecomms/relay/planetary/checkheat()
+	return
 
 /*
 	The bus mainframe idles and waits for hubs to relay them signals. They act

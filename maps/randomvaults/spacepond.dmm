@@ -194,7 +194,7 @@
 /area/vault/spacepond)
 "aK" = (
 /obj/structure/coatrack/full,
-/obj/item/clothing/mask/necklace/xeno_claw,
+/obj/item/clothing/accessory/necklace/xeno_claw,
 /turf/simulated/floor/wood{
 	broken = 1;
 	icon_state = "wood-broken4"

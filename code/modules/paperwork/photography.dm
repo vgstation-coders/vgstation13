@@ -80,7 +80,7 @@
 
 	user << browse("<html><head><title>[name]</title></head>" \
 		+ "<body style='overflow:hidden;margin:0;text-align:center'>" \
-		+ "<img src='tmp_photo.png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' />" \
+		+ "<img src='tmp_photo.png' width='[displaylength]' style='image-rendering: pixelated' />" \
 		+ "[scribble ? "<br>Written on the back:<br><i>[scribble]</i>" : ""]"\
 		+ "</body></html>", "window=book;size=[displaylength]x[scribble ? displaylength+108 : displaylength]")
 	if(info) //Would rather not display a blank line of text
@@ -165,6 +165,9 @@
 	w_type = RECYK_ELECTRONIC
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>", "<span class='warning'>A label covers the lens!</span>")
+	slimeadd_message = "You add the slime extract to the camera lens"
+	slimes_accepted = SLIME_SEPIA
+	slimeadd_success_message = "It now has a sepia tinge"
 	var/pictures_max = 10
 	var/pictures_left = 10
 	var/on = TRUE
@@ -195,6 +198,13 @@
 /obj/item/device/camera/Destroy()
 	QDEL_NULL(flashbulb)
 	..()
+
+/obj/item/device/camera/slime_act(primarytype, mob/user)
+	if(primarytype == SLIME_SEPIA && ..())
+		var/obj/item/device/camera/sepia/S = new(user.loc)
+		if(src in user.held_items)
+			user.put_in_hands(S)
+		qdel(src)
 
 /obj/item/device/camera/sepia
 	name = "camera"
@@ -265,7 +275,7 @@
 
 /obj/item/device/camera/cartridge
 	name = "PDA camera"
-	desc = "You should not be seeing this outside of a cartridge"
+	desc = "You should not be seeing this outside of a cartridge."
 	start_with_bulb = FALSE
 	var/obj/item/weapon/cartridge/camera/host_cart = null
 

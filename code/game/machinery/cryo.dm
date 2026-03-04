@@ -33,7 +33,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 /obj/machinery/atmospherics/unary/cryo_cell/Entered(var/atom/movable/Obj, var/atom/OldLoc)
 	. = ..()
-	
+
 	if(OldLoc.type != src.type)
 		spawn(rand(0,6))
 			if(OldLoc.type != src.type)
@@ -82,6 +82,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		node1 = findConnecting(cdir)
 		if(node1)
 			break
+	setup_sound()
 	update_icon()
 
 /obj/machinery/atmospherics/unary/cryo_cell/Destroy()
@@ -106,8 +107,20 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return
 	put_mob(L, user)
 
+/obj/machinery/atmospherics/unary/cryo_cell/setup_sound()
+	sound_emitter = new(src)
+	if (sound_emitter)
+		var/sound/bubbles = sound()
+		bubbles.file = 'sound/machines/looping/bubbles.ogg'
+		bubbles.repeat = 1
+		bubbles.volume = 3
+		sound_emitter.add(bubbles, "bubbles")
+
 /obj/machinery/atmospherics/unary/cryo_cell/proc/get_floaters()
-	var/list/floaters = contents - beaker
+	var/list/floaters = list()
+	for(var/atom/thing in contents)
+		if(thing != beaker && !isobserver(thing))
+			floaters += thing
 	if(floaters.len)
 		return floaters
 	return 0
@@ -148,6 +161,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 	if(stat & (FORCEDISABLE|NOPOWER))
 		on = 0
+		update_icon()
+		update_sound()
 
 	if(!node1)
 		return
@@ -190,7 +205,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	..()
 	if(Adjacent(user))
 		if(contents.len)
-			to_chat(user, "You can just about make out some properties of the cryo's murky depths:")
+			to_chat(user, "You can just about make out some properties of \the [src]'s murky depths:")
 			var/count = 0
 			var/list/stuff = list()
 			for(var/atom/movable/floater in ((contents - beaker) - occupant))
@@ -200,14 +215,14 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 					stuff += floater
 
 			if(occupant)
-				to_chat(user, "A figure floats in the depths, they appear to be [occupant]")
+				to_chat(user, "A figure floats in the depths, they appear to be [occupant].")
 
 			if (count)
 				// Let's just assume you can only have observers if there's a mob too.
-				to_chat(user, "<i>...[count] shape\s float behind them...</i>")
+				to_chat(user, "<i>...[count] shape\s float[count == 1 ? "s" : ""] behind them...</i>")
 
 			if(stuff.len)
-				to_chat(user, "Miscellaneous contents float in the depths, it appears to be [counted_english_list(stuff)]")
+				to_chat(user, "Miscellaneous contents float in the depths, it appears to be [counted_english_list(stuff)].")
 
 			if(beaker)
 				to_chat(user, "A beaker, releasing the following chemicals into the fluids:")
@@ -321,10 +336,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			return
 		on = 1
 		update_icon()
+		update_sound()
 
 	if(href_list["switchOff"])
 		on = 0
 		update_icon()
+		update_sound()
 
 	if(href_list["ejectBeaker"])
 		if(beaker)
@@ -409,10 +426,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		icon_state = "pod[on]"
 
 	for(var/atom/movable/floater in get_floaters())
-		if (!isobserver(floater))
-			vis_contents += floater
-			floater.pixel_y = rand(8,32)
-			floater.pixel_x = rand(-1,1)
+		vis_contents += floater
+		floater.pixel_y = rand(8,32)
+		floater.pixel_x = rand(-1,1)
 
 	if(occupant)
 		vis_contents += occupant
@@ -460,6 +476,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if (on && (beaker == null || beaker.reagents.total_volume == 0))
 		overlays += "nomix"
 
+/obj/machinery/atmospherics/unary/cryo_cell/proc/update_sound()
+	if (on)
+		sound_emitter.play("bubbles")
+	else
+		sound_emitter.stop()
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/process_occupant()
 	if(air_contents.total_moles() < 10)
@@ -639,7 +660,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		M.drop_item(I) // to avoid visual fuckery bobing. Doesn't do anything to items with cant_drop to avoid magic healing tube abuse.
 	update_icon()
 	nanomanager.update_uis(src)
-	M.ExtinguishMob()
+	M.extinguish()
 	M.throw_alert(SCREEN_ALARM_CRYO, /obj/abstract/screen/alert/object/cryo, new_master = src)
 	if(user)
 		if(M == user)
@@ -647,7 +668,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		else
 			visible_message("[user] places [M] into \the [src].")
 	else
-		visible_message("\the [M] is placed into \the [src].")
+		visible_message("\The [M] is placed into \the [src].")
 	return TRUE
 
 /obj/machinery/atmospherics/unary/cryo_cell/verb/move_eject()
@@ -689,6 +710,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		else
 			on = 1
 		update_icon()
+		update_sound()
 
 		message_admins("[key_name(L)] has turned \the [src] [on?"on":"off"]! [formatJumpTo(src)]")
 	else if(occupant && !ejecting) //Eject occupant

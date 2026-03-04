@@ -156,6 +156,8 @@ mob/verb/test()
 	sendAssets(hclient.client)
 
 /datum/html_interface/proc/sendAssets(var/client/client)
+	if (!client)
+		return
 	send_asset(client, "jquery.min.js")
 	send_asset(client, "bootstrap.min.js")
 	send_asset(client, "bootstrap.min.css")

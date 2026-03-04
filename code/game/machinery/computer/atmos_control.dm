@@ -57,7 +57,7 @@ var/global/list/atmos_controllers = list()
 	return interact(user)
 
 /obj/machinery/computer/atmoscontrol/attackby(var/obj/item/I as obj, var/mob/user as mob)
-	if(istype(I, /obj/item/weapon/card/emag))
+	if(isEmag(I))
 		return //lazy hackfix for the UI opening and not updating when using an emag with the UI closed
 	return ..()
 
@@ -191,9 +191,9 @@ var/global/list/atmos_controllers = list()
 			alarm_data["danger"] = max(alarm.local_danger_level, alarm_area.atmosalm-1)
 			alarm_data["name"] = "[alarm]"
 			alarm_data["area"] = get_area(alarm)
-			alarm_data["x"] = pos.x
-			alarm_data["y"] = pos.y
-			alarm_data["z"] = pos.z
+			alarm_data["x"] = pos.vx()
+			alarm_data["y"] = pos.vy()
+			alarm_data["z"] = pos.vz()
 			alarms+=list(alarm_data)
 		data["alarms"]=alarms
 
@@ -220,7 +220,7 @@ var/global/list/atmos_controllers = list()
 	data["aca_screen"] = screen //aca_screen so we don't conflict with air alarms, which already use screen
 
 	var/list/gas_datums=list()
-	for(var/gas_id in XGM.gases)
+	for(var/gas_id in XGM.noteworthy_gases)
 		var/datum/gas/gas_datum = XGM.gases[gas_id]
 		var/list/datum_data = list()
 		datum_data["id"] = gas_id
@@ -228,16 +228,15 @@ var/global/list/atmos_controllers = list()
 		datum_data["short_name"] = gas_datum.short_name || gas_datum.name
 		gas_datums += list(datum_data)
 	data["gas_datums"]=gas_datums
-	
 	if(bspipe_list.len>0)
 		data["bspipe_exist"] = TRUE
 	var/list/bspipes=list()
 	for(var/obj/machinery/atmospherics/unary/cap/bluespace/bscap in bspipe_list)
 		var/list/pipe_data = list()
 		pipe_data["name"] = bscap.name
-		pipe_data["x"] = bscap.x - WORLD_X_OFFSET[bscap.z]
-		pipe_data["y"] = bscap.y - WORLD_Y_OFFSET[bscap.z]
-		pipe_data["z"] = bscap.z
+		pipe_data["x"] = bscap.vx() - get_world_x_offset(bscap.vz())
+		pipe_data["y"] = bscap.vy() - get_world_y_offset(bscap.vz())
+		pipe_data["z"] = bscap.vz()
 		bspipes += list(pipe_data)
 	data["bspipes"]=bspipes
 
@@ -272,8 +271,7 @@ var/global/list/atmos_controllers = list()
 		if (istype(I, /obj/item/device/pda))
 			var/obj/item/device/pda/pda = I
 			I = pda.id
-		if (istype(I,/obj/item/weapon/card/emag))
-			emag_act(I, usr)
+		emag_check(I,M)
 		if (I && istype(I))
 			log_in_id = I
 		return 1
@@ -404,6 +402,8 @@ var/global/list/atmos_controllers = list()
 				selected_preset = new /datum/airalarm_configuration/preset/coldroom
 			if("Plasmaman")
 				selected_preset = new /datum/airalarm_configuration/preset/plasmaman
+			if("Fire Suppression")
+				selected_preset = new /datum/airalarm_configuration/preset/fire_suppression
 		return 1
 
 	if(href_list["apply_preset_batch"])
@@ -426,13 +426,10 @@ var/global/list/atmos_controllers = list()
 		if(href_list["set_preset_setting"] == "target_temperature")
 			var/max_temperature = MAX_TARGET_TEMPERATURE - T0C //these defines should come from code\game\machinery\alarm.dm
 			var/min_temperature = MIN_TARGET_TEMPERATURE - T0C
-			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
+			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE - T0C]C or above [MAX_TEMPERATURE - T0C]C by itself. ", "Thermostat Controls") as num|null
 			if(input_temperature==null)
 				return 1
-			if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
-				to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
-			else
-				input_temperature = input_temperature + T0C
+			input_temperature = round(clamp(input_temperature, min_temperature, max_temperature) + T0C, 0.01)
 			selected_preset.target_temperature = input_temperature
 			return 1
 		else if(href_list["set_preset_setting"] == "scrubbed_gases")
@@ -596,6 +593,10 @@ var/global/list/atmos_controllers = list()
 				current.apply_preset(!current.cycle_after_preset)
 			return 1
 
+		if(href_list["auto_suppress"])
+			current.auto_suppress = !current.auto_suppress
+			return 1
+
 		if(href_list["temperature"])
 			if(current.rcon_setting == RCON_NO)
 				return 1
@@ -608,14 +609,11 @@ var/global/list/atmos_controllers = list()
 			else
 				max_temperature = temperature_threshold.max_1() - T0C
 				min_temperature = temperature_threshold.min_1() - T0C
-			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
+			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE - T0C]C or above [MAX_TEMPERATURE - T0C]C by itself. ", "Thermostat Controls") as num|null
 			if(input_temperature==null)
 				return 1
-			if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
-				to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
-			else
-				input_temperature = input_temperature + T0C
-				current.set_temperature(input_temperature)
+			input_temperature = round(clamp(input_temperature, min_temperature, max_temperature) + T0C, 0.01)
+			current.set_temperature(input_temperature)
 			return 1
 
 #undef ACA_SCREEN_DETAILSVIEW

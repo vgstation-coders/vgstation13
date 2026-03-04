@@ -5,7 +5,7 @@
 
 	school = "evocation"
 	invocation = "M'tch st'ck"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -23,7 +23,7 @@
 
 	school = "evocation"
 	invocation = "s'ap s'ds"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -44,7 +44,7 @@
 
 	school = "evocation"
 	invocation = "bl'odso'k"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -62,7 +62,7 @@
 
 	school = "evocation"
 	invocation = "Wh't 'f 't w's p'rpl'?!"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 6
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -80,7 +80,7 @@
 
 	school = "evocation"
 	invocation = "Id'e h'nds m'k' l'ght w'rk"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER
 	level_max = list()
@@ -90,7 +90,7 @@
 	var/static/list/trinkets_coin = existing_typesof(/obj/item/weapon/coin)-list(/obj/item/weapon/coin/trader, /obj/item/weapon/coin/adamantine)
 	var/static/list/trinkets_card = existing_typesof(/obj/item/weapon/card)+existing_typesof(/obj/item/toy/singlecard)-list(/obj/item/weapon/card/id/admin, /obj/item/weapon/card/id/centcom/nt_supreme, /obj/item/weapon/card/emag)
 	var/static/list/trinkets_grenade = existing_typesof(/obj/item/weapon/grenade)-list(/obj/item/weapon/grenade, /obj/item/weapon/grenade/spawnergrenade, /obj/item/weapon/grenade/iedcasing)
-	var/static/list/trinkets_toy = list(/obj/item/clothing/mask/facehugger/toy, /obj/item/toy/waterballoon, /obj/item/toy/syndicateballoon, /obj/item/toy/syndicateballoon/ntballoon, /obj/item/toy/spinningtoy, /obj/item/toy/gun, /obj/item/toy/ammo/gun, /obj/item/toy/ammo/crossbow, /obj/item/toy/crossbow, /obj/item/toy/bomb, /obj/item/toy/snappop, /obj/item/toy/snappop/smokebomb, /obj/item/toy/waterflower, /obj/item/toy/minimeteor, /obj/item/toy/canary, /obj/item/toy/balloon, /obj/item/toy/crayon/rainbow, /obj/item/weapon/toy/xmas_cracker, /obj/item/weapon/boomerang/toy, /obj/item/toy/gasha/wizard, /obj/item/toy/figure/wizard)
+	var/static/list/trinkets_toy = list(/obj/item/clothing/mask/facehugger/toy, /obj/item/toy/waterballoon, /obj/item/toy/syndicateballoon, /obj/item/toy/syndicateballoon/ntballoon, /obj/item/toy/spinningtoy, /obj/item/toy/gun, /obj/item/toy/ammo/gun, /obj/item/toy/ammo/crossbow, /obj/item/toy/crossbow, /obj/item/toy/bomb, /obj/item/toy/snappop, /obj/item/toy/snappop/smokebomb, /obj/item/clothing/accessory/waterflower, /obj/item/toy/minimeteor, /obj/item/toy/canary, /obj/item/toy/balloon, /obj/item/toy/crayon/rainbow, /obj/item/weapon/toy/xmas_cracker, /obj/item/weapon/boomerang/toy, /obj/item/toy/gasha/wizard, /obj/item/toy/figure/wizard)
 	var/static/list/trinkets_bullet = existing_typesof(/obj/item/ammo_casing)-list(/obj/item/ammo_casing)
 	var/static/list/trinkets_accessory = existing_typesof(/obj/item/clothing/accessory/medal)+existing_typesof(/obj/item/clothing/accessory/tie)+existing_typesof(/obj/item/clothing/accessory/armband)-list(/obj/item/clothing/accessory/tie, /obj/item/clothing/accessory/armband)
 	var/static/list/trinkets_gadget = list(/obj/item/device/radio, /obj/item/device/radio/headset, /obj/item/device/pda, /obj/item/device/t_scanner, /obj/item/device/t_scanner/advanced, /obj/item/device/healthanalyzer, /obj/item/device/gps, /obj/item/device/lightreplacer, /obj/item/device/flash, /obj/item/device/flash/synthetic, /obj/item/device/analyzer, /obj/item/device/antibody_scanner, /obj/item/device/camera, /obj/item/device/robotanalyzer, /obj/item/device/taperecorder, /obj/item/device/reagent_scanner/adv, /obj/item/device/megaphone, /obj/item/device/device_analyser, /obj/item/device/flashlight, /obj/item/device/multitool, /obj/item/device/hailer, /obj/item/weapon/hand_tele, /obj/item/weapon/pinpointer, /obj/item/weapon/cell/crap, /obj/item/weapon/barcodescanner, /obj/item/weapon/autopsy_scanner, /obj/item/beacon, /obj/item/device/debugger, /obj/item/device/mining_scanner, /obj/item/device/detective_scanner, /obj/item/device/instrument/instrument_synth, /obj/item/device/geiger_counter)
@@ -98,8 +98,8 @@
 	var/static/list/trinkets_bauble = list(/obj/item/weapon/vectorreceiver, /obj/item/weapon/virusdish, /obj/item/weapon/shard, /obj/item/weapon/shard/plasma, /obj/item/weapon/ribbon, /obj/item/weapon/pai_cable, /obj/item/weapon/gavelblock, /obj/item/weapon/dart_cartridge, /obj/item/stack/chains, /obj/item/stack/teeth, /obj/item/stack/teeth/gold, /obj/item/gun_part/silencer, /obj/item/ice_crystal, /obj/item/claypot, /obj/item/cross_guard, /obj/item/sword_handle, /obj/item/weapon/dice/d00, /obj/item/weapon/dice/d10, /obj/item/weapon/dice/d12, /obj/item/weapon/dice/d2, /obj/item/weapon/dice/d20, /obj/item/weapon/dice/d4, /obj/item/weapon/dice/d8, /obj/item/weapon/dice/loaded/d20)+existing_typesof(/obj/item/stack/ore)+existing_typesof(/obj/item/ornament)-list(/obj/item/stack/ore)
 	var/list/categories = list("Coin", "Card", "Toy", "Accessory", "Gadget", "Grenade", "Widget", "Bauble", "Bullet")
 	var/item_choice = null
-	var/duration = 300
-	var/cat_choice = input("Select a kind of 'trinket'.") in categories | null
+	var/duration = 30 SECONDS
+	var/cat_choice = input("Select a kind of 'trinket'.") as null|anything in categories
 	switch(cat_choice)
 		if(null)
 			return 0
@@ -107,28 +107,28 @@
 			item_choice = pick(trinkets_coin)
 		if("Card")
 			item_choice = pick(trinkets_card)
-			duration = 200
+			duration = 20 SECONDS
 		if("Grenade")
 			item_choice = pick(trinkets_grenade)
-			duration = 100
+			duration = 10 SECONDS
 		if("Toy")
 			item_choice = pick(trinkets_toy)
-			duration = 600
+			duration = 60 SECONDS
 		if("Bullet")
 			item_choice = pick(trinkets_bullet)
-			duration = 200
+			duration = 20 SECONDS
 		if("Accessory")
 			item_choice = pick(trinkets_accessory)
-			duration = 1800
+			duration = 180 SECONDS
 		if("Gadget")
 			item_choice = pick(trinkets_gadget)
-			duration = 1200
+			duration = 120 SECONDS
 		if("Widget")
 			item_choice = pick(trinkets_widget)
-			duration = 1200
+			duration = 120 SECONDS
 		if("Bauble")
 			item_choice = pick(trinkets_bauble)
-			duration = 1800
+			duration = 180 SECONDS
 	var/obj/item/I = new item_choice
 	user.put_in_hands(I)
 	spawn(duration)
@@ -144,7 +144,7 @@
 
 	school = "evocation"
 	invocation = "sp'cy k'ych'in"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -173,7 +173,7 @@
 
 	school = "evocation"
 	invocation = "I'ce c'ld!"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -201,7 +201,7 @@
 
 	school = "evocation"
 	invocation = "Splash"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()

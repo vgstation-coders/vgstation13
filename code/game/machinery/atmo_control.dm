@@ -10,15 +10,6 @@
 
 	var/on = 1
 	var/list/metrics_monitored = list("pressure", "temperature")
-	//Flags:
-	// 1 for pressure
-	// 2 for temperature
-	// Output >= 4 includes gas composition
-	// 4 for oxygen concentration
-	// 8 for toxins concentration
-	// 16 for nitrogen concentration
-	// 32 for carbon dioxide concentration
-	// 64 for nitrous oxide concentration
 
 	machine_flags = WRENCHMOVE | MULTITOOL_MENU
 
@@ -49,7 +40,7 @@
 		<li>Monitor Pressure: <a href="?src=\ref[src];toggle_monitoring=pressure">[is_monitoring("pressure") ? "Yes" : "No"]</a>
 		<li>Monitor Temperature: <a href="?src=\ref[src];toggle_monitoring=temperature">[is_monitoring("temperature") ? "Yes" : "No"]</a>"}
 
-	for(var/gas_ID in XGM.gases)
+	for(var/gas_ID in XGM.noteworthy_gases)
 		var/datum/gas/gas_datum = XGM.gases[gas_ID]
 		dat += {"<li>Monitor [gas_datum.name] Concentration: <a href="?src=\ref[src];toggle_monitoring=[gas_ID]">[is_monitoring(gas_ID) ? "Yes" : "No"]</a>"}
 	dat += "</ul>"
@@ -62,7 +53,7 @@
 
 	if("toggle_monitoring" in href_list)
 		var/toggle_target = href_list["toggle_monitoring"]
-		if(toggle_target in XGM.gases || toggle_target == "pressure" || toggle_target == "temperature")
+		if((toggle_target in XGM.gases) || toggle_target == "pressure" || toggle_target == "temperature")
 			toggle_monitoring(toggle_target)
 		return MT_UPDATE
 
@@ -131,7 +122,7 @@
 	if(..(user))
 		return
 	var/html=return_text()+"</body></html>"
-	user << browse(html,"window=gac")
+	user << browse(html,"window=gac") // Already well-formed HTML
 	user.set_machine(src)
 	onclose(user, "gac")
 
@@ -168,7 +159,7 @@
 				if(data["temperature"])
 					sensor_part += "<tr><th>Temperature:</th><td>[data["temperature"]] K</td></tr>"
 				var/header_added = FALSE
-				for(var/gas_ID in XGM.gases)
+				for(var/gas_ID in XGM.noteworthy_gases)
 					if(data[gas_ID])
 						if(!header_added)
 							header_added = TRUE
@@ -305,7 +296,7 @@ font-weight:bold;
 
 /obj/machinery/computer/general_air_control/unlinkFrom(var/mob/user, var/obj/O)
 	..()
-	if("id_tag" in O.vars && (istype(O,/obj/machinery/air_sensor) || istype(O, /obj/machinery/meter)))
+	if(("id_tag" in O.vars) && (istype(O,/obj/machinery/air_sensor) || istype(O, /obj/machinery/meter)))
 		sensors.Remove(O:id_tag)
 		return 1
 	return 0

@@ -307,15 +307,19 @@
 	observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
 
 	// Has to be done here so we can get our random icon.
-	if(client.prefs.be_random_body)
+	if(client.prefs.get_pref(/datum/preference_setting/toggle/be_random_body))
 		client.prefs.randomize_appearance_for() // No argument means just the prefs are randomized.
 	client.prefs.update_preview_icon(1)
 	observer.icon = client.prefs.preview_icon
 	observer.alpha = 127
 
-	if(client.prefs.be_random_name)
-		client.prefs.real_name = random_name(client.prefs.gender,client.prefs.species)
-	observer.real_name = client.prefs.real_name
+	var/datum/preference_setting/name_pref = client.prefs.get_pref_datum(/datum/preference_setting/string/real_name)
+
+	if(client.prefs.get_pref(/datum/preference_setting/toggle/be_random_name))
+		var/gender = client.prefs.get_pref(/datum/preference_setting/enum/gender)
+		var/species = client.prefs.get_pref(/datum/preference_setting/string/species)
+		name_pref.setting = random_name(gender,species)
+	observer.real_name = name_pref.setting
 	observer.name = observer.real_name
 	if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
 		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
@@ -346,12 +350,12 @@
 		return 0
 	var/datum/job/job = job_master.GetJob(rank)
 	if(job.species_whitelist.len)
-		if(!job.species_whitelist.Find(client.prefs.species))
-			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+		if(!job.species_whitelist.Find(client.prefs.get_pref(/datum/preference_setting/string/species)))
+			to_chat(src, alert("[rank] is not available for [client.prefs.get_pref(/datum/preference_setting/string/species)]."))
 			return 0
 	if(job.species_blacklist.len)
-		if(job.species_blacklist.Find(client.prefs.species))
-			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+		if(job.species_blacklist.Find(client.prefs.get_pref(/datum/preference_setting/string/species)))
+			to_chat(src, alert("[rank] is not available for [client.prefs.get_pref(/datum/preference_setting/string/species)]."))
 			return 0
 
 	job_master.AssignRole(src, rank, 1)
@@ -361,7 +365,7 @@
 		job = job_master.GetJob(rank)
 
 	var/mob/living/carbon/human/character = create_human(client.prefs)	//creates the human and transfers vars and mind
-	if(character.client.prefs.randomslot)
+	if(character.client.prefs.get_pref(/datum/preference_setting/toggle/randomslot))
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
 	var/atom/movable/what_to_move = character.locked_to || character
@@ -466,6 +470,9 @@
 	var/obj/effect/landmark/start/endpoint = null
 	for(var/obj/effect/landmark/start/S in landmarks_list)
 		if(S.name == rank)
+			if(S.override_latejoin_behavior)
+				target.forceMove(S.loc)
+				return
 			endpoint = S
 			break
 	if(!endpoint)
@@ -566,7 +573,7 @@
 	if(highprior.len > 0)
 		dat += "<tr><th class='reqhead' colspan=3>High Priority Jobs</th></tr>"
 		for(var/datum/job/job in highprior)
-			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))))
 				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 				continue
 
@@ -578,7 +585,7 @@
 	if(heads.len > 0)
 		dat += "<tr><th colspan=3>Heads</th></tr>"
 		for(var/datum/job/job in heads)
-			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))))
 				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 				continue
 			if(job.department_prioritized)
@@ -590,7 +597,7 @@
 	if(sec.len > 0)
 		dat += "<tr><th colspan=3>Security</th></tr>"
 		for(var/datum/job/job in sec)
-			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))))
 				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 				continue
 
@@ -600,7 +607,7 @@
 	if(eng.len > 0)
 		dat += "<tr><th colspan=3>Engineering</th></tr>"
 		for(var/datum/job/job in eng)
-			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))))
 				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 				continue
 
@@ -610,7 +617,7 @@
 	if(med.len > 0)
 		dat += "<tr><th colspan=3>Medical</th></tr>"
 		for(var/datum/job/job in med)
-			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))))
 				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 				continue
 
@@ -620,7 +627,7 @@
 	if(sci.len > 0)
 		dat += "<tr><th colspan=3>Science</th></tr>"
 		for(var/datum/job/job in sci)
-			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))))
 				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 				continue
 
@@ -630,7 +637,7 @@
 	if(cgo.len > 0)
 		dat += "<tr><th colspan=3>Cargo</th></tr>"
 		for(var/datum/job/job in cgo)
-			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))))
 				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 				continue
 			if(job.department_prioritized)
@@ -642,7 +649,7 @@
 	if(civ.len > 0)
 		dat += "<tr><th colspan=3>Civilian</th></tr>"
 		for(var/datum/job/job in civ)
-			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))))
 				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 				continue
 
@@ -653,7 +660,7 @@
 	if(misc.len > 0)
 		dat += "<tr><th colspan=3>Miscellaneous</th></tr>"
 		for(var/datum/job/job in misc)
-			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.get_pref(/datum/preference_setting/string/species))))
 				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 				continue
 
@@ -662,34 +669,56 @@
 
 	dat += "</table>"
 	dat += "</center>"
-	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=latechoices;size=360x640;can_close=1")
 
 
 /mob/new_player/proc/create_human(var/datum/preferences/prefs)
 	spawning = TRUE
 	close_spawn_windows()
 
-	var/mob/living/carbon/human/new_character = new(loc)
 	var/datum/species/chosen_species
 	var/late_join = ticker.current_state == GAME_STATE_PLAYING ? TRUE : FALSE
 
-	if(prefs.species)
-		chosen_species = all_species[prefs.species]
+	var/species = prefs.get_pref(/datum/preference_setting/string/species)
+	var/language = prefs.get_pref(/datum/preference_setting/string/language)
+	var/datum/preference_setting/name_pref = prefs.get_pref_datum(/datum/preference_setting/string/real_name)
+
+	if(species)
+		chosen_species = all_species[species]
+
+    // Determine mob type based on species. This means every player is no longer a human
+	var/mob_type = /mob/living/carbon/human
+	if(chosen_species)
+		switch(chosen_species.name)
+			if("Vox") mob_type = /mob/living/carbon/human/vox
+			if("Unathi") mob_type = /mob/living/carbon/human/unathi
+			if("Skrell") mob_type = /mob/living/carbon/human/skrell
+			if("Tajaran") mob_type = /mob/living/carbon/human/tajaran
+			if("Diona") mob_type = /mob/living/carbon/human/diona
+			if("Plasmaman") mob_type = /mob/living/carbon/human/plasmaman
+
+	var/mob/living/carbon/human/new_character = new mob_type(loc)
+
+	if(species)
+		chosen_species = all_species[species]
 	if(chosen_species && (check_rights(R_ADMIN, 0) || chosen_species.flags & PLAYABLE || chosen_species.conditional_playable()))
-		new_character.set_species(prefs.species)
-	else
-		to_chat(usr, "Your preferences had a non-playable species, so you were reverted to the default species.")
+		new_character.set_species(species)
+	else if(chosen_species.fallback())
+		to_chat(usr, "Your preferences had a non-playable species, so you were reverted to [chosen_species.fallback()] (default for [chosen_species]).")
+		new_character.set_species(chosen_species.fallback())
 
 	var/datum/language/chosen_language
-	if(prefs.language)
-		chosen_language = all_languages["[prefs.language]"]
+	// This is a bit backwards, but: we check if language exists, and then add it as a string.
+	if(language)
+		chosen_language = all_languages[language]
 	if(chosen_language)
-		new_character.add_language("[prefs.language]")
+		new_character.add_language(language)
 	if(ticker.random_players || appearance_isbanned(src)) //disabling ident bans for now
+		var/datum/preference_setting/flavor_text = prefs.get_pref_datum(/datum/preference_setting/string/flavor_text)
 		new_character.setGender(pick(MALE, FEMALE))
-		prefs.real_name = random_name(new_character.gender, new_character.species.name)
+		name_pref.setting = random_name(new_character.gender, new_character.species.name)
 		prefs.randomize_appearance_for(new_character)
-		prefs.flavor_text = ""
+		flavor_text.setting = ""
 	else
 		prefs.copy_to(new_character)
 
@@ -700,43 +729,45 @@
 		mind.active = 0 // we wish to transfer the key manually
 		mind.transfer_to(new_character) // won't transfer key since the mind is not active
 
-	new_character.name = prefs.real_name
+	new_character.name = name_pref.setting
 	new_character.dna.ready_dna(new_character)
 
 	if(new_character.mind)
-		new_character.mind.store_memory("<b>Your blood type is:</b> [new_character.dna.b_type]<br>")
+		new_character.mind.store_memory("<b>Your blood type is:</b> [new_character.dna.b_type]<br>", category=MIND_MEMORY_GENERAL, forced=TRUE)
 
-	if(prefs.disabilities & DISABILITY_FLAG_NEARSIGHTED)
+	var/disabilities = prefs.get_pref(/datum/preference_setting/binary_flag/disabilities)
+
+	if(disabilities & DISABILITY_FLAG_NEARSIGHTED)
 		new_character.dna.SetSEState(GLASSESBLOCK,1,1)
 		new_character.disabilities |= NEARSIGHTED
 
-	if(prefs.disabilities & DISABILITY_FLAG_VEGAN)
+	if(disabilities & DISABILITY_FLAG_VEGAN)
 		new_character.dna.SetSEState(VEGANBLOCK, 1, 1)
 
-	if(prefs.disabilities & DISABILITY_FLAG_ASTHMA)
+	if(disabilities & DISABILITY_FLAG_ASTHMA)
 		new_character.dna.SetSEState(ASTHMABLOCK, 1, 1)
 
-	chosen_species = all_species[prefs.species]
-	if( (prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
+	chosen_species = all_species[species]
+	if( (disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		new_character.mutations += M_FAT
 		new_character.overeatduration = 600
 
-	if(prefs.disabilities & DISABILITY_FLAG_EPILEPTIC)
+	if(disabilities & DISABILITY_FLAG_EPILEPTIC)
 		new_character.dna.SetSEState(EPILEPSYBLOCK,1,1)
 		new_character.disabilities |= EPILEPSY
 
-	if(prefs.disabilities & DISABILITY_FLAG_DEAF)
+	if(disabilities & DISABILITY_FLAG_DEAF)
 		new_character.dna.SetSEState(DEAFBLOCK,1,1)
 		new_character.sdisabilities |= DEAF
 
-	if(prefs.disabilities & DISABILITY_FLAG_MUTE)
+	if(disabilities & DISABILITY_FLAG_MUTE)
 		new_character.dna.SetSEState(MUTEBLOCK,1,1)
 		new_character.sdisabilities |= MUTE
 
-	if(prefs.disabilities & DISABILITY_FLAG_LISP)
+	if(disabilities & DISABILITY_FLAG_LISP)
 		new_character.dna.SetSEState(LISPBLOCK, 1, 1)
 
-	if(prefs.disabilities & DISABILITY_FLAG_ANEMIA)
+	if(disabilities & DISABILITY_FLAG_ANEMIA)
 		new_character.dna.SetSEState(ANEMIABLOCK, 1, 1)
 
 	new_character.dna.UpdateSE()
@@ -777,6 +808,7 @@
 			break //Only autoconvert them once, and only if they aren't leading their own faith.
 
 	if(late_join)
+		message_admins("latejoin, key transfer.")
 		new_character.key = key
 
 	return new_character
@@ -828,18 +860,24 @@
 	<h4>High Job Preferences</h4>"}
 	dat += job_master.display_prediction()
 
-	src << browse(dat, "window=manifest;size=370x420;can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=manifest;size=370x420;can_close=1")
 
 /mob/new_player/proc/ViewManifest()
 	var/dat = {"<html><body>
 <h4>Crew Manifest</h4>"}
 	dat += data_core.get_manifest(OOC = 1)
 
-	src << browse(dat, "window=manifest;size=370x420;can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=manifest;size=370x420;can_close=1")
 
 /mob/new_player/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
+/mob/new_player/Destroy()
+	var/datum/gamemode/dynamic/dyn_mode = ticker.mode
+	if (istype(dyn_mode))
+		for (var/datum/dynamic_ruleset/DR in dyn_mode.roundstart_rules)
+			DR.candidates.Remove(src)
+	return ..()
 
 /mob/proc/close_spawn_windows()
 	src << browse(null, "window=latechoices") //closes late choices window

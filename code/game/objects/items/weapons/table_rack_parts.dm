@@ -96,7 +96,7 @@
 
 /obj/item/weapon/table_parts/reinforced/attackby(obj/item/weapon/W, mob/user)
 	if (W.is_wrench(user))
-		drop_stack(sheet_type, user.loc, 1, user)
+		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		drop_stack(/obj/item/stack/rods, user.loc, 1, user)
 		qdel(src)
 
@@ -116,7 +116,7 @@
 
 /obj/item/weapon/table_parts/wood/attackby(obj/item/weapon/W, mob/user)
 	if (W.is_wrench(user))
-		drop_stack(sheet_type, user.loc, 1, user)
+		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		qdel(src)
 		return
 	if (istype(W, /obj/item/stack/tile/grass))
@@ -137,7 +137,7 @@
 
 /obj/item/weapon/table_parts/wood/poker/attackby(obj/item/weapon/W, mob/user)
 	if (W.is_wrench(user))
-		drop_stack(sheet_type, user.loc, 1, user)
+		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		drop_stack(/obj/item/stack/tile/grass, user.loc, 1, user)
 		qdel(src)
 
@@ -155,7 +155,7 @@
 
 /obj/item/weapon/table_parts/glass/attackby(obj/item/weapon/W, mob/user)
 	if (W.is_wrench(user))
-		drop_stack(/obj/item/stack/sheet/glass/glass, loc, 1, user)
+		drop_stack(/obj/item/stack/sheet/glass/glass, loc, sheet_amount, user)
 		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
 
@@ -173,7 +173,7 @@
 
 /obj/item/weapon/table_parts/glass/plasma/attackby(obj/item/weapon/W, mob/user)
 	if (W.is_wrench(user))
-		drop_stack(/obj/item/stack/sheet/glass/plasmaglass, loc, 1, user)
+		drop_stack(/obj/item/stack/sheet/glass/plasmaglass, loc, sheet_amount, user)
 		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
 
@@ -232,5 +232,20 @@
 /obj/item/weapon/rack_parts/attack_self(mob/user)
 	var/obj/structure/rack/R = new /obj/structure/rack(user.loc)
 	R.add_fingerprint(user)
+	user.drop_item(src, force_drop = 1)
+	qdel(src)
+
+/obj/item/weapon/rack_parts/shelf
+	name = "crate shelf parts"
+	desc = "Parts of a shelf."
+	icon_state = "crate_shelf_parts"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	item_state = "shelf"
+	starting_materials = list(MAT_IRON = 11250)
+	sheet_amount = 3
+
+/obj/item/weapon/rack_parts/shelf/attack_self(mob/user)
+	var/obj/structure/rack/crate_shelf/C = new /obj/structure/rack/crate_shelf(user.loc)
+	C.add_fingerprint(user)
 	user.drop_item(src, force_drop = 1)
 	qdel(src)

@@ -6,6 +6,8 @@
 /datum/surgery_step/eye
 	priority = 2
 	can_infect = 1
+	blood_level = 0
+
 /datum/surgery_step/eye/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!hasorgans(target))
 		return 0
@@ -19,7 +21,7 @@
 
 
 //////CUT OPEN///////
-/datum/surgery_step/eye/cut_open/tool_quality(obj/item/tool)
+/datum/surgery_step/eye/cut_open/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -126,12 +128,11 @@
 	eyes.take_damage(5, 0)
 
 //////CAUTERIZE///////
-/datum/surgery_step/eye/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/eye/cauterize/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/eye/cauterize
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,
@@ -157,6 +158,8 @@
 	if (target.op_stage.eyes == 3)
 		target.disabilities &= ~NEARSIGHTED
 		target.sdisabilities &= ~BLIND
+		target.eye_blind = 0
+		target.eye_blurry = 0
 		eyes.damage = 0
 	target.op_stage.eyes = 0
 

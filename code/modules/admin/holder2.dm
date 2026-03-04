@@ -8,6 +8,7 @@ var/list/admin_datums = list()
 	var/admin_examine   = 0 //If on, allows the admin to see additional examine messages.
 
 	var/datum/marked_datum
+	var/list/copied_filters = list()
 	var/atom/marked_appearance //Reference to an atom or an image
 
 	var/admincaster_screen = 0	//See newscaster.dm under machinery for a full description
@@ -36,6 +37,8 @@ var/list/admin_datums = list()
 		owner = C
 		owner.holder = src
 		owner.add_admin_verbs()	//TODO
+		if(C.byond_version >= 516 && C.holder.rights & R_DEBUG)
+			winset(C, null, list("browser-options"="+devtools"))
 		admins |= C
 		owner.verbs -= /client/proc/readmin
 

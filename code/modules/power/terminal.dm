@@ -3,6 +3,8 @@
 // all conduit connects go to this object instead of the APC
 // using this solves the problem of having the APC in a wall yet also inside an area
 
+var/list/obj/machinery/power/terminal/terminals = list()
+
 /obj/machinery/power/terminal
 	name = "terminal"
 	icon_state = "term"
@@ -22,6 +24,7 @@
 
 /obj/machinery/power/terminal/New()
 	..()
+	terminals += src
 	var/turf/T = src.loc
 	if(level==1)
 		hide(T.intact)
@@ -50,6 +53,7 @@
 			plane = initial(plane)
 
 /obj/machinery/power/terminal/Destroy()
+	terminals -= src
 	if (master)
 		master:terminal = null
 		master = null

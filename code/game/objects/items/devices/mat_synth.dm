@@ -31,7 +31,6 @@ var/static/list/mat2type = list(
 	origin_tech = Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=5;" + Tc_POWERSTORAGE + "=3"
 
 	var/mode = 1 //0 is material selection, 1 is material production
-	var/emagged = 0
 
 	var/obj/item/stack/sheet/active_material = /obj/item/stack/sheet/metal
 	var/list/materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
@@ -98,7 +97,11 @@ var/static/list/mat2type = list(
 							 "diamond" = /obj/item/stack/sheet/mineral/diamond,
 							 "plasma" = /obj/item/stack/sheet/mineral/plasma,
 							 "uranium" = /obj/item/stack/sheet/mineral/uranium,
-							 "plastic" = /obj/item/stack/sheet/mineral/plastic)
+							 "plastic" = /obj/item/stack/sheet/mineral/plastic,
+							 "sandstone" = /obj/item/stack/sheet/mineral/sandstone,
+							 "wooden planks" = /obj/item/stack/sheet/wood,
+							 "cloth" = /obj/item/stack/sheet/cloth,
+							 "bricks" = /obj/item/stack/sheet/mineral/brick)
 
 /obj/item/device/material_synth/update_icon()
 	icon_state = "mat_synth[mode ? "on" : "off"]"
@@ -119,7 +122,7 @@ var/static/list/mat2type = list(
 		var/unit_can_produce
 		var/tospawn
 
-		unit_can_produce = round(matter / modifier)
+		unit_can_produce = min(50, round(matter / modifier))
 
 		if (unit_can_produce >= 1)
 			tospawn = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - [unit_can_produce])", "Material Synthesizer") as num
@@ -141,8 +144,8 @@ var/static/list/mat2type = list(
 /obj/item/device/material_synth/robot/create_material(mob/user, var/material)
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
-		if(R && R.cell)
-			if(R.cell.charge)
+		if(R && R.get_cell())
+			if(get_cell_charge(R))
 				var/obj/item/stack/sheet/material_type = material
 				if(material_type)
 					var/modifier = get_mat_cost(initial(active_material.perunit))
@@ -288,7 +291,4 @@ var/static/list/mat2type = list(
 	return 0
 
 /obj/item/device/material_synth/robot/TakeCost(var/spawned, var/modifier, mob/user)
-	if(isrobot(user))
-		var/mob/living/silicon/robot/R = user
-		return R.cell.use(spawned * modifier * MAT_SYNTH_ROBO)
-	return
+	return use_cell_charge(user,spawned * modifier * MAT_SYNTH_ROBO)

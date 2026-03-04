@@ -1434,7 +1434,7 @@
 /turf/simulated/floor/plating,
 /area/prison/cell_block/A)
 "adc" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/curtain/open/shower,
@@ -1961,7 +1961,7 @@
 	},
 /area/prison/cell_block/hydroponics)
 "aea" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -2009,8 +2009,8 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "bar"
@@ -2876,7 +2876,7 @@
 	name = "Research Outpost Auxiliary Storage";
 	network = list("RD","SS13")
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -3631,8 +3631,8 @@
 /area/research_outpost/atmos)
 "aim" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
@@ -3654,7 +3654,7 @@
 	},
 /area/research_outpost/xenobot)
 "aiq" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /obj/structure/mirror{
@@ -3751,7 +3751,9 @@
 /turf/simulated/floor/plating,
 /area/mine/west_outpost)
 "aiB" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -3765,7 +3767,7 @@
 /turf/simulated/floor,
 /area/mine/west_outpost)
 "aiD" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/structure/window/reinforced{
 	dir = 4
 	},
@@ -5755,7 +5757,9 @@
 	name = "Toxins Storage"
 	})
 "anz" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -5769,7 +5773,7 @@
 /turf/unsimulated/floor/asteroid/cave/permafrost,
 /area/mine/eva)
 "anB" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/structure/window/reinforced{
 	dir = 4
 	},
@@ -6965,8 +6969,8 @@
 	tag = "icon-warning_corner (NORTH)"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -7029,7 +7033,7 @@
 /turf/unsimulated/floor/snow/asphalt/mine,
 /area/mine/explored)
 "aqq" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -7037,7 +7041,7 @@
 	},
 /area/mine/living_quarters)
 "aqr" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /obj/machinery/light/small,
@@ -7559,8 +7563,8 @@
 	pixel_y = -25
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -11018,8 +11022,8 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -11090,8 +11094,8 @@
 /area/research_outpost/iso2)
 "azT" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
@@ -12008,8 +12012,8 @@
 /area/research_outpost/gearstore)
 "aBO" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /obj/effect/landmark{
 	name = "bluespacerift"
@@ -12017,7 +12021,7 @@
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
-/area/research_outpost/iso2)
+/area/research_outpost/iso1)
 "aBQ" = (
 /obj/machinery/light,
 /obj/structure/anomaly_container,
@@ -12047,13 +12051,13 @@
 /area/research_outpost/iso2)
 "aBW" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
-/area/research_outpost/iso1)
+/area/research_outpost/iso2)
 "aCa" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -12115,8 +12119,8 @@
 /area/research_outpost/iso3)
 "aCj" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -15024,14 +15028,13 @@
 	name = "Toxins"
 	})
 "aJe" = (
-/obj/machinery/door/airlock/external{
-	req_access_txt = "13";
-	req_one_access_txt = "13"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/door/airlock/external{
+	req_access_txt = "7"
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/dorm2{
@@ -15419,7 +15422,6 @@
 "aJW" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_interior";
@@ -15510,7 +15512,9 @@
 /turf/unsimulated/floor/snow/asphalt/mine,
 /area/mine/explored)
 "aKk" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -15529,7 +15533,7 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/research_outpost/gearstore)
 "aKm" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
@@ -15577,8 +15581,7 @@
 	})
 "aKq" = (
 /obj/machinery/door/airlock/external{
-	req_access_txt = "13";
-	req_one_access_txt = "13"
+	req_access_txt = "7"
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -15808,7 +15811,6 @@
 /area/research_outpost/gearstore)
 "aKT" = (
 /obj/machinery/door/airlock/external{
-	autoclose = 0;
 	frequency = 1331;
 	icon_state = "door_locked";
 	id_tag = "anom_airlock_exterior";
@@ -15982,7 +15984,7 @@
 /turf/simulated/floor/plating,
 /area/medical/virology_break)
 "aLp" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -16498,7 +16500,7 @@
 	},
 /area/medical/virology_break)
 "aMu" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -16871,7 +16873,7 @@
 	dir = 4;
 	pixel_x = -22
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -17972,7 +17974,7 @@
 	},
 /area/science/xenobiology)
 "aPq" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -19216,7 +19218,7 @@
 /area/vox_trading_post/gardens)
 "aUr" = (
 /obj/machinery/portable_atmospherics/hydroponics,
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/machinery/light/he{
@@ -19423,10 +19425,10 @@
 /area/vox_trading_post/gardens)
 "aUS" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -20049,7 +20051,7 @@
 	},
 /area/vox_trading_post/kitchen)
 "aWM" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor/vox{
@@ -20175,11 +20177,11 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -20289,11 +20291,11 @@
 /area/vox_trading_post/kitchen)
 "aXy" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "checker";
@@ -20677,10 +20679,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "aZh" = (
 /obj/structure/table,
@@ -21687,6 +21686,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Adult)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "beW" = (
@@ -23378,6 +23378,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Non-Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bqF" = (
@@ -23780,10 +23781,7 @@
 	info = "The Syndicate have cunningly disguised a Syndicate Uplink as your PDA. Simply enter the code \"678 Bravo\" into the ringtone select to unlock its hidden features. <br><br><b>Objective #1</b>. Kill the God damn AI in a fire blast that it rocks the station. <b>Success!</b>  <br><b>Objective #2</b>. Escape alive. <b>Failed.</b>";
 	name = "Mission Objectives"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/bridge/ai_upload)
 "bsD" = (
 /obj/structure/table/reinforced,
@@ -24746,11 +24744,11 @@
 	icon_state = "1-4"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -25047,6 +25045,7 @@
 /obj/structure/table/woodentable,
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "byd" = (
@@ -25114,7 +25113,7 @@
 /obj/machinery/camera{
 	name = "Research Division Access"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -25250,6 +25249,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Religious)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bzF" = (
@@ -25579,11 +25579,9 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/window/brigdoor{
-	dir = 8;
-	name = "Kitchen";
-	req_access = null;
-	req_one_access_txt = "25;28;35"
+/obj/machinery/door/table/reinforced{
+	req_one_access_txt = "25;28;35";
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -25591,7 +25589,7 @@
 	},
 /area/crew_quarters/kitchen)
 "bAZ" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor{
@@ -25634,6 +25632,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bBi" = (
@@ -25708,7 +25707,9 @@
 /turf/simulated/floor,
 /area/supply/storage)
 "bBT" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2"
@@ -25720,7 +25721,7 @@
 /turf/simulated/floor,
 /area/science/chargebay)
 "bBV" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2"
@@ -25836,11 +25837,11 @@
 /area/vox_trading_post/medbay)
 "bCu" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox,
 /area/vox_trading_post/medbay)
@@ -26473,10 +26474,10 @@
 	pixel_y = -24
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -26669,10 +26670,10 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -26745,7 +26746,7 @@
 /turf/simulated/wall,
 /area/crew_quarters/kitchen)
 "bGu" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -27043,10 +27044,10 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "bar";
@@ -27430,10 +27431,10 @@
 	req_access_txt = "150"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/hallway)
@@ -29233,11 +29234,11 @@
 /area/vox_trading_post/trading_floor)
 "bQD" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -31586,11 +31587,11 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox/wood,
 /area/vox_trading_post/dorms)
@@ -31621,11 +31622,11 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -31665,11 +31666,11 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -33122,7 +33123,7 @@
 	},
 /area/medical/medbay)
 "cee" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -33160,7 +33161,7 @@
 	dir = 4;
 	pixel_x = -23
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -35128,8 +35129,8 @@
 /area/science/hallway)
 "clc" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 8;
-	default_scrubbed_gases = list("carbon_dioxide")
+	default_scrubbed_gases = list("carbon_dioxide");
+	dir = 8
 	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -38800,7 +38801,7 @@
 /area/medical/storage)
 "cAG" = (
 /obj/structure/disposalpipe/segment,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -38891,7 +38892,6 @@
 /area/science/telescience)
 "cBn" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
-	default_scrubbed_gases = list("plasma");
 	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor/engine,
@@ -39447,7 +39447,7 @@
 	},
 /area/medical/surgery)
 "cDP" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -39826,7 +39826,7 @@
 	},
 /area/medical/surgery)
 "cFa" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -40311,7 +40311,7 @@
 /obj/structure/mirror{
 	pixel_y = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 22
 	},
 /obj/structure/cable{
@@ -40328,7 +40328,7 @@
 /obj/structure/mirror{
 	pixel_y = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 22
 	},
 /obj/machinery/power/apc{
@@ -41266,10 +41266,10 @@
 	dir = 4;
 	pixel_x = -24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/vox{
@@ -42108,10 +42108,7 @@
 /area/security/prison)
 "cSU" = (
 /obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "cSY" = (
 /obj/machinery/camera{
@@ -42719,8 +42716,8 @@
 	},
 /obj/machinery/deployable/barrier,
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /obj/machinery/light{
 	dir = 8
@@ -43903,7 +43900,7 @@
 	},
 /area/security/hos)
 "daa" = (
-/obj/structure/sink/kitchen,
+/obj/structure/wc/sink/kitchen,
 /turf/simulated/wall,
 /area/maintenance/asmaint2)
 "daf" = (
@@ -44181,14 +44178,12 @@
 /area/shuttle/administration/centcom)
 "daP" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "daQ" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "daR" = (
@@ -44198,8 +44193,8 @@
 	},
 /area/prison/solitary)
 "daS" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "daT" = (
@@ -44207,8 +44202,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "daU" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "daV" = (
@@ -44257,9 +44252,7 @@
 /area/security/prison)
 "daZ" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dba" = (
 /obj/effect/decal/cleanable/blood,
@@ -44484,13 +44477,13 @@
 /area/centcom/living)
 "dbD" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dbE" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dbF" = (
@@ -44503,8 +44496,8 @@
 /area/shuttle/administration/centcom)
 "dbG" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "dbH" = (
@@ -44536,14 +44529,10 @@
 	},
 /area/centcom/living)
 "dbL" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dbM" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dbN" = (
 /obj/machinery/dna_scannernew,
@@ -45371,7 +45360,7 @@
 /area/centcom/test)
 "ddU" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -45585,7 +45574,7 @@
 	},
 /area/centcom/ert)
 "deB" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -45799,7 +45788,9 @@
 	},
 /area/centcom/test)
 "dfb" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -45811,7 +45802,7 @@
 	},
 /area/centcom/test)
 "dfd" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -46339,7 +46330,7 @@
 	},
 /area/centcom/ert)
 "dgo" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -48418,7 +48409,7 @@
 	},
 /area/centcom/ert)
 "dkM" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -50310,7 +50301,9 @@
 /turf/space,
 /area/centcom/specops)
 "dpo" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -50331,7 +50324,7 @@
 	},
 /area/centcom/specops)
 "dpq" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -51711,10 +51704,6 @@
 	icon_state = "floor3"
 	},
 /area/shuttle/escape/centcom)
-"dsr" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "dss" = (
 /obj/structure/window/reinforced{
 	dir = 4
@@ -53244,7 +53233,7 @@
 	},
 /area/shuttle/nuclearops)
 "dwT" = (
-/obj/machinery/computer/security,
+/obj/machinery/computer/security/nukies,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -53742,7 +53731,7 @@
 	},
 /area/centcom/living)
 "dyV" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -54009,7 +53998,7 @@
 	},
 /area/centcom/test)
 "dzU" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/unsimulated/floor{
@@ -54220,7 +54209,7 @@
 	},
 /area/centcom/control)
 "dAP" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/effect/decal/cleanable/vomit,
@@ -55122,7 +55111,7 @@
 /turf/simulated/floor/plating,
 /area/security/hos)
 "dNl" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -55525,10 +55514,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "dYf" = (
 /obj/structure/rack,
@@ -56534,10 +56520,7 @@
 /area/maintenance/asmaint2)
 "eci" = (
 /obj/structure/window/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "ecj" = (
 /obj/structure/girder,
@@ -59230,9 +59213,9 @@
 /area/security/main)
 "ekY" = (
 /obj/docking_port/destination/pod3/station{
-	dir = 4;
+	base_turf_override = 1;
 	base_turf_type = /turf/unsimulated/floor/snow/asphalt;
-	base_turf_override = 1
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
@@ -59580,7 +59563,7 @@
 	name = "Station Intercom (General)";
 	pixel_x = -30
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -60432,8 +60415,8 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 10;
@@ -61154,8 +61137,8 @@
 	req_access_txt = "63"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -63049,10 +63032,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "ezm" = (
 /obj/structure/cable{
@@ -63313,8 +63293,8 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/security/lobby)
@@ -64207,10 +64187,7 @@
 	},
 /area/syndicate_mothership)
 "eHX" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "eIf" = (
 /obj/structure/disposalpipe/segment,
@@ -64429,15 +64406,12 @@
 	},
 /area/security/lobby)
 "eNM" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "eOa" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /obj/structure/catwalk,
 /turf/simulated/open,
@@ -66571,10 +66545,7 @@
 /obj/machinery/atmospherics/unary/cap/visible{
 	dir = 1
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/atmos)
 "fBh" = (
 /obj/structure/bed/chair{
@@ -66721,10 +66692,7 @@
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "fEr" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "fEA" = (
 /obj/item/device/radio/intercom{
@@ -66798,10 +66766,7 @@
 /area/storage/tech)
 "fFC" = (
 /obj/structure/dispenser,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "fFG" = (
 /obj/structure/table/reinforced,
@@ -66998,10 +66963,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "fJP" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/surface/snow)
 "fJT" = (
 /obj/machinery/door/firedoor/border_only{
@@ -67572,10 +67534,7 @@
 /area/centcom/evac)
 "fSX" = (
 /obj/machinery/light/small,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "fTw" = (
 /obj/structure/closet/radiation,
@@ -68486,9 +68445,9 @@
 /area/shuttle/nuclearops)
 "gkq" = (
 /obj/docking_port/destination/pod5/station{
-	dir = 4;
 	base_turf_override = 1;
-	base_turf_type = /turf/unsimulated/floor/snow/asphalt
+	base_turf_type = /turf/unsimulated/floor/snow/asphalt;
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engineering_auxiliary)
@@ -69136,10 +69095,7 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "gwN" = (
 /obj/structure/grille,
@@ -69262,10 +69218,7 @@
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
 	name = "Syndicate agent remains"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "gyY" = (
 /obj/structure/cable{
@@ -70291,10 +70244,7 @@
 /area/derelict/medical)
 "gRf" = (
 /obj/structure/grille,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "gRz" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -70796,10 +70746,7 @@
 /area/supply/office)
 "hbw" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "hbF" = (
 /turf/simulated/floor/bluegrid,
@@ -71449,10 +71396,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "hoF" = (
 /obj/machinery/door/window{
@@ -71497,7 +71441,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "hoQ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -71535,10 +71479,7 @@
 /area/supply/sorting)
 "hpH" = (
 /obj/structure/table,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "hqb" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible{
@@ -73617,10 +73558,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint2)
 "hXh" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "hXu" = (
 /obj/machinery/atmospherics/unary/outlet_injector{
@@ -73741,10 +73679,7 @@
 /area/maintenance/fpmaint2)
 "iac" = (
 /obj/machinery/light/small,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "iav" = (
 /obj/structure/closet/emcloset,
@@ -74499,10 +74434,7 @@
 	},
 /area/lawoffice)
 "ipB" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/hallway/primary)
 "ipF" = (
 /obj/structure/bed/chair/office/dark{
@@ -75077,6 +75009,7 @@
 /area/engineering/break_room)
 "izC" = (
 /obj/structure/bookcase/manuals,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "izD" = (
@@ -75152,8 +75085,8 @@
 /area/engineering/break_room)
 "iAW" = (
 /obj/docking_port/destination/pod1/station{
-	base_turf_type = /turf/unsimulated/floor/snow/asphalt;
-	base_turf_override = 1
+	base_turf_override = 1;
+	base_turf_type = /turf/unsimulated/floor/snow/asphalt
 	},
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
@@ -75163,10 +75096,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical)
 "iBi" = (
 /obj/structure/grille,
@@ -75251,8 +75181,8 @@
 /area/derelict/singularity_engine)
 "iCE" = (
 /obj/docking_port/destination/pod2/station{
-	base_turf_type = /turf/unsimulated/floor/snow/asphalt;
-	base_turf_override = 1
+	base_turf_override = 1;
+	base_turf_type = /turf/unsimulated/floor/snow/asphalt
 	},
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
@@ -75326,6 +75256,13 @@
 	oxygen = 0.01
 	},
 /area/maintenance/disposal)
+"iDB" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/crew_quarters/bar)
 "iDD" = (
 /obj/machinery/door/window{
 	base_state = "right";
@@ -75510,7 +75447,7 @@
 /turf/simulated/floor,
 /area/derelict/bridge)
 "iHo" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -75591,10 +75528,7 @@
 /area/supply/sorting)
 "iIz" = (
 /obj/item/stack/rods,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "iIB" = (
 /obj/structure/reagent_dispensers/fueltank,
@@ -75702,7 +75636,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/ghettobar)
 "iKr" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor/plating,
@@ -75780,7 +75714,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "iMo" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/plating,
@@ -75807,7 +75741,7 @@
 	},
 /area/hallway/primary/aft)
 "iMF" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/simulated/floor/plating,
@@ -76547,10 +76481,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "iYS" = (
 /obj/machinery/computer/arcade,
@@ -76913,8 +76844,8 @@
 /area/maintenance/aportsolar)
 "jeJ" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /obj/structure/catwalk,
 /turf/simulated/open,
@@ -77119,10 +77050,7 @@
 	name = "Engineering Access";
 	req_access_txt = "10"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "jkq" = (
 /turf/simulated/wall/r_wall,
@@ -79085,7 +79013,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/ghettobar)
 "jUM" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -80474,10 +80402,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "kuo" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "kuv" = (
 /obj/machinery/door/firedoor/border_only{
@@ -81107,7 +81032,7 @@
 /turf/simulated/floor,
 /area/supply/storage)
 "kDx" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -81756,10 +81681,7 @@
 /turf/unsimulated/floor/noblizz_permafrost/icecore,
 /area/surface/icecore)
 "kOl" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "kOn" = (
 /obj/structure/disposalpipe/segment,
@@ -82773,10 +82695,7 @@
 	},
 /area/science/xenobiology)
 "lim" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/surface/snow)
 "lin" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -83715,7 +83634,7 @@
 	},
 /area/hallway/primary/fore)
 "lzL" = (
-/obj/window_grille_spawner/reinforced_plasma/full,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/plating/airless,
 /area/engineering/engine)
 "lzO" = (
@@ -83758,10 +83677,7 @@
 /turf/simulated/floor,
 /area/engineering/break_room)
 "lzY" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/surface/snow)
 "lAi" = (
 /mob/living/simple_animal/mouse/Tom,
@@ -83917,10 +83833,7 @@
 /area/engineering/atmos)
 "lDh" = (
 /obj/item/weapon/storage/toolbox/syndicate,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "lDE" = (
 /obj/structure/closet/wardrobe/pjs,
@@ -83941,10 +83854,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "lDS" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
@@ -84382,10 +84292,7 @@
 	info = "<b>Objective #1</b>: Destroy the station with a nuclear device.";
 	name = "Objectives of a Nuclear Operative"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "lLo" = (
 /turf/simulated/floor/plating,
@@ -84818,10 +84725,7 @@
 /turf/simulated/floor/plating,
 /area/station/garage)
 "lUH" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "lUP" = (
 /obj/machinery/power/apc{
@@ -84922,10 +84826,7 @@
 	},
 /area/gateway)
 "lXt" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical)
 "lXu" = (
 /obj/structure/grille,
@@ -85620,10 +85521,7 @@
 /area/gateway)
 "mnf" = (
 /obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "mng" = (
 /obj/machinery/gateway,
@@ -86034,7 +85932,7 @@
 	},
 /area/medical/surgery_ghetto)
 "muK" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -86077,7 +85975,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "mvu" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/simulated/floor{
@@ -86106,7 +86004,7 @@
 /turf/simulated/floor,
 /area/derelict/solar_control)
 "mvU" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/machinery/camera{
@@ -86348,10 +86246,7 @@
 /area/surface/snow)
 "mzp" = (
 /obj/item/stack/medical/ointment,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical)
 "mzv" = (
 /obj/structure/table,
@@ -87257,7 +87152,9 @@
 	},
 /area/science/xenobiology)
 "mRw" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -87658,10 +87555,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "mYl" = (
 /obj/structure/disposalpipe/segment,
@@ -87737,7 +87631,7 @@
 	},
 /area/crew_quarters/sleep)
 "mZt" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -88182,8 +88076,8 @@
 /area/engineering/engineering_auxiliary)
 "niD" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /obj/structure/catwalk,
 /turf/simulated/open,
@@ -89481,7 +89375,7 @@
 	},
 /area/shuttle/trade/start)
 "nJn" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -89873,10 +89767,7 @@
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "nOC" = (
 /obj/structure/grille,
@@ -91549,7 +91440,7 @@
 /turf/simulated/floor/engine/vacuum,
 /area/derelict/atmos)
 "orl" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -91577,7 +91468,7 @@
 /turf/simulated/wall/r_wall,
 /area/surface/snow)
 "ors" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -91616,7 +91507,7 @@
 /turf/simulated/floor,
 /area/engineering/burn_chamber)
 "orO" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
@@ -92841,10 +92732,7 @@
 	},
 /area/station/garage)
 "oKY" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "oLa" = (
 /obj/structure/cable{
@@ -93224,7 +93112,7 @@
 	},
 /area/engineering/supermatter_room)
 "oRU" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -93690,7 +93578,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/medical)
 "oZh" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -93901,9 +93789,8 @@
 	},
 /area/chapel/main)
 "pbO" = (
-/obj/machinery/door/window{
+/obj/machinery/door/table/reinforced{
 	dir = 1;
-	name = "Medbay Reception";
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -94186,9 +94073,9 @@
 	req_access_txt = "31"
 	},
 /obj/docking_port/destination/supply/station{
-	dir = 8;
 	base_turf_override = 1;
-	base_turf_type = /turf/unsimulated/floor/snow/permafrost
+	base_turf_type = /turf/unsimulated/floor/snow/permafrost;
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/supply/storage)
@@ -94331,10 +94218,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "pmh" = (
 /obj/structure/cable{
@@ -94668,10 +94552,7 @@
 /area/surface/snow)
 "prv" = (
 /obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "prD" = (
 /obj/machinery/door/window{
@@ -94794,7 +94675,9 @@
 /area/station/garage)
 "pul" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -94818,7 +94701,7 @@
 	},
 /area/medical/medbay)
 "puF" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -95045,7 +94928,7 @@
 	},
 /area/ai_monitored/storage/eva)
 "pzM" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -95998,7 +95881,7 @@
 	dir = 2;
 	icon_state = "pipe-c"
 	},
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor{
@@ -97345,7 +97228,7 @@
 /turf/simulated/floor/plating,
 /area/station/garage)
 "qrz" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -98117,6 +98000,7 @@
 /area/engineering/engine)
 "qFs" = (
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "qFC" = (
@@ -98145,10 +98029,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "qGB" = (
 /obj/machinery/alarm{
@@ -98528,10 +98409,7 @@
 	},
 /area/shuttle/syndicate_elite/mothership)
 "qLP" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical)
 "qMl" = (
 /obj/machinery/vending/cigarette,
@@ -98570,10 +98448,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "qNm" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -98676,7 +98551,7 @@
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "qOC" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/effect/decal/cleanable/cobweb2,
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
@@ -99794,10 +99669,7 @@
 /turf/simulated/floor/plating/airless,
 /area/engineering/engine)
 "rmm" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/surface/snow)
 "rms" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -99878,10 +99750,7 @@
 /obj/structure/window/reinforced,
 /obj/item/weapon/table_parts/reinforced,
 /obj/item/weapon/table_parts/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "roq" = (
 /obj/machinery/space_heater/air_conditioner,
@@ -99902,10 +99771,7 @@
 /area/crew_quarters/bar)
 "roD" = (
 /obj/item/weapon/table_parts/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "roZ" = (
 /obj/structure/table,
@@ -99935,10 +99801,7 @@
 /area/engineering/burn_chamber)
 "rpI" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/hallway/secondary)
 "rpJ" = (
 /obj/machinery/door/unpowered/shuttle,
@@ -100090,7 +99953,7 @@
 /turf/unsimulated/floor/snow,
 /area/shuttle/trade/start)
 "rtc" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -100651,10 +100514,7 @@
 /turf/simulated/floor,
 /area/engineering/atmos_control)
 "rDV" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/arrival)
 "rEi" = (
 /obj/structure/rack,
@@ -101041,7 +100901,7 @@
 /turf/simulated/floor/airless,
 /area/surface/snow)
 "rKm" = (
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	anchored = 1;
 	dir = 8;
 	state = 2
@@ -101093,7 +100953,7 @@
 /turf/simulated/floor/bluegrid,
 /area/turret_protected/ai)
 "rLp" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -101346,10 +101206,7 @@
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "rRt" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "rRu" = (
 /obj/structure/grille/broken,
@@ -101874,6 +101731,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Private)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "scY" = (
@@ -102067,7 +101925,7 @@
 /area/engineering/atmos)
 "sfW" = (
 /obj/structure/table/woodentable,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/item/weapon/storage/fancy/cigarettes,
 /obj/item/weapon/lipstick,
 /turf/simulated/floor/wood,
@@ -103044,10 +102902,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/singularity_engine)
 "sDw" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/atmos)
 "sDz" = (
 /obj/machinery/atmospherics/binary/pump{
@@ -103164,10 +103019,7 @@
 /turf/simulated/floor/plating,
 /area/supply/storage)
 "sFv" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/surface/snow)
 "sFU" = (
 /obj/structure/punching_bag/captain,
@@ -103840,7 +103692,9 @@
 /turf/simulated/floor/plating,
 /area/engineering/burn_chamber)
 "sQU" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -104151,10 +104005,7 @@
 /turf/simulated/floor/plating/airless,
 /area/engineering/engine)
 "sVk" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/arrival)
 "sVu" = (
 /obj/machinery/door/firedoor/border_only{
@@ -104659,10 +104510,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "tcq" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -104989,9 +104837,9 @@
 	req_access_txt = "1"
 	},
 /obj/docking_port/destination/escape/shuttle/station{
-	dir = 4;
+	base_turf_override = 1;
 	base_turf_type = /turf/unsimulated/floor/snow;
-	base_turf_override = 1
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/hallway/secondary/exit)
@@ -106345,15 +106193,13 @@
 /turf/simulated/floor/plating/airless,
 /area/solar/derelict_aft)
 "tFL" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 2;
-	name = "Bar Door";
-	req_one_access_txt = "25;28"
-	},
 /obj/machinery/camera{
 	dir = 8;
 	name = "Bar North East"
+	},
+/obj/machinery/door/table/reinforced{
+	dir = 1;
+	req_one_access_txt = "25;28"
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -106461,10 +106307,7 @@
 	},
 /area/library)
 "tHN" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/derelict/hallway/primary)
 "tIm" = (
 /obj/structure/cult_legacy/tome,
@@ -106712,10 +106555,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "tLN" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -106968,10 +106808,7 @@
 /area/derelict/hallway/secondary)
 "tQd" = (
 /obj/structure/window/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "tQp" = (
 /obj/machinery/status_display{
@@ -107751,10 +107588,7 @@
 /area/hallway/secondary/entry)
 "ufs" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "ufD" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -108259,7 +108093,7 @@
 	},
 /area/derelict/medical/chapel)
 "utz" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /turf/simulated/floor{
@@ -108987,8 +108821,8 @@
 	icon_state = "bot"
 	},
 /obj/item/weapon/circuitboard/circuit_imprinter{
-	pixel_y = -3;
-	pixel_x = 3
+	pixel_x = 3;
+	pixel_y = -3
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -109012,10 +108846,7 @@
 /area/hallway/secondary/entry)
 "uHz" = (
 /obj/structure/window/reinforced,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "uHE" = (
 /obj/machinery/door/firedoor/border_only{
@@ -109253,7 +109084,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "uKZ" = (
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	anchored = 1;
 	dir = 4;
 	state = 2
@@ -109359,7 +109190,7 @@
 	dir = 8;
 	pixel_x = -24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -110627,10 +110458,7 @@
 	},
 /area/hallway/secondary/entry)
 "vlR" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/teleporter)
 "vlY" = (
 /obj/structure/cable{
@@ -110913,10 +110741,7 @@
 /area/crew_quarters/locker)
 "vqG" = (
 /obj/item/stack/medical/bruise_pack,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/medical)
 "vqX" = (
 /obj/structure/table,
@@ -111230,10 +111055,7 @@
 	},
 /area/science/lab)
 "vwc" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/teleporter)
 "vwe" = (
 /obj/structure/cable{
@@ -111372,16 +111194,13 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/atmos)
 "vyR" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	icon_state = "right";
-	name = "Captain's Desk Door";
-	req_access_txt = "20"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
 /obj/machinery/light,
+/obj/machinery/door/table/wood{
+	req_access_txt = "20"
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "vyX" = (
@@ -112343,10 +112162,7 @@
 /obj/machinery/light_construct/small{
 	dir = 1
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/teleporter)
 "vQD" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
@@ -112595,10 +112411,7 @@
 /turf/simulated/floor/plating,
 /area/storage/tools)
 "vWe" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area/surface/snow)
 "vWg" = (
 /obj/machinery/light/small{
@@ -113186,10 +112999,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "wfG" = (
 /obj/structure/disposalpipe/segment,
@@ -114499,10 +114309,7 @@
 	},
 /area/science/lab)
 "wBQ" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/hallway/secondary)
 "wBS" = (
 /obj/structure/cable{
@@ -115362,10 +115169,7 @@
 /turf/simulated/floor,
 /area/hallway/primary/starboard)
 "wQI" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "wQT" = (
 /obj/machinery/door/airlock{
@@ -115565,10 +115369,7 @@
 "wUT" = (
 /obj/structure/window/reinforced,
 /obj/machinery/portable_atmospherics/canister/plasma,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "wUX" = (
 /obj/structure/sign/securearea{
@@ -115590,7 +115391,7 @@
 /turf/simulated/floor,
 /area/derelict/bridge)
 "wVr" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -115941,7 +115742,7 @@
 	},
 /area/hallway/secondary/exit)
 "xcE" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{
@@ -116217,8 +116018,8 @@
 /area/maintenance/port)
 "xgx" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1;
-	default_scrubbed_gases = list("plasma")
+	default_scrubbed_gases = list("plasma");
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -116316,9 +116117,7 @@
 /area/surface/snow)
 "xiq" = (
 /obj/structure/bed/chair,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "xiz" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
@@ -116550,10 +116349,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/hallway/primary)
 "xpw" = (
 /obj/structure/cable{
@@ -116963,10 +116759,7 @@
 /turf/simulated/floor/plating,
 /area/science/xenobiology/specimen_3)
 "xxd" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 8;
-	name = "Library Desk Door";
+/obj/machinery/door/table/wood{
 	req_access_txt = "37"
 	},
 /turf/simulated/floor/wood,
@@ -117194,10 +116987,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/machinery/computer/smelting{
-	name = "recycling furnace console";
-	smelter_tag = "recycling_smelter"
-	},
+/obj/machinery/computer/smelting/recycling,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "neutral"
@@ -117518,10 +117308,7 @@
 /area/crew_quarters/captain)
 "xFW" = (
 /obj/item/stack/cable_coil/cut,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "xGg" = (
 /turf/unsimulated/floor{
@@ -117541,10 +117328,7 @@
 /turf/simulated/floor/bluegrid,
 /area/turret_protected/ai)
 "xGD" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/aft)
 "xGH" = (
 /obj/structure/catwalk,
@@ -118161,10 +117945,7 @@
 /turf/simulated/wall,
 /area/engineering/engine)
 "xOp" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/bridge/ai_upload)
 "xOq" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -118183,10 +117964,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area/derelict/singularity_engine)
 "xOz" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -254401,7 +254179,7 @@ bEs
 pQf
 bvv
 byU
-byU
+iDB
 bbq
 bcD
 bdH
@@ -319711,7 +319489,7 @@ dvd
 dvd
 dvd
 dvd
-dsr
+dvd
 dvd
 dvd
 dvd

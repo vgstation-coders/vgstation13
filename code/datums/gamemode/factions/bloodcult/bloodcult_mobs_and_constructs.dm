@@ -13,6 +13,13 @@
 	var/turf/crashing = null
 	spell_on_use_inhand = /spell/juggerdash //standard jug gets forcewall, but this seems better for perfect
 
+/mob/living/simple_animal/construct/armoured/perfect/special_thrown_behaviour()
+	dash_dir = dir
+	throwing = 2//dashing through windows and grilles
+
+/mob/living/simple_animal/construct/armoured/perfect/get_afterimage()
+	return "red"
+
 /mob/living/simple_animal/construct/armoured/perfect/to_bump(var/atom/obstacle)
 	if(src.throwing)
 		var/breakthrough = 0
@@ -819,9 +826,9 @@ var/list/astral_projections = list()
 
 /mob/living/simple_animal/astral_projection/update_perception()
 	if(client)
-		if(client.darkness_planemaster)
-			client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
-			client.darkness_planemaster.alpha = 180
+		if(dark_plane)
+			dark_plane.alphas["astralprojection"] = 75
+		check_dark_vision()
 		if(!tangibility)
 			client.color = list(
 						1,0,0,0,

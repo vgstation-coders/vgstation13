@@ -1,6 +1,7 @@
 #define NO_TRANSIT 0 //Don't use transit areas
 #define TRANSIT_ACROSS_Z_LEVELS 1 //Only use transit areas if moving to another z-level
 #define TRANSIT_ALWAYS 2 //Always use transit areas
+#define CHEAP_TRANSIT 3 //Only use transit areas when moving to another z-level, with free travel between the station and roid
 
 //Whether this shuttle can be linked to a shuttle control console.
 #define LINK_FREE 0
@@ -147,7 +148,6 @@
 			//This isn't really a problem, but if the shuttle moves somewhere it won't be able to return to its starting location
 			. = INIT_NO_START
 
-		src.dir = turn(linked_port.dir, 180)
 	else
 		//No docking port - the shuttle can't be moved (bad but fixable with admin intervention)
 		. = INIT_NO_PORT
@@ -156,6 +156,22 @@
 	for(var/obj/docking_port/D in linked_area)
 		docking_ports_aboard |= D
 
+	for(var/obj/structure/shuttle/engine/propulsion/P in linked_area) // Use any shuttle engine to set the shuttle's direction
+		if(istype(P))
+			dir = P.dir
+			break
+
+	for(var/turf/T in linked_area.area_turfs)
+		var/corner = FALSE
+		if(!isopensurface(T) || !istype(T,/turf/space))
+			for(var/obj/O in T.contents)
+				if(istype(O,/obj/structure/shuttle))
+					if(istype(T,/turf/space))
+						corner = TRUE
+						break
+			if(corner)
+				continue
+			T.turf_flags |= SHUTTLE_TURF
 	return
 
 /datum/shuttle/Destroy()
@@ -227,14 +243,15 @@
 	if(A)
 		return A
 	for(var/mob/living/M in get_contents_in_object(linked_area, /mob/living))
-		if(M.locked_to_z && M.locked_to_z != destination_port.z)
+		var/datum/virtual_z/destination_port_vz = destination_port.get_virtual_z()
+		if(M.locked_to_v && M.locked_to_v != destination_port_vz)
 			return M
 	return 0
 
 //This is the proc you generally want to use when moving a shuttle. Runs all sorts of checks (cooldown, if already moving, etc)
 //If you want to bypass it, set destination_port to something and call pre_flight()
 //Alternatively, call move_to_dock(destination)
-/datum/shuttle/proc/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
+/datum/shuttle/proc/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user, var/eject = FALSE)
 	if(!D)
 		return 0 //no docking port
 	if(!linked_port)
@@ -294,9 +311,9 @@
 			var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
 			message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
 	else
-		actually_travel_to(D, broadcast, user)
+		actually_travel_to(D, broadcast, user, eject)
 
-/datum/shuttle/proc/actually_travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
+/datum/shuttle/proc/actually_travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user, var/eject = FALSE)
 	//Handle the message
 	var/time = "as soon as possible"
 	switch(pre_flight_delay)
@@ -312,6 +329,10 @@
 			time = "in [max(round((pre_flight_delay) / 10, 1), 0)] seconds"
 	if(broadcast)
 		broadcast.announce("The shuttle has received your message and will be sent [time].")
+
+	animate_liftoff()
+	if(eject)
+		eject_mobs()
 
 	destination_port = D
 	last_moved = world.time
@@ -329,6 +350,8 @@
 	destination_port.start_warning_lights()
 
 	spawn(get_pre_flight_delay())
+		if(eject)
+			eject_mobs(TRUE) //Make sure there aren't any stowaways
 		if(current_port)
 			current_port.stop_warning_lights()
 		if(destination_port)
@@ -349,9 +372,20 @@
 						to_chat(user, "[A.name] is preventing the shuttle from departing.")
 				moving = 0
 				destination_port = null
+				reset_visuals()
 				return
 			for(var/atom/movable/AA in linked_area)
-				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "to_z" = D.z, "from_z" = linked_port.z)
+				INVOKE_EVENT(AA, /event/v_transition, "user" = AA, "to_v" = D.get_virtual_z(), "from_v" = linked_port.get_virtual_z())
+		if(D.get_virtual_z() != linked_port.get_virtual_z())
+			var/datum/virtual_z/to_v = D.get_virtual_z()
+			var/datum/virtual_z/from_v = linked_port.get_virtual_z()
+			for(var/atom/movable/AA in linked_area)
+				if(!istype(AA, /mob/living))
+					continue
+				var/mob/living/LL = AA
+				to_v.mob_entered(LL)
+				from_v.mob_exited(LL)
+
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -372,20 +406,116 @@
 	if(!destination_port)
 		return
 
+	var/datum/virtual_z/vz = destination_port.get_virtual_z()
+	if(vz.planet)
+		vz.spawn_lz_warnings(src)
 	if(transit_port && get_transit_delay())
-		if(use_transit == TRANSIT_ALWAYS || (use_transit == TRANSIT_ACROSS_Z_LEVELS && (linked_area.z != destination_port.z)))
+		if(transit_check())
+			close_all_doors()
 			move_to_dock(transit_port)
 			spawn(max(1,get_transit_delay()-5))
 				for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
 					spawn()
 						P.shoot_exhaust()
-			sleep(get_transit_delay())
+			for(var/atom/A in linked_area.contents)
+				animate(A)
+				if(istype(A,/mob/living))
+					var/mob/living/M = A
+					M << sound("sound/machines/hyperspace_progress.ogg", repeat = 0, wait = 1, channel = CHANNEL_AMBIENCE, volume = 75)
+			spawn(get_transit_delay())
+				complete_flight()
+			return
 
+	complete_flight()
+
+/datum/shuttle/proc/complete_flight()
 	if(destination_port)
+		animate_landing()
 		move_to_dock(destination_port)
 		destination_port = null
 
 	moving = 0
+
+/datum/shuttle/proc/transit_check()
+	if(use_transit == NO_TRANSIT) // no transit
+		return FALSE
+	else if(use_transit == TRANSIT_ALWAYS) // always transit
+		return TRUE
+	else if(linked_area.z == destination_port.z) // same z-level
+		if(istype(destination_port,/obj/docking_port/destination/planet_surface) || istype(linked_port,/obj/docking_port/destination/planet_surface)) //transit to/from a planet
+			return TRUE
+		else
+			return FALSE
+	else if(use_transit == CHEAP_TRANSIT) // station <-> roid no transit
+		if(linked_area.z == map.zMainStation) // no transit from station to the roid
+			if(destination_port.z == map.zAsteroid)
+				return FALSE
+			else
+				return TRUE
+		else if(destination_port.z == map.zMainStation) // no transit from roid to station
+			if(linked_area.z == map.zAsteroid)
+				return FALSE
+			else
+				return TRUE
+		else
+			return TRUE
+	else if(use_transit == TRANSIT_ACROSS_Z_LEVELS) // transit across a z-level
+		if(linked_area.z != destination_port.z)
+			return TRUE
+		else
+			return FALSE
+	else
+		return FALSE
+
+/datum/shuttle/proc/animate_liftoff()
+	var/variation = rand(1,2)
+	for(var/atom/A in linked_area.contents)
+		var/skip = FALSE
+		if(istype(A,/obj/structure/shuttle/engine/heater))
+			var/obj/structure/shuttle/engine/heater/H = A
+			H.activate()
+		if(istype(A,/mob/living))
+			var/mob/living/M = A
+			M << sound("sound/machines/hyperspace_begin.ogg", repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE, volume = 50)
+		if(istype(A,/turf))
+			var/turf/T = A
+			for(var/obj/O in T.contents)
+				if(istype(O,/obj/structure/shuttle/diag_wall))
+					skip = TRUE
+					break
+		if(skip)
+			continue
+		var/base_y = A.pixel_y + 5
+		animate(A, pixel_y = base_y, time = 5, easing = SINE_EASING | EASE_OUT)
+		animate(pixel_y = base_y + variation, time = 10, easing = SINE_EASING, loop = -1)
+		animate(pixel_y = base_y - variation, time = 10, easing = SINE_EASING)
+		A.pixel_y = base_y - 5
+
+/datum/shuttle/proc/animate_landing()
+	for(var/atom/A in linked_area.contents)
+		var/skip = FALSE
+		if(istype(A,/mob/living))
+			var/mob/living/M = A
+			M << sound("sound/machines/hyperspace_end.ogg", repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE, volume = 50)
+		if(istype(A,/turf))
+			var/turf/T = A
+			for(var/obj/O in T.contents)
+				if(istype(O,/obj/structure/shuttle/diag_wall))
+					skip = TRUE
+					break
+		if(skip)
+			continue
+		A.pixel_y += 5
+		animate(A, pixel_y = A.pixel_y - 5, time = 10, easing = SINE_EASING|EASE_OUT)
+	spawn(15)
+		reset_visuals()
+
+/datum/shuttle/proc/reset_visuals()
+	for(var/atom/A in linked_area.contents)
+		if(istype(A,/obj/structure/shuttle/engine/heater))
+			var/obj/structure/shuttle/engine/heater/H = A
+			H.deactivate()
+		animate(A)
 
 //This is the proc you want to use to FORCE a shuttle to move. It always moves it, unless the shuttle or its area don't exist. Transit is skipped, after_flight() is called
 /datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0, var/rotate_after = 0) //A direct proc with no bullshit
@@ -393,6 +523,9 @@
 		return
 	if(!linked_port)
 		return
+
+	// Track source virtual_z before moving for departure event (use current_port, not linked_port)
+	var/datum/virtual_z/source_vz = current_port?.get_virtual_z()
 
 	//List of all shuttles docked to this shuttle. They will be moved together with their parent.
 	//In the list, shuttles are associated with the docking port they are docked to
@@ -462,6 +595,12 @@
 
 		current_port = D
 
+		if(source_vz)
+			INVOKE_EVENT(src, /event/shuttle_departed, "vz" = source_vz, "shuttle" = src)
+		var/datum/virtual_z/dest_vz = D.get_virtual_z()
+		if(dest_vz)
+			INVOKE_EVENT(src, /event/shuttle_arrived, "vz" = dest_vz, "shuttle" = src)
+
 		after_flight() //Shake the shuttle, weaken unbuckled mobs, etc.
 
 		return 1
@@ -479,6 +618,9 @@
 
 //Shakes cameras for mobs
 /datum/shuttle/proc/after_flight()
+	var/datum/virtual_z/vz = current_port.get_virtual_z()
+	if(vz.planet)
+		vz.clear_lz_warnings(src)
 	for(var/atom/movable/AM in linked_area)
 		if(AM.anchored)
 			continue
@@ -556,9 +698,30 @@
 			occupants.Add(L)
 	else
 		for(var/mob/living/L in mob_list)
-			if(get_area(src) == linked_area)
+			if(get_area(L) == linked_area)
 				occupants.Add(L)
 	return occupants
+
+/datum/shuttle/proc/get_size()
+	if(!linked_area)
+		return null
+
+	var/low_x = world.maxx
+	var/low_y = world.maxy
+	var/high_x = 1
+	var/high_y = 1
+
+	for(var/turf/T in linked_area)
+		if(T.x < low_x)
+			low_x = T.x
+		if(T.x > high_x)
+			high_x = T.x
+		if(T.y < low_y)
+			low_y = T.y
+		if(T.y > high_y)
+			high_y = T.y
+
+	return list(abs(high_x - low_x) + 1, abs(high_y - low_y) + 1)
 
 /proc/get_refill_area(var/obj/docking_port/destination/D)
 	if(ispath(D?.refill_area))
@@ -645,6 +808,8 @@
 
 
 	var/list/turfs_to_update = list()
+	var/list/corner_turfs = list()
+	var/list/old_turfs = list() // Turfs that need weather re-registered after shuttle leaves
 
 	//Move turfs
 	for(var/datum/coords/C in new_turfs)
@@ -661,6 +826,10 @@
 		if(!new_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get new turf at [C.x_pos];[C.y_pos];[new_center.z]")
 			continue
+
+		// stop the shuttle corners from stealing turfs
+		if(locate(/obj/structure/shuttle/diag_wall) in old_turf)
+			corner_turfs[new_turf] = 1
 
 		var/turf/displace_to = locate(C.x_pos,throwy,new_center.z)
 		for(var/atom/movable/AM as mob|obj in new_turf.contents)
@@ -688,9 +857,14 @@
 
 		linked_area.contents.Add(new_turf)
 		new_turf.change_area(old_area,linked_area)
-		if(!istype(old_turf, /turf/space))
+		if(isshuttleturf(old_turf) || (old_turf.turf_flags & SHUTTLE_TURF))
 			new_turf.ChangeTurf(old_turf.type, allow = 1)
+			new_turf.turf_flags |= SHUTTLE_TURF
+			old_turf.turf_flags &= ~SHUTTLE_TURF
 		new_turfs[C] = new_turf
+
+		old_turf.pixel_y = initial(old_turf.pixel_y)
+		new_turf.pixel_y = old_turf.pixel_y
 
 		//***Remove old turf from shuttle's area****
 
@@ -745,7 +919,7 @@
 		// The better solution would be to not do that at all in New(), or use
 		// something like the map loader's atom preloader to transfer the
 		// floor_tile before New().
-		if(istype(old_turf, /turf/simulated/floor))
+		if(istype(old_turf, /turf/simulated/floor) && istype(new_turf, /turf/simulated/floor))
 			var/turf/simulated/floor/ancient = old_turf
 			var/turf/simulated/floor/modern = new_turf
 			modern.floor_tile = ancient.floor_tile
@@ -789,7 +963,7 @@
 		//Delete the old turf
 		var/replacing_turf_type = old_turf.get_underlying_turf()
 
-		if(D && istype(D))
+		if(D && istype(D) && D.base_turf_type)
 			replacing_turf_type = D.base_turf_type
 
 		old_turf.ChangeTurf(replacing_turf_type, allow = 1)
@@ -803,11 +977,65 @@
 		if(istype(old_turf,/turf/space))
 			old_turf.lighting_clear_overlay() //A horrible band-aid fix for lighting overlays appearing over space
 
+		old_turfs += old_turf
+
+	// shuttle corner adjustments
+	for(var/turf/diag_turf in corner_turfs)
+		var/obj/structure/shuttle/diag_wall/wall = locate(/obj/structure/shuttle/diag_wall) in diag_turf
+		if(!wall)
+			continue
+
+		if(istype(diag_turf, /turf/space))
+			var/turf/space/nextturf = null
+			for(var/direction in list(NORTH, SOUTH, EAST, WEST))
+				var/turf/check_turf = get_step(diag_turf, direction)
+				if(check_turf && istype(check_turf, /turf/space))
+					nextturf = check_turf
+					break
+
+			if(nextturf)
+				diag_turf.icon = nextturf.icon
+				diag_turf.icon_state = nextturf.icon_state
+			else
+				diag_turf.icon = initial(diag_turf.icon)
+				diag_turf.icon_state = initial(diag_turf.icon_state)
+
 	//Update doors
 	if(turfs_to_update.len)
 		for(var/turf/simulated/T1 in turfs_to_update)
 			for(var/obj/machinery/door/D2 in T1)
 				D2.update_nearby_tiles()
+
+	// Unregister shuttle turfs from weather system
+	// doing this for source and destination in case we move between planets
+	var/datum/virtual_z/source_v = our_center.get_virtual_z()
+	var/datum/climate/source_climate = SSweather.get_climate(source_v)
+	if(!source_climate)
+		source_climate = SSweather.get_climate(source_v)
+	var/datum/virtual_z/dest_v = new_center.get_virtual_z()
+	var/datum/climate/dest_climate = SSweather.get_climate(dest_v)
+	if(!dest_climate)
+		dest_climate = SSweather.get_climate(dest_v)
+
+	for(var/turf/T in linked_area.contents)
+		for(var/obj/effect/edge_overlay/E in T)
+			qdel(E)
+		if(T in corner_turfs)
+			continue
+		if(source_climate)
+			source_climate.unregister_weather_turf(T)
+		if(dest_climate)
+			dest_climate.unregister_weather_turf(T)
+		for(var/obj/effect/weather_holder/WH in T.vis_contents)
+			T.vis_contents -= WH
+
+	// Re-register turfs left behind by the shuttle with the source climate
+	if(source_climate)
+		for(var/turf/old_turf in old_turfs)
+			source_climate.register_weather_turf(old_turf, TRUE)
+
+	if(source_v.daynight_turfs.len)
+		SSDayNight.update_turf_lighting(old_turfs, source_v)
 
 	return 1
 
@@ -834,17 +1062,17 @@
 					warning("Invalid or missing starting area for [S.name] ([S.type]) [msg]")
 				else
 					var/msg = S.linked_area ? "- \"[S.linked_area]\" was given as a starting area." : ""
-					world.log << "Invalid or missing starting area for [S.name] ([S.type]) [msg]"
+					log_debug("Invalid or missing starting area for [S.name] ([S.type]) [msg]")
 			if(INIT_NO_PORT)
 				if(S.is_special())
 					warning("Couldn't find a shuttle docking port for [S.name] ([S.type]).")
 				else
-					world.log << "Couldn't find a shuttle docking port for [S.name] ([S.type])."
+					log_debug("Couldn't find a shuttle docking port for [S.name] ([S.type]).")
 			if(INIT_NO_START)
 				if(S.is_special())
 					warning("[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems.")
 				else
-					world.log << "[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems."
+					log_debug("[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems.")
 
 
 	//THE MOST IMPORTANT PIECE OF CODE HERE
@@ -925,6 +1153,362 @@
 		for(var/image/I in images)
 			usr.client.images -= I
 	return
+
+//Throws people off a shuttle back into the station
+/datum/shuttle/proc/eject_mobs(var/harder = FALSE)
+	var/turf/initial_turf
+	var/turf/target_turf
+	if(!harder)
+		initial_turf = get_step(get_turf(linked_port), opposite_dirs[linked_port.dir])
+		target_turf = get_ranged_target_turf(initial_turf, linked_port.dir, 10)
+
+		// Open any doors along the ejection path
+		var/turf/check_turf = initial_turf
+		var/safety = 0
+		var/list/doors_to_open = list()
+		while(check_turf)
+			for(var/obj/machinery/door/D in check_turf)
+				doors_to_open += D
+			if(check_turf == target_turf)
+				break
+			check_turf = get_step(check_turf, linked_port.dir)
+			safety++
+			if(safety > 12)
+				break
+
+		for(var/obj/machinery/door/D in doors_to_open)
+			D.open()
+
+	var/list/mobs_to_eject = get_occupants(TRUE)
+
+	if(harder)
+		var/obj/structure/inflatable/shelter/S = new(get_turf(linked_port))
+		for(var/mob/living/M in mobs_to_eject)
+			M.anchored = FALSE
+			M.forceMove(S)
+			to_chat(M, "<span class='warning'>\The [src] has ejected you!</span>")
+		S.ThrowAtStation()
+	else
+		for(var/mob/living/M in mobs_to_eject)
+			M.anchored = FALSE
+			M.forceMove(initial_turf)
+			M.throw_at(target_turf, rand(5,10), 2)
+			M.Knockdown(3)
+			to_chat(M, "<span class='warning'>\The [src] has ejected you!</span>")
+
+/datum/shuttle/proc/get_docking_port_offset()
+	if(!linked_port)
+		return null
+
+	var/low_x = world.maxx
+	var/low_y = world.maxy
+
+	for(var/turf/T in linked_area)
+		if(T.x < low_x)
+			low_x = T.x
+		if(T.y < low_y)
+			low_y = T.y
+
+	var/offset_x = linked_port.x - low_x
+	var/offset_y = linked_port.y - low_y
+
+	return list(offset_x, offset_y)
+
+/datum/shuttle/proc/update_appearance(obj/item/O, mob/user)
+	if(!O || !user)
+		return
+	var/obj/item/device/shuttle_holopainter/sam = O
+	if(!istype(sam))
+		return
+	if(sam.emagged)
+		for(var/turf/simulated/wall/shuttle/W in linked_area)
+			W.walltype = "swall"
+			W.relativewall()
+			W.color = "#ff00dd"
+		for(var/obj/structure/shuttle/diag_wall/WD in linked_area)
+			WD.icon_state = "diagonalWallS"
+			WD.color = "#ff00dd"
+		for(var/turf/simulated/floor/shuttle/F in linked_area)
+			F.icon_state = "clown"
+		return
+	if(sam.target == "Walls")
+		var/used_walltype
+		switch(sam.preset)
+			if("White Smoothed")
+				used_walltype = "swall"
+			if("Black Smoothed")
+				used_walltype = "bswall"
+			if("White Unsmoothed")
+				used_walltype = "wall1"
+			if("Black Unsmoothed")
+				used_walltype = "wall3"
+			if("Syndicate")
+				used_walltype = "satwall"
+			if("Layered")
+				used_walltype = "vwall"
+			else
+				used_walltype = "swall"
+		for(var/turf/simulated/wall/shuttle/W in linked_area)
+			W.walltype = used_walltype
+			W.relativewall()
+			if(sam.sel_color)
+				W.color = sam.sel_color
+		for(var/obj/structure/shuttle/diag_wall/WD in linked_area)
+			if(sam.sel_color)
+				if(istype(WD,/obj/structure/shuttle/diag_wall/smooth))
+					WD.icon_state = "diagonalWallS"
+				else
+					WD.icon_state = "diagonalWall"
+				WD.color = sam.sel_color
+			else
+				switch(sam.preset)
+					if("White Smoothed")
+						used_walltype = "diagonalWallS"
+					if("Black Smoothed")
+						used_walltype = "diagonalWall3S"
+					if("White Unsmoothed")
+						used_walltype = "diagonalWall"
+					if("Black Unsmoothed")
+						used_walltype = "diagonalWall3"
+					if("Syndicate")
+						used_walltype = "diagonalWall3"
+					if("Layered")
+						used_walltype = "vwall"
+					else
+						used_walltype = "diagonalWallS"
+				WD.icon_state = used_walltype
+	else if(sam.target == "Floors")
+		var/used_floortype
+		switch(sam.preset)
+			if("White")
+				used_floortype = "floor3"
+			if("Blue")
+				used_floortype = "floor"
+			if("Yellow")
+				used_floortype = "floor2"
+			if("Red")
+				used_floortype = "floor4"
+			if("Purple")
+				used_floortype = "floor5"
+			if("Plated")
+				used_floortype = "vfloor"
+			if("Cult")
+				used_floortype = "cult"
+			else
+				used_floortype = "floor_recolor"
+
+		for(var/turf/simulated/floor/shuttle/F in linked_area)
+			F.icon_state = used_floortype
+			if(sam.sel_color)
+				F.color = sam.sel_color
+	else
+		for(var/turf/simulated/floor/shuttle/F in linked_area)
+			F.icon_state = initial(F.icon_state)
+			F.color = initial(F.color)
+		for(var/turf/simulated/wall/shuttle/W in linked_area)
+			W.walltype = initial(W.walltype)
+			W.update_icon()
+			W.color = initial(W.color)
+		for(var/obj/structure/shuttle/diag_wall/WD in linked_area)
+			WD.icon_state = initial(WD.icon_state)
+			WD.color = initial(WD.color)
+
+//Planetary landing zone datum
+/datum/landing_zone
+	var/list/turf/turf_list = list()
+	var/datum/weakref/shuttle_ref
+	var/datum/weakref/planet_ref
+	var/datum/virtual_z/vz
+	var/obj/docking_port/destination/planet_surface/docking_port
+	var/min_x = 0
+	var/min_y = 0
+	var/max_x = 0
+	var/max_y = 0
+	var/port_x = 0
+	var/port_y = 0
+
+/datum/landing_zone/New(var/datum/shuttle/shuttle, var/datum/planet_type/planet)
+	. = ..()
+	if(!shuttle || !planet)
+		qdel(src)
+		return
+
+	if(!shuttle.linked_port || !shuttle.linked_area)
+		qdel(src)
+		return
+
+	vz = planet.v
+	if(!vz)
+		qdel(src)
+		return
+
+	shuttle_ref = makeweakref(shuttle)
+	planet_ref = makeweakref(planet)
+
+	var/list/size = shuttle.get_size()
+	if(!size)
+		qdel(src)
+		return
+
+	var/width = size[1]
+	var/height = size[2]
+
+	var/list/landing_info = find_landing_location(shuttle, width, height)
+	if(!landing_info)
+		qdel(src)
+		return
+
+	var/turf/bottom_left = landing_info["bottom_left"]
+	min_x = bottom_left.x
+	min_y = bottom_left.y
+	max_x = bottom_left.x + width - 1
+	max_y = bottom_left.y + height - 1
+	var/turf/port_turf = landing_info["port_turf"]
+	port_x = port_turf.x
+	port_y = port_turf.y
+	var/port_dir = landing_info["port_dir"]
+
+	// Populate turf list
+	turf_list = block(locate(min_x, min_y, vz.z()), locate(max_x, max_y, vz.z()))
+
+	// Create the docking port
+	docking_port = new(port_turf)
+	docking_port.dir = port_dir
+	docking_port.areaname = "[planet.planet_name] surface"
+	docking_port.planet = planet
+
+	if(planet.default_baseturf)
+		docking_port.base_turf_type = planet.default_baseturf
+
+/datum/landing_zone/proc/update_turfs()
+	turf_list = block(locate(min_x, min_y, vz.z()), locate(max_x, max_y, vz.z()))
+
+/datum/landing_zone/proc/find_landing_location(var/datum/shuttle/shuttle, var/x_dim, var/y_dim)
+	if(!shuttle?.linked_port || !vz)
+		return null
+
+	var/list/search_turfs = vz.get_turfs()
+
+	var/list/offsets = shuttle.get_docking_port_offset()
+	if(!offsets || offsets.len < 2)
+		return null
+	var/port_offset_x = offsets[1]
+	var/port_offset_y = offsets[2]
+
+	// Create matrix with relative coordinates
+	var/list/turf_matrix = list()
+	for(var/turf/T in search_turfs)
+		var/rel_x = T.x - vz.x_min + 1
+		var/rel_y = T.y - vz.y_min + 1
+		var/key = "[rel_x],[rel_y]"
+		turf_matrix[key] = T
+
+	// Define safe zone boundaries (accounting for edge buffer and shuttle size)
+	var/safe_x_min = LANDING_ZONE_EDGE_BUFFER + 1
+	var/safe_x_max = vz.size_x - LANDING_ZONE_EDGE_BUFFER - x_dim + 1
+	var/safe_y_min = LANDING_ZONE_EDGE_BUFFER + 1
+	var/safe_y_max = vz.size_y - LANDING_ZONE_EDGE_BUFFER - y_dim + 1
+
+	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
+		return // Not enough space for safe landing
+
+	// Create randomized search list within safe boundaries
+	var/list/search_positions = list()
+	for(var/rel_x = safe_x_min; rel_x <= safe_x_max; rel_x++)
+		for(var/rel_y = safe_y_min; rel_y <= safe_y_max; rel_y++)
+			var/key = "[rel_x],[rel_y]"
+			if(!turf_matrix[key])
+				continue
+			var/turf/T = turf_matrix[key]
+			if(T && !iswall(T) && !istype(T, /turf/unsimulated/mineral) && istype(T.loc, /area/planet) && !istype(T, /turf/unsimulated/beach/water) && !istype(T,/turf/unsimulated/floor/planetary/lava))
+				search_positions += T
+
+	// Shuffle the search positions for randomization
+	if(!search_positions.len)
+		return null
+	search_positions = shuffle(search_positions)
+
+	// Search through randomized positions
+	for(var/turf/T in search_positions)
+		var/rel_x = T.x - vz.x_min + 1
+		var/rel_y = T.y - vz.y_min + 1
+		var/found = TRUE
+
+		for(var/dx = 0; dx < x_dim && found; dx++)
+			for(var/dy = 0; dy < y_dim && found; dy++)
+				var/check_x = rel_x + dx
+				var/check_y = rel_y + dy
+				if(check_x < 1 || check_x > vz.size_x || check_y < 1 || check_y > vz.size_y) // Out of sector bounds
+					found = FALSE
+					continue
+				var/check_key = "[check_x],[check_y]"
+				if(!turf_matrix[check_key]) // Check if turf exists at this coordinate
+					found = FALSE
+					continue
+				var/turf/target = turf_matrix[check_key]
+				if(!target || !istype(target, T.type))
+					found = FALSE
+
+		if(found)
+			// Calculate the destination docking port position
+			var/port_x = T.x + port_offset_x
+			var/port_y = T.y + port_offset_y
+			var/turf/port_base_turf = locate(port_x, port_y, vz.z())
+			var/turf/port_turf = get_step(port_base_turf, shuttle.linked_port.dir)
+
+			// The destination port direction is opposite to the shuttle's port direction
+			var/port_dir = turn(shuttle.linked_port.dir, 180)
+
+			return list("bottom_left" = T, "port_turf" = port_turf, "port_dir" = port_dir)
+
+/datum/landing_zone/proc/spawn_warnings()
+	clear_warnings()
+	for(var/turf/T in turf_list)
+		var/is_corner = is_corner_turf(T)
+		new /obj/effect/landing_zone(T, corner = is_corner)
+
+/datum/landing_zone/proc/clear_warnings()
+	update_turfs()
+	for(var/turf/T in turf_list)
+		for(var/obj/effect/landing_zone/overlay in T)
+			qdel(overlay)
+
+/datum/landing_zone/proc/reset_turfs()
+	var/datum/climate/C = SSweather.get_climate(vz)
+	for(var/turf/T in turf_list)
+		C?.register_weather_turf(T, TRUE)
+		var/area/A = T.loc
+		if(isopensurface(A))
+			vz.daynight_turfs |= T
+	if(turf_list.len && vz)
+		SSDayNight.update_turf_lighting(turf_list, vz)
+
+/datum/landing_zone/proc/is_corner_turf(var/turf/T)
+	if(!turf_list.len || !T)
+		return FALSE
+
+	var/min_x = world.maxx
+	var/max_x = 0
+	var/min_y = world.maxy
+	var/max_y = 0
+
+	for(var/turf/check in turf_list)
+		if(check.x < min_x) min_x = check.x
+		if(check.x > max_x) max_x = check.x
+		if(check.y < min_y) min_y = check.y
+		if(check.y > max_y) max_y = check.y
+
+	return (T.x == min_x || T.x == max_x) && (T.y == min_y || T.y == max_y)
+
+/datum/landing_zone/Destroy()
+	clear_warnings()
+	if(docking_port)
+		qdel(docking_port)
+		docking_port = null
+	turf_list = null
+	shuttle_ref = null
+	planet_ref = null
+	return ..()
 
 #undef INIT_SUCCESS
 #undef INIT_NO_AREA

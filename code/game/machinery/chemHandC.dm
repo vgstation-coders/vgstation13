@@ -143,6 +143,9 @@
 			if(!had_item)
 				to_chat(user, "<span class='notice'>\The [src] doesn't have a container to work on right now.</span>")
 
+/obj/machinery/chemtemper/get_heat_conductivity() //Chemical machines are perfectly insulated
+	return 0
+
 //Heater//
 
 /obj/machinery/chemtemper/heater
@@ -152,7 +155,7 @@
 	icon_state_open = "heater_open"
 
 	max_temperature = TEMPERATURE_LASER
-	thermal_energy_transfer = 3000
+	thermal_energy_transfer = 27000
 	part_kind = "laser"
 
 /obj/machinery/chemtemper/heater/New()
@@ -174,7 +177,7 @@
 	icon_state_open = "cooler_open"
 
 	max_temperature = 0 //You can make stuff REALLY cold
-	thermal_energy_transfer = -3000
+	thermal_energy_transfer = -27000
 	part_kind = "scanner"
 
 /obj/machinery/chemtemper/cooler/New()

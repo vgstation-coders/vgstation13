@@ -136,9 +136,41 @@
 	name = "Space hobo shack"
 
 	file_path = "maps/misc/hoboshack.dmm"
-
-/datum/map_element/hoboshack/type1
-	name = "Space hobo shack"
-
-	file_path = "maps/misc/hoboshack.dmm"
 	can_rotate = TRUE
+
+///datum/map_element/hoboshack/type1 //it was a duplicate of the original just rotated
+//	name = "Space hobo shack"
+//
+//	file_path = "maps/misc/hoboshack.dmm"
+
+/datum/map_element/hoboshack/botany
+	name = "Space hobo shack - Botany"
+
+	file_path = "maps/misc/hoboshack_botany.dmm"
+
+/datum/map_element/hoboshack/ghettolab
+	name = "Space hobo shack - Ghetto Lab"
+
+	file_path = "maps/misc/hoboshack_ghettolab.dmm"
+
+/datum/map_element/hoboshack/rcd
+	name = "Space hobo shack - RCD"
+
+	file_path = "maps/misc/hoboshack_rcd.dmm"
+
+/datum/map_element/hoboshack/clown
+	name = "Space hobo shack - Clown"
+
+	file_path = "maps/misc/hoboshack_clown.dmm"
+	can_rotate = FALSE
+
+/datum/map_element/hoboshack/saucer
+	name = "Space hobo shack - Crashed Saucer"
+
+	file_path = "maps/misc/hoboshack_saucer.dmm"
+
+/datum/map_element/hoboshack/spaceranch
+	name = "Space hobo shack - Space Ranch"
+
+	file_path = "maps/misc/hoboshack_spaceranch.dmm"
+	can_rotate = FALSE

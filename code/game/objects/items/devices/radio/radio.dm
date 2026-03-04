@@ -107,7 +107,7 @@
 	for (var/ch_name in channels)
 		dat+=text_sec_channel(ch_name, channels[ch_name])
 	dat+={"[text_wires()]</TT></body></html>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 	return
 
@@ -492,7 +492,7 @@
 */
 
 
-/obj/item/device/radio/proc/receive_range(freq, level)
+/obj/item/device/radio/proc/receive_range(freq, level, list/v_levels = null)
 	// check if this radio can receive on the given frequency, and if so,
 	// what the range is in which mobs will hear the radio
 	// returns: -1 if can't receive, range otherwise
@@ -505,6 +505,13 @@
 		var/turf/position = get_turf(src)
 		if(!position || !(position.z in level))
 			return -1
+		// If we're on a planet, check if our virtual zLevel can receive the signal
+		var/datum/virtual_z/vz = get_virtual_z()
+		if(planet && vz)
+			if(!(vz in v_levels))
+				return -1
+			else
+				return -1
 	if(freq == SYND_FREQ)
 		if(!(src.syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
 			return -1
@@ -614,7 +621,7 @@
 		dat += "Channel: <A href='byond://?src=\ref[src];toggle_channel=1'>Responder</A> <b>Command</b>"
 
 	dat+={"</TT></body></html>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 
 /obj/item/device/radio/phone/Topic(href, href_list)
@@ -692,7 +699,7 @@
 
 	dat += "Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>"
 	dat+={"</TT></body></html>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 
 /obj/item/device/radio/phone/surveillance/Topic(href, href_list)
@@ -707,6 +714,9 @@
 
 /obj/item/device/radio/phone/surveillance/attackby(obj/item/I, mob/user)
 	cigbox.attackby(I,user)
+
+/obj/item/device/radio/phone/surveillance/MouseDropFrom(obj/over_object)
+	cigbox.MouseDropFrom(over_object)
 
 /obj/item/device/radio/bug
 	name = "cigarette butt"

@@ -89,6 +89,7 @@ var/global/list/all_docking_ports = list()
 	for(var/obj/machinery/door/airlock/A in range(1,src))
 		if(!A.shuttle_warning_lights)
 			A.shuttle_warning_lights = image('icons/obj/doors/Doorint.dmi', src, "warning_lights")
+			A.shuttle_warning_lights.plane = ABOVE_LIGHTING_PLANE
 		A.overlays += A.shuttle_warning_lights
 	for(var/obj/machinery/docklight/D in dockinglights)
 		if(D.id_tag == areaname)
@@ -153,7 +154,7 @@ var/global/list/all_docking_ports = list()
 	var/turf/origin_turf = null
 	var/list/disk_references = list() //List of shuttle destination disks that know about this docking port
 
-	var/base_turf_type			= /turf/space
+	var/base_turf_type			= null // was formerly /turf/space. undo this (and the change in shuttle.dm) if it causes stuff to mess up.
 	var/base_turf_icon			= null
 	var/base_turf_icon_state	= null
 	var/base_turf_override		= FALSE
@@ -172,11 +173,12 @@ var/global/list/all_docking_ports = list()
 			refill_area = A.type //look at the area we're pointing at, if it's not a shuttle, make it our refill area
 	if(base_turf_override)
 		return //Allows mappers to manually set base_turf info
-	if(src.z in 1 to map.zLevels.len)
-		base_turf_type = get_base_turf(src.z)
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(vz)
+		base_turf_type = get_base_turf(vz)
 
-	var/datum/zLevel/L = get_z_level(src)
-	if(istype(L,/datum/zLevel/centcomm)) //If the docking port is at z-level 2 (the one with the transit areas)
+	var/datum/virtual_z/L = get_virtual_z()
+	if(!L || L.level_type == VZ_TRANSIT) //If the docking port is at a transit area
 		var/turf/T = get_turf(src)
 		if(istype(T, /turf/space))	//Placed on space
 			base_turf_type = T.type //This ensures that once a shuttle leaves transit, its turfs are replaced with MOVING SPACE instead of STATIC SPACE
@@ -237,6 +239,9 @@ var/global/list/all_docking_ports = list()
 						new teleporter_typepath(check)
 
 		generate_borders = 0
+
+/obj/docking_port/destination/planet_surface
+	areaname = "planet surface"
 
 //SILLY PROC
 /proc/select_port_from_list(var/mob/user, var/message="Select a docking port", var/title="Admin abuse", var/list/list) //like input

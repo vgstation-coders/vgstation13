@@ -56,14 +56,14 @@ default behaviour is:
 	if (the_temp > maxbodytemp)
 		return the_temp - maxbodytemp
 	else if (the_temp < minbodytemp)
-		return the_temp - minbodytemp
+		return minbodytemp - the_temp
 	return 0
 
 /mob/living/carbon/monkey/get_safe_temperature_excursion(the_temp)
 	if (the_temp > BODYTEMP_HEAT_DAMAGE_LIMIT)
 		return the_temp - BODYTEMP_HEAT_DAMAGE_LIMIT
 	else if (the_temp < BODYTEMP_COLD_DAMAGE_LIMIT)
-		return the_temp - BODYTEMP_COLD_DAMAGE_LIMIT
+		return BODYTEMP_COLD_DAMAGE_LIMIT - the_temp
 	return 0
 
 /mob/living/carbon/human/get_safe_temperature_excursion(the_temp)
@@ -71,11 +71,26 @@ default behaviour is:
 		if (the_temp > species.heat_level_1)
 			return the_temp - species.heat_level_1
 		else if (the_temp < FRIDGETEMP_DEFAULT)//Something below freezing temperature should feel adequately freezing.
-			return the_temp - FRIDGETEMP_DEFAULT
+			return FRIDGETEMP_DEFAULT - the_temp
 		//else if (the_temp < species.cold_level_1)
 		//	return the_temp - species.cold_level_1
 	else if (the_temp > BODYTEMP_HEAT_DAMAGE_LIMIT)
 		return the_temp - BODYTEMP_HEAT_DAMAGE_LIMIT
 	else if (the_temp < BODYTEMP_COLD_DAMAGE_LIMIT)
-		return the_temp - BODYTEMP_COLD_DAMAGE_LIMIT
+		return BODYTEMP_COLD_DAMAGE_LIMIT - the_temp
 	return 0
+
+
+/mob/living/proc/enable_druggy_overlays()
+	overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
+	overlay_fullscreen("high_space", /obj/abstract/screen/fullscreen/high/space)
+	overlay_fullscreen("high_over", /obj/abstract/screen/fullscreen/high/over)
+	update_fullscreen_alpha("high", 3 * DRUGGY_ALPHA / 4, DRUGGY_FADE_IN)//lighting layer
+	update_fullscreen_alpha("high_space", DRUGGY_ALPHA, DRUGGY_FADE_IN)//on top of the space background
+	update_fullscreen_alpha("high_over", DRUGGY_ALPHA / 4, DRUGGY_FADE_IN)//on top of everything (except HUD) so it affects mesons
+
+
+/mob/living/proc/disable_druggy_overlays()
+	clear_fullscreen("high", DRUGGY_FADE_OUT)
+	clear_fullscreen("high_space", DRUGGY_FADE_OUT)
+	clear_fullscreen("high_over", DRUGGY_FADE_OUT)
