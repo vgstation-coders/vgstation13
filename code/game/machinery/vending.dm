@@ -2203,6 +2203,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/bottle/ammonia = 10,
 		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine = 5,
 		)
+	premium = list(
+		/obj/structure/largecrate/hissing/vendor = 1,
+		/obj/item/floral_somatoray = 2,
+		)
 
 	pack = /obj/structure/vendomatpack/hydronutrients
 
