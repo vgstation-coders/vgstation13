@@ -147,3 +147,7 @@
 		new /mob/living/simple_animal/snail(loc)
 		new /mob/living/simple_animal/snail(loc)
 	..()
+
+/obj/structure/largecrate/hissing/vendor
+	name = "hissing crate"
+	desc = "An emergency supply of frogs and lizards."
