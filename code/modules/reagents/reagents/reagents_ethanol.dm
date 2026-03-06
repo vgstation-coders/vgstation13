@@ -490,13 +490,13 @@
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Serendipity"
 		glass_desc = "Knock back a cold glass of R&D."
-		D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"
+		D.origin_tech = "materials=7;engineering=4;plasmatech=3;powerstorage=6;bluespace=7;combat=3;magnets=6;programming=5"
 
 	else
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Sapience"
 		glass_desc = "Why research what has already been catalogued?"
-		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=6;combat=6;magnets=6;programming=5;syndicate=2" //Maxes everything but Illegal and Anomaly //the heck is illegal research...
+		D.origin_tech = "materials=10;engineering=6;plasmatech=5;powerstorage=10;bluespace=10;biotech=7;combat=7;magnets=7;programming=6;syndicate=2" //Maxes everything but Illegal and Anomaly
 
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
