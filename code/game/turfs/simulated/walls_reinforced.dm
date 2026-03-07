@@ -12,7 +12,6 @@
 	opacity = 1
 	density = 1
 
-	walltype = "rwall"
 	hardness = 90
 
 	explosion_block = 2
