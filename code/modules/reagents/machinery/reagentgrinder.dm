@@ -466,18 +466,18 @@ var/global/list/juice_items = list (
 			break
 
 		var/allowed = get_allowed_juice_by_id(O)
-		if(isnull(allowed))
+		if(!islist(allowed))
 			break
 
-		for (var/r_id in allowed)
+		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+		var/amount = get_juice_amount(O)
+		if(!amount)
+			amount = allowed[2]
 
-			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			var/amount = get_juice_amount(O)
+		beaker.reagents.add_reagent(allowed[1], min(amount, space))
 
-			beaker.reagents.add_reagent(r_id, min(amount, space))
-
-			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-				break
+		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+			break
 
 		remove_object(O)
 

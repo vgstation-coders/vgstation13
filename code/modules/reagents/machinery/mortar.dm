@@ -118,12 +118,16 @@
 		for(var/i in juice_items)
 			if(istype(crushable, i))
 				id = juice_items[i]
-		if(!id)
+		if(!islist(id))
 			return
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
-		if(juiceable.potency == -1)
-			juiceable.potency = 0
-		reagents.add_reagent(id[1], min(round(5*sqrt(juiceable.potency)), volume - reagents.total_volume))
+		var/add_amount = id[2]
+		if(istype(crushable,/obj/item/weapon/reagent_containers/food/snacks/grown))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
+			if(juiceable.potency == -1)
+				juiceable.potency = 0
+			if(juiceable.potency)
+				add_amount = juiceable.potency
+		reagents.add_reagent(id[1], min(round(5*sqrt(add_amount)), volume - reagents.total_volume))
 	else if(is_type_in_list(crushable, blend_items))
 		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")
