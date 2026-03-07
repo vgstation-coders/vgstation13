@@ -120,7 +120,7 @@
 				id = juice_items[i]
 		if(!islist(id))
 			return
-		var/add_amount = id[2]
+		var/add_amount = id[id[1]]
 		if(istype(crushable,/obj/item/weapon/reagent_containers/food/snacks/grown))
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
 			if(juiceable.potency == -1)
