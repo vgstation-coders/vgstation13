@@ -460,8 +460,7 @@ var/global/list/juice_items = list (
 	spawn(50/speed_multiplier)
 		inuse = 0
 		interact(usr)
-	//Snacks
-	for (var/obj/item/weapon/reagent_containers/food/snacks/O in holdingitems)
+	for (var/obj/item/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
 
