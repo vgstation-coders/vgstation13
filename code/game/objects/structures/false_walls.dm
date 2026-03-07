@@ -144,7 +144,23 @@
 		icon_state = reinforced ? "frwall_open" : "[mineral]fwall_open"
 		return
 
-	icon_state = "[reinforced ? "rwall" : mineral][..()]"
+	. = ..()
+	if(reinforced || mineral == "metal")
+		overlays.len = 0
+		icon_state = walltype
+		for(var/direction in cardinal)
+			if(. & direction)
+				overlays += image(src,src,"metal_corner",layer,direction)
+		for(var/direction in diagonal)
+			if(. & direction)
+				overlays += image(src,src,"metal_corner",layer,direction)
+		if(reinforced)
+			overlays += image(src,src,"r_wall-0")
+			for(var/direction in cardinal)
+				if(. & direction)
+					overlays += image(src,src,"rwall_corners",layer,direction)
+	else
+		icon_state = "[mineral][.]"
 
 /obj/structure/falsewall/attack_ai(mob/user as mob)
 	if(isMoMMI(user))
