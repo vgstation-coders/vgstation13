@@ -147,7 +147,7 @@
 	. = ..()
 	if(reinforced || mineral == "metal")
 		overlays.len = 0
-		icon_state = walltype
+		icon_state = reinforced ? "rwall" : "wall"
 		for(var/direction in cardinal)
 			if(!(. & direction))
 				overlays += image(src,src,"metal_corner",layer,direction)
