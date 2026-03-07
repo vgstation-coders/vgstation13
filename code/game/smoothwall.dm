@@ -96,7 +96,7 @@
 			if(. & direction)
 				overlays += image(src,src,"metal_corner",layer,direction)
 	else
-		icon_state = "[walltype][.]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
+		icon_state = "[walltype][.]"
 	update_paint_overlay()
 
 // AND NOW WE HAVE TO YELL AT THE NEIGHBORS FOR BEING LOUD AND NOT PAINTING WITH HOA-APPROVED COLORS

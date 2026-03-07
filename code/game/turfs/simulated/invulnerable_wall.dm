@@ -14,6 +14,16 @@
 
 	penetration_dampening = 40
 
+//copypasta from rwall code because of sprite behaviour
+/turf/simulated/wall/invulnerable/relativewall()
+	overlays.len = 0
+	. = ..()
+	if(uses_overlays)
+		overlays += image(src,src,"r_wall-0")
+		for(var/direction in cardinal)
+			if(. & direction)
+				overlays += image(src,src,"rwall_corners",layer,direction)
+
 /turf/simulated/wall/invulnerable/attackby(obj/item/W as obj, mob/user as mob)
 
 	if (!user.dexterity_check())
@@ -68,9 +78,7 @@
 /turf/simulated/wall/invulnerable/r_wall
 	name = "reinforced wall"
 	desc = "A huge chunk of reinforced metal and anchored rods used to seperate rooms and keep all but the most equipped crewmen out."
-	icon_state = "r_wall"
-	walltype = "rwall"
-	uses_overlays = FALSE
+	icon_state = "rwall"
 
 /turf/simulated/wall/invulnerable/gold
 	name = "invulnerable gold wall"
