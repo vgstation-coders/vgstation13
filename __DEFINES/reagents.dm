@@ -238,8 +238,6 @@
 #define TONIC 			"tonic"
 #define SODAWATER 			"sodawater"
 #define ICE 			"ice"
-#define PYKRETE 		"pykrete"
-#define SUPERPYKRETE 	"superpykrete"
 #define COLA 			"cola"
 #define CRYOCOLA		"cryocola"
 #define SPACEMOUNTAINWIND 			"spacemountainwind"

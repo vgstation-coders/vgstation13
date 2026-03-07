@@ -175,6 +175,29 @@
 	density = 2.2
 	specheatcap = 0.7
 
+/datum/reagent/sawdust/reaction_mob(mob/living/M, method, volume, list/zone_sels, allow_permeability, list/splashplosion)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if (H.check_body_part_coverage(EYES))
+			to_chat(H, "<span class='warning'>Your eyewear protects you from \the [src]!</span>")
+		else
+			H.visible_message("<span class='warning'>[H] is blinded by the [src]!</span>", \
+				"<span class='warning'>\The [src] flies into your eyes!</span>")
+			H.eye_blurry = max(H.eye_blurry, rand(3,8))
+			H.instant_blindness(rand(11,13))
+			H.drop_hands(get_turf(H))
+		log_attack("<font color='red'>[M] ([H ? H.ckey : "what"]) was pocketsawdusted by ([holder.my_atom.fingerprintslast])</font>")
+
+/datum/reagent/sawdust/reaction_turf(turf/simulated/T, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(!locate(/obj/effect/decal/cleanable/scattered_sand) in T)
+		new/obj/effect/decal/cleanable/scattered_sand(T)
+
 /datum/reagent/pulp
 	name = "Pulp"
 	id = PULP
@@ -183,20 +206,6 @@
 	color = "#FFBB88"
 	density = 2.2
 	specheatcap = 0.7
-
-/datum/reagent/pykrete
-	name = "Pykrete"
-	id = PYKRETE
-	description = "A tough, sturdy mixture of ice and fine wood particles."
-	reagent_state = REAGENT_STATE_SOLID
-	color = "#FFBB88"
-	density = 2.2
-	specheatcap = 0.7
-
-/datum/reagent/pykrete/super
-	name = "Super pykrete"
-	id = SUPERPYKRETE
-	description = "A tougher, sturdier mixture of ice and wood pulp."
 
 /datum/reagent/silicate
 	name = "Silicate"
