@@ -85,7 +85,18 @@
  * WE COULD STANDARDIZE THIS BUT EVERYONE'S A FUCKING SNOWFLAKE
  */
 /turf/simulated/wall/relativewall()
-	icon_state = "[walltype][..()]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
+	. = ..()
+	if(uses_overlays)
+		overlays.len = 0
+		icon_state = walltype
+		for(var/direction in cardinal)
+			if(. & direction)
+				overlays += image(src,src,"metal_corner",layer,direction)
+		for(var/direction in diagonal)
+			if(. & direction)
+				overlays += image(src,src,"metal_corner",layer,direction)
+	else
+		icon_state = "[walltype][.]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
 	update_paint_overlay()
 
 // AND NOW WE HAVE TO YELL AT THE NEIGHBORS FOR BEING LOUD AND NOT PAINTING WITH HOA-APPROVED COLORS
