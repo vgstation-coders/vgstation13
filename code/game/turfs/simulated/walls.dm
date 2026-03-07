@@ -2,6 +2,7 @@
 	name = "wall"
 	desc = "A huge chunk of metal used to separate rooms."
 	icon = 'icons/turf/walls.dmi'
+	icon_state = "wall"
 	var/mineral = "metal"
 	var/rotting = 0
 	var/uses_overlays = TRUE

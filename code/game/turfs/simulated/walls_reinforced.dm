@@ -8,7 +8,7 @@
 /turf/simulated/wall/r_wall
 	name = "reinforced wall"
 	desc = "A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out."
-	icon_state = "r_wall"
+	icon_state = "rwall"
 	opacity = 1
 	density = 1
 
