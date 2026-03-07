@@ -45,10 +45,10 @@
 	overlays.len = 0
 	. = ..()
 	if(uses_overlays)
-		overlays += image(src,src,"r_wall-[d_state]")
+		overlays += image(icon = src,icon_state = "r_wall-[d_state]")
 		for(var/direction in cardinal)
 			if(!(. & direction))
-				overlays += image(src,src,"rwall_corners",layer,direction)
+				overlays += image(icon = src,icon_state = "rwall_corners",dir = direction)
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
 	user.delayNextAttack(5)
