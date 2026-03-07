@@ -91,10 +91,14 @@
 		icon_state = walltype
 		for(var/direction in cardinal)
 			if(!(. & direction))
-				overlays += image(icon = src,icon_state = "metal_corners",dir = direction)
+				var/image/over = image(icon = src,icon_state = "metal_corners",dir = direction)
+				over.plane = TURF_OVERLAY_PLANE
+				overlays += over
 		for(var/direction in diagonal)
 			if(!(. & direction))
-				overlays += image(icon = src,icon_state = "metal_corners",dir = direction)
+				var/image/over = image(icon = src,icon_state = "metal_corners",dir = direction)
+				over.plane = TURF_OVERLAY_PLANE
+				overlays += over
 	else
 		icon_state = "[walltype][.]"
 	update_paint_overlay()
