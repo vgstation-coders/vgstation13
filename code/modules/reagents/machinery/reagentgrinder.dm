@@ -469,9 +469,9 @@ var/global/list/juice_items = list (
 			break
 
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-		var/amount = get_juice_amount(O)
+		var/amount = allowed[allowed[1]]
 		if(!amount)
-			amount = allowed[allowed[1]]
+			amount = get_juice_amount(O)
 
 		beaker.reagents.add_reagent(allowed[1], min(amount, space))
 
