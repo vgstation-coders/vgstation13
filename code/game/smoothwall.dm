@@ -90,10 +90,10 @@
 		overlays.len = 0
 		icon_state = walltype
 		for(var/direction in cardinal)
-			if(. & direction)
+			if(!(. & direction))
 				overlays += image(src,src,"metal_corner",layer,direction)
 		for(var/direction in diagonal)
-			if(. & direction)
+			if(!(. & direction))
 				overlays += image(src,src,"metal_corner",layer,direction)
 	else
 		icon_state = "[walltype][.]"

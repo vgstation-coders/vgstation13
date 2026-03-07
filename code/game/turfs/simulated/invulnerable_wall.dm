@@ -21,7 +21,7 @@
 	if(uses_overlays)
 		overlays += image(src,src,"r_wall-0")
 		for(var/direction in cardinal)
-			if(. & direction)
+			if(!(. & direction))
 				overlays += image(src,src,"rwall_corners",layer,direction)
 
 /turf/simulated/wall/invulnerable/attackby(obj/item/W as obj, mob/user as mob)
