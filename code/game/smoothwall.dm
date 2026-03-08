@@ -90,13 +90,13 @@
 		overlays.len = 0
 		icon_state = walltype
 		if(uses_overlays >= RWALL_OVERLAY)
-			if(!src::d_state) //these lil ridges only show up when not building
+			if(!src:d_state) //these lil ridges only show up when not building
 				for(var/direction in cardinal)
 					if(!(. & direction))
 						var/image/subover = image(icon = src,icon_state = "rwall_corners",dir = direction)
 						subover.plane = TURF_OVERLAY_PLANE
 						overlays += subover
-			var/image/over = image(icon = src,icon_state = "r_wall-[src::d_state || 0]")
+			var/image/over = image(icon = src,icon_state = "r_wall-[src:d_state || 0]")
 			over.plane = TURF_OVERLAY_PLANE
 			overlays += over
 		for(var/direction in diagonal)
