@@ -30,11 +30,6 @@
 	if(flammable)
 		zone?.burnable_atoms |= src
 
-/turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD,var/luminous=FALSE)
-	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src
-	if(!tracks)
-		tracks = new typepath(src)
-	tracks.AddTracks(bloodDNA,comingdir,goingdir,bloodcolor,luminous)
 
 /turf/simulated/Entered(atom/A, atom/OL)
 	if(movement_disabled && usr.ckey != movement_disabled_exception)
@@ -48,32 +43,6 @@
 			return ..()
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
-
-			// Tracking blood
-			var/list/bloodDNA = null
-			var/bloodcolor=""
-
-			// Do we have shoes?
-			if(H.shoes)
-				var/obj/item/clothing/shoes/S = H.shoes
-				if(S.track_blood && S.blood_DNA)
-					bloodDNA   = S.blood_DNA
-					bloodcolor = S.blood_color
-					S.track_blood = max(round(S.track_blood - 1, 1),0)
-			else
-				if(H.track_blood && H.feet_blood_DNA)
-					bloodDNA   = H.feet_blood_DNA
-					bloodcolor = H.feet_blood_color
-					H.track_blood = max(round(H.track_blood - 1, 1),0)
-
-			if (bloodDNA)
-				AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor,H.luminous_feet()) // Coming
-				if(istype(OL, /turf/simulated) && Adjacent(OL))
-					var/turf/simulated/from = OL
-					from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor,H.luminous_feet()) // Going
-
-			bloodDNA = null
-
 			// Floorlength braids?  Enjoy your tripping.
 			if(H.my_appearance.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
 				var/datum/sprite_accessory/hair_style = hair_styles_list[H.my_appearance.h_style]

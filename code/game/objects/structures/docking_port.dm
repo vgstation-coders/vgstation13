@@ -154,7 +154,7 @@ var/global/list/all_docking_ports = list()
 	var/turf/origin_turf = null
 	var/list/disk_references = list() //List of shuttle destination disks that know about this docking port
 
-	var/base_turf_type			= /turf/space
+	var/base_turf_type			= null // was formerly /turf/space. undo this (and the change in shuttle.dm) if it causes stuff to mess up.
 	var/base_turf_icon			= null
 	var/base_turf_icon_state	= null
 	var/base_turf_override		= FALSE

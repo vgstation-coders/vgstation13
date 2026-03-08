@@ -76842,14 +76842,8 @@
 /area/centcom/suppy)
 "cPM" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
-	},
-/area/prison/solitary)
-"cPN" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPO" = (
@@ -76863,18 +76857,13 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "cPQ" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPR" = (
 /turf/unsimulated/floor{
 	name = "plating"
-	},
-/area/prison/solitary)
-"cPS" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
 	},
 /area/prison/solitary)
 "cPT" = (
@@ -76891,9 +76880,7 @@
 /area/prison/solitary)
 "cPV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cPW" = (
 /obj/item/weapon/storage/fancy/cigarettes,
@@ -77237,19 +77224,19 @@
 /area/centcom/suppy)
 "cQT" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cQU" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cQV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cQW" = (
@@ -77295,15 +77282,8 @@
 	icon_state = "dark neutral stripe"
 	},
 /area/centcom/suppy)
-"cRc" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "cRd" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cRe" = (
 /obj/machinery/dna_scannernew,
@@ -392859,7 +392839,7 @@ aaa
 aaa
 aaa
 cPC
-cPN
+cPV
 cQm
 cPC
 cQT
@@ -393365,7 +393345,7 @@ cPM
 cQl
 cPC
 cPU
-cRc
+cRd
 cPC
 aaa
 aaa
@@ -396373,11 +396353,11 @@ aaa
 aaa
 aaa
 cPC
-cPS
+cQU
 cQl
 cPC
 cQl
-cPS
+cQU
 cPC
 aaa
 cRv
@@ -397882,7 +397862,7 @@ cPC
 cPR
 cPU
 cPC
-cPS
+cQU
 cPR
 cPC
 aaa
@@ -399388,7 +399368,7 @@ cPC
 cPT
 cPQ
 cPC
-cPS
+cQU
 cPR
 cPC
 aaa
@@ -402398,7 +402378,7 @@ aaa
 aaa
 cPC
 cPR
-cPS
+cQU
 cPC
 cPU
 cRd

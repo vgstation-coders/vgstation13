@@ -680,8 +680,8 @@ var/global/mulebot_count = 0
 			else if(newdir == (EAST + WEST))
 				newdir = EAST
 			goingdir = newdir
-		if(bloodiness && istype(next,/turf/simulated) )
-			var/turf/simulated/n=next
+		if(bloodiness )
+			var/turf/n=next
 			n.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
 			bloodiness--
 

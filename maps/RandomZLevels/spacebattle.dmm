@@ -714,12 +714,6 @@
 /obj/machinery/computer/powermonitor,
 /turf/simulated/floor,
 /area/awaymission/spacebattle/cruiser)
-"cc" = (
-/turf/simulated/floor{
-	tag = "icon-damaged5";
-	icon_state = "damaged5"
-	},
-/area/awaymission/spacebattle/cruiser)
 "cd" = (
 /obj/machinery/computer/pod{
 	id_tag = "spacebattlepod";
@@ -748,10 +742,7 @@
 /turf/simulated/floor,
 /area/awaymission/spacebattle/cruiser)
 "cj" = (
-/turf/simulated/floor{
-	tag = "icon-damaged5";
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "diagonalWall3"
 	},
@@ -765,55 +756,18 @@
 	},
 /turf/simulated/floor/shuttle/plating,
 /area/awaymission/spacebattle/cruiser)
-"cl" = (
-/turf/simulated/floor{
-	tag = "icon-damaged4";
-	icon_state = "damaged4"
-	},
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 4;
-	icon_state = "diagonalWall3"
-	},
-/area/awaymission/spacebattle/cruiser)
 "cm" = (
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/space,
 /turf/simulated/floor,
 /area/awaymission/spacebattle/cruiser)
-"cn" = (
-/turf/simulated/floor{
-	tag = "icon-damaged2";
-	icon_state = "damaged2"
-	},
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "diagonalWall3"
-	},
-/area/awaymission/spacebattle/cruiser)
-"co" = (
-/turf/simulated/floor{
-	tag = "icon-damaged4";
-	icon_state = "damaged4"
-	},
-/area/awaymission/spacebattle/cruiser)
 "cp" = (
-/turf/simulated/floor{
-	tag = "icon-damaged3";
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "cq" = (
-/turf/simulated/floor{
-	tag = "icon-damaged5";
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 4;
 	icon_state = "diagonalWall3"
-	},
-/area/awaymission/spacebattle/cruiser)
-"cr" = (
-/turf/simulated/floor{
-	tag = "icon-damaged1";
-	icon_state = "damaged1"
 	},
 /area/awaymission/spacebattle/cruiser)
 "cs" = (
@@ -838,10 +792,7 @@
 "cy" = (
 /obj/item/ammo_casing/a12mm,
 /obj/item/ammo_casing/a12mm,
-/turf/simulated/floor{
-	tag = "icon-damaged2";
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "cz" = (
 /obj/item/stack/sheet/metal,
@@ -930,12 +881,6 @@
 "cO" = (
 /obj/item/ammo_casing/a12mm,
 /turf/simulated/floor,
-/area/awaymission/spacebattle/cruiser)
-"cP" = (
-/turf/simulated/floor{
-	tag = "icon-damaged2";
-	icon_state = "damaged2"
-	},
 /area/awaymission/spacebattle/cruiser)
 "cQ" = (
 /obj/effect/landmark{
@@ -1094,15 +1039,6 @@
 "dr" = (
 /turf/simulated/wall/shuttle,
 /area/awaymission/spacebattle/cruiser)
-"ds" = (
-/turf/simulated/floor{
-	tag = "icon-damaged4";
-	icon_state = "damaged4"
-	},
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "diagonalWall3"
-	},
-/area/awaymission/spacebattle/cruiser)
 "dt" = (
 /obj/machinery/door/poddoor{
 	density = 0;
@@ -1111,16 +1047,6 @@
 	name = "Front Hull Door"
 	},
 /turf/simulated/floor/shuttle/plating,
-/area/awaymission/spacebattle/cruiser)
-"du" = (
-/turf/simulated/floor{
-	tag = "icon-damaged1";
-	icon_state = "damaged1"
-	},
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 4;
-	icon_state = "diagonalWall3"
-	},
 /area/awaymission/spacebattle/cruiser)
 "dv" = (
 /obj/structure/shuttle/diag_wall/smooth,
@@ -1220,16 +1146,6 @@
 	dir = 4
 	},
 /turf/simulated/floor/engine,
-/area/awaymission/spacebattle/cruiser)
-"dL" = (
-/turf/simulated/floor{
-	tag = "icon-damaged3";
-	icon_state = "damaged3"
-	},
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 4;
-	icon_state = "diagonalWall3"
-	},
 /area/awaymission/spacebattle/cruiser)
 "dM" = (
 /obj/item/stack/rods,
@@ -1345,10 +1261,7 @@
 	mobname = "Clay Dawson";
 	name = "Clay Dawson"
 	},
-/turf/simulated/floor{
-	tag = "icon-damaged5";
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "ee" = (
 /obj/structure/grille,
@@ -2815,10 +2728,7 @@
 "iy" = (
 /obj/effect/landmark/corpse/syndicatesoldier,
 /obj/item/weapon/gun/projectile/automatic/c20r,
-/turf/simulated/floor{
-	tag = "icon-damaged2";
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/awaymission/spacebattle/cruiser)
 "iz" = (
 /obj/structure/shuttle/engine/propulsion{
@@ -22485,7 +22395,7 @@ ab
 ab
 ab
 dr
-cc
+cp
 ce
 ce
 ce
@@ -22745,7 +22655,7 @@ bO
 bO
 cj
 ce
-cr
+cp
 ce
 ce
 ce
@@ -23001,7 +22911,7 @@ bS
 bQ
 cd
 bO
-cn
+cj
 ce
 cN
 ce
@@ -23258,9 +23168,9 @@ bQ
 bQ
 bQ
 ck
-co
+cp
 cy
-cr
+cp
 ce
 cS
 ce
@@ -23516,7 +23426,7 @@ bQ
 bQ
 ck
 cp
-co
+cp
 cO
 ce
 ce
@@ -23774,7 +23684,7 @@ bQ
 bO
 cq
 cz
-cP
+cp
 cO
 ce
 ce
@@ -24028,10 +23938,10 @@ bO
 bO
 bO
 bO
-cl
-cr
+cq
+cp
 ce
-cP
+cp
 ce
 ce
 ct
@@ -25604,7 +25514,7 @@ ce
 ce
 ce
 ce
-cP
+cp
 ce
 cN
 dr
@@ -25862,8 +25772,8 @@ ce
 ce
 ce
 cO
-cP
-cP
+cp
+cp
 dr
 ab
 ab
@@ -26120,7 +26030,7 @@ ce
 ce
 ce
 iy
-cr
+cp
 dr
 ab
 ab
@@ -26375,9 +26285,9 @@ ce
 ce
 ce
 ce
-cr
-cP
-cP
+cp
+cp
+cp
 dr
 ab
 ab
@@ -51019,7 +50929,7 @@ ab
 ab
 dr
 ce
-co
+cp
 ce
 ce
 ce
@@ -51275,10 +51185,10 @@ ab
 ab
 ab
 dr
-co
 cp
-cr
-cr
+cp
+cp
+cp
 cp
 ce
 dM
@@ -51534,8 +51444,8 @@ bO
 bO
 bO
 bO
-ds
-co
+cj
+cp
 ce
 ce
 ce
@@ -51793,7 +51703,7 @@ bQ
 de
 bO
 cj
-cr
+cp
 ce
 ce
 cS
@@ -52050,7 +51960,7 @@ bQ
 bQ
 dt
 cp
-cr
+cp
 cp
 ce
 ce
@@ -52306,7 +52216,7 @@ bQ
 bQ
 bQ
 dt
-cc
+cp
 ed
 ce
 ce
@@ -52563,9 +52473,9 @@ bT
 bQ
 bQ
 bO
-dL
+cq
 ce
-cc
+cp
 ce
 ce
 dM
@@ -52819,10 +52729,10 @@ bO
 bO
 bO
 bO
-du
+cq
 ce
 cp
-cr
+cp
 cS
 ce
 ce
@@ -53075,7 +52985,7 @@ ab
 ab
 dr
 ce
-cP
+cp
 ce
 ce
 ce
@@ -53331,7 +53241,7 @@ ab
 ab
 ab
 dr
-cr
+cp
 ce
 ce
 dM

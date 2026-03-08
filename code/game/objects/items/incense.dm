@@ -46,6 +46,11 @@
 	adjective = "calming"
 	color = "#660000"
 
+/obj/item/incense_stick/roses
+	fragrance = INCENSE_ROSES
+	adjective = "romantic"
+	color = "#660531"
+
 /obj/item/incense_stick/sunflowers
 	fragrance = INCENSE_SUNFLOWERS
 	adjective = "pleasant"

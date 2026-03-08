@@ -2247,6 +2247,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/dionanode = 3,
 		/obj/item/seeds/soyaseed = 3,
 		/obj/item/seeds/sunflowerseed = 3,
+		/obj/item/seeds/roseseed = 3,
 		/obj/item/seeds/tomatoseed = 3,
 		/obj/item/seeds/towermycelium = 3,
 		/obj/item/seeds/wheatseed = 3,
@@ -2291,6 +2292,22 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/hydroseeds
+	var/fourtwentied = FALSE
+
+/obj/machinery/vending/hydroseeds/New()
+	if(Get_Holiday() == FOUR_TWENTY)
+		products[/obj/item/seeds/ambrosiavulgarisseed] = 420
+		premium[/obj/item/seeds/ambrosiadeusseed] = 420
+	. = ..()
+
+/obj/machinery/vending/hydroseeds/process()
+	. = ..()
+	if(time2text(world.timeofday, "hh") == "16" && time2text(world.timeofday, "mm") == "20" && !fourtwentied)
+		fourtwentied = TRUE
+		for(var/datum/data/vending_product/V in product_records)
+			if(V.product_path == /obj/item/seeds/ambrosiavulgarisseed)
+				V.amount = max(V.amount, V.original_amount)
+				break
 
 /obj/machinery/vending/voxseeds
 	name = "\improper Vox Seed 'n' Feed"

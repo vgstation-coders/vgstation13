@@ -14,7 +14,7 @@ var/list/existing_dungeons = list()
 
 //Returns list of loaded objects. If trying to load a duplicate dungeon (and it's forbidden), returns a reference to the "original" dungeon instead
 
-/proc/load_dungeon(dungeon_type, var/rotate = 0, var/hidden = FALSE)
+/proc/load_dungeon(dungeon_type, var/rotate = 0, var/hidden = FALSE, var/teleporters = TRUE)
 	var/datum/map_element/ME
 	if(ispath(dungeon_type, /datum/map_element))
 		ME = new dungeon_type
@@ -38,7 +38,8 @@ var/list/existing_dungeons = list()
 
 	var/result = ME.load(used_vz.x_min - 1, used_vz.y_min - 1, used_vz.parent_z.z, rotate)
 
-	for(var/turf/T in block_borders(locate(used_vz.x_min, used_vz.y_min,used_vz.parent_z.z), locate(used_vz.x_max, used_vz.y_max, used_vz.parent_z.z)))
-		new /obj/effect/step_trigger/teleporter/random/shuttle_transit(T)
+	if(teleporters)
+		for(var/turf/T in block_borders(locate(used_vz.x_min, used_vz.y_min,used_vz.parent_z.z), locate(used_vz.x_max, used_vz.y_max, used_vz.parent_z.z)))
+			new /obj/effect/step_trigger/teleporter/random/shuttle_transit(T)
 
 	return result

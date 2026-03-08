@@ -963,7 +963,7 @@
 		//Delete the old turf
 		var/replacing_turf_type = old_turf.get_underlying_turf()
 
-		if(D && istype(D))
+		if(D && istype(D) && D.base_turf_type)
 			replacing_turf_type = D.base_turf_type
 
 		old_turf.ChangeTurf(replacing_turf_type, allow = 1)

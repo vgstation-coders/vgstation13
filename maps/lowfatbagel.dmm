@@ -3105,7 +3105,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "agV" = (
 /obj/structure/cable{
@@ -5012,10 +5012,7 @@
 	d2 = 2;
 	icon_state = "0-2"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "ake" = (
 /obj/structure/grille,
@@ -5118,10 +5115,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "akn" = (
 /turf/simulated/floor/arcade{
@@ -7545,10 +7539,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "asc" = (
 /obj/structure/disposalpipe/segment{
@@ -12044,10 +12035,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "aHk" = (
 /obj/structure/bed/chair/comfy/couch/mid/teal{
@@ -29368,10 +29356,7 @@
 /area/maintenance/disposal)
 "bDa" = (
 /obj/machinery/atmospherics/pipe/simple/yellow,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "bDd" = (
 /obj/structure/cable{
@@ -30094,10 +30079,7 @@
 /area/maintenance/maintcentral)
 "bOn" = (
 /obj/structure/lattice,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "bOt" = (
 /obj/machinery/computer/smelting{
@@ -30348,10 +30330,7 @@
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "bRJ" = (
 /obj/structure/disposalpipe/trunk,
@@ -32036,9 +32015,7 @@
 	},
 /area/hallway/primary/upperstarboard)
 "cpO" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cpT" = (
 /obj/structure/bed/chair/shuttle/red,
@@ -32348,10 +32325,7 @@
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
 	dir = 5
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "cuH" = (
 /obj/structure/cable{
@@ -33405,10 +33379,7 @@
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "cHj" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -34541,7 +34512,7 @@
 	tag = "icon-warning"
 	},
 /obj/effect/landmark/corpse/assistant,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "cYh" = (
 /obj/structure/cable{
@@ -36189,9 +36160,7 @@
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/asmaint)
 "duq" = (
 /obj/machinery/door/airlock/glass_command{
@@ -36696,10 +36665,7 @@
 	},
 /area/centcom/test)
 "dCz" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "dCE" = (
 /obj/effect/decal{
@@ -36755,10 +36721,7 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "dDA" = (
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden{
@@ -36788,10 +36751,7 @@
 	dir = 10
 	},
 /obj/structure/catwalk,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "dEi" = (
 /obj/effect/landmark/start{
@@ -39509,7 +39469,7 @@
 	dir = 4;
 	on = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "eoK" = (
 /obj/structure/cable/yellow{
@@ -40431,8 +40391,8 @@
 	name = "Toxins"
 	})
 "eAO" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "eAW" = (
@@ -42524,10 +42484,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (SOUTHEAST)"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "fgP" = (
 /obj/machinery/door/airlock/command{
@@ -43804,7 +43761,7 @@
 /area/storage/tech)
 "fAF" = (
 /obj/machinery/newscaster,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "fAY" = (
 /obj/machinery/vending/groans,
@@ -44275,10 +44232,7 @@
 	dir = 5
 	},
 /obj/structure/catwalk,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "fIv" = (
 /obj/structure/cable{
@@ -44341,10 +44295,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "fJD" = (
 /obj/machinery/camera/autoname,
@@ -45433,7 +45384,7 @@
 /obj/machinery/recharger{
 	pixel_x = 29
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "gai" = (
 /obj/machinery/door/airlock/centcom{
@@ -47102,10 +47053,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "gvl" = (
 /obj/machinery/pipedispenser,
@@ -48566,10 +48514,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "gNA" = (
 /obj/structure/cable{
@@ -49552,10 +49497,7 @@
 /area/tdome/tdome1)
 "hcA" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "hcH" = (
 /obj/structure/rack,
@@ -49664,10 +49606,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "heX" = (
 /obj/machinery/cell_charger,
@@ -55530,7 +55469,7 @@
 /area/medical/surgery)
 "iTC" = (
 /obj/structure/closet/walllocker/emerglocker/east,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "iTP" = (
 /obj/structure/window/reinforced{
@@ -56591,10 +56530,7 @@
 "jiP" = (
 /obj/machinery/atmospherics/pipe/simple/cyan,
 /obj/structure/catwalk,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "jiW" = (
 /obj/structure/table/reinforced,
@@ -56787,10 +56723,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "jlQ" = (
 /obj/machinery/the_singularitygen{
@@ -58132,7 +58065,7 @@
 /area/maintenance/starboard)
 "jFM" = (
 /obj/structure/weightlifter,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "jFY" = (
 /obj/machinery/door/airlock/medical{
@@ -60159,7 +60092,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "khG" = (
 /obj/machinery/light{
@@ -60845,7 +60778,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "krD" = (
 /obj/effect/overlay/palmtree_l,
@@ -61410,7 +61343,7 @@
 	default_scrubbed_gases = list("plasma");
 	dir = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "kxY" = (
 /obj/machinery/optable,
@@ -61489,7 +61422,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "kzW" = (
 /obj/structure/catwalk,
@@ -61896,7 +61829,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "kGR" = (
 /obj/machinery/door/window{
@@ -62604,10 +62537,7 @@
 /area/centcom/living)
 "kPv" = (
 /obj/structure/catwalk,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "kPx" = (
 /turf/simulated/wall,
@@ -63174,8 +63104,8 @@
 	},
 /area/medical/medbay)
 "kYU" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "kYW" = (
@@ -64055,10 +63985,7 @@
 /obj/effect/landmark/corpse/assistant,
 /obj/item/weapon/pen,
 /obj/effect/decal/cleanable/blood/gibs/xeno/body,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "lkp" = (
 /obj/structure/table,
@@ -64649,10 +64576,7 @@
 /area/hallway/secondary/exit)
 "lrJ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "lrL" = (
 /obj/machinery/computer/atmos_alert,
@@ -65787,7 +65711,7 @@
 	pixel_x = 7
 	},
 /obj/effect/decal/cleanable/blood,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "lHM" = (
 /obj/machinery/atmospherics/binary/valve/digital{
@@ -66842,7 +66766,7 @@
 	},
 /obj/structure/window/full/reinforced/plasma,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "mbp" = (
 /turf/unsimulated/floor{
@@ -67808,10 +67732,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "mqu" = (
 /turf/simulated/floor/vox{
@@ -68207,7 +68128,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "mvc" = (
 /turf/simulated/floor/shuttle{
@@ -68581,10 +68502,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "mAU" = (
 /obj/machinery/atmospherics/pipe/manifold/filtering/visible,
@@ -69702,7 +69620,7 @@
 /obj/item/device/flashlight/lantern,
 /obj/item/device/flashlight/lantern,
 /obj/item/clothing/glasses/scanner/meson,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "mPU" = (
 /obj/structure/bed/chair/comfy/black,
@@ -70171,10 +70089,7 @@
 /obj/machinery/atmospherics/pipe/manifold/cyan{
 	dir = 1
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "mXs" = (
 /obj/structure/shuttle/engine/propulsion{
@@ -72796,10 +72711,7 @@
 /area/hallway/primary/central)
 "nKI" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "nLb" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
@@ -73228,7 +73140,7 @@
 	dir = 4;
 	name = "Firelock East"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "nTt" = (
 /obj/machinery/teleport/station,
@@ -74507,7 +74419,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "oiV" = (
 /obj/effect/decal{
@@ -76062,8 +75974,8 @@
 /area/shuttle/escape/centcom)
 "oET" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "oFh" = (
@@ -76613,10 +76525,7 @@
 /area/security/perma)
 "oLO" = (
 /obj/structure/grille/window_spawner/reinforced_plasma/full,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "oLW" = (
 /obj/machinery/media/transmitter/broadcast/shuttle,
@@ -76852,7 +76761,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "oQH" = (
 /obj/structure/bed/chair/shuttle/gamer{
@@ -78365,18 +78274,13 @@
 /obj/structure/ore_box,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
-"pqd" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
-	},
-/area/prison/solitary)
 "pqu" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "pqw" = (
 /obj/structure/table/reinforced,
@@ -78864,7 +78768,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "pxW" = (
 /obj/structure/table,
@@ -79681,10 +79585,7 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "pJs" = (
 /obj/structure/cult/pylon,
@@ -79803,10 +79704,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "pLS" = (
 /obj/structure/disposalpipe/segment{
@@ -80185,7 +80083,7 @@
 /area/science/storage)
 "pRg" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "pRj" = (
 /obj/structure/grille,
@@ -80361,7 +80259,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "pUg" = (
 /obj/machinery/door/firedoor/border_only{
@@ -81455,10 +81353,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (EAST)"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "qmx" = (
 /obj/effect/decal/cleanable/cockroach_remains,
@@ -82453,10 +82348,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "qzY" = (
 /obj/machinery/door/airlock/hatch{
@@ -84317,10 +84209,7 @@
 "rcb" = (
 /obj/machinery/atmospherics/pipe/simple/yellow,
 /obj/structure/lattice,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "rcc" = (
 /obj/structure/closet/firecloset,
@@ -86306,10 +86195,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "rFJ" = (
 /obj/machinery/portable_atmospherics/canister,
@@ -87157,10 +87043,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "rTw" = (
 /obj/structure/window/reinforced{
@@ -88179,7 +88062,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "smX" = (
 /obj/item/weapon/hatchet,
@@ -88553,10 +88436,7 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/yellow,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "stj" = (
 /obj/structure/table,
@@ -88905,10 +88785,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "syD" = (
 /obj/structure/grille,
@@ -89572,10 +89449,7 @@
 "sHp" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/simple/cyan,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "sHN" = (
 /obj/structure/morgue,
@@ -91547,7 +91421,7 @@
 	icon_state = "4-8"
 	},
 /obj/item/clothing/suit/strait_jacket,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "thH" = (
 /obj/structure/cable/orange{
@@ -91698,10 +91572,7 @@
 	dir = 8;
 	icon_state = "warning"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "tjE" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -92190,8 +92061,8 @@
 /area/maintenance/asmaint)
 "trP" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "tsh" = (
@@ -92443,10 +92314,7 @@
 /area/research_outpost/hallway)
 "twy" = (
 /obj/structure/closet/secure_closet/injection,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "twY" = (
 /obj/item/weapon/kitchen/utensil/knife/large,
@@ -93913,8 +93781,8 @@
 /area/maintenance/fpmaint)
 "tWv" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "tWw" = (
@@ -95167,10 +95035,7 @@
 	},
 /area/hallway/primary/port)
 "uol" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "uoo" = (
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{
@@ -96171,10 +96036,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "uCl" = (
 /obj/machinery/door/airlock/external{
@@ -96933,9 +96795,7 @@
 /area/hallway/primary/port)
 "uML" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "uMM" = (
 /turf/simulated/floor/shuttle,
@@ -97054,7 +96914,7 @@
 	dir = 8
 	},
 /obj/structure/table/glass,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "uON" = (
 /obj/structure/closet/wardrobe/chemistry_white,
@@ -97349,10 +97209,7 @@
 /obj/machinery/atmospherics/pipe/simple/cyan{
 	dir = 6
 	},
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "uTS" = (
 /turf/simulated/floor{
@@ -97702,10 +97559,7 @@
 	},
 /area/hallway/primary/central)
 "uYp" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "uYD" = (
 /obj/effect/decal/warning_stripes{
@@ -98811,11 +98665,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/engineering/mechanics)
-"vqR" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "vrb" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/simulated/floor/plating,
@@ -101855,10 +101704,7 @@
 /area/syndicate_mothership)
 "wmV" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/mine/explored)
 "wnw" = (
 /obj/structure/table,
@@ -102200,7 +102046,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "wsL" = (
 /obj/machinery/atmospherics/unary/portables_connector,
@@ -102938,10 +102784,7 @@
 /area/medical/medbay)
 "wCf" = (
 /obj/structure/lattice,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "wCn" = (
 /obj/item/device/radio/intercom{
@@ -103745,7 +103588,7 @@
 /area/engineering/atmos_control)
 "wMN" = (
 /obj/machinery/status_display,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "wNa" = (
 /obj/machinery/recharger{
@@ -103851,12 +103694,6 @@
 "wQZ" = (
 /turf/simulated/floor/plating/airless,
 /area/engineering/engine)
-"wRa" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "wRl" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -104454,10 +104291,7 @@
 /area/engineering/atmos)
 "xaS" = (
 /obj/structure/catwalk,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area)
 "xaT" = (
 /obj/machinery/vending/wallmed1{
@@ -107228,7 +107062,7 @@
 	pixel_x = 24;
 	req_access_txt = "2"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "xMT" = (
 /obj/structure/bed,
@@ -108523,10 +108357,7 @@
 "yeP" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/simple/yellow,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area)
 "yeS" = (
 /turf/simulated/floor,
@@ -109076,7 +108907,7 @@
 	},
 /area/mine/production)
 "ylW" = (
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/mine/explored)
 "yme" = (
 /obj/machinery/power/apc{
@@ -396626,7 +396457,7 @@ aaa
 aaa
 aaa
 rSj
-wRa
+uML
 tYF
 rSj
 tWv
@@ -397132,7 +396963,7 @@ trP
 iYF
 rSj
 mHz
-vqR
+cpO
 rSj
 aaa
 aaa
@@ -400140,11 +399971,11 @@ aaa
 aaa
 aaa
 rSj
-pqd
+kYU
 iYF
 rSj
 iYF
-pqd
+kYU
 rSj
 aaa
 dOg
@@ -401649,7 +401480,7 @@ rSj
 nGS
 mHz
 rSj
-pqd
+kYU
 nGS
 rSj
 aaa
@@ -403155,7 +402986,7 @@ rSj
 hKK
 eAO
 rSj
-pqd
+kYU
 nGS
 rSj
 aaa
@@ -406165,7 +405996,7 @@ aaa
 aaa
 rSj
 nGS
-pqd
+kYU
 rSj
 mHz
 cpO

@@ -2,7 +2,6 @@
 "ax" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating/airless,/area/derelict/bar)
 "ay" = (/turf/simulated/wall,/area/derelict/bar)
 "az" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/engine/vacuum,/area/derelict/atmos)
-"aB" = (/turf/simulated/floor/airless{broken = 1; icon_state = "damaged4"},/area/derelict/storage/tech_storage)
 "aD" = (/obj/machinery/chem_dispenser/mapping,/obj/machinery/light{dir = 4},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "aJ" = (/turf/simulated/wall,/area/derelict/kitchen)
 "aO" = (/obj/structure/bookcase,/turf/simulated/floor/plating/airless,/area/derelict/library)
@@ -39,7 +38,7 @@
 "dH" = (/turf/space,/area/derelict/crew_quarters)
 "dR" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/airless,/area/derelict/storage/aux_storage)
 "dV" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/wood,/area/derelict/bar)
-"ec" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area/derelict/medical/medbay)
+"ec" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/damaged/airless/broken,/area/derelict/medical/medbay)
 "ew" = (/obj/machinery/door/airlock/external{name = "Oxygen Tank Access"},/turf/simulated/floor/plating/airless,/area/derelict/atmos)
 "eA" = (/obj/item/stack/rods,/turf/space,/area/derelict/bridge/bridge)
 "eG" = (/obj/structure/lattice,/obj/item/weapon/shard{icon_state = "small"},/turf/space,/area/derelict/bridge/bridge)
@@ -81,7 +80,7 @@
 "hU" = (/obj/item/weapon/shard{icon_state = "small"; pixel_x = 5; pixel_y = -5},/obj/structure/cable/yellow{d2 = 2; icon_state = "0-2"},/turf/simulated/floor/plating/airless,/area)
 "ig" = (/obj/structure/lattice,/obj/item/weapon/shard{icon_state = "medium"},/turf/space,/area/derelict/bridge/bridge)
 "ih" = (/obj/structure/dispenser,/turf/simulated/floor/airless,/area/derelict/storage/aux_storage)
-"ip" = (/turf/simulated/floor/plating{icon_state = "panelscorched"},/area/derelict/solar_control)
+"ip" = (/turf/simulated/floor/plating/damaged/burnt,/area/derelict/solar_control)
 "iq" = (/obj/structure/girder,/turf/simulated/floor/plating/airless,/area/derelict/medical/medbay)
 "iu" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating/airless,/area/derelict/solar_control)
 "iA" = (/obj/machinery/door/airlock/medical{name = "Morgue"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/derelict/medical/medbay)
@@ -95,14 +94,14 @@
 "ji" = (/turf/simulated/wall/r_wall,/area/derelict/storage/aux_storage)
 "ju" = (/obj/machinery/door/airlock/external{name = "Solar Control"},/obj/structure/cable/yellow,/turf/simulated/floor/plating/airless,/area/derelict/solar_control)
 "jw" = (/turf/simulated/floor/plating/airless,/area/derelict/storage/tech_storage)
-"jx" = (/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area)
+"jx" = (/turf/simulated/floor/damaged/airless/broken,/area)
 "jF" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/derelict/atmos)
 "jO" = (/turf/space,/area/derelict/medical/morgue)
 "jR" = (/obj/structure/cable/yellow{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/derelict/solar_control)
 "jU" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/solar/derelict_starboard)
 "jV" = (/obj/machinery/door/airlock{id_tag = "rminingdorm1"; name = "Dorm 1"},/turf/simulated/floor/plating/airless,/area/derelict/crew_quarters)
 "jW" = (/obj/machinery/portable_atmospherics/canister/plasma,/obj/effect/decal/warning_stripes{dir = 9; icon_state = "warning"; tag = "icon-warning (NORTHWEST)"},/turf/simulated/floor/airless,/area/derelict/storage/tech_storage)
-"jX" = (/turf/simulated/floor/airless{broken = 1; icon_state = "damaged4"},/area/derelict/storage/aux_storage)
+"jX" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/storage/aux_storage)
 "ka" = (/obj/item/weapon/table_parts,/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
 "kd" = (/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/derelict/solar_control)
 "ko" = (/obj/structure/table,/obj/abstract/map/spawner/floorpill/guaranteed,/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
@@ -113,9 +112,9 @@
 "lc" = (/turf/simulated/floor/plating/airless,/area/derelict/research)
 "ld" = (/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating/airless,/area/derelict/atmos)
 "li" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating/airless,/area/derelict/atmos)
-"lp" = (/obj/effect/decal/cleanable/blood{icon_state = "gibbl4-old"},/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"lp" = (/obj/effect/decal/cleanable/blood{icon_state = "gibbl4-old"},/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "lq" = (/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken3"},/area/derelict/bar)
-"lt" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor5"},/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area/derelict/bridge/bridge)
+"lt" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor5"},/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
 "lD" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
 "lG" = (/turf/simulated/floor{dir = 9; icon_state = "darkblue"},/area/derelict/library)
 "lK" = (/obj/structure/wc/sink{dir = 8; pixel_x = -12},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
@@ -144,17 +143,16 @@
 "nz" = (/obj/effect/decal/cleanable/blood{icon_state = "armorblood-old"},/turf/simulated/floor/airless,/area/derelict/security)
 "nH" = (/obj/item/weapon/stool,/turf/simulated/floor/wood,/area/derelict/bar)
 "nJ" = (/obj/structure/flora/pottedplant/claypot,/turf/simulated/floor/airless,/area/derelict/security)
-"nN" = (/obj/effect/decal/cleanable/blood{icon_state = "gib2-old"},/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"nN" = (/obj/effect/decal/cleanable/blood{icon_state = "gib2-old"},/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "oc" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating/airless,/area/derelict/security)
 "od" = (/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor{dir = 6; icon_state = "darkblue"},/area/derelict/library)
 "oj" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/airless,/area/derelict/research)
 "ok" = (/obj/structure/table,/turf/simulated/floor/airless,/area/derelict/crew_quarters)
-"ot" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/floor/plating/airless{icon_state = "panelscorched"},/area/derelict/atmos)
+"ot" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/floor/plating/damaged/airless/burnt,/area/derelict/atmos)
 "ov" = (/turf/space,/area/derelict/storage/tech_storage)
 "ox" = (/obj/item/stack/rods,/turf/space,/area/derelict/security)
-"oF" = (/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area/derelict/storage/tech_storage)
 "oP" = (/obj/item/weapon/rack_parts,/turf/simulated/floor/plating/airless,/area)
-"oU" = (/turf/simulated/floor/airless{broken = 1; icon_state = "damaged3"},/area/derelict/storage/tech_storage)
+"oU" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/storage/tech_storage)
 "oX" = (/turf/simulated/wall,/area/derelict/security)
 "oY" = (/turf/simulated/floor/plating/airless,/area/derelict/storage/equipment)
 "pb" = (/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/simulated/floor/plating/airless,/area/derelict/storage/tech_storage)
@@ -183,7 +181,7 @@
 "rv" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating/airless,/area/derelict/research)
 "rF" = (/obj/structure/table,/obj/item/weapon/cell/high,/obj/item/weapon/cell/high,/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
 "rN" = (/obj/item/clothing/shoes/cult_legacy,/turf/simulated/floor/plating/airless,/area)
-"rR" = (/obj/item/weapon/shard{icon_state = "small"},/turf/simulated/floor/airless{broken = 1; icon_state = "damaged4"},/area/derelict/bridge/bridge)
+"rR" = (/obj/item/weapon/shard{icon_state = "small"},/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
 "sg" = (/obj/item/stack/cable_coil{pixel_x = 3; pixel_y = -7},/obj/effect/decal/remains/human,/obj/structure/cable/yellow,/turf/simulated/floor/plating/airless,/area/derelict/medical/medbay)
 "sl" = (/obj/structure/table/woodentable,/turf/simulated/floor/plating,/area/derelict/bar)
 "ss" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
@@ -214,10 +212,10 @@
 "uz" = (/obj/machinery/atmospherics/unary/cold_sink/freezer{current_temperature = 80; dir = 4; on = 1},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
 "uQ" = (/obj/effect/decal/warning_stripes{dir = 5; icon_state = "warning"; tag = "icon-warning (NORTHEAST)"},/turf/simulated/floor/airless,/area/derelict/storage/tech_storage)
 "vr" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/wood,/area/derelict/bar)
-"vx" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/simulated/floor/plating/airless{broken = 1; icon_state = "platingdmg1"},/area/derelict/atmos)
+"vx" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/simulated/floor/plating/damaged/airless/broken,/area/derelict/atmos)
 "vA" = (/obj/machinery/vending/engivend,/turf/simulated/floor,/area/derelict/solar_control)
-"vG" = (/obj/item/clothing/suit/legacy_cultrobes,/turf/simulated/floor/airless{broken = 1; icon_state = "damaged5"},/area/derelict/bridge/bridge)
-"vJ" = (/turf/simulated/floor/plating/airless{broken = 1; icon_state = "platingdmg1"},/area/derelict/research)
+"vG" = (/obj/item/clothing/suit/legacy_cultrobes,/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
+"vJ" = (/turf/simulated/floor/plating/damaged/airless/broken,/area/derelict/research)
 "vL" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating/airless,/area/derelict/bar)
 "vN" = (/obj/machinery/cooking/deepfryer,/turf/simulated/floor{dir = 5; icon_state = "cafeteria"},/area/derelict/kitchen)
 "vQ" = (/obj/effect/decal/cleanable/blood{icon_state = "gibbl2-old"},/turf/simulated/floor/plating/airless,/area/derelict/security)
@@ -233,14 +231,13 @@
 "wB" = (/obj/structure/cable/yellow{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor/airless,/area/derelict/security)
 "wC" = (/obj/effect/decal/cleanable/blood{icon_state = "floor4-old"},/turf/simulated/floor{icon_state = "dark"},/area/derelict/library)
 "wD" = (/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken6"},/area/derelict/bar)
-"wP" = (/turf/simulated/floor/plating/airless{icon_state = "platingdmg3"},/area/derelict/research)
-"wU" = (/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating/airless{icon_state = "platingdmg1"},/area/derelict/crew_quarters)
+"wU" = (/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating/damaged/airless/broken,/area/derelict/crew_quarters)
 "wX" = (/obj/structure/bookcase,/turf/simulated/floor{icon_state = "dark"},/area/derelict/library)
 "xg" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/machinery/atmospherics/pipe/simple/general/hidden,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating/airless,/area/derelict/atmos)
 "xm" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{dir = 4; icon_state = "darkblue"},/area/derelict/library)
 "xr" = (/obj/item/weapon/reagent_containers/food/drinks/shaker,/obj/structure/table,/obj/item/weapon/book/manual/barman_recipes,/turf/simulated/floor{icon_state = "grimy"},/area/derelict/bar)
 "xI" = (/obj/structure/rack,/turf/simulated/floor/airless,/area/derelict/security)
-"xK" = (/obj/effect/decal/cleanable/blood{icon_state = "floor5"},/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"xK" = (/obj/effect/decal/cleanable/blood{icon_state = "floor5"},/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "xT" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "xV" = (/obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue,/obj/machinery/meter,/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
 "xY" = (/obj/item/tool/circular_saw,/turf/space,/area)
@@ -253,17 +250,17 @@
 "yy" = (/obj/item/weapon/cell/high,/turf/space,/area/derelict/crew_quarters)
 "yz" = (/obj/item/stack/cable_coil{pixel_x = 3; pixel_y = -7},/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
 "yH" = (/obj/machinery/light{dir = 8},/turf/simulated/floor/airless,/area/derelict/security)
-"yI" = (/obj/machinery/portable_atmospherics/canister/plasma/broken,/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area/derelict/bridge/bridge)
+"yI" = (/obj/machinery/portable_atmospherics/canister/plasma/broken,/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
 "yN" = (/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "yP" = (/obj/item/weapon/stool,/turf/simulated/floor/plating,/area/derelict/bar)
 "yQ" = (/obj/machinery/iv_drip,/turf/space,/area)
-"yR" = (/turf/simulated/floor/plating/airless{broken = 1; icon_state = "platingdmg1"},/area)
+"yR" = (/turf/simulated/floor/plating/damaged/airless/broken,/area)
 "za" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/derelict/crew_quarters)
 "ze" = (/obj/structure/cable/yellow{d2 = 2; icon_state = "0-2"; pixel_y = 1},/turf/simulated/floor/plating/airless,/area/derelict/security)
 "zf" = (/obj/effect/decal/cleanable/blood{icon_state = "gib2-old"},/obj/effect/decal/cleanable/blood{icon_state = "floor7-old"},/turf/simulated/floor/plating,/area/derelict/bar)
 "zk" = (/obj/item/weapon/storage/firstaid/regular/empty,/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "zm" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "grimy"},/area/derelict/bar)
-"zo" = (/turf/simulated/floor/plating/airless{icon_state = "panelscorched"},/area/derelict/atmos)
+"zo" = (/turf/simulated/floor/plating/damaged/airless/burnt,/area/derelict/atmos)
 "zG" = (/obj/structure/lattice,/turf/space,/area/derelict/research)
 "zH" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating/airless,/area/derelict/storage/equipment)
 "zS" = (/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor/engine/vacuum,/area/derelict/atmos)
@@ -286,16 +283,16 @@
 "Bz" = (/obj/effect/decal/cleanable/blood{icon_state = "floor4"},/turf/simulated/floor/plating/airless,/area)
 "BF" = (/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken4"},/area/derelict/bar)
 "BI" = (/obj/machinery/light,/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
-"Cb" = (/obj/effect/decal/cleanable/blood{icon_state = "floor2-old"},/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"Cb" = (/obj/effect/decal/cleanable/blood{icon_state = "floor2-old"},/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "Ci" = (/obj/item/stack/rods,/turf/space,/area/derelict/crew_quarters)
 "Cu" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/derelict/solar_control)
-"Cw" = (/obj/item/weapon/table_parts,/turf/simulated/floor/airless{broken = 1; icon_state = "damaged4"},/area/derelict/bridge/bridge)
-"CA" = (/obj/item/tool/weldingtool/empty,/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"Cw" = (/obj/item/weapon/table_parts,/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
+"CA" = (/obj/item/tool/weldingtool/empty,/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "CE" = (/obj/machinery/air_sensor{frequency = 1438; id_tag = "secret_sensor"},/turf/simulated/floor/engine/vacuum,/area/derelict/atmos)
 "CH" = (/obj/structure/table,/obj/abstract/map/spawner/floorpill/guaranteed,/obj/abstract/map/spawner/floorpill/guaranteed,/obj/abstract/map/spawner/floorpill/guaranteed,/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "CI" = (/obj/machinery/light,/turf/simulated/floor/plating/airless,/area/derelict/security)
 "CY" = (/obj/machinery/door/airlock/external{name = "Toxins Tank Access"},/turf/simulated/floor/plating/airless,/area/derelict/atmos)
-"Dd" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor2"},/turf/simulated/floor/airless{broken = 1; icon_state = "damaged3"},/area/derelict/storage/aux_storage)
+"Dd" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor2"},/turf/simulated/floor/damaged/airless/broken,/area/derelict/storage/aux_storage)
 "Di" = (/turf/simulated/floor{icon_state = "dark"},/area/derelict/library)
 "Dk" = (/obj/machinery/power/apc{cell_type = 0; icon_state = "apc1"; opened = 1; pixel_y = -24},/obj/structure/cable/yellow{d2 = 4; icon_state = "0-4"},/turf/simulated/floor/plating/airless,/area/derelict/crew_quarters)
 "Dl" = (/obj/machinery/mass_driver{dir = 4; id_tag = "toxinsdriver"},/turf/simulated/floor/plating/airless,/area)
@@ -303,7 +300,7 @@
 "Dz" = (/turf/simulated/floor/plating/airless,/area/solar/derelict_starboard)
 "DS" = (/obj/structure/table,/turf/simulated/floor{icon_state = "dark"},/area/derelict/library)
 "DZ" = (/obj/effect/decal/cleanable/blood{icon_state = "floor6-old"},/turf/simulated/floor/plating,/area/derelict/bar)
-"Ei" = (/obj/effect/decal/cleanable/blood{icon_state = "gibdown1-old"},/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"Ei" = (/obj/effect/decal/cleanable/blood{icon_state = "gibdown1-old"},/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "Ej" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating/airless,/area/derelict/research)
 "En" = (/obj/item/weapon/shard,/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/derelict/atmos)
 "Ep" = (/obj/item/weapon/table_parts/reinforced,/turf/simulated/floor{dir = 5; icon_state = "cafeteria"},/area/derelict/kitchen)
@@ -327,7 +324,7 @@
 "Fx" = (/obj/machinery/computer/general_air_control/large_tank_control{frequency = 1438; input_tag = "n2_in"; name = "Nitrogen Supply Control"; output_tag = "n2_out"; sensors = list("n2_sensor"="Tank")},/turf/simulated/floor/plating/airless,/area/derelict/atmos)
 "Fy" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "FA" = (/obj/structure/cable/yellow,/turf/simulated/floor/plating/airless,/area)
-"FG" = (/turf/simulated/floor/plating/airless{broken = 1; icon_state = "panelscorched"},/area)
+"FG" = (/turf/simulated/floor/plating/damaged/airless/burnt,/area)
 "FT" = (/obj/machinery/door/airlock/medical{name = "Medical"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/derelict/medical/medbay)
 "Ge" = (/obj/machinery/constructable_frame/machine_frame,/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "Gj" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/airless,/area/derelict/security)
@@ -336,11 +333,10 @@
 "Gp" = (/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/machinery/atmospherics/unary/outlet_injector{dir = 1; frequency = 1438; icon_state = "on"; id_tag = "n2_in"; on = 1},/turf/simulated/floor/engine/vacuum,/area/derelict/atmos)
 "Gr" = (/obj/structure/morgue,/turf/simulated/floor{icon_state = "dark"},/area/derelict/medical/morgue)
 "Gy" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating/airless,/area/solar/derelict_starboard)
-"GJ" = (/obj/item/stack/rods,/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area/derelict/storage/aux_storage)
+"GJ" = (/obj/item/stack/rods,/turf/simulated/floor/damaged/airless/broken,/area/derelict/storage/aux_storage)
 "GM" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/airless,/area/derelict/atmos)
 "GO" = (/turf/simulated/floor,/area/derelict/solar_control)
 "GQ" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
-"Hb" = (/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area/derelict/bridge/bridge)
 "He" = (/obj/structure/bed/chair,/turf/space,/area/derelict/security)
 "Ht" = (/obj/effect/decal/cleanable/blood{icon_state = "floor5-old"},/turf/simulated/floor/plating/airless,/area/derelict/security)
 "HE" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating/airless,/area/derelict/bar)
@@ -354,7 +350,7 @@
 "IA" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/door/airlock/external{name = "Solar Access"},/turf/simulated/floor/plating/airless,/area/derelict/solar_control)
 "IC" = (/obj/machinery/door/poddoor/shutters{density = 0; dir = 2; icon_state = "shutter0"; id_tag = "syndieshutters"; name = "Blast Shutters"; opacity = 0},/turf/simulated/floor/airless,/area/derelict/storage/aux_storage)
 "IN" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor/airless,/area/derelict/security)
-"Jb" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"Jb" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "Jc" = (/obj/structure/grille,/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
 "Jh" = (/turf/simulated/floor/plating/airless,/area/derelict/atmos)
 "Ji" = (/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/machinery/atmospherics/miner/toxins,/turf/simulated/floor/engine/vacuum,/area/derelict/atmos)
@@ -362,21 +358,21 @@
 "JG" = (/obj/structure/table,/obj/item/weapon/storage/box/beakers{pixel_x = 3; pixel_y = 3},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "JJ" = (/obj/structure/table/woodentable,/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken4"},/area/derelict/bar)
 "JK" = (/obj/effect/landmark/corpse/chemist,/turf/space,/area)
-"JR" = (/turf/simulated/floor/plating/airless{broken = 1; icon_state = "panelscorched"},/area/derelict/storage/equipment)
-"JV" = (/obj/item/tool/retractor,/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area/derelict/medical/medbay)
+"JR" = (/turf/simulated/floor/plating/damaged/airless/burnt,/area/derelict/storage/equipment)
+"JV" = (/obj/item/tool/retractor,/turf/simulated/floor/damaged/airless/broken,/area/derelict/medical/medbay)
 "JY" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "Ka" = (/obj/item/weapon/shard{icon_state = "small"},/turf/space,/area)
 "Kb" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/derelict/research)
-"Kc" = (/turf/simulated/floor/airless{broken = 1; icon_state = "damaged5"},/area/derelict/bridge/bridge)
+"Kc" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
 "Ke" = (/obj/machinery/light{dir = 1},/turf/simulated/floor{dir = 1; icon_state = "darkblue"; tag = "icon-darkblue (NORTH)"},/area/derelict/library)
 "Kf" = (/obj/structure/wc/sink{pixel_y = 28},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "Kl" = (/turf/simulated/wall,/area/derelict/bridge/bridge)
 "Ks" = (/obj/structure/girder,/turf/simulated/floor/plating/airless,/area/derelict/medical/morgue)
 "KA" = (/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/derelict/bar)
-"KG" = (/obj/effect/decal/cleanable/blood{icon_state = "floor1"},/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area/derelict/bridge/bridge)
+"KG" = (/obj/effect/decal/cleanable/blood{icon_state = "floor1"},/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
 "KI" = (/obj/structure/grille/window_spawner/reinforced/full,/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/turf/simulated/floor/plating/airless,/area/derelict/research)
 "KQ" = (/obj/item/weapon/shard{icon_state = "small"; pixel_x = 5; pixel_y = -5},/turf/simulated/floor/plating/airless,/area/derelict/atmos)
-"KX" = (/obj/effect/decal/cleanable/blood{icon_state = "gib1-old"},/obj/effect/decal/cleanable/blood{icon_state = "floor5-old"},/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"KX" = (/obj/effect/decal/cleanable/blood{icon_state = "gib1-old"},/obj/effect/decal/cleanable/blood{icon_state = "floor5-old"},/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "Ll" = (/obj/structure/cable/yellow{d2 = 2; icon_state = "0-2"; pixel_y = 1},/turf/simulated/floor/plating/airless,/area)
 "Lo" = (/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating/airless,/area/derelict/research)
 "Ls" = (/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/machinery/atmospherics/miner/nitrogen,/turf/simulated/floor/engine/vacuum,/area/derelict/atmos)
@@ -402,7 +398,7 @@
 "NC" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/wall,/area/derelict/bar)
 "NL" = (/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/derelict/solar_control)
 "NM" = (/obj/effect/decal/cleanable/blood{icon_state = "floor1-old"},/obj/effect/decal/remains/human,/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{dir = 4; icon_state = "darkblue"},/area/derelict/library)
-"NQ" = (/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"NQ" = (/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "NR" = (/obj/item/weapon/storage/firstaid/regular{pixel_x = 2; pixel_y = 6},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "NS" = (/obj/machinery/power/apc{cell_type = 0; icon_state = "apc1"; opened = 1; pixel_y = -24},/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/turf/simulated/floor{dir = 5; icon_state = "cafeteria"},/area/derelict/kitchen)
 "NT" = (/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/machinery/atmospherics/unary/vent_pump{canSpawnMice = 0; external_pressure_bound = 120; frequency = 1438; icon_state = "in"; id_tag = "tox_out"; initialize_directions = 1; internal_pressure_bound = 4000; on = 1; pressure_checks = 2; pump_direction = 0},/turf/simulated/floor/engine/vacuum,/area/derelict/atmos)
@@ -411,18 +407,18 @@
 "On" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor/airless,/area/derelict/storage/tech_storage)
 "Os" = (/obj/structure/safe,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c10,/obj/item/weapon/spacecash/c10,/obj/item/weapon/spacecash/c10,/obj/item/weapon/spacecash/c10,/obj/item/weapon/spacecash/c10,/obj/item/weapon/spacecash/c10,/obj/item/weapon/spacecash,/obj/item/weapon/spacecash,/obj/item/weapon/spacecash,/obj/item/weapon/spacecash,/obj/item/weapon/spacecash,/obj/item/weapon/spacecash,/obj/item/weapon/coin/phazon,/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
 "Oy" = (/turf/simulated/floor{icon_state = "dark"},/area/derelict/medical/morgue)
-"OB" = (/turf/simulated/floor/plating/airless{broken = 1; icon_state = "platingdmg1"},/area/derelict/storage/equipment)
+"OB" = (/turf/simulated/floor/plating/damaged/airless/broken,/area/derelict/storage/equipment)
 "OC" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 1; icon_state = "darkblue"; tag = "icon-darkblue (NORTH)"},/area/derelict/library)
 "OP" = (/obj/item/stack/rods,/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
 "OR" = (/obj/structure/cable/yellow{d2 = 4; icon_state = "0-4"},/obj/machinery/power/terminal,/turf/simulated/floor/plating,/area/derelict/solar_control)
 "Ph" = (/obj/machinery/light,/turf/simulated/floor/plating/airless,/area/derelict/atmos)
 "Pk" = (/obj/structure/girder,/turf/simulated/floor/plating/airless,/area/derelict/crew_quarters)
-"Pq" = (/obj/item/weapon/melee/cultblade/nocult,/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
-"Pt" = (/obj/effect/decal/cleanable/blood{icon_state = "floor3-old"},/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"Pq" = (/obj/item/weapon/melee/cultblade/nocult,/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
+"Pt" = (/obj/effect/decal/cleanable/blood{icon_state = "floor3-old"},/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "PJ" = (/turf/simulated/wall/r_wall,/area/derelict/atmos)
 "PL" = (/obj/structure/lattice,/obj/machinery/door/airlock/security{name = "Cells"},/turf/simulated/floor/airless,/area/derelict/security)
 "PQ" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/turf/simulated/floor/plating/airless,/area/derelict/bar)
-"PR" = (/obj/item/weapon/shard{icon_state = "small"},/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"PR" = (/obj/item/weapon/shard{icon_state = "small"},/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "PS" = (/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/airless,/area/derelict/security)
 "Qa" = (/obj/structure/grille/window_spawner/reinforced/full,/turf/simulated/floor/plating/airless,/area/derelict/research)
 "Qd" = (/turf/simulated/floor/airless,/area/derelict/security)
@@ -430,7 +426,7 @@
 "Qk" = (/obj/effect/decal/cleanable/blood{icon_state = "floor4-old"},/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken"},/area/derelict/bar)
 "Qq" = (/turf/simulated/floor/plating/airless,/area/derelict/security)
 "Qt" = (/obj/structure/grille,/turf/simulated/floor/plating/airless,/area/derelict/bar)
-"QC" = (/obj/effect/decal/remains/human,/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"QC" = (/obj/effect/decal/remains/human,/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "QH" = (/turf/simulated/floor/plating/airless,/area/derelict/medical/medbay)
 "QI" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating/airless,/area/derelict/solar_control)
 "QK" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating/airless,/area/derelict/storage/equipment)
@@ -458,12 +454,11 @@
 "SV" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating/airless,/area/derelict/bar)
 "SW" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
 "Tj" = (/obj/structure/lattice,/turf/space,/area)
-"Tn" = (/obj/item/weapon/stamp/denied,/obj/structure/table,/turf/simulated/floor/airless{broken = 1; icon_state = "damaged4"},/area/derelict/bridge/bridge)
+"Tn" = (/obj/item/weapon/stamp/denied,/obj/structure/table,/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
 "Tw" = (/obj/machinery/light{dir = 1},/turf/simulated/floor{dir = 5; icon_state = "cafeteria"},/area/derelict/kitchen)
 "Tz" = (/obj/effect/decal/cleanable/blood{icon_state = "gibup1-old"},/obj/effect/decal/cleanable/blood{icon_state = "floor2-old"},/turf/simulated/floor/plating/airless,/area/derelict/security)
 "TC" = (/obj/item/tool/bonesetter,/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "TF" = (/turf/simulated/wall,/area/derelict/medical/medbay)
-"TI" = (/turf/simulated/floor/plating/airless{broken = 1; icon_state = "panelscorched"},/area/derelict/atmos)
 "TN" = (/turf/simulated/floor/plating/airless,/area/derelict/medical/morgue)
 "TO" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/derelict/solar_control)
 "TQ" = (/obj/effect/decal/warning_stripes{dir = 10; icon_state = "warning"; tag = "icon-warning (SOUTHWEST)"},/turf/simulated/floor/airless,/area/derelict/storage/tech_storage)
@@ -478,13 +473,12 @@
 "Ux" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/airless,/area/derelict/research)
 "UE" = (/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
 "UF" = (/obj/item/weapon/shard{icon_state = "small"},/turf/space,/area/derelict/bridge/bridge)
-"UI" = (/turf/simulated/floor/airless{broken = 1; icon_state = "damaged3"},/area/derelict/medical/medbay)
+"UI" = (/turf/simulated/floor/damaged/airless/broken,/area/derelict/medical/medbay)
 "UO" = (/obj/machinery/door/airlock/maintenance{name = "Bar & Kitchen Access"},/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating,/area/derelict/bar)
 "UP" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/space,/area)
 "UT" = (/turf/simulated/wall,/area/derelict/crew_quarters)
-"Vd" = (/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area/derelict/medical/medbay)
 "Vi" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/turf/space,/area/derelict/bar)
-"Vj" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor6"},/turf/simulated/floor/plating/airless/damaged,/area/derelict/bridge/bridge)
+"Vj" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor6"},/turf/simulated/floor/plating/damaged/airless,/area/derelict/bridge/bridge)
 "Vv" = (/obj/structure/girder,/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
 "Vx" = (/obj/structure/table,/obj/item/stack/cable_coil{pixel_x = 3; pixel_y = -7},/obj/item/stack/cable_coil{pixel_x = 3; pixel_y = -7},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
 "Vy" = (/obj/structure/cable/yellow{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor/plating/airless,/area/derelict/storage/equipment)
@@ -502,19 +496,18 @@
 "Wf" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/turf/space,/area)
 "Wi" = (/obj/machinery/computer/library/checkout/remote_gallery,/obj/structure/table,/turf/simulated/floor{dir = 1; icon_state = "darkblue"; tag = "icon-darkblue (NORTH)"},/area/derelict/library)
 "Wl" = (/obj/machinery/door/airlock/research{name = "Research and Development"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/research)
-"Wq" = (/turf/simulated/floor/airless{broken = 1; icon_state = "damaged2"},/area/derelict/storage/aux_storage)
 "Wr" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/turf/space,/area/derelict/bar)
 "Ws" = (/obj/structure/cable/yellow{d2 = 4; icon_state = "0-4"},/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/plating,/area/derelict/solar_control)
 "Wt" = (/obj/machinery/floodlight,/turf/simulated/floor/airless,/area/derelict/storage/aux_storage)
-"Wy" = (/obj/structure/table,/turf/simulated/floor/airless{broken = 1; icon_state = "damaged4"},/area/derelict/bridge/bridge)
+"Wy" = (/obj/structure/table,/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
 "Wz" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/plating/airless,/area/derelict/bridge/bridge)
 "WA" = (/obj/effect/decal/cleanable/blood/oil,/turf/simulated/floor/plating/airless,/area)
-"WC" = (/turf/simulated/floor/plating/airless{icon_state = "platingdmg3"},/area/derelict/atmos)
+"WC" = (/turf/simulated/floor/plating/damaged/airless/broken,/area/derelict/atmos)
 "WF" = (/turf/simulated/wall,/area/derelict/solar_control)
 "WG" = (/obj/machinery/door/airlock/external{name = "Science Airlock"},/obj/structure/cable/yellow,/turf/simulated/floor/plating/airless,/area/derelict/research)
 "WH" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating,/area/derelict/library)
 "WJ" = (/obj/structure/cable/yellow{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor{dir = 5; icon_state = "cafeteria"},/area/derelict/kitchen)
-"WM" = (/obj/item/clothing/head/legacy_culthood,/turf/simulated/floor/airless{broken = 1; icon_state = "damaged5"},/area/derelict/bridge/bridge)
+"WM" = (/obj/item/clothing/head/legacy_culthood,/turf/simulated/floor/damaged/airless/broken,/area/derelict/bridge/bridge)
 "WS" = (/obj/structure/cable/yellow{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable/yellow{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/plating/airless,/area/solar/derelict_starboard)
 "WW" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating/airless,/area/derelict/library)
 "WY" = (/obj/structure/cable/yellow{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
@@ -529,10 +522,10 @@
 "Yi" = (/turf/simulated/floor{dir = 5; icon_state = "cafeteria"},/area/derelict/kitchen)
 "Yq" = (/obj/structure/table,/obj/item/tool/FixOVein,/turf/simulated/floor/airless{icon_state = "white"},/area/derelict/medical/medbay)
 "Yy" = (/obj/item/stack/rods,/turf/simulated/floor/plating/airless,/area/derelict/security)
-"YA" = (/obj/machinery/atmospherics/unary/cap/visible,/obj/item/weapon/shard{icon_state = "small"},/turf/simulated/floor/plating/airless{icon_state = "platingdmg3"},/area/derelict/atmos)
+"YA" = (/obj/machinery/atmospherics/unary/cap/visible,/obj/item/weapon/shard{icon_state = "small"},/turf/simulated/floor/plating/damaged/airless/broken,/area/derelict/atmos)
 "YC" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating/airless,/area/derelict/atmos)
 "YS" = (/turf/simulated/wall,/area/derelict/medical/morgue)
-"YT" = (/obj/structure/rack,/obj/item/weapon/cell/high,/obj/item/weapon/cell/high,/turf/simulated/floor/plating/airless{broken = 1; icon_state = "panelscorched"},/area/derelict/storage/equipment)
+"YT" = (/obj/structure/rack,/obj/item/weapon/cell/high,/obj/item/weapon/cell/high,/turf/simulated/floor/plating/damaged/airless/burnt,/area/derelict/storage/equipment)
 "YY" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating/airless,/area/derelict/bar)
 "Zd" = (/turf/space,/area)
 "Ze" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/airless,/area/derelict/security)
@@ -560,13 +553,13 @@ ZdZdZdZdZdZdZdmZTjZdZdZdZdZdZdZdZdZdZdZdZdZdTjTjmZmZTjUoUoUoUoUoTFTFGeAfAfGeTFTF
 ZdZdZdZdZdZdZdTjZdZdZdZdZdZdZdZdZdZdZdZdTjTjZdTjTjTjTFTFTFTFTFTFTFhKAfAfAfAfAfTFTFYSYSmoVOumZdZdZdZdmZZdZdZdZdZdZdZdmZTjZdZdZdZdZdZdZdZdZdZd
 ZdZdZdZdZdUfTjZdZdZdZdZdZdZdZdZdZdZdZdUfZdTjZdTjpcUoTFAfsyKfiEaPsZAfAfAfAfAfAfAfTFGrOyOyOyKsTjUfZdZdTjTjgHZdZdZdZdZdZdTjTjZdZdZdZdZdZdZdZdZd
 ZdZdZdZdZdTjmZZdZdZdZdZdZdZdZdZdZdZdZdmZTjTjpcpcTjVXFTJYWYAfxTAfAfNRAfAfAfAfAfAfTFOyOyOyOyTNTjTjZdZdZdUoTjZdTjZdZdZdZdTjTjZdZdZdZdZdZdZdZdZd
-ZdZdZdZdmZTjZdZdZdZdZdZdZdZdZdZdZdTjZdTjTjZdZdZdTjTjTFVdyNZuFyJYRwqehIgPJYJYJYJYiAsOsOsOsOAaTjZdZdZdZdTjTjUoDlZdZdZdTjmZZdZdZdZdZdZdZdZdZdZd
-ZdZdZdZdmZTjZdZdZdZddHdHdHdHdHdHNsPkNsTjpcpcZdUfZdTjTFFwVdZFAfAfZVVSYqZFAfAfAfVATFOyOyOyOyTNTjZdUfKaZdZdUoTjTjZdZdZdmZZdZdZdZdZdZdZdZdZdZdZd
-ZdZdZdZdTjZdZdZdZdZddHdHdHdHyyNssCsCNspcZdZdZdZdZdZdsVVdAfZFAfAfAfAfAfZFAfAfAfAfTFGrOyOyTNTNTjTjTjUoUoTjZdZdTjZdZdZdZdZdZdZdZdZdZdZdZdZdZdZd
-ZdZdZdZdTjZdZdZdZdZddHdHdHdHdHsCsCNsPkTjUfZdZdZdZdUoTjQHUIzkVdTCSdBIAfZFXFXFXFAfTFYSYSKsKsjOTjeIUfUoUoUoTjUfTjmZZdZdZdZdZdZdZdZdZdZdZdZdZdZd
+ZdZdZdZdmZTjZdZdZdZdZdZdZdZdZdZdZdTjZdTjTjZdZdZdTjTjTFUIyNZuFyJYRwqehIgPJYJYJYJYiAsOsOsOsOAaTjZdZdZdZdTjTjUoDlZdZdZdTjmZZdZdZdZdZdZdZdZdZdZd
+ZdZdZdZdmZTjZdZdZdZddHdHdHdHdHdHNsPkNsTjpcpcZdUfZdTjTFFwUIZFAfAfZVVSYqZFAfAfAfVATFOyOyOyOyTNTjZdUfKaZdZdUoTjTjZdZdZdmZZdZdZdZdZdZdZdZdZdZdZd
+ZdZdZdZdTjZdZdZdZdZddHdHdHdHyyNssCsCNspcZdZdZdZdZdZdsVUIAfZFAfAfAfAfAfZFAfAfAfAfTFGrOyOyTNTNTjTjTjUoUoTjZdZdTjZdZdZdZdZdZdZdZdZdZdZdZdZdZdZd
+ZdZdZdZdTjZdZdZdZdZddHdHdHdHdHsCsCNsPkTjUfZdZdZdZdUoTjQHUIzkUITCSdBIAfZFXFXFXFAfTFYSYSKsKsjOTjeIUfUoUoUoTjUfTjmZZdZdZdZdZdZdZdZdZdZdZdZdZdZd
 ZdZdZdTjmZZdZdZdZdZddHdHdHNsNsPksCsCsCeIZdZdZdZdZdZdOdTjiqecAfAfFwTFkoCHTFTFTFkSTFoPoPTjZdZdTjTjZdUolXlXlXTjTjTjTjTjZdZdZdZdZdZdUfZdZdZdZdZd
 ZdZdmZTjZdZdZdZdZdZddHdHCidHDkzazazawUTjADgHZdUPZdZdyQgHTjsgiqJVbwTFAfZFVPaDTFUoUoUoTjTjZdZdTjUoTjUoMAMAlXUoTjZdZdZdZdZdZdZdZdZdTjZdZdZdZdZd
-ZdZdTjZdUfZdZdZdZdZddHdHdHPkUTUTjVUTUTTjFGZdZdZdZdZdJKTjUoTjQHiqVdgiAfyNJYwxTFUoUoTjeITjUoZdUoUoUoLlMAMAlXUoTjZdZdZdZdZdZdZdZdZdTjTjZdZdZdZd
+ZdZdTjZdUfZdZdZdZdZddHdHdHPkUTUTjVUTUTTjFGZdZdZdZdZdJKTjUoTjQHiqUIgiAfyNJYwxTFUoUoTjeITjUoZdUoUoUoLlMAMAlXUoTjZdZdZdZdZdZdZdZdZdTjTjZdZdZdZd
 ZdmZTjZdZdZdZdZdZdZddHdHNssCUTokMSsCUTgBUoZdZdZdZdZdZdxYUoTjTjiqTFTFnxJGAfwkTFUoTjZdTjZdZdTjUoUoUoHLMAMAlXMAUoTjZdZdZdZdZdZdZdZdmZTjmZZdZdZd
 ZdmZTjZdZdZdZdZdZdZdNsNssCsCUTbTMSFdUTEYcNUPmZZdZdZdLCZdZdgHTjUoUoTFTFTFTFTFTFUoTjZdZdZdZdTjTjTjMAHLMAMAlXMAUoUoTjZdZdZdZdZdZdZdZdZdTjZdZdZd
 ZdZdZdZdZdZdZdZdZdZdaJaJaJaJaJaJaJaJaJbcTjTjUfZdZdZdZdZdZdZdUPZdTjUoUoUoUoUoUfTjZdZdZdZdZdTjoXoXFnLNFnoXoXoXQqQqfjTjTjTjZdZdZdZdZdZdTjUfZdZd
@@ -577,33 +570,33 @@ ZdZdZdZdZdZdZdZdZdayayEAaywrwrEpEpwrayAkViWrZdZdZdZdZdZdZdZdZdZdZdZdTjTjTjTjTjZd
 ZdZdZdZdZdZdZdZdZdayxrzmayMvfgfxMvMvmndVmqUsZdZdZdZdZdZdZdZdZdTjTjZdZdZdUoTjTjUoZdZdZdZdZdoXoXQdQdQdQdQdoXQqfjfjQqQqQqfjZdTjZdZdZdZdZdZdZdZd
 ZdZdZdZdZdZdZdZdZdSVuyObsMlqccwDeMyjvrXnnHUsZdZdZdZdZdZdZdVziFVzhxnhnhnhcnUEUoyRTjUfZdZdZdoXQdQdQdQdQdQdQdoXQqQqYyQdQqfjZdTjZdZdZdZdZdZdZdZd
 ZdZdZdZdZdZdZdZdZdAZMvuysMvRBFMvHVsXzfccslNCZdZdZdZdZdZdUFiFiFOsZvWyTnZvrRUEpXeIZdTjZdZdZdZAQdINfrfrfrQdQdPLQqQqQdQdQdQqTjTjZdZdZdZdZdZdZdZd
-ZdZdZdUfZdZdZdZdZdAZuyuybsfIDZriXkBflqccRnaxZdZdZdZdZdiFiFeAiFFtGkHbyzqqWzUEVzUEZdZdZdZdZdhdQdQdbVbVQdBrQqQqoxvQnzzYQdQqTjTjTjZdZdZdZdZdZdZd
+ZdZdZdUfZdZdZdZdZdAZuyuybsfIDZriXkBflqccRnaxZdZdZdZdZdiFiFeAiFFtGkKcyzqqWzUEVzUEZdZdZdZdZdhdQdQdbVbVQdBrQqQqoxvQnzzYQdQqTjTjTjZdZdZdZdZdZdZd
 ZdZdZdmZZdZdZdZdZdPQuysMuyfxfglqQkccyPEuBFHEUPZdZdZdZdVzUEVveAeGJbGQGQWzNQiFZvMmZdZdZdZdZdhdnJQdbaYyfjfjfjclclQqTzHtfGQTQTfjZdZdZdZdZdZdZdZd
 ZdZdTjmZZdZdZdZdZdayLUuqnddFccfxMvJJKAMvwDHEZdZdZdZdZdVzUEuobIiFiFNQlDQCiFXWWySvZdZdZdZdZdocrqrqhGQTfjclfjHeclclfjfjQqQqQqfjZdZdZdZdZdZdZdZd
 ZdmZTjUfZdZdZdZddDayUOayayayfUayayYYcJcJvLQtgHZdZdZdZdVNWMnNNQCAiFEiVzVziFPRCwSvZdZdZdZdZdZdZdZdZdZdgHZdQTYyUkQqcdQqfjfjfjfjZdZdZdZdZdZdZdZd
 ZdTjTjZdZdZdZdZddDyqzHoYMaoYoYdDTjZdZdZdUPZdZdZdZdZdZdJcbDOPVjxKiFVzVzVzPqlpuoVzZdZdZdZdZdZdZdZdTjeIUoZdQTQdQdQqQqfjfjQqAloXZdZdZdZdZdZdZdZd
 ZdTjTjZdZdZdZdZddDVyyfoYoYOBoYOBTjZdZdZdZdZdZdZdZdZdUPqqKGUERcVzVzVzVzVzVzVziFeAUPZdZdZdZdZdZdmZmZTjZdUooXQdQdQdQqQqhwQdQdZAZdZdZdZdZdZdZdmZ
-ZdUfTjZdZdZdZdZddDzHoYqpqpFvYTJRZdZdZdZdZdZdZdZdTjZdZdJcHbheVviFVzVzroVzMyCbNQiFZdZdZdZdZdZdZdZdTjTjTjTjoXoXoXoXQdQdQdQdQdhdZdZdZdZdZdZdTjmZ
+ZdUfTjZdZdZdZdZddDzHoYqpqpFvYTJRZdZdZdZdZdZdZdZdTjZdZdJcKcheVviFVzVzroVzMyCbNQiFZdZdZdZdZdZdZdZdTjTjTjTjoXoXoXoXQdQdQdQdQdhdZdZdZdZdZdZdTjmZ
 ZdmZTjZdZdZdZdZddDQKdDdDdDdDJRjfZdTjZdZdZdZdZdZdZdTjZdiFUEheVzVziFVzVziFiFNQKcKlUPZdZdZdZdZdZdZdZdTjTjTjTjTjTjoXoXoXoXoXANBiZdZdZdZdZdUfTjmZ
 ZdmZTjZdZdZdZdZddDHOdDZdZdZdZdTjTjZdTjZdZdZdZdZdZdZdZdigUEeAqqiFVzVzVzVzcLMmvGUEZdZdZdZdZdZdZdTjZdeITjTjTjZdTjTjTjZdZdZdZdZdZdZdZdZdZdZdTjZd
 ZdZdTjTjZdZdZdZddDqJdDZdZdZdZdZdZdZdZdZdZdZdZdZdZdTjTjZdVziFVzcBbIVzeAKXeAiFPtZdTjZdZdZdZdZdmZTjTjmZTjmZTjTjTjmZTjTjTjZdZdZdZdZdZdZdZdZdZdZd
-ZdZdZdmZZdZdZdZdZdpcZdUfZdZdZdZdZdZdZdZdZdZdZdZdZdZdTjeITjUEheHbVveAiFyIlthkWAZdTjZdZdZdZdTjzUUoUoUoUoUoUoUoTjTjTjZdZdZdZdZdZdZdZdZdZdUfZdZd
+ZdZdZdmZZdZdZdZdZdpcZdUfZdZdZdZdZdZdZdZdZdZdZdZdZdZdTjeITjUEheKcVveAiFyIlthkWAZdTjZdZdZdZdTjzUUoUoUoUoUoUoUoTjTjTjZdZdZdZdZdZdZdZdZdZdUfZdZd
 ZdZdZdZdZdZdZdZdZdpcTjmZZdZdZdZdZdZdZdZdZdZdZdZdZdmZTjyRTjQfUoUojxBzZdTjUoZdZdZdTjTjcIcIRtjijijijijiPJPJCYPJPJUoTjTjZdmZZdZdZdZdZdZdZdZdTjZd
 ZdZdZdZdZdZdZdmZTjZdTjZdZdZdZdZdZdZdZdZdTjTjZdTjZdZdmZUoZdTjZdUoUoZdrNUoZdZdZdTjTjTjszszDdUwdRdRttttPJgosFgoPJpVpVpVTjmZZdZdZdZdZdZdZdZdTjZd
 ZdZdZdZdZdZdZdZdZdUfZdZdZdZdZdZdZdZdZdZdZdZdZdTjTjZdTjZdZdUfZdZdTjTjZdZdUPZdmZTjTjTjqCGJjXsRsRsRsRWtPJcYJigoPJjWqVuQjdTjmZZdZdZdZdZdZdZdTjmZ
-ZdZdZdZdZdZdZdZdmZTjpcpcpcZdZdZdZdZdZdZdZdZdZdZdUfyRUoTjTjZdZdZdZdZdZdZdZdmZTjUoTjTjjiMUWqsRihsRsRWtPJeKmKNTPJTQwtREoFSITjTjZdZdZdZdZdZdTjmZ
-ZdZdZdZdZdZdZdZdmZTjTjZlwoZlZlZlZlZdZdZdZdZdZdZdZdTjZdTjmZZdZdZdZdZdZdZdZdTjmZTjTjUojiICICICjiICICICPJxgYCQOPJBaBaBaaBoFTjZdTjZdZdZdZdZdTjZd
+ZdZdZdZdZdZdZdZdmZTjpcpcpcZdZdZdZdZdZdZdZdZdZdZdUfyRUoTjTjZdZdZdZdZdZdZdZdmZTjUoTjTjjiMUjXsRihsRsRWtPJeKmKNTPJTQwtREoUSITjTjZdZdZdZdZdZdTjmZ
+ZdZdZdZdZdZdZdZdmZTjTjZlwoZlZlZlZlZdZdZdZdZdZdZdZdTjZdTjmZZdZdZdZdZdZdZdZdTjmZTjTjUojiICICICjiICICICPJxgYCQOPJBaBaBaoUoUTjZdTjZdZdZdZdZdTjZd
 ZdZdZdZdZdZdZdZdZdZdZdZllGzWWiETZlZlZlZlZlZlFeXGLxwoZlTjmZZdZdZdZdZdZdZdTjZdmZFmeRJhKQJhJhJhUtJhJhJhJhtjFqtjJhBaBaBafRjdTjZdTjTjZdZdZdZdTjmZ
-ZdZdZdZdZdZdZdZdZdZdZdZlUjDiDiSiKeJqOCOChqWHWHdCpOpOZlTjTjTjTjZdZdTjTjTjTjZdTjJhholdJhJhJhrlEnjFjFjFjFjFjFjFGMqXaBBaStjdTjZdZdTjTjZdZdUfTjmZ
-ZdZdZdZdZdZdZdZdZdZdZdZlbRpSDiEJMWDiwXwXMHqYqYqYqYqYqYqYZdZdZdZdTjZdZdZdZdTjUfJhliWCzoRITIYAJhMoylMoPhMoFxMoJhBaoUoFoFSIZdZdZdZdTjZdZdZdTjmZ
-ZdmZZdZdZdZdZdZdZdZdZdZlZlUjDiDSDSDiDiDiNMqYkBkBtDkBmTqYZdZdZdZdZdZdZdZdZdZdTjJhliIdPJvxzootPJxgYCQOPJxgYCQOPJoFBajwSISIZdZdZdZdTjZdZdZdTjZd
-ZdZdZdZdZdZdZdZdZdZdZdZdZlaYpSmHmHwCaOaOMHqYkBlSlSlSKbqYZdZdZdZdZdZdZdZdZdZdeIJhliJhPJTIWCsGPJbNtyRYPJVQbjGpPJOnjwpbSIovZdZdZdZdZdZdZdTjTjUf
+ZdZdZdZdZdZdZdZdZdZdZdZlUjDiDiSiKeJqOCOChqWHWHdCpOpOZlTjTjTjTjZdZdTjTjTjTjZdTjJhholdJhJhJhrlEnjFjFjFjFjFjFjFGMqXoUBaStjdTjZdZdTjTjZdZdUfTjmZ
+ZdZdZdZdZdZdZdZdZdZdZdZlbRpSDiEJMWDiwXwXMHqYqYqYqYqYqYqYZdZdZdZdTjZdZdZdZdTjUfJhliWCzoRIzoYAJhMoylMoPhMoFxMoJhBaoUoUoUSIZdZdZdZdTjZdZdZdTjmZ
+ZdmZZdZdZdZdZdZdZdZdZdZlZlUjDiDSDSDiDiDiNMqYkBkBtDkBmTqYZdZdZdZdZdZdZdZdZdZdTjJhliIdPJvxzootPJxgYCQOPJxgYCQOPJoUBajwSISIZdZdZdZdTjZdZdZdTjZd
+ZdZdZdZdZdZdZdZdZdZdZdZdZlaYpSmHmHwCaOaOMHqYkBlSlSlSKbqYZdZdZdZdZdZdZdZdZdZdeIJhliJhPJzoWCsGPJbNtyRYPJVQbjGpPJOnjwpbSIovZdZdZdZdZdZdZdTjTjUf
 mZUfZdZdZdZdZdZdZdZdZdZdkvffaYpSDiDiDiDixmqYlSlSrrlSZPqYTjZdZdZdZdZdZdZdZdTjUoJhliJhmLgozSazPJgoGoazPJgoLsazPJOnOnSIovZdZdZdZdZdZdZdTjTjmZZd
 mZTjZdZdZdZdZdZdZdZdZdZdZdkDffaYpSDiIjDSwmqYkBlSlSlSKbqYUoUfZdZdZdZdZdZdTjWFplQIZTeLPJgoCEgoPJgodhgoPJgoiPgoPJpVjdovZdZdZdZdZdZdZdZdZdTjmZZd
 ZdZdTjZdZdZdZdZdZdZdZdZdZdZdkDffaYpSIjDSWbqYdkVElSkBKbqYUoTjZdZdZdZdZdZdZdWFvAmbBnwyPJPJPJPJPJPJewPJPJPJRzPJPJZdZdZdZdZdZdZdZdZdZdZdfzTjmZZd
 ZdZdmZmZZdZdZdZdZdZdZdZdZdZdZdkDffaYpSDixmqYQaKIQaQaKIqaIazGiTZdZdZdZdZdZdWFGOymTOGONLfKGOymWFDzDzDzDzDzDzprTjZdZdZdZdZdZdZdZdZdZdZdTjmZZdZd
 ZdZdZdTjZdZdZdZdZdZdZdZdZdZdZdZdkDffaYpSxmdAuzxVsssstUfvfvlcIoZdZdZdZdZdWFWFGOGOTOGOGOTOORsTIAEZDzDzDzDzmZTjZdZdZdZdZdZdZdZdZdZdZdZdTjZdZdZd
-ZdZdZdmZTjZdZdUfZdZdZdZdZdZdZdZdZdkDffaYodWlLovJwPXAmYFhNzlczGZdZdZdTjTjtAGOGOjRkdpnipWsQPVBWFGyDzDzDzTjTjmZZdZdZdZdZdZdZdZdZdZdZdZdTjZdZdZd
+ZdZdZdmZTjZdZdUfZdZdZdZdZdZdZdZdZdkDffaYodWlLovJvJXAmYFhNzlczGZdZdZdTjTjtAGOGOjRkdpnipWsQPVBWFGyDzDzDzTjTjmZZdZdZdZdZdZdZdZdZdZdZdZdTjZdZdZd
 ZdZdZdZdTjTjZdZdZdZdZdZdZdZdZdZdZdZdkDWWZldAlKfvfvfvSWojUxmYfNgHZdZdZdTjmNGOfCTOGOGOGOGOlPWFWFGyDzTjTjZdZdZdZdZdZdZdZdZdZdZdZdZdZdTjmZZdZdZd
 ZdZdZdZdZdmZTjmZmZZdZdZdZdZdZdZdZdZdZdZdTjdAkaVxXjrFbCmVNobCfNZdZdZdZdZdAbjRCuEHwjwjwjWFWFWFTjGyTjmeWSTTZdmeWSTTZdZdZdZdZdZdZdZdZdZdmZZdZdZd
 ZdZdZdZdZdZdZdTjTjZdZdZdUfZdZdZdZdZdZdZdZdIoIaIadAdADwNgnwbCQUFGTjZdZdZdWFTOWFWFpliuQIWFZdTjTjGyZdmeyvTTZdmeyvTTZdZdZdZdZdZdZdZdZdZdZdZdZdZd

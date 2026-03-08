@@ -219,3 +219,6 @@
 		S.perform(user, 0, list(src))
 		return 1
 	return 0
+
+/turf/space/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD,var/luminous=FALSE)
+	return null
