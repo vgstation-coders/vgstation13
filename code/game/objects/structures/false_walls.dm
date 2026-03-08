@@ -174,6 +174,7 @@
 	if(density)
 		opening = 1
 		icon_state = "[wallword]_open"
+		overlays.len = 0
 		update_meson_image()
 		flick("[wallword]_opening", src)
 		loc.mouse_opacity = 1
