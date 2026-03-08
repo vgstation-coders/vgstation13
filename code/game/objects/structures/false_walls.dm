@@ -158,12 +158,12 @@
 			overlays += over
 		for(var/direction in diagonal)
 			if(!(. & direction))
-				var/image/subover = image(icon = src,icon_state = "metal_corners",dir = direction)
+				var/image/subover = image(icon = src,icon_state = "[mineral]_corners",dir = direction)
 				subover.plane = OBJ_OVERLAY_PLANE
 				overlays += subover
 		for(var/direction in cardinal)
 			if(!(. & direction))
-				var/image/subover = image(icon = src,icon_state = "metal_corners",dir = direction)
+				var/image/subover = image(icon = src,icon_state = "[mineral]_corners",dir = direction)
 				subover.plane = OBJ_OVERLAY_PLANE
 				overlays += subover
 	else
