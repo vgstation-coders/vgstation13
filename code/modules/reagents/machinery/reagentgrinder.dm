@@ -20,6 +20,7 @@ var/global/list/juice_items = list (
 	/obj/item/weapon/paper = list(PULP = 1),
 	/obj/item/weapon/newspaper = list(PULP = 2),
 	/obj/item/weapon/book = list(PULP = 5),
+	/obj/item/dictionary = list(PULP = 5),
 	)
 
 /obj/machinery/reagentgrinder
