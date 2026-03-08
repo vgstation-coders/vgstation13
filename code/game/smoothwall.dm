@@ -96,7 +96,7 @@
 						var/image/subover = image(icon = src,icon_state = "rwall_corners",dir = direction)
 						subover.plane = TURF_OVERLAY_PLANE
 						overlays += subover
-			var/image/over = image(icon = src,icon_state = "r_wall-[src::d_state]")
+			var/image/over = image(icon = src,icon_state = "r_wall-[src::d_state || 0]")
 			over.plane = TURF_OVERLAY_PLANE
 			overlays += over
 		for(var/direction in diagonal)
