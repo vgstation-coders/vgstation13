@@ -56,6 +56,7 @@
 		/obj/item/weapon/reagent_containers/pill = list("generic",0),
 		/obj/item/ice_crystal                = list(ICE, 10),
 		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 10),
+		/obj/item/weapon/grown/log    		 = list(SAWDUST = 10),
 	)
 
 

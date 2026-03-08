@@ -1991,7 +1991,7 @@
 	display_name = "woodapple tree"
 	plant_dmi = 'icons/obj/hydroponics/woodapple.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/woodapple)
-	chems = list(SUGAR = list(1,10))
+	chems = list(SUGAR = list(1,10),PULP = list(1,10))
 
 	growth_stages = 3
 	maturation = 4
