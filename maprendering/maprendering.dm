@@ -58,12 +58,16 @@
 			for(var/y = 0 to world.maxy step icon_size)
 				var/list/pixel_shift_objects = list()
 				var/icon/map_icon = new/icon('maprendering/maprender.png') //2048 pixels, thats 32 tiles of 32 pixels
+				var/area_rendered = FALSE
 				for(var/a = 1 to icon_size)
 					for(var/b = 1 to icon_size)
 						//Finding turf and all turf contents
 						var/turf/currentturf = locate(x+a,y+b,z)
 						if(!currentturf || (currentturf.turf_flags & NO_MINIMAP))
 							continue
+						if(render_area && !istype(get_area(currentturf),render_area))
+							continue
+						area_rendered = TRUE
 						var/list/allturfcontents = currentturf.contents.Copy()
 
 						//Remove the following line if you want to add space to your renders, I think it is cheaper to merely use a pregenned image for this
@@ -99,6 +103,8 @@
 						sleep(-1)
 						MAPRENDER_IN_ROUND_CHECK_TICK
 					MAPRENDER_IN_ROUND_CHECK_TICK
+				if(!area_rendered)
+					continue
 				for(var/A in pixel_shift_objects)
 					var/icon/icontoblend = getFlatIcon(A, A:dir, cache = 0)
 					//This part is tricky since we've skipped a and b, since these are map objects they have valid x,y. a and b should be the modulo'd value of x,y with icon_size
