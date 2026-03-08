@@ -154,6 +154,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define ABOVE_DOOR_LAYER			12
 	#define CHAIR_LEG_LAYER				13
 
+#define OBJ_OVERLAY_PLANE 4
+
 #define LYING_MOB_PLANE			(5 + FLOAT_PLANE)			// other mobs that are lying down.
 
 #define LYING_HUMAN_PLANE 		(6 + FLOAT_PLANE)			// humans that are lying down

@@ -150,14 +150,22 @@
 		if(reinforced)
 			for(var/direction in cardinal)
 				if(!(. & direction))
-					overlays += image(src,src,"rwall_corners",layer,direction)
-			overlays += image(src,src,"r_wall-0")
+					var/image/subover = image(icon = src,icon_state = "rwall_corners",dir = direction)
+					subover.plane = OBJ_OVERLAY_PLANE
+					overlays += subover
+			var/image/over = image(icon = src,icon_state = "r_wall-0")
+			over.plane = OBJ_OVERLAY_PLANE
+			overlays += over
 		for(var/direction in diagonal)
 			if(!(. & direction))
-				overlays += image(src,src,"metal_corners",layer,direction)
+				var/image/subover = image(icon = src,icon_state = "metal_corners",dir = direction)
+				subover.plane = OBJ_OVERLAY_PLANE
+				overlays += subover
 		for(var/direction in cardinal)
 			if(!(. & direction))
-				overlays += image(src,src,"metal_corners",layer,direction)
+				var/image/subover = image(icon = src,icon_state = "metal_corners",dir = direction)
+				subover.plane = OBJ_OVERLAY_PLANE
+				overlays += subover
 	else
 		icon_state = "[mineral][.]"
 
