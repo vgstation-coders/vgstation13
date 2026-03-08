@@ -48034,9 +48034,7 @@
 	icon_state = "1-8";
 	tag = ""
 	},
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/auxsolarstarboard{
 	name = "Southeast Solar Control"
 	})
@@ -48374,9 +48372,7 @@
 	name = "Southeast Solar Control"
 	})
 "bYX" = (
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/auxsolarstarboard{
 	name = "Southeast Solar Control"
 	})
@@ -51578,14 +51574,12 @@
 /area/shuttle/administration/centcom)
 "ceF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "ceG" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ceH" = (
@@ -51595,8 +51589,8 @@
 	},
 /area/prison/solitary)
 "ceI" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ceJ" = (
@@ -51604,8 +51598,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "ceK" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ceL" = (
@@ -51617,12 +51611,6 @@
 /obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor{
 	name = "plating"
-	},
-/area/prison/solitary)
-"ceN" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
 	},
 /area/prison/solitary)
 "ceO" = (
@@ -51851,19 +51839,14 @@
 /area/centcom/living)
 "cfs" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
-	},
-/area/prison/solitary)
-"cft" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cfu" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cfv" = (
@@ -51894,15 +51877,8 @@
 	name = "plating"
 	},
 /area/centcom/living)
-"cfz" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "cfB" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cfC" = (
 /obj/machinery/dna_scannernew,
@@ -64210,9 +64186,7 @@
 	dir = 1
 	},
 /obj/machinery/recharge_station,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/secret)
 "drk" = (
 /obj/structure/closet/secure_closet/miner,
@@ -64222,9 +64196,7 @@
 /area/derelict/secret)
 "drl" = (
 /obj/structure/ore_box,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/secret)
 "drm" = (
 /obj/machinery/door/airlock{
@@ -64269,9 +64241,7 @@
 /area/derelict/secret)
 "drs" = (
 /obj/structure/closet/secure_closet/miner,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/secret)
 "drt" = (
 /obj/structure/bed/chair{
@@ -64414,9 +64384,7 @@
 /area/derelict/secret)
 "drK" = (
 /obj/structure/ore_box,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/secret)
 "drL" = (
 /obj/structure/grille,
@@ -65173,9 +65141,7 @@
 	name = "Mining Station Maintenance";
 	req_access_txt = "48"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "dtC" = (
 /obj/machinery/door/airlock/glass_medical{
@@ -65407,9 +65373,7 @@
 	},
 /area/derelict/secret)
 "dtZ" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/secret)
 "dua" = (
 /obj/structure/cable{
@@ -65418,9 +65382,7 @@
 	icon_state = "4-8"
 	},
 /obj/item/weapon/storage/box/lights/mixed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "dub" = (
 /obj/structure/cable{
@@ -65438,9 +65400,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/secret)
 "dud" = (
 /obj/machinery/light/small{
@@ -65698,19 +65658,10 @@
 /area/derelict/secret)
 "duz" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
-/area/derelict/secret)
-"duA" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "duB" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "duC" = (
 /obj/machinery/power/terminal{
@@ -65959,9 +65910,7 @@
 /area/derelict/secret)
 "dva" = (
 /obj/item/weapon/gun/energy/plasma/MP40k,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "dvb" = (
 /obj/structure/cable{
@@ -65971,9 +65920,7 @@
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/secret)
 "dvc" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -65988,9 +65935,7 @@
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "dve" = (
 /obj/machinery/door/airlock/external{
@@ -79198,9 +79143,7 @@
 	external_pressure_bound = 101;
 	on = 1
 	},
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/engine/aux_control{
 	name = "Engineering Medical"
 	})
@@ -86748,9 +86691,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/engine/aux_control{
 	name = "Engineering Medical"
 	})
@@ -199666,7 +199607,7 @@ ceG
 cfd
 cBS
 ceO
-cfz
+cfB
 cBS
 ccH
 ccH
@@ -200571,7 +200512,7 @@ cBS
 ceI
 ceL
 cBS
-cft
+ceK
 ceL
 cBS
 ccH
@@ -203890,7 +203831,7 @@ ccH
 ccH
 ccH
 cBS
-ceN
+ceF
 cfc
 cBS
 cfv
@@ -204196,7 +204137,7 @@ ceO
 ceL
 cBS
 ceL
-cft
+ceK
 cBS
 ccH
 ccH
@@ -620248,7 +620189,7 @@ dqx
 dte
 dpy
 dtZ
-duA
+duB
 dva
 dpy
 doU

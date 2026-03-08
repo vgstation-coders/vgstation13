@@ -21,10 +21,7 @@
 /turf/simulated/floor/plating/airless,
 /area/vault/asteroid)
 "ag" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/vault/asteroid)
 "ah" = (
 /turf/simulated/floor/plating/airless,
@@ -35,16 +32,10 @@
 /area/vault/asteroid)
 "aj" = (
 /obj/structure/cult/forge,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/vault/asteroid)
 "ak" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/vault/asteroid)
 "al" = (
 /obj/structure/catwalk,
@@ -52,10 +43,7 @@
 /area/vault/asteroid)
 "am" = (
 /obj/item/stack/tile/metal,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/vault/asteroid)
 "an" = (
 /obj/machinery/door/mineral/wood,

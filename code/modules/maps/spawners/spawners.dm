@@ -1107,6 +1107,7 @@
 		/obj/item/seeds/reishimycelium,
 		/obj/item/seeds/dionanode,
 		/obj/item/seeds/riceseed,
+		/obj/item/seeds/roseseed,
 		/obj/item/seeds/soyaseed,
 		/obj/item/seeds/sugarcaneseed,
 		/obj/item/seeds/sunflowerseed,

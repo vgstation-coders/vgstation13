@@ -2919,8 +2919,8 @@
 /area/surface/jungle/underground)
 "bfL" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bfM" = (
@@ -3570,8 +3570,8 @@
 	},
 /area/surface/jungle/vault)
 "bqY" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "brf" = (
@@ -4686,11 +4686,6 @@
 	icon_state = "bar"
 	},
 /area/centcom/living)
-"bLb" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
-	},
-/area/prison/solitary)
 "bLk" = (
 /obj/item/tool/circular_saw{
 	pixel_y = 4
@@ -12161,9 +12156,7 @@
 /area/shuttle/escape/centcom)
 "epl" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "epp" = (
 /turf/simulated/wall,
@@ -18665,12 +18658,6 @@
 	},
 /turf/simulated/floor,
 /area/mine/production)
-"gRo" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "gRt" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
@@ -22354,8 +22341,8 @@
 /area/vox_trading_post/kitchen)
 "ikV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ild" = (
@@ -28204,8 +28191,8 @@
 /area/centcom/control)
 "kuV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "kvg" = (
@@ -51136,9 +51123,7 @@
 	},
 /area/science/chargebay)
 "sSO" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "sSS" = (
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
@@ -58980,8 +58965,8 @@
 	},
 /area/bridge)
 "vJj" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "vJm" = (
@@ -62485,11 +62470,6 @@
 /obj/structure/closet/crate/bin,
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/fenced)
-"xad" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "xag" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -320516,7 +320496,7 @@ ocC
 ocC
 ocC
 llQ
-gRo
+epl
 wxE
 llQ
 kuV
@@ -320872,7 +320852,7 @@ bfL
 amC
 llQ
 czW
-xad
+sSO
 llQ
 ocC
 ocC
@@ -322980,11 +322960,11 @@ ocC
 ocC
 ocC
 llQ
-bLb
+vJj
 amC
 llQ
 amC
-bLb
+vJj
 llQ
 ocC
 xTB
@@ -324039,7 +324019,7 @@ llQ
 rOb
 czW
 llQ
-bLb
+vJj
 rOb
 llQ
 ocC
@@ -325095,7 +325075,7 @@ llQ
 wfm
 bqY
 llQ
-bLb
+vJj
 rOb
 llQ
 ocC
@@ -327205,7 +327185,7 @@ ocC
 ocC
 llQ
 rOb
-bLb
+vJj
 llQ
 czW
 sSO

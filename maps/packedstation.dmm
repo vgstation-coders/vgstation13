@@ -7034,9 +7034,7 @@
 /obj/item/weapon/newspaper,
 /obj/item/device/radio,
 /obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/fsmaint2)
 "amp" = (
 /obj/structure/grille,
@@ -30849,9 +30847,7 @@
 	pixel_y = 32
 	},
 /obj/abstract/map/spawner/maint,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/maintenance/asmaint)
 "baB" = (
 /obj/effect/decal/cleanable/dirt,
@@ -32885,9 +32881,7 @@
 	name = "Ghostly Gym"
 	})
 "bdX" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/maintenance/asmaint)
 "bdY" = (
 /obj/structure/window/reinforced/tinted{
@@ -47541,14 +47535,8 @@
 /area/centcom/striketeam)
 "bFK" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
-	},
-/area/prison/solitary)
-"bFL" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bFM" = (
@@ -47562,18 +47550,13 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "bFO" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bFP" = (
 /turf/unsimulated/floor{
 	name = "plating"
-	},
-/area/prison/solitary)
-"bFQ" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
 	},
 /area/prison/solitary)
 "bFR" = (
@@ -47590,9 +47573,7 @@
 /area/prison/solitary)
 "bFT" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bFU" = (
 /obj/item/weapon/storage/fancy/cigarettes,
@@ -47984,19 +47965,19 @@
 /area/centcom/striketeam)
 "bGY" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bGZ" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bHa" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bHb" = (
@@ -48041,14 +48022,7 @@
 	},
 /area/centcom/striketeam)
 "bHh" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
-"bHi" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bHj" = (
 /obj/machinery/dna_scannernew,
@@ -360234,7 +360208,7 @@ aaa
 aaa
 aaa
 bFu
-bFL
+bFT
 bGo
 bFu
 bGY
@@ -363748,11 +363722,11 @@ aaa
 aaa
 aaa
 bFu
-bFQ
+bGZ
 bGn
 bFu
 bGn
-bFQ
+bGZ
 bFu
 aaa
 bHA
@@ -365257,7 +365231,7 @@ bFu
 bFP
 bFS
 bFu
-bFQ
+bGZ
 bFP
 bFu
 aaa
@@ -366763,7 +366737,7 @@ bFu
 bFR
 bFO
 bFu
-bFQ
+bGZ
 bFP
 bFu
 aaa
@@ -369773,10 +369747,10 @@ aaa
 aaa
 bFu
 bFP
-bFQ
+bGZ
 bFu
 bFS
-bHi
+bHh
 bFu
 aaa
 aaa

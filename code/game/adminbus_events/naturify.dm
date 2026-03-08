@@ -68,6 +68,7 @@ var/list/seedbush_spawns = list(
 		/obj/item/seeds/dionanode = 10,
 		/obj/item/seeds/soyaseed = 10,
 		/obj/item/seeds/sunflowerseed = 10,
+		/obj/item/seeds/roseseed = 10,
 		/obj/item/seeds/tomatoseed = 10,
 		/obj/item/seeds/towermycelium = 10,
 		/obj/item/seeds/wheatseed = 10,

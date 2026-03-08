@@ -45467,16 +45467,10 @@
 	name = "plating"
 	},
 /area/centcom/striketeam)
-"bOz" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "bOA" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bOB" = (
@@ -45486,8 +45480,8 @@
 	},
 /area/prison/solitary)
 "bOC" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bOD" = (
@@ -45495,8 +45489,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "bOE" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bOF" = (
@@ -45512,9 +45506,7 @@
 /area/prison/solitary)
 "bOH" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bOI" = (
 /obj/effect/decal/cleanable/blood,
@@ -45924,19 +45916,14 @@
 /area/centcom/striketeam)
 "bPN" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
-	},
-/area/prison/solitary)
-"bPO" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bPP" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "bPQ" = (
@@ -45982,15 +45969,8 @@
 	icon_state = "floor"
 	},
 /area/centcom/striketeam)
-"bPW" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "bPX" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "bPY" = (
 /obj/machinery/dna_scannernew,
@@ -366795,7 +366775,7 @@ aaa
 aaa
 aaa
 bOj
-bOz
+bOH
 bPc
 bOj
 bPN
@@ -367301,7 +367281,7 @@ bOA
 bPd
 bOj
 bOI
-bPW
+bPX
 bOj
 aaa
 aaa
@@ -368806,7 +368786,7 @@ bOj
 bOC
 bOF
 bOj
-bPO
+bOE
 bOF
 bOj
 aaa
@@ -374831,7 +374811,7 @@ bOI
 bOF
 bOj
 bOF
-bPO
+bOE
 bOj
 aaa
 aaa

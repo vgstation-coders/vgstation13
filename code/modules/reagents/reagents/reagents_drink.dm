@@ -201,6 +201,15 @@
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "Berry juice. Or maybe it's jam. Who cares?"
 
+/datum/reagent/drink/berryjuice/jungle
+	id = BERRYJUICEJUNGLE
+	nutriment_factor = 1.5 * REAGENTS_METABOLISM
+
+/datum/reagent/drink/berryjuice/jungle/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.adjustToxLoss(0.8)
+
 /datum/reagent/drink/poisonberryjuice
 	name = "Poison Berry Juice"
 	id = POISONBERRYJUICE

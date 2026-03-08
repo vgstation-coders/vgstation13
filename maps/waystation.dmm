@@ -34846,16 +34846,10 @@
 	name = "plating"
 	},
 /area/centcom/striketeam)
-"ise" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "isp" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "isM" = (
@@ -34891,8 +34885,8 @@
 	},
 /area/prison/solitary)
 "isZ" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ita" = (
@@ -34928,11 +34922,6 @@
 /obj/structure/closet/secure_closet/freezer/fridge,
 /turf/simulated/floor/plating,
 /area/derelictparts/diner)
-"itr" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
-	},
-/area/prison/solitary)
 "itu" = (
 /turf/unsimulated/floor{
 	name = "plating"
@@ -34997,9 +34986,7 @@
 	})
 "iuk" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "ius" = (
 /obj/structure/cable/green{
@@ -36532,13 +36519,13 @@
 /area/maintenance/fsmaint)
 "iPn" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "iPo" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "iPz" = (
@@ -36630,8 +36617,8 @@
 /area/engineering/engine)
 "iQC" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "iRb" = (
@@ -36852,14 +36839,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/atmos)
 "iTL" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
-"iUa" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "iUn" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
@@ -374333,7 +374313,7 @@ cFY
 cFY
 cFY
 iny
-ise
+iuk
 iCJ
 iny
 iPn
@@ -377847,11 +377827,11 @@ cFY
 cFY
 cFY
 iny
-itr
+iPo
 iCO
 iny
 iCO
-itr
+iPo
 iny
 cFY
 jbj
@@ -379356,7 +379336,7 @@ iny
 itu
 iuV
 iny
-itr
+iPo
 itu
 iny
 cFY
@@ -380862,7 +380842,7 @@ iny
 itI
 isZ
 iny
-itr
+iPo
 itu
 iny
 cFY
@@ -383872,10 +383852,10 @@ cFY
 cFY
 iny
 itu
-itr
+iPo
 iny
 iuV
-iUa
+iTL
 iny
 cFY
 cFY
