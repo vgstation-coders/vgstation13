@@ -39,6 +39,11 @@
 			if(WALLRODSCUT)
 				to_chat(user, "It has no outer grille, external reinforced cover or external support rods and the inner reinforced cover is exposed")//And that's terrible
 
+/turf/simulated/wall/r_wall/update_icon() //called during construction, so it's here
+	relativewall()
+	relativewall_neighbours()
+	update_paint_overlay()
+
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
 	user.delayNextAttack(5)
 	if (!user.dexterity_check())
