@@ -51149,19 +51149,6 @@
 	icon_state = "dark"
 	},
 /area/security/armory)
-"hCH" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/maintenance/port)
 "hCL" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -204019,7 +204006,7 @@ dhk
 bMX
 dhk
 uhp
-hCH
+kpk
 umb
 pgh
 hkq

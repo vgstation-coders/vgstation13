@@ -773,14 +773,6 @@
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
-"hR" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "hX" = (
 /obj/effect/decal/cleanable/blood/stattrack{
 	dir = 10
@@ -5250,8 +5242,8 @@ Mg
 SU
 zm
 iQ
-hR
-hR
+Yc
+Yc
 pm
 xP
 UJ

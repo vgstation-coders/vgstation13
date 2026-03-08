@@ -7654,14 +7654,6 @@
 /obj/abstract/map/spawner/maint/lowchance,
 /turf/simulated/floor/plating,
 /area/shuttle/salvage/derelict)
-"bZD" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/maintenance/fportsolar)
 "bZH" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -198421,7 +198413,7 @@ byz
 bMA
 bMA
 cjw
-bZD
+aLU
 aaj
 aaa
 aaa
@@ -198923,7 +198915,7 @@ dEt
 dEb
 dEb
 ckf
-bZD
+aLU
 aaj
 aaa
 aaa
@@ -199425,7 +199417,7 @@ byL
 dEb
 dEb
 ckG
-bZD
+aLU
 aaj
 aaa
 aaa
@@ -199927,7 +199919,7 @@ bzA
 bNn
 dEb
 cmm
-bZD
+aLU
 aaj
 aaa
 aaa
@@ -200929,7 +200921,7 @@ dEb
 bmc
 bAA
 bNF
-bZD
+aLU
 cno
 cyu
 aaj

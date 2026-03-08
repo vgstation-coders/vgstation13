@@ -282,14 +282,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fportsolar)
-"aaG" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/maintenance/fportsolar)
 "aaH" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -5242,14 +5234,6 @@
 	},
 /obj/structure/window/barricade/full/block,
 /obj/structure/sign/pox,
-/turf/simulated/floor/plating,
-/area/maintenance/ghettobar)
-"akE" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /turf/simulated/floor/plating,
 /area/maintenance/ghettobar)
 "akF" = (
@@ -12675,17 +12659,6 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/yellow/visible{
 	dir = 10
-	},
-/turf/simulated/floor/plating,
-/area/engineering/supermatter_room)
-"axj" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	tag = ""
 	},
 /turf/simulated/floor/plating,
 /area/engineering/supermatter_room)
@@ -184763,7 +184736,7 @@ arK
 atb
 auD
 avP
-axj
+aIi
 ays
 azJ
 aBa
@@ -198777,7 +198750,7 @@ aaa
 aaa
 aac
 aaa
-aaG
+abD
 aaL
 aaT
 aaY
@@ -203326,7 +203299,7 @@ aeK
 ahG
 aeK
 ajD
-akE
+adT
 alH
 aeV
 anx

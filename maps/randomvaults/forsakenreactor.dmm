@@ -1179,16 +1179,6 @@
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
-"pf" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/vault/forsakenreactor)
 "pp" = (
 /obj/structure/table/reinforced,
 /turf/simulated/floor{
@@ -4134,7 +4124,7 @@ EX
 kA
 eW
 nH
-pf
+ws
 rS
 Nf
 no
@@ -4394,11 +4384,11 @@ lm
 bB
 kA
 sa
-pf
+ws
 xP
 xQ
 ga
-pf
+ws
 eW
 sa
 Th

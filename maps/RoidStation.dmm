@@ -6793,16 +6793,6 @@
 	},
 /turf/simulated/floor/glass/plasma,
 /area/hallway/primary/starboard)
-"apn" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/hallway/secondary/exit)
 "apo" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -8114,17 +8104,6 @@
 	},
 /turf/simulated/floor/carpet,
 /area/derelictparts/fore)
-"asu" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/hallway/secondary/exit)
 "asv" = (
 /turf/simulated/floor{
 	dir = 8;
@@ -38488,15 +38467,6 @@
 	},
 /turf/simulated/floor,
 /area/engineering/supermatter_room)
-"bvU" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
-/turf/simulated/floor/plating,
-/area/engineering/supermatter_room)
 "bvV" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -52367,14 +52337,6 @@
 	},
 /obj/structure/window/reinforced{
 	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/hallway/primary/starboard)
-"bVv" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/hallway/primary/starboard)
@@ -181744,7 +181706,7 @@ bdu
 bnq
 bqc
 bti
-bvU
+bPy
 byF
 bBr
 btj
@@ -182748,7 +182710,7 @@ bdu
 bnq
 bqi
 bti
-bvU
+bPy
 byJ
 bBx
 bvl
@@ -219353,12 +219315,12 @@ aaa
 aoo
 aoH
 aob
-apn
+aor
 apT
 aqr
 aoc
 aoc
-asu
+atA
 aob
 atA
 aoc
@@ -245006,7 +244968,7 @@ bMo
 bOA
 bQT
 bJW
-bVv
+bSY
 bXF
 bZO
 bXy

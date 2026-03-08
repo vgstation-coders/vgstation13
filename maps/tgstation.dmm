@@ -63695,14 +63695,6 @@
 	icon_state = "whitegreen"
 	},
 /area/science/hallway)
-"cpI" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/maintenance/asmaint2)
 "cpJ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -63710,17 +63702,6 @@
 	},
 /obj/structure/window/reinforced{
 	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/maintenance/asmaint2)
-"cpK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -268245,7 +268226,7 @@ clc
 bRM
 cno
 coG
-cpI
+cbc
 aaa
 aaj
 aaa
@@ -268747,7 +268728,7 @@ cld
 bRM
 cnp
 coG
-cpI
+cbc
 aaa
 aaj
 aaa
@@ -269249,7 +269230,7 @@ clh
 bRM
 bYs
 coG
-cpK
+cbd
 aaa
 aaj
 aaa
@@ -271768,7 +271749,7 @@ bYs
 cvr
 crE
 cwT
-cpI
+cbc
 aaa
 aaa
 aaa
@@ -272270,7 +272251,7 @@ cur
 bym
 cvX
 cwT
-cpI
+cbc
 aaa
 aaa
 aaa
@@ -272772,7 +272753,7 @@ cus
 cvq
 cvY
 cwT
-cpK
+cbd
 aaa
 aaa
 aaa

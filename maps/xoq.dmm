@@ -63098,25 +63098,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
-"cpM" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/maintenance/asmaint2)
-"cpN" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/maintenance/asmaint2)
 "cpO" = (
 /obj/structure/table,
 /obj/item/device/deskbell_assembly,
@@ -84300,10 +84281,6 @@
 /obj/structure/shuttle/engine/propulsion/right,
 /turf/space,
 /area/shuttle/supply)
-"dfF" = (
-/obj/structure/bed,
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
 "dfG" = (
 /obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor/broken{
@@ -84324,11 +84301,6 @@
 "dfJ" = (
 /obj/effect/decal/cleanable/blood,
 /turf/unsimulated/wall,
-/area/prison/solitary)
-"dfK" = (
-/turf/unsimulated/floor/broken{
-	icon_state = "plating"
-	},
 /area/prison/solitary)
 "dfL" = (
 /turf/unsimulated/floor{
@@ -84593,9 +84565,6 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
 "dgB" = (
-/turf/unsimulated/floor/scorched,
-/area/prison/solitary)
-"dgC" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "dgD" = (
@@ -209804,7 +209773,7 @@ aaa
 aaa
 aaa
 aaa
-cpN
+bWH
 cxo
 cww
 cvB
@@ -210306,7 +210275,7 @@ aaa
 aaa
 aaa
 aaa
-cpM
+bFQ
 cxo
 cwv
 bvn
@@ -210808,7 +210777,7 @@ aaa
 aaa
 aaa
 aaa
-cpM
+bFQ
 cxo
 crR
 cvA
@@ -213327,7 +213296,7 @@ aaa
 aaa
 aah
 aaa
-cpN
+bWH
 eLR
 bRw
 bPf
@@ -213829,7 +213798,7 @@ aaa
 aaa
 aah
 aaa
-cpM
+bFQ
 eLR
 cnd
 bPf
@@ -214331,7 +214300,7 @@ aaa
 aaa
 aah
 aaa
-cpM
+bFQ
 eLR
 cnc
 bPf
@@ -402229,7 +402198,7 @@ aaa
 aaa
 aaa
 dfy
-dfF
+dfN
 dfX
 dfy
 dgh
@@ -405743,11 +405712,11 @@ aaa
 aaa
 aaa
 dfy
-dfK
+dgi
 dfY
 dfy
 dfY
-dfK
+dgi
 dfy
 aaa
 dhM
@@ -407252,7 +407221,7 @@ dfy
 dfL
 dfO
 dfy
-dfK
+dgi
 dfL
 dfy
 aaa
@@ -408758,7 +408727,7 @@ dfy
 dfM
 dfI
 dfy
-dfK
+dgi
 dfL
 dfy
 aaa
@@ -411768,10 +411737,10 @@ aaa
 aaa
 dfy
 dfL
-dfK
+dgi
 dfy
 dfO
-dgC
+dgB
 dfy
 aaa
 aaa

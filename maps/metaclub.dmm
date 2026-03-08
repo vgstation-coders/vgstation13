@@ -99533,15 +99533,6 @@
 	},
 /turf/space,
 /area)
-"dUd" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/space,
-/area)
 "dVb" = (
 /obj/effect/landmark/map_element/djsat,
 /turf/space,
@@ -117021,20 +117012,6 @@
 	},
 /obj/machinery/door/mineral/wood,
 /turf/simulated/floor/vox/wood,
-/area)
-"eLa" = (
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/vox,
 /area)
 "eLb" = (
 /obj/structure/window/full/reinforced,
@@ -283057,7 +283034,7 @@ bhm
 aTn
 bsH
 bNw
-dUd
+bmD
 aTg
 bhj
 aTg
@@ -292066,7 +292043,7 @@ abl
 abl
 aPX
 aRG
-dUd
+bmD
 aTg
 aTg
 aTg
@@ -1486448,10 +1486425,10 @@ eJe
 eKn
 eJe
 eJe
-eLa
+eGT
 eHn
 eLp
-eLa
+eGT
 eHn
 dOD
 dOD
