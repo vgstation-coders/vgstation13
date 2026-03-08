@@ -412,9 +412,7 @@
 	one_way = 1
 	},
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /obj/item/ammo_storage/magazine/mc9mm,
 /obj/item/ammo_storage/magazine/mc9mm,
@@ -777,9 +775,7 @@
 /area/vault/black_site_prism)
 "hR" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /turf/unsimulated/floor{
 	icon_state = "dark"
@@ -1156,9 +1152,7 @@
 /area/vault/black_site_prism)
 "pm" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /turf/unsimulated/floor{
 	dir = 8;
@@ -1635,8 +1629,7 @@
 /area/vault/black_site_prism)
 "vB" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -1817,13 +1810,10 @@
 /area/vault/black_site_prism)
 "xt" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/unsimulated/floor{
 	icon_state = "dark"
@@ -3868,9 +3858,7 @@
 	one_way = 1
 	},
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /turf/unsimulated/floor{
 	icon_state = "dark"

@@ -18023,9 +18023,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aGf" = (
@@ -43781,9 +43779,7 @@
 /area/science/lab)
 "bFQ" = (
 /obj/structure/grille,
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -46639,9 +46635,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/medical/genetics)
 "bLq" = (
@@ -46772,9 +46766,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/science/lab)
 "bLE" = (
@@ -50677,9 +50669,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/medical/genetics)
 "bSr" = (
@@ -50815,9 +50805,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /obj/structure/window/full/reinforced,
 /obj/structure/disposalpipe/segment,
 /turf/simulated/floor/plating,
@@ -52870,9 +52858,7 @@
 /turf/simulated/floor/server,
 /area/tcomms/chamber)
 "bWB" = (
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /obj/effect/decal/cleanable/blood/splatter,
 /obj/structure/window/reinforced{
 	dir = 8
@@ -52929,9 +52915,7 @@
 /area/hallway/secondary/entry)
 "bWH" = (
 /obj/structure/grille,
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -61561,9 +61545,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /obj/machinery/door/poddoor{
 	density = 0;
 	icon_state = "pdoor0";
@@ -65754,9 +65736,7 @@
 /area/science/xenobiology)
 "cuK" = (
 /obj/structure/grille,
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 8;
 	one_way = 1
@@ -112956,9 +112936,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
 /area/science/xenobiology/specimen_6)
@@ -114452,9 +114430,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/structure/window/reinforced{
-	pixel_y = -1
-	},
+/obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 1
 	},

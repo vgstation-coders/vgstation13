@@ -1008,9 +1008,7 @@
 	in_dir = 4;
 	out_dir = 8
 	},
-/obj/structure/window/reinforced{
-	pixel_y = 1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark"
@@ -10866,8 +10864,7 @@
 	},
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/security/processing)
@@ -12243,9 +12240,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
-	pixel_y = 1
-	},
+/obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 4
 	},
@@ -14260,9 +14255,7 @@
 /obj/machinery/optable{
 	name = "Robotics Operating Table"
 	},
-/obj/structure/window/reinforced{
-	pixel_y = 1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -54500,9 +54493,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
-	pixel_y = 1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark"
@@ -57487,9 +57478,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
-	pixel_y = 1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/research_outpost/anomaly)
 "vjR" = (
@@ -62337,9 +62326,7 @@
 	name = "reinforced one-way window";
 	one_way = 1
 	},
-/obj/structure/window/reinforced{
-	pixel_y = 1
-	},
+/obj/structure/window/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -63979,9 +63966,7 @@
 	dir = 4;
 	id_tag = "garbage"
 	},
-/obj/structure/window/reinforced{
-	pixel_y = 1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark"
