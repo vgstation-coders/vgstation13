@@ -18,12 +18,18 @@
 		Past business:
 	</div>
 	<div class="itemContentSmall">
-		{{:data.pastbusiness}} ({{:data.pastdiscount}}% price) 
+		{{:data.pastbusiness}} ({{:data.pastdiscount}}% price)
 	</div>
 	<div class="itemContentSmall">
 		{{if data.pastbusiness == "Admin"}}
 			{{:helper.link("Admin: Add New", null, {'additem' : 1},null, 'yellowButton')}}
 		{{/if}}
+	</div>
+	<div class="itemLabel">
+		Credits in Shoal reserve:
+	</div>
+	<div class="itemContentSmall">
+		{{:data.shoalreserve}} ({{:data.reservediscount}}% price)
 	</div>
 </div>
 {{for data.categories}}

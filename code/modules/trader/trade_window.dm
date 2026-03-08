@@ -204,6 +204,8 @@
 	data["credsheld"] = credits_held()
 	data["shoalmoney"] = trader_account.money
 	data["shoaldiscount"] = round(100*(SStrade.shoal_prestige_factor()-1))
+	data["shoalreserve"] = shoal_reserves
+	data["reservediscount"] = round(100*(SStrade.reserve_prestige_factor()-1))
 	data["selectedCategory"] = category
 	data["categories"] = list(list("category" = TRADE_SINGLE), list("category" = TRADE_VARIETY))
 	SStrade.rebuild_databank(user)
