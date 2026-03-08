@@ -146,7 +146,6 @@
 
 	. = ..()
 	if(reinforced || mineral == "metal")
-		icon_state = reinforced ? "rwall" : "wall"
 		if(reinforced)
 			for(var/direction in cardinal)
 				if(!(. & direction))
