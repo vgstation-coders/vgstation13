@@ -453,13 +453,11 @@
 
 	if(new_location)
 		var/mob/M
-		if(ismob(loc))
-			M = loc
-			W.dropped(M)
 		if(ismob(new_location))
 			M = new_location
 			if(!M.put_in_active_hand(W))
 				return 0
+			W.dropped(M)
 		else
 			if(istype(new_location, /obj/item/weapon/storage))
 				var/obj/item/weapon/storage/A = new_location
