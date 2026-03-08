@@ -43,6 +43,10 @@
 //This took me longer to find this than it should havle
 /turf/simulated/wall/r_wall/relativewall()
 	overlays.len = 0
+	if(uses_overlays)
+		var/image/over = image(icon = src,icon_state = "r_wall-[d_state]")
+		over.plane = TURF_OVERLAY_PLANE
+		overlays += over
 	. = ..()
 	if(uses_overlays)
 		if(!d_state) //these lil ridges only show up when not building
@@ -50,10 +54,7 @@
 				if(!(. & direction))
 					var/image/subover = image(icon = src,icon_state = "rwall_corners",dir = direction)
 					subover.plane = TURF_OVERLAY_PLANE
-					overlays += subover
-		var/image/over = image(icon = src,icon_state = "r_wall-[d_state]")
-		over.plane = TURF_OVERLAY_PLANE
-		overlays += over
+					overlays.Insert(0,subover) // shows up wrong if not at the start
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
 	user.delayNextAttack(5)
