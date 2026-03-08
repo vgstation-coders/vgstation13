@@ -139,14 +139,13 @@
 	..()
 
 /obj/structure/falsewall/relativewall()
-
+	overlays.len = 0
 	if(!density)
 		icon_state = reinforced ? "frwall_open" : "[mineral]fwall_open"
 		return
 
 	. = ..()
 	if(reinforced || mineral == "metal")
-		overlays.len = 0
 		icon_state = reinforced ? "rwall" : "wall"
 		if(reinforced)
 			for(var/direction in cardinal)
