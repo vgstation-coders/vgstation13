@@ -459,7 +459,6 @@
 		if(ismob(new_location))
 			M = new_location
 			if(!M.put_in_active_hand(W))
-				W.forceMove(get_turf(src))
 				return 0
 		else
 			if(istype(new_location, /obj/item/weapon/storage))
