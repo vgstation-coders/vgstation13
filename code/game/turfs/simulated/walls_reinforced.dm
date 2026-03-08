@@ -43,12 +43,11 @@
 //This took me longer to find this than it should havle
 /turf/simulated/wall/r_wall/relativewall()
 	overlays.len = 0
+	. = ..()
 	if(uses_overlays)
 		var/image/over = image(icon = src,icon_state = "r_wall-[d_state]")
 		over.plane = TURF_OVERLAY_PLANE
-		overlays += over
-	. = ..()
-	if(uses_overlays)
+		overlays.Insert(0,over) // shows up wrong if not at the start
 		if(!d_state) //these lil ridges only show up when not building
 			for(var/direction in cardinal)
 				if(!(. & direction))
