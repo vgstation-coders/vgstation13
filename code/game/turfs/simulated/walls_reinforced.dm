@@ -11,6 +11,7 @@
 	icon_state = "rwall"
 	opacity = 1
 	density = 1
+	uses_overlays = RWALL_OVERLAY
 
 	hardness = 90
 
@@ -37,23 +38,6 @@
 				to_chat(user, "It has no outer grille or external reinforced cover and the external support rods are loose")
 			if(WALLRODSCUT)
 				to_chat(user, "It has no outer grille, external reinforced cover or external support rods and the inner reinforced cover is exposed")//And that's terrible
-
-
-//We need to export this here because we want to handle it differently
-//This took me longer to find this than it should havle
-/turf/simulated/wall/r_wall/relativewall()
-	overlays.len = 0
-	. = ..()
-	if(uses_overlays)
-		var/image/over = image(icon = src,icon_state = "r_wall-[d_state]")
-		over.plane = TURF_OVERLAY_PLANE
-		overlays.Insert(0,over) // shows up wrong if not at the start
-		if(!d_state) //these lil ridges only show up when not building
-			for(var/direction in cardinal)
-				if(!(. & direction))
-					var/image/subover = image(icon = src,icon_state = "rwall_corners",dir = direction)
-					subover.plane = TURF_OVERLAY_PLANE
-					overlays.Insert(0,subover) // shows up wrong if not at the start
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
 	user.delayNextAttack(5)

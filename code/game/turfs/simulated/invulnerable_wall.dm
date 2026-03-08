@@ -6,6 +6,7 @@
 	opacity = 1
 	density = 1
 	can_thermite = 0
+	uses_overlays = RWALL_OVERLAY
 
 	hardness = 100 // Hulk can't do dick.
 
@@ -13,16 +14,6 @@
 	girder_type = /obj/structure/girder/reinforced
 
 	penetration_dampening = 40
-
-//copypasta from rwall code because of sprite behaviour
-/turf/simulated/wall/invulnerable/relativewall()
-	overlays.len = 0
-	. = ..()
-	if(uses_overlays)
-		overlays += image(src,src,"r_wall-0")
-		for(var/direction in cardinal)
-			if(!(. & direction))
-				overlays += image(src,src,"rwall_corners",layer,direction)
 
 /turf/simulated/wall/invulnerable/attackby(obj/item/W as obj, mob/user as mob)
 
