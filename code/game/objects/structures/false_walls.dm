@@ -154,10 +154,10 @@
 			overlays += image(src,src,"r_wall-0")
 		for(var/direction in diagonal)
 			if(!(. & direction))
-				overlays += image(src,src,"metal_corner",layer,direction)
+				overlays += image(src,src,"metal_corners",layer,direction)
 		for(var/direction in cardinal)
 			if(!(. & direction))
-				overlays += image(src,src,"metal_corner",layer,direction)
+				overlays += image(src,src,"metal_corners",layer,direction)
 	else
 		icon_state = "[mineral][.]"
 
