@@ -100,6 +100,8 @@
 
 	var/datum/virtual_z/v = null // virtual z level
 
+	var/player_entries = 0
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -209,11 +211,19 @@
 		tracks = new typepath(src)
 	tracks.AddTracks(bloodDNA,comingdir,goingdir,bloodcolor,luminous)
 
+var/highest_player_entry = 0
 
 /turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
+
+	if(ismob(A))
+		var/mob/M = A
+		if(M.client)
+			player_entries++
+			if(player_entries > highest_player_entry)
+				highest_player_entry = player_entries
 
 	//footstep decal code
 	if (istype(A,/mob/living/carbon))

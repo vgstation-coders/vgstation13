@@ -339,6 +339,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 			score.rating = "Nanotrasen's Finest"
 	dat += "<B><U>RATING:</U></B> [score.rating]<br><br>"
 
+	dat += "<b>STATION HEATMAP:</b><br><img src='data:image/png;base64,[icon2base64(draw_heatmap(1))]'/><br><br>"
+
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
 	dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
 	var/i = 1
@@ -389,3 +391,19 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	src.mob_name = mob_name
 	src.award_name = award_name
 	src.award_desc = award_desc
+
+/proc/draw_heatmap(zLevel = 1)
+	set background=1
+
+	var/icon/canvas = icon('icons/480x480.dmi', "blank")
+	var/divisor_factor = 255/highest_player_entry
+	if (zLevel > world.maxz)
+		return
+	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+			var/turf/tile = locate(i, r, zLevel)
+			if(tile?.player_entries)
+				var/final_factor = tile.player_entries*divisor_factor
+				canvas.DrawBox(rgb(final_factor/4,final_factor/2,final_factor,255), i, r)
+
+	return canvas
