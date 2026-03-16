@@ -2,6 +2,14 @@
 #define LIGHTREPLACER_BORG 1
 #define LIGHTREPLACER_ADVANCED 2
 
+var/static/list/light_types = list(
+	"Bulb" 				= "/bulb",
+	"Tube" 				= "/tube",
+	"Standard" 			= "",
+	"High Efficiency" 	= "/he",
+	"Smart" 			= "/smart"
+)
+
 /obj/item/device/lightreplacer
 
 	name = "light replacer"
@@ -32,13 +40,6 @@
 
 	var/current_type = "Standard"
 	var/current_shape = "Tube"
-	var/light_types = list(
-		"Bulb" 				= "/bulb",
-		"Tube" 				= "/tube",
-		"Standard" 			= "",
-		"High Efficiency" 	= "/he",
-		"Smart" 			= "/smart"
-	)
 
 	//Quality = switchcount for created bulbs. Higher switchcount = higher chance to burn out on switch.
 	//Efficiency = multiplied by autolathe base glass for lights
@@ -85,34 +86,58 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		for(var/obj/O in gather_loc.contents)
 			. = insert_if_possible(O)
 		return .
-	
+
 	var/obj/item/weapon/light/best_light = get_best_light(lightfixture)
 	if(!best_light)
 		return 0
-	
+
 	// Replace light if fixture has no bulb or if we have a better bulb
 	if(!lightfixture.current_bulb || is_light_better(best_light, lightfixture.current_bulb))
 		return ReplaceLight(lightfixture, user)
-	
+
 	return 0
 
 /obj/item/device/lightreplacer/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/stack/sheet/glass/glass))
-		if(!add_glass(CC_PER_SHEET_GLASS, force_fill = 1))
-			to_chat(user, "<span class='warning'>\The [src] can't hold any more glass!</span>")
-			return
 		var/obj/item/stack/sheet/glass/glass/G = W
-		G.use(1)
-		to_chat(user, "<span class='notice'>You insert \the [G] into \the [src].</span>")
+		var/sheets_left = round((glass_max - glass)/G.perunit)
+		if(sheets_left <= 0)
+			to_chat(user, "<span class='warning'>\The [src] can't hold any more [G]!</span>")
+			return
+		var/amount = 1
+		if(G.amount > 1)
+			amount = round(input("How many sheets do you want to add? (0 - [min(G.amount, sheets_left)])","Add [G]",min(G.amount, sheets_left)) as num)//No decimals
+			if(!user.Adjacent(src) || !W || !W.loc || (W.loc != user && !isgripper(W.loc)))
+				return
+			amount = min(amount,G.amount,sheets_left)
+			if(amount <= 0)
+				return
+		if(!add_glass(CC_PER_SHEET_GLASS*amount, force_fill = 1))
+			to_chat(user, "<span class='warning'>\The [src] can't hold any more [G]!</span>")
+			return
+		G.use(amount)
+		to_chat(user, "<span class='notice'>You insert [amount] sheets of [G] into \the [src].</span>")
 		return
 
 	if(istype(W, /obj/item/stack/sheet/cardboard))
-		if(!add_cardboard(1, force_fill = 1))
-			to_chat(user, "<span class='warning'>\The [src] can't hold any more glass!</span>")
-			return
 		var/obj/item/stack/sheet/cardboard/G = W
-		G.use(1)
-		to_chat(user, "<span class='notice'>You insert \the [G] into \the [src].</span>")
+		var/sheets_left = cardboard_max - cardboard
+		if(sheets_left <= 0)
+			to_chat(user, "<span class='warning'>\The [src] can't hold any more [G]!</span>")
+			return
+		var/amount = 1
+		if(G.amount > 1)
+			amount = round(input("How many sheets do you want to add? (0 - [min(G.amount, sheets_left)])","Add [G]",min(G.amount, sheets_left)) as num)//No decimals
+			if(!user.Adjacent(src) || !W || !W.loc || (W.loc != user && !isgripper(W.loc)))
+				return
+			amount = min(amount,G.amount,sheets_left)
+			if(amount <= 0)
+				return
+		if(!add_cardboard(amount, force_fill = 1))
+			to_chat(user, "<span class='warning'>\The [src] can't hold any more [G]!</span>")
+			return
+		G.use(amount)
+		to_chat(user, "<span class='notice'>You insert [amount] sheets of [G] into \the [src].</span>")
 		return
 
 	if(istype(W, /obj/item/weapon/light))
@@ -247,7 +272,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 					return 1
 
 	if(href_list["recycle"])
-		recycle_waste()
+		recycle_waste(href_list["recycle"])
 		return 1
 
 	if(href_list["settings"])
@@ -368,10 +393,16 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		to_chat(usr, "<span class='notice'>\The [src] successfully fabricates \a [L].</span>")
 	return 1
 
-/obj/item/device/lightreplacer/proc/recycle_waste()
-	if(waste)
+/obj/item/device/lightreplacer/proc/recycle_waste(var/type)
+	var/obj/item/weapon/storage/box/lights/box_to_use
+	switch(type)
+		if("waste")
+			box_to_use = waste
+		if("supply")
+			box_to_use = supply
+	if(box_to_use)
 		var/recycledglass = 0 //How much glass is successfully recycled
-		for(var/obj/item/weapon/light/L in waste)
+		for(var/obj/item/weapon/light/L in box_to_use)
 			if(istype(L))
 				switch(L.status)
 					if(LIGHT_OK)
@@ -382,7 +413,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 						recycledglass += (L.materials.storage[MAT_GLASS] * 0.50)
 				QDEL_NULL(L)
 		if(recycledglass)
-			to_chat(usr, "<span class='notice'>\The [src] recycles its waste box, producing [recycledglass] units of glass.</span>")
+			to_chat(usr, "<span class='notice'>\The [src] recycles its [type] box, producing [recycledglass] units of glass.</span>")
 			add_glass(recycledglass, force_fill = 2)
 
 /obj/item/device/lightreplacer/proc/select_shape()
@@ -505,12 +536,14 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 	..()
 	supply = new /obj/item/weapon/storage/box/lights(src)
 	waste = new /obj/item/weapon/storage/box/lights/empty(src)
-	add_glass(5 * CC_PER_SHEET_GLASS, 2)
+	add_glass(glass_max, 2)
 
 /obj/item/device/lightreplacer/loaded/New()
 	..()
 	supply = new /obj/item/weapon/storage/box/lights/tubes(src)
 	waste = new /obj/item/weapon/storage/box/lights/empty(src)
+	add_glass(glass_max, 2)
+	add_cardboard(cardboard_max, 2)
 
 /obj/item/device/lightreplacer/loaded/he/New()
 	..()
@@ -518,6 +551,23 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 	waste = new /obj/item/weapon/storage/box/lights/empty(src)
 
 /obj/item/device/lightreplacer/loaded/mixed/New()
+	..()
+	supply = new /obj/item/weapon/storage/box/lights/mixed(src)
+	waste = new /obj/item/weapon/storage/box/lights/empty(src)
+
+/obj/item/device/lightreplacer/advanced/loaded/New()
+	..()
+	supply = new /obj/item/weapon/storage/box/lights/tubes(src)
+	waste = new /obj/item/weapon/storage/box/lights/empty(src)
+	add_glass(glass_max, 2)
+	add_cardboard(cardboard_max, 2)
+
+/obj/item/device/lightreplacer/advanced/loaded/he/New()
+	..()
+	supply = new /obj/item/weapon/storage/box/lights/he(src)
+	waste = new /obj/item/weapon/storage/box/lights/empty(src)
+
+/obj/item/device/lightreplacer/advanced/loaded/mixed/New()
 	..()
 	supply = new /obj/item/weapon/storage/box/lights/mixed(src)
 	waste = new /obj/item/weapon/storage/box/lights/empty(src)
