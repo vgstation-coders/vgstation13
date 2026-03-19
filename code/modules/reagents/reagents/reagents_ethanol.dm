@@ -2048,7 +2048,7 @@
 
 /datum/reagent/ethanol/drink/minty
 	name = "generic mint drink"
-//	id = EXPLICITLY_INVALID_REAGENT_ID //testing if removing this ID define (inherited from /datum/reagent/ethanol/drink fixes the unit test issue
+	id = EVEN_MORE_EXPLICITLY_INVALID_REAGENT_ID
 	description = "Here so all the mint drinks can inherit some behaviours without copypaste, how are you even reading this anyway?"
 	adj_temp = -1
 	max_temp_adj = 3
