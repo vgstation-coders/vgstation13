@@ -139,12 +139,35 @@
 	..()
 
 /obj/structure/falsewall/relativewall()
-
+	overlays.len = 0
 	if(!density)
 		icon_state = reinforced ? "frwall_open" : "[mineral]fwall_open"
 		return
 
-	icon_state = "[reinforced ? "rwall" : mineral][..()]"
+	. = ..()
+	if(reinforced || mineral == "metal")
+		icon_state = mineral
+		if(reinforced)
+			for(var/direction in cardinal)
+				if(!(. & direction))
+					var/image/subover = image(icon = src,icon_state = "rwall_corners",dir = direction)
+					subover.plane = OBJ_OVERLAY_PLANE
+					overlays += subover
+			var/image/over = image(icon = src,icon_state = "r_wall-0")
+			over.plane = OBJ_OVERLAY_PLANE
+			overlays += over
+		for(var/direction in diagonal)
+			if(!(. & direction))
+				var/image/subover = image(icon = src,icon_state = "[mineral]_corners",dir = direction)
+				subover.plane = OBJ_OVERLAY_PLANE
+				overlays += subover
+		for(var/direction in cardinal)
+			if(!(. & direction))
+				var/image/subover = image(icon = src,icon_state = "[mineral]_corners",dir = direction)
+				subover.plane = OBJ_OVERLAY_PLANE
+				overlays += subover
+	else
+		icon_state = "[mineral][.]"
 
 /obj/structure/falsewall/attack_ai(mob/user as mob)
 	if(isMoMMI(user))
@@ -159,6 +182,7 @@
 	if(density)
 		opening = 1
 		icon_state = "[wallword]_open"
+		overlays.len = 0
 		update_meson_image()
 		flick("[wallword]_opening", src)
 		loc.mouse_opacity = 1

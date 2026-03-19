@@ -124,6 +124,7 @@ var/global/list/lemuria_stuff = list(
 	fits_max_w_class = W_CLASS_LARGE
 	icon_state = "satchel-gibtonite"
 	item_state = "engiepack"
+	accepts_wielded = TRUE
 
 /obj/item/weapon/storage/bag/gibtonite/can_be_inserted(obj/item/W, stop_messages = 0)
 	if(!..())

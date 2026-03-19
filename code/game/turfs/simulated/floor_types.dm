@@ -84,6 +84,7 @@
 
 /turf/simulated/wall/vault
 	icon_state = "rockvault"
+	uses_overlays = FALSE
 
 /turf/simulated/wall/vault/New(location,type)
 	..()

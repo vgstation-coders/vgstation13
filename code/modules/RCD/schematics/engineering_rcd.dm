@@ -141,10 +141,10 @@
 	register_asset("floor_RCD.png", new/icon('icons/turf/floors.dmi', "floor" ))
 	send_asset(client, "floor_RCD.png")
 
-	register_asset("wall_RCD.png", new/icon('icons/turf/walls.dmi', "metal0" ))
+	register_asset("wall_RCD.png", new/icon('icons/turf/walls.dmi', "wall" ))
 	send_asset(client, "wall_RCD.png")
 
-	register_asset("rwall_RCD.png", new/icon('icons/turf/walls.dmi', "rwall0" ))
+	register_asset("rwall_RCD.png", new/icon('icons/turf/walls.dmi', "rwall" ))
 	send_asset(client, "rwall_RCD.png")
 
 	register_asset("woodwall_RCD.png", new/icon('icons/turf/walls.dmi', "wood0" ))
@@ -154,7 +154,7 @@
 	send_asset(client, "girder_RCD.png")
 
 
-	register_asset("RCD_HEADER_WALLS.png", new/icon('icons/turf/walls.dmi', "metal0" ))
+	register_asset("RCD_HEADER_WALLS.png", new/icon('icons/turf/walls.dmi', "wall" ))
 	send_asset(client, "RCD_HEADER_WALLS.png")
 
 

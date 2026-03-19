@@ -37,6 +37,7 @@
 	var/can_add_combinedwclass = FALSE
 	var/can_add_storageslots = FALSE
 	var/can_increase_wclass_stored = FALSE
+	var/accepts_wielded = FALSE
 
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
@@ -287,11 +288,12 @@
 		return 0 //Item is stuck to our hands
 	if(W.wielded || istype(W, /obj/item/offhand))
 		var/obj/item/offhand/offhand = W
-		var/obj/item/ref_name = W
 		if(istype(offhand))
-			ref_name = offhand.wielding
-		to_chat(usr, "<span class='notice'>Unwield \the [ref_name] first.</span>")
-		return
+			W = offhand.wielding
+		if(!accepts_wielded)
+			to_chat(usr, "<span class='notice'>Unwield \the [W] first.</span>")
+			return
+		qdel(offhand)
 	if(can_only_hold.len)
 		var/ok = 0
 		for(var/A in can_only_hold)
@@ -451,13 +453,11 @@
 
 	if(new_location)
 		var/mob/M
-		if(ismob(loc))
-			M = loc
-			W.dropped(M)
 		if(ismob(new_location))
 			M = new_location
 			if(!M.put_in_active_hand(W))
 				return 0
+			W.dropped(M)
 		else
 			if(istype(new_location, /obj/item/weapon/storage))
 				var/obj/item/weapon/storage/A = new_location

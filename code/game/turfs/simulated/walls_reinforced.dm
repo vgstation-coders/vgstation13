@@ -8,11 +8,11 @@
 /turf/simulated/wall/r_wall
 	name = "reinforced wall"
 	desc = "A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out."
-	icon_state = "r_wall"
+	icon_state = "rwall"
 	opacity = 1
 	density = 1
+	uses_overlays = RWALL_OVERLAY
 
-	walltype = "rwall"
 	hardness = 90
 
 	explosion_block = 2
@@ -39,20 +39,9 @@
 			if(WALLRODSCUT)
 				to_chat(user, "It has no outer grille, external reinforced cover or external support rods and the inner reinforced cover is exposed")//And that's terrible
 
-
-//We need to export this here because we want to handle it differently
-//This took me longer to find this than it should havle
-/turf/simulated/wall/r_wall/relativewall()
-	if(d_state) //We are fucking building
-		return //Fuck off
-	..()
-
-/turf/simulated/wall/r_wall/update_icon()
-	if(!d_state) //Are we under construction or deconstruction ?
-		relativewall() //Well isn't that odd, let's pass this to smoothwall.dm
-		relativewall_neighbours() //Let's make sure the other walls know about this travesty
-		return //Now fuck off
-	icon_state = "r_wall-[d_state]"  //You can thank me later
+/turf/simulated/wall/r_wall/update_icon() //called during construction, so it's here
+	relativewall()
+	relativewall_neighbours()
 	update_paint_overlay()
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
