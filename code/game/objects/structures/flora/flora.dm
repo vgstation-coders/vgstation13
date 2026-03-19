@@ -702,6 +702,8 @@
 	desc = "I eated the purple berries."
 	icon = 'icons/obj/hydroponics/berry.dmi'
 	icon_state="stage-6"
+	anchored=TRUE
+	shovelaway=TRUE
 	var/hasberries=FALSE
 	var/tickssincelastgrowth=0
 

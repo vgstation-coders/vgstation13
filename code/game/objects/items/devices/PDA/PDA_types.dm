@@ -327,10 +327,14 @@
 	show_overlays = FALSE
 
 /obj/item/device/pda/trader/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
 	if(app && !show_overlays)
 		app.note = "Congratulations, your statio RUNTIME FAULT AT 0x3ae46dc1"
+	var/datum/pda_app/ringer/ringapp = locate(/datum/pda_app/ringer) in applications
+	if(ringapp)
+		ringapp.frequency = deskbell_freq_pox
 
 /obj/item/device/pda/trader/fancy
 	name = "Merchant PDA"

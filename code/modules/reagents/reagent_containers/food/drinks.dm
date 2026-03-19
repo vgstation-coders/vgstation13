@@ -1450,7 +1450,8 @@
 			var/mob/living/carbon/M = loc
 			M.update_inv_hands()
 		playsound(user, 'sound/items/boston_shaker.ogg', 80, 1)
-		if(do_after(user, src, 30))
+		var/callback/shaker_do_after_callback/shaker_callback=new()
+		if(do_after(user, src, 30,custom_checks=shaker_callback))
 			reagents.trans_to(reaction,volume)
 			reaction.reagents.trans_to(reagents,volume)
 		icon_state = initial(icon_state)
@@ -1462,6 +1463,18 @@
 /obj/item/weapon/reagent_containers/food/drinks/shaker/reaction
 	flags = FPRINT  | OPENCONTAINER | SILENTCONTAINER
 	volume = 300
+
+//allows you to move around while shaking the shaker.
+/callback/shaker_do_after_callback/invoke(var/mob/user, var/turf/use_user_turf, var/user_original_location, var/atom/target, var/target_original_location, var/needhand, var/obj/item/originally_held_item)
+	if(!user || user.isStunned())
+		return FALSE
+	if(target.loc != target_original_location)
+		return FALSE
+	if(!originally_held_item)
+		return FALSE
+	if(!user.is_holding_item(originally_held_item))
+		return FALSE
+	return TRUE
 
 //bluespace shaker
 

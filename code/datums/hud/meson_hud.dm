@@ -67,6 +67,7 @@ var/list/meson_images = list()
 		if(!meson_image)
 			return
 		meson_image.plane = relative_plane_to_plane(plane, loc.plane)
+		meson_image.overlays = overlays
 		meson_images += meson_image
 		for (var/mob/L in meson_wearers)
 			if (L.client)

@@ -13,8 +13,7 @@
 /obj/structure/table/reinforced,
 /obj/machinery/computer/med_data/laptop,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
@@ -3213,8 +3212,7 @@
 /area/vault/mothership_lab/maintenance)
 "IC" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
@@ -4066,8 +4064,7 @@
 /area/vault/mothership_lab/armory)
 "QF" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/camera{
 	dir = 8;
@@ -4461,8 +4458,7 @@
 /obj/item/weapon/paper_bin/green,
 /obj/item/weapon/pen,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
@@ -4825,8 +4821,7 @@
 /area/vault/mothership_lab/maintenance)
 "Yr" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4

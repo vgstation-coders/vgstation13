@@ -85,7 +85,32 @@
  * WE COULD STANDARDIZE THIS BUT EVERYONE'S A FUCKING SNOWFLAKE
  */
 /turf/simulated/wall/relativewall()
-	icon_state = "[walltype][..()]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
+	. = ..()
+	if(uses_overlays)
+		overlays.len = 0
+		icon_state = walltype
+		if(uses_overlays >= RWALL_OVERLAY)
+			if(!src:d_state) //these lil ridges only show up when not building
+				for(var/direction in cardinal)
+					if(!(. & direction))
+						var/image/subover = image(icon = src,icon_state = "rwall_corners",dir = direction)
+						subover.plane = TURF_OVERLAY_PLANE
+						overlays += subover
+			var/image/over = image(icon = src,icon_state = "r_wall-[src:d_state || 0]")
+			over.plane = TURF_OVERLAY_PLANE
+			overlays += over
+		for(var/direction in diagonal)
+			if(!(. & direction))
+				var/image/subover = image(icon = src,icon_state = "[walltype]_corners",dir = direction)
+				subover.plane = TURF_OVERLAY_PLANE
+				overlays += subover
+		for(var/direction in cardinal)
+			if(!(. & direction))
+				var/image/subover = image(icon = src,icon_state = "[walltype]_corners",dir = direction)
+				subover.plane = TURF_OVERLAY_PLANE
+				overlays += subover
+	else
+		icon_state = "[walltype][.]"
 	update_paint_overlay()
 
 // AND NOW WE HAVE TO YELL AT THE NEIGHBORS FOR BEING LOUD AND NOT PAINTING WITH HOA-APPROVED COLORS
