@@ -88,6 +88,10 @@
 	. = ..()
 	if(uses_overlays)
 		overlays.len = 0
+		if(thermite) //hotfix for this going away
+			var/image/thermover = image('icons/effects/effects.dmi', icon_state = "thermite")
+			thermover.plane = TURF_OVERLAY_PLANE
+			overlays += thermover
 		icon_state = walltype
 		if(uses_overlays >= RWALL_OVERLAY)
 			if(!src:d_state) //these lil ridges only show up when not building

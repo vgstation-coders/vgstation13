@@ -504,8 +504,10 @@
 
 	if(volume >= 5 && T.can_thermite)
 		T.thermite = 1
-		T.overlays.len = 0
-		T.overlays = image('icons/effects/effects.dmi', icon_state = "thermite")
+		var/image/thermover = image('icons/effects/effects.dmi', icon_state = "thermite")
+		thermover.plane = TURF_OVERLAY_PLANE
+		thermover.layer = TURF_LAYER + 1 //shows over it
+		T.overlays += thermover
 
 /datum/reagent/thermite/on_mob_life(var/mob/living/M)
 	if(..())
