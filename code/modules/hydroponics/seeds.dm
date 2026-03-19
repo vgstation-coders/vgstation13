@@ -1015,6 +1015,7 @@
 	plant_dmi = 'icons/obj/hydroponics/towercap.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/grown/log)
+	chems = list(PULP = list(2,5))
 
 	lifespan = 80
 	maturation = 15
