@@ -12,7 +12,7 @@
 #define CHEMFLAG_NOTREMOVABLE	8 //cannot be rid of by charcoal (or other reagent tomfoolery means).
 
 #define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
-
+#define EVEN_MORE_EXPLICITLY_INVALID_REAGENT_ID "Use this ID if you need to have a nested invalid ID."
 //Reagents
 
 #define VAPORSALT			"vaporsalt"
