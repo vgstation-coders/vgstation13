@@ -9,9 +9,10 @@
 	name = "reinforced wall"
 	desc = "A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out."
 	icon_state = "rwall"
+	mineral = "plasteel"
 	opacity = 1
 	density = 1
-	uses_overlays = RWALL_OVERLAY
+	uses_overlays = WALL_OVERLAY|RWALL_OVERLAY
 
 	hardness = 90
 
@@ -173,11 +174,16 @@
 
 				if(do_after(user, src, 100) && d_state == WALLCOVERWEAKENED)
 					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1) //SLAM
-					src.d_state = WALLCOVERREMOVED
-					update_icon()
-					new /obj/item/stack/sheet/plasteel(get_turf(src))
+					var/sheet_spawned = get_sheet_type()
+					if(sheet_spawned)
+						new sheet_spawned(get_turf(src))
 					user.visible_message("<span class='warning'>[user] pries off \the [src]'s external cover.</span>", \
 					"<span class='notice'>You pry off \the [src]'s external cover.</span>")
+					if(type != /turf/simulated/wall/r_wall) //easy hack for mineral walls
+						ChangeTurf(/turf/simulated/wall/r_wall/nocover)
+					else
+						src.d_state = WALLCOVERREMOVED
+						update_icon()
 				return
 
 			//Fix welding damage caused above, by welding shit into place again
@@ -213,16 +219,24 @@
 
 			//Only construction step after reinforced girder, add the second plasteel sheet
 			//Acts as a super repair step, incidentally, if there's clearly more than cover damage
-			else if(istype(W, /obj/item/stack/sheet/plasteel))
-				var/obj/item/stack/sheet/plasteel/P = W
+			else if(istype(W, /obj/item/stack/sheet))
+				var/obj/item/stack/sheet/P = W
+				var/newpath = null
+				if(istype(P, /obj/item/stack/sheet/mineral))
+					newpath = text2path("/turf/simulated/wall/r_wall/mineral/[P.sheettype]")
+				if(!newpath && !istype(P,(/obj/item/stack/sheet/plasteel)))
+					return
 				user.visible_message("<span class='notice'>[user] starts installing an external cover to \the [src].</span>", \
 				"<span class='notice'>You start installing an external cover to \the [src].</span>")
 				playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 
 				if(do_after(user, src, 50) && d_state == WALLCOVERREMOVED)
 					P.use(1)
-					src.d_state = WALLCOMPLETED //A new pristine reinforced cover, we are done here
-					update_icon()
+					if(newpath)
+						ChangeTurf(newpath)
+					else
+						src.d_state = WALLCOMPLETED //A new pristine reinforced cover, we are done here
+						update_icon()
 					user.visible_message("<span class='notice'>[user] finishes installing an external cover to \the [src].</span>", \
 					"<span class='notice'>You finish installing an external cover to \the [src].</span>")
 				return
@@ -380,9 +394,14 @@
 				dismantle_wall(1,1) //Fuck it up nicely
 		if(2.0)
 			if(prob(75) && (d_state == WALLCOMPLETED))//No more infinite plasteel generation!
-				src.d_state = WALLCOVERREMOVED
-				update_icon()
-				new /obj/item/stack/sheet/plasteel(get_turf(src)) //Lose the plasteel needed to get ther)
+				var/sheet_spawned = get_sheet_type()
+				if(sheet_spawned)
+					new sheet_spawned(get_turf(src))
+				if(type != /turf/simulated/wall/r_wall) //easy hack for mineral walls
+					ChangeTurf(/turf/simulated/wall/r_wall/nocover)
+				else
+					src.d_state = WALLCOVERREMOVED
+					update_icon()
 			else
 				dismantle_wall(0,1)
 		if(3.0)
@@ -395,6 +414,247 @@
 
 /turf/simulated/wall/r_wall/dissolvable()
 	return 0
+
+/turf/simulated/wall/r_wall/nocover
+	d_state = WALLCOVERREMOVED
+
+/turf/simulated/wall/r_wall/mineral
+	name = "mineral wall"
+	desc = "This shouldn't exist."
+	icon_state = ""
+	explosion_block = 1
+	uses_overlays = RWALL_OVERLAY
+
+/turf/simulated/wall/r_wall/mineral/wood
+	name = "wooden wall"
+	desc = "A wall with wooden plating."
+	icon_state = "wood0"
+	walltype = "wood"
+	mineral = "wood"
+	girder_type = /obj/structure/girder/wood
+	hardness = 0 // a hulk can smash through wood easily
+
+/turf/simulated/wall/r_wall/mineral/wood/attackby(var/obj/item/W, var/mob/user)
+	if(W.sharpness_flags & CHOPWOOD)
+		user.visible_message("<span class='notice'>[user] starts chopping at \the [src] with \the [W].</span>", \
+				"<span class='notice'>You start chopping at \the [src] with \the [W].</span>", \
+				"<span class='warning'>You hear the sound of wood being cut.</span>")
+		W.playtoolsound(src, 100)
+		var/choptime = 50
+		if(istype(W, /obj/item/weapon/fireaxe))
+			choptime = 10
+		if(do_after(user, src, choptime))
+			user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
+						"<span class='notice'>You smash through \the [src].</span>")
+			W.playtoolsound(src, 100)
+			dismantle_wall()
+	else
+		..()
+
+/turf/simulated/wall/r_wall/mineral/wood/ex_act(var/severity)
+	if(severity < 3)
+		new /obj/item/stack/sheet/wood(src, 2)
+	..()
+
+/turf/simulated/wall/r_wall/mineral/wood/log
+	name = "log wall"
+	desc = "A log wall, ideal for a cabin."
+	girder_type = null
+	walltype = "log"
+	mineral = "log"
+	icon_state = "log0"
+	var/deconstruct_type = /turf/unsimulated/floor/snow/empty
+
+/turf/simulated/wall/r_wall/mineral/wood/log/dismantle_wall()
+	new /obj/item/weapon/grown/log/tree(src)
+	for(var/obj/O in src.contents)
+		if(istype(O,/obj/effect/cult_shortcut))
+			qdel(O)
+		if(istype(O,/obj/structure/sign/poster))
+			var/obj/structure/sign/poster/P = O
+			P.roll_and_drop(src)
+	ChangeTurf(deconstruct_type)
+	update_near_walls()
+
+/turf/simulated/wall/r_wall/mineral/wood/log/desert
+	deconstruct_type = /turf/simulated/floor/plating/ironsand
+
+/turf/simulated/wall/r_wall/mineral/brick
+	name = "brick wall"
+	desc = "A wall with brick siding. It looks nice."
+	icon_state = "brick0"
+	walltype = "brick"
+	mineral = "brick"
+
+/turf/simulated/wall/r_wall/mineral/gold
+	name = "gold wall"
+	desc = "A wall with gold plating. Swag!"
+	icon_state = "gold0"
+	walltype = "gold"
+	mineral = "gold"
+	//var/electro = 1
+	//var/shocked = null
+
+/turf/simulated/wall/r_wall/mineral/gold/gold_old
+	icon_state = "gold_old0"
+	walltype = "gold_old"
+
+/turf/simulated/wall/r_wall/mineral/silver
+	name = "silver wall"
+	desc = "A wall with silver plating. Shiny!"
+	icon_state = "silver0"
+	walltype = "silver"
+	mineral = "silver"
+	//var/electro = 0.75
+	//var/shocked = null
+
+/turf/simulated/wall/r_wall/mineral/silver/silver_old
+	icon_state = "silver_old0"
+	walltype = "silver_old"
+
+/turf/simulated/wall/r_wall/mineral/diamond
+	name = "diamond wall"
+	desc = "A wall with diamond plating. You monster."
+	icon_state = "diamond0"
+	walltype = "diamond"
+	mineral = "diamond"
+	explosion_block = 3
+
+/turf/simulated/wall/r_wall/mineral/clown
+	name = "bananium wall"
+	desc = "A wall with bananium plating. Honk!"
+	icon_state = "clown0"
+	walltype = "clown"
+	mineral = "clown"
+
+/turf/simulated/wall/r_wall/mineral/sandstone
+	name = "sandstone wall"
+	desc = "A wall with sandstone plating."
+	icon_state = "sandstone0"
+	walltype = "sandstone"
+	mineral = "sandstone"
+	explosion_block = 0
+
+/turf/simulated/wall/r_wall/mineral/plastic
+	name = "plastic wall"
+	desc = "A wall made of colorful plastic blocks attached together."
+	icon_state = "plastic0"
+	walltype = "plastic"
+	mineral = "plastic"
+	opacity = 0
+	explosion_block = 0
+
+/turf/simulated/wall/r_wall/mineral/uranium
+	name = "uranium wall"
+	desc = "A wall with uranium plating. This is probably a bad idea."
+	icon_state = "uranium0"
+	walltype = "uranium"
+	mineral = "uranium"
+	explosion_block = 2
+	var/active = null
+	var/last_event = 0
+
+/turf/simulated/wall/r_wall/mineral/uranium/proc/radiate()
+	if(!active)
+		if(world.time > last_event+15)
+			active = 1
+			emitted_harvestable_radiation(src, 3, range = 5)
+			for(var/mob/living/L in range(3,src))
+				L.apply_radiation(12,RAD_EXTERNAL)
+			for(var/turf/simulated/wall/mineral/uranium/T in range(3,src))
+				T.radiate()
+			last_event = world.time
+			active = null
+			return
+	return
+
+/turf/simulated/wall/r_wall/mineral/uranium/attack_hand(mob/user as mob)
+	radiate()
+	..()
+
+/turf/simulated/wall/r_wall/mineral/uranium/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	radiate()
+	..()
+
+/turf/simulated/wall/r_wall/mineral/uranium/Bumped(AM as mob|obj)
+	radiate()
+	..()
+
+/turf/simulated/wall/r_wall/mineral/plasma
+	name = "plasma wall"
+	desc = "A wall with plasma plating. This is definately a bad idea."
+	icon_state = "plasma0"
+	walltype = "plasma"
+	mineral = "plasma"
+
+/turf/simulated/wall/r_wall/mineral/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(W.is_hot() > 300)//If the temperature of the object is over 300, then ignite
+		ignite(W.is_hot())
+		return
+	..()
+
+/turf/simulated/wall/r_wall/mineral/plasma/proc/PlasmaBurn(temperature)
+	var/pdiff = performWallPressureCheck(src)
+	if(pdiff > 0)
+		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has caught on fire at [formatJumpTo(get_turf(src))]!")
+		message_admins("\The [src] with a pdiff of [pdiff] has caught of fire at [formatJumpTo(get_turf(src))]!")
+	spawn(2)
+	new /obj/structure/girder(src)
+	src.ChangeTurf(/turf/simulated/floor)
+	for(var/turf/simulated/floor/target_tile in range(0,src))
+		/*if(target_tile.parent && target_tile.parent.group_processing)
+			target_tile.parent.suspend_group_processing()*/
+		var/datum/gas_mixture/napalm = new
+		var/toxinsToDeduce = 20
+		napalm.temperature = 400+T0C
+		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
+		target_tile.assume_air(napalm)
+		spawn (0) target_tile.hotspot_expose(temperature, MEDIUM_FLAME,1)
+	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
+		var/turf/T = get_turf(F)
+		T.ChangeTurf(/turf/simulated/wall/mineral/plasma/)
+		QDEL_NULL (F)
+	for(var/turf/simulated/wall/mineral/plasma/W in range(3,src))
+		W.ignite((temperature/4))//Added so that you can't set off a massive chain reaction with a small flame
+	for(var/obj/machinery/door/airlock/plasma/D in range(3,src))
+		D.ignite(temperature/4)
+
+/turf/simulated/wall/r_wall/mineral/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//Doesn't fucking work because walls don't interact with air :(
+	if(exposed_temperature > 300)
+		PlasmaBurn(exposed_temperature)
+
+/turf/simulated/wall/r_wall/mineral/plasma/ignite(exposed_temperature)
+	if(exposed_temperature > 300)
+		PlasmaBurn(exposed_temperature)
+
+/turf/simulated/wall/r_wall/mineral/plasma/bullet_act(var/obj/item/projectile/Proj)
+	if(istype(Proj,/obj/item/projectile/beam))
+		PlasmaBurn(2500)
+	else if(istype(Proj,/obj/item/projectile/ion))
+		PlasmaBurn(500)
+	..()
+
+/turf/simulated/wall/r_wall/mineral/clockwork
+	name = "clockwork wall"
+	desc = "A huge chunk of warm metal. The clanging of machinery emanates from within."
+	icon_state = "clock"
+	walltype = "clock"
+	mineral = "brass"
+//	dismantle_type = /turf/simulated/floor/engine/clockwork // SOON
+	girder_type = /obj/structure/girder/clockwork
+
+/turf/simulated/wall/r_wall/mineral/clockwork/cultify()
+	return
+
+/turf/simulated/wall/r_wall/mineral/clockwork/clockworkify()
+	return
+
+/turf/simulated/wall/r_wall/mineral/gingerbread
+	name = "gingerbread wall"
+	desc = "Extremely stale and generally unappetizing."
+	icon_state = "gingerbread0"
+	walltype = "gingerbread"
+	mineral = "gingerbread"
 
 #undef WALLCOMPLETED
 #undef WALLCOVEREXPOSED

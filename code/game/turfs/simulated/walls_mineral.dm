@@ -4,8 +4,6 @@
 	icon_state = ""
 	explosion_block = 1
 	uses_overlays = FALSE
-	var/last_event = 0
-	var/active = null
 
 /turf/simulated/wall/mineral/wood
 	name = "wooden wall"
@@ -133,6 +131,8 @@
 	walltype = "uranium"
 	mineral = "uranium"
 	explosion_block = 2
+	var/active = null
+	var/last_event = 0
 
 /turf/simulated/wall/mineral/uranium/proc/radiate()
 	if(!active)

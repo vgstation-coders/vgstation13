@@ -89,7 +89,7 @@
 	if(uses_overlays)
 		overlays.len = 0
 		icon_state = walltype
-		if(uses_overlays >= RWALL_OVERLAY)
+		if(uses_overlays & RWALL_OVERLAY)
 			if(!src:d_state) //these lil ridges only show up when not building
 				for(var/direction in cardinal)
 					if(!(. & direction))
