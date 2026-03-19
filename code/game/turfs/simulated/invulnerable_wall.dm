@@ -6,7 +6,7 @@
 	opacity = 1
 	density = 1
 	can_thermite = 0
-	uses_overlays = RWALL_OVERLAY
+	uses_overlays = WALL_OVERLAY|RWALL_OVERLAY
 
 	hardness = 100 // Hulk can't do dick.
 

@@ -388,10 +388,7 @@
 		severity = 1.0
 	switch(severity)
 		if(1.0)
-			if(prob(66)) //It's "bomb-proof"
-				dismantle_wall(0,1) //So it isn't completely destroyed, nice uh ?
-			else
-				dismantle_wall(1,1) //Fuck it up nicely
+			dismantle_wall(!prob(66),1) //So it isn't completely destroyed, nice uh ?
 		if(2.0)
 			if(prob(75) && (d_state == WALLCOMPLETED))//No more infinite plasteel generation!
 				var/sheet_spawned = get_sheet_type()
