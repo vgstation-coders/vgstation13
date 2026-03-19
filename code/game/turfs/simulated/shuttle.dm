@@ -8,6 +8,7 @@
 	flags = INVULNERABLE
 	walltype = "swall"
 	hardness = 100 // nohulkz
+	uses_overlays = FALSE
 
 /turf/simulated/wall/shuttle/canSmoothWith()
 	var/static/list/smoothables = list(

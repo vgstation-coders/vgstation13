@@ -99,7 +99,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define ADVANCED_GRAFFITI_LAYER		(TURF_LAYER + 2)
 	#define MAPPING_TURF_LAYER			-999
 
-#define GLASSTILE_PLANE			-1						// Another one that won't behave, since it's an overlay
+#define TURF_OVERLAY_PLANE			-1						// Another one that won't behave, since it's an overlay
 
 #define ABOVE_TURF_PLANE 		(1 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
@@ -153,6 +153,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define CLOSED_DOOR_LAYER  			11
 	#define ABOVE_DOOR_LAYER			12
 	#define CHAIR_LEG_LAYER				13
+
+#define OBJ_OVERLAY_PLANE 4						// Another one that won't behave, since it's an overlay
 
 #define LYING_MOB_PLANE			(5 + FLOAT_PLANE)			// other mobs that are lying down.
 

@@ -1,5 +1,0 @@
-author: CrazyAmphibian
-delete-after: true
-changes:
-- tweak: Ice will now begin to melt in cooler temperatures, but will now melt slowly,
-    and cool down other reagents in the process.

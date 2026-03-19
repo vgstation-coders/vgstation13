@@ -2,8 +2,10 @@
 	name = "wall"
 	desc = "A huge chunk of metal used to separate rooms."
 	icon = 'icons/turf/walls.dmi'
+	icon_state = "wall"
 	var/mineral = "metal"
 	var/rotting = 0
+	var/uses_overlays = WALL_OVERLAY
 	opacity = 1
 	density = 1
 	blocks_air = 1
