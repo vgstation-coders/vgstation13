@@ -2217,6 +2217,10 @@
 		update_icon()
 		return 1
 	else if(I.is_hot())
+		if(molotov == 1)
+			light(user,I)
+			update_brightness(user)
+			return
 		attempt_heating(I, user)
 		light(user,I)
 		update_brightness(user)

@@ -312,6 +312,7 @@
 		if(BUNSEN_OPEN)
 			heating = BUNSEN_OFF
 			to_chat(user, "<span class = 'warning'>You close the fuel port on \the [src].</span>")
+	update_icon()
 
 
 /obj/machinery/bunsen_burner/mapped //for the sci break room

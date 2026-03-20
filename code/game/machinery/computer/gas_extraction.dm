@@ -48,7 +48,7 @@
 	if(!anchored)
 		to_chat(user, "<span class='warning'>\The [src] must be anchored to function.</span>")
 		return
-	if(!Adjacent(user))
+	if(!isAI(user) && !Adjacent(user))
 		to_chat(user, "<span class='warning'>You're too far away.</span>")
 		return
 	tgui_interact(user)

@@ -414,7 +414,7 @@
 			TryToShoot(target_turf, ttarget)
 			sleep(1)
 			TryToShoot(target_turf, ttarget)
-	if(doubleshot)
+	else if(doubleshot)
 		spawn()
 			TryToShoot(target_turf, ttarget)
 			sleep(1)

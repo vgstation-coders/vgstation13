@@ -1067,6 +1067,10 @@
 	description = "Whoah, this stuff looks volatile!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	dizzy_adj = 12
+	slurr_adj = 8
+	slur_start = 25
+	blur_start = 60
 	glass_icon_state = "gargleblasterglass"
 	glass_name = "\improper Pan-Galactic Gargle Blaster"
 	glass_desc = "Does... does this mean that Arthur and Ford are on the station? Oh joy."
