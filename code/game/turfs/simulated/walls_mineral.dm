@@ -3,8 +3,6 @@
 	desc = "This shouldn't exist."
 	icon_state = ""
 	explosion_block = 1
-	var/last_event = 0
-	var/active = null
 
 /turf/simulated/wall/mineral/wood
 	name = "wooden wall"
@@ -198,7 +196,7 @@
 	for(var/turf/simulated/wall/mineral/plasma/W in range(3,src))
 		W.ignite((temperature/4))//Added so that you can't set off a massive chain reaction with a small flame
 	for(var/turf/simulated/wall/r_wall/mineral/plasma/W2 in range(3,src))
-		W.ignite((temperature/4))
+		W2.ignite((temperature/4))
 	for(var/obj/machinery/door/airlock/plasma/D in range(3,src))
 		D.ignite(temperature/4)
 
