@@ -28,6 +28,3 @@ TURF_REAGENT_FILLS_CONTAINERS - allows mobs to click on the turf with a reagent 
 #define TURF_REAGENT_PROCESS				(1 << 2)
 #define TURF_REAGENT_INGORES_INVULNERABLE	(1 << 3)
 #define TURF_REAGENT_FILLS_CONTAINERS		(1 << 4)
-
-#define WALL_OVERLAY 1
-#define RWALL_OVERLAY 2

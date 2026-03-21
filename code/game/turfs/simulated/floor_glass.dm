@@ -25,7 +25,7 @@
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 	if(!floor_overlays[glass_state])
 		var/image/floor_overlay = image('icons/turf/overlays.dmi', glass_state)
-		floor_overlay.plane = TURF_OVERLAY_PLANE
+		floor_overlay.plane = GLASSTILE_PLANE
 		floor_overlays[glass_state] = floor_overlay
 	overlays += floor_overlays[glass_state]
 	set_light(1, 0.5, "#ffffff")
@@ -43,7 +43,7 @@
 	var/icon_state = "[cracked_base][damage_fraction]"
 	if(!damage_overlays[icon_state])
 		var/image/_damage_overlay = image('icons/obj/structures/window.dmi', icon_state)
-		_damage_overlay.plane = TURF_OVERLAY_PLANE
+		_damage_overlay.plane = GLASSTILE_PLANE
 		damage_overlays[icon_state] = _damage_overlay
 	var/damage_overlay = damage_overlays[icon_state]
 	if(current_damage_overlay == damage_overlay)
@@ -54,7 +54,7 @@
 
 /turf/simulated/floor/glass/AddDecal(var/image/decal)
 	decal.layer = DECAL_LAYER
-	decal.plane = TURF_OVERLAY_PLANE
+	decal.plane = GLASSTILE_PLANE
 	..()
 
 /turf/simulated/floor/glass/examine(var/mob/user)

@@ -247,7 +247,7 @@ var/list/open_overlay_depths
 	icon = 'icons/turf/overlays.dmi'
 	icon_state = "glass_floor"
 	layer = 0
-	plane = TURF_OVERLAY_PLANE
+	plane = GLASSTILE_PLANE
 
 /obj/effect/glass_open_overlay/plasma
 	icon_state = "plasma_glass_floor"

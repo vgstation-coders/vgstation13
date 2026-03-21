@@ -128,7 +128,7 @@
 /datum/rcd_schematic/con_walls
 	name		= "Build walls"
 	icon		= 'icons/turf/walls.dmi'
-	icon_state	= "wall"
+	icon_state	= "metal0"
 	category	= "Construction"
 	energy_cost	= 3
 
