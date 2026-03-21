@@ -1052,7 +1052,6 @@
 /obj/structure/wc/urinal/acid
 	name = "acid urinal"
 	desc = "The AY-452, an experimental urinal that seems to use acid instead of water."
-	clean_power = 0
 	watertype = /obj/item/reagent_core/acid
 
 //mapping subtypes
