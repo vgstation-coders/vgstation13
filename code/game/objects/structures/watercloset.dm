@@ -248,8 +248,8 @@
 /obj/structure/wc/urinal/update_dir()
 	. = ..()
 	if(anchored)
-		var/turf/T = get_step(src,dir)
-		if(T.density)
+		var/turf/T = get_step(src,opposite_dirs[dir])
+		if(T?.density)
 			switch(dir)
 				if(NORTH)
 					pixel_x = 0
