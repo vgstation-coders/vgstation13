@@ -428,6 +428,7 @@
 
 /turf/simulated/wall/r_wall/nocover
 	d_state = WALLCOVERREMOVED
+	icon_state = "r_wall-4"
 
 /turf/simulated/wall/r_wall/mineral
 	name = "mineral wall"
