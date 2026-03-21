@@ -275,6 +275,9 @@
 		flush_control = null
 		return
 	. = ..()
+	if(flushing && watersource && watersource.reagents && !watersource.reagents.is_empty())
+		to_chat(user, "<span class='notice'>You run your hands under [src], for some reason.</span>")
+		watersource.reagents.reaction(GM, TOUCH, zone_sels = list(LIMB_LEFT_HAND,LIMB_RIGHT_HAND))
 
 /obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
 	if(!anchored && !flush_control && istype(I,/obj/item/device/assembly))
@@ -305,12 +308,12 @@
 				user.visible_message("<span class='danger'>[user] slams [GM.name] into the [src]!</span>", "<span class='notice'>You slam [GM.name] into the [src]!</span>")
 				if(!flushing || user.a_intent == I_HURT)
 					GM.adjustBruteLoss(8)
-				if(flushing)
+				if(flushing && watersource && watersource.reagents && !watersource.reagents.is_empty())
 					watersource.reagents.reaction(GM, TOUCH, zone_sels = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH))
 			else
 				to_chat(user, "<span class='notice'>You need a tighter grip.</span>")
 
-	else if(flushing)
+	else if(flushing && watersource && watersource.reagents && !watersource.reagents.is_empty())
 		watersource.reagents.reaction(I, TOUCH)
 
 /obj/structure/wc/urinal/bite_act(mob/user)
