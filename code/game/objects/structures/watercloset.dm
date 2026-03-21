@@ -277,6 +277,12 @@
 	. = ..()
 
 /obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
+	if(!anchored && !flush_control && istype(I,/obj/item/device/assembly))
+		if(user.drop_item(I,src))
+			flush_control = I
+			to_chat(user, "<span class='notice'>You add [I] as a flush control mechanism for [src].</span>")
+			return 1
+
 	if(..())
 		return 1
 
@@ -303,15 +309,6 @@
 					watersource.reagents.reaction(GM, TOUCH, zone_sels = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH))
 			else
 				to_chat(user, "<span class='notice'>You need a tighter grip.</span>")
-
-	if(!anchored)
-		if(!flush_control && istype(I,/obj/item/device/assembly))
-			if(user.drop_item(I,src))
-				flush_control = I
-				to_chat(user, "<span class='notice'>You add [I] as a flush control mechanism for [src].</span>")
-				return 1
-		to_chat(user, "<span class='warning'>\The [src] needs to be bolted to the floor to work.</span>")
-		return 1
 
 	else if(flushing)
 		watersource.reagents.reaction(I, TOUCH)
