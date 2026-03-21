@@ -9,7 +9,7 @@
 	build_path = /obj/item/floral_somatoray
 
 /datum/design/plant_analyzer
-	name = "plant analyzer"
+	name = "Plant Analyzer"
 	desc = "A hand-held botanical scanner that reports detailed information about seeds, plants and produce."
 	id = "plant_analyzer"
 	req_tech = list(Tc_MAGNETS = 2, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
