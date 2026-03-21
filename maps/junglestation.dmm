@@ -14710,9 +14710,7 @@
 /turf/simulated/floor,
 /area/mine/production)
 "fsc" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
@@ -15302,9 +15300,7 @@
 /turf/simulated/floor/plating,
 /area/security/prison)
 "fBB" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},

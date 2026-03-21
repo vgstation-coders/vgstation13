@@ -16645,9 +16645,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aDf" = (
-/obj/structure/wc/urinal{
-	pixel_y = -32
-	},
+/obj/structure/wc/urinal/north,
 /obj/effect/decal/cleanable/generic,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
@@ -20951,17 +20949,13 @@
 	},
 /area/crew_quarters/toilet)
 "aMx" = (
-/obj/structure/wc/urinal{
-	pixel_y = -32
-	},
+/obj/structure/wc/urinal/north,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/crew_quarters/toilet)
 "aMy" = (
-/obj/structure/wc/urinal{
-	pixel_y = -32
-	},
+/obj/structure/wc/urinal/north,
 /obj/machinery/camera{
 	dir = 4;
 	name = "Dormitory Toilets North"
@@ -82056,17 +82050,13 @@
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "cYR" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
 "cYS" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"

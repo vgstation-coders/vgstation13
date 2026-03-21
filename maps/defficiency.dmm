@@ -44799,8 +44799,7 @@
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
 /obj/structure/wc/urinal{
-	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
-	pixel_y = 32
+	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth."
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/ash,
@@ -44845,8 +44844,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/generic,
 /obj/structure/wc/urinal{
-	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
-	pixel_y = 32
+	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth."
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -44860,8 +44858,7 @@
 	},
 /obj/item/tool/crowbar,
 /obj/structure/wc/urinal{
-	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
-	pixel_y = 32
+	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth."
 	},
 /turf/simulated/floor/plating/damaged/broken,
 /area/derelictparts/asderelict{
@@ -59422,18 +59419,14 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "cjO" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/crew_quarters/locker)
 "cjP" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
 	},
@@ -83047,9 +83040,7 @@
 /turf/unsimulated/floor,
 /area/syndicate_mothership)
 "dck" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},

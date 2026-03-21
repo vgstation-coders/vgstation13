@@ -484,10 +484,7 @@
 /area/vault/podstation/interior)
 "iv" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/wc/urinal{
-	dir = 4;
-	pixel_x = -30
-	},
+/obj/structure/wc/urinal/east,
 /obj/structure/mopbucket,
 /obj/item/weapon/mop,
 /turf/simulated/floor,

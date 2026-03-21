@@ -15432,9 +15432,7 @@
 	},
 /area/crew_quarters/toilet)
 "aGZ" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},

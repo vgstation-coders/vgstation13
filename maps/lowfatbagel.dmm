@@ -14232,8 +14232,7 @@
 /area/crew_quarters/toilet)
 "aME" = (
 /obj/structure/wc/urinal{
-	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
-	pixel_y = 32
+	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth."
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"

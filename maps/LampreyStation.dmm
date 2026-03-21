@@ -42486,8 +42486,7 @@
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bUP" = (
 /obj/structure/wc/urinal{
-	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
-	pixel_y = 32
+	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth."
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -115272,9 +115271,7 @@
 	},
 /area/lamprey/catchall)
 "eVy" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -117989,9 +117986,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/catchall)
 "fbh" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "barber"
@@ -125118,9 +125113,7 @@
 /turf/simulated/floor/plating/vox,
 /area/shuttle/nuclearops)
 "fsx" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /obj/machinery/light/small{
 	dir = 1;
 	light_range = 3
@@ -145699,9 +145692,7 @@
 /turf/space,
 /area)
 "gmm" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /turf/space,
 /area)
 "gmn" = (

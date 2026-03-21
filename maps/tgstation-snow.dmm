@@ -53962,9 +53962,7 @@
 	},
 /area/centcom/test)
 "dzU" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -54173,9 +54171,7 @@
 	},
 /area/centcom/control)
 "dAP" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
@@ -75689,9 +75685,7 @@
 	},
 /area/hallway/primary/aft)
 "iMF" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "iMG" = (
@@ -85897,9 +85891,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "mvu" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -85926,9 +85918,7 @@
 /turf/simulated/floor,
 /area/derelict/solar_control)
 "mvU" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/machinery/camera{
 	dir = 8;
 	name = "Dormitory Toilets North"

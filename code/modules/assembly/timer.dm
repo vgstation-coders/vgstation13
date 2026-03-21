@@ -35,6 +35,12 @@
 		VALUE_TIMEMODE = "repeat;"+VT_NUMBER,\
 		VALUE_TIMING = "timing;"+VT_NUMBER)
 
+/obj/item/device/assembly/timer/New()
+	. = ..()
+	time = default_time // for subtypes
+	if(timing)
+		countdown()
+
 /obj/item/device/assembly/timer/activate()
 	if(!..())
 		return 0//Cooldown check
