@@ -440,13 +440,11 @@
 	overlays += image(icon,"r_overlay")
 
 /turf/simulated/wall/r_wall/mineral/wood
-	name = "wooden wall"
-	desc = "A wall with wooden plating."
+	name = "reinforced wooden wall"
+	desc = "A reinforced wall with wooden plating."
 	icon_state = "wood0"
 	walltype = "wood"
 	mineral = "wood"
-	girder_type = /obj/structure/girder/wood
-	hardness = 0 // a hulk can smash through wood easily
 
 /turf/simulated/wall/r_wall/mineral/wood/attackby(var/obj/item/W, var/mob/user)
 	if(W.sharpness_flags & CHOPWOOD)
@@ -471,8 +469,8 @@
 	..()
 
 /turf/simulated/wall/r_wall/mineral/wood/log
-	name = "log wall"
-	desc = "A log wall, ideal for a cabin."
+	name = "reinforced log wall"
+	desc = "A reinforced log wall, ideal for a cabin."
 	girder_type = null
 	walltype = "log"
 	mineral = "log"
@@ -494,15 +492,15 @@
 	deconstruct_type = /turf/simulated/floor/plating/ironsand
 
 /turf/simulated/wall/r_wall/mineral/brick
-	name = "brick wall"
-	desc = "A wall with brick siding. It looks nice."
+	name = "reinforced brick wall"
+	desc = "A reinforced wall with brick siding. It looks nice."
 	icon_state = "brick0"
 	walltype = "brick"
 	mineral = "brick"
 
 /turf/simulated/wall/r_wall/mineral/gold
-	name = "gold wall"
-	desc = "A wall with gold plating. Swag!"
+	name = "reinforced gold wall"
+	desc = "A reinforced wall with gold plating. Swag!"
 	icon_state = "gold0"
 	walltype = "gold"
 	mineral = "gold"
@@ -514,8 +512,8 @@
 	walltype = "gold_old"
 
 /turf/simulated/wall/r_wall/mineral/silver
-	name = "silver wall"
-	desc = "A wall with silver plating. Shiny!"
+	name = "reinforced silver wall"
+	desc = "A reinforced wall with silver plating. Shiny!"
 	icon_state = "silver0"
 	walltype = "silver"
 	mineral = "silver"
@@ -527,31 +525,31 @@
 	walltype = "silver_old"
 
 /turf/simulated/wall/r_wall/mineral/diamond
-	name = "diamond wall"
-	desc = "A wall with diamond plating. You monster."
+	name = "reinforced diamond wall"
+	desc = "A reinforced wall with diamond plating. You monster."
 	icon_state = "diamond0"
 	walltype = "diamond"
 	mineral = "diamond"
 	explosion_block = 3
 
 /turf/simulated/wall/r_wall/mineral/clown
-	name = "bananium wall"
-	desc = "A wall with bananium plating. Honk!"
+	name = "reinforced bananium wall"
+	desc = "A reinforced wall with bananium plating. Honk!"
 	icon_state = "clown0"
 	walltype = "clown"
 	mineral = "clown"
 
 /turf/simulated/wall/r_wall/mineral/sandstone
-	name = "sandstone wall"
-	desc = "A wall with sandstone plating."
+	name = "reinforced sandstone wall"
+	desc = "A reinforced wall with sandstone plating."
 	icon_state = "sandstone0"
 	walltype = "sandstone"
 	mineral = "sandstone"
 	explosion_block = 0
 
 /turf/simulated/wall/r_wall/mineral/plastic
-	name = "plastic wall"
-	desc = "A wall made of colorful plastic blocks attached together."
+	name = "reinforced plastic wall"
+	desc = "A reinforced wall made of colorful plastic blocks attached together."
 	icon_state = "plastic0"
 	walltype = "plastic"
 	mineral = "plastic"
@@ -559,8 +557,8 @@
 	explosion_block = 0
 
 /turf/simulated/wall/r_wall/mineral/uranium
-	name = "uranium wall"
-	desc = "A wall with uranium plating. This is probably a bad idea."
+	name = "reinforced uranium wall"
+	desc = "A reinforced wall with uranium plating. This is probably a bad idea."
 	icon_state = "uranium0"
 	walltype = "uranium"
 	mineral = "uranium"
@@ -595,8 +593,8 @@
 	..()
 
 /turf/simulated/wall/r_wall/mineral/plasma
-	name = "plasma wall"
-	desc = "A wall with plasma plating. This is definately a bad idea."
+	name = "reinforced plasma wall"
+	desc = "A reinforced wall with plasma plating. This is definately a bad idea."
 	icon_state = "plasma0"
 	walltype = "plasma"
 	mineral = "plasma"
@@ -650,8 +648,8 @@
 	..()
 
 /turf/simulated/wall/r_wall/mineral/clockwork
-	name = "clockwork wall"
-	desc = "A huge chunk of warm metal. The clanging of machinery emanates from within."
+	name = "reinforced clockwork wall"
+	desc = "A huge reinforced chunk of warm metal. The clanging of machinery emanates from within."
 	icon_state = "clock"
 	walltype = "clock"
 	mineral = "brass"
@@ -665,7 +663,7 @@
 	return
 
 /turf/simulated/wall/r_wall/mineral/gingerbread
-	name = "gingerbread wall"
+	name = "reinforced gingerbread wall"
 	desc = "Extremely stale and generally unappetizing."
 	icon_state = "gingerbread0"
 	walltype = "gingerbread"
