@@ -276,7 +276,7 @@
 		return
 	if(flushing && watersource && watersource.reagents && !watersource.reagents.is_empty())
 		to_chat(user, "<span class='notice'>You run your hands under [src], for some reason.</span>")
-		watersource.reagents.reaction(GM, TOUCH, zone_sels = list(LIMB_LEFT_HAND,LIMB_RIGHT_HAND))
+		watersource.reagents.reaction(user, TOUCH, zone_sels = list(LIMB_LEFT_HAND,LIMB_RIGHT_HAND))
 		return
 	. = ..()
 
