@@ -220,7 +220,7 @@
 	name = "urinal"
 	desc = "The HU-452, an experimental urinal."
 	icon_state = "urinal"
-	pixel_y = -32
+	pixel_y = 32
 	var/flush_control_type = /obj/item/device/assembly/timer/wc
 	var/obj/item/device/assembly/flush_control
 	var/flushing = FALSE
