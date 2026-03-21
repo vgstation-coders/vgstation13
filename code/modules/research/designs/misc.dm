@@ -9,6 +9,8 @@
 	build_path = /obj/item/floral_somatoray
 
 /datum/design/plant_analyzer
+	name = "plant analyzer"
+	desc = "A hand-held botanical scanner that reports detailed information about seeds, plants and produce."
 	req_tech = list(Tc_MAGNETS = 2, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 200, MAT_GLASS = 100)
