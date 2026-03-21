@@ -25,7 +25,7 @@
 	var/spine_color = "#ff0"
 	var/spine_overlay = "#000"
 	var/mob/living/owner
-	var/owner_ckey
+	var/datum/mind/owner_mind
 	var/owner_name
 	var/datum/language/tongue
 	var/progress = 0
@@ -44,7 +44,7 @@
 	tongue = all_languages[LANGUAGE_VOX]
 
 /obj/item/dictionary/Destroy()
-	owner_ckey = null
+	owner_mind = null
 	tongue = null
 	..()
 
@@ -57,10 +57,12 @@
 	if(tongue in user.languages)
 		to_chat(user,"<span class='danger'>You already know this language!</span>")
 		return
-	if(!owner_ckey)
-		owner_ckey = user.ckey
+	if(!owner_mind)
+		if(!user.mind) //impacts many of our players smdh
+			return
+		owner_mind = user.mind
 		owner_name = user.name
-	if(owner_ckey != user.ckey)
+	if(owner_mind != user.mind)
 		to_chat(user,"<span class='danger'>This nanodictionary is already partially used up. Useless. You need the fundamentals.</span>")
 		return
 	busy = TRUE

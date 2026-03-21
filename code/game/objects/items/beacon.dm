@@ -116,6 +116,6 @@ var/global/list/emergency_beacons = list()
 	name = "Tracking Bacon"
 	desc = "A bacon used by a teleporter."
 
-/obj/item/beacon/bacon/New()
-	..()
+/obj/item/beacon/bacon/Destroy()
 	verbs -= /obj/item/beacon/verb/alter_signal
+	..()
