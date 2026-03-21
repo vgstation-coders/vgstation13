@@ -11,11 +11,12 @@
 /datum/design/plant_analyzer
 	name = "plant analyzer"
 	desc = "A hand-held botanical scanner that reports detailed information about seeds, plants and produce."
+	id = "plant_analyzer"
 	req_tech = list(Tc_MAGNETS = 2, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
+	build_path = /obj/item/device/analyzer/plant_analyzer
 	materials = list(MAT_IRON = 200, MAT_GLASS = 100)
 	category = "Misc"
-	build_path = /obj/item/device/analyzer/plant_analyzer
 
 /datum/design/janicart_upgrade
 	name = "Janicart Upgrade Module"
