@@ -13,6 +13,7 @@
 	density = 1
 
 	walltype = "rwall"
+	mineral = "plasteel"
 	hardness = 90
 
 	explosion_block = 2
@@ -430,7 +431,6 @@
 	desc = "This shouldn't exist."
 	icon_state = ""
 	explosion_block = 1
-	uses_overlays = RWALL_OVERLAY
 
 /turf/simulated/wall/r_wall/mineral/wood
 	name = "wooden wall"
