@@ -114,7 +114,6 @@ var/global/list/mineralSpawnChance[]
 	dismantle_type = /turf/unsimulated/mineral
 	girder_type = null
 	walltype = "rock_rf"
-	uses_overlays = FALSE
 
 /turf/simulated/wall/r_rock/porous
 	name = "reinforced porous rock"

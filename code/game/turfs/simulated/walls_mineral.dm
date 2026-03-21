@@ -3,7 +3,6 @@
 	desc = "This shouldn't exist."
 	icon_state = ""
 	explosion_block = 1
-	uses_overlays = FALSE
 	var/last_event = 0
 	var/active = null
 

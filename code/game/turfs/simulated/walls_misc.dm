@@ -3,7 +3,6 @@
 	desc = "The patterns engraved on the wall seem to shift as you try to focus on them. You feel sick."
 	icon_state = "cult"
 	walltype = "cult"
-	uses_overlays = FALSE
 	dismantle_type = /turf/simulated/floor/engine/cult
 	girder_type = /obj/structure/cultgirder
 
@@ -39,4 +38,3 @@
 	icon = 'icons/turf/shuttle.dmi'
 	icon_state = "satwall0"
 	walltype = "satwall"
-	uses_overlays = FALSE

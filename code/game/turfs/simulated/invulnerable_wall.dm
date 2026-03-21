@@ -6,8 +6,8 @@
 	opacity = 1
 	density = 1
 	can_thermite = 0
-	uses_overlays = RWALL_OVERLAY
 
+	walltype = "rwall"
 	hardness = 100 // Hulk can't do dick.
 
 	explosion_block = 9999
@@ -64,12 +64,12 @@
 	desc = "The incredible compressive forces that formed this sturdy ice wall gave it a blue color."
 	icon_state = "ice"
 	walltype = "ice"
-	uses_overlays = FALSE
 
 /turf/simulated/wall/invulnerable/r_wall
 	name = "reinforced wall"
 	desc = "A huge chunk of reinforced metal and anchored rods used to seperate rooms and keep all but the most equipped crewmen out."
-	icon_state = "rwall"
+	icon_state = "r_wall"
+	walltype = "rwall"
 
 /turf/simulated/wall/invulnerable/gold
 	name = "invulnerable gold wall"
@@ -77,4 +77,3 @@
 	icon_state = "gold0"
 	walltype = "gold"
 	mineral = "gold"
-	uses_overlays = FALSE
