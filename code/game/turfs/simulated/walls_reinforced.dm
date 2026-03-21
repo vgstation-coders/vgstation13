@@ -402,14 +402,7 @@
 			dismantle_wall(!prob(66),1) //So it isn't completely destroyed, nice uh ?
 		if(2.0)
 			if(prob(75) && (d_state == WALLCOMPLETED))//No more infinite plasteel generation!
-				var/sheet_spawned = get_sheet_type()
-				if(sheet_spawned)
-					new sheet_spawned(get_turf(src))
-				if(type != /turf/simulated/wall/r_wall) //easy hack for mineral walls
-					ChangeTurf(/turf/simulated/wall/r_wall/nocover)
-				else
-					src.d_state = WALLCOVERREMOVED
-					update_icon()
+				remove_cover()
 			else
 				dismantle_wall(0,1)
 		if(3.0)
@@ -419,6 +412,16 @@
 				src.d_state = WALLCOVEREXPOSED
 				update_icon()
 	return
+
+/turf/simulated/wall/r_wall/proc/remove_cover()
+	var/sheet_spawned = get_sheet_type()
+	if(sheet_spawned)
+		new sheet_spawned(get_turf(src))
+	if(type != /turf/simulated/wall/r_wall) //easy hack for mineral walls
+		ChangeTurf(/turf/simulated/wall/r_wall/nocover)
+	else
+		src.d_state = WALLCOVERREMOVED
+		update_icon()
 
 /turf/simulated/wall/r_wall/dissolvable()
 	return 0
@@ -458,7 +461,7 @@
 			user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
 						"<span class='notice'>You smash through \the [src].</span>")
 			W.playtoolsound(src, 100)
-			dismantle_wall()
+			remove_cover()
 	else
 		..()
 
@@ -610,8 +613,7 @@
 		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has caught on fire at [formatJumpTo(get_turf(src))]!")
 		message_admins("\The [src] with a pdiff of [pdiff] has caught of fire at [formatJumpTo(get_turf(src))]!")
 	spawn(2)
-	new /obj/structure/girder(src)
-	src.ChangeTurf(/turf/simulated/floor)
+	ChangeTurf(/turf/simulated/wall/r_wall/nocover)
 	for(var/turf/simulated/floor/target_tile in range(0,src))
 		/*if(target_tile.parent && target_tile.parent.group_processing)
 			target_tile.parent.suspend_group_processing()*/
@@ -627,6 +629,8 @@
 		QDEL_NULL (F)
 	for(var/turf/simulated/wall/mineral/plasma/W in range(3,src))
 		W.ignite((temperature/4))//Added so that you can't set off a massive chain reaction with a small flame
+	for(var/turf/simulated/wall/r_wall/mineral/plasma/W2 in range(3,src))
+		W.ignite((temperature/4))
 	for(var/obj/machinery/door/airlock/plasma/D in range(3,src))
 		D.ignite(temperature/4)
 
