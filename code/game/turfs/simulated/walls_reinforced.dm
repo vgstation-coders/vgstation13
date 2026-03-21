@@ -432,6 +432,10 @@
 	icon_state = ""
 	explosion_block = 1
 
+/turf/simulated/wall/r_wall/mineral/New()
+	. = ..()
+	overlays += image(icon,"r_overlay")
+
 /turf/simulated/wall/r_wall/mineral/wood
 	name = "wooden wall"
 	desc = "A wall with wooden plating."
