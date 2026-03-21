@@ -221,6 +221,7 @@
 	desc = "The HU-452, an experimental urinal."
 	icon_state = "urinal"
 	pixel_y = 32
+	alt_click_rotates = TRUE
 	var/flush_control_type = /obj/item/device/assembly/timer/wc
 	var/obj/item/device/assembly/flush_control
 	var/flushing = FALSE
