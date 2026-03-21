@@ -233,7 +233,7 @@
 			else if(istype(W, /obj/item/stack/sheet))
 				var/obj/item/stack/sheet/P = W
 				var/newpath = null
-				if(istype(P, /obj/item/stack/sheet/mineral))
+				if(istype(P, /obj/item/stack/sheet/mineral) || istype(P, /obj/item/stack/sheet/wood))
 					newpath = text2path("/turf/simulated/wall/r_wall/mineral/[P.sheettype]")
 				if(!newpath && !istype(P,(/obj/item/stack/sheet/plasteel)))
 					return
