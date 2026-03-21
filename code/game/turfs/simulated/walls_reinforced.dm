@@ -245,6 +245,7 @@
 					P.use(1)
 					if(newpath)
 						ChangeTurf(newpath)
+						relativewall_neighbours()
 					else
 						src.d_state = WALLCOMPLETED //A new pristine reinforced cover, we are done here
 						update_icon()
