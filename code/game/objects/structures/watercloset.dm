@@ -274,10 +274,11 @@
 		to_chat(user, "<span class='warning'>You remove [flush_control] from [src].</span>")
 		flush_control = null
 		return
-	. = ..()
 	if(flushing && watersource && watersource.reagents && !watersource.reagents.is_empty())
 		to_chat(user, "<span class='notice'>You run your hands under [src], for some reason.</span>")
 		watersource.reagents.reaction(GM, TOUCH, zone_sels = list(LIMB_LEFT_HAND,LIMB_RIGHT_HAND))
+		return
+	. = ..()
 
 /obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
 	if(!anchored && !flush_control && istype(I,/obj/item/device/assembly))
@@ -333,7 +334,7 @@
 	for(var/ticks in 1 to 10)
 		watersource.reagents.remove_all(5)
 		sleep(1 SECONDS)
-		if(!flushing || watersource.reagents.is_empty())
+		if(!flushing || !anchored || watersource.reagents.is_empty())
 			break
 	flushing = FALSE
 	overlays.len = 0
