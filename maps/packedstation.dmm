@@ -44696,7 +44696,7 @@
 	},
 /area/syndicate_mothership)
 "bxN" = (
-/obj/structure/wc/urinal,
+/obj/structure/wc/urinal/empty,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},

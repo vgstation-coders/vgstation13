@@ -61266,7 +61266,7 @@
 	},
 /area/syndicate_mothership)
 "cCu" = (
-/obj/structure/wc/urinal,
+/obj/structure/wc/urinal/empty,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},

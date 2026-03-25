@@ -69975,7 +69975,7 @@
 	},
 /area/syndicate_mothership)
 "cFK" = (
-/obj/structure/wc/urinal,
+/obj/structure/wc/urinal/empty,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},

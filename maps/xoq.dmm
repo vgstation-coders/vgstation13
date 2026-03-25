@@ -82050,7 +82050,7 @@
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "cYR" = (
-/obj/structure/wc/urinal,
+/obj/structure/wc/urinal/empty,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},

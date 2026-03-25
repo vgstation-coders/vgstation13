@@ -339,6 +339,10 @@
 	flushing = FALSE
 	overlays.len = 0
 
+/obj/structure/wc/urinal/empty // just so these don't process a timer on z2
+	flush_control_type = null
+	watersource = null
+
 /obj/machinery/shower
 	name = "shower"
 	desc = "The HS-451. Installed in the 2550s by the Nanotrasen Hygiene Division."
