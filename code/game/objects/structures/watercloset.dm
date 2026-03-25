@@ -250,7 +250,7 @@
 	if(flush_control_type)
 		flush_control = new flush_control_type(src)
 
-/obj/structure/wc/Destroy()
+/obj/structure/wc/urinal/Destroy()
 	. = ..()
 	QDEL_NULL(flush_control)
 
