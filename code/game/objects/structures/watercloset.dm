@@ -15,8 +15,8 @@
 		watersource = new watertype
 
 /obj/structure/wc/Destroy()
-	. = ..()
 	QDEL_NULL(watersource)
+	. = ..()
 
 /obj/structure/wc/verb/empty_container_into()
 	set name = "Empty container into"
@@ -251,8 +251,8 @@
 		flush_control = new flush_control_type(src)
 
 /obj/structure/wc/urinal/Destroy()
-	. = ..()
 	QDEL_NULL(flush_control)
+	. = ..()
 
 /obj/structure/wc/urinal/update_dir()
 	. = ..()
