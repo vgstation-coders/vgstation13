@@ -14,6 +14,10 @@
 	if(watertype)
 		watersource = new watertype
 
+/obj/structure/wc/Destroy()
+	. = ..()
+	QDEL_NULL(watersource)
+
 /obj/structure/wc/verb/empty_container_into()
 	set name = "Empty container into"
 	set category = "Object"
@@ -245,6 +249,10 @@
 	. = ..()
 	if(flush_control_type)
 		flush_control = new flush_control_type(src)
+
+/obj/structure/wc/Destroy()
+	. = ..()
+	QDEL_NULL(flush_control)
 
 /obj/structure/wc/urinal/update_dir()
 	. = ..()
