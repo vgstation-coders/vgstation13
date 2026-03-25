@@ -82056,7 +82056,7 @@
 	},
 /area/syndicate_mothership)
 "cYS" = (
-/obj/structure/wc/urinal,
+/obj/structure/wc/urinal/empty,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
