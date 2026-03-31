@@ -226,8 +226,6 @@
 	icon_state = "urinal"
 	pixel_y = 32
 	verb_rotates = TRUE
-	var/flush_control_type = /obj/item/device/assembly/timer/wc
-	var/obj/item/device/assembly/flush_control
 	var/flushing = FALSE
 
 //mapping subtypes
@@ -244,15 +242,6 @@
 	dir = WEST
 	pixel_x = 30
 	pixel_y = 0
-
-/obj/structure/wc/urinal/New()
-	. = ..()
-	if(flush_control_type)
-		flush_control = new flush_control_type(src)
-
-/obj/structure/wc/urinal/Destroy()
-	QDEL_NULL(flush_control)
-	. = ..()
 
 /obj/structure/wc/urinal/update_dir()
 	. = ..()
@@ -277,24 +266,18 @@
 	pixel_y = 0
 
 /obj/structure/wc/urinal/attack_hand(mob/living/user)
-	if(!anchored && !watersource && flush_control)
-		user.put_in_hands(flush_control)
-		to_chat(user, "<span class='warning'>You remove [flush_control] from [src].</span>")
-		flush_control = null
-		return
-	if(flushing && watersource && watersource.reagents && !watersource.reagents.is_empty())
-		to_chat(user, "<span class='notice'>You run your hands under [src], for some reason.</span>")
-		watersource.reagents.reaction(user, TOUCH, zone_sels = list(LIMB_LEFT_HAND,LIMB_RIGHT_HAND))
-		return
 	. = ..()
-
-/obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
-	if(!anchored && !flush_control && istype(I,/obj/item/device/assembly))
-		if(user.drop_item(I,src))
-			flush_control = I
-			to_chat(user, "<span class='notice'>You add [I] as a flush control mechanism for [src].</span>")
+	if(.)
+		if(flushing)
+			if(watersource && watersource.reagents && !watersource.reagents.is_empty())
+				to_chat(user, "<span class='notice'>You run your hands under [src], for some reason.</span>")
+				watersource.reagents.reaction(user, TOUCH, zone_sels = list(LIMB_LEFT_HAND,LIMB_RIGHT_HAND))
+				return 1
+		else
+			flush(user)
 			return 1
 
+/obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
 	if(..())
 		return 1
 
@@ -328,8 +311,9 @@
 /obj/structure/wc/urinal/bite_act(mob/user)
 	user.simple_message("<span class='notice'>That would be disgusting.</span>", "<span class='info'>You're not high enough for that... Yet.</span>") //Second message 4 hallucinations
 
-/obj/structure/wc/urinal/assembly_pulse(var/obj/item/device/assembly/A)
+/obj/structure/wc/urinal/proc/flush(mob/user)
 	if(!watersource || !watersource.reagents || watersource.reagents.is_empty())
+		to_chat(user,"<span class='warning'>You flush the handle but nothing happens.</span>")
 		return
 	flushing = !flushing
 	if(!flushing)
@@ -346,10 +330,6 @@
 			break
 	flushing = FALSE
 	overlays.len = 0
-
-/obj/structure/wc/urinal/empty // just so these don't process a timer on z2
-	flush_control_type = null
-	watersource = null
 
 /obj/machinery/shower
 	name = "shower"

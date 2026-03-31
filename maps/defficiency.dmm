@@ -83040,7 +83040,7 @@
 /turf/unsimulated/floor,
 /area/syndicate_mothership)
 "dck" = (
-/obj/structure/wc/urinal/empty,
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},

@@ -24702,13 +24702,13 @@
 /turf/simulated/floor/plating,
 /area/maintenance/disposal)
 "fQn" = (
-/obj/structure/wc/urinal/empty,
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
 "fQw" = (
-/obj/structure/wc/urinal/empty,
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"

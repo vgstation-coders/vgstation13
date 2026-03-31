@@ -69975,13 +69975,13 @@
 	},
 /area/syndicate_mothership)
 "cFK" = (
-/obj/structure/wc/urinal/empty,
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
 "cFL" = (
-/obj/structure/wc/urinal/empty,
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"

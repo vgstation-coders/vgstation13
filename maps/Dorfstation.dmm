@@ -37472,7 +37472,7 @@
 	},
 /area/shuttle/syndicate_elite/mothership)
 "uQy" = (
-/obj/structure/wc/urinal/empty,
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
