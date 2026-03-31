@@ -267,7 +267,7 @@
 
 /obj/structure/wc/urinal/attack_hand(mob/living/user)
 	. = ..()
-	if(.)
+	if(!.)
 		if(flushing)
 			if(watersource && watersource.reagents && !watersource.reagents.is_empty())
 				to_chat(user, "<span class='notice'>You run your hands under [src], for some reason.</span>")
