@@ -209,13 +209,6 @@
 /obj/structure/wc/toilet/bite_act(mob/user)
 	user.simple_message("<span class='notice'>That would be disgusting.</span>", "<span class='info'>You're not high enough for that... Yet.</span>") //Second message 4 hallucinations
 
-/obj/item/device/assembly/timer/wc
-	silent = TRUE
-	timing = TRUE
-	repeat = TRUE
-	secured = TRUE
-	default_time = 600
-
 /obj/structure/wc/urinal
 	name = "urinal"
 	desc = "The HU-452, an experimental urinal."
