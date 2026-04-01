@@ -633,13 +633,13 @@
 		return FALSE
 	if(is_pacified())
 		return FALSE
-	if(istype(trespasser,/mob/living/simple_animal))
-		var/mob/living/simple_animal/A=trespasser
-		if(A.pacify_aura)
+	if(isliving(trespasser))
+		var/mob/living/L = trespasser
+		if(L.pacify_aura)
 			return FALSE
 	if(istype(trespasser,/mob/living/simple_animal/complex))
 		var/mob/living/simple_animal/complex/A=trespasser
-		if(A.pacify_aura || (A.behavior_flags & ANIMAL_BEHAVIOR_UNDESIRABLE) )
+		if(A.behavior_flags & ANIMAL_BEHAVIOR_UNDESIRABLE)
 			return FALSE
 	return !is_kin(trespasser)
 

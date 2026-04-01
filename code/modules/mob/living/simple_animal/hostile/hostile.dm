@@ -169,15 +169,13 @@
 	return
 
 /mob/living/simple_animal/hostile/proc/isValidTarget(var/atom/A)//we should have made that proc long ago instead of expanding CanAttack()
+	if(isliving(A))
+		var/mob/living/L = A
+		if(L.pacify_aura)
+			return FALSE
 	if(istype(A,/mob/living/simple_animal))
 		var/mob/living/simple_animal/SA=A
 		if(SA.is_poisonous && avoids_poisonous )
-			return FALSE
-		if(SA.pacify_aura)
-			return FALSE
-	if(istype(A,/mob/living/simple_animal/complex))
-		var/mob/living/simple_animal/complex/CA=A
-		if(CA.pacify_aura)
 			return FALSE
 	return !loneliness_affected(A)
 
@@ -231,15 +229,9 @@
 			if (ref.get() == L)
 				return 0
 
-		//don't attack things which pacify (eg pillows or capybaras)
-		if(istype(L,/mob/living/simple_animal))
-			var/mob/living/simple_animal/SA = L
-			if (SA.pacify_aura)
-				return 0
-		if(istype(L,/mob/living/simple_animal/complex))
-			var/mob/living/simple_animal/complex/CA=L
-			if(CA.pacify_aura)
-				return 0
+		//don't attack things which pacify (eg pillows, capybaras, or pacification beacon holders)
+		if(L.pacify_aura)
+			return 0
 		return 1
 	if(isobj(the_target))
 		//if(the_target.type in wanted_objects)
