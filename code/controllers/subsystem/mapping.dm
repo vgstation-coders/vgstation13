@@ -16,7 +16,6 @@
 #define STAGE_RUIN 2
 #define STAGE_POPULATION 3
 #define STAGE_WEATHER 4
-#define STAGE_FINALIZE 5
 
 /// Cell size for spatial bucketing of mobs
 #define SPATIAL_BUCKET_SIZE 15
@@ -61,7 +60,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	// Queue-based processing variables
 	/// Start time for generation tracking
 	var/generation_start_time = 0
-	/// Current processing stage: STAGE_TERRAIN, STAGE_POPULATION, STAGE_WEATHER, or STAGE_FINALIZE
+	/// Current processing stage: STAGE_TERRAIN, STAGE_RUIN, STAGE_POPULATION, or STAGE_WEATHER
 	var/current_stage = null
 	/// Queue of turfs for terrain generation
 	var/list/terrain_queue = list()
@@ -76,7 +75,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	/// Mobs created during population
 	var/list/created_mobs = list()
 	// Fast-processing lists
-	var/list/finalize_queue = list() // Queue of turfs for edge updates and finalization
 	var/list/feature_buckets = list() // Spatial buckets for features - key is "cellX_cellY", value is list of features in that cell
 	var/list/mob_buckets = list() // Spatial buckets for mobs - key is "cellX_cellY", value is list of mobs in that cell
 	var/turfs_per_tick = 300 // Base turfs processed per tick (adjusted dynamically)
@@ -126,10 +124,6 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		if(STAGE_WEATHER)
 			stage_name = "Weather"
 			progress = 100
-		if(STAGE_FINALIZE)
-			stage_name = "Finalize"
-			if(finalize_queue.len > 0)
-				progress = round((queue_index / finalize_queue.len) * 100, 1)
 
 	return ..("[stage_name] [progress]% | Tp:[turfs_processed]")
 
@@ -208,7 +202,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 			while(queue_index <= terrain_queue.len && turfs_processed < target_turfs)
 				var/turf/T = terrain_queue[queue_index]
 				if(T)
-					current_mapgen.generate_turf(T, current_virtual_z.x_min, current_virtual_z.y_min)
+					current_mapgen.generate_turf(T)
 					T.planet = current_planet
 				queue_index++
 				turfs_processed++
@@ -247,7 +241,27 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 			while(queue_index <= population_queue.len && turfs_processed < target_turfs)
 				var/turf/T = population_queue[queue_index]
 				if(T)
+					// Populate with flora, features, mobs, loot
 					current_mapgen.populate_turf(T, created_features, created_mobs, current_mapgen.planet_loot, current_planet.mob_faction)
+
+					// Inline finalization (eliminates a full extra pass over all turfs)
+					T.v = current_virtual_z
+					T.turf_flags &= ~DEFER_EDGING
+					if(T.edge_flags & EDGE_CARDINAL)
+						T.update_edges()
+
+					// Close up any remaining space turfs
+					if(istype(T, /turf/space) && current_planet.default_baseturf)
+						T.ChangeTurf(current_planet.default_baseturf)
+
+					var/area/planet/A = T.loc
+					if(istype(A) && A.is_open_surface)
+						if(current_planet.climate)
+							current_planet.climate.register_weather_turf(T)
+						// Build daynight turf list (sample every other tile)
+						if(!(T.x & 1) && !(T.y & 1))
+							current_virtual_z.daynight_turfs += T
+
 				queue_index++
 				turfs_processed++
 
@@ -256,6 +270,9 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 					return
 
 			if(queue_index > population_queue.len)
+				// Run post-processing (gas vents etc.) before moving to weather
+				if(current_mapgen)
+					current_mapgen.post_process(current_virtual_z)
 				current_stage = STAGE_WEATHER
 				queue_index = 1
 			else
@@ -265,85 +282,40 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		if(STAGE_WEATHER)
 			if(current_planet.climate_type)
 				current_planet.climate = SSweather.set_climate(current_planet.climate_type, current_virtual_z, random_start = TRUE)
+				SSweather.fire()
 
-			finalize_queue = population_queue.Copy()
-			current_stage = STAGE_FINALIZE
+			var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
+			current_virtual_z.current_timeOfDay = pick(possible_times)
+
+			switch(current_virtual_z.current_timeOfDay)
+				if(TOD_MORNING) current_virtual_z.next_firetime = world.time + 5 MINUTES
+				if(TOD_SUNRISE) current_virtual_z.next_firetime = world.time + 3 MINUTES
+				if(TOD_DAYTIME) current_virtual_z.next_firetime = world.time + 14 MINUTES
+				if(TOD_AFTERNOON) current_virtual_z.next_firetime = world.time + 15 MINUTES
+				if(TOD_SUNSET) current_virtual_z.next_firetime = world.time + 3 MINUTES
+				if(TOD_NIGHTTIME) current_virtual_z.next_firetime = world.time + 36 MINUTES
+
+			daynight_v_lvls |= current_virtual_z
+			current_virtual_z.level_type = VZ_PLANET
+			current_virtual_z.update_settings()
+			SSDayNight.flags = 0
+			SSDayNight.update_lighting(current_virtual_z, immediate = TRUE)
+
+			var/total_time = (world.timeofday - generation_start_time) / 10
+			message_admins("Planet '[current_planet.planet_name]' generated successfully at v-level [current_virtual_z.id] in [total_time]s")
+
+			generating = FALSE
+			current_planet = null
+			current_virtual_z = null
+			current_stage = null
+			current_mapgen = null
+			terrain_queue = list()
+			population_queue = list()
 			queue_index = 1
-
-		if(STAGE_FINALIZE)
-			if(current_mapgen)
-				current_mapgen.post_process(current_virtual_z)
-				current_mapgen = null
-
-			while(queue_index <= finalize_queue.len && turfs_processed < target_turfs)
-				var/turf/T = finalize_queue[queue_index]
-				if(T)
-					T.v = current_virtual_z
-					T.turf_flags &= ~DEFER_EDGING
-					if(T.edge_flags & EDGE_CARDINAL) // Edge turfs that need it
-						T.update_edges()
-
-					// Close up any remaining space turfs
-					if(istype(T, /turf/space) && current_planet.default_baseturf)
-						T.ChangeTurf(current_planet.default_baseturf)
-
-					var/area/A = T.loc
-					if(!istype(A, /area/planet/cave))
-						if(isopensurface(A) && current_planet.climate)
-							current_planet.climate.register_weather_turf(T)
-
-						// Build daynight turf list
-						if(IsEven(T.x) && IsEven(T.y))
-							if(isopensurface(A))
-								current_virtual_z.daynight_turfs += T
-
-				queue_index++
-				turfs_processed++
-
-				if(TICK_CHECK)
-					throttle(tick_start, turfs_processed)
-					return
-
-			if(queue_index > finalize_queue.len)
-				if(current_planet.climate)
-					SSweather.fire()
-
-				var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
-				current_virtual_z.current_timeOfDay = pick(possible_times)
-
-				switch(current_virtual_z.current_timeOfDay)
-					if(TOD_MORNING) current_virtual_z.next_firetime = world.time + 5 MINUTES
-					if(TOD_SUNRISE) current_virtual_z.next_firetime = world.time + 3 MINUTES
-					if(TOD_DAYTIME) current_virtual_z.next_firetime = world.time + 14 MINUTES
-					if(TOD_AFTERNOON) current_virtual_z.next_firetime = world.time + 15 MINUTES
-					if(TOD_SUNSET) current_virtual_z.next_firetime = world.time + 3 MINUTES
-					if(TOD_NIGHTTIME) current_virtual_z.next_firetime = world.time + 36 MINUTES
-
-				daynight_v_lvls |= current_virtual_z
-				current_virtual_z.level_type = VZ_PLANET
-				current_virtual_z.update_settings()
-				SSDayNight.flags = 0
-				SSDayNight.update_lighting(current_virtual_z, immediate = TRUE)
-
-				var/total_time = (world.timeofday - generation_start_time) / 10
-				message_admins("Planet '[current_planet.planet_name]' generated successfully at v-level [current_virtual_z.id] in [total_time]s")
-
-				generating = FALSE
-				current_planet = null
-				current_virtual_z = null
-				current_stage = null
-				current_mapgen = null
-				terrain_queue = list()
-				population_queue = list()
-				finalize_queue = list()
-				queue_index = 1
-				created_features = null
-				created_mobs = null
-				feature_buckets = list()
-				mob_buckets = list()
-			else
-				throttle(tick_start, turfs_processed)
-				return
+			created_features = null
+			created_mobs = null
+			feature_buckets = list()
+			mob_buckets = list()
 
 	// Adjust processing rate based on performance
 	if(turfs_processed > 0)
@@ -446,9 +418,26 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	var/chosen_planet_type = input(user, "Select a planet type to generate:", "Planet Generation") as null|anything in planet_types
 	if(!chosen_planet_type)
 		return
+
+	var/list/size_options = list(
+		"Small (92x92) (~1min)" = ALLOCATION_SMALL,
+		"Quadrant (245x245) (~5min)" = ALLOCATION_QUADRANT,
+		"Full (500x500) (~1hr)" = ALLOCATION_FULL,
+		"Custom" = 0
+	)
+	var/chosen_size = input(user, "Select planet size:", "Planet Size") as null|anything in size_options
+	if(!chosen_size)
+		return
+	var/allocation_size = size_options[chosen_size]
+	if(!allocation_size)
+		allocation_size = input(user, "Enter planet dimension (creates a square NxN planet, min 50, max 500):", "Custom Planet Size", ALLOCATION_SMALL) as null|num
+		if(!allocation_size)
+			return
+		allocation_size = clamp(round(allocation_size), 50, 500)
+
 	var/hide_from_scanner = alert(user, "Should this planet be hidden from the Deep Space Scanner?", "Scanner Visibility", "No", "Yes") == "Yes"
 
-	SSmapping.spawn_planet(chosen_planet_type, hide_from_scanner)
+	SSmapping.spawn_planet(chosen_planet_type, hide_from_scanner, allocation_size)
 
 // Tries to place a new virtual zLevel of given size within the specified zLevel
 /datum/subsystem/mapping/proc/try_place_vz(var/datum/zLevel/check_z, var/size_x, var/size_y, var/spacing)
@@ -519,7 +508,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
  * Returns:
  * * TRUE if generation started successfully, FALSE if already generating
  */
-/datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, hide_from_scanner = FALSE)
+/datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, hide_from_scanner = FALSE, size_override = 0)
 	if(generating)
 		message_admins("Planet generation already in progress! Please wait for '[current_planet.planet_name]' to complete.")
 		return FALSE
@@ -527,8 +516,9 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	// Initialize generation state
 	generation_start_time = world.timeofday
 	current_planet = new planet_datum
-	current_mapgen = new current_planet.mapgen(ALLOCATION_SMALL)
-	current_virtual_z = map.addVLevel(ALLOCATION_SMALL, null, TRUE)
+	var/alloc_size = size_override ? size_override : current_planet.allocation_size
+	current_mapgen = new current_planet.mapgen(alloc_size)
+	current_virtual_z = map.addVLevel(alloc_size, null, TRUE)
 	current_virtual_z.teleJammed = VZ_TELEPORTATION_EXPENSIVE
 
 	planets += current_planet
@@ -550,6 +540,10 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	current_mapgen.cave_area.planet = current_planet
 	current_mapgen.cave_area.v = current_virtual_z
 
+
+	// Store coordinate offsets on the generator for biome grid lookups
+	current_mapgen.x_offset = current_virtual_z.x_min
+	current_mapgen.y_offset = current_virtual_z.y_min
 
 	// Prepare terrain queue
 	terrain_queue = current_virtual_z.get_turfs()
@@ -588,5 +582,4 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 #undef STAGE_RUIN
 #undef STAGE_POPULATION
 #undef STAGE_WEATHER
-#undef STAGE_FINALIZE
 #undef SPATIAL_BUCKET_SIZE

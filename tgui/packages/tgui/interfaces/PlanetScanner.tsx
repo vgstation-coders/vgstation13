@@ -46,7 +46,6 @@ const STAGE_TERRAIN = 1;
 const STAGE_RUIN = 2;
 const STAGE_POPULATION = 3;
 const STAGE_WEATHER = 4;
-const STAGE_FINALIZE = 5;
 
 export const PlanetScanner = (props) => {
   const { act, data } = useBackend<Data>();
@@ -243,7 +242,7 @@ export const PlanetScanner = (props) => {
                         <ProgressBar
                           value={generation_stage >= STAGE_WEATHER ? 100 : 0}
                           maxValue={100}
-                          color={generation_stage >= STAGE_FINALIZE ? "good" : generation_stage >= STAGE_WEATHER ? "average" : "default"}
+                          color={generation_stage >= STAGE_WEATHER ? "good" : generation_stage >= STAGE_POPULATION ? "average" : "default"}
                         />
                       </Stack.Item>
                     </Stack>
