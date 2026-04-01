@@ -179,7 +179,7 @@ var/list/special_fruits = list()
 					H.drop_item(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/after_consume(var/mob/living/carbon/human/H)
-	if((seed.thorny || arcanetampered) && istype(H))
+	if((seed?.thorny || arcanetampered) && istype(H))
 		var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
 		if(affecting)
 			if(thorns_apply_damage(H, affecting))

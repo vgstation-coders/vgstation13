@@ -9,6 +9,7 @@
 	siemens_coefficient = 1
 	flammable = TRUE
 	vent_use = TRUE
+	var/obj/item/device/assembly/attached = null
 
 	var/tmp/spam_flag = 0 //To prevent mashing the button to cause annoyance like a huge idiot.
 	var/selected_sound = "sound/items/bikehorn.ogg"
@@ -72,18 +73,37 @@
 	shiftpitch = text2num(assblast["shiftpitch"])
 	volume = text2num(assblast["volume"])
 
-/obj/item/device/soundsynth/attack_self(mob/user as mob)
+/obj/item/device/soundsynth/proc/play()
 	if(spam_flag + 2 SECONDS < world.timeofday)
 		playsound(src, selected_sound, volume, shiftpitch)
 		spam_flag = world.timeofday
 
+/obj/item/device/soundsynth/attack_self(mob/user as mob)
+	play()
+
 /obj/item/device/soundsynth/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	if(M == user)
 		pick_sound()
-	else if(spam_flag + 2 SECONDS < world.timeofday)
-		M.playsound_local(get_turf(src), selected_sound, volume, shiftpitch)
-		spam_flag = world.timeofday
-		//to_chat(M, selected_sound) //this doesn't actually go to their chat very much at all.
+	else
+		play()
+
+/obj/item/device/soundsynth/attackby(obj/item/W, mob/user)
+	. = ..()
+	if(attached && W.is_screwdriver())
+		to_chat(user,"<span class='warning'>You remove \the [attached] from \the [src].</span>")
+		W.playtoolsound(src, 50)
+		attached.forceMove(get_turf(src))
+		attached = null
+	else if(!attached && istype(W,/obj/item/device/assembly))
+		var/obj/item/device/assembly/A = W
+		if(!A.secured)
+			to_chat(user,"<span class='warning'>Secure \the [A] first!</span>")
+		else if(user.drop_item(A,src))
+			attached = A
+			to_chat(user,"<span class='notice'>You add \the [attached] to \the [src].</span>")
+
+/obj/item/device/soundsynth/assembly_pulse(var/obj/item/device/assembly/A)
+	play()
 
 /obj/item/device/soundsynth/emag_act(mob/user)
 	spark(src,5,FALSE)
@@ -97,6 +117,8 @@
 	..()
 	if(emagged && user.is_holding_item(src))
 		to_chat(user, "<span class='warning'>ERR%_m(mo4y corr?pt+d</span>")
+	if(attached && user.Adjacent(src))
+		to_chat(user, "<span class='notice'>There seems to be \a [attached] underneath.</span>")
 
 /obj/item/device/soundsynth/AltClick()
 	if(!usr.incapacitated() && Adjacent(usr))

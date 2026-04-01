@@ -43196,6 +43196,11 @@
 	name = "Trader Dock Shutters"
 	},
 /obj/structure/plasticflaps/mining,
+/obj/item/device/deskbell/signaler/trader{
+	pixel_x = 6;
+	pixel_y = 8;
+	name = "Trade Counter Bell"
+	},
 /turf/simulated/floor/vox{
 	name = "floor"
 	},

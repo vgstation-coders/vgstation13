@@ -17014,8 +17014,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
@@ -48703,8 +48702,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/science/lab)
@@ -49579,8 +49577,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/medical/genetics)
@@ -52476,8 +52473,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/medical/genetics)
@@ -55933,8 +55929,7 @@
 "cbc" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -55942,8 +55937,7 @@
 "cbd" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -59544,8 +59538,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/door/poddoor{
 	density = 0;
@@ -63702,14 +63695,6 @@
 	icon_state = "whitegreen"
 	},
 /area/science/hallway)
-"cpI" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/maintenance/asmaint2)
 "cpJ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -63717,17 +63702,6 @@
 	},
 /obj/structure/window/reinforced{
 	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/maintenance/asmaint2)
-"cpK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -66165,8 +66139,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -75689,8 +75662,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
@@ -75716,8 +75688,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /obj/structure/disposalpipe/segment,
@@ -95456,8 +95427,7 @@
 "dVc" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -110733,6 +110703,11 @@
 /obj/machinery/door/window{
 	name = "Tradeship Windoor";
 	req_one_access_txt = "140"
+	},
+/obj/item/device/deskbell/signaler/trader{
+	pixel_x = 6;
+	pixel_y = -12;
+	name = "Trade Ship Counter Bell"
 	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -268244,7 +268219,7 @@ clc
 bRM
 cno
 coG
-cpI
+cbc
 aaa
 aaj
 aaa
@@ -268746,7 +268721,7 @@ cld
 bRM
 cnp
 coG
-cpI
+cbc
 aaa
 aaj
 aaa
@@ -269248,7 +269223,7 @@ clh
 bRM
 bYs
 coG
-cpK
+cbd
 aaa
 aaj
 aaa
@@ -271767,7 +271742,7 @@ bYs
 cvr
 crE
 cwT
-cpI
+cbc
 aaa
 aaa
 aaa
@@ -272269,7 +272244,7 @@ cur
 bym
 cvX
 cwT
-cpI
+cbc
 aaa
 aaa
 aaa
@@ -272771,7 +272746,7 @@ cus
 cvq
 cvY
 cwT
-cpK
+cbd
 aaa
 aaa
 aaa

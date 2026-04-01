@@ -1132,6 +1132,7 @@ var/list/tagger_locations = list()
 /obj/machinery/autoprocessor/outfit
 	name = "auto outfitter"
 	desc = "Automatically applies an outfit to people inside."
+	machine_flags = SCREWTOGGLE | CROWDESTROY
 	circuitpath = /obj/item/weapon/circuitboard/autoprocessor/outfit
 
 	var/outfit_type = /datum/outfit/assistant

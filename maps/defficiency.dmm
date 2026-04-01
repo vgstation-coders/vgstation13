@@ -39465,8 +39465,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/door/poddoor{
 	density = 0;
@@ -97061,6 +97060,11 @@
 	id_tag = "TSdisplay";
 	name = "Tradeship Display Shutters"
 	},
+/obj/item/device/deskbell/signaler/trader{
+	pixel_x = 10;
+	pixel_y = -5;
+	name = "Trade Ship Counter Bell"
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -109833,11 +109837,11 @@
 	},
 /area/engineering/engine)
 "keO" = (
-/obj/docking_port{
-	dir = 2
-	},
 /obj/machinery/door/airlock/external{
 	name = "Arrival Airlock"
+	},
+/obj/docking_port/shuttle{
+	dir = 2
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
@@ -110634,8 +110638,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine)

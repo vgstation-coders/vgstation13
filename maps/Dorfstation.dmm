@@ -2076,6 +2076,11 @@
 	name = "Tradeship Windoor";
 	req_one_access_txt = "140"
 	},
+/obj/item/device/deskbell/signaler/trader{
+	pixel_y = 11;
+	pixel_x = 5;
+	name = "Trade Ship Counter Bell"
+	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},

@@ -11016,8 +11016,7 @@
 /obj/structure/cable/yellow,
 /obj/structure/window/full/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint2{
@@ -18050,8 +18049,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/table,
 /turf/simulated/floor,
@@ -18715,8 +18713,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -20557,8 +20554,7 @@
 	})
 "aQy" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/closet/crate/internals,
 /obj/effect/decal/warning_stripes{
@@ -23268,8 +23264,7 @@
 "aVj" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/machinery/disposal/deliveryChute{
 	dir = 4;
@@ -30302,8 +30297,7 @@
 /area)
 "bhk" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -30316,8 +30310,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -30665,8 +30658,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -31529,8 +31521,7 @@
 /area/turret_protected/ai)
 "bjr" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -33305,8 +33296,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/space,
 /area)
@@ -46506,8 +46496,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/lattice,
 /turf/space,
@@ -74050,8 +74039,7 @@
 /area/medical/genetics)
 "cEY" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -76178,8 +76166,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/machinery/light{
 	dir = 4
@@ -78419,8 +78406,7 @@
 	icon_state = "bot"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -83171,8 +83157,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/hallway/secondary/exit)
@@ -83181,8 +83166,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
@@ -83190,8 +83174,7 @@
 "cUG" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -85664,8 +85647,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/cable/yellow{
@@ -85910,8 +85892,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -87842,8 +87823,7 @@
 	icon_state = "14"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
@@ -87859,8 +87839,7 @@
 	icon_state = "17"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
@@ -87870,8 +87849,7 @@
 	icon_state = "9"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
@@ -90993,8 +90971,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -99544,15 +99521,6 @@
 	},
 /turf/space,
 /area)
-"dUd" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/space,
-/area)
 "dVb" = (
 /obj/effect/landmark/map_element/djsat,
 /turf/space,
@@ -100707,6 +100675,11 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/item/device/deskbell/signaler/trader{
+	pixel_x = 10;
+	pixel_y = -5;
+	name = "Trade Ship Counter Bell"
+	},
 /turf/simulated/floor/carpet,
 /area/shuttle/trade/start)
 "eac" = (
@@ -101521,8 +101494,7 @@
 "ecx" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -113558,8 +113530,7 @@
 /area/mine/living_quarters)
 "eAO" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/mine/living_quarters)
@@ -113568,8 +113539,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/mine/living_quarters)
@@ -115259,8 +115229,7 @@
 /area)
 "eGq" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating/vox,
@@ -115421,8 +115390,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -115788,8 +115756,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -115825,8 +115792,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -117037,20 +117003,6 @@
 	},
 /obj/machinery/door/mineral/wood,
 /turf/simulated/floor/vox/wood,
-/area)
-"eLa" = (
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/vox,
 /area)
 "eLb" = (
 /obj/structure/window/full/reinforced,
@@ -283073,7 +283025,7 @@ bhm
 aTn
 bsH
 bNw
-dUd
+bmD
 aTg
 bhj
 aTg
@@ -292082,7 +292034,7 @@ abl
 abl
 aPX
 aRG
-dUd
+bmD
 aTg
 aTg
 aTg
@@ -1486464,10 +1486416,10 @@ eJe
 eKn
 eJe
 eJe
-eLa
+eGT
 eHn
 eLp
-eLa
+eGT
 eHn
 dOD
 dOD

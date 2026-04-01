@@ -158,8 +158,7 @@
 /area/vault/mothership_lab/administration)
 "bp" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/photocopier,
 /obj/structure/window/reinforced{
@@ -1305,8 +1304,7 @@
 	},
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/habitation)
@@ -1619,8 +1617,7 @@
 /obj/item/weapon/paper_bin/yellow,
 /obj/item/weapon/pen,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
@@ -1950,8 +1947,7 @@
 	tag = "icon-warning (EAST)"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
@@ -2472,8 +2468,7 @@
 	},
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/paper_bin/yellow,
 /obj/item/weapon/pen,
@@ -2747,8 +2742,7 @@
 	tag = "icon-warning (EAST)"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -2902,8 +2896,7 @@
 "yR" = (
 /obj/structure/closet/emcloset,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -3115,8 +3108,7 @@
 	tag = "icon-warning (WEST)"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -3629,8 +3621,7 @@
 "FS" = (
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/paper_bin/yellow,
 /obj/item/weapon/pen,
@@ -5507,8 +5498,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/storage/firstaid/regular,
 /obj/item/weapon/storage/firstaid/regular,
