@@ -275,6 +275,9 @@
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
 			new /obj/item/stack/sheet/metal(loc, 2)
+			if(watersource)
+				watersource.forceMove(loc)
+				watersource = null
 			qdel(src)
 		return
 
