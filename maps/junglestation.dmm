@@ -3127,12 +3127,6 @@
 "bky" = (
 /turf/simulated/floor/wood,
 /area/djstation)
-"bkA" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/fenced)
 "ble" = (
 /turf/space/transit/south,
 /area)
