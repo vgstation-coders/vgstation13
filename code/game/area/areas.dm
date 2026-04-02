@@ -469,7 +469,7 @@ var/area/space_area
 /area/Exited(atom/movable/Obj)
 	var/turf/T = get_turf(Obj)
 	var/datum/virtual_z/new_v = T.v
-	if(!new_v || v != new_v)
+	if(v && (!new_v || v != new_v))
 		if(istype(Obj, /mob/living))
 			var/mob/living/L = Obj
 			v.mob_exited(L)
