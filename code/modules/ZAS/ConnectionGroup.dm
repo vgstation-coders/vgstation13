@@ -189,7 +189,7 @@ Class Procs:
 	return A == Z
 
 /connection_edge/unsimulated/tick()
-	if(A.invalid)
+	if(A.invalid || !air)
 		erase()
 		return
 
