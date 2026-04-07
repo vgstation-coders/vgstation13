@@ -18,6 +18,7 @@ type PlanetData = {
   icon_data: string;
   beacons: BeaconData[];
   has_active_beacon: boolean;
+  is_encounter: boolean;
 };
 
 type Data = {
@@ -253,7 +254,7 @@ export const PlanetScanner = (props) => {
 
               {!!has_discoveries && !scanning && !waiting_for_generation && (
                 <Stack.Item grow>
-                  <Section title="Discovered Planets">
+                  <Section title="Discoveries">
                     <Stack>
                       <Stack.Item width="280px">
                         <Box textAlign="center">
@@ -268,8 +269,8 @@ export const PlanetScanner = (props) => {
                               imageRendering: 'pixelated',
                             }}
                           />
-                          <Box mt={1} fontSize="12px" color="label">
-                            {currentPlanet ? currentPlanet.name : 'No Planet Type'}
+                          <Box mt={1} fontSize="12px" color={currentPlanet?.is_encounter ? "average" : "label"}>
+                            {currentPlanet ? currentPlanet.name : 'No Data'}
                           </Box>
                         </Box>
                       </Stack.Item>

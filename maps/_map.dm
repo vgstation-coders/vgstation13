@@ -68,6 +68,7 @@
 
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
+	var/list/load_custom_fixedvaults = list() //don't use this
 	var/center_x = 226
 	var/center_y = 254
 

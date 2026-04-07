@@ -230,11 +230,10 @@ var/global/list/all_docking_ports = list()
 
 		var/teleporter_typepath = /obj/effect/step_trigger/teleporter/random/shuttle_transit
 
-		var/area/shuttle_area = D.linked_shuttle.linked_area
-		for(var/turf/T in shuttle_area)
+		for(var/turf/T in D.linked_shuttle.shuttle_contents())
 			for(var/dir in cardinal)
 				var/turf/check = get_step(T, dir)
-				if(check.loc != shuttle_area) //Turf doesn't belong to a shuttle
+				if(!D.linked_shuttle.has_area(check.loc)) //Turf doesn't belong to a shuttle
 					if(!locate(teleporter_typepath) in check)
 						new teleporter_typepath(check)
 

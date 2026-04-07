@@ -639,11 +639,11 @@ For vending packs, see vending_packs.dm*/
 	if(SSsupply_shuttle.cargo_forwards.len == 0)
 		return 0
 	for(var/datum/cargo_forwarding/CF in SSsupply_shuttle.cargo_forwards)
-		if(!CF.associated_crate || get_area(CF.associated_crate) != cargo_shuttle.linked_area)
+		if(!CF.associated_crate || !cargo_shuttle.has_area(get_area(CF.associated_crate)))
 			return 1
 		if(!CF.weighed)
 			return 1
-		if(!CF.associated_manifest || get_area(CF.associated_manifest) != cargo_shuttle.linked_area)
+		if(!CF.associated_manifest || !cargo_shuttle.has_area(get_area(CF.associated_manifest)))
 			return 1
 		if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
 			return 1

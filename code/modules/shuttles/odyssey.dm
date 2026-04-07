@@ -1,0 +1,38 @@
+var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shuttle/odyssey)
+
+/datum/shuttle/odyssey
+	name = "NTEV Odyssey"
+	cant_leave_zlevel = list()
+	dir = EAST
+
+	cooldown = 60 SECONDS
+	transit_delay = 30 SECONDS
+	stable = 0
+
+	req_access = list(access_captain)
+
+/datum/shuttle/odyssey/initialize()
+	.=..()
+	add_dock(/obj/docking_port/destination/odyssey/outpost)
+	add_dock(/obj/docking_port/destination/odyssey/deep_space)
+	add_dock(/obj/docking_port/destination/odyssey/dj_sat)
+	add_dock(/obj/docking_port/destination/odyssey/derelict)
+
+/obj/machinery/computer/shuttle_control/odyssey
+	name = "NTEV Odyssey shuttle control computer"
+
+/obj/machinery/computer/shuttle_control/odyssey/New()
+	link_to(odyssey_shuttle)
+	.=..()
+
+/obj/docking_port/destination/odyssey/outpost
+	areaname = "NT Outpost"
+
+/obj/docking_port/destination/odyssey/deep_space
+	areaname = "deep space"
+
+/obj/docking_port/destination/odyssey/dj_sat
+	areaname = "abandoned dj satellite"
+
+/obj/docking_port/destination/odyssey/derelict
+	areaname = "derelict space station"

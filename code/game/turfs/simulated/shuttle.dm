@@ -289,3 +289,118 @@
 		icon_state = "podcomputer"
 
 
+/obj/item/stack/shuttle_panel
+	name = "shuttle panel"
+	desc = "A prefabricated wall panel used in shuttle construction. Apply it to a secured metal girder to build a shuttle wall. The panel can be sliced off with a welder."
+	singular_name = "shuttle panel"
+	icon = 'icons/turf/shuttle.dmi'
+	icon_state = "panel"
+	w_class = W_CLASS_LARGE
+	max_amount = 60
+	flags = FPRINT
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
+	perunit = CC_PER_SHEET_METAL
+	w_type = RECYK_METAL
+	melt_temperature = MELTPOINT_STEEL
+	origin_tech = Tc_MATERIALS + "=1"
+	var/wall_type = /turf/simulated/wall/shuttle/panel
+
+/obj/item/stack/shuttle_panel/black
+	name = "black shuttle panel"
+	desc = "A prefabricated wall panel used in shuttle construction, finished in matte black. Apply it to a secured metal girder to build a black shuttle wall. The panel can be sliced off with a welder."
+	singular_name = "black shuttle panel"
+	icon_state = "panel_black"
+	wall_type = /turf/simulated/wall/shuttle/panel/black
+
+/turf/simulated/wall/shuttle/panel
+	name = "shuttle wall"
+	desc = "A wall built from shuttle panels bolted to a girder."
+	flags = 0
+	hardness = 60
+	explosion_block = 1
+	var/panel_type = /obj/item/stack/shuttle_panel
+
+/turf/simulated/wall/shuttle/panel/black
+	name = "black shuttle wall"
+	desc = "A wall built from black shuttle panels bolted to a girder."
+	icon_state = "bswall0"
+	walltype = "bswall"
+	panel_type = /obj/item/stack/shuttle_panel/black
+
+/turf/simulated/wall/shuttle/panel/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	user.delayNextAttack(8)
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+	if(iswelder(W))
+		var/obj/item/tool/weldingtool/WT = W
+		if(WT.isOn() && WT.get_fuel() >= 1)
+			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer panel.</span>", \
+				"<span class='notice'>You begin slicing through \the [src]'s outer panel.</span>", \
+				"<span class='warning'>You hear welding noises.</span>")
+			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			if(WT.do_weld(user, src, 100, 1))
+				if(!istype(src))
+					return
+				playsound(src, 'sound/items/Welder.ogg', 100, 1)
+				user.visible_message("<span class='warning'>[user] slices off \the [src]'s outer panel.</span>", \
+					"<span class='notice'>You slice off \the [src]'s outer panel.</span>", \
+					"<span class='warning'>You hear welding noises.</span>")
+				var/pdiff = performWallPressureCheck(src)
+				if(pdiff)
+					investigation_log(I_ATMOS, "with a pdiff of [pdiff] dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+					message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+				dismantle_wall()
+		return
+	return ..()
+
+/turf/simulated/wall/shuttle/panel/dismantle_wall(devastated = 0, explode = 0)
+	if(!devastated)
+		new panel_type(src, 1)
+		if(girder_type)
+			new girder_type(src)
+	else
+		new /obj/item/stack/sheet/metal(src)
+	for(var/obj/O in src.contents)
+		if(istype(O, /obj/effect/cult_shortcut))
+			qdel(O)
+		if(istype(O, /obj/structure/sign/poster))
+			var/obj/structure/sign/poster/P = O
+			P.roll_and_drop(src)
+	if(peepers)
+		reset_view()
+	ChangeTurf(dismantle_type)
+	update_near_walls()
+
+/turf/simulated/wall/shuttle/panel/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			ChangeTurf(get_underlying_turf())
+			return
+		if(2.0)
+			if(prob(50))
+				dismantle_wall(0, 1)
+			else
+				dismantle_wall(1, 1)
+			return
+		if(3.0)
+			if(prob(40))
+				dismantle_wall(0, 1)
+			return
+
+/turf/simulated/wall/shuttle/panel/attack_animal(var/mob/living/simple_animal/M)
+	M.delayNextAttack(8)
+	if(M.environment_smash_flags & SMASH_WALLS)
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		dismantle_wall(1)
+		M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
+			"<span class='attack'>You smash through \the [src].</span>")
+
+/turf/simulated/wall/shuttle/panel/singularity_pull(S, current_size)
+	if(current_size >= STAGE_FIVE)
+		if(prob(75))
+			dismantle_wall()
+		return
+	if(current_size == STAGE_FOUR)
+		if(prob(30))
+			dismantle_wall()

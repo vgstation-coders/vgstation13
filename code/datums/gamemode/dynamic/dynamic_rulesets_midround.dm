@@ -1063,7 +1063,9 @@
 
 
 /datum/dynamic_ruleset/midround/from_ghosts/prisoner/proc/can_move_shuttle()
-	var/contents = get_contents_in_object(transport_shuttle.linked_area)
+	var/list/contents = list()
+	for(var/area/shuttle_area in transport_shuttle.linked_areas)
+		contents += get_contents_in_object(shuttle_area)
 	if (locate(/mob/living) in contents)
 		return FALSE
 	if (locate(/obj/item/weapon/disk/nuclear) in contents)

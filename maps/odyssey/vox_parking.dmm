@@ -1,0 +1,3079 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"bm" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"dF" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"fL" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/power/terminal,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"ir" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk8"
+	},
+/turf/space,
+/area/vox_station/northeast_solars)
+"iS" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"js" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"jC" = (
+/obj/machinery/door/airlock/external{
+	name = "Solar Farm";
+	req_access_txt = "140"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"jZ" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/turf/space,
+/area/vox_station/northeast_solars)
+"kq" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk4"
+	},
+/turf/space,
+/area/vox_station/northeast_solars)
+"kK" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/terminal,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"kM" = (
+/turf/simulated/wall,
+/area/vox_station/northeast_solars)
+"kU" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"lN" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"mY" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk3"
+	},
+/obj/structure/inflatable/door,
+/turf/space,
+/area/vox_station/northeast_solars)
+"nD" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "solarfarm";
+	name = "Solar Farm Array"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/vox_station/northeast_solars)
+"tO" = (
+/obj/machinery/power/battery_port,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/power/battery/portable{
+	anchored = 1
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"tP" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"vo" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"vt" = (
+/obj/machinery/power/battery_port,
+/obj/machinery/power/battery/portable{
+	anchored = 1
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"xe" = (
+/turf/space,
+/area)
+"yA" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"yE" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk3"
+	},
+/turf/space,
+/area/vox_station/northeast_solars)
+"zR" = (
+/obj/structure/lattice,
+/obj/docking_port/destination/trade/start{
+	areaname = "Solar Farm"
+	},
+/turf/space,
+/area)
+"Bf" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"BM" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/inflatable/door,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"BU" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/turf/space,
+/area/vox_station/northeast_solars)
+"EO" = (
+/obj/machinery/door/airlock/external{
+	name = "Solar Farm";
+	req_access_txt = "140"
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"FS" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"HG" = (
+/obj/structure/lattice,
+/obj/machinery/docklight{
+	id_tag = "Solar Farm";
+	name = "trade docking light"
+	},
+/turf/space,
+/area)
+"Ls" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"Mf" = (
+/obj/structure/cable,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/machinery/power/solar/control{
+	id_tag = "solarfarm";
+	name = "Solar Control"
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"Mw" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"Oj" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/turf/space,
+/area/vox_station/northeast_solars)
+"PD" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/space,
+/area/vox_station/northeast_solars)
+"Rk" = (
+/obj/item/tool/wrench,
+/obj/item/tool/crowbar,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"TE" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "solarfarm";
+	name = "Solar Farm Array"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/vox_station/northeast_solars)
+"WF" = (
+/obj/structure/hanging_lantern,
+/obj/machinery/computer/shuttle_control/trade,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"Xr" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"Xy" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/solar/panel/tracker,
+/obj/structure/catwalk{
+	icon_state = "catwalk2"
+	},
+/turf/space,
+/area/vox_station/northeast_solars)
+"Zq" = (
+/obj/item/weapon/storage/toolbox,
+/obj/machinery/power/apc{
+	locked = 0;
+	name = "Outpost APC";
+	pixel_y = -24;
+	req_access = null
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"Zv" = (
+/obj/effect/landmark/start{
+	name = "Trader"
+	},
+/turf/simulated/floor/plating/vox,
+/area/vox_station/northeast_solars)
+"ZH" = (
+/obj/structure/lattice,
+/obj/structure/girder,
+/turf/space,
+/area/vox_station/northeast_solars)
+
+(1,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(2,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(3,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(4,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(5,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(6,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(7,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(8,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(9,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(10,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(11,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(12,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(13,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(14,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(15,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(16,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(17,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+TE
+kq
+nD
+TE
+kq
+nD
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(18,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+TE
+BU
+nD
+TE
+BU
+nD
+FS
+FS
+FS
+FS
+HG
+FS
+FS
+FS
+FS
+HG
+FS
+FS
+FS
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(19,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+TE
+BU
+nD
+TE
+BU
+nD
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(20,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+TE
+BU
+nD
+TE
+BU
+nD
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(21,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+TE
+BU
+nD
+TE
+BU
+nD
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(22,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+FS
+jZ
+FS
+FS
+jZ
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+HG
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(23,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+ZH
+tP
+Ls
+Ls
+kU
+bm
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(24,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+lN
+Bf
+dF
+dF
+js
+EO
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(25,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+vo
+fL
+vt
+Zv
+Rk
+lN
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(26,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+Xy
+yE
+mY
+jC
+BM
+Mf
+Zv
+WF
+Mw
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(27,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+vo
+kK
+tO
+Zv
+Zq
+kM
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(28,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+Xr
+iS
+dF
+dF
+yA
+EO
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(29,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+ZH
+tP
+Ls
+Ls
+kU
+bm
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+HG
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(30,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+FS
+PD
+FS
+FS
+PD
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(31,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+TE
+Oj
+nD
+TE
+Oj
+nD
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+zR
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(32,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+TE
+Oj
+nD
+TE
+Oj
+nD
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(33,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+TE
+Oj
+nD
+TE
+Oj
+nD
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(34,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+TE
+Oj
+nD
+TE
+Oj
+nD
+FS
+FS
+FS
+FS
+HG
+FS
+FS
+FS
+FS
+HG
+FS
+FS
+FS
+FS
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(35,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+FS
+TE
+ir
+nD
+TE
+ir
+nD
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(36,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+FS
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(37,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(38,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(39,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(40,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(41,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(42,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(43,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(44,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(45,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(46,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(47,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(48,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(49,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}
+(50,1,1) = {"
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+xe
+"}

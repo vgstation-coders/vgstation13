@@ -587,3 +587,7 @@
 	overlays.Cut()
 	overlays += mutable_appearance(icon='icons/turf/floors.dmi', icon_state="plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
 	overlays += mutable_appearance(icon='icons/turf/catwalks.dmi', icon_state="[icon_state]_olay", layer = PAINT_LAYER, plane = TURF_PLANE)
+
+/turf/simulated/floor/plated_catwalk/dark
+	icon_state = "pcat0d"
+	catwalk_suffix = "d"

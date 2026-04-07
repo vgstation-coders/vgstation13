@@ -307,6 +307,10 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	null,
 	new/datum/stack_recipe("computer frame", /obj/structure/computerframe,                      5, time = 25, one_per_turf = 1			    ),
 	new/datum/stack_recipe("wall girders",   /obj/structure/girder,                             2, time = 50, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe_list("shuttle panels", list(
+		new/datum/stack_recipe("shuttle panel",       /obj/item/stack/shuttle_panel,       1, 1, 60, time = 10),
+		new/datum/stack_recipe("black shuttle panel", /obj/item/stack/shuttle_panel/black, 1, 1, 60, time = 10),
+		)),
 	new/datum/stack_recipe("railings",   /obj/structure/railing/loose,             				2, time = 25, on_floor = 1),
 	new/datum/stack_recipe("firelock frame", /obj/item/firedoor_frame,                          5, time = 50),
 	new/datum/stack_recipe("machine frame",  /obj/machinery/constructable_frame/machine_frame,  5, time = 25, one_per_turf = 1, on_floor = 1),
@@ -417,6 +421,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe("station holomap frame",     /obj/item/mounted/frame/station_map,          3, time = 25, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("light fixture frame",       /obj/item/mounted/frame/light_fixture,        2                                           ),
 		new/datum/stack_recipe("small light fixture frame", /obj/item/mounted/frame/light_fixture/small,  1                                           ),
+		new/datum/stack_recipe("floor light frame",         /obj/item/floor_light_frame,                  2                                           ),
 		new/datum/stack_recipe("embedded controller frame", /obj/item/mounted/frame/airlock_controller,   2, time = 50, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("access button frame",       /obj/item/mounted/frame/access_button,        1, time = 50, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("airlock sensor frame",      /obj/item/mounted/frame/airlock_sensor,       1, time = 50, one_per_turf = 0, on_floor = 1),

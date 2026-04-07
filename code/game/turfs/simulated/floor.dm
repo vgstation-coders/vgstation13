@@ -54,6 +54,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	//plated catwalk vars
 	var/hatch_installed = FALSE
 	var/hatch_open = FALSE
+	var/catwalk_suffix = ""
 
 /turf/simulated/floor/New()
 	create_floor_tile()
@@ -775,7 +776,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/relativewall()
 	if(is_plated_catwalk())
-		icon_state = "pcat[..()]"
+		icon_state = "pcat[..()][catwalk_suffix]"
 		overlays.Cut()
 		overlays += mutable_appearance(icon='icons/turf/floors.dmi', icon_state="plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
 		if(!hatch_open && hatch_installed)

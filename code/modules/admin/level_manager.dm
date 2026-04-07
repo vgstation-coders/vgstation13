@@ -39,10 +39,11 @@
 		z_data["ref"] = "\ref[Z]"
 		z_data["vLevelCount"] = Z.virtual_z_levels.len
 		z_data["hasHolomap"] = ((HOLOMAP_EXTRA_STATIONMAP + "_[Z.z]") in extraMiniMaps)
+		z_data["usesHolomap"] = !istype(Z, /datum/zLevel/dynamic)
 
-		// Check if map is active - holomap for z <= 6, MindUI for z > 6
+		// Check if map is active - holomap for static z-levels, MindUI for dynamic
 		var/map_active = FALSE
-		if(Z.z <= 6)
+		if(z_data["usesHolomap"])
 			map_active = (active_holomap_z == Z.z)
 		else if(user && user.mind && ("zlevel_map" in user.mind.activeUIs))
 			var/datum/mind_ui/zlevel_map/zmap = user.mind.activeUIs["zlevel_map"]
@@ -343,8 +344,8 @@
 				to_chat(usr, "<span class='warning'>Invalid z-level reference.</span>")
 				return FALSE
 
-			// Check if z <= 6: show holomap, else show MindUI
-			if(Z.z <= 6)
+			// Static z-levels use holomap, dynamic z-levels use MindUI
+			if(!istype(Z, /datum/zLevel/dynamic))
 				// Toggle holomap for base z-levels
 				if(active_holomap_z == Z.z)
 					// Close currently active holomap
@@ -433,6 +434,7 @@
 		if("create_vlevel")
 			var/list/vlevel_options = list(
 				"Generate Planet",
+				"Generate Encounter",
 				"Load Map Element",
 				"Create Transit Level",
 				"Manual Creation"
@@ -442,6 +444,45 @@
 				return FALSE
 
 			switch(vlevel_choice)
+				if("Generate Encounter")
+					// Get list of available shuttles
+					var/list/shuttle_names = list()
+					for(var/datum/shuttle/S in shuttles)
+						shuttle_names[S.name] = S
+
+					if(!shuttle_names.len)
+						to_chat(usr, "<span class='warning'>No shuttles available!</span>")
+						return FALSE
+
+					var/shuttle_choice = input(usr, "Select a shuttle for the encounter:", "Generate Encounter") as null|anything in shuttle_names
+					if(!shuttle_choice)
+						return FALSE
+
+					var/datum/shuttle/chosen_shuttle = shuttle_names[shuttle_choice]
+
+					if(!chosen_shuttle.linked_port)
+						to_chat(usr, "<span class='warning'>Shuttle has no linked docking port!</span>")
+						return FALSE
+
+					if(!chosen_shuttle.linked_area)
+						to_chat(usr, "<span class='warning'>Shuttle has no linked area!</span>")
+						return FALSE
+
+					var/enc_width = input(usr, "Enter encounter width (tiles, 30-255):", "Encounter Width", 80) as null|num
+					if(!enc_width || enc_width < 30 || enc_width > 255)
+						return FALSE
+					var/enc_height = input(usr, "Enter encounter height (tiles, 30-255):", "Encounter Height", enc_width) as null|num
+					if(!enc_height || enc_height < 30 || enc_height > 255)
+						return FALSE
+
+					var/datum/virtual_z/enc_vz = SSmapping.generate_encounter(enc_width, enc_height, chosen_shuttle)
+					if(enc_vz)
+						log_admin("[key_name(usr)] generated encounter for shuttle '[shuttle_choice]' (vZ: [enc_vz.id], Size: [enc_width]x[enc_height]).")
+						message_admins("<span class='notice'>[key_name_admin(usr)] generated encounter for shuttle '[shuttle_choice]' (vZ: [enc_vz.id], Size: [enc_width]x[enc_height]).</span>", 1)
+					else
+						to_chat(usr, "<span class='warning'>Failed to generate encounter! The vlevel may be too small for the selected shuttle.</span>")
+					return TRUE
+
 				if("Generate Planet")
 					// Open the procedural generation panel
 					var/datum/admins/admin_holder = usr.client?.holder

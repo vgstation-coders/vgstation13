@@ -28,7 +28,8 @@
 						,/datum/event/thing_storm/fireworks)
 
 	load_map_elements = list(
-	/datum/map_element/dungeon/holodeck/holodeck_3x3
+	/datum/map_element/dungeon/holodeck/holodeck_3x3,
+	/datum/map_element/dungeon/mecha_graveyard
 	)
 	has_engines = TRUE
 

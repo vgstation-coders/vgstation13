@@ -1,3 +1,113 @@
+// Encounter datum - represents a scanner-discovered encounter zone
+/datum/encounter
+	var/name = "Deep Space Encounter"
+	var/encounter_name = "Unknown Signal"
+	var/desc = "Anomalous readings detected in this sector of deep space."
+	var/icon/ico
+	var/datum/virtual_z/v
+	var/hidden = FALSE
+	var/list/placed_bounds = list() // list of list(x_min, y_min, x_max, y_max) for vault positions
+	var/list/shuttle_docking_ports = list() // shuttle datum -> docking port
+
+/datum/encounter/New()
+	..()
+	encounter_name = generate_encounter_name()
+	desc = generate_encounter_desc()
+	ico = icon('icons/ui/planet_scanner/128x128.dmi', "bg")
+	var/icon/fg = icon('icons/ui/planet_scanner/64x64.dmi', "encounter")
+	ico.Blend(fg, ICON_OVERLAY, 32, 32)
+
+/datum/encounter/proc/generate_encounter_name()
+	var/list/prefixes = list("Unknown", "Anomalous", "Uncharted", "Distress", "Faint", "Encrypted", "Fragmented", "Recurring")
+	var/list/types = list("Signal", "Beacon", "Transmission", "Reading", "Signature", "Contact", "Echo")
+	var/designation = "[pick("A","B","C","D","E","F","G","H","K","L","M","N","P","R","S","T","V","X","Z")]-[rand(100,999)]"
+	return "[pick(prefixes)] [pick(types)] [designation]"
+
+/datum/encounter/proc/generate_encounter_desc()
+	var/list/descriptions = list(
+		"Long-range sensors have detected unusual energy signatures emanating from this region. The source remains unidentified.",
+		"A cluster of artificial structures has been detected drifting in this sector. Origin unknown.",
+		"Faint electromagnetic emissions suggest the presence of derelict technology in this area.",
+		"Sensor sweeps reveal anomalous material compositions inconsistent with natural stellar phenomena.",
+		"Fragmented subspace transmissions have been triangulated to this location. Contents undecipherable.",
+		"Gravitometric analysis indicates the presence of dense artificial objects in otherwise empty space.",
+		"Residual radiation patterns suggest recent activity in this sector. No active transponders detected."
+	)
+	return pick(descriptions)
+
+/// Creates or returns an existing docking port for the given shuttle on this encounter's vlevel
+/datum/encounter/proc/get_shuttle_docking_port(datum/shuttle/shuttle)
+	if(!shuttle?.linked_port || !shuttle.linked_area || !v)
+		return null
+
+	// Return existing port if still valid
+	var/obj/docking_port/destination/existing = shuttle_docking_ports[shuttle]
+	if(existing?.loc)
+		return existing
+	shuttle_docking_ports -= shuttle
+
+	var/list/dims = shuttle.get_size()
+	if(!dims)
+		return null
+	var/shuttle_width = dims[1]
+	var/shuttle_height = dims[2]
+
+	var/list/offsets = shuttle.get_docking_port_offset()
+	if(!offsets || offsets.len < 2)
+		return null
+	var/port_offset_x = offsets[1]
+	var/port_offset_y = offsets[2]
+
+	var/buffer = 5
+	if(v.size_x < shuttle_width + 2 * buffer || v.size_y < shuttle_height + 2 * buffer)
+		return null
+
+	var/safe_x_min = v.x_min + buffer
+	var/safe_x_max = v.x_max - shuttle_width - buffer + 1
+	var/safe_y_min = v.y_min + buffer
+	var/safe_y_max = v.y_max - shuttle_height - buffer + 1
+
+	// Find a position for the shuttle that doesn't overlap vaults
+	var/bl_x = 0
+	var/bl_y = 0
+	var/found = FALSE
+	for(var/attempt = 1 to 50)
+		var/try_x = rand(safe_x_min, safe_x_max)
+		var/try_y = rand(safe_y_min, safe_y_max)
+		var/shuttle_x_max = try_x + shuttle_width + 1
+		var/shuttle_y_max = try_y + shuttle_height + 1
+		var/shuttle_x_min = try_x - 2
+		var/shuttle_y_min = try_y - 2
+
+		var/valid = TRUE
+		for(var/list/bounds in placed_bounds)
+			if(!(shuttle_x_max < bounds[1] || shuttle_x_min > bounds[3] || shuttle_y_max < bounds[2] || shuttle_y_min > bounds[4]))
+				valid = FALSE
+				break
+
+		if(valid)
+			bl_x = try_x
+			bl_y = try_y
+			found = TRUE
+			break
+
+	if(!found)
+		return null
+
+	// Place docking port
+	var/turf/port_base = locate(bl_x + port_offset_x, bl_y + port_offset_y, v.z())
+	var/turf/port_turf = get_step(port_base, shuttle.linked_port.dir)
+	var/port_dir = turn(shuttle.linked_port.dir, 180)
+
+	var/obj/docking_port/destination/dock = new(port_turf)
+	dock.dir = port_dir
+	dock.areaname = encounter_name
+	dock.base_turf_type = /turf/space
+	dock.link_to_shuttle(shuttle)
+
+	shuttle_docking_ports[shuttle] = dock
+	return dock
+
 // Configuration constants
 #define PLANET_SCANNER_MAX_SCANS 25
 #define PLANET_SCANNER_BASE_ENERGY_COST 1000000 // Base energy cost in Joules
@@ -180,8 +290,8 @@
 		data["generation_stage"] = null
 		data["generation_progress"] = null
 
-	// Planet discoveries
-	data["has_discoveries"] = SSmapping?.planets.len > 0
+	// Discoveries (planets + encounters)
+	data["has_discoveries"] = (SSmapping?.planets.len > 0) || (SSmapping?.encounters.len > 0)
 	data["discovered_planets"] = get_planet_list_data()
 
 	return data
@@ -216,13 +326,11 @@
 
 	return 0
 
-/// Build the list of discovered planets for the UI
-/// Returns: List of planet data dictionaries, or null if no planets discovered
+/// Build the list of discoveries (planets + encounters) for the UI
+/// Returns: List of discovery data dictionaries, or null if none found
 /obj/machinery/planet_scanner/proc/get_planet_list_data()
-	if(!SSmapping?.planets.len)
-		return null
-
 	var/list/planet_data = list()
+
 	for(var/datum/planet_type/planet in SSmapping.planets)
 		if(planet.hidden)
 			continue
@@ -233,6 +341,7 @@
 		planet_info["type"] = planet.type
 		planet_info["procedural_name"] = planet.planet_name
 		planet_info["icon_data"] = icon2base64(planet.ico)
+		planet_info["is_encounter"] = FALSE
 
 		// Get all beacons on this planet
 		var/list/beacons = list()
@@ -257,7 +366,21 @@
 		planet_info["has_active_beacon"] = has_active_beacon
 		planet_data += list(planet_info)
 
-	return planet_data
+	for(var/datum/encounter/enc in SSmapping.encounters)
+		if(enc.hidden)
+			continue
+
+		var/list/enc_info = list()
+		enc_info["name"] = enc.name
+		enc_info["desc"] = enc.desc
+		enc_info["procedural_name"] = enc.encounter_name
+		enc_info["icon_data"] = icon2base64(enc.ico)
+		enc_info["is_encounter"] = TRUE
+		enc_info["beacons"] = list()
+		enc_info["has_active_beacon"] = FALSE
+		planet_data += list(enc_info)
+
+	return planet_data.len ? planet_data : null
 
 /obj/machinery/planet_scanner/ui_act(action, params)
 	. = ..()
@@ -277,23 +400,38 @@
 			print_destination_disk(usr, planet_index)
 			return TRUE
 
-/// Validate that a planet index from the UI is valid
+/// Validate that a discovery index from the UI is valid
 /// Args:
-///   planet_index - 0-indexed planet index from the frontend
+///   planet_index - 0-indexed index from the frontend (covers planets + encounters)
 ///   user - The mob to send error messages to
 /// Returns: TRUE if valid, FALSE otherwise
 /obj/machinery/planet_scanner/proc/validate_planet_index(planet_index, mob/user)
-	if(!SSmapping || !SSmapping.planets || !SSmapping.planets.len)
+	var/datum/discovery = get_discovery_by_ui_index(planet_index)
+	if(!discovery)
 		if(user)
-			to_chat(user, "<span class='warning'>No planets discovered.</span>")
+			to_chat(user, "<span class='warning'>Invalid selection.</span>")
 		return FALSE
-
-	if(planet_index < 0 || planet_index >= SSmapping.planets.len)
-		if(user)
-			to_chat(user, "<span class='warning'>Invalid planet selected.</span>")
-		return FALSE
-
 	return TRUE
+
+/// Get a planet or encounter datum by UI index (0-indexed, matching the combined list order)
+/obj/machinery/planet_scanner/proc/get_discovery_by_ui_index(ui_index)
+	var/current = 0
+
+	for(var/datum/planet_type/planet in SSmapping.planets)
+		if(planet.hidden)
+			continue
+		if(current == ui_index)
+			return planet
+		current++
+
+	for(var/datum/encounter/enc in SSmapping.encounters)
+		if(enc.hidden)
+			continue
+		if(current == ui_index)
+			return enc
+		current++
+
+	return null
 
 /obj/machinery/planet_scanner/ui_state(mob/user)
 	return default_state
@@ -359,12 +497,17 @@
 	playsound(src, 'sound/machines/alert.ogg', 50, 1)
 	update_icon()
 
-/// Complete the current scan and spawn a new planet (energy requirement met)
+/// Complete the current scan and spawn a new planet or encounter (energy requirement met)
 /obj/machinery/planet_scanner/proc/complete_scan()
-	waiting_for_generation = TRUE
 	use_power = MACHINE_POWER_USE_IDLE // Stop consuming power
 	SSmapping.scanning = FALSE
-	spawn_new_planet()
+
+	if(prob(20)) // 20% chance of detecting an encounter instead of a planet
+		spawn_new_encounter()
+		finalize_scan()
+	else
+		waiting_for_generation = TRUE
+		spawn_new_planet()
 
 /// Finalize the scan after planet generation is complete
 /obj/machinery/planet_scanner/proc/finalize_scan()
@@ -393,40 +536,42 @@
 	var/list/available_planets = SSmapping.planet_types.Copy()
 	return pick(available_planets)
 
+/// Spawn a new encounter zone
+/obj/machinery/planet_scanner/proc/spawn_new_encounter()
+	if(!SSmapping)
+		CRASH("New encounter spawn attempted before mapping subsystem initialized")
+
+	SSmapping.generate_scanner_encounter()
+
 /obj/machinery/planet_scanner/proc/print_destination_disk(mob/user, planet_index)
 	if(world.time < last_disk_print_time + PLANET_SCANNER_DISK_PRINT_COOLDOWN)
 		to_chat(user, "<span class='warning'>Disk printer is still cooling down! Please wait [(last_disk_print_time + PLANET_SCANNER_DISK_PRINT_COOLDOWN - world.time)] seconds.</span>")
 		return FALSE
 
-	// Convert from 0-indexed frontend to 1-indexed DM list
-	var/dm_index = planet_index + 1
-
-	var/datum/planet_type/planet = get_planet_by_index(dm_index)
-	if(!planet)
-		to_chat(user, "<span class='warning'>Planet data corrupted or invalid.</span>")
+	var/datum/discovery = get_discovery_by_ui_index(planet_index)
+	if(!discovery)
+		to_chat(user, "<span class='warning'>Data corrupted or invalid.</span>")
 		return FALSE
 
-	to_chat(user, "<span class='notice'>Printing destination disk for [planet.planet_name]...</span>")
-	playsound(src, 'sound/effects/dotmatrixprinter.ogg', 40, 1)
-
 	var/obj/item/weapon/disk/shuttle_coords/procedural/disk = new(get_turf(src))
-	disk.planet_ref = planet
-	disk.header = "[planet.planet_name] Landing"
 
+	if(istype(discovery, /datum/planet_type))
+		var/datum/planet_type/planet = discovery
+		to_chat(user, "<span class='notice'>Printing destination disk for [planet.planet_name]...</span>")
+		disk.planet_ref = planet
+		disk.header = "[planet.planet_name] Landing"
+	else if(istype(discovery, /datum/encounter))
+		var/datum/encounter/enc = discovery
+		to_chat(user, "<span class='notice'>Printing destination disk for [enc.encounter_name]...</span>")
+		disk.encounter_ref = enc
+		disk.header = "[enc.encounter_name]"
+		disk.name = "encounter destination disk"
+		disk.desc = "A disk containing coordinates to a deep space encounter zone."
+
+	playsound(src, 'sound/effects/dotmatrixprinter.ogg', 40, 1)
 	last_disk_print_time = world.time
 
 	return TRUE
-
-/// Get a planet from the discovered planets list by 1-indexed position
-/// Returns: The planet datum, or null if invalid
-/obj/machinery/planet_scanner/proc/get_planet_by_index(dm_index)
-	if(!SSmapping?.planets?.len)
-		return null
-
-	if(dm_index < 1 || dm_index > SSmapping.planets.len)
-		return null
-
-	return SSmapping.planets[dm_index]
 
 
 // Cleanup defines
