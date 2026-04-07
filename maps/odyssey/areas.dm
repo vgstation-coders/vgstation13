@@ -90,6 +90,6 @@
 	name = "\improper Security Office"
 	icon_state = "security"
 
-/area/nt_outpost
+/area/surface/nt_outpost
 	name = "\improper Nanotrasen Outpost"
 	icon_state = "bluenew"

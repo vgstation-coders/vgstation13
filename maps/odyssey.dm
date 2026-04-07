@@ -75,15 +75,22 @@
 	new_vz.movementJammed = TRUE
 	new_vz.transitionLoops = FALSE
 	new_vz.base_turf = /turf/unsimulated/floor/planetary/grass/jungle
-	new_vz.base_area = /area/nt_outpost
+	new_vz.base_area = /area/surface/nt_outpost
 	new_vz.update_settings()
 	map.vLevels |= new_vz
 
 	for(var/obj/docking_port/destination/D in all_docking_ports)
 		if(D.vz() == new_vz.id)
 			D.base_turf_type = /turf/unsimulated/floor/planetary/concrete
-			D.refill_area = /area/nt_outpost
+			D.refill_area = /area/surface/nt_outpost
 	SSmapping.queue_planets(3)
+
+/datum/map/active/map_specific_init()
+	for(var/datum/virtual_z/vz in daynight_v_lvls)
+		if(vz.name == "Nanotrasen Outpost")
+			var/datum/climate/C = SSweather.set_climate(/datum/climate/temperate, vz)
+			vz.register_weather_turfs(C)
+			break
 
 ////////////////////////////////////////////////////////////////
 #undef OUTPOST_MAX_X
