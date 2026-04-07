@@ -456,12 +456,32 @@
 			cooked.forceMove(src.loc)
 			return
 		cooked = recipe.make_food(src,user)
-		stop(TRUE)
+
 		if(cooked)
+			var/obj/temp = new /obj //To prevent infinite loops, all results will be moved into a temporary location so they're not considered as inputs for other recipes
+			
+			if (cooked.reagents?.chem_temp < COOKTEMP_READY)
+				cooked.reagents?.chem_temp = COOKTEMP_READY//so cooking with frozen meat doesn't produce frozen steaks
+				cooked.update_icon()
 			adjust_cooked_food_reagents_temperature(cooked, recipe)
-			cooked.forceMove(get_output())
-			cooked.pixel_x = pixel_x - 2
-			cooked.pixel_y = pixel_y - 1
+			cooked.forceMove(temp)
+			while (select_recipe(available_recipes, src) == recipe)
+				if (!recipe)
+					break
+				var/obj/item/weapon/reagent_containers/food/snacks/I = recipe.make_food(src)
+				I.forceMove(temp)
+
+			for (var/r in temp.contents)
+				var/obj/item/weapon/reagent_containers/food/snacks/R = r
+				if (R.reagents?.chem_temp < COOKTEMP_READY)
+					R.reagents?.chem_temp = COOKTEMP_READY//so cooking with frozen meat doesn't produce frozen steaks
+					R.update_icon()
+				contents+= R
+				adjust_cooked_food_reagents_temperature(R, recipe)
+				R.forceMove(src.loc) //Move everything from the buffer back to the container	
+			qdel(temp)
+			update_icon()
+		stop(TRUE)
 		return
 
 /obj/machinery/microwave/proc/adjust_cooked_food_reagents_temperature(atom/cooked, datum/recipe/cookedrecipe)

@@ -441,13 +441,28 @@
 			cooked = cook_fail()
 
 		if(cooked)
+			var/obj/temp = new /obj //To prevent infinite loops, all results will be moved into a temporary location so they're not considered as inputs for other recipes
+			
 			if (cooked.reagents?.chem_temp < COOKTEMP_READY)
 				cooked.reagents?.chem_temp = COOKTEMP_READY//so cooking with frozen meat doesn't produce frozen steaks
 				cooked.update_icon()
-			cooked.forceMove(src)
+			cooked.forceMove(temp)
+			while (select_recipe(available_recipes, src) == currentrecipe)
+				if (!currentrecipe)
+					break
+				var/obj/item/weapon/reagent_containers/food/snacks/I = currentrecipe.make_food(src)
+				I.forceMove(temp)
+
+			for (var/r in temp.contents)
+				var/obj/item/weapon/reagent_containers/food/snacks/R = r
+				if (R.reagents?.chem_temp < COOKTEMP_READY)
+					R.reagents?.chem_temp = COOKTEMP_READY//so cooking with frozen meat doesn't produce frozen steaks
+					R.update_icon()
+				contents+= R
+				R.forceMove(src) //Move everything from the buffer back to the container	
+			qdel(temp)
 			update_icon()
 			O?.render_cookvessel()
-
 		if(contains_anything)
 			//re-check the recipe. generally this will return null because we'll continue cooking the previous result, which will lead to a burned mess
 			currentrecipe = select_recipe(available_recipes, src)

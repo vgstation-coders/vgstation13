@@ -63,7 +63,7 @@
 			var/found = FALSE
 			for(var/I in L)
 				var/reagent_amount = avail_reagents.get_reagent_amount(I)
-				if(abs(reagent_amount - reagents[r_r])<0.1)
+				if(reagent_amount - reagents[r_r]>=0)
 					found = TRUE
 					if(reagent_amount > reagents[r_r])
 						. = -1
@@ -72,7 +72,7 @@
 				return 0
 		else
 			var/reagent_amount = avail_reagents.get_reagent_amount(r_r)
-			if(abs(reagent_amount - reagents[r_r])<0.1)
+			if(reagent_amount - reagents[r_r]>=0)
 				if(reagent_amount > reagents[r_r])
 					. = -1
 			else
@@ -130,29 +130,40 @@
 		result_obj = new silver_slime_result(container)
 	else
 		result_obj = new result(container)
-	for(var/obj/O in (container.contents - result_obj))
-		if(O.arcanetampered && istype(container,/obj/machinery/microwave))
-			var/obj/machinery/microwave/M = container
-			M.fail(O.arcanetampered)
-			return
-		if(O.reagents)
-			//Should we have forbidden reagents, purge them first.
-			for(var/r_r in reagents_forbidden)
-				if(islist(r_r))
-					var/list/L = r_r
-					for(var/I in L)
-						O.reagents.del_reagent(I)
-				O.reagents.del_reagent(r_r)
+	if (items && items.len)
+		for (var/i in items)
+			var/obj/item/I = locate(i) in container
+			if (I && I.reagents)
+				if(I.arcanetampered && istype(container,/obj/machinery/microwave))
+					var/obj/machinery/microwave/M = container
+					M.fail(I.arcanetampered)
+					return
+				//Transfer any luckiness from the ingredients, to the resulting item
+				if(isitem(result_obj) && isitem(I))
+					var/obj/item/Item = I
+					var/obj/item/result_item = result_obj
+					if(Item.luckiness)
+						result_item.luckiness += Item.luckiness
+				for(var/r_r in reagents_forbidden)
+					if(islist(r_r))
+						var/list/L = r_r
+						for(var/re in L)
+							I.reagents.del_reagent(re)
+					I.reagents.del_reagent(r_r)
 			//Transfer any reagents found in the object, to the resulting object
-			O.reagents.trans_to(result_obj, O.reagents.total_volume)
-		//Transfer any luckiness from the ingredients, to the resulting item
-		if(isitem(result_obj) && isitem(O))
-			var/obj/item/I = O
-			var/obj/item/result_item = result_obj
-			if(I.luckiness)
-				result_item.luckiness += I.luckiness
-		qdel(O)
-	container.reagents.clear_reagents() //Clear all the reagents we haven't transfered, for instance if we need to cook in water
+				I.reagents.trans_to(result_obj, I.reagents.total_volume)
+			if (I)
+				qdel(I)
+		//And lastly deduct necessary quantities of reagents
+	if (reagents && reagents.len)
+		for (var/r in reagents)
+			//Doesnt matter whether or not there's enough, we assume that check is done before
+			container.reagents.remove_reagent(r, reagents[r])
+	
+
+			
+
+	//container.reagents.clear_reagents() //Clear all the reagents we haven't transfered, for instance if we need to cook in water
 	score.meals++
 	return result_obj
 
@@ -174,7 +185,7 @@
 	var/list/possible_recipes = list()
 
 	for(var/datum/recipe/recipe in available_recipes)
-		if(recipe.check_reagents(recipe_source.reagents) == exact && recipe.check_items(recipe_source) == exact)
+		if(recipe.check_reagents(recipe_source.reagents) != 0 && recipe.check_items(recipe_source) != 0)
 			possible_recipes += recipe
 	//If there is no possible recipes, return a fail
 	if(possible_recipes.len == 0)
