@@ -189,7 +189,10 @@
 	turf_biome.generate_turf(gen_turf, used_area, cave_automaton_list, cave_generation_size, x_offset, y_offset)
 
 /datum/planetGenerator/proc/populate_turf(turf/gen_turf, created_features, created_mobs, planet_loot, planet_faction = null)
-	var/datum/biome/turf_biome = get_biome(gen_turf)
+	// Inline biome grid lookup to avoid proc call overhead
+	var/rel_x = clamp(gen_turf.x - x_offset + 1, 1, cave_generation_size)
+	var/rel_y = clamp(gen_turf.y - y_offset + 1, 1, cave_generation_size)
+	var/datum/biome/turf_biome = biome_grid[cave_generation_size * (rel_y - 1) + rel_x]
 	turf_biome.populate_turf(gen_turf, created_features, created_mobs, planet_loot, planet_faction)
 
 /datum/planetGenerator/proc/post_process(datum/virtual_z/virtual_z)

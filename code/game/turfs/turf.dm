@@ -486,11 +486,13 @@
 	turf_flags |= DEFER_EDGING
 	var/turf/W = new N(src)
 	W.turf_flags |= DEFER_EDGING
-	if(world.has_round_started())
-		W.initialize()
-	W.levelupdate()
+	// Skip initialize() — DEFER_EDGING is set, no movables on fresh space turfs, area tracking done here
+	// Skip levelupdate() — fresh turfs from space have no level-1 objects to hide
+	var/area/WA = W.loc
+	if(WA)
+		WA.area_turfs += W
 
-	recalc_atom_opacity()
+	has_opaque_atom = opacity
 	if(SSlighting && SSlighting.initialized)
 		lighting_overlay = old_lighting_overlay
 		affecting_lights = old_affecting_lights

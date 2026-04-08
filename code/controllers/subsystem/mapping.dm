@@ -566,9 +566,9 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	current_mapgen.x_offset = current_virtual_z.x_min
 	current_mapgen.y_offset = current_virtual_z.y_min
 
-	// Prepare terrain queue
+	// Prepare terrain queue (population reuses the same list — no Copy() needed)
 	terrain_queue = current_virtual_z.get_turfs()
-	population_queue = terrain_queue.Copy()
+	population_queue = terrain_queue
 	current_stage = STAGE_TERRAIN
 	queue_index = 1
 

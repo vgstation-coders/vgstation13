@@ -5130,10 +5130,6 @@
 	},
 /turf/simulated/floor,
 /area/shuttle/odyssey/infirmary)
-"uO" = (
-/obj/structure/hanging_lantern,
-/turf/unsimulated/floor/planetary/concrete,
-/area/surface/nt_outpost)
 "uQ" = (
 /obj/machinery/status_display,
 /turf/simulated/wall/shuttle/panel/black,
@@ -12906,15 +12902,6 @@
 	icon_state = "floor"
 	},
 /area/surface/nt_outpost/cargo)
-"XX" = (
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/structure/railing{
-	dir = 8
-	},
-/turf/unsimulated/floor/planetary/concrete,
-/area/surface/nt_outpost)
 "Ya" = (
 /obj/machinery/computer/card,
 /obj/structure/railing{
@@ -13085,6 +13072,7 @@
 /obj/structure/railing{
 	dir = 1
 	},
+/obj/machinery/light/floor,
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
 "YD" = (
@@ -38422,7 +38410,7 @@ IY
 IY
 Bc
 Bc
-XX
+TW
 ps
 ps
 ps
@@ -38431,7 +38419,7 @@ ps
 ps
 ps
 ps
-ps
+Ij
 ba
 ot
 qZ
@@ -38733,7 +38721,7 @@ Iq
 Iq
 Iq
 Iq
-uO
+Iq
 ba
 bR
 me
@@ -40536,7 +40524,7 @@ Bc
 Bc
 Bc
 Bc
-nl
+nE
 Fi
 tF
 tF
@@ -40545,7 +40533,7 @@ tF
 fH
 OL
 Iq
-uO
+vk
 AN
 IF
 Ht
@@ -42659,7 +42647,7 @@ Iq
 Iq
 Iq
 Iq
-uO
+Iq
 ba
 TF
 WD
@@ -42961,7 +42949,7 @@ Ag
 Ag
 Ag
 Ag
-Ag
+vI
 ba
 ba
 Mz
