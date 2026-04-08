@@ -14,6 +14,7 @@
 	spine_color = "#fff"
 	spine_overlay = "#fff"
 	var/disabled_from_bundle //if true, this will not appear in the spellbook bundle
+	var/bundle_freebie //if true, if it appears in the spellbook bundle it will add another spellbook to be rolled
 
 /obj/item/weapon/spellbook/oneuse/New()
 	..()
@@ -612,7 +613,7 @@
 	icon_state ="booknorwood"
 	desc = "This book suddenly stops about 29 pages in. After, it is written 'it's over' in every language that has ever existed, will ever exist, and even in some which shouldn't theoretically exist."
 	spine_overlay = "#ff0"
-	disabled_from_bundle = TRUE //Too weak for the bundle
+	bundle_freebie = TRUE //Too weak
 
 ///// ANCIENT SPELLBOOK /////
 
