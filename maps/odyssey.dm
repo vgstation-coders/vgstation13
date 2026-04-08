@@ -51,6 +51,8 @@
 
 	center_x = 150
 	center_y = 150
+	shuttle_call_label = "Begin Bluespace Jump"
+	shuttle_cancel_label = "Cancel Bluespace Jump"
 
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category,/datum/role/blob_overmind))
@@ -86,6 +88,11 @@
 	SSmapping.queue_planets(3)
 
 /datum/map/active/map_specific_init()
+	// Replace the standard emergency shuttle controller with the Odyssey version
+	if(emergency_shuttle)
+		qdel(emergency_shuttle)
+	emergency_shuttle = new /datum/emergency_shuttle/odyssey()
+
 	for(var/datum/virtual_z/vz in daynight_v_lvls)
 		if(vz.name == "Nanotrasen Outpost")
 			var/datum/climate/C = SSweather.set_climate(/datum/climate/temperate, vz)

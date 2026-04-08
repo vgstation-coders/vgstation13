@@ -419,6 +419,10 @@
 	icon_state = "white"
 	},
 /area/surface/nt_outpost/clinic)
+"bA" = (
+/obj/machinery/status_display,
+/turf/simulated/wall/shuttle/panel/black,
+/area/shuttle/odyssey/quarters/crew)
 "bB" = (
 /turf/simulated/floor{
 	icon_state = "white"
@@ -1923,6 +1927,7 @@
 /obj/machinery/atmospherics/pipe/simple/supplymain/hidden{
 	dir = 10
 	},
+/obj/machinery/status_display,
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/logistics)
 "hF" = (
@@ -4671,6 +4676,10 @@
 	icon_state = "barber"
 	},
 /area/derelict/bar)
+"ta" = (
+/obj/machinery/status_display,
+/turf/simulated/wall/shuttle/panel/black,
+/area/shuttle/odyssey/infirmary)
 "td" = (
 /obj/machinery/disposal,
 /obj/structure/sign/vacuum{
@@ -5125,6 +5134,10 @@
 /obj/structure/hanging_lantern,
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
+"uQ" = (
+/obj/machinery/status_display,
+/turf/simulated/wall/shuttle/panel/black,
+/area/shuttle/odyssey/logistics)
 "uR" = (
 /obj/machinery/suit_storage_unit,
 /obj/machinery/suit_storage_unit,
@@ -6384,6 +6397,10 @@
 "zC" = (
 /turf/simulated/wall/invulnerable/r_wall,
 /area/surface/nt_outpost/mineral_processing)
+"zD" = (
+/obj/machinery/status_display,
+/turf/simulated/wall/shuttle/panel/black,
+/area/shuttle/odyssey/bridge)
 "zE" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4;
@@ -7466,6 +7483,10 @@
 	icon_state = "dark vault full"
 	},
 /area/shuttle/odyssey/engineering/engine_room)
+"DU" = (
+/obj/machinery/status_display,
+/turf/simulated/wall/shuttle/panel/black,
+/area/shuttle/odyssey/engineering/engine_room)
 "DV" = (
 /obj/structure/dispenser,
 /obj/effect/decal/warning_stripes{
@@ -7568,6 +7589,10 @@
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/supply)
+"Eo" = (
+/obj/machinery/status_display,
+/turf/simulated/wall/shuttle/panel/black,
+/area/shuttle/odyssey/hallway/fore)
 "Ev" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
@@ -9317,6 +9342,10 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/starboard)
+"Lu" = (
+/obj/machinery/status_display,
+/turf/simulated/wall/shuttle/panel/black,
+/area/shuttle/odyssey/engineering)
 "Lv" = (
 /obj/structure/closet/secure_closet/captains,
 /turf/simulated/floor/wood,
@@ -12665,6 +12694,10 @@
 /area/vox_trading_post/trading_floor{
 	name = "\improper Vox Casino"
 	})
+"Xj" = (
+/obj/machinery/status_display,
+/turf/simulated/wall/shuttle/panel/black,
+/area/shuttle/odyssey/cafeteria)
 "Xk" = (
 /obj/machinery/air_sensor{
 	frequency = 1441;
@@ -17862,7 +17895,7 @@ Iq
 bp
 Bi
 Bi
-Yv
+DU
 Ck
 aF
 Hd
@@ -17874,7 +17907,7 @@ VL
 fq
 Bu
 DA
-Yv
+DU
 Gz
 Gz
 od
@@ -20285,7 +20318,7 @@ RA
 PC
 PC
 PC
-mD
+Lu
 mD
 Nw
 mD
@@ -21490,7 +21523,7 @@ yh
 yh
 yh
 yh
-yh
+ta
 yh
 yh
 yh
@@ -22994,7 +23027,7 @@ Iq
 Bw
 iR
 iR
-iR
+Xj
 BD
 yh
 yh
@@ -23315,7 +23348,7 @@ Dq
 tm
 fy
 Nq
-Nq
+uQ
 Iq
 Iq
 Iq
@@ -25429,7 +25462,7 @@ jd
 Bx
 Jc
 Jh
-Nq
+uQ
 pR
 Iq
 Iq
@@ -25714,7 +25747,7 @@ Xe
 Xe
 Lp
 us
-Lp
+Eo
 cO
 cO
 cO
@@ -25728,7 +25761,7 @@ ws
 ws
 Lp
 wn
-Lp
+Eo
 uo
 uo
 uo
@@ -27542,7 +27575,7 @@ Wl
 we
 Mu
 uo
-uo
+bA
 jv
 jv
 uo
@@ -27831,13 +27864,13 @@ we
 Mn
 Zb
 tH
-Lp
+Eo
 gT
 zE
 Du
 AC
 nL
-Lp
+Eo
 ks
 SU
 iJ
@@ -29341,13 +29374,13 @@ Iq
 Iq
 NP
 Ou
-Ou
+zD
 Ya
 id
 EU
 Su
 Id
-Ou
+zD
 Ou
 Xu
 Iq

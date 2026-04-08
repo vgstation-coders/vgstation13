@@ -461,3 +461,203 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
 	world << sound('sound/AI/shuttlecalled.ogg')
+
+// Odyssey-specific emergency shuttle controller
+// Instead of calling a separate escape shuttle, the Odyssey itself performs a Bluespace jump to CentComm
+
+#define ODYSSEY_TRANSIT_TIME 90 // 90 seconds in transit
+
+/datum/emergency_shuttle/odyssey
+	var/obj/effect/overlay/bluespacify/bs_overlay // Single shared overlay instance
+
+/datum/emergency_shuttle/odyssey/process()
+	if(!online || shutdown)
+		return
+
+	var/timeleft = timeleft()
+	if(timeleft > 1e5)
+		timeleft = 0
+	if(timeleft < 0)
+		timeleft = 0
+
+	if(timeleft > 6)
+		warmup_sound = 0
+
+	// Update the odyssey shuttle's jump state based on time remaining
+	if(direction == EMERGENCY_SHUTTLE_GOING_TO_STATION)
+		if(timeleft > 300) // More than 5 min left - can still cancel, can fly to outpost
+			odyssey_shuttle.bluespace_jump_state = JUMP_COUNTDOWN
+		else if(timeleft > 0) // 5 min or less - committed, no flying
+			odyssey_shuttle.bluespace_jump_state = JUMP_COMMITTED
+
+	switch(location)
+		if(SHUTTLE_ON_STANDBY)
+
+			// --- Odyssey is in transit to centcom (3 min phase) ---
+			if(direction == EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM)
+				if(timeleft <= 0)
+					// Arrived at centcom
+					shuttle_phase("centcom", 0)
+					hyperspace_sounds("end")
+					return 1
+
+				// Engine exhaust during transit
+				for(var/obj/structure/shuttle/engine/propulsion/P in odyssey_shuttle.shuttle_contents())
+					spawn()
+						P.shoot_exhaust(backward = 3)
+				return 0
+
+			// --- Shuttle recalled back to centcom ---
+			if(timeleft > timelimit)
+				online = 0
+				direction = 0
+				endtime = null
+				odyssey_shuttle.bluespace_jump_state = JUMP_NONE
+				return 0
+
+			else if((fake_recall != 0) && (timeleft <= fake_recall))
+				recall()
+				fake_recall = 0
+				return 0
+
+			// --- Timer hit zero: begin the bluespace jump ---
+			else if(timeleft <= 0)
+				shuttle_phase("transit", 0)
+				return 1
+
+		// SHUTTLE_ON_STATION is unused for Odyssey - the ship IS the station
+
+	return 0
+
+/datum/emergency_shuttle/odyssey/recall()
+	if(shutdown)
+		return
+	if(!can_recall)
+		return
+	if(direction == EMERGENCY_SHUTTLE_GOING_TO_STATION)
+		var/timeleft = timeleft()
+		if(alert == 0)
+			if(timeleft >= 600)
+				return
+			command_alert(/datum/command_alert/emergency_shuttle_recalled)
+			world << sound('sound/AI/shuttlerecalled.ogg')
+			setdirection(EMERGENCY_SHUTTLE_RECALLED)
+			online = 1
+			odyssey_shuttle.bluespace_jump_state = JUMP_NONE
+			for(var/area/A in areas)
+				if(istype(A, /area/hallway))
+					A.readyreset()
+			return
+		else
+			captain_announce("The Bluespace jump has been cancelled.")
+			setdirection(EMERGENCY_SHUTTLE_RECALLED)
+			online = 1
+			odyssey_shuttle.bluespace_jump_state = JUMP_NONE
+			return
+
+/datum/emergency_shuttle/odyssey/shuttle_phase(phase, casual = 1)
+	switch(phase)
+		if("transit")
+			// Move Odyssey to its transit port
+			location = SHUTTLE_ON_STANDBY
+			departed = 1
+			direction = EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM
+			settimeleft(ODYSSEY_TRANSIT_TIME)
+
+			command_alert(/datum/command_alert/emergency_shuttle_left)
+			vote_preload()
+
+			odyssey_shuttle.bluespace_jump_state = JUMP_COMMITTED
+
+			// Close doors
+			for(var/obj/machinery/door/unpowered/shuttle/D in odyssey_shuttle.shuttle_contents())
+				spawn(0)
+					D.close()
+					D.locked = 1
+
+			// Fire engines
+			for(var/obj/structure/shuttle/engine/propulsion/P in odyssey_shuttle.shuttle_contents())
+				spawn()
+					P.shoot_exhaust(backward = 3)
+
+			// Move to transit
+			if(!odyssey_shuttle.move_to_dock(odyssey_shuttle.transit_port, 0, turn(odyssey_shuttle.dir, 180)))
+				message_admins("WARNING: THE ODYSSEY COULDN'T MOVE TO TRANSIT! PANIC PANIC PANIC")
+
+			hyperspace_sounds("progression")
+
+			// Add bluespacify overlay to all hyperspace turfs in transit VZ
+			if(odyssey_shuttle.transit_port)
+				var/datum/virtual_z/transit_vz = odyssey_shuttle.transit_port.get_virtual_z()
+				if(transit_vz)
+					bs_overlay = new /obj/effect/overlay/bluespacify()
+					for(var/turf/space/transit/T in transit_vz.get_turfs())
+						T.vis_contents += bs_overlay
+
+			// Switch all sound systems on the shuttle to the emergency shuttle frequency and play music
+			for(var/obj/machinery/media/receiver/boombox/wallmount/R in odyssey_shuttle.shuttle_contents())
+				R.disconnect_frequency()
+				R.media_frequency = 953
+				R.connect_frequency()
+			spawn()
+				for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
+					SJ.playing = 1
+					SJ.update_music()
+					SJ.update_icon()
+
+		if("centcom")
+			vote_preload()
+			location = EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM
+
+			// Sell items the crew brought
+			for(var/atom/movable/MA in odyssey_shuttle.shuttle_contents())
+				if(MA.anchored && !ismecha(MA))
+					continue
+				if(istype(MA, /obj/structure/closet/crate))
+					for(var/obj/A in MA)
+						SSsupply_shuttle.SellObjToOrders(A, 1, TRUE)
+				else
+					SSsupply_shuttle.SellObjToOrders(MA, 0, TRUE)
+
+				for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
+					O.cargo_contribution = 0
+					if(O.CheckFulfilled())
+						if(!istype(O, /datum/centcomm_order/per_unit))
+							O.Pay()
+						SSsupply_shuttle.centcomm_orders.Remove(O)
+						for(var/obj/machinery/computer/supplycomp/S in SSsupply_shuttle.supply_consoles)
+							S.say("Central Command request fulfilled!")
+							playsound(S, 'sound/machines/info.ogg', 50, 1)
+
+			if(ticker)
+				ticker.mode.ShuttleDocked(2)
+
+			// Move Odyssey to centcom dock
+			odyssey_shuttle.open_all_doors()
+			if(!odyssey_shuttle.move_to_dock(odyssey_shuttle.dock_centcom, 0, odyssey_shuttle.dir))
+				message_admins("WARNING: THE ODYSSEY COULDN'T MOVE TO CENTCOMM! PANIC PANIC PANIC")
+
+			// Unbolt and open the starboard airlocks
+			for(var/obj/machinery/door/airlock/A in odyssey_shuttle.shuttle_contents())
+				if(A.id_tag == "starboard_int_airlock" || A.id_tag == "starboard_ext_airlock")
+					spawn(0)
+						A.locked = 0
+						A.open(1)
+
+			online = 0
+
+/datum/emergency_shuttle/odyssey/hyperspace_sounds(phase)
+	var/frequency = get_rand_frequency()
+	switch(phase)
+		if("progression")
+			for(var/mob/M in player_list)
+				if(M && M.client)
+					var/turf/M_turf = get_turf(M)
+					if(M_turf.z == odyssey_shuttle.linked_port.z)
+						M.playsound_local(odyssey_shuttle.linked_port, 'sound/machines/hyperspace_progress.ogg', 75 - (get_dist(odyssey_shuttle.linked_port, M_turf) * 2), 1, frequency, falloff = 5)
+		if("end")
+			for(var/mob/M in player_list)
+				if(M && M.client)
+					var/turf/M_turf = get_turf(M)
+					if(M_turf.z == odyssey_shuttle.linked_port.z)
+						M.playsound_local(odyssey_shuttle.linked_port, 'sound/machines/hyperspace_end.ogg', 75 - (get_dist(odyssey_shuttle.linked_port, M_turf) * 2), 1, frequency, falloff = 5)

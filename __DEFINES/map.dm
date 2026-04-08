@@ -61,6 +61,11 @@
 #define VZ_TELEPORTATION_EXPENSIVE		(1<<1)  // Teleportation is allowed using real Bluespace Crystals
 #define VZ_TELEPORTATION_FORBIDDEN		(1<<2)  // Teleportation is forbidden
 
+// Odyssey bluespace jump states
+#define JUMP_NONE 0
+#define JUMP_COUNTDOWN 1
+#define JUMP_COMMITTED 2
+
 // This v-level is a...
 #define VZ_TRANSIT		1		// shuttle transit area
 #define VZ_PARKING		2		// shuttle parking area (unused for now)

@@ -53,6 +53,8 @@
 	//Fuck the preprocessor
 	var/dorf = 0
 	var/linked_to_centcomm = 1
+	var/shuttle_call_label = "Call Shuttle"
+	var/shuttle_cancel_label = "Cancel Shuttle"
 
 	//Disable holominimaps on generation, map-wide. If you're just testing things out, change config.txt instead.
 	var/disable_holominimap_generation = 0
