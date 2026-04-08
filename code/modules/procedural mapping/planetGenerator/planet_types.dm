@@ -42,6 +42,8 @@
 	var/ruin_budget = RUIN_BUDGET_PLANET
 	// Virtual z level this planet exists on
 	var/datum/virtual_z/v
+	// Allocation size for this planet's virtual z-level
+	var/allocation_size = ALLOCATION_SMALL
 
 
 /datum/planet_type/New()
