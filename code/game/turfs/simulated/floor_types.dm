@@ -579,8 +579,14 @@
 	desc = "A hybrid floor tile-catwalk which provides visibility and easy access to pipes and wires beneath it."
 	plane = TURF_PLANE
 	layer = PAINT_LAYER
+	intact = 0
 	hatch_installed = TRUE
 	hatch_open = FALSE
+
+/turf/simulated/floor/plated_catwalk/create_floor_tile()
+	if(!floor_tile)
+		floor_tile = new /obj/item/stack/tile/plated_catwalk(null)
+		floor_tile.amount = 1
 
 /turf/simulated/floor/plated_catwalk/New()
 	..()

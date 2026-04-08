@@ -30,7 +30,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 /datum/subsystem/mapping
 	name       = "Mapping"
 	init_order = SS_INIT_MAP
-	flags      = SS_BACKGROUND
+	flags      = SS_BACKGROUND | SS_FIRE_IN_LOBBY
 	priority   = SS_PRIORITY_MAPPING
 	wait       = 0.5 SECONDS
 
@@ -208,8 +208,8 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 /datum/subsystem/mapping/fire(resumed = FALSE)
 	if(!generating)
 		if(queued_planets.len)
-			var/datum/planet_type/next_planet = pick_n_take(queued_planets)
-			if(!istype(next_planet))
+			var/next_planet = pick_n_take(queued_planets)
+			if(!ispath(next_planet, /datum/planet_type) && !istype(next_planet, /datum/planet_type))
 				return
 			spawn_planet(next_planet, FALSE)
 		else
@@ -520,11 +520,9 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		biomes[biome_path] += biome_instance
 
 /datum/subsystem/mapping/proc/queue_planets(var/count = 1)
-	var/list/planet_queue = list()
 	var/list/available_planets = SSmapping.planet_types.Copy()
 	for(var/i = 1 to count)
-		planet_queue += pick(available_planets)
-	return planet_queue
+		queued_planets += pick(available_planets)
 
 /**
  * Spawns a new planet asynchronously with optional ruin

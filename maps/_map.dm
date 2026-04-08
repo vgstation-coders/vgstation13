@@ -179,6 +179,7 @@
 	var/shuttle_height = dims[2]
 	var/datum/virtual_z/new_vz = addVLevel(shuttle_width + 2*buffer, shuttle_height + 2*buffer, system = system)
 	new_vz.name = "[shuttle.name] - transit area"
+	new_vz.level_type = VZ_TRANSIT
 	new_vz.linked_shuttle = shuttle
 	for(var/turf/T in new_vz.get_turfs(FALSE))
 		var/turf/space/transit/t_turf = T.ChangeTurf(/turf/space/transit,0,0,1,0)

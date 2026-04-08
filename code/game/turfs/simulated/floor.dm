@@ -744,7 +744,10 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/levelupdate()
 	if(is_plated_catwalk())
-		return
+		intact = 0
+		for(var/obj/O in src)
+			if(O.level == LEVEL_BELOW_FLOOR)
+				O.hide(0)
 	else
 		..()
 

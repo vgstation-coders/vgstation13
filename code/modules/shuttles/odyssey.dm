@@ -18,6 +18,14 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 	add_dock(/obj/docking_port/destination/odyssey/dj_sat)
 	add_dock(/obj/docking_port/destination/odyssey/derelict)
 
+	var/obj/docking_port/destination/transit/transit = generate_transit_area(src)
+	if(transit)
+		set_transit_dock(transit)
+
+	var/obj/docking_port/destination/parking = generate_parking_area(src)
+	if(parking)
+		add_dock(parking)
+
 /obj/machinery/computer/shuttle_control/odyssey
 	name = "NTEV Odyssey shuttle control computer"
 

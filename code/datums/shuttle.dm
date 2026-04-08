@@ -193,15 +193,19 @@
 	for(var/area/shuttle_area in linked_areas)
 		all_area_turfs += shuttle_area.area_turfs
 	for(var/turf/T in all_area_turfs)
-		var/skipturf = FALSE
-		if(!isopensurface(T) || !istype(T,/turf/space))
-			for(var/obj/O in T.contents)
-				if(istype(O,/obj/structure/shuttle))
-					if(istype(T,/turf/space))
-						skipturf = TRUE
-						break
-			if(skipturf)
-				continue
+		if(isshuttleturf(T))
+			T.turf_flags |= SHUTTLE_TURF
+			continue
+		// Non-shuttle-type turfs containing shuttle exterior structures (engines,
+		// corners, catwalks) are ground the shuttle sits on — space, planetary
+		// surface, or another shuttle's hangar floor. Only the objects should
+		// move with the shuttle; the underlying turf stays behind.
+		var/has_shuttle_structure = FALSE
+		for(var/obj/O in T.contents)
+			if(istype(O, /obj/structure/shuttle) || istype(O, /obj/structure/catwalk))
+				has_shuttle_structure = TRUE
+				break
+		if(!has_shuttle_structure)
 			T.turf_flags |= SHUTTLE_TURF
 	return
 
@@ -908,14 +912,14 @@
 		var/area/source_area = turf_source_areas[old_turf] || linked_area
 		source_area.contents.Add(new_turf)
 		new_turf.change_area(old_area,source_area)
-		if(isshuttleturf(old_turf) || (old_turf.turf_flags & SHUTTLE_TURF))
+		var/is_shuttle_turf = isshuttleturf(old_turf) || (old_turf.turf_flags & SHUTTLE_TURF)
+		if(is_shuttle_turf)
 			new_turf.ChangeTurf(old_turf.type, allow = 1)
 			new_turf.turf_flags |= SHUTTLE_TURF
 			old_turf.turf_flags &= ~SHUTTLE_TURF
 		new_turfs[C] = new_turf
 
 		old_turf.pixel_y = initial(old_turf.pixel_y)
-		new_turf.pixel_y = old_turf.pixel_y
 
 		//***Remove old turf from shuttle's area****
 
@@ -927,56 +931,54 @@
 			if(!AM.can_shuttle_move(src))
 				AM.change_area(source_area,refill_area)
 
-		if(old_turf.transform)
-			new_turf.transform = old_turf.transform
+		// Only copy turf visual properties for actual shuttle turfs.
+		// Non-shuttle turfs (planetary ground, space with exterior structures)
+		// should not have their appearance transferred to the destination.
+		if(is_shuttle_turf)
+			new_turf.pixel_y = old_turf.pixel_y
 
-		//****Prepare underlays**** (only do this if add_underlay is 1 -> see above)
-		if(add_underlay && undlay)
-			new_turf.underlays = list(undlay) //Remove all old underlays, add space
-		else
-			new_turf.underlays = old_turf.underlays
-		/*
-		if(ispath(replaced_turf_type,/turf/space))//including the transit hyperspace turfs
-			if(old_turf.underlays.len)
-				new_turf.underlays = old_turf.underlays
+			if(old_turf.transform)
+				new_turf.transform = old_turf.transform
+
+			//****Prepare underlays**** (only do this if add_underlay is 1 -> see above)
+			if(add_underlay && undlay)
+				new_turf.underlays = list(undlay) //Remove all old underlays, add space
 			else
-				new_turf.underlays += undlay
-		else
-			new_turf.underlays += undlay*/
+				new_turf.underlays = old_turf.underlays
 
-		if(!istype(old_turf, /turf/space))
-			new_turf.dir = old_turf.dir
-			new_turf.icon_state = old_turf.icon_state
-			new_turf.icon = old_turf.icon
-			new_turf.plane = old_turf.plane
-			new_turf.layer = old_turf.layer
-			new_turf.color = old_turf.color
+			if(!istype(old_turf, /turf/space))
+				new_turf.dir = old_turf.dir
+				new_turf.icon_state = old_turf.icon_state
+				new_turf.icon = old_turf.icon
+				new_turf.plane = old_turf.plane
+				new_turf.layer = old_turf.layer
+				new_turf.color = old_turf.color
 
-			//***Moving the paint overlay****
-			new_turf.paint_overlay = old_turf.paint_overlay
-			if (new_turf.paint_overlay)
-				new_turf.paint_overlay.my_turf = new_turf
-				new_turf.update_paint_overlay()
-				old_turf.overlays.len = 0
-				old_turf.paint_overlay = null
+				//***Moving the paint overlay****
+				new_turf.paint_overlay = old_turf.paint_overlay
+				if (new_turf.paint_overlay)
+					new_turf.paint_overlay.my_turf = new_turf
+					new_turf.update_paint_overlay()
+					old_turf.overlays.len = 0
+					old_turf.paint_overlay = null
 
-			//***Moving decals****
-			if (old_turf.turfdecals && old_turf.turfdecals.len > 0)
-				for (var/image/decal in old_turf.turfdecals)
-					new_turf.AddDecal(decal)
+				//***Moving decals****
+				if (old_turf.turfdecals && old_turf.turfdecals.len > 0)
+					for (var/image/decal in old_turf.turfdecals)
+						new_turf.AddDecal(decal)
 
-		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
-		// Floor turfs create their `floor_tile` in New() if it's null.
-		// The better solution would be to not do that at all in New(), or use
-		// something like the map loader's atom preloader to transfer the
-		// floor_tile before New().
-		if(istype(old_turf, /turf/simulated/floor) && istype(new_turf, /turf/simulated/floor))
-			var/turf/simulated/floor/ancient = old_turf
-			var/turf/simulated/floor/modern = new_turf
-			modern.floor_tile = ancient.floor_tile
-			ancient.floor_tile = null
-		if(rotate)
-			new_turf.map_element_rotate(rotate)
+			// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
+			// Floor turfs create their `floor_tile` in New() if it's null.
+			// The better solution would be to not do that at all in New(), or use
+			// something like the map loader's atom preloader to transfer the
+			// floor_tile before New().
+			if(istype(old_turf, /turf/simulated/floor) && istype(new_turf, /turf/simulated/floor))
+				var/turf/simulated/floor/ancient = old_turf
+				var/turf/simulated/floor/modern = new_turf
+				modern.floor_tile = ancient.floor_tile
+				ancient.floor_tile = null
+			if(rotate)
+				new_turf.map_element_rotate(rotate)
 
 		//*****Move air*****
 

@@ -133,10 +133,13 @@
 	v = vz
 	. = ..(loc, P)
 
-	offset_x = -ZMAP_UI_SIZE/2 + floor((v.x_min-1)/2) + ZMAP_UI_PADDING
-	offset_y = -ZMAP_UI_SIZE/2 + floor((v.y_min-1)/2) + ZMAP_UI_PADDING
-	var/new_width = v.size_x / 2
-	var/new_height = v.size_y / 2
+	var/usable_size = ZMAP_UI_SIZE - 2 * ZMAP_UI_PADDING
+	var/scale_x = usable_size / world.maxx
+	var/scale_y = usable_size / world.maxy
+	offset_x = -ZMAP_UI_SIZE/2 + floor((v.x_min-1) * scale_x) + ZMAP_UI_PADDING
+	offset_y = -ZMAP_UI_SIZE/2 + floor((v.y_min-1) * scale_y) + ZMAP_UI_PADDING
+	var/new_width = max(round(v.size_x * scale_x), 1)
+	var/new_height = max(round(v.size_y * scale_y), 1)
 
 	var/type_desc
 	var/type_color
