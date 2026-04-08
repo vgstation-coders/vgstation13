@@ -202,7 +202,7 @@
 		// move with the shuttle; the underlying turf stays behind.
 		var/has_shuttle_structure = FALSE
 		for(var/obj/O in T.contents)
-			if(istype(O, /obj/structure/shuttle) || istype(O, /obj/structure/catwalk))
+			if(istype(O, /obj/structure/shuttle/diag_wall) || istype(O, /obj/structure/catwalk))
 				has_shuttle_structure = TRUE
 				break
 		if(!has_shuttle_structure)
@@ -368,6 +368,12 @@
 	if(broadcast)
 		broadcast.announce("The shuttle has received your message and will be sent [time].")
 
+	// Retract all deployed ROSAs on the shuttle before takeoff
+	for(var/obj/machinery/power/rosa/rosa in rosa_machines)
+		if(rosa.deployed && has_area(get_area(rosa)))
+			spawn()
+				rosa.retract()
+
 	animate_liftoff()
 	if(eject)
 		eject_mobs()
@@ -444,10 +450,15 @@
 	if(!destination_port)
 		return
 
+	// Safety: force-retract any ROSAs that haven't finished retracting
+	for(var/obj/machinery/power/rosa/rosa in rosa_machines)
+		if(rosa.deployed && has_area(get_area(rosa)))
+			rosa.force_retract()
+
 	var/datum/virtual_z/vz = destination_port.get_virtual_z()
 	if(vz.planet)
 		vz.spawn_lz_warnings(src)
-	if(transit_port && get_transit_delay())
+	if(transit_port && get_transit_delay() && destination_port != transit_port)
 		if(transit_check())
 			close_all_doors()
 			previous_port = current_port
@@ -464,16 +475,17 @@
 			spawn(get_transit_delay())
 				complete_flight()
 			var/obj/docking_port/destination/initial_d = destination_port
-			spawn(transit_timeout)
-				if(destination_port && initial_d == destination_port && current_port == transit_port)
-					log_game("[name] ([type]) timed out in transit after [transit_timeout / 10] seconds, returning to previous port.")
-					var/obj/docking_port/destination/return_port = previous_port
-					destination_port = null
-					if(return_port && !return_port.docked_with)
-						move_to_dock(return_port)
-						open_all_doors()
-					moving = 0
-					previous_port = null
+			if(transit_timeout > 0)
+				spawn(transit_timeout)
+					if(destination_port && initial_d == destination_port && current_port == transit_port)
+						log_game("[name] ([type]) timed out in transit after [transit_timeout / 10] seconds, returning to previous port.")
+						var/obj/docking_port/destination/return_port = previous_port
+						destination_port = null
+						if(return_port && !return_port.docked_with)
+							move_to_dock(return_port)
+							open_all_doors()
+						moving = 0
+						previous_port = null
 			return
 
 	complete_flight()

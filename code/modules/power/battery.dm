@@ -118,6 +118,7 @@ var/global/list/battery_online =	list(
 	// Misc
 	var/name_tag = ""
 	var/infinite_power = FALSE //makes the machine just generate power itself
+	var/external_power_supply = FALSE //outputs power at set level without draining stored charge
 
 	//Holders for powerout event.
 	var/last_output = 0
@@ -206,9 +207,11 @@ var/global/list/battery_online =	list(
 	// Output
 	if (online && get_powernet()) // how can discharge be real if our powernet isn't real
 		lastout = output
-		output = min(charge / SMESRATE, outputlevel) // Limit output to that stored
-
-		charge -= output * SMESRATE // Reduce the storage (may be recovered in /restore() if excessive)
+		if(external_power_supply)
+			output = outputlevel // External supply matches demand, no charge drain
+		else
+			output = min(charge / SMESRATE, outputlevel) // Limit output to that stored
+			charge -= output * SMESRATE // Reduce the storage (may be recovered in /restore() if excessive)
 
 		add_avail(output) // Add output to powernet (smes side)
 
@@ -226,6 +229,10 @@ var/global/list/battery_online =	list(
  */
 /obj/machinery/power/battery/proc/restore()
 	if (stat & BROKEN)
+		return
+
+	if (external_power_supply) // External supply provides free power - don't absorb excess back into charge
+		lastexcess = 0
 		return
 
 	var/_chargedisplay = chargedisplay()

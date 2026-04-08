@@ -327,6 +327,11 @@
 	walltype = "bswall"
 	panel_type = /obj/item/stack/shuttle_panel/black
 
+/turf/simulated/wall/shuttle/panel/isSmoothableNeighbor(atom/A)
+	if(!A)
+		return 0
+	return is_type_in_list(A, canSmoothWith()) && !(cannotSmoothWith() && (is_type_in_list(A, cannotSmoothWith())))
+
 /turf/simulated/wall/shuttle/panel/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if(!user.dexterity_check())

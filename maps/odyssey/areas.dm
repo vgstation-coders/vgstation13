@@ -1,6 +1,7 @@
 /area/shuttle/odyssey
 	name = "\improper NTEV Odyssey"
 	icon_state = "shuttle"
+	requires_power = 1
 
 /area/shuttle/odyssey/bridge
 	name = "\improper Bridge"
@@ -93,3 +94,24 @@
 /area/surface/nt_outpost
 	name = "\improper Nanotrasen Outpost"
 	icon_state = "bluenew"
+	requires_power = 0
+
+/area/surface/nt_outpost/admin
+	name = "\improper Outpost Administration"
+	icon_state = "conference"
+
+/area/surface/nt_outpost/cargo
+	name = "\improper Outpost Cargo"
+	icon_state = "cargo_bay"
+
+/area/surface/nt_outpost/clinic
+	name = "\improper Outpost Clinic"
+	icon_state = "virology"
+
+/area/surface/nt_outpost/store
+	name = "\improper Outpost Store"
+	icon_state = "blue"
+
+/area/surface/nt_outpost/mineral_processing
+	name = "\improper Mineral Processing"
+	icon_state = "mining_production"

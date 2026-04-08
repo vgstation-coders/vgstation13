@@ -52,6 +52,6 @@
 
 	var/obj/docking_port/destination/result = new(destination_turf)
 	result.dir = turn(shuttle.linked_port.dir, 180)
-	result.areaname = "[shuttle.name] parking"
+	result.areaname = "[shuttle.name] deep space parking"
 
 	return result

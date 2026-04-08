@@ -85,7 +85,7 @@
 	},
 /obj/structure/grille,
 /turf/simulated/floor/shuttle/plating,
-/area)
+/area/shuttle/striketeam/centcom)
 "av" = (
 /obj/structure/table/woodentable,
 /obj/machinery/recharger,
@@ -329,7 +329,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "bC" = (
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
 /obj/structure/table/reinforced,
@@ -374,7 +374,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
 	},
-/area)
+/area/shuttle/striketeam/centcom)
 "bQ" = (
 /obj/item/device/multitool,
 /obj/item/weapon/reagent_containers/spray/cleaner,
@@ -509,7 +509,7 @@
 	},
 /obj/structure/grille,
 /turf/simulated/floor/shuttle/plating,
-/area)
+/area/shuttle/striketeam/centcom)
 "cE" = (
 /obj/machinery/computer/atmos_alert,
 /turf/unsimulated/floor{
@@ -946,7 +946,7 @@
 /area/centcom/suppy)
 "eD" = (
 /turf/simulated/wall/shuttle,
-/area)
+/area/shuttle/striketeam/centcom)
 "eE" = (
 /obj/structure/bed/chair{
 	dir = 8
@@ -954,7 +954,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "eF" = (
 /obj/machinery/door/airlock/multi_tile/glass{
 	name = "Armory";
@@ -996,7 +996,7 @@
 	dir = 4
 	},
 /turf/simulated/floor/shuttle/plating,
-/area)
+/area/shuttle/striketeam/centcom)
 "eO" = (
 /obj/machinery/light{
 	dir = 1
@@ -1358,7 +1358,7 @@
 /area/centcom/suppy)
 "gz" = (
 /turf/unsimulated/wall/blastdoor,
-/area)
+/area/centcom/striketeam)
 "gA" = (
 /obj/structure/bed,
 /turf/unsimulated/floor/scorched,
@@ -1585,7 +1585,7 @@
 	dir = 8
 	},
 /turf/space,
-/area)
+/area/shuttle/striketeam/centcom)
 "hN" = (
 /obj/structure/bed/chair{
 	dir = 1
@@ -2779,7 +2779,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
 	},
-/area)
+/area/shuttle/striketeam/centcom)
 "nZ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -2879,7 +2879,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "ox" = (
 /obj/structure/table,
 /obj/machinery/microwave{
@@ -3249,7 +3249,7 @@
 /area/shuttle/supply)
 "qJ" = (
 /turf/unsimulated/wall,
-/area)
+/area/centcom/striketeam)
 "qK" = (
 /turf/unsimulated/floor{
 	dir = 10;
@@ -3464,7 +3464,7 @@
 	dir = 1
 	},
 /turf/simulated/floor/shuttle/plating,
-/area)
+/area/shuttle/striketeam/centcom)
 "sk" = (
 /obj/machinery/bot/medbot/mysterious{
 	name = "Medical Department"
@@ -3884,7 +3884,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "vj" = (
 /obj/structure/bed/chair{
 	dir = 4
@@ -3929,7 +3929,7 @@
 	dir = 8
 	},
 /turf/unsimulated/floor,
-/area)
+/area/shuttle/striketeam/centcom)
 "vy" = (
 /obj/machinery/computer/crew,
 /turf/unsimulated/floor{
@@ -4111,7 +4111,7 @@
 	dir = 4
 	},
 /turf/space,
-/area)
+/area/shuttle/striketeam/centcom)
 "ww" = (
 /obj/structure/table/woodentable,
 /turf/unsimulated/floor/mars/air,
@@ -4150,14 +4150,11 @@
 	},
 /area/shuttle/administration/centcom)
 "wA" = (
-/obj/machinery/door/airlock/external{
-	name = "Escape Airlock"
+/obj/docking_port/destination/odyssey/centcomm{
+	dir = 2
 	},
-/obj/docking_port/destination/escape/shuttle/centcom,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/evac)
+/turf/unsimulated/wall,
+/area/centcom/control)
 "wD" = (
 /turf/unsimulated/floor{
 	icon_state = "cafeteria"
@@ -4422,7 +4419,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
 	},
-/area)
+/area/shuttle/striketeam/centcom)
 "xH" = (
 /obj/structure/closet/secure_closet/injection,
 /turf/unsimulated/floor{
@@ -4666,7 +4663,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "yV" = (
 /turf/simulated/floor{
 	dir = 8;
@@ -4761,7 +4758,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "zu" = (
 /obj/machinery/kinetic_accelerator{
 	dir = 8;
@@ -4790,7 +4787,7 @@
 	dir = 8
 	},
 /turf/space,
-/area)
+/area/shuttle/striketeam/centcom)
 "zI" = (
 /turf/unsimulated/floor{
 	icon_state = "darkbluecorners"
@@ -4996,7 +4993,7 @@
 	dir = 8
 	},
 /turf/space,
-/area)
+/area/shuttle/striketeam/centcom)
 "AX" = (
 /obj/structure/block,
 /turf/simulated/floor/carpet,
@@ -5299,7 +5296,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "CK" = (
 /obj/effect/overlay/palmtree_r,
 /obj/effect/overlay/coconut,
@@ -5339,7 +5336,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area)
+/area/shuttle/striketeam/centcom)
 "CW" = (
 /obj/structure/bed/chair{
 	dir = 8
@@ -5460,7 +5457,7 @@
 /turf/unsimulated/floor{
 	name = "plating"
 	},
-/area)
+/area/centcom/striketeam)
 "DA" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -5743,7 +5740,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
 	},
-/area)
+/area/shuttle/striketeam/centcom)
 "EJ" = (
 /obj/machinery/light{
 	dir = 1
@@ -5837,7 +5834,7 @@
 /turf/unsimulated/floor{
 	name = "plating"
 	},
-/area)
+/area/centcom/striketeam)
 "Fd" = (
 /obj/structure/table/glass,
 /obj/item/weapon/aiModule/standard/oxygen,
@@ -6266,7 +6263,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "Hk" = (
 /obj/docking_port/shuttle{
 	dir = 4
@@ -7122,7 +7119,7 @@
 /turf/unsimulated/floor{
 	name = "plating"
 	},
-/area)
+/area/centcom/striketeam)
 "Lx" = (
 /obj/machinery/door/airlock/centcom{
 	name = "General Access";
@@ -7213,7 +7210,7 @@
 /turf/unsimulated/floor{
 	name = "plating"
 	},
-/area)
+/area/centcom/striketeam)
 "LT" = (
 /obj/structure/table/glass,
 /obj/item/weapon/storage/toolbox/mechanical,
@@ -7279,7 +7276,7 @@
 /turf/unsimulated/floor{
 	name = "plating"
 	},
-/area)
+/area/centcom/striketeam)
 "Mo" = (
 /obj/structure/bed/chair,
 /turf/unsimulated/floor{
@@ -7397,7 +7394,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
 	},
-/area)
+/area/shuttle/striketeam/centcom)
 "Ne" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -7520,7 +7517,7 @@
 /turf/unsimulated/floor{
 	name = "plating"
 	},
-/area)
+/area/centcom/striketeam)
 "NO" = (
 /obj/structure/bed/chair{
 	dir = 4
@@ -7536,7 +7533,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "NR" = (
 /obj/machinery/computer/operating{
 	name = "Robotics Operating Computer"
@@ -7602,7 +7599,7 @@
 /turf/unsimulated/floor{
 	name = "plating"
 	},
-/area)
+/area/centcom/striketeam)
 "Oe" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -8196,7 +8193,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "Rp" = (
 /turf/unsimulated/floor{
 	dir = 1;
@@ -8220,7 +8217,7 @@
 /turf/unsimulated/floor{
 	name = "plating"
 	},
-/area)
+/area/centcom/striketeam)
 "Ry" = (
 /obj/machinery/computer/aiupload,
 /turf/unsimulated/floor{
@@ -8570,7 +8567,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area)
+/area/centcom/striketeam)
 "Tk" = (
 /obj/machinery/door/window{
 	base_state = "right";
@@ -8627,7 +8624,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
 	},
-/area)
+/area/shuttle/striketeam/centcom)
 "Ty" = (
 /obj/structure/bed/chair/shuttle,
 /obj/effect/landmark/start{
@@ -8808,7 +8805,7 @@
 	dir = 1
 	},
 /turf/space,
-/area)
+/area/shuttle/striketeam/centcom)
 "Ux" = (
 /obj/machinery/door/airlock/centcom{
 	name = "Research Facility";
@@ -9336,7 +9333,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
 	},
-/area)
+/area/shuttle/striketeam/centcom)
 "XH" = (
 /obj/item/device/radio/intercom{
 	broadcasting = 1;
@@ -9781,7 +9778,7 @@
 	},
 /obj/structure/grille,
 /turf/simulated/floor/shuttle/plating,
-/area)
+/area/shuttle/striketeam/centcom)
 "ZK" = (
 /obj/item/weapon/stool{
 	pixel_y = 8
@@ -20111,7 +20108,7 @@ JI
 JI
 JI
 JI
-wA
+fJ
 Sc
 fJ
 Ke
@@ -20183,37 +20180,37 @@ NO
 NO
 qK
 zO
-OC
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
-JI
 wA
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+fJ
 Sc
 fJ
 Ke

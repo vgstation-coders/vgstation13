@@ -7,6 +7,7 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 
 	cooldown = 60 SECONDS
 	transit_delay = 30 SECONDS
+	transit_timeout = 0 // Disable transit safety recall - shuttle can remain in hyperspace indefinitely
 	stable = 0
 
 	req_access = list(access_captain)
@@ -21,10 +22,23 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 	var/obj/docking_port/destination/transit/transit = generate_transit_area(src)
 	if(transit)
 		set_transit_dock(transit)
+		transit.areaname = "hyperspace exploration"
+		add_dock(transit)
 
 	var/obj/docking_port/destination/parking = generate_parking_area(src)
 	if(parking)
 		add_dock(parking)
+
+	// If starting at outpost, enable external power on SMES units
+	if(istype(current_port, /obj/docking_port/destination/odyssey/outpost))
+		for(var/obj/machinery/power/battery/smes/S in shuttle_contents())
+			S.external_power_supply = TRUE
+
+/datum/shuttle/odyssey/after_flight()
+	..()
+	var/at_outpost = istype(current_port, /obj/docking_port/destination/odyssey/outpost)
+	for(var/obj/machinery/power/battery/smes/S in shuttle_contents())
+		S.external_power_supply = at_outpost
 
 /obj/machinery/computer/shuttle_control/odyssey
 	name = "NTEV Odyssey shuttle control computer"
@@ -44,3 +58,6 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 
 /obj/docking_port/destination/odyssey/derelict
 	areaname = "derelict space station"
+
+/obj/docking_port/destination/odyssey/centcomm
+	areaname = "Central Command"

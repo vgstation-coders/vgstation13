@@ -1,4 +1,5 @@
-#define ROSA_PANEL_GENRATE 500 // Flexible roll-out panels are less efficient than standard solar panels
+#define ROSA_PANEL_GENRATE 500 // Flexible roll-out panels are less efficient than standard solar panels on a planetary surface
+#define ROSA_PANEL_GENRATE_SPACE 1000 // More efficient in space with direct, unfiltered sunlight
 
 var/list/obj/machinery/power/rosa/rosa_machines = list()
 
@@ -37,10 +38,13 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 		return
 	if(!deployed || !panels.len)
 		return
+	var/datum/virtual_z/vz = get_virtual_z()
+	var/vz_type = vz.level_type
+	var/genrate = (vz_type == VZ_TRANSIT || vz_type == VZ_PARKING) ? ROSA_PANEL_GENRATE_SPACE : ROSA_PANEL_GENRATE
 	var/total_power = 0
 	for(var/obj/structure/rosa_panel/panel in panels)
 		if(!QDELETED(panel))
-			total_power += ROSA_PANEL_GENRATE
+			total_power += genrate
 	if(total_power > 0)
 		terminal.add_avail(total_power)
 
@@ -113,6 +117,14 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 		sleep(8)
 	deployed = TRUE
 	deploying = FALSE
+
+/obj/machinery/power/rosa/proc/force_retract()
+	deploying = FALSE
+	for(var/obj/structure/rosa_panel/panel in panels)
+		qdel(panel)
+	panels.Cut()
+	icon_state = "rollerpanel"
+	deployed = FALSE
 
 /obj/machinery/power/rosa/proc/retract()
 	deploying = TRUE

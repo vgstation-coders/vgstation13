@@ -231,6 +231,12 @@
 		icon_state = "scanner_depower"
 	else if(scanning || waiting_for_generation)
 		icon_state = "scanner_active"
+	else if(istype(src, /obj/machinery/planet_scanner/shuttle))
+		var/obj/machinery/planet_scanner/shuttle/S = src
+		if(S.passive_scanning)
+			icon_state = "scanner_passive"
+			return
+		icon_state = "scanner_idle"
 	else
 		icon_state = "scanner_idle"
 
@@ -572,6 +578,275 @@
 	last_disk_print_time = world.time
 
 	return TRUE
+
+
+/obj/machinery/planet_scanner/shuttle
+	name = "shuttle deep space scanner"
+	desc = "A deep space scanner modified for shuttle installation. Discovered destinations can be added directly to the shuttle's navigation computer."
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/planet_scanner/shuttle,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/console_screen,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor
+	)
+
+	// Tracks which discoveries (planet_type or encounter datums) have been added to the shuttle
+	var/list/added_discoveries = list()
+
+	// Passive scanning state
+	var/passive_scanning = FALSE
+	var/passive_scan_progress = 0 // Accumulated progress (completes at 1.0)
+
+/// Get the shuttle this scanner is installed on by checking the area
+/obj/machinery/planet_scanner/shuttle/proc/get_shuttle()
+	var/area/our_area = get_area(src)
+	if(!our_area)
+		return null
+	return our_area.get_shuttle()
+
+/// Check if the shuttle is currently parked in deep space (VZ_PARKING)
+/// Check if the shuttle is currently parked in deep space (VZ_PARKING)
+/obj/machinery/planet_scanner/shuttle/proc/shuttle_in_space()
+	var/datum/shuttle/shuttle = get_shuttle()
+	if(!shuttle?.current_port)
+		return FALSE
+	var/datum/virtual_z/vz = shuttle.current_port.get_virtual_z()
+	if(!vz)
+		return FALSE
+	return (vz.level_type == VZ_PARKING)
+
+/// Check if the shuttle is currently in hyperspace transit (VZ_TRANSIT)
+/obj/machinery/planet_scanner/shuttle/proc/shuttle_in_transit()
+	var/datum/shuttle/shuttle = get_shuttle()
+	if(!shuttle?.current_port)
+		return FALSE
+	var/datum/virtual_z/vz = shuttle.current_port.get_virtual_z()
+	if(!vz)
+		return FALSE
+	return (vz.level_type == VZ_TRANSIT)
+
+/// Reduce exponential growth by 50% - use 1.5 exponent instead of 2
+/obj/machinery/planet_scanner/shuttle/calculate_required_energy()
+	required_scan_energy = round(PLANET_SCANNER_BASE_ENERGY_COST * (1.5 ** scans_completed) * energy_efficiency_modifier)
+
+/// Override to also require shuttle to be in space
+/obj/machinery/planet_scanner/shuttle/can_start_scan()
+	return ..() && get_shuttle() && shuttle_in_space()
+
+/// Override process to handle passive scanning in transit
+/obj/machinery/planet_scanner/shuttle/process()
+	// Handle passive scan waiting for planet generation to complete
+	if(waiting_for_generation && !scanning)
+		if(!SSmapping.generating)
+			waiting_for_generation = FALSE
+			scans_completed++
+			playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
+			visible_message("<span class='notice'>[src] has passively detected a new planet in hyperspace.</span>")
+			calculate_required_energy()
+			update_icon()
+
+	// Handle passive scanning when in transit and not actively scanning
+	else if(!scanning && !waiting_for_generation && shuttle_in_transit() && !SSmapping?.scanning && !SSmapping?.generating && scans_completed < PLANET_SCANNER_MAX_SCANS && !(stat & (BROKEN|FORCEDISABLE)) && anchored)
+		if(!passive_scanning)
+			passive_scanning = TRUE
+			passive_scan_progress = 0
+			update_icon()
+		// 50% chance each tick to advance by 1/150 - averages ~10 min (300 ticks) to complete
+		if(prob(50))
+			passive_scan_progress += 1.0 / 150
+		if(passive_scan_progress >= 1.0)
+			complete_passive_scan()
+	else if(passive_scanning && !waiting_for_generation)
+		// Left transit or conditions changed - reset passive scan
+		passive_scanning = FALSE
+		passive_scan_progress = 0
+		update_icon()
+
+	..()
+	return // Prevent PROCESS_KILL from parent - shuttle scanner must keep processing for passive scans
+
+/// Complete a passive scan - same result as active scan but triggered by transit
+/obj/machinery/planet_scanner/shuttle/proc/complete_passive_scan()
+	passive_scanning = FALSE
+	passive_scan_progress = 0
+	update_icon()
+
+	SSmapping.scanning = TRUE
+
+	if(prob(50))
+		spawn_new_encounter()
+		SSmapping.scanning = FALSE
+		scans_completed++
+		playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
+		visible_message("<span class='notice'>[src] has passively detected an anomaly in hyperspace.</span>")
+		calculate_required_energy()
+	else
+		waiting_for_generation = TRUE
+		spawn_new_planet()
+
+/obj/machinery/planet_scanner/shuttle/ui_data(mob/user)
+	// Ensure we stay in the machines processing list (base machinery PROCESS_KILLs idle machines)
+	if(!inMachineList)
+		inMachineList = 1
+		machines += src
+
+	var/list/data = ..()
+
+	data["is_shuttle_scanner"] = TRUE
+
+	var/datum/shuttle/shuttle = get_shuttle()
+	data["shuttle_found"] = !!shuttle
+	data["shuttle_name"] = shuttle?.name
+	data["shuttle_in_space"] = shuttle_in_space()
+	data["passive_scanning"] = passive_scanning
+	data["passive_progress"] = passive_scanning ? round(passive_scan_progress * 100, 1) : null
+
+	// Build per-discovery "already added" flags
+	var/list/added_flags = list()
+	if(data["discovered_planets"])
+		for(var/list/planet_entry in data["discovered_planets"])
+			var/ui_index = added_flags.len
+			var/datum/discovery = get_discovery_by_ui_index(ui_index)
+			added_flags += list(discovery ? (discovery in added_discoveries) : FALSE)
+	data["added_destinations"] = added_flags
+
+	return data
+
+/obj/machinery/planet_scanner/shuttle/ui_act(action, params)
+	if(action == "print_disk")
+		return FALSE // Disable disk printing on shuttle scanner
+
+	if(action == "add_destination")
+		var/planet_index = text2num(params["planet_index"])
+		if(!validate_planet_index(planet_index, usr))
+			return FALSE
+		add_destination(usr, planet_index)
+		return TRUE
+
+	return ..()
+
+/// Add a discovered planet or encounter as a permanent shuttle destination
+/obj/machinery/planet_scanner/shuttle/proc/add_destination(mob/user, planet_index)
+	var/datum/shuttle/shuttle = get_shuttle()
+	if(!shuttle)
+		to_chat(user, "<span class='warning'>No shuttle detected. The scanner must be installed on a shuttle.</span>")
+		return FALSE
+
+	var/datum/discovery = get_discovery_by_ui_index(planet_index)
+	if(!discovery)
+		to_chat(user, "<span class='warning'>Data corrupted or invalid.</span>")
+		return FALSE
+
+	if(discovery in added_discoveries)
+		to_chat(user, "<span class='warning'>This destination has already been added to the shuttle's navigation.</span>")
+		return FALSE
+
+	if(istype(discovery, /datum/planet_type))
+		var/datum/planet_type/planet = discovery
+		if(!(planet?.v))
+			to_chat(user, "<span class='warning'>Planet data unavailable.</span>")
+			return FALSE
+
+		var/list/shuttle_size = shuttle.get_size()
+		if(!shuttle_size)
+			to_chat(user, "<span class='warning'>Unable to determine shuttle dimensions.</span>")
+			return FALSE
+
+		var/obj/docking_port/destination/planet_surface/surface_port = find_shuttle_landing_position(shuttle, planet)
+		if(!surface_port)
+			to_chat(user, "<span class='warning'>No suitable landing zone found on [planet.planet_name].</span>")
+			return FALSE
+
+		shuttle.add_dock(surface_port)
+		added_discoveries += discovery
+		to_chat(user, "<span class='notice'>[planet.planet_name] has been added to [shuttle.name]'s navigation destinations.</span>")
+		playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
+		return TRUE
+
+	else if(istype(discovery, /datum/encounter))
+		var/datum/encounter/enc = discovery
+		var/obj/docking_port/destination/dock = enc.get_shuttle_docking_port(shuttle)
+		if(!dock)
+			to_chat(user, "<span class='warning'>Unable to calculate a safe approach vector for [enc.encounter_name].</span>")
+			return FALSE
+
+		shuttle.add_dock(dock)
+		added_discoveries += discovery
+		to_chat(user, "<span class='notice'>[enc.encounter_name] has been added to [shuttle.name]'s navigation destinations.</span>")
+		playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
+		return TRUE
+
+	return FALSE
+
+/// Find a valid landing position on a planet for the shuttle, with permissive terrain checks.
+/// Only requires: 5 turf edge buffer, no overlap with placed ruins.
+/obj/machinery/planet_scanner/shuttle/proc/find_shuttle_landing_position(datum/shuttle/shuttle, datum/planet_type/planet)
+	var/datum/virtual_z/vz = planet.v
+	if(!vz || !shuttle?.linked_port)
+		return null
+
+	var/list/size = shuttle.get_size()
+	if(!size)
+		return null
+	var/shuttle_width = size[1]
+	var/shuttle_height = size[2]
+
+	var/list/offsets = shuttle.get_docking_port_offset()
+	if(!offsets || offsets.len < 2)
+		return null
+	var/port_offset_x = offsets[1]
+	var/port_offset_y = offsets[2]
+
+	// 5 turf edge buffer
+	var/buffer = 5
+	var/safe_x_min = vz.x_min + buffer
+	var/safe_x_max = vz.x_max - shuttle_width - buffer + 1
+	var/safe_y_min = vz.y_min + buffer
+	var/safe_y_max = vz.y_max - shuttle_height - buffer + 1
+
+	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
+		return null
+
+	// Try random positions, check for ruin overlap only
+	for(var/attempt = 1 to 50)
+		var/try_x = rand(safe_x_min, safe_x_max)
+		var/try_y = rand(safe_y_min, safe_y_max)
+
+		// Check overlap with placed ruins
+		var/valid = TRUE
+		for(var/list/placed in vz.placed_ruins)
+			var/placed_x = placed[1]
+			var/placed_y = placed[2]
+			var/placed_w = placed[3]
+			var/placed_h = placed[4]
+			// AABB overlap check with a small buffer around ruins
+			if(!((try_x + shuttle_width) < placed_x || try_x > (placed_x + placed_w) || (try_y + shuttle_height) < placed_y || try_y > (placed_y + placed_h)))
+				valid = FALSE
+				break
+
+		if(!valid)
+			continue
+
+		// Valid position found - create docking port
+		var/port_x = try_x + port_offset_x
+		var/port_y = try_y + port_offset_y
+		var/turf/port_base = locate(port_x, port_y, vz.z())
+		var/turf/port_turf = get_step(port_base, shuttle.linked_port.dir)
+		var/port_dir = turn(shuttle.linked_port.dir, 180)
+
+		var/obj/docking_port/destination/planet_surface/dock = new(port_turf)
+		dock.dir = port_dir
+		dock.areaname = "[planet.planet_name] surface"
+		dock.planet = planet
+		if(planet.default_baseturf)
+			dock.base_turf_type = planet.default_baseturf
+
+		return dock
+
+	return null
 
 
 // Cleanup defines

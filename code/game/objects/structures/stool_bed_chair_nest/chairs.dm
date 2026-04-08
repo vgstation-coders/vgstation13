@@ -717,3 +717,32 @@
 	..()
 	buckle_overlay = image("icons/obj/stools-chairs-beds.dmi", "[icon_state]_armrest", CHAIR_ARMREST_LAYER)
 	buckle_overlay.plane = relative_plane(ABOVE_HUMAN_PLANE)
+
+/obj/structure/bed/chair/handrail
+	name = "handrail"
+	desc = "A handrail with a built-in buckle used to prevent standing shuttle passengers from falling over during takeoff and landing."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "handrail"
+	sheet_amt = 1
+	anchored = 1
+
+/obj/structure/bed/chair/handrail/buckle_chair(mob/M,mob/user)
+	..()
+	var/y_shift = 0
+	var/x_shift = 0
+	switch(dir)
+		if(NORTH)
+			y_shift = -4
+		if(SOUTH)
+			y_shift = 4
+		if(EAST)
+			x_shift = -4
+		if(WEST)
+			x_shift = 4
+	M.pixel_x = initial(M.pixel_x) + x_shift
+	M.pixel_y = initial(M.pixel_y) + y_shift
+
+/obj/structure/bed/chair/handrail/unlock_atom(var/atom/movable/AM)
+	. = ..()
+	AM.pixel_x = initial(AM.pixel_x)
+	AM.pixel_y = initial(AM.pixel_y)
