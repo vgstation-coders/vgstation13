@@ -168,6 +168,75 @@
 /obj/structure/shuttle/diag_wall/smooth/black
 	icon_state = "diagonalWall3S"
 
+/obj/structure/shuttle/diag_wall/diy
+	anchored = FALSE
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
+	var/panel_type = /obj/item/stack/shuttle_panel
+
+/obj/structure/shuttle/diag_wall/diy/can_wrench_shuttle()
+	return TRUE
+
+/obj/structure/shuttle/diag_wall/diy/attackby(obj/item/I, mob/user)
+	if(I.is_wrench(user))
+		if(wrenchAnchor(user, I, 5 SECONDS))
+			return TRUE
+		return FALSE
+	if(iswelder(I))
+		var/obj/item/tool/weldingtool/WT = I
+		if(!WT.isOn())
+			to_chat(user, "<span class='warning'>\The [WT] needs to be on!</span>")
+			return FALSE
+		if(anchored)
+			to_chat(user, "<span class='warning'>\The [src] must be unwrenched before you can disassemble it!</span>")
+			return FALSE
+		user.visible_message("<span class='warning'>[user] begins cutting apart \the [src].</span>", \
+			"<span class='notice'>You begin cutting apart \the [src].</span>", \
+			"<span class='warning'>You hear welding noises.</span>")
+		playsound(src, 'sound/items/Welder.ogg', 100, 1)
+		if(WT.do_weld(user, src, 50, 1))
+			if(QDELETED(src))
+				return TRUE
+			user.visible_message("<span class='warning'>[user] cuts apart \the [src].</span>", \
+				"<span class='notice'>You cut apart \the [src] and recover the shuttle panel.</span>", \
+				"<span class='warning'>You hear welding noises.</span>")
+			new panel_type(get_turf(src), 2)
+			qdel(src)
+		return TRUE
+	return ..()
+
+/obj/structure/shuttle/diag_wall/diy/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+		if(2.0)
+			if(prob(50))
+				qdel(src)
+		if(3.0)
+			if(prob(25))
+				qdel(src)
+
+/obj/structure/shuttle/diag_wall/diy/mech_drill_act(severity)
+	new panel_type(get_turf(src), 2)
+	qdel(src)
+	return TRUE
+
+/obj/structure/shuttle/diag_wall/diy/singularity_pull(S, current_size)
+	if(current_size >= 4)
+		if(prob(50))
+			qdel(src)
+
+/obj/structure/shuttle/diag_wall/diy/black
+	icon_state = "diagonalWall3"
+	panel_type = /obj/item/stack/shuttle_panel/black
+
+/obj/structure/shuttle/diag_wall/diy/smooth
+	icon_state = "diagonalWallS"
+
+/obj/structure/shuttle/diag_wall/diy/smooth/black
+	icon_state = "diagonalWall3S"
+	panel_type = /obj/item/stack/shuttle_panel/black
+
 /turf/simulated/floor/shuttle
 	icon = 'icons/turf/shuttle.dmi'
 	thermal_conductivity = 0.05
@@ -291,7 +360,7 @@
 
 /obj/item/stack/shuttle_panel
 	name = "shuttle panel"
-	desc = "A prefabricated wall panel used in shuttle construction. Apply it to a secured metal girder to build a shuttle wall. The panel can be sliced off with a welder."
+	desc = "A prefabricated wall panel used in shuttle construction. Apply it to a secured metal girder to build a shuttle wall. The panel can be sliced off with a welder. Use in hand to see construction options."
 	singular_name = "shuttle panel"
 	icon = 'icons/turf/shuttle.dmi'
 	icon_state = "panel"
@@ -305,12 +374,20 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	var/wall_type = /turf/simulated/wall/shuttle/panel
 
+/obj/item/stack/shuttle_panel/New(var/loc, var/amount=null)
+	recipes = shuttle_panel_recipes
+	return ..()
+
 /obj/item/stack/shuttle_panel/black
 	name = "black shuttle panel"
-	desc = "A prefabricated wall panel used in shuttle construction, finished in matte black. Apply it to a secured metal girder to build a black shuttle wall. The panel can be sliced off with a welder."
+	desc = "A prefabricated wall panel used in shuttle construction, finished in matte black. Apply it to a secured metal girder to build a black shuttle wall. The panel can be sliced off with a welder. Use in hand to see construction options."
 	singular_name = "black shuttle panel"
 	icon_state = "panel_black"
 	wall_type = /turf/simulated/wall/shuttle/panel/black
+
+/obj/item/stack/shuttle_panel/black/New(var/loc, var/amount=null)
+	recipes = shuttle_panel_black_recipes
+	return ..()
 
 /turf/simulated/wall/shuttle/panel
 	name = "shuttle wall"

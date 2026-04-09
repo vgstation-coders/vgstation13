@@ -609,6 +609,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				var/datum/virtual_z/transit_vz = odyssey_shuttle.transit_port.get_virtual_z()
 				if(transit_vz)
 					bs_overlay = new /obj/effect/overlay/bluespacify()
+					bs_overlay.plane = FLOAT_PLANE // Render at transit turf's plane so it stays below catwalks and shuttle objects
 					for(var/turf/space/transit/T in transit_vz.get_turfs())
 						T.vis_contents += bs_overlay
 

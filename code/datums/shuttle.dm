@@ -1381,6 +1381,7 @@
 //Planetary landing zone datum
 /datum/landing_zone
 	var/list/turf/turf_list = list()
+	var/list/saved_turf_data = list() // Saves original turf types/appearance for restoration on departure
 	var/datum/weakref/shuttle_ref
 	var/datum/weakref/planet_ref
 	var/datum/virtual_z/vz
@@ -1444,6 +1445,10 @@
 
 	if(planet.default_baseturf)
 		docking_port.base_turf_type = planet.default_baseturf
+
+	// Save original turf data so we can restore it when the shuttle departs
+	for(var/turf/T in turf_list)
+		saved_turf_data["[T.x],[T.y]"] = list("type" = T.type, "icon" = T.icon, "icon_state" = T.icon_state, "dir" = T.dir)
 
 /datum/landing_zone/proc/update_turfs()
 	turf_list = block(locate(min_x, min_y, vz.z()), locate(max_x, max_y, vz.z()))
@@ -1539,6 +1544,17 @@
 			qdel(overlay)
 
 /datum/landing_zone/proc/reset_turfs()
+	// Restore original turf types from before the shuttle landed
+	for(var/turf/T in turf_list)
+		var/key = "[T.x],[T.y]"
+		var/list/data = saved_turf_data[key]
+		if(data && T.type != data["type"])
+			T.ChangeTurf(data["type"], allow = 1)
+			T.icon = data["icon"]
+			T.icon_state = data["icon_state"]
+			T.dir = data["dir"]
+
+	update_turfs() // Re-fetch turf references after ChangeTurf
 	var/datum/climate/C = SSweather.get_climate(vz)
 	for(var/turf/T in turf_list)
 		C?.register_weather_turf(T, TRUE)
@@ -1571,6 +1587,7 @@
 		qdel(docking_port)
 		docking_port = null
 	turf_list = null
+	saved_turf_data = null
 	shuttle_ref = null
 	planet_ref = null
 	return ..()

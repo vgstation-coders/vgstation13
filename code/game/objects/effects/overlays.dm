@@ -68,7 +68,8 @@
 	name = "Bluespace"
 	icon = 'icons/turf/space.dmi'
 	icon_state = "bluespacify"
-	layer = LIGHTING_LAYER
+	plane = ABOVE_TURF_PLANE
+	layer = ABOVE_TILE_LAYER
 
 /obj/effect/overlay/puddle
 	name = "Puddle"

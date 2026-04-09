@@ -764,3 +764,16 @@ var/list/datum/stack_recipe/feather_recipes = list(
 	new /datum/stack_recipe/feather("feather wreath", /obj/item/mounted/frame/wreath/featherwreath, 4, time = 50),
 	new /datum/stack_recipe/feather("dreamcatcher", /obj/item/mounted/frame/wreath/dreamcatcher, 4, time = 50)
 )
+
+/* =====================================================================
+						SHUTTLE PANEL RECIPES
+===================================================================== */
+var/list/datum/stack_recipe/shuttle_panel_recipes = list(
+	new/datum/stack_recipe("shuttle corner wall",        /obj/structure/shuttle/diag_wall/diy,               2, time = 30, one_per_turf = 1, on_floor = 1, start_unanchored = 1),
+	new/datum/stack_recipe("smooth shuttle corner wall", /obj/structure/shuttle/diag_wall/diy/smooth,        2, time = 30, one_per_turf = 1, on_floor = 1, start_unanchored = 1),
+)
+
+var/list/datum/stack_recipe/shuttle_panel_black_recipes = list(
+	new/datum/stack_recipe("black shuttle corner wall",        /obj/structure/shuttle/diag_wall/diy/black,          2, time = 30, one_per_turf = 1, on_floor = 1, start_unanchored = 1),
+	new/datum/stack_recipe("smooth black shuttle corner wall", /obj/structure/shuttle/diag_wall/diy/smooth/black,   2, time = 30, one_per_turf = 1, on_floor = 1, start_unanchored = 1),
+)

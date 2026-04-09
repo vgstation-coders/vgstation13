@@ -52,6 +52,7 @@
 
 	center_x = 150
 	center_y = 150
+	planet_size = 140
 	shuttle_call_label = "Begin Bluespace Jump"
 	shuttle_cancel_label = "Cancel Bluespace Jump"
 

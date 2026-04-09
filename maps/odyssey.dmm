@@ -125,6 +125,10 @@
 /obj/structure/bed/chair/handrail{
 	dir = 4
 	},
+/obj/machinery/light_switch{
+	pixel_x = -24;
+	pixel_y = -10
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "showroomfloor";
@@ -202,6 +206,10 @@
 /obj/structure/cable,
 /obj/structure/bed/chair/handrail{
 	dir = 4
+	},
+/obj/machinery/light_switch{
+	pixel_x = -24;
+	pixel_y = -10
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -610,6 +618,12 @@
 	icon_state = "barber"
 	},
 /area/security/perma)
+"cj" = (
+/obj/structure/bed/chair/shuttle{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "ck" = (
 /obj/machinery/power/apc{
 	pixel_x = -30;
@@ -774,6 +788,16 @@
 	},
 /turf/simulated/wall,
 /area/shuttle/trade/start)
+"cR" = (
+/obj/machinery/airlock_sensor{
+	frequency = 1331;
+	id_tag = "starboard_airlock_control";
+	master_tag = "starboard_airlock_control";
+	pixel_x = -24;
+	pixel_y = -5
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "cS" = (
 /obj/structure/table,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
@@ -903,7 +927,7 @@
 	},
 /area/shuttle/odyssey/infirmary)
 "dn" = (
-/obj/structure/shuttle/diag_wall/smooth/black{
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 8
 	},
 /turf/unsimulated/floor/planetary/concrete,
@@ -1408,6 +1432,10 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/port)
+"fu" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey_transfer)
 "fw" = (
 /turf/simulated/floor{
 	dir = 10;
@@ -2260,6 +2288,13 @@
 	},
 /turf/simulated/floor/plating/vox,
 /area/shuttle/trade/start)
+"iT" = (
+/obj/item/device/radio/intercom{
+	pixel_x = 25
+	},
+/obj/structure/bed/chair/shuttle/blue,
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "iU" = (
 /turf/simulated/floor/carpet,
 /area/surface/nt_outpost/admin)
@@ -2588,7 +2623,7 @@
 	},
 /area/shuttle/odyssey/hallway/fore)
 "km" = (
-/obj/structure/shuttle/diag_wall/smooth/black,
+/obj/structure/shuttle/diag_wall/diy/smooth/black,
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey/engineering/engine_room)
 "kn" = (
@@ -3471,6 +3506,21 @@
 "nB" = (
 /turf/unsimulated/wall,
 /area/start)
+"nC" = (
+/obj/machinery/door/airlock/external{
+	name = "Starboard External Airlock";
+	locked = 1;
+	id_tag = "starboard_ext_airlock";
+	icon_state = "door_locked";
+	frequency = 1331
+	},
+/obj/docking_port/destination/odyssey_transfer/transfer{
+	dir = 2
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/hallway/starboard)
 "nE" = (
 /obj/structure/railing{
 	dir = 1
@@ -3768,7 +3818,7 @@
 	},
 /area/security/perma)
 "oM" = (
-/obj/structure/shuttle/diag_wall/smooth/black{
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 4
 	},
 /turf/unsimulated/floor/planetary/concrete,
@@ -3909,6 +3959,10 @@
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/nt_outpost)
+"px" = (
+/obj/machinery/door/unpowered/shuttle,
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "py" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -3930,6 +3984,9 @@
 "pB" = (
 /obj/machinery/camera/autoname{
 	dir = 8
+	},
+/obj/machinery/light_switch{
+	pixel_x = 24
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -4338,6 +4395,10 @@
 	pixel_y = 30
 	},
 /obj/machinery/camera/autoname,
+/obj/machinery/light_switch{
+	pixel_y = 24;
+	pixel_x = 10
+	},
 /turf/simulated/floor/arcade,
 /area/shuttle/odyssey/quarters/crew)
 "qV" = (
@@ -4368,6 +4429,10 @@
 	tag = "icon-darkred"
 	},
 /area/shuttle/odyssey/security)
+"rb" = (
+/obj/structure/closet/emcloset/vox,
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "re" = (
 /obj/structure/closet/crate/freezer,
 /turf/unsimulated/floor{
@@ -4410,7 +4475,7 @@
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey/bridge)
 "rq" = (
-/obj/structure/shuttle/diag_wall/smooth/black{
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 1
 	},
 /turf/unsimulated/floor/planetary/concrete,
@@ -4529,6 +4594,15 @@
 "sg" = (
 /turf/simulated/wall/r_wall,
 /area/security/perma)
+"sm" = (
+/obj/structure/bed/chair/shuttle{
+	dir = 8
+	},
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "sn" = (
 /obj/machinery/mineral/processing_unit,
 /obj/structure/railing,
@@ -4583,6 +4657,15 @@
 	icon_state = "dark vault full"
 	},
 /area/shuttle/odyssey/engineering)
+"sA" = (
+/obj/structure/bed/chair/shuttle{
+	dir = 4
+	},
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "sB" = (
 /obj/machinery/door/airlock/glass_command,
 /obj/structure/cable{
@@ -4748,6 +4831,12 @@
 	tag = "icon-showroomfloor (NORTH)"
 	},
 /area/shuttle/odyssey/janitor)
+"tf" = (
+/obj/structure/bed/chair/shuttle{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "tg" = (
 /obj/structure/bed/chair/office/light{
 	dir = 4
@@ -5090,6 +5179,10 @@
 "uo" = (
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/quarters/crew)
+"up" = (
+/obj/docking_port/destination/odyssey_transfer/nt_outpost,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/nt_outpost)
 "uq" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 4;
@@ -5132,6 +5225,12 @@
 	},
 /turf/simulated/floor,
 /area/shuttle/odyssey/quarters/crew)
+"uD" = (
+/obj/structure/shuttle/engine/propulsion/odyssey/left{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey/maintenance/port)
 "uI" = (
 /obj/item/trash/cigbutt,
 /turf/simulated/floor/plating,
@@ -5768,6 +5867,12 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore)
+"wP" = (
+/obj/structure/shuttle/engine/propulsion{
+	dir = 1
+	},
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey_transfer)
 "wT" = (
 /obj/machinery/firealarm{
 	pixel_x = -30
@@ -6291,6 +6396,10 @@
 	},
 /turf/simulated/floor/arcade,
 /area/shuttle/odyssey/quarters/crew)
+"yK" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey_transfer)
 "yM" = (
 /obj/machinery/door/airlock/engineering,
 /obj/structure/cable{
@@ -6449,7 +6558,7 @@
 	},
 /area/shuttle/odyssey/cafeteria)
 "zA" = (
-/obj/structure/shuttle/diag_wall/smooth/black{
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 4
 	},
 /turf/unsimulated/floor/planetary/concrete,
@@ -6643,6 +6752,16 @@
 	icon_state = "floorgrime"
 	},
 /area/surface/nt_outpost/cargo)
+"Ac" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/machinery/media/receiver/boombox/wallmount/shuttle{
+	pixel_x = -32
+	},
+/obj/structure/closet/emcloset,
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "Ae" = (
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -6869,7 +6988,7 @@
 /turf/simulated/floor,
 /area/security/perma)
 "Bi" = (
-/obj/structure/shuttle/engine/propulsion{
+/obj/structure/shuttle/engine/propulsion/odyssey/right{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -6919,6 +7038,10 @@
 /obj/effect/landmark{
 	name = "xeno_spawn";
 	pixel_x = -1
+	},
+/obj/machinery/light_switch{
+	pixel_x = 12;
+	pixel_y = 24
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
@@ -7136,6 +7259,9 @@
 	icon_state = "dark vault full"
 	},
 /area/shuttle/odyssey/engineering/engine_room)
+"Cl" = (
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "Cm" = (
 /obj/structure/closet/crate/bin,
 /turf/simulated/floor{
@@ -7279,6 +7405,12 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/bridge)
+"CV" = (
+/obj/structure/shuttle/engine/propulsion/odyssey/left{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey/maintenance/starboard)
 "Da" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /obj/structure/disposalpipe/segment,
@@ -7663,7 +7795,7 @@
 	},
 /area/security/perma)
 "Ew" = (
-/obj/structure/shuttle/diag_wall/smooth/black{
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 1
 	},
 /turf/unsimulated/floor/planetary/concrete,
@@ -8116,7 +8248,7 @@
 	},
 /area/shuttle/odyssey/hallway/aft)
 "Gz" = (
-/obj/structure/shuttle/engine/propulsion{
+/obj/structure/shuttle/engine/propulsion/odyssey/right{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -9196,6 +9328,13 @@
 	icon_state = "floor"
 	},
 /area/surface/nt_outpost/store)
+"KA" = (
+/obj/machinery/docklight{
+	id_tag = "NTEV Odyssey Crew Transfer Shuttle Landing Zone";
+	name = "NTEV Odyssey Transfer Shuttle Docking Light"
+	},
+/turf/unsimulated/floor/planetary/concrete,
+/area/surface/nt_outpost)
 "KB" = (
 /obj/machinery/door/airlock/glass_atmos,
 /obj/machinery/door/poddoor{
@@ -11654,7 +11793,7 @@
 	},
 /area/surface/nt_outpost/admin)
 "SS" = (
-/obj/structure/shuttle/diag_wall/smooth/black{
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 1
 	},
 /turf/unsimulated/floor/planetary/concrete,
@@ -11999,6 +12138,13 @@
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey/engineering/engine_room)
+"Up" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/machinery/computer/shuttle_control/odyssey_transfer,
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "Ur" = (
 /obj/machinery/fishtank/tank,
 /turf/simulated/floor/vox,
@@ -12094,6 +12240,12 @@
 	},
 /turf/simulated/floor/vox,
 /area/vox_station/tradepost)
+"UG" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey_transfer)
 "UI" = (
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
@@ -12358,8 +12510,19 @@
 	dir = 8;
 	pixel_x = 24
 	},
+/obj/machinery/light_switch{
+	pixel_x = 12;
+	pixel_y = -24
+	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/port)
+"Vx" = (
+/obj/machinery/door/unpowered/shuttle,
+/obj/docking_port/shuttle{
+	dir = 2
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "Vy" = (
 /obj/structure/table,
 /obj/item/tool/hemostat{
@@ -12443,6 +12606,10 @@
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
+"VU" = (
+/obj/structure/bed/chair/shuttle,
+/turf/simulated/floor/shuttle,
+/area/shuttle/odyssey_transfer)
 "VV" = (
 /obj/structure/sign/poster{
 	icon_state = "poster10";
@@ -12864,6 +13031,9 @@
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey/bridge)
+"Xv" = (
+/turf/simulated/wall/shuttle,
+/area/shuttle/odyssey_transfer)
 "Xy" = (
 /obj/machinery/power/terminal{
 	dir = 8
@@ -13161,6 +13331,16 @@
 	},
 /turf/simulated/floor,
 /area/shuttle/odyssey/logistics)
+"Yy" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/machinery/light/floor,
+/turf/unsimulated/floor/planetary/concrete,
+/area/surface/nt_outpost)
 "Yz" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -13244,7 +13424,7 @@
 	},
 /area/shuttle/odyssey/hallway/fore)
 "YQ" = (
-/obj/structure/shuttle/diag_wall/smooth/black{
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 4
 	},
 /turf/unsimulated/floor/planetary/concrete,
@@ -17994,7 +18174,7 @@ Iq
 Iq
 Iq
 bp
-Bi
+uD
 Bi
 DU
 Ck
@@ -18009,7 +18189,7 @@ fq
 Bu
 DA
 DU
-Gz
+CV
 Gz
 od
 Iq
@@ -18269,19 +18449,19 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
+Yy
+ps
+ps
+ps
+ps
+Ij
+ps
+ps
+ps
+ps
+ps
+ps
+kN
 Bc
 Bc
 Bc
@@ -18293,7 +18473,7 @@ Iq
 Iq
 Iq
 bp
-Bi
+uD
 Bi
 bp
 Sa
@@ -18314,7 +18494,7 @@ Yv
 Dg
 Dg
 od
-Gz
+CV
 Gz
 od
 Iq
@@ -18571,19 +18751,19 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
+nl
+KA
+Iq
+Iq
+Iq
+KA
+Iq
+Iq
+Iq
+Iq
+Iq
+KA
+ic
 Bc
 Bc
 Bc
@@ -18873,19 +19053,19 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
+Iq
+Iq
+wP
+Xv
+Xv
+fu
+fu
+fu
+Xv
+Xv
+yK
+Iq
+ic
 Bc
 Bc
 Bc
@@ -19175,19 +19355,19 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
+Iq
+Iq
+Xv
+Xv
+sA
+tf
+tf
+Cl
+rb
+Ac
+Xv
+yK
+ic
 Bc
 Bc
 Bc
@@ -19477,21 +19657,21 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
+Iq
+Iq
+fu
+VU
+Cl
+Cl
+Cl
+Cl
+Cl
+Cl
+cR
+Vx
+up
+dh
+dh
 Bc
 nl
 Iq
@@ -19779,21 +19959,21 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
+Iq
+Iq
+fu
+VU
+Cl
+Cl
+Cl
+Cl
+Cl
+Cl
+Cl
+px
+dh
+dh
+dh
 Bc
 nl
 Iq
@@ -20081,21 +20261,21 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
+Iq
+Iq
+Xv
+Xv
+sm
+cj
+cj
+Cl
+iT
+Up
+Xv
+UG
+ic
+dh
+dh
 Bc
 nl
 Iq
@@ -20383,21 +20563,21 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
+Iq
+Iq
+wP
+Xv
+Xv
+fu
+fu
+fu
+Xv
+Xv
+UG
+Iq
+ic
+dh
+dh
 Bc
 nl
 Iq
@@ -20685,21 +20865,21 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
+nl
+KA
+Iq
+Iq
+Iq
+KA
+Iq
+Iq
+Iq
+Iq
+Iq
+KA
+ic
+dh
+dh
 Bc
 nl
 Iq
@@ -20987,21 +21167,21 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
+YC
+Ag
+Ag
+Ag
+Ag
+vI
+Ag
+Ag
+Ag
+Ag
+Ag
+Ag
+Rz
+dh
+dh
 Bc
 nl
 Iq
@@ -21302,8 +21482,8 @@ Bc
 Bc
 Bc
 Bc
-Bc
-Bc
+dh
+dh
 Bc
 nl
 Iq
@@ -21942,7 +22122,7 @@ DJ
 iZ
 HC
 Ls
-rZ
+nC
 Iq
 Iq
 Iq

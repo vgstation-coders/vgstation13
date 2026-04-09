@@ -79,6 +79,7 @@
 	var/has_engines = FALSE // Is the map a space ship with big engines?
 	var/broken_lights = TRUE //broken lights roundstart
 	var/can_have_robots = TRUE
+	var/planet_size = 0 // If set, overrides planet allocation size for this map
 
 	var/list/daynight_z_lvls = list() //Z-levels that participate in the day/night cycle
 

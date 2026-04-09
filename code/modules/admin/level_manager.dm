@@ -468,19 +468,12 @@
 						to_chat(usr, "<span class='warning'>Shuttle has no linked area!</span>")
 						return FALSE
 
-					var/enc_width = input(usr, "Enter encounter width (tiles, 30-255):", "Encounter Width", 80) as null|num
-					if(!enc_width || enc_width < 30 || enc_width > 255)
-						return FALSE
-					var/enc_height = input(usr, "Enter encounter height (tiles, 30-255):", "Encounter Height", enc_width) as null|num
-					if(!enc_height || enc_height < 30 || enc_height > 255)
-						return FALSE
-
-					var/datum/virtual_z/enc_vz = SSmapping.generate_encounter(enc_width, enc_height, chosen_shuttle)
-					if(enc_vz)
-						log_admin("[key_name(usr)] generated encounter for shuttle '[shuttle_choice]' (vZ: [enc_vz.id], Size: [enc_width]x[enc_height]).")
-						message_admins("<span class='notice'>[key_name_admin(usr)] generated encounter for shuttle '[shuttle_choice]' (vZ: [enc_vz.id], Size: [enc_width]x[enc_height]).</span>", 1)
+					var/datum/encounter/enc = SSmapping.generate_scanner_encounter(chosen_shuttle)
+					if(enc)
+						log_admin("[key_name(usr)] generated encounter '[enc.encounter_name]' for shuttle '[shuttle_choice]' (vZ: [enc.v.id]).")
+						message_admins("<span class='notice'>[key_name_admin(usr)] generated encounter '[enc.encounter_name]' for shuttle '[shuttle_choice]' (vZ: [enc.v.id]).</span>", 1)
 					else
-						to_chat(usr, "<span class='warning'>Failed to generate encounter! The vlevel may be too small for the selected shuttle.</span>")
+						to_chat(usr, "<span class='warning'>Failed to generate encounter!</span>")
 					return TRUE
 
 				if("Generate Planet")

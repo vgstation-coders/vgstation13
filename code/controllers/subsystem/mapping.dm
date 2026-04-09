@@ -21,7 +21,10 @@
 #define SPATIAL_BUCKET_SIZE 15
 
 /// Minimum space turfs between any point of the shuttle and the vlevel edge in encounters
-#define ENCOUNTER_EDGE_BUFFER 5
+#define ENCOUNTER_EDGE_BUFFER 7
+
+/// Fixed encounter zone size (must be large enough for shuttle + vaults)
+#define ENCOUNTER_ZONE_SIZE 145
 
 var/datum/subsystem/mapping/SSmapping
 var/skip_turf_init = FALSE //NEVER change this var for anything other than incrementing world.maxz it breaks EVERYTHING!!
@@ -205,7 +208,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 			var/next_planet = pick_n_take(queued_planets)
 			if(!ispath(next_planet, /datum/planet_type) && !istype(next_planet, /datum/planet_type))
 				return
-			spawn_planet(next_planet, FALSE)
+			spawn_planet(next_planet, FALSE, map.planet_size)
 		else
 			return
 
@@ -742,27 +745,46 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	return encounter_vz
 
 /**
- * Generates an encounter zone for the planet scanner (no shuttle-specific docking port).
+ * Generates an encounter zone for the planet scanner.
  *
- * Creates a new virtual z-level, spawns 1-3 vaults, and returns a /datum/encounter.
- * Docking ports are created on demand when a shuttle tries to visit via [/datum/encounter/proc/get_shuttle_docking_port].
+ * Creates a fixed [ENCOUNTER_ZONE_SIZE]x[ENCOUNTER_ZONE_SIZE] virtual z-level. If a shuttle is provided,
+ * reserves a landing area for it (with [ENCOUNTER_EDGE_BUFFER]-turf buffer from the zone edge) and places
+ * 1-3 vaults in the remaining space. Docking ports are created on demand via
+ * [/datum/encounter/proc/get_shuttle_docking_port].
  *
  * Returns the encounter datum, or null on failure
  */
-/datum/subsystem/mapping/proc/generate_scanner_encounter(var/enc_width = 0, var/enc_height = 0)
-	if(!enc_width)
-		enc_width = rand(70, ALLOCATION_SMALL)
-	if(!enc_height)
-		enc_height = enc_width
+/datum/subsystem/mapping/proc/generate_scanner_encounter(datum/shuttle/shuttle = null)
+	var/enc_size = ENCOUNTER_ZONE_SIZE
 
-	var/datum/virtual_z/encounter_vz = map.addVLevel(enc_width, enc_height)
+	var/datum/virtual_z/encounter_vz = map.addVLevel(enc_size, enc_size)
 	if(!encounter_vz)
 		return null
 	encounter_vz.name = "Encounter Zone"
 	encounter_vz.teleJammed = VZ_TELEPORTATION_FORBIDDEN
 	encounter_vz.movementJammed = TRUE
 
-	// Spawn 1-3 vaults
+	// Calculate shuttle reservation if shuttle is provided
+	var/list/shuttle_reservation = null // list(x_min, y_min, x_max, y_max) - exclusion zone for vaults
+	if(shuttle?.linked_port && shuttle.linked_area)
+		var/list/shuttle_dims = shuttle.get_size()
+		if(shuttle_dims)
+			var/shuttle_width = shuttle_dims[1]
+			var/shuttle_height = shuttle_dims[2]
+
+			// Pick a random position for the shuttle with ENCOUNTER_EDGE_BUFFER from each edge
+			var/safe_bl_x_min = encounter_vz.x_min + ENCOUNTER_EDGE_BUFFER
+			var/safe_bl_x_max = encounter_vz.x_max - shuttle_width - ENCOUNTER_EDGE_BUFFER + 1
+			var/safe_bl_y_min = encounter_vz.y_min + ENCOUNTER_EDGE_BUFFER
+			var/safe_bl_y_max = encounter_vz.y_max - shuttle_height - ENCOUNTER_EDGE_BUFFER + 1
+
+			if(safe_bl_x_max >= safe_bl_x_min && safe_bl_y_max >= safe_bl_y_min)
+				var/bl_x = rand(safe_bl_x_min, safe_bl_x_max)
+				var/bl_y = rand(safe_bl_y_min, safe_bl_y_max)
+				// Exclusion zone includes a 2-turf buffer around the shuttle
+				shuttle_reservation = list(bl_x - 2, bl_y - 2, bl_x + shuttle_width + 1, bl_y + shuttle_height + 1)
+
+	// Spawn 1-3 vaults outside the shuttle reservation
 	var/vault_count = rand(1, 3)
 	var/list/available_vaults = get_map_element_objects()
 	var/list/placed_bounds = list()
@@ -795,6 +817,12 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 				var/v_x_max = try_x + vault.width - 1
 				var/v_y_max = try_y + vault.height - 1
 
+				// Must not overlap shuttle reservation
+				if(shuttle_reservation)
+					if(!(v_x_max < shuttle_reservation[1] || try_x > shuttle_reservation[3] || v_y_max < shuttle_reservation[2] || try_y > shuttle_reservation[4]))
+						continue
+
+				// Must not overlap previously placed vaults
 				var/overlaps = FALSE
 				for(var/list/bounds in placed_bounds)
 					if(!(v_x_max < bounds[1] || try_x > bounds[3] || v_y_max < bounds[2] || try_y > bounds[4]))
@@ -820,9 +848,10 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	var/datum/encounter/enc = new()
 	enc.v = encounter_vz
 	enc.placed_bounds = placed_bounds
+	enc.shuttle_reservation = shuttle_reservation
 	encounters += enc
 
-	message_admins("Generated encounter '[enc.encounter_name]' at v-level [encounter_vz.id] ([enc_width]x[enc_height]) with [vaults_placed] vault(s).")
+	message_admins("Generated encounter '[enc.encounter_name]' at v-level [encounter_vz.id] ([enc_size]x[enc_size]) with [vaults_placed] vault(s).")
 	captain_announce("Deep space scanners have detected a new anomaly: [enc.encounter_name].")
 
 	return enc
@@ -833,3 +862,4 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 #undef STAGE_WEATHER
 #undef SPATIAL_BUCKET_SIZE
 #undef ENCOUNTER_EDGE_BUFFER
+#undef ENCOUNTER_ZONE_SIZE

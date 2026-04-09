@@ -7,6 +7,7 @@
 	var/datum/virtual_z/v
 	var/hidden = FALSE
 	var/list/placed_bounds = list() // list of list(x_min, y_min, x_max, y_max) for vault positions
+	var/list/shuttle_reservation = null // list(x_min, y_min, x_max, y_max) - pre-reserved shuttle landing zone
 	var/list/shuttle_docking_ports = list() // shuttle datum -> docking port
 
 /datum/encounter/New()
@@ -58,38 +59,47 @@
 	var/port_offset_x = offsets[1]
 	var/port_offset_y = offsets[2]
 
-	var/buffer = 5
+	var/buffer = 7
 	if(v.size_x < shuttle_width + 2 * buffer || v.size_y < shuttle_height + 2 * buffer)
 		return null
 
-	var/safe_x_min = v.x_min + buffer
-	var/safe_x_max = v.x_max - shuttle_width - buffer + 1
-	var/safe_y_min = v.y_min + buffer
-	var/safe_y_max = v.y_max - shuttle_height - buffer + 1
-
-	// Find a position for the shuttle that doesn't overlap vaults
 	var/bl_x = 0
 	var/bl_y = 0
 	var/found = FALSE
-	for(var/attempt = 1 to 50)
-		var/try_x = rand(safe_x_min, safe_x_max)
-		var/try_y = rand(safe_y_min, safe_y_max)
-		var/shuttle_x_max = try_x + shuttle_width + 1
-		var/shuttle_y_max = try_y + shuttle_height + 1
-		var/shuttle_x_min = try_x - 2
-		var/shuttle_y_min = try_y - 2
 
-		var/valid = TRUE
-		for(var/list/bounds in placed_bounds)
-			if(!(shuttle_x_max < bounds[1] || shuttle_x_min > bounds[3] || shuttle_y_max < bounds[2] || shuttle_y_min > bounds[4]))
-				valid = FALSE
+	// Use pre-reserved shuttle landing zone if available
+	if(shuttle_reservation)
+		// The reservation stores the exclusion zone (shuttle bbox + 2-turf buffer)
+		// Recover the shuttle bottom-left from the exclusion bounds
+		bl_x = shuttle_reservation[1] + 2
+		bl_y = shuttle_reservation[2] + 2
+		found = TRUE
+	else
+		// No reservation - find a position that doesn't overlap vaults
+		var/safe_x_min = v.x_min + buffer
+		var/safe_x_max = v.x_max - shuttle_width - buffer + 1
+		var/safe_y_min = v.y_min + buffer
+		var/safe_y_max = v.y_max - shuttle_height - buffer + 1
+
+		for(var/attempt = 1 to 50)
+			var/try_x = rand(safe_x_min, safe_x_max)
+			var/try_y = rand(safe_y_min, safe_y_max)
+			var/shuttle_x_max = try_x + shuttle_width + 1
+			var/shuttle_y_max = try_y + shuttle_height + 1
+			var/shuttle_x_min = try_x - 2
+			var/shuttle_y_min = try_y - 2
+
+			var/valid = TRUE
+			for(var/list/bounds in placed_bounds)
+				if(!(shuttle_x_max < bounds[1] || shuttle_x_min > bounds[3] || shuttle_y_max < bounds[2] || shuttle_y_min > bounds[4]))
+					valid = FALSE
+					break
+
+			if(valid)
+				bl_x = try_x
+				bl_y = try_y
+				found = TRUE
 				break
-
-		if(valid)
-			bl_x = try_x
-			bl_y = try_y
-			found = TRUE
-			break
 
 	if(!found)
 		return null
@@ -533,7 +543,7 @@
 
 	var/selected_planet_type = select_random_planet_type()
 
-	SSmapping.spawn_planet(selected_planet_type)
+	SSmapping.spawn_planet(selected_planet_type, FALSE, map.planet_size)
 
 	return selected_planet_type
 
@@ -599,6 +609,12 @@
 	// Passive scanning state
 	var/passive_scanning = FALSE
 	var/passive_scan_progress = 0 // Accumulated progress (completes at 1.0)
+
+/// Override to pass the shuttle to encounter generation for proper shuttle reservation
+/obj/machinery/planet_scanner/shuttle/spawn_new_encounter()
+	if(!SSmapping)
+		CRASH("New encounter spawn attempted before mapping subsystem initialized")
+	SSmapping.generate_scanner_encounter(get_shuttle())
 
 /// Get the shuttle this scanner is installed on by checking the area
 /obj/machinery/planet_scanner/shuttle/proc/get_shuttle()

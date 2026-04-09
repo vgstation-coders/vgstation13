@@ -1,9 +1,11 @@
 var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shuttle/odyssey)
+var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(starting_area = /area/shuttle/odyssey_transfer)
 
 /datum/shuttle/odyssey
 	name = "NTEV Odyssey"
 	cant_leave_zlevel = list()
 	dir = EAST
+	can_rotate = FALSE
 
 	cooldown = 60 SECONDS
 	pre_flight_delay = 10 SECONDS
@@ -32,6 +34,11 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 		set_transit_dock(transit)
 		transit.areaname = "Hyperspace"
 		add_dock(transit)
+		// Lower transit turf plane so catwalks and shuttle objects render above hyperspace
+		var/datum/virtual_z/tvz = transit.get_virtual_z()
+		if(tvz)
+			for(var/turf/space/transit/T in tvz.get_turfs())
+				T.plane = BELOW_PLATING_PLANE
 
 	var/obj/docking_port/destination/parking = generate_parking_area(src)
 	if(parking)
@@ -52,11 +59,32 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 		for(var/obj/effect/beach_water/unsimmed/W in T.vis_contents)
 			T.vis_contents -= W
 
+/datum/shuttle/odyssey/get_pre_flight_delay()
+	// Skip countdown when already in hyperspace
+	if(current_port == transit_port)
+		return 0
+	return ..()
+
+/datum/shuttle/odyssey/animate_liftoff()
+	// Skip liftoff when already in hyperspace
+	if(current_port == transit_port)
+		return
+	// Delay liftoff animation to 2 seconds before the pre-flight countdown ends
+	spawn(max(1, get_pre_flight_delay() - 2 SECONDS))
+		..()
+
+/datum/shuttle/odyssey/animate_landing()
+	// Skip landing animation when entering hyperspace
+	if(destination_port == transit_port)
+		return
+	..()
+
 /datum/shuttle/odyssey/actually_travel_to(obj/docking_port/D, obj/machinery/computer/shuttle_control/broadcast, mob/user, eject)
 	transit_destination_name = capitalize(D.areaname)
 	if(transit_port)
 		transit_port.areaname = "Hyperspace"
-	captain_announce("The NTEV Odyssey will be departing to [transit_destination_name] in 10 seconds.")
+	if(current_port != transit_port)
+		captain_announce("The NTEV Odyssey will be departing to [transit_destination_name] in 10 seconds.")
 	return ..()
 
 /datum/shuttle/odyssey/pre_flight()
@@ -71,8 +99,15 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 				if(destination_port)
 					captain_announce("The NTEV Odyssey will be arriving at [dest_name] in 10 seconds.")
 	..()
+	// Start periodic engine firing if we're now in hyperspace transit
+	if(current_port == transit_port)
+		for(var/obj/structure/shuttle/engine/propulsion/odyssey/E in shuttle_contents())
+			E.start_hyperspace_firing()
 
 /datum/shuttle/odyssey/complete_flight()
+	// Stop periodic engine firing before leaving hyperspace
+	for(var/obj/structure/shuttle/engine/propulsion/odyssey/E in shuttle_contents())
+		E.stop_hyperspace_firing()
 	transit_end_time = 0
 	transit_destination_name = ""
 	..()
@@ -142,3 +177,47 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 /datum/shuttle/trade/initialize()
 	.=..()
 	add_dock(/obj/docking_port/destination/odyssey/rendezvous_trader)
+
+/datum/shuttle/odyssey_transfer
+	name = "odyssey transfer shuttle"
+	dir = SOUTH
+	can_rotate = TRUE
+
+/datum/shuttle/odyssey_transfer/initialize()
+	.=..()
+	add_dock(/obj/docking_port/destination/odyssey_transfer/transfer)
+	add_dock(/obj/docking_port/destination/odyssey_transfer/nt_outpost)
+
+/obj/docking_port/destination/odyssey_transfer/transfer
+	areaname = "NTEV Odyssey Crew Transfer Dock"
+
+/obj/docking_port/destination/odyssey_transfer/nt_outpost
+	areaname = "NTEV Odyssey Crew Transfer Shuttle Landing Zone"
+
+/obj/machinery/computer/shuttle_control/odyssey_transfer
+	name = "NTEV Odyssey Crew Transfer Shuttle control computer"
+
+/obj/machinery/computer/shuttle_control/odyssey_transfer/New()
+	link_to(odyssey_transfer_shuttle)
+	.=..()
+
+/proc/odyssey_bluespace_transit()
+	if(!odyssey_shuttle || !odyssey_shuttle.transit_port)
+		return
+	var/datum/virtual_z/transit_vz = odyssey_shuttle.transit_port.get_virtual_z()
+	if(!transit_vz)
+		return
+	var/datum/emergency_shuttle/odyssey/ES = emergency_shuttle
+	if(!istype(ES))
+		return
+	// Toggle: remove if already active
+	if(ES.bs_overlay)
+		for(var/turf/space/transit/T in transit_vz.get_turfs())
+			T.vis_contents -= ES.bs_overlay
+		qdel(ES.bs_overlay)
+		ES.bs_overlay = null
+		return
+	ES.bs_overlay = new /obj/effect/overlay/bluespacify()
+	ES.bs_overlay.plane = FLOAT_PLANE
+	for(var/turf/space/transit/T in transit_vz.get_turfs())
+		T.vis_contents += ES.bs_overlay

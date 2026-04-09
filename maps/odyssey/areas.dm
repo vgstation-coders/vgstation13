@@ -115,3 +115,8 @@
 /area/surface/nt_outpost/mineral_processing
 	name = "\improper Mineral Processing"
 	icon_state = "mining_production"
+
+/area/shuttle/odyssey_transfer
+	name = "\improper NTEV Odyssey Crew Transfer Shuttle"
+	icon_state = "shuttle"
+	requires_power = 0
