@@ -339,7 +339,11 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 			score.rating = "Nanotrasen's Finest"
 	dat += "<B><U>RATING:</U></B> [score.rating]<br><br>"
 
-	dat += "<b>STATION HEATMAP:</b><br><img src='data:image/png;base64,[icon2base64(draw_heatmap(1))]'/><br><br>"
+	dat += "<b>STATION HEATMAP:</b><br>"
+	var/list/zs_to_draw = GetConnectedZlevels(1)
+	for(var/z in zs_to_draw)
+		dat += "<img src='data:image/png;base64,[icon2base64(draw_heatmap(z))]'/><br>"
+	dat += "<br>"
 
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
 	dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
