@@ -399,11 +399,21 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/divisor_factor = 255/highest_player_entry
 	if (zLevel > world.maxz)
 		return
+	var/lowest_x = 0
+	var/lowest_y = 0
+	var/highest_x = 0
+	var/highest_y = 0
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 			var/turf/tile = locate(i, r, zLevel)
-			if(tile?.player_entries)
+			if(tile && !istype(tile,get_base_turf()))
+				if(!lowest_x)
+					lowest_x = i
+				if(!lowest_y)
+					lowest_y = r
+				highest_x = i
+				highest_y = r
 				var/final_factor = tile.player_entries*divisor_factor
 				canvas.DrawBox(rgb(final_factor/4,final_factor/2,final_factor,255), i, r)
-
+	canvas.Crop(lowest_x,lowest_y,highest_x,highest_y)
 	return canvas
