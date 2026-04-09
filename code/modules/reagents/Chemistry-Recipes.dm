@@ -309,7 +309,7 @@
 	id = CHERRYLUBE
 	result = CHERRYLUBE
 	required_reagents = list(LUBE = 1, CHERRYJELLY = 1)
-	result_amount = 1
+	result_amount = 2
 
 /datum/chemical_reaction/sodium_polyacrylate
 	name = "Sodium Polyacrylate"
