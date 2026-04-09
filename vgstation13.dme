@@ -2846,7 +2846,6 @@
 #include "code\modules\shuttles\lightship.dm"
 #include "code\modules\shuttles\mining.dm"
 #include "code\modules\shuttles\misc.dm"
-#include "code\modules\shuttles\odyssey.dm"
 #include "code\modules\shuttles\research.dm"
 #include "code\modules\shuttles\salvage.dm"
 #include "code\modules\shuttles\security.dm"

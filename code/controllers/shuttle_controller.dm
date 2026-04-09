@@ -485,9 +485,9 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 	// Update the odyssey shuttle's jump state based on time remaining
 	if(direction == EMERGENCY_SHUTTLE_GOING_TO_STATION)
-		if(timeleft > 300) // More than 5 min left - can still cancel, can fly to outpost
+		if(timeleft > 120) // More than 2 min left - can still cancel, can fly to outpost
 			odyssey_shuttle.bluespace_jump_state = JUMP_COUNTDOWN
-		else if(timeleft > 0) // 5 min or less - committed, no flying
+		else if(timeleft > 0) // 2 min or less - committed, no flying
 			odyssey_shuttle.bluespace_jump_state = JUMP_COMMITTED
 
 	switch(location)
@@ -529,6 +529,24 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 	return 0
 
+/datum/emergency_shuttle/odyssey/incall(coeff = 1)
+	if(shutdown)
+		return
+	if((!universe.OnShuttleCall(null) || deny_shuttle) && alert == 1)
+		return
+	if(endtime)
+		setdirection(EMERGENCY_SHUTTLE_GOING_TO_STATION)
+	else
+		settimeleft(300 * coeff) // 5 minutes
+		online = 1
+		setdirection(EMERGENCY_SHUTTLE_GOING_TO_STATION)
+		if(always_fake_recall)
+			fake_recall = rand(150, 250)
+	if(alert == 0)
+		for(var/area/A in areas)
+			if(istype(A, /area/hallway))
+				A.readyalert()
+
 /datum/emergency_shuttle/odyssey/recall()
 	if(shutdown)
 		return
@@ -537,7 +555,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	if(direction == EMERGENCY_SHUTTLE_GOING_TO_STATION)
 		var/timeleft = timeleft()
 		if(alert == 0)
-			if(timeleft >= 600)
+			if(timeleft >= 300)
 				return
 			command_alert(/datum/command_alert/emergency_shuttle_recalled)
 			world << sound('sound/AI/shuttlerecalled.ogg')

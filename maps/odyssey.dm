@@ -22,7 +22,8 @@
 	load_custom_fixedvaults = list(
 		/datum/map_element/fixedvault/derelict,
 		/datum/map_element/fixedvault/dj_sat,
-		/datum/map_element/fixedvault/vox_parking
+		/datum/map_element/fixedvault/vox_parking,
+		/datum/map_element/fixedvault/rendezvous
 	)
 	enabled_jobs = list(/datum/job/trader)
 	disabled_jobs = list(
@@ -105,5 +106,6 @@
 
 #include "odyssey/areas.dm"
 #include "odyssey/fixedvaults.dm"
+#include "../code/modules/shuttles/odyssey.dm"
 #include "odyssey.dmm"
 #endif

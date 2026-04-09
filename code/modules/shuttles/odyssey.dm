@@ -6,11 +6,15 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 	dir = EAST
 
 	cooldown = 60 SECONDS
-	transit_delay = 30 SECONDS
+	pre_flight_delay = 10 SECONDS
+	transit_delay = 120 SECONDS
 	transit_timeout = 0 // Disable transit safety recall - shuttle can remain in hyperspace indefinitely
+	use_transit = TRANSIT_ALWAYS
 	stable = 0
 	var/bluespace_jump_state = JUMP_NONE
 	var/obj/docking_port/destination/dock_centcom
+	var/transit_end_time = 0
+	var/transit_destination_name = ""
 
 	req_access = list(access_captain)
 
@@ -20,12 +24,13 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 	add_dock(/obj/docking_port/destination/odyssey/deep_space)
 	add_dock(/obj/docking_port/destination/odyssey/dj_sat)
 	add_dock(/obj/docking_port/destination/odyssey/derelict)
+	add_dock(/obj/docking_port/destination/odyssey/rendezvous_odyssey)
 	dock_centcom = locate(/obj/docking_port/destination/odyssey/centcomm) in all_docking_ports
 
 	var/obj/docking_port/destination/transit/transit = generate_transit_area(src)
 	if(transit)
 		set_transit_dock(transit)
-		transit.areaname = "hyperspace exploration"
+		transit.areaname = "Hyperspace"
 		add_dock(transit)
 
 	var/obj/docking_port/destination/parking = generate_parking_area(src)
@@ -42,6 +47,35 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 	var/at_outpost = istype(current_port, /obj/docking_port/destination/odyssey/outpost)
 	for(var/obj/machinery/power/battery/smes/S in shuttle_contents())
 		S.external_power_supply = at_outpost
+	// Clean up lingering beach water effects on shuttle turfs after landing
+	for(var/turf/T in shuttle_contents())
+		for(var/obj/effect/beach_water/unsimmed/W in T.vis_contents)
+			T.vis_contents -= W
+
+/datum/shuttle/odyssey/actually_travel_to(obj/docking_port/D, obj/machinery/computer/shuttle_control/broadcast, mob/user, eject)
+	transit_destination_name = capitalize(D.areaname)
+	if(transit_port)
+		transit_port.areaname = "Hyperspace"
+	captain_announce("The NTEV Odyssey will be departing to [transit_destination_name] in 10 seconds.")
+	return ..()
+
+/datum/shuttle/odyssey/pre_flight()
+	if(!destination_port)
+		return
+	if(transit_port && get_transit_delay() && destination_port != transit_port)
+		transit_end_time = world.time + get_transit_delay()
+		var/dest_name = transit_destination_name
+		var/announce_delay = get_transit_delay() - 10 SECONDS
+		if(announce_delay > 0)
+			spawn(announce_delay)
+				if(destination_port)
+					captain_announce("The NTEV Odyssey will be arriving at [dest_name] in 10 seconds.")
+	..()
+
+/datum/shuttle/odyssey/complete_flight()
+	transit_end_time = 0
+	transit_destination_name = ""
+	..()
 
 /datum/shuttle/odyssey/travel_to(obj/docking_port/D, obj/machinery/computer/shuttle_control/broadcast, mob/user, eject = FALSE)
 	if(bluespace_jump_state == JUMP_COMMITTED)
@@ -80,3 +114,31 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 
 /obj/docking_port/destination/odyssey/centcomm
 	areaname = "Central Command"
+
+/obj/docking_port/destination/odyssey/rendezvous_odyssey
+	areaname = "Rendezvous with Vox Tradeship"
+
+/obj/docking_port/destination/odyssey/rendezvous_trader
+	areaname = "Rendezvous with NTEV Odyssey"
+
+/obj/machinery/status_display/odyssey
+	name = "shuttle status display"
+
+/obj/machinery/status_display/odyssey/update()
+	// Shuttle transit countdown takes priority
+	if(odyssey_shuttle && odyssey_shuttle.transit_end_time > world.time)
+		var/timeleft = max(0, round((odyssey_shuttle.transit_end_time - world.time) / 10, 1))
+		update_display("TRNST", "[add_zero(num2text((timeleft / 60) % 60), 2)]:[add_zero(num2text(timeleft % 60), 2)]")
+		return
+	// Bluespace jump countdown
+	if(emergency_shuttle && emergency_shuttle.online)
+		var/line2 = emergency_shuttle.get_shuttle_timer()
+		if(length(line2) > 5)
+			line2 = "Error"
+		update_display("-JUMP", line2)
+		return
+	..()
+
+/datum/shuttle/trade/initialize()
+	.=..()
+	add_dock(/obj/docking_port/destination/odyssey/rendezvous_trader)

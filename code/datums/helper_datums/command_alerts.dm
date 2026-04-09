@@ -155,6 +155,7 @@
 /datum/command_alert/emergency_shuttle_called/announce()
 	if(istype(emergency_shuttle, /datum/emergency_shuttle/odyssey))
 		message = "A Bluespace jump has been initiated. The jump will engage in [round(emergency_shuttle.timeleft()/60)] minutes."
+		noalert = 1
 	else
 		message = "The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes."
 	if(justification)

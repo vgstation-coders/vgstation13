@@ -184,5 +184,10 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 				M.activate()
 
 	sleep(50)
-	icon_state = "launcherbtt"
+	var/any_deployed = FALSE
+	for(var/obj/machinery/power/rosa/M in rosa_machines)
+		if(M.id_tag == src.id_tag && M.deployed)
+			any_deployed = TRUE
+			break
+	icon_state = any_deployed ? "launcheract" : "launcherbtt"
 	active = FALSE

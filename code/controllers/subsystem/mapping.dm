@@ -823,6 +823,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	encounters += enc
 
 	message_admins("Generated encounter '[enc.encounter_name]' at v-level [encounter_vz.id] ([enc_width]x[enc_height]) with [vaults_placed] vault(s).")
+	captain_announce("Deep space scanners have detected a new anomaly: [enc.encounter_name].")
 
 	return enc
 

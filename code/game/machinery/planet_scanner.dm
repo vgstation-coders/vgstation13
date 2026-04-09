@@ -652,7 +652,6 @@
 	else if(!scanning && !waiting_for_generation && shuttle_in_transit() && !SSmapping?.scanning && !SSmapping?.generating && scans_completed < PLANET_SCANNER_MAX_SCANS && !(stat & (BROKEN|FORCEDISABLE)) && anchored)
 		if(!passive_scanning)
 			passive_scanning = TRUE
-			passive_scan_progress = 0
 			update_icon()
 		// 50% chance each tick to advance by 1/150 - averages ~10 min (300 ticks) to complete
 		if(prob(50))
@@ -660,9 +659,8 @@
 		if(passive_scan_progress >= 1.0)
 			complete_passive_scan()
 	else if(passive_scanning && !waiting_for_generation)
-		// Left transit or conditions changed - reset passive scan
+		// Left transit - pause passive scan but keep progress for next visit
 		passive_scanning = FALSE
-		passive_scan_progress = 0
 		update_icon()
 
 	..()
