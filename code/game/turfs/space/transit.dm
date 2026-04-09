@@ -2,6 +2,39 @@
 	var/pushdirection // push things that get caught in the transit tile this direction
 	plane = TURF_PLANE
 
+/turf/space/transit/Entered(atom/movable/A, atom/OldLoc)
+	if(isliving(A) && !isobserver(A))
+		var/datum/virtual_z/transit_v = src.v
+		if(transit_v && transit_v.level_type == VZ_TRANSIT)
+			// During a bluespace jump, raw bluespace energy disintegrates anything outside the ship
+			var/datum/emergency_shuttle/odyssey/ES = emergency_shuttle
+			if(istype(ES) && ES.bs_overlay)
+				A.visible_message("<span class='warning'>\The [A] is engulfed by crackling bluespace energy and flashes out of existence!</span>",\
+					"<span class='danger'>You pass beyond the ship's protective field. Raw bluespace energy tears through you at the molecular level. There is a brilliant flash, and then nothing.</span>",\
+					"<span class='warning'>You hear a deafening crack of displaced energy.</span>")
+				playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+				A.supermatter_act(src)
+				return
+			// Teleport to a random parking or space v-level
+			var/list/datum/virtual_z/destinations = list()
+			for(var/datum/virtual_z/vz in map.vLevels)
+				if(vz.level_type == VZ_PARKING || vz.level_type == VZ_SPACE)
+					destinations += vz
+			if(destinations.len)
+				var/datum/virtual_z/dest = pick(destinations)
+				for(var/i = 1 to 50)
+					var/tx = rand(dest.x_min + TRANSITIONEDGE, dest.x_max - TRANSITIONEDGE)
+					var/ty = rand(dest.y_min + TRANSITIONEDGE, dest.y_max - TRANSITIONEDGE)
+					var/turf/T = locate(tx, ty, dest.z())
+					if(istype(T, /turf/space) && !istype(T, /turf/space/transit) && !istype(T, /turf/unsimulated/border))
+						to_chat(A, "<span class='warning'>You are violently thrown out of hyperspace!</span>")
+						var/mob/living/L = A
+						transit_v.mob_exited(L)
+						A.forceMove(T)
+						dest.mob_entered(L)
+						return
+	..()
+
 /turf/space/transit/New()
 	if(loc)
 		var/area/A = loc

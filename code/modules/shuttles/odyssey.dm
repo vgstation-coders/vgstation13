@@ -44,6 +44,22 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	if(parking)
 		add_dock(parking)
 
+	// Set up transition channel for parking and space v-levels so they drift between each other
+	var/list/datum/virtual_z/deep_space_vlevels = list()
+	for(var/datum/virtual_z/vz in map.vLevels)
+		if(vz.level_type == VZ_PARKING || vz.level_type == VZ_SPACE)
+			deep_space_vlevels += vz
+
+	if(deep_space_vlevels.len)
+		var/channel = "Odyssey Deep Space"
+		if(!(channel in accessable_v_levels))
+			accessable_v_levels[channel] = list()
+
+		for(var/datum/virtual_z/vz in deep_space_vlevels)
+			vz.movementJammed = FALSE
+			vz.transition_channel = channel
+			vz.update_settings()
+
 	// If starting at outpost, enable external power on SMES units
 	if(istype(current_port, /obj/docking_port/destination/odyssey/outpost))
 		for(var/obj/machinery/power/battery/smes/S in shuttle_contents())
@@ -200,24 +216,3 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 /obj/machinery/computer/shuttle_control/odyssey_transfer/New()
 	link_to(odyssey_transfer_shuttle)
 	.=..()
-
-/proc/odyssey_bluespace_transit()
-	if(!odyssey_shuttle || !odyssey_shuttle.transit_port)
-		return
-	var/datum/virtual_z/transit_vz = odyssey_shuttle.transit_port.get_virtual_z()
-	if(!transit_vz)
-		return
-	var/datum/emergency_shuttle/odyssey/ES = emergency_shuttle
-	if(!istype(ES))
-		return
-	// Toggle: remove if already active
-	if(ES.bs_overlay)
-		for(var/turf/space/transit/T in transit_vz.get_turfs())
-			T.vis_contents -= ES.bs_overlay
-		qdel(ES.bs_overlay)
-		ES.bs_overlay = null
-		return
-	ES.bs_overlay = new /obj/effect/overlay/bluespacify()
-	ES.bs_overlay.plane = FLOAT_PLANE
-	for(var/turf/space/transit/T in transit_vz.get_turfs())
-		T.vis_contents += ES.bs_overlay

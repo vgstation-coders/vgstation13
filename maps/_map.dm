@@ -118,6 +118,10 @@
 	var/datum/virtual_z/new_vz = new(level, world.maxx, world.maxy, 1, 1, skip_turf_setup = FALSE)
 	new_vz.id = level.z
 	new_vz.name = level.name
+	if(level.z == zCentcomm)
+		new_vz.level_type = VZ_PROTECTED
+	else if(level.planetside)
+		new_vz.level_type = VZ_PLANET
 	if(level.z in daynight_z_lvls)
 		daynight_v_lvls += new_vz
 	new_vz.gps_allowed = level.z != zCentcomm
@@ -201,7 +205,7 @@
 	if(istype(ME, /datum/map_element/away_mission))
 		prefix = "Away Mission: "
 	new_vz.name = "[prefix][ME.name]"
-	new_vz.level_type = VZ_MAP_ELEMENT
+	new_vz.level_type = VZ_PROTECTED
 	new_vz.gps_allowed = FALSE
 	new_vz.teleJammed = VZ_TELEPORTATION_FORBIDDEN
 	new_vz.bluespace_jammed = TRUE

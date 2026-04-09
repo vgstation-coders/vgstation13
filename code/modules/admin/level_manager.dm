@@ -585,7 +585,7 @@
 					var/datum/virtual_z/new_vz = map.addVLevel(vlevel_width, vlevel_height, FALSE, turf_type)
 					if(new_vz)
 						new_vz.name = "Map Element: [ME.name]"
-						new_vz.level_type = VZ_MAP_ELEMENT
+						new_vz.level_type = VZ_PROTECTED
 						// Load the actual map element content into the vLevel
 						// The maploader adds 1 to these offsets, so we subtract 1 to compensate
 						var/load_x = new_vz.x_min + buffer_size - 1
@@ -747,7 +747,7 @@
 					var/datum/virtual_z/new_vz = map.addVLevel(width, height, fill_turf_type = turf_type)
 					if(new_vz)
 						new_vz.name = name
-						new_vz.level_type = VZ_CUSTOM
+						new_vz.level_type = VZ_SPACE
 						new_vz.gps_allowed = gps_allowed
 						new_vz.teleJammed = teleport_choice
 						new_vz.movementJammed = movement_jammed

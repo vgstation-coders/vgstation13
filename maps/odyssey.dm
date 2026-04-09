@@ -72,6 +72,7 @@
 	var/datum/virtual_z/new_vz = new(src, OUTPOST_MAX_X, OUTPOST_MAX_Y, 1, 1, skip_turf_setup = FALSE)
 	new_vz.id = 1
 	new_vz.name = "Nanotrasen Outpost"
+	new_vz.level_type = VZ_PLANET
 	daynight_v_lvls += new_vz
 	new_vz.gps_allowed = TRUE
 	new_vz.teleJammed = VZ_TELEPORTATION_ALLOWED

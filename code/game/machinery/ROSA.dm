@@ -40,7 +40,7 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 		return
 	var/datum/virtual_z/vz = get_virtual_z()
 	var/vz_type = vz.level_type
-	var/genrate = (vz_type == VZ_TRANSIT || vz_type == VZ_PARKING) ? ROSA_PANEL_GENRATE_SPACE : ROSA_PANEL_GENRATE
+	var/genrate = (vz_type == VZ_PLANET) ? ROSA_PANEL_GENRATE : ROSA_PANEL_GENRATE_SPACE
 	var/total_power = 0
 	for(var/obj/structure/rosa_panel/panel in panels)
 		if(!QDELETED(panel))

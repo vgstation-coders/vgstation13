@@ -25,7 +25,7 @@
 	if(!vlevels.len)
 		vlevels = map.vLevels.Copy()
 		for(var/datum/virtual_z/vz in vlevels)
-			if(vz.teleJammed == VZ_TELEPORTATION_FORBIDDEN || vz.level_type == VZ_TRANSIT || vz.level_type == VZ_PARKING || vz.level_type == VZ_MAP_ELEMENT) // Can't visit Centcomm but can still end up on a planet
+			if(vz.teleJammed == VZ_TELEPORTATION_FORBIDDEN || vz.level_type == VZ_TRANSIT || vz.level_type == VZ_PARKING || vz.level_type == VZ_PROTECTED) // Can't visit protected areas but can still end up on a planet or space area
 				vlevels.Remove(vz)
 	disablePhrase = stripped_input(implanter, "Choose a phrase that disables the implant:")
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")

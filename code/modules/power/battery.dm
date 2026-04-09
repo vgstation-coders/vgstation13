@@ -174,7 +174,10 @@ var/global/list/battery_online =	list(
 
 	// Input
 	chargereceived = 0
-	if (charging)
+	if (external_power_supply)
+		chargeload = 0
+		// External supply satisfies demand only - don't charge SMES
+	else if (charging)
 
 		// Manual charge mode is the 'old' mode, when batteries only charge when available power is higher than set charge level
 		// Auto charge mode lets batteries take any amount of available power, limited by charge level
