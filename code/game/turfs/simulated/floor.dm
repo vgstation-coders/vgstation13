@@ -690,7 +690,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	else
 		P = new /obj/effect/overlay/puddle(src, slipperiness, delay)
 	if(custom_color)
-	P.color = custom_color
+		P.color = custom_color
 
 /turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
 	var/obj/effect/overlay/puddle/P = is_wet()
