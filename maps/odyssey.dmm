@@ -6320,8 +6320,7 @@
 	dir = 10
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /obj/structure/dispenser,
 /turf/simulated/floor{
