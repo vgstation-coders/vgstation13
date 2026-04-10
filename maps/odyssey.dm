@@ -109,7 +109,7 @@
 
 #include "odyssey/areas.dm"
 #include "odyssey/fixedvaults.dm"
-#include "../code/modules/shuttles/odyssey.dm"
-#include "../code/modules/shuttles/odyssey_events.dm"
+#include "odyssey/shuttles.dm"
+#include "odyssey/events.dm"
 #include "odyssey.dmm"
 #endif

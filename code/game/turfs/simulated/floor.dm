@@ -430,6 +430,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	icon_plating = "plating"
 	set_light(0)
 	floor_tile = null
+	catwalk_suffix = ""
 	intact = 0
 	fix_floor()
 	remove_paint_overlay()
@@ -466,6 +467,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	T.update_icon()
 	floor_tile = new T.type(null)
 	material = floor_tile.material
+	if(istype(T, /obj/item/stack/tile/plated_catwalk))
+		var/obj/item/stack/tile/plated_catwalk/PC = T
+		catwalk_suffix = PC.catwalk_suffix
 	//Becomes a teleport destination for other phazon tiles
 	if(material=="phazon")
 		phazontiles += src

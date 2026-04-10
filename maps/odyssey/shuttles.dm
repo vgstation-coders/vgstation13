@@ -1,3 +1,7 @@
+#define JUMP_NONE 0
+#define JUMP_COUNTDOWN 1
+#define JUMP_COMMITTED 2
+
 var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shuttle/odyssey)
 var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(starting_area = /area/shuttle/odyssey_transfer)
 
@@ -511,3 +515,6 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	..()
 
 #undef ODYSSEY_TRANSIT_TIME
+#undef JUMP_NONE
+#undef JUMP_COUNTDOWN
+#undef JUMP_COMMITTED

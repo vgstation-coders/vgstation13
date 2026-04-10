@@ -624,7 +624,6 @@
 	return our_area.get_shuttle()
 
 /// Check if the shuttle is currently parked in deep space (VZ_PARKING)
-/// Check if the shuttle is currently parked in deep space (VZ_PARKING)
 /obj/machinery/planet_scanner/shuttle/proc/shuttle_in_space()
 	var/datum/shuttle/shuttle = get_shuttle()
 	if(!shuttle?.current_port)

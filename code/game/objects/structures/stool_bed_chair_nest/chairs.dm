@@ -723,8 +723,45 @@
 	desc = "A handrail with a built-in buckle used to prevent standing shuttle passengers from falling over during takeoff and landing."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "handrail"
-	sheet_amt = 1
+	sheet_amt = 2
 	anchored = 1
+
+/obj/structure/bed/chair/handrail/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(W.is_wrench(user))
+		if(locked_atoms && locked_atoms.len)
+			to_chat(user, "<span class='warning'>You cannot [anchored ? "unsecure" : "secure"] \the [src] while someone is buckled to it.</span>")
+			return
+		W.playtoolsound(src, 50)
+		anchored = !anchored
+		user.visible_message("<span class='notice'>\The [user] [anchored ? "secures" : "unsecures"] \the [src] [anchored ? "to" : "from"] the floor.</span>", \
+			"<span class='notice'>You [anchored ? "secure" : "unsecure"] \the [src] [anchored ? "to" : "from"] the floor.</span>")
+		return
+	if(iswelder(W))
+		if(anchored)
+			to_chat(user, "<span class='warning'>\The [src] is bolted down. Unwrench it first.</span>")
+			return
+		if(locked_atoms && locked_atoms.len)
+			to_chat(user, "<span class='warning'>You cannot cut \the [src] apart while someone is buckled to it.</span>")
+			return
+		var/obj/item/tool/weldingtool/WT = W
+		to_chat(user, "<span class='notice'>You start slicing \the [src] apart.</span>")
+		if(WT.do_weld(user, src, 30, 1))
+			if(gcDestroyed)
+				return
+			if(locked_atoms && locked_atoms.len)
+				return
+			user.visible_message("<span class='warning'>\The [user] slices \the [src] apart.</span>", \
+				"<span class='notice'>You slice \the [src] apart.</span>", \
+				"<span class='warning'>You hear welding.</span>")
+			drop_stack(sheet_type, loc, sheet_amt, user)
+			qdel(src)
+		return
+	. = ..()
+
+/obj/structure/bed/chair/handrail/AltClick(mob/user as mob)
+	if(!Adjacent(user) || user.incapacitated())
+		return
+	rotate_ccw()
 
 /obj/structure/bed/chair/handrail/buckle_chair(mob/M,mob/user)
 	..()

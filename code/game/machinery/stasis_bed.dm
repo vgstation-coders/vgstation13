@@ -46,6 +46,13 @@
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
 
+	if(L != user && !L.client)
+		var/warn = alert(user, "[L] has no active client. Placing a disconnected player into cryogenic stasis will permanently remove their character and belongings. Doing this maliciously against another player's wishes will lead to a ban. Are you sure you want to continue?", "Warning: Clientless Occupant", "Yes", "No")
+		if(warn != "Yes")
+			return
+		if(occupant || !Adjacent(user) || !user.Adjacent(L) || L.anchored)
+			return
+
 	if(user.pulling == L)
 		user.stop_pulling()
 	L.forceMove(src)
@@ -66,8 +73,12 @@
 			return
 		if(occupant != L)
 			return
+		message_admins("[key_name_admin(L)] has ended their round via \a [src] ([formatJumpTo(src, "JMP")]).")
+		log_game("[key_name(L)] has ended their round via \a [src] at [x],[y],[z].")
 		enter_stasis()
 	else
+		message_admins("[key_name_admin(user)] has placed clientless player [key_name_admin(L)] into \a [src] ([formatJumpTo(src, "JMP")]).")
+		log_game("[key_name(user)] has placed clientless player [key_name(L)] into \a [src] at [x],[y],[z].")
 		enter_stasis()
 
 /obj/machinery/stasis_bed/proc/enter_stasis()

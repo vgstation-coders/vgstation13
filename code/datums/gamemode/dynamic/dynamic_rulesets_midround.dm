@@ -867,7 +867,7 @@
 //////////////////////////////////////////////
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/odyssey_xeno
-	name = "Alien Parasite"
+	name = "Alien Stowaway"
 	role_category = /datum/role/xenomorph
 	enemy_jobs = list()
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
@@ -899,7 +899,7 @@
 	new_xeno.key = applicant.key
 	new_xeno << sound('sound/voice/alienspawn.ogg')
 
-	spawn(rand(50 SECONDS, 60 SECONDS))
+	spawn(rand(90 SECONDS, 120 SECONDS))
 		captain_announce("Unidentified life signs detected aboard the NTEV Odyssey.")
 
 	return new_xeno

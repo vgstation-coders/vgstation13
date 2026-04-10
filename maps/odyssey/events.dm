@@ -1,3 +1,6 @@
+#define ODYSSEY_STATE_HYPERSPACE (1<<0)
+#define ODYSSEY_STATE_DEEPSPACE  (1<<1)
+
 /*
  * Odyssey Map Events
  *
@@ -206,3 +209,6 @@
 	for(var/i = 1 to count)
 		var/turf/T = pick(space_turfs)
 		new /mob/living/simple_animal/hostile/carp(T)
+
+#undef ODYSSEY_STATE_HYPERSPACE
+#undef ODYSSEY_STATE_DEEPSPACE

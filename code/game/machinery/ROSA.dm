@@ -16,6 +16,8 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 	var/deployed = FALSE
 	var/deploying = FALSE
 	var/list/panels = list()
+	var/frequency = 1449
+	var/datum/radio_frequency/radio_connection
 
 /obj/machinery/power/rosa/New()
 	..()
@@ -25,13 +27,46 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 	..()
 	if(!terminal)
 		stat |= BROKEN
+	if(radio_controller && frequency)
+		set_frequency(frequency)
 
 /obj/machinery/power/rosa/Destroy()
 	for(var/obj/structure/rosa_panel/panel in panels)
 		qdel(panel)
 	panels.Cut()
 	rosa_machines -= src
+	if(radio_connection)
+		radio_controller.remove_object(src, frequency)
 	..()
+
+/obj/machinery/power/rosa/proc/set_frequency(new_frequency)
+	if(!radio_controller)
+		return
+	radio_controller.remove_object(src, frequency)
+	frequency = new_frequency
+	if(frequency)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
+
+/obj/machinery/power/rosa/receive_signal(datum/signal/signal)
+	if(!signal || !id_tag)
+		return
+	if(signal.data["tag"] != id_tag)
+		return
+	switch(signal.data["command"])
+		if("toggle")
+			spawn()
+				activate()
+		if("status")
+			send_status()
+
+/obj/machinery/power/rosa/proc/send_status()
+	if(radio_connection)
+		var/datum/signal/signal = new /datum/signal
+		signal.transmission_method = 1
+		signal.data["tag"] = id_tag
+		signal.data["timestamp"] = world.time
+		signal.data["active"] = deployed ? 1 : 0
+		radio_connection.post_signal(src, signal, range = 25, filter = RADIO_AIRLOCK)
 
 /obj/machinery/power/rosa/process()
 	if(!terminal)
@@ -117,6 +152,7 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 		sleep(8)
 	deployed = TRUE
 	deploying = FALSE
+	send_status()
 
 /obj/machinery/power/rosa/proc/force_retract()
 	deploying = FALSE
@@ -125,6 +161,7 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 	panels.Cut()
 	icon_state = "rollerpanel"
 	deployed = FALSE
+	send_status()
 
 /obj/machinery/power/rosa/proc/retract()
 	deploying = TRUE
@@ -138,6 +175,7 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 	icon_state = "rollerpanel"
 	deployed = FALSE
 	deploying = FALSE
+	send_status()
 
 /obj/structure/rosa_panel
 	name = "solar panel"
@@ -153,41 +191,3 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 		parent_rosa.panels -= src
 		parent_rosa = null
 	..()
-
-/obj/machinery/rosa_button
-	name = "ROSA control"
-	desc = "A remote control switch for a Roll Out Solar Array."
-	icon = 'icons/obj/objects.dmi'
-	icon_state = "launcherbtt"
-	anchored = 1
-	use_power = MACHINE_POWER_USE_IDLE
-	idle_power_usage = 2
-	active_power_usage = 4
-	machine_flags = MULTITOOL_MENU
-	var/active = FALSE
-	ghost_read = 0
-	ghost_write = 0
-
-/obj/machinery/rosa_button/attack_hand(mob/user)
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
-		return
-	if(active)
-		return
-	use_power(5)
-	active = TRUE
-	icon_state = "launcheract"
-	add_fingerprint(user)
-
-	for(var/obj/machinery/power/rosa/M in rosa_machines)
-		if(M.id_tag == src.id_tag)
-			spawn()
-				M.activate()
-
-	sleep(50)
-	var/any_deployed = FALSE
-	for(var/obj/machinery/power/rosa/M in rosa_machines)
-		if(M.id_tag == src.id_tag && M.deployed)
-			any_deployed = TRUE
-			break
-	icon_state = any_deployed ? "launcheract" : "launcherbtt"
-	active = FALSE
