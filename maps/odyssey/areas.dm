@@ -91,6 +91,10 @@
 	name = "\improper Security Office"
 	icon_state = "security"
 
+/area/shuttle/odyssey/exterior
+	name = "\improper Exterior"
+	icon_state = "red"
+
 /area/surface/nt_outpost
 	name = "\improper Nanotrasen Outpost"
 	icon_state = "bluenew"

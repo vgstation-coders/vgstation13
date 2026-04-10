@@ -66,6 +66,10 @@
 #define JUMP_COUNTDOWN 1
 #define JUMP_COMMITTED 2
 
+// Odyssey event state flags
+#define ODYSSEY_STATE_HYPERSPACE (1<<0)
+#define ODYSSEY_STATE_DEEPSPACE  (1<<1)
+
 // This v-level is a...
 #define VZ_TRANSIT		1		// shuttle transit area
 #define VZ_PARKING		2		// shuttle parking area

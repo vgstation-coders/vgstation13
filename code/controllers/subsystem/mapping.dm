@@ -257,6 +257,10 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 				current_planet.ruin_budget -= used_ruin.cost
 
 		if(STAGE_POPULATION)
+			// Create climate before processing turfs so weather registration works
+			if(!current_planet.climate && current_planet.climate_type)
+				current_planet.climate = SSweather.set_climate(current_planet.climate_type, current_virtual_z, random_start = TRUE)
+
 			while(queue_index <= population_queue.len && turfs_processed < target_turfs)
 				var/turf/T = population_queue[queue_index]
 				if(T)
@@ -299,8 +303,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 				return
 
 		if(STAGE_WEATHER)
-			if(current_planet.climate_type)
-				current_planet.climate = SSweather.set_climate(current_planet.climate_type, current_virtual_z, random_start = TRUE)
+			if(current_planet.climate)
 				SSweather.fire()
 
 			var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
@@ -643,6 +646,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	if(!encounter_vz)
 		return null
 	encounter_vz.name = "Encounter Zone"
+	encounter_vz.gps_allowed = TRUE
 	encounter_vz.teleJammed = VZ_TELEPORTATION_FORBIDDEN
 	encounter_vz.movementJammed = TRUE
 
@@ -761,8 +765,17 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	if(!encounter_vz)
 		return null
 	encounter_vz.name = "Encounter Zone"
-	encounter_vz.teleJammed = VZ_TELEPORTATION_FORBIDDEN
-	encounter_vz.movementJammed = TRUE
+	encounter_vz.gps_allowed = TRUE
+	encounter_vz.teleJammed = VZ_TELEPORTATION_ALLOWED
+	encounter_vz.movementJammed = FALSE
+
+	// Inherit the deep-space drift channel from the shuttle's parking vlevel so this
+	// encounter can be reached by drifting like the rest of the deep-space group.
+	if(shuttle)
+		for(var/datum/virtual_z/parking_vz in map.vLevels)
+			if(parking_vz.level_type == VZ_PARKING && parking_vz.linked_shuttle == shuttle)
+				encounter_vz.transition_channel = parking_vz.transition_channel
+				break
 
 	// Calculate shuttle reservation if shuttle is provided
 	var/list/shuttle_reservation = null // list(x_min, y_min, x_max, y_max) - exclusion zone for vaults

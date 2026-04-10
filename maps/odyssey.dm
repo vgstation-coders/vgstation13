@@ -9,6 +9,7 @@
 	config.skip_fixedvault_generation = TRUE //this are overwritten by the map, so we need to skip them here to avoid generating vaults on top of the map's fixed vaults
 	config.skip_vault_generation = TRUE //this too lol
 	map.skip_hobo_shack = TRUE //no hobo shack on the outpost, sorry hobos
+	config.skip_holominimap_generation = TRUE //no holomaps on the odyssey
 
 /datum/map/active
 	nameShort = "odyssey"
@@ -109,5 +110,6 @@
 #include "odyssey/areas.dm"
 #include "odyssey/fixedvaults.dm"
 #include "../code/modules/shuttles/odyssey.dm"
+#include "../code/modules/shuttles/odyssey_events.dm"
 #include "odyssey.dmm"
 #endif

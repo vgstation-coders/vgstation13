@@ -6,16 +6,6 @@
 	if(isliving(A) && !isobserver(A))
 		var/datum/virtual_z/transit_v = src.v
 		if(transit_v && transit_v.level_type == VZ_TRANSIT)
-			// During a bluespace jump, raw bluespace energy disintegrates anything outside the ship
-			var/datum/emergency_shuttle/odyssey/ES = emergency_shuttle
-			if(istype(ES) && ES.bs_overlay)
-				A.visible_message("<span class='warning'>\The [A] is engulfed by crackling bluespace energy and flashes out of existence!</span>",\
-					"<span class='danger'>You pass beyond the ship's protective field. Raw bluespace energy tears through you at the molecular level. There is a brilliant flash, and then nothing.</span>",\
-					"<span class='warning'>You hear a deafening crack of displaced energy.</span>")
-				playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
-				A.supermatter_act(src)
-				return
-			// Teleport to a random parking or space v-level
 			var/list/datum/virtual_z/destinations = list()
 			for(var/datum/virtual_z/vz in map.vLevels)
 				if(vz.level_type == VZ_PARKING || vz.level_type == VZ_SPACE)

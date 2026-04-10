@@ -1805,3 +1805,250 @@ Different sizes of fuel reservoirs exist, with the starter kit coming with a fai
 	spine_color = "#840"
 	spine_overlay = "#fb0"
 	id = 26
+
+/obj/item/weapon/book/manual/odyssey
+	name = "\improper NTEV Odyssey Crew Orientation Manual"
+	icon_state = "odyssey"
+	item_state = "book2"
+	author = "Capt. James T. K."
+	title = "NTEV Odyssey Crew Orientation Manual"
+	spine_color = "#246"
+	spine_overlay = "#8cf"
+	id = 27
+	dat = {"<html>
+			<head>
+			<style>
+			h1 {font-size: 18px; margin: 15px 0px 5px;}
+			h2 {font-size: 15px; margin: 15px 0px 5px;}
+			h3 {font-size: 13px; margin: 10px 0px 5px;}
+			li {margin: 2px 0px 2px 15px;}
+			ul {list-style: none; margin: 5px; padding: 0px;}
+			ol {margin: 5px; padding: 0px 15px;}
+			.warning {color: red; font-weight: bold;}
+			.note {color: #cc8800; font-weight: bold;}
+			</style>
+			</head>
+			<body>
+			<h1>NTEV Odyssey - Crew Orientation Manual</h1>
+
+			<p>
+			If you're reading this, congratulations on your assignment to the NTEV Odyssey.
+			If nobody told you what the Odyssey is before you shipped out, well, that's Nanotrasen
+			HR for you. Here's the short version: you are on a deep space exploration vessel.
+			There is no station. There is no escape shuttle. The ship IS the escape shuttle.
+			Your job is to fly to places nobody has been before, scan planets, explore them,
+			and try not to die in the process. Don't let the crew roster fool you - half the
+			departments you're used to don't exist out here. No AI, no Science, and a single 
+			security guard. If you want anything else, build it yourself or find it on a planet.
+			<br><br>
+			I've been on this ship for three rotations now and I'm leaving these notes for whoever
+			gets my bunk next. Read the whole thing. I'm serious. The last guy who skipped
+			orientation walked into the stasis chamber thinking it was the cryo pods and we never
+			saw him again.
+			<br><br>
+			- Capt. James T. K.
+			</p>
+
+			<h2>The NT Outpost (Home Base)</h2>
+
+			<p>
+			The Odyssey starts docked at the <b>Nanotrasen Outpost</b>, a small base on a jungle planet.
+			It has a clinic, a cargo bay, a store, mineral processing, and admin offices. The outpost
+			runs on its own power - it doesn't need the ship and the ship doesn't need it, but when
+			you're docked, the outpost feeds power directly into the ship's APC units. This is important:
+			<b>your APC batteries charge for free while you're docked here.</b> However; your SMES units 
+			will not charge - so don't think you'll be able to freeload. When you undock, the ship
+			switches to internal power. If you fly off with empty batteries and forget to deploy your ROSA,
+			you're going to have a bad time.
+			</p>
+
+			<h2>Power: ROSA</h2>
+
+			<p>
+			The ship runs on <b>ROSA</b> units - Roll Out Solar Arrays. They're machines that
+			spit out a strip of flexible solar panels in front of them when you press the button.
+			</p>
+
+			<p>
+			<ol>
+			<li>Find a ROSA unit. They look like roller panels mounted on the deck.</li>
+			<li>If it's missing a power terminal (it'll tell you), grab <b>10 cable coils</b> and
+			click it to wire one up.</li>
+			<li>Hit the <b>ROSA control button</b> nearby. The unit deploys 4 panels in the direction
+			it's facing.</li>
+			<li>Press the button again to retract.</li>
+			</ol>
+			</p>
+
+			<p>
+			<span class="note">NOTE:</span> Panels generate <b>500 W each</b> on a planet surface, but
+			<b>1000 W each</b> in open space. No atmosphere filtering means double the output. Deploy your
+			arrays in deep space whenever possible.
+			</p>
+
+			<h2>Flying the Ship</h2>
+
+			<p>
+			Only the <b>Captain</b> (or anyone who stole the Captain's ID) can operate the shuttle
+			control computer on the Bridge. Here's the procedure:
+			</p>
+
+			<p>
+			<ol>
+			<li>Sit down at the shuttle control computer.</li>
+			<li>Pick a destination.</li>
+			<li>Confirm. The ship announces departure with a <b>10-second countdown</b>.</li>
+			<li>Wait through <b>2 minutes</b> of hyperspace transit.</li>
+			<li>Arrival is announced 10 seconds before you dock.</li>
+			</ol>
+			</p>
+
+			<p>
+			There's a <b>60-second cooldown</b> between jumps. If you're already in hyperspace and want to
+			change course, the pre-flight countdown is skipped - you redirect immediately.
+			<br><br>
+			The ship can remain in hyperspace <b>indefinitely</b>. There is no safety recall. If you
+			want to float in hyperspace until the heat death of the universe, Nanotrasen won't
+			stop you.
+			</p>
+
+			<h2>The Deep Space Scanner</h2>
+
+			<p>
+			This is the whole reason the Odyssey exists. The scanner searches for planets and
+			deep space encounters.
+			</p>
+
+			<p>
+			<ol>
+			<li><b>Anchor</b> the scanner with a wrench.</li>
+			<li>Make sure the area has <b>power</b>.</li>
+			<li>Open the interface. Hit <b>Start Scan</b>.</li>
+			<li>Wait for the energy bar to fill. How long this takes depends on available power
+			and your capacitor upgrades.</li>
+			<li>A planet or encounter is generated.</li>
+			<li>Hit <b>Add Destination</b> next to the discovery.</li>
+			<li>New destination unlocked. Go explore.</li>
+			</ol>
+			</p>
+
+			<p>
+			<span class="warning">IMPORTANT:</span> You only get <b>25 scans. Total. Forever.</b>
+			Each scan costs exponentially more energy than the last. By scan 15 you'll be waiting
+			a while. By scan 25, the machine locks out permanently. Don't waste scans on planets
+			you don't plan to visit.
+			<br><br>
+			<span class="note">NOTE:</span> Upgrade your scanner parts. T1 capacitors draw 10 kW and
+			take ages. T4 capacitors draw <b>1.25 MW</b>. The difference between a five-minute scan
+			and a five-second scan is two capacitors.
+			</p>
+
+			<p>
+			The ship also has a <b>shuttle-mounted scanner</b> that does <b>passive scanning</b> while you're
+			in hyperspace. It takes about 10 minutes on average, but it's free. Destinations it
+			finds get added to navigation automatically - no disk required.
+			</p>
+
+			<h2>What's Out There</h2>
+
+			<p>
+			Scans discover either a <b>planet</b> (80% chance) or an <b>encounter</b> (20% chance). 
+			This changes to 50/50 while in hyperspace.
+			</p>
+
+			<p>
+			<b>Planets</b> are procedurally generated with their own names, terrain, weather, and wildlife.
+			Types include temperate grasslands, jungles, deserts, frozen wastelands, volcanic hellscapes,
+			beaches, irradiated urban ruins, and genuinely alien worlds with plasma atmospheres.
+			They all have ruins to loot and fauna that wants you dead. Some are worse than others.
+			<br><br>
+			<b>Encounters</b> are deep space anomalies - derelict structures, weird signals, floating salvage.
+			They get names like "Anomalous Beacon M-512" and descriptions that are intentionally vague.
+			What you find when you get there is anyone's guess. Bring a weapon.
+			</p>
+
+			<h2>Things That Will Try to Kill You in Hyperspace</h2>
+
+			<p>
+			While the ship is in hyperspace or parked in deep space, random events fire every few minutes.
+			</p>
+
+			<p>
+			<b>Micro Meteors</b> (Hyperspace): Small debris pelts the hull. 5-10 projectiles from random
+			directions. Stay away from exterior walls.<br><br>
+			<b>Gib Storm</b> (Hyperspace): Chunks of organic matter hit the ship. 8-15 projectiles.
+			It's exactly as disgusting as it sounds. Don't ask where it comes from.<br><br>
+			<b>Solar Flare</b> (Hyperspace & Deep Space): All power goes out. APC cells drain to zero,
+			lights die. Lasts 1-3 minutes and then fixes itself. Keep a flashlight in your pocket
+			at all times.<br><br>
+			<b>Carp Swarm</b> (Deep Space only): 4-8 space carp spawn near the ship. They are hostile.
+			Close the airlocks and don't go outside unless you're armed.
+			</p>
+
+			<h2>Stasis Beds</h2>
+
+			<p>
+			The stasis chamber has cryogenic beds. These are <b>not</b> cryo pods.
+			<span class="warning">GETTING INTO A STASIS BED IS PERMANENT.</span>
+			Your character is deleted. Your belongings are deleted. You are gone. This is how you
+			leave the round if you need to log off. Do not drag people into these unless they asked.
+			Do not climb into one thinking you'll wake up later. You will not wake up later.
+			<br><br>
+			Yes, the last guy really did do this. No, we couldn't get him back.
+			</p>
+
+			<h2>The Bluespace Jump (Emergency Evacuation)</h2>
+
+			<p>
+			When the round is ending, someone calls the <b>Bluespace Jump</b> from the comms console
+			(same as calling the emergency shuttle on a normal station). This makes the Odyssey
+			itself jump directly to Central Command.
+			</p>
+
+			<p>
+			<ol>
+			<li>Jump is initiated. Countdown begins.</li>
+			<li>During countdown, the ship can still fly to the <b>NT Outpost</b> (but nowhere else).
+			The jump can be cancelled.</li>
+			<li>At <b>T-minus 2 minutes</b>, the jump becomes <b>committed</b>. No cancellations.
+			No course changes. You are going to CentComm.</li>
+			<li><b>90 seconds</b> of hyperspace transit. Doors lock. Music plays.</li>
+			<li>Arrival at CentComm.</li>
+			</ol>
+			</p>
+
+			<h2>The Transfer Shuttle</h2>
+
+			<p>
+			A small crew transfer shuttle runs between the NT Outpost and the Odyssey. It can <b>only
+			dock with the Odyssey when the ship is in deep space</b> - not in hyperspace, not docked
+			at a planet. After docking, the transfer shuttle <b>auto-returns to the outpost in 60 seconds</b>.
+			Get on or get off, but do it quickly.
+			</p>
+
+
+			<h2>Final Advice</h2>
+
+			<p>
+			<ol>
+			<li>Upgrade the scanner before you do anything else. T1 parts are a waste of everyone's time.</li>
+			<li>Charge your APCs at the outpost before departing. Free power.</li>
+			<li>Deploy ROSA in space for double output.</li>
+			<li>Bring a GPS beacon to planets. Drop it at interesting locations.</li>
+			<li>The Vox traders are friendly. Trade with them.</li>
+			<li>Keep flashlights on you. Solar flares don't care about your schedule.</li>
+			<li>Don't go EVA during a carp swarm unless you enjoy being eaten.</li>
+			<li>Seriously, don't touch the stasis beds unless you mean it.</li>
+			</ol>
+			</p>
+
+			<p>
+			Good luck out there. It's quieter than a station, but the things that go wrong
+			out here go wrong in ways that nobody's around to help you with.
+			<br><br>
+			- J.T.K.
+			</p>
+
+			</body>
+			</html>
+			"}

@@ -94,6 +94,10 @@
 
 	var/destroy_everything = 0
 
+	// Saves original turf data at the destination when shuttle turfs overwrite them.
+	// Used to restore the ground when the shuttle departs, keyed by "[x],[y],[z]".
+	var/list/saved_ground_turfs = list()
+
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
 
@@ -926,6 +930,8 @@
 		new_turf.change_area(old_area,source_area)
 		var/is_shuttle_turf = isshuttleturf(old_turf) || (old_turf.turf_flags & SHUTTLE_TURF)
 		if(is_shuttle_turf)
+			// Save the destination turf's original data before overwriting with shuttle type
+			saved_ground_turfs["[new_turf.x],[new_turf.y],[new_center.z]"] = list("type" = new_turf.type, "icon" = new_turf.icon, "icon_state" = new_turf.icon_state, "dir" = new_turf.dir)
 			new_turf.ChangeTurf(old_turf.type, allow = 1)
 			new_turf.turf_flags |= SHUTTLE_TURF
 			old_turf.turf_flags &= ~SHUTTLE_TURF
@@ -1025,22 +1031,33 @@
 		//Add the new turf to the list of turfs to update
 		turfs_to_update += new_turf
 
-		//Delete the old turf
-		var/replacing_turf_type = old_turf.get_underlying_turf()
+		//Replace the old turf: restore saved ground data if available, otherwise fall back to base turf.
+		//Non-shuttle turfs keep their original type since they were never overwritten.
+		if(is_shuttle_turf)
+			var/ground_key = "[old_turf.x],[old_turf.y],[our_center.z]"
+			var/list/ground_data = saved_ground_turfs[ground_key]
+			if(ground_data)
+				old_turf.ChangeTurf(ground_data["type"], allow = 1)
+				old_turf.icon = ground_data["icon"]
+				old_turf.icon_state = ground_data["icon_state"]
+				old_turf.dir = ground_data["dir"]
+				saved_ground_turfs -= ground_key
+			else
+				var/replacing_turf_type = old_turf.get_underlying_turf()
 
-		if(D && istype(D) && D.base_turf_type)
-			replacing_turf_type = D.base_turf_type
+				if(D && istype(D) && D.base_turf_type)
+					replacing_turf_type = D.base_turf_type
 
-		old_turf.ChangeTurf(replacing_turf_type, allow = 1)
+				old_turf.ChangeTurf(replacing_turf_type, allow = 1)
 
-		if(D && istype(D))
-			if(D.base_turf_icon)
-				old_turf.icon = D.base_turf_icon
-			if(D.base_turf_icon_state)
-				old_turf.icon_state = D.base_turf_icon_state
+				if(D && istype(D))
+					if(D.base_turf_icon)
+						old_turf.icon = D.base_turf_icon
+					if(D.base_turf_icon_state)
+						old_turf.icon_state = D.base_turf_icon_state
 
-		if(istype(old_turf,/turf/space))
-			old_turf.lighting_clear_overlay() //A horrible band-aid fix for lighting overlays appearing over space
+			if(istype(old_turf,/turf/space))
+				old_turf.lighting_clear_overlay() //A horrible band-aid fix for lighting overlays appearing over space
 
 		old_turfs += old_turf
 
@@ -1094,12 +1111,15 @@
 		for(var/obj/effect/weather_holder/WH in T.vis_contents)
 			T.vis_contents -= WH
 
-	// Re-register turfs left behind by the shuttle with the source climate
-	if(source_climate)
-		for(var/turf/old_turf in old_turfs)
+	// Re-register turfs left behind by the shuttle with the source climate and daynight
+	for(var/turf/old_turf in old_turfs)
+		if(source_climate)
 			source_climate.register_weather_turf(old_turf, TRUE)
+		var/area/old_area = old_turf.loc
+		if(isopensurface(old_area))
+			source_v?.daynight_turfs |= old_turf
 
-	if(source_v.daynight_turfs.len)
+	if(source_v?.daynight_turfs.len)
 		SSDayNight.update_turf_lighting(old_turfs, source_v)
 
 	return 1
@@ -1544,17 +1564,9 @@
 			qdel(overlay)
 
 /datum/landing_zone/proc/reset_turfs()
-	// Restore original turf types from before the shuttle landed
-	for(var/turf/T in turf_list)
-		var/key = "[T.x],[T.y]"
-		var/list/data = saved_turf_data[key]
-		if(data && T.type != data["type"])
-			T.ChangeTurf(data["type"], allow = 1)
-			T.icon = data["icon"]
-			T.icon_state = data["icon_state"]
-			T.dir = data["dir"]
-
-	update_turfs() // Re-fetch turf references after ChangeTurf
+	// Turf type restoration is handled by move_area_to's saved_ground_turfs mechanism.
+	// Re-fetch turf references and re-register weather/daynight for the restored turfs.
+	update_turfs()
 	var/datum/climate/C = SSweather.get_climate(vz)
 	for(var/turf/T in turf_list)
 		C?.register_weather_turf(T, TRUE)
