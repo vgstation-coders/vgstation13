@@ -3739,6 +3739,22 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
 
+/datum/recipe/sliders/roachgunk
+	priority = 1 //flour is inherited from the original slider recipe
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk
+
+/datum/recipe/sliders/cricketgunk
+	priority = 1
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk
+
 /datum/recipe/moonsupergunkburger
 	reagents = list(GUNKS = 10, FLOUR = 15)
 	items = list(
@@ -3873,6 +3889,10 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/roachesonstick
+
+//////////////////////////////////
+// YE HAVE LEFT THE GUNK ZONE ///
+////////////////////////////////
 
 /datum/recipe/sugarcube
 	reagents = list(SODIUMCHLORIDE = 10)
