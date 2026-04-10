@@ -8878,6 +8878,37 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosias and blingpizzas must ever afterward be poison to me."
 	bitesize = 10
 
+/obj/item/weapon/reagent_containers/food/snacks/slider/gunk
+	name = "gunk slider"
+	desc = "Extremely numerous and weirdly unsatisfying."
+	icon_state = "slider_gunk"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/gunk/New()
+	..()
+	processing_objects += src
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/gunk/pickup(mob/user)
+	timer = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/gunk/process()
+	timer += 1
+	if(timer > 20 && istype(loc, /turf) && prob(75)) //Opposite to the super gunk burger, this one wakes up fast and moves a lot
+		Move(get_step(loc, pick(cardinal)))
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/gunk/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk
+	name = "gunk sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/gunk
+	child_volume = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk/New()
+	..()
+	reagents.add_reagent(ROACHSHELL, 10)
+	reagents.add_reagent(NUTRIMENT, 10)	//spawns 10
+
 /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
 	name = "Gunk-kabob"
 	icon_state = "bugkabob"
@@ -9062,6 +9093,9 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	valid_utensils = 0
 	base_crumb_chance = 0
 	food_flags = FOOD_MEAT
+
+
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grandpatiks/New()
 	..()
