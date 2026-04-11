@@ -11,6 +11,7 @@ var/obj/machinery/account_database/centcomm_account_db
 var/datum/money_account/vendor_account
 var/list/all_money_accounts = list()
 var/list/all_station_accounts = list()
+var/shoal_reserves = 0
 var/datum/money_account/trader_account
 var/datum/money_account/centcomm_account
 

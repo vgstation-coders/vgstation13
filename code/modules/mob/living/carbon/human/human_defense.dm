@@ -372,6 +372,10 @@ emp_act
 	if(shoes && istype(shoes, /obj/item/clothing/shoes))
 		var/obj/item/clothing/shoes/S = shoes
 		damage = S.impact_dampen(source, damage)
+		if(damage && istype(S, /obj/item/clothing/shoes/magboots))
+			var/obj/item/clothing/shoes/magboots/MB = S
+			if(MB.stored_shoes)
+				damage = MB.stored_shoes.impact_dampen(source, damage)
 	if(!damage)
 		return FALSE
 	if(!ourfoot)

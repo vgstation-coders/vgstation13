@@ -5826,9 +5826,7 @@
 /turf/simulated/floor,
 /area/derelict/crew_quarters)
 "Ht" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
@@ -8102,9 +8100,7 @@
 /turf/space,
 /area)
 "TG" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;

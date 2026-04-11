@@ -1981,7 +1981,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
-		/obj/item/weapon/reagent_containers/food/snacks/mint
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mint
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/orzosalad
 
@@ -3064,7 +3064,11 @@
 
 /datum/recipe/toxicmint
 	reagents = list(SUGARS = 1)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mint)
+	result = /obj/item/weapon/reagent_containers/food/snacks/mint
+
+/datum/recipe/toxicmintalt
+	reagents = list(SUGARS = 1, MINTTOXIN = 1)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mint
 
 /datum/recipe/vanishingstew

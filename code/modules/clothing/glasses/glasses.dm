@@ -315,6 +315,12 @@ BLIND     // can't see anything
 	nearsighted_modifier = 5
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/glasses/welding/equipped(mob/M, slot)
+	if(slot == slot_glasses && up)
+		nearsighted_modifier = 0
+		eyeprot = 0
+	..()
+
 /obj/item/clothing/glasses/welding/attack_self()
 	toggle()
 

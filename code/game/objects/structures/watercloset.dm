@@ -14,6 +14,10 @@
 	if(watertype)
 		watersource = new watertype
 
+/obj/structure/wc/Destroy()
+	QDEL_NULL(watersource)
+	. = ..()
+
 /obj/structure/wc/verb/empty_container_into()
 	set name = "Empty container into"
 	set category = "Object"
@@ -42,6 +46,7 @@
 	if(can_be_wrenched && I.is_wrench(user))
 		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
 		anchored = !anchored
+		update_dir() // just so it updates a subtype
 		return 1
 	if(!anchored)
 		if(!watersource && (istype(I,/obj/item/weapon/reagent_containers/glass/beaker) || istype(I,/obj/item/reagent_core)))
@@ -212,8 +217,58 @@
 	name = "urinal"
 	desc = "The HU-452, an experimental urinal."
 	icon_state = "urinal"
-	can_be_wrenched = FALSE //mustard gas prevention
-	watertype = null //unused
+	pixel_y = 32
+	verb_rotates = TRUE
+	var/flushing = FALSE
+
+//mapping subtypes
+/obj/structure/wc/urinal/north
+	//no dir because it was like that on xoq
+	pixel_y = -32
+
+/obj/structure/wc/urinal/east
+	dir = EAST
+	pixel_x = -30
+	pixel_y = 0
+
+/obj/structure/wc/urinal/west
+	dir = WEST
+	pixel_x = 30
+	pixel_y = 0
+
+/obj/structure/wc/urinal/update_dir()
+	. = ..()
+	if(anchored)
+		var/turf/T = get_step(src,opposite_dirs[dir])
+		if(T?.density)
+			switch(dir)
+				if(NORTH)
+					pixel_x = 0
+					pixel_y = -32
+				if(SOUTH)
+					pixel_x = 0
+					pixel_y = 32
+				if(EAST)
+					pixel_x = -30
+					pixel_y = 0
+				if(WEST)
+					pixel_x = 30
+					pixel_y = 0
+			return
+	pixel_x = 0
+	pixel_y = 0
+
+/obj/structure/wc/urinal/attack_hand(mob/living/user)
+	. = ..()
+	if(!.)
+		if(flushing)
+			if(watersource && watersource.reagents && !watersource.reagents.is_empty())
+				to_chat(user, "<span class='notice'>You run your hands under [src], for some reason.</span>")
+				watersource.reagents.reaction(user, TOUCH, zone_sels = list(LIMB_LEFT_HAND,LIMB_RIGHT_HAND))
+				return 1
+		else
+			flush(user)
+			return 1
 
 /obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
 	if(..())
@@ -224,6 +279,9 @@
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
 			new /obj/item/stack/sheet/metal(loc, 2)
+			if(watersource)
+				watersource.forceMove(loc)
+				watersource = null
 			qdel(src)
 		return
 
@@ -236,12 +294,38 @@
 					to_chat(user, "<span class='notice'>[GM.name] needs to be on the urinal.</span>")
 					return
 				user.visible_message("<span class='danger'>[user] slams [GM.name] into the [src]!</span>", "<span class='notice'>You slam [GM.name] into the [src]!</span>")
-				GM.adjustBruteLoss(8)
+				if(!flushing || user.a_intent == I_HURT)
+					GM.adjustBruteLoss(8)
+				if(flushing && watersource && watersource.reagents && !watersource.reagents.is_empty())
+					watersource.reagents.reaction(GM, TOUCH, zone_sels = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH))
 			else
 				to_chat(user, "<span class='notice'>You need a tighter grip.</span>")
 
+	else if(flushing && watersource && watersource.reagents && !watersource.reagents.is_empty())
+		watersource.reagents.reaction(I, TOUCH)
+
 /obj/structure/wc/urinal/bite_act(mob/user)
 	user.simple_message("<span class='notice'>That would be disgusting.</span>", "<span class='info'>You're not high enough for that... Yet.</span>") //Second message 4 hallucinations
+
+/obj/structure/wc/urinal/proc/flush(mob/user)
+	if(!watersource || !watersource.reagents || watersource.reagents.is_empty())
+		to_chat(user,"<span class='warning'>You flush the handle but nothing happens.</span>")
+		return
+	flushing = !flushing
+	if(!flushing)
+		return
+	overlays.len = 0
+	var/image/flushover = image(icon,src,"urinal_flush")
+	flushover.color = mix_color_from_reagents(watersource.reagents.reagent_list)
+	overlays += flushover
+	visible_message("<span class='notice'>\The [src] flushes.</span>")
+	for(var/ticks in 1 to 10)
+		watersource.reagents.remove_all(5)
+		sleep(1 SECONDS)
+		if(!flushing || !anchored || watersource.reagents.is_empty())
+			break
+	flushing = FALSE
+	overlays.len = 0
 
 /obj/machinery/shower
 	name = "shower"

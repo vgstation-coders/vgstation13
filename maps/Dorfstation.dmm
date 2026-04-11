@@ -2076,6 +2076,11 @@
 	name = "Tradeship Windoor";
 	req_one_access_txt = "140"
 	},
+/obj/item/device/deskbell/signaler/trader{
+	pixel_y = 11;
+	pixel_x = 5;
+	name = "Trade Ship Counter Bell"
+	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
@@ -37472,9 +37477,7 @@
 	},
 /area/shuttle/syndicate_elite/mothership)
 "uQy" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},

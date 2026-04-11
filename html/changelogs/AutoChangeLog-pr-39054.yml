@@ -1,9 +1,0 @@
-author: Eneocho
-delete-after: true
-changes:
-- tweak: Updates the tech levels in a full glass of Scientist's Sapience (50u) to
-    match the current player-reachable maximum since it's supposed to be the ultimate
-    science drink. It STILL does not max Illegal nor Anomaly (or Expedition, for that
-    matter).
-- tweak: Buffs Scientist's Serendipity (<50u) slightly to account for the extra tech
-    levels added throughout the years.

@@ -306,9 +306,7 @@
 /turf/simulated/floor/mineral/gingerbread_nest,
 /area/vault/gingerbread_house)
 "kB" = (
-/obj/structure/wc/urinal{
-	pixel_y = 27
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/flour,
 /obj/machinery/light/small,
 /obj/item/weapon/storage/belt/janitor,

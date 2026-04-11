@@ -1048,3 +1048,23 @@
 	icon_state = "acidsink"
 	clean_power = 0
 	watertype = /obj/item/reagent_core/acid
+
+/obj/structure/wc/urinal/acid
+	name = "acid urinal"
+	desc = "The AY-452, an experimental urinal that seems to use acid instead of water."
+	watertype = /obj/item/reagent_core/acid
+
+//mapping subtypes
+/obj/structure/wc/urinal/acid/north
+	//no dir because it was like that on xoq
+	pixel_y = -32
+
+/obj/structure/wc/urinal/acid/east
+	dir = EAST
+	pixel_x = -30
+	pixel_y = 0
+
+/obj/structure/wc/urinal/acid/west
+	dir = WEST
+	pixel_x = 30
+	pixel_y = 0

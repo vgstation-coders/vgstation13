@@ -15,6 +15,12 @@ var/global/list/juice_items = list (
 	/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet = list(PLUMPHJUICE = 0),
+	/obj/item/stack/sheet/wood = list(PULP = U_PER_SHEET),
+	/obj/item/weapon/grown/log = list(PULP = U_PER_SHEET),
+	/obj/item/weapon/paper = list(PULP = 1),
+	/obj/item/weapon/newspaper = list(PULP = 2),
+	/obj/item/weapon/book = list(PULP = 5),
+	/obj/item/dictionary = list(PULP = 5),
 	)
 
 /obj/machinery/reagentgrinder
@@ -38,6 +44,7 @@ var/global/list/juice_items = list (
 		//Sheets
 		/obj/item/stack/sheet/metal           = list(IRON = U_PER_SHEET),
 		/obj/item/stack/sheet/glass           = list(SILICA = U_PER_SHEET),
+		/obj/item/stack/sheet/wood            = list(SAWDUST = U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/uranium = list(URANIUM = U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/clown   = list(BANANA = U_PER_SHEET),
@@ -76,6 +83,7 @@ var/global/list/juice_items = list (
 		/obj/item/weapon/reagent_containers/food = list(),
 		/obj/item/ice_crystal                = list(ICE = 10),
 		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 10),
+		/obj/item/weapon/grown/log    		  = list(SAWDUST = 10),
 		/obj/item/device/flashlight/flare     = list(SULFUR = 10),
 		/obj/item/stack/cable_coil            = list(COPPER = 10),
 		/obj/item/weapon/cell                 = list(LITHIUM = 10),
@@ -456,24 +464,23 @@ var/global/list/juice_items = list (
 	spawn(50/speed_multiplier)
 		inuse = 0
 		interact(usr)
-	//Snacks
-	for (var/obj/item/weapon/reagent_containers/food/snacks/O in holdingitems)
+	for (var/obj/item/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
 
 		var/allowed = get_allowed_juice_by_id(O)
-		if(isnull(allowed))
+		if(!islist(allowed))
 			break
 
-		for (var/r_id in allowed)
+		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+		var/amount = allowed[allowed[1]]
+		if(!amount)
+			amount = get_juice_amount(O)
 
-			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			var/amount = get_juice_amount(O)
+		beaker.reagents.add_reagent(allowed[1], min(amount, space))
 
-			beaker.reagents.add_reagent(r_id, min(amount, space))
-
-			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-				break
+		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+			break
 
 		remove_object(O)
 

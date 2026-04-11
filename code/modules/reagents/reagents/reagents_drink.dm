@@ -1136,3 +1136,23 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 
 	M.heal_organ_damage(4 * REM, -1 * REM) //heal 2 brute, cause 0.5 burn
+
+/datum/reagent/drink/cold/frostbite
+	name = "Frostbite"
+	id = FROSTBITE
+	description = "As close as you can get to the ultimate refreshment, regardless of safety."
+	glass_desc = "Any colder and you'd have exotic states of matter."
+	glass_name = "\improper Frostbite"
+	glass_icon_state = "frostbite"
+	color = "#4ec4c4"
+	adj_temp = -3
+	max_temp_adj = 6
+	adj_sleepy = -3
+	adj_dizzy = -1
+	adj_drowsy = -3
+
+/datum/reagent/drink/cold/frostbite/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	
+	M.reagents.add_reagent(MINTESSENCE, 0.1)
