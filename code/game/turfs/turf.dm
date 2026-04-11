@@ -225,39 +225,39 @@ var/highest_player_entry = 0
 			if(player_entries > highest_player_entry)
 				highest_player_entry = player_entries
 
-	//footstep decal code
-	if (istype(A,/mob/living/carbon))
-		var/mob/living/carbon/M = A
-		if(!M.on_foot())
-			return ..()
-		if(istype(M, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = M
+		//footstep decal code
+		if (iscarbon(M))
+			var/mob/living/carbon/C = M
+			if(!C.on_foot())
+				return ..()
+			if(istype(M, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = C
 
-			// Tracking blood
-			var/list/bloodDNA = null
-			var/bloodcolor=""
+				// Tracking blood
+				var/list/bloodDNA = null
+				var/bloodcolor=""
 
-			// Do we have shoes?
-			if(H.shoes)
-				var/obj/item/clothing/shoes/S = H.shoes
-				if(S.track_blood && S.blood_DNA)
-					bloodDNA   = S.blood_DNA
-					bloodcolor = S.blood_color
-					S.track_blood = max(round(S.track_blood - 1, 1),0)
-			else
-				if(H.track_blood && H.feet_blood_DNA)
-					bloodDNA   = H.feet_blood_DNA
-					bloodcolor = H.feet_blood_color
-					H.track_blood = max(round(H.track_blood - 1, 1),0)
+				// Do we have shoes?
+				if(H.shoes)
+					var/obj/item/clothing/shoes/S = H.shoes
+					if(S.track_blood && S.blood_DNA)
+						bloodDNA   = S.blood_DNA
+						bloodcolor = S.blood_color
+						S.track_blood = max(round(S.track_blood - 1, 1),0)
+				else
+					if(H.track_blood && H.feet_blood_DNA)
+						bloodDNA   = H.feet_blood_DNA
+						bloodcolor = H.feet_blood_color
+						H.track_blood = max(round(H.track_blood - 1, 1),0)
 
-			if (bloodDNA)
-				AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor,H.luminous_feet()) // Coming
-				if(Adjacent(OldLoc) && istype(OldLoc,/turf))
-					var/turf/from = OldLoc
-					from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor,H.luminous_feet()) // Going
+				if (bloodDNA)
+					AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor,H.luminous_feet()) // Coming
+					if(Adjacent(OldLoc) && istype(OldLoc,/turf))
+						var/turf/from = OldLoc
+						from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor,H.luminous_feet()) // Going
 
-			bloodDNA = null
-	//end footstep decal code
+				bloodDNA = null
+		//end footstep decal code
 
 
 	//THIS IS OLD TURF ENTERED CODE
