@@ -418,6 +418,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 				highest_x = i
 				highest_y = r
 				var/final_factor = tile.player_entries*divisor_factor
-				canvas.DrawBox(rgb(final_factor,final_factor/2,final_factor/4,255), i, r)
+				canvas.DrawBox(rgb(min(final_factor*4,255),min(final_factor*2,255),final_factor,255), i, r)
 	canvas.Crop(lowest_x,lowest_y,highest_x,highest_y)
 	return canvas
