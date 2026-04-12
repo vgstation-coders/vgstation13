@@ -10,7 +10,7 @@
 /area/derelict/bar)
 "ad" = (
 /turf/simulated/wall/shuttle/reinforced/panel,
-/area/shuttle/odyssey/hallway/fore)
+/area/shuttle/odyssey/maintenance/vacant_office)
 "ai" = (
 /obj/structure/table/reinforced,
 /obj/machinery/recharger,
@@ -46,6 +46,18 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/engineering)
+"al" = (
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc{
+	pixel_x = 30;
+	name = "Command Dorms APC";
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/shuttle/odyssey/maintenance/vacant_office)
 "am" = (
 /obj/machinery/telecomms/processor/preset_one,
 /turf/simulated/floor/bluegrid{
@@ -377,39 +389,61 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/nt_outpost)
 "bs" = (
-/obj/structure/flora/pottedplant/random,
-/obj/machinery/light_switch{
-	pixel_x = 24
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_x = -30
 	},
-/obj/machinery/door_control{
-	id_tag = "med shutters";
-	name = "Privacy Shutters";
-	pixel_x = 25;
-	pixel_y = -9
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/obj/machinery/newscaster{
+	pixel_y = -28
 	},
 /turf/simulated/floor{
-	icon_state = "whiteblue"
+	dir = 10;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (WEST)"
 	},
-/area/shuttle/odyssey/infirmary)
+/area/shuttle/odyssey/hallway/fore/lobby)
 "bu" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
-	dir = 4;
-	tag = "icon-intact (EAST)"
-	},
+/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
-	dir = 4;
-	tag = "icon-intact (EAST)"
+	dir = 3;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 4;
-	icon_state = "1-4";
-	tag = "90Curve"
+	icon_state = "1-4"
 	},
-/turf/simulated/floor{
-	icon_state = "white"
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
 	},
-/area/shuttle/odyssey/infirmary)
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8";
+	tag = ""
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/odyssey/hallway/fore/lobby)
 "bv" = (
 /obj/machinery/telecomms/bus/preset_two,
 /turf/simulated/floor/bluegrid{
@@ -428,6 +462,16 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/vox,
 /area/shuttle/trade/start)
+"bx" = (
+/obj/structure/bed/chair/comfy/couch/left/teal,
+/obj/machinery/alarm{
+	pixel_y = 28
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whiteblue"
+	},
+/area/shuttle/odyssey/infirmary)
 "by" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 10
@@ -679,6 +723,24 @@
 	icon_state = "floorgrime"
 	},
 /area/surface/nt_outpost/cargo)
+"cr" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	dir = 4;
+	on = 1
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/shuttle/odyssey/infirmary)
 "cs" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -823,6 +885,17 @@
 	},
 /turf/simulated/wall,
 /area/shuttle/trade/start)
+"cQ" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/structure/bed,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "darkred";
+	tag = "icon-darkred (EAST)"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "cR" = (
 /obj/machinery/door_control{
 	pixel_x = -30;
@@ -882,6 +955,14 @@
 	icon_state = "dark"
 	},
 /area/shuttle/trade/start)
+"cV" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/obj/machinery/door/poddoor/glass{
+	id_tag = "holdingcel";
+	name = "Holding Cell Lockdown"
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey/security/holding_cell)
 "cW" = (
 /obj/machinery/firealarm{
 	pixel_x = 30
@@ -902,6 +983,21 @@
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
+"da" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -23
+	},
+/obj/structure/wc/toilet{
+	pixel_y = 8
+	},
+/obj/structure/curtain/black,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "darkred";
+	tag = "icon-darkred (NORTHWEST)"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "db" = (
 /turf/simulated/floor{
 	dir = 9;
@@ -1130,7 +1226,7 @@
 	network = list("External")
 	},
 /turf/unsimulated/floor/planetary/concrete,
-/area/shuttle/odyssey/quarters/crew)
+/area/shuttle/odyssey/exterior)
 "dW" = (
 /obj/machinery/requests_console{
 	announcementConsole = 1;
@@ -1262,10 +1358,14 @@
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/hallway/aft)
 "eA" = (
-/obj/structure/dispenser,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/structure/closet/crate/secure/scisec,
+/obj/item/weapon/circuitboard/destructive_analyzer,
+/obj/item/weapon/circuitboard/protolathe,
+/obj/item/weapon/circuitboard/circuit_imprinter,
+/obj/item/weapon/circuitboard/rdconsole,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -1465,6 +1565,25 @@
 /area/vox_trading_post/trading_floor{
 	name = "\improper Vox Casino"
 	})
+"fm" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 3;
+	tag = ""
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/layered,
+/obj/structure/table/woodentable,
+/obj/item/weapon/pen/fountain{
+	pixel_x = 5;
+	pixel_y = 5
+	},
+/obj/item/weapon/paper_bin{
+	pixel_x = 1;
+	pixel_y = 9
+	},
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/shuttle/odyssey/maintenance/vacant_office)
 "fn" = (
 /obj/structure/noticeboard{
 	pixel_y = -30
@@ -1491,6 +1610,16 @@
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
+"fr" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "darkred";
+	tag = "icon-darkred"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "fs" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
@@ -1539,16 +1668,9 @@
 	},
 /area/shuttle/odyssey/security)
 "fC" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
-	dir = 4;
-	tag = "icon-intact (EAST)"
-	},
-/obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 4;
-	on = 1
-	},
 /turf/simulated/floor{
-	icon_state = "white"
+	dir = 1;
+	icon_state = "whiteblue"
 	},
 /area/shuttle/odyssey/infirmary)
 "fD" = (
@@ -1742,6 +1864,17 @@
 	icon_state = "floor"
 	},
 /area/surface/nt_outpost/mineral_processing)
+"gh" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/structure/bed/chair/comfy/couch/left/black,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (NORTH)"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "gi" = (
 /obj/structure/closet/secure_closet/miner,
 /turf/simulated/floor{
@@ -1823,11 +1956,22 @@
 	},
 /area/surface/nt_outpost/clinic)
 "gv" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 3;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
 	dir = 1;
-	icon_state = "whiteblue"
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (NORTH)"
 	},
-/area/shuttle/odyssey/infirmary)
+/area/shuttle/odyssey/hallway/fore/lobby)
 "gw" = (
 /obj/machinery/power/apc{
 	pixel_x = -30;
@@ -1914,10 +2058,12 @@
 /turf/unsimulated/wall/splashscreen,
 /area/start)
 "gQ" = (
-/obj/structure/window/full,
-/obj/structure/curtain/medical,
-/turf/simulated/floor,
-/area/shuttle/odyssey/infirmary)
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/odyssey/hallway/fore/lobby)
 "gR" = (
 /obj/structure/grille/window_spawner/reinforced_plasma,
 /turf/simulated/floor/plating,
@@ -2072,6 +2218,20 @@
 /obj/machinery/status_display/odyssey,
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/logistics)
+"hD" = (
+/obj/structure/closet/walllocker/defiblocker{
+	pixel_y = -30
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4";
+	tag = "90Curve"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/shuttle/odyssey/infirmary)
 "hF" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/green,
@@ -2268,6 +2428,14 @@
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
+"iz" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/obj/machinery/door/poddoor{
+	id_tag = "window_cover";
+	name = "Debris Shielding"
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey/maintenance/vacant_office)
 "iB" = (
 /turf/simulated/floor{
 	dir = 8;
@@ -2349,6 +2517,16 @@
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering)
+"iP" = (
+/obj/structure/table/woodentable,
+/obj/item/device/flashlight/lamp/green{
+	pixel_x = 1;
+	pixel_y = 5
+	},
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/shuttle/odyssey/maintenance/vacant_office)
 "iQ" = (
 /obj/effect/decal/cleanable/blood/tracks/footprints/vox{
 	basecolor = "#00FF00";
@@ -2706,6 +2884,12 @@
 	dir = 8;
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy (WEST)"
+	},
+/area/shuttle/odyssey/bridge)
+"kk" = (
+/mob/living/simple_animal/corgi/Ian,
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/bridge)
 "kl" = (
@@ -3076,6 +3260,17 @@
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
+"lr" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (EAST)"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "ls" = (
 /obj/machinery/atmospherics/pipe/simple/supplymain/hidden,
 /turf/simulated/wall/shuttle/panel/black,
@@ -3356,6 +3551,13 @@
 "ms" = (
 /turf/simulated/floor/engine,
 /area/surface/nt_outpost/admin)
+"mt" = (
+/obj/machinery/door_timer/cell_1{
+	dir = 4;
+	pixel_y = 0
+	},
+/turf/simulated/wall/shuttle/reinforced/panel,
+/area/shuttle/odyssey/security/holding_cell)
 "mv" = (
 /obj/machinery/light/small{
 	dir = 8
@@ -3562,6 +3764,14 @@
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/nt_outpost)
+"nc" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -23
+	},
+/obj/machinery/photocopier,
+/turf/simulated/floor/wood,
+/area/shuttle/odyssey/maintenance/vacant_office)
 "ni" = (
 /obj/structure/closet/crate/freezer/surgery,
 /obj/item/weapon/reagent_containers/blood/OMinus,
@@ -3631,12 +3841,8 @@
 /turf/unsimulated/floor,
 /area/surface/nt_outpost/mineral_processing)
 "nx" = (
-/obj/machinery/iv_drip,
-/turf/simulated/floor{
-	dir = 4;
-	icon_state = "whitebluecorner"
-	},
-/area/shuttle/odyssey/infirmary)
+/turf/simulated/wall/shuttle/reinforced/panel,
+/area/shuttle/odyssey/security/holding_cell)
 "ny" = (
 /obj/structure/table,
 /obj/machinery/microwave,
@@ -3868,6 +4074,8 @@
 	pixel_y = 30
 	},
 /obj/item/weapon/book/manual/odyssey,
+/obj/item/weapon/hand_labeler,
+/obj/item/weapon/storage/box/labels,
 /turf/simulated/floor/engine/acoustic,
 /area/shuttle/odyssey/logistics)
 "om" = (
@@ -3927,6 +4135,19 @@
 	temperature = 80
 	},
 /area/surface/nt_outpost/admin)
+"oy" = (
+/obj/machinery/camera/autoname{
+	dir = 4
+	},
+/obj/machinery/firealarm{
+	pixel_x = -30
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "darkred";
+	tag = "icon-darkred (WEST)"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "oz" = (
 /obj/machinery/light{
 	dir = 1
@@ -4068,6 +4289,32 @@
 	icon_state = "floorgrime"
 	},
 /area/security/perma)
+"pf" = (
+/obj/structure/table/glass,
+/obj/item/weapon/paper_bin/white{
+	pixel_x = 1;
+	pixel_y = 9
+	},
+/obj/item/weapon/folder/white,
+/obj/item/weapon/pen,
+/obj/item/device/flashlight/lamp/green{
+	pixel_x = -3;
+	pixel_y = 8
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/machinery/power/apc{
+	pixel_y = 30;
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whiteblue"
+	},
+/area/shuttle/odyssey/infirmary)
 "ph" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
@@ -4948,6 +5195,10 @@
 	opacity = 0
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 8;
+	tag = "icon-intact (EAST)"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -5107,6 +5358,21 @@
 	tag = "icon-showroomfloor (NORTH)"
 	},
 /area/shuttle/odyssey/janitor)
+"te" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -23
+	},
+/obj/machinery/status_display/odyssey{
+	pixel_y = 30
+	},
+/obj/structure/bed/chair/comfy/couch/right/black,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (NORTHWEST)"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "tf" = (
 /obj/structure/bed/chair/shuttle{
 	dir = 4
@@ -5169,22 +5435,18 @@
 /turf/simulated/floor/engine,
 /area/derelict/bar)
 "tp" = (
-/obj/structure/table/glass,
-/obj/item/weapon/paper_bin/white{
-	pixel_x = 1;
-	pixel_y = 9
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 3;
+	tag = ""
 	},
-/obj/item/weapon/folder/white,
-/obj/item/weapon/pen,
-/obj/item/device/flashlight/lamp/green{
-	pixel_x = -3;
-	pixel_y = 8
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "whiteblue"
-	},
-/area/shuttle/odyssey/infirmary)
+/turf/simulated/floor/wood,
+/area/shuttle/odyssey/maintenance/vacant_office)
 "tq" = (
 /obj/machinery/alarm,
 /turf/simulated/wall/mineral/wood,
@@ -5496,6 +5758,20 @@
 /obj/machinery/door/firedoor,
 /turf/simulated/floor,
 /area/shuttle/odyssey/hallway/fore)
+"uw" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	on = 1;
+	dir = 1
+	},
+/obj/machinery/firealarm{
+	pixel_x = -30
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (WEST)"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "ux" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
 /obj/structure/cable/yellow{
@@ -5779,6 +6055,19 @@
 /obj/item/toy/cards,
 /turf/simulated/floor/arcade,
 /area/shuttle/odyssey/quarters/crew)
+"vD" = (
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_x = -30
+	},
+/obj/machinery/status_display/odyssey{
+	pixel_y = 30
+	},
+/obj/structure/bookcase{
+	name = "bookcase (Adult)"
+	},
+/obj/abstract/map/spawner/library,
+/turf/simulated/floor/wood,
+/area/shuttle/odyssey/maintenance/vacant_office)
 "vF" = (
 /obj/machinery/reagentgrinder{
 	pixel_y = 3
@@ -5818,24 +6107,18 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
 "vN" = (
-/obj/structure/bed/chair/comfy/couch/left/teal,
-/obj/machinery/power/apc{
-	pixel_x = 30;
-	dir = 4
-	},
-/obj/machinery/alarm{
-	pixel_y = 28
-	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
 /obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "whiteblue"
+	dir = 4;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (EAST)"
 	},
-/area/shuttle/odyssey/infirmary)
+/area/shuttle/odyssey/hallway/fore/lobby)
 "vP" = (
 /obj/structure/fence/corner,
 /turf/unsimulated/floor/planetary/grass/jungle,
@@ -5976,6 +6259,16 @@
 	icon_state = "whitegreen"
 	},
 /area/surface/nt_outpost/clinic)
+"wg" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/door/airlock/glass,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "wi" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
@@ -6182,6 +6475,19 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore)
+"wN" = (
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 8
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/shuttle/odyssey/infirmary)
 "wP" = (
 /obj/structure/shuttle/engine/propulsion{
 	dir = 1
@@ -6289,6 +6595,20 @@
 	tag = "icon-dark_navy (WEST)"
 	},
 /area/shuttle/odyssey/bridge)
+"xf" = (
+/obj/machinery/atmospherics/unary/vent_pump/on/layered,
+/obj/machinery/camera/autoname{
+	dir = 8
+	},
+/obj/structure/extinguisher_cabinet{
+	pixel_x = 30
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (EAST)"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "xi" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -6386,6 +6706,10 @@
 	},
 /turf/simulated/floor/wood,
 /area/derelict/bar)
+"xw" = (
+/obj/structure/catwalk,
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey/bridge)
 "xx" = (
 /obj/structure/flora/pottedplant/random,
 /obj/machinery/power/apc{
@@ -6551,7 +6875,6 @@
 	name = "Engineering RC";
 	pixel_y = -30
 	},
-/obj/item/weapon/circuitboard/circuit_imprinter,
 /obj/item/weapon/circuitboard/communications,
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -6606,18 +6929,30 @@
 /turf/simulated/floor/vox,
 /area/vox_station/tradepost)
 "yl" = (
-/obj/structure/closet/walllocker/defiblocker{
-	pixel_y = -30
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc{
+	pixel_x = 30;
+	name = "Command Dorms APC";
+	dir = 4
+	},
+/obj/structure/closet/secure_closet/brig{
+	id_tag = "Cell 2";
+	name = "Cell 2 Locker"
 	},
 /turf/simulated/floor{
-	icon_state = "white"
+	dir = 5;
+	icon_state = "darkred";
+	tag = "icon-darkred (NORTHEAST)"
 	},
-/area/shuttle/odyssey/infirmary)
+/area/shuttle/odyssey/security/holding_cell)
 "ym" = (
-/obj/structure/ore_box,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/structure/dispenser,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -6650,12 +6985,12 @@
 	},
 /area/surface/nt_outpost/store)
 "yu" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
-	dir = 4;
-	tag = "icon-intact (EAST)"
+/obj/structure/extinguisher_cabinet{
+	pixel_y = -30
 	},
+/obj/structure/closet/crate/bin,
 /turf/simulated/floor{
-	icon_state = "white"
+	icon_state = "whiteblue"
 	},
 /area/shuttle/odyssey/infirmary)
 "yv" = (
@@ -7029,6 +7364,19 @@
 	},
 /turf/simulated/floor/server/bluegrid,
 /area/surface/nt_outpost/admin)
+"zM" = (
+/obj/machinery/camera/autoname{
+	dir = 4
+	},
+/obj/machinery/firealarm{
+	pixel_x = -30
+	},
+/obj/structure/bookcase{
+	name = "bookcase (Adult)"
+	},
+/obj/abstract/map/spawner/library,
+/turf/simulated/floor/wood,
+/area/shuttle/odyssey/maintenance/vacant_office)
 "zN" = (
 /obj/structure/table/woodentable/poker,
 /obj/item/toy/cards,
@@ -7038,6 +7386,19 @@
 /area/vox_trading_post/trading_floor{
 	name = "\improper Vox Casino"
 	})
+"zO" = (
+/obj/structure/table/glass,
+/obj/item/weapon/folder/white,
+/obj/item/clothing/accessory/stethoscope,
+/obj/item/clothing/suit/strait_jacket,
+/obj/item/clothing/mask/muzzle,
+/obj/item/weapon/cane,
+/obj/item/clothing/accessory/stethoscope,
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "whiteblue"
+	},
+/area/shuttle/odyssey/infirmary)
 "zP" = (
 /obj/machinery/vending/dinnerware,
 /turf/simulated/floor{
@@ -7106,6 +7467,19 @@
 	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/port)
+"zX" = (
+/obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 3;
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/odyssey/hallway/fore/lobby)
 "zY" = (
 /obj/machinery/door/window{
 	dir = 8;
@@ -7287,6 +7661,23 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore)
+"AI" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 3;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "darkred";
+	tag = "icon-darkred (NORTH)"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "AK" = (
 /obj/item/weapon/stool/bar,
 /turf/simulated/floor/wood,
@@ -7415,6 +7806,14 @@
 	},
 /turf/simulated/wall/r_wall,
 /area/surface/nt_outpost/admin)
+"Bo" = (
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/shuttle/odyssey/maintenance/vacant_office)
 "Bp" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -7480,6 +7879,22 @@
 /obj/structure/table/woodentable,
 /turf/simulated/floor/carpet,
 /area/surface/nt_outpost/admin)
+"BA" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 8;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (WEST)"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "BB" = (
 /obj/structure/curtain/black,
 /turf/simulated/floor{
@@ -7592,6 +8007,22 @@
 	},
 /turf/simulated/floor/vox,
 /area/vox_station/tradepost)
+"BY" = (
+/obj/structure/table/glass,
+/obj/item/weapon/storage/firstaid/regular{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/obj/item/weapon/reagent_containers/spray/cleaner,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/shuttle/odyssey/infirmary)
 "Ca" = (
 /obj/machinery/atmospherics/pipe/manifold/insulated/visible/blue,
 /obj/machinery/light{
@@ -7705,11 +8136,13 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/odyssey_transfer)
 "Cm" = (
-/obj/structure/closet/crate/bin,
+/obj/structure/weightlifter,
 /turf/simulated/floor{
-	icon_state = "whiteblue"
+	dir = 1;
+	icon_state = "darkred";
+	tag = "icon-darkred (NORTH)"
 	},
-/area/shuttle/odyssey/infirmary)
+/area/shuttle/odyssey/security/holding_cell)
 "Cn" = (
 /obj/structure/catwalk,
 /obj/machinery/camera{
@@ -7749,16 +8182,15 @@
 /turf/unsimulated/floor/planetary/grass/jungle,
 /area/surface/nt_outpost)
 "Cx" = (
-/obj/structure/table/glass,
-/obj/item/weapon/storage/firstaid/regular{
-	pixel_x = 2;
-	pixel_y = 6
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 1
 	},
-/obj/item/weapon/reagent_containers/spray/cleaner,
 /turf/simulated/floor{
-	icon_state = "white"
+	dir = 8;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (WEST)"
 	},
-/area/shuttle/odyssey/infirmary)
+/area/shuttle/odyssey/hallway/fore/lobby)
 "Cy" = (
 /obj/machinery/door/window{
 	dir = 2;
@@ -7863,6 +8295,21 @@
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
+"CY" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 8;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/door/airlock/glass,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "Da" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /obj/structure/disposalpipe/segment,
@@ -7872,6 +8319,20 @@
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/starboard)
+"Db" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/shuttle/odyssey/infirmary)
 "Dc" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 6;
@@ -7887,6 +8348,22 @@
 	dir = 8
 	},
 /area/shuttle/odyssey/logistics)
+"Dd" = (
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_x = -30
+	},
+/obj/machinery/status_display/odyssey{
+	pixel_y = -30
+	},
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "darkred";
+	tag = "icon-darkred (SOUTHWEST)"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "Dg" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 8
@@ -7976,6 +8453,11 @@
 /obj/item/blueprints,
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering)
+"Dx" = (
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "DA" = (
 /obj/structure/rack,
 /obj/item/device/modkit/gold_rig,
@@ -8240,6 +8722,18 @@
 /obj/machinery/status_display/odyssey,
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/hallway/fore)
+"Ep" = (
+/obj/machinery/door_control{
+	name = "Holding Cell Lockdown";
+	id_tag = "holdingcel";
+	pixel_y = -30
+	},
+/obj/machinery/light,
+/turf/simulated/floor{
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (WEST)"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "Ev" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
@@ -8307,6 +8801,15 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/security)
+"EG" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "EJ" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-8"
@@ -8715,6 +9218,26 @@
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
+"GA" = (
+/obj/machinery/door/airlock/glass_security,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 3;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/door/poddoor/glass/preopen{
+	id_tag = "holdingcel";
+	name = "Holding Cell Lockdown"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "GB" = (
 /obj/machinery/door/airlock/glass_security{
 	id_tag = "BrigWest";
@@ -8870,6 +9393,12 @@
 /area/vox_trading_post/trading_floor{
 	name = "\improper Vox Casino"
 	})
+"Hb" = (
+/obj/machinery/newscaster{
+	pixel_y = -28
+	},
+/turf/simulated/floor/wood,
+/area/shuttle/odyssey/maintenance/vacant_office)
 "Hc" = (
 /turf/simulated/wall,
 /area/shuttle/trade/start)
@@ -8897,13 +9426,24 @@
 	},
 /area/surface/nt_outpost/admin)
 "Hg" = (
-/obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc{
+	pixel_x = 30;
+	name = "Command Dorms APC";
+	dir = 4
+	},
+/obj/structure/bed/chair{
+	dir = 1
 	},
 /turf/simulated/floor{
-	icon_state = "white"
+	dir = 6;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (NORTHWEST)"
 	},
-/area/shuttle/odyssey/infirmary)
+/area/shuttle/odyssey/hallway/fore/lobby)
 "Hi" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /obj/machinery/door/poddoor/shutters{
@@ -9210,6 +9750,14 @@
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
+"ID" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/obj/machinery/door/poddoor{
+	id_tag = "window_cover";
+	name = "Debris Shielding"
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey/security/holding_cell)
 "IE" = (
 /obj/machinery/atmospherics/unary/tank/nitrogen{
 	dir = 4
@@ -9637,6 +10185,9 @@
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
+"JR" = (
+/turf/simulated/floor/carpet,
+/area/shuttle/odyssey/hallway/fore/lobby)
 "JT" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -10445,18 +10996,17 @@
 	},
 /area/shuttle/odyssey/hallway/fore)
 "Mr" = (
-/obj/structure/table/glass,
-/obj/item/clothing/suit/strait_jacket,
-/obj/item/clothing/accessory/stethoscope,
-/obj/item/clothing/mask/muzzle,
-/obj/item/weapon/cane,
-/obj/structure/extinguisher_cabinet{
-	pixel_y = -30
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 8;
+	tag = "icon-intact (EAST)"
 	},
-/turf/simulated/floor{
-	icon_state = "whiteblue"
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
-/area/shuttle/odyssey/infirmary)
+/turf/simulated/floor/carpet,
+/area/shuttle/odyssey/hallway/fore/lobby)
 "Ms" = (
 /obj/machinery/light{
 	dir = 8
@@ -10675,6 +11225,13 @@
 /obj/machinery/atmospherics/pipe/simple/general/visible,
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/port)
+"Ne" = (
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whitebluecorner"
+	},
+/area/shuttle/odyssey/infirmary)
 "Nf" = (
 /obj/machinery/mineral/stacking_machine{
 	id_tag = "mining_stacker";
@@ -10857,6 +11414,16 @@
 	icon_state = "floorgrime"
 	},
 /area/surface/nt_outpost/mineral_processing)
+"NL" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 9;
+	tag = ""
+	},
+/turf/simulated/floor{
+	icon_state = "darkred";
+	tag = "icon-darkred"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "NM" = (
 /obj/machinery/cooking/deepfryer,
 /obj/machinery/light{
@@ -10960,7 +11527,7 @@
 /area/surface/nt_outpost/admin)
 "Ou" = (
 /turf/simulated/wall/shuttle/panel/black,
-/area/shuttle/odyssey/bridge)
+/area/shuttle/odyssey/hallway/fore/lobby)
 "Oz" = (
 /obj/machinery/atmospherics/binary/valve/open{
 	dir = 4
@@ -11083,11 +11650,8 @@
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey/exterior)
 "OS" = (
-/obj/structure/table/glass,
-/obj/item/weapon/folder/white,
-/obj/item/clothing/accessory/stethoscope,
+/obj/machinery/iv_drip,
 /turf/simulated/floor{
-	dir = 10;
 	icon_state = "whiteblue"
 	},
 /area/shuttle/odyssey/infirmary)
@@ -11151,10 +11715,10 @@
 /obj/structure/railing{
 	dir = 1
 	},
+/obj/machinery/light/floor,
 /obj/structure/railing{
 	dir = 4
 	},
-/obj/machinery/light/floor,
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
 "Pc" = (
@@ -11218,6 +11782,22 @@
 /obj/structure/window/reinforced,
 /turf/simulated/floor,
 /area/security/perma)
+"Pk" = (
+/obj/machinery/door/airlock/maintenance,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 3;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/maintenance/vacant_office)
 "Pl" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -11304,6 +11884,24 @@
 	icon_state = "whitegreen"
 	},
 /area/surface/nt_outpost/clinic)
+"Pt" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/shuttle/odyssey/infirmary)
 "Pv" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -11819,6 +12417,20 @@
 	icon_state = "dark"
 	},
 /area/surface/nt_outpost/admin)
+"QR" = (
+/obj/structure/mirror{
+	pixel_x = 28
+	},
+/obj/structure/wc/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "darkred";
+	tag = "icon-darkred (SOUTHEAST)"
+	},
+/area/shuttle/odyssey/security/holding_cell)
 "QU" = (
 /obj/item/weapon/stool,
 /turf/simulated/floor/wood,
@@ -12146,6 +12758,13 @@
 	},
 /turf/simulated/floor/plating/vox,
 /area/shuttle/trade/start)
+"RQ" = (
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
+	dir = 4;
+	anchored = 1
+	},
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey/security/holding_cell)
 "RT" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -12376,6 +12995,13 @@
 /obj/item/weapon/storage/belt/utility,
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/port)
+"SG" = (
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
+	dir = 1;
+	anchored = 1
+	},
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey/maintenance/vacant_office)
 "SI" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/box/ids,
@@ -12519,6 +13145,15 @@
 	icon_state = "freezerfloor"
 	},
 /area/shuttle/odyssey/cafeteria)
+"Tj" = (
+/obj/structure/extinguisher_cabinet{
+	pixel_x = 30
+	},
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/shuttle/odyssey/maintenance/vacant_office)
 "Tk" = (
 /obj/machinery/sleeper,
 /turf/simulated/floor/vox{
@@ -12747,6 +13382,16 @@
 	icon_state = "whitegreen"
 	},
 /area/surface/nt_outpost/clinic)
+"Ug" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 10;
+	tag = ""
+	},
+/obj/structure/bed/chair/comfy/brown,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/shuttle/odyssey/maintenance/vacant_office)
 "Uj" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -12783,6 +13428,27 @@
 	tag = "icon-showroomfloor (NORTH)"
 	},
 /area/shuttle/odyssey/janitor)
+"Um" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 3;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor{
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (WEST)"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "Un" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -13320,6 +13986,21 @@
 	icon_state = "dark"
 	},
 /area/shuttle/trade/start)
+"VZ" = (
+/obj/machinery/light_switch{
+	pixel_x = 24
+	},
+/obj/machinery/door_control{
+	id_tag = "med shutters";
+	name = "Privacy Shutters";
+	pixel_x = 25;
+	pixel_y = -9
+	},
+/obj/machinery/bodyscanner,
+/turf/simulated/floor{
+	icon_state = "whiteblue"
+	},
+/area/shuttle/odyssey/infirmary)
 "Wa" = (
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden{
 	dir = 8;
@@ -13657,6 +14338,14 @@
 	icon_state = "floor"
 	},
 /area/surface/nt_outpost/cargo)
+"Xa" = (
+/obj/structure/bed/chair,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "dark_navy";
+	tag = "icon-dark_navy (NORTHEAST)"
+	},
+/area/shuttle/odyssey/hallway/fore/lobby)
 "Xb" = (
 /obj/structure/cable{
 	d2 = 8;
@@ -13971,6 +14660,19 @@
 /obj/structure/closet/vox_raiders/trader,
 /turf/simulated/floor/vox,
 /area/vox_station/tradepost)
+"Yf" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 3;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/odyssey/hallway/fore/lobby)
 "Yg" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -14466,6 +15168,12 @@
 	icon_state = "white"
 	},
 /area/surface/nt_outpost/clinic)
+"ZX" = (
+/obj/structure/sign/poster{
+	pixel_y = 30
+	},
+/turf/simulated/floor/wood,
+/area/shuttle/odyssey/maintenance/vacant_office)
 
 (1,1,1) = {"
 Yn
@@ -15018,53 +15726,53 @@ Mf
 Mf
 Mf
 Mf
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
 Mf
 Mf
 Mf
 Mf
 Mf
 Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
 Mf
 Mf
 Mf
@@ -15318,57 +16026,57 @@ Mf
 Mf
 Mf
 Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
 Mf
 Mf
 Mf
@@ -15618,1574 +16326,64 @@ Mf
 Mf
 Mf
 Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
 Mf
 Mf
 Mf
 "}
 (5,1,1) = {"
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-"}
-(6,1,1) = {"
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Bc
-Bc
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Bc
-Bc
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-"}
-(7,1,1) = {"
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-"}
-(8,1,1) = {"
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-XB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-"}
-(9,1,1) = {"
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Yn
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-nB
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Bj
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Mf
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Bc
-Mf
-Mf
-Mf
-Mf
-"}
-(10,1,1) = {"
 Yn
 Yn
 Yn
@@ -17487,7 +16685,7 @@ Mf
 Mf
 Mf
 "}
-(11,1,1) = {"
+(6,1,1) = {"
 Yn
 Yn
 Yn
@@ -17789,7 +16987,611 @@ Mf
 Mf
 Mf
 "}
-(12,1,1) = {"
+(7,1,1) = {"
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+nl
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Uo
+ro
+Iq
+Iq
+Iq
+Iq
+Iq
+ro
+Cn
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+ic
+Bc
+Mf
+Mf
+Mf
+"}
+(8,1,1) = {"
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+XB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+nl
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+xJ
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+dn
+Yv
+Yv
+Ll
+Ll
+Jg
+Ll
+Ll
+Yv
+Yv
+km
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+xJ
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+ic
+Bc
+Bc
+Mf
+Mf
+"}
+(9,1,1) = {"
 Yn
 Yn
 Yn
@@ -18057,20 +17859,327 @@ Iq
 Iq
 Iq
 Iq
+pS
+Iq
+Iq
+Yv
+Yv
+th
+Wp
+WF
+ty
+lq
+Xy
+ZD
+av
+Fu
+Yv
+Yv
+Iq
+Iq
+OR
 Iq
 Iq
 Iq
 Iq
 Iq
-Uo
-ro
+Iq
+Iq
+Iq
+Iq
+ic
+Bc
+Bc
+Mf
+Mf
+"}
+(10,1,1) = {"
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+nl
 Iq
 Iq
 Iq
 Iq
 Iq
-ro
-Cn
+Iq
+Iq
+Iq
+Iq
+bp
+uD
+Bi
+Yv
+Ck
+aF
+Hd
+SL
+MF
+VL
+VL
+VL
+fq
+Bu
+DA
+Yv
+CV
+Gz
+od
 Iq
 Iq
 Iq
@@ -18079,6 +18188,605 @@ Iq
 Iq
 Iq
 Iq
+Iq
+ic
+Bc
+Bc
+Mf
+Mf
+"}
+(11,1,1) = {"
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+nl
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+bp
+uD
+Bi
+bp
+Sa
+Sa
+Yv
+DT
+JT
+SN
+Qz
+lg
+VL
+Pw
+DV
+pF
+xt
+Am
+Yv
+Dg
+Dg
+od
+CV
+Gz
+od
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+ic
+Bc
+Bc
+Mf
+Mf
+"}
+(12,1,1) = {"
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Yn
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Mf
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+Bc
+nl
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+bp
+Sa
+Sa
+bp
+GU
+gJ
+Yv
+du
+JT
+wk
+LK
+sC
+VL
+Pw
+QH
+cZ
+xt
+ZN
+Yv
+dy
+wv
+od
+Dg
+Dg
+od
 Iq
 Iq
 Iq
@@ -18329,8 +19037,8 @@ Mf
 Mf
 Mf
 Mf
-Mf
-Mf
+Bc
+Bc
 Bc
 Bc
 Bc
@@ -18356,31 +19064,31 @@ Iq
 Iq
 Iq
 Iq
-xJ
-Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-dn
+bp
+WU
+he
+uc
+Tv
+Ds
 Yv
+qp
+RT
+oP
+LG
+Uk
+Qo
+lD
+XC
+PU
+Wa
+Lg
 Yv
-Ll
-Ll
-Jg
-Ll
-Ll
-Yv
-Yv
-km
-Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-xJ
+Ef
+HB
+hK
+Mk
+Vp
+od
 Iq
 Iq
 Iq
@@ -18630,8 +19338,8 @@ Mf
 Mf
 Mf
 Mf
-Mf
-Mf
+Bc
+Bc
 Bc
 Bc
 Bc
@@ -18658,31 +19366,31 @@ Iq
 Iq
 Iq
 Iq
-Iq
-Iq
-Iq
-pS
-Iq
-Iq
+bp
+SE
+tV
+bp
+lv
+Vu
 Yv
+qp
+EY
+pB
+EN
+VL
+HF
+RM
+Ea
+jX
+cW
+Js
 Yv
-th
-Wp
-WF
-ty
-lq
-Xy
-ZD
-av
-Fu
-Yv
-Yv
-Iq
-Iq
-OR
-Iq
-Iq
-Iq
+Bq
+Nu
+od
+XO
+vK
+od
 Iq
 Iq
 Iq
@@ -18932,7 +19640,7 @@ Mf
 Mf
 Mf
 Mf
-Mf
+Bc
 Bc
 Bc
 Bc
@@ -18959,33 +19667,33 @@ Iq
 Iq
 Iq
 Iq
-Iq
-Iq
-Iq
-Iq
-bp
-uD
-Bi
+DX
+CI
+CI
+CI
+Wc
+kH
+Wc
+Wc
+DU
 Yv
-Ck
-aF
-Hd
-SL
-MF
-VL
-VL
-VL
-fq
-Bu
-DA
 Yv
-CV
-Gz
-od
-Iq
-Iq
-Iq
-Iq
+Yv
+KB
+Yv
+PS
+Yv
+Yv
+Yv
+DU
+el
+el
+Mm
+el
+Sv
+Sv
+Sv
+LP
 Iq
 Iq
 Iq
@@ -19233,7 +19941,7 @@ Mf
 Mf
 Mf
 Mf
-Mf
+Bc
 Bc
 Bc
 Bc
@@ -19255,45 +19963,45 @@ kN
 Bc
 Bc
 Bc
-nl
+nE
 Iq
 Iq
 Iq
 Iq
 Iq
-Iq
-bp
-uD
-Bi
-bp
-Sa
-Sa
-Yv
-DT
-JT
-SN
-Qz
-lg
-VL
-Pw
-DV
-pF
-xt
-Am
-Yv
-Dg
-Dg
-od
-CV
-Gz
-od
-Iq
-Iq
-Iq
+ro
+CI
+Gj
+Nd
+of
+ED
+Nk
+AP
+ez
+lQ
+rR
+fT
+DY
+Ny
+az
+mh
+Gw
+wZ
+ez
+yB
+wz
+GS
+eL
+Kl
+cT
+Sv
+ro
 Iq
 Iq
 Iq
-ic
+Iq
+Iq
+VK
 Bc
 Bc
 Mf
@@ -19563,33 +20271,33 @@ Iq
 Iq
 Iq
 Iq
-Iq
-bp
-Sa
-Sa
-bp
-GU
-gJ
-Yv
-du
-JT
-wk
-LK
-sC
-VL
-Pw
-QH
-cZ
-xt
-ZN
-Yv
-dy
-wv
-od
-Dg
-Dg
-od
-Iq
+ro
+CI
+pQ
+Vq
+Tr
+Yk
+zW
+MP
+yM
+tA
+mU
+Ol
+GE
+UC
+vv
+Nx
+lA
+tr
+QV
+cb
+Pn
+Ie
+Yr
+GO
+mi
+Sv
+ro
 Iq
 Iq
 Iq
@@ -19836,7 +20544,7 @@ Mf
 Mf
 Mf
 Mf
-Mf
+Bc
 Bc
 Bc
 Bc
@@ -19865,33 +20573,33 @@ Iq
 Iq
 Iq
 Iq
-Iq
-bp
-WU
-he
-uc
-Tv
-Ds
-Yv
-qp
-RT
-oP
-LG
-Uk
-Qo
-lD
-XC
-PU
-Wa
-Lg
-Yv
-Ef
-HB
-hK
-Mk
-Vp
-od
-Iq
+ro
+CI
+CI
+CI
+yf
+US
+DB
+PC
+PC
+PC
+RA
+PC
+PC
+PC
+Lu
+mD
+Nw
+mD
+mD
+mD
+Cd
+Im
+wL
+Sv
+Sv
+Sv
+ro
 Iq
 Iq
 Iq
@@ -20161,45 +20869,45 @@ FZ
 Bc
 Bc
 Bc
-nE
+nl
 Iq
 Iq
 Iq
 Iq
 Iq
-Iq
-bp
-SE
-tV
-bp
-lv
-Vu
-Yv
-qp
-EY
-pB
-EN
-VL
-HF
-RM
-Ea
-jX
-cW
-Js
-Yv
-Bq
-Nu
-od
-XO
-vK
-od
-Iq
-Iq
-Iq
+ro
+CI
+Xk
+Vq
+Tr
+nz
+QD
+PC
+Ul
+aA
+zm
+gb
+qC
+PC
+Dw
+iO
+DF
+aJ
+Qu
+mD
+gy
+HU
+Mw
+qb
+mI
+Sv
+ro
 Iq
 Iq
 Iq
-VK
+Iq
+Iq
+ic
 Bc
 Bc
 Mf
@@ -20468,35 +21176,35 @@ Iq
 Iq
 Iq
 Iq
-Iq
-DX
+Kp
+ro
 CI
-CI
-CI
-Wc
-kH
-Wc
-Wc
-DU
-Yv
-Yv
-Yv
-KB
-Yv
-PS
-Yv
-Yv
-Yv
-DU
-el
-el
-Mm
-el
+eZ
+Vq
+eV
+qr
+iw
+PC
+Sj
+aB
+oY
+eE
+hu
+PC
+CK
+iO
+Hp
+xo
+dU
+mD
+qz
+iL
+nK
+ZM
+ZH
 Sv
-Sv
-Sv
-LP
-Iq
+ro
+Xs
 Iq
 Iq
 Iq
@@ -20767,41 +21475,41 @@ dh
 Bc
 nl
 Iq
+xJ
 Iq
 Iq
+YE
+YE
+YE
+YE
+YE
+ax
+sK
+ax
+PC
+Zn
+dN
+bD
+OB
+td
+PC
+HR
+iO
+Ly
+xM
+yb
+mD
+AS
+iu
+vx
+rC
+rC
+rC
+rC
+rC
 Iq
 Iq
-ro
-CI
-Gj
-Nd
-of
-ED
-Nk
-AP
-ez
-lQ
-rR
-fT
-DY
-Ny
-az
-mh
-Gw
-wZ
-ez
-yB
-wz
-GS
-eL
-Kl
-cT
-Sv
-ro
-Iq
-Iq
-Iq
-Iq
+xJ
 Iq
 ic
 Bc
@@ -21072,35 +21780,35 @@ Iq
 Iq
 Iq
 Iq
-Iq
-ro
-CI
-pQ
-Vq
-Tr
-Yk
-zW
-MP
-yM
-tA
-mU
-Ol
-GE
-UC
-vv
-Nx
-lA
-tr
-QV
-cb
-Pn
-Ie
-Yr
-GO
-mi
-Sv
-ro
-Iq
+Nz
+pl
+TE
+WY
+nI
+VB
+cs
+xT
+yh
+yh
+yh
+yh
+ta
+yh
+yh
+yh
+yh
+ak
+iX
+sy
+BV
+gw
+rB
+gk
+LM
+mz
+XT
+gq
+rZ
 Iq
 Iq
 Iq
@@ -21373,36 +22081,36 @@ nl
 Iq
 Iq
 Iq
-Iq
-Iq
-ro
-CI
-CI
-CI
-yf
-US
-DB
-PC
-PC
-PC
-RA
-PC
-PC
-PC
-Lu
+IA
+aE
+Rk
+fd
+fs
+kz
+Tw
+Zr
+fo
+yh
+Jb
+Vy
+yh
+lW
+zS
+fZ
+zO
+yh
+pC
+LQ
+zZ
 mD
-Nw
-mD
-mD
-mD
-Cd
-Im
-wL
-Sv
-Sv
-Sv
-ro
-Iq
+ry
+Ld
+lb
+DJ
+iZ
+HC
+Ls
+nC
 Iq
 Iq
 Iq
@@ -21676,35 +22384,35 @@ Iq
 Iq
 Iq
 Iq
-Iq
-ro
-CI
-Xk
-Vq
-Tr
-nz
-QD
-PC
-Ul
-aA
-zm
-gb
-qC
-PC
-Dw
-iO
-DF
-aJ
-Qu
-mD
-gy
-HU
-Mw
-qb
-mI
-Sv
-ro
-Iq
+rq
+vu
+NO
+oB
+sw
+jD
+Zy
+gs
+yh
+ni
+Hy
+yh
+lU
+tg
+bB
+dm
+yh
+Fa
+Fa
+Fa
+Fa
+Yz
+nQ
+aT
+kU
+ap
+uR
+HL
+oM
 Iq
 Iq
 Iq
@@ -21978,35 +22686,35 @@ Iq
 Iq
 Iq
 Iq
-Kp
-ro
-CI
-eZ
-Vq
-eV
-qr
-iw
-PC
-Sj
-aB
-oY
-eE
-hu
-PC
-CK
-iO
-Hp
-xo
-dU
-mD
-qz
-iL
-nK
-ZM
-ZH
-Sv
-ro
-Xs
+Iq
+rq
+YE
+YE
+YE
+xj
+Gt
+Ek
+yh
+vY
+Hy
+yh
+pf
+BY
+hD
+yh
+yh
+LA
+AL
+Pa
+Fa
+Rn
+Wr
+oD
+rC
+rC
+rC
+oM
+Iq
 Iq
 Iq
 Iq
@@ -22277,41 +22985,41 @@ dh
 Bc
 nl
 Iq
-xJ
 Iq
 Iq
-YE
-YE
-YE
-YE
-YE
-ax
-sK
-ax
-PC
-Zn
-dN
-bD
-OB
-td
-PC
-HR
-iO
-Ly
-xM
-yb
-mD
-AS
-iu
-vx
-rC
-rC
-rC
-rC
-rC
 Iq
 Iq
-xJ
+Iq
+Iq
+eQ
+VN
+Sh
+dG
+Uj
+yh
+mC
+oR
+aG
+fC
+bB
+wN
+lt
+yh
+fe
+gV
+gV
+Fa
+vX
+om
+OT
+Da
+YW
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 ic
 Bc
@@ -22577,45 +23285,45 @@ Bc
 dh
 dh
 dh
+vk
 Iq
 Iq
 Iq
 Iq
 Iq
-Nz
-pl
-TE
-WY
-nI
-VB
-cs
-xT
+Iq
+Iq
+Bw
+iR
+iR
+Xj
+BD
 yh
 yh
 yh
 yh
-ta
+lZ
+Ne
+Db
+yu
 yh
-yh
-yh
-yh
-ak
-iX
-sy
-BV
-gw
-rB
-gk
-LM
-mz
-XT
-gq
-rZ
+Fa
+jK
+jK
+Nq
+nS
+Nq
+hC
+ls
+Vs
 Iq
 Iq
 Iq
 Iq
-ic
+Iq
+Iq
+Iq
+VK
 Bc
 Bc
 Mf
@@ -22883,36 +23591,36 @@ Iq
 Iq
 Iq
 Iq
-IA
-aE
-Rk
-fd
-fs
-kz
-Tw
-Zr
-fo
+Iq
+Iq
+Iq
+Iq
+iR
+iR
+YJ
+nU
+vi
+iD
+tQ
+xx
 yh
-Jb
-Vy
 yh
-lW
-zS
-fZ
+bM
+cr
 OS
-yh
-pC
-LQ
-zZ
-mD
-ry
-Ld
-lb
-DJ
-iZ
-HC
-Ls
-nC
+oq
+xD
+oo
+Dc
+Vi
+Dq
+tm
+fy
+Nq
+uQ
+Iq
+Iq
+Iq
 Iq
 Iq
 Iq
@@ -23181,45 +23889,45 @@ mA
 vB
 dh
 Bc
-nE
+nl
 Iq
 Iq
 Iq
 Iq
-rq
-vu
-NO
-oB
-sw
-jD
-Zy
-gs
+Iq
+Iq
+Iq
+kW
+OD
+Te
+BK
+OQ
+qn
+qn
+zz
+Ib
 yh
-ni
-Hy
-yh
-lU
-tg
-bB
-dm
-yh
-Fa
-Fa
-Fa
-Fa
-Yz
-nQ
-aT
-kU
-ap
-uR
-HL
-oM
+bx
+Pt
+VZ
+oq
+gi
+iV
+Sg
+tE
+qh
+tE
+JN
+mk
+Nq
+ro
 Iq
 Iq
 Iq
 Iq
-VK
+Iq
+Iq
+ic
 Bc
 Bc
 Mf
@@ -23489,33 +24197,33 @@ Iq
 Iq
 Iq
 Iq
-rq
-YE
-YE
-YE
-xj
-Gt
-Ek
-yh
-vY
-Hy
-gQ
-tp
-Cx
-yl
+Iq
+Iq
+kW
+ny
+Te
+DI
+vi
+TT
+VP
+zz
+Yb
 yh
 yh
-LA
-AL
-Pa
-Fa
-Rn
-Wr
-oD
-rC
-rC
-rC
-oM
+uN
+yh
+Nq
+gi
+Qv
+py
+ym
+eA
+iV
+Jn
+qi
+Yx
+ro
+Iq
 Iq
 Iq
 Iq
@@ -23793,30 +24501,30 @@ Iq
 Iq
 Iq
 Iq
-eQ
-VN
-Sh
-dG
-Uj
-yh
-mC
-oR
-aG
-gv
-bB
-Hg
-lt
-yh
-fe
-gV
-gV
-Fa
-vX
-om
-OT
-Da
-YW
-Iq
+iR
+LB
+Px
+Rl
+vi
+OI
+OI
+zz
+xU
+iR
+wa
+Yi
+ck
+Nq
+sX
+Mc
+py
+Zp
+nG
+ZK
+Jn
+Yt
+PA
+ro
 Iq
 Iq
 Iq
@@ -24095,30 +24803,30 @@ Iq
 Iq
 Iq
 Iq
-Bw
 iR
-iR
-Xj
-BD
-yh
-yh
-yh
-yh
-lZ
-nx
-yu
-Mr
-yh
-Fa
-jK
-jK
-Nq
-nS
-Nq
-hC
-ls
-Vs
-Iq
+NM
+Te
+Cf
+jU
+vs
+vs
+aC
+vs
+KJ
+dt
+qq
+bd
+Ee
+mG
+as
+Wv
+wu
+rh
+ZK
+Jn
+Yt
+PA
+ro
 Iq
 Iq
 Iq
@@ -24397,30 +25105,30 @@ Iq
 Iq
 Iq
 Iq
-iR
-iR
-YJ
-nU
+kW
+JJ
+Te
+Te
 vi
-iD
-tQ
-xx
-yh
-yh
-bM
-fC
-Cm
-oq
-xD
-oo
-Dc
-Vi
-Dq
-tm
-fy
+OI
+Jt
+YR
+tR
+iR
+FG
+HZ
+ep
 Nq
-uQ
-Iq
+Gm
+jA
+wH
+Vj
+EX
+Qv
+Jn
+Lb
+Sl
+ro
 Iq
 Iq
 Iq
@@ -24700,27 +25408,27 @@ Iq
 Iq
 Iq
 kW
-OD
+bW
 Te
-BK
-OQ
+jf
+At
+OI
 qn
 qn
-zz
-Ib
-yh
-vN
-bu
-bs
-oq
-gi
-iV
-Sg
+zP
+iR
+PJ
+Hi
+PJ
+Nq
+oi
+jA
+PV
 tE
-qh
+sq
 tE
 JN
-mk
+Vo
 Nq
 ro
 Iq
@@ -25000,31 +25708,31 @@ Iq
 Iq
 Iq
 Iq
-Iq
-kW
-ny
-Te
-DI
+Aq
+iR
+iR
+KW
+ug
 vi
-TT
-VP
-zz
-Yb
-yh
-yh
-uN
-yh
+JK
+vU
+JB
+iR
+iR
+Ri
+Ae
+fB
 Nq
-gi
-Qv
-py
-ym
-eA
-iV
-Jn
-qi
-Yx
-ro
+Md
+BJ
+Tt
+yy
+jd
+Bx
+Jc
+Jh
+uQ
+pR
 Iq
 Iq
 Iq
@@ -25297,41 +26005,41 @@ dh
 Bc
 nl
 Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-iR
-LB
-Px
-Rl
-vi
-OI
-OI
-zz
-xU
-iR
-wa
-Yi
-ck
-Nq
-sX
-Mc
-py
-Zp
-nG
-ZK
-Jn
-Yt
-PA
-ro
-Iq
-Iq
-Iq
-Iq
-Iq
+Xe
+Xe
+Xe
+Xe
+Xe
+Xe
+Xe
+Xe
+Xe
+Lp
+us
+Eo
+cO
+cO
+cO
+cO
+Uy
+lX
+en
+ws
+ws
+ws
+ws
+Lp
+wn
+Eo
+uo
+uo
+uo
+uo
+uo
+jv
+jv
+uo
+uo
 Iq
 ic
 Bc
@@ -25599,41 +26307,41 @@ dh
 Bc
 nl
 Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-iR
-NM
-Te
-Cf
-jU
-vs
-vs
-aC
-vs
-KJ
-dt
-qq
-bd
-Ee
-mG
-as
-Wv
-wu
-rh
-ZK
-Jn
-Yt
-PA
-ro
-Iq
-Iq
-Iq
-Iq
-Iq
+Xe
+JX
+pY
+Xe
+Nm
+fN
+JO
+NG
+Xe
+Tx
+YV
+gU
+cO
+xN
+GN
+cO
+LC
+rg
+ra
+ws
+Lq
+Gc
+ws
+qy
+Zm
+tH
+uo
+ko
+Lo
+yI
+mN
+Jx
+zd
+ho
+uo
 Iq
 ic
 Bc
@@ -25899,45 +26607,45 @@ FH
 dh
 dh
 Bc
-nl
+nE
 Iq
+hm
+FP
+TY
+wC
+EW
+kM
+LD
+Kg
+Wq
+Qy
+UR
+kl
+cO
+wB
+qP
+cO
+WO
+EE
+se
+ws
+jr
+pm
+ws
+yo
+mE
+wM
+uo
+vC
+Je
+Oi
+zd
+zd
+zd
+vJ
+jv
 Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-kW
-JJ
-Te
-Te
-vi
-OI
-Jt
-YR
-tR
-iR
-FG
-HZ
-ep
-Nq
-Gm
-jA
-wH
-Vj
-EX
-Qv
-Jn
-Lb
-Sl
-ro
-Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-ic
+VK
 Bc
 Bc
 Mf
@@ -26201,45 +26909,45 @@ mA
 dh
 dh
 Bc
-nE
+nl
 Iq
+hm
+xQ
+LY
+Xe
+Xe
+Xe
+uT
+Xe
+Xe
+uJ
+dd
+SP
+Vb
+dA
+Ka
+cO
+WA
+jY
+zG
+ws
+kL
+vR
+Td
+Qy
+Yj
+kK
+uo
+qS
+FK
+Oi
+hh
+wj
+zd
+ho
+jv
 Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-kW
-bW
-Te
-jf
-At
-OI
-qn
-qn
-zP
-iR
-PJ
-Hi
-PJ
-Nq
-oi
-jA
-PV
-tE
-sq
-tE
-JN
-Vo
-Nq
-ro
-Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-VK
+ic
 Bc
 Bc
 Mf
@@ -26505,41 +27213,41 @@ dh
 Bc
 nl
 Iq
-Iq
-Iq
-Iq
-Iq
-Iq
-Aq
-iR
-iR
-KW
-ug
-vi
-JK
-vU
-JB
-iR
-iR
-Ri
-Ae
-fB
-Nq
-Md
-BJ
-Tt
-yy
-jd
-Bx
-Jc
-Jh
-uQ
-pR
-Iq
-Iq
-Iq
-Iq
-Iq
+SS
+Xe
+oa
+Xe
+Lv
+Ql
+TY
+nT
+Xe
+kB
+Bp
+Qx
+cO
+cO
+cO
+cO
+Tl
+uf
+WH
+ws
+ws
+ws
+ws
+no
+Pl
+FA
+uA
+hv
+hv
+Ub
+iF
+dP
+ho
+uo
+YQ
 Iq
 ic
 Bc
@@ -26807,41 +27515,41 @@ dh
 Bc
 nl
 Iq
+Iq
+SS
 Xe
 Xe
+CQ
+TY
+Aw
+ld
 Xe
-Xe
-Xe
-Xe
-Xe
-Xe
-Xe
+jz
+fg
+Nb
+YO
+Kc
 Lp
-us
-Eo
-cO
-cO
-cO
-cO
-Uy
-lX
-en
-ws
-ws
-ws
-ws
+Ms
+MK
+og
+zk
+Xm
 Lp
-wn
-Eo
+vS
+YO
+WW
+Wl
+Vd
+uo
+pN
+AK
+Gr
+xs
 uo
 uo
-uo
-uo
-uo
-jv
-jv
-uo
-uo
+YQ
+Iq
 Iq
 ic
 Bc
@@ -27109,41 +27817,41 @@ dh
 Bc
 nl
 Iq
+xJ
+Iq
+Iq
+SS
 Xe
-JX
-pY
+hm
+hm
 Xe
-Nm
-fN
-JO
-NG
 Xe
-Tx
-YV
-gU
-cO
-xN
-GN
-cO
-LC
-rg
-ra
-ws
-Lq
-Gc
-ws
-qy
-Zm
-tH
+we
+aw
+fg
+Iw
+Iw
+LO
+JF
+cA
+Jr
+pT
+nv
+LO
+Jr
+Jr
+Wl
+we
+Mu
 uo
-ko
-Lo
-yI
-mN
-Jx
-zd
-ho
+bA
+jv
+jv
 uo
+YQ
+Iq
+Iq
+xJ
 Iq
 ic
 Bc
@@ -27411,41 +28119,41 @@ dh
 Bc
 nl
 Iq
-hm
-FP
-TY
-wC
-EW
-kM
-LD
-Kg
-Wq
-Qy
-UR
-kl
-cO
-wB
-qP
-cO
-WO
-EE
-se
-ws
-jr
-pm
-ws
-yo
-mE
-wM
-uo
-vC
-Je
-Oi
-zd
-zd
-zd
-vJ
-jv
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Nc
+SS
+bI
+we
+Mn
+Zb
+tH
+Eo
+gT
+zE
+Du
+AC
+nL
+Eo
+ks
+SU
+iJ
+yF
+bI
+YQ
+dV
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 ic
 Bc
@@ -27713,41 +28421,41 @@ dh
 Bc
 nl
 Iq
-hm
-xQ
-LY
-Xe
-Xe
-Xe
-uT
-Xe
-Xe
-uJ
-dd
-SP
-Vb
-dA
-Ka
-cO
-WA
-jY
-zG
-ws
-kL
-vR
-Td
-Qy
-Yj
-kK
-uo
-qS
-FK
-Oi
-hh
-wj
-zd
-ho
-jv
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+bI
+iz
+ad
+ad
+ad
+ad
+Ou
+wg
+Ou
+CY
+Ou
+nx
+nx
+nx
+nx
+ID
+bI
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 ic
 Bc
@@ -28015,41 +28723,41 @@ dh
 Bc
 nl
 Iq
-SS
-Xe
-oa
-Xe
-Lv
-Ql
-TY
-nT
-Xe
-kB
-Bp
-Qx
-cO
-cO
-cO
-cO
-Tl
-uf
-WH
-ws
-ws
-ws
-ws
-no
-Pl
-FA
-uA
-hv
-hv
-Ub
-iF
-dP
-ho
-uo
-YQ
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+ad
+vD
+zM
+nc
+ad
+te
+Cx
+uw
+BA
+bs
+nx
+da
+oy
+Dd
+nx
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 ic
 Bc
@@ -28318,39 +29026,39 @@ Bc
 nl
 Iq
 Iq
-SS
-Xe
-Xe
-CQ
-TY
-Aw
-ld
-Xe
-jz
-fg
-Nb
-YO
-Kc
-Lp
-Ms
-MK
-og
-zk
-Xm
-Lp
-vS
-YO
-WW
-Wl
-Vd
-uo
-pN
-AK
-Gr
-xs
-uo
-uo
-YQ
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+iz
+Bo
+iP
+Hb
+ad
+gh
+gQ
+JR
+Mr
+Ep
+nx
+Cm
+Dx
+fr
+cV
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 Iq
 ic
@@ -28619,41 +29327,41 @@ dh
 Bc
 nl
 Iq
-xJ
 Iq
 Iq
-SS
-Xe
-hm
-hm
-Xe
-Xe
-we
-aw
-fg
-Iw
-Iw
-LO
-JF
-cA
-Jr
-pT
-nv
-LO
-Jr
-Jr
-Wl
-we
-Mu
-uo
-bA
-jv
-jv
-uo
-YQ
 Iq
 Iq
-xJ
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+iz
+Ug
+fm
+tp
+Pk
+gv
+zX
+Yf
+bu
+Um
+GA
+AI
+EG
+NL
+cV
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 ic
 Bc
@@ -28928,27 +29636,27 @@ Iq
 Iq
 Iq
 Iq
-Nc
-SS
-bI
-we
-Mn
-Zb
-tH
-Eo
-gT
-zE
-Du
-AC
-nL
-Eo
-ks
-SU
-iJ
-yF
-bI
-YQ
-dV
+Iq
+Iq
+Iq
+ad
+ZX
+Tj
+al
+ad
+Xa
+lr
+xf
+vN
+Hg
+mt
+yl
+cQ
+QR
+nx
+Iq
+Iq
+Iq
 Iq
 Iq
 Iq
@@ -29232,23 +29940,23 @@ Iq
 Iq
 Iq
 Iq
-bI
-bI
-Lp
-Lp
+Iq
+SG
 ad
-Zo
+ad
+ad
+ad
 Zo
 MJ
 Zo
 sB
 Zo
-Zo
-ad
-Lp
-Lp
-bI
-bI
+nx
+nx
+nx
+nx
+RQ
+Iq
 Iq
 Iq
 Iq
@@ -29535,9 +30243,9 @@ Iq
 Iq
 Iq
 Iq
-Iq
-Ew
-Ou
+ro
+xw
+xw
 wW
 Xz
 Qc
@@ -29547,9 +30255,9 @@ OO
 FS
 kb
 Zo
-Ou
-zA
-Iq
+xw
+xw
+ro
 Iq
 Iq
 Iq
@@ -30146,7 +30854,7 @@ Zo
 ml
 QO
 Qj
-CU
+kk
 WV
 qD
 Uv

@@ -11,6 +11,10 @@
 	name = "\improper Fore Hallway"
 	icon_state = "hallF"
 
+/area/shuttle/odyssey/hallway/fore/lobby
+	name = "\improper Bridge Lobby"
+	icon_state = "hallF"
+
 /area/shuttle/odyssey/hallway/aft
 	name = "\improper Aft Hallway"
 	icon_state = "hallA"
@@ -87,9 +91,17 @@
 	name = "\improper Starboard Engine Maintenance"
 	icon_state = "asmaint"
 
+/area/shuttle/odyssey/maintenance/vacant_office
+	name = "\improper Vacant Office"
+	icon_state = "construction"
+
 /area/shuttle/odyssey/security
 	name = "\improper Security Office"
 	icon_state = "security"
+
+/area/shuttle/odyssey/security/holding_cell
+	name = "\improper Holding Cell"
+	icon_state = "sec_prison"
 
 /area/shuttle/odyssey/exterior
 	name = "\improper Exterior"
