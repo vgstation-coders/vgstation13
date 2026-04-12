@@ -222,6 +222,17 @@
 	take_damage(dmg)
 
 /obj/machinery/door/window/attackby(obj/item/I, mob/living/user)
+	if(istype(I, /obj/item/tool/solder/bluespace) && operating == -1)
+		var/obj/item/tool/solder/bluespace/S = I
+		S.playtoolsound(loc, 100)
+		to_chat(user, "<span class='notice'>\The [S] begins to repair [src]'s internal circuitry.</span>")
+		if(S.do_solder(user, src,4 SECONDS,4))
+			if(electronics)
+				electronics.icon_state = "door_electronics"
+			operating = 0
+			machine_flags |= EMAGGABLE
+			to_chat(user, "<span class='notice'>You repair the blown fuses on the circuitboard.</span>")
+		return
 	// Make emagged/open doors able to be deconstructed
 	if(!density && operating != 1 && iscrowbar(I))
 		user.visible_message("[user] is removing \the [electronics.name] from \the [name].", "You start to remove \the [electronics.name] from \the [name].")

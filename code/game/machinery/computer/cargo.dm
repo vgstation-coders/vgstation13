@@ -213,7 +213,14 @@ For vending packs, see vending_packs.dm*/
 
 	add_fingerprint(user)
 
-	if(I.is_screwdriver(user))
+	if(istype(I, /obj/item/tool/solder/bluespace) && circuit)
+		var/obj/item/tool/solder/bluespace/S = I
+		S.playtoolsound(loc, 100)
+		to_chat(user, "<span class='notice'>\The [S] begins to modify [src]'s internal circuitry.</span>")
+		if(S.do_solder(user, src,4 SECONDS,2))
+			can_order_contraband = !can_order_contraband
+			to_chat(user, "<span class='notice'>You [can_order_contraband ? "" : "un"]connect the mysterious fuse.</span>")
+	else if(I.is_screwdriver(user))
 		I.playtoolsound(loc, 50)
 		if(do_after(user, src, 20))
 			if (stat & BROKEN)

@@ -1167,7 +1167,7 @@ About the new airlock wires panel:
 
 	if(operating)
 		return
-	
+
 	var/dooropendelay=0
 	var/level_of_door_opening = 0
 	if(istype(M,/mob/living/simple_animal))
@@ -1176,9 +1176,9 @@ About the new airlock wires panel:
 		if(SA.environment_smash_flags & OPEN_DOOR_STRONG)
 			level_of_door_opening = 2
 		dooropendelay=SA.force_airlock_time
-	
-	
-	
+
+
+
 	if(!level_of_door_opening)
 		return
 	if((locked || welded || jammed) && level_of_door_opening < 2)
@@ -1259,6 +1259,17 @@ About the new airlock wires panel:
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			user.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
 			bashed_in(user, TRUE)
+		return
+	if(istype(I, /obj/item/tool/solder/bluespace) && operating == -1)
+		var/obj/item/tool/solder/bluespace/S = I
+		S.playtoolsound(loc, 100)
+		to_chat(user, "<span class='notice'>\The [S] begins to repair [src]'s internal circuitry.</span>")
+		if(S.do_solder(user, src,4 SECONDS,4))
+			if(electronics)
+				electronics.icon_state = "door_electronics"
+			operating = 0
+			machine_flags |= EMAGGABLE
+			to_chat(user, "<span class='notice'>You repair the blown fuses on the circuitboard.</span>")
 		return
 	if(istype(I, /obj/item/tool/crowbar/halligan))
 		if (src.busy)

@@ -176,3 +176,14 @@
 	materials = list(MAT_DIAMOND = 250, MAT_IRON = 250)
 	category = "Bluespace"
 	build_path = /obj/item/device/bert
+
+/datum/design/bluespacesolder
+	name = "Bluespace Solder"
+	desc = "A solder capable of using bluespace technology to repair circuitry inside machinery."
+	id = "bluespacesolder"
+	req_tech = list(Tc_BLUESPACE = 2, Tc_ENGINEERING = 2, Tc_MATERIALS = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_GLASS = 6000, MAT_IRON = 6000)
+	reliability = 100
+	category = "Bluespace"
+	build_path = /obj/item/tool/solder/bluespace

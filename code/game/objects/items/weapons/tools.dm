@@ -941,6 +941,19 @@
 	reagents.add_reagent(SACID, 50)
 	update_icon()
 
+/obj/item/tool/solder/bluespace
+	name = "bluespace solder"
+	desc = "An advanced soldering tool that can reach fuses held within machinery."
+	accepts_pacids = TRUE
+	icon_state = "bsolder-0"
+	icon_prefix = "b"
+	origin_tech = Tc_ENGINEERING + "=2;" + Tc_BLUESPACE + "=2"
+
+/obj/item/tool/solder/bluespace/pre_fueled/New()
+	. = ..()
+	reagents.add_reagent(PACID, 50)
+	update_icon()
+
 /obj/item/tool/solder/screw
 	name = "screwsolder"
 	desc = "An advanced soldering tool with a screwdriver head. Use in hand to swap to and from the screwhead."
