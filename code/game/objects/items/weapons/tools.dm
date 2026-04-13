@@ -973,7 +973,36 @@
 /obj/item/tool/solder/screw/is_screwdriver(mob/user)
 	return screwmode
 
+/obj/item/tool/solder/screw/attackby(obj/item/W, mob/user)
+	if(istype(W,/obj/item/tool/solder/bluespace))
+		user.create_in_hands(src, /obj/item/tool/solder/bluespace/screw, W, msg = "<span class='notice'>You add bluespace properties to \the [src] with \the [W].</span>")
+		return
+	return ..()
+
 /obj/item/tool/solder/screw/pre_fueled/New()
+	. = ..()
+	reagents.add_reagent(PACID, 50)
+	update_icon()
+
+/obj/item/tool/solder/bluespace/screw
+	name = "bluespace screwsolder"
+	desc = "An advanced soldering tool with a screwdriver head that can reach fuses held within machinery. Use in hand to swap to and from the screwhead."
+	max_fuel = 32
+	work_speed = 2 //2x faster
+	icon_state = "bssolder-0"
+	icon_prefix = "bs"
+	origin_tech = Tc_ENGINEERING + "=6;" + Tc_BLUESPACE + "=2"
+	var/screwmode = TRUE
+
+/obj/item/tool/solder/bluespace/screw/attack_self(mob/user)
+	playsound(src,'sound/items/Screwdriver.ogg',40, 1)
+	screwmode = !screwmode
+	to_chat(user, "<span class='notice'>You toggle the screwhead [screwmode ? "on":"off"].</span>")
+
+/obj/item/tool/solder/bluespace/screw/is_screwdriver(mob/user)
+	return screwmode
+
+/obj/item/tool/solder/bluespace/screw/pre_fueled/New()
 	. = ..()
 	reagents.add_reagent(PACID, 50)
 	update_icon()
