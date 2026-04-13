@@ -484,6 +484,7 @@
 	var/old_density = density
 	var/old_holomap_draw_override = holomap_draw_override
 	var/old_registered_events = registered_events
+	var/datum/virtual_z/old_v = v
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -543,6 +544,7 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/simulated/W = new N(src)
+		W.v = old_v
 		if(defer_edges)
 			W.turf_flags |= DEFER_EDGING
 		if(world.has_round_started())
@@ -570,6 +572,7 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/W = new N(src)
+		W.v = old_v
 		if(defer_edges)
 			W.turf_flags |= DEFER_EDGING
 		if(world.has_round_started())
@@ -991,6 +994,8 @@
 		return v
 	else
 		for(var/datum/virtual_z/check_vz in map.getAllVLevels())
+			if(check_vz.parent_z?.z != z)
+				continue
 			if(check_vz.x_min <= x && check_vz.x_max >= x && check_vz.y_min <= y && check_vz.y_max >= y)
 				return check_vz
 	return null
