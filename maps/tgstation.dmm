@@ -93766,18 +93766,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"dzH" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"dzI" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "dzJ" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/mars/air,
@@ -423462,7 +423450,7 @@ dye
 dyk
 dyo
 dzt
-dzH
+dAb
 dAb
 dAb
 dAS
@@ -423964,7 +423952,7 @@ dyk
 dyk
 dyo
 dyi
-dzI
+dAb
 dAc
 dyk
 dAU
@@ -424466,7 +424454,7 @@ dyj
 dye
 dyo
 dyj
-dzI
+dAb
 dAc
 dyk
 dAU
@@ -425470,7 +425458,7 @@ dye
 dyi
 dyo
 dzu
-dzI
+dAb
 dyo
 dyo
 dAU
@@ -425972,7 +425960,7 @@ dym
 dyk
 dyo
 dym
-dzI
+dAb
 dyo
 dyo
 dAV
@@ -426474,7 +426462,7 @@ dym
 dyk
 dyo
 dye
-dzI
+dAb
 dyo
 dAx
 dAU
@@ -426976,7 +426964,7 @@ dyj
 dyJ
 dyo
 dym
-dzI
+dAb
 dAd
 dyI
 dAU
@@ -427478,7 +427466,7 @@ dyl
 dym
 dyo
 dye
-dzI
+dAb
 dyo
 dAx
 dAU
@@ -427980,7 +427968,7 @@ dym
 dyi
 dyo
 dyj
-dzI
+dAb
 dyo
 dAx
 dAU
@@ -428482,7 +428470,7 @@ dyl
 dyj
 dyo
 dye
-dzI
+dAb
 dAd
 dyI
 dAU
@@ -428984,7 +428972,7 @@ dyo
 dyo
 dyo
 dye
-dzI
+dAb
 dyo
 dAx
 dAW

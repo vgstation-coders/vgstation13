@@ -774,16 +774,8 @@
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
-"abY" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/simulated/floor/plating/damaged/broken,
-/area/lamprey/detoxins)
 "abZ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/lamprey/detoxins)
 "aca" = (
@@ -804,15 +796,13 @@
 /turf/simulated/floor/wood,
 /area/lamprey/detoxins)
 "ace" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/wood{
 	icon_state = "wood-broken6"
 	},
 /area/lamprey/detoxins)
 "acf" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/detoxins)
 "acg" = (
@@ -86135,9 +86125,7 @@
 	},
 /area/lamprey/enginerooms)
 "dLi" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/lamprey/thebelt)
 "dLj" = (
@@ -102286,9 +102274,7 @@
 /turf/simulated/floor/plating/airless,
 /area/lamprey/moon)
 "euH" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating/airless,
 /area/lamprey/moon)
 "euI" = (
@@ -128529,18 +128515,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"fAi" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"fAj" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "fAk" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/mars/air,
@@ -151519,9 +151493,7 @@
 	},
 /area)
 "gxl" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/space,
 /area)
 "gxm" = (
@@ -187462,9 +187434,7 @@
 	},
 /area/lamprey/excavationtunnels)
 "hOv" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -289176,7 +289146,7 @@ aiW
 aaa
 aaa
 acc
-abY
+acr
 alb
 acr
 acw
@@ -398237,7 +398207,7 @@ aaa
 aaa
 aaa
 acc
-abY
+acr
 alb
 acr
 acw
@@ -499774,7 +499744,7 @@ fxJ
 fxK
 fxP
 fzO
-fAi
+fAO
 fAO
 fAO
 fBQ
@@ -500276,7 +500246,7 @@ fxK
 fxK
 fxP
 fxM
-fAj
+fAO
 fAP
 fxK
 fBR
@@ -500778,7 +500748,7 @@ fxL
 fxJ
 fxP
 fxL
-fAj
+fAO
 fAP
 fxK
 fBR
@@ -501782,7 +501752,7 @@ fxJ
 fxM
 fxP
 fzP
-fAj
+fAO
 fxP
 fxP
 fBR
@@ -502284,7 +502254,7 @@ fxN
 fxK
 fxP
 fxN
-fAj
+fAO
 fxP
 fxP
 fBS
@@ -502786,7 +502756,7 @@ fxN
 fxK
 fxP
 fxJ
-fAj
+fAO
 fxP
 fBp
 fBR
@@ -503288,7 +503258,7 @@ fxL
 fyD
 fxP
 fxN
-fAj
+fAO
 fAQ
 fyB
 fBR
@@ -503790,7 +503760,7 @@ fxO
 fxN
 fxP
 fxJ
-fAj
+fAO
 fxP
 fBp
 fBR
@@ -504292,7 +504262,7 @@ fxN
 fxM
 fxP
 fxL
-fAj
+fAO
 fxP
 fBp
 fBR
@@ -504794,7 +504764,7 @@ fxO
 fxL
 fxP
 fxJ
-fAj
+fAO
 fAQ
 fyB
 fBR
@@ -505296,7 +505266,7 @@ fxP
 fxP
 fxP
 fxJ
-fAj
+fAO
 fxP
 fBp
 fBT

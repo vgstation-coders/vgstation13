@@ -93,3 +93,7 @@
 	if(!candidates.len)
 		return null
 	return pick(candidates)
+
+
+/mob/living/simple_animal/complex/parrot/get_butchering_products()
+	return list(/datum/butchering_product/feathers)

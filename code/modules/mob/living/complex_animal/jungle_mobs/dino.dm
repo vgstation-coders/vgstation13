@@ -103,6 +103,10 @@
 		icon_state="dino-bite"
 	return .
 
+/mob/living/simple_animal/complex/dinosaur/get_butchering_products()
+	return list(/datum/butchering_product/skin/lizard/lots, /datum/butchering_product/teeth/lots)
+
+
 /mob/living/simple_animal/complex/dinosaur/proc/walkthedinosaur()
 	var/list/dirlist=list(NORTH,SOUTH,EAST,WEST,NORTHWEST,SOUTHEAST,NORTHEAST,SOUTHWEST)
 	var/list/dirlist_cardinal=list(NORTH,SOUTH,EAST,WEST)

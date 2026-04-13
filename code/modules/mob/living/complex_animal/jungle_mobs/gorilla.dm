@@ -27,7 +27,7 @@
 				say("Ook.")
 
 
-/mob/living/simple_animal/complex/bear/get_attack_msg(var/individual)
+/mob/living/simple_animal/complex/gorilla/get_attack_msg(var/individual)
 	var/i=rand(1,3)
 	switch(i)
 		if(1)
@@ -36,3 +36,7 @@
 			emote("me", MESSAGE_SEE, "bludgeons \the [individual]!")
 		if(3)
 			emote("me", MESSAGE_SEE, "smacks \the [individual]!")
+
+/mob/living/simple_animal/complex/gorilla/get_butchering_products()
+	return list(/datum/butchering_product/skin/human, /datum/butchering_product/teeth/lots)
+	

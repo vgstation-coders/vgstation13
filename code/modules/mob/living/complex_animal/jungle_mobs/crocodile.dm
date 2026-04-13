@@ -78,6 +78,8 @@
 /mob/living/simple_animal/complex/crocodile/schnapps/can_offspring()
 	return FALSE
 
+/mob/living/simple_animal/complex/crocodile/get_butchering_products()
+	return list(/datum/butchering_product/skin/lizard/lots, /datum/butchering_product/teeth/lots)
 
 /mob/living/simple_animal/complex/crocodile/schnapps/tick_state_attacking()
 	.=..()

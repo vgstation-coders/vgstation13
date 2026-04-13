@@ -97920,18 +97920,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"dDA" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"dDB" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "dDC" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/mars/air,
@@ -109831,9 +109819,7 @@
 /turf/simulated/wall/r_wall,
 /area/mine/maintenance)
 "eub" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "euc" = (
@@ -428762,7 +428748,7 @@ dBN
 dBT
 dBX
 dDk
-dDA
+dDX
 dDX
 dDX
 dEZ
@@ -429264,7 +429250,7 @@ dBT
 dBT
 dBX
 dBR
-dDB
+dDX
 dDY
 dBT
 dFb
@@ -429766,7 +429752,7 @@ dBS
 dBN
 dBX
 dBS
-dDB
+dDX
 dDY
 dBT
 dFb
@@ -430770,7 +430756,7 @@ dBN
 dBR
 dBX
 dDl
-dDB
+dDX
 dBX
 dBX
 dFb
@@ -431272,7 +431258,7 @@ dBV
 dBT
 dBX
 dBV
-dDB
+dDX
 dBX
 dBX
 dFc
@@ -431774,7 +431760,7 @@ dBV
 dBT
 dBX
 dBN
-dDB
+dDX
 dBX
 dEv
 dFb
@@ -432276,7 +432262,7 @@ dBS
 dCt
 dBX
 dBV
-dDB
+dDX
 dDZ
 dCs
 dFb
@@ -432778,7 +432764,7 @@ dBU
 dBV
 dBX
 dBN
-dDB
+dDX
 dBX
 dEv
 dFb
@@ -433280,7 +433266,7 @@ dBV
 dBR
 dBX
 dBS
-dDB
+dDX
 dBX
 dEv
 dFb
@@ -433782,7 +433768,7 @@ dBU
 dBS
 dBX
 dBN
-dDB
+dDX
 dDZ
 dCs
 dFb
@@ -434284,7 +434270,7 @@ dBX
 dBX
 dBX
 dBN
-dDB
+dDX
 dBX
 dEv
 dFd

@@ -837,15 +837,18 @@
 
 /obj/item/weapon/storage/box/spellbook/New()
 	..()
+	var/limit = BOX_SPACE
 	var/list/possible_books = subtypesof(/obj/item/weapon/spellbook/oneuse)
 	for(var/S in possible_books)
 		var/obj/item/weapon/spellbook/oneuse/O = S
 		if(initial(O.disabled_from_bundle))
 			possible_books -= O
-	for(var/i =1; i <= BOX_SPACE; i++)
+	for(var/i =1; i <= limit; i++)
 		var/randombook = pick(possible_books)
-		var/book = new randombook(src)
+		var/obj/item/weapon/spellbook/oneuse/book = new randombook(src)
 		src.contents += book
+		if(book.bundle_freebie)
+			limit++
 		possible_books -= randombook
 	var/randomsprite = pick("a","b")
 	icon_state = "wizbox-[randomsprite]"

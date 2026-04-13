@@ -259,9 +259,7 @@
 	},
 /area/holodeck/source_wildride)
 "pY" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	icon_state = "asteroid"

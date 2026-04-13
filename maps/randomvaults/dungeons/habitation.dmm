@@ -880,9 +880,7 @@
 	},
 /area/vault/mothership_lab/cave)
 "ho" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless,
 /area/vault/mothership_lab/cave)

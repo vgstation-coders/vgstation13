@@ -3254,9 +3254,7 @@
 	},
 /area/hallway/primary/starboard)
 "ahg" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "ahh" = (
@@ -6735,9 +6733,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "apM" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "apN" = (
@@ -39121,9 +39117,7 @@
 /turf/space,
 /area)
 "ejR" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/asteroid/air,
 /area/security/perma)
 "ejT" = (
@@ -50456,9 +50450,7 @@
 /turf/simulated/floor/plating,
 /area/crew_quarters/heads/ce)
 "hsx" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "hsC" = (
@@ -51098,12 +51090,6 @@
 	icon_state = "whitehall"
 	},
 /area/medical/paramedics)
-"hBF" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "hBJ" = (
 /obj/machinery/door/airlock/glass{
 	name = "Dormitories"
@@ -67287,10 +67273,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/storage/tech)
-"mjS" = (
-/obj/structure/fence/corner,
-/turf/simulated/floor/asteroid/air,
-/area/security/perma)
 "mjT" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -69787,9 +69769,7 @@
 /turf/simulated/floor/wood,
 /area/medical/break_room)
 "mTe" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/starboard)
 "mTm" = (
@@ -72500,9 +72480,7 @@
 	},
 /area/prison/solitary)
 "nHd" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/research_outpost/maintstore2)
 "nHi" = (
@@ -77340,9 +77318,7 @@
 	},
 /area/mine/production)
 "pcR" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
 "pdd" = (
@@ -91986,9 +91962,7 @@
 	},
 /area/mine/explored)
 "tqA" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "trI" = (
@@ -98432,10 +98406,6 @@
 	},
 /turf/simulated/floor,
 /area/maintenance/incinerator)
-"voc" = (
-/obj/structure/fence,
-/turf/simulated/floor/asteroid/air,
-/area/security/perma)
 "vor" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 8
@@ -100264,9 +100234,7 @@
 	},
 /area/centcom/test)
 "vQp" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "vQt" = (
@@ -108481,12 +108449,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/tdome/tdomeadmin)
-"yhu" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "yhx" = (
 /turf/unsimulated/floor{
 	dir = 4;
@@ -272831,12 +272793,12 @@ wTF
 cyW
 cyW
 niU
-mjS
-voc
-voc
-voc
+ejR
+ejR
+ejR
+ejR
 sUs
-voc
+ejR
 cRq
 aaa
 aaa
@@ -415521,7 +415483,7 @@ hww
 upn
 rOk
 lIA
-yhu
+uCA
 uCA
 uCA
 krD
@@ -416023,7 +415985,7 @@ upn
 upn
 rOk
 hJN
-hBF
+uCA
 wch
 upn
 whs
@@ -416525,7 +416487,7 @@ kbA
 hww
 rOk
 kbA
-hBF
+uCA
 wch
 upn
 whs
@@ -417529,7 +417491,7 @@ hww
 hJN
 rOk
 nMb
-hBF
+uCA
 rOk
 rOk
 whs
@@ -418031,7 +417993,7 @@ oii
 upn
 rOk
 oii
-hBF
+uCA
 rOk
 rOk
 rSi
@@ -418533,7 +418495,7 @@ oii
 upn
 rOk
 hww
-hBF
+uCA
 rOk
 woZ
 whs
@@ -419035,7 +418997,7 @@ kbA
 tqp
 rOk
 oii
-hBF
+uCA
 cvV
 lPH
 whs
@@ -419537,7 +419499,7 @@ dXk
 oii
 rOk
 hww
-hBF
+uCA
 rOk
 woZ
 whs
@@ -420039,7 +420001,7 @@ oii
 hJN
 rOk
 kbA
-hBF
+uCA
 rOk
 woZ
 whs
@@ -420541,7 +420503,7 @@ dXk
 kbA
 rOk
 hww
-hBF
+uCA
 cvV
 lPH
 whs
@@ -421043,7 +421005,7 @@ rOk
 rOk
 rOk
 hww
-hBF
+uCA
 rOk
 woZ
 svX
