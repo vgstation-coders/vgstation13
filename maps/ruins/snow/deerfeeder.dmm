@@ -2,25 +2,11 @@
 "a" = (
 /turf/template_noop,
 /area/template_noop)
-"b" = (
-/obj/structure/fence/corner,
-/turf/template_noop,
-/area/exposed_ruin)
 "k" = (
 /turf/template_noop,
 /area/exposed_ruin)
 "l" = (
 /obj/structure/fence/door/opened,
-/turf/template_noop,
-/area/exposed_ruin)
-"p" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/template_noop,
-/area/exposed_ruin)
-"r" = (
-/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "t" = (
@@ -40,9 +26,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "C" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "E" = (
@@ -52,20 +36,8 @@
 	},
 /turf/template_noop,
 /area/exposed_ruin)
-"I" = (
-/obj/structure/fence/cut/large{
-	dir = 4
-	},
-/turf/template_noop,
-/area/exposed_ruin)
 "K" = (
 /obj/abstract/loot_spawner/trash/on_ground,
-/turf/template_noop,
-/area/exposed_ruin)
-"M" = (
-/obj/structure/fence{
-	dir = 4
-	},
 /turf/template_noop,
 /area/exposed_ruin)
 "Q" = (
@@ -88,12 +60,6 @@
 /obj/item/weapon/corncob,
 /turf/template_noop,
 /area/exposed_ruin)
-"W" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
-/turf/template_noop,
-/area/exposed_ruin)
 
 (1,1,1) = {"
 a
@@ -108,26 +74,26 @@ a
 (2,1,1) = {"
 a
 C
-r
-r
-r
+C
+C
+C
 A
-p
+C
 a
 "}
 (3,1,1) = {"
 a
-M
+C
 V
 k
 k
 V
-I
+A
 a
 "}
 (4,1,1) = {"
 a
-M
+C
 k
 w
 K
@@ -137,7 +103,7 @@ a
 "}
 (5,1,1) = {"
 a
-M
+C
 k
 E
 Q
@@ -147,7 +113,7 @@ a
 "}
 (6,1,1) = {"
 a
-I
+A
 V
 k
 V
@@ -157,12 +123,12 @@ u
 "}
 (7,1,1) = {"
 a
-W
-r
+C
+C
 A
-r
-r
-b
+C
+C
+C
 a
 "}
 (8,1,1) = {"

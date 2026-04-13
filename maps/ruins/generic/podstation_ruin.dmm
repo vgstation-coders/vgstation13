@@ -964,21 +964,13 @@
 /area/vault/podstation/interior)
 "rh" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "ru" = (
 /obj/structure/reagent_dispensers/silicate,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
-	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/exposed_ruin)
-"rx" = (
-/obj/structure/fence/corner{
-	dir = 1
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
@@ -1385,10 +1377,6 @@
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
-"DW" = (
-/obj/structure/lattice,
-/turf/template_noop,
-/area/template_noop)
 "En" = (
 /obj/structure/reagent_dispensers/cauldron/barrel{
 	name = "Discount Dan's Sauce Barrel"
@@ -1481,12 +1469,6 @@
 /obj/item/stack/sheet/metal/bigstack{
 	pixel_x = 1;
 	pixel_y = 1
-	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/exposed_ruin)
-"HJ" = (
-/obj/structure/fence/corner{
-	dir = 8
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
@@ -1989,12 +1971,6 @@
 /obj/structure/reagent_dispensers/fueltank,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
-"VJ" = (
-/obj/structure/fence/corner{
-	dir = 10
-	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/exposed_ruin)
 "VP" = (
 /turf/unsimulated/floor/planetary/path/jungle_plated{
 	dir = 8;
@@ -2007,18 +1983,6 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /turf/simulated/floor,
 /area/vault/podstation/interior)
-"VU" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/exposed_ruin)
-"VW" = (
-/obj/structure/fence/corner{
-	dir = 5
-	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/exposed_ruin)
 "VX" = (
 /obj/machinery/camera{
 	dir = 10;
@@ -2277,9 +2241,9 @@ pU
 pU
 TV
 TV
-HJ
 Np
-VJ
+Np
+Np
 TV
 pU
 pU
@@ -2304,7 +2268,7 @@ TV
 Yx
 HV
 Yx
-VU
+Np
 TV
 TV
 pU
@@ -2329,9 +2293,9 @@ TV
 En
 Kk
 Yx
-VW
 Np
-rx
+Np
+Np
 TV
 pU
 pU

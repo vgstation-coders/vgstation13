@@ -87,10 +87,14 @@
 }
 
 .palette div.paletteColor {
-	width: 28px;
-	height: 28px;
+	width: 30px;
+	height: 30px;
 	display: inline-block;
 	border: 1px solid #000000;
+}
+
+.palette div.paletteColor:nth-child(5n) {
+	margin-right: 10px;
 }
 
 .palette div.paletteButton {

@@ -52676,16 +52676,8 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"cgu" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "cgv" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "cgw" = (
@@ -52771,10 +52763,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"cgH" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "cgI" = (
 /obj/structure/closet,
@@ -385877,9 +385865,9 @@ cfv
 cfw
 cfB
 cgp
-cgu
-cgH
-cgH
+cgv
+cgv
+cgv
 chn
 chB
 chB

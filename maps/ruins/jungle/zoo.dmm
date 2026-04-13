@@ -30,7 +30,7 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "g" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	name = "DANGER: SPIDERS";
 	desc = "A warning sign which reads 'DANGER:SPIDERS'.";
@@ -39,10 +39,8 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "i" = (
-/obj/structure/fence/corner,
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "j" = (
@@ -83,13 +81,11 @@
 /turf/unsimulated/floor/planetary/grass/jungle,
 /area/exposed_ruin)
 "z" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "A" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "B" = (
@@ -128,9 +124,7 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "M" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "N" = (
@@ -166,7 +160,7 @@
 /turf/unsimulated/floor/planetary/dirt/jungle,
 /area/exposed_ruin)
 "Y" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	name = "DANGER: SPIDERS";
 	desc = "A warning sign which reads 'DANGER:SPIDERS'.";

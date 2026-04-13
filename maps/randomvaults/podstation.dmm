@@ -1008,9 +1008,7 @@
 /area/vault/podstation/interior)
 "rh" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -1019,14 +1017,6 @@
 /obj/structure/reagent_dispensers/silicate,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
-	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/podstation/exterior)
-"rx" = (
-/obj/structure/fence/corner{
-	dir = 1
 	},
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
@@ -1584,14 +1574,6 @@
 	icon_state = "asteroidfloor"
 	},
 /area/vault/podstation/exterior)
-"HJ" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/podstation/exterior)
 "HV" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/airless{
@@ -1782,12 +1764,6 @@
 	dir = 1
 	},
 /turf/space,
-/area/vault/podstation/exterior)
-"Np" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
 /area/vault/podstation/exterior)
 "NA" = (
 /obj/effect/decal/warning_stripes{
@@ -2115,14 +2091,6 @@
 	icon_state = "asteroidfloor"
 	},
 /area/vault/podstation/exterior)
-"VJ" = (
-/obj/structure/fence/corner{
-	dir = 10
-	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/podstation/exterior)
 "VP" = (
 /turf/unsimulated/floor/airless{
 	dir = 8;
@@ -2139,18 +2107,8 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /turf/simulated/floor,
 /area/vault/podstation/interior)
-"VU" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/podstation/exterior)
 "VW" = (
-/obj/structure/fence/corner{
-	dir = 5
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -2441,9 +2399,9 @@ pU
 pU
 ES
 ES
-HJ
-Np
-VJ
+VW
+VW
+VW
 ES
 VS
 aI
@@ -2488,7 +2446,7 @@ ES
 Yx
 HV
 Yx
-VU
+VW
 ES
 ES
 VS
@@ -2534,8 +2492,8 @@ En
 cE
 Yx
 VW
-Np
-rx
+VW
+VW
 ES
 pU
 pU

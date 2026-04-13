@@ -36712,9 +36712,7 @@
 	holomap_draw_override = 1
 	})
 "uvf" = (
-/obj/structure/fence/door{
-	dir = 4
-	},
+/obj/structure/fence/door,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},

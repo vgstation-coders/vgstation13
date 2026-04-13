@@ -55316,16 +55316,8 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"bYc" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "bYd" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "bYe" = (
@@ -55399,10 +55391,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"bYn" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "bYo" = (
 /obj/structure/closet,
@@ -379248,9 +379236,9 @@ bWO
 bWU
 bWY
 bXX
-bYc
-bYn
-bYn
+bYd
+bYd
+bYd
 bYN
 bYY
 bYY

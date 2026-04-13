@@ -92236,18 +92236,6 @@
 	},
 /turf/space,
 /area/shuttle/specops/centcom)
-"dBi" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"dBj" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "dBk" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -421316,7 +421304,7 @@ eEK
 eEB
 eEJ
 eEI
-dBi
+eJx
 eJx
 eJx
 eFb
@@ -421818,7 +421806,7 @@ eEB
 eEB
 eEJ
 eEF
-dBj
+eJx
 eJy
 eEB
 dod
@@ -422320,7 +422308,7 @@ eEN
 eEK
 eEJ
 eEN
-dBj
+eJx
 eJy
 eEB
 dod
@@ -423324,7 +423312,7 @@ eEK
 eEF
 eEJ
 eEO
-dBj
+eJx
 eEJ
 eEJ
 dod
@@ -423826,7 +423814,7 @@ eEH
 eEB
 eEJ
 eEH
-dBj
+eJx
 eEJ
 eEJ
 doe
@@ -424328,7 +424316,7 @@ eEH
 eEB
 eEJ
 eEK
-dBj
+eJx
 eEJ
 eDs
 dod
@@ -424830,7 +424818,7 @@ eEN
 eEP
 eEJ
 eEH
-dBj
+eJx
 eDk
 eEM
 dod
@@ -425332,7 +425320,7 @@ eEG
 eEH
 eEJ
 eEK
-dBj
+eJx
 eEJ
 eDs
 dod
@@ -425834,7 +425822,7 @@ eEH
 eEF
 eEJ
 eEN
-dBj
+eJx
 eEJ
 eDs
 dod
@@ -426336,7 +426324,7 @@ eEG
 eEN
 eEJ
 eEK
-dBj
+eJx
 eDk
 eEM
 dod
@@ -426838,7 +426826,7 @@ eEJ
 eEJ
 eEJ
 eEK
-dBj
+eJx
 eEJ
 eDs
 dof
