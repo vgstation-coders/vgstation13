@@ -267,7 +267,7 @@
 
 /obj/machinery/podcomputer/attackby(obj/item/O, mob/user)
 	..()
-	if(issolder(O) && emagged && panel_open)
+	if(issolder(O) && emagged && (panel_open || istype(O,/obj/item/tool/solder/bluespace)))
 		var/obj/item/tool/solder/S = O
 		if(S.remove_fuel(2,user))
 			fix_circuitry(user)

@@ -40,7 +40,7 @@
 		return
 	if(issolder(W))
 		. = TRUE
-		if(!panel_open)
+		if(!(panel_open || istype(W,/obj/item/tool/solder/bluespace)))
 			to_chat(user, "You need to open the maintenance panel first!")
 			return
 		var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
@@ -230,7 +230,7 @@
 		dat += "</ul>"
 	else
 		dat += "<li>NONE</li>"
-	
+
 	dat += {"<p><a href='?src=\ref[src];input_name=1'>\[Add Frequency Name\]</a></p>
 			<hr />"}
 	return dat
@@ -248,7 +248,7 @@
 			if((!(newfreq == SYND || newfreq == RAIDER || newfreq == REV_COMM)) && (!(newfreq in freq_names)))
 				freq_names.Add(newfreq)
 				temp = "<font color = #666633>-% New frequency name assigned: \"[newfreq]\" %-</font color>"
-	
+
 				var/newcolor = input(usr, "Specify a new frequency color. Leave blank for defaults.", src, network) as null|color
 				if(newcolor && canAccess(usr))
 					freq_names[newfreq] = newcolor
