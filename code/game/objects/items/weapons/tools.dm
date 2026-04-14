@@ -975,7 +975,7 @@
 
 /obj/item/tool/solder/screw/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/tool/solder/bluespace))
-		user.create_in_hands(src, /obj/item/tool/solder/bluespace/screw, W, msg = "<span class='notice'>You add bluespace properties to \the [src] with \the [W].</span>")
+		user.create_in_hands(src, /obj/item/tool/solder/bluespace/screw, W, msg = "<span class='notice'>You remove the bluespace components from \the [W] and install them on \the [src].</span>")
 		return
 	return ..()
 
