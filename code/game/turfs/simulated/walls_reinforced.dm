@@ -343,6 +343,8 @@
 		var/obj/item/weapon/pickaxe/PK = W
 		if(!(PK.diggables & DIG_RWALLS))
 			return
+		if(walltype == "diamond")
+			return
 
 		user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \
 		"<span class='notice'>You begin [PK.drill_verb] straight into \the [src].</span>")
