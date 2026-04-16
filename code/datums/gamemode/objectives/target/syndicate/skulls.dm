@@ -37,6 +37,8 @@
 		if(!H.organ_data)
 			continue
 		var/mob/living/carbon/brain/B = H.brainmob
+		if(!B)
+			continue
 		if(!B.client)
 			if(!B.mind)
 				continue

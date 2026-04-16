@@ -1842,6 +1842,20 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
+
+/obj/item/weapon/reagent_containers/food/snacks/dinonuggies
+	name = "Dinosaur Nugget"
+	desc = "A true delicacy worth at least 25 good boy points."
+	icon_state = "dinonuggies"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/dinonuggies/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(GRUGZONE, 2)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/blobburger
 	name = "bloburger"
 	desc = "Careful, has a tendency to spill sauce in every direction when squeezed too hard."

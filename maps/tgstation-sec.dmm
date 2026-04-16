@@ -4105,9 +4105,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "aiA" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/generic,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
@@ -9962,17 +9960,13 @@
 	},
 /area/crew_quarters/toilet)
 "avh" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/crew_quarters/toilet)
 "avi" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/machinery/camera{
 	dir = 8;
 	name = "Dormitory Toilets North"
@@ -69981,17 +69975,13 @@
 	},
 /area/syndicate_mothership)
 "cFK" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
 "cFL" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
@@ -80968,18 +80958,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"dhq" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"dhr" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dhs" = (
 /obj/structure/fence/door/opened,
@@ -416906,7 +416884,7 @@ dfV
 dfW
 dgb
 dhd
-dhq
+dhI
 dhI
 dhI
 diu
@@ -417408,7 +417386,7 @@ dfW
 dfW
 dgb
 dfY
-dhr
+dhI
 dhJ
 dfW
 div
@@ -417910,7 +417888,7 @@ dfX
 dfV
 dgb
 dfX
-dhr
+dhI
 dhJ
 dfW
 div
@@ -418914,7 +418892,7 @@ dfV
 dfY
 dgb
 dhe
-dhr
+dhI
 dgb
 dgb
 div
@@ -419416,7 +419394,7 @@ dfZ
 dfW
 dgb
 dfZ
-dhr
+dhI
 dgb
 dgb
 diw
@@ -419918,7 +419896,7 @@ dfZ
 dfW
 dgb
 dfV
-dhr
+dhI
 dgb
 dib
 div
@@ -420420,7 +420398,7 @@ dfX
 dgw
 dgb
 dfZ
-dhr
+dhI
 dhK
 dgu
 div
@@ -420922,7 +420900,7 @@ dga
 dfZ
 dgb
 dfV
-dhr
+dhI
 dgb
 dib
 div
@@ -421424,7 +421402,7 @@ dfZ
 dfY
 dgb
 dfX
-dhr
+dhI
 dgb
 dib
 div
@@ -421926,7 +421904,7 @@ dga
 dfX
 dgb
 dfV
-dhr
+dhI
 dhK
 dgu
 div
@@ -422428,7 +422406,7 @@ dgb
 dgb
 dgb
 dfV
-dhr
+dhI
 dgb
 dib
 dix

@@ -1643,7 +1643,7 @@
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "gs" = (
-/obj/structure/fence/door/secure/from_south,
+/obj/structure/fence/door/secure/inverted,
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "gt" = (
@@ -1805,12 +1805,6 @@
 /obj/item/weapon/handcuffs,
 /turf/unsimulated/floor/evil,
 /area/awaymission/hive/secure)
-"gY" = (
-/obj/structure/fence/door/secure/from_east{
-	dir = 4
-	},
-/turf/unsimulated/floor/evil/breathing,
-/area/awaymission/hive)
 "gZ" = (
 /obj/effect/decal/cleanable/blood/drip,
 /obj/effect/trap/fire_trap,
@@ -1864,7 +1858,7 @@
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "hj" = (
-/obj/structure/fence/door/secure/from_north,
+/obj/structure/fence/door/secure,
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "hk" = (
@@ -3486,10 +3480,10 @@ ab
 ab
 aq
 ab
-gY
+gs
 ab
 ab
-gY
+gs
 ab
 ar
 ab

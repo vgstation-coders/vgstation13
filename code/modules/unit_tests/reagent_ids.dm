@@ -13,6 +13,10 @@
 			if(ispath(parent_type, /datum/reagent) && initial(parent_type.id) == EXPLICITLY_INVALID_REAGENT_ID)
 				fail("[reagent_path] does not specify an ID")
 			continue
+		if(id == EVEN_MORE_EXPLICITLY_INVALID_REAGENT_ID) //same thing can happen with this nested thing and I ain't fixing it properlike 
+			var/datum/reagent/parent_type = type2parent(reagent_path)
+			if(ispath(parent_type, /datum/reagent) && initial(parent_type.id) == EVEN_MORE_EXPLICITLY_INVALID_REAGENT_ID)
+				fail("[reagent_path] does not specify an ID")
 		if(id_to_reagents[id])
 			id_to_reagents[id] += reagent_path
 		else

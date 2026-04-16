@@ -14432,9 +14432,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/wc/urinal{
-	pixel_y = 29
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -44493,9 +44491,7 @@
 /turf/simulated/floor/wood,
 /area/security/vacantoffice)
 "bGZ" = (
-/obj/structure/wc/urinal{
-	pixel_y = 29
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -86578,9 +86574,7 @@
 	},
 /area/syndicate_mothership)
 "dcb" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -97926,18 +97920,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"dDA" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"dDB" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "dDC" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/mars/air,
@@ -100686,6 +100668,11 @@
 	},
 /obj/structure/window/reinforced{
 	dir = 8
+	},
+/obj/item/device/deskbell/signaler/trader{
+	pixel_x = 10;
+	pixel_y = -5;
+	name = "Trade Ship Counter Bell"
 	},
 /turf/simulated/floor/carpet,
 /area/shuttle/trade/start)
@@ -109832,9 +109819,7 @@
 /turf/simulated/wall/r_wall,
 /area/mine/maintenance)
 "eub" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "euc" = (
@@ -116353,8 +116338,7 @@
 /area)
 "eJt" = (
 /obj/structure/wc/urinal{
-	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
-	pixel_y = 32
+	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth."
 	},
 /turf/simulated/floor/plating,
 /area)
@@ -428764,7 +428748,7 @@ dBN
 dBT
 dBX
 dDk
-dDA
+dDX
 dDX
 dDX
 dEZ
@@ -429266,7 +429250,7 @@ dBT
 dBT
 dBX
 dBR
-dDB
+dDX
 dDY
 dBT
 dFb
@@ -429768,7 +429752,7 @@ dBS
 dBN
 dBX
 dBS
-dDB
+dDX
 dDY
 dBT
 dFb
@@ -430772,7 +430756,7 @@ dBN
 dBR
 dBX
 dDl
-dDB
+dDX
 dBX
 dBX
 dFb
@@ -431274,7 +431258,7 @@ dBV
 dBT
 dBX
 dBV
-dDB
+dDX
 dBX
 dBX
 dFc
@@ -431776,7 +431760,7 @@ dBV
 dBT
 dBX
 dBN
-dDB
+dDX
 dBX
 dEv
 dFb
@@ -432278,7 +432262,7 @@ dBS
 dCt
 dBX
 dBV
-dDB
+dDX
 dDZ
 dCs
 dFb
@@ -432780,7 +432764,7 @@ dBU
 dBV
 dBX
 dBN
-dDB
+dDX
 dBX
 dEv
 dFb
@@ -433282,7 +433266,7 @@ dBV
 dBR
 dBX
 dBS
-dDB
+dDX
 dBX
 dEv
 dFb
@@ -433784,7 +433768,7 @@ dBU
 dBS
 dBX
 dBN
-dDB
+dDX
 dDZ
 dCs
 dFb
@@ -434286,7 +434270,7 @@ dBX
 dBX
 dBX
 dBN
-dDB
+dDX
 dBX
 dEv
 dFd

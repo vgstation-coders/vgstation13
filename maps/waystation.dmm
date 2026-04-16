@@ -24702,17 +24702,13 @@
 /turf/simulated/floor/plating,
 /area/maintenance/disposal)
 "fQn" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
 "fQw" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
@@ -55574,9 +55570,7 @@
 /turf/space,
 /area/shuttle/escape/centcom)
 "nsJ" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -59876,16 +59870,8 @@
 	icon_state = "freezerfloor"
 	},
 /area/crew_quarters/toilet)
-"ovH" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "ovQ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "owd" = (
@@ -60037,10 +60023,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"oyt" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "oyz" = (
 /obj/structure/closet,
@@ -72390,6 +72372,11 @@
 /obj/machinery/door/window{
 	name = "Tradeship Windoor";
 	req_one_access_txt = "140"
+	},
+/obj/item/device/deskbell/signaler/trader{
+	pixel_x = 6;
+	pixel_y = 11;
+	name = "Trade Ship Counter Bell"
 	},
 /turf/simulated/floor{
 	dir = 6;
@@ -162818,17 +162805,17 @@ cFY
 cFY
 cFY
 cFY
+qHY
+aPc
+uZj
+aPc
+ewo
 cFY
-cFY
-cFY
-cFY
-cFY
-cFY
-cFY
-cFY
-cFY
-cFY
-cFY
+qHY
+aPc
+aPc
+aPc
+ewo
 cFY
 cFY
 cFY
@@ -163317,21 +163304,21 @@ cFY
 cFY
 cFY
 cFY
-cFY
-cFY
-cFY
-qHY
-aPc
-uZj
-aPc
-ewo
-cFY
 qHY
 aPc
 aPc
 aPc
+gEP
+jJI
+wrN
+dXe
+aPc
+aPc
+kFt
+xHJ
+gwp
+aPc
 ewo
-cFY
 cFY
 cFY
 cFY
@@ -163819,27 +163806,27 @@ cFY
 cFY
 cFY
 cFY
-qHY
-aPc
-aPc
-aPc
-gEP
+xDJ
+qvh
+tRh
 jJI
-wrN
-dXe
+jJI
+jJI
+jJI
+nfi
+won
+nfi
+jJI
+jJI
+jJI
+won
 aPc
-aPc
-kFt
-xHJ
-gwp
-aPc
-ewo
-cFY
-cFY
-cFY
-cFY
-cFY
-mbe
+ape
+ajl
+xhJ
+gWt
+ali
+ali
 cFY
 cFY
 bgT
@@ -164322,26 +164309,26 @@ cFY
 cFY
 cFY
 xDJ
-qvh
-tRh
+kOW
+seI
+yfF
 jJI
 jJI
 jJI
 jJI
-nfi
-won
-nfi
 jJI
 jJI
 jJI
-won
-aPc
-ape
-ajl
-xhJ
-gWt
-ali
-ali
+jJI
+jJI
+jJI
+foF
+kJI
+ajg
+avr
+arw
+arw
+amk
 cFY
 aNm
 bwA
@@ -164824,26 +164811,26 @@ cFY
 cFY
 cFY
 xDJ
-kOW
-seI
-yfF
+ctF
+sWd
 jJI
 jJI
 jJI
 jJI
+eCS
+plc
+eCS
 jJI
 jJI
 jJI
-jJI
-jJI
-jJI
-foF
-kJI
-ajg
-avr
+plc
+aPc
+ape
+ajl
+mBP
 arw
 arw
-amk
+amK
 cFY
 cFY
 bwA
@@ -165325,24 +165312,24 @@ cFY
 cFY
 cFY
 cFY
-xDJ
-ctF
-sWd
-jJI
-jJI
-jJI
-jJI
-eCS
-plc
-eCS
-jJI
-jJI
-jJI
-plc
+iMZ
 aPc
-ape
-ajl
-mBP
+uXg
+aPc
+eZV
+jJI
+iab
+oOm
+aPc
+aPc
+oqU
+jJI
+sny
+aPc
+uwa
+cFY
+cFY
+ayx
 arw
 arw
 amK
@@ -165827,24 +165814,24 @@ cFY
 cFY
 cFY
 cFY
+cFY
+cFY
+cFY
 iMZ
 aPc
-uXg
+gxd
 aPc
-eZV
-jJI
-iab
-oOm
-aPc
-aPc
-oqU
-jJI
-sny
+uwa
+cFY
+iMZ
+otT
+bHT
 aPc
 uwa
 cFY
 cFY
-ayx
+cFY
+aqg
 arw
 arw
 amK
@@ -166332,17 +166319,17 @@ cFY
 cFY
 cFY
 cFY
-iMZ
-aPc
-gxd
-aPc
-uwa
+cFY
+cFY
+cFY
+cFY
+cFY
 gvB
-iMZ
-otT
-bHT
-aPc
-uwa
+cFY
+cFY
+cFY
+cFY
+cFY
 cFY
 cFY
 hXX
@@ -393412,9 +393399,9 @@ nYY
 nZb
 oaJ
 otQ
-ovH
-oyt
-oyt
+ovQ
+ovQ
+ovQ
 oGS
 oLx
 oLx

@@ -9134,6 +9134,11 @@
 	name = "Firelock South"
 	},
 /obj/item/device/instrument/glockenspiel,
+/obj/item/device/deskbell/signaler/trader{
+	pixel_y = -4;
+	pixel_x = -4;
+	name = "Trade Post Desk Bell"
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters)
 "atr" = (
@@ -15432,9 +15437,7 @@
 	},
 /area/crew_quarters/toilet)
 "aGZ" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -24567,9 +24570,7 @@
 /turf/simulated/floor/plating,
 /area/bridge)
 "aYm" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aYn" = (
@@ -69260,9 +69261,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "cBg" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "cBh" = (
@@ -84147,16 +84146,8 @@
 /obj/machinery/newscaster,
 /turf/unsimulated/wall,
 /area/centcom/holding)
-"djC" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "djD" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "djE" = (
@@ -89586,9 +89577,7 @@
 	},
 /area/prison/hallway/fore)
 "dVq" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "dVr" = (
@@ -100265,9 +100254,7 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/maintstore2)
 "epZ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/research_outpost/maintstore2)
 "eqa" = (
@@ -112594,6 +112581,11 @@
 "eNC" = (
 /obj/machinery/light,
 /obj/structure/table/woodentable,
+/obj/item/device/deskbell/signaler/trader{
+	pixel_y = 9;
+	pixel_x = 10;
+	name = "Trade Ship Bell"
+	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
@@ -113085,10 +113077,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"eOr" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "eOs" = (
 /obj/structure/closet,
@@ -421320,9 +421308,9 @@ diB
 diC
 diH
 djv
-djC
-eOr
-eOr
+djD
+djD
+djD
 dkg
 eOx
 eOx

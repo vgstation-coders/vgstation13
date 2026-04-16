@@ -895,6 +895,8 @@
 	if(..())
 		return TRUE
 	if(href_list["cook"])
+		if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+			return
 		if(on)
 			to_chat(usr, "<span class='danger'>\The [src] is already turned on!</span>")
 			return
@@ -924,6 +926,8 @@
 
 /obj/machinery/sleeper/mancrowave/process()
 	..()
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
 	if(automatic && occupant && !on)
 		cook("Thermoregulate")
 	if(!istype(occupant,/mob/living/carbon))

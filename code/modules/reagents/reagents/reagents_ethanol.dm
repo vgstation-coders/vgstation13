@@ -1067,6 +1067,10 @@
 	description = "Whoah, this stuff looks volatile!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	dizzy_adj = 12
+	slurr_adj = 8
+	slur_start = 25
+	blur_start = 60
 	glass_icon_state = "gargleblasterglass"
 	glass_name = "\improper Pan-Galactic Gargle Blaster"
 	glass_desc = "Does... does this mean that Arthur and Ford are on the station? Oh joy."
@@ -2021,7 +2025,6 @@
 		var/mob/living/carbon/human/H = M
 		H.vomit()
 
-
 /datum/reagent/ethanol/drink/junglejuice //this only exists to reduce confusion about why some berry juice might not be able to make the drink. of course, because this is made from safe berries, you don't get the "cool" effect.
 	name = "Jungle Juice"
 	id = FAKEJUNGLEJUICE
@@ -2033,7 +2036,6 @@
 	glass_desc = "It's quite tart, with earthy undertones."
 	nutriment_factor = 0.5 * REAGENTS_METABOLISM
 	glass_icon_state = "junglejuice"
-
 
 /datum/reagent/ethanol/drink/junglejuice/real //the intended variant of jungle juice which you make from poisounous berries (or the ones found on jungle). this one includes the special effects, as well as higher nutriment content.
 	id = JUNGLEJUICE
@@ -2047,3 +2049,64 @@
 		M.toxloss=min(M.toxloss+2.5,15)
 	else
 		M.toxloss = max(M.toxloss-1.5,15)
+
+/datum/reagent/ethanol/drink/minty
+	name = "generic mint drink"
+	id = EVEN_MORE_EXPLICITLY_INVALID_REAGENT_ID
+	description = "Here so all the mint drinks can inherit some behaviours without copypaste, how are you even reading this anyway?"
+	adj_temp = -1
+	max_temp_adj = 3
+
+/datum/reagent/ethanol/drink/minty/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.reagents.add_reagent(MINTESSENCE,0.1)
+
+/datum/reagent/ethanol/drink/minty/mintymule
+	name = "Minty Mule"
+	id = MINTYMULE
+	description = "A minty variant of the classic Moscow Mule, extra refreshing."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#46b903"
+	glass_icon_state = "mintymule"
+	glass_name = "\improper Minty Mule"
+	glass_desc = "For when siberian cold is not cold enough."
+	adj_temp = -4
+	max_temp_adj = 5
+
+/datum/reagent/ethanol/drink/minty/oldcuban
+	name = "Old Cuban"
+	id = OLDCUBAN
+	description = "Not to be confused with Old Cubean."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#a87221"
+	glass_icon_state = "oldcuban"
+	glass_name = "\improper Old Cuban"
+	glass_desc = "Often called a Mojito on Steroids."
+
+/datum/reagent/ethanol/drink/minty/caipirinha
+	name = "Caipirinha"
+	id = CAIPIRINHA
+	description = "Ideal for those hot days after work."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#d6f39c"
+	glass_icon_state = "caipirinha"
+	glass_name = "\improper Capirinha"
+	glass_desc = "Space Brazil's national drink."
+
+/datum/reagent/ethanol/drink/minty/englishgarden //TO DO: Make karm variant that also forces you to wear a football getup
+	name = "English Garden"
+	id = ENGLISHGARDEN
+	description = "So british you almost feel like enacting state surveillance..."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f2ffd8"
+	glass_icon_state = "englishgarden"
+	glass_name = "\improper English Garden"
+	glass_desc = "Ideal for a cook out with the chaps while watching the telly."
+
+/datum/reagent/ethanol/drink/minty/englishgarden/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(prob(4))
+		M.say(pick("COME ON [pick("ENGLAND","INGERLAND","ENGERLAND","INGLAND")]!", "SCORE SOM FAKIN GOALS!!", "'ate scots...", "'ate the irish...", "'ate freedumbs...", "Luv islams...", "Luv engerland", "Luv Norf FC", "Simple as!", "Simple ass!"))

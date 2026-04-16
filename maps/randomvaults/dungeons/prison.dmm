@@ -9,34 +9,10 @@
 /turf/unsimulated/floor/mars/border,
 /area)
 "ad" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
-/turf/unsimulated/floor/mars/border,
-/area)
-"ae" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/mars/border,
-/area)
-"af" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
-/turf/unsimulated/floor/mars/border,
-/area)
-"ag" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
-/turf/unsimulated/floor/mars/border,
-/area)
-"ah" = (
 /obj/structure/fence,
 /turf/unsimulated/floor/mars/border,
 /area)
-"ai" = (
+"af" = (
 /obj/structure/fence/post,
 /turf/unsimulated/floor/mars/border,
 /area)
@@ -593,32 +569,14 @@
 /obj/structure/disposalpipe/segment,
 /turf/simulated/wall/r_wall,
 /area/vault/prison)
-"bG" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "pattern_red"
-	},
-/area/vault/prison)
 "bH" = (
-/obj/structure/fence/door/secure/from_north,
+/obj/structure/fence/door/secure,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
 /area/vault/prison)
 "bI" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "pattern_red"
-	},
-/area/vault/prison)
-"bJ" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
@@ -664,10 +622,6 @@
 	},
 /turf/unsimulated/floor/mars,
 /area)
-"bQ" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/mars,
-/area)
 "bR" = (
 /obj/effect/landmark/corpse/civilian,
 /turf/simulated/floor{
@@ -698,9 +652,7 @@
 	},
 /area/vault/prison)
 "bV" = (
-/obj/structure/fence/door/secure/from_east{
-	dir = 4
-	},
+/obj/structure/fence/door/secure/inverted,
 /obj/effect/decal/cleanable/blood/drip,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
@@ -874,24 +826,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket,
 /turf/unsimulated/floor/mars,
 /area)
-"cr" = (
-/obj/structure/fence/post,
-/turf/unsimulated/floor/mars,
-/area)
 "cs" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/mars,
 /area)
 "ct" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
-/turf/unsimulated/floor/mars,
-/area)
-"cu" = (
-/obj/structure/fence/corner,
+/obj/structure/fence/post,
 /turf/unsimulated/floor/mars,
 /area)
 
@@ -1223,7 +1163,7 @@ be
 bc
 bt
 aJ
-bG
+bS
 bR
 cd
 aj
@@ -1291,7 +1231,7 @@ be
 bc
 bv
 aJ
-bG
+bS
 aJ
 ce
 aj
@@ -1344,8 +1284,8 @@ aa
 aa
 ac
 ad
-ah
-ai
+ad
+af
 aj
 aj
 aj
@@ -1359,7 +1299,7 @@ bf
 bc
 bx
 bA
-bG
+bS
 aJ
 aJ
 aj
@@ -1377,7 +1317,7 @@ aa
 aa
 aa
 ac
-ae
+ad
 ab
 ab
 ab
@@ -1427,7 +1367,7 @@ bf
 bc
 bx
 aJ
-bG
+bS
 bT
 cg
 aj
@@ -1445,7 +1385,7 @@ aa
 ab
 ab
 ac
-ae
+ad
 ab
 ab
 ab
@@ -1479,7 +1419,7 @@ ab
 ab
 ab
 ac
-ae
+ad
 ab
 ab
 ab
@@ -1495,7 +1435,7 @@ bc
 bc
 aJ
 aJ
-bG
+bS
 bU
 ci
 aj
@@ -1529,7 +1469,7 @@ aJ
 bl
 aJ
 aJ
-bG
+bS
 aJ
 cj
 aj
@@ -1547,7 +1487,7 @@ ab
 ab
 ab
 ac
-ae
+ad
 ab
 ab
 ab
@@ -1563,7 +1503,7 @@ aJ
 bc
 aJ
 aJ
-bJ
+bS
 bV
 ck
 aj
@@ -1581,7 +1521,7 @@ ab
 ab
 ab
 ac
-ae
+ad
 ab
 ab
 ab
@@ -1649,7 +1589,7 @@ aa
 aa
 ab
 ac
-ae
+ad
 ab
 ab
 ab
@@ -1683,7 +1623,7 @@ aa
 aa
 ab
 ac
-ae
+ad
 ab
 ab
 ab
@@ -1751,7 +1691,7 @@ aa
 ab
 ab
 ac
-ae
+ad
 ab
 ab
 ab
@@ -1785,9 +1725,9 @@ ab
 ab
 ab
 ac
-ag
-ah
-ai
+ad
+ad
+af
 aj
 aj
 aj
@@ -1971,10 +1911,10 @@ aj
 aj
 aj
 aj
-bQ
-bQ
-cr
-cu
+cs
+cs
+ct
+cs
 ac
 ab
 ab

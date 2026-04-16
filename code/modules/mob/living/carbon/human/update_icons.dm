@@ -249,7 +249,7 @@ var/global/list/damage_icon_parts = list()
 			else
 				stand_icon.Blend(rgb(-my_appearance.s_tone, -my_appearance.s_tone, -my_appearance.s_tone), ICON_SUBTRACT)
 
-	if(husk)
+	if(husk && has_head)
 		var/icon/mask = new(stand_icon)
 		var/icon/husk_over = new(race_icon,"overlay_husk")
 		mask.MapColors(0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,0)

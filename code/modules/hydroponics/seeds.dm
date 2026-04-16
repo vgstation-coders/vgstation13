@@ -1015,6 +1015,7 @@
 	plant_dmi = 'icons/obj/hydroponics/towercap.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/grown/log)
+	chems = list(PULP = list(2,5))
 
 	lifespan = 80
 	maturation = 15
@@ -1991,7 +1992,7 @@
 	display_name = "woodapple tree"
 	plant_dmi = 'icons/obj/hydroponics/woodapple.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/woodapple)
-	chems = list(SUGAR = list(1,10))
+	chems = list(SUGAR = list(1,10),PULP = list(1,10))
 
 	growth_stages = 3
 	maturation = 4

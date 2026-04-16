@@ -16645,9 +16645,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aDf" = (
-/obj/structure/wc/urinal{
-	pixel_y = -32
-	},
+/obj/structure/wc/urinal/north,
 /obj/effect/decal/cleanable/generic,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
@@ -20951,17 +20949,13 @@
 	},
 /area/crew_quarters/toilet)
 "aMx" = (
-/obj/structure/wc/urinal{
-	pixel_y = -32
-	},
+/obj/structure/wc/urinal/north,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/crew_quarters/toilet)
 "aMy" = (
-/obj/structure/wc/urinal{
-	pixel_y = -32
-	},
+/obj/structure/wc/urinal/north,
 /obj/machinery/camera{
 	dir = 4;
 	name = "Dormitory Toilets North"
@@ -82056,17 +82050,13 @@
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "cYR" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
 "cYS" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
@@ -92246,18 +92236,6 @@
 	},
 /turf/space,
 /area/shuttle/specops/centcom)
-"dBi" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"dBj" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "dBk" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -421326,7 +421304,7 @@ eEK
 eEB
 eEJ
 eEI
-dBi
+eJx
 eJx
 eJx
 eFb
@@ -421828,7 +421806,7 @@ eEB
 eEB
 eEJ
 eEF
-dBj
+eJx
 eJy
 eEB
 dod
@@ -422330,7 +422308,7 @@ eEN
 eEK
 eEJ
 eEN
-dBj
+eJx
 eJy
 eEB
 dod
@@ -423334,7 +423312,7 @@ eEK
 eEF
 eEJ
 eEO
-dBj
+eJx
 eEJ
 eEJ
 dod
@@ -423836,7 +423814,7 @@ eEH
 eEB
 eEJ
 eEH
-dBj
+eJx
 eEJ
 eEJ
 doe
@@ -424338,7 +424316,7 @@ eEH
 eEB
 eEJ
 eEK
-dBj
+eJx
 eEJ
 eDs
 dod
@@ -424840,7 +424818,7 @@ eEN
 eEP
 eEJ
 eEH
-dBj
+eJx
 eDk
 eEM
 dod
@@ -425342,7 +425320,7 @@ eEG
 eEH
 eEJ
 eEK
-dBj
+eJx
 eEJ
 eDs
 dod
@@ -425844,7 +425822,7 @@ eEH
 eEF
 eEJ
 eEN
-dBj
+eJx
 eEJ
 eDs
 dod
@@ -426346,7 +426324,7 @@ eEG
 eEN
 eEJ
 eEK
-dBj
+eJx
 eDk
 eEM
 dod
@@ -426848,7 +426826,7 @@ eEJ
 eEJ
 eEJ
 eEK
-dBj
+eJx
 eEJ
 eDs
 dof

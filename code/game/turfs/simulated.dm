@@ -21,6 +21,16 @@
 	//advanced_graffiti_overlay.SwapColor("#aaaaaaff", "#ffffff00")
 	overlays += advanced_graffiti_overlay
 
+/turf/simulated/floor/glass/render_advanced_graffiti(var/mob/user)
+	if (!advanced_graffiti)
+		return FALSE
+	overlays -= advanced_graffiti_overlay
+	advanced_graffiti_overlay = image(advanced_graffiti.render_on(icon(icon, icon_state)))
+	advanced_graffiti_overlay.plane = GLASSTILE_PLANE
+	advanced_graffiti_overlay.layer = ADVANCED_GRAFFITI_LAYER
+	//advanced_graffiti_overlay.SwapColor("#aaaaaaff", "#ffffff00")
+	overlays += advanced_graffiti_overlay
+
 /turf/simulated/New()
 	..()
 

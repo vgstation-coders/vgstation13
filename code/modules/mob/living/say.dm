@@ -537,15 +537,24 @@ var/list/headset_modes = list(
 		if(G)
 			speech.message = replacetext(speech.message,"the ","") // me no use good gramar!
 			speech.message = replacetext(speech.message,"i ","me ")
-			speech.message = replacetext(speech.message," i"," me")
 			speech.message = replacetext(speech.message," i "," me ")
 			speech.message = replacetext(speech.message,"i'm","me")
-			speech.message = replacetext(speech.message,"im","me")
+			speech.message = replacetext(speech.message,"im ","me ")
 			speech.message = replacetext(speech.message,"don't","no")
 			speech.message = replacetext(speech.message,"dont","no")
 			speech.message = replacetext(speech.message,"went","go")
+			speech.message = replacetext(speech.message,"you're","you")
+			speech.message = replacetext(speech.message,"youre","you")
 			speech.message = replacetext(speech.message,"is ","")
 			speech.message = replacetext(speech.message,"are ","")
+			speech.message = replacetext(speech.message,"do ","")
+			speech.message = replacetext(speech.message,"did ","")
+			speech.message = replacetext(speech.message,"captain","leader")
+			speech.message = replacetext(speech.message,"doctor","medicine-man")
+			speech.message = replacetext(speech.message,"scientist","shaman")
+			speech.message = replacetext(speech.message,"mime","silent one")
+			speech.message = replacetext(speech.message,"syndicate","rival faction")
+			
 			
 		var/datum/reagent/hyperzine/H = reagents.get_reagent_by_type(/datum/reagent/hyperzine)//also checks for hyperzine subtypes like cocaine etc
 		if (H && (H.data != "no motor mouth"))

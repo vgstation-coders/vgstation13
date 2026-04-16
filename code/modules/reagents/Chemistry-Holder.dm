@@ -32,7 +32,7 @@ var/const/INGEST = 2
 
 		for (var/path in typesof(/datum/reagent) - /datum/reagent)
 			var/datum/reagent/D = new path()
-			if(D.id == EXPLICITLY_INVALID_REAGENT_ID)
+			if(D.id == EXPLICITLY_INVALID_REAGENT_ID || D.id == EVEN_MORE_EXPLICITLY_INVALID_REAGENT_ID)
 				continue
 			chemical_reagents_list[D.id] = D
 

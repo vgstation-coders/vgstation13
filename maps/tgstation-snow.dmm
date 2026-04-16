@@ -537,9 +537,7 @@
 /turf/unsimulated/floor/snow/asphalt/mine,
 /area/mine/explored)
 "abx" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt/mine,
 /area/mine/explored)
 "abz" = (
@@ -746,9 +744,7 @@
 /turf/simulated/floor/plating,
 /area/prison/cell_block/A)
 "abQ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/machinery/camera{
 	dir = 4;
 	name = "Prison Mining Airlocks";
@@ -28430,15 +28426,6 @@
 	icon_state = "white"
 	},
 /area/medical/paramedics)
-"bNx" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/turf/unsimulated/floor/snow/asphalt,
-/area/surface/snow)
 "bNy" = (
 /obj/machinery/camera{
 	name = "Cargo Bay North"
@@ -33024,9 +33011,7 @@
 	},
 /area/vox_trading_post/eva)
 "cdF" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
@@ -41580,10 +41565,6 @@
 /obj/structure/disposalpipe/segment,
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
-"cQW" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow/asphalt,
-/area/surface/snow)
 "cQY" = (
 /obj/structure/rack,
 /obj/item/clothing/suit/armor/vest/security{
@@ -52748,15 +52729,7 @@
 	},
 /area/centcom/holding)
 "dvn" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"dvo" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dvp" = (
@@ -52863,10 +52836,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"dvC" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dvD" = (
 /obj/structure/closet,
@@ -53962,9 +53931,7 @@
 	},
 /area/centcom/test)
 "dzU" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -54173,9 +54140,7 @@
 	},
 /area/centcom/control)
 "dAP" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
@@ -62330,9 +62295,7 @@
 	},
 /area/security/lobby)
 "evt" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "evy" = (
@@ -71102,13 +71065,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/engineering/ce)
-"hhz" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/obj/structure/fence,
-/turf/unsimulated/floor/snow/asphalt,
-/area/hallway/secondary/entry)
 "hhE" = (
 /turf/simulated/wall/shuttle,
 /area/shuttle/escape_pod1)
@@ -75689,9 +75645,7 @@
 	},
 /area/hallway/primary/aft)
 "iMF" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "iMG" = (
@@ -75991,12 +75945,6 @@
 	icon_state = "dark-markings"
 	},
 /area/storage/nuke_storage)
-"iRb" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/snow/permafrost,
-/area/surface/snow)
 "iRg" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -81727,9 +81675,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
@@ -83973,12 +83919,6 @@
 	icon_state = "white"
 	},
 /area/derelict/medical)
-"lHF" = (
-/obj/structure/fence/door{
-	dir = 4
-	},
-/turf/unsimulated/floor/snow/permafrost,
-/area/surface/snow)
 "lHN" = (
 /turf/unsimulated/floor{
 	icon_state = "white"
@@ -85754,9 +85694,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/engineering/engineering_auxiliary)
 "msL" = (
@@ -85897,9 +85835,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "mvu" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -85926,9 +85862,7 @@
 /turf/simulated/floor,
 /area/derelict/solar_control)
 "mvU" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/machinery/camera{
 	dir = 8;
 	name = "Dormitory Toilets North"
@@ -86151,9 +86085,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
@@ -86654,7 +86586,7 @@
 /turf/simulated/floor,
 /area/derelict/solar_control)
 "mIw" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/permafrost,
 /area/surface/snow)
 "mIN" = (
@@ -88683,15 +88615,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/storage/primary)
-"nvB" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/snow/asphalt,
-/area/surface/snow)
 "nvC" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold{
 	dir = 1
@@ -104860,12 +104783,6 @@
 	},
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
-"tlS" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/snow/permafrost,
-/area/surface/snow)
 "tmb" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -105273,10 +105190,6 @@
 "ttx" = (
 /turf/simulated/wall,
 /area/maintenance/aft)
-"ttA" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow/permafrost,
-/area/surface/snow)
 "ttJ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -111302,9 +111215,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/hallway/secondary/entry)
 "vDW" = (
@@ -221728,7 +221639,7 @@ bZp
 bZp
 bZp
 bZp
-nvB
+sNM
 bZp
 bZp
 bZp
@@ -222030,7 +221941,7 @@ bZp
 bZp
 bZp
 bZp
-nvB
+sNM
 bZp
 bZp
 bZp
@@ -222319,20 +222230,20 @@ bZp
 ljM
 bZp
 bZp
-nvB
+sNM
 qKz
 nZi
 oBM
 pdN
 qKz
-nvB
+sNM
 bZp
 bZp
 ljM
 bZp
 bZp
 bZp
-nvB
+sNM
 bZp
 bZp
 bZp
@@ -222912,8 +222823,8 @@ bZp
 bZp
 orp
 sNM
-hhz
-hhz
+vDF
+vDF
 hUy
 hUy
 jkq
@@ -223212,7 +223123,7 @@ bZp
 bZp
 bZp
 bZp
-nvB
+sNM
 gAj
 hhE
 hhE
@@ -223514,7 +223425,7 @@ bZp
 bZp
 bZp
 bZp
-nvB
+sNM
 gAB
 hhR
 hyW
@@ -223816,7 +223727,7 @@ bZp
 bZp
 bZp
 bZp
-nvB
+sNM
 ooz
 hhE
 hhE
@@ -224120,8 +224031,8 @@ bZp
 bZp
 orp
 bJv
-hhz
-hhz
+vDF
+vDF
 hUy
 hUy
 jkq
@@ -224420,7 +224331,7 @@ bZp
 bZp
 bZp
 bZp
-nvB
+sNM
 gAE
 hiS
 hiS
@@ -224722,7 +224633,7 @@ bZp
 bZp
 bZp
 bZp
-nvB
+sNM
 gAP
 hiT
 hyY
@@ -225024,7 +224935,7 @@ bZp
 bZp
 bZp
 bZp
-nvB
+sNM
 usL
 hiS
 hiS
@@ -225328,8 +225239,8 @@ bZp
 bZp
 orp
 sNM
-hhz
-hhz
+vDF
+vDF
 hUy
 hUy
 jkq
@@ -226879,10 +226790,10 @@ bbN
 bbN
 bbN
 bbN
-ttA
-ttA
-ttA
-iRb
+mIw
+mIw
+mIw
+mIw
 bZp
 bZp
 bZp
@@ -227184,7 +227095,7 @@ tkh
 tkh
 tkh
 tkh
-tlS
+mIw
 bZp
 bZp
 bZp
@@ -227486,7 +227397,7 @@ tkh
 tkh
 tkh
 tkh
-tlS
+mIw
 bZp
 bZp
 bZp
@@ -227788,7 +227699,7 @@ tkh
 tkh
 tkh
 tkh
-tlS
+mIw
 bZp
 bZp
 bZp
@@ -228090,7 +228001,7 @@ tkh
 tkh
 tkh
 tkh
-tlS
+mIw
 bZp
 bZp
 bZp
@@ -228392,7 +228303,7 @@ tkh
 tkh
 tkh
 tkh
-tlS
+mIw
 bZp
 bZp
 bZp
@@ -228692,8 +228603,8 @@ fHr
 xHP
 tEe
 ocu
-ttA
-ttA
+mIw
+mIw
 mIw
 bZp
 bZp
@@ -231417,7 +231328,7 @@ tkh
 tkh
 tkh
 ftD
-nvB
+sNM
 bZp
 bZp
 bZp
@@ -231719,7 +231630,7 @@ tkh
 tkh
 tkh
 tkh
-nvB
+sNM
 bZp
 bZp
 bZp
@@ -232021,7 +231932,7 @@ tkh
 tkh
 tkh
 tkh
-nvB
+sNM
 bZp
 bZp
 bZp
@@ -232323,7 +232234,7 @@ tkh
 tkh
 tkh
 tkh
-nvB
+sNM
 bZp
 bZp
 bZp
@@ -232625,7 +232536,7 @@ tkh
 tkh
 tkh
 nNx
-nvB
+sNM
 bZp
 bZp
 bZp
@@ -233229,14 +233140,14 @@ toP
 sNM
 sNM
 orp
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
 orp
 bZp
 bZp
@@ -237774,12 +237685,12 @@ cVL
 cYA
 ebO
 ebO
-ttA
-ttA
-ttA
-ttA
-lHF
-ttA
+mIw
+mIw
+mIw
+mIw
+lKe
+mIw
 pkm
 niX
 niX
@@ -247313,27 +247224,27 @@ aSu
 aSu
 aSu
 orp
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
 cuM
 cvY
 cxj
@@ -252298,11 +252209,11 @@ bZp
 bZp
 bZp
 bZp
-nvB
+sNM
 phk
 gXb
 umR
-nvB
+sNM
 xfu
 oJl
 vbI
@@ -260957,8 +260868,8 @@ wNd
 wNd
 wNd
 orp
-cQW
-cQW
+evt
+evt
 bck
 aZW
 bag
@@ -262715,59 +262626,59 @@ bZp
 bZp
 bZp
 orp
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
-cQW
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
+evt
 orp
 eQs
 aZi
@@ -264092,11 +264003,11 @@ woU
 woU
 woU
 fyq
-ttA
-ttA
-ttA
-ttA
-iRb
+mIw
+mIw
+mIw
+mIw
+mIw
 bZp
 bZp
 bZp
@@ -264398,7 +264309,7 @@ tkh
 tkh
 tkh
 tkh
-tlS
+mIw
 bZp
 bZp
 bZp
@@ -264700,7 +264611,7 @@ tkh
 tkh
 tkh
 tkh
-tlS
+mIw
 bZp
 bZp
 bZp
@@ -265304,7 +265215,7 @@ tkh
 tkh
 tkh
 tkh
-tlS
+mIw
 bZp
 bZp
 bZp
@@ -272776,7 +272687,7 @@ bZp
 bZp
 bZp
 bMb
-nvB
+sNM
 bZp
 bZp
 bZp
@@ -273055,7 +272966,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bMb
 bZp
 bZp
@@ -273078,7 +272989,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -273357,7 +273268,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -273380,7 +273291,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -273659,7 +273570,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -273682,7 +273593,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -273961,7 +273872,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -273984,7 +273895,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -274263,7 +274174,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -274286,7 +274197,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -274565,7 +274476,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -274588,7 +274499,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -274867,7 +274778,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bMd
 bZp
 bZp
@@ -274890,7 +274801,7 @@ bZp
 bZp
 bZp
 bZp
-bNx
+bJU
 bZp
 bZp
 bZp
@@ -275192,7 +275103,7 @@ bZp
 bZp
 bZp
 bMd
-nvB
+sNM
 bZp
 bZp
 bZp
@@ -330281,8 +330192,8 @@ dtX
 duc
 dvb
 dvn
-dvC
-dvC
+dvn
+dvn
 dxm
 dxH
 dxH
@@ -330582,7 +330493,7 @@ dtX
 dtX
 duc
 dtZ
-dvo
+dvn
 dvD
 dtX
 dxn
@@ -330884,7 +330795,7 @@ dtY
 dtW
 duc
 dtY
-dvo
+dvn
 dvD
 dtX
 dxn
@@ -331488,7 +331399,7 @@ dtW
 dtZ
 duc
 dve
-dvo
+dvn
 duc
 duc
 dxn
@@ -331790,7 +331701,7 @@ dua
 dtX
 duc
 dua
-dvo
+dvn
 duc
 duc
 dxo
@@ -332092,7 +332003,7 @@ dua
 dtX
 duc
 dtW
-dvo
+dvn
 duc
 dwo
 dxn
@@ -332394,7 +332305,7 @@ dtY
 duz
 duc
 dua
-dvo
+dvn
 dvE
 dux
 dxn
@@ -332696,7 +332607,7 @@ dub
 dua
 duc
 dtW
-dvo
+dvn
 duc
 dwo
 dxn
@@ -332998,7 +332909,7 @@ dua
 dtZ
 duc
 dtY
-dvo
+dvn
 duc
 dwo
 dxn
@@ -333300,7 +333211,7 @@ dub
 dtY
 duc
 dtW
-dvo
+dvn
 dvE
 dux
 dxn
@@ -333602,7 +333513,7 @@ duc
 duc
 duc
 dtW
-dvo
+dvn
 duc
 dwo
 dxp

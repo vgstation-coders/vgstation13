@@ -38,8 +38,10 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 		/datum/planet_type/beach,
 		/datum/planet_type/desert,
 		/datum/planet_type/grass,
+		/datum/planet_type/jungle,
 		/datum/planet_type/lava,
 		/datum/planet_type/snow,
+		/datum/planet_type/urban,
 		/datum/planet_type/xeno
 	)
 	/// All spawned planets

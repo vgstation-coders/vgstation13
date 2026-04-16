@@ -70,6 +70,9 @@
 	var/last_moved = 0
 	var/cooldown = 100
 
+	var/obj/docking_port/destination/previous_port //Last port used before entering a transit area
+	var/transit_timeout = 45 SECONDS //Longest time the shuttle can stay in a transit area before getting recalled to the previous location
+
 	//When the shuttle moves, coordinates of its final location will be offset by rand(-innacuracy, innacuracy)
 	var/innacuracy = 0
 
@@ -412,6 +415,7 @@
 	if(transit_port && get_transit_delay())
 		if(transit_check())
 			close_all_doors()
+			previous_port = current_port
 			move_to_dock(transit_port)
 			spawn(max(1,get_transit_delay()-5))
 				for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
@@ -424,6 +428,17 @@
 					M << sound("sound/machines/hyperspace_progress.ogg", repeat = 0, wait = 1, channel = CHANNEL_AMBIENCE, volume = 75)
 			spawn(get_transit_delay())
 				complete_flight()
+			var/obj/docking_port/destination/initial_d = destination_port
+			spawn(transit_timeout)
+				if(destination_port && initial_d == destination_port && current_port == transit_port)
+					log_game("[name] ([type]) timed out in transit after [transit_timeout / 10] seconds, returning to previous port.")
+					var/obj/docking_port/destination/return_port = previous_port
+					destination_port = null
+					if(return_port && !return_port.docked_with)
+						move_to_dock(return_port)
+						open_all_doors()
+					moving = 0
+					previous_port = null
 			return
 
 	complete_flight()
@@ -435,6 +450,7 @@
 		destination_port = null
 
 	moving = 0
+	previous_port = null
 
 /datum/shuttle/proc/transit_check()
 	if(use_transit == NO_TRANSIT) // no transit

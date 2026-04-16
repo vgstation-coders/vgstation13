@@ -13,7 +13,8 @@
 	desc = "This template spellbook was never meant for the eyes of man..."
 	spine_color = "#fff"
 	spine_overlay = "#fff"
-	var/disabled_from_bundle //if 1, this will not appear in the spellbook bundle
+	var/disabled_from_bundle //if true, this will not appear in the spellbook bundle
+	var/bundle_freebie //if true, if it appears in the spellbook bundle it will add another spellbook to be rolled
 
 /obj/item/weapon/spellbook/oneuse/New()
 	..()
@@ -129,7 +130,7 @@
 	icon_state ="bookforcewall"
 	desc = "This book has a dedication to finger gun-toting mimes everywhere inside the front cover."
 	spine_overlay = "#8ff"
-	disabled_from_bundle = 1
+	disabled_from_bundle = TRUE
 
 /obj/item/weapon/spellbook/oneuse/unwall/attack_self(mob/user)
 	if(ishuman(user))
@@ -214,7 +215,7 @@
 	spellname = "charging"
 	icon_state ="bookcharge"
 	desc = "This book is made of 100% post-consumer wizard."
-	disabled_from_bundle = 1
+	disabled_from_bundle = TRUE
 	spine_overlay = "#8ff"
 
 /obj/item/weapon/spellbook/oneuse/charge/recoil(mob/user)
@@ -340,7 +341,7 @@
 	icon_state = "bookhighlander"
 	desc = "You can hear the bagpipes playing already."
 	spine_overlay = "#00f"
-	disabled_from_bundle = 1
+	disabled_from_bundle = TRUE
 
 /obj/item/weapon/spellbook/oneuse/disorient
 	spell = /spell/targeted/disorient
@@ -412,7 +413,7 @@
 	spell = /spell/lightning/sith
 	spellname = "sith lightning"
 	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
-	disabled_from_bundle = 1
+	disabled_from_bundle = 	TRUE
 
 /obj/item/weapon/spellbook/oneuse/timestop
 	spell = /spell/aoe_turf/fall
@@ -601,7 +602,7 @@
 	icon_state ="bookabsorb"
 	desc = "This book glows with sinister energy."
 	spine_overlay = "#00f"
-	disabled_from_bundle = 1
+	disabled_from_bundle = TRUE
 
 
 ///// Norwood curse ////
@@ -612,6 +613,7 @@
 	icon_state ="booknorwood"
 	desc = "This book suddenly stops about 29 pages in. After, it is written 'it's over' in every language that has ever existed, will ever exist, and even in some which shouldn't theoretically exist."
 	spine_overlay = "#ff0"
+	bundle_freebie = TRUE //Too weak
 
 ///// ANCIENT SPELLBOOK /////
 
