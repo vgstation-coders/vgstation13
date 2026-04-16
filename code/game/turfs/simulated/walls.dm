@@ -218,7 +218,7 @@
 	if(!S.remove_fuel(bullet_marks*2,user))
 		return
 	S.playtoolsound(loc, 100)
-	to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [W].</span>")
+	to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [S].</span>")
 	bullet_marks = 0
 	icon = initial(icon)
 	if(peepers)
