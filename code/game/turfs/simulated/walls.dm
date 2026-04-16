@@ -214,7 +214,7 @@
 /turf/simulated/wall/r_wall/attack_rotting(mob/user as mob)
 	to_chat(user, "<span class='notice'>This [src] feels rather unstable.</span>")
 
-/turf/simulated/wall/proc/remove_holes(obj/item/weapon/solder/S, mob/user)
+/turf/simulated/wall/proc/remove_holes(obj/item/tool/solder/S, mob/user)
 	if(!S.remove_fuel(bullet_marks*2,user))
 		return
 	S.playtoolsound(loc, 100)
