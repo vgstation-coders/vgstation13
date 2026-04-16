@@ -53,8 +53,11 @@
 		relativewall() //Well isn't that odd, let's pass this to smoothwall.dm
 		relativewall_neighbours() //Let's make sure the other walls know about this travesty
 		return //Now fuck off
-	icon_state = "r_wall-[d_state]"  //You can thank me later
+	update_d_state_icon()
 	update_paint_overlay()
+
+/turf/simulated/wall/r_wall/proc/update_d_state_icon()
+	icon_state = "r_wall-[d_state]"  //You can thank me later
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
 	user.delayNextAttack(5)
@@ -442,6 +445,10 @@
 /turf/simulated/wall/r_wall/mineral/New()
 	. = ..()
 	overlays += image(icon,"r_overlay")
+
+/turf/simulated/wall/r_wall/mineral/update_d_state_icon()
+	overlays.len = 0
+	overlays += image(icon,"r_overlay-[d_state]")
 
 /turf/simulated/wall/r_wall/mineral/wood
 	name = "reinforced wooden wall"
