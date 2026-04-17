@@ -678,8 +678,8 @@
 		return
 	if(opened)
 		return
-	for(var/obj/O in contents)
-		var/image/overlay = image(O.icon,loc,O.icon_state,layer,O.dir)
+	for(var/atom/movable/AM in contents)
+		var/image/overlay = image(AM.icon,loc,AM.icon_state,layer,AM.dir)
 		overlay.alpha = 127
 		overlays += overlay
 
