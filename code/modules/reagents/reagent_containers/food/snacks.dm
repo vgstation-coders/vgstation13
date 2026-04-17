@@ -8902,7 +8902,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	skitterdelay = 20 //Opposite to the super gunk burger, this one wakes up fast and moves a lot
 	base_crumb_chance = 20
 
-/obj/item/weapon/reagent_containers/food/snacks/skitter/gunk/New()
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkslider/New()
 	..()
 	if(prob(30))
 		reagents.add_reagent(SALTWATER, 1)
@@ -8910,7 +8910,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk
 	name = "gunk sliders"
-	child_type = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunk
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkslider
 	child_volume = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk/New()
