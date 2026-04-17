@@ -15,6 +15,17 @@
 /obj/structure/closet/secure_closet/engineering_welding,
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering)
+"ag" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers{
+	icon_state = "maintguide";
+	name = "walkway";
+	pixel_x = 14
+	},
+/turf/unsimulated/floor/planetary/concrete,
+/area/surface/nt_outpost)
 "ai" = (
 /obj/structure/table/reinforced,
 /obj/machinery/recharger,
@@ -1111,9 +1122,6 @@
 /obj/machinery/atmospherics/pipe/simple/insulated/visible/blue{
 	dir = 10
 	},
-/obj/structure/bed/chair/office/dark{
-	dir = 4
-	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -1676,6 +1684,9 @@
 	dir = 4;
 	on = 1
 	},
+/obj/structure/bed/chair{
+	dir = 8
+	},
 /turf/simulated/floor{
 	icon_state = "darkred";
 	tag = "icon-darkred"
@@ -2008,6 +2019,17 @@
 	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/port)
+"gt" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers{
+	icon_state = "maintguide";
+	name = "walkway";
+	pixel_x = -14
+	},
+/turf/unsimulated/floor/planetary/concrete,
+/area/surface/nt_outpost)
 "gu" = (
 /turf/simulated/floor{
 	icon_state = "white"
@@ -2105,6 +2127,17 @@
 	},
 /turf/simulated/floor/plating,
 /area/vox_trading_post/hallway)
+"gG" = (
+/obj/machinery/door_control{
+	pixel_x = 8;
+	name = "Port Entry";
+	normaldoorcontrol = 1;
+	specialfunctions = 5;
+	id_tag = "port_ext_airlock";
+	pixel_y = 4
+	},
+/turf/simulated/wall/shuttle/reinforced/panel,
+/area/shuttle/odyssey/hallway/port)
 "gH" = (
 /obj/structure/shuttle/diag_wall/black,
 /turf/unsimulated/floor/planetary/concrete,
@@ -3063,10 +3096,12 @@
 "kz" = (
 /obj/machinery/door/airlock/external{
 	name = "Port External Airlock";
-	locked = 1;
 	id_tag = "port_int_airlock";
-	icon_state = "door_locked";
-	frequency = 1331
+	frequency = 1331;
+	density = 0;
+	locked = 1;
+	opacity = 0;
+	icon_state = "door_open"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -4042,10 +4077,12 @@
 	},
 /obj/machinery/door/airlock/external{
 	name = "Port External Airlock";
-	locked = 1;
 	id_tag = "port_int_airlock";
-	icon_state = "door_locked";
-	frequency = 1331
+	frequency = 1331;
+	density = 0;
+	locked = 1;
+	opacity = 0;
+	icon_state = "door_open"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -7511,6 +7548,17 @@
 	icon_state = "whiteblue"
 	},
 /area/surface/nt_outpost/clinic)
+"zv" = (
+/obj/machinery/door_control{
+	pixel_x = 8;
+	name = "Starboard Entry";
+	normaldoorcontrol = 1;
+	specialfunctions = 5;
+	id_tag = "starboard_ext_airlock";
+	pixel_y = -4
+	},
+/turf/simulated/wall/shuttle/reinforced/panel,
+/area/shuttle/odyssey/hallway/starboard)
 "zw" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -8627,9 +8675,9 @@
 /obj/machinery/status_display/odyssey{
 	pixel_y = -30
 	},
-/obj/structure/bed/chair{
-	dir = 4
-	},
+/obj/structure/table/reinforced,
+/obj/item/weapon/paper_bin/black,
+/obj/item/weapon/storage/fancy/crayons,
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "darkred";
@@ -8707,17 +8755,13 @@
 	},
 /area/surface/nt_outpost/clinic)
 "Dw" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
+/obj/effect/decal/warning_stripes/pathmarkers{
+	icon_state = "maintguide";
+	name = "walkway";
+	pixel_x = 14
 	},
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/turf/unsimulated/floor/planetary/concrete,
+/area/surface/nt_outpost)
 "Dx" = (
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -8814,10 +8858,12 @@
 "DJ" = (
 /obj/machinery/door/airlock/external{
 	name = "Starboard External Airlock";
-	locked = 1;
 	id_tag = "starboard_int_airlock";
-	icon_state = "door_locked";
-	frequency = 1331
+	frequency = 1331;
+	icon_state = "door_open";
+	density = 0;
+	locked = 1;
+	opacity = 0
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -11122,10 +11168,12 @@
 /obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden,
 /obj/machinery/door/airlock/external{
 	name = "Starboard External Airlock";
-	locked = 1;
 	id_tag = "starboard_int_airlock";
-	icon_state = "door_locked";
-	frequency = 1331
+	frequency = 1331;
+	icon_state = "door_open";
+	density = 0;
+	locked = 1;
+	opacity = 0
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -12319,6 +12367,14 @@
 "PC" = (
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/janitor)
+"PD" = (
+/obj/effect/decal/warning_stripes/pathmarkers{
+	icon_state = "maintguide";
+	name = "walkway";
+	pixel_x = -14
+	},
+/turf/unsimulated/floor/planetary/concrete,
+/area/surface/nt_outpost)
 "PG" = (
 /obj/structure/bed/chair/folding{
 	dir = 1
@@ -13135,6 +13191,13 @@
 	},
 /turf/simulated/floor/plating/vox,
 /area/shuttle/trade/start)
+"RP" = (
+/obj/machinery/light/floor,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/planetary/concrete,
+/area/surface/nt_outpost)
 "RQ" = (
 /obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 4;
@@ -21595,7 +21658,7 @@ dh
 Bc
 nl
 Iq
-Iq
+xJ
 Iq
 Iq
 Kp
@@ -21895,12 +21958,12 @@ dh
 dh
 dh
 Bc
-nl
-Iq
-xJ
-Iq
-Iq
-YE
+ag
+Dw
+Dw
+Dw
+Dw
+gG
 YE
 YE
 YE
@@ -21928,7 +21991,7 @@ rC
 rC
 rC
 rC
-rC
+zv
 Iq
 Iq
 xJ
@@ -22196,8 +22259,8 @@ UG
 ic
 dh
 dh
-Bc
-nl
+dh
+Iq
 Iq
 Iq
 Iq
@@ -22498,8 +22561,8 @@ Iq
 ic
 dh
 dh
-Bc
-nl
+dh
+Iq
 Iq
 Iq
 Iq
@@ -22801,11 +22864,11 @@ ic
 dh
 dh
 Bc
-nl
-Iq
-Iq
-Iq
-Iq
+gt
+PD
+PD
+PD
+PD
 rq
 vu
 NO
@@ -23105,7 +23168,7 @@ dh
 Bc
 nl
 Iq
-Iq
+xJ
 Iq
 Iq
 Iq
@@ -23706,8 +23769,8 @@ Bc
 Bc
 dh
 dh
-dh
-vk
+Bc
+RP
 Iq
 Iq
 Iq
@@ -24008,8 +24071,8 @@ Bc
 Bc
 dh
 dh
-dh
-Iq
+Bc
+nl
 Iq
 Iq
 Iq
@@ -24908,9 +24971,9 @@ qL
 mA
 MC
 ts
-iU
-XS
 rw
+XS
+iU
 FH
 dh
 dh
@@ -27313,8 +27376,8 @@ Bc
 Bc
 mA
 PQ
-eO
 mv
+eO
 dq
 nf
 NJ
@@ -28531,7 +28594,7 @@ Io
 gB
 sD
 sD
-Dw
+Cc
 Cc
 hn
 hn
