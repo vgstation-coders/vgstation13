@@ -53,7 +53,7 @@
 		overlays += centre_overlay
 	..()
 
-/obj/machinery/atmospherics/pipe/t_scanner_expose()
+/obj/machinery/atmospherics/pipe/t_scanner_expose(ray_range)
 	if (exposed())
 		return
 

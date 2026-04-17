@@ -882,7 +882,7 @@
 	else
 		icon_state = base_icon_state
 
-/obj/structure/disposalpipe/t_scanner_expose()
+/obj/structure/disposalpipe/t_scanner_expose(ray_range)
 	if (level != LEVEL_BELOW_FLOOR)
 		return
 	var/old_invisibility = invisibility
