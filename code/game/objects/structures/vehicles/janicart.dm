@@ -44,7 +44,7 @@
 
 /obj/structure/bed/chair/vehicle/janicart/examine(mob/user)
 	..()
-	if(in_range(src, user) && reagents.has_reagent(LUBE))
+	if(in_range(src, user) && reagents.has_any_reagents(LUBES))
 		to_chat(user, "<span class='warning'>Something is very off about this water.</span>")
 	switch(health)
 		if(75 to 99)
