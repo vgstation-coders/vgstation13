@@ -147,6 +147,13 @@
 		return 0
 	return !density
 
+/obj/structure/shuttle/diag_wall/Bumped(atom/movable/AM)
+	. = ..()
+	if(get_dir(src,AM) == dir)
+		AM.Move(get_step(AM,counterclockwise_perpendicular_dirs[dir]))
+	else if(get_dir(src,AM) == counterclockwise_perpendicular_dirs[dir])
+		AM.Move(get_step(AM,dir))
+
 /obj/structure/shuttle/diag_wall/ex_act(severity)
 	return
 
