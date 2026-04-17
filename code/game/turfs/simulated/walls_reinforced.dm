@@ -441,14 +441,17 @@
 	desc = "This shouldn't exist."
 	icon_state = ""
 	explosion_block = 1
+	var/image/d_state_image
 
 /turf/simulated/wall/r_wall/mineral/New()
 	. = ..()
-	overlays += image(icon,"r_overlay")
+	d_state_image = image(icon,"r_overlay")
+	overlays += d_state_image
 
 /turf/simulated/wall/r_wall/mineral/update_d_state_icon()
-	overlays.len = 0
-	overlays += image(icon,"r_overlay-[d_state]")
+	overlays -= d_state_image
+	d_state_image.icon_state = "r_overlay-[d_state]"
+	overlays += d_state_image
 
 /turf/simulated/wall/r_wall/mineral/wood
 	name = "reinforced wooden wall"
