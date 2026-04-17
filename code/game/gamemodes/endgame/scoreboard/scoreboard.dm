@@ -397,12 +397,15 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	src.award_desc = award_desc
 
 /proc/draw_heatmap(zLevel = 1)
-	set background=1
-
-	var/icon/canvas = icon('icons/480x480.dmi', "blank")
-	var/divisor_factor = 255/highest_player_entry
+	if(!highest_player_entry)
+		return
 	if (zLevel > world.maxz)
 		return
+
+	set background=1
+	var/icon/canvas = icon('icons/480x480.dmi', "blank")
+	var/divisor_factor = 255/highest_player_entry
+
 	var/lowest_x = 0
 	var/lowest_y = 0
 	var/highest_x = 0
