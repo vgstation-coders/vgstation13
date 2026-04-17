@@ -573,3 +573,21 @@
 	icon_state = "gold_medal"
 	_color = "gold_medal"
 
+/obj/item/clothing/accessory/rose
+	name = "rose"
+	desc = "A symbol of peace and love."
+	icon = 'icons/obj/clothing/accessories.dmi'
+	icon_state = "rose"
+	_color = "rose"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "rose"
+
+/obj/item/clothing/accessory/rose/proc/generate_icon_state()
+	if(!attached_to || !icon_state)
+		return
+	icon_state = initial(icon_state)
+	if(istype(attached_to, /obj/item/clothing/suit))
+		icon_state = "[initial(icon_state)]rose"
+
+/obj/item/clothing/accessory/rose/can_attach_to(obj/item/clothing/C)
+	return (istype(C, /obj/item/clothing/under) || istype(C, /obj/item/clothing/suit))

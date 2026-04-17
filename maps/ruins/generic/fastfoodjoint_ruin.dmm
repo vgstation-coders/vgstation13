@@ -770,10 +770,7 @@
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/vault/fastfood/dining)
 "sn" = (
-/obj/structure/wc/urinal{
-	dir = 8;
-	pixel_x = 30
-	},
+/obj/structure/wc/urinal/west,
 /obj/effect/decal/cleanable/crayon,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"

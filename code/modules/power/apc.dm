@@ -391,21 +391,21 @@
 			update_overlay |= APC_UPOVERLAY_EQUIPMENT0
 		else if(equipment == 1)
 			update_overlay |= APC_UPOVERLAY_EQUIPMENT1
-		else if(equipment == 2)
+		else if(equipment >= 2)
 			update_overlay |= APC_UPOVERLAY_EQUIPMENT2
 
 		if(!lighting)
 			update_overlay |= APC_UPOVERLAY_LIGHTING0
 		else if(lighting == 1)
 			update_overlay |= APC_UPOVERLAY_LIGHTING1
-		else if(lighting == 2)
+		else if(lighting >= 2)
 			update_overlay |= APC_UPOVERLAY_LIGHTING2
 
 		if(!environ)
 			update_overlay |= APC_UPOVERLAY_ENVIRON0
 		else if(environ==1)
 			update_overlay |= APC_UPOVERLAY_ENVIRON1
-		else if(environ==2)
+		else if(environ>=2)
 			update_overlay |= APC_UPOVERLAY_ENVIRON2
 
 		if(pulselock)

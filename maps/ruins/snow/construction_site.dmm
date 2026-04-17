@@ -19,9 +19,7 @@
 /turf/unsimulated/floor/snow/permafrost,
 /area/exposed_ruin)
 "q" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/template_noop,
 /area/exposed_ruin)
 "y" = (
@@ -64,34 +62,20 @@
 /obj/abstract/loot_spawner/trash,
 /turf/unsimulated/floor/snow/permafrost,
 /area/exposed_ruin)
-"R" = (
-/obj/structure/fence/corner,
-/turf/template_noop,
-/area/exposed_ruin)
 "S" = (
 /obj/item/weapon/pickaxe/shovel,
 /obj/item/weapon/hatchet,
 /turf/unsimulated/floor/snow/permafrost,
 /area/exposed_ruin)
 "W" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/permafrost,
 /area/exposed_ruin)
 "Y" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'CONSTRUCTION'.";
 	name = "CONSTRUCTION"
-	},
-/turf/template_noop,
-/area/exposed_ruin)
-"Z" = (
-/obj/structure/fence{
-	dir = 4
 	},
 /turf/template_noop,
 /area/exposed_ruin)
@@ -142,7 +126,7 @@ C
 C
 C
 A
-Z
+q
 "}
 (5,1,1) = {"
 a
@@ -154,7 +138,7 @@ C
 M
 C
 C
-Z
+q
 "}
 (6,1,1) = {"
 a
@@ -202,7 +186,7 @@ h
 S
 h
 C
-Z
+q
 "}
 (10,1,1) = {"
 a
@@ -238,7 +222,7 @@ a
 C
 a
 C
-R
+q
 "}
 (13,1,1) = {"
 a

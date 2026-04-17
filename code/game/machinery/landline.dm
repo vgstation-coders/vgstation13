@@ -257,6 +257,7 @@
 	attached_to.overlays.Add(phone_overlay)
 
 /obj/landline/red
+	name = "red phone"
 	overlay_icon = 'icons/obj/items.dmi'
 	overlay_iconstate = "red_phone_handset"
 

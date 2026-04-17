@@ -587,8 +587,8 @@
 	if(..())
 		return 1
 
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (10 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(M.bodytemperature < BODYTEMP_DEFAULT)
+		M.bodytemperature = min(BODYTEMP_DEFAULT, M.bodytemperature + (10 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/ketchup
 	name = "Ketchup"

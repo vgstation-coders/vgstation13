@@ -130,6 +130,11 @@
 	icon_state = "blurry"
 	//alpha = 0//set to 255 by update_fullscreen_alpha(); //not anymore, currently only used when getting pie'd
 
+
+/obj/abstract/screen/fullscreen/blurry/alt
+	color = "#808080"
+	alpha = 0
+
 /obj/abstract/screen/fullscreen/nearsighted
 	icon = 'icons/mob/screen1_blindness.dmi'
 	icon_state = "eye"
@@ -179,6 +184,22 @@
 	blend_mode = BLEND_MULTIPLY
 	plane = FULLSCREEN_PLANE
 	alpha = 255
+
+/obj/abstract/screen/fullscreen/high/love
+	color = "#660531"
+	alpha = 255
+	blend_mode = BLEND_MULTIPLY
+	plane = FULLSCREEN_PLANE
+	alpha = 225
+
+/obj/abstract/screen/fullscreen/high/hearts
+	icon = 'icons/mob/animal.dmi'
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	icon_state = "heart-ani2"
+	anim_state = "heart-ani2"
+	alpha = 255
+	blend_mode = BLEND_MULTIPLY
+	plane = FULLSCREEN_PLANE
 
 /obj/abstract/screen/fullscreen/hackview_border
 	icon_state = "malfview"

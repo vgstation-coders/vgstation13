@@ -180,7 +180,7 @@
 	return
 
 /turf/space/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
-	return ..(N, tell_universe, 1, allow)
+	return ..(N, tell_universe, 1, allow, defer_edges)
 
 /turf/space/lighting_build_overlay()
 	return
@@ -219,3 +219,6 @@
 		S.perform(user, 0, list(src))
 		return 1
 	return 0
+
+/turf/space/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD,var/luminous=FALSE)
+	return null

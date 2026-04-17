@@ -17,7 +17,7 @@
 	for(var/datum/organ/external/cosmetic_organ in cosmetic_organs)
 		cosmetic_organ.droplimb(TRUE, TRUE)
 	var/gib_radius = 0
-	if(reagents.has_reagent(LUBE))
+	if(reagents.has_any_reagents(LUBES))
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)

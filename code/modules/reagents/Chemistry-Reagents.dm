@@ -49,6 +49,7 @@
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 	var/paint_light = PAINTLIGHT_NONE
 	var/adj_temp = 0//keep between -1.5,20 to prevent people from freezing/burning themselves
+	var/max_temp_adj = 20 //how much this reagent is allowed to move the body temp. pair with above var. 0=no change allowed relative to 310K. set to 20 to prevent burning
 	var/fission_time = null //null means it will have no effect on fuel lifetime. unit is in seconds. this is assuming a 1 rod reactor with 0% insertion (this will never happen.).
 	var/fission_power= 0 //watts of power. how much ooomph does it have?
 	var/fission_absorbtion=0 //watts. how much energy does this sap to facilitate its reactions?
@@ -214,10 +215,10 @@
 	if(M.nutrition < 0) //Prevent from going into negatives
 		M.nutrition = 0
 
-	if(adj_temp > 0 && M.bodytemperature <= 325) //310 is the normal bodytemp. 310.055, keeping possible temp adjust effect below a total of 350 will keep the screen alarm weak
-		M.bodytemperature = max(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
-	else if(adj_temp < 0 && M.bodytemperature >= 309.5)
-		M.bodytemperature = min(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(adj_temp > 0 && M.bodytemperature<BODYTEMP_DEFAULT+max_temp_adj)
+		M.bodytemperature = min(BODYTEMP_DEFAULT+max_temp_adj, M.bodytemperature+adj_temp*TEMPERATURE_DAMAGE_COEFFICIENT )
+	else if(adj_temp < 0 && M.bodytemperature>BODYTEMP_DEFAULT-max_temp_adj)
+		M.bodytemperature = max(BODYTEMP_DEFAULT-max_temp_adj, M.bodytemperature+adj_temp*TEMPERATURE_DAMAGE_COEFFICIENT )
 
 /datum/reagent/proc/is_overdosing() //Too much chems, or been in your system too long
 	return (overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)

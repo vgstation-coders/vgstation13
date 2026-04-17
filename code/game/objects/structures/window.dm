@@ -69,15 +69,19 @@ var/list/one_way_windows
 		return O.anchored && ..()
 
 /obj/structure/window/relativewall()
-	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
-	var/icon/I = new('icons/obj/structures/window.dmi', icon_state)
-	if(!is_fulltile)
-		var/cmasknumber = findSmoothingOnTurf()
-		if(cmasknumber)
-			var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]")
-			I.Blend(mask, ICON_OVERLAY)
-			I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
-	icon = I
+	if(anchored && density)
+		icon_state = "[base_state][..()]"
+		if(!is_fulltile)
+			var/icon/I = new('icons/obj/structures/window.dmi', icon_state, dir)
+			var/cmasknumber = findSmoothingOnTurf()
+			if(cmasknumber)
+				var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]", dir)
+				I.Blend(mask, ICON_OVERLAY)
+				I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
+			icon = I
+	else
+		icon_state = initial(icon_state)
+		icon = initial(icon) // this just werks for some reason
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
@@ -611,6 +615,7 @@ var/list/one_way_windows
 /obj/structure/window/change_dir(new_dir, changer)
 	update_nearby_tiles() //Compel updates before
 	. = ..()
+	relativewall()
 	update_nearby_tiles()
 
 /obj/structure/window/Destroy()

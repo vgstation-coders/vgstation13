@@ -91,7 +91,7 @@
 	data["targetPressure"] = target_pressure
 	data["gases"] = list()
 	var/static/list/display_gases = list()
-	for(var/gas_id in XGM.gases)
+	for(var/gas_id in XGM.noteworthy_gases)
 		var/datum/gas/gas_datum = XGM.gases[gas_id]
 		display_gases[gas_id] = gas_datum.name
 	var/total_moles = air.total_moles

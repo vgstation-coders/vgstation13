@@ -21,9 +21,9 @@ var/list/list/sensed_explosions = list()
 	var/list/watcher_maps = list()
 	var/list/watcher_buttons = list()
 
-	var/original_zLevel = 1	//zLevel on which the machine was initialized.
-	var/forced_zLevel = 0	//can be set by mappers to override the Station Map's zLevel
-							//only zLevels to have an actual map displayed are the Station, the Asteroid, and the Derelict.
+	var/original_vLevel = 1	//vLevel on which the machine was initialized.
+	var/forced_vLevel = 0	//can be set by mappers to override the Station Map's vLevel
+							//only vLevels to have an actual map displayed are the Station, the Asteroid, and the Derelict.
 
 	var/datum/station_holomap/bhang/holomap_datum
 
@@ -33,10 +33,14 @@ var/list/list/sensed_explosions = list()
 
 /obj/machinery/computer/bhangmeter/New()
 	..()
-	if (forced_zLevel)
-		original_zLevel = forced_zLevel
+	if (forced_vLevel)
+		original_vLevel = forced_vLevel
 	else
-		original_zLevel = loc.z
+		var/datum/virtual_z/vz = get_virtual_z()
+		if(vz)
+			original_vLevel = vz.z()
+		else
+			original_vLevel = z
 	bhangmeters += src
 	if(ticker && holomaps_initialized)
 		initialize()
@@ -49,13 +53,16 @@ var/list/list/sensed_explosions = list()
 
 /obj/machinery/computer/bhangmeter/initialize()
 	var/turf/T
-	if (forced_zLevel)
+	var/datum/virtual_z/vz
+	if (forced_vLevel)
 		var/turf/U = get_turf(src)
-		T = locate(U.x,U.y,forced_zLevel)
-		original_zLevel = forced_zLevel
+		vz = map.getVLevel(forced_vLevel)
+		T = locate(U.x,U.y,vz.z())
+		original_vLevel = forced_vLevel
 	else
 		T = get_turf(src)
-		original_zLevel = T.z
+		vz = get_virtual_z()
+		original_vLevel = vz.z()
 
 	holomap_datum = new()
 	holomap_datum.initialize_holomap(T)
@@ -128,9 +135,10 @@ var/list/list/sensed_explosions = list()
 		popup.open()
 
 /obj/machinery/computer/bhangmeter/proc/bhangmeterPanel()
-	if (!original_zLevel)
-		original_zLevel = z
-	var/datum/zLevel/thisZ = map.zLevels[original_zLevel]
+	if (!original_vLevel)
+		var/datum/virtual_z/vz = get_virtual_z()
+		original_vLevel = vz.z()
+	var/datum/virtual_z/thisv = map.getVLevel(original_vLevel)
 	var/dat = {"<html>
 		<head>
 		<style>
@@ -148,7 +156,7 @@ var/list/list/sensed_explosions = list()
 		</style>
 		</head>
 		<body>
-		<h2 style="text-align:center">Bhangmeter Database ([thisZ.name])</h2>
+		<h2 style="text-align:center">Bhangmeter Database ([thisv.name])</h2>
 		<table>
 		<tr>
 		<th style="width:0.2%">#</th>
@@ -160,12 +168,12 @@ var/list/list/sensed_explosions = list()
 		</tr>
 		"}
 	var/sensed_list = ""
-	for (var/datum/sensed_explosion/SE in sensed_explosions["z[z]"])
+	for (var/datum/sensed_explosion/SE in sensed_explosions["z[thisv.z()]"])
 		var/SE_dat = {"<tr>
 				<td style="text-align:center">[SE.ID]</td>
 				<td style="text-align:center">[SE.time]</td>
 				<td style="text-align:center">[SE.area.name]</td>
-				<td style="text-align:center">([SE.x],[SE.y],[SE.z])</td>
+				<td style="text-align:center">([thisv.vx(coord = SE.x)],[thisv.vy(coord = SE.y)],[thisv.id])</td>
 				"}
 		if (SE.cap)
 			SE_dat += {"<td style="text-align:center"><b>!![round(SE.cap*0.25)]  /  [round(SE.cap*0.5)]  /  [round(SE.cap)]!!</b></td>"}
@@ -211,7 +219,8 @@ var/list/list/sensed_explosions = list()
 /obj/machinery/computer/bhangmeter/proc/announce_explosion(var/datum/sensed_explosion/SE)
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
-	if (SE.z != original_zLevel)
+	var/datum/virtual_z/vz = vz_at_loc(SE.x,SE.y,SE.z)
+	if (vz.z() != original_vLevel)
 		return
 	if (last_announced_explosion && (world.time < (last_announcement + announcement_cooldown)))
 		var/new_score = SE.dev * 4 + SE.heavy * 2 + SE.light
@@ -221,15 +230,15 @@ var/list/list/sensed_explosions = list()
 	last_announcement = world.time
 	last_announced_explosion = SE
 	if (SE.cap)
-		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([SE.x-WORLD_X_OFFSET[SE.z]],[SE.y-WORLD_Y_OFFSET[SE.z]], [SE.z]). \[Theoretical Results\] Epicenter radius: [round(SE.cap*0.25)]. Outer radius: [round(SE.cap*0.5)]. Shockwave radius: [round(SE.cap)]. Temporal displacement of tachyons: [SE.delay] second\s.")
+		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([vz.vx(coord = SE.x)-get_world_x_offset(vz.id)],[vz.vy(coord = SE.y)-get_world_y_offset(vz.id)], [vz.id]). \[Theoretical Results\] Epicenter radius: [round(SE.cap*0.25)]. Outer radius: [round(SE.cap*0.5)]. Shockwave radius: [round(SE.cap)]. Temporal displacement of tachyons: [SE.delay] second\s.")
 	else
-		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([SE.x-WORLD_X_OFFSET[SE.z]],[SE.y-WORLD_Y_OFFSET[SE.z]], [SE.z]). Epicenter radius: [SE.dev]. Outer radius: [SE.heavy]. Shockwave radius: [SE.light]. Temporal displacement of tachyons: [SE.delay] second\s.")
+		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([vz.vx(coord = SE.x)-get_world_x_offset(vz.id)],[vz.vy(coord = SE.y)-get_world_y_offset(vz.id)], [vz.id]). Epicenter radius: [SE.dev]. Outer radius: [SE.heavy]. Shockwave radius: [SE.light]. Temporal displacement of tachyons: [SE.delay] second\s.")
 
 
 /obj/machinery/computer/bhangmeter/proc/announce_meteors(var/datum/meteor_warning/MW)
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
-	if (original_zLevel != map.zMainStation)
+	if (original_vLevel != map.zMainStation)
 		return
 
 	say("[MW.name], containing [MW.num] objects up to [MW.size] size and incoming from the [MW.dir], will strike in [MW.delay/10] seconds.")

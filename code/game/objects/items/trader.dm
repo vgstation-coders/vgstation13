@@ -14,6 +14,7 @@
 	areaname = "mecha graveyard"
 
 /datum/map_element/dungeon/mecha_graveyard
+	name = "Mecha Graveyard"
 	file_path = "maps/randomvaults/dungeons/mecha_graveyard.dmm"
 	unique = TRUE
 

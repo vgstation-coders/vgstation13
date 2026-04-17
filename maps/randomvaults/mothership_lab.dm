@@ -7,8 +7,8 @@
 
 /datum/map_element/vault/mothership_lab/pre_load()
 	// Load the two other levels
-	load_dungeon(/datum/map_element/dungeon/habitation)
-	load_dungeon(/datum/map_element/dungeon/research)
+	load_dungeon(/datum/map_element/dungeon/habitation, 0, TRUE)
+	load_dungeon(/datum/map_element/dungeon/research, 0, TRUE)
 
 //////////////////////////////
 // AREAS
@@ -242,6 +242,15 @@
 				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
 			else
 				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
+
+
+/turf/unsimulated/floor/lab_underplating/broken/New()
+	. = ..()
+	overlays += image(icon,src,"damaged[rand(1,3)]")
+
+/turf/unsimulated/floor/lab_underplating/scorched/New()
+	. = ..()
+	overlays += image(icon,src,"scorched[rand(1,2)]")
 
 /turf/unsimulated/floor/lab_sterile
 	name = "sterile tile floor"
@@ -1039,3 +1048,23 @@
 	icon_state = "acidsink"
 	clean_power = 0
 	watertype = /obj/item/reagent_core/acid
+
+/obj/structure/wc/urinal/acid
+	name = "acid urinal"
+	desc = "The AY-452, an experimental urinal that seems to use acid instead of water."
+	watertype = /obj/item/reagent_core/acid
+
+//mapping subtypes
+/obj/structure/wc/urinal/acid/north
+	//no dir because it was like that on xoq
+	pixel_y = -32
+
+/obj/structure/wc/urinal/acid/east
+	dir = EAST
+	pixel_x = -30
+	pixel_y = 0
+
+/obj/structure/wc/urinal/acid/west
+	dir = WEST
+	pixel_x = 30
+	pixel_y = 0

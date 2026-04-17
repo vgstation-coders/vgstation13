@@ -272,9 +272,32 @@
 	var/body_color
 	var/feather_regen = 0
 	var/original_body_color = null
+	var/mob/master
 	pass_flags = PASSTABLE
 	size = SIZE_SMALL
 	speak_override = TRUE
+
+
+/mob/living/simple_animal/chicken/attack_hand(mob/living/carbon/human/M) //can now pet chickens. Germansanta 2/10/2026
+	. = ..()
+	react_to_touch(M)
+	M.delayNextAttack(2 SECONDS)
+
+/mob/living/simple_animal/chicken/proc/react_to_touch(mob/M)
+	if(M && !isUnconscious())
+		switch(M.a_intent)
+			if(I_HELP)
+				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+				heart.plane = ABOVE_HUMAN_PLANE
+				flick_overlay(heart, list(M.client), 20)
+				emote("me", EMOTE_AUDIBLE, pick("clucks happily.","cocks happily.","spreads out wings!","wraps wings around your leg! [M]."))
+				playsound(loc, 'sound/voice/chick.ogg', 80, 1)
+				if(prob(5))
+					master = M
+					to_chat(M, "[src] seems closer to you now. At least until somebody else gives them attention, anyway.")
+			if(I_HURT)
+				playsound(loc, 'sound/voice/chicken.ogg', 80, 1)
+				emote("me", EMOTE_AUDIBLE, "clucks.")
 
 /mob/living/simple_animal/chicken/New()
 	if(prob(5))

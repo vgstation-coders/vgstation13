@@ -45,10 +45,6 @@
 /obj/effect/landmark/corpse/civilian,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/prison_ship)
-"m" = (
-/obj/structure/fence,
-/turf/simulated/floor/shuttle/brig,
-/area/vault/prison_ship)
 "n" = (
 /obj/item/device/flashlight/flare/ever_bright,
 /turf/simulated/floor/shuttle/brig,
@@ -63,17 +59,11 @@
 /turf/simulated/floor/shuttle/brig,
 /area/vault/prison_ship)
 "q" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/prison_ship)
 "r" = (
-/obj/structure/fence/door/secure/from_south,
-/turf/simulated/floor/shuttle/brig,
-/area/vault/prison_ship)
-"s" = (
-/obj/structure/fence/corner,
+/obj/structure/fence/door/secure/inverted,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/prison_ship)
 "t" = (
@@ -182,8 +172,8 @@ C
 a
 a
 B
-m
-s
+q
+q
 t
 t
 C

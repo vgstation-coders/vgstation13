@@ -15,6 +15,8 @@
 	attack_verb = list("whacks", "slaps", "slams", "forcefully blesses")
 	var/mob/affecting = null
 	var/datum/religion/my_rel = new /datum/religion
+	var/spine_color = "#888"
+	var/spine_overlay //optional, adds another sprite if set to a color
 	actions_types = list(/datum/action/item_action/convert)
 	rustle_sound = "pageturn"
 

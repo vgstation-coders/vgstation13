@@ -104,6 +104,7 @@ var/list/foliage_replacments=list(
 	desc="A mixture of sediments, clays, and decomposed matter."
 	icon='icons/turf/floors.dmi'
 	icon_state = "ironsand1"
+	base_icon_state=null
 	temperature = T_JUNGLE
 	oxygen = MOLES_JUNGLE_O2_STD
 	nitrogen = MOLES_JUNGLE_N2_STD
@@ -328,6 +329,7 @@ var/list/foliage_replacments=list(
 	nitrogen = MOLES_JUNGLE_N2_STD
 	carbon_dioxide = MOLES_JUNGLE_CO2_STD
 	mineral=null
+	mined_type = /turf/unsimulated/floor/planetary/cave/jungle
 
 /turf/unsimulated/mineral/jungle_underground/New()
 	..()

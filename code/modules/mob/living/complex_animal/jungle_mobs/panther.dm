@@ -82,4 +82,5 @@
 		to_chat(M,"<span class='notice'>\the [src] looks at you with contempt!</span>")
 		family-=M
 
-
+/mob/living/simple_animal/complex/panther/get_butchering_products()
+	return list(/datum/butchering_product/skin/cat/lots,/datum/butchering_product/teeth/lots)

@@ -179,7 +179,7 @@ var/list/special_fruits = list()
 					H.drop_item(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/after_consume(var/mob/living/carbon/human/H)
-	if((seed.thorny || arcanetampered) && istype(H))
+	if((seed?.thorny || arcanetampered) && istype(H))
 		var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
 		if(affecting)
 			if(thorns_apply_damage(H, affecting))
@@ -244,13 +244,13 @@ var/list/special_fruits = list()
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_fruit_teleport(atom/hit_atom, mob/M, var/potency)	//Does this need logging?
-	var/datum/zLevel/L = get_z_level(src)
-	if(!L || L.teleJammed)
-		return 0
 	var/picked = pick_rand_tele_turf(hit_atom, potency/15, potency/10) // Does nothing at base potency since inner_radius == 0
 	if(!isturf(picked))
 		return 0
 	var/turf/hit_turf = get_turf(hit_atom)
+	var/datum/virtual_z/vz_hit = hit_turf.get_virtual_z()
+	if(!vz_hit || vz_hit.teleJammed == VZ_TELEPORTATION_FORBIDDEN)
+		return 0
 	var/turf_has_mobs = locate(/mob) in hit_turf
 	if((!istype(M) || prob(50)) && turf_has_mobs) //50% chance to teleport the person who was hit by the fruit
 		spark(hit_atom)
@@ -356,6 +356,22 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	item_state = "dandelion"
 	plantname = "dandelions"
 	fragrance = INCENSE_LEAFY
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rose
+	name = "rose"
+	desc = "A symbol of peace and love."
+	potency = 1
+	throwforce = 1
+	filling_color = "#660531"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "rose"
+	plantname = "roses"
+	fragrance = INCENSE_ROSES
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rose/attack_self(mob/user as mob)
+	Destroy(/obj/item/weapon/reagent_containers/food/snacks/grown/rose)
+	new/obj/item/clothing/accessory/rose(user.loc)
+	to_chat(user, "<span class='notice'>You fold a pin into the rose.</span>")
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
@@ -1248,10 +1264,18 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#7E80DE"
 	plantname = "flax"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/mint
+	name = "mint"
+	desc = "The essence of pure freshness in plant form."
+	potency = 20
+	filling_color = "#7edeae"
+	plantname = "mint"
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle
 	icon = 'icons/obj/hydroponics/berry.dmi'
 	icon_state = "produce2"
 	desc = "They taste like... burning."
+	plantname=null
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle/New(var/loc,var/mob/berry_picker=null)
 	..(loc)

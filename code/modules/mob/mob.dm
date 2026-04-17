@@ -22,8 +22,9 @@
 	return RECYK_BIOLOGICAL
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
-	if(planet)
-		planet.on_mob_exited(src, planet)
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(vz)
+		vz.mob_exited(src)
 
 	for(var/datum/mind/mind in heard_by)
 		for(var/M in mind.heard_before)
@@ -2243,7 +2244,7 @@ Use this proc preferably at the end of an equipment loadout
 	if (target.isDead())
 		to_chat(src, "You cannot sense the target mind anymore, that's not good...")
 		return null
-	if(target_turf.z != our_turf.z) //Not on the same zlevel as us
+	if(target_turf.v != our_turf.v) //Not on the same vlevel as us
 		to_chat(src, "The target mind is too faint, they must be quite far from you...")
 		return null
 	if(target.stat != CONSCIOUS)

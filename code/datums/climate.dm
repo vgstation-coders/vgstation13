@@ -20,8 +20,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/datum/weather/current_weather
 	var/list/datum/weather/forecasts = list()
 	var/cycle_freq = list(3 MINUTES,6 MINUTES) //shortest possible time, longest possible time until next weather
-	var/z //z-level the climate is occupying
-	var/datum/allocation/allocation //the allocation this climate belongs to
+	var/datum/virtual_z/v //virtual z-level the climate is occupying
 	var/list/allowed_weather_types = list() // List of weather types this climate can have
 	var/list/weather_transitions = list() // Associative list: weather_type = list(possible_transitions)
 	var/list/weather_intensities = list() // Associative list: weather_type = intensity_level
@@ -30,14 +29,11 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/obj/effect/weather_holder/weather_image = null // The weather holder object for this climate
 	var/list/weather_turfs = list() // All turfs affected by this climate (includes snow turfs and other outdoor turfs)
 
-/datum/climate/New(var/active_z,var/datum/allocation/A = null,var/random_starting_weather = FALSE)
+/datum/climate/New(var/datum/virtual_z/vz,var/random_starting_weather = FALSE)
 	..()
-	if(active_z)
-		z = active_z
-	else
-		z = map.zMainStation
-	if(A)
-		allocation = A
+	if(!vz)
+		CRASH("Attempted to create climate with null virtual_z.")
+	v = vz
 	setup_weather_system()
 	if(random_starting_weather)
 		starting_weather_type = pick(allowed_weather_types)
@@ -125,6 +121,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 /datum/climate/proc/tick()
 	if(!current_weather)
 		return
+	if(!v.active)
+		return
 	current_weather.tick()
 	if(current_weather.timeleft <= 0)
 		change_weather(forecasts[1],force = TRUE)
@@ -132,14 +130,11 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(forecasts.len < PREDICTION_MINIMUM)
 		forecast()
 
-// Get the planet associated with this climate's allocation
+// Get the planet associated with this climate's virtual_z level
 /datum/climate/proc/get_planet()
-	if(!allocation)
+	if(!v)
 		return null
-	for(var/datum/planet_type/planet in SSmapping.planets)
-		if(planet.allocation == allocation)
-			return planet
-	return null
+	return v.planet
 
 #define INVALID_STEP -1
 #define CANNOT_CHANGE -2
@@ -498,13 +493,11 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		parent.weather_image.UpdatePrecipitation(precip_intensity)
 
 	// Update lighting based on weather conditions
-	var/datum/planet_type/planet = parent.get_planet()
-	if(planet)
-		planet.weather_mod = light_modifier
-		SSDayNight.update_planet_lighting(planet, immediate = TRUE)
-	else if(parent.z)
-		SSDayNight.weather_mod = light_modifier
-		SSDayNight.update_global_lighting()
+	var/datum/virtual_z/vz = parent.v
+	if(!vz)
+		CRASH("execute called on weather with null virtual_z.")
+	vz.weather_mod = light_modifier
+	SSDayNight.update_lighting(vz, immediate = TRUE)
 
 /datum/weather/proc/tick()
 	timeleft -= SS_WAIT_WEATHER
@@ -518,10 +511,10 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/list/playerlist = list()
 	var/list/players_near_weather = list()
 
-	if(parent.allocation)
-		players_near_weather = mobs_in_allocation(parent.allocation, client_needed = TRUE)
-	else
-		players_near_weather = mobs_in_zlevel(parent.z, client_needed = TRUE)
+	var/datum/virtual_z/vz = parent.v
+	if(!vz)
+		CRASH("get_weather_affected_players called on weather with null virtual_z.")
+	players_near_weather = vz.get_players()
 
 	// Filter to only players in open surface areas (not caves/indoors)
 	for(var/mob/M in players_near_weather)

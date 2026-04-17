@@ -79,6 +79,8 @@
 					desc += " Damn that looks hot!"
 				else
 					can_be_lit = 1
+			if(reagents.has_reagent(ICE) && R.id!=ICE)
+				name+=" on the rocks"
 	else
 		icon_state = "glass_empty"
 		item_state = "glass_empty"

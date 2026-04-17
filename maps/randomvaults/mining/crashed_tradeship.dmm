@@ -325,10 +325,7 @@
 /area/asteroid)
 "Dc" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/asteroid)
 "Dh" = (
 /obj/structure/window/reinforced{
@@ -446,10 +443,7 @@
 /area/asteroid)
 "SD" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/asteroid)
 "SR" = (
 /obj/item/weapon/shard{
@@ -539,12 +533,6 @@
 	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
-	},
-/area/asteroid)
-"Zb" = (
-/obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
 	},
 /area/asteroid)
 "Zc" = (
@@ -751,7 +739,7 @@ ab
 ab
 ab
 Yk
-Zb
+Dc
 zj
 LV
 fQ

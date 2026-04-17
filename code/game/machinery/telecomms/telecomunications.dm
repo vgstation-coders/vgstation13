@@ -109,8 +109,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 				"message_classes" = signal.data["message_classes"],
 				"wrapper_classes" = signal.data["wrapper_classes"],
 				"trace" = signal.data["trace"],
-				"allocations" = signal.data["allocations"],
-				"source_allocation" = signal.data["source_allocation"]
+				"virtual_z" = signal.data["virtual_z"],
+				"source_virtual_z" = signal.data["source_virtual_z"]
 			)
 
 			// Keep the "original" signal constant
@@ -510,19 +510,17 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	use_power = MACHINE_POWER_USE_NONE
 	hide = TRUE
 	network = "tcommsat"
-	var/datum/allocation/relay_allocation
 	var/activated = FALSE
 
-/obj/machinery/telecomms/relay/planetary/New()
+/obj/machinery/telecomms/relay/planetary/post_ruin_load()
 	..()
-	var/turf/T = get_turf(src)
-	var/datum/allocation/alloc = SSmapping.get_allocation(trf = T)
-	if(istype(alloc))
-		relay_allocation = alloc
-		alloc.comms_relay = src
-	else
-		CRASH("Failed to get allocation for planetary relay at [T] ([T.z])")
-	var/datum/planet_type/P = alloc.ptype
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(!vz)
+		CRASH("Planetary relay spawned on turf without virtual_z at [x],[y],[z]")
+	vz.comms_relay = src
+	var/datum/planet_type/P = vz.planet
+	if(!P)
+		CRASH("Planetary relay spawned on virtual_z without planet at [x],[y],[z]")
 	var/p_name = P.planet_name
 	p_name = replacetext(p_name, " ", "_")
 	autolinkers = list("[p_name]_relay")
@@ -539,48 +537,45 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/relay/planetary/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
 	if(can(signal) && broadcasting)
+		var/datum/virtual_z/vz = get_virtual_z()
 		signal.data["level"] |= listening_level
-		if(!signal.data["allocations"])
-			signal.data["allocations"] = list()
-		signal.data["allocations"] |= relay_allocation
+		if(!signal.data["virtual_z"])
+			signal.data["virtual_z"] = list()
+		signal.data["virtual_z"] |= vz
 
 /obj/machinery/telecomms/relay/planetary/can_send(datum/signal/signal)
 	if(!can(signal))
 		return 0
 	if(!broadcasting)
 		return 0
-	return in_allocation(signal)
+	return in_virtual_z(signal)
 
 /obj/machinery/telecomms/relay/planetary/can_receive(datum/signal/signal)
 	if(!can(signal))
 		return 0
 	if(!receiving)
 		return 0
-	return in_allocation(signal)
+	return in_virtual_z(signal)
 
-/// Checks if the signal originated from the same allocation as this relay
-/obj/machinery/telecomms/relay/planetary/proc/in_allocation(datum/signal/signal)
-	if(!relay_allocation)
+/// Checks if the signal originated from the same virtual z as this relay
+/obj/machinery/telecomms/relay/planetary/proc/in_virtual_z(datum/signal/signal)
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(!vz)
 		return FALSE
 
-	var/datum/allocation/signal_alloc = signal.data["source_allocation"]
-	if(signal_alloc)
-		return signal_alloc == relay_allocation
+	var/datum/virtual_z/signal_virtual_z = signal.data["source_virtual_z"]
+	if(signal_virtual_z)
+		return signal_virtual_z == vz
 
 	var/mob/M = signal.data["mob"]
 	if(!M)
 		return FALSE
 
-	var/turf/mob_turf = get_turf(M)
-	if(!mob_turf)
+	var/datum/virtual_z/mob_vz = M.get_virtual_z()
+	if(!mob_vz)
 		return FALSE
 
-	var/alloc = SSmapping.get_allocation(trf = mob_turf)
-	if(istype(alloc, /datum/allocation))
-		signal.data["source_allocation"] = alloc
-		return alloc == relay_allocation
-
-	return FALSE
+	return mob_vz == vz
 
 /obj/machinery/telecomms/relay/planetary/proc/activate()
 	if(activated)

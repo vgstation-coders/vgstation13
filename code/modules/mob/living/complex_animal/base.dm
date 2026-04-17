@@ -13,6 +13,7 @@
 
 #define ANIMAL_FLAG_NEVER_STARVE	(1<<0)
 #define ANIMAL_FLAG_NEVER_AGE	(1<<1)
+#define ANIMAL_FLAG_NEVER_ROT	(1<<2)
 #define ANIMAL_FLAG_IMMORTAL	ANIMAL_FLAG_NEVER_STARVE | ANIMAL_FLAG_NEVER_AGE
 
 #define ANIMAL_FOODPRIORITY_CANNIBAL -5	//she rips out my bones just like i'm an animal
@@ -98,12 +99,19 @@
 	if (stat==DEAD)
 		icon_state=icon_dead
 
-/mob/living/simple_animal/complex/Life()
-	update_icon()
-	if(!..())
-		return 0
-	if(stat == DEAD)
-		ticks_dead++
+
+/mob/living/simple_animal/complex/examine()
+	..()
+	if(!(animal_flags & ANIMAL_FLAG_NEVER_ROT))
+		if(ticks_dead>=150)
+			to_chat(usr,"<span class='notice'>The body is looking a bit stale.</span>")
+		else if(ticks_dead>=75)
+			to_chat(usr,"<span class='danger'>The body looks on the verge of rotting.</span>")
+
+
+/mob/living/simple_animal/complex/proc/death_logic() //this exists because SOMEHOW a mob died without calling death() and i have no idea how that happened and could not replicate the bug, so this exists to prevent them remaining in their attacking state postmortem
+	ticks_dead++
+	if(!(animal_flags & ANIMAL_FLAG_NEVER_ROT))
 		if(ticks_dead==75)
 			visible_message("Bugs start flying around <b>\the [src]</b>'s corpse.")
 		if(ticks_dead==150)
@@ -112,6 +120,15 @@
 			if(prob(10))
 				visible_message("<b>\The [src]</b>'s corpse rots away into nothing...")
 				qdel(src)
+	walk(src,0)
+	behavior_state=ANIMAL_STATE_IDLE
+
+/mob/living/simple_animal/complex/Life()
+	update_icon()
+	if(stat == DEAD)
+		death_logic()
+		return 0
+	if(!..())
 		return 0
 	ticks_dead=0
 
@@ -324,8 +341,8 @@
 	return TRUE
 
 /mob/living/simple_animal/complex/proc/tick_state_mating()
-	if(!verify_target(target,8))
-		for(var/atom/A in cache_objects_in_view)
+	if(!verify_target(target,16)) //ignores line of sight and has increased range to help sparse populations not die out.
+		for(var/atom/A in range(src,16) )
 			if(istype(A,/mob/living/simple_animal/complex))
 				var/mob/living/simple_animal/complex/CA=A
 				if(can_offspring(CA) && CA.can_offspring(src) && CA.behavior_state==ANIMAL_STATE_MATING && !CA.target) //you better believe we're going to enforce the communicative property.
@@ -333,6 +350,8 @@
 					target=CA
 					CA.visible_message("<b>\the [CA]</b> looks lovingly at \the [src].")
 					CA.target=src
+					walk_to(src,CA,0,src.movespeed)
+					walk_to(CA,src,0,CA.movespeed)
 		if(!target) //if we can't find one, exit back to idle
 			abort_target()
 			return FALSE
@@ -616,13 +635,13 @@
 		return FALSE
 	if(is_pacified())
 		return FALSE
-	if(istype(trespasser,/mob/living/simple_animal))
-		var/mob/living/simple_animal/A=trespasser
-		if(A.pacify_aura)
+	if(isliving(trespasser))
+		var/mob/living/L = trespasser
+		if(L.pacify_aura)
 			return FALSE
 	if(istype(trespasser,/mob/living/simple_animal/complex))
 		var/mob/living/simple_animal/complex/A=trespasser
-		if(A.pacify_aura || (A.behavior_flags & ANIMAL_BEHAVIOR_UNDESIRABLE) )
+		if(A.behavior_flags & ANIMAL_BEHAVIOR_UNDESIRABLE)
 			return FALSE
 	return !is_kin(trespasser)
 
@@ -736,24 +755,26 @@
 		flick_overlay(heart, list(H.client), 20)
 
 /mob/living/simple_animal/complex/assaulted_by(var/mob/M,var/weak_assault=FALSE)
-	if(!weak_assault)
-		if(behavior_flags & ANIMAL_BEHAVIOR_RETALIATE)
-			behavior_state=ANIMAL_STATE_ATTACKING
-			aggro_drawn(M,ANIMAL_STATE_ATTACKING)
-		else
-			get_flee_msg(M)
-			behavior_state = ANIMAL_STATE_FLEEING
-			target=M
+	if(stat!=DEAD)
+		if(!weak_assault)
+			if(behavior_flags & ANIMAL_BEHAVIOR_RETALIATE)
+				behavior_state=ANIMAL_STATE_ATTACKING
+				aggro_drawn(M,ANIMAL_STATE_ATTACKING)
+			else
+				get_flee_msg(M)
+				behavior_state = ANIMAL_STATE_FLEEING
+				target=M
 	return ..()
 
 /mob/living/simple_animal/complex/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
-	if(behavior_flags & ANIMAL_BEHAVIOR_RETALIATE)
-		behavior_state=behavior_state=ANIMAL_STATE_ATTACKING
-		aggro_drawn(attacker,ANIMAL_STATE_ATTACKING)
-	else
-		get_flee_msg(attacker)
-		behavior_state = ANIMAL_STATE_FLEEING
-		target=attacker
+	if(stat!=DEAD)
+		if(behavior_flags & ANIMAL_BEHAVIOR_RETALIATE)
+			behavior_state=behavior_state=ANIMAL_STATE_ATTACKING
+			aggro_drawn(attacker,ANIMAL_STATE_ATTACKING)
+		else
+			get_flee_msg(attacker)
+			behavior_state = ANIMAL_STATE_FLEEING
+			target=attacker
 	return ..()
 
 /mob/living/simple_animal/complex/getarmor(var/def_zone, var/type)
@@ -761,7 +782,7 @@
 
 /mob/living/simple_animal/complex/death()
 	..()
-	walk(src,0)
+	death_logic()
 
 /mob/living/simple_animal/complex/beartrap_act(var/obj/item/weapon/beartrap/trap)
 	if(flying)

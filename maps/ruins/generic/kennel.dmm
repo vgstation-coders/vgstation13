@@ -27,22 +27,13 @@
 	icon_state = "dark"
 	},
 /area/vault/kennel)
-"m" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/obj/structure/fence/corner,
-/turf/simulated/floor/engine/concrete,
-/area/vault/kennel)
 "o" = (
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
 	},
 /area/vault/kennel)
 "p" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "s" = (
@@ -77,12 +68,8 @@
 /obj/structure/fence/cut/large,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
-"H" = (
-/obj/structure/fence,
-/turf/simulated/floor/engine/concrete,
-/area/vault/kennel)
 "J" = (
-/obj/structure/fence/door/secure/from_south,
+/obj/structure/fence/door/secure/inverted,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "K" = (
@@ -190,8 +177,8 @@ a
 g
 a
 D
-H
-m
+p
+p
 N
 Y
 a

@@ -30,8 +30,7 @@
 		<h2 style="text-align:center">Climate Panel - [climates.len] Climate[climates.len > 1 ? "s" : ""]</h2>
 		<table>
 		<tr class="climate-header">
-		<th>Z-Level</th>
-		<th>Sector</th>
+		<th>vLevel</th>
 		<th>Climate Type</th>
 		<th>Current Weather</th>
 		<th>Time Remaining</th>
@@ -41,26 +40,24 @@
 
 	// Sort climates by z-level for consistent display
 	var/list/sorted_climates = list()
-	var/list/z_levels = list()
+	var/list/v_levels = list()
 
 	for(var/datum/climate/C in climates)
-		if(!(C.z in z_levels))
-			z_levels += C.z
-	z_levels = sortList(z_levels)
-	for(var/z in z_levels)
+		if(!(C.v.id in v_levels))
+			v_levels += C.v.id
+	v_levels = sortList(v_levels)
+	for(var/v in v_levels)
 		for(var/datum/climate/C in climates)
-			if(C.z == z)
+			if(C.v.id == v)
 				sorted_climates += C
 
 	for(var/datum/climate/C in sorted_climates)
 		var/datum/weather/W = C.current_weather
-		var/sector_display = C.allocation ? "([C.allocation.sector[1]], [C.allocation.sector[2]])" : "N/A"
 		var/weather_display = W ? "[W.name] <a href='?_src_=vars;Vars=\ref[W]'>\[VV\]</A>" : "<font color='red'>ERROR: NULL</font>"
 		var/timeleft_display = W ? "<a href='?src=\ref[src];climate_timeleft=\ref[W]'>[formatTimeDuration(W.timeleft)]</A>" : "<font color='red'>N/A</font>"
 		dat += {"<tr>
-			<td>Z-[C.z]</td>
-			<td>[sector_display]</td>
-			<td>[C.name] <a href='?_src_=vars;Vars=\ref[C]'>\[VV\]</A></td>
+			<td>vZ-[C.v.id]</td>
+			<td>[C.name]<a href='?_src_=vars;Vars=\ref[C]'>\[VV\]</A></td>
 			<td>[weather_display]</td>
 			<td>[timeleft_display]</td>
 			<td><a href='?src=\ref[src];climate_weather=\ref[C]'>Change Weather</A> | <a href='?src=\ref[src];climate_restart=\ref[C]'>Restart</A></td>

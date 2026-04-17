@@ -15,6 +15,14 @@
 			"preLaunchTask": "Build All",
 			"dmb": "${workspaceFolder}/${command:CurrentDMB}",
 			"dreamDaemon": true
+		},
+		{
+			"type": "byond",
+			"request": "launch",
+			"name": "Launch Both",
+			"preLaunchTask": "Build and Launch Server",
+			"dmb": "${workspaceFolder}/${command:CurrentDMB}",
+			"dreamDaemon": true
 		}
 	]
 }

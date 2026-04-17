@@ -5,6 +5,7 @@
 	icon_state = "retractor"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "retractor"
+	surgery_blood_overlay = "retractor"
 	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
 	melt_temperature = MELTPOINT_STEEL
 	w_type = RECYK_METAL
@@ -23,6 +24,7 @@
 	desc = "A true extension of the surgeon's body, this marvel instantly cuts the organ, clamps any bleeding, and retracts the skin, allowing for the immediate commencement of therapeutic steps."
 	icon_state = "incisionmanager"
 	item_state = "incisionmanager"
+	surgery_blood_overlay = ""
 	force = 7.5
 	toolspeed = 0.5
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
@@ -38,6 +40,7 @@
 	desc = "You think you've seen this before."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "hemostat"
+	surgery_blood_overlay = "hemostat"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "hemostat"
 	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 2500)
@@ -55,6 +58,7 @@
 	desc = "A thin rod with pico manipulators embedded in it allowing for fast and precise extraction."
 	icon_state = "pico_grasper"
 	item_state = "pico_grasper"
+	surgery_blood_overlay = ""
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
 	toolspeed = 0.5
 
@@ -160,6 +164,7 @@
 	icon_state = "scalpel"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "scalpel"
+	surgery_blood_overlay = "scalpel"
 	hitsound = "sound/weapons/bladeslice.ogg"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -181,6 +186,7 @@
 	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved."
 	icon_state = "scalpel_laser1"
 	item_state = "laserscalpel1"
+	surgery_blood_overlay = ""
 	heat_production = 1000000
 	source_temperature = TEMPERATURE_PLASMA //Even if it's laser based, it depends on plasma
 	damtype = "fire"
@@ -276,6 +282,7 @@
 	icon_state = "saw3"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "saw3"
+	surgery_blood_overlay = "saw3"
 	hitsound = 'sound/weapons/circsawhit.ogg'
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -299,6 +306,7 @@
 	desc = "Perfect for cutting through ice."
 	icon_state = "plasmasaw"
 	item_state = "plasmasaw"
+	surgery_blood_overlay = ""
 	force = 18.0
 	sharpness = 1.3
 	toolspeed = 0.5

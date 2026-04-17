@@ -349,16 +349,19 @@
 /datum/reagent/minttoxin
 	name = "Mint Toxin"
 	id = MINTTOXIN
-	description = "Useful for dealing with undesirable customers. The undiluted version of Mint Extract."
+	description = "Mint essence distilled to its purest form, a strong toxin against plants, mushrooms and animals. Useful for dealing with undesirable customers."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	density = 0.898
 	specheatcap = 3.58
-	custom_metabolism = 0.01 //so it lasts 10x as long as regular minttox
-	var/fatgokaboom = TRUE
+	custom_metabolism = 0.01 //so it lasts 10x as long as dilute essence
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM //about as nutritious as sugar
-	sport = SPORTINESS_SUGAR //a small performance boost from being COOL AND FRESH
+	sport = 2*SPORTINESS_SUGAR //a moderate performance boost from being COOL AND FRESH
+	plant_pests = -8
+	plant_weeds = -6
+	plant_toxins = 2
 	var/chillcounter = 0
+	var/concentrated = TRUE //also used to reduce the toxin damage done with the dilute version
 
 /datum/reagent/minttoxin/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -370,7 +373,7 @@
 	if(M.bodytemperature > 310) //copypasted from the cold drinks check so I don't have to change minttox internally and maybe most certainly break shit in the process
 		M.bodytemperature = max(310, M.bodytemperature + (-5 * TEMPERATURE_DAMAGE_COEFFICIENT)) //that minty freshness my dude, chill out
 
-	if(fatgokaboom && (M_FAT in M.mutations))
+	if(concentrated && (M_FAT in M.mutations))
 		M.gib()
 
 	if(ishuman(M))
@@ -398,13 +401,31 @@
 					playsound(H, 'sound/effects/toothshatter.ogg', 50, 1)
 					H.audible_scream()
 					H.adjustBruteLoss(50) //imagine all your teeth violently exploding, shrapnel and shit
+		if(concentrated)
+			if(isdiona(H) || ismushroom(H)) //technically more toxic to shrooms than plants but this is good enough
+				H.adjustToxLoss(4)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a sharp cold pain in your stems!</span>")
+
+			if(isinsectoid(H)) //more toxic to bugs than to plants
+				H.adjustToxLoss(6)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a cold stabing pain burn your carapace from within!</span>")
+
+			if(iscatbeast(H)) //pet cats are immune it's space magic ain't gotta explain shit
+				H.adjustToxLoss(10)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a sharp pain in your liver!</span>")
 
 /datum/reagent/minttoxin/essence
 	name = "Mint Essence"
 	id = MINTESSENCE
-	description = "Minty freshness in liquid form!"
+	description = "The raw, unrefined essence of freshness!"
 	custom_metabolism = 0.1 //toxin lasts 10x as long
-	fatgokaboom = FALSE
+	concentrated = FALSE
+	plant_pests = -2
+	plant_weeds = -1
+	plant_toxins = 0
 
 /datum/reagent/mutagen
 	name = "Unstable Mutagen"

@@ -42,8 +42,8 @@
 		var/turf/new_turf = get_step(src, dir)
 		if(new_turf.turf_flags & NOJAUNT)
 			return
-		var/datum/zLevel/L = get_z_level(new_turf)
-		if (L.teleJammed)
+		var/datum/virtual_z/vz = new_turf.get_virtual_z()
+		if (vz.teleJammed == VZ_TELEPORTATION_FORBIDDEN)
 			return
 		var/area/A = get_area(new_turf)
 		if (A.flags & NO_TELEPORT || A.jammed)

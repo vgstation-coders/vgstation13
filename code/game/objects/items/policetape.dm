@@ -225,8 +225,7 @@
 		var/mob/living/silicon/robot/R = A
 		return HAS_MODULE_QUIRK(R, robot_compatibility)
 
-	if(ismob(A)) // this line was added for atomicity to keep a PR related to bugfixes, remove this if you'd like to see secbots be able to cross this
-		return ..()
+	return ..()
 
 /obj/item/tape/attack_paw(mob/user as mob)
 	breaktape(null,user, TRUE)

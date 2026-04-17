@@ -24,7 +24,7 @@
 
 /obj/structure/trade_window/New()
 	..()
-	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
+	load_dungeon(/datum/map_element/dungeon/mecha_graveyard, 0, TRUE)
 	merchant_name = capitalize("[pick(vox_name_syllables)][pick(vox_name_syllables)] the [capitalize(pick(adjectives))]")
 	processing_objects += src
 	update_icon()
@@ -204,6 +204,8 @@
 	data["credsheld"] = credits_held()
 	data["shoalmoney"] = trader_account.money
 	data["shoaldiscount"] = round(100*(SStrade.shoal_prestige_factor()-1))
+	data["shoalreserve"] = shoal_reserves
+	data["reservediscount"] = round(100*(SStrade.reserve_prestige_factor()-1))
 	data["selectedCategory"] = category
 	data["categories"] = list(list("category" = TRADE_SINGLE), list("category" = TRADE_VARIETY))
 	SStrade.rebuild_databank(user)

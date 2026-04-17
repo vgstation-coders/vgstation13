@@ -13,17 +13,12 @@
 "d" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/ruin)
 "e" = (
 /obj/effect/alien/weeds/node,
 /obj/effect/alien/egg,
-/turf/simulated/floor{
-	icon_state = "damaged1"
-	},
+/turf/simulated/floor/damaged,
 /area/ruin)
 "f" = (
 /obj/effect/alien/weeds,
@@ -47,18 +42,13 @@
 	},
 /obj/structure/bed/nest,
 /obj/effect/gibspawner/human,
-/turf/simulated/floor{
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged,
 /area/ruin)
 "j" = (
 /obj/effect/gibspawner/xeno,
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/ruin)
 "k" = (
 /obj/effect/gibspawner/xeno,
@@ -76,9 +66,7 @@
 /area/ruin)
 "o" = (
 /obj/machinery/door/mineral/resin,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/ruin)
 "p" = (
 /obj/structure/sign/russian/caution,
@@ -122,10 +110,7 @@
 	},
 /obj/machinery/door/mineral/resin,
 /obj/effect/alien/weeds,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/ruin)
 "z" = (
 /obj/item/weapon/storage/toolbox/syndicate,
@@ -138,13 +123,6 @@
 /obj/abstract/loot_spawner/exotic,
 /turf/simulated/floor,
 /area/ruin)
-"B" = (
-/obj/structure/girder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
-/area/ruin)
 "C" = (
 /obj/effect/alien/weeds,
 /turf/template_noop,
@@ -152,9 +130,7 @@
 "E" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/ruin)
 "F" = (
 /obj/structure/girder,
@@ -162,18 +138,14 @@
 /area/ruin)
 "G" = (
 /obj/effect/alien/resin/wall,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/ruin)
 "H" = (
 /obj/structure/window/reinforced{
 	dir = 1
 	},
 /obj/effect/alien/resin/wall,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/ruin)
 "J" = (
 /obj/item/weapon/table_parts/reinforced,
@@ -198,9 +170,7 @@
 /area/ruin)
 "L" = (
 /obj/structure/girder,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/ruin)
 "M" = (
 /obj/effect/alien/weeds,
@@ -219,19 +189,14 @@
 	icon_state = "medium"
 	},
 /obj/effect/alien/weeds,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/ruin)
 "Q" = (
 /obj/item/weapon/shard,
 /obj/item/stack/rods,
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "damaged4"
-	},
+/turf/simulated/floor/damaged/broken,
 /area/ruin)
 "R" = (
 /obj/structure/bed/nest,
@@ -262,19 +227,10 @@
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
 /area/ruin)
-"W" = (
-/obj/effect/alien/weeds,
-/obj/effect/alien/egg,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
-/area/ruin)
 "X" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/ruin)
 "Z" = (
 /obj/structure/sign/securearea,
@@ -296,12 +252,12 @@ a
 (2,1,1) = {"
 a
 Z
-B
-B
+L
+L
 o
 G
 F
-B
+L
 L
 a
 "}
@@ -311,7 +267,7 @@ c
 U
 b
 E
-W
+E
 H
 G
 c

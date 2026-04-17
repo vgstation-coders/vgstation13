@@ -128,7 +128,7 @@
 	var/cpr_time = 1.0//Carbon
 
 
-	var/bodytemperature = 310.055	//98.7 F
+	var/bodytemperature = BODYTEMP_DEFAULT
 	var/drowsyness = 0.0//Carbon
 	var/dizziness = 0//Carbon
 	var/jitteriness = 0//Carbon

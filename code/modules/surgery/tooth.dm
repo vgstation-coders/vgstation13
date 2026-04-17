@@ -6,6 +6,7 @@
 /datum/surgery_step/tooth_replace
 	priority = 10
 	can_infect = 0
+	blood_level = 0
 
 /datum/surgery_step/tooth_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!hasorgans(target))

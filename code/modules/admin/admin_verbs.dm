@@ -88,6 +88,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/artifacts_panel,
 	/client/proc/body_archive_panel,
 	/client/proc/climate_panel,
+	/client/proc/level_manager,
 	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
 	/client/proc/toggle_admin_examine,
 	/client/proc/beasts_panel,	/* Lists all forgotten beasts generated, along with their characteristics */
@@ -1183,13 +1184,14 @@ fieldset {width:140px;}
 
 	#define ML_CURRENT_LOC  "Use my current location"
 	#define ML_INPUT_COORDS "Input coordinates"
-	#define ML_LOAD_TO_Z2   "Find a suitable location at Z-level 2 (done automatically)"
+	#define ML_LOAD_TO_NEWV "Create a new Virtual Z-level"
 	var/static/list/choices = list(
 	ML_CURRENT_LOC,
 	ML_INPUT_COORDS,
-	ML_LOAD_TO_Z2
+	ML_LOAD_TO_NEWV
 	)
 	var/dungeoning = FALSE
+	var/using_vz = FALSE
 
 	switch(input(usr, "Select a location for the new map element", "Map element loading") as null|anything in choices)
 		if(ML_CURRENT_LOC)
@@ -1217,11 +1219,7 @@ fieldset {width:140px;}
 			x_coord = clamp(x_coord, 1, world.maxx)
 			y_coord = clamp(y_coord, 1, world.maxy)
 
-		if(ML_LOAD_TO_Z2)
-			if(!dungeon_area)
-				to_chat(src, "<span class='warning'>Dungeon area not defined! This map is missing the /obj/effect/landmark/dungeon_area object.</span>")
-				return
-
+		if(ML_LOAD_TO_NEWV)
 			dungeoning = TRUE
 
 	var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
@@ -1236,35 +1234,39 @@ fieldset {width:140px;}
 	var/clipmax_y = INFINITY
 	var/clipmin_z = 0
 	var/clipmax_z = INFINITY
-	if(alert("Clip map to bounds?","Map element loading","Yes","No") == "Yes")
-		clipmin_x = input(usr, "Minimum X to clip at", "Map element loading", "1") as null|num
-		if(clipmin_x == null)
-			return
-		clipmax_x = input(usr, "Maximum X to clip at", "Map element loading", "[world.maxx]") as null|num
-		if(clipmax_x == null)
-			return
-		clipmin_y = input(usr, "Minimum Y to clip at", "Map element loading", "1") as null|num
-		if(clipmin_y == null)
-			return
-		clipmax_y = input(usr, "Maximum Y to clip at", "Map element loading", "[world.maxy]") as null|num
-		if(clipmax_y == null)
-			return
-		clipmin_z = input(usr, "Minimum Z to clip at", "Map element loading", "1") as null|num
-		if(clipmin_z == null)
-			return
-		clipmax_z = input(usr, "Maximum Z to clip at", "Map element loading", "[world.maxz]") as null|num
-		if(clipmax_z == null)
-			return
-
 	var/rotatetext = rotate ? " rotated by [rotate] degrees" : ""
-	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
-	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
-	if(dungeoning)
-		load_dungeon(ME, rotate, TRUE, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
+	if(!using_vz)
+		if(alert("Clip map to bounds?","Map element loading","Yes","No") == "Yes")
+			clipmin_x = input(usr, "Minimum X to clip at", "Map element loading", "1") as null|num
+			if(clipmin_x == null)
+				return
+			clipmax_x = input(usr, "Maximum X to clip at", "Map element loading", "[world.maxx]") as null|num
+			if(clipmax_x == null)
+				return
+			clipmin_y = input(usr, "Minimum Y to clip at", "Map element loading", "1") as null|num
+			if(clipmin_y == null)
+				return
+			clipmax_y = input(usr, "Maximum Y to clip at", "Map element loading", "[world.maxy]") as null|num
+			if(clipmax_y == null)
+				return
+			clipmin_z = input(usr, "Minimum Z to clip at", "Map element loading", "1") as null|num
+			if(clipmin_z == null)
+				return
+			clipmax_z = input(usr, "Maximum Z to clip at", "Map element loading", "[world.maxz]") as null|num
+			if(clipmax_z == null)
+				return
+
+		log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
+		message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
+		if(dungeoning)
+			load_dungeon(ME, rotate)
+		else
+			//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
+			ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
+		message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"][rotatetext].")
 	else
-		//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
-		ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
-	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"][rotatetext].")
+		var/datum/virtual_z/vz = map.addMapElementVLevel(ME, buffer_size = 0)
+		message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "virtual z-level [vz.id], "][rotatetext].")
 
 /client/proc/create_awaymission()
 	set category = "Admin"
@@ -1310,8 +1312,8 @@ fieldset {width:140px;}
 			override = 1
 
 	to_chat(src, "Attempting to load [AM.name] ([AM.file_path])...")
-	createRandomZlevel(override, AM, usr)
-	to_chat(src, "The away mission has been generated on z-level [world.maxz] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
+	var/datum/virtual_z/vz = createRandomZlevel(override, AM, usr)
+	to_chat(src, "The away mission has been generated on v-level [vz.id] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
 
 /client/proc/send_to_heck(var/mob/dead/observer/O in dead_mob_list)
 	set name = "Send to hell"
@@ -1330,7 +1332,7 @@ fieldset {width:140px;}
 	if(!O || !O.key)
 		return
 	if(!(/datum/map_element/dungeon/hell in existing_dungeons))
-		load_dungeon(/datum/map_element/dungeon/hell)
+		load_dungeon(/datum/map_element/dungeon/hell, 0, TRUE)
 	var/datum/map_element/dungeon/hell/H = locate(/datum/map_element/dungeon/hell) in existing_dungeons
 	var/list/turf/turfs = list()
 	for(var/turf/T in H.spawned_atoms)

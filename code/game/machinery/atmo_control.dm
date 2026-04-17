@@ -40,7 +40,7 @@
 		<li>Monitor Pressure: <a href="?src=\ref[src];toggle_monitoring=pressure">[is_monitoring("pressure") ? "Yes" : "No"]</a>
 		<li>Monitor Temperature: <a href="?src=\ref[src];toggle_monitoring=temperature">[is_monitoring("temperature") ? "Yes" : "No"]</a>"}
 
-	for(var/gas_ID in XGM.gases)
+	for(var/gas_ID in XGM.noteworthy_gases)
 		var/datum/gas/gas_datum = XGM.gases[gas_ID]
 		dat += {"<li>Monitor [gas_datum.name] Concentration: <a href="?src=\ref[src];toggle_monitoring=[gas_ID]">[is_monitoring(gas_ID) ? "Yes" : "No"]</a>"}
 	dat += "</ul>"
@@ -159,7 +159,7 @@
 				if(data["temperature"])
 					sensor_part += "<tr><th>Temperature:</th><td>[data["temperature"]] K</td></tr>"
 				var/header_added = FALSE
-				for(var/gas_ID in XGM.gases)
+				for(var/gas_ID in XGM.noteworthy_gases)
 					if(data[gas_ID])
 						if(!header_added)
 							header_added = TRUE

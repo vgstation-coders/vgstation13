@@ -1293,7 +1293,7 @@ About the new airlock wires panel:
 	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/tool/weldingtool/WT = I
-			if (WT.remove_fuel(0, user))
+			if (WT.remove_fuel(1, user))
 				if (!welded)
 					welded = 1
 				else

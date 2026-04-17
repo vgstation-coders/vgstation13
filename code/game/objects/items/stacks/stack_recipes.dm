@@ -297,7 +297,6 @@ var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes",
 	new/datum/stack_recipe/blacksmithing("tower shield", /obj/item/item_head/tower_shield,			20, time = 10 SECONDS, required_strikes = 20, other_reqs = list(/obj/item/stack/sheet/plasteel = 5)),
 	))
 
-
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/metal, 1, 4, 60),
 	new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),
@@ -467,6 +466,12 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("Tank dispenser",				/obj/structure/dispenser/empty,						2,	time = 10,	one_per_turf = 1				),
 	new/datum/stack_recipe("Fireaxe cabinet",				/obj/item/mounted/frame/fireaxe_cabinet_frame,		2,	time = 50									),
 	null,
+	new/datum/stack_recipe("fence", /obj/structure/fence, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe("fence post", /obj/structure/fence/post, 2, time = 50, one_per_turf = 1),
+	null,
+	new/datum/stack_recipe("fence door", /obj/structure/fence/door, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe("secure fence door", /obj/structure/fence/door/secure, 2, time = 50, one_per_turf = 1),
+	null,
 	new/datum/stack_recipe("lockless lockbox", /obj/item/weapon/storage/lockbox/nolock, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
 	null,
 	new/datum/stack_recipe("Vault Door assembly",			/obj/structure/door_assembly/door_assembly_vault,	8,	time = 50,	one_per_turf = 1,	on_floor = 1),
@@ -591,6 +596,7 @@ var/list/datum/stack_recipe/cloth_recipes_with_tool = list (
 	new/datum/stack_recipe/cloth("Villager Dress",			/obj/item/clothing/under/villager_dress,		5,	time = 200),
 	"Suits",
 	new/datum/stack_recipe/cloth("Labcoat",					/obj/item/clothing/suit/storage/labcoat/linen,	3,	time = 120),
+	new/datum/stack_recipe/cloth("Suit Jacket",				/obj/item/clothing/suit/suitjacket,				3,	time = 120),
 	"Hats",
 	new/datum/stack_recipe/cloth("Soft Cap",				/obj/item/clothing/head/soft/linen,				2,	time = 80),
 	new/datum/stack_recipe/cloth("Flat Cap",				/obj/item/clothing/head/flatcap/linen,			2,	time = 80),

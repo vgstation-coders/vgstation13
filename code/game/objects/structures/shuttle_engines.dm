@@ -173,7 +173,7 @@
 
 /obj/structure/shuttle/engine/propulsion/DIY/canAffixHere(var/mob/user)
 	var/turf/T = get_step(src, dir)
-	if(!istype(T, /turf/space))
+	if(!istype(T, /turf/space) || !istype(T,/turf/unsimulated/floor/planetary))
 		to_chat(user, "<span class = 'warning'>\The [src] must be facing and bordering space to be affixed.</span>")
 		return FALSE
 	for(var/obj/O in loc)

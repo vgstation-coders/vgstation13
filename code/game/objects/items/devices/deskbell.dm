@@ -207,6 +207,10 @@
 	. = ..()
 	frequency = deskbell_freq_rnd
 
+/obj/item/device/deskbell/signaler/trader/New()
+	. = ..()
+	frequency = deskbell_freq_pox
+
 /////ASSEMBLY/////
 
 /obj/item/device/deskbell_assembly
@@ -334,6 +338,7 @@ var/global/deskbell_freq_hop = call(/obj/item/device/deskbell/signaler/proc/get_
 var/global/deskbell_freq_medbay = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
 var/global/deskbell_freq_brig = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
 var/global/deskbell_freq_rnd = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
+var/global/deskbell_freq_pox = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
 
 /obj/item/device/deskbell/signaler/proc/get_new_bellfreq()
 	var/i = rand(MINIMUM_FREQUENCY,MAXIMUM_FREQUENCY)

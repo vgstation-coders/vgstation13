@@ -52,7 +52,7 @@
 			if(1)
 				emote("me", MESSAGE_HEAR, "growls.")
 			if(2)
-				if(loc.type==/turf/unsimulated/floor/planetary/water/jungle)
+				if(loc?.type==/turf/unsimulated/floor/planetary/water/jungle)
 					emote("me", MESSAGE_HEAR, "splashes.")
 				else
 					emote("me", MESSAGE_HEAR, "growls.")
@@ -65,18 +65,21 @@
 	icon_living="schnapps"
 	icon_dead="schnapps-dead"
 	behavior_flags = ANIMAL_BEHAVIOR_RETALIATE
-	animal_flags = ANIMAL_FLAG_IMMORTAL
+	animal_flags = ANIMAL_FLAG_IMMORTAL | ANIMAL_FLAG_NEVER_ROT
 	movespeed=6
 	health=120
 	maxHealth=120
 	armor=list(melee=35,bullet=15,laser=20,energy=0,bomb=10,bio=0,rad=0)
 	petable=TRUE
+	is_pet=TRUE
 
 /mob/living/simple_animal/complex/crocodile/schnapps/get_offspring_cost()
 	return 0 //no infinite schnapps.	
 /mob/living/simple_animal/complex/crocodile/schnapps/can_offspring()
 	return FALSE
 
+/mob/living/simple_animal/complex/crocodile/get_butchering_products()
+	return list(/datum/butchering_product/skin/lizard/lots, /datum/butchering_product/teeth/lots)
 
 /mob/living/simple_animal/complex/crocodile/schnapps/tick_state_attacking()
 	.=..()

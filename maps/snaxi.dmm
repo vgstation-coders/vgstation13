@@ -1114,21 +1114,7 @@
 /turf/simulated/floor/wood,
 /area/surface/forest/deer)
 "add" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/snow,
-/area/surface/junkyard)
-"ade" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
-/turf/unsimulated/floor/snow,
-/area/surface/junkyard)
-"adf" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "adg" = (
@@ -1151,10 +1137,6 @@
 "adj" = (
 /obj/structure/rack,
 /obj/item/clothing/under/greypants,
-/turf/unsimulated/floor/snow,
-/area/surface/junkyard)
-"adk" = (
-/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "adl" = (
@@ -1223,10 +1205,6 @@
 "adA" = (
 /turf/simulated/wall/mineral/wood,
 /area/surface/junkyard)
-"adB" = (
-/obj/structure/fence/corner,
-/turf/unsimulated/floor/snow,
-/area/surface/junkyard)
 "adC" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -1237,14 +1215,9 @@
 /area/surface/junkyard)
 "adD" = (
 /obj/structure/hanging_lantern{
-	dir = 8
+	dir = 1
 	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/unsimulated/floor/snow/asphalt,
+/turf/unsimulated/floor/snow/permafrost,
 /area/surface/junkyard)
 "adE" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1295,13 +1268,10 @@
 /turf/unsimulated/floor/snow/permafrost,
 /area/surface/junkyard)
 "adM" = (
-/obj/structure/hanging_lantern{
-	dir = 1
-	},
 /obj/effect/decal/cleanable/blood/oil{
 	icon_state = "floor2"
 	},
-/turf/unsimulated/floor/snow/permafrost,
+/turf/unsimulated/floor/snow/asphalt,
 /area/surface/junkyard)
 "adN" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1392,20 +1362,12 @@
 /turf/simulated/wall/mineral/wood,
 /area/surface/outer/ne)
 "aed" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
 /turf/unsimulated/floor/snow/asphalt,
-/area/surface/junkyard)
-"aee" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/snow,
 /area/surface/junkyard)
 "aef" = (
 /obj/structure/fence/door/opened,
@@ -1838,9 +1800,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/forest/north)
 "afT" = (
@@ -1859,8 +1819,7 @@
 /area/surface/forest/north)
 "afV" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/full/reinforced,
@@ -1875,8 +1834,7 @@
 	})
 "afW" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -1890,8 +1848,7 @@
 	})
 "agb" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/full/reinforced,
@@ -1905,8 +1862,7 @@
 	})
 "agc" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -2052,8 +2008,7 @@
 	})
 "agt" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -2070,8 +2025,7 @@
 	})
 "agu" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -2243,8 +2197,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/disposal{
@@ -3093,8 +3046,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible{
 	dir = 4
@@ -5409,9 +5361,7 @@
 	},
 /area/crew_quarters/sleep)
 "aoy" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -7301,8 +7251,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/surface/icecore)
@@ -16229,9 +16178,7 @@
 	},
 /area/medical/patient_room1)
 "aKK" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
@@ -17333,8 +17280,7 @@
 /obj/structure/grille,
 /obj/structure/window/full/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/port{
@@ -17620,12 +17566,6 @@
 /obj/structure/closet/toolcloset,
 /turf/simulated/floor/plating,
 /area/surface/forest/north)
-"aOj" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
 "aOl" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -19501,9 +19441,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "aSC" = (
@@ -20396,13 +20334,6 @@
 	icon_state = "brown"
 	},
 /area/supply/sorting)
-"aUH" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/obj/structure/fence,
-/turf/unsimulated/floor/snow/asphalt,
-/area/surface/snow)
 "aUI" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -22346,8 +22277,7 @@
 "aZk" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
@@ -22359,8 +22289,7 @@
 "aZm" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
@@ -22550,8 +22479,7 @@
 /area/medical/chemistry)
 "aZT" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -23630,10 +23558,6 @@
 	},
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
-"bcF" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
 "bcG" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -24196,12 +24120,6 @@
 /obj/structure/bed/chair/vehicle/snowmobile/security,
 /turf/simulated/floor/engine/concrete,
 /area/surface/snow)
-"bdP" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
 "bdQ" = (
 /turf/simulated/floor,
 /area/station/garage)
@@ -24215,8 +24133,7 @@
 /obj/structure/grille,
 /obj/structure/window/full/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/station/garage)
@@ -24229,8 +24146,7 @@
 /area/station/garage)
 "bdT" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -24323,7 +24239,7 @@
 /turf/simulated/wall,
 /area/supply/lobby)
 "bdZ" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
@@ -29187,9 +29103,7 @@
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "bpy" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "bpz" = (
@@ -29253,16 +29167,6 @@
 	d2 = 8;
 	icon_state = "1-8";
 	tag = ""
-	},
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
-"bpF" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
 	},
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
@@ -29391,9 +29295,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "bqm" = (
@@ -29403,9 +29305,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "bqn" = (
@@ -29462,10 +29362,6 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
-"bqy" = (
-/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "bqz" = (
@@ -29604,13 +29500,6 @@
 /area/engineering/engine_storage{
 	name = "Engineering Coat Storage"
 	})
-"bqU" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/obj/structure/cable,
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
 "bqV" = (
 /obj/machinery/space_heater/air_conditioner,
 /turf/simulated/floor/plating,
@@ -29665,9 +29554,7 @@
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
 "brb" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable,
 /turf/unsimulated/floor/snow,
 /area/surface/forest/south)
@@ -29994,12 +29881,6 @@
 /area/hallway/primary/starboard{
 	name = "\improper Central Medical Hallway"
 	})
-"bsk" = (
-/obj/structure/fence/end{
-	dir = 8
-	},
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
 "bsl" = (
 /obj/machinery/door/airlock/glass{
 	id_tag = "";
@@ -30199,8 +30080,7 @@
 "bsH" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
@@ -30340,12 +30220,6 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/snow/asphalt,
-/area/surface/snow)
-"bsZ" = (
-/obj/structure/fence/end{
-	dir = 1
-	},
-/turf/unsimulated/floor/snow,
 /area/surface/snow)
 "bta" = (
 /turf/simulated/floor{
@@ -30628,9 +30502,7 @@
 	name = "\improper Engineering Storage"
 	})
 "btO" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
@@ -34288,9 +34160,7 @@
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/forest/south)
 "bAN" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2"
@@ -44777,8 +44647,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -45887,8 +45756,7 @@
 "bUA" = (
 /obj/structure/closet/coffin,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/wood,
 /area/chapel/office)
@@ -45899,8 +45767,7 @@
 "bUC" = (
 /obj/structure/closet/coffin,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -47658,8 +47525,7 @@
 	icon_state = "0-2"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/door/poddoor{
 	density = 0;
@@ -48034,9 +47900,7 @@
 	icon_state = "1-8";
 	tag = ""
 	},
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/auxsolarstarboard{
 	name = "Southeast Solar Control"
 	})
@@ -48374,9 +48238,7 @@
 	name = "Southeast Solar Control"
 	})
 "bYX" = (
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/maintenance/auxsolarstarboard{
 	name = "Southeast Solar Control"
 	})
@@ -49909,8 +49771,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -49977,8 +49838,7 @@
 	one_way = 1
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -50029,8 +49889,7 @@
 	icon_state = "0-2"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -50234,8 +50093,7 @@
 	icon_state = "0-2"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -50308,8 +50166,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
@@ -50338,8 +50195,7 @@
 /obj/structure/cable,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
@@ -50366,8 +50222,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
@@ -50390,8 +50245,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /obj/structure/cable{
@@ -50418,8 +50272,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /obj/structure/cable{
@@ -51578,14 +51431,12 @@
 /area/shuttle/administration/centcom)
 "ceF" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "ceG" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ceH" = (
@@ -51595,8 +51446,8 @@
 	},
 /area/prison/solitary)
 "ceI" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ceJ" = (
@@ -51604,8 +51455,8 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "ceK" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "ceL" = (
@@ -51617,12 +51468,6 @@
 /obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor{
 	name = "plating"
-	},
-/area/prison/solitary)
-"ceN" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
 	},
 /area/prison/solitary)
 "ceO" = (
@@ -51851,19 +51696,14 @@
 /area/centcom/living)
 "cfs" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
-	},
-/area/prison/solitary)
-"cft" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cfu" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cfv" = (
@@ -51894,15 +51734,8 @@
 	name = "plating"
 	},
 /area/centcom/living)
-"cfz" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "cfB" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cfC" = (
 /obj/machinery/dna_scannernew,
@@ -60296,15 +60129,7 @@
 	},
 /area/centcom/holding)
 "czH" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"czI" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "czJ" = (
@@ -60417,10 +60242,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"czX" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "czY" = (
 /obj/structure/closet,
@@ -61321,17 +61142,13 @@
 	},
 /area/syndicate_mothership)
 "cCu" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
 "cCv" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
@@ -61480,10 +61297,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
-"cCY" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cDd" = (
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'FOURTH WALL'.";
@@ -63749,7 +63562,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/obj/machinery/computer/climate,
+/obj/machinery/computer/climate/long_range,
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "dpV" = (
@@ -64214,9 +64027,7 @@
 	dir = 1
 	},
 /obj/machinery/recharge_station,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/secret)
 "drk" = (
 /obj/structure/closet/secure_closet/miner,
@@ -64226,9 +64037,7 @@
 /area/derelict/secret)
 "drl" = (
 /obj/structure/ore_box,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/secret)
 "drm" = (
 /obj/machinery/door/airlock{
@@ -64273,9 +64082,7 @@
 /area/derelict/secret)
 "drs" = (
 /obj/structure/closet/secure_closet/miner,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/airless/burnt,
 /area/derelict/secret)
 "drt" = (
 /obj/structure/bed/chair{
@@ -64418,9 +64225,7 @@
 /area/derelict/secret)
 "drK" = (
 /obj/structure/ore_box,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/airless/broken,
 /area/derelict/secret)
 "drL" = (
 /obj/structure/grille,
@@ -65102,7 +64907,7 @@
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
-/obj/machinery/computer/climate,
+/obj/machinery/computer/climate/long_range,
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "dtv" = (
@@ -65177,9 +64982,7 @@
 	name = "Mining Station Maintenance";
 	req_access_txt = "48"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "dtC" = (
 /obj/machinery/door/airlock/glass_medical{
@@ -65411,9 +65214,7 @@
 	},
 /area/derelict/secret)
 "dtZ" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/secret)
 "dua" = (
 /obj/structure/cable{
@@ -65422,9 +65223,7 @@
 	icon_state = "4-8"
 	},
 /obj/item/weapon/storage/box/lights/mixed,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "dub" = (
 /obj/structure/cable{
@@ -65442,9 +65241,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/secret)
 "dud" = (
 /obj/machinery/light/small{
@@ -65702,19 +65499,10 @@
 /area/derelict/secret)
 "duz" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
-/area/derelict/secret)
-"duA" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "duB" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "duC" = (
 /obj/machinery/power/terminal{
@@ -65963,9 +65751,7 @@
 /area/derelict/secret)
 "dva" = (
 /obj/item/weapon/gun/energy/plasma/MP40k,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "dvb" = (
 /obj/structure/cable{
@@ -65975,9 +65761,7 @@
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/derelict/secret)
 "dvc" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -65992,9 +65776,7 @@
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/derelict/secret)
 "dve" = (
 /obj/machinery/door/airlock/external{
@@ -66659,7 +66441,7 @@
 	name = "Outpost Mining Dock"
 	})
 "dwy" = (
-/obj/machinery/computer/climate,
+/obj/machinery/computer/climate/long_range,
 /turf/simulated/floor,
 /area/mine/eva{
 	name = "Outpost Mining Dock"
@@ -70520,9 +70302,7 @@
 "dDx" = (
 /obj/machinery/botany/extractor,
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -70568,9 +70348,7 @@
 /obj/structure/table,
 /obj/item/weapon/storage/lockbox/diskettebox/large/open/botanydisk,
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
@@ -75568,8 +75346,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating/airless,
@@ -75736,9 +75513,7 @@
 	dir = 1
 	},
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /obj/machinery/door/poddoor/shutters/preopen{
 	dir = 2;
@@ -75760,6 +75535,11 @@
 	dir = 2;
 	id_tag = "TSdisplay";
 	name = "Tradeship Display Shutters"
+	},
+/obj/item/device/deskbell/signaler/trader{
+	pixel_y = 5;
+	pixel_x = 10;
+	name = "Trade Ship Counter Bell"
 	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -75959,10 +75739,6 @@
 	},
 /turf/simulated/floor/engine/concrete,
 /area/medical/paramedics)
-"dTR" = (
-/obj/structure/fence/end,
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
 "dUv" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced/plasma{
@@ -76467,8 +76243,7 @@
 "eBd" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -79114,9 +78889,7 @@
 	},
 /area/hallway/primary/port)
 "iwM" = (
-/obj/structure/fence/end{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	dir = 10;
 	icon_state = "warning";
@@ -79202,9 +78975,7 @@
 	external_pressure_bound = 101;
 	on = 1
 	},
-/turf/simulated/floor{
-	icon_state = "damaged3"
-	},
+/turf/simulated/floor/damaged,
 /area/engine/aux_control{
 	name = "Engineering Medical"
 	})
@@ -80500,9 +80271,7 @@
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "kkb" = (
@@ -81200,8 +80969,7 @@
 "ljU" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
@@ -82474,6 +82242,18 @@
 	icon_state = "wood-broken6"
 	},
 /area/icebar)
+"mUw" = (
+/obj/structure/hanging_lantern{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/snow/asphalt,
+/area/surface/junkyard)
 "mVD" = (
 /obj/machinery/atmospherics/unary/cold_sink/freezer{
 	current_temperature = 273
@@ -82851,10 +82631,6 @@
 	icon_state = "red"
 	},
 /area/security/checkpoint/supply)
-"noa" = (
-/obj/structure/fence/corner,
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
 "noj" = (
 /obj/structure/sign/taxi{
 	dir = 1
@@ -83279,8 +83055,7 @@
 "nSP" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
@@ -84234,7 +84009,7 @@
 	},
 /area/security/interrogation)
 "pnd" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "pnI" = (
@@ -84566,9 +84341,7 @@
 /turf/simulated/wall/mineral/wood/log,
 /area/surface/forest/south)
 "pBN" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
@@ -84838,9 +84611,7 @@
 	d2 = 2;
 	icon_state = "0-2"
 	},
-/obj/structure/fence/cut/small{
-	dir = 4
-	},
+/obj/structure/fence/cut/small,
 /obj/item/tape/police{
 	icon_state = "police_door";
 	tag = "icon-police_door"
@@ -85637,9 +85408,7 @@
 "rqN" = (
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
@@ -85962,12 +85731,6 @@
 /area/security/toilet{
 	name = "Brig Dormitories"
 	})
-"rLW" = (
-/obj/structure/fence/end{
-	dir = 4
-	},
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
 "rMY" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 8
@@ -86577,13 +86340,6 @@
 /area/hallway/primary/starboard{
 	name = "\improper Central Medical Hallway"
 	})
-"svV" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/obj/structure/cable,
-/turf/unsimulated/floor/snow,
-/area/surface/forest/south)
 "sxc" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable{
@@ -86752,9 +86508,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor{
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged,
 /area/engine/aux_control{
 	name = "Engineering Medical"
 	})
@@ -87672,7 +87426,7 @@
 /turf/simulated/floor,
 /area/science/chargebay)
 "ubg" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
@@ -88356,9 +88110,7 @@
 	name = "\improper Central Medical Hallway"
 	})
 "vqD" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
@@ -88997,9 +88749,7 @@
 /turf/simulated/floor/plating,
 /area/storage/auxillary)
 "wrE" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable,
 /obj/structure/cable,
 /turf/unsimulated/floor/snow,
@@ -89741,7 +89491,7 @@
 /turf/simulated/floor/server,
 /area/tcomms/chamber)
 "xAd" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
@@ -90377,9 +90127,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -111714,7 +111462,7 @@ aYZ
 aYZ
 aYZ
 aYZ
-bdP
+bpy
 bgV
 bgV
 bgV
@@ -112015,7 +111763,7 @@ aYZ
 aYZ
 bdN
 aYZ
-bdP
+bpy
 ubg
 bhe
 bnO
@@ -112026,7 +111774,7 @@ bnO
 bnO
 bnO
 boK
-bpF
+bgV
 bpy
 aYZ
 aYZ
@@ -112316,7 +112064,7 @@ aYZ
 aYZ
 aYZ
 aYZ
-bdP
+bpy
 xAd
 uOh
 bhd
@@ -112330,7 +112078,7 @@ naM
 bqt
 bpE
 ykv
-svV
+brb
 aYZ
 aYZ
 aYZ
@@ -112632,7 +112380,7 @@ naM
 naM
 aYZ
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -112934,7 +112682,7 @@ bnP
 naM
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -113221,7 +112969,7 @@ aYZ
 aYZ
 aYZ
 aYZ
-bdP
+bpy
 bdZ
 bfL
 bgv
@@ -113539,7 +113287,7 @@ naM
 naM
 bqt
 bra
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -113841,7 +113589,7 @@ jXU
 naM
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -114143,7 +113891,7 @@ rbR
 naM
 naM
 brc
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -114445,7 +114193,7 @@ pFH
 naM
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -114747,7 +114495,7 @@ mmi
 naM
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -115049,7 +114797,7 @@ bmZ
 bmZ
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -115351,7 +115099,7 @@ boN
 bpM
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -115653,7 +115401,7 @@ xvu
 bpR
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -115955,7 +115703,7 @@ teL
 bmZ
 naM
 rev
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -116255,9 +116003,9 @@ bmZ
 bmZ
 bmZ
 bmZ
-bqy
+bpy
 vFw
-noa
+bpy
 aYZ
 aYZ
 aYZ
@@ -125024,7 +124772,7 @@ xxU
 bqR
 bqR
 tet
-bsZ
+pnd
 aBX
 aYZ
 aYZ
@@ -125327,7 +125075,7 @@ bqR
 tet
 bvd
 bNd
-aOj
+pnd
 aYZ
 aYZ
 aYZ
@@ -125629,7 +125377,7 @@ aQx
 buK
 bvd
 bNd
-aOj
+pnd
 aYZ
 aYZ
 aYZ
@@ -125931,7 +125679,7 @@ aAo
 buK
 bvd
 aDv
-aOj
+pnd
 aYZ
 aYZ
 aYZ
@@ -125952,7 +125700,7 @@ bvy
 bMs
 aYZ
 aYZ
-bdP
+bpy
 bgV
 bgV
 bgV
@@ -126233,7 +125981,7 @@ aAo
 buK
 bvd
 aDv
-aOj
+pnd
 aYZ
 aYZ
 aYZ
@@ -126534,7 +126282,7 @@ xec
 heK
 fwo
 buK
-bsZ
+pnd
 pnd
 bbD
 aAo
@@ -126560,7 +126308,7 @@ qaR
 hCU
 xPD
 hCU
-bqU
+brb
 aYZ
 aYZ
 aYZ
@@ -133140,7 +132888,7 @@ aAo
 aAo
 aAo
 aBX
-dTR
+pnd
 aBV
 uZS
 fzl
@@ -133441,7 +133189,7 @@ aAo
 aAo
 aAo
 aAo
-aOj
+pnd
 aDv
 baf
 uZS
@@ -133743,7 +133491,7 @@ aAo
 aAo
 aAo
 aAo
-aOj
+pnd
 aDv
 baf
 uZS
@@ -134045,7 +133793,7 @@ aAo
 aAo
 aAo
 aAo
-aOj
+pnd
 aDv
 baf
 uZS
@@ -134056,10 +133804,10 @@ aAo
 aAo
 aAo
 aCe
-aUH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
+aSB
 aCe
 aJi
 aAo
@@ -134347,7 +134095,7 @@ aAo
 aAo
 aAo
 aAo
-bsk
+pnd
 aDv
 baf
 uZS
@@ -139470,7 +139218,7 @@ adY
 adY
 adY
 adY
-aOj
+pnd
 aDv
 aFc
 aGE
@@ -139772,7 +139520,7 @@ aCV
 aCV
 aKg
 aAo
-aOj
+pnd
 aDv
 aFc
 aGE
@@ -139816,7 +139564,7 @@ aAo
 aAo
 aBV
 aBV
-bsZ
+pnd
 btC
 btZ
 bux
@@ -140074,7 +139822,7 @@ aEN
 aHG
 aKh
 aKg
-aOj
+pnd
 aDv
 aFc
 aGE
@@ -143436,26 +143184,26 @@ aAo
 bpu
 aSz
 aTF
-aUH
-aUH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
+aSB
+aSB
 btH
 bug
 btH
 bue
 btH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
 btH
 bue
 bwQ
 bue
 bwQ
-aUH
-aUH
+aSB
+aSB
 bvN
 bsd
 bxH
@@ -145525,11 +145273,11 @@ bsm
 cgC
 lBb
 aTF
-aUH
-aUH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
+aSB
+aSB
 rEV
 aSz
 wek
@@ -147060,26 +146808,26 @@ aAo
 bpw
 aSz
 aTF
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
 bvN
 aSz
 bwm
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
-aUH
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
+aSB
 bvN
 aSz
 aQx
@@ -152476,12 +152224,12 @@ aVM
 aXO
 aXO
 aQx
-rLW
+pnd
 sXv
 sXv
 aDv
 aDv
-rLW
+pnd
 aAo
 aOI
 aAo
@@ -152779,10 +152527,10 @@ aWJ
 aXO
 aAo
 aBX
-bcF
-bcF
-bcF
-bcF
+pnd
+pnd
+pnd
+pnd
 pnd
 aAo
 aAo
@@ -155427,10 +155175,10 @@ aab
 aab
 aab
 aab
-ade
-adk
-adk
-aee
+add
+add
+add
+add
 aem
 aab
 aab
@@ -156632,16 +156380,16 @@ aab
 aab
 aab
 aab
-ade
-adk
-adk
-adB
-adp
+add
+add
+add
+adA
+adD
 adT
-adf
+add
 aep
-adk
-aee
+add
+add
 aab
 aab
 aat
@@ -156937,7 +156685,7 @@ aab
 add
 adj
 adu
-adA
+mUw
 adM
 adS
 adw
@@ -157239,7 +156987,7 @@ aab
 add
 adm
 adp
-adD
+adC
 adO
 adS
 aeg
@@ -159954,16 +159702,16 @@ aab
 aab
 aab
 aab
-adf
-adk
-adk
-adk
-adk
-adk
-adk
-adk
-adk
-adB
+add
+add
+add
+add
+add
+add
+add
+add
+add
+add
 aab
 aab
 aat
@@ -199670,7 +199418,7 @@ ceG
 cfd
 cBS
 ceO
-cfz
+cfB
 cBS
 ccH
 ccH
@@ -199958,7 +199706,7 @@ ccH
 ccH
 ccH
 ccH
-cCY
+ccH
 ccH
 ccH
 ccH
@@ -200575,7 +200323,7 @@ cBS
 ceI
 ceL
 cBS
-cft
+ceK
 ceL
 cBS
 ccH
@@ -203894,7 +203642,7 @@ ccH
 ccH
 ccH
 cBS
-ceN
+ceF
 cfc
 cBS
 cfv
@@ -204200,7 +203948,7 @@ ceO
 ceL
 cBS
 ceL
-cft
+ceK
 cBS
 ccH
 ccH
@@ -210893,8 +210641,8 @@ cyx
 cyC
 czx
 czH
-czX
-czX
+czH
+czH
 cAU
 cBm
 cBm
@@ -211194,7 +210942,7 @@ cyx
 cyx
 cyC
 cyz
-czI
+czH
 czY
 cyx
 cAV
@@ -211496,7 +211244,7 @@ cyy
 cyw
 cyC
 cyy
-czI
+czH
 czY
 cyx
 cAV
@@ -212100,7 +211848,7 @@ cyw
 cyz
 cyC
 czy
-czI
+czH
 cyC
 cyC
 cAV
@@ -212402,7 +212150,7 @@ cyA
 cyx
 cyC
 cyA
-czI
+czH
 cyC
 cyC
 cAW
@@ -212704,7 +212452,7 @@ cyA
 cyx
 cyC
 cyw
-czI
+czH
 cyC
 cAu
 cAV
@@ -213006,7 +212754,7 @@ cyy
 cyV
 cyC
 cyA
-czI
+czH
 czZ
 cyT
 cAV
@@ -213308,7 +213056,7 @@ cyB
 cyA
 cyC
 cyw
-czI
+czH
 cyC
 cAu
 cAV
@@ -213610,7 +213358,7 @@ cyA
 cyz
 cyC
 cyy
-czI
+czH
 cyC
 cAu
 cAV
@@ -213912,7 +213660,7 @@ cyB
 cyy
 cyC
 cyw
-czI
+czH
 czZ
 cyT
 cAV
@@ -214214,7 +213962,7 @@ cyC
 cyC
 cyC
 cyw
-czI
+czH
 cyC
 cAu
 cAX
@@ -620252,7 +620000,7 @@ dqx
 dte
 dpy
 dtZ
-duA
+duB
 dva
 dpy
 doU

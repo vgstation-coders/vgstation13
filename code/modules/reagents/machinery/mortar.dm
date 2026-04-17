@@ -15,6 +15,7 @@
 		/obj/item/trash/scrap                 = list(IRON,10),
 		/obj/item/stack/sheet/metal           = list(IRON,U_PER_SHEET),
 		/obj/item/stack/sheet/glass           = list(SILICA,U_PER_SHEET),
+		/obj/item/stack/sheet/wood            = list(SAWDUST,U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA,U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/uranium = list(URANIUM,U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/clown   = list(BANANA,U_PER_SHEET),
@@ -55,6 +56,7 @@
 		/obj/item/weapon/reagent_containers/pill = list("generic",0),
 		/obj/item/ice_crystal                = list(ICE, 10),
 		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 10),
+		/obj/item/weapon/grown/log    		 = list(SAWDUST = 10),
 	)
 
 
@@ -117,12 +119,16 @@
 		for(var/i in juice_items)
 			if(istype(crushable, i))
 				id = juice_items[i]
-		if(!id)
+		if(!islist(id))
 			return
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
-		if(juiceable.potency == -1)
-			juiceable.potency = 0
-		reagents.add_reagent(id[1], min(round(5*sqrt(juiceable.potency)), volume - reagents.total_volume))
+		var/add_amount = id[id[1]]
+		if(istype(crushable,/obj/item/weapon/reagent_containers/food/snacks/grown))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
+			if(juiceable.potency == -1)
+				juiceable.potency = 0
+			if(juiceable.potency)
+				add_amount = juiceable.potency
+		reagents.add_reagent(id[1], min(round(5*sqrt(add_amount)), volume - reagents.total_volume))
 	else if(is_type_in_list(crushable, blend_items))
 		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")

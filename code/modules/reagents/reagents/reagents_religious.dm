@@ -290,6 +290,17 @@
 	id = INCENSE_BANANA
 	description = "This fragrance helps you be more clumsy, so you can laugh at yourself."
 
+/datum/reagent/incense/rose
+	name = "Rose Incense"
+	id = INCENSE_ROSES
+	description = "This fragrance makes you dreamy, you can't help but fall in love."
+
+/datum/reagent/incense/rose/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(prob(5))
+		to_chat(M,"<span class='warning'>[pick("They look cute...", "Men in tuxedos...", "Women in dresses...")]</span>")
+
 /datum/reagent/incense/banana/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1

@@ -744,7 +744,7 @@ var/datum/controller/gameticker/ticker
 	create_random_orders(3) //Populate the order system so cargo has something to do
 	if(istype(mode, /datum/gamemode/dynamic))
 		var/datum/gamemode/dynamic/D = mode
-		if(D.living_players.len < 6) // Fill all the SMES to capacity if there's 5 or less players, to give players more time to set up the power.
+		if(D.roundstart_pop_ready < 6) // Fill all the SMES to capacity if there's 5 or less players, to give players more time to set up the power.
 			for(var/obj/machinery/power/battery/smes/S in power_machines)
 				if(S.charge) //Only do this if the SMES has any charge in the first place
 					S.charge = S.capacity
