@@ -149,10 +149,16 @@
 
 /obj/structure/shuttle/diag_wall/Bumped(atom/movable/AM)
 	. = ..()
+	var/turf/dest
+	var/turf/adjacent
 	if(get_dir(src,AM) == dir)
-		AM.Move(get_step(AM,counterclockwise_perpendicular_dirs[dir]))
+		dest = get_step(AM,counterclockwise_perpendicular_dirs[dir])
+		adjacent = get_step(src,counterclockwise_perpendicular_dirs[dir])
 	else if(get_dir(src,AM) == counterclockwise_perpendicular_dirs[dir])
-		AM.Move(get_step(AM,dir))
+		dest = get_step(AM,dir)
+		adjacent = get_step(screen_alarms_locs,dir)
+	if(!adjacent.density && !adjacent.has_dense_content())
+		AM.Move(dest)
 
 /obj/structure/shuttle/diag_wall/ex_act(severity)
 	return
