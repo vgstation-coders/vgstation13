@@ -115,12 +115,12 @@
 
 /obj/machinery/shield_capacitor/process()
 	var/to_drain = charge_rate
-	if(power_connnection.connected)
+	if(power_connection.connected)
 		if(power_connection.get_powernet())
-			var/to_drain = charge_rate
+			to_drain = charge_rate
 			if(stored_charge + charge_rate > max_charge)
 				to_drain = max_charge - stored_charge
-			stored_charge += power_connnection.add_load(to_drain)
+			stored_charge += power_connection.add_load(to_drain)
 		else
 			power_connection.disconnect()
 
