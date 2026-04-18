@@ -224,7 +224,7 @@
 
 	var/turf/T = get_turf(src)
 	var/list/covered_turfs = get_shielded_turfs(T)
-	for(var/turf/O in trange(field_radius, src))
+	for(var/turf/O in covered_turfs)
 		var/obj/effect/energy_field/E = new(O)
 		field.Add(E)
 		CHECK_TICK
