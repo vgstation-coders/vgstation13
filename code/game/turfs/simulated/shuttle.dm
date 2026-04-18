@@ -158,6 +158,10 @@
 		dest = get_step(AM,dir)
 		adjacent = get_step(screen_alarms_locs,dir)
 	if(!adjacent.density && !adjacent.has_dense_content())
+		if(!dest.density)
+			var/obj/structure/shuttle/diag_wall/other = locate() in dest
+			if(other && other.dir = opposite_dirs[dir] && !dest.has_dense_content(other))
+				dest = adjacent
 		AM.Move(dest)
 
 /obj/structure/shuttle/diag_wall/ex_act(severity)
