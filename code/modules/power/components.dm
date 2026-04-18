@@ -94,7 +94,7 @@
 
 /datum/power_connection/proc/add_load(var/amount, var/priority = power_priority)
 	if(get_powernet())
-		return powernet.add_load(amount, priority)
+		powernet.add_load(amount, priority)
 
 /datum/power_connection/proc/get_surplus()
 	if(get_powernet())
