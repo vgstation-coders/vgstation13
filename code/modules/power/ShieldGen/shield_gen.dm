@@ -237,7 +237,7 @@
 
 	flick("generator_[icon_prefix]_stop", src)
 
-	QDEL_LIST_NULL(field)
+	QDEL_LIST_CUT(field)
 	visible_message("<span class='notice'>\The [src] shuts down, the droning noise fading out.</span>", "<span class='notice'>You hear heavy droning fade out.</span>")
 	active = FALSE
 
