@@ -141,7 +141,7 @@
 	if(href_list["set_charge_rate"])
 		charge_rate = clamp(round(input(usr,"Set new charge rate ([min_charge_rate/1000]-[max_charge_rate/1000])","Charge rate",charge_rate/1000),0.001), min_charge_rate/1000, max_charge_rate/1000) * 1000
 	if(href_list["adjust_charge_rate"])
-		charge_rate = clamp(charge_rate + text2num(href_list["adjust_charge_rate"]), min_charge_rate, max_charge_rate)
+		charge_rate = clamp(charge_rate + (text2num(href_list["adjust_charge_rate"])*1000), min_charge_rate, max_charge_rate)
 	return 1
 
 /obj/machinery/shield_capacitor/proc/toggle_connection()
