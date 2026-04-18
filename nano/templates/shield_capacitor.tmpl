@@ -11,6 +11,16 @@ Used In File(s): /code/modules/power/ShieldGen/shield_capacitor.dm
         <div class="itemContents">{{:helper.link(data.active ? 'On' : 'Off', 'power', {'toggle_active' : '1'})}}</div>
     </div>
     <div class="item">
+        <div class="itemLabelWide">Active cable:</div>
+        <div class="itemContents">
+        {{if data.cable}}
+            <span class="good">Found.</span>
+        {{else}}
+            <span class="bad">Not found.</span>
+        {{/if}}
+        </div>
+    </div>
+    <div class="item">
         <div class="itemLabelWide">Stability:</div>
         <div class="itemContents">
         {{if data.stability}}

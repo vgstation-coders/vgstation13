@@ -97,6 +97,7 @@
 	var/data[0]
 	data["locked"] = locked && !issilicon(user) && !isAdminGhost(user)
 	data["active"] = power_connection.connected
+	data["cable"] = power_connection.powered()
 	data["stability"] = time_since_fail > 2
 	data["charge"] = stored_charge / 1000
 	data["charge_percentage"] = 100 * stored_charge / max_charge
@@ -116,7 +117,7 @@
 /obj/machinery/shield_capacitor/process()
 	var/to_drain = charge_rate
 	if(power_connection.connected)
-		if(power_connection.get_powernet())
+		if(power_connection.powered())
 			to_drain = charge_rate
 			if(stored_charge + charge_rate > max_charge)
 				to_drain = max_charge - stored_charge
