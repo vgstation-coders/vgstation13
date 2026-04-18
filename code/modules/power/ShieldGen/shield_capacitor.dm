@@ -93,11 +93,15 @@
 		return
 	ui_interact(user)
 
+/obj/machinery/shield_capacitor/proc/has_cable()
+	var/turf/T = get_turf(src)
+	return (connection && connection.cable) || (T && T.get_cable_node())
+
 /obj/machinery/shield_capacitor/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 	data["locked"] = locked && !issilicon(user) && !isAdminGhost(user)
 	data["active"] = power_connection.connected
-	data["cable"] = power_connection.powered()
+	data["cable"] = has_cable()
 	data["stability"] = time_since_fail > 2
 	data["charge"] = stored_charge / 1000
 	data["charge_percentage"] = 100 * stored_charge / max_charge
