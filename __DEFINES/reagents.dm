@@ -25,6 +25,7 @@
 #define VACCINE 			"vaccine"
 #define WATER 			"water"
 #define LUBE 			"lube"
+#define CHERRYLUBE 		"cherrylube"
 #define SODIUM_POLYACRYLATE			"sodium_polyacrylate"
 #define PHALANXIMINE 			"phalanximine"
 #define TOXIN 			"toxin"
@@ -630,6 +631,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define DEXALINS list(DEXALIN, THYMOL)
 #define ACIDS list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
 #define WATERS list(WATER, HOLYWATER, ICE)
+#define LUBES list(LUBE, CHERRYLUBE)
 #define CORES list(SOFTCORES, MEDCORES)
 #define ALLNANITES list(NANITES, AUTISTNANITES)
 #define SUGARS list(SUGAR, CORNSYRUP)

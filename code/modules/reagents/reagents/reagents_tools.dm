@@ -133,13 +133,23 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.11775
 	specheatcap = 2.71388
+	var/lube_color = null
 
 /datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
 		return 1
 
 	if(volume >= 1)
-		T.wet(800, TURF_WET_LUBE)
+		T.wet(800, TURF_WET_LUBE, lube_color)
+
+/datum/reagent/lube/cherry
+	name = "Cherry-Flavored Lube"
+	id = CHERRYLUBE
+	description = "Your favorite."
+	color = "#FF80B0"
+	density = 1.11775
+	specheatcap = 2.71388
+	lube_color = "#FF80B0"
 
 /datum/reagent/luminol
 	name = "Luminol"

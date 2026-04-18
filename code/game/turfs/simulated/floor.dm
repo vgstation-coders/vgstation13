@@ -694,14 +694,16 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 /turf/simulated/proc/is_wet() //Returns null if no puddle, otherwise returns the puddle
 	return locate(/obj/effect/overlay/puddle) in src
 
-/turf/simulated/proc/wet(delay = 800, slipperiness = TURF_WET_WATER)
+/turf/simulated/proc/wet(delay = 800, slipperiness = TURF_WET_WATER, custom_color)
 	var/obj/effect/overlay/puddle/P = is_wet()
 	if(P)
 		if(slipperiness > P.wet)
 			P.wet = slipperiness
 			P.lifespan = max(delay, P.lifespan)
 	else
-		new /obj/effect/overlay/puddle(src, slipperiness, delay)
+		P = new /obj/effect/overlay/puddle(src, slipperiness, delay)
+	if(custom_color)
+		P.color = custom_color
 
 /turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
 	var/obj/effect/overlay/puddle/P = is_wet()

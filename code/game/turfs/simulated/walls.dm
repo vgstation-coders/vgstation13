@@ -214,22 +214,24 @@
 /turf/simulated/wall/r_wall/attack_rotting(mob/user as mob)
 	to_chat(user, "<span class='notice'>This [src] feels rather unstable.</span>")
 
+/turf/simulated/wall/proc/remove_holes(obj/item/tool/solder/S, mob/user)
+	if(!S.remove_fuel(bullet_marks*2,user))
+		return
+	S.playtoolsound(src, 100)
+	to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [S].</span>")
+	bullet_marks = 0
+	icon = initial(icon)
+	if(peepers)
+		reset_view()
+
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(W.attack_delay)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if(istype(W,/obj/item/tool/solder) && bullet_marks)
-		var/obj/item/tool/solder/S = W
-		if(!S.remove_fuel(bullet_marks*2,user))
-			return
-		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-		to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [W].</span>")
-		bullet_marks = 0
-		icon = initial(icon)
-		if(peepers)
-			reset_view()
+	if(issolder(W) && bullet_marks)
+		remove_holes(W,user)
 		return
 
 	//Get the user's location
