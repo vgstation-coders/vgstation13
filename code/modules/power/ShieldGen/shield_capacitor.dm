@@ -124,7 +124,8 @@
 		if(power_connection.powered())
 			if(stored_charge + charge_rate > max_charge)
 				to_drain = max_charge - stored_charge
-			stored_charge += power_connection.add_load(to_drain)
+			power_connection.add_load(to_drain)
+			stored_charge += to_drain
 		else
 			power_connection.disconnect()
 
