@@ -41,5 +41,6 @@
 			open -= T
 			if(T != origin)
 				closed += T
+			CHECK_TICK
 
 	return closed
