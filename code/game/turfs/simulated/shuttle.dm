@@ -160,7 +160,7 @@
 	if(!adjacent.density && !adjacent.has_dense_content())
 		if(!dest.density)
 			var/obj/structure/shuttle/diag_wall/other = locate() in dest
-			if(other && other.dir = opposite_dirs[dir] && !dest.has_dense_content(other))
+			if(other && other.dir == opposite_dirs[dir] && !dest.has_dense_content(other))
 				dest = adjacent
 		AM.Move(dest)
 
