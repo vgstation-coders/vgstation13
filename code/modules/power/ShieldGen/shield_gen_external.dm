@@ -10,7 +10,7 @@
 	icon_prefix = "external"
 
 /obj/machinery/shield_gen/external/get_shielded_turfs(var/turf/origin)
-	var/list/open = list()
+	var/list/open = list(get_turf(src))
 	var/list/closed = list()
 
 	while(open.len)

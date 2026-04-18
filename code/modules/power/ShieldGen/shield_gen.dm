@@ -248,7 +248,7 @@
 //grab the border tiles in a circle around this machine
 /obj/machinery/shield_gen/proc/get_shielded_turfs(var/turf/origin)
 	var/list/out = list()
-	for(var/turf/T in trange(field_radius, origin))
+	for(var/turf/T in trange(field_radius, src))
 		if(T != origin && get_dist(src,T) == field_radius)
 			out.Add(T)
 		CHECK_TICK
