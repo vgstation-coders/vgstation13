@@ -71,7 +71,7 @@ Used In File(s): /code/modules/power/ShieldGen/shield_gen.dm
         <div class="itemContents">
                 {{:helper.displayBar(data.field_strength_cap, data.min_field_strength_cap, data.max_field_strength_cap, (data.field_strength_cap >= data.max_field_strength_cap/2) ? 'good' : (data.field_strength_cap >= data.max_field_strength_cap/4) ? 'average' : 'bad', data.field_strength_cap + '/' + data.max_field_strength_cap + ' renwicks')}}
                 <div style="clear: both; padding-top: 4px;">
-                    {{:helper.link('NIN', null, {'adjust_field_strength_cap' : -data.max_field_strength_cap}, (data.field_strength_cap > data.min_field_strength_cap) ? null : 'disabled')}}
+                    {{:helper.link('MIN', null, {'adjust_field_strength_cap' : -data.max_field_strength_cap}, (data.field_strength_cap > data.min_field_strength_cap) ? null : 'disabled')}}
 					{{:helper.link('SET', null, {'set_field_strength_cap' : 1})}}
 					{{:helper.link('MAX', null, {'adjust_field_strength_cap' : data.max_field_strength_cap}, (data.field_strength_cap < data.max_field_strength_cap) ? null : 'disabled')}}
                 </div>
