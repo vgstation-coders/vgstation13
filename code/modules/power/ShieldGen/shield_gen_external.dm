@@ -39,6 +39,7 @@
 					if(add_this_turf && !(O in open) && !(O in closed))
 						open += O
 			open -= T
-			closed += T
+			if(T != origin)
+				closed += T
 
 	return closed
