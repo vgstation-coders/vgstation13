@@ -65,7 +65,7 @@
 /obj/machinery/shield_gen/Destroy()
 	..()
 	owned_capacitor = null
-	destroy_field()
+	QDEL_LIST_NULL(field)
 
 /obj/machinery/shield_gen/proc/find_capacitor()
 	for(var/obj/machinery/shield_capacitor/possible_capacitor in range(1, src))
@@ -172,6 +172,7 @@
 				average_field_strength += E.strength
 			else
 				E.Strengthen(-E.strength)
+			CHECK_TICK
 
 		average_field_strength /= field.len
 		if(average_field_strength < 0)
@@ -221,21 +222,14 @@
 
 	flick("generator_[icon_prefix]_start", src)
 
-	var/list/covered_turfs = get_shielded_turfs()
 	var/turf/T = get_turf(src)
-	if(T in covered_turfs)
-		covered_turfs.Remove(T)
-	for(var/turf/O in covered_turfs)
+	var/list/covered_turfs = get_shielded_turfs(T)
+	for(var/turf/O in trange(field_radius, src))
 		var/obj/effect/energy_field/E = new(O)
 		field.Add(E)
-	del covered_turfs
+		CHECK_TICK
 	visible_message("<span class='notice'>\The [src] starts up, emitting a heavy droning noise.</span>", "<span class='notice'>You hear heavy droning start up.</span>")
 	active = TRUE
-
-/obj/machinery/shield_gen/proc/destroy_field()
-	for(var/obj/effect/energy_field/D in field)
-		field.Remove(D)
-		QDEL_NULL(D)
 
 /obj/machinery/shield_gen/proc/stop()
 	if(!active)
@@ -243,7 +237,7 @@
 
 	flick("generator_[icon_prefix]_stop", src)
 
-	destroy_field()
+	QDEL_LIST_NULL(field)
 	visible_message("<span class='notice'>\The [src] shuts down, the droning noise fading out.</span>", "<span class='notice'>You hear heavy droning fade out.</span>")
 	active = FALSE
 
@@ -252,11 +246,12 @@
 	power_change()
 
 //grab the border tiles in a circle around this machine
-/obj/machinery/shield_gen/proc/get_shielded_turfs()
+/obj/machinery/shield_gen/proc/get_shielded_turfs(var/turf/origin)
 	var/list/out = list()
-	for(var/turf/T in trange(field_radius, src))
-		if(get_dist(src,T) == field_radius)
+	for(var/turf/T in trange(field_radius, origin))
+		if(T != origin && get_dist(src,T) == field_radius)
 			out.Add(T)
+		CHECK_TICK
 	return out
 
 /obj/machinery/shield_gen/kick_act()
