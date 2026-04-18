@@ -104,8 +104,8 @@
 	data["min_charge"] = 0
 	data["max_charge"] = max_charge / 1000
 	data["charge_rate"] = charge_rate / 1000
-	data["min_charge_rate"] = min_charge_rate
-	data["max_charge_rate"] = max_charge_rate
+	data["min_charge_rate"] = min_charge_rate / 1000
+	data["max_charge_rate"] = max_charge_rate / 1000
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
