@@ -156,7 +156,7 @@
 		adjacent = get_step(src,counterclockwise_perpendicular_dirs[dir])
 	else if(get_dir(src,AM) == counterclockwise_perpendicular_dirs[dir])
 		dest = get_step(AM,dir)
-		adjacent = get_step(screen_alarms_locs,dir)
+		adjacent = get_step(src,dir)
 	if(!adjacent.density && !adjacent.has_dense_content())
 		if(!dest.density)
 			var/obj/structure/shuttle/diag_wall/other = locate() in dest
