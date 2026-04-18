@@ -188,6 +188,12 @@
 		return 0
 	if(href_list["toggle_active"])
 		toggle()
+	else if(href_list["set_field_radius"])
+		field_radius = clamp(input(usr,"Set new field radius","Field radius",field_radius), MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
+	else if(href_list["set_strengthen_rate"])
+		strengthen_rate = clamp(input(usr,"Set new strengthen rate","Strengthen rate",strengthen_rate), MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)
+	else if(href_list["set_field_strength_cap"])
+		field_strength_cap = clamp(input(usr,"Set new field strength cap","Field strength cap",field_strength_cap), MIN_FIELD_STRENGTH_CAP, MAX_FIELD_STRENGTH_CAP)
 	else if(href_list["adjust_field_radius"])
 		field_radius = clamp(field_radius + text2num(href_list["adjust_field_radius"]), MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
 	else if(href_list["adjust_strengthen_rate"])
