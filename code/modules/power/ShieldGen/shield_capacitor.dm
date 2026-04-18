@@ -95,7 +95,7 @@
 
 /obj/machinery/shield_capacitor/proc/has_cable()
 	var/turf/T = get_turf(src)
-	return anchored && ((connection && connection.cable) || (T && T.get_cable_node()))
+	return anchored && ((power_connection && power_connection.cable) || (T && T.get_cable_node()))
 
 /obj/machinery/shield_capacitor/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
