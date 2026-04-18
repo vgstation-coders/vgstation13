@@ -22,11 +22,7 @@
 	req_one_access = list(access_security, access_engine_major) // For locking/unlocking controls
 	density = 1
 	anchored = TRUE
-	use_power = MACHINE_POWER_USE_IDLE			//0 use nothing
-							//1 use idle power
-							//2 use active power
-	idle_power_usage = 20
-	active_power_usage = 100
+	use_power = MACHINE_POWER_USE_NONE
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/active = FALSE
 	var/field_radius = 3
