@@ -150,6 +150,8 @@
 
 
 /obj/structure/mirror/bullet_act(var/obj/item/projectile/Proj)
+	if(!shattered && istype(Proj, /obj/item/projectile/beam))
+		return PROJECTILE_COLLISION_REBOUND
 	if(prob(Proj.damage * 2))
 		if(!shattered)
 			shatter(Proj.firer)
