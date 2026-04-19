@@ -366,6 +366,13 @@
 		reagents.trans_to(M,50)
 
 
+/obj/item/weapon/pen/lead
+	desc = "A primitive writing instrument made out of a thin piece of lead."
+	name = "lead stick"
+	icon_state="leadpen"
+	colour= "gray"
+	colour_rgb="#373737"
+
 /*
  * Sleepy Pens
  */

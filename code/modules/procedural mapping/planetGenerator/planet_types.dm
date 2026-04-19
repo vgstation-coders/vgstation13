@@ -42,6 +42,8 @@
 	var/ruin_budget = RUIN_BUDGET_PLANET
 	// Virtual z level this planet exists on
 	var/datum/virtual_z/v
+	// Allocation size for this planet's virtual z-level
+	var/allocation_size = ALLOCATION_SMALL
 
 
 /datum/planet_type/New()
@@ -189,23 +191,36 @@
 		"West"
 	)
 
-	// 30% chance to use a complete name, 70% chance to build one
-	if(prob(30))
-		return pick(whole_names)
+	// Collect existing planet names to avoid duplicates
+	var/list/existing_names = list()
+	if(SSmapping)
+		for(var/datum/planet_type/existing in SSmapping.planets)
+			existing_names += existing.planet_name
 
-	// Build a name from components
-	var/generated_name = ""
-	var/name_type = rand(1, 3)
+	var/max_attempts = 100
+	for(var/attempt = 1 to max_attempts)
+		var/candidate = ""
 
-	switch(name_type)
-		if(1) // Prefix + Base + Suffix
-			generated_name = "[pick(prefixes)] [pick(bases)] [pick(suffixes)]"
-		if(2) // Prefix + Base only
-			generated_name = "[pick(prefixes)] [pick(bases)]"
-		if(3) // Base + Suffix only
-			generated_name = "[pick(bases)] [pick(suffixes)]"
+		// 30% chance to use a complete name, 70% chance to build one
+		if(prob(30))
+			candidate = pick(whole_names)
+		else
+			// Build a name from components
+			var/name_type = rand(1, 3)
+			switch(name_type)
+				if(1) // Prefix + Base + Suffix
+					candidate = "[pick(prefixes)] [pick(bases)] [pick(suffixes)]"
+				if(2) // Prefix + Base only
+					candidate = "[pick(prefixes)] [pick(bases)]"
+				if(3) // Base + Suffix only
+					candidate = "[pick(bases)] [pick(suffixes)]"
 
-	return generated_name
+		if(!(candidate in existing_names))
+			return candidate
+
+	// Fallback: append a unique number to guarantee uniqueness
+	var/fallback = "[pick(prefixes)] [pick(bases)] [pick(suffixes)]-[rand(1000, 9999)]"
+	return fallback
 
 /datum/planet_type/beach
 	name = "beach planet"

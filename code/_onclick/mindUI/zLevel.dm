@@ -5,9 +5,8 @@
 #define ZMAP_COLOR_TRANSIT   "#FFC800" // Yellow - shuttles in motion
 #define ZMAP_COLOR_PARKING   "#6464FF" // Blue - parked shuttles
 #define ZMAP_COLOR_PLANET    "#32C832" // Green - planetary surfaces
-#define ZMAP_COLOR_MAP_ELEMENT "#C83232" // Red - ruins/dungeons
-#define ZMAP_COLOR_CUSTOM    "#C832C8" // Purple - custom
-#define ZMAP_COLOR_DEFAULT   "#969696" // Gray - default
+#define ZMAP_COLOR_PROTECTED "#C83232" // Red - protected areas (centcomm, dungeons, etc)
+#define ZMAP_COLOR_SPACE     "#969696" // Gray - space areas (station, derelict, etc)
 #define ZMAP_COLOR_CURRENT   "#FFFFFF" // White - current location highlight
 
 ////////////////////////////////////////////////////////
@@ -72,25 +71,24 @@
 /obj/abstract/mind_ui_element/zmap_legend
 	layer = MIND_UI_FRONT
 	offset_x = ZMAP_UI_SIZE/2
-	offset_y = ZMAP_UI_SIZE/2 - 80
+	offset_y = ZMAP_UI_SIZE/2 - 70
 
 /obj/abstract/mind_ui_element/zmap_legend/New(turf/loc, var/datum/mind_ui/P)
 	. = ..(loc, P)
 
 	var/icon/legend = new /icon('icons/ui/zlevel_map/1x1.dmi', "pixel")
-	legend.Scale(80, 70)
+	legend.Scale(80, 60)
 	legend.Blend(rgb(0, 0, 0, 180), ICON_MULTIPLY) // Semi-transparent black background
 
 	var/list/legend_entries = list(
 		list("Transit", ZMAP_COLOR_TRANSIT),
 		list("Parking", ZMAP_COLOR_PARKING),
 		list("Planet", ZMAP_COLOR_PLANET),
-		list("Ruin/Away", ZMAP_COLOR_MAP_ELEMENT),
-		list("Custom", ZMAP_COLOR_CUSTOM),
-		list("Default", ZMAP_COLOR_DEFAULT)
+		list("Protected", ZMAP_COLOR_PROTECTED),
+		list("Space", ZMAP_COLOR_SPACE)
 	)
 
-	var/y_pos = 60
+	var/y_pos = 50
 	for(var/list/entry in legend_entries)
 		var/icon/swatch = new /icon('icons/ui/zlevel_map/1x1.dmi', "pixel")
 		swatch.Scale(8, 8)
@@ -106,19 +104,19 @@
 /obj/abstract/mind_ui_element/zmap_legend_text
 	layer = MIND_UI_FRONT
 	offset_x = ZMAP_UI_SIZE/2 + 14
-	offset_y = ZMAP_UI_SIZE/2 - 80
+	offset_y = ZMAP_UI_SIZE/2 - 70
 
 /obj/abstract/mind_ui_element/zmap_legend_text/New(turf/loc, var/datum/mind_ui/P)
 	. = ..(loc, P)
 
 	var/icon/text_bg = new /icon('icons/ui/zlevel_map/1x1.dmi', "pixel")
-	text_bg.Scale(66, 70)
+	text_bg.Scale(66, 60)
 	text_bg.Blend(rgb(0, 0, 0, 0), ICON_MULTIPLY) // Transparent background
 	icon = text_bg
 
 	maptext_width = 66
-	maptext_height = 70
-	maptext = {"<div style=\"font-family: Fixedsys, monospace; font-size: 7pt; color: white; line-height: 10px; padding-top: 4px;\">Transit<br>Parking<br>Planet<br>Ruin/Away<br>Custom<br>Default</div>"}
+	maptext_height = 60
+	maptext = {"<div style=\"font-family: Fixedsys, monospace; font-size: 7pt; color: white; line-height: 10px; padding-top: 4px;\">Transit<br>Parking<br>Planet<br>Protected<br>Space</div>"}
 
 	UpdateUIScreenLoc()
 
@@ -133,10 +131,13 @@
 	v = vz
 	. = ..(loc, P)
 
-	offset_x = -ZMAP_UI_SIZE/2 + floor((v.x_min-1)/2) + ZMAP_UI_PADDING
-	offset_y = -ZMAP_UI_SIZE/2 + floor((v.y_min-1)/2) + ZMAP_UI_PADDING
-	var/new_width = v.size_x / 2
-	var/new_height = v.size_y / 2
+	var/usable_size = ZMAP_UI_SIZE - 2 * ZMAP_UI_PADDING
+	var/scale_x = usable_size / world.maxx
+	var/scale_y = usable_size / world.maxy
+	offset_x = -ZMAP_UI_SIZE/2 + floor((v.x_min-1) * scale_x) + ZMAP_UI_PADDING
+	offset_y = -ZMAP_UI_SIZE/2 + floor((v.y_min-1) * scale_y) + ZMAP_UI_PADDING
+	var/new_width = max(round(v.size_x * scale_x), 1)
+	var/new_height = max(round(v.size_y * scale_y), 1)
 
 	var/type_desc
 	var/type_color
@@ -151,15 +152,12 @@
 		if(VZ_PLANET)
 			type_desc = "Planet Surface"
 			type_color = ZMAP_COLOR_PLANET
-		if(VZ_MAP_ELEMENT)
-			type_desc = "Ruin/Dungeon/Away Mission"
-			type_color = ZMAP_COLOR_MAP_ELEMENT
-		if(VZ_CUSTOM)
-			type_desc = "Custom Level"
-			type_color = ZMAP_COLOR_CUSTOM
+		if(VZ_PROTECTED)
+			type_desc = "Protected Area"
+			type_color = ZMAP_COLOR_PROTECTED
 		else
-			type_desc = "Default Level"
-			type_color = ZMAP_COLOR_DEFAULT
+			type_desc = "Space Area"
+			type_color = ZMAP_COLOR_SPACE
 
 	var/icon/ico = new /icon(icon, icon_state)
 	ico.Scale(new_width, new_height)
@@ -224,7 +222,6 @@
 #undef ZMAP_COLOR_TRANSIT
 #undef ZMAP_COLOR_PARKING
 #undef ZMAP_COLOR_PLANET
-#undef ZMAP_COLOR_MAP_ELEMENT
-#undef ZMAP_COLOR_CUSTOM
-#undef ZMAP_COLOR_DEFAULT
+#undef ZMAP_COLOR_PROTECTED
+#undef ZMAP_COLOR_SPACE
 #undef ZMAP_COLOR_CURRENT

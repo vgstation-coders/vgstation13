@@ -53,6 +53,8 @@
 	//Fuck the preprocessor
 	var/dorf = 0
 	var/linked_to_centcomm = 1
+	var/shuttle_call_label = "Call Shuttle"
+	var/shuttle_cancel_label = "Cancel Shuttle"
 
 	//Disable holominimaps on generation, map-wide. If you're just testing things out, change config.txt instead.
 	var/disable_holominimap_generation = 0
@@ -68,6 +70,7 @@
 
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
+	var/list/load_custom_fixedvaults = list() //don't use this
 	var/center_x = 226
 	var/center_y = 254
 
@@ -76,6 +79,7 @@
 	var/has_engines = FALSE // Is the map a space ship with big engines?
 	var/broken_lights = TRUE //broken lights roundstart
 	var/can_have_robots = TRUE
+	var/planet_size = 0 // If set, overrides planet allocation size for this map
 
 	var/list/daynight_z_lvls = list() //Z-levels that participate in the day/night cycle
 
@@ -114,6 +118,10 @@
 	var/datum/virtual_z/new_vz = new(level, world.maxx, world.maxy, 1, 1, skip_turf_setup = FALSE)
 	new_vz.id = level.z
 	new_vz.name = level.name
+	if(level.z == zCentcomm)
+		new_vz.level_type = VZ_PROTECTED
+	else if(level.planetside)
+		new_vz.level_type = VZ_PLANET
 	if(level.z in daynight_z_lvls)
 		daynight_v_lvls += new_vz
 	new_vz.gps_allowed = level.z != zCentcomm
@@ -178,9 +186,11 @@
 	var/shuttle_height = dims[2]
 	var/datum/virtual_z/new_vz = addVLevel(shuttle_width + 2*buffer, shuttle_height + 2*buffer, system = system)
 	new_vz.name = "[shuttle.name] - transit area"
+	new_vz.level_type = VZ_TRANSIT
 	new_vz.linked_shuttle = shuttle
 	for(var/turf/T in new_vz.get_turfs(FALSE))
 		var/turf/space/transit/t_turf = T.ChangeTurf(/turf/space/transit,0,0,1,0)
+		t_turf.v = new_vz
 		t_turf.pushdirection = shuttle.dir
 		t_turf.update_icon()
 		CHECK_TICK
@@ -195,7 +205,7 @@
 	if(istype(ME, /datum/map_element/away_mission))
 		prefix = "Away Mission: "
 	new_vz.name = "[prefix][ME.name]"
-	new_vz.level_type = VZ_MAP_ELEMENT
+	new_vz.level_type = VZ_PROTECTED
 	new_vz.gps_allowed = FALSE
 	new_vz.teleJammed = VZ_TELEPORTATION_FORBIDDEN
 	new_vz.bluespace_jammed = TRUE

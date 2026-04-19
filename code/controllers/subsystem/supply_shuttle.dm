@@ -126,7 +126,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			message_admins("WARNING: Cargo shuttle unable to find the station!")
 			warning("Cargo shuttle can't find station")
 	else //at station
-		for(var/obj/structure/shuttle/engine/propulsion/P in cargo_shuttle.linked_area)
+		for(var/obj/structure/shuttle/engine/propulsion/P in cargo_shuttle.shuttle_contents())
 			spawn()
 				P.shoot_exhaust()
 		sleep(3)
@@ -146,8 +146,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	if(moving)
 		return 0
 
-	if(forbidden_atoms_check(cargo_shuttle.linked_area))
-		return 0
+	for(var/area/shuttle_area in cargo_shuttle.linked_areas)
+		if(forbidden_atoms_check(shuttle_area))
+			return 0
 
 	return 1
 
@@ -170,9 +171,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			return
 
 /datum/subsystem/supply_shuttle/proc/scrub()
-	for (var/obj/effect/decal/cleanable/C in cargo_shuttle.linked_area)
+	for (var/obj/effect/decal/cleanable/C in cargo_shuttle.shuttle_contents())
 		qdel(C)
-	for (var/obj/effect/rune/R in cargo_shuttle.linked_area)
+	for (var/obj/effect/rune/R in cargo_shuttle.shuttle_contents())
 		qdel(R)
 
 /datum/subsystem/supply_shuttle/proc/sell()
@@ -184,7 +185,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	var/recycled_crates = 0
 
-	for(var/atom/movable/MA in cargo_shuttle.linked_area)
+	for(var/atom/movable/MA in cargo_shuttle.shuttle_contents())
 		if(MA.anchored && !ismecha(MA))
 			continue
 
@@ -261,7 +262,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	for(var/datum/cargo_forwarding/CF in cargo_forwards)
 		var/reason = null
 		var/specific_reason = FALSE // For debug logs
-		if(!CF.associated_crate || get_area(CF.associated_crate) != cargo_shuttle.linked_area)
+		if(!CF.associated_crate || !cargo_shuttle.has_area(get_area(CF.associated_crate)))
 			reason = "Crate is missing"
 			specific_reason = TRUE
 			if(!CF.associated_manifest)
@@ -270,7 +271,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 				log_debug("CARGO FORWARDING: [CF] denied: Crate was in [get_area(CF.associated_crate)], not in [cargo_shuttle.linked_area]")
 		if(!CF.weighed)
 			reason = "Crate not weighed"
-		if(!CF.associated_manifest || get_area(CF.associated_manifest) != cargo_shuttle.linked_area)
+		if(!CF.associated_manifest || !cargo_shuttle.has_area(get_area(CF.associated_manifest)))
 			reason = "Manifest is missing"
 			specific_reason = TRUE
 			if(!CF.associated_manifest)
@@ -313,7 +314,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	var/list/clear_turfs = list()
 
-	for(var/turf/T in cargo_shuttle.linked_area)
+	for(var/turf/T in cargo_shuttle.shuttle_contents())
 		if(T.density)
 			continue
 		var/contcount

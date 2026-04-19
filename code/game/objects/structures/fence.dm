@@ -72,6 +72,10 @@
 	uncut_state = "post"
 	cuttable = FALSE
 
+/obj/structure/fence/corner
+	icon_state = "endcorner0"
+	uncut_state = "endcorner"
+
 /obj/structure/fence/cut/small
 	hole_size = SMALL_HOLE
 

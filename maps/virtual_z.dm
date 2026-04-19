@@ -11,7 +11,7 @@
 	var/size_y = ALLOCATION_SMALL
 	var/datum/zLevel/parent_z
 	var/active = TRUE
-	var/level_type = VZ_DEFAULT
+	var/level_type = VZ_SPACE
 
 	var/list/area/areas = list()
 	var/list/shuttle_landing_zones = list()

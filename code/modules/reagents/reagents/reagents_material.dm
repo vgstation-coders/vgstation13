@@ -367,6 +367,7 @@
 	color = "#676767" //rgb: 103, 103, 103
 	density = 11.34
 	specheatcap = 0.129
+	fission_absorbtion = 5000
 
 /datum/reagent/lead/on_mob_life(var/mob/living/M) //less potent mercury
 	if(..())

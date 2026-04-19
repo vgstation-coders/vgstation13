@@ -649,6 +649,7 @@
 	desc = "Generates a holofield which permits passage of crewmembers while blocking airflow and hostile fauna."
 	icon_state = "holo_gen"
 	active_state = "holo_gen_on"
+	anchored = 1
 	density = 0
 	plane = ABOVE_HUMAN_PLANE
 	layer = CLOSED_FIREDOOR_LAYER
@@ -658,6 +659,7 @@
 	cover_self = TRUE
 	directional = TRUE
 	damage_multiplier = 5 // These are weaker than the base type since they allow passage
+	machine_flags = WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | SHUTTLEWRENCH
 
 /obj/machinery/shieldwallgen/holofield/can_connect(var/obj/machinery/shieldwallgen/othergen)
 	// Ensure only the same subtypes are connected

@@ -25,3 +25,33 @@
 	result.dir = turn(shuttle.linked_port.dir, 180)
 
 	return result
+
+//generate_parking_area proc
+//Creates a small virtual z-level with space turfs for a shuttle to park in
+//Arguments: shuttle (/datum/shuttle object)
+//Returns: docking port
+/proc/generate_parking_area(datum/shuttle/shuttle)
+	var/buffer = world.view
+	var/list/dims = shuttle.get_size()
+	if(!dims)
+		return null
+	var/shuttle_width = dims[1]
+	var/shuttle_height = dims[2]
+	var/datum/virtual_z/parking_vz = map.addVLevel(shuttle_width + 2*buffer, shuttle_height + 2*buffer)
+	parking_vz.name = "[shuttle.name] - parking area"
+	parking_vz.level_type = VZ_PARKING
+	parking_vz.linked_shuttle = shuttle
+
+	var/list/offsets = shuttle.get_docking_port_offset()
+	var/port_x = offsets[1]
+	var/port_y = offsets[2]
+
+	var/dest_x = parking_vz.x_min + buffer + port_x
+	var/dest_y = parking_vz.y_min + buffer + port_y
+	var/turf/destination_turf = get_step(locate(dest_x, dest_y, parking_vz.z()), shuttle.linked_port.dir)
+
+	var/obj/docking_port/destination/result = new(destination_turf)
+	result.dir = turn(shuttle.linked_port.dir, 180)
+	result.areaname = "[shuttle.name] deep space parking"
+
+	return result

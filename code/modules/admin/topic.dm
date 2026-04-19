@@ -5358,10 +5358,10 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 
 		if(S.linked_area)
 			if(killed_objs == 1)
-				for(var/turf/T in S.linked_area)
+				for(var/turf/T in S.shuttle_contents())
 					if(istype(T, /turf/simulated))
 						qdel(T)
-				for(var/obj/O in S.linked_area)
+				for(var/obj/O in S.shuttle_contents())
 					if(istype(O, /obj/item) || istype(O, /obj/machinery) || istype(O, /obj/structure))
 						qdel(O)
 				to_chat(usr, "All turfs and objects deleted from [S.linked_area].")
@@ -5385,7 +5385,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			to_chat(usr, "The shuttle is in the middle of nowhere! (The 'linked_area' variable is either null or not an area, please report this)")
 			return
 
-		var/turf/T = locate(/turf/) in S.linked_area
+		var/turf/T = locate(/turf/) in S.shuttle_contents()
 		usr.forceMove(T)
 		to_chat(usr, "You have teleported to [capitalize(S.name)]")
 

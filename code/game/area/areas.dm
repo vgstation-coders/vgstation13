@@ -523,7 +523,7 @@ var/area/space_area
 
 /area/proc/get_shuttle()
 	for(var/datum/shuttle/S in shuttles)
-		if(S.linked_area == src)
+		if(S.has_area(src))
 			return S
 	return null
 

@@ -18,6 +18,7 @@ type PlanetData = {
   icon_data: string;
   beacons: BeaconData[];
   has_active_beacon: boolean;
+  is_encounter: boolean;
 };
 
 type Data = {
@@ -40,13 +41,20 @@ type Data = {
   generation_progress: number | null;
   other_scan_in_progress: boolean;
   scanning_disabled: boolean;
+  // Shuttle scanner fields (only present when is_shuttle_scanner is true)
+  is_shuttle_scanner?: boolean;
+  shuttle_found?: boolean;
+  shuttle_name?: string;
+  shuttle_in_space?: boolean;
+  passive_scanning?: boolean;
+  passive_progress?: number | null;
+  added_destinations?: boolean[];
 };
 
 const STAGE_TERRAIN = 1;
 const STAGE_RUIN = 2;
 const STAGE_POPULATION = 3;
 const STAGE_WEATHER = 4;
-const STAGE_FINALIZE = 5;
 
 export const PlanetScanner = (props) => {
   const { act, data } = useBackend<Data>();
@@ -70,6 +78,13 @@ export const PlanetScanner = (props) => {
     generation_progress,
     other_scan_in_progress,
     scanning_disabled,
+    is_shuttle_scanner,
+    shuttle_found,
+    shuttle_name,
+    shuttle_in_space,
+    passive_scanning,
+    passive_progress,
+    added_destinations,
   } = data;
 
   // State for cycling through planets
@@ -81,6 +96,10 @@ export const PlanetScanner = (props) => {
     : null;
 
   const totalPlanets = (powered && anchored && discovered_planets) ? discovered_planets.length : 0;
+
+  const currentAlreadyAdded = (is_shuttle_scanner && added_destinations && currentPlanetIndex < added_destinations.length)
+    ? added_destinations[currentPlanetIndex]
+    : false;
 
   // Reset planet index if it's out of bounds
   if (currentPlanetIndex >= totalPlanets && totalPlanets > 0) {
@@ -105,7 +124,7 @@ export const PlanetScanner = (props) => {
   };
 
   return (
-    <Window width={600} height={485}>
+    <Window width={600} height={passive_scanning ? 590 : 485}>
       <Window.Content>
         <Stack fill vertical>
           {!anchored && (
@@ -120,6 +139,14 @@ export const PlanetScanner = (props) => {
             <Stack.Item>
               <Section>
                 <Box color="bad">No power</Box>
+              </Section>
+            </Stack.Item>
+          )}
+
+          {!!is_shuttle_scanner && !!powered && !!anchored && !shuttle_found && (
+            <Stack.Item>
+              <Section>
+                <Box color="bad">No shuttle detected - scanner must be installed on a shuttle</Box>
               </Section>
             </Stack.Item>
           )}
@@ -218,6 +245,7 @@ export const PlanetScanner = (props) => {
                 </Stack.Item>
               )}
 
+
               {!!waiting_for_generation && generation_stage !== null &&(
                 <Stack.Item>
                   <Section title="Generating Planet...">
@@ -243,7 +271,7 @@ export const PlanetScanner = (props) => {
                         <ProgressBar
                           value={generation_stage >= STAGE_WEATHER ? 100 : 0}
                           maxValue={100}
-                          color={generation_stage >= STAGE_FINALIZE ? "good" : generation_stage >= STAGE_WEATHER ? "average" : "default"}
+                          color={generation_stage >= STAGE_WEATHER ? "good" : generation_stage >= STAGE_POPULATION ? "average" : "default"}
                         />
                       </Stack.Item>
                     </Stack>
@@ -253,7 +281,7 @@ export const PlanetScanner = (props) => {
 
               {!!has_discoveries && !scanning && !waiting_for_generation && (
                 <Stack.Item grow>
-                  <Section title="Discovered Planets">
+                  <Section title="Discoveries">
                     <Stack>
                       <Stack.Item width="280px">
                         <Box textAlign="center">
@@ -268,8 +296,8 @@ export const PlanetScanner = (props) => {
                               imageRendering: 'pixelated',
                             }}
                           />
-                          <Box mt={1} fontSize="12px" color="label">
-                            {currentPlanet ? currentPlanet.name : 'No Planet Type'}
+                          <Box mt={1} fontSize="12px" color={currentPlanet?.is_encounter ? "average" : "label"}>
+                            {currentPlanet ? currentPlanet.name : 'No Data'}
                           </Box>
                         </Box>
                       </Stack.Item>
@@ -332,13 +360,29 @@ export const PlanetScanner = (props) => {
                               </Stack.Item>
                               <Stack.Item grow />
                               <Stack.Item>
-                                <Button
-                                  icon="save"
-                                  content="Print Destination Disk"
-                                  disabled={!currentPlanet}
-                                  onClick={() => act('print_disk', { planet_index: currentPlanetIndex })}
-                                  tooltip="Create a destination disk for this planet"
-                                />
+                                {is_shuttle_scanner ? (
+                                  <Button
+                                    icon={currentAlreadyAdded ? "check" : "plus"}
+                                    content={currentAlreadyAdded ? "Already Added" : "Add Destination"}
+                                    disabled={!currentPlanet || currentAlreadyAdded || !shuttle_found}
+                                    onClick={() => act('add_destination', { planet_index: currentPlanetIndex })}
+                                    tooltip={
+                                      currentAlreadyAdded
+                                        ? "This destination is already in the shuttle's navigation"
+                                        : shuttle_found
+                                          ? `Add to ${shuttle_name}'s destinations`
+                                          : "No shuttle detected"
+                                    }
+                                  />
+                                ) : (
+                                  <Button
+                                    icon="save"
+                                    content="Print Destination Disk"
+                                    disabled={!currentPlanet}
+                                    onClick={() => act('print_disk', { planet_index: currentPlanetIndex })}
+                                    tooltip="Create a destination disk for this planet"
+                                  />
+                                )}
                               </Stack.Item>
                             </Stack>
                           </Stack.Item>
@@ -359,6 +403,27 @@ export const PlanetScanner = (props) => {
                 </Stack.Item>
               )}
 
+              {!!is_shuttle_scanner && !!passive_scanning && !scanning && !waiting_for_generation && (
+                <Stack.Item>
+                  <Section title="Passive Scan">
+                    <Stack vertical>
+                      <Stack.Item>
+                        <Box color="label" mb={1}>
+                          Hyperspace transit detected. Scanning passively...
+                        </Box>
+                      </Stack.Item>
+                      <Stack.Item>
+                        <ProgressBar
+                          value={passive_progress ?? 0}
+                          maxValue={100}
+                          color="teal"
+                        />
+                      </Stack.Item>
+                    </Stack>
+                  </Section>
+                </Stack.Item>
+              )}
+
               <Stack.Item>
                 <Section>
                   <Button
@@ -371,10 +436,14 @@ export const PlanetScanner = (props) => {
                         ? "Maximum scans reached"
                         : "Start Planet Scan"
                     }
-                    disabled={!can_scan}
+                    disabled={!can_scan || (is_shuttle_scanner && (!shuttle_found || !shuttle_in_space))}
                     onClick={() => act('start_scan')}
                     tooltip={
-                      other_scan_in_progress
+                      is_shuttle_scanner && !shuttle_found
+                        ? "No shuttle detected"
+                        : is_shuttle_scanner && !shuttle_in_space
+                        ? "Shuttle must be in deep space to scan"
+                        : other_scan_in_progress
                         ? "A planet scan is already in progress on this station - multiple scans are disabled due to electrical infetterence."
                         : at_scan_limit
                         ? "Maximum scans reached"
@@ -385,6 +454,7 @@ export const PlanetScanner = (props) => {
               </Stack.Item>
             </>
           )}
+
         </Stack>
       </Window.Content>
     </Window>
