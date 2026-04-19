@@ -35,6 +35,7 @@ var/list/existing_dungeons = list()
 	existing_dungeons.Add(ME) //Add it now, to prevent issues occuring when two dungeons are loaded at once
 
 	var/datum/virtual_z/used_vz = map.addMapElementVLevel(ME, rotation = rotate, buffer_size = 0, system = hidden)
+	used_vz.level_type = ME.vz_type
 
 	var/result = ME.load(used_vz.x_min - 1, used_vz.y_min - 1, used_vz.parent_z.z, rotate)
 

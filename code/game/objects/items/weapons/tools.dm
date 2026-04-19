@@ -879,6 +879,7 @@
 				"<span class='warning'>The tool isn't THAT thirsty.</span>")
 			return
 		var/reagentcheck = accepts_pacids ? G.reagents.has_any_reagents(SACIDS, 1) || G.reagents.has_any_reagents(PACIDS, 1) : G.reagents.has_any_reagents(SACIDS, 1)
+		reagentcheck = reagentcheck || G.reagents.has_reagent(LEAD,1)
 		if(!reagentcheck)
 			user.simple_message("<span class='warning'>The tool is not compatible with that.</span>",
 				"<span class='warning'>The tool won't drink that.</span>")
@@ -898,6 +899,8 @@
 				G.reagents.trans_id_to(src,PHENOL,transfer_amount)
 			else if(G.reagents.has_reagent(SACID, 1))
 				G.reagents.trans_id_to(src,SACID,transfer_amount)
+			else if(G.reagents.has_reagent(LEAD, 1))
+				G.reagents.trans_id_to(src,LEAD,transfer_amount)
 			else
 				G.reagents.trans_id_to(src,FORMIC_ACID,transfer_amount)
 			update_damage()
@@ -912,6 +915,7 @@
 		if(accepts_pacids)
 			mult += min(1,reagents.get_reagent_amounts(PACIDS)/rem_amt)
 		var/list/removable_reagents = accepts_pacids ? PACIDS + SACIDS : SACIDS
+		removable_reagents |= LEAD
 		for(var/reag in removable_reagents)
 			reagents.remove_reagent(reag, amount)
 			//still some of one reagent left, so job done
@@ -934,7 +938,7 @@
 
 //Returns the amount of fuel in the welder
 /obj/item/tool/solder/proc/get_fuel()
-	return reagents.get_reagent_amounts(SACIDS + PACIDS)
+	return reagents.get_reagent_amounts(SACIDS + PACIDS + LEAD)
 
 /obj/item/tool/solder/pre_fueled/New()
 	. = ..()

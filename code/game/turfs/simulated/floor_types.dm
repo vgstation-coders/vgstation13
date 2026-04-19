@@ -579,11 +579,21 @@
 	desc = "A hybrid floor tile-catwalk which provides visibility and easy access to pipes and wires beneath it."
 	plane = TURF_PLANE
 	layer = PAINT_LAYER
+	intact = 0
 	hatch_installed = TRUE
 	hatch_open = FALSE
+
+/turf/simulated/floor/plated_catwalk/create_floor_tile()
+	if(!floor_tile)
+		floor_tile = new /obj/item/stack/tile/plated_catwalk(null)
+		floor_tile.amount = 1
 
 /turf/simulated/floor/plated_catwalk/New()
 	..()
 	overlays.Cut()
 	overlays += mutable_appearance(icon='icons/turf/floors.dmi', icon_state="plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
 	overlays += mutable_appearance(icon='icons/turf/catwalks.dmi', icon_state="[icon_state]_olay", layer = PAINT_LAYER, plane = TURF_PLANE)
+
+/turf/simulated/floor/plated_catwalk/dark
+	icon_state = "pcat0d"
+	catwalk_suffix = "d"

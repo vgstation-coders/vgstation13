@@ -214,4 +214,17 @@
 	material  = "gingerbread"
 
 
-
+/obj/item/stack/tile/mineral/lead
+	name = "lead tile"
+	singular_name = "lead floor tile"
+	desc = "A tile made out of lead."
+	icon_state = "tile_lead"
+	w_class = W_CLASS_MEDIUM
+	force = 1.0
+	throwforce = 1.0
+	throw_speed = 3
+	throw_range = 7
+	max_amount = 60
+	w_type = RECYK_METAL
+	sheet_type = /obj/item/stack/sheet/mineral/lead
+	material="lead"

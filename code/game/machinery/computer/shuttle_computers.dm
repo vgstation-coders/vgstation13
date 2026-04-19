@@ -102,6 +102,7 @@
 	desc = "A disk containing coordinates to a recently discovered planet."
 	header = "PLANETARY LANDING"
 	var/datum/planet_type/planet_ref
+	var/datum/encounter/encounter_ref
 
 /obj/docking_port/destination/coord //Specific subtype to hunt for when doing cleanup
 
@@ -280,8 +281,10 @@
 				var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
 				if(proc_disk.planet_ref && proc_disk.compatible(shuttle))
 					dat += " | <b><a href='?src=\ref[src];select_procedural=1'>[proc_disk.planet_ref.planet_name] Landing</a></b> | "
+				else if(proc_disk.encounter_ref && proc_disk.compatible(shuttle))
+					dat += " | <b><a href='?src=\ref[src];select_procedural=1'>[proc_disk.encounter_ref.encounter_name]</a></b> | "
 				else
-					dat += " | <b>ERROR: Unable to read planetary coordinates</b>"
+					dat += " | <b>ERROR: Unable to read coordinates</b>"
 
 			dat += " |<BR>"
 			var/destination_text = ""
@@ -325,11 +328,14 @@
 			to_chat(user, "<span class='warning'>No shuttle detected.</span>")
 		return
 
-	// Land on a planet
+	// Land on a planet or travel to an encounter
 	if(procgen_target && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
 		var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
 		if(proc_disk.planet_ref)
 			travel_to_planet(proc_disk.planet_ref, user)
+			return
+		else if(proc_disk.encounter_ref)
+			travel_to_encounter(proc_disk.encounter_ref, user)
 			return
 
 	if(!selected_port && shuttle.docking_ports.len >= 2)
@@ -395,6 +401,32 @@
 
 	shuttle.travel_to(surface_port, src, user)
 
+/obj/machinery/computer/shuttle_control/proc/travel_to_encounter(datum/encounter/encounter, mob/user)
+	if(!(encounter?.v))
+		to_chat(user, "<span class='warning'>Encounter data unavailable.</span>")
+		return
+
+	var/obj/docking_port/destination/dock = encounter.get_shuttle_docking_port(shuttle)
+	if(!dock)
+		to_chat(user, "<span class='warning'>Unable to find a safe approach vector for this shuttle.</span>")
+		return
+
+	if(istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+		var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
+		proc_disk.destination = dock
+
+	var/obj/docking_port/destination/transit/transit_port = shuttle.transit_port
+	if(!transit_port)
+		transit_port = generate_transit_area(shuttle)
+		if(!transit_port)
+			to_chat(user, "<span class='warning'>Failed to create transit area.</span>")
+			return
+		shuttle.set_transit_dock(transit_port)
+	transit_port.areaname = "transit to [encounter.encounter_name]"
+	transit_port.generate_borders = 1
+
+	shuttle.travel_to(dock, src, user)
+
 /obj/machinery/computer/shuttle_control/Topic(href, href_list)
 	if(..())
 		return
@@ -420,7 +452,7 @@
 
 		var/list/ports = list()
 
-		for(var/obj/docking_port/shuttle/S in shuttle.linked_area)
+		for(var/obj/docking_port/shuttle/S in shuttle.shuttle_contents())
 			var/name = capitalize(S.areaname)
 			ports += name
 			ports[name] = S
@@ -453,7 +485,10 @@
 			return
 		if(istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
 			var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
-			procgen_target = proc_disk.planet_ref?.planet_name
+			if(proc_disk.planet_ref)
+				procgen_target = proc_disk.planet_ref.planet_name
+			else if(proc_disk.encounter_ref)
+				procgen_target = proc_disk.encounter_ref.encounter_name
 			selected_port = null
 		updateUsrDialog()
 	if(href_list["link_to_shuttle"])

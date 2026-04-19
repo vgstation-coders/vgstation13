@@ -51,7 +51,22 @@
 		var/mutable_appearance/nextshelf_olay = mutable_appearance(icon = 'icons/obj/objects.dmi', icon_state = "shelf_overlay", layer = stack_layer, plane = stack_plane)
 		nextshelf_olay.pixel_y = stack_offset
 		overlays += nextshelf_olay
+	spawn(0) // Wait for other atoms on this turf to finish spawning, then absorb any mapped shelvable objects.
+		absorb_turf_contents()
 	return
+
+/obj/structure/rack/crate_shelf/proc/absorb_turf_contents()
+	var/turf/T = get_turf(src)
+	if(!T)
+		return
+	for(var/obj/O in T)
+		if(O == src)
+			continue
+		if(!can_shelf(O))
+			continue
+		if(!shelf_contents.Find(null))
+			return // Shelf is full.
+		force_load(O)
 
 /obj/structure/rack/crate_shelf/centcomm_provided/New()
 	. = ..()
@@ -70,14 +85,17 @@
 	. = ..()
 	. += "<span class='notice'>There are some <b>bolts</b> holding [src] together.</span>"
 	if(shelf_contents.Find(null)) // If there's an empty space in the shelf, let the examiner know.
-		. += "<span class='notice'>You could <b>drag</b> a crate into [src]."
+		. += "<span class='notice'>You could <b>drag</b> a crate or recharge pack into [src]."
 	if(contents.len) // If there are any crates in the shelf, let the examiner know.
-		. += "<span class='notice'>You could <b>drag</b> a crate out of [src]."
+		. += "<span class='notice'>You could <b>drag</b> something out of [src]."
 		. += "<span class='notice'>[src] contains:</span>"
-		for(var/obj/structure/closet/crate/crate in shelf_contents)
-			. += "[crate]"
+		for(var/obj/stored in shelf_contents)
+			. += "[stored]"
 	if(osha_violation)
 		. += "<span class='warning'>It doesn't look very sturdy.</span>"
+
+/obj/structure/rack/crate_shelf/proc/can_shelf(obj/O)
+	return istype(O, /obj/structure/closet/crate) || istype(O, /obj/structure/vendomatpack)
 
 /obj/structure/rack/crate_shelf/attackby(obj/item/weapon/W as obj, mob/living/user, params)
 	if(W.is_wrench(user) && can_disassemble())
@@ -97,11 +115,12 @@
 
 /obj/structure/rack/crate_shelf/destroy(dropParts = TRUE)
 	var/turf/dump_turf = get_turf(src)
-	for(var/obj/structure/closet/crate/crate in shelf_contents)
-		force_unload(crate, dump_turf)
-		step(crate, pick(cardinal)) // Shuffle the crates around as though they've fallen down.
+	for(var/obj/stored in shelf_contents)
+		force_unload(stored, dump_turf)
+		step(stored, pick(cardinal)) // Shuffle the contents around as though they've fallen down.
 		if(prob(5)) // Open the crate!
-			if(crate.open())
+			var/obj/structure/closet/crate/crate = stored
+			if(istype(crate) && crate.open())
 				crate.visible_message("<span class='warning'>[crate]'s lid falls open!</span>")
 	if(trapping)
 		unlock_atom(trappeduser)
@@ -129,65 +148,71 @@
 	vis_contents = contents // It really do be that shrimple.
 	return
 
-// Used when a mob attempts to put a crate on the rack.
-/obj/structure/rack/crate_shelf/proc/load(obj/structure/closet/crate/crate, mob/user)
+// Used when a mob attempts to put a crate or recharge pack on the rack.
+/obj/structure/rack/crate_shelf/proc/load(obj/stored, mob/user)
+	if(!can_shelf(stored))
+		return FALSE
 	var/next_free = shelf_contents.Find(null) // Find the first empty slot in the shelf.
 	if(!next_free) // If we don't find an empty slot, return early.
 		to_chat(user, "<span class='warning'>\The [src] is full!</span>")
 		return FALSE
-	if(do_after(user, use_delay, target = crate))
-		return force_load(crate, next_free)
+	if(do_after(user, use_delay, target = stored))
+		return force_load(stored, next_free)
 	return FALSE // If the do_after() is interrupted, return FALSE!
 
-// Directly inserts a crate into the rack.
-// next_free: Used for if you're trying to insert a crate into a specific position. Default: next available slot
-// Returns FALSE if the crate can't be forced on for whatever reason.
-/obj/structure/rack/crate_shelf/proc/force_load(obj/structure/closet/crate/crate, next_free)
+// Directly inserts an object into the rack.
+// next_free: Used for if you're trying to insert an object into a specific position. Default: next available slot
+// Returns FALSE if the object can't be forced on for whatever reason.
+/obj/structure/rack/crate_shelf/proc/force_load(obj/stored, next_free)
+	if(!can_shelf(stored))
+		return FALSE
 	if(!next_free)
 		next_free = shelf_contents.Find(null) // Find the first empty slot in the shelf.
 		if(!next_free)
 			return FALSE //No slots open!
 	if(shelf_contents[next_free] != null)
 		return FALSE // Can't load if no room.
-	if(crate.opened) // If the crate is open, try to close it.
-		if(!crate.close())
-			return FALSE // If we fail to close it, don't load it into the shelf.
-	shelf_contents[next_free] = crate // Insert a reference to the crate into the free slot.
-	crate.forceMove(src) // Insert the crate into the shelf.
-	crate.pixel_y = DEFAULT_SHELF_VERTICAL_OFFSET * (next_free - 1) // Adjust the vertical offset of the crate to look like it's on the shelf.
-	crate.plane = FLOAT_PLANE
-	if(next_free >= 3) // If we're at or above three, we'll be on the way to going off the tile we're on. This allows mobs to be below the crate when this happens.
-		crate.plane = HUMAN_PLANE
-	crate.layer = BELOW_OBJ_LAYER + 0.02 * (next_free - 1) // Adjust the layer of the crate to look like it's in the shelf.
+	if(istype(stored, /obj/structure/closet/crate))
+		var/obj/structure/closet/crate/crate = stored
+		if(crate.opened) // If the crate is open, try to close it.
+			if(!crate.close())
+				return FALSE // If we fail to close it, don't load it into the shelf.
+	shelf_contents[next_free] = stored // Insert a reference to the object into the free slot.
+	stored.forceMove(src) // Insert the object into the shelf.
+	stored.pixel_y = DEFAULT_SHELF_VERTICAL_OFFSET * (next_free - 1) // Adjust the vertical offset to look like it's on the shelf.
+	stored.plane = FLOAT_PLANE
+	if(next_free >= 3) // If we're at or above three, we'll be on the way to going off the tile we're on. This allows mobs to be below the object when this happens.
+		stored.plane = HUMAN_PLANE
+	stored.layer = BELOW_OBJ_LAYER + 0.02 * (next_free - 1) // Adjust the layer of the object to look like it's in the shelf.
 	handle_visuals()
 	return TRUE
 
-// Used when a mob attempts take a crate off the rack.
-/obj/structure/rack/crate_shelf/proc/unload(obj/structure/closet/crate/crate, mob/user, turf/unload_turf)
+// Used when a mob attempts take an object off the rack.
+/obj/structure/rack/crate_shelf/proc/unload(obj/stored, mob/user, turf/unload_turf)
 	if(!unload_turf)
 		unload_turf = get_turf(user) // If a turf somehow isn't passed into the proc, put it at the user's feet.
 	if(unload_turf.density)
 		return
-	if(locate(/obj/structure/closet/crate) in unload_turf)
-		to_chat(user,"<span class='warning'>There is already a crate here.</span>")
+	if((locate(/obj/structure/closet/crate) in unload_turf) || (locate(/obj/structure/vendomatpack) in unload_turf))
+		to_chat(user,"<span class='warning'>There is already something in the way.</span>")
 		return
-	if(do_after(user, use_delay, target = crate))
-		return force_unload(crate, unload_turf)
+	if(do_after(user, use_delay, target = stored))
+		return force_unload(stored, unload_turf)
 	return FALSE  // If the do_after() is interrupted, return FALSE!
 
-// Directly removes a specific crate from the rack.
-// unload_turf: Used to specify where the crate will be dropped. default: get_turf(src)
-// Returns FALSE if the crate does not exist on the rack.
-/obj/structure/rack/crate_shelf/proc/force_unload(obj/structure/closet/crate/crate, turf/unload_turf)
-	if(!shelf_contents.Find(crate))
-		return FALSE // If something has happened to the crate while we were waiting, abort!
+// Directly removes a specific object from the rack.
+// unload_turf: Used to specify where the object will be dropped. default: get_turf(src)
+// Returns FALSE if the object does not exist on the rack.
+/obj/structure/rack/crate_shelf/proc/force_unload(obj/stored, turf/unload_turf)
+	if(!shelf_contents.Find(stored))
+		return FALSE // If something has happened to the object while we were waiting, abort!
 	if(!unload_turf)
 		unload_turf = get_turf(src)
-	crate.plane = initial(crate.plane)
-	crate.layer = initial(crate.layer) // Reset the crate back to having the default layer, otherwise we might get strange interactions.
-	crate.pixel_y = initial(crate.pixel_y) // Reset the crate back to having no offset, otherwise it will be floating.
-	crate.forceMove(unload_turf)
-	shelf_contents[shelf_contents.Find(crate)] = null // We do this instead of removing it from the list to preserve the order of the shelf.
+	stored.plane = initial(stored.plane)
+	stored.layer = initial(stored.layer) // Reset the object back to having the default layer, otherwise we might get strange interactions.
+	stored.pixel_y = initial(stored.pixel_y) // Reset the object back to having no offset, otherwise it will be floating.
+	stored.forceMove(unload_turf)
+	shelf_contents[shelf_contents.Find(stored)] = null // We do this instead of removing it from the list to preserve the order of the shelf.
 	handle_visuals()
 	return TRUE
 
@@ -319,11 +344,12 @@
 	overlays.Cut()
 	plane = HUMAN_PLANE
 
-	for(var/obj/structure/closet/crate/crate in shelf_contents)
-		force_unload(crate, fallturf)
-		step(crate, pick(cardinal))
+	for(var/obj/stored in shelf_contents)
+		force_unload(stored, fallturf)
+		step(stored, pick(cardinal))
 		if(prob(50))
-			if(crate.open())
+			var/obj/structure/closet/crate/crate = stored
+			if(istype(crate) && crate.open())
 				crate.visible_message("<span class='warning'>[crate]'s lid falls open!</span>")
 
 	for(var/mob/living/carbon/human/H in fallturf)

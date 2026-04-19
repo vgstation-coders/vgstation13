@@ -497,9 +497,12 @@ var/list/shuttle_log = list()
 		shuttle["eta"]="[timeleft / 60 % 60]:[add_zero(num2text(timeleft % 60), 2)]"
 	shuttle["pos"] = emergency_shuttle.location
 	shuttle["can_recall"]=!(recall_time_limit && world.time >= recall_time_limit)
+	shuttle["call_label"] = map.shuttle_call_label
+	shuttle["cancel_label"] = map.shuttle_cancel_label
 
 	data["shuttle"]=shuttle
 
+	data["is_odyssey"] = (map.nameShort == "odyssey")
 	data["defcon_1_enabled"] = defcon_1_enabled
 	data["last_shipment_time"] = last_shipment_time
 	data["next_shipment_time"] = next_shipment_time

@@ -23,7 +23,9 @@ var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle
 	add_dock(/obj/docking_port/destination/trade/start)
 	add_dock(/obj/docking_port/destination/trade/station)
 
-	set_transit_dock(/obj/docking_port/destination/trade/transit)
+	var/obj/docking_port/destination/transit/transit = generate_transit_area(src)
+	if(transit)
+		set_transit_dock(transit)
 
 /obj/machinery/computer/shuttle_control/trade
 	icon_state = "syndishuttle"

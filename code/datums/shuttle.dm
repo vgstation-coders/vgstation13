@@ -27,6 +27,9 @@
 	//The shuttle's main area - it contains the linked_port
 	var/area/linked_area
 
+	//All areas that compose this shuttle (for multi-area shuttles)
+	var/list/linked_areas = list()
+
 	//The shuttle's linked shuttle docking port - essential
 	var/obj/docking_port/shuttle/linked_port
 
@@ -91,22 +94,48 @@
 
 	var/destroy_everything = 0
 
+	// Saves original turf data at the destination when shuttle turfs overwrite them.
+	// Used to restore the ground when the shuttle departs, keyed by "[x],[y],[z]".
+	var/list/saved_ground_turfs = list()
+
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
 
 	if(starting_area)
 		if(ispath(starting_area))
-			linked_area = locate(starting_area)
+			// Find all areas that are subtypes of the given type (supports multi-area shuttles)
+			for(var/area/A in world)
+				if(istype(A, starting_area))
+					linked_areas += A
+			// Set linked_area to the first area that has turfs (for z-level checks, etc.)
+			for(var/area/A in linked_areas)
+				if(A.contents.len)
+					linked_area = A
+					break
+			if(!linked_area && linked_areas.len)
+				linked_area = linked_areas[1]
+			if(!linked_area)
+				warning("Unable to find area [starting_area] in world - [src.type] ([src.name]) won't be able to function properly.")
 		else if(isarea(starting_area))
 			linked_area = starting_area
+			linked_areas += starting_area
 		else
-			linked_area = starting_area
 			warning("Unable to find area [starting_area] in world - [src.type] ([src.name]) won't be able to function properly.")
 
 	if(istype(linked_area)) //Only add the shuttle to the list if its area exists and it has something in it
 		shuttles |= src
 	if(password)
 		password = rand(10000,99999)
+
+// Returns the combined contents of all linked areas
+/datum/shuttle/proc/shuttle_contents()
+	. = list()
+	for(var/area/A in linked_areas)
+		. += A.contents
+
+// Checks if an area is part of this shuttle
+/datum/shuttle/proc/has_area(var/area/A)
+	return (A in linked_areas)
 
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
@@ -127,7 +156,7 @@
 	//I have no idea what was causing it, but after replacing it with the following five lines everything started working as intended
 	var/obj/docking_port/shuttle/shuttle_docking_port
 
-	for(var/obj/docking_port/shuttle/S in linked_area)
+	for(var/obj/docking_port/shuttle/S in shuttle_contents())
 		shuttle_docking_port = S
 		break
 	//
@@ -156,24 +185,31 @@
 		. = INIT_NO_PORT
 
 
-	for(var/obj/docking_port/D in linked_area)
+	for(var/obj/docking_port/D in shuttle_contents())
 		docking_ports_aboard |= D
 
-	for(var/obj/structure/shuttle/engine/propulsion/P in linked_area) // Use any shuttle engine to set the shuttle's direction
+	for(var/obj/structure/shuttle/engine/propulsion/P in shuttle_contents()) // Use any shuttle engine to set the shuttle's direction
 		if(istype(P))
 			dir = P.dir
 			break
 
-	for(var/turf/T in linked_area.area_turfs)
-		var/corner = FALSE
-		if(!isopensurface(T) || !istype(T,/turf/space))
-			for(var/obj/O in T.contents)
-				if(istype(O,/obj/structure/shuttle))
-					if(istype(T,/turf/space))
-						corner = TRUE
-						break
-			if(corner)
-				continue
+	var/list/all_area_turfs = list()
+	for(var/area/shuttle_area in linked_areas)
+		all_area_turfs += shuttle_area.area_turfs
+	for(var/turf/T in all_area_turfs)
+		if(isshuttleturf(T))
+			T.turf_flags |= SHUTTLE_TURF
+			continue
+		// Non-shuttle-type turfs containing shuttle exterior structures (engines,
+		// corners, catwalks) are ground the shuttle sits on — space, planetary
+		// surface, or another shuttle's hangar floor. Only the objects should
+		// move with the shuttle; the underlying turf stays behind.
+		var/has_shuttle_structure = FALSE
+		for(var/obj/O in T.contents)
+			if(istype(O, /obj/structure/shuttle/diag_wall) || istype(O, /obj/structure/catwalk))
+				has_shuttle_structure = TRUE
+				break
+		if(!has_shuttle_structure)
 			T.turf_flags |= SHUTTLE_TURF
 	return
 
@@ -242,13 +278,16 @@
 
 //Checks the shuttle for any offending atoms
 /datum/shuttle/proc/forbid_movement()
-	var/atom/A = linked_area.contains_atom_from_list(cant_leave_zlevel) //code/game/atoms.dm, 243
-	if(A)
-		return A
-	for(var/mob/living/M in get_contents_in_object(linked_area, /mob/living))
-		var/datum/virtual_z/destination_port_vz = destination_port.get_virtual_z()
-		if(M.locked_to_v && M.locked_to_v != destination_port_vz)
-			return M
+	var/atom/A
+	for(var/area/shuttle_area in linked_areas)
+		A = shuttle_area.contains_atom_from_list(cant_leave_zlevel) //code/game/atoms.dm, 243
+		if(A)
+			return A
+	for(var/area/shuttle_area in linked_areas)
+		for(var/mob/living/M in get_contents_in_object(shuttle_area, /mob/living))
+			var/datum/virtual_z/destination_port_vz = destination_port.get_virtual_z()
+			if(M.locked_to_v && M.locked_to_v != destination_port_vz)
+				return M
 	return 0
 
 //This is the proc you generally want to use when moving a shuttle. Runs all sorts of checks (cooldown, if already moving, etc)
@@ -333,6 +372,12 @@
 	if(broadcast)
 		broadcast.announce("The shuttle has received your message and will be sent [time].")
 
+	// Retract all deployed ROSAs on the shuttle before takeoff
+	for(var/obj/machinery/power/rosa/rosa in rosa_machines)
+		if(rosa.deployed && has_area(get_area(rosa)))
+			spawn()
+				rosa.retract()
+
 	animate_liftoff()
 	if(eject)
 		eject_mobs()
@@ -345,7 +390,7 @@
 
 	if(get_pre_flight_delay())
 		spawn(max(1,get_pre_flight_delay()-5))
-			for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
+			for(var/obj/structure/shuttle/engine/propulsion/P in shuttle_contents())
 				spawn()
 					P.shoot_exhaust()
 	if(current_port)
@@ -377,12 +422,12 @@
 				destination_port = null
 				reset_visuals()
 				return
-			for(var/atom/movable/AA in linked_area)
+			for(var/atom/movable/AA in shuttle_contents())
 				INVOKE_EVENT(AA, /event/v_transition, "user" = AA, "to_v" = D.get_virtual_z(), "from_v" = linked_port.get_virtual_z())
 		if(D.get_virtual_z() != linked_port.get_virtual_z())
 			var/datum/virtual_z/to_v = D.get_virtual_z()
 			var/datum/virtual_z/from_v = linked_port.get_virtual_z()
-			for(var/atom/movable/AA in linked_area)
+			for(var/atom/movable/AA in shuttle_contents())
 				if(!istype(AA, /mob/living))
 					continue
 				var/mob/living/LL = AA
@@ -409,19 +454,24 @@
 	if(!destination_port)
 		return
 
+	// Safety: force-retract any ROSAs that haven't finished retracting
+	for(var/obj/machinery/power/rosa/rosa in rosa_machines)
+		if(rosa.deployed && has_area(get_area(rosa)))
+			rosa.force_retract()
+
 	var/datum/virtual_z/vz = destination_port.get_virtual_z()
 	if(vz.planet)
 		vz.spawn_lz_warnings(src)
-	if(transit_port && get_transit_delay())
+	if(transit_port && get_transit_delay() && destination_port != transit_port)
 		if(transit_check())
 			close_all_doors()
 			previous_port = current_port
 			move_to_dock(transit_port)
 			spawn(max(1,get_transit_delay()-5))
-				for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle_contents())
 					spawn()
 						P.shoot_exhaust()
-			for(var/atom/A in linked_area.contents)
+			for(var/atom/A in shuttle_contents())
 				animate(A)
 				if(istype(A,/mob/living))
 					var/mob/living/M = A
@@ -429,16 +479,17 @@
 			spawn(get_transit_delay())
 				complete_flight()
 			var/obj/docking_port/destination/initial_d = destination_port
-			spawn(transit_timeout)
-				if(destination_port && initial_d == destination_port && current_port == transit_port)
-					log_game("[name] ([type]) timed out in transit after [transit_timeout / 10] seconds, returning to previous port.")
-					var/obj/docking_port/destination/return_port = previous_port
-					destination_port = null
-					if(return_port && !return_port.docked_with)
-						move_to_dock(return_port)
-						open_all_doors()
-					moving = 0
-					previous_port = null
+			if(transit_timeout > 0)
+				spawn(transit_timeout)
+					if(destination_port && initial_d == destination_port && current_port == transit_port)
+						log_game("[name] ([type]) timed out in transit after [transit_timeout / 10] seconds, returning to previous port.")
+						var/obj/docking_port/destination/return_port = previous_port
+						destination_port = null
+						if(return_port && !return_port.docked_with)
+							move_to_dock(return_port)
+							open_all_doors()
+						moving = 0
+						previous_port = null
 			return
 
 	complete_flight()
@@ -485,7 +536,7 @@
 
 /datum/shuttle/proc/animate_liftoff()
 	var/variation = rand(1,2)
-	for(var/atom/A in linked_area.contents)
+	for(var/atom/A in shuttle_contents())
 		var/skip = FALSE
 		if(istype(A,/obj/structure/shuttle/engine/heater))
 			var/obj/structure/shuttle/engine/heater/H = A
@@ -508,7 +559,7 @@
 		A.pixel_y = base_y - 5
 
 /datum/shuttle/proc/animate_landing()
-	for(var/atom/A in linked_area.contents)
+	for(var/atom/A in shuttle_contents())
 		var/skip = FALSE
 		if(istype(A,/mob/living))
 			var/mob/living/M = A
@@ -527,7 +578,7 @@
 		reset_visuals()
 
 /datum/shuttle/proc/reset_visuals()
-	for(var/atom/A in linked_area.contents)
+	for(var/atom/A in shuttle_contents())
 		if(istype(A,/obj/structure/shuttle/engine/heater))
 			var/obj/structure/shuttle/engine/heater/H = A
 			H.deactivate()
@@ -553,7 +604,7 @@
 	moved_shuttles += src
 
 	//See all destination ports in current area
-	for(var/obj/docking_port/destination/dock in linked_area)
+	for(var/obj/docking_port/destination/dock in shuttle_contents())
 		//If somebody is docked to it (and it isn't us (that would be weird but better be sure))
 		if(dock.docked_with && !(dock.docked_with == linked_port))
 			//Get the docking port that's docked to it, and then its shuttle
@@ -623,12 +674,12 @@
 	return
 
 /datum/shuttle/proc/close_all_doors()
-	for(var/obj/machinery/door/unpowered/shuttle/D in linked_area)
+	for(var/obj/machinery/door/unpowered/shuttle/D in shuttle_contents())
 		spawn(0)
 			D.close()
 
 /datum/shuttle/proc/open_all_doors()
-	for(var/obj/machinery/door/unpowered/shuttle/D in linked_area)
+	for(var/obj/machinery/door/unpowered/shuttle/D in shuttle_contents())
 		spawn(0)
 			D.open()
 
@@ -637,7 +688,7 @@
 	var/datum/virtual_z/vz = current_port.get_virtual_z()
 	if(vz.planet)
 		vz.clear_lz_warnings(src)
-	for(var/atom/movable/AM in linked_area)
+	for(var/atom/movable/AM in shuttle_contents())
 		if(AM.anchored)
 			continue
 
@@ -710,11 +761,11 @@
 /datum/shuttle/proc/get_occupants(var/find_stowaways)
 	var/list/occupants = list()
 	if(!find_stowaways)
-		for(var/mob/living/L in linked_area) //Yeah they could be hiding in lockers, but that's a stowaway not an occupant
+		for(var/mob/living/L in shuttle_contents()) //Yeah they could be hiding in lockers, but that's a stowaway not an occupant
 			occupants.Add(L)
 	else
 		for(var/mob/living/L in mob_list)
-			if(get_area(L) == linked_area)
+			if(has_area(get_area(L)))
 				occupants.Add(L)
 	return occupants
 
@@ -727,7 +778,7 @@
 	var/high_x = 1
 	var/high_y = 1
 
-	for(var/turf/T in linked_area)
+	for(var/turf/T in shuttle_contents())
 		if(T.x < low_x)
 			low_x = T.x
 		if(T.x > high_x)
@@ -777,13 +828,16 @@
 	//this coordinates list stores every coordinate of a moved turf as a string (example: "52;61").
 	var/list/our_own_turfs = list()
 
-	//Go through all turfs in our area
-	for(var/turf/T in linked_area.contents)
-		var/datum/coords/C = new(T.x,T.y)
-		turfs_to_move += C
-		turfs_to_move[C] = T
+	//Go through all turfs in our areas
+	var/list/turf_source_areas = list() // Maps turfs to their original area (for multi-area shuttles)
+	for(var/area/shuttle_area in linked_areas)
+		for(var/turf/T in shuttle_area.contents)
+			var/datum/coords/C = new(T.x,T.y)
+			turfs_to_move += C
+			turfs_to_move[C] = T
+			turf_source_areas[T] = shuttle_area
 
-		our_own_turfs += "[T.x];[T.y];[T.z]"
+			our_own_turfs += "[T.x];[T.y];[T.z]"
 
 	var/cosine	= cos(rotate)
 	var/sine	= sin(rotate)
@@ -871,77 +925,78 @@
 
 		//****Add the new turf to shuttle's area****
 
-		linked_area.contents.Add(new_turf)
-		new_turf.change_area(old_area,linked_area)
-		if(isshuttleturf(old_turf) || (old_turf.turf_flags & SHUTTLE_TURF))
+		var/area/source_area = turf_source_areas[old_turf] || linked_area
+		source_area.contents.Add(new_turf)
+		new_turf.change_area(old_area,source_area)
+		var/is_shuttle_turf = isshuttleturf(old_turf) || (old_turf.turf_flags & SHUTTLE_TURF)
+		if(is_shuttle_turf)
+			// Save the destination turf's original data before overwriting with shuttle type
+			saved_ground_turfs["[new_turf.x],[new_turf.y],[new_center.z]"] = list("type" = new_turf.type, "icon" = new_turf.icon, "icon_state" = new_turf.icon_state, "dir" = new_turf.dir)
 			new_turf.ChangeTurf(old_turf.type, allow = 1)
 			new_turf.turf_flags |= SHUTTLE_TURF
 			old_turf.turf_flags &= ~SHUTTLE_TURF
 		new_turfs[C] = new_turf
 
 		old_turf.pixel_y = initial(old_turf.pixel_y)
-		new_turf.pixel_y = old_turf.pixel_y
 
 		//***Remove old turf from shuttle's area****
 
 		refill_area.contents.Add(old_turf)
-		old_turf.change_area(linked_area,refill_area)
+		old_turf.change_area(source_area,refill_area)
 
 		//All objects which can't be moved by the shuttle have their area changed to refill_area!
 		for(var/atom/movable/AM in old_turf.contents)
 			if(!AM.can_shuttle_move(src))
-				AM.change_area(linked_area,refill_area)
+				AM.change_area(source_area,refill_area)
 
-		if(old_turf.transform)
-			new_turf.transform = old_turf.transform
+		// Only copy turf visual properties for actual shuttle turfs.
+		// Non-shuttle turfs (planetary ground, space with exterior structures)
+		// should not have their appearance transferred to the destination.
+		if(is_shuttle_turf)
+			new_turf.pixel_y = old_turf.pixel_y
 
-		//****Prepare underlays**** (only do this if add_underlay is 1 -> see above)
-		if(add_underlay && undlay)
-			new_turf.underlays = list(undlay) //Remove all old underlays, add space
-		else
-			new_turf.underlays = old_turf.underlays
-		/*
-		if(ispath(replaced_turf_type,/turf/space))//including the transit hyperspace turfs
-			if(old_turf.underlays.len)
-				new_turf.underlays = old_turf.underlays
+			if(old_turf.transform)
+				new_turf.transform = old_turf.transform
+
+			//****Prepare underlays**** (only do this if add_underlay is 1 -> see above)
+			if(add_underlay && undlay)
+				new_turf.underlays = list(undlay) //Remove all old underlays, add space
 			else
-				new_turf.underlays += undlay
-		else
-			new_turf.underlays += undlay*/
+				new_turf.underlays = old_turf.underlays
 
-		if(!istype(old_turf, /turf/space))
-			new_turf.dir = old_turf.dir
-			new_turf.icon_state = old_turf.icon_state
-			new_turf.icon = old_turf.icon
-			new_turf.plane = old_turf.plane
-			new_turf.layer = old_turf.layer
-			new_turf.color = old_turf.color
+			if(!istype(old_turf, /turf/space))
+				new_turf.dir = old_turf.dir
+				new_turf.icon_state = old_turf.icon_state
+				new_turf.icon = old_turf.icon
+				new_turf.plane = old_turf.plane
+				new_turf.layer = old_turf.layer
+				new_turf.color = old_turf.color
 
-			//***Moving the paint overlay****
-			new_turf.paint_overlay = old_turf.paint_overlay
-			if (new_turf.paint_overlay)
-				new_turf.paint_overlay.my_turf = new_turf
-				new_turf.update_paint_overlay()
-				old_turf.overlays.len = 0
-				old_turf.paint_overlay = null
+				//***Moving the paint overlay****
+				new_turf.paint_overlay = old_turf.paint_overlay
+				if (new_turf.paint_overlay)
+					new_turf.paint_overlay.my_turf = new_turf
+					new_turf.update_paint_overlay()
+					old_turf.overlays.len = 0
+					old_turf.paint_overlay = null
 
-			//***Moving decals****
-			if (old_turf.turfdecals && old_turf.turfdecals.len > 0)
-				for (var/image/decal in old_turf.turfdecals)
-					new_turf.AddDecal(decal)
+				//***Moving decals****
+				if (old_turf.turfdecals && old_turf.turfdecals.len > 0)
+					for (var/image/decal in old_turf.turfdecals)
+						new_turf.AddDecal(decal)
 
-		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
-		// Floor turfs create their `floor_tile` in New() if it's null.
-		// The better solution would be to not do that at all in New(), or use
-		// something like the map loader's atom preloader to transfer the
-		// floor_tile before New().
-		if(istype(old_turf, /turf/simulated/floor) && istype(new_turf, /turf/simulated/floor))
-			var/turf/simulated/floor/ancient = old_turf
-			var/turf/simulated/floor/modern = new_turf
-			modern.floor_tile = ancient.floor_tile
-			ancient.floor_tile = null
-		if(rotate)
-			new_turf.map_element_rotate(rotate)
+			// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
+			// Floor turfs create their `floor_tile` in New() if it's null.
+			// The better solution would be to not do that at all in New(), or use
+			// something like the map loader's atom preloader to transfer the
+			// floor_tile before New().
+			if(istype(old_turf, /turf/simulated/floor) && istype(new_turf, /turf/simulated/floor))
+				var/turf/simulated/floor/ancient = old_turf
+				var/turf/simulated/floor/modern = new_turf
+				modern.floor_tile = ancient.floor_tile
+				ancient.floor_tile = null
+			if(rotate)
+				new_turf.map_element_rotate(rotate)
 
 		//*****Move air*****
 
@@ -976,22 +1031,33 @@
 		//Add the new turf to the list of turfs to update
 		turfs_to_update += new_turf
 
-		//Delete the old turf
-		var/replacing_turf_type = old_turf.get_underlying_turf()
+		//Replace the old turf: restore saved ground data if available, otherwise fall back to base turf.
+		//Non-shuttle turfs keep their original type since they were never overwritten.
+		if(is_shuttle_turf)
+			var/ground_key = "[old_turf.x],[old_turf.y],[our_center.z]"
+			var/list/ground_data = saved_ground_turfs[ground_key]
+			if(ground_data)
+				old_turf.ChangeTurf(ground_data["type"], allow = 1)
+				old_turf.icon = ground_data["icon"]
+				old_turf.icon_state = ground_data["icon_state"]
+				old_turf.dir = ground_data["dir"]
+				saved_ground_turfs -= ground_key
+			else
+				var/replacing_turf_type = old_turf.get_underlying_turf()
 
-		if(D && istype(D) && D.base_turf_type)
-			replacing_turf_type = D.base_turf_type
+				if(D && istype(D) && D.base_turf_type)
+					replacing_turf_type = D.base_turf_type
 
-		old_turf.ChangeTurf(replacing_turf_type, allow = 1)
+				old_turf.ChangeTurf(replacing_turf_type, allow = 1)
 
-		if(D && istype(D))
-			if(D.base_turf_icon)
-				old_turf.icon = D.base_turf_icon
-			if(D.base_turf_icon_state)
-				old_turf.icon_state = D.base_turf_icon_state
+				if(D && istype(D))
+					if(D.base_turf_icon)
+						old_turf.icon = D.base_turf_icon
+					if(D.base_turf_icon_state)
+						old_turf.icon_state = D.base_turf_icon_state
 
-		if(istype(old_turf,/turf/space))
-			old_turf.lighting_clear_overlay() //A horrible band-aid fix for lighting overlays appearing over space
+			if(istype(old_turf,/turf/space))
+				old_turf.lighting_clear_overlay() //A horrible band-aid fix for lighting overlays appearing over space
 
 		old_turfs += old_turf
 
@@ -1033,7 +1099,7 @@
 	if(!dest_climate)
 		dest_climate = SSweather.get_climate(dest_v)
 
-	for(var/turf/T in linked_area.contents)
+	for(var/turf/T in shuttle_contents())
 		for(var/obj/effect/edge_overlay/E in T)
 			qdel(E)
 		if(T in corner_turfs)
@@ -1045,12 +1111,15 @@
 		for(var/obj/effect/weather_holder/WH in T.vis_contents)
 			T.vis_contents -= WH
 
-	// Re-register turfs left behind by the shuttle with the source climate
-	if(source_climate)
-		for(var/turf/old_turf in old_turfs)
+	// Re-register turfs left behind by the shuttle with the source climate and daynight
+	for(var/turf/old_turf in old_turfs)
+		if(source_climate)
 			source_climate.register_weather_turf(old_turf, TRUE)
+		var/area/old_area = old_turf.loc
+		if(isopensurface(old_area))
+			source_v?.daynight_turfs |= old_turf
 
-	if(source_v.daynight_turfs.len)
+	if(source_v?.daynight_turfs.len)
 		SSDayNight.update_turf_lighting(old_turfs, source_v)
 
 	return 1
@@ -1127,7 +1196,7 @@
 	var/rotate = dir2angle(turn(user.dir,180)) - dir2angle(linked_port.dir)
 
 	var/list/original_coords = list()
-	for(var/turf/T in linked_area.contents)
+	for(var/turf/T in shuttle_contents())
 		var/datum/coords/C = new(T.x,T.y)
 		original_coords += C
 
@@ -1219,7 +1288,7 @@
 	var/low_x = world.maxx
 	var/low_y = world.maxy
 
-	for(var/turf/T in linked_area)
+	for(var/turf/T in shuttle_contents())
 		if(T.x < low_x)
 			low_x = T.x
 		if(T.y < low_y)
@@ -1237,14 +1306,14 @@
 	if(!istype(sam))
 		return
 	if(sam.emagged)
-		for(var/turf/simulated/wall/shuttle/W in linked_area)
+		for(var/turf/simulated/wall/shuttle/W in shuttle_contents())
 			W.walltype = "swall"
 			W.relativewall()
 			W.color = "#ff00dd"
-		for(var/obj/structure/shuttle/diag_wall/WD in linked_area)
+		for(var/obj/structure/shuttle/diag_wall/WD in shuttle_contents())
 			WD.icon_state = "diagonalWallS"
 			WD.color = "#ff00dd"
-		for(var/turf/simulated/floor/shuttle/F in linked_area)
+		for(var/turf/simulated/floor/shuttle/F in shuttle_contents())
 			F.icon_state = "clown"
 		return
 	if(sam.target == "Walls")
@@ -1264,12 +1333,12 @@
 				used_walltype = "vwall"
 			else
 				used_walltype = "swall"
-		for(var/turf/simulated/wall/shuttle/W in linked_area)
+		for(var/turf/simulated/wall/shuttle/W in shuttle_contents())
 			W.walltype = used_walltype
 			W.relativewall()
 			if(sam.sel_color)
 				W.color = sam.sel_color
-		for(var/obj/structure/shuttle/diag_wall/WD in linked_area)
+		for(var/obj/structure/shuttle/diag_wall/WD in shuttle_contents())
 			if(sam.sel_color)
 				if(istype(WD,/obj/structure/shuttle/diag_wall/smooth))
 					WD.icon_state = "diagonalWallS"
@@ -1313,25 +1382,26 @@
 			else
 				used_floortype = "floor_recolor"
 
-		for(var/turf/simulated/floor/shuttle/F in linked_area)
+		for(var/turf/simulated/floor/shuttle/F in shuttle_contents())
 			F.icon_state = used_floortype
 			if(sam.sel_color)
 				F.color = sam.sel_color
 	else
-		for(var/turf/simulated/floor/shuttle/F in linked_area)
+		for(var/turf/simulated/floor/shuttle/F in shuttle_contents())
 			F.icon_state = initial(F.icon_state)
 			F.color = initial(F.color)
-		for(var/turf/simulated/wall/shuttle/W in linked_area)
+		for(var/turf/simulated/wall/shuttle/W in shuttle_contents())
 			W.walltype = initial(W.walltype)
 			W.update_icon()
 			W.color = initial(W.color)
-		for(var/obj/structure/shuttle/diag_wall/WD in linked_area)
+		for(var/obj/structure/shuttle/diag_wall/WD in shuttle_contents())
 			WD.icon_state = initial(WD.icon_state)
 			WD.color = initial(WD.color)
 
 //Planetary landing zone datum
 /datum/landing_zone
 	var/list/turf/turf_list = list()
+	var/list/saved_turf_data = list() // Saves original turf types/appearance for restoration on departure
 	var/datum/weakref/shuttle_ref
 	var/datum/weakref/planet_ref
 	var/datum/virtual_z/vz
@@ -1395,6 +1465,10 @@
 
 	if(planet.default_baseturf)
 		docking_port.base_turf_type = planet.default_baseturf
+
+	// Save original turf data so we can restore it when the shuttle departs
+	for(var/turf/T in turf_list)
+		saved_turf_data["[T.x],[T.y]"] = list("type" = T.type, "icon" = T.icon, "icon_state" = T.icon_state, "dir" = T.dir)
 
 /datum/landing_zone/proc/update_turfs()
 	turf_list = block(locate(min_x, min_y, vz.z()), locate(max_x, max_y, vz.z()))
@@ -1490,6 +1564,9 @@
 			qdel(overlay)
 
 /datum/landing_zone/proc/reset_turfs()
+	// Turf type restoration is handled by move_area_to's saved_ground_turfs mechanism.
+	// Re-fetch turf references and re-register weather/daynight for the restored turfs.
+	update_turfs()
 	var/datum/climate/C = SSweather.get_climate(vz)
 	for(var/turf/T in turf_list)
 		C?.register_weather_turf(T, TRUE)
@@ -1522,6 +1599,7 @@
 		qdel(docking_port)
 		docking_port = null
 	turf_list = null
+	saved_turf_data = null
 	shuttle_ref = null
 	planet_ref = null
 	return ..()

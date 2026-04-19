@@ -166,7 +166,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 			playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
 
 	spawn()
-		for(var/obj/machinery/door/D in S.linked_area)
+		for(var/obj/machinery/door/D in S.shuttle_contents())
 			if(destination == "transit" || destination == "shuttle")
 				D.close()
 			else
@@ -268,7 +268,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		if ("transit")
 			location = SHUTTLE_ON_STANDBY // in deep space
 
-			for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
+			for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.shuttle_contents())
 				spawn(0)
 					D.close()
 					D.locked = 1
@@ -294,7 +294,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				var/datum/shuttle/escape/E = shuttle
 				E.close_all_doors()
 
-				for(var/obj/structure/shuttle/engine/propulsion/P in E.linked_area)
+				for(var/obj/structure/shuttle/engine/propulsion/P in E.shuttle_contents())
 					spawn()
 						P.shoot_exhaust(backward = 3)
 
@@ -314,7 +314,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				location = EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM
 
 			//if the crew brought items ordered by centcom with them, they get paid for those as if it were the supply shuttle
-			for(var/atom/movable/MA in shuttle.linked_area)
+			for(var/atom/movable/MA in shuttle.shuttle_contents())
 				if(MA.anchored && !ismecha(MA))
 					continue
 
@@ -377,7 +377,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 					hyperspace_sounds("end")
 					return 1
-				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.shuttle_contents())
 					spawn()
 						P.shoot_exhaust(backward = 3)
 
@@ -430,11 +430,11 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				return 1
 
 			else if(timeleft <= 2) // Just before it leaves, close the damn doors!
-				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
+				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.shuttle_contents())
 					spawn(0)
 						D.close()
 						D.locked = 1
-				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.shuttle_contents())
 					spawn()
 						P.shoot_exhaust(backward = 3)
 

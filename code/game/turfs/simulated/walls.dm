@@ -55,15 +55,20 @@
 	if(src.engraving)
 		to_chat(user, src.engraving)
 
-/turf/simulated/wall/dismantle_wall(devastated = 0, explode = 0)
+/turf/simulated/wall/proc/get_sheet_type()
 	if(mineral == "metal")
-		new /obj/item/stack/sheet/metal(src, 2)
+		return /obj/item/stack/sheet/metal
 	else if(mineral == "wood")
-		new /obj/item/stack/sheet/wood(src, 2)
+		return /obj/item/stack/sheet/wood
+	else if(mineral == "plasteel")
+		return /obj/item/stack/sheet/plasteel
 	else
-		var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
-		if(M)
-			new M(src, 2)
+		return text2path("/obj/item/stack/sheet/mineral/[mineral]")
+
+/turf/simulated/wall/dismantle_wall(devastated = 0, explode = 0)
+	var/spawn_sheet = get_sheet_type()
+	if(spawn_sheet)
+		new spawn_sheet(src, 2)
 
 	if(devastated)
 		new /obj/item/stack/sheet/metal(src)
@@ -343,7 +348,7 @@
 		var/obj/item/weapon/pickaxe/PK = W
 		if(!(PK.diggables & DIG_WALLS))
 			return
-		if(mineral == "diamond")
+		if(walltype == "diamond")
 			return
 
 		user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \
@@ -386,7 +391,7 @@
 	rotting = 0
 
 /turf/simulated/wall/proc/thermitemelt(var/mob/user)
-	if(mineral == "diamond")
+	if(walltype == "diamond")
 		return
 	var/obj/effect/overlay/O = new/obj/effect/overlay(src)
 	O.name = "thermite"
@@ -429,7 +434,7 @@
 
 //Generic wall melting proc.
 /turf/simulated/wall/melt()
-	if(mineral == "diamond")
+	if(walltype == "diamond")
 		return
 
 	src.ChangeTurf(/turf/simulated/floor/plating)

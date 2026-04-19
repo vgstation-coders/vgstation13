@@ -1136,6 +1136,17 @@
 /datum/chemical_reaction/solidification/wood/product_to_spawn()
 	return /obj/item/stack/sheet/wood
 
+/datum/chemical_reaction/solidification/lead
+	name = "Solid Lead"
+	id = "solidlead"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, LEAD = CC_PER_U)
+	result_amount = 1 //amount of sheets created per the above reagents
+
+/datum/chemical_reaction/solidification/lead/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/lead
+
+
 /datum/chemical_reaction/condensedcapsaicin
 	name = "Condensed Capsaicin"
 	id = CONDENSEDCAPSAICIN

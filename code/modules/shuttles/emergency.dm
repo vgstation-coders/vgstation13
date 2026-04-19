@@ -59,7 +59,7 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 /datum/shuttle/escape/pod/initialize()
 	.=..()
 	emergency_shuttle.escape_pods.Add(src)
-	podcomputer = locate(/obj/machinery/podcomputer) in linked_area
+	podcomputer = locate(/obj/machinery/podcomputer) in shuttle_contents()
 	if(podcomputer)
 		podcomputer.linked_pod = src
 
@@ -100,7 +100,7 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 		else
 			explosion(get_turf(dock_shuttle), 2, 3, 4, 6)
 
-			for(var/mob/living/M in emergency_shuttle.shuttle.linked_area)
+			for(var/mob/living/M in emergency_shuttle.shuttle.shuttle_contents())
 				shake_camera(M, 10, 1)
 				if(iscarbon(M) || !M.anchored)
 					M.Knockdown(3)
@@ -111,9 +111,10 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 			// instead of wasting time solving an issue caused by a worthless feature im going to cheat
 
 			spawn(2 SECONDS)
-				for(var/turf/T in linked_area)
-					T.set_area(emergency_shuttle.shuttle.linked_area)
-				qdel(linked_area)
+				for(var/area/pod_area in linked_areas)
+					for(var/turf/T in pod_area)
+						T.set_area(emergency_shuttle.shuttle.linked_area)
+					qdel(pod_area)
 				qdel(src)
 
 

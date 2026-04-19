@@ -746,7 +746,7 @@ var/datum/controller/gameticker/ticker
 		var/datum/gamemode/dynamic/D = mode
 		if(D.roundstart_pop_ready < 6) // Fill all the SMES to capacity if there's 5 or less players, to give players more time to set up the power.
 			for(var/obj/machinery/power/battery/smes/S in power_machines)
-				if(S.charge) //Only do this if the SMES has any charge in the first place
+				if(S.charge && !S.external_power_supply) //Only do this if the SMES has any charge in the first place, and isn't on external power
 					S.charge = S.capacity
 
 // -- Tag mode!

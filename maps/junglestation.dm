@@ -33,6 +33,7 @@
 						/datum/event/meteor_wave,/datum/event/meteor_shower,/datum/event/thing_storm/meaty_gore,/datum/event/thing_storm/blob_shower,
 						/datum/event/thing_storm/blob_storm,/datum/event/thing_storm/fireworks)
 	load_map_elements = list(
+	/datum/map_element/dungeon/mecha_graveyard
 	)
 
 	skip_hobo_shack=TRUE

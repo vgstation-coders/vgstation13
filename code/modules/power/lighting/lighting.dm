@@ -69,6 +69,8 @@ var/global/list/light_colors = list(
 					src.icon_state = "tube-empty"
 				if(/obj/machinery/light/small/built)
 					src.icon_state = "bulb-empty"
+				if(/obj/machinery/light/floor/built)
+					src.icon_state = "floor-empty"
 			src.stage = 2
 			user.visible_message("[user.name] adds wires to \the [src].", \
 				"You add wires to \the [src]")
@@ -99,6 +101,15 @@ var/global/list/light_colors = list(
 	icon_state = "bulb-construct-stage1"
 	fixture_type = /obj/machinery/light/small/built
 	sheets_refunded = 1
+
+/obj/machinery/light_construct/floor
+	name = "floor light frame"
+	desc = "A floor light fixture under construction."
+	icon_state = "floor-empty"
+	plane = ABOVE_TURF_PLANE
+	layer = ABOVE_TILE_LAYER
+	fixture_type = /obj/machinery/light/floor/built
+	sheets_refunded = 2
 
 var/global/list/obj/machinery/light/alllights = list()
 
@@ -218,6 +229,40 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/machinery/light/small/built
 	icon_state = "lbulb-empty" //for the mapper
+	spawn_with_bulb = null
+
+/obj/machinery/light/floor
+	name = "floor light"
+	desc = "A floor-mounted lighting fixture."
+	icon_state = "floor1"
+	fitting = "bulb"
+	plane = ABOVE_TURF_PLANE
+	layer = ABOVE_TILE_LAYER
+	spawn_with_bulb = /obj/item/weapon/light/bulb
+
+/obj/machinery/light/floor/update_icon()
+	if(current_bulb)
+		switch(current_bulb.status)
+			if(LIGHT_OK)
+				icon_state = "floor[on]"
+				if(on)
+					color = current_bulb.brightness_color
+			if(LIGHT_BURNED)
+				icon_state = "floor-broken"
+				on = 0
+			if(LIGHT_BROKEN)
+				icon_state = "floor-broken"
+				on = 0
+	else
+		icon_state = "floor-empty"
+		on = 0
+
+/obj/machinery/light/floor/broken
+	icon_state = "floor-broken"
+	spawn_with_bulb = /obj/item/weapon/light/bulb/broken
+
+/obj/machinery/light/floor/built
+	icon_state = "floor-empty"
 	spawn_with_bulb = null
 
 /obj/machinery/light/initialize()
@@ -415,14 +460,17 @@ var/global/list/obj/machinery/light/alllights = list()
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
 				"You remove \the [src]'s wires.", "You hear a noise.")
 			var/obj/machinery/light_construct/newlight = null
-			switch(fitting)
-				if("tube")
-					newlight = new /obj/machinery/light_construct(src.loc)
-					newlight.icon_state = "tube-construct-stage1"
+			if(istype(src, /obj/machinery/light/floor))
+				newlight = new /obj/machinery/light_construct/floor(src.loc)
+			else
+				switch(fitting)
+					if("tube")
+						newlight = new /obj/machinery/light_construct(src.loc)
+						newlight.icon_state = "tube-construct-stage1"
 
-				if("bulb")
-					newlight = new /obj/machinery/light_construct/small(src.loc)
-					newlight.icon_state = "bulb-construct-stage1"
+					if("bulb")
+						newlight = new /obj/machinery/light_construct/small(src.loc)
+						newlight.icon_state = "bulb-construct-stage1"
 			new /obj/item/stack/cable_coil(get_turf(src.loc), 1, "red")
 			newlight.dir = src.dir
 			newlight.stage = 1
@@ -827,3 +875,41 @@ var/global/list/obj/machinery/light/alllights = list()
 		force = 5
 		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		update()
+
+// Floor light frame item - used to construct floor lights
+/obj/item/floor_light_frame
+	name = "floor light frame"
+	desc = "A frame for constructing a floor light. Use it on a floor to install."
+	icon = 'icons/obj/lighting.dmi'
+	icon_state = "floor-empty"
+	flags = FPRINT
+
+/obj/item/floor_light_frame/afterattack(atom/target, mob/user, proximity_flag)
+	if(!proximity_flag)
+		return ..()
+	if(!istype(target, /turf/simulated/floor))
+		to_chat(user, "<span class='rose'>[src] can only be installed on a floor.</span>")
+		return
+	var/turf/T = get_turf(target)
+	if(locate(/obj/machinery/light_construct/floor) in T || locate(/obj/machinery/light/floor) in T)
+		to_chat(user, "<span class='warning'>There is already a floor light here!</span>")
+		return
+	to_chat(user, "You begin installing [src] into the floor.")
+	playsound(src, 'sound/machines/click.ogg', 75, 1)
+	if(!do_after(user, target, 30))
+		return
+	var/obj/machinery/light_construct/floor/newlight = new(T)
+	newlight.fingerprints = src.fingerprints
+	newlight.fingerprintshidden = src.fingerprintshidden
+	newlight.fingerprintslast = src.fingerprintslast
+	user.visible_message("[user] installs [src] into the floor.", \
+		"You install [src] into the floor.")
+	qdel(src)
+
+/obj/item/floor_light_frame/attackby(obj/item/weapon/W, mob/user)
+	if(W.is_wrench(user))
+		var/obj/item/stack/sheet/metal/M = new(get_turf(src))
+		M.amount = 2
+		qdel(src)
+		return
+	..()

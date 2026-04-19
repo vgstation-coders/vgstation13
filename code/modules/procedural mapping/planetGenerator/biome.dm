@@ -64,23 +64,25 @@
  * Arguments:
  * * gen_turf - The turf to generate
  * * new_area - The area to assign the turf to
- * * string_gen - Optional string used for procedural generation logic
+ * * cave_data - Optional list of numeric cave automaton data (0 = open, 1 = closed)
  */
-/datum/biome/proc/generate_turf(turf/gen_turf, area/new_area, string_gen, size, x_offset = 0, y_offset = 0)
+/datum/biome/proc/generate_turf(turf/gen_turf, area/new_area, list/cave_data, size, x_offset = 0, y_offset = 0)
 	var/area/current_area = gen_turf.loc
 	if(!(current_area.flags & CAVES_ALLOWED))
 		return FALSE
 
-	// Reassign turf to new area
+	// Reassign turf to new area (skip change_area — it only does name replacetext,
+	// which is pointless since ChangeTurfPlanetGen creates a new turf instance)
 	new_area.contents += gen_turf
-	gen_turf.change_area(current_area, new_area)
 
 	// Preserve NO_RUINS flag through turf change
 	var/stored_flags = gen_turf.turf_flags & NO_RUINS
-	var/turf/new_turf_type = get_turf_type(gen_turf, string_gen, size, x_offset, y_offset)
-	var/turf/new_turf = gen_turf.ChangeTurf(new_turf_type, defer_edges = TRUE)
+	var/turf/new_turf_type = get_turf_type(gen_turf, cave_data, size, x_offset, y_offset)
+	var/turf/new_turf = gen_turf.ChangeTurfPlanetGen(new_turf_type)
+	if(!new_turf)
+		return FALSE
 	// Restore the preserved flag
-	new_turf?.turf_flags |= stored_flags
+	new_turf.turf_flags |= stored_flags
 	new_turf.oxygen = MOLES_O2STANDARD
 	new_turf.nitrogen = MOLES_N2STANDARD
 	new_turf.temperature = biome_temperature
@@ -92,9 +94,9 @@
  * Base implementation simply picks from the biome's open turf types. Override in subtypes for custom logic.
  * Arguments:
  * * gen_turf - The turf being generated
- * * string_gen - Optional string used for procedural generation logic
+ * * cave_data - Optional list of numeric cave automaton data
  */
-/datum/biome/proc/get_turf_type(turf/gen_turf, string_gen, size, x_offset = 0, y_offset = 0)
+/datum/biome/proc/get_turf_type(turf/gen_turf, list/cave_data, size, x_offset = 0, y_offset = 0)
 	return pick(open_turf_types_expanded)
 
 /**
@@ -283,29 +285,25 @@
 	return ..()
 
 /**
- * Returns a turf type based on string generation data
+ * Returns a turf type based on cave automaton data
  *
- * Uses the string_gen value at the turf's coordinates to determine if a closed or open turf should be placed.
+ * Uses the cave_data value at the turf's coordinates to determine if a closed or open turf should be placed.
  * Arguments:
  * * gen_turf - The turf being generated
- * * string_gen - String containing generation data, indexed by coordinate
+ * * cave_data - List of numeric cave automaton data (0 = open, 1 = closed)
  */
-/datum/biome/cave/get_turf_type(turf/gen_turf, string_gen, size, x_offset = 0, y_offset = 0)
-	// Gets the character in string_gen corresponding to gen_turf's coords. If it is nonzero,
+/datum/biome/cave/get_turf_type(turf/gen_turf, list/cave_data, size, x_offset = 0, y_offset = 0)
+	// Look up the cave automaton value at gen_turf's coords. If nonzero,
 	// place a closed turf; otherwise place an open turf
-	if(!size || !string_gen)
+	if(!size || !length(cave_data))
 		return pick(open_turf_types_expanded)
 	// Calculate relative coordinates within the virtual_z
-	var/rel_x = gen_turf.x - x_offset + 1
-	var/rel_y = gen_turf.y - y_offset + 1
-	// Clamp to valid range
-	rel_x = clamp(rel_x, 1, size)
-	rel_y = clamp(rel_y, 1, size)
-	var/string_index = size * (rel_y - 1) + rel_x
-	if(string_index < 1 || string_index > length(string_gen))
+	var/rel_x = clamp(gen_turf.x - x_offset + 1, 1, size)
+	var/rel_y = clamp(gen_turf.y - y_offset + 1, 1, size)
+	var/list_index = size * (rel_y - 1) + rel_x
+	if(list_index < 1 || list_index > length(cave_data))
 		return pick(open_turf_types_expanded)
-	var/is_closed = text2num(string_gen[string_index])
-	return pick(is_closed ? closed_turf_types_expanded : open_turf_types_expanded)
+	return pick(cave_data[list_index] ? closed_turf_types_expanded : open_turf_types_expanded)
 
 
 #undef FEATURE_SPAWN_DISTANCE
