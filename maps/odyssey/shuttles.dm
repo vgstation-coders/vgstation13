@@ -275,6 +275,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	if(!emergency_shuttle || emergency_shuttle.online || emergency_shuttle.departed || emergency_shuttle.shutdown)
 		return
 	emergency_shuttle.incall()
+	captain_announce("The NTEV Odyssey's bridge communications array has been destroyed; Central Command cannot authorize continued exploration operations. Automated emergency protocol engaged: the Bluespace Drive is now charging for immediate return to Central Command.")
 	log_game("Communications Console destroyed. Bluespace jump initiated.")
 	message_admins("Communications Console destroyed. Bluespace jump initiated.", 1)
 

@@ -8,7 +8,7 @@
 	dat += "Current Status:"
 
 	var/area/shuttle_loc = locate(/area/shuttle/escape/centcom)
-	var/turf/shuttle_turf = shuttle_loc ? pick(shuttle_loc.area_turfs) : null
+	var/turf/shuttle_turf = (shuttle_loc && shuttle_loc.area_turfs && shuttle_loc.area_turfs.len) ? pick(shuttle_loc.area_turfs) : null
 	if(shuttle_turf)
 		dat += "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[shuttle_turf.x];Y=[shuttle_turf.y];Z=[shuttle_turf.z]'>"
 	else

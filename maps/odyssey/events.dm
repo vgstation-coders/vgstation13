@@ -235,36 +235,45 @@
 	logo = "xeno-logo"
 	my_fac = /datum/faction/xenomorph
 
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/odyssey_xeno/proc/get_valid_spawns()
+	var/list/valid_area_types = list(
+		/area/shuttle/odyssey/engineering,
+		/area/shuttle/odyssey/maintenance/port,
+		/area/shuttle/odyssey/maintenance/starboard,
+		/area/shuttle/odyssey/janitor,
+		/area/shuttle/odyssey/restroom,
+		/area/shuttle/odyssey/quarters/crew,
+		/area/shuttle/odyssey/quarters/heads
+	)
+	var/list/valid_spawns = list()
+	for(var/area/shuttle/odyssey/A in world)
+		if(!(A.type in valid_area_types))
+			continue
+		for(var/turf/simulated/floor/T in A)
+			if(T.density)
+				continue
+			valid_spawns += T
+	return valid_spawns
+
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/odyssey_xeno/ready(var/forced = 0)
 	if(map.nameShort != "odyssey")
 		return FALSE
 
-	if(!xeno_spawn.len)
-		log_admin("Odyssey xeno ruleset: No xeno_spawn landmarks found.")
-		message_admins("Odyssey xeno ruleset: No xeno_spawn landmarks found.")
-		return FALSE
-
-	var/list/valid_spawns = list()
-	for(var/turf/T in xeno_spawn)
-		if(istype(get_area(T), /area/shuttle/odyssey))
-			valid_spawns += T
-
-	if(!valid_spawns.len)
-		log_admin("Odyssey xeno ruleset: No xeno_spawn landmarks are currently on the shuttle.")
-		message_admins("Odyssey xeno ruleset: No xeno_spawn landmarks are currently on the shuttle.")
+	var/list/spawns = get_valid_spawns()
+	if(!spawns.len)
+		log_admin("Odyssey xeno ruleset: No valid shuttle spawn turfs found.")
+		message_admins("Odyssey xeno ruleset: No valid shuttle spawn turfs found.")
 		return FALSE
 
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/odyssey_xeno/generate_ruleset_body(var/mob/applicant)
-	var/list/valid_spawns = list()
-	for(var/turf/T in xeno_spawn)
-		if(istype(get_area(T), /area/shuttle/odyssey))
-			valid_spawns += T
-
-	var/turf/spawn_loc = valid_spawns.len ? pick(valid_spawns) : pick(xeno_spawn)
+	var/list/valid_spawns = get_valid_spawns()
+	if(!valid_spawns.len)
+		return
+	var/turf/spawn_loc = pick(valid_spawns)
 	var/mob/living/carbon/alien/larva/new_xeno = new(spawn_loc)
-	new_xeno.stowaway = TRUE // Restrict this xeno's evolution to Hunter only
+	new_xeno.stowaway = TRUE
 	new_xeno.key = applicant.key
 	new_xeno << sound('sound/voice/alienspawn.ogg')
 

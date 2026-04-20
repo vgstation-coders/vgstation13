@@ -46,17 +46,14 @@
 	name = "Engineering Supplies";
 	id_tag = "eng supplies";
 	pixel_y = 25;
-	pixel_x = -5
+	pixel_x = -5;
+	req_one_access_txt = "11"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 10;
 	tag = ""
 	},
 /obj/machinery/camera/autoname,
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -175,10 +172,6 @@
 	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
-	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -2222,10 +2215,6 @@
 	},
 /area/surface/nt_outpost/clinic)
 "he" = (
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
-	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/port)
 "hh" = (
@@ -2598,10 +2587,6 @@
 	dir = 1;
 	on = 1
 	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
-	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/crew)
 "iJ" = (
@@ -2719,10 +2704,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
 	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -2804,10 +2785,6 @@
 "jr" = (
 /obj/structure/wc/toilet{
 	pixel_y = 8
-	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -6748,7 +6725,8 @@
 	name = "Starboard Gas Storage Lockdown";
 	id_tag = "starboard gas";
 	pixel_y = -27;
-	pixel_x = 8
+	pixel_x = 8;
+	req_access_txt = "11"
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
@@ -7211,7 +7189,8 @@
 	name = "Port Gas Storage Lockdown";
 	id_tag = "port gas";
 	pixel_y = 27;
-	pixel_x = 8
+	pixel_x = 8;
+	req_one_access_txt = "11"
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/gas_storage/port)
@@ -8172,10 +8151,6 @@
 	d2 = 2;
 	icon_state = "0-2";
 	pixel_y = 1
-	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
 	},
 /obj/machinery/light_switch{
 	pixel_x = 12;
@@ -10560,10 +10535,6 @@
 	},
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_x = -30
-	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
@@ -14795,10 +14766,6 @@
 	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
-	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
