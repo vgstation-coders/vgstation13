@@ -122,6 +122,7 @@
 	var/to_drain = charge_rate
 	if(power_connection.connected)
 		if(power_connection.get_surplus() > 0)
+			to_drain = min(to_drain,power_connection.get_surplus())
 			if(stored_charge + charge_rate > max_charge)
 				to_drain = max_charge - stored_charge
 			power_connection.add_load(to_drain)
