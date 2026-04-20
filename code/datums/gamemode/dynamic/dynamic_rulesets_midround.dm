@@ -862,50 +862,6 @@
 
 //////////////////////////////////////////////
 //                                          //
-//          ODYSSEY XENOMORPH               ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                          //
-//////////////////////////////////////////////
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/odyssey_xeno
-	name = "Alien Stowaway"
-	role_category = /datum/role/xenomorph
-	enemy_jobs = list()
-	required_pop = list(0,0,0,0,0,0,0,0,0,0)
-	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
-	required_candidates = 1
-	max_candidates = 1
-	weight = 12
-	weight_category = "Alien"
-	cost = 5
-	requirements = list(20,15,10,10,10,10,10,10,10,10)
-	high_population_requirement = 10
-	logo = "xeno-logo"
-	my_fac = /datum/faction/xenomorph
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/odyssey_xeno/ready(var/forced = 0)
-	if(map.nameShort != "odyssey")
-		return FALSE
-
-	if(!xeno_spawn.len)
-		log_admin("Odyssey xeno ruleset: No xeno_spawn landmarks found.")
-		message_admins("Odyssey xeno ruleset: No xeno_spawn landmarks found.")
-		return FALSE
-
-	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/odyssey_xeno/generate_ruleset_body(var/mob/applicant)
-	var/turf/spawn_loc = pick(xeno_spawn)
-	var/mob/living/carbon/alien/larva/new_xeno = new(spawn_loc)
-	new_xeno.key = applicant.key
-	new_xeno << sound('sound/voice/alienspawn.ogg')
-
-	spawn(rand(90 SECONDS, 120 SECONDS))
-		captain_announce("Unidentified life signs detected aboard the NTEV Odyssey.")
-
-	return new_xeno
-
-//////////////////////////////////////////////
-//                                          //
 //                PULSE DEMON               ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////

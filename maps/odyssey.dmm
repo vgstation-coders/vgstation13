@@ -2508,7 +2508,6 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/supply)
 "iu" = (
-/obj/machinery/door/airlock/engineering,
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
@@ -2526,6 +2525,7 @@
 	tag = "icon-intact (EAST)"
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/maintenance_hatch,
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "iv" = (
@@ -4156,6 +4156,8 @@
 	pixel_y = -30;
 	dir = 1
 	},
+/obj/item/weapon/circuitboard/shuttle_control/odyssey,
+/obj/item/weapon/circuitboard/communications/odyssey,
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
 "nU" = (
@@ -5300,15 +5302,10 @@
 	pixel_x = -4;
 	pixel_y = -5
 	},
-/obj/item/weapon/storage/box/flashbangs{
-	pixel_x = 4;
-	pixel_y = 5
-	},
 /obj/item/weapon/storage/box/smokebombs{
 	pixel_x = 5;
 	pixel_y = -5
 	},
-/obj/item/weapon/storage/box/smokebombs,
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_y = -30
 	},
@@ -5409,7 +5406,9 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/odyssey_transfer)
 "sB" = (
-/obj/machinery/door/airlock/glass_command,
+/obj/machinery/door/airlock/glass_command{
+	req_access_txt = "19"
+	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -5484,8 +5483,8 @@
 /obj/machinery/atmospherics/pipe/simple/cyan/hidden{
 	dir = 4
 	},
-/obj/machinery/door/airlock/engineering,
 /obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/maintenance_hatch,
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/port)
 "sL" = (
@@ -7181,7 +7180,8 @@
 	name = "Engineering RC";
 	pixel_y = -30
 	},
-/obj/item/weapon/circuitboard/communications,
+/obj/item/weapon/circuitboard/communications/odyssey,
+/obj/item/weapon/circuitboard/shuttle_control/odyssey,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -7403,7 +7403,9 @@
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey_transfer)
 "yM" = (
-/obj/machinery/door/airlock/engineering,
+/obj/machinery/door/airlock/engineering{
+	req_access_txt = "11"
+	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -8363,7 +8365,7 @@
 	},
 /area/surface/nt_outpost/admin)
 "Cb" = (
-/obj/machinery/computer/communications,
+/obj/machinery/computer/communications/odyssey,
 /turf/simulated/floor{
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy (WEST)"
@@ -10779,7 +10781,9 @@
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
 "KB" = (
-/obj/machinery/door/airlock/glass_atmos,
+/obj/machinery/door/airlock/glass_atmos{
+	req_access_txt = "11"
+	},
 /obj/machinery/door/poddoor{
 	density = 0;
 	icon_state = "pdoor0";
@@ -11485,7 +11489,9 @@
 	},
 /area/surface/nt_outpost/clinic)
 "MJ" = (
-/obj/machinery/door/airlock/glass_command,
+/obj/machinery/door/airlock/glass_command{
+	req_access_txt = "19"
+	},
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden{
 	dir = 4
 	},
@@ -11699,7 +11705,9 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
 "Nw" = (
-/obj/machinery/door/airlock/engineering,
+/obj/machinery/door/airlock/engineering{
+	req_access_txt = "11"
+	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -12459,7 +12467,9 @@
 /turf/simulated/floor/plating/vox,
 /area/shuttle/trade/start)
 "PS" = (
-/obj/machinery/door/airlock/glass_atmos,
+/obj/machinery/door/airlock/glass_atmos{
+	req_access_txt = "11"
+	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -12876,7 +12886,9 @@
 /turf/simulated/floor/wood,
 /area/derelict/bar)
 "QV" = (
-/obj/machinery/door/airlock/engineering,
+/obj/machinery/door/airlock/engineering{
+	req_access_txt = "11"
+	},
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable{
 	d1 = 1;
@@ -14668,7 +14680,9 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
 "WH" = (
-/obj/machinery/door/airlock/security,
+/obj/machinery/door/airlock/security{
+	req_access_txt = "1"
+	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;

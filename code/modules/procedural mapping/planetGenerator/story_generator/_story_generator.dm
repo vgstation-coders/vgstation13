@@ -506,7 +506,7 @@ var/list/datum/story_theme/story_themes = list()
 		return
 
 	activating = TRUE
-	var/reboot_time = rand(5, 15) MINUTES
+	var/reboot_time = (map.nameShort == "odyssey") ? rand(2, 5) MINUTES : rand(5, 15) MINUTES
 
 	visible_message("<span class='notice'>\The [src] begins to hum as [user] initiates the boot sequence...</span>")
 	playsound(src, 'sound/machines/click.ogg', 50, 1)

@@ -161,8 +161,14 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 			return 0
 	return ..()
 
+/obj/item/weapon/circuitboard/shuttle_control/odyssey
+	name = "Circuit board (NTEV Odyssey Shuttle Control)"
+	desc = "A circuit board for running the NTEV Odyssey's shuttle control computer."
+	build_path = /obj/machinery/computer/shuttle_control/odyssey
+
 /obj/machinery/computer/shuttle_control/odyssey
 	name = "NTEV Odyssey shuttle control computer"
+	circuit = "/obj/item/weapon/circuitboard/shuttle_control/odyssey"
 
 /obj/machinery/computer/shuttle_control/odyssey/New()
 	link_to(odyssey_shuttle)
@@ -257,6 +263,31 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 			return
 	return ..()
 
+/obj/item/weapon/circuitboard/communications/odyssey
+	name = "Circuit board (Odyssey Bridge Communications)"
+	desc = "A circuit board for running the Odyssey bridge communications console."
+	build_path = /obj/machinery/computer/communications/odyssey
+
+/obj/machinery/computer/communications/odyssey
+	circuit = "/obj/item/weapon/circuitboard/communications/odyssey"
+
+/obj/machinery/computer/communications/odyssey/proc/trigger_bluespace_jump()
+	if(!emergency_shuttle || emergency_shuttle.online || emergency_shuttle.departed || emergency_shuttle.shutdown)
+		return
+	emergency_shuttle.incall()
+	log_game("Communications Console destroyed. Bluespace jump initiated.")
+	message_admins("Communications Console destroyed. Bluespace jump initiated.", 1)
+
+/obj/machinery/computer/communications/odyssey/set_broken()
+	. = ..()
+	if(.)
+		trigger_bluespace_jump()
+
+/obj/machinery/computer/communications/odyssey/Destroy()
+	if(!(stat & BROKEN))
+		trigger_bluespace_jump()
+	return ..()
+
 // Odyssey-specific emergency shuttle controller
 // Instead of calling a separate escape shuttle, the Odyssey itself performs a Bluespace jump to CentComm
 
@@ -264,6 +295,9 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 
 /datum/emergency_shuttle/odyssey
 	var/obj/effect/overlay/bluespacify/bs_overlay // Single shared overlay instance
+
+/datum/emergency_shuttle/odyssey/get_linked_port()
+	return odyssey_shuttle ? odyssey_shuttle.linked_port : null
 
 /datum/emergency_shuttle/odyssey/process()
 	if(!online || shutdown)
@@ -370,6 +404,10 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 
 /datum/emergency_shuttle/odyssey/shuttle_phase(phase, casual = 1)
 	switch(phase)
+		if("station")
+			message_admins("Emergency shuttle panel: 'move to station' is not applicable for the Odyssey Bluespace Jump.")
+			return
+
 		if("transit")
 			// Move Odyssey to its transit port
 			location = SHUTTLE_ON_STANDBY

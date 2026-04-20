@@ -172,6 +172,11 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 			else
 				D.open()
 
+// Returns the shuttle's linked docking port for use in admin log messages.
+// Overridden by map-specific subtypes that don't use the escape shuttle var.
+/datum/emergency_shuttle/proc/get_linked_port()
+	return shuttle ? shuttle.linked_port : null
+
 /datum/emergency_shuttle/proc/force_shutdown()
 	online=0
 	shutdown=1
