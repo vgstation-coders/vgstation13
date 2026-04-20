@@ -256,9 +256,6 @@
 	return valid_spawns
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/odyssey_xeno/ready(var/forced = 0)
-	if(map.nameShort != "odyssey")
-		return FALSE
-
 	var/list/spawns = get_valid_spawns()
 	if(!spawns.len)
 		log_admin("Odyssey xeno ruleset: No valid shuttle spawn turfs found.")
