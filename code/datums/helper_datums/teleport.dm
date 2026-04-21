@@ -233,7 +233,7 @@
 			return FALSE
 
 	var/datum/virtual_z/vz = destination.get_virtual_z()
-	if (vz.teleJammed == VZ_TELEPORTATION_FORBIDDEN && !ignore_jamming)
+	if (vz?.teleJammed == VZ_TELEPORTATION_FORBIDDEN && !ignore_jamming)
 		return FALSE
 
 	for (var/mob/M in recursive_type_check(teleatom, /mob))
