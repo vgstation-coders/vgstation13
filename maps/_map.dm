@@ -67,6 +67,7 @@
 
 	var/list/event_blacklist = list(/datum/event/blizzard, /datum/event/omega_blizzard)
 	var/list/event_whitelist = list()
+	var/disable_random_events = FALSE //If TRUE, the standard /datum/event random event scheduler will not fire on this map.
 
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()

@@ -53,6 +53,7 @@
 	planet_size = 140
 	shuttle_call_label = "Begin Bluespace Jump"
 	shuttle_cancel_label = "Cancel Bluespace Jump"
+	disable_random_events = TRUE //Odyssey uses its own event system (see maps/odyssey/events.dm)
 
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category,/datum/role/blob_overmind))
