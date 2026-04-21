@@ -48,7 +48,7 @@ var/datum/ui_state/default/default_state = new
 
 /mob/living/silicon/pai/default_can_use_topic(src_object)
 	// pAIs can only use themselves and the owner's radio.
-	if((src_object == src || src_object == radio) && !stat)
+	if((src_object == src || src_object == radio || src_object == pps_device) && !stat)
 		return UI_INTERACTIVE
 	else
 		return min(..(), UI_UPDATE)
