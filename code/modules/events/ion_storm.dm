@@ -109,14 +109,34 @@
 
 	//And now the fun part, we use all those words to create dymanic ion laws fragments
 
-	var/list/il_laws_fragments = list("[pick(il_bio)] must [pick(il_bio_act)]", "[pick(il_bio_desc)] [pick(il_bio)] must [pick(il_bio_act)]", "[pick(il_bio)] are [pick(il_bio_desc)]", "[pick(il_bio)] are [pick(il_bio_desc)] and [pick(il_bio_desc)]",
-	"[pick(il_bio_desc)] [pick(il_bio)] are [pick(il_bio_desc)] and must [pick(il_bio_act)]", "[pick(players)] must [pick(il_bio_act)]", "[pick(players)] is [pick(il_bio_desc)]", "[pick(players)] is [pick(il_bio_desc)] and [pick(il_bio_desc)]", \
-	"[pick(players)] is [pick(il_bio_desc)] and must [pick(il_bio_act)]", "[pick(il_mach)] must [pick(il_mach_act)]", "[pick(il_mach)] are [pick(il_mach_desc)]", "[pick(il_mach_desc)] [pick(il_mach)] must [pick(il_mach_act)]", \
-	"[pick(il_mach)] are [pick(il_mach_desc)] and [pick(il_mach_desc)]", "[pick(il_mach_desc)] [pick(il_mach)] are [pick(il_mach_desc)] and must [pick(il_mach_act)]", "[pick(il_area)] is [pick(il_area_desc)]", \
-	"[pick(il_area)] is [pick(il_area_desc)] for [pick(il_bio)]", "[pick(il_bio)] must not enter [pick(il_area)]", "[pick(il_bio)] must always be in [pick(il_area)]", "[pick(il_area)]'s [pick(il_mach)] must [pick(il_mach_act)]", \
-	"[pick(il_obj)] must be relocated to [pick(il_area)]", "no [pick(il_obj)] must be located within [pick(il_area)]", "[pick(il_area)] needs [pick(il_mach_desc)] [pick(il_mach)]", "[pick(il_obj)] must [pick(il_obj_act)]", \
-	"[pick(il_obj_desc)] [pick(il_obj)] are [pick(il_obj_desc)] and must [pick(il_obj_act)]", "[pick(il_bio)] must wear [pick(il_obj_wear)] when in sight of [pick(il_mach)]", "[pick(il_bio)] must wear [pick(il_obj_wear)] in [pick(il_area)]", \
-	"[pick(il_obj)] must [pick(il_obj_act)] while wearing [pick(il_obj_desc)] [pick(il_obj_wear)]", "[pick(il_bio)] wearing [pick(il_obj_wear)] must [pick(il_bio_act)]")
+	var/list/il_laws_fragments = list("[pick(il_bio)] must [pick(il_bio_act)]",
+	"[pick(il_bio_desc)] [pick(il_bio)] must [pick(il_bio_act)]",
+	"[pick(il_bio)] are [pick(il_bio_desc)]",
+	"[pick(il_bio)] are [pick(il_bio_desc)] and [pick(il_bio_desc)]",
+	"[pick(il_bio_desc)] [pick(il_bio)] are [pick(il_bio_desc)] and must [pick(il_bio_act)]",
+	"[pick(players)] must [pick(il_bio_act)]",
+	"[pick(players)] is [pick(il_bio_desc)]",
+	"[pick(players)] is [pick(il_bio_desc)] and [pick(il_bio_desc)]",
+	"[pick(players)] is [pick(il_bio_desc)] and must [pick(il_bio_act)]",
+	"[pick(il_mach)] must [pick(il_mach_act)]",
+	"[pick(il_mach)] are [pick(il_mach_desc)]",
+	"[pick(il_mach_desc)] [pick(il_mach)] must [pick(il_mach_act)]",
+	"[pick(il_mach)] are [pick(il_mach_desc)] and [pick(il_mach_desc)]",
+	"[pick(il_mach_desc)] [pick(il_mach)] are [pick(il_mach_desc)] and must [pick(il_mach_act)]",
+	"[pick(il_area)] is [pick(il_area_desc)]",
+	"[pick(il_area)] is [pick(il_area_desc)] for [pick(il_bio)]",
+	"[pick(il_bio)] must not enter [pick(il_area)]",
+	"[pick(il_bio)] must always be in [pick(il_area)]",
+	"[pick(il_area)]'s [pick(il_mach)] must [pick(il_mach_act)]",
+	"[pick(il_obj)] must be relocated to [pick(il_area)]",
+	"no [pick(il_obj)] must be located within [pick(il_area)]",
+	"[pick(il_area)] needs [pick(il_mach_desc)] [pick(il_mach)]",
+	"[pick(il_obj)] must [pick(il_obj_act)]",
+	"[pick(il_obj_desc)] [pick(il_obj)] are [pick(il_obj_desc)] and must [pick(il_obj_act)]",
+	"[pick(il_bio)] must wear [pick(il_obj_wear)] when in sight of [pick(il_mach)]",
+	"[pick(il_bio)] must wear [pick(il_obj_wear)] in [pick(il_area)]",
+	"[pick(il_obj)] must [pick(il_obj_act)] while wearing [pick(il_obj_desc)] [pick(il_obj_wear)]",
+	"[pick(il_bio)] wearing [pick(il_obj_wear)] must [pick(il_bio_act)]")
 
 	//One last list for the sake of it, how will we order this pure insanity ?
 
