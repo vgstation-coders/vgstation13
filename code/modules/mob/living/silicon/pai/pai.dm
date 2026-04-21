@@ -34,6 +34,7 @@
 	var/secHUD = FALSE			// Toggles whether the Security HUD is active or not
 	var/medHUD = FALSE			// Toggles whether the Medical  HUD is active or not
 	var/lighted = FALSE			// Toggles whether light is active or not
+	var/loudspeak = FALSE		// Toggles megaphone mode
 
 	var/datum/data/record/medicalActive1		// Datacore record declarations for record software
 	var/datum/data/record/medicalActive2
@@ -379,3 +380,7 @@
 	if (holomap_device)
 		holomap_device.update_holomap()
 
+/mob/living/silicon/pai/treat_speech(var/datum/speech/speech, genesay = 0)
+	..()
+	if(loudspeak)
+		speech.message_classes.Add("megaphone")
