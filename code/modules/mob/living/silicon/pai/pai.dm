@@ -96,6 +96,14 @@
 		"Sleep Toxin" = STOXIN,
 	)
 
+	var/list/synthable_combat_chems = list(
+		"Hyperzine" = HYPERZINE,
+		"Synaptizine" = SYNAPTIZINE,
+		"Biofoam" = BIOFOAM,
+		"Equalizone" = EQUALIZONE,
+		"Brawndo" = SPORTDRINK
+	)
+
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
 	change_sight(removing = BLIND)
 	canmove = FALSE
