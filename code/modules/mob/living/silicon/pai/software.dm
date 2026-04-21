@@ -187,6 +187,9 @@
 						return 0
 				spawn CheckDNA(M, src)
 
+		if(SOFT_NW)
+			painews.attack_hand(src)
+
 		if(SOFT_DM)
 			if(!isnull(pda))
 				var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in pda.applications
@@ -352,6 +355,8 @@
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_CM];sub=0'>Crew Manifest</a> <br>"
 		if(s == SOFT_DM)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_DM];sub=0'>Digital Messenger</a> <br>"
+		if(s == SOFT_NW)
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_NW];sub=0'>Newscaster</a> <br>"
 		if(s == SOFT_RS)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_RS];sub=0'>Remote Signaller</a> <br>"
 		if(s == SOFT_AS)
