@@ -19,6 +19,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	stable = 0
 	var/bluespace_jump_state = JUMP_NONE
 	var/obj/docking_port/destination/dock_centcom
+	var/obj/docking_port/destination/outpost_dock
 	var/transit_end_time = 0
 	var/transit_destination_name = ""
 
@@ -26,7 +27,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 
 /datum/shuttle/odyssey/initialize()
 	.=..()
-	add_dock(/obj/docking_port/destination/odyssey/outpost)
+	outpost_dock = add_dock(/obj/docking_port/destination/odyssey/outpost)
 	add_dock(/obj/docking_port/destination/odyssey/deep_space)
 	add_dock(/obj/docking_port/destination/odyssey/dj_sat)
 	add_dock(/obj/docking_port/destination/odyssey/derelict)
@@ -66,10 +67,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 			vz.teleJammed = VZ_TELEPORTATION_ALLOWED
 			vz.update_settings()
 
-	// If starting at outpost, enable external power on SMES units
-	if(istype(current_port, /obj/docking_port/destination/odyssey/outpost))
-		for(var/obj/machinery/power/battery/smes/S in shuttle_contents())
-			S.external_power_supply = TRUE
+	update_outpost_power()
 
 	// Initialize Odyssey events
 	possible_events = list(
@@ -79,11 +77,14 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 		new /datum/odyssey_event/carp_swarm
 	)
 
-/datum/shuttle/odyssey/after_flight()
-	..()
-	var/at_outpost = istype(current_port, /obj/docking_port/destination/odyssey/outpost)
+/datum/shuttle/odyssey/proc/update_outpost_power()
+	var/at_outpost = outpost_dock && current_port == outpost_dock
 	for(var/obj/machinery/power/battery/smes/S in shuttle_contents())
 		S.external_power_supply = at_outpost
+
+/datum/shuttle/odyssey/after_flight()
+	..()
+	update_outpost_power()
 	// Clean up lingering beach water effects on shuttle turfs after landing
 	for(var/turf/T in shuttle_contents())
 		for(var/obj/effect/beach_water/unsimmed/W in T.vis_contents)
