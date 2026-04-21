@@ -50,6 +50,8 @@
 
 	var/obj/item/device/gps/pai/pps_device = null //Our GPS device.
 
+	var/obj/machinery/newscaster/painews //our copy of the Newscaster
+
 	var/obj/item/device/station_map/holomap_device = null // Our holomap device.
 	var/holo_target = "show_map" // Our holomap target.
 
@@ -118,6 +120,8 @@
 	add_language(LANGUAGE_GALACTIC_COMMON, 1)
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_GUTTER, 1)
+
+	painews = new(src)
 
 	verbs.Remove(/mob/living/silicon/verb/state_laws)
 	..()
