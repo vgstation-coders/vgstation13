@@ -252,7 +252,13 @@
 				else if(chargeloop(SOFT_CS))
 					var/mob/M = get_holder_of_type(loc, /mob)
 					if(M) //Sanity
-						M.reagents.add_reagent(href_list["chem"], 15)
+						var/amount = 15
+						var/chem = href_list["chem"]
+						if(chem == HYPERZINE) //i wanted a list but this works well enough
+							amount = 14.9
+						if(chem == SYNAPTIZINE)
+							amount = 1
+						M.reagents.add_reagent(chem, amount)
 						playsound(loc, 'sound/effects/bubbles.ogg', 50, 1)
 				else
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
@@ -691,9 +697,12 @@ Target Machine: "}
 			dat += "<br>Medical Supplement Chemicals:<br>"
 			for(var/chem in synthable_medical_chems)
 				dat += "<a href='byond://?src=\ref[src];software=[SOFT_CS];sub=0;chem=[synthable_medical_chems[chem]]'>[chem]</a> <br>"
+		if(SOFT_SS in software)
+			dat += "<br>Combat Supplement Chemicals:<br>"
+			for(var/chem in synthable_combat_chems)
+				dat += "<a href='byond://?src=\ref[src];software=[SOFT_CS];sub=0;chem=[synthable_combat_chems[chem]]'>[chem]</a> <br>"
 	else
-		dat += "Charging... [charge]u ready.<br><br>Deploying at 15u."
-	return dat
+		dat += "Charging... [round(charge*100/15)]% ready.<br><br>Deploying..."
 
 /mob/living/silicon/pai/proc/softwareFood()
 	var/dat = "<h3>Nutrition Synthesizer</h3>"
