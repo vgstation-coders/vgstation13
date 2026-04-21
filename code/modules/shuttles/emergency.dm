@@ -77,7 +77,23 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 
 	crashing_this_pod = 0
 
-	if(!dock_shuttle)
+	var/obj/docking_port/destination/crash_dock = dock_shuttle
+	if(!crash_dock)
+		var/datum/shuttle/escape/main_shuttle = emergency_shuttle.shuttle
+		if(main_shuttle)
+			for(var/turf/simulated/floor/shuttle/T in main_shuttle.shuttle_contents())
+				var/occupied = FALSE
+				for(var/obj/docking_port/D in T)
+					occupied = TRUE
+					break
+				if(!occupied)
+					crash_dock = new /obj/docking_port/destination(T)
+					crash_dock.areaname = "emergency shuttle"
+					crash_dock.link_to_shuttle(src)
+					break
+
+	if(!crash_dock)
+		message_admins("Warning: [src] could not find a crash dock for the emergency shuttle.")
 		return
 
 	playsound(linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
@@ -91,14 +107,14 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 	spawn(15 SECONDS + random_delay)
 
 		playsound(linked_port, 'sound/machines/hyperspace_begin.ogg', 70, 0, 0, 0, 0)
-		playsound(dock_shuttle, 'sound/machines/hyperspace_begin.ogg', 60, 0, 0, 0, 0)
+		playsound(crash_dock, 'sound/machines/hyperspace_begin.ogg', 60, 0, 0, 0, 0)
 
 		spawn(5 SECONDS)
 
-		if(!move_to_dock(dock_shuttle, 0, 180))
+		if(!move_to_dock(crash_dock, 0, 180))
 			message_admins("Warning: [src] failed to crash into shuttle.")
 		else
-			explosion(get_turf(dock_shuttle), 2, 3, 4, 6)
+			explosion(get_turf(crash_dock), 2, 3, 4, 6)
 
 			for(var/mob/living/M in emergency_shuttle.shuttle.shuttle_contents())
 				shake_camera(M, 10, 1)

@@ -36,13 +36,10 @@
 		/datum/job/geneticist,
 		/datum/job/hos,
 		/datum/job/hydro,
-		/datum/job/lawyer,
 		/datum/job/librarian,
-		/datum/job/mechanic,
 		/datum/job/mommi,
 		/datum/job/orderly,
 		/datum/job/paramedic,
-		/datum/job/qm,
 		/datum/job/rd,
 		/datum/job/roboticist,
 		/datum/job/scientist,
@@ -111,5 +108,6 @@
 #include "odyssey/fixedvaults.dm"
 #include "odyssey/shuttles.dm"
 #include "odyssey/events.dm"
+#include "odyssey/jobs.dm"
 #include "odyssey.dmm"
 #endif

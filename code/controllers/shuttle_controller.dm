@@ -154,7 +154,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 			if(!S.move_to_dock(S.dock_station, 0))
 				message_admins("Warning: [S] failed to move to station.")
 		if("centcom")
-			if(S.current_port != S.dock_shuttle)
+			if(!S.dock_shuttle || S.current_port != S.dock_shuttle)
 				if(!S.move_to_dock(S.dock_centcom, 0))
 					message_admins("Warning: [S] failed to move to centcom.")
 		if("transit")

@@ -244,6 +244,9 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
+/obj/effect/landmark/start{
+	name = "Station Engineer"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -2382,6 +2385,7 @@
 	dir = 4;
 	name = "Cargo Office"
 	},
+/obj/structure/closet/secure_closet/quartermaster,
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -4706,7 +4710,9 @@
 /turf/simulated/floor,
 /area/security/perma)
 "pY" = (
-/obj/structure/closet/secure_closet/hop2,
+/obj/structure/closet/secure_closet/hop2{
+	name = "First Mate's Attire"
+	},
 /obj/item/clothing/suit/armor/hos,
 /obj/item/clothing/shoes/laceup,
 /obj/machinery/firealarm{
@@ -4841,6 +4847,9 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
+/obj/effect/landmark{
+	name = "Observer-Start"
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/central)
 "qr" = (
@@ -4943,10 +4952,10 @@
 "qD" = (
 /obj/structure/bed/chair/shuttle{
 	dir = 4;
-	name = "Bridge Officer"
+	name = "Navigation"
 	},
 /obj/effect/landmark/start{
-	name = "Internal Affairs Agent"
+	name = "Chief Engineer"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -6661,7 +6670,7 @@
 /area/shuttle/odyssey/stasis)
 "wC" = (
 /obj/machinery/door/airlock/command{
-	name = "Head of Personnel's Office";
+	name = "First Mate's Quarters";
 	req_access_txt = "57"
 	},
 /obj/machinery/door/firedoor,
@@ -7085,7 +7094,9 @@
 	},
 /area/shuttle/odyssey/stasis)
 "xQ" = (
-/obj/structure/closet/secure_closet/hop,
+/obj/structure/closet/secure_closet/hop{
+	name = "First Mate's Locker"
+	},
 /turf/simulated/floor/carpet,
 /area/shuttle/odyssey/quarters/heads)
 "xR" = (
@@ -8355,15 +8366,15 @@
 	tag = "icon-map (NORTH)"
 	},
 /obj/structure/bed/chair/folding,
-/obj/effect/landmark/start{
-	name = "Station Engineer"
-	},
 /obj/machinery/alarm{
 	pixel_y = 24;
 	req_access = list(140);
 	req_one_access = list()
 	},
 /obj/machinery/camera/autoname,
+/obj/effect/landmark/start{
+	name = "Mechanic"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -8453,7 +8464,7 @@
 	dir = 8
 	},
 /obj/effect/landmark/start{
-	name = "Cargo Technician"
+	name = "Quartermaster"
 	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
@@ -9771,6 +9782,9 @@
 /obj/structure/bed/chair{
 	dir = 1
 	},
+/obj/effect/landmark/start{
+	name = "Security Officer"
+	},
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark_navy";
@@ -10564,7 +10578,6 @@
 /obj/item/clothing/accessory/tie/horrible,
 /obj/item/clothing/suit/space,
 /obj/item/clothing/head/helmet/space,
-/obj/item/clothing/suit/storage/wintercoat/hop,
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
 "JY" = (
@@ -10928,13 +10941,11 @@
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "Le" = (
-/obj/effect/landmark{
-	name = "Observer-Start"
+/obj/structure/filingcabinet,
+/turf/unsimulated/floor{
+	icon_state = "floor"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/shuttle/odyssey/bridge)
+/area/surface/nt_outpost/cargo)
 "Lg" = (
 /obj/structure/reagent_dispensers/watertank,
 /turf/simulated/floor/plating,
@@ -12814,6 +12825,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/effect/landmark/start{
+	name = "Internal Affairs Agent"
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark_navy";
@@ -13037,15 +13051,15 @@
 /area/shuttle/odyssey/bridge)
 "Rv" = (
 /obj/structure/bed/chair,
-/obj/effect/landmark/start{
-	name = "Security Officer"
-	},
 /obj/machinery/door_control{
 	id_tag = "Prison Gate";
 	name = "Prison Wing Lockdown";
 	pixel_x = -5;
 	pixel_y = -26;
 	req_access_txt = "2"
+	},
+/obj/effect/landmark/start{
+	name = "Warden"
 	},
 /turf/simulated/floor,
 /area/security/perma)
@@ -14782,6 +14796,9 @@
 /area/surface/nt_outpost/cargo)
 "Xa" = (
 /obj/structure/bed/chair,
+/obj/effect/landmark/start{
+	name = "Assistant"
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "dark_navy";
@@ -31924,7 +31941,7 @@ Ew
 Zo
 dW
 kd
-Le
+CU
 kd
 WR
 Zo
@@ -41891,7 +41908,7 @@ kr
 WD
 WD
 WD
-WD
+Le
 Mz
 Bc
 sg
