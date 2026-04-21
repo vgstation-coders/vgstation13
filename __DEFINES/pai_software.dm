@@ -2,6 +2,7 @@
 #define SOFT_CM "crew manifest"
 #define SOFT_FL "flashlight"
 #define SOFT_RT "redundant threading"
+#define SOFT_VE "volume enhancer"
 #define SOFT_RS "remote signaller"
 #define SOFT_WJ "wirejack"
 #define SOFT_CS "chem synth"
