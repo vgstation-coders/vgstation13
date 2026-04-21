@@ -5,6 +5,7 @@
 															SOFT_FL = 10,
 															SOFT_RT = 10,
 															SOFT_RS = 10,
+															SOFT_VE = 10,
 
 															SOFT_WJ = 30,
 															SOFT_CS = 30,
@@ -69,6 +70,8 @@
 				left_part = softwareLight()
 			if(SOFT_HM)
 				left_part = softwareHolomap()
+			if(SOFT_VE)
+				left_part = softwareVolumeEnhancer()
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
 
@@ -294,7 +297,9 @@
 					holomap_device.toggleHolomap(M)
 			if(href_list["show_map"])
 				holomap_device.toggleHolomap(src)
-
+		if(SOFT_VE)
+			if(href_list["toggle"])
+				loudspeak = !loudspeak
 		if(SOFT_UN)
 			if(href_list["cancel"])
 				uninstallprogress = -1
@@ -323,6 +328,8 @@
 							remove_hud_by_type(/datum/visioneffect/security/arrest)
 							remove_hud_by_type(/datum/visioneffect/job)
 							secHUD = FALSE
+						if(target==SOFT_VE)
+							loudspeak = initial(loudspeak)
 						software.Remove(target)
 					uninstallprogress = -1
 				else
@@ -772,4 +779,11 @@ Target Machine: "}
 	dat+= "Creates a virtual map of the surrounding area.<BR>"
 	dat+= "Current mode: [holo_target == initial(holo_target)? "Internal Viewer" : "External Projector"] | <a href='byond://?src=\ref[src];software=[SOFT_HM];switch_target=1;sub=0'>Switch Type</a><BR>"
 	dat+= "<BR><a href='byond://?src=\ref[src];software=[SOFT_HM];[holo_target]=1;sub=0'>Toogle Holomap</a><BR>"
+	return dat
+
+//Megaphone
+/mob/living/silicon/pai/proc/softwareVolumeEnhancer()
+	var/dat = "<h3>Volume Enhancer</h3>"
+	dat += "Volume increase via targeted speaker overvoltage.<br><br>"
+	dat += "Volume enhancement [ (loudspeak) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=\ref[src];software=[SOFT_VE];sub=0;toggle=1'>Toggle Megaphone</a><br>"
 	return dat
