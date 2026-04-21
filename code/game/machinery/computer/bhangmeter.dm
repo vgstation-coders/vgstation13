@@ -62,7 +62,7 @@ var/list/list/sensed_explosions = list()
 	else
 		T = get_turf(src)
 		vz = get_virtual_z()
-		original_vLevel = vz.z()
+		original_vLevel = vz ? vz.z() : z
 
 	holomap_datum = new()
 	holomap_datum.initialize_holomap(T)

@@ -96,9 +96,6 @@
 	var/spawned_story_ruin = FALSE
 
 /datum/planetGenerator/New(var/generation_size)
-	if(!generation_size)
-		return
-
 	// Initialize perlin noise seeds with random values
 	height_seed = rand(0, 50000)
 	humidity_seed = rand(0, 50000)
