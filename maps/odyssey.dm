@@ -171,6 +171,12 @@
 			vz.register_weather_turfs(C)
 			break
 
+/datum/command_alert/emergency_shuttle_called/announce()
+	message = "The engines are charging in preparation for the Bluespace Jump. The ship will depart in [round(emergency_shuttle.timeleft()/60)] minutes."
+	if(justification)
+		message += " Justification: [justification]"
+	..()
+
 ////////////////////////////////////////////////////////////////
 #undef OUTPOST_MAX_X
 #undef OUTPOST_MAX_Y
