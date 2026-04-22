@@ -2935,6 +2935,7 @@
 /obj/machinery/newscaster{
 	pixel_y = -28
 	},
+/obj/item/device/megaphone,
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "dark_navy";
@@ -4747,7 +4748,7 @@
 /area/vox_station/tradepost)
 "qp" = (
 /obj/machinery/gas_extractor{
-	anchored = TRUE
+	anchored = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -13315,8 +13316,7 @@
 	},
 /area/shuttle/odyssey/engineering/engine_room)
 "SO" = (
-/obj/structure/table,
-/obj/item/device/megaphone,
+/obj/machinery/telecomms/relay/planetary/ship,
 /turf/simulated/floor{
 	dir = 12;
 	icon_state = "dark_navy";
