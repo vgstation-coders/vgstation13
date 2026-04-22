@@ -53,7 +53,34 @@
 	planet_size = 140
 	shuttle_call_label = "Begin Bluespace Jump"
 	shuttle_cancel_label = "Cancel Bluespace Jump"
-	disable_random_events = TRUE //Odyssey uses its own event system (see maps/odyssey/events.dm)
+
+	event_whitelist = list(
+		// Odyssey-native events
+		/datum/event/micro_meteors,
+		/datum/event/gib_storm,
+		/datum/event/solar_flare,
+		/datum/event/odyssey_carp_swarm,
+		// Vanilla events with Odyssey overrides
+		/datum/event/radiation_storm/odyssey,
+		/datum/event/disease_outbreak/odyssey,
+		/datum/event/viral_infection/odyssey,
+		/datum/event/viral_outbreak/odyssey,
+		/datum/event/ancientpod/odyssey,
+		/datum/event/grid_check/odyssey,
+		/datum/event/immovable_rod/odyssey,
+		/datum/event/rogue_drone/odyssey,
+		/datum/event/brand_intelligence/odyssey,
+		/datum/event/old_vendotron_teleport/odyssey,
+		// Vanilla events that work as-is
+		/datum/event/organ_failure,
+		/datum/event/mass_hallucination,
+		/datum/event/pda_spam,
+		/datum/event/money_lotto,
+		/datum/event/money_hacker,
+		/datum/event/profound_peace,
+		/datum/event/hog,
+		/datum/event/ionstorm
+	)
 
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category,/datum/role/blob_overmind))
@@ -63,6 +90,45 @@
 	else if(ispath(DR.role_category,/datum/role/nuclear_operative))
 		return FALSE
 	return ..()
+
+/datum/map/active/proc/get_ship_state()
+	if(!ship_shuttle || !ship_shuttle.current_port)
+		return 0
+	var/datum/virtual_z/vz = ship_shuttle.current_port.get_virtual_z()
+	if(!vz)
+		return 0
+	switch(vz.level_type)
+		if(VZ_TRANSIT)
+			return ODYSSEY_STATE_HYPERSPACE
+		if(VZ_PARKING, VZ_SPACE)
+			return ODYSSEY_STATE_DEEPSPACE
+	return 0
+
+/datum/map/active/proc/recently_on_planet()
+	if(!ship_shuttle)
+		return FALSE
+	// Currently docked at a planet?
+	if(ship_shuttle.current_port)
+		var/datum/virtual_z/vz = ship_shuttle.current_port.get_virtual_z()
+		if(vz && vz.level_type == VZ_PLANET)
+			return TRUE
+	// Or was within the last 15 minutes
+	var/datum/shuttle/odyssey/O = ship_shuttle
+	if(istype(O) && O.last_planet_dock_time && (world.time - O.last_planet_dock_time) < 15 MINUTES)
+		return TRUE
+	return FALSE
+
+/datum/map/active/map_specific_event_checks(var/datum/event/E)
+	var/required_state = 0
+	if(istype(E, /datum/event/micro_meteors) || istype(E, /datum/event/gib_storm) || istype(E, /datum/event/immovable_rod/odyssey))
+		required_state = ODYSSEY_STATE_HYPERSPACE
+	else if(istype(E, /datum/event/solar_flare) || istype(E, /datum/event/radiation_storm/odyssey))
+		required_state = ODYSSEY_STATE_HYPERSPACE | ODYSSEY_STATE_DEEPSPACE
+	else if(istype(E, /datum/event/odyssey_carp_swarm) || istype(E, /datum/event/rogue_drone/odyssey))
+		required_state = ODYSSEY_STATE_DEEPSPACE
+	if(required_state && !(get_ship_state() & required_state))
+		return 0
+	return 1
 
 /datum/zLevel/dynamic/odyssey
 	name = "odyssey"

@@ -22,6 +22,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	var/obj/docking_port/destination/outpost_dock
 	var/transit_end_time = 0
 	var/transit_destination_name = ""
+	var/last_planet_dock_time = 0 //world.time of last time the shuttle docked at or departed a VZ_PLANET port.
 
 	req_access = list(access_captain)
 
@@ -69,13 +70,8 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 
 	update_outpost_power()
 
-	// Initialize Odyssey events
-	possible_events = list(
-		new /datum/odyssey_event/micro_meteors,
-		new /datum/odyssey_event/gib_storm,
-		new /datum/odyssey_event/solar_flare,
-		new /datum/odyssey_event/carp_swarm
-	)
+	if(map)
+		map.ship_shuttle = src
 
 /datum/shuttle/odyssey/proc/update_outpost_power()
 	var/at_outpost = outpost_dock && current_port == outpost_dock
@@ -89,8 +85,10 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	for(var/turf/T in shuttle_contents())
 		for(var/obj/effect/beach_water/unsimmed/W in T.vis_contents)
 			T.vis_contents -= W
-	// Start the Odyssey event loop if in hyperspace or deep space
-	start_event_loop()
+	if(current_port)
+		var/datum/virtual_z/vz = current_port.get_virtual_z()
+		if(vz && vz.level_type == VZ_PLANET)
+			last_planet_dock_time = world.time
 
 /datum/shuttle/odyssey/get_pre_flight_delay()
 	// Skip countdown when already in hyperspace
@@ -121,7 +119,10 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	return ..()
 
 /datum/shuttle/odyssey/pre_flight()
-	stop_event_loop()
+	if(current_port)
+		var/datum/virtual_z/vz = current_port.get_virtual_z()
+		if(vz && vz.level_type == VZ_PLANET)
+			last_planet_dock_time = world.time
 	if(!destination_port)
 		return
 	if(transit_port && get_transit_delay() && destination_port != transit_port)

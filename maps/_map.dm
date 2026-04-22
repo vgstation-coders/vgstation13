@@ -67,7 +67,8 @@
 
 	var/list/event_blacklist = list(/datum/event/blizzard, /datum/event/omega_blizzard)
 	var/list/event_whitelist = list()
-	var/disable_random_events = FALSE //If TRUE, the standard /datum/event random event scheduler will not fire on this map.
+
+	var/datum/shuttle/ship_shuttle = null //Reference to "the ship" for map-specific features (events, etc). Set by map-specific init code.
 
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
@@ -83,6 +84,10 @@
 	var/planet_size = 0 // If set, overrides planet allocation size for this map
 
 	var/list/daynight_z_lvls = list() //Z-levels that participate in the day/night cycle
+
+//Used for events; override as-needed.
+/datum/map/proc/map_specific_event_checks(var/datum/event/E)
+	return 1
 
 /datum/map/New()
 	. = ..()
