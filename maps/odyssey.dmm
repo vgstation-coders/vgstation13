@@ -3623,7 +3623,7 @@
 	dir = 4;
 	icon_state = "pipe-c"
 	},
-/obj/machinery/computer/crew,
+/obj/machinery/computer/crew/odyssey,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whiteblue"
@@ -5456,7 +5456,7 @@
 	icon_state = "0-2";
 	pixel_y = 1
 	},
-/obj/structure/ore_box,
+/obj/structure/bed/chair/handrail,
 /turf/simulated/floor{
 	icon_state = "darkyellow";
 	tag = "icon-darkyellow (EAST)";
@@ -7152,7 +7152,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/obj/structure/dispenser,
+/obj/structure/ore_box,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -8867,7 +8867,7 @@
 	},
 /area/odyssey/admin)
 "Ec" = (
-/obj/machinery/computer/crew,
+/obj/machinery/computer/crew/odyssey,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark_navy";
@@ -12888,14 +12888,6 @@
 	name = "Bridge Lockdown";
 	id_tag = "bridge blast";
 	pixel_y = 8
-	},
-/obj/machinery/access_button{
-	pixel_x = -9;
-	pixel_y = -1;
-	name = "ROSA Control";
-	master_tag = "odyssey_rosa";
-	command = "toggle";
-	master_active = 0
 	},
 /turf/simulated/floor{
 	dir = 4;
