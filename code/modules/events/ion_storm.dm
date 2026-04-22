@@ -72,7 +72,7 @@
 	"superflous", "useless", "wasteful", "off-station", "functional", "subverted", "malfunctioning")
 
 	var/list/il_mach_act = list("be destroyed", "be repaired", "be shut down", "be upkept", "be powered", "be unpowered", "be removed", "be disabled", "be electrified", "be restored", "be restarted", "be protected", "be improved", "be on maximum output", \
-	"be on minimum ouput", "be activated", "be deactivated", "be overloaded", "be anchored", "be deanchored", "be detonated", "be kept under constant engineering supervision", "be on fire", "undergo thorough maintenance", "be watered regularly", \
+	"be on minimum ouput", "be activated", "be deactivated", "be overloaded", "be anchored", "be unanchored", "be detonated", "be kept under constant engineering supervision", "be on fire", "undergo thorough maintenance", "be watered regularly", \
 	"have another backup ready to use", "be duplicated", "be considered critical to station functionality", "not be tampered with", "be powered at all costs", "be painted red", "be constantly be kept at atmospheric pressure", "be fed humans", \
 	"be constantly kept in an atmospheric void", "be constantly kept below 173.25 K", "not be linked to the station's powernet", "never be referenced by name", "never be on-station", "never be off-station")
 
