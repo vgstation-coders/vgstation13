@@ -126,7 +126,7 @@
 		"telecommunication machines", "medical machines", "research machines", "kitchen machines", "chemistry machines", "MoMMIs", "AIs")
 		//Narrow machine action list to more damaging ones
 		il_mach_act = list("be destroyed", "be shut down", "be unpowered", "be removed", "be disabled", "be electrified", "be restarted", "be on maximum output",
-		"be on minimum output", "be deactivated", "be overloaded", "be anchored", "be de-anchored", "be detonated", "be on fire",
+		"be on minimum output", "be deactivated", "be overloaded", "be anchored", "be unanchored", "be detonated", "be on fire",
 		"be fed humans",
 		"be constantly kept in an atmospheric void", "be constantly kept below 173.25 K", "not be linked to the station's powernet", "never be referenced by name", "never be on-station")
 
