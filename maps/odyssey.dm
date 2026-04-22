@@ -171,10 +171,36 @@
 			vz.register_weather_turfs(C)
 			break
 
+/datum/command_alert/emergency_shuttle_called
+	name = "Bluespace Jump Warning"
+	alert_title = "Priority Announcement"
+	force_report = 1
+	alert = null
+	var/justification = ""
+
 /datum/command_alert/emergency_shuttle_called/announce()
 	message = "The engines are charging in preparation for the Bluespace Jump. The ship will depart in [round(emergency_shuttle.timeleft()/60)] minutes."
 	if(justification)
 		message += " Justification: [justification]"
+	..()
+
+/datum/command_alert/emergency_shuttle_recalled
+	name = "Bluespace Jump Cancelled"
+	alert_title = "Priority Announcement"
+	force_report = 1
+	alert = null
+
+/datum/command_alert/emergency_shuttle_recalled/announce()
+	message = "The Bluespace Jump has been cancelled."
+	..()
+
+/datum/command_alert/emergency_shuttle_left
+	name = "Bluespace Jump Initiated"
+	alert_title = "Priority Announcement"
+	force_report = 1
+
+/datum/command_alert/emergency_shuttle_left/announce()
+	message = "The Bluespace Jump has begun. Estimate [round(emergency_shuttle.timeleft()/60,1)] minutes until the NTEV Odyssey docks at Central Command."
 	..()
 
 ////////////////////////////////////////////////////////////////
