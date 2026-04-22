@@ -3560,7 +3560,7 @@
 /area/shuttle/odyssey/hallway/aft)
 "mi" = (
 /obj/machinery/atmospherics/miner/surface{
-	anchored = TRUE
+	anchored = 1
 	},
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
