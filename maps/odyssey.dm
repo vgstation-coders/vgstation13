@@ -78,7 +78,7 @@
 		/datum/event/money_lotto,
 		/datum/event/money_hacker,
 		/datum/event/profound_peace,
-		/datum/event/hog,
+		/datum/event/hog/odyssey,
 		/datum/event/ionstorm
 	)
 
@@ -102,6 +102,8 @@
 			return ODYSSEY_STATE_HYPERSPACE
 		if(VZ_PARKING, VZ_SPACE)
 			return ODYSSEY_STATE_DEEPSPACE
+		if(VZ_PLANET)
+			return ODYSSEY_STATE_PLANETSIDE
 	return 0
 
 /datum/map/active/proc/recently_on_planet()
@@ -126,6 +128,8 @@
 		required_state = ODYSSEY_STATE_HYPERSPACE | ODYSSEY_STATE_DEEPSPACE
 	else if(istype(E, /datum/event/odyssey_carp_swarm) || istype(E, /datum/event/rogue_drone/odyssey))
 		required_state = ODYSSEY_STATE_DEEPSPACE
+	else if(istype(E, /datum/event/hog/odyssey))
+		required_state = ODYSSEY_STATE_PLANETSIDE
 	if(required_state && !(get_ship_state() & required_state))
 		return 0
 	return 1

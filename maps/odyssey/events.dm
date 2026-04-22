@@ -339,6 +339,31 @@
 		return
 	return pick(possibleVends)
 
+/datum/event/hog/odyssey
+
+/datum/event/hog/odyssey/start()
+	if(!map || !map.ship_shuttle)
+		message_admins("Aborted hog event (odyssey). No ship shuttle.")
+		return
+	var/datum/shuttle/odyssey/S = map.ship_shuttle
+	if(!istype(S))
+		message_admins("Aborted hog event (odyssey). Ship shuttle is not odyssey.")
+		return
+
+	var/list/turf/simulated/floor/turfs = list()
+	for(var/turf/simulated/floor/F in S.shuttle_contents())
+		if(!is_blocked_turf(F))
+			turfs += F
+	if(turfs.len < 2)
+		message_admins("Aborted hog event (odyssey). Not enough open shuttle turfs.")
+		return
+
+	command_alert(/datum/command_alert/hog)
+	var/turf/spawn_turf = pick_n_take(turfs)
+	var/mob/living/simple_animal/rampagingspacehog/ourhog = new(spawn_turf)
+	message_admins("<span class='notice'>Event: hog spawned in at [ourhog.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[ourhog.x];Y=[ourhog.y];Z=[ourhog.z]'>(JMP)</a></span>")
+	ourhog.homes += turfs
+
 /// Spawn a meteor projectile from the edge of the shuttle's current virtual z-level aimed at the shuttle
 /datum/shuttle/odyssey/proc/spawn_vz_meteor(meteor_type)
 	var/datum/virtual_z/vz = current_port.get_virtual_z()
