@@ -271,6 +271,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 
 /obj/machinery/computer/communications/odyssey
 	circuit = "/obj/item/weapon/circuitboard/communications/odyssey"
+	ignore_station_z_check = TRUE
 
 /obj/machinery/computer/communications/odyssey/proc/trigger_bluespace_jump()
 	if(!emergency_shuttle || emergency_shuttle.online || emergency_shuttle.departed || emergency_shuttle.shutdown)

@@ -1251,8 +1251,11 @@ Thanks.
 //shuttle_act is called when a shuttle collides with the mob
 /mob/living/shuttle_act(datum/shuttle/S)
 	if(!(src.flags & INVULNERABLE))
-		src.attack_log += "\[[time_stamp()]\] was gibbed by a shuttle ([S.name], [S.type])!"
-		gib()
+		src.attack_log += "\[[time_stamp()]\] was destroyed by a shuttle ([S.name], [S.type])!"
+		if(ishuman(src))
+			gib()
+		else
+			qdel(src)
 	return
 
 //mob verbs are a lot faster than object verbs

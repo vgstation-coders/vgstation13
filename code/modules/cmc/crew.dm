@@ -134,11 +134,15 @@ GENERAL PROCS
 		deactivate(user)
 		return
 
-	// Build list of valid vLevel IDs (those with gps_allowed)
+	// Build list of valid vLevel IDs (those with gps_allowed, plus the console's own
+	// vlevel so it still works in transit / at encounters).
 	var/list/valid_vlevels = list()
 	for(var/datum/virtual_z/V in map.vLevels)
 		if(V.gps_allowed)
 			valid_vlevels += V.id
+	var/datum/virtual_z/own_vz = get_virtual_z()
+	if(own_vz && !(own_vz.id in valid_vlevels))
+		valid_vlevels += own_vz.id
 
 	// 0 means "ALL" vLevels, which is always valid
 	if(holomap_z[uid] != 0 && !(holomap_z[uid] in valid_vlevels)) //catching some more unwanted behaviours
@@ -178,6 +182,9 @@ GENERAL PROCS
 	for(var/datum/virtual_z/V in map.vLevels)
 		if(V.gps_allowed)
 			entries["[V.id]"] = list()
+	var/datum/virtual_z/own_vz = get_virtual_z()
+	if(own_vz && !("[own_vz.id]" in entries))
+		entries["[own_vz.id]"] = list()
 
 	//looping though carbons
 	for(var/mob/living/carbon/human/H in mob_list)
@@ -208,9 +215,8 @@ GENERAL PROCS
 				if (H.z == 0 && entry_turf.z != z)
 					continue
 
-				// Get virtual z-level and check gps_allowed
 				var/datum/virtual_z/entry_vz = entry_turf.get_virtual_z()
-				if(!entry_vz || !entry_vz.gps_allowed)
+				if(!entry_vz || (!entry_vz.gps_allowed && entry_vz != own_vz))
 					continue
 
 				var/obj/item/weapon/card/id/I = H.wear_id ? H.wear_id.GetID() : null
@@ -254,7 +260,7 @@ GENERAL PROCS
 
 		var/turf/pos = get_turf(B)
 		var/datum/virtual_z/vz = pos?.get_virtual_z()
-		if(!isnull(pos) && vz && vz.gps_allowed && istype(M) && M.brainmob == B && !isrobot(M.loc))
+		if(!isnull(pos) && vz && (vz.gps_allowed || vz == own_vz) && istype(M) && M.brainmob == B && !isrobot(M.loc))
 			var/see_x = pos.x - get_world_x_offset(vz.id)
 			var/see_y = pos.y - get_world_y_offset(vz.id)
 			var/see_z = vz.id
@@ -287,9 +293,9 @@ HOLOMAP PROCS
 */
 //initializes the holomap
 /obj/machinery/computer/crew/proc/openHolomap(var/mob/user)
-	// Create holomap images for each vLevel with gps_allowed
+	var/datum/virtual_z/own_vz = get_virtual_z()
 	for(var/datum/virtual_z/V in map.vLevels)
-		if(!V.gps_allowed)
+		if(!V.gps_allowed && V != own_vz)
 			continue
 		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[V.id]"
 		if(!(holomap_bgmap in holomap_cache))
@@ -471,10 +477,10 @@ TGUI PROCS
 
 	data["currentZLevel"] = current_z
 
-	// Build list of vLevels with gps_allowed and their holomap availability
+	var/datum/virtual_z/own_vz = get_virtual_z()
 	var/list/vlevel_data = list()
 	for(var/datum/virtual_z/V in map.vLevels)
-		if(V.gps_allowed)
+		if(V.gps_allowed || V == own_vz)
 			var/real_z = V.parent_z.z
 			var/has_holomap = (holoMiniMaps.len >= real_z) && (holoMiniMaps[real_z] != null)
 			vlevel_data += list(list(
@@ -494,7 +500,7 @@ TGUI PROCS
 	var/list/vlevels_to_scan = list()
 	if(current_z == 0)
 		for(var/datum/virtual_z/V in map.vLevels)
-			if(V.gps_allowed)
+			if(V.gps_allowed || V == own_vz)
 				vlevels_to_scan += "[V.id]"
 	else
 		vlevels_to_scan += "[current_z]"

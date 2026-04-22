@@ -12,6 +12,11 @@
 		clear_weather_effects()
 		return
 
+	var/area/A = get_area(src)
+	if(istype(A, /area/shuttle))
+		clear_weather_effects()
+		return
+
 	var/datum/climate/climate = SSweather.get_climate_from_turf(T)
 	if(!climate?.current_weather)
 		clear_weather_effects()
@@ -20,7 +25,6 @@
 	var/datum/weather/weather = climate.current_weather
 
 	// Check if we're in an open surface area (weather-affected area)
-	var/area/A = get_area(src)
 	if(!A || !isopensurface(A))
 		clear_weather_effects()
 		return

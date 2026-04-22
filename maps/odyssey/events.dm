@@ -161,7 +161,6 @@
 	var/list/affected_apcs = list()
 
 	for(var/obj/machinery/power/apc/A in shuttle.shuttle_contents())
-		A.overload_lighting()
 		if(A.cell)
 			A.cell.charge = 0
 		A.chargemode = 0

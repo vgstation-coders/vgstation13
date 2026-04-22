@@ -1,7 +1,9 @@
 /datum/job/hop/New()
 	..()
 	title = "First Mate"
+	head_position = 1
+	command_positions |= list(title)
 
-/datum/job/chief_engineer/New()
+/datum/job/assistant/New()
 	..()
-	title = "Navigator"
+	title = "Deckhand"

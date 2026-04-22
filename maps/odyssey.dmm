@@ -840,7 +840,7 @@
 "cz" = (
 /obj/machinery/conveyor{
 	dir = 10;
-	id_tag = "secdisposal"
+	id_tag = "mining_internal"
 	},
 /obj/machinery/light{
 	dir = 1
@@ -961,18 +961,6 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/nt_outpost)
 "cT" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	canSpawnMice = 0;
-	external_pressure_bound = 0;
-	frequency = 1441;
-	icon_state = "in";
-	id_tag = "miner_out";
-	initialize_directions = 1;
-	internal_pressure_bound = 4000;
-	on = 1;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
 /obj/machinery/air_sensor{
 	frequency = 1441;
 	id_tag = "miner_sensor";
@@ -980,6 +968,18 @@
 	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide","cryotheum","radon")
 	},
 /obj/machinery/light/small,
+/obj/machinery/atmospherics/unary/vent_pump/high_volume{
+	canSpawnMice = 0;
+	dir = 1;
+	external_pressure_bound = 0;
+	frequency = 1441;
+	icon_state = "in";
+	id_tag = "miner_out";
+	internal_pressure_bound = 2000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "cU" = (
@@ -1546,8 +1546,7 @@
 	internal_pressure_bound = 4000;
 	on = 1;
 	pressure_checks = 2;
-	pump_direction = 0;
-	dir = 1
+	pump_direction = 0
 	},
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/port)
@@ -3448,7 +3447,7 @@
 /obj/machinery/computer/med_data/laptop,
 /obj/machinery/requests_console{
 	announcementConsole = 1;
-	department = "Infirmary";
+	department = "Medbay";
 	departmentType = 2;
 	name = "Infirmary RC";
 	pixel_y = 30
@@ -3560,7 +3559,9 @@
 	},
 /area/shuttle/odyssey/hallway/aft)
 "mi" = (
-/obj/machinery/atmospherics/miner/surface,
+/obj/machinery/atmospherics/miner/surface{
+	anchored = TRUE
+	},
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "mj" = (
@@ -3602,14 +3603,6 @@
 	tag = "icon-dark_navy (NORTHEAST)"
 	},
 /area/shuttle/odyssey/bridge)
-"mp" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "all";
-	tag = "icon-all"
-	},
-/obj/machinery/turret,
-/turf/simulated/floor/plating,
-/area/odyssey/admin)
 "mq" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -3739,14 +3732,14 @@
 	pixel_x = 16;
 	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide","cryotheum","radon")
 	},
-/obj/machinery/atmospherics/unary/vent_pump{
+/obj/machinery/atmospherics/unary/vent_pump/high_volume{
 	canSpawnMice = 0;
+	dir = 1;
 	external_pressure_bound = 0;
 	frequency = 1441;
 	icon_state = "in";
 	id_tag = "air_out";
-	initialize_directions = 1;
-	internal_pressure_bound = 4000;
+	internal_pressure_bound = 2000;
 	on = 1;
 	pressure_checks = 2;
 	pump_direction = 0
@@ -4156,7 +4149,7 @@
 /obj/machinery/recharger,
 /obj/machinery/requests_console{
 	announcementConsole = 1;
-	department = "Logistics";
+	department = "Cargo Bay";
 	departmentType = 2;
 	name = "Logistics RC";
 	pixel_y = 30
@@ -4753,7 +4746,9 @@
 /turf/simulated/floor/vox,
 /area/vox_station/tradepost)
 "qp" = (
-/obj/machinery/gas_extractor,
+/obj/machinery/gas_extractor{
+	anchored = TRUE
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -5171,24 +5166,6 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/aft)
-"rS" = (
-/obj/machinery/turretid{
-	ailock = 1;
-	control_area = /area/turret_protected/tcomms_control_room;
-	desc = "A firewall prevents AIs from interacting with this device.";
-	name = "Telecomms Control Room turret control";
-	req_access = null;
-	req_access_txt = "61";
-	pixel_y = -29
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 6;
-	icon_state = "dark"
-	},
-/area/odyssey/admin)
 "rX" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible/blue{
 	dir = 9;
@@ -5262,7 +5239,9 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/odyssey_transfer)
 "sn" = (
-/obj/machinery/mineral/processing_unit,
+/obj/machinery/mineral/processing_unit{
+	id_tag = "mining_smelter"
+	},
 /obj/structure/railing,
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
@@ -5883,11 +5862,11 @@
 /turf/simulated/floor,
 /area/shuttle/odyssey/security)
 "ug" = (
-/obj/machinery/media/jukebox,
 /obj/structure/sign/directions/security{
 	pixel_x = 32;
 	dir = 4
 	},
+/obj/machinery/media/jukebox/dj,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -7369,7 +7348,6 @@
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
-/obj/structure/closet/crate/bin,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -8814,7 +8792,7 @@
 "DS" = (
 /obj/machinery/conveyor{
 	dir = 4;
-	id_tag = "mining_mint"
+	id_tag = "mining_internal"
 	},
 /obj/structure/railing,
 /turf/unsimulated/floor{
@@ -9408,8 +9386,7 @@
 	internal_pressure_bound = 4000;
 	on = 1;
 	pressure_checks = 2;
-	pump_direction = 0;
-	dir = 1
+	pump_direction = 0
 	},
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/port)
@@ -10286,6 +10263,14 @@
 	dir = 1
 	},
 /obj/structure/flora/pottedplant/random,
+/obj/machinery/embedded_controller/radio/access_controller{
+	id_tag = "virology_airlock_control";
+	name = "Virology Access Console";
+	pixel_x = -6;
+	pixel_y = 23;
+	tag_exterior_door = "virology_airlock_exterior";
+	tag_interior_door = "virology_airlock_interior"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -11638,15 +11623,6 @@
 	},
 /turf/simulated/floor/plating/vox,
 /area/vox_station/tradepost)
-"NC" = (
-/obj/machinery/door/window{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 6;
-	icon_state = "dark"
-	},
-/area/odyssey/admin)
 "ND" = (
 /obj/effect/decal/warning_stripes{
 	dir = 6;
@@ -14844,8 +14820,7 @@
 /area/shuttle/odyssey/engineering/engine_room)
 "XF" = (
 /obj/machinery/conveyor{
-	dir = 1;
-	id_tag = "QMLoad3"
+	id_tag = "mining_internal"
 	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
@@ -15345,7 +15320,7 @@
 /obj/structure/bedsheetbin,
 /obj/machinery/requests_console{
 	announcementConsole = 1;
-	department = "Janitor";
+	department = "Janitorial";
 	departmentType = 5;
 	name = "Janitor RC";
 	pixel_y = 30
@@ -26042,7 +26017,7 @@ Bc
 Bc
 Bc
 mA
-hI
+mv
 Wi
 ru
 HM
@@ -26344,7 +26319,7 @@ Bc
 Bc
 Bc
 mA
-JM
+hI
 Wi
 eE
 lY
@@ -26646,12 +26621,12 @@ Bc
 Bc
 Bc
 mA
-RG
+JM
 cH
 RH
 mH
 yY
-rS
+wh
 mA
 uk
 Ro
@@ -26948,12 +26923,12 @@ Bc
 Bc
 Bc
 mA
-mp
+RG
 mv
 mv
 ox
 Wi
-NC
+Ih
 QI
 Ih
 Ih
