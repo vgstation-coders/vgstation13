@@ -116,7 +116,7 @@
 		//Narrow action list to mostly harmful actions
 		il_bio_act = list("be harmed", "be killed", "be removed", "be made into food", "be stunned", "be exterminated", "be disarmed", "be beheaded", "be set to arrest", "be arrested",
 		"be stalked", "be enslaved", "be insulted", "be electrified", "be exiled from the station",
-		"be spaced", "be incinerated", "breathe plasma", "breathe nitrous oxyde", "not breathe", "not eat",
+		"be spaced", "be incinerated", "breathe plasma", "breathe nitrous oxide", "not breathe", "not eat",
 		"drink acid", "drink alcohol", "drink liquid plasma", "lie down", "always be in space",
 		"be handcuffed", \
 		"never have fun", "be used as test subjects", "never carry weapons", "be inoculated with a harmful virus")
