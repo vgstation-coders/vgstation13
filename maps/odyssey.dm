@@ -176,7 +176,7 @@
 	alert_title = "Priority Announcement"
 	force_report = 1
 	alert = null
-	var/justification = ""
+	justification = ""
 
 /datum/command_alert/emergency_shuttle_called/announce()
 	message = "The engines are charging in preparation for the Bluespace Jump. The ship will depart in [round(emergency_shuttle.timeleft()/60)] minutes."
