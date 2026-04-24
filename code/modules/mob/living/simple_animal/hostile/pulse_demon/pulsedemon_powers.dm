@@ -631,7 +631,8 @@
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
 		for(var/obj/machinery/light/L in PD.controlling_area.lights)
-			L.brightness_color = "#bbbb00";
+			if(L.current_bulb)
+				L.current_bulb.brightness_color = "#bbbb00";
 			L.update(0)
 	..()
 
