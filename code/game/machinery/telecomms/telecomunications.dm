@@ -377,7 +377,19 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	flick("receiver_receive", src)
 
 /obj/machinery/telecomms/receiver/proc/check_receive_level(datum/signal/signal)
-	// A signal can only enter the network via a relay whose own vlevel matches the signal's origin.
+	// Signals originating in the receiver's own virtual z-level are accepted directly.
+	var/datum/virtual_z/receiver_vz = get_virtual_z()
+	if(receiver_vz)
+		var/datum/virtual_z/signal_vz = signal.data["source_virtual_z"]
+		if(!signal_vz)
+			var/mob/source_mob = signal.data["mob"]
+			if(source_mob)
+				signal_vz = source_mob.get_virtual_z()
+		if(signal_vz == receiver_vz)
+			return 1
+	else if(signal.data["level"] == listening_level)
+		return 1
+	// Otherwise the signal must enter the network via a relay whose vlevel matches the signal's origin.
 	for(var/obj/machinery/telecomms/hub/H in links)
 		for(var/obj/machinery/telecomms/relay/R in H.links)
 			if(!R.can_receive(signal))
