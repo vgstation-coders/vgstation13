@@ -439,6 +439,52 @@
 	qdel(src)
 
 
+/obj/item/clothing/accessory/wcoat
+	name = "waistcoat"
+	desc = "For some classy, murderous fun."
+	icon = null
+	icon_state = null
+	inv_overlay
+	var/obj/item/clothing/suit/wcoat/source_vest
+
+/obj/item/clothing/accessory/wcoat/can_attach_to(obj/item/clothing/C)
+	if(!istype(C, /obj/item/clothing/under))
+		return FALSE
+	for(var/obj/item/clothing/accessory/wcoat/W in C.accessories)
+		if(W != src)
+			return FALSE
+	return TRUE
+
+/obj/item/clothing/accessory/wcoat/update_icon()
+	if(source_vest)
+		appearance = source_vest.appearance
+		if(attached_to)
+			var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
+			attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
+			if(ismob(attached_to.loc))
+				var/mob/M = attached_to.loc
+				M.regenerate_icons()
+	..()
+
+/obj/item/clothing/accessory/wcoat/on_removed(mob/user)
+	if(!attached_to)
+		return
+	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
+	attached_to.overlays -= inv_overlay
+	if(ismob(attached_to.loc))
+		var/mob/M = attached_to.loc
+		M.regenerate_icons()
+	attached_to = null
+	if(source_vest)
+		source_vest.forceMove(get_turf(src))
+		if(user)
+			user.put_in_hands(source_vest)
+		add_fingerprint(user)
+		transfer_fingerprints(src,source_vest)
+		source_vest = null
+	qdel(src)
+
+
 /obj/item/clothing/accessory/jinglebells
 	name = "jingle bells"
 	desc = "A festive jingley bell, can be attached to shoes!"
