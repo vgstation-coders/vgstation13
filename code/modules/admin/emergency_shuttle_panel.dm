@@ -8,8 +8,11 @@
 	dat += "Current Status:"
 
 	var/area/shuttle_loc = locate(/area/shuttle/escape/centcom)
-	var/turf/shuttle_turf = pick(shuttle_loc.area_turfs)
-	dat += "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[shuttle_turf.x];Y=[shuttle_turf.y];Z=[shuttle_turf.z]'>"
+	var/turf/shuttle_turf = (shuttle_loc && shuttle_loc.area_turfs && shuttle_loc.area_turfs.len) ? pick(shuttle_loc.area_turfs) : null
+	if(shuttle_turf)
+		dat += "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[shuttle_turf.x];Y=[shuttle_turf.y];Z=[shuttle_turf.z]'>"
+	else
+		dat += "<span>"
 
 	switch (emergency_shuttle.location)
 		if(0)
@@ -27,7 +30,7 @@
 		if(2)
 			dat += "<b>At Central Command</b> (Round Ended)"
 
-	dat += "</a><br>"
+	dat += shuttle_turf ? "</a><br>" : "</span><br>"
 
 	if (!emergency_shuttle.online)
 		dat += "<a href='?src=\ref[src];call_shuttle=1'>Call Shuttle</a><br>"

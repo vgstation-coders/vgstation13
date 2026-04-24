@@ -657,6 +657,7 @@
 	if(waiting_for_generation && !scanning)
 		if(!SSmapping.generating)
 			waiting_for_generation = FALSE
+			SSmapping.scanning = FALSE
 			scans_completed++
 			playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
 			visible_message("<span class='notice'>[src] has passively detected a new planet in hyperspace.</span>")

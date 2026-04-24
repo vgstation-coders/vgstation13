@@ -20,8 +20,10 @@
 /// Cell size for spatial bucketing of mobs
 #define SPATIAL_BUCKET_SIZE 15
 
-/// Minimum space turfs between any point of the shuttle and the vlevel edge in encounters
-#define ENCOUNTER_EDGE_BUFFER 7
+/// Minimum space turfs between any point of the shuttle and the vlevel's transition zone in encounters.
+/// Must exceed TRANSITIONEDGE so the shuttle (and any crew walking near it) cannot overlap the
+/// outer band that would teleport them to another z-level.
+#define ENCOUNTER_EDGE_BUFFER (TRANSITIONEDGE + 7)
 
 /// Fixed encounter zone size (must be large enough for shuttle + vaults)
 #define ENCOUNTER_ZONE_SIZE 145

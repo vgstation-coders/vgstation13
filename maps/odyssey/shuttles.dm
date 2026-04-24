@@ -19,14 +19,16 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	stable = 0
 	var/bluespace_jump_state = JUMP_NONE
 	var/obj/docking_port/destination/dock_centcom
+	var/obj/docking_port/destination/outpost_dock
 	var/transit_end_time = 0
 	var/transit_destination_name = ""
+	var/last_planet_dock_time = 0 //world.time of last time the shuttle docked at or departed a VZ_PLANET port.
 
 	req_access = list(access_captain)
 
 /datum/shuttle/odyssey/initialize()
 	.=..()
-	add_dock(/obj/docking_port/destination/odyssey/outpost)
+	outpost_dock = add_dock(/obj/docking_port/destination/odyssey/outpost)
 	add_dock(/obj/docking_port/destination/odyssey/deep_space)
 	add_dock(/obj/docking_port/destination/odyssey/dj_sat)
 	add_dock(/obj/docking_port/destination/odyssey/derelict)
@@ -66,30 +68,27 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 			vz.teleJammed = VZ_TELEPORTATION_ALLOWED
 			vz.update_settings()
 
-	// If starting at outpost, enable external power on SMES units
-	if(istype(current_port, /obj/docking_port/destination/odyssey/outpost))
-		for(var/obj/machinery/power/battery/smes/S in shuttle_contents())
-			S.external_power_supply = TRUE
+	update_outpost_power()
 
-	// Initialize Odyssey events
-	possible_events = list(
-		new /datum/odyssey_event/micro_meteors,
-		new /datum/odyssey_event/gib_storm,
-		new /datum/odyssey_event/solar_flare,
-		new /datum/odyssey_event/carp_swarm
-	)
+	if(map)
+		map.ship_shuttle = src
+
+/datum/shuttle/odyssey/proc/update_outpost_power()
+	var/at_outpost = outpost_dock && current_port == outpost_dock
+	for(var/obj/machinery/power/battery/smes/S in shuttle_contents())
+		S.external_power_supply = at_outpost
 
 /datum/shuttle/odyssey/after_flight()
 	..()
-	var/at_outpost = istype(current_port, /obj/docking_port/destination/odyssey/outpost)
-	for(var/obj/machinery/power/battery/smes/S in shuttle_contents())
-		S.external_power_supply = at_outpost
+	update_outpost_power()
 	// Clean up lingering beach water effects on shuttle turfs after landing
 	for(var/turf/T in shuttle_contents())
 		for(var/obj/effect/beach_water/unsimmed/W in T.vis_contents)
 			T.vis_contents -= W
-	// Start the Odyssey event loop if in hyperspace or deep space
-	start_event_loop()
+	if(current_port)
+		var/datum/virtual_z/vz = current_port.get_virtual_z()
+		if(vz && vz.level_type == VZ_PLANET)
+			last_planet_dock_time = world.time
 
 /datum/shuttle/odyssey/get_pre_flight_delay()
 	// Skip countdown when already in hyperspace
@@ -120,7 +119,10 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	return ..()
 
 /datum/shuttle/odyssey/pre_flight()
-	stop_event_loop()
+	if(current_port)
+		var/datum/virtual_z/vz = current_port.get_virtual_z()
+		if(vz && vz.level_type == VZ_PLANET)
+			last_planet_dock_time = world.time
 	if(!destination_port)
 		return
 	if(transit_port && get_transit_delay() && destination_port != transit_port)
@@ -161,8 +163,14 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 			return 0
 	return ..()
 
+/obj/item/weapon/circuitboard/shuttle_control/odyssey
+	name = "Circuit board (NTEV Odyssey Shuttle Control)"
+	desc = "A circuit board for running the NTEV Odyssey's shuttle control computer."
+	build_path = /obj/machinery/computer/shuttle_control/odyssey
+
 /obj/machinery/computer/shuttle_control/odyssey
 	name = "NTEV Odyssey shuttle control computer"
+	circuit = "/obj/item/weapon/circuitboard/shuttle_control/odyssey"
 
 /obj/machinery/computer/shuttle_control/odyssey/New()
 	link_to(odyssey_shuttle)
@@ -257,6 +265,33 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 			return
 	return ..()
 
+/obj/item/weapon/circuitboard/communications/odyssey
+	name = "Circuit board (Odyssey Bridge Communications)"
+	desc = "A circuit board for running the Odyssey bridge communications console."
+	build_path = /obj/machinery/computer/communications/odyssey
+
+/obj/machinery/computer/communications/odyssey
+	circuit = "/obj/item/weapon/circuitboard/communications/odyssey"
+	ignore_station_z_check = TRUE
+
+/obj/machinery/computer/communications/odyssey/proc/trigger_bluespace_jump()
+	if(!emergency_shuttle || emergency_shuttle.online || emergency_shuttle.departed || emergency_shuttle.shutdown)
+		return
+	emergency_shuttle.incall()
+	captain_announce("The NTEV Odyssey's bridge communications array has been destroyed; Central Command cannot authorize continued exploration operations. Automated emergency protocol engaged: the Bluespace Drive is now charging for immediate return to Central Command.")
+	log_game("Communications Console destroyed. Bluespace jump initiated.")
+	message_admins("Communications Console destroyed. Bluespace jump initiated.", 1)
+
+/obj/machinery/computer/communications/odyssey/set_broken()
+	. = ..()
+	if(.)
+		trigger_bluespace_jump()
+
+/obj/machinery/computer/communications/odyssey/Destroy()
+	if(!(stat & BROKEN))
+		trigger_bluespace_jump()
+	return ..()
+
 // Odyssey-specific emergency shuttle controller
 // Instead of calling a separate escape shuttle, the Odyssey itself performs a Bluespace jump to CentComm
 
@@ -264,6 +299,9 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 
 /datum/emergency_shuttle/odyssey
 	var/obj/effect/overlay/bluespacify/bs_overlay // Single shared overlay instance
+
+/datum/emergency_shuttle/odyssey/get_linked_port()
+	return odyssey_shuttle ? odyssey_shuttle.linked_port : null
 
 /datum/emergency_shuttle/odyssey/process()
 	if(!online || shutdown)
@@ -370,6 +408,10 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 
 /datum/emergency_shuttle/odyssey/shuttle_phase(phase, casual = 1)
 	switch(phase)
+		if("station")
+			message_admins("Emergency shuttle panel: 'move to station' is not applicable for the Odyssey Bluespace Jump.")
+			return
+
 		if("transit")
 			// Move Odyssey to its transit port
 			location = SHUTTLE_ON_STANDBY
