@@ -249,7 +249,7 @@
 			if(href_list["chem"])
 				if(!get_holder_of_type(loc, /mob))
 					to_chat(src, "<span class='warning'>You must have a carrier to inject with chemicals!</span>")
-				else if(chargeloop(SOFT_CS))
+				else if(!charge && chargeloop(SOFT_CS))
 					var/mob/M = get_holder_of_type(loc, /mob)
 					if(M) //Sanity
 						M.reagents.add_reagent(href_list["chem"], 15)
@@ -257,7 +257,7 @@
 				else
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
 		if(SOFT_FS)
-			if(href_list["food"] && chargeloop(SOFT_FS))
+			if(href_list["food"] && !charge && chargeloop(SOFT_FS))
 				var/foodType = href_list["food"]
 				var/found = FALSE
 				for (var/name in synthable_default_food)

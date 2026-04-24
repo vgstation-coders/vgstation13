@@ -46,17 +46,14 @@
 	name = "Engineering Supplies";
 	id_tag = "eng supplies";
 	pixel_y = 25;
-	pixel_x = -5
+	pixel_x = -5;
+	req_one_access_txt = "11"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 10;
 	tag = ""
 	},
 /obj/machinery/camera/autoname,
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -176,10 +173,6 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
-	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "showroomfloor";
@@ -250,6 +243,9 @@
 	d1 = 2;
 	d2 = 4;
 	icon_state = "2-4"
+	},
+/obj/effect/landmark/start{
+	name = "Station Engineer"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -361,7 +357,7 @@
 /area/security/perma)
 "ba" = (
 /turf/simulated/wall,
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "bd" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -391,7 +387,7 @@
 /obj/item/weapon/folder/blue,
 /obj/structure/table/woodentable,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "bj" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
@@ -439,9 +435,7 @@
 	pixel_y = -28
 	},
 /turf/simulated/floor{
-	dir = 10;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (WEST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "bu" = (
@@ -526,7 +520,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "bz" = (
 /obj/structure/table,
 /obj/item/device/antibody_scanner{
@@ -546,7 +540,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "bA" = (
 /obj/machinery/status_display/odyssey,
 /turf/simulated/wall/shuttle/panel/black,
@@ -646,11 +640,11 @@
 "bN" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging,
 /turf/simulated/floor/server,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "bR" = (
 /obj/machinery/vending/sale,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "bT" = (
 /obj/machinery/firealarm{
 	dir = 4;
@@ -665,7 +659,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "bW" = (
 /obj/machinery/processor,
 /turf/simulated/floor{
@@ -710,7 +704,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "ce" = (
 /obj/machinery/door/window{
 	base_state = "right";
@@ -751,7 +745,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "cm" = (
 /obj/machinery/vending/tool{
 	contraband = list(/obj/item/tool/weldingtool/hugetank=2,/obj/item/clothing/gloves/yellow/vox=2);
@@ -764,7 +758,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "cr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 4;
@@ -820,7 +814,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "cw" = (
 /obj/machinery/light{
 	dir = 1
@@ -828,7 +822,7 @@
 /turf/unsimulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "cx" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "oxygen"
@@ -844,7 +838,7 @@
 "cz" = (
 /obj/machinery/conveyor{
 	dir = 10;
-	id_tag = "secdisposal"
+	id_tag = "mining_internal"
 	},
 /obj/machinery/light{
 	dir = 1
@@ -852,7 +846,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "cA" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -879,7 +873,7 @@
 	dir = 4;
 	icon_state = "whitepurple"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "cH" = (
 /obj/machinery/power/terminal{
 	dir = 1
@@ -891,7 +885,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "cJ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -905,7 +899,7 @@
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "cM" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/closet/crate/hydroponics,
@@ -965,18 +959,6 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/nt_outpost)
 "cT" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	canSpawnMice = 0;
-	external_pressure_bound = 0;
-	frequency = 1441;
-	icon_state = "in";
-	id_tag = "miner_out";
-	initialize_directions = 1;
-	internal_pressure_bound = 4000;
-	on = 1;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
 /obj/machinery/air_sensor{
 	frequency = 1441;
 	id_tag = "miner_sensor";
@@ -984,6 +966,18 @@
 	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide","cryotheum","radon")
 	},
 /obj/machinery/light/small,
+/obj/machinery/atmospherics/unary/vent_pump/high_volume{
+	canSpawnMice = 0;
+	dir = 1;
+	external_pressure_bound = 0;
+	frequency = 1441;
+	icon_state = "in";
+	id_tag = "miner_out";
+	internal_pressure_bound = 2000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "cU" = (
@@ -1057,7 +1051,7 @@
 	dir = 9;
 	icon_state = "warnwhite"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "dc" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -1125,7 +1119,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "dt" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -1236,14 +1230,14 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "dL" = (
 /obj/machinery/vending/coffee,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "dN" = (
 /obj/machinery/washing_machine,
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
@@ -1318,7 +1312,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "eb" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -1448,15 +1442,6 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/logistics)
-"eD" = (
-/obj/structure/shuttle/engine/heater{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "eE" = (
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
@@ -1464,7 +1449,7 @@
 	},
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "eJ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -1496,7 +1481,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "eQ" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/unary/vent,
@@ -1559,15 +1544,14 @@
 	internal_pressure_bound = 4000;
 	on = 1;
 	pressure_checks = 2;
-	pump_direction = 0;
-	dir = 1
+	pump_direction = 0
 	},
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/port)
 "fa" = (
 /obj/machinery/r_n_d/server/core,
 /turf/simulated/floor/server/bluegrid,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "fd" = (
 /obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
 	dir = 1;
@@ -1628,7 +1612,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "fj" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
@@ -1663,7 +1647,7 @@
 	req_access_txt = "50"
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "fo" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 8
@@ -1709,7 +1693,7 @@
 	dir = 10;
 	icon_state = "warnwhite"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "fy" = (
 /obj/machinery/suit_storage_unit/mining,
 /turf/simulated/floor{
@@ -1728,7 +1712,7 @@
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "fB" = (
 /obj/machinery/suit_storage_unit/security,
 /obj/item/device/radio/intercom{
@@ -1768,27 +1752,13 @@
 	icon_state = "floorgrime"
 	},
 /area/security/perma)
-"fH" = (
-/obj/machinery/door_control{
-	id_tag = "QMLoaddoor";
-	name = "Loading Doors";
-	pixel_x = -8;
-	pixel_y = -24
-	},
-/obj/machinery/door_control{
-	id_tag = "QMLoaddoor2";
-	name = "Loading Doors";
-	pixel_x = 8;
-	pixel_y = -24
-	},
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "fI" = (
 /obj/machinery/photocopier,
+/obj/machinery/light,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "fJ" = (
 /obj/structure/mirror{
 	pixel_y = 28
@@ -1802,7 +1772,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "fN" = (
 /obj/structure/flora/pottedplant/random,
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
@@ -1826,7 +1796,7 @@
 	dir = 8;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "fT" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
 	dir = 4;
@@ -1850,7 +1820,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "fV" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -1869,7 +1839,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "fX" = (
 /obj/structure/sign/double/barsign{
 	desc = "Caw.";
@@ -1915,7 +1885,7 @@
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "ge" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -1926,16 +1896,14 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "gh" = (
 /obj/machinery/light{
 	dir = 1
 	},
 /obj/structure/bed/chair/comfy/couch/left/black,
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (NORTH)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "gi" = (
@@ -1970,13 +1938,13 @@
 	dir = 4;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "gm" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "gn" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -1986,11 +1954,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
-"go" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/unsimulated/floor/planetary/concrete,
-/area/shuttle/supply)
+/area/odyssey/clinic)
 "gq" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
@@ -2034,7 +1998,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "gv" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 3;
@@ -2047,9 +2011,7 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (NORTH)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "gw" = (
@@ -2102,7 +2064,7 @@
 	dir = 1
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "gD" = (
 /obj/structure/table,
 /obj/machinery/pos{
@@ -2115,7 +2077,7 @@
 /turf/unsimulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "gE" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -2158,7 +2120,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "gN" = (
 /turf/unsimulated/wall/splashscreen,
 /area/start)
@@ -2212,7 +2174,7 @@
 /turf/unsimulated/floor{
 	icon_state = "bar"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "hc" = (
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{
 	dir = 4
@@ -2220,12 +2182,8 @@
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "he" = (
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
-	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/port)
 "hh" = (
@@ -2244,7 +2202,7 @@
 	tag = "icon-warning (NORTHEAST)"
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "hm" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /obj/machinery/door/poddoor{
@@ -2256,7 +2214,7 @@
 "hn" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "ho" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet,
@@ -2306,16 +2264,6 @@
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/crew)
-"hw" = (
-/obj/machinery/conveyor{
-	id_tag = "QMLoad"
-	},
-/obj/machinery/door/poddoor{
-	id_tag = "QMLoaddoor";
-	name = "Supply Shuttle Loading Door"
-	},
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "hx" = (
 /obj/structure/rack,
 /obj/item/stack/sheet/metal{
@@ -2363,7 +2311,7 @@
 /turf/simulated/floor{
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "hI" = (
 /obj/structure/closet/malf/suits,
 /obj/item/toy/gasha/AI/malf,
@@ -2373,7 +2321,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "hK" = (
 /obj/machinery/door_control{
 	name = "Starboard Engine Blast Door Control";
@@ -2393,15 +2341,16 @@
 	dir = 4;
 	name = "Cargo Office"
 	},
+/obj/structure/closet/secure_closet/quartermaster,
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "hQ" = (
 /obj/item/weapon/folder/red,
 /obj/structure/table/woodentable,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "hS" = (
 /obj/structure/table,
 /obj/machinery/microwave,
@@ -2454,7 +2403,7 @@
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "ii" = (
 /obj/effect/decal/warning_stripes{
 	dir = 9;
@@ -2467,20 +2416,10 @@
 /area/vox_trading_post/trading_floor{
 	name = "\improper Vox Casino"
 	})
-"ij" = (
-/obj/machinery/conveyor{
-	id_tag = "QMLoad2"
-	},
-/obj/machinery/door/poddoor{
-	id_tag = "QMLoaddoor2";
-	name = "Supply Shuttle Loading Door"
-	},
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "ik" = (
 /obj/machinery/status_display/supply,
 /turf/simulated/wall,
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "im" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
@@ -2499,16 +2438,8 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
-"iq" = (
-/obj/structure/shuttle/window{
-	icon_state = "17"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
+/area/odyssey/clinic)
 "iu" = (
-/obj/machinery/door/airlock/engineering,
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
@@ -2526,6 +2457,7 @@
 	tag = "icon-intact (EAST)"
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/maintenance_hatch,
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "iv" = (
@@ -2566,7 +2498,7 @@
 	dir = 8;
 	icon_state = "dark vault corner"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "iC" = (
 /obj/structure/bed/chair/office/dark,
 /turf/simulated/floor/carpet,
@@ -2597,10 +2529,6 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
 	dir = 1;
 	on = 1
-	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/crew)
@@ -2694,7 +2622,7 @@
 /area/shuttle/odyssey_transfer)
 "iU" = (
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "iV" = (
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -2718,10 +2646,6 @@
 "iZ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
-	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -2776,7 +2700,7 @@
 "jh" = (
 /obj/machinery/mech_bay_recharge_port,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "ji" = (
 /obj/machinery/computer/arcade,
 /turf/simulated/floor/light,
@@ -2794,7 +2718,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "jq" = (
 /obj/machinery/light,
 /turf/simulated/floor/vox{
@@ -2804,10 +2728,6 @@
 "jr" = (
 /obj/structure/wc/toilet{
 	pixel_y = 8
-	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -3009,6 +2929,7 @@
 /obj/machinery/newscaster{
 	pixel_y = -28
 	},
+/obj/item/device/megaphone,
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "dark_navy";
@@ -3077,7 +2998,7 @@
 	dir = 8;
 	icon_state = "wood"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "kr" = (
 /obj/machinery/conveyor_switch/oneway{
 	convdir = -1;
@@ -3086,7 +3007,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "ks" = (
 /obj/structure/closet/crate/bin,
 /turf/simulated/floor{
@@ -3114,7 +3035,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "kB" = (
 /obj/machinery/light{
 	dir = 1
@@ -3153,7 +3074,7 @@
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "kH" = (
 /obj/machinery/door/airlock/maintenance_hatch,
 /obj/structure/cable{
@@ -3255,7 +3176,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "kP" = (
 /obj/structure/cable/yellow{
 	icon_state = "0-8"
@@ -3267,19 +3188,12 @@
 	},
 /turf/simulated/floor/vox,
 /area/vox_station/tradepost)
-"kQ" = (
-/obj/machinery/door/unpowered/shuttle,
-/obj/docking_port/shuttle{
-	dir = 2
-	},
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "kS" = (
 /obj/structure/closet/crate,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "kU" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /turf/simulated/wall/shuttle/reinforced/panel,
@@ -3366,7 +3280,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "lk" = (
 /obj/structure/reagent_dispensers/fueltank,
 /turf/simulated/floor/plating,
@@ -3400,9 +3314,7 @@
 	tag = "icon-intact (EAST)"
 	},
 /turf/simulated/floor{
-	dir = 4;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (EAST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "ls" = (
@@ -3485,7 +3397,7 @@
 /area/shuttle/odyssey/hallway/aft)
 "lC" = (
 /turf/simulated/floor/server,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "lD" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -3528,7 +3440,7 @@
 /obj/machinery/computer/med_data/laptop,
 /obj/machinery/requests_console{
 	announcementConsole = 1;
-	department = "Infirmary";
+	department = "Medbay";
 	departmentType = 2;
 	name = "Infirmary RC";
 	pixel_y = 30
@@ -3583,7 +3495,7 @@
 	},
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "lZ" = (
 /obj/machinery/vending/medical,
 /turf/simulated/floor{
@@ -3603,14 +3515,14 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "me" = (
 /obj/machinery/door/airlock/glass_mining{
 	name = "Cargo Office";
 	req_access_txt = "50"
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "mf" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -3627,7 +3539,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "mh" = (
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_x = -30
@@ -3640,7 +3552,9 @@
 	},
 /area/shuttle/odyssey/hallway/aft)
 "mi" = (
-/obj/machinery/atmospherics/miner/surface,
+/obj/machinery/atmospherics/miner/surface{
+	anchored = 1
+	},
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "mj" = (
@@ -3682,14 +3596,6 @@
 	tag = "icon-dark_navy (NORTHEAST)"
 	},
 /area/shuttle/odyssey/bridge)
-"mp" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "all";
-	tag = "icon-all"
-	},
-/obj/machinery/turret,
-/turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
 "mq" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -3698,36 +3604,29 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "mr" = (
 /obj/machinery/door/airlock/maintenance,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "ms" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4;
 	icon_state = "pipe-c"
 	},
-/obj/machinery/computer/crew,
+/obj/machinery/computer/crew/odyssey,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
-"mt" = (
-/obj/machinery/door_timer/cell_1{
-	dir = 4;
-	pixel_y = 0
-	},
-/turf/simulated/wall/shuttle/reinforced/panel,
-/area/shuttle/odyssey/security/holding_cell)
+/area/odyssey/clinic)
 "mv" = (
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "mx" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -3749,7 +3648,7 @@
 /area/shuttle/odyssey/hallway/starboard)
 "mA" = (
 /turf/simulated/wall/r_wall,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "mC" = (
 /obj/machinery/computer/operating,
 /turf/simulated/floor{
@@ -3811,7 +3710,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "mI" = (
 /obj/machinery/air_sensor{
 	frequency = 1441;
@@ -3819,14 +3718,14 @@
 	pixel_x = 16;
 	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide","cryotheum","radon")
 	},
-/obj/machinery/atmospherics/unary/vent_pump{
+/obj/machinery/atmospherics/unary/vent_pump/high_volume{
 	canSpawnMice = 0;
+	dir = 1;
 	external_pressure_bound = 0;
 	frequency = 1441;
 	icon_state = "in";
 	id_tag = "air_out";
-	initialize_directions = 1;
-	internal_pressure_bound = 4000;
+	internal_pressure_bound = 2000;
 	on = 1;
 	pressure_checks = 2;
 	pump_direction = 0
@@ -3903,7 +3802,7 @@
 	},
 /obj/structure/table,
 /turf/simulated/floor,
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "mW" = (
 /obj/machinery/computer/security,
 /turf/simulated/floor,
@@ -3933,7 +3832,7 @@
 	tag = "icon-warning (NORTHWEST)"
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "ni" = (
 /obj/structure/closet/crate/freezer/surgery,
 /obj/item/weapon/reagent_containers/blood/OMinus,
@@ -3971,7 +3870,7 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "nt" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -4003,7 +3902,7 @@
 "nw" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor,
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "nx" = (
 /turf/simulated/wall/shuttle/reinforced/panel,
 /area/shuttle/odyssey/security/holding_cell)
@@ -4156,6 +4055,8 @@
 	pixel_y = -30;
 	dir = 1
 	},
+/obj/item/weapon/circuitboard/shuttle_control/odyssey,
+/obj/item/weapon/circuitboard/communications/odyssey,
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
 "nU" = (
@@ -4175,7 +4076,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "nZ" = (
 /obj/structure/grille,
 /obj/structure/window/full/reinforced,
@@ -4234,7 +4135,7 @@
 /obj/machinery/recharger,
 /obj/machinery/requests_console{
 	announcementConsole = 1;
-	department = "Logistics";
+	department = "Cargo Bay";
 	departmentType = 2;
 	name = "Logistics RC";
 	pixel_y = 30
@@ -4291,13 +4192,13 @@
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "ot" = (
 /obj/machinery/light{
 	dir = 1
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "ow" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -4308,7 +4209,7 @@
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "ox" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible/blue{
 	dir = 4;
@@ -4317,7 +4218,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "oy" = (
 /obj/machinery/camera/autoname{
 	dir = 4
@@ -4331,12 +4232,6 @@
 	tag = "icon-darkred (WEST)"
 	},
 /area/shuttle/odyssey/security/holding_cell)
-"oz" = (
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "oA" = (
 /obj/structure/bed/chair/office/dark{
 	dir = 1
@@ -4413,7 +4308,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "oP" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -4430,7 +4325,7 @@
 	dir = 1;
 	icon_state = "whitepurple"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "oR" = (
 /obj/structure/bed/chair/handrail{
 	dir = 8
@@ -4447,7 +4342,7 @@
 	},
 /obj/item/weapon/pen,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "oY" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered,
 /obj/structure/closet/crate/trashcart,
@@ -4617,7 +4512,7 @@
 	},
 /obj/machinery/computer/communications,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "pF" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -4727,7 +4622,9 @@
 /turf/simulated/floor,
 /area/security/perma)
 "pY" = (
-/obj/structure/closet/secure_closet/hop2,
+/obj/structure/closet/secure_closet/hop2{
+	name = "First Mate's Attire"
+	},
 /obj/item/clothing/suit/armor/hos,
 /obj/item/clothing/shoes/laceup,
 /obj/machinery/firealarm{
@@ -4781,7 +4678,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "qh" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -4818,10 +4715,6 @@
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/trade/start)
-"qk" = (
-/obj/machinery/light,
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "qn" = (
 /obj/structure/table,
 /turf/simulated/floor{
@@ -4839,7 +4732,9 @@
 /turf/simulated/floor/vox,
 /area/vox_station/tradepost)
 "qp" = (
-/obj/machinery/gas_extractor,
+/obj/machinery/gas_extractor{
+	anchored = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -4861,6 +4756,9 @@
 	d1 = 2;
 	d2 = 8;
 	icon_state = "2-8"
+	},
+/obj/effect/landmark{
+	name = "Observer-Start"
 	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/central)
@@ -4946,7 +4844,7 @@
 	dir = 10;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "qC" = (
 /obj/item/weapon/storage/toolbox/electrical,
 /obj/item/weapon/storage/toolbox/electrical,
@@ -4964,10 +4862,10 @@
 "qD" = (
 /obj/structure/bed/chair/shuttle{
 	dir = 4;
-	name = "Bridge Officer"
+	name = "Navigation"
 	},
 /obj/effect/landmark/start{
-	name = "Internal Affairs Agent"
+	name = "Chief Engineer"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -5007,7 +4905,11 @@
 	dir = 8
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
+"qM" = (
+/obj/machinery/light/small,
+/turf/simulated/floor,
+/area/security/perma)
 "qN" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/box/drinkingglasses{
@@ -5032,7 +4934,7 @@
 /turf/simulated/floor{
 	icon_state = "whitepurple"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "qP" = (
 /obj/machinery/newscaster{
 	pixel_y = -28
@@ -5075,7 +4977,7 @@
 	})
 "qZ" = (
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "ra" = (
 /obj/structure/closet/secure_closet/warden,
 /obj/machinery/newscaster{
@@ -5095,7 +4997,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "rg" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -5121,12 +5023,19 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/logistics)
+"ri" = (
+/obj/structure/rack/crate_shelf/centcomm_provided,
+/obj/machinery/light,
+/turf/unsimulated/floor{
+	icon_state = "floor"
+	},
+/area/odyssey/cargo)
 "rm" = (
 /obj/structure/bed/chair/wood/pew/right{
 	dir = 8
 	},
 /turf/unsimulated/floor/grass,
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "ro" = (
 /obj/structure/catwalk,
 /turf/unsimulated/floor/planetary/concrete,
@@ -5146,7 +5055,7 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "ru" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -5163,13 +5072,13 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "rw" = (
 /obj/structure/table/woodentable,
 /obj/machinery/recharger,
 /obj/item/device/flashlight/lamp/green,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "ry" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 4
@@ -5243,24 +5152,6 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/aft)
-"rS" = (
-/obj/machinery/turretid{
-	ailock = 1;
-	control_area = /area/turret_protected/tcomms_control_room;
-	desc = "A firewall prevents AIs from interacting with this device.";
-	name = "Telecomms Control Room turret control";
-	req_access = null;
-	req_access_txt = "61";
-	pixel_y = -29
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 6;
-	icon_state = "dark"
-	},
-/area/surface/nt_outpost/admin)
 "rX" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible/blue{
 	dir = 9;
@@ -5272,7 +5163,7 @@
 	},
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "rZ" = (
 /obj/machinery/door/airlock/external{
 	name = "Starboard External Airlock";
@@ -5300,15 +5191,10 @@
 	pixel_x = -4;
 	pixel_y = -5
 	},
-/obj/item/weapon/storage/box/flashbangs{
-	pixel_x = 4;
-	pixel_y = 5
-	},
 /obj/item/weapon/storage/box/smokebombs{
 	pixel_x = 5;
 	pixel_y = -5
 	},
-/obj/item/weapon/storage/box/smokebombs,
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_y = -30
 	},
@@ -5328,7 +5214,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "sm" = (
 /obj/structure/bed/chair/shuttle{
 	dir = 8
@@ -5339,12 +5225,14 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/odyssey_transfer)
 "sn" = (
-/obj/machinery/mineral/processing_unit,
+/obj/machinery/mineral/processing_unit{
+	id_tag = "mining_smelter"
+	},
 /obj/structure/railing,
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "sq" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -5376,7 +5264,7 @@
 /turf/unsimulated/floor{
 	icon_state = "bar"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "sw" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /turf/simulated/wall/shuttle/reinforced/panel,
@@ -5387,7 +5275,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "sy" = (
 /obj/structure/table,
 /obj/item/stack/cable_coil/cyan,
@@ -5409,7 +5297,9 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/odyssey_transfer)
 "sB" = (
-/obj/machinery/door/airlock/glass_command,
+/obj/machinery/door/airlock/glass_command{
+	req_access_txt = "19"
+	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -5454,7 +5344,7 @@
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "sE" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -5484,8 +5374,8 @@
 /obj/machinery/atmospherics/pipe/simple/cyan/hidden{
 	dir = 4
 	},
-/obj/machinery/door/airlock/engineering,
 /obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/maintenance_hatch,
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/port)
 "sL" = (
@@ -5540,7 +5430,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "sX" = (
 /obj/machinery/power/apc{
 	pixel_y = 30;
@@ -5552,7 +5442,7 @@
 	icon_state = "0-2";
 	pixel_y = 1
 	},
-/obj/structure/ore_box,
+/obj/structure/bed/chair/handrail,
 /turf/simulated/floor{
 	icon_state = "darkyellow";
 	tag = "icon-darkyellow (EAST)";
@@ -5588,9 +5478,7 @@
 	},
 /obj/structure/bed/chair/comfy/couch/right/black,
 /turf/simulated/floor{
-	dir = 9;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (NORTHWEST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "tf" = (
@@ -5693,7 +5581,7 @@
 	dir = 10;
 	icon_state = "dark vault stripe"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "tu" = (
 /obj/machinery/door/airlock/external{
 	name = "Maintenance";
@@ -5776,9 +5664,6 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/logistics)
-"tF" = (
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "tH" = (
 /obj/structure/closet/emcloset,
 /turf/simulated/floor{
@@ -5841,12 +5726,12 @@
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "tP" = (
 /turf/unsimulated/floor{
 	icon_state = "bar"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "tQ" = (
 /obj/structure/bed/chair/folding{
 	dir = 4
@@ -5909,7 +5794,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "tY" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/table/reinforced,
@@ -5917,7 +5802,7 @@
 	dir = 6;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "tZ" = (
 /obj/structure/table,
 /obj/item/weapon/reagent_containers/food/snacks/porktenderloin{
@@ -5961,11 +5846,11 @@
 /turf/simulated/floor,
 /area/shuttle/odyssey/security)
 "ug" = (
-/obj/machinery/media/jukebox,
 /obj/structure/sign/directions/security{
 	pixel_x = 32;
 	dir = 4
 	},
+/obj/machinery/media/jukebox/dj,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -5978,7 +5863,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "uo" = (
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/quarters/crew)
@@ -6018,9 +5903,7 @@
 	pixel_x = -30
 	},
 /turf/simulated/floor{
-	dir = 8;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (WEST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "ux" = (
@@ -6081,7 +5964,7 @@
 /turf/unsimulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "uN" = (
 /obj/machinery/door/airlock/glass_medical,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
@@ -6121,13 +6004,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
-"uV" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
-	},
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
+/area/odyssey/admin)
 "uY" = (
 /obj/item/weapon/stool{
 	pixel_y = 8
@@ -6151,7 +6028,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "vb" = (
 /obj/item/weapon/paper_bin/orange{
 	pixel_x = -3;
@@ -6166,7 +6043,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "vc" = (
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
@@ -6175,12 +6052,6 @@
 /area/vox_trading_post/trading_floor{
 	name = "\improper Vox Casino"
 	})
-"vg" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 4
-	},
-/turf/unsimulated/floor/planetary/concrete,
-/area/shuttle/supply)
 "vi" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4;
@@ -6235,7 +6106,7 @@
 /obj/machinery/computer/ordercomp,
 /obj/machinery/light,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "vs" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
@@ -6349,7 +6220,7 @@
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "vI" = (
 /obj/structure/railing{
 	dir = 4
@@ -6377,9 +6248,7 @@
 	icon_state = "4-8"
 	},
 /turf/simulated/floor{
-	dir = 4;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (EAST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "vP" = (
@@ -6391,7 +6260,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "vR" = (
 /obj/machinery/alarm{
 	dir = 8;
@@ -6476,7 +6345,7 @@
 	dir = 5;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "wa" = (
 /obj/machinery/light/small{
 	dir = 8
@@ -6521,7 +6390,7 @@
 	dir = 4;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "wg" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4;
@@ -6538,7 +6407,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "wi" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
@@ -6607,7 +6476,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "ws" = (
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/restroom)
@@ -6685,7 +6554,7 @@
 /area/shuttle/odyssey/stasis)
 "wC" = (
 /obj/machinery/door/airlock/command{
-	name = "Head of Personnel's Office";
+	name = "First Mate's Quarters";
 	req_access_txt = "57"
 	},
 /obj/machinery/door/firedoor,
@@ -6712,7 +6581,7 @@
 "wG" = (
 /obj/structure/sign/poster/cargo,
 /turf/simulated/wall/invulnerable/r_wall,
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "wH" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -6749,7 +6618,8 @@
 	name = "Starboard Gas Storage Lockdown";
 	id_tag = "starboard gas";
 	pixel_y = -27;
-	pixel_x = 8
+	pixel_x = 8;
+	req_access_txt = "11"
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
@@ -6785,7 +6655,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "wU" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -6868,7 +6738,7 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "xc" = (
 /obj/structure/extinguisher_cabinet{
 	pixel_x = -36
@@ -6897,9 +6767,7 @@
 	pixel_x = 30
 	},
 /turf/simulated/floor{
-	dir = 4;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (EAST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "xi" = (
@@ -6964,20 +6832,20 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "xq" = (
 /obj/machinery/conveyor{
 	id_tag = "QMLoad"
 	},
 /obj/structure/plasticflaps/mining,
 /obj/machinery/door/poddoor{
-	id_tag = "QMLoaddoor2";
+	id_tag = "QMLoaddoor";
 	name = "Supply Dock Loading Door"
 	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "xs" = (
 /obj/machinery/sweet,
 /obj/machinery/light,
@@ -7042,7 +6910,7 @@
 /obj/machinery/photocopier,
 /obj/machinery/light,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "xD" = (
 /obj/structure/rack,
 /obj/machinery/door_control{
@@ -7081,7 +6949,7 @@
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "xJ" = (
 /obj/machinery/docklight{
 	id_tag = "NT Outpost";
@@ -7108,7 +6976,9 @@
 	},
 /area/shuttle/odyssey/stasis)
 "xQ" = (
-/obj/structure/closet/secure_closet/hop,
+/obj/structure/closet/secure_closet/hop{
+	name = "First Mate's Locker"
+	},
 /turf/simulated/floor/carpet,
 /area/shuttle/odyssey/quarters/heads)
 "xR" = (
@@ -7135,7 +7005,7 @@
 	dir = 4;
 	icon_state = "whitepurple"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "xT" = (
 /obj/machinery/power/apc{
 	pixel_x = -30;
@@ -7181,7 +7051,8 @@
 	name = "Engineering RC";
 	pixel_y = -30
 	},
-/obj/item/weapon/circuitboard/communications,
+/obj/item/weapon/circuitboard/communications/odyssey,
+/obj/item/weapon/circuitboard/shuttle_control/odyssey,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -7211,7 +7082,8 @@
 	name = "Port Gas Storage Lockdown";
 	id_tag = "port gas";
 	pixel_y = 27;
-	pixel_x = 8
+	pixel_x = 8;
+	req_one_access_txt = "11"
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/gas_storage/port)
@@ -7258,7 +7130,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/obj/structure/dispenser,
+/obj/structure/ore_box,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -7289,7 +7161,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "yu" = (
 /obj/structure/extinguisher_cabinet{
 	pixel_y = -30
@@ -7306,7 +7178,7 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "yw" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/cable/yellow{
@@ -7362,7 +7234,7 @@
 	dir = 5;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "yE" = (
 /obj/structure/bed/chair/office/light{
 	dir = 8
@@ -7370,7 +7242,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "yF" = (
 /obj/structure/table/glass,
 /obj/item/ashtray/glass,
@@ -7403,7 +7275,6 @@
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey_transfer)
 "yM" = (
-/obj/machinery/door/airlock/engineering,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -7415,6 +7286,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/maintenance_hatch,
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "yP" = (
@@ -7423,11 +7295,11 @@
 	dir = 8;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "yS" = (
 /obj/structure/bed/chair/comfy/black,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "yW" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -7452,11 +7324,10 @@
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
-/obj/structure/closet/crate/bin,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "yZ" = (
 /obj/machinery/computer/library/checkout,
 /obj/structure/table/woodentable,
@@ -7464,7 +7335,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "zd" = (
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/crew)
@@ -7500,7 +7371,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "zm" = (
 /obj/structure/mopbucket,
 /obj/item/weapon/mop,
@@ -7514,10 +7385,6 @@
 	tag = "icon-showroomfloor (NORTH)"
 	},
 /area/shuttle/odyssey/janitor)
-"zo" = (
-/obj/machinery/door/unpowered/shuttle,
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "zq" = (
 /obj/structure/closet/crate/bin,
 /turf/simulated/floor/wood,
@@ -7541,13 +7408,13 @@
 	dir = 4;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "zu" = (
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "zv" = (
 /obj/machinery/door_control{
 	pixel_x = 8;
@@ -7570,7 +7437,7 @@
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "zx" = (
 /obj/machinery/embedded_controller/radio/access_controller{
 	id_tag = "virology_airlock_control";
@@ -7589,13 +7456,13 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "zy" = (
 /obj/machinery/computer/cloning,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "zz" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -7615,7 +7482,7 @@
 /area/shuttle/odyssey/bridge)
 "zC" = (
 /turf/simulated/wall/invulnerable/r_wall,
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "zD" = (
 /obj/machinery/status_display/odyssey,
 /turf/simulated/wall/shuttle/reinforced/panel,
@@ -7683,7 +7550,7 @@
 	dir = 6
 	},
 /turf/simulated/floor/server/bluegrid,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "zM" = (
 /obj/machinery/camera/autoname{
 	dir = 4
@@ -7850,7 +7717,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "Ac" = (
 /obj/machinery/light{
 	dir = 8
@@ -7879,7 +7746,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Al" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -7959,20 +7826,13 @@
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Aw" = (
 /obj/effect/landmark/start{
 	name = "Captain"
 	},
 /turf/simulated/floor/carpet,
 /area/shuttle/odyssey/quarters/heads)
-"Ay" = (
-/obj/structure/shuttle/window{
-	icon_state = "16"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "Az" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -8044,7 +7904,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor5"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "AO" = (
 /obj/structure/table,
 /obj/machinery/microwave{
@@ -8055,7 +7915,7 @@
 	dir = 8;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "AP" = (
 /obj/machinery/atmospherics/pipe/simple/cyan/hidden{
 	dir = 5
@@ -8078,7 +7938,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "AS" = (
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/hallway/starboard)
@@ -8136,7 +7996,7 @@
 	pixel_y = -2
 	},
 /turf/simulated/wall/r_wall,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Bo" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 8
@@ -8170,10 +8030,6 @@
 	d2 = 2;
 	icon_state = "0-2";
 	pixel_y = 1
-	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
 	},
 /obj/machinery/light_switch{
 	pixel_x = 12;
@@ -8209,7 +8065,7 @@
 /obj/item/weapon/book/manual/security_space_law,
 /obj/structure/table/woodentable,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "BA" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 8;
@@ -8221,9 +8077,7 @@
 	icon_state = "4-8"
 	},
 /turf/simulated/floor{
-	dir = 8;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (WEST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "BB" = (
@@ -8361,9 +8215,9 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Cb" = (
-/obj/machinery/computer/communications,
+/obj/machinery/computer/communications/odyssey,
 /turf/simulated/floor{
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy (WEST)"
@@ -8371,22 +8225,22 @@
 /area/shuttle/odyssey/bridge)
 "Cc" = (
 /turf/simulated/wall,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Cd" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
 	dir = 1;
 	tag = "icon-map (NORTH)"
 	},
 /obj/structure/bed/chair/folding,
-/obj/effect/landmark/start{
-	name = "Station Engineer"
-	},
 /obj/machinery/alarm{
 	pixel_y = 24;
 	req_access = list(140);
 	req_one_access = list()
 	},
 /obj/machinery/camera/autoname,
+/obj/effect/landmark/start{
+	name = "Mechanic"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -8476,12 +8330,12 @@
 	dir = 8
 	},
 /obj/effect/landmark/start{
-	name = "Cargo Technician"
+	name = "Quartermaster"
 	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "Cs" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -8493,7 +8347,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Cw" = (
 /obj/machinery/atmospherics/unary/cold_sink/freezer{
 	current_temperature = 80;
@@ -8514,15 +8368,13 @@
 	icon_state = "warning"
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Cx" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
 	dir = 1
 	},
 /turf/simulated/floor{
-	dir = 8;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (WEST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "Cy" = (
@@ -8546,17 +8398,18 @@
 /area/shuttle/trade/start)
 "CD" = (
 /obj/structure/ore_box,
+/obj/machinery/light,
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "CF" = (
 /obj/machinery/computer/diseasesplicer,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "CI" = (
 /turf/simulated/wall/shuttle/reinforced/panel,
 /area/shuttle/odyssey/engineering/gas_storage/port)
@@ -8753,7 +8606,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Dw" = (
 /obj/effect/decal/warning_stripes/pathmarkers{
 	icon_state = "maintguide";
@@ -8778,7 +8631,7 @@
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "DA" = (
 /obj/structure/rack,
 /obj/item/device/modkit/gold_rig,
@@ -8812,7 +8665,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "DD" = (
 /obj/machinery/biogenerator,
 /turf/simulated/floor{
@@ -8900,7 +8753,7 @@
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "DN" = (
 /obj/structure/closet/secure_closet/freezer/kitchen/mining,
 /turf/simulated/floor{
@@ -8911,13 +8764,13 @@
 "DS" = (
 /obj/machinery/conveyor{
 	dir = 4;
-	id_tag = "mining_mint"
+	id_tag = "mining_internal"
 	},
 /obj/structure/railing,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "DT" = (
 /obj/item/device/radio/intercom{
 	pixel_y = 30
@@ -8984,9 +8837,9 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Ec" = (
-/obj/machinery/computer/crew,
+/obj/machinery/computer/crew/odyssey,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark_navy";
@@ -9035,12 +8888,6 @@
 	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/port)
-"Em" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
-	},
-/turf/unsimulated/floor/planetary/concrete,
-/area/shuttle/supply)
 "Eo" = (
 /obj/machinery/status_display/odyssey,
 /turf/simulated/wall/shuttle/panel/black,
@@ -9053,8 +8900,7 @@
 	},
 /obj/machinery/light,
 /turf/simulated/floor{
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (WEST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "Ev" = (
@@ -9075,7 +8921,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "EB" = (
 /obj/machinery/vending/hydronutrients,
 /turf/simulated/floor{
@@ -9166,7 +9012,7 @@
 	dir = 5;
 	icon_state = "warnwhite"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "ET" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -9176,7 +9022,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "EU" = (
 /turf/simulated/floor{
 	icon_state = "rampbottom";
@@ -9188,7 +9034,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "EW" = (
 /obj/machinery/alarm{
 	dir = 8;
@@ -9228,20 +9074,13 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "Fg" = (
 /obj/machinery/mech_bay_recharge_floor{
 	icon_state = "recharge_floor_asteroid"
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/nt_outpost/mineral_processing)
-"Fi" = (
-/obj/structure/shuttle/window{
-	icon_state = "9"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
+/area/odyssey/mineral_processing)
 "Fl" = (
 /obj/structure/table,
 /obj/item/critter_cage/with_mouse{
@@ -9250,12 +9089,12 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Fn" = (
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Fp" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/folder/black{
@@ -9281,7 +9120,7 @@
 	dir = 4;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Fq" = (
 /obj/structure/wc/sink{
 	pixel_y = 28
@@ -9337,7 +9176,7 @@
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "FA" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
@@ -9369,13 +9208,13 @@
 "FH" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "FI" = (
 /obj/machinery/mineral/mint,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "FK" = (
 /obj/structure/bed/chair/comfy/brown{
 	dir = 8
@@ -9405,7 +9244,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "FP" = (
 /obj/effect/landmark/start{
 	name = "Head of Personnel"
@@ -9418,7 +9257,7 @@
 	dir = 1;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "FS" = (
 /obj/structure/table,
 /obj/item/weapon/folder/blue,
@@ -9467,7 +9306,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/server,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "FZ" = (
 /obj/structure/railing,
 /obj/machinery/computer/shuttle_control/odyssey_transfer,
@@ -9518,8 +9357,7 @@
 	internal_pressure_bound = 4000;
 	on = 1;
 	pressure_checks = 2;
-	pump_direction = 0;
-	dir = 1
+	pump_direction = 0
 	},
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/port)
@@ -9528,7 +9366,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Gm" = (
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
 /obj/structure/sign/directions/medical{
@@ -9574,7 +9412,9 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
 "GA" = (
-/obj/machinery/door/airlock/glass_security,
+/obj/machinery/door/airlock/glass_security{
+	req_access_txt = "1"
+	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 3;
 	tag = ""
@@ -9618,7 +9458,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "GE" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable{
@@ -9675,7 +9515,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor5"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "GN" = (
 /obj/item/device/radio/intercom{
 	pixel_x = -30
@@ -9699,7 +9539,7 @@
 	dir = 8;
 	icon_state = "wood"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "GS" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -9780,7 +9620,7 @@
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Hg" = (
 /obj/structure/cable{
 	d2 = 8;
@@ -9794,10 +9634,11 @@
 /obj/structure/bed/chair{
 	dir = 1
 	},
+/obj/effect/landmark/start{
+	name = "Security Officer"
+	},
 /turf/simulated/floor{
-	dir = 6;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (NORTHWEST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "Hi" = (
@@ -9809,10 +9650,6 @@
 	},
 /turf/simulated/floor,
 /area/shuttle/odyssey/hallway/central)
-"Hl" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "Ho" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -9843,19 +9680,19 @@
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Ht" = (
 /obj/machinery/crate_weigher,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "Hu" = (
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "warnwhite"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Hv" = (
 /turf/simulated/wall/r_wall,
 /area/tcomms/chamber)
@@ -9869,7 +9706,7 @@
 /turf/unsimulated/floor{
 	icon_state = "bar"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "HB" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 5;
@@ -9920,7 +9757,7 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "HK" = (
 /obj/machinery/vending/sale,
 /turf/simulated/wall,
@@ -9946,7 +9783,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "HP" = (
 /obj/machinery/portable_atmospherics/canister/nitrogen,
 /obj/structure/hanging_lantern{
@@ -10040,7 +9877,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Ii" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
@@ -10082,14 +9919,14 @@
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "Io" = (
 /turf/simulated/wall/r_wall,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Iq" = (
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
 "Is" = (
 /obj/machinery/computer/labor,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "It" = (
 /obj/machinery/vaporizer,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -10143,7 +9980,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "IG" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -10166,7 +10003,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "II" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -10234,7 +10071,7 @@
 	dir = 1
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "IR" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -10268,7 +10105,7 @@
 	dir = 8;
 	icon_state = "wood"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "IW" = (
 /obj/machinery/power/battery/smes,
 /obj/structure/cable{
@@ -10364,7 +10201,7 @@
 	dir = 5;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Jj" = (
 /obj/machinery/alarm/vox{
 	dir = 8;
@@ -10397,10 +10234,18 @@
 	dir = 1
 	},
 /obj/structure/flora/pottedplant/random,
+/obj/machinery/embedded_controller/radio/access_controller{
+	id_tag = "virology_airlock_control";
+	name = "Virology Access Console";
+	pixel_x = -6;
+	pixel_y = 23;
+	tag_exterior_door = "virology_airlock_exterior";
+	tag_interior_door = "virology_airlock_interior"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Jq" = (
 /turf/simulated/wall,
 /area/vox_station/tradepost)
@@ -10438,7 +10283,7 @@
 	dir = 4;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Jw" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -10447,7 +10292,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "Jx" = (
 /obj/structure/railing/wood/glass{
 	dir = 1
@@ -10537,7 +10382,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "JN" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -10558,10 +10403,6 @@
 	},
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_x = -30
-	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
@@ -10591,7 +10432,6 @@
 /obj/item/clothing/accessory/tie/horrible,
 /obj/item/clothing/suit/space,
 /obj/item/clothing/head/helmet/space,
-/obj/item/clothing/suit/storage/wintercoat/hop,
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
 "JY" = (
@@ -10617,7 +10457,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Ka" = (
 /obj/structure/cable,
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
@@ -10656,7 +10496,7 @@
 	dir = 1;
 	icon_state = "whitepurple"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Kf" = (
 /obj/structure/bed/chair/folding{
 	dir = 8
@@ -10717,7 +10557,7 @@
 "Kq" = (
 /obj/machinery/vending/cart,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Ks" = (
 /obj/structure/hanging_lantern{
 	dir = 1
@@ -10736,7 +10576,7 @@
 	dir = 4;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Kw" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
@@ -10770,7 +10610,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "KA" = (
 /obj/machinery/docklight{
 	id_tag = "NTEV Odyssey Crew Transfer Shuttle Landing Zone";
@@ -10779,7 +10619,9 @@
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
 "KB" = (
-/obj/machinery/door/airlock/glass_atmos,
+/obj/machinery/door/airlock/glass_atmos{
+	req_access_txt = "11"
+	},
 /obj/machinery/door/poddoor{
 	density = 0;
 	icon_state = "pdoor0";
@@ -10799,7 +10641,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "KI" = (
 /obj/machinery/door/airlock/medical{
 	autoclose = 0;
@@ -10815,7 +10657,7 @@
 	dir = 1;
 	icon_state = "whitegreencorner"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "KJ" = (
 /obj/machinery/door/airlock/glass,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
@@ -10855,7 +10697,7 @@
 	dir = 5;
 	icon_state = "whitepurple"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "KT" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 4
@@ -10866,7 +10708,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "KW" = (
 /obj/structure/wc/sink/kitchen{
 	pixel_y = 30
@@ -10892,7 +10734,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "Lb" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -10953,13 +10795,11 @@
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "Le" = (
-/obj/effect/landmark{
-	name = "Observer-Start"
+/obj/structure/filingcabinet,
+/turf/unsimulated/floor{
+	icon_state = "floor"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/shuttle/odyssey/bridge)
+/area/odyssey/cargo)
 "Lg" = (
 /obj/structure/reagent_dispensers/watertank,
 /turf/simulated/floor/plating,
@@ -11037,7 +10877,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "Ly" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 8;
@@ -11122,13 +10962,6 @@
 /obj/machinery/atmospherics/unary/vent_pump/on/layered,
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
-"LH" = (
-/obj/structure/shuttle/window{
-	icon_state = "8"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "LI" = (
 /obj/machinery/conveyor{
 	id_tag = "QMLoad2"
@@ -11141,7 +10974,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "LK" = (
 /obj/structure/railing{
 	dir = 1
@@ -11279,7 +11112,7 @@
 	dir = 8;
 	icon_state = "wood"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "Mc" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -11452,19 +11285,19 @@
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "Mx" = (
 /turf/simulated/wall,
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "Mz" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor{
 	icon_state = "floor5"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "MC" = (
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark vault stripe"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "MF" = (
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
@@ -11483,9 +11316,11 @@
 /turf/simulated/floor{
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "MJ" = (
-/obj/machinery/door/airlock/glass_command,
+/obj/machinery/door/airlock/glass_command{
+	req_access_txt = "19"
+	},
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden{
 	dir = 4
 	},
@@ -11551,7 +11386,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "MV" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -11630,14 +11465,14 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Ng" = (
 /obj/machinery/door/airlock/maintenance,
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "wood"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "Nk" = (
 /obj/machinery/light/small{
 	dir = 8
@@ -11673,14 +11508,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/store)
-"Nt" = (
-/obj/structure/shuttle/window{
-	icon_state = "14"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
+/area/odyssey/store)
 "Nu" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -11699,7 +11527,9 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
 "Nw" = (
-/obj/machinery/door/airlock/engineering,
+/obj/machinery/door/airlock/engineering{
+	req_access_txt = "11"
+	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -11764,15 +11594,6 @@
 	},
 /turf/simulated/floor/plating/vox,
 /area/vox_station/tradepost)
-"NC" = (
-/obj/machinery/door/window{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 6;
-	icon_state = "dark"
-	},
-/area/surface/nt_outpost/admin)
 "ND" = (
 /obj/effect/decal/warning_stripes{
 	dir = 6;
@@ -11816,7 +11637,7 @@
 	tag = "icon-warning (WEST)"
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "NK" = (
 /obj/machinery/computer/smelting{
 	smelter_tag = "mining_smelter"
@@ -11824,7 +11645,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "NL" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 9;
@@ -11888,7 +11709,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Oc" = (
 /obj/machinery/power/solar/panel/tracker,
 /obj/structure/cable/yellow,
@@ -11928,11 +11749,11 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Or" = (
 /obj/machinery/account_database,
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Ou" = (
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/hallway/fore/lobby)
@@ -11952,7 +11773,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "OD" = (
 /obj/structure/closet/secure_closet/freezer/fridge,
 /turf/simulated/floor{
@@ -11998,9 +11819,6 @@
 	icon_state = "floorgrime"
 	},
 /area/security/perma)
-"OL" = (
-/turf/simulated/wall/shuttle,
-/area/shuttle/supply)
 "OM" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/vox{
@@ -12033,7 +11851,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "OQ" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
@@ -12097,7 +11915,7 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/grass,
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "OY" = (
 /obj/machinery/microwave{
 	pixel_x = -1;
@@ -12113,12 +11931,6 @@
 	icon_state = "floorgrime"
 	},
 /area/security/perma)
-"OZ" = (
-/obj/structure/shuttle/engine/propulsion{
-	dir = 4
-	},
-/turf/unsimulated/floor/planetary/concrete,
-/area/shuttle/supply)
 "Pa" = (
 /obj/structure/rack/crate_shelf/centcomm_provided,
 /obj/structure/vendomatpack/security,
@@ -12143,7 +11955,7 @@
 	dir = 5
 	},
 /turf/simulated/floor/server/bluegrid,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Pd" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/reagent_containers/food/condiment/enzyme{
@@ -12162,6 +11974,9 @@
 	},
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker{
 	pixel_x = -3
+	},
+/obj/machinery/light/small{
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -12193,7 +12008,7 @@
 	dir = 8;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Pj" = (
 /obj/machinery/computer/secure_data,
 /obj/structure/window/reinforced,
@@ -12293,14 +12108,14 @@
 	dir = 4;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Ps" = (
 /obj/structure/closet/secure_closet/personal/patient,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Pt" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4;
@@ -12326,7 +12141,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Pv" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -12382,7 +12197,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "PH" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -12390,7 +12205,7 @@
 	dir = 4
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "PI" = (
 /obj/machinery/seed_extractor,
 /turf/simulated/floor/vox,
@@ -12433,7 +12248,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor5"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "PQ" = (
 /obj/structure/table,
 /obj/item/weapon/stock_parts/subspace/ansible,
@@ -12450,7 +12265,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "PR" = (
 /obj/structure/table,
 /obj/item/weapon/storage/belt/slim,
@@ -12459,7 +12274,9 @@
 /turf/simulated/floor/plating/vox,
 /area/shuttle/trade/start)
 "PS" = (
-/obj/machinery/door/airlock/glass_atmos,
+/obj/machinery/door/airlock/glass_atmos{
+	req_access_txt = "11"
+	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -12492,7 +12309,7 @@
 	dir = 1;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "PU" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 9;
@@ -12525,7 +12342,7 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "PY" = (
 /obj/structure/bed/chair/shuttle/blue{
 	dir = 4;
@@ -12573,7 +12390,7 @@
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Qj" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 8;
@@ -12689,7 +12506,7 @@
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "Qx" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 1
@@ -12737,7 +12554,7 @@
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "QB" = (
 /obj/machinery/light{
 	dir = 1
@@ -12747,7 +12564,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "QC" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible/blue{
 	dir = 10
@@ -12758,7 +12575,7 @@
 	},
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "QD" = (
 /obj/machinery/light/small,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
@@ -12776,7 +12593,7 @@
 	dir = 4
 	},
 /turf/simulated/floor/server,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "QH" = (
 /obj/machinery/portable_atmospherics/canister,
 /obj/effect/decal/warning_stripes{
@@ -12793,13 +12610,13 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "QJ" = (
 /obj/machinery/atmospherics/unary/cryo_cell,
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "QL" = (
 /obj/machinery/door/airlock/glass_medical{
 	name = "Outpost Clinic"
@@ -12807,7 +12624,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "QN" = (
 /obj/structure/table,
 /obj/item/weapon/paper_bin/purple{
@@ -12822,7 +12639,7 @@
 /turf/unsimulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "QO" = (
 /obj/structure/bed/chair/shuttle{
 	dir = 4;
@@ -12832,6 +12649,9 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/effect/landmark/start{
+	name = "Internal Affairs Agent"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -12856,7 +12676,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "QR" = (
 /obj/structure/mirror{
 	pixel_x = 28
@@ -12876,7 +12696,6 @@
 /turf/simulated/floor/wood,
 /area/derelict/bar)
 "QV" = (
-/obj/machinery/door/airlock/engineering,
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable{
 	d1 = 1;
@@ -12889,6 +12708,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/maintenance_hatch,
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "QZ" = (
@@ -12899,7 +12719,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Ra" = (
 /obj/structure/reagent_dispensers/fueltank,
 /turf/simulated/floor/vox{
@@ -12913,7 +12733,7 @@
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Rc" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 4;
@@ -12926,7 +12746,7 @@
 "Rd" = (
 /obj/structure/sign/biohazard,
 /turf/simulated/wall/r_wall,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Rg" = (
 /obj/machinery/light/small{
 	dir = 4
@@ -12990,7 +12810,7 @@
 "Rm" = (
 /obj/machinery/r_n_d/server/robotics,
 /turf/simulated/floor/server/bluegrid,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Rn" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -13018,11 +12838,11 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Rp" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "Rr" = (
 /obj/structure/table/woodentable,
 /turf/simulated/floor/wood,
@@ -13038,14 +12858,6 @@
 	id_tag = "bridge blast";
 	pixel_y = 8
 	},
-/obj/machinery/access_button{
-	pixel_x = -9;
-	pixel_y = -1;
-	name = "ROSA Control";
-	master_tag = "odyssey_rosa";
-	command = "toggle";
-	master_active = 0
-	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark_navy";
@@ -13054,15 +12866,15 @@
 /area/shuttle/odyssey/bridge)
 "Rv" = (
 /obj/structure/bed/chair,
-/obj/effect/landmark/start{
-	name = "Security Officer"
-	},
 /obj/machinery/door_control{
 	id_tag = "Prison Gate";
 	name = "Prison Wing Lockdown";
 	pixel_x = -5;
 	pixel_y = -26;
 	req_access_txt = "2"
+	},
+/obj/effect/landmark/start{
+	name = "Warden"
 	},
 /turf/simulated/floor,
 /area/security/perma)
@@ -13101,7 +12913,7 @@
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "RB" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/table,
@@ -13132,7 +12944,7 @@
 	dir = 6;
 	icon_state = "warnwhite"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "RG" = (
 /obj/machinery/light{
 	dir = 1
@@ -13143,7 +12955,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "RH" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -13153,7 +12965,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "RI" = (
 /obj/structure/reagent_dispensers/watertank,
 /turf/simulated/floor/plating/vox,
@@ -13246,7 +13058,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Sa" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 8
@@ -13269,7 +13081,7 @@
 	dir = 1;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Sd" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -13408,13 +13220,13 @@
 /turf/unsimulated/floor{
 	icon_state = "bar"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Sx" = (
 /obj/structure/bed/chair/comfy/black{
 	dir = 4
 	},
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Sy" = (
 /obj/structure/table,
 /obj/machinery/door/window{
@@ -13423,7 +13235,7 @@
 /turf/unsimulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "Sz" = (
 /obj/machinery/smartfridge/chemistry,
 /turf/simulated/floor/vox{
@@ -13453,14 +13265,7 @@
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
-"SK" = (
-/obj/structure/shuttle/window{
-	icon_state = "15"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
+/area/odyssey/clinic)
 "SL" = (
 /obj/structure/railing{
 	dir = 1
@@ -13479,8 +13284,7 @@
 	},
 /area/shuttle/odyssey/engineering/engine_room)
 "SO" = (
-/obj/structure/table,
-/obj/item/device/megaphone,
+/obj/machinery/telecomms/relay/planetary/ship,
 /turf/simulated/floor{
 	dir = 12;
 	icon_state = "dark_navy";
@@ -13516,7 +13320,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "SS" = (
 /obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 1;
@@ -13555,7 +13359,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Tb" = (
 /obj/structure/table,
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
@@ -13568,7 +13372,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Td" = (
 /obj/machinery/door/airlock,
 /obj/structure/cable{
@@ -13611,7 +13415,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Tp" = (
 /obj/effect/decal/warning_stripes{
 	dir = 10;
@@ -13632,7 +13436,7 @@
 /turf/unsimulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "Tr" = (
 /obj/machinery/atmospherics/pipe/simple/general/visible,
 /turf/simulated/floor/plating,
@@ -13672,7 +13476,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Tv" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 6;
@@ -13740,7 +13544,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "TK" = (
 /obj/structure/fence/corner{
 	dir = 1
@@ -13779,7 +13583,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "TW" = (
 /obj/structure/railing{
 	dir = 1
@@ -13801,7 +13605,7 @@
 	dir = 4;
 	icon_state = "warnwhite"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Ub" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
@@ -13830,7 +13634,7 @@
 	dir = 1;
 	icon_state = "whitegreen"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Ug" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 10;
@@ -13903,8 +13707,7 @@
 	icon_state = "1-4"
 	},
 /turf/simulated/floor{
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (WEST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "Un" = (
@@ -14039,7 +13842,7 @@
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "UJ" = (
 /obj/structure/closet/crate/bin,
 /obj/structure/window/reinforced{
@@ -14132,7 +13935,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Vb" = (
 /obj/machinery/door/airlock,
 /obj/structure/cable{
@@ -14198,7 +14001,7 @@
 /turf/unsimulated/floor{
 	icon_state = "bar"
 	},
-/area/surface/nt_outpost/store)
+/area/odyssey/store)
 "Vi" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 3;
@@ -14241,13 +14044,13 @@
 	dir = 4
 	},
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Vn" = (
 /obj/machinery/light,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "Vo" = (
 /obj/item/weapon/caution/cone{
 	pixel_x = 8;
@@ -14427,6 +14230,15 @@
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
+"VR" = (
+/obj/structure/rack/crate_shelf/centcomm_provided,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/unsimulated/floor{
+	icon_state = "floor"
+	},
+/area/odyssey/cargo)
 "VU" = (
 /obj/structure/bed/chair/shuttle,
 /turf/simulated/floor/shuttle,
@@ -14479,7 +14291,7 @@
 /area/shuttle/odyssey/engineering/engine_room)
 "Wb" = (
 /turf/simulated/wall,
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Wc" = (
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/engineering/gas_storage/port)
@@ -14515,7 +14327,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "Wl" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -14538,6 +14350,9 @@
 	dir = 8
 	},
 /obj/structure/curtain/open/privacy,
+/obj/machinery/light/small{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -14601,11 +14416,11 @@
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Wt" = (
 /obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Wv" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -14649,7 +14464,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "WE" = (
 /obj/structure/hanging_lantern,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
@@ -14668,7 +14483,9 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
 "WH" = (
-/obj/machinery/door/airlock/security,
+/obj/machinery/door/airlock/security{
+	req_access_txt = "1"
+	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -14695,13 +14512,7 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
-"WJ" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 1
-	},
-/turf/unsimulated/floor/planetary/concrete,
-/area/shuttle/supply)
+/area/odyssey/clinic)
 "WO" = (
 /obj/machinery/computer/security_alerts,
 /obj/machinery/computer/security/telescreen/entertainment{
@@ -14739,7 +14550,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "WU" = (
 /obj/machinery/light/small{
 	dir = 1;
@@ -14782,10 +14593,6 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
 	},
-/obj/effect/landmark{
-	name = "xeno_spawn";
-	pixel_x = -1
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -14798,13 +14605,14 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "Xa" = (
 /obj/structure/bed/chair,
+/obj/effect/landmark/start{
+	name = "Assistant"
+	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (NORTHEAST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore/lobby)
 "Xb" = (
@@ -14822,7 +14630,7 @@
 	icon_state = "whitebluecorner";
 	dir = 8
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Xd" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -14899,7 +14707,7 @@
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Xp" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	initialize_directions = 11
@@ -14969,13 +14777,12 @@
 /area/shuttle/odyssey/engineering/engine_room)
 "XF" = (
 /obj/machinery/conveyor{
-	dir = 1;
-	id_tag = "QMLoad3"
+	id_tag = "mining_internal"
 	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "XG" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
@@ -14986,13 +14793,13 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "XH" = (
 /obj/machinery/disposal/compactor,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "XJ" = (
 /obj/machinery/door/mineral/wood,
 /turf/simulated/floor/plating,
@@ -15019,7 +14826,7 @@
 	name = "SERVER ROOM"
 	},
 /turf/simulated/wall/r_wall,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "XO" = (
 /obj/item/toy/gasha/skub,
 /obj/machinery/firealarm{
@@ -15061,7 +14868,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/carpet,
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "XT" = (
 /obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
 	frequency = 1331;
@@ -15103,7 +14910,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "Ya" = (
 /obj/machinery/computer/card,
 /obj/structure/railing{
@@ -15333,7 +15140,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "YH" = (
 /obj/structure/bed/chair/comfy/black,
 /turf/simulated/floor{
@@ -15347,7 +15154,7 @@
 /turf/simulated/floor{
 	icon_state = "cmo"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "YJ" = (
 /obj/structure/table,
 /obj/machinery/smartfridge/mini,
@@ -15386,18 +15193,18 @@
 /area/shuttle/odyssey/cafeteria)
 "YT" = (
 /obj/machinery/conveyor_switch/oneway{
-	id_tag = "QMLoad3"
+	id_tag = "QMLoad2"
 	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
-/area/surface/nt_outpost/cargo)
+/area/odyssey/cargo)
 "YU" = (
 /obj/structure/bed/chair/vehicle/wheelchair,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "YV" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -15416,10 +15223,10 @@
 /area/shuttle/odyssey/hallway/fore)
 "YW" = (
 /obj/structure/catwalk,
-/obj/machinery/disposal/deliveryChute,
 /obj/structure/disposalpipe/trunk{
 	dir = 1
 	},
+/obj/structure/disposaloutlet,
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey/exterior)
 "YY" = (
@@ -15451,7 +15258,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Zm" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -15470,7 +15277,7 @@
 /obj/structure/bedsheetbin,
 /obj/machinery/requests_console{
 	announcementConsole = 1;
-	department = "Janitor";
+	department = "Janitorial";
 	departmentType = 5;
 	name = "Janitor RC";
 	pixel_y = 30
@@ -15504,7 +15311,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "Zr" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -15534,7 +15341,7 @@
 /turf/unsimulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/surface/nt_outpost/mineral_processing)
+/area/odyssey/mineral_processing)
 "Zw" = (
 /obj/abstract/map/spawner/robot/clean,
 /turf/simulated/floor/wood,
@@ -15571,7 +15378,7 @@
 	dir = 6;
 	icon_state = "dark"
 	},
-/area/surface/nt_outpost/admin)
+/area/odyssey/admin)
 "ZC" = (
 /turf/simulated/floor/carpet,
 /area/shuttle/trade/start)
@@ -15607,7 +15414,7 @@
 	dir = 10;
 	icon_state = "whiteblue"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "ZK" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "loading_area";
@@ -15652,7 +15459,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/surface/nt_outpost/clinic)
+/area/odyssey/clinic)
 "ZX" = (
 /obj/structure/sign/poster{
 	pixel_y = 30
@@ -26167,7 +25974,7 @@ Bc
 Bc
 Bc
 mA
-hI
+mv
 Wi
 ru
 HM
@@ -26469,7 +26276,7 @@ Bc
 Bc
 Bc
 mA
-JM
+hI
 Wi
 eE
 lY
@@ -26771,12 +26578,12 @@ Bc
 Bc
 Bc
 mA
-RG
+JM
 cH
 RH
 mH
 yY
-rS
+wh
 mA
 uk
 Ro
@@ -27073,12 +26880,12 @@ Bc
 Bc
 Bc
 mA
-mp
+RG
 mv
 mv
 ox
 Wi
-NC
+Ih
 QI
 Ih
 Ih
@@ -30134,7 +29941,7 @@ lr
 xf
 vN
 Hg
-mt
+nx
 yl
 cQ
 QR
@@ -31943,7 +31750,7 @@ Ew
 Zo
 dW
 kd
-Le
+CU
 kd
 WR
 Zo
@@ -41019,7 +40826,7 @@ mL
 sS
 mL
 mL
-mL
+qM
 sg
 Vt
 Sq
@@ -41291,13 +41098,13 @@ Bc
 Bc
 Bc
 nl
-Em
-OL
-Ay
-LH
-SK
-OL
-go
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 Iq
 Mz
@@ -41593,13 +41400,13 @@ Bc
 Bc
 Bc
 nl
-OL
-tF
-tF
-tF
-tF
-tF
-OL
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 Iq
 Mz
@@ -41619,7 +41426,7 @@ Wh
 RB
 uY
 Sp
-mL
+qM
 sg
 Pm
 zR
@@ -41895,13 +41702,13 @@ Bc
 Bc
 Bc
 nl
-OL
-tF
-tF
-tF
-tF
-qk
-OL
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 Iq
 Mz
@@ -41910,7 +41717,7 @@ kr
 WD
 WD
 WD
-WD
+Le
 Mz
 Bc
 sg
@@ -42197,13 +42004,13 @@ Bc
 Bc
 Bc
 nl
-OL
-oz
-tF
-tF
-tF
-tF
-hw
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 ja
 ja
 xq
@@ -42499,13 +42306,13 @@ Bc
 Bc
 Bc
 nl
-Nt
-tF
-tF
-tF
-tF
-tF
-kQ
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 ss
 Iq
 PP
@@ -42801,13 +42608,13 @@ Bc
 Bc
 Bc
 nE
-Fi
-tF
-tF
-tF
-tF
-fH
-OL
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 vk
 AN
@@ -43103,13 +42910,13 @@ Bc
 Bc
 Bc
 nl
-iq
-tF
-tF
-tF
-tF
-tF
-zo
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 Iq
 PP
@@ -43405,13 +43212,13 @@ Bc
 Bc
 Bc
 nl
-OL
-oz
-tF
-tF
-tF
-tF
-ij
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 vW
 vW
 LI
@@ -43707,13 +43514,13 @@ Bc
 Bc
 Bc
 nl
-OL
-tF
-tF
-tF
-tF
-qk
-OL
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 Iq
 Mz
@@ -44009,13 +43816,13 @@ Mf
 Bc
 Bc
 nl
-OL
-Hl
-tF
-tF
-tF
-uV
-OL
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 Iq
 Mz
@@ -44311,13 +44118,13 @@ Mf
 Bc
 Bc
 nl
-WJ
-OL
-eD
-eD
-eD
-OL
-vg
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 Iq
 Mz
@@ -44614,11 +44421,11 @@ Bc
 Bc
 nl
 Iq
-OZ
-OZ
-OZ
-OZ
-OZ
+Iq
+Iq
+Iq
+Iq
+Iq
 Iq
 Iq
 Iq
@@ -44925,12 +44732,12 @@ Iq
 Iq
 Iq
 ba
-TF
+VR
 WD
 TF
 TF
 WD
-TF
+ri
 ba
 Bc
 sg

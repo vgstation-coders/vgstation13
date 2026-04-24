@@ -154,7 +154,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 			if(!S.move_to_dock(S.dock_station, 0))
 				message_admins("Warning: [S] failed to move to station.")
 		if("centcom")
-			if(S.current_port != S.dock_shuttle)
+			if(!S.dock_shuttle || S.current_port != S.dock_shuttle)
 				if(!S.move_to_dock(S.dock_centcom, 0))
 					message_admins("Warning: [S] failed to move to centcom.")
 		if("transit")
@@ -171,6 +171,11 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				D.close()
 			else
 				D.open()
+
+// Returns the shuttle's linked docking port for use in admin log messages.
+// Overridden by map-specific subtypes that don't use the escape shuttle var.
+/datum/emergency_shuttle/proc/get_linked_port()
+	return shuttle ? shuttle.linked_port : null
 
 /datum/emergency_shuttle/proc/force_shutdown()
 	online=0

@@ -292,6 +292,17 @@ var/list/meteor_warnings = list()
 	explosion(get_turf(src), -1, 1, 3, 4, 0, 1, 0) //Tiny meteor doesn't cause too much damage
 	qdel(src)
 
+/obj/item/projectile/meteor/small/microdebris
+	name = "micro debris"
+	desc = "A tiny fragment of rock. It stings."
+
+/obj/item/projectile/meteor/small/microdebris/to_bump(atom/A)
+	if(loc == null)
+		return
+
+	explosion(get_turf(src), -1, 0, 1, 2, 0, 1, 0)
+	qdel(src)
+
 /obj/item/projectile/meteor/small/flash
 	name = "flash meteor"
 	desc = "A absolutely stunning rock specimen of blinding beauty."

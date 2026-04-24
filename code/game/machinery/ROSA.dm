@@ -15,6 +15,7 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 	starting_terminal = 1
 	var/deployed = FALSE
 	var/deploying = FALSE
+	var/deploy_generation = 0
 	var/list/panels = list()
 	var/frequency = 1449
 	var/datum/radio_frequency/radio_connection
@@ -29,6 +30,8 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 		stat |= BROKEN
 	if(radio_controller && frequency)
 		set_frequency(frequency)
+	spawn(1)
+		send_status()
 
 /obj/machinery/power/rosa/Destroy()
 	for(var/obj/structure/rosa_panel/panel in panels)
@@ -130,13 +133,20 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 		deploy()
 
 /obj/machinery/power/rosa/proc/deploy()
+	deploy_generation++
+	var/our_gen = deploy_generation
 	deploying = TRUE
 	flick("rollerpanel-open", src)
 	sleep(7)
+	if(deploy_generation != our_gen)
+		return
 	flick("rollerpanel-deploy", src)
 	sleep(3)
+	if(deploy_generation != our_gen)
+		return
 	spawn(20)
-		icon_state = "rollerpanel-deployed"
+		if(deploy_generation == our_gen && deploying)
+			icon_state = "rollerpanel-deployed"
 	var/turf/current = get_turf(src)
 	for(var/i = 1 to 4)
 		current = get_step(current, dir)
@@ -150,11 +160,14 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 		panel.dir = dir
 		flick("solarpanel-deploy", panel)
 		sleep(8)
+		if(deploy_generation != our_gen)
+			return
 	deployed = TRUE
 	deploying = FALSE
 	send_status()
 
 /obj/machinery/power/rosa/proc/force_retract()
+	deploy_generation++
 	deploying = FALSE
 	for(var/obj/structure/rosa_panel/panel in panels)
 		qdel(panel)
@@ -164,12 +177,20 @@ var/list/obj/machinery/power/rosa/rosa_machines = list()
 	send_status()
 
 /obj/machinery/power/rosa/proc/retract()
+	deploy_generation++
+	var/our_gen = deploy_generation
 	deploying = TRUE
 	for(var/i = panels.len to 1 step -1)
+		if(deploy_generation != our_gen)
+			return
+		if(i > panels.len)
+			continue
 		var/obj/structure/rosa_panel/panel = panels[i]
 		if(!QDELETED(panel))
 			flick("solarpanel-retract", panel)
 			sleep(5)
+			if(deploy_generation != our_gen)
+				return
 			qdel(panel)
 	panels.Cut()
 	icon_state = "rollerpanel"

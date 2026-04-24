@@ -51,7 +51,7 @@
 	if(istype(I,/obj/item/weapon/kitchen/utensil/spoon) || istype(I,/obj/item/weapon/kitchen/utensil/spork))  //because it's funny.
 		return 0.1
 	return 0.0
-	
+
 /turf/unsimulated/floor/planetary/proc/item_pickaxe_ability(var/obj/item/I,var/mob/user) //see above
 	if(!I || !user)
 		return 0.0
@@ -80,7 +80,7 @@
 		return TRUE
 	else
 		return FALSE
-	
+
 
 /turf/unsimulated/floor/planetary/attackby(var/obj/item/I, var/mob/user)
 	if(pickaxe_conversion_turf)
@@ -110,7 +110,7 @@
 /turf/unsimulated/mineral/cave
 	name = "cave wall"
 	icon_state = "cave_wall"
-	mined_type = /turf/unsimulated/floor/asteroid/underground
+	mined_type = /turf/unsimulated/floor/planetary/cave
 	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT
 
 //Floors
@@ -324,7 +324,7 @@
 	icon = 'icons/misc/beach.dmi'
 	icon_state = "water5"
 	anchored      = TRUE
-	name=""	
+	name=""
 	plane            = ABOVE_OBJ_PLANE
 	mouse_opacity    = 0
 	invisibility     = INVISIBILITY_LIGHTING
@@ -344,7 +344,7 @@
 	return
 /obj/effect/overlay/water_turf/clean_act(var/cleanliness)
 	return
-	
+
 /turf/unsimulated/floor/planetary/water
 	name = "water"
 	desc = "Of course it's wet, are you stupid?"
@@ -386,7 +386,7 @@
 	desc="Rocks which have been eroded over countless centuries into a fine powder. A wonderful material for castles!"
 	icon = 'icons/misc/beach.dmi'
 	icon_state = "sand"
-	
+
 /turf/unsimulated/floor/planetary/sand/New()
 	..()
 	footstep_sound = sounds_sand
@@ -403,7 +403,7 @@
 	edge_priority = 1
 	turf_speed_multiplier=1.75 //mud is difficult to travel over
 
-/turf/unsimulated/floor/planetary/mud/New()	
+/turf/unsimulated/floor/planetary/mud/New()
 	..()
 	footstep_sound = sounds_water
 	footstep_sound_barefoot = sounds_water

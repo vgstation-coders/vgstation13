@@ -1104,6 +1104,8 @@
 			qdel(E)
 		if(T in corner_turfs)
 			continue
+		if(dest_v)
+			T.v = dest_v
 		if(source_climate)
 			source_climate.unregister_weather_turf(T)
 		if(dest_climate)

@@ -13,6 +13,24 @@
             centcomm_account_db = db
             break
 
+    // /area/shuttle/supply lives in this fixedvault instead of the main map, so
+    // cargo_shuttle.New() (a global var initializer, runs before fixedvaults load)
+    // couldn't resolve its linked_area and the shuttle was never added to the global
+    // shuttles list. Back-fill it here so setup_shuttles() can initialize it and
+    // populate dock_station / dock_centcom.
+    if(cargo_shuttle && !cargo_shuttle.linked_area)
+        for(var/area/A in world)
+            if(istype(A, /area/shuttle/supply))
+                cargo_shuttle.linked_areas |= A
+        for(var/area/A in cargo_shuttle.linked_areas)
+            if(A.contents.len)
+                cargo_shuttle.linked_area = A
+                break
+        if(!cargo_shuttle.linked_area && cargo_shuttle.linked_areas.len)
+            cargo_shuttle.linked_area = cargo_shuttle.linked_areas[1]
+        if(cargo_shuttle.linked_area)
+            shuttles |= cargo_shuttle
+
 /datum/map_element/fixedvault/derelict
     name = "derelict space station"
     file_path = "maps/odyssey/derelict.dmm"

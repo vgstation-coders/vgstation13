@@ -112,23 +112,28 @@
 	icon_state = "bluenew"
 	requires_power = 0
 
-/area/surface/nt_outpost/admin
+/area/odyssey
+	name = "\improper Odyssey"
+	icon_state = "odyssey"
+	requires_power = 0
+
+/area/odyssey/admin
 	name = "\improper Outpost Administration"
 	icon_state = "conference"
 
-/area/surface/nt_outpost/cargo
+/area/odyssey/cargo
 	name = "\improper Outpost Cargo"
 	icon_state = "cargo_bay"
 
-/area/surface/nt_outpost/clinic
+/area/odyssey/clinic
 	name = "\improper Outpost Clinic"
 	icon_state = "virology"
 
-/area/surface/nt_outpost/store
+/area/odyssey/store
 	name = "\improper Outpost Store"
 	icon_state = "blue"
 
-/area/surface/nt_outpost/mineral_processing
+/area/odyssey/mineral_processing
 	name = "\improper Mineral Processing"
 	icon_state = "mining_production"
 

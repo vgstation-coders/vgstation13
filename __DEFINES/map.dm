@@ -68,6 +68,11 @@
 #define VZ_PROTECTED	4		// protected area (centcomm, inaccessible dungeons, away missions, etc)
 #define VZ_SPACE		5		// space area (station, encounter areas, derelict, dj sat, etc)
 
+// Whether the Odyssey shuttle is in hyperspace, deep space, or docked at a planet
+#define ODYSSEY_STATE_HYPERSPACE (1<<0)
+#define ODYSSEY_STATE_DEEPSPACE  (1<<1)
+#define ODYSSEY_STATE_PLANETSIDE (1<<2)
+
 // System vLevel offset - system vLevels (station, centcomm, etc) use IDs 101+
 // to differentiate them from dynamically created vLevels which use IDs 1+
 #define SYSTEM_VLEVEL_OFFSET	100
