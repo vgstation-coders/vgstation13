@@ -63,7 +63,6 @@
 		else if(V.x > 0 && V.y < 0)
 			. |= list(SOUTHEAST)
 
-//defaults to north
 /proc/vector2ClosestDirs(var/_vector/V,var/cardinal_reflect=FALSE)
 	var/_vector/V_norm = V.chebyshev_normalized()
 
