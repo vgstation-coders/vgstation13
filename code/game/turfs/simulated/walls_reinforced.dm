@@ -570,8 +570,7 @@
 				0,0,0,1,
 				0,0,0,0)
 
-/turf/simulated/wall/r_wall/mineral/phazon/Bumped(AM as mob|obj)
-	..()
+/turf/simulated/wall/r_wall/mineral/phazon/proc/teleport_hit(AM as mob|obj)
 	if(!spam_flag)
 		spam_flag = 1
 		phazon_teleport(AM)
@@ -582,6 +581,14 @@
 					0,0,0,0)
 		spawn(20)
 			spam_flag = 0
+
+/turf/simulated/wall/r_wall/mineral/phazon/Bumped(AM as mob|obj)
+	..()
+	teleport_hit(AM)
+
+/turf/simulated/wall/r_wall/mineral/phazon/attack_hand(mob/living/user)
+	. = ..()
+	teleport_hit(user)
 
 /turf/simulated/wall/r_wall/mineral/sandstone
 	name = "reinforced sandstone wall"
