@@ -44,12 +44,15 @@
 			return new /_vector(-1,1)
 
 //defaults to north
-/proc/vector2ClosestDir(var/_vector/V)
+/proc/vector2ClosestDir(var/_vector/V,var/cardinal_reflect=FALSE)
 	var/_vector/V_norm = V.chebyshev_normalized()
 
 	var/smallest_dist = 2 //since all vectors are normalized, the biggest possible distance is 2
 	var/closestDir = NORTH
-	for(var/d in alldirs)
+	var/list/dirstouse = alldirs
+	if(cardinal_reflect)
+		dirstouse = cardinal
+	for(var/d in dirstouse)
 		var/_vector/dir = dir2vector(d)
 		var/_vector/delta = dir.chebyshev_normalized() - V_norm
 		var/dist = delta.chebyshev_norm()

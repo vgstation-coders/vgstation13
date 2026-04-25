@@ -81,7 +81,7 @@
 
 	//we assume every atom is a octogonal, hence we use all_vectors
 	//here we calculate the "face" of the octagonal atom we want to rebound on
-	var/entry_byond_dir = vector2ClosestDir(hit_vector)
+	var/entry_byond_dir = vector2ClosestDir(hit_vector,resolved_hit_atom.cardinal_reflect)
 	var/_vector/entry_dir = dir2vector(entry_byond_dir)
 
 	return src.direction.mirrorWithNormal(entry_dir)
