@@ -136,7 +136,7 @@
 	if(destination.density)
 		var/turf/other
 		for(var/direction in cardinal)
-			other = get_step(AM,direction)
+			other = get_step(destination,direction)
 			if(other && !other.density)
 				destination = other
 				break
