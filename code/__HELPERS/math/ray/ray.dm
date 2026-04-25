@@ -68,7 +68,7 @@
 	return (c_x == c_y && (!max_distance || c_x <= max_distance ))
 
 //returns rebound angle of hit atom
-//assumes atom is 1x1 octogonal box
+//assumes atom is 1x1 octogonal box, unless cardinal_reflect is set to TRUE, where it becomes a square
 //TODO: entry vector (0.4,1) on the surface normal (1,-1). result is (1.6, -0.2)
 // wrong?
 /ray/proc/getReboundOnAtom(var/rayCastHit/hit)
@@ -79,8 +79,8 @@
 
 	var/_vector/hit_vector = hit_point - hit_atom_loc
 
-	//we assume every atom is a octogonal, hence we use all_vectors
-	//here we calculate the "face" of the octagonal atom we want to rebound on
+	//here we calculate the "face" of the atom we want to rebound on.
+	//any atom with cardinal_reflect set to TRUE is treated like a square, otherwise an octagon.
 	var/entry_byond_dir = vector2ClosestDir(hit_vector,resolved_hit_atom.cardinal_reflect)
 	var/_vector/entry_dir = dir2vector(entry_byond_dir)
 
