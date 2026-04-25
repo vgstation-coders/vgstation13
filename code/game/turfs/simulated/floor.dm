@@ -17,7 +17,7 @@ var/list/plating_icons = list("plating","asteroid","asteroid_dug",
 var/list/wood_icons = list("wood","wood-broken")
 
 //For phazon tile teleportation
-var/global/list/turf/simulated/floor/phazontiles = list()
+var/global/list/turf/phazontiles = list()
 
 /turf/simulated/floor
 
@@ -272,8 +272,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		if("phazon")
 			if(!spam_flag)
 				spam_flag = 1
-				var/turf/simulated/floor/destination = pick(phazontiles)
-				do_teleport(user, destination)
+				phazon_teleport(user)
 				spawn(20)
 					spam_flag = 0
 	..()

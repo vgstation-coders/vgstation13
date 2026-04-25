@@ -106,6 +106,33 @@
 	walltype = "clown"
 	mineral = "clown"
 
+/turf/simulated/wall/mineral/phazon
+	name = "phazon wall"
+	desc = "A wall with phazon plating. You can't seem to make out any shapes on it."
+	icon_state = "clown0"
+	walltype = "clown"
+	mineral = "clown"
+	var/spam_flag = 0
+
+/turf/simulated/wall/mineral/phazon/Bumped(AM as mob|obj)
+	..()
+	if(!spam_flag)
+		spam_flag = 1
+		phazon_teleport(AM)
+		spawn(20)
+			spam_flag = 0
+
+/proc/phazon_teleport(AM as mob|obj)
+	var/turf/destination = pick(phazontiles)
+	if(destination.density)
+		var/turf/other
+		for(var/direction in cardinal)
+			other = get_step(AM,direction)
+			if(other && !other.density)
+				destination = other
+				break
+	do_teleport(AM, destination)
+
 /turf/simulated/wall/mineral/sandstone
 	name = "sandstone wall"
 	desc = "A wall with sandstone plating."
