@@ -304,7 +304,7 @@ var/highest_player_entry = 0
 		if(v.size_x < TRANSITIONEDGE * 2 || v.size_y < TRANSITIONEDGE * 2)
 			v.movementJammed = TRUE // Too small to use any transitioning; fix incorrectly-set param
 			return
-		if(istype(A, /obj/item/projectile/meteor))
+		if(istype(A, /obj/item/projectile/meteor)) // Odyssey's micrometeors spawn from the edge of the map; without this they will immediately transition to a random v-level before striking the shuttle.
 			return
 		if (A.vx() <= TRANSITIONEDGE || A.vx() >= (v.x_max - TRANSITIONEDGE) || A.vy() <= TRANSITIONEDGE || A.vy() >= (v.y_max - TRANSITIONEDGE))
 			var/list/contents_brought = list()

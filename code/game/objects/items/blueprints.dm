@@ -383,7 +383,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 //Adds a new room to an existing shuttle's list of areas
 /obj/item/blueprints/proc/extend_shuttle(mob/user)
 	if(!(get_area_type() in can_create_areas_in))
-		to_chat(user, "There is no space on \the [src] for another drawing.")
+		to_chat(user, "<span class='notice'>There is no space on \the [src] for another drawing.</span>")
 		return
 
 	var/res = detect_room(get_turf(user))
