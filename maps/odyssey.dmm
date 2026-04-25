@@ -437,7 +437,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "bu" = (
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
@@ -476,8 +476,10 @@
 	icon_state = "2-8";
 	tag = ""
 	},
-/turf/simulated/floor/carpet,
-/area/shuttle/odyssey/hallway/fore/lobby)
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/bridge_lobby)
 "bv" = (
 /obj/machinery/light/small{
 	dir = 1
@@ -874,6 +876,16 @@
 	icon_state = "whitepurple"
 	},
 /area/odyssey/clinic)
+"cE" = (
+/obj/effect/landmark/start{
+	name = "Trader"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vox_trading_post/trading_floor{
+	name = "\improper Vox Casino"
+	})
 "cH" = (
 /obj/machinery/power/terminal{
 	dir = 1
@@ -1577,6 +1589,7 @@
 /obj/item/firefoam_popper,
 /obj/item/weapon/grenade/chem_grenade/metalfoam,
 /obj/item/weapon/grenade/chem_grenade/metalfoam,
+/obj/item/clothing/gloves/yellow,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -1905,7 +1918,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "gi" = (
 /obj/structure/closet/secure_closet/miner,
 /turf/simulated/floor{
@@ -2013,7 +2026,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "gw" = (
 /obj/machinery/power/apc{
 	pixel_x = -30;
@@ -2124,13 +2137,6 @@
 "gN" = (
 /turf/unsimulated/wall/splashscreen,
 /area/start)
-"gQ" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
-	dir = 4;
-	tag = "icon-intact (EAST)"
-	},
-/turf/simulated/floor/carpet,
-/area/shuttle/odyssey/hallway/fore/lobby)
 "gR" = (
 /obj/structure/grille/window_spawner/reinforced_plasma,
 /turf/simulated/floor/plating,
@@ -3316,7 +3322,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "ls" = (
 /obj/machinery/atmospherics/pipe/simple/supplymain/hidden,
 /turf/simulated/wall/shuttle/panel/black,
@@ -3497,7 +3503,9 @@
 /turf/simulated/floor/plating,
 /area/odyssey/admin)
 "lZ" = (
-/obj/machinery/vending/medical,
+/obj/machinery/vending/medical{
+	req_access = null
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "whiteblue"
@@ -5226,7 +5234,9 @@
 /area/shuttle/odyssey_transfer)
 "sn" = (
 /obj/machinery/mineral/processing_unit{
-	id_tag = "mining_smelter"
+	id_tag = "mining_smelter";
+	in_dir = 8;
+	out_dir = 4
 	},
 /obj/structure/railing,
 /turf/unsimulated/floor{
@@ -5298,7 +5308,8 @@
 /area/shuttle/odyssey_transfer)
 "sB" = (
 /obj/machinery/door/airlock/glass_command{
-	req_access_txt = "19"
+	req_access_txt = "19";
+	name = "Bridge"
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -5480,7 +5491,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "tf" = (
 /obj/structure/bed/chair/shuttle{
 	dir = 4
@@ -5905,7 +5916,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "ux" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
 /obj/structure/cable/yellow{
@@ -5966,7 +5977,9 @@
 	},
 /area/odyssey/store)
 "uN" = (
-/obj/machinery/door/airlock/glass_medical,
+/obj/machinery/door/airlock/glass_medical{
+	name = "Infirmary"
+	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4;
 	tag = "icon-intact (EAST)"
@@ -6250,7 +6263,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "vP" = (
 /obj/structure/fence/corner,
 /turf/unsimulated/floor/planetary/grass/jungle,
@@ -6400,7 +6413,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "wh" = (
 /obj/structure/closet/crate/bin,
 /turf/simulated/floor{
@@ -6540,13 +6553,17 @@
 	})
 "wB" = (
 /obj/structure/noticeboard{
-	pixel_y = 28
+	pixel_y = 36
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 8
 	},
 /obj/effect/landmark{
 	name = "JoinLate"
+	},
+/obj/machinery/light_switch{
+	pixel_y = 24;
+	pixel_x = 12
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -6769,7 +6786,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "xi" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -6867,10 +6884,6 @@
 	},
 /turf/simulated/floor/wood,
 /area/derelict/bar)
-"xw" = (
-/obj/structure/catwalk,
-/turf/unsimulated/floor/planetary/concrete,
-/area/shuttle/odyssey/bridge)
 "xx" = (
 /obj/structure/flora/pottedplant/random,
 /obj/machinery/power/apc{
@@ -7665,8 +7678,10 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/carpet,
-/area/shuttle/odyssey/hallway/fore/lobby)
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/bridge_lobby)
 "zY" = (
 /obj/machinery/door/window{
 	dir = 8;
@@ -8079,7 +8094,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "BB" = (
 /obj/structure/curtain/black,
 /turf/simulated/floor{
@@ -8376,7 +8391,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "Cy" = (
 /obj/machinery/door/window{
 	dir = 2;
@@ -8482,7 +8497,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "Da" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /obj/structure/disposalpipe/segment,
@@ -8902,7 +8917,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "Ev" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
@@ -9413,7 +9428,8 @@
 /area/shuttle/odyssey/maintenance/starboard)
 "GA" = (
 /obj/machinery/door/airlock/glass_security{
-	req_access_txt = "1"
+	req_access_txt = "1";
+	name = "Holding Cell"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 3;
@@ -9640,7 +9656,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "Hi" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /obj/machinery/door/poddoor/shutters{
@@ -10407,8 +10423,10 @@
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
 "JR" = (
-/turf/simulated/floor/carpet,
-/area/shuttle/odyssey/hallway/fore/lobby)
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/bridge_lobby)
 "JT" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -10465,10 +10483,8 @@
 	dir = 1
 	},
 /obj/machinery/power/apc{
-	pixel_x = 30
-	},
-/obj/machinery/light_switch{
-	pixel_y = -30
+	pixel_x = 30;
+	dir = 4
 	},
 /obj/effect/landmark{
 	name = "JoinLate"
@@ -10476,6 +10492,17 @@
 /obj/machinery/camera/autoname{
 	dir = 8
 	},
+/obj/structure/closet/walllocker{
+	dir = 1;
+	pixel_y = -24;
+	name = "Emergency Locker"
+	},
+/obj/item/tool/crowbar/red,
+/obj/item/tool/crowbar/red,
+/obj/item/tool/crowbar/red,
+/obj/item/weapon/extinguisher/mini,
+/obj/item/weapon/extinguisher/mini,
+/obj/item/weapon/extinguisher/mini,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -10620,7 +10647,8 @@
 /area/surface/nt_outpost)
 "KB" = (
 /obj/machinery/door/airlock/glass_atmos{
-	req_access_txt = "11"
+	req_access_txt = "11";
+	name = "Engine Room"
 	},
 /obj/machinery/door/poddoor{
 	density = 0;
@@ -11130,6 +11158,7 @@
 /obj/item/device/radio/intercom{
 	pixel_y = 24
 	},
+/obj/item/device/paicard,
 /turf/simulated/floor/engine/acoustic,
 /area/shuttle/odyssey/logistics)
 "Me" = (
@@ -11215,18 +11244,6 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore)
-"Mr" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
-	dir = 8;
-	tag = "icon-intact (EAST)"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/carpet,
-/area/shuttle/odyssey/hallway/fore/lobby)
 "Ms" = (
 /obj/machinery/light{
 	dir = 8
@@ -11319,7 +11336,8 @@
 /area/odyssey/clinic)
 "MJ" = (
 /obj/machinery/door/airlock/glass_command{
-	req_access_txt = "19"
+	req_access_txt = "19";
+	name = "Bridge"
 	},
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden{
 	dir = 4
@@ -11458,8 +11476,8 @@
 "Nf" = (
 /obj/machinery/mineral/stacking_machine{
 	id_tag = "mining_stacker";
-	in_dir = 4;
-	out_dir = 8
+	in_dir = 8;
+	out_dir = 4
 	},
 /obj/structure/railing,
 /turf/unsimulated/floor{
@@ -11528,7 +11546,8 @@
 /area/shuttle/odyssey/maintenance/starboard)
 "Nw" = (
 /obj/machinery/door/airlock/engineering{
-	req_access_txt = "11"
+	req_access_txt = "11";
+	name = "Engineering Office"
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -11756,7 +11775,7 @@
 /area/odyssey/admin)
 "Ou" = (
 /turf/simulated/wall/shuttle/panel/black,
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "Oz" = (
 /obj/machinery/atmospherics/binary/valve/open{
 	dir = 4
@@ -12015,7 +12034,9 @@
 /turf/simulated/floor,
 /area/security/perma)
 "Pk" = (
-/obj/machinery/door/airlock/maintenance,
+/obj/machinery/door/airlock/maintenance{
+	name = "Accounting"
+	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 3;
 	tag = ""
@@ -12275,7 +12296,8 @@
 /area/shuttle/trade/start)
 "PS" = (
 /obj/machinery/door/airlock/glass_atmos{
-	req_access_txt = "11"
+	req_access_txt = "11";
+	name = "Engine Room"
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -13709,7 +13731,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "Un" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -14614,7 +14636,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/fore/lobby)
+/area/shuttle/odyssey/bridge_lobby)
 "Xb" = (
 /obj/structure/cable{
 	d2 = 8;
@@ -14911,6 +14933,12 @@
 	icon_state = "floor"
 	},
 /area/odyssey/cargo)
+"XY" = (
+/obj/effect/landmark/start{
+	name = "Trader"
+	},
+/turf/simulated/floor/vox,
+/area/vox_station/tradepost)
 "Ya" = (
 /obj/machinery/computer/card,
 /obj/structure/railing{
@@ -14939,19 +14967,6 @@
 /obj/structure/closet/vox_raiders/trader,
 /turf/simulated/floor/vox,
 /area/vox_station/tradepost)
-"Yf" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
-	dir = 3;
-	tag = ""
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/carpet,
-/area/shuttle/odyssey/hallway/fore/lobby)
 "Yg" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -15455,6 +15470,9 @@
 "ZW" = (
 /obj/structure/bed/chair/office/light{
 	dir = 4
+	},
+/obj/effect/landmark/start{
+	name = "Virologist"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -29333,9 +29351,9 @@ iP
 Hb
 ad
 gh
-gQ
+lr
 JR
-Mr
+BA
 Ep
 nx
 Cm
@@ -29636,7 +29654,7 @@ tp
 Pk
 gv
 zX
-Yf
+gv
 bu
 Um
 GA
@@ -30535,9 +30553,9 @@ Iq
 Iq
 Iq
 Iq
+Iq
 ro
-xw
-xw
+ro
 wW
 Xz
 Qc
@@ -30547,9 +30565,9 @@ OO
 FS
 kb
 Zo
-xw
-xw
 ro
+ro
+Iq
 Iq
 Iq
 Iq
@@ -34724,7 +34742,7 @@ Bc
 Bc
 Jq
 yj
-Lj
+XY
 Lj
 Cj
 ux
@@ -38973,7 +38991,7 @@ Ja
 fj
 IY
 GZ
-Ma
+cE
 GJ
 wo
 Ma

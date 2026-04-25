@@ -1,6 +1,6 @@
 /datum/event/micro_meteors
-	announceWhen = 1
-	endWhen = 5
+	announceWhen = 0
+	endWhen = 10
 
 /datum/event/micro_meteors/can_start()
 	return 20
@@ -9,39 +9,41 @@
 	captain_announce("Sensors detect incoming micro-debris field. Brace for impact.")
 
 /datum/event/micro_meteors/start()
-	if(!map || !map.ship_shuttle)
-		return
-	var/datum/shuttle/odyssey/S = map.ship_shuttle
-	if(!istype(S))
-		return
-	var/count = rand(4, 8)
-	for(var/i = 1 to count)
-		var/meteor_type = /obj/item/projectile/meteor/small/microdebris
-		if(prob(25))
-			meteor_type = /obj/item/projectile/meteor/small
-		S.spawn_vz_meteor(meteor_type)
-		sleep(rand(3, 5))
+	spawn(5 SECONDS)
+		if(!map || !map.ship_shuttle)
+			return
+		var/datum/shuttle/odyssey/S = map.ship_shuttle
+		if(!istype(S))
+			return
+		var/count = rand(4, 8)
+		for(var/i = 1 to count)
+			var/meteor_type = /obj/item/projectile/meteor/small/microdebris
+			if(prob(25))
+				meteor_type = /obj/item/projectile/meteor/small
+			S.spawn_vz_meteor(meteor_type)
+			sleep(rand(3, 5))
 
 /datum/event/gib_storm
-	announceWhen = 1
-	endWhen = 5
+	announceWhen = 0
+	endWhen = 10
 
 /datum/event/gib_storm/can_start()
 	return 40
 
 /datum/event/gib_storm/announce()
-	captain_announce("Warning: Unidentified organic matter on collision course.")
+	captain_announce("Warning: Unidentified organic matter on collision course. Brace for impact.")
 
 /datum/event/gib_storm/start()
-	if(!map || !map.ship_shuttle)
-		return
-	var/datum/shuttle/odyssey/S = map.ship_shuttle
-	if(!istype(S))
-		return
-	var/count = rand(8, 15)
-	for(var/i = 1 to count)
-		S.spawn_vz_meteor(/obj/item/projectile/meteor/gib)
-		sleep(rand(2, 4))
+	spawn(5 SECONDS)
+		if(!map || !map.ship_shuttle)
+			return
+		var/datum/shuttle/odyssey/S = map.ship_shuttle
+		if(!istype(S))
+			return
+		var/count = rand(8, 15)
+		for(var/i = 1 to count)
+			S.spawn_vz_meteor(/obj/item/projectile/meteor/gib)
+			sleep(rand(2, 4))
 
 /datum/event/solar_flare
 	announceWhen = 1

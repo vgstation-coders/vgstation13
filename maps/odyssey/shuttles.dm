@@ -12,7 +12,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	can_rotate = FALSE
 
 	cooldown = 60 SECONDS
-	pre_flight_delay = 10 SECONDS
+	pre_flight_delay = 30 SECONDS
 	transit_delay = 120 SECONDS
 	transit_timeout = 0 // Disable transit safety recall - shuttle can remain in hyperspace indefinitely
 	use_transit = TRANSIT_ALWAYS
@@ -81,14 +81,30 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 /datum/shuttle/odyssey/after_flight()
 	..()
 	update_outpost_power()
-	// Clean up lingering beach water effects on shuttle turfs after landing
+	var/datum/virtual_z/vz = current_port?.get_virtual_z()
+	var/datum/climate/dest_climate = vz ? SSweather.get_climate(vz) : null
+	var/list/turf/exterior_turfs = list()
 	for(var/turf/T in shuttle_contents())
+		// Clean up lingering beach water effects on shuttle turfs after landing
 		for(var/obj/effect/beach_water/unsimmed/W in T.vis_contents)
 			T.vis_contents -= W
-	if(current_port)
-		var/datum/virtual_z/vz = current_port.get_virtual_z()
-		if(vz && vz.level_type == VZ_PLANET)
-			last_planet_dock_time = world.time
+		// The base shuttle move strips weather/daynight registrations from every
+		// shuttle turf. Re-attach them for the exterior deck so it participates
+		// in rain, sunset, etc. at the new destination.
+		if(!istype(T.loc, /area/shuttle/odyssey/exterior))
+			continue
+		exterior_turfs += T
+		for(var/datum/virtual_z/other in map.vLevels)
+			if(other != vz)
+				other.daynight_turfs -= T
+		if(vz)
+			vz.daynight_turfs |= T
+		if(dest_climate)
+			dest_climate.register_weather_turf(T, TRUE)
+	if(vz && exterior_turfs.len)
+		SSDayNight.update_turf_lighting(exterior_turfs, vz)
+	if(vz && vz.level_type == VZ_PLANET)
+		last_planet_dock_time = world.time
 
 /datum/shuttle/odyssey/get_pre_flight_delay()
 	// Skip countdown when already in hyperspace
@@ -115,7 +131,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	if(transit_port)
 		transit_port.areaname = "Hyperspace"
 	if(current_port != transit_port)
-		captain_announce("The NTEV Odyssey will be departing to [transit_destination_name] in 10 seconds.")
+		captain_announce("The NTEV Odyssey will be departing to [transit_destination_name] in 30 seconds.")
 	return ..()
 
 /datum/shuttle/odyssey/pre_flight()

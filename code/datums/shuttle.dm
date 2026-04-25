@@ -668,10 +668,31 @@
 		if(dest_vz)
 			INVOKE_EVENT(src, /event/shuttle_arrived, "vz" = dest_vz, "shuttle" = src)
 
+		if(source_vz && source_vz.level_type == VZ_TRANSIT && source_vz.linked_shuttle == src)
+			spawn(10 SECONDS)
+				if(current_port?.get_virtual_z() == source_vz)
+					return
+				cleaup_transit_level(source_vz)
+
 		after_flight() //Shake the shuttle, weaken unbuckled mobs, etc.
 
 		return 1
 	return
+
+//Wipes any obj/mob left behind in a transit vlevel after the shuttle has moved out.
+/datum/shuttle/proc/cleaup_transit_level(var/datum/virtual_z/vz)
+	if(!vz)
+		return
+	for(var/turf/T in vz.get_turfs())
+		for(var/mob/living/L in T)
+			if(L.client)
+				L.gib()
+			else
+				qdel(L)
+		for(var/obj/O in T)
+			if(istype(O, /obj/docking_port))
+				continue
+			qdel(O)
 
 /datum/shuttle/proc/close_all_doors()
 	for(var/obj/machinery/door/unpowered/shuttle/D in shuttle_contents())

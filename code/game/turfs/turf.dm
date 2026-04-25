@@ -304,6 +304,8 @@ var/highest_player_entry = 0
 		if(v.size_x < TRANSITIONEDGE * 2 || v.size_y < TRANSITIONEDGE * 2)
 			v.movementJammed = TRUE // Too small to use any transitioning; fix incorrectly-set param
 			return
+		if(istype(A, /obj/item/projectile/meteor))
+			return
 		if (A.vx() <= TRANSITIONEDGE || A.vx() >= (v.x_max - TRANSITIONEDGE) || A.vy() <= TRANSITIONEDGE || A.vy() >= (v.y_max - TRANSITIONEDGE))
 			var/list/contents_brought = list()
 			contents_brought += recursive_type_check(A)
