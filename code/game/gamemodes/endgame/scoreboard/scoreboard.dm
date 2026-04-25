@@ -340,7 +340,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "<B><U>RATING:</U></B> [score.rating]<br><br>"
 
 	dat += "<b>STATION HEATMAP:</b><br>"
-	var/list/zs_to_draw = GetConnectedZlevels(1)
+	var/list/zs_to_draw = GetConnectedZlevels(map.zMainStation)
 	for(var/z in zs_to_draw)
 		dat += "<img src='data:image/png;base64,[icon2base64(draw_heatmap(z))]'/><br>"
 	dat += "<br>"
@@ -397,12 +397,12 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	src.award_desc = award_desc
 
 /proc/draw_heatmap(zLevel = 1)
+	set background=1
 	if(!highest_player_entry)
 		return
 	if (zLevel > world.maxz)
 		return
 
-	set background=1
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 	var/divisor_factor = 255/highest_player_entry
 
@@ -413,7 +413,10 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 			var/turf/tile = locate(i, r, zLevel)
-			if(tile && !istype(tile,get_base_turf()))
+			var/v_or_z = tile.v
+			if(!v_or_z)
+				v_or_z = zLevel
+			if(tile && !istype(tile,get_base_turf(v_or_z)))
 				if(!lowest_x)
 					lowest_x = i
 				if(!lowest_y)
