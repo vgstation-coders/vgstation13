@@ -128,6 +128,11 @@
 	if(!spam_flag)
 		spam_flag = 1
 		phazon_teleport(AM)
+		color = list(1,0,0,0,
+					0,1,0,0,
+					rand(1,5)/10,0,1,0,
+					0,0,0,1,
+					0,0,0,0)
 		spawn(20)
 			spam_flag = 0
 
