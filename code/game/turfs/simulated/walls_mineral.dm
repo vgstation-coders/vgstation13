@@ -109,9 +109,9 @@
 /turf/simulated/wall/mineral/phazon
 	name = "phazon wall"
 	desc = "A wall with phazon plating. You can't seem to make out any shapes on it."
-	icon_state = "clown0"
-	walltype = "clown"
-	mineral = "clown"
+	icon_state = "phazon0"
+	walltype = "phazon"
+	mineral = "phazon"
 	var/spam_flag = 0
 
 /turf/simulated/wall/mineral/phazon/Bumped(AM as mob|obj)
