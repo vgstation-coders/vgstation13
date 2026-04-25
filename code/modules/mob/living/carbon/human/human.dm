@@ -2249,7 +2249,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 	if (istype(gloves, /obj/item/clothing/gloves/hunter))
 		for(var/obj/item/I in held_items)
 			if (istype(I, /obj/item/weapon/gun/hookshot/whip))
-				to_chat(src, "<span class='notice'>You hold your grip onto your [I]</span>")
+				to_chat(src, "<span class='notice'>You hold your grip onto your [I.name]</span>")
 			else
 				drop_item(I, Target, force_drop = force_drop)
 	else

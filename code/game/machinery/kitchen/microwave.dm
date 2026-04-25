@@ -550,7 +550,7 @@
 					if(!G.is_open_container())
 						continue
 
-					to_chat(user, "<span class='notice'>You recover the reagents from the microwave inside your [G]!</span>")
+					to_chat(user, "<span class='notice'>You recover the reagents from the microwave inside your [G.name]!</span>")
 					reagents.trans_to(G, reagents.total_volume)
 					recovered_reagents = TRUE
 					break

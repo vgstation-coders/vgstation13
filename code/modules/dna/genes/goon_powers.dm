@@ -173,10 +173,10 @@
 					handle_suit = 1
 					if(H.internal)
 						H.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [H]!</span>",
-											"<span class='notice'>A cloud of fine ice crystals cover your [H.head]'s visor.</span>")
+											"<span class='notice'>A cloud of fine ice crystals cover your [H.head.name]'s visor.</span>")
 					else
 						H.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [H]!</span>",
-											"<span class='warning'>A cloud of fine ice crystals cover your [H.head]'s visor and make it into your air vents!</span>")
+											"<span class='warning'>A cloud of fine ice crystals cover your [H.head.name]'s visor and make it into your air vents!</span>")
 						H.bodytemperature = max(T0C + 31, H.bodytemperature - 3)
 						H.adjustFireLoss(5)
 		if(!handle_suit)
