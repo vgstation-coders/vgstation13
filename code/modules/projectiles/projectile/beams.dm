@@ -159,6 +159,11 @@ var/list/beam_master = list()
 		if(temp_ray.equals(other_ray))
 			return
 
+	damage *= A.disperse_coeff
+	if(damage <= 1)
+		bullet_die()
+		return
+
 	fireto(origin, direction)
 	shot_from = A //temporary
 
