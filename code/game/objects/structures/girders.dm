@@ -375,8 +375,6 @@
 					if(X)
 						X.add_hiddenprint(user)
 						X.add_fingerprint(user)
-						if(M == "phazon")
-							phazontiles += X
 					qdel(src)
 				return
 

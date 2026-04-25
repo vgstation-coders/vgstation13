@@ -114,6 +114,15 @@
 	mineral = "phazon"
 	var/spam_flag = 0
 
+/turf/simulated/wall/mineral/phazon/New()
+	. = ..()
+	phazontiles += src
+	color = list(1,0,0,0,
+				0,1,0,0,
+				rand(1,5)/10,0,1,0,
+				0,0,0,1,
+				0,0,0,0)
+
 /turf/simulated/wall/mineral/phazon/Bumped(AM as mob|obj)
 	..()
 	if(!spam_flag)
