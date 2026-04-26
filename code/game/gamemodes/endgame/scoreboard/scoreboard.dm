@@ -342,7 +342,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "<b>STATION HEATMAP:</b><br>"
 	var/list/zs_to_draw = GetConnectedZlevels(map.zMainStation)
 	for(var/z in zs_to_draw)
-		dat += "<img src='data:image/png;base64,[icon2base64(draw_heatmap(z))]'/><br>"
+		dat += string_heatmap(z)
 	dat += "<br>"
 
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
@@ -426,4 +426,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 					canvas.DrawBox(rgb(min(final_factor*4,255),min(final_factor*2,255),final_factor,255), i, r)
 	canvas.Crop(lowest_x,lowest_y,highest_x,highest_y)
 	log_debug("Heatmap generated for z-level [zLevel]. Lowest x: [lowest_x]. Lowest y: [lowest_y]. Highest x: [highest_x]. Highest y: [highest_y].")
-	return canvas
+	return highest_x || highest_y ? canvas : null
+
+/proc/string_heatmap(zLevel = 1)
+	var/icon/I = draw_heatmap(zLevel)
+	return I ? "<img src='data:image/png;base64,[icon2base64(I)]'/><br>" : ""

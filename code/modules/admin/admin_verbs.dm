@@ -1448,7 +1448,7 @@ fieldset {width:140px;}
 	set category = "Admin"
 	var/dat = ""
 	for(var/zrender in 1 to world.maxz)
-		dat += "<img src='data:image/png;base64,[icon2base64(draw_heatmap(zrender))]'/><br>"
+		dat += string_heatmap(zrender)
 	var/datum/browser/B = new /datum/browser/clean(usr, "heatmap", "Station heatmaps")
 	B.set_content(dat)
 	B.open()
