@@ -427,4 +427,5 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 					var/final_factor = tile.player_entries*divisor_factor
 					canvas.DrawBox(rgb(min(final_factor*4,255),min(final_factor*2,255),final_factor,255), i, r)
 	canvas.Crop(lowest_x,lowest_y,highest_x,highest_y)
+	log_debug("Heatmap generated for [zLevel]. Lowest x: [lowest_x]. Lowest y: [lowest_y]. Highest x: [highest_x]. Highest y: [highest_y].")
 	return canvas
