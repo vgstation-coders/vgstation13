@@ -544,7 +544,7 @@
 			var/mob/user = usr
 			var/recovered_reagents = FALSE
 			if (user && Adjacent(user))
-				for(var/obj/item/weapon/reagent_containers/glass/G in (user.get_active_hand() + user.get_inactive_hand()))
+				for(var/obj/item/weapon/reagent_containers/glass/G in user.held_items)
 					if(!G.reagents)
 						continue
 					if(!G.is_open_container())
