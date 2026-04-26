@@ -12,11 +12,13 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 	var/obj/item/weapon/reagent_containers/glass/held_container
+	var/datum/geosample/scanned_sample
 	var/target_scan_ticks = 30
 	var/report_num = 0
 	// How far into a scan we are.
 	// If it's zero we're not scanning.
 	var/scan_process = 0
+	var/icon/map_icon
 
 /obj/machinery/anomaly/splashable()
 	return FALSE
@@ -102,7 +104,7 @@
 		src.visible_message("<span class='notice'>[bicon(src)] makes an insistent chime.</span>", "You hear an insistent chime.")
 		var/obj/item/weapon/paper/P = new(loc)
 		P.name = "[src] report #[++report_num]"
-		P.info = "<b>[src] analysis report #[report_num]</b><br><br>" + ScanResults()
+		P.info = "<b>[src] analysis report #[report_num]</b><br><br>" + ScanResults() + "<br><b>Location data:</b><br><br>" + generate_map()
 		P.stamped = list(/obj/item/weapon/stamp)
 		P.overlays += "paper_stamp-qm"
 	else
@@ -168,6 +170,29 @@
 
 	start(user)
 
+/obj/machinery/anomaly/proc/generate_map()
+	set background=1
+	map_icon = icon('icons/480x480.dmi', "blank")
+	var/lowest_x = 0
+	var/lowest_y = 0
+	var/highest_x = 0
+	var/highest_y = 0
+	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+			var/turf/tile = locate(i, r, z)
+			if(tile && istype(tile,/turf/unsimulated/mineral))
+				lowest_x = min(lowest_x,i)
+				lowest_y = min(lowest_y,r)
+				highest_x = max(highest_x,i)
+				highest_y = max(highest_y,r)
+				draw_on_map(i,r)
+	map_icon.Crop(lowest_x,lowest_y,highest_x,highest_y)
+	return "<br><img src='data:image/png;base64,[icon2base64(map_icon)]'/><br>"
+
+//override this
+/obj/machinery/anomaly/proc/draw_on_map(x,y)
+	if(map_icon)
+		map_icon.DrawBox("#000", x, y)
 
 /obj/machinery/anomaly/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if (stat & (FORCEDISABLE|NOPOWER))

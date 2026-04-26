@@ -4,6 +4,7 @@
 /obj/machinery/anomaly/fourier_transform
 	name = "\improper Fourier transform spectroscope"
 	desc = "A specialised, complex analysis machine. Can measure an approximate distance from the closest source of anomalous exotic energies."
+	var/distance = 0
 
 /obj/machinery/anomaly/fourier_transform/New()
 	. = ..()
@@ -20,8 +21,6 @@
 /obj/machinery/anomaly/fourier_transform/ScanResults()
 	var/results = "The scan was inconclusive. Check sample integrity."
 
-	var/datum/geosample/scanned_sample
-
 	for(var/datum/reagent/A in held_container.reagents.reagent_list)
 		var/datum/reagent/R = A
 		if(istype(R, /datum/reagent/analysis_sample))
@@ -37,3 +36,8 @@
 			results = "Energy dispersion detected throughout sample consistent with background readings.<br>"
 
 	return results
+
+/obj/machinery/anomaly/fourier_transform/draw_on_map(x,y)
+	if(map_icon && scanned_sample)
+		if(round(abs((scanned_sample.scanned_x-x)**2) + abs((scanned_sample.scanned_y-y)**2)) != round(distance**2))
+			map_icon.DrawBox("#000", x, y)
