@@ -406,8 +406,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 	var/divisor_factor = 255/highest_player_entry
 
-	var/lowest_x = 0
-	var/lowest_y = 0
+	var/lowest_x = world.maxx
+	var/lowest_y = world.maxy
 	var/highest_x = 0
 	var/highest_y = 0
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
@@ -418,10 +418,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 				if(!v_or_z)
 					v_or_z = zLevel
 				if(!istype(tile,get_base_turf(v_or_z)))
-					if(!lowest_x)
-						lowest_x = i
-					if(!lowest_y)
-						lowest_y = r
+					lowest_x = min(lowest_x,i)
+					lowest_y = min(lowest_y,r)
 					highest_x = max(highest_x,i)
 					highest_y = max(highest_y,r)
 					var/final_factor = tile.player_entries*divisor_factor
