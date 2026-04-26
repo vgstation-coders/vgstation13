@@ -57,7 +57,7 @@
 
 	return results
 
-/obj/machinery/anomaly/fourier_transform/draw_on_map(x,y)
+/obj/machinery/anomaly/hyperspectral/draw_on_map(x,y)
 	if(map_icon && scanned_sample)
-		if(x == scanned_sample.scanned_x && y == scanned_sample.scanned_y)
+		if(x != scanned_sample.scanned_x && y != scanned_sample.scanned_y)
 			map_icon.DrawBox("#000", x, y)
