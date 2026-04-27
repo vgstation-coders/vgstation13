@@ -555,7 +555,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 				return
 			var/list/datum/virtual_z/destinations = list()
 			for(var/datum/virtual_z/vz in map.vLevels)
-				if(vz.level_type == VZ_PARKING || vz.level_type == VZ_SPACE)
+				if((vz.level_type == VZ_PARKING || vz.level_type == VZ_SPACE) && !vz.movementJammed)
 					destinations += vz
 			if(destinations.len)
 				var/datum/virtual_z/dest = pick(destinations)

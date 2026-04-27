@@ -306,7 +306,7 @@ var/highest_player_entry = 0
 			return
 		if(istype(A, /obj/item/projectile/meteor)) // Odyssey's micrometeors spawn from the edge of the map; without this they will immediately transition to a random v-level before striking the shuttle.
 			return
-		if (A.vx() <= TRANSITIONEDGE || A.vx() >= (v.x_max - TRANSITIONEDGE) || A.vy() <= TRANSITIONEDGE || A.vy() >= (v.y_max - TRANSITIONEDGE))
+		if (src.x <= v.x_min + TRANSITIONEDGE || src.x >= v.x_max - TRANSITIONEDGE || src.y <= v.y_min + TRANSITIONEDGE || src.y >= v.y_max - TRANSITIONEDGE)
 			var/list/contents_brought = list()
 			contents_brought += recursive_type_check(A)
 
@@ -337,13 +337,13 @@ var/highest_player_entry = 0
 			if(v.transition_crosswrap_v && v.transition_crosswrap_v.len==4)
 				locked_to_current_v=TRUE //prevent shuffling z-level later in the code.
 				randomize_drift_position=FALSE
-				if(A.vy()>=v.y_max - TRANSITIONEDGE) // NORTH
+				if(src.y >= v.y_max - TRANSITIONEDGE) // NORTH
 					move_to_v=v.transition_crosswrap_v[1]
-				else if(A.vy()<=TRANSITIONEDGE) // SOUTH
+				else if(src.y <= v.y_min + TRANSITIONEDGE) // SOUTH
 					move_to_v=v.transition_crosswrap_v[2]
-				else if(A.vx()>=v.x_max - TRANSITIONEDGE) // EAST
+				else if(src.x >= v.x_max - TRANSITIONEDGE) // EAST
 					move_to_v=v.transition_crosswrap_v[3]
-				else if(A.vx()<=TRANSITIONEDGE) // WEST
+				else if(src.x <= v.x_min + TRANSITIONEDGE) // WEST
 					move_to_v=v.transition_crosswrap_v[4]
 
 			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
@@ -379,25 +379,25 @@ var/highest_player_entry = 0
 				INVOKE_EVENT(AA, /event/v_transition, "user" = AA, "from_v" = old_v, "to_v" = move_to_v)
 			A.z = move_to_v.z()
 
-			if(src.vx() <= TRANSITIONEDGE)
+			if(src.x <= v.x_min + TRANSITIONEDGE) // entered from src's WEST edge -> appear on dest's EAST edge
 				A.x = move_to_v.x_max - TRANSITIONEDGE - 2
 				if(randomize_drift_position)
-					A.y = rand(TRANSITIONEDGE + 2, move_to_v.y_max - TRANSITIONEDGE - 2)
+					A.y = rand(move_to_v.y_min + TRANSITIONEDGE + 2, move_to_v.y_max - TRANSITIONEDGE - 2)
 
-			else if (A.vx() >= (move_to_v.x_max - TRANSITIONEDGE - 1))
-				A.x = TRANSITIONEDGE + 1
+			else if(src.x >= v.x_max - TRANSITIONEDGE) // EAST -> WEST
+				A.x = move_to_v.x_min + TRANSITIONEDGE + 1
 				if(randomize_drift_position)
-					A.y = rand(TRANSITIONEDGE + 2, move_to_v.y_max - TRANSITIONEDGE - 2)
+					A.y = rand(move_to_v.y_min + TRANSITIONEDGE + 2, move_to_v.y_max - TRANSITIONEDGE - 2)
 
-			else if (src.vy() <= TRANSITIONEDGE)
-				A.y = move_to_v.y_max - TRANSITIONEDGE -2
+			else if(src.y <= v.y_min + TRANSITIONEDGE) // SOUTH -> NORTH
+				A.y = move_to_v.y_max - TRANSITIONEDGE - 2
 				if(randomize_drift_position)
-					A.x = rand(TRANSITIONEDGE + 2, move_to_v.x_max - TRANSITIONEDGE - 2)
+					A.x = rand(move_to_v.x_min + TRANSITIONEDGE + 2, move_to_v.x_max - TRANSITIONEDGE - 2)
 
-			else if (A.vy() >= (move_to_v.y_max - TRANSITIONEDGE - 1))
-				A.y = TRANSITIONEDGE + 1
+			else if(src.y >= v.y_max - TRANSITIONEDGE) // NORTH -> SOUTH
+				A.y = move_to_v.y_min + TRANSITIONEDGE + 1
 				if(randomize_drift_position)
-					A.x = rand(TRANSITIONEDGE + 2, move_to_v.x_max - TRANSITIONEDGE - 2)
+					A.x = rand(move_to_v.x_min + TRANSITIONEDGE + 2, move_to_v.x_max - TRANSITIONEDGE - 2)
 
 			spawn (0)
 				if(was_pulling && MOB) //Carry the object they were pulling over when they transition
