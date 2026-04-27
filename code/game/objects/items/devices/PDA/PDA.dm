@@ -538,7 +538,7 @@ var/global/msg_id = 0
 
 	if (ismob(loc))
 		var/mob/M = loc
-		M.show_message("<span class='warning'>Your [src] explodes!</span>", 1)
+		M.show_message("<span class='warning'>Your [src.name] explodes!</span>", 1)
 
 	if(T)
 		try_hotspot_expose(700,SMALL_FLAME,0)

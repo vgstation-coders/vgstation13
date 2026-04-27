@@ -340,9 +340,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "<B><U>RATING:</U></B> [score.rating]<br><br>"
 
 	dat += "<b>STATION HEATMAP:</b><br>"
-	var/list/zs_to_draw = GetConnectedZlevels(1)
+	var/list/zs_to_draw = GetConnectedZlevels(map.zMainStation)
 	for(var/z in zs_to_draw)
-		dat += "<img src='data:image/png;base64,[icon2base64(draw_heatmap(z))]'/><br>"
+		dat += string_heatmap(z)
 	dat += "<br>"
 
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
@@ -397,30 +397,37 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	src.award_desc = award_desc
 
 /proc/draw_heatmap(zLevel = 1)
+	set background=1
 	if(!highest_player_entry)
 		return
 	if (zLevel > world.maxz)
 		return
 
-	set background=1
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 	var/divisor_factor = 255/highest_player_entry
 
-	var/lowest_x = 0
-	var/lowest_y = 0
+	var/lowest_x = world.maxx
+	var/lowest_y = world.maxy
 	var/highest_x = 0
 	var/highest_y = 0
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 			var/turf/tile = locate(i, r, zLevel)
-			if(tile && !istype(tile,get_base_turf()))
-				if(!lowest_x)
-					lowest_x = i
-				if(!lowest_y)
-					lowest_y = r
-				highest_x = i
-				highest_y = r
-				var/final_factor = tile.player_entries*divisor_factor
-				canvas.DrawBox(rgb(min(final_factor*4,255),min(final_factor*2,255),final_factor,255), i, r)
+			if(tile)
+				var/v_or_z = tile.v
+				if(!v_or_z)
+					v_or_z = zLevel
+				if(!istype(tile,get_base_turf(v_or_z)))
+					lowest_x = min(lowest_x,i)
+					lowest_y = min(lowest_y,r)
+					highest_x = max(highest_x,i)
+					highest_y = max(highest_y,r)
+					var/final_factor = tile.player_entries*divisor_factor
+					canvas.DrawBox(rgb(min(final_factor*4,255),min(final_factor*2,255),final_factor,255), i, r)
 	canvas.Crop(lowest_x,lowest_y,highest_x,highest_y)
-	return canvas
+	log_debug("Heatmap generated for z-level [zLevel]. Lowest x: [lowest_x]. Lowest y: [lowest_y]. Highest x: [highest_x]. Highest y: [highest_y].")
+	return highest_x || highest_y ? canvas : null
+
+/proc/string_heatmap(zLevel = 1)
+	var/icon/I = draw_heatmap(zLevel)
+	return I ? "<img src='data:image/png;base64,[icon2base64(I)]'/><br>" : ""

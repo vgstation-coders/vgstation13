@@ -253,7 +253,7 @@
 		src.item_state = "xcomarmor2_sleeveless"
 		to_chat(usr, "You roll up your sleeves.")
 	else
-		to_chat(usr, "You roll up some imaginary sleeves on your [src].")
+		to_chat(usr, "You roll up some imaginary sleeves on your [src.name].")
 		return
 	usr.update_inv_wear_suit()
 

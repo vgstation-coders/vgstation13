@@ -988,7 +988,7 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
 	if(isEmag(W))
-		to_chat(user, "<span class='warning'>Your [W] refuses to touch \the [src]!</span>")
+		to_chat(user, "<span class='warning'>Your [W.name] refuses to touch \the [src]!</span>")
 		return
 	..()
 

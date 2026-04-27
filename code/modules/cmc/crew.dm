@@ -104,8 +104,9 @@ Crew Monitor by Paul, based on the holomaps by Deity
 GENERAL PROCS
 */
 //returns whether a virtual z-level should be visible to this console.
+//Suit sensors always reach the CMC regardless of vLevel type, so just require an active vLevel.
 /obj/machinery/computer/crew/proc/is_vlevel_valid(var/datum/virtual_z/V)
-	return V && V.gps_allowed
+	return V && V.active
 
 //initializes all important vars for a new user
 /obj/machinery/computer/crew/proc/initializeUser(var/mob/user)
@@ -233,8 +234,7 @@ GENERAL PROCS
 				if (U.sensor_mode >= 2)
 					damage = list(round(H.getOxyLoss(),1), round(H.getToxLoss(),1), round(H.getFireLoss(),1), round(H.getBruteLoss(),1))
 
-				// Only show location data if sensor_mode == 3 and not on a planet
-				if(U.sensor_mode == 3 && !entry_vz.planet)
+				if(U.sensor_mode == 3)
 					player_area = format_text(get_area(H).name)
 					see_x = H.vx() - get_world_x_offset(entry_vz.id)
 					see_y = H.vy() - get_world_y_offset(entry_vz.id)
@@ -616,13 +616,6 @@ TGUI PROCS
 // NTEV Odyssey variant
 /obj/machinery/computer/crew/odyssey
 	name = "expedition crew monitoring computer"
-
-/obj/machinery/computer/crew/odyssey/is_vlevel_valid(var/datum/virtual_z/V)
-	if(!V)
-		return FALSE
-	if(V.gps_allowed)
-		return TRUE
-	return V == get_virtual_z()
 
 //Forces the Show Holomap button off regardless of which vLevel is selected.
 /obj/machinery/computer/crew/odyssey/handle_sanity(var/mob/user)

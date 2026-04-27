@@ -570,7 +570,7 @@
 					var/obj/item/clothing/to_thank = H.head
 					if(!to_thank || (istype(to_thank) && H.glasses && H.glasses.eyeprot > to_thank.eyeprot))
 						to_thank = H.glasses
-					eye_msg(user, 0, "<span class='notice'>Your [to_thank] protects you the welder's glow.</span>")
+					eye_msg(user, 0, "<span class='notice'>Your [to_thank.name] protects you from the welder's glow.</span>")
 			else
 				switch(safety)
 					if(1)
@@ -583,7 +583,7 @@
 						var/obj/item/clothing/to_blame = H.head //blame the hat
 						if(!to_blame || (istype(to_blame) && H.glasses && H.glasses.eyeprot < to_blame.eyeprot)) //if we don't have a hat, the issue is the glasses. Otherwise, if the glasses are worse, blame the glasses
 							to_blame = H.glasses
-						eye_msg(user, 2, "<span class='warning'>Your [to_blame] intensifies the welder's glow. Your eyes itch and burn severely.</span>", 	"<span class='warning'>Somebody's cutting onions.</span>")
+						eye_msg(user, 2, "<span class='warning'>Your [to_blame.name] intensifies the welder's glow. Your eyes itch and burn severely.</span>", 	"<span class='warning'>Somebody's cutting onions.</span>")
 						E.damage += rand(12, 16)
 
 				if (E.damage >= E.min_broken_damage)

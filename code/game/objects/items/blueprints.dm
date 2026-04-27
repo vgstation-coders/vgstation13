@@ -158,6 +158,9 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		if("delete_area")
 			delete_area(usr)
 
+		if("extend_shuttle")
+			extend_shuttle(usr)
+
 /obj/item/blueprints/interact()
 	var/area/A = get_area(src)
 	var/text = {"<HTML><head><title>[src]</title></head><BODY>
@@ -189,6 +192,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	if(area_type in can_create_areas_in)
 		text += "<p><a href='?src=\ref[src];action=create_room'>Create a new room</a></p>"
 		text += "<p><a href='?src=\ref[src];action=create_area'>Start a new drawing</a></p>"
+		text += "<p><a href='?src=\ref[src];action=extend_shuttle'>Add a room to a shuttle</a></p>"
 	if(area_type in can_rename_areas)
 		text += "<p><a href='?src=\ref[src];action=rename_area'>Change the drawing's name</a></p>"
 	if(area_type in can_edit_areas)
@@ -372,6 +376,82 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		edit_area(user)
 
 	ghostteleportlocs[newarea.name] = newarea
+
+	sleep(5)
+	interact()
+
+//Adds a new room to an existing shuttle's list of areas
+/obj/item/blueprints/proc/extend_shuttle(mob/user)
+	if(!(get_area_type() in can_create_areas_in))
+		to_chat(user, "<span class='notice'>There is no space on \the [src] for another drawing.</span>")
+		return
+
+	var/res = detect_room(get_turf(user))
+	if(!istype(res, /list))
+		switch(res)
+			if(ROOM_ERR_SPACE)
+				to_chat(user, "<span class='warning'>The new area must be completely airtight!</span>")
+				return
+			if(ROOM_ERR_TOOLARGE)
+				to_chat(user, "<span class='warning'>The new area is too large!</span>")
+				return
+			else
+				to_chat(user, "<span class='warning'>Error! Please notify administration!</span>")
+				return
+
+	//Find shuttles whose areas border the detected room
+	var/list/datum/shuttle/candidates = list()
+	for(var/turf/T in res)
+		for(var/dir in cardinal)
+			var/turf/N = get_step(T, dir)
+			if(!N || (N in res))
+				continue
+			var/area/NA = get_area(N)
+			if(!NA)
+				continue
+			var/datum/shuttle/S = NA.get_shuttle()
+			if(S)
+				candidates |= S
+
+	if(!candidates.len)
+		to_chat(user, "<span class='warning'>The new room must be adjacent to an existing shuttle.</span>")
+		return
+
+	var/datum/shuttle/chosen
+	if(candidates.len == 1)
+		chosen = candidates[1]
+	else
+		var/list/options = list()
+		for(var/datum/shuttle/S in candidates)
+			options[S.name] = S
+		var/pick = input(user, "Select a shuttle to extend:", "Shuttle Extension") as null|anything in options
+		if(!pick)
+			return
+		chosen = options[pick]
+
+	if(!chosen || !Adjacent(user))
+		return
+
+	var/str = trim(stripped_input(user, "New area name:", "Blueprint Editing", "", MAX_NAME_LEN))
+	if(!str || !length(str) || !Adjacent(user))
+		return
+	if(length(str) > 50)
+		to_chat(user, "<span class='warning'>Name too long.</span>")
+		return
+
+	var/area/station/custom/newarea = new
+	newarea.name = str
+	newarea.tag = "[newarea.type]/[md5(str)]"
+
+	for(var/turf/T in res)
+		T.set_area(newarea)
+		T.turf_flags |= SHUTTLE_TURF
+
+	chosen.linked_areas |= newarea
+
+	ghostteleportlocs[newarea.name] = newarea
+
+	to_chat(user, "<span class='notice'>You have extended \the [chosen.name] with the new area '[str]'.</span>")
 
 	sleep(5)
 	interact()

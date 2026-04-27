@@ -92,6 +92,7 @@ var/list/admin_verbs_admin = list(
 	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
 	/client/proc/toggle_admin_examine,
 	/client/proc/beasts_panel,	/* Lists all forgotten beasts generated, along with their characteristics */
+	/client/proc/show_heatmaps,
 	/datum/admins/proc/procedural_generation_panel
 )
 var/list/admin_verbs_ban = list(
@@ -1441,3 +1442,14 @@ fieldset {width:140px;}
 		holder.beasts_panel()
 		log_admin("[key_name(usr)] checked the Megabeast Panel.")
 	feedback_add_details("admin_verb","BST")
+
+/client/proc/show_heatmaps()
+	set name = "Show station heatmaps"
+	set category = "Admin"
+	var/dat = ""
+	for(var/zrender in 1 to world.maxz)
+		dat += string_heatmap(zrender)
+	var/datum/browser/B = new /datum/browser/clean(usr, "heatmap", "Station heatmaps")
+	B.set_content(dat)
+	B.open()
+	feedback_add_details("admin_verb","HMP")

@@ -532,7 +532,7 @@ var/list/tag_suits_list = list()
 		src.item_state = "suitjacket_blue_open"
 		to_chat(usr, "You unbutton the suit jacket.")
 	else
-		to_chat(usr, "You button-up some imaginary buttons on your [src].")
+		to_chat(usr, "You button-up some imaginary buttons on your [src.name].")
 		return
 	usr.update_inv_wear_suit()
 

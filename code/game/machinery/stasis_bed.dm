@@ -85,6 +85,10 @@
 	if(!occupant)
 		return
 	visible_message("<span class='notice'>[occupant] enters cryogenic stasis, fading from the world...</span>")
+	if(occupant.mind && occupant.mind.assigned_role && job_master)
+		var/datum/job/J = job_master.GetJob(occupant.mind.assigned_role)
+		if(J && J.current_positions > 0)
+			J.current_positions--
 	occupant.ghostize(0)
 	qdel(occupant)
 	occupant = null

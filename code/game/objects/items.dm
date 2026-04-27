@@ -160,7 +160,7 @@
 		return 1
 	return 0
 
-/obj/item/t_scanner_expose()
+/obj/item/t_scanner_expose(ray_range)
 	if (level > LEVEL_BELOW_FLOOR)
 		..()
 	else

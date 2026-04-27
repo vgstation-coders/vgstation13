@@ -73,6 +73,44 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2026.04.27</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Jungle animals should overpopulate less and not break the server.</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">pAIs can now buy the Volume Enhancer module, letting them speak louder, like a megaphone.</li>
+				<li class="rscadd">pAIs now have access to a native newscaster module, letting them engage with the news. They cannot post images, since they don&#39;t have cameras.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="spellcheck">Many items no longer have an erroneous &#34;the&#34; after the word &#34;your&#34; in output messages relating to them.</li>
+				<li class="bugfix">Disposing chemicals from microwaves now properly puts them in held beakers.</li>
+				<li class="tweak">Bumping into the diagonal end of a diagonal shuttle wall now moves you &#34;along&#34; the wall cardinally, if the other side facing that end has free space to move into opposite of it or yourself in that direction. If another diagonal wall is on the tile facing the other way, you move directly into the tile beside the first wall.</li>
+				<li class="bugfix">Station heatmaps now properly crop more accurate minimum and maximum bounds.</li>
+				<li class="tweak">Station heatmaps now properly account for shuttles, virtual z levels, and the actual main station z level now.</li>
+				<li class="rscadd">Admins now have a verb to view all station z-level heatmaps for themselves.</li>
+				<li class="rscadd">P-ray scanners now show the contents of a crate or locker at half alpha when active and one tile nearby.</li>
+			</ul>
+			<h2 class="date">2026.04.25</h2>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed incorrect in/out dirs in the ore processing room.</li>
+				<li class="bugfix">Fixed the stasis room lightswitch being covered by the APC.</li>
+				<li class="bugfix">Fixed the bridge lobby turfs changing colors.</li>
+				<li class="bugfix">Fixed micro meteors not working.</li>
+				<li class="tweak">CMC on Odyssey can now track players on planets.</li>
+				<li class="tweak">Stasis beds now open up the job slot the user occupied.</li>
+				<li class="tweak">Increased the Odyssey pre-flight delay to 30s.</li>
+				<li class="tweak">Enabled weather and day/night effects on external shuttle structures.</li>
+				<li class="tweak">Added more a few more job spawns to Odyssey.</li>
+				<li class="tweak">Added a visual indicator at the transition edge of an encounter zone.</li>
+				<li class="tweak">Added a pAI to Odyssey.</li>
+				<li class="tweak">Blueprints can now add additional areas to a shuttle.</li>
+				<li class="tweak">Hyperspace levels will no longer have persistent gibs/objs/mobs.</li>
+				<li class="tweak">Odyssey crew now will have a 5 second notice before micro meteors strike.</li>
+			</ul>
 			<h2 class="date">2026.04.24</h2>
 			<h3 class="author">jwhitak updated:</h3>
 			<ul class="changes bgimages16">
@@ -1427,44 +1465,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">west3436 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Restored the missing firefighter suit and birthday hat sprites.</li>
-			</ul>
-			<h2 class="date">2025.09.14</h2>
-			<h3 class="author">Blonichu updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Feathers and related feather-recipes. Feathers can be obtained from butchery on chickens, vox, and vox chickens alike. Vox can have their feathers surgically removed and chickens can be plucked by hand with grab intent. Vox can preen themselves with a similar grab intent.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Table doors can now be made out of wood, metal, plasteel, reinforced glass and reinforced plasma glass. They must be adjacent to a wall or table to be built, and can accept access electronics for permitting people in and out. Deconstruction is done by using a wrench on them, plus a welder first for reinforced types; after removing electronics, if any, with a screwdriver and crowbar.</li>
-				<li class="spellcheck">Almost every single atom description without proper capitalization or full stops has been fixed.</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You can now mousedrag crates onto crate weighers.</li>
-				<li class="bugfix">Mecha Graveyard loot wrecks no longer give double loot.</li>
-			</ul>
-			<h2 class="date">2025.09.11</h2>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The salvage shuttles on boxstation and lowfat bagel now have spiders... again?</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The station will no longer consume power if there are no players online, to avoid most scenarios where players would hop on a powerless station.</li>
-				<li class="tweak">The SMES units will be fully charged at roundstart if there are less than 6 players in the round.</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Attempting to overload magazines/other ammo storages will now fumble bullets once the magazine hits max ammo.</li>
-				<li class="bugfix">Admins with +DEBUG can actually right click inspect UIs again without needing to deadmin then readmin.</li>
-				<li class="rscdel">Cargo carts can no longer be put in closets or crates.</li>
-				<li class="bugfix">Cargo carts now have considerably less bugs related to being destroyed.</li>
-				<li class="bugfix">Cargo carts can no longer open locked crates via a glitch.</li>
-				<li class="imageadd">Little pilots can be seen driving in open-topped Ripleys.</li>
-			</ul>
-			<h3 class="author">vampirebat74 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">Changed a hardcoded number into a variable.</li>
 			</ul>
 		</div>
 		<!--
