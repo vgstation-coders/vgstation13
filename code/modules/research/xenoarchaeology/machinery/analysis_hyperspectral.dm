@@ -59,7 +59,7 @@
 
 /obj/machinery/anomaly/hyperspectral/draw_on_map(x,y)
 	if(map_icon && scanned_sample)
-		if(x != round(scanned_sample.scanned_x,2) || y != round(scanned_sample.scanned_y,2))
+		if(round(x,map_round_check) != round(scanned_sample.scanned_x,map_round_value) || round(y,map_round_check) != round(scanned_sample.scanned_y,map_round_value))
 			map_icon.DrawBox("#000", x, y)
 		else
 			map_icon.DrawBox("#f00", x, y)

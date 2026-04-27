@@ -19,6 +19,8 @@
 	// If it's zero we're not scanning.
 	var/scan_process = 0
 	var/icon/map_icon
+	var/map_round_check = 1 //debug verb
+	var/map_round_value = 1 //debug verb
 
 /obj/machinery/anomaly/splashable()
 	return FALSE
