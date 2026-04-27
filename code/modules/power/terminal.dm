@@ -39,7 +39,7 @@ var/list/obj/machinery/power/terminal/terminals = list()
 		invisibility = 0
 		icon_state = "term"
 
-/obj/machinery/power/terminal/t_scanner_expose()
+/obj/machinery/power/terminal/t_scanner_expose(ray_range)
 	if (level != LEVEL_BELOW_FLOOR)
 		return
 

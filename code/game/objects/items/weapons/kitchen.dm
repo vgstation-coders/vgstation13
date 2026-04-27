@@ -48,7 +48,7 @@
 		return
 
 	if(loaded_food)
-		to_chat(user, "<span class='notice'>There's already [loaded_food] on your [src].</span>")
+		to_chat(user, "<span class='notice'>There's already [loaded_food] on your [src.name].</span>")
 		return
 
 	if(snack.wrapped)

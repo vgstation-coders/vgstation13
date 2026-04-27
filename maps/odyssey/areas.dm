@@ -7,12 +7,12 @@
 	name = "\improper Bridge"
 	icon_state = "bridge"
 
-/area/shuttle/odyssey/hallway/fore
-	name = "\improper Fore Hallway"
+/area/shuttle/odyssey/bridge_lobby
+	name = "\improper Bridge Lobby"
 	icon_state = "hallF"
 
-/area/shuttle/odyssey/hallway/fore/lobby
-	name = "\improper Bridge Lobby"
+/area/shuttle/odyssey/hallway/fore
+	name = "\improper Fore Hallway"
 	icon_state = "hallF"
 
 /area/shuttle/odyssey/hallway/aft

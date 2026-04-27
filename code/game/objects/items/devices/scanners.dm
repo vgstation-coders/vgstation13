@@ -45,14 +45,15 @@ BREATHALYZER
 		processing_objects.Remove(src)
 		return null
 
-	for(var/turf/T in trange(ray_range, get_turf(src)))
+	var/turf/source = get_turf(src)
+	for(var/turf/T in trange(ray_range, source))
 		if(!T.intact)
 			continue
 
 		for(var/A in T.contents)
 			if(istype(A,/obj/))
 				var/obj/O = A
-				O.t_scanner_expose()
+				O.t_scanner_expose(ray_range-(get_dist(T,source)-1))
 			else if(istype(A,/mob/living/carbon))
 				var/mob/living/carbon/C = A
 				if(C.alpha < OPAQUE || (C.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER) || length(C.body_alphas))
@@ -398,7 +399,7 @@ Subject's pulse: ??? BPM"})
 			var/moles = scanned[id]
 			var/concentration = moles / total_moles
 			var/datum/gas/gas = XGM.gases[id]
-			
+
 			if(!(gas.flags & XGM_GAS_NOTEWORTHY))
 				continue
 			if (concentration < 0.01)

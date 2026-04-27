@@ -43,7 +43,6 @@
 		/datum/job/rd,
 		/datum/job/roboticist,
 		/datum/job/scientist,
-		/datum/job/virologist,
 		/datum/job/xenoarchaeologist,
 		/datum/job/xenobiologist,
 		)

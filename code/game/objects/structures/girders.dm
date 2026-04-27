@@ -527,7 +527,7 @@
 							"<span class='notice'>You start [PK.drill_verb] \the [src] with \the [PK].</span>")
 		if(do_after(user, src,30))
 			user.visible_message("<span class='warning'>[user] destroys \the [src]!</span>",
-								"<span class='notice'>Your [PK] tears through the last of \the [src]!</span>")
+								"<span class='notice'>Your [PK.name] tears through the last of \the [src]!</span>")
 			new /obj/effect/decal/remains/human(loc)
 			qdel(src)
 

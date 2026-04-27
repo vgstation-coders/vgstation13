@@ -383,7 +383,7 @@
 	health += diff
 	healthcheck(user, FALSE)
 
-	user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S].</span>")
+	user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S.name].</span>")
 
 	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6) //Probably will never hear this!
 	S.remove_silicate(diff * SILICATE_PER_DAMAGE)

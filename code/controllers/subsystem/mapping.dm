@@ -717,6 +717,18 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 				vaults_placed++
 
 	encounter_vz.initialize_turfs()
+
+	var/image/transition_overlay = image('icons/effects/32x32.dmi', icon_state = "white")
+	transition_overlay.alpha = 32
+	transition_overlay.plane = ABOVE_LIGHTING_PLANE
+	for(var/turf/space/T in encounter_vz.get_turfs())
+		if(istype(T, /turf/space/transit))
+			continue
+		var/rel_x = T.x - encounter_vz.x_min + 1
+		var/rel_y = T.y - encounter_vz.y_min + 1
+		if(rel_x <= TRANSITIONEDGE || rel_x >= (encounter_vz.size_x - TRANSITIONEDGE) || rel_y <= TRANSITIONEDGE || rel_y >= (encounter_vz.size_y - TRANSITIONEDGE))
+			T.overlays += transition_overlay
+
 	encounter_vz.update_settings()
 
 	var/datum/encounter/enc = new()
