@@ -28,7 +28,7 @@
 			break
 
 	if(scanned_sample)
-		var/distance = scanned_sample.artifact_distance
+		distance = scanned_sample.artifact_distance
 		if(distance > 0)
 			distance += (2 * rand() - 1) * distance * 0.05
 			results = "Fourier transform analysis on anomalous energy absorption indicates source located inside emission radius (95% accuracy): <b>[distance]</b>."
