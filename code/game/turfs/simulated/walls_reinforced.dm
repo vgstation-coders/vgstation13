@@ -348,7 +348,7 @@
 		PK.playtoolsound(src, 100)
 		if(do_after(user, src, (MINE_DURATION * PK.toolspeed) * 50))
 			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
-			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
+			"<span class='notice'>Your [PK.name] tears though the last of \the [src], leaving nothing but a girder.</span>")
 			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")

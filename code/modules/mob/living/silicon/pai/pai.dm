@@ -34,6 +34,7 @@
 	var/secHUD = FALSE			// Toggles whether the Security HUD is active or not
 	var/medHUD = FALSE			// Toggles whether the Medical  HUD is active or not
 	var/lighted = FALSE			// Toggles whether light is active or not
+	var/loudspeak = FALSE		// Toggles megaphone mode
 
 	var/datum/data/record/medicalActive1		// Datacore record declarations for record software
 	var/datum/data/record/medicalActive2
@@ -49,6 +50,8 @@
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
 	var/obj/item/device/gps/pai/pps_device = null //Our GPS device.
+
+	var/obj/machinery/newscaster/painews //our copy of the Newscaster
 
 	var/obj/item/device/station_map/holomap_device = null // Our holomap device.
 	var/holo_target = "show_map" // Our holomap target.
@@ -118,6 +121,8 @@
 	add_language(LANGUAGE_GALACTIC_COMMON, 1)
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_GUTTER, 1)
+
+	painews = new(src)
 
 	verbs.Remove(/mob/living/silicon/verb/state_laws)
 	..()
@@ -382,3 +387,7 @@
 	if (holomap_device)
 		holomap_device.update_holomap()
 
+/mob/living/silicon/pai/treat_speech(var/datum/speech/speech, genesay = 0)
+	..()
+	if(loudspeak)
+		speech.message_classes.Add("megaphone")

@@ -1049,6 +1049,10 @@
 				L -= old_turf
 				L += new_turf
 
+		//For heatmaps
+		new_turf.player_entries = old_turf.player_entries
+		old_turf.player_entries = 0
+
 		//Add the new turf to the list of turfs to update
 		turfs_to_update += new_turf
 
