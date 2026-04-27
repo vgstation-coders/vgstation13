@@ -161,9 +161,9 @@ var/global/list/juice_items = list (
 		var/obj/item/device/core_sampler/CS = O
 		if(CS.extracted)
 			CS.extracted.forceMove(src)
+			holdingitems += CS.extracted
 			CS.extracted = null
 			CS.icon_state = "sampler"
-			holdingitems += CS
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 0, -4, FALLOFF_SOUNDS, 0)
 			to_chat(user, "<span class='notice'>You eject the sample into \the [src].</span>")
 			return 1
