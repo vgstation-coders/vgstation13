@@ -41,3 +41,5 @@
 	if(map_icon && scanned_sample)
 		if(round(abs((scanned_sample.scanned_x-x)**2) + abs((scanned_sample.scanned_y-y)**2)) != round(distance**2))
 			map_icon.DrawBox("#000", x, y)
+		else
+			map_icon.DrawBox("#f00", x, y)
