@@ -173,8 +173,8 @@
 /obj/machinery/anomaly/proc/generate_map()
 	set background=1
 	map_icon = icon('icons/480x480.dmi', "blank")
-	var/lowest_x = 0
-	var/lowest_y = 0
+	var/lowest_x = world.maxx
+	var/lowest_y = world.maxy
 	var/highest_x = 0
 	var/highest_y = 0
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
