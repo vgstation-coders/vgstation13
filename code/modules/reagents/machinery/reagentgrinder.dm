@@ -157,6 +157,17 @@ var/global/list/juice_items = list (
 	if(..())
 		return 1
 
+	if (istype(O,/obj/item/device/core_sampler))
+		var/obj/item/device/core_sampler/CS = O
+		if(CS.extracted)
+			CS.extracted.forceMove(src)
+			CS.extracted = null
+			CS.icon_state = "sampler"
+			holdingitems += CS
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 0, -4, FALLOFF_SOUNDS, 0)
+			to_chat(user, "<span class='notice'>You eject the sample into \the [src].</span>")
+			return 1
+
 	if (istype(O,/obj/item/weapon/reagent_containers/glass) || \
 		istype(O,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) || \
 		istype(O,/obj/item/weapon/reagent_containers/food/drinks/shaker))
