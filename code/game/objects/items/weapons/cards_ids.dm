@@ -92,6 +92,7 @@
 
 	var/nticks=0
 	var/disable_config_sync = FALSE
+	var/flash_animation = FLASH_ID_ANIM
 
 /obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=1)
 	..(loc)
@@ -183,6 +184,13 @@
 		var/zone = ran_zone(user.zone_sel.selecting, 100)
 		var/datum/organ/external/organ = target_living.get_organ(zone)
 		target_living.emag_act(user, organ, src)
+
+/obj/item/weapon/card/emag/attack_self(var/mob/user)
+	if(isliving(user) && !user.incapacitated())
+		user.delayNextAttack(0.5 SECONDS)
+		add_fingerprint(user)
+		user.visible_message("<span class='warning'>[user] displays \the [src] like an absolute madman.</span>","<span class='warning'>You proudly display \the [src].</span>")
+		flash_object_animation(user, src, flash_animation)
 
 /mob/living/carbon/human/emag_check(obj/item/weapon/card/emag/E, mob/user) //handled above!
 	return FALSE
