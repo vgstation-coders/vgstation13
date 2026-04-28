@@ -1050,7 +1050,7 @@
 						modern_pc.hatch_open = ancient_pc.hatch_open
 						modern_pc.catwalk_suffix = ancient_pc.catwalk_suffix
 					// Rebuild catwalk overlays against the icon_state copied from the ancient turf above.
-					// Avoid calling update_icon()/relativewall() here because neighbours are still being processed in this loop and would re-smooth against a half-old destination.
+					// Avoid calling update_icon()/relativewall() here because neighbors are still being processed in this loop and would re-smooth against a half-old destination.
 					if(modern_pc.is_plated_catwalk())
 						modern_pc.overlays.Cut()
 						modern_pc.overlays += mutable_appearance(icon = 'icons/turf/floors.dmi', icon_state = "plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
