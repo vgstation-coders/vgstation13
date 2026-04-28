@@ -86,7 +86,8 @@
 	if(entry_byond_dirs.len > 1)
 		var/turf/dense_check = get_step(resolved_hit_atom,entry_byond_dir)
 		if(dense_check.density || dense_check.has_dense_content())
-			entry_byond_dir = entry_byond_dirs[entry_byond_dirs.len - 1]
+			//entry_byond_dir = entry_byond_dirs[entry_byond_dirs.len - 1]
+			return //above is too buggy and so is doing nothing
 	var/_vector/entry_dir = dir2vector(entry_byond_dir)
 
 	return src.direction.mirrorWithNormal(entry_dir)

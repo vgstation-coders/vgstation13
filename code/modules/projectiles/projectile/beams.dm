@@ -152,6 +152,8 @@ var/list/beam_master = list()
 	var/list/rayCastHit/hit_cache = latest_ray.hit_cache
 	var/_vector/origin = hit_cache[hit_cache.len].point
 	var/_vector/direction = latest_ray.getReboundOnAtom(hit_cache[hit_cache.len])
+	if(!direction)
+		return
 
 	//check if raypath was already traveled
 	var/ray/temp_ray = new /ray(origin, direction)
