@@ -14,6 +14,7 @@
 															SOFT_MS = 30, //records + HUD
 															SOFT_SS = 30, //records + HUD
 															SOFT_AS = 5,
+															SOFT_ME = 5,
 															SOFT_PS = 10,
 															SOFT_HM = 25
 
@@ -72,6 +73,8 @@
 				left_part = softwareHolomap()
 			if(SOFT_VE)
 				left_part = softwareVolumeEnhancer()
+			if(SOFT_ME)
+				left_part = softwareMesons()
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
 
@@ -303,6 +306,15 @@
 		if(SOFT_VE)
 			if(href_list["toggle"])
 				loudspeak = !loudspeak
+		if(SOFT_ME)
+			if(href_list["toggle"])
+				mesons = !mesons
+			if(mesons)
+				apply_hud_by_type(/datum/visioneffect/meson)
+				handle_regular_hud_updates()
+			if(!mesons)
+				remove_hud_by_type(/datum/visioneffect/meson)
+				handle_regular_hud_updates()
 		if(SOFT_UN)
 			if(href_list["cancel"])
 				uninstallprogress = -1
@@ -333,6 +345,9 @@
 							secHUD = FALSE
 						if(target==SOFT_VE)
 							loudspeak = initial(loudspeak)
+						if(target==SOFT_ME)
+							remove_hud_by_type(/datum/visioneffect/meson)
+							mesons = initial(mesons)
 						software.Remove(target)
 					uninstallprogress = -1
 				else
@@ -400,6 +415,8 @@
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_PS];sub=0'>pAI Positioning System</a> <br>"
 		if(s == SOFT_HM)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_HM];sub=0'>Holomap Viewer</a> <br>"
+		if(s == SOFT_ME)
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_ME];sub=0'>Mesons Augmentation</a> <br>"
 	dat += {"<br>
 		<br>
 		<a href='byond://?src=\ref[src];software=[SOFT_BY];sub=0'>Download additional software</a>"}
@@ -793,4 +810,11 @@ Target Machine: "}
 	var/dat = "<h3>Volume Enhancer</h3>"
 	dat += "Volume increase via targeted speaker overvoltage.<br><br>"
 	dat += "Volume enhancement [ (loudspeak) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=\ref[src];software=[SOFT_VE];sub=0;toggle=1'>Toggle Megaphone</a><br>"
+	return dat
+
+//Mesons
+/mob/living/silicon/pai/proc/softwareMesons()
+	var/dat = "<h3>Meson Firmware</h3>"
+	dat += "Low-intensity p-ray emitter for high resolution area mapping.<br><br>"
+	dat += "Meson firmware [ (mesons) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=\ref[src];software=[SOFT_ME];sub=0;toggle=1'>Toggle Mesons</a><br>"
 	return dat
