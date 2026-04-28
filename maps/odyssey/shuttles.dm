@@ -572,6 +572,10 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 						return
 	..()
 
+/area/shuttle/supply/processing
+	name = "Freighter Processing"
+	icon_state = "shuttle"
+
 #undef ODYSSEY_TRANSIT_TIME
 #undef JUMP_NONE
 #undef JUMP_COUNTDOWN

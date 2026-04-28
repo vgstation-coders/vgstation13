@@ -1,0 +1,468 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/machinery/conveyor{
+	id_tag = "mining_internal"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"b" = (
+/obj/machinery/light,
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"c" = (
+/obj/machinery/conveyor{
+	dir = 1;
+	id_tag = "QMLoad2"
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"d" = (
+/turf/simulated/wall/shuttle,
+/area/shuttle/supply/processing)
+"e" = (
+/obj/docking_port/shuttle,
+/turf/simulated/wall/shuttle,
+/area/shuttle/supply/processing)
+"f" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/obj/structure/shuttle/engine/propulsion{
+	dir = 1
+	},
+/turf/template_noop,
+/area/shuttle/supply)
+"h" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"j" = (
+/obj/machinery/conveyor{
+	id_tag = "QMLoad"
+	},
+/obj/machinery/door/poddoor{
+	id_tag = "QMLoaddoor";
+	name = "Supply Dock Loading Door"
+	},
+/obj/structure/plasticflaps/mining,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"k" = (
+/obj/structure/grille,
+/obj/structure/shuttle/window{
+	icon_state = "16"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"l" = (
+/obj/structure/grille,
+/obj/structure/shuttle/window{
+	icon_state = "16"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"m" = (
+/obj/structure/grille,
+/obj/structure/shuttle/window{
+	icon_state = "17"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"o" = (
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"p" = (
+/obj/machinery/door/airlock/glass,
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"q" = (
+/obj/structure/grille,
+/obj/structure/shuttle/window{
+	icon_state = "14"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"r" = (
+/obj/machinery/computer/stacking_unit{
+	stacker_tag = "mining_stacker"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"s" = (
+/obj/machinery/light,
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"u" = (
+/obj/structure/grille,
+/obj/structure/shuttle/window{
+	icon_state = "8"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"w" = (
+/obj/machinery/conveyor{
+	dir = 1;
+	id_tag = "QMLoad2"
+	},
+/obj/machinery/door/poddoor{
+	id_tag = "QMLoaddoor2";
+	name = "Supply Dock Loading Door"
+	},
+/obj/structure/plasticflaps/mining,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"x" = (
+/turf/template_noop,
+/area/template_noop)
+"y" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/obj/structure/shuttle/engine/propulsion{
+	dir = 1
+	},
+/turf/template_noop,
+/area/shuttle/supply)
+"z" = (
+/obj/machinery/computer/smelting{
+	smelter_tag = "mining_smelter"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"A" = (
+/turf/simulated/wall/shuttle,
+/area/shuttle/supply)
+"B" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/template_noop,
+/area/shuttle/supply)
+"C" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"E" = (
+/obj/machinery/mineral/processing_unit{
+	id_tag = "mining_smelter"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"F" = (
+/obj/machinery/conveyor_switch/oneway{
+	id_tag = "mining_internal";
+	name = "mining conveyor"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"G" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/obj/structure/shuttle/engine/propulsion{
+	dir = 1
+	},
+/turf/template_noop,
+/area/shuttle/supply/processing)
+"H" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/obj/structure/shuttle/engine/propulsion{
+	dir = 1
+	},
+/turf/template_noop,
+/area/shuttle/supply/processing)
+"I" = (
+/obj/structure/grille,
+/obj/structure/shuttle/window{
+	icon_state = "15"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"J" = (
+/obj/machinery/door/airlock/multi_tile/glass{
+	autoclose = 0;
+	frequency = 1441;
+	id_tag = "Incinerator Vent";
+	locked = 1
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"N" = (
+/obj/structure/grille,
+/obj/structure/shuttle/window{
+	icon_state = "8"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"O" = (
+/obj/machinery/conveyor{
+	dir = 1;
+	id_tag = "QMLoad2"
+	},
+/obj/machinery/door/poddoor{
+	id_tag = "QMLoaddoor2";
+	name = "Supply Dock Loading Door"
+	},
+/obj/structure/plasticflaps/mining,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"P" = (
+/obj/machinery/conveyor{
+	id_tag = "QMLoad"
+	},
+/obj/machinery/door/poddoor{
+	id_tag = "QMLoaddoor";
+	name = "Supply Dock Loading Door"
+	},
+/obj/structure/plasticflaps/mining,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"Q" = (
+/obj/machinery/mineral/stacking_machine{
+	id_tag = "mining_stacker"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"T" = (
+/obj/machinery/mineral/unloading_machine{
+	in_dir = 1;
+	out_dir = 2
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"U" = (
+/obj/machinery/conveyor{
+	id_tag = "QMLoad"
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"V" = (
+/obj/structure/closet/crate,
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+"W" = (
+/obj/structure/grille,
+/obj/structure/shuttle/window{
+	icon_state = "9"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"X" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/template_noop,
+/area/shuttle/supply)
+"Y" = (
+/obj/structure/grille,
+/obj/structure/shuttle/window{
+	icon_state = "15"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"Z" = (
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply/processing)
+
+(1,1,1) = {"
+x
+x
+x
+x
+x
+x
+x
+x
+x
+y
+A
+k
+u
+Y
+A
+X
+"}
+(2,1,1) = {"
+H
+d
+l
+N
+N
+N
+N
+I
+d
+A
+o
+o
+o
+o
+s
+A
+"}
+(3,1,1) = {"
+e
+h
+Z
+Z
+Z
+Z
+Z
+Z
+b
+A
+C
+o
+o
+o
+o
+q
+"}
+(4,1,1) = {"
+O
+c
+c
+c
+c
+c
+c
+c
+c
+w
+o
+o
+o
+o
+o
+W
+"}
+(5,1,1) = {"
+j
+U
+U
+U
+U
+U
+U
+U
+U
+P
+o
+o
+o
+o
+o
+W
+"}
+(6,1,1) = {"
+J
+Z
+Z
+r
+F
+z
+V
+V
+V
+p
+o
+o
+o
+o
+o
+W
+"}
+(7,1,1) = {"
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+p
+o
+o
+o
+o
+o
+W
+"}
+(8,1,1) = {"
+d
+h
+T
+a
+E
+a
+Q
+a
+b
+A
+C
+o
+o
+o
+o
+m
+"}
+(9,1,1) = {"
+G
+d
+l
+N
+N
+N
+N
+I
+d
+A
+o
+o
+o
+o
+s
+A
+"}
+(10,1,1) = {"
+x
+x
+x
+x
+x
+x
+x
+x
+x
+f
+A
+k
+u
+Y
+A
+B
+"}
