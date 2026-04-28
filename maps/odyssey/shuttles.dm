@@ -21,6 +21,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	var/obj/docking_port/destination/dock_centcom
 	var/obj/docking_port/destination/outpost_dock
 	var/transit_end_time = 0
+	var/liftoff_time = 0
 	var/transit_destination_name = ""
 	var/last_planet_dock_time = 0 //world.time of last time the shuttle docked at or departed a VZ_PLANET port.
 
@@ -132,9 +133,16 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 		transit_port.areaname = "Hyperspace"
 	if(current_port != transit_port)
 		captain_announce("The NTEV Odyssey will be departing to [transit_destination_name] in 30 seconds.")
+		liftoff_time = world.time + get_pre_flight_delay()
+		// Seal the outer port/starboard airlocks before takeoff so nobody gets vented.
+		for(var/obj/machinery/door/airlock/A in shuttle_contents())
+			if(A.id_tag == "port_ext_airlock" || A.id_tag == "starboard_ext_airlock")
+				spawn(0)
+					A.close()
 	return ..()
 
 /datum/shuttle/odyssey/pre_flight()
+	liftoff_time = 0
 	if(current_port)
 		var/datum/virtual_z/vz = current_port.get_virtual_z()
 		if(vz && vz.level_type == VZ_PLANET)
@@ -221,6 +229,11 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	if(odyssey_shuttle && odyssey_shuttle.transit_end_time > world.time)
 		var/timeleft = max(0, round((odyssey_shuttle.transit_end_time - world.time) / 10, 1))
 		update_display("TRNST", "[add_zero(num2text((timeleft / 60) % 60), 2)]:[add_zero(num2text(timeleft % 60), 2)]")
+		return
+	// Pre-flight liftoff countdown
+	if(odyssey_shuttle && odyssey_shuttle.liftoff_time > world.time)
+		var/timeleft = max(0, round((odyssey_shuttle.liftoff_time - world.time) / 10, 1))
+		update_display("DEPART", "[add_zero(num2text((timeleft / 60) % 60), 2)]:[add_zero(num2text(timeleft % 60), 2)]")
 		return
 	// Bluespace jump countdown
 	if(emergency_shuttle && emergency_shuttle.online)

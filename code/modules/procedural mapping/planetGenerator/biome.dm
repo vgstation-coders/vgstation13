@@ -166,7 +166,7 @@
 /datum/biome/cave/spawn_loot(turf/simulated/floor/floor_turf, area_flags)
 	if(!length(loot_spawners))
 		return null
-	if(!prob(loot_spawn_chance))
+	if(!prob(loot_spawn_chance/2))
 		return null
 	if(floor_turf.turf_flags & NO_LOOT)
 		return null
