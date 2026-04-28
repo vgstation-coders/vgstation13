@@ -525,6 +525,7 @@ var/highest_player_entry = 0
 		A.area_turfs -= src
 		if(istype(A, /area/shuttle))
 			turf_flags |= SHUTTLE_TURF
+	var/preserved_shuttle_flag = turf_flags & SHUTTLE_TURF
 	if (!N || !allow)
 		return
 	remove_particles()
@@ -599,6 +600,8 @@ var/highest_player_entry = 0
 
 		var/turf/simulated/W = new N(src)
 		W.v = old_v
+		if(preserved_shuttle_flag)
+			W.turf_flags |= SHUTTLE_TURF
 		if(defer_edges)
 			W.turf_flags |= DEFER_EDGING
 		if(world.has_round_started())
@@ -627,6 +630,8 @@ var/highest_player_entry = 0
 
 		var/turf/W = new N(src)
 		W.v = old_v
+		if(preserved_shuttle_flag)
+			W.turf_flags |= SHUTTLE_TURF
 		if(defer_edges)
 			W.turf_flags |= DEFER_EDGING
 		if(world.has_round_started())
@@ -698,8 +703,9 @@ var/highest_player_entry = 0
 
 /turf/proc/get_underlying_turf()
 	var/area/A = loc
-	if(A.base_turf_type)
-		return A.base_turf_type
+	var/area_base = A.get_base_turf_type(src)
+	if(area_base)
+		return area_base
 
 	return get_base_turf(z)
 

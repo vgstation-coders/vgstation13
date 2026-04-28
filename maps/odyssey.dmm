@@ -4048,6 +4048,10 @@
 	tag = "icon-intact (EAST)"
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -5903,6 +5907,10 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
 /turf/simulated/floor,
 /area/shuttle/odyssey/hallway/fore)
 "uw" = (
@@ -6456,6 +6464,11 @@
 	tag = "icon-intact (EAST)"
 	},
 /obj/machinery/door/firedoor,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -14113,6 +14126,9 @@
 /obj/effect/landmark/start{
 	name = "Cyborg"
 	},
+/obj/docking_port/destination/vox/starboard_breach{
+	dir = 2
+	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
 "Vq" = (
@@ -14578,6 +14594,7 @@
 	dir = 1;
 	invisibility = 1
 	},
+/obj/docking_port/destination/vox/port_breach,
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/port)
 "WV" = (

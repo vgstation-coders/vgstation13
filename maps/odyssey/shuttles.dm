@@ -83,16 +83,40 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	update_outpost_power()
 	var/datum/virtual_z/vz = current_port?.get_virtual_z()
 	var/datum/climate/dest_climate = vz ? SSweather.get_climate(vz) : null
+	// Re-resolve hull breaches against the new vLevel. A breach left by an explosion in
+	// one vLevel is wrong-looking after we move to a different one — vacuum showing
+	// through the floor while sitting on dirt, dirt showing through the floor while
+	// drifting in space. Mirror /area/shuttle/odyssey/get_base_turf_type()'s logic so
+	// the post-move appearance lines up with what fresh explosions would produce now.
+	// We only convert turfs that look like exposed-base material (space turfs, or the
+	// previous planet's surface still sitting inside a shuttle area), never normal
+	// shuttle floors/walls/catwalks.
+	var/turf/breach_replacement = null
+	if(vz)
+		switch(vz.level_type)
+			if(VZ_PLANET)
+				if(vz.base_turf && vz.base_turf != /turf/space)
+					breach_replacement = vz.base_turf
+				else if(vz.planet?.default_baseturf)
+					breach_replacement = vz.planet.default_baseturf
+			if(VZ_TRANSIT)
+				breach_replacement = /turf/space/odyssey_breach
+	if(!breach_replacement)
+		breach_replacement = /turf/space
 	var/list/turf/exterior_turfs = list()
 	for(var/turf/T in shuttle_contents())
 		// Clean up lingering beach water effects on shuttle turfs after landing
 		for(var/obj/effect/beach_water/unsimmed/W in T.vis_contents)
 			T.vis_contents -= W
+		// Heal/re-expose breaches as appropriate for the new vLevel.
+		if(istype(T.loc, /area/shuttle/odyssey) && (T.turf_flags & SHUTTLE_TURF))
+			if(should_resurface_breach(T, breach_replacement))
+				T = T.ChangeTurf(breach_replacement, allow = 1)
+		if(!istype(T.loc, /area/shuttle/odyssey/exterior))
+			continue
 		// The base shuttle move strips weather/daynight registrations from every
 		// shuttle turf. Re-attach them for the exterior deck so it participates
 		// in rain, sunset, etc. at the new destination.
-		if(!istype(T.loc, /area/shuttle/odyssey/exterior))
-			continue
 		exterior_turfs += T
 		for(var/datum/virtual_z/other in map.vLevels)
 			if(other != vz)
@@ -105,6 +129,21 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 		SSDayNight.update_turf_lighting(exterior_turfs, vz)
 	if(vz && vz.level_type == VZ_PLANET)
 		last_planet_dock_time = world.time
+
+/// True if `T` looks like a hull breach (i.e. the turf left behind by destroying a wall
+/// or floor) rather than a real shuttle floor/wall the player is meant to walk on, so
+/// after_flight() should re-resolve it against the new vLevel's base turf. We treat any
+/// space subtype as a breach; on planets we additionally treat /turf/unsimulated/floor
+/// (the planetary surface family) inside a shuttle area as a stale breach from a previous
+/// planetary docking.
+/datum/shuttle/odyssey/proc/should_resurface_breach(turf/T, turf/replacement)
+	if(T.type == replacement)
+		return FALSE
+	if(istype(T, /turf/space))
+		return TRUE
+	if(istype(T, /turf/unsimulated/floor))
+		return TRUE
+	return FALSE
 
 /datum/shuttle/odyssey/get_pre_flight_delay()
 	// Skip countdown when already in hyperspace
@@ -286,9 +325,46 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	desc = "A circuit board for running the Odyssey bridge communications console."
 	build_path = /obj/machinery/computer/communications/odyssey
 
+/obj/item/weapon/circuitboard/communications/New()
+	..()
+	if(build_path == /obj/machinery/computer/communications)
+		name = "Circuit board (Odyssey Bridge Communications)"
+		desc = "A circuit board for running the Odyssey bridge communications console."
+		build_path = /obj/machinery/computer/communications/odyssey
+
 /obj/machinery/computer/communications/odyssey
 	circuit = "/obj/item/weapon/circuitboard/communications/odyssey"
 	ignore_station_z_check = TRUE
+
+/obj/machinery/computer/communications/odyssey/Topic(href, href_list)
+	if(href_list && href_list["operation"] == "cancelshuttle" && (authenticated || isAdminGhost(usr)))
+		if(!map.linked_to_centcomm && !isAdminGhost(usr))
+			to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
+			return
+		if(issilicon(usr))
+			return
+		if(istype(usr, /mob/living/simple_animal/hostile/pulse_demon))
+			to_chat(usr, "<span class='warning'>This machinery resists your hijacking attempt!</span>")
+			return FALSE
+		usr.set_machine(src)
+		var/response = alert("Are you sure you wish to cancel the Bluespace jump?", "Confirm", "Yes", "No")
+		if(response != "Yes")
+			return
+		if(!emergency_shuttle.online || emergency_shuttle.direction != EMERGENCY_SHUTTLE_GOING_TO_STATION)
+			to_chat(usr, "<span class='warning'>There is no jump in progress to cancel.</span>")
+			return
+		if(istype(emergency_shuttle, /datum/emergency_shuttle/odyssey))
+			if(odyssey_shuttle?.bluespace_jump_state == JUMP_COMMITTED)
+				to_chat(usr, "<span class='warning'>The Bluespace jump is already committed and cannot be cancelled.</span>")
+				return
+		emergency_shuttle.recall()
+		log_game("[key_name(usr)] has cancelled the Bluespace jump.")
+		message_admins("[key_name_admin(usr)] has cancelled the Bluespace jump.", 1)
+		if(!isobserver(usr))
+			shuttle_log += "\[[worldtime2text()]] Cancelled from [get_area(usr)] ([usr.x-get_world_x_offset(usr.vz())], [usr.y-get_world_y_offset(usr.vz())], [usr.vz()])."
+		setMenuState(usr, COMM_SCREEN_MAIN)
+		return
+	return ..()
 
 /obj/machinery/computer/communications/odyssey/proc/trigger_bluespace_jump()
 	if(!emergency_shuttle || emergency_shuttle.online || emergency_shuttle.departed || emergency_shuttle.shutdown)
@@ -407,7 +483,6 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 			if(timeleft >= 300)
 				return
 			command_alert(/datum/command_alert/emergency_shuttle_recalled)
-			world << sound('sound/AI/shuttlerecalled.ogg')
 			setdirection(EMERGENCY_SHUTTLE_RECALLED)
 			online = 1
 			odyssey_shuttle.bluespace_jump_state = JUMP_NONE
@@ -534,13 +609,6 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 					if(M_turf.z == odyssey_shuttle.linked_port.z)
 						M.playsound_local(odyssey_shuttle.linked_port, 'sound/machines/hyperspace_end.ogg', 75 - (get_dist(odyssey_shuttle.linked_port, M_turf) * 2), 1, frequency, falloff = 5)
 
-/datum/command_alert/emergency_shuttle_called/announce()
-	message = "A Bluespace jump has been initiated. The jump will engage in [round(emergency_shuttle.timeleft()/60)] minutes."
-	noalert = 1
-	if(justification)
-		message += " Justification: [justification]"
-	..()
-
 /turf/space/transit/Entered(atom/movable/A, atom/OldLoc)
 	if(isliving(A) && !isobserver(A))
 		var/datum/virtual_z/transit_v = src.v
@@ -571,6 +639,65 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 						dest.mob_entered(L)
 						return
 	..()
+
+// Hyperspace that doesn't teleport people; used for breaches on shuttles.
+/turf/space/breach
+	name = "exposed bluespace"
+	desc = "A swirling void where the ship's hull used to be. Looking at it makes your eyes ache."
+	plane = TURF_PLANE
+	var/pushdirection = EAST
+
+/turf/space/breach/New()
+	..()
+	update_icon()
+
+/turf/space/breach/initialize()
+	if(loc)
+		var/area/A = loc
+		A.area_turfs += src
+	update_icon()
+
+/turf/space/breach/update_icon()
+	var/dira = "ns"
+	var/i = 1
+	var/area/A = loc
+	if(!istype(A))
+		pushdirection = null
+	else
+		pushdirection = null
+		for(var/datum/shuttle/S in shuttles)
+			if(S.has_area(A))
+				pushdirection = S.dir
+				break
+
+	switch(pushdirection)
+		if(NORTH, SOUTH)
+			dira = "ns"
+			i = 1 + (abs((x ^ 2) - y) % 15)
+		if(EAST, WEST)
+			dira = "ew"
+			i = 1 + (((y ^ 2) + x) % 15)
+		else
+			icon_state = "black"
+			return
+	icon_state = "speedspace_[dira]_[i]"
+
+/datum/map_element/dungeon/vox_shuttle
+	name = "Vox Shuttle"
+	file_path = "maps/odyssey/voxshuttle.dmm"
+	unique = TRUE
+
+/obj/docking_port/destination/vox/starboard_breach
+	areaname = "breach into the NTEV Odyssey from the starboard side"
+
+/obj/docking_port/destination/vox/port_breach
+	areaname = "breach into the NTEV Odyssey from the port side"
+
+/datum/shuttle/vox/initialize()
+	.=..()
+	add_dock(/obj/docking_port/destination/vox/starboard_breach)
+	add_dock(/obj/docking_port/destination/vox/port_breach)
+	destroy_everything = 1
 
 #undef ODYSSEY_TRANSIT_TIME
 #undef JUMP_NONE

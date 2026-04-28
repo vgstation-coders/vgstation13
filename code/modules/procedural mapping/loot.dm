@@ -263,7 +263,7 @@
 		/obj/item/weapon/glowstick/blue,
 		/obj/item/weapon/circuitboard/airlock,
 		/obj/item/stack/sheet/metal,
-		/obj/item/stack/sheet/glass,
+		/obj/item/stack/sheet/glass/glass,
 		/obj/item/weapon/storage/belt/utility,
 		/obj/item/weapon/circuitboard/holofield,
 		/obj/item/device/shuttle_holopainter,

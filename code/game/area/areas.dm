@@ -24,6 +24,10 @@ var/area/space_area
 
 	flags = CAVES_ALLOWED
 
+/// Used for shuttle overrides so we can expose planet or space turfs depending on the shuttle's location.
+/area/proc/get_base_turf_type(turf/T)
+	return base_turf_type
+
 /area/New()
 	area_turfs = list()
 	icon_state = ""
