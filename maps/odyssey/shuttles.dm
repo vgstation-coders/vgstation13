@@ -100,7 +100,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 				else if(vz.planet?.default_baseturf)
 					breach_replacement = vz.planet.default_baseturf
 			if(VZ_TRANSIT)
-				breach_replacement = /turf/space/odyssey_breach
+				breach_replacement = /turf/space/breach
 	if(!breach_replacement)
 		breach_replacement = /turf/space
 	var/list/turf/exterior_turfs = list()
