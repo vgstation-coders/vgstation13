@@ -75,7 +75,6 @@
 		if(dist <= smallest_dist)
 			smallest_dist = dist
 			. |= list(d)
-	log_debug("Closest direction list of vector [V.toString()][A ? " off of [A]" : ""]: [json_encode(.)]")
 
 /proc/drawLaser(var/_vector/A, var/_vector/B, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser")
 	var/_vector/delta = (B - A)
