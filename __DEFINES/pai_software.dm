@@ -14,6 +14,7 @@
 #define SOFT_AS "atmosphere sensor"
 #define SOFT_PS "pai positioning system"
 #define SOFT_HM "holomap viewer"
+#define SOFT_ME "meson augmentation"
 #define SOFT_UN "uninstall"
 #define SOFT_BY	"buy"
 
