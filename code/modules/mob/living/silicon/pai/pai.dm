@@ -50,6 +50,8 @@
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
 	var/obj/item/device/gps/pai/pps_device = null //Our GPS device.
+	var/obj/item/device/gps/planetary/pai/xps_device = null //our planetary expedition tracker
+	var/sharedfirmware = FALSE
 
 	var/obj/machinery/newscaster/painews //our copy of the Newscaster
 
