@@ -15,6 +15,7 @@
 															SOFT_SS = 30, //records + HUD
 															SOFT_AS = 5,
 															SOFT_PS = 10,
+															SOFT_XS = 10,
 															SOFT_HM = 25
 
 															)
