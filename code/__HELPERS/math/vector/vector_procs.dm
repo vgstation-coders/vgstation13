@@ -63,7 +63,7 @@
 		else if(V.x > 0 && V.y < 0)
 			. |= list(SOUTHEAST)
 
-/proc/vector2ClosestDirs(var/_vector/V,var/cardinal_reflect=FALSE)
+/proc/vector2ClosestDirs(var/_vector/V,var/cardinal_reflect=FALSE,atom/A)
 	var/_vector/V_norm = V.chebyshev_normalized()
 
 	var/smallest_dist = 2 //since all vectors are normalized, the biggest possible distance is 2
@@ -75,6 +75,7 @@
 		if(dist <= smallest_dist)
 			smallest_dist = dist
 			. |= list(d)
+	log_debug("Closest direction list of vector [V.toString()][A ? " off of [A]" : ""]: [json_encode(d)]")
 
 /proc/drawLaser(var/_vector/A, var/_vector/B, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser")
 	var/_vector/delta = (B - A)
