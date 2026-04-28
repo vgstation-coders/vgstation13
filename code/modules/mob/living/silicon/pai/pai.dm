@@ -9,7 +9,7 @@
 	var/obj/machinery/camera/current = null
 
 	var/ram = 100	// Used as currency to purchase different abilities
-	var/list/software = list(SOFT_CM,SOFT_DM)
+	var/list/software = list(SOFT_CM,SOFT_DM,SOFT_NW)
 	var/obj/item/device/paicard/card	// The card we inhabit
 
 	var/speakStatement = "states"
