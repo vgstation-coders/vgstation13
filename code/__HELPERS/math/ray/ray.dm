@@ -81,7 +81,7 @@
 
 	//here we calculate the "face" of the atom we want to rebound on.
 	//any atom with cardinal_reflect set to TRUE is treated like a square, otherwise an octagon.
-	var/list/entry_byond_dirs = vector2ClosestDirs(hit_vector,resolved_hit_atom.cardinal_reflect,resolved_hit_atom)
+	var/list/entry_byond_dirs = vector2ClosestDirs(hit_vector,resolved_hit_atom.cardinal_reflect)
 	var/entry_byond_dir = entry_byond_dirs[entry_byond_dirs.len]
 	if(entry_byond_dirs.len > 1)
 		var/turf/dense_check = get_step(resolved_hit_atom,entry_byond_dir)
