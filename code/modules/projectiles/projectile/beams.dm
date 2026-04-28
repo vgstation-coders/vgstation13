@@ -122,13 +122,13 @@ var/list/beam_master = list()
 			final_turf=null
 			ASSERT(!gcDestroyed)
 			spawn()
-				rebound(last_hit.hit_atom)
+				rebound(last_hit.hit_atom.get())
 
 		if(last_hit.hit_type == RAY_CAST_PORTAL)
 			final_turf=null
 			ASSERT(!gcDestroyed)
 			spawn()
-				portal(last_hit.hit_atom)
+				portal(last_hit.hit_atom.get())
 
 	shot_ray.draw(distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift, above_light = luminous)
 
