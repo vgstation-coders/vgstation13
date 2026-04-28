@@ -372,6 +372,8 @@
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_FL];sub=0'>Brightness Enhancer</a> <br>"
 		if(s == SOFT_RT)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_RT];sub=0'>Redundant Threading</a> <br>"
+		if(s == SOFT_VE)
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_VE];sub=0'>Volume Enhancer</a> <br>"
 	dat += "<br>"
 
 	//Standard
