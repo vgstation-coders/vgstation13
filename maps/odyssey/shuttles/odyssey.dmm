@@ -604,6 +604,10 @@
 	dir = 1
 	},
 /obj/structure/disposaloutlet,
+/obj/machinery/camera{
+	name = "Starboard External";
+	network = list("External")
+	},
 /turf/template_noop,
 /area/shuttle/odyssey/exterior)
 "dt" = (
@@ -783,11 +787,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/obj/structure/closet/crate/secure/scisec,
-/obj/item/weapon/circuitboard/destructive_analyzer,
-/obj/item/weapon/circuitboard/protolathe,
-/obj/item/weapon/circuitboard/circuit_imprinter,
-/obj/item/weapon/circuitboard/rdconsole,
+/obj/machinery/suit_storage_unit/mining,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -936,7 +936,7 @@
 	},
 /area/shuttle/odyssey/hallway/port)
 "fy" = (
-/obj/machinery/suit_storage_unit/mining,
+/obj/machinery/computer/supplycomp,
 /turf/simulated/floor{
 	icon_state = "darkyellow";
 	tag = "icon-darkyellow (EAST)";
@@ -1587,14 +1587,6 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore)
-"km" = (
-/obj/structure/catwalk,
-/obj/machinery/camera{
-	name = "Starboard External 1";
-	network = list("External")
-	},
-/turf/template_noop,
-/area/shuttle/odyssey/exterior)
 "ko" = (
 /obj/structure/bed/chair/comfy/brown{
 	dir = 4
@@ -1931,18 +1923,31 @@
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_x = -30
 	},
-/obj/machinery/computer/supplycomp,
 /obj/machinery/door_control{
 	id_tag = "QMLoaddoor";
 	name = "Loading Doors";
-	pixel_x = -5;
-	pixel_y = -24
+	pixel_x = 9;
+	pixel_y = -21
 	},
 /obj/machinery/door_control{
 	id_tag = "QMLoaddoor2";
 	name = "Loading Doors";
-	pixel_x = 5;
-	pixel_y = -24
+	pixel_x = -1;
+	pixel_y = -21
+	},
+/obj/machinery/status_display/supply{
+	pixel_y = -36
+	},
+/obj/machinery/conveyor_switch/oneway{
+	id_tag = "QMLoad2";
+	pixel_x = -7
+	},
+/obj/machinery/conveyor_switch/oneway{
+	id_tag = "QMLoad";
+	pixel_x = 6
+	},
+/obj/structure/bed/chair/handrail{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "darkyellow";
@@ -2140,23 +2145,23 @@
 	icon_state = "door_locked";
 	frequency = 1331
 	},
-/obj/docking_port/destination/odyssey_transfer/transfer{
-	dir = 2
+/obj/docking_port/shuttle/dynamic{
+	dir = 2;
+	areaname = "Starboard Airlock"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/starboard)
 "nG" = (
-/obj/structure/closet/crate/freezer,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/obj/item/pizzabox/meat,
-/obj/item/pizzabox/mushroom,
-/obj/item/pizzabox/vegetable,
-/obj/item/pizzabox/margherita,
-/obj/item/pizzabox/meat,
+/obj/item/weapon/circuitboard/rdconsole,
+/obj/item/weapon/circuitboard/circuit_imprinter,
+/obj/item/weapon/circuitboard/protolathe,
+/obj/item/weapon/circuitboard/destructive_analyzer,
+/obj/structure/closet/crate/secure/scisec,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -2806,12 +2811,15 @@
 	},
 /area/shuttle/odyssey/security)
 "rh" = (
-/obj/structure/closet/crate,
-/obj/item/stack/sheet/metal/bigstack,
-/obj/item/stack/sheet/glass/glass/bigstack,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/structure/closet/crate/freezer,
+/obj/item/pizzabox/meat,
+/obj/item/pizzabox/margherita,
+/obj/item/pizzabox/vegetable,
+/obj/item/pizzabox/mushroom,
+/obj/item/pizzabox/meat,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -3017,7 +3025,7 @@
 	icon_state = "0-2";
 	pixel_y = 1
 	},
-/obj/structure/bed/chair/handrail,
+/obj/structure/ore_box,
 /turf/simulated/floor{
 	icon_state = "darkyellow";
 	tag = "icon-darkyellow (EAST)";
@@ -3061,13 +3069,15 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
 "tm" = (
-/obj/machinery/suit_storage_unit/mining,
 /obj/machinery/camera/autoname{
 	dir = 4
 	},
 /obj/structure/sign/directions/engineering{
 	pixel_x = -32;
 	dir = 8
+	},
+/obj/structure/bed/chair/handrail{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "darkyellow";
@@ -3328,10 +3338,6 @@
 /obj/machinery/door/firedoor,
 /turf/simulated/floor,
 /area/shuttle/odyssey/infirmary)
-"uQ" = (
-/obj/machinery/status_display/odyssey,
-/turf/simulated/wall/shuttle/panel/black,
-/area/shuttle/odyssey/logistics)
 "uR" = (
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden,
 /obj/machinery/suit_storage_unit,
@@ -3941,15 +3947,6 @@
 	tag = "icon-darkred (NORTHEAST)"
 	},
 /area/shuttle/odyssey/security/holding_cell)
-"ym" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/obj/structure/ore_box,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/shuttle/odyssey/logistics)
 "yo" = (
 /obj/machinery/vending/snack,
 /turf/simulated/floor{
@@ -4298,10 +4295,6 @@
 	canSpawnMice = 0;
 	dir = 1;
 	on = 1
-	},
-/obj/machinery/camera{
-	name = "Starboard External 2";
-	network = list("External")
 	},
 /turf/template_noop,
 /area/shuttle/odyssey/exterior)
@@ -5184,6 +5177,8 @@
 /obj/item/device/paicard,
 /obj/machinery/cell_charger,
 /obj/structure/table,
+/obj/item/stack/sheet/glass/glass/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
 /turf/simulated/floor/engine/acoustic,
 /area/shuttle/odyssey/logistics)
 "Gr" = (
@@ -5445,7 +5440,7 @@
 	dir = 4
 	},
 /obj/machinery/light,
-/obj/machinery/computer/shuttle_control/odyssey_transfer,
+/obj/machinery/computer/security,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -6066,12 +6061,6 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/engineering)
-"LT" = (
-/obj/docking_port/destination/supply/station{
-	dir = 2
-	},
-/turf/simulated/wall/shuttle/panel/black,
-/area/shuttle/odyssey/logistics)
 "LY" = (
 /obj/machinery/light/small,
 /obj/machinery/light_switch{
@@ -6367,6 +6356,9 @@
 	id_tag = "port_ext_airlock";
 	icon_state = "door_locked";
 	frequency = 1331
+	},
+/obj/docking_port/shuttle/dynamic{
+	areaname = "Port Airlock"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -7086,16 +7078,21 @@
 	id_tag = "mining_bay";
 	name = "Mining Bay"
 	},
+/obj/docking_port/shuttle/dynamic{
+	dir = 2;
+	areaname = "Logistics Dock";
+	shuttle_whitelist = list(/datum/shuttle/supply,/datum/shuttle/trader)
+	},
 /turf/simulated/floor,
 /area/shuttle/odyssey/logistics)
 "Su" = (
-/obj/machinery/computer/security,
 /obj/structure/railing{
 	dir = 1
 	},
 /obj/structure/railing{
 	dir = 4
 	},
+/obj/machinery/computer/supplycomp,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -7587,11 +7584,11 @@
 /obj/machinery/door_control{
 	id_tag = "mining_bay";
 	name = "Mining Bay Blast Door Control";
-	pixel_y = -25;
+	pixel_y = -21;
 	pixel_x = -9
 	},
 /obj/machinery/access_button{
-	pixel_y = -25;
+	pixel_y = -21;
 	name = "Holofield Control";
 	master_tag = "mining_bay_holo";
 	command = "toggle";
@@ -7603,11 +7600,11 @@
 /obj/machinery/camera/autoname{
 	dir = 8
 	},
-/obj/machinery/conveyor_switch/oneway{
-	id_tag = "QMLoad3"
-	},
 /obj/structure/bed/chair/handrail{
 	dir = 8
+	},
+/obj/machinery/status_display/supply{
+	pixel_y = -36
 	},
 /turf/simulated/floor{
 	dir = 6;
@@ -9203,7 +9200,7 @@ Dq
 tm
 fy
 Nq
-uQ
+Nq
 SS
 SS
 SS
@@ -9240,7 +9237,7 @@ qh
 tE
 FO
 mk
-LT
+Nq
 Yn
 SS
 SS
@@ -9272,7 +9269,7 @@ Nq
 dF
 Qv
 py
-ym
+eA
 eA
 cx
 iV
@@ -9462,8 +9459,8 @@ jd
 Bx
 Jc
 Jh
-uQ
-km
+Nq
+Yn
 SS
 SS
 SS

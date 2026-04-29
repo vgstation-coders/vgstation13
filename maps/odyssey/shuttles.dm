@@ -11,22 +11,34 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 	name = "NTEV Odyssey"
 	file_path = "maps/odyssey/shuttles/odyssey.dmm"
 	shuttle_datum_path = /datum/shuttle/odyssey
+	parking_width = 200
+	parking_height = 200
 
 /datum/map_element/shuttle/freighter
 	name = "Cargo Freighter"
 	file_path = "maps/odyssey/shuttles/freighter.dmm"
-	shuttle_datum_path = /datum/shuttle/trade
+	shuttle_datum_path = /datum/shuttle/supply
 
 /datum/map_element/shuttle/medship
 	name = "Medical Ship"
 	file_path = "maps/odyssey/shuttles/medship.dmm"
 	shuttle_datum_path = /datum/shuttle/medship
 
+/datum/map_element/shuttle/trade
+	name = "Vox Trade Ship"
+	file_path = "maps/odyssey/shuttles/trade.dmm"
+	shuttle_datum_path = /datum/shuttle/trade
+
 /datum/shuttle/odyssey
 	name = "NTEV Odyssey"
 	cant_leave_zlevel = list()
 	dir = EAST
 	can_rotate = FALSE
+
+	// Exterior decks (catwalks, hull plating outside the pressurised interior)
+	// can be docked over by visiting shuttles. The standard shuttle move logic
+	// snapshots and restores the underlying turfs when the visitor leaves.
+	dockable_through_areas = list(/area/shuttle/odyssey/exterior)
 
 	cooldown = 60 SECONDS
 	pre_flight_delay = 30 SECONDS
@@ -513,11 +525,17 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 	icon_state = "shuttle"
 
 ///// MEDICAL SHIP /////
+var/global/datum/shuttle/medship/medship_shuttle = new(starting_area = /area/shuttle/medship)
+
 /datum/shuttle/medship
 	name = "Medical Ship"
 	cant_leave_zlevel = list()
 	dir = WEST
 	can_rotate = FALSE
+
+/area/shuttle/medship
+	name = "Medical Ship"
+	icon_state = "shuttle"
 
 ///// PROCS /////
 /turf/space/transit/Entered(atom/movable/A, atom/OldLoc)

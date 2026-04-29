@@ -1,0 +1,1169 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"dG" = (
+/obj/machinery/vending/engivend{
+	name = "Outpost Engi-Vend";
+	req_access = null
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"ez" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"fa" = (
+/obj/structure/trade_window,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"fq" = (
+/obj/structure/reagent_dispensers/watertank,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"fY" = (
+/turf/simulated/floor/carpet,
+/area/shuttle/trade/start)
+"gc" = (
+/obj/machinery/shower{
+	dir = 4;
+	tag = "icon-shower (EAST)"
+	},
+/obj/structure/curtain/open/shower/right,
+/obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
+	name = "Outpost Air Scrubber";
+	on = 1
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"gP" = (
+/obj/structure/sign/poster{
+	icon_state = "poster10";
+	pixel_x = -32
+	},
+/obj/structure/safe,
+/obj/item/stack/sheet/mineral/silver{
+	amount = 20;
+	pixel_x = -8;
+	pixel_y = -3
+	},
+/obj/item/stack/sheet/mineral/gold{
+	amount = 20;
+	pixel_x = -4;
+	pixel_y = 5
+	},
+/obj/item/stack/sheet/mineral/diamond{
+	amount = 5
+	},
+/obj/item/weapon/spacecash/c1000,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"hU" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/machinery/alarm/vox{
+	dir = 4;
+	pixel_x = -28
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"ia" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"ie" = (
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/food/snacks/porktenderloin{
+	pixel_y = 8
+	},
+/obj/item/weapon/reagent_containers/food/snacks/risenshiny{
+	pixel_x = 6;
+	pixel_y = 2
+	},
+/obj/item/weapon/reagent_containers/food/snacks/risenshiny{
+	pixel_x = 3;
+	pixel_y = -4
+	},
+/turf/simulated/floor/vox/wood,
+/area/shuttle/trade/start)
+"jc" = (
+/obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
+	dir = 8;
+	name = "Outpost Air Scrubber";
+	on = 1
+	},
+/obj/machinery/door_control{
+	id_tag = "vox_exterior";
+	name = "Exterior Hatch Control";
+	normaldoorcontrol = 1;
+	pixel_x = 8;
+	pixel_y = 25;
+	req_access_txt = "140";
+	specialfunctions = 5
+	},
+/obj/machinery/door_control{
+	id_tag = "vox_interior";
+	name = "Interior Hatch Control";
+	normaldoorcontrol = 1;
+	pixel_x = -8;
+	pixel_y = 25;
+	req_access_txt = "140";
+	specialfunctions = 5
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"jt" = (
+/obj/machinery/vending/sale,
+/turf/simulated/wall,
+/area/shuttle/trade/start)
+"jB" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 1
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/trade/start)
+"mA" = (
+/obj/structure/bed/chair/office/dark{
+	dir = 1
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"ne" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"nq" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"nR" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"ox" = (
+/obj/machinery/door/airlock/external{
+	req_access_txt = "140"
+	},
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "vox_maint";
+	name = "Maintenance Blast Door"
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"oT" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	initialize_directions = 11
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"pE" = (
+/obj/machinery/power/treadmill{
+	dir = 8
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"pG" = (
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "vox_maint";
+	name = "Maintenance Blast Door"
+	},
+/obj/machinery/door/airlock/external{
+	req_access_txt = "140"
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"pR" = (
+/obj/machinery/door/airlock/glass{
+	id_tag = "vox_interior";
+	name = "Internal Gas Exchange";
+	req_access_txt = "140"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	initialize_directions = 11
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"qe" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"qJ" = (
+/turf/simulated/wall/shuttle/unsmoothed/black,
+/area/shuttle/trade/start)
+"qY" = (
+/obj/structure/bed/chair/comfy/brown{
+	dir = 1;
+	name = "command chair"
+	},
+/obj/effect/landmark/start{
+	name = "Trader"
+	},
+/turf/simulated/floor/vox/wood,
+/area/shuttle/trade/start)
+"rw" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 9
+	},
+/turf/simulated/wall,
+/area/shuttle/trade/start)
+"rL" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/cardboard,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"sj" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"sm" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/shuttle/trade/start)
+"th" = (
+/obj/machinery/vending/tool{
+	contraband = list(/obj/item/tool/weldingtool/hugetank=2,/obj/item/clothing/gloves/yellow/vox=2);
+	name = "Outpost YouTool"
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"tN" = (
+/obj/machinery/door/airlock/external,
+/obj/docking_port/shuttle{
+	dir = 4
+	},
+/obj/docking_port/shuttle/dynamic{
+	dir = 4;
+	areaname = "Customer Dock"
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/trade/start)
+"tY" = (
+/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"uX" = (
+/obj/machinery/chem_dispenser/mapping,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"vb" = (
+/obj/structure/closet/secure_closet/personal/cabinet,
+/obj/item/clothing/under/vox/vox_robes,
+/obj/item/clothing/under/vox/vox_robes,
+/obj/item/clothing/under/vox/vox_robes,
+/obj/item/clothing/under/vox/vox_casual,
+/obj/item/clothing/under/vox/vox_casual,
+/obj/item/clothing/under/vox/vox_casual,
+/obj/item/weapon/storage/backpack/satchel,
+/obj/item/weapon/storage/backpack/satchel,
+/obj/item/device/radio/headset,
+/obj/item/device/radio/headset,
+/obj/machinery/alarm/vox{
+	dir = 4;
+	pixel_x = -28
+	},
+/obj/item/weapon/tank/jetpack/nitrogen,
+/obj/item/weapon/tank/jetpack/nitrogen,
+/obj/item/weapon/tank/jetpack/nitrogen,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"vA" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"vK" = (
+/obj/machinery/door_control{
+	desc = "A remote control switch.";
+	id_tag = "vox_maint";
+	name = "Maintenance";
+	pixel_x = -8;
+	pixel_y = 25;
+	req_access_txt = "140"
+	},
+/obj/machinery/alarm/vox{
+	dir = 8;
+	pixel_x = 25
+	},
+/obj/structure/closet/emcloset/vox,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"xb" = (
+/obj/structure/rack,
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/glass/glass{
+	amount = 50
+	},
+/obj/item/weapon/storage/toolbox/electrical,
+/obj/item/weapon/storage/toolbox/mechanical{
+	pixel_x = 4;
+	pixel_y = -4
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"xt" = (
+/obj/machinery/planet_scanner{
+	anchored = 1;
+	icon_state = "scanner_idle"
+	},
+/turf/simulated/floor/vox/wood,
+/area/shuttle/trade/start)
+"xO" = (
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"yD" = (
+/obj/structure/bed/chair/office/dark{
+	dir = 4
+	},
+/obj/machinery/atm{
+	desc = "It looks extremely scuffed and dirty, as if it had been stolen.";
+	pixel_x = 27
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/trade/start)
+"yR" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"zA" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"zD" = (
+/obj/effect/decal/cleanable/blood/tracks/footprints/vox{
+	basecolor = "#00FF00";
+	color = "#00FF00";
+	dir = 4;
+	icon_state = "claw1"
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"Ad" = (
+/obj/machinery/smartfridge/chemistry,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"AF" = (
+/obj/structure/flora/pottedplant/random,
+/obj/machinery/light,
+/obj/machinery/atm{
+	desc = "It looks extremely scuffed and dirty, as if it had been stolen.";
+	pixel_y = -30
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/trade/start)
+"Bd" = (
+/turf/simulated/floor/vox/wood,
+/area/shuttle/trade/start)
+"Bq" = (
+/obj/structure/table,
+/obj/item/weapon/storage/belt/slim,
+/obj/item/weapon/storage/toolbox,
+/obj/item/stack/sheet/wood,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"BW" = (
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"Ch" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/closet/secure_closet/miner{
+	name = "vox miner's equipment";
+	req_access = null
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"Cy" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	initialize_directions = 11
+	},
+/obj/machinery/door/airlock/glass{
+	icon_state = "door_locked";
+	id_tag = "vox_exterior";
+	locked = 1;
+	name = "External Gas Exchange";
+	req_access_txt = "140"
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/trade/start)
+"CN" = (
+/obj/structure/bed/chair/office/dark,
+/turf/simulated/floor/carpet,
+/area/shuttle/trade/start)
+"Dr" = (
+/obj/item/weapon/reagent_containers/glass/beaker/large{
+	pixel_x = 6;
+	pixel_y = 10
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/large{
+	pixel_x = -4;
+	pixel_y = 6
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/large/plasma,
+/obj/structure/table,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"DI" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 1
+	},
+/turf/template_noop,
+/area/shuttle/trade/start)
+"Eq" = (
+/turf/template_noop,
+/area/template_noop)
+"Er" = (
+/obj/machinery/alarm/vox{
+	dir = 8;
+	pixel_x = 25
+	},
+/obj/effect/decal/cleanable/cockroach_remains,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"Fn" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"Fp" = (
+/obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
+	name = "Outpost Air Scrubber";
+	on = 1
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"FD" = (
+/obj/machinery/vaporizer,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"FN" = (
+/obj/machinery/door/window{
+	dir = 2;
+	name = "Tradeship Windoor";
+	req_one_access_txt = "140"
+	},
+/obj/machinery/door/poddoor/shutters/preopen{
+	dir = 2;
+	id_tag = "TS";
+	name = "Tradeship Shutters"
+	},
+/obj/machinery/door_control{
+	id_tag = "TS";
+	name = "Tradeship Shutters";
+	pixel_x = -25;
+	req_access_txt = "140"
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/trade/start)
+"Gj" = (
+/obj/machinery/atmospherics/unary/vent/high_volume{
+	dir = 1
+	},
+/obj/structure/support_rail{
+	dir = 1
+	},
+/obj/structure/catwalk,
+/turf/template_noop,
+/area/shuttle/trade/start)
+"Hu" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"Hz" = (
+/obj/machinery/light,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"HI" = (
+/obj/effect/decal/cleanable/blood/tracks/footprints/vox{
+	basecolor = "#00FF00";
+	color = "#00FF00";
+	icon_state = "claw1"
+	},
+/obj/effect/decal/cleanable/blood/tracks/footprints/vox{
+	basecolor = "#00FF00";
+	color = "#00FF00";
+	dir = 8;
+	icon_state = "claw2"
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"In" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 8
+	},
+/turf/template_noop,
+/area/shuttle/trade/start)
+"IV" = (
+/obj/structure/wc/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/obj/machinery/alarm/vox{
+	dir = 8;
+	pixel_x = 25
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
+	dir = 1;
+	name = "Outpost Air Scrubber";
+	on = 1
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"JF" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "oxygen"
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/trade/start)
+"JZ" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 6
+	},
+/turf/simulated/wall,
+/area/shuttle/trade/start)
+"Kp" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 1
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"KB" = (
+/obj/machinery/chem_master,
+/obj/item/weapon/storage/bag/chem,
+/obj/item/weapon/storage/box/pillbottles,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"KI" = (
+/obj/effect/decal/cleanable/flour,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"LR" = (
+/obj/structure/shuttle/engine/propulsion/burst{
+	dir = 8
+	},
+/turf/template_noop,
+/area/shuttle/trade/start)
+"OA" = (
+/obj/item/stack/sheet/cardboard{
+	amount = 50
+	},
+/obj/item/device/priceTagger,
+/obj/item/tool/screwdriver{
+	pixel_y = 8
+	},
+/obj/item/weapon/hand_labeler,
+/obj/structure/table,
+/obj/machinery/door_control{
+	id_tag = "vox_exterior";
+	name = "Exterior Hatch Control";
+	normaldoorcontrol = 1;
+	pixel_x = -8;
+	pixel_y = 25;
+	req_access_txt = "140";
+	specialfunctions = 5
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/trade/start)
+"OJ" = (
+/obj/machinery/door/airlock/hatch{
+	name = "Trade Ship";
+	req_access_txt = "140"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"ON" = (
+/obj/effect/decal/cleanable/greenglow,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"PO" = (
+/obj/machinery/vending/security{
+	name = "Outpost SecTech"
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"Qy" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/door/airlock/glass{
+	name = "Trade Ship";
+	req_access_txt = "140"
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"QE" = (
+/obj/machinery/sleeper,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"Rl" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"Rp" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 8
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"RB" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/power/battery_port,
+/obj/machinery/power/battery/portable{
+	anchored = 1;
+	output = 4000
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"RE" = (
+/obj/machinery/alarm/vox{
+	dir = 8;
+	pixel_x = 25
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	initialize_directions = 11
+	},
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"RJ" = (
+/obj/machinery/door_control{
+	id_tag = "vox_interior";
+	name = "Interior Hatch Control";
+	normaldoorcontrol = 1;
+	pixel_x = 25;
+	pixel_y = -8;
+	req_access_txt = "140";
+	specialfunctions = 5
+	},
+/obj/structure/closet/emcloset/vox,
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"RO" = (
+/obj/effect/decal/cleanable/cockroach_remains,
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"SJ" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"TF" = (
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/obj/structure/hanging_lantern{
+	dir = 4
+	},
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"TM" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/wall,
+/area/shuttle/trade/start)
+"TO" = (
+/obj/structure/table/reinforced,
+/obj/machinery/door/window{
+	dir = 2;
+	name = "Tradeship Windoor";
+	req_one_access_txt = "140"
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/item/device/deskbell/signaler/trader{
+	pixel_x = 10;
+	pixel_y = -5;
+	name = "Trade Ship Counter Bell"
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/trade/start)
+"Ue" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/rods,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+"UA" = (
+/obj/structure/shuttle/diag_wall/black,
+/turf/template_noop,
+/area/shuttle/trade/start)
+"VE" = (
+/obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
+	name = "Outpost Air Scrubber";
+	on = 1
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"VF" = (
+/turf/simulated/wall,
+/area/shuttle/trade/start)
+"VK" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 8
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"Wp" = (
+/obj/machinery/computer/shuttle_control/trade,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/vox/wood,
+/area/shuttle/trade/start)
+"Wq" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/wall/shuttle/unsmoothed/black,
+/area/shuttle/trade/start)
+"Wy" = (
+/obj/effect/decal/cleanable/blood/tracks/footprints/vox{
+	basecolor = "#00FF00";
+	color = "#00FF00";
+	icon_state = "claw1"
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"Xq" = (
+/obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
+	dir = 1;
+	name = "Outpost Air Scrubber";
+	on = 1
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"Xu" = (
+/obj/machinery/station_map/strategic{
+	icon = 'icons/obj/computer.dmi';
+	icon_state = "comm_serv";
+	name = "Starmap";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/simulated/floor/vox/wood,
+/area/shuttle/trade/start)
+"Xv" = (
+/obj/machinery/light,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/vox{
+	icon_state = "dark"
+	},
+/area/shuttle/trade/start)
+"ZI" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
+	},
+/turf/simulated/wall,
+/area/shuttle/trade/start)
+"ZW" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/wall,
+/area/shuttle/trade/start)
+"ZX" = (
+/obj/machinery/power/terminal,
+/obj/structure/cable,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating/vox,
+/area/shuttle/trade/start)
+
+(1,1,1) = {"
+Eq
+Eq
+LR
+qJ
+qJ
+qe
+sj
+sj
+nR
+qJ
+LR
+Eq
+Eq
+"}
+(2,1,1) = {"
+Eq
+LR
+qJ
+VF
+pE
+ZX
+RB
+dG
+th
+VF
+qJ
+LR
+Eq
+"}
+(3,1,1) = {"
+Eq
+qJ
+VF
+ez
+Fp
+Rp
+RO
+vA
+Ue
+FD
+TM
+Wq
+Gj
+"}
+(4,1,1) = {"
+In
+VF
+Bq
+fq
+Er
+rL
+Ch
+TF
+VF
+VF
+VF
+qJ
+UA
+"}
+(5,1,1) = {"
+qJ
+VF
+VF
+VF
+VF
+OJ
+VF
+VF
+VF
+gP
+vb
+VF
+qJ
+"}
+(6,1,1) = {"
+ox
+BW
+VE
+nq
+nq
+oT
+Hu
+Dr
+hU
+BW
+KI
+fa
+qJ
+"}
+(7,1,1) = {"
+qJ
+ie
+Bd
+BW
+BW
+ia
+yR
+KB
+mA
+xO
+BW
+PO
+qJ
+"}
+(8,1,1) = {"
+qJ
+Wp
+qY
+xt
+BW
+Xv
+Fn
+uX
+ON
+HI
+Wy
+tY
+qJ
+"}
+(9,1,1) = {"
+qJ
+Xu
+Bd
+BW
+BW
+Kp
+Qy
+Xq
+zD
+zD
+BW
+Hz
+qJ
+"}
+(10,1,1) = {"
+pG
+BW
+VE
+VK
+nq
+RE
+Hu
+xb
+BW
+QE
+QE
+QE
+qJ
+"}
+(11,1,1) = {"
+qJ
+vK
+RJ
+ia
+BW
+ZW
+ne
+Rl
+Ad
+zA
+Rl
+VF
+qJ
+"}
+(12,1,1) = {"
+qJ
+VF
+JZ
+pR
+zA
+SJ
+fY
+fY
+FN
+fY
+fY
+jB
+qJ
+"}
+(13,1,1) = {"
+DI
+VF
+ZW
+jc
+Fp
+Cy
+JF
+CN
+TO
+fY
+fY
+AF
+qJ
+"}
+(14,1,1) = {"
+Eq
+DI
+ZI
+IV
+gc
+rw
+OA
+yD
+jt
+fY
+fY
+jB
+qJ
+"}
+(15,1,1) = {"
+Eq
+Eq
+DI
+qJ
+qJ
+qJ
+qJ
+qJ
+qJ
+sm
+tN
+sm
+qJ
+"}

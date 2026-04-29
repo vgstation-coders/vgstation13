@@ -46,6 +46,11 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	var/cargo_last_forward = 0
 	var/list/datum/cargo_forwarding/fulfilled_forwards = list() // For persistence
 	var/list/datum/cargo_forwarding/previous_forwards = list()
+	// On ship-shuttle-style maps (e.g. Odyssey), can_move() populates this with
+	// a user-facing string explaining why the shuttle can't move right now (ship
+	// in transit, dock obstructed, ...). The cargo console reads it to give
+	// callers a specific reason instead of the generic safety blurb.
+	var/cant_move_reason = null
 
 /datum/subsystem/supply_shuttle/New()
 	NEW_SS_GLOBAL(SSsupply_shuttle)
@@ -114,6 +119,11 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	object.OnConfirmed(user)
 
 /datum/subsystem/supply_shuttle/proc/send()
+	// Ship-shuttle-style maps (Odyssey) wire the cargo shuttle into the host
+	// ship via the dock-request system rather than fixed centcomm/station ports.
+	if(map?.ship_shuttle)
+		send_shipmode()
+		return
 
 	var/obj/docking_port/destination
 
@@ -141,14 +151,64 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	cargo_shuttle.move_to_dock(destination)
 	moving = 0
 
+// Ship-shuttle-style send: when called, fire a silent dock-request from the
+// cargo shuttle to the host ship; when recalled, route the cargo shuttle back
+// to its parking destination. can_move() has already validated state by the
+// time this is called.
+/datum/subsystem/supply_shuttle/proc/send_shipmode()
+	var/datum/shuttle/host = map.ship_shuttle
+	if(!at_station)
+		var/result = cargo_shuttle.request_docking(host, null, TRUE, TRUE)
+		if(result == SDR_OK_AUTO_ACCEPTED)
+			at_station = 1
+		else
+			message_admins("WARNING: Cargo shuttle dock-request to [host.name] failed (code [result]).")
+			warning("Cargo shuttle dock-request failed: [cargo_shuttle.dock_request_error_message(result)]")
+	else
+		for(var/obj/structure/shuttle/engine/propulsion/P in cargo_shuttle.shuttle_contents())
+			spawn()
+				P.shoot_exhaust()
+		sleep(3)
+		if(cargo_shuttle.parking_port)
+			cargo_shuttle.move_to_dock(cargo_shuttle.parking_port)
+			at_station = 0
+		else
+			message_admins("WARNING: Cargo shuttle has no parking_port - can't recall!")
+			warning("Cargo shuttle has no parking_port set; loader didn't run?")
+	moving = 0
+
 	//Check whether the shuttle is allowed to move
 /datum/subsystem/supply_shuttle/proc/can_move()
+	cant_move_reason = null
 	if(moving)
 		return 0
 
 	for(var/area/shuttle_area in cargo_shuttle.linked_areas)
 		if(forbidden_atoms_check(shuttle_area))
 			return 0
+
+	// Ship-shuttle-style maps: also require the host ship be in a dockable
+	// vlevel and that the cargo shuttle has a compatible (non-obstructed)
+	// dynamic-port pair available. Only check when the cargo shuttle is at
+	// parking - the recall direction just routes back to parking_port.
+	if(map?.ship_shuttle)
+		var/datum/shuttle/host = map.ship_shuttle
+		if(!at_station)
+			if(!host.is_in_dockable_vlevel())
+				cant_move_reason = "[host.name] is not in a dockable location (it must be parked in space)."
+				return 0
+			if(!cargo_shuttle.is_in_dockable_vlevel())
+				cant_move_reason = "Cargo shuttle is not in a dockable location."
+				return 0
+			var/list/mode_holder = list(0)
+			if(!cargo_shuttle.find_compatible_dock_pair(host, mode_holder))
+				cant_move_reason = "Logistics Dock is unavailable or obstructed."
+				return 0
+			// Cargo always docks alongside the host - never rendezvous (which
+			// would warp the host out of its current vlevel).
+			if(mode_holder[1] != SDR_MODE_IN_PLACE)
+				cant_move_reason = "[host.name] does not have room alongside it for the cargo shuttle to dock in-place."
+				return 0
 
 	return 1
 
@@ -187,6 +247,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	for(var/atom/movable/MA in cargo_shuttle.shuttle_contents())
 		if(MA.anchored && !ismecha(MA))
+			continue
+		if(istype(get_area(MA), /area/shuttle/supply/processing))
 			continue
 
 		if(isobj(MA))
@@ -316,6 +378,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	for(var/turf/T in cargo_shuttle.shuttle_contents())
 		if(T.density)
+			continue
+		if(istype(T.loc, /area/shuttle/supply/processing))
 			continue
 		var/contcount
 		for(var/atom/movable/MA in T.contents)

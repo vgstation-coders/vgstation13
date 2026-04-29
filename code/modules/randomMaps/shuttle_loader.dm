@@ -28,7 +28,7 @@ var/global/list/datum/map_element/shuttle/loaded_shuttle_map_elements = list()
 //
 /obj/docking_port/shuttle/dynamic
 	name = "dynamic docking port"
-	icon_state = "docking_shuttle"
+	icon_state = "docking_dynamic"
 	areaname = "rendezvous"
 
 	// If non-null and non-empty, only shuttles whose datum istype() one of these
@@ -37,21 +37,54 @@ var/global/list/datum/map_element/shuttle/loaded_shuttle_map_elements = list()
 	// Shuttles whose datum istype() any of these paths may not dock here.
 	var/list/shuttle_blacklist = list()
 
+// Inherited /obj/docking_port/shuttle/can_shuttle_move only returns 1 for the
+// shuttle's primary linked_port, so without this override a dynamic port stays
+// behind on its old turf during move_area_to and gets its area swapped to
+// refill_area, dropping out of the shuttle's linked_areas. We can't ask
+// get_area() here either: move_area_to sets old_turf's area to refill_area
+// (line ~1518) BEFORE the can_shuttle_move check (line ~1593). Track ownership
+// via linked_shuttle, populated by the loader after the shuttle is attached.
+/obj/docking_port/shuttle/dynamic/can_shuttle_move(datum/shuttle/S)
+	if(S && linked_shuttle == S)
+		return 1
+	return 0
+
 /obj/docking_port/shuttle/dynamic/proc/allows_shuttle(datum/shuttle/S)
 	if(!S)
 		return FALSE
 	if(shuttle_whitelist && shuttle_whitelist.len)
 		var/matched = FALSE
 		for(var/T in shuttle_whitelist)
-			if(istype(S, T))
+			// Mappers may set whitelists from the DMM editor, which serialises
+			// typepaths as plain strings ("/datum/shuttle/supply"). Coerce.
+			if(istext(T))
+				T = text2path(T)
+			if(T && istype(S, T))
 				matched = TRUE
 				break
 		if(!matched)
 			return FALSE
 	for(var/T in shuttle_blacklist)
-		if(istype(S, T))
+		if(istext(T))
+			T = text2path(T)
+		if(T && istype(S, T))
 			return FALSE
 	return TRUE
+
+// A dynamic port is "occupied" if some shuttle has a dock_request commitment
+// against it - either docked alongside (current_port is a dock_request with
+// pa==src or pb==src) or inbound to one (destination_port likewise). This
+// covers both "another ship is here right now" and "another ship is enroute
+// and has reserved this slot".
+/obj/docking_port/shuttle/dynamic/proc/is_occupied()
+	for(var/datum/shuttle/S in shuttles)
+		var/obj/docking_port/destination/dock_request/cur = S.current_port
+		if(istype(cur) && cur.source_req && (cur.source_req.pa == src || cur.source_req.pb == src))
+			return TRUE
+		var/obj/docking_port/destination/dock_request/dst = S.destination_port
+		if(istype(dst) && dst.source_req && (dst.source_req.pa == src || dst.source_req.pb == src))
+			return TRUE
+	return FALSE
 
 //
 // Map element that loads a shuttle DMM into its own VZ_PARKING vlevel.
@@ -66,6 +99,11 @@ var/global/list/datum/map_element/shuttle/loaded_shuttle_map_elements = list()
 
 	// Buffer of empty space turfs around the shuttle inside its parking vlevel.
 	var/parking_buffer = 7
+
+	// If non-zero, the parking vlevel will be exactly this wide/tall instead of
+	// being sized dynamically from the shuttle dimensions + parking_buffer.
+	var/parking_width = 0
+	var/parking_height = 0
 
 /datum/map_element/shuttle/initialize(list/objects)
 	..()
@@ -117,6 +155,7 @@ var/global/list/datum/map_element/shuttle/loaded_shuttle_map_elements = list()
 	var/obj/docking_port/destination/parking = new(dest_turf)
 	parking.dir = turn(shuttle_port.dir, 180)
 	parking.areaname = "[S.name] parking"
+	S.parking_port = parking
 
 // Loads each /datum/map_element/shuttle entry in map.load_shuttles into its
 // own parking vlevel. Called by SSmapping after fixedvaults.
@@ -136,10 +175,17 @@ var/global/list/datum/map_element/shuttle/loaded_shuttle_map_elements = list()
 		// addVLevel rather than addMapElementVLevel so the vlevel defaults
 		// (movement allowed, teleport allowed, etc.) match a regular parking
 		// area instead of a protected dungeon.
-		var/datum/virtual_z/parking_vz = map.addVLevel(ME.width + ME.parking_buffer * 2, ME.height + ME.parking_buffer * 2)
+		var/vlevel_w = ME.parking_width ? ME.parking_width : ME.width + ME.parking_buffer * 2
+		var/vlevel_h = ME.parking_height ? ME.parking_height : ME.height + ME.parking_buffer * 2
+		var/datum/virtual_z/parking_vz = map.addVLevel(vlevel_w, vlevel_h)
 		parking_vz.level_type = ME.vz_type
 		parking_vz.name = "[ME.name] parking"
-		ME.load(parking_vz.x_min - 1 + ME.parking_buffer, parking_vz.y_min - 1 + ME.parking_buffer, parking_vz.parent_z.z, ME.rotation)
+		// Centre the shuttle within its parking vlevel so visiting shuttles
+		// have room to dock on every side. With no explicit parking_width/_height
+		// this still produces parking_buffer turfs of margin on each side.
+		var/x_offset = round((vlevel_w - ME.width) / 2)
+		var/y_offset = round((vlevel_h - ME.height) / 2)
+		ME.load(parking_vz.x_min - 1 + x_offset, parking_vz.y_min - 1 + y_offset, parking_vz.parent_z.z, ME.rotation)
 
 		// Tie the parking vlevel to the shuttle datum once we know which one
 		// ended up linked to the loaded areas.
@@ -147,129 +193,21 @@ var/global/list/datum/map_element/shuttle/loaded_shuttle_map_elements = list()
 		if(S)
 			parking_vz.linked_shuttle = S
 
-// After setup_shuttles() has run, build a docking vlevel for every unordered
-// pair of load_shuttles shuttles whose dynamic ports allow each other.
-/proc/generate_shuttle_docking_vlevels()
+// After setup_shuttles() has run, give each loaded shuttle a transit vlevel
+// (if it doesn't have one yet) and fire its post_setup() hook. Pair-wise
+// rendezvous vlevels are built lazily on first request — see
+// /datum/shuttle/proc/lazy_get_rendezvous_vlevel.
+/proc/setup_loaded_shuttle_transits()
 	if(!loaded_shuttle_map_elements.len)
 		return
 
-	// Collect (shuttle, dynamic_ports) for every shuttle we loaded.
-	var/list/datum/shuttle/loaded_shuttles = list()
 	for(var/datum/map_element/shuttle/ME in loaded_shuttle_map_elements)
 		var/datum/shuttle/S = shuttle_datums_by_path[ME.shuttle_datum_path]
-		if(S && S.linked_port)
-			loaded_shuttles |= S
-
-	// Generate transit area for each loaded shuttle that doesn't already have one.
-	for(var/datum/shuttle/S in loaded_shuttles)
-		if(S.transit_port)
+		if(!S || !S.linked_port)
 			continue
-		var/obj/docking_port/destination/transit/transit = generate_transit_area(S)
-		if(transit)
-			S.set_transit_dock(transit)
-			S.add_dock(transit)
-
-	// Walk unordered pairs.
-	for(var/i = 1 to loaded_shuttles.len - 1)
-		for(var/j = i + 1 to loaded_shuttles.len)
-			var/datum/shuttle/A = loaded_shuttles[i]
-			var/datum/shuttle/B = loaded_shuttles[j]
-			create_shuttle_pair_docking_vlevel(A, B)
-
-	// Post-setup callback so each shuttle datum can decorate transit vlevels,
-	// register transition channels, etc. once everything else is in place.
-	for(var/datum/shuttle/S in loaded_shuttles)
+		if(!S.transit_port)
+			var/obj/docking_port/destination/transit/transit = generate_transit_area(S)
+			if(transit)
+				S.set_transit_dock(transit)
+				S.add_dock(transit)
 		S.post_setup()
-
-// Builds one docking vlevel between two shuttles using the first compatible
-// pair of /obj/docking_port/shuttle/dynamic on each side. Both shuttles get
-// destination ports added so they can dock here independently.
-/proc/create_shuttle_pair_docking_vlevel(datum/shuttle/A, datum/shuttle/B)
-	var/obj/docking_port/shuttle/dynamic/port_a = null
-	var/obj/docking_port/shuttle/dynamic/port_b = null
-	for(var/obj/docking_port/shuttle/dynamic/da in A.shuttle_contents())
-		if(!da.allows_shuttle(B))
-			continue
-		for(var/obj/docking_port/shuttle/dynamic/db in B.shuttle_contents())
-			if(!db.allows_shuttle(A))
-				continue
-			port_a = da
-			port_b = db
-			break
-		if(port_a)
-			break
-	if(!port_a || !port_b)
-		return
-
-	var/list/dims_a = A.get_size()
-	var/list/dims_b = B.get_size()
-	if(!dims_a || !dims_b)
-		return
-
-	var/buffer = 25
-
-	// Decide vlevel orientation by the dynamic port's facing.
-	// Horizontal pairing (ports face E/W) -> ships side by side along X.
-	// Vertical pairing (ports face N/S)   -> ships stacked along Y.
-	var/horizontal = (port_a.dir == EAST || port_a.dir == WEST)
-
-	var/vz_w
-	var/vz_h
-	if(horizontal)
-		vz_w = dims_a[1] + dims_b[1] + buffer * 2
-		vz_h = max(dims_a[2], dims_b[2]) + buffer * 2
-	else
-		vz_w = max(dims_a[1], dims_b[1]) + buffer * 2
-		vz_h = dims_a[2] + dims_b[2] + buffer * 2
-
-	var/datum/virtual_z/dock_vz = map.addVLevel(vz_w, vz_h)
-	dock_vz.level_type = VZ_SPACE
-	dock_vz.name = "[A.name] / [B.name] rendezvous"
-
-	// Pick the rendezvous turf - where port_a will end up after A docks here.
-	// Place it so port_b ends one step in port_a.dir, then both shuttles + buffer fit.
-	var/rx
-	var/ry
-	if(horizontal)
-		// Ship A on the side opposite port_a.dir, ship B on the same side.
-		// E.g. port_a.dir == EAST -> A on west, B on east; rendezvous near the middle.
-		ry = dock_vz.y_min + buffer + (max(dims_a[2], dims_b[2]) >> 1)
-		if(port_a.dir == EAST)
-			rx = dock_vz.x_min + buffer + dims_a[1] - 1
-		else
-			rx = dock_vz.x_min + buffer + dims_b[1]
-	else
-		rx = dock_vz.x_min + buffer + (max(dims_a[1], dims_b[1]) >> 1)
-		if(port_a.dir == NORTH)
-			ry = dock_vz.y_min + buffer + dims_a[2] - 1
-		else
-			ry = dock_vz.y_min + buffer + dims_b[2]
-
-	var/turf/rendezvous_a = locate(rx, ry, dock_vz.z())
-	var/turf/rendezvous_b = get_step(rendezvous_a, port_a.dir)
-	if(!rendezvous_a || !rendezvous_b)
-		return
-
-	// For each shuttle, compute where its linked_port lands when its dynamic
-	// port is at the rendezvous turf, and place a destination port one step
-	// further in the linked_port's direction (where get_docking_turf() lands).
-	place_pair_destination_port(A, port_a, rendezvous_a, dock_vz, "[B.name] rendezvous")
-	place_pair_destination_port(B, port_b, rendezvous_b, dock_vz, "[A.name] rendezvous")
-
-/proc/place_pair_destination_port(datum/shuttle/S, obj/docking_port/shuttle/dynamic/port, turf/rendezvous, datum/virtual_z/dock_vz, areaname)
-	// Offset of linked_port relative to dynamic port.
-	var/dx = S.linked_port.x - port.x
-	var/dy = S.linked_port.y - port.y
-	var/lp_x = rendezvous.x + dx
-	var/lp_y = rendezvous.y + dy
-	var/turf/lp_turf = locate(lp_x, lp_y, dock_vz.z())
-	if(!lp_turf)
-		return
-	// Destination port sits one step in linked_port.dir from where linked_port lands.
-	var/turf/dest_turf = get_step(lp_turf, S.linked_port.dir)
-	if(!dest_turf)
-		return
-	var/obj/docking_port/destination/dest = new(dest_turf)
-	dest.dir = turn(S.linked_port.dir, 180)
-	dest.areaname = areaname
-	S.add_dock(dest)

@@ -1,7 +1,7 @@
 var/global/datum/shuttle/supply/cargo_shuttle = new(starting_area = /area/shuttle/supply)
 
 /datum/shuttle/supply
-	name = "supply shuttle"
+	name = "Cargo Freighter"
 
 	var/obj/docking_port/destination/dock_centcom
 	var/obj/docking_port/destination/dock_station

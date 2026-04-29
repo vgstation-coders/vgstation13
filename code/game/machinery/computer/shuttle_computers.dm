@@ -293,6 +293,20 @@
 			else if(procgen_target)
 				destination_text = " to [procgen_target] surface"
 			dat += "<center>[shuttle_name]:<br> <b><A href='?src=\ref[src];move=[1]'>Send[destination_text]</A></b></center><BR>"
+
+			// Shuttle-to-shuttle docking request UI.
+			if(shuttle.pending_request)
+				if(shuttle.pending_request.initiator == shuttle)
+					var/secs_left = max(round((shuttle.pending_request.expires_at - world.time) * 0.1), 0)
+					dat += "<center>Awaiting response from [shuttle.pending_request.target.name]… ([secs_left]s remaining)<br>"
+					dat += "<a href='?src=\ref[src];dock_request_cancel=1'><b>Cancel pending request</b></a></center><br>"
+				else
+					dat += "<center>Incoming docking request from [shuttle.pending_request.initiator.name]<br>"
+					dat += "<a href='?src=\ref[src];dock_request_accept=1'><b>Accept</b></a> | "
+					dat += "<a href='?src=\ref[src];dock_request_reject=1'><b>Reject</b></a></center><br>"
+			else
+				dat += "<center><a href='?src=\ref[src];dock_request_open=1'>Request docking with another vessel</a></center><br>"
+
 			dat += "<div align=\"right\"><a href='?src=\ref[src];disk=1'>Disk: [disk ? disk.header : "--------"]</a></div>"
 
 			if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
@@ -665,6 +679,73 @@
 			procgen_target = null
 			disk = null
 			updateUsrDialog()
+
+	if(href_list["dock_request_open"])
+		if(!allowed(usr))
+			to_chat(usr, "<span class='red'>Access denied.</span>")
+			return
+		if(!shuttle)
+			return
+		if(shuttle.pending_request)
+			to_chat(usr, "<span class='warning'>A docking request is already pending.</span>")
+			return
+		if(!shuttle.is_in_dockable_vlevel())
+			to_chat(usr, "<span class='warning'>This shuttle is not parked in a dockable location.</span>")
+			return
+		var/list/L = list()
+		for(var/datum/shuttle/S in shuttles)
+			if(S == shuttle)
+				continue
+			if(!S.is_in_dockable_vlevel())
+				continue
+			if(S.pending_request)
+				continue
+			L[S.name] = S
+		if(!L.len)
+			to_chat(usr, "<span class='warning'>No eligible shuttles found.</span>")
+			return
+		var/choice = input(usr, "Request docking with which vessel?", "Docking request") as null|anything in L
+		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
+			return
+		if(!choice)
+			return
+		var/datum/shuttle/target = L[choice]
+		if(!target)
+			return
+		var/code = shuttle.request_docking(target, usr)
+		if(code != SDR_OK_PENDING && code != SDR_OK_AUTO_ACCEPTED)
+			to_chat(usr, "<span class='warning'>Cannot request docking: [shuttle.dock_request_error_message(code)]</span>")
+		updateUsrDialog()
+
+	if(href_list["dock_request_cancel"])
+		if(!allowed(usr))
+			to_chat(usr, "<span class='red'>Access denied.</span>")
+			return
+		if(shuttle?.pending_request && shuttle.pending_request.initiator == shuttle)
+			shuttle.pending_request.cancel()
+		updateUsrDialog()
+
+	if(href_list["dock_request_accept"])
+		if(!allowed(usr))
+			to_chat(usr, "<span class='red'>Access denied.</span>")
+			return
+		if(shuttle?.pending_request && shuttle.pending_request.target == shuttle)
+			shuttle.pending_request.accept()
+		updateUsrDialog()
+
+	if(href_list["dock_request_reject"])
+		if(!allowed(usr))
+			to_chat(usr, "<span class='red'>Access denied.</span>")
+			return
+		if(!(shuttle?.pending_request && shuttle.pending_request.target == shuttle))
+			return
+		var/reason = input(usr, "Reason for rejection (optional):", "Reject docking request", "") as null|text
+		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
+			return
+		if(!shuttle?.pending_request || shuttle.pending_request.target != shuttle)
+			return
+		shuttle.pending_request.reject(reason)
+		updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/proc/insert_disk(obj/item/weapon/disk/shuttle_coords/SC, mob/user)
 	if(!shuttle)

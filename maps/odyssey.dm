@@ -34,6 +34,8 @@
 	load_shuttles = list(
 		/datum/map_element/shuttle/odyssey,
 		/datum/map_element/shuttle/freighter,
+		/datum/map_element/shuttle/medship,
+		/datum/map_element/shuttle/trade,
 	)
 	enabled_jobs = list(/datum/job/trader)
 	disabled_jobs = list(

@@ -24,6 +24,6 @@
     vz_type = VZ_SPACE
 
 /datum/map_element/fixedvault/casino
-    name = "Vox parking station"
+    name = "Vox casino"
     file_path = "maps/odyssey/casino.dmm"
     vz_type = VZ_SPACE

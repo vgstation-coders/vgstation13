@@ -183,8 +183,7 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 	//load all roundstart dungeons
 	for(var/T in map.load_map_elements)
-		// Skip elements already loaded synchronously in world/New() via
-		// map.early_load_map_elements.
+		// Skip elements already loaded synchronously in world/New() via map.early_load_map_elements.
 		var/element_type
 		if(ispath(T))
 			element_type = T
