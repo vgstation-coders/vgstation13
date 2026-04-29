@@ -16,15 +16,24 @@
 	nameLong = "NTEV Odyssey"
 	map_dir = "odyssey"
 	zLevels = list(/datum/zLevel/dynamic/odyssey) //YEEHAW VLEVEL TIME
-	load_map_elements = list(
+	// Centcomm loads early (in world/New, before Master.Setup) so its
+	// Observer-Start landmark populates newplayer_start before the first
+	// client Login(); otherwise the title-screen viewport falls back to
+	// (1,1,1) while subsystem init is still running.
+	early_load_map_elements = list(
 		/datum/map_element/fixedvault/centcomm,
+	)
+	load_map_elements = list(
 		/datum/map_element/dungeon/mecha_graveyard
 	)
 	load_custom_fixedvaults = list(
 		/datum/map_element/fixedvault/derelict,
 		/datum/map_element/fixedvault/dj_sat,
-		/datum/map_element/fixedvault/vox_parking,
-		/datum/map_element/fixedvault/rendezvous
+		/datum/map_element/fixedvault/casino,
+	)
+	load_shuttles = list(
+		/datum/map_element/shuttle/odyssey,
+		/datum/map_element/shuttle/freighter,
 	)
 	enabled_jobs = list(/datum/job/trader)
 	disabled_jobs = list(
@@ -137,8 +146,10 @@
 	name = "odyssey"
 
 /datum/zLevel/dynamic/odyssey/post_mapload()
-	var/datum/virtual_z/new_vz = new(src, OUTPOST_MAX_X, OUTPOST_MAX_Y, 1, 1, skip_turf_setup = FALSE)
-	new_vz.id = 1
+	// Bin-pack the planet vlevel rather than forcing position (1,1), so
+	// elements that load earlier (centcomm via early_load_map_elements) can
+	// occupy that corner without overlapping us.
+	var/datum/virtual_z/new_vz = map.addVLevel(OUTPOST_MAX_X, OUTPOST_MAX_Y)
 	new_vz.name = "Nanotrasen Outpost"
 	new_vz.level_type = VZ_PLANET
 	daynight_v_lvls += new_vz
@@ -150,7 +161,6 @@
 	new_vz.base_turf = /turf/unsimulated/floor/planetary/grass/jungle
 	new_vz.base_area = /area/surface/nt_outpost
 	new_vz.update_settings()
-	map.vLevels |= new_vz
 
 	for(var/obj/docking_port/destination/D in all_docking_ports)
 		if(D.vz() == new_vz.id)

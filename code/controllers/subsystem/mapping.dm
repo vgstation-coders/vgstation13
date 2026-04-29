@@ -183,10 +183,23 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 
 	//load all roundstart dungeons
 	for(var/T in map.load_map_elements)
+		// Skip elements already loaded synchronously in world/New() via
+		// map.early_load_map_elements.
+		var/element_type
+		if(ispath(T))
+			element_type = T
+		else if(istype(T, /datum/map_element))
+			var/datum/map_element/ME = T
+			element_type = ME.type
+		if(element_type && (element_type in map.early_loaded_map_element_types))
+			continue
 		load_dungeon(T, 0, TRUE)
 
 	for(var/T in map.load_custom_fixedvaults)
 		load_dungeon(T, 0, FALSE, FALSE)
+
+	if(map.load_shuttles && map.load_shuttles.len)
+		load_map_shuttles()
 
 	watch = start_watch()
 	for(var/datum/virtual_z/vz in map.getAllVLevels())

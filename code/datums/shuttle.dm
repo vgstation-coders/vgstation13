@@ -24,6 +24,10 @@
 	//List of ALL docking ports the shuttle can move to
 	var/list/docking_ports = list()
 
+	//Path passed as `starting_area` to New(). Saved so the shuttle loader can
+	//re-scan for areas that didn't exist at New() time.
+	var/area/starting_area_path = null
+
 	//The shuttle's main area - it contains the linked_port
 	var/area/linked_area
 
@@ -101,6 +105,11 @@
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
 
+	// Register every shuttle datum by type so the shuttle loader can resolve
+	// us even if our area doesn't exist yet (and we aren't in `shuttles`).
+	shuttle_datums_by_path[type] = src
+	starting_area_path = ispath(starting_area) ? starting_area : null
+
 	if(starting_area)
 		if(ispath(starting_area))
 			// Find all areas that are subtypes of the given type (supports multi-area shuttles)
@@ -126,6 +135,38 @@
 		shuttles |= src
 	if(password)
 		password = rand(10000,99999)
+
+// Hook called by generate_shuttle_docking_vlevels() after transit + paired
+// docking vlevels are in place. Override on per-shuttle datums to decorate
+// transit vlevels, set up transition channels, etc.
+/datum/shuttle/proc/post_setup()
+	return
+
+// Called by the shuttle loader after a shuttle DMM has been loaded into a
+// parking vlevel. Re-scans linked_areas for a populated area, refreshes
+// linked_area, and adds the shuttle to the global list if it isn't already.
+/datum/shuttle/proc/attach_loaded_areas(list/areas)
+	for(var/area/A in areas)
+		linked_areas |= A
+
+	// If we have a starting_area_path, also fold in any newly-instantiated
+	// subtypes that didn't exist when New() ran.
+	if(starting_area_path)
+		for(var/area/A in world)
+			if(istype(A, starting_area_path))
+				linked_areas |= A
+
+	if(!linked_area || !linked_area.contents.len)
+		linked_area = null
+		for(var/area/A in linked_areas)
+			if(A.contents.len)
+				linked_area = A
+				break
+		if(!linked_area && linked_areas.len)
+			linked_area = linked_areas[1]
+
+	if(istype(linked_area))
+		shuttles |= src
 
 // Returns the combined contents of all linked areas
 /datum/shuttle/proc/shuttle_contents()
@@ -157,6 +198,10 @@
 	var/obj/docking_port/shuttle/shuttle_docking_port
 
 	for(var/obj/docking_port/shuttle/S in shuttle_contents())
+		// /obj/docking_port/shuttle/dynamic ports mark ship-to-ship rendezvous
+		// slots and must not be picked as the shuttle's primary linked_port.
+		if(istype(S, /obj/docking_port/shuttle/dynamic))
+			continue
 		shuttle_docking_port = S
 		break
 	//

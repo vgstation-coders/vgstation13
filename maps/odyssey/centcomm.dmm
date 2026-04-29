@@ -46,16 +46,6 @@
 	icon_state = "wood"
 	},
 /area/centcom/living)
-"al" = (
-/obj/machinery/turret/centcomm{
-	dir = 8
-	},
-/turf/unsimulated/floor{
-	dir = 6;
-	icon_state = "darkred";
-	tag = "icon-darkred (SOUTHEAST)"
-	},
-/area/centcom/suppy)
 "an" = (
 /obj/structure/table,
 /obj/item/weapon/storage/toolbox/electrical,
@@ -93,12 +83,6 @@
 	icon_state = "carpetside"
 	},
 /area/centcom/test)
-"aw" = (
-/obj/machinery/vending/snack,
-/turf/unsimulated/floor{
-	icon_state = "dark neutral stripe"
-	},
-/area/centcom/suppy)
 "aA" = (
 /obj/structure/rack,
 /obj/item/device/radio{
@@ -357,13 +341,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"bL" = (
-/turf/unsimulated/floor{
-	dir = 6;
-	icon_state = "darkred";
-	tag = "icon-darkred (SOUTHEAST)"
-	},
-/area/centcom/suppy)
 "bO" = (
 /obj/machinery/light{
 	dir = 1
@@ -394,23 +371,6 @@
 	},
 /turf/space,
 /area/centcom/specops)
-"bU" = (
-/obj/machinery/door/airlock/glass_mining{
-	name = "Break Room";
-	req_access_txt = "54"
-	},
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "dark neutral stripe";
-	tag = "icon-dark neutral stripe (EAST)"
-	},
-/area/centcom/suppy)
-"bW" = (
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "darkred"
-	},
-/area/centcom/suppy)
 "bX" = (
 /obj/machinery/station_map/strategic,
 /turf/unsimulated/floor{
@@ -471,14 +431,6 @@
 	icon_state = "green"
 	},
 /area/centcom/control)
-"ct" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor/plating,
-/area/centcom/suppy)
 "cw" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -597,13 +549,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/living)
-"cO" = (
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "dark neutral stripe";
-	tag = "icon-dark neutral stripe (EAST)"
-	},
-/area/centcom/suppy)
 "cP" = (
 /obj/machinery/computer/crew,
 /turf/unsimulated/floor{
@@ -696,15 +641,6 @@
 	},
 /turf/unsimulated/wall,
 /area/centcom/ert)
-"dr" = (
-/obj/structure/bed/chair/wood/wings{
-	dir = 1
-	},
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "dark neutral stripe"
-	},
-/area/centcom/suppy)
 "dt" = (
 /obj/machinery/r_n_d/fabricator/circuit_imprinter,
 /turf/unsimulated/floor{
@@ -722,15 +658,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/ert)
-"dy" = (
-/obj/structure/table/glass,
-/obj/item/binoculars,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "dark neutral stripe";
-	tag = "icon-dark neutral stripe (EAST)"
-	},
-/area/centcom/suppy)
 "dz" = (
 /obj/machinery/vending/security{
 	req_access = null
@@ -878,13 +805,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/centcom/living)
-"es" = (
-/obj/structure/table/glass,
-/obj/item/weapon/storage/fancy/donut_box,
-/turf/unsimulated/floor{
-	icon_state = "dark neutral stripe"
-	},
-/area/centcom/suppy)
 "ew" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -906,12 +826,6 @@
 	name = "plating"
 	},
 /area/centcom/living)
-"ey" = (
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "eA" = (
 /obj/machinery/camera{
 	name = "Assault Armor North";
@@ -936,14 +850,6 @@
 	name = "plating"
 	},
 /area/centcom/ferry)
-"eC" = (
-/obj/machinery/computer/fluff/starmap,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "dark neutral stripe";
-	tag = "icon-dark neutral stripe (EAST)"
-	},
-/area/centcom/suppy)
 "eD" = (
 /turf/simulated/wall/shuttle,
 /area/shuttle/striketeam/centcom)
@@ -965,13 +871,6 @@
 	icon_state = "darkred"
 	},
 /area/centcom/specops)
-"eG" = (
-/obj/structure/table/glass,
-/obj/item/weapon/storage/box/mugs,
-/turf/unsimulated/floor{
-	icon_state = "dark neutral stripe"
-	},
-/area/centcom/suppy)
 "eH" = (
 /obj/structure/table,
 /obj/item/toy/gasha/defsquid{
@@ -981,16 +880,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/specops)
-"eL" = (
-/obj/machinery/conveyor{
-	id_tag = "QMLoad"
-	},
-/obj/machinery/door/poddoor{
-	id_tag = "QMLoaddoor";
-	name = "Supply Shuttle Loading Door"
-	},
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "eN" = (
 /obj/docking_port/shuttle{
 	dir = 4
@@ -1026,12 +915,6 @@
 	icon_state = "floor4"
 	},
 /area/shuttle/administration/centcom)
-"fe" = (
-/obj/machinery/computer/fluff/factory,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "fg" = (
 /obj/structure/table/woodentable,
 /obj/item/clothing/head/dunce_cap,
@@ -1074,12 +957,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/specops)
-"fx" = (
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "dark neutral stripe"
-	},
-/area/centcom/suppy)
 "fy" = (
 /turf/unsimulated/floor{
 	dir = 8;
@@ -1220,12 +1097,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/control)
-"fW" = (
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "neutral"
-	},
-/area/centcom/suppy)
 "fX" = (
 /obj/machinery/door/unpowered/shuttle,
 /turf/simulated/floor/shuttle,
@@ -1352,10 +1223,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/centcom/holding)
-"gy" = (
-/obj/effect/landmark/corpse/miner,
-/turf/simulated/floor/plating,
-/area/centcom/suppy)
 "gz" = (
 /turf/unsimulated/wall/blastdoor,
 /area/centcom/striketeam)
@@ -1376,13 +1243,6 @@
 	icon_state = "white"
 	},
 /area/centcom/test)
-"gH" = (
-/obj/machinery/teleport/station,
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "darkred"
-	},
-/area/centcom/suppy)
 "gI" = (
 /obj/structure/window/reinforced,
 /turf/unsimulated/floor{
@@ -1472,14 +1332,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/specops)
-"he" = (
-/obj/machinery/door/airlock/maintenance_hatch{
-	locked = 1
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "hk" = (
 /obj/structure/table/reinforced,
 /obj/machinery/recharger{
@@ -1626,14 +1478,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/specops)
-"hR" = (
-/obj/structure/closet/crate/secure/loot/bay_06,
-/turf/unsimulated/floor{
-	dir = 9;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (NORTHWEST)"
-	},
-/area/centcom/suppy)
 "hT" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -1685,15 +1529,6 @@
 /obj/structure/lattice,
 /turf/space,
 /area/centcom/specops)
-"ib" = (
-/obj/machinery/conveyor/centcom_auto{
-	dir = 1;
-	tag = "icon-conveyor0 (NORTH)"
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "ie" = (
 /obj/structure/table/reinforced,
 /obj/item/stack/sheet/glass/glass{
@@ -1801,12 +1636,6 @@
 	icon_state = "carpet"
 	},
 /area/centcom/control)
-"iC" = (
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "darkred"
-	},
-/area/centcom/suppy)
 "iF" = (
 /obj/machinery/ert_cryo_cell,
 /turf/simulated/floor/bluegrid,
@@ -1818,16 +1647,6 @@
 	icon_state = "wood"
 	},
 /area/centcom/test)
-"iK" = (
-/obj/machinery/door/airlock/command{
-	name = "Teleport Access";
-	req_access_txt = "17"
-	},
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "dark"
-	},
-/area/centcom/suppy)
 "iO" = (
 /obj/docking_port/destination/striketeam/destination2{
 	dir = 8
@@ -1857,11 +1676,6 @@
 	icon_state = "carpetside"
 	},
 /area/centcom/test)
-"iY" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 4
-	},
-/area/centcom/suppy)
 "iZ" = (
 /obj/machinery/vending/medical{
 	req_access = null
@@ -1993,12 +1807,6 @@
 	icon_state = "white"
 	},
 /area/tdome)
-"jJ" = (
-/obj/structure/shuttle/engine/propulsion{
-	dir = 4
-	},
-/turf/space,
-/area/shuttle/supply)
 "jN" = (
 /obj/structure/bed/chair,
 /turf/unsimulated/floor{
@@ -2066,12 +1874,6 @@
 	icon_state = "darkpurple"
 	},
 /area/centcom/control)
-"kg" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 1
-	},
-/turf/space,
-/area/shuttle/supply)
 "kh" = (
 /obj/structure/flora/ausbushes/leafybush,
 /turf/unsimulated/floor/grass,
@@ -2148,15 +1950,6 @@
 	icon_state = "white"
 	},
 /area/centcom/test)
-"kC" = (
-/obj/structure/bed/chair{
-	dir = 1
-	},
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "neutral"
-	},
-/area/centcom/suppy)
 "kG" = (
 /obj/structure/table/reinforced{
 	dir = 4;
@@ -2230,15 +2023,6 @@
 	icon_state = "wood"
 	},
 /area/centcom/control)
-"kY" = (
-/obj/machinery/conveyor/centcom_auto{
-	dir = 6;
-	tag = "icon-conveyor0 (SOUTHEAST)"
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "la" = (
 /obj/structure/closet/secure_closet/freezer/meat,
 /turf/unsimulated/floor{
@@ -2250,12 +2034,6 @@
 	icon_state = "bar"
 	},
 /area/centcom/living)
-"lc" = (
-/turf/unsimulated/floor{
-	dir = 8;
-	icon_state = "darkred"
-	},
-/area/centcom/suppy)
 "lf" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -2358,27 +2136,12 @@
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"lM" = (
-/obj/machinery/door/airlock/command{
-	name = "E.V.A.";
-	req_access_txt = "18"
-	},
-/turf/unsimulated/floor{
-	dir = 9;
-	icon_state = "darkred"
-	},
-/area/centcom/suppy)
 "lO" = (
 /turf/unsimulated/floor{
 	dir = 4;
 	icon_state = "darkred"
 	},
 /area/centcom/specops)
-"lR" = (
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "lS" = (
 /obj/machinery/light,
 /turf/unsimulated/floor{
@@ -2406,13 +2169,6 @@
 	},
 /turf/space,
 /area/shuttle/transport1/centcom)
-"mb" = (
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "dark loading";
-	tag = "icon-dark loading (NORTH)"
-	},
-/area/centcom/suppy)
 "me" = (
 /obj/machinery/vending/coffee,
 /turf/unsimulated/floor{
@@ -2439,15 +2195,6 @@
 	},
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/specops/centcom)
-"mq" = (
-/obj/structure/table/reinforced,
-/obj/item/weapon/storage/box/actionfigure,
-/turf/unsimulated/floor{
-	dir = 6;
-	icon_state = "darkred";
-	tag = "icon-darkred (SOUTHEAST)"
-	},
-/area/centcom/suppy)
 "mt" = (
 /obj/structure/shuttle/diag_wall/smooth/black,
 /turf/space,
@@ -2464,26 +2211,6 @@
 	icon_state = "carpet"
 	},
 /area/centcom/control)
-"mC" = (
-/obj/machinery/power/treadmill{
-	dir = 4
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/simulated/floor/plating,
-/area/centcom/suppy)
-"mJ" = (
-/obj/machinery/conveyor{
-	dir = 4;
-	id_tag = "anosample"
-	},
-/obj/structure/plasticflaps/mining,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "mL" = (
 /obj/structure/table/woodentable,
 /turf/unsimulated/floor{
@@ -2491,10 +2218,6 @@
 	icon_state = "carpetside"
 	},
 /area/centcom/control)
-"mN" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "mP" = (
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
@@ -2588,9 +2311,6 @@
 	icon_state = "floor4"
 	},
 /area/shuttle/specops/centcom)
-"no" = (
-/turf/unsimulated/wall/blastdoor,
-/area/centcom/suppy)
 "nq" = (
 /obj/structure/closet/syndicate/resources/everything,
 /turf/unsimulated/floor{
@@ -2729,12 +2449,6 @@
 	icon_state = "cafeteria"
 	},
 /area/centcom/living)
-"nM" = (
-/obj/structure/closet/crate/secure/loot,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "nP" = (
 /turf/unsimulated/floor{
 	dir = 1;
@@ -2793,13 +2507,6 @@
 	name = "plating"
 	},
 /area/centcom/ferry)
-"oc" = (
-/obj/structure/shuttle/window{
-	icon_state = "9"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "oe" = (
 /obj/machinery/status_display{
 	pixel_y = 32
@@ -2857,17 +2564,6 @@
 	icon_state = "carpetside"
 	},
 /area/centcom/control)
-"ou" = (
-/obj/structure/closet/crate,
-/obj/abstract/map/spawner/space/tools,
-/obj/abstract/map/spawner/space/tools,
-/obj/abstract/map/spawner/space/tools,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (EAST)"
-	},
-/area/centcom/suppy)
 "ov" = (
 /obj/structure/punching_bag/wizard,
 /turf/unsimulated/floor{
@@ -2894,29 +2590,6 @@
 /obj/structure/reagent_dispensers/virusfood,
 /turf/unsimulated/wall,
 /area/centcom/test)
-"oD" = (
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (EAST)"
-	},
-/area/centcom/suppy)
-"oH" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/grille,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "oI" = (
 /obj/machinery/microwave,
 /obj/structure/table/reinforced,
@@ -3007,33 +2680,12 @@
 	icon_state = "carpetside"
 	},
 /area/centcom/living)
-"pj" = (
-/obj/machinery/conveyor/centcom_auto{
-	dir = 1;
-	tag = "icon-conveyor0 (NORTH)"
-	},
-/obj/machinery/door/airlock/external{
-	frequency = 1449;
-	icon_state = "door_locked";
-	id_tag = "vox_eva_airlock_exterior";
-	locked = 1
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "pl" = (
 /obj/structure/table,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
 /area/tdome)
-"pn" = (
-/obj/machinery/vending/groans,
-/turf/unsimulated/floor{
-	icon_state = "dark neutral stripe"
-	},
-/area/centcom/suppy)
 "po" = (
 /obj/item/weapon/beach_ball,
 /turf/unsimulated/beach/sand,
@@ -3067,12 +2719,6 @@
 /obj/machinery/light/small,
 /turf/simulated/floor/bluegrid,
 /area/shuttle/ert/centcom)
-"pE" = (
-/turf/unsimulated/floor{
-	icon_state = "darkred";
-	tag = "icon-darkred"
-	},
-/area/centcom/suppy)
 "pH" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -3131,12 +2777,6 @@
 /obj/structure/sign/goldenplaque,
 /turf/unsimulated/wall,
 /area/centcom/ert)
-"pV" = (
-/obj/machinery/vending/coffee,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "pW" = (
 /obj/structure/bed/chair{
 	dir = 4
@@ -3244,9 +2884,6 @@
 	icon_state = "engine"
 	},
 /area/centcom/control)
-"qG" = (
-/turf/simulated/wall/shuttle,
-/area/shuttle/supply)
 "qJ" = (
 /turf/unsimulated/wall,
 /area/centcom/striketeam)
@@ -3345,12 +2982,6 @@
 	},
 /turf/space,
 /area/shuttle/transport1/centcom)
-"rx" = (
-/obj/structure/skele_stand/mrbones,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "rz" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -3562,17 +3193,6 @@
 	name = "plating"
 	},
 /area/centcom/living)
-"tc" = (
-/obj/machinery/conveyor{
-	dir = 9;
-	id_tag = "garbage";
-	in_reverse = 1;
-	movedir = 8
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "te" = (
 /obj/machinery/emancipation_grill/anti_duck,
 /turf/unsimulated/floor{
@@ -3599,15 +3219,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/centcom/living)
-"tn" = (
-/obj/machinery/conveyor{
-	dir = 4;
-	id_tag = "anosample"
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "tw" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -3766,22 +3377,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/ert)
-"up" = (
-/obj/structure/bed/chair{
-	dir = 8
-	},
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "neutral"
-	},
-/area/centcom/suppy)
-"ur" = (
-/obj/item/weapon/stool,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "neutral"
-	},
-/area/centcom/suppy)
 "us" = (
 /obj/structure/shuttle/diag_wall/black{
 	dir = 4
@@ -3813,15 +3408,6 @@
 	icon_state = "wood"
 	},
 /area/centcom/test)
-"uI" = (
-/obj/machinery/conveyor/centcom_auto{
-	dir = 10;
-	tag = "icon-conveyor0 (SOUTHWEST)"
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "uK" = (
 /obj/structure/sign/biohazard,
 /turf/unsimulated/wall,
@@ -3893,9 +3479,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/evac)
-"vl" = (
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "vm" = (
 /obj/structure/disposalpipe/segment,
 /turf/simulated/floor,
@@ -4100,12 +3683,6 @@
 	icon_state = "white"
 	},
 /area/centcom/test)
-"ws" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 1;
-	icon_state = "fakewindows2"
-	},
-/area/centcom/suppy)
 "wu" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 4
@@ -4257,17 +3834,6 @@
 	icon_state = "red"
 	},
 /area/tdome)
-"xb" = (
-/obj/machinery/door/airlock/external{
-	frequency = 1449;
-	icon_state = "door_locked";
-	id_tag = "vox_eva_airlock_exterior";
-	locked = 1
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "xe" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -4340,10 +3906,6 @@
 /obj/machinery/recharger,
 /turf/unsimulated/wall,
 /area/centcom/ert)
-"xs" = (
-/obj/structure/extinguisher_cabinet/empty,
-/turf/unsimulated/wall,
-/area/centcom/suppy)
 "xt" = (
 /obj/structure/closet/secure_closet/medical1{
 	pixel_x = 5
@@ -4440,22 +4002,12 @@
 	icon_state = "dark-markings"
 	},
 /area/centcom/ert)
-"xP" = (
-/obj/machinery/door/unpowered/shuttle,
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "xQ" = (
 /obj/structure/closet/emcloset,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
 /area/shuttle/ert/centcom)
-"xR" = (
-/obj/machinery/door/poddoor/preopen,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "xT" = (
 /obj/machinery/door/airlock/centcom{
 	name = "General Access";
@@ -4529,13 +4081,6 @@
 	name = "plating"
 	},
 /area/tdome/tdome2)
-"yf" = (
-/obj/structure/shuttle/window{
-	icon_state = "17"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "yh" = (
 /turf/unsimulated/floor{
 	dir = 8;
@@ -4599,13 +4144,6 @@
 	icon_state = "fakewindows2"
 	},
 /area/centcom/ert)
-"yC" = (
-/obj/structure/shuttle/window{
-	icon_state = "16"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "yE" = (
 /mob/living/silicon/decoy{
 	name = "A.L.I.C.E."
@@ -4723,15 +4261,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/centcom/holding)
-"zl" = (
-/obj/machinery/conveyor/centcom_auto{
-	dir = 9;
-	tag = "icon-conveyor0 (NORTHWEST)"
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "zm" = (
 /obj/structure/table/glass,
 /obj/item/weapon/reagent_containers/blood/OMinus,
@@ -5007,14 +4536,6 @@
 	icon_state = "white"
 	},
 /area/centcom/test)
-"Bb" = (
-/obj/structure/table/woodentable/poker,
-/obj/item/toy/cards,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "neutral"
-	},
-/area/centcom/suppy)
 "Bc" = (
 /obj/structure/rack,
 /obj/item/clothing/head/that{
@@ -5068,13 +4589,6 @@
 	icon_state = "floor4"
 	},
 /area/shuttle/administration/centcom)
-"Bi" = (
-/turf/unsimulated/floor{
-	dir = 6;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (SOUTHEAST)"
-	},
-/area/centcom/suppy)
 "Bj" = (
 /obj/item/weapon/stool{
 	pixel_y = 8
@@ -5124,14 +4638,6 @@
 "BC" = (
 /turf/unsimulated/floor/mars/air,
 /area/centcom/holding)
-"BJ" = (
-/obj/structure/closet/crate/secure/loot/vg_painting,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (EAST)"
-	},
-/area/centcom/suppy)
 "BM" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -5223,13 +4729,6 @@
 	},
 /turf/simulated/floor,
 /area/tdome)
-"Cr" = (
-/obj/machinery/door/unpowered/shuttle,
-/obj/docking_port/shuttle{
-	dir = 2
-	},
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "Ct" = (
 /obj/structure/table/reinforced,
 /obj/machinery/recharger{
@@ -5239,16 +4738,6 @@
 	icon_state = "floor3"
 	},
 /area/shuttle/ert/centcom)
-"Cw" = (
-/obj/machinery/turret/centcomm{
-	dir = 8
-	},
-/turf/unsimulated/floor{
-	dir = 5;
-	icon_state = "darkred";
-	tag = "icon-darkred (NORTHEAST)"
-	},
-/area/centcom/suppy)
 "Cz" = (
 /obj/structure/signpost,
 /turf/unsimulated/floor/grass,
@@ -5541,17 +5030,6 @@
 /obj/docking_port/shuttle,
 /turf/simulated/floor/plating,
 /area/shuttle/administration/centcom)
-"DQ" = (
-/obj/structure/table,
-/obj/structure/flora/pottedplant{
-	icon_state = "plant-15";
-	pixel_y = 12
-	},
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "darkred"
-	},
-/area/centcom/suppy)
 "DS" = (
 /obj/machinery/sleeper,
 /turf/simulated/floor/shuttle{
@@ -5770,12 +5248,6 @@
 	icon_state = "carpetside"
 	},
 /area/centcom/control)
-"EM" = (
-/obj/machinery/vending,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "EN" = (
 /turf/unsimulated/wall,
 /area/centcom/ert)
@@ -5794,12 +5266,6 @@
 	icon_state = "floor3"
 	},
 /area/shuttle/administration/centcom)
-"EQ" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
-	},
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "EW" = (
 /obj/machinery/teleport/station,
 /turf/unsimulated/floor{
@@ -5997,12 +5463,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/control)
-"FM" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 8;
-	icon_state = "fakewindows2"
-	},
-/area/centcom/suppy)
 "FO" = (
 /obj/structure/flora/ausbushes/lavendergrass,
 /turf/unsimulated/floor/grass,
@@ -6056,29 +5516,12 @@
 	icon_state = "redyellowfull"
 	},
 /area/tdome/tdomeadmin)
-"Gb" = (
-/obj/structure/shuttle/engine/heater{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "Gd" = (
 /obj/structure/AIcore,
 /turf/unsimulated/floor{
 	icon_state = "white"
 	},
 /area/centcom/test)
-"Ge" = (
-/obj/structure/table/glass,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "dark neutral stripe";
-	tag = "icon-dark neutral stripe (EAST)"
-	},
-/area/centcom/suppy)
 "Gj" = (
 /obj/structure/closet/secure_closet/bar{
 	req_access_txt = "25"
@@ -6171,16 +5614,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/control)
-"GP" = (
-/obj/structure/sign/poster,
-/turf/unsimulated/wall,
-/area/centcom/suppy)
-"GQ" = (
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "dark loading"
-	},
-/area/centcom/suppy)
 "GR" = (
 /turf/unsimulated/floor{
 	dir = 8;
@@ -6293,15 +5726,6 @@
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating/airless,
 /area/shuttle/ert/centcom)
-"Hp" = (
-/obj/machinery/conveyor/centcom_auto{
-	dir = 4;
-	tag = "icon-conveyor0 (EAST)"
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "Ht" = (
 /turf/unsimulated/wall/blastdoor,
 /area/centcom)
@@ -6320,19 +5744,6 @@
 	icon_state = "redbluefull"
 	},
 /area/tdome/tdomeobserve)
-"Hy" = (
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "dark"
-	},
-/area/centcom/suppy)
-"Hz" = (
-/turf/unsimulated/floor{
-	dir = 8;
-	icon_state = "dark neutral stripe";
-	tag = "icon-dark neutral stripe (WEST)"
-	},
-/area/centcom/suppy)
 "HA" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -6350,14 +5761,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/control)
-"HF" = (
-/obj/machinery/computer/arcade,
-/turf/unsimulated/floor{
-	dir = 8;
-	icon_state = "dark neutral stripe";
-	tag = "icon-dark neutral stripe (WEST)"
-	},
-/area/centcom/suppy)
 "HG" = (
 /obj/machinery/computer/card,
 /turf/unsimulated/floor{
@@ -6390,14 +5793,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/specops)
-"HP" = (
-/obj/machinery/door/poddoor/preopen,
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (NORTH)"
-	},
-/area/centcom/suppy)
 "HR" = (
 /obj/machinery/computer/ordercomp,
 /turf/unsimulated/floor{
@@ -6420,12 +5815,6 @@
 "HZ" = (
 /turf/unsimulated/floor/scorched,
 /area/prison/solitary)
-"Ic" = (
-/obj/machinery/computer/fluff/shuttle_control,
-/turf/unsimulated/floor{
-	icon_state = "dark neutral stripe"
-	},
-/area/centcom/suppy)
 "Ie" = (
 /obj/structure/closet/secure_closet/freezer/meat,
 /turf/unsimulated/floor{
@@ -6567,13 +5956,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/specops)
-"IL" = (
-/obj/structure/shuttle/window{
-	icon_state = "8"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "IN" = (
 /turf/unsimulated/floor{
 	dir = 8;
@@ -6581,14 +5963,6 @@
 	tag = "icon-dark neutral stripe (EAST)"
 	},
 /area/centcom/ert)
-"IP" = (
-/obj/machinery/power/emitter/energycannon,
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/turf/simulated/floor/plating,
-/area/centcom/suppy)
 "IR" = (
 /obj/structure/flora/pottedplant/random{
 	icon_state = "plant-13";
@@ -6625,12 +5999,6 @@
 	name = "plating"
 	},
 /area/centcom/test)
-"IZ" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 4
-	},
-/turf/space,
-/area/shuttle/supply)
 "Jd" = (
 /obj/machinery/door/airlock/multi_tile/glass{
 	dir = 2
@@ -6717,12 +6085,6 @@
 	},
 /turf/space,
 /area/shuttle/administration/centcom)
-"Jt" = (
-/mob/living/simple_animal/hostile/mimic/crate/chest,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "Jv" = (
 /obj/structure/table/glass,
 /obj/item/stack/medical/advanced/bruise_pack,
@@ -6732,13 +6094,6 @@
 	icon_state = "white"
 	},
 /area/centcom/test)
-"JB" = (
-/obj/machinery/door/poddoor/preopen,
-/turf/unsimulated/floor{
-	icon_state = "warnplate";
-	tag = "icon-warnplate"
-	},
-/area/centcom/suppy)
 "JC" = (
 /obj/structure/wc/sink/kitchen{
 	pixel_y = 28
@@ -6773,12 +6128,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/ert)
-"JR" = (
-/turf/unsimulated/floor{
-	dir = 8;
-	icon_state = "warnplate"
-	},
-/area/centcom/suppy)
 "JT" = (
 /obj/machinery/sleeper/mancrowave,
 /turf/unsimulated/floor{
@@ -6791,13 +6140,6 @@
 	icon_state = "white"
 	},
 /area/centcom/test)
-"JX" = (
-/turf/unsimulated/floor{
-	dir = 5;
-	icon_state = "darkred";
-	tag = "icon-darkred (NORTHEAST)"
-	},
-/area/centcom/suppy)
 "JY" = (
 /obj/machinery/camera/arena{
 	c_tag = "Arena";
@@ -6857,10 +6199,6 @@
 	icon_state = "dark"
 	},
 /area/tdome)
-"Kt" = (
-/obj/structure/filingcabinet,
-/turf/simulated/floor/plating,
-/area/centcom/suppy)
 "Kv" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -6911,17 +6249,6 @@
 /obj/structure/window/full/reinforced,
 /turf/unsimulated/floor,
 /area/centcom/control)
-"KG" = (
-/obj/machinery/door/airlock/command{
-	name = "E.V.A.";
-	req_access_txt = "18"
-	},
-/turf/unsimulated/floor{
-	dir = 10;
-	icon_state = "darkred";
-	tag = "icon-darkred (SOUTHWEST)"
-	},
-/area/centcom/suppy)
 "KH" = (
 /turf/unsimulated/floor{
 	dir = 1;
@@ -6970,12 +6297,6 @@
 	icon_state = "floor3"
 	},
 /area/shuttle/ert/centcom)
-"KR" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
-	},
-/turf/space,
-/area/shuttle/supply)
 "KT" = (
 /obj/machinery/r_n_d/server/centcom,
 /turf/unsimulated/floor{
@@ -7010,13 +6331,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/control)
-"KZ" = (
-/turf/unsimulated/floor{
-	dir = 10;
-	icon_state = "darkred";
-	tag = "icon-darkred (SOUTHWEST)"
-	},
-/area/centcom/suppy)
 "Lb" = (
 /obj/structure/rack,
 /obj/item/weapon/gun/energy/ionrifle{
@@ -7095,11 +6409,6 @@
 	name = "plating"
 	},
 /area/centcom/evac)
-"Lq" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 8
-	},
-/area/centcom/suppy)
 "Lt" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet,
@@ -7163,10 +6472,6 @@
 	icon_state = "dark red stripe"
 	},
 /area/centcom/ert)
-"LH" = (
-/obj/machinery/status_display,
-/turf/unsimulated/wall,
-/area/centcom/suppy)
 "LJ" = (
 /turf/unsimulated/floor{
 	icon_state = "red"
@@ -7264,10 +6569,6 @@
 	icon_state = "dark purple stripe"
 	},
 /area/centcom/ert)
-"Md" = (
-/obj/structure/filingcabinet/chestdrawer,
-/turf/simulated/floor/plating,
-/area/centcom/suppy)
 "Me" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -7291,16 +6592,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/tdome/tdomeadmin)
-"Mp" = (
-/turf/unsimulated/wall,
-/area/centcom/suppy)
-"Ms" = (
-/turf/unsimulated/floor{
-	dir = 6;
-	icon_state = "dark neutral stripe";
-	tag = "icon-dark neutral stripe (SOUTHEAST)"
-	},
-/area/centcom/suppy)
 "Mu" = (
 /obj/machinery/light/small{
 	dir = 1
@@ -7418,24 +6709,12 @@
 	icon_state = "carpetside"
 	},
 /area/centcom/control)
-"Ni" = (
-/obj/structure/closet/crate{
-	icon_state = "crateopen";
-	opened = 1
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "Nk" = (
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "redbluefull"
 	},
 /area/tdome/tdomeobserve)
-"Nm" = (
-/turf/simulated/floor/plating,
-/area/centcom/suppy)
 "Nt" = (
 /obj/structure/table/reinforced{
 	dir = 4;
@@ -7499,13 +6778,6 @@
 	},
 /turf/space,
 /area/centcom/specops)
-"NH" = (
-/obj/structure/shuttle/window{
-	icon_state = "14"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "NI" = (
 /obj/structure/bed/chair/shuttle/gamer{
 	dir = 8
@@ -7584,21 +6856,6 @@
 	icon_state = "white"
 	},
 /area/centcom/test)
-"Oa" = (
-/obj/machinery/conveyor/centcom_auto{
-	dir = 5;
-	tag = "icon-conveyor0 (NORTHEAST)"
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
-"Ob" = (
-/obj/item/weapon/bikehorn,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "Oc" = (
 /obj/docking_port/destination/striketeam/base{
 	dir = 8
@@ -7660,13 +6917,6 @@
 	icon_state = "cafeteria"
 	},
 /area/centcom/living)
-"Or" = (
-/turf/unsimulated/floor{
-	dir = 9;
-	icon_state = "dark neutral stripe";
-	tag = "icon-dark neutral stripe (NORTHWEST)"
-	},
-/area/centcom/suppy)
 "Os" = (
 /obj/effect/landmark{
 	name = "ERT"
@@ -7820,12 +7070,6 @@
 	name = "plating"
 	},
 /area/centcom/control)
-"Pe" = (
-/turf/unsimulated/floor{
-	dir = 9;
-	icon_state = "darkred"
-	},
-/area/centcom/suppy)
 "Pg" = (
 /obj/machinery/computer/teleporter,
 /turf/unsimulated/floor{
@@ -7849,13 +7093,6 @@
 	icon_state = "dark loading"
 	},
 /area/centcom/ert)
-"Pr" = (
-/obj/structure/table,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "neutral"
-	},
-/area/centcom/suppy)
 "Pu" = (
 /obj/machinery/kinetic_accelerator{
 	dir = 8;
@@ -7901,15 +7138,6 @@
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/transport1/centcom)
-"PF" = (
-/obj/structure/closet/crate,
-/obj/abstract/map/spawner/space/vox/trader/spacesuit,
-/obj/abstract/map/spawner/space/vox/trader/spacesuit,
-/obj/abstract/map/spawner/space/russian,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "PM" = (
 /obj/structure/wc/sink{
 	dir = 4;
@@ -7919,14 +7147,6 @@
 	icon_state = "white"
 	},
 /area/centcom/test)
-"PO" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor/plating,
-/area/centcom/suppy)
 "PP" = (
 /obj/machinery/atm{
 	pixel_y = 24
@@ -7950,13 +7170,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"PV" = (
-/turf/unsimulated/floor{
-	dir = 5;
-	icon_state = "dark neutral stripe";
-	tag = "icon-dark neutral stripe (NORTHEAST)"
-	},
-/area/centcom/suppy)
 "PY" = (
 /turf/unsimulated/floor{
 	dir = 8;
@@ -8086,11 +7299,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/control)
-"QC" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 1
-	},
-/area/centcom/suppy)
 "QD" = (
 /obj/machinery/door_control{
 	desc = "A remote control switch for port-side blast doors.";
@@ -8190,9 +7398,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/ert)
-"Rn" = (
-/turf/unsimulated/wall/fakeglass,
-/area/centcom/suppy)
 "Ro" = (
 /obj/structure/mirror{
 	pixel_y = 28
@@ -8321,24 +7526,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/control)
-"Sb" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/plating,
-/area/centcom/suppy)
 "Sc" = (
 /turf/unsimulated/floor{
 	name = "plating"
@@ -8349,13 +7536,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/living)
-"Si" = (
-/obj/structure/closet/crate/secure/loot/bay_04,
-/turf/unsimulated/floor{
-	icon_state = "warnplate";
-	tag = "icon-warnplate"
-	},
-/area/centcom/suppy)
 "Sk" = (
 /turf/unsimulated/wall,
 /area/centcom/living)
@@ -8382,21 +7562,6 @@
 	icon_state = "neutral"
 	},
 /area/tdome)
-"Ss" = (
-/obj/machinery/door_control{
-	id_tag = "QMLoaddoor";
-	name = "Loading Doors";
-	pixel_x = -8;
-	pixel_y = -24
-	},
-/obj/machinery/door_control{
-	id_tag = "QMLoaddoor2";
-	name = "Loading Doors";
-	pixel_x = 8;
-	pixel_y = -24
-	},
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "Su" = (
 /obj/structure/flora/ausbushes/ywflowers,
 /turf/unsimulated/floor/grass,
@@ -8449,31 +7614,6 @@
 	name = "plating"
 	},
 /area/centcom/control)
-"SH" = (
-/obj/structure/table,
-/obj/item/weapon/reagent_containers/food/drinks/mug,
-/obj/item/weapon/reagent_containers/food/drinks/mug,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
-"SI" = (
-/obj/machinery/conveyor{
-	id_tag = "QMLoad2"
-	},
-/obj/machinery/door/poddoor{
-	id_tag = "QMLoaddoor2";
-	name = "Supply Shuttle Loading Door"
-	},
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
-"SJ" = (
-/obj/structure/table/woodentable/poker,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "neutral"
-	},
-/area/centcom/suppy)
 "SK" = (
 /obj/machinery/shower{
 	dir = 4
@@ -8591,13 +7731,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/centcom/holding)
-"To" = (
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (NORTH)"
-	},
-/area/centcom/suppy)
 "Ts" = (
 /turf/unsimulated/wall,
 /area/centcom)
@@ -8639,17 +7772,6 @@
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/transport1/centcom)
-"Tz" = (
-/obj/structure/closet/crate,
-/obj/abstract/map/spawner/space/drinks,
-/obj/abstract/map/spawner/space/drinks,
-/obj/abstract/map/spawner/space/drinks,
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (NORTH)"
-	},
-/area/centcom/suppy)
 "TB" = (
 /obj/machinery/door/airlock/glass{
 	name = "Arrivals Access"
@@ -8666,12 +7788,6 @@
 	icon_state = "dark vault full"
 	},
 /area/tdome)
-"TE" = (
-/obj/structure/falsewall/closed,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "TH" = (
 /obj/structure/bed/chair/shuttle/red{
 	dir = 1
@@ -8725,21 +7841,6 @@
 	icon_state = "carpet"
 	},
 /area/centcom/control)
-"TX" = (
-/obj/machinery/door/airlock/command{
-	name = "E.V.A.";
-	req_access_txt = "18"
-	},
-/turf/unsimulated/floor{
-	dir = 8;
-	icon_state = "darkred"
-	},
-/area/centcom/suppy)
-"TZ" = (
-/turf/unsimulated/floor{
-	icon_state = "dark neutral stripe"
-	},
-/area/centcom/suppy)
 "Ue" = (
 /obj/structure/window/reinforced,
 /obj/structure/shuttle/engine/propulsion{
@@ -8885,20 +7986,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/ert)
-"UO" = (
-/turf/unsimulated/floor{
-	icon_state = "warnplate";
-	tag = "icon-warnplate"
-	},
-/area/centcom/suppy)
-"UQ" = (
-/obj/structure/closet/crate/secure/loot/bay_07,
-/turf/unsimulated/floor{
-	dir = 5;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (NORTHEAST)"
-	},
-/area/centcom/suppy)
 "UT" = (
 /obj/structure/table/woodentable,
 /turf/unsimulated/floor{
@@ -8923,13 +8010,6 @@
 	name = "grass"
 	},
 /area/centcom/living)
-"UZ" = (
-/obj/machinery/teleport/hub,
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "darkred"
-	},
-/area/centcom/suppy)
 "Vb" = (
 /obj/machinery/vending/cola,
 /turf/unsimulated/floor{
@@ -9030,10 +8110,6 @@
 	icon_state = "floor"
 	},
 /area/centcom/ferry)
-"Vw" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/space,
-/area/shuttle/supply)
 "Vy" = (
 /obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor/broken{
@@ -9191,13 +8267,6 @@
 	icon_state = "dark"
 	},
 /area/centcom/ert)
-"WE" = (
-/obj/item/weapon/stool/bar,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "neutral"
-	},
-/area/centcom/suppy)
 "WF" = (
 /obj/machinery/door/airlock/centcom{
 	name = "Research Facility";
@@ -9219,25 +8288,11 @@
 /obj/structure/window/full/reinforced,
 /turf/unsimulated/wall/fakeglass,
 /area/centcom/ert)
-"WK" = (
-/obj/structure/shuttle/window{
-	icon_state = "15"
-	},
-/obj/structure/grille,
-/turf/simulated/floor/shuttle/plating,
-/area/shuttle/supply)
 "WO" = (
 /turf/unsimulated/floor/scorched{
 	icon_state = "plating"
 	},
 /area/prison/solitary)
-"WU" = (
-/obj/structure/bookcase/manuals/xenoarchaeology,
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "neutral"
-	},
-/area/centcom/suppy)
 "WW" = (
 /obj/machinery/computer/shuttle_control/deathsquad,
 /turf/simulated/floor/shuttle{
@@ -9265,13 +8320,6 @@
 "Xi" = (
 /turf/simulated/floor/bluegrid,
 /area/tdome)
-"Xj" = (
-/obj/machinery/computer/teleporter,
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "darkred"
-	},
-/area/centcom/suppy)
 "Xq" = (
 /obj/machinery/computer/secure_data/detective_computer,
 /obj/structure/window/reinforced/tinted{
@@ -9282,16 +8330,6 @@
 	icon_state = "wood"
 	},
 /area/centcom/test)
-"Xs" = (
-/obj/machinery/conveyor/centcom_auto{
-	dir = 4;
-	tag = "icon-conveyor0 (EAST)"
-	},
-/obj/structure/plasticflaps/mining,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "Xv" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet,
@@ -9332,12 +8370,6 @@
 	icon_state = "darkbluecorners"
 	},
 /area/centcom/ert)
-"XD" = (
-/obj/structure/closet/crate/secure/loot/bay_06,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "XE" = (
 /obj/machinery/light,
 /turf/simulated/floor/shuttle{
@@ -9366,13 +8398,6 @@
 	icon_state = "green"
 	},
 /area/centcom/control)
-"XJ" = (
-/turf/unsimulated/floor{
-	dir = 4;
-	icon_state = "dark-markings";
-	tag = "icon-dark-markings (EAST)"
-	},
-/area/centcom/suppy)
 "XK" = (
 /obj/machinery/door/unpowered/shuttle,
 /obj/docking_port/shuttle{
@@ -9380,13 +8405,6 @@
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/transport1/centcom)
-"XL" = (
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "dark-markings";
-	tag = "icon-dark-markings (NORTH)"
-	},
-/area/centcom/suppy)
 "XP" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -9598,12 +8616,6 @@
 	icon_state = "redbluefull"
 	},
 /area/tdome/tdomeobserve)
-"YL" = (
-/obj/docking_port/destination/supply/centcom,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "YO" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
@@ -9625,10 +8637,6 @@
 /obj/machinery/door/window,
 /turf/simulated/floor/engine,
 /area/centcom/test)
-"YQ" = (
-/obj/machinery/light,
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
 "YR" = (
 /obj/machinery/recharge_station,
 /turf/simulated/floor/shuttle{
@@ -9724,12 +8732,6 @@
 	name = "plating"
 	},
 /area/centcom/control)
-"Zr" = (
-/turf/unsimulated/floor{
-	icon_state = "dark-markings";
-	tag = "icon-dark-markings"
-	},
-/area/centcom/suppy)
 "Zx" = (
 /obj/machinery/chem_dispenser/scp_294,
 /turf/unsimulated/floor{
@@ -9748,12 +8750,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/tdome/tdomeadmin)
-"Zz" = (
-/obj/structure/vendomatpack/building,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "ZF" = (
 /obj/machinery/atmospherics/unary/portables_connector{
 	dir = 1
@@ -9769,13 +8765,6 @@
 	icon_state = "redyellowfull"
 	},
 /area/tdome/tdomeadmin)
-"ZG" = (
-/obj/structure/closet/crate,
-/obj/abstract/map/spawner/space/weapons2,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/centcom/suppy)
 "ZI" = (
 /obj/machinery/recharge_station,
 /turf/unsimulated/floor{
@@ -20051,21 +19040,21 @@ JI
 JI
 JI
 JI
-Mp
-no
-no
-no
-no
-no
-no
-no
-no
-no
-Mp
-Mp
-GP
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -20153,21 +19142,21 @@ JI
 JI
 JI
 JI
-Mp
-Ob
-KR
-qG
-yC
-IL
-WK
-qG
-Vw
-lR
-lR
-lR
-lR
-lR
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -20255,21 +19244,21 @@ JI
 JI
 JI
 JI
-GP
-lR
-qG
-vl
-vl
-vl
-vl
-vl
-qG
-lR
-lR
-lR
-lR
-lR
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -20357,21 +19346,21 @@ JI
 JI
 JI
 JI
-Mp
-lR
-qG
-vl
-vl
-vl
-vl
-YQ
-qG
-lR
-lR
-lR
-lR
-lR
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -20459,30 +19448,30 @@ JI
 JI
 JI
 JI
-Mp
-lR
-qG
-ey
-vl
-vl
-vl
-vl
-eL
-ib
-Oa
-lR
-lR
-lR
-Mp
-Mp
-Mp
-Mp
-QC
-ws
-ws
-Rn
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -20561,31 +19550,31 @@ JI
 JI
 JI
 JI
-Mp
-lR
-NH
-vl
-vl
-vl
-vl
-vl
-Cr
-YL
-Hp
-lR
-lR
-lR
-lR
-Mp
-Mp
-Ge
-dy
-cO
-cO
-cO
-eC
-GP
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -20663,32 +19652,32 @@ JI
 JI
 JI
 JI
-Mp
-lR
-oc
-vl
-vl
-vl
-vl
-Ss
-qG
-lR
-Hp
-lR
-lR
-lR
-lR
-GP
-eG
-Ms
-fW
-fW
-fW
-fW
-PV
-fx
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 OC
@@ -20765,32 +19754,32 @@ JI
 JI
 JI
 JI
-Mp
-lR
-yf
-vl
-vl
-vl
-vl
-vl
-xP
-lR
-Hp
-lR
-lR
-lR
-lR
-Lq
-es
-fW
-fW
-Pr
-Pr
-Pr
-fW
-PV
-cO
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -20867,32 +19856,32 @@ JI
 JI
 JI
 JI
-Mp
-lR
-qG
-ey
-vl
-vl
-vl
-vl
-SI
-Oa
-Hp
-lR
-lR
-lR
-lR
-FM
-pn
-fW
-Pr
-WU
-up
-up
-ur
-SJ
-fx
-Lq
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -20969,32 +19958,32 @@ JI
 JI
 JI
 JI
-Mp
-lR
-qG
-vl
-vl
-vl
-vl
-YQ
-qG
-Hp
-Hp
-lR
-lR
-lR
-lR
-FM
-aw
-fW
-Pr
-kC
-fW
-fW
-ur
-Bb
-dr
-FM
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -21071,32 +20060,32 @@ JI
 JI
 JI
 JI
-Mp
-lR
-qG
-mN
-vl
-vl
-vl
-EQ
-qG
-Hp
-Hp
-lR
-lR
-lR
-lR
-FM
-TZ
-fW
-Pr
-kC
-fW
-fW
-ur
-SJ
-fx
-iY
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -21173,32 +20162,32 @@ JI
 JI
 JI
 JI
-Mp
-lR
-kg
-qG
-Gb
-Gb
-Gb
-qG
-IZ
-Hp
-Hp
-lR
-lR
-lR
-lR
-FM
-Ic
-fW
-fW
-fW
-WE
-WE
-fW
-Or
-Hz
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -21275,32 +20264,32 @@ JI
 JI
 JI
 JI
-Mp
-lR
-lR
-jJ
-jJ
-jJ
-jJ
-jJ
-lR
-Hp
-Hp
-lR
-lR
-lR
-lR
-FM
-TZ
-fW
-Or
-Hz
-HF
-HF
-Hz
-Hz
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -21377,31 +20366,31 @@ JI
 JI
 JI
 JI
-Mp
-lR
-lR
-lR
-lR
-kY
-ib
-ib
-ib
-zl
-Hp
-lR
-lR
-lR
-lR
-iY
-TZ
-fW
-fx
-GP
-Mp
-Mp
-Mp
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -21479,30 +20468,30 @@ JI
 JI
 JI
 JI
-Mp
-lR
-lR
-UO
-To
-tn
-UO
-To
-lR
-kY
-zl
-lR
-lR
-lR
-lR
-Mp
-bU
-oH
-bU
-Mp
-EM
-Zz
-rx
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -21581,30 +20570,30 @@ JI
 JI
 JI
 JI
-Mp
-Mp
-Mp
-Mp
-HP
-mJ
-JB
-Mp
-xR
-Xs
-xR
-Mp
-xR
-xR
-xR
-LH
-lR
-lR
-lR
-Mp
-lR
-lR
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -21683,29 +20672,29 @@ JI
 JI
 JI
 JI
-Mp
-lR
-oD
-Bi
-To
-tn
-UO
-Mp
-lR
-Hp
-lR
-fe
-lR
-lR
-lR
-Ni
-lR
-lR
-lR
-he
-lR
-GP
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -21785,28 +20774,28 @@ JI
 JI
 JI
 JI
-Mp
-UO
-hR
-JR
-lR
-tn
-UO
-Mp
-lR
-Hp
-lR
-lR
-lR
-lR
-lR
-lR
-lR
-lR
-lR
-Mp
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -21887,26 +20876,26 @@ JI
 JI
 JI
 JI
-Mp
-UO
-To
-XD
-lR
-tn
-UO
-GP
-lR
-Hp
-ib
-lR
-lR
-lR
-lR
-lR
-lR
-lR
-lR
-GP
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -21989,26 +20978,26 @@ JI
 JI
 JI
 JI
-Mp
-UO
-Tz
-lR
-lR
-tc
-UO
-Mp
-lR
-Hp
-lR
-lR
-lR
-lR
-lR
-lR
-lR
-lR
-Ni
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -22091,26 +21080,26 @@ JI
 JI
 JI
 JI
-Mp
-UO
-To
-PF
-lR
-lR
-Si
-Mp
-lR
-Hp
-ib
-lR
-lR
-lR
-Ni
-lR
-pV
-SH
-Ni
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -22193,26 +21182,26 @@ JI
 JI
 JI
 JI
-Mp
-UO
-UQ
-oD
-BJ
-ou
-Bi
-Mp
-lR
-Hp
-lR
-lR
-lR
-lR
-Mp
-GP
-Mp
-Mp
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -22295,26 +21284,26 @@ JI
 JI
 JI
 JI
-Mp
-lR
-JR
-JR
-JR
-JR
-JR
-Mp
-Ni
-Hp
-ib
-Oa
-lR
-lR
-xb
-lR
-lR
-lR
-lR
-no
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -22397,26 +21386,26 @@ JI
 JI
 JI
 JI
-GP
-lR
-nM
-lR
-Jt
-lR
-lR
-no
-lR
-lR
-lR
-uI
-ib
-ib
-pj
-ib
-ib
-ib
-ib
-no
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -22499,26 +21488,26 @@ JI
 JI
 JI
 JI
-Mp
-lR
-lR
-lR
-lR
-ZG
-lR
-no
-lR
-lR
-lR
-lR
-Ni
-lR
-xb
-lR
-lR
-lR
-lR
-no
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -22601,26 +21590,26 @@ JI
 JI
 JI
 JI
-Mp
-Mp
-Mp
-Mp
-Mp
-Mp
-Mp
-Mp
-Mp
-lM
-TX
-KG
-Mp
-Mp
-Mp
-Mp
-TE
-Mp
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -22704,25 +21693,25 @@ JI
 JI
 JI
 JI
-Mp
-Pe
-lc
-lc
-lc
-lc
-KZ
-Mp
-iC
-GQ
-pE
-Mp
-Nm
-Nm
-Nm
-Nm
-Nm
-Nm
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -22806,25 +21795,25 @@ JI
 JI
 JI
 JI
-Mp
-iC
-XJ
-pE
-Mp
-JX
-bL
-Mp
-iC
-Hy
-pE
-Mp
-mC
-mC
-mC
-Nm
-Nm
-Nm
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -22908,25 +21897,25 @@ JI
 JI
 JI
 JI
-Mp
-iC
-XL
-pE
-Mp
-iK
-Mp
-Mp
-iC
-Hy
-pE
-GP
-PO
-Sb
-ct
-Nm
-Nm
-Nm
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -23010,24 +21999,24 @@ JI
 JI
 JI
 JI
-Mp
-Xj
-Zr
-pE
-Mp
-Pe
-KZ
-Mp
-iC
-Hy
-pE
-Mp
-Nm
-IP
-Nm
-Nm
-gy
-xs
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -23112,24 +22101,24 @@ JI
 JI
 JI
 JI
-Mp
-gH
-XL
-pE
-Mp
-iC
-pE
-iK
-iC
-mb
-pE
-GP
-Nm
-Nm
-Nm
-Nm
-Nm
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -23214,23 +22203,23 @@ JI
 JI
 JI
 JI
-Mp
-UZ
-Zr
-pE
-Mp
-JX
-bL
-Mp
-Cw
-DQ
-al
-Mp
-Kt
-Md
-Nm
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -23316,21 +22305,21 @@ JI
 JI
 JI
 JI
-Mp
-JX
-bW
-mq
-Mp
-Mp
-Mp
-Mp
-Mp
-GP
-Mp
-Mp
-Mp
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
@@ -23418,11 +22407,11 @@ JI
 JI
 JI
 JI
-Mp
-Mp
-Mp
-Mp
-Mp
+JI
+JI
+JI
+JI
+JI
 JI
 JI
 JI
