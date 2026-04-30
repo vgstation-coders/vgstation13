@@ -77,23 +77,13 @@
 // /obj/docking_port/destination/dock_request that points back to this request.
 // Single-fire: subsequent arrivals (e.g. target arriving second in rendezvous
 // mode) are no-ops.
+//
+// Both shuttles' on_dock_request_completed() hooks fire so per-shuttle
+// behaviour (announcements, achievements, logging) can opt in. The base hook
+// is a no-op — see /datum/shuttle/proc/on_dock_request_completed.
 /datum/shuttle_dock_request/proc/fire_arrival_announcement(datum/shuttle/arrived)
 	if(announced)
 		return
 	announced = TRUE
-	var/datum/shuttle/odyssey_party = null
-	if(istype(initiator, /datum/shuttle/odyssey))
-		odyssey_party = initiator
-	else if(istype(target, /datum/shuttle/odyssey))
-		odyssey_party = target
-	if(!odyssey_party)
-		return
-	var/datum/shuttle/other = (initiator == odyssey_party) ? target : initiator
-	if(mode == SDR_MODE_RENDEZVOUS)
-		captain_announce("[odyssey_party.name] has rendezvoused with [other.name].")
-		return
-	var/obj/docking_port/shuttle/dynamic/odyssey_port = (initiator == odyssey_party) ? pa : pb
-	var/where = odyssey_port?.areaname
-	if(!where || where == "rendezvous")  // mappers haven't set a friendly name yet
-		where = "an unspecified docking port"
-	captain_announce("[other.name] has docked with [odyssey_party.name] at [where].")
+	initiator.on_dock_request_completed(target, mode, pa, pb)
+	target.on_dock_request_completed(initiator, mode, pb, pa)

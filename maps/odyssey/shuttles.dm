@@ -96,6 +96,29 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 			vz.teleJammed = VZ_TELEPORTATION_ALLOWED
 			vz.update_settings()
 
+/datum/shuttle/odyssey/get_bluespace_state()
+	return bluespace_jump_state
+
+/datum/shuttle/odyssey/get_bluespace_timing()
+	if(!emergency_shuttle || !emergency_shuttle.online)
+		return null
+	var/tl = emergency_shuttle.timeleft()
+	if(tl <= 0 || tl >= 1e5)
+		return null
+	return list(
+		"seconds_left" = round(tl),
+		"seconds_total" = round(emergency_shuttle.timelimit),
+	)
+
+/datum/shuttle/odyssey/on_dock_request_completed(datum/shuttle/other, mode, obj/docking_port/shuttle/dynamic/own_port, obj/docking_port/shuttle/dynamic/other_port)
+	if(mode == SDR_MODE_RENDEZVOUS)
+		captain_announce("[name] has rendezvoused with [other.name].")
+		return
+	var/where = own_port?.areaname
+	if(!where || where == "rendezvous")  // mappers haven't named the port yet
+		where = "an unspecified docking port"
+	captain_announce("[other.name] has docked with [name] at [where].")
+
 /datum/shuttle/odyssey/proc/update_outpost_power()
 	var/at_outpost = outpost_dock && current_port == outpost_dock
 	for(var/obj/machinery/power/battery/smes/S in shuttle_contents())
@@ -518,11 +541,6 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 	..()
 
 
-
-///// CARGO FREIGHTER /////
-/area/shuttle/supply/processing
-	name = "Freighter Processing"
-	icon_state = "shuttle"
 
 ///// MEDICAL SHIP /////
 var/global/datum/shuttle/medship/medship_shuttle = new(starting_area = /area/shuttle/medship)

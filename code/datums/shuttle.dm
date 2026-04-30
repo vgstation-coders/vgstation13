@@ -769,6 +769,30 @@
 /datum/shuttle/proc/get_cooldown()
 	return cooldown
 
+// Bluespace jump state. Map-agnostic hook — base returns 0 (no jump). Map-
+// specific shuttle subtypes (e.g. /datum/shuttle/odyssey) may override.
+//   0 = none, 1 = countdown, 2 = committed.
+/datum/shuttle/proc/get_bluespace_state()
+	return 0
+
+// Returns list("seconds_left" = N, "seconds_total" = N) describing the timer
+// for an in-progress bluespace jump, or null if no jump or no timing info.
+// Subtypes that return a non-zero state from get_bluespace_state() should
+// also override this to provide the corresponding timer.
+/datum/shuttle/proc/get_bluespace_timing()
+	return null
+
+// Hook fired when a shuttle-to-shuttle docking request completes and the
+// initiator finishes its travel. Called once on the initiator and once on
+// the target. Default behaviour is silent — override on map-specific
+// shuttles (e.g. the player ship) to add chat/captain announcements.
+//   `other`      : the shuttle on the far side of the request
+//   `mode`       : SDR_MODE_IN_PLACE or SDR_MODE_RENDEZVOUS
+//   `own_port`   : the dynamic port on `src` that participated
+//   `other_port` : the dynamic port on `other` that participated
+/datum/shuttle/proc/on_dock_request_completed(datum/shuttle/other, mode, obj/docking_port/shuttle/dynamic/own_port, obj/docking_port/shuttle/dynamic/other_port)
+	return
+
 //Shuttles like the emergency shuttle (which moves to pre-defined locations) and vox shuttle (which ends the round once moved to a pre-defined location)
 //should have this proc return 1, so they can't be deleted.
 /datum/shuttle/proc/is_special()

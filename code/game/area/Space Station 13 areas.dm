@@ -302,6 +302,10 @@ var/global/list/adminbusteleportlocs = list()
 	name = "supply shuttle"
 	icon_state = "shuttle3"
 
+/area/shuttle/supply/processing
+	name = "Freighter Processing"
+	icon_state = "shuttle"
+
 /area/shuttle/security
 	name = "\improper Security Shuttle"
 	icon_state = "shuttlered"

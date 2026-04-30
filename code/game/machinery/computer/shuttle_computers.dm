@@ -182,26 +182,6 @@
 /obj/machinery/computer/shuttle_control/proc/announce(var/message)
 	return say(message)
 
-/obj/machinery/computer/shuttle_control/proc/get_doc_href(var/obj/docking_port/D, var/bonus_parameters=null)
-	if(!D)
-		return "ERROR"
-	var/name = capitalize(D.areaname)
-	var/span_s = "<a href='?src=\ref[src];select=\ref[D][bonus_parameters]'>"
-	var/span_e = "</a>"
-	if(D == selected_port)
-		span_s += "<font color='blue'>"
-		span_e += "</font>"
-	else
-		span_s += "<font color='green'>"
-		span_e += "</font>"
-
-	if(D.docked_with) //If used by somebody
-		span_s = "<i>"
-		span_e = "</i>"
-
-
-	return "[span_s][name][span_e]"
-
 /obj/machinery/computer/shuttle_control/attackby(obj/item/O, mob/user)
 	if(istype(O, /obj/item/weapon/disk/shuttle_coords))
 		insert_disk(O, user)
@@ -220,120 +200,236 @@
 /obj/machinery/computer/shuttle_control/attack_hand(mob/user as mob)
 	if(..(user))
 		return
-
 	user.set_machine(src)
-	add_fingerprint(usr)
-	var/shuttle_name = "Unknown shuttle"
-	var/dat
+	add_fingerprint(user)
+	tgui_interact(user)
 
-	if(selected_port)
-		if(!selected_port.loc) //If selected port was deleted, forget about it
-			selected_port = null
+/obj/machinery/computer/shuttle_control/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "ShuttleControl")
+		ui.open()
 
-	if(shuttle)
-		shuttle_name = shuttle.name
-		if(shuttle.lockdown)
-			dat += "<h2><font color='red'>THIS SHUTTLE IS LOCKED DOWN</font></h2><br>"
-			if(istext(shuttle.lockdown))
-				dat += shuttle.lockdown
-			else
-				dat += "Additional information has not been provided."
-		else if(!shuttle.linked_area)
-			dat = "<h2><font color='red'>UNABLE TO FIND [uppertext(shuttle.name)]</font></h2>"
-		else if(shuttle.moving)
-			dat += "<center><h3>Currently moving [shuttle.destination_port.areaname ? "to [shuttle.destination_port.areaname]" : ""]</h3></center>"
-		else
-			dat += {"<a href='?src=\ref[src];link_to_port=1'>Scan for docking ports</a><br>"}
-			if(shuttle.current_port)
-				dat += "Location: <b>[shuttle.current_port.areaname]</b><br>"
-			else
-				dat += "Location: <font color='red'><b>unknown</b></font><br>"
-			dat += "Ready to move[max(shuttle.last_moved + shuttle.cooldown - world.time, 0) ? " in [max(round((shuttle.last_moved + shuttle.cooldown - world.time) * 0.1), 0)] seconds" : ": now"]<br>"
-
-				//Write a list of all possible areas
-			var/text
-			if(allow_selecting_all)
-				for(var/obj/docking_port/destination/D in all_docking_ports)
-					if(D.docked_with)
-						continue
-					else
-						text = get_doc_href(D)
-
-					dat += " | [text] | "
-			else
-				for(var/obj/docking_port/destination/D in shuttle.docking_ports)
-					if(D.docked_with)
-						continue
-					// Skip planet surface ports when we have a procedural disk - they'll be shown via the disk instead
-					if(istype(D, /obj/docking_port/destination/planet_surface) && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
-						continue
-					else
-						text = get_doc_href(D)
-
-					dat += " | [text] | "
-
-			if(disk && disk.destination)
-				if(disk.compatible(shuttle))
-					dat += " | <b>[get_doc_href(disk.destination)]</b> | "
-				else //Shuttle not allowed to use disk
-					dat += " | <b>ERROR: Unable to read coordinates from disk (unknown encryption key)</b>"
-			else if(istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
-				var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
-				if(proc_disk.planet_ref && proc_disk.compatible(shuttle))
-					dat += " | <b><a href='?src=\ref[src];select_procedural=1'>[proc_disk.planet_ref.planet_name] Landing</a></b> | "
-				else if(proc_disk.encounter_ref && proc_disk.compatible(shuttle))
-					dat += " | <b><a href='?src=\ref[src];select_procedural=1'>[proc_disk.encounter_ref.encounter_name]</a></b> | "
-				else
-					dat += " | <b>ERROR: Unable to read coordinates</b>"
-
-			dat += " |<BR>"
-			var/destination_text = ""
-			if(selected_port)
-				destination_text = " to [selected_port.areaname]"
-			else if(procgen_target)
-				destination_text = " to [procgen_target] surface"
-			dat += "<center>[shuttle_name]:<br> <b><A href='?src=\ref[src];move=[1]'>Send[destination_text]</A></b></center><BR>"
-
-			// Shuttle-to-shuttle docking request UI.
-			if(shuttle.pending_request)
-				if(shuttle.pending_request.initiator == shuttle)
-					var/secs_left = max(round((shuttle.pending_request.expires_at - world.time) * 0.1), 0)
-					dat += "<center>Awaiting response from [shuttle.pending_request.target.name]… ([secs_left]s remaining)<br>"
-					dat += "<a href='?src=\ref[src];dock_request_cancel=1'><b>Cancel pending request</b></a></center><br>"
-				else
-					dat += "<center>Incoming docking request from [shuttle.pending_request.initiator.name]<br>"
-					dat += "<a href='?src=\ref[src];dock_request_accept=1'><b>Accept</b></a> | "
-					dat += "<a href='?src=\ref[src];dock_request_reject=1'><b>Reject</b></a></center><br>"
-			else
-				dat += "<center><a href='?src=\ref[src];dock_request_open=1'>Request docking with another vessel</a></center><br>"
-
-			dat += "<div align=\"right\"><a href='?src=\ref[src];disk=1'>Disk: [disk ? disk.header : "--------"]</a></div>"
-
-			if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
-				dat += {"<div align=\"left\"><b>COORDINATE INPUTS</b>:<br>
-				<a href='?src=\ref[src];custom_coord=x'>X Offset:</a> [custom_x]</a><br>
-				<a href='?src=\ref[src];custom_coord=y'>Y Offset:</a> [custom_y]</a><br>
-				<a href='?src=\ref[src];custom_coord=z'>Z Destination:</a> [custom_z]</a><br>
-				<a href='?src=\ref[src];custom_coord=a'>Rotate by:</a> [custom_rot]<br><br>
-				<a href='?src=\ref[src];process_custom_coord=1'><b>Calculate Course</b></a></div>"}
-	else //No shuttle
-		dat = "<h1>NO SHUTTLE LINKED</h1><br>"
-		dat += "<a href='?src=\ref[src];link_to_shuttle=1'>Link to a shuttle</a>"
-
+/obj/machinery/computer/shuttle_control/ui_state(mob/user)
 	if(isAdminGhost(user))
-		dat += "<br><hr><br>"
-		dat += "<b><font color='red'>SPECIAL OPTIONS</font></h1></b>"
-		dat += "<i>These are only available to administrators. Abuse may result in fun.</i><br><br>"
-		dat += "<a href='?src=\ref[src];admin_link_to_shuttle=1'>Link to a shuttle</a><br><i>This allows you to link this computer to any existing shuttle, even if it's normally impossible to do so.</i><br>"
-		if(shuttle)
-			dat += {"<a href='?src=\ref[src];admin_unlink_shuttle=1'>Unlink current shuttle</a><br><i>Unlink this computer from [shuttle.name]</i><br>
-			<a href='?src=\ref[src];admin_toggle_lockdown=1'>[shuttle.lockdown ? "Lift lockdown" : "Lock down"]</a><br>
-			<a href='?src=\ref[src];admin_toggle_select_all=1'>[allow_selecting_all ? "Select only from ports linked to [shuttle.name]" : "Select from ALL ports"]</a><br>
-			<a href='?src=\ref[src];admin_toggle_silicon_use=1'>[allow_silicons ? "Forbid silicons from using this computer" : "Allow silicons to use this computer"]</a><br>
-			<a href='?src=\ref[src];admin_reset=1'>Reset shuttle</a><br><i>Revert the shuttle's areas to initial state</i><br>"}
+		return global.admin_state
+	return global.default_state
 
-	user << browse(HTML_SKELETON(dat), "window=shuttle_control;size=575x450")
-	onclose(user, "shuttle_control")
+/obj/machinery/computer/shuttle_control/ui_data(mob/user)
+	// Stale port cleanup so the UI never tries to act on a deleted port.
+	if(selected_port && !selected_port.loc)
+		selected_port = null
+
+	var/list/data = list(
+		"is_admin" = !!isAdminGhost(user),
+		"is_silicon" = !!issilicon(user),
+		"allow_selecting_all" = allow_selecting_all,
+		"allow_silicons" = allow_silicons,
+		"console_name" = name,
+	)
+
+	// No shuttle linked yet: surface only the linker so the user has somewhere to go.
+	if(!shuttle)
+		data["has_shuttle"] = FALSE
+		data["available_shuttles"] = build_link_candidates(get_area(src), admin_only = FALSE)
+		data["admin_available_shuttles"] = isAdminGhost(user) ? build_link_candidates(get_area(src), admin_only = TRUE) : null
+		return data
+
+	data["has_shuttle"] = TRUE
+	data["shuttle_name"] = shuttle.name
+	data["lockdown"] = !!shuttle.lockdown
+	data["lockdown_reason"] = istext(shuttle.lockdown) ? shuttle.lockdown : null
+	data["moving"] = !!shuttle.moving
+	data["has_linked_area"] = !!shuttle.linked_area
+	data["destination_areaname"] = shuttle.destination_port ? capitalize(shuttle.destination_port.areaname) : null
+	data["current_areaname"] = shuttle.current_port ? capitalize(shuttle.current_port.areaname) : null
+	var/cd = max(shuttle.last_moved + shuttle.cooldown - world.time, 0)
+	data["cooldown_seconds_left"] = cd ? max(round(cd * 0.1), 0) : 0
+	data["selected_ref"] = selected_port ? "\ref[selected_port]" : null
+	data["procgen_target"] = procgen_target
+
+	// Phase + progress. Resolved in priority order so the most disruptive
+	// state always wins (e.g. lockdown beats a stale cooldown timer).
+	var/list/phase_data = compute_phase()
+	data["phase"] = phase_data["phase"]
+	data["phase_seconds_left"] = phase_data["seconds_left"]
+	data["phase_seconds_total"] = phase_data["seconds_total"]
+
+	// Destination ports.
+	var/list/ports = list()
+	var/list/source_ports
+	if(allow_selecting_all)
+		source_ports = all_docking_ports
+	else
+		source_ports = shuttle.docking_ports
+	for(var/obj/docking_port/destination/D in source_ports)
+		// Surface ports come via the procedural disk panel; suppress their
+		// dupes from the main list to keep the UI uncluttered.
+		if(istype(D, /obj/docking_port/destination/planet_surface) && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+			continue
+		ports += list(list(
+			"ref" = "\ref[D]",
+			"name" = capitalize(D.areaname),
+			"occupied" = !!D.docked_with,
+			"selected" = (D == selected_port),
+		))
+	data["destinations"] = ports
+
+	// Disk panel.
+	if(disk)
+		var/list/disk_data = list("header" = disk.header)
+		if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
+			disk_data["kind"] = "freemove"
+			disk_data["custom_x"] = custom_x
+			disk_data["custom_y"] = custom_y
+			disk_data["custom_z"] = custom_z
+			disk_data["custom_rot"] = custom_rot
+			if(disk.destination)
+				disk_data["dest_name"] = capitalize(disk.destination.areaname)
+		else if(istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+			var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
+			disk_data["kind"] = "procedural"
+			disk_data["compatible"] = !!proc_disk.compatible(shuttle)
+			if(proc_disk.planet_ref)
+				disk_data["target_label"] = "[proc_disk.planet_ref.planet_name] Landing"
+				disk_data["target_kind"] = "planet"
+			else if(proc_disk.encounter_ref)
+				disk_data["target_label"] = proc_disk.encounter_ref.encounter_name
+				disk_data["target_kind"] = "encounter"
+			disk_data["selected"] = (procgen_target != null)
+		else
+			disk_data["kind"] = "fixed"
+			disk_data["compatible"] = !!disk.compatible(shuttle)
+			if(disk.destination)
+				disk_data["dest_ref"] = "\ref[disk.destination]"
+				disk_data["dest_name"] = capitalize(disk.destination.areaname)
+				disk_data["dest_occupied"] = !!disk.destination.docked_with
+				disk_data["selected"] = (disk.destination == selected_port)
+		data["disk"] = disk_data
+	else
+		data["disk"] = null
+
+	// Dock-request panel.
+	if(shuttle.pending_request)
+		var/datum/shuttle_dock_request/req = shuttle.pending_request
+		var/secs_left = max(round((req.expires_at - world.time) * 0.1), 0)
+		data["dock_request"] = list(
+			"is_initiator" = (req.initiator == shuttle),
+			"other_name" = (req.initiator == shuttle) ? req.target.name : req.initiator.name,
+			"mode" = (req.mode == SDR_MODE_RENDEZVOUS) ? "rendezvous" : "in_place",
+			"secs_left" = secs_left,
+			"timeout_seconds" = round(SDR_REQUEST_TIMEOUT / 10),
+		)
+	else
+		data["dock_request"] = null
+	data["dockable_now"] = !!shuttle.is_in_dockable_vlevel()
+
+	// Picker payloads (cheap to compute; included unconditionally so the
+	// frontend modals can render without an extra round-trip).
+	data["dock_targets"] = build_dock_request_targets()
+	data["available_shuttles"] = build_link_candidates(get_area(src), admin_only = FALSE)
+	data["admin_available_shuttles"] = isAdminGhost(user) ? build_link_candidates(get_area(src), admin_only = TRUE) : null
+	data["internal_ports"] = build_internal_ports()
+
+	return data
+
+// Resolves the shuttle's current phase, returning a list with:
+//   "phase"          : one of "idle", "warmup", "transit", "cooldown",
+//                      "awaiting_dock", "bs_warmup", "bs_jump", "lockdown"
+//   "seconds_left"   : seconds remaining in the current phase, or 0
+//   "seconds_total"  : full duration of the current phase, for progress bars
+//                      (0 if no meaningful denominator exists)
+//
+// WARMUP and TRANSIT share a single denominator (pre_flight_delay +
+// transit_delay) so the bar reads as one continuous trip from departure
+// to arrival.
+/obj/machinery/computer/shuttle_control/proc/compute_phase()
+	var/list/result = list("phase" = "idle", "seconds_left" = 0, "seconds_total" = 0)
+	if(!shuttle)
+		return result
+
+	if(shuttle.lockdown)
+		result["phase"] = "lockdown"
+		return result
+
+	// Bluespace jump. The base /datum/shuttle implementation returns 0 for
+	// every shuttle that doesn't support a jump, so this works on any map.
+	// Map-specific subtypes (e.g. /datum/shuttle/odyssey) override
+	// get_bluespace_state() and get_bluespace_timing() to fill in the timer.
+	var/bs_state = shuttle.get_bluespace_state()
+	if(bs_state)
+		result["phase"] = (bs_state == 2) ? "bs_jump" : "bs_warmup"
+		var/list/timing = shuttle.get_bluespace_timing()
+		if(timing)
+			result["seconds_left"] = timing["seconds_left"]
+			result["seconds_total"] = timing["seconds_total"]
+		return result
+
+	if(shuttle.moving)
+		var/elapsed_ds = max(world.time - shuttle.last_moved, 0)
+		var/total_ds = shuttle.pre_flight_delay + shuttle.transit_delay
+		if(elapsed_ds < shuttle.pre_flight_delay)
+			result["phase"] = "warmup"
+		else
+			result["phase"] = "transit"
+		result["seconds_left"] = max(round((total_ds - elapsed_ds) * 0.1), 0)
+		result["seconds_total"] = max(round(total_ds * 0.1), 0)
+		return result
+
+	if(shuttle.pending_request && shuttle.pending_request.initiator == shuttle)
+		result["phase"] = "awaiting_dock"
+		return result
+
+	var/cd_ds = max(shuttle.last_moved + shuttle.cooldown - world.time, 0)
+	if(cd_ds > 0)
+		result["phase"] = "cooldown"
+		result["seconds_left"] = max(round(cd_ds * 0.1), 0)
+		result["seconds_total"] = max(round(shuttle.cooldown * 0.1), 0)
+
+	return result
+
+// Lists shuttles the dock-request modal is allowed to target. Mirrors the
+// gating in the original Topic dock_request_open handler.
+/obj/machinery/computer/shuttle_control/proc/build_dock_request_targets()
+	var/list/L = list()
+	if(!shuttle || !shuttle.is_in_dockable_vlevel())
+		return L
+	for(var/datum/shuttle/S in shuttles)
+		if(S == shuttle)
+			continue
+		if(!S.is_in_dockable_vlevel())
+			continue
+		if(S.pending_request)
+			continue
+		L += list(list("name" = S.name, "ref" = "\ref[S]"))
+	return L
+
+// Lists shuttle datums offered by the link-to-shuttle picker. admin_only=TRUE
+// drops the LINK_FORBIDDEN exclusion that the player-facing path enforces.
+/obj/machinery/computer/shuttle_control/proc/build_link_candidates(area/this_area, admin_only = FALSE)
+	var/list/L = list()
+	for(var/datum/shuttle/S in shuttles)
+		var/needs_password = FALSE
+		if(S.can_link_to_computer == LINK_FORBIDDEN)
+			if(!admin_only)
+				continue
+		else if(S.can_link_to_computer == LINK_FREE || (this_area && this_area.get_shuttle() == S))
+			needs_password = FALSE
+		else if(S.password)
+			needs_password = TRUE
+		else
+			continue
+		L += list(list("name" = S.name, "ref" = "\ref[S]", "needs_password" = needs_password))
+	return L
+
+// Lists internal shuttle docking ports for the link-to-port modal.
+/obj/machinery/computer/shuttle_control/proc/build_internal_ports()
+	var/list/L = list()
+	if(!shuttle || !shuttle.linked_area)
+		return L
+	for(var/obj/docking_port/shuttle/S in shuttle.shuttle_contents())
+		L += list(list("name" = capitalize(S.areaname), "ref" = "\ref[S]"))
+	return L
 
 /// Only pass `user` if the mob is directly interacting through the UI.
 /obj/machinery/computer/shuttle_control/proc/try_move(mob/user)
@@ -441,236 +537,120 @@
 
 	shuttle.travel_to(dock, src, user)
 
-/obj/machinery/computer/shuttle_control/Topic(href, href_list)
-	if(..())
+/obj/machinery/computer/shuttle_control/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+	. = ..()
+	if(.)
 		return
 	if(issilicon(usr) && !allow_silicons)
 		to_chat(usr, "<span class='notice'>There seems to be a firewall preventing you from accessing this device.</span>")
-		return
+		return TRUE
 
-	usr.set_machine(src)
 	add_fingerprint(usr)
-	if(href_list["move"])
+	var/needs_admin = (copytext(action, 1, 7) == "admin_")
+
+	// Player-facing actions all gate on access, except: disk handling and
+	// course plotting (no access check in the original Topic handler either),
+	// and the admin paths which only check ghost status.
+	var/static/list/skip_allowed = list(
+		"eject_disk",
+		"set_custom_coord",
+		"process_custom_coord",
+	)
+	if(!needs_admin && !(action in skip_allowed))
 		if(!allowed(usr))
 			to_chat(usr, "<span class='red'>Access denied.</span>")
-			return
-		try_move(usr)
-	if(href_list["link_to_port"])
-		if(!shuttle)
-			return
-		if(!shuttle.linked_area)
-			return
-		if(!allowed(usr))
-			to_chat(usr, "<span class='red'>Access denied.</span>")
-			return
+			return TRUE
 
-		var/list/ports = list()
+	if(needs_admin && !isAdminGhost(usr))
+		to_chat(usr, "You must be an admin for this.")
+		return TRUE
 
-		for(var/obj/docking_port/shuttle/S in shuttle.shuttle_contents())
-			var/name = capitalize(S.areaname)
-			ports += name
-			ports[name] = S
+	switch(action)
+		if("move")
+			try_move(usr)
+			return TRUE
 
-		var/choice = input("Select a docking port to link this shuttle to","Shuttle maintenance") in ports
-		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
-			return
-		var/obj/docking_port/shuttle/S = ports[choice]
+		if("select_port")
+			var/obj/docking_port/A = locate(params["ref"]) in all_docking_ports
+			if(!A)
+				return TRUE
+			selected_port = A
+			procgen_target = null
+			return TRUE
 
-		if(S)
-			S.link_to_shuttle(shuttle)
-			to_chat(usr, "Successfully linked [capitalize(shuttle.name)] to the port.")
-			return updateUsrDialog()
-		to_chat(usr, "No docking ports found.")
-
-	if(href_list["select"])
-		if(!allowed(usr))
-			to_chat(usr, "<span class='red'>Access denied.</span>")
-			return
-		var/obj/docking_port/A = locate(href_list["select"]) in all_docking_ports
-		if(!A)
-			return
-
-		selected_port = A
-		procgen_target = null
-		updateUsrDialog()
-	if(href_list["select_procedural"])
-		if(!allowed(usr))
-			to_chat(usr, "<span class='red'>Access denied.</span>")
-			return
-		if(istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+		if("select_procedural")
+			if(!istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+				return TRUE
 			var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
 			if(proc_disk.planet_ref)
 				procgen_target = proc_disk.planet_ref.planet_name
 			else if(proc_disk.encounter_ref)
 				procgen_target = proc_disk.encounter_ref.encounter_name
 			selected_port = null
-		updateUsrDialog()
-	if(href_list["link_to_shuttle"])
-		if(!allowed(usr))
-			to_chat(usr, "<span class='red'>Access denied.</span>")
-			return
-		var/list/L = list()
-		var/area/this_area = get_area(src)
-		for(var/datum/shuttle/S in shuttles)
-			var/name
-			if(S.can_link_to_computer == LINK_FORBIDDEN)
-				continue
-			else if(S.can_link_to_computer == LINK_FREE || this_area.get_shuttle() == S)
-				name = S.name
-			else if(S.password)
-				name = "[S.name] (requires password)"
-			else
-				continue
-			L += name
-			L[name] = S
+			return TRUE
 
-		var/choice = input(usr,"Select a shuttle to link this computer to", "Shuttle control console") as null|anything in L
-		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
-			return
-		if(L[choice] && istype(L[choice],/datum/shuttle))
-			var/datum/shuttle/S = L[choice]
+		if("link_to_shuttle")
+			if(!shuttle_link_request(params, admin_path = FALSE))
+				return TRUE
+			return TRUE
 
-			if(S.password)
-				var/password_attempt = input(usr,"Please input [capitalize(S.name)]'s interface password:", "Shuttle control console", 00000) as num
+		if("link_to_port")
+			if(!shuttle || !shuttle.linked_area)
+				return TRUE
+			var/obj/docking_port/shuttle/S = locate(params["ref"])
+			if(!istype(S))
+				return TRUE
+			if(!(S in shuttle.shuttle_contents()))
+				return TRUE
+			S.link_to_shuttle(shuttle)
+			to_chat(usr, "Successfully linked [capitalize(shuttle.name)] to the port.")
+			return TRUE
 
-				if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
-					return
-				if(S.password == password_attempt)
-					shuttle = L[choice]
-				else
-					return
-			else if(S.can_link_to_computer == LINK_FORBIDDEN)
-				return
-			else
-				link_to(L[choice])
-			to_chat(usr, "Successfully linked [src] to [capitalize(S.name)]!")
-			updateUsrDialog()
+		if("set_custom_coord")
+			if(!istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
+				return TRUE
+			var/value = text2num(params["value"])
+			if(isnull(value))
+				return TRUE
+			switch(params["axis"])
+				if("x")
+					custom_x = value
+				if("y")
+					custom_y = value
+				if("z")
+					custom_z = value
+				if("rot")
+					custom_rot = value
+			return TRUE
 
-	if(href_list["custom_coord"])
-		switch(href_list["custom_coord"])
-			if("x")
-				custom_x = input("Enter new X drift", "Course Plotting", custom_x) as num
-			if("y")
-				custom_y = input("Enter new Y drift", "Course Plotting", custom_y) as num
-			if("z")
-				custom_z = input("Enter new Z drift", "Course Plotting", custom_z) as num
-			if("a")
-				custom_rot=input("Enter rotation angle", "Course Plotting", custom_rot) as num
-
-		updateUsrDialog()
-
-	if(href_list["process_custom_coord"])
-		if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
+		if("process_custom_coord")
+			if(!istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
+				return TRUE
 			var/turf/dest = locate(\
-			shuttle.linked_port.x + custom_x,\
-			shuttle.linked_port.y + custom_y,\
-			shuttle.linked_port.z + custom_z
+				shuttle.linked_port.x + custom_x,\
+				shuttle.linked_port.y + custom_y,\
+				shuttle.linked_port.z + custom_z\
 			)
-
 			if(!dest || dest.z == map.zCentcomm || (!istype(dest, /turf/space) && !shuttle.destroy_everything))
 				to_chat(usr, "Error! Bad coordinates.")
-				return
+				return TRUE
 			if(istype(disk.destination, /obj/docking_port/destination/coord))
 				if(shuttle.current_port == disk.destination)
 					shuttle.current_port = null
 				QDEL_NULL(disk.destination)
 			disk.destination = new /obj/docking_port/destination/coord(dest)
-			disk.destination.dir = angle2dir( dir2angle(shuttle.linked_port.dir) + custom_rot + 180)
-			//For instance, COURSE:06:06:2600:12:00
+			disk.destination.dir = angle2dir(dir2angle(shuttle.linked_port.dir) + custom_rot + 180)
 			disk.destination.areaname = "COURSE:[time2text(world.timeofday, "MM:DD")]:[game_year]:[worldtime2text()]"
-
 			to_chat(usr, "Destination calculated!")
+			return TRUE
 
-		updateUsrDialog()
-
-	if(href_list["admin_link_to_shuttle"])
-		if(!isAdminGhost(usr))
-			to_chat(usr, "You must be an admin for this")
-			return
-
-		var/list/L = list()
-		var/area/this_area = get_area(src)
-		for(var/datum/shuttle/S in shuttles)
-			var/name
-			if(S.can_link_to_computer == LINK_FORBIDDEN)
-				continue
-			else if(S.can_link_to_computer == LINK_FREE || this_area.get_shuttle() == S)
-				name = S.name
-			else if(S.password)
-				name = "[S.name] (requires password)"
-			else
-				continue
-			L += name
-			L[name] = S
-
-		var/choice = input(usr,"Select a shuttle to link this computer to", "Admin abuse") as null|anything in L
-		if(L[choice] && istype(L[choice],/datum/shuttle))
-			shuttle = L[choice]
-
-	if(href_list["admin_unlink_shuttle"])
-		if(!isAdminGhost(usr))
-			to_chat(usr, "You must be an admin for this")
-			return
-
-		shuttle = null
-
-	if(href_list["admin_toggle_lockdown"])
-		if(!isAdminGhost(usr))
-			to_chat(usr, "You must be an admin for this")
-			return
-
-		if(!shuttle.lockdown)
-			var/choice = input(usr,"Would you like to specify a reason?", "Admin abuse") in list("Yes","No","Cancel")
-
-			if(choice == "Cancel")
-				return
-
-			shuttle.lockdown = 1
-			if(choice == "Yes")
-				shuttle.lockdown = input(usr,"Please write a reason for locking the [capitalize(shuttle.name)] down.", "Admin abuse")
-		else
-			shuttle.lockdown = 0
-
-		updateUsrDialog()
-	if(href_list["admin_toggle_select_all"])
-		if(!isAdminGhost(usr))
-			to_chat(usr, "You must be an admin for this")
-			return
-
-		if(allow_selecting_all)
-			allow_selecting_all = 0
-			to_chat(usr, "Now selecting from shuttle's docking ports.")
-		else
-			allow_selecting_all = 1
-			to_chat(usr, "Now selecting from all existing docking ports.")
-
-		updateUsrDialog()
-	if(href_list["admin_reset"])
-		if(!isAdminGhost(usr))
-			to_chat(usr, "You must be an admin for this")
-			return
-
-		shuttle.initialize()
-		to_chat(usr, "Shuttle's list of travel destinations has been reset")
-	if(href_list["admin_toggle_silicon_use"])
-		if(!isAdminGhost(usr))
-			to_chat(usr, "You must be an admin for this")
-			return
-
-		if(allow_silicons)
-			allow_silicons = 0
-			to_chat(usr, "Silicons can no longer use [src].")
-		else
-			allow_silicons = 1
-			to_chat(usr, "Silicons may now use [src] again.")
-
-		updateUsrDialog()
-	if(href_list["disk"])
-		if(!disk) //No disk inserted - grab one from user's hand
-			var/obj/item/weapon/disk/shuttle_coords/D = usr.get_active_hand()
-
-			insert_disk(D, usr)
-		else
+		if("eject_disk")
+			if(!disk)
+				// Insert flow: pull a disk from the user's hand if they have one.
+				var/obj/item/weapon/disk/shuttle_coords/D = usr.get_active_hand()
+				if(istype(D))
+					insert_disk(D, usr)
+				return TRUE
 			disk.forceMove(get_turf(src))
 			usr.put_in_hands(disk)
 			to_chat(usr, "<span class='info'>You eject \the [disk] from \the [src].</span>")
@@ -678,74 +658,106 @@
 				selected_port = null
 			procgen_target = null
 			disk = null
-			updateUsrDialog()
+			return TRUE
 
-	if(href_list["dock_request_open"])
-		if(!allowed(usr))
-			to_chat(usr, "<span class='red'>Access denied.</span>")
-			return
-		if(!shuttle)
-			return
-		if(shuttle.pending_request)
-			to_chat(usr, "<span class='warning'>A docking request is already pending.</span>")
-			return
-		if(!shuttle.is_in_dockable_vlevel())
-			to_chat(usr, "<span class='warning'>This shuttle is not parked in a dockable location.</span>")
-			return
-		var/list/L = list()
-		for(var/datum/shuttle/S in shuttles)
-			if(S == shuttle)
-				continue
-			if(!S.is_in_dockable_vlevel())
-				continue
-			if(S.pending_request)
-				continue
-			L[S.name] = S
-		if(!L.len)
-			to_chat(usr, "<span class='warning'>No eligible shuttles found.</span>")
-			return
-		var/choice = input(usr, "Request docking with which vessel?", "Docking request") as null|anything in L
-		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
-			return
-		if(!choice)
-			return
-		var/datum/shuttle/target = L[choice]
-		if(!target)
-			return
-		var/code = shuttle.request_docking(target, usr)
-		if(code != SDR_OK_PENDING && code != SDR_OK_AUTO_ACCEPTED)
-			to_chat(usr, "<span class='warning'>Cannot request docking: [shuttle.dock_request_error_message(code)]</span>")
-		updateUsrDialog()
+		if("dock_request_open")
+			if(!shuttle)
+				return TRUE
+			if(shuttle.pending_request)
+				to_chat(usr, "<span class='warning'>A docking request is already pending.</span>")
+				return TRUE
+			if(!shuttle.is_in_dockable_vlevel())
+				to_chat(usr, "<span class='warning'>This shuttle is not parked in a dockable location.</span>")
+				return TRUE
+			var/datum/shuttle/target = locate(params["ref"])
+			if(!istype(target) || !(target in shuttles))
+				return TRUE
+			var/code = shuttle.request_docking(target, usr)
+			if(code != SDR_OK_PENDING && code != SDR_OK_AUTO_ACCEPTED)
+				to_chat(usr, "<span class='warning'>Cannot request docking: [shuttle.dock_request_error_message(code)]</span>")
+			return TRUE
 
-	if(href_list["dock_request_cancel"])
-		if(!allowed(usr))
-			to_chat(usr, "<span class='red'>Access denied.</span>")
-			return
-		if(shuttle?.pending_request && shuttle.pending_request.initiator == shuttle)
-			shuttle.pending_request.cancel()
-		updateUsrDialog()
+		if("dock_request_cancel")
+			if(shuttle?.pending_request && shuttle.pending_request.initiator == shuttle)
+				shuttle.pending_request.cancel()
+			return TRUE
 
-	if(href_list["dock_request_accept"])
-		if(!allowed(usr))
-			to_chat(usr, "<span class='red'>Access denied.</span>")
-			return
-		if(shuttle?.pending_request && shuttle.pending_request.target == shuttle)
-			shuttle.pending_request.accept()
-		updateUsrDialog()
+		if("dock_request_accept")
+			if(shuttle?.pending_request && shuttle.pending_request.target == shuttle)
+				shuttle.pending_request.accept()
+			return TRUE
 
-	if(href_list["dock_request_reject"])
-		if(!allowed(usr))
-			to_chat(usr, "<span class='red'>Access denied.</span>")
-			return
-		if(!(shuttle?.pending_request && shuttle.pending_request.target == shuttle))
-			return
-		var/reason = input(usr, "Reason for rejection (optional):", "Reject docking request", "") as null|text
-		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
-			return
-		if(!shuttle?.pending_request || shuttle.pending_request.target != shuttle)
-			return
-		shuttle.pending_request.reject(reason)
-		updateUsrDialog()
+		if("dock_request_reject")
+			if(!(shuttle?.pending_request && shuttle.pending_request.target == shuttle))
+				return TRUE
+			var/reason = params["reason"]
+			if(!istext(reason))
+				reason = ""
+			shuttle.pending_request.reject(reason)
+			return TRUE
+
+		// --- Admin-only paths --------------------------------------------
+		if("admin_link_to_shuttle")
+			var/datum/shuttle/S = locate(params["ref"])
+			if(istype(S) && (S in shuttles))
+				shuttle = S
+			return TRUE
+
+		if("admin_unlink_shuttle")
+			shuttle = null
+			return TRUE
+
+		if("admin_toggle_lockdown")
+			if(!shuttle)
+				return TRUE
+			if(shuttle.lockdown)
+				shuttle.lockdown = 0
+			else
+				var/reason = params["reason"]
+				shuttle.lockdown = istext(reason) && length(reason) ? reason : 1
+			return TRUE
+
+		if("admin_toggle_select_all")
+			allow_selecting_all = !allow_selecting_all
+			to_chat(usr, allow_selecting_all ? "Now selecting from all existing docking ports." : "Now selecting from shuttle's docking ports.")
+			return TRUE
+
+		if("admin_reset")
+			if(!shuttle)
+				return TRUE
+			shuttle.initialize()
+			to_chat(usr, "Shuttle's list of travel destinations has been reset")
+			return TRUE
+
+		if("admin_toggle_silicon_use")
+			allow_silicons = !allow_silicons
+			to_chat(usr, allow_silicons ? "Silicons may now use [src] again." : "Silicons can no longer use [src].")
+			return TRUE
+
+	return FALSE
+
+// Resolves a player-side link-to-shuttle request, including the password gate.
+// Returns TRUE on success (link performed) and FALSE on any failure path so
+// the caller can decide whether to keep going.
+/obj/machinery/computer/shuttle_control/proc/shuttle_link_request(list/params, admin_path = FALSE)
+	var/datum/shuttle/S = locate(params["ref"])
+	if(!istype(S) || !(S in shuttles))
+		return FALSE
+	var/area/this_area = get_area(src)
+	var/freely_listable = (S.can_link_to_computer == LINK_FREE) || (this_area && this_area.get_shuttle() == S)
+
+	if(S.can_link_to_computer == LINK_FORBIDDEN && !admin_path)
+		return FALSE
+
+	if(!freely_listable && S.password)
+		var/password_attempt = text2num(params["password"])
+		if(isnull(password_attempt) || password_attempt != S.password)
+			to_chat(usr, "<span class='warning'>Incorrect password.</span>")
+			return FALSE
+
+	link_to(S)
+	to_chat(usr, "Successfully linked [src] to [capitalize(S.name)]!")
+	return TRUE
 
 /obj/machinery/computer/shuttle_control/proc/insert_disk(obj/item/weapon/disk/shuttle_coords/SC, mob/user)
 	if(!shuttle)
