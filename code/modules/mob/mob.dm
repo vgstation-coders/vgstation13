@@ -1555,7 +1555,8 @@ Use this proc preferably at the end of an equipment loadout
 	if (!forced_density)
 		if(lying)
 			setDensity(FALSE)
-			drop_hands()
+			if(!lying_prev) // Only drop items when first lying down, not on every subsequent update
+				drop_hands()
 		else
 			setDensity(original_density)
 

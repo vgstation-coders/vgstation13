@@ -1,0 +1,4 @@
+author: copilot
+delete-after: True
+changes:
+- bugfix: Being tear gassed (or otherwise knocked down) no longer causes you to drop items that are glued to your hands.
