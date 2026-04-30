@@ -247,7 +247,7 @@
 		if(virus2.len)
 			for(var/ID in virus2)
 				var/datum/disease2/disease/D = virus2[ID]
-				if(D.spread & (SPREAD_BLOOD | SPREAD_CONTACT))
+				if(D.spread & SPREAD_BLOOD)
 					L.infect_disease2(D, 1, notes="(Contaminated needle, injected with \a [src])")
 		// Contaminate the needle with the target's blood and any blood-borne diseases
 		if(iscarbon(L))
