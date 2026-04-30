@@ -24,8 +24,11 @@
 	//List of ALL docking ports the shuttle can move to
 	var/list/docking_ports = list()
 
-	//Path passed as `starting_area` to New(). Saved so the shuttle loader can re-scan for areas that didn't exist at New() time.
-	var/area/starting_area_path = null
+	// Original starting-area typepath passed to New(). Saved so the shuttle loader and initialize()
+	// can re-resolve linked_areas for shuttles whose areas only become available after New() ran
+	// (loaded DMMs, fixedvaults loaded via load_map_elements, dynamically loaded gamemode/event elements).
+	// Holds a typepath, not an instance.
+	var/starting_area_path = null
 
 	// Shuttle-to-shuttle docking handshake (see code/datums/shuttle_dock_request.dm).
 	var/auto_accept_requests = FALSE
@@ -128,12 +131,6 @@
 	// Saves original turf data at the destination when shuttle turfs overwrite them.
 	// Used to restore the ground when the shuttle departs, keyed by "[x],[y],[z]".
 	var/list/saved_ground_turfs = list()
-
-	// Original starting-area typepath passed to New(). Stored so initialize() can re-resolve
-	// linked_areas if the shuttle's area only became available after New() ran (e.g. shuttles
-	// whose areas live in a fixedvault loaded via load_map_elements, or in a map element
-	// loaded dynamically by a gamemode/event). Holds a typepath, not an instance.
-	var/starting_area_path
 
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
