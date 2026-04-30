@@ -50,17 +50,25 @@ var/global/list/status_displays = list() //This list contains both normal status
 	maptext_width = WORLD_ICON_SIZE
 	layer = ABOVE_WINDOW_LAYER
 
+	var/buildstage = 3	// 0 = frame only (no circuit board)
+						// 1 = circuit board installed
+						// 2 = wired (panel open)
+						// 3 = fully operational
+
 /obj/machinery/status_display/supply
 	supply_display = 1
 
 // new display
 // register for radio system
-/obj/machinery/status_display/New()
+/obj/machinery/status_display/New(turf/loc, var/ndir = 0, var/building = 3)
 	..()
-	status_displays |= src
-
-	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
-		initialize()
+	buildstage = building
+	if(ndir)
+		dir = ndir
+	if(buildstage == 3)
+		status_displays |= src
+		if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+			initialize()
 
 /obj/machinery/status_display/initialize()
 	..()
@@ -73,6 +81,8 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 // timed process
 /obj/machinery/status_display/process()
+	if(buildstage < 3)
+		return
 	if(stat & (FORCEDISABLE|NOPOWER))
 		remove_display()
 		return
@@ -82,7 +92,71 @@ var/global/list/status_displays = list() //This list contains both normal status
 		return
 	update()
 
+/obj/machinery/status_display/attackby(obj/item/weapon/W, mob/user)
+	switch(buildstage)
+		if(3)
+			if(W.is_screwdriver(user))
+				W.playtoolsound(src, 50)
+				if(do_after(user, src, 10))
+					buildstage = 2
+					status_displays -= src
+					remove_display()
+					to_chat(user, "<span class='notice'>You open the panel.</span>")
+				return 1
+			return ..()
+		if(2)
+			if(W.is_wirecutter(user))
+				W.playtoolsound(src, 50)
+				if(do_after(user, src, 10))
+					new /obj/item/stack/cable_coil(get_turf(src), 1)
+					buildstage = 1
+					to_chat(user, "<span class='notice'>You remove the wiring.</span>")
+				return 1
+			if(W.is_screwdriver(user))
+				W.playtoolsound(src, 50)
+				if(do_after(user, src, 10))
+					buildstage = 3
+					status_displays |= src
+					to_chat(user, "<span class='notice'>You close the panel.</span>")
+					if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+						initialize()
+				return 1
+		if(1)
+			if(iscrowbar(W))
+				W.playtoolsound(src, 50)
+				if(do_after(user, src, 10))
+					new /obj/item/weapon/circuitboard/status_display(get_turf(src))
+					buildstage = 0
+					to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
+				return 1
+			if(iscablecoil(W))
+				var/obj/item/stack/cable_coil/coil = W
+				if(coil.amount < 1)
+					to_chat(user, "<span class='warning'>You need cable for this!</span>")
+					return
+				if(do_after(user, src, 10))
+					coil.use(1)
+					buildstage = 2
+					to_chat(user, "<span class='notice'>You wire the display.</span>")
+				return 1
+		if(0)
+			if(istype(W, /obj/item/weapon/circuitboard/status_display))
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+				if(do_after(user, src, 10))
+					qdel(W)
+					buildstage = 1
+					to_chat(user, "<span class='notice'>You install the circuit board.</span>")
+				return 1
+			if(iswelder(W))
+				var/obj/item/tool/weldingtool/WT = W
+				if(WT.do_weld(user, src, 10, 5))
+					new /obj/item/mounted/frame/status_display(get_turf(src))
+					qdel(src)
+				return 1
+
 /obj/machinery/status_display/attack_ai(mob/user)
+	if(buildstage < 3)
+		return
 	if(spookymode)
 		return
 	if(user.stat)
@@ -191,6 +265,15 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 /obj/machinery/status_display/examine(mob/user)
 	. = ..()
+	if(buildstage < 3)
+		switch(buildstage)
+			if(0)
+				to_chat(user, "<span class='info'>The frame is mounted on the wall. It needs a circuit board.</span>")
+			if(1)
+				to_chat(user, "<span class='info'>The circuit board is installed. It needs wiring.</span>")
+			if(2)
+				to_chat(user, "<span class='info'>The wiring is in place. Close the panel with a screwdriver.</span>")
+		return
 	switch(mode)
 		if(MODE_CARGO_TIMER)
 			to_chat(user, "<span class='info'>The display reads:<br>\t<xmp>-ETA-</xmp><br>\t<xmp>[get_supply_shuttle_timer()]</xmp></span>")

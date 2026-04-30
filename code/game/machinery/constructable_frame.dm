@@ -313,6 +313,7 @@ to destroy them and players will be able to make replacements.
 	"intercom"=/obj/item/weapon/intercom_electronics,
 	"air alarm"=/obj/item/weapon/circuitboard/air_alarm,
 	"fire alarm"=/obj/item/weapon/circuitboard/fire_alarm,
+	"status display"=/obj/item/weapon/circuitboard/status_display,
 	"airlock"=/obj/item/weapon/circuitboard/airlock,
 	"APC"=/obj/item/weapon/circuitboard/power_control,
 	"vendomat"=/obj/item/weapon/circuitboard/vendomat,
@@ -484,6 +485,13 @@ to destroy them and players will be able to make replacements.
 	icon = 'icons/obj/doors/door_assembly.dmi'
 	icon_state = "door_electronics"
 	//origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/status_display
+	name = "Circuit board (Status Display)"
+	desc = "A circuit board used to run a status display."
+	board_type = OTHER
+	icon = 'icons/obj/doors/door_assembly.dmi'
+	icon_state = "door_electronics"
 
 /obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (R&D Server)"
