@@ -4134,6 +4134,8 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		/obj/item/weapon/storage/box/syndicatefake/space = 2,
 		/obj/item/clothing/mask/gas/syndicate = 2,
 		/obj/item/clothing/shoes/laceup = 2,
+		/obj/item/clothing/suit/syndie_football = 2,
+		/obj/item/clothing/head/syndie_football_helmet = 2,
 		)
 	contraband = list(
 		/obj/item/clothing/head/beret/centcom/officer = 2,
