@@ -81,6 +81,12 @@
 		if (do_surgery(M,user,I))
 			return 1
 
+	if(user.a_intent == I_HELP)
+		user.do_attack_animation(M, I)
+		M.visible_message("<span class='notice'>[user] gently taps [M] with [I].</span>", \
+			"<span class='notice'>[user] gently taps you with [I].</span>")
+		return 1
+
 	if (user.is_pacified(VIOLENCE_DEFAULT,M))
 		return 0
 
