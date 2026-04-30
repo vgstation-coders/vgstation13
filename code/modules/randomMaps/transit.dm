@@ -31,7 +31,7 @@
 //Arguments: shuttle (/datum/shuttle object)
 //Returns: docking port
 /proc/generate_parking_area(datum/shuttle/shuttle)
-	var/buffer = world.view
+	var/buffer = 2 * world.view + TRANSITIONEDGE // Buffer space to ensure shuttle fits in the parking area with sufficient space for players and other mobs to move around in.
 	var/list/dims = shuttle.get_size()
 	if(!dims)
 		return null

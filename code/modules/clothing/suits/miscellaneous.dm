@@ -317,6 +317,28 @@ var/list/tag_suits_list = list()
 	body_parts_covered = FULL_TORSO
 	species_fit = list(INSECT_SHAPED)
 
+/obj/item/clothing/suit/wcoat/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 0
+	if(istype(target, /obj/item/clothing/under))
+		var/obj/item/clothing/C = target
+		var/obj/item/clothing/accessory/wcoat/A = new()
+		if(C.check_accessory_overlap(A))
+			to_chat(user, "<span class='notice'>You cannot attach more accessories of this type to \the [C].</span>")
+			qdel(A)
+			return
+		if(user.drop_item(src))
+			to_chat(user, "<span class='notice'>You attach \the [src] to \the [C].</span>")
+			C.attach_accessory(A)
+			transfer_fingerprints(src,A)
+			forceMove(A)
+			A.source_vest = src
+			A.update_icon()
+		else
+			qdel(A)
+		return 1
+	return ..()
+
 
 /obj/item/clothing/suit/apron/overalls
 	name = "coveralls"

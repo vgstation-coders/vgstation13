@@ -72,15 +72,13 @@
 		/datum/event/odyssey_carp_swarm,
 		// Vanilla events with Odyssey overrides
 		/datum/event/radiation_storm/odyssey,
-		/datum/event/disease_outbreak/odyssey,
 		/datum/event/viral_infection/odyssey,
 		/datum/event/viral_outbreak/odyssey,
-		/datum/event/ancientpod/odyssey,
 		/datum/event/grid_check/odyssey,
-		/datum/event/immovable_rod/odyssey,
 		/datum/event/rogue_drone/odyssey,
 		/datum/event/brand_intelligence/odyssey,
 		/datum/event/old_vendotron_teleport/odyssey,
+		/datum/event/hog/odyssey,
 		// Vanilla events that work as-is
 		/datum/event/organ_failure,
 		/datum/event/mass_hallucination,
@@ -88,7 +86,6 @@
 		/datum/event/money_lotto,
 		/datum/event/money_hacker,
 		/datum/event/profound_peace,
-		/datum/event/hog/odyssey,
 		/datum/event/ionstorm
 	)
 
@@ -98,6 +95,14 @@
 	else if(ispath(DR.role_category,/datum/role/malfAI))
 		return FALSE
 	else if(ispath(DR.role_category,/datum/role/nuclear_operative))
+		return FALSE
+	else if(ispath(DR.role_category,/datum/role/revolutionary))
+		return FALSE
+	else if(ispath(DR.role_category,/datum/role/traitor/challenger))
+		return FALSE
+	else if(ispath(DR.role_category,/datum/role/vampire))
+		return FALSE
+	else if(ispath(DR.role_category,/datum/role/wizard))
 		return FALSE
 	return ..()
 
@@ -132,7 +137,7 @@
 
 /datum/map/active/map_specific_event_checks(var/datum/event/E)
 	var/required_state = 0
-	if(istype(E, /datum/event/micro_meteors) || istype(E, /datum/event/gib_storm) || istype(E, /datum/event/immovable_rod/odyssey))
+	if(istype(E, /datum/event/micro_meteors) || istype(E, /datum/event/gib_storm))
 		required_state = ODYSSEY_STATE_HYPERSPACE
 	else if(istype(E, /datum/event/solar_flare) || istype(E, /datum/event/radiation_storm/odyssey))
 		required_state = ODYSSEY_STATE_HYPERSPACE | ODYSSEY_STATE_DEEPSPACE
@@ -160,7 +165,7 @@
 	new_vz.bluespace_jammed = FALSE
 	new_vz.movementJammed = TRUE
 	new_vz.transitionLoops = FALSE
-	new_vz.base_turf = /turf/unsimulated/floor/planetary/grass/jungle
+	new_vz.base_turf = /turf/unsimulated/floor/planetary/concrete
 	new_vz.base_area = /area/surface/nt_outpost
 	new_vz.update_settings()
 
@@ -193,7 +198,7 @@
 	message = "The engines are charging in preparation for the Bluespace Jump. The ship will depart in [round(emergency_shuttle.timeleft()/60)] minutes."
 	if(justification)
 		message += " Justification: [justification]"
-	..()
+	command_alert(message, alert_title, force_report, alert, noalert, small)
 
 /datum/command_alert/emergency_shuttle_recalled
 	name = "Bluespace Jump Cancelled"
@@ -203,7 +208,7 @@
 
 /datum/command_alert/emergency_shuttle_recalled/announce()
 	message = "The Bluespace Jump has been cancelled."
-	..()
+	command_alert(message, alert_title, force_report, alert, noalert, small)
 
 /datum/command_alert/emergency_shuttle_left
 	name = "Bluespace Jump Initiated"
@@ -212,7 +217,7 @@
 
 /datum/command_alert/emergency_shuttle_left/announce()
 	message = "The Bluespace Jump has begun. Estimate [round(emergency_shuttle.timeleft()/60,1)] minutes until the NTEV Odyssey docks at Central Command."
-	..()
+	command_alert(message, alert_title, force_report, alert, noalert, small)
 
 ////////////////////////////////////////////////////////////////
 #undef OUTPOST_MAX_X
