@@ -75,6 +75,7 @@ Helper procs and procs used in mobs
 
 //A new subtype of images used specifically for these visioneffects
 /image/hud
+	mouse_opacity = 0
 
 //Handle specific on-apply effects. Useful mainly for scanners like Mesons
 /mob/proc/apply_hud(var/datum/visioneffect/V)
