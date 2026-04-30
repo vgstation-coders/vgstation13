@@ -1147,6 +1147,23 @@
 		H.set_species("Human", transfer_damage = TRUE)
 		H.regenerate_icons()
 
+		// Drop any clothing that humans cannot wear (e.g. plasmaman species-restricted suits)
+		var/list/items_to_check = list()
+		if(H.wear_suit) items_to_check[H.wear_suit] = slot_wear_suit
+		if(H.head) items_to_check[H.head] = slot_head
+		if(H.w_uniform) items_to_check[H.w_uniform] = slot_w_uniform
+		if(H.gloves) items_to_check[H.gloves] = slot_gloves
+		if(H.shoes) items_to_check[H.shoes] = slot_shoes
+		if(H.wear_mask) items_to_check[H.wear_mask] = slot_wear_mask
+		if(H.glasses) items_to_check[H.glasses] = slot_glasses
+		if(H.ears) items_to_check[H.ears] = slot_ears
+		if(H.back) items_to_check[H.back] = slot_back
+		if(H.belt) items_to_check[H.belt] = slot_belt
+
+		for(var/obj/item/I in items_to_check)
+			if(!I.mob_can_equip(H, items_to_check[I], disable_warning = TRUE))
+				H.drop_from_inventory(I)
+
 /datum/disease2/effect/lizard
 	name = "Reptile Dysfunction"
 	desc =  "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Unathi."
