@@ -269,6 +269,8 @@
 	if(!usr)
 		return
 	if(flipped)
+		if(get_dir(loc, usr) != dir)
+			return
 		do_put()
 	else
 		do_flip()
