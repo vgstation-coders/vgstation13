@@ -6,6 +6,7 @@
 	icon_state = "mirror"
 	density = FALSE
 	anchored = TRUE
+	cardinal_reflect = TRUE //it's on walls, works better like this
 	var/shattered = FALSE
 	/// Whether or not using this mirror makes you permanently bald or not.
 	var/norwood_cursed = FALSE
