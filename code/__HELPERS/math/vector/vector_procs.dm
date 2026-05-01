@@ -66,7 +66,7 @@
 /proc/vector2ClosestDirs(var/_vector/V,var/cardinal_reflect=FALSE)
 	var/_vector/V_norm = V.chebyshev_normalized()
 
-	var/smallest_dist = 2 //since all vectors are normalized, the biggest possible distance is 2
+	var/smallest_dist = INFINITY
 	. = list()
 	for(var/d in vector2dirs(V_norm,cardinal_reflect))
 		var/_vector/dir = dir2vector(d)
