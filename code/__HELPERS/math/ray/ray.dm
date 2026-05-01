@@ -85,7 +85,7 @@
 	var/entry_byond_dir = entry_byond_dirs[entry_byond_dirs.len]
 	var/turf/dense_check = get_step(resolved_hit_atom,entry_byond_dir)
 	if(!dense_check || dense_check.density || dense_check.has_dense_content())
-		entry_byond_dir = entry_byond_dirs[max(1,entry_byond_dirs.len - 1)]
+		//entry_byond_dir = entry_byond_dirs[max(1,entry_byond_dirs.len - 1)]
 		return
 	var/_vector/entry_dir = dir2vector(entry_byond_dir)
 
