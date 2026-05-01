@@ -48,6 +48,10 @@
 	..()
 	update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/clean_blood()
+	. = ..()
+	remove_disease2()
+
 /obj/item/weapon/reagent_containers/syringe/pickup(mob/user)
 	..()
 	update_icon()
