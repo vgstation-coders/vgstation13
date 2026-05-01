@@ -52,16 +52,11 @@
 /datum/geosample
 	var/artifact_id = ""					//id of a nearby artifact, if there is one
 	var/artifact_distance = -1				//proportional to distance
-	var/scanned_x = 0
-	var/scanned_y = 0
 
 //have this separate from UpdateTurf() so that we dont have a billion turfs being updated (redundantly) every time an artifact spawns
 /datum/geosample/proc/UpdateNearbyArtifactInfo(var/turf/unsimulated/mineral/container)
 	if(!container || !istype(container))
 		return
-
-	scanned_x = container.x
-	scanned_y = container.y
 
 	if(container.finddatum?.artifact_find)
 		artifact_distance = rand() // 0-1

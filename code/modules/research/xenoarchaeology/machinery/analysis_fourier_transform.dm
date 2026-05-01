@@ -39,7 +39,7 @@
 
 /obj/machinery/anomaly/fourier_transform/draw_on_map(x,y)
 	if(map_icon && scanned_sample)
-		if(round(abs(scanned_sample.scanned_x-x)**2 + abs(scanned_sample.scanned_y-y)**2,distance*3) != round(distance**2,distance*3))
+		if(round(abs(x_offset-x)**2 + abs(y_offset-y)**2,distance*3) != round(distance**2,distance*3))
 			map_icon.DrawBox("#000", x, y)
 		else
 			map_icon.DrawBox("#f00", x, y)

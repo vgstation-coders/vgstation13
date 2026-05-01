@@ -19,6 +19,8 @@
 	// If it's zero we're not scanning.
 	var/scan_process = 0
 	var/icon/map_icon
+	var/x_offset = 1
+	var/y_offset = 1
 
 /obj/machinery/anomaly/splashable()
 	return FALSE
@@ -127,6 +129,14 @@
 		stop()
 		. = 1
 
+	if (href_list["change_x"])
+		x_offset = clamp(input(usr,"Set X offset","X offset",x_offset),1,world.maxx)
+		. = 1
+
+	if (href_list["change_y"])
+		y_offset = clamp(input(usr,"Set Y offset","Y offset",y_offset),1,world.maxy)
+		. = 1
+
 /obj/machinery/anomaly/proc/eject(var/mob/user)
 	held_container.forceMove(loc)
 	playsound(loc, 'sound/machines/click.ogg', 50, 1)
@@ -179,7 +189,7 @@
 	var/highest_y = 0
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
-			var/turf/tile = locate(i, r, z)
+			var/turf/tile = locate(i, r, map.zAsteroid)
 			var/area/A = get_area(tile)
 			if((A && A.holomap_draw_override == HOLOMAP_DRAW_FULL) || (tile && istype(tile,/turf/unsimulated/mineral)))
 				lowest_x = min(lowest_x,i)
@@ -203,6 +213,9 @@
 
 	data["target_ticks"] = target_scan_ticks
 	data["scan_process"] = scan_process
+
+	data["x_offset"] = x_offset
+	data["y_offset"] = y_offset
 
 	data["beaker"] = !!held_container
 	if (held_container)
