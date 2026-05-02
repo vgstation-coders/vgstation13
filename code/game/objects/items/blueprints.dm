@@ -303,27 +303,32 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 			#undef error_flash_dur
 
+/client
+	var/list/blueprint_images = list()
+
 //Shows an archive of surrounding tiles
 /obj/item/blueprints/proc/show_room(mob/user)
 	if(shows_archives && user.client)
-		var/list/shown_images = list()
 		var/tstring = ""
 		for(var/turf/T in spiral_block(get_turf(user),user.client.view))
 			tstring = "[T.x],[T.y],[T.z]"
 			if(tstring in blueprint_archives)
 				for(var/I in blueprint_archives[tstring])
-					shown_images += I
+					user.client.blueprint_images += I
 					user.client.images += I
 		last_shown_archive = world.time
 		spawn(10 SECONDS)
 			if(world.time - last_shown_archive >= 99) // sanity for mass clicking of this
-				user.client.images -= shown_images
+				user.client.images -= user.client.blueprint_images
+				user.client.blueprint_images = list()
 
 /obj/item/blueprints/proc/update_room(mob/user)
 	if(shows_archives)
 		if(blueprint_archives.len)
 			if(alert(usr,"This will overwrite any archives, continue?","Overwriting","Yes","No") == "No")
 				return
+		user.client.images -= user.client.blueprint_images
+		user.client.blueprint_images = list()
 		for(var/turf/T in view(user.client.view))
 			update_turf_image(T)
 
