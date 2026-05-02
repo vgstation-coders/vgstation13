@@ -26,6 +26,20 @@ Used In File(s): \code\modules\telesci\gps.dm
 			{{:helper.link(data.autorefresh ? 'On' : 'Off', 'refresh', {'toggle_refresh' : '1'}, null)}}
 		</div>
 	</div>
+	{{if data.beacon_ready !== undefined}}
+		<div class="item">
+			<div class="itemLabel">Distress Beacon:</div>
+			<div class="itemContent">
+				{{if data.beacon_active}}
+					{{:helper.link('Cancel Beacon (' + data.beacon_time_remaining + 's remaining)', 'times-circle', {'cancel_beacon' : '1'}, 'bad')}}
+				{{else data.beacon_ready}}
+					{{:helper.link('Activate Beacon', 'alert', {'distress_beacon' : '1'}, 'bad')}}
+				{{else}}
+					<span class="average">Cooldown: {{:data.beacon_cooldown}}s</span>
+				{{/if}}
+			</div>
+		</div>
+	{{/if}}
 
 	<h3>Detected signals</h3>
 	<div class="item">

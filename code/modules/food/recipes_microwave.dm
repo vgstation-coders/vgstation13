@@ -108,6 +108,10 @@
 	items = list(/obj/item/clothing/head/beret)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mimeburger
 
+/datum/recipe/nothingburger
+	reagents = list(FLOUR = 5, NOTHING = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/nothingburger
+
 /datum/recipe/donutburger
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat,
@@ -274,6 +278,11 @@
 		/obj/item/stack/sheet/glass/glass)
 	result = /obj/item/weapon/reagent_containers/food/snacks/glassburger
 
+/datum/recipe/dinonugget
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/oogabooga)
+	result = /obj/item/weapon/reagent_containers/food/snacks/dinonuggies
+
 // Burger sliders //////////////////////////////////////////////
 
 /datum/recipe/sliders
@@ -332,6 +341,12 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/mime
 
+/datum/recipe/sliders/nothing
+	priority = 1
+	reagents = list(FLOUR = 10, NOTHING = 10)
+	items = list()
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/nothing
+
 /datum/recipe/sliders/slippery
 	reagents = list(FLOUR = 10, LUBE = 5)
 	items = list(
@@ -346,6 +361,10 @@
 /datum/recipe/friedegg
 	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/friedegg
+
+/datum/recipe/friedeggalt
+	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1, EGGYOLK = 4) //one egg worth
 	result = /obj/item/weapon/reagent_containers/food/snacks/friedegg
 
 /datum/recipe/boiledegg
@@ -514,6 +533,46 @@
 		/obj/item/slime_extract/grey
 		)
 	result = /mob/living/simple_animal/hostile/gingerbread
+
+/datum/recipe/taaitaai
+	reagents = list(CINNAMON = 5, SUGARS = 5, WATER = 5, FLOUR = 5) //no nutmeg, anise, clove, cardamom, etc so this works
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/taaitaai
+
+/datum/recipe/chocoladeletter
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/chocolatebar, /obj/item/weapon/paper)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chocoladeletter
+
+/datum/recipe/chocoladeletter/make_food(var/obj/container, var/mob/user, var/passedletter = "S")
+	var/obj/item/weapon/paper/paper_item = locate(/obj/item/weapon/paper) in container
+	if(paper_item.info)
+		passedletter = strip_html_properly(paper_item.info)
+	var/obj/item/weapon/reagent_containers/food/snacks/chocoladeletter/result_obj = new /obj/item/weapon/reagent_containers/food/snacks/chocoladeletter(loc=container,letterfood=passedletter)
+
+	for(var/obj/O in (container.contents - result_obj))
+		if(O.arcanetampered && istype(container,/obj/machinery/microwave))
+			var/obj/machinery/microwave/M = container
+			M.fail(O.arcanetampered)
+			return
+		if(O.reagents)
+			//Should we have forbidden reagents, purge them first.
+			for(var/r_r in reagents_forbidden)
+				if(islist(r_r))
+					var/list/L = r_r
+					for(var/I in L)
+						O.reagents.del_reagent(I)
+				O.reagents.del_reagent(r_r)
+			//Transfer any reagents found in the object, to the resulting object
+			O.reagents.trans_to(result_obj, O.reagents.total_volume)
+		//Transfer any luckiness from the ingredients, to the resulting item
+		if(isitem(result_obj) && isitem(O))
+			var/obj/item/I = O
+			var/obj/item/result_item = result_obj
+			if(I.luckiness)
+				result_item.luckiness += I.luckiness
+		qdel(O)
+	container.reagents.clear_reagents() //Clear all the reagents we haven't transfered, for instance if we need to cook in water
+	score.meals++
+	return result_obj
 
 /datum/recipe/candy_cane
 	reagents = list(SUGARS = 5, WATER = 5)
@@ -1927,7 +1986,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
-		/obj/item/weapon/reagent_containers/food/snacks/mint
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mint
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/orzosalad
 
@@ -2793,16 +2852,13 @@
 
 /datum/recipe/ijzerkoekje
 	reagents = list(FLOUR = 30, IRON = 30)
-	result = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy
+	result = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
 
-/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy
-	name = "Helper Dummy"
-	desc = "You should never see this text."
-
-/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy/New()
-	for(var/i = 1 to 6)
-		new /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje(get_turf(src))
-	qdel(src)
+/datum/recipe/ijzerkoekje/make_food(obj/container, mob/user)
+	// fixing a buggy old hack, dont ask any questions
+	for (var/i = 1 to 5)
+		new result(get_turf(container))
+	return ..()
 
 /datum/recipe/pimiento
 	items = list(
@@ -3013,7 +3069,11 @@
 
 /datum/recipe/toxicmint
 	reagents = list(SUGARS = 1)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mint)
+	result = /obj/item/weapon/reagent_containers/food/snacks/mint
+
+/datum/recipe/toxicmintalt
+	reagents = list(SUGARS = 1, MINTTOXIN = 1)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mint
 
 /datum/recipe/vanishingstew
@@ -3704,6 +3764,22 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
 
+/datum/recipe/sliders/roachgunk
+	priority = 1 //flour is inherited from the original slider recipe
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk
+
+/datum/recipe/sliders/cricketgunk
+	priority = 1
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk
+
 /datum/recipe/hopcorn
 	items = list(
 				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
@@ -3819,11 +3895,15 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/roachesonstick
 
+//////////////////////////////////
+// YE HAVE LEFT THE GUNK ZONE ///
+////////////////////////////////
+
 /datum/recipe/sugarcube
 	reagents = list(SODIUMCHLORIDE = 10)
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
 	cookable_with = COOKABLE_WITH_MIXING
-	
+
 /datum/recipe/saltcube
 	reagents = list(SUGARS = 10)
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube

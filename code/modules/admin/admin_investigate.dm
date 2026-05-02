@@ -57,7 +57,7 @@ var/global/list/investigations=list(
 	handle << message
 
 /datum/log_controller/proc/read(var/mob/user)
-	user << browse(handle,"window=investigate[subject];size=800x300")
+	user << browse(HTML_SKELETON_TITLE(subject, file2text(handle)),"window=investigate[subject];size=800x300")
 
 // Calls our own formatting functions, but then appends to the global log.
 /atom/proc/investigation_log(var/subject, var/message)
@@ -83,7 +83,7 @@ var/global/list/investigations=list(
 	if(!I)
 		warning("SOME ASSHAT USED INVALID INVESTIGATION ID [subject]")
 		return
-	I.write("<small>[time_stamp()][prefix]</small> || [message]<br />")
+	I.write("[time_stamp()][prefix] || [message]<br />")
 
 //ADMINVERBS
 /client/proc/investigate_show(var/subject in AVAILABLE_INVESTIGATIONS)

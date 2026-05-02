@@ -13,7 +13,7 @@
 	var/image/holder
 	var/turf/T
 	T = get_turf(M)
-	for(var/mob/living/simple_animal/construct/construct in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	for(var/mob/living/simple_animal/construct/construct in (M.loneliness_affected() ? list(M) : range(C.view+DATAHUD_RANGE_OVERHEAD,T)))
 		if(!check_HUD_visibility(construct, M))
 			continue
 

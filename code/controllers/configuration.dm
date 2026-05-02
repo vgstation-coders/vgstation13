@@ -218,6 +218,22 @@
 	var/rsclist = ""
 	var/rscstring = ""
 
+	// TGUI & tg asset thing
+	var/tgui_max_chunk_count = 32
+	var/tg_asset_transport = "simple" // simple or "webroot". Webroot is via CDN.
+	var/cache_assets = 1 // Disabled during dev, enabled during prod
+	var/smart_cache_assets = 1
+	var/save_spritesheets = 0 // Disabled by default.
+
+	var/asset_simple_preload = 0 // Disabled by default
+
+	// tg asset cdn via webroot systme. Currently unused.
+	var/asset_cdn_webroot = ""
+	var/asset_cdn_url = ""
+	//Is Dynamic+ Enabled
+	var/dynamic_plus = FALSE
+
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = subtypesof(/datum/gamemode)-/datum/gamemode/cult
@@ -720,6 +736,8 @@
 					hardcore_mode = value
 				if("humans_speak")
 					voice_noises = 1
+				if("dynamic_plus")
+					config.dynamic_plus = TRUE
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

@@ -26,14 +26,27 @@ var/global/list/battery_online =	list(
 										image('icons/obj/power.dmi', "smes-op1")
 										)
 
+/proc/init_smes_overlays()
+	for (var/image/I in battery_charge)
+		I.plane = ABOVE_LIGHTING_PLANE
+	for (var/image/I in battery_charging)
+		I.plane = ABOVE_LIGHTING_PLANE
+	for (var/image/I in battery_online)
+		I.plane = ABOVE_LIGHTING_PLANE
+	for(var/obj/machinery/power/battery/smes/S in power_machines)
+		S.update_icon()
+
 /obj/machinery/power/battery/update_icon()
 	overlays.len = 0
 	icon_state = initial(icon_state)
 
 	if(stat & (BROKEN | FORCEDISABLE | EMPED))
+		luminosity = 0
 		return
 
 	overlays += battery_online[online + 1]
+
+	luminosity = 2
 
 	if(charging)
 		overlays += battery_charging[2]
@@ -44,6 +57,25 @@ var/global/list/battery_online =	list(
 	if(clevel>0)
 		overlays += battery_charge[clevel]
 	return
+
+/obj/machinery/power/battery/proc/update_sound()
+	if(!sound_emitter)
+		return
+
+	if(stat & (BROKEN | FORCEDISABLE | EMPED))
+		if (sound_emitter.is_currently_playing())
+			sound_emitter.play("smes_switch")
+		sound_emitter.stop()
+		return
+
+	if(online)
+		if (!sound_emitter.is_currently_playing())
+			sound_emitter.play("smes_switch")
+		//sound_emitter.play("smes_hum")
+	else
+		if (sound_emitter.is_currently_playing())
+			sound_emitter.play("smes_switch")
+		sound_emitter.stop()
 
 #define SMESRATE 0.05 				// rate of internal charge to external power
 
@@ -86,6 +118,7 @@ var/global/list/battery_online =	list(
 	// Misc
 	var/name_tag = ""
 	var/infinite_power = FALSE //makes the machine just generate power itself
+	var/external_power_supply = FALSE //outputs power at set level without draining stored charge
 
 	//Holders for powerout event.
 	var/last_output = 0
@@ -93,6 +126,26 @@ var/global/list/battery_online =	list(
 	var/last_online = 0
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY
+
+/obj/machinery/power/battery/initialize()
+	..()
+	setup_sound()
+	//update_sound()
+
+/obj/machinery/power/battery/setup_sound()
+	sound_emitter = new /datum/sound_emitter(src)
+	if(sound_emitter)
+		//var/sound/smes_hum = sound()
+		//smes_hum.file = 'sound/machines/looping/smes_hum.ogg'
+		//smes_hum.repeat = 1
+		//smes_hum.volume = 15
+		//sound_emitter.add(smes_hum, "smes_hum")
+
+		var/sound/smes_switch = sound()
+		smes_switch.file = 'sound/machines/effects/smes_switch.ogg'
+		smes_switch.repeat = 0
+		smes_switch.volume = 30
+		sound_emitter.add(smes_switch, "smes_switch")
 
 /obj/machinery/power/battery/RefreshParts()
 	var/capcount = 0
@@ -121,7 +174,10 @@ var/global/list/battery_online =	list(
 
 	// Input
 	chargereceived = 0
-	if (charging)
+	if (external_power_supply)
+		chargeload = 0
+		// External supply satisfies demand only - don't charge SMES
+	else if (charging)
 
 		// Manual charge mode is the 'old' mode, when batteries only charge when available power is higher than set charge level
 		// Auto charge mode lets batteries take any amount of available power, limited by charge level
@@ -154,19 +210,18 @@ var/global/list/battery_online =	list(
 	// Output
 	if (online && get_powernet()) // how can discharge be real if our powernet isn't real
 		lastout = output
-		output = min(charge / SMESRATE, outputlevel) // Limit output to that stored
-
-		charge -= output * SMESRATE // Reduce the storage (may be recovered in /restore() if excessive)
+		if(external_power_supply)
+			output = outputlevel // External supply matches demand, no charge drain
+		else
+			output = min(charge / SMESRATE, outputlevel) // Limit output to that stored
+			charge -= output * SMESRATE // Reduce the storage (may be recovered in /restore() if excessive)
 
 		add_avail(output) // Add output to powernet (smes side)
 
-		if (charge < 0.0001)
-			online = FALSE
-			output = 0
-
-	// Only update icon if state changed
+	// Reflect state change
 	if(_charging != charging || _online != online || _chargedisplay != chargedisplay())
 		update_icon()
+		//update_sound()
 
 /obj/machinery/power/battery/proc/chargedisplay()
 	return clamp(round(5.5*charge/(capacity ? capacity : 5e6)), 0, battery_charge.len)
@@ -177,6 +232,10 @@ var/global/list/battery_online =	list(
  */
 /obj/machinery/power/battery/proc/restore()
 	if (stat & BROKEN)
+		return
+
+	if (external_power_supply) // External supply provides free power - don't absorb excess back into charge
+		lastexcess = 0
 		return
 
 	var/_chargedisplay = chargedisplay()
@@ -225,8 +284,8 @@ var/global/list/battery_online =	list(
 	var/data[0]
 	data["nameTag"] = name_tag
 	data["storedCapacity"] = round(100.0*charge/capacity, 0.1)
-	data["charge"] = charge ? charge/SMESRATE : 0 //Compensates for the input/output rate
-	data["capacity"] = capacity ? capacity/SMESRATE : 0
+	data["charge"] = charge ? charge/SMESRATE/1000 : 0 //Compensates for the input/output rate, and converts the value into kilo (1000)
+	data["capacity"] = capacity ? capacity/SMESRATE/1000 : 0
 	data["charging"] = charging
 	data["chargeMode"] = chargemode
 	data["chargeLoad"] = round(chargereceived)
@@ -285,6 +344,9 @@ var/global/list/battery_online =	list(
 	else if( href_list["online"] )
 		online = !online
 		update_icon()
+		if (sound_emitter)
+			sound_emitter.play("smes_switch")
+		//update_sound()
 	else if( href_list["input"] )
 		switch( href_list["input"] )
 			if("min")
@@ -355,6 +417,9 @@ var/global/list/battery_online =	list(
 	if(prob(50)) //Toggle on/off
 		online = !online
 		update_icon()
+		if (sound_emitter)
+			sound_emitter.play("smes_switch")
+		//update_sound()
 	else //Screw up power input/output
 		chargelevel = rand(0, max_input)
 		outputlevel = rand(0, max_output)

@@ -1,7 +1,7 @@
 /mob/dead/observer/Login()
 	..()
 	observers += src
-	
+
 	client.show_popup_menus = TRUE
 
 	if(src.check_rights(R_ADMIN|R_FUN))

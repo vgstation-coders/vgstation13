@@ -17,7 +17,7 @@
 		return
 	var/turf/T
 	T = get_turf(caster)
-	for(var/mob/living/carbon/target in dview(caster.client.view+DATAHUD_RANGE_OVERHEAD, T, INVISIBILITY_MAXIMUM))
+	for(var/mob/living/carbon/target in (caster.loneliness_affected() ? list(caster) : dview(caster.client.view+DATAHUD_RANGE_OVERHEAD, T, INVISIBILITY_MAXIMUM)))
 		if(!check_HUD_visibility(target, caster))
 			continue
 		if(target.mind)

@@ -520,9 +520,8 @@
 
 
 /obj/item/weapon/storage/fancy/vials/New()
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/glass/beaker/vial = storage_slots)
 	..()
-	for(var/i=1; i <= storage_slots; i++)
-		new /obj/item/weapon/reagent_containers/glass/beaker/vial(src)
 	update_icon()
 
 /obj/item/weapon/storage/fancy/vials/update_icon()
@@ -530,8 +529,8 @@
 
 	var/i = 0
 	for (var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial in contents)
-		var/image/vial_image = image('icons/obj/vialbox.dmi',src,"vial")
-		if(vial.reagents.total_volume)
+		var/image/vial_image = image('icons/obj/vialbox.dmi',src,vial.icon_state)
+		if(!vial.opaque && vial.reagents.total_volume)
 			var/image/filling = image('icons/obj/vialbox.dmi',src, "vial_reagents")
 			filling.icon += mix_color_from_reagents(vial.reagents.reagent_list)
 			filling.alpha = mix_alpha_from_reagents(vial.reagents.reagent_list)
@@ -567,6 +566,11 @@
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 6
 	req_one_access = list(access_virology) //Obj was inheriting from obj/storage/lockbox which requires armory access.  This behavior is overridden here.
+	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 200)
+
+/obj/item/weapon/storage/lockbox/vials/nolock
+	startswithelectronics = FALSE
+	locked = FALSE
 
 /obj/item/weapon/storage/lockbox/vials/New()
 	..()
@@ -576,13 +580,13 @@
 	overlays.len = 0
 	icon_state = "vialbox"
 	item_state = "vialbox"
-	if (!broken && !locked)
+	if (!emagged && !locked)
 		overlays += image('icons/obj/vialbox.dmi',src,"cover_open")
 
 	var/i = 0
 	for (var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial in contents)
-		var/image/vial_image = image('icons/obj/vialbox.dmi',src,"vial")
-		if(vial.reagents.total_volume)
+		var/image/vial_image = image('icons/obj/vialbox.dmi',src,vial.icon_state)
+		if(!vial.opaque && vial.reagents.total_volume)
 			var/image/filling = image('icons/obj/vialbox.dmi',src, "vial_reagents")
 			filling.icon += mix_color_from_reagents(vial.reagents.reagent_list)
 			filling.alpha = mix_alpha_from_reagents(vial.reagents.reagent_list)
@@ -598,7 +602,7 @@
 		overlays += vial_image
 		i++
 
-	if (!broken)
+	if (!emagged && electronics)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover")
@@ -740,7 +744,7 @@
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/New()
 	..()
-	for(var/i=1, i <= storage_slots; i++)
+	for(var/i=1; i <= storage_slots; i++)
 		new slider_type(src)
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/synth
@@ -866,3 +870,33 @@
 		return
 	for(var/i in 1 to storage_slots)
 		new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
+
+/*
+ * Bad Battery Box
+ */
+
+/obj/item/weapon/storage/fancy/battery_box
+	icon = 'icons/obj/storage/battery_container.dmi'
+	icon_state = "batterybox6"
+	icon_type = "battery"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	item_state = "box"
+	name = "battery box"
+	storage_slots = 6
+	can_only_hold = list("/obj/item/weapon/cell/crap","/obj/item/weapon/cell/secborg","/obj/item/weapon/cell/miningborg")
+
+	foldable = /obj/item/stack/sheet/cardboard
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type = RECYK_CARDBOARD
+
+/obj/item/weapon/storage/fancy/battery_box/empty
+	empty = 1
+	icon_state = "batterybox0"
+
+/obj/item/weapon/storage/fancy/battery_box/New()
+	..()
+	if(empty)
+		update_icon()
+		return
+	for(var/i in 1 to storage_slots)
+		new /obj/item/weapon/cell/crap(src)

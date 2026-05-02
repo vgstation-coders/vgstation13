@@ -333,10 +333,10 @@
 
 	race_items_to_collect = list(
 		/datum/species/vox/ = list(
-			/obj/item/clothing/suit/armor/hos/jensen,
+			/obj/item/clothing/suit/armor/vest/security,
 		),
 		/datum/species/plasmaman/ = list(
-			/obj/item/clothing/suit/armor/hos/jensen,
+			/obj/item/clothing/suit/armor/vest/security,
 		)
 	)
 

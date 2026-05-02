@@ -60,6 +60,7 @@
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
 		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(), \
 		new /obj/item/weapon/storage/toolbox(), \
+		new /obj/item/weapon/storage/lockbox/coinbox(), \
 		new /obj/item/weapon/reagent_containers/glass/jar(), \
 		),
 		"Assemblies"=list(
@@ -94,6 +95,15 @@
 		new /obj/item/tool/cautery(),\
 		new /obj/item/tool/hemostat(),\
 		),
+		"Cutlery"=list(
+		new /obj/item/weapon/kitchen/utensil/knife/large(), \
+		new /obj/item/weapon/kitchen/utensil/knife(), \
+		new /obj/item/weapon/kitchen/utensil/fork(), \
+		new /obj/item/weapon/kitchen/utensil/spoon(), \
+		new /obj/item/weapon/kitchen/utensil/spork(), \
+		new /obj/item/weapon/tray(), \
+		new /obj/item/weapon/kitchen/canopener(), \
+		),
 		"Ammunition"=list(
 		new /obj/item/ammo_casing/shotgun/blank(), \
 		new /obj/item/ammo_casing/shotgun/beanbag(), \
@@ -108,7 +118,6 @@
 		new /obj/item/weapon/extinguisher/empty(), \
 		new /obj/item/device/radio/headset(), \
 		new /obj/item/device/radio/off(), \
-		new /obj/item/weapon/kitchen/utensil/knife/large(), \
 		new /obj/item/clothing/head/welding(), \
 		new /obj/item/device/taperecorder(), \
 		new /obj/item/tool/wirecutters/scissors(), \

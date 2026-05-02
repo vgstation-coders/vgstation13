@@ -18,14 +18,8 @@
 	desc = null
 	icon = 'icons/turf/meat.dmi'
 	icon_state = "flesh"
-
-/turf/simulated/floor/plating/flesh/New()
-	..()
-	var/image/img = image('icons/turf/rock_overlay.dmi', "flesh_overlay",layer = SIDE_LAYER)
-	img.pixel_x = -4*PIXEL_MULTIPLIER
-	img.pixel_y = -4*PIXEL_MULTIPLIER
-	img.plane = relative_plane(ABOVE_TURF_PLANE)
-	overlays += img
+	edge_flags = EDGE_CARDINAL
+	edge_priority = ROCK_EDGE_PRIORITY
 
 //Objects
 /obj/item/voucher/free_item/scrip
@@ -192,6 +186,11 @@
 		L.reagents.add_reagent(FEVERFEW,3)
 		to_chat(L, "<span class='danger'>You prick yourself on \the [src].</span>")
 
+/obj/structure/flora/desert/saguaro/hell
+	name = "hell cactus"
+	desc = "The Hell Cactus has adapted to the harshest environment known to man or beast."
+	color = "#4500a1"
+
 /obj/structure/flora/desert/saguaro/New()
 	..()
 	icon_state = "saguaro_[rand(1,2)]"
@@ -271,7 +270,7 @@
 /spell/mountup
 	name = "Mount Up"
 	desc = "Mount a steed."
-	charge_max = 0
+	charge_cooldown_max = 0 SECONDS
 	spell_flags = 0
 	cast_delay = 2 SECONDS
 	var/obj/effect/overlay/my_overlay

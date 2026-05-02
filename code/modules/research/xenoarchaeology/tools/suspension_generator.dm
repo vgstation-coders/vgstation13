@@ -9,6 +9,7 @@
 	density = 1
 	req_access = list(access_science)
 	machine_flags = EMAGGABLE
+	verb_rotates = TRUE
 	var/obj/item/weapon/cell/cell
 	var/obj/item/weapon/card/id/auth_card
 	var/locked = 1
@@ -134,7 +135,7 @@
 		dat += "<br>"
 	dat += "<A href='?src=\ref[src];refresh=1'>Refresh console</A><br>"
 	dat += "<A href='?src=\ref[src];close=1'>Close console</A>"
-	user << browse(dat, "window=suspension;size=500x400")
+	user << browse(HTML_SKELETON(dat), "window=suspension;size=500x400")
 	onclose(user, "suspension")
 
 /obj/machinery/suspension_gen/Topic(href, href_list)
@@ -345,26 +346,6 @@
 	//safety checks: clear the field and drop anything it's holding
 	deactivate()
 	..()
-
-/obj/machinery/suspension_gen/verb/rotate_cw()
-	set src in view(1)
-	set name = "Rotate suspension gen (Clockwise)"
-	set category = "Object"
-
-	if(anchored)
-		to_chat(usr, "<span class='warning'>You cannot rotate \the [src], it has been firmly fixed to the floor.</span>")
-	else
-		dir = turn(dir, -90)
-
-/obj/machinery/suspension_gen/verb/rotate_ccw()
-	set src in view(1)
-	set name = "Rotate suspension gen (Counter-Clockwise)"
-	set category = "Object"
-
-	if(anchored)
-		to_chat(usr, "<span class='warning'>You cannot rotate \the [src], it has been firmly fixed to the floor.</span>")
-	else
-		dir = turn(dir, 90)
 
 /obj/effect/suspension_field
 	name = "energy field"

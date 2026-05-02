@@ -7,7 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/weapon/reagent_containers/food/drinks
 	name = "drink"
-	desc = "yummy"
+	desc = "Yummy."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
 	icon = 'icons/obj/drinks.dmi'
 	icon_state = "glassbottle"
@@ -290,9 +290,7 @@
 			spawn(5)
 				reagents.trans_to(M, gulp_size)
 
-		if(isrobot(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
-			var/mob/living/silicon/robot/bro = user
-			bro.cell.use(30)
+		if(use_cell_charge(user,30)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
 			var/refill = reagents.get_master_reagent_id()
 			spawn(600)
 				reagents.add_reagent(refill, gulp_size)
@@ -866,6 +864,12 @@
 		overlays += image(icon = icon, icon_state = "soda_open")
 		set_blood_overlay()
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/kitchen/canopener))
+		if(!is_open_container())
+			return pop_open(user)
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
 		return pop_open(user)
@@ -894,6 +898,16 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola/New()
 	..()
 	reagents.add_reagent(COLA, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cryocola //looks identical to space cola.
+	name = "Space Cola"
+	desc = "Cola. in space."
+	icon_state = "cola"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cryocola/New()
+	..()
+	reagents.add_reagent(CRYOCOLA, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
@@ -1180,8 +1194,8 @@
 	icon_state = "gibness"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness/New()
 	..()
-	reagents.add_reagent(BEER, 25)
-	reagents.add_reagent(POTATO, 25)
+	reagents.add_reagent(STOUT, 45)
+	reagents.add_reagent(POTATO, 5)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer
 	name = "Geometer"
@@ -1210,8 +1224,7 @@
 	icon_state = "orchardtides"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides/New()
 	..()
-	reagents.add_reagent(BEER, 20)
-	reagents.add_reagent(APPLEJUICE, 30)
+	reagents.add_reagent(CIDER, 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken
 	name = "Sleimiken"
@@ -1228,8 +1241,7 @@
 	icon_state = "strongebow"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow/New()
 	..()
-	reagents.add_reagent(BEER, 30)
-	reagents.add_reagent(APPLEJUICE, 20)
+	reagents.add_reagent(CIDER, 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee
 	name = "Kiririn FIRE"
@@ -1249,7 +1261,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee
 	name = "Energizer"
-	desc = "Smells a bit like Battery Acid"
+	desc = "Smells a bit like Battery Acid."
 	icon_state = "engicoffee"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee/New()
 	..()
@@ -1257,7 +1269,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard
 	name = "Supermatter Sea Salt Soda "
-	desc = "Mmmmm Blurple"
+	desc = "Mmmmm... blurple."
 	icon_state = "engicoffee_shard"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard/New()
 	..()
@@ -1438,7 +1450,8 @@
 			var/mob/living/carbon/M = loc
 			M.update_inv_hands()
 		playsound(user, 'sound/items/boston_shaker.ogg', 80, 1)
-		if(do_after(user, src, 30))
+		var/callback/shaker_do_after_callback/shaker_callback=new()
+		if(do_after(user, src, 30,custom_checks=shaker_callback))
 			reagents.trans_to(reaction,volume)
 			reaction.reagents.trans_to(reagents,volume)
 		icon_state = initial(icon_state)
@@ -1450,6 +1463,18 @@
 /obj/item/weapon/reagent_containers/food/drinks/shaker/reaction
 	flags = FPRINT  | OPENCONTAINER | SILENTCONTAINER
 	volume = 300
+
+//allows you to move around while shaking the shaker.
+/callback/shaker_do_after_callback/invoke(var/mob/user, var/turf/use_user_turf, var/user_original_location, var/atom/target, var/target_original_location, var/needhand, var/obj/item/originally_held_item)
+	if(!user || user.isStunned())
+		return FALSE
+	if(target.loc != target_original_location)
+		return FALSE
+	if(!originally_held_item)
+		return FALSE
+	if(!user.is_holding_item(originally_held_item))
+		return FALSE
+	return TRUE
 
 //bluespace shaker
 
@@ -1959,7 +1984,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/kahlua
 	name = "Robert Robust's Coffee Liqueur"
-	desc = "A widely known, Mexican coffee-flavoured liqueur. In production since 1936, HONK"
+	desc = "A widely known, Mexican coffee-flavoured liqueur. In production since 1936, HONK!"
 	icon_state = "kahluabottle"
 	vending_cat = "fermented"
 	molotov = -1
@@ -2137,7 +2162,7 @@
 				user?.attack_log += text("\[[time_stamp()]\] <span class='danger'>Threw a [lit ? "lit" : "unlit"] molotov to \the [hit_atom], containing [reagents.get_reagent_ids()]</span>")
 				log_attack("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name(user)] and containing [reagents.get_reagent_ids()]")
 				message_admins("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name_admin(user)] and containing [reagents.get_reagent_ids()]")
-			reagents.splashplosion(reagents.total_volume >= (reagents.maximum_volume/2))//splashing everything on the tile hit, and the surrounding ones if we're over half full.
+			reagents.splashplosion(0)//splashing everything on the tile hit, and the surrounding ones if we're over half full.
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
 		if(molotov == 1) //for molotovs
@@ -2192,9 +2217,11 @@
 		update_icon()
 		return 1
 	else if(I.is_hot())
-		attempt_heating(I, user)
 		light(user,I)
 		update_brightness(user)
+		if(molotov == 1)
+			return
+		attempt_heating(I, user)
 	else if(istype(I, /obj/item/device/assembly/igniter))
 		var/obj/item/device/assembly/igniter/C = I
 		C.activate()
@@ -2205,6 +2232,8 @@
 		if(reagents.total_volume)
 			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
 			D.dip(src, user)
+			return
+	..()
 
 /obj/item/weapon/reagent_containers/food/drinks/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(!(molotov == 1))
@@ -2331,8 +2360,8 @@
 				return ..()
 
 			// Geometrically checking if we're on a straight line.
-			var/vector/V = atoms2vector(src, over_location)
-			var/vector/V_norm = V.normalized()
+			var/_vector/V = atoms2vector(src, over_location)
+			var/_vector/V_norm = V.normalized()
 			if (!V_norm.is_integer())
 				return ..() // Only a cardinal vector (north, south, east, west) can pass this test
 
@@ -2343,7 +2372,7 @@
 			do
 				temp_turf = temp_turf.get_translated_turf(V_norm)
 				if (!locate(/obj/structure/table) in temp_turf)
-					var/vector/V2 = atoms2vector(src, temp_turf)
+					var/_vector/V2 = atoms2vector(src, temp_turf)
 					vector_translate(V2, 0.1 SECONDS)
 					user.visible_message("<span class='warning'>\The [user] slides \the [src] down the table... and straight into the ground!</span>", "<span class='warning'>You slide \the [src] down the table, and straight into the ground!</span>")
 					create_broken_bottle()

@@ -7,15 +7,20 @@
 	var/construction_length = 40
 	pass_flags_self = PASSGIRDER
 
-/obj/structure/girder/attack_animal(var/mob/living/simple_animal/M)
+/obj/structure/girder/attack_animal(var/mob/living/M)
 	M.delayNextAttack(8)
-	if(M.environment_smash_flags & SMASH_WALLS)
-		if(prob(25)) // Not the best solution, but this should allow for better feedback so the player realizes the mob is trying to break through and has time to retreat
-			playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
-			M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
-			"<span class='attack'>You smash through \the [src].</span>")
-			drop_stack(material, get_turf(src), 2)
-			qdel(src)
+	if(istype(M,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = M
+		if(SA.environment_smash_flags & SMASH_WALLS)
+			if(prob(25)) // Not the best solution, but this should allow for better feedback so the player realizes the mob is trying to break through and has time to retreat
+				playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+				M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
+				"<span class='attack'>You smash through \the [src].</span>")
+				drop_stack(material, get_turf(src), 2)
+				qdel(src)
+			else
+				M.visible_message("<span class='danger'>[M] smashes against \the [src].</span>", \
+				"<span class='attack'>You smash against \the [src].</span>")
 		else
 			M.visible_message("<span class='danger'>[M] smashes against \the [src].</span>", \
 			"<span class='attack'>You smash against \the [src].</span>")
@@ -105,7 +110,7 @@
 		"<span class='notice'>You start [PK.drill_verb] \the [src] with \the [PK]</span>")
 		if(do_after(user, src, 30))
 			user.visible_message("<span class='warning'>[user] destroys \the [src]!</span>", \
-			"<span class='notice'>Your [PK] tears through the last of \the [src]!</span>")
+			"<span class='notice'>Your \the [PK] tears through the last of \the [src]!</span>")
 			new material(get_turf(src))
 			qdel(src)
 
@@ -177,6 +182,37 @@
 			add_fingerprint(user)
 			anchored = 0
 			update_icon()
+
+	else if(istype(W, /obj/item/stack/shuttle_panel))
+		if(state)
+			return
+		if(material != /obj/item/stack/sheet/metal)
+			return
+		if(!anchored)
+			to_chat(user, "<span class='warning'>The girder needs to be secured first.</span>")
+			return
+		var/obj/item/stack/shuttle_panel/SP = W
+		if(SP.amount < 1)
+			return
+		user.visible_message("<span class='notice'>[user] starts installing \the [SP] onto \the [src].</span>", \
+		"<span class='notice'>You start installing \the [SP] onto \the [src].</span>")
+		if(do_after(user, src, construction_length))
+			if(SP.amount < 1) //User being tricky
+				return
+			SP.use(1)
+			user.visible_message("<span class='notice'>[user] finishes installing \the [SP] onto \the [src].</span>", \
+			"<span class='notice'>You finish installing \the [SP] onto \the [src].</span>")
+			var/turf/Tsrc = get_turf(src)
+			if(!istype(Tsrc))
+				return 0
+			for(var/obj/effect/decal/cleanable/blood/tracks/footprints in Tsrc)
+				qdel(footprints)
+			var/turf/simulated/wall/shuttle/panel/X = Tsrc.ChangeTurf(SP.wall_type)
+			if(X)
+				X.add_hiddenprint(user)
+				X.add_fingerprint(user)
+			qdel(src)
+		return
 
 	else if(istype(W, /obj/item/stack))//this could be either material stacks or tile stacks
 		var/use_amount = 2
@@ -491,7 +527,7 @@
 							"<span class='notice'>You start [PK.drill_verb] \the [src] with \the [PK].</span>")
 		if(do_after(user, src,30))
 			user.visible_message("<span class='warning'>[user] destroys \the [src]!</span>",
-								"<span class='notice'>Your [PK] tears through the last of \the [src]!</span>")
+								"<span class='notice'>Your [PK.name] tears through the last of \the [src]!</span>")
 			new /obj/effect/decal/remains/human(loc)
 			qdel(src)
 

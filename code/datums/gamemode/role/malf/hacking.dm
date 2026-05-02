@@ -9,7 +9,7 @@
 	var/malf_disrupted = FALSE
 	var/aicontrolbypass = FALSE
 
-	var/hack_abilities = list(
+	var/list/hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
 		/datum/malfhack_ability/oneuse/overload_quiet
 	)

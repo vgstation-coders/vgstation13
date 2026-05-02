@@ -56,10 +56,12 @@
 
 	//Station Holomaps display the map of the Z-Level they were built on.
 	generateStationMinimap(map.zMainStation)
-	if(world.maxz >= map.zAsteroid)
+	if(map.zAsteroid && (world.maxz >= map.zAsteroid))
 		generateStationMinimap(map.zAsteroid)
-	if(world.maxz >= map.zDerelict)
+	if(map.zDerelict && (world.maxz >= map.zDerelict))
 		generateStationMinimap(map.zDerelict)
+	if(map.zAdditionalStationZlevel && (world.maxz >= map.zAdditionalStationZlevel))
+		generateStationMinimap(map.zAdditionalStationZlevel)
 	//If they were built on another Z-Level, they will display an error screen.
 
 	holomaps_initialized = 1
@@ -187,7 +189,7 @@
 		full_obstacles += /obj/structure/flora/tree
 
 	if(!map.disable_holominimap_generation)
-		if (zLevel > map.zDeepSpace)
+		if (zLevel > world.maxz)
 			return // No need to generate an holomap for something that didn't spawn.
 		if(zLevel != map.zCentcomm)
 			for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))

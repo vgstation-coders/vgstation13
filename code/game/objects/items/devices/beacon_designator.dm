@@ -9,7 +9,7 @@
 
 /obj/item/weapon/beacon_dispenser
 	name = "beacon based area designator"
-	desc = "Guide to using: 1. spawn beacons in the shape of the future area, 2. use the 'Create an area' command, 3. ???, 4. ADMINBUS"
+	desc = "Guide to using: 1. spawn beacons in the shape of the future area, 2. use the 'Create an area' command, 3. ???, 4. ADMINBUS!"
 	icon = 'icons/obj/bluespace_beacon.dmi'
 	icon_state = "dispenser"
 

@@ -2,7 +2,7 @@
 
 /obj/machinery/singularity/narsie/large/exit
 	name = "Bluespace Rift"
-	desc = "NO TIME TO EXPLAIN, JUMP IN"
+	desc = "NO TIME TO EXPLAIN, JUMP IN!"
 	icon = 'icons/obj/rift.dmi'
 	icon_state = "rift"
 	move_self = FALSE
@@ -65,6 +65,7 @@
 					step_towards(AM, src)
 
 /datum/map_element/dungeon/rift_beach
+	name = "Rift Beach"
 	file_path = "maps/misc/riftbeach1.dmm"
 	unique = TRUE
 

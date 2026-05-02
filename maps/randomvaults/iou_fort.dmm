@@ -110,17 +110,13 @@
 /obj/effect/decal/cleanable/blood/gibs{
 	icon_state = "gibmid1"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/ioufort)
 "u" = (
 /obj/effect/decal/cleanable/blood/gibs{
 	icon_state = "gib1"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/ioufort)
 "v" = (
 /turf/simulated/floor{
@@ -155,17 +151,13 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/ioufort)
 "z" = (
 /obj/effect/decal/cleanable/blood/gibs{
 	icon_state = "gib3"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/ioufort)
 "A" = (
 /obj/machinery/door/airlock/vault,
@@ -188,17 +180,13 @@
 /obj/effect/decal/cleanable/blood/gibs{
 	icon_state = "gib4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/ioufort)
 "E" = (
 /obj/effect/decal/cleanable/blood/gibs{
 	icon_state = "gibmid2"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/ioufort)
 "F" = (
 /obj/machinery/light{

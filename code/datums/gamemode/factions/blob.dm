@@ -160,6 +160,7 @@
 				set_security_level("red")//We raise the sec level to red, unless some malf AI has it set to delta already
 			command_alert(/datum/command_alert/blob_defcon_3)
 			stage = BLOB_DEFCON_3
+			ticker.StartThematic("endgame")
 
 		if (BLOB_DEFCON_2) // 30% blob count: free borg reset and allow the ERT to be called
 			command_alert(/datum/command_alert/blob_defcon_2)
@@ -196,7 +197,9 @@
 				var/law = "Directive 7-12 has been authorized. Allow no sentient being to escape the purge. The nuclear failsafe must be activated at any cost, the code is: [nukecode]."
 				aiPlayer.set_zeroth_law(law)
 				to_chat(aiPlayer, "Laws Updated: [law]")
-			..() //Set thematic
+			stage = FACTION_ENDGAME
+		/*	..() //Set thematic
+		This goes to the faction endgame stuff, but all of that is done here already and it would interfere with the thematic to have this uncommented. Break glass in case of emergency. */
 		if (FACTION_DEFEATED) //Cleanup time
 			command_alert(/datum/command_alert/biohazard_station_unlock)
 			send_intercept(FACTION_DEFEATED)

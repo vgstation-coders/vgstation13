@@ -21,7 +21,7 @@
 		<a href='?src=\ref[src];makeAntag=8'>Make Aliens (Requires Ghosts)</a><br>
 		"}
 
-	usr << browse(dat, "window=oneclickantag;size=400x400")
+	usr << browse(HTML_SKELETON(dat), "window=oneclickantag;size=400x400")
 	return
 
 
@@ -196,8 +196,7 @@
 					break
 
 				new_syndicate_commando.key = theghost.key
-				new_syndicate_commando.internal = new_syndicate_commando.s_store
-				new_syndicate_commando.internals.icon_state = "internal1"
+				new_syndicate_commando.equip_internals(new_syndicate_commando.s_store)
 
 				//So they don't forget their code or mission.
 

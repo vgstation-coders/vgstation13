@@ -60,7 +60,7 @@
 		if((R_ADMIN|R_MOD) & C.holder.rights)
 			if(C.is_afk())
 				admin_number_afk++
-		if(C.prefs.toggles & CHAT_PRAYER)
+		if(C.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_PRAYER)
 			C.output_to_special_tab(msg)
 			C << sound
 

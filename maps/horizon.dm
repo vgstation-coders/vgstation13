@@ -28,7 +28,8 @@
 						,/datum/event/thing_storm/fireworks)
 
 	load_map_elements = list(
-	/datum/map_element/dungeon/holodeck/holodeck_3x3
+	/datum/map_element/dungeon/holodeck/holodeck_3x3,
+	/datum/map_element/dungeon/mecha_graveyard
 	)
 	has_engines = TRUE
 
@@ -37,35 +38,6 @@
 
 	center_x = 253
 	center_y = 142
-
-	default_tagger_locations = list(
-		null,
-		null,
-		null,
-		DISP_ENGINEERING,
-		null,
-		DISP_ATMOSPHERICS,
-		DISP_SECURITY,
-		null,
-		DISP_MEDBAY,
-		null,
-		null,
-		DISP_RESEARCH,
-		null,
-		DISP_ROBOTICS,
-		null,
-		null,
-		null,
-		null,
-		DISP_BAR,
-		DISP_KITCHEN,
-		DISP_HYDROPONICS,
-		null,
-		DISP_GENETICS,
-		null,
-		null,
-		null
-	)
 
 /datum/map/active/New()
 	.=..()

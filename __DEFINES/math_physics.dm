@@ -59,4 +59,6 @@
 
 #define IS_INT(x) (x == round(x))
 
+#define fancytrunc(x, y) (floor(x*(y*10))/(y*10)) //X is the value to truncate, Y is the trunc multiplier, i.e: x,3 would truncate to the thousandth. 
+
 #define GLIDE_SIZE_OF_A_WALKING_HUMAN 2.4615386

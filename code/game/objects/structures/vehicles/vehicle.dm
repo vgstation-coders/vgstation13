@@ -137,9 +137,11 @@
 					if(!istype(W, keytype))
 						to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
 						return
+					var/obj/item/key/K=W
 					if(mykey && mykey != W)
-						to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
-						return
+						if(!vin || !K.vin || K.vin!=vin) //if neither have a vin id, or they don't match (since they default as null)
+							to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
+							return
 				if(((M_CLUMSY in user.mutations) || user.getBrainLoss("coordination") >= 60) && prob(50))
 					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
 					return
@@ -178,6 +180,12 @@
 /obj/structure/bed/chair/vehicle/proc/check_key(var/mob/user)
 	if(!keytype)
 		return 1
+	if(vin)
+		if(heldkey && heldkey.vin == vin)
+			return TRUE
+		for(var/obj/item/key/K in user.held_items)
+			if(istype(K,keytype) && K.vin==vin)
+				return TRUE
 	if(mykey)
 		return heldkey == mykey || user.is_holding_item(mykey)
 	return istype(heldkey, keytype) || user.find_held_item_by_type(keytype)
@@ -394,6 +402,8 @@
 		die()
 
 /obj/structure/bed/chair/vehicle/suicide_act(var/mob/living/user)
+	if(!keytype)
+		return ..()
 	if(occupant == user)
 		to_chat(viewers(user), "<span class='danger'>[user] is licking the keyhole of the [src]! It looks like \he's trying to commit suicide.</span>")
 		return(SUICIDE_ACT_FIRELOSS)
@@ -424,6 +434,11 @@
 /obj/structure/bed/chair/vehicle/proc/setup_wreckage(var/obj/effect/decal/mecha_wreckage/wreck)
 	// Transfer salvagables here.
 	return
+
+/obj/structure/bed/chair/vehicle/GetAccess()
+	if(is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE))
+		var/atom/locked = get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]
+		return locked.GetAccess()
 
 /obj/structure/bed/chair/vehicle/to_bump(var/atom/movable/obstacle)
 	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
@@ -458,7 +473,9 @@
 
 /obj/structure/bed/chair/vehicle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/oldloc = loc
-	..()
+	if(!..())
+		//Failed to move at all
+		return
 	if (loc == oldloc)
 		return
 	if(next_cart)
@@ -475,18 +492,18 @@
 //           VEHICLE ACTIONS
 ////////////////////////////////////
 
+/datum/action/vehicle/New(var/obj/structure/bed/chair/vehicle/Target)
+	..()
+	icon_icon = Target.icon
+	button_icon_state = Target.icon_state
+	Target.vehicle_actions += src
+
 /datum/action/vehicle/toggle_headlights
 	name = "toggle headlights"
 	desc = "Turn the headlights on or off."
 	var/on = FALSE
 	var/brightness = 6
 	var/sounds = list('sound/items/flashlight_on.ogg','sound/items/flashlight_off.ogg')
-
-/datum/action/vehicle/toggle_headlights/New(var/obj/structure/bed/chair/vehicle/Target)
-	..()
-	icon_icon = Target.icon
-	button_icon_state = Target.icon_state
-	Target.vehicle_actions += src
 
 /datum/action/vehicle/toggle_headlights/Trigger()
 	if(!..())
@@ -504,3 +521,31 @@
 	name = "toggle siren"
 	desc = "Turn the siren lights on or off."
 	sounds = list('sound/voice/woopwoop.ogg','sound/items/flashlight_off.ogg')
+
+/datum/action/vehicle/spray_extinguisher
+	name = "spray extinguisher"
+	desc = "Spray an attached extinguisher directly in front of you."
+
+/datum/action/vehicle/spray_extinguisher/New()
+	..()
+	icon_icon = 'icons/obj/items.dmi'
+	button_icon_state = "fire_extinguisher0"
+
+/datum/action/vehicle/spray_extinguisher/IsAvailable()
+	. = ..()
+	if(!locate(/obj/item/weapon/extinguisher) in target.contents)
+		return FALSE
+
+/datum/action/vehicle/spray_extinguisher/Trigger()
+	if(!..())
+		return FALSE
+	for(var/obj/item/weapon/extinguisher/sprayer in target.contents)
+		if(sprayer.safety)
+			to_chat(owner,"<span class='notice'>The trigger is locked, the safety on \the [sprayer] is on.</span>")
+			return FALSE
+		sprayer.afterattack(get_ranged_target_turf(target, target.dir, 4), owner)
+		if(istype(target,/obj/structure/bed/chair/vehicle/tractor/fire/))
+			var/obj/structure/bed/chair/vehicle/tractor/fire/my_tractor = target
+			if(my_tractor.extinguisher_linked)
+				var/avail_vol = sprayer.reagents.maximum_volume - sprayer.reagents.total_volume
+				sprayer.reagents.add_reagent(WATER, avail_vol)

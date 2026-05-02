@@ -180,6 +180,7 @@ var/global/list/organ_damage_overlays = list(
 		cycle = "DEAD"
 		return //We go ahead and process them 5 times for HUD images and other stuff though.
 	handle_environment(environment)
+	handle_weather()
 	handle_fire()
 	handle_regular_status_updates()	//Optimized a bit
 	update_canmove()

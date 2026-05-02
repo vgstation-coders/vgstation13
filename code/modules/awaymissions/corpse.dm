@@ -1367,6 +1367,14 @@
 	if(prob(50))
 		corpseglasses = null
 
+/obj/effect/landmark/corpse/ninja
+	name = "Ninja"
+	corpseuniform = /obj/item/clothing/under/color/black
+	corpsesuit = /obj/item/clothing/suit/space/ninja/apprentice
+	corpseshoes = /obj/item/clothing/shoes/ninja/apprentice
+	corpsegloves = /obj/item/clothing/gloves/ninja
+	corpsemask = /obj/item/clothing/mask/gas/voice/ninja
+
 #undef G_MALE
 #undef G_FEMALE
 #undef G_BOTH

@@ -133,13 +133,23 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.11775
 	specheatcap = 2.71388
+	var/lube_color = null
 
 /datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
 		return 1
 
 	if(volume >= 1)
-		T.wet(800, TURF_WET_LUBE)
+		T.wet(800, TURF_WET_LUBE, lube_color)
+
+/datum/reagent/lube/cherry
+	name = "Cherry-Flavored Lube"
+	id = CHERRYLUBE
+	description = "Your favorite."
+	color = "#FF80B0"
+	density = 1.11775
+	specheatcap = 2.71388
+	lube_color = "#FF80B0"
 
 /datum/reagent/luminol
 	name = "Luminol"
@@ -389,7 +399,7 @@
 	if(..())
 		return 1
 
-	if(volume >= 1)
+	if ((volume >= 1) || (clean_level >= CLEANLINESS_BLEACH))
 		for (var/obj/effect/decal/cleanable/C in T)
 			qdel(C)
 
@@ -397,8 +407,6 @@
 			T.overlays -= T.advanced_graffiti_overlay
 			T.advanced_graffiti_overlay = null
 			qdel(T.advanced_graffiti)
-
-		T.clean_blood()
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5, 10))
@@ -454,7 +462,7 @@
 	switch(tick)
 		if(1 to 10)
 			M.adjustBruteLoss(3 * REM) //soft tissue damage
-		if(10 to INFINITY)
+		if(11 to INFINITY)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(5))
@@ -484,7 +492,7 @@
 				H.audible_scream()
 				to_chat(H,"<span class='danger'>You are sprayed directly in the eyes with bleach!</span>")
 				H.eye_blurry = max(M.eye_blurry, 15)
-				H.eye_blind = max(M.eye_blind, 5)
+				H.instant_blindness(15)
 				H.adjustBruteLoss(2)
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 				E.take_damage(5, 1)

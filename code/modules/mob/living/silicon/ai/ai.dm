@@ -157,7 +157,7 @@ var/list/ai_list = list()
 			if (mind && !stored_freqs)
 				to_chat(src, "The various frequencies used by the crew to communicate have been stored in your mind. Use the verb <i>Notes</i> to access them.")
 				spawn(1)
-					mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
+					mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>", category=MIND_MEMORY_GENERAL, forced=TRUE)
 				stored_freqs = 1
 
 			job = "AI"
@@ -265,7 +265,7 @@ var/static/list/ai_icon_states = list(
 		"Helios" = "ai-helios",
 		"Hourglass" = "ai-hourglass",
 		"Inverted" = "ai-u",
-		"JaCobson" = "ai-cobson",
+		"Jobe Smith" = "ai-cobson",
 		"Jack Frost" = "ai-jack",
 		"Matrix" = "ai-matrix",
 		"Metaclub" = "ai-terminal",
@@ -359,7 +359,7 @@ var/static/list/ai_icon_states = list(
 		dat += "<BR>\n"
 
 	viewalerts = TRUE
-	src << browse(dat, "window=aialerts&can_close=0")
+	src << browse(HTML_SKELETON(dat), "window=aialerts&can_close=0")
 
 // this verb lets the ai see the stations manifest
 /mob/living/silicon/ai/proc/ai_roster()
@@ -950,7 +950,9 @@ var/static/list/ai_icon_states = list(
 	icon_state = chosen_core_icon_state
 
 /mob/living/silicon/ai/update_perception()
-	if(ai_flags & HIGHRESCAMS)
-		client?.darkness_planemaster.alpha = 150
-	else
-		client?.darkness_planemaster.alpha = 255
+	if(dark_plane)
+		if(ai_flags & HIGHRESCAMS)
+			dark_plane.alphas["ai"] = 105
+		else
+			dark_plane.alphas["ai"] = 10
+	check_dark_vision()

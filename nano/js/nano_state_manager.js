@@ -38,9 +38,10 @@ NanoStateManager = function ()
 	var init = function ()
 	{
 		// We store initialData and templateData in the body tag, it's as good a place as any
-		_data = $('body').data('initialData');
+		var rawAttr = $('body').attr('data-initial-data');
+		_data = JSON.parse(decodeURIComponent(rawAttr));
 
-		_data = parseBYOND(JSON.stringify(_data)) //Can't pass a reviver to data(), so this is the easiest way to parse the special BYOND values. Hilarious in a morbid sense.
+		_data = parseBYOND(JSON.stringify(_data)); //Can't pass a reviver to data(), so this is the easiest way to parse the special BYOND values. Hilarious in a morbid sense.
 
 		if (_data == null || !_data.hasOwnProperty('config') || !_data.hasOwnProperty('data'))
 		{

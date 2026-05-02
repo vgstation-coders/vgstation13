@@ -1,5 +1,3 @@
-#define MONKEY_ANIM_TIME 22
-
 // A standardized proc for turning a mob into a monkey
 // ignore_primitive will force the mob to specifically become a monkey and not its primitive type
 // returns the monkey mob
@@ -381,5 +379,6 @@
 		my_appearance.b_facial = my_appearance.b_hair = 5
 		update_hair() //wie zal dat zijn?
 
-
-#undef MONKEY_ANIM_TIME
+		drop_hands(force_drop = 1)
+		var/strooigoed = new /obj/item/weapon/reagent_containers/food/snacks/kruidnoten(get_active_hand())
+		put_in_hands(strooigoed)

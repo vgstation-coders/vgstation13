@@ -27,7 +27,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/lit = 0
 	var/smoketime = 10
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
-	heat_production = 1000
+	heat_production = 5000
 	source_temperature = TEMPERATURE_FLAME
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
@@ -211,7 +211,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
 	attack_verb = list("prods", "pokes")
-	heat_production = 1000
+	heat_production = 5000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	slot_flags = SLOT_MASK|SLOT_EARS
@@ -231,6 +231,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/burn_on_end = FALSE
 	surgerysound = 'sound/items/cautery.ogg'
 	var/light_icon = "cig-light"
+	var/requires_oxygen = TRUE
+	var/dragon = 0.0 //world.time
 
 /obj/item/clothing/mask/cigarette/New()
 	base_name = name
@@ -470,7 +472,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if (smoketime == 5 && ismob(loc))
 		to_chat(M, "<span class='warning'>Your [name] is about to go out.</span>")
 	var/datum/gas_mixture/env = location.return_air()
-	if(smoketime <= 0 || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+	if(smoketime <= 0 || (requires_oxygen && env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME)))
 		if(smoketime > 0 && ishuman(loc))
 			var/mob/living/carbon/human/mysmoker = loc
 			if(mysmoker.internal?.air_contents.partial_pressure(GAS_OXYGEN) > 0)
@@ -505,7 +507,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
-		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
+		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask || dragon))) //If it's in the human/monkey mouth, transfer reagents to the mob
 			if(M.reagents.has_any_reagents(LEXORINS) || (M_NO_BREATH in M.mutations) || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
@@ -518,13 +520,30 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/attack_self(mob/user as mob)
 	if(lit)
-		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
-		var/turf/T = get_turf(src)
-		var/atom/new_butt = new type_butt(T)
-		transfer_fingerprints_to(new_butt)
-		lit = 0 //Needed for proper update
-		update_brightness()
-		qdel(src)
+		if(user.a_intent == I_DISARM || user.a_intent == I_HURT)
+			user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
+			var/turf/T = get_turf(src)
+			var/atom/new_butt = new type_butt(T)
+			transfer_fingerprints_to(new_butt)
+			lit = 0 //Needed for proper update
+			update_brightness()
+			qdel(src)
+		else if(dragon==0.0 && user.get_item_by_slot(slot_wear_mask)==null)
+			dragon=world.time //because the callback does not send how long do_after was being done for, so we have to do this instead. thanks, oldcoders
+			var/list/pmsg=list("slowly inhales from \the [src].","takes a drag from \the [src].","gently draws from \the [src].")
+			user.emote("me",MESSAGE_SEE,pick(pmsg))
+			
+			var/callback/take_drag_do_after_callback/cb = new()
+			cb.cig=src
+			
+			do_after(user,src,2 SECONDS,custom_checks=cb) //need callback for stuff like moving the item and mask covering, ect.
+			user.add_particles(PS_CIG_SMOKE)
+			spawn( 0.75*(world.time-dragon) )
+				user.adjust_particles(PVAR_SPAWNING,FALSE,PS_CIG_SMOKE)
+				spawn(0.5 SECONDS) //do this so that the particle effect will naturally decay instead of abruptly stopping. it looks much better like this.
+					user.remove_particles(PS_CIG_SMOKE)
+			dragon=0.0
+			
 
 /obj/item/clothing/mask/cigarette/attack(mob/living/carbon/M, mob/living/carbon/user)
 	if(!istype(M))
@@ -549,6 +568,32 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	else
 		return ..()
 
+
+/callback/take_drag_do_after_callback
+	var/obj/item/clothing/mask/cigarette/cig=null
+
+/callback/take_drag_do_after_callback/invoke(var/mob/user, var/turf/use_user_turf, var/user_original_location, var/atom/target, var/target_original_location, var/needhand, var/obj/item/originally_held_item)
+	if(!user)
+		return FALSE
+	if(user.isStunned())
+		return FALSE
+	if(target.loc != target_original_location)
+		return FALSE
+		
+	var/mask_slot=user.get_item_by_slot(slot_wear_mask)
+	if(mask_slot)
+		return FALSE	
+		
+	if(originally_held_item)
+		if(!user.is_holding_item(originally_held_item))
+			return FALSE
+	else
+		if(user.get_active_hand())
+			return FALSE
+	if(!cig.lit)
+		return FALSE
+	return TRUE
+
 //////////////
 //FANCY CIGS//
 //////////////
@@ -561,6 +606,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/bidibutt
 	burn_on_end = TRUE
+	requires_oxygen = FALSE
 
 /obj/item/clothing/mask/cigarette/goldencarp
 	name = "\improper Golden Carp cigarette"
@@ -928,7 +974,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/lightersound = list('sound/items/lighter1.ogg','sound/items/lighter2.ogg')
 	var/fuel = 20
 	var/fueltime
-	heat_production = 1500
+	heat_production = 10000
 	source_temperature = TEMPERATURE_FLAME
 	slot_flags = SLOT_BELT
 	var/list/unlit_attack_verb = list("prods", "pokes")
@@ -940,6 +986,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/base_icon = "lighter"
 	surgerysound = 'sound/items/cautery.ogg'
 	var/light_icon = "lighter-light"
+	var/requires_oxygen=TRUE //if we're underwater, then how is there a fire...?
 
 /obj/item/weapon/lighter/New()
 	..()
@@ -969,7 +1016,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/examine(mob/user)
 	..()
-	to_chat(user, "The lighter is [lit ? "":"un"]lit")
+	to_chat(user, "The lighter is [lit ? "":"un"]lit.")
 
 //Also updates the name, the damage and item_state for good measure
 /obj/item/weapon/lighter/update_icon()
@@ -1038,7 +1085,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+	if(requires_oxygen && (!fuel || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME)))
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return
@@ -1102,7 +1149,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			visible_message("<span class='warning'>Without warning, \the [src] suddenly shuts off.</span>")
 			fueltime = null
 	var/datum/gas_mixture/env = location.return_air()
-	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+	if(requires_oxygen && env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		lit = 0
 		update_brightness()
 		visible_message("<span class='warning'>Without warning, the flame on \the [src] suddenly goes out in a weak fashion.</span>")
@@ -1141,3 +1188,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		user.visible_message("<span class='rose'>You hear a quiet click as [user] shuts off \the [src] without even looking at what they're doing. Wow.</span>", \
 		"<span class='rose'>You hear a quiet click as you shut off \the [src] without even looking at what you are doing.</span>")
 	update_brightness()
+
+
+//it even works in nitrogen!
+/obj/item/weapon/lighter/vox
+	name = "shoal lighter"
+	desc = "A budget lighter. Engineered to be as cheap as possible, and work without oxygen."
+	icon_state = "lighter-vox"
+	light_icon = "lighter-vox-on"
+	color_suffix = null
+	requires_oxygen=FALSE

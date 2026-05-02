@@ -95,7 +95,7 @@
 		no_refresh = TRUE
 		var/turf/T = get_turf(pda_device)
 		if(!holomap.bogus)
-			to_chat(user,"[bicon(pda_device)] Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
+			to_chat(user,"[bicon(pda_device)] Current Location: <b>[T.loc.name] ([T.x-get_world_x_offset(map.zMainStation)],[T.y-get_world_y_offset(map.zMainStation)],1)")
 
 /datum/pda_app/station_map/Destroy()
 	if (holomap)

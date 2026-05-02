@@ -697,7 +697,7 @@
 	},
 /area/vault/zathura)
 "cf" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 16
 	},
 /obj/structure/mirror{
@@ -710,7 +710,7 @@
 	},
 /area/vault/zathura)
 "cg" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 10
 	},
 /turf/simulated/floor{

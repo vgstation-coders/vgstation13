@@ -80,7 +80,7 @@
 	if(!colour_to_apply)
 		colour_to_apply = get_screen_colour()
 	if((M_NOIR in mutations) && client)
-		client.screen += noir_master
+		enable_noir()
 	// We can't compare client.color directly because Byond will force set client.color to null
 	// when assigning the default_colour_matrix to it
 	var/list/colour_initial = (client.color ? client.color : default_colour_matrix)
@@ -368,12 +368,12 @@
 	//assorted replacements to make text feel "dumb"
 	message = replacetext(message, "he", "eh") //he, she, the -> eh, seh, teh, etc
 	message = replacetext(message, "ies", "is")
-	message = replacetext(message, "you", "u") 
+	message = replacetext(message, "you", "u")
 	message = replacetext(message, "iou", "ou") //delicous
 	message = replacetext(message, "xc", "x") //exited
 	message = replacetext(message, "air", "er") //cher, her
 	message = replacetext(message, "uni", "uin")
-	message = replacetext(message, "dg", "g") //knowlege, 
+	message = replacetext(message, "dg", "g") //knowlege,
 	message = replacetext(message, "tch", "ch") //bich
 	message = replacetext(message, "are", "ar")
 	message = replacetext(message, "pl", "pul")
@@ -408,9 +408,10 @@
 		message = replacetext(message, duplicate, "") //duplicate letters into one letter, for all words
 	if(prob(20)) //occasionally replaces one word with umm.
 		var/list/words = splittext(message, " ")
-		words[rand(0, words.len)] = pick("um,", "umm,", "uh,", "uhh,")
+		if(words.len > 0) // Check if the list has any words
+			words[rand(1, words.len)] = pick("um,", "umm,", "uh,", "uhh,")
 		message = jointext(words, " ")
-			
+
 	if(prob(35))
 		message = uppertext(message)
 		if(prob(50))
@@ -604,7 +605,11 @@ var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT
 		var/mob/dead/observer/G=user
 		P = G.ghostMulti
 
-	if(!istype(P))
+	if(!ismultitool(P))
+		if(istype(P,/obj/item/weapon/switchtool)) //Switchtool deployed multitool special case!
+			var/obj/item/weapon/switchtool/ST = P
+			if(ismultitool(ST.deployed))
+				return ST.deployed
 		return null
 	return P
 

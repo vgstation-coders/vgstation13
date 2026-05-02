@@ -80,7 +80,7 @@
 	..()
 
 /obj/item/weapon/paper/merchant/proc/apply_text(mob/living/carbon/human/merchant)
-	identity = merchant.client.prefs.real_name
+	identity = merchant.client.prefs.get_pref(/datum/preference_setting/string/real_name)
 	icon = 'icons/obj/items.dmi'
 	icon_state = "permit"
 	name = "Merchant's Licence - [identity]"
@@ -105,7 +105,7 @@
 	display_y = 700
 
 /obj/item/weapon/paper/merchant/report/apply_text(mob/living/carbon/human/merchant)
-	identity = merchant.client.prefs.real_name
+	identity = merchant.client.prefs.get_pref(/datum/preference_setting/string/real_name)
 	name = "Licensed Merchant Report - [identity]"
 	info = {"<html><style>
 			body {color: #000000; background: #ccffff;}

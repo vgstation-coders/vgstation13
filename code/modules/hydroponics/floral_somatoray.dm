@@ -46,6 +46,10 @@
 	playsound(user, 'sound/weapons/egun_toggle_noammo.ogg', 50, 1)
 	flick("floral_somatoray-modechange", src)
 
+/obj/item/floral_somatoray/examine(var/mob/user)
+	..()
+	to_chat(user, "It's set to modify [genes[mode]] traits.")
+
 /obj/item/floral_somatoray/update_icon()
 	overlays.len = 0
 	var/current_gene = genes[mode]
@@ -90,7 +94,7 @@
 		desc += " It seems to have it's safety features de-activated."
 		playsound(user, 'sound/effects/sparks4.ogg', 50, 1)
 		update_icon()
-	
+
 
 /obj/item/floral_somatoray/attack(var/mob/living/M, var/mob/living/user, var/def_zone, var/originator=null)
 	return

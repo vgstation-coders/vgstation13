@@ -41,6 +41,7 @@
 			for(destination = destination.loc; !isturf(destination); destination = destination.loc);
 
 		forceEnter(destination)
+		INVOKE_EVENT(src, /event/moved, "mover" = src)
 
 		cameranet.visibility(src)
 		if(ai.client && ai.client.eye != src) // Set the eye to us and give the AI the sight & visibility flags it needs.
@@ -128,7 +129,7 @@
 	for(var/i = 0; i < max(user.sprint, initial); i += 20)
 		var/turf/step = get_turf(get_step(user.eyeobj, direct))
 		if(step)
-			if (user.client.prefs.stumble && ((world.time - user.last_movement) > 4))
+			if (user.client.prefs.get_pref(/datum/preference_setting/toggle/stumble) && ((world.time - user.last_movement) > 4))
 				user.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			else if(istype(H) && H.advancedholo)
 				H.holo.dir = direct
@@ -192,6 +193,8 @@
 	eyeobj.ai = src
 	refresh_eyeobj_name()
 	eyeobj.forceMove(loc)
+	if (client?.listener_context)
+		client.listener_context.reset_proxy(eyeobj)
 
 /mob/living/silicon/ai/proc/refresh_eyeobj_name()
 	eyeobj.name = "[name] (AI Eye)"

@@ -25,33 +25,33 @@
 #define NO_SPELLBOOK 131072 //Does not show up in the spell list for spellbook purposes
 
 //invocation
-#define SpI_SHOUT	"shout"
-#define SpI_WHISPER	"whisper"
-#define SpI_EMOTE	"emote"
-#define SpI_NONE	"none"
+#define SP_INV_SHOUT	"shout"
+#define SP_INV_WHISPER	"whisper"
+#define SP_INV_EMOTE	"emote"
+#define SP_INV_NONE	"none"
 
 //upgrading
-#define Sp_SPEED	"cooldown"
-#define Sp_POWER	"power"
-#define Sp_MOVE		"mobility"
-#define Sp_AMOUNT	"amount"
-#define Sp_RANGE	"range"
+#define SP_SPEED	"cooldown"
+#define SP_POWER	"power"
+#define SP_MOVE		"mobility"
+#define SP_AMOUNT	"amount"
+#define SP_RANGE	"range"
 
-#define Sp_TOTAL	"total"
+#define SP_TOTAL	"total"
 
 //casting costs
-#define Sp_RECHARGE	1
-#define Sp_CHARGES	2
-#define Sp_HOLDVAR	4
-#define Sp_GRADUAL	8
-#define Sp_PASSIVE 16
+#define SP_RECHARGE	1
+#define SP_CHARGES	2
+#define SP_HOLDVAR	4
+#define SP_GRADUAL	8
+#define SP_PASSIVE 16
 
 //spell range
 #define SELFCAST -1
 #define GLOBALCAST -2
 
 //buying costs
-#define Sp_BASE_PRICE 20
+#define SP_BASE_PRICE 20
 
 //Autocast flags
 #define AUTOCAST_NOTARGET 1 //For spells with complex targeting (AI can't pick a target)
@@ -95,3 +95,6 @@
 #define SPECIFIC_TELEPATHY 1
 #define LOCAL_TELEPATHY 2
 #define GLOBAL_TELEPATHY 4
+
+// Purely helper proc to make code more readable
+#define CHARGES *1

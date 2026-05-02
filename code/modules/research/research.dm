@@ -53,7 +53,7 @@ var/global/list/hidden_tech = list(
 	)
 
 /datum/research								//Holder for all the existing, archived, and known tech. Individual to console.
-	var/list/known_tech = list()			//List of locally known tech.
+	var/list/datum/tech/known_tech = list()			//List of locally known tech. Called with /datum/tech to be able to call tech variables directly
 	var/list/known_designs = list()			//List of available designs (at base reliability).
 	var/alphabetsort = FALSE				//Is it sorted alphabetically?
 
@@ -273,6 +273,13 @@ var/global/list/hidden_tech = list(
 	id = "anomaly"
 	max_level=6
 
+/datum/tech/exploration
+	name = "Exploration Research"
+	desc = "The study of deep space exploration technologies."
+	id = "exploration"
+	goal_level=0 // Doesn't count towards maxed research, since it's bonus.
+	max_level=1
+
 /*
 datum/tech/arcane
 	name = "Arcane Research"
@@ -328,4 +335,4 @@ datum/tech/robotics
 
 /obj/item/weapon/paper/tech_nanotrasen
 	name = "paper - 'Nanotrasen Experimental Technologies'"
-	info = "<B>Thank you for participating in this Nanotrasen-sponsored initiative!</B><BR><BR>This technology disk will open you the doors of Nanotrasen's most bleeding-edge experimental devices, and we look forward to you testing them for us! Also, note that you will still need to perform some research before these designs become available for you to print, but here's a guide to the tech levels that they will require.<br><ol><li><b>Hookshot</b>: Materials=2, Engineering=5, Electromagnetic=2</li><li><b>Ricochet Rifle</b>: Materials=3, Power=3, Combat=3</li><li><b>Gravity Well Gun</b>: Materials=7, Bluespace=5, Electromagnetic=5</li><li><b>Machine-Man Interface</b>: Biotech=4, Data Theory=4</li><li><b>Plasma Cutter</b>: Materials=4, Plasma=3, Engineering=3</li><li><b>Mind Machine Pod & Hub</b>: Bluespace=4, Biotech=5, Anomaly=2, Data Theory=4</li></ol> <br>, We look forward to the results of your experiments. Depending on their success we might grant you access to even more bleeding-edge technologies in the future! Make Science proud!<br><br><i>Central Command R&D Lab</i>"
+	info = "<B>Thank you for participating in this Nanotrasen-sponsored initiative!</B><BR><BR>This technology disk will open you the doors of Nanotrasen's most bleeding-edge experimental devices, and we look forward to you testing them for us! Also, note that you will still need to perform some research before these designs become available for you to print, but here's a guide to the tech levels that they will require.<br><ol><li><b>Hookshot</b>: Materials=2, Engineering=5, Electromagnetic=2</li><li><b>Ricochet Rifle</b>: Materials=3, Power=3, Combat=3</li><li><b>Gravity Well Gun</b>: Materials=7, Bluespace=5, Electromagnetic=5</li><li><b>Machine-Man Interface</b>: Biotech=4, Data Theory=4</li><li><b>Advanced Plasma Cutter</b>: Materials=4, Plasma=3, Engineering=3</li><li><b>Mind Machine Pod & Hub</b>: Bluespace=4, Biotech=5, Anomaly=2, Data Theory=4</li></ol> <br>, We look forward to the results of your experiments. Depending on their success we might grant you access to even more bleeding-edge technologies in the future! Make Science proud!<br><br><i>Central Command R&D Lab</i>"

@@ -37,9 +37,16 @@
 //Returns the world time in english
 /proc/worldtime2text(timestamp = world.time, give_seconds = FALSE)
 	if(timestamp == world.time)
-		timestamp -= time_taken_to_init
-	return "[add_zero((round(((timestamp / 600) + 55) / 60) + 11) % 24, 2)]:[add_zero(round(((timestamp / 600) + 55) % 60), 2)]\
+		if(ticker && ticker.current_state < GAME_STATE_PLAYING)
+			return "12:00[give_seconds ? ":00" : ""]"
+		timestamp = max(0,get_round_time())
+	return "[add_zero((round(timestamp / 36000) + 12) % 24, 2)]:[add_zero(round(timestamp / 600) % 60, 2)]\
 	[give_seconds ? ":[add_zero(round(timestamp / 10) % 60, 2)]" : ""]"
+
+var/admin_time_offset = 0
+
+/proc/get_round_time()
+	return (world.time - time_taken_to_init - time_taken_in_lobby) + admin_time_offset
 
 /proc/formatTimeDuration(var/deciseconds)
 	var/m = round(deciseconds / 600)

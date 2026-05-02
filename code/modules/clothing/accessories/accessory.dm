@@ -306,18 +306,23 @@
 	slot_flags = SLOT_BELT
 
 	var/stored_name = null
+	var/flash_animation = FLASH_BADGE_ANIM
 
 /obj/item/clothing/accessory/holobadge/cord
 	icon_state = "holobadge-cord"
 	_color = "holobadge-cord"
 	slot_flags = SLOT_MASK
+	flash_animation = FLASH_BADGE_CORD_ANIM
 
 /obj/item/clothing/accessory/holobadge/attack_self(mob/user as mob)
 	if(!stored_name)
 		to_chat(user, "Waving around a badge before swiping an ID would be pretty pointless.")
 		return
 	if(isliving(user))
+		user.delayNextAttack(0.5 SECONDS)
+		add_fingerprint(user)
 		user.visible_message("<span class='warning'>[user] displays their Nanotrasen Internal Security Legal Authorization Badge.\nIt reads: [stored_name], NT Security.</span>","<span class='warning'>You display your Nanotrasen Internal Security Legal Authorization Badge.\nIt reads: [stored_name], NT Security.</span>")
+		flash_object_animation(user, src, flash_animation)
 
 /obj/item/clothing/accessory/holobadge/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
@@ -416,6 +421,52 @@
 	..()
 
 /obj/item/clothing/accessory/lasertag/on_removed(mob/user)
+	if(!attached_to)
+		return
+	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
+	attached_to.overlays -= inv_overlay
+	if(ismob(attached_to.loc))
+		var/mob/M = attached_to.loc
+		M.regenerate_icons()
+	attached_to = null
+	if(source_vest)
+		source_vest.forceMove(get_turf(src))
+		if(user)
+			user.put_in_hands(source_vest)
+		add_fingerprint(user)
+		transfer_fingerprints(src,source_vest)
+		source_vest = null
+	qdel(src)
+
+
+/obj/item/clothing/accessory/wcoat
+	name = "waistcoat"
+	desc = "For some classy, murderous fun."
+	icon = null
+	icon_state = null
+	inv_overlay
+	var/obj/item/clothing/suit/wcoat/source_vest
+
+/obj/item/clothing/accessory/wcoat/can_attach_to(obj/item/clothing/C)
+	if(!istype(C, /obj/item/clothing/under))
+		return FALSE
+	for(var/obj/item/clothing/accessory/wcoat/W in C.accessories)
+		if(W != src)
+			return FALSE
+	return TRUE
+
+/obj/item/clothing/accessory/wcoat/update_icon()
+	if(source_vest)
+		appearance = source_vest.appearance
+		if(attached_to)
+			var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
+			attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
+			if(ismob(attached_to.loc))
+				var/mob/M = attached_to.loc
+				M.regenerate_icons()
+	..()
+
+/obj/item/clothing/accessory/wcoat/on_removed(mob/user)
 	if(!attached_to)
 		return
 	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
@@ -568,3 +619,21 @@
 	icon_state = "gold_medal"
 	_color = "gold_medal"
 
+/obj/item/clothing/accessory/rose
+	name = "rose"
+	desc = "A symbol of peace and love."
+	icon = 'icons/obj/clothing/accessories.dmi'
+	icon_state = "rose"
+	_color = "rose"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "rose"
+
+/obj/item/clothing/accessory/rose/proc/generate_icon_state()
+	if(!attached_to || !icon_state)
+		return
+	icon_state = initial(icon_state)
+	if(istype(attached_to, /obj/item/clothing/suit))
+		icon_state = "[initial(icon_state)]rose"
+
+/obj/item/clothing/accessory/rose/can_attach_to(obj/item/clothing/C)
+	return (istype(C, /obj/item/clothing/under) || istype(C, /obj/item/clothing/suit))

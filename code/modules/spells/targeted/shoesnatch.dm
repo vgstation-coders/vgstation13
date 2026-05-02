@@ -6,17 +6,17 @@
 	specialization = SSOFFENSIVE
 
 	school = "evocation"
-	charge_type = Sp_RECHARGE
-	charge_max = 150
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 15 SECONDS
 	invocation = "H'NK!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 7
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
-	cooldown_min = 30
+	cooldown_min = 3 SECONDS
 	selection_type = "range"
 
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 	valid_targets = list(/mob/living/carbon/human)
 
 	hud_state = "wiz_shoes"
@@ -50,7 +50,7 @@
 		animate(S, alpha = 255, time = 10)
 
 /spell/targeted/shoesnatch/empower_spell()
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	spawn_shards = 1
 
 	var/upgrade_desc = "You have upgraded [name] into Shoe Snatching Scourge. When cast on somebody who isn't wearing any shoes, it will summon 4 glass shards around them."
@@ -60,6 +60,6 @@
 	return upgrade_desc
 
 /spell/targeted/shoesnatch/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if(upgrade_type == SP_POWER)
 		return "Make the spell summon glass shards around targets who aren't wearing any shoes."
 	return ..()

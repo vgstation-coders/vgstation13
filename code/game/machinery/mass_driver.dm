@@ -14,7 +14,7 @@ var/list/mass_drivers = list()
 	var/power = 1.0
 	var/code = 1.0
 	id_tag = "default"
-	var/drive_range = 50 //this is mostly irrelevant since current mass drivers throw into space, but you could make a lower-range mass driver for interstation transport or something I guess.
+	var/drive_range = 150 //this is mostly irrelevant since current mass drivers throw into space, but you could make a lower-range mass driver for interstation transport or something I guess.
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
@@ -126,6 +126,8 @@ var/list/mass_drivers = list()
 	icon_state = "mass_driver_b0"
 	density = 0
 	anchored = 0
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/datum/construction/reversible/construct
 
 /obj/machinery/mass_driver_frame/New()
@@ -135,17 +137,6 @@ var/list/mass_drivers = list()
 /obj/machinery/mass_driver_frame/attackby(var/obj/item/W, var/mob/user)
 	if(!construct || !construct.action(W, user))
 		..()
-
-/obj/machinery/mass_driver_frame/verb/rotate()
-	set category = "Object"
-	set name = "Rotate Frame"
-	set src in view(1)
-
-	if (usr.isUnconscious() || usr.restrained())
-		return
-
-	src.dir = turn(src.dir, -90)
-	return
 
 /datum/construction/reversible/mass_driver
 	result = /obj/machinery/mass_driver

@@ -1,9 +1,9 @@
 
 /datum/artifact_effect/hurt
 	effecttype = I_HURT
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_UNKNOWN)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_UNKNOWN)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
-	effect_type = 5
+	effect_hint = EFFECT_HINT_ORGANICALLY_REACTIVE_EXOTIC_PARTICLES
 
 /datum/artifact_effect/hurt/DoEffectTouch(var/mob/toucher)
 	if(toucher)

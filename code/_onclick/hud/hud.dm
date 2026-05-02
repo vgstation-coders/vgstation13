@@ -167,6 +167,9 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		src.hand_hud_objects += inv_box
 		src.adding += inv_box
 
+		inv_box.pointer_to_list = &src.hand_hud_objects
+		inv_box.pointer_to_secondary_list = &src.adding
+
 /datum/hud/proc/update_hand_icons()
 	var/obj/abstract/screen/inventory/example = locate(/obj/abstract/screen/inventory) in hand_hud_objects
 
@@ -206,9 +209,9 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		ui_color = null
 		ui_alpha = 255
 	else
-		ui_style = ui_style2icon(mymob.client.prefs.UI_style)
-		ui_color = mymob.client.prefs.UI_style_color
-		ui_alpha = mymob.client.prefs.UI_style_alpha
+		ui_style = ui_style2icon(mymob.client.prefs.get_pref(/datum/preference_setting/string/UI_style))
+		ui_color = mymob.client.prefs.get_pref(/datum/preference_setting/string/UI_style_color)
+		ui_alpha = mymob.client.prefs.get_pref(/datum/preference_setting/numerical/UI_style_alpha)
 
 	if(ishuman(mymob))
 		human_hud(ui_style, ui_color, ui_alpha) // Pass the player the UI style chosen in preferences
@@ -273,6 +276,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	holomap_obj.screen_loc = "SOUTH,WEST"
 	holomap_obj.mouse_opacity = 0
 	holomap_obj.alpha = 255
+
+	holomap_obj.pointer_to_var = &holomap_obj
 
 	mymob.client.screen += src.holomap_obj
 

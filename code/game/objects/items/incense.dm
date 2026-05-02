@@ -14,7 +14,7 @@
 	icon_state = "incensestick"
 	item_state = "incensestick"
 	w_class = W_CLASS_TINY
-	heat_production = 1000
+	heat_production = 5000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	siemens_coefficient = 0
@@ -45,6 +45,11 @@
 	fragrance = INCENSE_POPPIES
 	adjective = "calming"
 	color = "#660000"
+
+/obj/item/incense_stick/roses
+	fragrance = INCENSE_ROSES
+	adjective = "romantic"
+	color = "#660531"
 
 /obj/item/incense_stick/sunflowers
 	fragrance = INCENSE_SUNFLOWERS

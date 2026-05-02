@@ -30,3 +30,4 @@
 	for (var/turf/TT in trange(view, T))
 		if (TT.holomap_data)
 			. += TT.holomap_data
+			

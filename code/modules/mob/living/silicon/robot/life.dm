@@ -33,8 +33,8 @@
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
 
-	if(locked_to_z)
-		check_locked_zlevel()
+	if(locked_to_v)
+		check_locked_vlevel()
 
 /mob/living/silicon/robot/proc/clamp_values()
 	SetParalysis(min(paralysis, 30))
@@ -45,16 +45,16 @@
 	adjustFireLoss(0)
 
 /mob/living/silicon/robot/proc/use_power()
-	if(cell && is_component_functioning("power cell"))
-		if(cell.charge <= 0)
+	if(get_cell() && is_component_functioning("power cell"))
+		if(get_cell_charge(src) <= 0)
 			uneq_all()
 		else
-			if(cell.charge <= ROBOT_LOW_POWER)
+			if(get_cell_charge(src) <= ROBOT_LOW_POWER)
 				uneq_all()
-				cell.use(1)
+				use_cell_charge(src,1)
 			else
 				for(var/M in get_all_slots())
-					cell.use(3)
+					use_cell_charge(src,3)
 
 			for(var/V in components)
 				var/datum/robot_component/C = components[V]
@@ -119,11 +119,7 @@
 	if(druggy)
 		druggy = max(druggy-1,0)
 
-	if(jitteriness)
-		jitteriness = max(jitteriness-1,0)
 	handle_jitteriness()
-	if(dizziness)
-		dizziness = max(0, dizziness - 1)
 	handle_dizziness()
 
 	if(camera && !scrambledcodes)
@@ -187,14 +183,14 @@
 	canmove = !(paralysis || stunned || knockdown || locked_to || lockdown || anchored)
 	return canmove
 
-/mob/living/silicon/robot/proc/check_locked_zlevel()
-	if(!locked_to_z)
+/mob/living/silicon/robot/proc/check_locked_vlevel()
+	if(!locked_to_v)
 		return
 
-	var/datum/zLevel/current_zlevel = get_z_level(src)
-	if(!current_zlevel)
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(!vz)
 		return
-	if(current_zlevel.z != locked_to_z)
+	if(vz != locked_to_v)
 		to_chat(src, "<span class='userdanger'>Your hardware detects that you have left your intended location. Initiating self-destruct.</span>")
 		spawn(rand(2,7) SECONDS)
 			if(mmi) //no sneaking brains away

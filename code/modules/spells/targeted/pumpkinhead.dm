@@ -6,13 +6,13 @@
 	specialization = SSOFFENSIVE
 
 	school = "transmutation"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	range = 1
 	max_targets = 1
 	invocation = "H'T POT'TO"
-	invocation_type = SpI_SHOUT
-	cooldown_min = 200 //100 deciseconds reduction per rank
+	invocation_type = SP_INV_SHOUT
+	cooldown_min = 20 SECONDS //10 seconds reduction per rank
 
 	hud_state = "pumpkin"
 

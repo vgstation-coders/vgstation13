@@ -88,8 +88,12 @@ var/list/admin_verbs_admin = list(
 	/client/proc/artifacts_panel,
 	/client/proc/body_archive_panel,
 	/client/proc/climate_panel,
+	/client/proc/level_manager,
 	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
-	/client/proc/toggle_admin_examine
+	/client/proc/toggle_admin_examine,
+	/client/proc/beasts_panel,	/* Lists all forgotten beasts generated, along with their characteristics */
+	/client/proc/show_heatmaps,
+	/datum/admins/proc/procedural_generation_panel
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -133,6 +137,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/add_centcomm_order,
 	/client/proc/apes,
 	/client/proc/force_next_map,
+	/client/proc/rig_crew_score,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -528,7 +533,8 @@ var/list/admin_verbs_mod = list(
 		return
 	var/new_ooccolor = input(src, "Please select your OOC colour.", "OOC colour") as color|null
 	if(new_ooccolor)
-		prefs.ooccolor = new_ooccolor
+		var/datum/preference_setting/ooc_color = prefs.get_pref_datum(/datum/preference_setting/string/ooc_color)
+		ooc_color.setting = new_ooccolor
 		prefs.save_preferences_sqlite(src, ckey)
 	feedback_add_details("admin_verb","OC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
@@ -577,11 +583,13 @@ var/list/admin_verbs_mod = list(
 	if(!warn_reason)
 		return
 	holder.notes_add(warned_ckey, warn_reason)
-	if(++D.warns >= MAX_WARNS)					//uh ohhhh...you'reee iiiiin trouuuubble O:)
+	var/datum/preference_setting/warns = D.get_pref_datum(/datum/preference_setting/numerical/warns)
+	if(++warns.setting >= MAX_WARNS)					//uh ohhhh...you'reee iiiiin trouuuubble O:)
 		var/bantime = AUTOBANTIME//= (++D.warnbans * AUTOBANTIME)
-		D.warns = 0
-		++D.warnbans
-		for(var/i = 1; i < D.warnbans; i++)
+		warns.setting = 0
+		var/datum/preference_setting/warnbans = D.get_pref_datum(/datum/preference_setting/numerical/warnbans)
+		++warnbans.setting
+		for(var/i = 1; i < warnbans.setting; i++)
 			bantime *= 2
 		ban_unban_log_save("[ckey] warned [warned_ckey] - [warn_reason], resulting in a [bantime] minute autoban.")
 		if(C)
@@ -595,14 +603,18 @@ var/list/admin_verbs_mod = list(
 		D.save_preferences_sqlite(C, C.ckey)
 		del(C)
 	else
+		var/warnbans = D.get_pref(/datum/preference_setting/numerical/warnbans)
 		if(C)
 			to_chat(C, "<span class='danger'><BIG>You have been formally warned by an administrator - Reason: [warn_reason].</span></BIG><br>Further warnings will result in an autoban.</font>")
-			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)] - [warn_reason]. They have [MAX_WARNS-D.warns] strikes remaining. And have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
+			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)] - [warn_reason]. They have [MAX_WARNS-warnbans] strikes remaining. And have been warn banned [warnbans] [warnbans == 1 ? "time" : "times"]")
 		else
-			message_admins("[key_name_admin(src)] has warned [warned_ckey] (DC) - [warn_reason]. They have [MAX_WARNS-D.warns] strikes remaining. And have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
-			D.show_warning_next_time = 1
-			D.last_warned_message = warn_reason
-			D.warning_admin = ckey
+			message_admins("[key_name_admin(src)] has warned [warned_ckey] (DC) - [warn_reason]. They have [MAX_WARNS-warnbans] strikes remaining. And have been warn banned [warnbans] [warnbans == 1 ? "time" : "times"]")
+			var/datum/preference_setting/show_warning_next_time = D.get_pref_datum(/datum/preference_setting/toggle/show_warning_next_time)
+			show_warning_next_time.setting = 1
+			var/datum/preference_setting/last_warned_message = D.get_pref_datum(/datum/preference_setting/string/last_warned_message)
+			last_warned_message.setting = warn_reason
+			var/datum/preference_setting/warning_admin = D.get_pref_datum(/datum/preference_setting/string/last_warned_message)
+			warning_admin.setting = ckey
 		D.save_preferences_sqlite(C, warned_ckey)
 	feedback_add_details("admin_verb","WARN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -627,17 +639,18 @@ var/list/admin_verbs_mod = list(
 		to_chat(src, "<span class='red'>Error: unwarn(): No such ckey found.</span>")
 		return
 
-	if(D.warns == 0)
+	if(D.get_pref(/datum/preference_setting/numerical/warns) == 0)
 		to_chat(src, "<span class='red'>Error: unwarn(): You can't unwarn someone with 0 warnings, you big dummy.</span>")
 		return
 
-	D.warns-=1
-	var/strikesleft = MAX_WARNS-D.warns
+	var/datum/preference_setting/warns = D.get_pref_datum(/datum/preference_setting/numerical/warns)
+	warns.setting-=1
+	var/strikesleft = MAX_WARNS-warns.setting
 	if(C)
 		to_chat(C, "<span class='red'><BIG><B>One of your warnings has been removed.</B></BIG><br>You currently have [strikesleft] strike\s left</span>")
-		message_admins("[key_name_admin(src)] has unwarned [key_name_admin(C)]. They have [strikesleft] strike(s) remaining, and have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
+		message_admins("[key_name_admin(src)] has unwarned [key_name_admin(C)]. They have [strikesleft] strike(s) remaining, and have been warn banned [D.get_pref(/datum/preference_setting/numerical/warnbans)] [D.get_pref(/datum/preference_setting/numerical/warnbans) == 1 ? "time" : "times"]")
 	else
-		message_admins("[key_name_admin(src)] has unwarned [warned_ckey] (DC). They have [strikesleft] strike(s) remaining, and have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
+		message_admins("[key_name_admin(src)] has unwarned [warned_ckey] (DC). They have [strikesleft] strike(s) remaining, and have been warn banned [D.get_pref(/datum/preference_setting/numerical/warnbans)] [D.get_pref(/datum/preference_setting/numerical/warnbans) == 1 ? "time" : "times"]")
 	D.save_preferences_sqlite(C, C.ckey)
 	feedback_add_details("admin_verb","UNWARN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -651,7 +664,7 @@ var/list/admin_verbs_mod = list(
 
 	var/turf/epicenter = mob.loc
 	var/list/choices = list("Small Bomb (1,3,4)", "Medium Bomb (3,7,14)", "Big Bomb (7,14,28)", "Custom Bomb")
-	var/choice = input("What size explosion would you like to produce?") in choices | null
+	var/choice = input("What size explosion would you like to produce?") as null|anything in choices
 	switch(choice)
 		if(null)
 			return 0
@@ -689,7 +702,7 @@ var/list/admin_verbs_mod = list(
 
 	var/turf/epicenter = mob.loc
 	var/list/choices = list("Small EMP (1,2)", "Medium EMP (2,4)", "Big EMP (4,8)", "Custom EMP")
-	var/choice = input("What size EMP would you like to produce?") in choices | null
+	var/choice = input("What size EMP would you like to produce?") as null|anything in choices
 	switch(choice)
 		if(null)
 			return 0
@@ -799,6 +812,7 @@ var/list/admin_verbs_mod = list(
 				send2adminirc("[key_name(src, showantag = FALSE)] deadminned themself - no more non-AFK admins online. - [admin_number_afk] AFK.")
 				send2admindiscord("[key_name(src, showantag = FALSE)] deadminned themself. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 		deadmin()
+		winset(src, null, list("browser-options"="-devtools"))
 		verbs += /client/proc/readmin
 		deadmins += ckey
 		to_chat(src, "<span class='interface'>You are now a normal player.</span>")
@@ -931,7 +945,7 @@ var/list/admin_verbs_mod = list(
 			to_chat(src, "You are already an admin.")
 			verbs -= /client/proc/readmin
 			return
-		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = :ckey", list("ckey" = ckey))
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT `ckey`, `rank`, `level`, `flags` FROM erro_admin WHERE `ckey` = :ckey", list("ckey" = ckey))
 		if(!query.Execute())
 			log_sql("Error: [query.ErrorMsg()]")
 			qdel(query)
@@ -1093,12 +1107,35 @@ var/list/admin_verbs_mod = list(
 
 	stop_all_media()
 
+var/list/fax_presets = list(
+	"Centcomm" = {"<!DOCTYPE html>
+<html>
+<body style="background-color:darkblue;">
+
+<h1><center><font color="white">NANOTRASEN CENTRAL COMMAND</font></center></h1>
+<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center>
+<p><center><font color="white">\[MESSAGE BODY GOES HERE\]</center></font></p>
+<p><center><font color="white">\[MESSAGE BODY GOES HERE\]</center></font></p>
+
+</body>
+</html>"},
+	"Internal Affairs" = {"<html><style>body {color: #000000; background: #ccffff;}
+h1 {color: #000000; font-size:30px;}
+fieldset {width:140px;}
+</style><body><center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center><BR>
+\[MESSAGE BODY GOES HERE\]
+<BR><BR><I>Central Command</I>
+</body></html>"},
+	"Blank" = ""
+)
+
 /client/proc/SendCentcommFax()
 	set	category = "Fun"
 	set name = "Send Fax"
 	set desc = "Sends a fax to all fax machines."
 
-	var/sent = input(src, "Please enter a message send via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
+	var/preset = input(src,"Which preset to use?","Preset formatting") as null|anything in fax_presets
+	var/sent = input(src, "Please enter a message send via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", fax_presets[preset]) as message|null
 	if(!sent)
 		return
 
@@ -1121,7 +1158,8 @@ var/list/admin_verbs_mod = list(
 	var/mission_to_load = alert(usr, "How do you want to select the map element?", "Map element loading", "Choose a /datum/map_element object", "Load external .dmm file", "Cancel")
 	switch(mission_to_load)
 		if("Choose a /datum/map_element object")
-			var/new_map_element = input(usr, "Please select the map element object.", "Map element loading") as null|anything in typesof(/datum/map_element) - /datum/map_element
+			var/element_type = input("Specify a map element type. Periods exclude subtypes.", "Map element type") as text
+			var/new_map_element = filter_typelist_input("Please select the map element object.", "Map element loading", get_matching_types(element_type,/datum/map_element))
 			if(!new_map_element)
 				return
 
@@ -1147,13 +1185,14 @@ var/list/admin_verbs_mod = list(
 
 	#define ML_CURRENT_LOC  "Use my current location"
 	#define ML_INPUT_COORDS "Input coordinates"
-	#define ML_LOAD_TO_Z2   "Find a suitable location at Z-level 2 (done automatically)"
+	#define ML_LOAD_TO_NEWV "Create a new Virtual Z-level"
 	var/static/list/choices = list(
 	ML_CURRENT_LOC,
 	ML_INPUT_COORDS,
-	ML_LOAD_TO_Z2
+	ML_LOAD_TO_NEWV
 	)
 	var/dungeoning = FALSE
+	var/using_vz = FALSE
 
 	switch(input(usr, "Select a location for the new map element", "Map element loading") as null|anything in choices)
 		if(ML_CURRENT_LOC)
@@ -1181,11 +1220,7 @@ var/list/admin_verbs_mod = list(
 			x_coord = clamp(x_coord, 1, world.maxx)
 			y_coord = clamp(y_coord, 1, world.maxy)
 
-		if(ML_LOAD_TO_Z2)
-			if(!dungeon_area)
-				to_chat(src, "<span class='warning'>Dungeon area not defined! This map is missing the /obj/effect/landmark/dungeon_area object.</span>")
-				return
-
+		if(ML_LOAD_TO_NEWV)
 			dungeoning = TRUE
 
 	var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
@@ -1200,35 +1235,39 @@ var/list/admin_verbs_mod = list(
 	var/clipmax_y = INFINITY
 	var/clipmin_z = 0
 	var/clipmax_z = INFINITY
-	if(alert("Clip map to bounds?","Map element loading","Yes","No") == "Yes")
-		clipmin_x = input(usr, "Minimum X to clip at", "Map element loading", "1") as null|num
-		if(clipmin_x == null)
-			return
-		clipmax_x = input(usr, "Maximum X to clip at", "Map element loading", "[world.maxx]") as null|num
-		if(clipmax_x == null)
-			return
-		clipmin_y = input(usr, "Minimum Y to clip at", "Map element loading", "1") as null|num
-		if(clipmin_y == null)
-			return
-		clipmax_y = input(usr, "Maximum Y to clip at", "Map element loading", "[world.maxy]") as null|num
-		if(clipmax_y == null)
-			return
-		clipmin_z = input(usr, "Minimum Z to clip at", "Map element loading", "1") as null|num
-		if(clipmin_z == null)
-			return
-		clipmax_z = input(usr, "Maximum Z to clip at", "Map element loading", "[world.maxz]") as null|num
-		if(clipmax_z == null)
-			return
-
 	var/rotatetext = rotate ? " rotated by [rotate] degrees" : ""
-	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
-	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
-	if(dungeoning)
-		load_dungeon(ME, rotate, TRUE, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
+	if(!using_vz)
+		if(alert("Clip map to bounds?","Map element loading","Yes","No") == "Yes")
+			clipmin_x = input(usr, "Minimum X to clip at", "Map element loading", "1") as null|num
+			if(clipmin_x == null)
+				return
+			clipmax_x = input(usr, "Maximum X to clip at", "Map element loading", "[world.maxx]") as null|num
+			if(clipmax_x == null)
+				return
+			clipmin_y = input(usr, "Minimum Y to clip at", "Map element loading", "1") as null|num
+			if(clipmin_y == null)
+				return
+			clipmax_y = input(usr, "Maximum Y to clip at", "Map element loading", "[world.maxy]") as null|num
+			if(clipmax_y == null)
+				return
+			clipmin_z = input(usr, "Minimum Z to clip at", "Map element loading", "1") as null|num
+			if(clipmin_z == null)
+				return
+			clipmax_z = input(usr, "Maximum Z to clip at", "Map element loading", "[world.maxz]") as null|num
+			if(clipmax_z == null)
+				return
+
+		log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
+		message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
+		if(dungeoning)
+			load_dungeon(ME, rotate)
+		else
+			//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
+			ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
+		message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"][rotatetext].")
 	else
-		//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
-		ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
-	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"][rotatetext].")
+		var/datum/virtual_z/vz = map.addMapElementVLevel(ME, buffer_size = 0)
+		message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "virtual z-level [vz.id], "][rotatetext].")
 
 /client/proc/create_awaymission()
 	set category = "Admin"
@@ -1274,8 +1313,8 @@ var/list/admin_verbs_mod = list(
 			override = 1
 
 	to_chat(src, "Attempting to load [AM.name] ([AM.file_path])...")
-	createRandomZlevel(override, AM, usr)
-	to_chat(src, "The away mission has been generated on z-level [world.maxz] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
+	var/datum/virtual_z/vz = createRandomZlevel(override, AM, usr)
+	to_chat(src, "The away mission has been generated on v-level [vz.id] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
 
 /client/proc/send_to_heck(var/mob/dead/observer/O in dead_mob_list)
 	set name = "Send to hell"
@@ -1294,7 +1333,7 @@ var/list/admin_verbs_mod = list(
 	if(!O || !O.key)
 		return
 	if(!(/datum/map_element/dungeon/hell in existing_dungeons))
-		load_dungeon(/datum/map_element/dungeon/hell)
+		load_dungeon(/datum/map_element/dungeon/hell, 0, TRUE)
 	var/datum/map_element/dungeon/hell/H = locate(/datum/map_element/dungeon/hell) in existing_dungeons
 	var/list/turf/turfs = list()
 	for(var/turf/T in H.spawned_atoms)
@@ -1395,3 +1434,22 @@ var/list/admin_verbs_mod = list(
 		to_chat(usr, "<span class='notice'>You toggle [holder.admin_examine ? "on" : "off"] admin examining.")
 	feedback_add_details("admin_verb","admin_examine")
 	return
+
+/client/proc/beasts_panel()
+	set name = "Megabeast Panel"
+	set category = "Admin"
+	if(holder)
+		holder.beasts_panel()
+		log_admin("[key_name(usr)] checked the Megabeast Panel.")
+	feedback_add_details("admin_verb","BST")
+
+/client/proc/show_heatmaps()
+	set name = "Show station heatmaps"
+	set category = "Admin"
+	var/dat = ""
+	for(var/zrender in 1 to world.maxz)
+		dat += string_heatmap(zrender)
+	var/datum/browser/B = new /datum/browser/clean(usr, "heatmap", "Station heatmaps")
+	B.set_content(dat)
+	B.open()
+	feedback_add_details("admin_verb","HMP")

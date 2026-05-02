@@ -39,5 +39,5 @@ table{
 	/* "Center" it, since we can only crop out the top-left  */
     margin: -16px -16px -16px -16px;
 	/* Remove antialias to prevent cataracts */
-	-ms-interpolation-mode: nearest-neighbor;
+	image-rendering: pixelated;
 }

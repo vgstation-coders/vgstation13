@@ -17,7 +17,7 @@
 
 /obj/structure/centrifuge/attackby(var/obj/item/W, var/mob/user)
 	if(iscrowbar(W))
-		var/obj/structure/toilet/T = new /obj/structure/toilet(src.loc)
+		var/obj/structure/wc/toilet/T = new /obj/structure/wc/toilet(src.loc)
 		T.open = 1
 		T.cistern = 1
 		T.dir = src.dir

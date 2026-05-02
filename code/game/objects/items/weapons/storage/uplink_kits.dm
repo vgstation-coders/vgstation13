@@ -388,7 +388,7 @@
 //Contains unique gear not found anywhere else
 /obj/item/weapon/storage/box/syndicate_experimental/New()
 	..()
-	var/selection = pick("damocles", "bomber vest", "bike horn")
+	var/selection = pick("damocles", "bomber vest", "bike horn", "ZKZ transactional rifle")
 	switch(selection)
 		if("damocles")
 			new /obj/item/weapon/damocles(src)
@@ -396,6 +396,8 @@
 			new /obj/item/clothing/suit/bomber_vest(src)
 		if("bike horn")
 			new /obj/item/weapon/bikehorn/syndicate(src)
+		if("ZKZ transactional rifle")
+			new /obj/item/weapon/gun/projectile/zkz(src)
 
 /obj/item/weapon/storage/box/syndie_kit/cratesender
 	name = "box (CS)"
@@ -453,6 +455,7 @@
 		/obj/item/clothing/gloves/neorussian/fingerless,
 		/obj/item/clothing/under/sl_suit/armored,
 		/obj/item/clothing/suit/armor/hos/jensen,
+		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/glasses/sunglasses/prescription,
 		/obj/item/clothing/head/beanie/black,
 		/obj/item/clothing/accessory/storage/bandolier,
@@ -469,6 +472,7 @@
 		/obj/item/clothing/gloves/neorussian/fingerless,
 		/obj/item/clothing/under/syndicate,
 		/obj/item/clothing/suit/armor/hos/jensen,
+		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/glasses/sunglasses/prescription,
 		/obj/item/clothing/head/soft/black,
 		/obj/item/clothing/accessory/storage/webbing,

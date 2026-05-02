@@ -6,14 +6,14 @@
 	specialization = SSOFFENSIVE
 
 	school = "transmutation"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	range = 1
 	max_targets = 1
 	invocation = "STAUN EI"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	amt_stunned = 5//just exists to make sure the statue "catches" them
-	cooldown_min = 200 //100 deciseconds reduction per rank
+	cooldown_min = 20 SECONDS //10 SECONDS deciseconds reduction per rank
 	valid_targets = list(/mob/living)
 
 	hud_state = "wiz_statue"
