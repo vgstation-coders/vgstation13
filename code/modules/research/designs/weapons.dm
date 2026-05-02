@@ -252,7 +252,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 1000, MAT_GLASS = 1000, MAT_RETICULITE = 3000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/melee/baton/loaded/probe
+	build_path = /obj/item/weapon/melee/baton/stunprobe
 
 /datum/design/sickstick
 	name = "Sick Stick"
@@ -262,7 +262,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 1000, MAT_GLASS = 1000, MAT_RETICULITE = 3000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/melee/baton/loaded/probe/sick
+	build_path = /obj/item/weapon/melee/baton/stunprobe/sick
 
 /datum/design/smalldisintegrator
 	name = "Small Disintegrator"
@@ -458,7 +458,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 4000)
 	build_path = /obj/item/ammo_storage/box/b380auto/rubber
-	
+
 /datum/design/ammo_b380auto/pepperball
 	name = "Ammunition box (.380AUTO pepperball)"
 	desc = "A box of .380AUTO pepperball cartridges."

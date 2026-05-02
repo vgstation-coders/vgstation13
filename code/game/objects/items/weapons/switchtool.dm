@@ -690,7 +690,7 @@
 			alreadyhas = "Nanotrasen"
 		if(istype(disk_tech, /datum/tech/alien) && disk_tech.level >= 5)
 			if(!(has_tech & AYY))
-				stored_modules["/obj/item/weapon/melee/baton/loaded/probe:stun probe"] = new /obj/item/weapon/melee/baton/loaded/probe(src)
+				stored_modules["/obj/item/weapon/melee/baton/stunprobe:stun probe"] = new /obj/item/weapon/melee/baton/stunprobe(src)
 				to_chat(user, "The holo switchtool has a secret shocking design now!")
 				has_tech |= AYY
 				return TRUE
