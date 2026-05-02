@@ -271,6 +271,9 @@
 
 //Returning 0 will cause the staff to attack an object, 1 will cause it to not attack
 /obj/item/weapon/staff/necro/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	var/mob/master_user = user
+	if(arcanetampered)
+		master_user = null
 	if(get_dist(target, user) > 7)
 		return 0
 	var/success = FALSE
@@ -295,7 +298,7 @@
 						H.locked_to = 0
 						H.anchored = 0
 				H.dropBorers()
-				H.zombify(arcanetampered ? null : user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
+				H.zombify(master_user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
 			else
 				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
 				return 1
@@ -335,7 +338,7 @@
 		if(L.stat == DEAD)
 			if(charges >= charge_cost)
 				success = TRUE
-				var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), arcanetampered ? null : user, L)
+				var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), master_user, L)
 				aG.ghoulifyAnimal(target)
 				if(!arcanetampered)
 					aG.faction = "\ref[user]"
@@ -350,7 +353,7 @@
 	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat)) //Meat can be turned into the undead
 		charge_cost = 5 //Meat is cheaper to raise
 		if(charges >= charge_cost)
-			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(target), arcanetampered ? null : user)
+			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(target), master_user)
 			success = TRUE
 			mG.ghoulifyMeat(target)
 			if(!arcanetampered)
