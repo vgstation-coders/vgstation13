@@ -2712,7 +2712,6 @@
 #include "code\modules\research\designs\mecha\odysseus.dm"
 #include "code\modules\research\designs\mecha\phazon.dm"
 #include "code\modules\research\designs\mecha\ripley.dm"
-#include "code\modules\research\designs\mecha\roswell.dm"
 #include "code\modules\research\designs\mecha\tools.dm"
 #include "code\modules\research\designs\mecha\weapons.dm"
 #include "code\modules\research\designs\spacepod\construction.dm"
