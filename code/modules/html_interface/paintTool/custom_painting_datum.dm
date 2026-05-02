@@ -3,6 +3,10 @@
 #define BRUSH_STRENGTH_MAX 1
 #define BRUSH_STRENGTH_MIN 0
 
+#define PAINTING_OC_ORIGINAL 0
+#define PAINTING_OC_COPY 1
+#define PAINTING_OC_MODIFIED_COPY 2
+
 /*
  * PAINTING UTENSIL DATUM
  *
@@ -171,10 +175,10 @@
 	var/author = ""
 	var/title = ""
 	var/description = ""
-	var/contributing_artists = list()
+	var/list/contributing_artists = list()
 	var/show_on_scoreboard = TRUE
 
-	var/copy = 0
+	var/copy = PAINTING_OC_ORIGINAL
 
 	var/list/components = list()
 
@@ -201,17 +205,6 @@
 	QDEL_NULL(interface)
 
 	QDEL_NULL(mp_handler)
-
-/datum/custom_painting/proc/Copy()
-	var/datum/custom_painting/copy = new(parent, bitmap_width, bitmap_height, offset_x, offset_y, base_color)
-	copy.author = author
-	copy.title = title
-	copy.description = description
-	copy.bitmap = bitmap.Copy()
-	copy.nanomap = nanomap.Copy()
-	copy.components = components.Copy()
-	copy.has_nano_paint = has_nano_paint
-	return copy
 
 /datum/custom_painting/proc/set_parent(parent)
 	src.parent = parent
@@ -383,6 +376,10 @@
 		for (var/i = 1; i <= nanomap.len; i++)
 			nanomap[i] = sanitize_hexcolor(nanomap[i])
 
+		if (copy == PAINTING_OC_COPY)
+			copy = PAINTING_OC_MODIFIED_COPY
+		show_on_scoreboard = TRUE
+
 		//Save and sanitize author, title and description
 		author = copytext(sanitize(url_decode(href_list["author"])), 1, MAX_NAME_LEN)
 		title = copytext(sanitize(url_decode(href_list["title"])), 1, MAX_NAME_LEN)
@@ -493,7 +490,7 @@
 	painting.title = title
 	painting.author = author
 	painting.description = description
-	painting.copy = 1
+	painting.copy = PAINTING_OC_COPY
 	painting.show_on_scoreboard = FALSE //sorry, OC only
 	return painting
 

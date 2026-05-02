@@ -280,7 +280,7 @@
 		dat += "Particle Strength: [src.strength] "
 		dat += "<A href='?src=\ref[src];strengthdown=1'>--</A>|<A href='?src=\ref[src];strengthup=1'>++</A><BR><BR>"
 
-	//user << browse(dat, "window=pacontrol;size=420x500")
+	//user << browse(HTML_SKELETON(dat), "window=pacontrol;size=420x500")
 	//onclose(user, "pacontrol")
 	var/datum/browser/popup = new(user, "pacontrol", name, 420, 500)
 	popup.set_content(dat)

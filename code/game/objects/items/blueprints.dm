@@ -15,6 +15,7 @@
 # define ROOM_ERR_SPACE    -1
 # define ROOM_ERR_TOOLARGE -2
 
+var/global/list/blueprint_archives = list()
 
 /obj/item/blueprints
 	name = "station blueprints"
@@ -26,6 +27,8 @@
 	flammable = TRUE
 
 	var/header = "<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small>"
+	var/shows_archives = TRUE
+	var/last_shown_archive
 
 	var/can_create_areas_in = list(AREA_SPACE,AREA_CONSTRUCT)
 	var/can_rename_areas = list(AREA_STATION, AREA_BLUEPRINTS)
@@ -42,6 +45,30 @@
 	var/area_protection_buffer = 4
 
 	var/mob/editor
+
+// below is non functional, uncomment if you want to have a go at this being available from a roundstart snapshot
+/*/obj/item/blueprints/initialize()
+	. = ..()
+	if(shows_archives && !blueprint_archives.len)
+		for(var/area/A in areas)
+			if(get_area_type(A) == AREA_STATION)
+				for(var/turf/T in A.area_turfs)
+					update_turf_image(T)*/
+
+/obj/item/blueprints/proc/update_turf_image(var/turf/T)
+	var/image/overlay = image(T.icon,T,T.icon_state,T.layer,T.dir,T.pixel_x,T.pixel_y)
+	overlay.plane = NARSIE_PLANE
+	overlay.alpha = 128
+	overlay.color = "#06f"
+	blueprint_archives["[T.x],[T.y],[T.z]"] = list(overlay)
+	for(var/atom/AM in T.contents)
+		if(AM.type == /atom/movable/lighting_overlay)
+			continue
+		overlay = image(AM.icon,T,AM.icon_state,AM.layer,AM.dir,AM.pixel_x,AM.pixel_y)
+		overlay.plane = NARSIE_PLANE
+		overlay.alpha = 128
+		overlay.color = "#0af"
+		blueprint_archives["[T.x],[T.y],[T.z]"] += overlay
 
 //MoMMI blueprints
 /obj/item/blueprints/mommiprints
@@ -62,6 +89,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	icon_state = "permit"
 
 	w_class = W_CLASS_TINY
+	shows_archives = FALSE
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
 	can_delete_areas = list(AREA_BLUEPRINTS)
@@ -109,6 +137,12 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		return
 
 	switch(href_list["action"])
+		if("show_room")
+			show_room(usr)
+
+		if("update_room")
+			update_room(usr)
+
 		if("create_room")
 			create_room(usr)
 
@@ -123,6 +157,9 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 		if("delete_area")
 			delete_area(usr)
+
+		if("extend_shuttle")
+			extend_shuttle(usr)
 
 /obj/item/blueprints/interact()
 	var/area/A = get_area(src)
@@ -149,9 +186,13 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	text += "<br>"
 
+	if(shows_archives)
+		text += "<p><a href='?src=\ref[src];action=show_room'>Show archive of surroundings</a></p>"
+		text += "<p><a href='?src=\ref[src];action=update_room'>Update archive of surroundings</a></p>"
 	if(area_type in can_create_areas_in)
 		text += "<p><a href='?src=\ref[src];action=create_room'>Create a new room</a></p>"
 		text += "<p><a href='?src=\ref[src];action=create_area'>Start a new drawing</a></p>"
+		text += "<p><a href='?src=\ref[src];action=extend_shuttle'>Add a room to a shuttle</a></p>"
 	if(area_type in can_rename_areas)
 		text += "<p><a href='?src=\ref[src];action=rename_area'>Change the drawing's name</a></p>"
 	if(area_type in can_edit_areas)
@@ -160,7 +201,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		text += "<p><a href='?src=\ref[src];action=delete_area'>Erase this drawing</a></p>"
 
 	text += "</BODY></HTML>"
-	usr << browse(text, "window=blueprints")
+	usr << browse(text, "window=blueprints") // NB: no need for HTML_SKELETON as it already HTML'd
 	onclose(usr, "blueprints")
 
 /obj/item/blueprints/proc/get_area_type(var/area/A)
@@ -262,6 +303,30 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 			#undef error_flash_dur
 
+//Shows an archive of surrounding tiles
+/obj/item/blueprints/proc/show_room(mob/user)
+	if(shows_archives && user.client)
+		var/list/shown_images = list()
+		var/tstring = ""
+		for(var/turf/T in spiral_block(get_turf(user),user.client.view))
+			tstring = "[T.x],[T.y],[T.z]"
+			if(tstring in blueprint_archives)
+				for(var/I in blueprint_archives[tstring])
+					shown_images += I
+					user.client.images += I
+		last_shown_archive = world.time
+		spawn(10 SECONDS)
+			if(world.time - last_shown_archive >= 99) // sanity for mass clicking of this
+				user.client.images -= shown_images
+
+/obj/item/blueprints/proc/update_room(mob/user)
+	if(shows_archives)
+		if(blueprint_archives.len)
+			if(alert(usr,"This will overwrite any archives, continue?","Overwriting","Yes","No") == "No")
+				return
+		for(var/turf/T in view(user.client.view))
+			update_turf_image(T)
+
 //Creates a new area and spreads it to cover the current room
 /obj/item/blueprints/proc/create_room(mob/user)
 	if(!(get_area_type() in can_create_areas_in))
@@ -315,6 +380,82 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	sleep(5)
 	interact()
 
+//Adds a new room to an existing shuttle's list of areas
+/obj/item/blueprints/proc/extend_shuttle(mob/user)
+	if(!(get_area_type() in can_create_areas_in))
+		to_chat(user, "<span class='notice'>There is no space on \the [src] for another drawing.</span>")
+		return
+
+	var/res = detect_room(get_turf(user))
+	if(!istype(res, /list))
+		switch(res)
+			if(ROOM_ERR_SPACE)
+				to_chat(user, "<span class='warning'>The new area must be completely airtight!</span>")
+				return
+			if(ROOM_ERR_TOOLARGE)
+				to_chat(user, "<span class='warning'>The new area is too large!</span>")
+				return
+			else
+				to_chat(user, "<span class='warning'>Error! Please notify administration!</span>")
+				return
+
+	//Find shuttles whose areas border the detected room
+	var/list/datum/shuttle/candidates = list()
+	for(var/turf/T in res)
+		for(var/dir in cardinal)
+			var/turf/N = get_step(T, dir)
+			if(!N || (N in res))
+				continue
+			var/area/NA = get_area(N)
+			if(!NA)
+				continue
+			var/datum/shuttle/S = NA.get_shuttle()
+			if(S)
+				candidates |= S
+
+	if(!candidates.len)
+		to_chat(user, "<span class='warning'>The new room must be adjacent to an existing shuttle.</span>")
+		return
+
+	var/datum/shuttle/chosen
+	if(candidates.len == 1)
+		chosen = candidates[1]
+	else
+		var/list/options = list()
+		for(var/datum/shuttle/S in candidates)
+			options[S.name] = S
+		var/pick = input(user, "Select a shuttle to extend:", "Shuttle Extension") as null|anything in options
+		if(!pick)
+			return
+		chosen = options[pick]
+
+	if(!chosen || !Adjacent(user))
+		return
+
+	var/str = trim(stripped_input(user, "New area name:", "Blueprint Editing", "", MAX_NAME_LEN))
+	if(!str || !length(str) || !Adjacent(user))
+		return
+	if(length(str) > 50)
+		to_chat(user, "<span class='warning'>Name too long.</span>")
+		return
+
+	var/area/station/custom/newarea = new
+	newarea.name = str
+	newarea.tag = "[newarea.type]/[md5(str)]"
+
+	for(var/turf/T in res)
+		T.set_area(newarea)
+		T.turf_flags |= SHUTTLE_TURF
+
+	chosen.linked_areas |= newarea
+
+	ghostteleportlocs[newarea.name] = newarea
+
+	to_chat(user, "<span class='notice'>You have extended \the [chosen.name] with the new area '[str]'.</span>")
+
+	sleep(5)
+	interact()
+
 /obj/item/blueprints/proc/edit_area(mob/user)
 	if(!user || !user.client)
 		return
@@ -335,6 +476,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	//Create a visual effect over the edited area
 	edited_overlay = image('icons/turf/areas.dmi', currently_edited, "yellow")
+	edited_overlay.plane = ABOVE_LIGHTING_PLANE
 	editor.client.images.Add(edited_overlay)
 
 	to_chat(editor, "<span class='info'>In this mode, you can add or modify tiles to the [currently_edited] area. When you're done, bring up the blueprints or leave the area.</span>")

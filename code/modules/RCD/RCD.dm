@@ -38,9 +38,22 @@
 	var/datum/html_interface/rcd/interface
 
 	var/obj/abstract/screen/close/closer
+	
+	
+	var/list/settings //for stuff like window directions and construction options.
+	var/current_menu=null //we are keeping both systems of schematics for the sake of backwards compatability
+	var/list/datum/rcd_scematic_grouping/schem_groups=null
+	var/datum/rcd_grouped_schematic/selected_schem=null
+	var/list/client/loaded_clients=null //store a list of clients who have loaded all the images, so we can skip trying to send it to them.
+	
+	
 
 /obj/item/device/rcd/New()
 	. = ..()
+
+	schem_groups=new()
+	settings=new()
+	loaded_clients=new()
 
 	//interface gets created BEFORE the schematics get created, so they can modify the HEAD content (RPD pipe colour picker).
 	interface = new(src, sanitize(name))
@@ -230,9 +243,9 @@
 			use_energy(selected.energy_cost, user)
 	else
 		if(istext(t))
-			to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s error light flickers: [t]</span>")
 		else
-			to_chat(user, "<span class='warning'>\the [src]'s error light flickers.</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s error light flickers.</span>")
 
 	busy = FALSE
 
@@ -294,26 +307,10 @@
 	var/cell_power_per_energy = 30
 
 /obj/item/device/rcd/borg/use_energy(var/amount, var/mob/user)
-	if(!isrobot(user))
-		return
-
-	var/mob/living/silicon/robot/R = user
-
-	if(!R.cell)
-		return
-
-	R.cell.use(amount * cell_power_per_energy)
+	use_cell_charge(user,amount * cell_power_per_energy)
 
 /obj/item/device/rcd/borg/get_energy(var/mob/user)
-	if(!isrobot(user))
-		return 0
-
-	var/mob/living/silicon/robot/R = user
-
-	if(!R.cell)
-		return
-
-	return R.cell.charge / cell_power_per_energy
+	return get_cell_charge(user) / cell_power_per_energy
 
 //Matter based RCDs.
 /obj/item/device/rcd/matter
@@ -332,12 +329,12 @@
 	..()
 	if(istype(S,/obj/item/stack/rcd_ammo))
 		if((matter + 10) > max_matter)
-			to_chat(user, "<span class='notice'>\the [src] can't hold any more matter-units.</span>")
+			to_chat(user, "<span class='notice'>\The [src] can't hold any more matter-units.</span>")
 			return 1
 		matter += 10
 		S.use(1)
 		playsound(src, 'sound/machines/click.ogg', 20, 1)
-		to_chat(user, "<span class='notice'>\the [src] now holds [matter]/[max_matter] matter-units.</span>")
+		to_chat(user, "<span class='notice'>\The [src] now holds [matter]/[max_matter] matter-units.</span>")
 		return 1
 
 	if(S.is_screwdriver(user))
@@ -350,7 +347,7 @@
 
 /obj/item/device/rcd/matter/use_energy(var/amount, var/mob/user)
 	matter -= amount
-	to_chat(user, "<span class='notice'>\the [src] currently holds [matter]/[max_matter] matter-units.")
+	to_chat(user, "<span class='notice'>\The [src] currently holds [matter]/[max_matter] matter-units.")
 
 /obj/item/device/rcd/matter/get_energy(var/mob/user)
 	return matter
@@ -360,16 +357,3 @@
 		if(selected.show(user,1))
 			return
 	user.hud_used.toggle_show_schematics_display(null, 1, src)
-
-/obj/item/device/rcd/mech
-	schematics = list(
-	/datum/rcd_schematic/decon,
-	/datum/rcd_schematic/con_floors,
-	/datum/rcd_schematic/con_walls,
-	/datum/rcd_schematic/con_airlock,
-	/datum/rcd_schematic/con_window,
-	)
-
-/obj/item/device/rcd/mech/attack_self(var/mob/living/user)
-	if(!selected || user.shown_schematics_background || !selected.show(user))
-		user.hud_used.toggle_show_schematics_display(schematics["Construction"], 0, src)

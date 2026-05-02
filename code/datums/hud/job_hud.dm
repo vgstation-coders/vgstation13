@@ -17,7 +17,8 @@
 	offset = offset * PIXEL_MULTIPLIER
 	T = get_turf(M)
 
-	for(var/mob/living/simple_animal/astral_projection/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	var/list/perplist = M.loneliness_affected() ? list(M) : range(C.view+DATAHUD_RANGE_OVERHEAD,T)
+	for(var/mob/living/simple_animal/astral_projection/perp in perplist)
 		if(!check_HUD_visibility(perp, M))
 			continue
 		if(!offset)
@@ -33,7 +34,7 @@
 		holder.icon_state = "hud[ckey(perp.cardjob)]"
 		C.images += holder
 
-	for(var/mob/living/carbon/human/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	for(var/mob/living/carbon/human/perp in perplist)
 		if(!check_HUD_visibility(perp, M))
 			continue
 		if(!offset)

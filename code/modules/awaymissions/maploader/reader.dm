@@ -330,6 +330,8 @@ var/list/map_dimension_cache = list()
 	instance = locate(members[index])
 	if(!isarea(instance))
 		WARNING("Instance at [members[index]] is not an area!")
+	if(istype(instance, /area/template_noop))
+		instance = get_area(locate(xcrd,ycrd,zcrd))
 	if(!isspace(instance)) //Space is the default area and contains every loaded turf by default
 		instance.contents.Add(locate(xcrd,ycrd,zcrd))
 		spawned_atoms.Add(instance)
@@ -341,7 +343,6 @@ var/list/map_dimension_cache = list()
 	//We have to add it manually
 	if(!areas.Find(instance))
 		var/area/A = instance
-
 		if(istype(A))
 			areas.Add(instance)
 
@@ -364,7 +365,7 @@ var/list/map_dimension_cache = list()
 		last_turf_index++
 
 	//instanciate the last /turf
-	var/turf/T = instance_atom(members[last_turf_index],members_attributes[last_turf_index],xcrd,ycrd,zcrd,rotate)
+	var/turf/T = instance_atom(members[last_turf_index],members_attributes[last_turf_index],xcrd,ycrd,zcrd,rotate,overwrite)
 
 	if(first_turf_index != last_turf_index) //More than one turf is present - go from the lowest turf to the turf before the last one
 		var/turf_index = first_turf_index
@@ -380,7 +381,7 @@ var/list/map_dimension_cache = list()
 
 	//finally instance all remainings objects/mobs
 	for(index=1,index < first_turf_index,index++)
-		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate)
+		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate,overwrite)
 		spawned_atoms.Add(new_atom)
 
 	if(!spawned_atoms.len)
@@ -392,8 +393,10 @@ var/list/map_dimension_cache = list()
 ////////////////
 
 //Instance an atom at (x,y,z) and gives it the variables in attributes
-/dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z, var/rotate)
+/dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z, var/rotate, var/overwrite)
 	if(!path)
+		return
+	if(!overwrite && path == get_base_turf(z))
 		return
 	var/timestart = world.timeofday
 	var/atom/instance
@@ -403,7 +406,7 @@ var/list/map_dimension_cache = list()
 	if(!T)
 		WARNING("Turf at [x], [y], [z] not found!")
 	if(ispath(path, /turf)) //Turfs use ChangeTurf
-		if(path != T.type)
+		if(path != T.type && path != /turf/template_noop)
 			instance = T.ChangeTurf(path, allow = 1)
 			T = instance
 	else
@@ -512,22 +515,6 @@ var/list/map_dimension_cache = list()
 		placed.opacity = 1
 	placed.underlays += turfs_underlays
 
-/atom/New()
-	// Incase any lighting vars are on in the typepath we turn the light on in New().
-
-	if (light_power && light_range)
-		update_light()
-
-	if (opacity && isturf(loc))
-		var/turf/T = loc
-		T.has_opaque_atom = TRUE // No need to recalculate it in this case, it's guaranteed to be on afterwards anyways.
-
-	//atom creation method that preloads variables at creation
-	if(use_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
-		_preloader.load(src)
-
-	. = ..()
-
 //////////////////
 //Preloader datum
 //////////////////
@@ -554,3 +541,11 @@ var/use_preloader = FALSE
 	var/list/what_vars = what.vars
 	for(var/attribute in local_attributes)
 		what_vars[attribute] = local_attributes[attribute]
+
+/turf/template_noop
+	name = "Template Passthrough"
+	icon_state = "noop"
+
+/area/template_noop
+	name = "Template Passthrough"
+	icon_state = "noop"

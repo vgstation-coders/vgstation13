@@ -77,7 +77,7 @@
 
 /obj/item/weapon/card/debit/preferred/examine(var/mob/user)
 	. = ..()
-	if(src in user.held_items || istype(user, /mob/dead))
+	if((src in user.held_items) || istype(user, /mob/dead))
 		to_chat(user, examine_held)
 
 /obj/item/weapon/card/debit/preferred/elite

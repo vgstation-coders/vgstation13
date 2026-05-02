@@ -45,7 +45,6 @@ var/stacking_limit = 90
 	var/list/living_antags = list()
 	var/list/dead_players = list()
 	var/list/list_observers = list()
-	var/last_time_of_population = 0
 
 	var/latejoin_injection_cooldown = 0
 	var/midround_injection_cooldown = 0
@@ -146,7 +145,7 @@ var/stacking_limit = 90
 	out += "<B>Remaining threat/threat_level:</B> [threat]/[threat_level]<br/>"
 	out += "<B>Remaining midround threat/threat_level:</B> [midround_threat]/[midround_threat_level]"
 
-	usr << browse(out, "window=threatlog;size=700x500")
+	usr << browse(HTML_SKELETON(out), "window=threatlog;size=700x500")
 
 /datum/gamemode/dynamic/GetScoreboard()
 
@@ -247,7 +246,7 @@ var/stacking_limit = 90
 		"two_rounds_ago" = list(),
 		"three_rounds_ago" = list()
 	)
-	var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/latest_dynamic_rulesets)
+	var/list/data = SSpersistence_tasks.read_data(/datum/persistence_task/latest_dynamic_rulesets)
 	if(length(data))
 		for (var/entries in data)
 			var/previous_rulesets_text = data[entries]
@@ -260,7 +259,7 @@ var/stacking_limit = 90
 
 	//Recapping the weight of the various rulesets according to their categories
 	ruleset_category_weights = list()
-	data = SSpersistence_misc.read_data(/datum/persistence_task/dynamic_ruleset_weights)
+	data = SSpersistence_tasks.read_data(/datum/persistence_task/dynamic_ruleset_weights)
 	for (var/rule in subtypesof(/datum/dynamic_ruleset))//first we dress the list of all categories according to the rulesets that currently exist
 		var/datum/dynamic_ruleset/ruletype = rule
 		var/rulecategory = initial(ruletype.weight_category)
@@ -540,7 +539,7 @@ var/stacking_limit = 90
 			return 1
 	return 0
 
-/datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype,var/forced=0,var/caller)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
+/datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype,var/forced=0,var/rule_caller)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
 	var/datum/dynamic_ruleset/midround/new_rule
 	if(ispath(ruletype))
 		new_rule = new ruletype()//you should only use it to call midround rules though.
@@ -550,8 +549,8 @@ var/stacking_limit = 90
 		message_admins("DYNAMIC MODE: The specific ruleset failed beacuse a type other than a path or rule was sent.")
 		log_admin("DYNAMIC MODE: The specific ruleset failed beacuse a type other than a path or rule was sent.")
 		return
-	if(caller)
-		new_rule.calledBy = caller
+	if(rule_caller)
+		new_rule.calledBy = rule_caller
 	update_playercounts()
 	var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
 	current_players[CURRENT_LIVING_PLAYERS] = living_players.Copy()
@@ -672,11 +671,6 @@ var/stacking_limit = 90
 					living_players.Add(M)//yes we're adding a ghost to "living_players", so make sure to properly check for type when testing midround rules
 					continue
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
-
-	if(living_players.len) //if anybody is around and alive in the current round
-		last_time_of_population = world.time
-	else if(last_time_of_population && world.time - last_time_of_population > 1 HOURS) //if enough time has passed without it
-		ticker.station_nolife_cinematic()
 
 /datum/gamemode/dynamic/proc/GetInjectionChance()
 	var/chance = 0

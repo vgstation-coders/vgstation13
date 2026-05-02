@@ -2,7 +2,7 @@
 
 /obj/item/device/deskbell
 	name = "desk bell"
-	desc = "ding. ding."
+	desc = "Ding. Ding."
 	icon_state = "deskbell_2"
 	force = 5
 	throwforce = 5
@@ -207,6 +207,10 @@
 	. = ..()
 	frequency = deskbell_freq_rnd
 
+/obj/item/device/deskbell/signaler/trader/New()
+	. = ..()
+	frequency = deskbell_freq_pox
+
 /////ASSEMBLY/////
 
 /obj/item/device/deskbell_assembly
@@ -269,7 +273,7 @@
 					to_chat(user, "<span class='warning'>You must add wires first.</span>")
 					return
 			if(1)
-				if(istype(W,/obj/item/tool/wirecutters))
+				if(W.is_wirecutter(user))
 					if(has_signaler)
 						to_chat(user, "<span class='warning'>You must remove the signaler first.</span>")
 						return
@@ -334,6 +338,7 @@ var/global/deskbell_freq_hop = call(/obj/item/device/deskbell/signaler/proc/get_
 var/global/deskbell_freq_medbay = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
 var/global/deskbell_freq_brig = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
 var/global/deskbell_freq_rnd = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
+var/global/deskbell_freq_pox = call(/obj/item/device/deskbell/signaler/proc/get_new_bellfreq)()
 
 /obj/item/device/deskbell/signaler/proc/get_new_bellfreq()
 	var/i = rand(MINIMUM_FREQUENCY,MAXIMUM_FREQUENCY)

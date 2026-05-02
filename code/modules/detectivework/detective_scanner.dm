@@ -1,5 +1,7 @@
 //CONTAINS: Detective's Scanner
 
+#define FINGERPRINT_COMPLETE 6	//This is the output of the stringpercent(print) proc, and means about 80% of
+								//the print must be there for it to be complete.  (Prints are 32 digits)
 
 /obj/item/device/detective_scanner
 	name = "forensic scanner"
@@ -73,13 +75,13 @@
 	return extracted_fibers
 
 //alt-mode uses preattack so you can scan boxes and lockers without hassle
-/obj/item/device/detective_scanner/preattack(atom/A as obj|turf|area, mob/user as mob) 
+/obj/item/device/detective_scanner/preattack(atom/A as obj|turf|area, mob/user as mob)
 	if(scanmode)
 		scanitem(A, user)
 		return 1 //this will not call attack or afterattack afterwards.
 	..()
-	
-/obj/item/device/detective_scanner/afterattack(atom/A as obj|turf|area, mob/user as mob) 
+
+/obj/item/device/detective_scanner/afterattack(atom/A as obj|turf|area, mob/user as mob)
 	scanitem(A, user)
 
 /obj/item/device/detective_scanner/proc/add_data(var/atom/A, var/list/blood_DNA_found,var/list/fingerprints_found,var/list/fibers_found)
@@ -155,7 +157,7 @@
 		return
 	if(loc != user)
 		return
-	
+
 	if(istype(A,/obj/machinery/computer/forensic_scanning)) //breaks shit.
 		return
 	if(istype(A,/obj/item/weapon/f_card))

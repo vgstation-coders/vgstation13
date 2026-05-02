@@ -70,7 +70,10 @@
 		for(var/ID in files.known_tech)
 			var/datum/tech/T = files.known_tech[ID]
 			if(prob(1))
-				T.level = 0 // This never happens, so make it dramatic. T.level--
+				if(T.level <= 1) //He's dead, Jim!
+					continue
+				T.level = 1 // This never happens, so make it dramatic. T.level--
+				//Except it does happen and floods the admins!! Minimum level is 1, not 0
 				message_admins("[src] lost [T.id] tech levels due to heat damage.")
 				for(var/obj/machinery/computer/rdservercontrol/SC in machines)
 					SC.screen = -1 //Display an alert
@@ -305,14 +308,14 @@
 			for(var/obj/machinery/r_n_d/server/S in servers)
 				dat += "[S.name] <A href='?src=\ref[src];send_to=[S.server_id]'> (Transfer)</A><BR>"
 			dat += "<HR><A href='?src=\ref[src];main=1'>Main Menu</A>"
-	user << browse("<TITLE>R&D Server Control</TITLE><HR>[dat]", "window=server_control;size=575x400")
+	user << browse(HTML_SKELETON_TITLE("R&D Server Control", dat), "window=server_control;size=575x400")
 	onclose(user, "server_control")
 	return
 
 /obj/machinery/computer/rdservercontrol/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 
 	add_fingerprint(user)
-
+	updateUsrDialog()
 	if(D.is_screwdriver(user))
 		D.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
@@ -341,12 +344,14 @@
 				A.anchored = 1
 				src.transfer_fingerprints_to(A)
 				qdel(src)
-	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
-		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
+	else
+		return ..()
+
+/obj/machinery/computer/rdservercontrol/emag_act(mob/user)
+	if(!emagged)
+		. = ..()
 		emagged = 1
 		to_chat(user, "<span class='notice'>You disable the security protocols</span>")
-	src.updateUsrDialog()
-	return
 
 /obj/machinery/r_n_d/server/derelict
 	name = "Derelict R&D Server"

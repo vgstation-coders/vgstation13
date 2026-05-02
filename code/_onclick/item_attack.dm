@@ -23,6 +23,17 @@
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 	if(W.material_type)
 		W.material_type.on_use(W, src, user)
+	return emag_check(W,user)
+
+/atom/movable/proc/emag_check(obj/item/weapon/card/emag/E, mob/user)
+	if(can_emag() && istype(E) && E.canUse(user,src))
+		if(E.arcanetampered && prob(50))
+			arcane_act(user)
+			if(prob(50))
+				return TRUE
+		emag_act(user)
+		return TRUE
+	return FALSE
 
 /mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
 	if(!no_delay)
@@ -152,23 +163,10 @@
 				else
 					to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
 
-	if(istype(M, /mob/living/carbon))
-		var/mob/living/carbon/C = M
-		if(originator)
-			. = C.attacked_by(I, user, def_zone, originator, crit = is_crit)
-		else
-			. = C.attacked_by(I, user, def_zone, crit = is_crit)
+	if(originator)
+		. = M.attacked_by(I, user, def_zone, originator, crit = is_crit, force = power)
 	else
-		switch(I.damtype)
-			if("brute")
-				M.take_organ_damage(power)
-				if (prob(33) && I.force) // Added blood for whacking non-humans too
-					var/turf/simulated/location = M.loc
-					if (istype(location))
-						location.add_blood_floor(M)
-			if("fire")
-				if (!(M_RESIST_COLD in M.mutations))
-					M.take_organ_damage(0, power)
+		. = M.attacked_by(I, user, def_zone, crit = is_crit, force = power)
 
 	//Break the item if applicable.
 	if(power && (I.breakable_flags & BREAKABLE_AS_MELEE) && (I.breakable_flags & BREAKABLE_MOB) && (I.damtype == BRUTE))

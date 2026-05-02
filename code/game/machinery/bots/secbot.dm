@@ -16,7 +16,6 @@
 	req_one_access = list(access_security, access_forensics_lockers)
 	control_filter = RADIO_SECBOT
 	var/check_records = 1
-//	var/emagged = 0 //Emagged Secbots view everyone as a criminal
 
 	var/idcheck = 0 //If true, arrest people with no IDs
 	var/weaponscheck = 0 //If true, arrest people for weapons if they lack access	var/check_records = 1 //Does it check security records?
@@ -134,7 +133,7 @@ Auto Patrol: []"},
 "<A href='?src=\ref[src];operation=patrol'>[auto_patrol ? "On" : "Off"]</A>" )
 
 
-	user << browse("<HEAD><TITLE>Securitron v1.3 controls</TITLE></HEAD>[dat]", "window=autosec")
+	user << browse(HTML_SKELETON_TITLE("Securitron v1.3 controls", dat), "window=autosec")
 	onclose(user, "autosec")
 	return
 
@@ -651,7 +650,7 @@ Auto Patrol: []"},
 
 /obj/item/weapon/secbot_assembly/britsky
 	name = "custodian signaler assembly"
-	desc = "some sort of british assembly."
+	desc = "Some sort of british assembly."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "bhelmet_signaler"
 	build_step = 0

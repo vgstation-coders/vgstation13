@@ -116,6 +116,17 @@ var/datum/feed_network/news_network = new /datum/feed_network     //The global n
 
 var/list/obj/machinery/newscaster/allCasters = list() //Global list that will contain reference to all newscasters in existence.
 
+/datum/feed_channel/preset
+	locked = 1
+	is_admin_channel = 1
+
+/datum/feed_channel/preset/tauceti
+	channel_name = "Tau Ceti Daily"
+	author = "CentComm Minister of Information"
+
+/datum/feed_channel/preset/gibsongazette
+	channel_name = "The Gibson Gazette"
+	author = "Editor Mike Hammers"
 
 /obj/machinery/newscaster
 	name = "newscaster"
@@ -421,7 +432,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
-								dat+="<BR><a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR>"
+								dat+="<BR><a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='image-rendering: pixelated'></a><BR>"
 							dat+="<BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><HR>"
 
 				dat += {"<A href='?src=\ref[src];refresh=1'>Refresh</A>
@@ -548,7 +559,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
 
 
-		M << browse(dat, "window=newscaster_main;size=400x600")
+		M << browse(HTML_SKELETON(dat), "window=newscaster_main;size=400x600")
 		onclose(M, "newscaster_main")
 
 /obj/machinery/newscaster/Topic(href, href_list)
@@ -1072,7 +1083,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 			else if (stat & BROKEN)
 				playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 100, 1)
-				visible_message("<EM>[user.name]</EM> further abuses the shattered [src].")
+				visible_message("<EM>[user.name]</EM> further abuses the shattered \the [src].")
 
 			else
 				var/obj/item/weapon/photo/P = I

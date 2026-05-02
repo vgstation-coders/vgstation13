@@ -75,8 +75,11 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/tome/proc/tome_text()
 	var/page_data = null
-	var/dat = {"<title>arcane tome</title><body style="color:#FFFFFF" bgcolor="#110000">
-
+	var/title = "arcane tome"
+	var/body_style = {"
+	"color:#FFFFFF" bgcolor="#110000"
+	"}
+	var/dat = {"
 			<style>
 				label {display: inline-block; width: 50px;text-align: right;float: left;margin: 0 0 0 10px;}
 				ul {list-style-type: none;}
@@ -122,9 +125,9 @@ var/list/arcane_tomes = list()
 	else
 		dat += page_special()
 
-	dat += {"</div></div></div></body>"}
+	dat += {"</div></div></div>"}
 
-	return dat
+	return HTML_SKELETON_TITLE_STYLE(title, dat, body_style)
 
 /obj/item/weapon/tome/proc/page_special()
 	var/dat = null
@@ -1888,8 +1891,9 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/blood_tesseract/throw_impact(atom/hit_atom)
 	var/turf/T = get_turf(src)
-	playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	if(T)
+		playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	qdel(src)
 
 /obj/item/weapon/blood_tesseract/examine(var/mob/user)
@@ -1990,7 +1994,7 @@ var/list/arcane_tomes = list()
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.blend_mode = BLEND_ADD
 		if (isturf(loc))
-			I.plane = ABOVE_LIGHTING_PLANE
+			I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		else
 			I.plane = ABOVE_HUD_PLANE // inventory
 		overlays += I
@@ -1999,9 +2003,9 @@ var/list/arcane_tomes = list()
 		var/image/left_I = image(inhand_states["left_hand"], src, "bloodcandle_lit")
 		var/image/right_I = image(inhand_states["right_hand"], src, "bloodcandle_lit")
 		left_I.blend_mode = BLEND_ADD
-		left_I.plane = ABOVE_LIGHTING_PLANE
+		left_I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		right_I.blend_mode = BLEND_ADD
-		right_I.plane = ABOVE_LIGHTING_PLANE
+		right_I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 

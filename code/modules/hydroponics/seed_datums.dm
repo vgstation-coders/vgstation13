@@ -405,6 +405,10 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	text += " Plant is now [thorny ? "thorny" : "NO LONGER thorny."] |"
 	text += " Plant chems: "
 	for (var/chemical in chems)
+		if(length(chems[chemical])<2)
+			spawn()
+				CRASH("Invalid chemical in seed [src]! Chemical [chems[chemical]] is missing a [chems[chemical][1]?"potency":"total volume"] value!")
+			continue
 		text += "[chemical], vol: [chems[chemical][1]], potency: [chems[chemical][2]]."
 
 	mutation_log += text

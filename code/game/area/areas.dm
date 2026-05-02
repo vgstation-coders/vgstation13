@@ -12,15 +12,21 @@ var/area/space_area
 	var/list/obj/machinery/light_switch/lightswitches = list()
 	var/list/obj/machinery/light/lights = list()
 	var/list/area_turfs
-	plane = ABOVE_LIGHTING_PLANE
+	var/datum/virtual_z/v
+	plane = LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
 	var/project_shadows = FALSE
+	var/obj/effect/area_alert_holder/alert_holder = null
 	var/obj/effect/narration/narrator = null
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
-	flags = 0
+	flags = CAVES_ALLOWED
+
+/// Used for shuttle overrides so we can expose planet or space turfs depending on the shuttle's location.
+/area/proc/get_base_turf_type(turf/T)
+	return base_turf_type
 
 /area/New()
 	area_turfs = list()
@@ -48,6 +54,8 @@ var/area/space_area
 		power_equip = 1
 		power_environ = 1
 
+	alert_holder = new(src)
+
 	..()
 
 //	spawn(15)
@@ -61,6 +69,9 @@ var/area/space_area
 /area/Destroy()
 	..()
 	areaapc = null
+	if (alert_holder)
+		QDEL_NULL(alert_holder)
+
 
 /*
  * Added to fix mech fabs 05/2013 ~Sayu.
@@ -330,7 +341,7 @@ var/area/space_area
 		updateicon()
 	return
 
-/area/proc/get_ambience_list()
+/area/proc/get_ambience_list(mob/user)
 	//Check if the area has an AI and add the appropriate ambience
 	var/list/ambience_list = list()
 	ambience_list.Add(ambient_sounds)
@@ -340,37 +351,14 @@ var/area/space_area
 			if(AI?.laws.name == "Asimov's Three Laws of Robotics")
 				ambience_list.Add(/datum/ambience/AI/harmonica)
 			break
+	if(user.loneliness_affected())
+		ambience_list.Add(/datum/ambience/nobodyhere)
 	if(ambience_list.len > 0)
 		return ambience_list
 
 /area/proc/updateicon()
-	if (!areaapc)
-		icon_state = null
-		return
-	if ((fire || eject || party || radalert) && ((!requires_power)?(!requires_power):power_environ))//If it doesn't require power, can still activate this proc.
-		// Highest priority at the top.
-		if(radalert && !fire)
-			icon_state = "radiation"
-		else if(fire && !radalert && !eject && !party)
-			icon_state = "blue"
-		/*else if(atmosalm && !fire && !eject && !party)
-			icon_state = "bluenew"*/
-		else if(!fire && eject && !party)
-			icon_state = "red"
-		else if(party && !fire && !eject)
-			icon_state = "party"
-		else
-			icon_state = "blue-red"
-	else
-	//	new lighting behaviour with obj lights
-		icon_state = null
-
-
-/*
-#define EQUIP 1
-#define LIGHT 2
-#define ENVIRON 3
-*/
+	if (alert_holder)
+		alert_holder.update()
 
 /area/proc/powered(var/chan)		// return true if the area has power to given channel
 
@@ -450,21 +438,52 @@ var/area/space_area
 		Obj.underlays -= Obj.shadow
 
 	Obj.area_entered(src)
+	if(planet)
+		Obj.planet = planet
 	for(var/atom/movable/thing in get_contents_in_object(Obj))
 		thing.area_entered(src)
+		if(planet)
+			thing.planet = planet
 
 	for(var/mob/mob_in_obj in Obj.contents)
 		if(istype(mob_in_obj))
 			INVOKE_EVENT(mob_in_obj, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
+			if(oldArea.v && src.v && (oldArea.v != src.v))
+				var/datum/virtual_z/old_v = oldArea.v
+				var/datum/virtual_z/new_v = src.v
+				if(istype(mob_in_obj, /mob/living))
+					var/mob/living/L = mob_in_obj
+					new_v.mob_entered(L)
+					INVOKE_EVENT(L, /event/v_transition, "user" = L, "from_v" = old_v, "to_v" = new_v)
 
 	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
 		INVOKE_EVENT(M, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
+		if(oldArea?.v && src.v && (oldArea.v != src.v))
+			var/datum/virtual_z/old_v = oldArea.v
+			var/datum/virtual_z/new_v = src.v
+			if(istype(M, /mob/living))
+				var/mob/living/L = M
+				new_v.mob_entered(L)
+				INVOKE_EVENT(L, /event/v_transition, "user" = L, "from_v" = old_v, "to_v" = new_v)
 		if(narrator)
 			narrator.Crossed(M)
 
 /area/Exited(atom/movable/Obj)
+	var/turf/T = get_turf(Obj)
+	var/datum/virtual_z/new_v = T?.v
+	if(v && v != new_v)
+		if(istype(Obj, /mob/living))
+			var/mob/living/L = Obj
+			v.mob_exited(L)
+			INVOKE_EVENT(L, /event/v_transition, "user" = L, "from_v" = v, "to_v" = new_v)
+		for(var/atom/movable/thing in get_contents_in_object(Obj))
+			if(istype(thing, /mob/living))
+				var/mob/living/L = thing
+				v.mob_exited(L)
+				INVOKE_EVENT(L, /event/v_transition, "user" = L, "from_v" = v, "to_v" = new_v)
+
 	INVOKE_EVENT(src, /event/area_exited, "exiter" = Obj)
 	..()
 
@@ -508,7 +527,7 @@ var/area/space_area
 
 /area/proc/get_shuttle()
 	for(var/datum/shuttle/S in shuttles)
-		if(S.linked_area == src)
+		if(S.has_area(src))
 			return S
 	return null
 
@@ -715,6 +734,106 @@ var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are move
 
 	for(var/obj/machinery/door/D in doors)
 		D.update_nearby_tiles()
+
+
+/area/proc/copy_contents_to(area/A , platingRequired = FALSE)
+	//This version is used by the Holodeck.
+	//Moving it here from unsorted.dm for easier maintenance in the future.
+
+	if(!A || !src)
+		return 0
+
+	var/list/turfs_src = get_area_turfs(src.type)
+	var/list/turfs_trg = get_area_turfs(A.type)
+
+	var/src_min_x = 0
+	var/src_min_y = 0
+	for (var/turf/T in turfs_src)
+		if(T.x < src_min_x || !src_min_x)
+			src_min_x	= T.x
+		if(T.y < src_min_y || !src_min_y)
+			src_min_y	= T.y
+
+	var/trg_min_x = 0
+	var/trg_min_y = 0
+	for (var/turf/T in turfs_trg)
+		if(T.x < trg_min_x || !trg_min_x)
+			trg_min_x	= T.x
+		if(T.y < trg_min_y || !trg_min_y)
+			trg_min_y	= T.y
+
+	var/list/refined_src = new/list()
+	for(var/turf/T in turfs_src)
+		refined_src += T
+		refined_src[T] = new/datum/coords
+		var/datum/coords/C = refined_src[T]
+		C.x_pos = (T.x - src_min_x)
+		C.y_pos = (T.y - src_min_y)
+
+	var/list/refined_trg = new/list()
+	for(var/turf/T in turfs_trg)
+		refined_trg += T
+		refined_trg[T] = new/datum/coords
+		var/datum/coords/C = refined_trg[T]
+		C.x_pos = (T.x - trg_min_x)
+		C.y_pos = (T.y - trg_min_y)
+
+	var/list/copiedobjs = list()
+
+	moving:
+		for (var/turf/T in refined_src)
+			var/datum/coords/C_src = refined_src[T]
+			for (var/turf/B in refined_trg)
+				var/datum/coords/C_trg = refined_trg[B]
+				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)
+					var/old_name = T.name
+					var/old_dir = T.dir
+					var/old_icon_state = T.icon_state
+					var/old_icon = T.icon
+
+					if(platingRequired)
+						if(istype(B, /turf/space))
+							continue moving
+
+					B.ChangeTurf(T.type)
+					B.name = old_name
+					B.dir = old_dir
+					B.icon_state = old_icon_state
+					B.icon = old_icon
+
+					B.return_air().copy_from(T.return_air())
+
+					for(var/obj/O in T)
+						copiedobjs += O.DuplicateObject(B)
+
+					for(var/mob/M in T)
+						if(!M.can_shuttle_move())
+							continue
+						copiedobjs += M.DuplicateObject(B)
+
+					refined_src -= T
+					refined_trg -= B
+					continue moving
+
+	for(var/obj/machinery/door/new_door in copiedobjs)
+		new_door.update_nearby_tiles()
+
+	return copiedobjs
+
+// If you're looking at this proc and thinking "that's exactly what I need!"
+// then you're wrong and you need to take a step back and reconsider.
+/atom/movable/proc/DuplicateObject(var/location)
+	var/atom/movable/duplicate = new src.type(location)
+	duplicate.change_dir(dir)
+	duplicate.plane = plane
+	duplicate.layer = layer
+	duplicate.name = name
+	duplicate.desc = desc
+	duplicate.pixel_x = pixel_x
+	duplicate.pixel_y = pixel_y
+	duplicate.pixel_w = pixel_w
+	duplicate.pixel_z = pixel_z
+	return duplicate
 
 /area/proc/make_geyser(turf/T)
 	return

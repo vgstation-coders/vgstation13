@@ -21,7 +21,7 @@
 
 
 //////CUT///////
-/datum/surgery_step/limb/cut/tool_quality(obj/item/tool)
+/datum/surgery_step/limb/cut/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -97,12 +97,11 @@
 
 
 //////PREPARE///////
-/datum/surgery_step/limb/prepare/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/limb/prepare/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/limb/prepare
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,
@@ -150,6 +149,7 @@
 		)
 	can_infect = 0
 	duration = 8 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/limb/attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
@@ -193,6 +193,7 @@
 
 	can_infect = 0
 	duration = 8 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/limb/attach_plank/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

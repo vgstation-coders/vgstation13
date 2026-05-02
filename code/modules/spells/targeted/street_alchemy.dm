@@ -5,16 +5,16 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSUTILITY
 	school = "transmutation"
-	charge_max = 250
-	cooldown_min = 30
-	invocation_type = SpI_SHOUT
+	charge_cooldown_max = 25 SECONDS
+	cooldown_min = 3 SECONDS
+	invocation_type = SP_INV_SHOUT
 	range = 10 //If you can see it, you can steal it
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK | NEEDSHUMAN | INCLUDEUSER
 	hud_state = "wiz_stAlch"
-	price = 0.5 * Sp_BASE_PRICE
-	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_RANGE = 0, Sp_AMOUNT = 0)
-	level_max = list(Sp_TOTAL = 30, Sp_SPEED = 3, Sp_POWER = 1, Sp_RANGE = 20, Sp_AMOUNT = 2)
+	price = 0.5 * SP_BASE_PRICE
+	spell_levels = list(SP_SPEED = 0, SP_POWER = 0, SP_RANGE = 0, SP_AMOUNT = 0)
+	level_max = list(SP_TOTAL = 30, SP_SPEED = 3, SP_POWER = 1, SP_RANGE = 20, SP_AMOUNT = 2)
 	var/list/existingElixirs = list()
 	var/elixirAmount = 1
 	var/reagToSteal = 1
@@ -25,50 +25,50 @@
 
 /spell/targeted/alchemy/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return quicken_spell()
-		if(Sp_POWER)
-			spell_levels[Sp_POWER]++
+		if(SP_POWER)
+			spell_levels[SP_POWER]++
 			name = "Permeating " + name
 			return "Thrown elixirs now transfer reagents."
-		if(Sp_RANGE)
-			spell_levels[Sp_RANGE]++
+		if(SP_RANGE)
+			spell_levels[SP_RANGE]++
 			reagToSteal++
-			if(spell_levels[Sp_RANGE] == 20)
+			if(spell_levels[SP_RANGE] == 20)
 				name = "Delving " + name
 			return "You can pilfer from one more container per cast. Spell affects an area at max level"
-		if(Sp_AMOUNT)
-			spell_levels[Sp_AMOUNT]++
+		if(SP_AMOUNT)
+			spell_levels[SP_AMOUNT]++
 			elixirAmount++
-			if(spell_levels[Sp_AMOUNT] == 3)
+			if(spell_levels[SP_AMOUNT] == 3)
 				name ="Bountiful " + name
 			return "An additonal elixir can now exist."
 
 /spell/targeted/alchemy/get_upgrade_price(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return 10
-		if(Sp_POWER)
+		if(SP_POWER)
 			return 10
-		if(Sp_RANGE)
+		if(SP_RANGE)
 			return 1
-		if(Sp_AMOUNT)
+		if(SP_AMOUNT)
 			return 5
 
 /spell/targeted/alchemy/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_POWER)
-			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+		if(SP_POWER)
+			if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 				return "Thrown elixirs can already transfer their contents into living targets!"
 			return "Thrown elixirs transfer their contents into living targets."
-		if(Sp_RANGE)
-			if(spell_levels[Sp_RANGE] >= level_max[Sp_RANGE])
+		if(SP_RANGE)
+			if(spell_levels[SP_RANGE] >= level_max[SP_RANGE])
 				return "This spell already steals as many reagents as it can from an area!"
-			if(spell_levels[Sp_RANGE] >= 21)
+			if(spell_levels[SP_RANGE] >= 21)
 				return "You will now steal all reagents in an area."
 			return "Pilfers from one more target per cast."
-		if(Sp_AMOUNT)
-			if(spell_levels[Sp_AMOUNT] >= level_max[Sp_AMOUNT])
+		if(SP_AMOUNT)
+			if(spell_levels[SP_AMOUNT] >= level_max[SP_AMOUNT])
 				return "You have already reached the limit of how many elixirs can exist at a time!"
 			return "The amount of alchemic elixirs that can exist at a time."
 	return ..()
@@ -82,7 +82,7 @@
 
 /spell/targeted/alchemy/proc/singleAlchemy(target, mob/user)
 	var/obj/item/weapon/reagent_containers/pill/streetAlchElixir/elixir = null
-	if(spell_levels[Sp_POWER])
+	if(spell_levels[SP_POWER])
 		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir(src)
 	else
 		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir(src)
@@ -104,7 +104,7 @@
 
 /spell/targeted/alchemy/proc/aoeAlchemy(target, mob/user)
 	var/obj/item/weapon/reagent_containers/pill/streetAlchElixir/elixir = null
-	if(spell_levels[Sp_POWER])
+	if(spell_levels[SP_POWER])
 		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir(src)
 	else
 		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir(src)

@@ -99,7 +99,7 @@
 /obj/item/clothing/under/color/pink
 	name = "pink jumpsuit"
 	icon_state = "pink"
-	item_state = "p_suit"
+	item_state = "pi_suit"
 	_color = "pink"
 	color = null
 	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
@@ -127,9 +127,12 @@
 	name = "psychedelic jumpsuit"
 	desc = "Groovy!"
 	icon_state = "psyche"
+	item_state = "psyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	_color = "psyche"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	luminosity = 2
 
 /obj/item/clothing/under/lightblue
 	name = "lightblue jumpsuit"
@@ -141,6 +144,7 @@
 /obj/item/clothing/under/aqua
 	name = "aqua jumpsuit"
 	icon_state = "aqua"
+	item_state = "a_suit"
 	_color = "aqua"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
@@ -148,7 +152,7 @@
 /obj/item/clothing/under/purple
 	name = "purple jumpsuit"
 	icon_state = "purple"
-	item_state = "p_suit"
+	item_state = "pu_suit"
 	_color = "purple"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)

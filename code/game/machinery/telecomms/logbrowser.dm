@@ -142,7 +142,7 @@ var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
 
 
 
-	user << browse(dat, "window=comm_monitor;size=575x400")
+	user << browse(HTML_SKELETON(dat), "window=comm_monitor;size=575x400")
 	onclose(user, "server_control")
 
 	temp = ""
@@ -210,7 +210,7 @@ var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
 
 	if(href_list["network"])
 		var/newnet = sanitize(input(usr, "Which network do you want to view?", "Comm Monitor", network) as null|text)
-		if(newnet && (usr in range(1, src) || issilicon(usr)))
+		if(newnet && ((usr in range(1, src)) || issilicon(usr)))
 			if(length(newnet) > 15)
 				temp = "<font color = #D70B00>- FAILED: NETWORK TAG STRING TOO LENGHTLY -</font color>"
 

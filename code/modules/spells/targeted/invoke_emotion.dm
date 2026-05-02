@@ -8,15 +8,15 @@ var/global/list/invoked_emotions = list()
 	specialization = SSUTILITY
 	hud_state = "invoke_emotion"
 	invocation = "YU'V GO'T MA'LE"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	spell_flags = WAIT_FOR_CLICK | SELECTABLE | INCLUDEUSER
-	price = 0.25 * Sp_BASE_PRICE
+	price = 0.25 * SP_BASE_PRICE
 	range = 9
-	charge_max = 150
-	cooldown_min = 10
+	charge_cooldown_max = 15 SECONDS
+	cooldown_min = 1 SECONDS
 	valid_targets = list(/mob/living/carbon)
-	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_MOVE = 0)
-	level_max = list(Sp_TOTAL = 7, Sp_SPEED = 1, Sp_POWER = 5, Sp_MOVE = 1)
+	spell_levels = list(SP_SPEED = 0, SP_POWER = 0, SP_MOVE = 0)
+	level_max = list(SP_TOTAL = 7, SP_SPEED = 1, SP_POWER = 5, SP_MOVE = 1)
 
 	var/obj/item/weapon/paper/emotion_invoker/thePaper = null
 	var/obj/item/weapon/pen/invoked_quill/theQuill = null
@@ -26,8 +26,8 @@ var/global/list/invoked_emotions = list()
 	for(var/mob/living/carbon/target in targets)
 		var/obj/item/weapon/paper/emotion_invoker/thePaper = new /obj/item/weapon/paper/emotion_invoker(user.loc)
 		thePaper.curseTarget = target
-		thePaper.cursePower = spell_levels[Sp_POWER]
-		thePaper.forcesHand = spell_levels[Sp_MOVE]
+		thePaper.cursePower = spell_levels[SP_POWER]
+		thePaper.forcesHand = spell_levels[SP_MOVE]
 		user.put_in_hands(thePaper)
 		if(!theQuill)
 			theQuill = new /obj/item/weapon/pen/invoked_quill(user.loc)
@@ -40,32 +40,32 @@ var/global/list/invoked_emotions = list()
 
 /spell/targeted/invoke_emotion/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return quicken_spell()
-		if(Sp_POWER)
-			spell_levels[Sp_POWER]++
+		if(SP_POWER)
+			spell_levels[SP_POWER]++
 			return "Your invoked emotions now cut slightly deeper."
-		if(Sp_MOVE)
-			spell_levels[Sp_MOVE]++
+		if(SP_MOVE)
+			spell_levels[SP_MOVE]++
 			return "Your invoked emotions are now harder to ignore."
 
 /spell/targeted/invoke_emotion/get_upgrade_price(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return 20
-		if(Sp_POWER)
+		if(SP_POWER)
 			return 1
-		if(Sp_MOVE)
+		if(SP_MOVE)
 			return 5
 
 /spell/targeted/invoke_emotion/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_POWER)
-			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+		if(SP_POWER)
+			if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 				return "The invoked paper annoys the target as much as it can!"
 			return "Invoked paper is more likely to cut, or otherwise curse, the target."
-		if(Sp_MOVE)
-			if(spell_levels[Sp_MOVE] >= level_max[Sp_MOVE])
+		if(SP_MOVE)
+			if(spell_levels[SP_MOVE] >= level_max[SP_MOVE])
 				return "The invoked emotions can already place themselves in their target's hand!"
 			return "Invoked emotions have a chance to place themselves in their target's hand."
 	return ..()

@@ -62,8 +62,8 @@ var/list/apiaries_list = list()
 /obj/machinery/apiary/New()
 	..()
 	apiaries_list.Add(src)
-	update_icon()
 	create_reagents(100)
+	update_icon()
 	consume = new()
 	spawn(EXILE_RESTRICTION)
 		open_for_exile = 1
@@ -82,12 +82,15 @@ var/list/apiaries_list = list()
 		update_icon()
 
 /obj/machinery/apiary/attack_hand(var/mob/user)
+	if(isobserver(user) && !isAdminGhost(user))
+		to_chat(user, "<span class='warning'>Your ghostly limb passes right through \the [src].</span>")
+		return
 	if(reagents.total_volume <= 0)
 		alert(user,"There's no honey to harvest yet!","[name]","Ok")
 		return
 
 	if(alert(user,"Harvest the honeycombs?[((queen_bees_inside || worker_bees_inside) && species.angery) ? " Be ready to handle some angry bees!" : ""]","[name]","Yes","No")== "Yes")
-		user.visible_message("<span class='notice'>\the [user] begins dismantling the apiary.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
+		user.visible_message("<span class='notice'>\The [user] begins dismantling the apiary.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
 
 		if((queen_bees_inside || worker_bees_inside) && species.angery)
 			user.visible_message("<span class='danger'>The [species.common_name] don't like that.</span>")
@@ -120,7 +123,7 @@ var/list/apiaries_list = list()
 
 /obj/machinery/apiary/examine(mob/user)
 	..()
-	var/species_name = "bees"//people would expect an apiary to contain bees by default I guess.
+	var/species_name = BEESPECIES_NORMAL//people would expect an apiary to contain bees by default I guess.
 	if (species)
 		species_name = species.common_name
 	if(!worker_bees_inside && !queen_bees_inside)
@@ -213,7 +216,7 @@ var/list/apiaries_list = list()
 		user.put_in_hands(TrashItem)
 		qdel(O)
 	else if(istype(O, /obj/item/weapon/hatchet) || iscrowbar(O))
-		user.visible_message("<span class='notice'>\the [user] begins dismantling the apiary.</span>","<span class='danger'>You begin to dismantle the apiary.</span>")
+		user.visible_message("<span class='notice'>\The [user] begins dismantling the apiary.</span>","<span class='danger'>You begin to dismantle the apiary.</span>")
 
 		if((queen_bees_inside || worker_bees_inside) && species.angery)
 			user.visible_message("<span class='danger'>The [species.common_name] don't like that.</span>")
@@ -261,7 +264,7 @@ var/list/apiaries_list = list()
 		else
 			to_chat(user, "<span class='notice'>There are no more bees in the net.</span>")
 	else
-		user.visible_message("<span class='warning'>\the [user] hits \the [src] with \the [O]!</span>","<span class='warning'>You hit \the [src] with \the [O]!</span>")
+		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [O]!</span>","<span class='warning'>You hit \the [src] with \the [O]!</span>")
 		angry_swarm(user)
 
 //Called every time a bee enters the hive.

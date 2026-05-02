@@ -51,9 +51,10 @@
 
 /obj/machinery/ai_slipper/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
-
 	user.set_machine(src)
 	var/area/this_area = get_area(src)
 	var/t = "<TT><B>Foam Dispenser</B> ([this_area.name])<HR>"
@@ -64,18 +65,22 @@
 		t += text("Dispenser [src.disabled ? "unactive":"active"] - <A href='?src=\ref[src];toggleOn=1'>[src.disabled?"Enable":"Disable"]?</a><br>\n")
 		t += text("Uses Left: [uses]. <A href='?src=\ref[src];toggleUse=1'>Activate the dispenser?</A><br>\n")
 
-	user << browse(t, "window=computer;size=575x450")
+	user << browse(HTML_SKELETON(t), "window=computer;size=575x450")
 	onclose(user, "computer")
 	return
 
 /obj/machinery/ai_slipper/AICtrlClick(mob/user as mob)
 	src.add_hiddenprint(user)
+	if(is_pulselocked(user))
+		return
 	src.disabled = !src.disabled
 	icon_state = src.disabled? "motion0":"motion3"
 	return
 
 /obj/machinery/ai_slipper/AIShiftClick(mob/user as mob)
 	src.add_hiddenprint(user)
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(src.cooldown_on)

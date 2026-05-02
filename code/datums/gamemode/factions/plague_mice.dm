@@ -32,8 +32,7 @@
 
 	/* With the disease set-up, store the detials of the disease in the mouse's memory */
 	var/datum/mind/mouse_mind = R.antag
-	mouse_mind.store_memory(plague.get_info(TRUE), forced = 1)
-	mouse_mind.store_memory("<hr>", forced = 1)
+	mouse_mind.store_memory(plague.get_info(TRUE), category=MIND_MEMORY_ANTAGONIST, forced = 1)
 	var/dat = "<span class='notice'>You carry a deadly plague with the following traits:</span>"
 	dat += "<br><span class='notice'>Strength / Robustness:</span> <b>[plague.strength]%</b> / <b>[plague.robustness]%</b>"
 	dat += "<br><span class='notice'>Infection chance:</span> <b>[plague.infectionchance]%</b>"
@@ -77,14 +76,7 @@
 			EFFECT_DANGER_HARMFUL	= 3,
 			EFFECT_DANGER_DEADLY	= 5,
 			)
-		if(prob(2)) //Dan's Discount products are notoriously bad
-			plague.origin = "Discount Dan's Gas Station Sushi"
-		else if(Holiday == APRIL_FOOLS_DAY)
-			plague.origin = pick("Nurgle's Cauldron", "Deadly Africanized Water", "Public Bathroom", "Thrax",
-								"A spaceman got a mouse disease, this is what happened to his body")
-		else
-			plague.origin = pick("Black Plague", "Javorian Pox", "Gray Death", "Doom of Pandyssia", "Thrassian Plague",
-								"Redlight", "Khaara Bacterium", "MEV-1")
+		plague.origin = "Black Plague"//for the admin panel
 
 		plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE //gotta ensure that our mice can spread that disease
 

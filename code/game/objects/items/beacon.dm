@@ -8,7 +8,6 @@ var/global/list/obj/item/beacon/beacons = list()
 	item_state = "signaler"
 	var/code = "electronic"
 	var/frequency = 1459
-	var/emagged = 0
 	origin_tech = Tc_BLUESPACE + "=1"
 	flags = FPRINT
 	w_type = RECYK_PLASTIC
@@ -116,3 +115,7 @@ var/global/list/emergency_beacons = list()
 /obj/item/beacon/bacon //shouldn't be visible unless manually spawned by an admeme
 	name = "Tracking Bacon"
 	desc = "A bacon used by a teleporter."
+
+/obj/item/beacon/bacon/Destroy()
+	verbs -= /obj/item/beacon/verb/alter_signal
+	..()

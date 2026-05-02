@@ -136,3 +136,6 @@ var/list/smes_list = list()
 	infinite_power = 1
 
 	mech_flags = MECH_SCAN_FAIL
+
+/obj/machinery/power/battery/smes/infinite/setup_sound()
+	return

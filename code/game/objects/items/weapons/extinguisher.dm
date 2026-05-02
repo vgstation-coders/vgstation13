@@ -18,6 +18,9 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	attack_verb = list("slams", "whacks", "bashes", "thunks", "batters", "bludgeons", "thrashes")
+	slimeadd_message = "You attach the slime extract to the extinguisher's funnel"
+	slimes_accepted = SLIME_BLUE
+	slimeadd_success_message = "It feels much colder now"
 	var/max_water = 50
 	var/last_use = 1.0
 	var/safety = 1
@@ -81,13 +84,6 @@
 	to_chat(user, "The safety is [safety ? "on" : "off"].")
 	return
 
-/obj/item/weapon/extinguisher/foam/slime_act(primarytype, mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/blue)
-		has_slime=1
-		to_chat(user, "You attach the slime extract to the extinguisher's funnel.")
-		return TRUE
-
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)
 		return
@@ -123,6 +119,8 @@
 
 /obj/item/weapon/extinguisher/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag)
+		if((istype(target, /obj/structure/bed/chair/vehicle/tractor/fire))) //Don't spray while loading!
+			return
 		if((istype(target, /obj/structure/reagent_dispensers)))
 			target.reagents.trans_to(src, 50, log_transfer = TRUE, whodunnit = user)
 			to_chat(user, "<span class='notice'>\The [src] is now refilled</span>")
@@ -147,7 +145,7 @@
 			else if (pack == 1)
 				return
 
-		if (world.time < src.last_use + 20)
+		if (world.time < src.last_use + 2 SECONDS)
 			return
 		user.delayNextAttack(5, 1)
 
@@ -225,6 +223,8 @@
 
 /obj/item/weapon/extinguisher/foam/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag)
+		if((istype(target, /obj/structure/bed/chair/vehicle/tractor/fire))) //Don't spray while loading!
+			return
 		if((istype(target, /obj/structure/reagent_dispensers/watertank)))
 			var/obj/o = target
 			o.reagents.trans_to(src, 50)
@@ -241,7 +241,7 @@
 			else if (pack == 1)
 				return
 
-		if (world.time < src.last_use + 20)
+		if (world.time < src.last_use + 2 SECONDS)
 			return
 		user.delayNextAttack(5, 1)
 		src.last_use = world.time
@@ -274,7 +274,7 @@
 				R.my_atom = src
 				reagents.trans_to_holder(R,1)
 				var/obj/effect/foam/fire/W
-				if(has_slime)
+				if(has_slimes & SLIME_BLUE)
 					W=new /obj/effect/foam/fire/enhanced(get_turf(src),R)
 				else
 					W = new /obj/effect/foam/fire(get_turf(src),R)

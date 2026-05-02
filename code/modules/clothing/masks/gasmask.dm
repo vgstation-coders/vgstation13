@@ -330,6 +330,8 @@
 	desc = "A true prankster's groovy facial attire. A clown is incomplete without his wig and mask."
 	icon_state = "clownmaskpsyche"
 	item_state = "clownmaskpsyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	luminosity = 2
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0

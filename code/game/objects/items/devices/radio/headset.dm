@@ -35,7 +35,7 @@
 /obj/item/device/radio/headset/talk_into(datum/speech/speech_orig, channel=null)
 	if(!broadcasting)
 		return
-	if(usr?.client?.prefs.headset_sound)
+	if(usr?.client?.prefs.get_pref(/datum/preference_setting/numerical/headset_sound))
 		playsound(usr, 'sound/effects/radio_chatter.ogg', 100, 1, vary = 0)
 	return ..()
 
@@ -43,7 +43,7 @@
 	if(ishuman(src.loc))
 		var/mob/living/carbon/human/H = src.loc
 		if(H.ears == src)
-			if(H.client && (H.client.prefs.headset_sound == HEADSET_SOUND_ALL))
+			if(H.client && (H.client.prefs.get_pref(/datum/preference_setting/numerical/headset_sound) == HEADSET_SOUND_ALL))
 				playsound(H, 'sound/effects/radio_chatter.ogg', 100, 1, vary = 0)
 			return ..(freq, level)
 	return -1
@@ -171,7 +171,7 @@
 
 /obj/item/device/radio/headset/heads/hop
 	name = "head of personnel's headset"
-	desc = "The headset of the guy who will one day be captain. Channels are as follows: :u - supply, :d - service, :c - command, :s - security"
+	desc = "The headset of the guy who will one day be captain. Channels are as follows: :u - supply, :d - service, :c - command, :s - security."
 	icon_state = "com_headset"
 	item_state = "headset"
 	init_keyslot2_type = /obj/item/device/encryptionkey/heads/hop
@@ -185,7 +185,7 @@
 
 /obj/item/device/radio/headset/headset_mining
 	name = "supply radio headset"
-	desc = "A headset used by the shaft miners to be yelled at from the QM and R&D at the same time. Channels are as follows: :u - supply, :n - science"
+	desc = "A headset used by the shaft miners to be yelled at from the QM and R&D at the same time. Channels are as follows: :u - supply, :n - science."
 	icon_state = "mine_headset"
 	item_state = "headset"
 	init_keyslot2_type = /obj/item/device/encryptionkey/headset_mining

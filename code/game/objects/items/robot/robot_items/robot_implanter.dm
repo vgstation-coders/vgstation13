@@ -11,7 +11,7 @@
 	..()
 	name = "[initial(name)][imp? " - [imp.name]":""]"
 
-/obj/item/weapon/implanter/cyborg/restock()
+/obj/item/weapon/implanter/cyborg/restock(nanobots = FALSE)
 	charge++
 	if(charge >= NEEDED_CHARGE_TO_RESTOCK_IMP && !imp) //takes about 60 seconds.
 		if(imp_type)

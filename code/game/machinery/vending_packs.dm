@@ -13,6 +13,22 @@
 	var/list/hidden_records = list()
 	var/list/coin_records = list()
 
+/obj/structure/vendomatpack/MouseDrop(atom/drop_atom, src_location, over_location)
+	. = ..()
+	var/mob/living/user = usr
+	if(!isliving(user))
+		return
+	if(!isturf(user.loc) || user.incapacitated() || user.resting)
+		return
+	if(get_dist(drop_atom, src) != 1 || get_dist(drop_atom, user) != 1)
+		return
+	if(isturf(drop_atom) && istype(loc, /obj/structure/rack/crate_shelf) && user.Adjacent(drop_atom))
+		var/obj/structure/rack/crate_shelf/shelf = loc
+		return shelf.unload(src, user, drop_atom)
+	if(istype(drop_atom, /obj/structure/rack/crate_shelf) && isturf(loc) && user.Adjacent(src))
+		var/obj/structure/rack/crate_shelf/shelf = drop_atom
+		return shelf.load(src, user)
+
 //////CUSTOM PACKS///////
 
 /obj/structure/vendomatpack/custom
@@ -257,7 +273,7 @@
 	return
 
 /obj/structure/stackopacks/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/tool/wirecutters) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/tool/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
+	if(W.is_wirecutter(user) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/tool/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
 		var/turf/T = get_turf(src)
 		for(var/obj/O in contents)
 			O.forceMove(T)

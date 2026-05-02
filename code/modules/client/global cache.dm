@@ -13,6 +13,21 @@ var/list/asset_datums = list()
 	var/list/sending = list()
 	var/last_asset_job = 0 // Last job done.
 
+/// Blocks until all currently sending browse and browse_rsc assets have been sent.
+/// Due to byond limitations, this proc will sleep for 1 client round trip even if the client has no pending asset sends.
+/// This proc will return an untrue value if it had to return before confirming the send, such as timeout or the client going away.
+/client/proc/browse_queue_flush(timeout = 50)
+	var/job = ++last_asset_job
+	var/t = 0
+	var/timeout_time = timeout
+	src << browse({"<script>window.location.href='byond://?asset_cache_confirm_arrival=[job]'</script>"}, "window=asset_cache_browser&file=asset_cache_send_verify.htm")
+
+	while(!completed_asset_jobs["[job]"] && t < timeout_time) // Reception is handled in Topic()
+		stoplag(1) // Lock up the caller until this is received.
+		t++
+	if (t < timeout_time)
+		return TRUE
+
 //This proc sends the asset to the client, but only if it needs it.
 /proc/send_asset(var/client/client, var/asset_name, var/verify = TRUE)
 	if(!istype(client))
@@ -26,6 +41,9 @@ var/list/asset_datums = list()
 
 		else
 			return 0
+
+	if(!client)	//don't have a goddamned clue why this would be called without a client input but it currently is!
+		return 0
 
 	while(!global.asset_cache_populated)
 		sleep(5)
@@ -172,6 +190,23 @@ var/list/asset_datums = list()
 
 //DEFINITIONS FOR ASSET DATUMS START HERE.
 
+/datum/asset/simple/tetris
+	assets = list(
+		"tetris.css" = 'html/tetris/public/css/tetris.css',
+
+		"jquery.min.js" = 'code/modules/html_interface/jquery.min.js',
+
+		"main_tetris.js" = 'html/tetris/tetris_browser_compile.js',
+
+		"stardust.png" = 'html/tetris/public/img/stardust.png',
+		"classy_fabric.png" = 'html/tetris/public/img/stardust.png',
+		"beep1.mp3" = 'html/tetris/public/sounds/beep1.mp3',
+		"beep2.mp3" = 'html/tetris/public/sounds/beep2.mp3',
+		"beep3.mp3" = 'html/tetris/public/sounds/beep3.mp3',
+		"beep4.mp3" = 'html/tetris/public/sounds/beep4.mp3',
+
+		"Start2P.woff2" = 'html/tetris/public/fonts/Start2P.woff2'
+	)
 
 /datum/asset/simple/pda
 	assets = list(
@@ -362,27 +397,6 @@ var/list/asset_datums = list()
 		"spesspets_arrow_left.png"	=	'icons/pda_icons/spesspets_icons/spesspets_arrow_left.png'
 	)
 
-/datum/asset/simple/cmc_css_icons
-	assets = list(
-		//"cmc.css" = 'html/browser/cmc.css',
-		"cmc_background.png" = 'icons/cmc/css_icons/background.png',
-		"cmc_0.png" = 'icons/cmc/css_icons/0.png',
-		"cmc_1.png" = 'icons/cmc/css_icons/1.png',
-		"cmc_2.png" = 'icons/cmc/css_icons/2.png',
-		"cmc_3.png" = 'icons/cmc/css_icons/3.png',
-		"cmc_4.png" = 'icons/cmc/css_icons/4.png',
-		"cmc_5.png" = 'icons/cmc/css_icons/5.png',
-		"cmc_6.png" = 'icons/cmc/css_icons/6.png',
-		"cmc_7.png" = 'icons/cmc/css_icons/7.png'
-	)
-/*
-/datum/asset/simple/nanoui_maps/New()
-	for(var/z in 1 to world.maxz)
-		if(z == map.zCentcomm)
-			continue
-		assets["[map.nameShort][z].png"] = file("[getMinimapFile(z)].png")
-*/
-
 //Registers HTML I assets.
 /datum/asset/HTML_interface/register()
 	for(var/path in typesof(/datum/html_interface))
@@ -435,12 +449,11 @@ var/list/asset_datums = list()
 
 /datum/asset/simple/fontawesome
 	assets = list(
-		"fa-regular-400.eot"  = 'html/font-awesome/webfonts/fa-regular-400.eot',
-		"fa-regular-400.woff" = 'html/font-awesome/webfonts/fa-regular-400.woff',
-		"fa-solid-900.eot"    = 'html/font-awesome/webfonts/fa-solid-900.eot',
-		"fa-solid-900.woff"   = 'html/font-awesome/webfonts/fa-solid-900.woff',
-		"font-awesome.css"    = 'html/font-awesome/css/all.min.css',
-		"v4shim.css"          = 'html/font-awesome/css/v4-shims.min.css'
+		"fa-regular-400.ttf" = 'html/font-awesome/webfonts/fa-regular-400.ttf',
+		"fa-solid-900.ttf" = 'html/font-awesome/webfonts/fa-solid-900.ttf',
+		"fa-v4compatibility.ttf" = 'html/font-awesome/webfonts/fa-v4compatibility.ttf',
+		"v4shim.css" = 'html/font-awesome/css/v4-shims.min.css',
+		"font-awesome.css" = 'html/font-awesome/css/all.min.css',
 	)
 
 /datum/asset/simple/tgui

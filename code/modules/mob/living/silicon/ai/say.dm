@@ -139,13 +139,13 @@ var/VOX_AVAILABLE_VOICES = list(
 		dat += "<li>"
 		if(vox_corrupted)
 			dat += "<strong>"
-		dat += "<a href=;?src=\ref[src];voice_corrupted=[!vox_corrupted]>[vox_corrupted ? "On" : "Off"]</a>"
+		dat += "<a href=?src=\ref[src];voice_corrupted=[!vox_corrupted]>[vox_corrupted ? "On" : "Off"]</a>"
 		if (vox_corrupted)
 			dat += "</strong>"
 		dat += "</li></ul><p>Your laws are corrupted, this option allows you to speak in a befitting manner.</p></fieldset>"
 
 	dat += "<fieldset><legend>Voice</legend><ul>"
-	for(var/voice_id in VOX_AVAILABLE_VOICES)
+/*	for(var/voice_id in VOX_AVAILABLE_VOICES)
 		dat += "<li>"
 		if (voice_id == src.vox_voice)
 			dat += "<strong>"
@@ -154,6 +154,10 @@ var/VOX_AVAILABLE_VOICES = list(
 			dat += "</strong>"
 		dat += "</li>"
 	dat += "</ul><p><strong>NOTE:</strong> Each voice has its own unique quirks. Don't expect the same outcomes!</p></fieldset>"
+*/
+
+// RIP MASC VOICE
+
 	dat += "<div class='formline'><input type='text' name='words' id='words' placeholder='Words go here' /> <span id='wordcount'>0</span> <button id='reset' type='button'>Clear</button><button id='submit' type='button'>Announce</button></div>"
 	dat += "<ul id='errors'></div>"
 

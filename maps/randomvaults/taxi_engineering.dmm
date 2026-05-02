@@ -222,9 +222,7 @@
 	dir = 8;
 	icon_state = "pipe-c"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/CE_office)
 "ax" = (
 /obj/structure/bed/chair/office/light{
@@ -328,18 +326,7 @@
 	},
 /area/vault/taxi_engi/atmos)
 "aK" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "aL" = (
@@ -358,9 +345,7 @@
 /turf/space,
 /area/vault/taxi_engi/CE_office)
 "aN" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/CE_office)
 "aO" = (
 /obj/structure/table/reinforced,
@@ -413,9 +398,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "aS" = (
 /obj/structure/cable{
@@ -460,26 +443,14 @@
 /turf/simulated/wall/r_wall,
 /area/vault/taxi_engi/atmos)
 "bb" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bc" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable{
 	d2 = 4;
@@ -490,14 +461,10 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bd" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -507,26 +474,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor/plating,
-/area/vault/taxi_engi/atmos)
-"be" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bf" = (
@@ -594,16 +542,6 @@
 	},
 /obj/structure/lattice,
 /turf/space,
-/area/vault/taxi_engi/engine)
-"bn" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
 /area/vault/taxi_engi/engine)
 "bo" = (
 /obj/structure/cable{
@@ -869,22 +807,12 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "bT" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
 	pixel_y = 1
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "bU" = (
@@ -901,9 +829,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/taxi_engi/engine)
 "bV" = (
 /obj/structure/cable{
@@ -978,13 +904,7 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cb" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cc" = (
@@ -1013,9 +933,7 @@
 /obj/item/ammo_casing,
 /obj/item/ammo_casing,
 /obj/item/ammo_casing,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/lobby)
 "cg" = (
 /turf/space,
@@ -1060,10 +978,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
 	},
-/obj/structure/disposalpipe/sortjunction{
-	icon_state = "pipe-j2s";
-	sort_tag = "ENGINEERING"
-	},
+/obj/structure/disposalpipe/sortjunction/Engineering/mirrored,
 /obj/effect/decal/cleanable/blood/writing{
 	dir = 4
 	},
@@ -1341,22 +1256,12 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "cH" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
 /obj/structure/sign/directions/engineering,
 /obj/structure/cable,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cI" = (
@@ -1385,9 +1290,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "cK" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
@@ -1424,9 +1327,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "cN" = (
 /obj/structure/cable{
@@ -1523,9 +1424,7 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cV" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/taxi_engi/engine)
 "cW" = (
 /obj/effect/decal/cleanable/cobweb2,
@@ -1548,9 +1447,7 @@
 "cZ" = (
 /obj/effect/decal/remains/human,
 /obj/item/clothing/shoes/galoshes/broken,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/lobby)
 "da" = (
 /obj/structure/lattice,
@@ -1565,20 +1462,10 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "dc" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/lobby)
 "dd" = (
@@ -1665,9 +1552,7 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "dk" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "dl" = (
 /turf/simulated/floor/damaged,
@@ -1813,14 +1698,7 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/mechanics)
 "dz" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/mechanics)
 "dA" = (
@@ -1997,9 +1875,7 @@
 /area/vault/taxi_engi/engine)
 "dQ" = (
 /obj/effect/decal/cleanable/ash,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "dR" = (
 /obj/item/tool/wrench,
@@ -2202,9 +2078,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "ep" = (
 /obj/structure/cable{
@@ -2510,9 +2384,7 @@
 /area/vault/taxi_engi/mechanics)
 "fb" = (
 /obj/item/stack/sheet/plasteel,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/storage)
 "fc" = (
 /obj/item/weapon/circuitboard/powermonitor{
@@ -2837,9 +2709,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "fE" = (
 /obj/machinery/door/airlock/glass{
@@ -2860,9 +2730,7 @@
 /turf/simulated/wall,
 /area/vault/taxi_engi/mechanics)
 "fG" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/storage)
 "fH" = (
 /obj/structure/cable{
@@ -2966,9 +2834,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "fU" = (
 /obj/structure/grille,
@@ -3000,24 +2866,7 @@
 	icon_state = "coil_red1";
 	name = "cable piece"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
-/area/vault/taxi_engi/engine)
-"fX" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
-/area/vault/taxi_engi/engine)
-"fY" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/engine)
 "fZ" = (
 /turf/simulated/wall,
@@ -3150,9 +2999,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/taxi_engi/engine)
 "gn" = (
 /obj/structure/cable{
@@ -3223,9 +3070,7 @@
 	},
 /area/vault/taxi_engi/podbay)
 "gu" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/taxi_engi/podbay)
 "gv" = (
 /turf/space,
@@ -3246,7 +3091,6 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -3254,6 +3098,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gy" = (
@@ -3265,11 +3110,11 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
 /obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gz" = (
@@ -3277,7 +3122,6 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -3285,6 +3129,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gA" = (
@@ -3342,14 +3187,7 @@
 /area/vault/taxi_engi/podbay)
 "gJ" = (
 /obj/effect/decal/cleanable/blood/tracks/footprints/vox,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
-/area/vault/taxi_engi/podbay)
-"gK" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/taxi_engi/podbay)
 "gL" = (
 /obj/machinery/atmospherics/miner/nitrogen{
@@ -3420,11 +3258,6 @@
 	dir = 4;
 	icon_state = "dark vault corner";
 	tag = "icon-dark vault corner (EAST)"
-	},
-/area/vault/taxi_engi/podbay)
-"gU" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
 	},
 /area/vault/taxi_engi/podbay)
 "gV" = (
@@ -3670,7 +3503,7 @@ eJ
 fH
 gd
 gv
-gK
+gu
 gT
 gv
 "}
@@ -3694,7 +3527,7 @@ fI
 gd
 gw
 gw
-gU
+gu
 gF
 "}
 (11,1,1) = {"
@@ -3702,7 +3535,7 @@ aa
 af
 ar
 aG
-be
+bd
 aB
 bT
 co
@@ -3842,7 +3675,7 @@ al
 aM
 bi
 bC
-bn
+aR
 aB
 cM
 dm
@@ -4049,7 +3882,7 @@ am
 aS
 aB
 bI
-bn
+aR
 cv
 cV
 du
@@ -4185,7 +4018,7 @@ aa
 aa
 aa
 aa
-bn
+aR
 am
 am
 aa
@@ -4243,7 +4076,7 @@ aa
 aa
 bM
 aa
-bn
+aR
 aa
 aa
 aa
@@ -4449,7 +4282,7 @@ bk
 bN
 bN
 dk
-fX
+dk
 aS
 aa
 aa
@@ -4472,7 +4305,7 @@ dx
 fV
 dx
 fD
-fY
+fD
 bZ
 aa
 aa

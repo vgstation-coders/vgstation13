@@ -9,6 +9,7 @@
 	I.pixel_y = pixel_y
 	I.color=color
 	T.AddDecal(I)
+	I = null
 	qdel(src)
 
 /obj/effect/decal/warning_stripes/oldstyle
@@ -19,6 +20,9 @@
 	desc = "Marks an important path."
 
 	icon_state="pathmarker"
+
+/obj/effect/decal/warning_stripes/pathmarkers/horizontal
+	dir = WEST
 
 /obj/effect/decal/warning_stripes/pathmarkers/yellow
 	color = "#ffff00"

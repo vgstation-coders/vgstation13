@@ -64,10 +64,10 @@
 	var/our_area_type = "default"
 
 	var/area/A = get_area(src)
-	if(A.fire)
-		our_area_type = "emergency"
-	else
-		if(isspace(A))
+	if(A)
+		if(A.fire)
+			our_area_type = "emergency"
+		else if(isspace(A))
 			our_area_type = "space"
 		else if(istype(A,/area/engine) || istype(A,/area/engineering) || istype(A,/area/construction))
 			our_area_type = "engineering"
@@ -359,7 +359,7 @@ var/global/list/crate_mimic_disguises = list(\
 // Lies still until somebody tries to pick it up
 
 var/global/list/item_mimic_disguises = list(
-	"default" = list(/obj/item/alien_embryo, /obj/item/ammo_storage, /obj/item/device/chameleon, /obj/item/toy/crossbow, /obj/item/toy/waterflower, /obj/item/weapon/banhammer/admin,\
+	"default" = list(/obj/item/alien_embryo, /obj/item/ammo_storage, /obj/item/device/chameleon, /obj/item/toy/crossbow, /obj/item/clothing/accessory/waterflower, /obj/item/weapon/banhammer/admin,\
 				/obj/item/weapon/beach_ball, /obj/item/weapon/card/emag, /obj/item/weapon/extinguisher, /obj/item/weapon/hand_labeler, /obj/item/weapon/soap, /obj/item/tool/crowbar,\
 				/obj/item/weapon/caution, /obj/item/weapon/bananapeel, /obj/item/device/chameleon, /obj/item/weapon/storage/pneumatic, /obj/item/trash/discountchocolate,\
 				/obj/item/weapon/fireaxe, /obj/item/weapon/gun/gatling, /obj/item/weapon/table_parts, /obj/item/tool/wrench/socket, /obj/item/weapon/lighter, /obj/item/weapon/bikehorn/rubberducky,\
@@ -648,7 +648,7 @@ var/global/list/protected_objects = list(
 			if(prob(15))
 				L.Knockdown(1)
 				L.Stun(1)
-				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
+				L.visible_message("<span class='danger'>\The [src] knocks down \the [L]!</span>")
 
 
 /datum/locking_category/mimic

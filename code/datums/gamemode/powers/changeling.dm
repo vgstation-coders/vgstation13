@@ -264,3 +264,17 @@
 	helptext = "It does not purge the diseases nor provides antigens, but instead causes the symptoms to never appear."
 	cost = 2
 	spellpath = /spell/changeling/disease_immunity
+
+/datum/power/changeling/faster_suck
+	name = "Faster Absorb DNA"
+	desc = "We optimize the development process and pressure differential of our proboscis, permitting faster development and consumption."
+	helptext = "Reduces DNA absorption time from 45 seconds to 24 seconds."
+	cost = 4
+
+/datum/power/changeling/faster_suck/add_power(var/datum/role/R)
+	. = ..()
+	if (!.)
+		return
+	var/datum/role/changeling/changeling = R
+	to_chat(changeling.antag.current, span_notice("We improved our proboscis, and can now absorb targets in 24 seconds."))
+	changeling.faster_suck = TRUE

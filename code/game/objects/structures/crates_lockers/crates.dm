@@ -5,70 +5,48 @@
 	desc = "A rectangular steel crate."
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "crate"
-	density = 1
 	icon_opened = "crateopen"
 	icon_closed = "crate"
-	req_access = null
-	opened = 0
-	flags = FPRINT
 //	mouse_drag_pointer = MOUSE_ACTIVE_POINTER	//???
 	var/rigged = 0
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
-/obj/structure/closet/crate/proc/jiggle(var/obj/item/I)
-	var/jx = I.w_class == W_CLASS_TINY ? 7 : 3
-	var/jy = I.w_class == W_CLASS_TINY ? 3 : 1
-	I.pixel_x = rand(-jx,jx)
-	I.pixel_y = rand(-jy,jy)
+/obj/structure/closet/crate/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.firer?.reagents?.has_reagent(CARGONANOBOTS))
+		health -= Proj.damage //double power
+	. = ..()
 
 /obj/structure/closet/crate/basic
 	has_lock_type = /obj/structure/closet/crate/secure/basic
 
-/obj/structure/closet/pcrate
+/obj/structure/closet/crate/plastic
 	name = "plastic crate"
 	desc = "A rectangular plastic crate."
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "plasticcrate"
-	density = 1
 	icon_opened = "plasticcrateopen"
 	icon_closed = "plasticcrate"
-	req_access = null
-	opened = 0
-	flags = FPRINT
 	w_type = RECYK_PLASTIC //This one's plastic, not metal!
-
-//	mouse_drag_pointer = MOUSE_ACTIVE_POINTER	//???
-	var/rigged = 0
-	var/sound_effect_open = 'sound/machines/click.ogg'
-	var/sound_effect_close = 'sound/machines/click.ogg'
-
 	starting_materials = list(MAT_PLASTIC = 10*CC_PER_SHEET_MISC) // Recipe calls for 10 sheets.
 
 /obj/structure/closet/crate/internals
 	desc = "A internals crate."
 	name = "Internals crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "o2crate"
-	density = 1
 	icon_opened = "o2crateopen"
 	icon_closed = "o2crate"
 
 /obj/structure/closet/crate/trashcart
 	desc = "A heavy, metal trashcart with wheels."
 	name = "Trash Cart"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "trashcart"
-	density = 1
 	icon_opened = "trashcartopen"
 	icon_closed = "trashcart"
 
 /obj/structure/closet/crate/chest
 	desc = "A heavy wooden chest. Probably filled with gold and treasure!"
 	name = "chest"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "chest"
-	density = 1
 	icon_opened = "chestopen"
 	icon_closed = "chest"
 
@@ -79,32 +57,10 @@
 		var/mob/living/simple_animal/hostile/mimic/crate/chest/C = new(src.loc)
 		forceMove(C)
 
-/*these aren't needed anymore
-/obj/structure/closet/crate/hat
-	desc = "A crate filled with Valuable Collector's Hats!."
-	name = "Hat Crate"
-	icon = 'icons/obj/storage/storage.dmi'
-	icon_state = "crate"
-	density = 1
-	icon_opened = "crateopen"
-	icon_closed = "crate"
-
-/obj/structure/closet/crate/contraband
-	name = "Poster crate"
-	desc = "A random assortment of posters manufactured by providers NOT listed under Nanotrasen's whitelist."
-	icon = 'icons/obj/storage/storage.dmi'
-	icon_state = "crate"
-	density = 1
-	icon_opened = "crateopen"
-	icon_closed = "crate"
-*/
-
 /obj/structure/closet/crate/medical
 	desc = "A medical crate."
 	name = "Medical crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "medicalcrate"
-	density = 1
 	icon_opened = "medicalcrateopen"
 	icon_closed = "medicalcrate"
 	has_lock_type = /obj/structure/closet/crate/secure/medsec
@@ -112,9 +68,7 @@
 /obj/structure/closet/crate/rcd
 	desc = "A crate for the storage of the RCD."
 	name = "RCD crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "crate"
-	density = 1
 	icon_opened = "crateopen"
 	icon_closed = "crate"
 	has_lock_type = /obj/structure/closet/crate/secure/basic
@@ -122,9 +76,7 @@
 /obj/structure/closet/crate/freezer
 	desc = "A freezer."
 	name = "Freezer"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "freezer"
-	density = 1
 	icon_opened = "freezeropen"
 	icon_closed = "freezer"
 	var/target_temp = T0C - 40
@@ -192,9 +144,7 @@
 /obj/structure/closet/crate/bin
 	desc = "A large bin."
 	name = "Large bin"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "largebin"
-	density = 1
 	icon_opened = "largebinopen"
 	icon_closed = "largebin"
 
@@ -209,45 +159,35 @@
 /obj/structure/closet/crate/radiation
 	desc = "A crate with a radiation sign on it."
 	name = "Radioactive gear crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "radiation"
-	density = 1
 	icon_opened = "radiationopen"
 	icon_closed = "radiation"
 
 /obj/structure/closet/crate/secure/weapon
 	desc = "A secure weapons crate."
 	name = "Weapons crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "weaponcrate"
-	density = 1
 	icon_opened = "weaponcrateopen"
 	icon_closed = "weaponcrate"
 
 /obj/structure/closet/crate/secure/plasma
 	desc = "A secure plasma crate."
 	name = "Plasma crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "plasmacrate"
-	density = 1
 	icon_opened = "plasmacrateopen"
 	icon_closed = "plasmacrate"
 
 /obj/structure/closet/crate/secure/gear
 	desc = "A secure gear crate."
 	name = "Gear crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "secgearcrate"
-	density = 1
 	icon_opened = "secgearcrateopen"
 	icon_closed = "secgearcrate"
 
 /obj/structure/closet/crate/secure/hydrosec
 	desc = "A crate with a lock on it, painted in the scheme of the station's botanists."
 	name = "secure hydroponics crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "hydrosecurecrate"
-	density = 1
 	icon_opened = "hydrosecurecrateopen"
 	icon_closed = "hydrosecurecrate"
 	has_lockless_type = /obj/structure/closet/crate/hydroponics
@@ -274,7 +214,6 @@
 /obj/structure/closet/crate/secure/large
 	name = "large crate"
 	desc = "A hefty metal crate with an electronic locking system."
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "largemetal"
 	icon_opened = "largemetalopen"
 	icon_closed = "largemetal"
@@ -343,7 +282,6 @@
 /obj/structure/closet/crate/large
 	name = "large crate"
 	desc = "A hefty metal crate."
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "largemetal"
 	icon_opened = "largemetalopen"
 	icon_closed = "largemetal"
@@ -369,19 +307,15 @@
 /obj/structure/closet/crate/hydroponics
 	name = "Hydroponics crate"
 	desc = "All you need to destroy those pesky weeds and pests."
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "hydrocrate"
 	icon_opened = "hydrocrateopen"
 	icon_closed = "hydrocrate"
-	density = 1
 	has_lock_type = /obj/structure/closet/crate/secure/hydrosec
 
 /obj/structure/closet/crate/sci
 	desc = "A science crate."
 	name = "science crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "scicrate"
-	density = 1
 	icon_opened = "scicrateopen"
 	icon_closed = "scicrate"
 	has_lock_type = /obj/structure/closet/crate/secure/scisec
@@ -389,9 +323,7 @@
 /obj/structure/closet/crate/secure/scisec
 	desc = "A secure science crate."
 	name = "secure science crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "scisecurecrate"
-	density = 1
 	icon_opened = "scisecurecrateopen"
 	icon_closed = "scisecurecrate"
 	has_lockless_type = /obj/structure/closet/crate/sci
@@ -399,9 +331,7 @@
 /obj/structure/closet/crate/engi
 	desc = "An engineering crate."
 	name = "engineering crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "engicrate"
-	density = 1
 	icon_opened = "engicrateopen"
 	icon_closed = "engicrate"
 	has_lock_type = /obj/structure/closet/crate/secure/engisec
@@ -409,9 +339,7 @@
 /obj/structure/closet/crate/secure/engisec
 	desc = "A secure engineering crate."
 	name = "secure engineering crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "engisecurecrate"
-	density = 1
 	icon_opened = "engisecurecrateopen"
 	icon_closed = "engisecurecrate"
 	has_lockless_type = /obj/structure/closet/crate/engi
@@ -419,9 +347,7 @@
 /obj/structure/closet/crate/secure/medsec
 	desc = "A secure medical crate."
 	name = "secure medical crate"
-	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "medicalsecurecrate"
-	density = 1
 	icon_opened = "medicalsecurecrateopen"
 	icon_closed = "medicalsecurecrate"
 	has_lockless_type = /obj/structure/closet/crate/medical
@@ -473,16 +399,25 @@
 		return 0
 	return (!density)
 
+//Jiggles an item in a crate, raw power scales how much things are jostled
+/obj/structure/closet/crate/proc/jiggle(var/obj/item/I, var/raw_power = W_CLASS_SMALL)
+	var/jx = I.w_class < raw_power ? 7 : 3
+	var/jy = I.w_class < raw_power ? 3 : 1
+	I.pixel_x = rand(-jx,jx)
+	I.pixel_y = rand(-jy,jy)
+
+//Randomly moves around objects inside the crate based off of item size, representing items getting jostled around
+/obj/structure/closet/crate/proc/jiggle_all(var/max_size_jiggle = W_CLASS_SMALL)
+	for(var/obj/item/I in contents)
+		if(I.w_class <= max_size_jiggle)
+			jiggle(I, max_size_jiggle)
+
 /obj/structure/closet/crate/open()
 	if(src.opened)
 		return 0
 	if(!src.can_open())
 		return 0
 	playsound(src, sound_effect_open, 15, 1, -3)
-
-	for(var/obj/item/I in contents)
-		if(I.w_class <= W_CLASS_SMALL)
-			jiggle(I)
 
 	dump_contents()
 
@@ -520,7 +455,11 @@
 	else if(isobj(AM))
 		if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
 			return 0
-
+		else if(locked_to == AM)
+			return 0
+	//Prevent cargo carts from getting dragged into crates and closets
+	if(istype(AM, /obj/machinery/cart))
+		return 0
 	if(istype(AM, /obj/structure/bed)) //This is only necessary because of rollerbeds and swivel chairs.
 		var/obj/structure/bed/B = AM
 		if(B.is_locking(/datum/locking_category/buckle, subtypes=TRUE))
@@ -532,6 +471,8 @@
 /obj/structure/closet/crate/attack_hand(var/mob/user)
 	if(!Adjacent(user))
 		return
+	if(istype(src.loc, /obj/structure/rack/crate_shelf))
+		return // No opening crates in shelves!!
 	add_fingerprint(user)
 	if(opened)
 		close()
@@ -544,6 +485,50 @@
 					return
 		open()
 	return
+
+//Jiggles when tackled
+/obj/structure/closet/crate/tackled(var/mob/living/user)
+	..()
+	if(M_HULK in user.mutations)
+		jiggle_all(W_CLASS_MEDIUM)
+	else
+		jiggle_all(W_CLASS_SMALL)
+
+//Jiggles when kicked
+/obj/structure/closet/crate/kick_act(var/mob/living/carbon/human/user)
+	..()
+	if(M_HULK in user.mutations)
+		jiggle_all(W_CLASS_MEDIUM)
+	else
+		jiggle_all(W_CLASS_SMALL)
+
+//Jiggles when run into with heavy objects
+/obj/structure/closet/crate/Bumped(atom/movable/AM)
+	..()
+	var/bump_amt = 0
+	if(istype(AM,/obj))
+		if(istype(AM,/obj/item/projectile))
+			bump_amt = W_CLASS_TINY
+		else if(istype(AM,/obj/structure/bed/chair/vehicle))
+			bump_amt = W_CLASS_MEDIUM
+		else
+			var/obj/O = AM
+			switch(O.w_class)
+				if(W_CLASS_LARGE)
+					bump_amt = W_CLASS_TINY
+				if(W_CLASS_HUGE)
+					bump_amt = W_CLASS_SMALL
+				if(W_CLASS_GIANT)
+					bump_amt = W_CLASS_MEDIUM
+	else if(istype(AM,/mob/living))
+		var/mob/living/M = AM
+		if(M.reagents)
+			if(M.reagents.get_sportiness() > 1)
+				bump_amt = W_CLASS_SMALL
+		if(M_HULK in M.mutations)
+			bump_amt = W_CLASS_MEDIUM
+	if(bump_amt)
+		jiggle_all(bump_amt)
 
 /obj/structure/closet/crate/secure/attack_hand(mob/user as mob)
 	if(!Adjacent(user))
@@ -559,6 +544,22 @@
 			return
 	else
 		..()
+
+/obj/structure/closet/crate/MouseDrop(atom/drop_atom, src_location, over_location)
+	. = ..()
+	var/mob/living/user = usr
+	if(!isliving(user))
+		return // Ghosts busted.
+	if(!isturf(user.loc) || user.incapacitated() || user.resting)
+		return // If the user is in a weird state, don't bother trying.
+	if(get_dist(drop_atom, src) != 1 || get_dist(drop_atom, user) != 1)
+		return // Check whether the crate is exactly 1 tile from the shelf and the user.
+	if(isturf(drop_atom) && istype(loc, /obj/structure/rack/crate_shelf) && user.Adjacent(drop_atom))
+		var/obj/structure/rack/crate_shelf/shelf = loc
+		return shelf.unload(src, user, drop_atom) // If we're being dropped onto a turf, and we're inside of a crate shelf, unload.
+	if(istype(drop_atom, /obj/structure/rack/crate_shelf) && isturf(loc) && user.Adjacent(src))
+		var/obj/structure/rack/crate_shelf/shelf = drop_atom
+		return shelf.load(src, user) // If we're being dropped onto a crate shelf, and we're in a turf, load.
 
 /obj/structure/closet/crate/secure/proc/togglelock(atom/A)
 	if(istype(A,/mob))
@@ -583,7 +584,20 @@
 			return 0
 
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
+	if(!opened)
+		if(!broken)
+			if(emag_check(W,user))
+				return
+			if(istype(W, /obj/item/weapon/card/id))
+				togglelock(user)
+				return
+		if(W.is_screwdriver(user) && !locked && src.has_lockless_type)
+			remove_lock(user)
+			return
+	return ..()
+
+/obj/structure/closet/crate/secure/emag_act(mob/user)
+	if(locked && !broken)
 		overlays.len = 0
 		overlays += emag
 		overlays += sparks
@@ -592,14 +606,6 @@
 		src.locked = 0
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
-		return
-	else if(istype(W, /obj/item/weapon/card) && !opened && !broken)
-		togglelock(user)
-		return
-	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
-		remove_lock(user)
-		return
-	return ..()
 
 /obj/structure/closet/crate/secure/verb/verb_togglelock()
 	set src in oview(1) // One square distance
@@ -720,6 +726,8 @@
 					dump_electronics()
 				dump_contents()
 				qdel(src)
+			else
+				jiggle_all(W_CLASS_MEDIUM)
 
 /obj/structure/closet/crate/secure/weapon/experimental
 	name = "Experimental Weapons Crate"

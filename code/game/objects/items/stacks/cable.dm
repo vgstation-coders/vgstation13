@@ -5,7 +5,7 @@
 ////////////////////////////////
 // Definitions
 ////////////////////////////////
-/datum/stack_recipe/cable_cuffs/finish_building(var/mob/usr, var/obj/item/stack/cable_coil/S, var/obj/item/weapon/handcuffs/cable/C)
+/datum/stack_recipe/cable_cuffs/finish_building(var/mob/user, var/obj/item/stack/cable_coil/S, var/obj/item/weapon/handcuffs/cable/C)
 	C.color = S.color
 
 var/global/list/datum/stack_recipe/cable_recipes = list ( \

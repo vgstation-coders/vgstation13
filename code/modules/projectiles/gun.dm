@@ -79,6 +79,14 @@
 	var/gun_miss_message //Message that shows up as an addition to the message text
 	var/gun_miss_message_replace //If toggled on, will cause gun_miss_message to replace the entire missing message
 
+	//This is a list that allows admins to alter projectile properties mid-round via assoc list.
+	//Usage: vv the gun, C a new list, add text variable equal to the variable name you want to change,
+	//Then set an associative value equal to the new value you want to change it to.
+	//aka if you want to change the damage to 25, add a list with entry: text damage and associated value num 25
+	var/list/bullet_overrides
+	//And this overrides whatever's in the chamber.
+	var/bullet_type_override
+
 /obj/item/weapon/gun/New()
 	..()
 	if(isHandgun())
@@ -192,13 +200,17 @@
 		var/datum/organ/external/a_hand = H.get_active_hand_organ()
 		if(!a_hand.can_use_advanced_tools())
 			if(display_message)
-				to_chat(user, "<span class='warning'>Your [a_hand] doesn't have the dexterity to do this!</span>")
+				to_chat(user, "<span class='warning'>Your [a_hand.display_name] doesn't have the dexterity to do this!</span>")
 			return 0
 	return 1
 
 /obj/item/weapon/gun/proc/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	//Exclude lasertag guns from the M_CLUMSY check.
 	. = reset_point_blank_shot()
+
+	if(!can_Fire(user, 1))
+		return
+
 	var/explode = FALSE
 	var/dehand = FALSE
 	if(istype(user, /mob/living))
@@ -225,9 +237,6 @@
 			qdel(src)
 			return
 
-	if(!can_Fire(user, 1))
-		return
-
 	add_fingerprint(user)
 	var/atom/originaltarget = target
 
@@ -237,10 +246,6 @@
 	var/turf/targloc = get_turf(target)
 	if (!istype(targloc) || !istype(curloc))
 		return
-
-	if(defective)
-		target = get_inaccuracy(originaltarget, 1+recoil)
-		targloc = get_turf(target)
 
 	if(!special_check(user))
 		return
@@ -253,11 +258,12 @@
 	if(!process_chambered() || jammed) //CHECK
 		return click_empty(user)
 
+	if(bullet_type_override && ispath(bullet_type_override, /obj/item/projectile))
+		in_chamber = new bullet_type_override
+
 	if(!in_chamber)
 		return
-	if(defective)
-		if(!failure_check(user))
-			return
+
 	if(!istype(src, /obj/item/weapon/gun/energy/tag))
 		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [originaltarget] [ismob(target) ? "([originaltarget:ckey])" : ""] ([originaltarget.x],[originaltarget.y],[originaltarget.z])[struggle ? " due to being disarmed." :""]" )
 	in_chamber.firer = user
@@ -302,8 +308,6 @@
 
 		user.apply_inertia(get_dir(target, user))
 
-	play_firesound(user, reflex)
-
 	in_chamber.original = target
 	in_chamber.forceMove(get_turf(user))
 	in_chamber.starting = get_turf(user)
@@ -334,6 +338,14 @@
 	if(gun_miss_message_replace)
 		in_chamber.projectile_miss_message_replace = gun_miss_message_replace
 
+	if(bullet_overrides)
+		for(var/bvar in in_chamber.vars)
+			for(var/o in bullet_overrides)
+				if(bvar == o)
+					in_chamber.vars[bvar] = bullet_overrides[o]
+
+	play_firesound(user, reflex)
+
 	spawn()
 		if(in_chamber)
 			in_chamber.process()
@@ -343,13 +355,6 @@
 	update_icon()
 
 	user.update_inv_hand(user.active_hand)
-
-	if(defective && recoil && prob(3))
-		var/throwturf = get_ranged_target_turf(user, pick(alldirs), 7)
-		user.drop_item()
-		user.visible_message("\The [src] jumps out of [user]'s hands!","\The [src] jumps out of your hands!")
-		throw_at(throwturf, rand(3, 6), 3)
-		return 1
 
 	return 1
 
@@ -401,7 +406,9 @@
 					playsound(user, in_chamber.fire_sound, fire_volume, 1)
 			in_chamber.firer = M
 			in_chamber.on_hit(M)
-			if (!in_chamber.nodamage)
+			if(in_chamber.has_special_suicide)
+				in_chamber.custom_mouthshot(user)
+			else if (!in_chamber.nodamage)
 				user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
 				user.death()
 				var/suicidesound = pick('sound/misc/suicide/suicide1.ogg','sound/misc/suicide/suicide2.ogg','sound/misc/suicide/suicide3.ogg','sound/misc/suicide/suicide4.ogg','sound/misc/suicide/suicide5.ogg','sound/misc/suicide/suicide6.ogg')

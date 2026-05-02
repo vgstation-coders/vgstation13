@@ -10,6 +10,7 @@ Mineral Sheets
 		- Silver
 		- Clown
 		- Plastic
+		- Lead
 	Others:
 		- Adamantine
 		- Mythril
@@ -38,6 +39,7 @@ Mineral Sheets
 
 var/list/datum/stack_recipe/sandstone_recipes = list ( \
 	new/datum/stack_recipe("pile of dirt", /obj/machinery/portable_atmospherics/hydroponics/soil, 3, time = 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("plant pot", /obj/item/claypot, 3, time = 3 SECONDS, one_per_turf = 0, on_floor = 0), \
 	new/datum/stack_recipe("sandstone door", /obj/machinery/door/mineral/sandstone, 10, one_per_turf = 1, on_floor = 1), \
 /*	new/datum/stack_recipe("sandstone wall", ???), \
 		new/datum/stack_recipe("sandstone floor", ???),\ */
@@ -187,7 +189,7 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic floor tile", /obj/item/stack/tile/mineral/plastic, 1, 4, 20), \
 	new/datum/stack_recipe("plastic bucket", /obj/item/weapon/reagent_containers/glass/bucket, 3, time = 3 SECONDS, one_per_turf = 0, on_floor = 0), \
-	new/datum/stack_recipe("plastic crate", /obj/structure/closet/pcrate, 10, one_per_turf = 1, on_floor = 1, one_per_turf = 1), \
+	new/datum/stack_recipe("plastic crate", /obj/structure/closet/crate/plastic, 10, one_per_turf = 1, on_floor = 1, one_per_turf = 1), \
 	new/datum/stack_recipe("plastic ashtray", /obj/item/ashtray/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("lunch box", /obj/item/weapon/storage/lunchbox/plastic, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0), \
 	new/datum/stack_recipe("plastic fork", /obj/item/weapon/kitchen/utensil/fork/plastic, 1, on_floor = 1), \
@@ -200,6 +202,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic flaps", /obj/structure/plasticflaps, 10, one_per_turf = 1, on_floor = 1, start_unanchored = 1), \
 	new/datum/stack_recipe("plastic chair", /obj/structure/bed/chair/plastic/plastic_chair, 3, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("plastic table parts", /obj/item/weapon/table_parts/plastic, 5, on_floor = 1), \
+	new/datum/stack_recipe/table_door("plastic table door", /obj/machinery/door/table/plastic, 5, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("water-cooler", /obj/structure/reagent_dispensers/water_cooler, 4, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("warning cone", /obj/item/weapon/caution/cone, 2, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe/hydro_tray("hydroponics tray", /obj/machinery/portable_atmospherics/hydroponics/plastic, 5, time = 3 SECONDS, one_per_turf = 1, on_floor = 1), \
@@ -214,13 +217,14 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 		new/datum/stack_recipe("security shower curtains", /obj/structure/curtain/open/shower/security, 4, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("medical shower curtains", /obj/structure/curtain/open/shower/medical, 4, one_per_turf = 1, on_floor = 1), \
 		), 4),
+	new/datum/stack_recipe("gold pan", /obj/item/weapon/reagent_containers/glass/goldpan/plastic, 5, time = 3 SECONDS, one_per_turf = 0, on_floor = 0),
 	)
 
 /obj/item/stack/sheet/mineral/plastic/New(var/loc, var/amount=null)
 	recipes = plastic_recipes
 	..()
 
-/datum/stack_recipe/hydro_tray/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/machinery/portable_atmospherics/hydroponics/plastic/R)
+/datum/stack_recipe/hydro_tray/finish_building(var/mob/user, var/obj/item/stack/S, var/obj/machinery/portable_atmospherics/hydroponics/plastic/R)
 	R.waterlevel = 0
 	R.update_icon(TRUE)
 	return R
@@ -255,6 +259,7 @@ var/list/datum/stack_recipe/gold_recipes = list ( \
 	new/datum/stack_recipe("collection plate", /obj/item/weapon/storage/fancy/collection_plate, 2, 1, 1),
 	null,
 	blacksmithing_recipes,
+	new/datum/stack_recipe("gold pan", /obj/item/weapon/reagent_containers/glass/goldpan/gold, 5, time = 3 SECONDS, one_per_turf = 0, on_floor = 0),
 	)
 
 /obj/item/stack/sheet/mineral/gold/New(var/loc, var/amount=null)
@@ -602,4 +607,24 @@ var/list/datum/stack_recipe/gingerbread_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/gingerbread/New(var/loc, var/amount=null)
 	recipes = gingerbread_recipes
+	..()
+
+
+/obj/item/stack/sheet/mineral/lead
+	name = "Lead"
+	desc = "Damn, that's some heavy metal."
+	icon_state = "sheet-lead"
+	throwforce = 10
+	throw_range = 2
+	origin_tech = Tc_MATERIALS + "=2"
+
+var/list/datum/stack_recipe/lead_recipes = list (
+	new/datum/stack_recipe("lead floor tile", /obj/item/stack/tile/mineral/lead, 1, 4, 20),
+	new/datum/stack_recipe("lead writing stick", /obj/item/weapon/pen/lead, 1, 1),
+	new/datum/stack_recipe("lead acid battery (frame)", /obj/item/weapon/reagent_containers/glass/leadacidframe, 4, 1, time=4 SECONDS),
+	new/datum/stack_recipe("exosuit radiation shielding kit", /obj/item/device/modkit/suitradshielding, 5, 1, time=5 SECONDS),	
+	)
+
+/obj/item/stack/sheet/mineral/lead/New(var/loc, var/amount=null)
+	recipes = lead_recipes
 	..()

@@ -109,6 +109,8 @@ var/list/impact_master = list()
 	var/travel_range = 0	//if set, the projectile will be deleted when its distance from the firing location exceeds this
 	var/decay_type = null	//if set, along with travel range, will drop a new item of this type when the projectile exceeds its course
 	var/special_collision = PROJECTILE_COLLISION_DEFAULT
+	var/has_special_suicide = FALSE //when set to true will invoke a custom_mouthshot() in place of the standard mouthshot effect.
+
 
 	var/is_crit = FALSE
 	var/point_blank = FALSE //If fired at point-blank, deals extra damage and doesn't miss.
@@ -129,7 +131,7 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/hit_apply(var/mob/living/X, var/blocked) // this is relevant because of projectile/energy/electrode
 	// Random crits
 	if ((Holiday == APRIL_FOOLS_DAY) && firer && X.client)
-		firer.crit_rampup[text2num(world.time)] = damage
+		firer.crit_rampup[num2text(world.time)] = damage
 	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
@@ -704,7 +706,8 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/rebound(var/atom/A)//Projectiles bouncing off walls and obstacles
 	var/turf/T = get_turf(src)
 	var/turf/W = get_turf(A)
-	playsound(T, bounce_sound, 30, 1)
+	if (bounce_sound)
+		playsound(T, bounce_sound, 30, 1)
 	reflected = 1
 	var/orientation = SOUTH
 	if(T == W)
@@ -873,4 +876,7 @@ var/list/impact_master = list()
 	return
 
 /obj/item/projectile/proc/teleport_act()
+	return
+
+/obj/item/projectile/proc/custom_mouthshot(mob/living/user)
 	return

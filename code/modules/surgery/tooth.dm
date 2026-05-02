@@ -6,6 +6,7 @@
 /datum/surgery_step/tooth_replace
 	priority = 10
 	can_infect = 0
+	blood_level = 0
 
 /datum/surgery_step/tooth_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!hasorgans(target))
@@ -114,7 +115,7 @@
 /datum/surgery_step/tooth_extract/set_jaws
 	allowed_tools = list(
 		/obj/item/tool/bonesetter = 100,
-		/obj/item/tool/wrench = 75,
+		"wrench" = 75,
 		)
 
 	duration = 6 SECONDS
@@ -146,7 +147,7 @@
 /datum/surgery_step/tooth_extract/pull_tooth
 	allowed_tools = list(
 		/obj/item/tool/hemostat = 100,
-		/obj/item/tool/wirecutters = 50,
+		"wirecutter" = 50,
 		/obj/item/device/assembly/mousetrap = 10,	//I don't know. Don't ask me. But I'm leaving it because hilarity.
 		)
 
@@ -196,7 +197,7 @@
 /datum/surgery_step/tooth_extract/reset
 	allowed_tools = list(
 		/obj/item/tool/bonesetter = 100,
-		/obj/item/tool/wrench = 75,
+		"wrench" = 75,
 		)
 
 	duration = 6 SECONDS

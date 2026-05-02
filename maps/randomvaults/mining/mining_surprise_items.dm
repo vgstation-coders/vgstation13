@@ -21,7 +21,7 @@
 
 /mob/living/simple_animal/robot/NPC/dusky
 	name = "Dusky"
-	desc = "A little rusted at the creases, but this barbot is still happy to serve so long as the generator is running"
+	desc = "A little rusted at the creases, but this barbot is still happy to serve so long as the generator is running."
 	icon_state = "kodiak-service"
 
 /mob/living/simple_animal/robot/NPC/dusky/initialize_NPC_components()

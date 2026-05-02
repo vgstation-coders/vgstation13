@@ -94,6 +94,11 @@
 			<b>Destination:</b> [sanitize(locked_area.name)]<br>
 			<a href='?src=\ref[src];clear=1'>Clear destination</a><br>
 			"}
+			var/datum/virtual_z/dest_vz = locked.get_virtual_z()
+			if(dest_vz && dest_vz.teleJammed == VZ_TELEPORTATION_EXPENSIVE)
+				. += {"
+				<br><span style='color:orange'><b>WARNING:</b> Destination is in an unstable teleportation zone. Travellers may experience genetic damage.</span><br>
+				"}
 	else
 		. += {"
 		<b>Destination unset!</b><br>
@@ -315,9 +320,27 @@
 	if(get_turf(locked) == get_turf(src))
 		to_chat(M, "<span class = 'notice'>The act of teleportation was so smooth, it feels like you didn't move at all!</span>")
 		return FALSE
+
+	var/datum/virtual_z/source_vz = src.get_virtual_z()
+	var/datum/virtual_z/dest_vz = locked.get_virtual_z()
+	var/expensive_teleport = FALSE
+	if((source_vz && source_vz.teleJammed == VZ_TELEPORTATION_EXPENSIVE) || (dest_vz && dest_vz.teleJammed == VZ_TELEPORTATION_EXPENSIVE))
+		expensive_teleport = TRUE
+
 	if(istype(M, /atom/movable))
 		do_teleport(M, locked)
 		after_teleport()
+		// Side effects when teleporting to/from expensive vLevel
+		if(expensive_teleport && isliving(M))
+			var/mob/living/L = M
+			if(prob(50))
+				L.adjustCloneLoss(rand(5, 15))
+				to_chat(L, "<span class='warning'>You feel your cells tearing apart as the teleporter struggles to reconstruct you!</span>")
+			if(prob(40))
+				L.dizziness += rand(10, 30)
+			if(prob(30) && ishuman(L))
+				var/mob/living/carbon/human/H = L
+				H.vomit()
 	else
 		spark(src, 5)
 

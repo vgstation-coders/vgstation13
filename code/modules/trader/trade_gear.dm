@@ -22,8 +22,11 @@
 	item_state = "book"
 
 	var/busy = FALSE
-
+	var/spine_color = "#ff0"
+	var/spine_overlay = "#000"
 	var/mob/living/owner
+	var/datum/mind/owner_mind
+	var/owner_name
 	var/datum/language/tongue
 	var/progress = 0
 	var/progress_goal = 6 //How many times do you need to progress to master the language?
@@ -41,7 +44,7 @@
 	tongue = all_languages[LANGUAGE_VOX]
 
 /obj/item/dictionary/Destroy()
-	master = null
+	owner_mind = null
 	tongue = null
 	..()
 
@@ -54,10 +57,13 @@
 	if(tongue in user.languages)
 		to_chat(user,"<span class='danger'>You already know this language!</span>")
 		return
-	if(!master)
-		master = user
-	if(master != user)
-		to_chat(user,"<span class='danger'>This nanodictionary is already partially used up. Useless. You need the fundamentals.</span>.")
+	if(!owner_mind)
+		if(!user.mind) //impacts many of our players smdh
+			return
+		owner_mind = user.mind
+		owner_name = user.name
+	if(owner_mind != user.mind)
+		to_chat(user,"<span class='danger'>This nanodictionary is already partially used up. Useless. You need the fundamentals.</span>")
 		return
 	busy = TRUE
 	if(do_after(user, src,progress_time, 10, custom_checks = new /callback(src, /obj/item/dictionary/proc/on_do_after)))
@@ -75,7 +81,7 @@
 
 /obj/item/dictionary/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
 	. =  do_after_default_checks(arglist(args))
-	if(. && prob(35))
+	if(. && !user.mind.miming && prob(35))
 		practice(user)
 	return .
 
@@ -97,7 +103,7 @@
 			say(phrase, tongue)
 
 /obj/item/dictionary/GetVoice()
-	return master
+	return owner_name
 
 //Talonifier
 /obj/item/talonprosthetic

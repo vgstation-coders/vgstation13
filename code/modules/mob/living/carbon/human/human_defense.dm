@@ -213,7 +213,7 @@ emp_act
 /mob/living/carbon/human/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
+			visible_message("<span class='warning'>\The [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
@@ -235,7 +235,7 @@ emp_act
 	..()
 
 
-/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
+/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor, var/force)
 	if(!..())
 		return
 	var/power = I.force
@@ -372,12 +372,30 @@ emp_act
 	if(shoes && istype(shoes, /obj/item/clothing/shoes))
 		var/obj/item/clothing/shoes/S = shoes
 		damage = S.impact_dampen(source, damage)
+		if(damage && istype(S, /obj/item/clothing/shoes/magboots))
+			var/obj/item/clothing/shoes/magboots/MB = S
+			if(MB.stored_shoes)
+				damage = MB.stored_shoes.impact_dampen(source, damage)
 	if(!damage)
 		return FALSE
 	if(!ourfoot)
 		ourfoot = get_organ(pick(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT))
 	apply_damage(damage, BRUTE, ourfoot)
 	return TRUE
+
+/**
+ * Returns a random valid foot if the mob has a foot unprotected by clothing, robolimb metal, or stone skin mutation.
+ * Otherwise, returns FALSE
+ */
+/mob/living/carbon/human/proc/has_vulnerable_foot()
+	if(check_body_part_coverage(FEET))
+		return FALSE
+	var/list/limbs_to_check = shuffle(list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)) //pick randomly
+	for(var/has_organ in limbs_to_check)
+		var/datum/organ/external/foot = pick_usable_organ(has_organ)
+		if(foot && foot.is_organic() && !organ_has_mutation(foot, M_STONE_SKIN))
+			return foot
+	return FALSE
 
 /mob/living/carbon/human/proc/bloody_hands(var/mob/living/source, var/amount = 3)
 	if (ishuman(source))

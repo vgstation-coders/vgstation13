@@ -74,19 +74,41 @@
 
 /obj/item/clothing/update_icon()
 	..()
-
 	overlays.len = 0
 	dynamic_overlay.len = 0
+	var/image/dyn_overlay_worn
+	var/image/dyn_overlay_left
+	var/image/dyn_overlay_right
+
+	if ((luminosity > 0) || (dyed_parts.len > 0))
+		dyn_overlay_worn = image('icons/effects/32x32.dmi', src, "blank")
+		dyn_overlay_left = image('icons/effects/32x32.dmi', src, "blank")
+		dyn_overlay_right = image('icons/effects/32x32.dmi', src, "blank")
+
+	if (luminosity > 0)
+		update_moody_light_index("luminous_clothing", image_override = image(icon, src, icon_state))
+		//dynamic in-hands moody lights
+		var/image/worn_moody = image(cloth_icon, src, "[icon_state][(cloth_layer == UNIFORM_LAYER) ? "_s" : ""]")
+		var/image/left_moody = image(inhand_states["left_hand"], src, item_state)
+		var/image/right_moody = image(inhand_states["right_hand"], src, item_state)
+		worn_moody.blend_mode = BLEND_ADD
+		worn_moody.plane = LIGHTING_PLANE
+		dyn_overlay_worn.overlays += worn_moody
+		left_moody.blend_mode = BLEND_ADD
+		left_moody.plane = LIGHTING_PLANE
+		dyn_overlay_left.overlays += left_moody
+		right_moody.blend_mode = BLEND_ADD
+		right_moody.plane = LIGHTING_PLANE
+		dyn_overlay_right.overlays += right_moody
+
 	if (dyed_parts.len > 0)
 		if (!cloth_layer || !cloth_icon)
 			return
-		var/image/dyn_overlay_worn = image('icons/effects/32x32.dmi', src, "blank")
-		var/image/dyn_overlay_left = image('icons/effects/32x32.dmi', src, "blank")
-		var/image/dyn_overlay_right = image('icons/effects/32x32.dmi', src, "blank")
 		for (var/part in dyed_parts)
 			var/list/dye_data = dyed_parts[part]
 			var/dye_color = dye_data[1]
 			var/dye_alpha = dye_data[2]
+			//TODO: dye_date[3] to allow glowing clothing?
 
 			var/_state = dye_base_iconstate_override
 			if (!_state)
@@ -120,9 +142,14 @@
 			right_overlay.alpha = dye_alpha
 			dyn_overlay_right.overlays += right_overlay
 
+	if ((luminosity > 0) || (dyed_parts.len > 0))
 		dynamic_overlay["[cloth_layer]"] = dyn_overlay_worn
 		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = dyn_overlay_left
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = dyn_overlay_right
+
+	set_blood_overlay()//re-applying blood stains
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 
 /obj/item/clothing/can_quick_store(var/obj/item/I)
@@ -178,9 +205,6 @@
 			return
 		if(user.drop_item(I, src))
 			attach_accessory(A, user)
-		if(iscarbon(loc))
-			var/mob/living/carbon/carbon_wearer = loc
-			carbon_wearer.update_inv_by_slot(slot_flags)
 		return 1
 	if(I.is_screwdriver(user))
 		for(var/obj/item/clothing/accessory/accessory in priority_accessories())
@@ -410,6 +434,9 @@
 	if(user)
 		to_chat(user, "<span class='notice'>You attach [accessory] to [src].</span>")
 		accessory.add_fingerprint(user)
+	if(iscarbon(loc))
+		var/mob/living/carbon/carbon_wearer = loc
+		carbon_wearer.update_inv_by_slot(slot_flags)
 
 /obj/item/clothing/proc/priority_accessories()
 	if(!accessories.len)
@@ -566,12 +593,6 @@
 			var/obj/item/I = wearer.get_item_by_slot(slotID)
 			if(I)
 				I.stripped(wearer, stripper)
-
-/obj/item/clothing/become_defective()
-	if(!defective)
-		..()
-		for(var/A in armor)
-			armor[A] -= rand(armor[A]/3, armor[A])
 
 /obj/item/clothing/attack(var/mob/living/M, var/mob/living/user, def_zone, var/originator = null)
 	if (!(iscarbon(user) && user.a_intent == I_HELP && (clothing_flags & CANEXTINGUISH) && ishuman(M) && M.on_fire))
@@ -912,9 +933,10 @@ var/global/maxStackDepth = 10
 	sterility = 50
 
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
-	var/step_sound = ""
+	var/list/step_sound = null
 	var/stepstaken = 1
 	var/modulo_steps = 2 //if stepstaken is a multiplier of modulo_steps, play the sound. Does not work if modulo_steps < 1
+	var/footsteps_range = -4
 	cloth_layer = SHOES_LAYER
 	cloth_icon = 'icons/mob/feet.dmi'
 	starting_materials = list(MAT_FABRIC = 1250)
@@ -922,17 +944,12 @@ var/global/maxStackDepth = 10
 	var/luminous_paint = FALSE
 
 /obj/item/clothing/shoes/proc/step_action()
-	stepstaken++
-	if(step_sound != "" && ishuman(loc))
-		var/mob/living/carbon/human/H = loc
-		switch(H.m_intent)
-			if("run")
-				if(stepstaken % modulo_steps == 0)
-					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
-			if("walk")
-				playsound(H, step_sound, 20, 1)
+	return
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
+	return
+
+/obj/item/clothing/shoes/proc/on_kick_obj(mob/living/user, obj/target)
 	return
 
 /obj/item/clothing/shoes/defenseTackleBonus()

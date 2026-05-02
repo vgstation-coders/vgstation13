@@ -1,1 +1,11 @@
 #define RUST_GYROTRON_RANGE 25
+#define MAX_FIELD_FREQ 1000
+#define MIN_FIELD_FREQ 1
+#define MAX_FIELD_STR 1000
+#define MIN_FIELD_STR 1
+#define RUST_CORE_STR_COST 500
+#define MIN_MEGA_ENERGY 0.001
+#define MAX_MEGA_ENERGY 0.01
+#define MAX_GYRO_FREQ 1000
+#define MIN_GYRO_FREQ 1
+#define GYRO_MEGA_COST 100000000 //Yes, original code made it that big

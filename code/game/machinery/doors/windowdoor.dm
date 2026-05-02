@@ -75,38 +75,15 @@
 		to_chat(user, "It is a secure windoor. It's stronger and closes more quickly.")
 
 /obj/machinery/door/window/Bumped(atom/movable/AM)
-	var/sleeptime = normalspeed ? 50 : 20 // secure doors close faster
-	if(!ismob(AM))
-		var/obj/machinery/bot/bot = AM
-		if(istype(bot))
-			if(density && check_access(bot.botcard))
-				open()
-				sleep(sleeptime)
-				close()
-		else if(istype(AM, /obj/mecha))
-			var/obj/mecha/mecha = AM
-			if(density)
-				if(mecha.occupant && allowed(mecha.occupant))
-					open()
-					sleep(sleeptime)
-					close()
-		else if(istype(AM, /obj/structure/bed/chair/vehicle))
-			var/obj/structure/bed/chair/vehicle/vehicle = AM
-			if(density)
-				if(vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
-					if(istype(vehicle, /obj/structure/bed/chair/vehicle/firebird))
-						vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
-					open()
-					spawn(sleeptime)
-						close()
-				else if(!operating)
-					denied()
-		return
 	if(!(ticker))
 		return
 	if(operating)
 		return
 	if(density && allowed(AM))
+		var/sleeptime = normalspeed ? 50 : 20 // secure doors close faster
+		if(istype(AM, /obj/structure/bed/chair/vehicle/firebird))
+			var/obj/structure/bed/chair/vehicle/firebird/F = AM
+			F.forceMove(get_step(F,F.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 		open()
 		spawn(sleeptime)
 			close()
@@ -232,14 +209,17 @@
 /obj/machinery/door/window/attack_animal(mob/living/user)
 	if(operating)
 		return
-	var/mob/living/simple_animal/M = user
-	if(M.melee_damage_upper <= 0)
-		return
+	var/dmg=0
+	if(istype(user,/mob/living/simple_animal))
+		var/mob/living/simple_animal/M = user
+		if(M.melee_damage_upper <= 0)
+			return
+		dmg=M.melee_damage_upper
+		visible_message("<span class='warning'>\The [M.name] [M.attacktext] against \the [name].</span>", 1)
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
 	playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
-	visible_message("<span class='warning'>\The [M.name] [M.attacktext] against \the [name].</span>", 1)
-	take_damage(M.melee_damage_upper)
+	take_damage(dmg)
 
 /obj/machinery/door/window/attackby(obj/item/I, mob/living/user)
 	// Make emagged/open doors able to be deconstructed

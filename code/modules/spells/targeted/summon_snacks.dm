@@ -17,15 +17,15 @@
 	user_type = USER_TYPE_WIZARD
 	school = "conjuration"
 	invocation = "OR'DER UHP"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	message = "<span class='sinister'>Suddenly your hands are full of snacks!<span>"
-	charge_max = 300
-	cooldown_min = 150
+	charge_cooldown_max = 30 SECONDS
+	cooldown_min = 15 SECONDS
 	selection_type = "range"
 	range = 7
 	valid_targets = list(/mob/living/carbon)
-	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_AMOUNT = 0, Sp_MOVE = 0)
-	level_max = list(Sp_TOTAL = 16, Sp_SPEED = 3, Sp_POWER = 1, Sp_AMOUNT = 5, Sp_MOVE = 7)
+	spell_levels = list(SP_SPEED = 0, SP_POWER = 0, SP_AMOUNT = 0, SP_MOVE = 0)
+	level_max = list(SP_TOTAL = 16, SP_SPEED = 3, SP_POWER = 1, SP_AMOUNT = 5, SP_MOVE = 7)
 	var/menuType = SUMMON_SNACKS_FILLING
 
 /spell/targeted/summon_snacks/cast(var/list/targets, mob/user)
@@ -40,7 +40,7 @@
 			else
 				S = new /obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_drink(target.loc)
 
-			S.spellInherit(menuType, spell_levels[Sp_AMOUNT], spell_levels[Sp_POWER])
+			S.spellInherit(menuType, spell_levels[SP_AMOUNT], spell_levels[SP_POWER])
 			S.menuOrder(menuType)
 			target.put_in_hands(S)
 
@@ -51,75 +51,75 @@
 
 /spell/targeted/summon_snacks/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return quicken_spell()
-		if(Sp_POWER)
-			spell_levels[Sp_POWER]++
+		if(SP_POWER)
+			spell_levels[SP_POWER]++
 			return "Your snacks are now extremely unhealthy."
-		if(Sp_AMOUNT)
-			spell_levels[Sp_AMOUNT]++
+		if(SP_AMOUNT)
+			spell_levels[SP_AMOUNT]++
 			return "Your snacks are now a little bigger"
-		if(Sp_MOVE)
-			spell_levels[Sp_MOVE]++
-			if(spell_levels[Sp_MOVE] == 1)
+		if(SP_MOVE)
+			spell_levels[SP_MOVE]++
+			if(spell_levels[SP_MOVE] == 1)
 				name = "Summon Discount Snacks"
 				invocation = "DA'N THUH MA'N"
 				menuType = SUMMON_SNACKS_DISCOUNT
 				return "Your snacks are now sponsored by Discount Dan."
-			if(spell_levels[Sp_MOVE] == 2)
+			if(spell_levels[SP_MOVE] == 2)
 				name = "Summon Horrible Snacks"
 				invocation = "AB'OM'INATION"
 				menuType = SUMMON_SNACKS_HORRIBLE
 				return "Your snacks are now horrible."
-			if(spell_levels[Sp_MOVE] == 3)
+			if(spell_levels[SP_MOVE] == 3)
 				name = "Summon Pub Snacks"
 				invocation = "PE'ANO AS'BEN DRYNCAN"
 				menuType = SUMMON_SNACKS_PUB
 				return "Your snacks are now pub fare."
-			if(spell_levels[Sp_MOVE] == 4)
+			if(spell_levels[SP_MOVE] == 4)
 				name = "Summon Patrol Snacks"
 				invocation = "LEH'GO I'LAND"
 				menuType = SUMMON_SNACKS_PATROL
 				return "Your snacks are now loved by security."
-			if(spell_levels[Sp_MOVE] == 5)
+			if(spell_levels[SP_MOVE] == 5)
 				name = "Summon Spicy Snacks"
 				invocation = "HAW'T TO'MALLEE"
 				menuType = SUMMON_SNACKS_SPICY
 				return "Your snacks are now Mexican."
-			if(spell_levels[Sp_MOVE] == 6)
+			if(spell_levels[SP_MOVE] == 6)
 				name = "Summon Drunken Snacks"
 				invocation = "FSH'IN LEV'VAL"
 				menuType = SUMMON_SNACKS_DWARF
 				return "Your snacks are now dwarven."
-			if(spell_levels[Sp_MOVE] == 7)
+			if(spell_levels[SP_MOVE] == 7)
 				name = "Summon Filling Snacks"
 				invocation = "OR'DER UHP"
 				menuType = SUMMON_SNACKS_FILLING
-				spell_levels[Sp_MOVE] = 0		//So you can cycle between them
+				spell_levels[SP_MOVE] = 0		//So you can cycle between them
 				return "Your snacks are now hearty."
 
 /spell/targeted/summon_snacks/get_upgrade_price(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return 10
-		if(Sp_POWER)
+		if(SP_POWER)
 			return 25
-		if(Sp_MOVE)
+		if(SP_MOVE)
 			return 0
-		if(Sp_AMOUNT)
+		if(SP_AMOUNT)
 			return 1
 
 /spell/targeted/summon_snacks/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_POWER)
-			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+		if(SP_POWER)
+			if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 				return "Your snacks already carry a small amount of disabeetusol!"
 			return "Your snacks will now contain a small amount of diabeetusol. Full of flavor and calories!"
-		if(Sp_AMOUNT)
-			if(spell_levels[Sp_AMOUNT] >= level_max[Sp_AMOUNT])
+		if(SP_AMOUNT)
+			if(spell_levels[SP_AMOUNT] >= level_max[SP_AMOUNT])
 				return "Your snacks have reached the limit of how many bites are needed to finish eating them!"
 			return "Increases how many bites it takes to finish eating."
-		if(Sp_MOVE)
+		if(SP_MOVE)
 			return "Changes the type of snack and drink. Resets at max level to allow cycling through the menu. Level 0: Filling, Level 1: Discount, Level 2: Horrible, Level 3: Pub, Level 4: Patrol, Level 5: Spicy, Level 6: Dwarven."
 	return ..()
 

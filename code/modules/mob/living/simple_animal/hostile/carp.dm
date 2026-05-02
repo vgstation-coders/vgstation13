@@ -102,7 +102,7 @@
 		if(prob(15))
 			L.Knockdown(3)
 			L.Stun(3)
-			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
+			L.visible_message("<span class='danger'>\The [src] knocks down \the [L]!</span>")
 
 /mob/living/simple_animal/hostile/carp/baby
 	desc = "A ferocious, fang-bearing creature that resembles a fish. This one, despite not being mature yet, is just as agressive as any of its brethren."

@@ -50,7 +50,7 @@
 	can_enlarge = FALSE
 
 /datum/map/active/map_specific_init()
-	climate = new /datum/climate/arctic()
+	SSweather.set_climate(/datum/climate/arctic)
 
 /datum/subsystem/daynightcycle
 	flags = SS_FIRE_IN_LOBBY

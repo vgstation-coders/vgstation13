@@ -326,7 +326,7 @@ var/global/global_cricket_population = 0
 	desc = "A heads-up display that displays information on plants and farm animals. It appears to feature corrective lenses too."
 	icon_state = "hydrohud"
 	item_state = "rwelding-g"
-	nearsighted_modifier = -3
+	perfect_sight = TRUE
 	var/obj/item/device/analyzer/plant_analyzer/my_analyzer
 
 /obj/item/clothing/glasses/hud/hydro/New()
@@ -378,6 +378,15 @@ var/global/global_cricket_population = 0
 		weedlevel = 0
 		update_icon_after_process = TRUE
 	..()
+
+//works as a lawnmower
+/obj/structure/bed/chair/vehicle/mower/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
+	//if we successfully moved clear the flora in the current tile. We can't use newloc because we can't really check if we actually moved. i tried checking, and it doesn't work.
+	if(istype(loc,/turf))
+		var/turf/T=loc
+		for(var/obj/structure/flora/F in T.contents)
+			qdel(F)
+	return ..()
 
 /obj/effect/plantsegment/Crossed(var/atom/movable/AM)
 	if(istype(AM,/obj/structure/bed/chair/vehicle/mower))
@@ -586,12 +595,12 @@ var/global/global_cricket_population = 0
 		return
 
 	if(alert(user,"Harvest the honeycombs?[((queen_bees_inside || worker_bees_inside) && species.angery) ? " Be ready to handle some angry bees!" : ""]","[name]","Yes","No")== "Yes")
-		user.visible_message("<span class='notice'>\the [user] begins dismantling the apiary.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
+		user.visible_message("<span class='notice'>\The [user] begins dismantling the apiary.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
 
 		if((queen_bees_inside || worker_bees_inside) && species.angery)
 			playsound(loc, 'sound/effects/fan.ogg', 75, 1, -1)
 			anim(target = loc, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
-			visible_message("<span class='good'>\The hive fans smoke, calming the residents for the harvest.</span>")
+			visible_message("<span class='good'>The hive fans smoke, calming the residents for the harvest.</span>")
 
 		if(do_after(user, loc, 50))
 			if(harvest_honeycombs())

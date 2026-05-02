@@ -5,7 +5,7 @@
 	desc = "The echo of the first shot, like the first sip of whiskey, burning..."
 	var/charge = 0
 
-/obj/item/ammo_storage/speedloader/c38/cyborg/restock()
+/obj/item/ammo_storage/speedloader/c38/cyborg/restock(nanobots = FALSE)
 	charge++
 	if(charge >= NEEDED_CHARGE_TO_RESTOCK_AMMO && stored_ammo.len < max_ammo) //takes about 10 seconds.
 		stored_ammo += new ammo_type(src)

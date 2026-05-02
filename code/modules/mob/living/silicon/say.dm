@@ -76,6 +76,12 @@
 	..(speech)
 	speech.message_classes.Add("siliconsay")
 
+	if(config.voice_noises && world.time > time_last_speech + 5 SECONDS)
+		time_last_speech = world.time
+		for(var/mob/O in hearers())
+			if(!O.is_deaf() && O.client)
+				O.client.handle_hear_voice(src)
+
 /mob/living/silicon/say_understands(var/atom/movable/other,var/datum/language/speaking = null)
 	//These only pertain to common. Languages are handled by mob/say_understands()
 	if (!speaking)

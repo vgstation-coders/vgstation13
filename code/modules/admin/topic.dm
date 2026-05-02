@@ -418,9 +418,12 @@
 						casual = 0
 					if("No")
 						emergency_shuttle.shuttle_phase("centcom",1)
-		var/obj/docking_port/shuttle/P = emergency_shuttle.shuttle.linked_port
+		var/obj/docking_port/shuttle/P = emergency_shuttle.get_linked_port()
 		log_admin("[key_name(usr)] moved the emergency shuttle to [href_list["move_emergency_shuttle"]][casual?" (no round triggers)":""].</span>")
-		message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle to <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[P.x];Y=[P.y];Z=[P.z]'>[href_list["move_emergency_shuttle"]]</a>[casual?" (no round triggers)":""].</span>", 1)
+		if(P)
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle to <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[P.x];Y=[P.y];Z=[P.z]'>[href_list["move_emergency_shuttle"]]</a>[casual?" (no round triggers)":""].</span>", 1)
+		else
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle to [href_list["move_emergency_shuttle"]][casual?" (no round triggers)":""].</span>", 1)
 		href_list["secretsadmin"] = "emergency_shuttle_panel"
 
 	else if(href_list["move_emergency_dock"])
@@ -428,6 +431,9 @@
 			return
 		var/obj/docking_port/destination/port
 		var/datum/shuttle/escape/E = emergency_shuttle.shuttle
+		if(!E)
+			alert("This shuttle type does not support dock repositioning.")
+			return
 		switch (href_list["move_emergency_dock"])
 			if ("station")
 				port = E.dock_station
@@ -446,6 +452,9 @@
 			return
 		var/obj/docking_port/destination/port
 		var/datum/shuttle/escape/E = emergency_shuttle.shuttle
+		if(!E)
+			alert("This shuttle type does not support dock repositioning.")
+			return
 		switch (href_list["reset_emergency_dock"])
 			if ("station")
 				port = E.dock_station
@@ -582,6 +591,11 @@
 
 		SendAdminGhostTo(T,null)
 
+	else if(href_list["artifactpanel_spawnsmall"])
+		if(!check_rights(R_ADMIN))
+			return
+		debug_spawn_find()
+
 	else if(href_list["bodyarchivepanel_focus"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -635,33 +649,87 @@
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
 			return
-		if(!map.climate)
+		var/datum/weather/W = locate(href_list["climate_timeleft"])
+		if(!W || !istype(W))
 			return
-		var/datum/weather/W = map.climate.current_weather
 		var/nu = input(usr, "Enter remaining time (nearest 2 seconds)", "Adjust Timeleft", W.timeleft / (1 SECONDS)) as null|num
 		if(!nu)
 			return
 		W.timeleft = round(nu SECONDS,SS_WAIT_WEATHER)
-		log_admin("[key_name(usr)] adjusted weather time.")
-		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time.</span>", 1)
+		log_admin("[key_name(usr)] adjusted weather time for vZ-[W.parent.v].")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time for vZ-[W.parent.v].</span>", 1)
 		climate_panel()
 
 	else if(href_list["climate_weather"])
 		if(!check_rights(R_ADMIN))
 			return
-		if(!map.climate)
+		var/datum/climate/C = locate(href_list["climate_weather"])
+		if(!C || !istype(C))
 			return
-		var/datum/climate/C = map.climate
-		var/nu = input(usr, "Select New Weather", "Adjust Weather", C.current_weather.type) as null|anything in typesof(/datum/weather)
-		if(!nu || nu == C.current_weather.type)
+
+		var/list/valid_climates = list()
+
+		// Use the climate's allowed weather types if available, otherwise fall back to all weather types
+		if(C.allowed_weather_types && C.allowed_weather_types.len)
+			for(var/weather_type in C.allowed_weather_types)
+				var/datum/weather/instance = weather_type
+				var/weather_name = initial(instance.name)
+				if (weather_name != "weather")
+					valid_climates[weather_name] = weather_type
+		else
+			for(var/subtype in subtypesof(/datum/weather))
+				var/datum/weather/instance = subtype
+				var/weather_name = initial(instance.name)
+				if (weather_name != "weather")
+					valid_climates[weather_name] = subtype
+
+		if (valid_climates.len <= 0)
+			alert(usr, "There are somehow no weather subtypes!", "Error", "Wtf?")
 			return
-		if(!ispath(nu))
+
+		var/nu = input(usr, "Select New Weather for vZ-[C.v.id]", "Adjust Weather", null) as null|anything in valid_climates
+		if(!nu)
+			to_chat(usr, "Weather change canceled.")
 			return
-		C.change_weather(nu)
+		if(nu == C.current_weather.name)
+			to_chat(usr, "That's already the current weather you dummy.")
+			return
+		C.change_weather(valid_climates[nu],force = TRUE)
 		C.forecast()
-		log_admin("[key_name(usr)] adjusted weather type.")
-		message_admins("<span class='notice'>[key_name(usr)] adjusted weather type.</span>", 1)
+		log_admin("[key_name(usr)] changed the weather to [nu] for vZ-[C.v.id].")
+		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu] for vZ-[C.v.id].</span>", 1)
 		climate_panel()
+
+	else if(href_list["climate_restart"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/climate/C = locate(href_list["climate_restart"])
+		if(!C || !istype(C))
+			return
+		var/response = alert(usr, "This will completely restart the climate controller for vZ-[C.v.id]. Continue?", "Restart Climate", "Yes", "No")
+		if(response != "Yes")
+			return
+		SSweather.restart_climate(C)
+		log_admin("[key_name(usr)] restarted the climate controller for vZ-[C.v.id].")
+		message_admins("<span class='notice'>[key_name(usr)] restarted the climate controller for vZ-[C.v.id].</span>", 1)
+		climate_panel()
+
+	else if(href_list["level_manager_jump"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/virtual_z/V = locate(href_list["level_manager_jump"])
+		if(!V || !istype(V))
+			to_chat(usr, "<span class='warning'>Invalid virtual z-level reference.</span>")
+			return
+		var/center_x = round((V.x_min + V.x_max) / 2)
+		var/center_y = round((V.y_min + V.y_max) / 2)
+		var/turf/T = locate(center_x, center_y, V.z())
+		if(T)
+			usr.forceMove(T)
+			log_admin("[key_name(usr)] jumped to virtual z-level [V.id] ([V.name]).")
+			message_admins("<span class='notice'>[key_name(usr)] jumped to virtual z-level [V.id] ([V.name]).</span>", 1)
+		else
+			to_chat(usr, "<span class='warning'>Could not find a valid turf to jump to.</span>")
 
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
@@ -704,7 +772,7 @@
 					message_admins("<span class='notice'>[key_name(usr)] edited the hub description.</span>")
 					log_admin("[key_name(usr)] edited the hub description from [old_desc] to [temp_desc]")
 
-		var/datum/persistence_task/task = SSpersistence_misc.tasks["/datum/persistence_task/hub_settings"]
+		var/datum/persistence_task/task = SSpersistence_tasks.tasks["/datum/persistence_task/hub_settings"]
 		task.on_shutdown()
 		world.update_status()
 		HubPanel()
@@ -802,6 +870,198 @@
 				usr = new_mob //We probably transformed ourselves
 			show_player_panel(new_mob)
 
+	// Procedural generation panel
+	else if(href_list["procgen_create"])
+		if(!check_rights(R_ADMIN))
+			return
+		generate_planet(usr)
+		procedural_generation_panel()
+		return
+
+	else if(href_list["procgen_toggle_exploration"])
+		if(!check_rights(R_ADMIN))
+			return
+		toggle_exploration_program(usr, bypass_cooldown = TRUE)
+		procedural_generation_panel()
+		return
+
+	else if(href_list["procgen_jump"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_jump"])
+		if(planet?.v)
+			var/datum/virtual_z/vz = planet.v
+			var/center_x = vz.x(coord = vz.size_x/2)
+			var/center_y = vz.y(coord = vz.size_y/2)
+			var/turf/jump_target = locate(center_x, center_y, vz.z())
+			if(jump_target)
+				SendAdminGhostTo(jump_target, null)
+				to_chat(usr, "<span class='notice'>Jumped to planet [planet.name] on virtual z-level [vz.id].</span>")
+			else
+				to_chat(usr, "<span class='warning'>Failed to find jump target for planet [planet.name].</span>")
+		else
+			to_chat(usr, "<span class='warning'>Invalid planet reference or virtual z!</span>")
+		return
+
+	else if(href_list["procgen_weather"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_weather"])
+		if(!planet)
+			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
+			return
+		if(!planet.climate)
+			to_chat(usr, "<span class='warning'>This planet has no climate system!</span>")
+			return
+
+		// Build list of available weather types for this climate
+		var/list/weather_options = list()
+		for(var/weather_type in planet.climate.allowed_weather_types)
+			var/datum/weather/W = new weather_type(planet.climate)
+			weather_options[W.name] = weather_type
+			qdel(W)
+
+		var/choice = input(usr, "Select new weather for [planet.planet_name]:", "Change Weather") as null|anything in weather_options
+		if(!choice)
+			return
+
+		var/weather_path = weather_options[choice]
+		planet.climate.change_weather(weather_path, force = TRUE)
+		message_admins("[key_name_admin(usr)] changed weather on [planet.planet_name] to [choice].")
+		procedural_generation_panel()
+		return
+
+	else if(href_list["procgen_time"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_time"])
+		if(!planet)
+			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
+		if(!planet.v)
+			to_chat(usr, "<span class='warning'>This planet has no virtual z!</span>")
+			return
+
+		var/datum/virtual_z/vz = planet.v
+		if(!(vz in daynight_v_lvls))
+			to_chat(usr, "<span class='warning'>This planet does not have a day/night cycle!</span>")
+			return
+
+		var/list/time_options = list("Morning", "Sunrise", "Daytime", "Afternoon", "Sunset", "Nighttime")
+		var/choice = input(usr, "Select new time of day for [planet.planet_name]:", "Change Time of Day") as null|anything in time_options
+		if(!choice)
+			return
+
+		// Map choice to TOD constants
+		var/new_time
+		switch(choice)
+			if("Morning") new_time = TOD_MORNING
+			if("Sunrise") new_time = TOD_SUNRISE
+			if("Daytime") new_time = TOD_DAYTIME
+			if("Afternoon") new_time = TOD_AFTERNOON
+			if("Sunset") new_time = TOD_SUNSET
+			if("Nighttime") new_time = TOD_NIGHTTIME
+
+		// Set the time for this specific planet
+		vz.current_timeOfDay = new_time
+		vz.next_firetime = world.time + 10 MINUTES
+
+		// Force immediate lighting update for this planet only
+		SSDayNight.update_lighting(vz, immediate = TRUE)
+
+		message_admins("[key_name_admin(usr)] changed time of day to [choice] on [planet.planet_name].")
+		procedural_generation_panel()
+		return
+
+	else if(href_list["procgen_delete"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_delete"])
+
+		if(!planet?.v)
+			return
+
+		var/datum/virtual_z/vz = planet.v
+		var/planet_name = planet.planet_name
+
+		var/confirm = alert(usr, "Are you sure you want to delete [planet_name]? This will permanently remove all contents and cannot be undone.", "Confirm Deletion", "Yes", "No")
+		if(confirm != "Yes")
+			return
+
+		message_admins("[key_name_admin(usr)] is deleting planet [planet_name].")
+
+		// Delete all contents in the virtual z's turfs
+		var/list/turf/turfs = vz.get_turfs()
+		for(var/turf/T in turfs)
+			for(var/atom/movable/AM in T.contents)
+				qdel(AM)
+			T.ChangeTurf(/turf/space)
+
+		SSmapping.planets -= planet
+
+		qdel(planet)
+		qdel(vz)
+
+		message_admins("[key_name_admin(usr)] deleted planet [planet_name].")
+		to_chat(usr, "<span class='notice'>Planet [planet_name] has been deleted.</span>")
+		procedural_generation_panel()
+		return
+
+	else if(href_list["procgen_add_landing_zone"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_add_landing_zone"])
+		if(!planet)
+			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
+			return
+		if(!planet.v)
+			to_chat(usr, "<span class='warning'>This planet has no virtual z!</span>")
+			return
+
+		if(SSmapping.generating && SSmapping.current_planet == planet)
+			to_chat(usr, "<span class='warning'>Planet is still generating! Please wait for generation to complete.</span>")
+			return
+
+		var/datum/virtual_z/vz = planet.v
+
+		if(vz.shuttle_landing_zones[/datum/shuttle/exploration])
+			to_chat(usr, "<span class='warning'>This planet already has a landing zone for the exploration shuttle!</span>")
+			procedural_generation_panel()
+			return
+
+		if(!exploration_shuttle)
+			to_chat(usr, "<span class='warning'>Exploration shuttle not found!</span>")
+			return
+
+		var/list/shuttle_size = exploration_shuttle.get_size()
+		if(!shuttle_size)
+			to_chat(usr, "<span class='warning'>Unable to determine shuttle dimensions.</span>")
+			return
+
+		var/obj/docking_port/destination/planet_surface/surface_port = vz.get_shuttle_landing_zone(exploration_shuttle, shuttle_size)
+		if(!surface_port)
+			to_chat(usr, "<span class='warning'>No suitable landing zone found on [planet.planet_name]. The planet terrain may be too irregular.</span>")
+			return
+
+		exploration_shuttle.add_dock(surface_port)
+
+		message_admins("[key_name_admin(usr)] added a landing zone for the exploration shuttle on [planet.planet_name].")
+		to_chat(usr, "<span class='notice'>Landing zone successfully created on [planet.planet_name] and added to exploration shuttle.</span>")
+		procedural_generation_panel()
+		return
+
+	else if(href_list["procgen_toggle_visibility"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_toggle_visibility"])
+		if(!planet)
+			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
+			return
+
+		planet.hidden = !planet.hidden
+		var/new_status = planet.hidden ? "hidden from" : "visible on"
+		to_chat(usr, "<span class='notice'>[planet.planet_name] is now [new_status] the Deep Space Scanner.</span>")
+		procedural_generation_panel()
+		return
 
 	/////////////////////////////////////new ban stuff
 	else if(href_list["unbanf"])
@@ -1387,7 +1647,7 @@
 
 		body = "<body>[jobs]</body>"
 		dat = "<tt>[header][body]</tt>"
-		usr << browse(dat, "window=jobban2;size=800x490")
+		usr << browse(HTML_SKELETON(dat), "window=jobban2;size=800x490")
 		return
 
 	//JOBBAN'S INNARDS
@@ -1695,7 +1955,7 @@
 		dat += {"<A href='?src=\ref[src];c_mode2=secret'>Secret</A><br>"}
 		dat += {"<A href='?src=\ref[src];c_mode2=random'>Random</A><br>"}
 		dat += {"Now: [master_mode]"}
-		usr << browse(dat, "window=c_mode")
+		usr << browse(HTML_SKELETON(dat), "window=c_mode")
 
 	else if(href_list["f_secret"])
 		if(!check_rights(R_ADMIN))
@@ -1710,7 +1970,7 @@
 			dat += {"<A href='?src=\ref[src];f_secret2=[mode]'>[config.mode_names[mode]]</A><br>"}
 		dat += {"<A href='?src=\ref[src];f_secret2=secret'>Random (default)</A><br>"}
 		dat += {"Now: [secret_force_mode]"}
-		usr << browse(dat, "window=f_secret")
+		usr << browse(HTML_SKELETON(dat), "window=f_secret")
 
 	else if(href_list["f_dynamic_roundstart"])
 		if(!check_rights(R_ADMIN))
@@ -2622,7 +2882,7 @@
 				foo += text("<A HREF='?src=\ref[];forcespeech=\ref[]'>Say</A> \]", src, M)
 			dat += text("N: [] R: [] (K: []) (IP: []) []<BR>", M.name, M.real_name, (M.client ? M.client : "No client"), M.lastKnownIP, foo)
 
-		usr << browse(dat, "window=players;size=900x480")
+		usr << browse(HTML_SKELETON(dat), "window=players;size=900x480")
 
 *****************AFTER******************/
 
@@ -2833,7 +3093,12 @@
 			spawntype = /obj/item/weapon/coin/pumf
 			feedback = "You have greatly angered the gods, and their grudge toward you has been crystalized into a damned pumf coin."
 
-		if(!H.put_in_hands( new spawntype(H)))
+		var/obj/item/reward = new spawntype(H)
+		if (answer == "Cookie")
+			var/obj/item/weapon/reagent_containers/food/snacks/cookie/C = reward
+			C.thermal_variation_modifier = 0
+
+		if(!H.put_in_hands(reward))
 			log_admin("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
 			message_admins("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
 			return
@@ -3061,14 +3326,22 @@
 		if(P.img)
 			usr << browse_rsc(P.img.img, "tmp_photo.png")
 			info_2 = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br>"
-		usr << browse("<HTML><HEAD><TITLE>Centcomm Fax Message</TITLE></HEAD><BODY>[info_2][P.info][P.stamps]</BODY></HTML>", "window=Centcomm Fax Message")
+		var/text = {"<!DOCTYPE html><HEAD>
+		<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<TITLE>Centcomm Fax Message</TITLE></HEAD>
+		<BODY>[info_2][P.info][P.stamps]</BODY>
+		</HTML>
+		"}
+		usr << browse(text, "window=Centcomm Fax Message") // No need to HTML_SKELETON() this
 
 	else if(href_list["CentcommFaxReply"])
 		var/mob/living/carbon/human/H = locate(href_list["CentcommFaxReply"])
 
 		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a fax message from [key_name_admin(H)].</span>")
 
-		var/sent = input(src.owner, "Please enter a message to reply to [key_name(H)] via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
+		var/preset = input(src.owner,"Which preset to use?","Preset formatting") as null|anything in fax_presets
+		var/sent = input(src.owner, "Please enter a message to reply to [key_name(H)] via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", fax_presets[preset]) as message|null
 		if(!sent)
 			return
 
@@ -3205,6 +3478,12 @@
 		if(!check_rights(R_SPAWN))
 			return
 		return create_mob(usr)
+
+	else if(href_list["create_megabeast"])
+		if(!check_rights(0))
+			return
+		var/datum/D = locate(href_list["create_megabeast"])
+		return create_megabeast(D)
 
 	else if(href_list["object_list"])			//this is the laggiest thing ever
 		if(!check_rights(R_SPAWN))
@@ -3893,7 +4172,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				var/choice = input("Are you sure you want to fill the station with a bunch of unnecessary mobs?") in list("Of course!", "No, I hate timespace anomalies involving fun")
 				if(choice == "Of course!")
 					var/amt = input("How many would you like to spawn?", 10) as num
-					var/mobtype = input("What mob would you like?", "Mob Swarm") as null|anything in typesof(/mob/living)
+					var/typefilter = input("Mob type to filter to?","Mob Swarm") as text
+					var/mobtype = filter_typelist_input("What mob would you like?", "Mob Swarm", get_matching_types(typefilter,/mob/living))
 					message_admins("[key_name_admin(usr)] triggered a mob swarm.")
 					new /datum/event/mob_swarm(mobtype, amt)
 			if("pick_event")
@@ -3922,8 +4202,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				feedback_add_details("admin_secrets_fun_used","TD")
 				var/newname = ""
 				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
-				if (!newname)
-					newname = "Admin"
+				if(!newname) //cancel case
+					return
 				var/turf/T = get_turf(usr)
 				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
 				var/obj/item/weapon/card/id/admin/admin_id = new(D)
@@ -3945,8 +4225,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				feedback_add_details("admin_secrets_fun_used","TDO")
 				var/newname = ""
 				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
-				if (!newname)
-					newname = "Admin"
+				if(!newname) //cancel case
+					return
 				var/choice = alert("Edit appearance on spawn?", "Admin", "Yes", "No")
 				var/outfit_type = select_loadout()
 				if(!outfit_type || !ispath(outfit_type))
@@ -4037,15 +4317,42 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					to_chat(usr, "<span class='warning'>Invalid input range (null or negative)</span>")
 					return
 				var/realeffect = alert(usr,"Use visible explosions?", "Fake Explosions", "Yes", "No") == "Yes"
+				var/realsense = alert(usr,"Fool the bhangmeters?", "Fake Explosions", "Yes", "No") == "Yes"
 				message_admins("[key_name_admin(usr)] triggered [round(amount)] fake explosions.")
 				log_admin("[key_name_admin(usr)] triggered [round(amount)] fake explosions.")
 				for(var/i = 1 to amount)
 					if(realeffect)
 						var/turf/epicenter = locate(rand(1,world.maxx),rand(1,world.maxy),map.zMainStation)
 						explosion_effect(epicenter,7,14,28)
+						if(realsense)
+							var/datum/sensed_explosion/sensed = new(epicenter.x, epicenter.y, epicenter.z, 7, 14, 28)
+							if(sensed)
+								sensed.paint(epicenter)
+								sensed.ready(20)
 					else
 						world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
+			if("fakenews")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","FAKEN")
+				var/type
+				var/datum/feed_message/news/newspost
+				var/dest
+				var/datum/trade_destination/newsdest
+				if(alert(usr,"Generate news specifically from a location or not?","Location","Yes","No") == "Yes")
+					dest = input("Where will it happen?") in subtypesof(/datum/trade_destination)
+					newsdest = new dest()
+					var/list/typelist = newsdest.viable_mundane_events.len || newsdest.viable_random_events.len ? newsdest.viable_mundane_events + newsdest.viable_random_events : subtypesof(/datum/feed_message/news)
+					type = input("Select a news message to broadcast!") in typelist
+					newspost = new type(newsdest)
+				else
+					type = input("Select a news message to broadcast!") in subtypesof(/datum/feed_message/news)
+					dest = input("Where will it happen, if applicable?") in subtypesof(/datum/trade_destination)
+					newsdest = new dest()
+					newspost = new type(newsdest)
+				if(newsdest.get_custom_eventstring(type))
+					newspost.body = newsdest.get_custom_eventstring(type)
+				announce_newscaster_news(newspost)
 			if("togglerunescapepvp")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RSPVP")
@@ -4383,12 +4690,18 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				var/dat = "<B>Bombing List<HR>"
 				for(var/l in bombers)
 					dat += text("[l]<BR>")
-				usr << browse(dat, "window=bombers")
+				usr << browse(HTML_SKELETON(dat), "window=bombers")
 			if("list_lawchanges")
 				var/dat = "<B>Showing last [length(lawchanges)] law changes.</B><HR>"
 				for(var/sig in lawchanges)
 					dat += "[sig]<BR>"
-				usr << browse(dat, "window=lawchanges;size=800x500")
+				usr << browse(HTML_SKELETON(dat), "window=lawchanges;size=800x500")
+			if("settime")
+				var/hours = input(usr,"How many hours?","Round time",0) as num
+				var/mins = input(usr,"How many minutes?","Round time",0) as num
+				var/secs = input(usr,"How many seconds?","Round time",0) as num
+
+				admin_time_offset = (hours HOURS) + (mins MINUTES) + (secs SECONDS)
 			if("list_job_debug")
 				var/dat = "<B>Job Debug info.</B><HR>"
 				if(job_master)
@@ -4399,7 +4712,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						if(!job)
 							continue
 						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.get_total_positions()] <BR>"
-					usr << browse(dat, "window=jobdebug;size=600x500")
+					usr << browse(HTML_SKELETON(dat), "window=jobdebug;size=600x500")
 			if("showailaws")
 				output_ai_laws()
 			if("showgm")
@@ -4416,7 +4729,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					if(H.ckey)
 						dat += text("<tr><td>[]</td><td>[]</td></tr>", H.name, H.get_assignment())
 				dat += "</table>"
-				usr << browse(dat, "window=manifest;size=440x410")
+				usr << browse(HTML_SKELETON(dat), "window=manifest;size=440x410")
 			// if("check_antagonist")
 			// 	check_antagonists()
 			if("emergency_shuttle_panel")
@@ -4428,7 +4741,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					if(H.dna && H.ckey)
 						dat += "<tr><td>[H]</td><td>[H.dna.unique_enzymes]</td><td>[H.dna.b_type]</td></tr>"
 				dat += "</table>"
-				usr << browse(dat, "window=DNA;size=440x410")
+				usr << browse(HTML_SKELETON(dat), "window=DNA;size=440x410")
 			if("fingerprints")
 				var/dat = "<B>Showing Fingerprints.</B><HR>"
 				dat += "<table cellspacing=5><tr><th>Name</th><th>Fingerprints</th></tr>"
@@ -4441,14 +4754,14 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						else if(!H.dna)
 							dat += "<tr><td>[H]</td><td>H.dna = null</td></tr>"
 				dat += "</table>"
-				usr << browse(dat, "window=fingerprints;size=440x410")
+				usr << browse(HTML_SKELETON(dat), "window=fingerprints;size=440x410")
 			if("show_admin_log")
 				var/dat = "<B>Admin Log<HR></B>"
 				for(var/l in admin_log)
 					dat += "<li>[l]</li>"
 				if(!admin_log.len)
 					dat += "No-one has done anything this round!"
-				usr << browse(dat, "window=admin_log")
+				usr << browse(HTML_SKELETON(dat), "window=admin_log")
 
 		if (usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsadmin"]]")
@@ -5054,10 +5367,10 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 
 		if(S.linked_area)
 			if(killed_objs == 1)
-				for(var/turf/T in S.linked_area)
+				for(var/turf/T in S.shuttle_contents())
 					if(istype(T, /turf/simulated))
 						qdel(T)
-				for(var/obj/O in S.linked_area)
+				for(var/obj/O in S.shuttle_contents())
 					if(istype(O, /obj/item) || istype(O, /obj/machinery) || istype(O, /obj/structure))
 						qdel(O)
 				to_chat(usr, "All turfs and objects deleted from [S.linked_area].")
@@ -5081,7 +5394,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			to_chat(usr, "The shuttle is in the middle of nowhere! (The 'linked_area' variable is either null or not an area, please report this)")
 			return
 
-		var/turf/T = locate(/turf/) in S.linked_area
+		var/turf/T = locate(/turf/) in S.shuttle_contents()
 		usr.forceMove(T)
 		to_chat(usr, "You have teleported to [capitalize(S.name)]")
 
@@ -5302,16 +5615,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 		if(!istype(S))
 			return
 
-		var/transit_dir = NORTH
-		var/list/dirs = list("north"=NORTH, "west"=WEST, "east"=EAST, "south"=SOUTH)
-		var/choice = input(usr, "Select a direction for the transit area (this should be the direction in which the shuttle is currently facing)", "Transit") as null|anything in dirs
-
-		if(!choice)
-			return
-
-		transit_dir = dirs[choice]
-
-		var/obj/docking_port/destination/D = generate_transit_area(S, transit_dir)
+		var/obj/docking_port/destination/D = generate_transit_area(S)
 		if(!istype(D))
 			to_chat(usr, "<span class='notice'>Transit area generation failed!</span>")
 			return
@@ -5813,7 +6117,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				z_del = new_limit
 			if ("type") // Lifted from "spawn" code.
 				var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Setting the type to delete.") as null|text
-				var/chosen = filter_list_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
+				var/chosen = filter_typelist_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
 				if(!chosen)
 					to_chat(usr, "<span class='warning'>No type chosen.</span>")
 					return
@@ -5896,4 +6200,4 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			text +="</ul>"
 			text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"
 	text += "<A HREF='?src=\ref[src];religions=new'>Bus in a new religion</a> <br/>"
-	usr << browse(jointext(text, ""), "window=admin2;size=300x370")
+	usr << browse(HTML_SKELETON(jointext(text, "")), "window=admin2;size=300x370")

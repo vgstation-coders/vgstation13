@@ -133,6 +133,8 @@
 	sheetamount = 3
 	layer = ABOVE_DOOR_LAYER
 	is_fulltile = TRUE
+	verb_rotates = FALSE
+	alt_click_rotates = FALSE
 
 //Basically the barricade version of full windows, and inherits the former rather than the later
 /obj/structure/window/barricade/full/New(loc)

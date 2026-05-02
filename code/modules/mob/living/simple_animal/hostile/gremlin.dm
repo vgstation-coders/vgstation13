@@ -23,7 +23,7 @@ var/list/bad_gremlin_items = list()
 	//Tampering is handled by the 'npc_tamper()' obj proc
 	wanted_objects = list(
 		/obj/machinery,
-		/obj/structure/sink,
+		/obj/structure/wc/sink,
 		/obj/structure/displaycase
 	)
 

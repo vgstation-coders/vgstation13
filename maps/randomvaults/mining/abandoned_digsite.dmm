@@ -132,9 +132,7 @@
 /turf/unsimulated/floor/asteroid,
 /area/mining_surprise)
 "Q" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mining_surprise)
 "S" = (

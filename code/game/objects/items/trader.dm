@@ -14,21 +14,25 @@
 	areaname = "mecha graveyard"
 
 /datum/map_element/dungeon/mecha_graveyard
+	name = "Mecha Graveyard"
 	file_path = "maps/randomvaults/dungeons/mecha_graveyard.dmm"
 	unique = TRUE
 
+//Ripley wreckage but with enough parts to rebuild
 /obj/effect/decal/mecha_wreckage/graveyard_ripley
 	name = "Ripley wreckage"
-	desc = "Surprisingly well preserved."
 	icon_state = "ripley-broken"
 
 /obj/effect/decal/mecha_wreckage/graveyard_ripley/New()
 	..()
-	var/list/parts = list(/obj/item/mecha_parts/part/ripley_torso,
+	var/list/parts = list(		/obj/item/mecha_parts/chassis/ripley,
+								/obj/item/mecha_parts/part/ripley_torso,
 								/obj/item/mecha_parts/part/ripley_left_arm,
 								/obj/item/mecha_parts/part/ripley_right_arm,
 								/obj/item/mecha_parts/part/ripley_left_leg,
-								/obj/item/mecha_parts/part/ripley_right_leg)
+								/obj/item/mecha_parts/part/ripley_right_leg,
+								/obj/item/weapon/circuitboard/mecha/ripley/peripherals,
+								/obj/item/weapon/circuitboard/mecha/ripley/main)
 	welder_salvage += parts
 
 	if(prob(80))
@@ -36,27 +40,73 @@
 	else
 		add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/drill/diamonddrill,100)
 	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp,100)
-	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/jetpack,100)
+	if(prob(50))
+		return
+	switch(rand(1,3))
+		if(1)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/jetpack,100)
+		if(2)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/passive/rack,100)
+		if(3)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/passive/runningboard,100)
 
 /obj/effect/decal/mecha_wreckage/graveyard_clarke
 	name = "Clarke wreckage"
-	desc = "Surprisingly well preserved."
 	icon_state = "clarke-broken"
 
 /obj/effect/decal/mecha_wreckage/graveyard_clarke/New()
 	..()
-	var/list/parts = list(
+	var/list/parts = list(		/obj/item/mecha_parts/chassis/clarke,
 								/obj/item/mecha_parts/part/clarke_torso,
 								/obj/item/mecha_parts/part/clarke_head,
 								/obj/item/mecha_parts/part/clarke_left_arm,
 								/obj/item/mecha_parts/part/clarke_right_arm,
 								/obj/item/mecha_parts/part/clarke_left_tread,
-								/obj/item/mecha_parts/part/clarke_right_tread)
+								/obj/item/mecha_parts/part/clarke_right_tread,
+								/obj/item/weapon/circuitboard/mecha/clarke/peripherals,
+								/obj/item/weapon/circuitboard/mecha/clarke/main)
 	welder_salvage += parts
 
-	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/collector,100)
 	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/tiler,100)
 	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/switchtool,100)
+	if(prob(50))
+		return
+	switch(rand(1,4))
+		if(1)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/jetpack,100)
+		if(2)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/passive/rack,100)
+		if(3)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/passive/runningboard,100)
+		if(4)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/collector,100)
+
+
+/mob/living/simple_animal/hostile/asteroid/basilisk/skullbot
+	name = "Mysterious skullbot"
+	desc = "A bizarre robot-like thing."
+	icon = 'icons/mecha/mecha.dmi'
+	icon_state = "skullmech"
+	icon_living = "skullmech"
+	icon_aggro = "skullmech-laugh"
+	icon_dead = "skullmech-broken"
+	icon_gib = null
+	move_to_delay = 5
+	projectiletype = /obj/item/projectile/temp/basilisk
+	projectilesound = 'sound/weapons/pierce.ogg'
+	ranged = 1
+	ranged_message = "laughs"
+	melee_damage_lower = 15
+	melee_damage_upper = 30
+	attacktext = "bites into"
+	attack_sound = 'sound/weapons/spiderlunge.ogg'
+
+/mob/living/simple_animal/hostile/asteroid/basilisk/skullbot/death()
+	visible_message("<span class='danger'>\The [src] shatters before dying, leaving some bones.</span>")
+	drop_stack(/obj/item/stack/sheet/bone, loc, 5)
+	new /obj/effect/decal/mecha_wreckage/skullbot(loc)
+	..(TRUE)
+	qdel(src)
 
 /obj/item/weapon/mech_expansion_kit
 	name = "exosuit expansion kit"
@@ -151,7 +201,7 @@
 /obj/structure/wetdryvac/MouseDropFrom(var/obj/O, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!can_use(usr,O))
 		return
-	if(istype(O,/obj/structure/sink))
+	if(istype(O,/obj/structure/wc/sink))
 		if(!reagents.total_volume)
 			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
 			return
@@ -200,12 +250,6 @@
 		else if(P.wet == TURF_WET_WATER)
 			reagents.add_reagent(WATER,1)
 		qdel(P)
-	for(var/obj/effect/ash/A in T)
-		if(reagents.is_full())
-			visible_message(span_warning("\The [src] sputters, wet tank full!"))
-			break
-		reagents.add_reagent(CARBON,1)
-		qdel(A)
 	T.clean_blood()
 	for(var/obj/item/trash/R in T)
 		if(trash.len >= max_trash)
@@ -279,80 +323,3 @@
 		return ..()
 	myvac.whrr(get_turf(target))
 	return 1
-
-/obj/item/weapon/fakeposter_kit
-	name = "cargo cache kit"
-	desc = "Used to create a hidden cache behind what appears to be a cargo poster."
-	icon = 'icons/obj/barricade.dmi'
-	icon_state = "barricade_kit"
-	w_class = W_CLASS_MEDIUM
-	w_type = RECYK_WOOD
-	flammable = TRUE
-
-/obj/item/weapon/fakeposter_kit/preattack(atom/target, mob/user , proximity)
-	if(!proximity)
-		return
-	if(istype(target,/turf/simulated/wall))
-		playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
-		if(do_after(user,target,4 SECONDS))
-			to_chat(user,"<span class='notice'>Using the kit, you hollow out the wall and hang the poster in front.</span>")
-			var/obj/structure/fakecargoposter/FCP = new(target)
-			FCP.access_loc = get_turf(user)
-			qdel(src)
-			return 1
-	else
-		return ..()
-
-/obj/structure/fakecargoposter
-	icon = 'icons/obj/posters.dmi'
-	var/obj/item/weapon/storage/cargocache/cash
-	var/turf/access_loc
-
-/obj/structure/fakecargoposter/New()
-	..()
-	var/datum/poster/type = pick(/datum/poster/special/cargoflag,/datum/poster/special/cargofull)
-	icon_state = initial(type.icon_state)
-	desc = initial(type.desc)
-	name = initial(type.name)
-	cash = new(src)
-
-/obj/structure/fakecargoposter/examine(mob/user)
-	..()
-	if(user.loc == access_loc)
-		to_chat(user, "<span class='info'>Upon closer inspection, there's a hidden cache behind it accessible with a free hand.</span>")
-
-/obj/structure/fakecargoposter/Destroy()
-	for(var/atom/movable/A in cash.contents)
-		A.forceMove(loc)
-	QDEL_NULL(cash)
-	..()
-
-/obj/structure/fakecargoposter/attackby(var/obj/item/weapon/W, mob/user)
-	if(iswelder(W))
-		visible_message("<span class='warning'>[user] is destroying the hidden cache disguised as a poster!</span>")
-		var/obj/item/tool/weldingtool/WT=W
-		if(WT.do_weld(user, src, 10 SECONDS, 5))
-			visible_message("<span class='warning'>[user] destroyed the hidden cache!</span>")
-			qdel(src)
-	else if(user.loc == access_loc)
-		cash.attackby(W,user)
-	else
-		..()
-
-/obj/structure/fakecargoposter/attack_hand(mob/user)
-	if(user.loc == access_loc)
-		cash.AltClick(user)
-
-/obj/item/weapon/storage/cargocache
-	name = "cargo cache"
-	desc = "A large hidey hole for all your goodies."
-	icon = 'icons/obj/posters.dmi'
-	icon_state = "cargoposter-flag"
-	fits_max_w_class = W_CLASS_LARGE
-	max_combined_w_class = 28
-	slot_flags = 0
-
-/obj/item/weapon/storage/cargocache/distance_interact(mob/user)
-	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))
-		return TRUE
-	return FALSE

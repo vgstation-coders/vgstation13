@@ -14,15 +14,23 @@
 
 	// evil infection stuff that will make everyone hate me
 	var/can_infect = 0
-	//How much blood this step can get on surgeon. 1 - hands, 2 - full body.
-	var/blood_level = 0
+	//How much blood this step can get on surgeon. 0 - Bloodless, 1 - hands, 2 - full body.
+	var/blood_level = 1
 	//Whether or not the sound played will be a digging sound or the surgery sound designated by the tools used.
 	var/digging = FALSE
 
 	//returns how well tool is suited for this step
-/datum/surgery_step/proc/tool_quality(obj/item/tool)
+/datum/surgery_step/proc/tool_quality(obj/item/tool, mob/living/user)
 	for (var/T in allowed_tools)
-		if (istype(tool,T))
+		if (!istext(T) && istype(tool,T))
+			return allowed_tools[T]
+		if (!istype(tool,/obj/item))
+			continue
+		if (T == "screwdriver" && tool.is_screwdriver(user))
+			return allowed_tools[T]
+		if (T == "wrench" && tool.is_wrench(user))
+			return allowed_tools[T]
+		if (T == "wirecutter" && tool.is_wirecutter(user))
 			return allowed_tools[T]
 	return 0
 
@@ -69,12 +77,20 @@
 		var/bleeding = user.check_bodypart_bleeding(HANDS)
 		target.oneway_contact_diseases(user,block,bleeding)//potentially spreads diseases from us to them, wear latex gloves!
 
-		if (ishuman(user) && prob(60))
+		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
 			if (blood_level)
 				H.bloody_hands(target, 2)//potentially spreads diseases from them to us, wear latex gloves!
+				tool.add_blood(target, tool.surgery_blood_overlay)
 			if (blood_level > 1)
 				H.bloody_body(target, 0)//potentially spreads diseases from them to us, wear a bio suit, or at least a labcoat!
+				target.spray_blood(get_dir(target, user), rand(2,3))
+				playsound(target, get_sfx("gib"), 30, 1)
+				if(duration > 15)
+					spawn(rand(15,duration))
+						if(H in doing_surgery)		// Did we cancel the step early?
+							target.spray_blood(get_dir(target,user), rand(2,3))	// Again!
+							playsound(target, get_sfx("gib"), 30, 1)
 
 	if(istype(tool,/obj/item/tool/scalpel/laser) || istype(tool,/obj/item/tool/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_on"
@@ -133,7 +149,7 @@
 	for(var/datum/surgery_step/S in surgery_steps)
 		//check if tool is right or close enough and if this step is possible
 		sleep_fail = 0
-		if(S.tool_quality(tool))
+		if(S.tool_quality(tool, user))
 			var/canuse = S.can_use(user, M, target_area, tool)
 			if(canuse == -1)
 				sleep_fail = 1
@@ -148,7 +164,7 @@
 
 				var/selection = user.zone_sel ? user.zone_sel.selecting : null //Check if the zone selection hasn't changed
 				//We had proper tools! (or RNG smiled.) and user did not move or change hands.
-				if(do_mob(user, M, S.duration * tool.toolspeed) && (success_override == SURGERY_SUCCESS_ALWAYS || (success_override == SURGERY_SUCCESS_NORMAL && (prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))))) && (!user.zone_sel || selection == user.zone_sel.selecting)) //Last part checks whether the zone selection hasn't changed
+				if(do_mob(user, M, S.duration * tool.toolspeed) && (success_override == SURGERY_SUCCESS_ALWAYS || (success_override == SURGERY_SUCCESS_NORMAL && (prob(S.tool_quality(tool, user) / (sleep_fail + clumsy + 1))))) && (!user.zone_sel || selection == user.zone_sel.selecting)) //Last part checks whether the zone selection hasn't changed
 					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] successfully completed by [user.name] ([user.ckey])</font>")
 					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Successfully completed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to successfully complete surgery type [S.type] on [M.name] ([M.ckey])</font>")

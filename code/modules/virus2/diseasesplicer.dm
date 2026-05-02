@@ -187,7 +187,7 @@
 
 	if(scanning || splicing)
 		var/image/splicer_glass = image(icon,"splicer_glass")
-		splicer_glass.plane = ABOVE_LIGHTING_PLANE
+		splicer_glass.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		splicer_glass.layer = ABOVE_LIGHTING_LAYER
 		splicer_glass.blend_mode = BLEND_ADD
 		overlays += splicer_glass

@@ -48,7 +48,7 @@
 		return
 
 	if(loaded_food)
-		to_chat(user, "<span class='notice'>There's already [loaded_food] on your [src].</span>")
+		to_chat(user, "<span class='notice'>There's already [loaded_food] on your [src.name].</span>")
 		return
 
 	if(snack.wrapped)
@@ -104,8 +104,7 @@
 
 /obj/item/weapon/kitchen/utensil/spoon/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/spoon/examine(mob/user)
 	..()
@@ -191,6 +190,14 @@
 	w_type = RECYK_PLASTIC
 	flammable = TRUE
 
+/obj/item/weapon/kitchen/utensil/spoon/plastic/teflon
+	name = "teflon spoon"
+	desc = "Less likely to dissolve when scooping up a bowl of mothership stew."
+	icon_state = "tspoon"
+
+/obj/item/weapon/kitchen/utensil/spoon/plastic/teflon/dissolvable()
+	return FALSE
+
 /*
  * Sporks
  */
@@ -207,8 +214,7 @@
 
 /obj/item/weapon/kitchen/utensil/spork/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/spork/examine(mob/user)
 	..()
@@ -297,6 +303,7 @@
 	name = "teflon spork"
 	desc = "Tlork!"
 	icon_state = "tspork"
+	flammable = FALSE
 
 /obj/item/weapon/kitchen/utensil/spork/plastic/teflon/dissolvable()
 	return FALSE
@@ -316,8 +323,7 @@
 
 /obj/item/weapon/kitchen/utensil/fork/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/fork/attack(var/mob/living/carbon/M, var/mob/living/carbon/user)
 	if(!istype(M) || !istype(user))
@@ -391,19 +397,21 @@
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 
-/obj/item/weapon/kitchen/utensil/fork/teflon
+/obj/item/weapon/kitchen/utensil/fork/plastic/teflon
 	name = "teflon fork"
-	desc = "Less likely to dissolve when picking up a forkful of mothership stew."
+	desc = "Tork!"
 	icon_state = "tfork"
-	melt_temperature = MELTPOINT_PLASTIC
-	flammable = TRUE
+	flammable = FALSE
+
+/obj/item/weapon/kitchen/utensil/fork/plastic/teflon/dissolvable()
+	return FALSE
 
 /*
  * Knives
  */
 /obj/item/weapon/kitchen/utensil/knife
 	name = "small knife"
-	desc = "A round tipped knife used to cut food food."
+	desc = "A round tipped knife used to cut food."
 	icon_state = "smallknife"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 5.0
@@ -435,6 +443,18 @@
 	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
+
+/obj/item/weapon/kitchen/utensil/knife/plastic/teflon
+	name = "teflon knife"
+	desc = "More suited for cutting through mothership meals."
+	force = 3 //Yes, it's plastic, but it's SUPER plastic
+	throwforce = 5
+	sharpness = 1
+	icon_state = "tknife"
+	flammable = FALSE
+
+/obj/item/weapon/kitchen/utensil/knife/plastic/teflon/dissolvable()
+	return FALSE
 
 /obj/item/weapon/kitchen/utensil/knife/nazi
 	name = "nazi knife"
@@ -866,3 +886,19 @@
 /obj/item/weapon/tray/proc/whoops()
 	playsound(src, "trayhit", 35, 1)
 	send_items_flying()
+
+
+/obj/item/weapon/kitchen/canopener
+	name = "can opener"
+	desc = "Open soda cans in style."
+	icon_state = "can_opener"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	force = 7
+	w_class = W_CLASS_TINY
+	throwforce = 5
+	throw_speed = 3
+	throw_range = 5
+	flags = FPRINT
+	siemens_coefficient = 1
+	origin_tech = Tc_MATERIALS + "=1"
+	attack_verb = list("attacks", "stabs", "pokes")

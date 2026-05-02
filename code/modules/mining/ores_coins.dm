@@ -49,6 +49,36 @@
 	name = "cave sand"
 	icon_state = "cavesand"
 
+// Handles sand pouring in containers
+/obj/item/stack/ore/glass/afterattack(atom/target, var/mob/user, var/adjacency_flag, var/click_params)
+	var/static/list/allowed_targets = list(/obj/item/weapon/reagent_containers, /obj/structure/reagent_dispensers/cauldron)
+	if(!adjacency_flag || !is_type_in_list(target, allowed_targets) || !target.is_open_container())
+		return
+
+	if(materials.getAmount(MAT_GLASS) <= 0)
+		to_chat(user, "<span class='notice'>\The [src] seems to be empty, somehow. It dissolves away.</span>")
+		qdel(src)
+
+	if(target.reagents.is_full())
+		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
+		return
+
+	var/datum/material/mat = materials.getMaterial(MAT_GLASS)
+	var/tx_amount = U_PER_SHEET * materials.getAmount(MAT_GLASS)/mat.cc_per_sheet
+	if(tx_amount <= 0)
+		to_chat(user, "<span class='warning'>You can't seem to be able to pour \the [src] into \the [target]. Make a bug report!</span>")
+		return
+
+	target.reagents.add_reagent(SILICA,tx_amount)
+	materials.removeAmount(MAT_GLASS,tx_amount*mat.cc_per_sheet)
+	if(materials.getAmount(MAT_GLASS) <= 0)
+		user.visible_message("<span class='warning'>[user] pours \the [src] into \the [target].</span>", \
+			self_message = "<span class='notice'>You pour \the [src] into \the [target].[target.reagents.is_full()? " It is now full." : ""]</span>", range = 2)
+		qdel(src)
+	else
+		user.visible_message("<span class='warning'>[user] pours \the [src] into \the [target].</span>", \
+			self_message = "<span class='notice'>You partially pour \the [src] into \the [target].[target.reagents.is_full()? " It is now full." : ""]</span>", range = 2)
+
 /obj/item/stack/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
 	var/turf/T //turf to extinguish
@@ -82,6 +112,13 @@
 /obj/item/stack/ore/glass/New(var/loc, var/amount=null)
 	recipes = sand_recipes
 	..()
+
+/obj/item/stack/ore/glass/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W))
+		var/obj/item/weapon/bikehorn/honker = W
+		if(honker.can_honk_baton)
+			user.create_in_hands(honker, /obj/item/weapon/bikehorn/ankhhorn, src, uses=1, msg = "<span class='notice'>You call upon the blessings of the Sun God as you cover \the [W] with \the [src].</span>")
 
 /obj/item/stack/ore/plasma
 	name = "\improper plasma ore"
@@ -533,7 +570,7 @@
 		string_attached = 1
 		to_chat(user, "<span class='notice'>You attach a string to \the [name].</span>")
 		CC.use(1)
-	else if(istype(W,/obj/item/tool/wirecutters) )
+	else if(W.is_wirecutter(user))
 		if(!string_attached)
 			..()
 			return

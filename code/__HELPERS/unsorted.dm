@@ -3,8 +3,13 @@
 /*
  * A large number of misc global procs.
  */
-/proc/sign(x)
-	return x!=0?x/abs(x):0
+///proc/sign(x)
+//	return x!=0?x/abs(x):0
+
+/// Return html to load a url.
+/// for use inside of browse() calls to html assets that might be loaded on a cdn.
+/proc/url2htmlloader(url)
+	return {"<html><head><meta http-equiv="refresh" content="0;URL='[url]'"/></head><body onLoad="parent.location='[url]'"></body></html>"}
 
 /proc/getline(atom/M,atom/N)//Ultra-Fast Bresenham Line-Drawing Algorithm
 	var/px=M.x		//starting x
@@ -508,7 +513,7 @@
 	var/holding = user.get_active_hand()
 	var/delayfraction = round(delay/numticks)
 	var/image/progbar
-	if(user && user.client && user.client.prefs.progress_bars)
+	if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars))
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.plane = HUD_PLANE
@@ -519,7 +524,7 @@
 			//barbar.pixel_y = 36
 	//var/oldstate
 	for (var/i = 1 to numticks)
-		if(user && user.client && user.client.prefs.progress_bars && progbar)
+		if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars) && progbar)
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar
@@ -551,8 +556,12 @@
 /proc/do_after_many(var/mob/user, var/list/targets, var/delay, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
 	if(!user || numticks == 0 || !targets || !targets.len)
 		return 0
+	if(delay <= 0)
+		return TRUE //instant finish speed so no need for any of the below code
 
 	var/delay_fraction = round(delay / numticks)
+	if(delay_fraction == 0)
+		return TRUE //A sleep(0) below means instant finish speed, the progbar isn't even shown to the user since it finishes so fast.
 	if(istype(user.loc, /obj/mecha))
 		use_user_turf = TRUE
 	var/initial_user_location = use_user_turf ? get_turf(user) : user.loc
@@ -561,7 +570,7 @@
 	for(var/atom/target in targets)
 		initial_target_locations[target] = target.loc
 
-	if(user.client && user.client.prefs.progress_bars)
+	if(user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars))
 		for(var/target in targets)
 			if(!targets[target])
 				var/image/new_progress_bar = create_progress_bar_on(target)
@@ -570,7 +579,7 @@
 	for(var/i = 1 to numticks)
 		for(var/target in targets)
 			var/image/target_progress_bar = targets[target]
-			target_progress_bar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+			target_progress_bar?.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 		sleep(delay_fraction)
 		var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
 		for(var/atom/target in targets)
@@ -606,6 +615,8 @@
 		progress_bar.loc = null
 
 /proc/stop_progress_bar(var/mob/user, var/image/progress_bar)
+	if(!progress_bar || !user)
+		return
 	progress_bar.icon_state = "prog_bar_stopped"
 	spawn(0.2 SECONDS)
 		remove_progress_bar(user, progress_bar)
@@ -639,7 +650,7 @@
   * Arguments:
   * * mob/user - the user who will see the progress bar
   * * atom/target - the atom the progress bar will be attached to
-  * * delay - duration in deciseconds of the delay
+  * * delay - duration in deciseconds of the delay. If this is below numticks or is <=0, this will return TRUE instantly.
   * * numticks - how many times the failure conditions will be checked throughout the duration. default 10
   * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration. default TRUE
   * * use_user_turf - if TRUE, the turf of the user is checked instead of its location. default FALSE
@@ -648,10 +659,14 @@
 /proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks)
 	if(!user || isnull(user))
 		return 0
+	if(delay <= 0)
+		return TRUE //instant finish speed so no need for any of the below code
 	if(numticks == 0)
 		return 0
 
 	var/delayfraction = round(delay/numticks)
+	if(delayfraction == 0)
+		return TRUE //A sleep(0) below means instant finish speed, the progbar isn't even shown to the user since it finishes so fast.
 	var/Location
 	if(istype(user.loc, /obj/mecha))
 		use_user_turf = TRUE
@@ -663,7 +678,7 @@
 	var/target_location = target.loc
 	var/image/progbar
 	//var/image/barbar
-	if(user && user.client && user.client.prefs.progress_bars && target)
+	if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars) && target)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.pixel_z = WORLD_ICON_SIZE
@@ -671,7 +686,7 @@
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
 			progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 	for (var/i = 1 to numticks)
-		if(user && user.client && user.client.prefs.progress_bars && target)
+		if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars) && target)
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 				progbar.pixel_z = WORLD_ICON_SIZE
@@ -761,108 +776,6 @@
 /datum/coords/proc/add(var/datum/coords/C)
 	var/datum/coords/CR = new(x_pos+C.x_pos,y_pos+C.y_pos,z_pos+C.z_pos)
 	return CR
-
-// If you're looking at this proc and thinking "that's exactly what I need!"
-// then you're wrong and you need to take a step back and reconsider.
-/atom/movable/proc/DuplicateObject(var/location)
-	var/atom/movable/duplicate = new src.type(location)
-	duplicate.change_dir(dir)
-	duplicate.plane = plane
-	duplicate.layer = layer
-	duplicate.name = name
-	duplicate.desc = desc
-	duplicate.pixel_x = pixel_x
-	duplicate.pixel_y = pixel_y
-	duplicate.pixel_w = pixel_w
-	duplicate.pixel_z = pixel_z
-	return duplicate
-
-/area/proc/copy_contents_to(area/A , platingRequired = FALSE)
-	//Takes: Area. Optional: If it should copy to areas that don't have plating
-	//Returns: Nothing.
-	//Notes: Attempts to move the contents of one area to another area.
-	//       Movement based on lower left corner. Tiles that do not fit
-	//		 into the new area will not be moved.
-
-	if(!A || !src)
-		return 0
-
-	var/list/turfs_src = get_area_turfs(src.type)
-	var/list/turfs_trg = get_area_turfs(A.type)
-
-	var/src_min_x = 0
-	var/src_min_y = 0
-	for (var/turf/T in turfs_src)
-		if(T.x < src_min_x || !src_min_x)
-			src_min_x	= T.x
-		if(T.y < src_min_y || !src_min_y)
-			src_min_y	= T.y
-
-	var/trg_min_x = 0
-	var/trg_min_y = 0
-	for (var/turf/T in turfs_trg)
-		if(T.x < trg_min_x || !trg_min_x)
-			trg_min_x	= T.x
-		if(T.y < trg_min_y || !trg_min_y)
-			trg_min_y	= T.y
-
-	var/list/refined_src = new/list()
-	for(var/turf/T in turfs_src)
-		refined_src += T
-		refined_src[T] = new/datum/coords
-		var/datum/coords/C = refined_src[T]
-		C.x_pos = (T.x - src_min_x)
-		C.y_pos = (T.y - src_min_y)
-
-	var/list/refined_trg = new/list()
-	for(var/turf/T in turfs_trg)
-		refined_trg += T
-		refined_trg[T] = new/datum/coords
-		var/datum/coords/C = refined_trg[T]
-		C.x_pos = (T.x - trg_min_x)
-		C.y_pos = (T.y - trg_min_y)
-
-	var/list/copiedobjs = list()
-
-	moving:
-		for (var/turf/T in refined_src)
-			var/datum/coords/C_src = refined_src[T]
-			for (var/turf/B in refined_trg)
-				var/datum/coords/C_trg = refined_trg[B]
-				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)
-					var/old_name = T.name
-					var/old_dir = T.dir
-					var/old_icon_state = T.icon_state
-					var/old_icon = T.icon
-
-					if(platingRequired)
-						if(istype(B, /turf/space))
-							continue moving
-
-					B.ChangeTurf(T.type)
-					B.name = old_name
-					B.dir = old_dir
-					B.icon_state = old_icon_state
-					B.icon = old_icon
-
-					B.return_air().copy_from(T.return_air())
-
-					for(var/obj/O in T)
-						copiedobjs += O.DuplicateObject(B)
-
-					for(var/mob/M in T)
-						if(!M.can_shuttle_move())
-							continue
-						copiedobjs += M.DuplicateObject(B)
-
-					refined_src -= T
-					refined_trg -= B
-					continue moving
-
-	for(var/obj/machinery/door/new_door in copiedobjs)
-		new_door.update_nearby_tiles()
-
-	return copiedobjs
 
 /proc/view_or_range(distance = world.view , center = usr , type)
 	switch(type)
@@ -1218,7 +1131,7 @@ var/mob/dview/tview/tview_mob = new()
 		result = "-[result]"
 	return result
 
-/proc/get_random_colour(var/simple, var/lower, var/upper)
+/proc/get_random_colour(var/simple = FALSE, var/lower = 0, var/upper = 255)
 	var/colour
 	if(simple)
 		colour = pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))
@@ -1315,12 +1228,12 @@ Game Mode config tags:
 			. += M.client
 
 /client/proc/output_to_special_tab(msg, force_focus = FALSE)
-	if(prefs.special_popup)
+	if(prefs.get_pref(/datum/preference_setting/enum/special_popup))
 		src << output("\[[time_stamp()]] [msg]", "window1.msay_output")
 		if(!holder) //Force normal players to see the admin message when it gets sent to them
 			winset(src, "rpane.special_button", "is-checked=true")
 			winset(src, null, "rpanewindow.left=window1")
-	if(prefs.special_popup == SPECIAL_POPUP_EXCLUSIVE)
+	if(prefs.get_pref(/datum/preference_setting/enum/special_popup) == SPECIAL_POPUP_EXCLUSIVE)
 		return
 	to_chat(src, msg)
 
@@ -1445,7 +1358,7 @@ Game Mode config tags:
         var/mob/M = C
         if(M.client)
             C = M.client
-    if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
+    if(!istype(C) || (!C.prefs.get_pref(/datum/preference_setting/toggle/window_flashing) && !ignorepref))
         return
     winset(C, "mainwindow", "flash=5")
 

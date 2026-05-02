@@ -50,9 +50,7 @@
 	var/tank_slot_name = "suit storage"
 	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.
 	to_chat(H, "<span class='notice'>You are now running on plasma internals from the [H.s_store] in your [tank_slot_name].  You must breathe plasma in order to survive, and are extremely flammable.</span>")
-	H.internal = H.get_item_by_slot(tank_slot)
-	if (H.internals)
-		H.internals.icon_state = "internal1"
+	H.equip_internals(H.get_item_by_slot(tank_slot))
 
 /datum/species/plasmaman/can_artifact_revive()
 	return 0
@@ -68,12 +66,11 @@
 			if(environment.total_moles && ((environment[GAS_OXYGEN] / environment.total_moles) >= OXYCONCEN_PLASMEN_IGNITION)) //How's the concentration doing?
 				if(!host.on_fire)
 					to_chat(host, "<span class='warning'>Your body reacts with the atmosphere and bursts into flame!</span>")
-				host.adjust_fire_stacks(0.5)
 				host.ignite()
 	else
 		var/obj/item/clothing/suit/PS=host.wear_suit
 		if(istype(PS))
-			if(host.fire_stacks > 0)
+			if(host.on_fire)
 				PS.Extinguish(host)
 			else
 				PS.regulate_temp_of_wearer(host)

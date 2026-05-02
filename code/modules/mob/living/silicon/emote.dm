@@ -1,11 +1,11 @@
 /datum/emote/silicon
-	mob_type_allowed_typelist = list(/mob/living/silicon)
+	mob_type_allowed_typelist = list(/mob/living/silicon, /mob/living/carbon/brain, /mob/living/simple_animal/spiderbot)
 	emote_type = EMOTE_AUDIBLE
 	var/module_quirk_required
 	var/pai_software_required
 
 /datum/emote/sound/silicon
-	mob_type_allowed_typelist = list(/mob/living/silicon, /mob/living/carbon/brain)
+	mob_type_allowed_typelist = list(/mob/living/silicon, /mob/living/carbon/brain, /mob/living/simple_animal/spiderbot)
 	emote_type = EMOTE_AUDIBLE
 	var/module_quirk_required
 	var/pai_software_required
@@ -15,6 +15,8 @@
 	if (. && isbrain(user) && !module_quirk_required)
 		return TRUE
 	if (. && isAI(user) && !module_quirk_required)
+		return TRUE
+	if (. && istype(user, /mob/living/simple_animal/spiderbot))
 		return TRUE
 	var/mob/living/silicon/pai/the_pai = user
 	if (. && istype(the_pai) && (!pai_software_required || (pai_software_required in the_pai.software)))
@@ -27,6 +29,12 @@
 
 /datum/emote/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
 	. = ..()
+	if (. && isbrain(user) && !module_quirk_required)
+		return TRUE
+	if (. && isAI(user) && !module_quirk_required)
+		return TRUE
+	if (. && istype(user, /mob/living/simple_animal/spiderbot))
+		return TRUE
 	var/mob/living/silicon/pai/the_pai = user
 	if (. && istype(the_pai) && (!pai_software_required || (pai_software_required in the_pai.software)))
 		return TRUE
@@ -118,7 +126,7 @@
 	set name = "Power Warning"
 
 	if(stat != DEAD)
-		if(!cell || !cell.charge)
+		if(!get_cell_charge(src))
 			visible_message("The power warning light on <span class='name'>[src]</span> flashes urgently.")
 			to_chat(src, "<span class='info' style=\"font-family:Courier\">You announce you are operating in low power mode.</span>")
 			playsound(loc, 'sound/machines/buzz-two.ogg', 50, 0)

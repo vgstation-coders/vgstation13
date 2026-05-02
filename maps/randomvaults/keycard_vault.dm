@@ -21,7 +21,7 @@
 	thevault = new /datum/map_element/dungeon/keycard_vault
 	thevault.file_path = "maps/randomvaults/dungeons/keycard_vault_[difficulty].dmm"
 	thevault.parent = src
-	load_dungeon(thevault,rotation)
+	load_dungeon(thevault,rotation,TRUE)
 	var/static/list/keycard_find_types = list(
 		KEYCARD_DIFFICULTY_EASY = /datum/map_element/keycard_find_easy,
 		KEYCARD_DIFFICULTY_NORMAL = /datum/map_element/keycard_find_normal,
@@ -43,7 +43,7 @@
 		new key_type(get_turf(LM))
 		qdel(LM)
 
-/datum/map_element/vault/keycards/load()
+/datum/map_element/vault/keycards/load(x,y,z,rotate=0,overwrite=FALSE,override_can_rotate=FALSE)
 	. = ..()
 	var/list/turfs = .
 	ASSERT(thevault)
@@ -75,7 +75,7 @@
 	file_path = "maps/randomvaults/dungeons/keycard_vault_normal.dmm"
 	var/datum/map_element/vault/keycards/parent
 
-/datum/map_element/dungeon/keycard_vault/load()
+/datum/map_element/dungeon/keycard_vault/load(x,y,z,rotate=0,overwrite=FALSE,override_can_rotate=FALSE)
 	. = ..()
 	var/list/turfs = .
 	ASSERT(parent)
@@ -191,7 +191,7 @@
 
 /obj/item/keycard
 	name = "mysterious keycard"
-	desc = "A keycard for opening a door somewhere"
+	desc = "A keycard for opening a door somewhere."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "keycard"
 	var/insert_type = 0 // What kind of bitflag does this access on the door?

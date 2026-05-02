@@ -118,7 +118,7 @@
 	icon_state = "syndicate"
 	item_state = "bl_suit"
 	_color = "syndicate"
-	desc = "it's a cybernetically enhanced jumpsuit used for administrative duties."
+	desc = "It's a cybernetically enhanced jumpsuit used for administrative duties."
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
@@ -899,9 +899,23 @@
 	item_state = "callum_suit"
 	_color = "callum_suit"
 
+/obj/item/clothing/under/tian
+	name = "tian dress"
+	desc = "Custom-made for a warrior, long long ago."
+	icon_state = "tian_dress"
+	item_state = "tian_dress"
+	_color = "tian_dress"
+
+/obj/item/clothing/under/matsuda
+	name = "disheveled jumpsuit"
+	desc = "A rolled down jumpsuit and undershirt combo, styled after old Martian actress."
+	icon_state = "matsuda"
+	item_state = "matsuda"
+	_color = "matsuda"
+
 /obj/item/clothing/under/clownsuit
 	name = "formal clown outfit"
-	desc = "for clowns living in a society."
+	desc = "For clowns living in a society."
 	icon_state = "clownsuit"
 	item_state = "clownsuit"
 	_color = "clownsuit"
@@ -923,6 +937,8 @@
 	desc = "Do you know the definition of insanity?"
 	icon_state = "clownpsyche"
 	item_state = "clownpsyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	luminosity = 2
 	_color = "clownpsyche"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED)
@@ -1004,7 +1020,7 @@
 
 /obj/item/clothing/under/hunter
 	name = "modern vampire hunter's attire"
-	desc = "A tough leather vest with stylish white pants"
+	desc = "A tough leather vest with stylish white pants."
 	icon_state = "hunter"
 	item_state = "hunter_uniform"
 	_color = "hunter"
@@ -1109,3 +1125,21 @@
 	dyeable_parts = list("drape","trim")
 	clothing_flags = COLORS_OVERLAY
 	color = COLOR_LINEN
+
+/obj/item/clothing/under/sonicman
+	name = "sonicman suit"
+	desc = "Did you call me?"
+	icon_state = "sonicmansuit"
+	item_state = "sonicmansuit"
+	_color = "sonicmansuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/under/lepre
+	name = "Leprechaun outfit"
+	desc = "Shipping off to Boston!"
+	icon_state = "lepre"
+	item_state = "lepre"
+	_color = "lepre"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)

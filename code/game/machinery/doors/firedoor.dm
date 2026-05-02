@@ -77,6 +77,8 @@ var/global/list/alert_overlays_global = list()
 	animation_delay_predensity_opening = 3
 	animation_delay_predensity_closing = 7
 
+	machine_flags = SCREWTOGGLE | EMAGGABLE
+
 	var/list/alert_overlays_local
 
 	var/blocked = 0
@@ -242,6 +244,8 @@ var/global/list/alert_overlays_global = list()
 	return
 
 /obj/machinery/door/firedoor/attack_ai(mob/user,var/override=FALSE)
+	if(is_pulselocked(user))
+		return
 	if(!isAdminGhost(user) && (isobserver(user) || user.stat))
 		return
 	spawn()
@@ -304,7 +308,7 @@ var/global/list/alert_overlays_global = list()
 
 	if(iswelder(C))
 		var/obj/item/tool/weldingtool/W = C
-		if(W.remove_fuel(0, user))
+		if(W.remove_fuel(1, user))
 			blocked = !blocked
 			user.visible_message("<span class='attack'>\The [user] [blocked ? "welds" : "unwelds"] \the [src] with \a [W].</span>",\
 			"You [blocked ? "weld" : "unweld"] \the [src] with \the [W].",\
@@ -359,14 +363,7 @@ var/global/list/alert_overlays_global = list()
 		else
 			to_chat(user, "<span class = 'attack'>\The [src] is not welded or otherwise blocked.</span>")
 
-	if(isEmag(C))
-		if(density)
-			door_animate("spark")
-			sleep(6)
-			force_open(user, C)
-			sleep(8)
-		blocked = TRUE
-		update_icon()
+	if(emag_check(C,user))
 		return
 
 	do_interaction(user, C)
@@ -379,16 +376,23 @@ var/global/list/alert_overlays_global = list()
 			flick("door_closing", src)
 		if("spark")
 			flick("door_spark", src)
-			anim(target = src, a_icon = icon, flick_anim = "door_spark-moody", sleeptime = 10, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+			var/area/here = get_area(src)
+			if (here && here.dynamic_lighting)
+				anim(target = src, a_icon = icon, flick_anim = "door_spark-moody", sleeptime = 10, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 		if("deny")
 			flick("door_deny", src)
-			anim(target = src, a_icon = icon, flick_anim = "door_deny-moody", sleeptime = 5, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+			var/area/here = get_area(src)
+			if (here && here.dynamic_lighting)
+				anim(target = src, a_icon = icon, flick_anim = "door_deny-moody", sleeptime = 5, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 
-/obj/machinery/door/firedoor/emag_ai(mob/living/silicon/ai/A)
+/obj/machinery/door/firedoor/emag_act(mob/user)
 	if(density)
 		door_animate("spark")
 		sleep(6)
-		open()
+		if(isAI(user) || ispulsedemon(user))
+			open()
+		else
+			force_open(user)
 		sleep(8)
 	blocked = TRUE
 	update_icon()

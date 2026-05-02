@@ -472,7 +472,7 @@
 		if (iscultist(M.current))//failsafe for cultist brains put in MMIs
 			to_chat(M.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[reminder]</span></span>")
 			to_chat(M.current, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
-			M.store_memory("Cult reminder: [text].")
+			M.store_memory("Cult reminder: [text].", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 
 	for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
 		to_chat(A, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinisterbig'>[reminder]</span></span>. (Cult reminder)")
@@ -1109,7 +1109,7 @@ var/list/converted_minds = list()
 				if (istype(victim.handcuffed,/obj/item/weapon/handcuffs/cult))
 					victim.drop_from_inventory(victim.handcuffed)
 				//and their loyalty implants are removed, so they can't mislead security, not that the conversion should even go through
-				victim.implant_pop()
+				victim.implant_pop()//but it does prevent funny players from implanting people right before the ritual concludes
 				for(var/obj/item/weapon/implant/holy/H in victim)
 					to_chat(victim, "<span class='warning'>The ritual's energies have completely fried the holy implant that was lodged in your skull.</span>")
 					qdel(H)

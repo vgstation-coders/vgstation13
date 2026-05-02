@@ -1,0 +1,73 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/structure/flora/tree/pine,
+/turf/template_noop,
+/area/template_noop)
+"l" = (
+/turf/template_noop,
+/area/template_noop)
+"n" = (
+/obj/abstract/loot_spawner/combat,
+/turf/template_noop,
+/area/template_noop)
+
+(1,1,1) = {"
+l
+l
+l
+a
+l
+l
+l
+a
+"}
+(2,1,1) = {"
+l
+a
+l
+l
+l
+l
+a
+l
+"}
+(3,1,1) = {"
+l
+l
+l
+n
+a
+l
+l
+l
+"}
+(4,1,1) = {"
+l
+l
+l
+l
+l
+l
+l
+a
+"}
+(5,1,1) = {"
+l
+l
+a
+l
+l
+a
+l
+l
+"}
+(6,1,1) = {"
+a
+l
+l
+l
+l
+l
+l
+a
+"}

@@ -1,15 +1,15 @@
 
 /datum/artifact_effect/radiate
 	effecttype = "radiate"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_MARTIAN)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_MARTIAN)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	var/radiation_amount
 	copy_for_battery = list("radiation_amount")
+	effect_hint = EFFECT_HINT_HIGH_FREQUENCY_PARTICLES
 
 /datum/artifact_effect/radiate/New()
 	..()
 	radiation_amount = rand(1, 10)
-	effect_type = pick(4,5)
 
 /datum/artifact_effect/radiate/DoEffectTouch(var/mob/living/user)
 	if(user)

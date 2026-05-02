@@ -16,13 +16,15 @@
 	if (open)
 		overlays += image(icon = 'icons/obj/drinks.dmi', icon_state = "soda_open")
 
+/obj/item/canned_heat/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/kitchen/canopener))
+		if(!open)
+			return pop_open(user)
+
 /obj/item/canned_heat/attack_self(var/mob/user)
 	if (!open)
-		to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
-		open = TRUE
-		playsound(user, pick(open_sounds), 50, 1)
-		update_icon()
-		heat_up(user)
+		pop_open(user)
 	else if (user.a_intent == I_HURT)
 		var/turf/T = get_turf(user)
 		user.drop_item(src, T, 1)
@@ -31,6 +33,13 @@
 		user.put_in_active_hand(crushed_can)
 		playsound(user, 'sound/items/can_crushed.ogg', 75, 1)
 		qdel(src)
+
+/obj/item/canned_heat/proc/pop_open(var/mob/user)
+		to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
+		open = TRUE
+		playsound(user, pick(open_sounds), 50, 1)
+		update_icon()
+		heat_up(user)
 
 /obj/item/canned_heat/proc/heat_up(var/mob/user)
 	if (istype(user.loc, /obj/machinery/atmospherics/pipe))

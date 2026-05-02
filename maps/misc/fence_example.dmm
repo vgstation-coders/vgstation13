@@ -80,9 +80,7 @@
 /turf/simulated/floor,
 /area/prison/solitary)
 "j" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
@@ -90,9 +88,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "k" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -105,9 +101,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "l" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 8;
@@ -121,9 +115,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "n" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -133,9 +125,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "o" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/cable,
 /obj/structure/cable{
 	d2 = 4;
@@ -144,9 +134,7 @@
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "p" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -175,43 +163,13 @@
 /obj/structure/cable,
 /turf/simulated/floor/engine,
 /area/prison/solitary)
-"t" = (
-/obj/structure/fence,
-/turf/simulated/floor/plating,
-/area/prison/solitary)
 "u" = (
 /obj/structure/fence,
 /obj/structure/cable,
 /turf/simulated/floor/engine,
 /area/prison/solitary)
-"v" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
-/turf/simulated/floor{
-	icon_state = "cult"
-	},
-/area/prison/solitary)
-"w" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "cult"
-	},
-/area/prison/solitary)
 "x" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "cult"
-	},
-/area/prison/solitary)
-"y" = (
-/obj/structure/fence/corner{
-	dir = 4
-	},
+/obj/structure/fence/post,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -235,70 +193,30 @@
 	icon_state = "cult"
 	},
 /area/prison/solitary)
-"C" = (
-/obj/structure/fence/cut/small,
-/turf/simulated/floor/plating,
-/area/prison/solitary)
-"D" = (
-/obj/structure/fence/cut/medium,
-/turf/simulated/floor/plating,
-/area/prison/solitary)
-"E" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/simulated/floor{
-	icon_state = "cult"
-	},
-/area/prison/solitary)
 "F" = (
-/obj/structure/fence/door/secure/from_south,
+/obj/structure/fence/door/secure/inverted,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
-/area/prison/solitary)
-"G" = (
-/obj/structure/fence/corner,
-/turf/simulated/floor{
-	icon_state = "cult"
-	},
-/area/prison/solitary)
-"H" = (
-/obj/structure/fence/cut/large,
-/turf/simulated/floor/plating,
-/area/prison/solitary)
-"I" = (
-/obj/structure/fence/post{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
 /area/prison/solitary)
 "J" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "K" = (
-/obj/structure/fence/cut/large{
-	dir = 4
-	},
+/obj/structure/fence/cut/large,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "L" = (
-/obj/structure/fence/cut/medium{
-	dir = 4
-	},
+/obj/structure/fence/cut/medium,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "M" = (
-/obj/structure/fence/cut/small{
-	dir = 4
-	},
+/obj/structure/fence/cut/small,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 "N" = (
-/obj/structure/fence/door/secure/from_south,
+/obj/structure/fence/door/secure/inverted,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 
@@ -353,16 +271,16 @@ g
 g
 a
 q
-t
-t
-t
-t
-t
-t
-C
-D
-H
-t
+J
+J
+J
+J
+J
+J
+M
+L
+K
+J
 q
 a
 g
@@ -386,7 +304,7 @@ r
 r
 r
 r
-I
+q
 g
 a
 "}
@@ -420,13 +338,13 @@ g
 k
 r
 r
-v
 z
 z
 z
 z
 z
-E
+z
+z
 r
 r
 r
@@ -442,13 +360,13 @@ g
 k
 r
 r
-w
+z
 A
 A
 A
 A
 A
-w
+z
 r
 r
 r
@@ -464,13 +382,13 @@ h
 l
 r
 r
-w
+z
 A
 A
 A
 A
 A
-w
+z
 r
 r
 r
@@ -486,13 +404,13 @@ g
 m
 r
 r
-w
+z
 A
 A
 A
 A
 A
-w
+z
 r
 r
 r
@@ -530,13 +448,13 @@ g
 m
 r
 r
-w
+z
 A
 A
 A
 A
 A
-w
+z
 r
 r
 r
@@ -552,13 +470,13 @@ h
 o
 r
 r
-w
+z
 A
 A
 A
 A
 A
-w
+z
 r
 r
 r
@@ -574,13 +492,13 @@ g
 k
 r
 r
-w
+z
 A
 A
 A
 A
 A
-w
+z
 r
 r
 r
@@ -596,13 +514,13 @@ g
 k
 r
 r
-y
 z
 z
 z
 z
 z
-G
+z
+z
 r
 r
 r
@@ -650,7 +568,7 @@ r
 r
 r
 r
-I
+q
 g
 a
 "}
@@ -661,16 +579,16 @@ g
 g
 a
 q
-t
-t
-t
-t
-t
-t
-t
-t
-t
-t
+J
+J
+J
+J
+J
+J
+J
+J
+J
+J
 q
 a
 g

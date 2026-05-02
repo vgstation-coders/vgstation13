@@ -101,7 +101,7 @@
 			eye_blurry = 0
 		else if(eye_blind)		       //Blindness, heals slowly over time
 			eye_blind =  max(eye_blind - 1, 0)
-			blinded =    1
+			//blinded =    1, the blindness here is now handled by get_impaired_vision_range() and enable_nearsightedness()
 		else if(istype(glasses, /obj/item/clothing/glasses/sunglasses/blindfold)) //Resting your eyes with a blindfold heals blurry eyes faster
 			eye_blurry = max(eye_blurry - 3, 0)
 			blinded =    1

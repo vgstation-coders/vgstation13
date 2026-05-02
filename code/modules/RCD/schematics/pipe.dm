@@ -477,7 +477,7 @@
 		set_dir(dirs[index])
 
 /datum/rcd_schematic/pipe/attack(var/atom/A, var/mob/user, frequency, id)
-	to_chat(user, "Building Pipes ...")
+	to_chat(user, "Building Pipes...")
 	playsound(user, 'sound/machines/click.ogg', 50, 1)
 	var/thislayer = layer
 	var/thisdir = selected_dir
@@ -543,7 +543,7 @@
 	return "<a href='?src=\ref[master.interface];set_dir=[dir]'[selected] title='[title]'><img src='RPD_D_[pipe_id]_[dir].png'/></a>"
 
 /datum/rcd_schematic/pipe/disposal/attack(var/atom/A, var/mob/user)
-	to_chat(user, "Building Pipes ...")
+	to_chat(user, "Building Pipes...")
 	playsound(user, 'sound/machines/click.ogg', 50, 1)
 	var/thisdir = selected_dir
 	if(!master.delay(user, A, 2 SECONDS))

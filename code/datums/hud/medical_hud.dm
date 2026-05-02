@@ -13,7 +13,8 @@
 	var/image/holder
 	var/turf/T
 	T = get_turf(M)
-	for(var/mob/living/simple_animal/mouse/patient in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	var/list/patientlist = M.loneliness_affected() ? list(M) : range(C.view+DATAHUD_RANGE_OVERHEAD,T)
+	for(var/mob/living/simple_animal/mouse/patient in patientlist)
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
@@ -39,7 +40,7 @@
 						holder.icon_state = "hudhealthy"
 			C.images += holder
 
-	for(var/mob/living/simple_animal/hostile/necro/zombie/patient in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	for(var/mob/living/simple_animal/hostile/necro/zombie/patient in patientlist)
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
@@ -52,7 +53,7 @@
 				holder.icon_state = "hudundead"
 			C.images += holder
 
-	for(var/mob/living/carbon/patient in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	for(var/mob/living/carbon/patient in patientlist)
 		if (ishuman(patient))
 			var/mob/living/carbon/human/H = patient
 			if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
