@@ -2862,16 +2862,13 @@
 
 /datum/recipe/vreemdkoekje
 	reagents = list(FLOUR = 30, ZETADUST = 30)
-	result = /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje_helper_dummy
+	result = /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje
 
-/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje_helper_dummy
-	name = "Other Helper Dummy"
-	desc = "You should never see this text."
-
-/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje_helper_dummy/New()
-	for(var/i = 1 to 6)
-		new /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje(get_turf(src))
-	qdel(src)
+/datum/recipe/vreemdkoekje/make_food(obj/container, mob/user)
+	// fixing a buggy old hack, dont ask any questions
+	for (var/i = 1 to 5)
+		new result(get_turf(container))
+	return ..()
 
 /datum/recipe/pimiento
 	items = list(
