@@ -890,6 +890,22 @@
 /datum/disease2/effect/toothdecay/affect_mob_voice(var/datum/speech/speech)
 	speech.message = piratespeech(speech.message)
 
+/datum/disease2/effect/norris
+	name = "Norris Syndrome"
+	desc = "Causes the infected to kick ass."
+	encyclopedia = "Symptom strength increases kick frequency."
+	stage = 3
+	badness = EFFECT_DANGER_HARMFUL
+	multiplier = 1
+	max_multiplier = 5
+
+/datum/disease2/effect/norris/activate(var/mob/living/mob)
+	if (prob(20 * multiplier) && ishuman(mob))
+		if(mob.reagents && prob(50))
+			mob.reagents.add_reagent(GYRO,1)
+		var/atom/A = pick(adjacent_atoms(mob))
+		if(A)
+			A.kick_act(mob)
 
 /datum/disease2/effect/cult_vomit
 	name = "Hemoptysis"
