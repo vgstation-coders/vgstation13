@@ -16,8 +16,8 @@
 	var/obj/item/weapon/cell/bcell = null
 	var/hitcost = 100 // 10 hits on crap cell
 	var/stunsound = 'sound/weapons/Egloves.ogg'
-	var/vismsg = TRUE
 	var/can_swap_cell = TRUE // Determines whether the cell can be swapped
+	var/has_stun_message = TRUE // Determines if it'll say that the target has been stunned. Only important for the alien stun probe currently
 	var/attacklogverb = "stunned"
 	hitsound = "swing_hit"
 
@@ -195,7 +195,7 @@
 		L.lastattacker = user
 
 		apply_baton_effect(L)
-		if(vismsg)
+		if(has_stun_message)
 			L.visible_message("<span class='danger'>\The [L] has been [attacklogverb] with \the [src] by [user]!</span>",\
 				"<span class='userdanger'>You have been [attacklogverb] with \the [src] by \the [user]!</span>",\
 				self_drugged_message="<span class='userdanger'>\The [user]'s [src] sucks the life right out of you!</span>")
@@ -224,7 +224,7 @@
 
 	apply_baton_effect(L)
 
-	if(vismsg)
+	if(has_stun_message)
 		L.visible_message("<span class='danger'>[L] has been [attacklogverb] with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
 	playsound(loc, stunsound, 50, 1, -1)
 

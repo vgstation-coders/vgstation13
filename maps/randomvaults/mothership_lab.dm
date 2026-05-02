@@ -1024,7 +1024,7 @@
 	origin_tech = Tc_COMBAT + "=3" + Tc_POWERSTORAGE + "=2"
 	hitcost = 50 // 20 stuns with integrated cell, but can't upgrade or remove it. Doesn't have a normal baton's vulnerability to emp blasts. Compatible with rechargers
 	can_swap_cell = FALSE
-	vismsg = FALSE
+	has_stun_message = FALSE
 	stunsound = 'sound/weapons/electriczap.ogg'
 
 /obj/item/weapon/melee/baton/stunprobe/New() // Should always start with a cell integrated
