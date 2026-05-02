@@ -544,6 +544,7 @@
 /obj/item/weapon/robot_module/syndicate/blitzkrieg/New()
 	..()
 
+	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/tool/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
 	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
@@ -559,6 +560,10 @@
 	sprites = list(
 		"Droid" = "droid-crisis"
 		)
+	respawnables = list(
+		/obj/item/stack/medical/splint
+		)
+	respawnables_max_amount = MEDICAL_MAX_KIT
 
 /obj/item/weapon/robot_module/syndicate/crisis/New()
 	..()
@@ -574,11 +579,15 @@
 	modules += new /obj/item/device/reagent_scanner/adv(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
+	modules += new /obj/item/weapon/reagent_containers/spray/lube(src)
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/switchtool/surgery/maxed(src)
 	modules += new /obj/item/robot_rack/bed/syndie(src)
 	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
-
+	var/obj/item/stack/medical/splint/K = new /obj/item/stack/medical/splint(src)
+	K.max_amount = MEDICAL_MAX_KIT
+	K.amount = MEDICAL_MAX_KIT
+	modules += K
 	sensor_augs = list("Thermal", "Medical", "Disable")
 
 	fix_modules()

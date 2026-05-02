@@ -1842,7 +1842,6 @@
 #include "code\modules\mecha\combat\honker.dm"
 #include "code\modules\mecha\combat\marauder.dm"
 #include "code\modules\mecha\combat\phazon.dm"
-#include "code\modules\mecha\combat\roswell.dm"
 #include "code\modules\mecha\equipment\mecha_equipment.dm"
 #include "code\modules\mecha\equipment\passive\passive.dm"
 #include "code\modules\mecha\equipment\tools\medical_tools.dm"

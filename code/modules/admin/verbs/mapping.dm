@@ -82,7 +82,7 @@
 					output += "<li><font color='red'>Camera not connected to wall at \[[C1.x], [C1.y], [C1.z]\] ([C1.loc.loc]) Network: [C1.network]</color></li>"
 
 	output += "</ul>"
-	usr << browse(output,"window=airreport;size=1000x500")
+	usr << browse(HTML_SKELETON(output),"window=airreport;size=1000x500")
 	feedback_add_details("admin_verb","mCRP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/intercom_view()
@@ -414,13 +414,19 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 		if(!C.d1) //It's a stub
 			continue
 		var/obj/structure/cable/neighbour
-		neighbour = locate() in get_step(get_turf(C),C.d1)
-		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
-			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
-		neighbour = locate() in get_step(get_turf(C),C.d2)
-		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
-			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
-	
+		var/list/found_directions = list()
+		for(var/direction in list(C.d1,C.d2))
+			neighbour = locate() in get_step(get_turf(C),direction)
+			if(!neighbour || neighbour.get_powernet() != C.get_powernet())
+				found_directions += list(dir2text(direction))
+		if(found_directions.len)
+			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))] (Directions: [english_list(found_directions)])</span><br>"
+	error_str += "<h1>Terminal connections on current Z Level [z]</h1>"
+	for(var/obj/machinery/power/terminal/T in terminals)
+		var/turf/T2 = get_turf(T)
+		if(!T2.get_cable_node())
+			error_str += "<span class = 'warning'>Disconnected terminal at [formatJumpTo(T2)]</span><br>"
+
 	var/datum/browser/popup = new(usr, "Wire connections", usr.name, 300, 400)
 	popup.set_content(error_str)
 	popup.open()
@@ -496,4 +502,4 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 							continue
 
 	output += "</ul><br>[bad_pipes] bad pipes detected."
-	usr << browse(output,"window=distrowastemixreport;size=1000x500")
+	usr << browse(HTML_SKELETON(output),"window=distrowastemixreport;size=1000x500")

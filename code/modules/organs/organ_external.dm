@@ -49,6 +49,8 @@
 
 	//How often wounds should be updated, a higher number means less often
 	var/wound_update_accuracy = 1
+	//Cache for if limb has a bleeding wound. If true, will force-process the limb's wounds regardless of damage.
+	var/internally_bleeding = FALSE
 
 	var/has_fat = 0 //Has a _fat variant
 	var/cosmetic_only = FALSE
@@ -398,6 +400,7 @@
 		if(!internal_bleeding)
 			var/datum/wound/internal_bleeding/I = new (15)
 			wounds += I
+			internally_bleeding = TRUE
 			owner.custom_pain("You feel something rip in your [display_name]!", 1)
 
 	//Check whether we can add the wound to an existing wound
@@ -451,6 +454,8 @@
 
 /datum/organ/external/proc/need_process()
 	if(status && !is_organic()) //If it's non-organic, that's fine it will have a status.
+		return 1
+	if(internally_bleeding)
 		return 1
 	if(brute_dam || burn_dam)
 		return 1
@@ -648,10 +653,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 		return
 
 	var/datum/species/species = src.species || owner.species
+	internally_bleeding = FALSE
 
 	for(var/datum/wound/W in wounds)
 		//Internal wounds get worse over time, and you lose blood
 		if(W.internal && !W.is_treated() && !(species && species.anatomy_flags & NO_BLOOD))
+			internally_bleeding = TRUE
 			var/blood_factor = owner.calcbloodloss() //Calls helper function to determine amount of blood loss.
 
 			owner.vessel.remove_reagent(BLOOD, W.damage * wound_update_accuracy * 0.07 * max(0, blood_factor))
@@ -1267,7 +1274,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(is_malfunctioning())
 		// owner.u_equip(c_hand, 1)
 		owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")
-		spark(src, 5, FALSE)
+		spark(owner, 5, FALSE)
 		owner.drop_item(c_hand)
 
 /datum/organ/external/proc/embed(var/obj/item/weapon/W, var/silent = 0)
@@ -1380,6 +1387,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 						icon_name = "grey"
 					if(VOXBROWN)
 						icon_name = "brown"
+					if(VOXPLUCKED)
+						icon_name = "plucked"
 					else
 						icon_name = "green"
 			if("tajaran")
@@ -2087,11 +2096,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	name = "robotic head"
 
 /obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ/external/head/O)
-	origin_body = makeweakref(H)
-
 	..()
 	if(!istype(H)) //It's entirely possible for stuff to call this without a human, such as headpoles with heads in maps for some reason...
 		return
+
+	origin_body = makeweakref(H)
 	src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	if(isgolem(H)) //Golems don't inhabit their severed heads, they turn to dust when they die.
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms()

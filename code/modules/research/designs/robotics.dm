@@ -82,6 +82,7 @@
 	materials = list(MAT_IRON = 7000, MAT_GLASS = 7000)
 	category = "Robotics"
 	build_path = /obj/item/stack/nanopaste
+	use_design_materials = FALSE // Cannot be recycled because stack code doesn't work well with recycling
 
 /datum/design/robotanalyzer
 	name = "Cyborg Analyzer"
@@ -113,12 +114,14 @@
 	category = "Misc"
 	build_path = /obj/item/device/mech_painter
 
+/* Perhaps this can come back one day in the future, when one can't spam them every round
 /datum/design/killdozer_modkit
 	name = "Ripley Killdozer kit"
-	desc = "this never even shows up ingame???"
+	desc = "This never even shows up ingame???"
 	id = "killdozer_modkit"
 	req_tech = list(Tc_MATERIALS = 3, Tc_MAGNETS = 3, Tc_SYNDICATE = 2)
 	build_type = PROTOLATHE | MECHFAB
 	materials = list(MAT_IRON = 275000, MAT_GLASS = 1000) //LODSOFMETAL
 	category = "Robotics"
 	build_path = /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit
+*/

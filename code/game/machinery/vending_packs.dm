@@ -13,6 +13,22 @@
 	var/list/hidden_records = list()
 	var/list/coin_records = list()
 
+/obj/structure/vendomatpack/MouseDrop(atom/drop_atom, src_location, over_location)
+	. = ..()
+	var/mob/living/user = usr
+	if(!isliving(user))
+		return
+	if(!isturf(user.loc) || user.incapacitated() || user.resting)
+		return
+	if(get_dist(drop_atom, src) != 1 || get_dist(drop_atom, user) != 1)
+		return
+	if(isturf(drop_atom) && istype(loc, /obj/structure/rack/crate_shelf) && user.Adjacent(drop_atom))
+		var/obj/structure/rack/crate_shelf/shelf = loc
+		return shelf.unload(src, user, drop_atom)
+	if(istype(drop_atom, /obj/structure/rack/crate_shelf) && isturf(loc) && user.Adjacent(src))
+		var/obj/structure/rack/crate_shelf/shelf = drop_atom
+		return shelf.load(src, user)
+
 //////CUSTOM PACKS///////
 
 /obj/structure/vendomatpack/custom

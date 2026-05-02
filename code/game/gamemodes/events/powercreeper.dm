@@ -87,6 +87,9 @@
 			if(environment.temperature < T0C)
 				die()
 				return
+			if(istype(T,/turf/unsimulated/floor/planetary) && prob(25))
+				die()
+				return
 		//add power to powernet through converting atmospheric heat to power
 		add_avail(-(environment.add_thermal_energy(max(environment.get_thermal_energy_change(T0C),-POWER_PER_FRUIT*10)/10)))
 		if(growdirs)
@@ -166,6 +169,8 @@
 		return 0
 	if(T.has_dense_content())
 		return CANZAP
+	if(istype(T,/turf/unsimulated/floor/planetary) && prob(90))
+		return 0
 	return CANGROW|CANZAP
 
 

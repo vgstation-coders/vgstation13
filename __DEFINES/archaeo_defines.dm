@@ -60,9 +60,18 @@
 #define DIGSITE_TEMPLE "temple"
 #define DIGSITE_WAR "war"
 
-#define ARTIFACT_EFFECT_TOUCH 0
-#define ARTIFACT_EFFECT_AURA 1
-#define ARTIFACT_EFFECT_PULSE 2
+#define ARTIFACT_EFFECT_TOUCH 	0
+#define ARTIFACT_EFFECT_AURA 	1
+#define ARTIFACT_EFFECT_PULSE 	2
+
+#define EFFECT_HINT_LOW_LEVEL_EMISSIONS						0
+#define EFFECT_HINT_CONCENTRATED_ENERGY_EMISSIONS			1
+#define EFFECT_HINT_INTERMITTENT_PSIONIC_WAVEFRONT			2
+#define EFFECT_HINT_ELECTROMAGNETIC_ENERGY					3
+#define EFFECT_HINT_HIGH_FREQUENCY_PARTICLES				4
+#define EFFECT_HINT_ORGANICALLY_REACTIVE_EXOTIC_PARTICLES	5
+#define EFFECT_HINT_INTERDIMENSIONAL_BLUESPACE_PHASING		6
+#define EFFECT_HINT_ATOMIC_SYNTHESIS						7
 
 #define ARTIFACT_STYLE_ANOMALY "ano"
 #define ARTIFACT_STYLE_ANCIENT "ancient"
@@ -73,7 +82,7 @@
 #define ARTIFACT_STYLE_UNKNOWN "unknown"
 #define ARTIFACT_STYLE_RELIQUARY "reliquary"
 
-var/list/goon_style_effect_types = list(
+var/list/goon_artifact_styles = list(
 	ARTIFACT_STYLE_ANCIENT = 7,
 	ARTIFACT_STYLE_MARTIAN = 7,
 	ARTIFACT_STYLE_WIZARD = 7,
@@ -83,8 +92,8 @@ var/list/goon_style_effect_types = list(
 	ARTIFACT_STYLE_RELIQUARY = 4
 	)
 
-var/list/vg_style_effect_types = list(
+var/list/vg_artifact_styles = list(
 	ARTIFACT_STYLE_ANOMALY = 12
 	)
 
-var/list/all_artifact_style_effect_types = vg_style_effect_types + goon_style_effect_types
+var/list/all_artifact_styles = vg_artifact_styles + goon_artifact_styles

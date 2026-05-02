@@ -376,7 +376,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
 "bm" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

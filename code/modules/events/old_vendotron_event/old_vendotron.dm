@@ -386,7 +386,7 @@
 
 /mob/living/simple_animal/hostile/old_vendotron
 	name = "old vendotron"
-	desc = "Pay up"
+	desc = "Pay up."
 	icon = 'icons/mob/old_vendotron.dmi'
 	icon_state = "Old_Vendotron"
 	icon_living = "Old_Vendotron"

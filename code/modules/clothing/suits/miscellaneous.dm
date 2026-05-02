@@ -90,7 +90,7 @@ var/list/tag_suits_list = list()
 		<br/>
 		<b><a href='?src=\ref[src]&edition_done=\ref[my_laser_tag_game]'>Done</a></b>
 	""}
-	user << browse(dat,"window=laser_tag_window2;size=250x250")
+	user << browse(HTML_SKELETON(dat),"window=laser_tag_window2;size=250x250")
 
 /obj/item/clothing/suit/tag/Topic(href, href_list)
 	if(..())
@@ -100,7 +100,7 @@ var/list/tag_suits_list = list()
 		var/datum/laser_tag_game/game = locate(href_list["join_game"])
 		game.handle_new_player(player, usr)
 		my_laser_tag_game = game
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
 		return
 
 	if (href_list["create_game"])
@@ -110,7 +110,7 @@ var/list/tag_suits_list = list()
 		game.name = "[get_first_word(usr.name)]'s game"
 		game.handle_new_player(player, usr)
 		refresh_edit_window(usr, game)
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
 		return
 
 	// Game parametrisation
@@ -188,7 +188,7 @@ var/list/tag_suits_list = list()
 	if (href_list["leave_game"])
 		var/datum/laser_tag_game/game = locate(href_list["leave_game"])
 		game.kick_player(usr)
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
 		return
 
 	if (href_list["clear_gamertag"])
@@ -293,7 +293,7 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/justice
 	name = "justice suit"
-	desc = "this pretty much looks ridiculous."
+	desc = "This pretty much looks ridiculous."
 	icon_state = "justice"
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
@@ -316,6 +316,28 @@ var/list/tag_suits_list = list()
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/suit/wcoat/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 0
+	if(istype(target, /obj/item/clothing/under))
+		var/obj/item/clothing/C = target
+		var/obj/item/clothing/accessory/wcoat/A = new()
+		if(C.check_accessory_overlap(A))
+			to_chat(user, "<span class='notice'>You cannot attach more accessories of this type to \the [C].</span>")
+			qdel(A)
+			return
+		if(user.drop_item(src))
+			to_chat(user, "<span class='notice'>You attach \the [src] to \the [C].</span>")
+			C.attach_accessory(A)
+			transfer_fingerprints(src,A)
+			forceMove(A)
+			A.source_vest = src
+			A.update_icon()
+		else
+			qdel(A)
+		return 1
+	return ..()
 
 
 /obj/item/clothing/suit/apron/overalls
@@ -395,7 +417,7 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/reaper_robes
 	name = "\improper grim robes"
-	desc = "Tends to snag on tombstones"
+	desc = "Tends to snag on tombstones."
 	icon_state = "reaper_hoodie" //edited version of chaplain_hoodie. 1px longer, and more open at the front
 	item_state = "reaper_hoodie"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
@@ -532,7 +554,7 @@ var/list/tag_suits_list = list()
 		src.item_state = "suitjacket_blue_open"
 		to_chat(usr, "You unbutton the suit jacket.")
 	else
-		to_chat(usr, "You button-up some imaginary buttons on your [src].")
+		to_chat(usr, "You button-up some imaginary buttons on your [src.name].")
 		return
 	usr.update_inv_wear_suit()
 
@@ -781,7 +803,7 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/bedsheet_ghost
 	name = "Bedsheet Ghost"
-	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky"
+	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky."
 	icon_state = "bedsheet_ghost"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	blood_overlay_type = "coat"
@@ -1207,3 +1229,99 @@ var/list/tag_suits_list = list()
 	item_state = "wftr"
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 	body_parts_covered = FULL_TORSO
+
+/obj/item/clothing/suit/shadowsuit
+	name = "shadow suit"
+	desc = "A costume good enough to belong to a faker."
+	icon_state = "shadowsuit"
+	item_state = "shadowsuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/sonicsuit
+	name = "sonic suit"
+	desc = "A costume based on a true blue."
+	icon_state = "sonicsuit"
+	item_state = "sonicsuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/tailssuit
+	name = "tails suit"
+	desc = "A costume based on a bonafide sidekick."
+	icon_state = "tailssuit"
+	item_state = "tailssuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/knucklessuit
+	name = "knuckles suit"
+	desc = "A costume designed for protecting oversized jewels."
+	icon_state = "knucklessuit"
+	item_state = "knucklessuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/amysuit
+	name = "amy suit"
+	desc = "Piko-piko hammer not included."
+	icon_state = "amysuit"
+	item_state = "amysuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/suitjacket
+	name = "suit jacket"
+	desc = "A jacket for the trendy office worker."
+	icon_state = "suitjacket"
+	item_state = "suitjacket"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	body_parts_covered = FULL_TORSO|ARMS
+
+	blood_overlay_type = "coat"
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("buttons")
+	dye_base_iconstate_override = "suitjacket"
+
+	var/open = 0
+
+/obj/item/clothing/suit/suitjacket/New()
+	. = ..()
+	update_icon()
+
+/obj/item/clothing/suit/suitjacket/update_icon()
+	if(open)
+		icon_state = "suitjacket_open"
+		dye_base_iconstate_override = "suitjacket_open"
+	else
+		icon_state = "suitjacket"
+		dye_base_iconstate_override = "suitjacket"
+	..()
+
+/obj/item/clothing/suit/suitjacket/verb/toggle()
+	set name = "Toggle Jacket Buttons"
+	set category = "Object"
+	set src in usr
+
+	var/mob/user = usr
+
+	if(user.incapacitated())
+		return 0
+
+	if(open)
+		to_chat(usr, "You button up the jacket.")
+		body_parts_covered |= IGNORE_INV
+	else
+		to_chat(usr, "You unbutton the jacket.")
+		body_parts_covered ^= IGNORE_INV
+
+	open = !open
+	update_icon()
+	user.update_inv_wear_suit()

@@ -67,7 +67,7 @@
 	if(target.anchored)
 		to_chat(user, "<span class='notice'>You can't get the wrapping around \the [target].</span>")
 		return
-	if(target in user)
+	if( (target in user) && !(target in user.held_items)) // Can wrap things in held items.
 		to_chat(user, "<span class='notice'>That's not gonna work.</span>")
 		return
 	if(!proximity_flag)
@@ -85,13 +85,17 @@
 	if(istype(target, /obj/item) && smallpath)
 		if (amount >= 1)
 			var/obj/item/I = target
-			var/obj/item/P = new smallpath(get_turf(target.loc),target,round(I.w_class))
+			var/gift_in_hands = user.is_holding_item(target)
+			var/obj/item/P = new smallpath(get_turf(target),target,round(I.w_class))
 			if(!istype(target.loc, /turf))
 				if(user.client)
 					user.client.screen -= target
+			user.drop_item(target, force_drop = 1)
 			target.forceMove(P)
 			P.add_fingerprint(user)
 			use(1)
+			if (gift_in_hands)
+				user.put_in_hands(P)
 			to_chat(user, "<span class='notice'>You wrap \the [target] with \the [src].</span>")
 		else
 			to_chat(user, "<span class='warning'>You need more paper!</span>")
@@ -105,7 +109,7 @@
 			if(MC.angry)
 				return
 		if(amount >= 3)
-			var/obj/item/P = new bigpath(get_turf(target.loc),target)
+			var/obj/item/P = new bigpath(get_turf(target), target)
 			target.forceMove(P)
 			P.add_fingerprint(user)
 			use(3)

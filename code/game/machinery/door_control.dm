@@ -192,7 +192,7 @@
 		if(M.id_tag == src.id_tag)
 			M.drive()
 
-	sleep(50)
+	sleep(door_delay)
 
 	for(var/obj/machinery/door/poddoor/M in poddoors)
 		if (M.id_tag == src.id_tag)

@@ -128,7 +128,6 @@
 /datum/next_map/snaxi
 	name = "Snow Station"
 	path = "Snow Taxi"
-	min_players = 30
 
 /datum/next_map/snaxi/is_votable()
 	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
@@ -179,6 +178,14 @@
 	name = "Wheelstation"
 	path = "wheelstation"
 	min_players = 30
+
+/datum/next_map/junglestation
+	name = "Jungle Station" //NT Colony Gamma-8 - the trve name.
+	path = "junglestation"
+
+/datum/next_map/odyssey
+	name = "NTEV Odyssey"
+	path = "odyssey"
 
 /proc/get_votable_maps()
 	var/list/votable_maps = list()

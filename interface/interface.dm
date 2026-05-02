@@ -10,7 +10,7 @@
 	if(alert("This will open the map render(s) in your browser. Are you sure?",,"Yes","No")=="No")
 		return
 	var/mapname = replacetext(map.nameLong, " ", "")
-	src << link("[config.renders_url]/images/maps/[mapname]")
+	src << link("[config.renders_url]/?map=[mapname]")
 
 /client/verb/wiki()
 	set name = "wiki"

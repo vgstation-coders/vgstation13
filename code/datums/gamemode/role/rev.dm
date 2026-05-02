@@ -129,7 +129,7 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 								   /obj/item/weapon/storage/box/handcuffs,
 								   /obj/item/weapon/storage/box/bolas,
 								   /obj/item/weapon/storage/bag/ammo_pouch/rev,
-								   /obj/item/clothing/glasses/sunglasses/prescription,
+								   /obj/item/clothing/glasses/sunglasses,
 								   /obj/item/weapon/melee/telebaton,
 								   /obj/item/weapon/melee/classic_baton,
 								   /obj/item/weapon/reagent_containers/spray/rev
@@ -236,9 +236,7 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 		rev_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cargo(rev_mob), slot_wear_suit)
 		rev_mob.equip_to_slot_or_del(new /obj/item/weapon/tank/plasma/plasmaman(rev_mob), slot_s_store)
 		rev_mob.equip_or_collect(new /obj/item/clothing/mask/breath(rev_mob), slot_wear_mask)
-		rev_mob.internal = rev_mob.get_item_by_slot(slot_s_store)
-		if (rev_mob.internals)
-			rev_mob.internals.icon_state = "internal1"
+		rev_mob.equip_internals(rev_mob.get_item_by_slot(slot_s_store))
 		rev_mob.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cargo(rev_mob), slot_head)
 	else if(istype(rev_mob.species, /datum/species/vox))
 		rev_mob.equip_or_collect(new /obj/item/clothing/mask/breath/vox(rev_mob), slot_wear_mask)
@@ -247,10 +245,7 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 		var/obj/item/weapon/tank/nitrogen/TN = new(rev_mob)
 		rev_mob.put_in_hands(TN)
 		to_chat(rev_mob, "<span class='notice'>You are now running on nitrogen internals from the [TN] in your hand. Your species finds oxygen toxic, so you must breathe nitrogen (AKA N<sub>2</sub>) only.</span>")
-		rev_mob.internal = TN
-
-		if (rev_mob.internals)
-			rev_mob.internals.icon_state = "internal1"
+		rev_mob.equip_internals(TN)
 	else
 		rev_mob.equip_to_slot_or_del(new /obj/item/clothing/head/soft(rev_mob), slot_head) //cargo cap
 
@@ -268,8 +263,10 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 	var/list/possible_gear = revsquad_gear.Copy()
 	while(BP.contents.len < BP.storage_slots)
 		var/tospawn = pick_n_take(possible_gear)
-		if(istype(tospawn,/obj/item/weapon/reagent_containers/spray/rev)&&BP.storage_slots-BP.contents.len==1)
+		if(istype(tospawn,/obj/item/weapon/reagent_containers/spray/rev) && ((BP.storage_slots - BP.contents.len) == 1))
 			continue //don't spawn the lube bottle as our last item because it needs an extra slot for the antilube
+		if(istype(tospawn,/obj/item/clothing/glasses/sunglasses) && (rev_mob.disabilities & NEARSIGHTED))
+			tospawn = /obj/item/clothing/glasses/sunglasses/prescription
 		new tospawn(BP)
 
 	rev_mob.update_icons()

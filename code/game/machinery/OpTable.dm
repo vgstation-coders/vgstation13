@@ -113,7 +113,7 @@
 /obj/machinery/optable/process()
 	check_victim()
 
-/obj/machinery/optable/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
+/obj/machinery/optable/TryToThrowOnTable(var/mob/user,var/mob/victim)
 	for (var/atom/A in loc)
 		if (A == src || A == victim || A == user)
 			continue

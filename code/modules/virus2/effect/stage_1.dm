@@ -493,18 +493,19 @@
 		return
 
 	var/mob/living/carbon/human/H = mob
-	switch(rand(1,2))
-		if(1)
-			to_chat(mob, "<span class='notice'>You feel an odd taste in your mouth...</span>")
-			sleep(10)
-			H.reagents.add_reagent(MILK, multiplier*10)
-			H.vomit(0,1,1)
-		if(2)
-			to_chat(mob, "<span class='notice'>Your throat feels extremely dry!</span>")
-			H.audible_cough()
-			H.adjustOxyLoss((2*multiplier)) //not that strong
-			sleep(10)
-			H.reagents.add_reagent(FLOUR, multiplier*10)
-			new /obj/effect/decal/cleanable/flour(get_turf(H))
-			H.vomit(0,1,1)
+	if(prob(33))
+		switch(rand(1,2))
+			if(1)
+				to_chat(mob, "<span class='notice'>You feel an odd taste in your mouth...</span>")
+				sleep(10)
+				H.reagents.add_reagent(MILK, multiplier*10)
+				H.vomit(0,1,1)
+			if(2)
+				to_chat(mob, "<span class='notice'>Your throat feels extremely dry!</span>")
+				H.audible_cough()
+				H.adjustOxyLoss((2*multiplier)) //not that strong
+				sleep(10)
+				H.reagents.add_reagent(FLOUR, multiplier*10)
+				new /obj/effect/decal/cleanable/flour(get_turf(H))
+				H.vomit(0,1,1)
 //TODO: maybe remove the whole flour vomit thing and have it exclusively as flour coughing if and when we add an easy way to pick up floor flour (the wet dry vacuum doesn't count)

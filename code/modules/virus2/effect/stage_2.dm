@@ -39,8 +39,8 @@
 	encyclopedia = "Turning them blind for a few seconds."
 	stage = 2
 	badness = EFFECT_DANGER_HINDRANCE
-	multiplier = 4
-	max_multiplier = 10
+	multiplier = 10
+	max_multiplier = 20
 	max_chance = 8
 
 /datum/disease2/effect/blind/activate(var/mob/living/mob)
@@ -393,7 +393,7 @@
 
 /datum/disease2/effect/piglatin
 	name = "Porcus Latinus Syndrome"
-	desc = "Securitas Eunt Domus"
+	desc = "Securitas Eunt Domus!"
 	stage = 2
 	affect_voice = 1
 	max_count = 1

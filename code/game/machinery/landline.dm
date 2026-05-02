@@ -257,6 +257,7 @@
 	attached_to.overlays.Add(phone_overlay)
 
 /obj/landline/red
+	name = "red phone"
 	overlay_icon = 'icons/obj/items.dmi'
 	overlay_iconstate = "red_phone_handset"
 
@@ -374,7 +375,7 @@
 
 /obj/item/telephone/switchboard
 	name = "switchboard operator headset"
-	desc = "you shouldn't ever see this."
+	desc = "You shouldn't ever see this."
 	mic_range = 1
 
 /obj/item/telephone/switchboard/explode()

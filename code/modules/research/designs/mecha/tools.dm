@@ -40,7 +40,7 @@
 
 /datum/design/mech_repair_droid
 	name = "Module Design (Repair Droid Module)"
-	desc = "Automated Repair Droid. BEEP BOOP"
+	desc = "Automated Repair Droid. BEEP BOOP!"
 	id = "mech_repair_droid"
 	build_type = MECHFAB
 	req_tech = list(Tc_MAGNETS = 3, Tc_PROGRAMMING = 3, Tc_ENGINEERING = 3)

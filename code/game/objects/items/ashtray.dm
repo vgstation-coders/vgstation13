@@ -29,7 +29,7 @@
 			var/obj/item/clothing/mask/cigarette/pipe/P = W
 			P.lit = 0
 			P.smoketime = 0
-			to_chat(user, "<span class='notice'>You tap your [P] over the [src], emptying the remaining tobbaco and ashes into it.</span>")
+			to_chat(user, "<span class='notice'>You tap your [P.name] over the [src], emptying the remaining tobbaco and ashes into it.</span>")
 			P.update_brightness()
 			add_fingerprint(user)
 			return

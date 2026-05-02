@@ -119,7 +119,7 @@
 							continue	//only find medibots on the same z-level as the computer
 						var/turf/bl = get_turf(M)
 						if(bl)	//if it can't find a turf for the medibot, then it probably shouldn't be showing up
-							bdat += "[M.name] - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]]\]</b> - [M.on ? "Online" : "Offline"]<br>"
+							bdat += "[M.name] - <b>\[[bl.x-get_world_x_offset(bl.vz())],[bl.y-get_world_y_offset(bl.vz())]\]</b> - [M.on ? "Online" : "Offline"]<br>"
 							if((!isnull(M.reagent_glass)) && M.use_beaker)
 								bdat += "Reservoir: \[[M.reagent_glass.reagents.total_volume]/[M.reagent_glass.reagents.maximum_volume]\]<br>"
 							else
@@ -132,12 +132,16 @@
 				else
 		else
 			dat += text("<A href='?src=\ref[];login=1'>{Log In}</A>", src)
-	user << browse(text("<HEAD><TITLE>Medical Records</TITLE></HEAD><TT>[]</TT>", dat), "window=med_rec")
+	user << browse(HTML_SKELETON_TITLE("Medical Records", "<TT>[dat]</TT>"), "window=med_rec")
 	onclose(user, "med_rec")
 	return
 
 
 /obj/machinery/computer/med_data/attackby(var/obj/item/O, var/mob/living/user)
+	if(istype(O, /obj/item/weapon/card/id) && !scan)
+		if(usr.drop_item(O, src))
+			scan = O
+			to_chat(user, "You insert \the [O].")
 	if (istype(user) && authenticated && (screen == 4.0) && active1)
 		if(istype(O, /obj/item/weapon/photo/id))
 			var/obj/item/weapon/photo/id/photo_id = O

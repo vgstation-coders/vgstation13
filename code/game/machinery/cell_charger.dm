@@ -35,7 +35,7 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/cell_charger,
+		/obj/item/weapon/circuitboard/small/cell_charger,
 		/obj/item/weapon/stock_parts/scanning_module,
 		/obj/item/weapon/stock_parts/capacitor,
 		/obj/item/weapon/stock_parts/capacitor

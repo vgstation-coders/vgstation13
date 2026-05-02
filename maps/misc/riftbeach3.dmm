@@ -25,7 +25,7 @@
 	},
 /area/beach)
 "j" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/wood{

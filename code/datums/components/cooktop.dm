@@ -4,12 +4,14 @@
 	if(!isobj(parent))
 		return FALSE
 	parent.register_event(/event/attackhand, src, nameof(src::on_attackhand()))
+	parent.register_event(/event/item_attack_self, src, nameof(src::on_attackself()))
 	parent.register_event(/event/attackby, src, nameof(src::on_attackby()))
 	parent.register_event(/event/examined, src, nameof(src::on_examine()))
 	return TRUE
 
 /datum/component/cooktop/Destroy()
 	parent.unregister_event(/event/attackhand, src, nameof(src::on_attackhand()))
+	parent.unregister_event(/event/item_attack_self, src, nameof(src::on_attackself()))
 	parent.unregister_event(/event/attackby, src, nameof(src::on_attackby()))
 	parent.unregister_event(/event/examined, src, nameof(src::on_examine()))
 	..()
@@ -18,6 +20,16 @@
 	var/obj/P = parent
 	if(P.cookvessel && ismob(user))
 		if(user.put_in_active_hand(P.cookvessel))
+			P.cookvessel.cook_stop()
+			P.cookvessel = null
+			P.on_cook_stop()
+			P.render_cookvessel()
+			P.remove_particles()
+
+/datum/component/cooktop/proc/on_attackself(mob/user)
+	var/obj/P = parent
+	if(P.cookvessel && ismob(user))
+		if(user.put_in_inactive_hand(P.cookvessel))
 			P.cookvessel.cook_stop()
 			P.cookvessel = null
 			P.on_cook_stop()

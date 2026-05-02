@@ -6,16 +6,16 @@
 	specialization = SSUTILITY
 
 	school = "transmutation"
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = 0
 	invocation = "AULIE OXIN FIERA"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 3
-	cooldown_min = 20 //20 deciseconds reduction per rank
+	cooldown_min = 2 SECONDS //2 seconds reduction per rank
 
 	hud_state = "wiz_knock"
 
-	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
+	price = 0.5 * SP_BASE_PRICE //Half of the normal spell price
 
 /spell/aoe_turf/knock/cast(list/targets)
 	for(var/turf/T in targets)
@@ -55,7 +55,7 @@
 
 	spell_flags = CONSTRUCT_CHECK
 
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	invocation = ""
 	invocation_type = "silent"
 	range = 5

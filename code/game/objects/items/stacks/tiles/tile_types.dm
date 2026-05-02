@@ -48,7 +48,7 @@
 	sheet_type = /obj/item/stack/sheet/wood
 	material = "wood"
 
-/obj/item/stack/tile/wood/proc/build(turf/S as turf)
+/obj/item/stack/tile/wood/build(turf/S as turf)
 	if(S.air)
 		var/datum/gas_mixture/GM = S.air
 		if(GM.pressure > HALF_ATM)
@@ -168,3 +168,10 @@
 	flags = FPRINT
 	siemens_coefficient = 0
 	max_amount = 60
+	var/catwalk_suffix = ""
+
+/obj/item/stack/tile/plated_catwalk/dark
+	name = "black plated catwalk frame"
+	singular_name = "black plated catwalk frame"
+	desc = "A frame for a black plated catwalk. Add rods after installing."
+	catwalk_suffix = "d"

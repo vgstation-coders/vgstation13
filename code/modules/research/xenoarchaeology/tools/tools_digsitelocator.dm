@@ -31,37 +31,38 @@
 			return
 		cooldown = world.time
 		playtoolsound(src, 50)
-		for(var/turf/unsimulated/mineral/M in range(7, user))
-			if(M.finds.len)
-				var/n = 0
-				var/list/image/IS = list()
-				var/totalfinds = M.finds.len
-				for(var/datum/find/F in M.finds)
-					n++
-					var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "find_overlay[rand(1,3)]", layer = UNDER_HUD_LAYER)
-					IS.Add(I)
-					I.color = color_from_find_reagent[F.responsive_reagent]
+		for(var/turf/unsimulated/M in range(7, user))
+			if(M.finddatum)
+				if(M.finddatum.finds.len)
+					var/n = 0
+					var/list/image/IS = list()
+					var/totalfinds = M.finddatum.finds.len
+					for(var/datum/find/F in M.finddatum.finds)
+						n++
+						var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "find_overlay[rand(1,3)]", layer = UNDER_HUD_LAYER)
+						IS.Add(I)
+						I.color = color_from_find_reagent[F.responsive_reagent]
+						I.plane = HUD_PLANE
+						if(n > 1)
+							var/matrix/TR = matrix()
+							TR.Scale(((totalfinds + 1) - n) / totalfinds, ((totalfinds + 1) - n) / totalfinds)
+							I.transform = TR
+							var/list/col = rgb2num(I.color)
+							I.filters = filter(type="outline",color=rgb(255-col[1],255-col[2],255-col[3]))
+						C.images += I
+					spawn(1 SECONDS)
+						for(var/image/I in IS)
+							animate(I, alpha = 0, time = 4 SECONDS)
+					spawn(5 SECONDS)
+						for(var/image/I in IS)
+							if(C)
+								C.images -= I
+				if (adv && M.finddatum.artifact_find)
+					var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "artifact_overlay", layer = UNDER_HUD_LAYER)
 					I.plane = HUD_PLANE
-					if(n > 1)
-						var/matrix/TR = matrix()
-						TR.Scale(((totalfinds + 1) - n) / totalfinds, ((totalfinds + 1) - n) / totalfinds)
-						I.transform = TR
-						var/list/col = rgb2num(I.color)
-						I.filters = filter(type="outline",color=rgb(255-col[1],255-col[2],255-col[3]))
 					C.images += I
-				spawn(1 SECONDS)
-					for(var/image/I in IS)
+					spawn(1 SECONDS)
 						animate(I, alpha = 0, time = 4 SECONDS)
-				spawn(5 SECONDS)
-					for(var/image/I in IS)
+					spawn(5 SECONDS)
 						if(C)
 							C.images -= I
-			if (adv && M.artifact_find)
-				var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "artifact_overlay", layer = UNDER_HUD_LAYER)
-				I.plane = HUD_PLANE
-				C.images += I
-				spawn(1 SECONDS)
-					animate(I, alpha = 0, time = 4 SECONDS)
-				spawn(5 SECONDS)
-					if(C)
-						C.images -= I

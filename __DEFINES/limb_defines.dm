@@ -13,6 +13,12 @@
 #define TARGET_MOUTH		"mouth"
 #define TARGET_EYES		    "eyes"
 
+#define LIMB_HEART			"heart"
+#define LIMB_EYES			"eyes"
+#define LIMB_LUNG			"lungs"
+#define LIMB_LIVER			"liver"
+#define LIMB_KIDNEYS		"kidneys"
+
 #define UNCUFF_LEGS			-1
 #define UNCUFF_BOTH			0
 #define UNCUFF_HANDS		1

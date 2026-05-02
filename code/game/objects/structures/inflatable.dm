@@ -447,6 +447,8 @@
 	..()
 
 /obj/structure/inflatable/shelter/container_resist(var/mob/user,var/turf/dest)
+	if (user.stat || !user.canmove)
+		return
 	if (user.loc != src)
 		exiting -= user
 		to_chat(user,"<span class='warning'>You cannot climb out of something you aren't even in!</span>")

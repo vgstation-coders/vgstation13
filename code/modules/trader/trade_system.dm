@@ -105,6 +105,11 @@ var/datum/subsystem/trade_system/SStrade
 		return 0.8
 	return 1-round(trader_account.money / 25000, 0.01)
 
+/datum/subsystem/trade_system/proc/reserve_prestige_factor()
+	if(shoal_reserves >= 10000)
+		return 0.8
+	return 1-round(shoal_reserves / 50000, 0.01)
+
 /datum/subsystem/trade_system/proc/loyal_customer(mob/living/carbon/human/user)
 	if(!istype(user))
 		return 1.5

@@ -296,7 +296,7 @@
 	src.add_fingerprint(usr)
 	src.update_icon()
 
-/obj/item/weapon/reagent_containers/syringe/restock()
+/obj/item/weapon/reagent_containers/syringe/restock(nanobots = FALSE)
 	if(mode == 2) //SYRINGE_BROKEN
 		mode = 0 //SYRINGE_DRAW
 		update_icon()

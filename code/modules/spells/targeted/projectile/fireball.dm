@@ -8,15 +8,15 @@
 	proj_type = /obj/item/projectile/spell_projectile/fireball
 
 	school = "evocation"
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = IS_HARMFUL
 	invocation = "ONI SOMA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 20
-	cooldown_min = 20 //10 deciseconds reduction per rank
+	cooldown_min = 2 SECONDS //1 second reduction per rank
 
 	spell_aspect_flags = SPELL_FIRE
-	duration = 20
+	duration = 2 SECONDS
 	projectile_speed = 1
 	cast_prox_range = 0
 
@@ -28,13 +28,21 @@
 	var/ex_light = 3
 	var/ex_flash = 5
 
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 
 	hud_state = "wiz_fireball"
 
 /spell/targeted/projectile/dumbfire/fireball/prox_cast(var/list/targets, spell_holder)
-	for(var/mob/living/M in targets)
-		apply_spell_damage(M)
+	var/mob/living/wizard = holder
+	for(var/mob/living/target in range(spell_holder, 1)) //Because cast_prox_range is 0 we have to override this because the targets list is empty.
+		//Copypasted some of the code from choose_prox_targets(), defined in code/modules/spells/targeted/projectile/projectile.dm
+		if(target == wizard)
+			continue
+		if(wizard in target.get_arcane_golems())
+			continue
+		if(wizard.shares_arcane_golem_spell(target))
+			continue
+		apply_spell_damage(target)
 	explosion(get_turf(spell_holder), ex_severe, ex_heavy, ex_light, ex_flash, whodunnit = holder)
 	return targets
 
@@ -46,10 +54,10 @@
 	return targets
 
 /spell/targeted/projectile/dumbfire/fireball/empower_spell()
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 
 	var/explosion_description = ""
-	switch(spell_levels[Sp_POWER])
+	switch(spell_levels[SP_POWER])
 		if(0)
 			name = "Fireball"
 			explosion_description = "It will now create a small explosion."
@@ -72,7 +80,7 @@
 	return (isturf(target) || isturf(target.loc))
 
 /spell/targeted/projectile/dumbfire/fireball/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if(upgrade_type == SP_POWER)
 		return "Make the spell targetable."
 	return ..()
 

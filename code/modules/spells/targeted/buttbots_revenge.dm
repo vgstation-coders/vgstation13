@@ -6,13 +6,13 @@
 	abbreviation = "AN"
 
 	school = "evocation"
-	charge_max = 500
+	charge_cooldown_max = 50 SECONDS
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "ARSE NATH"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 1
-	cooldown_min = 200 //100 deciseconds reduction per rank
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	cooldown_min = 20 SECONDS //10 seconds reduction per rank
+	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 	sparks_spread = 1
 	sparks_amt = 4
 	valid_targets = list(/mob/living/carbon/human,/mob/living/carbon/monkey)
@@ -39,7 +39,7 @@
 	return
 
 /spell/targeted/buttbots_revenge/empower_spell()
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	summon_bot = 1
 
 	var/upgrade_desc = "You have upgraded [name] into Butt-Bot's Legacy. When successfully cast on someone it will turn their butt into a working butt-bot."
@@ -49,6 +49,6 @@
 	return upgrade_desc
 
 /spell/targeted/buttbots_revenge/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if(upgrade_type == SP_POWER)
 		return "Make the spell instead summon a butt-bot at the target's location."
 	return ..()

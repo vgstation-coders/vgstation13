@@ -243,20 +243,20 @@ var/anomaly_report_num = 0
 			//primary effect
 			if(A.primary_effect)
 				//what kind of effect the artifact has
-				switch(A.primary_effect.effect_type)
-					if(1)
+				switch(A.primary_effect.effect_hint)
+					if(EFFECT_HINT_CONCENTRATED_ENERGY_EMISSIONS)
 						out += "concentrated energy emissions"
-					if(2)
+					if(EFFECT_HINT_INTERMITTENT_PSIONIC_WAVEFRONT)
 						out += "intermittent psionic wavefront"
-					if(3)
+					if(EFFECT_HINT_ELECTROMAGNETIC_ENERGY)
 						out += "electromagnetic energy"
-					if(4)
+					if(EFFECT_HINT_HIGH_FREQUENCY_PARTICLES)
 						out += "high frequency particles"
-					if(5)
+					if(EFFECT_HINT_ORGANICALLY_REACTIVE_EXOTIC_PARTICLES)
 						out += "organically reactive exotic particles"
-					if(6)
+					if(EFFECT_HINT_INTERDIMENSIONAL_BLUESPACE_PHASING)
 						out += "interdimensional/bluespace? phasing"
-					if(7)
+					if(EFFECT_HINT_ATOMIC_SYNTHESIS)
 						out += "atomic synthesis"
 					else
 						out += "low level energy emissions"
@@ -264,11 +264,11 @@ var/anomaly_report_num = 0
 
 				//how the artifact does it's effect
 				switch(A.primary_effect.effect)
-					if(1)
+					if(ARTIFACT_EFFECT_AURA)
 						out += " emitting in an ambient energy field."
-					if(2)
+					if(ARTIFACT_EFFECT_PULSE)
 						out += " emitting in periodic bursts."
-					else
+					else//ARTIFACT_EFFECT_TOUCH
 						out += " interspersed throughout substructure and shell."
 
 				//effect's trigger
@@ -293,23 +293,23 @@ var/anomaly_report_num = 0
 				independantly from primary systems. Auxiliary activity involves "
 
 				//what kind of effect the artifact has
-				switch(A.secondary_effect.effect_type)
-					if(1)
+				switch(A.secondary_effect.effect_hint)
+					if(EFFECT_HINT_CONCENTRATED_ENERGY_EMISSIONS)
 						out += "concentrated energy emissions"
-					if(2)
+					if(EFFECT_HINT_INTERMITTENT_PSIONIC_WAVEFRONT)
 						out += "intermittent psionic wavefront"
-					if(3)
+					if(EFFECT_HINT_ELECTROMAGNETIC_ENERGY)
 						out += "electromagnetic energy"
-					if(4)
+					if(EFFECT_HINT_HIGH_FREQUENCY_PARTICLES)
 						out += "high frequency particles"
-					if(5)
+					if(EFFECT_HINT_ORGANICALLY_REACTIVE_EXOTIC_PARTICLES)
 						out += "organically reactive exotic particles"
-					if(6)
+					if(EFFECT_HINT_INTERDIMENSIONAL_BLUESPACE_PHASING)
 						out += "interdimensional/bluespace? phasing"
-					if(7)
+					if(EFFECT_HINT_ATOMIC_SYNTHESIS)
 						out += "atomic synthesis"
 					else
-						out += "low level radiation"
+						out += "low level energy emissions"
 
 				//how the artifact does it's effect
 				switch(A.secondary_effect.effect)

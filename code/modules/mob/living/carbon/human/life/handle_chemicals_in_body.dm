@@ -1,7 +1,6 @@
 //Refer to life.dm for caller
 
 /mob/living/carbon/human/proc/handle_chemicals_in_body()
-	var/jittery_time = jitteriness
 
 	if(reagents)
 
@@ -62,10 +61,18 @@
 			else
 				light_amount = 10
 
-		if(light_amount > 2) //If there's enough light, start dying
+		if(light_amount > 2) //If there's enough light, start dying //maybe clothing should counteract that somewhat?
 			take_overall_damage(1,1)
+			add_particles(PS_SHADOW_SMOKE)
+			add_particles(PS_SHADOW_SMOKE2)
+			adjust_particles(PVAR_SPAWNING,0.6,PS_SHADOW_SMOKE)
+			adjust_particles(PVAR_SPAWNING,0.6,PS_SHADOW_SMOKE2)
+			if (prob(1))
+				to_chat(src,"<span class='danger'>The light burns your skin!</span>")
 		else if(light_amount < 2) //Heal in the dark
 			heal_overall_damage(1,1)
+			remove_particles(PS_SHADOW_SMOKE)
+			remove_particles(PS_SHADOW_SMOKE2)
 
 	//The fucking M_FAT mutation is the greatest shit ever. It makes everyone so hot and bothered.
 	if(species.anatomy_flags & CAN_BE_FAT)
@@ -118,15 +125,6 @@
 			Paralyse(5)
 
 	remove_confused(1)
-	//Decrement dizziness counter, clamped to 0
-	if(resting)
-		dizziness = max(0, dizziness - 15)
-		jitteriness = max(0, jitteriness - 15)
-	else
-		dizziness = max(0, dizziness - 3)
-		jitteriness = max(0, jitteriness - 3)
-	if(jittery_time && !jitteriness)
-		animate(src)
 
 	handle_trace_chems()
 

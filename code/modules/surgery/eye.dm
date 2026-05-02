@@ -6,6 +6,8 @@
 /datum/surgery_step/eye
 	priority = 2
 	can_infect = 1
+	blood_level = 0
+
 /datum/surgery_step/eye/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!hasorgans(target))
 		return 0
@@ -156,6 +158,8 @@
 	if (target.op_stage.eyes == 3)
 		target.disabilities &= ~NEARSIGHTED
 		target.sdisabilities &= ~BLIND
+		target.eye_blind = 0
+		target.eye_blurry = 0
 		eyes.damage = 0
 	target.op_stage.eyes = 0
 

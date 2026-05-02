@@ -37,7 +37,7 @@
 	name = "\improper Nanotrasen brand rechargeable AA battery"
 	desc = "You can't top the plasma top." //TOTALLY TRADEMARK INFRINGEMENT
 	origin_tech = Tc_POWERSTORAGE + "=0"
-	icon_state = "crapcell"
+	icon_state = "crapcell_large"
 	maxcharge = 500
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 	rating = 1
@@ -48,17 +48,28 @@
 
 /obj/item/weapon/cell/crap/better
 	name = "\improper Nanotrasen brand rechargeable D battery"
+	icon_state = "crapcell_huge"
 	maxcharge = 700 //for the ion carbine
 	rating = 3
 
+/obj/item/weapon/cell/crap/better/empty/New()
+	..()
+	charge = 0
+
 /obj/item/weapon/cell/crap/worse
 	name = "\improper Nanotrasen brand rechargeable AAA battery"
+	icon_state = "crapcell"
 	maxcharge = 250
 	rating = 0
+
+/obj/item/weapon/cell/crap/worse/empty/New()
+	..()
+	charge = 0
 
 /obj/item/weapon/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
+	icon_state = "crapcell_huge"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 	rating = 2
@@ -71,6 +82,7 @@
 /obj/item/weapon/cell/miningborg
 	name = "\improper Mining borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
+	icon_state = "crapcell_huge"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 	rating = 2
@@ -333,3 +345,35 @@
 /obj/item/weapon/cell/rad/large/empty/New()
 	..()
 	charge = 0
+
+
+/obj/item/weapon/cell/leadacid
+	name = "lead-acid battery"
+	desc = "A primitive but robust battery that has very poor energy density."
+	maxcharge = 7000
+	rating = 3
+	icon_state = "lacell"
+	item_state = "cell"
+	origin_tech = Tc_POWERSTORAGE + "=1"
+
+/obj/item/weapon/cell/leadacid/New(var/loc,var/quality=1)
+	maxcharge*=quality
+	rating*=quality
+	..()
+	if(quality < 1)
+		name = "improvised " + name
+	else if(quality > 1.5)
+		name = "premium " + name
+
+/obj/item/weapon/cell/leadacid/examine(mob/user)
+	..()
+	to_chat(user, "These were once used to charge electric eels.")
+
+/obj/item/weapon/cell/leadacid/emp_act(severity) //too stupid to get messed up by an EMP
+	return
+
+/obj/item/weapon/cell/leadacid/corrupt()
+	return
+
+/obj/item/weapon/cell/leadacid/updateicon()
+	icon_state = "lacell"

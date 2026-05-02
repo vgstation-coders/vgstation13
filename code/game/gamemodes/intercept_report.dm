@@ -115,7 +115,7 @@
 
 /datum/intercept_text/proc/get_suspect()
 	var/list/dudes = list()
-	for(var/mob/living/carbon/human/man in player_list) if(man.client && man.client.prefs.nanotrasen_relation == "Opposed")
+	for(var/mob/living/carbon/human/man in player_list) if(man.client && man.client.prefs.get_pref(/datum/preference_setting/enum/string/nanotrasen_relation) == "Opposed")
 		dudes += man
 	for(var/i = 0, i < max(player_list.len/10,2), i++)
 		dudes += pick(player_list)

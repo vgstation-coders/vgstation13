@@ -103,7 +103,7 @@
 			continue //skip monkeys and leavers
 		if (istype(M, /mob/new_player))
 			continue
-		if(M.stat == 2 &&  M.client.prefs.toggles & CHAT_GHOSTEARS)
+		if(M.stat == 2 &&  M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_GHOSTEARS)
 			listening|=M
 
 	for(var/mob/M in listening)

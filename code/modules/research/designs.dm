@@ -70,6 +70,7 @@ The required techs are the following:
 	var/locked = 0						//If true it will spawn inside a lockbox with currently sec access
 	var/list/req_lock_access			//Sets the access for the lockbox that a locked item spawns in
 	var/category = "Misc"				//Primarily used for Mech Fabricators, but can be used for anything
+	var/use_design_materials = TRUE		//Determines whether the printed item will have the design's material costs as its materials
 
 //A proc to calculate the reliability of a design based on tech levels and innate modifiers.
 //Input: A list of /datum/tech; Output: The new reliabilty.
@@ -152,8 +153,12 @@ The required techs are the following:
 //obj/O: The freshly created object
 //obj/machinery/r_n_d/fabricator/F: the machine where the object was just manufactured
 /datum/design/proc/after_craft(var/obj/O, var/obj/machinery/r_n_d/fabricator/F)
-	return
-
+// Reduce the printed item materials accordingly
+	for(var/obj/item/I in O.contents)
+		if(!I.materials)
+			continue
+		for(var/matID in I.materials.storage)
+			I.materials.storage[matID] = F.get_resource_cost_w_coeff_no_design(I.materials.storage[matID], matID)
 ////////////////////////////////////////
 //Disks for transporting design datums//
 ////////////////////////////////////////

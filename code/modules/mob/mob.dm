@@ -22,6 +22,10 @@
 	return RECYK_BIOLOGICAL
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(vz)
+		vz.mob_exited(src)
+
 	for(var/datum/mind/mind in heard_by)
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
@@ -53,6 +57,11 @@
 	attack_delayer = null
 	special_delayer = null
 	throw_delayer = null
+
+	dark_plane = null
+	self_vision = null
+	lighting_planemaster = null
+
 	QDEL_NULL(hud_used)
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
@@ -72,6 +81,9 @@
 
 	if (ticker && ticker.mode)
 		ticker.mode.mob_destroyed(src)
+	QDEL_NULL(last_thrown_by)
+	QDEL_NULL(last_bumped_by)
+	QDEL_NULL(lastassailant)
 	..()
 
 /mob/projectile_check()
@@ -235,6 +247,8 @@
 	if(flags & HEAR_ALWAYS)
 		virtualhearer = new /mob/virtualhearer(src)
 
+	perception_filters = new
+
 	update_colour(0)
 
 	register_event(/event/z_transition, src, nameof(src::update_multi_z_verbs()))
@@ -292,8 +306,10 @@
 	else
 		to_chat(src, msg)
 
-/mob/proc/show_message(var/msg, var/type, var/alt, var/alt_type, var/mob/speaker)//Message, type of message (1=visible or 2=hearable), alternative message, alt message type (1=if blind or 2=if deaf), and optionally the speaker
+/mob/proc/show_message(var/msg, var/type, var/alt, var/alt_type, var/mob/speaker, atom/source)//Message, type of message (1=visible or 2=hearable), alternative message, alt message type (1=if blind or 2=if deaf), and optionally the speaker
 	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
+	if(loneliness_affected(source || speaker,TRUE))
+		return
 
 	if(!client) //We dun goof
 		return
@@ -364,7 +380,7 @@
 			msg = drugged_message
 		if(blind_drugged_message)
 			msg2 = blind_drugged_message
-	show_message( msg, MESSAGE_SEE, msg2, MESSAGE_HEAR)
+	show_message( msg, MESSAGE_SEE, msg2, MESSAGE_HEAR, source = A)
 
 // Show a message to all mobs in sight of this atom
 // Use for objects performing visible actions
@@ -417,7 +433,7 @@
 			spell_master.update_spells(0, src)
 
 	for (var/time in crit_rampup)
-		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
+		if (world.time > text2num(time) + 20 SECONDS) // clear out the items older than 20 seconds
 			crit_rampup -= time
 
 	if(base_luck ? base_luck.temporary_luckiness : FALSE)
@@ -1002,7 +1018,7 @@ Use this proc preferably at the end of an equipment loadout
 			// Are we trying to pull something we are already pulling?
 			// Then we want to either toggle pulling (stop pulling and quit), or keep pulling (just quit) if client preferences want otherwise.
 			if(pulling == P)
-				if(client && !client.prefs.pulltoggle)
+				if(client && !client.prefs.get_pref(/datum/preference_setting/toggle/pulltoggle))
 					return
 				else
 					stop_pulling()
@@ -1016,7 +1032,7 @@ Use this proc preferably at the end of an equipment loadout
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
-			M.assaulted_by(usr, TRUE)
+			M.assaulted_by(src, TRUE)
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -1047,12 +1063,12 @@ Use this proc preferably at the end of an equipment loadout
 	if(istype(loc,/obj/mecha))
 		return
 
-	if(isVentCrawling())
-		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
-		return
-
 	var/obj/item/W = get_held_item_by_index(active_hand)
+
 	if(W)
+		if(isVentCrawling() && !W.vent_use)
+			to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
+			return
 		W.attack_self(src)
 		update_inv_hand(active_hand)
 
@@ -1144,7 +1160,7 @@ Use this proc preferably at the end of an equipment loadout
 						else
 							to_chat(M, "<span class='info'><b>\The [L]</b> looks at [A].</span>")
 
-/mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
+/mob/living/verb/verb_pickup(obj/item/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"
 	set category = "Object"
 
@@ -1154,7 +1170,7 @@ Use this proc preferably at the end of an equipment loadout
 /proc/acquirable_objects_in_view(var/mob/living/L, var/range)
 	var/list/obj_list = list()
 	for(var/turf/T in view(L, range))
-		for(var/obj/I in T)
+		for(var/obj/item/I in T)
 			if(I.can_pickup(L, FALSE, TRUE))
 				obj_list.Add(I)
 	return obj_list
@@ -1240,7 +1256,7 @@ Use this proc preferably at the end of an equipment loadout
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Version: [byond_version].[byond_build] Revision: [return_revision()]
 					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&byondver=[byond_version].[byond_build]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
-	src << browse(dat, "window=github;size=480x480")
+	src << browse(HTML_SKELETON(dat), "window=github;size=480x480")
 
 /client/verb/changes()
 	set name = "Changelog"
@@ -1268,7 +1284,7 @@ Use this proc preferably at the end of an equipment loadout
 		)
 	src << browse('html/changelog.html', "window=changes;size=675x650")
 
-	if(prefs.lastchangelog != changelog_hash)
+	if(prefs.get_pref(/datum/preference_setting/string/changelog) != changelog_hash)
 		prefs.SetChangelog(ckey, changelog_hash)
 		winset(src, "rpane.changelog", "background-color=none;font-style=;")
 
@@ -1277,7 +1293,7 @@ Use this proc preferably at the end of an equipment loadout
 	set category = "OOC"
 	var/output = {"Your BYOND version is: <b>[byond_version].[byond_build]</b><br>
 		You can view all of the latest server-compatible BYOND builds here: https://www.byond.com/download/build/[world.byond_version]/"}
-	usr << browse(output, "window=byond-version-data");
+	usr << browse(HTML_SKELETON(output), "window=byond-version-data");
 
 /mob/verb/observe()
 	set name = "Observe"
@@ -1476,12 +1492,12 @@ Use this proc preferably at the end of an equipment loadout
 				if((!S.connected_button) || !statpanel(S.panel))
 					continue //Not showing the noclothes spell
 				var/charge_type = S.charge_type
-				if(charge_type & Sp_HOLDVAR)
+				if(charge_type & SP_HOLDVAR)
 					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
-				else if(charge_type & Sp_CHARGES)
-					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
-				else if(charge_type & Sp_RECHARGE || charge_type & Sp_GRADUAL)
-					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
+				else if(charge_type & SP_CHARGES)
+					statpanel(S.panel,"[S.charge_cooldown_max? "[S.charge_counter]/[S.charge_cooldown_max] charges" : "Free"]",S.connected_button)
+				else if(charge_type & SP_RECHARGE || charge_type & SP_GRADUAL)
+					statpanel(S.panel,"[S.charge_cooldown_max? "[S.charge_counter/10.0]/[S.charge_cooldown_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 
 
@@ -1600,7 +1616,7 @@ Use this proc preferably at the end of an equipment loadout
 	if (self_vision)
 		if (isturf(loc))
 			var/turf/T = loc
-			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
+			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (lighting_planemaster.blend_mode == BLEND_MULTIPLY))
 				animate(self_vision, alpha = self_vision.target_alpha, time = 0)
 			else
 				animate(self_vision, alpha = 0, time = 0)
@@ -1661,6 +1677,9 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/Jitter(amount)
 	jitteriness = max(jitteriness,amount,0)
+
+/mob/proc/AdjustJitter(amount)
+	jitteriness = max(jitteriness+amount, 0)
 
 /mob/proc/Dizzy(amount)
 	dizziness = max(dizziness,amount,0)
@@ -1782,14 +1801,10 @@ Use this proc preferably at the end of an equipment loadout
 	return 1
 
 // Mobs tell access what access levels it has.
-/mob/proc/GetAccess()
+/mob/GetAccess()
 	return list()
 
 /mob/proc/get_visible_id()
-	return 0
-
-// Skip over all the complex list checks.
-/mob/proc/hasFullAccess()
 	return 0
 
 /mob/proc/assess_threat()
@@ -1877,7 +1892,17 @@ Use this proc preferably at the end of an equipment loadout
 	if(SS)
 		SS.supermatter_act(source)
 	else
-
+		if (client)
+			if(pulledby) // If we have a client, we add attack logs
+				add_logs(pulledby, src, "pulled into a suppermatter object", TRUE, source, get_coordinates_string(source))
+			else if(last_bumped_by_timestamp - 0.1 SECONDS <= world.time <= last_bumped_by_timestamp + 0.1 SECONDS) // If got bumped into a supermatter
+				var/mob/hostile = last_bumped_by.get()
+				add_logs(hostile, src, "bumped into a supermatter object", TRUE, source, get_coordinates_string(source))
+			else if(last_thrown_by_timestamp - 0.1 SECONDS <= world.time <= last_thrown_by_timestamp + 2 SECONDS) // If got thrown into a supermatter
+				var/mob/hostile = last_thrown_by.get()
+				add_logs(hostile, src, "thrown into a supermatter object", TRUE, source, get_coordinates_string(source))
+			else
+				attack_log += "\[[time_stamp()]\]: walked into supermatter (no bumper/no pusher)"
 		if(severity == SUPERMATTER_DUST)
 			dust()
 			return 1
@@ -1934,7 +1959,7 @@ Use this proc preferably at the end of an equipment loadout
 	var/init_deaf = ear_deaf
 	overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 	blinded = 1
-	eye_blind = 1
+	eye_blind = 11
 	ear_deaf = 1
 
 	..()
@@ -2069,9 +2094,9 @@ Use this proc preferably at the end of an equipment loadout
 	desc = "Morph back into your previous form."
 	spell_flags = GHOSTCAST
 	abbreviation = "RF"
-	charge_max = 1
+	charge_cooldown_max = 0.1 SECONDS
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	hud_state = "wiz_mindswap"
 
@@ -2140,6 +2165,13 @@ Use this proc preferably at the end of an equipment loadout
 		alpha = alphas[alphas[1]]
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(status_flags & PACIFIED)
+		if(locate(/datum/event/profound_peace) in events)
+			to_chat(src, "<span class='notice'>You feel [pick("like ","as if ","")]this [pick("would misalign your inner chakras","prevents you from attaining nirvana","would be bad for your own karma")].</span>")
+		else
+			to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")
+		return TRUE
+
 	if(paxban_isbanned(ckey))
 		to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")
 		return TRUE
@@ -2171,12 +2203,11 @@ Use this proc preferably at the end of an equipment loadout
 				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")
 			return TRUE
 
-	for(var/mob/living/simple_animal/P in view(src))
+	for(var/mob/living/P in view(src))
 		if(P.isDead() || !P.pacify_aura)
 			continue
 		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
 		return TRUE
-
 	return FALSE
 
 /mob/proc/handle_regular_hud_updates()
@@ -2213,7 +2244,7 @@ Use this proc preferably at the end of an equipment loadout
 	if (target.isDead())
 		to_chat(src, "You cannot sense the target mind anymore, that's not good...")
 		return null
-	if(target_turf.z != our_turf.z) //Not on the same zlevel as us
+	if(target_turf.v != our_turf.v) //Not on the same vlevel as us
 		to_chat(src, "The target mind is too faint, they must be quite far from you...")
 		return null
 	if(target.stat != CONSCIOUS)
@@ -2246,6 +2277,9 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/isUnholy()
 	return (isanycultist(src) || isvampire(src))
+
+/mob/proc/beartrap_act(var/obj/item/weapon/beartrap/trap)
+	return FALSE
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

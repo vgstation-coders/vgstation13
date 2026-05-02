@@ -6,18 +6,18 @@
 	specialization = SSUTILITY
 
 	school = "transmutation"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = 0
 	invocation = "GIN'YU CAPAN"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	max_targets = 1
 	mind_affecting = 1
 	range = 1
-	cooldown_min = 200 //100 deciseconds reduction per rank
+	cooldown_min = 20 SECONDS //10 seconds reduction per rank
 	valid_targets = list(/mob/living/carbon/human,/mob/living/carbon/monkey) //which types of mobs are affected by the spell. NOTE: change at your own risk
 
 	var/list/protected_roles = list("Wizard","Changeling","Cultist") //which roles are immune to the spell
-	var/msg_wait = 500 //how long in deciseconds it waits before telling that body doesn't feel right or mind swap robbed of a spell
+	var/msg_wait = 50 SECONDS //how long in seconds it waits before telling that body doesn't feel right or mind swap robbed of a spell
 	amt_paralysis = 20 //how much the victim is paralysed for after the spell
 
 	hud_state = "wiz_mindswap"

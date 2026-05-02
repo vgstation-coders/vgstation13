@@ -19,7 +19,7 @@
   * * l_power - Intensity of the light
   * * l_color - Color of the light in hex
   */
-/atom/proc/set_light(var/l_range, var/l_power, var/l_color = NONSENSICAL_VALUE)
+/atom/proc/set_light(var/l_range, var/l_power, var/l_color = NONSENSICAL_VALUE,var/lowpriority=FALSE)
 	if(l_range > 0 && l_range < MINIMUM_USEFUL_LIGHT_RANGE)
 		l_range = MINIMUM_USEFUL_LIGHT_RANGE	//Brings the range up to 1.4, which is just barely brighter than the soft lighting that surrounds players.
 	if (l_power != null)
@@ -31,13 +31,13 @@
 	if (l_color != NONSENSICAL_VALUE)
 		light_color = l_color
 
-	update_light()
+	update_light(lowpriority)
 
 #undef NONSENSICAL_VALUE
 
 // Will update the light (duh).
 // Creates or destroys it if needed, makes it update values, makes sure it's got the correct source turf...
-/atom/proc/update_light()
+/atom/proc/update_light(var/lowpriority=FALSE)
 	set waitfor = FALSE
 	if (gcDestroyed)
 		return
@@ -53,9 +53,10 @@
 			. = loc
 
 		if (light) // Update the light or create it if it does not exist.
+			light.lowpriority=lowpriority
 			light.update(.)
 		else
-			light = new/datum/light_source(src, .)
+			light = new/datum/light_source(src, .,lowpriority)
 
 // Destroy our light source so we GC correctly.
 /atom/Destroy()

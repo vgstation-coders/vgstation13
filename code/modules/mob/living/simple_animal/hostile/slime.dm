@@ -1,6 +1,6 @@
 /mob/living/simple_animal/hostile/slime
 	name = "rabid slime"
-	desc = "you won't be petting that one."
+	desc = "You won't be petting that one."
 	speak_emote = list("angrily chirps")
 	icon = 'icons/mob/slimes.dmi'
 	icon_state = "grey baby slime eat"

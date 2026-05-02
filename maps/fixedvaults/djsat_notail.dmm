@@ -19,7 +19,7 @@
 	},
 /area/djstation)
 "aC" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -146,7 +146,7 @@
 	},
 /area/djstation)
 "gG" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 8
 	},
 /turf/simulated/floor{

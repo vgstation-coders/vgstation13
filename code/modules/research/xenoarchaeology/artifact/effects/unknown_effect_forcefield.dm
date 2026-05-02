@@ -1,10 +1,10 @@
 
 /datum/artifact_effect/forcefield
 	effecttype = "forcefield"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ANCIENT, ARTIFACT_STYLE_PRECURSOR, ARTIFACT_STYLE_RELIQUARY)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ANCIENT, ARTIFACT_STYLE_PRECURSOR, ARTIFACT_STYLE_RELIQUARY)
 	effect = ARTIFACT_EFFECT_AURA
 	var/list/created_field = list()
-	effect_type = 4
+	effect_hint = EFFECT_HINT_HIGH_FREQUENCY_PARTICLES
 
 /datum/artifact_effect/forcefield/New()
 	..()

@@ -8,6 +8,16 @@
 	var/intact = 1
 	var/turf_flags = 0
 
+	//icon stuff
+	var/base_icon_state
+	var/min_icon_states = 0
+	var/max_icon_states = 0
+	var/variance = 50 // % chance to use varied icon state
+	var/edge_priority = 0 // higher priority edges are placed over lower-priority ones
+	var/edge_flags = 0
+	var/edge_overlay_type = /obj/effect/edge_overlay
+	var/list/datum/weakref/edge_overlays
+
 	//properties for open tiles (/floor)
 	var/oxygen = 0
 	var/carbon_dioxide = 0
@@ -47,6 +57,7 @@
 	penetration_dampening = 10
 	// if STANDING     ON THE EDGE        OF THE z-level will transition you to another
 	var/can_border_transition = 0
+
 /*
  * Technically obsoleted by base_turf
 	//For building on the asteroid.
@@ -75,26 +86,93 @@
 
 	var/datum/paint_overlay/paint_overlay = null
 
+	var/list/footstep_sound
+	var/list/footstep_sound_barefoot
+	var/list/footstep_sound_claw
+
+	//reagent stuff
+	var/list/turf_reagents //a list of reagent ids, associated with their relative amount. eg WATER=1 these numbers should sum to 1, though.
+	var/reagent_interaction_flags = 0
+	var/turf_reagent_amount = null // null = do not make any reagents and skip the code
+	var/turf_reagent_method = TOUCH
+	var/turf_reagents_limited = null // if a non-null value, will treat it as a limited resivoir and will drain by reducing this number.
+	var/turf_reagents_temp = 0 //this uses strange reagent temperature stuff. i don't know what kind of unit method it's using but it's here regardless.
+
+	var/datum/virtual_z/v = null // virtual z level
+
+	var/player_entries = 0
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
 		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
-	if(locate(/obj/effect/ash) in src)
-		to_chat(user, "It is covered in ashes.")
 
 /turf/proc/process()
 	set waitfor = FALSE
 	universe.OnTurfTick(src)
+	if((reagent_interaction_flags & TURF_REAGENT_PROCESS))
+		for(var/mob/M in contents)
+			GiveReagentsTo(M)
+
+/turf/New()
+	// Lazy list inits
+	edge_overlays = list()
+	footstep_sound = list()
+	footstep_sound_barefoot = list()
+	footstep_sound_claw = list()
+
+	if(skip_turf_init)
+		return
+
+	..()
+
+	footstep_sound = sounds_floor
+	footstep_sound_barefoot = sounds_floor_barefoot
+	footstep_sound_claw = sounds_floor_claw
+	if(!base_icon_state)
+		base_icon_state = icon_state
+	pick_icon_state()
+
+	// Fire stuff
+	if(!thermal_material)
+		flammable = FALSE
+		return
+	else
+		if(!autoignition_temperature)
+			autoignition_temperature = thermal_material.autoignition_temperature
+		if(thermal_mass)
+			initial_thermal_mass = thermal_mass
+		fire_protection = world.time
+
+/turf/proc/pick_icon_state()
+	if(base_icon_state && max_icon_states && prob(variance))
+		icon_state = "[base_icon_state][rand(min_icon_states,max_icon_states)]"
 
 /turf/initialize()
+	if(skip_turf_init)
+		return
 	..()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
+		if (A.alert_holder)
+			A.alert_holder.add_turf(src)
 	for(var/atom/movable/AM in src)
 		src.Entered(AM)
+		if(istype(AM, /obj/effect/edge_overlay))
+			var/obj/effect/edge_overlay/edge = AM
+			if(edge.turf_type == src.type || edge.priority <= edge_priority)
+				qdel(edge)
 	if(opacity)
 		has_opaque_atom = TRUE
+	if((edge_flags & EDGE_CARDINAL) && !(turf_flags & DEFER_EDGING))
+		update_edges()
+
+	// MultiZ support
+	if(HasBelow(src.z))
+		var/turf/below = GetBelow(src)
+		if(below)
+			below.openspace_update(src)
 
 /turf/ex_act(severity)
 	return 0
@@ -108,6 +186,8 @@
 	return 0
 
 /turf/Exit(atom/movable/mover, atom/target)
+	if(reagent_interaction_flags & TURF_REAGENT_EXIT)
+		GiveReagentsTo(mover)
 	return TRUE
 
 /turf/Exited(atom/movable/mover, atom/newloc)
@@ -120,11 +200,64 @@
 		for(var/atom/movable/AM in src)
 			if(!AM.Cross(mover))
 				return FALSE
+	if(reagent_interaction_flags & TURF_REAGENT_ENTER)
+		GiveReagentsTo(mover)
+
+
+/turf/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD,var/luminous=FALSE)
+	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src
+	if(!tracks)
+		tracks = new typepath(src)
+	tracks.AddTracks(bloodDNA,comingdir,goingdir,bloodcolor,luminous)
+
+var/highest_player_entry = 0
 
 /turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
+
+	if(ismob(A))
+		var/mob/M = A
+		if(M.client)
+			player_entries++
+			if(player_entries > highest_player_entry)
+				highest_player_entry = player_entries
+
+		//footstep decal code
+		if (iscarbon(M))
+			var/mob/living/carbon/C = M
+			if(!C.on_foot())
+				return ..()
+			if(istype(M, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = C
+
+				// Tracking blood
+				var/list/bloodDNA = null
+				var/bloodcolor=""
+
+				// Do we have shoes?
+				if(H.shoes)
+					var/obj/item/clothing/shoes/S = H.shoes
+					if(S.track_blood && S.blood_DNA)
+						bloodDNA   = S.blood_DNA
+						bloodcolor = S.blood_color
+						S.track_blood = max(round(S.track_blood - 1, 1),0)
+				else
+					if(H.track_blood && H.feet_blood_DNA)
+						bloodDNA   = H.feet_blood_DNA
+						bloodcolor = H.feet_blood_color
+						H.track_blood = max(round(H.track_blood - 1, 1),0)
+
+				if (bloodDNA)
+					AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor,H.luminous_feet()) // Coming
+					if(Adjacent(OldLoc) && istype(OldLoc,/turf))
+						var/turf/from = OldLoc
+						from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor,H.luminous_feet()) // Going
+
+				bloodDNA = null
+		//end footstep decal code
+
 
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
@@ -162,13 +295,18 @@
 	if (!(src.can_border_transition))
 		return
 	if(ticker && ticker.mode)
-
 		// Okay, so let's make it so that people can travel z levels but not nuke disks!
 		// if(ticker.mode.name == "nuclear emergency")	return
-		if(A.z > 6)
+		if(!v)
 			return
-		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE + 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE + 1))
-
+		if(v.movementJammed)
+			return
+		if(v.size_x < TRANSITIONEDGE * 2 || v.size_y < TRANSITIONEDGE * 2)
+			v.movementJammed = TRUE // Too small to use any transitioning; fix incorrectly-set param
+			return
+		if(istype(A, /obj/item/projectile/meteor)) // Odyssey's micrometeors spawn from the edge of the map; without this they will immediately transition to a random v-level before striking the shuttle.
+			return
+		if (src.x <= v.x_min + TRANSITIONEDGE || src.x >= v.x_max - TRANSITIONEDGE || src.y <= v.y_min + TRANSITIONEDGE || src.y >= v.y_max - TRANSITIONEDGE)
 			var/list/contents_brought = list()
 			contents_brought += recursive_type_check(A)
 
@@ -177,11 +315,11 @@
 				if(B.is_locking(B.mob_lock_type))
 					contents_brought += recursive_type_check(B)
 
-			var/locked_to_current_z = FALSE//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
+			var/locked_to_current_v = FALSE//To prevent the moveable atom from leaving this V, examples are DAT DISK and derelict MoMMIs.
+			var/randomize_drift_position = TRUE // if true, randomizes where you'll end up on the new V-level
 
-			var/datum/zLevel/ZL = map.zLevels[z]
-			if(ZL.transitionLoops)
-				locked_to_current_z = TRUE
+			if(v.transitionLoops)
+				locked_to_current_v = TRUE
 
 			var/obj/item/weapon/disk/nuclear/nuclear = locate() in contents_brought
 			if(nuclear)
@@ -195,51 +333,71 @@
 				if(MOB.pulling)
 					was_pulling = MOB.pulling //Store the object to transition later
 
-
-			var/move_to_z = src.z
+			var/datum/virtual_z/move_to_v = v
+			if(v.transition_crosswrap_v && v.transition_crosswrap_v.len==4)
+				locked_to_current_v=TRUE //prevent shuffling z-level later in the code.
+				randomize_drift_position=FALSE
+				if(src.y >= v.y_max - TRANSITIONEDGE) // NORTH
+					move_to_v=v.transition_crosswrap_v[1]
+				else if(src.y <= v.y_min + TRANSITIONEDGE) // SOUTH
+					move_to_v=v.transition_crosswrap_v[2]
+				else if(src.x >= v.x_max - TRANSITIONEDGE) // EAST
+					move_to_v=v.transition_crosswrap_v[3]
+				else if(src.x <= v.x_min + TRANSITIONEDGE) // WEST
+					move_to_v=v.transition_crosswrap_v[4]
 
 			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
 			for(var/mob/living/L in contents_brought)
-				if(L.locked_to_z != 0)
-					if(src.z == L.locked_to_z)
-						locked_to_current_z = TRUE
+				if(L.locked_to_v)
+					if(src.v == L.locked_to_v)
+						locked_to_current_v = TRUE
 					else
 						to_chat(L, "<span class='warning'>You find your way back.</span>")
-						move_to_z = L.locked_to_z
-
+						move_to_v = L.locked_to_v
 			var/safety = 1
 
-			if(!locked_to_current_z)
-				while(move_to_z == src.z)
-					var/move_to_z_str = pickweight(accessable_z_levels)
-					move_to_z = text2num(move_to_z_str)
+			if(!locked_to_current_v)
+				while(move_to_v == src.v)
+					var/picked = pickweight(accessable_v_levels[v.transition_channel])
+					var/datum/virtual_z/vz_to_use = map.getVLevel(text2num(picked))
+					if(istype(vz_to_use))
+						move_to_v = vz_to_use
 					safety++
 					if(safety > 10)
 						break
 
-			if(!move_to_z)
+
+			if(!move_to_v)
 				return
 
-			INVOKE_EVENT(A, /event/z_transition, "user" = A, "from_z" = A.z, "to_z" = move_to_z)
+			if(isnum(move_to_v)) //DEBUG
+				move_to_v = map.getVLevel(move_to_v)
+
+			var/datum/virtual_z/old_v = src.v
+			INVOKE_EVENT(A, /event/v_transition, "user" = A, "from_v" = old_v, "to_v" = move_to_v)
 			for(var/atom/movable/AA in contents_brought)
-				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
-			A.z = move_to_z
+				INVOKE_EVENT(AA, /event/v_transition, "user" = AA, "from_v" = old_v, "to_v" = move_to_v)
+			A.z = move_to_v.z()
 
-			if(src.x <= TRANSITIONEDGE)
-				A.x = world.maxx - TRANSITIONEDGE - 2
-				A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
+			if(src.x <= v.x_min + TRANSITIONEDGE) // entered from src's WEST edge -> appear on dest's EAST edge
+				A.x = move_to_v.x_max - TRANSITIONEDGE - 2
+				if(randomize_drift_position)
+					A.y = rand(move_to_v.y_min + TRANSITIONEDGE + 2, move_to_v.y_max - TRANSITIONEDGE - 2)
 
-			else if (A.x >= (world.maxx - TRANSITIONEDGE - 1))
-				A.x = TRANSITIONEDGE + 1
-				A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
+			else if(src.x >= v.x_max - TRANSITIONEDGE) // EAST -> WEST
+				A.x = move_to_v.x_min + TRANSITIONEDGE + 1
+				if(randomize_drift_position)
+					A.y = rand(move_to_v.y_min + TRANSITIONEDGE + 2, move_to_v.y_max - TRANSITIONEDGE - 2)
 
-			else if (src.y <= TRANSITIONEDGE)
-				A.y = world.maxy - TRANSITIONEDGE -2
-				A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
+			else if(src.y <= v.y_min + TRANSITIONEDGE) // SOUTH -> NORTH
+				A.y = move_to_v.y_max - TRANSITIONEDGE - 2
+				if(randomize_drift_position)
+					A.x = rand(move_to_v.x_min + TRANSITIONEDGE + 2, move_to_v.x_max - TRANSITIONEDGE - 2)
 
-			else if (A.y >= (world.maxy - TRANSITIONEDGE - 1))
-				A.y = TRANSITIONEDGE + 1
-				A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
+			else if(src.y >= v.y_max - TRANSITIONEDGE) // NORTH -> SOUTH
+				A.y = move_to_v.y_min + TRANSITIONEDGE + 1
+				if(randomize_drift_position)
+					A.x = rand(move_to_v.x_min + TRANSITIONEDGE + 2, move_to_v.x_max - TRANSITIONEDGE - 2)
 
 			spawn (0)
 				if(was_pulling && MOB) //Carry the object they were pulling over when they transition
@@ -252,9 +410,9 @@
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
 
-			INVOKE_EVENT(A, /event/post_z_transition, "user" = A, "from_z" = A.z, "to_z" = move_to_z)
+			INVOKE_EVENT(A, /event/post_v_transition, "user" = A, "from_v" = old_v, "to_v" = move_to_v)
 			for(var/atom/movable/AA in contents_brought)
-				INVOKE_EVENT(AA, /event/post_z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
+				INVOKE_EVENT(AA, /event/post_v_transition, "user" = AA, "from_v" = old_v, "to_v" = move_to_v)
 
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
@@ -316,11 +474,58 @@
 /turf/proc/add_dust()
 	return
 
+/// Lightweight turf change for procedural planet generation (space -> unsimulated only).
+/// Skips connections, zones, SSair, universe notifications, holomap, and edge processing.
+/// Falls back to full ChangeTurf if source is not /turf/space.
+/turf/proc/ChangeTurfPlanetGen(var/turf/N)
+	if(!N)
+		return
+	if(!istype(src, /turf/space)) // Safety: fall back for non-space turfs (e.g. ruin turfs)
+		return ChangeTurf(N, defer_edges = TRUE)
+
+	// Remove from old area's turf tracking to prevent stale references
+	var/area/A = loc
+	if(A)
+		A.area_turfs -= src
+
+	var/old_opacity = opacity
+	var/old_dynamic_lighting = dynamic_lighting
+	var/old_affecting_lights = affecting_lights
+	var/old_lighting_overlay = lighting_overlay
+	var/old_corners = corners
+
+	turf_flags |= DEFER_EDGING
+	var/turf/W = new N(src)
+	W.turf_flags |= DEFER_EDGING
+	// Skip initialize() — DEFER_EDGING is set, no movables on fresh space turfs, area tracking done here
+	// Skip levelupdate() — fresh turfs from space have no level-1 objects to hide
+	var/area/WA = W.loc
+	if(WA)
+		WA.area_turfs += W
+
+	has_opaque_atom = opacity
+	if(SSlighting && SSlighting.initialized)
+		lighting_overlay = old_lighting_overlay
+		affecting_lights = old_affecting_lights
+		corners = old_corners
+		if((old_opacity != opacity) || (dynamic_lighting != old_dynamic_lighting))
+			reconsider_lights()
+		if(dynamic_lighting != old_dynamic_lighting)
+			if(dynamic_lighting)
+				lighting_build_overlay()
+			else
+				lighting_clear_overlay()
+	return W
+
 //Creates a new turf
-/turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1,var/defer_edges = FALSE)
+	var/area/original_area=loc
 	if(loc)
 		var/area/A = loc
 		A.area_turfs -= src
+		if(istype(A, /area/shuttle))
+			turf_flags |= SHUTTLE_TURF
+	var/preserved_shuttle_flag = turf_flags & SHUTTLE_TURF
 	if (!N || !allow)
 		return
 	remove_particles()
@@ -334,6 +539,7 @@
 	var/old_density = density
 	var/old_holomap_draw_override = holomap_draw_override
 	var/old_registered_events = registered_events
+	var/datum/virtual_z/old_v = v
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -355,6 +561,16 @@
 		for(var/obj/effect/overlay/puddle/ice/P in src)
 			qdel(P)
 
+	if(edge_overlays && edge_overlays.len)
+		for(var/datum/weakref/EO in edge_overlays)
+			var/obj/effect/edge_overlay/E = EO.get()
+			if(E)
+				var/turf/T = E.loc
+				if(T)
+					var/edge_dir = get_dir(src, T)
+					E.remove_direction(edge_dir, src)
+		edge_overlays.len = 0
+
 	//Rebuild turf
 	var/turf/T = src
 	env = T.air //Get the air before the change
@@ -372,6 +588,8 @@
 			QDEL_NULL(F.floor_tile)
 		F = null
 
+	if(defer_edges)
+		turf_flags |= DEFER_EDGING
 	if(ispath(N, /turf/simulated/floor))
 		//if the old turf had a zone, connect the new turf to it as well - Cael
 		//Adjusted by SkyMarshal 5/10/13 - The air master will handle the addition of the new turf.
@@ -381,8 +599,13 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/simulated/W = new N(src)
+		W.v = old_v
+		if(preserved_shuttle_flag)
+			W.turf_flags |= SHUTTLE_TURF
+		if(defer_edges)
+			W.turf_flags |= DEFER_EDGING
 		if(world.has_round_started())
-			initialize()
+			W.initialize()
 		if(env)
 			W.air = env //Copy the old environment data over if both turfs were simulated
 
@@ -406,6 +629,11 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/W = new N(src)
+		W.v = old_v
+		if(preserved_shuttle_flag)
+			W.turf_flags |= SHUTTLE_TURF
+		if(defer_edges)
+			W.turf_flags |= DEFER_EDGING
 		if(world.has_round_started())
 			W.initialize()
 
@@ -438,6 +666,18 @@
 	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
+	if(!defer_edges)
+		for(var/turf/adj in range(1,src))
+			adj.update_edges()
+	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
+		if(.)
+			var/turf/NewTurf=.
+			NewTurf.affecting_lights=list()
+			NewTurf.lighting_clear_overlay()
+			NewTurf.lighting_build_overlay()
+			NewTurf.set_light(SSDayNight.next_light_range,SSDayNight.next_light_power,SSDayNight.current_timeOfDay)
+
+
 
 /turf/proc/AddDecal(var/image/decal)
 	if(!turfdecals)
@@ -463,8 +703,9 @@
 
 /turf/proc/get_underlying_turf()
 	var/area/A = loc
-	if(A.base_turf_type)
-		return A.base_turf_type
+	var/area_base = A.get_base_turf_type(src)
+	if(area_base)
+		return area_base
 
 	return get_base_turf(z)
 
@@ -671,7 +912,7 @@
 	I.alpha = 128
 	// Since holomaps are overlays of the turf
 	// This'll make them always be just above the turf and not block interaction.
-	I.plane = FLOAT_PLANE + 1 //Yes, there's a define equal to this value, but what we specifically want here is one plane above the parent, which is what this means.
+	I.plane = FLOAT_PLANE + 1
 	// When I said above turfs I mean it.
 	I.layer = HOLOMAP_LAYER
 
@@ -737,6 +978,22 @@
 /turf/proc/remove_rot()
 	return
 
+/turf/attackby(var/obj/item/I, var/mob/user)
+	//if you're using this and it's not triggering, ensure your turf is calling ..() properly
+	if(turf_reagent_amount!=null && (reagent_interaction_flags & TURF_REAGENT_FILLS_CONTAINERS) && istype(I,/obj/item/weapon/reagent_containers))
+		to_chat(user,"<span class='notice'>You fill \the [I] from \the [src]</span>")
+		var/obj/item/weapon/reagent_containers/RC=I
+		if(!turf_reagents)
+			turf_reagents = list()
+		for(var/RID in turf_reagents)
+			RC.reagents.add_reagent(RID,turf_reagents[RID]*RC.amount_per_transfer_from_this)
+		if(turf_reagents_limited!=null)
+			turf_reagents_limited-=RC.amount_per_transfer_from_this
+			if(turf_reagents_limited<=0)
+				OnEmptyReagents()
+		return TRUE
+	return ..()
+
 //Pathnode stuff
 
 /turf/proc/FindPathNode(var/id)
@@ -752,3 +1009,53 @@
 	..()
 	if (cleanliness >= CLEANLINESS_BLEACH)
 		remove_paint_overlay(TRUE)
+
+//reagent things
+
+/turf/proc/GiveReagentsTo(var/atom/A)
+	if(!A)
+		return
+	if(turf_reagent_amount==null)
+		return
+	if(!turf_reagents)
+		turf_reagents = list()
+	for(var/RID in turf_reagents)
+		var/datum/reagent/D = chemical_reagents_list[RID]
+		if(D)
+			var/datum/reagent/R = new D.type()
+			R.volume = turf_reagent_amount * turf_reagents[RID]
+			R.adj_temp = turf_reagents_temp
+
+			if (ismob(A))
+				var/mob/M=A
+				if( (!(M.flags & INVULNERABLE)) || (reagent_interaction_flags & TURF_REAGENT_INGORES_INVULNERABLE) )
+					if (isanimal(A))
+						R.reaction_animal(A, turf_reagent_method , turf_reagent_amount)
+					else
+						R.reaction_mob(A, turf_reagent_method , turf_reagent_amount, ALL_LIMBS)
+			else if ( istype(A,/obj/machinery) || istype(A,/obj/item)  || istype(A,/obj/structure) )
+				R.reaction_obj(A, turf_reagent_amount)
+
+			qdel(R)
+
+	if(turf_reagents_limited!=null)
+		turf_reagents_limited-=turf_reagent_amount
+		if(turf_reagents_limited<=0)
+			OnEmptyReagents()
+
+/turf/proc/OnEmptyReagents()
+	turf_reagent_amount = null
+
+/turf/proc/mob_life_effects(mob/living/affected) //apply effects to mobs standing on this turf every life() tick
+	return
+
+/turf/get_virtual_z()
+	if(v)
+		return v
+	else
+		for(var/datum/virtual_z/check_vz in map.getAllVLevels())
+			if(check_vz.parent_z?.z != z)
+				continue
+			if(check_vz.x_min <= x && check_vz.x_max >= x && check_vz.y_min <= y && check_vz.y_max >= y)
+				return check_vz
+	return null

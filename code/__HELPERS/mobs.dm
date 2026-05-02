@@ -13,6 +13,52 @@ var/static/list/ALL_LIMBS = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
 
 	return h_style
 
+/proc/random_hair_color()
+	var/red = 0
+	var/green = 0
+	var/blue = 0
+
+	var/col = pick("blonde", "black", "chestnut", "copper", "brown", "wheat", "old", 15;"punk")
+	switch(col)
+		if("blonde")
+			red = 255
+			green = 255
+			blue = 0
+		if("black")
+			red = 0
+			green = 0
+			blue = 0
+		if("chestnut")
+			red = 153
+			green = 102
+			blue = 51
+		if("copper")
+			red = 255
+			green = 153
+			blue = 0
+		if("brown")
+			red = 102
+			green = 51
+			blue = 0
+		if("wheat")
+			red = 255
+			green = 255
+			blue = 153
+		if("old")
+			red = rand (100, 255)
+			green = red
+			blue = red
+		if("punk")
+			red = rand(0, 255)
+			green = rand(0, 255)
+			blue = rand(0, 255)
+
+	red = max(min(red + rand (-25, 25), 255), 0)
+	green = max(min(green + rand (-25, 25), 255), 0)
+	blue = max(min(blue + rand (-25, 25), 255), 0)
+	return list(red, green, blue)
+
+
 /proc/GetOppositeDir(var/dir)
 	switch(dir)
 		if(NORTH)
@@ -243,12 +289,13 @@ Proc for attack log creation, because really why not
 
 /proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var/addition=null)
 	if(user && ismob(user))
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has [what_done] [target ? "[target.name][(ismob(target) && target.ckey) ? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
+		user.attack_log += "\[[time_stamp()]\] Has [what_done] [target ? "[target.name][(ismob(target) && target.ckey) ? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]"
 	if(target && ismob(target))
-		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [what_done] by [user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
+		target.attack_log += "\[[time_stamp()]\] Has been [what_done] by [user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]"
 		target.assaulted_by(user)
 	if(admin)
 		log_attack("<font color='red'>[user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"] [what_done] [target ? "[target.name][(ismob(target) && target.ckey)? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
+		message_admins("[user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"] <font color='red'>[what_done]</font> [target ? "[target.name][(ismob(target) && target.ckey)? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition][formatJumpTo(target)]")
 
 /proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var/addition=null)
 	var/target_text = "NON-EXISTENT TARGET"
@@ -348,3 +395,15 @@ Proc for attack log creation, because really why not
 	for (var/mob/M in player_list)
 		if (M.ckey == ckey)
 			return M
+
+/proc/get_open_maintenance_turfs(var/num)
+	var/list/turf/simulated/floor/turfs = list()
+	for(var/areapath in typesof(/area/maintenance))
+		var/area/A = locate(areapath)
+		for(var/turf/simulated/floor/F in A.contents)
+			if(!is_blocked_turf(F))
+				turfs += F
+	var/list/turf/simulated/floor/output = list()
+	for(var/i = 1 to num)
+		output += pick_n_take(turfs)
+	return output
