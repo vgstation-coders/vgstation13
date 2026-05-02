@@ -18,6 +18,8 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "hydro"
 	item_state = "analyzer"
+	starting_materials = list(MAT_IRON = 100, MAT_GLASS = 40)
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=2;"
 	var/form_title //Descriptive title of the last plant scanned, example: mutant watermelon (#81)
 	var/last_data  //Stores the entire last scan, for printing purposes.
 	var/tmp/last_print = 0 //When was the last printing, works as a cooldown to prevent paperspam
@@ -213,12 +215,12 @@
 		dat = jointext(dat,"")
 		last_data = dat
 		dat += "<br>\[<a href='?src=\ref[src];print=1'>print report</a>\] \[<a href='?src=\ref[src];clear=1'>clear</a>\]"
-		user << browse(dat,"window=plant_analyzer_\ref[src];size=500x600")
+		user << browse(HTML_SKELETON(dat),"window=plant_analyzer_\ref[src];size=500x600")
 	return
 
 /obj/item/device/analyzer/plant_analyzer/attack_self(mob/user as mob)
 	if(last_data)
-		user << browse(last_data,"window=plant_analyzer_\ref[src];size=400x500")
+		user << browse(HTML_SKELETON(last_data),"window=plant_analyzer_\ref[src];size=400x500")
 	else
 		to_chat(user, "<span class='notice'>[bicon(src)] No plant scan data in memory.</span>")
 	return 0
@@ -282,7 +284,7 @@
 	siemens_coefficient = 1
 	force = 12.0
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 5000)
+	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_METAL
 	throwforce = 15.0
 	throw_speed = 4

@@ -12,25 +12,37 @@
 	var/crush_flick = "mortar_crush"
 
 	var/list/blend_items = list (
-		/obj/item/stack/sheet/metal           = list(IRON,20),
-		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA,20),
-		/obj/item/stack/sheet/mineral/uranium = list(URANIUM,20),
-		/obj/item/stack/sheet/mineral/clown   = list(BANANA,20),
-		/obj/item/stack/sheet/mineral/silver  = list(SILVER,20),
-		/obj/item/stack/sheet/mineral/gold    = list(GOLD,20),
-		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
-		/obj/item/stack/sheet/mineral/reticulite = list(ZETADUST = 10),
+		/obj/item/trash/scrap                 = list(IRON,10),
+		/obj/item/stack/sheet/metal           = list(IRON,U_PER_SHEET),
+		/obj/item/stack/sheet/glass           = list(SILICA,U_PER_SHEET),
+		/obj/item/stack/sheet/wood            = list(SAWDUST,U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA,U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/uranium = list(URANIUM,U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/clown   = list(BANANA,U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/silver  = list(SILVER,U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/gold    = list(GOLD,U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST,U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/reticulite = list(ZETADUST,U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON,1),
+		/obj/item/stack/sheet/wax			  = list(WAX,5),
+		/obj/item/candle					  = list(WAX,1.25),
+		/obj/item/trash/candle				  = list(WAX,1),
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID,10),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL,10),
-		/obj/item/stack/sheet/charcoal        = list("charcoal",20),
+		/obj/item/stack/sheet/charcoal        = list(CHARCOAL,U_PER_SHEET),
+		/obj/item/stack/sheet/bone	          = list(BONEMARROW,U_PER_SHEET),
+
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans   = list(SOYMILK,1),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato     = list(KETCHUP,2),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/corn       = list(CORNOIL,3),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/wheat      = list(FLOUR,5),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk  = list(RICE,5),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries   = list(CHERRYJELLY,1),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/plastellium = list(PLASTICIDE,5),
+
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans        = list(ALUMINUM,10),
 		/obj/item/trash/soda_cans										 = list(ALUMINUM,10),
+		/obj/item/weapon/ectoplasm 										 = list(ECTOPLASM,5),
 		/obj/item/trash/egg												 = list(CALCIUMCARBONATE,1),
 		/obj/item/seeds	                      = list(BLACKPEPPER,5),
 		/obj/item/device/flashlight/flare     = list(SULFUR,10),
@@ -42,7 +54,10 @@
 
 		//Recipes must include both variables!
 		/obj/item/weapon/reagent_containers/food = list("generic",0),
+		/obj/item/weapon/reagent_containers/pill = list("generic",0),
 		/obj/item/ice_crystal                = list(ICE, 10),
+		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 10),
+		/obj/item/weapon/grown/log    		 = list(SAWDUST = 10),
 	)
 
 
@@ -105,12 +120,16 @@
 		for(var/i in juice_items)
 			if(istype(crushable, i))
 				id = juice_items[i]
-		if(!id)
+		if(!islist(id))
 			return
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
-		if(juiceable.potency == -1)
-			juiceable.potency = 0
-		reagents.add_reagent(id[1], min(round(5*sqrt(juiceable.potency)), volume - reagents.total_volume))
+		var/add_amount = id[id[1]]
+		if(istype(crushable,/obj/item/weapon/reagent_containers/food/snacks/grown))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
+			if(juiceable.potency == -1)
+				juiceable.potency = 0
+			if(juiceable.potency)
+				add_amount = juiceable.potency
+		reagents.add_reagent(id[1], min(round(5*sqrt(add_amount)), volume - reagents.total_volume))
 	else if(is_type_in_list(crushable, blend_items))
 		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")

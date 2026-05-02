@@ -340,6 +340,9 @@ var/global/list/playable_species = list("Human")
 /datum/species/proc/conditional_playable()
 	return 0
 
+/datum/species/proc/fallback()
+	return "Human"
+
 /datum/species/human
 	name = "Human"
 	known_languages = list(LANGUAGE_HUMAN)
@@ -465,6 +468,8 @@ var/global/list/playable_species = list("Human")
 	var/MM = text2num(time2text(world.timeofday, "MM"))
 	return MM == 10 //October
 
+/datum/species/skellington/fallback()
+	return "Plasmaman"
 
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(25))
@@ -847,7 +852,7 @@ var/list/has_died_as_golem = list()
 	H.death(1)
 	H.handle_body_destroyed()
 	var/gib_radius = 0
-	if(H.reagents.has_reagent(LUBE))
+	if(H.reagents.has_any_reagents(LUBES))
 		gib_radius = 6
 	hgibs(H.loc, H.virus2, H.dna, flesh_color, blood_color, gib_radius)
 	spawn()
@@ -875,7 +880,7 @@ var/list/has_died_as_golem = list()
 /mob/living/adamantine_dust/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/slime_extract/adamantine))
 		var/obj/item/slime_extract/adamantine/A = I
-		if(A.Uses)
+		if(A.uses)
 			if(!mind)
 				to_chat(user, "<span class='warning'>You press \the [A] into \the [src], but nothing happens.</span>")
 			else
@@ -1000,7 +1005,7 @@ var/list/has_died_as_golem = list()
 			//Override the current limb status and don't cause an explosion
 			E.droplimb(1, 1)
 	var/gib_radius = 0
-	if(H.reagents.has_reagent(LUBE))
+	if(H.reagents.has_any_reagents(LUBES))
 		gib_radius = 6
 
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
@@ -1119,6 +1124,7 @@ var/list/has_died_as_golem = list()
 //	belt_icons      = 'icons/mob/belt.dmi'
 	wear_suit_icons = 'icons/mob/species/insectoid/suit.dmi'
 	wear_mask_icons = 'icons/mob/species/insectoid/mask.dmi'
+	accessory_icons = 'icons/mob/species/insectoid/clothing_accessories.dmi'
 //	back_icons      = 'icons/mob/back.dmi'
 
 

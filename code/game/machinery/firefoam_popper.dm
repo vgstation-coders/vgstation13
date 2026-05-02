@@ -16,7 +16,7 @@
 
 /obj/item/firefoam_popper/New()
 	contained_parts = newlist(
-		/obj/item/weapon/circuitboard/firefoam_popper,
+		/obj/item/weapon/circuitboard/small/firefoam_popper,
 		/obj/item/weapon/stock_parts/scanning_module,
 		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/manipulator
@@ -96,7 +96,7 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/firefoam_popper,
+		/obj/item/weapon/circuitboard/small/firefoam_popper,
 		/obj/item/weapon/stock_parts/scanning_module,
 		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/manipulator
@@ -152,10 +152,9 @@
 	for(var/turf/T in dview(covered_range, epicenter, INVISIBILITY_MAXIMUM))
 		if(cheap_pythag(T.x - epicenter.x,T.y - epicenter.y) <= covered_range + 0.5)
 			if(test_reach(epicenter,T,PASSTABLE|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER|PASSRAILING))
-				var/datum/reagents/R = new/datum/reagents(5)
-				R.my_atom = T
-				R.add_reagent(WATER, 5)
-				var/obj/effect/foam/fire/F = new /obj/effect/foam/fire(T,R)
+				create_reagents(5)
+				reagents.add_reagent(WATER, 5)
+				var/obj/effect/foam/fire/F = new /obj/effect/foam/fire(T,reagents)
 				var/turf/F_turf = get_turf(F)
 				F.reagents.reaction(F_turf, TOUCH)
 				for(var/atom/atm in F_turf)
@@ -211,11 +210,10 @@
 		alpha = 0
 		pixel_y = 4
 
-/obj/item/weapon/circuitboard/firefoam_popper
-	name = "Circuit Board (Firefoam Popper)"
+/obj/item/weapon/circuitboard/small/firefoam_popper
+	name = "Mini Circuit Board (Firefoam Popper)"
 	desc = "A circuit board used to run a firefoam popper."
 	build_path = /obj/machinery/firefoam_popper
-	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;"
 	req_components = list (
 							/obj/item/weapon/stock_parts/scanning_module = 1,

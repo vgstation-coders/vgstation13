@@ -228,8 +228,8 @@
 			"<span class='notice'>You begin [PK.drill_verb] straight into \the [src].</span>")
 			PK.playtoolsound(src, 100)
 			if(do_after(user, src, (MINE_DURATION * PK.toolspeed) * 10))
-				user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
-				"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
+				user.visible_message("<span class='notice'>[user]'s [PK.name] tears though the last of \the [src], leaving nothing but a girder.</span>", \
+				"<span class='notice'>Your [PK.name] tears though the last of \the [src], leaving nothing but a girder.</span>")
 				dismantle()
 	else
 		to_chat(user, "<span class='notice'>You can't reach, close it first!</span>")

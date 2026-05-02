@@ -58,7 +58,7 @@
 
 	if(img)
 		user << browse_rsc(img.img, "tmp_photo.png")
-		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
+		info_image = "<img src='tmp_photo.png' width='192' style='image-rendering: pixelated' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
 	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name];size=[display_x]x[display_y]")
 	onclose(user, "[name]")
 
@@ -319,12 +319,12 @@
 			//Not writing with a pen or crayon
 			if(!istype(i,/obj/item/weapon/pen) && !istype(i,/obj/item/toy/crayon))
 				to_chat(usr, "<span class='warning'>Please ensure your pen is in your active hand and that you're holding the paper.</span>")
-				continue
+				return
 
 			//Lost the paper or lost consciousness
 			if(!Adjacent(usr, 1) || usr.isUnconscious()) //the 1 means that the paper can be in one other item and be written on
-				to_chat(usr, "<span class='warning'>You are to unable to write on this paper.</span>")
-				continue
+				to_chat(usr, "<span class='warning'>You are unable to write on this paper.</span>")
+				return
 
 		while(isnull(new_text))
 
@@ -541,3 +541,31 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/crumpled/bloody
 	icon_state = "scrap_bloodied"
+
+/obj/item/weapon/paper/random
+	var/list/possible = list()
+	var/list/blacklist = list(
+		/obj/item/weapon/paper/flag,
+		/obj/item/weapon/paper/photograph,
+		/obj/item/weapon/paper/derelict_invoice,
+		/obj/item/weapon/paper/amelab1,
+		/obj/item/weapon/paper/amelab2,
+		/obj/item/weapon/paper/amelab3,
+		/obj/item/weapon/paper/amelab4,
+		/obj/item/weapon/paper/amelab5,
+		/obj/item/weapon/paper/amelab6,
+		/obj/item/weapon/paper/amelab7,
+		/obj/item/weapon/paper/explosive,
+		/obj/item/weapon/paper/djstation,
+		/obj/item/weapon/paper/talisman,
+		/obj/item/weapon/paper/sokoban,
+		/obj/item/weapon/paper/tomb_notes,
+		/obj/item/weapon/paper/vox_paper,
+		)
+
+/obj/item/weapon/paper/random/New()
+	..()
+	possible = subtypesof(/obj/item/weapon/paper)
+	var/paper_type = pick(possible - blacklist)
+	new paper_type(get_turf(src))
+	qdel(src)

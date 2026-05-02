@@ -288,7 +288,7 @@ var/list/obj/item/device/flashlight/lamp/lamps = list()
 
 /obj/item/device/flashlight/flare
 	name = "flare"
-	desc = "A red Nanotrasen issued flare. There are instructions on the side, it reads 'pull cord, make light'."
+	desc = "A red flare, issued by Nanotrasen. There are instructions on the side, it reads 'pull cord, make light'."
 	w_class = W_CLASS_SMALL
 	brightness_on = 1
 	range_on = 4
@@ -299,7 +299,7 @@ var/list/obj/item/device/flashlight/lamp/lamps = list()
 	sound_off = ""
 	var/fuel = 0
 	var/on_damage = 7
-	heat_production = 1500
+	heat_production = 15000
 	source_temperature = TEMPERATURE_FLAME
 	flammable = FALSE //lol
 	var/H_color = ""
@@ -324,7 +324,7 @@ var/list/obj/item/device/flashlight/lamp/lamps = list()
 /obj/item/device/flashlight/flare/process()
 	var/turf/pos = get_turf(src)
 	if(pos && on)
-		try_hotspot_expose(heat_production, LARGE_FLAME, -1)
+		try_hotspot_expose(source_temperature, MEDIUM_FLAME, -1)
 	fuel = max(fuel - 1, 0)
 	if(!fuel || !on)
 		turn_off()

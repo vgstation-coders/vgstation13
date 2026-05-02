@@ -32,7 +32,7 @@
 
 /mob/living/silicon/robot/movement_tally_multiplier()
 	. = ..()
-	if(is_component_functioning("power cell") && cell)
+	if(is_component_functioning("power cell") && get_cell())
 		var/timeofday = world.timeofday
 		if((timeofday - last_tase_timeofday) < SILICON_TASER_SLOWDOWN_DURATION)
 			. *= SILICON_TASER_SLOWDOWN_MULTIPLIER
@@ -41,12 +41,13 @@
 		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
 			. *= SILICON_MOBILITY_MODULE_SPEED_MODIFIER
 		var/low_movement_speed_trigger = get_percentage_power_for_movement()
-		if(cell.charge <= low_movement_speed_trigger) //25% of the cell OR 25% of a normal cell, whatever is lower
-			if(cell.charge <= 0)
+		var/cellcharge = get_cell_charge(src)
+		if(cellcharge <= low_movement_speed_trigger) //25% of the cell OR 25% of a normal cell, whatever is lower
+			if(cellcharge <= 0)
 				. *= SILICON_NO_CELL_SLOWDOWN
 			else
 				//This should be +1.4 at the trigger point and +2 at maximum
-				. += SILI_LOW_SLOW + 0.6*(low_movement_speed_trigger-cell.charge)/low_movement_speed_trigger
+				. += SILI_LOW_SLOW + 0.6*(low_movement_speed_trigger-cellcharge)/low_movement_speed_trigger
 		else
 			if(module)
 				. *= module.speed_modifier

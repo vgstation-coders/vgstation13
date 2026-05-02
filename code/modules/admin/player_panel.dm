@@ -107,7 +107,7 @@
 								if ( search.innerText.toLowerCase().indexOf(filter) == -1 )
 								{
 									//document.write("a");
-									//ltr.removeChild(tr);
+    								tr.parentNode.removeChild(tr);
 									td.innerHTML = "";
 									i--;
 								}
@@ -340,7 +340,7 @@
 	</body></html>
 	"}
 
-	usr << browse(dat, "window=players;size=600x480")
+	usr << browse(HTML_SKELETON(dat), "window=players;size=600x480")
 
 //The old one
 /datum/admins/proc/player_panel_old()

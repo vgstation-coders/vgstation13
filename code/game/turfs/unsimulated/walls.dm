@@ -13,7 +13,7 @@
 
 /turf/unsimulated/wall/isSmoothableNeighbor(atom/A, bordercheck)
 	return smooths && istype(A, src.type)
-	
+
 /turf/unsimulated/wall/canSmoothWith()
 	return smooths
 
@@ -54,7 +54,7 @@
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
-	if(istype(W,/obj/item/tool/solder) && bullet_marks)
+	if(issolder(W) && bullet_marks)
 		var/obj/item/tool/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
@@ -115,9 +115,7 @@ var/icon/current_round_splashscreen
 	opacity = 1
 	density = 1
 	smooths = 0
-
-/turf/unsimulated/wall/evil/New()
-	..()
-
-	if(prob(80))
-		icon_state = "evilwall_[rand(1,8)]"
+	base_icon_state = "evilwall_"
+	min_icon_states = 2
+	max_icon_states = 8
+	variance = 80

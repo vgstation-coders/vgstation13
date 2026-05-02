@@ -35,6 +35,15 @@
 
 /obj/item/clothing/suit/fire/firefighter/attackby(obj/item/W,mob/user)
 	..()
+	if(istype(W,/obj/item/stack/sheet/mineral/lead) && !stage)
+		var/obj/item/stack/sheet/mineral/lead/S=W
+		if(S.amount>=4)
+			to_chat(user,"<span class='notice'>You insert some sheets into \the [src].</span>")
+			S.use(4)
+			new /obj/item/clothing/suit/fire/firefighter/leadlined(src.loc)
+			qdel(src)
+		else
+			to_chat(user,"<span class='notice'>You need 4 sheets to shield \the [src]!</span>")
 	if(istype(W,/obj/item/clothing/suit/spaceblanket) && !stage)
 		stage = 1
 		to_chat(user,"<span class='notice'>You add \the [W] to \the [src]</span>")
@@ -56,6 +65,16 @@
 	item_state = "ro_suit"
 	w_class = W_CLASS_LARGE//bulky item
 	slowdown = HARDSUIT_SLOWDOWN_MED
+
+
+/obj/item/clothing/suit/fire/firefighter/leadlined
+	name = "lead-lined firesuit"
+	desc = "A suit that protects against fire and heat, with added radiation shielding."
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
+	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 33)
+	armor_absorb = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 4.0)
+	
 
 /*
  * Bomb protection

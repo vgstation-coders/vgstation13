@@ -19,7 +19,6 @@
 	feedback_add_details("admin_verb","DG2") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
-
 /* 21st sept 2010
 Updated by Skie -- Still not perfect but better!
 Stuff you can't do:
@@ -37,7 +36,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		return
 
 	spawn(0)
-		var/target = null
+		var/datum/target = null
 		var/targetselected = 0
 		var/lst[] // List reference
 		lst = new/list() // Make the list
@@ -405,13 +404,16 @@ Pressure: [env.pressure]"}
 */
 
 //TODO: merge the vievars version into this or something maybe mayhaps
-/client/proc/cmd_debug_del_all()
+/client/proc/cmd_debug_del_all(target as text)
 	set category = "Debug"
 	set name = "Del-All"
+	set desc = "Delete all atoms of a type. Finish path with a period to hide subtypes."
 
+	if(!istext(target))
+		return
 	// to prevent REALLY stupid deletions
-	var/blocked = list(/obj, /mob, /mob/living, /mob/living/carbon, /mob/living/carbon/human, /mob/dead, /mob/dead/observer, /mob/living/silicon, /mob/living/silicon/robot, /mob/living/silicon/ai)
-	var/hsbitem = input(usr, "Choose an object to delete.", "Delete:") as null|anything in typesof(/obj) + typesof(/mob) - blocked
+	var/blocked = list(/atom/movable/lighting_overlay, /atom/movable/border_dummy, /obj, /mob, /mob/living, /mob/living/carbon, /mob/living/carbon/human, /mob/dead, /mob/dead/observer, /mob/living/silicon, /mob/living/silicon/robot, /mob/living/silicon/ai)
+	var/hsbitem = filter_typelist_input("Choose an object to delete.", "Delete:", get_matching_types(target,/atom/movable) - blocked)
 	if(hsbitem)
 		for(var/atom/O in world)
 			if(istype(O, hsbitem))
@@ -984,7 +986,7 @@ var/global/blood_virus_spreading_disabled = 0
 		"15x15 (4 players)",
 		"39x23 (10 players)",
 		)
-	var/arena_type = input("What size for the arena?", "Arena Construction") in arena_sizes | null
+	var/arena_type = input("What size for the arena?", "Arena Construction") as null|anything in arena_sizes
 
 	if(!arena_type)
 		return
@@ -1420,6 +1422,14 @@ var/global/blood_virus_spreading_disabled = 0
 		log_admin("[key_name(usr)] checked the Climate Panel.")
 	feedback_add_details("admin_verb","CLI")
 
+/client/proc/level_manager()
+	set name = "Level Manager"
+	set category = "Admin"
+	if(holder)
+		holder.level_manager()
+		log_admin("[key_name(usr)] checked the Level Manager.")
+	feedback_add_details("admin_verb","LVM")
+
 
 /client/proc/start_line_profiling()
 	set category = "Profile"
@@ -1586,3 +1596,14 @@ var/obj/blend_test = null
 		output = "No unconnected vents/scrubbers found."
 
 	usr << browse (output, "window=unconnected-atmos-search")
+
+/client/proc/rig_crew_score()
+	set category = "Debug"
+	set name = "Rig crew score"
+	set desc = "Manually adjust round-end crew score."
+
+	if(!check_rights(R_FUN))
+		return
+
+	score.badmin_score = input(usr,"What score do you want?","Badmin score",score.badmin_score) as num
+	score.badmin_override = alert(usr,"Override or add to the round-end score?","Badmin score","Override","Add") == "Override"

@@ -118,6 +118,7 @@
 /obj/item/projectile/zwartepiet/proc/zwartepietenate(var/mob/living/carbon/human/M,var/type) //WHY: as mob in living_mob_list
 	if(istype(M, /mob/living) && M.stat != DEAD)
 		M.zwartepietify()
+		M.add_spell(/spell/strooigoed)
 		to_chat(M, "<B>You feel jovial!</B>")
 
 /obj/item/projectile/mouse

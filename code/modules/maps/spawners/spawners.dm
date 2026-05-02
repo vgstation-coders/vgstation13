@@ -199,7 +199,7 @@
 		/obj/machinery/power/battery/smes,
 		/obj/machinery/processor,
 		/obj/machinery/recharge_station,
-		/obj/machinery/rust/gyrotron,
+		/obj/machinery/power/gyrotron,
 		/obj/machinery/shield_gen,
 		/obj/machinery/shieldgen,
 		/obj/machinery/shieldwallgen,
@@ -221,7 +221,7 @@
 		/obj/structure/reagent_dispensers/water_cooler,
 		/obj/structure/safe,
 		/obj/structure/shuttle/engine/router,
-		/obj/structure/toilet,
+		/obj/structure/wc/toilet,
 		/obj/structure/turret/gun_turret,
 		/obj/spacepod/random,
 		)
@@ -347,6 +347,7 @@
 		/obj/item/clothing/glasses/eyepatch,
 		/obj/item/clothing/glasses/regular,
 		/obj/item/clothing/glasses/regular/hipster,
+		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/glasses/sunglasses/blindfold,
 		/obj/item/clothing/glasses/sunglasses/prescription,
 		/obj/item/clothing/glasses/welding,
@@ -601,6 +602,7 @@
 		/obj/item/clothing/accessory/wristwatch/black,
 		/obj/item/high_roller,
 		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+		/obj/item/weapon/book/library_randomized,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -858,19 +860,15 @@
  	icon_state = "space_supply"
 
 /obj/abstract/map/spawner/space/vox/trader/spacesuit/perform_spawn()
-	var/i = rand(1, 4) // 1 in 4 chance of spawning a single of listed below
+	var/i = rand(1, 3) // 1 in 4 chance of spawning a single of listed below
 	switch (i)
 		if (1)
-			new /obj/item/clothing/suit/space/vox/civ/trader(src.loc) // standard brownsuit and helmet
-			new /obj/item/clothing/head/helmet/space/vox/civ/trader(src.loc)
-
-		if (2)
 			new /obj/item/clothing/suit/space/vox/civ/trader/carapace(src.loc) // carapace
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace(src.loc)
-		if (3)
+		if (2)
 			new /obj/item/clothing/suit/space/vox/civ/trader/medic(src.loc) // aqua coloured hardsuit
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/medic(src.loc)
-		if (4)
+		if (3)
 			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
 	qdel(src)
@@ -955,6 +953,15 @@
 	amount = 2
 	chance = 50
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
+
+/obj/abstract/map/spawner/mobs/abnormality
+	name = "abnormality spawner"
+	icon_state = "mob_spider"
+	to_spawn = list(
+		/mob/living/simple_animal/scp_173,
+		/obj/machinery/chem_dispenser/scp_294,
+		/obj/effect/landmark/procedural_mobspawn/forgottenbeast,
+		)
 
 /obj/abstract/map/spawner/mobs/medivault
 	name = "medivault spawner"
@@ -1101,6 +1108,7 @@
 		/obj/item/seeds/reishimycelium,
 		/obj/item/seeds/dionanode,
 		/obj/item/seeds/riceseed,
+		/obj/item/seeds/roseseed,
 		/obj/item/seeds/soyaseed,
 		/obj/item/seeds/sugarcaneseed,
 		/obj/item/seeds/sunflowerseed,
@@ -1446,6 +1454,15 @@
 			new /obj/item/clothing/mask/gas/sexymime(src.loc)
 			new	/obj/item/clothing/under/sexymime(src.loc)
 	qdel(src)
+
+//Library Books
+/obj/abstract/map/spawner/library
+	name = "library book spawner"
+	icon_state = "book"
+	chance = 15
+	to_spawn = list(
+		/obj/item/weapon/book/library_randomized,
+	)
 
 // Spawn all in the turf
 /obj/abstract/spawn_all

@@ -150,6 +150,10 @@
 	milkable_reagents = new(150)
 	milkable_reagents.my_atom = src
 
+/mob/living/simple_animal/cow/Destroy()
+	QDEL_NULL(milkable_reagents)
+	return ..()
+
 /mob/living/simple_animal/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
@@ -271,9 +275,34 @@
 	health = 10
 	var/eggsleft = 0
 	var/body_color
+	var/feather_regen = 0
+	var/original_body_color = null
+	var/mob/master
 	pass_flags = PASSTABLE
 	size = SIZE_SMALL
 	speak_override = TRUE
+
+
+/mob/living/simple_animal/chicken/attack_hand(mob/living/carbon/human/M) //can now pet chickens. Germansanta 2/10/2026
+	. = ..()
+	react_to_touch(M)
+	M.delayNextAttack(2 SECONDS)
+
+/mob/living/simple_animal/chicken/proc/react_to_touch(mob/M)
+	if(M && !isUnconscious())
+		switch(M.a_intent)
+			if(I_HELP)
+				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+				heart.plane = ABOVE_HUMAN_PLANE
+				flick_overlay(heart, list(M.client), 20)
+				emote("me", EMOTE_AUDIBLE, pick("clucks happily.","cocks happily.","spreads out wings!","wraps wings around your leg! [M]."))
+				playsound(loc, 'sound/voice/chick.ogg', 80, 1)
+				if(prob(5))
+					master = M
+					to_chat(M, "[src] seems closer to you now. At least until somebody else gives them attention, anyway.")
+			if(I_HURT)
+				playsound(loc, 'sound/voice/chicken.ogg', 80, 1)
+				emote("me", EMOTE_AUDIBLE, "clucks.")
 
 /mob/living/simple_animal/chicken/New()
 	if(prob(5))
@@ -288,6 +317,8 @@
 	..() //call this after icons to generate the proper static overlays
 	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
+
+	init_butchering_list()
 
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
@@ -307,6 +338,18 @@
 	else
 		..()
 
+/mob/living/simple_animal/chicken/attack_hand(mob/living/carbon/M as mob)
+	if(!stat && M.a_intent == I_GRAB)
+		// Only allow if there are feathers left to pluck
+		for(var/datum/butchering_product/feathers/chicken/F in butchering_drops)
+			if(F.amount > 0)
+				M.visible_message("<span class='warning'>[M] plucks a feather from [src]!</span>", "<span class='notice'>You pluck a feather from [src].</span>")
+				F.spawn_result(get_turf(src), src)
+				return
+		to_chat(M, "<span class='notice'>[src] has no feathers left to pluck!</span>")
+	else
+		..()
+
 /mob/living/simple_animal/chicken/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -322,9 +365,30 @@
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
 
+	//feather regeneration
+	for(var/datum/butchering_product/feathers/chicken/F in butchering_drops)
+		if(F.amount <= 2)
+			feather_regen += 1 SECONDS
+			if(feather_regen == 2 SECONDS) //it would constantly spam if I didn't do this.
+				visible_message("<span class='notice'>[src] starts to regrow some feathers.</span>")
+		if(feather_regen >= 5 MINUTES)
+			F.amount = F.initial_amount
+			visible_message("<span class='notice'>[src] regrows their feathers.</span>")
+			feather_regen = 0
+			if(original_body_color)
+				body_color = original_body_color
+				original_body_color = null
+			icon_state = "chicken_[body_color]"
+			icon_living = "chicken_[body_color]"
+			icon_dead = "chicken_[body_color]_dead"
+			update_icon()
+
 /mob/living/simple_animal/chicken/pomf
 	name = "Pomf chicken"
 	body_color = "white"
+
+/mob/living/simple_animal/chicken/get_butchering_products()
+	return list(/datum/butchering_product/feathers/chicken)
 
 #define BOX_GROWTH_BAR 200
 /mob/living/simple_animal/hostile/retaliate/box

@@ -107,7 +107,7 @@
 	. += ..() // Who he was, his objectives...
 
 /datum/role/vampire/ForgeObjectives()
-	if(!antag.current.client.prefs.antag_objectives)
+	if(!antag.current.client.prefs.get_pref(/datum/preference_setting/toggle/antag_objectives))
 		AppendObjective(/datum/objective/freeform/vampire)
 		return
 
@@ -595,6 +595,17 @@
 			if (prob(35)) // 35% chance of dethralling
 				Drop(TRUE)
 
+/datum/role/thrall/handle_splashed_reagent(var/reagent_id, var/method, var/volume)
+	switch(reagent_id)
+		if(HOLYWATER, SACREDWATER)
+			var/mob/living/carbon/human/H = antag.current
+			if(!istype(H))
+				return
+			H.eye_blurry = max(H.eye_blurry, 5)
+			H.Dizzy(5)
+			H.stuttering = max(H.stuttering, 5)
+			H.Jitter(5)
+
 /mob/proc/vampire_power(var/required_blood = 0, var/max_stat = 0)
 	var/datum/role/vampire/vampire = isvampire(src)
 
@@ -667,6 +678,17 @@
 			if(send_message)
 				to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
 			success = FALSE
+		var/mob/thrallcheck
+		if(client)
+			thrallcheck = src
+		else if(mind)
+			var/mob/dead/observer/ghost = mind_can_reenter(src.mind)
+			if(ghost)
+				thrallcheck = ghost.get_top_transmogrification()
+		if(isthrall(thrallcheck))
+			if(send_message)
+				to_chat(M.current, "<span class='warning'>This one's mind is already under the influence of another!</span>")
+			return FALSE
 		// Null rod nullifies vampire powers, unless we're a young vamp.
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)

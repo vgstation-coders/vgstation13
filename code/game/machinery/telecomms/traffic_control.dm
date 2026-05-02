@@ -135,7 +135,7 @@
 					return
 
 
-	user << browse(dat, "window=traffic_control;size=575x400")
+	user << browse(HTML_SKELETON(dat), "window=traffic_control;size=575x400")
 	onclose(user, "server_control")
 
 	temp = ""
@@ -188,7 +188,7 @@
 			return
 
 	if(href_list["print"])
-		usr << browse(print_logs(), "window=traffic_logs")
+		usr << browse(HTML_SKELETON(print_logs()), "window=traffic_logs")
 		return
 
 	if(!auth && !issilicon(usr) && !emagged)

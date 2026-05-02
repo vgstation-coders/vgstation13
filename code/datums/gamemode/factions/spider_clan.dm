@@ -14,7 +14,7 @@
 
 /datum/faction/spider_clan/New()
 	..()
-	load_dungeon(/datum/map_element/dungeon/ninja_dojo)
+	load_dungeon(/datum/map_element/dungeon/ninja_dojo, 0, TRUE)
 
 
 /datum/faction/spider_clan/forgeObjectives()
@@ -22,6 +22,7 @@
 
 
 /datum/map_element/dungeon/ninja_dojo //small room for the ninja to get oriented
+	name = "Ninja Dojo"
 	file_path = "maps/misc/dojo.dmm"
 	unique = TRUE
 

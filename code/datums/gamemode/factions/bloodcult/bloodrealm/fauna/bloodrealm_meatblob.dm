@@ -268,7 +268,7 @@
 		stuck_count = 0
 
 /datum/meat_blob/proc/set_target(var/turf/T)
-	if (!T || (T.z != blobZ))
+	if (!T || (T.z != blobZ) || !center_blob)
 		return
 	target_tile = T
 	target_dist = abs(abs(center_blob.x - T.x) + abs(center_blob.y - T.y))
@@ -834,7 +834,7 @@
 //"Corpse" that spawns when a meatblob tile gets destroyed, meant to be butchered
 /mob/living/simple_animal/meat_blob_chunk
 	name = "meat blob chunk"
-	desc = "The remains of a meat blob, waiting to be butchered"
+	desc = "The remains of a meat blob, waiting to be butchered."
 	icon = 'icons/mob/meatblob.dmi'
 	icon_state = "blob_corpse"
 	icon_living = "blob_corpse"

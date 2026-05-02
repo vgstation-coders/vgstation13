@@ -59,6 +59,9 @@
 	sound = 'sound/ambience/ambigen14.ogg'
 	length = 15 SECONDS + 5 MINUTES
 
+/datum/ambience/nobodyhere
+	sound = 'sound/ambience/nobodyhere.ogg'
+	length = 35 SECONDS + 5 MINUTES
 
 //Telecomms
 

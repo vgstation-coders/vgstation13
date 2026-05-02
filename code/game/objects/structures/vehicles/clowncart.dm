@@ -192,7 +192,7 @@
 					to_chat(user, "<span class='notice'>Set to paint the floor!</span>")
 				else
 					to_chat(user, "<span class='notice'>Set to print the following text: [printing_text].</span>")
-	else if(istype(W, /obj/item/toy/waterflower)) //Water flower
+	else if(istype(W, /obj/item/clothing/accessory/waterflower)) //Water flower
 		to_chat(user, "<span class='notice'>You plug [W] into [src]!</span>")//Using it on the clown cart will transfer anything in the fuel tank (other than banana juice) into the flower
 
 		if(max_health >= HEALTH_FOR_FLOWER_RECHARGE)
@@ -256,7 +256,7 @@
 				colour1 = "#000000"
 				colour2 = "#6D6D6D"
 				to_chat(user, "Selected color: Boring Black")
-		
+
 /obj/structure/bed/chair/vehicle/clowncart/emag_act(mob/user)
 	if(!emagged)
 		emagged = 1
@@ -301,10 +301,14 @@
 			draw_graffiti(old_pos)
 		else if(mode == MODE_PEELS)
 			if(!emagged)
-				new /obj/item/weapon/bananapeel/(old_pos)
+				var/atom/peel = new /obj/item/weapon/bananapeel/(old_pos)
+				peel.pixel_x = rand(-12,12)
+				peel.pixel_y = rand(-12,12)
 				reagents.remove_reagent(BANANA,BANANA_FOR_NORMAL_PEEL)
 			else
-				new /obj/item/weapon/bananapeel/traitorpeel/(old_pos)
+				var/atom/peel = new /obj/item/weapon/bananapeel/traitorpeel/(old_pos)
+				peel.pixel_x = rand(-12,12)
+				peel.pixel_y = rand(-12,12)
 				reagents.remove_reagent(BANANA,BANANA_FOR_TRAITOR_PEEL)
 	else
 		if(can_warn())

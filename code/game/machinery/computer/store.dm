@@ -22,7 +22,6 @@
 	. = ..()
 	if(.)
 		return
-
 	tgui_interact(user)
 
 /obj/machinery/computer/merch/tgui_interact(mob/user, datum/tgui/ui)

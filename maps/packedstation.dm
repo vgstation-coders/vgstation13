@@ -22,39 +22,11 @@
 			},
 		)
 
-	default_tagger_locations = list(
-		DISP_DISPOSALS,
-		DISP_CARGO_BAY,
-		null,
-		DISP_ENGINEERING,
-		null,
-		DISP_ATMOSPHERICS,
-		DISP_SECURITY,
-		null,
-		DISP_MEDBAY,
-		DISP_CMO_OFFICE,
-		DISP_CHEMISTRY,
-		DISP_RESEARCH,
-		null,
-		DISP_ROBOTICS,
-		DISP_HOP_OFFICE,
-		DISP_LIBRARY,
-		null,
-		DISP_THEATRE,
-		DISP_BAR,
-		DISP_KITCHEN,
-		DISP_HYDROPONICS,
-		DISP_JANITOR_CLOSET,
-		DISP_GENETICS,
-		null,
-		DISP_MECHANICS,
-		null
-	)
-
 	enabled_jobs = list(/datum/job/trader)
 
 	load_map_elements = list(
-	/datum/map_element/dungeon/holodeck
+	/datum/map_element/dungeon/holodeck,
+	/datum/map_element/dungeon/mecha_graveyard
 	)
 
 	holomap_offset_x = list(0,0,0,86,4,0,0,)

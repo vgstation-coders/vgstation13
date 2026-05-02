@@ -26,7 +26,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_weeds"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR|Sp_RECHARGE
+	charge_type = SP_HOLDVAR|SP_RECHARGE
 	holder_var_type = "plasma"
 	holder_var_amount = 50
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -57,7 +57,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_whisper"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = SP_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 10
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -105,7 +105,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_transfer"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = SP_HOLDVAR
 	holder_var_type = "plasma"
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
@@ -135,17 +135,18 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_neurotoxin"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR|Sp_RECHARGE
+	// Need 50 plasmas and will only fire every seconds
+	charge_type = SP_HOLDVAR|SP_RECHARGE
 	holder_var_type = "plasma"
 	holder_var_amount = 50
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 	still_recharging_msg = "<span class='alien'>You must regenerate your neurotoxin stores first.</span>"
-	charge_max = 50
+	charge_cooldown_max = 5 SECONDS
 
 	spell_flags = WAIT_FOR_CLICK
 	proj_type = /obj/item/projectile/energy/neurotoxin
 	cast_sound = 'sound/weapons/pierce.ogg'
-	duration = 20
+	duration = 2 SECONDS
 	projectile_speed = 1
 
 /spell/targeted/projectile/alienneurotoxin/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
@@ -188,7 +189,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_resin"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = SP_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 75
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -205,8 +206,8 @@ Doesn't work on other aliens/AI.*/
 	override_base = "alien"
 
 	spell_flags = WAIT_FOR_CLICK
-	charge_type = Sp_HOLDVAR|Sp_RECHARGE
-	charge_max = 8 SECONDS
+	charge_type = SP_HOLDVAR|SP_RECHARGE
+	charge_cooldown_max = 8 SECONDS
 	holder_var_type = "plasma"
 	holder_var_amount = 200
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -256,7 +257,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_egg"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = SP_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 75
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -283,7 +284,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_evolve"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = SP_HOLDVAR
 	insufficient_holder_msg = "<span class='alien'>You are not ready for this kind of evolution.</span>"
 
 	cast_sound = 'sound/effects/evolve.ogg'
@@ -342,6 +343,13 @@ Doesn't work on other aliens/AI.*/
 	return ..()
 
 /spell/aoe_turf/evolve/larva/spell_do_after(mob/living/carbon/alien/user)
+	if(istype(user,/mob/living/carbon/alien))
+		var/mob/living/carbon/alien/larva/L = user
+		if(L.stowaway)
+			to_chat(user, "<span class='notice'><B>You are a lone stowaway - the only path open to you is that of the Hunter.</B></span>")
+			spawning = /mob/living/carbon/alien/humanoid/hunter
+			return ..()
+
 	var/explanation_message = {"<span class='notice'><B>You are growing into a beautiful alien! It is time to choose a caste.</B><br>
 	There are three castes to choose from:<br>
 	<B>Hunters</B> are strong and agile, able to hunt away from the hive and rapidly move through ventilation shafts. Hunters generate plasma slowly and have low reserves.<br>
@@ -381,7 +389,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_hide"
 	override_base = "alien"
 
-	charge_max = 0
+	charge_cooldown_max = 0
 
 /spell/aoe_turf/alien_hide/cast(list/targets, mob/user)
 	if(user.plane != HIDING_MOB_PLANE)

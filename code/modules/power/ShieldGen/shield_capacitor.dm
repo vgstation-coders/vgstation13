@@ -15,6 +15,8 @@
 	idle_power_usage = 10
 	active_power_usage = 100
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/active = TRUE
 	var/stored_charge = 0
 	var/time_since_fail = 100
@@ -141,28 +143,3 @@
 		return
 	if(prob(50))
 		active = !active
-
-/obj/machinery/shield_capacitor/proc/rotate(var/mob/user, var/degrees)
-	if(anchored)
-		to_chat(user, "\The [src] is fastened to the floor!")
-		return
-	dir = turn(dir, degrees)
-
-/obj/machinery/shield_capacitor/verb/rotate_cw()
-	set name = "Rotate capacitor clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	rotate(usr, -90)
-
-/obj/machinery/shield_capacitor/verb/rotate_ccw()
-	set name = "Rotate capacitor counter-clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	rotate(usr, 90)
-
-/obj/machinery/shield_capacitor/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate(usr,-90)

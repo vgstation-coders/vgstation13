@@ -19,6 +19,8 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
+	if(skip_turf_init)
+		return
 	if(!parallax_appearances)
 		parallax_appearances = list()
 		for(var/i in 0 to 25)
@@ -177,8 +179,8 @@
 /turf/space/singularity_act()
 	return
 
-/turf/space/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
-	return ..(N, tell_universe, 1, allow)
+/turf/space/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
+	return ..(N, tell_universe, 1, allow, defer_edges)
 
 /turf/space/lighting_build_overlay()
 	return
@@ -217,3 +219,6 @@
 		S.perform(user, 0, list(src))
 		return 1
 	return 0
+
+/turf/space/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD,var/luminous=FALSE)
+	return null

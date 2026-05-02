@@ -153,7 +153,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 				var/colour = href_list["attach"]
 				// Detach
 				if(IsAttached(colour))
-					if(I.arcanetampered)
+					if(I?.arcanetampered)
 						L.electrocute_act(30,holder)
 					else
 						var/obj/item/O = Detach(colour)

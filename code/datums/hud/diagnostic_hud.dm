@@ -13,7 +13,7 @@
 	var/image/holder
 	var/turf/T = get_turf(M)
 
-	for(var/mob/living/silicon/robot/borg in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	for(var/mob/living/silicon/robot/borg in (M.loneliness_affected() ? list(M) : range(C.view+DATAHUD_RANGE_OVERHEAD,T)))
 		if(!check_HUD_visibility(borg, M))
 			continue
 

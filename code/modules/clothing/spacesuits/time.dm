@@ -67,7 +67,8 @@
 	suit_active = TRUE
 	H.flags |= TIMELESS
 	refresh_spells(H)
-	playsound(src, 'sound/misc/timesuit_activate.ogg', 50)
+	if(get_turf(src))
+		playsound(src, 'sound/misc/timesuit_activate.ogg', 50)
 
 /obj/item/clothing/suit/space/time/proc/deactivate_suit(mob/living/carbon/human/H)
 	if(!istype(H))
@@ -77,7 +78,8 @@
 	H.remove_spell(timestop)
 	H.remove_spell(futurejump)
 	H.remove_spell(pastjump)
-	playsound(src, 'sound/misc/timesuit_deactivate.ogg', 50)
+	if(get_turf(src))
+		playsound(src, 'sound/misc/timesuit_deactivate.ogg', 50)
 
 /obj/item/clothing/suit/space/time/equipped(mob/living/carbon/human/H, equipped_slot)
 	..()
@@ -94,7 +96,7 @@
 	panel = "Time Powers"
 	override_base = "time"
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	still_recharging_msg = "<span class='notice'>The suit is still recharging.</span>"
 	var/obj/item/clothing/suit/space/time/suit
@@ -104,7 +106,7 @@
 	desc = "Halt the progression of time in a small area for five seconds."
 	abbreviation = "ST"
 	hud_state = "time_stop"
-	charge_max = 30 SECONDS
+	charge_cooldown_max = 30 SECONDS
 
 /spell/aoe_turf/time_suit/time_stop/before_cast(list/targets, mob/user, bypass_range = 0)
 	if(user.timestopped)
@@ -120,7 +122,7 @@
 	desc = "Jump ten seconds into the future."
 	abbreviation = "FJ"
 	hud_state = "time_future"
-	charge_max = 30 SECONDS
+	charge_cooldown_max = 30 SECONDS
 
 /spell/aoe_turf/time_suit/future_jump/before_cast(list/targets, mob/user, bypass_range = 0)
 	if(user.timestopped)
@@ -136,7 +138,7 @@
 	desc = "Prepare the suit for a jump to the past and execute it after ten seconds."
 	abbreviation = "RF"
 	hud_state = "time_past"
-	charge_max = 60 SECONDS
+	charge_cooldown_max = 60 SECONDS
 
 /spell/aoe_turf/time_suit/past_jump/before_cast(list/targets, mob/user, bypass_range = 0)
 	if(user.timestopped)

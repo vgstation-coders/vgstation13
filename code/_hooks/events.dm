@@ -11,15 +11,20 @@
 /event/irradiate
 
 // Called whenever an atom's z-level changes.
-// Seems to be invoked all over the place, actually. Someone should sort this out.
+// Only retained for multiz compat; should use /event/v_transition in all other cases.
 // Arguments:
 // atom/movable/user: The atom that moved.
 // to_z: The new z.
 // from_z: The old z.
 /event/z_transition
 
-// TODO: docs
-/event/post_z_transition
+// Called whenever an atom's v-level changes.
+// Arguments:
+// atom/movable/user: The atom that moved.
+// to_v: The new v.
+// from_v: The old v.
+/event/v_transition
+/event/post_v_transition // same args as previous
 
 // Called whenever an /atom/movable moves.
 // Arguments:
@@ -278,6 +283,18 @@
 // direction: shuttle direction
 /event/shuttletimer
 
+// Called when a shuttle arrives at a virtual_z (after all turfs have been placed)
+// Arguments:
+// datum/virtual_z/vz: the virtual z-level the shuttle arrived at
+// datum/shuttle/shuttle: the shuttle that arrived
+/event/shuttle_arrived
+
+// Called when a shuttle departs from a virtual_z (after all turfs have been replaced with base turfs)
+// Arguments:
+// datum/virtual_z/vz: the virtual z-level the shuttle departed from
+// datum/shuttle/shuttle: the shuttle that departed
+/event/shuttle_departed
+
 // Called by miscellaneous functions not covered by entered, equipped and unequipped events for cameranet updates
 // Arguments:
 // atom/movable/mover: the atom changing status on the cameranet
@@ -370,8 +387,8 @@
 		registered_events[event_type] = list()
 	var/key = "[ref(target)]:[procname]"
 	registered_events[event_type][key] = list(
-		EVENT_HANDLER_OBJREF_INDEX = target,
-		EVENT_HANDLER_PROCNAME_INDEX = procname
+		/*EVENT_HANDLER_OBJREF_INDEX*/ target,
+		/*EVENT_HANDLER_PROCNAME_INDEX*/ procname
 	)
 
 /**

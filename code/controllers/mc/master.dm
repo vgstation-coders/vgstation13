@@ -144,6 +144,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		CHECK_TICK
 	CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	time_taken_to_init = world.timeofday - time_to_init
+	time_taken_in_lobby = world.timeofday
 
 	to_chat(world, "<span class='boldannounce'>Initializations complete in [time_taken_to_init / 10] seconds!</span>")
 	world.log << "Initializations complete. Took [time_taken_to_init / 10] seconds."
@@ -170,6 +171,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 // Starts the mc, and sticks around to restart it if the loop ever ends.
 /datum/controller/master/proc/StartProcessing()
 	set waitfor = 0
+	usr = null
 	var/rtn = Loop()
 	if (rtn > 0 || processing < 0)
 		return //this was suppose to happen.
@@ -184,6 +186,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 // Main loop.
 /datum/controller/master/proc/Loop()
+	usr = null
 	. = -1
 	//Prep the loop (most of this is because we want MC restarts to reset as much state as we can, and because
 	//	local vars rock

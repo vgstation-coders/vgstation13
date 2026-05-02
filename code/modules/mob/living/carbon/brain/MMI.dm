@@ -75,8 +75,9 @@
 		//M.custom_name = created_name
 
 		brainmob.mind.transfer_to(M)
-		M.cell = locate(/obj/item/weapon/cell) in contents
-		M.cell.forceMove(M)
+		var/obj/item/weapon/cell/ourcell = locate(/obj/item/weapon/cell) in contents
+		ourcell.forceMove(M)
+		M.add_cell(ourcell)
 		src.forceMove(M)//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 		M.mmi = src
 
@@ -238,10 +239,13 @@
 	brainmob.dna = new()
 	brainmob.dna.ResetUI()
 	brainmob.dna.ResetSE()
-	if(P.be_random_name)
-		P.real_name = random_name(P.gender, P.species)
-	brainmob.name = P.real_name
-	brainmob.real_name = P.real_name
+	var/datum/preference_setting/name_pref = P.get_pref_datum(/datum/preference_setting/string/real_name)
+	var/species = P.get_pref(/datum/preference_setting/string/species)
+	var/gender = P.get_pref(/datum/preference_setting/enum/gender)
+	if(P.get_pref(/datum/preference_setting/toggle/be_random_name))
+		name_pref.setting = random_name(gender, species)
+	brainmob.name = name_pref.setting
+	brainmob.real_name = name_pref.setting
 	brainmob.container = src
 
 	name = "Man-Machine Interface: [brainmob.real_name]"
@@ -275,7 +279,7 @@
 		to_chat(brainmob, "Can't do that while incapacitated or dead.")
 
 	radio.broadcasting = radio.broadcasting==1 ? 0 : 1
-	to_chat(brainmob, "<<span class='notice'>Radio is [radio.broadcasting==1 ? "now" : "no longer"] broadcasting.</span>")
+	to_chat(brainmob, "<span class='notice'>Radio is [radio.broadcasting==1 ? "now" : "no longer"] broadcasting.</span>")
 
 /obj/item/device/mmi/radio_enabled/verb/Toggle_Listening()
 	set name = "Toggle Listening"

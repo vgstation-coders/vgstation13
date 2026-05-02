@@ -493,7 +493,7 @@
 		t += "Turrets [enabled ? "activated":"deactivated"] - <A href='?src=\ref[src];toggleOn=1'>[enabled ? "Disable":"Enable"]?</a><br>\n"
 		t += "Currently set to [lethal ? "lethal":"stun"] - <A href='?src=\ref[src];toggleLethal=1'>Change to [lethal ? "Stun":"Lethal"]?</a><br>\n"
 
-	user << browse(t, "window=turretid")
+	user << browse(HTML_SKELETON(t), "window=turretid")
 	onclose(user, "turretid")
 
 /obj/machinery/turretid/npc_tamper_act(mob/living/L)
@@ -545,6 +545,8 @@
 
 //All AI shortcuts. Basing this on what airlocks do, so slight clash with user (Alt is dangerous so toggle stun/lethal, Ctrl is bolts so lock, Shift is 'open' so toggle turrets)
 /obj/machinery/turretid/AIAltClick(mob/living/silicon/ai/user) //Stun/lethal toggle
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(!ailock || is_malf_owner(user))
@@ -553,6 +555,8 @@
 		updateTurrets()
 
 /obj/machinery/turretid/AICtrlClick(mob/living/silicon/ai/user) //Lock the device
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(!ailock || is_malf_owner(user))
@@ -560,6 +564,8 @@
 		to_chat(usr, "<span class='notice'>You [locked ? "lock" : "unlock"] the switchboard panel.</span>")
 
 /obj/machinery/turretid/AIShiftClick(mob/living/silicon/ai/user)  //Toggle the turrets on/off
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(!ailock || is_malf_owner(user))
@@ -665,7 +671,7 @@
 
 				</body>
 				</html>"}
-	user << browse(dat, "window=turret")
+	user << browse(HTML_SKELETON(dat), "window=turret")
 	onclose(user, "turret")
 	return
 

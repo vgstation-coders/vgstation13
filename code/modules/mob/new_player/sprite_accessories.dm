@@ -483,6 +483,12 @@
 	gender = FEMALE
 	additional_accessories = 1
 
+/datum/sprite_accessory/hair/sailormoon
+	name = "Sailor Moon"
+	icon_state = "hair_sailormoon"
+	gender = FEMALE
+	additional_accessories = 1
+
 /datum/sprite_accessory/hair/joestar
 	name = "Joestar"
 	icon_state = "hair_joestar"
@@ -1003,6 +1009,16 @@
 /datum/sprite_accessory/hair/vox_quills_pony
 	name = "Vox Pony"
 	icon_state = "vox_pony"
+	species_allowed = list(VOX_SHAPED)
+
+/datum/sprite_accessory/hair/vox_quills_emperor
+	name = "Vox Emperor"
+	icon_state = "vox_emperor"
+	species_allowed = list(VOX_SHAPED)
+
+/datum/sprite_accessory/hair/vox_quills_razor
+	name = "Vox Razor"
+	icon_state = "vox_razor"
 	species_allowed = list(VOX_SHAPED)
 
 /datum/sprite_accessory/hair/diona_popcorn

@@ -44,9 +44,8 @@
 	var/unmonkey_anim = "monkey2h"
 
 /mob/living/carbon/monkey/New()
-	var/datum/reagents/R = new/datum/reagents(1000)
-	reagents = R
-	R.my_atom = src
+	create_reagents(1000)
+
 
 	if(namenumbers)
 		name = "[name] ([rand(1, 1000)])"
@@ -310,7 +309,7 @@
 			else if(!(O.can_reenter_corpse))
 				to_chat(O,"<span class='notice'>While \the [src] may be mindless, you have recently ghosted and thus are not allowed to take over for now.</span>")
 
-/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
+/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor, var/force)
 	if(!..())
 		return
 

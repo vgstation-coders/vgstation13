@@ -7,7 +7,7 @@
 
 /datum/pda_app/cart/virus
 	name = "Send Virus"
-	desc = "Sends to 5 PDAs"
+	desc = "Sends to 5 PDAs."
 	menu = FALSE //Shows up elsewhere
 	var/charges = 5
 	var/virus_type = "viral files"
@@ -38,7 +38,7 @@
 
 /datum/pda_app/cart/virus/detonate
 	name = "Detonate"
-	desc = "And maybe a leg too in the process"
+	desc = "And maybe a leg too in the process."
 	icon = "pda_boom"
 	virus_type = "detonation charges"
 
@@ -115,7 +115,7 @@
 
 /datum/pda_app/cart/virus/fake_uplink
 	name = "Send Uplink"
-	desc = "Frame someone as a tator"
+	desc = "Frame someone as a tator."
 	icon = "pda_boom"
 	virus_type = "fake uplinks"
 
@@ -250,7 +250,7 @@
 					if(7)
 						displaylength = 448
 
-				dat += {"<div style='float: left'> <img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /> </div>"}
+				dat += {"<div style='float: left'> <img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='image-rendering: pixelated' /> </div>"}
 				i++
 	return dat
 

@@ -102,7 +102,7 @@
 
 /obj/item/weapon/grenade/spawnergrenade/bearnade
 	name = "tactical bearstrike delivery beacon"
-	desc = "HOO HA, HOO-HA"
+	desc = "HOO HA, HOO-HA!"
 	icon_state = "bearnade"
 	spawner_type = /mob/living/simple_animal/hostile/bear
 	deliveryamt = 5

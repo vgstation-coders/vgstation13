@@ -69,9 +69,7 @@
 
 /mob/living/carbon/slime/New()
 	lifestage_updates() //Set values according to whether the slime is a baby or an adult.
-	var/datum/reagents/R = new/datum/reagents(100)
-	reagents = R
-	R.my_atom = src
+	create_reagents(100)
 	name = "[colour] slime ([rand(1, 1000)])"
 	desc = "\An [lifestage_name()] [colour] slime."
 	icon_state = "[iconstate_color()] [lifestage_name()] slime"
@@ -487,9 +485,10 @@
 	throw_range = 6
 	origin_tech = Tc_BIOTECH + "=4"
 	mech_flags = MECH_SCAN_FAIL
-	var/Uses = 1 // uses before it goes inert
+	var/uses = 1 // uses before it goes inert
 	var/enhanced = 0 //has it been enhanced before?
 	var/primarytype = SLIME_GREY
+	var/came_from_slime_type = null
 	var/list/reactive_reagents = list() //easier lookup for reaction checks in grenades
 	var/icon_state_backup	//backup icon_state_name to switch between multiple use sprites
 
@@ -499,179 +498,204 @@
 			to_chat(user, "<span class='warning'>This extract has already been enhanced!</span>")
 			return ..()
 		to_chat(user, "You apply the enhancer to \the [src]. It now has triple the amount of uses.")
-		Uses = 3
+		uses = 3
 		enhanced = 1
 		update_icon()
 		qdel(O)
 
 	//slime res
 	if(istype(O, /obj/item/weapon/slimeres))
-		if(Uses == 0)
+		if(uses <= 0)
 			to_chat(user, "<span class='warning'>The solution doesn't work on used extracts!</span>")
+			qdel(src)
 			return ..()
-		to_chat(user, "You splash the Slime Resurrection Serum onto \the [src] causing it to quiver and come to life.")
-		new primarytype(get_turf(src))
-		Uses--
+		to_chat(user, "You splash the [O] onto \the [src], causing it to quiver and come to life!")
+		new came_from_slime_type(get_turf(src))
+		uses--
+		update_icon()
 		qdel(O)
+		if(uses <= 0)
+			qdel(src)
 
 //perform individual slime_act() stuff on children overriding the method here
 /obj/item/slime_extract/afterattack(var/atom/target, mob/user, proximity)
 	if(!proximity)
 		return
 	if(target.slime_act(primarytype,user))
-		if (Uses > 0)
-			Uses -= 1
+		if (uses > 0)
+			uses -= 1
 			update_icon()
-		if (Uses == 0)
+		if (uses <= 0)
 			qdel(src)
 
 /obj/item/slime_extract/New()
 	..()
-	var/datum/reagents/R = new/datum/reagents(100)
-	reagents = R
-	R.my_atom = src
+	create_reagents(100)
 	icon_state_backup = icon_state
-	if (Uses > 1)
+	if (uses > 1)
 		update_icon()
 
 
 /obj/item/slime_extract/update_icon()
 	..()
-	if (Uses == 1||Uses<0) //return if 1 or less uses
+	if(uses <= 0) //delete if no uses
+		qdel(src)
+	if (uses <= 1) //return if 1 use
 		icon_state = icon_state_backup
-	else if (Uses == 3||Uses>2) //if 3 or more uses use the triple icon
+	else if (uses >= 3) //if 3 or more uses use the triple icon
 		icon_state = "[icon_state_backup]_3"
 	else 		//only option left is two uses
 		icon_state = "[icon_state_backup]_2"
 
 /obj/item/slime_extract/examine(mob/user)
 	..()
-	to_chat(user, "<span class='notice'>\The [name] has [Uses] left.</span>")
+	to_chat(user, "<span class='notice'>\The [name] has [uses] use\s left.</span>")
 
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
 	icon_state = "grey slime extract"
 	primarytype = SLIME_GREY
+	came_from_slime_type = /mob/living/carbon/slime
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/gold
 	name = "gold slime extract"
 	icon_state = "gold slime extract"
 	primarytype = SLIME_GOLD
+	came_from_slime_type = /mob/living/carbon/slime/gold
 	reactive_reagents = list(PLASMA,BLOOD,WATER)
 
 /obj/item/slime_extract/silver
 	name = "silver slime extract"
 	icon_state = "silver slime extract"
 	primarytype = SLIME_SILVER
+	came_from_slime_type = /mob/living/carbon/slime/silver
 	reactive_reagents = list(PLASMA,WATER,CARBON)
 
 /obj/item/slime_extract/metal
 	name = "metal slime extract"
 	icon_state = "metal slime extract"
 	primarytype = SLIME_METAL
+	came_from_slime_type = /mob/living/carbon/slime/metal
 	reactive_reagents = list(PLASMA,COPPER,TUNGSTEN,RADIUM,CARBON)
 
 /obj/item/slime_extract/purple
 	name = "purple slime extract"
 	icon_state = "purple slime extract"
 	primarytype = SLIME_PURPLE
+	came_from_slime_type = /mob/living/carbon/slime/purple
 	reactive_reagents = list(PLASMA,SUGAR)
 
 /obj/item/slime_extract/darkpurple
 	name = "dark purple slime extract"
 	icon_state = "dark purple slime extract"
 	primarytype = SLIME_DARKPURPLE
+	came_from_slime_type = /mob/living/carbon/slime/darkpurple
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/orange
 	name = "orange slime extract"
 	icon_state = "orange slime extract"
 	primarytype = SLIME_ORANGE
+	came_from_slime_type = /mob/living/carbon/slime/orange
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/yellow
 	name = "yellow slime extract"
 	icon_state = "yellow slime extract"
 	primarytype = SLIME_YELLOW
+	came_from_slime_type = /mob/living/carbon/slime/yellow
 	reactive_reagents = list(PLASMA,BLOOD,WATER)
 
 /obj/item/slime_extract/red
 	name = "red slime extract"
 	icon_state = "red slime extract"
 	primarytype = SLIME_RED
+	came_from_slime_type = /mob/living/carbon/slime/red
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/blue
 	name = "blue slime extract"
 	icon_state = "blue slime extract"
 	primarytype = SLIME_BLUE
+	came_from_slime_type = /mob/living/carbon/slime/blue
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/darkblue
 	name = "dark blue slime extract"
 	icon_state = "dark blue slime extract"
 	primarytype = SLIME_DARKBLUE
+	came_from_slime_type = /mob/living/carbon/slime/darkblue
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/pink
 	name = "pink slime extract"
 	icon_state = "pink slime extract"
 	primarytype = SLIME_PINK
+	came_from_slime_type = /mob/living/carbon/slime/pink
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/green
 	name = "green slime extract"
 	icon_state = "green slime extract"
 	primarytype = SLIME_GREEN
+	came_from_slime_type = /mob/living/carbon/slime/green
 	reactive_reagents = list(PLASMA,IRON,BLOOD,WATER)
 
 /obj/item/slime_extract/lightpink
 	name = "light pink slime extract"
 	icon_state = "light pink slime extract"
 	primarytype = SLIME_LIGHTPINK
+	came_from_slime_type = /mob/living/carbon/slime/lightpink
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/black
 	name = "black slime extract"
 	icon_state = "black slime extract"
 	primarytype = SLIME_BLACK
+	came_from_slime_type = /mob/living/carbon/slime/black
 	reactive_reagents = list(PLASMA,GOLD,WATER,SUGAR,BLOOD)
 
 /obj/item/slime_extract/oil
 	name = "oil slime extract"
 	icon_state = "oil slime extract"
 	primarytype = SLIME_OIL
+	came_from_slime_type = /mob/living/carbon/slime/oil
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/adamantine
 	name = "adamantine slime extract"
 	icon_state = "adamantine slime extract"
 	primarytype = SLIME_ADAMANTINE
+	came_from_slime_type = /mob/living/carbon/slime/adamantine
 	reactive_reagents = list(PLASMA,CARBON,GOLD,SILVER)
 
 /obj/item/slime_extract/bluespace
 	name = "bluespace slime extract"
 	icon_state = "bluespace slime extract"
 	primarytype = SLIME_BLUESPACE
+	came_from_slime_type = /mob/living/carbon/slime/bluespace
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/pyrite
 	name = "pyrite slime extract"
 	icon_state = "pyrite slime extract"
 	primarytype = SLIME_PYRITE
+	came_from_slime_type = /mob/living/carbon/slime/pyrite
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/cerulean
 	name = "cerulean slime extract"
 	icon_state = "cerulean slime extract"
 	primarytype = SLIME_CERULEAN
+	came_from_slime_type = /mob/living/carbon/slime/cerulean
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/sepia
 	name = "sepia slime extract"
 	icon_state = "sepia slime extract"
 	primarytype = SLIME_SEPIA
+	came_from_slime_type = /mob/living/carbon/slime/sepia
 	reactive_reagents = list(PLASMA,BLOOD,PHAZON)
 
 ////Pet Slime Creation///
@@ -780,7 +804,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle12"
 	w_class = W_CLASS_TINY
-	var/Uses = 2
+	var/uses = 2
 
 /obj/item/weapon/slimenutrient/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
 	if(!istype(M))//If target is not a slime.
@@ -796,9 +820,9 @@
 	to_chat(user, "You feed \the [M] the nutrient. It now appears ready to grow.")
 	M.amount_grown = 10
 
-	if (Uses > 0)
-		Uses -= 1
-	if (Uses == 0)
+	if (uses > 0)
+		uses -= 1
+	if (uses == 0)
 		qdel (src)
 
 /obj/item/weapon/slimesteroid2
@@ -844,7 +868,7 @@
 /*
 /obj/item/clothing/under/golem
 	name = "adamantine skin"
-	desc = "a golem's skin."
+	desc = "A golem's skin."
 	icon_state = "golem"
 	item_state = "golem"
 	_color = "golem"
@@ -854,7 +878,7 @@
 
 /obj/item/clothing/suit/golem
 	name = "adamantine shell"
-	desc = "a golem's thick outer shell."
+	desc = "A golem's thick outer shell."
 	icon_state = "golem"
 	item_state = "golem"
 	w_class = W_CLASS_LARGE//bulky item
@@ -871,7 +895,7 @@
 
 /obj/item/clothing/shoes/golem
 	name = "golem's feet"
-	desc = "sturdy adamantine feet."
+	desc = "Sturdy adamantine feet."
 	icon_state = "golem"
 	item_state = null
 	canremove = 0
@@ -913,88 +937,82 @@
 /obj/item/clothing/head/space/golem/dissolvable()
 	return 0
 */
-/obj/effect/golem_rune
+/obj/effect/decal/cleanable/golem_rune
 	anchored = 1
-	desc = "A strange rune used to create golems. It glows when spirits are nearby."
-	name = "rune"
+	desc = "A strange rune used to create golems. It draws in the souls of the dead."
+	name = "adamantine golem rune"
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "golem"
-	mouse_opacity = 1 //So we can actually click these
 	plane = ABOVE_TURF_PLANE
 	layer = RUNE_LAYER
-	var/list/mob/dead/observer/ghosts[0]
+	mouse_opacity = 1
+	var/mob/creator = null
+	var/datum/recruiter/recruiter = null
+	var/recruiting = 0
+	persistent_type_replacement = /obj/effect/decal/cleanable/golem_rune/persistent
+	reagent = SLIMEJELLY
 
-/obj/effect/golem_rune/New()
+/obj/effect/decal/cleanable/golem_rune/New()
 	..()
-	processing_objects.Add(src)
+	if(!recruiter)
+		recruiter = new(src)
+		recruiter.display_name = "adamantine golem"
+		recruiter.role = ROLE_MINOR
+		recruiter.jobban_roles = list(ROLE_MINOR)
 
-/obj/effect/golem_rune/process()
-	if(ghosts.len>0)
-		icon_state = "golem2"
+		// A player has their role set to Yes or Always
+		recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
+		// ", but No or Never
+		recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
+
+		recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
+	spawn(5 SECONDS)
+		try_recruit()
+
+
+/obj/effect/decal/cleanable/golem_rune/proc/try_recruit()
+	if(recruiting || !src)
+		return
+	icon_state = "golem2"
+	recruiting = 1
+	src.visible_message("<span class='notice'>The [name] glows with arcane energies.</span>")
+	recruiter.request_player()
+
+/obj/effect/decal/cleanable/golem_rune/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [src] is about to activate. You have been added to the list of potential ghosts. ([controls])</span>")
+
+/obj/effect/decal/cleanable/golem_rune/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [src] is about to activate. ([controls])</span>")
+
+/obj/effect/decal/cleanable/golem_rune/proc/recruiter_recruited(mob/dead/observer/player)
+	if(player)
+		var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem(get_turf(src))
+		G.real_name = G.species.makeName()
+		G.ckey = player.ckey
+		var/msg = "<span class='info'>You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. "
+		if(creator)
+			msg += "Serve [creator.name], and assist them in completing their goals at any cost."
+		else
+			msg += "You were born an unbound golem, free to do as you please."
+		msg += "</span>"
+		to_chat(G, msg)
+		playsound(src.loc, 'sound/effects/shock.ogg', 50, 1)
+		qdel(src)
 	else
+		src.visible_message("<span class='notice'>The energies of \the [name] go dormant for now.</span>")
+		recruiting = 0
 		icon_state = "golem"
+		spawn (5 MINUTES)
+			try_recruit()
 
-/obj/effect/golem_rune/attack_hand(mob/living/user as mob)
-	var/mob/dead/observer/ghost
-	for(var/mob/dead/observer/O in src.loc)
-		if(!check_observer(O))
-			continue
-		ghost = O
-		break
-	if(!ghost)
-		to_chat(user, "The rune fizzles uselessly. There is no spirit nearby.")
-		return
-	var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
-	G.real_name = G.species.makeName()
-	G.forceMove(src.loc) //we use move to get the entering procs - this fixes gravity
-	G.key = ghost.key
-	to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
-	qdel (src)
-	if(ticker.mode.name == "sandbox")
-		G.CanBuild()
-		to_chat(G, "Sandbox tab enabled.")
+/obj/effect/decal/cleanable/golem_rune/persistent
+	recruiter = 1
+	mouse_opacity = 0
+
+/obj/effect/decal/cleanable/golem_rune/persistent/try_recruit()
+	return
 
 
-/obj/effect/golem_rune/proc/announce_to_ghosts()
-	for(var/mob/dead/observer/O in player_list)
-		if(O.client)
-			var/area/A = get_area(src)
-			if(A)
-				to_chat(O, "<span class=\"recruit\">Golem rune created in [A.name]. ([formatGhostJump(src)] | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
-
-/obj/effect/golem_rune/Topic(href,href_list)
-	if("signup" in href_list)
-		var/mob/dead/observer/O = locate(href_list["signup"])
-		volunteer(O)
-
-/obj/effect/golem_rune/attack_ghost(var/mob/dead/observer/O)
-	if(!O)
-		return
-	volunteer(O)
-
-/obj/effect/golem_rune/proc/check_observer(var/mob/dead/observer/O)
-	if(!O)
-		return 0
-	if(!O.client)
-		return 0
-	if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
-		return 0
-	return 1
-
-/obj/effect/golem_rune/proc/volunteer(var/mob/dead/observer/O)
-	if(O in ghosts)
-		ghosts.Remove(O)
-		to_chat(O, "<span class='warning'>You are no longer signed up to be a golem.</span>")
-	else
-		if(!check_observer(O))
-			to_chat(O, "<span class='warning'>You are not eligible.</span>")
-			return
-		if(O.key in has_died_as_golem)
-			if(world.time < has_died_as_golem[O.key] + GOLEM_RESPAWN_TIME)
-				to_chat(O, "<span class='warning'>You already died as a golem too recently. You must wait longer before you can become a golem again.</span>")
-				return
-		ghosts.Add(O)
-		to_chat(O, "<span class='notice'>You are signed up to be a golem.</span>")
 
 /mob/living/carbon/slime/has_eyes()
 	return 0
@@ -1080,15 +1098,13 @@
 	origin_tech = Tc_BIOTECH + "=4"
 	var/POWERFLAG = 0 // sshhhhhhh
 	var/Flush = 30
-	var/Uses = 5 // uses before it goes inert
+	var/uses = 5 // uses before it goes inert
 
 /obj/item/slime_core/New()
 		..()
-		var/datum/reagents/R = new/datum/reagents(100)
-		reagents = R
-		R.my_atom = src
+		create_reagents(100)
 		POWERFLAG = rand(1,10)
-		Uses = rand(7, 25)
+		uses = rand(7, 25)
 		//flags |= NOREACT
 /*
 		spawn()

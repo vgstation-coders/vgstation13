@@ -20,8 +20,8 @@
 			R.adjustFireLoss(rand(-15, -20))
 			R.updatehealth()
 			use(1)
-			user.visible_message("<span class='notice'>[user] applies some [src] to [R]'s damaged areas.</span>", \
-				"<span class='notice'>You apply some [src] to [R]'s damaged areas.</span>")
+			user.visible_message("<span class='notice'>[user] applies some \the [src] to [R]'s damaged areas.</span>", \
+				"<span class='notice'>You apply some \the [src] to [R]'s damaged areas.</span>")
 		else
 			to_chat(user, "<span class='notice'>All [R]'s systems are nominal.</span>")
 
@@ -35,8 +35,8 @@
 					affecting.heal_damage(rand(15, 20), rand(15, 20), robo_repair = 1)
 					H.updatehealth()
 					use(1)
-					user.visible_message("<span class='notice'>[user] applies some [src] to [user != M ? "[M]'s":"their"] [affecting.display_name].</span>", \
-					"<span class='notice'>You apply some [src] to [user != M ? "[M]'s":"your"] [affecting.display_name].</span>")
+					user.visible_message("<span class='notice'>[user] applies some \the [src] to [user != M ? "[M]'s":"their"] [affecting.display_name].</span>", \
+					"<span class='notice'>You apply some \the [src] to [user != M ? "[M]'s":"your"] [affecting.display_name].</span>")
 				else
 					to_chat(user, "<span class='notice'>Nothing to fix here.</span>")
 		else

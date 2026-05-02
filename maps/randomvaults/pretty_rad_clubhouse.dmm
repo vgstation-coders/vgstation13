@@ -232,7 +232,7 @@
 /turf/simulated/floor/carpet,
 /area/vault/mechclubhouse)
 "V" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8
 	},
 /obj/item/weapon/soap,
@@ -248,7 +248,7 @@
 /turf/space,
 /area/vault/mechclubhouse)
 "Y" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/mineral/plastic,

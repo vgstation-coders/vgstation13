@@ -29,6 +29,8 @@
 	speak_override = TRUE
 	treadmill_speed = 2
 	var/obj/item/weapon/reagent_containers/food/snacks/burger = null
+	var/hates_fast_food = FALSE //no burgers for me.
+	var/failed_geometry_class=FALSE //what you don't know can't hurt you
 
 	//Space bears aren't affected by atmos.
 	min_oxy = 0
@@ -43,6 +45,8 @@
 	var/stance_step = 0
 
 	faction = "russian"
+	avoids_poisonous=TRUE
+
 
 /mob/living/simple_animal/hostile/bear/Destroy()
 	if(burger)
@@ -91,6 +95,7 @@
 
 /mob/living/simple_animal/hostile/bear/brownbear/get_butchering_products()
 	return list(/datum/butchering_product/skin/bear/brownbear, /datum/butchering_product/teeth/lots)
+
 
 /mob/living/simple_animal/hostile/bear/polarbear
 	name = "space polar bear"
@@ -215,9 +220,10 @@
 
 /mob/living/simple_animal/hostile/bear/CanAttack(var/atom/the_target)
 	. = ..()
-	for(var/obj/effect/decal/cleanable/crayon/C in get_turf(the_target))
-		if(!C.on_wall && C.name == "o") //drawing a circle around yourself is the only way to ward off space bears!
-			return 0
+	if(!failed_geometry_class)
+		for(var/obj/effect/decal/cleanable/crayon/C in get_turf(the_target))
+			if(!C.on_wall && C.name == "o") //drawing a circle around yourself is the only way to ward off space bears!
+				return 0
 
 /mob/living/simple_animal/hostile/bear/FindTarget()
 	. = ..()
@@ -235,7 +241,7 @@
 	. = ..()
 	if(.)
 		return
-	if(istype(AM,/obj/item/weapon/reagent_containers/food/snacks) && AM.icon_state == "hburger")
+	if(istype(AM,/obj/item/weapon/reagent_containers/food/snacks) && AM.icon_state == "hburger" && !hates_fast_food)
 		if (burger)
 			burger.forceMove(get_turf(src))
 		visible_message("<span class='danger'>\The [src] catches \the [AM] mid-flight, a jovial look on its face.</span>")
@@ -279,3 +285,16 @@
 	if (istype(locked_to,/obj/item/weapon/beartrap))
 		return TRUE
 	return ..()
+
+/mob/living/simple_animal/hostile/bear/beartrap_act(var/obj/item/weapon/beartrap/trap)
+	trap.trapped = 1
+	trap.trappedbear = src
+	LostTarget()
+	dir = SOUTH
+	trap.armed = 0
+	playsound(trap, 'sound/effects/snap.ogg', 60, 1)
+	trap.lock_atom(src, /datum/locking_category/beartrap)
+	adjustBruteLoss(20)
+	update_canmove()
+	update_icon()
+	return TRUE

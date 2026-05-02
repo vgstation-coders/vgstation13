@@ -1,11 +1,8 @@
 /datum/artifact_effect/darkrevive
 	effecttype = "darkrevive"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH, ARTIFACT_STYLE_WIZARD)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH, ARTIFACT_STYLE_WIZARD)
 	effect = ARTIFACT_EFFECT_TOUCH
-
-/datum/artifact_effect/darkrevive/New()
-	..()
-	effect_type = pick(0,2,5)
+	effect_hint = EFFECT_HINT_LOW_LEVEL_EMISSIONS
 
 /datum/artifact_effect/darkrevive/DoEffectTouch(var/mob/living/carbon/human/user)
 	if(holder && user.species && user.species.can_artifact_revive() && !user.isDead() && user.dna.mutantrace != "shadow")

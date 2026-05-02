@@ -733,6 +733,10 @@
 		else
 			..()
 
+/obj/machinery/bot/GetAccess()
+	if(botcard)
+		return botcard.GetAccess()
+
 /obj/machinery/bot/kick_act(mob/living/H)
 	..()
 

@@ -33,6 +33,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 	var/show_status = 1 //in order to prevent the signaler button in signaler.dm from saying "... is ready!" when examined
 	var/secured = 1
+	var/silent = 0
 	var/list/attached_overlays = list()
 	var/obj/item/device/assembly_holder/holder = null
 	var/cooldown = 0//To prevent spam
@@ -241,11 +242,10 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 		if(holder && (wires & WIRE_PULSE_SPECIAL))
 			holder.process_activation(src, 0, 1)
 
-	if(istype(loc,/obj/item/weapon/grenade)) // This is a hack.  Todo: Manage this better -Sayu
-		var/obj/item/weapon/grenade/G = loc
-		G.prime() 							 // Adios, muchachos
-//		if(radio && (wires & WIRE_RADIO_PULSE))
-		//Not sure what goes here quite yet send signal?
+	if(loc)
+		//if(radio && (wires & WIRE_RADIO_PULSE)) //TODO: uncomment this? only kept here to make a PR atomic
+		loc.assembly_pulse(src)
+
 	return 1
 
 

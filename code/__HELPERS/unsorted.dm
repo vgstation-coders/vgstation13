@@ -3,8 +3,13 @@
 /*
  * A large number of misc global procs.
  */
-/proc/sign(x)
-	return x!=0?x/abs(x):0
+///proc/sign(x)
+//	return x!=0?x/abs(x):0
+
+/// Return html to load a url.
+/// for use inside of browse() calls to html assets that might be loaded on a cdn.
+/proc/url2htmlloader(url)
+	return {"<html><head><meta http-equiv="refresh" content="0;URL='[url]'"/></head><body onLoad="parent.location='[url]'"></body></html>"}
 
 /proc/getline(atom/M,atom/N)//Ultra-Fast Bresenham Line-Drawing Algorithm
 	var/px=M.x		//starting x
@@ -508,7 +513,7 @@
 	var/holding = user.get_active_hand()
 	var/delayfraction = round(delay/numticks)
 	var/image/progbar
-	if(user && user.client && user.client.prefs.progress_bars)
+	if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars))
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.plane = HUD_PLANE
@@ -519,7 +524,7 @@
 			//barbar.pixel_y = 36
 	//var/oldstate
 	for (var/i = 1 to numticks)
-		if(user && user.client && user.client.prefs.progress_bars && progbar)
+		if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars) && progbar)
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar
@@ -551,8 +556,12 @@
 /proc/do_after_many(var/mob/user, var/list/targets, var/delay, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
 	if(!user || numticks == 0 || !targets || !targets.len)
 		return 0
+	if(delay <= 0)
+		return TRUE //instant finish speed so no need for any of the below code
 
 	var/delay_fraction = round(delay / numticks)
+	if(delay_fraction == 0)
+		return TRUE //A sleep(0) below means instant finish speed, the progbar isn't even shown to the user since it finishes so fast.
 	if(istype(user.loc, /obj/mecha))
 		use_user_turf = TRUE
 	var/initial_user_location = use_user_turf ? get_turf(user) : user.loc
@@ -561,7 +570,7 @@
 	for(var/atom/target in targets)
 		initial_target_locations[target] = target.loc
 
-	if(user.client && user.client.prefs.progress_bars)
+	if(user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars))
 		for(var/target in targets)
 			if(!targets[target])
 				var/image/new_progress_bar = create_progress_bar_on(target)
@@ -570,7 +579,7 @@
 	for(var/i = 1 to numticks)
 		for(var/target in targets)
 			var/image/target_progress_bar = targets[target]
-			target_progress_bar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+			target_progress_bar?.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 		sleep(delay_fraction)
 		var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
 		for(var/atom/target in targets)
@@ -606,6 +615,8 @@
 		progress_bar.loc = null
 
 /proc/stop_progress_bar(var/mob/user, var/image/progress_bar)
+	if(!progress_bar || !user)
+		return
 	progress_bar.icon_state = "prog_bar_stopped"
 	spawn(0.2 SECONDS)
 		remove_progress_bar(user, progress_bar)
@@ -639,7 +650,7 @@
   * Arguments:
   * * mob/user - the user who will see the progress bar
   * * atom/target - the atom the progress bar will be attached to
-  * * delay - duration in deciseconds of the delay
+  * * delay - duration in deciseconds of the delay. If this is below numticks or is <=0, this will return TRUE instantly.
   * * numticks - how many times the failure conditions will be checked throughout the duration. default 10
   * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration. default TRUE
   * * use_user_turf - if TRUE, the turf of the user is checked instead of its location. default FALSE
@@ -648,10 +659,14 @@
 /proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks)
 	if(!user || isnull(user))
 		return 0
+	if(delay <= 0)
+		return TRUE //instant finish speed so no need for any of the below code
 	if(numticks == 0)
 		return 0
 
 	var/delayfraction = round(delay/numticks)
+	if(delayfraction == 0)
+		return TRUE //A sleep(0) below means instant finish speed, the progbar isn't even shown to the user since it finishes so fast.
 	var/Location
 	if(istype(user.loc, /obj/mecha))
 		use_user_turf = TRUE
@@ -663,7 +678,7 @@
 	var/target_location = target.loc
 	var/image/progbar
 	//var/image/barbar
-	if(user && user.client && user.client.prefs.progress_bars && target)
+	if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars) && target)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.pixel_z = WORLD_ICON_SIZE
@@ -671,7 +686,7 @@
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
 			progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 	for (var/i = 1 to numticks)
-		if(user && user.client && user.client.prefs.progress_bars && target)
+		if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars) && target)
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 				progbar.pixel_z = WORLD_ICON_SIZE
@@ -1213,12 +1228,12 @@ Game Mode config tags:
 			. += M.client
 
 /client/proc/output_to_special_tab(msg, force_focus = FALSE)
-	if(prefs.special_popup)
+	if(prefs.get_pref(/datum/preference_setting/enum/special_popup))
 		src << output("\[[time_stamp()]] [msg]", "window1.msay_output")
 		if(!holder) //Force normal players to see the admin message when it gets sent to them
 			winset(src, "rpane.special_button", "is-checked=true")
 			winset(src, null, "rpanewindow.left=window1")
-	if(prefs.special_popup == SPECIAL_POPUP_EXCLUSIVE)
+	if(prefs.get_pref(/datum/preference_setting/enum/special_popup) == SPECIAL_POPUP_EXCLUSIVE)
 		return
 	to_chat(src, msg)
 
@@ -1343,7 +1358,7 @@ Game Mode config tags:
         var/mob/M = C
         if(M.client)
             C = M.client
-    if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
+    if(!istype(C) || (!C.prefs.get_pref(/datum/preference_setting/toggle/window_flashing) && !ignorepref))
         return
     winset(C, "mainwindow", "flash=5")
 

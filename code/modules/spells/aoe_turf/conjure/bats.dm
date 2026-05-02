@@ -6,10 +6,10 @@
 	summon_type = list(/mob/living/simple_animal/hostile/scarybat)
 	summon_amt = 3
 
-	charge_max = 2 MINUTES
+	charge_cooldown_max = 2 MINUTES
 	cooldown_min = 2 MINUTES
 	invocation = ""
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	override_base = "vamp"
 

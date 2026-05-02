@@ -94,7 +94,7 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 
 /obj/effect/open_overlay
 	name = "open overlay"
-	desc = "The darkness of the abyss below"
+	desc = "The darkness of the abyss below."
 	icon = 'icons/effects/32x32.dmi'
 	icon_state = "white"
 	layer = ABOVE_LIGHTING_LAYER
@@ -132,7 +132,7 @@ var/list/open_overlay_depths
 		return 1
 	return 0
 
-/turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	overlays.Cut()
 	vis_contents.Cut()
 	..()
@@ -140,33 +140,22 @@ var/list/open_overlay_depths
 /turf/proc/openspace_update(var/turf/above) // function for changes in stuff if above is no longer open
 	return
 
-/turf/initialize()
-	. = ..()
-	if(HasBelow(src.z))
-		var/turf/below = GetBelow(src)
-		if(below)
-			below.openspace_update(src)
-
 /turf/unsimulated/floor/snow/openspace_update(var/turf/above)
 	if(above && !isopenspace(above))
-		snow_intensity_override = SNOW_CALM // should be at least a bit chilly
+		precip_intensity_override = WEATHER_CALM // should be at least a bit chilly
 		ignore_blizzard_updates = TRUE
 		vis_contents.Cut()
 	else
-		snow_intensity_override = 0
+		precip_intensity_override = 0
 		ignore_blizzard_updates = FALSE
-		if(!blizzard_image)
-			blizzard_image = new
-		if(!(blizzard_image in vis_contents))
-			vis_contents += blizzard_image
 
-/turf/simulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/simulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	var/turf/simulated/open/BS = GetBelow(src)
 	if(BS && (istype(BS,/turf/simulated/wall) || istype(BS,/turf/unsimulated/wall)) && isopenspace(N))
 		return
 	return ..()
 
-/turf/unsimulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/unsimulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	var/turf/simulated/open/BS = GetBelow(src)
 	if(BS && (istype(BS,/turf/simulated/wall) || istype(BS,/turf/unsimulated/wall)) && isopenspace(N))
 		return
@@ -254,7 +243,7 @@ var/list/open_overlay_depths
 
 /obj/effect/glass_open_overlay
 	name = "glass open overlay"
-	desc = "The window over the darkness of the abyss below"
+	desc = "The window over the darkness of the abyss below."
 	icon = 'icons/turf/overlays.dmi'
 	icon_state = "glass_floor"
 	layer = 0
@@ -268,12 +257,12 @@ var/obj/effect/glass_open_overlay/plasma/openpgfloor
 
 /obj/effect/glass_open_overlay/damage
 	name = "glass open overlay cracks"
-	desc = "The dent in the window over the darkness of the abyss below"
+	desc = "The dent in the window over the darkness of the abyss below."
 	icon = 'icons/obj/structures.dmi'
 
 /obj/effect/glass_open_overlay/decal
 	name = "glass open overlay decal"
-	desc = "The decoration on the window over the darkness of the abyss below"
+	desc = "The decoration on the window over the darkness of the abyss below."
 	icon = 'icons/effects/floor_decals.dmi'
 
 /turf/simulated/floor/glass/update_icon()
@@ -316,7 +305,7 @@ var/obj/effect/glass_open_overlay/plasma/openpgfloor
 	else
 		..()
 
-/turf/simulated/floor/glass/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/simulated/floor/glass/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/defer_edges = FALSE)
 	vis_contents.Cut()
 	overlays.Cut()
 	..()

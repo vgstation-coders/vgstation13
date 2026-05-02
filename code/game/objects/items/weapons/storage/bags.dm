@@ -142,6 +142,11 @@
 	actions_types = list(/datum/action/item_action/toggle_auto_handling)
 	var/handling = FALSE
 
+/obj/item/weapon/storage/bag/ore/auto/attack_self(mob/user)
+	if(!contents.len)
+		toggle_hold(user)
+	. = ..()
+
 /datum/action/item_action/toggle_auto_handling
 	name = "Toggle Ore Loader"
 
@@ -156,19 +161,22 @@
 	if(!istype(T))
 		return
 
-	T.handling = !T.handling
-
-	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
-
-	if(T.handling == TRUE)
-		user.register_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
-	else
-		user.unregister_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+	T.toggle_hold(user)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
 		preattack(collect_loc, src, TRUE)
 		break
+
+/obj/item/weapon/storage/bag/ore/auto/proc/toggle_hold(var/mob/user)
+	handling = !handling
+
+	to_chat(user, "You turn [src] [handling? "on":"off"].")
+
+	if(handling)
+		user.register_event(/event/moved, src, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+	else
+		user.unregister_event(/event/moved, src, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_fill(var/mob/holder)
 	var/obj/structure/ore_box/box = null
@@ -363,7 +371,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped,//18 nutriments
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
-		/obj/item/weapon/kitchen/utensil/fork/teflon,
+		/obj/item/weapon/kitchen/utensil/spork/plastic/teflon,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea,//tea you can't trust
 		/obj/item/weapon/reagent_containers/food/condiment/small/zammild,
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
@@ -373,7 +381,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped,//15 nutriments
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
-		/obj/item/weapon/kitchen/utensil/fork/teflon,
+		/obj/item/weapon/kitchen/utensil/spork/plastic/teflon,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz,//yum yum melts my tum
 		/obj/item/weapon/reagent_containers/food/condiment/small/zammild,
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
@@ -383,7 +391,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped,//12 nutriments
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
-		/obj/item/weapon/kitchen/utensil/fork/teflon,
+		/obj/item/weapon/kitchen/utensil/spork/plastic/teflon,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,
 		/obj/item/weapon/reagent_containers/food/condiment/small/zammild,
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
@@ -449,7 +457,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	storage_slots = 50;
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell", "/obj/item/weapon/circuitboard")
+	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell", "/obj/item/weapon/circuitboard", "/obj/item/robot_parts/robot_component")
 	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
@@ -552,7 +560,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 /obj/item/weapon/storage/bag/potion/dice_potion_bundle
 	name = "Lucky potion bundle"
-	desc = "A bundle of potions for a lucky individual"
+	desc = "A bundle of potions for a lucky individual."
 
 /obj/item/weapon/storage/bag/potion/dice_potion_bundle/New()
 	..()
@@ -610,3 +618,8 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	"/obj/item/weapon/spellbook","/obj/item/weapon/paper","/obj/item/weapon/paper/nano","/obj/item/weapon/barcodescanner",
 	"obj/item/weapon/pen","obj/item/weapon/folder", "/obj/item/dictionary", "/obj/item/weapon/storage/bible")
 
+/obj/item/weapon/storage/bag/bookbag/attackby(obj/item/W, mob/user)
+	. = ..()
+	if(istype(W,/obj/item/weapon/barcodescanner))
+		for(var/obj/item/weapon/book/B in src)
+			. |= B.attackby(W,user)

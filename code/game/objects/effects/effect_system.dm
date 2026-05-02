@@ -144,10 +144,11 @@ steam.start() -- spawns the effect
 /////////////////////////////////////////////
 
 #define SPARK_TEMP 500
+#define SPARK_TURF_LIMIT 8
 
 /obj/effect/sparks
 	name = "sparks"
-	desc = "it's a spark what do you need to know?"
+	desc = "It's a spark, what do you need to know?"
 	icon_state = "sparks"
 	anchored = 1
 
@@ -228,11 +229,17 @@ steam.start() -- spawns the effect
   */
 /proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE, var/silent = FALSE)
 	loc = get_turf(loc)
+	var/tally = -1 //Prevent the sparks from starting if there are already too many sparks on the same tile. -1 to exclude itself
+	for(var/obj/effect/sparks/S in loc.contents)
+		tally++
+	if(tally >= SPARK_TURF_LIMIT)
+		return
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
 	S.start(surfaceburn, silent)
 
 #undef SPARK_TEMP
+#undef SPARK_TURF_LIMIT
 
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS
@@ -467,9 +474,7 @@ steam.start() -- spawns the effect
 /datum/effect/system/smoke_spread/chem/New()
 	..()
 	chemholder = new/obj()
-	var/datum/reagents/R = new/datum/reagents(500)
-	chemholder.reagents = R
-	R.my_atom = chemholder
+	chemholder.create_reagents(500)
 
 /datum/effect/system/smoke_spread/chem/set_up(var/datum/reagents/carry = null, n = 5, c = 0, loca, direct)
 	if(n > 20)
@@ -1110,3 +1115,130 @@ steam.start() -- spawns the effect
 
 		if(dmglevel<4)
 			holder.ex_act(dmglevel)
+
+//Weather Holders
+/obj/effect/weather_holder
+	name = "weather holder"
+	desc = "you shouldn't see this"
+	density = 0
+	anchored = 1
+	plane = ABOVE_TURF_PLANE
+	mouse_opacity = 0
+	var/datum/climate/parent_climate = null
+	var/list/precip_overlays = list()
+	var/list/overlay_counts = list()
+	var/overlay_icon = 'icons/turf/weatherfx.dmi'
+
+/obj/effect/weather_holder/New(var/datum/climate/climate_ref = null)
+	..()
+	parent_climate = climate_ref
+	if(map && parent_climate && parent_climate.current_weather)
+		UpdatePrecipitation(parent_climate.current_weather.precip_intensity)
+	else
+		UpdatePrecipitation(WEATHER_CALM)
+
+/obj/effect/weather_holder/proc/UpdatePrecipitation(var/weather_state)
+	var/cache_key = "[type]_[weather_state]"
+	if(!precip_state_to_texture[cache_key])
+		cache_weather_tile(weather_state)
+	appearance = precip_state_to_texture[cache_key]
+
+/obj/effect/weather_holder/proc/cache_weather_tile(var/weather_state)
+	overlays.Cut()
+	for(var/i = 1 to overlay_counts[weather_state+1])
+		var/image/precipfx = image(overlay_icon, "[precip_overlays[weather_state+1]][i]", SNOW_OVERLAY_LAYER)
+		precipfx.plane = EFFECTS_PLANE
+		overlays += precipfx
+	var/cache_key = "[type]_[weather_state]"
+	precip_state_to_texture[cache_key] = appearance
+
+/obj/effect/weather_holder/blizzard
+	precip_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
+	overlay_counts = list(2,2,2,3)
+
+/obj/effect/weather_holder/blizzard/heavy
+
+/obj/effect/weather_holder/temperate
+	precip_overlays = list("clear","rain_average","rain_hard","rain_storm")
+	overlay_counts = list(1,1,1,3)
+
+/obj/effect/weather_holder/tropical
+	precip_overlays = list("clear","rain_average","rain_average","rain_storm")
+	overlay_counts = list(1,1,1,3)
+
+/obj/effect/weather_holder/desert
+	precip_overlays = list("clear","dust","sand","clear")
+	overlay_counts = list(1,2,3,1)
+
+/obj/effect/weather_holder/lava
+	precip_overlays = list("clear","ash","ash_storm")
+	overlay_counts = list(1,2,1)
+
+/obj/effect/weather_holder/fallout
+	precip_overlays = list("clear","rad","rad_storm","toxic_rain","toxic_rain_hard")
+	overlay_counts = list(1,1,1,1,1)
+
+/obj/effect/weather_holder/xeno
+	precip_overlays = list("clear","acid_rain","acid_rain_hard")
+	overlay_counts = list(1,1,1)
+
+/obj/effect/landing_zone
+	name = "landing zone"
+	icon_state = "LZ_scan"
+	density = 0
+	anchored = 1
+	mouse_opacity = 0
+	var/overlay_state = "LZ_warn"
+
+/obj/effect/landing_zone/New(loc, var/corner = FALSE)
+	. = ..()
+	if(corner)
+		overlays += image(icon, icon_state = overlay_state)
+
+// For area-wide effects like radstorm flashing and stuff
+/obj/effect/area_alert_holder
+	name = "area alert holder"
+	desc = "you shouldn't see this"
+	density = 0
+	anchored = 1
+	plane = LIGHTING_PLANE
+	layer = MAPPING_AREA_LAYER // from areas.dm
+	mouse_opacity = 0
+	icon = 'icons/turf/areas.dmi'
+	var/area/parent_area = null
+
+/obj/effect/area_alert_holder/New(area/A)
+	..()
+	parent_area = A
+
+/obj/effect/area_alert_holder/proc/update()
+	if (!parent_area)
+		return
+
+	var/new_state = null
+	var/new_luminosity = 0
+
+	if (parent_area.areaapc)
+		var/has_power = (!parent_area.requires_power || parent_area.power_environ)
+		if ((parent_area.fire || parent_area.eject || parent_area.party || parent_area.radalert) && has_power)
+			new_luminosity = 1
+			// priority follows original updateicon impl
+			if (parent_area.radalert && !parent_area.fire)
+				new_state = "radiation"
+			else if (parent_area.fire && !parent_area.radalert && !parent_area.eject && !parent_area.party)
+				new_state = "blue"
+			else if (!parent_area.fire && parent_area.eject && !parent_area.party)
+				new_state = "red"
+			else if(parent_area.party && !parent_area.fire && !parent_area.eject)
+				new_state = "party"
+			else
+				new_state = "blue-red"
+
+	icon_state = new_state
+	luminosity = new_luminosity
+
+/obj/effect/area_alert_holder/proc/add_turf(turf/T)
+	T.vis_contents |= src
+
+/obj/effect/area_alert_holder/proc/remove_turf(turf/T)
+    T.vis_contents -= src

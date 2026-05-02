@@ -2,9 +2,9 @@
 //todo
 /datum/artifact_effect/dnaswitch
 	effecttype = "dnaswitch"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_RELIQUARY, ARTIFACT_STYLE_WIZARD)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_RELIQUARY, ARTIFACT_STYLE_WIZARD)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
-	effect_type = 5
+	effect_hint = EFFECT_HINT_ORGANICALLY_REACTIVE_EXOTIC_PARTICLES
 	var/severity
 	copy_for_battery = list("severity")
 

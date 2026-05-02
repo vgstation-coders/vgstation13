@@ -188,7 +188,7 @@
 		if(!stage_to_focus)
 			to_chat(usr, "<span class='notice'>The effect focusing is now turned off.</span>")
 		else
-			to_chat(usr, "span class='notice'>\The [src] will now focus on stage [stage_to_focus].</span>")
+			to_chat(usr, "<span class='notice'>\The [src] will now focus on stage [stage_to_focus].</span>")
 		effect_focus = stage_to_focus
 		return TRUE
 
@@ -327,7 +327,7 @@
 			incubator_light.layer = ABOVE_LIGHTING_LAYER
 			overlays += incubator_light
 			var/image/incubator_glass = image(icon,"incubator_glass")
-			incubator_glass.plane = ABOVE_LIGHTING_PLANE
+			incubator_glass.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 			incubator_glass.layer = ABOVE_LIGHTING_LAYER
 			incubator_glass.blend_mode = BLEND_ADD
 			overlays += incubator_glass
