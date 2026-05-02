@@ -76,20 +76,23 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				else
 					B.volume += 0.1 // regenerate blood VERY slowly
 					var/regenmult = (M_REGEN in mutations) ? 2 : 1
-					if(M_REGEN in mutations)
+					if(regenmult > 1)
 						B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
 					var/datum/role/cultist/C = iscultist(src)
 					if (C && C.blood_pool)//cultists that take on the blood communion tattoo get a slight blood regen bonus
 						B.volume += 0.3*regenmult
 					if (reagents.has_reagent(NUTRIMENT))	//Getting food speeds it up
 						B.volume += 0.6*regenmult
-						reagents.remove_reagent(NUTRIMENT, 0.5)
+						if(regenmult > 1)
+							reagents.remove_reagent(NUTRIMENT, 0.5)
 					if (reagents.has_reagent(IRON))	//Hematogen candy anyone?
 						B.volume += 1.2*regenmult
-						reagents.remove_reagent(IRON, 0.5)
+						if(regenmult > 1)
+							reagents.remove_reagent(IRON, 0.5)
 					if (reagents.has_reagent(ZETADUST) && isgrey(src))
 						B.volume += 1.2*regenmult
-						reagents.remove_reagent(ZETADUST, 0.5)
+						if(regenmult > 1)
+							reagents.remove_reagent(ZETADUST, 0.5)
 
 		// Damaged heart virtually reduces the blood volume, as the blood isn't
 		// being pumped properly anymore.
