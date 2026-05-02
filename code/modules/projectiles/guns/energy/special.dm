@@ -271,11 +271,11 @@
 
 //Returning 0 will cause the staff to attack an object, 1 will cause it to not attack
 /obj/item/weapon/staff/necro/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(get_dist(target, user) > 7)
+		return 0
 	var/mob/master_user = user
 	if(arcanetampered)
 		master_user = null
-	if(get_dist(target, user) > 7)
-		return 0
 	var/success = FALSE
 	var/charge_cost = 10 //Because some actions are less expensive to perform
 	var/turf/target_location = get_turf(target) //Because the original target could get deleted and it'd break the particle effects
