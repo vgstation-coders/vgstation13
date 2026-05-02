@@ -198,9 +198,11 @@
 		see_in_dark = 8
 		check_dark_vision()
 
-/mob/living/simple_animal/hostile/necro/zombie/New() //(mob/living/L)
+/mob/living/simple_animal/hostile/necro/zombie/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller, var/cannot_evolve)
 	..()
 	hud_list[STATUS_HUD]      = new/image/hud('icons/mob/hud.dmi', src, "hudundead")
+	if(cannot_evolve)
+		can_evolve = FALSE
 
 /mob/living/simple_animal/hostile/necro/zombie/CanAttack(var/atom/the_target)
 	if(the_target == creator)
@@ -272,7 +274,9 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_evolve()
 	if(!can_evolve)
-		return
+		to_chat(src, "<span class='warning'>You cannot evolve! There is nothing to evolve to!</span>")
+		return 0
+	return 1
 
 	/*
 					Turned (Just reanimated, can be turned back)
@@ -302,7 +306,11 @@
 		get_clothes(src, evolution)
 		if(mind)
 			mind.transfer_to(evolution) //Just in the offchance we have a player in control
-			evolution.add_spell(/spell/aoe_turf/necro/zombie/evolve)
+		var/mob/living/simple_animal/hostile/necro/zombie/Z = evolution
+		//Evolution is currently only supported for zombies
+		if(istype(Z)) //Don't check for minds here
+			if(Z.can_evolve)
+				evolution.add_spell(/spell/aoe_turf/necro/zombie/evolve)
 		qdel(src)
 	else
 		//Now, how did you get here when this is supposed to be the zombie evolution tree?
@@ -365,9 +373,14 @@
 	var/being_unzombified = FALSE
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/check_evolve()
-	..()
+	if(!..())
+		return 0
 	if(times_revived > 0 || times_eaten > 0)
 		evolve(/mob/living/simple_animal/hostile/necro/zombie/rotting)
+		return 1
+	else
+		to_chat(src, "<span class='warning'>You cannot evolve yet! You must either at least consume once or revive first!</span>")
+		return 0
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/Destroy()
 	if(host)
@@ -435,11 +448,17 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 
 /mob/living/simple_animal/hostile/necro/zombie/rotting/check_evolve()
-	..()
+	if(!..())
+		return 0
 	if(times_eaten > (1+times_revived)*2) //Have to have eaten at least twice and more than double that of times died
 		evolve(/mob/living/simple_animal/hostile/necro/zombie/putrid)
+		return 1
 	else if(times_revived > times_eaten+1) //Died at least twice
 		evolve(/mob/living/simple_animal/hostile/necro/zombie/crimson)
+		return 1
+	else
+		to_chat(src, "<span class='warning'>You cannot evolve yet! You must either consume multiple times or revive multiple times!</span>")
+		return 0
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid
 	icon_living = "zombie" //The original

@@ -203,7 +203,7 @@
 
 	var/mob/living/carbon/human/H = M
 
-	if(user.zone_sel.selecting == "head")
+	if(user.zone_sel.selecting == "head" && H.face_style)
 		if(H == user)
 			to_chat(user, "<span class='notice'>You wipe off the face paint with [src].</span>")
 			H.face_style = null
@@ -211,13 +211,13 @@
 		else
 			user.visible_message("<span class='warning'>[user] begins to wipe [H]'s face paint  off with \the [src].</span>", \
 									"<span class='notice'>You begin to wipe off [H]'s face paint .</span>")
-			if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+			if(do_after(user, H, 10))	//user needs to keep their active hand, H does not.
 				user.visible_message("<span class='notice'>[user] wipes [H]'s face paint  off with \the [src].</span>", \
 										"<span class='notice'>You wipe off [H]'s face paint .</span>")
 				H.face_style = null
 				H.update_body()
 
-	else if(user.zone_sel.selecting == "eyes")
+	else if(user.zone_sel.selecting == "eyes" && H.eye_style)
 		if(H == user)
 			to_chat(user, "<span class='notice'>You wipe off the eyeshadow with [src].</span>")
 			H.eye_style = null
@@ -225,13 +225,13 @@
 		else
 			user.visible_message("<span class='warning'>[user] begins to wipe [H]'s eyeshadow off with \the [src].</span>", \
 									"<span class='notice'>You begin to wipe off [H]'s eyeshadow.</span>")
-			if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+			if(do_after(user, H, 10))	//user needs to keep their active hand, H does not.
 				user.visible_message("<span class='notice'>[user] wipes [H]'s eyeshadow off with \the [src].</span>", \
 										"<span class='notice'>You wipe off [H]'s eyeshadow.</span>")
 				H.eye_style = null
 				H.update_body()
 
-	else if(user.zone_sel.selecting == "mouth")
+	else if(user.zone_sel.selecting == "mouth" && H.lip_style)
 		if(H == user)
 			to_chat(user, "<span class='notice'>You wipe off the lipstick with [src].</span>")
 			H.lip_style = null
@@ -239,7 +239,7 @@
 		else
 			user.visible_message("<span class='warning'>[user] begins to wipe [H]'s lipstick off with \the [src].</span>", \
 									"<span class='notice'>You begin to wipe off [H]'s lipstick.</span>")
-			if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+			if(do_after(user, H, 10))	//user needs to keep their active hand, H does not.
 				user.visible_message("<span class='notice'>[user] wipes [H]'s lipstick off with \the [src].</span>", \
 										"<span class='notice'>You wipe off [H]'s lipstick.</span>")
 				H.lip_style = null
@@ -629,7 +629,8 @@
 	flags = FPRINT
 	w_class = W_CLASS_TINY
 
-	var/shattered = 0
+	var/shattered = FALSE
+	var/norwood_cursed = FALSE
 
 /obj/item/weapon/pocket_mirror/attack_self(mob/user)
 	if(shattered)
@@ -666,6 +667,14 @@
 		H = user
 	if(!H)
 		return
+	if (norwood_cursed)
+		if (isjusthuman(H))
+			to_chat(H, "<span class = 'userwarning'>Oh no! It's the curse of Norwood!</span>")
+			H.visible_message("<span class='warning'>[H]'s hair vanishes in a flash!</span>")
+			H.my_appearance.h_style = "Bald"
+			H.update_hair()
+			H.my_appearance.permanently_bald = TRUE
+			return
 	if(arcanetampered)
 		to_chat(user, "<span class='sinister'>You feel different.</span>")
 		H.Humanize(pick("Unathi","Tajaran","Insectoid","Grey",/*and worst of all*/"Vox"))
@@ -745,7 +754,7 @@
 
 /obj/item/weapon/pocket_mirror/arcane
 	name = "strange pocket mirror"
-	desc = "is that your reflection? or someone elses."
+	desc = "Is that your reflection? Or someone else's..."
 	arcanetampered = 1
 
 

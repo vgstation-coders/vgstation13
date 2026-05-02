@@ -25,7 +25,8 @@
 	enabled_jobs = list(/datum/job/trader)
 
 	load_map_elements = list(
-	/datum/map_element/dungeon/holodeck
+	/datum/map_element/dungeon/holodeck,
+	/datum/map_element/dungeon/mecha_graveyard
 	)
 
 	holomap_offset_x = list(0,0,0,86,4,0,0,)

@@ -3,6 +3,8 @@
 //////////////////////////////////////////////////////////////////
 
 /datum/surgery_step/slime
+	blood_level = 0
+
 /datum/surgery_step/slime/is_valid_mutantrace(mob/living/carbon/slime/target)
 	return istype(target, /mob/living/carbon/slime/)
 

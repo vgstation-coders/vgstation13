@@ -1,5 +1,7 @@
 /datum/event/cricketsbehindthefridge/start()
 	for(var/obj/machinery/smartfridge/SF in machines)
+		if(SF.z != map.zMainStation)
+			continue
 		for(var/i = 1 to rand(3,4))
 			var/mob/living/simple_animal/cricket/C = new (SF.loc)
 			if(i==1)

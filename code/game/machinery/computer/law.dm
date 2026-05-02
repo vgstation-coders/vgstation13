@@ -29,7 +29,7 @@
 	set src in oview(1)
 	if(get_dist(src, usr) > 1 || usr.restrained() || usr.lying || usr.isUnconscious() || istype(usr, /mob/living/silicon))
 		return
-	
+
 	opened = !opened
 	if(opened)
 		to_chat(usr, "<span class='notice'>The access panel is now open.</span>")
@@ -80,23 +80,24 @@
 			R.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 	to_chat(user, "<span class='notice'>Upload complete. The AI's laws have been modified.</span>")
 
-/obj/machinery/computer/aiupload/proc/same_zlevel()
+/obj/machinery/computer/aiupload/proc/same_vlevel()
 	if(!current)
 		return FALSE
 	var/turf/T = get_turf(current)
-	if(!atoms_share_level(T, src))
+	var/datum/virtual_z/v_level = get_virtual_z()
+	if(!(T.v == v_level))
 		return FALSE
 	return TRUE
 
 /obj/machinery/computer/aiupload/attackby(obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/aiModule))
-		if(!same_zlevel())
+		if(!same_vlevel())
 			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target AI!")
 			return
 		if(install_module(O,user))
 			announce_law_changes(user)
 	else if(istype(O, /obj/item/weapon/planning_frame))
-		if(!same_zlevel())
+		if(!same_vlevel())
 			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target AI!")
 			return
 		if(stat & NOPOWER)
@@ -222,17 +223,18 @@
 		announce_law_changes()
 	return 1
 
-/obj/machinery/computer/borgupload/proc/same_zlevel()
+/obj/machinery/computer/borgupload/proc/same_vlevel()
 	if(!current)
 		return FALSE
 	var/turf/T = get_turf(current)
-	if(!atoms_share_level(T, src))
+	var/datum/virtual_z/v_level = get_virtual_z()
+	if(!(T.v == v_level))
 		return FALSE
 	return TRUE
 
 /obj/machinery/computer/borgupload/attackby(var/obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/aiModule))
-		if(!same_zlevel())
+		if(!same_vlevel())
 			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target silicon!")
 			return
 		if(isMoMMI(current))
@@ -242,7 +244,7 @@
 				return ..()
 		install_module(W,user)
 	else if(istype(W, /obj/item/weapon/planning_frame))
-		if(!same_zlevel())
+		if(!same_vlevel())
 			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target silicon!")
 			return
 		if(stat & NOPOWER)
@@ -313,16 +315,16 @@
 	desc = "Used to upload laws to the AI using a powerful subspace transceiver."
 	circuit = "/obj/item/weapon/circuitboard/aiupload/longrange"
 
-/obj/machinery/computer/aiupload/longrange/same_zlevel()
+/obj/machinery/computer/aiupload/longrange/same_vlevel()
 	return TRUE
 
 /obj/machinery/computer/aiupload/update_icon()
 	..()
 	overlays = 0
-	
+
 	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
-	
+
 	if (occupant)
 		switch (occupant.stat)
 			if (CONSCIOUS)

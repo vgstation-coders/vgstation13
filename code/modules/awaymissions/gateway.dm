@@ -150,6 +150,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 		return
 
 	var/obj/machinery/gateway/center/away/dest = pick(gateway_centers_away) //Pick a random gateway from an away mission
+	var/datum/virtual_z/dest_vz = dest.get_virtual_z()
 	if(dest.calibrated) //If it's calibrated, move to it
 		M.forceMove(get_step(dest.loc, SOUTH))
 		M.dir = SOUTH
@@ -157,7 +158,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 		var/list/good_landmarks = list()
 
 		for(var/obj/effect/landmark/L in awaydestinations)
-			if(L.z == dest.z)
+			if(L.get_virtual_z() == dest_vz)
 				good_landmarks.Add(L)
 
 		if(!good_landmarks.len)
@@ -167,7 +168,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 		M.dir = SOUTH
 	use_power(5000)
 	if(ismob(M))
-		var/datum/map_element/away_mission/AM = get_mission_by_z(dest.z)
+		var/datum/map_element/away_mission/AM = get_mission_by_v(dest_vz)
 		AM.onArrive(M)
 
 

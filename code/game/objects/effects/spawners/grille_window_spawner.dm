@@ -21,7 +21,7 @@
 		if(get_area(src) == get_area(there) && (locate(/obj/structure/grille) in there))
 			continue
 		var/obj/structure/window/new_window = new window_path(loc)
-		new_window.dir = direction
+		new_window.change_dir(direction)
 
 /obj/structure/grille/window_spawner/full
 	icon_state = "windowgrille_full"

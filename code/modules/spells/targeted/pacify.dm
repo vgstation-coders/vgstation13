@@ -4,16 +4,16 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSDEFENSIVE
 
-	charge_max = 45 SECONDS
+	charge_cooldown_max = 45 SECONDS
 	cooldown_reduc = 15 SECONDS
 	cooldown_min = 15 SECONDS
 
-	spell_levels = list(Sp_SPEED = 0, Sp_RANGE = 0, Sp_POWER = 0)
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_RANGE = 1, Sp_POWER = 2)
+	spell_levels = list(SP_SPEED = 0, SP_RANGE = 0, SP_POWER = 0)
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 2, SP_RANGE = 1, SP_POWER = 2)
 
 	spell_flags = WAIT_FOR_CLICK
 	invocation = "YUKKRI SHEETI NAY"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 6
 
 	max_targets = 1
@@ -27,28 +27,28 @@
 		targets = turf_target
 	if(targets)
 		if(user.reagents)
-			user.reagents.add_reagent(CHILLWAX, 4 + (spell_levels[Sp_POWER]/2))
+			user.reagents.add_reagent(CHILLWAX, 4 + (spell_levels[SP_POWER]/2))
 		var/turf/target = targets[1]
-		target.vis_contents += new /obj/effect/overlay/pacify_aoe(target, spell_levels[Sp_POWER], spell_levels[Sp_RANGE])
+		target.vis_contents += new /obj/effect/overlay/pacify_aoe(target, spell_levels[SP_POWER], spell_levels[SP_RANGE])
 
 /spell/targeted/pacify/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return quicken_spell()
-		if(Sp_POWER)
-			spell_levels[Sp_POWER]++
-		if(Sp_RANGE)
-			spell_levels[Sp_RANGE]++
+		if(SP_POWER)
+			spell_levels[SP_POWER]++
+		if(SP_RANGE)
+			spell_levels[SP_RANGE]++
 
 /spell/targeted/pacify/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_POWER)
-			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+		if(SP_POWER)
+			if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 				return "The spell can't be made any more powerful than this!"
 			var/duration = 2/REAGENTS_METABOLISM*2 //2 extra units of Chillwax per rank, multiplied by 2 due to Life() happening every 2 seconds
 			return "Increases how long targets are pacified for by around [duration] seconds."
-		if(Sp_RANGE)
-			if(spell_levels[Sp_RANGE] >= level_max[Sp_RANGE])
+		if(SP_RANGE)
+			if(spell_levels[SP_RANGE] >= level_max[SP_RANGE])
 				return "This spell's area of effect is at its maximum!"
 			return "Increases the area of the spell's impact by 1 tile."
 	return ..()

@@ -96,7 +96,6 @@
 	switch(status)
 		if(TRUE) //turning it off
 			status = FALSE
-			current_temp = 0
 			processing_objects.Remove(src)
 		if(FALSE)//turning it on
 			status = TRUE
@@ -162,8 +161,10 @@
 //Prefer to burn through sheets over ores
 /obj/structure/forge/proc/has_fuel()
 	fuel_time = max(0, fuel_time-1)
-	if(fuel_time <= 0 && status)
-		toggle_lit()
+	if(fuel_time <= 0)
+		current_temp = 0
+		if(status)
+			toggle_lit()
 	return fuel_time
 
 /obj/structure/forge/is_hot()

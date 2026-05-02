@@ -161,7 +161,7 @@
 		dying = TRUE
 		visible_message("<span class = 'warning'>Something cracks and breaks within \the [src], as it begins to implode!</span>")
 		for(var/mob/living/M in view(src))
-			M.playsound_local(get_turf(src), get_sfx("explosion"), 100, 1, get_rand_frequency(), falloff = 5)
+			M.playsound_local(get_turf(src), get_sfx("explosion"), 100, 1, get_rand_frequency(), falloff = 5,source = src)
 			if(!M.client)
 				continue
 			var/int_distance = get_dist(M, src)

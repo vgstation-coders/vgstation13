@@ -16,7 +16,7 @@ var/global/floorIsLava = 0
 	log_adminwarn(rendered)
 	for(var/client/C in admins)
 		if(R_ADMIN & C.holder.rights)
-			if(C.prefs.toggles & CHAT_ATTACKLOGS)
+			if(C.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_ATTACKLOGS)
 				var/msg = rendered
 				to_chat(C, msg)
 
@@ -242,7 +242,7 @@ var/global/floorIsLava = 0
 		</body></html>
 	"}
 
-	usr << browse(body, "window=adminplayeropts-\ref[M];size=550x515")
+	usr << browse(HTML_SKELETON(body), "window=adminplayeropts-\ref[M];size=550x515")
 	feedback_add_details("admin_verb","SPP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
@@ -331,7 +331,7 @@ var/global/floorIsLava = 0
 			if(index == page)
 				dat += "</b>"
 
-	usr << browse(dat, "window=player_notes;size=400x400")
+	usr << browse(HTML_SKELETON(dat), "window=player_notes;size=400x400")
 
 
 /datum/admins/proc/player_has_info(var/key as text)
@@ -407,7 +407,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];add_player_info=[key]'>Add Comment</A><br>
 		</body></html>"}
 
-	usr << browse(dat, "window=adminplayerinfo;size=480x480")
+	usr << browse(HTML_SKELETON(dat), "window=adminplayerinfo;size=480x480")
 
 /datum/admins/proc/access_news_network() //MARKER
 	set category = "Fun"
@@ -650,7 +650,7 @@ var/global/floorIsLava = 0
 
 //	to_chat(world, "Channelname: [src.admincaster_feed_channel.channel_name] [src.admincaster_feed_channel.author]")
 //	to_chat(world, "Msg: [src.admincaster_feed_message.author] [src.admincaster_feed_message.body]")
-	usr << browse(dat, "window=admincaster_main;size=400x600")
+	usr << browse(HTML_SKELETON(dat), "window=admincaster_main;size=400x600")
 	onclose(usr, "admincaster_main")
 
 
@@ -666,7 +666,7 @@ var/global/floorIsLava = 0
 			r = copytext( r, 1, findtext(r,"##") )//removes the description
 		dat += text("<tr><td>[t] (<A href='?src=\ref[src];removejobban=[r]'>unban</A>)</td></tr>")
 	dat += "</table>"
-	usr << browse(dat, "window=ban;size=400x400")
+	usr << browse(HTML_SKELETON(dat), "window=ban;size=400x400")
 
 /datum/admins/proc/Game()
 	if(!check_rights(0))
@@ -728,7 +728,7 @@ var/global/floorIsLava = 0
 	dat += "<A href ='?src=\ref[src];econ_panel=open'>Manage accounts database</A><br>"
 	dat += "<A href ='?src=\ref[src];religions=1&display=1'>Manage religions</A><br>"
 
-	usr << browse(dat, "window=admin2;size=280x370")
+	usr << browse(HTML_SKELETON(dat), "window=admin2;size=280x370")
 	return
 
 /datum/admins/proc/dynamic_mode_options(mob/user)
@@ -764,7 +764,7 @@ var/global/floorIsLava = 0
 		Curve width: <A href='?src=\ref[src];f_dynamic_roundstart_width=1'>-> [dynamic_curve_width] <-</A><br>
 		"}
 
-	user << browse(dat, "window=dyn_mode_options;size=900x650")
+	user << browse(HTML_SKELETON(dat), "window=dyn_mode_options;size=900x650")
 
 /datum/admins/proc/Secrets()
 	if(!check_rights(0))
@@ -805,6 +805,8 @@ var/global/floorIsLava = 0
 			<BR>
 			<A href='?src=\ref[src];secretsadmin=showailaws'>Show AI Laws</A><BR>
 			<A href='?src=\ref[src];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsadmin=settime'>Set round time offset</A><BR>
 			<BR>
 			<BR>
 			"}
@@ -947,7 +949,7 @@ var/global/floorIsLava = 0
 		"}
 
 
-	usr << browse(dat, "window=secrets")
+	usr << browse(HTML_SKELETON(dat), "window=secrets")
 	return
 
 /datum/admins/var/datum/shuttle/selected_shuttle
@@ -986,8 +988,103 @@ var/global/floorIsLava = 0
 	<a href='?src=\ref[src];shuttle_add_docking_port=1'>Create a shuttle docking port</a><br>
 	<a href='?src=\ref[src];shuttle_mass_lockdown=1'>Lock down all shuttles</a><br>
 	"}
-	usr << browse(dat, "window=shuttlemagic")
+	usr << browse(HTML_SKELETON(dat), "window=shuttlemagic")
 
+/datum/admins/proc/procedural_generation_panel()
+	set category = "Admin"
+	set name = "Procedural Generation Panel"
+	set desc = "Manage procedurally generated planets and create new ones"
+
+	if(!check_rights(R_ADMIN))
+		return
+
+	if(!SSmapping)
+		to_chat(usr, "<span class='warning'>Mapping subsystem not initialized!</span>")
+		return
+
+	var/dat = "<title>Procedural Generation Panel</title>"
+
+	// Combined planet and discovery data table
+	dat += "<h2>Planet Registry:</h2>"
+	var/has_planets = FALSE
+
+	// Check if we have any planets
+	if(SSmapping.planets.len)
+		has_planets = TRUE
+		dat += "<table border='1' style='width:100%'>"
+		dat += "<tr><th>Planet Name</th><th>Planet Type</th><th>V-Level</th><th>Weather</th><th>Time</th><th>Landing Zone</th><th>Visibility</th><th>Actions</th></tr>"
+
+		// Display existing planets with their virtual z-level data
+		for(var/datum/planet_type/planet in SSmapping.planets)
+			var/planet_name = planet.planet_name
+			var/current_weather = "N/A"
+			var/current_time = "N/A"
+
+			var/datum/virtual_z/vz = planet.v
+
+
+			if(!vz)
+				CRASH("Planet [planet_name] has no virtual z-level!")
+
+			// Get current weather info
+			if(planet.climate && planet.climate.current_weather)
+				current_weather = planet.climate.current_weather.name
+
+			// Get current time of day info for this specific planet
+			if(SSDayNight && vz && (vz in daynight_v_lvls))
+				switch(vz.current_timeOfDay)
+					if(TOD_MORNING) current_time = "Morning"
+					if(TOD_SUNRISE) current_time = "Sunrise"
+					if(TOD_DAYTIME) current_time = "Daytime"
+					if(TOD_AFTERNOON) current_time = "Afternoon"
+					if(TOD_SUNSET) current_time = "Sunset"
+					if(TOD_NIGHTTIME) current_time = "Nighttime"
+
+			// Check landing zone status
+			var/landing_zone_status = ""
+			var/is_generating = SSmapping.generating && (SSmapping.current_planet == planet)
+			var/datum/shuttle/exploration/E
+			for(var/datum/shuttle/S in shuttles)
+				if(istype(S, /datum/shuttle/exploration))
+					E = S
+			if(is_generating)
+				landing_zone_status = "<i>Generating...</i>"
+			else if(E && vz.shuttle_landing_zones[E])
+				landing_zone_status = "Active"
+			else
+				landing_zone_status = "<A href='?_src_=holder;procgen_add_landing_zone=\ref[planet]'>Add Landing Zone</A>"
+
+			// Check visibility status
+			var/visibility_status = planet.hidden ? "<span style='color:red;'>Hidden</span>" : "<span style='color:green;'>Visible</span>"
+			var/visibility_action = planet.hidden ? "Show" : "Hide"
+
+			dat += "<tr>"
+			dat += "<td>[planet_name]</td>"
+			dat += "<td>[planet.name]</td>"
+			dat += "<td>[vz.id]</td>"
+			dat += "<td>[current_weather] <A href='?_src_=holder;procgen_weather=\ref[planet]'>\[Change\]</A></td>"
+			dat += "<td>[current_time] <A href='?_src_=holder;procgen_time=\ref[planet]'>\[Change\]</A></td>"
+			dat += "<td>[landing_zone_status]</td>"
+			dat += "<td>[visibility_status] <A href='?_src_=holder;procgen_toggle_visibility=\ref[planet]'>\[[visibility_action]\]</A></td>"
+			dat += "<td><A href='?_src_=holder;procgen_jump=\ref[planet]'>Jump to Planet</A> | <A href='?_src_=holder;procgen_delete=\ref[planet]'>Destroy</A></td>"
+			dat += "</tr>"
+
+		dat += "</table>"
+
+	if(!has_planets)
+		dat += "<p>No planets currently exist.</p>"
+
+	// Create new planet section
+	dat += "<h2>Create New Planet:</h2>"
+	dat += "<p><A href='?_src_=holder;procgen_create=1'>Generate New Planet</A></p>"
+	if(SSmapping.scanning_disabled)
+		dat += "<p><A href='?_src_=holder;procgen_toggle_exploration=1' style='color:green;'>Enable Planet Generation</A></p>"
+	else
+		dat += "<p><A href='?_src_=holder;procgen_toggle_exploration=1' style='color:red;'>Disable Planet Generation (Recalls Exploration Shuttle)</A></p>"
+
+	var/datum/browser/popup = new(usr, "procgen_panel", "Procedural Generation Panel", 1000, 600)
+	popup.set_content(dat)
+	popup.open()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////admins2.dm merge
 //i.e. buttons/verbs
@@ -1165,8 +1262,6 @@ var/global/floorIsLava = 0
 	message_admins("[key_name_admin(usr)] toggled Aliens [aliens_allowed ? "on" : "off"].", 1)
 	feedback_add_details("admin_verb","TA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-#define LOBBY_TICKING_STOPPED 0
-#define LOBBY_TICKING_RESTARTED 2
 /datum/admins/proc/delay()
 	set category = "Server"
 	set desc="Delay the game start/end"
@@ -1200,8 +1295,7 @@ var/global/floorIsLava = 0
 		to_chat(world, "<b>The game start has been delayed.</b>")
 		log_admin("[key_name(usr)] delayed the game.")
 	feedback_add_details("admin_verb","DELAY") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-#undef LOBBY_TICKING_STOPPED
-#undef LOBBY_TICKING_RESTARTED
+
 /datum/admins/proc/adjump()
 	set category = "Server"
 	set desc="Toggle admin jumping"
@@ -1624,7 +1718,7 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 
 	dat += "<hr><br><center>ADVANCED: <a href='?_src_=vars;Vars=\ref[end_credits]'>Debug Credits Datum</A></center>"
 
-	usr << browse(dat, "window=creditspanel;size=600x800")
+	usr << browse(HTML_SKELETON(dat), "window=creditspanel;size=600x800")
 
 /datum/admins/proc/PersistencePanel()
 	if(!check_rights(0))
@@ -1646,7 +1740,7 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 		dat += "<b>[T.name]</b>: [T.tracking.len] entries - <A href='?src=\ref[src];persistencedatum=\ref[T];persistenceaction=qdelall'>(DELETE)</A><br>"
 		dat += "Max [T.max_per_turf] per turf. Lasts up to [T.max_age] rounds.<hr>"
 
-	usr << browse(dat, "window=persistencepanel;size=350x600")
+	usr << browse(HTML_SKELETON(dat), "window=persistencepanel;size=350x600")
 
 /datum/admins/proc/ViewAllRods()
 	if(!check_rights(0))
@@ -1660,4 +1754,121 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 			dat += "- <A href='?src=\ref[src];rod_to_untrack=\ref[rod]'>(UNTRACK)</A>"
 		dat += "<br/>"
 
-	usr << browse(dat, "window=rodswindow;size=350x300")
+	usr << browse(HTML_SKELETON(dat), "window=rodswindow;size=350x300")
+
+/datum/admins/proc/beasts_panel()
+
+	var/dat = {"<html>
+		<head>
+		<title>Megabeast Panel</title>
+		<style>
+		table,h2 {
+		font-family: Arial, Helvetica, sans-serif;
+		border-collapse: collapse;
+		}
+		td, th {
+		border: 1px solid #dddddd;
+		padding: 8px;
+		}
+		tr:nth-child(even) {
+		background-color: #dddddd;
+		}
+		</style>
+		</head>
+		<body>
+		<h2 style="text-align:center">Megabeast Panel</h2>
+		<table>
+		<tr>
+		<th style="width:1%">Mob</th>
+		<th style="width:1%">Name</th>
+		<th style="width:1%">Datum Info</th>
+		<th style="width:2%">Ability</th>
+		<th style="width:2%"><a href='?src=\ref[src];create_megabeast=1'>New</a></th><!-- Spawn a random FB -->
+		</tr>
+		"}
+
+	for(var/datum/procedural_mobspawn/ID in procgen_mob_datums)
+		var/projectile_name = ""
+		var/breath_name = ""
+		var/passive_name = ""
+		var/radioactive = ""
+		if(ID.ranged)
+			if(ID.mybreath)
+				projectile_name = "Breath: [ID.mybreath.name]\n"
+			else if(ID.projectiletype)
+				breath_name = "Projectile: [ID.projectiletype.name]\n"
+		if(ID.radioactive)
+			radioactive = "Radiation Pulse"
+		if(ID.vapors)
+			passive_name = "[ID.vapors.name] Smoke"
+
+		dat += {"<tr>
+			<td>[bicon(ID)]</td>
+			<td>[ID.name]</td>
+			<td><a href='?_src_=vars;Vars=\ref[ID]'>\[VV\]</a> <a href='?_src_=vars;mark_object=\ref[ID]'>\[mark datum\]</a></td>
+			<td>[projectile_name][breath_name][radioactive]<br>[passive_name]</br></td>
+			<td><a href='?src=\ref[src];create_megabeast=\ref[ID]'>Spawn</a></td><!-- Spawn this FB specifically.-->
+			</tr>
+			"}
+
+	dat += {"</table>
+		</body>
+		</html>
+		"}
+
+	usr << browse(HTML_SKELETON(dat), "window=beastspanel;size=840x450")
+
+/datum/admins/proc/create_megabeast(var/datum/procedural_mobspawn/add_template)//Since megabeasts are generated on initialize, they may have descriptions that don't match their traits when generated. Good thing admins can varedit the FB datum before spawning it! -Mr. Heavenly
+	if(!check_rights(R_SPAWN))
+		return
+
+	if(!add_template)
+		if(alert(usr, "Create custom megabeast?", "Megabeast panel", "Yes", "No") == "Yes")
+			//your inputs go here
+			var/datum/procedural_mobspawn/my_monster = new()
+			my_monster.name =  input(usr,"Please name your megabeast:","Name your megabeast",null) as text
+			if(!my_monster.name)
+				my_monster.name = "Forgotten Beast"
+			var/mob/living/simple_animal/hostile/mob_type = filter_typelist_input("Please select the base mob.", "Mob selection", typesof(/mob/living/simple_animal/hostile))
+			if(mob_type:icon)
+				my_monster.icon = mob_type:icon
+				my_monster.icon_state = mob_type:icon_state
+			if(alert(usr, "Apply custom attributes?", "Megabeast panel", "Yes", "No") == "Yes")
+				my_monster.maxHealth =  input(usr,"Maximum HP","Megabeast panel",null) as num
+				my_monster.melee_damage_lower =  input(usr,"Minimum Damage","Megabeast panel",null) as num
+				my_monster.melee_damage_upper =  input(usr,"Maximum Damage","Megabeast panel",null) as num
+			if(alert(usr, "Customize appearance modifiers?", "Megabeast panel", "Yes", "No") == "Yes")
+				my_monster.color =  input(usr,"Color (Text):","Megabeast panel",null) as color
+				var/scaling_x =  input(usr,"Size Multiplier - X axis, base 1.00","Megabeast panel",null) as num
+				var/scaling_y =  input(usr,"Size Multiplier - Y axis, base 1.00","Megabeast panel",null) as num
+				my_monster.size_matrix = matrix()
+				my_monster.size_matrix.Scale(scaling_x, scaling_y)
+			if(alert(usr, "Manually assign abilities?", "Megabeast panel", "Yes", "No") == "Yes")
+				if(alert(usr, "Assign projectile attack?", "Megabeast panel", "Yes", "No") == "Yes")
+					my_monster.projectiletype = filter_typelist_input("Please select the projectile.", "Projectile selection", typesof(/obj/item/projectile))
+					my_monster.ranged = TRUE
+				else
+					if(alert(usr, "Assign breath attack?", "Megabeast panel", "Yes", "No") == "Yes")
+						var/list/my_breaths = list()
+						for (var/list/x in breath_list)
+							my_breaths += x[1]
+						var/selection = input("Please select the breath type.", "Breath selection") as null|anything in my_breaths
+
+						for (var/list/x in breath_list)
+							if(selection in x)
+								my_monster.PickBreath(x[1])
+				if(alert(usr, "Make it radioactive?", "Megabeast panel", "Yes", "No") == "Yes")
+					my_monster.radioactive = TRUE
+					return
+				else
+					my_monster.radioactive = FALSE
+
+				if(alert(usr, "Assign vapors?", "Megabeast panel", "Yes", "No") == "Yes")
+					var/datum/reagent/my_chemical = filter_typelist_input("Please select the projectile.", "Projectile selection", typesof(/datum/reagent))
+					my_monster.PickVapors(my_chemical)
+				else
+					my_monster.vapors = FALSE
+		else
+			new /datum/procedural_mobspawn()
+		return
+	new /mob/living/simple_animal/hostile/forgotten_beast(get_turf(usr), add_template)

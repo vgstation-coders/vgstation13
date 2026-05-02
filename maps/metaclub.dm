@@ -25,7 +25,8 @@
 	enabled_jobs = list(/datum/job/trader)
 
 	load_map_elements = list(
-	/datum/map_element/dungeon/holodeck
+	/datum/map_element/dungeon/holodeck,
+	/datum/map_element/dungeon/mecha_graveyard
 	)
 
 /datum/map/active/New()

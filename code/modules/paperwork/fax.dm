@@ -29,7 +29,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/fax,
+		/obj/item/weapon/circuitboard/small/fax,
 		/obj/item/weapon/stock_parts/subspace/ansible,
 		/obj/item/weapon/stock_parts/scanning_module
 	)
@@ -119,7 +119,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 		if(tofax)
 			dat += "<a href ='byond://?src=\ref[src];remove=1'>Remove Paper</a><br>"
 
-	user << browse(dat, "window=copier")
+	user << browse(HTML_SKELETON(dat), "window=copier")
 	onclose(user, "copier")
 	return
 

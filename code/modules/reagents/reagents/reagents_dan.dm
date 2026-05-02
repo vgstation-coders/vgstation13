@@ -24,14 +24,14 @@
 				if(prob(5))
 					to_chat(H,"<span class='warning'>You don't feel very good.</span>")
 					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
-			if(20 to 35)
+			if(21 to 35)
 				if(prob(10))
 					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
 				if(prob(5))
 					H.adjustToxLoss(0.1)
 					H.visible_message("[H] groans.")
 					holder.remove_reagent(src.id, 0.3 * FOOD_METABOLISM)
-			if(35 to INFINITY)
+			if(36 to INFINITY)
 				if(prob(10))
 					to_chat(H,"<span class='warning'>Your stomach grumbles unsettlingly.</span>")
 				if(prob(5))
@@ -77,6 +77,15 @@
 
 	if(prob(20))
 		M.adjustToxLoss(1)
+
+/datum/reagent/toxicwaste/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(istype(O,/obj/item/device/plugin/sleeper) && !istype(O,/obj/item/device/plugin/sleeper/gunk))
+		playsound(O, 'sound/effects/grue_burn.ogg', 100, 1)
+		new /obj/item/device/plugin/sleeper/gunk(get_turf(O))
+		qdel(O)
 
 /datum/reagent/refriedbeans
 	name = "Re-Fried Beans"

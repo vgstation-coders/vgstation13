@@ -4,13 +4,13 @@
 	user_type = USER_TYPE_ARTIFACT
 
 	school = "abjuration"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	range = 7
 	max_targets = 1
 
 	amt_stunned = 5
-	cooldown_min = 30
+	cooldown_min = 3 SECONDS
 
 	hud_state = "ice_barrage"
 	valid_targets = list(/mob/living)

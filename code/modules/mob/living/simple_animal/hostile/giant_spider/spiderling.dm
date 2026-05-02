@@ -31,7 +31,7 @@
 	a_intent = I_HELP
 	size = SIZE_TINY
 	//throw_message = "sinks in slowly, before being pushed out of "
-	
+
 	search_objects = 0
 	wanted_objects = list(/obj/machinery/atmospherics/unary/vent_pump)
 	can_ventcrawl = TRUE
@@ -162,4 +162,14 @@
 	icon_living = "jonas"
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/salk/growth()//little jonas can never grow up
+	return
+
+/mob/living/simple_animal/hostile/giant_spider/spiderling/clownling
+	name = "clownling"
+	desc = "You really don't want this thing to grow up."
+	icon = 'icons/mob/clown_mobs.dmi'
+	icon_state = "clownling"
+	icon_living = "clownling"
+
+/mob/living/simple_animal/hostile/giant_spider/spiderling/clownling/growth()//this is literally too terrifying
 	return

@@ -53,6 +53,7 @@
 		PLASMA
 		)
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
+	var/max_beaker_size = W_CLASS_SMALL
 /*
 USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 */
@@ -340,7 +341,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			return FALSE
 		if(istype(AM,/obj/item))
 			var/obj/item/I = AM
-			if(I.w_class > W_CLASS_SMALL)
+			if(I.w_class > max_beaker_size)
 				return FALSE
 		else if(!panel_open)
 			AM.forceMove(src)
@@ -370,7 +371,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(src.container)
 			to_chat(user, "\A [src.container] is already loaded into the machine.")
 			return
-		if(D.w_class > W_CLASS_SMALL)
+		if(D.w_class > max_beaker_size)
 			to_chat(user, "<span class='warning'>\The [D] is too big to fit.</span>")
 			return
 		else if(!panel_open)
@@ -661,4 +662,181 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		to_chat(usr, "<span class='notice'>You are not capable of such fine manipulation.</span>")
 		return
 	move_that_gear_up()
-	
+
+
+//Special Chemistry Dispensers that Dispense Single Reagents
+/obj/machinery/chem_dispenser/single
+	name = "\improper Single Chemical Dispenser"
+	icon_state = "mixertall"
+	dispensable_reagents = list()
+	var/single_reagent = WATER
+	beaker_height = 1
+	max_beaker_size = W_CLASS_MEDIUM
+
+/obj/machinery/chem_dispenser/single/New()
+	..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/chem_dispenser/single,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+	dispensable_reagents = list(single_reagent)
+	var/datum/reagent/temp = chemical_reagents_list[single_reagent]
+	desc = "It dispenses [temp ? temp.name : single_reagent]."
+
+/obj/machinery/chem_dispenser/single/update_icon()
+
+	overlays.len = 0
+
+	if(container)
+
+		var/image/overlay
+
+		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/bluespace) || istype(container, /obj/item/weapon/reagent_containers/glass/beaker/noreact))
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_bluesp")
+		else if(istype(container, /obj/item/weapon/reagent_containers/food/drinks/soda_cans))
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_soda")
+		else if(istype(container, /obj/item/weapon/reagent_containers/glass/bucket))
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_bucket")
+		else
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_glassb")
+
+		overlay.pixel_y = beaker_height * PIXEL_MULTIPLIER //used for children
+		overlays += overlay
+
+//Returns the pixel_x that our beaker overlay should have to match up with where the user clicked.
+/obj/machinery/chem_dispenser/single/x_coord_to_nozzle(x_coord)
+	return 0
+
+/obj/machinery/chem_dispenser/single/RefreshParts()
+	..()
+	for(var/obj/item/weapon/circuitboard/chem_dispenser/single/C in component_parts)
+		single_reagent = C.single_reagent
+	update_chem_list()
+
+/obj/machinery/chem_dispenser/single/update_chem_list()
+	dispensable_reagents = list(single_reagent)
+	var/datum/reagent/temp = chemical_reagents_list[single_reagent]
+	desc = "It dispenses [temp ? temp.name : single_reagent]."
+
+/obj/machinery/chem_dispenser/single/examine(var/mob/user)
+	..()
+	if(user?.client?.holder)
+		to_chat(user,"Hello admin, you can use the change_reagent proc to change the reagent!")
+
+//admin proc to change the reagent
+/obj/machinery/chem_dispenser/single/proc/change_reagent()
+	var/input_reagent = copytext(sanitize(input("Enter the name of any liquid", "Input") as text),1,MAX_MESSAGE_LEN)
+	input_reagent = lowertext(input_reagent) // Lowercase for easier parsing
+	if(findtext(input_reagent,"a cup of ")) // These appear at the start of a lot of requests in the SCP so parse these properly too
+		input_reagent = replacetext(input_reagent,"a cup of ","")
+	else if(findtext(input_reagent,"cup of ",0,7))
+		input_reagent = replacetext(input_reagent,"cup of ","")
+	var/chemfound = FALSE
+	// Then searches through the list of all reagents and ignores case, plus converts spaces into either nothing or underscores for IDs
+	// (due to no consistent alternating between either)
+	for(var/reagent_id in chemical_reagents_list)
+		var/datum/reagent/R = chemical_reagents_list[reagent_id]
+		if(input_reagent == lowertext(R.name) || input_reagent == lowertext(reagent_id) || lowertext(reagent_id) == replacetext(input_reagent," ","") || lowertext(reagent_id) == replacetext(input_reagent," ","_"))
+			input_reagent = reagent_id
+			chemfound = R.name
+			break
+	if(chemfound)
+		single_reagent = input_reagent
+		for(var/obj/item/weapon/circuitboard/chem_dispenser/single/C in component_parts)
+			C.single_reagent = input_reagent
+		RefreshParts()
+		to_chat(usr,"Updated \the [src] to have [chemfound].")
+	else
+		to_chat(usr,"OUT OF RANGE")
+
+//
+//Looted Dispenser
+//Has random reagents
+//
+/obj/machinery/chem_dispenser/single/loot
+	name = "\improper Mysterious Dispenser"
+	single_reagent = null
+
+/obj/machinery/chem_dispenser/single/loot/New()
+	..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/chem_dispenser/single/loot,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+	RefreshParts() //Circuitboard controls everything!
+
+//Circuitboards for the above
+/obj/item/weapon/circuitboard/chem_dispenser/single
+	name = "Circuit Board (Single Chemical Dispenser)"
+	desc = "A circuit board used to run a reagent dispensing machine which dispenses a single chemical."
+	build_path = /obj/machinery/chem_dispenser/single
+	var/single_reagent = WATER
+
+/obj/item/weapon/circuitboard/chem_dispenser/single/New(var/loc, var/optional_reagent)
+	..()
+	if(optional_reagent)
+		single_reagent = optional_reagent
+	if(istype(loc,/obj/machinery/chem_dispenser/single))
+		var/obj/machinery/chem_dispenser/single/my_dispenser = loc
+		single_reagent = my_dispenser.single_reagent
+	var/datum/reagent/temp = chemical_reagents_list[single_reagent]
+	desc = "A circuit board used to run a reagent dispensing machine which dispenses a single chemical. An attached label says [temp ? temp.name : single_reagent]."
+
+/obj/item/weapon/circuitboard/chem_dispenser/single/proc/change_reagent()
+	var/input_reagent = copytext(sanitize(input("Enter the name of any liquid", "Input") as text),1,MAX_MESSAGE_LEN)
+	input_reagent = lowertext(input_reagent) // Lowercase for easier parsing
+	if(findtext(input_reagent,"a cup of ")) // These appear at the start of a lot of requests in the SCP so parse these properly too
+		input_reagent = replacetext(input_reagent,"a cup of ","")
+	else if(findtext(input_reagent,"cup of ",0,7))
+		input_reagent = replacetext(input_reagent,"cup of ","")
+	var/chemfound = FALSE
+	// Then searches through the list of all reagents and ignores case, plus converts spaces into either nothing or underscores for IDs
+	// (due to no consistent alternating between either)
+	for(var/reagent_id in chemical_reagents_list)
+		var/datum/reagent/R = chemical_reagents_list[reagent_id]
+		if(input_reagent == lowertext(R.name) || input_reagent == lowertext(reagent_id) || lowertext(reagent_id) == replacetext(input_reagent," ","") || lowertext(reagent_id) == replacetext(input_reagent," ","_"))
+			input_reagent = reagent_id
+			chemfound = R.name
+			break
+	if(chemfound)
+		single_reagent = input_reagent
+		var/datum/reagent/temp = chemical_reagents_list[single_reagent]
+		desc = "[initial(desc)] An attached label says [temp ? temp.name : single_reagent]."
+		to_chat(usr,"Updated \the [src] to have [chemfound].")
+	else
+		to_chat(usr,"OUT OF RANGE")
+
+/obj/item/weapon/circuitboard/chem_dispenser/single/examine(var/mob/user)
+	..()
+	if(user?.client?.holder)
+		to_chat(user,"Hello admin, you can use the change_reagent proc to change the reagent!")
+
+
+//Lootboard
+/obj/item/weapon/circuitboard/chem_dispenser/single/loot
+	name = "Circuit Board (Mysterious Dispenser)"
+	desc = "A circuit board used to run a strange dispensing machine."
+	build_path = /obj/machinery/chem_dispenser/single/loot
+	single_reagent = null
+
+/obj/item/weapon/circuitboard/chem_dispenser/single/loot/New()
+	..()
+	if(!single_reagent)
+		single_reagent = pick(LOOT_REAGENTS)
+	var/datum/reagent/temp = chemical_reagents_list[single_reagent]
+	desc = "A circuit board used to run a strange dispensing machine. A faded label says [temp ? temp.name : single_reagent]."
+

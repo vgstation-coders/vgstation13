@@ -57,6 +57,8 @@
 	if(A.mop_act(src, user))
 		update_icon()
 		return
+	if(!src)
+		return
 	if(istype(A, /mob/living))
 		if(!(reagents.total_volume < 1)) //Slap slap slap
 			A.visible_message("<span class='danger'>[user] [ishuman(A) ? "hits [A] in the [parse_zone(user.zone_sel.selecting)] with" : "covers [A] in"] the mop's contents</span>")

@@ -70,7 +70,10 @@
 		for(var/ID in files.known_tech)
 			var/datum/tech/T = files.known_tech[ID]
 			if(prob(1))
-				T.level = 0 // This never happens, so make it dramatic. T.level--
+				if(T.level <= 1) //He's dead, Jim!
+					continue
+				T.level = 1 // This never happens, so make it dramatic. T.level--
+				//Except it does happen and floods the admins!! Minimum level is 1, not 0
 				message_admins("[src] lost [T.id] tech levels due to heat damage.")
 				for(var/obj/machinery/computer/rdservercontrol/SC in machines)
 					SC.screen = -1 //Display an alert
@@ -305,7 +308,7 @@
 			for(var/obj/machinery/r_n_d/server/S in servers)
 				dat += "[S.name] <A href='?src=\ref[src];send_to=[S.server_id]'> (Transfer)</A><BR>"
 			dat += "<HR><A href='?src=\ref[src];main=1'>Main Menu</A>"
-	user << browse("<TITLE>R&D Server Control</TITLE><HR>[dat]", "window=server_control;size=575x400")
+	user << browse(HTML_SKELETON_TITLE("R&D Server Control", dat), "window=server_control;size=575x400")
 	onclose(user, "server_control")
 	return
 
@@ -341,7 +344,7 @@
 				A.anchored = 1
 				src.transfer_fingerprints_to(A)
 				qdel(src)
-	else 
+	else
 		return ..()
 
 /obj/machinery/computer/rdservercontrol/emag_act(mob/user)

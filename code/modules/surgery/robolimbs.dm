@@ -149,6 +149,7 @@
 		)
 	can_infect = 0
 	duration = 8 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/limb/attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
@@ -192,6 +193,7 @@
 
 	can_infect = 0
 	duration = 8 SECONDS
+	blood_level = 0
 
 /datum/surgery_step/limb/attach_plank/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

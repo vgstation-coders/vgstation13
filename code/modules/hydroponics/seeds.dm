@@ -54,6 +54,23 @@
 	seed_type = seed.name
 	..()
 
+/obj/item/seeds/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W,/obj/item/weapon/pen))
+		if(seed.immutable)//if the seed cannot be gene edited, like diona nodes
+			return
+		var/n_name = copytext(sanitize(input(user, "What would you like to name this seed variety?", "Plant Renaming", null) as text|null), 1, MAX_NAME_LEN*3)
+		if(n_name && Adjacent(user) && !user.stat)
+			var/newnoun = seed.seed_noun
+			seed = seed.diverge(-1)//creates a new seed datum with a unique identifier. Seed datums are globals, so you don't want to modify every other seed in existence.
+			seed.seed_name = "[n_name]"//the name on the packet
+			seed.display_name = "[n_name]"//the name on the description of the packet and on growing plants
+			seed.add_newline_to_controller()//adds the entry to the plant subsystem
+			seed.roundstart = 1
+			seed.seed_noun = newnoun
+			update_appearance()//automagically updates the name and desc to reflect the seed_name varaible
+			desc += " The words [n_name] are scribbled on it."
+	..()
+
 //the vegetable/fruit categories are made from a culinary standpoint. many of the "vegetables" in there are technically fruits. (tomatoes, pumpkins...)
 
 /obj/item/seeds/dionanode
@@ -295,6 +312,11 @@
 	seed_type = "sunflowers"
 	vending_cat = "flowers"
 
+/obj/item/seeds/roseseed
+	name = "packet of rose seeds"
+	seed_type = "roses"
+	vending_cat = "flowers"
+
 /obj/item/seeds/mustardplantseed
 	name = "packet of mustardplant seeds"
 	seed_type = "mustardplants"
@@ -328,6 +350,11 @@
 /obj/item/seeds/goldappleseed
 	name = "packet of golden apple seeds"
 	seed_type = "goldapple"
+	vending_cat = "fruits"
+
+/obj/item/seeds/crabappleseed
+	name = "packet of crab apple seeds"
+	seed_type = "crabapple"
 	vending_cat = "fruits"
 
 /obj/item/seeds/ambrosiavulgarisseed
@@ -522,6 +549,12 @@
 /obj/item/seeds/flaxseed
 	name = "packet of flax seeds"
 	seed_type = "flax"
+	vending_cat = "flowers"
+
+/obj/item/seeds/mintseed
+	name = "packet of mint seeds"
+	seed_type = "mint"
+	vending_cat = "weeds"
 
 // Chili plants/variants.
 /datum/seed/chili
@@ -772,7 +805,7 @@
 	display_name = "apple tree"
 	plant_dmi = 'icons/obj/hydroponics/apple.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
-	mutants = list("poisonapple","goldapple")
+	mutants = list("poisonapple","goldapple", "crabapple")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
 
@@ -802,6 +835,20 @@
 	maturation = 10
 	production = 10
 	yield = 3
+
+/datum/seed/apple/crab
+	name = "crabapple"
+	seed_name = "crab apple"
+	display_name = "crab apple tree"
+	plant_dmi = 'icons/obj/hydroponics/crabapple.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple)
+	mutants = null
+	chems = list(NUTRIMENT = list(1,10), TANNIC_ACID = list(1,30))
+
+	maturation = 5
+	production = 5
+	yield = 2
+	pest_tolerance = 75
 
 //Ambrosia/varieties.
 /datum/seed/ambrosia
@@ -968,6 +1015,7 @@
 	plant_dmi = 'icons/obj/hydroponics/towercap.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/grown/log)
+	chems = list(PULP = list(2,5))
 
 	lifespan = 80
 	maturation = 15
@@ -1079,6 +1127,27 @@
 	fluid_consumption = 6
 	nutrient_consumption = 2
 	large = 0
+
+/datum/seed/flower/rose
+	name = "roses"
+	seed_name = "rose"
+	display_name = "roses"
+	plural = 1
+	plant_dmi = 'icons/obj/hydroponics/rose.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/rose)
+	chems = list(NUTRIMENT = list(1,20))
+
+	lifespan = 60
+	potency = 20
+	maturation = 6
+	production = 6
+	yield = 6
+	growth_stages = 3
+	ideal_light = 8
+	fluid_consumption = 0.5
+	nutrient_consumption = 0.5
+	large = 0
+	thorny = 1
 
 /datum/seed/flower/sunflower/moonflower
 	name = "moonflowers"
@@ -1923,7 +1992,7 @@
 	display_name = "woodapple tree"
 	plant_dmi = 'icons/obj/hydroponics/woodapple.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/woodapple)
-	chems = list(SUGAR = list(1,10))
+	chems = list(SUGAR = list(1,10),PULP = list(1,10))
 
 	growth_stages = 3
 	maturation = 4
@@ -2054,3 +2123,20 @@
 	ideal_light = 8
 	nutrient_consumption = 2
 	constrained = 1
+
+/datum/seed/mint //somewhat realistic mint stats
+	name = "mint"
+	seed_name = "mint"
+	display_name = "mint"
+	plant_dmi = 'icons/obj/hydroponics/mint.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mint)
+	chems = list(MINTESSENCE = list(2,4)) //TO DO: add a PROPER system that switches the produced chems based on potency so it makes mint essence when low potency and mint tox when high potency
+	lifespan = 150
+	maturation = 2
+	production = 8
+	yield = 6
+	potency = 5
+	fluid_consumption = 5
+	nutrient_consumption = 0.05
+	growth_stages = 2
+	voracious = 1

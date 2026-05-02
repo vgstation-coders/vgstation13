@@ -17,7 +17,7 @@ var/atom/movable/typing_indicator/typing_indicator
 	return ..()
 
 /mob/proc/create_typing_indicator()
-	if(client && !stat && client.prefs.typing_indicator && src.is_visible() && isturf(src.loc))
+	if(client && !stat && client.prefs.get_pref(/datum/preference_setting/toggle/typing_indicator) && src.is_visible() && isturf(src.loc))
 		vis_contents |= typing_indicator
 
 /mob/proc/remove_typing_indicator()

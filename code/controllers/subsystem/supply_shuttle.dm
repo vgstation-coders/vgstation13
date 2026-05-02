@@ -126,7 +126,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			message_admins("WARNING: Cargo shuttle unable to find the station!")
 			warning("Cargo shuttle can't find station")
 	else //at station
-		for(var/obj/structure/shuttle/engine/propulsion/P in cargo_shuttle.linked_area)
+		for(var/obj/structure/shuttle/engine/propulsion/P in cargo_shuttle.shuttle_contents())
 			spawn()
 				P.shoot_exhaust()
 		sleep(3)
@@ -146,8 +146,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	if(moving)
 		return 0
 
-	if(forbidden_atoms_check(cargo_shuttle.linked_area))
-		return 0
+	for(var/area/shuttle_area in cargo_shuttle.linked_areas)
+		if(forbidden_atoms_check(shuttle_area))
+			return 0
 
 	return 1
 
@@ -170,9 +171,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			return
 
 /datum/subsystem/supply_shuttle/proc/scrub()
-	for (var/obj/effect/decal/cleanable/C in cargo_shuttle.linked_area)
+	for (var/obj/effect/decal/cleanable/C in cargo_shuttle.shuttle_contents())
 		qdel(C)
-	for (var/obj/effect/rune/R in cargo_shuttle.linked_area)
+	for (var/obj/effect/rune/R in cargo_shuttle.shuttle_contents())
 		qdel(R)
 
 /datum/subsystem/supply_shuttle/proc/sell()
@@ -184,7 +185,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	var/recycled_crates = 0
 
-	for(var/atom/movable/MA in cargo_shuttle.linked_area)
+	for(var/atom/movable/MA in cargo_shuttle.shuttle_contents())
 		if(MA.anchored && !ismecha(MA))
 			continue
 
@@ -261,7 +262,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	for(var/datum/cargo_forwarding/CF in cargo_forwards)
 		var/reason = null
 		var/specific_reason = FALSE // For debug logs
-		if(!CF.associated_crate || get_area(CF.associated_crate) != cargo_shuttle.linked_area)
+		if(!CF.associated_crate || !cargo_shuttle.has_area(get_area(CF.associated_crate)))
 			reason = "Crate is missing"
 			specific_reason = TRUE
 			if(!CF.associated_manifest)
@@ -270,7 +271,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 				log_debug("CARGO FORWARDING: [CF] denied: Crate was in [get_area(CF.associated_crate)], not in [cargo_shuttle.linked_area]")
 		if(!CF.weighed)
 			reason = "Crate not weighed"
-		if(!CF.associated_manifest || get_area(CF.associated_manifest) != cargo_shuttle.linked_area)
+		if(!CF.associated_manifest || !cargo_shuttle.has_area(get_area(CF.associated_manifest)))
 			reason = "Manifest is missing"
 			specific_reason = TRUE
 			if(!CF.associated_manifest)
@@ -313,12 +314,12 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	var/list/clear_turfs = list()
 
-	for(var/turf/T in cargo_shuttle.linked_area)
+	for(var/turf/T in cargo_shuttle.shuttle_contents())
 		if(T.density)
 			continue
 		var/contcount
-		for(var/atom/A in T.contents)
-			if(islightingoverlay(A) || istype(A, /obj/machinery/conveyor))
+		for(var/atom/movable/MA in T.contents)
+			if(MA.anchored && !istype(MA,/obj/structure/shuttle) && !istype(MA,/obj/machinery/door))
 				continue
 			contcount++
 		if(contcount)
@@ -347,6 +348,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		//supply manifest generation begin
 
 		var/obj/item/weapon/paper/manifest/slip = new /obj/item/weapon/paper/manifest(A)
+
+		if(istype(A, /obj/structure/closet/crate))
+			var/obj/structure/closet/crate/my_box = A
+			my_box.jiggle_all(W_CLASS_MEDIUM)
 
 		slip.name = "Shipping Manifest for [SO.orderedby]'s Order"
 		slip.info = {"<h3>[command_name()] Shipping Manifest for [SO.orderedby]'s Order</h3><hr><br>
@@ -534,7 +539,6 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 /datum/subsystem/supply_shuttle/proc/add_centcomm_order(var/datum/centcomm_order/C)
 	centcomm_orders.Add(C)
-	var/name = "External order form - [C.name] order number [C.id]"
 	var/info = {"<h3>Central Command supply requisition form</h3><hr>
 	 			INDEX: #[C.id]<br>
 	 			REQUESTED BY: [C.name]<br>
@@ -547,10 +551,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		return
 	for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
 		if(S.printccrequests)
-			var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
-			reqform.name = name
-			reqform.info = info
-			reqform.update_icon()
+			C.generate_form(S.loc)
 		S.say("New Central Command request available!")
 		playsound(S, 'sound/machines/twobeep.ogg', 50, 1)
 

@@ -39,6 +39,38 @@
 /obj/machinery/portable_atmospherics/canister/New()
 	..()
 	old_color = canister_color
+	setup_sound()
+
+/obj/machinery/portable_atmospherics/canister/setup_sound()
+	sound_emitter = new(src)
+	if (sound_emitter)
+		var/sound/hiss = sound()
+		hiss.file = 'sound/machines/looping/gas_hiss.ogg'
+		hiss.repeat = 1
+		hiss.volume = 100
+		sound_emitter.add(hiss, "gas_hiss")
+
+/obj/machinery/portable_atmospherics/canister/proc/calc_sound_vol(var/p_delta, var/p_env)
+	var/soundvol = 0
+	if (p_env > 0.01)
+		// p_delta/p_env is usually 0~10
+		soundvol = clamp(10 * p_delta / p_env, 0.001, 100)
+	return soundvol
+
+/obj/machinery/portable_atmospherics/canister/proc/set_initial_sound_volume() // i copied some of this from process(). sorry
+	if(valve_open)
+		var/datum/gas_mixture/environment
+		if(holding && !arcanetampered)
+			environment = holding.air_contents
+		else
+			environment = loc.return_air()
+
+		var/env_pressure = environment.return_pressure()
+		var/soundvol = 0
+		if (env_pressure > 0.01)
+			var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
+			soundvol = calc_sound_vol(pressure_delta, env_pressure)
+		sound_emitter.update_active_sound_param(volume = soundvol)
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent
 	name = "Canister: \[N2O\]"
@@ -78,6 +110,18 @@
 	name = "Canister \[Air\]"
 	icon_state = "grey"
 	canister_color = "grey"
+	can_label = 0
+
+/obj/machinery/portable_atmospherics/canister/radon //for testing (or admin shittery)
+	name = "Canister \[Rn\]"
+	icon_state = "green"
+	canister_color = "green"
+	can_label = 0
+
+/obj/machinery/portable_atmospherics/canister/cryotheum // see above
+	name = "Canister \[O2β\]"
+	icon_state = "cyan"
+	canister_color = "cyan"
 	can_label = 0
 
 /obj/machinery/portable_atmospherics/canister/update_icon()
@@ -127,6 +171,9 @@
 		image('icons/obj/atmos.dmi', "can-o2"),
 		image('icons/obj/atmos.dmi', "can-o3")
 	)
+
+	var/image/I = status_overlays_pressure[state]
+	I.plane = ABOVE_LIGHTING_PLANE
 
 	return status_overlays_pressure[state]
 
@@ -202,6 +249,10 @@
 		var/env_pressure = environment.return_pressure()
 		var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
+		var/soundvol = 0
+		if (env_pressure > 0.01)
+			soundvol = calc_sound_vol(pressure_delta, env_pressure)
+		sound_emitter.update_active_sound_param(volume = soundvol)
 
 		var/transfer_moles = 0
 		if((air_contents.temperature > 0) && (pressure_delta > 0))
@@ -368,6 +419,11 @@
 					log_admin("[usr]([ckey(usr.key)]) opened a[arcanetampered ? "n arcane tampered" : ""] canister that contains [naughty_stuff] at [loc.x], [loc.y], [loc.z]")
 
 		valve_open = !valve_open
+		if (!valve_open)
+			sound_emitter.stop()
+		else
+			sound_emitter.play("gas_hiss")
+			set_initial_sound_volume()
 
 	if (href_list["remove_tank"])
 		if(holding)
@@ -399,6 +455,8 @@
 				"\[CO2\]" = "black", \
 				"\[Air\]" = "grey", \
 				"\[CAUTION\]" = "yellow", \
+				"\[Rn\]" = "green", \
+				"\[O2β\]" = "cyan", \
 			)
 			var/label = input("Choose canister label", "Gas canister") as null|anything in colors
 			if (label)
@@ -445,6 +503,18 @@
 		GAS_NITROGEN, (N2STANDARD * maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 	update_icon()
+
+
+/obj/machinery/portable_atmospherics/canister/radon/New(loc)
+	..(loc)
+	air_contents.adjust_gas(GAS_RADON, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
+
+/obj/machinery/portable_atmospherics/canister/cryotheum/New(loc)
+	..(loc)
+	air_contents.adjust_gas(GAS_CRYOTHEUM, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
+
 
 /obj/machinery/portable_atmospherics/canister/proc/weld(var/obj/item/tool/weldingtool/WT, var/mob/user)
 

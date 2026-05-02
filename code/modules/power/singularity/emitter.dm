@@ -27,6 +27,8 @@
 	var/last_satisfaction = 0
 
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | WELD_FIXED | MULTITOOL_MENU
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 	var/frequency = 0
 	var/datum/radio_frequency/radio_connection
@@ -44,33 +46,6 @@
 	frequency = new_frequency
 	if(frequency)
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
-
-/obj/machinery/power/emitter/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if(src.anchored || usr:stat)
-		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/machinery/power/emitter/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if(src.anchored || usr:stat)
-		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
-		return 0
-	src.dir = turn(src.dir, 90)
-	return 1
-
-/obj/machinery/power/emitter/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate_cw()
 
 /obj/machinery/power/emitter/initialize()
 	..()
@@ -154,6 +129,9 @@
 		emitterbeam.plane = ABOVE_LIGHTING_PLANE
 		emitterbeam.layer = ABOVE_LIGHTING_LAYER
 		overlays += emitterbeam
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_emitter", moody_color = "#66ffff")
+	else
+		kill_moody_light()
 
 	if(locked)
 		var/image/emitterlock = image(icon,"emitter-lock")
@@ -373,6 +351,7 @@
 	//if(!master)
 		//testing("Visible power: [visible_power]")
 	icon_state = "[base_state]_[visible_power]"
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_emitter_beam", moody_color = "#66ffff")//might do eyes/mice versions later
 
 /obj/effect/beam/emitter/get_machine_underlay(var/mdir)
 	var/visible_power = clamp(round(power/3) + 1, 1, 3)

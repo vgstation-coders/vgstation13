@@ -31,9 +31,13 @@
 /datum/event/radiation_storm/announce()
 	// Don't do anything, we want to pack the announcement with the actual event
 
-/datum/event/radiation_storm/proc/is_safe_zone(var/area/A)
+/datum/event/radiation_storm/proc/is_safe_zone(var/area/A,var/turf/T)
 	for(var/szt in safe_zones)
 		if(istype(A, szt))
+			return 1
+	if(istype(T,/turf/simulated/floor))
+		var/turf/simulated/floor/F=T
+		if(F.material=="lead")
 			return 1
 	return 0
 
@@ -54,7 +58,7 @@
 			command_alert(/datum/command_alert/radiation_storm)
 
 		for(var/area/A in areas)
-			if(A.z != map.zMainStation || is_safe_zone(A))
+			if(A.z != map.zMainStation || is_safe_zone(A,null))
 				continue
 			var/area/ma = get_area(A)
 			ma.radiation_alert()
@@ -69,17 +73,17 @@
 			var/irradiationThisBurst = rand(15,25) //everybody gets the same rads this radiation burst
 			for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 				var/turf/T = get_turf(R)
-				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc))
+				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc,T))
 					continue
 				R.receive_pulse(irradiationThisBurst * 50)
 			for(var/obj/item/weapon/am_containment/decelerator/D in decelerators)
 				var/turf/T = get_turf(D)
-				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc))
+				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc,T))
 					continue
 				D.receive_pulse(irradiationThisBurst * 50)
 			for(var/obj/machinery/portable_atmospherics/hydroponics/tray in hydro_trays)
 				var/turf/T = get_turf(tray)
-				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc))
+				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc,T))
 					continue
 				tray.receive_pulse(irradiationThisBurst * 50)
 
@@ -91,7 +95,7 @@
 				var/turf/T = get_turf(H)
 				if(!T)
 					continue
-				if(T.z != map.zMainStation || is_safe_zone(T.loc))
+				if(T.z != map.zMainStation || is_safe_zone(T.loc,T))
 					continue
 				randomMutation = prob(50)
 				var/applied_rads = (H.apply_radiation(irradiationThisBurst,RAD_EXTERNAL) > (irradiationThisBurst/4))
@@ -111,7 +115,7 @@
 		command_alert(/datum/command_alert/radiation_storm/end)
 
 		for(var/area/A in areas)
-			if(A.z != map.zMainStation || is_safe_zone(A))
+			if(A.z != map.zMainStation || is_safe_zone(A,null))
 				continue
 			var/area/ma = get_area(A)
 			ma.reset_radiation_alert()

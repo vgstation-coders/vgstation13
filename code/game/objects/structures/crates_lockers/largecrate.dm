@@ -97,9 +97,9 @@
 
 /obj/structure/largecrate/porcelain/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iscrowbar(W))
-		var/obj/structure/toilet/T = new (loc)
+		var/obj/structure/wc/toilet/T = new (loc)
 		T.anchored = 0
-		var/obj/structure/sink/S = new (loc)
+		var/obj/structure/wc/sink/S = new (loc)
 		S.anchored = 0
 	..()
 

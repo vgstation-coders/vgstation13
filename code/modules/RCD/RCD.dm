@@ -38,9 +38,22 @@
 	var/datum/html_interface/rcd/interface
 
 	var/obj/abstract/screen/close/closer
+	
+	
+	var/list/settings //for stuff like window directions and construction options.
+	var/current_menu=null //we are keeping both systems of schematics for the sake of backwards compatability
+	var/list/datum/rcd_scematic_grouping/schem_groups=null
+	var/datum/rcd_grouped_schematic/selected_schem=null
+	var/list/client/loaded_clients=null //store a list of clients who have loaded all the images, so we can skip trying to send it to them.
+	
+	
 
 /obj/item/device/rcd/New()
 	. = ..()
+
+	schem_groups=new()
+	settings=new()
+	loaded_clients=new()
 
 	//interface gets created BEFORE the schematics get created, so they can modify the HEAD content (RPD pipe colour picker).
 	interface = new(src, sanitize(name))
@@ -294,26 +307,10 @@
 	var/cell_power_per_energy = 30
 
 /obj/item/device/rcd/borg/use_energy(var/amount, var/mob/user)
-	if(!isrobot(user))
-		return
-
-	var/mob/living/silicon/robot/R = user
-
-	if(!R.cell)
-		return
-
-	R.cell.use(amount * cell_power_per_energy)
+	use_cell_charge(user,amount * cell_power_per_energy)
 
 /obj/item/device/rcd/borg/get_energy(var/mob/user)
-	if(!isrobot(user))
-		return 0
-
-	var/mob/living/silicon/robot/R = user
-
-	if(!R.cell)
-		return
-
-	return R.cell.charge / cell_power_per_energy
+	return get_cell_charge(user) / cell_power_per_energy
 
 //Matter based RCDs.
 /obj/item/device/rcd/matter
@@ -360,16 +357,3 @@
 		if(selected.show(user,1))
 			return
 	user.hud_used.toggle_show_schematics_display(null, 1, src)
-
-/obj/item/device/rcd/mech
-	schematics = list(
-	/datum/rcd_schematic/decon,
-	/datum/rcd_schematic/con_floors,
-	/datum/rcd_schematic/con_walls,
-	/datum/rcd_schematic/con_airlock,
-	/datum/rcd_schematic/con_window,
-	)
-
-/obj/item/device/rcd/mech/attack_self(var/mob/living/user)
-	if(!selected || user.shown_schematics_background || !selected.show(user))
-		user.hud_used.toggle_show_schematics_display(schematics["Construction"], 0, src)

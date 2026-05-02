@@ -79,7 +79,7 @@
 				var/log = replacetext(n, "\n", "(new line)")//no intentionally spamming admins with 100 lines, nice try
 				log_say("[pda_device] notes - [U] changed the text to: [log]")
 				for(var/mob/dead/observer/M in player_list)
-					if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA))
+					if(M.stat == DEAD && M.client && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_GHOSTPDA))
 						M.show_message("<span class='game say'>[pda_device] notes - <span class = 'name'>[U]</span> changed the text to:</span> [log]")
 		else
 			U << browse(null, "window=pda")

@@ -42,7 +42,7 @@
 		if(C.use(5))
 			user.drop_item(src, force_drop = 1)
 
-			var/obj/item/clothing/mask/necklace/teeth/X = new(get_turf(src))
+			var/obj/item/clothing/accessory/necklace/teeth/X = new(get_turf(src))
 
 			X.animal_type = src.animal_type
 			X.teeth_amount = amount

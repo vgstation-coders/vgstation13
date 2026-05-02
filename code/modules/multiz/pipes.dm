@@ -146,7 +146,7 @@
 	var/turf/T = src.loc			// hide if turf is not intact
 	hide(!T.is_plating())
 
-/obj/machinery/atmospherics/pipe/zpipe/up/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/zpipe/up/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
@@ -154,7 +154,7 @@
 	update_planes_and_layers()
 	initialize(1)
 	if(!node1&&!node2)
-		to_chat(usr, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
+		to_chat(user, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()
@@ -197,7 +197,7 @@
 	var/turf/T = src.loc			// hide if turf is not intact
 	hide(!T.is_plating())
 
-/obj/machinery/atmospherics/pipe/zpipe/down/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/zpipe/down/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
@@ -205,7 +205,7 @@
 	update_planes_and_layers()
 	initialize(1)
 	if(!node1&&!node2)
-		to_chat(usr, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
+		to_chat(user, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()

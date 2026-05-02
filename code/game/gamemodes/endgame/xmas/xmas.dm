@@ -17,8 +17,8 @@
 
 // Apply changes when entering state
 /datum/universal_state/christmas/OnEnter()
-	space_overlay1 = image(icon='icons/turf/snowfx.dmi',icon_state="snowlayer1")
-	space_overlay2 = image(icon='icons/turf/snowfx.dmi',icon_state="snowlayer2")
+	space_overlay1 = image(icon='icons/turf/weatherfx.dmi',icon_state="snowlayer1")
+	space_overlay2 = image(icon='icons/turf/weatherfx.dmi',icon_state="snowlayer2")
 
 	to_chat(world, "<span class='sinister' style='font-size:22pt'>You feel a sudden chill in the air...</span>")
 

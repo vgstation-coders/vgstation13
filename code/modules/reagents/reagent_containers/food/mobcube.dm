@@ -19,7 +19,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/afterattack(obj/O, mob/user,proximity)
 	if(!proximity)
 		return
-	if(istype(O,/obj/structure/sink) && !wrapped)
+	if(istype(O,/obj/structure/wc/sink) && !wrapped)
 		to_chat(user, "<span class='notice'>You place [src] under a stream of water...</span>")
 		return Expand()
 	..()

@@ -1123,7 +1123,7 @@
 	},
 /area/awaymission/academy/classrooms)
 "dr" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor{
@@ -3339,7 +3339,7 @@
 /turf/simulated/floor,
 /area/awaymission/academy/academyaft)
 "iQ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -3381,7 +3381,7 @@
 	},
 /area/awaymission/academy/academyaft)
 "iV" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -3398,7 +3398,7 @@
 	},
 /area/awaymission/academy/academyaft)
 "iX" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/machinery/light/small{
@@ -3412,7 +3412,7 @@
 	},
 /area/awaymission/academy/academyaft)
 "iY" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{
@@ -3450,7 +3450,7 @@
 	},
 /area/awaymission/academy/academyaft)
 "jc" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/machinery/light/small{
@@ -3486,7 +3486,7 @@
 /turf/simulated/floor/engine,
 /area/awaymission/academy/academyaft)
 "jj" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/machinery/light/small{
@@ -3506,7 +3506,7 @@
 /turf/simulated/floor/wood,
 /area/awaymission/academy/academyaft)
 "jl" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small{

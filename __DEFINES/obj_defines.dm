@@ -11,16 +11,16 @@
 #define B_MASTERWORK 8
 #define B_LEGENDARY 9
 
-var/list/qualityByString = list(
-		B_AWFUL = "Awful",
-		B_SHODDY = "Shoddy",
-		B_POOR = "Poor",
-		B_AVERAGE = "Average",
-		B_GOOD = "Good",
-		B_SUPERIOR = "Superior",
-		B_EXCELLENT = "Excellent",
-		B_MASTERWORK = "Masterwork",
-		B_LEGENDARY = "Legendary")
+var/static/list/qualityByString = list(
+		"Awful",
+		"Shoddy",
+		"Poor",
+		"Average",
+		"Good",
+		"Superior",
+		"Excellent",
+		"Masterwork",
+		"Legendary")
 
 //Daemons
 #define DAEMON_EXAMINE 	1

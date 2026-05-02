@@ -89,7 +89,7 @@ var/global/list/floorbot_targets=list()
 		dat += "Finds tiles: <A href='?src=\ref[src];operation=tiles'>[eattiles ? "Yes" : "No"]</A><BR>"
 		dat += "Make single pieces of metal into tiles when empty: <A href='?src=\ref[src];operation=make'>[maketiles ? "Yes" : "No"]</A><BR>"
 
-	user << browse("<HEAD><TITLE>Repairbot v0.1 controls (alpha)</TITLE></HEAD>[dat]", "window=autorepair")
+	user << browse(HTML_SKELETON_TITLE("Repairbot v0.1 controls (alpha)", dat), "window=autorepair")
 	onclose(user, "autorepair")
 
 
@@ -333,8 +333,7 @@ var/global/list/floorbot_targets=list()
 					repairing = 0
 					// Cheap, and does the job.
 					F.icon_state = "plating"
-					F.burnt = 0
-					F.broken = 0
+					F.fix_floor()
 
 /obj/machinery/bot/floorbot/proc/eattile(var/obj/item/stack/tile/metal/T)
 	if(!istype(T, /obj/item/stack/tile/metal))

@@ -2,7 +2,7 @@
 	name = "Piercer"
 	desc = "Overload your flash bulb to blind a target creature."
 	hud_state = "amogusflash_piercer"
-	charge_max = 300 SECONDS
+	charge_cooldown_max = 300 SECONDS
 	range = 3
 	user_type = USER_TYPE_NOUSER
 	spell_flags = WAIT_FOR_CLICK
@@ -39,7 +39,7 @@
 	desc = "Blind a vulnerable target creature."
 	hud_state = "amogusflash_flasher"
 	range = 1
-	charge_max = 30 SECONDS
+	charge_cooldown_max = 30 SECONDS
 	user_type = USER_TYPE_NOUSER
 	spell_flags = WAIT_FOR_CLICK
 
@@ -68,3 +68,36 @@
 			target.Stun(10)
 			target.flash_eyes(affect_silicon = 1)
 			to_chat(usr, "<span class='warning'>You overload [target]'s sensors!</span>")
+
+
+/spell/strooigoed //putting this here since this seems to be the meme spell file
+	name = "Strooigoed"
+	desc = "Summon a handful of candy to throw at someone."
+	user_type = USER_TYPE_WIZARD
+	specialization = SSOFFENSIVE
+	spell_flags = null
+	school = "conjuration"
+	charge_cooldown_max = 10 SECONDS
+	cooldown_min = 5 SECONDS
+	range = 1
+
+	spell_levels = list()
+	level_max = list()
+
+	charge_type = SP_RECHARGE
+	invocation = "H'RD G'KLP'T"
+	invocation_type = SP_INV_SHOUT
+	hud_state = "kruidnoten"
+	override_icon = 'icons/obj/food_seasonal.dmi'
+
+/spell/strooigoed/cast(list/targets, mob/user)
+	..()
+	user.drop_hands(force_drop = 1)
+	var/kruid = new /obj/item/weapon/reagent_containers/food/snacks/kruidnoten(user.get_active_hand())
+	user.put_in_hands(kruid)
+
+/spell/strooigoed/choose_targets(mob/user = usr)
+	return list(user)
+
+/spell/strooigoed/perform(mob/user = usr, skipcharge = 0, list/target_override)
+	..()

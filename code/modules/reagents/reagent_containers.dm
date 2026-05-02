@@ -21,6 +21,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	var/controlled_splash = FALSE	//If true, splashing someone/something with the reagent container will only usr the current amount_per_transfer_from_this instead of all of it
 									//Honestly we should try setting this to TRUE by default for all containers at some point, it's just convenient.
+	var/being_heated = FALSE
 
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
@@ -79,7 +80,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return ..()
 
 /obj/item/weapon/reagent_containers/MiddleAltClick(var/mob/living/user)
-	if(!Adjacent(user, src))
+	if(user.stat || !Adjacent(user, src))
 		return
 	if(!reagents || !reagents.total_volume)
 		to_chat(user, "<span class='warning'>\The [src] is desperately empty.</span>")
@@ -439,13 +440,34 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	..()
 	attempt_heating(I, user)
 	process_temperature()
+	if(istype(I,/obj/item/ice_crystal))
+		if(!is_open_container())
+			to_chat(user,"\The [src]'s lid is in the way...")
+			return
+		if(reagents.total_volume>=volume)
+			to_chat(user,"There's no room in \the [src] to fit \the [I]!")
+			return
+		to_chat(user,"You add \the [I] into \the [src].")
+		reagents.add_reagent(ICE, 10, reagtemp = T0C)
+		qdel(I)
 
 /obj/item/weapon/reagent_containers/attempt_heating(atom/A, mob/user)
 	var/temperature = A.is_hot()
-	if(temperature && reagents)
+	if(!(temperature && reagents))
+		return
+	if(!user)
 		reagents.heating(A.thermal_energy_transfer(), temperature)
-		if(user)
-			to_chat(user, "<span class='notice'>You heat \the [src] with \the [A].</span>")
+		return
+	if(being_heated)
+		return
+	being_heated = TRUE
+	to_chat(user, "<span class='notice'>You heat \the [src] with \the [A].</span>")
+	while(user && temperature && do_after(user,src,20)) //Have to keep checking if the thing is hot, welders run out of fuel...
+		temperature = A.is_hot()
+		if(temperature)
+			reagents.heating(A.thermal_energy_transfer(), temperature)
+	to_chat(user, "<span class='notice'>You stop heating \the [src] with \the [A].</span>")
+	being_heated = FALSE
 
 /obj/item/weapon/reagent_containers/Hear(var/datum/speech/speech, var/rendered_speech="")
 	. = ..()
@@ -505,7 +527,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	..()
-	process_temperature()
+	if (!harderforce) // This causes hard del to happen.
+		process_temperature()
 
 /obj/item/weapon/reagent_containers/dropped(var/mob/user)
 	..()

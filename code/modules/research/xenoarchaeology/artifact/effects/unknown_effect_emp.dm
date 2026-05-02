@@ -1,9 +1,9 @@
 
 /datum/artifact_effect/emp
 	effecttype = "emp"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_WIZARD, ARTIFACT_STYLE_ANCIENT, ARTIFACT_STYLE_PRECURSOR, ARTIFACT_STYLE_RELIQUARY)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_WIZARD, ARTIFACT_STYLE_ANCIENT, ARTIFACT_STYLE_PRECURSOR, ARTIFACT_STYLE_RELIQUARY)
 	effect = ARTIFACT_EFFECT_PULSE
-	effect_type = 3
+	effect_hint = EFFECT_HINT_ELECTROMAGNETIC_ENERGY
 
 /datum/artifact_effect/emp/DoEffectPulse()
 	if(holder)

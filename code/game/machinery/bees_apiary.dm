@@ -82,6 +82,9 @@ var/list/apiaries_list = list()
 		update_icon()
 
 /obj/machinery/apiary/attack_hand(var/mob/user)
+	if(isobserver(user) && !isAdminGhost(user))
+		to_chat(user, "<span class='warning'>Your ghostly limb passes right through \the [src].</span>")
+		return
 	if(reagents.total_volume <= 0)
 		alert(user,"There's no honey to harvest yet!","[name]","Ok")
 		return
@@ -120,7 +123,7 @@ var/list/apiaries_list = list()
 
 /obj/machinery/apiary/examine(mob/user)
 	..()
-	var/species_name = "bees"//people would expect an apiary to contain bees by default I guess.
+	var/species_name = BEESPECIES_NORMAL//people would expect an apiary to contain bees by default I guess.
 	if (species)
 		species_name = species.common_name
 	if(!worker_bees_inside && !queen_bees_inside)

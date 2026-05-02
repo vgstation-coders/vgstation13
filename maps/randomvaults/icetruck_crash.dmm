@@ -88,7 +88,7 @@
 	},
 /area/vault/icetruck)
 "w" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -103,7 +103,7 @@
 	},
 /area/vault/icetruck)
 "y" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -112,7 +112,7 @@
 	},
 /area/vault/icetruck)
 "z" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
