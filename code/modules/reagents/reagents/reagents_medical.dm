@@ -1214,9 +1214,11 @@ var/global/list/charcoal_doesnt_remove=list(
 							if(ispath(typepath))
 								new typepath(M.loc)
 							else
-								new /mob/living/simple_animal/hostile/monster/cyber_horror/monster(M.loc,M)
-							spawning_horror = 0
-							M.gib()
+								new /mob/living/simple_animal/hostile/monster/cyber_horror(M.loc)
+						else
+							new /mob/living/simple_animal/hostile/monster/cyber_horror/monster(M.loc,M)
+						spawning_horror = 0
+						M.gib()
 
 /datum/reagent/mednanobots/grey
 	name = "Grey Zeptobots"
