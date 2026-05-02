@@ -133,7 +133,7 @@ Auto Patrol: []"},
 "<A href='?src=\ref[src];operation=patrol'>[auto_patrol ? "On" : "Off"]</A>" )
 
 
-	user << browse("<HEAD><TITLE>Securitron v1.3 controls</TITLE></HEAD>[dat]", "window=autosec")
+	user << browse(HTML_SKELETON_TITLE("Securitron v1.3 controls", dat), "window=autosec")
 	onclose(user, "autosec")
 	return
 
@@ -650,7 +650,7 @@ Auto Patrol: []"},
 
 /obj/item/weapon/secbot_assembly/britsky
 	name = "custodian signaler assembly"
-	desc = "some sort of british assembly."
+	desc = "Some sort of british assembly."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "bhelmet_signaler"
 	build_step = 0

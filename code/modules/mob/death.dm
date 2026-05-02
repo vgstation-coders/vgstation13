@@ -46,6 +46,9 @@ var/global/firstblood = FALSE
 	INVOKE_EVENT(src, /event/death, "user" = src, "body_destroyed" = gibbed)
 	living_mob_list -= src
 	dead_mob_list += src
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(vz)
+		vz.mob_exited(src)
 	if(attack_log.len)
 		var/lastmsg = attack_log[attack_log.len]
 		for(var/mob/living/L in living_mob_list)
@@ -77,6 +80,8 @@ var/global/firstblood = FALSE
 			var/rendered = "\proper[formatFollow(src)] <span class='game deadsay'> \The <span class='name'>[mindname][died_as]</span> has died at \the <span class='name'>[get_area(place_of_death)]</span>.</span>"
 			to_chat(M, rendered)
 		log_game("[key_name(src)] has died at [get_area(place_of_death)]. Coordinates: ([get_coordinates_string(src)])")
+		if (iscultist(src))
+			DisplayUI("Shade Timer")
 	is_dying = FALSE
 
 /mob/proc/transmog_death()

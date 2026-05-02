@@ -16,6 +16,8 @@
 	density = FALSE
 	dir = NORTH
 	pass_flags_self = PASSDOOR|PASSGLASS
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/windoor_type = /obj/machinery/door/window
 	var/secure_type = /obj/machinery/door/window/brigdoor
@@ -169,7 +171,7 @@
 			update_name()
 
 
-	//Adding airlock electronics for access. Step 6 complete.
+	//Adding access electronics for access. Step 6 complete.
 	if(istype(W, /obj/item/weapon/circuitboard/airlock) && anchored)
 		var/obj/item/weapon/circuitboard/airlock/AE = W
 		if(AE.icon_state =="door_electronics_smoked")
@@ -188,7 +190,7 @@
 			update_name()
 			user.drop_item(AE, src, force_drop = 1)
 
-	//Screwdriver to remove airlock electronics. Step 6 undone.
+	//Screwdriver to remove access electronics. Step 6 undone.
 	if(W.is_screwdriver(user) && (anchored && electronics))
 		W.playtoolsound(src, 100)
 		user.visible_message("[user] removes the [electronics] from [src].", "You start to uninstall [electronics] from [src].")
@@ -232,16 +234,8 @@
 	//Update to reflect changes(if applicable)
 	update_icon()
 
-//Rotates the windoor assembly clockwise
-/obj/structure/windoor_assembly/verb/revrotate()
-	set name = "Rotate window door assembly"
-	set category = "Object"
-	set src in oview(1)
-
-	if(anchored)
-		to_chat(usr, "It is fastened to the floor; therefore, you can't rotate it!")
-		return FALSE
-	change_dir(turn(dir, 270))
+/obj/structure/windoor_assembly/change_dir(new_dir, changer)
+	. = ..()
 	update_nearby_tiles()
 	update_icon()
 

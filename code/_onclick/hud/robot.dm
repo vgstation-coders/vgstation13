@@ -3,7 +3,7 @@
 	src.other = list()
 
 	var/obj/abstract/screen/using
-
+	var/mob/living/silicon/robot/R = mymob
 
 //Radio
 	using = new /obj/abstract/screen
@@ -14,6 +14,8 @@
 	using.screen_loc = ui_movi
 	src.adding += using
 
+	using.pointer_to_list = &adding
+
 //Module select
 
 	using = new /obj/abstract/screen
@@ -23,7 +25,11 @@
 	using.icon_state = "sight"
 	using.screen_loc = ui_borg_sight
 	src.adding += using
-	mymob:sensor = using
+	R.sensor = using
+
+	using.pointer_to_var = &R.sensor
+	using.pointer_to_list = &adding
+
 
 	using = new /obj/abstract/screen
 	using.name = "module1"
@@ -32,7 +38,10 @@
 	using.icon_state = "inv1"
 	using.screen_loc = ui_inv1
 	src.adding += using
-	mymob:inv1 = using
+	R.inv1 = using
+
+	using.pointer_to_var = &R.inv1
+	using.pointer_to_list = &adding
 
 	using = new /obj/abstract/screen
 	using.name = "module2"
@@ -41,7 +50,10 @@
 	using.icon_state = "inv2"
 	using.screen_loc = ui_inv2
 	src.adding += using
-	mymob:inv2 = using
+	R.inv2 = using
+
+	using.pointer_to_var = &R.inv2
+	using.pointer_to_list = &adding
 
 	using = new /obj/abstract/screen
 	using.name = "module3"
@@ -50,7 +62,10 @@
 	using.icon_state = "inv3"
 	using.screen_loc = ui_inv3
 	src.adding += using
-	mymob:inv3 = using
+	R.inv3 = using
+
+	using.pointer_to_var = &R.inv3
+	using.pointer_to_list = &adding
 
 	using = new /obj/abstract/screen
 	using.dir = SOUTHWEST
@@ -58,7 +73,10 @@
 	using.icon_state = "block"
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
-	mymob:robot_modules_background = using
+	R.robot_modules_background = using
+
+	using.pointer_to_var = &R.robot_modules_background
+	using.pointer_to_list = &adding
 
 //End of module select
 
@@ -72,21 +90,10 @@
 	src.adding += using
 	action_intent = using
 
-//Health
-	mymob.healths = new /obj/abstract/screen
-	mymob.healths.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.healths.icon_state = "health0"
-	mymob.healths.name = "health"
-	mymob.healths.screen_loc = ui_borg_health 
+	using.pointer_to_var = &action_intent
+	using.pointer_to_list = &adding
 
-//Installed Module
-	mymob.hands = new /obj/abstract/screen
-	mymob.hands.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.hands.icon_state = "nomod"
-	mymob.hands.name = "module"
-	mymob.hands.screen_loc = ui_borg_module
-
-//Module Panel
+	//Module Panel
 	using = new /obj/abstract/screen
 	using.name = "panel"
 	using.icon = 'icons/mob/screen1_robot.dmi'
@@ -95,39 +102,76 @@
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
+	using.pointer_to_list = &adding
+
+//Health
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "health0"
+	using.name = "health"
+	using.screen_loc = ui_borg_health
+
+	mymob.healths = using
+	using.pointer_to_var = &mymob.healths
+
+//Installed Module
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "nomod"
+	using.name = "module"
+	using.screen_loc = ui_borg_module
+
+	mymob.hands = using
+	mymob.hands.pointer_to_var = &mymob.hands
+
 //Store
-	mymob.throw_icon = new /obj/abstract/screen
-	mymob.throw_icon.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.throw_icon.icon_state = "store"
-	mymob.throw_icon.name = "store"
-	mymob.throw_icon.screen_loc = ui_borg_store
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "store"
+	using.name = "store"
+	using.screen_loc = ui_borg_store
+
+	mymob.throw_icon = using
+	using.pointer_to_var = &mymob.throw_icon
 
 //Photography stuff
-	mymob.camera_icon = new /obj/abstract/screen
-	mymob.camera_icon.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.camera_icon.icon_state = "camera"
-	mymob.camera_icon.name = "Take Image"
-	mymob.camera_icon.screen_loc = ui_borg_camera
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "camera"
+	using.name = "Take Image"
+	using.screen_loc = ui_borg_camera
+	mymob.camera_icon = using
 
-	mymob.album_icon = new /obj/abstract/screen
-	mymob.album_icon.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.album_icon.icon_state = "album"
-	mymob.album_icon.name = "View Images"
-	mymob.album_icon.screen_loc = ui_borg_album
+	using.pointer_to_var = &mymob.camera_icon
 
-	mymob.pullin = new /obj/abstract/screen
-	mymob.pullin.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.pullin.icon_state = "pull0"
-	mymob.pullin.name = "pull"
-	mymob.pullin.screen_loc = ui_borg_pull
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "album"
+	using.name = "View Images"
+	using.screen_loc = ui_borg_album
+	mymob.album_icon = using
 
-	mymob.zone_sel = new /obj/abstract/screen/zone_sel
-	mymob.zone_sel.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.zone_sel.overlays.len = 0
-	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+	using.pointer_to_var  = &mymob.album_icon
+
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "pull0"
+	using.name = "pull"
+	using.screen_loc = ui_borg_pull
+	mymob.pullin = using
+
+	using.pointer_to_var  = &mymob.pullin
+
+	var/obj/abstract/screen/zone_sel/ZS = new /obj/abstract/screen/zone_sel
+	ZS.icon = 'icons/mob/screen1_robot.dmi'
+	ZS.overlays.len = 0
+	ZS.overlays += image('icons/mob/zone_sel.dmi', "[ZS.selecting]")
+	mymob.zone_sel = ZS
 
 	//Handle the gun settings buttons
 	mymob.gun_setting_icon = new /obj/abstract/screen/gun/mode
+	mymob.healths.pointer_to_var = &mymob.gun_setting_icon
+
 	if (mymob.client)
 		if (mymob.client.gun_mode) // If in aim mode, correct the sprite
 			mymob.gun_setting_icon.dir = 2
@@ -137,6 +181,9 @@
 			if (mymob.client.target_can_click)
 				mymob.item_use_icon.dir = 1
 			src.adding += mymob.item_use_icon
+
+			mymob.item_use_icon.pointer_to_list = &src.adding
+
 			mymob.gun_move_icon = new /obj/abstract/screen/gun/move
 			if (mymob.client.target_can_move)
 				mymob.gun_move_icon.dir = 1
@@ -144,7 +191,10 @@
 				if (mymob.client.target_can_run)
 					mymob.gun_run_icon.dir = 1
 				src.adding += mymob.gun_run_icon
+				mymob.gun_run_icon.pointer_to_list = &src.adding
+
 			src.adding += mymob.gun_move_icon
+			mymob.gun_move_icon.pointer_to_list = &src.adding
 
 	mymob.client.reset_screen()
 

@@ -327,10 +327,14 @@
 	show_overlays = FALSE
 
 /obj/item/device/pda/trader/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
 	if(app && !show_overlays)
 		app.note = "Congratulations, your statio RUNTIME FAULT AT 0x3ae46dc1"
+	var/datum/pda_app/ringer/ringapp = locate(/datum/pda_app/ringer) in applications
+	if(ringapp)
+		ringapp.frequency = deskbell_freq_pox
 
 /obj/item/device/pda/trader/fancy
 	name = "Merchant PDA"
@@ -557,9 +561,9 @@
 		var/icon/img = app.imglist[note]
 		if(img)
 			usr << browse_rsc(img, "tmp_photo_[note].png")
-			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
+			dat += "<img src='tmp_photo_[note].png' width = '192' style='image-rendering: pixelated'><BR>"
 	dat += "</body></html>"
-	usr << browse(dat, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
+	usr << browse(HTML_SKELETON(dat), "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 
 /mob/living/silicon/ai/proc/cmd_show_message_log()
 	if(usr.isDead())
@@ -576,9 +580,9 @@
 			var/icon/img = app.imglist[note]
 			if(img)
 				usr << browse_rsc(img, "tmp_photo_[note].png")
-				dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
+				dat += "<img src='tmp_photo_[note].png' width = '192' style='image-rendering: pixelated'><BR>"
 		dat += "</body></html>"
-		usr << browse(dat, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
+		usr << browse(HTML_SKELETON(dat), "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 	else
 		to_chat(usr, "You do not have a PDA. You should make an issue report about this.")
 

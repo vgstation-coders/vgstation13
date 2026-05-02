@@ -55,7 +55,7 @@ var/datum/subsystem/dbcore/SSdbcore
 	. = ..()
 
 	// All connections established, migrations can start.
-	migration_controller_mysql = new
+	//migration_controller_mysql = new
 
 /datum/subsystem/dbcore/fire()
 	for(var/I in active_queries)

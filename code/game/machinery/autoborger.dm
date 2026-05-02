@@ -90,8 +90,10 @@
 	// Delete the items or they'll all pile up in a single tile and lag
 	// skipnaming disables namepick on New(). It's annoying as fuck on malf.  Later on, we enable or disable namepick.
 	if(R)
-		R.cell.maxcharge = robot_cell_charge
-		R.cell.charge = robot_cell_charge
+		var/obj/item/weapon/cell/Rcell = R.get_cell()
+		if (Rcell)
+			Rcell.maxcharge = robot_cell_charge
+			Rcell.charge = robot_cell_charge
 
 	 	// So he can't jump out the gate right away.
 		R.SetKnockdown(5)
@@ -102,12 +104,6 @@
 		// /vg/: Select from various name lists.
 		if(name_type == NAMETYPE_SILLY)
 			R.custom_name = pick(autoborg_silly_names)
-			R.custom_name = replacetext(R.custom_name, "{AINAME}", (!isnull(R.connected_ai) ? R.connected_ai.name : "AI"))
-			if(findtext(R.custom_name, "{###}"))
-				R.custom_name = replacetext(R.custom_name, "{###}", num2text(R.ident))
-			else
-				R.custom_name += "-[num2text(R.ident)]"
-
 
 		// /vg/: Allow AI to disable namepick.
 		R.namepick_uses=enable_namepick
@@ -206,7 +202,7 @@
 			enable_namepick=!enable_namepick
 		if("force_class")
 			var/list/modules = list("(Robot's Choice)")
-			modules += getAvailableRobotModules()
+			modules += getAvailableRobotModules(usr)
 			var/sel_mod = input("Please, select a module!", "Robot", null, null) as null|anything in modules
 			if(!sel_mod)
 				return
@@ -220,6 +216,6 @@
 /obj/machinery/autoborger/mommi
 	name = "Autimatic Crab Factory 5000"
 	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, silent crab comes out'. Human must be lying down and alive. Has to cooldown between each use."
-	
+
 /obj/machinery/autoborger/mommi/do_transform(var/mob/living/carbon/human/H, var/deleteItems=FALSE, var/skipnaming=FALSE, var/malfAI=null)
 	return H.MoMMIfy(deleteItems,skipnaming,malfAI)

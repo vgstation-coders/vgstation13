@@ -118,7 +118,6 @@
 
 	var/has_headset = 1 //excluding parrotmorph parrots from gaining headsets when a mob is transformed into a parrot via wizard.
 
-
 /mob/living/simple_animal/parrot/New()
 	..()
 	if(!ears && has_headset)
@@ -214,7 +213,7 @@
 	else
 		dat +=	"<br><b>Headset:</b> <a href='?src=\ref[src];add_inv=ears'>Nothing</a>"
 
-	user << browse(dat, "window=mob[real_name];size=325x500")
+	user << browse(HTML_SKELETON(dat), "window=mob[real_name];size=325x500")
 	onclose(user, "mob[real_name]")
 
 

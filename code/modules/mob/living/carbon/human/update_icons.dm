@@ -249,7 +249,7 @@ var/global/list/damage_icon_parts = list()
 			else
 				stand_icon.Blend(rgb(-my_appearance.s_tone, -my_appearance.s_tone, -my_appearance.s_tone), ICON_SUBTRACT)
 
-	if(husk)
+	if(husk && has_head)
 		var/icon/mask = new(stand_icon)
 		var/icon/husk_over = new(race_icon,"overlay_husk")
 		mask.MapColors(0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,0)
@@ -293,6 +293,26 @@ var/global/list/damage_icon_parts = list()
 	update_tail_layer(FALSE)
 	if(update_icons)
 		update_icons()
+
+/mob/living/carbon/human/proc/get_skin_color()
+	var/husk = (M_HUSK in mutations)
+	var/hulk = (M_HULK in mutations) && !ishorrorform(src) && mind.special_role != HIGHLANDER // Part of the species.
+	var/skeleton = (M_SKELETON in mutations)
+
+	var/base_rgb = species.flesh_color
+	if(base_rgb == null)
+		base_rgb = rgb(255, 202, 149)
+	if(!skeleton && !husk && !hulk)
+		if(species.anatomy_flags & MULTICOLOR)
+			return AddRGB(base_rgb, rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b))
+		else if(species.anatomy_flags & RGBSKINTONE)
+			return AddRGB(base_rgb, rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair))
+		else if(species.anatomy_flags & HAS_SKIN_TONE)
+			if(my_appearance.s_tone >= 0)
+				return AddRGB(base_rgb, rgb(my_appearance.s_tone, my_appearance.s_tone, my_appearance.s_tone))
+			else
+				return SubRGB(base_rgb, rgb(-my_appearance.s_tone, -my_appearance.s_tone, -my_appearance.s_tone))
+	return base_rgb
 
 //HAIR OVERLAY
 /mob/living/carbon/human/update_hair(update_icons = TRUE)
@@ -636,8 +656,8 @@ var/global/list/damage_icon_parts = list()
 				bloodsies.color = actual_gloves.blood_color
 				gloves_overlay.overlays += bloodsies
 			else
-				if (actual_gloves.blood_overlay)
-					actual_gloves.overlays.Remove(actual_gloves.blood_overlay)
+				if (actual_gloves.blood_overlays)
+					actual_gloves.overlays.Remove(actual_gloves.blood_overlays)
 		gloves.screen_loc = ui_gloves
 
 		gloves.generate_accessory_overlays(gloves_overlay)
@@ -1056,6 +1076,7 @@ var/global/list/damage_icon_parts = list()
 			else
 				to_chat(src, span_warning("You burst out of \the [wear_suit]!"))
 				drop_from_inventory(wear_suit)
+				return
 		else
 			if(SP.name in wear_suit.species_fit) //Allows clothes to display differently for multiple species
 				if(SP.wear_suit_icons && has_icon(SP.wear_suit_icons, wear_suit.icon_state))

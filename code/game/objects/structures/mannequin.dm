@@ -19,6 +19,9 @@
 	plane = ABOVE_HUMAN_PLANE
 	layer = VEHICLE_LAYER
 	flags = FPRINT | PROXMOVE
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
+	rotates_anchored = FALSE
 	var/trueForm = /mob/living/simple_animal/hostile/mannequin
 	var/pedestal = /obj/item/trash/mannequin
 	var/datum/species/species
@@ -970,27 +973,10 @@
 	update_icon()
 
 
-/obj/structure/mannequin/proc/spin()
+/obj/structure/mannequin/change_dir(new_dir, changer)
 	INVOKE_EVENT(src, /event/before_move)
-	change_dir(turn(dir, 90))
+	. = ..()
 	INVOKE_EVENT(src, /event/after_move)
-
-/obj/structure/mannequin/verb/rotate_mannequin()
-	set name = "Rotate Mannequin"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!usr || !isturf(usr.loc))
-		return
-
-	if(anchored)
-		return
-
-	if(usr.isUnconscious() || usr.restrained())
-		return
-
-	spin()
-
 
 /obj/structure/mannequin/woman
 	name = "human woman marble mannequin"

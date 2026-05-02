@@ -303,7 +303,7 @@
 	dat += "<h4>Crew Manifest</h4>"
 	dat += data_core.get_manifest(OOC = 1)
 
-	src << browse(dat, "window=manifest;size=370x420;can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=manifest;size=370x420;can_close=1")
 
 //Used for drawing on walls with blood puddles as a spooky ghost.
 /mob/dead/verb/bloody_doodle()
@@ -498,7 +498,7 @@
 	to_chat(src, "<span class='notice'>Pooling other ghosts for a bomberman arena...</span>")
 	if (!creating_arena)
 		creating_arena = TRUE
-		new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src)
+		new /datum/bomberman_arena(locate(250, 250, map.zCentcomm), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src)
 		if (!arenas.len) // Someone hit the cancel option
 			creating_arena = FALSE
 		return

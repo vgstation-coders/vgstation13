@@ -16,7 +16,7 @@
 
 /datum/faction/wizard/New()
 	..()
-	load_dungeon(/datum/map_element/dungeon/wizard_den)
+	load_dungeon(/datum/map_element/dungeon/wizard_den, 0, TRUE)
 
 /datum/faction/wizard/civilwar
 	var/enemy_faction
@@ -67,6 +67,7 @@
 		return 1
 
 /datum/map_element/dungeon/wizard_den
+	name = "Wizard Den"
 	file_path = "maps/misc/wizardden1.dmm"
 	unique = TRUE
 

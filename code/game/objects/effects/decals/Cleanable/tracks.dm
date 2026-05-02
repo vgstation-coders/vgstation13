@@ -185,7 +185,7 @@
 		var/state=coming_state
 		truedir=track.direction
 		if(truedir>15) // Check if we're in the GOING block
-			state = state || going_state
+			state = going_state || state
 			truedir=truedir>>4
 		if (isfloor(loc))
 			var/turf/T = loc
@@ -210,7 +210,7 @@
 				lum_add.plane = LIGHTING_PLANE
 				lum_add.blend_mode = BLEND_ADD
 				overlays += lum_add
-		if(track.basecolor == "#FF0000"||track.basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
+		if((track.basecolor == "#FF0000") || (track.basecolor == DEFAULT_BLOOD) || (track.basecolor == "#a10808ff")) // no dirty dumb vox scum allowed
 			plane = NOIR_BLOOD_PLANE
 		else
 			plane = ABOVE_TURF_PLANE

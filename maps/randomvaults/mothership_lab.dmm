@@ -69,7 +69,7 @@
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "aR" = (
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -275,24 +275,16 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
-"fs" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/asteroid,
-/area/vault/mothership_lab/asteroid)
 "fx" = (
 /obj/structure/closet/walllocker/emerglocker{
 	pixel_x = -30
 	},
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "fz" = (
-/turf/unsimulated/floor/lab_underplating{
-	icon_state = "panelscorched"
-	},
+/turf/unsimulated/floor/lab_underplating/scorched,
 /area/vault/mothership_lab/control_room)
 "fG" = (
 /obj/effect/decal/cleanable/dirt,
@@ -428,7 +420,7 @@
 /area/vault/mothership_lab/entrance)
 "hN" = (
 /obj/structure/curtain/open/shower/left,
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 8
 	},
 /turf/unsimulated/floor/lab_sterile,
@@ -491,7 +483,7 @@
 	},
 /area/vault/mothership_lab/control_room)
 "iG" = (
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -557,9 +549,7 @@
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "jD" = (
-/turf/unsimulated/floor/lab_underplating{
-	icon_state = "panelscorched"
-	},
+/turf/unsimulated/floor/lab_underplating/scorched,
 /area/vault/mothership_lab/asteroid)
 "jE" = (
 /obj/machinery/light/he{
@@ -947,7 +937,7 @@
 /turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/entrance)
 "nL" = (
-/obj/structure/acidtoilet{
+/obj/structure/wc/toilet/acid{
 	dir = 4
 	},
 /turf/unsimulated/floor/lab_sterile,
@@ -1035,8 +1025,8 @@
 /obj/machinery/light/he/broken{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "pq" = (
@@ -1141,8 +1131,8 @@
 /area/vault/mothership_lab/entrance)
 "qZ" = (
 /obj/structure/catwalk/invulnerable,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "ra" = (
@@ -1248,9 +1238,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/asteroid)
 "sK" = (
-/obj/structure/fence/door/secure/from_east{
-	dir = 8
-	},
+/obj/structure/fence/door/secure/inverted,
 /turf/unsimulated/floor/asteroid/plating,
 /area/vault/mothership_lab/asteroid)
 "sN" = (
@@ -1286,7 +1274,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/entrance)
 "tf" = (
-/obj/structure/acidtoilet{
+/obj/structure/wc/toilet/acid{
 	dir = 8
 	},
 /obj/machinery/light/small{
@@ -1333,8 +1321,8 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "tN" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "ug" = (
@@ -1345,15 +1333,10 @@
 /obj/machinery/door/window{
 	name = "Shower"
 	},
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /turf/unsimulated/floor/lab_sterile,
-/area/vault/mothership_lab/entrance)
-"un" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
-	},
 /area/vault/mothership_lab/entrance)
 "uo" = (
 /obj/structure/rack,
@@ -1505,8 +1488,8 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "wt" = (
@@ -1620,8 +1603,8 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "xX" = (
-/obj/item/weapon/melee/stunprobe,
-/obj/item/weapon/melee/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
 /obj/structure/closet/secure_closet/ayy2{
 	anchored = 1;
 	req_access_txt = "162";
@@ -1640,7 +1623,7 @@
 /obj/structure/mirror{
 	pixel_x = 28
 	},
-/obj/structure/acidsink{
+/obj/structure/wc/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},
@@ -1651,7 +1634,7 @@
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/entrance)
 "yk" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /obj/machinery/door/window{
@@ -1770,11 +1753,6 @@
 	},
 /obj/structure/closet/crate/ayy2,
 /turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/entrance)
-"zk" = (
-/turf/unsimulated/floor/lab_underplating{
-	icon_state = "platingdmg1"
-	},
 /area/vault/mothership_lab/entrance)
 "zr" = (
 /turf/space,
@@ -1941,8 +1919,8 @@
 /area/vault/mothership_lab/entrance)
 "BG" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "BJ" = (
@@ -2023,9 +2001,7 @@
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Dk" = (
-/turf/unsimulated/floor/lab_underplating{
-	icon_state = "platingdmg3"
-	},
+/turf/unsimulated/floor/lab_underplating/broken,
 /area/vault/mothership_lab/entrance)
 "Dl" = (
 /obj/effect/decal/cleanable/blood/drip{
@@ -2422,9 +2398,7 @@
 /area/vault/mothership_lab/entrance)
 "JU" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/lab_underplating{
-	icon_state = "platingdmg1"
-	},
+/turf/unsimulated/floor/lab_underplating/broken,
 /area/vault/mothership_lab/entrance)
 "JX" = (
 /obj/structure/table/flipped{
@@ -2725,12 +2699,10 @@
 /obj/machinery/atmospherics/unary/tank/air{
 	dir = 4
 	},
-/turf/unsimulated/floor/lab_underplating{
-	icon_state = "panelscorched"
-	},
+/turf/unsimulated/floor/lab_underplating/scorched,
 /area/vault/mothership_lab/control_room)
 "PC" = (
-/obj/structure/acidtoilet{
+/obj/structure/wc/toilet/acid{
 	dir = 8
 	},
 /turf/unsimulated/floor/lab_sterile,
@@ -2913,8 +2885,8 @@
 /area/vault/mothership_lab/raidtunnel_upper)
 "SD" = (
 /obj/effect/mine/stun,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "SS" = (
@@ -3338,12 +3310,12 @@
 "YU" = (
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced/plasma,
-/obj/item/weapon/melee/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "Zh" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/vault/mothership_lab/entrance)
 "Zi" = (
@@ -4411,7 +4383,7 @@ Rj
 Rj
 HZ
 BB
-zk
+Dk
 BB
 BB
 BB
@@ -4646,7 +4618,7 @@ Rj
 Rj
 nl
 BB
-zk
+Dk
 BB
 aM
 QI
@@ -5636,7 +5608,7 @@ BB
 Ei
 BB
 vt
-un
+tN
 fG
 gn
 vt
@@ -5832,7 +5804,7 @@ Dk
 Yo
 Ei
 Ei
-zk
+Dk
 aI
 BB
 BB
@@ -6025,7 +5997,7 @@ nj
 Rj
 WP
 du
-un
+tN
 Yx
 BB
 BB
@@ -6667,7 +6639,7 @@ XO
 GL
 eQ
 GL
-fs
+Wf
 ZW
 GL
 GL
@@ -6761,7 +6733,7 @@ Nq
 GL
 GL
 GL
-fs
+Wf
 Xd
 GL
 ly

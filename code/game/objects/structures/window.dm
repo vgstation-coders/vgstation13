@@ -28,6 +28,9 @@ var/list/one_way_windows
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
 	pass_flags_self = PASSGLASS
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
+	rotate_type = /obj/structure/window
 	var/mutable_appearance/damage_overlay
 	var/image/oneway_overlay
 	var/cracked_base = "crack"
@@ -63,18 +66,22 @@ var/list/one_way_windows
 /obj/structure/window/isSmoothableNeighbor(atom/A)
 	if(A?.density && ismovable(A))
 		var/atom/movable/O = A
-		return O.anchored && ..() 
+		return O.anchored && ..()
 
 /obj/structure/window/relativewall()
-	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
-	var/icon/I = new('icons/obj/structures/window.dmi', icon_state)
-	if(!is_fulltile)
-		var/cmasknumber = findSmoothingOnTurf()
-		if(cmasknumber)
-			var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]")
-			I.Blend(mask, ICON_OVERLAY)
-			I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
-	icon = I
+	if(anchored && density)
+		icon_state = "[base_state][..()]"
+		if(!is_fulltile)
+			var/icon/I = new('icons/obj/structures/window.dmi', icon_state, dir)
+			var/cmasknumber = findSmoothingOnTurf()
+			if(cmasknumber)
+				var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]", dir)
+				I.Blend(mask, ICON_OVERLAY)
+				I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
+			icon = I
+	else
+		icon_state = initial(icon_state)
+		icon = initial(icon) // this just werks for some reason
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
@@ -88,14 +95,6 @@ var/list/one_way_windows
 /obj/structure/window/examine(mob/user)
 	..()
 	examine_health(user)
-
-/obj/structure/window/AltClick(mob/user)
-	if(is_fulltile)
-		. = ..()
-	else
-		if(user.incapacitated() || !Adjacent(user))
-			return
-		ccwrotate()
 
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
@@ -185,7 +184,7 @@ var/list/one_way_windows
 		health += diff
 		healthcheck(user, FALSE)
 
-		user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S].</span>")
+		user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S.name].</span>")
 
 	else // No diff, but we didn't exit earlier, so mode must be reinforce
 		var/extra_health = health - initial(health)
@@ -195,7 +194,7 @@ var/list/one_way_windows
 		diff = min(S.get_amount() / SILICATE_PER_REINFORCE, (initial(health) * MAX_WINDOW_HEALTH_MULTIPLIER) - (initial(health) + extra_health))
 		health += diff
 		healthcheck(user)
-		user.visible_message("<span class='notice'>[user] reinforced \the [src] with their [S]!</span>", "<span class='notice'>You reinforce \the [src] with your [S].</span>")
+		user.visible_message("<span class='notice'>[user] reinforced \the [src] with their [S]!</span>", "<span class='notice'>You reinforce \the [src] with your [S.name].</span>")
 
 	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6)
 	S.remove_silicate(diff * SILICATE_PER_DAMAGE)
@@ -352,10 +351,11 @@ var/list/one_way_windows
 
 /obj/structure/window/attack_animal(mob/user as mob)
 
-	var/mob/living/simple_animal/M = user
-	if(M.melee_damage_upper <= 0)
-		return
-	attack_generic(M, M.melee_damage_upper)
+	if(istype(user,/mob/living/simple_animal))
+		var/mob/living/simple_animal/M = user
+		if(M.melee_damage_upper <= 0)
+			return
+		attack_generic(M, M.melee_damage_upper)
 
 /obj/structure/window/attack_slime(mob/user as mob)
 
@@ -612,33 +612,10 @@ var/list/one_way_windows
 					return 0
 	return 1
 
-/obj/structure/window/verb/ccwrotate()
-	set name = "Rotate Window Counter-Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	rotate(90)
-
-/obj/structure/window/verb/cwrotate()
-	set name = "Rotate Window Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	rotate(270)
-
-/obj/structure/window/proc/rotate(var/angle = 90)
-	if(anchored)
-		var/turf/T = loc
-		if(T)
-			for(var/obj/structure/window/W in T)
-				if(!W.anchored && W.dir == src.dir)
-					W.rotate(angle)
-					return
-		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
-		return
-
+/obj/structure/window/change_dir(new_dir, changer)
 	update_nearby_tiles() //Compel updates before
-	change_dir(turn(dir, angle))
+	. = ..()
+	relativewall()
 	update_nearby_tiles()
 
 /obj/structure/window/Destroy()

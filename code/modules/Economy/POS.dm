@@ -447,7 +447,7 @@ var/const/POS_HEADER = {"<html>
 			dat += SettingsScreen()
 
 	dat += "</body></html>"
-	user << browse(dat, "window=pos")
+	user << browse(HTML_SKELETON(dat), "window=pos")
 	onclose(user, "pos")
 	return
 

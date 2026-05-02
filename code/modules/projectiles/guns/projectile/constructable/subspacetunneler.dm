@@ -173,8 +173,8 @@
 	if(target == user)
 		return
 
-	var/datum/zLevel/L = get_z_level(target)
-	if (L.teleJammed)
+	var/datum/virtual_z/vz = target.get_virtual_z()
+	if (vz.teleJammed == VZ_TELEPORTATION_FORBIDDEN)
 		return
 	var/area/A = get_area(target)
 	if (A.flags & NO_TELEPORT)

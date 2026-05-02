@@ -253,12 +253,38 @@
 
 /obj/item/weapon/storage/box/blanks
 	name = "box of blank shells"
-	desc = "It has a picture of a gun and several warning symbols on the front."
+	icon_state = "dart_shells"
+	desc = "It has a picture of a shotgun shell and several warning symbols on the front."
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/blank = BOX_SPACE)
 
 /obj/item/weapon/storage/box/flashbangs
 	name = "box of flashbangs (WARNING)"
-	desc = "<FONT color=red><B>WARNING: Do not use without reading these precautions!</B></FONT>\n<B>These devices are extremely dangerous and can cause blindness or deafness if used incorrectly.</B>\nThe chemicals contained in these devices have been tuned for maximal effectiveness and due to\nextreme safety precuaiotn shave been incased in a tamper-proof pack. DO NOT ATTEMPT TO OPEN\nFLASH WARNING: Do not use continually. Excercise extreme care when detonating in closed spaces.\n\tMake attemtps not to detonate withing range of 2 meters of the intended target. It is imperative\n\tthat the targets visit a medical professional after usage. Damage to eyes increases extremely per\n\tuse and according to range. Glasses with flash resistant filters DO NOT always work on high powered\n\tflash devices such as this. <B>EXERCISE CAUTION REGARDLESS OF CIRCUMSTANCES</B>\nSOUND WARNING: Do not use continually. Visit a medical professional if hearing is lost.\n\tThere is a slight chance per use of complete deafness. Exercise caution and restraint.\nSTUN WARNING: If the intended or unintended target is too close to detonation the resulting sound\n\tand flash have been known to cause extreme sensory overload resulting in temporary\n\tincapacitation.\n<B>DO NOT USE CONTINUALLY</B>\nOperating Directions:\n\t1. Pull detonnation pin. <B>ONCE THE PIN IS PULLED THE GRENADE CAN NOT BE DISARMED!</B>\n\t2. Throw grenade. <B>NEVER HOLD A LIVE FLASHBANG</B>\n\t3. The grenade will detonste 10 seconds hafter being primed. <B>EXCERCISE CAUTION</B>\n\t-<B>Never prime another grenade until after the first is detonated</B>\nNote: Usage of this pyrotechnic device without authorization is an extreme offense and can\nresult in severe punishment upwards of <B>10 years in prison per use</B>.\n\nDefault 3 second wait till from prime to detonation. This can be switched with a screwdriver\nto 10 seconds.\n\nCopyright of Nanotrasen Industries- Military Armnaments Division\nThis device was created by Nanotrasen Labs a member of the Expert Advisor Corporation"
+	desc = {"<FONT color=red><B>WARNING: Do not use without reading these precautions!</B></FONT>
+			<B>These devices are extremely dangerous and can cause blindness or deafness if used incorrectly.</B>
+			The chemicals contained in these devices have been tuned for maximal effectiveness and due to
+			extreme safety precuaiotn shave been incased in a tamper-proof pack. DO NOT ATTEMPT TO OPEN
+			FLASH WARNING: Do not use continually. Excercise extreme care when detonating in closed spaces.
+			\tMake attemtps not to detonate withing range of 2 meters of the intended target. It is imperative
+			\tthat the targets visit a medical professional after usage. Damage to eyes increases extremely per
+			\tuse and according to range. Glasses with flash resistant filters DO NOT always work on high powered
+			\tflash devices such as this. <B>EXERCISE CAUTION REGARDLESS OF CIRCUMSTANCES</B>
+			SOUND WARNING: Do not use continually. Visit a medical professional if hearing is lost.
+			\tThere is a slight chance per use of complete deafness. Exercise caution and restraint.
+			STUN WARNING: If the intended or unintended target is too close to detonation the resulting sound
+			\tand flash have been known to cause extreme sensory overload resulting in temporary
+			\tincapacitation.
+			<B>DO NOT USE CONTINUALLY</B>
+			Operating Directions:
+			\t1. Pull detonnation pin. <B>ONCE THE PIN IS PULLED THE GRENADE CAN NOT BE DISARMED!</B>
+			\t2. Throw grenade. <B>NEVER HOLD A LIVE FLASHBANG</B>
+			\t3. The grenade will detonste 10 seconds hafter being primed. <B>EXCERCISE CAUTION</B>
+			\t-<B>Never prime another grenade until after the first is detonated</B>
+			Note: Usage of this pyrotechnic device without authorization is an extreme offense and can
+			result in severe punishment upwards of <B>10 years in prison per use</B>.\n
+			Default 3 second wait till from prime to detonation. This can be switched with a screwdriver
+			to 10 seconds.\n
+			Copyright of Nanotrasen Industries- Military Armnaments Division.
+			This device was created by Nanotrasen Labs a member of the Expert Advisor Corporation."}
 	icon_state = "flashbang"
 	item_state = "flashbang"
 	items_to_spawn = list(/obj/item/weapon/grenade/flashbang = BOX_SPACE)
@@ -364,7 +390,26 @@
 /obj/item/weapon/storage/box/drinkingglasses
 	name = "box of drinking glasses"
 	desc = "It has a picture of drinking glasses on it."
+	icon_state = "glass_box"
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = BOX_SPACE)
+
+/obj/item/weapon/storage/box/partyhats
+	name = "box of party hats"
+	desc = "It has a picture of party hats on it."
+	icon_state = "party_box"
+	items_to_spawn = list(/obj/item/clothing/head/party_hat = BOX_SPACE)
+
+/obj/item/weapon/storage/box/partyjunk
+	name = "box of party supplies"
+	desc = "It has a picture of someone in a party hat screaming in joy."
+	items_to_spawn = list(
+					/obj/item/weapon/reagent_containers/food/drinks/discount_shaker,
+					/obj/item/weapon/reagent_containers/food/drinks/bottle/patron,
+					/obj/item/weapon/reagent_containers/food/drinks/bottle/goldschlager,
+					/obj/item/weapon/storage/fancy/cigarettes/dromedaryco,
+					/obj/item/weapon/lipstick/random,
+					/obj/item/device/maracas = 2,
+					)
 
 /obj/item/weapon/storage/box/cdeathalarm_kit
 	name = "Death Alarm Kit"
@@ -536,30 +581,35 @@
 /obj/item/weapon/storage/box/lethalshells
 	name = "12-gauge slugs"
 	icon_state = "slug_shells"
+	desc = "The box claims that these slugs have a near-perfect accuracy rating when used in defense situations."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun = 16)
 
 /obj/item/weapon/storage/box/beanbagshells
 	name = "12-gauge beanbag shells"
 	icon_state = "beanbag_shells"
+	desc = "A warning sticker states that improper aim can cause grievous injury with this less-than-lethal ammunition."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/beanbag = 16)
 
 /obj/item/weapon/storage/box/stunshells
 	name = "12-gauge stun shells"
 	icon_state = "stun_shells"
+	desc = "The box claims to only cause minor bruising and discomfort in \"neutralized hostiles\"."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/stunshell = 16)
 
 /obj/item/weapon/storage/box/dartshells
 	name = "12-gauge darts"
 	icon_state = "dart_shells"
+	desc = "Fujinsei brand toxic darts. A red label forbids modifying these shells with alterative chemical payloads."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/dart = 16)
 
 /obj/item/weapon/storage/box/buckshotshells
 	name = "12-gauge 00 buckshot shells"
 	icon_state = "buckshot_shells"
+	desc = "Covered in bright labels showing the number 9 in large print."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/buckshot = 16)
 
@@ -576,20 +626,51 @@
 /obj/item/weapon/storage/box/dragonsbreathshells
 	name = "12-gauge dragon's breath shells"
 	icon_state = "dragonsbreath_shells"
+	desc = "The box smells of burned cardboard."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/dragonsbreath = 16)
 
 /obj/item/weapon/storage/box/fragshells
 	name = "12-gauge high-explosive fragmentation shells"
 	icon_state = "frag_shells"
+	desc = "Rule 78 of the Geneva Conventions forbids the use of projectiles that explode within the human body. Therefore these are only to be used on non-humans."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/frag = 16)
 
 /obj/item/weapon/storage/box/rocksaltshells
 	name = "12-gauge rocksalt shells"
 	icon_state = "rocksalt_shells"
+	desc = "Someone has scribbled \"DIE, SATANSPAWN\" below the picture of the shell."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/rocksalt = 16)
+
+/obj/item/weapon/storage/box/superbeanbagshells
+	name = "12-gauge super beanbag shells"
+	icon_state = "superbeanbag_shells"
+	desc = "The box claims that these cause zero injuries, no matter the target."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/superbeanbag = 16)
+
+/obj/item/weapon/storage/box/concussiveblastshells
+	name = "12-gauge concussive blast shells"
+	icon_state = "frag_shells"
+	desc = "The box has seventeen seperate labels instructing to always wear ear and eye protection while shooting."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/concussiveblast = 16)
+
+/obj/item/weapon/storage/box/pepperballshells
+	name = "12-gauge pepperball shells"
+	icon_state = "pepper_shells"
+	desc = "The box warns not to ingest the contents of these shells."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/pepperball = 16)
+
+/obj/item/weapon/storage/box/duckshotshells
+	name = "12-gauge duckshot shells"
+	icon_state = "duckshot_shells"
+	desc = "A small label below the festively printed duck states \"Not a toy - keep away from children\"."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/duckshot = 16)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
@@ -766,15 +847,18 @@
 
 /obj/item/weapon/storage/box/spellbook/New()
 	..()
+	var/limit = BOX_SPACE
 	var/list/possible_books = subtypesof(/obj/item/weapon/spellbook/oneuse)
 	for(var/S in possible_books)
 		var/obj/item/weapon/spellbook/oneuse/O = S
 		if(initial(O.disabled_from_bundle))
 			possible_books -= O
-	for(var/i =1; i <= BOX_SPACE; i++)
+	for(var/i =1; i <= limit; i++)
 		var/randombook = pick(possible_books)
-		var/book = new randombook(src)
+		var/obj/item/weapon/spellbook/oneuse/book = new randombook(src)
 		src.contents += book
+		if(book.bundle_freebie)
+			limit++
 		possible_books -= randombook
 	var/randomsprite = pick("a","b")
 	icon_state = "wizbox-[randomsprite]"
@@ -1272,6 +1356,42 @@
 /obj/item/weapon/storage/box/smartbox/clothing_box/banana_set/New()
 	new /obj/item/clothing/suit/banana_suit(src)
 	new /obj/item/clothing/head/banana_hat(src)
+
+	..()
+/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set
+	name = "Fur trapper's outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set/New()
+	new /obj/item/clothing/head/coonskin_cap(src)
+	new /obj/item/clothing/suit/storage/wintercoat/fur_trapper(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/trader
+	name = "Standard trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/trader/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader(src) // standard brownsuit and helmet
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/carapace
+	name = "Carapace trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/carapace/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/carapace(src) // carapace
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/aqua
+	name = "Aqua trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/aqua/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/medic(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/medic(src) // aqua coloured hardsuit
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/stealth
+	name = "Stealth trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/stealth/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src) // black hardsuit. Not capable of any form of stealth systems or shit like that
 	..()
 
 /obj/item/weapon/storage/box/biscuit
@@ -1335,3 +1455,73 @@
 	new /obj/item/clothing/shoes/hunter(src)
 	new /obj/item/clothing/head/hunter(src)
 	new /obj/item/clothing/gloves/hunter(src)
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit
+	name = "Shadow costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit/New()
+	new /obj/item/clothing/suit/shadowsuit(src)
+	new	/obj/item/clothing/head/shadowhead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicsuit
+	name = "Sonic costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicsuit/New()
+	new /obj/item/clothing/suit/sonicsuit(src)
+	new	/obj/item/clothing/head/sonichead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/tailssuit
+	name = "Tails costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/tailssuit/New()
+	new /obj/item/clothing/suit/tailssuit(src)
+	new	/obj/item/clothing/head/tailshead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit
+	name = "Knuckles costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit/New()
+	new /obj/item/clothing/suit/knucklessuit(src)
+	new	/obj/item/clothing/head/knuckleshead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit
+	name = "Amy costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit/New()
+	new /obj/item/clothing/suit/amysuit(src)
+	new	/obj/item/clothing/head/amyhead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicman
+	name = "Sonicman costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicman/New()
+	new /obj/item/clothing/under/sonicman(src)
+	new	/obj/item/clothing/head/helmet/sonicman(src)
+	new	/obj/item/clothing/gloves/sonicman(src)
+	new	/obj/item/clothing/shoes/sonicman(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lepresuit
+	name = "Leprechaun costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lepresuit/New()
+	new /obj/item/clothing/head/lepre(src)
+	new /obj/item/clothing/under/lepre(src)
+	new /obj/item/clothing/shoes/lepre(src)
+	..()
+
+/obj/item/weapon/storage/box/large/utensils_plastic
+	name = "Plastic Utensils"
+	desc = "For your picnic needs"
+	icon_state = "putensil_box"
+	item_state = "box"
+	items_to_spawn = list(
+			/obj/item/weapon/kitchen/utensil/spoon/plastic=7,
+			/obj/item/weapon/kitchen/utensil/fork/plastic=7,
+			/obj/item/weapon/kitchen/utensil/knife/plastic=7,
+		)

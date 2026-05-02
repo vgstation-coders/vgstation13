@@ -2,17 +2,6 @@
  * Library Computer
  */
 
-#define MAIN_MENU 0
-#define INVENTORY 1
-#define CHECKED_OUT 2
-#define CHECKOUT_BOOK 3
-#define EXTERNAL_ARCHIVE 4
-#define UPLOAD_NEW_TITLE 5
-#define PRINT_BIBLE 6
-#define PRINT_MANUAL 7
-#define FORBIDDEN_LORE 8
-#define PRINT_QUEUE 9
-
 /obj/machinery/computer/library/checkout
 	name = "Check-In/Out Computer"
 	icon = 'icons/obj/library.dmi'
@@ -533,7 +522,8 @@
 		var/http = file2text(_http["CONTENT"])
 		if(!http)
 			return*/
-		usr << browse("<TT><I>[PVB.title] by [PVB.author].</I></TT> <BR>" + "[PVB.content]", "window=[PVB.title];size=600x800")
+		var/book_text = "<TT><I>[PVB.title] by [PVB.author].</I></TT> <BR>[PVB.content]"
+		usr << browse(HTML_SKELETON(book_text), "window=[PVB.title];size=600x800")
 
 	if(href_list["delqueue"])
 		var/slot = text2num(href_list["delqueue"])
@@ -679,6 +669,7 @@
 		else
 			B.icon_state = "book[rand(1,9)]"
 	B.item_state = B.icon_state
+	B.update_icon()
 	printbook(B, forceprint)
 
 #undef MAIN_MENU

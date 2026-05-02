@@ -1,0 +1,159 @@
+@-webkit-keyframes pulsate {
+    0% {-webkit-filter: brightness(100%);}
+    50% {-webkit-filter: brightness(130%);}
+    100% {-webkit-filter: brightness(100%);}
+}
+
+body {
+    background:#343838 url(stardust.png);
+    font-family:"Press Start 2P";
+    color:#f3e678;
+    text-shadow:1px 1px 0px rgba(0,0,0,0.6);
+    font-size:0.84em;
+}
+
+
+a.nav-link:link {
+	color: #f3e678 !important;
+	text-decoration: none;
+}
+
+a.nav-link:visited {
+	color: #f3e678;
+	text-decoration: none;
+}
+
+a.nav-link:hover
+{
+   color: #fb3f00;
+   text-decoration: none;
+}
+a.nav-link:active
+{
+   color: #f3e678;
+   text-decoration: none;
+}
+
+h1,h2,h3,h4,h5 {
+    font-family:"Press Start 2P";
+    text-align:center;
+    text-transform: uppercase;
+}
+
+h1 {
+    color:#f3e678;
+    text-shadow:3px 3px 0px rgba(0,0,0,1);
+}
+
+.container { width:544px; margin:4em auto; }
+
+.btn {
+    display:inline-block;
+    cursor:pointer;
+    padding:0.75em;
+    font-size:1.1em;
+    font-family:"Press Start 2P";
+    text-transform: uppercase;
+    background:#36b336;
+    border:3px solid #000;
+    border-radius:6px;
+    box-shadow: inset -3px -3px 0px rgba(0, 0, 0, 0.5),
+        inset 3px 3px 0px rgba(255, 255, 255, 0.3);
+
+    -webkit-animation: pulsate 1s ease-out;
+    -webkit-animation-iteration-count: infinite;
+}
+
+.btn:active{
+    box-shadow: inset -3px -3px 0px rgba(255, 255, 255, 0.3),
+        inset 3px 3px 0px rgba(0, 0, 0, 0.5);
+}
+
+.btn:hover{
+    -webkit-filter:brightness(150%);
+}
+
+.game-container {
+    width:300px;
+    height:600px;
+    position:relative;
+    overflow:hidden;
+    box-shadow: 0px 0px 15px #222;
+}
+
+.game-container, .status-container{
+    border:8px solid rgba(255, 255, 255, 0.7);
+    border-radius:7px;
+}
+
+.status-container{
+    float:right;
+    width:200px;
+    margin-top:20px;
+    padding:10px;
+    margin-bottom:1em;
+    border-left:0;
+    box-shadow: 0px 0px 7px #222;
+    border-top-left-radius:0px;
+    border-bottom-left-radius:0px;
+}
+
+.game, .status-container{
+    background:#000 url(classy_fabric.png);
+}
+
+.status-container #preview {
+    width:100px;
+    height:100px;
+    overflow:visible;
+}
+
+.game-container .overlay {
+    position:absolute;
+    top:100px;
+    left:0px;
+    width:300px;
+    height:400px;
+}
+
+.tile-0, .tile-1, .tile-2, .tile-3, .tile-4, .tile-5, .tile-6, .tile-7{
+    box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.1);
+}
+
+.tile-1 { background:#36b3b3; }
+.tile-2 { background:#3636b3; }
+.tile-3 { background:#b38636; }
+.tile-4 { background:#b3b336; }
+.tile-5 { background:#36b336; }
+.tile-6 { background:#b336b3; }
+.tile-7 { background:#b33636; }
+
+.tile-1, .tile-2, .tile-3, .tile-4, .tile-5, .tile-6, .tile-7{
+    border-radius:2px;
+    box-shadow: inset -3px -3px 0px rgba(0, 0, 0, 0.5),
+        inset 3px 3px 0px rgba(255, 255, 255, 0.3),
+        0px 0px 0px 2px rgba(0, 0, 0, 0.5);
+}
+
+.piece .tile-0, .status-container .tile-0{
+    box-shadow: none;
+}
+
+.scoreboard { margin:1em 0; width:100%; }
+.scoreboard td { text-align:center; }
+.scoreboard tr.selected td { background:#ccc; opacity:0.8; }
+
+#menu{ text-align:center; }
+
+table#controls { font-size:0.6em; margin-bottom:1em; }
+table#controls td { padding:0.5em 0; border-bottom:1px solid rgba(255, 255, 255, 0.4); }
+
+/* Sourced from google api */
+/* latin */
+@font-face {
+  font-family: 'Press Start 2P';
+  font-style: normal;
+  font-weight: 400;
+  src: url(Start2P.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

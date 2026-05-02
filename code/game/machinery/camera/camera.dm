@@ -1,6 +1,7 @@
 #define CAMERA_MAX_HEALTH 120
 #define CAMERA_DEACTIVATE_HEALTH 45
 #define CAMERA_MIN_WEAPON_DAMAGE 5
+#define CAMERA_MAX_FAIL_CHANCE 25
 
 var/list/camera_names=list()
 /obj/machinery/camera
@@ -61,6 +62,8 @@ var/list/camera_names=list()
 
 /obj/machinery/camera/initialize()
 	..()
+	if(failure_chance)
+		failure_chance = clamp(failure_chance-(last_crewscore/1000),0,CAMERA_MAX_FAIL_CHANCE) // 25% at highest, 0% at lowest
 	if(prob(failure_chance))
 		deactivate()
 
@@ -84,9 +87,11 @@ var/list/camera_names=list()
 /obj/machinery/camera/proc/update_hear()//only cameras with voice analyzers can hear, to reduce the number of unecessary /mob/virtualhearer
 	if(!hear_voice && isHearing())
 		hear_voice = 1
+		micd_cameras |= src
 		addHear()
 	if(hear_voice && !isHearing())
 		hear_voice = 0
+		micd_cameras -= src
 		removeHear()
 
 /obj/machinery/camera/proc/update_upgrades()//Called when an upgrade is added or removed.
@@ -289,7 +294,7 @@ var/list/camera_messages = list()
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
-		to_chat(U, "You hold [W] up to the camera ...")
+		to_chat(U, "You hold \the [W] up to the camera...")
 
 		var/info = ""
 		if(istype(W, /obj/item/weapon/paper))
@@ -309,13 +314,13 @@ var/list/camera_messages = list()
 		for(var/mob/living/silicon/ai/O in living_mob_list)
 			if(!O.client)
 				continue
-			to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track=[U.name]'>[U.name]</a></span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
+			to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track=[U.name]'>[U.name]</a></span> holds <a href='byond://?src=\ref[src];message_id=[key]'>\the [W]</a> up to one of your cameras...")
 
 		for(var/obj/machinery/computer/security/tv in tv_monitors)
 			if(tv.active_camera != src)
 				continue
 			for(var/datum/tgui/ui in SStgui.open_uis_by_src[tv])
-				to_chat(ui.user, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
+				to_chat(ui.user, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>\the [W]</a> up to one of the cameras...")
 	else
 		..()
 		add_fingerprint(user)
@@ -593,3 +598,4 @@ var/list/camera_messages = list()
 #undef CAMERA_MAX_HEALTH
 #undef CAMERA_DEACTIVATE_HEALTH
 #undef CAMERA_MIN_WEAPON_DAMAGE
+#undef CAMERA_MAX_FAIL_CHANCE

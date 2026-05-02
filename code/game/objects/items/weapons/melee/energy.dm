@@ -6,7 +6,7 @@
 	sharpness = 1.5 //very very sharp
 	var/sharpness_on = 1.5 //so badmins can VV this!
 	sharpness_flags = SHARP_BLADE | HOT_EDGE
-	heat_production = 3500
+	heat_production = 27000
 	source_temperature = TEMPERATURE_PLASMA
 	sterility = 0
 

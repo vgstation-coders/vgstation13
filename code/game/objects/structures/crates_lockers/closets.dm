@@ -158,6 +158,9 @@
 	// Prevent AIs from being crammed into lockers. /vg/ Redmine #153 - N3X
 	if(istype(AM, /mob/living/silicon/ai) || istype(AM, /mob/living/simple_animal/scp_173))
 		return 0
+	//Prevent cargo carts from getting dragged into crates and closets
+	if(istype(AM, /obj/machinery/cart))
+		return 0
 
 	if(istype(AM, /mob/living))
 		var/mob/living/L = AM
@@ -168,7 +171,7 @@
 			L.client.eye = src
 	else if(!istype(AM, /obj/item) && !istype(AM, /obj/effect/dummy/chameleon))
 		return 0
-	else if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
+	else if(AM.density || AM.anchored || istype(AM,/obj/structure/closet) || locked_to == AM)
 		return 0
 	AM.forceMove(src)
 	return 1
@@ -419,16 +422,16 @@
 		return src.attack_hand(user)
 	..(user)
 
-/obj/structure/closet/attack_animal(mob/living/simple_animal/user as mob)
-	if(user.environment_smash_flags & SMASH_CONTAINERS)
-//		user.do_attack_animation(src, user) //This will look stupid
-		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
-		broken = 1
-		if(has_electronics)
-			dump_electronics()
-		dump_contents()
-		qdel(src)
-
+/obj/structure/closet/attack_animal(var/mob/living/user)
+	if(istype(user,/mob/living/simple_animal))
+		var/mob/living/simple_animal/M=user
+		if(M.environment_smash_flags & SMASH_CONTAINERS)
+			visible_message("<span class='warning'>[user] destroys the [src]. </span>")
+			broken = 1
+			if(has_electronics)
+				dump_electronics()
+			dump_contents()
+			qdel(src)
 // this should probably use dump_contents()
 /obj/structure/closet/blob_act()
 	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
@@ -484,6 +487,8 @@
 			return
 		src.welded =! src.welded
 		src.update_icon()
+		if(!welded && arcanetampered)
+			bless()
 		for(var/mob/M in viewers(src))
 			M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
 	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type) //testing with crowbars for now, will use circuits later
@@ -502,6 +507,10 @@
 	if(user.incapacitated())
 		return 0
 	if((!( istype(O, /atom/movable) ) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src)))
+		return 0
+	if(istype(O, /obj/machinery/cart)) //Prevent cargo carts from getting dragged into crates and closets
+		return 0
+	if(locked_to == O) //Don't let a closet contain that which it is attached to!
 		return 0
 	if(!istype(user.loc, /turf)) // are you in a container/closet/pod/etc? Will also check for null loc
 		return 0
@@ -664,8 +673,19 @@
 		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 
+/obj/structure/closet/t_scanner_expose(ray_range)
+	if(ray_range < 3)
+		return
+	if(opened)
+		return
+	for(var/atom/movable/AM in contents)
+		var/image/overlay = image(AM.icon,loc,AM.icon_state,layer,AM.dir)
+		overlay.alpha = 127
+		overlays += overlay
 
-
+	spawn(1 SECONDS)
+		overlays.len = 0
+		update_icon()
 
 // -- Vox raiders.
 

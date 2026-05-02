@@ -1,0 +1,236 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/template_noop)
+"c" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"d" = (
+/obj/structure/closet/cabinet/basic,
+/turf/simulated/floor/dark,
+/area/ruin)
+"e" = (
+/obj/structure/table,
+/obj/item/device/flashlight/lamp/green,
+/turf/simulated/floor/dark,
+/area/ruin)
+"h" = (
+/obj/structure/table,
+/obj/machinery/microwave,
+/turf/simulated/floor/dark,
+/area/ruin)
+"i" = (
+/turf/unsimulated/mineral,
+/area/ruin)
+"j" = (
+/obj/machinery/media/jukebox/dj,
+/obj/machinery/light,
+/turf/simulated/floor/dark,
+/area/ruin)
+"l" = (
+/obj/structure/curtain/black,
+/turf/simulated/floor/dark,
+/area/ruin)
+"m" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 1
+	},
+/obj/effect/landmark/story,
+/turf/simulated/floor/dark,
+/area/ruin)
+"n" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/black,
+/turf/simulated/floor/dark,
+/area/ruin)
+"u" = (
+/obj/structure/table,
+/obj/item/binoculars,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/dark,
+/area/ruin)
+"w" = (
+/obj/structure/bed/chair/comfy/couch/right/red{
+	dir = 4
+	},
+/turf/simulated/floor/dark,
+/area/ruin)
+"y" = (
+/obj/machinery/space_heater/campfire/stove,
+/turf/simulated/floor/dark,
+/area/ruin)
+"B" = (
+/turf/simulated/floor/dark,
+/area/ruin)
+"E" = (
+/obj/structure/wc/toilet,
+/obj/structure/curtain/medical,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/dark,
+/area/ruin)
+"G" = (
+/obj/machinery/old_database,
+/turf/simulated/floor/dark,
+/area/ruin)
+"K" = (
+/obj/machinery/telecomms/relay/planetary,
+/turf/simulated/floor/dark,
+/area/ruin)
+"O" = (
+/obj/structure/bed/chair/comfy/couch/mid/red{
+	dir = 4
+	},
+/turf/simulated/floor/dark,
+/area/ruin)
+"U" = (
+/obj/structure/table,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/machinery/light,
+/turf/simulated/floor/dark,
+/area/ruin)
+"W" = (
+/obj/structure/rack,
+/obj/item/weapon/gun/projectile/hecate/hunting,
+/turf/simulated/floor/dark,
+/area/ruin)
+"X" = (
+/obj/structure/coatrack,
+/turf/simulated/floor/dark,
+/area/ruin)
+"Y" = (
+/obj/structure/table,
+/obj/item/weapon/storage/photo_album,
+/obj/item/device/camera,
+/turf/simulated/floor/dark,
+/area/ruin)
+"Z" = (
+/obj/structure/bed/chair/comfy/couch/left/red{
+	dir = 4
+	},
+/turf/simulated/floor/dark,
+/area/ruin)
+
+(1,1,1) = {"
+a
+i
+i
+i
+i
+i
+i
+a
+a
+a
+"}
+(2,1,1) = {"
+i
+i
+e
+Z
+O
+w
+i
+i
+a
+a
+"}
+(3,1,1) = {"
+i
+E
+B
+B
+B
+B
+j
+i
+i
+a
+"}
+(4,1,1) = {"
+i
+i
+K
+B
+B
+B
+B
+X
+i
+a
+"}
+(5,1,1) = {"
+a
+i
+G
+B
+B
+B
+B
+B
+l
+c
+"}
+(6,1,1) = {"
+a
+i
+Y
+m
+B
+B
+B
+W
+i
+a
+"}
+(7,1,1) = {"
+a
+i
+u
+B
+B
+B
+U
+i
+i
+a
+"}
+(8,1,1) = {"
+a
+i
+y
+B
+B
+B
+h
+i
+a
+a
+"}
+(9,1,1) = {"
+a
+i
+i
+n
+d
+i
+i
+i
+a
+a
+"}
+(10,1,1) = {"
+a
+a
+i
+i
+i
+i
+a
+a
+a
+a
+"}

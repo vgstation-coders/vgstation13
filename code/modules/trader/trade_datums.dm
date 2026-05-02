@@ -17,7 +17,7 @@
 	var/loyalty_multiplier = 1
 	if(!isAdminGhost(user)) //admin ghosts don't have customer data
 		loyalty_multiplier = SStrade.loyal_customer(user)
-	return round(baseprice * flux_rate * SStrade.shoal_prestige_factor() * loyalty_multiplier * isflashed())
+	return round(baseprice * flux_rate * SStrade.shoal_prestige_factor() * SStrade.reserve_prestige_factor() * loyalty_multiplier * isflashed())
 
 /datum/trade_product/proc/can_restock()
 	if(!totalsold || !restocks_left)
@@ -71,17 +71,19 @@
 	maxunits = 3
 	sales_category = TRADE_VARIETY
 
+/datum/trade_product/lostlemuria
+	name = "Lost Crate of Lemuria"
+	path = /obj/structure/closet/crate/lemuria
+	baseprice = 160
+	maxunits = 2
+	sales_category = TRADE_VARIETY
+
 /datum/trade_product/babel
 	name = "Library of Babel shipment"
 	path = /obj/structure/closet/crate/library
 	baseprice = 100
 	maxunits = 5
 	sales_category = TRADE_VARIETY
-
-/datum/trade_product/mechagy
-	name = "Mecha Graveyard shuttle disk"
-	path = /obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard
-	baseprice = 100
 
 /datum/trade_product/mechexpac
 	name = "exosuit expansion kit"
@@ -102,11 +104,6 @@
 	baseprice = 100
 	maxunits = 2
 	restocks_left = 3
-
-/datum/trade_product/fakeposter
-	name = "cargo cache kit"
-	path = /obj/item/weapon/fakeposter_kit
-	baseprice = 50
 
 /datum/trade_product/yantarcrate
 	name = "Yantar medical crate"
@@ -181,3 +178,17 @@
 	baseprice = 30
 	maxunits = 3
 	sales_category = TRADE_VARIETY
+
+/datum/trade_product/exoticshotgunshells
+	name = "Exotic shotgun shells crate"
+	path = /obj/structure/closet/crate/chest/exoticshotgunshells
+	baseprice = 100
+	maxunits = 3
+	sales_category = TRADE_VARIETY
+
+/datum/trade_product/voxsleeper
+	name = "Vox Shoal sleeper optimization kit"
+	path = /obj/item/device/plugin/sleeper/trader
+	baseprice = 75
+	maxunits = 1
+	restocks_left = 2

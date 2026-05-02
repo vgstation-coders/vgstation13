@@ -200,6 +200,11 @@ var/global/list/adminbusteleportlocs = list()
 	flags = NO_PERSISTENCE
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
+/area/shuttle/Exited(atom/movable/Obj)
+	..()
+	animate(Obj)
+	Obj.pixel_y = initial(Obj.pixel_y)
+
 /area/shuttle/arrival
 	name = "\improper Arrival Shuttle"
 
@@ -565,6 +570,9 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Trading Post"
 	icon_state = "yellow"
 
+/area/shuttle/exploration
+	name = "\improper Exploration Shuttle"
+	icon_state = "yellow"
 
 /area/airtunnel1/      // referenced in airtunnel.dm:759
 
@@ -1351,6 +1359,10 @@ var/global/list/adminbusteleportlocs = list()
 	name = "Antimatter Engine Room"
 	icon_state = "antimatter"
 
+/area/engineering/reactor_room
+	name = "Fission Reactor Room"
+	icon_state = "fission"
+
 /area/engineering/engineering_auxiliary
 	name = "Auxiliary Engineering"
 	icon_state = "engiaux"
@@ -1577,6 +1589,10 @@ var/global/list/adminbusteleportlocs = list()
 /area/medical/paramedics
 	name = "\improper Paramedic Station"
 	icon_state = "paramedics"
+
+/area/medical/eva
+    name = "\improper Emergency Rescue Unit"
+    icon_state = "rescue_unit"
 
 //Security
 /area/security
@@ -2026,6 +2042,157 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Southeast Reaches"
 	icon_state = "tundra4"
 
+//JUNGLE STATION
+/area/surface/jungle
+	name = "\improper Untamed Wilderness"
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+	icon_state="jungle_wild"
+	always_unpowered=TRUE
+
+//to hide vaults on the main station z-level
+/area/surface/jungle/vault
+	icon_state="jungle_landing"
+
+
+/area/surface/jungle/roid //i have no idea if using the same zone for 2 z-levels will cause technical issues, but i don't want to take the chance.
+
+//vault spawning on Z4
+/area/surface/jungle/roid/vaults
+	icon_state="jungle_landing"
+
+/area/surface/jungle/mining
+	name = "\proper Meteor Impact"
+	icon_state="jungle_fenced"
+	always_unpowered=FALSE
+
+/area/surface/jungle/mining/unexplored
+	icon_state="jungle_zone"
+
+/area/surface/jungle/fenced
+	name = "\improper Outdoors"
+	icon_state="jungle_fenced"
+	holomap_draw_override = HOLOMAP_DRAW_PATH
+	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
+	always_unpowered=FALSE
+
+/area/surface/jungle/fenced/trader
+	name= "\improper Vox Outpost"
+
+/area/surface/jungle/fenced/trader/solars
+	name= "\improper Vox Outpost Solar Array"
+
+/area/surface/jungle/underground
+	name = "\improper Underground"
+	icon_state="jungle_wild"
+	always_unpowered=TRUE
+
+/area/surface/jungle/underground/zoned
+	forbid_apc=FALSE
+	construction_zone=FALSE
+	always_unpowered=FALSE
+	icon_state="jungle_zone"
+
+/area/surface/jungle/underground/zoned/speakeasy
+	name = "\improper Speakeasy"
+
+/area/surface/jungle/underground/zoned/ghettosurgery
+	name = "\improper Ghetto Surgery"
+
+/area/surface/jungle/underground/zoned/ghettomining
+	name = "\improper Refinery"
+
+/area/surface/jungle/underground/zoned/casino
+	name = "\improper Casino"
+
+/area/surface/jungle/underground/zoned/ghetto_morgue
+	name = "\improper Crypt"
+
+/area/surface/jungle/underground/zoned/tcomms
+	name = "\proper Underground Relay"
+
+/area/surface/jungle/underground/zoned/roid_tcomms
+	name = "\proper Underground Relay"
+
+/area/surface/jungle/underground/zoned/ghetto_research
+	name = "\improper Ghetto Research"
+
+/area/surface/jungle/zoned
+	forbid_apc=FALSE
+	construction_zone=FALSE
+	always_unpowered=FALSE
+	icon_state="jungle_zone"
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
+
+/area/surface/jungle/zoned/prison_yard
+	name = "\improper Prison Yard"
+
+/area/surface/jungle/zoned/outdoor_bar
+	name = "\improper Outdoor Dining Area"
+
+/area/surface/jungle/zoned/atmos_outside
+	name = "\improper Exterior Atmospherics"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
+
+/area/surface/jungle/zoned/sme_outside
+	name = "\improper Supermatter Cooling Zone"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
+
+/area/surface/jungle/zoned/reactor_outside
+	name = "\improper Reactor Cooling Zone"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
+
+/area/surface/jungle/zoned/botanty_outside
+	name = "\improper Outdoor Botany Area"
+
+/area/surface/jungle/zoned/storage_shed
+	name = "\improper Tool Shed"
+
+/area/surface/jungle/zoned/tradearea
+	name = "\improper Bazaar"
+
+/area/surface/jungle/zoned/art_zone
+	name = "\improper Portrait Zone"
+
+/area/surface/jungle/zoned/dump
+	name = "\improper Dump"
+	holomap_color = HOLOMAP_AREACOLOR_CARGO
+
+/area/surface/jungle/zoned/aifenced
+	name = "\improper AI Restricted Fenced Zone"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+
+/area/surface/jungle/zoned/dorms_patio
+	name = "\improper Dormitory Patio"
+
+/area/surface/jungle/zoned/medbay_patio
+	name = "\improper Medbay Break Patio"
+	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
+
+/area/surface/jungle/zoned/solars
+	name = "\improper Solar Array"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
+
+/area/surface/jungle/zoned/cargogarage
+	name = "\improper Cargo Parking"
+	holomap_color = HOLOMAP_AREACOLOR_CARGO
+
+/area/surface/jungle/zoned/cargolobby
+	name = "\improper Cargo Lobby"
+	holomap_color = HOLOMAP_AREACOLOR_CARGO
+
+/area/surface/jungle/zoned/bombrange
+	name = "\improper Bomb Range"
+
+/area/surface/jungle/zoned/roid_prep
+	name = "\improper Mine Solar Array"
+
+/area/surface/jungle/landing
+	name = "\improper Landing Area"
+	icon_state="jungle_landing"
+	base_turf_type=/turf/unsimulated/floor/planetary/concrete/jungle
+	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
+
 //DJSTATION
 
 /area/djstation
@@ -2037,129 +2204,6 @@ var/global/list/adminbusteleportlocs = list()
 /area/djstation/solars
 	name = "\improper DJ Station Solars"
 	icon_state = "DJ"
-
-//DERELICT
-
-/area/derelict
-	name = "\improper Derelict Station"
-	icon_state = "storage"
-
-	general_area = /area/derelict
-	general_area_name = "Derelict Station"
-	shuttle_can_crush = FALSE
-
-/area/derelict/hallway
-	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
-
-/area/derelict/hallway/primary
-	name = "\improper Derelict Primary Hallway"
-	icon_state = "hallP"
-
-/area/derelict/hallway/secondary
-	name = "\improper Derelict Secondary Hallway"
-	icon_state = "hallS"
-
-/area/derelict/arrival
-	name = "\improper Derelict Arrival Centre"
-	icon_state = "yellow"
-	holomap_color = HOLOMAP_AREACOLOR_ARRIVALS
-
-/area/derelict/storage/equipment
-	name = "Derelict Equipment Storage"
-
-/area/derelict/storage/storage_access
-	name = "Derelict Storage Access"
-
-/area/derelict/storage/engine_storage
-	name = "Derelict Engine Storage"
-	icon_state = "green"
-	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
-
-/area/derelict/bridge
-	name = "\improper Derelict Control Room"
-	icon_state = "bridge"
-	holomap_color = HOLOMAP_AREACOLOR_COMMAND
-
-/area/derelict/secret
-	name = "\improper Derelict Secret Room"
-	icon_state = "library"
-	holomap_draw_override = HOLOMAP_DRAW_EMPTY
-
-/area/derelict/bridge/access
-	name = "Derelict Control Room Access"
-	icon_state = "auxstorage"
-	holomap_color = HOLOMAP_AREACOLOR_COMMAND
-
-/area/derelict/bridge/ai_upload
-	name = "\improper Derelict Computer Core"
-	icon_state = "ai"
-	holomap_color = HOLOMAP_AREACOLOR_COMMAND
-
-/area/derelict/solar_control
-	name = "\improper Derelict Solar Control"
-	icon_state = "engine"
-	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
-
-/area/derelict/atmos
-	name = "\improper Derelict Atmospherics"
-	icon_state = "atmos"
-	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
-
-/area/derelict/research
-	name = "\improper Derelict Research"
-	icon_state = "toxins"
-	holomap_color = HOLOMAP_AREACOLOR_SCIENCE
-
-/area/derelict/crew_quarters
-	name = "\improper Derelict Crew Quarters"
-	icon_state = "fitness"
-
-/area/derelict/medical
-	name = "Derelict Medbay"
-	icon_state = "medbay"
-	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
-
-/area/derelict/medical/morgue
-	name = "\improper Derelict Morgue"
-	icon_state = "morgue"
-	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
-
-/area/derelict/medical/chapel
-	name = "\improper Derelict Chapel"
-	icon_state = "chapel"
-
-/area/derelict/teleporter
-	name = "\improper Derelict Teleporter"
-	icon_state = "teleporter"
-	holomap_color = HOLOMAP_AREACOLOR_COMMAND
-
-/area/derelict/eva
-	name = "Derelict EVA Storage"
-	icon_state = "eva"
-	holomap_color = HOLOMAP_AREACOLOR_COMMAND
-
-/area/derelict/ship
-	name = "\improper Abandoned Ship"
-	icon_state = "yellow"
-	holomap_draw_override = HOLOMAP_DRAW_EMPTY
-
-/area/solar/derelict_starboard
-	name = "\improper Derelict Starboard Solar Array"
-	icon_state = "panelsS"
-
-/area/solar/derelict_aft
-	name = "\improper Derelict Aft Solar Array"
-	icon_state = "aft"
-
-/area/derelict/singularity_engine
-	name = "\improper Derelict Singularity Engine"
-	icon_state = "engine"
-	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
-
-/area/derelict/research
-	name = "\improper Derelict Research"
-	icon_state = "toxmisc"
-	holomap_color = HOLOMAP_AREACOLOR_SCIENCE
 
 //Construction
 
@@ -2746,14 +2790,6 @@ var/list/the_station_areas = list (
 /area/solar/prison
 	name = "\improper Prison Solar Array"
 	icon_state = "panelsA"
-
-/area/derelict/bar
-	name = "Derelict Bar"
-	icon_state = "bar"
-
-/area/derelict/holodeck
-	name = "Derelict Holodeck"
-	icon_state = "Holodeck"
 
 /area/tcomms/storage2
 	name = "Telecoms Auxiliary Storage"

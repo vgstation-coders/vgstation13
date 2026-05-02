@@ -12,9 +12,7 @@
 	return ..() * 0.9 // Hunters are fast.
 
 /mob/living/carbon/alien/humanoid/hunter/New()
-	var/datum/reagents/R = new/datum/reagents(100)
-	reagents = R
-	R.my_atom = src
+	create_reagents(100)
 	if(name == "alien hunter")
 		name = text("alien hunter ([rand(1, 1000)])")
 	real_name = name

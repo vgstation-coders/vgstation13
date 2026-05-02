@@ -102,7 +102,7 @@
 
 	dat += text("<HR><b>Mineral Value List:</b><BR>[get_ore_values()]")
 
-	user << browse("[dat]", "window=console_stacking_machine")
+	user << browse(HTML_SKELETON(dat), "window=console_stacking_machine")
 	user.set_machine(src)
 	onclose(user, "console_stacking_machine")
 	return

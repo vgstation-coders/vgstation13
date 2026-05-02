@@ -1,6 +1,7 @@
 /obj/effect/decal/cleanable/blood/gibs/robot
 	name = "robot debris"
 	desc = "It's a useless heap of junk... <i>or is it?</i>"
+	reagent = IRON
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "gib1"
 	basecolor=ROBOT_OIL
@@ -42,7 +43,7 @@
 	name = "motor oil"
 	desc = "It's black and greasy. Looks like Beepsky made another mess."
 	basecolor=ROBOT_OIL
-
+	reagent = FUEL
 	fake_DNA = "oil splatters"
 	stain_name = "oil"
 

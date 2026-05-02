@@ -166,3 +166,18 @@
 
 /mob/living/proc/get_defender_accuracy_decrease()
 	return 0
+
+/mob/living/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor, var/force)
+	if(!I || !user)
+		return FALSE
+	switch(I.damtype)
+		if("brute")
+			take_organ_damage(force)
+			if (prob(33) && I.force) // Added blood for whacking non-humans too
+				var/turf/simulated/location = loc
+				if (istype(location))
+					location.add_blood_floor(src)
+		if("fire")
+			if (!(M_RESIST_COLD in mutations))
+				take_organ_damage(0, force)
+	return TRUE

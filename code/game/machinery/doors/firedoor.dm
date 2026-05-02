@@ -76,7 +76,7 @@ var/global/list/alert_overlays_global = list()
 
 	animation_delay_predensity_opening = 3
 	animation_delay_predensity_closing = 7
-	
+
 	machine_flags = SCREWTOGGLE | EMAGGABLE
 
 	var/list/alert_overlays_local
@@ -244,6 +244,8 @@ var/global/list/alert_overlays_global = list()
 	return
 
 /obj/machinery/door/firedoor/attack_ai(mob/user,var/override=FALSE)
+	if(is_pulselocked(user))
+		return
 	if(!isAdminGhost(user) && (isobserver(user) || user.stat))
 		return
 	spawn()
@@ -306,7 +308,7 @@ var/global/list/alert_overlays_global = list()
 
 	if(iswelder(C))
 		var/obj/item/tool/weldingtool/W = C
-		if(W.remove_fuel(0, user))
+		if(W.remove_fuel(1, user))
 			blocked = !blocked
 			user.visible_message("<span class='attack'>\The [user] [blocked ? "welds" : "unwelds"] \the [src] with \a [W].</span>",\
 			"You [blocked ? "weld" : "unweld"] \the [src] with \the [W].",\

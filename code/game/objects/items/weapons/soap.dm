@@ -79,8 +79,8 @@
 			qdel(target)
 			on_successful_use(user)
 
-	else if(istype(target,/turf/simulated))
-		var/turf/simulated/T = target
+	else if(istype(target,/turf))
+		var/turf/T = target
 		var/list/cleanables = list()
 
 		for(var/obj/effect/decal/cleanable/CC in T)
@@ -96,11 +96,13 @@
 			if(CC.on_wall == target)
 				cleanables += CC
 
-		if (T.advanced_graffiti)
-			T.overlays -= T.advanced_graffiti_overlay
-			T.advanced_graffiti_overlay = null
-			qdel(T.advanced_graffiti)
-			cleanables += "advanced graffiti"
+		if (istype(T,/turf/simulated))
+			var/turf/simulated/ST=T
+			if(ST.advanced_graffiti)
+				ST.overlays -= ST.advanced_graffiti_overlay
+				ST.advanced_graffiti_overlay = null
+				qdel(ST.advanced_graffiti)
+				cleanables += "advanced graffiti"
 
 		if(!cleanables.len)
 			user.simple_message("<span class='notice'>You fail to clean anything.</span>",

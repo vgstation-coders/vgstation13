@@ -81,7 +81,7 @@
 				else
 					current_target = M
 					user.visible_message("<span class='notice'>[user] uses \a [src] to stem the bleeding on [M]'s [targetorgan.display_name].</span>", \
-					"<span class='notice'>You use your [src] to stem the bleeding on [M]'s [targetorgan.display_name].</span>")
+					"<span class='notice'>You use your [src.name] to stem the bleeding on [M]'s [targetorgan.display_name].</span>")
 					qdel(src)
 			else
 				to_chat(user, "<span class='notice'>[M]'s [targetorgan.display_name] is cut wide open, you'll need more than a rag!</span>")
@@ -106,7 +106,7 @@
 		return  //we used the rag as a bandage
 	if(!proximity_flag)
 		return 0 // Not adjacent
-	if (istype(target,/obj/structure/sink))
+	if (istype(target,/obj/structure/wc/sink))
 		return	// We're here to fill the rag, not use it pointlessly
 	if(reagents.total_volume < 1)
 		to_chat(user, "<span class='notice'>Your rag is dry!</span>")

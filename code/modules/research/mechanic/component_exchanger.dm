@@ -182,10 +182,10 @@
 
 
 	//Move the old part into our component exchanger
-	M.component_parts -= P
+	M.remove_part(P)
 	handle_item_insertion(P, 1)
 	//Move the new part into the machine
 	remove_from_storage(R, M)
-	M.component_parts += R
+	M.add_part(R)
 	//Update the machine's parts
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1) //User feedback

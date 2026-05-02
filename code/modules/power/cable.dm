@@ -146,7 +146,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	else
 		icon_state = "[d1]-[d2]"
 
-/obj/structure/cable/t_scanner_expose()
+/obj/structure/cable/t_scanner_expose(ray_range)
 	if (level != LEVEL_BELOW_FLOOR)
 		return
 

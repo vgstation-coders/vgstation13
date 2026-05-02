@@ -138,3 +138,14 @@
 
 /turf/simulated/floor/mineral/gingerbread/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/gingerbread(null)
+
+
+// LEAD
+
+/turf/simulated/floor/mineral/lead
+	name = "lead floor"
+	icon_state = "lead"
+	material="lead"
+
+/turf/simulated/floor/mineral/lead/create_floor_tile()
+	floor_tile = new /obj/item/stack/tile/mineral/lead(null)

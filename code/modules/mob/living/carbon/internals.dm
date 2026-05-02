@@ -29,9 +29,7 @@
 
 	if(internal)
 		internal.add_fingerprint(user)
-		internal = null
-		if(internals) //This is the HUD icon, these variables have WAY too similar names
-			internals.icon_state = "internal0"
+		equip_internals(null)
 		if(user != src)
 			if(!user.isGoodPickpocket())
 				visible_message("<span class='warning'>\The [user] shuts off \the [src]'s internals!</span>")
@@ -60,10 +58,8 @@
 				else
 					to_chat(user, "<span class='warning'>You don't have \an [breathes] tank.</span>")
 				return
-		internal = T
 		T.add_fingerprint(user)
-		if(internals)
-			internals.icon_state = "internal1"
+		equip_internals(T)
 		if(user != src)
 			var/gas_contents = T.air_contents.english_contents_list()
 			if(!user.isGoodPickpocket())
@@ -75,11 +71,21 @@
 			to_chat(src, "<span class='notice'>You are now running on internals from \the [T].</span>")
 		return 1
 
+/mob/living/carbon/proc/equip_internals(obj/item/weapon/tank/tank)
+	internal = tank
+	update_internals()
+
 /mob/living/carbon/proc/update_internals()
-	var/new_icon_state
-	if(internal)
-		new_icon_state = "internal1"
-	else
-		new_icon_state = "internal0"
 	if(internals)
-		internals.icon_state = new_icon_state
+		internals.icon_state = "internal-oxy-[internal ? "1" : "0"]"
+
+/mob/living/carbon/human/update_internals()
+	if(internals)
+		var/breath_string = "oxy"
+		if(species)
+			switch(species.breath_type)
+				if(GAS_NITROGEN)
+					breath_string = "nitro"
+				if(GAS_PLASMA)
+					breath_string = "plasma"
+		internals.icon_state = "internal-[breath_string]-[internal ? "1" : "0"]"

@@ -1,0 +1,152 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/structure/flora/tree/pine,
+/turf/template_noop,
+/area/exposed_ruin)
+"f" = (
+/obj/structure/flora/tree/pine,
+/obj/abstract/loot_spawner/medical,
+/turf/template_noop,
+/area/exposed_ruin)
+"r" = (
+/turf/template_noop,
+/area/exposed_ruin)
+"x" = (
+/obj/structure/flora/tree/pine,
+/obj/abstract/loot_spawner/combat,
+/turf/template_noop,
+/area/exposed_ruin)
+"J" = (
+/obj/item/weapon/hatchet,
+/turf/template_noop,
+/area/exposed_ruin)
+"V" = (
+/obj/structure/flora/tree_stump,
+/turf/template_noop,
+/area/exposed_ruin)
+"W" = (
+/obj/structure/flora/tree/pine,
+/obj/structure/flora/tree/pine,
+/turf/template_noop,
+/area/exposed_ruin)
+
+(1,1,1) = {"
+a
+r
+r
+r
+a
+a
+a
+r
+r
+a
+"}
+(2,1,1) = {"
+r
+r
+r
+a
+a
+W
+a
+W
+r
+r
+"}
+(3,1,1) = {"
+r
+a
+a
+x
+r
+r
+r
+a
+a
+r
+"}
+(4,1,1) = {"
+r
+r
+a
+r
+r
+r
+r
+r
+a
+a
+"}
+(5,1,1) = {"
+r
+a
+r
+r
+V
+r
+r
+r
+r
+r
+"}
+(6,1,1) = {"
+r
+a
+r
+r
+J
+r
+r
+r
+a
+a
+"}
+(7,1,1) = {"
+a
+f
+r
+r
+r
+r
+r
+a
+a
+r
+"}
+(8,1,1) = {"
+r
+r
+W
+a
+a
+r
+a
+a
+r
+a
+"}
+(9,1,1) = {"
+r
+r
+a
+a
+W
+a
+a
+r
+a
+r
+"}
+(10,1,1) = {"
+a
+r
+a
+a
+r
+r
+r
+r
+r
+a
+"}

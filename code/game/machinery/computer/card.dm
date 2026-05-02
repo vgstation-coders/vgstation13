@@ -162,6 +162,7 @@
 	data["authenticated"] = is_authenticated()
 	data["has_modify"] = !!modify
 	data["account_number"] = modify ? modify.associated_account_number : null
+	data["target_bio"] = (modify && modify.dna_hash == "\[UNSET\]") ? "Undetected - Use Body Scanner" : "Detected"
 	data["centcom_access"] = is_centcom()
 	data["all_centcom_access"] = null
 	data["regions"] = null
@@ -369,17 +370,21 @@
 					else if (modify)
 						P.name = "access report"
 						P.info = {"<h4>Access Report</h4>
-							<u>Prepared By:</u> [scan.registered_name ? scan.registered_name : "Unknown"]<br>
+							<u>Prepared By:</u> [scan?.registered_name ? scan.registered_name : "Unknown"]<br>
 							<u>For:</u> [modify.registered_name ? modify.registered_name : "Unregistered"]<br>
 							<hr>
 							<u>Assignment:</u> [modify.assignment]<br>
 							<u>Account Number:</u> #[modify.associated_account_number]<br>
-							<u>Blood Type:</u> [modify.blood_type]<br><br>
+							<u>Blood Type:</u> [modify.blood_type]<br>
+							<u>DNA:</u> [modify.dna_hash]<br>
+							<u>Fingerprint:</u> [modify.fingerprint_hash]<br><br>
 							<u>Access:</u><br>
 						"}
 
+						P.info += "<ul>"
 						for(var/A in modify.access)
-							P.info += "  [get_access_desc(A)]"
+							P.info += "<li>[get_access_desc(A)]</li>"
+						P.info += "</ul>"
 
 	if (modify)
 		modify.name = text("[modify.registered_name]'s ID Card ([modify.assignment])")

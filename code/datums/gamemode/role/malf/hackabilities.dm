@@ -10,6 +10,12 @@
 /datum/malfhack_ability/New(var/obj/machinery/M)
 	machine = M
 
+/datum/malfhack_ability/Destroy()
+	if (machine) // In case we got destroyed but the machine wasn't, this can happen in edge cases.
+		machine.hack_abilities -= src
+		machine = null
+	. = ..()
+
 /datum/malfhack_ability/proc/activate(var/mob/living/silicon/A)
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
@@ -422,9 +428,11 @@
 	var/obj/machinery/computer/security/S = machine
 	if(!istype(S))
 		return
-	var/obj/abstract/screen/plane_master/fakecamera_planemaster/F = locate(/obj/abstract/screen/plane_master/fakecamera_planemaster) in S.cam_plane_masters
-	if(F)
+	var/obj/abstract/screen/plane_master/fakecamera_screen_planemaster/F = locate(/obj/abstract/screen/plane_master/fakecamera_screen_planemaster) in S.cam_plane_masters
+	var/obj/abstract/screen/plane_master/fakecamera_button_planemaster/G = locate(/obj/abstract/screen/plane_master/fakecamera_button_planemaster) in S.cam_plane_masters
+	if(F && G)
 		F.alpha = 255  // make the fake image visible
+		G.alpha = 255
 		to_chat(A, "<span class='warning'>You reprogram the image processing software on \the [machine]</span>")
 
 //--------------------------------------------------------

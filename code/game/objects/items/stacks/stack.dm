@@ -35,7 +35,6 @@
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
 		usr << browse(null, "window=stack")
-	src.forceMove(null)
 	..()
 
 /obj/item/stack/examine(mob/user)
@@ -64,7 +63,7 @@
 		var/datum/stack_recipe_list/srl = recipe_list[recipes_sublist]
 		recipe_list = srl.recipes
 	var/t1 = "<HTML><HEAD><title>[name] recipes</title></HEAD><body><TT>Amount of [name] available: [src.amount]<br>"
-	for(var/i = 1;i <= recipe_list.len,i++)
+	for(var/i = 1;i <= recipe_list.len;i++)
 		var/E = recipe_list[i]
 		if(isnull(E))
 			t1 += "<hr>"
@@ -141,9 +140,9 @@
 				var/list/multipliers = list(5, 10, 25)
 				for(var/n in multipliers)
 					if(max_multiplier>=n)
-						t1 += " <A href='?src=\ref[src];make=[i];multiplier=[n]'>[n*R.res_amount]x</A>"
+						t1 += " <A href='?src=\ref[src];sublist=[recipes_sublist];make=[i];multiplier=[n]'>[n*R.res_amount]x</A>"
 				if (!(max_multiplier in multipliers))
-					t1 += " <A href='?src=\ref[src];make=[i];multiplier=[max_multiplier]'>[max_multiplier*R.res_amount]x</A>"
+					t1 += " <A href='?src=\ref[src];sublist=[recipes_sublist];make=[i];multiplier=[max_multiplier]'>[max_multiplier*R.res_amount]x</A>"
 	t1 += extra_message()
 	t1 += "</TT></body></HTML>"
 	user << browse(t1, "window=stack")
@@ -391,8 +390,8 @@
 		return
 	return ..()
 
-/obj/item/stack/restock()
-	if(!restock_amount)
+/obj/item/stack/restock(nanobots = FALSE)
+	if(nanobots || !restock_amount)
 		return //Do not restock this stack type
 	if(amount < max_amount)
 		amount += restock_amount

@@ -4,6 +4,11 @@
 	var/window_path = /obj/structure/window
 	var/full_path
 
+/obj/structure/grille/window_spawner/spawned_by_map_element(datum/map_element/ME)
+	. = ..()
+	if(ticker?.current_state == GAME_STATE_PLAYING)
+		initialize()
+
 /obj/structure/grille/window_spawner/initialize()
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "grille0"
@@ -16,7 +21,7 @@
 		if(get_area(src) == get_area(there) && (locate(/obj/structure/grille) in there))
 			continue
 		var/obj/structure/window/new_window = new window_path(loc)
-		new_window.dir = direction
+		new_window.change_dir(direction)
 
 /obj/structure/grille/window_spawner/full
 	icon_state = "windowgrille_full"

@@ -41,9 +41,6 @@
 	border-bottom: 1px solid #000;
 }
 
-ul#errors {
-	min-height: 300px;
-}
 
 ul#errors li {
 	color: white;

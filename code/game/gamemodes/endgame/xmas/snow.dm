@@ -638,7 +638,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/item/ice_crystal
 	name = "ice crystal"
-	desc = "crystallized water. Take a chunk or two off to cool down your liquor."
+	desc = "Crystallized water. Take a chunk or two off to cool down your liquor."
 	icon_state = "ice_crystal"
 	melt_temperature = MELTPOINT_SNOW
 	w_class = W_CLASS_TINY

@@ -151,6 +151,7 @@
 							to_chat(src, "<span class = 'danger'>You feel something tear in your [victim.display_name]</span>")
 						var/datum/wound/internal_bleeding/I = new (1*major_rad_multiplier)
 						victim.wounds += I
+						victim.internally_bleeding = TRUE
 		if(rad_tick > RADDOSEADVANCED)
 			if(prob(5*rad_multiplier))
 				//Organ damage

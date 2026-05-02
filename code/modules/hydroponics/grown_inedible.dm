@@ -15,9 +15,7 @@
 	pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER	//Randomizes position slightly.
 	pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
-	var/datum/reagents/R = new/datum/reagents(50)
-	reagents = R
-	R.my_atom = src
+	create_reagents(50)
 
 	if(custom_plantname)
 		plantname = custom_plantname

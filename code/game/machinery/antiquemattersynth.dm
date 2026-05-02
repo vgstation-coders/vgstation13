@@ -179,7 +179,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 		new O(get_turf(src))
 	else
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
-	spark(src, 10, FALSE)
+	spark(src, 8, FALSE)
 
 
 /obj/machinery/power/antiquesynth/wrenchAnchor(var/mob/user, var/obj/item/I)

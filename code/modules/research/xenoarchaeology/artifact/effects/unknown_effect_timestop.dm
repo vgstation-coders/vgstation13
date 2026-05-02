@@ -1,7 +1,8 @@
 /datum/artifact_effect/timestop
 	effecttype = "timestop"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_WIZARD)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_WIZARD)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_PULSE)
+	effect_hint = EFFECT_HINT_HIGH_FREQUENCY_PARTICLES
 
 	var/mob/caster
 	var/spell/aoe_turf/fall/fall
@@ -18,7 +19,7 @@
 	fall = new /spell/aoe_turf/fall
 	caster.add_spell(fall)
 	fall.spell_flags = 0
-	fall.invocation_type = SpI_NONE
+	fall.invocation_type = SP_INV_NONE
 	fall.the_world_chance = 0
 	chargelevelmax = rand(30, 200)
 	effectrange = rand(2, 15)

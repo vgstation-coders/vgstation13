@@ -69,23 +69,23 @@ Class Procs:
 	var/list/currentrun
 	var/currentpart = SSAIR_TILES
 
-	var/list/cost_parts = list(SSAIR_TILES     = 0,\
-	                           SSAIR_DEFERRED  = 0,\
-	                           SSAIR_EDGES     = 0,\
-/*	                           SSAIR_FIRE_ZONE = 0,*/\
-	                           SSAIR_HOTSPOT   = 0,\
-	                           SSAIR_ZONE      = 0)
+	var/list/cost_parts = list(/*SSAIR_TILES*/ 0,\
+	                           /*SSAIR_DEFERRED*/ 0,\
+	                           /*SSAIR_EDGES*/ 0,\
+/*	                           /*SSAIR_FIRE_ZONE*/ 0,*/\
+	                           /*SSAIR_HOTSPOT*/ 0,\
+	                           /*SSAIR_ZONE*/ 0)
 
 	var/list/zones = list()
 	var/list/edges = list()
 
 	//Geometry process lists
-	var/list/processing_parts = list(SSAIR_TILES     = list(),\
-	                                 SSAIR_DEFERRED  = list(),\
-	                                 SSAIR_EDGES     = list(),\
-/*	                                 SSAIR_FIRE_ZONE = list(),*/\
-	                                 SSAIR_HOTSPOT   = list(),\
-	                                 SSAIR_ZONE      = list())
+	var/list/processing_parts = list(/*SSAIR_TILES*/ list(),\
+	                           /*SSAIR_DEFERRED*/ list(),\
+	                           /*SSAIR_EDGES*/ list(),\
+/*	                           /*SSAIR_FIRE_ZONE*/ list(),*/\
+	                           /*SSAIR_HOTSPOT*/ list(),\
+	                           /*SSAIR_ZONE*/ list())
 
 	var/active_zones = 0
 

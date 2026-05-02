@@ -33,8 +33,7 @@ var/static/list/bad_procs = list(
 
     procargs.len = argnum // Expand to right length
 
-    var/i
-    for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+    for(var/i in 1 to argnum) // Lists indexed from 1 forwards in byond
         procargs[i] = variable_set(user.client)
 
     if(procname in bad_procs)
@@ -67,3 +66,60 @@ var/static/list/bad_procs = list(
         spawn(1)
             call(A,procname)(arglist(procargs))
     return ..()
+
+/obj/item/procnade
+	name = "Procnade"
+	desc = "Oh no..."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	icon = 'icons/obj/grenade.dmi'
+	icon_state = "banana"
+	item_state = "banana" //banana inhand sprites when
+	w_class = W_CLASS_SMALL
+	var/affected_area = 2
+	var/procname
+	var/typefilter = /atom
+	var/list/procargs = list()
+
+/obj/item/procnade/attack_self(mob/user)
+	if(!user.check_rights(R_DEBUG))
+		to_chat(user,"<span class='warning'>You do not have the divine authority to modify what this grenade does.</span>")
+		return
+
+	procname = input("Proc path to call on affected, eg: /proc/fake_blood","Path:",procname) as text|null
+	if(!procname)
+		return
+
+	var/argnum = input("Number of arguments","Number:",procargs.len) as num|null
+	if(!argnum && (argnum!=0))
+		return
+
+	procargs.len = argnum // Expand to right length
+
+	for(var/i in 1 to argnum) // Lists indexed from 1 forwards in byond
+		procargs[i] = variable_set(user.client)
+
+	if(procname in bad_procs)
+		desc = "RUN!!!"
+	else
+		desc = "Oh no..."
+
+	var/texttype = input("Type to filter to, eg: /obj/item","Type:", null) as text|null
+	var/ourtype = texttype ? filter_list_input("Select an atom type", "Type filter", get_matching_types(texttype, /atom)) : /atom
+	typefilter = ourtype || /atom
+
+	affected_area = input("Range to affect","Range", affected_area) as num|null
+	if(!affected_area)
+		affected_area = world.view
+
+/obj/item/procnade/throw_impact(atom/impacted_atom, speed, mob/user)
+	if(!..() && procname)
+		playsound(src, 'sound/effects/bamfgas.ogg', 50, 1)
+		visible_message("<span class='warning'>[bicon(src)] \The [src] bursts open.</span>")
+		var/turf/T = get_turf(src)
+		for(var/atom/A in view(affected_area, src))
+			if(T && cheap_pythag(T.x - A.x, T.y - A.y) > affected_area) // do it in a circle
+				continue
+			if(istype(A,typefilter) && procname && hascall(A, procname))
+				spawn(1)
+					call(A,procname)(arglist(procargs))
+

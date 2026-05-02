@@ -13,12 +13,11 @@
 
 	var/growth = 0
 	var/time_of_birth
+	var/stowaway = FALSE // If TRUE, evolution is restricted to Hunter only (set by odyssey_xeno ruleset)
 
 //This is fine right now, if we're adding organ specific damage this needs to be updated
 /mob/living/carbon/alien/larva/New()
-	var/datum/reagents/R = new/datum/reagents(100)
-	reagents = R
-	R.my_atom = src
+	create_reagents(100)
 	if(name == "alien larva")
 		name = "alien larva ([rand(1, 1000)])"
 	real_name = name

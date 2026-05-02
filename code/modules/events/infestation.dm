@@ -50,8 +50,7 @@
 	var/list/spawn_types = list()
 	var/max_number = 4
 
-	vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS, VERM_ROACHES, VERM_GREMLINS, VERM_BEES, VERM_HORNETS,
-	VERM_SYPHONER, VERM_GREMTIDE, VERM_CRABS, VERM_DIONA, VERM_MUSHMEN, VERM_FROGS, VERM_SNAILS, VERM_HEADCRABS)
+	vermin = rand(0, VERM_MAX)
 
 	if (override_vermin)
 		vermin = override_vermin

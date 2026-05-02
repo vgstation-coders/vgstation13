@@ -36,16 +36,15 @@
 			T.ChangeTurf(T.get_underlying_turf())
 			return 0
 
-	else if(istype(A, /obj/machinery/door/airlock))
-		var/obj/machinery/door/airlock/D = A
-		to_chat(user, "Deconstructing \the [D]...")
-		if(master.delay(user, D, 5 SECONDS))
+	else if(is_type_in_list(A, list(/obj/machinery/door/airlock,/obj/structure/fence)))
+		to_chat(user, "Deconstructing \the [A]...")
+		if(master.delay(user, A, 5 SECONDS))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
-			D.investigation_log(I_RCD,"was deconstructed by [user]")
-			qdel(D)
+			A.investigation_log(I_RCD,"was deconstructed by [user]")
+			qdel(A)
 			return 0
 
 	else if(istype(A,/obj/structure/window))
@@ -458,7 +457,7 @@
 /datum/rcd_schematic/con_window
 	name						= "Build window"
 	icon 						= 'icons/obj/window_grille_spawner.dmi'
-	icon_state 					= "windowgrille"
+	icon_state 					= "rwindowgrille"
 	category					= "Construction"
 	energy_cost					= 2
 
@@ -536,6 +535,55 @@
 
 	new selected.build_type(A)
 	A.investigation_log(I_RCD,"had \a [selected.name] built on it by [user]")
+
+
+/datum/rcd_schematic/con_pwindow
+	name				= "Build plasma window"
+	icon 				= 'icons/obj/window_grille_spawner.dmi'
+	icon_state 			= "rpwindowgrille"
+	category			= "Construction"
+	energy_cost			= 5
+
+/datum/rcd_schematic/con_pwindow/attack(var/atom/A, var/mob/user)
+
+	var/list/obj/structure/window/reinforced/rwindows = list()
+	var/obj/structure/window/full/reinforced/frwindow = null
+	var/turf/simulated/floor/T = get_turf(A)
+	var/founddirs = 0
+	for(var/obj/structure/window/reinforced/R in T)
+		if(istype(R,/obj/structure/window/reinforced/plasma))
+			continue
+		if(R.dir & founddirs)
+			continue
+		rwindows += R
+		founddirs |= R.dir
+	for(var/obj/structure/window/full/reinforced/FR in T)
+		if(istype(FR,/obj/structure/window/full/reinforced/plasma))
+			continue
+		frwindow = FR
+		break
+	if(!rwindows.len && !frwindow)
+		return "no windows on tile to reinforce!"
+	to_chat(user, "Reinforcing windows...")
+	playsound(master, 'sound/machines/click.ogg', 50, 1)
+	if(master.delay(user, A, 2 SECONDS))
+		if(master.get_energy(user) < energy_cost)
+			return 1
+
+		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+		T.investigation_log(I_RCD,"had windows plasma reinforced on it by [user]")
+		for(var/obj/structure/window/reinforced/R in rwindows)
+			var/obj/structure/window/reinforced/plasma/P = new(R.loc)
+			P.dir = R.dir
+			P.update_icon()
+			P.update_nearby_tiles()
+			qdel(R)
+		if(frwindow)
+			new /obj/structure/window/full/reinforced/plasma(frwindow.loc)
+			qdel(frwindow)
+		return 0
+
+	return 1
 
 /datum/selection_schematic
 	var/name			= "Selection"
