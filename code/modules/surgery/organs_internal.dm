@@ -281,11 +281,11 @@
 
 var/static/list/partstobraindamagetype = list(
 	"Brain stem (sever this organ)" = "remove",
-	"Cerebellum" = "motor",
-	"Frontal lobe" = "coordination",
-	"Broca's area" = "speech",
-	"Temporal lobe" = "intelligence",
-	"Occipital lobe" = "sight"
+	"Cerebellum" = MOTOR_L,
+	"Frontal lobe" = COORDINATION_L,
+	"Broca's area" = SPEECH_L,
+	"Temporal lobe" = INTELLIGENCE_L,
+	"Occipital lobe" = SIGHT_L
 )
 
 /datum/surgery_step/internal/detatch_organ/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -335,7 +335,7 @@ var/static/list/partstobraindamagetype = list(
 	user.visible_message("[user] starts to [cutverb] [target]'s [target.op_stage.current_organ] with \the [tool].", \
 	"You start to [cutverb] [target]'s [target.op_stage.current_organ] with \the [tool]." )
 	target.custom_pain("The pain in your [affected.display_name] is living hell!",1, scream=TRUE)
-	if(brain_damagetype == "speech")
+	if(brain_damagetype == SPEECH_L)
 		target.say_gibberish()
 	..()
 

@@ -519,7 +519,7 @@ var/list/headset_modes = list(
 		for(var/obj/item/I in get_all_slots() + held_items)
 			I.affect_speech(speech, src)
 
-	if(getBrainLoss("speech") >= 60)
+	if(getBrainLoss(SPEECH_L) >= 60)
 		if(braindamagespeechcooldown)
 			speech.message = null
 			emote("gibber")
@@ -554,8 +554,8 @@ var/list/headset_modes = list(
 			speech.message = replacetext(speech.message,"scientist","shaman")
 			speech.message = replacetext(speech.message,"mime","silent one")
 			speech.message = replacetext(speech.message,"syndicate","rival faction")
-			
-			
+
+
 		var/datum/reagent/hyperzine/H = reagents.get_reagent_by_type(/datum/reagent/hyperzine)//also checks for hyperzine subtypes like cocaine etc
 		if (H && (H.data != "no motor mouth"))
 			speech.message = replacetext(speech.message," ","") // motor mouth
@@ -671,7 +671,7 @@ var/list/headset_modes = list(
 /mob/living/say_quote()
 	if (stuttering)
 		return "stammers, [text]"
-	if (getBrainLoss("speech") >= 60)
+	if (getBrainLoss(SPEECH_L) >= 60)
 		return "gibbers, [text]"
 	return ..()
 
@@ -682,7 +682,7 @@ var/list/headset_modes = list(
 /mob/living/get_spoken_verb(var/msg)
 	if (stuttering)
 		return "stammers"
-	if (getBrainLoss("speech") >= 60)
+	if (getBrainLoss(SPEECH_L) >= 60)
 		return "gibbers"
 	return ..()
 
