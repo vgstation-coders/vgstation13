@@ -901,8 +901,6 @@
 
 /datum/disease2/effect/norris/activate(var/mob/living/mob)
 	if (prob(20 * multiplier) && ishuman(mob))
-		if(mob.reagents && prob(50))
-			mob.reagents.add_reagent(GYRO,1)
 		var/atom/A = pick(adjacent_atoms(mob))
 		if(A)
 			A.kick_act(mob)
