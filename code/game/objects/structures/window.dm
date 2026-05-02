@@ -201,7 +201,9 @@ var/list/one_way_windows
 	return 1
 
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
-
+	if(Proj.destroy)
+		ex_act(1)
+		return ..()
 	adjustHealthLoss(Proj.damage,Proj)
 	. = ..()
 	healthcheck(Proj.firer)
