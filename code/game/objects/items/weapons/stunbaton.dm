@@ -64,7 +64,7 @@
 
 /obj/item/weapon/melee/baton/update_icon()
 	icon_state = "[initial(name)][status ? "_active" : bcell ? "" : "_nocell"]"
-	item_state = "[initial(item_state)][status ? "-on" : ""]"
+	item_state = "[initial(item_state)][status ? "1" : "0"]"
 
 	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/M = loc
