@@ -2,7 +2,7 @@
 	name = "stun baton"
 	desc = "A stun baton for incapacitating people with."
 	icon_state = "stun baton"
-	item_state = "baton"
+	item_state = "baton0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	flags = FPRINT
 	slot_flags = SLOT_BELT
