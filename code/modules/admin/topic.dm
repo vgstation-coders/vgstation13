@@ -418,9 +418,12 @@
 						casual = 0
 					if("No")
 						emergency_shuttle.shuttle_phase("centcom",1)
-		var/obj/docking_port/shuttle/P = emergency_shuttle.shuttle.linked_port
+		var/obj/docking_port/shuttle/P = emergency_shuttle.get_linked_port()
 		log_admin("[key_name(usr)] moved the emergency shuttle to [href_list["move_emergency_shuttle"]][casual?" (no round triggers)":""].</span>")
-		message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle to <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[P.x];Y=[P.y];Z=[P.z]'>[href_list["move_emergency_shuttle"]]</a>[casual?" (no round triggers)":""].</span>", 1)
+		if(P)
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle to <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[P.x];Y=[P.y];Z=[P.z]'>[href_list["move_emergency_shuttle"]]</a>[casual?" (no round triggers)":""].</span>", 1)
+		else
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle to [href_list["move_emergency_shuttle"]][casual?" (no round triggers)":""].</span>", 1)
 		href_list["secretsadmin"] = "emergency_shuttle_panel"
 
 	else if(href_list["move_emergency_dock"])
@@ -428,6 +431,9 @@
 			return
 		var/obj/docking_port/destination/port
 		var/datum/shuttle/escape/E = emergency_shuttle.shuttle
+		if(!E)
+			alert("This shuttle type does not support dock repositioning.")
+			return
 		switch (href_list["move_emergency_dock"])
 			if ("station")
 				port = E.dock_station
@@ -446,6 +452,9 @@
 			return
 		var/obj/docking_port/destination/port
 		var/datum/shuttle/escape/E = emergency_shuttle.shuttle
+		if(!E)
+			alert("This shuttle type does not support dock repositioning.")
+			return
 		switch (href_list["reset_emergency_dock"])
 			if ("station")
 				port = E.dock_station
@@ -5358,10 +5367,10 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 
 		if(S.linked_area)
 			if(killed_objs == 1)
-				for(var/turf/T in S.linked_area)
+				for(var/turf/T in S.shuttle_contents())
 					if(istype(T, /turf/simulated))
 						qdel(T)
-				for(var/obj/O in S.linked_area)
+				for(var/obj/O in S.shuttle_contents())
 					if(istype(O, /obj/item) || istype(O, /obj/machinery) || istype(O, /obj/structure))
 						qdel(O)
 				to_chat(usr, "All turfs and objects deleted from [S.linked_area].")
@@ -5385,7 +5394,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			to_chat(usr, "The shuttle is in the middle of nowhere! (The 'linked_area' variable is either null or not an area, please report this)")
 			return
 
-		var/turf/T = locate(/turf/) in S.linked_area
+		var/turf/T = locate(/turf/) in S.shuttle_contents()
 		usr.forceMove(T)
 		to_chat(usr, "You have teleported to [capitalize(S.name)]")
 

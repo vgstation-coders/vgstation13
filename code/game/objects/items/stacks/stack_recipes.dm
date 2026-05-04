@@ -297,16 +297,22 @@ var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes",
 	new/datum/stack_recipe/blacksmithing("tower shield", /obj/item/item_head/tower_shield,			20, time = 10 SECONDS, required_strikes = 20, other_reqs = list(/obj/item/stack/sheet/plasteel = 5)),
 	))
 
-
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/metal, 1, 4, 60),
 	new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),
 	new/datum/stack_recipe("conveyor belt", /obj/item/stack/conveyor_assembly, 2, 1, 20, cargonia_boost = 1),
-	new/datum/stack_recipe("plated catwalk frame", /obj/item/stack/tile/plated_catwalk, 1, 4, 60),
+	new/datum/stack_recipe_list("plated catwalk frames", list(
+		new/datum/stack_recipe("plated catwalk frame",       /obj/item/stack/tile/plated_catwalk,      1, 4, 60),
+		new/datum/stack_recipe("black plated catwalk frame", /obj/item/stack/tile/plated_catwalk/dark, 1, 4, 60),
+		)),
 	//new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
 	null,
 	new/datum/stack_recipe("computer frame", /obj/structure/computerframe,                      5, time = 25, one_per_turf = 1			    ),
 	new/datum/stack_recipe("wall girders",   /obj/structure/girder,                             2, time = 50, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe_list("shuttle panels", list(
+		new/datum/stack_recipe("shuttle panel",       /obj/item/stack/shuttle_panel,       1, 1, 60, time = 10),
+		new/datum/stack_recipe("black shuttle panel", /obj/item/stack/shuttle_panel/black, 1, 1, 60, time = 10),
+		)),
 	new/datum/stack_recipe("railings",   /obj/structure/railing/loose,             				2, time = 25, on_floor = 1),
 	new/datum/stack_recipe("firelock frame", /obj/item/firedoor_frame,                          5, time = 50),
 	new/datum/stack_recipe("machine frame",  /obj/machinery/constructable_frame/machine_frame,  5, time = 25, one_per_turf = 1, on_floor = 1),
@@ -328,6 +334,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("bar stool",          /obj/item/weapon/stool/bar                                              ),
 		new/datum/stack_recipe/chair("chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("folding chair",      /obj/structure/bed/chair/folding,         one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe/chair("handrail",           /obj/structure/bed/chair/handrail,     2, one_per_turf = 1, on_floor = 1, start_unanchored = 1),
 		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 		)),
@@ -417,6 +424,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe("station holomap frame",     /obj/item/mounted/frame/station_map,          3, time = 25, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("light fixture frame",       /obj/item/mounted/frame/light_fixture,        2                                           ),
 		new/datum/stack_recipe("small light fixture frame", /obj/item/mounted/frame/light_fixture/small,  1                                           ),
+		new/datum/stack_recipe("floor light frame",         /obj/item/floor_light_frame,                  2                                           ),
 		new/datum/stack_recipe("embedded controller frame", /obj/item/mounted/frame/airlock_controller,   2, time = 50, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("access button frame",       /obj/item/mounted/frame/access_button,        1, time = 50, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("airlock sensor frame",      /obj/item/mounted/frame/airlock_sensor,       1, time = 50, one_per_turf = 0, on_floor = 1),
@@ -442,6 +450,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("spring", /obj/item/spring, 					1, time = 25, one_per_turf = 0, on_floor = 0),
 	new/datum/stack_recipe("cannonball", /obj/item/cannonball/iron, 20, time = 4 SECONDS, one_per_turf = 0, on_floor = 1),
 	new/datum/stack_recipe("frying pan", /obj/item/weapon/reagent_containers/pan, 10, time = 4 SECONDS, one_per_turf = 0, on_floor = 0),
+	new/datum/stack_recipe("gold pan", /obj/item/weapon/reagent_containers/glass/goldpan/metal, 5, time = 3 SECONDS, one_per_turf = 0, on_floor = 0),
 	new/datum/stack_recipe("lunch box", /obj/item/weapon/storage/lunchbox/metal, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
 	new/datum/stack_recipe("lockless coinbox", /obj/item/weapon/storage/lockbox/coinbox/nolock, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0, cargonia_boost = 1),
 	null,
@@ -466,6 +475,12 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("Mass Driver frame",				/obj/machinery/mass_driver_frame,					3,	time = 50,	one_per_turf = 1				),
 	new/datum/stack_recipe("Tank dispenser",				/obj/structure/dispenser/empty,						2,	time = 10,	one_per_turf = 1				),
 	new/datum/stack_recipe("Fireaxe cabinet",				/obj/item/mounted/frame/fireaxe_cabinet_frame,		2,	time = 50									),
+	null,
+	new/datum/stack_recipe("fence", /obj/structure/fence, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe("fence post", /obj/structure/fence/post, 2, time = 50, one_per_turf = 1),
+	null,
+	new/datum/stack_recipe("fence door", /obj/structure/fence/door, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe("secure fence door", /obj/structure/fence/door/secure, 2, time = 50, one_per_turf = 1),
 	null,
 	new/datum/stack_recipe("lockless lockbox", /obj/item/weapon/storage/lockbox/nolock, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
 	null,
@@ -544,6 +559,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
 	new/datum/stack_recipe("baseball bat",		/obj/item/weapon/bat,					10,		time = 8 SECONDS							),
 	new/datum/stack_recipe("wooden club",		/obj/item/weapon/melee/wooden_club,					8,		time = 8 SECONDS					),
+	new/datum/stack_recipe("gold pan", /obj/item/weapon/reagent_containers/glass/goldpan/wood, 5, time = 3 SECONDS, one_per_turf = 0, on_floor = 0),
 	)
 
 /* =========================================================================
@@ -758,4 +774,17 @@ var/list/datum/stack_recipe/feather_recipes = list(
 	new /datum/stack_recipe/feather("quill pen", /obj/item/weapon/pen/quill, 1, time = 10),
 	new /datum/stack_recipe/feather("feather wreath", /obj/item/mounted/frame/wreath/featherwreath, 4, time = 50),
 	new /datum/stack_recipe/feather("dreamcatcher", /obj/item/mounted/frame/wreath/dreamcatcher, 4, time = 50)
+)
+
+/* =====================================================================
+						SHUTTLE PANEL RECIPES
+===================================================================== */
+var/list/datum/stack_recipe/shuttle_panel_recipes = list(
+	new/datum/stack_recipe("shuttle corner wall",        /obj/structure/shuttle/diag_wall/diy,               2, time = 30, one_per_turf = 1, on_floor = 1, start_unanchored = 1),
+	new/datum/stack_recipe("smooth shuttle corner wall", /obj/structure/shuttle/diag_wall/diy/smooth,        2, time = 30, one_per_turf = 1, on_floor = 1, start_unanchored = 1),
+)
+
+var/list/datum/stack_recipe/shuttle_panel_black_recipes = list(
+	new/datum/stack_recipe("black shuttle corner wall",        /obj/structure/shuttle/diag_wall/diy/black,          2, time = 30, one_per_turf = 1, on_floor = 1, start_unanchored = 1),
+	new/datum/stack_recipe("smooth black shuttle corner wall", /obj/structure/shuttle/diag_wall/diy/smooth/black,   2, time = 30, one_per_turf = 1, on_floor = 1, start_unanchored = 1),
 )

@@ -5,6 +5,7 @@
 															SOFT_FL = 10,
 															SOFT_RT = 10,
 															SOFT_RS = 10,
+															SOFT_VE = 10,
 
 															SOFT_WJ = 30,
 															SOFT_CS = 30,
@@ -69,6 +70,8 @@
 				left_part = softwareLight()
 			if(SOFT_HM)
 				left_part = softwareHolomap()
+			if(SOFT_VE)
+				left_part = softwareVolumeEnhancer()
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
 
@@ -187,6 +190,9 @@
 						return 0
 				spawn CheckDNA(M, src)
 
+		if(SOFT_NW)
+			painews.attack_hand(src)
+
 		if(SOFT_DM)
 			if(!isnull(pda))
 				var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in pda.applications
@@ -249,7 +255,7 @@
 			if(href_list["chem"])
 				if(!get_holder_of_type(loc, /mob))
 					to_chat(src, "<span class='warning'>You must have a carrier to inject with chemicals!</span>")
-				else if(chargeloop(SOFT_CS))
+				else if(!charge && chargeloop(SOFT_CS))
 					var/mob/M = get_holder_of_type(loc, /mob)
 					if(M) //Sanity
 						M.reagents.add_reagent(href_list["chem"], 15)
@@ -257,7 +263,7 @@
 				else
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
 		if(SOFT_FS)
-			if(href_list["food"] && chargeloop(SOFT_FS))
+			if(href_list["food"] && !charge && chargeloop(SOFT_FS))
 				var/foodType = href_list["food"]
 				var/found = FALSE
 				for (var/name in synthable_default_food)
@@ -294,7 +300,9 @@
 					holomap_device.toggleHolomap(M)
 			if(href_list["show_map"])
 				holomap_device.toggleHolomap(src)
-
+		if(SOFT_VE)
+			if(href_list["toggle"])
+				loudspeak = !loudspeak
 		if(SOFT_UN)
 			if(href_list["cancel"])
 				uninstallprogress = -1
@@ -323,6 +331,8 @@
 							remove_hud_by_type(/datum/visioneffect/security/arrest)
 							remove_hud_by_type(/datum/visioneffect/job)
 							secHUD = FALSE
+						if(target==SOFT_VE)
+							loudspeak = initial(loudspeak)
 						software.Remove(target)
 					uninstallprogress = -1
 				else
@@ -352,6 +362,8 @@
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_CM];sub=0'>Crew Manifest</a> <br>"
 		if(s == SOFT_DM)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_DM];sub=0'>Digital Messenger</a> <br>"
+		if(s == SOFT_NW)
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_NW];sub=0'>Newscaster</a> <br>"
 		if(s == SOFT_RS)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_RS];sub=0'>Remote Signaller</a> <br>"
 		if(s == SOFT_AS)
@@ -360,6 +372,8 @@
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_FL];sub=0'>Brightness Enhancer</a> <br>"
 		if(s == SOFT_RT)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_RT];sub=0'>Redundant Threading</a> <br>"
+		if(s == SOFT_VE)
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_VE];sub=0'>Volume Enhancer</a> <br>"
 	dat += "<br>"
 
 	//Standard
@@ -772,4 +786,11 @@ Target Machine: "}
 	dat+= "Creates a virtual map of the surrounding area.<BR>"
 	dat+= "Current mode: [holo_target == initial(holo_target)? "Internal Viewer" : "External Projector"] | <a href='byond://?src=\ref[src];software=[SOFT_HM];switch_target=1;sub=0'>Switch Type</a><BR>"
 	dat+= "<BR><a href='byond://?src=\ref[src];software=[SOFT_HM];[holo_target]=1;sub=0'>Toogle Holomap</a><BR>"
+	return dat
+
+//Megaphone
+/mob/living/silicon/pai/proc/softwareVolumeEnhancer()
+	var/dat = "<h3>Volume Enhancer</h3>"
+	dat += "Volume increase via targeted speaker overvoltage.<br><br>"
+	dat += "Volume enhancement [ (loudspeak) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=\ref[src];software=[SOFT_VE];sub=0;toggle=1'>Toggle Megaphone</a><br>"
 	return dat

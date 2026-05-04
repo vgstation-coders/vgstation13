@@ -400,15 +400,15 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 /obj/item/device/gps/planetary/get_location_name()
 	var/turf/device_turf = get_turf(src)
 	var/area/device_area = get_area(src)
+	var/datum/virtual_z/vz = device_turf?.get_virtual_z()
 	if(emped)
 		return "ERROR"
 	else if(!device_turf || !device_area)
 		return "UNKNOWN"
-	else if(!device_turf.planet)
+	else if(!vz?.planet)
 		return "NOT ON PLANET"
 	else
 		// coordinates are relative to each vlevel
-		var/datum/virtual_z/vz = device_turf.get_virtual_z()
 		if(!istype(vz))
 			return "[format_text(device_area.name)] (UNKNOWN)"
 		var/planet_name = vz.planet ? vz.planet.planet_name : "Unknown Planet"
@@ -427,10 +427,10 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	data["beacon_time_remaining"] = beacon_active ? max(0, round((beacon_cooldown - world.time) / 10)) : 0
 	var/list/devices = list()
 	var/turf/device_turf = get_turf(src)
+	var/datum/virtual_z/vz = device_turf?.get_virtual_z()
 
 	// Only show other devices if we're on a planet and transmitting
-	if(!emped && transmitting && device_turf?.planet)
-		var/datum/virtual_z/vz = device_turf.get_virtual_z()
+	if(!emped && transmitting && vz?.planet)
 		if(istype(vz))
 			// Always show docking ports on this planet
 			for(var/obj/docking_port/destination/planet_surface/port in all_docking_ports)
@@ -450,9 +450,9 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 				if(!other.transmitting || other == src)
 					continue
 				var/turf/other_turf = get_turf(other)
-				if(!other_turf?.planet)
+				var/datum/virtual_z/other_vz = other_turf?.get_virtual_z()
+				if(!other_vz?.planet)
 					continue
-				var/datum/virtual_z/other_vz = other_turf.get_virtual_z()
 				if(other_vz == vz)
 					var/list/device_data = list()
 					device_data["tag"] = other.gpstag
@@ -473,12 +473,12 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 				to_chat(usr, "<span class='warning'>The GPS is experiencing electromagnetic interference!</span>")
 				return FALSE
 			var/turf/device_turf = get_turf(src)
-			if(!device_turf?.planet)
+			var/datum/virtual_z/vz = device_turf?.get_virtual_z()
+			if(!vz?.planet)
 				to_chat(usr, "<span class='warning'>The distress beacon only works on planet surfaces!</span>")
 				return FALSE
 
 			// planet information
-			var/datum/virtual_z/vz = device_turf.get_virtual_z()
 			if(!istype(vz))
 				to_chat(usr, "<span class='warning'>Unable to determine location!</span>")
 				return FALSE
@@ -574,11 +574,11 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 			to_chat(usr, "<span class='warning'>The GPS is experiencing electromagnetic interference!</span>")
 			return FALSE
 		var/turf/device_turf = get_turf(src)
-		if(!device_turf?.planet)
+		var/datum/virtual_z/vz = device_turf?.get_virtual_z()
+		if(!vz?.planet)
 			to_chat(usr, "<span class='warning'>The distress beacon only works on planetary surfaces!</span>")
 			return FALSE
 
-		var/datum/virtual_z/vz = device_turf.get_virtual_z()
 		if(!istype(vz))
 			to_chat(usr, "<span class='warning'>Unable to determine planetary location!</span>")
 			return FALSE

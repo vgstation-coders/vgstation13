@@ -40,7 +40,7 @@ For the main html chat area
 		return 0
 
 	if(!winexists(owner, "browseroutput")) // Oh goddamnit.
-		alert(owner.mob, "Updated chat window does not exist. If you are using a custom skin file please allow the game to update.")
+		alert(owner.mob || owner, "Updated chat window does not exist. If you are using a custom skin file please allow the game to update.")
 		broken = TRUE
 		return 0
 

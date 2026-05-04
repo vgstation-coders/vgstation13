@@ -275,12 +275,6 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
-"fs" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/asteroid,
-/area/vault/mothership_lab/asteroid)
 "fx" = (
 /obj/structure/closet/walllocker/emerglocker{
 	pixel_x = -30
@@ -1244,9 +1238,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/asteroid)
 "sK" = (
-/obj/structure/fence/door/secure/from_east{
-	dir = 8
-	},
+/obj/structure/fence/door/secure/inverted,
 /turf/unsimulated/floor/asteroid/plating,
 /area/vault/mothership_lab/asteroid)
 "sN" = (
@@ -6647,7 +6639,7 @@ XO
 GL
 eQ
 GL
-fs
+Wf
 ZW
 GL
 GL
@@ -6741,7 +6733,7 @@ Nq
 GL
 GL
 GL
-fs
+Wf
 Xd
 GL
 ly

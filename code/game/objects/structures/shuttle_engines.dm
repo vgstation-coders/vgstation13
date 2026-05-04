@@ -274,3 +274,34 @@ var/list/large_engines = list()
 	icon = 'icons/3x3.dmi'
 	icon_state = "huge_engine"
 	largeness = 2
+
+// -- NTEV ODYSSEY --
+
+/obj/structure/shuttle/engine/propulsion/odyssey
+	name = "odyssey propulsion engine"
+	icon_state = "propulsion"
+	opacity = 0 // Doesn't block line of sight
+	var/hyperspace_firing = FALSE
+	var/hyperspace_fire_delay = 5 SECONDS
+
+/obj/structure/shuttle/engine/propulsion/odyssey/proc/start_hyperspace_firing()
+	if(hyperspace_firing || destroyed)
+		return
+	hyperspace_firing = TRUE
+	hyperspace_fire_loop()
+
+/obj/structure/shuttle/engine/propulsion/odyssey/proc/stop_hyperspace_firing()
+	hyperspace_firing = FALSE
+
+/obj/structure/shuttle/engine/propulsion/odyssey/proc/hyperspace_fire_loop()
+	set waitfor = FALSE
+	while(hyperspace_firing && !destroyed && !QDELETED(src))
+		sleep(hyperspace_fire_delay)
+		if(hyperspace_firing && !destroyed && !QDELETED(src))
+			shoot_exhaust(backward = 3)
+
+/obj/structure/shuttle/engine/propulsion/odyssey/left
+	icon_state = "propulsion_l"
+
+/obj/structure/shuttle/engine/propulsion/odyssey/right
+	icon_state = "propulsion_r"

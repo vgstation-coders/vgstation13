@@ -77,13 +77,13 @@
 /obj/structure/coatrack/attackby(obj/item/C, mob/user)
 	if (istype(C, /obj/item/clothing/suit) && !suit && is_type_in_list(C, allowed_suits))
 		if(user.drop_item(C, src))
-			to_chat(user, "<span class='notice'>You place your [C] on \the [src]</span>")
+			to_chat(user, "<span class='notice'>You place your [C.name] on \the [src]</span>")
 			playsound(src, "rustle", 50, 1, -5)
 			suit = C
 			update_icon()
 	else if (istype(C, /obj/item/clothing/head) && !hat && is_type_in_list(C, allowed_hats))
 		if(user.drop_item(C, src))
-			to_chat(user, "<span class='notice'>You place your [C] on \the [src]</span>")
+			to_chat(user, "<span class='notice'>You place your [C.name] on \the [src]</span>")
 			playsound(src, "rustle", 50, 1, -5)
 			hat = C
 			update_icon()

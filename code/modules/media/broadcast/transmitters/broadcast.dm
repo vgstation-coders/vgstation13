@@ -101,6 +101,7 @@
 		if(S.do_solder(user, src,4 SECONDS, 4))
 			S.playtoolsound(loc, 100)
 			integrity = 100
+			update_icon()
 			to_chat(user, "<span class='notice'>You repair the blown fuses on [src].</span>")
 
 /obj/machinery/media/transmitter/broadcast/attack_hand(var/mob/user as mob)

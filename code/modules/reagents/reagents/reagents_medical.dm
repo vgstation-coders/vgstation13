@@ -1149,6 +1149,7 @@ var/global/list/charcoal_doesnt_remove=list(
 			if (E.status & ORGAN_BROKEN)
 				E.status &= ~ORGAN_BROKEN //What do I owe you?
 				E.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
+				E.brute_dam = min(E.brute_dam, E.min_broken_damage) //Heal enough to prevent immediate re-fracture
 				holder.remove_reagent(MEDNANOBOTS, 0.10)
 			if (E.status & ORGAN_BLEEDING)
 				E.status &= ~ORGAN_BLEEDING //FOR FREE?!

@@ -1769,3 +1769,7 @@ to destroy them and players will be able to make replacements.
 		/obj/item/weapon/stock_parts/console_screen = 1,
 		/obj/item/weapon/stock_parts/capacitor = 2
 	)
+
+/obj/item/weapon/circuitboard/planet_scanner/shuttle
+	name = "Circuit board (Shuttle Deep Space Scanner)"
+	build_path = /obj/machinery/planet_scanner/shuttle

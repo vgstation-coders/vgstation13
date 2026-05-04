@@ -24,6 +24,10 @@ var/area/space_area
 
 	flags = CAVES_ALLOWED
 
+/// Used for shuttle overrides so we can expose planet or space turfs depending on the shuttle's location.
+/area/proc/get_base_turf_type(turf/T)
+	return base_turf_type
+
 /area/New()
 	area_turfs = list()
 	icon_state = ""
@@ -468,8 +472,8 @@ var/area/space_area
 
 /area/Exited(atom/movable/Obj)
 	var/turf/T = get_turf(Obj)
-	var/datum/virtual_z/new_v = T.v
-	if(!new_v || v != new_v)
+	var/datum/virtual_z/new_v = T?.v
+	if(v && v != new_v)
 		if(istype(Obj, /mob/living))
 			var/mob/living/L = Obj
 			v.mob_exited(L)
@@ -523,7 +527,7 @@ var/area/space_area
 
 /area/proc/get_shuttle()
 	for(var/datum/shuttle/S in shuttles)
-		if(S.linked_area == src)
+		if(S.has_area(src))
 			return S
 	return null
 

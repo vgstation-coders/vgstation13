@@ -304,6 +304,13 @@
 	required_reagents = list(WATER = 2, SILICA = 3, SILICON = 1)
 	result_amount = 8
 
+/datum/chemical_reaction/cherrylube
+	name = "Cherry-Flavored Lube"
+	id = CHERRYLUBE
+	result = CHERRYLUBE
+	required_reagents = list(LUBE = 1, CHERRYJELLY = 1)
+	result_amount = 2
+
 /datum/chemical_reaction/sodium_polyacrylate
 	name = "Sodium Polyacrylate"
 	id = SODIUM_POLYACRYLATE
@@ -322,14 +329,14 @@
 	name = "Absorb Lube"
 	id = "absorblube"
 	result = CHEMICAL_WASTE
-	required_reagents = list(SODIUM_POLYACRYLATE = 0.3, LUBE = 1)
+	required_reagents = list(SODIUM_POLYACRYLATE = 0.3, LUBES = 1)
 	result_amount = 0.3
 
 /datum/chemical_reaction/sludge
 	name = "Sludge"
 	id = CHEMICAL_WASTE
 	result = CHEMICAL_WASTE
-	required_reagents = list(LUBE = 1)
+	required_reagents = list(LUBES = 1)
 	result_amount = 0.2
 	required_temp = 3500
 	react_discretely = TRUE
@@ -1118,6 +1125,27 @@
 
 /datum/chemical_reaction/solidification/plastic/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/plastic
+
+/datum/chemical_reaction/solidification/wood
+	name = "Solid Wood"
+	id = "solidwood"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PULP = U_PER_SHEET)
+	result_amount = 1 //amount of sheets created per the above reagents
+
+/datum/chemical_reaction/solidification/wood/product_to_spawn()
+	return /obj/item/stack/sheet/wood
+
+/datum/chemical_reaction/solidification/lead
+	name = "Solid Lead"
+	id = "solidlead"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, LEAD = CC_PER_U)
+	result_amount = 1 //amount of sheets created per the above reagents
+
+/datum/chemical_reaction/solidification/lead/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/lead
+
 
 /datum/chemical_reaction/condensedcapsaicin
 	name = "Condensed Capsaicin"
@@ -2695,10 +2723,22 @@
 	name = "Melted ice"
 	id = WATER
 	result = WATER
-	required_reagents = list(ICE = 1)
-	required_temp = T20C+5
-	result_amount = 1
+	required_reagents = list(ICE = 0.1)
+	required_temp = T0C+10
+	result_amount = 0.1
 	quiet = 1
+
+/datum/chemical_reaction/ice_to_water/on_reaction(var/datum/reagents/holder, var/created_volume)
+	if(istype(holder.my_atom,/obj/item/weapon/reagent_containers/food/drinks/shaker ) || istype(holder.my_atom.loc,/obj/machinery/chem_dispenser) ) //"halt" melting if we're in a shaker, or if we're in a booze/other dispenser to not mess with cocktail making that requires ice.
+		holder.remove_reagent(WATER, created_volume, safety = 1)
+		holder.add_reagent(ICE, created_volume, null, T0C)
+		return
+	var/allowed_consumption = ( holder.chem_temp - required_temp )/50 //.1 units used for every 5 degrees
+	allowed_consumption = ceil(allowed_consumption*10)/10 //clamp to every .1 units.
+	allowed_consumption = min(allowed_consumption,created_volume) //limit to how many units we have to work with.
+	holder.heating(-allowed_consumption*10,T0C) //each .1 unit will reduce the temp of water (or other shc=1 reagent) by 1 degree.
+	holder.remove_reagent(WATER, created_volume-allowed_consumption, safety = 1)
+	holder.add_reagent(ICE, created_volume-allowed_consumption, null, T0C)
 
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 
@@ -3526,8 +3566,8 @@
 	name = "Mojito"
 	id = MOJITO
 	result = MOJITO
-	required_reagents = list(RUM = 2, SUGARS = 1, SODAWATER = 1, LIMEJUICE = 1)
-	result_amount = 5
+	required_reagents = list(RUM = 2, SUGARS = 1, SODAWATER = 1, LIMEJUICE = 1, MINTESSENCE = 1)
+	result_amount = 6
 
 /datum/chemical_reaction/whiskeytonic
 	name = "Whiskey Tonic"
@@ -4451,6 +4491,40 @@
 	required_reagents = list(POISONBERRYJUICE = 1, SCREWDRIVERCOCKTAIL=1)
 	result_amount = 2
 
+/datum/chemical_reaction/frostbite
+	name = "Frostbite"
+	id = FROSTBITE
+	result = FROSTBITE
+	required_reagents = list(MINTTOXIN = 1, ICE = 1, LIMEJUICE = 1, FROSTOIL = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/mintymule
+	name = "Minty Mule"
+	id = MINTYMULE
+	result = MINTYMULE
+	required_reagents = list(MINTESSENCE = 1, ICED_BEER = 1, LIMEJUICE = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/oldcuban
+	name = "Old Cuban"
+	id = OLDCUBAN
+	result = OLDCUBAN
+	required_reagents = list(RUM = 3, MINTESSENCE = 1, CHAMPAGNE = 2, LIMEJUICE = 1, BITTERS = 1)
+	result_amount = 8
+
+/datum/chemical_reaction/caipirinha
+	name = "Caipirinha"
+	id = CAIPIRINHA
+	result = CAIPIRINHA
+	required_reagents = list(RUM = 4, LIMEJUICE = 1, MINTESSENCE = 2, SUGAR = 1)
+	result_amount = 6
+
+/datum/chemical_reaction/englishgarden
+	name = "English Garden"
+	id = ENGLISHGARDEN
+	result = ENGLISHGARDEN
+	required_reagents = list(MINTESSENCE = 1, GIN = 5, LEMONJUICE = 2, APPLEJUICE = 2)
+	result_amount = 10
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

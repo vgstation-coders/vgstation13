@@ -302,6 +302,7 @@ var/global/list/blood_list = list()
 	gender = PLURAL
 	density = 0
 	anchored = 1
+	reagent = MUCUS
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mucus"
 	random_icon_states = list("mucus")

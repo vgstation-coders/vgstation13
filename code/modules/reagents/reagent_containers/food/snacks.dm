@@ -1842,6 +1842,20 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
+
+/obj/item/weapon/reagent_containers/food/snacks/dinonuggies
+	name = "Dinosaur Nugget"
+	desc = "A true delicacy worth at least 25 good boy points."
+	icon_state = "dinonuggies"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/dinonuggies/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(GRUGZONE, 2)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/blobburger
 	name = "bloburger"
 	desc = "Careful, has a tendency to spill sauce in every direction when squeezed too hard."
@@ -8878,6 +8892,32 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosias and blingpizzas must ever afterward be poison to me."
 	bitesize = 10
 
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkslider
+	name = "gunk slider"
+	desc = "Extremely numerous and weirdly unsatisfying."
+	icon_state = "gunkslider"
+	food_flags = FOOD_MEAT
+	bitesize = 2
+	skitterchance = 75
+	skitterdelay = 20 //Opposite to the super gunk burger, this one wakes up fast and moves a lot
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkslider/New()
+	..()
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 1)
+		desc = "Horrors beyond your comprehension to-go!."
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk
+	name = "gunk sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkslider
+	child_volume = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk/New()
+	..()
+	reagents.add_reagent(ROACHSHELL, 10)
+	reagents.add_reagent(NUTRIMENT, 10)	//spawns 10
+
 /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
 	name = "Gunk-kabob"
 	icon_state = "bugkabob"
@@ -9067,6 +9107,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 1)
+
+//////////////////////////////////
+// YE HAVE LEFT THE GUNK ZONE ///
+////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
 	name = "salt cubes"

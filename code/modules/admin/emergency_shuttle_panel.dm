@@ -8,8 +8,11 @@
 	dat += "Current Status:"
 
 	var/area/shuttle_loc = locate(/area/shuttle/escape/centcom)
-	var/turf/shuttle_turf = pick(shuttle_loc.area_turfs)
-	dat += "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[shuttle_turf.x];Y=[shuttle_turf.y];Z=[shuttle_turf.z]'>"
+	var/turf/shuttle_turf = (shuttle_loc && shuttle_loc.area_turfs && shuttle_loc.area_turfs.len) ? pick(shuttle_loc.area_turfs) : null
+	if(shuttle_turf)
+		dat += "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[shuttle_turf.x];Y=[shuttle_turf.y];Z=[shuttle_turf.z]'>"
+	else
+		dat += "<span>"
 
 	switch (emergency_shuttle.location)
 		if(0)
@@ -27,7 +30,7 @@
 		if(2)
 			dat += "<b>At Central Command</b> (Round Ended)"
 
-	dat += "</a><br>"
+	dat += shuttle_turf ? "</a><br>" : "</span><br>"
 
 	if (!emergency_shuttle.online)
 		dat += "<a href='?src=\ref[src];call_shuttle=1'>Call Shuttle</a><br>"
@@ -57,8 +60,11 @@
 	dat += "<h2>Escape Pods Control</h2>"
 	for (var/pod in emergency_shuttle.escape_pods)
 		var/datum/shuttle/escape/S = pod
-		if (S.linked_area.area_turfs.len > 0)
-			var/turf/T = pick(S.linked_area.area_turfs)
+		var/list/all_turfs = list()
+		for(var/area/shuttle_area in S.linked_areas)
+			all_turfs += shuttle_area.area_turfs
+		if (all_turfs.len > 0)
+			var/turf/T = pick(all_turfs)
 			dat += "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[S.linked_area.name]</a> : [(emergency_shuttle.escape_pods[pod] == "station") ? "<b>station</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=station'>station</a>"] - [(emergency_shuttle.escape_pods[pod] == "transit") ? "<b>transit</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=transit'>transit</a>"] - [(emergency_shuttle.escape_pods[pod] == "centcom") ? "<b>centcom</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=centcom'>centcom</a>"] - <a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=shuttle'>crash into shuttle</a><br>"
 		else
 			dat += "<i>[S.linked_area.name] : missing on current map</i><br>"

@@ -138,50 +138,64 @@
 	var/max_time = 2 MINUTES
 	var/used_time = 0
 	var/mob/living/holder
-	var/mob/living/last_holder
+
+/obj/item/device/pacification_beacon/proc/clear_aura(var/mob/living/target)
+	if(!target)
+		return
+	target.pacify_aura = initial(target.pacify_aura)
+	target.hallucination = initial(target.hallucination)
+
+/obj/item/device/pacification_beacon/proc/deactivate()
+	if(!active)
+		return
+	active = FALSE
+	processing_objects -= src
+	clear_aura(holder)
+	holder = null
+	update_icon()
 
 /obj/item/device/pacification_beacon/attack_self(var/mob/living/user)
 	if(user.incapacitated() || !Adjacent(user))
 		return
-	active = !active
-	if(active)
+	if(!active)
+		if(used_time >= max_time)
+			to_chat(user, "<span class='warning'>\The [src] is spent and no longer functional.</span>")
+			return
+		active = TRUE
 		to_chat(user, "<span class='notice'>You activate \the [src]. A calming field radiates from it.</span>")
 		playsound(user, 'sound/machines/signal.ogg', 50, 1)
 		processing_objects += src
 		holder = user
 	else
 		to_chat(user, "<span class='notice'>You deactivate \the [src]. The calming field dissipates.</span>")
-		processing_objects -= src
-		holder = null
+		deactivate()
 	update_icon()
 
-/obj/item/device/pacification_beacon/dropped()
+/obj/item/device/pacification_beacon/dropped(var/mob/living/user)
 	..()
+	clear_aura(holder)
 	holder = null
 
-/obj/item/device/pacification_beacon/process()
+/obj/item/device/pacification_beacon/equipped(var/mob/living/user, var/slot)
 	..()
-	if(!holder)
+	if(active && isliving(user))
+		holder = user
+
+/obj/item/device/pacification_beacon/process()
+	if(!active)
 		processing_objects -= src
-		last_holder.pacify_aura = initial(last_holder.pacify_aura)
-		last_holder.hallucination = initial(last_holder.hallucination)
 		return
-	if(src in holder.contents)
-		holder.pacify_aura = TRUE
-		holder.hallucination = max(holder.hallucination, 50)
-		last_holder = holder
-	else
-		holder.pacify_aura = initial(holder.pacify_aura)
-		holder.hallucination = initial(holder.hallucination)
+	if(!holder || !(src in holder.contents))
+		clear_aura(holder)
+		holder = null
+		return
+	holder.pacify_aura = TRUE
+	holder.hallucination = max(holder.hallucination, 50)
 	used_time += 2 SECONDS
 	if(used_time >= max_time)
-		to_chat(null, "<span class='warning'>\The [src] emits a final pulse before shutting down completely.</span>")
-		playsound(null, 'sound/machines/alert.ogg', 50, 1)
-		active = FALSE
-		processing_objects -= src
-		holder.pacify_aura = initial(holder.pacify_aura)
-		holder = null
-		update_icon()
+		to_chat(holder, "<span class='warning'>\The [src] emits a final pulse before shutting down completely.</span>")
+		playsound(holder, 'sound/machines/alert.ogg', 50, 1)
+		deactivate()
 
 /obj/item/device/pacification_beacon/update_icon()
 	..()
@@ -192,17 +206,16 @@
 
 /obj/item/device/pacification_beacon/examine(mob/user)
 	desc = initial(desc)
-	if(active)
-		desc += "\nThe device is currently active."
-	desc += "\nRemaining active time: [(max_time - used_time)/10]s."
+	if(used_time >= max_time)
+		desc += "\nThe device is completely spent."
+	else
+		if(active)
+			desc += "\nThe device is currently active."
+		desc += "\nRemaining active time: [(max_time - used_time)/10]s."
 	..()
 
 /obj/item/device/pacification_beacon/Destroy()
-	processing_objects -= src
-	if(holder)
-		holder.pacify_aura = initial(holder.pacify_aura)
-		holder.hallucination = initial(holder.hallucination)
-		holder = null
+	deactivate()
 	..()
 
 //// Shuttle Holopainter

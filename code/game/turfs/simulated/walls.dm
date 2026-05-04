@@ -55,15 +55,20 @@
 	if(src.engraving)
 		to_chat(user, src.engraving)
 
-/turf/simulated/wall/dismantle_wall(devastated = 0, explode = 0)
+/turf/simulated/wall/proc/get_sheet_type()
 	if(mineral == "metal")
-		new /obj/item/stack/sheet/metal(src, 2)
+		return /obj/item/stack/sheet/metal
 	else if(mineral == "wood")
-		new /obj/item/stack/sheet/wood(src, 2)
+		return /obj/item/stack/sheet/wood
+	else if(mineral == "plasteel")
+		return /obj/item/stack/sheet/plasteel
 	else
-		var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
-		if(M)
-			new M(src, 2)
+		return text2path("/obj/item/stack/sheet/mineral/[mineral]")
+
+/turf/simulated/wall/dismantle_wall(devastated = 0, explode = 0)
+	var/spawn_sheet = get_sheet_type()
+	if(spawn_sheet)
+		new spawn_sheet(src, 2)
 
 	if(devastated)
 		new /obj/item/stack/sheet/metal(src)
@@ -214,22 +219,24 @@
 /turf/simulated/wall/r_wall/attack_rotting(mob/user as mob)
 	to_chat(user, "<span class='notice'>This [src] feels rather unstable.</span>")
 
+/turf/simulated/wall/proc/remove_holes(obj/item/tool/solder/S, mob/user)
+	if(!S.remove_fuel(bullet_marks*2,user))
+		return
+	S.playtoolsound(src, 100)
+	to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [S].</span>")
+	bullet_marks = 0
+	icon = initial(icon)
+	if(peepers)
+		reset_view()
+
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(W.attack_delay)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if(istype(W,/obj/item/tool/solder) && bullet_marks)
-		var/obj/item/tool/solder/S = W
-		if(!S.remove_fuel(bullet_marks*2,user))
-			return
-		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-		to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [W].</span>")
-		bullet_marks = 0
-		icon = initial(icon)
-		if(peepers)
-			reset_view()
+	if(issolder(W) && bullet_marks)
+		remove_holes(W,user)
 		return
 
 	//Get the user's location
@@ -341,7 +348,7 @@
 		var/obj/item/weapon/pickaxe/PK = W
 		if(!(PK.diggables & DIG_WALLS))
 			return
-		if(mineral == "diamond")
+		if(walltype == "diamond")
 			return
 
 		user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \
@@ -349,7 +356,7 @@
 		PK.playtoolsound(src, 100)
 		if(do_after(user, src, (MINE_DURATION * PK.toolspeed) * 10))
 			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
-			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
+			"<span class='notice'>Your [PK.name] tears though the last of \the [src], leaving nothing but a girder.</span>")
 			dismantle_wall()
 
 			var/pdiff = performWallPressureCheck(src)
@@ -384,7 +391,7 @@
 	rotting = 0
 
 /turf/simulated/wall/proc/thermitemelt(var/mob/user)
-	if(mineral == "diamond")
+	if(walltype == "diamond")
 		return
 	var/obj/effect/overlay/O = new/obj/effect/overlay(src)
 	O.name = "thermite"
@@ -427,7 +434,7 @@
 
 //Generic wall melting proc.
 /turf/simulated/wall/melt()
-	if(mineral == "diamond")
+	if(walltype == "diamond")
 		return
 
 	src.ChangeTurf(/turf/simulated/floor/plating)

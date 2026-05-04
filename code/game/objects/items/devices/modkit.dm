@@ -26,15 +26,14 @@
 
 	var/to_type = null
 	var/parts_left = 0
-	var/j = 0
-
+	var/modifiable=FALSE
 	for(var/i=1;i<=original.len;i++)
 		var/original_type = original[i]
 		if(istype(O,original_type))
 			to_type = finished[i]
 			parts_left = parts[i]
-			j = i
-	if(!to_type)
+			modifiable=TRUE
+	if(!modifiable)
 		to_chat(user, "<span class='warning'>You cannot modify \the [O] with this kit.</span>")
 		return
 	if(parts_left <= 0)
@@ -46,15 +45,18 @@
 	if(!isturf(O.loc))
 		to_chat(user, "<span class='warning'>\The [O] must be safely placed on the ground for modification.</span>")
 		return
+	
+	on_modify(O,user,to_type)
+
+/obj/item/device/modkit/proc/on_modify(var/obj/O, var/mob/user,var/to_type)
 	playtoolsound(user.loc, 100)
 	var/N = new to_type(O.loc)
 	user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] into \the [N].</span>","<span class='warning'>You open \the [src] and modify \the [O] into \the [N].</span>")
 	qdel(O)
 
-
 	var/has_parts = 0
 	for(var/i=1;i<=original.len;i++)
-		if(i == j)
+		if(finished[i]==to_type)
 			parts[i]--
 		if(parts[i] > 0)
 			has_parts = 1
@@ -213,3 +215,35 @@
 	parts[1] =	1
 	original[1] = /obj/item/weapon/gun/energy/kinetic_accelerator
 	finished[1] = /obj/item/weapon/gun/energy/kinetic_accelerator/shotgun
+
+
+/obj/item/device/modkit/suitradshielding
+	name = "Exosuit radiation shielding kit"
+	desc = "A set of pre-cut plates, fasteners and joints that can be applied to an exosuit for increased radiation shielding at the cost of reduced movement."
+
+/obj/item/device/modkit/suitradshielding/New()
+	..()
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	1
+	original[1] = /obj/item/clothing/suit/space
+	finished[1] = null
+
+/obj/item/device/modkit/suitradshielding/on_modify(var/obj/O, var/mob/user,var/to_type)
+	if(locate(src.type) in O.contents)
+		to_chat(user, "<span class='notice'>\The [O] is already modified.</span>")
+		return
+	if(!user.drop_item(src))
+		return
+	user.visible_message("<span class='warning'>[user] opens \the [src] and adds additional shielding to \the [O].</span>","<span class='warning'>You open \the [src] and add additional shielding to \the [O].</span>")
+	O.name = "lead-lined " + O.name
+	O.desc = O.desc + "\nLead plates have been added to provide additional radiation shielding."
+	O.contents+=src
+	src.loc=O
+	var/obj/item/clothing/C=O
+	C.slowdown+=0.4
+	C.armor["rad"]+=25
+	C.armor_absorb["rad"]+=4.0
+	

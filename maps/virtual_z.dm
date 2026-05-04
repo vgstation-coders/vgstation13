@@ -11,7 +11,7 @@
 	var/size_y = ALLOCATION_SMALL
 	var/datum/zLevel/parent_z
 	var/active = TRUE
-	var/level_type = VZ_DEFAULT
+	var/level_type = VZ_SPACE
 
 	var/list/area/areas = list()
 	var/list/shuttle_landing_zones = list()
@@ -49,6 +49,9 @@
 	var/transition_channel = "Default" //The "galaxy" the vlevel is in; can only drift between vlevels in the same channel
 	var/transitionLoops = FALSE //if true, transition sends you back to the same v-level
 	var/list/transition_crosswrap_v=null // list(z_north,z_south,z_east,z_west). when you hit the edge, instead of drifting to a random zlevel or looping on the current one, teleports you to the corresponding edge on the z-level in the list.
+
+	// Cached mineral replacement type for ruin post-processing; computed on first call to get_mineral_replacement()
+	var/cached_mineral_replacement = null
 
 /datum/virtual_z/New(var/datum/zLevel/z, var/input_size_x, var/input_size_y, var/input_x = 0, var/input_y = 0, var/skip_turf_setup = FALSE, var/system = FALSE)
 	. = ..()
@@ -288,6 +291,33 @@
 		if(isopensurface(A))
 			climate.register_weather_turf(T)
 
+// Returns the turf type that /turf/unsimulated/mineral tiles should be converted to when a ruin is placed.
+// Pulls from the planet's already-built generator (SSmapping.current_mapgen) so we don't spin up a throwaway
+// generator datum per ruin. Result is cached on the virtual_z.
+/datum/virtual_z/proc/get_mineral_replacement()
+	if(cached_mineral_replacement)
+		return cached_mineral_replacement
+
+	var/datum/planetGenerator/mapgen = SSmapping.current_mapgen
+	if(mapgen?.cave_biome_table?.len)
+		for(var/temp_key in mapgen.cave_biome_table)
+			var/list/humidity_list = mapgen.cave_biome_table[temp_key]
+			for(var/humidity_key in humidity_list)
+				var/biome_type = humidity_list[humidity_key]
+				var/datum/biome/cave_biome = SSmapping.biomes[biome_type]
+				if(istype(cave_biome, /datum/biome/cave))
+					var/datum/biome/cave/cave_biome_casted = cave_biome
+					if(cave_biome_casted.closed_turf_types?.len)
+						cached_mineral_replacement = cave_biome_casted.closed_turf_types[1]
+						break
+			if(cached_mineral_replacement)
+				break
+
+	if(!cached_mineral_replacement)
+		cached_mineral_replacement = /turf/unsimulated/mineral/random
+
+	return cached_mineral_replacement
+
 // Replaces certain turfs in the ruin based on the planet's characteristics
 /datum/virtual_z/proc/post_process_ruin_turfs(datum/map_element/ruin/ruin_to_use, list/spawned_objects)
 	if(!ruin_to_use || !planet)
@@ -296,27 +326,7 @@
 	var/datum/planet_type/P = planet
 	var/default_baseturf = P.default_baseturf
 
-	var/datum/planetGenerator/mapgen = new P.mapgen
-	var/mineral_replacement = null
-
-	// Get mineral replacement type from cave biome table if available
-	if(mapgen.cave_biome_table && mapgen.cave_biome_table.len)
-		for(var/temp_key in mapgen.cave_biome_table)
-			var/list/humidity_list = mapgen.cave_biome_table[temp_key]
-			for(var/humidity_key in humidity_list)
-				var/biome_type = humidity_list[humidity_key]
-				var/datum/biome/cave_biome = SSmapping.biomes[biome_type]
-				if(cave_biome && istype(cave_biome, /datum/biome/cave))
-					var/datum/biome/cave/cave_biome_casted = cave_biome
-					if(cave_biome_casted.closed_turf_types && cave_biome_casted.closed_turf_types.len)
-						mineral_replacement = cave_biome_casted.closed_turf_types[1]
-						break
-			if(mineral_replacement)
-				break
-
-	// Fallback to a default mineral type if none found
-	if(!mineral_replacement)
-		mineral_replacement = /turf/unsimulated/mineral/random
+	var/mineral_replacement = get_mineral_replacement()
 
 	// Process all turfs in the spawned objects
 	for(var/area/A in spawned_objects)

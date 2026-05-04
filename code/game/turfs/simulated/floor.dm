@@ -54,6 +54,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	//plated catwalk vars
 	var/hatch_installed = FALSE
 	var/hatch_open = FALSE
+	var/catwalk_suffix = ""
 
 /turf/simulated/floor/New()
 	create_floor_tile()
@@ -366,6 +367,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			return //diamond doesn't break
 		if(material=="plastic")
 			return //you can't break legos
+		if(material=="lead")
+			return
 		if(material=="phazon") //Phazon shatters
 			spawn(rand(2,10))
 				playsound(src, "shatter", 70, 1)
@@ -429,6 +432,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	icon_plating = "plating"
 	set_light(0)
 	floor_tile = null
+	catwalk_suffix = ""
 	intact = 0
 	fix_floor()
 	remove_paint_overlay()
@@ -465,6 +469,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	T.update_icon()
 	floor_tile = new T.type(null)
 	material = floor_tile.material
+	if(istype(T, /obj/item/stack/tile/plated_catwalk))
+		var/obj/item/stack/tile/plated_catwalk/PC = T
+		catwalk_suffix = PC.catwalk_suffix
 	//Becomes a teleport destination for other phazon tiles
 	if(material=="phazon")
 		phazontiles += src
@@ -694,14 +701,16 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 /turf/simulated/proc/is_wet() //Returns null if no puddle, otherwise returns the puddle
 	return locate(/obj/effect/overlay/puddle) in src
 
-/turf/simulated/proc/wet(delay = 800, slipperiness = TURF_WET_WATER)
+/turf/simulated/proc/wet(delay = 800, slipperiness = TURF_WET_WATER, custom_color)
 	var/obj/effect/overlay/puddle/P = is_wet()
 	if(P)
 		if(slipperiness > P.wet)
 			P.wet = slipperiness
 			P.lifespan = max(delay, P.lifespan)
 	else
-		new /obj/effect/overlay/puddle(src, slipperiness, delay)
+		P = new /obj/effect/overlay/puddle(src, slipperiness, delay)
+	if(custom_color)
+		P.color = custom_color
 
 /turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
 	var/obj/effect/overlay/puddle/P = is_wet()
@@ -743,7 +752,10 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/levelupdate()
 	if(is_plated_catwalk())
-		return
+		intact = 0
+		for(var/obj/O in src)
+			if(O.level == LEVEL_BELOW_FLOOR)
+				O.hide(0)
 	else
 		..()
 
@@ -775,7 +787,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/relativewall()
 	if(is_plated_catwalk())
-		icon_state = "pcat[..()]"
+		icon_state = "pcat[..()][catwalk_suffix]"
 		overlays.Cut()
 		overlays += mutable_appearance(icon='icons/turf/floors.dmi', icon_state="plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
 		if(!hatch_open && hatch_installed)

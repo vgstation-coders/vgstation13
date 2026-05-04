@@ -59,13 +59,14 @@
 	var/petable=FALSE
 	var/lastmate=0
 	var/matingcooldown=60 //2 minutes
-	var/max_local_population=6 //to prevent total overpopulation
+	var/max_local_population=8 //to prevent total overpopulation
 	var/healthregen=0.01
 	var/lasthealth=0.0
 	var/ticks_dead=0
 	
 	//cache vars. we use this for extra SPEEEEEED. so you can ignore it for vving stuff.
 	var/list/cache_objects_in_view=list()
+	var/list/cache_objects_in_extended_area=list()
 
 
 /mob/living/simple_animal/complex/New(var/loc)
@@ -139,6 +140,7 @@
 		ticks_this_state++
 
 	cache_objects_in_view = view(src,7) //refresh it every life tick.
+	cache_objects_in_extended_area = range(src,16)
 
 	reagents?.metabolize(src)
 
@@ -158,11 +160,11 @@
 		death()
 		return 0
 	if(mob_max_age && mob_age > mob_max_age && !(animal_flags&ANIMAL_FLAG_NEVER_AGE) )
-		var/chancetokeelover = (mob_age-mob_max_age)/mob_max_age
+		var/chancetokeelover = 0.5*((mob_age-mob_max_age)/mob_max_age)
 		chancetokeelover = 1-(1/(chancetokeelover+1))
-		// math formula: 1-\frac{1}{\frac{\left(x-m\right)}{m}+1}
+		// math formula: 1-\frac{1}{.5\left(\frac{\left(x-m\right)}{m}\right)+1} 
 		//basically, the older you are, the more likley you are to die.
-		//if you are twice as old as the max age, you have a 50% chance to die.
+		//if you are 3x as old as the max age, you have a 50% chance to die.
 		//this is ran every tick, by the way, so the probabilities add up.
 		chancetokeelover*=0.25 //ok nevermind reduce the chance a bit it happens a bit too fast.
 		if(rand() < chancetokeelover)
@@ -236,7 +238,7 @@
 	abort_target()
 
 	//attempt reproduction only while full
-	if(nutrition >= (max_food- get_offspring_cost()*2) && get_offspring_cost() && prob(20) && lastmate<=0)
+	if(nutrition >= (max_food- get_offspring_cost()*2) && get_offspring_cost() && prob(50) && lastmate<=0)
 		behavior_state=ANIMAL_STATE_MATING
 		return FALSE
 
@@ -341,8 +343,8 @@
 	return TRUE
 
 /mob/living/simple_animal/complex/proc/tick_state_mating()
-	if(!verify_target(target,8))
-		for(var/atom/A in cache_objects_in_view)
+	if(!verify_target(target,16)) //ignores line of sight and has increased range to help sparse populations not die out.
+		for(var/atom/A in cache_objects_in_extended_area )
 			if(istype(A,/mob/living/simple_animal/complex))
 				var/mob/living/simple_animal/complex/CA=A
 				if(can_offspring(CA) && CA.can_offspring(src) && CA.behavior_state==ANIMAL_STATE_MATING && !CA.target) //you better believe we're going to enforce the communicative property.
@@ -350,6 +352,8 @@
 					target=CA
 					CA.visible_message("<b>\the [CA]</b> looks lovingly at \the [src].")
 					CA.target=src
+					walk_to(src,CA,0,src.movespeed)
+					walk_to(CA,src,0,CA.movespeed)
 		if(!target) //if we can't find one, exit back to idle
 			abort_target()
 			return FALSE
@@ -633,13 +637,13 @@
 		return FALSE
 	if(is_pacified())
 		return FALSE
-	if(istype(trespasser,/mob/living/simple_animal))
-		var/mob/living/simple_animal/A=trespasser
-		if(A.pacify_aura)
+	if(isliving(trespasser))
+		var/mob/living/L = trespasser
+		if(L.pacify_aura)
 			return FALSE
 	if(istype(trespasser,/mob/living/simple_animal/complex))
 		var/mob/living/simple_animal/complex/A=trespasser
-		if(A.pacify_aura || (A.behavior_flags & ANIMAL_BEHAVIOR_UNDESIRABLE) )
+		if(A.behavior_flags & ANIMAL_BEHAVIOR_UNDESIRABLE)
 			return FALSE
 	return !is_kin(trespasser)
 
@@ -697,7 +701,7 @@
 	if(mate.type!=src.type)
 		return FALSE
 	var/localcount=0
-	for(var/mob/living/simple_animal/complex/A in cache_objects_in_view)
+	for(var/mob/living/simple_animal/complex/A in cache_objects_in_extended_area)
 		if(A.type==src.type && A.stat!=DEAD)
 			localcount++
 	if(localcount>max_local_population)

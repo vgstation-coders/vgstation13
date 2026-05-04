@@ -4,14 +4,13 @@
 
 //Fence smashing sound downloaded from http://freesound.org/people/hintringer/sounds/274768/
 
-#define CUT_TIME (20 SECONDS)
-#define CLIMB_TIME (20 SECONDS)
+#define CLIMB_TIME (10 SECONDS)
 
 #define NO_HOLE 0 //section is intact
 #define SMALL_HOLE 1 //small hole in the section - can pass small items through.
 #define MEDIUM_HOLE 2 //medium hole in the section - can climb through (takes 20 seconds)
 #define LARGE_HOLE 3 //large hole in the section - can walk through
-#define MAX_HOLE_SIZE LARGE_HOLE
+#define CUT_THROUGH 4 //entirely gone!
 
 /obj/structure/fence
 	name = "fence"
@@ -20,16 +19,14 @@
 	anchored = 1
 	pass_flags_self = PASSGRILLE
 	icon = 'icons/obj/structures/fence.dmi'
-	icon_state = "straight"
+	icon_state = "straight0"
+	var/uncut_state = "straight"
+	sheet_type = /obj/item/stack/sheet/plasteel
+	sheet_amt = 2
 
+	var/cut_time = 100
 	var/cuttable = TRUE
 	var/hole_size= NO_HOLE
-	var/invulnerable = FALSE
-
-/obj/structure/fence/New()
-	..()
-
-	update_cut_status()
 
 /obj/structure/fence/examine(mob/user)
 	.=..()
@@ -42,48 +39,74 @@
 		if(LARGE_HOLE)
 			user.show_message("\The [src] has been completely cut through.", MESSAGE_SEE)
 
-/obj/structure/fence/end
-	icon_state = "end"
+/obj/structure/fence/canSmoothWith()
+	var/static/list/smoothables = list(
+		/obj/structure/fence,
+		/obj/structure/grille,
+		/turf/simulated/wall,
+	)
+	return smoothables
+
+/obj/structure/fence/relativewall()
+	. = ..()
+	update_junction()
+
+/obj/structure/fence/change_dir(new_dir, changer)
+	. = ..()
+	relativewall()
+
+/obj/structure/fence/proc/update_junction()
+	uncut_state = initial(uncut_state)
+	switch(junction)
+		if(NORTH|SOUTH,NORTH|SOUTH|EAST,NORTH|SOUTH|WEST)
+			dir = WEST
+		if(EAST|WEST,NORTH|EAST|WEST,SOUTH|EAST|WEST)
+			dir = NORTH
+		if(NORTH,SOUTH,EAST,WEST,NORTH|EAST,SOUTH|EAST,NORTH|WEST,SOUTH|WEST)
+			uncut_state = "endcorner"
+			dir = junction
+	update_cut_status()
+
+/obj/structure/fence/post
+	icon_state = "post0"
+	uncut_state = "post"
 	cuttable = FALSE
 
 /obj/structure/fence/corner
-	icon_state = "corner"
-	cuttable = FALSE
-
-/obj/structure/fence/post
-	icon_state = "post"
-	cuttable = FALSE
+	icon_state = "endcorner0"
+	uncut_state = "endcorner"
 
 /obj/structure/fence/cut/small
-	icon_state = "straight_cut1"
 	hole_size = SMALL_HOLE
 
 /obj/structure/fence/cut/medium
-	icon_state = "straight_cut2"
 	hole_size = MEDIUM_HOLE
 
 /obj/structure/fence/cut/large
-	icon_state = "straight_cut3"
 	hole_size = LARGE_HOLE
 
 /obj/structure/fence/attackby(obj/item/W, mob/user)
-	if(W.is_wirecutter(user) && !shock(user, 100, W.siemens_coefficient))
+	if(istype(W,/obj/item/weapon/pickaxe/drill))
+		user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
+							"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
+		if(do_after(user, src, cut_time/2))
+			user.visible_message("<span class='notice'>\The [user] cuts through \the [src] with \the [W].</span>",
+							"<span class='info'>You cut \the [src] back into rods with \the [W].</span>")
+			dismantle(user)
+		return
+
+	if((W.sharpness_flags & SHARP_BLADE) && !shock(user, 100, W.siemens_coefficient))
 		if(!cuttable)
 			to_chat(user, "<span class='notice'>This section of the fence can't be cut.</span>")
 			return
 
-		if(invulnerable)
-			to_chat(user, "<span class='notice'>This fence is too strong to cut through.</span>")
-			return
-
 		var/current_stage = hole_size
-		if(current_stage >= MAX_HOLE_SIZE)
-			return
 
-		user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
-		"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
+		if(cut_time)
+			user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
+			"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
 
-		if(do_after(user, src, CUT_TIME))
+		if(do_after(user, src, cut_time/W.sharpness))
 			if(current_stage == hole_size)
 
 				switch(++hole_size)
@@ -97,14 +120,50 @@
 						else
 							to_chat(user, "<span class='info'>You could probably fit yourself through that hole now. Although climbing through would be much faster if you made it even bigger.</span>")
 					if(LARGE_HOLE)
-						visible_message("<span class='notice'>\The [user] completely cuts through \the [src].</span>")
+						visible_message("<span class='notice'>\The [user] cuts into \the [src] even more.</span>")
 						to_chat(user, "<span class='info'>The hole in \the [src] is now big enough to walk through.</span>")
+					if(CUT_THROUGH)
+						visible_message("<span class='notice'>\The [user] completely cuts through \the [src].</span>")
+						to_chat(user, "<span class='info'>\The [src] is now rods again.</span>")
+						dismantle(user)
+						return
 
 				update_cut_status()
 		return
 
+	if(hole_size && istype(W,sheet_type))
+		var/obj/item/stack/S = W
+		if(S.use(1))
+			to_chat(user, "<span class='info'>You repair \the [src] with a rod.</span>")
+			hole_size = NO_HOLE
+			update_cut_status()
+			return
+
 	if(hole_size >= SMALL_HOLE)
 		user.drop_item(W, get_turf(src))
+
+/obj/structure/fence/attack_paw(mob/user)
+	if(M_HULK in user.mutations)
+		if(prob(50))
+			user.do_attack_animation(src, user)
+			visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
+			user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+			dismantle(user)
+
+/obj/structure/fence/attack_alien(mob/living/user)
+	if(prob(50))
+		user.do_attack_animation(src, user)
+		visible_message("<span class='danger'>[user] slices [src] apart!</span>")
+		playsound(src, 'sound/effects/fence_smash.ogg', 100, 1)
+		dismantle(user)
+
+/obj/structure/fence/attack_animal(mob/living/simple_animal/user)
+	if(user.environment_smash_flags & SMASH_WALLS)
+		if(prob(50))
+			user.do_attack_animation(src, user)
+			visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
+			playsound(src, 'sound/effects/fence_smash.ogg', 100, 1)
+			dismantle(user)
 
 /obj/structure/fence/attack_hand(mob/user)
 	if(user.a_intent == I_HURT)
@@ -116,6 +175,7 @@
 		user.visible_message("<span class='danger'>\The [user] hits \the [src]!</span>")
 		playsound(src, 'sound/effects/fence_smash.ogg', 30 * strength, 1) //Sound is louder the stronger you are
 		shock(user, 100)
+		attack_paw(user)
 		return 1
 
 	if(hole_size == MEDIUM_HOLE)
@@ -133,21 +193,21 @@
 	return 1
 
 /obj/structure/fence/proc/update_cut_status()
+	setDensity(TRUE)
+
 	if(!cuttable)
+		icon_state = "[uncut_state]0"
 		return
 
-	density = 1
+	icon_state = "[uncut_state][hole_size]"
+	if(hole_size == LARGE_HOLE)
+		setDensity(FALSE)
 
-	switch(hole_size)
-		if(NO_HOLE)
-			icon_state = initial(icon_state)
-		if(SMALL_HOLE)
-			icon_state = "straight_cut1"
-		if(MEDIUM_HOLE)
-			icon_state = "straight_cut2"
-		if(LARGE_HOLE)
-			icon_state = "straight_cut3"
-			setDensity(FALSE)
+	cut_time = hole_size < LARGE_HOLE ? initial(cut_time) : 0
+
+/obj/structure/fence/proc/dismantle(mob/user)
+	drop_stack(sheet_type,get_turf(src),sheet_amt,user)
+	qdel(src)
 
 /obj/structure/fence/Bumped(atom/user)
 	if(ismob(user))
@@ -183,6 +243,19 @@
 			return 0
 	return 0
 
+/obj/structure/fence/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+			return
+		if(2.0)
+			if(prob(50))
+				new /obj/item/stack/rods(loc,1)
+				qdel(src)
+				return
+		if(3.0)
+			return
+
 //FENCE DOORS
 
 /obj/structure/fence/door
@@ -191,11 +264,18 @@
 	icon_state = "door_closed"
 	cuttable = FALSE
 	var/open = FALSE
+	var/inverted = FALSE //for relativewalling
 
 /obj/structure/fence/door/New()
 	..()
 	set_up_access()
 	update_door_status()
+
+/obj/structure/fence/door/update_junction()
+	if((junction & NORTH) || (junction & SOUTH))
+		dir = inverted ? EAST : WEST
+	if((junction & EAST) || (junction & WEST))
+		dir = inverted ? SOUTH : NORTH
 
 /obj/structure/fence/door/opened
 	icon_state = "door_opened"
@@ -239,33 +319,29 @@
 	name = "secure fence door"
 	desc = "A fence door with a door latch. It can only be opened and closed from one direction."
 
-	var/permitted_direction = SOUTH
-
-/obj/structure/fence/door/secure/from_south
-	permitted_direction = SOUTH
-
-/obj/structure/fence/door/secure/from_north
-	permitted_direction = NORTH
-
-/obj/structure/fence/door/secure/from_east
-	permitted_direction = EAST
-
-/obj/structure/fence/door/secure/from_west
-	permitted_direction = WEST
+/obj/structure/fence/door/secure/inverted
+	inverted = TRUE
 
 /obj/structure/fence/door/secure/can_open(mob/user)
 	//User must be standing in the permitted direction from the door, or must have telekinesis
-	if((M_TK in usr.mutations) || (get_dir(src, user) == permitted_direction))
+	if((M_TK in usr.mutations) || (get_dir(src, user) == dir))
 		return TRUE
 	else
 		to_chat(user, "<span class='warning'>You can't reach the door latch from here!</span>")
 		return FALSE
 
-#undef CUT_TIME
+/obj/structure/fence/door/secure/AltClick(mob/user)
+	// must be on same turf
+	if(!user.incapacitated() && get_turf(user) == get_turf(src) && user.dexterity_check() && allowed(user))
+		inverted = !inverted
+		change_dir(opposite_dirs[dir])
+		to_chat(user, "<span class='notice'>You flip the door latch to the other side of the door. It now faces [dir2text(dir)].</span>")
+	. = ..()
+
 #undef CLIMB_TIME
 
 #undef NO_HOLE
 #undef SMALL_HOLE
 #undef MEDIUM_HOLE
 #undef LARGE_HOLE
-#undef MAX_HOLE_SIZE
+#undef CUT_THROUGH

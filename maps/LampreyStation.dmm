@@ -302,8 +302,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
@@ -312,8 +311,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
@@ -323,8 +321,7 @@
 /obj/structure/window/full/reinforced,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
@@ -332,8 +329,7 @@
 /obj/structure/grille,
 /obj/structure/window/full/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -425,8 +421,7 @@
 	icon_state = "2-4"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
@@ -779,16 +774,8 @@
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
-"abY" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/simulated/floor/plating/damaged/broken,
-/area/lamprey/detoxins)
 "abZ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/lamprey/detoxins)
 "aca" = (
@@ -809,15 +796,13 @@
 /turf/simulated/floor/wood,
 /area/lamprey/detoxins)
 "ace" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/wood{
 	icon_state = "wood-broken6"
 	},
 /area/lamprey/detoxins)
 "acf" = (
-/obj/structure/fence/corner,
+/obj/structure/fence,
 /turf/simulated/floor/plating/damaged/broken,
 /area/lamprey/detoxins)
 "acg" = (
@@ -1037,8 +1022,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
@@ -1547,8 +1531,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/wall/r_wall,
 /area/lamprey/mining)
@@ -1584,8 +1567,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
@@ -2116,8 +2098,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/wall/r_wall,
@@ -2554,8 +2535,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/mining)
@@ -2948,8 +2928,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
@@ -6658,8 +6637,7 @@
 	},
 /obj/structure/window/full/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/warzonebar)
@@ -7927,17 +7905,6 @@
 	icon_state = "neutral"
 	},
 /area/lamprey/foreporthallways)
-"asL" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/turf/simulated/floor/plating,
-/area/lamprey/foreporthallways)
 "asM" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -8739,19 +8706,6 @@
 "auK" = (
 /turf/unsimulated/floor/asteroid,
 /area/lamprey/catchall)
-"auL" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/lamprey/mining)
 "auM" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -12878,8 +12832,7 @@
 	},
 /obj/structure/window/full/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/warzonemaintenanceblob)
@@ -17860,8 +17813,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
@@ -18001,8 +17953,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard{
 	icon_state = "small";
@@ -20691,8 +20642,7 @@
 "aXQ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/item/weapon/shard{
@@ -21037,8 +20987,7 @@
 	opacity = 0
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
@@ -21554,8 +21503,7 @@
 /area/lamprey/foreporthallways)
 "aZJ" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -22116,8 +22064,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/wood,
 /area/lamprey/darkfarm)
@@ -22781,8 +22728,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/warzonemaintenanceblob)
@@ -23560,8 +23506,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/door/poddoor{
 	density = 0;
@@ -23966,14 +23911,6 @@
 "bfp" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/lamprey/centralhallways)
-"bfq" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /turf/simulated/floor/plating,
 /area/lamprey/centralhallways)
 "bfr" = (
@@ -26267,16 +26204,14 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
 "bkg" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard{
 	icon_state = "medium"
@@ -26401,8 +26336,7 @@
 	opacity = 0
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating{
 	icon = 'icons/turf/new_snow.dmi';
@@ -26540,8 +26474,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/door/poddoor{
 	density = 0;
@@ -27071,8 +27004,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
@@ -27608,26 +27540,6 @@
 	icon_state = "floorgrime"
 	},
 /area/lamprey/permabrig)
-"bmZ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
-	id_tag = "Secure Gate";
-	name = "Security Blast Door";
-	opacity = 0
-	},
-/turf/simulated/floor/plating,
-/area/lamprey/security)
 "bna" = (
 /obj/structure/closet/secure_closet/brig,
 /turf/simulated/floor{
@@ -28005,8 +27917,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
@@ -28138,8 +28049,7 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -28995,8 +28905,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/centralhallways)
@@ -29007,8 +28916,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/centralhallways)
@@ -29419,8 +29327,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
@@ -29798,8 +29705,7 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/centralhallways)
@@ -31232,8 +31138,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
@@ -31275,8 +31180,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/door/poddoor{
 	density = 0;
@@ -33838,8 +33742,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced/tinted,
 /obj/item/weapon/shard{
@@ -33998,14 +33901,6 @@
 	nitrogen = 0.01;
 	oxygen = 0.01
 	},
-/area/lamprey/originmaintenanceblob)
-"bBl" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
 /area/lamprey/originmaintenanceblob)
 "bBm" = (
 /obj/structure/grille,
@@ -34560,8 +34455,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide,
 /obj/machinery/door/window,
@@ -35638,28 +35532,6 @@
 	icon_state = "dark"
 	},
 /area/lamprey/permabrig)
-"bEU" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
-	id_tag = "Secure Gate";
-	name = "Security Blast Door";
-	opacity = 0
-	},
-/turf/simulated/floor/plating,
-/area/lamprey/permabrig)
 "bEV" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -35669,8 +35541,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
@@ -36590,8 +36461,7 @@
 /area/lamprey/ghettosecuritymaintenanceblob)
 "bGX" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -36608,8 +36478,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /obj/effect/decal/warning_stripes{
@@ -36630,8 +36499,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -39065,8 +38933,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/tape{
 	icon_state = "engineering_door"
@@ -40206,8 +40073,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -40219,8 +40085,7 @@
 /area/lamprey/centralhallways)
 "bPl" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -40235,8 +40100,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -40837,8 +40701,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/originmaintenanceblob)
@@ -42326,8 +42189,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -42614,8 +42476,7 @@
 /area/lamprey/medbaywarehousemaintenanceblob)
 "bUP" = (
 /obj/structure/wc/urinal{
-	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
-	pixel_y = 32
+	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth."
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -43636,8 +43497,7 @@
 "bWX" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -43648,8 +43508,7 @@
 "bWY" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -43660,8 +43519,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -44424,20 +44282,6 @@
 /obj/structure/sign/directions/evac,
 /turf/simulated/wall,
 /area/lamprey/tinyroomzone)
-"bYZ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/turf/simulated/floor/plating,
-/area/lamprey/escape)
 "bZa" = (
 /obj/structure/bed/chair{
 	dir = 4
@@ -45300,8 +45144,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/toolstorage)
@@ -46557,8 +46400,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/porthallways)
@@ -47095,8 +46937,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard,
 /obj/item/stack/rods,
@@ -47130,8 +46971,7 @@
 "cfp" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/item/weapon/shard{
@@ -48070,24 +47910,13 @@
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/researchwarehousemaintenanceblob)
-"chA" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/lamprey/researchwarehousemaintenanceblob)
 "chB" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard,
 /obj/item/stack/rods,
@@ -48179,19 +48008,6 @@
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "unloading"
-	},
-/turf/simulated/floor/plating,
-/area/lamprey/researchwarehousemaintenanceblob)
-"chN" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/researchwarehousemaintenanceblob)
@@ -48925,8 +48741,7 @@
 "cjw" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -48937,8 +48752,7 @@
 "cjx" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -49147,8 +48961,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -49316,8 +49129,7 @@
 /obj/structure/window/full/reinforced/tinted,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -49397,8 +49209,7 @@
 "ckv" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -49423,8 +49234,7 @@
 "ckx" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -49522,8 +49332,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/conveyor/auto,
 /mob/living/carbon/monkey/punpun,
@@ -49973,8 +49782,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/botaneva)
@@ -50416,8 +50224,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/hellmaintenanceblob)
@@ -50553,8 +50360,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
@@ -51168,8 +50974,7 @@
 "cop" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -51466,8 +51271,7 @@
 /area/lamprey/tinyroomzone)
 "cpe" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/machinery/conveyor/auto{
@@ -51477,8 +51281,7 @@
 /area/lamprey/tinyroomzone)
 "cpf" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/conveyor/auto{
 	dir = 4
@@ -51642,8 +51445,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -51664,8 +51466,7 @@
 "cpE" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -51681,8 +51482,7 @@
 "cpF" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -51731,8 +51531,7 @@
 "cpH" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -52090,8 +51889,7 @@
 "cqD" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/full/reinforced/tinted,
@@ -52395,8 +52193,7 @@
 	tag = "icon-loading_area (EAST)"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -52912,8 +52709,7 @@
 "csv" = (
 /obj/machinery/vending/hydronutrients,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -53369,8 +53165,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/researchwarehousemaintenanceblob)
@@ -53558,8 +53353,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/botanymaintenanceblob)
@@ -53892,8 +53686,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/grille/invulnerable,
 /turf/simulated/floor/plating,
@@ -56006,8 +55799,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced/tinted,
 /turf/simulated/floor/plating{
@@ -58490,8 +58282,7 @@
 "cFu" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -58916,8 +58707,7 @@
 	},
 /obj/item/stack/rods,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -59579,8 +59369,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard{
 	icon_state = "medium"
@@ -60975,8 +60764,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/botaneva)
@@ -61328,20 +61116,6 @@
 "cLT" = (
 /turf/unsimulated/wall/other,
 /area/lamprey/bridge)
-"cLU" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/turf/simulated/floor/plating,
-/area/lamprey/researchwarehousemaintenanceblob)
 "cLV" = (
 /obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
@@ -61361,8 +61135,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
 /turf/simulated/floor{
@@ -61456,8 +61229,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/door/firedoor/border_only{
 	dir = 8;
@@ -61678,8 +61450,7 @@
 "cMC" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -61690,8 +61461,7 @@
 "cMD" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -62080,8 +61850,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/researchwarehousemaintenanceblob)
@@ -62102,8 +61871,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -62594,8 +62362,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/researchwarehousemaintenanceblob)
@@ -62616,8 +62383,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/soap/syndie,
 /turf/simulated/floor{
@@ -67347,8 +67113,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/lamprey/bottomrung)
@@ -69048,8 +68813,7 @@
 "ddy" = (
 /obj/machinery/vending/hatdispenser,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/lamprey/miniatureboxstationreplica)
@@ -69583,8 +69347,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -70626,8 +70389,7 @@
 	},
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -70749,8 +70511,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/aftstarboardhallways)
@@ -72268,8 +72029,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/engineering)
@@ -72393,8 +72153,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/full/reinforced/tinted,
 /turf/simulated/floor/plating,
@@ -74266,8 +74025,7 @@
 /area/lamprey/miniatureboxstationreplica)
 "dnl" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -76160,8 +75918,7 @@
 "dqC" = (
 /obj/machinery/r_n_d/server/robotics,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -76909,14 +76666,6 @@
 	req_access_txt = "48"
 	},
 /turf/simulated/floor/plating,
-/area/lamprey/miniatureboxstationreplica)
-"drY" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor{
-	icon_state = "white"
-	},
 /area/lamprey/miniatureboxstationreplica)
 "drZ" = (
 /obj/machinery/door/airlock/glass_medical{
@@ -82264,8 +82013,7 @@
 	req_one_access_txt = "140"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "gold";
@@ -82280,8 +82028,7 @@
 	req_one_access_txt = "140"
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "diamond";
@@ -85413,8 +85160,7 @@
 	},
 /obj/item/stack/rods,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard,
 /turf/simulated/floor/plating,
@@ -85883,8 +85629,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/stack/rods,
 /obj/item/weapon/shard{
@@ -86076,8 +85821,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -86085,8 +85829,7 @@
 "dKD" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -86234,8 +85977,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -86383,9 +86125,7 @@
 	},
 /area/lamprey/enginerooms)
 "dLi" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/lamprey/thebelt)
 "dLj" = (
@@ -86657,8 +86397,7 @@
 	},
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/engineeringmaintenanceblob)
@@ -87312,8 +87051,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard{
 	icon_state = "medium"
@@ -87488,8 +87226,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -88218,8 +87955,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/thebelt)
@@ -89391,8 +89127,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -89400,8 +89135,7 @@
 "dRc" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -89412,8 +89146,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -89425,8 +89158,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard,
 /obj/item/stack/rods,
@@ -89446,8 +89178,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -91688,8 +91419,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/painting/random{
 	pixel_x = 32
@@ -92205,8 +91935,7 @@
 "dWP" = (
 /obj/structure/girder,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -93939,20 +93668,6 @@
 /obj/item/weapon/rack_parts,
 /turf/simulated/floor/plating,
 /area/lamprey/engineeringmaintenanceblob)
-"ebj" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/turf/simulated/floor/plating,
-/area/lamprey/engineeringmaintenanceblob)
 "ebk" = (
 /obj/structure/rack,
 /obj/abstract/map/spawner/highrisk,
@@ -94159,8 +93874,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/engineeringmaintenanceblob)
@@ -94423,8 +94137,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/engineeringmaintenanceblob)
@@ -94987,8 +94700,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/engineeringmaintenanceblob)
@@ -94998,8 +94710,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/full/reinforced/tinted,
@@ -95008,8 +94719,7 @@
 "edV" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/full/reinforced/tinted,
@@ -95021,8 +94731,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/full/reinforced/tinted,
@@ -95152,8 +94861,7 @@
 "eeu" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -95462,8 +95170,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/theater)
@@ -95714,8 +95421,7 @@
 /area/lamprey/deepresearch)
 "efS" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -95727,8 +95433,7 @@
 /area/lamprey/deepresearch)
 "efT" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/computer/fluff/starmap,
 /turf/simulated/floor{
@@ -95750,8 +95455,7 @@
 /area/lamprey/deepresearch)
 "efV" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/computer/fluff/communications,
 /turf/simulated/floor{
@@ -95760,8 +95464,7 @@
 /area/lamprey/deepresearch)
 "efW" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -96064,8 +95767,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/deepresearch)
@@ -96151,8 +95853,7 @@
 "egN" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -96434,8 +96135,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -96519,8 +96219,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/bridge)
@@ -96612,8 +96311,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -96621,8 +96319,7 @@
 "ehP" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -96633,8 +96330,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -97172,8 +96868,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/machinery/door/poddoor/shutters{
@@ -97186,8 +96881,7 @@
 "eiV" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/machinery/door/poddoor/shutters{
@@ -97203,8 +96897,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/machinery/door/poddoor/shutters{
@@ -102581,9 +102274,7 @@
 /turf/simulated/floor/plating/airless,
 /area/lamprey/moon)
 "euH" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating/airless,
 /area/lamprey/moon)
 "euI" = (
@@ -107688,8 +107379,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/arrivals)
@@ -107814,8 +107504,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -107882,8 +107571,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard,
 /obj/item/stack/rods,
@@ -108459,8 +108147,7 @@
 "eGI" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -109301,8 +108988,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard{
 	icon_state = "medium"
@@ -109328,8 +109014,7 @@
 "eIv" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/item/weapon/shard{
 	icon_state = "medium"
@@ -111466,14 +111151,6 @@
 	},
 /obj/structure/window/reinforced{
 	dir = 8
-	},
-/turf/space,
-/area)
-"eMP" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
 	},
 /turf/space,
 /area)
@@ -115580,9 +115257,7 @@
 	},
 /area/lamprey/catchall)
 "eVy" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -118297,9 +117972,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/catchall)
 "fbh" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "barber"
@@ -125426,9 +125099,7 @@
 /turf/simulated/floor/plating/vox,
 /area/shuttle/nuclearops)
 "fsx" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /obj/machinery/light/small{
 	dir = 1;
 	light_range = 3
@@ -128843,18 +128514,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"fAi" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"fAj" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "fAk" = (
 /obj/structure/fence/door/opened,
@@ -141932,17 +141591,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/space,
 /area)
-"gdn" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/space,
-/area)
 "gdo" = (
 /obj/structure/grille,
 /obj/structure/disposalpipe/segment,
@@ -142734,25 +142382,6 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/space,
-/area)
-"gfh" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/space,
-/area)
-"gfi" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
 /turf/space,
 /area)
 "gfj" = (
@@ -146037,9 +145666,7 @@
 /turf/space,
 /area)
 "gmm" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /turf/space,
 /area)
 "gmn" = (
@@ -151866,9 +151493,7 @@
 	},
 /area)
 "gxl" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/space,
 /area)
 "gxm" = (
@@ -171665,8 +171290,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/space,
@@ -171674,8 +171298,7 @@
 "hhz" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/space,
@@ -171686,8 +171309,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/space,
@@ -171723,37 +171345,12 @@
 /obj/structure/table/reinforced,
 /turf/space,
 /area)
-"hhF" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/space,
-/area)
 "hhG" = (
 /obj/machinery/firealarm{
 	dir = 1;
 	pixel_y = -24
 	},
 /obj/machinery/vending/groans,
-/turf/space,
-/area)
-"hhH" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /turf/space,
 /area)
 "hhI" = (
@@ -172184,8 +171781,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -174224,8 +173820,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/space,
 /area)
@@ -174678,21 +174273,6 @@
 /obj/item/tool/wirecutters/clippers,
 /turf/space,
 /area)
-"hni" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/space,
-/area)
 "hnj" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -174700,8 +174280,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/space,
 /area)
@@ -174712,8 +174291,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/space,
 /area)
@@ -180855,8 +180433,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/space,
 /area)
@@ -181120,8 +180697,7 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/space,
 /area)
@@ -181129,8 +180705,7 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/sign/vacuum,
 /turf/space,
@@ -184736,8 +184311,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -185172,8 +184746,7 @@
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -185195,8 +184768,7 @@
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -185548,8 +185120,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "plating"
@@ -187052,8 +186623,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -187864,9 +187434,7 @@
 	},
 /area/lamprey/excavationtunnels)
 "hOv" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -188356,19 +187924,10 @@
 	},
 /turf/simulated/floor/plating,
 /area/lamprey/combooutpost)
-"hPI" = (
-/obj/structure/lattice,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
-	},
-/turf/space,
-/area)
 "hPJ" = (
 /obj/structure/lattice,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -190773,8 +190332,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -190782,8 +190340,7 @@
 /area/lamprey/combooutpost)
 "hUJ" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/vox{
@@ -190792,8 +190349,7 @@
 /area/lamprey/combooutpost)
 "hUK" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/machinery/door/window{
@@ -190805,8 +190361,7 @@
 /area/lamprey/combooutpost)
 "hUL" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -190814,8 +190369,7 @@
 /area/lamprey/combooutpost)
 "hUM" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -191004,16 +190558,14 @@
 	},
 /obj/structure/catwalk,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/space,
 /area)
 "hVd" = (
 /obj/structure/lattice,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/space,
 /area)
@@ -192180,8 +191732,7 @@
 /area/lamprey/combooutpost)
 "hXo" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/catwalk,
 /turf/space,
@@ -248013,7 +247564,7 @@ aaa
 aaa
 aaa
 aLU
-bmZ
+bvb
 boZ
 bjr
 bsE
@@ -253045,7 +252596,7 @@ acc
 acc
 bjr
 bjr
-bEU
+blj
 bmT
 boT
 bjr
@@ -266054,7 +265605,7 @@ aek
 ady
 asr
 atV
-auL
+afW
 avE
 axd
 ayn
@@ -267058,7 +266609,7 @@ ady
 ady
 asv
 ady
-auL
+afW
 avH
 axf
 ayr
@@ -268094,7 +267645,7 @@ aLU
 aLU
 acc
 aLU
-bmZ
+bvb
 brm
 brm
 brm
@@ -272641,7 +272192,7 @@ ccb
 bTB
 cct
 cgl
-chA
+cNy
 ciW
 ciW
 ciW
@@ -272663,7 +272214,7 @@ ciW
 ciW
 ccn
 cct
-cLU
+caI
 cNx
 apk
 acc
@@ -286134,7 +285685,7 @@ aqK
 apF
 asJ
 aug
-asL
+aXN
 awh
 acc
 acc
@@ -286635,7 +286186,7 @@ apF
 apF
 apD
 asK
-asL
+aXN
 asM
 acc
 acc
@@ -287136,7 +286687,7 @@ alS
 apI
 aqL
 art
-asL
+aXN
 asM
 acc
 aaa
@@ -287701,7 +287252,7 @@ ccv
 cct
 bYq
 cgv
-chN
+ctD
 cjc
 ckj
 clv
@@ -289595,7 +289146,7 @@ aiW
 aaa
 aaa
 acc
-abY
+acr
 alb
 acr
 acw
@@ -292291,7 +291842,7 @@ dJL
 dKM
 dZJ
 eas
-ebj
+dWq
 ebM
 acc
 aaa
@@ -302238,7 +301789,7 @@ bvF
 bxc
 byr
 bzF
-bBl
+bWY
 bCF
 bCF
 bCF
@@ -304246,7 +303797,7 @@ bvJ
 blP
 byr
 bzF
-bBl
+bWY
 bOM
 bBj
 bBj
@@ -304748,7 +304299,7 @@ bvK
 bkb
 bys
 bzG
-bBl
+bWY
 dfg
 bBj
 bFL
@@ -305250,7 +304801,7 @@ bvK
 blP
 byr
 bzF
-bBl
+bWY
 bCJ
 bBj
 bBj
@@ -305752,7 +305303,7 @@ bvF
 bkb
 bys
 bzG
-bBl
+bWY
 bCK
 bBj
 bFM
@@ -307760,7 +307311,7 @@ bvJ
 bkb
 bys
 bzG
-bBl
+bWY
 dgu
 dmz
 bFP
@@ -337364,7 +336915,7 @@ aYT
 auw
 bck
 bdS
-bfq
+brL
 bgO
 biw
 bkA
@@ -340453,7 +340004,7 @@ dkf
 dnj
 cSZ
 dqB
-drY
+dnl
 dkf
 dvm
 dwG
@@ -358978,7 +358529,7 @@ bsm
 bUR
 bUR
 bsm
-bYZ
+bKy
 bMl
 bMl
 bMl
@@ -398656,7 +398207,7 @@ aaa
 aaa
 aaa
 acc
-abY
+acr
 alb
 acr
 acw
@@ -500193,7 +499744,7 @@ fxJ
 fxK
 fxP
 fzO
-fAi
+fAO
 fAO
 fAO
 fBQ
@@ -500695,7 +500246,7 @@ fxK
 fxK
 fxP
 fxM
-fAj
+fAO
 fAP
 fxK
 fBR
@@ -501197,7 +500748,7 @@ fxL
 fxJ
 fxP
 fxL
-fAj
+fAO
 fAP
 fxK
 fBR
@@ -502201,7 +501752,7 @@ fxJ
 fxM
 fxP
 fzP
-fAj
+fAO
 fxP
 fxP
 fBR
@@ -502703,7 +502254,7 @@ fxN
 fxK
 fxP
 fxN
-fAj
+fAO
 fxP
 fxP
 fBS
@@ -503205,7 +502756,7 @@ fxN
 fxK
 fxP
 fxJ
-fAj
+fAO
 fxP
 fBp
 fBR
@@ -503707,7 +503258,7 @@ fxL
 fyD
 fxP
 fxN
-fAj
+fAO
 fAQ
 fyB
 fBR
@@ -504209,7 +503760,7 @@ fxO
 fxN
 fxP
 fxJ
-fAj
+fAO
 fxP
 fBp
 fBR
@@ -504711,7 +504262,7 @@ fxN
 fxM
 fxP
 fxL
-fAj
+fAO
 fxP
 fBp
 fBR
@@ -505213,7 +504764,7 @@ fxO
 fxL
 fxP
 fxJ
-fAj
+fAO
 fAQ
 fyB
 fBR
@@ -505715,7 +505266,7 @@ fxP
 fxP
 fxP
 fxJ
-fAj
+fAO
 fxP
 fBp
 fBT
@@ -636577,7 +636128,7 @@ aaa
 aaa
 aaa
 abQ
-eMP
+hzy
 eNb
 eNu
 aaY
@@ -637079,7 +636630,7 @@ aaa
 aaa
 aaa
 abQ
-eMP
+hzy
 eNb
 eNu
 aaY
@@ -637581,7 +637132,7 @@ aaa
 aaa
 aaa
 abQ
-eMP
+hzy
 eNb
 eNu
 aaY
@@ -758126,7 +757677,7 @@ gLq
 aae
 gMF
 gNn
-gdn
+hhy
 geV
 gAN
 gQv
@@ -758628,7 +758179,7 @@ gLr
 aae
 gMG
 aaa
-gfh
+hhz
 eQq
 gAN
 eRE
@@ -759130,7 +758681,7 @@ aab
 aae
 gMH
 aaa
-gfh
+hhz
 eQq
 gAN
 eRE
@@ -759632,11 +759183,11 @@ gLs
 gLW
 gHd
 aaa
-gfh
+hhz
 eQq
 gAN
 eRE
-gdn
+hhy
 gSl
 fZT
 gaz
@@ -760120,7 +759671,7 @@ gAG
 gBA
 gCe
 gCQ
-gdn
+hhy
 eNN
 gFg
 gFS
@@ -760134,11 +759685,11 @@ aaa
 gLX
 gHd
 aaa
-gfh
+hhz
 eQq
 gAN
 eRE
-gfi
+hhA
 gSm
 eRE
 aaa
@@ -760636,7 +760187,7 @@ gLt
 fXy
 gMI
 aaa
-gfi
+hhA
 eQq
 gAN
 fZT
@@ -761626,7 +761177,7 @@ aaa
 eOA
 aaa
 aaa
-gdn
+hhy
 eNN
 gAL
 gFU
@@ -761644,7 +761195,7 @@ gNS
 eQq
 gPn
 gQw
-gdn
+hhy
 aaa
 aaa
 aae
@@ -762142,11 +761693,11 @@ gLu
 gMa
 gMJ
 gNo
-gdn
+hhy
 eQq
 gPn
 gQw
-gfh
+hhz
 gSn
 aaa
 aae
@@ -763624,7 +763175,7 @@ grF
 eNa
 gty
 guB
-gdn
+hhy
 aaa
 gxp
 gyy
@@ -765130,11 +764681,11 @@ grI
 gsI
 eOA
 guD
-gdn
+hhy
 gwp
 gxs
 eQq
-gfh
+hhz
 aaa
 gAN
 gBG
@@ -765145,7 +764696,7 @@ aaa
 aaa
 aaa
 gGC
-gfh
+hhz
 gIi
 gJc
 gEu
@@ -765632,11 +765183,11 @@ grJ
 gsJ
 gtA
 guE
-gfh
+hhz
 gwp
 gxs
 eQq
-gfh
+hhz
 eOA
 gAO
 gBH
@@ -765647,7 +765198,7 @@ aaa
 aaa
 gAH
 gGD
-gfh
+hhz
 eRE
 gaV
 gEu
@@ -766134,11 +765685,11 @@ grK
 gsK
 gtB
 guF
-gfi
+hhA
 aaa
 gxs
 eQq
-gfh
+hhz
 aaa
 gAP
 gBI
@@ -766149,7 +765700,7 @@ aaa
 aaa
 aaa
 geV
-gfi
+hhA
 eRE
 geV
 gEu
@@ -766640,7 +766191,7 @@ aae
 gjY
 gxs
 eQq
-gfi
+hhA
 aaa
 gAQ
 aae
@@ -767655,7 +767206,7 @@ aaa
 aaa
 gAH
 gGD
-gfh
+hhz
 gIl
 aaa
 eNP
@@ -768157,7 +767708,7 @@ gEB
 aaa
 aaa
 gGC
-gfi
+hhA
 gIm
 gJe
 eNP
@@ -772170,7 +771721,7 @@ gCm
 aaa
 eQq
 gEH
-eMP
+hzy
 aaa
 gGI
 gHn
@@ -777145,7 +776696,7 @@ ePN
 eRH
 eSJ
 eQx
-eMP
+hzy
 eNb
 apQ
 aab
@@ -777647,7 +777198,7 @@ fZm
 eRE
 apQ
 eQq
-eMP
+hzy
 eNb
 apQ
 aab
@@ -777688,7 +777239,7 @@ gzr
 eRG
 gAW
 eQq
-eMP
+hzy
 gcz
 aaa
 gek
@@ -778149,7 +777700,7 @@ aab
 fZU
 apQ
 eQq
-eMP
+hzy
 eNb
 apQ
 aab
@@ -778190,7 +777741,7 @@ gwB
 gAm
 gAX
 eQq
-eMP
+hzy
 gDb
 eOA
 gek
@@ -778727,7 +778278,7 @@ hdq
 fYk
 gfK
 eQx
-hhF
+hnk
 ghL
 hjL
 hkI
@@ -779737,7 +779288,7 @@ eNi
 eNi
 aaa
 aaa
-hni
+gfU
 hoe
 gaq
 aaa
@@ -780198,7 +779749,7 @@ eWb
 geV
 gAW
 eQq
-eMP
+hzy
 gDc
 eQq
 eRE
@@ -783245,7 +782796,7 @@ aab
 eRE
 hfz
 eNP
-hhH
+gBL
 hiE
 gDa
 gzW
@@ -786271,7 +785822,7 @@ eOz
 hry
 aae
 aaa
-gfh
+hhz
 hus
 aaa
 aae
@@ -786773,7 +786324,7 @@ hqG
 hrz
 aae
 aaa
-gfh
+hhz
 hus
 aaa
 acE
@@ -787792,7 +787343,7 @@ aaa
 aaa
 hxT
 aaa
-gfh
+hhz
 aaa
 hzQ
 aaa
@@ -788235,7 +787786,7 @@ aaa
 aiW
 aaa
 acE
-eMP
+hzy
 gGM
 gHw
 gIw
@@ -788282,7 +787833,7 @@ hsX
 hsX
 huw
 aaa
-gfh
+hhz
 hvV
 aaa
 hvV
@@ -788737,7 +788288,7 @@ aaa
 aiW
 aaa
 acE
-eMP
+hzy
 gGM
 gHw
 gIw
@@ -789239,7 +788790,7 @@ acc
 gxN
 aaa
 acE
-eMP
+hzy
 gGM
 gHx
 gIx
@@ -789800,7 +789351,7 @@ htb
 aaa
 hyZ
 hzi
-gfh
+hhz
 aaa
 hzQ
 aaa
@@ -790804,7 +790355,7 @@ htb
 aaa
 aaa
 aaa
-gfh
+hhz
 aaa
 hzS
 hAf
@@ -791306,7 +790857,7 @@ htb
 aaa
 aaa
 aaa
-gfh
+hhz
 acE
 aae
 aae
@@ -791796,7 +791347,7 @@ hte
 htK
 huD
 hvf
-gfh
+hhz
 hux
 eRE
 aaa
@@ -791808,7 +791359,7 @@ htb
 aaa
 aaa
 hzk
-gfh
+hhz
 aaa
 hzQ
 aaa
@@ -792812,7 +792363,7 @@ htb
 aaa
 aaa
 aaa
-gfh
+hhz
 aaa
 hzS
 hAh
@@ -793255,7 +792806,7 @@ acc
 gxN
 aaa
 acE
-eMP
+hzy
 gGM
 gHv
 gIC
@@ -793314,7 +792865,7 @@ hyo
 aaa
 aaa
 aaa
-gfh
+hhz
 acE
 aae
 aae
@@ -793757,7 +793308,7 @@ aaa
 aiW
 aaa
 acE
-eMP
+hzy
 gGM
 gHw
 gID
@@ -793816,7 +793367,7 @@ hyp
 aaa
 aaa
 hzm
-gfh
+hhz
 aaa
 hzQ
 aaa
@@ -794259,7 +793810,7 @@ aaa
 aiW
 aaa
 acE
-eMP
+hzy
 gGM
 gHw
 gID
@@ -794789,7 +794340,7 @@ haT
 eRE
 hdz
 heF
-eMP
+hzy
 eWS
 aaa
 hiT
@@ -794820,7 +794371,7 @@ hyp
 aaa
 aaa
 gqH
-gfh
+hhz
 aaa
 hzS
 hAj
@@ -795291,7 +794842,7 @@ aaa
 eWb
 fXL
 heG
-eMP
+hzy
 gGx
 aaa
 hiU
@@ -795322,7 +794873,7 @@ hyp
 aaa
 aaa
 aaa
-gfh
+hhz
 acE
 aae
 aae
@@ -795793,7 +795344,7 @@ gYR
 fVH
 aaa
 heH
-eMP
+hzy
 eMR
 aaa
 eWb
@@ -795824,7 +795375,7 @@ hyp
 aaa
 aaa
 hzo
-gfh
+hhz
 aaa
 hzQ
 aaa
@@ -799230,7 +798781,7 @@ eVo
 eQx
 aaa
 gQl
-eMP
+hzy
 gaO
 fWs
 gcb
@@ -799724,7 +799275,7 @@ fVp
 fVS
 fWg
 fWA
-eMP
+hzy
 aaa
 aaa
 aaa
@@ -799732,7 +799283,7 @@ fXL
 eQq
 aaa
 gQl
-eMP
+hzy
 gaP
 aaa
 aab
@@ -799814,7 +799365,7 @@ eMQ
 eRE
 hlE
 eQq
-gfh
+hhz
 hlK
 hmA
 hbZ
@@ -800316,7 +799867,7 @@ gwI
 hhN
 hcA
 eQq
-gfh
+hhz
 hlL
 aaa
 aaa
@@ -801332,7 +800883,7 @@ hrS
 hrS
 hrS
 htT
-gfh
+hhz
 gOK
 aaa
 aaa
@@ -801364,7 +800915,7 @@ hCy
 hCF
 aaa
 aaa
-eMP
+hzy
 aaa
 aaa
 aiW
@@ -801866,7 +801417,7 @@ hCz
 hCG
 aaa
 aaa
-eMP
+hzy
 aaa
 aaa
 aiW
@@ -802368,7 +801919,7 @@ hCA
 hwz
 aaa
 aaa
-eMP
+hzy
 aaa
 aaa
 aiW
@@ -802870,7 +802421,7 @@ hCy
 hwz
 aaa
 aaa
-eMP
+hzy
 aaa
 aaa
 aiW
@@ -803372,7 +802923,7 @@ hCy
 htU
 aaa
 aaa
-eMP
+hzy
 aaa
 aaa
 aiW
@@ -805285,7 +804836,7 @@ aab
 eQq
 eNb
 eRE
-gfh
+hhz
 aaa
 eOA
 gtZ
@@ -805787,7 +805338,7 @@ aae
 eQq
 eNb
 eRE
-gfh
+hhz
 dle
 aaa
 aaa
@@ -806371,9 +805922,9 @@ aaa
 aaa
 aaa
 aaa
-eMP
+hzy
 hBj
-eMP
+hzy
 aaa
 aaa
 aaa
@@ -806873,9 +806424,9 @@ aaa
 aaa
 aaa
 aaa
-eMP
+hzy
 aaa
-eMP
+hzy
 aaa
 aaa
 aaa
@@ -810280,7 +809831,7 @@ eNb
 apQ
 gcB
 aaa
-gdn
+hhy
 apQ
 eRE
 eQq
@@ -813797,7 +813348,7 @@ aaa
 aaa
 aaa
 aaa
-gfh
+hhz
 gfN
 ggs
 aab
@@ -814299,7 +813850,7 @@ fYO
 aaa
 aaa
 aaa
-gfh
+hhz
 gfO
 gfO
 aab
@@ -814801,7 +814352,7 @@ aaa
 gdr
 aaa
 aaa
-gfh
+hhz
 gfO
 gfO
 aab
@@ -815303,7 +814854,7 @@ gdg
 aab
 gdZ
 geE
-gfh
+hhz
 gfO
 gfO
 aab
@@ -815805,7 +815356,7 @@ gdh
 aab
 gea
 gea
-gfi
+hhA
 gfP
 gfO
 aab
@@ -817334,7 +816885,7 @@ aaa
 gne
 gea
 eNb
-eMP
+hzy
 eRE
 gte
 gvg
@@ -819385,7 +818936,7 @@ gVe
 haq
 hbj
 hcK
-gdn
+hhy
 gek
 eNL
 hgU
@@ -819887,7 +819438,7 @@ gZg
 har
 hbk
 geG
-gfh
+hhz
 gen
 hga
 hgV
@@ -820389,7 +819940,7 @@ gZh
 har
 hbk
 hcL
-gfh
+hhz
 heX
 hgb
 hgW
@@ -820891,7 +820442,7 @@ eOA
 eNj
 hbl
 hcM
-gfi
+hhA
 gek
 eNP
 hgX
@@ -1101450,7 +1101001,7 @@ acc
 acc
 hPj
 hPr
-hPI
+hVd
 aaa
 aaa
 aaa
@@ -1101952,7 +1101503,7 @@ aaa
 acc
 hPj
 hPr
-hPI
+hVd
 aaa
 aaa
 aaa

@@ -12,7 +12,7 @@
 #define CHEMFLAG_NOTREMOVABLE	8 //cannot be rid of by charcoal (or other reagent tomfoolery means).
 
 #define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
-
+#define EVEN_MORE_EXPLICITLY_INVALID_REAGENT_ID "Use this ID if you need to have a nested invalid ID."
 //Reagents
 
 #define VAPORSALT			"vaporsalt"
@@ -25,6 +25,7 @@
 #define VACCINE 			"vaccine"
 #define WATER 			"water"
 #define LUBE 			"lube"
+#define CHERRYLUBE 		"cherrylube"
 #define SODIUM_POLYACRYLATE			"sodium_polyacrylate"
 #define PHALANXIMINE 			"phalanximine"
 #define TOXIN 			"toxin"
@@ -42,6 +43,8 @@
 #define SACREDWATER 		"sacredwater"
 #define SEROTROTIUM 			"serotrotium"
 #define SILICA 			"silica"
+#define SAWDUST 			"sawdust"
+#define PULP 			"pulp"
 #define SILICATE 			"silicate"
 #define OXYGEN 			"oxygen"
 #define COPPER 			"copper"
@@ -499,6 +502,11 @@
 #define GRUGZONE		"grugzone"
 #define JUNGLEJUICE		"junglejuice"
 #define FAKEJUNGLEJUICE		"fakejunglejuice"
+#define FROSTBITE 		"frostbite"
+#define MINTYMULE		"mintymule"
+#define OLDCUBAN		"oldcuban"
+#define CAIPIRINHA		"caipirinha"
+#define ENGLISHGARDEN	"englishgarden"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -623,6 +631,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define DEXALINS list(DEXALIN, THYMOL)
 #define ACIDS list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
 #define WATERS list(WATER, HOLYWATER, ICE)
+#define LUBES list(LUBE, CHERRYLUBE)
 #define CORES list(SOFTCORES, MEDCORES)
 #define ALLNANITES list(NANITES, AUTISTNANITES)
 #define SUGARS list(SUGAR, CORNSYRUP)
@@ -632,6 +641,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 //HOT and COLD drinks defines used for the mint toxin/mint essence checks for tooth pain and shit, maybe you can find another use for it
 //Useful reagents for looting
 #define LOOT_REAGENTS list(BEER, WHISKEY, TEQUILA,VODKA, VERMOUTH, RUM, COGNAC, WINE, SAKE, TRIPLESEC, BITTERS, CINNAMONWHISKY, SCHNAPPS, BLUECURACAO, KAHLUA, ALE,	CHAMPAGNE, PWINE, WATER, GIN, SODAWATER, COLA, CREAM, TOMATOJUICE, ORANGEJUICE, LIMEJUICE, TONIC, SPACEMOUNTAINWIND, LEMON_LIME, DR_GIBB, TEA, GREENTEA, REDTEA, COFFEE, MILK, HOT_COCO, SOYMILK, SPORTDRINK, REFRIEDBEANS, BEFF, HORSEMEAT, CORNSYRUP, OFFCOLORCHEESE, BONEMARROW,	GREENRAMEN, DEEPFRIEDRAMEN, DISCOUNT, NUTRIMENT, SUGAR, CORNOIL, LIPOZINE, INAPROVALINE, ANTI_TOXIN, BLISTEROL, KELOTANE, DEXALIN, LEPORAZINE, COCAINE, HYPERZINE, OPIUM, SPACE_DRUGS, ZAMMILD, ZAMSPICES, BLOOD, PANCAKE, FLOUR, MANNITOL, TRICORDRAZINE, HONKSERUM, AMINOMICIN, AMINOBLATELLA, MUTAGEN, KARMOTRINE, OXYCODONE)
+#define GHETTOACIDS list(LIMEJUICE,LEMONJUICE,TOMATOJUICE,VINEGAR)
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"

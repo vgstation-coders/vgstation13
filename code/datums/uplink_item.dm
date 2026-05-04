@@ -764,11 +764,14 @@ var/list/discounted_items_of_the_round = list()
 				continue
 			if(I.get_cost(U.job, U.species, 0.5) > U.telecrystals)
 				continue
+			if(I.num_in_stock && I.times_bought >= I.num_in_stock)
+				continue
 			possible_items += I
 
 	if(possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
 		U.telecrystals -= max(0, I.get_cost(U.job, U.species, 0.5))
+		I.times_bought += 1
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return I
 

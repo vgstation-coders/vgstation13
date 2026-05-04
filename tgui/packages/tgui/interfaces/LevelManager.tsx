@@ -26,6 +26,7 @@ type ZLevel = {
   ref: string;
   vLevelCount: number;
   hasHolomap: boolean;
+  usesHolomap: boolean;
   holomapActive: boolean;
   vLevels: VLevel[];
 };
@@ -125,11 +126,11 @@ const ZLevelEntry = (props: { zLevel: ZLevel }) => {
           <Button
             icon="map"
             selected={zLevel.holomapActive}
-            disabled={zLevel.index <= 6 && !zLevel.hasHolomap}
+            disabled={zLevel.usesHolomap && !zLevel.hasHolomap}
             tooltip={
-              zLevel.index <= 6 && !zLevel.hasHolomap
+              zLevel.usesHolomap && !zLevel.hasHolomap
                 ? 'No holomap data available'
-                : zLevel.index <= 6
+                : zLevel.usesHolomap
                   ? (zLevel.holomapActive ? 'Hide Holomap' : 'Show Holomap')
                   : (zLevel.holomapActive ? 'Hide Virtual Z-Level Map' : 'Show Virtual Z-Level Map')
             }

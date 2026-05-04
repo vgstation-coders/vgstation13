@@ -62,7 +62,7 @@ var/list/list/sensed_explosions = list()
 	else
 		T = get_turf(src)
 		vz = get_virtual_z()
-		original_vLevel = vz.z()
+		original_vLevel = vz ? vz.z() : z
 
 	holomap_datum = new()
 	holomap_datum.initialize_holomap(T)
@@ -302,6 +302,8 @@ var/list/list/sensed_explosions = list()
 	cap = overcap
 
 	explosion_icon = icon('icons/480x480.dmi', "blank")
+	if(!sensed_explosions["z[z]"])
+		sensed_explosions["z[z]"] = list()
 	sensed_explosions["z[z]"] += src
 	ID = "[z]-[add_zero(sensed_explosions["z[z]"].len,3)]"
 
@@ -341,10 +343,12 @@ var/list/list/sensed_explosions = list()
 
 	if(map.holomap_offset_x.len >= z)
 		explosion_icon.DrawBox(color, min(T.x+map.holomap_offset_x[z],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(T.y+map.holomap_offset_y[z],((2 * world.view + 1)*WORLD_ICON_SIZE)))
-		bhangmap.DrawBox(color, min(T.x+map.holomap_offset_x[z],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(T.y+map.holomap_offset_y[z],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+		if(bhangmap)
+			bhangmap.DrawBox(color, min(T.x+map.holomap_offset_x[z],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(T.y+map.holomap_offset_y[z],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 	else
 		explosion_icon.DrawBox(color, T.x, T.y)
-		bhangmap.DrawBox(color, T.x, T.y)
+		if(bhangmap)
+			bhangmap.DrawBox(color, T.x, T.y)
 
 #undef BHANGMAP_COLOR_DEVASTATION
 #undef BHANGMAP_COLOR_HEAVY

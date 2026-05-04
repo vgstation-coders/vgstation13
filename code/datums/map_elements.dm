@@ -18,6 +18,8 @@ var/list/datum/map_element/map_elements = list()
 	var/can_rotate = FALSE //Can this be rotated?
 	var/rotation = 0 //The map's rotation value
 
+	var/vz_type = VZ_PROTECTED
+
 /datum/map_element/proc/pre_load() //Called before loading the element
 	return
 

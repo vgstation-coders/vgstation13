@@ -34,6 +34,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	var/long_range_link = 0	// Can you link it across Z levels or on the otherside of the map? (Relay & Hub)
 	var/hide = 0				// Is it a hidden machine?
 	var/listening_level = 0	// 0 = auto set in New() - this is the z level that the machine is listening to.
+	var/listening_level_locked = FALSE // If TRUE, listening_level is manually pinned and won't auto-refresh when the machine moves.
 
 	var/moody_state
 
@@ -163,6 +164,15 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(!listening_level)
 		//Defaults to our Z level!
 		var/turf/position = get_turf(src)
+		listening_level = position.z
+
+// Keep listening_level in sync when the machine is physically moved (e.g. on a shuttle).
+/obj/machinery/telecomms/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	. = ..()
+	if(listening_level_locked)
+		return
+	var/turf/position = get_turf(src)
+	if(position)
 		listening_level = position.z
 
 /obj/machinery/telecomms/initialize()
@@ -367,18 +377,26 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	flick("receiver_receive", src)
 
 /obj/machinery/telecomms/receiver/proc/check_receive_level(datum/signal/signal)
-
-
-	if(signal.data["level"] != listening_level)
-		for(var/obj/machinery/telecomms/hub/H in links)
-			var/list/connected_levels = list()
-			for(var/obj/machinery/telecomms/relay/R in H.links)
-				if(R.can_receive(signal))
-					connected_levels |= R.listening_level
-			if(signal.data["level"] in connected_levels)
+	// Signals originating in the receiver's own virtual z-level are accepted directly.
+	var/datum/virtual_z/receiver_vz = get_virtual_z()
+	if(receiver_vz)
+		var/datum/virtual_z/signal_vz = signal.data["source_virtual_z"]
+		if(!signal_vz)
+			var/mob/source_mob = signal.data["mob"]
+			if(source_mob)
+				signal_vz = source_mob.get_virtual_z()
+		if(signal_vz == receiver_vz)
+			return 1
+	else if(signal.data["level"] == listening_level)
+		return 1
+	// Otherwise the signal must enter the network via a relay whose vlevel matches the signal's origin.
+	for(var/obj/machinery/telecomms/hub/H in links)
+		for(var/obj/machinery/telecomms/relay/R in H.links)
+			if(!R.can_receive(signal))
+				continue
+			if(signal.data["level"] == R.listening_level)
 				return 1
-		return 0
-	return 1
+	return 0
 
 
 /*
@@ -548,7 +566,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		return 0
 	if(!broadcasting)
 		return 0
-	return in_virtual_z(signal)
+	return TRUE
 
 /obj/machinery/telecomms/relay/planetary/can_receive(datum/signal/signal)
 	if(!can(signal))
@@ -586,6 +604,32 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	return TRUE
 
 /obj/machinery/telecomms/relay/planetary/checkheat()
+	return
+
+// A mobile subspace relay that rides aboard a ship.
+/obj/machinery/telecomms/relay/planetary/ship
+	name = "subspace communications relay"
+	desc = "A compact subspace relay designed to travel aboard a ship, providing comms wherever its host vessel goes."
+	icon_state = "relay"
+	on = TRUE
+	toggled = TRUE
+	activated = TRUE
+	hide = FALSE
+	use_power = MACHINE_POWER_USE_IDLE
+	idle_power_usage = 30
+	network = "tcommsat"
+	autolinkers = list("relay")
+
+/obj/machinery/telecomms/relay/planetary/ship/update_power()
+	// Always on when operational, regardless of activation state.
+	if(stat & (BROKEN|NOPOWER|EMPED|FORCEDISABLE) || get_integrity() <= 0)
+		on = FALSE
+		return
+	on = TRUE
+
+/obj/machinery/telecomms/relay/planetary/ship/post_ruin_load()
+	// Mobile relay — do not register to any vz.comms_relay slot, and skip the
+	// planetary-specific ruin setup that CRASHes when there's no planet_type on the vz.
 	return
 
 /*

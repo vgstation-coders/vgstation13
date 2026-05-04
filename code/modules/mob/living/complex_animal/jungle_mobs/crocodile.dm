@@ -14,7 +14,7 @@
 	melee_damage_lower=15
 	behavior_flags = ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_RETALIATE | ANIMAL_BEHAVIOR_DESTRUCTIVE | ANIMAL_BEHAVIOR_TERRITORIAL
 	movespeed=5
-	max_local_population = 3
+	max_local_population = 5
 	mob_max_age = 900 // 30 minutes
 	food_per_tick = 0.0001
 	var/stuntracker=FALSE //prevents being stunlocked
@@ -78,6 +78,8 @@
 /mob/living/simple_animal/complex/crocodile/schnapps/can_offspring()
 	return FALSE
 
+/mob/living/simple_animal/complex/crocodile/get_butchering_products()
+	return list(/datum/butchering_product/skin/lizard/lots, /datum/butchering_product/teeth/lots)
 
 /mob/living/simple_animal/complex/crocodile/schnapps/tick_state_attacking()
 	.=..()

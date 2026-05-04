@@ -172,7 +172,7 @@
 	if (iswelder(W) && ( (istext(glass)) || (glass == 1) || (!anchored) ))
 		var/obj/item/tool/weldingtool/WT = W
 
-		if (WT.remove_fuel(0, user))
+		if (WT.remove_fuel(1, user))
 			busy = TRUE
 			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
 
