@@ -45,7 +45,7 @@
 
 	maprenders(zlevel, all_z, area_rendered, invisibles)
 
-/client/proc/maprenders(var/currentz = 1, var/allz = 0, var/render_area, var/invisibles)
+/client/proc/maprenders(var/currentz = 1, var/allz = 0, var/render_area = null, var/invisibles = TRUE)
 
 	to_chat(world, "Map Render: <B>GENERATE MAP FOR [allz? "ALL ZLEVELS" : "LEVEL [currentz]"]</B>")
 	var/mapname = replacetext(map.nameLong, " ", "")
