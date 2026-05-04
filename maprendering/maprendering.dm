@@ -72,7 +72,7 @@
 							continue
 						if(render_area && !istype(get_area(currentturf),render_area))
 							var/otherfound = FALSE
-							if(currentturf.density)
+							if(currentturf.density || currentturf.has_dense_content())
 								for(var/direction in alldirs)
 									var/turf/otherturf = get_step(currentturf,direction)
 									if(!otherturf.density && istype(get_area(otherturf),render_area))
