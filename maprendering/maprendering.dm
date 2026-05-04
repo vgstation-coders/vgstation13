@@ -71,7 +71,15 @@
 						if(!currentturf || (currentturf.turf_flags & NO_MINIMAP))
 							continue
 						if(render_area && !istype(get_area(currentturf),render_area))
-							continue
+							var/otherfound = FALSE
+							if(currentturf.density)
+								for(var/direction in alldirs)
+									var/turf/otherturf = get_step(currentturf,direction)
+									if(!otherturf.density && istype(get_area(otherturf),render_area))
+										otherfound = TRUE
+										break
+							if(!otherfound)
+								continue
 						area_rendered = TRUE
 						var/list/allturfcontents = currentturf.contents.Copy()
 
