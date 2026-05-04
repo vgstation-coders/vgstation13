@@ -19,7 +19,7 @@
 		if("Cancel")
 			return
 		if("Specific")
-			zlevel = input("Input zlevel you wish to render") as num
+			zlevel = input(usr,"Input zlevel you wish to render","Input zlevel",zlevel) as num
 		if("All")
 			all_z = TRUE
 
@@ -31,16 +31,21 @@
 			area_rendered = input("Input area type") as text
 			area_rendered = filter_list_input("Select an area type", "Area type", get_matching_types(area_rendered, /area))
 			if(!area_rendered)
-				area_rendered = /area
+				area_rendered = null
 		if("All")
-			area_rendered = /area
+			area_rendered = null
+
+	var/invisibles = alert("Render invisible atoms?", "Render invisible", "Yes", "No", "Cancel")
+	if(invisibles == "Cancel")
+		return
+	invisibles = invisibles == "Yes"
 
 	message_admins("[ckey]/[src] started rendering maps")
 	log_admin("[ckey]/[src] started rendering maps")
 
-	maprenders(zlevel, all_z, area_rendered)
+	maprenders(zlevel, all_z, area_rendered, invisibles)
 
-/client/proc/maprenders(var/currentz = 1, var/allz = 0, var/render_area)
+/client/proc/maprenders(var/currentz = 1, var/allz = 0, var/render_area, var/invisibles)
 
 	to_chat(world, "Map Render: <B>GENERATE MAP FOR [allz? "ALL ZLEVELS" : "LEVEL [currentz]"]</B>")
 	var/mapname = replacetext(map.nameLong, " ", "")
@@ -97,6 +102,8 @@
 
 						//Preparing to blend get flat icon of
 						for(var/A in allturfcontents)
+							if(!invisibles && A:invisibility == 101)
+								continue
 							var/icon/icontoblend = getFlatIcon(A,A:dir, cache = 0)
 							map_icon.Blend(icontoblend, ICON_OVERLAY, ((a-1)*WORLD_ICON_SIZE)+1, ((b-1)*WORLD_ICON_SIZE)+1)
 							MAPRENDER_IN_ROUND_CHECK_TICK
