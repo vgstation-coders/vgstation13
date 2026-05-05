@@ -40,12 +40,18 @@
 		return
 	invisibles = invisibles == "Yes"
 
-	message_admins("[ckey]/[src] started rendering maps")
-	log_admin("[ckey]/[src] started rendering maps")
+	var/lighted = alert("Render lighting?", "Render lighting", "Yes", "No", "Cancel")
+	if(lighted == "Cancel")
+		return
+	lighted = lighted == "Yes"
 
-	maprenders(zlevel, all_z, area_rendered, invisibles)
+	var/strang = "[ckey]/[src] started rendering maps[area_rendered ? " for area [area_rendered]"][all_z ? "" : " on z-level [zlevel]"],[invisible ? "" : " not"] showing invisible atoms,[lighted ? "" : " not"] showing lighting"
+	message_admins(strang)
+	log_admin(strang)
 
-/client/proc/maprenders(var/currentz = 1, var/allz = 0, var/render_area = null, var/invisibles = TRUE)
+	maprenders(zlevel, all_z, area_rendered, invisibles, lighted)
+
+/client/proc/maprenders(var/currentz = 1, var/allz = 0, var/render_area = null, var/invisibles = TRUE, var/lighted = FALSE)
 
 	to_chat(world, "Map Render: <B>GENERATE MAP FOR [allz? "ALL ZLEVELS" : "LEVEL [currentz]"]</B>")
 	var/mapname = replacetext(map.nameLong, " ", "")
@@ -97,8 +103,7 @@
 							map_icon.Blend(turficon, ICON_OVERLAY, ((a-1)*WORLD_ICON_SIZE)+1, ((b-1)*WORLD_ICON_SIZE)+1)
 
 						for(var/atom/movable/A in allturfcontents)
-							//Remove the following line to allow lighting to be considered, if you do this it must be blended with BLEND_MULTIPLY instead of ICON_OVERLAY
-							if(A.type == /atom/movable/lighting_overlay || (!invisibles && A.invisibility == 101))
+							if((!lighted && A.type == /atom/movable/lighting_overlay) || (!invisibles && A.invisibility == 101))
 								allturfcontents -= A
 							else if(A.locs.len > 1) //Fix for multitile objects I wish I didn't have to do this its probably slow
 								if(A.locs[1] != A.loc)
@@ -118,8 +123,11 @@
 
 						//Preparing to blend get flat icon of
 						for(var/A in allturfcontents)
+							var/blendtype = ICON_OVERLAY
+							if(A:type == /atom/movable/lighting_overlay)
+								blendtype = BLEND_MULTIPLY
 							var/icon/icontoblend = getFlatIcon(A,A:dir, cache = 0)
-							map_icon.Blend(icontoblend, ICON_OVERLAY, ((a-1)*WORLD_ICON_SIZE)+1, ((b-1)*WORLD_ICON_SIZE)+1)
+							map_icon.Blend(icontoblend, blendtype, ((a-1)*WORLD_ICON_SIZE)+1, ((b-1)*WORLD_ICON_SIZE)+1)
 							MAPRENDER_IN_ROUND_CHECK_TICK
 						sleep(-1)
 						MAPRENDER_IN_ROUND_CHECK_TICK
