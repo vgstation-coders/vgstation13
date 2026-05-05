@@ -98,7 +98,7 @@
 
 						for(var/atom/movable/A in allturfcontents)
 							//Remove the following line to allow lighting to be considered, if you do this it must be blended with BLEND_MULTIPLY instead of ICON_OVERLAY
-							if(A.type == /atom/movable/lighting_overlay || (!invisibles && (A.invisibility == 101 || A.plane < currentturf.plane)))
+							if(A.type == /atom/movable/lighting_overlay || (!invisibles && A.invisibility == 101))
 								allturfcontents -= A
 							else if(A.locs.len > 1) //Fix for multitile objects I wish I didn't have to do this its probably slow
 								if(A.locs[1] != A.loc)
