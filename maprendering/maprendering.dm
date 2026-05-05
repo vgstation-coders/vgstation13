@@ -71,8 +71,16 @@
 						if(!currentturf || (currentturf.turf_flags & NO_MINIMAP))
 							continue
 						if(render_area && !istype(get_area(currentturf),render_area))
+							var/otherfinds = FALSE
 							var/otherfound = FALSE
-							if(currentturf.density || currentturf.has_dense_content())
+							if(currentturf.density)
+								otherfinds = TRUE
+							else
+								for(var/atom/movable/A in currentturf.contents)
+									if((A.pass_flags_self & PASSGRILLE) || (A.pass_flags_self & PASSDOOR))
+										otherfinds = TRUE
+										break
+							if(otherfinds)
 								for(var/direction in alldirs)
 									var/turf/otherturf = get_step(currentturf,direction)
 									if(!otherturf.density && istype(get_area(otherturf),render_area))
@@ -90,7 +98,7 @@
 
 						for(var/atom/movable/A in allturfcontents)
 							//Remove the following line to allow lighting to be considered, if you do this it must be blended with BLEND_MULTIPLY instead of ICON_OVERLAY
-							if(A.type == /atom/movable/lighting_overlay)
+							if(A.type == /atom/movable/lighting_overlay || (!invisibles && (A.invisibility == 101 || A.plane < currentturf.plane)))
 								allturfcontents -= A
 							else if(A.locs.len > 1) //Fix for multitile objects I wish I didn't have to do this its probably slow
 								if(A.locs[1] != A.loc)
@@ -109,9 +117,7 @@
 						allturfcontents = plane_layer_sort(allturfcontents)
 
 						//Preparing to blend get flat icon of
-						for(var/A in allturfcontents)
-							if(!invisibles && A:invisibility == 101)
-								continue
+						for(var/atom/movable/A in allturfcontents)
 							var/icon/icontoblend = getFlatIcon(A,A:dir, cache = 0)
 							map_icon.Blend(icontoblend, ICON_OVERLAY, ((a-1)*WORLD_ICON_SIZE)+1, ((b-1)*WORLD_ICON_SIZE)+1)
 							MAPRENDER_IN_ROUND_CHECK_TICK
