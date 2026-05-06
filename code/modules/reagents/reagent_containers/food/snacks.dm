@@ -6458,6 +6458,18 @@
 	reagents.add_reagent(IRON, 5)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje
+	name = "Vreemdkoekje"
+	desc = "Bevat nog steeds geen ijzer."
+	icon_state = "vreemdkoekje"
+	food_flags = FOOD_DIPPABLE
+
+/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ZETADUST, 5)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
 	name = "no-fruit pie"
 	desc = "It doesn't really taste like anything."

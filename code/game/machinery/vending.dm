@@ -525,6 +525,7 @@ var/global/num_vending_terminals = 1
 			if(user.drop_item(W, src))
 				coin = W
 				to_chat(user, "<span class='notice'>You insert \a [W] into [src].</span>")
+				coin_act(W)
 				src.updateUsrDialog()
 		else
 			to_chat(user, "<SPAN CLASS='notice'>There's already \a [coin] in [src].</SPAN>")
@@ -1148,6 +1149,9 @@ var/global/num_vending_terminals = 1
 		src.vend_ready = 1
 		update_icon()
 		src.updateUsrDialog()
+
+/obj/machinery/vending/proc/coin_act(obj/item/weapon/coin/C, mob/user)
+	return
 
 /obj/machinery/vending/proc/on_return_coin_detect(mob/user)
 	return 0
@@ -3931,6 +3935,11 @@ var/global/num_vending_terminals = 1
 		return pick(grey_slogans)
 	else
 		return pick(product_slogans)
+
+/obj/machinery/vending/zamsnax/coin_act(obj/item/weapon/coin/C, mob/user)
+	if(C.material == MAT_RETICULITE && !(/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje in premium))
+		premium[/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje] = 3
+		build_inventories()
 
 /obj/machinery/vending/lotto
 	name = "\improper Lotto Tickets"

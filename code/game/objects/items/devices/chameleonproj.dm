@@ -50,11 +50,22 @@
 		if(istype(target, /obj/item) && !istype(target, /obj/item/weapon/disk/nuclear) || istype(target, /mob))
 			playsound(src, 'sound/weapons/flash.ogg', 100, 1, -6)
 			to_chat(user, "<span class='notice'>Scanned [target].</span>")
-			saved_item = target.type
-			saved_icon = target.icon
-			saved_icon_state = target.icon_state
-			saved_overlays = target.overlays.Copy()
+			if(arcanetampered)
+				saved_item = /obj/item/toy/syndicateballoon
+				saved_icon = 'icons/obj/weapons.dmi'
+				saved_icon_state = "syndballoon"
+			else
+				saved_item = target.type
+				saved_icon = target.icon
+				saved_icon_state = target.icon_state
+				saved_overlays = target.overlays.Copy()
 			return 1
+
+/obj/item/device/chameleon/arcane_act(mob/user, recursive)
+	. = ..()
+	saved_item = /obj/item/toy/syndicateballoon
+	saved_icon = 'icons/obj/weapons.dmi'
+	saved_icon_state = "syndballoon"
 
 /obj/item/device/chameleon/proc/toggle()
 	if(!can_use || !saved_item)

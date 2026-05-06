@@ -25,6 +25,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 #define	MECH_SCREEN_PHAZON		36
 #define	MECH_SCREEN_NANOTRASEN	37
 #define	MECH_SCREEN_CLARKE		38
+#define	MECH_SCREEN_ROSWELL		39
 
 #define	MECH_SCREEN_MISC		41
 
@@ -100,6 +101,9 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 	</div>
 	<div class="line">
 		{{:helper.link('Phazon',	 'gear',{'screen':36},(data.screen==36)?'linkOn':'', 'fixedLeft')}}
+		{{if data.parts.Roswell.length > 1}}
+			{{:helper.link('Roswell',	 'gear',{'screen':39},(data.screen==39)?'linkOn':'', 'fixedLeft')}}
+		{{/if}}
 	</div>
 	{{if data.parts.Nanotrasen.length > 1}}
 		<div class="line">
@@ -586,6 +590,34 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 		<div class="statusDisplay">
 			<div class="line">
 				{{for data.parts.Clarke}}
+					<div class="line">
+						<div class="statusValue">
+							{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+							{{:helper.link(value.cost, null, null, null, null, 'cost')}}
+							{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+						</div>
+					</div>
+				{{empty}}
+					<i>No parts in memory</i>
+				{{/for}}
+				</div>
+			</div>
+		</div>
+	</div>
+{{/if}}
+
+{{if data.screen == 39}}
+	<div class="item">
+		<div class="itemLabel">
+			Roswell Parts
+		</div>
+		<div class="line">
+			{{:helper.link('Quick Roswell', 'gear', {'queue_part_set':'Roswell'}, null, 'fixedLeftWidest')}}
+	</div>
+	<div class="itemContentWide" style="width:100%;">
+		<div class="statusDisplay">
+			<div class="line">
+				{{for data.parts.Roswell}}
 					<div class="line">
 						<div class="statusValue">
 							{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}

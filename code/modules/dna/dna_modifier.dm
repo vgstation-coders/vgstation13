@@ -67,7 +67,7 @@
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/injector_cooldown = 150 //Used by attachment
 	machine_flags = SCREWTOGGLE | CROWDESTROY
-	var/obj/machinery/computer/connected
+	var/list/obj/machinery/computer/connected = list()
 	var/last_message // Used by go_out()
 
 	light_color = LIGHT_COLOR_CYAN
@@ -131,14 +131,13 @@
 
 	go_out() //Eject everything
 
-	if(connected)
-		if(istype(connected,/obj/machinery/computer/cloning))
-			var/obj/machinery/computer/cloning/C = connected
-			C.scanner = null
-		else if(istype(connected,/obj/machinery/computer/scan_consolenew))
-			var/obj/machinery/computer/scan_consolenew/C = connected
+	if(connected.len)
+		for(var/obj/machinery/computer/cloning/C in connected)
+			if(src in C.scanners)
+				C.scanners -= src
+		for(var/obj/machinery/computer/scan_consolenew/C in connected)
 			C.connected = null
-		connected = null
+		connected.Cut()
 
 	. = ..()
 
@@ -222,8 +221,9 @@
 		if(user.drop_item(beaker, src))
 			beaker = item
 			user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
-			if(connected)
-				nanomanager.update_uis(connected)
+			if(connected.len)
+				for(var/obj/machinery/computer/C in connected)
+					nanomanager.update_uis(C)
 			return
 	else if(istype(item, /obj/item/weapon/grab)) //sanity checks, you chucklefucks
 		var/obj/item/weapon/grab/G = item
@@ -278,8 +278,9 @@
 	M.reset_view()
 	src.occupant = M
 	src.icon_state = "scanner_1"
-	if(connected)
-		nanomanager.update_uis(connected)
+	if(connected.len)
+		for(var/obj/machinery/computer/C in connected)
+			nanomanager.update_uis(C)
 
 	if(user)
 		if(M == user)
@@ -364,8 +365,9 @@
 			C.update_icon()
 			C.updateUsrDialog()
 
-	if(connected)
-		nanomanager.update_uis(connected)
+	if(connected.len)
+		for(var/obj/machinery/computer/C in connected)
+			nanomanager.update_uis(C)
 
 	return 1
 

@@ -213,7 +213,6 @@
 
 	material  = "gingerbread"
 
-
 /obj/item/stack/tile/mineral/lead
 	name = "lead tile"
 	singular_name = "lead floor tile"
@@ -228,3 +227,25 @@
 	w_type = RECYK_METAL
 	sheet_type = /obj/item/stack/sheet/mineral/lead
 	material="lead"
+
+/obj/item/stack/tile/mineral/reticulite
+	name = "reticulite tile"
+	singular_name = "reticulite floor tile"
+	desc = "A hexagonally shaped tile made out of reticulite."
+	icon_state = "tile_reticulite"
+	w_class = W_CLASS_MEDIUM
+	force = 1.0
+	throwforce = 1.0
+	throw_speed = 3
+	throw_range = 7
+	max_amount = 60
+
+	material = "alien_tile1"
+	starting_materials = list(MAT_RETICULITE = CC_PER_SHEET_RETICULITE / 4) // Recipe requires 1 sheet for 4 tiles
+	w_type = RECYK_METAL
+
+/obj/item/stack/tile/mineral/reticulite/fancy
+	name = "ornate reticulite tile"
+	icon_state = "tile_fancyreticulite"
+	desc = "A refined, chiseled and normal shaped tile made out of reticulite."
+	material = "alien_tile_fancy"

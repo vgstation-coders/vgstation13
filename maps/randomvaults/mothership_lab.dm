@@ -119,6 +119,13 @@
 	explosion_block = 9999
 	walltype = "alloy"
 
+/turf/simulated/wall/mineral/reticulite
+	name = "alien alloy wall"
+	desc = "A solid wall of an unknown alloy. It's oddly warm to the touch, and seems to pulse rhymically."
+	icon_state = "alloy"
+	walltype = "alloy"
+	mineral = "reticulite"
+
 /turf/unsimulated/wall/r_rock
 	name = "riveted porous rock"
 	desc = "Asteroid rock reinforced by a wall with massive rivets embedded in the struts."
@@ -362,16 +369,19 @@
 	icon_state = "ayychair1"
 	name = "GDR chair"
 	desc = "A plain chair manufactured by greys for other greys. Average comfort, but much better than a stool."
+	sheet_type = /obj/item/stack/sheet/mineral/reticulite
 
 /obj/structure/bed/chair/comfy/ayy2
 	icon_state = "ayychair2"
 	name = "GDR premium chair"
 	desc = "A premium chair manufactured by greys for more important greys. Surprisingly comfortable, good lumbar support."
+	sheet_type = /obj/item/stack/sheet/mineral/reticulite
 
 /obj/structure/bed/ayy1
 	name = "GDR standard bed"
 	desc = "Manufactured efficiently from basic alloys and sythetic threads. Quality may vary. "
 	icon_state = "ayybed1"
+	sheet_type = /obj/item/stack/sheet/mineral/reticulite
 
 /obj/structure/bed/ayy2
 	name = "GDR premium bed"
@@ -388,6 +398,10 @@
 	density = 1
 	icon_opened = "ayycrate1open"
 	icon_closed = "ayycrate1"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
+
+/obj/structure/closet/crate/ayy/metal
+	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 
 /obj/structure/closet/crate/ayy2
 	name = "MDF crate"
@@ -397,6 +411,7 @@
 	density = 1
 	icon_opened = "ayycrate2open"
 	icon_closed = "ayycrate2"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/crate/ayy3
 	name = "GDR industrial crate"
@@ -406,6 +421,10 @@
 	density = 1
 	icon_opened = "ayycrate3open"
 	icon_closed = "ayycrate3"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
+
+/obj/structure/closet/crate/ayy3/metal
+	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 
 /obj/structure/closet/crate/secure/ayy_general
 	name = "GDR secure crate"
@@ -415,6 +434,7 @@
 	density = 1
 	icon_opened = "ayysecurecrate2open"
 	icon_closed = "ayysecurecrate2"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/crate/secure/ayy_mdf
 	name = "MDF secure crate"
@@ -424,6 +444,7 @@
 	density = 1
 	icon_opened = "ayysecurecrateopen"
 	icon_closed = "ayysecurecrate"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/ayy
 	name = "GDR locker"
@@ -431,6 +452,10 @@
 	icon_state = "ayy1_closed"
 	icon_closed = "ayy1_closed"
 	icon_opened = "ayy1_open"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
+
+/obj/structure/closet/ayy/metal
+	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 
 /obj/structure/closet/ayy2
 	name = "MDF locker"
@@ -438,6 +463,7 @@
 	icon_state = "ayy2_closed"
 	icon_closed = "ayy2_closed"
 	icon_opened = "ayy2_open"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/ayy3
 	name = "Laborer locker"
@@ -445,6 +471,7 @@
 	icon_state = "ayy3_closed"
 	icon_closed = "ayy3_closed"
 	icon_opened = "ayy3_open"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/secure_closet/ayy
 	name = "GDR secure locker"
@@ -455,6 +482,10 @@
 	icon_opened = "ayysecureopen"
 	icon_broken = "ayysecurebroken"
 	icon_off = "ayysecureoff"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
+
+/obj/structure/closet/secure_closet/ayy/metal
+	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 
 /obj/structure/closet/secure_closet/ayy2
 	name = "MDF secure locker"
@@ -465,6 +496,10 @@
 	icon_opened = "ayymdfsecureopen"
 	icon_broken = "ayymdfsecurebroken"
 	icon_off = "ayymdfsecureoff"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
+
+/obj/structure/closet/secure_closet/ayy2/metal
+	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 
 /obj/structure/closet/secure_closet/ayy_leader
 	name = "Administrator's secure locker"
@@ -475,6 +510,7 @@
 	icon_opened = "leadersecureopen"
 	icon_broken = "leadersecurebroken"
 	icon_off = "leadersecureoff"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 //////////////////////////////
 // NARRATION
@@ -977,7 +1013,7 @@
 	return
 
 //////////////////////////////
-// AYY-THEMED STUN BATON (I tried several times to make this a child of the stun baton, but couldn't get it to play nice with the sprites. My apologies for what you're about to see)
+// AYY-THEMED STUN BATON
 //////////////////////////////
 
 /obj/item/weapon/melee/baton/stunprobe
@@ -1009,6 +1045,22 @@
 		L.electrocute_act(damage, src)
 	if(iscarbon(L))
 		L.apply_effect(10, STUTTER)
+
+/obj/item/weapon/melee/baton/stunprobe/sick
+	name = "sick stick"
+	desc = "An even more unusual baton used by MDF pacifiers. Less than nonlethal, more lunch lethal."
+	icon_state = "sick stick"
+	item_state = "s_probe"
+	origin_tech = Tc_COMBAT + "=3" + Tc_POWERSTORAGE + "=2;" + Tc_ALIEN + "=4"
+
+/obj/item/weapon/melee/baton/stunprobe/sick/apply_baton_effect(mob/victim)
+	if(ishuman(victim))
+		var/mob/living/carbon/human/H = victim
+		to_chat(H, "<span class='warning'>The scrambler particles in probe makes you feel lightheaded and sick!</span>")
+		H.eye_blurry = max(H.eye_blurry, 5)
+		H.adjustBrainLoss(2)
+		H.drop_item()
+		H.vomit(0,1)
 
 //////////////////////////////
 // AYY SINKS, TOILETS, AND SHOWERS (Only attainable via the vault and bussing for now)

@@ -698,3 +698,84 @@
 
 	mainboard = /obj/item/weapon/circuitboard/mecha/clarke/main
 	peripherals = /obj/item/weapon/circuitboard/mecha/clarke/peripherals
+
+/datum/construction/reversible/mecha/roswell
+	result = "/obj/mecha/combat/roswell"
+	base_icon = "roswell"
+
+	steps = list(
+					//1
+					list(Co_DESC="Internal armor is installed. The dome requires metal rods, for a screen. ",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/rods,
+					 		Co_AMOUNT = 10,
+					 		Co_VIS_MSG = "{USER} install{s} a steel wire mesh to {HOLDER}'s dome.",
+					 		Co_START_MSG = "{USER} begin{s} installing the wire mesh...",
+					 		Co_DELAY = 30),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
+					 		Co_VIS_MSG = "{USER} prie{s} internal armor layer from {HOLDER}.")
+					 	),
+					//2
+					list(Co_DESC="Peripherals control module is secured",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/mineral/reticulite,
+					 		Co_AMOUNT = 5,
+					 		Co_VIS_MSG = "{USER} install{s} internal armor layer to {HOLDER}."),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
+					 		Co_VIS_MSG = "{USER} remove{s} the peripherals control module from {HOLDER}.")
+					 	),
+					//3
+					list(Co_DESC="Central control module is secured",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/circuitboard/mecha/roswell/peripherals,
+					 		Co_AMOUNT = 1,
+					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
+					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
+					 	),
+					//4
+					list(Co_DESC="Prober is installed.",
+						Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/circuitboard/mecha/roswell/main,
+					 		Co_AMOUNT = 1,
+					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
+					 		Co_VIS_MSG = "{USER} removes{s} the prober from {HOLDER}.")
+					 	),
+					//5
+					list(Co_DESC="Scrambler is installed.",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/prober,
+					 		Co_AMOUNT = 1,
+					 		Co_VIS_MSG = "{USER} adds{s} the prober to {HOLDER}."),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
+					 		Co_VIS_MSG = "{USER} removes{s} the scrambler from {HOLDER}.")
+					 	),
+					//6
+					list(Co_DESC="Gravitator is installed.",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/scrambler,
+					 		Co_AMOUNT = 1,
+					 		Co_VIS_MSG = "{USER} adds{s} the scrambler to {HOLDER}."),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
+					 		Co_VIS_MSG = "{USER} removes{s} the gravitator from {HOLDER}.")
+					 	),
+					//7
+					list(Co_DESC="Abductor is installed.",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/gravitator,
+					 		Co_AMOUNT = 1,
+					 		Co_VIS_MSG = "{USER} adds{s} the gravitator to {HOLDER}."),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
+					 		Co_VIS_MSG = "{USER} removes{s} the abductor from {HOLDER}.")
+					 	),
+					//8
+					list(Co_DESC="The body of the ship is empty.",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/abductor,
+					 		Co_AMOUNT = 1,
+					 		Co_VIS_MSG = "{USER} adds{s} the abductor to {HOLDER}.")
+					 	)
+					)
+
+/datum/construction/reversible/mecha/custom_action(index, diff, atom/used_atom, mob/user)
+	if(!..())
+		return 0
+
+	holder.icon_state = "[base_icon][steps.len - index - diff > 8 ? 1 : 0]"
+	return 1
+
+/datum/construction/reversible/mecha/roswell/add_board_keys()
+	return

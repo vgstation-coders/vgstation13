@@ -649,6 +649,10 @@
 	. = ..()
 	if(!istype(loc, /turf/space))
 		for(var/obj/item/I in get_all_slots())
+			if(I == get_item_by_slot(slot_shoes) && istype(loc, /turf/simulated/floor))
+				var/turf/simulated/floor/T = loc
+				if(T.material == "alien_tile1") // these ignore magboots
+					continue
 			if(I == src.back)
 				. *= max(1,I.slowdown / 2) // heavy items worn on the back. those shouldn't slow you down as much.
 			else if(!isclothing(I) || (isclothing(I) && (I in get_clothing_items())))

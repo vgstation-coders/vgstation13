@@ -81,18 +81,18 @@
 			throw_mult += (H.get_strength()-1)/2 //For each level of strength above 1, add 0.5
 	return ..()
 
-/obj/item/weapon/boomerang/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+/obj/item/weapon/boomerang/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	var/turf/starting = get_turf(src)
-	var/turf/target = get_turf(targ)
+	var/turf/targ = get_turf(target)
 	var/obj/item/projectile/boomerang/B = new (starting)
 	B.name = name
 	B.desc = desc
-	B.original = target
-	B.target = target
+	B.original = targ
+	B.target = targ
 	B.current = starting
 	B.starting = starting
-	B.yo = target.y - starting.y
-	B.xo = target.x - starting.x
+	B.yo = targ.y - starting.y
+	B.xo = targ.x - starting.x
 	//B.damage = throwforce //Actual damage is down by calls to throw_impact(). The projectile damage should remain at zero unless you want to break open crates with it
 	B.projectile_speed = 0.66/throw_mult
 	B.icon_state = "[icon_state]-spin"
@@ -326,7 +326,7 @@
 	..()
 	update_moody_light(icon, "[icon_state]-moody")
 
-/obj/item/weapon/boomerang/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+/obj/item/weapon/boomerang/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	plane = ABOVE_LIGHTING_PLANE
 	..()
 

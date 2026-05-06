@@ -1688,5 +1688,254 @@
 	qdel(src)
 	playsound(get_turf(marktwo),'sound/items/ratchet.ogg',50,TRUE)
 
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/can_attach(obj/mecha/combat/roswell/R)
+	if(..())
+		if(istype(R))
+			return 1
+	return 0
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor
+	name = "\improper Carbon Abductor"
+	desc = "Carbon Abductor. (Can be attached to: UFOs)"
+	icon_state = "mecha_abductor"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ALIEN + "=3"
+	energy_drain = 20
+	range = MELEE
+	reliability = 1000
+	equip_cooldown = 50
+	var/datum/global_iterator/pr_mech_abductor
+	var/mob/living/occupant = null
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/New()
+	..()
+	pr_mech_abductor = new /datum/global_iterator/mech_abductor(list(src),0)
+	pr_mech_abductor.set_delay(equip_cooldown)
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/Destroy()
+	go_out()
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/action(var/mob/living/target)
+	if(!action_checks(target))
+		return
+	if(target.loc != chassis.loc)
+		return
+	if(!ishuman(target) && !istype(target,/mob/living/simple_animal/cow))
+		occupant_message("Cannot abduct [target]: not humanoid or bovine.")
+		return
+	if(target.locked_to)
+		occupant_message("Cannot abduct [target]: buckled to [target.locked_to].")
+		return
+	if(occupant)
+		occupant_message("The ship is already occupied.")
+		return
+	for(var/mob/living/carbon/slime/M in range(1,target))
+		if(M.Victim == target)
+			occupant_message("Cannot abduct [target]: slime latched onto their head.")
+			return
+	occupant_message("You start abducting [target] into [src].")
+	chassis.visible_message("[chassis] starts abducting [target] into \the [src].")
+	var/C = chassis.loc
+	var/T = target.loc
+	animate(chassis, pixel_y = 16, time = 3, easing = SINE_EASING)
+	animate(target, pixel_y = 16, time = 5 SECONDS)
+	chassis.underlays.Cut()
+	chassis.underlays += image(icon, chassis, "abductor_beam", pixel_y = -10)
+	playsound(chassis.loc, 'sound/mecha/abduct.ogg', 100, 1)
+	if(do_after_cooldown(target))
+		if(chassis.loc!=C || target.loc!=T)
+			chassis.underlays.Cut()
+			animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
+			animate(target, pixel_y = 0, time = 1)
+			return
+		if(occupant)
+			occupant_message("<span class='warning'>The ship is already occupied!</span>")
+			chassis.underlays.Cut()
+			animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
+			animate(target, pixel_y = 0, time = 1)
+			return
+		target.forceMove(src)
+		target.reset_view(src)
+		target.sleeping = 30
+		target.pixel_y = initial(target.pixel_y)
+		occupant = target
+		pr_mech_abductor.start()
+		occupant_message("<span class='notice'>[target] was successfully loaded into [src]</span>.")
+		chassis.visible_message("[chassis] loads [target] into [src].")
+		log_message("[target] loaded.")
+		chassis.underlays.Cut()
+		animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
+		animate(target, pixel_y = 0, time = 1)
+		return 1
+	chassis.underlays.Cut()
+	animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
+	if(target)
+		animate(target, pixel_y = 0, time = 1)
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/get_equip_info()
+	var/output = ..()
+	if(output)
+		return "[output] <br />\[Occupant: [occupant ? "[occupant] (Health: [occupant.health]%)" : "none"]\]<br />|<a href='?src=\ref[src];eject=1'>Eject</a>|"
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/Topic(href,href_list)
+	if(..())
+		return TRUE
+	var/datum/topic_input/topic_filter = new /datum/topic_input(href,href_list)
+	if(topic_filter.get("eject"))
+		go_out()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/alt_action()
+	if(occupant)
+		go_out()
+	else
+		for(var/mob/living/L in chassis.loc)
+			if(action(L))
+				return
+	
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/detach()
+	if(occupant)
+		occupant_message("Unable to detach [src] - equipment occupied.")
+		return
+	pr_mech_abductor.stop()
+	return ..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/proc/go_out()
+	if(!occupant)
+		return
+	pr_mech_abductor.stop()
+	occupant.forceMove(get_turf(src))
+	occupant_message("[occupant] ejected.")
+	log_message("[occupant] ejected.")
+	occupant.reset_view()
+	occupant = null
+	return 1
+
+/datum/global_iterator/mech_abductor/process(var/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/A)
+	if(!A.chassis)
+		A.set_ready_state(1)
+		return stop()
+	if(!A.chassis.has_charge(A.energy_drain))
+		A.set_ready_state(1)
+		A.log_message("Deactivated.")
+		A.occupant_message("[A] deactivated - no power.")
+		A.go_out()
+		return stop()
+	A.chassis.use_power(A.energy_drain)
+	A.update_equip_info()
+	if(A.occupant)
+		A.occupant.sleeping = 30
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober
+	name = "\improper Carbon Prober"
+	desc = "Carbon Prober. (Can be attached to: UFOs)"
+	icon_state = "mecha_prober"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ALIEN + "=3"
+	energy_drain = 20
+	range = MELEE
+	reliability = 1000
+	equip_cooldown = 20
+	var/obj/item/probe_item = null
+	var/probing = 0
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/can_attach(obj/mecha/M as obj)
+	if(..())
+		if(!M.proc_res["dynattackby"])
+			return 1
+	return 0
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/attach(obj/mecha/M as obj)
+	..()
+	chassis.proc_res["dynattackby"] = src
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/detach()
+	chassis.proc_res["dynattackby"] = null
+	if(probe_item)
+		probe_item.forceMove(get_turf(src))
+		probe_item = null
+	..()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/Destroy()
+	chassis.proc_res["dynattackby"] = null
+	if(probe_item)
+		probe_item.forceMove(get_turf(src))
+		probe_item = null
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(!chassis.operation_allowed(user))
+		to_chat(user, "<span class='warning'>Access Denied.</span>")
+		chassis.log_append_to_last("Permission denied.")
+		return
+	if(W.w_class > 1)
+		to_chat(user,"<span class='warning'>This item is too big for the prober.</span>")
+		return
+	if(user.drop_item(W,src))
+		probe_item = W
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/action(atom/target)
+	if(target == chassis)
+		alt_action()
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/alt_action()
+	if(probing)
+		return
+	if(!action_checks(chassis))
+		return
+	var/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/abd = locate() in chassis.equipment
+	if(!abd)
+		occupant_message("No abductor to capture probees with.")
+		return
+	if(!abd.occupant)
+		occupant_message("No occupant in abductor.")
+		return
+	if(ishuman(abd.occupant))
+		if(!probe_item)
+			occupant_message("No item loaded into probe.")
+			return
+		var/mob/living/carbon/human/H = abd.occupant
+		var/datum/organ/external/chest/affected = H.get_organ(LIMB_GROIN) // the crew gets an anal probe
+		if(affected.hidden)
+			occupant_message("Probe space already occupied.")
+			return
+		occupant_message("Beginning probal of [probe_item] into rectal cavity.")
+		probing = 1
+		if(do_after_cooldown(H,2.5))
+			if(!H)
+				occupant_message("Probe failure: Occupant missing.")
+				probing = 0
+				return
+			if(!probe_item)
+				occupant_message("Probe failure: Probe item missing.")
+				probing = 0
+				return
+			if(!affected)
+				occupant_message("Probe failure: Implant area not found.")
+				probing = 0
+				return
+			occupant_message("Probing complete.")
+			affected.hidden = probe_item
+			probe_item.forceMove(H)
+			if(istype(probe_item, /obj/item/weapon/implant))
+				var/obj/item/weapon/implant/timp = probe_item
+				timp.insert(H, affected.name, chassis.occupant)
+			affected.cavity = 0
+			probe_item = null
+	else
+		probing = 1
+		chassis.visible_message("<span class='danger'>[chassis] makes some grinding noises!</span>")
+		playsound(chassis.loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
+		if(do_after_cooldown(abd.occupant))
+			abd.occupant.adjustBruteLoss(abd.occupant.maxHealth) // the thing UFOs do to cattle
+	abd.go_out()
+	probing = 0
+
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED

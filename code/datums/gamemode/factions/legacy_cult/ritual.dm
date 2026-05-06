@@ -85,7 +85,7 @@ var/runedec = 0 // Rune cap ?
 	if(user.wear_mask?.is_muzzle)
 		to_chat(user, "You are unable to speak the words of the rune.")
 		return
-	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
+	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss(INTELLIGENCE_L)))
 		return fizzle()
 //		if(!src.visibility)
 //			src.visibility=1

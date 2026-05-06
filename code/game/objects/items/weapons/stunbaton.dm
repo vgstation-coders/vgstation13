@@ -18,6 +18,7 @@
 	var/stunsound = 'sound/weapons/Egloves.ogg'
 	var/can_swap_cell = TRUE // Determines whether the cell can be swapped
 	var/has_stun_message = TRUE // Determines if it'll say that the target has been stunned. Only important for the alien stun probe currently
+	var/attacklogverb = "stunned"
 	hitsound = "swing_hit"
 
 /obj/item/weapon/melee/baton/get_cell()
@@ -62,15 +63,8 @@
 
 
 /obj/item/weapon/melee/baton/update_icon()
-	if(status)
-		icon_state = "[initial(name)]_active"
-		item_state = "baton1"
-	else if(!bcell)
-		icon_state = "[initial(name)]_nocell"
-		item_state = "baton0"
-	else
-		icon_state = "[initial(name)]"
-		item_state = "baton0"
+	icon_state = "[initial(name)][status ? "_active" : bcell ? "" : "_nocell"]"
+	item_state = "[initial(item_state)][status ? "1" : "0"]"
 
 	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/M = loc
@@ -202,8 +196,8 @@
 
 		apply_baton_effect(L)
 		if(has_stun_message)
-			L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
-				"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
+			L.visible_message("<span class='danger'>\The [L] has been [attacklogverb] with \the [src] by [user]!</span>",\
+				"<span class='userdanger'>You have been [attacklogverb] with \the [src] by \the [user]!</span>",\
 				self_drugged_message="<span class='userdanger'>\The [user]'s [src] sucks the life right out of you!</span>")
 		playsound(loc, stunsound, 50, 1, -1)
 
@@ -211,9 +205,9 @@
 
 		L.forcesay(hit_appends)
 
-		user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
-		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
-		log_attack("<font color='red'>[user.name] ([user.ckey]) stunned [L.name] ([L.ckey]) with [name]</font>" )
+		user.attack_log += "\[[time_stamp()]\]<font color='red'> [capitalize(attacklogverb)] [L.name] ([L.ckey]) with [name]</font>"
+		L.attack_log += "\[[time_stamp()]\]<font color='orange'> [capitalize(attacklogverb)] by [user.name] ([user.ckey]) with [name]</font>"
+		log_attack("<font color='red'>[user.name] ([user.ckey]) [attacklogverb] [L.name] ([L.ckey]) with [name]</font>" )
 		M.assaulted_by(user)
 
 /obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
@@ -231,16 +225,16 @@
 	apply_baton_effect(L)
 
 	if(has_stun_message)
-		L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
+		L.visible_message("<span class='danger'>[L] has been [attacklogverb] with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
 	playsound(loc, stunsound, 50, 1, -1)
 
 	deductcharge(hitcost)
 
 	L.forcesay(hit_appends)
 
-	foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
-	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
-	log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) stunned [L.name] ([L.ckey])</font>" )
+	foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> [capitalize(attacklogverb)] [L.name] ([L.ckey]) with [name]</font>"
+	L.attack_log += "\[[time_stamp()]\]<font color='orange'> [capitalize(attacklogverb)] by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
+	log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) [attacklogverb] [L.name] ([L.ckey])</font>" )
 	L.assaulted_by(foundmob)
 
 /obj/item/weapon/melee/baton/emp_act(severity)
