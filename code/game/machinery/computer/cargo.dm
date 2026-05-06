@@ -457,14 +457,20 @@ For vending packs, see vending_packs.dm*/
 			if(text2num(tempcount) == 0)
 				return
 
+		if(!account)
+			to_chat(usr, "<span class='warning'>No account linked: unable to process transaction!</span>")
+			return
 		// Calculate money tied up in requests
 		var/total_money_req = 0
 		for(var/i = 1; i <= length(SSsupply_shuttle.requestlist); i++)
 			var/datum/supply_order/R = SSsupply_shuttle.requestlist[i]
+			if(!R)
+				continue
 			var/datum/money_account/R_acc = R.account
-			if(R_acc.account_number == account.account_number)
+			if(R_acc?.account_number == account.account_number)
 				var/datum/supply_packs/R_pack = R.object
-				total_money_req += R_pack.cost
+				if(R_pack)
+					total_money_req += R_pack.cost
 		// check they can afford the order
 		if(P.cost * crates + total_money_req > account.money)
 			var/max_crates = round((account.money - total_money_req) / P.cost)
@@ -799,9 +805,9 @@ For vending packs, see vending_packs.dm*/
 				orders_list.Add(list(list("ordernum" = SO.ordernum, "orderedby" = SO.orderedby, "supply_type" = SO.object.name)))
 	data["orders"] = orders_list
 	var/datum/money_account/account = current_acct["account"]
-	data["name_of_source_account"] = account.owner_name
+	data["name_of_source_account"] = account ? account.owner_name : "Unknown"
 	data["authorized_name"] = current_acct["authorized_name"]
-	data["money"] = account.fmtBalance()
+	data["money"] = account ? account.fmtBalance() : "$0"
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
