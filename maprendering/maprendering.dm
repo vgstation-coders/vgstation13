@@ -45,7 +45,7 @@
 		return
 	lighted = lighted == "Yes"*/
 
-	var/strang = "[ckey]/[src] started rendering maps[area_rendered ? " for area [area_rendered]" : ""][all_z ? "" : " on z-level [zlevel]"],[invisibles ? "" : " not"] showing invisible atoms,[lighted ? "" : " not"] showing lighting"
+	var/strang = "[ckey]/[src] started rendering maps[area_rendered ? " for area [area_rendered]" : ""][all_z ? "" : " on z-level [zlevel]"],[invisibles ? "" : " not"] showing invisible atoms"/*,[lighted ? "" : " not"] showing lighting*/
 	message_admins(strang)
 	log_admin(strang)
 
