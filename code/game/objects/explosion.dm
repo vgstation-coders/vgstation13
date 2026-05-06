@@ -120,7 +120,8 @@ var/explosion_shake_message_cooldown = 0
 						skip_shake = 1
 
 				if(!explosion_shake_message_cooldown && !skip_shake)
-					if(map.zLevels[M.z]?.planetside)
+					var/datum/virtual_z/vz = M.get_virtual_z()
+					if(vz?.level_type == VZ_PLANET)
 						to_chat(M, "<span class='danger'>You feel the ground shudder beneath your feet.</span>")
 					else
 						to_chat(M, "<span class='danger'>You feel the station's structure shaking all around you.</span>")
