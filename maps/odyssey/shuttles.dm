@@ -156,8 +156,8 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	// Skip liftoff when already in hyperspace
 	if(current_port == transit_port)
 		return
-	// Delay liftoff animation to 2 seconds before the pre-flight countdown ends
-	spawn(max(1, get_pre_flight_delay() - 2 SECONDS))
+	// Delay liftoff animation to 4 seconds before the pre-flight countdown ends
+	spawn(max(1, get_pre_flight_delay() - 4 SECONDS))
 		..()
 
 /datum/shuttle/odyssey/animate_landing()

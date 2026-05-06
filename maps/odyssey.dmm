@@ -1662,7 +1662,7 @@
 /area/odyssey/cargo)
 "fo" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /obj/structure/closet/emcloset/vox,
 /turf/simulated/floor{
@@ -1788,7 +1788,7 @@
 "fN" = (
 /obj/structure/flora/pottedplant/random,
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /obj/item/device/radio/intercom{
 	pixel_x = -30
@@ -2193,7 +2193,7 @@
 /area/shuttle/odyssey/maintenance/port)
 "hh" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/crew)
@@ -3483,7 +3483,7 @@
 	tag = "90Curve"
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -4356,7 +4356,10 @@
 /turf/simulated/floor/carpet,
 /area/odyssey/admin)
 "oY" = (
-/obj/machinery/atmospherics/unary/vent_scrubber/layered,
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	dir = 1;
+	on = 1
+	},
 /obj/structure/closet/crate/trashcart,
 /obj/machinery/newscaster{
 	pixel_y = -28
@@ -4805,7 +4808,9 @@
 /area/security/perma)
 "qy" = (
 /obj/structure/flora/pottedplant/random,
-/obj/machinery/atmospherics/unary/vent_scrubber/layered,
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	on = 1
+	},
 /obj/structure/sign/directions/carg{
 	pixel_x = -32;
 	dir = 8
@@ -5913,7 +5918,7 @@
 	dir = 4;
 	tag = "icon-intact (EAST)"
 	},
-/turf/simulated/floor,
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "uw" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
@@ -6575,7 +6580,7 @@
 	pixel_y = 36
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /obj/effect/landmark{
 	name = "JoinLate"
@@ -6667,7 +6672,7 @@
 /area/shuttle/odyssey/hallway/fore)
 "wN" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -7238,7 +7243,8 @@
 /area/shuttle/odyssey/logistics)
 "yB" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 8
+	dir = 4;
+	on = 1
 	},
 /obj/structure/extinguisher_cabinet{
 	pixel_x = -30
@@ -8027,7 +8033,7 @@
 /area/odyssey/admin)
 "Bo" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -8144,7 +8150,7 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/door/firedoor,
-/turf/simulated/floor,
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/cafeteria)
 "BG" = (
 /obj/effect/decal/warning_stripes{
@@ -10432,7 +10438,7 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 8;
+	dir = 4;
 	on = 1
 	},
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
@@ -14735,7 +14741,7 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /obj/machinery/firealarm{
 	pixel_x = -30
