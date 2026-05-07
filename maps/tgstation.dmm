@@ -30366,8 +30366,8 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/window/reinforced/tinted,
 /obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/bridge)
 "bfn" = (
@@ -31256,12 +31256,12 @@
 	},
 /area/bridge)
 "bha" = (
-/obj/structure/window/reinforced/tinted{
-	dir = 1
-	},
 /obj/machinery/computer/bhangmeter,
-/obj/structure/window/reinforced/tinted{
-	dir = 4
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -31281,13 +31281,13 @@
 	},
 /area/bridge)
 "bhc" = (
-/obj/structure/window/reinforced/tinted{
-	dir = 8
-	},
-/obj/structure/window/reinforced/tinted{
+/obj/machinery/computer/message_monitor,
+/obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/machinery/computer/message_monitor,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "darkblue";
