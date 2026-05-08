@@ -592,6 +592,11 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 			if(ticker)
 				ticker.mode.ShuttleDocked(2)
 
+			// Get the heatmap before the shuttle moves to Centcomm to remove noise
+			var/datum/virtual_z/current_vz = odyssey_shuttle.current_port?.get_virtual_z()
+			if(current_vz)
+				heatmap_snapshot = string_heatmap(current_vz)
+
 			// Move Odyssey to centcom dock
 			odyssey_shuttle.open_all_doors()
 			if(!odyssey_shuttle.move_to_dock(odyssey_shuttle.dock_centcom, 0, odyssey_shuttle.dir))
