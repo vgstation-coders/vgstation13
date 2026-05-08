@@ -408,6 +408,42 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 /datum/emergency_shuttle/odyssey/get_linked_port()
 	return odyssey_shuttle ? odyssey_shuttle.linked_port : null
 
+// Admin panel overrides
+/datum/emergency_shuttle/odyssey/uses_escape_pods()
+	return FALSE
+
+/datum/emergency_shuttle/odyssey/supports_phase(phase)
+	if(phase == "station")
+		return FALSE
+	return ..()
+
+/datum/emergency_shuttle/odyssey/manages_shuttle_docks()
+	return FALSE
+
+/datum/emergency_shuttle/odyssey/panel_title()
+	return "Bluespace Jump Control (NTEV Odyssey)"
+
+/datum/emergency_shuttle/odyssey/get_panel_jump_turf()
+	if(odyssey_shuttle?.linked_area?.area_turfs?.len)
+		return pick(odyssey_shuttle.linked_area.area_turfs)
+	return null
+
+/datum/emergency_shuttle/odyssey/get_status_label()
+	switch(location)
+		if(SHUTTLE_ON_STANDBY)
+			switch(direction)
+				if(EMERGENCY_SHUTTLE_RECALLED)
+					return "<b>Bluespace jump cancelled</b> (returning to standby)"
+				if(EMERGENCY_SHUTTLE_STANDBY)
+					return "<b>Idle</b> (engines cold)"
+				if(EMERGENCY_SHUTTLE_GOING_TO_STATION)
+					return "<b>Charging engines</b> (countdown to Bluespace jump)"
+				if(EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM)
+					return "<b>Bluespace jump in progress</b> (en route to Central Command)"
+		if(SHUTTLE_ON_CENTCOM)
+			return "<b>Docked at Central Command</b> (round ended)"
+	return "<b>Unknown</b>"
+
 /datum/emergency_shuttle/odyssey/process()
 	if(!online || shutdown)
 		return
