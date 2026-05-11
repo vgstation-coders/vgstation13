@@ -902,7 +902,7 @@
 /datum/disease2/effect/norris/activate(var/mob/living/mob)
 	if (prob(20 * multiplier) && ishuman(mob))
 		var/atom/A = pick(adjacent_atoms(mob))
-		if(A && A.mouse_opacity && !A.invisibility)
+		if(A && A.mouse_opacity && !A.invisibility && A != mob && !(A in mob))
 			mob.face_atom(A)
 			A.kick_act(mob)
 
