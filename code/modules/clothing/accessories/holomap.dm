@@ -158,7 +158,9 @@ var/list/holomap_cache = list()
 #define HOLOMAP_DEAD	3
 
 /obj/item/clothing/accessory/holomap_chip/proc/handle_sanity(var/turf/T)
-	if((!attached_to) || (!activator) || (activator.get_item_by_slot(slot_w_uniform) != attached_to) || (!activator.client) || (holoMiniMaps[T.z] == null))
+	if((!attached_to) || (!activator) || (activator.get_item_by_slot(slot_w_uniform) != attached_to) || (!activator.client))
+		return FALSE
+	if(T.z < 1 || T.z > holoMiniMaps.len || holoMiniMaps[T.z] == null)
 		return FALSE
 	return TRUE
 

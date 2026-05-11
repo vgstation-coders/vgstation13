@@ -27,7 +27,10 @@
 
 /obj/effect/overlay/beam/New(var/turf/loc, var/lifetime = 10, var/fade = 0, var/src_icon = 'icons/effects/beam.dmi', var/icon_state = "b_beam", var/base_damage = 30, var/col_override = null, var/col_shift = null)
 	..()
-	alpha = round(255*(max(1,loc.last_beam_damage)/max(1,base_damage)))
+	if(loc)
+		alpha = round(255*(max(1,loc.last_beam_damage)/max(1,base_damage)))
+	else
+		alpha = round(255*(1/max(1,base_damage)))
 	icon = src_icon
 	src.icon_state = icon_state
 	if (col_override)

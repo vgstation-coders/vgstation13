@@ -166,7 +166,9 @@
 		return FALSE
 
 /obj/machinery/door/window/bullet_act(var/obj/item/projectile/Proj)
-	if(Proj.damage)
+	if(Proj.destroy)
+		ex_act(1)
+	else if(Proj.damage)
 		take_damage(round(Proj.damage / 2))
 	return ..()
 

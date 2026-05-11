@@ -49,6 +49,68 @@
 	specheatcap = 0.45
 	density = 7.874
 
+/datum/reagent/zetadust
+	name = "Zeta dust"
+	id = ZETADUST
+	description = "Ground up reticulite, the essence of any grey's healthy blood system."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#336666" //closer to ayy colors
+	specheatcap = 0.1
+	density = 25
+	dupeable = FALSE
+
+/datum/reagent/zetadust/on_mob_life(mob/living/M, alien)
+	. = ..()
+	if(!isgrey(M) && prob(25)) //restores blood on greys, stings a little for anyone else
+		M.adjustFireLoss(0.5 * REM)
+		M.bodytemperature += 1 * TEMPERATURE_DAMAGE_COEFFICIENT
+		if(prob(50))
+			M.adjustToxLoss(-1 * REM)
+
+/datum/reagent/zetadust/reaction_mob(var/mob/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+	if(..())
+		return 1
+
+	if(method == TOUCH && ishuman(M) && !isgrey(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.flags & NO_BLOOD)
+			return
+		var/screamed = FALSE
+		var/damage = (10 / zone_sels.len) * (H.vessel.total_volume / 600)
+		for(var/part in zone_sels)
+			if(H.check_body_part_coverage(limb_define_to_part_define(part)))
+				return
+			var/datum/organ/external/ext_organ = H.get_organ(part)
+			if((ext_organ.wounds?.len) && prob(15) && volume >= 5)
+				if(ext_organ.take_damage(0, damage)) // Balance for precisions vs general.
+					H.UpdateDamageIcon(1)
+					screamed = TRUE
+				if(istype(ext_organ,/datum/organ/external/head))
+					var/datum/organ/external/head/head_organ = ext_organ
+					head_organ.disfigure("burn")
+		if(screamed)
+			H.audible_scream()
+
+/datum/reagent/zetadust/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	O.clean_blood()
+		
+	if(volume >= 20 && istype(O,/obj/item/stack/sheet/mineral/reticulite))
+		var/obj/item/stack/S = O
+		S.add(volume/20)
+
+/datum/reagent/zetadust/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 1)
+		for (var/obj/effect/decal/cleanable/blood/C in T)
+			qdel(C)
+
+		T.clean_blood()
+
 /datum/reagent/phazon
 	name = "Phazon Salt"
 	id = PHAZON

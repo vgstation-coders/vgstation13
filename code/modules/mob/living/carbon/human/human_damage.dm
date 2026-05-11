@@ -18,7 +18,7 @@
 		ChangeToHusk()
 	return
 
-/mob/living/carbon/human/getBrainLoss()
+/mob/living/carbon/human/getBrainLoss(var/type)
 	var/res = brainloss
 	if(species && species.has_organ["brain"])
 		var/datum/organ/internal/brain/sponge = internal_organs_by_name["brain"]
@@ -30,9 +30,22 @@
 			if (sponge.is_broken())
 				res += 50
 
+		if(type && (type in sponge.specific_damages))
+			res += sponge.specific_damages[type]
 		res = min(res,maxHealth*2)
 		return res
 	return 0
+
+/mob/living/carbon/human/proc/format_brain_issues()
+	var/datum/organ/internal/brain/B = internal_organs_by_name["brain"]
+	if(B)
+		var/list/issues = list()
+		for(var/damage in B.specific_damages)
+			if(B.specific_damages[damage] > 0)
+				issues += get_key_by_element(partstobraindamagetype,damage)
+		if(issues.len)
+			return "Brain cut on [english_list(issues)]"
+	return ""
 
 //These procs fetch a cumulative total damage from all organs
 /mob/living/carbon/human/getBruteLoss(var/ignore_inorganic = FALSE)
@@ -129,6 +142,14 @@
 	if(M_HULK in mutations)
 		return
 	..()
+
+// the following heals the compartmentalised stuff in surgery
+/*/mob/living/carbon/human/adjustBrainLoss(var/amount)
+	if(..() && amount < 0 && species && species.has_organ["brain"])
+		var/datum/organ/internal/brain/sponge = internal_organs_by_name["brain"]
+		if(sponge)
+			for(var/damage in sponge.specific_damages)
+				sponge.specific_damages[damage] = max(sponge.specific_damages[damage] + (amount * brain_damage_modifier), 0)*/
 
 /mob/living/carbon/human/adjustCloneLoss(var/amount)
 	..()

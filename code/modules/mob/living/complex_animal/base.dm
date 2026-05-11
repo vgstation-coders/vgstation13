@@ -77,6 +77,16 @@
 		gender="male"
 	territory=locate(x,y,z) //store turf where we were born/created
 
+/mob/living/simple_animal/complex/Destroy()
+	territory=null
+	cache_objects_in_view=null
+	cache_objects_in_extended_area=null
+	target=null
+	for(var/mob/living/simple_animal/complex/C in family) //we will be referenced by our family, so clear us from that.
+		C.family -=src
+	family=null
+	..()
+
 
 /mob/living/simple_animal/complex/proc/allow_msg()
 	for(var/mob/m in range(src,11)) //only do emotes/say things if a player is nearby. this is to reduce log spam and make obsgang not want to die, even though they should just play the game.

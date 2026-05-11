@@ -53,6 +53,8 @@
 	var/fission_time = null //null means it will have no effect on fuel lifetime. unit is in seconds. this is assuming a 1 rod reactor with 0% insertion (this will never happen.).
 	var/fission_power= 0 //watts of power. how much ooomph does it have?
 	var/fission_absorbtion=0 //watts. how much energy does this sap to facilitate its reactions?
+	var/arcane_id //arcane tampered replacement
+	var/arcane_ratio = 1 //how much of it replaced?
 
 	//adjusts the values of hydro trays and soils by this value per process
 	var/plant_nutrition = 0

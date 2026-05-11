@@ -247,7 +247,7 @@ In all, this is a lot like the monkey code. /N
 
 //This proc is NOT useless, we make it so that aliens have an halved siemens_coeff. Which means they take half damage
 //I will personally find the retard who made all these VARIABLES into FUCKING CONSTANTS. THE FUCKING SOURCE AND THE SHOCK DAMAGE, CONSTANTS ? YOU THINK ?
-/mob/living/carbon/alien/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1)
+/mob/living/carbon/alien/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1, def_zone = null, incapacitation_duration = 20 SECONDS)
 
 	var/damage = shock_damage * siemens_coeff
 

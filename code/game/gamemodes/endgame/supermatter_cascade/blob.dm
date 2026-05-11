@@ -78,9 +78,11 @@
 					QDEL_NULL(A)
 				CHECK_TICK
 			T.ChangeTurf(type)
-			var/turf/unsimulated/wall/supermatter/SM = T
-			if(SM.avail_dirs)
-				SM.avail_dirs -= get_dir(T, src)
+			// ChangeTurf is a no-op on some special turfs (e.g. /turf/space/transit), so only treat T as supermatter if the conversion actually happened.
+			if(istype(T, /turf/unsimulated/wall/supermatter))
+				var/turf/unsimulated/wall/supermatter/SM = T
+				if(SM.avail_dirs)
+					SM.avail_dirs -= get_dir(T, src)
 
 /turf/unsimulated/wall/supermatter/attack_paw(mob/user as mob)
 	return attack_hand(user)

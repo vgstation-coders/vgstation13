@@ -529,6 +529,7 @@
 		/obj/item/weapon/coin/diamond,
 		/obj/item/weapon/coin/iron,
 		/obj/item/weapon/coin/phazon,
+		/obj/item/weapon/coin/reticulite,
 		/obj/item/weapon/coin/plasma,
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,

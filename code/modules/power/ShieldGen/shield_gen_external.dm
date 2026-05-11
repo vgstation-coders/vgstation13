@@ -9,7 +9,7 @@
 	icon_state = "generator_external_off"
 	icon_prefix = "external"
 
-/obj/machinery/shield_gen/external/get_shielded_turfs()
+/obj/machinery/shield_gen/external/get_shielded_turfs(var/turf/origin)
 	var/list/open = list(get_turf(src))
 	var/list/closed = list()
 
@@ -39,6 +39,8 @@
 					if(add_this_turf && !(O in open) && !(O in closed))
 						open += O
 			open -= T
-			closed += T
+			if(T != origin)
+				closed += T
+			CHECK_TICK
 
 	return closed

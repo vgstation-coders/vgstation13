@@ -20,6 +20,8 @@
 	rested_dizzy_reduce = 16 //This should be 15 it was reworked a little and it keeps them behaving the same as before, set to 1 if you don't want that
 	rested_jitter_reduce = 16 //Likewise
 
+	disperse_coeff = 1 //For ablatives
+
 	var/age = 30		//Player's age (pure fluff)
 	//var/b_type = "A+"	//Player's bloodtype //NOW HANDLED IN THEIR DNA
 

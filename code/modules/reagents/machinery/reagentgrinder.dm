@@ -52,6 +52,7 @@ var/global/list/juice_items = list (
 		/obj/item/stack/sheet/mineral/gold    = list(GOLD = U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
+		/obj/item/stack/sheet/mineral/reticulite = list(ZETADUST = CC_PER_U),
 		/obj/item/stack/sheet/mineral/lead	  = list(LEAD = CC_PER_U),
 		/obj/item/stack/sheet/wax			  = list(WAX = 5),
 		/obj/item/candle					  = list(WAX = 1.25),
@@ -156,6 +157,17 @@ var/global/list/juice_items = list (
 
 	if(..())
 		return 1
+
+	if (istype(O,/obj/item/device/core_sampler))
+		var/obj/item/device/core_sampler/CS = O
+		if(CS.extracted)
+			CS.extracted.forceMove(src)
+			holdingitems += CS.extracted
+			CS.extracted = null
+			CS.icon_state = "sampler"
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 0, -4, FALLOFF_SOUNDS, 0)
+			to_chat(user, "<span class='notice'>You eject the sample into \the [src].</span>")
+			return 1
 
 	if (istype(O,/obj/item/weapon/reagent_containers/glass) || \
 		istype(O,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) || \

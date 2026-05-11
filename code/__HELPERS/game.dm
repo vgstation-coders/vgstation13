@@ -20,11 +20,17 @@
 			return A
 	return 0
 
-/proc/get_area_name(atom/X, format_text = FALSE)
+/proc/get_area_name(atom/X, format_text = FALSE, short = FALSE)
 	var/area/A = isarea(X) ? X : get_area(X)
 	if(!A)
 		return null
-	return format_text ? format_text(A.name) : A.name
+	if(short)
+		if(A.short_name)
+			. = A.short_name
+		else
+			. = replacetext(format_text(get_first_word(A.name)),"'s","")
+	else
+		. = format_text ? format_text(A.name) : A.name
 
 /proc/get_coordinates_string(var/atom/A)
 	var/turf/T = get_turf(A)

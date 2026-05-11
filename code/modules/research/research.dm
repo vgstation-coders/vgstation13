@@ -46,11 +46,7 @@ research holder datum.
 
 var/global/list/design_list = list()
 var/global/list/tech_list = list()
-
-var/global/list/hidden_tech = list(
-	/datum/tech,
-	/datum/tech/nanotrasen,
-	)
+var/global/list/all_tech = list()
 
 /datum/research								//Holder for all the existing, archived, and known tech. Individual to console.
 	var/list/datum/tech/known_tech = list()			//List of locally known tech. Called with /datum/tech to be able to call tech variables directly
@@ -59,9 +55,12 @@ var/global/list/hidden_tech = list(
 
 /datum/research/New()		//Insert techs into possible_tech here. Known_tech automatically updated.
 	if(!tech_list.len)
-		for(var/inst in typesof(/datum/tech) - hidden_tech)
+		var/static/list/hidden_tech = list(/datum/tech/nanotrasen,/datum/tech/alien)
+		for(var/inst in subtypesof(/datum/tech))
 			var/datum/tech/T = new inst()
-			tech_list[T.id] = T
+			if(!(inst in hidden_tech))
+				tech_list[T.id] = T
+			all_tech[T.id] = T
 	if(!design_list.len)
 		for(var/D in typesof(/datum/design) - /datum/design)
 			design_list += new D()
@@ -151,6 +150,9 @@ var/global/list/hidden_tech = list(
 //Input: Tech's ID and Level; Output: null
 /datum/research/proc/UpdateTech(var/ID, var/level)
 	var/datum/tech/KT = GetKTechByID(ID)
+	if(!KT && (ID in all_tech))
+		KT = create_tech(ID)
+		known_tech[ID] = KT
 	if(KT && KT.level <= level)
 		KT.level = max((KT.level + 1), (level - 1))
 	return
@@ -266,6 +268,13 @@ var/global/list/hidden_tech = list(
 	goal_level=0 // Doesn't count towards maxed research, since it's bonus.
 	max_level=8
 	new_category = "Nanotrasen"
+	
+/datum/tech/alien
+	name = "Alien Technology"
+	desc = "Resarch found in distant systems operated by grays."
+	id = "xenotech"
+	goal_level=0 // Doesn't count towards maxed research, since it's bonus.
+	max_level=6
 
 /datum/tech/anomaly
 	name = "Anomaly Research"

@@ -117,6 +117,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE * 2 //No need for anyone to get suspicious.
 	custom_metabolism = 0.01
+	arcane_id = BICARIDINE
 
 /datum/reagent/carpotoxin
 	name = "Carpotoxin"
@@ -160,6 +161,7 @@
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 11.43
 	specheatcap = 13.79
+	arcane_id = COFFEE
 
 /datum/reagent/chloralhydrate/on_mob_life(var/mob/living/M)
 	if(..())
@@ -183,6 +185,7 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "beerglass"
 	glass_desc = "A cold pint of pale lager."
+	arcane_id = BEER
 
 /datum/reagent/chloramine
 	name = "Chloramine"
@@ -253,6 +256,7 @@
 	color = "#ff91b7" //rgb: 255, 145, 183
 	density = 0.78
 	specheatcap = 5.47
+	arcane_id = SPIRITBREAKER
 
 /datum/reagent/heartbreaker/on_mob_life(var/mob/living/M)
 	if(..())
@@ -287,6 +291,7 @@
 	color = "#F2C900" //rgb: 242, 201, 0
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
+	arcane_id = SILENCER
 
 /datum/reagent/honkserum/on_overdose(var/mob/living/H)
 	if (H?.mind?.miming)
@@ -317,6 +322,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	specheatcap = 0.14
 	density = 13.56
+	arcane_id = METHYLIN
 
 /datum/reagent/mercury/on_mob_life(var/mob/living/M)
 	if(..())
@@ -339,6 +345,7 @@
 	custom_metabolism = 0.05
 	density = 0.78
 	specheatcap = 5.47
+	arcane_id = SPIRITBREAKER
 
 /datum/reagent/mindbreaker/on_mob_life(var/mob/living/M)
 	if(..())
@@ -360,6 +367,7 @@
 	plant_pests = -8
 	plant_weeds = -6
 	plant_toxins = 2
+	arcane_id = MINTESSENCE
 	var/chillcounter = 0
 	var/concentrated = TRUE //also used to reduce the toxin damage done with the dilute version
 
@@ -426,6 +434,7 @@
 	plant_pests = -2
 	plant_weeds = -1
 	plant_toxins = 0
+	arcane_id = MINTTOXIN
 
 /datum/reagent/mutagen
 	name = "Unstable Mutagen"
@@ -435,6 +444,7 @@
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
 	specheatcap = 0.09686
+	arcane_id = RADIUM
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -567,6 +577,7 @@
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
 	var/disease_type = DISEASE_CYBORG
+	//arcane_id = XENOMICROBES
 
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -659,6 +670,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#3B0805" //rgb: 59, 8, 5
 	custom_metabolism = 0.05
+	arcane_id = SYNAPTIZINE
 
 /datum/reagent/spiritbreaker/on_mob_life(var/mob/living/M)
 	if(..())
@@ -680,6 +692,7 @@
 	density = 3.56
 	specheatcap = 17.15
 	overdose_am = REAGENTS_OVERDOSE // So you can't pretend that you "didn't know it was an OD"
+	arcane_id = CHLORALHYDRATE
 
 /datum/reagent/stoxin/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -726,6 +739,7 @@
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	density = 1.4 //Let's just assume it's alpha-solanine
+	arcane_id = ANTI_TOXIN
 	plant_toxins = 2
 
 /datum/reagent/toxin/on_mob_life(var/mob/living/M)
@@ -741,6 +755,7 @@
 	description = "Microbes with an entirely alien cellular structure."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#535E66" //rgb: 83, 94, 102
+	arcane_id = NANITES
 
 /datum/reagent/xenomicrobes/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())

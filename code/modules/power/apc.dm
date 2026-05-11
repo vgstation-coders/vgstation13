@@ -956,11 +956,11 @@
 
 	var/mob/living/carbon/human/H = user
 	if (istype(H))
-		if(H.getBrainLoss() >= 60)
+		if(H.getBrainLoss(INTELLIGENCE_L) >= 60)
 			for(var/mob/M in viewers(src, null))
 				to_chat(M, "<span class='warning'>[H] stares cluelessly at [src] and drools.</span>")
 			return 0
-		else if(prob(H.getBrainLoss()))
+		else if(prob(H.getBrainLoss(INTELLIGENCE_L)))
 			to_chat(user, "<span class='warning'>You momentarily forget how to use [src].</span>")
 			return 0
 	return 1

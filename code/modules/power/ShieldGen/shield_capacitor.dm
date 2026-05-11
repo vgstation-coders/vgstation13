@@ -9,15 +9,10 @@
 	req_one_access = list(access_security, access_engine_minor) // For locking/unlocking controls
 	density = 1
 	anchored = TRUE
-	use_power = MACHINE_POWER_USE_IDLE	//0 use nothing
-										//1 use idle power
-										//2 use active power
-	idle_power_usage = 10
-	active_power_usage = 100
+	use_power = MACHINE_POWER_USE_NONE
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	verb_rotates = TRUE
 	alt_click_rotates = TRUE
-	var/active = TRUE
 	var/stored_charge = 0
 	var/time_since_fail = 100
 	var/max_charge = 10000000
@@ -25,9 +20,11 @@
 	var/min_charge_rate = 1
 	var/locked = FALSE
 	var/charge_rate = 100
+	var/datum/power_connection/consumer/cable/power_connection = null
 
 /obj/machinery/shield_capacitor/New()
 	..()
+	power_connection = new(src)
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/shield_cap,
@@ -40,6 +37,11 @@
 	)
 
 	RefreshParts()
+
+/obj/machinery/shield_capacitor/Destroy()
+	if(power_connection)
+		QDEL_NULL(power_connection)
+	. = ..()
 
 /obj/machinery/shield_capacitor/RefreshParts()
 	var/T = 0
@@ -91,18 +93,23 @@
 		return
 	ui_interact(user)
 
+/obj/machinery/shield_capacitor/proc/has_cable()
+	var/turf/T = get_turf(src)
+	return anchored && ((power_connection && power_connection.cable) || (T && T.get_cable_node()))
+
 /obj/machinery/shield_capacitor/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 	data["locked"] = locked && !issilicon(user) && !isAdminGhost(user)
-	data["active"] = active
+	data["active"] = power_connection.connected
+	data["cable"] = has_cable()
 	data["stability"] = time_since_fail > 2
 	data["charge"] = stored_charge / 1000
 	data["charge_percentage"] = 100 * stored_charge / max_charge
 	data["min_charge"] = 0
 	data["max_charge"] = max_charge / 1000
 	data["charge_rate"] = charge_rate / 1000
-	data["min_charge_rate"] = min_charge_rate
-	data["max_charge_rate"] = max_charge_rate
+	data["min_charge_rate"] = min_charge_rate / 1000
+	data["max_charge_rate"] = max_charge_rate / 1000
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -112,34 +119,42 @@
 		ui.open()
 
 /obj/machinery/shield_capacitor/process()
-	if(active)
-		use_power = MACHINE_POWER_USE_ACTIVE
-		if(stored_charge + charge_rate > max_charge)
-			active_power_usage = max_charge - stored_charge
+	var/to_drain = charge_rate
+	if(power_connection.connected)
+		if(power_connection.get_surplus() > 0)
+			to_drain = min(to_drain,power_connection.get_surplus())
+			if(stored_charge + charge_rate > max_charge)
+				to_drain = max_charge - stored_charge
+			power_connection.add_load(to_drain)
+			stored_charge += to_drain
 		else
-			active_power_usage = charge_rate
-		stored_charge += active_power_usage
-	else
-		use_power = MACHINE_POWER_USE_IDLE
+			power_connection.disconnect()
 
 	time_since_fail++
-	if(stored_charge < active_power_usage * 1.5)
+	if(stored_charge < to_drain * 1.5)
 		time_since_fail = 0
 
 /obj/machinery/shield_capacitor/Topic(href, href_list[])
 	if(..())
 		return 0
 	if(href_list["toggle_active"])
-		active = !active
-		use_power = active ? 2 : 1
+		toggle_connection()
+	if(href_list["set_charge_rate"])
+		charge_rate = clamp(round(input(usr,"Set new charge rate ([min_charge_rate/1000]-[max_charge_rate/1000])","Charge rate",charge_rate/1000),0.001), min_charge_rate/1000, max_charge_rate/1000) * 1000
 	if(href_list["adjust_charge_rate"])
-		charge_rate = clamp(charge_rate + text2num(href_list["adjust_charge_rate"]), min_charge_rate, max_charge_rate)
+		charge_rate = clamp(charge_rate + (text2num(href_list["adjust_charge_rate"])*1000), min_charge_rate, max_charge_rate)
 	return 1
+
+/obj/machinery/shield_capacitor/proc/toggle_connection()
+	if(!power_connection.connected)
+		power_connection.connect()
+	else
+		power_connection.disconnect()
 
 /obj/machinery/shield_capacitor/kick_act()
 	..()
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
-		active = FALSE
+		power_connection.disconnect()
 		return
 	if(prob(50))
-		active = !active
+		toggle_connection()

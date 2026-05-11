@@ -22,11 +22,7 @@
 	req_one_access = list(access_security, access_engine_major) // For locking/unlocking controls
 	density = 1
 	anchored = TRUE
-	use_power = MACHINE_POWER_USE_IDLE			//0 use nothing
-							//1 use idle power
-							//2 use active power
-	idle_power_usage = 20
-	active_power_usage = 100
+	use_power = MACHINE_POWER_USE_NONE
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/active = FALSE
 	var/field_radius = 3
@@ -69,7 +65,7 @@
 /obj/machinery/shield_gen/Destroy()
 	..()
 	owned_capacitor = null
-	destroy_field()
+	QDEL_LIST_NULL(field)
 
 /obj/machinery/shield_gen/proc/find_capacitor()
 	for(var/obj/machinery/shield_capacitor/possible_capacitor in range(1, src))
@@ -141,7 +137,7 @@
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "shield_gen.tmpl", name, 500, 450)
+		ui = new(user, src, ui_key, "shield_gen.tmpl", name, 500, 400)
 		ui.set_initial_data(data)
 		ui.set_auto_update(TRUE)
 		ui.open()
@@ -176,6 +172,7 @@
 				average_field_strength += E.strength
 			else
 				E.Strengthen(-E.strength)
+			CHECK_TICK
 
 		average_field_strength /= field.len
 		if(average_field_strength < 0)
@@ -188,6 +185,12 @@
 		return 0
 	if(href_list["toggle_active"])
 		toggle()
+	else if(href_list["set_field_radius"])
+		field_radius = clamp(round(input(usr,"Set new coverage radius ([MIN_FIELD_RADIUS]-[MAX_FIELD_RADIUS])","Field radius",field_radius)), MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
+	else if(href_list["set_strengthen_rate"])
+		strengthen_rate = clamp(round(input(usr,"Set new charge rate ([MIN_STRENGTHEN_RATE].00-[MAX_STRENGTHEN_RATE].00)","Strengthen rate",strengthen_rate),0.01), MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)
+	else if(href_list["set_field_strength_cap"])
+		field_strength_cap = clamp(round(input(usr,"Set new maximum field strength ([MIN_FIELD_STRENGTH_CAP]-[MAX_FIELD_STRENGTH_CAP])","Field strength cap",field_strength_cap)), MIN_FIELD_STRENGTH_CAP, MAX_FIELD_STRENGTH_CAP)
 	else if(href_list["adjust_field_radius"])
 		field_radius = clamp(field_radius + text2num(href_list["adjust_field_radius"]), MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
 	else if(href_list["adjust_strengthen_rate"])
@@ -219,21 +222,14 @@
 
 	flick("generator_[icon_prefix]_start", src)
 
-	var/list/covered_turfs = get_shielded_turfs()
 	var/turf/T = get_turf(src)
-	if(T in covered_turfs)
-		covered_turfs.Remove(T)
+	var/list/covered_turfs = get_shielded_turfs(T)
 	for(var/turf/O in covered_turfs)
 		var/obj/effect/energy_field/E = new(O)
 		field.Add(E)
-	del covered_turfs
+		CHECK_TICK
 	visible_message("<span class='notice'>\The [src] starts up, emitting a heavy droning noise.</span>", "<span class='notice'>You hear heavy droning start up.</span>")
 	active = TRUE
-
-/obj/machinery/shield_gen/proc/destroy_field()
-	for(var/obj/effect/energy_field/D in field)
-		field.Remove(D)
-		QDEL_NULL(D)
 
 /obj/machinery/shield_gen/proc/stop()
 	if(!active)
@@ -241,7 +237,7 @@
 
 	flick("generator_[icon_prefix]_stop", src)
 
-	destroy_field()
+	QDEL_LIST_CUT(field)
 	visible_message("<span class='notice'>\The [src] shuts down, the droning noise fading out.</span>", "<span class='notice'>You hear heavy droning fade out.</span>")
 	active = FALSE
 
@@ -250,11 +246,12 @@
 	power_change()
 
 //grab the border tiles in a circle around this machine
-/obj/machinery/shield_gen/proc/get_shielded_turfs()
+/obj/machinery/shield_gen/proc/get_shielded_turfs(var/turf/origin)
 	var/list/out = list()
 	for(var/turf/T in trange(field_radius, src))
-		if(get_dist(src,T) == field_radius)
+		if(T != origin && get_dist(src,T) == field_radius)
 			out.Add(T)
+		CHECK_TICK
 	return out
 
 /obj/machinery/shield_gen/kick_act()

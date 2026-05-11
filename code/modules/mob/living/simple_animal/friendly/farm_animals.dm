@@ -196,6 +196,11 @@
 	else
 		..()
 
+/mob/living/simple_animal/cow/Cross(atom/movable/mover, turf/target, height, air_group)
+	if(istype(mover, /obj/mecha/combat/roswell))
+		return 1
+	return ..()
+
 /mob/living/simple_animal/cow/chocolate
 	name = "chocolate cow"
 	desc = "Where did you think chocolate milk came from? We don't talk about strawberry milk."

@@ -21,6 +21,7 @@
 		/area/medical/patient_room2,
 		/area/derelictparts,
 		/area/vox_trading_post,
+		/area/shack,
 	)
 
 /datum/event/radiation_storm/can_start(var/list/active_with_role)
