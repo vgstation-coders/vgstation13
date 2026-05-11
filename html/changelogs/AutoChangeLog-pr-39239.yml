@@ -1,0 +1,6 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: The admin map renderer can now render to just specific areas, and toggle
+    hiding invisible items. Nearby walls, windows and doors will also render their
+    tile if next to the relevant area, for aesthetic purposes.

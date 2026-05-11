@@ -1,0 +1,9 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- rscadd: Pulse demons can now purchase the spell Yellowed Light for 10,000 charge,
+    at 2,000 charge per use. Using this while in an APC turns all the light in the
+    room your shade of yellow, as to not stick out immediately under them. All bulbs
+    are permanently affected, so putting the bulbs in new light fixtures will make
+    emitted light just as yellow, but replacing the fixtures with new bulbs will make
+    the light color normal again.

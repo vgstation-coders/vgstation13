@@ -4,6 +4,8 @@
 	layer = TURF_LAYER
 	luminosity = 0
 
+	cardinal_reflect = TRUE
+
 	//for floors, use is_plating(), is_metal_floor() and is_light_floor()
 	var/intact = 1
 	var/turf_flags = 0

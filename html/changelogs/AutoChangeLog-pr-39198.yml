@@ -1,0 +1,7 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Laser beams shot at diamond walls and mirrors now reflect off them. These
+    dim any beam they come into contact with by 5% too.
+- tweak: Laser beam reflections are now four-sided instead of eight for turfs. Currently,
+    only diamond walls reflect like this.

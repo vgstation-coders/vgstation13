@@ -48,6 +48,10 @@
 	..()
 	update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/clean_blood()
+	. = ..()
+	remove_disease2()
+
 /obj/item/weapon/reagent_containers/syringe/pickup(mob/user)
 	..()
 	update_icon()
@@ -174,6 +178,7 @@
 			if (B)
 				user.visible_message("<span class='notice'>[user] takes a blood sample from [target].</span>",
 									 "<span class='notice'>You take a blood sample from [target].</span>")
+				src.add_blood(T) // Contaminate the needle with the target's blood and any blood-borne diseases
 			else
 				user.visible_message("<span class='warning'>[user] inserts the syringe into [target], draws back the plunger and gets... nothing?</span>",\
 					"<span class='warning'>You insert the syringe into [target], draw back the plunger and get... nothing?</span>")
@@ -183,6 +188,12 @@
 			if (B)
 				user.visible_message("<span class='notice'>[user] takes a small blood sample from [target].</span>",
 									 "<span class='notice'>You take a small blood sample from [target].</span>")
+				// Contaminate the needle with any blood-borne diseases from the mouse
+				if(T.virus2.len)
+					var/list/blood_diseases = filter_disease_by_spread(T.virus2, required = SPREAD_BLOOD)
+					for(var/ID in blood_diseases)
+						var/datum/disease2/disease/D = blood_diseases[ID]
+						src.infect_disease2(D, notes="(Blood draw from [T])")
 			else
 				user.visible_message("<span class='warning'>[user] inserts the syringe into [target], draws back the plunger and gets... nothing?</span>",\
 					"<span class='warning'>You insert the syringe into [target], draw back the plunger and get... nothing?</span>")
@@ -232,6 +243,27 @@
 		var/tx_amount = min(amount_per_transfer_from_this, reagents.total_volume)
 		tx_amount = reagents.trans_to(target, tx_amount, log_transfer = TRUE, whodunnit = user)
 		to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. The syringe now contains [reagents.total_volume] units.</span>")
+
+	// Needle contamination: when injecting into a living mob, the needle touches blood/tissue
+	if(isliving(target))
+		var/mob/living/L = target
+		// Transfer any diseases already on the needle directly into the target's bloodstream
+		if(virus2.len)
+			for(var/ID in virus2)
+				var/datum/disease2/disease/D = virus2[ID]
+				if(D.spread & SPREAD_BLOOD)
+					L.infect_disease2(D, 1, notes="(Contaminated needle, injected with \a [src])")
+		// Contaminate the needle with the target's blood and any blood-borne diseases
+		if(iscarbon(L))
+			var/mob/living/carbon/C = L
+			if(C.dna)
+				src.add_blood(C)
+		else if(L.virus2.len)
+			// For non-carbon mobs (e.g. mice), manually spread blood-borne diseases to the needle
+			var/list/blood_diseases = filter_disease_by_spread(L.virus2, required = SPREAD_BLOOD)
+			for(var/ID in blood_diseases)
+				var/datum/disease2/disease/D = blood_diseases[ID]
+				src.infect_disease2(D, notes="(Blood, injection into [L])")
 
 	if(is_empty())
 		mode = SYRINGE_DRAW

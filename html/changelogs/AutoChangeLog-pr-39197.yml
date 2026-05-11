@@ -1,0 +1,8 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Hyperspectral imagers and fourier transform spectroscopes in xenoarchaeology
+    now print out maps showing relevant information for locating large artifact finds,
+    namely the spot of extraction on the former and distance radius on the latter.
+- tweak: Core samplers now instantly take their rock samples instead of after a 1
+    second delay, and can put them straight into reagent grinders.

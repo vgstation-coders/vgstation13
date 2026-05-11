@@ -41,6 +41,11 @@
 				update()
 
 
+/obj/item/weapon/implanter/arcane_act(mob/user, recursive)
+	. = ..()
+	if(imp)
+		. = imp.arcane_act(user,recursive)
+
 /obj/item/weapon/implanter/New()
 	..()
 	if(imp_type)

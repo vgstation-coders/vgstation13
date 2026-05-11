@@ -436,6 +436,7 @@
 	name = "Collectible lunchbox"
 	desc = "A plastic lunchbox with a unique design!"
 	icon_state = "lunchbox_random"
+	disperse_coeff = 1
 
 /obj/item/weapon/storage/lunchbox/plastic/nt/random/New()
 	..()

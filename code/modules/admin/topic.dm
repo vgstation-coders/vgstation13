@@ -429,6 +429,9 @@
 	else if(href_list["move_emergency_dock"])
 		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
 			return
+		if(!emergency_shuttle.manages_shuttle_docks())
+			alert("This shuttle type does not support dock repositioning.")
+			return
 		var/obj/docking_port/destination/port
 		var/datum/shuttle/escape/E = emergency_shuttle.shuttle
 		if(!E)
@@ -450,6 +453,9 @@
 	else if(href_list["reset_emergency_dock"])
 		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
 			return
+		if(!emergency_shuttle.manages_shuttle_docks())
+			alert("This shuttle type does not support dock repositioning.")
+			return
 		var/obj/docking_port/destination/port
 		var/datum/shuttle/escape/E = emergency_shuttle.shuttle
 		if(!E)
@@ -470,6 +476,9 @@
 
 	else if(href_list["move_escape_pod"])
 		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+		if(!emergency_shuttle.uses_escape_pods())
+			alert("This shuttle controller does not use escape pods.")
 			return
 
 		if (href_list["move_escape_pod"] == "all")
@@ -4658,7 +4667,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						M.req_one_access = list(access_brig,access_engine_major)
 				message_admins("[key_name_admin(usr)] made all maint doors engineering and brig access-only.")
 			if("infinite_sec")
-				var/datum/job/J = job_master.GetJob("Security Officer")
+				var/datum/job/J = locate(/datum/job/officer) in job_master.occupations
 				if(!J)
 					return
 				J.set_total_positions(99)

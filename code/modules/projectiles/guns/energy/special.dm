@@ -101,7 +101,14 @@
 		P.changetype=changetype
 	return 1
 
+/obj/item/weapon/gun/energy/staff/change/arcane_act(mob/user, recursive)
+	changetype = null
+	return ..()
+
 /obj/item/weapon/gun/energy/staff/change/attack_self(var/mob/living/user)
+	if(arcanetampered)
+		to_chat(user, "<span class='sinister'>The dial conspicuously mounted on the side of your staff is spinning too hard for you to even touch!</span>")
+		return
 	if(world.time < next_changetype)
 		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
 		return
@@ -173,6 +180,9 @@
 	var/next_changetype = 0
 
 /obj/item/weapon/gun/energy/staff/polymorph/attack_self(var/mob/living/user)
+	if(arcanetampered)
+		to_chat(user, "<span class='sinister'>The dial conspicuously mounted on the side of your staff is spinning too hard for you to even touch!</span>")
+		return
 	if(world.time < next_changetype)
 		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
 		return
@@ -191,7 +201,10 @@
 		return 0
 	var/obj/item/projectile/polymorph/P=in_chamber
 	if(P && istype(P))
-		P.status=setting
+		if(arcanetampered)
+			P.status=pick(MINOR, MAJOR)
+		else
+			P.status=setting
 	return 1
 
 //This is not actually a real gun, but it doesn't behave as a gun so it's just a staff
@@ -260,6 +273,9 @@
 /obj/item/weapon/staff/necro/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(get_dist(target, user) > 7)
 		return 0
+	var/mob/master_user = user
+	if(arcanetampered)
+		master_user = null
 	var/success = FALSE
 	var/charge_cost = 10 //Because some actions are less expensive to perform
 	var/turf/target_location = get_turf(target) //Because the original target could get deleted and it'd break the particle effects
@@ -282,7 +298,7 @@
 						H.locked_to = 0
 						H.anchored = 0
 				H.dropBorers()
-				H.zombify(user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
+				H.zombify(master_user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
 			else
 				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
 				return 1
@@ -322,9 +338,10 @@
 		if(L.stat == DEAD)
 			if(charges >= charge_cost)
 				success = TRUE
-				var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user, L)
+				var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), master_user, L)
 				aG.ghoulifyAnimal(target)
-				aG.faction = "\ref[user]"
+				if(!arcanetampered)
+					aG.faction = "\ref[user]"
 				L.gib()
 			else
 				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
@@ -336,10 +353,11 @@
 	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat)) //Meat can be turned into the undead
 		charge_cost = 5 //Meat is cheaper to raise
 		if(charges >= charge_cost)
-			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(target), user)
+			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(target), master_user)
 			success = TRUE
 			mG.ghoulifyMeat(target)
-			mG.faction = "\ref[user]"
+			if(!arcanetampered)
+				mG.faction = "\ref[user]"
 			qdel(target)
 		else
 			to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")

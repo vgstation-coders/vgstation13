@@ -336,7 +336,7 @@
 		return 0	//godmode
 	cloneloss = amount
 
-/mob/living/proc/getBrainLoss()
+/mob/living/proc/getBrainLoss(var/type)
 	return brainloss
 
 /mob/living/proc/adjustBrainLoss(var/amount)
@@ -347,6 +347,7 @@
 		return 0
 
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
+	return 1
 
 /mob/living/proc/setBrainLoss(var/amount)
 	if(status_flags & GODMODE)
@@ -1295,6 +1296,27 @@ Thanks.
 					return
 		if (istype(AM, /mob/living)) //no pushing people pushing rollerbeds that have people on them
 			var/mob/living/tmob = AM
+			var/obj/item/clothing/under/uniform = get_item_by_slot(slot_w_uniform)
+			if(uniform?.stuns_arcane_loyalty)
+				var/arcanetampered_loyalty = FALSE
+				for(var/obj/item/weapon/implant/loyalty/L in tmob)
+					if(L.imp_in == tmob && L.arcanetampered)
+						arcanetampered_loyalty = TRUE
+						break
+				if(arcanetampered_loyalty)
+					for(var/obj/item/weapon/implant/loyalty/L in src)
+						if(L.imp_in == src)
+							arcanetampered_loyalty = FALSE
+							break
+					if(arcanetampered_loyalty) //if greytide or clown bumps into the likes of sec
+						tmob.Knockdown(10)
+						tmob.Stun(10)
+						if(iscarbon(tmob))
+							tmob.apply_effect(10, STUTTER)
+						if(tmob.knockdown)
+							playsound(tmob.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+						now_pushing = 0
+						return
 			for(var/obj/structure/bed/roller/R in range(tmob, 1))
 				if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
 					to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")

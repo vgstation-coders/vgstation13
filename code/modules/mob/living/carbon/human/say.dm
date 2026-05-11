@@ -20,7 +20,7 @@
 		return "stammers, [text]";
 	if(isliving(src))
 		var/mob/living/L = src
-		if (L.getBrainLoss() >= 60)
+		if (L.getBrainLoss(SPEECH_L) >= 60)
 			return "gibbers, [text]";
 	var/ending = copytext(text, length(text))
 	if (ending == "?")

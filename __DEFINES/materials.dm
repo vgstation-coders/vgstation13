@@ -31,6 +31,7 @@
 #define MAT_CERENKITE "$cerenkite"
 #define MAT_MOLITZ    "$molitz"
 #define MAT_GINGERBREAD "$gingerbread"
+#define MAT_RETICULITE "$reticulite"
 
 
 #define VALUE_MISC 0.1
@@ -87,6 +88,7 @@
 #define CC_PER_SHEET_CERENKITE   CC_PER_SHEET_METAL
 #define CC_PER_SHEET_MOLITZ      CC_PER_SHEET_METAL
 #define CC_PER_SHEET_GINGERBREAD CC_PER_SHEET_METAL
+#define CC_PER_SHEET_RETICULITE  CC_PER_SHEET_DIAMOND
 
 #define CC_PER_U 10 //How many cc per 1 u of reagent in eg. a glass of water or a human's bloodstream.
 #define U_PER_SHEET 20 //Same as above, but for making sheets

@@ -135,7 +135,7 @@ var/list/valid_ninja_suits = list(
 		L.throw_item(target)
 		return 1
 
-/obj/item/stack/shuriken/throw_at(var/atom/A, throw_range, throw_speed)
+/obj/item/stack/shuriken/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	if(ishuman(usr))
 		var/mob/living/carbon/human/H = usr
 		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
@@ -147,7 +147,7 @@ var/list/valid_ninja_suits = list(
 			if(amount>1)
 				use(1)
 				var/obj/item/stack/shuriken/S = new(loc)
-				S.throw_at(A, throw_range, throw_speed)
+				S.throw_at(target, range, speed, override, fly_speed, whitelist, superthrow)
 				H.put_in_hands(src)
 				//statistics collection: ninja shuriken thrown
 				if(istype(N.stat_datum, /datum/stat/role/ninja))

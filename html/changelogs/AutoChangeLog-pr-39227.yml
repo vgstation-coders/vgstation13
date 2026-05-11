@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: Station blueprint archive images no longer stack in client views after updates.
+- tweak: Station blueprint archive images now clear from client views after updates.

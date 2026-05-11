@@ -266,3 +266,43 @@
 	materials = list(MAT_GLASS = 100, MAT_SILVER = 10, MAT_URANIUM = 15)
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/subspace/transmitter
+
+/datum/design/zepto_abductor
+	name = "Zepto Abductor"
+	desc = "Alien electronics used to pull things towards itself."
+	id = "s-abductor"
+	req_tech = list(Tc_MAGNETS = 5, Tc_MATERIALS = 5, Tc_ALIEN = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_URANIUM = 50, MAT_RETICULITE = 50)
+	category = "Stock Parts"
+	build_path = /obj/item/weapon/stock_parts/ayy/abductor
+
+/datum/design/gravitation_module
+	name = "Gravitation Module"
+	desc = "Alien device used to suspend gravity around itself."
+	id = "s-gravitation"
+	req_tech = list(Tc_MAGNETS = 5, Tc_MATERIALS = 5, Tc_ALIEN = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_GOLD = 50, MAT_RETICULITE = 50)
+	category = "Stock Parts"
+	build_path = /obj/item/weapon/stock_parts/ayy/gravitator
+
+/datum/design/zepto_scrambler
+	name = "Zepto Scrambler"
+	desc = "Alien instrument used to scramble the material composition of things."
+	id = "s-scrambler"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 5, Tc_ALIEN = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_DIAMOND = 50, MAT_RETICULITE = 50)
+	category = "Stock Parts"
+	build_path = /obj/item/weapon/stock_parts/ayy/scrambler
+	
+/datum/design/probing_module
+	name = "Probing Module"
+	desc = "Alien module used to probe things for inspection."
+	id = "s-prober"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 5, Tc_ALIEN = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_SILVER = 50, MAT_RETICULITE = 50)
+	category = "Stock Parts"
+	build_path = /obj/item/weapon/stock_parts/ayy/prober

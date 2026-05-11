@@ -228,6 +228,7 @@
 	var/empower_cost = 0
 	var/quicken_cost = 0
 	var/invisible = 0 //Whether it appears in the ability list
+	var/in_apc = FALSE //Needs to be in an APC
 
 /spell/pulse_demon/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
@@ -299,7 +300,17 @@
 	return "[speed_name][power_name][original_name]"
 
 /spell/pulse_demon/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
-	return 1
+	if(in_apc && istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+		if(PD.controlling_area == get_area(target))
+			return TRUE
+		// Only works in an APC
+		else if(istype(PD.current_power,/obj/machinery/power/apc))
+			to_chat(holder, "You can only cast this in the area you control!")
+		else
+			to_chat(holder, "You need to be in an APC for this!")
+		return FALSE
+	return TRUE
 
 /spell/pulse_demon/generate_tooltip()
 	var/dat = "<br>Charge cost: [charge_cost]W"
@@ -479,19 +490,7 @@
 	purchase_cost = 50000
 	empower_cost = 50000
 	quicken_cost = 200000
-
-
-/spell/pulse_demon/emag/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
-	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
-		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		if(PD.controlling_area == get_area(target))
-			return TRUE
-		else if(istype(PD.current_power,/obj/machinery/power/apc))
-			to_chat(holder, "You can only cast this in the area you control!")
-		else
-			to_chat(holder, "You need to be in an APC for this!")
-	return FALSE
-
+	in_apc = TRUE
 
 /spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
 	var/atom/target = targets[1]
@@ -515,18 +514,7 @@
 	purchase_cost = 50000
 	empower_cost = 50000
 	quicken_cost = 200000
-
-/spell/pulse_demon/emp/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
-	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
-		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		if(PD.controlling_area == get_area(target))
-			return TRUE
-		// Only works in an APC
-		else if(istype(PD.current_power,/obj/machinery/power/apc))
-			to_chat(holder, "You can only cast this in the area you control!")
-		else
-			to_chat(holder, "You need to be in an APC for this!")
-	return FALSE
+	in_apc = TRUE
 
 /spell/pulse_demon/emp/cast(list/targets, mob/user = usr)
 	var/atom/target = targets[1]
@@ -623,6 +611,29 @@
 	spawn(50)
 		explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
 		qdel(M)
+	..()
+
+/spell/pulse_demon/yellowlight
+	name = "Yellowed Light"
+	abbreviation = "YL"
+	desc = "Turns all the lights in a room to your shade of yellow."
+	range = 10
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 3, SP_POWER = 0)
+	hud_state = "blackout"
+	charge_cost = 2000
+	purchase_cost = 10000
+	in_apc = TRUE
+
+/spell/pulse_demon/yellowlight/choose_targets(var/mob/user = usr)
+	return list(user) // Self-cast
+
+/spell/pulse_demon/yellowlight/cast(list/targets, mob/user = usr)
+	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+		for(var/obj/machinery/light/L in PD.controlling_area.lights)
+			if(L.current_bulb)
+				L.current_bulb.brightness_color = "#bbbb00";
+			L.update(0)
 	..()
 
 /datum/action/pd_toggle_drain

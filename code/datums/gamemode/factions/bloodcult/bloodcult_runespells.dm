@@ -312,15 +312,21 @@
 		R.active_spell.midcast(user)
 		return
 
-	switch(structure)
-		if("Altar")
-			spawntype = /obj/structure/cult/altar
-		if("Spire")
-			spawntype = /obj/structure/cult/spire
-		if("Forge")
-			spawntype = /obj/structure/cult/forge
-		if("Pylon")
-			spawntype = /obj/structure/cult/pylon
+	if(spell_holder?.arcanetampered)
+		spawntype = pick(/obj/item/weapon/reagent_containers/food/snacks/badrecipe,\
+			/obj/item/weapon/bikehorn/rubberducky,\
+			/obj/item/weapon/bikehorn,\
+			/obj/item/weapon/card/fake_emag)
+	else
+		switch(structure)
+			if("Altar")
+				spawntype = /obj/structure/cult/altar
+			if("Spire")
+				spawntype = /obj/structure/cult/spire
+			if("Forge")
+				spawntype = /obj/structure/cult/forge
+			if("Pylon")
+				spawntype = /obj/structure/cult/pylon
 
 	if(!spell_holder)
 		return
@@ -413,6 +419,8 @@
 	for(var/mob/living/L in contributors)
 		var/datum/role/cultist/C = L.mind.GetRole(CULTIST)
 		C.gain_devotion(10, DEVOTION_TIER_1,"raise_structure",structure)
+	if(spell_holder.arcanetampered)
+		playsound(spell_holder.loc, 'sound/misc/fart.ogg', 50, 1)
 	new spawntype(spell_holder.loc)
 	qdel(spell_holder) //Deletes the datum as well.
 
@@ -444,6 +452,7 @@
 	R.one_pulse()
 	var/mob/living/user = activator
 	comms = new /obj/effect/cult_ritual/cult_communication(spell_holder.loc,user,src)
+	comms.arcanetampered = spell_holder?.arcanetampered
 
 /datum/rune_spell/communication/midcast(var/mob/living/user)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -538,6 +547,13 @@
 			speaker_name = H.real_name
 			L = speech.speaker
 		rendered_message = speech.render_message()
+		if(arcanetampered)
+			if(prob(50))
+				speech.message = derpspeech(speech.message)
+			else
+				speech.message = tumblrspeech(speech.message)
+				speech.message = nekospeech(speech.message)
+			speaker_name = pick(clown_names)
 		var/datum/faction/bloodcult = find_active_faction_by_member(iscultist(L))
 		for(var/datum/role/cultist/C in bloodcult.members)
 			var/datum/mind/M = C.antag
@@ -549,6 +565,8 @@
 			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")
+		if(arcanetampered && prob(50))
+			L.radio(speech,MODE_HEADSET) //busted!
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
 
 /obj/effect/cult_ritual/cult_communication/HasProximity(var/atom/movable/AM)
@@ -2303,7 +2321,9 @@ var/list/seer_rituals = list()
 				L.stat = CONSCIOUS
 				if (L.reagents)
 					L.reagents.del_reagent(HOLYWATER)
-					if (!L.reagents.has_any_reagents(HYPERZINES))
+					if(spell_holder.arcanetampered && !L.reagents.has_any_reagents(HONKSERUM))
+						L.reagents.add_reagent(HONKSERUM,1)
+					else if (!L.reagents.has_any_reagents(HYPERZINES))
 						L.reagents.add_reagent(HYPERZINE,1,"no motor mouth")
 		qdel(spell_holder)
 	qdel(src)
@@ -2495,6 +2515,11 @@ var/list/seer_rituals = list()
 		for(var/mob/living/L in contributors)
 			to_chat(activator, "<span class='warning'>The ritual failed, the target seems to be under a curse that prevents us from reaching them through the veil.</span>")
 	else
+		if(spell_holder?.arcanetampered) // send in the clowns!
+			for (var/mob/living/carbon/human/H in player_list)
+				if(istype(H) && !H.stat && istype(H.get_item_by_slot(slot_wear_mask),/obj/item/clothing/mask/gas/clown_hat))
+					target = H
+					break
 		if (rejoin)
 			var/list/valid_turfs = list()
 			for(var/turf/T in orange(target,1))
@@ -3084,6 +3109,8 @@ var/list/bloodcult_exitportals = list()
 			newCultist.tattoos[TATTOO_MANIFEST] = new /datum/cult_tattoo/manifest()
 
 			vessel.equip_or_collect(new /obj/item/clothing/under/leather_rags(vessel), slot_w_uniform)
+			if(spell_holder?.arcanetampered)
+				vessel.adjustBrainLoss(100)
 
 		M.regenerate_icons()
 

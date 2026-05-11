@@ -1,0 +1,4 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Pulse rifles now instantly destroy windows, fences and window doors.

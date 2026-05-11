@@ -229,7 +229,7 @@
 				to_chat(user, "<span class='warning'>This [W] does not seem to fit.</span>")
 				return
 
-			var/datum/job/job_datum = job_master.GetJob("Cyborg")
+			var/datum/job/job_datum = locate(/datum/job/cyborg) in job_master.occupations
 			if(job_datum ? !job_datum.player_old_enough(M.brainmob.client) : 0)
 				to_chat(user, "<span class='warning'>This [W] is too inexperienced to handle being a cyborg</span>")
 				return
