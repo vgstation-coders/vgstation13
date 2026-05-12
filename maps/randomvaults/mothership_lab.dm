@@ -1020,7 +1020,7 @@
 	name = "stun probe"
 	desc = "An unusual baton used by MDF pacifiers. Less than lethal, not quite nonlethal."
 	icon_state = "stun probe"
-	item_state = "s_probe0"
+	item_state = "s_probe"
 	origin_tech = Tc_COMBAT + "=3" + Tc_POWERSTORAGE + "=2"
 	hitcost = 50 // 20 stuns with integrated cell, but can't upgrade or remove it. Doesn't have a normal baton's vulnerability to emp blasts. Compatible with rechargers
 	can_swap_cell = FALSE
