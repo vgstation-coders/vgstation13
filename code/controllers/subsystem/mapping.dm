@@ -188,6 +188,9 @@ var/skip_turf_init = FALSE //NEVER change this var for anything other than incre
 	for(var/T in map.load_custom_fixedvaults)
 		load_dungeon(T, 0, FALSE, FALSE)
 
+	if(map?.load_shuttles.len)
+		load_map_shuttles()
+
 	watch = start_watch()
 	for(var/datum/virtual_z/vz in map.getAllVLevels())
 		vz.initialize_turfs()

@@ -976,6 +976,21 @@ var/global/floorIsLava = 0
 		<a href='?src=\ref[src];shuttle_supercharge=1'>Make movement instant</a><br>
 		<a href='?src=\ref[src];shuttle_show_overlay=1'>Draw outline</a>
 		<hr>
+		<a href='?src=\ref[src];shuttle_request_dock=1'>Request docking with another shuttle</a><br>
+		<a href='?src=\ref[src];shuttle_toggle_auto_accept=1'>auto_accept_requests: <b>[selected_shuttle.auto_accept_requests ? "ON" : "OFF"]</b></a><br>
+		"}
+		if(selected_shuttle.pending_request)
+			var/datum/shuttle_dock_request/req = selected_shuttle.pending_request
+			var/role = (req.initiator == selected_shuttle) ? "OUTBOUND to" : "INBOUND from"
+			var/datum/shuttle/other = (req.initiator == selected_shuttle) ? req.target : req.initiator
+			var/mode_str = (req.mode == SDR_MODE_RENDEZVOUS) ? "rendezvous" : "in-place"
+			var/secs_left = max(round((req.expires_at - world.time) * 0.1), 0)
+			dat += {"<b>Pending request:</b> [role] [other.name] (mode: [mode_str], [secs_left]s remaining)<br>
+			<a href='?src=\ref[src];shuttle_force_accept=1'>Force accept</a> |
+			<a href='?src=\ref[src];shuttle_force_reject=1'>Force reject</a> |
+			<a href='?src=\ref[src];shuttle_force_cancel=1'>Force cancel</a><br>
+			"}
+		dat += {"<hr>
 		<a href='?src=\ref[src];shuttle_lockdown=1'>[selected_shuttle.lockdown ? "Lift lockdown" : "Lock down"]</a><br>
 		<a href='?src=\ref[src];shuttle_reset=1'>Reset</a><br>
 		<a href='?src=\ref[src];shuttle_delete=1'>Delete</a>

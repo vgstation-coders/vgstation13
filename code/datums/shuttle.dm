@@ -24,6 +24,24 @@
 	//List of ALL docking ports the shuttle can move to
 	var/list/docking_ports = list()
 
+	// Original starting-area typepath
+	var/starting_area_path = null
+
+	// Shuttle-to-shuttle docking setting
+	var/dockability = SHUTTLE_DOCKING_PROHIBITED
+	var/auto_accept_requests = FALSE
+	var/datum/shuttle_dock_request/pending_request = null
+
+	// Associative list mapping other shuttle types to the rendezvous vlevel used for docking with them
+	var/list/rendezvous_vlevels = list()
+
+	// Cached set of /turf/simulated tiles in linked_areas.
+	var/list/_hull_turf_cache = null
+	var/_hull_turf_cache_built_at_port = null
+
+	// Destination ports created on the fly for in-place rendezvous. Destroyed when the initiator next undocks from them.
+	var/list/temporary_destinations = list()
+
 	//The shuttle's main area - it contains the linked_port
 	var/area/linked_area
 
@@ -76,6 +94,20 @@
 	var/obj/docking_port/destination/previous_port //Last port used before entering a transit area
 	var/transit_timeout = 45 SECONDS //Longest time the shuttle can stay in a transit area before getting recalled to the previous location
 
+	// Set by /proc/load_map_shuttles when this shuttle is loaded via a
+	// /datum/map_element/shuttle. Points at the parking destination port the
+	// loader created in the shuttle's parking vlevel. Used by callers who want
+	// to send the shuttle "back to parking" without going through the dock-
+	// request flow (e.g. the cargo recall path).
+	var/obj/docking_port/destination/parking_port
+
+	// Areas on this shuttle's hull that visiting shuttles are allowed to land
+	// over (catwalks, exterior decks, etc.). Mappers populate this with /area
+	// subtypes; find_compatible_dock_pair excludes turfs in these areas from
+	// the overlap check. The standard shuttle move's saved_ground_turfs flow
+	// already saves & restores the underlying turfs when the visitor leaves.
+	var/list/dockable_through_areas = list()
+
 	//When the shuttle moves, coordinates of its final location will be offset by rand(-innacuracy, innacuracy)
 	var/innacuracy = 0
 
@@ -98,14 +130,12 @@
 	// Used to restore the ground when the shuttle departs, keyed by "[x],[y],[z]".
 	var/list/saved_ground_turfs = list()
 
-	// Original starting-area typepath passed to New(). Stored so initialize() can re-resolve
-	// linked_areas if the shuttle's area only became available after New() ran (e.g. shuttles
-	// whose areas live in a fixedvault loaded via load_map_elements, or in a map element
-	// loaded dynamically by a gamemode/event). Holds a typepath, not an instance.
-	var/starting_area_path
-
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
+
+	// Register every shuttle datum by type so the shuttle loader can resolve us even if our area doesn't exist yet (and we aren't in `shuttles`).
+	shuttle_datums_by_path[type] = src
+	starting_area_path = ispath(starting_area) ? starting_area : null
 
 	if(starting_area)
 		if(ispath(starting_area))
@@ -121,6 +151,30 @@
 		shuttles |= src
 	if(password)
 		password = rand(10000,99999)
+
+// Called by generate_shuttle_docking_vlevels() after transit + paired docking vlevels are in place.
+/datum/shuttle/proc/post_setup()
+	return
+
+// Called by the shuttle loader after a shuttle DMM has been loaded into a parking vlevel.
+/datum/shuttle/proc/attach_loaded_areas(list/areas)
+	for(var/area/A in areas)
+		linked_areas |= A
+
+	// If we have a starting_area_path, also fold in any newly-instantiated subtypes that didn't exist when New() ran.
+	if(starting_area_path)
+		for(var/area/A in world)
+			if(istype(A, starting_area_path))
+				linked_areas |= A
+
+	if(!linked_area?.contents.len)
+		linked_area = null
+	for(var/area/A in linked_areas)
+		if(A.contents.len)
+			linked_area = A
+			break
+	if(!linked_area && linked_areas.len)
+		linked_area = linked_areas[1]
 
 // Looks up world areas matching starting_area_path and populates linked_areas / linked_area.
 // Safe to call multiple times; additional matching areas are unioned in. Used by both New()
@@ -140,6 +194,487 @@
 				break
 		if(!linked_area && linked_areas.len)
 			linked_area = linked_areas[1]
+
+	if(istype(linked_area))
+		shuttles |= src
+
+// Returns every turf in the shuttle's linked_areas (ie everything move_area_to() will physically move during a dock).
+/datum/shuttle/proc/hull_turfs()
+	if(_hull_turf_cache && _hull_turf_cache_built_at_port == current_port)
+		return _hull_turf_cache
+
+	_hull_turf_cache = list()
+	_hull_turf_cache_built_at_port = current_port
+	for(var/area/A in linked_areas)
+		for(var/turf/T in A.contents)
+			_hull_turf_cache += T
+	return _hull_turf_cache
+
+// Returns a list of list(x, y) coordinate pairs representing where this shuttle's hull turfs would land in target_vz if its pa dynamic port ended up adjacent to pb on the target vlevel (pa lands at get_step(pb, pb.dir)).
+/datum/shuttle/proc/project_hull_onto_vlevel(obj/docking_port/shuttle/dynamic/pa, obj/docking_port/shuttle/dynamic/pb, datum/virtual_z/target_vz)
+	var/turf/anchor = get_step(pb, pb.dir)
+	if(!anchor || anchor.get_virtual_z() != target_vz)
+		return null
+
+	// Rotate the shuttle to dock, if permitted
+	var/rotate = 0
+	if(pa.dir != turn(pb.dir, 180))
+		if(!can_rotate)
+			return null
+		rotate = dir2angle(turn(pb.dir, 180)) - dir2angle(pa.dir)
+		if(rotate < 0)
+			rotate += 360
+		else if(rotate >= 360)
+			rotate -= 360
+
+	var/list/projected = list()
+	var/anchor_x = anchor.x
+	var/anchor_y = anchor.y
+	var/pa_x = pa.x
+	var/pa_y = pa.y
+	if(rotate)
+		var/cosine = cos(rotate)
+		var/sine = sin(rotate)
+		for(var/turf/T in hull_turfs())
+			var/dx = T.x - pa_x
+			var/dy = T.y - pa_y
+			var/rx = round(cosine * dx + sine * dy)
+			var/ry = round(-sine * dx + cosine * dy)
+			projected += list(list(anchor_x + rx, anchor_y + ry))
+	else
+		for(var/turf/T in hull_turfs())
+			var/dx = T.x - pa_x
+			var/dy = T.y - pa_y
+			projected += list(list(anchor_x + dx, anchor_y + dy))
+	return projected
+
+// True if the shuttle is parked in a vlevel where docking is allowed (VZ_PARKING or VZ_SPACE) and is not currently moving.
+/datum/shuttle/proc/is_in_dockable_vlevel()
+	if(moving)
+		return FALSE
+	if(!current_port)
+		return FALSE
+	var/datum/virtual_z/vz = current_port.get_virtual_z()
+	if(!vz)
+		return FALSE
+	if(vz.level_type != VZ_PARKING && vz.level_type != VZ_SPACE)
+		return FALSE
+	return TRUE
+
+// True if any third-party shuttle is either docked alongside us via a dock_request OR is in flight toward such a port that points at us.
+/datum/shuttle/proc/has_active_visitors()
+	for(var/datum/shuttle/S in shuttles)
+		if(S == src)
+			continue
+		var/obj/docking_port/destination/dock_request/cur = S.current_port
+		if(istype(cur) && cur.source_req?.target == src)
+			return TRUE
+		var/obj/docking_port/destination/dock_request/dst = S.destination_port
+		if(istype(dst) && dst.source_req?.target == src)
+			return TRUE
+	return FALSE
+
+/* Searches for a (pa, pb) pair of dynamic ports where pa is on this shuttle and pb is on `target`, such that the projected hull doesn't overlap target's hull or any other shuttle that's docked alongside / inbound to target.
+ * Whitelisted-port preference: if any target pb has a non-empty shuttle_whitelist that admits src and yields a viable pair, the best such pair wins regardless of how good a non-whitelisted alternative looks.
+ * Falls back to non-whitelisted ports only when no whitelisted pair is viable.
+ * Returns list(pa, pb) and sets out_mode[1] to the chosen mode, or null.
+*/
+/datum/shuttle/proc/find_compatible_dock_pair(datum/shuttle/target, list/out_mode)
+#ifdef SDR_DEBUG_PORT_SELECTION
+	message_admins("\[SDR\] find_compatible_dock_pair: src=[name] target=[target?.name]")
+#endif
+	// Either side flagged PROHIBITED refuses the dock req outright.
+	if(dockability == SHUTTLE_DOCKING_PROHIBITED || target?.dockability == SHUTTLE_DOCKING_PROHIBITED)
+#ifdef SDR_DEBUG_PORT_SELECTION
+		message_admins("\[SDR\]   reject: dockability prohibited (src=[dockability] target=[target?.dockability])")
+#endif
+		return null
+	if(!target?.current_port)
+#ifdef SDR_DEBUG_PORT_SELECTION
+		message_admins("\[SDR\]   reject: target has no current_port")
+#endif
+		return null
+	var/datum/virtual_z/target_vz = target.current_port.get_virtual_z()
+	if(!target_vz)
+#ifdef SDR_DEBUG_PORT_SELECTION
+		message_admins("\[SDR\]   reject: target current_port has no vlevel")
+#endif
+		return null
+
+#ifdef SDR_DEBUG_PORT_SELECTION
+	message_admins("\[SDR\]   target_vz bounds: x=[target_vz.x_min]..[target_vz.x_max] y=[target_vz.y_min]..[target_vz.y_max]")
+#endif
+
+	var/list/target_hull_coords = list()
+	for(var/turf/T in target.hull_turfs())
+		if(target.dockable_through_areas.len)
+			var/area/A = T.loc
+			if(A && (A.type in target.dockable_through_areas))
+				continue
+		target_hull_coords["[T.x],[T.y]"] = TRUE
+
+	for(var/datum/shuttle/visitor in shuttles)
+		if(visitor == src || visitor == target)
+			continue
+		var/obj/docking_port/destination/dock_request/cur = visitor.current_port
+		var/obj/docking_port/destination/dock_request/dst = visitor.destination_port
+		if(istype(cur) && cur.source_req?.target == target)
+			for(var/turf/T in visitor.hull_turfs())
+				target_hull_coords["[T.x],[T.y]"] = TRUE
+		else if(istype(dst) && dst.source_req?.target == target)
+			var/list/inbound_proj = visitor.project_hull_onto_vlevel(dst.source_req.pa, dst.source_req.pb, target_vz)
+			if(inbound_proj)
+				for(var/list/coord in inbound_proj)
+					target_hull_coords["[coord[1]],[coord[2]]"] = TRUE
+
+	var/list/best_whitelisted_pair = null
+	var/best_whitelisted_mode = 0
+	var/best_whitelisted_score = -1
+	var/list/best_fallback_pair = null
+	var/best_fallback_mode = 0
+	var/best_fallback_score = -1
+
+	for(var/obj/docking_port/shuttle/dynamic/pa in shuttle_contents())
+#ifdef SDR_DEBUG_PORT_SELECTION
+		message_admins("\[SDR\]   try pa=[pa.areaname] @([pa.x],[pa.y]) dir=[pa.dir] whitelist=[json_encode(pa.shuttle_whitelist)]")
+#endif
+		if(pa.is_occupied())
+#ifdef SDR_DEBUG_PORT_SELECTION
+			message_admins("\[SDR\]     skip pa: occupied")
+#endif
+			continue
+		if(!pa.allows_shuttle(target))
+#ifdef SDR_DEBUG_PORT_SELECTION
+			message_admins("\[SDR\]     skip pa: doesn't allow target [target.type]")
+#endif
+			continue
+		for(var/obj/docking_port/shuttle/dynamic/pb in target.shuttle_contents())
+#ifdef SDR_DEBUG_PORT_SELECTION
+			message_admins("\[SDR\]     try pb=[pb.areaname] @([pb.x],[pb.y]) dir=[pb.dir] whitelist=[json_encode(pb.shuttle_whitelist)]")
+#endif
+			if(pb.is_occupied())
+#ifdef SDR_DEBUG_PORT_SELECTION
+				message_admins("\[SDR\]       skip pb: occupied")
+#endif
+				continue
+			if(!pb.allows_shuttle(src))
+#ifdef SDR_DEBUG_PORT_SELECTION
+				message_admins("\[SDR\]       skip pb: doesn't allow src [type]")
+#endif
+				continue
+			var/dirs_aligned = (pa.dir == turn(pb.dir, 180))
+			if(!dirs_aligned && !can_rotate)
+#ifdef SDR_DEBUG_PORT_SELECTION
+				message_admins("\[SDR\]       skip pb: pa.dir=[pa.dir] != turn(pb.dir=[pb.dir], 180)=[turn(pb.dir, 180)] and shuttle can't rotate")
+#endif
+				continue
+			var/list/projected = project_hull_onto_vlevel(pa, pb, target_vz)
+			if(!projected)
+#ifdef SDR_DEBUG_PORT_SELECTION
+				message_admins("\[SDR\]       skip pb: projection failed (anchor off-map?)")
+#endif
+				continue
+			var/overlap = FALSE
+			var/list/overlap_coord = null
+			for(var/list/coord in projected)
+				if(target_hull_coords["[coord[1]],[coord[2]]"])
+					overlap = TRUE
+					overlap_coord = coord
+					break
+			if(overlap)
+#ifdef SDR_DEBUG_PORT_SELECTION
+				message_admins("\[SDR\]       skip pb: projected hull overlaps target hull at ([overlap_coord[1]],[overlap_coord[2]])")
+#endif
+				continue
+			var/lo_x = INFINITY
+			var/lo_y = INFINITY
+			var/hi_x = -INFINITY
+			var/hi_y = -INFINITY
+			for(var/list/coord in projected)
+				if(coord[1] < lo_x) lo_x = coord[1]
+				if(coord[2] < lo_y) lo_y = coord[2]
+				if(coord[1] > hi_x) hi_x = coord[1]
+				if(coord[2] > hi_y) hi_y = coord[2]
+			// Mode = IN_PLACE iff the projected hull fits inside the target vlevel.
+			var/mode
+			if(lo_x >= target_vz.x_min && \
+			   lo_y >= target_vz.y_min && \
+			   hi_x <= target_vz.x_max && \
+			   hi_y <= target_vz.y_max)
+				mode = SDR_MODE_IN_PLACE
+			else
+				mode = SDR_MODE_RENDEZVOUS
+			if(mode == SDR_MODE_RENDEZVOUS && !dirs_aligned)
+#ifdef SDR_DEBUG_PORT_SELECTION
+				message_admins("\[SDR\]       skip pb: rotation needed but mode would be RENDEZVOUS (not supported)")
+#endif
+				continue
+			var/pb_whitelisted = (pb.shuttle_whitelist && pb.shuttle_whitelist.len)
+			var/score = (mode == SDR_MODE_IN_PLACE ? 2 : 0)
+			// Prefer pairings that need no rotation when one is available.
+			if(dirs_aligned)
+				score += 1
+#ifdef SDR_DEBUG_PORT_SELECTION
+			message_admins("\[SDR\]       candidate: pa=[pa.areaname] pb=[pb.areaname] proj_bbox=([lo_x],[lo_y])..([hi_x],[hi_y]) mode=[mode == SDR_MODE_IN_PLACE ? "IN_PLACE" : "RENDEZVOUS"] score=[score] whitelisted=[pb_whitelisted]")
+#endif
+			if(pb_whitelisted)
+				if(score > best_whitelisted_score)
+					best_whitelisted_pair = list(pa, pb)
+					best_whitelisted_mode = mode
+					best_whitelisted_score = score
+			else
+				if(score > best_fallback_score)
+					best_fallback_pair = list(pa, pb)
+					best_fallback_mode = mode
+					best_fallback_score = score
+
+	var/list/best_pair
+	var/best_mode
+	var/best_score
+	if(best_whitelisted_pair)
+		best_pair = best_whitelisted_pair
+		best_mode = best_whitelisted_mode
+		best_score = best_whitelisted_score
+	else
+		best_pair = best_fallback_pair
+		best_mode = best_fallback_mode
+		best_score = best_fallback_score
+
+	if(best_pair)
+		out_mode[1] = best_mode
+#ifdef SDR_DEBUG_PORT_SELECTION
+		var/obj/docking_port/shuttle/dynamic/sel_pa = best_pair[1]
+		var/obj/docking_port/shuttle/dynamic/sel_pb = best_pair[2]
+		var/bucket = best_whitelisted_pair ? "whitelisted" : "fallback"
+		message_admins("\[SDR\]   selected: pa=[sel_pa.areaname] pb=[sel_pb.areaname] mode=[best_mode == SDR_MODE_IN_PLACE ? "IN_PLACE" : "RENDEZVOUS"] score=[best_score] ([bucket])")
+#endif
+#ifdef SDR_DEBUG_PORT_SELECTION
+	else
+		message_admins("\[SDR\]   no compatible pair found")
+#endif
+	return best_pair
+
+/datum/shuttle/proc/request_docking(datum/shuttle/target, mob/requester, silent = FALSE, in_place_only = FALSE)
+	if(target == src)
+		return SDR_ERR_SELF
+	if(pending_request || target.pending_request)
+		return SDR_ERR_BUSY
+	if(!is_in_dockable_vlevel())
+		if(moving || !current_port)
+			return SDR_ERR_TRANSIT
+		return SDR_ERR_BAD_LOCATION
+	if(!target.is_in_dockable_vlevel())
+		if(target.moving || !target.current_port)
+			return SDR_ERR_TRANSIT
+		return SDR_ERR_BAD_LOCATION
+
+	var/list/mode_holder = list(0)
+	var/list/pair = find_compatible_dock_pair(target, mode_holder)
+	if(!pair)
+		return SDR_ERR_NO_COMPATIBLE_PORT
+	var/obj/docking_port/shuttle/dynamic/pa = pair[1]
+	var/obj/docking_port/shuttle/dynamic/pb = pair[2]
+	var/mode = mode_holder[1]
+
+	// Caller insisted on in-place.
+	// Used by automated flows like cargo recall that don't ever want to warp the host out from under players.
+	if(in_place_only && mode != SDR_MODE_IN_PLACE)
+		return SDR_ERR_NO_COMPATIBLE_PORT
+
+	if(mode == SDR_MODE_RENDEZVOUS && (has_active_visitors() || target.has_active_visitors()))
+		return SDR_ERR_VISITORS_PRESENT
+
+	var/datum/shuttle_dock_request/req = new(src, target, pa, pb, mode)
+	pending_request = req
+	target.pending_request = req
+
+	if(silent)
+		req.accept()
+		return SDR_OK_AUTO_ACCEPTED
+
+	if(target.auto_accept_requests)
+		for(var/obj/machinery/computer/shuttle_control/C in control_consoles)
+			C.announce("Auto-accepted docking request from [target.name].")
+		for(var/obj/machinery/computer/shuttle_control/C in target.control_consoles)
+			C.announce("Auto-accepted docking request from [name].")
+		req.accept()
+		return SDR_OK_AUTO_ACCEPTED
+
+	for(var/obj/machinery/computer/shuttle_control/C in target.control_consoles)
+		C.announce("Incoming docking request from [name]. [mode == SDR_MODE_RENDEZVOUS ? "They will rendezvous at a neutral location." : "They will dock alongside us."]")
+	for(var/obj/machinery/computer/shuttle_control/C in control_consoles)
+		C.announce("Awaiting docking response from [target.name]…")
+
+	spawn(SDR_REQUEST_TIMEOUT)
+		if(!QDELETED(req) && !req.resolved)
+			req.expire()
+
+	return SDR_OK_PENDING
+
+// Maps a result code to a user-facing message for the requester's chat.
+/datum/shuttle/proc/dock_request_error_message(code)
+	switch(code)
+		if(SDR_ERR_SELF) return "Cannot request docking with self."
+		if(SDR_ERR_BUSY) return "A docking request is already pending."
+		if(SDR_ERR_TRANSIT) return "One of the shuttles is in transit."
+		if(SDR_ERR_BAD_LOCATION) return "Both shuttles must be parked in space or a parking area."
+		if(SDR_ERR_NO_COMPATIBLE_PORT) return "No compatible docking ports available on the target."
+		if(SDR_ERR_VISITORS_PRESENT) return "Cannot rendezvous - one of the shuttles has another vessel inbound or docked alongside it."
+	return "Unknown error ([code])."
+
+// Resolves an accepted in-place request: place a temporary destination port in target's vlevel where the initiator's linked_port will land, register it, and call travel_to.
+/datum/shuttle/proc/accept_dock_request_in_place(datum/shuttle_dock_request/req)
+	var/obj/docking_port/shuttle/dynamic/pa = req.pa
+	var/obj/docking_port/shuttle/dynamic/pb = req.pb
+	var/turf/anchor = get_step(pb, pb.dir)
+	if(!anchor)
+		stack_trace("accept_dock_request_in_place: no anchor turf")
+		return
+	// Rotate, if allowed
+	var/rotate = 0
+	if(can_rotate && pa.dir != turn(pb.dir, 180))
+		rotate = dir2angle(turn(pb.dir, 180)) - dir2angle(pa.dir)
+		if(rotate < 0)
+			rotate += 360
+		else if(rotate >= 360)
+			rotate -= 360
+	var/pa_dx = pa.x - linked_port.x
+	var/pa_dy = pa.y - linked_port.y
+	var/lp_x
+	var/lp_y
+	var/lp_new_dir
+	if(rotate)
+		var/c = cos(rotate)
+		var/s = sin(rotate)
+		lp_x = anchor.x - round(c * pa_dx + s * pa_dy)
+		lp_y = anchor.y - round(-s * pa_dx + c * pa_dy)
+		lp_new_dir = turn(linked_port.dir, -rotate)
+	else
+		lp_x = anchor.x - pa_dx
+		lp_y = anchor.y - pa_dy
+		lp_new_dir = linked_port.dir
+	var/turf/lp_turf = locate(lp_x, lp_y, anchor.z)
+	if(!lp_turf)
+		stack_trace("accept_dock_request_in_place: linked_port turf off-map")
+		return
+	var/turf/dest_turf = get_step(lp_turf, lp_new_dir)
+	if(!dest_turf)
+		stack_trace("accept_dock_request_in_place: destination turf off-map")
+		return
+	var/obj/docking_port/destination/dock_request/dest = new(dest_turf)
+	dest.dir = turn(lp_new_dir, 180)
+	dest.areaname = "[req.target.name] rendezvous"
+	dest.source_req = req
+	add_dock(dest)
+	temporary_destinations += dest
+
+	for(var/obj/machinery/computer/shuttle_control/C in req.target.control_consoles)
+		C.announce("Docking request accepted. [name] will dock alongside.")
+	for(var/obj/machinery/computer/shuttle_control/C in control_consoles)
+		C.announce("Docking request accepted. Beginning approach to [req.target.name].")
+
+	travel_to(dest)
+
+/datum/shuttle/proc/lazy_get_rendezvous_vlevel(datum/shuttle/other, obj/docking_port/shuttle/dynamic/pa, obj/docking_port/shuttle/dynamic/pb)
+	if(rendezvous_vlevels[other.type])
+		return rendezvous_vlevels[other.type]
+
+	var/list/dims_a = get_size()
+	var/list/dims_b = other.get_size()
+	if(!dims_a || !dims_b)
+		return null
+
+	var/buffer = 25
+	var/horizontal = (pa.dir == EAST || pa.dir == WEST)
+	var/vz_w
+	var/vz_h
+	if(horizontal)
+		vz_w = dims_a[1] + dims_b[1] + buffer * 2
+		vz_h = max(dims_a[2], dims_b[2]) + buffer * 2
+	else
+		vz_w = max(dims_a[1], dims_b[1]) + buffer * 2
+		vz_h = dims_a[2] + dims_b[2] + buffer * 2
+
+	var/datum/virtual_z/dock_vz = map.addVLevel(vz_w, vz_h)
+	dock_vz.level_type = VZ_SPACE
+	dock_vz.name = "[name] / [other.name] rendezvous"
+
+	var/rx
+	var/ry
+	if(horizontal)
+		ry = dock_vz.y_min + buffer + (max(dims_a[2], dims_b[2]) >> 1)
+		rx = (pa.dir == EAST) ? (dock_vz.x_min + buffer + dims_a[1] - 1) : (dock_vz.x_min + buffer + dims_b[1])
+	else
+		rx = dock_vz.x_min + buffer + (max(dims_a[1], dims_b[1]) >> 1)
+		ry = (pa.dir == NORTH) ? (dock_vz.y_min + buffer + dims_a[2] - 1) : (dock_vz.y_min + buffer + dims_b[2])
+
+	var/turf/rendezvous_a = locate(rx, ry, dock_vz.z())
+	var/turf/rendezvous_b = get_step(rendezvous_a, pa.dir)
+	if(!rendezvous_a || !rendezvous_b)
+		return null
+
+	var/obj/docking_port/destination/dest_a = _make_pair_destination_port(pa, rendezvous_a, dock_vz, "[other.name] rendezvous")
+	var/obj/docking_port/destination/dest_b = other._make_pair_destination_port(pb, rendezvous_b, dock_vz, "[name] rendezvous")
+	if(!dest_a || !dest_b)
+		return null
+
+	add_dock(dest_a)
+	other.add_dock(dest_b)
+
+	rendezvous_vlevels[other.type] = dock_vz
+	other.rendezvous_vlevels[type] = dock_vz
+	return dock_vz
+
+/datum/shuttle/proc/_make_pair_destination_port(obj/docking_port/shuttle/dynamic/port, turf/rendezvous, datum/virtual_z/dock_vz, areaname)
+	var/dx = linked_port.x - port.x
+	var/dy = linked_port.y - port.y
+	var/lp_x = rendezvous.x + dx
+	var/lp_y = rendezvous.y + dy
+	var/turf/lp_turf = locate(lp_x, lp_y, dock_vz.z())
+	if(!lp_turf)
+		return null
+	var/turf/dest_turf = get_step(lp_turf, linked_port.dir)
+	if(!dest_turf)
+		return null
+	var/obj/docking_port/destination/dock_request/dest = new(dest_turf)
+	dest.dir = turn(linked_port.dir, 180)
+	dest.areaname = areaname
+	return dest
+
+/datum/shuttle/proc/accept_dock_request_rendezvous(datum/shuttle_dock_request/req)
+	for(var/obj/machinery/computer/shuttle_control/C in control_consoles)
+		C.announce("Locating rendezvous coordinates…")
+	for(var/obj/machinery/computer/shuttle_control/C in req.target.control_consoles)
+		C.announce("Locating rendezvous coordinates…")
+
+	var/datum/virtual_z/rendezvous_vz = lazy_get_rendezvous_vlevel(req.target, req.pa, req.pb)
+	if(!rendezvous_vz)
+		for(var/obj/machinery/computer/shuttle_control/C in control_consoles)
+			C.announce("Rendezvous coordinate calculation failed.")
+		return
+	req.chosen_rendezvous_vz = rendezvous_vz
+
+	var/obj/docking_port/destination/my_dest = null
+	var/obj/docking_port/destination/their_dest = null
+	for(var/obj/docking_port/destination/D in docking_ports)
+		if(D.get_virtual_z() == rendezvous_vz)
+			my_dest = D
+			break
+	for(var/obj/docking_port/destination/D in req.target.docking_ports)
+		if(D.get_virtual_z() == rendezvous_vz)
+			their_dest = D
+			break
+	if(!my_dest || !their_dest)
+		for(var/obj/machinery/computer/shuttle_control/C in control_consoles)
+			C.announce("Rendezvous destination ports missing.")
+		return
+
+	if(istype(my_dest, /obj/docking_port/destination/dock_request))
+		var/obj/docking_port/destination/dock_request/my_dr = my_dest
+		my_dr.source_req = req
+
+	travel_to(my_dest)
+	req.target.travel_to(their_dest)
 
 // Returns the combined contents of all linked areas
 /datum/shuttle/proc/shuttle_contents()
@@ -176,9 +711,11 @@
 	var/obj/docking_port/shuttle/shuttle_docking_port
 
 	for(var/obj/docking_port/shuttle/S in shuttle_contents())
+		// /obj/docking_port/shuttle/dynamic ports mark ship-to-ship rendezvous slots and must not be picked as the shuttle's primary linked_port.
+		if(istype(S, /obj/docking_port/shuttle/dynamic))
+			continue
 		shuttle_docking_port = S
 		break
-	//
 
 	if(shuttle_docking_port)
 		//In case this shuttle already has a shuttle docking port, unlink it
@@ -206,6 +743,9 @@
 
 	for(var/obj/docking_port/D in shuttle_contents())
 		docking_ports_aboard |= D
+		if(istype(D, /obj/docking_port/shuttle/dynamic))
+			var/obj/docking_port/shuttle/dynamic/dyn = D
+			dyn.linked_shuttle = src
 
 	for(var/obj/structure/shuttle/engine/propulsion/P in shuttle_contents()) // Use any shuttle engine to set the shuttle's direction
 		if(istype(P))
@@ -230,6 +770,19 @@
 				break
 		if(!has_shuttle_structure)
 			T.turf_flags |= SHUTTLE_TURF
+
+	if(dockability == SHUTTLE_DOCKING_VISIBLE && linked_port)
+		var/turf/lp_turf = get_turf(linked_port)
+		if(lp_turf)
+			var/has_one = FALSE
+			for(var/obj/docking_port/shuttle/dynamic/existing in lp_turf)
+				has_one = TRUE
+				break
+			if(!has_one)
+				var/obj/docking_port/shuttle/dynamic/dyn = new(lp_turf)
+				dyn.dir = linked_port.dir
+				dyn.linked_shuttle = src
+				docking_ports_aboard |= dyn
 	return
 
 /datum/shuttle/Destroy()
@@ -244,6 +797,30 @@
 
 /datum/shuttle/proc/get_cooldown()
 	return cooldown
+
+// Bluespace jump state. Map-agnostic hook — base returns 0 (no jump). Map-
+// specific shuttle subtypes (e.g. /datum/shuttle/odyssey) may override.
+//   0 = none, 1 = countdown, 2 = committed.
+/datum/shuttle/proc/get_bluespace_state()
+	return 0
+
+// Returns list("seconds_left" = N, "seconds_total" = N) describing the timer
+// for an in-progress bluespace jump, or null if no jump or no timing info.
+// Subtypes that return a non-zero state from get_bluespace_state() should
+// also override this to provide the corresponding timer.
+/datum/shuttle/proc/get_bluespace_timing()
+	return null
+
+// Hook fired when a shuttle-to-shuttle docking request completes and the
+// initiator finishes its travel. Called once on the initiator and once on
+// the target. Default behaviour is silent — override on map-specific
+// shuttles (e.g. the player ship) to add chat/captain announcements.
+//   `other`      : the shuttle on the far side of the request
+//   `mode`       : SDR_MODE_IN_PLACE or SDR_MODE_RENDEZVOUS
+//   `own_port`   : the dynamic port on `src` that participated
+//   `other_port` : the dynamic port on `other` that participated
+/datum/shuttle/proc/on_dock_request_completed(datum/shuttle/other, mode, obj/docking_port/shuttle/dynamic/own_port, obj/docking_port/shuttle/dynamic/other_port)
+	return
 
 //Shuttles like the emergency shuttle (which moves to pre-defined locations) and vox shuttle (which ends the round once moved to a pre-defined location)
 //should have this proc return 1, so they can't be deleted.
@@ -679,7 +1256,21 @@
 
 		log_game("[name] ([type]) moved to [D.areaname]")
 
+		// Clean up temporary in-place destination ports we're leaving behind.
+		if(temporary_destinations.len && (current_port in temporary_destinations))
+			var/obj/docking_port/destination/old_temp = current_port
+			temporary_destinations -= old_temp
+			remove_dock(old_temp)
+			spawn(0)
+				qdel(old_temp)
+
 		current_port = D
+
+		// Fire the dock-request arrival announcement (single-fire) when the initiator parks at a port created for an accepted request.
+		if(istype(D, /obj/docking_port/destination/dock_request))
+			var/obj/docking_port/destination/dock_request/DR = D
+			if(DR.source_req)
+				DR.source_req.fire_arrival_announcement(src)
 
 		if(source_vz)
 			INVOKE_EVENT(src, /event/shuttle_departed, "vz" = source_vz, "shuttle" = src)
@@ -1242,6 +1833,7 @@
 /datum/shuttle/custom
 	name = "custom shuttle"
 	can_link_to_computer = LINK_FREE
+	dockability = SHUTTLE_DOCKING_VISIBLE
 
 /datum/shuttle/proc/show_outline(var/mob/user, var/turf/centered_at)
 	if(!user)

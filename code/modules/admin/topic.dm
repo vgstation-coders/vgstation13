@@ -5635,6 +5635,83 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			S.use_transit = TRANSIT_ACROSS_Z_LEVELS
 			to_chat(usr, "<span class='info'>The [S.name] will now use the transit area when traveling across z-levels. Set its use_transit to 2 to make it always use transit, or 0 to disable transit.</span>")
 
+	if(href_list["shuttle_request_dock"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","RD")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S))
+			return
+		var/datum/shuttle/target = select_shuttle_from_all(usr, "Select a shuttle for [S.name] to request docking with", "Admin abuse", omit_shuttles = list(S))
+		if(!istype(target))
+			return
+		var/code = S.request_docking(target, usr)
+		switch(code)
+			if(SDR_OK_PENDING)
+				to_chat(usr, "<span class='info'>Docking request sent to [target.name]; awaiting response.</span>")
+			if(SDR_OK_AUTO_ACCEPTED)
+				to_chat(usr, "<span class='info'>Docking request auto-accepted by [target.name].</span>")
+			else
+				to_chat(usr, "<span class='warning'>Docking request failed: [S.dock_request_error_message(code)]</span>")
+		message_admins("<span class='notice'>[key_name_admin(usr)] sent a docking request from [S.name] to [target.name].</span>", 1)
+		log_admin("[key_name_admin(usr)] sent a docking request from [S.name] to [target.name] (result code [code])")
+		shuttle_magic()
+
+	if(href_list["shuttle_toggle_auto_accept"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","AA")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S))
+			return
+		S.auto_accept_requests = !S.auto_accept_requests
+		to_chat(usr, "<span class='info'>[S.name].auto_accept_requests = [S.auto_accept_requests ? "ON" : "OFF"]</span>")
+		message_admins("<span class='notice'>[key_name_admin(usr)] toggled [S.name].auto_accept_requests to [S.auto_accept_requests ? "ON" : "OFF"].</span>", 1)
+		log_admin("[key_name_admin(usr)] toggled [S.name].auto_accept_requests to [S.auto_accept_requests]")
+		shuttle_magic()
+
+	if(href_list["shuttle_force_accept"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","FA")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S) || !S.pending_request)
+			return
+		var/datum/shuttle_dock_request/req = S.pending_request
+		req.accept()
+		message_admins("<span class='notice'>[key_name_admin(usr)] force-accepted the pending docking request on [S.name].</span>", 1)
+		log_admin("[key_name_admin(usr)] force-accepted dock request on [S.name]")
+		shuttle_magic()
+
+	if(href_list["shuttle_force_reject"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","FR")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S) || !S.pending_request)
+			return
+		var/reason = input(usr, "Reason for rejection (optional):", "Admin force-reject", "") as null|text
+		if(!S.pending_request)
+			return
+		var/datum/shuttle_dock_request/req = S.pending_request
+		req.reject(reason)
+		message_admins("<span class='notice'>[key_name_admin(usr)] force-rejected the pending docking request on [S.name][reason ? " ([reason])" : ""].</span>", 1)
+		log_admin("[key_name_admin(usr)] force-rejected dock request on [S.name][reason ? ": [reason]" : ""]")
+		shuttle_magic()
+
+	if(href_list["shuttle_force_cancel"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","FC")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S) || !S.pending_request)
+			return
+		var/datum/shuttle_dock_request/req = S.pending_request
+		req.cancel()
+		message_admins("<span class='notice'>[key_name_admin(usr)] force-cancelled the pending docking request on [S.name].</span>", 1)
+		log_admin("[key_name_admin(usr)] force-cancelled dock request on [S.name]")
+		shuttle_magic()
+
 
 	//------------------------------------------------------------------Shuttle stuff end---------------------------------
 

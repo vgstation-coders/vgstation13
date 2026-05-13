@@ -10,6 +10,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	cant_leave_zlevel = list()
 	dir = EAST
 	can_rotate = FALSE
+	dockability = SHUTTLE_DOCKING_VISIBLE
 
 	cooldown = 60 SECONDS
 	pre_flight_delay = 30 SECONDS
@@ -291,6 +292,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	name = "odyssey transfer shuttle"
 	dir = SOUTH
 	can_rotate = TRUE
+	dockability = SHUTTLE_DOCKING_VISIBLE
 	var/obj/docking_port/destination/odyssey_transfer/nt_outpost/outpost_dock
 	var/auto_return_timer = 0
 

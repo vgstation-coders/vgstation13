@@ -5,6 +5,7 @@ var/global/datum/shuttle/salvage/salvage_shuttle = new(starting_area=/area/shutt
 
 /datum/shuttle/salvage
 	name = "salvage shuttle"
+	dockability = SHUTTLE_DOCKING_VISIBLE
 
 	cooldown = SALVAGE_SHIP_COOLDOWN
 

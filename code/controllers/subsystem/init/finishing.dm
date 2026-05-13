@@ -14,6 +14,8 @@ var/datum/subsystem/finish/SSfinish
 /datum/subsystem/finish/Initialize(timeofday)
 	setup_shuttles()
 
+	setup_shuttle_transit_areas()
+
 	stat_collection.artifacts_discovered = 0 // Because artifacts during generation get counted otherwise!
 
 	..()
