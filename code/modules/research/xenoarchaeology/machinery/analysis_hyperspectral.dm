@@ -42,8 +42,6 @@
 /obj/machinery/anomaly/hyperspectral/ScanResults()
 	var/results = "The scan was inconclusive. Check sample integrity."
 
-	var/datum/geosample/scanned_sample
-
 	for(var/datum/reagent/A in held_container.reagents.reagent_list)
 		var/datum/reagent/R = A
 		if(istype(R, /datum/reagent/analysis_sample))
@@ -58,3 +56,10 @@
 			results = "Detected energy signatures 100% consistent with standard background readings."
 
 	return results
+
+/obj/machinery/anomaly/hyperspectral/draw_on_map(x,y)
+	if(map_icon && scanned_sample)
+		if(round(x,3) != round(x_offset,3) || round(y,3) != round(y_offset,3))
+			map_icon.DrawBox("#000", x, y)
+		else
+			map_icon.DrawBox("#f00", x, y)

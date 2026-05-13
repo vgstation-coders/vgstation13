@@ -73,6 +73,7 @@
 	color = null
 	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	stuns_arcane_loyalty = TRUE
 
 /obj/item/clothing/under/color/orange
 	name = "orange jumpsuit"

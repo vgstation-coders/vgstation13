@@ -605,3 +605,9 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 		to_chat(usr, "<span class='notice'>Distress beacon cancelled.</span>")
 		return TRUE
 	return FALSE
+
+/obj/item/device/gps/planetary/pai
+	base_name = "pAI expedition tracker"
+	base_tag = "PAIEX"
+	builtin = TRUE
+	transmitting = TRUE

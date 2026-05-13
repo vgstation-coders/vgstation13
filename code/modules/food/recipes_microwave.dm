@@ -2860,6 +2860,16 @@
 		new result(get_turf(container))
 	return ..()
 
+/datum/recipe/vreemdkoekje
+	reagents = list(FLOUR = 30, ZETADUST = 30)
+	result = /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje
+
+/datum/recipe/vreemdkoekje/make_food(obj/container, mob/user)
+	// fixing a buggy old hack, dont ask any questions
+	for (var/i = 1 to 5)
+		new result(get_turf(container))
+	return ..()
+
 /datum/recipe/pimiento
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,

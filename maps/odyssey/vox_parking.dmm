@@ -466,9 +466,7 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_station/northeast_solars)
 "Zv" = (
-/obj/effect/landmark/start{
-	name = "Trader"
-	},
+/obj/effect/landmark/start/trader_also_latejoin,
 /turf/simulated/floor/plating/vox,
 /area/vox_station/northeast_solars)
 "ZH" = (

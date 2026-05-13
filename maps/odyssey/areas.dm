@@ -2,6 +2,24 @@
 	name = "\improper NTEV Odyssey"
 	icon_state = "shuttle"
 	requires_power = 1
+	base_turf_type = /turf/space // Fallback only; get_base_turf_type() resolves per-vLevel.
+
+// What's outside the ship depends on where the ship is sitting:
+//   - VZ_PLANET: expose the planet surface so a breach reveals the ground.
+//   - VZ_TRANSIT: a visual /turf/space/breach that scrolls in the same direction as the surrounding hyperspace turfs but doesn't teleport mobs.
+//   - everything else (VZ_SPACE, VZ_PARKING): plain /turf/space, since the ship is just sitting in space.
+/area/shuttle/odyssey/get_base_turf_type(turf/T)
+	var/datum/virtual_z/vz = T?.get_virtual_z()
+	if(vz)
+		switch(vz.level_type)
+			if(VZ_PLANET)
+				if(vz.base_turf && vz.base_turf != /turf/space)
+					return vz.base_turf
+				if(vz.planet?.default_baseturf)
+					return vz.planet.default_baseturf
+			if(VZ_TRANSIT)
+				return /turf/space/breach
+	return /turf/space
 
 /area/shuttle/odyssey/bridge
 	name = "\improper Bridge"
@@ -106,6 +124,7 @@
 /area/shuttle/odyssey/exterior
 	name = "\improper Exterior"
 	icon_state = "red"
+	base_turf_type = /turf/space // Inherits the vLevel-aware get_base_turf_type() from the parent area.
 
 /area/surface/nt_outpost
 	name = "\improper Nanotrasen Outpost"

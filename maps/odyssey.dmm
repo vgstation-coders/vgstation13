@@ -1578,7 +1578,7 @@
 /obj/structure/rack,
 /obj/machinery/door_control{
 	id_tag = "mining shutters";
-	name = "Mining Supplies";
+	name = "Storage";
 	pixel_x = 25;
 	pixel_y = -9
 	},
@@ -1589,7 +1589,6 @@
 /obj/item/firefoam_popper,
 /obj/item/weapon/grenade/chem_grenade/metalfoam,
 /obj/item/weapon/grenade/chem_grenade/metalfoam,
-/obj/item/clothing/gloves/yellow,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -1663,7 +1662,7 @@
 /area/odyssey/cargo)
 "fo" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /obj/structure/closet/emcloset/vox,
 /turf/simulated/floor{
@@ -1789,7 +1788,7 @@
 "fN" = (
 /obj/structure/flora/pottedplant/random,
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /obj/item/device/radio/intercom{
 	pixel_x = -30
@@ -2194,7 +2193,7 @@
 /area/shuttle/odyssey/maintenance/port)
 "hh" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/crew)
@@ -3484,7 +3483,7 @@
 	tag = "90Curve"
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -4037,7 +4036,9 @@
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "nS" = (
-/obj/machinery/door/airlock/mining,
+/obj/machinery/door/airlock/mining{
+	name = "Logistics"
+	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -4048,6 +4049,10 @@
 	tag = "icon-intact (EAST)"
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -4058,7 +4063,6 @@
 	pixel_x = -24;
 	pixel_y = 5
 	},
-/obj/item/weapon/card/id/captains_spare,
 /obj/machinery/firealarm{
 	pixel_y = -30;
 	dir = 1
@@ -4352,7 +4356,10 @@
 /turf/simulated/floor/carpet,
 /area/odyssey/admin)
 "oY" = (
-/obj/machinery/atmospherics/unary/vent_scrubber/layered,
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	dir = 1;
+	on = 1
+	},
 /obj/structure/closet/crate/trashcart,
 /obj/machinery/newscaster{
 	pixel_y = -28
@@ -4801,7 +4808,9 @@
 /area/security/perma)
 "qy" = (
 /obj/structure/flora/pottedplant/random,
-/obj/machinery/atmospherics/unary/vent_scrubber/layered,
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	on = 1
+	},
 /obj/structure/sign/directions/carg{
 	pixel_x = -32;
 	dir = 8
@@ -5892,7 +5901,9 @@
 	name = "\improper Vox Casino"
 	})
 "us" = (
-/obj/machinery/door/airlock/glass,
+/obj/machinery/door/airlock/glass{
+	name = "Cafeteria"
+	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 4;
 	tag = "icon-intact (EAST)"
@@ -5903,7 +5914,11 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/door/firedoor,
-/turf/simulated/floor,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "uw" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
@@ -5927,7 +5942,9 @@
 /turf/simulated/floor/vox,
 /area/vox_station/tradepost)
 "uA" = (
-/obj/machinery/door/airlock,
+/obj/machinery/door/airlock{
+	name = "Dorms"
+	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/structure/cable{
@@ -6446,7 +6463,9 @@
 	},
 /area/shuttle/odyssey/engineering/engine_room)
 "wn" = (
-/obj/machinery/door/airlock/mining,
+/obj/machinery/door/airlock/mining{
+	name = "Logistics"
+	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 4;
 	tag = "icon-intact (EAST)"
@@ -6456,6 +6475,11 @@
 	tag = "icon-intact (EAST)"
 	},
 /obj/machinery/door/firedoor,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -6556,7 +6580,7 @@
 	pixel_y = 36
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /obj/effect/landmark{
 	name = "JoinLate"
@@ -6648,7 +6672,7 @@
 /area/shuttle/odyssey/hallway/fore)
 "wN" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -6928,22 +6952,16 @@
 /obj/structure/rack,
 /obj/machinery/door_control{
 	id_tag = "mining shutters";
-	name = "Mining Supplies";
+	name = "Storage";
 	pixel_x = -25;
 	pixel_y = -9
 	},
-/obj/item/weapon/storage/belt/mining,
-/obj/item/weapon/storage/belt/mining,
-/obj/item/weapon/pickaxe,
-/obj/item/weapon/pickaxe,
-/obj/item/device/mining_scanner,
-/obj/item/device/mining_scanner,
-/obj/item/weapon/storage/bag/ore,
-/obj/item/weapon/storage/bag/ore,
-/obj/item/clothing/glasses/scanner/meson,
-/obj/item/clothing/glasses/scanner/meson,
-/obj/item/device/flashlight/lantern,
-/obj/item/device/flashlight/lantern,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/radio,
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "darkyellow";
@@ -7225,7 +7243,8 @@
 /area/shuttle/odyssey/logistics)
 "yB" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 8
+	dir = 4;
+	on = 1
 	},
 /obj/structure/extinguisher_cabinet{
 	pixel_x = -30
@@ -8014,7 +8033,7 @@
 /area/odyssey/admin)
 "Bo" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -8114,7 +8133,9 @@
 	},
 /area/shuttle/trade/start)
 "BD" = (
-/obj/machinery/door/airlock/glass,
+/obj/machinery/door/airlock/glass{
+	name = "Cafeteria"
+	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4;
 	tag = "icon-intact (EAST)"
@@ -8129,7 +8150,7 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/door/firedoor,
-/turf/simulated/floor,
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/cafeteria)
 "BG" = (
 /obj/effect/decal/warning_stripes{
@@ -8862,7 +8883,9 @@
 	},
 /area/shuttle/odyssey/bridge)
 "Ee" = (
-/obj/machinery/door/airlock/mining,
+/obj/machinery/door/airlock/mining{
+	name = "Logistics"
+	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -9165,6 +9188,7 @@
 /obj/structure/table/reinforced,
 /obj/machinery/recharger,
 /obj/item/weapon/book/manual/odyssey,
+/obj/item/weapon/card/id/captains_spare,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -10414,7 +10438,7 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 8;
+	dir = 4;
 	on = 1
 	},
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
@@ -10646,10 +10670,6 @@
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
 "KB" = (
-/obj/machinery/door/airlock/glass_atmos{
-	req_access_txt = "11";
-	name = "Engine Room"
-	},
 /obj/machinery/door/poddoor{
 	density = 0;
 	icon_state = "pdoor0";
@@ -10658,6 +10678,10 @@
 	opacity = 0
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/glass_engineering{
+	req_access_txt = "11";
+	name = "Engine Room"
+	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -10687,7 +10711,9 @@
 	},
 /area/odyssey/clinic)
 "KJ" = (
-/obj/machinery/door/airlock/glass,
+/obj/machinery/door/airlock/glass{
+	name = "Cafeteria"
+	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/structure/cable{
@@ -10917,11 +10943,12 @@
 /area/shuttle/odyssey/engineering)
 "LA" = (
 /obj/structure/rack,
-/obj/item/device/radio,
-/obj/item/device/radio,
-/obj/item/device/gps/planetary,
-/obj/item/device/gps/planetary,
 /obj/item/weapon/pinpointer/gas_dowser,
+/obj/item/weapon/pinpointer/gas_dowser,
+/obj/item/weapon/storage/belt/utility,
+/obj/item/weapon/storage/belt/utility,
+/obj/item/clothing/gloves/yellow,
+/obj/item/clothing/gloves/yellow,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -12295,10 +12322,6 @@
 /turf/simulated/floor/plating/vox,
 /area/shuttle/trade/start)
 "PS" = (
-/obj/machinery/door/airlock/glass_atmos{
-	req_access_txt = "11";
-	name = "Engine Room"
-	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -12320,6 +12343,10 @@
 	opacity = 0
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/glass_engineering{
+	req_access_txt = "11";
+	name = "Engine Room"
+	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -13396,7 +13423,9 @@
 	},
 /area/odyssey/mineral_processing)
 "Td" = (
-/obj/machinery/door/airlock,
+/obj/machinery/door/airlock{
+	name = "Restroom"
+	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -13959,7 +13988,9 @@
 	},
 /area/odyssey/admin)
 "Vb" = (
-/obj/machinery/door/airlock,
+/obj/machinery/door/airlock{
+	name = "Stasis"
+	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -14112,6 +14143,9 @@
 /obj/machinery/light/small,
 /obj/effect/landmark/start{
 	name = "Cyborg"
+	},
+/obj/docking_port/destination/vox/starboard_breach{
+	dir = 2
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
@@ -14407,7 +14441,9 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
 "Wq" = (
-/obj/machinery/door/airlock/glass_command,
+/obj/machinery/door/airlock/glass_command{
+	name = "Command Dorms"
+	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -14506,7 +14542,8 @@
 /area/shuttle/odyssey/engineering/engine_room)
 "WH" = (
 /obj/machinery/door/airlock/security{
-	req_access_txt = "1"
+	req_access_txt = "1";
+	name = "Security"
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -14578,6 +14615,7 @@
 	dir = 1;
 	invisibility = 1
 	},
+/obj/docking_port/destination/vox/port_breach,
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/port)
 "WV" = (
@@ -14703,7 +14741,7 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
-	dir = 8
+	dir = 4
 	},
 /obj/machinery/firealarm{
 	pixel_x = -30

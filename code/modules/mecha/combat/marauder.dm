@@ -147,7 +147,7 @@
 	else
 		icon_state = initial_icon
 
-/obj/mecha/combat/marauder/throw_at(var/atom/obstacle)
+/obj/mecha/combat/marauder/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	if (!throwing)
 		icon_state = initial_icon + "-dash"
 		overlays |= rockets

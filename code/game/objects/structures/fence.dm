@@ -243,6 +243,12 @@
 			return 0
 	return 0
 
+/obj/structure/fence/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.destroy)
+		new /obj/item/stack/rods(loc,1)
+		qdel(src)
+	return ..()
+
 /obj/structure/fence/ex_act(severity)
 	switch(severity)
 		if(1.0)

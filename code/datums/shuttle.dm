@@ -98,34 +98,48 @@
 	// Used to restore the ground when the shuttle departs, keyed by "[x],[y],[z]".
 	var/list/saved_ground_turfs = list()
 
+	// Original starting-area typepath passed to New(). Stored so initialize() can re-resolve
+	// linked_areas if the shuttle's area only became available after New() ran (e.g. shuttles
+	// whose areas live in a fixedvault loaded via load_map_elements, or in a map element
+	// loaded dynamically by a gamemode/event). Holds a typepath, not an instance.
+	var/starting_area_path
+
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
 
 	if(starting_area)
 		if(ispath(starting_area))
-			// Find all areas that are subtypes of the given type (supports multi-area shuttles)
-			for(var/area/A in world)
-				if(istype(A, starting_area))
-					linked_areas += A
-			// Set linked_area to the first area that has turfs (for z-level checks, etc.)
-			for(var/area/A in linked_areas)
-				if(A.contents.len)
-					linked_area = A
-					break
-			if(!linked_area && linked_areas.len)
-				linked_area = linked_areas[1]
-			if(!linked_area)
-				warning("Unable to find area [starting_area] in world - [src.type] ([src.name]) won't be able to function properly.")
+			starting_area_path = starting_area
+			resolve_linked_areas()
 		else if(isarea(starting_area))
 			linked_area = starting_area
 			linked_areas += starting_area
 		else
 			warning("Unable to find area [starting_area] in world - [src.type] ([src.name]) won't be able to function properly.")
 
-	if(istype(linked_area)) //Only add the shuttle to the list if its area exists and it has something in it
+	if(istype(linked_area) || starting_area_path)
 		shuttles |= src
 	if(password)
 		password = rand(10000,99999)
+
+// Looks up world areas matching starting_area_path and populates linked_areas / linked_area.
+// Safe to call multiple times; additional matching areas are unioned in. Used by both New()
+// and initialize() so shuttles whose areas load after global var init (fixedvaults or
+// dynamically loaded map elements) can self-recover without per-shuttle backfill code.
+/datum/shuttle/proc/resolve_linked_areas()
+	if(!starting_area_path)
+		return
+	for(var/area/A in world)
+		if(istype(A, starting_area_path))
+			linked_areas |= A
+	// Set linked_area to the first area that has turfs (for z-level checks, etc.)
+	if(!linked_area)
+		for(var/area/A in linked_areas)
+			if(A.contents.len)
+				linked_area = A
+				break
+		if(!linked_area && linked_areas.len)
+			linked_area = linked_areas[1]
 
 // Returns the combined contents of all linked areas
 /datum/shuttle/proc/shuttle_contents()
@@ -140,6 +154,11 @@
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
 /datum/shuttle/initialize()
+	if(!linked_area && starting_area_path)
+		resolve_linked_areas()
+		if(linked_area)
+			shuttles |= src
+
 	. = INIT_SUCCESS
 	src.docking_ports = list()
 	src.docking_ports_aboard = list()
@@ -1014,8 +1033,31 @@
 			if(istype(old_turf, /turf/simulated/floor) && istype(new_turf, /turf/simulated/floor))
 				var/turf/simulated/floor/ancient = old_turf
 				var/turf/simulated/floor/modern = new_turf
+				// Drop the tile create_floor_tile() made for us during New() before adopting the ancient one, otherwise it leaks.
+				if(modern.floor_tile)
+					qdel(modern.floor_tile)
 				modern.floor_tile = ancient.floor_tile
 				ancient.floor_tile = null
+				modern.intact = ancient.intact
+				modern.broken = ancient.broken
+				modern.burnt = ancient.burnt
+				modern.icon_regular_floor = ancient.icon_regular_floor
+				if(istype(modern, /turf/simulated/floor/plated_catwalk))
+					var/turf/simulated/floor/plated_catwalk/modern_pc = modern
+					if(istype(ancient, /turf/simulated/floor/plated_catwalk))
+						var/turf/simulated/floor/plated_catwalk/ancient_pc = ancient
+						modern_pc.hatch_installed = ancient_pc.hatch_installed
+						modern_pc.hatch_open = ancient_pc.hatch_open
+						modern_pc.catwalk_suffix = ancient_pc.catwalk_suffix
+					// Rebuild catwalk overlays against the icon_state copied from the ancient turf above.
+					// Avoid calling update_icon()/relativewall() here because neighbors are still being processed in this loop and would re-smooth against a half-old destination.
+					if(modern_pc.is_plated_catwalk())
+						modern_pc.overlays.Cut()
+						modern_pc.overlays += mutable_appearance(icon = 'icons/turf/floors.dmi', icon_state = "plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
+						if(!modern_pc.hatch_open && modern_pc.hatch_installed)
+							modern_pc.overlays += mutable_appearance(icon = 'icons/turf/catwalks.dmi', icon_state = "[modern_pc.icon_state]_olay", layer = PAINT_LAYER, plane = TURF_PLANE)
+				// Re-resolve below-floor visibility now that floor_tile and intact reflect the ancient turf's actual state.
+				modern.levelupdate()
 			if(rotate)
 				new_turf.map_element_rotate(rotate)
 
@@ -1166,14 +1208,17 @@
 
 /proc/setup_shuttles()
 
-	for(var/datum/shuttle/S in shuttles)
+	// Iterate a copy because we may prune the list below.
+	var/list/to_init = shuttles.Copy()
+	for(var/datum/shuttle/S in to_init)
 		switch(S.initialize())
 			if(INIT_NO_AREA)
+				shuttles -= S
 				if(S.is_special())
-					var/msg = S.linked_area ? "- \"[S.linked_area]\" was given as a starting area." : ""
+					var/msg = S.starting_area_path ? "- \"[S.starting_area_path]\" was given as a starting area." : ""
 					warning("Invalid or missing starting area for [S.name] ([S.type]) [msg]")
 				else
-					var/msg = S.linked_area ? "- \"[S.linked_area]\" was given as a starting area." : ""
+					var/msg = S.starting_area_path ? "- \"[S.starting_area_path]\" was given as a starting area." : ""
 					log_debug("Invalid or missing starting area for [S.name] ([S.type]) [msg]")
 			if(INIT_NO_PORT)
 				if(S.is_special())

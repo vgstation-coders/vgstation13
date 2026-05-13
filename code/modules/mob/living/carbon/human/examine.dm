@@ -410,7 +410,7 @@
 		msg += "<span class='warning'><b>[src] has \a [implant] sticking out of [t_his] flesh!</span>\n"
 
 	if(!is_destroyed["head"])
-		if(getBrainLoss() >= 60)
+		if(getBrainLoss(INTELLIGENCE_L) >= 60)
 			msg += "[t_He] [t_has] a stupid expression on [t_his] face.\n"
 
 		if(distance <= 3)

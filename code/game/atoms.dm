@@ -64,6 +64,8 @@ var/global/list/ghdel_profiling_roundstart = list()
 	var/emag_cost = 0 // Emag energy cost (in MJ)
 	var/arcanetampered = 0 //A looot of things can be
 
+	var/cardinal_reflect = FALSE //For beams
+	var/disperse_coeff = 0.95
 
 	var/image/moody_light
 	var/list/moody_lights
@@ -896,15 +898,23 @@ its easier to just keep the beam vertical.
 /mob/var/list/atom/arcane_tampered_atoms = list()
 
 /atom/proc/arcane_act(var/mob/user, var/recursive = FALSE)
-	if(user)
+	if(ismob(user))
 		arcanetampered = user
 		user.arcane_tampered_atoms.Add(src)
 	else
 		arcanetampered = TRUE
+	. = "E'MAGI!"
 	if(recursive)
 		for(var/atom/A in contents)
-			A.arcane_act(user,TRUE)
-	return "E'MAGI!"
+			var/invoke = A.arcane_act(user,TRUE)
+			if(invoke != "E'MAGI!") //anything other than the default recursively? return that instead
+				. = invoke
+	if(reagents)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			if(R.arcane_id)
+				var/oldamt = R.volume
+				reagents.remove_reagent(R.id, oldamt*R.arcane_ratio)
+				reagents.add_reagent(R.arcane_id, oldamt*R.arcane_ratio)
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()

@@ -357,7 +357,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	Debug("DO, Running AC2")
 
 	var/count = GetSecurityCount()
-	var/datum/job/master_assistant = GetJob("Assistant")
+	var/datum/job/master_assistant = locate(/datum/job/assistant) in occupations
 
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
@@ -376,8 +376,8 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 				unassigned -= player
 				continue //no, you can't evade the blacklist just by not being picked for your available jobs
 			Debug("AC2 Assistant located, Player: [player]")
-			AssignRole(player, "Assistant")
-			master_assistant = GetJob("Assistant")
+			AssignRole(player, master_assistant.title)
+			master_assistant = locate(/datum/job/assistant) in occupations
 
 	// Those that got assigned a role, but had assistant higher.
 	var/security_jobs = list(
@@ -404,8 +404,8 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 				//This may change the number of security players, so we have to update the list of secoffs
 				if(secmod)
 					count = GetSecurityCount()
-				AssignRole(player, "Assistant")
-				master_assistant = GetJob("Assistant")
+				AssignRole(player, master_assistant.title)
+				master_assistant = locate(/datum/job/assistant) in occupations
 			else
 				Debug("AC3: [player] failed the second chance assistant lottery.")
 
@@ -438,7 +438,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	// If the player wants that job on this level, then try give it to him.
 	var/list/jobs = player.client.prefs.get_pref(/datum/preference_setting/assoc_list_setting/jobs)
 	if(jobs[job.title] == level)
-		if (job.title == "Assistant" && !CheckAssistantCount(player, level))
+		if (istype(job, /datum/job/assistant) && !CheckAssistantCount(player, level))
 			return FALSE
 		// If the job isn't filled
 		if((job.current_positions < job.spawn_positions) || job.spawn_positions == -1)
@@ -451,7 +451,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	//People who wants to be assistants, sure, go on.
 	var/count = GetSecurityCount()
 	Debug("DO, Running Assistant Check 1 for [player]")
-	var/datum/job/master_assistant = GetJob("Assistant")
+	var/datum/job/master_assistant = locate(/datum/job/assistant) in occupations
 	var/not_enough_sec = (master_assistant.current_positions - FREE_ASSISTANTS_BRUT) > (config.assistantratio * count)
 	if(not_enough_sec && (count < 5))
 		Debug("AC1 failed, not enough sec.")

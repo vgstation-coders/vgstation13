@@ -268,7 +268,12 @@
 
 	if(!usr)
 		return
-	do_flip()
+	if(flipped)
+		if(get_dir(loc, usr) != dir)
+			return
+		do_put()
+	else
+		do_flip()
 
 /obj/structure/table/glass/kick_act()
 	health -= 5

@@ -152,7 +152,7 @@ var/list/all_doors = list()
 /obj/machinery/door/proc/headbutt_check(mob/user, var/stun_time = 0, var/knockdown_time = 0, var/damage = 0) //This is going to be an airlock proc until someone makes headbutting a more official thing
 	if(prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
+		if(H.getBrainLoss(COORDINATION_L) >= BRAINLOSS_FOR_HEADBUTT)
 			playsound(src, 'sound/effects/bang.ogg', 25, 1)
 			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 			if(!istype(H.head, /obj/item/clothing/head/helmet))
