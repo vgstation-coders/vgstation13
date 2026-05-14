@@ -505,10 +505,10 @@
 /turf/simulated/floor/plating/vox,
 /area/shuttle/trade/start)
 "bx" = (
-/obj/structure/bed/chair/comfy/couch/left/teal,
 /obj/machinery/alarm{
 	pixel_y = 28
 	},
+/obj/machinery/bodyscanner,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whiteblue"
@@ -629,11 +629,17 @@
 	name = "\improper Vox Casino"
 	})
 "bM" = (
-/obj/structure/bed/chair/comfy/couch/right/teal,
-/obj/item/device/radio/intercom{
+/obj/machinery/camera/autoname,
+/obj/machinery/iv_drip,
+/obj/machinery/power/apc{
+	dir = 1;
 	pixel_y = 24
 	},
-/obj/machinery/camera/autoname,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whiteblue"
@@ -771,9 +777,10 @@
 	on = 1
 	},
 /obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4";
+	tag = "90Curve"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -1106,12 +1113,12 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/nt_outpost)
 "dm" = (
-/obj/structure/curtain/medical,
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/medical,
-/obj/machinery/light/small{
-	dir = 4
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_y = -30
 	},
+/obj/structure/curtain/medical,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "whiteblue"
@@ -1870,16 +1877,16 @@
 /turf/simulated/floor/plating/vox,
 /area/shuttle/trade/start)
 "fZ" = (
+/obj/item/tool/suture/synthgraft,
+/obj/item/tool/suture/synthgraft,
+/obj/item/tool/suture/synthgraft,
+/obj/item/tool/suture/surgical_line,
+/obj/item/tool/suture/surgical_line,
+/obj/item/tool/suture/surgical_line,
 /obj/structure/closet/secure_closet/medical1,
 /obj/machinery/firealarm{
 	pixel_x = -30
 	},
-/obj/item/tool/suture/synthgraft,
-/obj/item/tool/suture/synthgraft,
-/obj/item/tool/suture/synthgraft,
-/obj/item/tool/suture/surgical_line,
-/obj/item/tool/suture/surgical_line,
-/obj/item/tool/suture/surgical_line,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "whiteblue"
@@ -2296,12 +2303,6 @@
 "hD" = (
 /obj/structure/closet/walllocker/defiblocker{
 	pixel_y = -30
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = "90Curve"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -3327,18 +3328,8 @@
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/logistics)
 "lt" = (
-/obj/structure/table/glass,
-/obj/item/weapon/storage/box/gloves{
-	pixel_x = 3;
-	pixel_y = 4
-	},
-/obj/item/weapon/storage/box/masks,
-/obj/machinery/recharger/defibcharger/wallcharger{
-	pixel_x = 5;
-	pixel_y = -28
-	},
-/obj/machinery/light{
-	dir = 8
+/obj/machinery/vending/medical{
+	req_access = null
 	},
 /turf/simulated/floor{
 	dir = 10;
@@ -3441,14 +3432,17 @@
 	},
 /area/shuttle/odyssey/hallway/aft)
 "lU" = (
-/obj/structure/table/glass,
-/obj/machinery/computer/med_data/laptop,
 /obj/machinery/requests_console{
 	announcementConsole = 1;
 	department = "Medbay";
 	departmentType = 2;
 	name = "Infirmary RC";
 	pixel_y = 30
+	},
+/obj/structure/table/glass,
+/obj/machinery/computer/med_data/laptop{
+	pixel_x = -1;
+	pixel_y = 3
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -3470,6 +3464,9 @@
 /area/tcomms/chamber)
 "lW" = (
 /obj/structure/filingcabinet/medical,
+/obj/structure/sign/nosmoking_2{
+	pixel_x = -28
+	},
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "whiteblue"
@@ -3502,9 +3499,11 @@
 /turf/simulated/floor/plating,
 /area/odyssey/admin)
 "lZ" = (
-/obj/machinery/vending/medical{
-	req_access = null
+/obj/machinery/recharger/defibcharger/wallcharger{
+	pixel_y = 24;
+	pixel_x = 5
 	},
+/obj/structure/flora/pottedplant/random,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "whiteblue"
@@ -4383,26 +4382,28 @@
 	},
 /area/security/perma)
 "pf" = (
-/obj/structure/table/glass,
 /obj/item/weapon/paper_bin/white{
-	pixel_x = 1;
-	pixel_y = 9
+	pixel_y = 12;
+	pixel_x = 1
 	},
-/obj/item/weapon/folder/white,
-/obj/item/weapon/pen,
+/obj/item/weapon/folder/white{
+	pixel_y = 7
+	},
+/obj/item/weapon/pen{
+	pixel_y = 5
+	},
 /obj/item/device/flashlight/lamp/green{
-	pixel_x = -3;
+	pixel_x = -15;
 	pixel_y = 8
 	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
+/obj/item/weapon/reagent_containers/spray/cleaner{
+	pixel_x = 8;
+	pixel_y = -3
 	},
-/obj/machinery/power/apc{
-	pixel_y = 30;
-	dir = 1
+/obj/structure/extinguisher_cabinet{
+	pixel_y = 30
 	},
+/obj/structure/table/glass,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whiteblue"
@@ -6674,11 +6675,6 @@
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 4
 	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -7194,10 +7190,8 @@
 	},
 /area/odyssey/store)
 "yu" = (
-/obj/structure/extinguisher_cabinet{
-	pixel_y = -30
-	},
 /obj/structure/closet/crate/bin,
+/obj/machinery/light,
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
@@ -7607,12 +7601,33 @@
 	})
 "zO" = (
 /obj/structure/table/glass,
-/obj/item/weapon/folder/white,
-/obj/item/clothing/accessory/stethoscope,
-/obj/item/clothing/suit/strait_jacket,
-/obj/item/clothing/mask/muzzle,
-/obj/item/weapon/cane,
-/obj/item/clothing/accessory/stethoscope,
+/obj/item/clothing/suit/strait_jacket{
+	pixel_y = 5;
+	pixel_x = -2
+	},
+/obj/item/clothing/mask/muzzle{
+	pixel_x = -3
+	},
+/obj/item/weapon/cane{
+	pixel_y = 5;
+	pixel_x = 3
+	},
+/obj/item/weapon/folder/white{
+	pixel_y = 2
+	},
+/obj/item/clothing/accessory/stethoscope{
+	pixel_y = 5
+	},
+/obj/item/clothing/accessory/stethoscope{
+	pixel_y = 5
+	},
+/obj/machinery/light_switch{
+	pixel_x = -24;
+	pixel_y = 6
+	},
+/obj/machinery/light/small{
+	dir = 8
+	},
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "whiteblue"
@@ -7662,8 +7677,8 @@
 /area/security/perma)
 "zS" = (
 /obj/structure/closet/secure_closet/medical3,
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -30
+/obj/item/device/radio/intercom{
+	pixel_x = -28
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -8231,14 +8246,16 @@
 "BY" = (
 /obj/structure/table/glass,
 /obj/item/weapon/storage/firstaid/regular{
-	pixel_x = 2;
-	pixel_y = 6
+	pixel_x = -6;
+	pixel_y = 7
 	},
-/obj/item/weapon/reagent_containers/spray/cleaner,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/item/weapon/storage/box/masks{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/item/weapon/storage/box/gloves{
+	pixel_x = 4;
+	pixel_y = 14
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -8532,11 +8549,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 4;
 	tag = "icon-intact (EAST)"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -10184,23 +10196,29 @@
 "Jb" = (
 /obj/structure/table,
 /obj/item/stack/medical/bruise_pack{
-	pixel_y = 4
+	pixel_y = 8;
+	pixel_x = -5
 	},
-/obj/item/tool/retractor{
-	pixel_y = 6
+/obj/item/tool/scalpel{
+	pixel_y = -12
 	},
-/obj/item/tool/circular_saw,
-/obj/item/tool/scalpel,
 /obj/structure/sign/nosmoking_1{
 	pixel_y = 28
 	},
-/obj/item/tool/bonegel{
-	pixel_x = 4;
-	pixel_y = 3
-	},
 /obj/item/tool/FixOVein{
-	pixel_x = -6;
-	pixel_y = 1
+	pixel_x = 11;
+	pixel_y = 8
+	},
+/obj/item/tool/bonegel{
+	pixel_x = 6;
+	pixel_y = -11
+	},
+/obj/item/tool/retractor{
+	pixel_y = 1;
+	pixel_x = -2
+	},
+/obj/item/tool/hemostat{
+	pixel_y = 4
 	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -11494,7 +11512,6 @@
 /turf/simulated/floor/engine/airless,
 /area/shuttle/odyssey/engineering/gas_storage/port)
 "Ne" = (
-/obj/structure/flora/pottedplant/random,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whitebluecorner"
@@ -11923,7 +11940,9 @@
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey/exterior)
 "OS" = (
-/obj/machinery/iv_drip,
+/obj/structure/bed/chair/comfy/couch/left/teal{
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
@@ -14205,14 +14224,20 @@
 /area/shuttle/odyssey_transfer)
 "Vy" = (
 /obj/structure/table,
-/obj/item/tool/hemostat{
-	pixel_y = 4
+/obj/item/tool/surgicaldrill{
+	pixel_x = 9;
+	pixel_y = -3
+	},
+/obj/item/tool/bonesetter{
+	pixel_y = 4;
+	pixel_x = -4
+	},
+/obj/item/tool/circular_saw{
+	pixel_y = -5
 	},
 /obj/item/tool/cautery{
-	pixel_y = 4
+	pixel_y = 8
 	},
-/obj/item/tool/surgicaldrill,
-/obj/item/tool/bonesetter,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -14324,16 +14349,15 @@
 	},
 /area/shuttle/trade/start)
 "VZ" = (
-/obj/machinery/light_switch{
-	pixel_x = 24
-	},
 /obj/machinery/door_control{
 	id_tag = "med shutters";
 	name = "Privacy Shutters";
 	pixel_x = 25;
-	pixel_y = -9
+	pixel_y = 8
 	},
-/obj/machinery/bodyscanner,
+/obj/structure/bed/chair/comfy/couch/right/teal{
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
