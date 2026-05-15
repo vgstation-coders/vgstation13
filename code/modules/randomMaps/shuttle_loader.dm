@@ -6,17 +6,16 @@
 // turf, and back-fills the global shuttle datum so setup_shuttles() picks it
 // up like any other shuttle.
 //
-// After all shuttles are initialized, generate_shuttle_docking_vlevels() walks
-// every unordered pair of load_shuttles shuttles and, for the first compatible
-// dynamic-port pair, creates a permanent docking vlevel with destination ports
-// laid out so the dynamic ports line up when both shuttles dock.
+// Rendezvous vlevels for shuttle-to-shuttle docking are created on demand by
+// /datum/shuttle/proc/lazy_get_rendezvous_vlevel the first time a given pair
+// of shuttle types successfully negotiates a rendezvous-mode dock.
 
 // Registry of /datum/shuttle datums by type, populated in /datum/shuttle/New.
 // Lets the shuttle loader resolve a shuttle datum even if its area doesn't
 // exist yet (and so it isn't in the global shuttles list).
 var/global/list/shuttle_datums_by_path = list()
 
-// Loaded shuttle map elements, in load order. Used to drive docking-vlevel pairing.
+// Loaded shuttle map elements, in load order. Iterated by setup_shuttle_transit_areas() to wire up transit ports and fire each shuttle's post_setup() hook.
 var/global/list/datum/map_element/shuttle/loaded_shuttle_map_elements = list()
 
 //
@@ -147,7 +146,6 @@ var/global/list/datum/map_element/shuttle/loaded_shuttle_map_elements = list()
 	var/obj/docking_port/destination/parking = new(dest_turf)
 	parking.dir = turn(shuttle_port.dir, 180)
 	parking.areaname = "[S.name] parking"
-	S.parking_port = parking
 
 // Loads each /datum/map_element/shuttle entry in map.load_shuttles into its own parking vlevel.
 /proc/load_map_shuttles()

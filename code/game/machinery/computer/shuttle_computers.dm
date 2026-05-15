@@ -493,7 +493,7 @@ var/list/shuttle_control_themes = list(
 	return d
 
 // Pending shuttle-to-shuttle docking handshake payload (or null).
-// SDR_* macros live in __DEFINES/shuttle_dock_request.dm.
+// SDR_* macros live in __DEFINES/docking.dm.
 /obj/machinery/computer/shuttle_control/proc/dock_request_payload()
 	if(!shuttle?.pending_request)
 		return null
@@ -604,6 +604,9 @@ var/list/shuttle_control_themes = list(
 				to_chat(usr, "<span class='warning'>Cannot request docking: [shuttle.dock_request_error_message(code)]</span>")
 			return TRUE
 		if("dock_request_cancel")
+			if(!allowed(usr))
+				to_chat(usr, "<span class='red'>Access denied.</span>")
+				return TRUE
 			if(shuttle?.pending_request && shuttle.pending_request.initiator == shuttle)
 				shuttle.pending_request.cancel()
 			return TRUE

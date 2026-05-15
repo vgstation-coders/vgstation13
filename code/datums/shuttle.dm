@@ -94,20 +94,6 @@
 	var/obj/docking_port/destination/previous_port //Last port used before entering a transit area
 	var/transit_timeout = 45 SECONDS //Longest time the shuttle can stay in a transit area before getting recalled to the previous location
 
-	// Set by /proc/load_map_shuttles when this shuttle is loaded via a
-	// /datum/map_element/shuttle. Points at the parking destination port the
-	// loader created in the shuttle's parking vlevel. Used by callers who want
-	// to send the shuttle "back to parking" without going through the dock-
-	// request flow (e.g. the cargo recall path).
-	var/obj/docking_port/destination/parking_port
-
-	// Areas on this shuttle's hull that visiting shuttles are allowed to land
-	// over (catwalks, exterior decks, etc.). Mappers populate this with /area
-	// subtypes; find_compatible_dock_pair excludes turfs in these areas from
-	// the overlap check. The standard shuttle move's saved_ground_turfs flow
-	// already saves & restores the underlying turfs when the visitor leaves.
-	var/list/dockable_through_areas = list()
-
 	//When the shuttle moves, coordinates of its final location will be offset by rand(-innacuracy, innacuracy)
 	var/innacuracy = 0
 
@@ -135,7 +121,6 @@
 
 	// Register every shuttle datum by type so the shuttle loader can resolve us even if our area doesn't exist yet (and we aren't in `shuttles`).
 	shuttle_datums_by_path[type] = src
-	starting_area_path = ispath(starting_area) ? starting_area : null
 
 	if(starting_area)
 		if(ispath(starting_area))
@@ -152,7 +137,7 @@
 	if(password)
 		password = rand(10000,99999)
 
-// Called by generate_shuttle_docking_vlevels() after transit + paired docking vlevels are in place.
+// Called by setup_shuttle_transit_areas() after the shuttle has its transit dock wired up. Override on shuttles that need additional one-time setup once transit is available.
 /datum/shuttle/proc/post_setup()
 	return
 
@@ -307,10 +292,6 @@
 
 	var/list/target_hull_coords = list()
 	for(var/turf/T in target.hull_turfs())
-		if(target.dockable_through_areas.len)
-			var/area/A = T.loc
-			if(A && (A.type in target.dockable_through_areas))
-				continue
 		target_hull_coords["[T.x],[T.y]"] = TRUE
 
 	for(var/datum/shuttle/visitor in shuttles)
@@ -334,6 +315,7 @@
 	var/best_fallback_mode = 0
 	var/best_fallback_score = -1
 
+	var/list/target_contents = target.shuttle_contents()
 	for(var/obj/docking_port/shuttle/dynamic/pa in shuttle_contents())
 #ifdef SDR_DEBUG_PORT_SELECTION
 		message_admins("\[SDR\]   try pa=[pa.areaname] @([pa.x],[pa.y]) dir=[pa.dir] whitelist=[json_encode(pa.shuttle_whitelist)]")
@@ -348,7 +330,7 @@
 			message_admins("\[SDR\]     skip pa: doesn't allow target [target.type]")
 #endif
 			continue
-		for(var/obj/docking_port/shuttle/dynamic/pb in target.shuttle_contents())
+		for(var/obj/docking_port/shuttle/dynamic/pb in target_contents)
 #ifdef SDR_DEBUG_PORT_SELECTION
 			message_admins("\[SDR\]     try pb=[pb.areaname] @([pb.x],[pb.y]) dir=[pb.dir] whitelist=[json_encode(pb.shuttle_whitelist)]")
 #endif
@@ -454,7 +436,7 @@
 #endif
 	return best_pair
 
-/datum/shuttle/proc/request_docking(datum/shuttle/target, mob/requester, silent = FALSE, in_place_only = FALSE)
+/datum/shuttle/proc/request_docking(datum/shuttle/target, mob/requester, silent = FALSE)
 	if(target == src)
 		return SDR_ERR_SELF
 	if(pending_request || target.pending_request)
@@ -475,11 +457,6 @@
 	var/obj/docking_port/shuttle/dynamic/pa = pair[1]
 	var/obj/docking_port/shuttle/dynamic/pb = pair[2]
 	var/mode = mode_holder[1]
-
-	// Caller insisted on in-place.
-	// Used by automated flows like cargo recall that don't ever want to warp the host out from under players.
-	if(in_place_only && mode != SDR_MODE_IN_PLACE)
-		return SDR_ERR_NO_COMPATIBLE_PORT
 
 	if(mode == SDR_MODE_RENDEZVOUS && (has_active_visitors() || target.has_active_visitors()))
 		return SDR_ERR_VISITORS_PRESENT
@@ -652,7 +629,6 @@
 		for(var/obj/machinery/computer/shuttle_control/C in control_consoles)
 			C.announce("Rendezvous coordinate calculation failed.")
 		return
-	req.chosen_rendezvous_vz = rendezvous_vz
 
 	var/obj/docking_port/destination/my_dest = null
 	var/obj/docking_port/destination/their_dest = null
@@ -691,8 +667,6 @@
 /datum/shuttle/initialize()
 	if(!linked_area && starting_area_path)
 		resolve_linked_areas()
-		if(linked_area)
-			shuttles |= src
 
 	. = INIT_SUCCESS
 	src.docking_ports = list()
@@ -797,30 +771,6 @@
 
 /datum/shuttle/proc/get_cooldown()
 	return cooldown
-
-// Bluespace jump state. Map-agnostic hook — base returns 0 (no jump). Map-
-// specific shuttle subtypes (e.g. /datum/shuttle/odyssey) may override.
-//   0 = none, 1 = countdown, 2 = committed.
-/datum/shuttle/proc/get_bluespace_state()
-	return 0
-
-// Returns list("seconds_left" = N, "seconds_total" = N) describing the timer
-// for an in-progress bluespace jump, or null if no jump or no timing info.
-// Subtypes that return a non-zero state from get_bluespace_state() should
-// also override this to provide the corresponding timer.
-/datum/shuttle/proc/get_bluespace_timing()
-	return null
-
-// Hook fired when a shuttle-to-shuttle docking request completes and the
-// initiator finishes its travel. Called once on the initiator and once on
-// the target. Default behaviour is silent — override on map-specific
-// shuttles (e.g. the player ship) to add chat/captain announcements.
-//   `other`      : the shuttle on the far side of the request
-//   `mode`       : SDR_MODE_IN_PLACE or SDR_MODE_RENDEZVOUS
-//   `own_port`   : the dynamic port on `src` that participated
-//   `other_port` : the dynamic port on `other` that participated
-/datum/shuttle/proc/on_dock_request_completed(datum/shuttle/other, mode, obj/docking_port/shuttle/dynamic/own_port, obj/docking_port/shuttle/dynamic/other_port)
-	return
 
 //Shuttles like the emergency shuttle (which moves to pre-defined locations) and vox shuttle (which ends the round once moved to a pre-defined location)
 //should have this proc return 1, so they can't be deleted.
@@ -1265,12 +1215,6 @@
 				qdel(old_temp)
 
 		current_port = D
-
-		// Fire the dock-request arrival announcement (single-fire) when the initiator parks at a port created for an accepted request.
-		if(istype(D, /obj/docking_port/destination/dock_request))
-			var/obj/docking_port/destination/dock_request/DR = D
-			if(DR.source_req)
-				DR.source_req.fire_arrival_announcement(src)
 
 		if(source_vz)
 			INVOKE_EVENT(src, /event/shuttle_departed, "vz" = source_vz, "shuttle" = src)

@@ -5,9 +5,7 @@
 	var/obj/docking_port/shuttle/dynamic/pb  // dynamic port on target
 	var/mode = SDR_MODE_IN_PLACE
 	var/expires_at = 0   // world.time after which expire() fires
-	var/datum/virtual_z/chosen_rendezvous_vz  // populated after rendezvous accept
 	var/resolved = FALSE  // guard so accept/reject/cancel/expire can't double-fire
-	var/announced = FALSE  // dedupe arrival-time crew announcement
 
 // Destination port subtype that carries a back-reference to the request that created it.
 /obj/docking_port/destination/dock_request
@@ -63,10 +61,3 @@
 	clear_pending()
 	for(var/obj/machinery/computer/shuttle_control/C in initiator.control_consoles)
 		C.announce("Docking request to [target.name] timed out.")
-
-/datum/shuttle_dock_request/proc/fire_arrival_announcement(datum/shuttle/arrived)
-	if(announced)
-		return
-	announced = TRUE
-	initiator.on_dock_request_completed(target, mode, pa, pb)
-	target.on_dock_request_completed(initiator, mode, pb, pa)
