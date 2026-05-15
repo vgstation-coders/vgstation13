@@ -23,8 +23,7 @@
 	load_custom_fixedvaults = list(
 		/datum/map_element/fixedvault/derelict,
 		/datum/map_element/fixedvault/dj_sat,
-		/datum/map_element/fixedvault/vox_parking,
-		/datum/map_element/fixedvault/rendezvous
+		/datum/map_element/fixedvault/vox_parking
 	)
 	enabled_jobs = list(/datum/job/trader)
 	disabled_jobs = list(

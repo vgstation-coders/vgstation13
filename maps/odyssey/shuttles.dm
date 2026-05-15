@@ -34,7 +34,6 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	add_dock(/obj/docking_port/destination/odyssey/deep_space)
 	add_dock(/obj/docking_port/destination/odyssey/dj_sat)
 	add_dock(/obj/docking_port/destination/odyssey/derelict)
-	add_dock(/obj/docking_port/destination/odyssey/rendezvous_odyssey)
 	dock_centcom = locate(/obj/docking_port/destination/odyssey/centcomm) in all_docking_ports
 
 	var/obj/docking_port/destination/transit/transit = generate_transit_area(src)
@@ -255,12 +254,6 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 /obj/docking_port/destination/odyssey/centcomm
 	areaname = "Central Command"
 
-/obj/docking_port/destination/odyssey/rendezvous_odyssey
-	areaname = "Rendezvous with Vox Tradeship"
-
-/obj/docking_port/destination/odyssey/rendezvous_trader
-	areaname = "Rendezvous with NTEV Odyssey"
-
 /obj/machinery/status_display/odyssey
 	name = "shuttle status display"
 
@@ -283,10 +276,6 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 		update_display("-JUMP", line2)
 		return
 	..()
-
-/datum/shuttle/trade/initialize()
-	.=..()
-	add_dock(/obj/docking_port/destination/odyssey/rendezvous_trader)
 
 /datum/shuttle/odyssey_transfer
 	name = "odyssey transfer shuttle"

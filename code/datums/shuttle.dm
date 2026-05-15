@@ -265,28 +265,28 @@
  * Returns list(pa, pb) and sets out_mode[1] to the chosen mode, or null.
 */
 /datum/shuttle/proc/find_compatible_dock_pair(datum/shuttle/target, list/out_mode)
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 	message_admins("\[SDR\] find_compatible_dock_pair: src=[name] target=[target?.name]")
 #endif
 	// Either side flagged PROHIBITED refuses the dock req outright.
 	if(dockability == SHUTTLE_DOCKING_PROHIBITED || target?.dockability == SHUTTLE_DOCKING_PROHIBITED)
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 		message_admins("\[SDR\]   reject: dockability prohibited (src=[dockability] target=[target?.dockability])")
 #endif
 		return null
 	if(!target?.current_port)
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 		message_admins("\[SDR\]   reject: target has no current_port")
 #endif
 		return null
 	var/datum/virtual_z/target_vz = target.current_port.get_virtual_z()
 	if(!target_vz)
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 		message_admins("\[SDR\]   reject: target current_port has no vlevel")
 #endif
 		return null
 
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 	message_admins("\[SDR\]   target_vz bounds: x=[target_vz.x_min]..[target_vz.x_max] y=[target_vz.y_min]..[target_vz.y_max]")
 #endif
 
@@ -317,42 +317,42 @@
 
 	var/list/target_contents = target.shuttle_contents()
 	for(var/obj/docking_port/shuttle/dynamic/pa in shuttle_contents())
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 		message_admins("\[SDR\]   try pa=[pa.areaname] @([pa.x],[pa.y]) dir=[pa.dir] whitelist=[json_encode(pa.shuttle_whitelist)]")
 #endif
 		if(pa.is_occupied())
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 			message_admins("\[SDR\]     skip pa: occupied")
 #endif
 			continue
 		if(!pa.allows_shuttle(target))
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 			message_admins("\[SDR\]     skip pa: doesn't allow target [target.type]")
 #endif
 			continue
 		for(var/obj/docking_port/shuttle/dynamic/pb in target_contents)
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 			message_admins("\[SDR\]     try pb=[pb.areaname] @([pb.x],[pb.y]) dir=[pb.dir] whitelist=[json_encode(pb.shuttle_whitelist)]")
 #endif
 			if(pb.is_occupied())
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 				message_admins("\[SDR\]       skip pb: occupied")
 #endif
 				continue
 			if(!pb.allows_shuttle(src))
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 				message_admins("\[SDR\]       skip pb: doesn't allow src [type]")
 #endif
 				continue
 			var/dirs_aligned = (pa.dir == turn(pb.dir, 180))
 			if(!dirs_aligned && !can_rotate)
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 				message_admins("\[SDR\]       skip pb: pa.dir=[pa.dir] != turn(pb.dir=[pb.dir], 180)=[turn(pb.dir, 180)] and shuttle can't rotate")
 #endif
 				continue
 			var/list/projected = project_hull_onto_vlevel(pa, pb, target_vz)
 			if(!projected)
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 				message_admins("\[SDR\]       skip pb: projection failed (anchor off-map?)")
 #endif
 				continue
@@ -364,7 +364,7 @@
 					overlap_coord = coord
 					break
 			if(overlap)
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 				message_admins("\[SDR\]       skip pb: projected hull overlaps target hull at ([overlap_coord[1]],[overlap_coord[2]])")
 #endif
 				continue
@@ -387,7 +387,7 @@
 			else
 				mode = SDR_MODE_RENDEZVOUS
 			if(mode == SDR_MODE_RENDEZVOUS && !dirs_aligned)
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 				message_admins("\[SDR\]       skip pb: rotation needed but mode would be RENDEZVOUS (not supported)")
 #endif
 				continue
@@ -396,7 +396,7 @@
 			// Prefer pairings that need no rotation when one is available.
 			if(dirs_aligned)
 				score += 1
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 			message_admins("\[SDR\]       candidate: pa=[pa.areaname] pb=[pb.areaname] proj_bbox=([lo_x],[lo_y])..([hi_x],[hi_y]) mode=[mode == SDR_MODE_IN_PLACE ? "IN_PLACE" : "RENDEZVOUS"] score=[score] whitelisted=[pb_whitelisted]")
 #endif
 			if(pb_whitelisted)
@@ -424,13 +424,13 @@
 
 	if(best_pair)
 		out_mode[1] = best_mode
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 		var/obj/docking_port/shuttle/dynamic/sel_pa = best_pair[1]
 		var/obj/docking_port/shuttle/dynamic/sel_pb = best_pair[2]
 		var/bucket = best_whitelisted_pair ? "whitelisted" : "fallback"
 		message_admins("\[SDR\]   selected: pa=[sel_pa.areaname] pb=[sel_pb.areaname] mode=[best_mode == SDR_MODE_IN_PLACE ? "IN_PLACE" : "RENDEZVOUS"] score=[best_score] ([bucket])")
 #endif
-#ifdef SDR_DEBUG_PORT_SELECTION
+#if SDR_DEBUG_PORT_SELECTION
 	else
 		message_admins("\[SDR\]   no compatible pair found")
 #endif
@@ -1215,6 +1215,11 @@
 				qdel(old_temp)
 
 		current_port = D
+
+		if(istype(D, /obj/docking_port/destination/dock_request))
+			var/obj/docking_port/destination/dock_request/DR = D
+			if(DR.source_req)
+				DR.source_req.fire_arrival_announcement(src)
 
 		if(source_vz)
 			INVOKE_EVENT(src, /event/shuttle_departed, "vz" = source_vz, "shuttle" = src)

@@ -6,6 +6,7 @@
 	var/mode = SDR_MODE_IN_PLACE
 	var/expires_at = 0   // world.time after which expire() fires
 	var/resolved = FALSE  // guard so accept/reject/cancel/expire can't double-fire
+	var/announced = FALSE  // dedupe arrival-time crew announcement
 
 // Destination port subtype that carries a back-reference to the request that created it.
 /obj/docking_port/destination/dock_request
@@ -61,3 +62,24 @@
 	clear_pending()
 	for(var/obj/machinery/computer/shuttle_control/C in initiator.control_consoles)
 		C.announce("Docking request to [target.name] timed out.")
+
+// Fired once when a shuttle finishes its move into a dock_request destination.
+// Tells both crews where the docking ended up; for in-place mode this includes
+// the target's docking-port location so the host knows which airlock they're
+// connected to.
+/datum/shuttle_dock_request/proc/fire_arrival_announcement(datum/shuttle/arrived)
+	if(announced)
+		return
+	announced = TRUE
+	if(mode == SDR_MODE_RENDEZVOUS)
+		for(var/obj/machinery/computer/shuttle_control/C in initiator.control_consoles)
+			C.announce("Rendezvous with [target.name] complete.")
+		for(var/obj/machinery/computer/shuttle_control/C in target.control_consoles)
+			C.announce("Rendezvous with [initiator.name] complete.")
+	else
+		var/area/pb_area = get_area(pb)
+		var/loc_label = pb_area ? pb_area.name : pb.areaname
+		for(var/obj/machinery/computer/shuttle_control/C in initiator.control_consoles)
+			C.announce("Docking complete. Now docked to [target.name] at [loc_label].")
+		for(var/obj/machinery/computer/shuttle_control/C in target.control_consoles)
+			C.announce("[initiator.name] has docked at [loc_label].")

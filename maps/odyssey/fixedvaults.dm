@@ -27,8 +27,3 @@
     name = "Vox parking station"
     file_path = "maps/odyssey/vox_parking.dmm"
     vz_type = VZ_PARKING
-
-/datum/map_element/fixedvault/rendezvous
-    name = "Vox Trade Shuttle - NTEV Odyssey Rendezvous Point"
-    file_path = "maps/odyssey/rendezvous.dmm"
-    vz_type = VZ_PARKING
