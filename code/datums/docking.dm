@@ -83,3 +83,58 @@
 			C.announce("Docking complete. Now docked to [target.name] at [loc_label].")
 		for(var/obj/machinery/computer/shuttle_control/C in target.control_consoles)
 			C.announce("[initiator.name] has docked at [loc_label].")
+
+// Dynamic shuttle docking port: lives on a shuttle hull at a valid ship-to-ship
+// docking location. Marks where another shuttle could dock against this one.
+// Mappers place these inside shuttle DMMs and configure whitelist/blacklist.
+//
+// NOT picked as the shuttle's primary linked_port (see /datum/shuttle/initialize).
+/obj/docking_port/shuttle/dynamic
+	name = "dynamic docking port"
+	icon_state = "docking_dynamic"
+	areaname = "rendezvous"
+
+	// If non-null and non-empty, only shuttles whose datum istype() one of these paths may dock here. Null/empty means no whitelist constraint.
+	var/list/shuttle_whitelist = null
+	// Shuttles whose datum istype() any of these paths may not dock here.
+	var/list/shuttle_blacklist = list()
+
+/obj/docking_port/shuttle/dynamic/can_shuttle_move(datum/shuttle/S)
+	if(S && linked_shuttle == S)
+		return 1
+	return 0
+
+/obj/docking_port/shuttle/dynamic/proc/allows_shuttle(datum/shuttle/S)
+	if(!S)
+		return FALSE
+	if(shuttle_whitelist && shuttle_whitelist.len)
+		var/matched = FALSE
+		for(var/T in shuttle_whitelist)
+			if(istext(T))
+				T = text2path(T)
+			if(T && istype(S, T))
+				matched = TRUE
+				break
+		if(!matched)
+			return FALSE
+	for(var/T in shuttle_blacklist)
+		if(istext(T))
+			T = text2path(T)
+		if(T && istype(S, T))
+			return FALSE
+	return TRUE
+
+// A dynamic port is "occupied" if some shuttle has a dock_request commitment
+// against it; either docked alongside (current_port is a dock_request with
+// pa==src or pb==src) or inbound to one (destination_port likewise). This
+// covers both "another ship is here right now" and "another ship is enroute
+// and has reserved this slot".
+/obj/docking_port/shuttle/dynamic/proc/is_occupied()
+	for(var/datum/shuttle/S in shuttles)
+		var/obj/docking_port/destination/dock_request/cur = S.current_port
+		if(istype(cur) && cur.source_req && (cur.source_req.pa == src || cur.source_req.pb == src))
+			return TRUE
+		var/obj/docking_port/destination/dock_request/dst = S.destination_port
+		if(istype(dst) && dst.source_req && (dst.source_req.pa == src || dst.source_req.pb == src))
+			return TRUE
+	return FALSE

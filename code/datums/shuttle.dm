@@ -119,9 +119,6 @@
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
 
-	// Register every shuttle datum by type so the shuttle loader can resolve us even if our area doesn't exist yet (and we aren't in `shuttles`).
-	shuttle_datums_by_path[type] = src
-
 	if(starting_area)
 		if(ispath(starting_area))
 			starting_area_path = starting_area
@@ -136,30 +133,6 @@
 		shuttles |= src
 	if(password)
 		password = rand(10000,99999)
-
-// Called by setup_shuttle_transit_areas() after the shuttle has its transit dock wired up. Override on shuttles that need additional one-time setup once transit is available.
-/datum/shuttle/proc/post_setup()
-	return
-
-// Called by the shuttle loader after a shuttle DMM has been loaded into a parking vlevel.
-/datum/shuttle/proc/attach_loaded_areas(list/areas)
-	for(var/area/A in areas)
-		linked_areas |= A
-
-	// If we have a starting_area_path, also fold in any newly-instantiated subtypes that didn't exist when New() ran.
-	if(starting_area_path)
-		for(var/area/A in world)
-			if(istype(A, starting_area_path))
-				linked_areas |= A
-
-	if(!linked_area?.contents.len)
-		linked_area = null
-	for(var/area/A in linked_areas)
-		if(A.contents.len)
-			linked_area = A
-			break
-	if(!linked_area && linked_areas.len)
-		linked_area = linked_areas[1]
 
 // Looks up world areas matching starting_area_path and populates linked_areas / linked_area.
 // Safe to call multiple times; additional matching areas are unioned in. Used by both New()

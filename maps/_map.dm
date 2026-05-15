@@ -73,9 +73,6 @@
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
 	var/list/load_custom_fixedvaults = list() //don't use this
-	//List of /datum/map_element/shuttle (path or instance) loaded after fixedvaults.
-	//Each entry creates a VZ_PARKING vlevel containing the shuttle DMM.
-	var/list/load_shuttles = list()
 	var/center_x = 226
 	var/center_y = 254
 
