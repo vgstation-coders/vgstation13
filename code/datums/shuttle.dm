@@ -136,8 +136,8 @@
 
 // Looks up world areas matching starting_area_path and populates linked_areas / linked_area.
 // Safe to call multiple times; additional matching areas are unioned in. Used by both New()
-// and initialize() so shuttles whose areas load after global var init (fixedvaults or
-// dynamically loaded map elements) can self-recover without per-shuttle backfill code.
+// and initialize() so shuttles whose areas live in a fixedvault loaded after global var init
+// can self-recover without per-shuttle backfill code.
 /datum/shuttle/proc/resolve_linked_areas()
 	if(!starting_area_path)
 		return
@@ -152,9 +152,6 @@
 				break
 		if(!linked_area && linked_areas.len)
 			linked_area = linked_areas[1]
-
-	if(istype(linked_area))
-		shuttles |= src
 
 // Returns every turf in the shuttle's linked_areas (ie everything move_area_to() will physically move during a dock).
 /datum/shuttle/proc/hull_turfs()
@@ -640,6 +637,8 @@
 /datum/shuttle/initialize()
 	if(!linked_area && starting_area_path)
 		resolve_linked_areas()
+		if(linked_area)
+			shuttles |= src
 
 	. = INIT_SUCCESS
 	src.docking_ports = list()
