@@ -12,9 +12,6 @@ var/global/datum/shuttle/supply/cargo_shuttle = new(starting_area = /area/shuttl
 
 	stable = 1 //Don't stun everyone and don't throw anything when moving
 
-	// HIDDEN: ship-mode cargo docks via silent dock-request, but operators shouldn't see the supply shuttle as a manual handshake target.
-	dockability = SHUTTLE_DOCKING_HIDDEN
-
 /datum/shuttle/supply/is_special()
 	return 1
 
