@@ -59970,13 +59970,6 @@
 	pixel_x = 28;
 	pixel_y = 5
 	},
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
-/obj/item/device/gps/planetary,
-/obj/item/device/gps/planetary,
-/obj/item/device/gps/planetary,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},

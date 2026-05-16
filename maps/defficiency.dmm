@@ -110151,18 +110151,6 @@
 	},
 /turf/simulated/floor/glass/plasma,
 /area/hallway/secondary/entry)
-"nil" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
-/turf/simulated/floor/carpet,
-/area/bridge)
 "niJ" = (
 /obj/machinery/claw_machine,
 /turf/simulated/floor{
@@ -226608,7 +226596,7 @@ cOq
 cOq
 cOq
 cOq
-nil
+cOq
 cTZ
 cUL
 cVv
