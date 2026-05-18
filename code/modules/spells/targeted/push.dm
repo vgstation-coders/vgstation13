@@ -67,14 +67,8 @@
 			continue
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
-		if(!T.density && T.z != src.z) //In case an area somehow shows up in multiple z-levels
-			var/clear = 1
-			for(var/obj/O in T)
-				if(O.density)
-					clear = 0
-					break
-			if(clear)
-				L+=T
+		if(!T.density && !T.has_dense_content() && T.z == src.z) //In case an area somehow shows up in multiple z-levels
+			L+=T
 	if(!L.len)
 		if(user)
 			to_chat(user, "The spell matrix was unable to locate a suitable destination for an unknown reason. Sorry.")
