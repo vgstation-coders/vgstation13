@@ -9606,7 +9606,7 @@
 	id_tag = "vox_eva_airlock_interior";
 	locked = 1
 	},
-/turf/simulated/wall,
+/turf/simulated/floor/plating/vox,
 /area/vox_trading_post/hallway)
 "GU" = (
 /obj/structure/bed/chair/handrail,
