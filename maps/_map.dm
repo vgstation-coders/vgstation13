@@ -73,6 +73,15 @@
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
 	var/list/load_custom_fixedvaults = list() //don't use this
+	//List of /datum/map_element/shuttle (path or instance) loaded after fixedvaults.
+	//Each entry creates a VZ_PARKING vlevel containing the shuttle DMM.
+	var/list/load_shuttles = list()
+	//Map elements loaded synchronously during world/New(), before Master.Setup
+	//starts subsystem init. Use for elements that must be present before the
+	//first client connection (e.g. centcomm-housed Observer-Start landmark on
+	//maps where the main DMM has no spawn landmarks of its own).
+	var/list/early_load_map_elements = list()
+	var/list/early_loaded_map_element_types = list()
 	var/center_x = 226
 	var/center_y = 254
 
@@ -239,6 +248,18 @@
 var/global/list/accessable_v_levels = list(
 	"Default" = list()
 )
+
+// Loads each entry in early_load_map_elements synchronously. Called from
+// world/New() before Master.Setup() so the loaded landmarks are populated
+// before any client connection / Login() can fire.
+/datum/map/proc/load_early_elements()
+	for(var/T in early_load_map_elements)
+		load_dungeon(T, 0, FALSE, FALSE)
+		if(ispath(T))
+			early_loaded_map_element_types |= T
+		else if(istype(T, /datum/map_element))
+			var/datum/map_element/ME = T
+			early_loaded_map_element_types |= ME.type
 
 /datum/map/proc/map_specific_init()
 
