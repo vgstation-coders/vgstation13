@@ -30,7 +30,7 @@
 	// Holds a typepath, not an instance.
 	var/starting_area_path = null
 
-	// Shuttle-to-shuttle docking handshake (see code/datums/shuttle_dock_request.dm).
+	// Shuttle-to-shuttle docking handshake (see code/datums/docking.dm).
 	var/auto_accept_requests = FALSE
 	var/datum/shuttle_dock_request/pending_request = null
 	// Cache of per-pair rendezvous vlevels keyed by the OTHER shuttle's type path.
@@ -646,7 +646,6 @@
 		for(var/obj/machinery/computer/shuttle_control/C in control_consoles)
 			C.announce("Rendezvous coordinate calculation failed.")
 		return
-	req.chosen_rendezvous_vz = rendezvous_vz
 
 	var/obj/docking_port/destination/my_dest = null
 	var/obj/docking_port/destination/their_dest = null

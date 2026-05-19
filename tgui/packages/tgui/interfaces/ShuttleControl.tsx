@@ -501,7 +501,7 @@ const DockingProtocols = (props: {
   const { data, act } = props;
   const { dock_request, dockable_now, dock_targets } = data;
   const [pickerOpen, setPickerOpen] = useState(false);
-  const [rejectTarget, setRejectTarget] = useState<DockRequest | null>(null);
+  const [rejectOpen, setRejectOpen] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
 
   if (dock_request) {
@@ -575,7 +575,7 @@ const DockingProtocols = (props: {
               icon="times"
               color="bad"
               onClick={() => {
-                setRejectTarget(dock_request);
+                setRejectOpen(true);
                 setRejectReason('');
               }}
             >
@@ -583,9 +583,9 @@ const DockingProtocols = (props: {
             </Button>
           </Flex.Item>
         </Flex>
-        {rejectTarget && (
+        {rejectOpen && (
           <Modal>
-            <Box bold mb={1}>Reject docking request from {rejectTarget.other_name}</Box>
+            <Box bold mb={1}>Reject docking request from {dock_request.other_name}</Box>
             <Box color="label" mb={0.5}>Reason (optional):</Box>
             <Input
               fluid
@@ -599,7 +599,7 @@ const DockingProtocols = (props: {
                   color="bad"
                   onClick={() => {
                     act('dock_request_reject', { reason: rejectReason });
-                    setRejectTarget(null);
+                    setRejectOpen(false);
                     setRejectReason('');
                   }}
                 >
@@ -610,7 +610,7 @@ const DockingProtocols = (props: {
                 <Button
                   fluid
                   onClick={() => {
-                    setRejectTarget(null);
+                    setRejectOpen(false);
                     setRejectReason('');
                   }}
                 >
