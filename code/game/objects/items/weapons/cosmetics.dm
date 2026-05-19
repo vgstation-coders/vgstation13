@@ -677,7 +677,10 @@
 			return
 	if(arcanetampered)
 		to_chat(user, "<span class='sinister'>You feel different.</span>")
-		H.Humanize(pick("Unathi","Tajaran","Insectoid","Grey",/*and worst of all*/"Vox"))
+		var/mob/living/carbon/human/new_H = H.Humanize(pick("Unathi","Tajaran","Insectoid","Grey",/*and worst of all*/"Vox")) //damn right
+		if (!new_H)
+			return
+		H = new_H
 		var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, H.gender, H.species.name)
 		if(species_facial_hair.len)
 			H.my_appearance.f_style = pick(species_facial_hair)
