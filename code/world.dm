@@ -86,10 +86,7 @@ var/auxtools_path
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
-	// Load anything the map flagged as early — runs synchronously before any
-	// client connection is possible, so spawn landmarks they contain (e.g.
-	// the Observer-Start landmark inside centcomm) are populated before the
-	// first /mob/new_player/Login() reads newplayer_start.
+	// Load anything the map flagged as early (ran before any client connection is possible)
 	if(map)
 		map.load_early_elements()
 

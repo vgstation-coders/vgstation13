@@ -104,16 +104,14 @@
 	// loaded dynamically by a gamemode/event). Holds a typepath, not an instance.
 	var/starting_area_path
 
-	// Set by /proc/load_map_shuttles when this shuttle is loaded via a
-	// /datum/map_element/shuttle. Points at the parking destination port the
-	// loader created in the shuttle's parking vlevel.
+	// Set by /proc/load_map_shuttles when this shuttle is loaded via a /datum/map_element/shuttle.
+	// Points at the parking destination port the loader created in the shuttle's parking vlevel.
 	var/obj/docking_port/destination/parking_port
 
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
 
-	// Register every shuttle datum by type so the shuttle loader can resolve us
-	// even if our area doesn't exist yet (and we therefore aren't in `shuttles`).
+	// Register every shuttle datum by type so the shuttle loader can resolve us even if our area doesn't exist yet (and we therefore aren't in the global shuttles list).
 	shuttle_datums_by_path[type] = src
 
 	if(starting_area)
@@ -150,14 +148,11 @@
 		if(!linked_area && linked_areas.len)
 			linked_area = linked_areas[1]
 
-// Called by the shuttle loader after a shuttle DMM has been loaded into a parking
-// vlevel. Folds the loaded areas into linked_areas and picks a linked_area.
+// Called by the shuttle loader after a shuttle DMM has been loaded into a parking vlevel and adds the loaded areas into linked_areas.
 /datum/shuttle/proc/attach_loaded_areas(list/areas)
 	for(var/area/A in areas)
 		linked_areas |= A
 
-	// If we have a starting_area_path, also fold in any newly-instantiated subtypes
-	// that didn't exist when New() ran.
 	if(starting_area_path)
 		for(var/area/A in world)
 			if(istype(A, starting_area_path))
@@ -175,9 +170,8 @@
 	if(istype(linked_area))
 		shuttles |= src
 
-// Hook called by setup_loaded_shuttle_transits() after the loader has wired up
-// the shuttle's transit dock. Override per-shuttle for post-setup behaviour
-// (announcements, dock binding, transit area decoration, etc.).
+// Hook called by setup_loaded_shuttle_transits() after the loader has wired up the shuttle's transit dock.
+// Override per-shuttle for post-setup behaviour (announcements, dock binding, transit area decoration, etc.).
 /datum/shuttle/proc/post_setup()
 	return
 
