@@ -34,6 +34,7 @@ var/global/datum/shuttle/odyssey/odyssey_shuttle = new(starting_area = /area/shu
 	cant_leave_zlevel = list()
 	dir = EAST
 	can_rotate = FALSE
+	dockability = SHUTTLE_DOCKING_VISIBLE
 
 	// Exterior decks (catwalks, hull plating outside the pressurised interior)
 	// can be docked over by visiting shuttles. The standard shuttle move logic

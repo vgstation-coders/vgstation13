@@ -31,6 +31,7 @@
 	var/starting_area_path = null
 
 	// Shuttle-to-shuttle docking handshake (see code/datums/docking.dm).
+	var/dockability = SHUTTLE_DOCKING_PROHIBITED
 	var/auto_accept_requests = FALSE
 	var/datum/shuttle_dock_request/pending_request = null
 	// Cache of per-pair rendezvous vlevels keyed by the OTHER shuttle's type path.

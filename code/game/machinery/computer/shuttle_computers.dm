@@ -516,6 +516,8 @@ var/list/shuttle_control_themes = list(
 	for(var/datum/shuttle/S in shuttles)
 		if(S == shuttle)
 			continue
+		if(S.dockability != SHUTTLE_DOCKING_VISIBLE)
+			continue
 		if(!S.is_in_dockable_vlevel())
 			continue
 		if(S.pending_request)
@@ -602,6 +604,9 @@ var/list/shuttle_control_themes = list(
 				to_chat(usr, "<span class='warning'>Cannot request docking: [shuttle.dock_request_error_message(code)]</span>")
 			return TRUE
 		if("dock_request_cancel")
+			if(!allowed(usr))
+				to_chat(usr, "<span class='red'>Access denied.</span>")
+				return TRUE
 			if(shuttle?.pending_request && shuttle.pending_request.initiator == shuttle)
 				shuttle.pending_request.cancel()
 			return TRUE
