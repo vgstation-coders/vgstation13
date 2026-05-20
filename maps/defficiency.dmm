@@ -21028,9 +21028,9 @@
 "aNP" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/bed/roller/deff,
-/obj/structure/sign/nosmoking_1{
-	pixel_x = -26;
-	pixel_y = 4
+/obj/machinery/firealarm{
+	dir = 8;
+	pixel_x = -24
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -101427,7 +101427,7 @@
 /obj/machinery/portable_atmospherics/canister/nitrogen,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/structure/sign/nosmoking_1{
-	pixel_x = -32
+	pixel_x = 32
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
@@ -109140,9 +109140,9 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/machinery/firealarm{
-	dir = 4;
-	pixel_x = 24
+/obj/structure/sign/nosmoking_1{
+	pixel_x = 26;
+	pixel_y = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
