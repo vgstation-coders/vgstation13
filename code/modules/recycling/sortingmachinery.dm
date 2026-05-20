@@ -168,7 +168,7 @@ var/list/tagger_locations = list()
 		receive_atom(AM)
 
 /obj/machinery/disposal/deliveryChute/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	if(isobj(AM) || ismob(AM))
+	if(istype(AM,/obj/item))
 		if(stat & BROKEN || !AM || mode <=0 || !deconstructable)
 			return FALSE
 		receive_atom(AM)
