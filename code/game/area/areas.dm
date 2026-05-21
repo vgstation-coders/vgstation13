@@ -383,7 +383,7 @@ var/area/space_area
 /area/proc/power_change()
 	for(var/obj/machinery/M in src)	// for each machine in the area
 		M.power_change()				// reverify power status (to update icons etc.)
-	if (fire || eject || party)
+	if (fire || eject || party || radalert)
 		updateicon()
 
 /area/proc/usage(const/chan)
