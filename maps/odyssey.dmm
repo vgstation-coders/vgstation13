@@ -7739,24 +7739,16 @@
 "zO" = (
 /obj/structure/table/glass,
 /obj/item/clothing/suit/strait_jacket{
-	pixel_y = 5;
-	pixel_x = -2
+	pixel_y = 6;
+	pixel_x = -5
 	},
 /obj/item/clothing/mask/muzzle{
-	pixel_x = -3
+	pixel_x = -3;
+	pixel_y = 5
 	},
 /obj/item/weapon/cane{
 	pixel_y = 5;
-	pixel_x = 3
-	},
-/obj/item/weapon/folder/white{
-	pixel_y = 2
-	},
-/obj/item/clothing/accessory/stethoscope{
-	pixel_y = 5
-	},
-/obj/item/clothing/accessory/stethoscope{
-	pixel_y = 5
+	pixel_x = -1
 	},
 /obj/machinery/light_switch{
 	pixel_x = -24;
@@ -7764,6 +7756,21 @@
 	},
 /obj/machinery/light/small{
 	dir = 8
+	},
+/obj/item/weapon/folder/white{
+	pixel_y = 4;
+	pixel_x = -3
+	},
+/obj/item/clothing/accessory/stethoscope{
+	pixel_y = 3;
+	pixel_x = -5
+	},
+/obj/item/clothing/accessory/stethoscope{
+	pixel_y = 3;
+	pixel_x = -5
+	},
+/obj/item/bodybag{
+	pixel_x = 6
 	},
 /turf/simulated/floor{
 	dir = 10;
@@ -11191,11 +11198,16 @@
 /area/shuttle/odyssey/mining_storage)
 "LB" = (
 /obj/structure/table,
-/obj/item/weapon/kitchen/rollingpin,
-/obj/item/weapon/storage/bag/plants{
-	name = "Chef's Plant Bag"
-	},
 /obj/machinery/camera/autoname,
+/obj/item/weapon/storage/bag/plants{
+	name = "Chef's Plant Bag";
+	pixel_x = 1;
+	pixel_y = 1
+	},
+/obj/item/weapon/kitchen/rollingpin{
+	pixel_x = -3;
+	pixel_y = 3
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
