@@ -220,6 +220,24 @@ included:
 			l.apply_radiation(rads, RAD_EXTERNAL)
 	..()
 
+//for shuttle movment.
+/obj/machinery/fissioncontroller/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	spawn() //delay proc to fire last.
+		var/datum/fission_reactor_holder/newholder= new /datum/fission_reactor_holder()
+		var/datum/fission_reactor_holder/oldholder=associated_reactor
+		
+		oldholder.copy_data(newholder)
+		oldholder.transfer_part_ownership(newholder)
+		
+		qdel(oldholder) //set our reactor to the new one.
+		..()
+		newholder.zlevel=src.z
+		newholder.origin_x=src.x
+		newholder.origin_y=src.y
+		newholder.corner_x=src.x
+		newholder.corner_y=src.y
+		newholder.init_resize(get_turf(src))
+
 /*/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)*/
 
 /obj/machinery/fissioncontroller/attackby(var/obj/I,var/mob/user)

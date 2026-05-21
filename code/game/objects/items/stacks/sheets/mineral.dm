@@ -586,6 +586,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 /obj/item/stack/sheet/mineral/gingerbread
 	name = "gingerbread"
 	icon_state = "sheet-gingerbread"
+	singular_name = "gingerbread sheet"
 	force = 5.0
 	throwforce = 5
 	w_class = W_CLASS_MEDIUM
