@@ -219,16 +219,17 @@
 	var/icon/logo_icon = icon('icons/logos.dmi', logo)
 	for(var/mob/M in possible_volunteers)
 		var/banned_factor = (jobban_isbanned(M, role_id) || isantagbanned(M) || (role_category_override && jobban_isbanned(M, role_category_override)))
-		if(!M.client || banned_factor || M.client.is_afk())
+		if(!M.client || banned_factor)
 			continue
 
-		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>The mode is looking for volunteers to become [initial(role_category.id)]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
+		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>Dynamic is looking for volunteers to become \a [initial(role_category.id)]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
 		window_flash(M.client)
+		M << sound('sound/voice/preparetofight.ogg', volume = 75)
 
 	spawn(1 MINUTES)
 		searching = 0
 		for(var/mob/M in possible_volunteers)
-			if(!M.client || jobban_isbanned(M, role_category) || M.client.is_afk())
+			if(!M.client || jobban_isbanned(M, role_category))
 				continue
 			to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>Applications for [initial(role_category.id)] are now closed.</span>[logo ? "[bicon(logo_icon)]" : ""]")
 		if(!applicants || applicants.len <= 0)
