@@ -101427,7 +101427,7 @@
 /obj/machinery/portable_atmospherics/canister/nitrogen,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/structure/sign/nosmoking_1{
-	pixel_x = 32
+	pixel_x = -32
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
