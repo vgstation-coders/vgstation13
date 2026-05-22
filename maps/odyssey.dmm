@@ -12866,16 +12866,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/crew_quarters/heads/ce)
-"Nv" = (
-/obj/structure/table,
-/obj/item/clothing/suit/storage/hazardvest,
-/obj/item/clothing/suit/storage/hazardvest,
-/obj/item/weapon/storage/firstaid/regular{
-	pixel_x = -2;
-	pixel_y = 4
-	},
-/turf/simulated/floor/plating,
-/area/surface/nt_outpost)
 "Nw" = (
 /obj/machinery/status_display/odyssey,
 /turf/simulated/wall/shuttle/panel/black,
@@ -16720,13 +16710,6 @@
 "Yn" = (
 /turf/space,
 /area)
-"Yr" = (
-/obj/structure/table,
-/obj/item/weapon/storage/box,
-/obj/item/weapon/storage/belt/utility,
-/obj/item/weapon/storage/belt/utility,
-/turf/simulated/floor/plating,
-/area/surface/nt_outpost)
 "Yt" = (
 /turf/simulated/floor{
 	icon_state = "warning";
@@ -20757,7 +20740,7 @@ Bc
 Bc
 Bc
 nl
-Nv
+Iq
 Iq
 Iq
 kH
@@ -21059,7 +21042,7 @@ Bc
 Bc
 Bc
 nl
-Yr
+Iq
 Iq
 Iq
 kH
