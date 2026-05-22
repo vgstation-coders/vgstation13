@@ -17,6 +17,11 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whitegreen"
@@ -6074,6 +6079,15 @@
 /obj/item/device/radio/intercom{
 	pixel_y = 26;
 	pixel_x = 0
+	},
+/obj/machinery/power/apc{
+	pixel_x = 30;
+	dir = 4
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
 	},
 /turf/simulated/floor{
 	dir = 5;
