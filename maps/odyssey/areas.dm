@@ -113,10 +113,18 @@
 	name = "\improper Vacant Office"
 	icon_state = "construction"
 
-/area/shuttle/odyssey/security
-	name = "\improper Security Office"
-	icon_state = "security"
+/area/shuttle/odyssey/crew_quarters/heads/ce
+	name = "\improper Chief Engineer's Office"
+	icon_state = "head_quarters"
 
+/area/shuttle/odyssey/science/lab
+	name = "\improper Research and Development"
+	icon_state = "toxlab"
+
+/area/shuttle/odyssey/infirmary/chemistry
+	name = "\improper Chemistry"
+	icon_state = "chem"
+	
 /area/shuttle/odyssey/security/holding_cell
 	name = "\improper Holding Cell"
 	icon_state = "sec_prison"

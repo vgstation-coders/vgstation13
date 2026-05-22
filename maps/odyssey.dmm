@@ -21,7 +21,7 @@
 	dir = 4;
 	icon_state = "whitegreen"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "ag" = (
 /obj/structure/railing{
 	dir = 1
@@ -97,7 +97,7 @@
 	dir = 4;
 	icon_state = "whitegreen"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "ar" = (
 /obj/machinery/biogenerator,
 /turf/simulated/floor/vox,
@@ -153,9 +153,7 @@
 	dir = 8;
 	tag = "icon-intact (EAST)"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "aA" = (
 /obj/machinery/disease2/diseaseanalyser{
@@ -166,7 +164,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 4
+	dir = 4;
+	density = 0
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -310,9 +309,7 @@
 /obj/structure/bed/chair/handrail{
 	dir = 1
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "aX" = (
 /obj/structure/grille,
@@ -425,7 +422,7 @@
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy (NORTH)"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "bq" = (
 /obj/structure/catwalk,
 /obj/structure/cable/yellow{
@@ -522,6 +519,7 @@
 	dir = 1
 	},
 /obj/structure/closet/wardrobe/pjs,
+/obj/abstract/loot_spawner/clothing,
 /obj/abstract/loot_spawner/clothing,
 /obj/abstract/loot_spawner/clothing,
 /obj/abstract/loot_spawner/clothing,
@@ -644,7 +642,7 @@
 	pixel_y = 27
 	},
 /turf/simulated/floor/bluegrid,
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "bM" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -764,9 +762,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/central)
 "cl" = (
 /obj/machinery/atmospherics/unary/cold_sink/freezer{
@@ -1070,7 +1066,7 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/binary/pump{
-	dir = 3;
+	dir = 1;
 	on = 1
 	},
 /turf/simulated/floor/plating,
@@ -1093,7 +1089,7 @@
 	dir = 1
 	},
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "db" = (
 /turf/simulated/floor{
 	dir = 9;
@@ -1145,16 +1141,14 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
 	on = 1
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "dn" = (
 /obj/machinery/atmospherics/pipe/simple/supplymain/hidden{
 	dir = 4
 	},
 /obj/machinery/door/airlock/maintenance_hatch,
-/turf/simulated/floor,
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/starboard)
 "dp" = (
 /obj/machinery/vending/medical{
@@ -1223,7 +1217,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/hallway/fore)
 "dA" = (
 /obj/structure/cable{
@@ -1348,7 +1344,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 8
+	dir = 8;
+	density = 0
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -1619,7 +1616,7 @@
 /obj/structure/bed/chair/handrail{
 	dir = 4
 	},
-/turf/simulated/floor/plating,
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "eO" = (
 /obj/structure/bed/chair/office/dark{
@@ -1664,8 +1661,8 @@
 /obj/machinery/door/airlock/research{
 	name = "Research and Development"
 	},
-/turf/simulated/floor/plated_catwalk/dark,
-/area/science/lab)
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey/science/lab)
 "eV" = (
 /obj/structure/bed/chair,
 /obj/machinery/status_display/odyssey{
@@ -1920,6 +1917,11 @@
 	dir = 4;
 	tag = "icon-intact (EAST)"
 	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "darkred";
 	tag = "icon-darkred"
@@ -1959,11 +1961,13 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/machinery/door/airlock/maintenance{
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/glass{
 	name = "Chapel"
 	},
-/obj/machinery/door/firedoor,
-/turf/space,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/maintenance/vacant_office)
 "fI" = (
 /obj/machinery/photocopier,
@@ -2027,9 +2031,7 @@
 /obj/structure/bed/chair/handrail{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "fU" = (
 /obj/machinery/mineral/unloading_machine{
@@ -2189,7 +2191,7 @@
 	tag = "icon-darkyellow (EAST)";
 	dir = 10
 	},
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "gs" = (
 /obj/structure/railing,
 /obj/machinery/floodlight/on/infinite,
@@ -2237,13 +2239,11 @@
 	dir = 8
 	},
 /obj/structure/cable{
+	d1 = 1;
 	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
+	icon_state = "1-2"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/starboard)
 "gx" = (
 /obj/structure/table/woodentable,
@@ -2258,7 +2258,7 @@
 	anchored = 1
 	},
 /turf/unsimulated/floor/planetary/concrete,
-/area/surface/nt_outpost)
+/area/shuttle/odyssey/maintenance/vacant_office)
 "gB" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -2276,9 +2276,7 @@
 "gC" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered,
 /obj/machinery/camera/autoname,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "gD" = (
 /obj/structure/table,
@@ -2355,7 +2353,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "gL" = (
 /obj/effect/decal/warning_stripes{
 	dir = 10;
@@ -2449,7 +2447,7 @@
 	icon_state = "stage_stairs";
 	tag = "icon-stage_stairs (NORTH)"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "hh" = (
 /turf/simulated/floor{
 	icon_state = "stage_stairs";
@@ -2507,7 +2505,7 @@
 	dir = 1;
 	icon_state = "whitegreen"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "hv" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
@@ -2553,7 +2551,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plated_catwalk/dark,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/logistics)
 "hD" = (
 /obj/structure/cable{
@@ -2627,7 +2627,7 @@
 	tag = "icon-map (NORTH)"
 	},
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "hL" = (
 /obj/machinery/status_display/odyssey,
 /turf/simulated/wall/shuttle/panel/black,
@@ -2771,7 +2771,7 @@
 	},
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/maintenance_hatch,
-/turf/simulated/floor/plated_catwalk/dark,
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/starboard)
 "iv" = (
 /obj/effect/glowshroom,
@@ -2783,7 +2783,7 @@
 	dir = 6;
 	icon_state = "whitegreen"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "ix" = (
 /obj/structure/hanging_lantern{
 	dir = 4
@@ -2826,7 +2826,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 8
+	dir = 8;
+	density = 0
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -2845,9 +2846,7 @@
 /obj/effect/landmark/start{
 	name = "Assistant"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/fore)
 "iL" = (
 /obj/structure/disposalpipe/segment{
@@ -2874,7 +2873,7 @@
 	dir = 10;
 	icon_state = "whitegreen"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "iP" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 3;
@@ -3043,7 +3042,7 @@
 /turf/simulated/floor{
 	icon_state = "whitegreen"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "js" = (
 /turf/simulated/floor/plating/vox,
 /area/shuttle/trade/start)
@@ -3075,14 +3074,19 @@
 	},
 /area/shuttle/odyssey/logistics)
 "jA" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
-	dir = 8;
-	tag = "icon-intact (EAST)"
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4";
+	tag = "90Curve"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
 	},
-/area/shuttle/odyssey/bridge_lobby)
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey/engineering/engine_room)
 "jC" = (
 /obj/structure/shuttle/engine/propulsion/burst{
 	dir = 8
@@ -3101,9 +3105,7 @@
 	pixel_y = 24
 	},
 /obj/structure/bed/chair/handrail,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/port)
 "jG" = (
 /obj/machinery/light,
@@ -3306,7 +3308,7 @@
 	pixel_x = 27
 	},
 /turf/simulated/floor/bluegrid,
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "kn" = (
 /obj/structure/wc/sink{
 	dir = 8;
@@ -3382,9 +3384,7 @@
 /obj/machinery/light{
 	dir = 1
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "kC" = (
 /obj/structure/hanging_lantern,
@@ -3419,7 +3419,7 @@
 /area/odyssey/store)
 "kH" = (
 /turf/simulated/wall/shuttle/panel/black,
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "kI" = (
 /obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor{
@@ -3560,9 +3560,7 @@
 /obj/machinery/atmospherics/pipe/simple/supplymain/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "lc" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -3630,7 +3628,7 @@
 	dir = 8;
 	icon_state = "whitegreen"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "lm" = (
 /obj/structure/hanging_lantern{
 	dir = 8
@@ -3702,7 +3700,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "lw" = (
 /obj/machinery/door/airlock/external{
 	frequency = 1449;
@@ -3923,9 +3921,7 @@
 /obj/structure/bed/chair/handrail{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "mi" = (
 /obj/machinery/atmospherics/miner/surface{
@@ -3961,11 +3957,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "showroomfloor";
-	tag = "icon-showroomfloor (NORTH)"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/janitor)
 "ml" = (
 /obj/item/device/radio/intercom{
@@ -4135,7 +4127,9 @@
 	name = "Cafeteria"
 	},
 /obj/machinery/door/firedoor,
-/turf/simulated/floor,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/cafeteria)
 "mL" = (
 /turf/simulated/floor,
@@ -4153,16 +4147,25 @@
 /obj/machinery/firealarm{
 	pixel_x = -30
 	},
-/obj/structure/bookcase{
-	name = "bookcase (Adult)"
-	},
-/obj/abstract/map/spawner/library,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/wood,
+/obj/structure/closet/cabinet,
+/obj/abstract/map/spawner/assistant/tools,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/abstract/loot_spawner/clothing,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
 /area/shuttle/odyssey/quarters/crew)
 "mO" = (
 /obj/item/weapon/stool{
@@ -4273,7 +4276,7 @@
 	anchored = 1
 	},
 /turf/unsimulated/floor/planetary/concrete,
-/area/surface/nt_outpost)
+/area/shuttle/odyssey/engineering/engine_room)
 "nl" = (
 /obj/structure/railing{
 	dir = 1
@@ -4282,9 +4285,7 @@
 /area/surface/nt_outpost)
 "no" = (
 /obj/structure/bed/chair/handrail,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "nr" = (
 /obj/structure/sign/directions/medical{
@@ -4351,9 +4352,7 @@
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /obj/structure/dispenser,
 /obj/machinery/vending/cigarette,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/starboard)
 "nz" = (
 /obj/structure/closet/secure_closet/medical1,
@@ -4478,9 +4477,7 @@
 	tag = ""
 	},
 /obj/machinery/vending/cola,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/starboard)
 "nS" = (
 /obj/machinery/vending/chapel,
@@ -4509,7 +4506,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 4
+	dir = 4;
+	density = 0
 	},
 /obj/machinery/portable_atmospherics/hydroponics{
 	pixel_x = 0;
@@ -4562,7 +4560,7 @@
 /area/surface/nt_outpost)
 "od" = (
 /turf/simulated/wall/shuttle/panel/black,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "oe" = (
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_x = -30
@@ -4590,10 +4588,12 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/gas_storage/port)
 "og" = (
-/turf/simulated/floor{
-	icon_state = "dark"
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
+	dir = 4;
+	anchored = 1
 	},
-/area/shuttle/odyssey/hallway/fore)
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey/hallway/starboard)
 "oi" = (
 /obj/structure/table,
 /obj/machinery/recharger,
@@ -4618,9 +4618,7 @@
 	tag = ""
 	},
 /obj/structure/closet/emcloset,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/starboard)
 "oo" = (
 /turf/simulated/floor{
@@ -4854,7 +4852,7 @@
 	},
 /obj/machinery/flasher,
 /turf/simulated/floor/bluegrid,
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "oW" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/paper_bin/black{
@@ -4902,7 +4900,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 8
+	dir = 8;
+	density = 0
 	},
 /obj/machinery/portable_atmospherics/pump,
 /obj/machinery/atmospherics/unary/portables_connector,
@@ -5221,7 +5220,7 @@
 	icon_state = "darkyellow";
 	tag = "icon-darkyellow (SOUTHEAST)"
 	},
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "qd" = (
 /obj/machinery/light_switch{
 	pixel_y = -27;
@@ -5240,7 +5239,7 @@
 	dir = 5;
 	icon_state = "warnwhite"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "qi" = (
 /obj/machinery/light/small{
 	dir = 1;
@@ -5257,9 +5256,7 @@
 	pixel_y = 30
 	},
 /obj/abstract/map/spawner/maint/lowchance,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "qj" = (
 /obj/structure/shuttle/diag_wall/black{
@@ -5350,15 +5347,14 @@
 /obj/structure/sign/poster{
 	pixel_y = 30
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/fore)
 "qz" = (
 /obj/structure/closet/walllocker{
 	pixel_x = 5;
 	pixel_y = 0;
-	name = "First-Aid"
+	name = "First-Aid";
+	dir = 4
 	},
 /turf/simulated/wall/shuttle/panel/black,
 /area/shuttle/odyssey/infirmary)
@@ -5392,7 +5388,7 @@
 	dir = 9;
 	icon_state = "whitegreen"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "qD" = (
 /obj/structure/bed/chair/shuttle{
 	dir = 4;
@@ -5420,7 +5416,7 @@
 /turf/simulated/floor{
 	icon_state = "darkyellow"
 	},
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "qF" = (
 /obj/machinery/door/airlock/glass,
 /turf/simulated/floor,
@@ -5751,9 +5747,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "rX" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible/blue{
@@ -5914,6 +5908,11 @@
 	dir = 8;
 	tag = "icon-intact (EAST)"
 	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -5969,7 +5968,9 @@
 	},
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/maintenance_hatch,
-/turf/simulated/floor/plated_catwalk/dark,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/hallway/port)
 "sL" = (
 /obj/machinery/computer/slot_machine,
@@ -6078,7 +6079,7 @@
 	dir = 5;
 	icon_state = "whitegreen"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "te" = (
 /obj/machinery/alarm{
 	dir = 4;
@@ -6218,7 +6219,7 @@
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy (EAST)"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "tz" = (
 /turf/simulated/floor{
 	dir = 8;
@@ -6407,7 +6408,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 8
+	dir = 8;
+	density = 0
 	},
 /obj/machinery/r_n_d/fabricator/mech{
 	pixel_x = 0;
@@ -6416,7 +6418,7 @@
 /turf/simulated/floor{
 	icon_state = "warnwhite"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "tW" = (
 /turf/simulated/floor/plating,
 /area/derelict/bar)
@@ -6468,7 +6470,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "ue" = (
 /obj/structure/table/glass,
 /obj/item/ashtray/glass,
@@ -6477,9 +6479,7 @@
 	pixel_y = 13
 	},
 /obj/item/binoculars,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/fore)
 "uf" = (
 /obj/structure/grille/window_spawner/reinforced/full,
@@ -6539,9 +6539,7 @@
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/port)
 "uw" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
@@ -6581,7 +6579,9 @@
 	name = "Dorms"
 	},
 /obj/machinery/door/firedoor,
-/turf/simulated/floor,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/quarters/crew)
 "uD" = (
 /obj/structure/shuttle/engine/heater{
@@ -6595,7 +6595,7 @@
 	name = "Port Engines Blast Door"
 	},
 /turf/simulated/floor/plating,
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "uI" = (
 /obj/item/trash/cigbutt,
 /turf/simulated/floor/plating,
@@ -6605,9 +6605,7 @@
 	pixel_y = 30
 	},
 /obj/structure/bed/chair/handrail,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "uK" = (
 /obj/machinery/computer/shuttle_control/odyssey,
@@ -6873,7 +6871,7 @@
 /obj/abstract/map/spawner/assistant,
 /obj/abstract/map/spawner/assistant/materials,
 /obj/abstract/map/spawner/assistant/tools,
-/turf/space,
+/turf/simulated/floor/arcade,
 /area/shuttle/odyssey/quarters/crew)
 "vD" = (
 /obj/machinery/camera/autoname{
@@ -6940,7 +6938,7 @@
 	icon_state = "darkyellow";
 	tag = "icon-darkyellow (SOUTHWEST)"
 	},
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "vN" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
 /obj/structure/cable{
@@ -7000,9 +6998,7 @@
 	pixel_y = 20;
 	dir = 1
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/fore)
 "vU" = (
 /obj/machinery/alarm{
@@ -7050,9 +7046,7 @@
 /obj/effect/landmark/start{
 	name = "Orderly"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/central)
 "we" = (
 /turf/simulated/floor/plated_catwalk/dark,
@@ -7089,9 +7083,7 @@
 	tag = "icon-intact (EAST)"
 	},
 /obj/machinery/door/airlock/glass,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/bridge_lobby)
 "wh" = (
 /obj/structure/closet/crate/bin,
@@ -7107,11 +7099,12 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/hallway)
 "wj" = (
-/obj/structure/railing/wood/glass{
-	dir = 1
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
+	dir = 1;
+	anchored = 1
 	},
-/turf/simulated/floor/wood,
-/area/shuttle/odyssey/quarters/crew)
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey/hallway/fore)
 "wk" = (
 /obj/machinery/computer/general_air_control/large_tank_control{
 	frequency = 1441;
@@ -7128,7 +7121,9 @@
 /obj/machinery/door/airlock/mining{
 	name = "Logistics"
 	},
-/turf/simulated/floor,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/hallway/fore)
 "wo" = (
 /obj/item/weapon/stool,
@@ -7184,8 +7179,8 @@
 /area/shuttle/odyssey/logistics)
 "wv" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered,
-/turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/turf/simulated/floor/plated_catwalk/dark,
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "wx" = (
 /obj/structure/table/woodentable/poker,
 /turf/simulated/floor{
@@ -7205,9 +7200,7 @@
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_x = -30
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "wA" = (
 /obj/structure/table/glass,
@@ -7303,7 +7296,7 @@
 	dir = 4;
 	icon_state = "warnwhite"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "wM" = (
 /obj/machinery/vending/mining,
 /turf/simulated/floor{
@@ -7424,9 +7417,7 @@
 	dir = 8;
 	flickering = 1
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "xb" = (
 /obj/structure/bed/chair/comfy/couch/left/teal{
@@ -7513,9 +7504,7 @@
 	pixel_y = 24
 	},
 /obj/structure/dispenser,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/port)
 "xm" = (
 /obj/machinery/door/airlock/glass{
@@ -7571,9 +7560,7 @@
 /obj/machinery/atmospherics/pipe/simple/supplymain/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "xs" = (
 /obj/structure/railing{
@@ -7590,7 +7577,7 @@
 	name = "Mix to Distro"
 	},
 /obj/abstract/map/spawner/maint/filled_crate,
-/turf/simulated/floor/plating,
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "xu" = (
 /obj/structure/table/woodentable,
@@ -7742,7 +7729,9 @@
 /obj/machinery/door/airlock/glass{
 	name = "Cafeteria"
 	},
-/turf/simulated/floor,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/cafeteria)
 "xW" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -7776,11 +7765,8 @@
 	req_access_txt = "56";
 	name = "Chief Engineer's Office"
 	},
-/turf/simulated/floor{
-	icon_state = "stage_stairs";
-	tag = "icon-stage_stairs"
-	},
-/area/shuttle/odyssey/maintenance/starboard)
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "yg" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1
@@ -7839,9 +7825,7 @@
 	pixel_x = 0
 	},
 /obj/structure/closet/emcloset/vox,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/fore)
 "yq" = (
 /obj/structure/bed/chair/comfy/couch/right/teal{
@@ -7855,9 +7839,21 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/effect/landmark/start{
-	name = "Librarian"
+/obj/structure/bookcase{
+	name = "bookcase (Adult)"
 	},
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -7880,9 +7876,7 @@
 	pixel_x = 0;
 	pixel_y = 38
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "yv" = (
 /obj/structure/table/reinforced,
@@ -7927,7 +7921,7 @@
 /area/shuttle/odyssey/logistics)
 "yB" = (
 /obj/machinery/door/airlock/maintenance_hatch,
-/turf/simulated/floor,
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/aft)
 "yC" = (
 /obj/structure/table,
@@ -7970,7 +7964,6 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/railing,
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/crew)
 "yK" = (
@@ -7990,14 +7983,17 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/maintenance_hatch,
-/turf/simulated/floor/plated_catwalk/dark,
-/area/shuttle/odyssey/hallway/aft)
-"yN" = (
-/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/infirmary)
+/area/shuttle/odyssey/hallway/aft)
+"yN" = (
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
+	dir = 4;
+	anchored = 1
+	},
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey/security/holding_cell)
 "yP" = (
 /obj/machinery/washing_machine,
 /turf/simulated/floor{
@@ -8055,23 +8051,12 @@
 	},
 /area/security/perma)
 "zk" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
-	dir = 8;
-	tag = "icon-intact (EAST)"
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 4;
-	tag = "icon-intact (EAST)"
+	anchored = 1
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/shuttle/odyssey/hallway/fore)
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey/bridge)
 "zl" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -8185,7 +8170,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 4
+	dir = 4;
+	density = 0
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -8212,9 +8198,7 @@
 	dir = 4;
 	tag = "icon-intact (EAST)"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "zG" = (
 /obj/structure/cable{
@@ -8273,9 +8257,7 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "zM" = (
 /obj/machinery/alarm{
@@ -8315,7 +8297,7 @@
 	name = "AI"
 	},
 /turf/simulated/floor/bluegrid,
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "zQ" = (
 /obj/machinery/power/treadmill{
 	dir = 8
@@ -8507,7 +8489,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 8
+	dir = 8;
+	density = 0
 	},
 /turf/simulated/floor,
 /area/shuttle/odyssey/hallway/fore)
@@ -8529,6 +8512,11 @@
 	dir = 2;
 	id_tag = "eng shutter";
 	name = "Engineering Shutters"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/starboard)
@@ -8618,9 +8606,7 @@
 	dir = 8;
 	tag = "icon-intact (EAST)"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "AI" = (
 /obj/machinery/door/window/brigdoor{
@@ -8686,9 +8672,7 @@
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_x = -30
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/port)
 "AR" = (
 /obj/structure/railing{
@@ -8762,7 +8746,7 @@
 /obj/structure/bed/chair/handrail{
 	dir = 1
 	},
-/turf/simulated/floor/plating,
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "Bj" = (
 /turf/unsimulated/border,
@@ -8815,8 +8799,13 @@
 	dir = 1
 	},
 /obj/structure/reagent_dispensers/silicate,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Bu" = (
 /obj/machinery/door/airlock{
 	name = "Dorms"
@@ -8978,7 +8967,7 @@
 "BY" = (
 /obj/structure/reagent_dispensers/sacid,
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Ca" = (
 /obj/machinery/computer/telecomms/monitor{
 	network = "tcommsat"
@@ -9012,9 +9001,7 @@
 /obj/effect/landmark/start{
 	name = "Mechanic"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "Cf" = (
 /obj/structure/cable{
@@ -9051,7 +9038,7 @@
 	id_tag = "eng supplies";
 	name = "Engineering Supply Shutters"
 	},
-/turf/simulated/floor/plated_catwalk/dark,
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "Ci" = (
 /obj/machinery/door/airlock/hatch{
@@ -9302,9 +9289,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/bridge_lobby)
 "Da" = (
 /obj/structure/grille/window_spawner/reinforced/full,
@@ -9371,7 +9356,7 @@
 	name = "Starboard Engines Blast Door"
 	},
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Di" = (
 /obj/item/weapon/stool{
 	pixel_y = 8
@@ -9420,7 +9405,7 @@
 	name = "Engineering Supply Shutters"
 	},
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Dq" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 3;
@@ -9448,7 +9433,7 @@
 	dir = 9;
 	icon_state = "warnwhite"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "Du" = (
 /obj/machinery/light{
 	dir = 4
@@ -9456,9 +9441,7 @@
 /obj/machinery/camera/autoname{
 	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "Dv" = (
 /obj/structure/bed,
@@ -9579,7 +9562,7 @@
 	name = "Infirmary Shutters"
 	},
 /turf/simulated/floor/plating,
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "DH" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/plating/vox,
@@ -9702,9 +9685,7 @@
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey/exterior)
 "DY" = (
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "Ea" = (
 /obj/structure/bed/chair/handrail{
@@ -9717,6 +9698,14 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 3;
 	tag = ""
+	},
+/obj/machinery/power/apc{
+	pixel_x = 30;
+	dir = 4
+	},
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
@@ -9755,7 +9744,7 @@
 	},
 /obj/structure/bed/chair/handrail,
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Ek" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -9897,7 +9886,7 @@
 	name = "Air to Distro"
 	},
 /obj/abstract/map/spawner/maint/filled_crate,
-/turf/simulated/floor/plating,
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "EG" = (
 /obj/structure/cable{
@@ -9936,7 +9925,7 @@
 	anchored = 1
 	},
 /turf/unsimulated/floor/planetary/concrete,
-/area/surface/nt_outpost)
+/area/shuttle/odyssey/engineering/engine_room)
 "EN" = (
 /turf/simulated/floor{
 	icon_state = "stage_stairs";
@@ -10039,6 +10028,10 @@
 /obj/effect/landmark/start{
 	name = "Warden"
 	},
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "darkred";
@@ -10057,12 +10050,12 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/odyssey/mineral_processing)
 "Fi" = (
-/obj/machinery/door/airlock/glass{
-	name = "Cafeteria"
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
+	dir = 1;
+	anchored = 1
 	},
-/obj/machinery/door/firedoor,
-/turf/space,
-/area/shuttle/odyssey/cafeteria)
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey/hallway/port)
 "Fl" = (
 /obj/structure/table,
 /obj/item/critter_cage/with_mouse{
@@ -10168,7 +10161,7 @@
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy (WEST)"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "FE" = (
 /obj/machinery/recharge_station,
 /turf/simulated/floor/engine,
@@ -10414,7 +10407,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "Gr" = (
 /obj/item/weapon/stool/bar{
 	pixel_x = 1;
@@ -10427,9 +10420,7 @@
 	dir = 1;
 	tag = "icon-adapter_4 (NORTH)"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/port)
 "Gv" = (
 /obj/structure/wc/sink{
@@ -10444,9 +10435,7 @@
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "Gz" = (
 /obj/machinery/power/terminal{
@@ -10467,6 +10456,11 @@
 	id_tag = "holdingcel";
 	pixel_y = -22;
 	pixel_x = 0
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
 	},
 /turf/simulated/floor{
 	icon_state = "darkred";
@@ -10620,7 +10614,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "GV" = (
 /obj/structure/bed/chair/folding{
 	dir = 4
@@ -10744,10 +10738,8 @@
 	id_tag = "chem shutters";
 	name = "Infirmary Shutters"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/medical/chemistry)
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey/infirmary/chemistry)
 "Hr" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 9
@@ -10790,12 +10782,12 @@
 /area/odyssey/store)
 "HB" = (
 /obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
 	},
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "HC" = (
 /obj/machinery/atmospherics/binary/dp_vent_pump/high_volume{
 	frequency = 1331;
@@ -10806,14 +10798,7 @@
 	},
 /area/shuttle/odyssey/hallway/starboard)
 "HF" = (
-/obj/machinery/power/apc{
-	pixel_x = 30;
-	dir = 4
-	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
 "HH" = (
@@ -10879,7 +10864,7 @@
 	dir = 8;
 	icon_state = "whitegreen"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "HS" = (
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden,
 /obj/structure/cable/yellow{
@@ -10904,9 +10889,7 @@
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "HZ" = (
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/central)
 "Ib" = (
 /obj/machinery/light,
@@ -11254,7 +11237,7 @@
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy (NORTHEAST)"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "Ja" = (
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
@@ -11441,10 +11424,6 @@
 	},
 /area/odyssey/cargo)
 "Jx" = (
-/obj/machinery/alarm{
-	dir = 4;
-	pixel_x = -23
-	},
 /obj/machinery/camera/autoname{
 	dir = 4
 	},
@@ -11453,6 +11432,10 @@
 	d2 = 4;
 	icon_state = "1-4";
 	tag = "90Curve"
+	},
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -23
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -11528,7 +11511,7 @@
 	})
 "JJ" = (
 /turf/simulated/wall/shuttle/panel/black,
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "JK" = (
 /obj/machinery/light{
 	dir = 4
@@ -11813,7 +11796,7 @@
 	name = "Engine Room"
 	},
 /turf/simulated/floor{
-	icon_state = "dark vault full"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/engineering/engine_room)
 "KC" = (
@@ -11834,7 +11817,9 @@
 /obj/machinery/door/airlock/glass{
 	name = "Cafeteria"
 	},
-/turf/simulated/floor/plated_catwalk/dark,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/cafeteria)
 "KE" = (
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
@@ -11955,7 +11940,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "Lc" = (
 /obj/structure/cable/yellow{
 	d2 = 2;
@@ -12016,7 +12001,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 8
+	dir = 8;
+	density = 0
 	},
 /obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor{
@@ -12119,7 +12105,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "Lv" = (
 /obj/structure/closet/secure_closet/captains,
 /turf/simulated/floor/wood,
@@ -12131,16 +12117,12 @@
 	},
 /area/odyssey/cargo)
 "Ly" = (
-/obj/structure/grille/window_spawner/reinforced/full,
-/obj/machinery/door/poddoor/shutters{
-	dir = 2;
-	id_tag = "chem shutters";
-	name = "Infirmary Shutters"
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
+	dir = 1;
+	anchored = 1
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/medical/chemistry)
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey/quarters/heads)
 "LA" = (
 /obj/structure/rack,
 /obj/item/weapon/pinpointer/gas_dowser,
@@ -12163,9 +12145,7 @@
 /obj/structure/bed/chair/handrail{
 	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/port)
 "LC" = (
 /obj/machinery/computer/secure_data,
@@ -12212,7 +12192,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 8
+	dir = 8;
+	density = 0
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -12230,7 +12211,9 @@
 /obj/machinery/door/airlock/glass{
 	name = "Cafeteria"
 	},
-/turf/simulated/floor,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/cafeteria)
 "LI" = (
 /obj/machinery/conveyor{
@@ -12295,7 +12278,9 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/glass,
-/turf/simulated/floor/plated_catwalk/dark,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/hallway/fore)
 "LP" = (
 /obj/structure/catwalk,
@@ -12403,7 +12388,7 @@
 	anchored = 1
 	},
 /turf/unsimulated/floor/planetary/concrete,
-/area/surface/nt_outpost)
+/area/shuttle/odyssey/quarters/crew)
 "Me" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -12450,8 +12435,8 @@
 /turf/simulated/floor/engine,
 /area/derelict/bar)
 "Mk" = (
-/turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/turf/simulated/floor/plated_catwalk/dark,
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Ml" = (
 /obj/structure/bed/chair/shuttle/blue{
 	dir = 4;
@@ -12482,7 +12467,7 @@
 	dir = 6;
 	icon_state = "warnwhite"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "Mn" = (
 /obj/machinery/requests_console{
 	announcementConsole = 1;
@@ -12541,9 +12526,7 @@
 	pixel_x = -5;
 	pixel_y = 0
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/fore)
 "Mt" = (
 /obj/machinery/airlock_sensor{
@@ -12560,9 +12543,7 @@
 "Mu" = (
 /obj/structure/table/glass,
 /obj/abstract/loot_spawner/entertainment,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/fore)
 "Mv" = (
 /obj/structure/bed/chair/comfy/black{
@@ -12582,9 +12563,7 @@
 /obj/structure/extinguisher_cabinet{
 	pixel_x = -30
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "Mx" = (
 /turf/simulated/wall,
@@ -12654,9 +12633,7 @@
 	pixel_x = -4;
 	pixel_y = 0
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/fore)
 "ML" = (
 /obj/structure/table/woodentable,
@@ -12801,17 +12778,33 @@
 	},
 /area/odyssey/store)
 "Nj" = (
-/obj/structure/railing{
-	dir = 4
-	},
 /obj/structure/bookcase{
 	name = "bookcase (Adult)"
 	},
 /obj/abstract/map/spawner/library,
-/turf/simulated/floor/wood,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/abstract/map/spawner/library,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 4;
+	density = 0
+	},
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
 /area/shuttle/odyssey/quarters/crew)
 "Nk" = (
-/obj/structure/grille/window_spawner/reinforced/full,
 /obj/machinery/smartfridge/chemistry,
 /obj/abstract/map/spawner/medical/pills,
 /obj/abstract/map/spawner/medical/drugs,
@@ -12851,8 +12844,14 @@
 /obj/machinery/camera/autoname{
 	dir = 8
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8";
+	tag = ""
+	},
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Nv" = (
 /obj/structure/table,
 /obj/item/clothing/suit/storage/hazardvest,
@@ -12866,7 +12865,7 @@
 "Nw" = (
 /obj/machinery/status_display/odyssey,
 /turf/simulated/wall/shuttle/panel/black,
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "Nx" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable{
@@ -12886,9 +12885,7 @@
 	pixel_x = -32;
 	pixel_y = 0
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "Nz" = (
 /obj/machinery/door/airlock/external{
@@ -12988,7 +12985,7 @@
 	pixel_x = 0;
 	pixel_y = -13
 	},
-/turf/space,
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/security/holding_cell)
 "NM" = (
 /obj/machinery/alarm{
@@ -13036,10 +13033,10 @@
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/bluegrid,
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "Oa" = (
 /obj/machinery/door/firedoor,
-/obj/machinery/door/airlock/maintenance{
+/obj/machinery/door/airlock/glass{
 	name = "Rectory"
 	},
 /turf/simulated/floor{
@@ -13069,10 +13066,6 @@
 /obj/structure/cable/yellow,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/nt_outpost)
-"Oi" = (
-/obj/structure/railing,
-/turf/simulated/floor/wood,
-/area/shuttle/odyssey/quarters/crew)
 "Ol" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable{
@@ -13243,9 +13236,7 @@
 	icon_state = "intact_on";
 	on = 1
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "OU" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
@@ -13294,7 +13285,8 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 4
+	dir = 4;
+	density = 0
 	},
 /obj/structure/railing{
 	dir = 8
@@ -13388,9 +13380,7 @@
 /obj/effect/landmark/start{
 	name = "Assistant"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "Pl" = (
 /obj/structure/cable{
@@ -13664,7 +13654,7 @@
 	tag = "icon-intact (EAST)"
 	},
 /turf/simulated/floor{
-	icon_state = "dark vault full"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/engineering/engine_room)
 "PT" = (
@@ -13745,7 +13735,7 @@
 	pixel_y = -25
 	},
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Qh" = (
 /obj/machinery/chem_dispenser/mapping,
 /turf/simulated/floor/vox{
@@ -13802,7 +13792,7 @@
 	icon_state = "darkyellow";
 	tag = "icon-darkyellow (SOUTHWEST)"
 	},
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Qp" = (
 /obj/machinery/door/airlock/glass_security{
 	id_tag = "BrigWest";
@@ -13905,17 +13895,12 @@
 /turf/simulated/floor,
 /area/shuttle/odyssey/hallway/fore)
 "Qy" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
+	dir = 1;
+	anchored = 1
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/shuttle/odyssey/hallway/fore)
+/turf/unsimulated/floor/planetary/concrete,
+/area/shuttle/odyssey/bridge)
 "Qz" = (
 /obj/structure/railing{
 	dir = 1
@@ -14093,7 +14078,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/maintenance_hatch,
-/turf/simulated/floor/plated_catwalk/dark,
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/aft)
 "QW" = (
 /obj/machinery/door/firedoor,
@@ -14156,7 +14141,8 @@
 /obj/structure/closet/walllocker{
 	pixel_x = -31;
 	pixel_y = 0;
-	name = "Armory"
+	name = "Armory";
+	dir = 4
 	},
 /obj/item/weapon/gun/energy/gun{
 	pixel_x = 4;
@@ -14209,7 +14195,7 @@
 	dir = 6
 	},
 /obj/abstract/loot_spawner/trash/on_ground,
-/turf/simulated/floor/plating,
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "Rk" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
@@ -14251,9 +14237,7 @@
 	dir = 4
 	},
 /obj/abstract/map/spawner/floorpill,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "Ro" = (
 /obj/structure/bed/chair/office/dark{
@@ -14347,25 +14331,6 @@
 	icon_state = "floorgrime"
 	},
 /area/security/perma)
-"RD" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = "90Curve"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/odyssey/engineering/engine_room)
 "RF" = (
 /obj/machinery/access_button{
 	command = "cycle_exterior";
@@ -14424,9 +14389,9 @@
 	dir = 6;
 	tag = ""
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
-	dir = 6;
-	tag = ""
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 8;
+	tag = "icon-map (WEST)"
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
@@ -14513,13 +14478,14 @@
 	dir = 1
 	},
 /obj/structure/railing{
-	dir = 4
+	dir = 4;
+	density = 0
 	},
 /obj/machinery/computer/rdconsole/robotics,
 /turf/simulated/floor{
 	icon_state = "warnwhite"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "Sc" = (
 /obj/structure/table,
 /obj/machinery/light{
@@ -14573,8 +14539,8 @@
 	pixel_x = 0;
 	pixel_y = -26
 	},
-/turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/turf/simulated/floor/plated_catwalk/dark,
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Si" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{
 	dir = 8
@@ -14673,7 +14639,7 @@
 	},
 /obj/machinery/recharge_station,
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Su" = (
 /obj/machinery/computer/security,
 /obj/structure/railing{
@@ -14735,7 +14701,7 @@
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy (EAST)"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "SG" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/black,
@@ -14826,9 +14792,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "SX" = (
 /obj/structure/cable/yellow{
@@ -14886,9 +14850,7 @@
 /obj/machinery/door/airlock{
 	name = "Restroom"
 	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/restroom)
 "Te" = (
 /turf/simulated/floor{
@@ -14957,9 +14919,7 @@
 /obj/effect/landmark/start{
 	name = "Xenobiologist"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/port)
 "Tt" = (
 /obj/structure/bed/chair/handrail{
@@ -14994,7 +14954,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "Tw" = (
 /obj/machinery/atmospherics/pipe/simple/cyan/hidden{
 	dir = 6
@@ -15131,7 +15091,9 @@
 	name = "Cafeteria"
 	},
 /obj/machinery/door/firedoor,
-/turf/simulated/floor,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/cafeteria)
 "Uf" = (
 /turf/simulated/floor{
@@ -15200,15 +15162,16 @@
 	},
 /area/shuttle/odyssey/janitor)
 "Um" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/structure/window/reinforced{
 	dir = 1
 	},
 /obj/effect/landmark/start{
 	name = "Detective"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -15448,9 +15411,7 @@
 /obj/machinery/atmospherics/pipe/simple/cyan/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/port)
 "UT" = (
 /obj/effect/decal/cleanable/greenglow,
@@ -15486,7 +15447,7 @@
 /area/odyssey/admin)
 "UY" = (
 /turf/simulated/wall/shuttle/reinforced/panel,
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "Vb" = (
 /obj/machinery/door/airlock{
 	name = "Stasis"
@@ -15531,7 +15492,7 @@
 /obj/structure/bed/chair{
 	dir = 1
 	},
-/turf/simulated/floor/plated_catwalk/dark,
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/fore)
 "Ve" = (
 /obj/structure/table/glass,
@@ -15619,9 +15580,7 @@
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_y = 30
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "Vp" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
@@ -15647,7 +15606,7 @@
 	tag = "icon-darkyellow (EAST)";
 	dir = 1
 	},
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "Vq" = (
 /obj/structure/grille/window_spawner/reinforced_plasma/full,
 /obj/machinery/atmospherics/pipe/simple/general/visible,
@@ -15690,7 +15649,7 @@
 	dir = 5;
 	icon_state = "warnwhite"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "Vx" = (
 /obj/machinery/door/unpowered/shuttle,
 /obj/docking_port/shuttle{
@@ -15993,9 +15952,7 @@
 	pixel_x = 0;
 	pixel_y = 0
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/starboard)
 "Ws" = (
 /obj/machinery/atmospherics/unary/cold_sink/freezer{
@@ -16128,7 +16085,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/medical/chemistry)
+/area/shuttle/odyssey/infirmary/chemistry)
 "WH" = (
 /obj/machinery/door/airlock/security{
 	req_access_txt = "1";
@@ -16168,7 +16125,8 @@
 /obj/structure/closet/walllocker{
 	pixel_x = -31;
 	pixel_y = 0;
-	name = "Riot Gear"
+	name = "Riot Gear";
+	dir = 4
 	},
 /obj/item/clothing/head/helmet/tactical/riot,
 /obj/item/clothing/suit/armor/riot,
@@ -16246,7 +16204,7 @@
 	icon_state = "dark_navy";
 	tag = "icon-dark_navy (NORTHEAST)"
 	},
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "WV" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
@@ -16388,9 +16346,7 @@
 /obj/machinery/firealarm{
 	pixel_x = -30
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/fore)
 "Xn" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -16465,7 +16421,9 @@
 /obj/machinery/door/airlock/mining{
 	name = "Logistics"
 	},
-/turf/simulated/floor,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/logistics)
 "XF" = (
 /obj/machinery/conveyor{
@@ -16536,7 +16494,7 @@
 	name = "Engineering Supply Shutters"
 	},
 /turf/simulated/floor/plating,
-/area/shuttle/odyssey/maintenance/starboard)
+/area/shuttle/odyssey/crew_quarters/heads/ce)
 "XP" = (
 /obj/effect/decal/cleanable/blood/tracks/footprints/vox{
 	basecolor = "#00FF00";
@@ -16684,9 +16642,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/central)
 "Yj" = (
 /obj/structure/cable{
@@ -16731,9 +16687,7 @@
 /obj/machinery/atmospherics/trinary/filter/mirrored{
 	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/port)
 "Yl" = (
 /obj/structure/catwalk,
@@ -16864,9 +16818,7 @@
 	pixel_y = -28;
 	pixel_x = 1
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/port)
 "YL" = (
 /obj/machinery/vending/sale,
@@ -16878,15 +16830,22 @@
 /obj/structure/bed/chair/handrail{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
+/turf/simulated/floor/plating,
+/area/shuttle/odyssey/hallway/fore)
+"YP" = (
+/obj/structure/shuttle/diag_wall/diy/smooth/black{
+	dir = 4;
+	anchored = 1
 	},
+/turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey/hallway/fore)
 "YQ" = (
-/obj/structure/closet/cabinet,
-/obj/abstract/map/spawner/highrisk,
-/obj/abstract/map/spawner/assistant/tools,
-/obj/abstract/loot_spawner/clothing,
+/obj/effect/landmark/start{
+	name = "Librarian"
+	},
+/obj/structure/railing/wood/glass{
+	dir = 1
+	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/crew)
 "YR" = (
@@ -16951,9 +16910,7 @@
 /obj/structure/bed/chair/handrail{
 	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "Zh" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -17160,7 +17117,7 @@
 	},
 /obj/machinery/r_n_d/server/core,
 /turf/simulated/floor/bluegrid,
-/area/science/lab)
+/area/shuttle/odyssey/science/lab)
 "ZR" = (
 /obj/abstract/loot_spawner/trash,
 /turf/simulated/floor{
@@ -20804,9 +20761,9 @@ RT
 oP
 zA
 ID
-RD
+ID
+jA
 Pw
-VL
 VL
 VL
 VL
@@ -21106,9 +21063,9 @@ Ne
 Ne
 EN
 VL
-lD
-lD
 VL
+lD
+lD
 PU
 Wa
 Lg
@@ -22618,7 +22575,7 @@ JJ
 JJ
 JJ
 Lu
-Ly
+DF
 Nw
 gI
 mD
@@ -23525,7 +23482,7 @@ td
 ae
 aq
 iw
-Ly
+DF
 xM
 yb
 Gn
@@ -24413,7 +24370,7 @@ gt
 PD
 PD
 PD
-gy
+Fi
 vu
 NO
 oB
@@ -24443,7 +24400,7 @@ kU
 ap
 uR
 HL
-Md
+og
 Iq
 Iq
 Iq
@@ -24716,7 +24673,7 @@ Iq
 Iq
 Iq
 Iq
-gy
+Fi
 YE
 YE
 YE
@@ -24744,7 +24701,7 @@ xr
 rC
 rC
 rC
-Md
+og
 Iq
 Iq
 Iq
@@ -25325,7 +25282,7 @@ Iq
 lB
 iR
 Xj
-Fi
+Ue
 KC
 iR
 yh
@@ -26241,7 +26198,7 @@ iR
 vx
 xT
 uN
-yN
+yh
 dp
 yh
 MO
@@ -28345,7 +28302,7 @@ Nm
 fN
 Xe
 Xe
-og
+we
 YV
 oz
 gU
@@ -28369,7 +28326,7 @@ Lo
 yI
 mN
 Jx
-wj
+zd
 Bu
 ho
 jv
@@ -28663,15 +28620,15 @@ ws
 pm
 ws
 yo
-og
+we
 mE
 uo
 vC
 Je
-Oi
+zd
 Nj
 yr
-zd
+YQ
 uo
 uo
 uo
@@ -28964,8 +28921,8 @@ mS
 ws
 vR
 Td
-Qy
-Qy
+Iw
+Iw
 kK
 uo
 qS
@@ -28973,7 +28930,7 @@ FK
 zd
 hh
 ez
-wj
+zd
 Bu
 JB
 jv
@@ -29242,7 +29199,7 @@ vB
 dh
 Bc
 nl
-gy
+Ly
 Xe
 oa
 Xe
@@ -29277,7 +29234,7 @@ iF
 dP
 bx
 uo
-YQ
+uo
 Md
 ic
 dh
@@ -29545,7 +29502,7 @@ dh
 Bc
 nl
 Iq
-gy
+Ly
 Xe
 Xe
 CQ
@@ -29563,12 +29520,12 @@ Lp
 Ms
 MK
 YO
-zk
+YV
 Xm
 Lp
 vS
 YO
-og
+we
 WW
 Vd
 uo
@@ -29849,13 +29806,13 @@ DI
 Iq
 Iq
 Iq
-gy
+Ly
 Xe
 hm
 hm
 Xe
 Xe
-og
+we
 we
 fg
 Iw
@@ -30157,26 +30114,26 @@ Iq
 Iq
 Nc
 bI
-og
+we
 Pk
-og
+we
 SU
 Zb
-og
+we
 QW
-og
+we
 zE
 Du
 AC
-og
+we
 QW
-og
-og
+we
+we
 SU
 iJ
 ue
 bI
-Md
+YP
 dV
 Iq
 Iq
@@ -30458,7 +30415,7 @@ Iq
 Iq
 Iq
 Iq
-gy
+wj
 bI
 ad
 ad
@@ -31677,7 +31634,7 @@ Oa
 JR
 lr
 JR
-jA
+BA
 Hg
 fC
 yl
@@ -31979,7 +31936,7 @@ ad
 hR
 lr
 JO
-jA
+BA
 cZ
 Fb
 nx
@@ -32288,7 +32245,7 @@ Zo
 nx
 nx
 nx
-Md
+yN
 Iq
 Iq
 Iq
@@ -33786,7 +33743,7 @@ Iq
 Iq
 Iq
 Iq
-gy
+Qy
 Zo
 dW
 kd
@@ -33794,7 +33751,7 @@ CU
 kd
 WR
 Zo
-Md
+zk
 Iq
 Iq
 Iq
@@ -34693,13 +34650,13 @@ Iq
 Iq
 Iq
 Iq
-gy
+Qy
 Zo
 yG
 yG
 yG
 Zo
-Md
+zk
 Iq
 Iq
 Iq
