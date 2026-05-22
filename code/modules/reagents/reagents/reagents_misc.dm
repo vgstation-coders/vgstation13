@@ -549,3 +549,12 @@ var/procizine_tolerance = 0
 	if(!M.isUnconscious() && data["stored_phrase"])
 		to_chat(M, "You hear a voice in your head saying: <span class='bold'>'[data["stored_phrase"]]'</span>.")
 		M.reagents.del_reagent(LOCUTOGEN)
+
+/datum/reagent/toner
+	name = "Toner"
+	id = TONER
+	description = "Powder used to fill toner cartridges."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#777777"
+	density = 1.2
+	specheatcap = 1.7

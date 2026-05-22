@@ -1157,6 +1157,19 @@
 /datum/chemical_reaction/solidification/lead/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/lead
 
+/datum/chemical_reaction/toner
+	name = "Toner Powder"
+	id = TONER
+	result = TONER
+	required_reagents = list(PLASTICIDE = 1, IRON = 1, CARBON = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/toner_waste
+	name = "Toner Waste"
+	id = "tonerwaste"
+	result = CHEMICAL_WASTE
+	required_reagents = list(TONER = 1, AMMONIA = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/condensedcapsaicin
 	name = "Condensed Capsaicin"

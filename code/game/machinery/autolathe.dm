@@ -139,6 +139,7 @@
 		new /obj/item/weapon/camera_assembly(), \
 		new /obj/item/stack/sheet/glass/rglass(), \
 		new /obj/item/stack/rods(), \
+		new /obj/item/device/toner/printed(), \
 		new /obj/item/weapon/storage/box/ornaments(), \
 		new /obj/item/weapon/storage/box/ornaments/teardrop_ornaments(), \
 		new /obj/item/weapon/disk/shuttle_coords/station_auxillary(),\

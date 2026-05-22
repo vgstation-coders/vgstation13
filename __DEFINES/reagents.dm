@@ -171,6 +171,7 @@
 #define KETCHUP 			"ketchup"
 #define CAPSAICIN 			"capsaicin"
 #define CONDENSEDCAPSAICIN 			"condensedcapsaicin"
+#define TONER 				"toner"
 #define BLACKCOLOR 			"blackcolor"
 #define FROSTOIL 			"frostoil"
 #define SODIUMCHLORIDE 			"sodiumchloride"

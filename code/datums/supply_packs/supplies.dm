@@ -1,7 +1,7 @@
 //////SUPPLIES//////
 
 /datum/supply_packs/toner
-	name = "Toner cartridges"
+	name = "Filled toner cartridges"
 	contains = list(/obj/item/device/toner,
 					/obj/item/device/toner,
 					/obj/item/device/toner,
@@ -10,7 +10,7 @@
 					/obj/item/device/toner)
 	cost = 10
 	containertype = /obj/structure/closet/crate/basic
-	containername = "toner cartridges crate"
+	containername = "filled toner cartridges crate"
 	group = "Supplies"
 	containsdesc = "For when the clown decides to use up all of your photocopier ink. Contains an excessive six sets of replacement toner."
 

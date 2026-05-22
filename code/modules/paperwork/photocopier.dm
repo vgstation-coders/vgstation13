@@ -464,9 +464,66 @@
  */
 /obj/item/device/toner
 	name = "toner cartridge"
+	desc = "A cartridge that holds toner powder for printing."
 	icon_state = "tonercartridge"
 	var/charges = 5
 	var/max_charges = 5
+
+/obj/item/device/toner/printed
+	charges = 0
+
+/obj/item/device/toner/splashable()
+	return FALSE
+
+/obj/item/device/toner/examine(mob/user, size, show_name)
+	. = ..()
+	if(charges < max_charges)
+		user.simple_message("<span class='notice'>\The [src] has [charges] charge[charges == 1 ? "" : "s"].</span>",
+			"<span class='notice'>\The [src] is thirsty.</span>")
+	else
+		user.simple_message("<span class='notice'>\The [src] is full.</span>",
+			"<span class='notice'>\The [src] is quenched.</span>")
+
+/obj/item/device/toner/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W,/obj/item/weapon/reagent_containers/) && W.flags & OPENCONTAINER)
+		var/obj/item/weapon/reagent_containers/G = W
+		if(G.reagents.reagent_list.len>1)
+			user.simple_message("<span class='warning'>The mixture is rejected by \the [src].</span>",
+				"<span class='warning'>\The [src] isn't THAT thirsty.</span>")
+			return
+		if(G.reagents.has_reagent(AMMONIA,1))
+			var/transfer_amount = min(G.amount_per_transfer_from_this,max_charges)
+			user.simple_message("<span class='notice'>You transfer [transfer_amount] units to \the [src].</span>",
+				"<span class='notice'>\The [src] gulps down your drink!</span>")
+			G.reagents.remove_reagent(AMMONIA,transfer_amount)
+			charges -= transfer_amount
+			return
+		if(!G.reagents.has_reagent(TONER,1))
+			user.simple_message("<span class='warning'>\The [src] is not compatible with that.</span>",
+				"<span class='warning'>\The [src] won't drink that.</span>")
+			return
+		else
+			var/space = max_charges - charges
+			if(space <= 0)
+				user.simple_message("<span class='warning'>\The [src] is full!</span>",
+					"<span class='warning'>\The [src] isn't thirsty.</span>")
+				return
+			var/transfer_amount = min(G.amount_per_transfer_from_this,space)
+			user.simple_message("<span class='notice'>You transfer [transfer_amount] units to \the [src].</span>",
+				"<span class='notice'>\The [src] gulps down your drink!</span>")
+			G.reagents.remove_reagent(TONER,transfer_amount)
+			charges += transfer_amount
+	else
+		return ..()
+
+/obj/item/device/toner/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = ..()
+	if(charges > 0)
+		user.simple_message("<span class='notice'>You empty the toner from \the [src] into \the [target] using the handle.</span>",
+			"<span class='notice'>You parch \the [src] and make it thirsty, feeding \the [target] instead!</span>")
+		if(target.reagents)
+			target.reagents.add_reagent(TONER,charges)
+		charges = 0
 
 /obj/machinery/photocopier/proc/copier_blocked(var/mob/user)
 	if(gcDestroyed)
