@@ -28,23 +28,7 @@
 	)
 	enabled_jobs = list(/datum/job/trader)
 	disabled_jobs = list(
-		/datum/job/ai,
-		/datum/job/chaplain,
-		/datum/job/chemist,
-		/datum/job/cmo,
-		/datum/job/detective,
-		/datum/job/geneticist,
-		/datum/job/hos,
-		/datum/job/hydro,
-		/datum/job/librarian,
 		/datum/job/mommi,
-		/datum/job/orderly,
-		/datum/job/paramedic,
-		/datum/job/rd,
-		/datum/job/roboticist,
-		/datum/job/scientist,
-		/datum/job/xenoarchaeologist,
-		/datum/job/xenobiologist,
 		)
 
 	center_x = 150
