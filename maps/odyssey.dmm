@@ -5273,6 +5273,9 @@
 /obj/machinery/newscaster{
 	pixel_y = -28
 	},
+/obj/structure/table,
+/obj/item/weapon/kitchen/rollingpin,
+/obj/abstract/loot_spawner/food_or_drink,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -7019,9 +7022,11 @@
 	dir = 8;
 	pixel_x = 24
 	},
-/obj/structure/table,
-/obj/item/weapon/kitchen/rollingpin,
-/obj/abstract/loot_spawner/food_or_drink,
+/obj/structure/wc/sink/kitchen{
+	pixel_y = 1;
+	pixel_x = 10;
+	dir = 8
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -11529,10 +11534,6 @@
 "JK" = (
 /obj/machinery/light{
 	dir = 4
-	},
-/obj/structure/wc/sink/kitchen{
-	pixel_y = 12;
-	pixel_x = 0
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
