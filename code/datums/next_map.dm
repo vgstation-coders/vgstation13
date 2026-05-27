@@ -182,6 +182,7 @@
 /datum/next_map/junglestation
 	name = "Jungle Station" //NT Colony Gamma-8 - the trve name.
 	path = "junglestation"
+	is_enabled = FALSE
 
 /datum/next_map/odyssey
 	name = "NTEV Odyssey"
