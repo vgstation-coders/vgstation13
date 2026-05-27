@@ -307,7 +307,7 @@
 	for(var/ID in kicker.virus2)
 		var/datum/disease2/disease/V = kicker.virus2[ID]
 		for(var/datum/disease2/effect/e in V.effects)
-			if(e.count > 0 && e.type == /datum/disease2/effect/norris)
+			if(e.count > 0 && e.type == /datum/disease2/effect/walker)
 				return TRUE
 	return kicker.reagents && kicker.reagents.has_reagent(GYRO)
 

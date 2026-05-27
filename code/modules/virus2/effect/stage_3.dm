@@ -890,8 +890,8 @@
 /datum/disease2/effect/toothdecay/affect_mob_voice(var/datum/speech/speech)
 	speech.message = piratespeech(speech.message)
 
-/datum/disease2/effect/norris
-	name = "Norris Syndrome"
+/datum/disease2/effect/walker
+	name = "Walker Syndrome"
 	desc = "Causes the infected to kick ass."
 	encyclopedia = "Symptom strength increases kick frequency."
 	stage = 3
@@ -899,7 +899,7 @@
 	multiplier = 1
 	max_multiplier = 5
 
-/datum/disease2/effect/norris/activate(var/mob/living/mob)
+/datum/disease2/effect/walker/activate(var/mob/living/mob)
 	if (prob(20 * multiplier) && ishuman(mob))
 		var/atom/A = pick(adjacent_atoms(mob))
 		if(A && A.mouse_opacity && !A.invisibility && A != mob && !(A in mob))
