@@ -85,6 +85,8 @@
 
 	if(peepers)
 		reset_view()
+	if(mineral == "phazon")
+		phazontiles -= src
 	ChangeTurf(dismantle_type)
 	update_near_walls()
 

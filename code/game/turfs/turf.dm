@@ -544,6 +544,11 @@ var/highest_player_entry = 0
 	var/datum/virtual_z/old_v = v
 
 	var/old_holomap = holomap_data
+
+	if(light)
+		light.destroy()
+		light = null
+
 //	to_chat(world, "Replacing [src.type] with [N]")
 
 	//The following two lines are an optimization. Without them, each connection would search connections when erased to remove itself.
@@ -671,13 +676,17 @@ var/highest_player_entry = 0
 	if(!defer_edges)
 		for(var/turf/adj in range(1,src))
 			adj.update_edges()
-	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
+	// Drop the cached shuttle-interior lighting overlay when a turf is restored to any outdoor surface area; otherwise the corner lum cache "ghosts" until SSlighting catches up.
+	if(isopensurface(loc) && !isopensurface(original_area))
 		if(.)
 			var/turf/NewTurf=.
 			NewTurf.affecting_lights=list()
 			NewTurf.lighting_clear_overlay()
 			NewTurf.lighting_build_overlay()
-			NewTurf.set_light(SSDayNight.next_light_range,SSDayNight.next_light_power,SSDayNight.current_timeOfDay)
+			var/datum/virtual_z/refresh_vz = NewTurf.get_virtual_z()
+			var/refresh_power = refresh_vz?.current_light_power || SSDayNight.next_light_power
+			var/refresh_tod = refresh_vz?.current_timeOfDay || SSDayNight.current_timeOfDay
+			NewTurf.set_light(SSDayNight.next_light_range, refresh_power, refresh_tod)
 
 
 

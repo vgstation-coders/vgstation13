@@ -109,12 +109,13 @@
 
 	var/mob/living/carbon/human/UH=user
 	return isvox(UH)
+
 /obj/item/weapon/organ_remover/attack_self(mob/user)
 	if(!can_use(user))
 		to_chat(user, "<span class='warning'>The object remains inert and useless.  It doesn't even <em>feel</em> right in your grip.</span>")
 		return
 	target_type=input(user, "Select desired organ.") in valid_targets
-	to_chat(user, "<span class='info'>[target_type] selected.</span>")
+	to_chat(user, "<span class='info'>[capitalize(target_type)] selected.</span>")
 
 /obj/item/weapon/organ_remover/adminbus_edition
 	vox_only = FALSE

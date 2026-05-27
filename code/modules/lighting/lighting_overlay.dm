@@ -52,7 +52,7 @@
 		qdel(src)
 		return
 
-	if (!T.lighting_corners_initialised)//may happen due to nano paint
+	if (!T.lighting_corners_initialised || !T.corners)//may happen due to nano paint
 		T.generate_missing_corners()
 
 	// To the future coder who sees this and thinks

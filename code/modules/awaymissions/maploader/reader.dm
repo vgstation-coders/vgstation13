@@ -382,6 +382,10 @@ var/list/map_dimension_cache = list()
 	//finally instance all remainings objects/mobs
 	for(index=1,index < first_turf_index,index++)
 		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate,overwrite)
+		// dont keep refs to things that qdel themselves in New() (like /obj/effect/decal/warning_stripes or whatever paint decals or something)
+		// prevent hdel
+		if(new_atom && new_atom.gcDestroyed)
+			continue
 		spawned_atoms.Add(new_atom)
 
 	if(!spawned_atoms.len)

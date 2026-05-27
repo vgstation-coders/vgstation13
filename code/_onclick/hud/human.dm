@@ -148,7 +148,7 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
-	inv_box.pointer_to_list = &src.adding
+	using.pointer_to_list = &src.adding
 
 	using = new /obj/abstract/screen/inventory
 	using.name = "hand"
@@ -161,7 +161,7 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
-	inv_box.pointer_to_list = &src.adding
+	using.pointer_to_list = &src.adding
 
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "id"
@@ -189,7 +189,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box.pointer_to_list = &src.adding
+	inv_box.pointer_to_list = &src.other
 
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "back"
@@ -255,7 +255,7 @@
 	using.alpha = ui_alpha
 	src.hotkeybuttons += using
 
-	inv_box.pointer_to_list = &src.hotkeybuttons
+	using.pointer_to_list = &src.hotkeybuttons
 
 	using = new /obj/abstract/screen
 	using.name = "toggle"
@@ -266,7 +266,7 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
-	inv_box.pointer_to_list = &src.adding
+	using.pointer_to_list = &src.adding
 
 	using = new /obj/abstract/screen
 	using.name = "equip"
@@ -277,7 +277,7 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
-	inv_box.pointer_to_list = &src.adding
+	using.pointer_to_list = &src.adding
 
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "gloves"
@@ -366,7 +366,7 @@
 	mymob.throw_icon.alpha = ui_alpha
 	src.hotkeybuttons += mymob.throw_icon
 
-	mymob.throw_icon.pointer_to_list = &src.adding
+	mymob.throw_icon.pointer_to_list = &src.hotkeybuttons
 	mymob.throw_icon.pointer_to_var = &mymob.throw_icon
 
 	mymob.kick_icon = new /obj/abstract/screen
@@ -391,7 +391,7 @@
 	src.hotkeybuttons += mymob.bite_icon
 
 	mymob.bite_icon.pointer_to_list = &src.hotkeybuttons
-	mymob.bite_icon.pointer_to_var = &mymob.kick_icon
+	mymob.bite_icon.pointer_to_var = &mymob.bite_icon
 
 	mymob.internals = new /obj/abstract/screen
 	mymob.internals.icon = 'icons/mob/screen1.dmi'
@@ -420,8 +420,8 @@
 	mymob.pullin.screen_loc = ui_pull_resist
 	src.hotkeybuttons += mymob.pullin
 
-	mymob.bite_icon.pointer_to_list = &src.hotkeybuttons
-	mymob.healths.pointer_to_var = &mymob.pullin
+	mymob.pullin.pointer_to_list = &src.hotkeybuttons
+	mymob.pullin.pointer_to_var = &mymob.pullin
 
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = ui_style
@@ -432,7 +432,7 @@
 
 	//Handle the gun settings buttons
 	mymob.gun_setting_icon = new /obj/abstract/screen/gun/mode
-	mymob.healths.pointer_to_var = &mymob.gun_setting_icon
+	mymob.gun_setting_icon.pointer_to_var = &mymob.gun_setting_icon
 
 	if (mymob.client)
 		if (mymob.client.gun_mode) // If in aim mode, correct the sprite

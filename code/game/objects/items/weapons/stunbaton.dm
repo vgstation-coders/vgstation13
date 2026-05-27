@@ -2,7 +2,7 @@
 	name = "stun baton"
 	desc = "A stun baton for incapacitating people with."
 	icon_state = "stun baton"
-	item_state = "baton0"
+	item_state = "baton"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	flags = FPRINT
 	slot_flags = SLOT_BELT
@@ -257,7 +257,6 @@
 	name = "stunprod"
 	desc = "An improvised stun baton."
 	icon_state = "stunprod_nocell"
-	item_state = "prod"
 	force = 3
 	throwforce = 5
 	stunforce = 5
@@ -278,7 +277,6 @@
 /obj/item/weapon/melee/baton/harm
 	desc = "A baton for permanently incapacitating people with."
 	icon_state = "harmbaton"
-	item_state = "baton0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	origin_tech = Tc_COMBAT + "=2;" + Tc_SYNDICATE + "=3"
 	attack_verb = list("robusts", "harms")

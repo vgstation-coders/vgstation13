@@ -7,10 +7,13 @@
 
 /mob/living/clickbot/ClickOn(var/atom/A, var/params)
 	path = get_path_to(src, A)
+	if (!length(path))
+		playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 0)
+		return
 	pathers += src
 
 /mob/living/clickbot/process_astar_path()
-	if(gcDestroyed || stat == DEAD)
+	if(gcDestroyed || stat == DEAD || !length(path))
 		return FALSE
 	step_to(src, path[1])
 	if(get_turf(src) != path[1])
