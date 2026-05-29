@@ -166,8 +166,8 @@ var/list/map_dimension_cache = list()
 		clipmax_x = min(clipmax_x,map_width)
 		clipmax_y = min(clipmax_y,map_height)
 
-		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : map_height + y_offset
-		var/y_check = rotate == 0 || rotate == 180 ? map_height + y_offset : map_width + x_offset
+		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : max(map_width, map_height) + x_offset
+		var/y_check = rotate == 0 || rotate == 180 ? map_height + y_offset : map_width + y_offset
 		if(world.maxx < x_check)
 			var/old_max_x = world.maxx + 1
 			if(!map.can_enlarge)
@@ -409,6 +409,7 @@ var/list/map_dimension_cache = list()
 	var/turf/T = locate(x,y,z)
 	if(!T)
 		WARNING("Turf at [x], [y], [z] not found!")
+		return
 	if(ispath(path, /turf)) //Turfs use ChangeTurf
 		if(path != T.type && path != /turf/template_noop)
 			instance = T.ChangeTurf(path, allow = 1)
