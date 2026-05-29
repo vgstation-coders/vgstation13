@@ -156,7 +156,7 @@
 
 /obj/machinery/crate_weigher
 	name = "crate weigher"
-	desc = "Weighs crates, and adds relevant info to a shipping manifest. There is a slot on it for inserting a shipping manifest, which will have the weight printed on it should a crate be weighed."
+	desc = "Weighs crates, and adds relevant info to a shipping manifest."
 	icon = 'icons/obj/machines/crate_weigher.dmi'
 	icon_state = "up"
 	layer = OPEN_DOOR_LAYER // Below the crates
@@ -267,6 +267,13 @@
 	if(C.locked_to || C.is_locking())
 		return
 	C.Move(loc)
+
+/obj/machinery/crate_weigher/examine(mob/user)
+	..()
+	if(current_manifest)
+		to_chat(user, "<span class='notice'>There is a manifest currently inserted.</span>")
+		return
+	to_chat(user, "<span class='notice'>There is a slot available for a manifest to be inserted.</span>")
 
 /obj/machinery/crate_weigher/proc/remove_crate()
 	current_crate = null
