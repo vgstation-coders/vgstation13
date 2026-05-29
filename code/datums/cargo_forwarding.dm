@@ -156,7 +156,7 @@
 
 /obj/machinery/crate_weigher
 	name = "crate weigher"
-	desc = "Weighs crates, and adds relevant info to a shipping manifest."
+	desc = "Weighs crates, and adds relevant info to a shipping manifest. There is a slot on it for inserting a shipping manifest, which will have the weight printed on it should a crate be weighed."
 	icon = 'icons/obj/machines/crate_weigher.dmi'
 	icon_state = "up"
 	layer = OPEN_DOOR_LAYER // Below the crates
