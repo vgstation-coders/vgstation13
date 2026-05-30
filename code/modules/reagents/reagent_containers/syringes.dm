@@ -307,9 +307,8 @@
 
 		if (deflected)
 			user.visible_message("<span class='danger'>[user] tries to stab [user == target ? get_reflexive_pronoun(user.gender) : target] in \the [hit_area] with \the [src], but the attack is deflected by armor!</span>", "<span class='danger'>You try to stab [user == target ? "yourself" : "\the [target]"] in \the [hit_area] with \the [src], but the attack is deflected by armor!</span>")
-			user.u_equip(src, 1)
-			qdel(src)
-			return // Avoid the transfer since we're using qdel
+			break_needle(target, user)
+			return // Avoid the transfer
 		else
 			user.visible_message("<span class='danger'>[user] stabs [user == target ? get_reflexive_pronoun(user.gender) : target] in \the [hit_area] with \the [src]!</span>", "<span class='danger'>You stab [user == target ? "yourself" : "\the [target]"] in \the [hit_area] with \the [src]!</span>")
 			affecting.take_damage(3)
@@ -322,11 +321,16 @@
 		var/syringestab_amount_transferred = max(rand(min(reagents.total_volume, 2), (reagents.total_volume - 5)), 0) //nerfed by popular demand.
 		src.reagents.reaction(target, INGEST, amount_override = min(reagents.total_volume,syringestab_amount_transferred)/(reagents.reagent_list.len))
 		src.reagents.trans_to(target, syringestab_amount_transferred)
-	src.desc += " It is broken."
-	src.mode = SYRINGE_BROKEN
-	src.add_blood(target)
-	src.add_fingerprint(usr)
-	src.update_icon()
+	break_needle(target, user)
+
+/obj/item/weapon/reagent_containers/syringe/proc/break_needle(mob/living/carbon/target as mob, mob/living/carbon/user as mob)
+	desc += " It is broken."
+	mode = SYRINGE_BROKEN
+	if(target)
+		add_blood(target)
+	if(user)
+		add_fingerprint(user)
+	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/restock(nanobots = FALSE)
 	if(mode == 2) //SYRINGE_BROKEN
