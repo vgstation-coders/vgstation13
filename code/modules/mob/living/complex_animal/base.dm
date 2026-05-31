@@ -665,6 +665,10 @@
 	if(mate.type!=src.type)
 		return FALSE
 	if(localcheck)
+		if(mob_age>mob_max_age*1.5 || mob_age<mob_max_age*0.1) //too young or too old? no can do.
+			return FALSE
+		if(lastmate>0)
+			return FALSE
 		localcount = get_local_count()
 	if(localcount>max_local_population)
 		return FALSE
