@@ -375,7 +375,7 @@
 		var/rads = (power / 50) * sqrt(1/(max(get_dist(l, src), 1)))
 		l.apply_radiation(rads, RAD_EXTERNAL)
 
-	power -= (power/power_loss_modifier)**3
+	power -= max(power,(power/power_loss_modifier)**3)
 
 	var/light_value = clamp(round(clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
 

@@ -32746,10 +32746,8 @@
 	},
 /area/bridge)
 "bkm" = (
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
+/obj/structure/table,
+/obj/machinery/cell_charger,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "vault";

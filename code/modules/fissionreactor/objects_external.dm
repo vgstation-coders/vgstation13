@@ -222,6 +222,9 @@ included:
 
 //for shuttle movment.
 /obj/machinery/fissioncontroller/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	if(!associated_reactor) //no need to transfer ownership if there's no reactor in the first place
+		return ..()
+	
 	spawn() //delay proc to fire last.
 		var/datum/fission_reactor_holder/newholder= new /datum/fission_reactor_holder()
 		var/datum/fission_reactor_holder/oldholder=associated_reactor
@@ -238,7 +241,6 @@ included:
 		newholder.corner_y=src.y
 		newholder.init_resize(get_turf(src))
 
-/*/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)*/
 
 /obj/machinery/fissioncontroller/attackby(var/obj/I,var/mob/user)
 	if(istype(I,/obj/item/weapon/fuelrod))

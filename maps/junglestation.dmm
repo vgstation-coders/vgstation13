@@ -490,6 +490,18 @@
 	icon_state = "floorgrime"
 	},
 /area/security/processing)
+"akt" = (
+/obj/machinery/alarm{
+	pixel_y = 23
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitepurple"
+	},
+/area/research_outpost/dorm2{
+	icon_state = "toxlab";
+	name = "Toxins"
+	})
 "akL" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -7131,8 +7143,12 @@
 	},
 /area/centcom/test)
 "cEk" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning";
+	tag = "icon-warning"
+	},
 /turf/simulated/floor{
-	icon_state = "whitepurple"
+	icon_state = "whitered"
 	},
 /area/research_outpost/dorm2{
 	icon_state = "toxlab";
@@ -9787,6 +9803,10 @@
 	default_scrubbed_gases = list("plasma");
 	dir = 1
 	},
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -10328,6 +10348,13 @@
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/shuttle/research/station)
+"dML" = (
+/obj/structure/closet/bombcloset,
+/turf/simulated/floor,
+/area/research_outpost/dorm2{
+	icon_state = "toxlab";
+	name = "Toxins"
+	})
 "dMN" = (
 /turf/simulated/wall/r_wall,
 /area/science/rd)
@@ -11956,6 +11983,10 @@
 	},
 /area/security/warden)
 "enM" = (
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whitepurple"
@@ -12816,6 +12847,20 @@
 /obj/effect/decal/cleanable/blood/gibs/body,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle)
+"eFq" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitered"
+	},
+/area/research_outpost/dorm2{
+	icon_state = "toxlab";
+	name = "Toxins"
+	})
 "eFF" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -13019,9 +13064,14 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "eKp" = (
-/turf/simulated/floor{
+/obj/effect/decal/warning_stripes{
 	dir = 9;
-	icon_state = "whitepurple"
+	icon_state = "warning";
+	tag = "icon-warning (NORTHEAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "whitered";
+	dir = 9
 	},
 /area/research_outpost/dorm2{
 	icon_state = "toxlab";
@@ -16145,6 +16195,9 @@
 /obj/item/weapon/pickaxe,
 /obj/item/weapon/storage/belt/utility,
 /obj/structure/table,
+/obj/machinery/alarm{
+	pixel_y = 23
+	},
 /turf/simulated/floor,
 /area/mine/eva)
 "fUf" = (
@@ -18471,6 +18524,19 @@
 /obj/machinery/hologram/holopad,
 /turf/simulated/floor/wood,
 /area/library)
+"gPc" = (
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/food/drinks/coffee{
+	pixel_x = -5;
+	pixel_y = 5
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/research_outpost/dorm2{
+	icon_state = "toxlab";
+	name = "Toxins"
+	})
 "gPg" = (
 /obj/structure/sign/securearea{
 	name = "DANGER: SPIDERS";
@@ -18926,6 +18992,10 @@
 /area/medical/surgery)
 "gWW" = (
 /obj/machinery/smartfridge,
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whitegreen"
@@ -19806,9 +19876,14 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
 /turf/simulated/floor{
 	dir = 1;
-	icon_state = "whitepurple"
+	icon_state = "whitered"
 	},
 /area/research_outpost/dorm2{
 	icon_state = "toxlab";
@@ -28853,9 +28928,14 @@
 	},
 /area/shuttle/administration/centcom)
 "kJP" = (
-/turf/simulated/floor{
+/obj/effect/decal/warning_stripes{
 	dir = 5;
-	icon_state = "whitepurple"
+	icon_state = "warning";
+	tag = "icon-warning (NORTHEAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "whitered";
+	dir = 5
 	},
 /area/research_outpost/dorm2{
 	icon_state = "toxlab";
@@ -29416,6 +29496,17 @@
 /obj/machinery/cooking/deepfryer,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/crew_quarters/kitchen)
+"kXc" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/research_outpost/dorm2{
+	icon_state = "toxlab";
+	name = "Toxins"
+	})
 "kXk" = (
 /obj/structure/table,
 /obj/item/weapon/storage/firstaid/internalbleed{
@@ -30529,6 +30620,15 @@
 /obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/bridge)
+"ltC" = (
+/obj/structure/dispenser,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/research_outpost/dorm2{
+	icon_state = "toxlab";
+	name = "Toxins"
+	})
 "ltH" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable/yellow{
@@ -33100,6 +33200,10 @@
 	network = list("RD","SS13");
 	dir = 8
 	},
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
 /turf/simulated/floor,
 /area/research_outpost/hallway)
 "mnj" = (
@@ -33868,9 +33972,14 @@
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "mCa" = (
-/turf/simulated/floor{
+/obj/effect/decal/warning_stripes{
 	dir = 10;
-	icon_state = "whitepurple"
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHWEST)"
+	},
+/turf/simulated/floor{
+	icon_state = "whitered";
+	dir = 10
 	},
 /area/research_outpost/dorm2{
 	icon_state = "toxlab";
@@ -35042,6 +35151,14 @@
 	icon_state = "red"
 	},
 /area/security/lobby)
+"mYR" = (
+/obj/machinery/alarm{
+	pixel_y = 23
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/research_outpost/harvesting)
 "mYY" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -35688,6 +35805,9 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/machinery/alarm{
+	pixel_y = 23
+	},
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
 "nlF" = (
@@ -36202,13 +36322,6 @@
 	icon_state = "hydrofloor"
 	},
 /area/crew_quarters/courtroom)
-"nxJ" = (
-/obj/structure/bed/chair/wood/normal{
-	dir = 4
-	},
-/mob/living/simple_animal/complex/gorilla,
-/turf/unsimulated/floor/planetary/dirt/jungle,
-/area/surface/jungle/vault)
 "nxM" = (
 /obj/structure/table/plastic,
 /obj/item/clothing/under/shorts/red,
@@ -38404,6 +38517,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
+/obj/machinery/portable_atmospherics/pump,
 /turf/simulated/floor,
 /area/research_outpost/maintstore1{
 	icon_state = "toxstorage";
@@ -40683,9 +40797,15 @@
 	},
 /area/security/armory)
 "pgA" = (
-/turf/simulated/floor{
+/obj/structure/closet/firecloset,
+/obj/effect/decal/warning_stripes{
 	dir = 6;
-	icon_state = "whitepurple"
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHEAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "whitered";
+	dir = 6
 	},
 /area/research_outpost/dorm2{
 	icon_state = "toxlab";
@@ -43378,6 +43498,12 @@
 /area/server{
 	name = "AI Integrity Restoration Room"
 	})
+"qgQ" = (
+/obj/machinery/alarm{
+	pixel_y = 23
+	},
+/turf/simulated/floor,
+/area/research_outpost/gearstore)
 "qgR" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -43959,6 +44085,9 @@
 	name = "Research Outpost Hallway Starboard";
 	network = list("RD","SS13");
 	pixel_x = 24
+	},
+/obj/machinery/alarm{
+	pixel_y = 23
 	},
 /turf/simulated/floor,
 /area/research_outpost/entry)
@@ -46911,15 +47040,6 @@
 	icon_state = "dark-markings"
 	},
 /area/security/armory)
-"rsT" = (
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning";
-	tag = "icon-warning (WEST)"
-	},
-/mob/living/simple_animal/complex/bear,
-/turf/unsimulated/floor/planetary/concrete/jungle,
-/area/surface/jungle/vault)
 "rsW" = (
 /obj/machinery/door/airlock/glass_command{
 	name = "Bridge";
@@ -49426,9 +49546,14 @@
 	},
 /area/medical/virology)
 "snb" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (EAST)"
+	},
 /turf/simulated/floor{
 	dir = 8;
-	icon_state = "whitepurple"
+	icon_state = "whitered"
 	},
 /area/research_outpost/dorm2{
 	icon_state = "toxlab";
@@ -49602,6 +49727,10 @@
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "warning_corner"
+	},
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
 	},
 /turf/simulated/floor,
 /area/research_outpost/maintstore1{
@@ -49848,6 +49977,9 @@
 	},
 /obj/machinery/light_switch{
 	pixel_x = -27
+	},
+/obj/machinery/alarm{
+	pixel_y = 23
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -52174,6 +52306,10 @@
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/item/device/radio/intercom{
+	name = "Station Intercom (General)";
+	pixel_x = 27
+	},
 /turf/simulated/floor,
 /area/research_outpost/dorm2{
 	icon_state = "toxlab";
@@ -53197,6 +53333,17 @@
 "tFd" = (
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/mining)
+"tFh" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/research_outpost/dorm2{
+	icon_state = "toxlab";
+	name = "Toxins"
+	})
 "tFZ" = (
 /obj/structure/closet/emcloset/vox,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
@@ -55211,6 +55358,20 @@
 	icon_state = "floor4"
 	},
 /area/syndicate_mothership/elite_squad)
+"uuK" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning";
+	tag = "icon-warning (EAST)"
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whitered"
+	},
+/area/research_outpost/dorm2{
+	icon_state = "toxlab";
+	name = "Toxins"
+	})
 "uuL" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
@@ -56383,6 +56544,10 @@
 	network = list("RD","SS13")
 	},
 /obj/structure/closet,
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
 /turf/simulated/floor,
 /area/research_outpost/dorm1)
 "uUD" = (
@@ -59535,6 +59700,7 @@
 /obj/machinery/light_switch{
 	pixel_x = 28
 	},
+/obj/machinery/portable_atmospherics/scrubber,
 /turf/simulated/floor,
 /area/research_outpost/maintstore1{
 	icon_state = "toxstorage";
@@ -61682,6 +61848,10 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
 /turf/simulated/floor,
 /area/mine/production)
 "wPv" = (
@@ -63143,6 +63313,9 @@
 "xpr" = (
 /obj/structure/table,
 /obj/item/device/pipe_painter,
+/obj/item/tool/screwdriver{
+	pixel_y = 18
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -68825,7 +68998,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -69765,7 +69938,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -79051,7 +79224,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -80629,7 +80802,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -88072,7 +88245,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -89640,7 +89813,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -90212,7 +90385,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -92613,7 +92786,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -93777,7 +93950,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -99895,7 +100068,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -112560,7 +112733,7 @@ lIK
 lIK
 lIK
 lIK
-cnU
+lIK
 lIK
 lIK
 lIK
@@ -114219,7 +114392,7 @@ gJc
 gJc
 gJc
 gJc
-oli
+gJc
 gJc
 gJc
 gJc
@@ -115355,7 +115528,7 @@ lIK
 lIK
 lIK
 lIK
-mCs
+lIK
 lIK
 lIK
 lIK
@@ -115695,7 +115868,7 @@ lIK
 lIK
 lIK
 lIK
-cnU
+lIK
 lIK
 lIK
 lIK
@@ -117441,7 +117614,7 @@ lIK
 lIK
 lIK
 lIK
-mCs
+lIK
 lIK
 lIK
 lIK
@@ -117859,7 +118032,7 @@ lIK
 lIK
 lIK
 lIK
-cnU
+lIK
 lIK
 lIK
 lIK
@@ -121655,7 +121828,7 @@ lIK
 lIK
 lIK
 lIK
-mCs
+lIK
 lIK
 lIK
 lIK
@@ -124895,7 +125068,7 @@ lIK
 lIK
 lIK
 lIK
-cnU
+lIK
 lIK
 lIK
 lIK
@@ -125924,7 +126097,7 @@ rnF
 rnF
 rnF
 rnF
-scy
+rnF
 rnF
 rnF
 rnF
@@ -126209,7 +126382,7 @@ gJc
 gJc
 gJc
 gJc
-oli
+gJc
 gJc
 gJc
 gJc
@@ -129751,7 +129924,7 @@ lIK
 lIK
 lIK
 lIK
-mCs
+lIK
 lIK
 lIK
 lIK
@@ -131554,7 +131727,7 @@ bRe
 bRe
 bRe
 bRe
-vfF
+bRe
 xiS
 dFK
 rnF
@@ -133305,7 +133478,7 @@ rnF
 dFK
 bRe
 bRe
-rsT
+rCj
 bRe
 bRe
 rCj
@@ -135740,7 +135913,7 @@ lIK
 lIK
 lIK
 lIK
-cnU
+lIK
 lIK
 lIK
 lIK
@@ -143423,7 +143596,7 @@ gJc
 gJc
 gJc
 gJc
-oli
+gJc
 gJc
 gJc
 gJc
@@ -143513,7 +143686,7 @@ lIK
 lIK
 lIK
 lIK
-cnU
+lIK
 lIK
 lIK
 lIK
@@ -153761,7 +153934,7 @@ gJc
 gJc
 gJc
 gJc
-oli
+gJc
 gJc
 gJc
 gJc
@@ -162396,7 +162569,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -165165,7 +165338,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -169509,7 +169682,7 @@ unv
 unv
 unv
 unv
-luW
+unv
 unv
 rnF
 rnF
@@ -171881,7 +172054,7 @@ gJc
 gJc
 gJc
 gJc
-oli
+gJc
 gJc
 gJc
 gJc
@@ -177353,7 +177526,7 @@ gJc
 gJc
 gJc
 gJc
-oli
+gJc
 gJc
 gJc
 gJc
@@ -177469,7 +177642,7 @@ oQA
 oQA
 oQA
 oQA
-nxJ
+mNM
 mNM
 mNM
 oQA
@@ -178171,7 +178344,7 @@ oQA
 oQA
 oQA
 oQA
-fRP
+oQA
 oQA
 icG
 icG
@@ -178878,7 +179051,7 @@ oQA
 oQA
 oQA
 oQA
-fRP
+oQA
 oQA
 oQA
 oQA
@@ -179228,7 +179401,7 @@ oQA
 oQA
 oQA
 oQA
-fRP
+oQA
 cvW
 oQA
 oQA
@@ -179586,7 +179759,7 @@ mNM
 mNM
 oQA
 oQA
-fRP
+oQA
 oQA
 oQA
 oQA
@@ -179937,7 +180110,7 @@ icG
 icG
 icG
 oQA
-fRP
+oQA
 oQA
 oQA
 oQA
@@ -180641,7 +180814,7 @@ lWc
 lWc
 nBI
 oQA
-fRP
+oQA
 oQA
 oQA
 oQA
@@ -183236,7 +183409,7 @@ unv
 unv
 unv
 unv
-luW
+unv
 unv
 unv
 rnF
@@ -184188,7 +184361,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -187916,7 +188089,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
@@ -460464,7 +460637,7 @@ cTx
 akL
 gNo
 cTx
-cTx
+dML
 epp
 ugv
 ugv
@@ -461171,7 +461344,7 @@ mqQ
 mqQ
 mqQ
 mqQ
-mqQ
+ltC
 epp
 ugv
 ugv
@@ -461511,8 +461684,8 @@ rIh
 rIh
 tFd
 epp
-pQF
-mqQ
+eFq
+kXc
 cEk
 rEb
 gTF
@@ -461864,7 +462037,7 @@ tFd
 tFd
 epp
 hpp
-mqQ
+gPc
 cEk
 mqQ
 pEH
@@ -462215,8 +462388,8 @@ rIh
 tFd
 tFd
 epp
-pQF
-mqQ
+eFq
+tFh
 cEk
 xpr
 gTF
@@ -462568,11 +462741,11 @@ tFd
 tFd
 epp
 kJP
-oom
+uuK
 pgA
 epp
 epp
-pQF
+akt
 gci
 cMw
 ueY
@@ -466438,7 +466611,7 @@ rIh
 rIh
 rIh
 dqd
-wfW
+mYR
 wfW
 tOj
 kSn
@@ -472780,7 +472953,7 @@ nsl
 nsl
 vEE
 wIo
-toi
+qgQ
 xIP
 ycD
 aBR
