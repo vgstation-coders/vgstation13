@@ -327,13 +327,10 @@
 
 /mob/living/simple_animal/complex/proc/tick_state_mating()
 	if(!verify_target(target,16)) //ignores line of sight and has increased range to help sparse populations not die out.
-		var/localcount=0
-		for(var/mob/living/simple_animal/complex/A in cache_objects_in_extended_area)
-			if(A.type==src.type && A.stat!=DEAD)
-				localcount++
+		var/localcount = get_local_count()
 		for(var/mob/living/simple_animal/complex/A in cache_objects_in_extended_area)
 			//you better believe we're going to enforce the communicative property.
-			if(A.behavior_state==ANIMAL_STATE_MATING && !A.target && can_offspring(A,localcount) && A.can_offspring(src,localcount))
+			if(A.behavior_state==ANIMAL_STATE_MATING && !A.target && can_offspring(A,localcount) && A.can_offspring(src,localcheck=TRUE))
 				visible_message("<b>\the [src]</b> looks lovingly at \the [A].")
 				target=A
 				A.visible_message("<b>\the [A]</b> looks lovingly at \the [src].")
@@ -650,20 +647,28 @@
 	return size*7.5
 
 // if you don't want offspring, then return FALSE here.
-/mob/living/simple_animal/complex/proc/can_offspring(var/mob/living/simple_animal/complex/mate,var/localcount=0)
+/mob/living/simple_animal/complex/proc/can_offspring(var/mob/living/simple_animal/complex/mate,var/localcount=0,var/localcheck=FALSE)
 	if(!mate)
 		return FALSE
 	if(mate.type!=src.type)
-		return FALSE
-	if(localcount>max_local_population)
 		return FALSE
 	if(mob_age>mob_max_age*1.5 || mob_age<mob_max_age*0.1) //too young or too old? no can do.
 		return FALSE
 	if(lastmate>0)
 		return FALSE
-	if((src.gender=="male" && mate.gender=="female") || (mate.gender=="male" && src.gender=="female"))
+	if((src.gender==MALE && mate.gender==FEMALE) || (mate.gender==MALE && src.gender==FEMALE))
 		return TRUE
+	if(localcheck)
+		localcount = get_local_count()
+	if(localcount>max_local_population)
+		return FALSE
 	return FALSE
+
+/mob/living/simple_animal/complex/proc/get_local_count()
+	. = 0
+	for(var/mob/living/simple_animal/complex/A in cache_objects_in_extended_area)
+		if(A.type==src.type && A.stat!=DEAD)
+			.++
 
 //this proc is ran on the mother only.
 /mob/living/simple_animal/complex/proc/generate_offspring(var/mob/living/simple_animal/complex/father)
