@@ -327,6 +327,10 @@
 
 /mob/living/simple_animal/complex/proc/tick_state_mating()
 	if(!verify_target(target,16)) //ignores line of sight and has increased range to help sparse populations not die out.
+		if(mob_age>mob_max_age*1.5 || mob_age<mob_max_age*0.1) //too young or too old? no can do.
+			return FALSE
+		if(lastmate>0)
+			return FALSE
 		var/localcount = get_local_count()
 		for(var/mob/living/simple_animal/complex/A in cache_objects_in_extended_area)
 			//you better believe we're going to enforce the communicative property.
@@ -659,10 +663,6 @@
 	if(!mate)
 		return FALSE
 	if(mate.type!=src.type)
-		return FALSE
-	if(mob_age>mob_max_age*1.5 || mob_age<mob_max_age*0.1) //too young or too old? no can do.
-		return FALSE
-	if(lastmate>0)
 		return FALSE
 	if(localcheck)
 		localcount = get_local_count()
