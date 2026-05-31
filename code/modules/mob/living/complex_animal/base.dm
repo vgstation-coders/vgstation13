@@ -656,12 +656,12 @@
 		return FALSE
 	if(lastmate>0)
 		return FALSE
-	if((src.gender==MALE && mate.gender==FEMALE) || (mate.gender==MALE && src.gender==FEMALE))
-		return TRUE
 	if(localcheck)
 		localcount = get_local_count()
 	if(localcount>max_local_population)
 		return FALSE
+	if((src.gender==MALE && mate.gender==FEMALE) || (mate.gender==MALE && src.gender==FEMALE))
+		return TRUE
 	return FALSE
 
 /mob/living/simple_animal/complex/proc/get_local_count()
