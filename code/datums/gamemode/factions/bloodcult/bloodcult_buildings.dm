@@ -330,12 +330,13 @@
 			if (istype(blade) && !blade.shade)
 				var/icon/logo_icon = icon('icons/logos.dmi', "shade-blade")
 				for(var/mob/M in observers)
-					if(!M.client || isantagbanned(M) || jobban_isbanned(M, CULTIST) || M.client.is_afk())
+					if(!M.client || isantagbanned(M) || jobban_isbanned(M, CULTIST))
 						continue
 					if (iscultist(M))
 						var/datum/role/cultist/cultist = iscultist(M)
 						if (cultist.second_chance)
 							to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
+							M << sound('sound/voice/preparetofight.ogg', volume = 75)
 		return 1
 	if (istype(I, /obj/item/weapon/grab))
 		if (blade)

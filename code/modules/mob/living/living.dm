@@ -1284,7 +1284,11 @@ Thanks.
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
 		INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
-		if (now_pushing || !loc || size <= SIZE_TINY)
+		if (now_pushing || !loc)
+			return
+		if (size <= SIZE_TINY)
+			if(istype(AM,/obj/machinery/disposal/deliveryChute)) //hotfix
+				AM.Bumped(src)
 			return
 		now_pushing = 1
 		if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them

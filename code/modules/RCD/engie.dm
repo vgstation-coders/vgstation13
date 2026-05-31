@@ -16,20 +16,20 @@
 	if(!no_schematics)
 		var/datum/rcd_scematic_grouping/destroy/dest_g = new(src)
 		dest_g.schematics+= new /datum/rcd_grouped_schematic/destroy_all(src)
-	
+
 		var/datum/rcd_scematic_grouping/build_wall/engi_std/wall_g = new(src)
 		var/datum/rcd_scematic_grouping/build_floors/engi_std/floor_g = new(src)
 		var/datum/rcd_scematic_grouping/build_windows/engi_std/window_g = new(src)
 		var/datum/rcd_scematic_grouping/build_airlock/engi_std/airlock_g=new(src)
 		var/datum/rcd_scematic_grouping/misc_objects/engi_std/misc_g=new(src)
-	
+
 		schem_groups+=dest_g
 		schem_groups+=wall_g
 		schem_groups+=floor_g
 		schem_groups+=airlock_g
 		schem_groups+=window_g
 		schem_groups+=misc_g
-	
+
 		current_menu=schem_groups[1]?.name
 		schem_groups[1]?.switch_to()
 
@@ -39,7 +39,7 @@
 		for(var/datum/rcd_scematic_grouping/schemgroup in schem_groups)
 			schemgroup.send_assets(L.client)
 			for(var/datum/rcd_grouped_schematic/sch)
-				sch.send_assets(L.client)	
+				sch.send_assets(L.client)
 
 /obj/item/device/rcd/matter/engineering/Destroy()
 	. = ..()
@@ -50,13 +50,13 @@
 		return
 
 	return ..()
-	
+
 /obj/item/device/rcd/matter/engineering/attack_self(var/mob/user)
-	rebuild_ui()	
+	rebuild_ui()
 	interface.show(user)
 	if( locate(user.client) in loaded_clients )
 		return
-		
+
 	for(var/datum/rcd_scematic_grouping/schemgroup in schem_groups)
 		schemgroup.send_assets(user.client)
 		for(var/datum/rcd_grouped_schematic/sch)
@@ -66,7 +66,7 @@
 	loaded_clients+=user.client
 
 
-/obj/item/device/rcd/matter/engineering/Topic(var/href, var/list/href_list)	
+/obj/item/device/rcd/matter/engineering/Topic(var/href, var/list/href_list)
 	if(href_list["clear_images"])
 		loaded_clients=new()
 	if(href_list["set_group"])
@@ -90,7 +90,7 @@
 					do_spark()
 					rebuild_ui()
 					break
-		return			
+		return
 	if(href_list["set_arg"])
 		if(href_list["value_togglelist"])
 			var/val =  href_list["value_isnum"]=="yes" ? text2num(href_list["value"]) : href_list["value"]
@@ -118,16 +118,16 @@
 			settings[href_list["set_arg"]] = href_list["value_isnum"]=="yes" ? text2num(href_list["value"]) : href_list["value"]
 		rebuild_ui()
 		return
-		
+
 	return
 
 /obj/item/device/rcd/matter/engineering/rebuild_ui()
 	var/dat=""
-	
+
 	dat+="Compressed Matter: [matter]/[max_matter] <span class='schem'><a href='?src=\ref[interface];clear_images=yes;'>Reload Images</a></span><hr>"
-	
+
 	//that's right, you can embed a stylesheet in the html body, and you better believe i'm going to do this instead of setting up a whole new file for like 2 rules.
-	dat+={"<style> 
+	dat+={"<style>
 	.grouplisting{
 	text-align:center;
 	font-size:100%;
@@ -136,46 +136,46 @@
 	width:64px;
 	height:64px;
 	}
-	
+
 	.grouplisting a{
 	width:100%;
 	height:100%;
 	display:block;
 	background:revert;
 	}
-	
+
 	.clickabletable td{
 		text-align:center;
 		height:100%; /*to make it so that links inhabit the whole size of the td. kinda annoying to have to do all this.*/
 	}
-	
+
 	.clickabletable a{
 		width:100%;
 		height:100%;
 		display:block;
 	}
-	
+
 	img, .clickabletable img, .grouplisting img {
 		border:none;
 		background:none;
 		image-rendering:pixelated;
 	}
-	
+
 	</style>"}
-	
+
 	dat+="<table class='grouplisting'><tr>"
 	for(var/datum/rcd_scematic_grouping/schem_group in schem_groups)
 		dat+="<td class='[schem_group.name==current_menu ? "schem_selected" : "schem" ]'><a href='?src=\ref[interface];set_group=[schem_group.name]'><img src='[schem_group.headerimage]'><br>[schem_group.name]</a></td>"
 	dat+="</tr></table><hr>"
-	
-	
+
+
 	for(var/datum/rcd_scematic_grouping/schem_group in schem_groups)
 		if(schem_group.name==current_menu)
 			var/t=schem_group.generate_html()
 			dat+=t
 			break
-			
-	
+
+
 	interface.updateLayout(dat)
 
 /obj/item/device/rcd/matter/engineering/afterattack(var/atom/A, var/mob/user)
@@ -186,14 +186,17 @@
 	if(get_dist(A, user) > 1)
 		return 1
 
-	var/c=selected_schem.build(A,user)
-	if(!c)
-		to_chat(user, "<span class='warning'>\The [src]'s error light flickers.</span>")
+	var/c = selected_schem.build(A,user)
+	if(!c || istext(c))
+		if (istext(c))
+			to_chat(user, "<span class='warning'>\The [src]'s error light flickers: [c]</span>")
+		else
+			to_chat(user, "<span class='warning'>\The [src]'s error light flickers.</span>")
 	else
 		use_energy(c, user)
 		rebuild_ui()
 	return 1
-	
+
 
 /obj/item/device/rcd/matter/engineering/suicide_act(var/mob/living/user)
 	visible_message("<span class='danger'>[user] is using the deconstruct function on \the [src] on \himself! It looks like \he's trying to commit suicide!</span>")
@@ -218,7 +221,7 @@
 	/datum/rcd_schematic/con_window/borg,
 	)
 	var/matter=0
-	
+
 	current_menu="deconstruct"
 
 /obj/item/device/rcd/borg/engineering/New()
@@ -233,7 +236,7 @@
 	schem_groups+=new /datum/rcd_scematic_grouping/build_floors/engi_std(src)
 	schem_groups+=new /datum/rcd_scematic_grouping/build_airlock/engi_std(src)
 	schem_groups+=new /datum/rcd_scematic_grouping/build_windows/engi_std(src)
-	
+
 	current_menu=schem_groups[1]?.name
 	schem_groups[1]?.switch_to()
 
@@ -244,17 +247,17 @@
 			schemgroup.send_assets(L.client)
 			for(var/datum/rcd_grouped_schematic/sch)
 				sch.send_assets(L.client)
-	
+
 /obj/item/device/rcd/borg/engineering/attack_self(var/mob/user)
 	if(!isrobot(user))
 		return
 	matter = get_energy(user)
 
-	rebuild_ui()	
+	rebuild_ui()
 	interface.show(user)
 	if( locate(user.client) in loaded_clients )
 		return
-		
+
 	for(var/datum/rcd_scematic_grouping/schemgroup in schem_groups)
 		schemgroup.send_assets(user.client)
 		for(var/datum/rcd_grouped_schematic/sch)
@@ -288,7 +291,7 @@
 					do_spark()
 					rebuild_ui()
 					break
-		return			
+		return
 	if(href_list["set_arg"])
 		if(href_list["value_togglelist"])
 			var/val =  href_list["value_isnum"]=="yes" ? text2num(href_list["value"]) : href_list["value"]
@@ -316,16 +319,16 @@
 			settings[href_list["set_arg"]] = href_list["value_isnum"]=="yes" ? text2num(href_list["value"]) : href_list["value"]
 		rebuild_ui()
 		return
-		
+
 	return
 
 /obj/item/device/rcd/borg/engineering/rebuild_ui()
 	var/dat=""
-	
+
 	dat+="Charge: [floor(matter)] <span class='schem'><a href='?src=\ref[interface];clear_images=yes;'>Reload Images</a></span><hr>"
-	
+
 	//that's right, you can embed a stylesheet in the html body, and you better believe i'm going to do this instead of setting up a whole new file for like 2 rules.
-	dat+={"<style> 
+	dat+={"<style>
 	.grouplisting{
 	text-align:center;
 	font-size:100%;
@@ -334,46 +337,46 @@
 	width:64px;
 	height:64px;
 	}
-	
+
 	.grouplisting a{
 	width:100%;
 	height:100%;
 	display:block;
 	background:revert;
 	}
-	
+
 	.clickabletable td{
 		text-align:center;
 		height:100%; /*to make it so that links inhabit the whole size of the td. kinda annoying to have to do all this.*/
 	}
-	
+
 	.clickabletable a{
 		width:100%;
 		height:100%;
 		display:block;
 	}
-	
+
 	img, .clickabletable img, .grouplisting img {
 		border:none;
 		background:none;
 		image-rendering:pixelated;
 	}
-	
+
 	</style>"}
-	
+
 	dat+="<table class='grouplisting'><tr>"
 	for(var/datum/rcd_scematic_grouping/schem_group in schem_groups)
 		dat+="<td class='[schem_group.name==current_menu ? "schem_selected" : "schem" ]'><a href='?src=\ref[interface];set_group=[schem_group.name]'><img src='[schem_group.headerimage]'><br>[schem_group.name]</a></td>"
 	dat+="</tr></table><hr>"
-	
-	
+
+
 	for(var/datum/rcd_scematic_grouping/schem_group in schem_groups)
 		if(schem_group.name==current_menu)
 			var/t=schem_group.generate_html()
 			dat+=t
 			break
-			
-	
+
+
 	interface.updateLayout(dat)
 
 /obj/item/device/rcd/borg/engineering/afterattack(var/atom/A, var/mob/user)
@@ -393,11 +396,11 @@
 		to_chat(user, "<span class='warning'>\The [src]'s error light flickers.</span>")
 	else
 		use_energy(c, user)
-		
+
 		matter = get_energy(user)
-		
+
 		rebuild_ui()
-	return 1	
+	return 1
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv
 	name = "advanced Rapid-Construction-Device (RCD)"
@@ -421,7 +424,7 @@
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/New(var/loc=null,var/no_schematics=FALSE)
 	..(loc,TRUE)
-	
+
 	if(!no_schematics)
 		var/datum/rcd_scematic_grouping/destroy/dest_g = new(src)
 		dest_g.schematics+= new /datum/rcd_grouped_schematic/destroy_all(src)
@@ -432,11 +435,11 @@
 		schem_groups+=new /datum/rcd_scematic_grouping/build_airlock/engi_std/CE(src)
 		schem_groups+=new /datum/rcd_scematic_grouping/build_windows/engi_std(src)
 		schem_groups+=new /datum/rcd_scematic_grouping/misc_objects/engi_std/CE(src)
-	
+
 		current_menu=schem_groups[1].name
 		schem_groups[1].switch_to()
 
-	
+
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/slime_act(primarytype, mob/user)
 	. = ..()
 	if(. && (slimes_accepted & primarytype))
@@ -444,20 +447,20 @@
 		if(!schematics[P.category])
 			schematics[P.category] = list()
 		schematics[P.category] += P
-		
+
 		for(var/datum/rcd_scematic_grouping/schem_group in schem_groups)
 			if(istype(schem_group,/datum/rcd_scematic_grouping/build_windows) )
 				schem_group.schematics+=new /datum/rcd_grouped_schematic/glass/plasma(src)
-				schem_group.schematics+=new /datum/rcd_grouped_schematic/glass/rplas(src)	
+				schem_group.schematics+=new /datum/rcd_grouped_schematic/glass/rplas(src)
 			if(istype(schem_group,/datum/rcd_scematic_grouping/build_airlock) )
 				schem_group.schematics+= new /datum/rcd_grouped_schematic/airlock/tabledoor/reinforced(src)
 			if(istype(schem_group,/datum/rcd_scematic_grouping/build_floors) )
 				schem_group.schematics+= new/datum/rcd_grouped_schematic/plasmaglassfloor(src)
 			if(istype(schem_group,/datum/rcd_scematic_grouping/misc_objects) )
-				schem_group.schematics+= new/datum/rcd_grouped_schematic/table/pglass(src)	
+				schem_group.schematics+= new/datum/rcd_grouped_schematic/table/pglass(src)
 		loaded_clients=list() //refresh images since we are adding more to show.
 		rebuild_ui()
-			
+
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/delay(var/mob/user, var/atom/target, var/amount)
 	return do_after(user, target, amount/2)
@@ -494,7 +497,7 @@
 
 /obj/item/device/rcd/matter/engineering/mech/use_energy(var/amount, var/mob/user)
 	return	//mech charge is used up elsewhere
-	
+
 /obj/item/device/rcd/matter/engineering/mech/get_energy(var/mob/user)
 	return INFINITY
-	
+

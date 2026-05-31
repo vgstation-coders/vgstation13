@@ -162,6 +162,7 @@ var/queued_event_expiry = 0
 	active_with_role["Janitor"] = 0
 	active_with_role["Botanist"] = 0
 	active_with_role["Minor"] = 0
+	active_with_role["Telecomms"] = 0
 	active_with_role["Any"] = 0
 
 	for(var/mob/M in player_list)
@@ -189,6 +190,8 @@ var/queued_event_expiry = 0
 
 		if((M.mind.assigned_role in engineering_positions) && M.mind.assigned_role != "Mechanic")
 			active_with_role["Engineer"]++
+			if (M.mind.assigned_role == "Chief Engineer")
+				active_with_role["Telecomms"]++
 			continue
 
 		if(M.mind.assigned_role in medical_positions)
@@ -201,6 +204,8 @@ var/queued_event_expiry = 0
 
 		if(M.mind.assigned_role in science_positions)
 			active_with_role["Scientist"]++
+			if(M.mind.assigned_role == "Mechanic" || M.mind.assigned_role == "Research Director")
+				active_with_role["Telecomms"]++
 			continue
 
 		if(M.mind.assigned_role == "AI")

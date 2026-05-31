@@ -73,8 +73,12 @@
 			if(92 to INFINITY)
 				filling.icon_state = "[icon_state]30"
 
-		filling.icon += mix_color_from_reagents(reagents.reagent_list)
-		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		var/mixed = mix_color_from_reagents(reagents.reagent_list)
+		if (mixed)
+			filling.icon += mixed
+		var/mixed_alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		if (mixed_alpha)
+			filling.alpha = mixed_alpha
 		overlays += filling
 
 	if(!is_open_container())
