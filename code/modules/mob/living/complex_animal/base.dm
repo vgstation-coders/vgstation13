@@ -624,8 +624,9 @@
 /mob/living/simple_animal/hostile/is_threat(var//mob/living/simple_animal/complex/hunter)
 	return TRUE
 
-/mob/living/simple_animal/complex/is_threat(var//mob/living/simple_animal/complex/hunter)
-	return behavior_flags & (ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_TERRITORIAL)
+// previously unreachable code below commented out for atomicity
+//mob/living/simple_animal/complex/is_threat(var//mob/living/simple_animal/complex/hunter)
+	//return behavior_flags & (ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_TERRITORIAL)
 
 /mob/living/simple_animal/complex/proc/get_aggro_msg(var/individual)
 	emote("me",MESSAGE_SEE,"stares alertly at \the [individual].")
