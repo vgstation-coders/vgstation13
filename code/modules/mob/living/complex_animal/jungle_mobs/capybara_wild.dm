@@ -60,7 +60,7 @@
 	return
 
 //no predators, so leaving this out is probably a bad idea.
-/mob/living/simple_animal/complex/capybara_wild/can_offspring(var/mob/living/simple_animal/complex/mate)
+/mob/living/simple_animal/complex/capybara_wild/can_offspring(var/mob/living/simple_animal/complex/mate,var/localcount=0,var/localcheck=FALSE)
 	return FALSE
 
 /mob/living/simple_animal/complex/capybara_wild/get_attack_msg(var/individual)

@@ -70,7 +70,7 @@
 	movespeed=4
 	sea_bear=FALSE
 
-/mob/living/simple_animal/complex/bear/spare/can_offspring(var/mob/living/simple_animal/complex/mate)
+/mob/living/simple_animal/complex/bear/spare/can_offspring(var/mob/living/simple_animal/complex/mate,var/localcount=0,var/localcheck=FALSE)
 	return FALSE
 
 /mob/living/simple_animal/complex/bear/spare/GetAccess()
@@ -90,10 +90,10 @@
 	food_per_tick=0.0015
 
 
-/mob/living/simple_animal/complex/bear/panda/can_offspring(var/mob/living/simple_animal/complex/mate)
-	.=..()
+/mob/living/simple_animal/complex/bear/panda/can_offspring(var/mob/living/simple_animal/complex/mate,var/localcount=0,var/localcheck=FALSE)
 	if(prob(75))
 		return FALSE
+	return ..()
 
 /mob/living/simple_animal/complex/bear/panda/get_butchering_products()
 	return list(/datum/butchering_product/skin/bear/panda, /datum/butchering_product/teeth/lots)
@@ -130,5 +130,5 @@
 	healthregen=0.015
 	sea_bear=FALSE
 
-/mob/living/simple_animal/complex/bear/polar/chef/can_offspring(var/mob/living/simple_animal/complex/mate)
+/mob/living/simple_animal/complex/bear/polar/chef/can_offspring(var/mob/living/simple_animal/complex/mate,var/localcount=0,var/localcheck=FALSE)
 	return FALSE

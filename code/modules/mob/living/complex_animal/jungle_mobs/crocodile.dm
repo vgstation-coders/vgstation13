@@ -18,7 +18,7 @@
 	mob_max_age = 900 // 30 minutes
 	food_per_tick = 0.0001
 	var/stuntracker=FALSE //prevents being stunlocked
-	
+
 /mob/living/simple_animal/complex/crocodile/tick_state_idle() //we like water.
 	.=..()
 	if(prob(50))
@@ -74,8 +74,8 @@
 	is_pet=TRUE
 
 /mob/living/simple_animal/complex/crocodile/schnapps/get_offspring_cost()
-	return 0 //no infinite schnapps.	
-/mob/living/simple_animal/complex/crocodile/schnapps/can_offspring()
+	return 0 //no infinite schnapps.
+/mob/living/simple_animal/complex/crocodile/schnapps/can_offspring(var/mob/living/simple_animal/complex/mate,var/localcount=0,var/localcheck=FALSE)
 	return FALSE
 
 /mob/living/simple_animal/complex/crocodile/get_butchering_products()
@@ -87,4 +87,3 @@
 		emote("me",MESSAGE_SEE,"looks more calm.")
 		abort_target()
 		return FALSE
-	
