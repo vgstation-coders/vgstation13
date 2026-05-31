@@ -135,7 +135,7 @@
 	spawn(1 MINUTES)
 		searching = 0
 		for(var/mob/M in possible_volunteers)
-			if(!M.client || jobban_isbanned(M, role_category) || M.client.is_afk())
+			if(!M.client || jobban_isbanned(M, role_category))
 				continue
 			to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>Applications for [initial(role_category.id)] are now closed.</span>[logo ? "[bicon(logo_icon)]" : ""]")
 		if(!applicants || applicants.len <= 0)
