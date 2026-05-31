@@ -1,3 +1,5 @@
+#define CANNOT_MATE (lastmate>0 || mob_age>mob_max_age*1.5 || mob_age<mob_max_age*0.1)
+
 /mob/living/simple_animal/complex
 	size=0
 	icon='icons/mob/animal.dmi'
@@ -327,9 +329,7 @@
 
 /mob/living/simple_animal/complex/proc/tick_state_mating()
 	if(!verify_target(target,16)) //ignores line of sight and has increased range to help sparse populations not die out.
-		if(mob_age>mob_max_age*1.5 || mob_age<mob_max_age*0.1) //too young or too old? no can do.
-			return FALSE
-		if(lastmate>0)
+		if(CANNOT_MATE) //too young, too old or mated too soon? no can do.
 			return FALSE
 		var/localcount = get_local_count()
 		for(var/mob/living/simple_animal/complex/A in cache_objects_in_extended_area)
@@ -665,9 +665,7 @@
 	if(mate.type!=src.type)
 		return FALSE
 	if(localcheck)
-		if(mob_age>mob_max_age*1.5 || mob_age<mob_max_age*0.1) //too young or too old? no can do.
-			return FALSE
-		if(lastmate>0)
+		if(CANNOT_MATE) //too young, too old or mated too soon? no can do.
 			return FALSE
 		localcount = get_local_count()
 	if(localcount>max_local_population)
@@ -772,3 +770,5 @@
 		behavior_state = ANIMAL_STATE_ATTACKING
 		target = src
 	return TRUE
+
+#undef CANNOT_MATE
