@@ -332,7 +332,8 @@
 			if(A.type==src.type && A.stat!=DEAD)
 				localcount++
 		for(var/mob/living/simple_animal/complex/A in cache_objects_in_extended_area)
-			if(can_offspring(A,localcount) && A.can_offspring(src,localcount) && A.behavior_state==ANIMAL_STATE_MATING && !A.target) //you better believe we're going to enforce the communicative property.
+			//you better believe we're going to enforce the communicative property.
+			if(A.behavior_state==ANIMAL_STATE_MATING && !A.target && can_offspring(A,localcount) && A.can_offspring(src,localcount))
 				visible_message("<b>\the [src]</b> looks lovingly at \the [A].")
 				target=A
 				A.visible_message("<b>\the [A]</b> looks lovingly at \the [src].")
