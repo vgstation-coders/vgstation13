@@ -1,5 +1,6 @@
 /mob/living/carbon/
 	gender = MALE
+	eaten_by_flags = ANIMAL_CARNIVORE
 	var/list/stomach_contents = list()
 
 	var/last_eating = 0 	//Not sure what this does... I found it hidden in food.dm

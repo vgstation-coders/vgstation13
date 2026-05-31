@@ -2072,6 +2072,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_state = "head_m"
 	part = LIMB_HEAD
 	w_class = W_CLASS_SMALL
+	eaten_by_flags = 0 //we don't want to round remove people
 	var/mob/living/carbon/brain/brainmob
 	var/brain_op_stage = 0
 	/// (/mob/living/carbon/human)

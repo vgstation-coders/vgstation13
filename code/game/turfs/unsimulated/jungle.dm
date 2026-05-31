@@ -51,6 +51,7 @@ var/list/foliage_replacments=list(
 	intact=0
 	pickaxe_conversion_turf = /turf/unsimulated/floor/planetary/dirt/jungle
 	pickaxe_conversion_time = 2 SECONDS
+	eaten_by_flags = ANIMAL_HERBIVORE
 
 /turf/unsimulated/floor/planetary/grass/jungle/New(var/loc)
 	..()

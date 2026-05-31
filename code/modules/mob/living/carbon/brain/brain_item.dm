@@ -15,6 +15,7 @@
 	prosthetic_icon = "brain-prosthetic"
 	organ_tag = "brain"
 	organ_type = /datum/organ/internal/brain
+	eaten_by_flags = 0  //we don't want to round remove people
 	//nonplant_seed_type = /obj/item/seeds/synthbrainseed
 
 	var/mob/living/carbon/brain/brainmob = null

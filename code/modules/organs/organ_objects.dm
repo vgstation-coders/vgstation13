@@ -1,3 +1,6 @@
+/obj/item/organ
+	eaten_by_flags = ANIMAL_CARNIVORE
+
 /obj/item/organ/internal
 	name = "organ"
 	desc = "It looks like it probably just plopped out."

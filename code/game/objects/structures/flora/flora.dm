@@ -1,6 +1,7 @@
 //trees
 /obj/structure/flora
 	name = "flora"
+	eaten_by_flags = ANIMAL_HERBIVORE
 	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
 	var/shovelaway = FALSE
 	var/pollen = null
@@ -104,6 +105,7 @@
 
 	health = 100
 	maxHealth = 100
+	eaten_by_flags = 0
 
 	var/height = 6 //How many logs are spawned
 
@@ -640,6 +642,7 @@
 	icon = 'icons/obj/flora/rocks.dmi'
 	anchored = 1
 	shovelaway = TRUE
+	eaten_by_flags = 0
 
 /obj/structure/flora/rock/New()
 	..()
@@ -671,6 +674,7 @@
 	icon_state="stage-6"
 	anchored=TRUE
 	shovelaway=TRUE
+	eaten_by_flags = ANIMAL_FRUGIVORE
 	var/hasberries=FALSE
 	var/tickssincelastgrowth=0
 
@@ -710,6 +714,9 @@
 		tickssincelastgrowth++
 	..()
 	processing_objects+=src // flora is not normally an object which calls this proc, so we have to manually re-add it every cycle.
+
+/obj/structure/flora/jungle_berries/can_be_fauna_eaten(var/mob/living/simple_animal/complex/other)
+	return hasberries
 
 //lavaland lmao
 /obj/structure/flora/firebush
