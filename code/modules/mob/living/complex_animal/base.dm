@@ -242,10 +242,10 @@
 			if(members.len)
 				var/mob/living/simple_animal/complex/M = pick(members) //pick a random member to move territory towards
 				var/traversedir = get_dir(territory,M.territory)
-				for(var/i=0,i<4,i++) //4 steps ensures that we will overshoot regularly, which adds a bit of random flavor to the pack position
+				for(var/i in 1 to 4) //4 steps ensures that we will overshoot regularly, which adds a bit of random flavor to the pack position
 					var/turf/T=get_step(M.territory,traversedir)
 					if(T)
-						territory =T
+						territory = T
 		else //just random movment
 			territory=locate(territory.x+rand(-4,4),territory.y+rand(-4,4),territory.z)
 
@@ -600,7 +600,7 @@
 	return !is_kin(trespasser)
 
 //only fired when the mob is seen by us, and we have the AVOID_PRED flag
-/mob/living/simple_animal/complex/proc/determine_isthreat(var/mob/individual)
+/mob/living/simple_animal/complex/proc/determine_isthreat(var/mob/living/individual)
 	if(!verify_target(individual))
 		return FALSE
 	if(is_pacified())
@@ -608,17 +608,24 @@
 	if(is_kin(individual))
 		return FALSE
 	if(behavior_flags & ANIMAL_BEHAVIOR_AVOID_PRED)
-		if(istype(individual,/mob/living/carbon))
-			return !(behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL)
-		if(istype(individual,/mob/living/silicon))
-			return !(behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL)
-		if(istype(individual,/mob/living/simple_animal))
-			return istype(individual,/mob/living/simple_animal/hostile)
-		if(istype(individual,/mob/living/simple_animal/complex))
-			var/mob/living/simple_animal/complex/A = individual
-			return A.behavior_flags & (ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_TERRITORIAL)
+		return individual.is_threat(src)
 	return FALSE
 
+
+/mob/living/proc/is_threat(var//mob/living/simple_animal/complex/hunter)
+	return FALSE
+
+/mob/living/carbon/is_threat(var//mob/living/simple_animal/complex/hunter)
+	return !(hunter.behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL)
+
+/mob/living/silicon/is_threat(var//mob/living/simple_animal/complex/hunter)
+	return !(hunter.behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL)
+
+/mob/living/simple_animal/hostile/is_threat(var//mob/living/simple_animal/complex/hunter)
+	return TRUE
+
+/mob/living/simple_animal/complex/is_threat(var//mob/living/simple_animal/complex/hunter)
+	return behavior_flags & (ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_TERRITORIAL)
 
 /mob/living/simple_animal/complex/proc/get_aggro_msg(var/individual)
 	emote("me",MESSAGE_SEE,"stares alertly at \the [individual].")
