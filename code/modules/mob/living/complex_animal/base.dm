@@ -454,7 +454,7 @@
 
 
 /mob/living/simple_animal/complex/proc/aggro_drawn(var/victim,var/state=ANIMAL_STATE_ATTACKING,var/skipsmg=FALSE)
-	if(!victim)
+	if(!victim || (target == victim && state == behavior_state))
 		return
 	if(!skipsmg && target!=victim && state!=behavior_state)
 		get_aggro_msg(victim)

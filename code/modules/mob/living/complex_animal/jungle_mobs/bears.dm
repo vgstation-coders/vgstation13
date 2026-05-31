@@ -79,24 +79,6 @@
 /mob/living/simple_animal/complex/bear/spare/get_butchering_products()
 	return list(/datum/butchering_product/skin/bear/spare, /datum/butchering_product/teeth/lots)
 
-/mob/living/simple_animal/complex/bear/spare/aggro_drawn(var/victim,var/state=ANIMAL_STATE_ATTACKING)
-	if(!victim)
-		return
-	target=victim
-	behavior_state=state
-	get_aggro_msg(victim)
-	if( !(behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) && !family.len)
-		return
-	if(istype(target,/mob/living))
-		var/mob/living/T=target
-		if(T.stat!=DEAD)
-			var/list/nearby_objects=range(15,src) //increased range, and ignores visibility. have fun!
-			for(var/mob/living/simple_animal/complex/M in nearby_objects)
-				if( (behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) || (M in family))
-					if(is_kin(M) && !M.is_kin(target))
-						if(M.behavior_state!=state)
-							M.aggro_drawn(victim,state)
-
 /mob/living/simple_animal/complex/bear/panda
 	name="\improper Panda Bear"
 	desc="Endangered even in space."
@@ -106,7 +88,7 @@
 	behavior_flags = ANIMAL_BEHAVIOR_RETALIATE | ANIMAL_BEHAVIOR_PACK_DYNAMICS | ANIMAL_BEHAVIOR_DESTRUCTIVE
 	movespeed=6
 	food_per_tick=0.0015
-	
+
 
 /mob/living/simple_animal/complex/bear/panda/can_offspring(var/mob/living/simple_animal/complex/mate)
 	.=..()
@@ -115,7 +97,7 @@
 
 /mob/living/simple_animal/complex/bear/panda/get_butchering_products()
 	return list(/datum/butchering_product/skin/bear/panda, /datum/butchering_product/teeth/lots)
-	
+
 /mob/living/simple_animal/complex/bear/polar
 	name="\improper Polar Bear"
 	desc="Its eyes are souless and cold."
@@ -127,7 +109,7 @@
 	melee_damage_lower=25
 	health=70
 	maxHealth=70
-	
+
 
 /mob/living/simple_animal/complex/bear/polar/get_butchering_products()
 	return list(/datum/butchering_product/skin/bear/polarbear, /datum/butchering_product/teeth/lots)
@@ -149,4 +131,4 @@
 	sea_bear=FALSE
 
 /mob/living/simple_animal/complex/bear/polar/chef/can_offspring(var/mob/living/simple_animal/complex/mate)
-	return FALSE	
+	return FALSE
