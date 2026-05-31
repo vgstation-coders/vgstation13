@@ -612,16 +612,16 @@
 	return FALSE
 
 
-/mob/living/proc/is_threat(var//mob/living/simple_animal/complex/hunter)
+/mob/living/proc/is_threat(var/mob/living/simple_animal/complex/hunter)
 	return FALSE
 
-/mob/living/carbon/is_threat(var//mob/living/simple_animal/complex/hunter)
+/mob/living/carbon/is_threat(var/mob/living/simple_animal/complex/hunter)
 	return !(hunter.behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL)
 
-/mob/living/silicon/is_threat(var//mob/living/simple_animal/complex/hunter)
+/mob/living/silicon/is_threat(var/mob/living/simple_animal/complex/hunter)
 	return !(hunter.behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL)
 
-/mob/living/simple_animal/hostile/is_threat(var//mob/living/simple_animal/complex/hunter)
+/mob/living/simple_animal/hostile/is_threat(var/mob/living/simple_animal/complex/hunter)
 	return TRUE
 
 // previously unreachable code below commented out for atomicity
