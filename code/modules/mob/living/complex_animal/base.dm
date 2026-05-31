@@ -468,9 +468,9 @@
 		var/mob/living/T=target
 		if(T.stat!=DEAD)
 			for(var/mob/living/simple_animal/complex/M in cache_objects_in_view)
-				if( (behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) || (M in family))
+				if(M.behavior_state!=state) //if the pack member is not engaged in similar activity
 					if(is_kin(M) && !M.is_kin(target)) //rally the pack to us, if the target is not kin
-						if(M.behavior_state!=state) //if the pack member is not engaged in similar activity
+						if( (behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) || (M in family))
 							M.aggro_drawn(victim,state) //do this recursively for each. don't kick the bee hive.
 
 
