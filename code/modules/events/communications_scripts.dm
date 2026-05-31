@@ -7,7 +7,7 @@
 
 
 /datum/event/communications_scripts/can_start(var/list/active_with_role)
-	if(active_with_role["Engineering"] > 1)
+	if(active_with_role["Telecomms"] > 1)
 		return 20
 	return 0
 
