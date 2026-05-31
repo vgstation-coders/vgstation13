@@ -601,9 +601,9 @@
 
 //only fired when the mob is seen by us, and we have the AVOID_PRED flag
 /mob/living/simple_animal/complex/proc/determine_isthreat(var/mob/living/individual)
-	if(!verify_target(individual))
-		return FALSE
 	if(is_pacified())
+		return FALSE
+	if(!verify_target(individual))
 		return FALSE
 	if(is_kin(individual))
 		return FALSE
