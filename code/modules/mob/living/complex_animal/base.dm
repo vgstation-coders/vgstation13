@@ -394,9 +394,9 @@
 /mob/living/simple_animal/complex/proc/is_kin(var/mob/target)
 	if(!istype(target,/mob))
 		return FALSE
-	if(target in family)
-		return TRUE
 	if(target.faction == src.faction && src.faction!="neutral")
+		return TRUE
+	if(target in family)
 		return TRUE
 	if(kin_check_type_path)
 		if(istype(target,kin_check_type_path))
