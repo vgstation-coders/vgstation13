@@ -35,38 +35,38 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 // Defines for what used to be magic numbers.
 // The code partially relies on numbers to tell what device is supposed to show up (2.x = Protolathe for example).
 // The (machine)_UPPER_LIMIT defines are used due to the aforementioned.
-#define DATABASE_UPDATE 0.0
-#define DATABASE_PROCESS 0.1
-#define CONSOLE_LOCKED 0.2
-#define PROTOLATHE_BUILD 0.3
-#define CIRCUIT_BUILD 0.4
+#define DATABASE_UPDATE 0
+#define DATABASE_PROCESS 1
+#define CONSOLE_LOCKED 2
+#define PROTOLATHE_BUILD 3
+#define CIRCUIT_BUILD 4
 
-#define CONSOLE_MENU 1.0
-#define CONSOLE_RESEARCH_MENU 1.1
-#define CONSOLE_DISK_TECH_MENU 1.2
-#define CONSOLE_DISK_TECH_DOWNLOAD_MENU 1.3
-#define CONSOLE_DISK_DESIGN_MENU 1.4
-#define CONSOLE_DISK_DESIGN_DOWNLOAD_MENU 1.5
-#define CONSOLE_SETTINGS_MENU 1.6
-#define CONSOLE_LINKAGE_MENU 1.7
+#define CONSOLE_MENU 10
+#define CONSOLE_RESEARCH_MENU 11
+#define CONSOLE_DISK_TECH_MENU 12
+#define CONSOLE_DISK_TECH_DOWNLOAD_MENU 13
+#define CONSOLE_DISK_DESIGN_MENU 14
+#define CONSOLE_DISK_DESIGN_DOWNLOAD_MENU 15
+#define CONSOLE_SETTINGS_MENU 16
+#define CONSOLE_LINKAGE_MENU 17
 
-#define DA_UNLINKED 2.0
-#define DA_NO_ITEM_LOADED 2.1
-#define DA_ITEM_LOADED 2.2
-#define DA_UPPER_LIMIT 2.9
+#define DA_UNLINKED 20
+#define DA_NO_ITEM_LOADED 21
+#define DA_ITEM_LOADED 22
+#define DA_UPPER_LIMIT 29
 
-#define PROTOLATHE_UNLINKED 3.0
-#define PROTOLATHE_MENU 3.1
-#define PROTOLATHE_RESOURCE_MENU 3.2
-#define PROTOLATHE_QUEUE_MENU 3.4
-#define PROTOLATHE_UPPER_LIMIT 3.9
+#define PROTOLATHE_UNLINKED 30
+#define PROTOLATHE_MENU 31
+#define PROTOLATHE_RESOURCE_MENU 32
+#define PROTOLATHE_QUEUE_MENU 34
+#define PROTOLATHE_UPPER_LIMIT 39
 
-#define CIRCUIT_UNLINKED 4.0
-#define CIRCUIT_MENU 4.1
-#define CIRCUIT_CHEMICAL_MENU 4.2
-#define CIRCUIT_RESOURCE_MENU 4.3
-#define CIRCUIT_QUEUE_MENU 4.4
-#define CIRCUIT_UPPER_LIMIT 4.9
+#define CIRCUIT_UNLINKED 40
+#define CIRCUIT_MENU 41
+#define CIRCUIT_CHEMICAL_MENU 42
+#define CIRCUIT_RESOURCE_MENU 43
+#define CIRCUIT_QUEUE_MENU 44
+#define CIRCUIT_UPPER_LIMIT 49
 
 /obj/machinery/computer/rdconsole
 	name = "R&D Console"
@@ -739,7 +739,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		return
 
 	user.set_machine(src)
-	var/dat = list()
+	var/dat = ""
 	files.RefreshResearch()
 	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
 		if(DA_UNLINKED to DA_UPPER_LIMIT)
@@ -969,6 +969,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						if(num_units_avail)
 							upTo = min(upTo, num_units_avail)
 						else
+							upTo = 0
 							break
 					if (upTo)
 						dat += {"<li>
@@ -1062,6 +1063,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						if(num_units_avail)
 							upTo = min(upTo, num_units_avail)
 						else
+							upTo = 0
 							break
 					if (upTo)
 						dat += {"<li><A href='?src=\ref[src];imprint=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
@@ -1149,7 +1151,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			else
 				dat += "<A href='?src=\ref[src];setImprinterStopped=1' class='redBackground'>Stop Production</A>"
 
-	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "\ref[src]", name, 575, 400)
 	popup.set_content(dat)
 	popup.open()
