@@ -341,6 +341,7 @@
 				A.target=src
 				walk_to(src,A,0,src.movespeed)
 				walk_to(A,src,0,A.movespeed)
+			CHECK_TICK //recursive mob loop insurance
 		if(!target) //if we can't find one, exit back to idle
 			abort_target()
 			return FALSE
@@ -352,7 +353,7 @@
 		if(get_dist(src,M)>1)
 			walk_to(src,M,0,movespeed)
 		else
-			if(gender=="female")
+			if(gender==FEMALE)
 				if(generate_offspring(M))
 					M.nutrition-=M.get_offspring_cost()
 					M.abort_target()
@@ -472,7 +473,7 @@
 					if(is_kin(M) && !M.is_kin(target)) //rally the pack to us, if the target is not kin
 						if( (behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) || (M in family))
 							M.aggro_drawn(victim,state) //do this recursively for each. don't kick the bee hive.
-
+				CHECK_TICK //recursive mob loop insurance
 
 /mob/living/simple_animal/complex/proc/attack(var/victim)
 	if(!verify_target(victim,1,TRUE))
@@ -679,6 +680,7 @@
 	for(var/mob/living/simple_animal/complex/A in cache_objects_in_extended_area)
 		if(A.type==src.type && A.stat!=DEAD)
 			.++
+		CHECK_TICK //recursive mob loop insurance
 
 //this proc is ran on the mother only.
 /mob/living/simple_animal/complex/proc/generate_offspring(var/mob/living/simple_animal/complex/father)
