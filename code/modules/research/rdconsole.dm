@@ -971,7 +971,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						else
 							upTo = 0
 							break
-					if (upTo)
+					if (upTo >= 1) //If we can print at least one item
 						dat += {"<li>
 							<A href='?src=\ref[src];build=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
 						if(upTo>=5)
