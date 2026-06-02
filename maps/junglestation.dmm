@@ -61473,7 +61473,7 @@
 /area/tdome)
 "wmy" = (
 /obj/machinery/atmospherics/unary/vent_pump{
-	dir = 8;
+	dir = 1;
 	on = 1
 	},
 /turf/simulated/floor/wood,
