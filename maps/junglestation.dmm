@@ -2532,6 +2532,13 @@
 /obj/item/weapon/beach_ball,
 /turf/unsimulated/floor/snow/dirt,
 /area/centcom/holding)
+"aVj" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/camera{
+	dir = 8
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "aVB" = (
 /obj/structure/closet/secure_closet/hop,
 /turf/simulated/floor{
@@ -3601,6 +3608,13 @@
 	icon_state = "floor3"
 	},
 /area/shuttle/escape/centcom)
+"bpZ" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning"
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "bqh" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -4268,6 +4282,13 @@
 	icon_state = "white"
 	},
 /area/centcom/test)
+"bAZ" = (
+/obj/structure/flora/ausbushes/ywflowers,
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "bBb" = (
 /obj/machinery/door/airlock/highsecurity{
 	name = "Secure Technical Storage";
@@ -4923,6 +4944,9 @@
 	pixel_x = -7;
 	pixel_y = 4
 	},
+/obj/machinery/light/small{
+	dir = 1
+	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
 "bNk" = (
@@ -5480,6 +5504,9 @@
 /area/storage/tech)
 "bYg" = (
 /obj/machinery/vending/cigarette,
+/obj/machinery/camera{
+	dir = 6
+	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
 "bYw" = (
@@ -6020,6 +6047,7 @@
 /area/centcom/striketeam)
 "cih" = (
 /obj/structure/flora/pottedplant,
+/obj/machinery/light/small,
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "cis" = (
@@ -8197,6 +8225,14 @@
 	icon_state = "white"
 	},
 /area/medical/chemistry)
+"cVk" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "cVp" = (
 /obj/machinery/alarm{
 	pixel_y = 24
@@ -10455,6 +10491,10 @@
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/shuttle/research/station)
+"dMJ" = (
+/obj/item/beacon,
+/turf/unsimulated/floor/planetary/dirt/jungle,
+/area/surface/jungle/zoned/bombrange)
 "dML" = (
 /obj/structure/closet/bombcloset,
 /turf/simulated/floor,
@@ -10609,6 +10649,12 @@
 /obj/structure/window/reinforced,
 /turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
+"dPQ" = (
+/obj/machinery/camera{
+	dir = 8
+	},
+/turf/unsimulated/floor/planetary/path/jungle,
+/area/surface/jungle/zoned/outdoor_bar)
 "dPZ" = (
 /obj/machinery/media/receiver/boombox/wallmount{
 	pixel_x = -28
@@ -10628,8 +10674,12 @@
 	pixel_y = -3;
 	pixel_x = -5
 	},
+/obj/machinery/light{
+	dir = 4
+	},
 /obj/machinery/recharger/defibcharger/wallcharger{
-	pixel_x = 32
+	pixel_y = -28;
+	pixel_x = 5
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -11738,6 +11788,13 @@
 	icon_state = "red"
 	},
 /area/security/prison)
+"eia" = (
+/obj/structure/flora/ausbushes/sparsegrass,
+/obj/machinery/camera{
+	dir = 1
+	},
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "eiw" = (
 /obj/machinery/light{
 	dir = 8
@@ -12370,6 +12427,17 @@
 	icon_state = "redyellowfull"
 	},
 /area/tdome/tdomeadmin)
+"erv" = (
+/obj/item/beacon,
+/turf/unsimulated/floor/planetary/path/jungle,
+/area/surface/jungle/fenced)
+"erB" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/camera{
+	dir = 5
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "esa" = (
 /obj/structure/lattice,
 /turf/space,
@@ -12398,6 +12466,18 @@
 	icon_state = "whiteyellow"
 	},
 /area/medical/chemistry)
+"esg" = (
+/obj/effect/decal/warning_stripes/siding{
+	dir = 4
+	},
+/obj/machinery/door_control{
+	id_tag = "Skynet_launch";
+	name = "Mech Bay Door Control";
+	pixel_x = 6;
+	pixel_y = 26
+	},
+/turf/unsimulated/floor/planetary/grass/jungle,
+/area/surface/jungle/fenced)
 "esr" = (
 /obj/machinery/computer/secure_data,
 /turf/simulated/floor{
@@ -13634,6 +13714,12 @@
 	dir = 4
 	},
 /area/engineering/ce)
+"eSt" = (
+/obj/effect/nmpi{
+	pixel_x = -15
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "eSx" = (
 /obj/structure/flora/ausbushes/genericbush{
 	pixel_y = 6;
@@ -14297,7 +14383,7 @@
 /area/centcom/suppy)
 "fgb" = (
 /obj/item/trash/popcorn,
-/turf/unsimulated/floor/planetary/grass/jungle,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
 "fgf" = (
 /obj/structure/table,
@@ -14622,6 +14708,15 @@
 	},
 /turf/simulated/floor,
 /area/tdome)
+"flQ" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/camera{
+	dir = 1
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "flV" = (
 /obj/effect/landmark{
 	name = "ERT"
@@ -14796,6 +14891,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
 	},
+/obj/item/beacon,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whitepurplecorner"
@@ -14854,6 +14950,9 @@
 /area/security/perma)
 "fsn" = (
 /obj/machinery/disposal/compactor,
+/obj/machinery/camera{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "neutralcorner"
@@ -15226,6 +15325,10 @@
 	icon_state = "dark vault full"
 	},
 /area/bridge/meeting_room)
+"fzf" = (
+/obj/item/beacon,
+/turf/simulated/floor,
+/area/research_outpost/entry)
 "fzq" = (
 /obj/structure/cable/orange{
 	icon_state = "4-8";
@@ -15681,6 +15784,9 @@
 /obj/machinery/alarm{
 	pixel_y = 24
 	},
+/obj/machinery/light/he{
+	dir = 8
+	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -15903,6 +16009,9 @@
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/light/small{
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -16333,6 +16442,15 @@
 "fTO" = (
 /turf/unsimulated/wall,
 /area/centcom/striketeam)
+"fTP" = (
+/obj/structure/bed/chair/folding{
+	dir = 4
+	},
+/obj/machinery/camera{
+	dir = 6
+	},
+/turf/unsimulated/floor/planetary/path/jungle,
+/area/surface/jungle/fenced)
 "fUe" = (
 /obj/item/weapon/storage/backpack/satchel,
 /obj/item/weapon/pickaxe,
@@ -16654,9 +16772,6 @@
 "fYR" = (
 /obj/structure/flora/ausbushes/sparsegrass,
 /obj/structure/flora/ausbushes/grassybush,
-/obj/machinery/camera{
-	dir = 1
-	},
 /obj/structure/hanging_lantern,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
@@ -19657,6 +19772,15 @@
 	},
 /turf/simulated/floor,
 /area/research_outpost/entry)
+"hdy" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/structure/hanging_lantern/dim{
+	dir = 1
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "hdB" = (
 /obj/structure/closet/crate/secure/loot/bay_06,
 /turf/unsimulated/floor{
@@ -21803,6 +21927,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
 	},
+/obj/item/beacon,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -22454,6 +22579,18 @@
 /obj/item/weapon/handcuffs{
 	pixel_y = -10;
 	pixel_x = -3
+	},
+/obj/structure/cable/yellow{
+	icon_state = "0-2"
+	},
+/obj/machinery/power/apc{
+	cell_type = 5000;
+	dir = 1;
+	name = "Bridge APC";
+	pixel_y = 24
+	},
+/obj/machinery/light{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -23605,6 +23742,12 @@
 	icon_state = "carpet10-8"
 	},
 /area/prison/solitary)
+"iCK" = (
+/obj/effect/decal/warning_stripes/siding{
+	dir = 8
+	},
+/turf/unsimulated/floor/planetary/grass/jungle,
+/area/surface/jungle/fenced)
 "iCY" = (
 /turf/unsimulated/floor{
 	icon_state = "grass1";
@@ -24616,6 +24759,10 @@
 /area/surface/jungle/underground)
 "iWn" = (
 /obj/machinery/vending/coffee,
+/obj/machinery/light_switch{
+	pixel_x = -25;
+	pixel_y = -4
+	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
 "iWr" = (
@@ -25270,6 +25417,10 @@
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/transport1/centcom)
+"jgy" = (
+/obj/item/trash/chips,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "jgz" = (
 /obj/structure/bed/chair/wood/normal{
 	name = "Jurry seat"
@@ -26326,6 +26477,19 @@
 	icon_state = "cafeteria"
 	},
 /area/centcom/living)
+"jDr" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/obj/machinery/door/poddoor/shutters{
+	dir = 2;
+	id_tag = "Skynet_launch";
+	name = "Mech Bay"
+	},
+/turf/simulated/floor,
+/area/science/chargebay)
 "jDv" = (
 /turf/simulated/floor,
 /area/research_outpost/maintstore1{
@@ -26583,6 +26747,15 @@
 	icon_state = "cult"
 	},
 /area/crew_quarters/heads/hos)
+"jHL" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/camera{
+	dir = 10
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "jHW" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
@@ -26942,6 +27115,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
+	},
+/obj/machinery/camera{
+	dir = 4
 	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
@@ -27372,6 +27548,9 @@
 "jVM" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
+	},
+/obj/machinery/camera{
+	dir = 10
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -29156,6 +29335,15 @@
 	icon_state = "white"
 	},
 /area/shuttle/nuclearops)
+"kFJ" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "loading_area";
+	tag = "icon-loading_area"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/science/chargebay)
 "kFQ" = (
 /obj/machinery/disease2/incubator,
 /turf/unsimulated/floor{
@@ -30488,6 +30676,9 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/machinery/light{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "darkred"
 	},
@@ -30633,6 +30824,10 @@
 /obj/structure/bed/chair{
 	dir = 4
 	},
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "neutral"
@@ -30766,6 +30961,18 @@
 /obj/machinery/vending/tool,
 /turf/simulated/floor,
 /area/surface/jungle/zoned/storage_shed)
+"loc" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning"
+	},
+/obj/machinery/door/poddoor/shutters{
+	dir = 2;
+	id_tag = "Skynet_launch";
+	name = "Mech Bay"
+	},
+/turf/simulated/floor,
+/area/science/chargebay)
 "loi" = (
 /obj/structure/window/reinforced{
 	dir = 4
@@ -32059,6 +32266,7 @@
 	},
 /obj/structure/flora/ausbushes/leafybush,
 /obj/structure/flora/ausbushes/ywflowers,
+/obj/machinery/camera,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
 "lKW" = (
@@ -33797,6 +34005,10 @@
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
 	},
+/obj/machinery/light_switch{
+	pixel_y = -26;
+	pixel_x = -3
+	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -34321,6 +34533,7 @@
 /area/shuttle/nuclearops)
 "mAa" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/item/beacon,
 /turf/simulated/floor{
 	icon_state = "yellowcorner";
 	dir = 8
@@ -34476,7 +34689,7 @@
 /area/centcom/evac)
 "mDC" = (
 /obj/structure/hanging_lantern/dim,
-/turf/unsimulated/floor/planetary/grass/jungle,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
 "mDG" = (
 /obj/structure/cable/yellow{
@@ -34715,8 +34928,8 @@
 /area/surface/jungle/vault)
 "mHH" = (
 /obj/machinery/disposal/compactor,
-/obj/machinery/alarm{
-	pixel_y = 24
+/obj/machinery/light{
+	dir = 1
 	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
@@ -35555,6 +35768,9 @@
 /obj/machinery/computer/supermatter{
 	id_tag = "Shard1"
 	},
+/obj/machinery/light{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "darkyellow";
 	tag = "icon-darkyellow (EAST)";
@@ -35845,6 +36061,13 @@
 	icon_state = "redbluefull"
 	},
 /area/tdome/tdomeobserve)
+"nen" = (
+/obj/machinery/camera{
+	name = "Captain's Cage";
+	network = list("Spess.TV")
+	},
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "neC" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -36012,6 +36235,9 @@
 	},
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
+	},
+/obj/machinery/camera{
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 10;
@@ -36994,6 +37220,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/machinery/camera,
 /turf/simulated/floor/wood,
 /area/library)
 "nBG" = (
@@ -38239,6 +38466,9 @@
 "nXB" = (
 /obj/structure/closet/jcloset,
 /obj/effect/landmark/xtra_cleanergrenades,
+/obj/machinery/camera{
+	dir = 9
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker";
@@ -40448,6 +40678,12 @@
 	icon_state = "cafeteria"
 	},
 /area/syndicate_mothership)
+"oNb" = (
+/obj/machinery/camera{
+	dir = 8
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "oNw" = (
 /obj/effect/step_trigger/teleporter/random{
 	affect_ghosts = 1;
@@ -43139,7 +43375,7 @@
 /area/djstation)
 "pPA" = (
 /obj/machinery/camera{
-	dir = 1
+	dir = 10
 	},
 /turf/unsimulated/floor/planetary/grass/jungle,
 /area/surface/jungle/fenced)
@@ -43887,6 +44123,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
+/obj/item/beacon,
 /turf/simulated/floor,
 /area/teleporter)
 "qcB" = (
@@ -45101,12 +45338,13 @@
 	pixel_y = 9
 	},
 /obj/structure/cable/yellow{
-	icon_state = "0-2"
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
-/obj/machinery/power/apc{
-	dir = 4;
-	pixel_x = 25;
-	pixel_y = 3
+/obj/machinery/light_switch{
+	pixel_x = 26;
+	pixel_y = -2
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -47603,6 +47841,9 @@
 /area/security/processing)
 "rsc" = (
 /obj/machinery/photocopier,
+/obj/machinery/light{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "neutral"
@@ -49704,6 +49945,9 @@
 /area/shuttle/arrival/station)
 "scN" = (
 /obj/machinery/computer/mecha,
+/obj/machinery/camera{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -50100,6 +50344,10 @@
 	},
 /turf/simulated/floor,
 /area/supply/storage)
+"skj" = (
+/obj/machinery/camera,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "skl" = (
 /turf/simulated/wall,
 /area/medical/medbay)
@@ -50566,6 +50814,9 @@
 /area/surface/jungle/underground/zoned/tcomms)
 "sug" = (
 /obj/item/trash/popcorn,
+/obj/machinery/camera{
+	dir = 1
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "chapel"
@@ -51701,16 +51952,10 @@
 	},
 /area/medical/sleeper)
 "sRW" = (
-/obj/machinery/door_control{
-	id_tag = "Skynet_launch";
-	name = "Mech Bay Door Control";
-	pixel_x = 6;
-	pixel_y = -26
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/science/chargebay)
+/obj/structure/flora/ausbushes/sparsegrass,
+/obj/structure/hanging_lantern/dim,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "sSf" = (
 /obj/item/weapon/stool{
 	pixel_y = 8
@@ -53822,6 +54067,12 @@
 	icon_state = "dark"
 	},
 /area/maintenance/disposal)
+"tCq" = (
+/obj/effect/nmpi{
+	pixel_x = 15
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "tCs" = (
 /obj/machinery/power/terminal{
 	dir = 4
@@ -56543,6 +56794,9 @@
 /obj/structure/hanging_lantern/dim{
 	dir = 1
 	},
+/obj/effect/decal/warning_stripes/siding{
+	dir = 8
+	},
 /turf/unsimulated/floor/planetary/grass/jungle,
 /area/surface/jungle/fenced)
 "uFM" = (
@@ -57007,6 +57261,9 @@
 	},
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
+	},
+/obj/machinery/camera{
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/teleporter)
@@ -59108,6 +59365,9 @@
 	pixel_y = 2
 	},
 /obj/structure/table,
+/obj/machinery/light/he{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -59799,6 +60059,9 @@
 /area/centcom/ert)
 "vLQ" = (
 /obj/machinery/vending/cola,
+/obj/machinery/light{
+	dir = 8
+	},
 /turf/simulated/floor{
 	icon_state = "neutral";
 	dir = 10
@@ -60867,6 +61130,9 @@
 "wgU" = (
 /obj/structure/closet/secure_closet/captains,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/machinery/light{
 	dir = 4
 	},
 /turf/simulated/floor/wood,
@@ -62532,6 +62798,9 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/machinery/camera{
+	dir = 6
+	},
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -62562,7 +62831,8 @@
 /area/science/xenobiology)
 "wOf" = (
 /mob/living/simple_animal/complex/dinosaur{
-	name = "Dynamic"
+	name = "Dynamic";
+	desc = "Despite its name, this creature does not seem very aerodynamic."
 	},
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
@@ -62916,6 +63186,7 @@
 /area/chapel/office)
 "wTs" = (
 /obj/structure/flora/ausbushes/grassybush,
+/obj/structure/hanging_lantern/dim,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
 "wTA" = (
@@ -63005,6 +63276,13 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/shuttle/nuclearops)
+"wVv" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/item/beacon,
+/turf/simulated/floor,
+/area/engineering/atmos)
 "wVy" = (
 /obj/structure/table,
 /obj/item/weapon/paper_bin/white,
@@ -63705,6 +63983,9 @@
 /area/security/detectives_office)
 "xiw" = (
 /obj/machinery/computer/bhangmeter,
+/obj/machinery/light/small{
+	dir = 8
+	},
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "darkred"
@@ -63935,6 +64216,12 @@
 	},
 /turf/simulated/floor,
 /area/engineering/engine)
+"xml" = (
+/obj/effect/decal/warning_stripes/siding{
+	dir = 4
+	},
+/turf/unsimulated/floor/planetary/grass/jungle,
+/area/surface/jungle/fenced)
 "xmr" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor{
@@ -64001,16 +64288,11 @@
 /turf/unsimulated/mineral/jungle_underground/crate_loot,
 /area/surface/jungle/underground/zoned/ghetto_research)
 "xnS" = (
-/obj/structure/bed/chair/wood/pew/right{
-	dir = 4
+/obj/machinery/alarm{
+	pixel_y = 24
 	},
-/obj/machinery/camera{
-	dir = 1
-	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet13-5"
-	},
-/area/chapel/main)
+/turf/simulated/floor/wood,
+/area/crew_quarters/captain)
 "xnX" = (
 /obj/structure/rack,
 /obj/item/tool/scalpel,
@@ -64098,6 +64380,9 @@
 /obj/machinery/r_n_d/blueprinter,
 /turf/simulated/floor,
 /area/engineering/mechanics)
+"xoA" = (
+/turf/simulated/wall,
+/area/surface/jungle/fenced)
 "xoB" = (
 /obj/machinery/suit_storage_unit/engie,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -66010,9 +66295,6 @@
 /turf/unsimulated/floor/snow/asphalt/mine,
 /area/centcom/holding)
 "xXN" = (
-/obj/machinery/camera{
-	dir = 8
-	},
 /obj/structure/hanging_lantern/dim{
 	dir = 4
 	},
@@ -66308,6 +66590,10 @@
 	dir = 4;
 	pixel_x = 29;
 	pixel_y = 3
+	},
+/obj/machinery/camera{
+	dir = 9;
+	pixel_y = -1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -121218,13 +121504,13 @@ wld
 wld
 wld
 wld
-wld
-wld
+nre
+nre
 xor
 oQK
 oQK
 xor
-mWM
+fRH
 mDC
 cIm
 sAZ
@@ -121570,14 +121856,14 @@ wld
 bIY
 wld
 wld
-wld
-wld
+nre
+nre
 xor
 oQK
 oQK
 xor
-wld
-wld
+nre
+nre
 cIm
 iXO
 kbS
@@ -121924,11 +122210,11 @@ wld
 wld
 wld
 fgb
-wld
+nre
 xor
 xor
-wld
-hZt
+nre
+jgy
 wld
 cIm
 kZc
@@ -121950,7 +122236,7 @@ tpX
 tpX
 tpX
 inf
-xor
+erv
 xor
 xor
 xor
@@ -122276,10 +122562,10 @@ wld
 wld
 wld
 wld
-wld
+nre
 xor
 xor
-wld
+nre
 wld
 buZ
 cIm
@@ -122628,10 +122914,10 @@ wld
 wld
 wld
 wld
-wld
+nre
 xor
 xor
-wld
+nre
 wld
 wld
 cIm
@@ -122980,10 +123266,10 @@ mWM
 wld
 wld
 wld
-wld
+nre
 xor
 xor
-wld
+nre
 wld
 bIY
 cIm
@@ -123332,10 +123618,10 @@ wld
 wld
 wld
 wld
-wld
+nre
 xor
 xor
-wld
+nre
 wld
 pPA
 cIm
@@ -124366,7 +124652,7 @@ snf
 snf
 snf
 snf
-snf
+oNb
 snf
 snf
 snf
@@ -124383,7 +124669,7 @@ bBI
 xXN
 mEG
 mEG
-mEG
+aVj
 mEG
 mEG
 pnb
@@ -127532,7 +127818,7 @@ idZ
 jIP
 snf
 snf
-dzM
+sRW
 mAq
 mAq
 ltH
@@ -127542,7 +127828,7 @@ trS
 jIh
 mAq
 mAq
-jis
+bAZ
 ryn
 qZX
 xMH
@@ -128236,7 +128522,7 @@ pes
 lri
 snf
 snf
-nre
+jIv
 mAq
 hCu
 ihA
@@ -128620,7 +128906,7 @@ kqL
 uuL
 hfX
 hfX
-nre
+skj
 nre
 xor
 maR
@@ -129302,7 +129588,7 @@ nxe
 mAq
 mAq
 mAq
-fPZ
+fTP
 xor
 xor
 xMH
@@ -129315,7 +129601,7 @@ edD
 edD
 edD
 edD
-edD
+dPQ
 fOS
 edD
 edD
@@ -132108,7 +132394,7 @@ fUK
 uNo
 dAf
 maR
-dzM
+eia
 dyE
 dyE
 wzd
@@ -132451,8 +132737,8 @@ ijG
 mrr
 sJg
 quU
-wld
-wld
+nre
+nre
 kPA
 wld
 wld
@@ -132460,7 +132746,7 @@ wld
 wld
 hXJ
 maR
-nre
+mDC
 dyE
 fHE
 cHT
@@ -132802,9 +133088,9 @@ jga
 ufD
 aYH
 xlQ
-wld
-wld
-wld
+nre
+nre
+nre
 wld
 wld
 wld
@@ -133154,9 +133440,9 @@ fRW
 okK
 sJg
 sJg
-wld
-wld
-wld
+nre
+nre
+nre
 nre
 nre
 nre
@@ -134197,12 +134483,12 @@ jOW
 rAD
 nRB
 saC
+nre
+nre
+nre
 wld
 wld
-wld
-wld
-wld
-wld
+rNB
 wld
 wld
 xor
@@ -134235,7 +134521,7 @@ muW
 cGy
 xMH
 psY
-maR
+flQ
 ihi
 veM
 edD
@@ -134549,9 +134835,9 @@ ijK
 btG
 wXw
 saC
-wld
-wld
-wld
+nre
+nre
+nre
 wld
 wld
 wld
@@ -134902,8 +135188,8 @@ xbe
 nRB
 saC
 quU
-wld
-wld
+nre
+nre
 wld
 wld
 wld
@@ -135276,7 +135562,7 @@ nre
 wld
 hXJ
 maR
-nre
+jIv
 mSW
 mSW
 djZ
@@ -135289,7 +135575,7 @@ mSW
 cGy
 cGy
 cGy
-xMH
+hdy
 psY
 maR
 edD
@@ -135624,7 +135910,7 @@ xor
 xor
 xor
 nre
-wld
+nre
 wld
 hXJ
 maR
@@ -136332,7 +136618,7 @@ wld
 wld
 hXJ
 maR
-jIv
+nre
 mSW
 mHH
 qtJ
@@ -136681,12 +136967,12 @@ wld
 wld
 wld
 wld
-wld
+fjR
 hXJ
 maR
 chG
 mSW
-vmo
+xnS
 vmo
 eae
 xYa
@@ -137033,7 +137319,7 @@ wld
 wld
 wld
 wld
-wld
+xoA
 hXJ
 maR
 szg
@@ -137398,7 +137684,7 @@ tyu
 yeP
 sLr
 mSW
-nre
+nen
 dXc
 bsE
 xMH
@@ -137755,7 +138041,7 @@ nre
 cQb
 xMH
 psY
-maR
+jHL
 ihi
 veM
 edD
@@ -138444,7 +138730,7 @@ wld
 wld
 hXJ
 maR
-dzM
+sRW
 mSW
 mSW
 mSW
@@ -138457,7 +138743,7 @@ sLr
 usw
 usw
 usw
-xMH
+hdy
 phQ
 pOS
 jUa
@@ -139139,13 +139425,13 @@ gru
 gSB
 utn
 bka
-sRW
+bka
 aRn
-wld
-wld
-wld
-wld
-wld
+esg
+xml
+xml
+xml
+xml
 hXJ
 maR
 nre
@@ -139491,13 +139777,13 @@ gSB
 gzZ
 mbB
 bka
-bka
-dBO
-wld
-wld
-wld
-wld
-wld
+kFJ
+jDr
+cVk
+cVk
+cVk
+cVk
+cVk
 hXJ
 maR
 nre
@@ -139845,14 +140131,14 @@ tAF
 bka
 bka
 dBO
-wld
-wld
-wld
-wld
-wld
+tCq
+tCq
+tCq
+tCq
+tCq
 hXJ
 maR
-nre
+jIv
 eAh
 qgh
 qcw
@@ -140197,11 +140483,11 @@ sSp
 bka
 bka
 dBO
-wld
-wld
-wld
-wld
-wld
+eSt
+eSt
+eSt
+eSt
+eSt
 hXJ
 maR
 nre
@@ -140547,13 +140833,13 @@ oXS
 wtY
 vuB
 bka
-bka
-dBO
-wld
-wld
-wld
-wld
-wld
+kFJ
+loc
+bpZ
+bpZ
+bpZ
+bpZ
+bpZ
 hXJ
 maR
 szg
@@ -140578,7 +140864,7 @@ wld
 hXJ
 maR
 xor
-nre
+jIv
 kqa
 maE
 ptI
@@ -140902,10 +141188,10 @@ bka
 avb
 aRn
 uFw
-wld
-wld
-wld
-wld
+iCK
+iCK
+iCK
+iCK
 hXJ
 maR
 fYR
@@ -141265,14 +141551,14 @@ rOD
 rOD
 rOD
 rOD
-rOD
+erB
 lwn
 ppa
 rOD
 rOD
 rOD
 rOD
-rOD
+erB
 ulu
 psY
 maR
@@ -143013,7 +143299,7 @@ fgj
 fgj
 fgj
 jtw
-nre
+skj
 nre
 nre
 tFZ
@@ -143037,7 +143323,7 @@ nre
 wld
 pbD
 fjR
-wld
+jaT
 cLA
 tIP
 xXD
@@ -144789,7 +145075,7 @@ pLW
 iQT
 oVB
 oiu
-xnS
+pLW
 vQV
 rOJ
 qSc
@@ -146928,7 +147214,7 @@ cPE
 aWS
 izN
 gsG
-eZo
+wVv
 gsG
 yhF
 obd
@@ -449281,7 +449567,7 @@ wEH
 wEH
 wEH
 wEH
-wEH
+dMJ
 wEH
 wEH
 wEH
@@ -470396,7 +470682,7 @@ tFd
 tFd
 tFd
 tat
-lNb
+fzf
 lNb
 lSf
 kIA
