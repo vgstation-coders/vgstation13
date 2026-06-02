@@ -3814,7 +3814,7 @@
 "bsE" = (
 /obj/structure/fence,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
-/area/surface/jungle/fenced)
+/area/crew_quarters/captain)
 "bsH" = (
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/roid)
@@ -4968,6 +4968,10 @@
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced/trader)
+"bNy" = (
+/obj/structure/flora/ausbushes/sparsegrass,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/crew_quarters/captain)
 "bNE" = (
 /turf/unsimulated/floor/snow,
 /area/centcom/evac)
@@ -7220,9 +7224,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable/yellow{
-	icon_state = "1-2"
-	},
 /turf/simulated/floor/carpet,
 /area/library)
 "cCM" = (
@@ -7517,6 +7518,9 @@
 	req_access_txt = "19"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/camera{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -7984,7 +7988,7 @@
 /obj/structure/flora/ausbushes/fullgrass,
 /obj/structure/fence,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
-/area/surface/jungle/fenced)
+/area/crew_quarters/captain)
 "cQf" = (
 /obj/structure/bed/chair{
 	dir = 4
@@ -9318,6 +9322,9 @@
 /obj/machinery/vending/cart{
 	req_access_txt = "57"
 	},
+/obj/machinery/alarm{
+	pixel_y = 22
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -9433,6 +9440,10 @@
 /obj/structure/bed/chair/comfy/lime{
 	dir = 4
 	},
+/obj/machinery/power/apc{
+	pixel_y = -26
+	},
+/obj/structure/cable/yellow,
 /turf/simulated/floor/carpet,
 /area/library)
 "dsT" = (
@@ -9901,16 +9912,11 @@
 	},
 /area/centcom/ert)
 "dAf" = (
-/obj/machinery/newscaster{
-	pixel_y = 30
+/obj/machinery/camera,
+/obj/structure/hanging_lantern/dim{
+	dir = 1
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/obj/structure/cable/yellow{
-	icon_state = "4-8"
-	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
 "dAh" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
@@ -11154,7 +11160,7 @@
 /obj/structure/flora/ausbushes/leafybush,
 /obj/structure/flora/ausbushes/fullgrass,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
-/area/surface/jungle/fenced)
+/area/crew_quarters/captain)
 "dXu" = (
 /obj/effect/step_trigger/teleporter/random{
 	affect_ghosts = 1;
@@ -11789,12 +11795,14 @@
 	},
 /area/security/prison)
 "eia" = (
-/obj/structure/flora/ausbushes/sparsegrass,
-/obj/machinery/camera{
-	dir = 1
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
 	},
-/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
-/area/surface/jungle/fenced)
+/obj/structure/cable/yellow{
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/wood,
+/area/library)
 "eiw" = (
 /obj/machinery/light{
 	dir = 8
@@ -12474,7 +12482,8 @@
 	id_tag = "Skynet_launch";
 	name = "Mech Bay Door Control";
 	pixel_x = 6;
-	pixel_y = 26
+	pixel_y = 26;
+	req_access_txt = "29"
 	},
 /turf/unsimulated/floor/planetary/grass/jungle,
 /area/surface/jungle/fenced)
@@ -12725,6 +12734,9 @@
 /area/centcom/holding)
 "exk" = (
 /obj/structure/bed/chair/comfy/couch/mid/lime,
+/obj/machinery/light{
+	dir = 1
+	},
 /turf/simulated/floor/carpet,
 /area/library)
 "ext" = (
@@ -12956,7 +12968,7 @@
 /obj/structure/table/woodentable,
 /obj/machinery/door_control{
 	id_tag = "captain";
-	name = "Bridge Blast Door Control";
+	name = "Window Shield Control";
 	pixel_x = 26;
 	req_access_txt = "20";
 	pixel_y = 3
@@ -14953,6 +14965,9 @@
 /obj/machinery/camera{
 	dir = 4
 	},
+/obj/machinery/newscaster{
+	pixel_x = -28
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "neutralcorner"
@@ -15321,6 +15336,10 @@
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
 	},
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -22
+	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -15649,6 +15668,9 @@
 	icon_state = "dark"
 	},
 /area/science/robotics)
+"fFC" = (
+/turf/unsimulated/floor/planetary/path/jungle,
+/area/crew_quarters/captain)
 "fFG" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -15781,11 +15803,11 @@
 	icon_state = "plant-22";
 	tag = "icon-plant-22"
 	},
-/obj/machinery/alarm{
-	pixel_y = 24
-	},
 /obj/machinery/light/he{
 	dir = 8
+	},
+/obj/machinery/newscaster{
+	pixel_y = 30
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -20966,8 +20988,13 @@
 /area/shuttle/escape/centcom)
 "hCu" = (
 /obj/structure/coatrack,
-/obj/machinery/alarm{
-	pixel_y = 24
+/obj/machinery/requests_console{
+	announcementConsole = 1;
+	department = "Bridge";
+	departmentType = 5;
+	name = "Bridge RC";
+	pixel_y = 23;
+	pixel_x = -8
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -21830,6 +21857,9 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/surface/jungle/mining)
+"hQU" = (
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/crew_quarters/captain)
 "hRa" = (
 /turf/simulated/floor{
 	icon_state = "carpet"
@@ -26164,6 +26194,12 @@
 /obj/structure/wc/sink/puddle,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/zoned/botanty_outside)
+"jwS" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/unsimulated/floor/planetary/path/jungle,
+/area/surface/jungle/zoned/outdoor_bar)
 "jxh" = (
 /obj/machinery/message_server,
 /turf/simulated/floor/server,
@@ -27044,6 +27080,9 @@
 /area/science/xenobiology/specimen_6)
 "jOj" = (
 /obj/machinery/pdapainter,
+/obj/structure/extinguisher_cabinet{
+	pixel_y = -30
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -29380,7 +29419,7 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
-/area/surface/jungle/fenced)
+/area/crew_quarters/captain)
 "kHf" = (
 /obj/machinery/alarm{
 	pixel_y = 23
@@ -29803,6 +29842,9 @@
 /area/research_outpost/anomaly)
 "kQt" = (
 /obj/machinery/libraryscanner,
+/obj/machinery/light/small{
+	dir = 4
+	},
 /turf/simulated/floor/carpet/shag,
 /area/library)
 "kQw" = (
@@ -29956,6 +29998,9 @@
 	on = 1
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/extinguisher_cabinet{
+	pixel_y = -30
+	},
 /turf/simulated/floor/carpet,
 /area/chapel/office)
 "kTk" = (
@@ -33400,6 +33445,12 @@
 	icon_state = "gravsnow_corner"
 	},
 /area/syndicate_mothership)
+"mfj" = (
+/obj/machinery/camera{
+	dir = 10
+	},
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "mfl" = (
 /turf/simulated/wall/r_wall,
 /area/security/armory)
@@ -33898,6 +33949,10 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/surface/jungle/vault)
+"mnH" = (
+/obj/structure/flora/tree/shitty,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/crew_quarters/captain)
 "mnL" = (
 /obj/effect/landmark/map_element/derelict_tele,
 /turf/space,
@@ -34394,6 +34449,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
 	},
+/obj/machinery/light/small,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -34469,6 +34525,9 @@
 /obj/machinery/light_switch{
 	pixel_x = -22;
 	pixel_y = -2
+	},
+/obj/machinery/newscaster{
+	pixel_y = 30
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -35622,6 +35681,9 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
+	},
 /turf/simulated/floor/wood,
 /area/library)
 "mWv" = (
@@ -36067,7 +36129,7 @@
 	network = list("Spess.TV")
 	},
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
-/area/surface/jungle/fenced)
+/area/crew_quarters/captain)
 "neC" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -37221,6 +37283,9 @@
 	dir = 4
 	},
 /obj/machinery/camera,
+/obj/machinery/newscaster{
+	pixel_y = 30
+	},
 /turf/simulated/floor/wood,
 /area/library)
 "nBG" = (
@@ -37245,6 +37310,10 @@
 	},
 /turf/simulated/floor/engine,
 /area/storage/nuke_storage)
+"nBW" = (
+/obj/machinery/light,
+/turf/simulated/floor/wood,
+/area/library)
 "nCE" = (
 /obj/machinery/power/apc{
 	dir = 1;
@@ -41567,9 +41636,6 @@
 	freq = 1400;
 	location = "Chapel"
 	},
-/obj/structure/extinguisher_cabinet{
-	pixel_x = 27
-	},
 /obj/machinery/media/jukebox/holyjuke,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -43530,7 +43596,7 @@
 /obj/structure/flora/rock/pile,
 /obj/structure/flora/ausbushes/sparsegrass,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
-/area/surface/jungle/fenced)
+/area/crew_quarters/captain)
 "pSm" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -45672,6 +45738,10 @@
 /area/engineering/break_room)
 "qBq" = (
 /obj/machinery/computer/supplycomp,
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -22
+	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -45802,6 +45872,13 @@
 	icon_state = "4-8"
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
+"qDF" = (
+/obj/structure/flora/tree/shitty,
+/obj/machinery/camera{
+	dir = 1
+	},
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
 "qDJ" = (
 /obj/machinery/door/unpowered/shuttle,
@@ -46162,6 +46239,10 @@
 	dir = 1
 	},
 /area/engineering/engine)
+"qLs" = (
+/obj/structure/flora/rock/pile,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/crew_quarters/captain)
 "qLt" = (
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
@@ -46357,6 +46438,17 @@
 	dir = 8
 	},
 /area/engineering/atmos)
+"qPL" = (
+/obj/machinery/door_control{
+	id_tag = "chapel";
+	name = "Emergency Shutters";
+	req_access_txt = "22";
+	pixel_y = -24
+	},
+/turf/simulated/floor{
+	icon_state = "chapel"
+	},
+/area/chapel/main)
 "qPP" = (
 /obj/machinery/disposal/compactor,
 /turf/simulated/floor{
@@ -48693,6 +48785,10 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/machinery/light_switch{
+	pixel_y = 24;
+	pixel_x = -15
+	},
 /turf/simulated/floor/carpet/shag,
 /area/library)
 "rES" = (
@@ -49083,6 +49179,9 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1;
 	initialize_directions = 11
+	},
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/wood,
 /area/library)
@@ -49936,7 +50035,7 @@
 /obj/structure/flora/ausbushes/sparsegrass,
 /obj/structure/fence,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
-/area/surface/jungle/fenced)
+/area/crew_quarters/captain)
 "scK" = (
 /obj/structure/shuttle/engine/propulsion/left{
 	dir = 4
@@ -52421,13 +52520,8 @@
 /obj/structure/bed/chair/comfy/couch/turn/inward/lime{
 	dir = 4
 	},
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/machinery/power/apc{
-	dir = 1;
-	pixel_y = 26
+/obj/structure/extinguisher_cabinet{
+	pixel_y = 28
 	},
 /turf/simulated/floor/carpet,
 /area/library)
@@ -54677,6 +54771,14 @@
 /obj/machinery/door/window,
 /turf/simulated/floor/engine,
 /area/centcom/test)
+"tNP" = (
+/obj/structure/extinguisher_cabinet{
+	pixel_y = 28
+	},
+/turf/simulated/floor/carpet{
+	icon_state = "carpet14-10"
+	},
+/area/chapel/main)
 "tOj" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
 /turf/simulated/floor{
@@ -54890,10 +54992,6 @@
 	name = "Reporter's Cap"
 	},
 /obj/item/clothing/head/flatcap,
-/obj/machinery/light/small{
-	dir = 8;
-	flickering = 1
-	},
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -55940,6 +56038,11 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 4
 	},
+/obj/machinery/door/poddoor/shutters{
+	icon_state = "shutter0";
+	name = "Emergency Shutters";
+	id_tag = "chapel"
+	},
 /turf/simulated/floor/plating,
 /area/chapel/main)
 "uoL" = (
@@ -56233,6 +56336,10 @@
 "usD" = (
 /obj/structure/bed/chair/comfy/lime{
 	dir = 8
+	},
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -24
 	},
 /turf/simulated/floor/carpet,
 /area/library)
@@ -56672,6 +56779,11 @@
 	},
 /obj/structure/window/reinforced/plasma{
 	dir = 4
+	},
+/obj/machinery/door/poddoor/shutters{
+	icon_state = "shutter0";
+	name = "Emergency Shutters";
+	id_tag = "chapel"
 	},
 /turf/simulated/floor/plating,
 /area/chapel/main)
@@ -57759,7 +57871,7 @@
 "uYz" = (
 /obj/structure/wc/sink/puddle,
 /turf/unsimulated/floor/planetary/path/jungle,
-/area/surface/jungle/fenced)
+/area/crew_quarters/captain)
 "uYB" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/grille/window_spawner/reinforced,
@@ -59367,6 +59479,14 @@
 /obj/structure/table,
 /obj/machinery/light/he{
 	dir = 4
+	},
+/obj/machinery/requests_console{
+	announcementConsole = 1;
+	department = "Bridge";
+	departmentType = 5;
+	name = "Bridge RC";
+	pixel_y = 25;
+	phone_name = "Heads of Staff Meeting Room"
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -62801,6 +62921,9 @@
 /obj/machinery/camera{
 	dir = 6
 	},
+/obj/machinery/newscaster{
+	pixel_y = 30
+	},
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -62835,7 +62958,7 @@
 	desc = "Despite its name, this creature does not seem very aerodynamic."
 	},
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
-/area/surface/jungle/fenced)
+/area/crew_quarters/captain)
 "wOt" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -63007,6 +63130,9 @@
 "wQz" = (
 /obj/structure/table,
 /obj/item/ashtray/glass,
+/obj/machinery/newscaster{
+	pixel_x = 28
+	},
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/zoned/cargolobby)
 "wQI" = (
@@ -63180,6 +63306,12 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/requests_console{
+	department = "Chapel";
+	departmentType = 2;
+	pixel_y = 24;
+	pixel_x = -3
+	},
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -63206,6 +63338,12 @@
 	dir = 8
 	},
 /area/engineering/engine)
+"wTD" = (
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/wood,
+/area/library)
 "wTG" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor{
@@ -65559,16 +65697,13 @@
 /turf/simulated/floor/vox,
 /area/vox_trading_post/docking)
 "xKw" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
+/obj/structure/flora/ausbushes/sparsegrass,
+/obj/structure/hanging_lantern/dim,
+/obj/machinery/camera{
+	dir = 1
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor/wood,
-/area/library)
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "xKy" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
@@ -127818,7 +127953,7 @@ idZ
 jIP
 snf
 snf
-sRW
+xKw
 mAq
 mAq
 ltH
@@ -128522,7 +128657,7 @@ pes
 lri
 snf
 snf
-jIv
+nre
 mAq
 hCu
 ihA
@@ -128906,7 +129041,7 @@ kqL
 uuL
 hfX
 hfX
-skj
+dAf
 nre
 xor
 maR
@@ -129252,7 +129387,7 @@ nBG
 edD
 edD
 edD
-edD
+jwS
 edD
 edD
 edD
@@ -130634,7 +130769,7 @@ unq
 unq
 snf
 snf
-nsW
+qDF
 mAq
 mAq
 mAq
@@ -132392,9 +132527,9 @@ ngs
 oxL
 fUK
 uNo
-dAf
+hXJ
 maR
-eia
+dzM
 dyE
 dyE
 wzd
@@ -135210,7 +135345,7 @@ nre
 wld
 hXJ
 maR
-nre
+mfj
 dyE
 vzy
 rtp
@@ -135562,7 +135697,7 @@ nre
 wld
 hXJ
 maR
-jIv
+nre
 mSW
 mSW
 djZ
@@ -135924,8 +136059,8 @@ syx
 vBW
 jOR
 aTe
-nsW
-dzM
+mnH
+bNy
 bsE
 xMH
 psY
@@ -136277,7 +136412,7 @@ wEB
 vmo
 eiZ
 kHe
-lwA
+qLs
 scA
 xMH
 psY
@@ -136628,8 +136763,8 @@ xHP
 dgc
 vmo
 wAM
-nre
-nre
+hQU
+hQU
 bsE
 xMH
 psY
@@ -137332,8 +137467,8 @@ wgU
 bhS
 eBz
 dCc
-nre
-nre
+hQU
+hQU
 bsE
 xMH
 psY
@@ -138036,8 +138171,8 @@ jPq
 bwa
 xDi
 mSW
-xor
-nre
+fFC
+hQU
 cQb
 xMH
 psY
@@ -138389,7 +138524,7 @@ qtJ
 qYv
 mSW
 uYz
-xor
+fFC
 bsE
 xMH
 psY
@@ -140129,7 +140264,7 @@ lGO
 hNl
 tAF
 bka
-bka
+kFJ
 dBO
 tCq
 tCq
@@ -140481,7 +140616,7 @@ gSB
 gqu
 sSp
 bka
-bka
+kFJ
 dBO
 eSt
 eSt
@@ -143658,7 +143793,7 @@ oqo
 upa
 tba
 cCw
-xKw
+mWu
 eSE
 sqE
 upa
@@ -144014,7 +144149,7 @@ rOm
 vhv
 sqE
 upa
-nXG
+tNP
 vwp
 suW
 uje
@@ -144714,8 +144849,8 @@ qMo
 oof
 dsq
 wmy
-mWu
-eSE
+eia
+wTD
 dsS
 upa
 nXG
@@ -145772,7 +145907,7 @@ lZv
 eSE
 uXd
 eSE
-eSE
+nBW
 upa
 kpE
 kAu
@@ -147891,7 +148026,7 @@ fJZ
 tED
 tZn
 suW
-tZn
+qPL
 vQV
 lIK
 bcJ
@@ -154917,7 +155052,7 @@ lIK
 lIK
 lIK
 lIK
-lIK
+ngi
 lIK
 lIK
 lIK
@@ -155996,7 +156131,7 @@ lIK
 lIK
 lIK
 lIK
-lIK
+xtL
 lIK
 lIK
 lIK
@@ -159146,7 +159281,7 @@ lIK
 lIK
 lIK
 lIK
-ngi
+lIK
 lIK
 lIK
 lIK
@@ -164445,7 +164580,7 @@ lIK
 lIK
 lIK
 lIK
-xtL
+lIK
 lIK
 lIK
 lIK
