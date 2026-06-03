@@ -17979,7 +17979,8 @@
 	dir = 4
 	},
 /turf/simulated/floor{
-	icon_state = "dark vault full"
+	dir = 4;
+	icon_state = "dark vault stripe"
 	},
 /area/chapel/main)
 "guA" = (
@@ -20534,7 +20535,8 @@
 	dir = 10
 	},
 /turf/simulated/floor{
-	icon_state = "dark vault full"
+	dir = 4;
+	icon_state = "dark vault stripe"
 	},
 /area/chapel/main)
 "hqV" = (
@@ -34328,7 +34330,8 @@
 	pixel_y = 2
 	},
 /turf/simulated/floor{
-	icon_state = "dark vault full"
+	dir = 4;
+	icon_state = "dark vault stripe"
 	},
 /area/chapel/main)
 "mvd" = (
@@ -37317,18 +37320,18 @@
 /turf/simulated/floor/vox,
 /area/vox_trading_post/docking)
 "nCG" = (
-/obj/machinery/door/airlock/glass{
-	name = "Chapel Office";
-	req_access_txt = "22"
-	},
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/machinery/door/airlock/glass{
+	name = "Chapel Office";
+	req_access_txt = "22"
+	},
 /turf/simulated/floor{
-	icon_state = "grimy"
+	icon_state = "dark vault full"
 	},
 /area/chapel/office)
 "nCS" = (
@@ -41605,7 +41608,8 @@
 	dir = 4
 	},
 /turf/simulated/floor{
-	icon_state = "dark vault full"
+	dir = 4;
+	icon_state = "dark vault stripe"
 	},
 /area/chapel/main)
 "pgo" = (
@@ -41915,7 +41919,8 @@
 	dir = 5
 	},
 /turf/simulated/floor{
-	icon_state = "dark vault full"
+	dir = 4;
+	icon_state = "dark vault stripe"
 	},
 /area/chapel/main)
 "pmu" = (
@@ -61833,7 +61838,8 @@
 	dir = 4
 	},
 /turf/simulated/floor{
-	icon_state = "dark vault full"
+	dir = 4;
+	icon_state = "dark vault stripe"
 	},
 /area/chapel/main)
 "wvr" = (
@@ -63103,15 +63109,15 @@
 /turf/simulated/floor,
 /area/medical/genetics)
 "wQP" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
 /obj/machinery/door/airlock/glass{
 	name = "Funeral Services";
 	normalspeed = 0
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
 /turf/simulated/floor{
-	icon_state = "dark"
+	icon_state = "dark vault full"
 	},
 /area/chapel/main)
 "wRa" = (
