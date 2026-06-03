@@ -419,11 +419,8 @@
 /area/supply/miningdock)
 "ait" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
-/obj/machinery/light_switch{
-	pixel_x = 28
-	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet13-5"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "aix" = (
@@ -1023,9 +1020,7 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
-/turf/simulated/floor{
-	icon_state = "chapel"
-	},
+/turf/simulated/floor/carpet,
 /area/chapel/main)
 "asB" = (
 /obj/machinery/power/terminal{
@@ -1402,7 +1397,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/floor/carpet,
 /area/chapel/main)
 "azy" = (
 /obj/machinery/door/airlock{
@@ -1890,14 +1885,6 @@
 	},
 /turf/simulated/floor,
 /area/supply/storage)
-"aIN" = (
-/obj/structure/bed/chair/wood/pew/right{
-	dir = 4
-	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet5-1"
-	},
-/area/chapel/main)
 "aJs" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
@@ -2679,8 +2666,9 @@
 /obj/structure/bed/chair/wood/pew/left{
 	dir = 4
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet6-2"
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "chapel"
 	},
 /area/chapel/main)
 "aYx" = (
@@ -4923,8 +4911,8 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "bNc" = (
@@ -6504,12 +6492,11 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "coD" = (
-/obj/machinery/disposal/compactor,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet13-5"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "coJ" = (
@@ -12669,7 +12656,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/floor/carpet,
 /area/chapel/main)
 "evb" = (
 /obj/structure/table/woodentable,
@@ -13120,8 +13107,8 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "eGq" = (
@@ -15968,14 +15955,15 @@
 	},
 /area/security/evidence)
 "fKE" = (
-/obj/structure/bed/chair/wood/pew/left{
-	dir = 4
-	},
 /obj/machinery/camera{
 	dir = 6
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
+/obj/structure/bed/chair/wood/pew/left{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "chapel"
 	},
 /area/chapel/main)
 "fKW" = (
@@ -17990,8 +17978,8 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet10-8"
+/turf/simulated/floor{
+	icon_state = "dark vault full"
 	},
 /area/chapel/main)
 "guA" = (
@@ -18000,7 +17988,6 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle)
 "guB" = (
-/obj/structure/table/woodentable,
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 8;
@@ -18009,9 +17996,9 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 4
 	},
+/obj/structure/table/woodentable,
 /turf/simulated/floor{
-	dir = 8;
-	icon_state = "chapel"
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "guE" = (
@@ -20546,8 +20533,8 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet3-0"
+/turf/simulated/floor{
+	icon_state = "dark vault full"
 	},
 /area/chapel/main)
 "hqV" = (
@@ -23013,7 +23000,6 @@
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "ios" = (
-/obj/structure/table/woodentable,
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
@@ -23023,9 +23009,9 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/table/woodentable,
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "chapel"
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "iot" = (
@@ -24478,10 +24464,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "chapel"
-	},
+/turf/simulated/floor/carpet,
 /area/chapel/main)
 "iQZ" = (
 /obj/structure/closet,
@@ -27727,8 +27710,8 @@
 /area/centcom/control)
 "jYL" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "jYM" = (
@@ -28509,8 +28492,8 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "kpJ" = (
@@ -29065,8 +29048,8 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/carpet{
-	icon_state = "carpet13-5"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "kAv" = (
@@ -34340,13 +34323,12 @@
 	},
 /area/crew_quarters/hop)
 "muY" = (
-/obj/structure/flora/pottedplant/random,
 /obj/machinery/light_switch{
 	pixel_x = 26;
 	pixel_y = 2
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet11-4"
+/turf/simulated/floor{
+	icon_state = "dark vault full"
 	},
 /area/chapel/main)
 "mvd" = (
@@ -38565,8 +38547,9 @@
 	},
 /area/security/interrogation)
 "nXG" = (
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "chapel"
 	},
 /area/chapel/main)
 "nXV" = (
@@ -39161,14 +39144,6 @@
 	},
 /turf/simulated/wall/r_wall,
 /area/surface/jungle/zoned/bombrange)
-"oiu" = (
-/obj/structure/bed/chair/wood/pew/left{
-	dir = 4
-	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
-	},
-/area/chapel/main)
 "oiw" = (
 /obj/item/weapon/storage/fancy/beer_box,
 /turf/unsimulated/floor/planetary/cave/jungle,
@@ -39402,10 +39377,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	dir = 4;
-	icon_state = "chapel"
-	},
+/turf/simulated/floor/carpet,
 /area/chapel/main)
 "omk" = (
 /turf/simulated/wall/r_wall,
@@ -41053,18 +41025,6 @@
 /obj/item/ammo_casing/a357,
 /turf/simulated/floor/engine,
 /area/surface/jungle/vault)
-"oVB" = (
-/obj/structure/cable/yellow{
-	icon_state = "4-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor{
-	dir = 8;
-	icon_state = "chapel"
-	},
-/area/chapel/main)
 "oWd" = (
 /turf/unsimulated/floor{
 	dir = 4;
@@ -41644,9 +41604,8 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet9-4";
-	dir = 3
+/turf/simulated/floor{
+	icon_state = "dark vault full"
 	},
 /area/chapel/main)
 "pgo" = (
@@ -41955,8 +41914,8 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet11-8"
+/turf/simulated/floor{
+	icon_state = "dark vault full"
 	},
 /area/chapel/main)
 "pmu" = (
@@ -43229,8 +43188,9 @@
 /obj/structure/bed/chair/wood/pew/right{
 	dir = 4
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet13-5"
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "chapel"
 	},
 /area/chapel/main)
 "pMk" = (
@@ -48877,8 +48837,9 @@
 /obj/machinery/light{
 	dir = 1
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "chapel"
 	},
 /area/chapel/main)
 "rGl" = (
@@ -50122,8 +50083,7 @@
 	initialize_directions = 11
 	},
 /turf/simulated/floor{
-	dir = 4;
-	icon_state = "chapel"
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "seF" = (
@@ -51206,7 +51166,7 @@
 	initialize_directions = 11
 	},
 /turf/simulated/floor{
-	icon_state = "chapel"
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "sAP" = (
@@ -51743,8 +51703,8 @@
 /area/security/main)
 "sLj" = (
 /obj/machinery/light,
-/turf/simulated/floor/carpet{
-	icon_state = "carpet13-5"
+/turf/simulated/floor{
+	icon_state = "chapel"
 	},
 /area/chapel/main)
 "sLm" = (
@@ -54775,8 +54735,9 @@
 /obj/structure/extinguisher_cabinet{
 	pixel_y = 28
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "chapel"
 	},
 /area/chapel/main)
 "tOj" = (
@@ -55657,9 +55618,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "chapel"
-	},
+/turf/simulated/floor/carpet,
 /area/chapel/main)
 "ujg" = (
 /obj/machinery/vending/hydroseeds,
@@ -59288,11 +59247,6 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/chapel/main)
-"vwp" = (
-/turf/simulated/floor/carpet{
-	icon_state = "carpet13-5"
-	},
-/area/chapel/main)
 "vwx" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on/vox{
 	dir = 8
@@ -60051,8 +60005,8 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet13-5"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/chapel/main)
 "vKe" = (
@@ -61878,8 +61832,8 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet3-0"
+/turf/simulated/floor{
+	icon_state = "dark vault full"
 	},
 /area/chapel/main)
 "wvr" = (
@@ -63156,7 +63110,9 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/chapel/main)
 "wRa" = (
 /obj/structure/piano{
@@ -143798,11 +143754,11 @@ eSE
 sqE
 upa
 aYk
-aIN
+pLW
 iQT
-oVB
+uje
 aYk
-aIN
+pLW
 vQV
 wld
 wld
@@ -144150,8 +144106,8 @@ vhv
 sqE
 upa
 tNP
-vwp
-suW
+tZn
+iQT
 uje
 nXG
 sLj
@@ -144501,11 +144457,11 @@ mWu
 eSE
 sqE
 upa
-oiu
+aYk
 pLW
 iQT
-oVB
-oiu
+uje
+aYk
 pLW
 vQV
 rOJ
@@ -144854,11 +144810,11 @@ wTD
 dsS
 upa
 nXG
-vwp
-suW
+tZn
+iQT
 uje
 nXG
-vwp
+tZn
 vQV
 hnw
 hnw
@@ -145208,8 +145164,8 @@ upa
 fKE
 pLW
 iQT
-oVB
-oiu
+uje
+aYk
 pLW
 vQV
 rOJ
@@ -145558,11 +145514,11 @@ eSE
 usD
 upa
 rGg
-vwp
+tZn
 omg
 asA
 nXG
-vwp
+tZn
 vQV
 lIK
 qSc
