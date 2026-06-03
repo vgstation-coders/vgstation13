@@ -307,6 +307,9 @@
 			return INFINITY
 		return round(reagent_total / cost)
 
+//Copypasted proc that checks for bluespace resources specifically
+/obj/machinery/r_n_d/fabricator/proc/check_mat_with_bluespace(var/datum/design/being_built, var/M)
+
 //The build_part_loop fires independently and will build stuff until the queue is over or when it is stopped.
 /obj/machinery/r_n_d/fabricator/proc/build_part_loop()
 	if(busy || stopped || being_built || stat&(NOPOWER|BROKEN|FORCEDISABLE) || queue.len == 0)

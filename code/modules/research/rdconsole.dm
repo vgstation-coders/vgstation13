@@ -963,14 +963,22 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					if(!(D.build_type & PROTOLATHE) || D.category != name_set)
 						continue
 					var/temp_dat = "[D.name] ([linked_lathe.output_part_cost(D)])"
-					var/upTo=20
+					var/upTo=20 //How many we can print
+//					//Associative list that keeps track of each resource cost.
+//					var/list/available_resources = list()
 					for(var/M in D.materials)
 						var/num_units_avail=linked_lathe.check_mat(D,M)
+//						available_resources += M
 						if(num_units_avail)
 							upTo = min(upTo, num_units_avail)
 						else
+							num_units_avail = linked_lathe.check_mats_bluespace(M)
 							upTo = 0
 							break
+					//if(!upTo) //Check if it can be printed with bluespace items instead
+					//	for(var/M in D.materials)
+					//		var/bluespace_resources = linked_lathe.check_mats_bluespace(M)
+					//		if(bluespace_resources)
 					if (upTo >= 1) //If we can print at least one item
 						dat += {"<li>
 							<A href='?src=\ref[src];build=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
@@ -983,7 +991,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						dat += "<A href='?src=\ref[src];build=[D.id];customamt=1'>Custom</A>"
 						dat += "</li>"
 					else
-						dat += "<li>[temp_dat]</li>"
+						dat += "<li><span color='bbbbbb'>[temp_dat]</span></li>"
 				dat += "</ul>"
 
 		if(PROTOLATHE_RESOURCE_MENU) //Protolathe Material Storage Sub-menu
@@ -1065,7 +1073,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						else
 							upTo = 0
 							break
-					if (upTo)
+					if (upTo >= 1)
 						dat += {"<li><A href='?src=\ref[src];imprint=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
 						if(upTo>=5)
 							dat += "<A href='?src=\ref[src];imprint=[D.id];n=5'>&times;5</A>"
