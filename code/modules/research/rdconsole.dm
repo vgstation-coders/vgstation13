@@ -1106,7 +1106,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					var/color_modifier = ""
 					var/material_cost = ""
 
-					var/upTo=20
+					var/upTo=10
 					var/count = 0
 					for(var/M in D.materials)
 						var/available_prints = linked_imprinter.material_print_amount(D, M)
