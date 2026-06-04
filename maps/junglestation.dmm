@@ -12465,6 +12465,9 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/machinery/newscaster{
+	pixel_y = 30
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "red"
@@ -43804,7 +43807,8 @@
 /obj/structure/table,
 /obj/item/weapon/storage/fancy/donut_box,
 /obj/machinery/recharger{
-	pixel_x = -29
+	pixel_x = -26;
+	pixel_y = 4
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -46274,9 +46278,6 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
-	},
-/obj/machinery/recharger{
-	pixel_y = -29
 	},
 /obj/machinery/light,
 /obj/structure/cable/yellow{
@@ -59555,9 +59556,6 @@
 /obj/item/weapon/folder/red{
 	pixel_x = -6;
 	pixel_y = 2
-	},
-/obj/machinery/recharger{
-	pixel_y = -29
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor{
