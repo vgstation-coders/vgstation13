@@ -6,6 +6,10 @@
 
 #define FAB_MAT_BASEMOD			100
 
+//Keeps track of fabricators with bluespace materials in them
+//Improved alternative over checking every single machine in the game to see if it has bluespace bins in it.
+var/global/list/bluespace_fabricators = list()
+var/datum/materials/bluespace_materials = new
 
 /obj/machinery/r_n_d/fabricator
 	desc = "A fabricator. What kind, you don't know."
@@ -63,6 +67,14 @@
 		T += M.rating - 1
 	max_material_storage = (initial(max_material_storage)+(T * 187500))
 	update_coeff()
+	if(has_bluespace_bin())
+		bluespace_fabricators |= src
+	else
+		bluespace_fabricators -= src
+
+/obj/machinery/r_n_d/fabricator/Destroy()
+	..()
+	bluespace_fabricators -= src
 
 //A separate proc for updating the machine's coefficiency ratings
 /obj/machinery/r_n_d/fabricator/update_coeff()
@@ -225,9 +237,23 @@
 				output += "[output ? " | " : null][get_resource_cost_w_coeff(part,M)] [chemical_reagents_list[M]]"
 	return output
 
+//Same as output_part_cost but only for a specific resource
+/obj/machinery/r_n_d/fabricator/proc/output_part_cost_individual(var/datum/design/part, var/specific_material)
+	var/output = ""
+	for(var/M in part.materials)
+		if(M == specific_material)
+			if(copytext(M, 1, 2) == "$")
+				if(!(research_flags & IGNORE_MATS))
+					var/datum/material/material = materials.getMaterial(M)
+					output = "[get_resource_cost_w_coeff(part,M)] [material.processed_name]"
+			else //It's a chem, not a material
+				if(!(research_flags & IGNORE_CHEMS))
+					output = "[get_resource_cost_w_coeff(part,M)] [chemical_reagents_list[M]]"
+	return output
+
 /obj/machinery/r_n_d/fabricator/proc/remove_materials(var/datum/design/part)
 	for(var/M in part.materials)
-		if(!check_mat(part, M))
+		if(!material_print_amount(part, M))
 			return 0
 
 	for(var/M in part.materials)
@@ -256,15 +282,75 @@
 	if(!has_bluespace_bin())
 		return 0
 
-	for (var/obj/machinery/r_n_d/fabricator/gibmats in machines)
-		if(gibmats.has_bluespace_bin())
-			for(var/gib in part.materials)
-				if (gibmats.check_mat(part,gib) && !check_mat(part,gib))//they have what we need && we don't need more
-					if(copytext(gib,1,2) == "$" && !(research_flags & IGNORE_MATS))
-						var/bluespaceamount = get_resource_cost_w_coeff(part, gib)
-						gibmats.materials.removeAmount(gib,bluespaceamount)
-						materials.addAmount(gib,bluespaceamount)
+	for (var/obj/machinery/r_n_d/fabricator/gibmats in bluespace_fabricators)
+		for(var/gib in part.materials)
+			if (gibmats.material_print_amount(part,gib) && !material_print_amount(part,gib))//they have what we need && we don't need more
+				if(copytext(gib,1,2) == "$" && !(research_flags & IGNORE_MATS))
+					var/bluespaceamount = get_resource_cost_w_coeff(part, gib)
+					gibmats.materials.removeAmount(gib,bluespaceamount)
+					materials.addAmount(gib,bluespaceamount)
 	return remove_materials(part)
+
+//Proc for checking whether there's enough materials
+/obj/machinery/r_n_d/fabricator/proc/enough_materials(var/datum/design/part)
+	var/resource_amount
+	for(var/M in part.materials)
+		var/is_material = copytext(M,1,2) == "$"
+		var/material_cost = get_resource_cost_w_coeff(part, M) //Don't call this proc multiple times
+		resource_amount = check_mats(M)
+		if(resource_amount >= material_cost) //Do we have enough materials?
+			continue
+		if((research_flags & IGNORE_MATS) && is_material)
+			continue
+		else if((research_flags & IGNORE_CHEMS) && !is_material)
+			continue
+		//Has access to bluespace and are there other machines?
+		if(has_bluespace_bin() && is_material) //Materials only, no chems
+			var/total_bluespace_amount //Keep track of how many resources there are
+			var/list/other_fabricators = bluespace_fabricators - src
+			for(var/obj/machinery/r_n_d/fabricator/F in other_fabricators)
+				total_bluespace_amount += F.check_mats(M)
+			if((total_bluespace_amount + resource_amount) >= material_cost) //Are there enough materials in the bluespace network to cover the cost?
+				continue
+		return 0 //Not enough materials
+	return 1
+
+//Does the actual material taking, and should be called after enough_materials()
+//A lot of redundancy with the enough_materials() proc but this prevents an odd case where some materials would be swapped between
+//fabricators due to there not being sufficient materials midway through the material transfer
+/obj/machinery/r_n_d/fabricator/proc/take_materials(var/datum/design/part)
+	var/resource_amount
+	for(var/M in part.materials)
+		var/is_material = copytext(M,1,2) == "$"
+		var/material_cost = get_resource_cost_w_coeff(part, M)
+		resource_amount = check_mats(M)
+		if((research_flags & IGNORE_MATS) && is_material)
+			continue
+		else if((research_flags & IGNORE_CHEMS) && !is_material)
+			continue
+		if(resource_amount >= material_cost)
+			if(is_material)
+				materials.removeAmount(M, material_cost)
+			else //It's a chemical
+				for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+					var/remove_amount = min(RC.reagents.get_reagent_amount(M), material_cost)
+					RC.reagents.remove_reagent(M, remove_amount)
+					material_cost -= remove_amount
+					if(material_cost <= 0)
+						break
+				update_buffer_size()
+		else if(has_bluespace_bin() && is_material) //Now extract per fabricator
+			var/list/other_fabricators = bluespace_fabricators - src
+			if(other_fabricators.len)
+				for(var/obj/machinery/r_n_d/fabricator/F in other_fabricators)
+					var/remove_amount = min(F.check_mats(M), material_cost)
+					F.materials.removeAmount(M, remove_amount)
+					material_cost -= remove_amount
+					if(material_cost <= 0)
+						break
+				if(material_cost > 0)
+					warning("Bluespace matter bins did not consume a 1:1 amount of material, please yell at a coder.")
+	return 1
 
 //Returns however much of that material we have
 /obj/machinery/r_n_d/fabricator/proc/check_mats(var/material)
@@ -282,45 +368,44 @@
 		return 0
 
 	var/amount
-	for(var/obj/machinery/r_n_d/fabricator/gibmats in machines)
-		if(gibmats.has_bluespace_bin())
-			amount += gibmats.materials.getAmount(material)
+	for(var/obj/machinery/r_n_d/fabricator/gibmats in bluespace_fabricators)
+		amount += gibmats.materials.getAmount(material)
 	return amount
 
-
-/obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M)
+//How many times a resource cost is covered
+/obj/machinery/r_n_d/fabricator/proc/material_print_amount(var/datum/design/being_built, var/M)
 	if(copytext(M,1,2) == "$")
 		if(research_flags & IGNORE_MATS)
-			return 1
+			return 100 //Arbitrary value meaning that you can print the material 100 times
 		var/cost = get_resource_cost_w_coeff(being_built, M)
 		if(cost <= 0)
-			return INFINITY
-		return round(materials.storage[M] / cost)
+			return 100
+		return floor(materials.storage[M] / cost)
 	else
 		if(research_flags & IGNORE_CHEMS)
-			return 1
+			return 100
 		var/reagent_total = 0
 		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
 			reagent_total += RC.reagents.get_reagent_amount(M)
 		var/cost = get_resource_cost_w_coeff(being_built, M)
 		if(cost <= 0)
-			return INFINITY
-		return round(reagent_total / cost)
-
-//Copypasted proc that checks for bluespace resources specifically
-/obj/machinery/r_n_d/fabricator/proc/check_mat_with_bluespace(var/datum/design/being_built, var/M)
+			return 100
+		return floor(reagent_total / cost)
 
 //The build_part_loop fires independently and will build stuff until the queue is over or when it is stopped.
 /obj/machinery/r_n_d/fabricator/proc/build_part_loop()
+	while(build_part_loop_check())
+		var/datum/design/D = queue_pop()
+		if(!build_part(D))
+			if(D)
+				queue.Add(D)
+			stop_processing_queue()
+		sleep(fabricator_cooldown)
+
+/obj/machinery/r_n_d/fabricator/proc/build_part_loop_check()
 	if(busy || stopped || being_built || stat&(NOPOWER|BROKEN|FORCEDISABLE) || queue.len == 0)
-		return
-	var/datum/design/D = queue_pop()
-	if(!build_part(D))
-		if(D)
-			queue.Add(D)
-		stop_processing_queue()
-	sleep(fabricator_cooldown)
-	build_part_loop()
+		return 0
+	return 1
 
 /obj/machinery/r_n_d/fabricator/proc/build_part(var/datum/design/part)
 	if(!part || being_built) //we're in the middle of something here!
@@ -334,10 +419,11 @@
 		visible_message("<span class='notice'>The [name] buzzes, \"Safety procedures prevent current queued item from being built.\"</span>")
 		return
 
-	if(!remove_materials(part) && !bluespace_materials(part))
+	if(!enough_materials(part))
 		stopped = 1
 		visible_message("<span class='notice'>The [name] beeps, \"Not enough materials to complete item.\"</span>")
 		return
+	take_materials(part)
 
 	being_built = new part.build_path(src)
 

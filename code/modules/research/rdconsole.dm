@@ -122,6 +122,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		"Armor" = list(),
 		"Misc" = list(),
 		)
+	var/datum/materials/bluespace_materials = new //A dummy list that keeps track of bluespace resources for printing purposes.
 
 /obj/machinery/computer/rdconsole/Destroy()
 	. = ..()
@@ -144,6 +145,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		linked_lathe.linked_console		= null
 		linked_lathe.update_icon()
 		linked_lathe					= null
+	if(bluespace_materials)
+		QDEL_NULL(bluespace_materials)
 
 /obj/machinery/computer/rdconsole/proc/Maximize()
 	for(var/ID in files.known_tech)
@@ -955,30 +958,49 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				dat += "<a href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' [(name_set in filtered["protolathe"]) ? "class='redBackground'" : ""]>[name_set]</a> "
 			dat += "<a href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]'>Filter All</a>"
 
+			var/list/design_list = files.known_designs.Copy()
+			for(var/datum/design/D in design_list)
+				if(!(D.build_type & PROTOLATHE)) //Remove incompatible designs from the list
+					design_list -= D
+
+			var/bluespace_available = FALSE // A toggle variable to avoid doing unnecessary checking of whether the list has any materials at all
+			if(linked_lathe.has_bluespace_bin())
+				for(var/obj/machinery/r_n_d/fabricator/F in bluespace_fabricators - linked_lathe) //Don't include the machine itself
+					for(var/mat_id in F.materials.storage)
+						bluespace_materials.storage[mat_id] += F.materials.getAmount(mat_id)
+			if(bluespace_materials.getVolume()) //We have materials
+				bluespace_available = TRUE //So we don't have to call getVolume() for every single design
+
 			for(var/name_set in linked_lathe.part_sets)
 				if(name_set in filtered["protolathe"])
 					continue
 				dat += "<h2>[name_set]</h2><ul>"
-				for(var/datum/design/D in files.known_designs)
-					if(!(D.build_type & PROTOLATHE) || D.category != name_set)
+				for(var/datum/design/D in design_list)
+					if(D.category != name_set)
 						continue
-					var/temp_dat = "[D.name] ([linked_lathe.output_part_cost(D)])"
+					var/temp_dat = "[D.name]"
+					var/color_modifier = ""//Determines what color the material cost indicator will have in the menu
+					var/material_cost = "" //Each material cost is split up so that it can be colored and added individually
+
 					var/upTo=20 //How many we can print
-//					//Associative list that keeps track of each resource cost.
-//					var/list/available_resources = list()
+					var/count = 0 //Tracks when to add "|" between each material cost
 					for(var/M in D.materials)
-						var/num_units_avail=linked_lathe.check_mat(D,M)
-//						available_resources += M
-						if(num_units_avail)
-							upTo = min(upTo, num_units_avail)
-						else
-							num_units_avail = linked_lathe.check_mats_bluespace(M)
-							upTo = 0
-							break
-					//if(!upTo) //Check if it can be printed with bluespace items instead
-					//	for(var/M in D.materials)
-					//		var/bluespace_resources = linked_lathe.check_mats_bluespace(M)
-					//		if(bluespace_resources)
+						var/available_prints = linked_lathe.material_print_amount(D, M)
+						if(available_prints < 1)
+							color_modifier = "#ff0000"
+							if(bluespace_available) //See if the bluespace materials can make up for the insufficiency, not compatible with chems
+								var/total_resources = bluespace_materials.getAmount(M) + linked_lathe.materials.getAmount(M)
+								available_prints = total_resources / linked_lathe.get_resource_cost_w_coeff(D, M)
+								if(available_prints >= 1)
+									color_modifier = "#00ffff"
+						material_cost += "<span style='color:[color_modifier]'>[linked_lathe.output_part_cost_individual(D, M)]</span>"
+						count++
+						if(count < D.materials.len)
+							material_cost += " | "
+						upTo = min(upTo, available_prints)
+						color_modifier = "" //Reset the color modifier for the next material cost
+					temp_dat = "[temp_dat] ([material_cost])"
+
 					if (upTo >= 1) //If we can print at least one item
 						dat += {"<li>
 							<A href='?src=\ref[src];build=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
@@ -991,8 +1013,11 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						dat += "<A href='?src=\ref[src];build=[D.id];customamt=1'>Custom</A>"
 						dat += "</li>"
 					else
-						dat += "<li><span color='bbbbbb'>[temp_dat]</span></li>"
+						dat += "<li><span style='color:#bbbbbb'>[temp_dat]</span></li>"
+					design_list -= D //It's now in the printing menu, don't parse this for other part_sets
 				dat += "</ul>"
+			for(var/mat_id in bluespace_materials.storage) //Clean up the dummy list
+				bluespace_materials.storage[mat_id] = 0
 
 		if(PROTOLATHE_RESOURCE_MENU) //Protolathe Material Storage Sub-menu
 
@@ -1057,24 +1082,53 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				dat += "<a href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' [(name_set in filtered["imprinter"]) ? "class='redBackground'" : ""]>[name_set]</a> "
 			dat += "<a href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]'>Filter All</a><BR>"
 
+			var/list/design_list = files.known_designs.Copy()
+			for(var/datum/design/D in design_list)
+				if(!(D.build_type & IMPRINTER))
+					design_list -= D
+
+			var/bluespace_available = FALSE
+			if(linked_imprinter.has_bluespace_bin())
+				for(var/obj/machinery/r_n_d/fabricator/F in bluespace_fabricators - linked_imprinter)
+					for(var/mat_id in F.materials.storage)
+						bluespace_materials.storage[mat_id] += F.materials.getAmount(mat_id)
+			if(bluespace_materials.getVolume()) //We have materials
+				bluespace_available = TRUE //So we don't have to call getVolume() for every single design
+
 			for(var/name_set in linked_imprinter.part_sets)
 				if(name_set in filtered["imprinter"])
 					continue
 				dat += "<h2>[name_set]</h2><ul>"
-				for(var/datum/design/D in files.known_designs)
-					if(!(D.build_type & IMPRINTER) || D.category != name_set)
+				for(var/datum/design/D in design_list)
+					if(D.category != name_set)
 						continue
-					var/temp_dat = "[D.name] ([linked_imprinter.output_part_cost(D)])"
-					var/upTo=10
+					var/temp_dat = "[D.name]"
+					var/color_modifier = ""
+					var/material_cost = ""
+
+					var/upTo=20
+					var/count = 0
 					for(var/M in D.materials)
-						var/num_units_avail=linked_imprinter.check_mat(D,M)
-						if(num_units_avail)
-							upTo = min(upTo, num_units_avail)
-						else
-							upTo = 0
-							break
-					if (upTo >= 1)
-						dat += {"<li><A href='?src=\ref[src];imprint=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
+						var/available_prints = linked_imprinter.material_print_amount(D, M)
+						if(available_prints < 1)
+							color_modifier = "#ff0000"
+							if(copytext(M,1,2) == "$") //Boards require chems but this feature only works with materials
+								if(bluespace_available)
+									var/total_resources = bluespace_materials.getAmount(M) + linked_imprinter.materials.getAmount(M)
+									available_prints = total_resources / linked_imprinter.get_resource_cost_w_coeff(D, M)
+									if(available_prints >= 1)
+										color_modifier = "#00ffff"
+						material_cost += "<span style='color:[color_modifier]'>[linked_imprinter.output_part_cost_individual(D, M)]</span>"
+						count++
+						if(count < D.materials.len)
+							material_cost += " | "
+						upTo = min(upTo, available_prints)
+						color_modifier = ""
+					temp_dat = "[temp_dat] ([material_cost])"
+
+					if (upTo >= 1) //If we can print at least one item
+						dat += {"<li>
+							<A href='?src=\ref[src];imprint=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
 						if(upTo>=5)
 							dat += "<A href='?src=\ref[src];imprint=[D.id];n=5'>&times;5</A>"
 						if(upTo>=10)
@@ -1082,8 +1136,11 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						dat += "<A href='?src=\ref[src];imprint=[D.id];customamt=1'>Custom</A>"
 						dat += "</li>"
 					else
-						dat += "<li>[temp_dat]</li>"
+						dat += "<li><span style='color:#bbbbbb'>[temp_dat]</span></li>"
+					design_list -= D
 				dat += "</ul>"
+			for(var/mat_id in bluespace_materials.storage) //Clean up the dummy list
+				bluespace_materials.storage[mat_id] = 0
 
 		if(CIRCUIT_CHEMICAL_MENU)
 
