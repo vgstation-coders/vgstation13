@@ -20331,9 +20331,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
 /area/research_outpost/anomaly)
-"hnw" = (
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/aifenced)
 "hnA" = (
 /obj/machinery/camera{
 	dir = 8
@@ -24778,6 +24775,9 @@
 /obj/machinery/light_switch{
 	pixel_x = -25;
 	pixel_y = -4
+	},
+/obj/machinery/alarm{
+	pixel_y = 24
 	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
@@ -41330,7 +41330,7 @@
 "pax" = (
 /obj/item/clothing/gloves/fyellow/insulted,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/aifenced)
+/area/surface/jungle/fenced)
 "paF" = (
 /obj/structure/table,
 /obj/item/tool/wrench{
@@ -49177,9 +49177,12 @@
 /turf/simulated/floor,
 /area/surface/jungle/vault)
 "rOJ" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/aifenced)
+/obj/item/trash/chips,
+/obj/structure/hanging_lantern/dim{
+	dir = 4
+	},
+/turf/unsimulated/floor/planetary/grass/jungle,
+/area/surface/jungle/fenced)
 "rPh" = (
 /turf/unsimulated/floor{
 	dir = 1;
@@ -64387,12 +64390,6 @@
 	},
 /turf/unsimulated/mineral/jungle_underground/crate_loot,
 /area/surface/jungle/underground/zoned/ghetto_research)
-"xnS" = (
-/obj/machinery/alarm{
-	pixel_y = 24
-	},
-/turf/simulated/floor/wood,
-/area/crew_quarters/captain)
 "xnX" = (
 /obj/structure/rack,
 /obj/item/tool/scalpel,
@@ -137069,7 +137066,7 @@ hXJ
 maR
 chG
 mSW
-xnS
+vmo
 vmo
 eae
 xYa
@@ -143427,8 +143424,8 @@ xXD
 hqE
 cAu
 eOY
-fjR
-hZt
+wld
+rOJ
 wld
 wld
 kiK
@@ -144470,10 +144467,10 @@ uje
 aYk
 pLW
 vQV
-rOJ
-rOJ
-rOJ
-rOJ
+vcQ
+vcQ
+vcQ
+vcQ
 dWi
 dWi
 vxH
@@ -144822,10 +144819,10 @@ uje
 nXG
 tZn
 vQV
-hnw
-hnw
+snf
+snf
 pax
-hnw
+snf
 dWi
 dWi
 euz
@@ -145174,7 +145171,7 @@ uje
 aYk
 pLW
 vQV
-rOJ
+opc
 qSc
 qSc
 qSc
