@@ -1067,7 +1067,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			screen = text2num(href_list["setScreen"])
 			if (screen == NEWSCASTER_MENU)
 				scanned_user = "Unknown";
+				hdln = "";
+				raw_hdln = "";
 				msg = "";
+				raw_msg = "";
 				c_locked=0;
 				channel_name="";
 				viewing_channel = null
