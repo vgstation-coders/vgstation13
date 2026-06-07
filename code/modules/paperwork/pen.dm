@@ -58,7 +58,7 @@
 	parent_type = /datum/speech_filter
 
 	var/style      = "font-family:Verdana, sans;"
-	var/style_sign = "font-family:'Times New Roman', monospace;text-style:italic;"
+	//var/style_sign = "font-family:'Times New Roman', monospace;text-style:italic;"
 
 /datum/writing_style/New()
 	..()
@@ -82,7 +82,7 @@
 	return
 
 
-/datum/writing_style/proc/Format(var/t, var/obj/item/weapon/pen/P, var/mob/user, var/obj/item/weapon/paper/paper)
+/datum/writing_style/proc/Format(var/t, var/obj/item/implement, var/mob/user, var/atom/movable/onto)
 	var/count = 0
 	if(expressions.len)
 		for(var/key in expressions)
@@ -91,7 +91,7 @@
 			count++
 			var/datum/speech_filter_action/SFA = expressions[key]
 			if(SFA && !SFA.broken)
-				t = SFA.Run(t,user,paper)
+				t = SFA.Run(t,user,onto)
 			if(count%100 == 0)
 				sleep(1) //too much for us.
 	t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
@@ -108,11 +108,12 @@
 	t = replacetext(t, "\[row\]", "</td><tr>")
 	t = replacetext(t, "\[cell\]", "<td>")
 
-	var/text_color
-	if(istype(P, /obj/item/weapon/pen))
+	var/text_color = "black"
+	if(istype(implement, /obj/item/weapon/pen))
+		var/obj/item/weapon/pen/P = implement
 		text_color = P.colour
-	else if(istype(P, /obj/item/toy/crayon))
-		var/obj/item/toy/crayon/C = P
+	else if(istype(implement, /obj/item/toy/crayon))
+		var/obj/item/toy/crayon/C = implement
 		text_color = C.mainColour
 
 	return "<span style=\"[style];color:[text_color]\">[t]</span>"
