@@ -464,7 +464,7 @@ var/list/seedbush_spawns = list(
 /obj/item/weapon/melee/defib_basic/proc/attempt_defib(mob/living/carbon/human/target, mob/user)
 	display_start_message(target, user)
 	if(target.mind && !target.client && target.get_heart() && target.get_organ(LIMB_HEAD) && target.has_brain() && !target.mind.suiciding && target.health+target.getOxyLoss() > config.health_threshold_dead)
-		target.ghost_reenter_alert("Someone is about to try to defibrillate your body. Return to it if you want to be resurrected!")
+		target.ghost_reenter_alert("Someone is about to try to defibrillate your body.","Return to it if you want to be resurrected!")
 	if(do_after(user,target,defib_delay))
 		if(pre_defib_check(target, user))
 			perform_defib(target, user)
@@ -513,7 +513,7 @@ var/list/seedbush_spawns = list(
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 	if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
-		target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. [target.ghost_reenter_alert("Someone has tried to defibrillate your body. Return to it if you want to be resurrected!") ? "Vital signs are too weak, please try again in five seconds" : "No brainwaves detected"].</span>")
+		target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. [target.ghost_reenter_alert("Someone has tried to defibrillate your body.","Return to it if you want to be resurrected!") ? "Vital signs are too weak, please try again in five seconds" : "No brainwaves detected"].</span>")
 		return
 	target.apply_damage(-target.getOxyLoss(),OXY)
 	target.updatehealth()

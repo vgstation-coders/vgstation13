@@ -250,7 +250,10 @@
 	<a href='?_src_=prefs;preference=stumble;task=input'><b>[get_pref(/datum/preference_setting/toggle/stumble) ? "Yes" : "No"]</b></a><br>
 
 	<b>Pulling action:</b>
-	<a href='?_src_=prefs;preference=pulltoggle;task=input'><b>[get_pref(/datum/preference_setting/toggle/pulltoggle) ? "Toggle Pulling" : "Always Pull"]</b></a><br>
+	<a href='?_src_=prefs;preference=reentercorpse;task=input'><b>[get_pref(/datum/preference_setting/toggle/pulltoggle) ? "Toggle Pulling" : "Always Pull"]</b></a><br>
+
+	<b>Revival action:</b>
+	<a href='?_src_=prefs;preference=pulltoggle;task=input'><b>[get_pref(/datum/preference_setting/toggle/reentercorpse) ? "Re-enter Corpse" : "Poll Re-enter"]</b></a><br>
 
 	<b>Solo Antag Objectives:</b>
 	<a href='?_src_=prefs;preference=antag_objectives;task=input'><b>[get_pref(/datum/preference_setting/toggle/antag_objectives) ? "Standard" : "Freeform"]</b></a><br>

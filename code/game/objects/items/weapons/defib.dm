@@ -130,7 +130,7 @@
 	user.visible_message("<span class='notice'>[user] starts setting up the [defib_tool] on [target]'s chest.</span>", \
 	"<span class='notice'>You start setting up the [defib_tool] on [target]'s chest</span>")
 	if(target.mind && !target.client && target.get_heart() && target.get_organ(LIMB_HEAD) && target.has_brain() && !target.mind.suiciding && target.health+target.getOxyLoss() > config.health_threshold_dead)
-		target.ghost_reenter_alert("Someone is about to try to defibrillate your body. Return to it if you want to be resurrected!")
+		target.ghost_reenter_alert("Someone is about to try to defibrillate your body.","Return to it if you want to be resurrected!")
 	if(do_after(user,target,defib_delay))
 		. = TRUE
 		spark(src, 5, FALSE)
@@ -169,7 +169,7 @@
 				target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 				return
 		if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
-			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. [target.ghost_reenter_alert("Someone has tried to defibrillate your body. Return to it if you want to be resurrected!") ? "Vital signs are too weak, please try again in five seconds" : "No brainwaves detected"].</span>")
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. [target.ghost_reenter_alert("Someone has tried to defibrillate your body.","Return to it if you want to be resurrected!") ? "Vital signs are too weak, please try again in five seconds" : "No brainwaves detected"].</span>")
 			return
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()

@@ -296,19 +296,24 @@
 		if(C)
 			C.update_icon()
 			C.updateUsrDialog()
-			M.ghost_reenter_alert("Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!")
+			M.ghost_reenter_alert("Your corpse has been placed into a cloning scanner.","Return to your body if you want to be cloned!")
 			break
 	return TRUE
 
-/mob/proc/ghost_reenter_alert(var/message) //!M.client = mob has ghosted out of their body
+/mob/proc/ghost_reenter_alert(var/message,var/enter_message) //!M.client = mob has ghosted out of their body
 	if(!client && mind)
 		var/mob/dead/observer/ghost = mind_can_reenter(mind)
 		if(ghost)
 			var/mob/ghostmob = ghost.get_top_transmogrification()
 			if(ghostmob)
+				var/auto_reenter = client.prefs.get_pref(/datum/preference_setting/toggle/reentercorpse)
 				ghostmob << 'sound/effects/adminhelp.ogg'
-				to_chat(ghostmob, "<span class='interface big'><span class='bold'>[message]</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>[message]\
+				[!auto_reenter ?\
+				" [enter_message] (Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)" :\
+				" You have been automatically re-entered into your corpse as per your player preferences."]</span></span>")
+				if(auto_reenter)
+					ghost.reenter_corpse()
 				return TRUE
 	return FALSE
 
@@ -380,7 +385,7 @@
 
 /obj/machinery/dna_scannernew/on_login(var/mob/M)
 	if(locate(/obj/machinery/computer/cloning) in range(src, 1))
-		M.ghost_reenter_alert("Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!")
+		M.ghost_reenter_alert("Your corpse has been placed into a cloning scanner.","Return to your body if you want to be cloned!")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.

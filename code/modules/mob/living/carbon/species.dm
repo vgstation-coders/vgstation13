@@ -886,7 +886,7 @@ var/list/has_died_as_golem = list()
 			else
 				if(!client)
 					to_chat(user, "<span class='notice'>As you press \the [A] into \the [src], it shudders briefly, but falls still.</span>")
-					ghost_reenter_alert("Someone is trying to resurrect you. Return to your body if you want to live again!")
+					ghost_reenter_alert("Someone is trying to resurrect you.","Return to your body if you want to live again!")
 				else
 					anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "reverse-dust-g", sleeptime = 15)
 					var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem

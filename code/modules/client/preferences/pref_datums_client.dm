@@ -348,6 +348,14 @@
 
 	default_setting = TRUE
 
+/datum/preference_setting/toggle/reentercorpse
+	name = "Corpse re-entry action"
+	sql_name = "reentercorpse"
+	sql_table = "client"
+	enabled = TRUE
+
+	default_setting = FALSE
+
 /datum/preference_setting/toggle/hear_instruments
 	name = "Hear instruments"
 	sql_name = "hear_instruments"

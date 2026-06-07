@@ -2261,7 +2261,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(brainmob.client)
 				mind_found = 1
 				to_chat(user, "<span class='notice'>[pick("The eyes","The jaw","The ears")] of \the [src] twitch ever so slightly.</span>")
-			else if(brainmob.ghost_reenter_alert("Someone has found your head. Return to it if you want to be resurrected!"))
+			else if(brainmob.ghost_reenter_alert("Someone has found your head.","Return to it if you want to be resurrected!"))
 				mind_found = 1 //Lights are on but no-one's home
 				to_chat(user, "<span class='notice'>\The [src] stares blankly forward. The pupils dilate but otherwise it does not react to stimuli.</span>")
 			if(!mind_found)

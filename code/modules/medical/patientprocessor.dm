@@ -15,7 +15,7 @@
 	var/output = get_step(src, output_dir)
 	var/mob/living/M = locate(/mob/living, input)
 	if(M)
-		M.ghost_reenter_alert("You've been healed by the patient processor! Return to your body to get back into the round like you deserve.")
+		M.ghost_reenter_alert("You've been healed by the patient processor!","Return to your body to get back into the round like you deserve.")
 		M.forceMove(output)
 		M.rejuvenate(animation = TRUE)
 		return
@@ -33,7 +33,7 @@
 		brainmob = brain.brainmob
 	if(!brainmob)
 		return
-	brainmob.ghost_reenter_alert("You've been healed by the patient processor! Return to your body to get back into the round like you deserve.")
+	brainmob.ghost_reenter_alert("You've been healed by the patient processor!","Return to your body to get back into the round like you deserve.")
 
 	//produce a new body
 	var/datum/dna/new_dna = brainmob.dna.Clone()

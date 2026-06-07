@@ -380,7 +380,7 @@
 					temp += " "
 					i++
 					switch(code)
-						if(ERR_NO_CLONEPOD)	
+						if(ERR_NO_CLONEPOD)
 							temp += "Clone pod [i] unlinkable."
 						if(ERR_CLONEPOD_OCCUPIED)
 							temp += "Clone pod [i] is currently occupied."
@@ -447,12 +447,12 @@
 			to_chat(subject, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
 				You cannot be cloned as your body has been husked. However, your brain may still be used. Your ghost has been displayed as active and inside your body.</span>")
 		else
-			scantemp = "Error: Unable to locate valid genetic data. Additionally, [subject.ghost_reenter_alert("Someone is trying to clone your corpse. You cannot be cloned as your body has been husked. However, your brain may still be used. To show you're still active, return to your body!") ? "subject's brain is not responding to scanning stimuli" : "mental interface failed to initialize"]."
+			scantemp = "Error: Unable to locate valid genetic data. Additionally, [subject.ghost_reenter_alert("Someone is trying to clone your corpse. You cannot be cloned as your body has been husked. However, your brain may still be used.","To show you're still active, return to your body!") ? "subject's brain is not responding to scanning stimuli" : "mental interface failed to initialize"]."
 		return
 
 	//There's nothing wrong with the corpse itself past this point
 	if(!subject.client) //There is not a player "in control" of this corpse, maybe they ghosted, maybe they logged out
-		scantemp = "Error: [subject.ghost_reenter_alert("Someone is trying to clone your corpse. Return to your body if you want to be cloned!") ? "Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds" : "Mental interface failure"]."
+		scantemp = "Error: [subject.ghost_reenter_alert("Someone is trying to clone your corpse.","Return to your body if you want to be cloned!") ? "Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds" : "Mental interface failure"]."
 		return
 
 	//Past this point, we know for sure the corpse is cloneable and has a ghost inside.

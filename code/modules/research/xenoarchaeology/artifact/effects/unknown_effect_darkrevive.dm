@@ -29,7 +29,7 @@
 		return
 
 	if(target.mind && !target.client)
-		if(target.ghost_reenter_alert("Someone is trying to revive your body. Return to it if you want to be resurrected!"))
+		if(target.ghost_reenter_alert("Someone is trying to revive your body.","Return to it if you want to be resurrected!"))
 			target.visible_message("<span class='warning'>[target] seems to shudder a bit.</span>")
 		return
 
