@@ -196,6 +196,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	addReplacement(REG_BBTAG("list"), "<ul>")
 	addReplacement(REG_BBTAG("/list"), "</ul>")
 
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+
+	addReplacement(REG_BBTAG("table"),		"<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	addReplacement(REG_BBTAG("/table"),		"</td></tr></table>")
+	addReplacement(REG_BBTAG("row"),		"</td><tr>")
+	addReplacement(REG_BBTAG("cell"),		"<td>")
+
 	..() // Order of operations
 
 /datum/writing_style/newscaster_header/New()
@@ -593,24 +600,24 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						\[i\] - \[/i\] : Makes the text <i>italic</i>.<br>
 						\[u\] - \[/u\] : Makes the text <u>underlined</u>.<br>
 						\[large\] - \[/large\] : Increases the <span style=\"font-size:25px\">size</span> of the text.<br>
-						\[table\] - \[/table\] : Creates table using \[row\] and \[cell\] tags.<br>
-						\[row\] - Creates a new table row.<br>
-						\[cell\] - Creates a new table cell.<br>
-						\[sign\] : Inserts a signature of your name in a foolproof way.<br>
 						\[stationname\] : Inserts the name of the station.<br>
-						\[logo\] : Inserts a medium-size Nanotrasen logo.<br>
-						\[field\] : Inserts an invisible field which lets you start type from there. Useful for forms.<br>
 						\[date\] : Inserts the current date in the format DAY MONTH, YEAR.<br>
 						\[time\] : Inserts the current station time.<br>
+						<br>
+						<b><center>Header exclusive commands</center></b><br>
+						<br>
+						\[tabloid\] : Makes the headline more <span style=\"font-family:Arial Black;color:white;background:black\">SENSATIONAL</span>.<br>
+						<br>
+						<b><center>Content exclusive commands</center></b><br>
+						<br>
 						\[small\] - \[/small\] : Decreases the <span style=\"font-size:15px\">size</span> of the text.<br>
 						\[tiny\] - \[/tiny\] : Sharply decreases the <span style=\"font-size:10px\">size</span> of the text.<br>
 						\[list\] - \[/list\] : A list.
 						\[*\] : A dot used for lists.<br>
 						\[hr\] : Adds a horizontal rule.<br>
-						<br>
-						<b><center>Header exclusive commands</center></b><br>
-						<br>
-						\[tabloid\] : Makes the headline more <span style=\"font-family:Arial Black;color:white;background:black\">SENSATIONAL</span>.<br>
+						\[table\] - \[/table\] : Creates table using \[row\] and \[cell\] tags.<br>
+						\[row\] - Creates a new table row.<br>
+						\[cell\] - Creates a new table cell.<br>
 						<A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_MESSAGE]'>Return</A>"}
 			else
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
