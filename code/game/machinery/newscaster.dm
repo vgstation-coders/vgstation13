@@ -167,6 +167,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/scanned_user = "Unknown" //Will contain the name of the person who currently uses the newscaster
 	var/mob/masterController = null // Mob with control over the newscaster.
 	var/hdln = ""; //Feed headline
+	var/raw_hdln = ""; //Raw feed headline
 	var/msg = ""; //Feed message
 	var/raw_msg = ""; //Raw feed message
 	var/photo = null
@@ -177,7 +178,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/hitstaken = 0 //Death at 3 hits from an item with force>=15
 	var/datum/feed_channel/viewing_channel = list()
 	var/datum/writing_style/article_style
-	var/style_type = /datum/writing_style/newscaster
+	var/datum/writing_style/header_style
+	var/article_style_type = /datum/writing_style/newscaster
+	var/header_style_type = /datum/writing_style/newscaster_header
 	var/anonymous_posting = FALSE
 	luminosity = 0
 	anchored = TRUE
@@ -195,12 +198,20 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 	..() // Order of operations
 
+/datum/writing_style/newscaster_header/New()
+	style = "font-family:'Times New Roman', sans;"
+	addReplacement(REG_BBTAG("tabloid"), "<span style=\"font-family:Arial Black;color:white;background:black\">")
+	addReplacement(REG_BBTAG("/tabloid"), "</span>")
+
+	..() // Order of operations
+
 /obj/machinery/newscaster/security_unit //Security unit
 	name = "Security Newscaster"
 	securityCaster = TRUE
 
 /obj/machinery/newscaster/New(var/loc, var/ndir, var/building = 1)
-	article_style = new style_type
+	article_style = new article_style_type
+	header_style = new header_style_type
 	buildstage = building
 	if(!buildstage) //Already placed newscasters via mapping will not be affected by this
 		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
@@ -593,9 +604,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						\[time\] : Inserts the current station time.<br>
 						\[small\] - \[/small\] : Decreases the <span style=\"font-size:15px\">size</span> of the text.<br>
 						\[tiny\] - \[/tiny\] : Sharply decreases the <span style=\"font-size:10px\">size</span> of the text.<br>
-						\[list\] - \[/list\] : A list.<br>
+						\[list\] - \[/list\] : A list.
 						\[*\] : A dot used for lists.<br>
 						\[hr\] : Adds a horizontal rule.<br>
+						<br>
+						<b><center>Header exclusive commands</center></b><br>
+						<br>
+						\[tabloid\] : Makes the headline more <span style=\"font-family:Arial Black;color:white;background:black\">SENSATIONAL</span>.<br>
 						<A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_MESSAGE]'>Return</A>"}
 			else
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
@@ -703,9 +718,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				return
 			if(isnull(hdln))
 				hdln = ""
-			hdln = stripped_input(usr, "Write your story headline", "Network Channel Handler", hdln, 64)
-			while (findtext(hdln," ") == 1)
-				hdln = copytext(hdln,2,length(hdln)+1)
+			raw_hdln = stripped_input(usr, "Write your story headline", "Network Channel Handler", raw_hdln, 64)
+			while (findtext(raw_hdln," ") == 1)
+				raw_hdln = copytext(raw_hdln,2,length(raw_hdln)+1)
+			hdln = header_style.Format(raw_hdln,null,usr,src)
 			updateUsrDialog()
 
 		else if(href_list["set_new_message"])
@@ -715,9 +731,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(isnull(msg))
 				msg = ""
 			raw_msg = stripped_message(usr, "Write your Feed story", "Network Channel Handler", raw_msg, MAX_BOOK_MESSAGE_LEN)
+			//while (findtext(raw_msg," ") == 1)
+			//	raw_msg = copytext(raw_msg,2,length(raw_msg)+1)
 			msg = article_style.Format(raw_msg,null,usr,src)
-	//		while (findtext(msg," ") == 1)
-	//			msg = copytext(msg,2,length(msg)+1)
 
 			updateUsrDialog()
 
