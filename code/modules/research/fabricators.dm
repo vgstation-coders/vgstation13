@@ -9,7 +9,6 @@
 //Keeps track of fabricators with bluespace materials in them
 //Improved alternative over checking every single machine in the game to see if it has bluespace bins in it.
 var/global/list/bluespace_fabricators = list()
-var/datum/materials/bluespace_materials = new
 
 /obj/machinery/r_n_d/fabricator
 	desc = "A fabricator. What kind, you don't know."
