@@ -2,10 +2,11 @@
 //**************************************************************
 // Map Datum -- NTEV Theseus
 //**************************************************************
-// Theseus is the reforged variant of the Odyssey hull. It is a standalone,
-// separately-votable map that reuses Odyssey's ship systems (shuttles, events,
-// fixed vaults, zLevel, emergency shuttle) but ships its own station layout
-// (theseus.dmm) and its own area labels (theseus/areas.dm).
+// Theseus is the reforged variant of the Odyssey. It supports a
+//  larger crew and has more facilities on board along with a
+//  slightly changed layout.
+// Code is reused with Odyssey which is a bit yucky and gross but
+//  none of us are paid to do this ok
 #define OUTPOST_MAX_X 110
 #define OUTPOST_MAX_Y 110
 

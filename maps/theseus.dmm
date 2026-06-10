@@ -3258,7 +3258,7 @@
 	},
 /obj/machinery/docklight{
 	id_tag = "NT Outpost";
-	name = "NTEV Odyssey Docking Light"
+	name = "NTEV Theseus Docking Light"
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
@@ -7681,7 +7681,7 @@
 "xJ" = (
 /obj/machinery/docklight{
 	id_tag = "NT Outpost";
-	name = "NTEV Odyssey Docking Light"
+	name = "NTEV Theseus Docking Light"
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
@@ -8709,7 +8709,7 @@
 /obj/structure/railing,
 /obj/machinery/docklight{
 	id_tag = "NT Outpost";
-	name = "NTEV Odyssey Docking Light"
+	name = "NTEV Theseus Docking Light"
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
@@ -9592,7 +9592,7 @@
 	},
 /obj/machinery/docklight{
 	id_tag = "NT Outpost";
-	name = "NTEV Odyssey Docking Light"
+	name = "NTEV Theseus Docking Light"
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)
@@ -11792,8 +11792,8 @@
 /area/odyssey/store)
 "KA" = (
 /obj/machinery/docklight{
-	id_tag = "NTEV Odyssey Crew Transfer Shuttle Landing Zone";
-	name = "NTEV Odyssey Transfer Shuttle Docking Light"
+	id_tag = "NTEV Theseus Crew Transfer Shuttle Landing Zone";
+	name = "NTEV Theseus Transfer Shuttle Docking Light"
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/surface/nt_outpost)

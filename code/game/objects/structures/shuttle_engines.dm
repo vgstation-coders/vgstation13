@@ -278,11 +278,16 @@ var/list/large_engines = list()
 // -- NTEV ODYSSEY --
 
 /obj/structure/shuttle/engine/propulsion/odyssey
-	name = "odyssey propulsion engine"
 	icon_state = "propulsion"
 	opacity = 0 // Doesn't block line of sight
 	var/hyperspace_firing = FALSE
 	var/hyperspace_fire_delay = 5 SECONDS
+
+// Name follows the active map variant (NTEV Odyssey / NTEV Theseus); set at runtime
+// because map.nameLong is not a constant expression usable in a type initializer.
+/obj/structure/shuttle/engine/propulsion/odyssey/New()
+	..()
+	name = "[map.nameLong] propulsion engine"
 
 /obj/structure/shuttle/engine/propulsion/odyssey/proc/start_hyperspace_firing()
 	if(hyperspace_firing || destroyed)
