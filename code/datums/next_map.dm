@@ -188,6 +188,11 @@
 	path = "odyssey"
 	max_players = 10
 
+/datum/next_map/theseus
+	name = "NTEV Theseus"
+	path = "theseus"
+	max_players = 20
+
 /proc/get_votable_maps()
 	var/list/votable_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))

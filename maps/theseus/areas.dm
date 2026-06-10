@@ -1,5 +1,5 @@
 /area/shuttle/odyssey
-	name = "\improper NTEV Odyssey"
+	name = "\improper NTEV Theseus"
 	icon_state = "shuttle"
 	requires_power = 1
 	base_turf_type = /turf/space // Fallback only; get_base_turf_type() resolves per-vLevel.
@@ -113,10 +113,18 @@
 	name = "\improper Vacant Office"
 	icon_state = "construction"
 
-/area/shuttle/odyssey/security
-	name = "\improper Security Office"
-	icon_state = "security"
+/area/shuttle/odyssey/crew_quarters/heads/ce
+	name = "\improper Chief Engineer's Office"
+	icon_state = "head_quarters"
 
+/area/shuttle/odyssey/science/lab
+	name = "\improper Research and Development"
+	icon_state = "toxlab"
+
+/area/shuttle/odyssey/infirmary/chemistry
+	name = "\improper Chemistry"
+	icon_state = "chem"
+	
 /area/shuttle/odyssey/security/holding_cell
 	name = "\improper Holding Cell"
 	icon_state = "sec_prison"
@@ -132,7 +140,7 @@
 	requires_power = 0
 
 /area/odyssey
-	name = "\improper Odyssey"
+	name = "\improper Theseus"
 	icon_state = "odyssey"
 	requires_power = 0
 
@@ -157,6 +165,6 @@
 	icon_state = "mining_production"
 
 /area/shuttle/odyssey_transfer
-	name = "\improper NTEV Odyssey Crew Transfer Shuttle"
+	name = "\improper NTEV Theseus Crew Transfer Shuttle"
 	icon_state = "shuttle"
 	requires_power = 0

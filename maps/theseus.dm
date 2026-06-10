@@ -1,7 +1,11 @@
 #ifndef MAP_OVERRIDE
 //**************************************************************
-// Map Datum -- NTEV Odyssey
+// Map Datum -- NTEV Theseus
 //**************************************************************
+// Theseus is the reforged variant of the Odyssey hull. It is a standalone,
+// separately-votable map that reuses Odyssey's ship systems (shuttles, events,
+// fixed vaults, zLevel, emergency shuttle) but ships its own station layout
+// (theseus.dmm) and its own area labels (theseus/areas.dm).
 #define OUTPOST_MAX_X 110
 #define OUTPOST_MAX_Y 110
 
@@ -9,12 +13,12 @@
 	config.skip_fixedvault_generation = TRUE //this are overwritten by the map, so we need to skip them here to avoid generating vaults on top of the map's fixed vaults
 	config.skip_vault_generation = TRUE //this too lol
 	map.skip_hobo_shack = TRUE //no hobo shack on the outpost, sorry hobos
-	config.skip_holominimap_generation = TRUE //no holomaps on the odyssey
+	config.skip_holominimap_generation = TRUE //no holomaps on the theseus
 
 /datum/map/active
-	nameShort = "odyssey"
-	nameLong = "NTEV Odyssey"
-	map_dir = "odyssey"
+	nameShort = "theseus"
+	nameLong = "NTEV Theseus"
+	map_dir = "theseus"
 	zLevels = list(/datum/zLevel/dynamic/odyssey) //YEEHAW VLEVEL TIME
 	load_map_elements = list(
 		/datum/map_element/fixedvault/centcomm,
@@ -28,23 +32,7 @@
 	)
 	enabled_jobs = list(/datum/job/trader)
 	disabled_jobs = list(
-		/datum/job/ai,
-		/datum/job/chaplain,
-		/datum/job/chemist,
-		/datum/job/cmo,
-		/datum/job/detective,
-		/datum/job/geneticist,
-		/datum/job/hos,
-		/datum/job/hydro,
-		/datum/job/librarian,
 		/datum/job/mommi,
-		/datum/job/orderly,
-		/datum/job/paramedic,
-		/datum/job/rd,
-		/datum/job/roboticist,
-		/datum/job/scientist,
-		/datum/job/xenoarchaeologist,
-		/datum/job/xenobiologist,
 		)
 
 	center_x = 150
@@ -139,7 +127,7 @@
 	return 1
 
 /datum/zLevel/dynamic/odyssey
-	name = "odyssey"
+	name = "theseus"
 
 /datum/zLevel/dynamic/odyssey/post_mapload()
 	var/datum/virtual_z/new_vz = new(src, OUTPOST_MAX_X, OUTPOST_MAX_Y, 1, 1, skip_turf_setup = FALSE)
@@ -204,17 +192,17 @@
 	force_report = 1
 
 /datum/command_alert/emergency_shuttle_left/announce()
-	message = "The Bluespace Jump has begun. Estimate [round(emergency_shuttle.timeleft()/60,1)] minutes until the NTEV Odyssey docks at Central Command."
+	message = "The Bluespace Jump has begun. Estimate [round(emergency_shuttle.timeleft()/60,1)] minutes until the NTEV Theseus docks at Central Command."
 	command_alert(message, alert_title, force_report, alert, noalert, small)
 
 ////////////////////////////////////////////////////////////////
 #undef OUTPOST_MAX_X
 #undef OUTPOST_MAX_Y
 
-#include "odyssey/areas.dm"
+#include "theseus/areas.dm"
 #include "odyssey/fixedvaults.dm"
 #include "odyssey/shuttles.dm"
 #include "odyssey/events.dm"
 #include "odyssey/jobs.dm"
-#include "odyssey.dmm"
+#include "theseus.dmm"
 #endif

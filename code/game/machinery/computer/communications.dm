@@ -506,7 +506,7 @@ var/list/shuttle_log = list()
 
 	data["shuttle"]=shuttle
 
-	data["is_odyssey"] = (map.nameShort == "odyssey")
+	data["is_odyssey"] = (map.nameShort == "odyssey" || map.nameShort == "theseus") // Theseus is the reforged Odyssey hull and shares its bluespace-jump console UI
 	data["defcon_1_enabled"] = defcon_1_enabled
 	data["last_shipment_time"] = last_shipment_time
 	data["next_shipment_time"] = next_shipment_time
