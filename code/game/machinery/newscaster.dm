@@ -824,11 +824,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				screen = NEWSCASTER_MENU
 				log_game("[key_name(usr)] posted the message [newMsg.body] as [newMsg.author].")
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
-					NEWSCASTER.newsAlert(channel_name, newMsg.headline)
+					NEWSCASTER.newsAlert(channel_name, strip_html(newMsg.headline))
 				for(var/obj/item/device/pda/PDA in PDAs)
 					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 					if(reader)
-						reader.newsAlert(channel_name,newMsg.headline)
+						reader.newsAlert(channel_name,strip_html(newMsg.headline))
 
 			updateUsrDialog()
 
