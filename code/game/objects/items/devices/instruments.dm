@@ -62,6 +62,7 @@
 	attack_verb = list("smashed")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	instrumentId = "violin"
+	w_type = RECYK_WOOD
 
 /obj/item/device/instrument/guitar
 	name = "guitar"

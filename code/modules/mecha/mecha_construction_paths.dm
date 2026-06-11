@@ -770,7 +770,7 @@
 					 	)
 					)
 
-/datum/construction/reversible/mecha/custom_action(index, diff, atom/used_atom, mob/user)
+/datum/construction/reversible/mecha/roswell/custom_action(index, diff, atom/used_atom, mob/user)
 	if(!..())
 		return 0
 
