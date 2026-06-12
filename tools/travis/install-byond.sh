@@ -7,7 +7,7 @@ else
   echo "Setting up BYOND."
   mkdir -p "$HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}"
   cd "$HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}"
-  curl "http://www.byond.com/download/build/${BYOND_MAJOR}/${BYOND_MAJOR}.${BYOND_MINOR}_byond_linux.zip" -o byond.zip
+  curl -fSsL --retry 5 --retry-all-errors "http://www.byond.com/download/build/${BYOND_MAJOR}/${BYOND_MAJOR}.${BYOND_MINOR}_byond_linux.zip" -o byond.zip
   unzip -o byond.zip
   cd byond
   make here
