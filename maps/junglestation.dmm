@@ -9514,7 +9514,8 @@
 "dsq" = (
 /obj/machinery/chem_dispenser/brewer/mapping{
 	pixel_y = 22;
-	pixel_x = -4
+	pixel_x = -4;
+	density = 0
 	},
 /obj/machinery/hologram/holopad,
 /turf/simulated/floor/wood,
