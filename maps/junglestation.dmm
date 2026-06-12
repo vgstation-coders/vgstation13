@@ -28606,6 +28606,10 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
 /area/research_outpost/entry)
+"kjk" = (
+/obj/structure/flora/rock,
+/turf/unsimulated/floor/planetary/grass/jungle,
+/area/surface/jungle/fenced)
 "kjs" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/wood,
@@ -30344,6 +30348,11 @@
 	},
 /turf/simulated/floor/vox,
 /area/vox_trading_post/docking)
+"kRT" = (
+/obj/structure/flora/rock/pile,
+/mob/living/simple_animal/hostile/lizard/frog,
+/turf/unsimulated/floor/planetary/path/jungle,
+/area/surface/jungle/fenced)
 "kSb" = (
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
@@ -36214,7 +36223,7 @@
 /obj/machinery/camera{
 	dir = 4
 	},
-/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/fenced)
 "mWR" = (
 /obj/machinery/door/airlock/external{
@@ -55262,7 +55271,6 @@
 /obj/machinery/camera{
 	dir = 4
 	},
-/obj/machinery/computer/security,
 /obj/machinery/requests_console{
 	announcementConsole = 1;
 	department = "Head of Security's Desk";
@@ -55274,6 +55282,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/machinery/computer/prisoner,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -62863,7 +62872,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/machinery/computer/prisoner,
+/obj/machinery/computer/security,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -135709,11 +135718,11 @@ saC
 nre
 nre
 nre
-nre
-nre
+xor
+xor
 mWM
-bzK
-wld
+tdn
+xor
 xor
 xor
 wld
@@ -136061,12 +136070,12 @@ saC
 ocP
 nre
 nre
-nre
-nre
-wld
-wld
-nre
 xor
+xor
+xor
+xor
+xor
+kRT
 xor
 wld
 nre
@@ -136766,7 +136775,7 @@ saC
 saC
 saC
 saC
-nre
+kjk
 wld
 wld
 wld
@@ -137473,7 +137482,7 @@ saC
 nre
 wld
 wld
-nre
+khE
 xor
 xor
 nre
