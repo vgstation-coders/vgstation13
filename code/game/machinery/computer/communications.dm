@@ -6,6 +6,8 @@
 #define COMM_SCREEN_ERT			5
 #define COMM_SCREEN_SHUTTLE_LOG 6
 
+// dummy change to a random file i had open
+
 #define UNAUTH 0
 #define AUTH_HEAD 1
 #define AUTH_CAPT 2
