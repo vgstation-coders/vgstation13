@@ -4,7 +4,7 @@
 
 /datum/migration/sqlite/ss13_prefs/_031/up()
 	if(!hasColumn("client","reentercorpse"))
-		return execute("ALTER TABLE `client` ADD COLUMN reentercorpse INTEGER DEFAULT 1")
+		return execute("ALTER TABLE `client` ADD COLUMN reentercorpse INTEGER DEFAULT 0")
 	return TRUE
 
 /datum/migration/sqlite/ss13_prefs/_031/down()
