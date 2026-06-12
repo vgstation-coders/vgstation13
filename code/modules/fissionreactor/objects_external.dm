@@ -36,7 +36,7 @@ included:
 	loc=origloc
 	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(src,1) )
 		loc=null
-		part.update_icon()			
+		part.update_icon()
 	..()
 
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/examine()
@@ -63,7 +63,7 @@ included:
 			newcase.state=3
 			newcase.update_icon()
 			qdel(src)
-			
+
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/update_icon()
 	var/dirs=0
 	overlays=list()
@@ -75,7 +75,7 @@ included:
 		dirs|=EAST
 	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, WEST) )
 		dirs|=WEST
-		
+
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, NORTH) )
 		dirs|=NORTH
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, SOUTH) )
@@ -83,8 +83,8 @@ included:
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, EAST) )
 		dirs|=EAST
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, WEST) )
-		dirs|=WEST	
-		
+		dirs|=WEST
+
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, NORTH) )
 		dirs|=NORTH
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, SOUTH) )
@@ -92,9 +92,9 @@ included:
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, EAST) )
 		dirs|=EAST
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, WEST) )
-		dirs|=WEST	
-		
-	overlays+=image(icon, src,"coonantpipeoverlay")	
+		dirs|=WEST
+
+	overlays+=image(icon, src,"coonantpipeoverlay")
 	icon_state="case_[dirs]"
 
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/New()
@@ -107,21 +107,21 @@ included:
 	for(var/obj/structure/fission_reactor_case/part in range(src,1) )
 		part.update_icon()
 	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(src,1) )
-		part.update_icon()	
-		
+		part.update_icon()
+
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/proc/transfer_reactor() //transfer coolant from/to the reactor
 	if(!associated_reactor)
 		return
 	var/pressure_coolant=air_contents.pressure
 	var/pressure_reactor=associated_reactor.coolant.pressure
-	
+
 	var/pdiff=pressure_reactor-pressure_coolant
 	if (pdiff<0) //flowing external->reactor
-		pdiff*=-1 
+		pdiff*=-1
 		pdiff*=associated_reactor.coolant_input_amt
 		var/molestotransfer=  pdiff*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 		var/datum/gas_mixture/nu_mix=air_contents.remove(molestotransfer *0.5) //we multiply by 1/2 because if we transfer the whole difference, then it'll just swap between the 2 bodies forever.
-		associated_reactor.coolant.merge(nu_mix) 
+		associated_reactor.coolant.merge(nu_mix)
 		//air_contents.update=1
 		if(network)
 			network.update=1
@@ -132,8 +132,8 @@ included:
 		if(network)
 			network.update=1
 		//air_contents.update=1
-		
-		
+
+
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/ex_act(var/severity, var/child=null, var/mob/whodunnit)
 	switch(severity)
 		if(1) //dev
@@ -144,8 +144,8 @@ included:
 				qdel(src)
 		if(3) //light
 			return
-	
-	
+
+
 
 
 /obj/machinery/fissioncontroller
@@ -193,9 +193,9 @@ included:
 	temperature_history=tl
 	for(var/i=1, i<=max_temp_history,i++)
 		temperature_history[i]=20.0 //default it to 20K at all points
-	
+
 	interface=new /datum/html_interface(src,"Fission reactor controller",500,290,"<link rel='stylesheet' href='fission.css'>")
-	
+
 	for(var/datum/fission_reactor_holder/r in fissionreactorlist)
 		if(r.turf_in_reactor(src.loc))
 			if(r.adopt_part(src))
@@ -204,9 +204,9 @@ included:
 	for(var/obj/structure/fission_reactor_case/part in range(src,1) )
 		part.update_icon()
 	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(src,1) )
-		part.update_icon()	
-				
-				
+		part.update_icon()
+
+
 /obj/machinery/fissioncontroller/Destroy()
 	if(currentfuelrod)
 		currentfuelrod.forceMove(loc)
@@ -224,14 +224,14 @@ included:
 /obj/machinery/fissioncontroller/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	if(!associated_reactor) //no need to transfer ownership if there's no reactor in the first place
 		return ..()
-	
+
 	spawn() //delay proc to fire last.
 		var/datum/fission_reactor_holder/newholder= new /datum/fission_reactor_holder()
 		var/datum/fission_reactor_holder/oldholder=associated_reactor
-		
+
 		oldholder.copy_data(newholder)
 		oldholder.transfer_part_ownership(newholder)
-		
+
 		qdel(oldholder) //set our reactor to the new one.
 		..()
 		newholder.zlevel=src.z
@@ -276,7 +276,7 @@ included:
 				associated_reactor?.fuel=null
 
 			return
-				
+
 		user.visible_message("<span class='notice'>[user] starts prying the fuel reservoir out of \the [src].</span>", "<span class='notice'>You start prying the fuel reservoir out of \the [src].</span>")
 		playsound(src,'sound/items/crowbar.ogg',50)
 		if(do_after(user, src,20) && currentfuelrod)
@@ -287,7 +287,7 @@ included:
 				associated_reactor.fuel=null
 		return
 
-	
+
 	if(iswelder(I))
 		if(associated_reactor && associated_reactor.considered_on())
 			if(user.a_intent==I_HELP)
@@ -308,9 +308,9 @@ included:
 			newframe.components+=new /obj/item/weapon/stock_parts/matter_bin
 			newframe.components+=new /obj/item/weapon/stock_parts/scanning_module
 			qdel(src)
-		return	
+		return
 	..()
-		
+
 
 /obj/machinery/fissioncontroller/attack_hand(mob/user)
 	if(..())
@@ -347,12 +347,12 @@ included:
 	var/aychteeemel_string=""
 	if(!associated_reactor)
 		interface.updateLayout("<h1>NO REACTOR</h1>")
-		return 
-	
+		return
+
 	if(isinoptionsmenu)
 		aychteeemel_string={"
 <a href='?src=\ref[interface];set_set_men=0'>\[BACK\]</a><br><br>
-		
+
 AUTOSCRAM<br>
 
 <a [can_autoscram ?"" :"class='blocked'"] href='?src=\ref[interface];set_autoscram=0'>\[DISABLED\]</a>&nbsp;
@@ -390,7 +390,7 @@ CRITICAL<br>
 
 		"}
 	else
-	
+
 		var/fuelusepercent=associated_reactor.fuel? floor(associated_reactor.fuel.life*100+0.5) : 0
 		var/estimatedtimeleft =""
 		if(associated_reactor.fuel)
@@ -408,7 +408,7 @@ CRITICAL<br>
 				var/mins=floor(secs/60)
 				secs%=60
 				estimatedtimeleft="[mins]m [secs]s"
-		else	
+		else
 			estimatedtimeleft="None"
 
 		var/rodtargettpercent= floor(associated_reactor.control_rod_target*100+0.5)
@@ -424,14 +424,14 @@ CRITICAL<br>
 			status="<span class='status_done'>Depleted</span>"
 		else if (!associated_reactor.considered_on())
 			status="<span class='status_halt'>Standby</span>"
-	
+
 		var/coretemppercent= associated_reactor.temperature / FISSIONREACTOR_MELTDOWNTEMP
 		coretemppercent=max(min(coretemppercent,1),0)
 		coretemppercent=floor(coretemppercent*100+0.5)
 		var/coolanttemppercent=associated_reactor.coolant.temperature / FISSIONREACTOR_MELTDOWNTEMP
 		coolanttemppercent=max(min(coolanttemppercent,1),0)
 		coolanttemppercent=floor(coolanttemppercent*100+0.5)
-	
+
 		var/reactivity=associated_reactor.fuel_rods.len*((associated_reactor.fuel_reactivity) - ( (associated_reactor.fuel_reactivity-associated_reactor.fuel_reactivity_with_rods)*associated_reactor.control_rod_insertion))
 		var/thermaloutput=0
 		if(associated_reactor.fuel)
@@ -439,7 +439,7 @@ CRITICAL<br>
 		reactivity=floor(reactivity*100+0.5)
 		var/speed=associated_reactor.fuel_rods.len - (associated_reactor.fuel_rods_affected_by_rods*associated_reactor.control_rod_insertion)
 		speed=floor(speed*100+0.5)
-	
+
 		if (thermaloutput>=1000000000)
 			thermaloutput="[round(thermaloutput/1000000000,0.1)] GW" //if you accomplish this then good job
 		else if (thermaloutput>=1000000)
@@ -448,7 +448,7 @@ CRITICAL<br>
 			thermaloutput="[round(thermaloutput/1000,0.1)] kW"
 		else
 			thermaloutput="[round(thermaloutput,0.1)] W"
-		
+
 
 		var/highesttemp=0.0
 		var/graphstring=""
@@ -457,9 +457,9 @@ CRITICAL<br>
 			var y=(1.0-( (temperature_history[i] || 20.0) /FISSIONREACTOR_MELTDOWNTEMP))*100
 			var x=(1.0-((i-1)/(temperature_history.len-1)))*350
 			graphstring+=i==1 ? "M[x] [y]" : "L[x] [y]"
-	
-	
-	
+
+
+
 		var/coolant_tempdisplay="[floor(associated_reactor.coolant.temperature)][emagged ? "°" : ""]K"
 		var/reactor_tempdisplay="[floor(associated_reactor.temperature)][emagged ? "°" : ""]K"
 		var/reactor_highesttempdisplay="[floor(highesttemp)][emagged ? "°" : ""]K"
@@ -475,24 +475,24 @@ CRITICAL<br>
 			coolant_tempdisplay="[floor(1.8*associated_reactor.coolant.temperature)][emagged ? "°" : ""]R"
 			reactor_tempdisplay="[floor(1.8*associated_reactor.temperature)][emagged ? "°" : ""]R"
 			reactor_highesttempdisplay="[floor(1.8*highesttemp)][emagged ? "°" : ""]R"
-		
-	
+
+
 		aychteeemel_string={"<table style='border-collapse:initial;'>
 <tr><td style='vertical-align:top;'>
 
 <div style='width:350px;'>
 <div>
 <svg id='TempGraph' width=350 height=100>
-	
+
 
 	<path d='M0 82 L350 82' style='stroke:#077;'/>
 	<path d='M0 18 L350 18' style='stroke:#700;'/>
-	
-	
+
+
 	<path d='M0 [100*(1-highesttemp/FISSIONREACTOR_MELTDOWNTEMP)] L350 [100*(1-highesttemp/FISSIONREACTOR_MELTDOWNTEMP)]' style='stroke:#770;'> </path>
-	
+
 	<path d='[graphstring]'> </path>
-	
+
 	<path d='M0 0 L350 0 L350 100 L0 100 Z' style='stroke:#777;stroke-width:4px;'/>
 </svg>
 </div>
@@ -535,7 +535,7 @@ CRITICAL<br>
 <svg id='ControlRods' width=100 height=200>
 	<rect x='28' y='0' width='43' height='[associated_reactor.control_rod_target*200]' fill='#070'/>
 	<rect x='33' y='0' width='33' height='[associated_reactor.control_rod_insertion*200]' fill='#0f0'/>
-	
+
 	<path d='M0 0 L100 0 L100 200 L0 200 Z' style='stroke:#777;stroke-width:4px;'/>
 </svg>
 </div>
@@ -552,9 +552,9 @@ CRITICAL<br>
 
 </td></tr>
 </table>"}
-	
+
 	interface.updateLayout(aychteeemel_string)
-	
+
 
 /obj/machinery/fissioncontroller/update_icon()
 	overlays=null
@@ -567,7 +567,7 @@ CRITICAL<br>
 		dirs|=EAST
 	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, WEST) )
 		dirs|=WEST
-		
+
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, NORTH) )
 		dirs|=NORTH
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, SOUTH) )
@@ -575,8 +575,8 @@ CRITICAL<br>
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, EAST) )
 		dirs|=EAST
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, WEST) )
-		dirs|=WEST	
-		
+		dirs|=WEST
+
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, NORTH) )
 		dirs|=NORTH
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, SOUTH) )
@@ -584,10 +584,10 @@ CRITICAL<br>
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, EAST) )
 		dirs|=EAST
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, WEST) )
-		dirs|=WEST	
-		
+		dirs|=WEST
+
 	icon_state="case_[dirs]"
-	
+
 
 
 
@@ -617,17 +617,17 @@ CRITICAL<br>
 	if(stat & BROKEN)
 		to_chat(usr, "The screen is broken. You should fix it soon.")
 		return
-	
+
 	if(!associated_reactor)
 		to_chat(usr, "The readouts indicate there's no linked reactor.")
 		return
 
 	if(associated_reactor.SCRAM)
 		to_chat(usr, "<span class='warning'>The readouts indicate that the SCRAM protocol has been activated.</span>")
-	
+
 	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP)
 		to_chat(usr, "<span class='warning'>The readouts indicate that the reactor is overheated, and that you should cool it down.</span>")
-	
+
 	if(!associated_reactor.fuel)
 		to_chat(usr, "The readouts indicate there's no fuel reservoir inserted.")
 	else
@@ -651,14 +651,14 @@ CRITICAL<br>
 		if(C.mob && get_dist(C.mob.loc,src.loc)<=1)
 			interface.show( interface._getClient(interface.clients[C]) ) //"There's probably shenanigans" - dilt. yes there are.
 		else
-			interface.hide(interface._getClient(interface.clients[C]))	
+			interface.hide(interface._getClient(interface.clients[C]))
 	lastupdatetick=world.time
 
 /obj/machinery/fissioncontroller/proc/add_history_temp(var/temp=20.0)
 	temperature_history.Insert(1,temp)
 	temperature_history.len=max_temp_history
-	
-	
+
+
 /obj/machinery/fissioncontroller/proc/speakandsay(var/msg,var/level=1)
 	if(level==0) //i have no mouth
 		return
@@ -684,18 +684,18 @@ CRITICAL<br>
 		S.speaker=src
 		Broadcast_Message(S,0,0,0,list(src.z))
 		qdel(S)
-	
-	
+
+
 /obj/machinery/fissioncontroller/process()
 	update_icon()
 	if(!associated_reactor) //no reactor? no processing to be done.
 		add_history_temp()
-		return	
-		
-	ask_remakeUI(TRUE)
-		
+		return
 
-	
+	ask_remakeUI(TRUE)
+
+
+
 	associated_reactor.update_all_icos()
 	if(!powered()) //with my last breath, i curse zoidberg!
 		if(!poweroutagemsg)
@@ -704,11 +704,11 @@ CRITICAL<br>
 				speakandsay("Reactor lost power, engaging SCRAM.",talkmode_critical)
 				playsound(src,'sound/machines/fission/rc_scram.ogg',50)
 				associated_reactor.SCRAM=TRUE
-		add_history_temp()		
+		add_history_temp()
 		return
 	else
 		poweroutagemsg=FALSE
-	
+
 	add_history_temp(associated_reactor.temperature)
 
 
@@ -719,13 +719,13 @@ CRITICAL<br>
 		fueldepletedmsg=TRUE
 	else
 		fueldepletedmsg=FALSE
-	
-	
+
+
 	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP && can_autoscram && !associated_reactor.SCRAM )
 		speakandsay("critical temperature reached, engaging SCRAM.",talkmode_critical)
 		playsound(src,'sound/machines/fission/rc_scram.ogg',50)
 		associated_reactor.SCRAM=TRUE
-	
+
 	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP && associated_reactor.temperature>lasttempnag )
 		if(associated_reactor.temperature>=FISSIONREACTOR_MELTDOWNTEMP)
 			speakandsay("Reactor at critical temperature: [associated_reactor.temperature]K. Evacuate immediately.",talkmode_critical)
@@ -735,12 +735,12 @@ CRITICAL<br>
 			playsound(src,'sound/machines/fission/rc_alert.ogg',50)
 
 	lasttempnag=associated_reactor.temperature
-	
+
 	if(associated_reactor.fuel?.life<=0) //no fuel or depleated? no reactions to be done.
 		return
 
 
-/obj/machinery/fissioncontroller/Topic(var/href, var/list/href_list , var/datum/html_interface_client/hclient )	
+/obj/machinery/fissioncontroller/Topic(var/href, var/list/href_list , var/datum/html_interface_client/hclient )
 	if(!associated_reactor)
 		return
 	if(!powered())
@@ -759,7 +759,7 @@ CRITICAL<br>
 		if(!is_in_range(usr))
 			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
 			return 1
-	
+
 	switch(href_list["action"])
 		if("SCRAM")
 			if(!associated_reactor.SCRAM)
@@ -779,12 +779,12 @@ CRITICAL<br>
 				to_chat(hclient.client, "The reactor safety locks prevent the fuel reservoir from being ejected!")
 				return
 			currentfuelrod.forceMove(src.loc)
-			currentfuelrod=null	
+			currentfuelrod=null
 			associated_reactor.fuel=null
-		if("swap_tempunit")	
+		if("swap_tempunit")
 			tempdisplaymode++
 			tempdisplaymode%=4
-		if("swap_gasunit")		
+		if("swap_gasunit")
 			displaycoolantinmoles=!displaycoolantinmoles
 		if("setdelta_5")
 			roddelta=5
@@ -826,7 +826,7 @@ CRITICAL<br>
 		if(associated_reactor?.SCRAM)
 			playsound(src,'sound/machines/fission/rc_scram.ogg',50)
 		associated_reactor?.SCRAM=FALSE
-	
+
 	ask_remakeUI() //update it so that changes appear NOW.
 
 
@@ -858,8 +858,8 @@ CRITICAL<br>
 	for(var/obj/structure/fission_reactor_case/part in range(src,1) )
 		part.update_icon()
 	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(src,1) )
-		part.update_icon()	
-	
+		part.update_icon()
+
 /obj/structure/fission_reactor_case/Destroy()
 	if(associated_reactor)
 		associated_reactor.handledestruction(src)
@@ -870,10 +870,10 @@ CRITICAL<br>
 	loc=origloc
 	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(src,1) )
 		loc=null
-		part.update_icon()	
+		part.update_icon()
 	..()
 
-	
+
 /obj/structure/fission_reactor_case/update_icon()
 	var/dirs=0
 	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, NORTH) )
@@ -884,7 +884,7 @@ CRITICAL<br>
 		dirs|=EAST
 	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, WEST) )
 		dirs|=WEST
-		
+
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, NORTH) )
 		dirs|=NORTH
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, SOUTH) )
@@ -892,8 +892,8 @@ CRITICAL<br>
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, EAST) )
 		dirs|=EAST
 	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, WEST) )
-		dirs|=WEST	
-		
+		dirs|=WEST
+
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, NORTH) )
 		dirs|=NORTH
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, SOUTH) )
@@ -901,10 +901,10 @@ CRITICAL<br>
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, EAST) )
 		dirs|=EAST
 	if(  locate(/obj/machinery/fissioncontroller) in get_step(src, WEST) )
-		dirs|=WEST	
-		
+		dirs|=WEST
+
 	icon_state="case_[dirs]"
-	
+
 /obj/structure/fission_reactor_case/examine()
 	..()
 	if(associated_reactor?.considered_on())
@@ -944,17 +944,17 @@ CRITICAL<br>
 
 /obj/structure/girder/reactor
 	name="reactor casing girder"
-	material=/obj/item/stack/sheet/plasteel
+	sheet_type=/obj/item/stack/sheet/plasteel
 	construction_length=40
 	var/pipeadded=FALSE
 
 
-/obj/structure/girder/reactor/update_icon()	
+/obj/structure/girder/reactor/update_icon()
 	icon_state = state>=2 ? "reinforced" : "girder"
 	overlays=null
 	if(pipeadded)
-		overlays+=image('icons/obj/fissionreactor/reactorcase.dmi', src,"coonantpipeoverlay")	
-	
+		overlays+=image('icons/obj/fissionreactor/reactorcase.dmi', src,"coonantpipeoverlay")
+
 /obj/structure/girder/reactor/examine()
 	..()
 	switch(state)
@@ -994,7 +994,7 @@ CRITICAL<br>
 				if (dir&WEST)
 					dirstr="west"
 				to_chat(usr,"There's piping installed, it's facing [dirstr].")
-			
+
 /obj/structure/girder/reactor/attackby(obj/item/W as obj, mob/user as mob) //this proc uses a lot of weird checks that will probably break with the multiple construction steps, so lets just use our own override. (it's also just messy in general and hard to follow)
 	switch(state)
 		if(0) // fresh built frame
@@ -1023,12 +1023,12 @@ CRITICAL<br>
 					if(state!=0)
 						return
 					user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", "<span class='notice'>You dissasemble \the [src].</span>")
-					new material(get_turf(src), 3)
+					new sheet_type(get_turf(src), 3)
 					qdel(src)
 				return
 			to_chat(user, "<span class='notice'>You can't find a use for \the [W]</span>")
 			return
-					
+
 		if(1) // added rods
 			if(W.is_screwdriver(user)) //fasten the rods
 				W.playtoolsound(src, 100)
@@ -1089,20 +1089,20 @@ CRITICAL<br>
 				return
 			if(istype(W, /obj/item/pipe ))
 				if(pipeadded)
-					to_chat(user, "<span class='notice'>There's already a piping added!</span>")	
+					to_chat(user, "<span class='notice'>There's already a piping added!</span>")
 					return
 				var/obj/item/pipe/P = W
 				if(P.pipe_type!=0)
-					to_chat(user, "<span class='notice'>This isn't the right pipe to use!</span>")	
+					to_chat(user, "<span class='notice'>This isn't the right pipe to use!</span>")
 					return
 				qdel(W)
 				pipeadded=TRUE
-				overlays+=image('icons/obj/fissionreactor/reactorcase.dmi', src,"coonantpipeoverlay")	
-				user.visible_message("<span class='notice'>[user] adds piping into \the [src].</span>", "<span class='notice'>You add piping into \the [src].</span>")	
+				overlays+=image('icons/obj/fissionreactor/reactorcase.dmi', src,"coonantpipeoverlay")
+				user.visible_message("<span class='notice'>[user] adds piping into \the [src].</span>", "<span class='notice'>You add piping into \the [src].</span>")
 				return
 			if(pipeadded && W.is_wrench(user))
-				W.playtoolsound(src, 100)	
-				to_chat(user, "<span class='notice'>You remove the piping from \the [src]</span>")	
+				W.playtoolsound(src, 100)
+				to_chat(user, "<span class='notice'>You remove the piping from \the [src]</span>")
 				var/obj/item/pipe/np= new /obj/item/pipe(loc)
 				np.pipe_type=0
 				np.forceMove(loc)
@@ -1124,9 +1124,9 @@ CRITICAL<br>
 				else if(dir&WEST)
 					dir=NORTH
 					nds="north"
-				to_chat(user, "<span class='notice'>You turn \the [src]'s piping. It is now facing [nds]</span>")	
+				to_chat(user, "<span class='notice'>You turn \the [src]'s piping. It is now facing [nds]</span>")
 				return
-			to_chat(user, "<span class='notice'>You can't find a use for \the [W]</span>")	
+			to_chat(user, "<span class='notice'>You can't find a use for \the [W]</span>")
 			return
 		if(3) // plating added
 			if(iswelder(W))
@@ -1139,7 +1139,7 @@ CRITICAL<br>
 					if(state!=3)
 						return
 					user.visible_message("<span class='notice'>[user] welds the external plating to \the [src]'s frame.</span>", "<span class='notice'>You weld the external plating to \the [src]'s frame.</span>")
-					
+
 					if(!pipeadded)
 						var/obj/structure/fission_reactor_case/newcase= new /obj/structure/fission_reactor_case(loc)
 						newcase.forceMove(loc)
@@ -1164,10 +1164,10 @@ CRITICAL<br>
 					user.visible_message("<span class='warning'>[user] pries the external plating off \the [src].</span>", "<span class='notice'>You pry the external plating off the \the [src].</span>")
 					add_hiddenprint(user)
 					add_fingerprint(user)
-					new material(get_turf(src), 2)
+					new sheet_type(get_turf(src), 2)
 					state--
-				return	
-			if(W.is_wrench(user))	
+				return
+			if(W.is_wrench(user))
 				W.playtoolsound(src, 100)
 				user.visible_message("<span class='warning'>[user] starts [anchored?"un":""]bolting \the [src] [anchored?"from":"to"] the floor.</span>", "<span class='notice'>You start [anchored?"un":""]bolting \the [src] [anchored?"from":"to"] the floor.</span>")
 				if(do_after(user, src, construction_length))
