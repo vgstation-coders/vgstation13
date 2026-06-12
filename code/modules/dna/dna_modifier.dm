@@ -306,7 +306,7 @@
 		if(ghost)
 			var/mob/ghostmob = ghost.get_top_transmogrification()
 			if(ghostmob)
-				var/auto_reenter = client.prefs.get_pref(/datum/preference_setting/toggle/reentercorpse)
+				var/auto_reenter = ghostmob.client.prefs.get_pref(/datum/preference_setting/toggle/reentercorpse)
 				ghostmob << 'sound/effects/adminhelp.ogg'
 				to_chat(ghostmob, "<span class='interface big'><span class='bold'>[message]\
 				[!auto_reenter ?\
