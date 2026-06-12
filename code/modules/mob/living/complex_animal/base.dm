@@ -12,9 +12,8 @@
 #define ANIMAL_FRUGIVORE	(1<<2 ) //fruits (jungle berry bushes). implied with HERBIVORE, but can be used on its own.
 
 #define ANIMAL_FLAG_NEVER_STARVE	(1<<0)
-#define ANIMAL_FLAG_NEVER_AGE	(1<<1)
-#define ANIMAL_FLAG_NEVER_ROT	(1<<2)
-#define ANIMAL_FLAG_IMMORTAL	ANIMAL_FLAG_NEVER_STARVE | ANIMAL_FLAG_NEVER_AGE
+#define ANIMAL_FLAG_NEVER_ROT	(1<<1)
+#define ANIMAL_FLAG_IMMORTAL	ANIMAL_FLAG_NEVER_STARVE
 
 #define ANIMAL_FOODPRIORITY_CANNIBAL -5	//she rips out my bones just like i'm an animal
 #define ANIMAL_FOODPRIORITY_PRECOOKED 5	//why would you eat a plant when you could eat a tasty donut or burger?
@@ -22,7 +21,6 @@
 #define ANIMAL_FOODPRIORITY_CORPSES 3	//no need to beat a dead horse. we should be eating it instead.
 #define ANIMAL_FOODPRIORITY_SIZEDIFF_LARGER -4	//bigger=more dangerous, right?
 #define ANIMAL_FOODPRIORITY_SIZEDIFF_SMALLER -2	//prefer bigger meals
-#define ANIMAL_FOODPRIORITY_FAMILY -5	//hi ma :)
 #define ANIMAL_FOODPRIORITY_UNDESIRABLE -5	//poison... poison... tasty fish!
 
 #define ANIMAL_STATE_IDLE 0	//hanging around.
@@ -48,18 +46,15 @@
 	var/animal_flags = 0
 	var/last_state = -1
 	var/ticks_this_state=0
-	var/mob_age = 0
-	var/mob_max_age = 450 //15 minutes. above this, the mob will start rolling to die of old age.
 	var/atom/target = null
 	var/turf/territory=null //turf location
-	var/list/family = list() //list of mobs. avoid attacking them and whatnot. also can be used for taming.
 	environment_smash_flags = 0xFFFFFF
 	var/movespeed=5 //lower=faster.
 	var/kin_check_type_path=null //for mobs with many subtypes. set to the parent mob type. leave null if not needed
 	var/petable=FALSE
 	var/lastmate=0
 	var/matingcooldown=60 //2 minutes
-	var/max_local_population=8 //to prevent total overpopulation
+	var/max_local_population=5 //to prevent total overpopulation
 	var/healthregen=0.01
 	var/lasthealth=0.0
 	var/ticks_dead=0
@@ -82,14 +77,11 @@
 	cache_objects_in_view=null
 	cache_objects_in_extended_area=null
 	target=null
-	for(var/mob/living/simple_animal/complex/C in family) //we will be referenced by our family, so clear us from that.
-		C.family -=src
-	family=null
 	..()
 
 
 /mob/living/simple_animal/complex/proc/allow_msg()
-	for(var/mob/m in range(src,11)) //only do emotes/say things if a player is nearby. this is to reduce log spam and make obsgang not want to die, even though they should just play the game.
+	for(var/mob/m in cache_objects_in_extended_area) //only do emotes/say things if a player is nearby. this is to reduce log spam and make obsgang not want to die, even though they should just play the game.
 		if(m.client)
 			return TRUE
 	return FALSE
@@ -143,52 +135,41 @@
 		return 0
 	ticks_dead=0
 
+	cache_objects_in_extended_area = range(src,16)
+	cache_objects_in_view = view(src,7) //refresh it every life tick.
+
 	if(last_state!=behavior_state)
 		ticks_this_state=0
 		last_state=behavior_state
 	else
-		ticks_this_state++
-
-	cache_objects_in_view = view(src,7) //refresh it every life tick.
-	cache_objects_in_extended_area = range(src,16)
+		ticks_this_state++		
 
 	reagents?.metabolize(src)
 
 	nutrition-=max_food*food_per_tick
-
-	lastmate--
 
 	if(lasthealth<=health && health<maxHealth)
 		health=min(maxHealth,health+maxHealth*healthregen)
 		nutrition-=max_food*food_per_tick*0.25 //use extra food when regaining health
 	lasthealth=health
 
-	if(nutrition<0 && prob(20) && !(animal_flags&ANIMAL_FLAG_NEVER_STARVE) )
+	if(nutrition<0 && !(animal_flags&ANIMAL_FLAG_NEVER_STARVE) && prob(20) )
 		emote("deathgasp")
 		health=0
 	if(health<=0 && stat != DEAD)
 		death()
 		return 0
-	if(mob_max_age && mob_age > mob_max_age && !(animal_flags&ANIMAL_FLAG_NEVER_AGE) )
-		var/chancetokeelover = 0.5*((mob_age-mob_max_age)/mob_max_age)
-		chancetokeelover = 1-(1/(chancetokeelover+1))
-		// math formula: 1-\frac{1}{.5\left(\frac{\left(x-m\right)}{m}\right)+1} 
-		//basically, the older you are, the more likley you are to die.
-		//if you are 3x as old as the max age, you have a 50% chance to die.
-		//this is ran every tick, by the way, so the probabilities add up.
-		chancetokeelover*=0.25 //ok nevermind reduce the chance a bit it happens a bit too fast.
-		if(rand() < chancetokeelover)
-			emote("deathgasp")
-			health=0
-			stat=DEAD
-			return 0
-	mob_age++
-
+	
 	escape()
 
 	interrupt_hunger() //prioritize eating over all other things
 	interrupt_territory() //next, prioritize defending our home
 	interrupt_fear() //then, prioritize saving our own ass.
+
+
+	if (behavior_state==ANIMAL_STATE_IDLE==last_state && (ticks_this_state % 3!=1) ) //throttle idle ticking
+		walk(src,0)
+		return 1
 
 	switch(behavior_state)
 		if(ANIMAL_STATE_IDLE)
@@ -201,8 +182,6 @@
 			tick_state_attacking()
 		if(ANIMAL_STATE_FLEEING)
 			tick_state_fleeing()
-		if(ANIMAL_STATE_MATING)
-			tick_state_mating()
 		if(ANIMAL_STATE_SPECIAL)
 			tick_state_special()
 	return 1
@@ -245,22 +224,18 @@
 
 //state functions return TRUE if the behavior_state is unchanged, and FALSE if not. basically just do if(..())
 /mob/living/simple_animal/complex/proc/tick_state_idle()
-	abort_target()
-
-	//attempt reproduction only while full
-	if(nutrition >= (max_food- get_offspring_cost()*2) && get_offspring_cost() && prob(50) && lastmate<=0)
-		behavior_state=ANIMAL_STATE_MATING
-		return FALSE
+	if(target)
+		abort_target()
 
 	get_idle_sounds()
 
-	if(prob(25))//move around randomly sometimes
-		if(territory && prob(50))
-			walk_to(src,locate(territory.x+rand(-3,3),territory.y+rand(-3,3),territory.z),0,movespeed)
-		else
-			walk_to(src,locate(x+rand(-3,3),y+rand(-3,3),z),0,movespeed)
+	//move around randomly sometimes
+	if(behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL && territory)
+		walk_to(src,locate(territory.x+rand(-3,3),territory.y+rand(-3,3),territory.z),0,movespeed)
+	else
+		walk_to(src,locate(x+rand(-3,3),y+rand(-3,3),z),0,movespeed)
 
-	if(territory && prob(25)) //randomly move the territory
+	if(territory) //randomly move the territory
 		if(behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) //move our territory closer to pack members
 			var/list/mob/living/simple_animal/complex/members=list()
 			for(var/mob/living/simple_animal/complex/M in cache_objects_in_view)
@@ -275,20 +250,23 @@
 						territory =T
 		else //just random movment
 			territory=locate(territory.x+rand(-4,4),territory.y+rand(-4,4),territory.z)
-
-	if(behavior_flags & ANIMAL_BEHAVIOR_TERRITORIAL && !territory) //if we can't find the territory, regenerate it
-		territory=locate(x,y,z)
 	return TRUE
 
 /mob/living/simple_animal/complex/proc/tick_state_hunting()
-	if(nutrition>max_food*0.75)
+	if(nutrition>max_food*0.60)
 		abort_target()
 		return FALSE
-	if(!verify_target(target,20,TRUE) || (ticks_this_state>9 && prob(25)) )
+	if(!verify_target(target,16,TRUE) || (ticks_this_state>9 && prob(25)) )
 		abort_target(FALSE)
 		var/list/possible=rank_foodsources(get_food())
 		var/list/pickfrom=list()
 		var/highestprio=-999999
+		
+		if(nutrition>max_food*0.2) //avoid disliked targets, unless we are really desperate for food.
+			highestprio = 0
+		else if(nutrition>max_food*0.05) //I NEEEEEEEED IIIIIIIIT
+			highestprio= -4
+		
 		for(var/atom/A in possible) //get the highest ranked objects
 			var/rank=possible[A]
 			if(rank>highestprio)
@@ -298,10 +276,6 @@
 				pickfrom+=A
 		if(pickfrom.len)
 			target=pick(pickfrom)
-		if(highestprio<0 && nutrition>max_food*0.2) //avoid disliked targets, unless we are really desperate for food.
-			target=null
-		if(highestprio<-4 && nutrition>max_food*0.05) //I NEEEEEEEED IIIIIIIIT
-			target=null
 		if(!target) //if we can't find a suitable target, move around randomly
 			walk_to(src,locate(x+rand(-15,15),y+rand(-15,15),z),0,movespeed)
 		else
@@ -354,16 +328,14 @@
 
 /mob/living/simple_animal/complex/proc/tick_state_mating()
 	if(!verify_target(target,16)) //ignores line of sight and has increased range to help sparse populations not die out.
-		for(var/atom/A in cache_objects_in_extended_area )
-			if(istype(A,/mob/living/simple_animal/complex))
-				var/mob/living/simple_animal/complex/CA=A
-				if(can_offspring(CA) && CA.can_offspring(src) && CA.behavior_state==ANIMAL_STATE_MATING && !CA.target) //you better believe we're going to enforce the communicative property.
-					visible_message("<b>\the [src]</b> looks lovingly at \the [CA].")
-					target=CA
-					CA.visible_message("<b>\the [CA]</b> looks lovingly at \the [src].")
-					CA.target=src
-					walk_to(src,CA,0,src.movespeed)
-					walk_to(CA,src,0,CA.movespeed)
+		for(var/mob/living/simple_animal/complex/CA in cache_objects_in_extended_area )
+			if(CA.behavior_state==ANIMAL_STATE_MATING && !CA.target && can_offspring(CA) && CA.can_offspring(src)) //you better believe we're going to enforce the communicative property.
+				visible_message("<b>\the [src]</b> looks lovingly at \the [CA].")
+				target=CA
+				CA.visible_message("<b>\the [CA]</b> looks lovingly at \the [src].")
+				CA.target=src
+				walk_to(src,CA,0,src.movespeed)
+				walk_to(CA,src,0,CA.movespeed)
 		if(!target) //if we can't find one, exit back to idle
 			abort_target()
 			return FALSE
@@ -377,10 +349,10 @@
 		else
 			if(gender=="female")
 				if(generate_offspring(M))
-					M.nutrition-=M.get_offspring_cost()
+					M.nutrition-=(M.size*7.5)
 					M.abort_target()
 
-					nutrition-=get_offspring_cost()
+					nutrition-=(size*7.5)
 					abort_target()
 
 					M.lastmate=M.matingcooldown
@@ -414,60 +386,40 @@
 		behavior_state=ANIMAL_STATE_IDLE
 
 /mob/living/simple_animal/complex/proc/is_kin(var/mob/target)
-	if(!istype(target,/mob))
-		return FALSE
-	if(target in family)
-		return TRUE
 	if(target.faction == src.faction && src.faction!="neutral")
 		return TRUE
 	if(kin_check_type_path)
 		if(istype(target,kin_check_type_path))
 			return TRUE
 	else
-		if(istype(target,src.type) || istype(src,target.type))
-			return TRUE
+		return target.type==src.type
 	return FALSE
 
 //return a list of valid salad
 /mob/living/simple_animal/complex/proc/get_food()
 	var/list/foodsources=list()
-	for(var/atom/A in cache_objects_in_view)
-		if(A==src) //do not eat ourselves
-			continue
-		if(food_flags & ANIMAL_HERBIVORE)
-			if(istype(A,/obj/structure/flora) && !istype(A,/obj/structure/flora/tree) && !istype(A,/obj/structure/flora/rock))
+	if(food_flags & ANIMAL_HERBIVORE)
+		for(var/obj/structure/flora/A in cache_objects_in_view)
+			if(!istype(A,/obj/structure/flora/tree) && !istype(A,/obj/structure/flora/rock))
 				foodsources+=A
-				continue
-			if(istype(A,/turf/unsimulated/floor/planetary/grass/jungle))
+	
+	else if(food_flags & ANIMAL_FRUGIVORE)
+		for(var/obj/structure/flora/jungle_berries/A in cache_objects_in_view)
+			if(A.hasberries)
 				foodsources+=A
-				continue
-		if(food_flags & ANIMAL_FRUGIVORE)
-			if(istype(A,/obj/structure/flora/jungle_berries))
-				var/obj/structure/flora/jungle_berries/bush=A
-				if(bush.hasberries)
-					foodsources+=A
-					continue
-		if(food_flags & ANIMAL_CARNIVORE)
-			if(istype(A,/mob/living/carbon) || istype(A,/mob/living/simple_animal) || istype(A,/mob/living/simple_animal/complex))
-				var/mob/living/M=A
-				if(M.stat!=DEAD)
-					if(!is_pacified() && behavior_flags & ANIMAL_BEHAVIOR_PREDATORY)
-						foodsources+=M
-						continue
-				else
-					foodsources+=M
-					continue
-			else if(istype(A,/obj/item/organ) && !istype(A,/obj/item/organ/external/head) && !istype(A,/obj/item/organ/internal/brain)) //we don't want to round remove people
-				foodsources+=A
-				continue
-
-		//no easy way to check if it's meat. oh well.
-		if(istype(A,/obj/item/weapon/reagent_containers/food/snacks))
-			foodsources+=A
-			continue
-	for(var/atom/A in foodsources)
-		if(!verify_target(A,-1,TRUE))
-			foodsources-=A
+	
+	if(food_flags & ANIMAL_CARNIVORE)
+		for(var/obj/item/organ/A in cache_objects_in_view)
+			if(!istype(A,/obj/item/organ/external/head) && !istype(A,/obj/item/organ/internal/brain)) //we don't want to round remove people
+				foodsources+=A 
+		if((behavior_flags & ANIMAL_BEHAVIOR_PREDATORY) && !is_pacified())
+			for(var/mob/living/A in cache_objects_in_view)
+				if(A.stat!=DEAD && A!=src)
+					foodsources+=A 
+	
+	for(var/obj/item/weapon/reagent_containers/food/snacks/A in cache_objects_in_view) //no easy way to check if it's meat. oh well.
+		foodsources+=A
+	
 	return foodsources
 
 //take the list from get_food, and create an associated list ranking our affinity for them
@@ -485,8 +437,6 @@
 				p+=ANIMAL_FOODPRIORITY_SIZEDIFF_LARGER
 			if(M.size < src.size-2) //smaller things ain't worth our time
 				p+=ANIMAL_FOODPRIORITY_SIZEDIFF_SMALLER
-			if(M in family)
-				p+=ANIMAL_FOODPRIORITY_FAMILY
 			if(istype(A,/mob/living/simple_animal))
 				var/mob/living/simple_animal/SA=A
 				if(SA.is_poisonous)
@@ -500,6 +450,7 @@
 		if(istype(A,/obj/structure/flora))
 			p+=ANIMAL_FOODPRIORITY_PLANTS
 		out[A]=p
+	
 	return out
 
 
@@ -516,13 +467,13 @@
 		get_aggro_msg(victim)
 	target=victim
 	behavior_state=state
-	if( !(behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) && !family.len)
+	if( !(behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS))
 		return
 	if(istype(target,/mob/living))
 		var/mob/living/T=target
 		if(T.stat!=DEAD)
 			for(var/mob/living/simple_animal/complex/M in cache_objects_in_view)
-				if( (behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) || (M in family))
+				if( (behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS))
 					if(is_kin(M) && !M.is_kin(target)) //rally the pack to us, if the target is not kin
 						if(M.behavior_state!=state) //if the pack member is not engaged in similar activity
 							M.aggro_drawn(victim,state) //do this recursively for each. don't kick the bee hive.
@@ -533,8 +484,6 @@
 		return FALSE
 	if(is_pacified())
 		return FALSE
-	if(!victim)
-		return FALSE
 	if(istype(victim,/mob))
 		.= unarmed_attack_mob(victim)
 	else
@@ -543,8 +492,6 @@
 		get_attack_msg(victim)
 
 /mob/living/simple_animal/complex/proc/tryeat(var/victim)
-	if(!victim)
-		return FALSE
 	if(!verify_target(victim,1,TRUE))
 		return FALSE
 	if(istype(target,/mob/living))
@@ -584,10 +531,6 @@
 		else
 			visible_message("<b>\The [src]</b> nibbles at \the [target].")
 		nutrition+=5
-
-	else if (istype(target,/turf))
-		nutrition+=1
-		visible_message("<b>\The [src]</b> nibbles at \the [target].")
 	else if(istype(target,/obj/item/weapon/reagent_containers/food/snacks))
 		var/obj/item/weapon/reagent_containers/food/snacks/F=target
 		visible_message("<b>\The [src]</b> takes a bite out of <b>\the [F]</b>.")
@@ -647,10 +590,6 @@
 		return FALSE
 	if(is_pacified())
 		return FALSE
-	if(isliving(trespasser))
-		var/mob/living/L = trespasser
-		if(L.pacify_aura)
-			return FALSE
 	if(istype(trespasser,/mob/living/simple_animal/complex))
 		var/mob/living/simple_animal/complex/A=trespasser
 		if(A.behavior_flags & ANIMAL_BEHAVIOR_UNDESIRABLE)
@@ -659,9 +598,7 @@
 
 //only fired when the mob is seen by us, and we have the AVOID_PRED flag
 /mob/living/simple_animal/complex/proc/determine_isthreat(var/mob/individual)
-	if(!verify_target(individual))
-		return FALSE
-	if(is_pacified())
+	if(!individual || individual.stat==DEAD)
 		return FALSE
 	if(is_kin(individual))
 		return FALSE
@@ -701,22 +638,11 @@
 		emote("me",MESSAGE_HEAR, "vocalizes.")
 
 
-/mob/living/simple_animal/complex/proc/get_offspring_cost()
-	return size*7.5
-
 // if you don't want offspring, then return FALSE here.
 /mob/living/simple_animal/complex/proc/can_offspring(var/mob/living/simple_animal/complex/mate)
 	if(!mate)
 		return FALSE
 	if(mate.type!=src.type)
-		return FALSE
-	var/localcount=0
-	for(var/mob/living/simple_animal/complex/A in cache_objects_in_extended_area)
-		if(A.type==src.type && A.stat!=DEAD)
-			localcount++
-	if(localcount>max_local_population)
-		return FALSE
-	if(mob_age>mob_max_age*1.5 || mob_age<mob_max_age*0.1) //too young or too old? no can do.
 		return FALSE
 	if(lastmate>0)
 		return FALSE
@@ -731,10 +657,6 @@
 		return FALSE
 	child.faction=faction
 	child.nutrition=child.max_food*0.5
-	family+=child
-	father.family+=child
-	child.family+=src
-	child.family+=father
 	return child
 	
 

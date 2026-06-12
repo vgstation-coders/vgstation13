@@ -622,6 +622,7 @@
 	hud_state = "blackout"
 	charge_cost = 2000
 	purchase_cost = 10000
+	quicken_cost = 10000
 	in_apc = TRUE
 
 /spell/pulse_demon/yellowlight/choose_targets(var/mob/user = usr)

@@ -42,8 +42,9 @@
 	desc = "A small wooden shield. Its surface area is small, but it's still somewhat effective."
 	icon_state = "buckler"
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
 	slot_flags = 0
-	starting_materials = list()
+	starting_materials = list(MAT_WOOD = 8500)
 
 /obj/item/weapon/shield/riot/buckler/IsShield()
 	return prob(33) //Only attempt to block 1/3 of attacks

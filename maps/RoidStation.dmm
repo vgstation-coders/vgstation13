@@ -14686,25 +14686,6 @@
 /area/ai_monitored/storage/eva{
 	name = "E.V.A. Storage"
 	})
-"aER" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/cable/yellow{
-	icon_state = "0-8"
-	},
-/turf/simulated/floor/plating,
-/area/ai_monitored/storage/eva{
-	name = "E.V.A. Storage"
-	})
 "aES" = (
 /obj/structure/table,
 /turf/simulated/floor,
@@ -24834,10 +24815,6 @@
 	dir = 1;
 	name = "Cryogenics APC";
 	pixel_y = 24
-	},
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2"
 	},
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
@@ -40243,11 +40220,6 @@
 	req_access_txt = "45"
 	},
 /obj/machinery/holosign/surgery,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -56201,10 +56173,6 @@
 	},
 /area/science/lab)
 "cco" = (
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/power/apc{
 	dir = 8;
 	pixel_x = -26
@@ -59012,10 +58980,6 @@
 /area/engineering/break_room)
 "chm" = (
 /obj/machinery/computer/powermonitor,
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
@@ -221325,9 +221289,9 @@ cXk
 aCK
 aCC
 aDI
-aER
+aIR
 aFZ
-aER
+aIR
 aDI
 aIR
 aKc

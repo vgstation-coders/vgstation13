@@ -438,7 +438,7 @@ Subject's pulse: ??? BPM"})
 		return
 	if(istype(A,/obj))
 		var/obj/O = A
-		if(O.w_type == RECYK_WOOD)
+		if(O.w_type == RECYK_WOOD || O.sheet_type == /obj/item/stack/sheet/wood || (O.materials?.getAmount(MAT_WOOD) > 0))
 			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"Yep, it's wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows green.</span>")
 		else
 			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"No, it's not wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows red.</span>")
