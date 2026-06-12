@@ -39720,15 +39720,16 @@
 /area/security/perma)
 "ogl" = (
 /obj/structure/closet/secure_closet/hos,
-/obj/machinery/media/receiver/boombox/wallmount{
-	pixel_y = -22
-	},
 /obj/machinery/door_control{
 	id_tag = "HoSOffice";
 	name = "Office Shutters";
 	req_access_txt = "2";
 	pixel_x = -24;
 	pixel_y = 8
+	},
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -22
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -57256,13 +57257,13 @@
 	},
 /area/lawoffice)
 "usc" = (
-/obj/machinery/alarm{
-	pixel_y = 23
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
 /obj/machinery/photocopier,
+/obj/machinery/newscaster{
+	pixel_y = 30
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
