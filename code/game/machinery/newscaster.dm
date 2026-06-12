@@ -823,12 +823,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
 				screen = NEWSCASTER_MENU
 				log_game("[key_name(usr)] posted the message [newMsg.body] as [newMsg.author].")
+				var/stripped_headline = strip_html_properly(newMsg.headline)
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
-					NEWSCASTER.newsAlert(channel_name, strip_html_properly(newMsg.headline))
+					NEWSCASTER.newsAlert(channel_name, stripped_headline)
 				for(var/obj/item/device/pda/PDA in PDAs)
 					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 					if(reader)
-						reader.newsAlert(channel_name,strip_html_properly(newMsg.headline))
+						reader.newsAlert(channel_name, stripped_headline)
 
 			updateUsrDialog()
 
