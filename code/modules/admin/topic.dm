@@ -723,6 +723,71 @@
 		message_admins("<span class='notice'>[key_name(usr)] restarted the climate controller for vZ-[C.v.id].</span>", 1)
 		climate_panel()
 
+	else if(href_list["admin_arena_panel_create"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/turf/T = get_turf(usr)
+		if(!T)
+			return
+		var/response = alert(usr, "Create an arena with bottom-left at [T.x],[T.y],[T.z]?", "Create Arena", "Yes", "No")
+		if(response != "Yes")
+			return
+		new /datum/admin_arena(T)
+		log_admin("[key_name(usr)] created an arena with bottom-left at [T.x],[T.y],[T.z].")
+		message_admins("<span class='notice'>[key_name(usr)] created an arena with bottom-left at [T.x],[T.y],[T.z].</span>", 1)
+		admin_arena_panel()
+
+	else if(href_list["admin_arena_panel_add_prep_room"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/turf/T = get_turf(usr)
+		if(!T)
+			return
+		var/response = alert(usr, "Create a prep room spawn point at [T.x],[T.y],[T.z]?", "Create Prep Room", "Yes", "No")
+		if(response != "Yes")
+			return
+		add_prep_room(T)
+		log_admin("[key_name(usr)] created a prep room marker at [T.x],[T.y],[T.z].")
+		message_admins("<span class='notice'>[key_name(usr)] created a prep room marker at [T.x],[T.y],[T.z].</span>", 1)
+		admin_arena_panel()
+
+	else if(href_list["admin_arena_panel_load_file"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!current_admin_arena)
+			alert(usr, "You need to create an admin arena first!", "No Arena", "Ok")
+			return
+		var/dmm_file = input(usr, "Select a .dmm file to load. It must be exactly [ADMIN_ARENA_WIDTH]x[ADMIN_ARENA_HEIGHT] tiles.", "Load Arena") as null|file
+		if(!dmm_file)
+			return
+		if(!current_admin_arena.load_from_dmm(dmm_file))
+			alert(usr, "Failed to load the arena. Make sure the file is exactly [ADMIN_ARENA_WIDTH]x[ADMIN_ARENA_HEIGHT] tiles.", "Load Failed", "Ok")
+			return
+		log_admin("[key_name(usr)] loaded a custom arena map.")
+		message_admins("<span class='notice'>[key_name(usr)] loaded a custom arena map.</span>", 1)
+		admin_arena_panel()
+
+	else if(href_list["admin_arena_panel_load_preset"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!current_admin_arena)
+			alert(usr, "You need to create an admin arena first!", "No Arena", "Ok")
+			return
+		var/list/presets = list()
+		for(var/preset_path in subtypesof(/datum/admin_arena_preset))
+			var/datum/admin_arena_preset/preset = preset_path
+			presets[initial(preset.name)] = preset_path
+		var/selection = input(usr, "Select an arena preset to load.", "Load Preset") as null|anything in presets
+		if(!selection)
+			return
+		var/datum/admin_arena_preset/preset = presets[selection]
+		if(!current_admin_arena.load_from_dmm(file(initial(preset.file_path))))
+			alert(usr, "Failed to load the [selection] preset. It seems like this preset needs a code fix.", "Load Failed", "Ok")
+			return
+		log_admin("[key_name(usr)] loaded the [selection] arena preset.")
+		message_admins("<span class='notice'>[key_name(usr)] loaded the [selection] arena preset.</span>", 1)
+		admin_arena_panel()
+
 	else if(href_list["level_manager_jump"])
 		if(!check_rights(R_ADMIN))
 			return
