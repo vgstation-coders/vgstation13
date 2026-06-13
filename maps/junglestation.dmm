@@ -37076,9 +37076,9 @@
 /obj/machinery/shower{
 	dir = 4
 	},
-/obj/item/clothing/head/beret/officer{
-	pixel_y = -3;
-	pixel_x = 2
+/obj/item/clothing/head/beret/headofsecurity{
+	pixel_x = 2;
+	pixel_y = -3
 	},
 /turf/simulated/floor{
 	dir = 8;
