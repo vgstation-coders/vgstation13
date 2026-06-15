@@ -18,6 +18,7 @@
 	var/default_language=null
 	var/times_cloned=0
 	var/talkcount
+	var/clown
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
