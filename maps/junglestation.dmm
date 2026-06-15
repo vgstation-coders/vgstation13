@@ -58115,9 +58115,6 @@
 /turf/unsimulated/floor/planetary/cave/jungle,
 /area/surface/jungle/underground)
 "uKc" = (
-/mob/living/simple_animal/corgi/sasha{
-	dir = 8
-	},
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 4;
 	on = 1
