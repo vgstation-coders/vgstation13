@@ -351,7 +351,7 @@
 	R.default_language = H.default_language
 	R.times_cloned = H.times_cloned
 	R.talkcount = H.talkcount
-	R.clown = M_CLUMSY in H.mutations
+	R.clown = (M_CLUMSY in H.mutations)
 	if (!isnull(H.mind))
 		R.mind = "\ref[H.mind]"
 	cloned_records += R

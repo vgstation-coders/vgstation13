@@ -111,7 +111,7 @@ var/list/body_archives = list()
 	R.default_language = default_language
 	R.times_cloned = times_cloned
 	R.talkcount = talkcount
-	R.clown = M_CLUMSY in mutations
+	R.clown = (M_CLUMSY in mutations)
 
 	archive.data["dna_records"] = R
 	archive.data["underwear"] = underwear
