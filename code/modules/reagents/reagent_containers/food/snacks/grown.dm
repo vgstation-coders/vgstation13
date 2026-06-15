@@ -261,6 +261,8 @@ var/list/special_fruits = list()
 			spawn()
 				spark(A)
 	else //Teleports the thrower instead.
+		if(!M)
+			return 0 //Nobody to teleport... There was a runtime here!!
 		spark(M)
 		new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
 		M.unlock_from()

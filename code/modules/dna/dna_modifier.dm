@@ -456,8 +456,7 @@
 
 /obj/machinery/computer/scan_consolenew/Destroy()
 	if(connected)
-		if(connected.connected == src)
-			connected.connected = null
+		connected.connected -= src
 		connected = null
 	for(var/datum/block_label/label in labels)
 		qdel(label)
@@ -498,7 +497,7 @@
 /obj/machinery/computer/scan_consolenew/initialize()
 	connected = findScanner()
 	if(connected)
-		connected.connected = src
+		connected.connected += src
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
 	switch(severity)
