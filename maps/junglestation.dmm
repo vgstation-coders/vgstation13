@@ -305,6 +305,10 @@
 	pixel_y = -16;
 	pixel_x = -9
 	},
+/obj/item/weapon/cartridge/detective{
+	pixel_y = 7;
+	pixel_x = 9
+	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/heads/hos)
 "afe" = (
@@ -4954,9 +4958,6 @@
 /area/centcom/holding)
 "bMz" = (
 /obj/machinery/computer/mecha,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /turf/simulated/floor/arcade,
 /area/science/rd)
 "bMB" = (
@@ -5354,7 +5355,9 @@
 	},
 /area/security/perma)
 "bUO" = (
-/obj/machinery/atmospherics/unary/vent_scrubber/on/vox,
+/obj/machinery/atmospherics/unary/vent_scrubber/on/vox{
+	dir = 8
+	},
 /turf/simulated/floor/vox{
 	icon_state = "checker";
 	tag = "icon-checker"
@@ -13112,7 +13115,7 @@
 	id_tag = "captain";
 	name = "Window Shield Control";
 	pixel_x = 26;
-	req_access_txt = "20";
+	req_access_txt = "28";
 	pixel_y = 3
 	},
 /obj/machinery/faxmachine{
@@ -13772,9 +13775,6 @@
 /area/surface/jungle/mining)
 "eOB" = (
 /obj/machinery/computer/robotics,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /turf/simulated/floor/arcade,
 /area/science/rd)
 "eOE" = (
@@ -13788,6 +13788,11 @@
 	base_state = "right";
 	dir = 8;
 	req_access = list(30)
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -16228,6 +16233,12 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/effect/decal/warning_stripes{
+	dir = 10;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHWEST)"
+	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -17230,13 +17241,9 @@
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/zoned/roid_prep)
 "gcu" = (
-/obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/security/armory)
+/obj/item/trash/discountchocolate,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "gcX" = (
 /obj/structure/grille/window_spawner/reinforced,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -18830,9 +18837,6 @@
 /obj/machinery/conveyor{
 	dir = 1;
 	id_tag = "garbage"
-	},
-/obj/machinery/atmospherics/unary/vent_pump{
-	on = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -24349,7 +24353,7 @@
 /area/syndicate_mothership)
 "iGC" = (
 /obj/item/trash/syndi_cakes,
-/turf/unsimulated/floor/planetary/grass/jungle,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
 "iGE" = (
 /obj/structure/cable/yellow{
@@ -26974,11 +26978,10 @@
 /area/surface/jungle)
 "jEt" = (
 /obj/structure/table/reinforced,
-/obj/machinery/door/poddoor/shutters{
+/obj/machinery/door/poddoor/shutters/preopen{
+	id_tag = "hop";
 	dir = 8;
-	icon_state = "shutter0";
-	name = "Privacy Shutters";
-	id_tag = "hop"
+	name = "Privacy Shutters"
 	},
 /obj/machinery/door/window/brigdoor{
 	base_state = "rightsecure";
@@ -27546,11 +27549,6 @@
 /area/engineering/break_room)
 "jPq" = (
 /obj/structure/closet/cabinet,
-/obj/machinery/atmospherics/unary/vent_pump{
-	canSpawnMice = 0;
-	dir = 1;
-	on = 1
-	},
 /obj/item/weapon/book/manual/security_space_law,
 /obj/item/weapon/book/manual/security_antag_guide,
 /obj/item/device/camera{
@@ -29930,9 +29928,6 @@
 /area/research_outpost/entry)
 "kID" = (
 /obj/machinery/computer/aifixer,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /turf/simulated/floor/arcade,
 /area/science/rd)
 "kIE" = (
@@ -30087,8 +30082,8 @@
 	id_tag = "hop";
 	name = "Privacy Shutters";
 	pixel_x = -24;
-	req_access_txt = "57";
-	pixel_y = 6
+	pixel_y = 6;
+	req_access_txt = "57"
 	},
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -31768,7 +31763,11 @@
 	},
 /area/science/xenobiology)
 "ltQ" = (
-/obj/structure/displaycase/lamarr,
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning";
+	tag = "icon-warning"
+	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -32794,10 +32793,6 @@
 "lLx" = (
 /obj/structure/closet/secure_closet/vault/armory,
 /obj/item/toy/gasha/wizard,
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 1;
-	on = 1
-	},
 /obj/item/weapon/gun/projectile/colt,
 /turf/simulated/floor{
 	dir = 8;
@@ -34983,9 +34978,6 @@
 	d1 = 2;
 	d2 = 4;
 	icon_state = "2-4"
-	},
-/obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "cult"
@@ -39733,7 +39725,7 @@
 /obj/machinery/door_control{
 	id_tag = "HoSOffice";
 	name = "Office Shutters";
-	req_access_txt = "2";
+	req_access_txt = "58";
 	pixel_x = -24;
 	pixel_y = 8
 	},
@@ -41254,7 +41246,8 @@
 "oIP" = (
 /obj/structure/flora/ausbushes/leafybush,
 /obj/machinery/light{
-	dir = 8
+	dir = 8;
+	break_chance = 0
 	},
 /turf/unsimulated/floor/planetary/grass,
 /area/hallway/primary/central/lobby)
@@ -41293,8 +41286,8 @@
 	},
 /area/centcom/suppy)
 "oJC" = (
-/obj/machinery/vending/cola,
-/turf/unsimulated/floor/planetary/path/jungle,
+/obj/item/trash/cigbutt,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
 "oJH" = (
 /obj/machinery/hologram/holopad,
@@ -41646,11 +41639,9 @@
 /turf/simulated/wall/r_wall,
 /area/medical/virology)
 "oRM" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor{
-	icon_state = "cult"
-	},
-/area/lawoffice)
+/obj/item/trash/chips,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "oRX" = (
 /obj/item/clothing/head/collectable/chef,
 /obj/effect/decal/warning_stripes/siding{
@@ -54153,7 +54144,7 @@
 /area/security/brig)
 "tnj" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 1
+	dir = 8
 	},
 /obj/machinery/light/small{
 	dir = 1
@@ -54908,7 +54899,6 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "tzS" = (
-/obj/machinery/atmospherics/unary/vent_scrubber/on,
 /obj/structure/table,
 /obj/item/weapon/paper_bin/black{
 	pixel_x = -3;
@@ -55642,7 +55632,8 @@
 "tME" = (
 /obj/structure/flora/ausbushes/sparsegrass,
 /obj/machinery/light{
-	dir = 8
+	dir = 8;
+	break_chance = 0
 	},
 /turf/unsimulated/floor/planetary/grass,
 /area/hallway/primary/central/lobby)
@@ -58668,10 +58659,6 @@
 /obj/item/device/taperecorder{
 	pixel_x = -7;
 	pixel_y = 2
-	},
-/obj/item/weapon/cartridge/detective{
-	pixel_y = -1;
-	pixel_x = 6
 	},
 /obj/item/device/megaphone{
 	pixel_x = 5;
@@ -63656,6 +63643,7 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/structure/displaycase/lamarr,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -64968,7 +64956,8 @@
 	pixel_y = 7
 	},
 /obj/item/clothing/mask/cigarette/cigar{
-	pixel_y = -3
+	pixel_y = 3;
+	pixel_x = 6
 	},
 /obj/machinery/hologram/holopad,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
@@ -65760,6 +65749,9 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "cult"
@@ -67575,8 +67567,8 @@
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/zoned/outdoor_bar)
 "xYJ" = (
-/obj/structure/flora/pottedplant/random,
 /obj/structure/hanging_lantern/dim,
+/obj/machinery/vending/cola,
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/fenced)
 "xYN" = (
@@ -112168,7 +112160,7 @@ jgK
 xor
 xor
 xor
-oJC
+piw
 lQc
 wDJ
 nUS
@@ -112541,7 +112533,7 @@ dzN
 rYY
 soM
 rAY
-gcu
+fAB
 emi
 fAB
 fAB
@@ -116394,8 +116386,8 @@ maR
 iMQ
 xMH
 ikh
-sbf
 iuN
+sbf
 rbU
 auw
 oXM
@@ -121004,7 +120996,7 @@ dKf
 wld
 nre
 nre
-wld
+nre
 tMC
 fMu
 fMu
@@ -121353,7 +121345,7 @@ eiA
 dYI
 maR
 dKf
-wld
+nre
 wld
 nre
 wld
@@ -121706,9 +121698,9 @@ twd
 hRV
 dKf
 nre
-wld
-wld
-wld
+nre
+nre
+nre
 fMu
 rki
 cGe
@@ -122058,7 +122050,7 @@ dYI
 maR
 dKf
 wld
-wld
+nre
 wld
 nre
 fMu
@@ -123449,8 +123441,8 @@ cIm
 kZc
 dbd
 dbd
+dbd
 sJF
-oRM
 pzN
 ktX
 ajT
@@ -123786,8 +123778,8 @@ maR
 psY
 xMH
 wld
-bRK
-wld
+oJC
+nre
 nre
 wld
 fgb
@@ -123809,9 +123801,9 @@ oFz
 odV
 kHJ
 wld
+nre
+nre
 wld
-nre
-nre
 wld
 nre
 wld
@@ -124139,15 +124131,15 @@ psY
 xMH
 nre
 wld
-wld
-wld
-wld
+nre
+nre
+nre
 nre
 nre
 xor
 xor
 nre
-wld
+nre
 wld
 cIm
 tvd
@@ -124163,15 +124155,15 @@ psY
 nre
 wld
 nre
+nre
 wld
-wld
-wld
+nre
 nre
 nre
 nre
 xor
 nre
-wld
+nre
 wld
 fMu
 cGe
@@ -124490,17 +124482,17 @@ maR
 psY
 xMH
 wld
-wld
+nre
 fRH
 wld
-wld
+nre
 nre
 nre
 xor
 xor
 nre
 nre
-hZt
+oRM
 cIm
 eGz
 lld
@@ -124513,18 +124505,18 @@ xMH
 maR
 psY
 wld
-wld
-wld
-wld
 nre
 wld
+nre
+nre
+nre
 wld
 nre
 nre
 xor
 nre
-wld
-wld
+nre
+nre
 fMu
 cGe
 bWj
@@ -124864,11 +124856,11 @@ cIm
 lNM
 maR
 psY
+nre
 wld
 nre
 nre
-wld
-wld
+nre
 nre
 nre
 wld
@@ -125216,11 +125208,11 @@ ptw
 ulu
 maR
 psY
-wld
+nre
+nre
+nre
 wld
 nre
-vNb
-vNb
 vNb
 vNb
 wZY
@@ -125569,10 +125561,10 @@ tsV
 ljY
 rcM
 wld
-wld
-wld
-vNb
-vNb
+nre
+nre
+nre
+nre
 nre
 nre
 xor
@@ -125925,7 +125917,7 @@ wld
 wld
 iqa
 vNb
-vNb
+nre
 vNb
 khl
 xor
@@ -126264,8 +126256,8 @@ wld
 nre
 nre
 wld
-wld
 nre
+wld
 maR
 iMQ
 sCJ
@@ -126612,11 +126604,11 @@ edD
 edD
 bWb
 nre
-wld
-wld
-wld
+nre
 nre
 wld
+nre
+nre
 nre
 maR
 iMQ
@@ -126968,7 +126960,7 @@ rSu
 rSu
 rSu
 wld
-wld
+nre
 wld
 maR
 iMQ
@@ -127319,7 +127311,7 @@ lwz
 mGS
 wZe
 rSu
-wld
+nre
 nre
 wld
 maR
@@ -128375,7 +128367,7 @@ hqV
 ssE
 rSu
 rSu
-wld
+nre
 nre
 nre
 maR
@@ -129431,8 +129423,8 @@ wJc
 ooz
 eYk
 ihi
-wld
-wld
+nre
+nre
 wld
 maR
 iMQ
@@ -133971,7 +133963,7 @@ nre
 kPA
 nre
 wld
-wld
+nre
 nre
 hXJ
 maR
@@ -134321,8 +134313,8 @@ nre
 nre
 wld
 wld
-wld
-wld
+nre
+nre
 wld
 wld
 hXJ
@@ -135723,7 +135715,7 @@ xor
 xor
 xor
 wld
-wld
+nre
 wld
 nre
 nre
@@ -136074,7 +136066,7 @@ xor
 xor
 kRT
 xor
-wld
+nre
 nre
 wld
 nre
@@ -136422,12 +136414,12 @@ nre
 nre
 nre
 nre
-wld
+nre
 wld
 xor
 xor
 wld
-wld
+nre
 nre
 wld
 nre
@@ -136775,12 +136767,12 @@ saC
 kjk
 wld
 wld
-wld
+nre
 xor
 xor
 nre
 wld
-wld
+nre
 wld
 nre
 xor
@@ -137125,14 +137117,14 @@ saC
 pJD
 saC
 wld
-wld
 nre
-wld
+nre
+nre
 xor
 xor
-wld
-wld
-wld
+nre
+nre
+nre
 nre
 nre
 xor
@@ -137478,7 +137470,7 @@ lzQ
 saC
 nre
 wld
-wld
+nre
 khE
 xor
 xor
@@ -137491,7 +137483,7 @@ lVb
 nre
 nre
 nre
-wld
+nre
 wld
 hXJ
 maR
@@ -137829,20 +137821,20 @@ saC
 azy
 saC
 wld
-wld
-wld
+nre
+nre
 wld
 xor
 xor
 wld
+nre
+nre
 wld
 nre
 wld
-wld
-wld
 nre
 wld
-wld
+nre
 wld
 nre
 hXJ
@@ -138180,22 +138172,22 @@ anh
 smj
 anh
 aPt
-wld
-wld
-wld
-wld
+nre
+nre
+nre
+nre
 xor
 xor
-wld
-wld
-wld
-wld
-wld
-wld
-wld
 wld
 nre
 wld
+nre
+nre
+nre
+nre
+wld
+nre
+nre
 fjR
 hXJ
 maR
@@ -138534,17 +138526,17 @@ anh
 aPt
 wld
 wld
-wld
+nre
 wld
 xor
 xor
 wld
 nre
+nre
+nre
 wld
 wld
-wld
-wld
-wld
+nre
 nre
 wld
 wld
@@ -139595,13 +139587,13 @@ nre
 wld
 iqa
 wld
-wld
-wld
 nre
 wld
+nre
+nre
 gKl
 nre
-wld
+nre
 nre
 wld
 nre
@@ -139953,7 +139945,7 @@ aRn
 aRn
 aRn
 wld
-wld
+nre
 wld
 nre
 nre
@@ -140681,7 +140673,7 @@ psY
 maR
 iGC
 wld
-wld
+nre
 hXJ
 maR
 xor
@@ -141031,9 +141023,9 @@ usw
 xMH
 psY
 maR
-wld
-wld
-wld
+nre
+nre
+nre
 hXJ
 maR
 xor
@@ -141383,8 +141375,8 @@ usw
 xMH
 psY
 maR
-bIY
-wld
+dPc
+nre
 wld
 hXJ
 maR
@@ -141736,8 +141728,8 @@ tft
 gqR
 maR
 wld
-fgb
-wld
+gcu
+nre
 hXJ
 maR
 xor
@@ -142078,7 +142070,7 @@ mFh
 piH
 eAh
 owz
-nre
+xor
 pSk
 hiS
 nXB
@@ -142087,9 +142079,9 @@ usw
 xMH
 psY
 maR
-wld
-wld
-wld
+nre
+nre
+nre
 hXJ
 maR
 xor
@@ -142439,7 +142431,7 @@ usw
 hdy
 psY
 maR
-wld
+nre
 wld
 wld
 hXJ
@@ -142791,9 +142783,9 @@ erB
 ulu
 psY
 maR
-wld
-wld
-bIY
+nre
+nre
+dPc
 hXJ
 maR
 xor
@@ -143144,8 +143136,8 @@ jUa
 rcM
 maR
 wld
-wld
-wld
+nre
+nre
 hXJ
 maR
 xor
@@ -143496,7 +143488,7 @@ mEG
 mEG
 xKy
 nre
-wld
+nre
 wld
 hXJ
 maR
@@ -144198,10 +144190,10 @@ eSx
 nre
 wld
 nre
+nre
+nre
 wld
-wld
-wld
-wld
+nre
 eDb
 bBI
 mEG
@@ -145215,7 +145207,7 @@ lIK
 lIK
 dMN
 bIv
-bIv
+ltQ
 kID
 hTL
 wLx
