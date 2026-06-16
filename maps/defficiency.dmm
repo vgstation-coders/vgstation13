@@ -70982,9 +70982,7 @@
 	name = "Security Medbay"
 	})
 "cGr" = (
-/obj/structure/closet/walllocker/defiblocker{
-	pixel_y = 32
-	},
+/obj/structure/closet/walllocker/defiblocker/north,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -110627,11 +110625,12 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
 "rfC" = (
-/obj/machinery/recharger/defibcharger/wallcharger{
-	pixel_x = -24;
-	pixel_y = -2
-	},
 /obj/structure/bed/roller/deff,
+/obj/machinery/vending/wallmed1{
+	name = "Emergency NanoMed";
+	pixel_x = -27;
+	pixel_y = 2
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark_navy";
