@@ -4739,7 +4739,7 @@
 	dir = 8;
 	pixel_x = -24
 	},
-/obj/machinery/washing_machine,
+/obj/structure/flora/pottedplant/random,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -5697,12 +5697,12 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 9
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning"
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -5711,14 +5711,6 @@
 	},
 /area/medical/virology)
 "alX" = (
-/obj/structure/wc/sink{
-	dir = 8;
-	pixel_x = -12;
-	pixel_y = 2
-	},
-/obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 4
-	},
 /obj/machinery/access_button{
 	command = "cycle_interior";
 	master_tag = "virology_airlock_control";
@@ -5732,6 +5724,9 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTHWEST)"
 	},
+/obj/machinery/shower{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "dark green stripe";
@@ -5739,7 +5734,6 @@
 	},
 /area/medical/virology)
 "alY" = (
-/obj/structure/closet/emcloset,
 /obj/machinery/camera{
 	name = "Virology Airlock"
 	},
@@ -5751,6 +5745,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
 	},
+/obj/structure/closet/l3closet/virology,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "dark green stripe";
@@ -6139,9 +6134,6 @@
 	},
 /area/medical/virology)
 "amR" = (
-/obj/machinery/shower{
-	dir = 4
-	},
 /obj/structure/sign/securearea{
 	pixel_x = -32
 	},
@@ -6150,6 +6142,9 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
+/obj/machinery/shower{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark green stripe";
@@ -6157,20 +6152,16 @@
 	},
 /area/medical/virology)
 "amS" = (
-/obj/machinery/alarm{
-	dir = 8;
-	pixel_x = 24
-	},
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/structure/closet/l3closet/virology,
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "warning";
 	tag = "icon-warning (EAST)"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/closet/l3closet/virology,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark green stripe";
@@ -6619,9 +6610,6 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "warning_corner";
@@ -6631,26 +6619,25 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	dir = 4;
+	on = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark green stripe";
 	tag = "icon-dark green stripe (NORTH)"
 	},
 /area/medical/virology)
 "anO" = (
-/obj/structure/wc/sink{
-	dir = 8;
-	pixel_x = -12;
-	pixel_y = 2
-	},
-/obj/machinery/atmospherics/unary/vent_pump{
-	canSpawnMice = 0;
-	dir = 4;
-	on = 1
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 10;
 	icon_state = "warning";
 	tag = "icon-warning (SOUTHWEST)"
+	},
+/obj/structure/wc/sink{
+	dir = 8;
+	pixel_x = -11
 	},
 /turf/simulated/floor{
 	dir = 10;
@@ -6668,7 +6655,6 @@
 	},
 /area/medical/virology)
 "anQ" = (
-/obj/structure/closet/l3closet/virology,
 /obj/effect/decal/warning_stripes{
 	dir = 6;
 	icon_state = "warning";
@@ -6677,6 +6663,11 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
 	},
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
+/obj/machinery/washing_machine,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark green stripe";
