@@ -17,6 +17,7 @@ var/static/list/mat2type = list(
 	MAT_MYTHRIL = /obj/item/stack/sheet/mineral/mythril,
 	MAT_CLOWN = /obj/item/stack/sheet/mineral/clown,
 	MAT_PHAZON = /obj/item/stack/sheet/mineral/phazon,
+	MAT_RETICULITE = /obj/item/stack/sheet/mineral/reticulite,
 )
 
 /obj/item/device/material_synth
