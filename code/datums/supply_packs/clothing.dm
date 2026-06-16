@@ -332,7 +332,7 @@
 					/obj/item/weapon/tank/emergency_oxygen/engi,
 					/obj/item/weapon/tank/emergency_oxygen/engi)
 	cost = 40
-	containertype = /obj/structure/closet/crate/ayy3/metal
+	containertype = /obj/structure/closet/crate/ayy3
 	containername = "GDR half-mask crate"
 	contraband = 1
 	group = "Clothing"
