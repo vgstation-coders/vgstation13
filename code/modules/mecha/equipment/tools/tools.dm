@@ -1873,7 +1873,7 @@
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		chassis.log_append_to_last("Permission denied.")
 		return
-	if(W.w_class > 1)
+	if(W.w_class > 2)
 		to_chat(user,"<span class='warning'>This item is too big for the prober.</span>")
 		return
 	if(user.drop_item(W,src))
