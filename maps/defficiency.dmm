@@ -70625,7 +70625,7 @@
 	freerange = 1;
 	name = "Station Intercom (Captain)";
 	pixel_x = 27;
-	pixel_y = -7
+	pixel_y = -9
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
@@ -71348,10 +71348,6 @@
 /obj/machinery/light_switch{
 	pixel_x = -24;
 	pixel_y = 6
-	},
-/obj/machinery/media/receiver/boombox/wallmount{
-	pixel_y = -4;
-	pixel_x = -28
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
@@ -72903,6 +72899,10 @@
 	dir = 6
 	},
 /obj/structure/disposalpipe/segment,
+/obj/machinery/media/receiver/boombox/wallmount{
+	pixel_y = -2;
+	pixel_x = -28
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "cJV" = (
@@ -72919,10 +72919,6 @@
 	},
 /area/bridge)
 "cJW" = (
-/obj/machinery/recharger/defibcharger/wallcharger{
-	pixel_x = 35;
-	pixel_y = -10
-	},
 /turf/simulated/floor{
 	icon_state = "bluecorner"
 	},
@@ -73835,6 +73831,10 @@
 /area/maintenance/maintcentral)
 "cLD" = (
 /obj/machinery/vending/cigarette,
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "cLE" = (
@@ -74630,10 +74630,6 @@
 	dir = 1
 	},
 /obj/machinery/disposal,
-/obj/machinery/alarm{
-	dir = 4;
-	pixel_x = -24
-	},
 /obj/structure/painting/random{
 	pixel_y = -32
 	},
@@ -74647,6 +74643,10 @@
 	},
 /area/bridge)
 "cMX" = (
+/obj/machinery/recharger/defibcharger/wallcharger{
+	pixel_x = 35;
+	pixel_y = -5
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "bluecorner"
