@@ -1456,6 +1456,9 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 1
 	},
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -2241,6 +2244,11 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
 	on = 1
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -4598,9 +4606,6 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /obj/structure/grille,
 /obj/machinery/door/poddoor{
 	density = 0;
@@ -4609,11 +4614,14 @@
 	name = "Bridge Blast Doors";
 	opacity = 0
 	},
-/obj/structure/cable/yellow,
 /obj/structure/cable/yellow{
-	icon_state = "1-8"
+	d2 = 8;
+	icon_state = "0-8"
 	},
 /obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
 /turf/simulated/floor/plating,
 /area/bridge)
 "bFC" = (
@@ -13448,11 +13456,6 @@
 	dir = 8;
 	on = 1
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -13480,13 +13483,7 @@
 	name = "Bridge Blast Doors";
 	opacity = 0
 	},
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/cable/yellow{
-	icon_state = "1-4"
-	},
+/obj/structure/cable/yellow,
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
 /area/bridge)
@@ -16266,11 +16263,6 @@
 /area/surface/jungle/zoned/outdoor_bar)
 "fMl" = (
 /obj/machinery/computer/atmos_alert,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light/small{
 	dir = 8
 	},
@@ -17018,11 +17010,6 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
 	density = 0;
 	icon_state = "pdoor0";
@@ -17030,14 +17017,14 @@
 	name = "Bridge Blast Doors";
 	opacity = 0
 	},
+/obj/structure/cable/yellow,
 /obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2"
+	icon_state = "1-4"
 	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/bridge)
@@ -19308,9 +19295,6 @@
 /area/engineering/engine)
 "gOX" = (
 /obj/structure/bed/chair/office/dark,
-/obj/structure/cable/yellow{
-	icon_state = "4-8"
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -31139,15 +31123,10 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters)
 "lis" = (
-/obj/machinery/computer/med_data,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/machinery/computer/med_data,
 /turf/simulated/floor{
 	icon_state = "darkred"
 	},
@@ -31481,14 +31460,6 @@
 "lpm" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable/yellow{
-	icon_state = "1-8"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -36348,11 +36319,19 @@
 /turf/simulated/floor,
 /area/engineering/supermatter_room)
 "mYK" = (
-/obj/machinery/computer/supermatter{
-	id_tag = "Shard1"
-	},
 /obj/machinery/light{
 	dir = 4
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/computer/powermonitor,
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
 	},
 /turf/simulated/floor{
 	icon_state = "darkyellow";
@@ -36853,9 +36832,6 @@
 	pixel_x = 5;
 	pixel_y = -24;
 	req_access_txt = "19"
-	},
-/obj/structure/cable/yellow{
-	icon_state = "4-8"
 	},
 /obj/machinery/camera{
 	dir = 1
@@ -44805,7 +44781,9 @@
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
 "pZm" = (
-/obj/machinery/computer/powermonitor,
+/obj/machinery/computer/supermatter{
+	id_tag = "Shard1"
+	},
 /turf/simulated/floor{
 	icon_state = "darkyellow";
 	tag = "icon-darkyellow (EAST)";
@@ -45069,9 +45047,12 @@
 /area/vox_trading_post/medbay)
 "qeC" = (
 /obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "darkyellowcorners";
@@ -45315,8 +45296,13 @@
 	opacity = 0
 	},
 /obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2"
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
@@ -52852,6 +52838,19 @@
 /obj/structure/curtain/open/bed,
 /turf/simulated/floor/wood,
 /area/surface/jungle/zoned/outdoor_bar)
+"sQd" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	icon_state = "2-8"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/bridge)
 "sQB" = (
 /obj/machinery/door/window/brigdoor{
 	base_state = "right";
@@ -53715,6 +53714,9 @@
 /obj/item/ashtray/bronze{
 	pixel_y = 3;
 	pixel_x = 4
+	},
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -59462,10 +59464,9 @@
 /area/security/prison)
 "viq" = (
 /obj/structure/cable/yellow{
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	icon_state = "4-8"
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -61516,9 +61517,7 @@
 	dir = 4
 	},
 /obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
+	icon_state = "1-4"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -65182,6 +65181,11 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "darkred"
@@ -65858,8 +65862,11 @@
 	opacity = 0
 	},
 /obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable/yellow{
+	icon_state = "2-8"
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
@@ -126928,7 +126935,7 @@ idZ
 snf
 snf
 dzM
-fYL
+fkR
 fMl
 qeC
 gsH
@@ -126936,7 +126943,7 @@ owD
 gsH
 viq
 xiw
-fkR
+fYL
 qht
 ryn
 tBG
@@ -127282,11 +127289,11 @@ snf
 nre
 mmb
 nDi
-tbZ
+qRi
 tbZ
 mtO
 tbZ
-qRi
+tbZ
 ldM
 eZy
 jis
@@ -127634,11 +127641,11 @@ snf
 nre
 mmb
 jQV
-tbZ
+qRi
 tbZ
 bEC
 tbZ
-qRi
+tbZ
 esr
 eZy
 pHC
@@ -128338,11 +128345,11 @@ snf
 szg
 mmb
 pZm
-tbZ
+qRi
 wWn
 brY
 ijh
-qRi
+tbZ
 uFM
 eZy
 pHC
@@ -128690,7 +128697,7 @@ snf
 nre
 xrY
 mYK
-tbZ
+sQd
 aPT
 vSz
 eKb
