@@ -1,0 +1,198 @@
+// A single 1v1 tournament round inside the admin arena.
+
+// Starting a round doesn't immediately teleport them into the arena. Instead, COPIES
+// of their bodies are teleported to a prep room.
+
+// Only one arena is supported at a time right now, so only one round
+var/global/datum/admin_arena_round/current_admin_arena_round
+
+
+
+/datum/admin_arena_round
+	var/list/datum/admin_arena_contestant/contestants = list()
+	// Creation of this datum implies the teleportation of contestants into their prep rooms.
+	var/in_arena = FALSE		// TRUE once the contestants have been moved out of their prep rooms into the arena
+	var/combat_started = FALSE	// TRUE once the combat has started and barriers lifted
+	var/finished = FALSE		// TRUE once someone dies in combat
+
+/datum/admin_arena_round/New(client/red_client, turf/red_prep_turf, client/green_client, turf/green_prep_turf)
+	contestants += new /datum/admin_arena_contestant(red_client, red_prep_turf, /datum/outfit/special/robust_tournament_red)
+	contestants += new /datum/admin_arena_contestant(green_client, green_prep_turf, /datum/outfit/special/robust_tournament_green)
+
+/datum/admin_arena_round/Destroy()
+	QDEL_LIST_NULL(contestants)
+	if(current_admin_arena_round == src)
+		current_admin_arena_round = null
+
+// Builds a "CKEY:CLIENT" map for all possible candidates. Candidates must have a body that can be found in the body archive.
+/proc/get_arena_contestant_candidates()
+	var/list/candidates = list()
+	for(var/client/C in clients)
+		if(!C.mob || !C.mob.mind || !C.mob.mind.body_archive)
+			continue
+		var/display_name = C.mob.real_name ? C.mob.real_name : C.mob.name
+		candidates["[display_name] ([C.ckey])"] = C
+	return candidates
+
+/datum/admin_arena_round/proc/get_contestant_by_body(mob/body)
+	for(var/datum/admin_arena_contestant/C in contestants)
+		if(C.arena_body == body)
+			return C
+	return null
+
+/datum/admin_arena_round/proc/announce(message)
+	to_chat(world, "<font size='12' color='red'><b>[message]</b></font>")
+
+
+
+// Telports fighting bodies to the arena. Returns whether it was successful; should always be unless something got deleted.
+/datum/admin_arena_round/proc/send_contestants_to_arena()
+	if(!current_admin_arena || contestants.len < 2)
+		return FALSE
+	var/obj/effect/admin_arena_spawn/spawn_one = current_admin_arena.find_spawn_marker(/obj/effect/admin_arena_spawn/one)
+	var/obj/effect/admin_arena_spawn/spawn_two = current_admin_arena.find_spawn_marker(/obj/effect/admin_arena_spawn/two)
+	if(!spawn_one || !spawn_two)
+		return FALSE
+	var/datum/admin_arena_contestant/red = contestants[1]
+	var/datum/admin_arena_contestant/green = contestants[2]
+	red.send_to_arena(get_turf(spawn_one))
+	green.send_to_arena(get_turf(spawn_two))
+	in_arena = TRUE
+	return TRUE
+
+// Server-wide countdown, then drops barrier and listens for deaths.
+/datum/admin_arena_round/proc/begin_combat()
+	set waitfor = FALSE
+	if(combat_started || finished)
+		return
+	combat_started = TRUE
+	world << sound('sound/effects/three two one go.mp3')
+	announce("Three...")
+	sleep(0.9 SECONDS)
+	announce("Two...")
+	sleep(0.9 SECONDS)
+	announce("One...")
+	sleep(0.9 SECONDS)
+	announce("Go!")
+	delete_barriers()
+	begin_life_tracking()
+
+/datum/admin_arena_round/proc/delete_barriers()
+	if(!current_admin_arena)
+		return
+	for(var/turf/T in current_admin_arena.get_turfs())
+		for(var/obj/effect/admin_arena_barrier/barrier in T)
+			qdel(barrier)
+
+/datum/admin_arena_round/proc/begin_life_tracking()
+	for(var/datum/admin_arena_contestant/C in contestants)
+		if(C.arena_body)
+			C.arena_body.register_event(/event/death, src, nameof(src::on_contestant_death()))
+
+/datum/admin_arena_round/proc/stop_life_tracking()
+	for(var/datum/admin_arena_contestant/C in contestants)
+		if(!C.arena_body)
+			continue
+		C.arena_body.unregister_event(/event/death, src, nameof(src::on_contestant_death()))
+
+/datum/admin_arena_round/proc/on_contestant_death(mob/user, body_destroyed)
+	if(finished)
+		return
+	var/datum/admin_arena_contestant/loser = get_contestant_by_body(user)
+	if(loser)
+		end_combat(loser)
+
+// Ends combat, but not the round. Ending/deleting the round is done manually.
+/datum/admin_arena_round/proc/end_combat(datum/admin_arena_contestant/loser)
+	if(finished)
+		return
+	finished = TRUE
+	stop_life_tracking()
+	var/datum/admin_arena_contestant/winner
+	for(var/datum/admin_arena_contestant/C in contestants)
+		if(C != loser)
+			winner = C
+			break
+	announce("[winner.display_name] is your victor!")
+
+// Ends the round immediately, returning everyone to their original bodies and deletes this round datum.
+/datum/admin_arena_round/proc/end_round()
+	finished = TRUE
+	for(var/datum/admin_arena_contestant/C in contestants)
+		C.restore_original_body()
+	qdel(src)
+
+
+
+
+
+
+/datum/admin_arena_contestant
+	var/ckey
+	var/display_name
+	var/datum/mind/mind
+	var/mob/original_body		// Real body, parked in nullspace until round is over
+	var/turf/original_location	// Location to return real body to after round
+	var/mob/arena_body			// Body copy that actually fights
+
+/datum/admin_arena_contestant/New(client/player, turf/destination, outfit_type)
+	ckey = player.ckey
+	display_name = player.mob.real_name ? player.mob.real_name : player.mob.name
+	mind = player.mob.mind
+	original_body = mind.current
+	enter_prep_room(destination, outfit_type)
+
+/datum/admin_arena_contestant/Destroy()
+	mind = null
+	original_body = null
+	original_location = null
+	arena_body = null
+	return ..()
+
+/datum/admin_arena_contestant/proc/enter_prep_room(turf/destination, outfit_type)
+	var/datum/body_archive/archive = mind.body_archive
+	if(!archive)
+		return FALSE
+	stash_original_body()
+	arena_body = spawn_arena_body(destination, archive)
+	equip_arena_outfit(outfit_type)
+	return TRUE
+
+// Moves OG body to nullspace and stores where it was moved from
+/datum/admin_arena_contestant/proc/stash_original_body()
+	original_location = get_turf(original_body)
+	original_body.forceMove(null)
+
+// Uses body archive to spawn a temporary body for the fight.
+/datum/admin_arena_contestant/proc/spawn_arena_body(turf/destination, datum/body_archive/archive)
+	// Might be a better way than creating a temp mob to do this.
+	var/mob/temp_mob = new archive.mob_type(destination)
+	var/mob/copy = temp_mob.actually_reset_body(archive, FALSE, FALSE, null, mind)
+	qdel(temp_mob)
+	return copy
+
+/datum/admin_arena_contestant/proc/equip_arena_outfit(outfit_type)
+	if(!ishuman(arena_body))
+		return
+	var/datum/outfit/team_outfit = new outfit_type
+	team_outfit.equip(arena_body, TRUE)
+
+/datum/admin_arena_contestant/proc/send_to_arena(turf/destination)
+	if(!arena_body || !destination)
+		return
+	arena_body.forceMove(destination)
+
+/datum/admin_arena_contestant/proc/restore_original_body()
+	if(!QDELETED(original_body))
+		if(original_location)
+			original_body.forceMove(original_location)
+		if(mind)
+			mind.transfer_to(original_body)
+	if(arena_body)
+		qdel(arena_body)
+		arena_body = null
+
+
+
+
+

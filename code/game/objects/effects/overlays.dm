@@ -177,4 +177,28 @@
 	pixel_x += rand(-10, 10) * PIXEL_MULTIPLIER
 	pixel_y += rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/effect/overlay/mapped_weather
+	name = "mapped weather effect"
+	anchored = 1
+	mouse_opacity = 0
+
+/obj/effect/overlay/mapped_weather/ash
+	name = "ash"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "ash1"
+
+/obj/effect/overlay/mapped_weather/ash
+	name = "ash"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "ash1"
+
+/obj/effect/overlay/mapped_weather/ash
+	name = "ash"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "ash1"
+
+/obj/effect/overlay/mapped_weather/ash
+	name = "ash"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "ash1"
 

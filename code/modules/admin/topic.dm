@@ -751,6 +751,18 @@
 		message_admins("<span class='notice'>[key_name(usr)] created a prep room marker at [T.x],[T.y],[T.z].</span>", 1)
 		admin_arena_panel()
 
+	else if(href_list["admin_arena_panel_remove_prep_room"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/obj/effect/admin_arena_prep_room_marker/marker = locate(href_list["admin_arena_panel_remove_prep_room"])
+		if(!istype(marker))
+			return
+		var/turf/T = get_turf(marker)
+		log_admin("[key_name(usr)] removed a prep room marker at [T ? "[T.x],[T.y],[T.z]" : "(nullspace)"].")
+		message_admins("<span class='notice'>[key_name(usr)] removed a prep room marker[T ? " at [T.x],[T.y],[T.z]" : ""].</span>", 1)
+		qdel(marker)
+		admin_arena_panel()
+
 	else if(href_list["admin_arena_panel_load_file"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -786,6 +798,71 @@
 			return
 		log_admin("[key_name(usr)] loaded the [selection] arena preset.")
 		message_admins("<span class='notice'>[key_name(usr)] loaded the [selection] arena preset.</span>", 1)
+		admin_arena_panel()
+
+	else if(href_list["admin_arena_panel_begin_round"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!current_admin_arena)
+			alert(usr, "You need to create an admin arena first!", "No Arena", "Ok")
+			return
+		var/list/prep_rooms = get_available_arena_prep_rooms(2)
+		if(prep_rooms.len < 2)
+			alert(usr, "You need at least two prep rooms before starting a round!", "Not Enough Prep Rooms", "Ok")
+			return
+		var/list/candidates = get_arena_contestant_candidates()
+		if(candidates.len < 2)
+			alert(usr, "There aren't enough valid players to start a round!", "Not Enough Players", "Ok")
+			return
+		var/red_choice = input(usr, "Select the RED contestant.", "Begin New Round") as null|anything in candidates
+		if(!red_choice)
+			return
+		var/client/red_client = candidates[red_choice]
+		candidates -= red_choice
+		var/green_choice = input(usr, "Select the GREEN contestant.", "Begin New Round") as null|anything in candidates
+		if(!green_choice)
+			return
+		var/client/green_client = candidates[green_choice]
+		var/obj/effect/admin_arena_prep_room_marker/red_prep = prep_rooms[1]
+		var/obj/effect/admin_arena_prep_room_marker/green_prep = prep_rooms[2]
+		current_admin_arena_round = new /datum/admin_arena_round(red_client, get_turf(red_prep), green_client, get_turf(green_prep))
+		log_admin("[key_name(usr)] began an arena round: [red_client.ckey] (red) vs [green_client.ckey] (green).")
+		message_admins("<span class='notice'>[key_name(usr)] began an arena round: [red_client.ckey] (red) vs [green_client.ckey] (green).</span>", 1)
+		admin_arena_panel()
+
+	else if(href_list["admin_arena_panel_send_to_arena"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return
+		if(!current_admin_arena_round.send_contestants_to_arena())
+			alert(usr, "Couldn't find both arena spawn markers (one and two) inside the arena!", "Missing Spawn Markers", "Ok")
+			return
+		log_admin("[key_name(usr)] sent the arena contestants into the arena.")
+		message_admins("<span class='notice'>[key_name(usr)] sent the arena contestants into the arena.</span>", 1)
+		admin_arena_panel()
+
+	else if(href_list["admin_arena_panel_begin_combat"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return
+		current_admin_arena_round.begin_combat()
+		log_admin("[key_name(usr)] started combat in the arena.")
+		message_admins("<span class='notice'>[key_name(usr)] started combat in the arena.</span>", 1)
+		admin_arena_panel()
+
+	else if(href_list["admin_arena_panel_end_round"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return
+		current_admin_arena_round.end_round()
+		log_admin("[key_name(usr)] ended the arena round.")
+		message_admins("<span class='notice'>[key_name(usr)] ended the arena round.</span>", 1)
 		admin_arena_panel()
 
 	else if(href_list["level_manager_jump"])

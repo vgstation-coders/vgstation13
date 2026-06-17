@@ -267,6 +267,7 @@
 #include "code\datums\action.dm"
 #include "code\datums\admin_arena.dm"
 #include "code\datums\admin_arena_presets.dm"
+#include "code\datums\admin_arena_round.dm"
 #include "code\datums\ai_laws.dm"
 #include "code\datums\alt_control.dm"
 #include "code\datums\body_archive.dm"
