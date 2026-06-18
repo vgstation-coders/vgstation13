@@ -67,7 +67,7 @@
 	else if(!vz?.gps_allowed)
 		return "SIGNAL JAMMED"
 	else
-		return "[format_text(device_area.name)] ([vx() - get_world_x_offset(vz.id)], [vy() - get_world_y_offset(vz.id)], [vz.id])"
+		return "[format_text(device_area.name)] ([device_turf.vx() - get_world_x_offset(vz.id)], [device_turf.vy() - get_world_y_offset(vz.id)], [vz.id])"
 
 
 /obj/item/device/pcmc/proc/get_crew()
