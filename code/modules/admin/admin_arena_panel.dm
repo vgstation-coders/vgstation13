@@ -54,10 +54,11 @@
 		</p>
 		<h3>Round Management</h3>
 		<p>
-		[arena_panel_button("admin_arena_panel_begin_round", "Begin New Round", arena_exists)]<br>
+		[arena_panel_button("admin_arena_panel_begin_round", "Begin New Round", arena_exists && !round_active)]<br>
 		[arena_panel_button("admin_arena_panel_send_to_arena", "Send Contestants To Arena", round_active)]<br>
 		[arena_panel_button("admin_arena_panel_begin_combat", "Begin Combat", can_begin_combat)]<br>
-		[arena_panel_button("admin_arena_panel_end_round", "End Round", round_active)]
+		[arena_panel_button("admin_arena_panel_end_round", "End Round", round_active)]<br>
+		[arena_panel_button("admin_arena_panel_reset_round", "Reset Round", round_active)]
 		</p>
 		</body>
 		</html>

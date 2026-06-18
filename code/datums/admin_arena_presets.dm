@@ -10,7 +10,7 @@
 	file_path = "maps/admin_arenas/arena_apartments.dmm"
 
 /datum/admin_arena_preset/art_gallery
-	name = "art_gallery"
+	name = "arena_art_gallery"
 	file_path = "maps/admin_arenas/arena_art_gallery.dmm"
 
 /datum/admin_arena_preset/cascade

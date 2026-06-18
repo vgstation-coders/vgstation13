@@ -48,7 +48,7 @@ var/global/list/active_prep_rooms = list()
 	var/turf/bottom_left
 
 /datum/admin_arena/New(turf/bl)
-	bottom_left = bl
+	src.bottom_left = bl
 	if(current_admin_arena)
 		qdel(current_admin_arena)
 	current_admin_arena = src
@@ -74,9 +74,10 @@ var/global/list/active_prep_rooms = list()
 
 /datum/admin_arena/proc/clear_arena()
 	var/list/turfs = get_arena_turfs()
-	var/list/to_clear = list()
 	for(var/turf/T in turfs)
 		for(var/atom/movable/AM in T)
+			if(istype(AM, /mob/dead/observer))
+				continue
 			qdel(AM)
 		T.ChangeTurf(get_base_turf(T.z))
 
