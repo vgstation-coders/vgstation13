@@ -23,6 +23,7 @@ var/global/datum/admin_arena_round/current_admin_arena_round
 	QDEL_LIST_NULL(src.contestants)
 	if(current_admin_arena_round == src)
 		current_admin_arena_round = null
+	return ..()
 
 // Builds a "CKEY:CLIENT" map for all possible candidates. Candidates must have a body that can be found in the body archive.
 /proc/get_arena_contestant_candidates()
