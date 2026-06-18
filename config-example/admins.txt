@@ -34,6 +34,5 @@ uristqwerty - Game Master
 wrongnumber - Game Admin
 mij - Game Admin
 
-ApotheoticOrder - Game Admin
 pomf123 - Game Admin
 n3x15 - Coder
