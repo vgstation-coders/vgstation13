@@ -73,10 +73,6 @@
 	name = "arena_medbay"
 	file_path = "maps/admin_arenas/arena_medbay.dmm"
 
-/datum/admin_arena_preset/obsidian
-	name = "arena_obsidian"
-	file_path = "maps/admin_arenas/arena_obsidian.dmm"
-
 /datum/admin_arena_preset/one_true_king
 	name = "arena_one_true_king"
 	file_path = "maps/admin_arenas/arena_one_true_king.dmm"
