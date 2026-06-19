@@ -411,7 +411,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<FONT COLOR='maroon'>Invalid receiving channel name.</FONT><BR>"
 				if(scanned_user=="Unknown")
 					dat+="<FONT COLOR='maroon'>Channel author unverified.</FONT><BR>"
-				if(msg == "" || msg == "\[REDACTED\]")
+				if(raw_msg == "" || raw_msg == "\[REDACTED\]")
 					dat+="<FONT COLOR='maroon'>Invalid message body.</FONT><BR>"
 
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_MESSAGE]'>Return</A><BR>"
@@ -792,7 +792,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(isobserver(usr) && !canGhostWrite(usr,src,"added a new story"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
 				return
-			if(msg =="" || msg=="\[REDACTED\]" || scanned_user == "Unknown" || channel_name == "" )
+			if(raw_msg =="" || raw_msg=="\[REDACTED\]" || scanned_user == "Unknown" || channel_name == "" )
 				screen=NEWSCASTER_NEW_MESSAGE_ERROR
 			else
 				var/datum/feed_channel/our_channel
