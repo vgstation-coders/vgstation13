@@ -300,6 +300,9 @@
 	if(!emagged)
 		to_chat(user, "<span class='warning'>You short out the access on \the [src].</span>")
 		emagged = TRUE
+		open = TRUE
+		update_door_status()
+		playsound(src, 'sound/machines/click.ogg', 100, 1)
 
 /obj/structure/fence/door/attack_hand(mob/user)
 	if(can_open(user))
