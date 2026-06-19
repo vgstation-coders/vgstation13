@@ -5,6 +5,11 @@
 /obj/item/weapon/tray/robotray
 	name = "RoboTray"
 	desc = "An autoloading tray specialized for carrying refreshments."
+	var/list/carrying = list() // List of things on the tray. - Doohl
+
+/obj/item/weapon/tray/robotray/Destroy()
+	QDEL_LIST_NULL(carrying)
+	..()
 
 /obj/item/weapon/tray/robotray/afterattack(atom/target, mob/user as mob, proximity_flag)
 	if(!target)
