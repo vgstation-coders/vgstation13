@@ -2751,6 +2751,9 @@
 	holder.remove_reagent(WATER, created_volume-allowed_consumption, safety = 1)
 	holder.add_reagent(ICE, created_volume-allowed_consumption, null, T0C)
 
+/datum/chemical_reaction/ice_to_water/log_reaction()
+	return
+
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 
 /datum/chemical_reaction/goldschlager

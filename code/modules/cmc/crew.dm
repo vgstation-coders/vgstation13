@@ -508,7 +508,7 @@ TGUI PROCS
 			var/list/crew_entry = list()
 
 			crew_entry["name"] = entry[ENTRY_NAME]
-			crew_entry["job"] = entry[ENTRY_ASSIGNMENT]
+			crew_entry["job"] = entry[ENTRY_ASSIGNMENT] || ""
 			crew_entry["vitals"] = entry[ENTRY_STAT]
 			crew_entry["area"] = entry[ENTRY_AREA]
 
