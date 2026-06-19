@@ -146,7 +146,10 @@
 			return
 
 	if(hole_size >= SMALL_HOLE)
-		user.drop_item(W, get_turf(src))
+		if(user.drop_item(W, get_turf(src)))
+			return
+
+	. = ..()
 
 /obj/structure/fence/attack_paw(mob/user)
 	if(M_HULK in user.mutations)
