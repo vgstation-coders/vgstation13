@@ -7843,9 +7843,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza{
-	pixel_y = 8
-	},
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza,
 /obj/machinery/newscaster{
 	pixel_y = 32
 	},
@@ -10834,9 +10832,8 @@
 	dir = 4
 	},
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/medical/genetics)
 "awd" = (
@@ -10870,23 +10867,24 @@
 	name = "Medbay - Genetics Research"
 	},
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+	icon_state = "dark purple stripe";
+	tag = "icon-dark purple stripe (WEST)";
+	dir = 1
 	},
 /area/medical/genetics)
 "awf" = (
-/obj/machinery/dna_scannernew,
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
 	},
-/area/medical/genetics)
+/obj/machinery/hologram/holopad,
+/turf/simulated/floor/carpet,
+/area/crew_quarters/captain)
 "awg" = (
 /obj/machinery/dna_scannernew,
 /turf/simulated/floor{
-	icon_state = "dark"
+	icon_state = "dark purple stripe";
+	tag = "icon-dark purple stripe (WEST)";
+	dir = 1
 	},
 /area/medical/genetics)
 "awh" = (
@@ -10903,9 +10901,9 @@
 	pixel_y = 2
 	},
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+	icon_state = "dark purple stripe";
+	tag = "icon-dark purple stripe (WEST)";
+	dir = 1
 	},
 /area/medical/genetics)
 "awi" = (
@@ -10920,7 +10918,9 @@
 	pixel_y = 24
 	},
 /turf/simulated/floor{
-	icon_state = "dark"
+	dir = 5;
+	icon_state = "dark purple stripe";
+	tag = "icon-dark purple stripe (SOUTHEAST)"
 	},
 /area/medical/genetics)
 "awj" = (
@@ -10929,7 +10929,9 @@
 	},
 /obj/machinery/computer/scan_consolenew,
 /turf/simulated/floor{
-	icon_state = "dark"
+	icon_state = "dark purple stripe";
+	tag = "icon-dark purple stripe (WEST)";
+	dir = 1
 	},
 /area/medical/genetics)
 "awk" = (
@@ -11811,9 +11813,8 @@
 "axR" = (
 /mob/living/carbon/monkey,
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/medical/genetics)
 "axT" = (
@@ -11868,9 +11869,8 @@
 	},
 /mob/living/carbon/monkey,
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/medical/genetics)
 "axZ" = (
@@ -11950,7 +11950,7 @@
 	},
 /obj/machinery/door/airlock/glass_research{
 	name = "Genetics Research";
-	req_access_txt = "5"
+	req_access_txt = "5;9"
 	},
 /turf/simulated/floor{
 	icon_state = "dark purple full";
@@ -12729,9 +12729,8 @@
 /mob/living/carbon/monkey,
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/medical/genetics)
 "azz" = (
@@ -12741,9 +12740,8 @@
 /mob/living/carbon/monkey,
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/medical/genetics)
 "azA" = (
@@ -12753,9 +12751,8 @@
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/medical/genetics)
 "azB" = (
@@ -14066,9 +14063,9 @@
 	pixel_x = -5
 	},
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+	dir = 8;
+	icon_state = "dark purple stripe";
+	tag = "icon-dark purple stripe (WEST)"
 	},
 /area/medical/genetics)
 "aBA" = (
@@ -14164,8 +14161,9 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/floor{
-	icon_state = "dark purple corner";
-	tag = "icon-dark purple corner (WEST)"
+	dir = 4;
+	icon_state = "dark purple stripe";
+	tag = "icon-dark purple stripe (WEST)"
 	},
 /area/medical/genetics)
 "aBK" = (
@@ -38021,8 +38019,9 @@
 	dir = 4
 	},
 /turf/simulated/floor{
+	dir = 10;
 	icon_state = "dark purple stripe";
-	tag = "icon-dark purple stripe (WEST)"
+	tag = "icon-dark purple stripe (SOUTHEAST)"
 	},
 /area/medical/genetics)
 "brZ" = (
@@ -66805,7 +66804,7 @@
 	},
 /obj/item/weapon/coin/silver{
 	pixel_x = 5;
-	pixel_y = -3
+	pixel_y = -15
 	},
 /obj/item/weapon/melee/chainofcommand{
 	pixel_y = 6;
@@ -72306,7 +72305,6 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "cIF" = (
-/obj/machinery/hologram/holopad,
 /obj/structure/table/woodentable,
 /obj/item/weapon/pinpointer,
 /obj/item/weapon/disk/nuclear,
@@ -110813,6 +110811,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine)
+"qEb" = (
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "vault"
+	},
+/area/medical/genetics)
 "qGK" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -111152,9 +111156,8 @@
 	dir = 1
 	},
 /turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark";
-	tag = "icon-dark (NORTH)"
+	dir = 5;
+	icon_state = "vault"
 	},
 /area/medical/genetics)
 "sRx" = (
@@ -220704,7 +220707,7 @@ aoO
 apW
 arC
 aCY
-awb
+qEb
 axR
 azy
 aBy
@@ -222210,7 +222213,7 @@ aqa
 arF
 vuU
 aCY
-awf
+awg
 awb
 gSj
 azB
@@ -230834,7 +230837,7 @@ cEe
 cFN
 cyH
 cIF
-cJX
+awf
 cLB
 cMY
 cOu
