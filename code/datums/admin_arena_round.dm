@@ -188,10 +188,10 @@ var/global/datum/admin_arena_round/current_admin_arena_round
 		if(src.original_location)
 			src.original_body.forceMove(src.original_location)
 		if(src.mind)
+			// Usually redundant given the ckey transfer but let's do it anyways
 			src.mind.transfer_to(src.original_body)
-			// Sort of a hard check in case the mind transfer fails. Force their ckey back into their original body.
-			if(src.ckey && src.original_body.ckey != src.ckey)
-				src.original_body.ckey = src.ckey
+		if(src.ckey && src.original_body.ckey != src.ckey)
+			src.original_body.ckey = src.ckey
 	if(src.arena_body)
 		qdel(src.arena_body)
 		src.arena_body = null
