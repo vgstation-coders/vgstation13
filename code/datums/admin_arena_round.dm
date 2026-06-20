@@ -75,6 +75,9 @@ var/global/datum/admin_arena_round/current_admin_arena_round
 	sleep(1 SECONDS)
 	src.announce("One...")
 	sleep(1 SECONDS)
+	if(!src.in_arena || !src.combat_started || src.finished)
+		src.announce("Nevermind!")
+		return
 	src.announce("Go!")
 	src.delete_barriers()
 	src.begin_life_tracking()
@@ -167,6 +170,8 @@ var/global/datum/admin_arena_round/current_admin_arena_round
 /datum/admin_arena_contestant/proc/enter_prep_room()
 	var/datum/body_archive/archive = src.mind.body_archive
 	if(!archive)
+		log_admin("Admin Arena: [src.ckey] had no body archive. The round should be ended.")
+		message_admins("Admin Arena: [src.ckey] had no body archive. You should end the round, things will break if you continue.")
 		return FALSE
 	src.stash_original_body()
 	src.arena_body = src.spawn_arena_body(src.prep_turf, archive)
@@ -184,7 +189,7 @@ var/global/datum/admin_arena_round/current_admin_arena_round
 			src.original_body.forceMove(src.original_location)
 		if(src.mind)
 			src.mind.transfer_to(src.original_body)
-			// Sort of a hard check in case the mind got deleted or they ghosted that forces their ckey back in.
+			// Sort of a hard check in case the mind transfer fails. Force their ckey back into their original body.
 			if(src.ckey && src.original_body.ckey != src.ckey)
 				src.original_body.ckey = src.ckey
 	if(src.arena_body)
