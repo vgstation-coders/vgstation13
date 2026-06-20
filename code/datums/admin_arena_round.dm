@@ -68,6 +68,7 @@ var/global/datum/admin_arena_round/current_admin_arena_round
 		return
 	src.combat_started = TRUE
 	world << sound('sound/effects/three two one go.mp3')
+	sleep(0.5 SECONDS)
 	src.announce("Three...")
 	sleep(1 SECONDS)
 	src.announce("Two...")
