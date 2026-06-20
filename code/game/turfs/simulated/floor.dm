@@ -220,6 +220,7 @@ var/global/list/turf/phazontiles = list()
 			if(air)
 				update_visuals(air)*/
 	update_paint_overlay()
+	ReapplyDecals()
 
 /turf/simulated/floor/return_siding_icon_state()
 	..()

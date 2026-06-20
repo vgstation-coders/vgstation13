@@ -605,11 +605,6 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 					trappedbear.update_icon()
 					trappedbear = null
 					anchored = FALSE
-					
-					if(istype(trappedbear,/mob/living/simple_animal/complex))
-						var/mob/living/simple_animal/complex/CA=trappedbear
-						CA.family+=user
-						to_chat(user,"<span class='notice'>\The [trappedbear] seems appreciative.</span>")
 					return
 				else
 					user.visible_message("<span class='warning'>\The [H] fails to pry \the [src] off of \the [trappedbear], and crushes their leg even more!</span>", \
@@ -701,10 +696,6 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 				unlock_atom(trappedbear)
 				trappedbear.update_icon()
 				trappedbear = null
-				if(istype(trappedbear,/mob/living/simple_animal/complex))
-					var/mob/living/simple_animal/complex/CA=trappedbear
-					CA.family+=user
-					to_chat(user,"<span class='notice'>\The [trappedbear] seems appreciative.</span>")
 	else
 		to_chat(user, "<span class='notice'>You carefully set the bear trap off with \the [I.name].</span>")
 		playsound(src, 'sound/effects/snap.ogg', 60, 1)

@@ -243,6 +243,7 @@ var/MAX_EXPLOSION_RANGE = 32
 #define PASSDOOR	(1<<6) //not just airlocks, but also firelocks, windoors etc
 #define PASSGIRDER	(1<<7)
 #define PASSRAILING (1<<8)
+#define PASSFLAPS   (1<<9)
 
 #define PASSALL		(~0) //bolt of pain
 

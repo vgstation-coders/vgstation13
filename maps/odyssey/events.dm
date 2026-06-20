@@ -122,13 +122,14 @@
 		/area/shuttle/odyssey/hallway/aft,
 		/area/shuttle/odyssey/engineering,
 		/area/shuttle/odyssey/bridge,
+		/area/shuttle/odyssey/bridge_lobby,
 	)
 
 /datum/command_alert/radiation_storm/odyssey
 	name = "Radiation Storm - Warning"
 	alert_title = "Anomaly Alert"
 	alert = 'sound/AI/radiation.ogg'
-	message = "High levels of radiation detected near the station, ETA in 30 seconds. Please evacuate into the ship's bridge or aft."
+	message = "High levels of radiation detected near the ship, ETA in 30 seconds. Please evacuate to the bridge, aft hallway, engineering, or maintenance."
 
 /datum/event/radiation_storm/odyssey/start()
 	spawn()
@@ -147,17 +148,17 @@
 			var/irradiationThisBurst = rand(15, 25)
 			for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 				var/turf/T = get_turf(R)
-				if(!T || is_safe_zone(T.loc, T))
+				if(!T || !odyssey_shuttle.has_area(T.loc) || is_safe_zone(T.loc, T))
 					continue
 				R.receive_pulse(irradiationThisBurst * 50)
 			for(var/obj/item/weapon/am_containment/decelerator/D in decelerators)
 				var/turf/T = get_turf(D)
-				if(!T || is_safe_zone(T.loc, T))
+				if(!T || !odyssey_shuttle.has_area(T.loc) || is_safe_zone(T.loc, T))
 					continue
 				D.receive_pulse(irradiationThisBurst * 50)
 			for(var/obj/machinery/portable_atmospherics/hydroponics/tray in hydro_trays)
 				var/turf/T = get_turf(tray)
-				if(!T || is_safe_zone(T.loc, T))
+				if(!T || !odyssey_shuttle.has_area(T.loc) || is_safe_zone(T.loc, T))
 					continue
 				tray.receive_pulse(irradiationThisBurst * 50)
 
@@ -165,7 +166,7 @@
 				if(istype(H.loc, /obj/spacepod))
 					continue
 				var/turf/T = get_turf(H)
-				if(!T || is_safe_zone(T.loc, T))
+				if(!T || !odyssey_shuttle.has_area(T.loc) || is_safe_zone(T.loc, T))
 					continue
 				var/randomMutation = prob(50)
 				var/applied_rads = (H.apply_radiation(irradiationThisBurst, RAD_EXTERNAL) > (irradiationThisBurst / 4))

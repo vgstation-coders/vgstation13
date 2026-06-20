@@ -29,6 +29,10 @@
 									/obj/machinery/suit_storage_unit,	/obj/structure/flora/tree)
 
 
+/mob/living/simple_animal/complex/parrot/Destroy()
+	heard_phrases=null
+	..()
+
 /mob/living/simple_animal/complex/parrot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(speech.speaker && speech.speaker != src && !(speech.message in heard_phrases) && !(speech.message in builtin_phrases)  ) //Don't imitate ourselves
 		if(heard_phrases.len >= 20)

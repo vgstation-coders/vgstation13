@@ -12,7 +12,7 @@ var/global/goldpan_drop_weights = alist(
 
 /obj/item/weapon/reagent_containers/glass/goldpan
 	name = "gold pan"
-	desc = "separates valuable minerals from fine rock using water."
+	desc = "Separates valuable minerals from fine rock using water."
 	w_class = W_CLASS_SMALL
 	volume = 20
 	icon = 'icons/obj/chemical.dmi'
@@ -34,7 +34,7 @@ var/global/goldpan_drop_weights = alist(
 
 /obj/item/weapon/reagent_containers/glass/goldpan/fits_in_iv_drip()
 	return FALSE
-	
+
 /obj/item/weapon/reagent_containers/glass/goldpan/attackby(var/obj/item/I, var/mob/user)
 	if(istype(I,/obj/item/stack/ore/glass))
 		var/obj/item/stack/ore/glass/S=I

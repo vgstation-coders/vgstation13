@@ -1840,10 +1840,6 @@
 	pixel_x = 5;
 	pixel_y = -32
 	},
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},

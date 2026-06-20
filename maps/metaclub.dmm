@@ -35918,10 +35918,6 @@
 /turf/simulated/floor/carpet,
 /area/bridge)
 "brt" = (
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "darkblue"

@@ -73,8 +73,12 @@
 			if(92 to INFINITY)
 				filling.icon_state = "[icon_state]30"
 
-		filling.icon += mix_color_from_reagents(reagents.reagent_list)
-		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		var/mixed = mix_color_from_reagents(reagents.reagent_list)
+		if (mixed)
+			filling.icon += mixed
+		var/mixed_alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		if (mixed_alpha)
+			filling.alpha = mixed_alpha
 		overlays += filling
 
 	if(!is_open_container())
@@ -538,6 +542,15 @@ var/datum/disease2/disease/wizarditis = null
 /obj/item/weapon/reagent_containers/glass/bottle/sacid/New()
 	..()
 	reagents.add_reagent(SACID, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/thermite
+	name = "Thermite Bottle"
+	desc = "A small bottle. Contains a small amount of thermite."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/thermite/New()
+	..()
+	reagents.add_reagent(THERMITE, 30)
 
 /obj/item/weapon/reagent_containers/glass/bottle/rezadone
 	name = "Rezadone Bottle"

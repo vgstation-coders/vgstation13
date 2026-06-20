@@ -21028,9 +21028,9 @@
 "aNP" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/bed/roller/deff,
-/obj/structure/sign/nosmoking_1{
-	pixel_x = -26;
-	pixel_y = 4
+/obj/machinery/firealarm{
+	dir = 8;
+	pixel_x = -24
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -21143,9 +21143,6 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
-	},
-/obj/structure/extinguisher_cabinet{
-	pixel_y = -28
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -21851,6 +21848,10 @@
 	dir = 4;
 	pixel_x = -22;
 	pixel_y = -10
+	},
+/obj/structure/extinguisher_cabinet{
+	pixel_x = -32;
+	pixel_y = null
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -22783,10 +22784,9 @@
 /area/medical/medbay)
 "aQZ" = (
 /obj/machinery/requests_console{
-	department = "Security";
-	departmentType = 5;
-	phone_name = "Brig Medbay";
-	pixel_y = 24
+	department = "Medbay";
+	pixel_y = 30;
+	phone_name = "Medbay Lobby"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -26923,15 +26923,6 @@
 	dir = 9
 	},
 /obj/structure/disposalpipe/segment,
-/obj/machinery/light{
-	dir = 4;
-	pixel_y = -3
-	},
-/obj/machinery/camera{
-	dir = 8;
-	name = "Medbay - Hallway";
-	pixel_y = 1
-	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark_navy_corner";
@@ -26946,9 +26937,6 @@
 /area/medical/medbay2)
 "aYP" = (
 /obj/structure/disposalpipe/segment,
-/obj/structure/sign/examroom{
-	pixel_x = -28
-	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark_navy_corner";
@@ -27998,9 +27986,14 @@
 /area/medical/medbay2)
 "baA" = (
 /obj/structure/disposalpipe/segment,
-/obj/machinery/firealarm{
+/obj/machinery/light{
 	dir = 4;
-	pixel_x = 24
+	pixel_y = -3
+	},
+/obj/machinery/camera{
+	dir = 8;
+	name = "Medbay - Hallway";
+	pixel_y = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -109147,6 +109140,10 @@
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/structure/sign/nosmoking_1{
+	pixel_x = 26;
+	pixel_y = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -110151,18 +110148,6 @@
 	},
 /turf/simulated/floor/glass/plasma,
 /area/hallway/secondary/entry)
-"nil" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
-/turf/simulated/floor/carpet,
-/area/bridge)
 "niJ" = (
 /obj/machinery/claw_machine,
 /turf/simulated/floor{
@@ -110176,12 +110161,15 @@
 	icon_state = "pipe-c"
 	},
 /obj/structure/flora/pottedplant/random,
+/obj/item/device/radio/intercom/medbay{
+	pixel_y = -26
+	},
+/obj/structure/sign/examroom{
+	pixel_x = -28
+	},
 /obj/machinery/light/small{
 	dir = 8;
 	pixel_y = 10
-	},
-/obj/item/device/radio/intercom/medbay{
-	pixel_y = -26
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -226608,7 +226596,7 @@ cOq
 cOq
 cOq
 cOq
-nil
+cOq
 cTZ
 cUL
 cVv
@@ -227533,7 +227521,7 @@ aSG
 aXr
 baz
 bbX
-aXr
+aPr
 aXr
 bgQ
 aCV

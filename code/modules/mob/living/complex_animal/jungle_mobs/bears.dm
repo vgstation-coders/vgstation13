@@ -16,7 +16,6 @@
 	behavior_flags = ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_RETALIATE | ANIMAL_BEHAVIOR_PACK_DYNAMICS | ANIMAL_BEHAVIOR_DESTRUCTIVE | ANIMAL_BEHAVIOR_AVOID_CAPTURE
 	movespeed=5
 	kin_check_type_path=/mob/living/simple_animal/complex/bear
-	max_local_population=5
 	var/sea_bear=TRUE
 
 /mob/living/simple_animal/complex/bear/get_idle_sounds()
@@ -60,7 +59,6 @@
 	maxHealth=250
 	armor=list(melee=10,bullet=30,laser=40,energy=0,bomb=0,bio=0,rad=0)
 	max_food=200
-	mob_max_age=9999999
 	healthregen=0.02
 	food_per_tick = 0.0005
 	melee_damage_upper=40
@@ -69,6 +67,7 @@
 	animal_flags = ANIMAL_FLAG_IMMORTAL | ANIMAL_FLAG_NEVER_ROT
 	movespeed=4
 	sea_bear=FALSE
+	max_local_population=0
 
 /mob/living/simple_animal/complex/bear/spare/can_offspring(var/mob/living/simple_animal/complex/mate)
 	return FALSE
@@ -85,14 +84,14 @@
 	target=victim
 	behavior_state=state
 	get_aggro_msg(victim)
-	if( !(behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) && !family.len)
+	if( !(behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) )
 		return
 	if(istype(target,/mob/living))
 		var/mob/living/T=target
 		if(T.stat!=DEAD)
 			var/list/nearby_objects=range(15,src) //increased range, and ignores visibility. have fun!
 			for(var/mob/living/simple_animal/complex/M in nearby_objects)
-				if( (behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) || (M in family))
+				if( (behavior_flags & ANIMAL_BEHAVIOR_PACK_DYNAMICS) )
 					if(is_kin(M) && !M.is_kin(target))
 						if(M.behavior_state!=state)
 							M.aggro_drawn(victim,state)
@@ -109,9 +108,9 @@
 	
 
 /mob/living/simple_animal/complex/bear/panda/can_offspring(var/mob/living/simple_animal/complex/mate)
-	.=..()
 	if(prob(75))
 		return FALSE
+	.=..()
 
 /mob/living/simple_animal/complex/bear/panda/get_butchering_products()
 	return list(/datum/butchering_product/skin/bear/panda, /datum/butchering_product/teeth/lots)
@@ -140,13 +139,13 @@
 	animal_flags = ANIMAL_FLAG_IMMORTAL
 	movespeed=4
 	health=100
-	mob_max_age=9999999
 	melee_damage_upper=50
 	melee_damage_lower=20
 	maxHealth=100
 	food_per_tick=0.0
 	healthregen=0.015
 	sea_bear=FALSE
+	max_local_population=0
 
 /mob/living/simple_animal/complex/bear/polar/chef/can_offspring(var/mob/living/simple_animal/complex/mate)
 	return FALSE	

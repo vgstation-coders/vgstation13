@@ -14686,25 +14686,6 @@
 /area/ai_monitored/storage/eva{
 	name = "E.V.A. Storage"
 	})
-"aER" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/cable/yellow{
-	icon_state = "0-8"
-	},
-/turf/simulated/floor/plating,
-/area/ai_monitored/storage/eva{
-	name = "E.V.A. Storage"
-	})
 "aES" = (
 /obj/structure/table,
 /turf/simulated/floor,
@@ -24834,10 +24815,6 @@
 	dir = 1;
 	name = "Cryogenics APC";
 	pixel_y = 24
-	},
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2"
 	},
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
@@ -40243,11 +40220,6 @@
 	req_access_txt = "45"
 	},
 /obj/machinery/holosign/surgery,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -56201,10 +56173,6 @@
 	},
 /area/science/lab)
 "cco" = (
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/machinery/power/apc{
 	dir = 8;
 	pixel_x = -26
@@ -57472,8 +57440,6 @@
 /turf/simulated/floor,
 /area/hallway/primary/central)
 "cel" = (
-/obj/structure/table/reinforced,
-/obj/item/device/flash,
 /obj/item/device/radio/intercom{
 	dir = 8;
 	name = "Station Intercom (General)";
@@ -57484,6 +57450,10 @@
 	pixel_x = -25;
 	pixel_y = -10
 	},
+/obj/item/device/flash,
+/obj/item/device/flash,
+/obj/item/device/flash,
+/obj/structure/table/reinforced,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -58623,10 +58593,8 @@
 /obj/structure/window/reinforced{
 	one_way = 1
 	},
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/firstaid/regular,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -59012,10 +58980,6 @@
 /area/engineering/break_room)
 "chm" = (
 /obj/machinery/computer/powermonitor,
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
@@ -61853,7 +61817,6 @@
 /obj/item/weapon/storage/secure/briefcase,
 /obj/item/weapon/storage/box/PDAs,
 /obj/item/weapon/storage/box/ids,
-/obj/item/weapon/storage/firstaid/regular,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -221326,9 +221289,9 @@ cXk
 aCK
 aCC
 aDI
-aER
+aIR
 aFZ
-aER
+aIR
 aDI
 aIR
 aKc

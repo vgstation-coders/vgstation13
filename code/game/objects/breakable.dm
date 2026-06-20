@@ -199,7 +199,7 @@
 	if(!kickingfoot)
 		kickingfoot = kicker.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 	var/damage = kicker.get_strength() * 5
-	if(kicker.reagents && kicker.reagents.has_reagent(GYRO))
+	if(roundhouse_kick(kicker))
 		damage += 5
 	damage *= 1 + min(0,(kicker.size - SIZE_NORMAL)) //The bigger the kicker, the more damage
 	var/obj/item/clothing/shoes/S = kicker.shoes
@@ -249,7 +249,7 @@
 			try_break()
 		else
 			. = ..()
-	
+
 
 //Object ballistically colliding with something
 
@@ -303,7 +303,15 @@
 
 //Kicking the object
 
-/obj/kick_act/(mob/living/carbon/human/kicker)
+/atom/proc/roundhouse_kick(mob/living/carbon/human/kicker)
+	for(var/ID in kicker.virus2)
+		var/datum/disease2/disease/V = kicker.virus2[ID]
+		for(var/datum/disease2/effect/e in V.effects)
+			if(e.count > 0 && e.type == /datum/disease2/effect/walker)
+				return TRUE
+	return kicker.reagents && kicker.reagents.has_reagent(GYRO)
+
+/obj/kick_act(mob/living/carbon/human/kicker)
 	if(breakable_flags & BREAKABLE_UNARMED && kicker.can_kick(src))
 		if(arcanetampered && density && anchored)
 			to_chat(kicker,"<span class='sinister'>[src] kicks YOU!</span>")
@@ -321,7 +329,7 @@
 			return
 		var/attack_verb = "kick"
 		var/recoil_damage = BREAKARMOR_FLIMSY
-		if(kicker.reagents && kicker.reagents.has_reagent(GYRO))
+		if(roundhouse_kick(kicker))
 			attack_verb = "roundhouse kick"
 			recoil_damage = 0
 		if(M_HULK in kicker.mutations)

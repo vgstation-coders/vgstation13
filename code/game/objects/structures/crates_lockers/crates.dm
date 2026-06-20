@@ -49,6 +49,7 @@
 	icon_state = "chest"
 	icon_opened = "chestopen"
 	icon_closed = "chest"
+	w_type = RECYK_WOOD
 
 /obj/structure/closet/crate/chest/potential_mimic/New()
 	..()
