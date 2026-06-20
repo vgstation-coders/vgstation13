@@ -44,7 +44,7 @@
 			reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))
 			spawn(5)
 				if(!reagents)
-					return 0
+					return
 				reagents.trans_to(M, amount_per_transfer_from_this)
 
 		playsound(M.loc,'sound/items/drink.ogg', rand(10, 50), 1)
@@ -72,7 +72,7 @@
 			reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))
 			spawn(5)
 				if(!reagents)
-					return 0
+					return
 				reagents.trans_to(M, amount_per_transfer_from_this)
 
 		playsound(M.loc,'sound/items/drink.ogg', rand(10,50), 1)

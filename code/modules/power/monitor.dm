@@ -212,7 +212,7 @@
 		var/list/demand = history["demand"]
 		if(!demand)
 			history["demand"] = list()
-			supply = history["demand"]
+			demand = history["demand"]
 
 		var/datum/powernet/connected_powernet = power_connection.get_powernet()
 		if(connected_powernet)
