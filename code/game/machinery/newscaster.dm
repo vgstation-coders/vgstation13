@@ -1468,9 +1468,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	return "beeps, [text]"
 
 /obj/machinery/newscaster/pai
+	name = "pAI newscaster"
 /obj/machinery/newscaster/pai/printpaper()
 	..()
-	if(paper_remaining != initial(paper_remaining) && !(paper_remaining > initial(paper_remaining)) //safety check in case of nested calls or someshit 
+	if(paper_remaining != initial(paper_remaining) && !(paper_remaining > initial(paper_remaining))) //safety check in case of nested calls or someshit 
 		for(var/i = 1 to (initial(paper_remaining) - paper_remaining))
 			spawn(15 SECONDS)
 			paper_remaining++
