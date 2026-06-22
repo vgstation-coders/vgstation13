@@ -197,6 +197,7 @@
 	trace_signal.transmission_method = 2
 	screen = 2
 	tracert_report = "Beginning tracert on [freq] at [worldtime2text()].<BR>EXPECTED NEXT: Receiver<BR>"
+	last_machine = null
 	for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
 		R.receive_signal(trace_signal)
 	spawn(1 SECONDS)
