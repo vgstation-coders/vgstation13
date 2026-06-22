@@ -85,8 +85,6 @@ var/list/special_fruits = list()
 
 	if(reagents.total_volume > 0)
 		bitesize = 1 + round(reagents.total_volume/2, 1)
-	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
-	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom, var/speed, mob/user)

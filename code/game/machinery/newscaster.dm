@@ -24,6 +24,7 @@
 #define NEWSCASTER_WANTED_EDIT 19
 #define NEWSCASTER_PRINT_NEWSPAPER_SUCCESS 20
 #define NEWSCASTER_PRINT_NEWSPAPER_ERROR 21
+#define NEWSCASTER_FORMAT_HELP 22
 
 /datum/feed_message
 	var/author =""
@@ -166,7 +167,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/scanned_user = "Unknown" //Will contain the name of the person who currently uses the newscaster
 	var/mob/masterController = null // Mob with control over the newscaster.
 	var/hdln = ""; //Feed headline
+	var/raw_hdln = ""; //Raw feed headline
 	var/msg = ""; //Feed message
+	var/raw_msg = ""; //Raw feed message
 	var/photo = null
 	var/channel_name = ""; //the feed channel which will be receiving the feed, or being created
 	var/c_locked = FALSE; //Will our new channel be locked to public submissions?
@@ -174,16 +177,48 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/c_anoncreate = FALSE //Will our new channel be created anonymously?
 	var/hitstaken = 0 //Death at 3 hits from an item with force>=15
 	var/datum/feed_channel/viewing_channel = list()
+	var/datum/writing_style/article_style
+	var/datum/writing_style/header_style
+	var/article_style_type = /datum/writing_style/newscaster
+	var/header_style_type = /datum/writing_style/newscaster_header
 	var/anonymous_posting = FALSE
 	luminosity = 0
 	anchored = TRUE
 
+/datum/writing_style/newscaster/New()
+	style = "font-family:'Times New Roman', sans;"
+	addReplacement(REG_BBTAG("\\*"), "<li>")
+	addReplacement(REG_BBTAG("hr"), "<HR>")
+	addReplacement(REG_BBTAG("small"), "<span style=\"font-size:15px\">")
+	addReplacement(REG_BBTAG("/small"), "</span>")
+	addReplacement(REG_BBTAG("tiny"), "<span style=\"font-size:10px\">")
+	addReplacement(REG_BBTAG("/tiny"), "</span>")
+	addReplacement(REG_BBTAG("list"), "<ul>")
+	addReplacement(REG_BBTAG("/list"), "</ul>")
+
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+
+	addReplacement(REG_BBTAG("table"),		"<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	addReplacement(REG_BBTAG("/table"),		"</td></tr></table>")
+	addReplacement(REG_BBTAG("row"),		"</td><tr>")
+	addReplacement(REG_BBTAG("cell"),		"<td>")
+
+	..() // Order of operations
+
+/datum/writing_style/newscaster_header/New()
+	style = "font-family:'Times New Roman', sans;"
+	addReplacement(REG_BBTAG("tabloid"), "<span style=\"font-family:Arial Black;color:white;background:black\">")
+	addReplacement(REG_BBTAG("/tabloid"), "</span>")
+
+	..() // Order of operations
 
 /obj/machinery/newscaster/security_unit //Security unit
 	name = "Security Newscaster"
 	securityCaster = TRUE
 
 /obj/machinery/newscaster/New(var/loc, var/ndir, var/building = 1)
+	article_style = new article_style_type
+	header_style = new header_style_type
 	buildstage = building
 	if(!buildstage) //Already placed newscasters via mapping will not be affected by this
 		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
@@ -356,7 +391,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					<HR><B><A href='?src=\ref[src];set_channel_receiving=1'>Receiving Channel</A>:</B> [channel_name]<BR>
 					<B>Message Author:</B>[author_text]<BR>
 					<B><A href='?src=\ref[src];set_new_headline=1'>Headline</A>:</B> [hdln] <BR>
-					<B><A href='?src=\ref[src];set_new_message=1'>Message Body</A>:</B> [msg] <BR>"}
+					<B><A href='?src=\ref[src];set_new_message=1'>Message Body</A>:</B> [msg] <BR>
+					<A href='?src=\ref[src];setScreen=[NEWSCASTER_FORMAT_HELP]'>(Formatting help)</A><BR>"}
 
 				dat += AttachPhotoButton(user)
 
@@ -375,7 +411,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<FONT COLOR='maroon'>Invalid receiving channel name.</FONT><BR>"
 				if(scanned_user=="Unknown")
 					dat+="<FONT COLOR='maroon'>Channel author unverified.</FONT><BR>"
-				if(msg == "" || msg == "\[REDACTED\]")
+				if(raw_msg == "" || raw_msg == "\[REDACTED\]")
 					dat+="<FONT COLOR='maroon'>Invalid message body.</FONT><BR>"
 
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_MESSAGE]'>Return</A><BR>"
@@ -555,6 +591,34 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 				dat += {"<FONT COLOR='maroon'>Unable to print newspaper. Insufficient paper. Please notify maintenance personnell to refill machine storage.</FONT><BR><BR>
 					<A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Return</A>"}
+			if(NEWSCASTER_FORMAT_HELP)
+				dat += {"<b><center>Article formatting commands</center></b><br>
+						<br>
+						\[br\] : Creates a linebreak.<br>
+						\[center\] - \[/center\] : Centers the text.<br>
+						\[b\] - \[/b\] : Makes the text <b>bold</b>.<br>
+						\[i\] - \[/i\] : Makes the text <i>italic</i>.<br>
+						\[u\] - \[/u\] : Makes the text <u>underlined</u>.<br>
+						\[large\] - \[/large\] : Increases the <span style=\"font-size:25px\">size</span> of the text.<br>
+						\[stationname\] : Inserts the name of the station.<br>
+						\[date\] : Inserts the current date in the format DAY MONTH, YEAR.<br>
+						\[time\] : Inserts the current station time.<br>
+						<br>
+						<b><center>Header exclusive commands</center></b><br>
+						<br>
+						\[tabloid\] : Makes the headline more <span style=\"font-family:Arial Black;color:white;background:black\">SENSATIONAL</span>.<br>
+						<br>
+						<b><center>Content exclusive commands</center></b><br>
+						<br>
+						\[small\] - \[/small\] : Decreases the <span style=\"font-size:15px\">size</span> of the text.<br>
+						\[tiny\] - \[/tiny\] : Sharply decreases the <span style=\"font-size:10px\">size</span> of the text.<br>
+						\[list\] - \[/list\] : A list.
+						\[*\] : A dot used for lists.<br>
+						\[hr\] : Adds a horizontal rule.<br>
+						\[table\] - \[/table\] : Creates table using \[row\] and \[cell\] tags.<br>
+						\[row\] - Creates a new table row.<br>
+						\[cell\] - Creates a new table cell.<br>
+						<A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_MESSAGE]'>Return</A>"}
 			else
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
 
@@ -661,9 +725,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				return
 			if(isnull(hdln))
 				hdln = ""
-			hdln = stripped_input(usr, "Write your story headline", "Network Channel Handler", hdln, 64)
-			while (findtext(hdln," ") == 1)
-				hdln = copytext(hdln,2,length(hdln)+1)
+			raw_hdln = stripped_input(usr, "Write your story headline", "Network Channel Handler", raw_hdln, 64)
+			while (findtext(raw_hdln," ") == 1)
+				raw_hdln = copytext(raw_hdln,2,length(raw_hdln)+1)
+			hdln = header_style.Format(raw_hdln,null,usr,src)
 			updateUsrDialog()
 
 		else if(href_list["set_new_message"])
@@ -672,9 +737,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				return
 			if(isnull(msg))
 				msg = ""
-			msg = stripped_message(usr, "Write your Feed story", "Network Channel Handler", msg, MAX_BOOK_MESSAGE_LEN)
-	//		while (findtext(msg," ") == 1)
-	//			msg = copytext(msg,2,length(msg)+1)
+			raw_msg = stripped_message(usr, "Write your Feed story", "Network Channel Handler", raw_msg, MAX_BOOK_MESSAGE_LEN)
+			//while (findtext(raw_msg," ") == 1)
+			//	raw_msg = copytext(raw_msg,2,length(raw_msg)+1)
+			msg = article_style.Format(raw_msg,null,usr,src)
 
 			updateUsrDialog()
 
@@ -726,7 +792,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(isobserver(usr) && !canGhostWrite(usr,src,"added a new story"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
 				return
-			if(msg =="" || msg=="\[REDACTED\]" || scanned_user == "Unknown" || channel_name == "" )
+			if(raw_msg =="" || raw_msg=="\[REDACTED\]" || scanned_user == "Unknown" || channel_name == "" )
 				screen=NEWSCASTER_NEW_MESSAGE_ERROR
 			else
 				var/datum/feed_channel/our_channel
@@ -757,12 +823,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
 				screen = NEWSCASTER_MENU
 				log_game("[key_name(usr)] posted the message [newMsg.body] as [newMsg.author].")
+				var/stripped_headline = strip_html_properly(newMsg.headline)
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
-					NEWSCASTER.newsAlert(channel_name, newMsg.headline)
+					NEWSCASTER.newsAlert(channel_name, stripped_headline)
 				for(var/obj/item/device/pda/PDA in PDAs)
 					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 					if(reader)
-						reader.newsAlert(channel_name,newMsg.headline)
+						reader.newsAlert(channel_name, stripped_headline)
 
 			updateUsrDialog()
 
@@ -1008,7 +1075,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			screen = text2num(href_list["setScreen"])
 			if (screen == NEWSCASTER_MENU)
 				scanned_user = "Unknown";
+				hdln = "";
+				raw_hdln = "";
 				msg = "";
+				raw_msg = "";
 				c_locked=0;
 				channel_name="";
 				viewing_channel = null

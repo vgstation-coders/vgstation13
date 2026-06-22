@@ -543,6 +543,15 @@ var/datum/disease2/disease/wizarditis = null
 	..()
 	reagents.add_reagent(SACID, 30)
 
+/obj/item/weapon/reagent_containers/glass/bottle/thermite
+	name = "Thermite Bottle"
+	desc = "A small bottle. Contains a small amount of thermite."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/thermite/New()
+	..()
+	reagents.add_reagent(THERMITE, 30)
+
 /obj/item/weapon/reagent_containers/glass/bottle/rezadone
 	name = "Rezadone Bottle"
 	desc = "A small bottle. Contains a small amount of Rezadone."

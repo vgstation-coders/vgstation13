@@ -706,6 +706,14 @@ var/highest_player_entry = 0
 
 	turfdecals.len = 0
 
+/turf/proc/ReapplyDecals()
+	if(!turfdecals)
+		return
+
+	for(var/image/decal in turfdecals)
+		overlays -= decal
+		overlays += decal
+
 /turf/apply_luminol()
 	if(!..())
 		return FALSE
