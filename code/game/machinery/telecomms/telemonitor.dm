@@ -201,7 +201,9 @@
 		R.receive_signal(trace_signal)
 	spawn(1 SECONDS)
 		if(!trace_signal.data["done"])
-			tracert_report += "The operation timed out.<BR><font color = #D70B00>Last Known Machine:</font color> <a href='?src=\ref[src];viewmachine=[last_machine.id]'>\ref[last_machine] [last_machine.id]</a>"
+			tracert_report += "The operation timed out."
+			if(last_machine)
+				tracert_report += "<BR><font color = #D70B00>Last Known Machine:</font color> <a href='?src=\ref[src];viewmachine=[last_machine.id]'>\ref[last_machine] [last_machine.id]</a>"
 		QDEL_NULL(trace_signal)
 		updateUsrDialog()
 
