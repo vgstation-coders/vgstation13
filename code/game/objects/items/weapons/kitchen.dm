@@ -795,10 +795,9 @@
 		to_chat(user, "<span class='warning'>This doesn't seem like a good idea.</span>")
 		return
 	if(user.drop_item(W, user.loc))
-		contents += W
+		W.forceMove(src)
 		vis_contents += W
-		if (user)
-			W.setPixelOffsetsFromParams(params, user)
+		W.setPixelOffsetsFromParams(params, user)
 		W.vis_flags |= VIS_INHERIT_PLANE
 		W.register_event(/event/moved, src, /obj/item/weapon/tray/proc/tray_remove_proc)
 	else
@@ -810,7 +809,7 @@
 /obj/item/weapon/tray/proc/removeitemfromtray(atom/movable/removed_item)
 	src.vis_contents -= removed_item
 	removed_item.vis_flags &= ~VIS_INHERIT_PLANE
-	removed_item.unregister_event(/event/moved, removed_item, /obj/item/weapon/tray/proc/tray_remove_proc)
+	removed_item.unregister_event(/event/moved, src, /obj/item/weapon/tray/proc/tray_remove_proc)
 
 /obj/item/weapon/tray/proc/calc_carry()
 	// calculate the weight of the items on the tray
