@@ -28626,7 +28626,6 @@
 	pixel_y = 9
 	},
 /obj/item/weapon/pen,
-/obj/item/weapon/folder/white,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
@@ -33214,10 +33213,6 @@
 	dir = 4;
 	name = "Research Division Break Room"
 	},
-/obj/item/weapon/reagent_containers/food/drinks/flagmug/uruguaycup{
-	pixel_x = 5;
-	pixel_y = 1
-	},
 /obj/machinery/alarm{
 	dir = 4;
 	pixel_x = -23
@@ -33225,6 +33220,10 @@
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/uruguaycup{
 	pixel_x = 1;
 	pixel_y = 5
+	},
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/uruguaycup{
+	pixel_x = 5;
+	pixel_y = 1
 	},
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/uruguaycup{
 	pixel_x = -3;
@@ -36714,10 +36713,6 @@
 /area/science/hallway)
 "bpt" = (
 /obj/structure/flora/pottedplant/random,
-/obj/item/device/radio/intercom{
-	name = "Station Intercom (General)";
-	pixel_y = 3
-	},
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "darkpurple"
@@ -36784,10 +36779,6 @@
 	},
 /area/science/lab)
 "bpy" = (
-/obj/structure/wc/sink{
-	dir = 4;
-	pixel_x = 11
-	},
 /obj/machinery/light_switch{
 	pixel_x = -1;
 	pixel_y = -25
