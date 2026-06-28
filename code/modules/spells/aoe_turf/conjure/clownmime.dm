@@ -182,6 +182,7 @@
 		name = "reincarnated clownhorror"
 		speed = 0.8
 		attack_sound = 'sound/weapons/heavysmash.ogg'
+		response_harm = "smashes"
 		maxHealth = 100
 		health = 100
 
