@@ -1,3 +1,18 @@
+// workaround a byond bug where browse() sent with a <65536 content but short opts (~16) crashes the client
+// add padding to pull it out of the danger zone
+// reported 2026/06/28, may be fixed by the time u read this
+/proc/browse_crashguard(content, options)
+	var/content_len = length(content)
+	var/framed_len = content_len + length(options) + 4
+	if(content_len < 65535 && framed_len >= 65532 && framed_len <= 66048) // not sure exactly where the boundary is so casting a wide net
+		var/needed = 65599 - content_len
+		var/filler = "."
+		while(length(filler) < needed)
+			filler += filler
+		filler = copytext(filler, 1, needed + 1)
+		content += "<!--[filler]-->"
+	return content
+
 /datum/browser
 	var/mob/user
 	var/title
@@ -110,7 +125,8 @@
 		C = M.client
 	if(!C)
 		return
-	user << browse(get_content(), "window=[window_id];[window_options]")
+	var/window_opts = "window=[window_id];[window_options]"
+	user << browse(browse_crashguard(get_content(), window_opts), window_opts)
 	if (width && height)
 		var/dpi = text2num(winget(C, window_id, "dpi")) || 1
 		winset(C, window_id, "size=[width*dpi]x[height*dpi]")
