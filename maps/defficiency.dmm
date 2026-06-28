@@ -14101,9 +14101,7 @@
 	},
 /area/medical/paramedics)
 "aBE" = (
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
+/obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 4
 	},
@@ -16722,8 +16720,7 @@
 /area)
 "aGo" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
+	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
@@ -18472,9 +18469,7 @@
 	name = "Engineering Delivery";
 	req_access_txt = "24"
 	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
+/obj/structure/window/reinforced,
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "loading_area";
@@ -18777,8 +18772,7 @@
 "aJX" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
+	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
@@ -46347,9 +46341,7 @@
 /obj/structure/disposalpipe/trunk{
 	dir = 8
 	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor,
 /area/supply/storage)
 "bHI" = (
@@ -221390,7 +221382,7 @@ sPl
 axR
 azA
 awb
-gPn
+aCX
 aGA
 anM
 bqH
@@ -221892,7 +221884,7 @@ awc
 axY
 azz
 awb
-aCX
+gPn
 aGA
 aDa
 aGC
