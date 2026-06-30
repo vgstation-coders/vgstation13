@@ -11,6 +11,20 @@
 	icon_state = "holdingpack"
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
+	var/honked = FALSE
+
+/obj/item/weapon/storage/backpack/holding/attackby(obj/item/W as obj, mob/user as mob)
+	if(!honked && istype(W, /obj/item/toy/crayon/rainbow))
+		to_chat(usr, "You start painting \the [src] with \the [W].")
+		if(do_after(user, src, 4 SECONDS))
+			to_chat(usr, "You finish painting \the [src].")
+			name = "bag of honking"
+			desc = "A backpack that opens straight to a pocket of Hammerspace. Where do you think the clowns keep all those balloons?"
+			item_state = "honkingpack"
+			icon_state = "honkingpack"
+			honked = TRUE
+			update_icon()
+	..()
 
 /obj/item/weapon/storage/backpack/holding/return_air()//prevents hot food from getting cold while in it.
 	return
@@ -87,3 +101,10 @@
 		S.energy -= (S.energy/3)*2
 		S.check_energy()
 	qdel(src)
+
+/obj/item/weapon/storage/backpack/holding/honking //only here so admins can spawn it for adminbus reasons
+	name = "bag of honking"
+	desc = "A backpack that opens straight to a pocket of Hammerspace. Where do you think the clowns keep all those balloons?"
+	item_state = "honkingpack"
+	icon_state = "honkingpack"
+	honked = TRUE
