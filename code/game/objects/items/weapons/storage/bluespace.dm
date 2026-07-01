@@ -87,8 +87,12 @@
 		investigation_log(I_SINGULO,"has become a singularity. Caused by [user.key]")
 		message_admins("[key_name_admin(user)] detonated [counted_english_list(Hs)] and [src], creating a singularity.")
 		log_game("[key_name(user)] detonated [counted_english_list(Hs)] and [src], creating a singularity.")
-		var/obj/machinery/singularity/S = new (T)
-		S.consume(user) //So the BoHolder can't run away from his wrongdoing
+		if(!honked)
+			var/obj/machinery/singularity/S = new (T)
+			S.consume(user) //So the BoHolder can't run away from his wrongdoing
+		else
+			var/obj/machinery/singularity/scrungulartiy/S = new (T)
+			S.consume(user) //how do i the scrungulartiy???
 
 /obj/item/weapon/storage/backpack/holding/singularity_act(var/current_size,var/obj/machinery/singularity/S)
 	var/dist = max(current_size, 1)
