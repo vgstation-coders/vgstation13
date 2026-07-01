@@ -121147,6 +121147,15 @@
 /area/security/range{
 	name = "\improper Security E.V.A"
 	})
+"tJI" = (
+/obj/machinery/telecomms/relay/preset/station,
+/turf/simulated/floor/bluegrid{
+	icon_state = "gcircuit";
+	name = "Mainframe Base";
+	nitrogen = 100;
+	temperature = 80
+	},
+/area/tcomms/chamber)
 "tKc" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -121363,6 +121372,15 @@
 	icon_state = "bar"
 	},
 /area/prison/rec_room)
+"uQH" = (
+/obj/machinery/telecomms/relay/preset/telecomms,
+/turf/simulated/floor/bluegrid{
+	icon_state = "gcircuit";
+	name = "Mainframe Base";
+	nitrogen = 100;
+	temperature = 80
+	},
+/area/tcomms/chamber)
 "uRh" = (
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -286527,7 +286545,7 @@ bGG
 bIp
 bKa
 bLX
-bNB
+tJI
 bPm
 bQF
 bSb
@@ -289539,7 +289557,7 @@ bGI
 bIr
 bKc
 bLZ
-bNB
+uQH
 bPm
 bQH
 bSd

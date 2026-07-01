@@ -6007,11 +6007,7 @@
 "bwq" = (
 /obj/machinery/telecomms/processor/preset_one/ministation,
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
-	dir = 6
-	},
-/obj/machinery/alarm/server{
-	dir = 4;
-	pixel_x = -22
+	dir = 4
 	},
 /turf/simulated/floor/server/bluegrid{
 	icon_state = "gcircuit"
@@ -7338,12 +7334,18 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "bLI" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
-/obj/structure/cable/orange{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/machinery/power/apc{
+	cell_type = 5000;
+	dir = 8;
+	name = "Telecoms Server APC";
+	pixel_x = -25;
+	pixel_y = 1
 	},
+/obj/structure/cable/orange{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/blackbox_recorder,
 /turf/simulated/floor/server,
 /area/tcomms/chamber)
 "bLL" = (
@@ -31828,18 +31830,12 @@
 	},
 /area/engineering/break_room)
 "hDL" = (
-/obj/machinery/blackbox_recorder,
-/obj/machinery/power/apc{
-	cell_type = 5000;
-	dir = 8;
-	name = "Telecoms Server APC";
-	pixel_x = -25;
-	pixel_y = 1
-	},
 /obj/structure/cable/orange{
-	d2 = 4;
-	icon_state = "0-4"
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
 /turf/simulated/floor/bluegrid{
 	icon_state = "dark";
 	name = "Mainframe Floor";
@@ -71824,6 +71820,19 @@
 	},
 /turf/simulated/floor/engine,
 /area/science/xenobiology)
+"sEJ" = (
+/obj/machinery/alarm/server{
+	dir = 4;
+	pixel_x = -22
+	},
+/obj/machinery/telecomms/relay/preset/station,
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 6
+	},
+/turf/simulated/floor/server/bluegrid{
+	icon_state = "gcircuit"
+	},
+/area/tcomms/chamber)
 "sEL" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -76417,7 +76426,7 @@
 "uIn" = (
 /obj/machinery/telecomms/receiver/preset_left/ministation,
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
-	dir = 5
+	dir = 4
 	},
 /turf/simulated/floor/server/bluegrid{
 	icon_state = "gcircuit"
@@ -80697,6 +80706,15 @@
 	icon_state = "greencorner"
 	},
 /area/hallway/primary/starboard)
+"wNX" = (
+/obj/machinery/telecomms/relay/preset/telecomms,
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 5
+	},
+/turf/simulated/floor/server/bluegrid{
+	icon_state = "gcircuit"
+	},
+/area/tcomms/chamber)
 "wNY" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -211566,7 +211584,7 @@ feB
 pxS
 dTl
 dTl
-dTl
+bLI
 dTl
 dTl
 dCF
@@ -212067,9 +212085,9 @@ cFY
 cFY
 dTl
 dTl
-dTl
+sEJ
 hDL
-dTl
+wNX
 dTl
 dTl
 kMu
@@ -212570,7 +212588,7 @@ cFY
 dTl
 dTl
 bwq
-bLI
+gRc
 uIn
 dTl
 dTl
