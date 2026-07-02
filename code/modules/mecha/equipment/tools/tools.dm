@@ -1795,7 +1795,7 @@
 		for(var/mob/living/L in chassis.loc)
 			if(action(L))
 				return
-	
+
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/detach()
 	if(occupant)
 		occupant_message("Unable to detach [src] - equipment occupied.")
@@ -1872,6 +1872,9 @@
 	if(!chassis.operation_allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		chassis.log_append_to_last("Permission denied.")
+		return
+	if(probe_item)
+		to_chat(user,"<span class='warning'>There is already \a [probe_item] in the prober.</span>")
 		return
 	if(W.w_class > 2)
 		to_chat(user,"<span class='warning'>This item is too big for the prober.</span>")
