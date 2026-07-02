@@ -1862,7 +1862,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/Destroy()
-	chassis.proc_res["dynattackby"] = null
+	if(chassis)
+		chassis.proc_res["dynattackby"] = null
 	if(probe_item)
 		probe_item.forceMove(get_turf(src))
 		probe_item = null
