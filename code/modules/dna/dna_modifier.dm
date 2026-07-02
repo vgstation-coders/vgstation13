@@ -49,6 +49,7 @@
 	new_copy.attack_log = attack_log.Copy()
 	new_copy.default_language = default_language
 	new_copy.times_cloned = times_cloned
+	new_copy.clown = clown
 
 	return new_copy
 
