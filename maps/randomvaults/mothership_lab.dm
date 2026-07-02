@@ -400,9 +400,6 @@
 	icon_closed = "ayycrate1"
 	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
-/obj/structure/closet/crate/ayy/metal
-	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
-
 /obj/structure/closet/crate/ayy2
 	name = "MDF crate"
 	desc = "A rugged storage crate, for transporting mothership military supplies."
@@ -422,9 +419,6 @@
 	icon_opened = "ayycrate3open"
 	icon_closed = "ayycrate3"
 	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
-
-/obj/structure/closet/crate/ayy3/metal
-	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 
 /obj/structure/closet/crate/secure/ayy_general
 	name = "GDR secure crate"
@@ -454,9 +448,6 @@
 	icon_opened = "ayy1_open"
 	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
-/obj/structure/closet/ayy/metal
-	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
-
 /obj/structure/closet/ayy2
 	name = "MDF locker"
 	desc = "A rugged storage unit, for transporting mothership military supplies."
@@ -484,9 +475,6 @@
 	icon_off = "ayysecureoff"
 	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
-/obj/structure/closet/secure_closet/ayy/metal
-	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
-
 /obj/structure/closet/secure_closet/ayy2
 	name = "MDF secure locker"
 	desc = "A rugged card-locked storage unit, for transporting mothership military supplies."
@@ -497,9 +485,6 @@
 	icon_broken = "ayymdfsecurebroken"
 	icon_off = "ayymdfsecureoff"
 	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
-
-/obj/structure/closet/secure_closet/ayy2/metal
-	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 
 /obj/structure/closet/secure_closet/ayy_leader
 	name = "Administrator's secure locker"
