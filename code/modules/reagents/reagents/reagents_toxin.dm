@@ -309,7 +309,7 @@
 		var/mob/living/carbon/human/M = H
 		if(!(M_CLUMSY in M.mutations))
 			M.mutations.Add(M_CLUMSY)
-			M.visible_message("<span class='notice'>\The [M] seems to be stumbling over himself...</span>", "<span class='notice'>You feel clumsier than before.</span>'")
+			M.visible_message("<span class='notice'>\The [M] seems to be stumbling over...</span>", "<span class='notice'>You feel clumsier than before.</span>'")
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 	if(..())
