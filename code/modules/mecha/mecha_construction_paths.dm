@@ -730,19 +730,11 @@
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
 					 	),
-					//4
-					list(Co_DESC="Prober is installed.",
+					//5
+					list(Co_DESC="Scrambler is installed.",
 						Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/circuitboard/mecha/roswell/main,
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
-					 		Co_VIS_MSG = "{USER} removes{s} the prober from {HOLDER}.")
-					 	),
-					//5
-					list(Co_DESC="Scrambler is installed.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/prober,
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} adds{s} the prober to {HOLDER}."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} removes{s} the scrambler from {HOLDER}.")
 					 	),
@@ -754,19 +746,11 @@
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} removes{s} the gravitator from {HOLDER}.")
 					 	),
-					//7
-					list(Co_DESC="Abductor is installed.",
+					//8
+					list(Co_DESC="The body of the ship is empty.",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/gravitator,
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} adds{s} the gravitator to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
-					 		Co_VIS_MSG = "{USER} removes{s} the abductor from {HOLDER}.")
-					 	),
-					//8
-					list(Co_DESC="The body of the ship is empty.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/abductor,
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} adds{s} the abductor to {HOLDER}.")
 					 	)
 					)
 
