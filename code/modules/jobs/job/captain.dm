@@ -10,7 +10,7 @@
 	access = list() 			//See get_access()
 	minimal_access = list() 	//See get_access()
 	minimal_player_age = 30
-	species_whitelist = list("Human")
+	species_whitelist = list("Human","Plasmaman")
 
 	outfit_datum = /datum/outfit/captain
 
@@ -34,7 +34,7 @@
 	req_admin_notify = 1
 	minimal_player_age = 20
 
-	species_whitelist = list("Human")
+	species_whitelist = list("Human", "Plasmaman")
 
 	access = list(access_security, access_sec_doors, access_brig, access_court, access_weapons, access_forensics_lockers,
 			            access_medical, access_engine_major, access_change_ids, access_ai_upload, access_eva, access_heads,
