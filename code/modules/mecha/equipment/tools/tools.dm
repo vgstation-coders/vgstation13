@@ -1882,7 +1882,7 @@
 		return
 	if(user.drop_item(W,src))
 		probe_item = W
-		to_chat(user,"<span class='warning'>You add \a [probe_item] to the prober.</span>")
+		to_chat(user,"<span class='notice'>You add \a [probe_item] to the prober.</span>")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/action(atom/target)
