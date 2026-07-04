@@ -189,6 +189,12 @@ var/datum/controller/gameticker/ticker
 	var/list/new_players_ready = list() //unique list of people who have readied up, so we can delete mob/new_player later (ready is lost on mind transfer)
 	var/list/roundstart_occupied_area_paths = list() //List of typepaths of areas in departments that are occupied at roundstart, used to handle the lights being on or off.
 
+	var/list/ready_player_ckeys = list()
+	for(var/mob/new_player/ready_np in player_list)
+		if(ready_np.ready && ready_np.mind && ready_np.mind.assigned_role && ready_np.client)
+			ready_player_ckeys |= ready_np.ckey
+	var/list/custom_items_by_ckey = GetCustomItemsByCkey(ready_player_ckeys)
+
 	for(var/mob/M in player_list)
 		if(!istype(M, /mob/new_player/))
 			var/mob/living/L = M
@@ -217,7 +223,7 @@ var/datum/controller/gameticker/ticker
 			else
 				var/mob/living/carbon/human/H = np.create_human(prefs)
 				H.store_position()
-				EquipCustomItems(H)
+				EquipCustomItemsPrefetched(H, key, custom_items_by_ckey)
 				H.update_icons()
 				new_characters[key] = H
 				roundstart_occupied_area_paths |= get_department_area_typepaths(H)
