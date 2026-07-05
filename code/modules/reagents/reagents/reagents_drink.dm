@@ -263,6 +263,7 @@
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	nutriment_factor = 0
 	glass_name = "nothing"
+	overdose_am = 50
 
 /datum/reagent/drink/nothing/on_mob_life(var/mob/living/M)
     if(ishuman(M))
@@ -276,6 +277,13 @@
                 M.heal_organ_damage(0, REM)
             if(M.getToxLoss() && prob(80))
                 M.adjustToxLoss(-REM)
+
+/datum/reagent/drink/nothing/on_overdose(var/mob/living/H)
+	if(ishuman(H))
+		var/mob/living/carbon/human/M = H
+		if(M_CLUMSY in M.mutations)
+			M.mutations.Remove(M_CLUMSY)
+			M.visible_message("<span class='notice'>\The [M] seems to get a grasp over themselves...</span>", "<span class='notice'>You have outgrown that wave of clumsiness.</span>'")
 
 /datum/reagent/drink/potato_juice
 	name = "Potato Juice"

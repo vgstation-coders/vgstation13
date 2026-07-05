@@ -290,7 +290,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
 	custom_metabolism = 0.05
-	overdose_am = REAGENTS_OVERDOSE
+	overdose_am = 50
 	arcane_id = SILENCER
 
 /datum/reagent/honkserum/on_overdose(var/mob/living/H)
@@ -304,6 +304,12 @@
 			qdel(H.wear_mask)
 			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")
 		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
+
+	if(ishuman(H))
+		var/mob/living/carbon/human/M = H
+		if(!(M_CLUMSY in M.mutations))
+			M.mutations.Add(M_CLUMSY)
+			M.visible_message("<span class='notice'>\The [M] seems to be stumbling over...</span>", "<span class='notice'>You feel clumsier than before.</span>'")
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 	if(..())
