@@ -45,7 +45,9 @@ var/list/acceptable_sushi_inputs = list()
 	overlays.Cut()
 	if (rice == 0)
 		overlays+=image(icon, src, "rice_bowl_empty")
-	else if (rice>0)
+	else if (rice==1)
+		overlays+=image(icon, src, "rice_bowl_almost_empty")
+	else if (rice>1)
 		overlays+=image(icon, src, "rice_bowl_full")
 
 /obj/item/sushimat/examine()
@@ -102,7 +104,6 @@ var/list/acceptable_sushi_inputs = list()
 				lastroll = world.time
 				playsound(loc, 'sound/effects/bamboo_rattle.ogg', 75, 1, -1)
 				visible_message("<span class='notice'>[user] rolls the sushi!</span>")
-				contents += I
 				spawn(FLICKFRAMES)
 					var/obj/item/newsushi = R.make_food(src, user)
 					if (newsushi)
