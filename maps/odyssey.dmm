@@ -64,9 +64,13 @@
 	icon_state = "0-8"
 	},
 /obj/machinery/power/apc{
-	pixel_x = 30;
+	pixel_x = 28;
 	name = "Command Dorms APC";
 	dir = 4
+	},
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -24
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/maintenance/vacant_office)
@@ -104,11 +108,6 @@
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
@@ -158,9 +157,9 @@
 /area/shuttle/odyssey/hallway/aft)
 "aA" = (
 /obj/structure/cable{
-	d1 = 1;
+	d1 = 2;
 	d2 = 8;
-	icon_state = "1-8"
+	icon_state = "2-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 4;
@@ -208,13 +207,8 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8";
-	tag = ""
-	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -260,17 +254,17 @@
 /turf/simulated/wall,
 /area/vox_trading_post/hallway)
 "aJ" = (
-/obj/machinery/power/apc{
-	pixel_x = -30;
-	dir = 8
-	},
-/obj/structure/cable,
 /obj/structure/bed/chair/handrail{
 	dir = 4
 	},
 /obj/machinery/light_switch{
 	pixel_x = -24;
 	pixel_y = -10
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -426,9 +420,6 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/nt_outpost)
 "bs" = (
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -30
-	},
 /obj/structure/bed/chair{
 	dir = 1
 	},
@@ -1032,9 +1023,6 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/security/holding_cell)
 "cW" = (
-/obj/machinery/firealarm{
-	pixel_x = 30
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 9;
 	tag = ""
@@ -1289,9 +1277,6 @@
 "dU" = (
 /obj/structure/closet/secure_closet/engineering_personal,
 /obj/machinery/light/small,
-/obj/structure/extinguisher_cabinet{
-	pixel_y = -30
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -1492,9 +1477,6 @@
 /obj/machinery/atmospherics/pipe/manifold/cyan/visible{
 	dir = 8
 	},
-/obj/machinery/firealarm{
-	pixel_x = -30
-	},
 /obj/structure/bed/chair/handrail{
 	dir = 4
 	},
@@ -1528,9 +1510,6 @@
 "eV" = (
 /obj/machinery/atmospherics/unary/cap{
 	dir = 1
-	},
-/obj/structure/bed/chair/handrail{
-	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/gas_storage/port)
@@ -1762,7 +1741,7 @@
 "fB" = (
 /obj/machinery/suit_storage_unit/security,
 /obj/item/device/radio/intercom{
-	pixel_x = -30
+	pixel_x = -25
 	},
 /turf/simulated/floor{
 	icon_state = "darkred";
@@ -1848,9 +1827,6 @@
 	dir = 4;
 	on = 1
 	},
-/obj/machinery/firealarm{
-	pixel_x = -30
-	},
 /obj/structure/bed/chair/handrail{
 	dir = 4
 	},
@@ -1912,7 +1888,8 @@
 /obj/item/tool/suture/surgical_line,
 /obj/structure/closet/secure_closet/medical1,
 /obj/machinery/firealarm{
-	pixel_x = -30
+	pixel_x = -26;
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -2027,6 +2004,10 @@
 /obj/machinery/camera/autoname{
 	dir = 1
 	},
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -24
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/port)
 "gt" = (
@@ -2061,26 +2042,22 @@
 	},
 /area/shuttle/odyssey/bridge_lobby)
 "gw" = (
-/obj/machinery/power/apc{
-	pixel_x = -30;
-	dir = 8
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/starboard)
 "gx" = (
-/obj/structure/table/woodentable,
-/obj/machinery/chem_dispenser/brewer{
-	pixel_y = 11
+/obj/structure/closet/secure_closet/miner,
+/obj/machinery/firealarm{
+	dir = 1;
+	pixel_y = 24
 	},
-/turf/simulated/floor/wood,
-/area/derelict/bar)
+/turf/simulated/floor{
+	icon_state = "darkyellow";
+	tag = "icon-darkyellow (EAST)";
+	dir = 1
+	},
+/area/shuttle/odyssey/logistics)
 "gy" = (
 /obj/machinery/light/small{
 	dir = 1;
@@ -2157,10 +2134,10 @@
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/trade/start)
 "gJ" = (
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
+/obj/structure/reagent_dispensers/fueltank,
+/obj/structure/extinguisher_cabinet{
 	pixel_y = -30
 	},
-/obj/structure/reagent_dispensers/fueltank,
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/port)
 "gL" = (
@@ -2189,12 +2166,14 @@
 /area/derelict/bar)
 "gT" = (
 /obj/machinery/vending/coffee,
+/obj/machinery/firealarm{
+	pixel_y = 26
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore)
 "gU" = (
-/obj/structure/flora/pottedplant/random,
 /obj/machinery/newscaster{
 	pixel_y = -28
 	},
@@ -2521,7 +2500,7 @@
 	tag = ""
 	},
 /obj/structure/extinguisher_cabinet{
-	pixel_y = -30
+	pixel_y = -28
 	},
 /obj/machinery/vending/cola,
 /turf/simulated/floor/plated_catwalk/dark,
@@ -2554,17 +2533,17 @@
 /obj/structure/bed/chair/folding{
 	dir = 4
 	},
-/obj/machinery/light_switch{
-	pixel_x = -24
-	},
-/obj/machinery/camera/autoname{
-	dir = 4
-	},
-/obj/structure/sign/directions/engineering{
-	pixel_x = -32;
+/obj/machinery/firealarm{
+	pixel_x = -24;
 	dir = 8
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -2724,6 +2703,11 @@
 	dir = 5;
 	tag = ""
 	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "darkyellow";
@@ -2741,6 +2725,7 @@
 "jf" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered,
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -2934,16 +2919,19 @@
 	icon_state = "2-4"
 	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
 "jX" = (
 /obj/structure/fireaxecabinet{
-	pixel_x = 32
+	pixel_x = 32;
+	pixel_y = -2
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/camera/autoname{
-	dir = 8
+	dir = 8;
+	pixel_y = 1
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
@@ -2977,6 +2965,9 @@
 /obj/item/device/gps/secure/command{
 	pixel_x = -5;
 	pixel_y = 3
+	},
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_x = -26
 	},
 /turf/simulated/floor{
 	dir = 10;
@@ -3058,6 +3049,10 @@
 /area/odyssey/cargo)
 "ks" = (
 /obj/structure/closet/crate/bin,
+/obj/structure/sign/directions/security{
+	pixel_y = 20;
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -3154,10 +3149,6 @@
 /area/derelict/bar)
 "kK" = (
 /obj/machinery/light,
-/obj/machinery/firealarm{
-	pixel_y = -30;
-	dir = 1
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -3465,9 +3456,6 @@
 	dir = 8;
 	flickering = 1
 	},
-/obj/item/device/radio/intercom{
-	pixel_y = 30
-	},
 /obj/machinery/vending/coffee,
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -3589,9 +3577,6 @@
 	},
 /area/odyssey/clinic)
 "mh" = (
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -30
-	},
 /obj/structure/bed/chair/handrail{
 	dir = 4
 	},
@@ -3625,7 +3610,7 @@
 /obj/structure/extinguisher_cabinet{
 	pixel_y = -30
 	},
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
+/obj/structure/sign/xeno_warning_mining{
 	pixel_x = -30
 	},
 /turf/simulated/floor{
@@ -3821,22 +3806,22 @@
 	},
 /area/security/perma)
 "mU" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/cyan/hidden{
 	dir = 1
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/structure/disposalpipe/segment,
+/obj/structure/cable,
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 27
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "mV" = (
@@ -3862,10 +3847,6 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/nt_outpost)
 "nc" = (
-/obj/machinery/alarm{
-	dir = 4;
-	pixel_x = -23
-	},
 /obj/machinery/photocopier,
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/maintenance/vacant_office)
@@ -3900,9 +3881,6 @@
 /area/surface/nt_outpost)
 "no" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered,
-/obj/item/device/radio/intercom{
-	pixel_y = 30
-	},
 /obj/machinery/camera/autoname,
 /obj/structure/bed/chair/handrail,
 /turf/simulated/floor{
@@ -3955,8 +3933,14 @@
 /turf/simulated/wall/shuttle/reinforced/panel,
 /area/shuttle/odyssey/security/holding_cell)
 "ny" = (
-/obj/structure/table,
-/obj/machinery/microwave,
+/obj/structure/closet/secure_closet/bar{
+	req_access_txt = "25"
+	},
+/obj/item/device/breathalyzer,
+/obj/item/device/rcd/matter/rsf,
+/obj/item/stack/rcd_ammo,
+/obj/item/stack/rcd_ammo,
+/obj/item/clothing/accessory/storage/bandolier,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -4046,6 +4030,16 @@
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "nL" = (
 /obj/machinery/vending/cigarette,
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
+/obj/structure/sign/directions/medical{
+	pixel_y = -20
+	},
+/obj/structure/sign/directions/carg{
+	pixel_y = -26
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -4104,10 +4098,6 @@
 	pixel_x = -24;
 	pixel_y = 5
 	},
-/obj/machinery/firealarm{
-	pixel_y = -30;
-	dir = 1
-	},
 /obj/item/weapon/circuitboard/communications/odyssey{
 	pixel_y = 8;
 	pixel_x = -4
@@ -4119,7 +4109,15 @@
 /area/shuttle/odyssey/quarters/heads)
 "nU" = (
 /obj/structure/closet/crate/bin,
+/obj/machinery/light_switch{
+	pixel_x = -24;
+	pixel_y = -3
+	},
+/obj/machinery/camera/autoname{
+	dir = 4
+	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -4175,9 +4173,6 @@
 /obj/machinery/atmospherics/unary/cap{
 	dir = 1
 	},
-/obj/machinery/firealarm{
-	pixel_x = -30
-	},
 /obj/structure/bed/chair/handrail{
 	dir = 4
 	},
@@ -4194,13 +4189,6 @@
 	pixel_y = 12;
 	pixel_x = 10
 	},
-/obj/machinery/requests_console{
-	announcementConsole = 1;
-	department = "Cargo Bay";
-	departmentType = 2;
-	name = "Logistics RC";
-	pixel_y = 30
-	},
 /obj/item/weapon/storage/box/labels{
 	pixel_x = -2;
 	pixel_y = 1
@@ -4208,6 +4196,13 @@
 /obj/item/weapon/hand_labeler{
 	pixel_x = -3;
 	pixel_y = -3
+	},
+/obj/machinery/requests_console{
+	announcementConsole = 1;
+	department = "Cargo Bay";
+	departmentType = 2;
+	name = "Logistics RC";
+	pixel_y = 25
 	},
 /turf/simulated/floor/engine/acoustic,
 /area/shuttle/odyssey/logistics)
@@ -4286,9 +4281,6 @@
 /obj/machinery/camera/autoname{
 	dir = 4
 	},
-/obj/machinery/firealarm{
-	pixel_x = -30
-	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -4314,10 +4306,6 @@
 	dir = 4
 	},
 /obj/machinery/light,
-/obj/machinery/alarm{
-	dir = 1;
-	pixel_y = -24
-	},
 /obj/structure/dispenser,
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -4373,6 +4361,16 @@
 	},
 /area/odyssey/admin)
 "oP" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -4445,8 +4443,8 @@
 	pixel_y = 5
 	},
 /obj/item/device/flashlight/lamp/green{
-	pixel_x = -15;
-	pixel_y = 8
+	pixel_x = -13;
+	pixel_y = 12
 	},
 /obj/item/weapon/reagent_containers/spray/cleaner{
 	pixel_x = 8;
@@ -4456,6 +4454,10 @@
 	pixel_y = 30
 	},
 /obj/structure/table/glass,
+/obj/item/weapon/storage/firstaid/regular{
+	pixel_x = -6;
+	pixel_y = -13
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whiteblue"
@@ -4483,11 +4485,6 @@
 	},
 /area/shuttle/odyssey/hallway/port)
 "pm" = (
-/obj/machinery/firealarm{
-	dir = 1;
-	pixel_y = -24;
-	pixel_x = -4
-	},
 /obj/machinery/light/small,
 /obj/machinery/light_switch{
 	pixel_y = -24;
@@ -4557,8 +4554,13 @@
 /obj/machinery/camera/autoname{
 	dir = 8
 	},
-/obj/machinery/light_switch{
-	pixel_x = 24
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 26
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -4568,6 +4570,10 @@
 /obj/machinery/suit_storage_unit/engie,
 /obj/item/device/radio/intercom{
 	pixel_y = 30
+	},
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -4695,10 +4701,6 @@
 	},
 /obj/item/clothing/suit/armor/hos,
 /obj/item/clothing/shoes/laceup,
-/obj/machinery/firealarm{
-	pixel_y = -30;
-	dir = 1
-	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
 "qb" = (
@@ -4786,6 +4788,7 @@
 "qn" = (
 /obj/structure/table,
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -4873,6 +4876,9 @@
 	pixel_x = -32;
 	dir = 1
 	},
+/obj/item/device/radio/intercom{
+	pixel_y = 24
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -4893,6 +4899,9 @@
 /obj/structure/sign/directions/medical{
 	pixel_x = 32;
 	dir = 4
+	},
+/obj/machinery/firealarm{
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -5120,6 +5129,7 @@
 /obj/structure/closet/crate,
 /obj/item/stack/sheet/metal/bigstack,
 /obj/item/stack/sheet/glass/glass/bigstack,
+/obj/item/stack/sheet/mineral/sandstone,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
@@ -5187,6 +5197,15 @@
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 4
 	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/machinery/power/apc{
+	pixel_y = 24;
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -5200,12 +5219,6 @@
 "rB" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = "90Curve"
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -5244,18 +5257,14 @@
 /turf/simulated/floor/carpet,
 /area/shuttle/trade/start)
 "rR" = (
-/obj/machinery/power/apc{
-	pixel_x = -30;
-	dir = 8
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
+/obj/structure/closet/emcloset,
+/obj/machinery/status_display/odyssey{
+	pixel_x = 32
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/hallway/aft)
+/area/shuttle/odyssey/hallway/fore)
 "rX" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible/blue{
 	dir = 9;
@@ -5554,16 +5563,6 @@
 	},
 /area/odyssey/mineral_processing)
 "sX" = (
-/obj/machinery/power/apc{
-	pixel_y = 30;
-	name = "Cargo APC";
-	dir = 1
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /obj/structure/bed/chair/handrail,
 /turf/simulated/floor{
 	icon_state = "darkyellow";
@@ -5696,6 +5695,10 @@
 	dir = 3;
 	tag = ""
 	},
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_x = 28;
+	pixel_y = 2
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "ts" = (
@@ -5788,6 +5791,10 @@
 /area/shuttle/odyssey/logistics)
 "tH" = (
 /obj/structure/closet/emcloset,
+/obj/machinery/firealarm{
+	pixel_y = -24;
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -5797,6 +5804,17 @@
 	d1 = 2;
 	d2 = 4;
 	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8";
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -5855,16 +5873,19 @@
 	},
 /area/odyssey/store)
 "tQ" = (
-/obj/structure/bed/chair/folding{
-	dir = 4
-	},
 /obj/machinery/light{
 	dir = 8
 	},
-/obj/machinery/firealarm{
-	pixel_x = -30
+/obj/structure/bed/chair/folding{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -5872,7 +5893,9 @@
 /obj/structure/extinguisher_cabinet{
 	pixel_y = -30
 	},
+/obj/machinery/media/jukebox/dj,
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -5947,13 +5970,10 @@
 /turf/simulated/floor/vox/wood,
 /area/shuttle/trade/start)
 "uc" = (
-/obj/machinery/firealarm{
-	pixel_x = 30
-	},
 /obj/machinery/door_control{
 	name = "Port Engine Blast Door Control";
 	id_tag = "port engines";
-	pixel_x = -30
+	pixel_x = -26
 	},
 /obj/machinery/camera/autoname{
 	dir = 8
@@ -5974,12 +5994,8 @@
 /turf/simulated/floor,
 /area/shuttle/odyssey/security)
 "ug" = (
-/obj/structure/sign/directions/security{
-	pixel_x = 32;
-	dir = 4
-	},
-/obj/machinery/media/jukebox/dj,
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -6034,7 +6050,8 @@
 	dir = 1
 	},
 /obj/machinery/firealarm{
-	pixel_x = -30
+	pixel_x = -27;
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -6074,9 +6091,6 @@
 /turf/simulated/floor/plating,
 /area/derelict/bar)
 "uJ" = (
-/obj/machinery/firealarm{
-	pixel_y = 30
-	},
 /obj/structure/bed/chair/handrail,
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -6085,9 +6099,7 @@
 "uK" = (
 /obj/machinery/computer/shuttle_control/odyssey,
 /turf/simulated/floor{
-	dir = 4;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (EAST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/bridge)
 "uL" = (
@@ -6204,7 +6216,13 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -6246,17 +6264,14 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/odyssey/cargo)
 "vs" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/structure/table/glass,
+/obj/machinery/firealarm{
+	pixel_y = 26
 	},
 /turf/simulated/floor{
-	icon_state = "bar"
+	icon_state = "dark"
 	},
-/area/shuttle/odyssey/cafeteria)
+/area/shuttle/odyssey/hallway/fore)
 "vu" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
@@ -6289,6 +6304,9 @@
 /obj/machinery/camera/autoname{
 	dir = 8
 	},
+/obj/machinery/status_display/odyssey{
+	pixel_x = 32
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "vw" = (
@@ -6318,9 +6336,6 @@
 /area/surface/nt_outpost)
 "vC" = (
 /obj/structure/table/woodentable/poker,
-/obj/item/device/radio/intercom{
-	pixel_y = 30
-	},
 /obj/machinery/light{
 	dir = 1
 	},
@@ -6329,7 +6344,7 @@
 /area/shuttle/odyssey/quarters/crew)
 "vD" = (
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -30
+	pixel_x = -24
 	},
 /obj/machinery/status_display/odyssey{
 	pixel_y = 30
@@ -6423,25 +6438,22 @@
 /area/shuttle/odyssey/restroom)
 "vS" = (
 /obj/machinery/vending/cola,
-/obj/structure/sign/directions/security{
-	pixel_y = 20;
-	dir = 1
+/obj/machinery/status_display/odyssey{
+	pixel_y = 32
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/fore)
 "vU" = (
-/obj/structure/bed/chair/folding{
-	dir = 8
-	},
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/machinery/light_switch{
-	pixel_x = 24
+/obj/structure/bed/chair/folding{
+	dir = 8
 	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -6466,8 +6478,7 @@
 	tag = "icon-intact (EAST)"
 	},
 /obj/machinery/firealarm{
-	dir = 1;
-	pixel_y = 26
+	pixel_y = 24
 	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
@@ -6666,9 +6677,6 @@
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 4
 	},
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -30
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -6778,6 +6786,9 @@
 /area/shuttle/odyssey/engineering/gas_storage/starboard)
 "wM" = (
 /obj/structure/closet/emcloset/vox,
+/obj/machinery/status_display/odyssey{
+	pixel_y = -32
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -6874,6 +6885,9 @@
 	dir = 8;
 	flickering = 1
 	},
+/obj/item/device/radio/intercom{
+	pixel_y = -27
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -6948,9 +6962,6 @@
 /obj/machinery/atmospherics/pipe/simple/cyan/hidden{
 	dir = 10
 	},
-/obj/machinery/alarm{
-	pixel_y = 24
-	},
 /obj/structure/dispenser,
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -7016,16 +7027,18 @@
 /turf/simulated/floor/wood,
 /area/derelict/bar)
 "xx" = (
-/obj/structure/flora/pottedplant/random,
 /obj/machinery/power/apc{
-	pixel_x = -30;
+	pixel_x = -24;
 	dir = 8
 	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
+/obj/structure/flora/pottedplant/random,
+/obj/item/device/radio/intercom{
+	pixel_y = -28;
+	pixel_x = 3
 	},
+/obj/structure/cable,
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -7080,6 +7093,10 @@
 	},
 /obj/item/device/radio{
 	pixel_x = 4
+	},
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_x = -28;
+	pixel_y = 5
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -7157,18 +7174,19 @@
 	},
 /area/odyssey/clinic)
 "xT" = (
-/obj/machinery/power/apc{
-	pixel_x = -30;
-	dir = 8
-	},
 /obj/structure/cable,
 /obj/structure/closet/emcloset,
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/obj/machinery/status_display/odyssey{
+	pixel_x = -32
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/port)
 "xU" = (
-/obj/structure/reagent_dispensers/water_cooler,
 /obj/structure/sign/directions/medical{
 	pixel_y = -26
 	},
@@ -7176,6 +7194,7 @@
 	pixel_y = -20
 	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -7192,13 +7211,6 @@
 /area/vox_trading_post/hallway)
 "yb" = (
 /obj/structure/table,
-/obj/machinery/requests_console{
-	announcementConsole = 1;
-	department = "Engineering";
-	departmentType = 4;
-	name = "Engineering RC";
-	pixel_y = -30
-	},
 /obj/item/weapon/circuitboard/communications/odyssey{
 	pixel_x = 4
 	},
@@ -7374,13 +7386,14 @@
 	dir = 4;
 	on = 1
 	},
-/obj/structure/extinguisher_cabinet{
-	pixel_x = -30
-	},
-/obj/item/device/radio/intercom{
-	pixel_y = 30
-	},
 /obj/machinery/vending/cigarette,
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -23
+	},
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_y = 26
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -7423,7 +7436,8 @@
 /area/shuttle/odyssey/bridge)
 "yI" = (
 /obj/machinery/firealarm{
-	pixel_x = -30
+	pixel_x = -25;
+	dir = 4
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -7541,6 +7555,15 @@
 	dir = 8
 	},
 /obj/structure/mopbucket,
+/obj/machinery/light_switch{
+	pixel_x = -23;
+	pixel_y = 5
+	},
+/obj/machinery/power/apc{
+	pixel_y = -25
+	},
+/obj/structure/cable,
+/obj/item/weapon/reagent_containers/glass/bucket,
 /obj/item/weapon/mop,
 /turf/simulated/floor{
 	dir = 1;
@@ -7626,16 +7649,6 @@
 	icon_state = "white"
 	},
 /area/odyssey/clinic)
-"zz" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/shuttle/odyssey/cafeteria)
 "zA" = (
 /obj/structure/shuttle/diag_wall/diy/smooth/black{
 	dir = 4;
@@ -7718,9 +7731,6 @@
 /obj/machinery/camera/autoname{
 	dir = 4
 	},
-/obj/machinery/firealarm{
-	pixel_x = -30
-	},
 /obj/structure/bookcase{
 	name = "bookcase (Adult)"
 	},
@@ -7780,6 +7790,7 @@
 "zP" = (
 /obj/machinery/vending/dinnerware,
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -8022,6 +8033,7 @@
 	icon_state = "4-8"
 	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -8132,8 +8144,12 @@
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 4
 	},
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -30
+/obj/item/device/radio/intercom{
+	pixel_y = -27
+	},
+/obj/machinery/firealarm{
+	pixel_x = -24;
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -8232,17 +8248,13 @@
 /area/shuttle/odyssey/hallway/fore)
 "Bq" = (
 /obj/machinery/power/apc{
-	pixel_y = 30;
+	pixel_y = 25;
 	dir = 1
 	},
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
 	pixel_y = 1
-	},
-/obj/machinery/light_switch{
-	pixel_x = 12;
-	pixel_y = 24
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
@@ -8264,6 +8276,11 @@
 /area/shuttle/odyssey/exterior)
 "Bx" = (
 /obj/machinery/vending/mining,
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 27
+	},
+/obj/structure/cable,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "darkyellow";
@@ -8348,9 +8365,6 @@
 	name = "\improper Vox Casino"
 	})
 "BJ" = (
-/obj/machinery/newscaster{
-	pixel_x = 30
-	},
 /obj/structure/bed/chair/handrail{
 	dir = 8
 	},
@@ -8361,6 +8375,7 @@
 	on = 1
 	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -8405,16 +8420,12 @@
 /area/vox_station/tradepost)
 "BY" = (
 /obj/structure/table/glass,
-/obj/item/weapon/storage/firstaid/regular{
-	pixel_x = -6;
-	pixel_y = 7
-	},
 /obj/item/weapon/storage/box/masks{
 	pixel_x = 5;
 	pixel_y = 2
 	},
 /obj/item/weapon/storage/box/gloves{
-	pixel_x = 4;
+	pixel_x = 5;
 	pixel_y = 14
 	},
 /turf/simulated/floor{
@@ -8445,14 +8456,12 @@
 	tag = "icon-map (NORTH)"
 	},
 /obj/structure/bed/chair/folding,
-/obj/machinery/alarm{
-	pixel_y = 24;
-	req_access = list(140);
-	req_one_access = list()
-	},
 /obj/machinery/camera/autoname,
 /obj/effect/landmark/start{
 	name = "Mechanic"
+	},
+/obj/structure/extinguisher_cabinet{
+	pixel_y = 27
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -8815,9 +8824,6 @@
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 1
 	},
-/obj/structure/extinguisher_cabinet{
-	pixel_y = -30
-	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/port)
 "Du" = (
@@ -8884,10 +8890,6 @@
 	dir = 4;
 	tag = "icon-intact (EAST)"
 	},
-/obj/machinery/alarm{
-	dir = 1;
-	pixel_y = -24
-	},
 /obj/machinery/camera/autoname{
 	dir = 1
 	},
@@ -8934,21 +8936,9 @@
 /area/vox_trading_post/hallway)
 "DI" = (
 /obj/structure/table,
-/obj/item/weapon/storage/box/donkpockets{
-	pixel_x = 7;
-	pixel_y = 9
-	},
-/obj/item/weapon/book/manual/chef_recipes{
-	pixel_y = 8;
-	pixel_x = -6
-	},
-/obj/item/weapon/reagent_containers/food/condiment/enzyme{
-	pixel_x = 15;
-	pixel_y = 8
-	},
-/obj/item/weapon/reagent_containers/glass/beaker{
-	pixel_x = 10;
-	pixel_y = 1
+/obj/machinery/microwave{
+	pixel_y = 7;
+	pixel_x = -1
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -9087,9 +9077,7 @@
 "Ec" = (
 /obj/machinery/computer/crew/odyssey,
 /turf/simulated/floor{
-	dir = 4;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (EAST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/bridge)
 "Ee" = (
@@ -9241,6 +9229,9 @@
 /turf/unsimulated/floor/planetary/grass/jungle,
 /area/surface/nt_outpost)
 "EN" = (
+/obj/machinery/light_switch{
+	pixel_x = 25
+	},
 /turf/simulated/floor{
 	icon_state = "stage_stairs";
 	tag = "icon-stage_stairs"
@@ -9510,12 +9501,6 @@
 /area/odyssey/clinic)
 "FS" = (
 /obj/structure/table,
-/obj/machinery/power/apc{
-	name = "Bridge APC";
-	pixel_x = -30;
-	dir = 8
-	},
-/obj/structure/cable,
 /obj/item/weapon/storage/fancy/donut_box{
 	pixel_y = 10
 	},
@@ -9624,7 +9609,7 @@
 "Gm" = (
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
 /obj/structure/sign/directions/medical{
-	pixel_y = 20;
+	pixel_y = 24;
 	dir = 1
 	},
 /turf/simulated/floor/engine/acoustic,
@@ -9773,7 +9758,7 @@
 /area/odyssey/store)
 "GN" = (
 /obj/item/device/radio/intercom{
-	pixel_x = -30
+	pixel_x = -27
 	},
 /obj/machinery/stasis_bed,
 /turf/simulated/floor{
@@ -9882,7 +9867,7 @@
 	icon_state = "0-8"
 	},
 /obj/machinery/power/apc{
-	pixel_x = 30;
+	pixel_x = 27;
 	name = "Command Dorms APC";
 	dir = 4
 	},
@@ -9891,6 +9876,9 @@
 	},
 /obj/effect/landmark/start{
 	name = "Security Officer"
+	},
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_y = -25
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -9983,16 +9971,9 @@
 	},
 /area/shuttle/odyssey/hallway/starboard)
 "HF" = (
-/obj/machinery/power/apc{
-	pixel_x = 30;
-	dir = 4
-	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/odyssey/engineering/engine_room)
+/obj/machinery/vending/boozeomat,
+/turf/simulated/wall/shuttle/panel/black,
+/area/shuttle/odyssey/cafeteria)
 "HH" = (
 /obj/machinery/door/airlock/maintenance{
 	name = "Bar Storage";
@@ -10080,10 +10061,8 @@
 /area/shuttle/odyssey/hallway/central)
 "Ib" = (
 /obj/machinery/vending/meat,
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -30
-	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -10528,13 +10507,14 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/engineering/engine_room)
 "Jt" = (
-/obj/structure/bed/chair/folding{
-	dir = 4
-	},
 /obj/effect/landmark/start{
 	name = "Assistant"
 	},
+/obj/structure/bed/chair/folding{
+	dir = 4
+	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -10572,17 +10552,18 @@
 	},
 /area/security/perma)
 "JB" = (
-/obj/structure/bed/chair/folding{
-	dir = 8
-	},
-/obj/machinery/alarm{
-	dir = 8;
-	pixel_x = 24
+/obj/machinery/camera/autoname{
+	dir = 1
 	},
 /obj/machinery/newscaster{
-	pixel_y = -28
+	pixel_x = 26
+	},
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -24
 	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -10625,10 +10606,21 @@
 	},
 /area/shuttle/odyssey/cafeteria)
 "JK" = (
-/obj/machinery/camera/autoname{
-	dir = 8
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -10753,9 +10745,6 @@
 	},
 /area/shuttle/odyssey/stasis)
 "Kc" = (
-/obj/structure/extinguisher_cabinet{
-	pixel_x = -30
-	},
 /obj/structure/sign/directions/security{
 	pixel_y = -20
 	},
@@ -10988,17 +10977,11 @@
 /obj/structure/wc/sink/kitchen{
 	pixel_y = 30
 	},
-/obj/machinery/requests_console{
-	pixel_x = 30;
-	name = "Kitchen RC";
-	department = "Kitchen";
-	departmentType = 2
-	},
 /obj/structure/bed/chair/handrail{
 	dir = 8
 	},
 /turf/simulated/floor{
-	icon_state = "bar"
+	icon_state = "freezerfloor"
 	},
 /area/shuttle/odyssey/cafeteria)
 "KY" = (
@@ -11066,6 +11049,12 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4;
 	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4";
+	tag = "90Curve"
 	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
@@ -11145,10 +11134,6 @@
 	icon_state = "dark"
 	},
 /area/shuttle/odyssey/hallway/starboard)
-"Lu" = (
-/obj/machinery/status_display/odyssey,
-/turf/simulated/wall/shuttle/panel/black,
-/area/shuttle/odyssey/engineering)
 "Lv" = (
 /obj/structure/closet/secure_closet/captains,
 /turf/simulated/floor/wood,
@@ -11198,7 +11183,9 @@
 /area/shuttle/odyssey/mining_storage)
 "LB" = (
 /obj/structure/table,
-/obj/machinery/camera/autoname,
+/obj/machinery/light{
+	dir = 1
+	},
 /obj/item/weapon/storage/bag/plants{
 	name = "Chef's Plant Bag";
 	pixel_x = 1;
@@ -11215,7 +11202,7 @@
 "LC" = (
 /obj/machinery/computer/secure_data,
 /obj/machinery/firealarm{
-	pixel_y = 30
+	pixel_y = 24
 	},
 /obj/machinery/camera/autoname,
 /turf/simulated/floor{
@@ -11343,9 +11330,6 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/machinery/firealarm{
-	pixel_x = 30
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -11417,21 +11401,22 @@
 	},
 /area/odyssey/store)
 "Mc" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = "90Curve"
+/obj/machinery/gas_extractor{
+	anchored = 1
+	},
+/obj/machinery/requests_console{
+	announcementConsole = 1;
+	department = "Engineering";
+	departmentType = 4;
+	name = "Engineering RC";
+	pixel_y = 25
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/shuttle/odyssey/logistics)
+/area/shuttle/odyssey/engineering/engine_room)
 "Md" = (
 /obj/structure/table,
-/obj/item/device/radio/intercom{
-	pixel_y = 24
-	},
 /obj/machinery/camera/autoname{
 	dir = 9
 	},
@@ -11446,6 +11431,13 @@
 /obj/machinery/cell_charger{
 	pixel_y = -1;
 	pixel_x = -15
+	},
+/obj/item/device/radio/intercom{
+	pixel_x = 26;
+	pixel_y = -2
+	},
+/obj/machinery/newscaster{
+	pixel_y = 28
 	},
 /turf/simulated/floor/engine/acoustic,
 /area/shuttle/odyssey/logistics)
@@ -11528,6 +11520,9 @@
 /obj/structure/bed/chair{
 	dir = 8
 	},
+/obj/structure/extinguisher_cabinet{
+	pixel_x = 24
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -11539,10 +11534,6 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
 	dir = 4;
 	on = 1
-	},
-/obj/machinery/alarm{
-	dir = 4;
-	pixel_x = -23
 	},
 /obj/structure/bed/chair/handrail,
 /turf/simulated/floor{
@@ -11643,7 +11634,7 @@
 /area/shuttle/odyssey/bridge)
 "MK" = (
 /obj/machinery/power/apc{
-	pixel_x = -30;
+	pixel_x = -24;
 	name = "Fore Hallway APC";
 	dir = 8
 	},
@@ -11676,6 +11667,10 @@
 	tag = "icon-map (EAST)"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/engineering/gas_storage/port)
 "MR" = (
@@ -11802,6 +11797,10 @@
 /obj/structure/bedsheetbin{
 	pixel_y = 4
 	},
+/obj/machinery/firealarm{
+	pixel_y = 24;
+	dir = 1
+	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
 "Nq" = (
@@ -11867,6 +11866,10 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "Ny" = (
@@ -11920,7 +11923,7 @@
 "NG" = (
 /obj/structure/table/woodentable,
 /obj/machinery/light_switch{
-	pixel_y = -30
+	pixel_y = -24
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
@@ -11965,8 +11968,11 @@
 /area/shuttle/odyssey/security/holding_cell)
 "NM" = (
 /obj/machinery/cooking/deepfryer,
-/obj/machinery/light{
-	dir = 1
+/obj/machinery/requests_console{
+	name = "Kitchen RC";
+	department = "Kitchen";
+	departmentType = 2;
+	pixel_y = 25
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -12044,6 +12050,10 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
 	dir = 4
 	},
+/obj/machinery/firealarm{
+	pixel_x = 24;
+	dir = 4
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "Oo" = (
@@ -12082,7 +12092,9 @@
 	},
 /area/odyssey/admin)
 "OD" = (
-/obj/structure/closet/secure_closet/freezer/fridge,
+/obj/structure/closet/secure_closet/freezer/fridge{
+	pixel_x = 2
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -12112,7 +12124,11 @@
 	},
 /area/security/perma)
 "OI" = (
+/obj/structure/bed/chair/folding{
+	dir = 4
+	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -12133,11 +12149,6 @@
 	},
 /area/shuttle/trade/start)
 "OO" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -12171,6 +12182,7 @@
 	icon_state = "4-8"
 	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -12666,12 +12678,18 @@
 /area/shuttle/odyssey/bridge)
 "Qc" = (
 /obj/structure/table,
-/obj/machinery/firealarm{
-	pixel_x = -30
-	},
 /obj/machinery/faxmachine{
 	pixel_x = -2;
 	pixel_y = 2
+	},
+/obj/machinery/power/apc{
+	name = "Bridge APC";
+	pixel_x = -27;
+	dir = 8
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -12727,25 +12745,27 @@
 /turf/simulated/floor/vox,
 /area/vox_station/tradepost)
 "Qo" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/glass/beaker{
+	pixel_x = 10;
+	pixel_y = 1
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = "90Curve"
+/obj/item/weapon/storage/box/donkpockets{
+	pixel_x = 7;
+	pixel_y = 9
 	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
+/obj/item/weapon/reagent_containers/food/condiment/enzyme{
+	pixel_x = 15;
+	pixel_y = 8
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
-/turf/simulated/floor/plating,
-/area/shuttle/odyssey/engineering/engine_room)
+/obj/item/weapon/book/manual/chef_recipes{
+	pixel_y = 8;
+	pixel_x = -6
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/shuttle/odyssey/cafeteria)
 "Qp" = (
 /obj/machinery/door/airlock/glass_security{
 	id_tag = "BrigWest";
@@ -12782,12 +12802,13 @@
 /area/shuttle/trade/start)
 "Qu" = (
 /obj/structure/closet/secure_closet/engineering_atmos,
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -30
+/obj/machinery/power/apc{
+	pixel_x = -26;
+	dir = 8
 	},
-/obj/machinery/alarm{
-	dir = 1;
-	pixel_y = -24
+/obj/structure/cable,
+/obj/structure/extinguisher_cabinet{
+	pixel_y = -30
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -12813,9 +12834,6 @@
 "Qx" = (
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 1
-	},
-/obj/item/device/radio/intercom{
-	pixel_y = -30
 	},
 /obj/machinery/camera/autoname{
 	dir = 1
@@ -13135,8 +13153,8 @@
 	dir = 4;
 	tag = "icon-intact (EAST)"
 	},
-/obj/item/device/radio/intercom{
-	pixel_y = 30
+/obj/machinery/alarm{
+	pixel_y = 24
 	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
@@ -13173,9 +13191,7 @@
 	pixel_y = 4
 	},
 /turf/simulated/floor{
-	dir = 4;
-	icon_state = "dark_navy";
-	tag = "icon-dark_navy (EAST)"
+	icon_state = "dark"
 	},
 /area/shuttle/odyssey/bridge)
 "Rv" = (
@@ -13433,9 +13449,6 @@
 	on = 1;
 	name = "Distro Outlet"
 	},
-/obj/machinery/firealarm{
-	pixel_x = 30
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -13484,6 +13497,10 @@
 	},
 /obj/item/weapon/storage/box/mousetraps{
 	pixel_x = 20
+	},
+/obj/machinery/light/small{
+	dir = 1;
+	invisibility = 1
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -13722,9 +13739,6 @@
 	},
 /area/shuttle/odyssey/cafeteria)
 "Tj" = (
-/obj/structure/extinguisher_cabinet{
-	pixel_x = 30
-	},
 /obj/machinery/light{
 	dir = 4
 	},
@@ -13779,9 +13793,6 @@
 	dir = 10;
 	tag = ""
 	},
-/obj/machinery/light_switch{
-	pixel_x = 24
-	},
 /obj/structure/bed/chair/handrail{
 	dir = 8
 	},
@@ -13824,13 +13835,9 @@
 /area/shuttle/odyssey/hallway/port)
 "Tx" = (
 /obj/machinery/vending/groans,
-/obj/structure/sign/directions/engineering{
-	pixel_x = -32;
-	dir = 8
-	},
-/obj/structure/sign/directions/medical{
-	pixel_x = -32;
-	pixel_y = -6
+/obj/item/device/radio/intercom{
+	pixel_x = -26;
+	pixel_y = -3
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -13907,10 +13914,8 @@
 /obj/structure/bed/chair/folding{
 	dir = 8
 	},
-/obj/effect/landmark/start{
-	name = "Assistant"
-	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -14010,6 +14015,10 @@
 	dir = 4;
 	tag = "icon-intact (EAST)"
 	},
+/obj/machinery/firealarm{
+	dir = 1;
+	pixel_y = -25
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/port)
 "Uk" = (
@@ -14024,23 +14033,11 @@
 "Ul" = (
 /obj/structure/bed,
 /obj/item/device/radio/intercom{
-	pixel_y = 30
+	pixel_y = 24
 	},
 /obj/machinery/power/apc{
 	pixel_x = -30;
 	dir = 8
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/machinery/light_switch{
-	pixel_x = -24;
-	pixel_y = -10
-	},
-/obj/machinery/light/small{
-	dir = 1;
-	invisibility = 1
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -14187,10 +14184,6 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
-/obj/machinery/alarm{
-	dir = 8;
-	pixel_x = 24
-	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/aft)
 "UF" = (
@@ -14384,8 +14377,9 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/obj/machinery/firealarm{
-	pixel_x = -30
+/obj/machinery/light_switch{
+	pixel_y = -8;
+	pixel_x = -24
 	},
 /turf/simulated/floor{
 	icon_state = "darkyellow";
@@ -14503,16 +14497,12 @@
 /area/security/perma)
 "Vu" = (
 /obj/machinery/power/apc{
-	pixel_y = -30
+	pixel_y = -25
 	},
 /obj/structure/cable,
 /obj/machinery/alarm{
 	dir = 8;
 	pixel_x = 24
-	},
-/obj/machinery/light_switch{
-	pixel_x = 12;
-	pixel_y = -24
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/port)
@@ -14605,10 +14595,14 @@
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/hallway/port)
 "VP" = (
+/obj/effect/landmark/start{
+	name = "Assistant"
+	},
 /obj/structure/bed/chair/folding{
 	dir = 8
 	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -14835,7 +14829,8 @@
 /obj/machinery/door_control{
 	name = "Privacy Shutters";
 	id_tag = "sec shutters";
-	pixel_x = 30
+	pixel_x = 24;
+	pixel_y = 2
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -15048,10 +15043,6 @@
 /area/vox_trading_post/trading_floor{
 	name = "\improper Vox Casino"
 	})
-"Xj" = (
-/obj/machinery/status_display/odyssey,
-/turf/simulated/wall/shuttle/panel/black,
-/area/shuttle/odyssey/cafeteria)
 "Xk" = (
 /obj/machinery/atmospherics/unary/outlet_injector{
 	frequency = 1441;
@@ -15074,17 +15065,8 @@
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 4
 	},
-/obj/machinery/firealarm{
-	pixel_x = -30
-	},
 /obj/structure/bed/chair/handrail{
 	dir = 1
-	},
-/obj/structure/sign/directions/carg{
-	pixel_y = -26
-	},
-/obj/structure/sign/directions/medical{
-	pixel_y = -20
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -15141,9 +15123,6 @@
 /area/shuttle/odyssey/engineering/engine_room)
 "Xz" = (
 /obj/structure/table,
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -30
-	},
 /obj/item/weapon/book/manual/security_antag_guide{
 	pixel_x = -7;
 	pixel_y = 6
@@ -15155,6 +15134,10 @@
 /obj/item/weapon/book/manual/security_space_law{
 	pixel_x = -1;
 	pixel_y = 4
+	},
+/obj/machinery/firealarm{
+	pixel_x = -24;
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -15232,7 +15215,8 @@
 "XO" = (
 /obj/item/toy/gasha/skub,
 /obj/machinery/firealarm{
-	pixel_x = 30
+	pixel_x = 24;
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/odyssey/maintenance/starboard)
@@ -15338,7 +15322,11 @@
 /area/shuttle/odyssey/bridge)
 "Yb" = (
 /obj/machinery/vending/discount,
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_y = -24
+	},
 /turf/simulated/floor{
+	dir = 5;
 	icon_state = "bar"
 	},
 /area/shuttle/odyssey/cafeteria)
@@ -15495,6 +15483,9 @@
 	tag = ""
 	},
 /obj/machinery/camera/autoname,
+/obj/item/device/radio/intercom{
+	pixel_y = 24
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/starboard)
 "YC" = (
@@ -15552,9 +15543,16 @@
 /area/odyssey/clinic)
 "YJ" = (
 /obj/structure/table,
-/obj/machinery/smartfridge/mini,
+/obj/machinery/smartfridge/mini{
+	pixel_y = 5;
+	pixel_x = -1
+	},
+/obj/machinery/chem_dispenser/brewer{
+	pixel_x = -28;
+	density = 0
+	},
 /turf/simulated/floor{
-	icon_state = "bar"
+	icon_state = "freezerfloor"
 	},
 /area/shuttle/odyssey/cafeteria)
 "YL" = (
@@ -15578,14 +15576,6 @@
 	},
 /turf/unsimulated/floor/planetary/concrete,
 /area/shuttle/odyssey/quarters/crew)
-"YR" = (
-/obj/structure/bed/chair/folding{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/shuttle/odyssey/cafeteria)
 "YT" = (
 /obj/machinery/conveyor_switch/oneway{
 	id_tag = "QMLoad2"
@@ -15685,7 +15675,7 @@
 	pixel_y = 1
 	},
 /obj/machinery/firealarm{
-	pixel_x = 27;
+	pixel_x = 24;
 	dir = 4
 	},
 /obj/item/weapon/reagent_containers/spray/cleaner{
@@ -15881,6 +15871,9 @@
 "ZX" = (
 /obj/structure/sign/poster{
 	pixel_y = 30
+	},
+/obj/structure/extinguisher_cabinet{
+	pixel_x = 24
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/maintenance/vacant_office)
@@ -19781,12 +19774,12 @@ uc
 Tv
 Ds
 Yv
-qp
+Mc
 RT
 oP
 LG
 Uk
-Qo
+Uk
 lD
 XC
 PU
@@ -20088,7 +20081,7 @@ EY
 pB
 EN
 VL
-HF
+VL
 RM
 Ea
 jX
@@ -20689,7 +20682,7 @@ Nk
 AP
 ez
 lQ
-rR
+DY
 fT
 DY
 Ny
@@ -21297,7 +21290,7 @@ PC
 mD
 mD
 mD
-Lu
+mD
 mD
 Nw
 mD
@@ -24006,7 +23999,7 @@ Iq
 Bw
 iR
 iR
-Xj
+iR
 BD
 yh
 yh
@@ -24306,7 +24299,7 @@ Iq
 Iq
 Iq
 iR
-iR
+HF
 YJ
 nU
 vi
@@ -24614,7 +24607,7 @@ BK
 OQ
 qn
 qn
-zz
+ug
 Ib
 yh
 bx
@@ -24913,17 +24906,17 @@ kW
 ny
 Te
 DI
-vi
+JK
 TT
 VP
-zz
+ug
 Yb
 yh
 yh
 uN
 yh
 Nq
-gi
+gx
 Qv
 py
 ym
@@ -25214,11 +25207,11 @@ Iq
 iR
 LB
 Px
-Rl
-vi
-OI
-OI
-zz
+Qo
+JK
+ug
+ug
+ug
 xU
 iR
 wa
@@ -25226,7 +25219,7 @@ Yi
 ck
 Nq
 sX
-Mc
+iV
 py
 Zp
 nG
@@ -25516,12 +25509,12 @@ Iq
 iR
 NM
 Te
-Cf
+Rl
 jU
-vs
-vs
 aC
-vs
+aC
+aC
+aC
 KJ
 dt
 qq
@@ -25818,11 +25811,11 @@ Iq
 kW
 JJ
 Te
-Te
-vi
+Cf
+JK
 OI
 Jt
-YR
+ug
 tR
 iR
 FG
@@ -26122,9 +26115,9 @@ bW
 Te
 jf
 At
-OI
 qn
 qn
+ug
 zP
 iR
 PJ
@@ -26423,8 +26416,8 @@ iR
 iR
 KW
 ug
-vi
 JK
+TT
 vU
 JB
 iR
@@ -26740,7 +26733,7 @@ ws
 ws
 Lp
 wn
-Eo
+Lp
 uo
 uo
 uo
@@ -28536,7 +28529,7 @@ hm
 hm
 Xe
 Xe
-we
+vs
 aw
 fg
 Iw
@@ -28842,14 +28835,14 @@ bI
 we
 Mn
 Zb
-tH
-Eo
+rR
+Lp
 gT
 zE
 Du
 AC
 nL
-Eo
+Lp
 ks
 SU
 iJ
@@ -38198,7 +38191,7 @@ Bc
 dh
 dh
 dv
-gx
+Rr
 KK
 KK
 SD
