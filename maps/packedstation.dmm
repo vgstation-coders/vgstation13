@@ -32068,7 +32068,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/telecomms/relay/preset/telecomms,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "dark vault corner";
