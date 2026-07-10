@@ -1473,7 +1473,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 /obj/machinery/newscaster/pai/print_paper()
   ..()
   spawn(15 SECONDS)
-    paper_remaining = min(paper_remaining + 1, initial(paper_remaining)
+    paper_remaining = min(paper_remaining + 1, initial(paper_remaining))
 
 
 #undef NEWSCASTER_MENU
