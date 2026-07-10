@@ -90,6 +90,7 @@ var/list/acceptable_sushi_inputs = list()
 		rice += 3
 		qdel(I)
 		update_icon()
+		return
 	if(!is_type_in_list(I,acceptable_sushi_inputs))
 		return ..()
 	if(lastroll + FLICKFRAMES > world.time)
