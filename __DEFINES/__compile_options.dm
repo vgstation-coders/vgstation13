@@ -50,6 +50,8 @@
 //#define MAP_OVERRIDE 18
 // odyssey.dm
 //#define MAP_OVERRIDE 19
+// theseus.dm
+//#define MAP_OVERRIDE 20
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this

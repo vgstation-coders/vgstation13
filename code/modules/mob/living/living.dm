@@ -1042,6 +1042,10 @@ Thanks.
 				var/obj/structure/closet/secure_closet/SC = L.loc
 				if(!SC.locked && !SC.welded)
 					return //It's a secure closet, but isn't locked. Easily escapable from, no need to 'resist'
+			else if(istype(C, /obj/structure/closet/crate/secure))
+				var/obj/structure/closet/crate/secure/SC = L.loc
+				if(!SC.locked && !SC.welded)
+					return
 			else
 				if(!C.welded)
 					return //closed but not welded...
@@ -1060,6 +1064,10 @@ Thanks.
 						var/obj/structure/closet/secure_closet/SC = L.loc
 						if(!SC.locked && !SC.welded)
 							return
+					else if(istype(L.loc, /obj/structure/closet/crate/secure))
+						var/obj/structure/closet/crate/secure/SC = L.loc
+						if(!SC.locked && !SC.welded)
+							return
 					else
 						if(!C.welded)
 							return
@@ -1075,6 +1083,9 @@ Thanks.
 					sleep(10)
 					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
+				if(istype(usr.loc, /obj/structure/closet/crate/secure))
+					var/obj/structure/closet/crate/secure/SC = L.loc
+					SC.break_open()
 				C.welded = 0
 				if(C.arcanetampered)
 					C.bless() // so it doesn't just close again, fairness on the user

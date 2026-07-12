@@ -1795,7 +1795,7 @@
 		for(var/mob/living/L in chassis.loc)
 			if(action(L))
 				return
-	
+
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/detach()
 	if(occupant)
 		occupant_message("Unable to detach [src] - equipment occupied.")
@@ -1862,7 +1862,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/Destroy()
-	chassis.proc_res["dynattackby"] = null
+	if(chassis)
+		chassis.proc_res["dynattackby"] = null
 	if(probe_item)
 		probe_item.forceMove(get_turf(src))
 		probe_item = null
@@ -1873,11 +1874,15 @@
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		chassis.log_append_to_last("Permission denied.")
 		return
+	if(probe_item)
+		to_chat(user,"<span class='warning'>There is already \a [probe_item] in the prober.</span>")
+		return
 	if(W.w_class > 2)
 		to_chat(user,"<span class='warning'>This item is too big for the prober.</span>")
 		return
 	if(user.drop_item(W,src))
 		probe_item = W
+		to_chat(user,"<span class='notice'>You add \a [probe_item] to the prober.</span>")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/action(atom/target)

@@ -18391,6 +18391,7 @@
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
 	dir = 9
 	},
+/obj/machinery/telecomms/relay/preset/telecomms,
 /turf/simulated/floor/server/bluegrid,
 /area/tcomms/chamber)
 "aQi" = (
@@ -21901,6 +21902,7 @@
 /area/tcomms/chamber)
 "aYq" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging,
+/obj/machinery/telecomms/relay/preset/station,
 /turf/simulated/floor/server/bluegrid,
 /area/tcomms/chamber)
 "aYs" = (

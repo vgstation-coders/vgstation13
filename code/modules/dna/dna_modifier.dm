@@ -18,6 +18,7 @@
 	var/default_language=null
 	var/times_cloned=0
 	var/talkcount
+	var/clown
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
@@ -48,6 +49,7 @@
 	new_copy.attack_log = attack_log.Copy()
 	new_copy.default_language = default_language
 	new_copy.times_cloned = times_cloned
+	new_copy.clown = clown
 
 	return new_copy
 

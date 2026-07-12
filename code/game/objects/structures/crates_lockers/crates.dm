@@ -223,6 +223,8 @@
 	has_lockless_type = /obj/structure/closet/crate/large
 
 /obj/structure/closet/crate/secure/large/close()
+	if(!..())
+		return 0
 	//we can hold up to one large item
 	var/found = 0
 	for(var/obj/structure/S in src.loc)
@@ -237,7 +239,7 @@
 			if(!M.anchored)
 				M.forceMove(src)
 				break
-	..()
+	return 1
 
 //fluff variant
 /obj/structure/closet/crate/secure/large/reinforced
@@ -289,6 +291,8 @@
 	has_lock_type = /obj/structure/closet/crate/secure/large
 
 /obj/structure/closet/crate/large/close()
+	if(!..())
+		return 0
 	//we can hold up to one large item
 	var/found = 0
 	for(var/obj/structure/S in src.loc)
@@ -303,7 +307,7 @@
 			if(!M.anchored)
 				M.forceMove(src)
 				break
-	..()
+	return 1
 
 /obj/structure/closet/crate/hydroponics
 	name = "Hydroponics crate"
@@ -546,6 +550,13 @@
 	else
 		..()
 
+/obj/structure/closet/crate/secure/can_open()
+	if(!..())
+		return 0
+	if(src.locked)
+		return 0
+	return 1
+
 /obj/structure/closet/crate/MouseDrop(atom/drop_atom, src_location, over_location)
 	. = ..()
 	var/mob/living/user = usr
@@ -607,6 +618,16 @@
 		src.locked = 0
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
+
+/obj/structure/closet/crate/secure/proc/break_open()
+	if(locked && !broken)
+		overlays.len = 0
+		overlays += emag
+		overlays += sparks
+		spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
+		playsound(src, "sparks", 60, 1)
+		src.locked = 0
+		src.broken = 1
 
 /obj/structure/closet/crate/secure/verb/verb_togglelock()
 	set src in oview(1) // One square distance

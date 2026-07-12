@@ -380,7 +380,7 @@
 					temp += " "
 					i++
 					switch(code)
-						if(ERR_NO_CLONEPOD)	
+						if(ERR_NO_CLONEPOD)
 							temp += "Clone pod [i] unlinkable."
 						if(ERR_CLONEPOD_OCCUPIED)
 							temp += "Clone pod [i] is currently occupied."
@@ -491,6 +491,7 @@
 	R.default_language = subject.default_language
 	R.times_cloned = subject.times_cloned
 	R.talkcount = subject.talkcount
+	R.clown = (M_CLUMSY in subject.mutations)
 
 	if (!isnull(subject.mind)) //Save that mind so traitors can continue traitoring after cloning.
 		R.mind = "\ref[subject.mind]"

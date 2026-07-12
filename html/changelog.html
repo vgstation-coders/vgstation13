@@ -73,6 +73,83 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2026.07.12</h2>
+			<h3 class="author">Kammerjunk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed silicons not being able to cut tower caps into logs of wood.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Roswell mech probers now only accept one item at a time.</li>
+				<li class="bugfix">Roswell mech probers now properly delete if not inside a chassis.</li>
+				<li class="tweak">Roswell mech probers now give message feedback when loaded with an item.</li>
+				<li class="tweak">Roswell mechs no longer need prober or abductor stock parts, as their modules are redundant to them.</li>
+			</ul>
+			<h3 class="author">gallywix4 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You can now bless a tile without making it slippery.</li>
+				<li class="tweak">You need to spill more then 10 units of holy water to make the floor slippery.</li>
+			</ul>
+			<h3 class="author">mentgah updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a non infinite rice variant of the sushi mat, available in the dinner vend. It can be refilled by using boiled rice on it.</li>
+			</ul>
+			<h2 class="date">2026.07.09</h2>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">GDR cargo crates now come in genuine mothership closets!</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Clowns keep being clumsy even when cloned.</li>
+			</ul>
+			<h3 class="author">mentgah updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">AI radio and station bounced radios should work again (Telecomms relays were added to deff, roid, packed, way and meta)</li>
+			</ul>
+			<h2 class="date">2026.07.07</h2>
+			<h3 class="author">Kromkar2KromHarder updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">New map, Theseus. It&#39;s Odyssey but with comprehensive remapping to smooth movement and add better playability / functionality to the ship-as-a-station plus additional available roles.</li>
+			</ul>
+			<h2 class="date">2026.07.03</h2>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Catbeasts no longer appear in Odyssey, as they either instantly speedrun or get speedran by an armed crew.</li>
+				<li class="rscadd">Overdosing on Honk Serum will now also permanently give the clumsy mutation, allowing cloned clowns to recover their lost clumsiness, and evildoers to purposefully clumsify individuals, should they acquire enough serum.</li>
+				<li class="tweak">Honk Serum overdose amount raised from 30u to 50u.</li>
+				<li class="rscadd">Overdosing on &#39;Nothing&#39; will now permanently remove the clumsy mutation, letting forced clownification victims to regain their dexterity, and evil mimes to prank/punish their clownish counterpart.</li>
+			</ul>
+			<h3 class="author">mentgah updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Tray code was refactored, allowing for items to be picked up from trays individually.</li>
+			</ul>
+			<h2 class="date">2026.07.02</h2>
+			<h3 class="author">13monkeks updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Deff: removed some weird windows that were causing issues (didnt touch the tinted windows)</li>
+				<li class="bugfix">Deff: slightly moved a light fixture in genetics to provide better lighting</li>
+			</ul>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">increased the size of jungle atmospherics</li>
+				<li class="rscadd">added more cameras on jungle</li>
+				<li class="tweak">moved some cameras around on jungle</li>
+				<li class="tweak">changed some jungle atmos frequencies</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">ID flashing delay can now be modified by admins by looking for the &#34;flash_post_delay&#34; variable.</li>
+			</ul>
+			<h3 class="author">hacker-on-steroids updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Telecomms traceroute should no longer break if an invalid route was requested</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Recycling machines no longer open locked crates.</li>
+				<li class="bugfix">Cargo carts no longer randomly open large locked crates.</li>
+			</ul>
 			<h2 class="date">2026.06.24</h2>
 			<h3 class="author">13monkeks updated:</h3>
 			<ul class="changes bgimages16">
@@ -1408,57 +1485,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">Eneocho updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Holy water puddles are slippery now</li>
-			</ul>
-			<h2 class="date">2025.11.28</h2>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Removed bunnies from the procgen spawn list to prevent bunnapocalypse (closes #38623).</li>
-				<li class="bugfix">Fixed Phazon mechs being able to defy physics and phase across planetary boundaries.</li>
-				<li class="bugfix">Removed an erroneous 0 from the Planet Scanner UI (closes #38617).</li>
-				<li class="bugfix">Fixed turfs previously occupied by shuttles not updating their day/night lighting and weather effects when the shuttle departs.</li>
-				<li class="bugfix">Fixed certain shuttles losing their floors when visiting or leaving planetary surfaces (for real this time).</li>
-				<li class="bugfix">Players will now have all weather sounds cleared when they become a ghost.</li>
-			</ul>
-			<h2 class="date">2025.11.27</h2>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Urinals no longer runtime on creation.</li>
-			</ul>
-			<h2 class="date">2025.11.26</h2>
-			<h3 class="author">Kharkov72 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Airlock Consoles can now be used to toggle the bolts.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">4 minutes of liberation from samsara is coming soon to a station near you.</li>
-			</ul>
-			<h2 class="date">2025.11.25</h2>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Jungle: Randomized vaults exclusive to jungle now spawn across the surface, away from the station.</li>
-				<li class="rscadd">Jungle: Improved the tunnels</li>
-				<li class="rscadd">Jungle: improved station decoration (thank you 13monkeys)</li>
-				<li class="bugfix">Jungle: fixed many mapping oversights</li>
-				<li class="bugfix">Jungle: fixed issues with certain events</li>
-				<li class="bugfix">Jungle: fixed mobs spamming deadchat and the logs</li>
-				<li class="tweak">Jungle: overhauled cargo, made bridge and research better and more unique (thank you 13monkeys)</li>
-				<li class="tweak">Jungle: Dinosaurs and panthers are smarter, and should avoid going extinct</li>
-				<li class="tweak">Jungle: The underground area now has a telecommunications relay</li>
-				<li class="tweak">Jungle: Bar is now seperate from kitchen</li>
-				<li class="imageadd">Jungle: updated sprites for the underground tiles</li>
-				<li class="experiment">Jungle: the vox outpost has been relocated to the same area as the station, after a lengthy trade agreement between the Shoal and NanoTrasen</li>
-				<li class="experiment">Jungle: NanoTrasen has discovered the location of a large fallen meteorite on the planet, and have moved mining efforts to the surface (the roid is now planetside. you can either take the shuttle as usual, or walk to the roid z-level if you can brave the fauna).</li>
-				<li class="spellcheck">Jungle: fixed some grammar issues mainly with mobs</li>
-			</ul>
-			<h2 class="date">2025.11.24</h2>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Sinks, toilets and showers can now have their reagent reservoirs removed and replaced while unwrenched and with an empty hand. Give people their honk serum showers that they deserve today!</li>
-				<li class="tweak">Sink, toilet and shower reagent reservoirs now transfer their reagents when filling other containers instead of cloning them.</li>
-				<li class="rscadd">To balance sink, toilet and shower reagent reservoirs no longer infinitely refilling, they now default to being a new item known as a &#34;reagent core&#34; that can refill infinitely and only have their reagents transferred out at these relevant objects, defaulting to a water core on station ones and acid core on motherships. These are mechanic scannable for easy replacement, and have an admin subtype that can select its reagent to fill on use in hand by an admin.</li>
-				<li class="bugfix">Punctualite now properly explodes on the hour.</li>
-				<li class="rscadd">Admins can now set a manual round time offset in the secrets panel.</li>
 			</ul>
 		</div>
 		<!--

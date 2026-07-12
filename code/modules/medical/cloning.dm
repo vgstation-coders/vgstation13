@@ -16,7 +16,7 @@
 	req_access = list(access_genetics) //For premature unlocking.
 	var/mob/living/occupant
 	//list of mob/living/ that are currently in the pod. Usually only one, but in exceptional circumstances there may be multiple. All are ejected at the same time (when everyone's ready)
-	var/list/occupants[0] 
+	var/list/occupants[0]
 	var/heal_level = 0 //The clone is released once its health reaches this level.
 	var/locked = FALSE
 	var/frequency = 0
@@ -238,9 +238,11 @@
 		H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna = TRUE)
 	H.times_cloned = R.times_cloned + 1
 	H.talkcount = R.talkcount
+	if(R.clown)
+		H.mutations.Add(M_CLUMSY)
 
 	if(isplasmaman(H))
-		H.fire_sprite = "Plasmaman" 
+		H.fire_sprite = "Plasmaman"
 
 	H.dna = R.dna.Clone()
 	H.dna.flavor_text = R.dna.flavor_text
@@ -251,7 +253,7 @@
 	H.UpdateAppearance()
 	H.set_species(H.dna.species)
 	H.update_mutantrace()
-	
+
 	if(do_mind_transfer)
 		has_been_shade.Remove(clonemind)
 		clonemind.transfer_to(H)
@@ -293,7 +295,7 @@
 				if(!force_clone && !isobserver(P))
 					return FALSE
 				break
-	
+
 	var/original_in_cloner = (original in occupants)
 	var/mob/living/carbon/human/H
 	if(original.dna.species == "Vox") //Special case for vox so they get their feathers.
@@ -305,16 +307,18 @@
 	else
 		H.times_cloned = original.times_cloned + 1
 	H.talkcount = original.talkcount
+	if(M_CLUMSY in original.mutations)
+		H.mutations.Add(M_CLUMSY)
 
 	if(isplasmaman(H))
 		H.fire_sprite = "Plasmaman"
-	
+
 	H.dna = original.dna.Clone()
 	H.dna.flavor_text = original.dna.flavor_text
 	H.dna.species = original.dna.species
 	if(H.dna.species != "Human")
 		H.set_species(H.dna.species, TRUE)
-	
+
 	H.UpdateAppearance()
 	H.set_species(H.dna.species)
 	H.update_mutantrace()
@@ -347,6 +351,7 @@
 	R.default_language = H.default_language
 	R.times_cloned = H.times_cloned
 	R.talkcount = H.talkcount
+	R.clown = (M_CLUMSY in H.mutations)
 	if (!isnull(H.mind))
 		R.mind = "\ref[H.mind]"
 	cloned_records += R
@@ -362,7 +367,7 @@
 /obj/machinery/cloning/clonepod/proc/addclone(var/mob/living/carbon/human/H, var/mob/living/copy_progress_from = null)
 	if(heal_level == 0)
 		heal_level = upgraded ? 100 : rand(10,40) //Randomizes what health the clone is when ejected
-	
+
 	//only lock if we're not already working on a clone
 	if(!working)
 		locked = TRUE
@@ -444,6 +449,7 @@
     R.default_language = orig_record.default_language
     R.times_cloned = orig_record.times_cloned
     R.talkcount = orig_record.talkcount
+    R.clown = orig_record.clown
 
     var/mob/living/carbon/human/clone = growclone(R, copy_progress_from=null, do_mind_transfer=TRUE, allow_multiple=TRUE, force_clone=TRUE)
     var/datum/mind/new_mind = clone.mind

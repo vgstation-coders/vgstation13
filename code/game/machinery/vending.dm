@@ -2437,7 +2437,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/condiment/saltshaker	= 5,
 		/obj/item/weapon/reagent_containers/food/condiment/vinegar = 5,
 		/obj/item/weapon/storage/lunchbox/plastic/nt = 10,
-		/obj/item/weapon/storage/bag/food = 5
+		/obj/item/weapon/storage/bag/food = 5,
+		/obj/item/sushimat = 2
 		)
 	contraband = list(
 		/obj/item/weapon/kitchen/utensil/spork = 10,

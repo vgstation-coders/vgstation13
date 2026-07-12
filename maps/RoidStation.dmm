@@ -31307,6 +31307,7 @@
 /obj/machinery/alarm/server{
 	pixel_y = 27
 	},
+/obj/machinery/telecomms/relay/preset/telecomms,
 /turf/simulated/floor/bluegrid{
 	icon_state = "dark";
 	name = "Mainframe Floor";
@@ -31345,6 +31346,7 @@
 /obj/machinery/camera{
 	name = "Telecomms Server Room"
 	},
+/obj/machinery/telecomms/relay/preset/station,
 /turf/simulated/floor/bluegrid{
 	icon_state = "dark";
 	name = "Mainframe Floor";

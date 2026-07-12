@@ -295,7 +295,7 @@
 					/obj/item/weapon/tank/oxygen/red,
 					/obj/item/clothing/mask/gas/mothership)
 	cost = 175
-	containertype = /obj/structure/closet/crate/ayy/metal
+	containertype = /obj/structure/closet/crate/ayy
 	containername = "grey Space-Ex crate"
 	group = "Clothing"
 	containsdesc = "Contains a space-worthy softsuit that is perfectly fitted for a grey. Includes a fancy red oxygen tank!"
@@ -313,7 +313,7 @@
 					/obj/item/clothing/shoes/jackboots/mothership,
 					/obj/item/clothing/shoes/jackboots/mothership)
 	cost = 50
-	containertype = /obj/structure/closet/ayy/metal
+	containertype = /obj/structure/closet/ayy
 	containername = "mothership uniform locker"
 	containsicon = "grey_uniform"
 	containsdesc = "A batch of clothing from the grey mothership. Comes with either two outfits for workers, or two outfits for researchers. Whatever they had extra."
@@ -332,7 +332,7 @@
 					/obj/item/weapon/tank/emergency_oxygen/engi,
 					/obj/item/weapon/tank/emergency_oxygen/engi)
 	cost = 40
-	containertype = /obj/structure/closet/crate/ayy3/metal
+	containertype = /obj/structure/closet/crate/ayy3
 	containername = "GDR half-mask crate"
 	contraband = 1
 	group = "Clothing"

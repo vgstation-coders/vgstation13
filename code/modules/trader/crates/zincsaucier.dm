@@ -8,7 +8,7 @@ var/global/list/chef_stuff = list(
 	/obj/item/apiary/langstroth,/obj/item/apiary/langstroth,
 	//one of a kind
 	/obj/item/weapon/vinyl/echoes, //media/jukebox.dm
-	/obj/item/sushimat,
+	/obj/item/sushimat/bottomless,
 	/obj/structure/dishwasher,
 	/obj/item/cricketfarm,
 	/obj/structure/bed/chair/vehicle/mower,
@@ -31,13 +31,38 @@ var/global/list/chef_stuff = list(
 
 var/list/sushi_recipes = list()
 var/list/acceptable_sushi_inputs = list()
+
 /obj/item/sushimat
-	name = "bottomless sushi mat"
-	desc = "Since the 1800s, top researchers, clowns, and magicians have known that there are alternate dimensions full of one object repeated forever. Previously this was thought to be limited to just dimensions of colorful handkerchiefs, doves, etc. -- but this mat connects to limitless rice to feed your sushi addiction."
+	name = "sushi mat"
+	desc = "A mat for sushi."
 	w_class = W_CLASS_LARGE
 	icon = 'icons/obj/items_weird.dmi'
 	icon_state = "sushimat"
 	var/lastroll = 0
+	var/rice = 0
+
+/obj/item/sushimat/update_icon()
+	overlays.Cut()
+	if (rice == 0)
+		overlays+=image(icon, src, "rice_bowl_empty")
+	else if (rice==1)
+		overlays+=image(icon, src, "rice_bowl_almost_empty")
+	else if (rice>1)
+		overlays+=image(icon, src, "rice_bowl_full")
+
+/obj/item/sushimat/examine()
+	..()
+	if (rice==0)
+		to_chat(usr, "<span class='notice'>It's out of rice.</span>")
+	else if (rice > 0)
+		to_chat(usr, "<span class='notice'>You think there's enough rice for [rice] batches of sushi.</span>")
+	else
+		to_chat(usr, "<span class='notice'>It looks like there's infinite rice!</span>")
+
+/obj/item/sushimat/bottomless
+	name = "bottomless sushi mat"
+	desc = "Since the 1800s, top researchers, clowns, and magicians have known that there are alternate dimensions full of one object repeated forever. Previously this was thought to be limited to just dimensions of colorful handkerchiefs, doves, etc. -- but this mat connects to limitless rice to feed your sushi addiction."
+	rice = -1
 
 /obj/item/sushimat/New()
 	..()
@@ -56,23 +81,38 @@ var/list/acceptable_sushi_inputs = list()
 	for(var/datum/recipe/recipe in sushi_recipes)
 		for (var/item in recipe.items)
 			acceptable_sushi_inputs += item
+	update_icon()
 
 #define FLICKFRAMES 11
 /obj/item/sushimat/attackby(obj/item/I, mob/user)
+	if (istype(I, /obj/item/weapon/reagent_containers/food/snacks/boiledrice) && rice>=0)
+		to_chat(user, "<span class='notice'>You add some rice to the rice bowl.</span>")
+		rice += 3
+		qdel(I)
+		update_icon()
+		return
 	if(!is_type_in_list(I,acceptable_sushi_inputs))
 		return ..()
 	if(lastroll + FLICKFRAMES > world.time)
 		return
 	for(var/datum/recipe/R in sushi_recipes)
 		if(istype(I, R.items[1])) //Compare to the only remaining item in the recipe
-			flick("sushimat-flickfast", src)
-			lastroll = world.time
-			playsound(loc, 'sound/effects/bamboo_rattle.ogg', 75, 1, -1)
-			visible_message("<span class='notice'>[user] rolls the sushi!</span>")
-			qdel(I)
-			spawn(FLICKFRAMES)
-				var/obj/item/newsushi = new R.result(src)
-				newsushi.forceMove(loc) //to trigger multispawners
+			if (rice == 0)
+				to_chat(user, "<span class='notice'>You don't have enough rice for more sushi.</span>")
+				return
+			if (user.drop_item(I, src))
+				flick("sushimat-flickfast", src)
+				lastroll = world.time
+				playsound(loc, 'sound/effects/bamboo_rattle.ogg', 75, 1, -1)
+				visible_message("<span class='notice'>[user] rolls the sushi!</span>")
+				spawn(FLICKFRAMES)
+					var/obj/item/newsushi = R.make_food(src, user)
+					if (newsushi)
+						newsushi.forceMove(loc) //to trigger multispawners
+				if (rice>0)
+					rice-=1
+	update_icon()
+
 #undef FLICKFRAMES
 
 var/global/global_cricket_population = 0
