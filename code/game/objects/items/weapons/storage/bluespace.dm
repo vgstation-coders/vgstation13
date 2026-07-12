@@ -17,7 +17,7 @@
 	if(!honked && istype(W, /obj/item/toy/crayon/rainbow))
 		to_chat(user, "You start painting \the [src] with \the [W].")
 		if(do_after(user, src, 4 SECONDS))
-			to_chat(usr, "You finish painting \the [src].")
+			to_chat(user, "You finish painting \the [src].")
 			name = "bag of honking"
 			desc = "A backpack that opens straight to a pocket of Hammerspace. Where do you think the clowns keep all those balloons?"
 			item_state = "honkingpack"
