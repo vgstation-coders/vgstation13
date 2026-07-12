@@ -9704,7 +9704,9 @@
 	id_tag = "holdingcel";
 	name = "Holding Cell Lockdown"
 	},
-/turf/simulated/floor/carpet,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/shuttle/odyssey/security/holding_cell)
 "GB" = (
 /obj/machinery/door/airlock/glass_security{
