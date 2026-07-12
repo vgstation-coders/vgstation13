@@ -851,11 +851,6 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 3;
 	tag = ""
@@ -2167,8 +2162,13 @@
 /area/derelict/bar)
 "gT" = (
 /obj/machinery/vending/coffee,
-/obj/machinery/firealarm{
-	pixel_y = 26
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc{
+	pixel_y = 24;
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -2578,6 +2578,10 @@
 	},
 /obj/effect/landmark/start{
 	name = "Assistant"
+	},
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -6357,7 +6361,7 @@
 /area/shuttle/odyssey/quarters/crew)
 "vD" = (
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -24
+	pixel_x = -25
 	},
 /obj/machinery/status_display/odyssey{
 	pixel_y = 30
@@ -7745,7 +7749,7 @@
 "zO" = (
 /obj/machinery/light_switch{
 	pixel_x = -24;
-	pixel_y = 13
+	pixel_y = 9
 	},
 /obj/structure/table/glass,
 /obj/item/clothing/suit/strait_jacket{
@@ -7778,9 +7782,9 @@
 /obj/item/bodybag{
 	pixel_x = 6
 	},
-/obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -28;
-	pixel_y = 1
+/obj/machinery/firealarm{
+	pixel_y = -24;
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 10;
@@ -7832,15 +7836,9 @@
 /area/security/perma)
 "zS" = (
 /obj/item/device/radio/intercom{
-	pixel_x = -28;
-	pixel_y = 7
+	pixel_x = -28
 	},
 /obj/structure/closet/secure_closet/medical3,
-/obj/machinery/firealarm{
-	pixel_x = -26;
-	dir = 8;
-	pixel_y = -10
-	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "whiteblue"
@@ -8783,7 +8781,7 @@
 /area/shuttle/odyssey/logistics)
 "Dd" = (
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
-	pixel_x = -28
+	pixel_x = -25
 	},
 /obj/machinery/status_display/odyssey{
 	pixel_y = -32
@@ -10621,6 +10619,11 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
 	dir = 4
 	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
 /turf/simulated/floor/plated_catwalk/dark,
 /area/shuttle/odyssey/hallway/fore)
 "JH" = (
@@ -11575,6 +11578,10 @@
 /obj/structure/bed/chair{
 	dir = 8
 	},
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -11686,14 +11693,9 @@
 	},
 /area/shuttle/odyssey/bridge)
 "MK" = (
-/obj/machinery/power/apc{
-	pixel_x = -24;
-	name = "Fore Hallway APC";
-	dir = 8
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -23
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -15219,6 +15221,10 @@
 	name = "Bridge APC";
 	pixel_x = -26;
 	dir = 8
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
 	},
 /turf/simulated/floor{
 	dir = 9;
