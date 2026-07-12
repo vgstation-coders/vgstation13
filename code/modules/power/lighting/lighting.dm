@@ -688,7 +688,7 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/machinery/light/clean_act(cleanliness)
 	. = ..()
-	if(current_bulb && current_bulb.brightness_color == "#bbbb00")
+	if(current_bulb && current_bulb.brightness_color == "COLOR_PULSEDEMON")
 		current_bulb.brightness_color = initial(current_bulb.brightness_color)
 		update(0)
 
@@ -820,7 +820,7 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/item/weapon/light/bulb/clean_act(cleanliness)
 	. = ..()
-	if(brightness_color == "#bbbb00")
+	if(brightness_color == "COLOR_PULSEDEMON")
 		brightness_color = initial(brightness_color)
 
 // update the icon state and description of the light

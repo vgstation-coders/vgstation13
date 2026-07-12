@@ -309,7 +309,7 @@
 	O.color = ""
 	if(istype(O,/obj/machinery/light))
 		var/obj/machinery/light/L = O
-		if(L.current_bulb && L.current_bulb.brightness_color == "#bbbb00")
+		if(L.current_bulb && L.current_bulb.brightness_color == "COLOR_PULSEDEMON")
 			L.current_bulb.brightness_color = initial(L.current_bulb.brightness_color)
 			L.update(0)
 
