@@ -1667,6 +1667,9 @@
 	dir = 4
 	},
 /obj/structure/closet/emcloset/vox,
+/obj/item/device/radio/intercom{
+	pixel_y = -27
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -2513,9 +2516,6 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 9;
 	tag = ""
-	},
-/obj/structure/extinguisher_cabinet{
-	pixel_y = -28
 	},
 /obj/machinery/vending/cola,
 /turf/simulated/floor/plated_catwalk/dark,
@@ -4892,7 +4892,7 @@
 	pixel_x = 28;
 	dir = 4
 	},
-/obj/machinery/firealarm{
+/obj/machinery/alarm{
 	pixel_y = 24
 	},
 /turf/simulated/floor{
@@ -5273,6 +5273,15 @@
 	},
 /turf/simulated/floor/carpet,
 /area/shuttle/trade/start)
+"rP" = (
+/obj/item/device/radio/intercom{
+	pixel_x = -27;
+	pixel_y = 13
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/odyssey/hallway/aft)
 "rR" = (
 /obj/structure/closet/emcloset,
 /obj/machinery/status_display/odyssey{
@@ -7390,10 +7399,6 @@
 	on = 1
 	},
 /obj/machinery/vending/cigarette,
-/obj/machinery/alarm{
-	dir = 4;
-	pixel_x = -23
-	},
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_y = 26
 	},
@@ -8157,9 +8162,9 @@
 /obj/item/device/radio/intercom{
 	pixel_y = -27
 	},
-/obj/machinery/firealarm{
-	pixel_x = -24;
-	dir = 8
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -23
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -11722,8 +11727,7 @@
 	tag = "icon-map (EAST)"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
-/obj/machinery/alarm{
-	dir = 8;
+/obj/structure/extinguisher_cabinet{
 	pixel_x = 24
 	},
 /turf/simulated/floor/plated_catwalk/dark,
@@ -20770,7 +20774,7 @@ Nk
 AP
 ez
 lQ
-DY
+rP
 fT
 DY
 Ny
