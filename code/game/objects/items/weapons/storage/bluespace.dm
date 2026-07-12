@@ -15,7 +15,7 @@
 
 /obj/item/weapon/storage/backpack/holding/attackby(obj/item/W as obj, mob/user as mob)
 	if(!honked && istype(W, /obj/item/toy/crayon/rainbow))
-		to_chat(usr, "You start painting \the [src] with \the [W].")
+		to_chat(user, "You start painting \the [src] with \the [W].")
 		if(do_after(user, src, 4 SECONDS))
 			to_chat(usr, "You finish painting \the [src].")
 			name = "bag of honking"
