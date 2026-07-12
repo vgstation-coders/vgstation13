@@ -1278,9 +1278,6 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/machinery/keycard_auth{
-	pixel_y = 24
-	},
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "dark_navy";
@@ -8696,9 +8693,6 @@
 /obj/item/weapon/bedsheet/captain,
 /obj/machinery/camera/autoname{
 	dir = 6
-	},
-/obj/machinery/keycard_auth{
-	pixel_x = 26
 	},
 /turf/simulated/floor/wood,
 /area/shuttle/odyssey/quarters/heads)
