@@ -78,10 +78,10 @@
 	faction = "wizard"
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/goblin/wizard/death(var/gibbed = FALSE)
-	..(TRUE)
+//	..(TRUE)
 	if(prob(90))
-		animate(src, alpha = 0, time = 4 SECONDS)
-		spawn(4 SECONDS)
+		animate(src, alpha = 0, time = 3 SECONDS)
+		spawn(3 SECONDS)
 			qdel(src)
 	else
 		new /obj/item/clothing/mask/gas/clown_hat(src.loc)
@@ -95,10 +95,10 @@
 	speak = list("AHAHAHAHAHAHA!")
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/wizard/death(var/gibbed = FALSE)
-	..(TRUE)
+//	..(TRUE)
 	if(prob(90))
-		animate(src, alpha = 0, time = 4 SECONDS)
-		spawn(4 SECONDS)
+		animate(src, alpha = 0, time = 3 SECONDS)
+		spawn(3 SECONDS)
 			qdel(src)
 	else
 		new /obj/item/clothing/mask/gas/clownmaskpsyche(src.loc)
@@ -111,10 +111,10 @@
 	faction = "wizard"
 
 /mob/living/simple_animal/hostile/retaliate/faguette/goblin/wizard/death(var/gibbed = FALSE)
-	..(TRUE)
+//	..(TRUE)
 	if(prob(90))
-		animate(src, alpha = 0, time = 4 SECONDS)
-		spawn(4 SECONDS)
+		animate(src, alpha = 0, time = 3 SECONDS)
+		spawn(3 SECONDS)
 			qdel(src)
 	else
 		new /obj/item/clothing/head/beret(src.loc)
