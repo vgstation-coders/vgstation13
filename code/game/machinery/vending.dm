@@ -3850,6 +3850,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/stack/sheet/mineral/brick/bigstack = 1,
 		/obj/item/binoculars = 2,
 		/obj/item/clothing/suit/storage/wintercoat/fur = 1,
+		/obj/item/clothing/head/helmet/iceminer = 2,
+		/obj/item/clothing/suit/storage/iceminer = 2
 		)
 
 /obj/machinery/vending/zamsnax

@@ -500,3 +500,19 @@
 	hood = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 
+/obj/item/clothing/suit/storage/iceminer
+	name = "Ice Miner Coat"
+	desc = "A heavy jacket designed for miners cutting through ice sheets. Has special plating for dealing with space criminals!"
+	icon_state = "iceminer_coat"
+	item_state = "iceminer_coat"
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	armor = list(melee = 45, bullet = 20, laser = 25,energy = 15, bomb = 15, bio = 5, rad = 0)
+	allowed = list(
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/weapon/tank/emergency_nitrogen,
+		/obj/item/weapon/pickaxe/drill/orangetransparentchainsaw)
+	hood = null
+

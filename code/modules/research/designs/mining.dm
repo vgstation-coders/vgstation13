@@ -101,3 +101,14 @@
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_SILVER = 1000, MAT_DIAMOND = 750)
 	category = "Mining"
 	build_path = /obj/item/weapon/pickaxe/excavationdrill/adv
+
+/datum/design/orangetransparentchainsaw
+	name = "Orange Transparent Chainsaw"
+	desc = "Yours is the saw that will cut the ice! And people, I guess."
+	id = "plasmachainsaw"
+	req_tech = list(Tc_MATERIALS = 4, Tc_PLASMATECH = 5, Tc_ENGINEERING = 5)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 6000, MAT_GLASS = 1000, MAT_PLASMA = 6000)
+	reliability_base = 75
+	category = "Mining"
+	build_path = /obj/item/weapon/pickaxe/drill/orangetransparentchainsaw

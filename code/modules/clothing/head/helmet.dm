@@ -391,3 +391,12 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
+
+/obj/item/clothing/head/helmet/iceminer
+	name = "Ice Mining Helmet"
+	desc = "Perfect for protecting your eyes from flying ice chunks!"
+	icon_state = "iceminer_hat"
+	item_state = "iceminer_hat"
+	armor = list(melee = 45, bullet = 15, laser = 25, energy = 15, bomb = 15, bio = 5, rad = 0)
+	body_parts_covered = FULL_HEAD|MASKHEADHAIR
+	species_restricted = list("Human")
