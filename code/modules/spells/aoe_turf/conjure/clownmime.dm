@@ -174,7 +174,7 @@
 		icon_dead = "[temporaryiconholder]_dead"
 
 	else
-		var/temporarygigaholder = pick("honkhulk", "bananatree", "honkmunculus", "destroyer", "mutant", "blob", "clowns")
+		var/temporarygigaholder = pick("honkhulk", "banana tree", "honkmunculus", "destroyer", "mutant", "blob", "clowns")
 		icon_state = temporarygigaholder
 		icon_living = temporarygigaholder
 		icon_dead = "[temporarygigaholder]_dead"
