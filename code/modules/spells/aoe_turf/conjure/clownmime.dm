@@ -132,14 +132,13 @@
 	icon_living = "scary clown"
 	icon_dead = "clown_dead"
 	icon_gib = "clown_gib"
-	speak_chance = 0
+	speak_chance = 2
 	turns_per_move = 5
 	response_help = "touches"
 	response_disarm = "gently pushes aside"
 	response_harm = "hits"
 	speak = list("The Honkmother abandoned us...", "Master brought us back...", "It's eternity in there...", "Longer than you think...", "Whatever it takes to not go back...")
 	emote_see = list("laughs incoherently", "stares at nothing")
-	speak_chance = 1
 	a_intent = I_HURT
 	stop_automated_movement_when_pulled = 0
 	maxHealth = 75
