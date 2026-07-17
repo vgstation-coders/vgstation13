@@ -24,7 +24,7 @@
 			icon_state = "honkingpack"
 			honked = TRUE
 			update_icon()
-	..()
+	return ..()
 
 /obj/item/weapon/storage/backpack/holding/return_air()//prevents hot food from getting cold while in it.
 	return
