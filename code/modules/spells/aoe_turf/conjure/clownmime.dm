@@ -78,7 +78,12 @@
 	faction = "wizard"
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/goblin/wizard/death(var/gibbed = FALSE)
-//	..(TRUE)
+	..(TRUE)
+	if(gibbed)
+		return
+	handle_loot_drop()
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/wizard/proc/handle_loot_drop()
 	if(prob(90))
 		animate(src, alpha = 0, time = 3 SECONDS)
 		spawn(3 SECONDS)
@@ -95,7 +100,12 @@
 	speak = list("AHAHAHAHAHAHA!")
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/wizard/death(var/gibbed = FALSE)
-//	..(TRUE)
+	..(TRUE)
+	if(gibbed)
+		return
+	handle_loot_drop()
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/wizard/proc/handle_loot_drop()
 	if(prob(90))
 		animate(src, alpha = 0, time = 3 SECONDS)
 		spawn(3 SECONDS)
@@ -111,7 +121,12 @@
 	faction = "wizard"
 
 /mob/living/simple_animal/hostile/retaliate/faguette/goblin/wizard/death(var/gibbed = FALSE)
-//	..(TRUE)
+	..(TRUE)
+	if(gibbed)
+		return
+	handle_loot_drop()
+
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin/wizard/proc/handle_loot_drop()
 	if(prob(90))
 		animate(src, alpha = 0, time = 3 SECONDS)
 		spawn(3 SECONDS)
