@@ -818,7 +818,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_power = 2
 	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
 
-/obj/item/weapon/light/bulb/clean_act(cleanliness)
+/obj/item/weapon/light/clean_act(cleanliness)
 	. = ..()
 	if(brightness_color == COLOR_PULSEDEMON)
 		brightness_color = initial(brightness_color)
