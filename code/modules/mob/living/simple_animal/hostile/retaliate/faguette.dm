@@ -128,7 +128,7 @@
 		return
 	handle_loot_drop()
 
-/mob/living/simple_animal/hostile/retaliate/faguette/goblin/wizard/proc/handle_loot_drop()
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin/proc/handle_loot_drop()
 	new /obj/item/clothing/head/beret(src.loc)
 	new /obj/item/clothing/gloves/white(src.loc)
 	qdel(src)
