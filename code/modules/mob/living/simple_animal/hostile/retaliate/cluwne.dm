@@ -147,6 +147,8 @@
 		to_chat(src, "<big><span class='danger'>You have died, and will not be able to rejoin the game until the next round.</span><big>")
 		sleep(1)
 		del(client)
+/mob/living/simple_animal/hostile/retaliate/cluwne/proc/handle_loot_drop()
+//here so the children inherit a proc and I don't have to define it AS a proc multiple times
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/goblin
 	name = "clown goblin"
@@ -178,6 +180,11 @@
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/goblin/death(var/gibbed = FALSE)
 	..(TRUE)
+	if(gibbed)
+		return
+	handle_loot_drop()
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/handle_loot_drop()
 	new /obj/item/clothing/mask/gas/clown_hat(src.loc)
 	new /obj/item/clothing/shoes/clown_shoes(src.loc)
 	qdel(src)
@@ -222,10 +229,14 @@
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/death(var/gibbed = FALSE)
 	..(TRUE)
+	if(gibbed)
+		return
+	handle_loot_drop()
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/handle_loot_drop()
 	new /obj/item/clothing/mask/gas/clownmaskpsyche(src.loc)
 	new /obj/item/clothing/shoes/clownshoespsyche(src.loc)
 	qdel(src)
-
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/tempcluwne
 	//this version of a cluwne  is for when someone is temporarily turned into a cluwne but you don't intend for them to die before the transformation is finished
