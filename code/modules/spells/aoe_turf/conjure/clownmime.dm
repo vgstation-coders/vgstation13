@@ -77,13 +77,7 @@
 	desc = "The soul of a clown doomed for eternity now inhabits this shell. It's not fully there yet, so it's not outwardly hostile."
 	faction = "wizard"
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/wizard/death(var/gibbed = FALSE)
-	..(TRUE)
-	if(gibbed)
-		return
-	handle_loot_drop()
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/wizard/proc/handle_loot_drop()
+/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/wizard/handle_loot_drop()
 	if(prob(90))
 		animate(src, alpha = 0, time = 3 SECONDS)
 		spawn(3 SECONDS)
@@ -99,13 +93,7 @@
 	faction = "wizard"
 	speak = list("AHAHAHAHAHAHA!")
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/wizard/death(var/gibbed = FALSE)
-	..(TRUE)
-	if(gibbed)
-		return
-	handle_loot_drop()
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/wizard/proc/handle_loot_drop()
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/wizard/handle_loot_drop()
 	if(prob(90))
 		animate(src, alpha = 0, time = 3 SECONDS)
 		spawn(3 SECONDS)
@@ -120,13 +108,7 @@
 	desc = "The soul of one of the mimes sent to the darkest depths of the cluwne realm, where those cursed without even mouths to cry in pain go, inhabits this shell. It's soul is not fully there yet, so it's not outwardly hostile."
 	faction = "wizard"
 
-/mob/living/simple_animal/hostile/retaliate/faguette/goblin/wizard/death(var/gibbed = FALSE)
-	..(TRUE)
-	if(gibbed)
-		return
-	handle_loot_drop()
-
-/mob/living/simple_animal/hostile/retaliate/faguette/goblin/wizard/proc/handle_loot_drop()
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin/wizard/handle_loot_drop()
 	if(prob(90))
 		animate(src, alpha = 0, time = 3 SECONDS)
 		spawn(3 SECONDS)
