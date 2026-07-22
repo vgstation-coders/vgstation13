@@ -68,7 +68,7 @@
 	// Post-Byond 516 DPI scaling settings affects opened windows.
 	// Rather than e.g. 100x100 you get (window size / scale), so for 125% scaling you get 80x80.
 	// This messes up a lot of interfaces so this value is cached and applied to opening windows to correct for scaling.
-	/client/var/dpiScale = 1
+	var/dpiScale = 1
 
 		////////////
 		//PARALLAX+OTHER PLANEMASTERS//
