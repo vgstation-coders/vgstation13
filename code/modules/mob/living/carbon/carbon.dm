@@ -789,3 +789,20 @@
 		if(internal)
 			return internal.remove_air_volume(volume_needed)
 	return null
+
+/mob/living/carbon/t_scanner_expose(ray_range)
+	if(alpha < OPAQUE || (invisibility > 0 && invisibility < INVISIBILITY_OBSERVER) || body_alphas.len)
+		var/old_alpha = alpha
+		var/old_invisibility = invisibility
+		var/list/old_body_alphas = body_alphas.Copy()
+		body_alphas.Cut()
+		alpha = OPAQUE
+		invisibility = 0
+		regenerate_icons()
+		spawn(1 SECONDS)
+			if(src)
+				if(old_body_alphas.len)
+					body_alphas = old_body_alphas.Copy()
+					regenerate_icons()
+				alpha = old_alpha
+				invisibility = old_invisibility

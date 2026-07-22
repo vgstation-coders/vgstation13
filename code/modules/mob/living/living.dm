@@ -1828,3 +1828,14 @@ Thanks.
 /// Event handler for v_transition events used to activate or pause v-levels.
 /mob/living/proc/OnMobVChanged(mob/living/user, datum/virtual_z/to_v, datum/virtual_z/from_v)
 	SSmapping?.v_pause_check(src, to_v, from_v)
+
+/mob/living/t_scanner_expose(ray_range)
+	if(alpha < OPAQUE || (invisibility > 0 && invisibility < INVISIBILITY_OBSERVER))
+		var/old_alpha = alpha
+		var/old_invisibility = invisibility
+		alpha = OPAQUE
+		invisibility = 0
+		spawn(1 SECONDS)
+			if(src)
+				alpha = old_alpha
+				invisibility = old_invisibility

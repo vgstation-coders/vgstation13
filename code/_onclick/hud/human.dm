@@ -258,6 +258,18 @@
 	using.pointer_to_list = &src.hotkeybuttons
 
 	using = new /obj/abstract/screen
+	using.name = "rest"
+	using.icon = ui_style
+	using.icon_state = "act_rest"
+	using.screen_loc = ui_rest
+	using.layer = HUD_BASE_LAYER
+	using.color = ui_color
+	using.alpha = ui_alpha
+	src.hotkeybuttons += using
+
+	using.pointer_to_list = &src.hotkeybuttons
+
+	using = new /obj/abstract/screen
 	using.name = "toggle"
 	using.icon = ui_style
 	using.icon_state = "other"
