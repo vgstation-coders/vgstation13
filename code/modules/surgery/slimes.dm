@@ -90,6 +90,7 @@
 /datum/surgery_step/slime/saw_core
 	allowed_tools = list(
 		/obj/item/tool/circular_saw = 100,
+		/obj/item/weapon/pickaxe/drill/orangetransparentchainsaw = 100,
 		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75,
 		/obj/item/weapon/hatchet = 75,
 		)

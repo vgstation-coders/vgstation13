@@ -2181,7 +2181,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	brainmob.container = src
 
 /obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/tool/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
+	if(istype(W,/obj/item/tool/scalpel) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/pickaxe/drill/orangetransparentchainsaw) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
 		if(organ_data)
 			switch(brain_op_stage)
 				if(0)

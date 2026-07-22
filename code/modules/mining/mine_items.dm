@@ -301,13 +301,13 @@
 	icon_state = "transparentorangechainsaw"
 	item_state = "transparentorangechainsaw"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/icemining.dmi', "right_hand" = 'icons/mob/in-hand/right/icemining.dmi')
-	toolspeed = 0.08
-	sharpness = 1.8
+	toolspeed = 0.01
+	sharpness = 1.5
 	force = 15.0
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
-	origin_tech = Tc_MATERIALS + "=4;" + Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=6;" + Tc_PLASMATECH + "=5;" + Tc_BIOTECH + "=5;" + Tc_COMBAT + "=4"
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=6;" + Tc_PLASMATECH + "=4;" + Tc_BIOTECH + "=5;" + Tc_COMBAT + "=4"
 	desc = "Yours is the saw that will cut the ice! And people, I guess."
-	starting_materials = list(MAT_IRON = 6000, MAT_GLASS = 1000, MAT_PLASMA = 6000)
+	starting_materials = list(MAT_IRON = 6000, MAT_GLASS = 1000, MAT_PLASMA = 6000, MAT_PLASTIC = 3000)
 	drill_verb = "cutting"
 	attack_verb = list("attacks", "slashes", "saws", "cuts")
 	hitsound = 'sound/weapons/circsawhit.ogg'
