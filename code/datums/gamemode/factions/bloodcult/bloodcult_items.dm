@@ -24,6 +24,8 @@ var/list/arcane_tomes = list()
 	var/can_flick = 1
 	var/list/talismans = list()
 	var/current_page = PAGE_FOREWORD
+	var/spine_color = "#111"
+	var/spine_overlay = "#111"
 
 /obj/item/weapon/tome/New()
 	..()
