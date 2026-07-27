@@ -2895,6 +2895,7 @@
 #include "code\modules\spells\aoe_turf\summons.dm"
 #include "code\modules\spells\aoe_turf\conjure\arcane_golem.dm"
 #include "code\modules\spells\aoe_turf\conjure\bats.dm"
+#include "code\modules\spells\aoe_turf\conjure\clownmime.dm"
 #include "code\modules\spells\aoe_turf\conjure\conjure.dm"
 #include "code\modules\spells\aoe_turf\conjure\construct.dm"
 #include "code\modules\spells\aoe_turf\conjure\doppelganger.dm"
