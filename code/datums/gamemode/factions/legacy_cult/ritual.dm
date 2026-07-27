@@ -165,7 +165,8 @@ var/runedec = 0 // Rune cap ?
 	var/tomedat = ""
 	var/list/words = list("ire" = "ire", "ego" = "ego", "nahlizet" = "nahlizet", "certum" = "certum", "veri" = "veri", "jatkaa" = "jatkaa", "balaq" = "balaq", "mgar" = "mgar", "karazet" = "karazet", "geeri" = "geeri")
 	var/list/cultwords = list()
-
+	var/spine_color = "#444"
+	var/spine_overlay = "#444"
 	tomedat = {"<html>
 				<head>
 				<style>
