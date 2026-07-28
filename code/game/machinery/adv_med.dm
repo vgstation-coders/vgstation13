@@ -622,8 +622,6 @@
 /obj/machinery/bodyscanner/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(scanning<3)
 		return
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
-		return
 	if(speech.speaker && !speech.frequency)
 		if(findtext(speech.message, "print"))
 			if(!occupant||!istype(occupant,/mob/living/carbon/human))
@@ -633,11 +631,14 @@
 /obj/machinery/bodyscanner/proc/print_diagnostic()
 	if (!occupant)
 		return
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		return
 	say("Outputting diagnostic.")
 	playsound(loc, "sound/effects/fax.ogg", 50, 1)
 	var/obj/item/weapon/paper/P = new(loc)
 	P.name = "paper - 'body scan report'"
 	P.info = format_occupant_data(get_occupant_data(occupant),scanning)
+	use_power(active_power_usage, power_channel)
 
 /obj/machinery/bodyscanner/upgraded
 	name = "advanced body scanner"
