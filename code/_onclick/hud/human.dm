@@ -266,6 +266,7 @@
 	using.color = ui_color
 	using.alpha = ui_alpha
 	src.hotkeybuttons += using
+	rest_intent = using
 
 	using.pointer_to_list = &src.hotkeybuttons
 
