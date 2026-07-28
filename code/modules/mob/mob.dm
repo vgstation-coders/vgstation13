@@ -1721,14 +1721,17 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/Resting(amount)
 	resting = max(max(resting,amount),0)
+	update_rest_hud()
 	return
 
 /mob/proc/SetResting(amount)
 	resting = max(amount,0)
+	update_rest_hud()
 	return
 
 /mob/proc/AdjustResting(amount)
 	resting = max(resting + amount,0)
+	update_rest_hud()
 	return
 
 /mob/proc/get_species()

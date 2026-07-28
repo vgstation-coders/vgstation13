@@ -609,7 +609,8 @@
 			occupant.reagents.remove_reagents(list(STOXIN, STOXIN2, VALERENIC_ACID, CHLORALHYDRATE),1000)
 			occupant.sleeping = 0
 			occupant.paralysis = 0
-			occupant.resting = 0
+			if(occupant.resting)
+				occupant.rest_action()
 		on = FALSE
 		if(auto_eject_after)
 			go_out(ejector = user)

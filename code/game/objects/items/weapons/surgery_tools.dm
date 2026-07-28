@@ -445,7 +445,8 @@
 	if(target.lying)
 		target.sleeping = max(0,target.sleeping-10)
 		if(target.sleeping == 0)
-			target.resting = 0
+			if(target.resting)
+				target.rest_action()
 		target.AdjustParalysis(-3)
 		target.AdjustStunned(-3)
 		target.AdjustKnockdown(-3)
