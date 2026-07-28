@@ -451,8 +451,10 @@
 	O.forceMove(loc)
 	if(O == user)
 		to_chat(user, "<span class='warning'>You climb on top of \the [src].</span>")
-		if(!O.resting)
-			O.rest_action()
+		if(isliving(user))
+			var/mob/living/L = user
+			if(!L.resting)
+				L.rest_action()
 	else
 		to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src].</span>")
 	return 1

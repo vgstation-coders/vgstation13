@@ -446,7 +446,9 @@
 		target.sleeping = max(0,target.sleeping-10)
 		if(target.sleeping == 0)
 			if(target.resting)
-				target.rest_action()
+				if(isliving(target))
+					var/mob/living/T = target
+					T.rest_action()
 		target.AdjustParalysis(-3)
 		target.AdjustStunned(-3)
 		target.AdjustKnockdown(-3)
