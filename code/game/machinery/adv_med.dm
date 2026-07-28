@@ -622,6 +622,8 @@
 /obj/machinery/bodyscanner/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(scanning<3)
 		return
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		return
 	if(speech.speaker && !speech.frequency)
 		if(findtext(speech.message, "print"))
 			if(!occupant||!istype(occupant,/mob/living/carbon/human))
