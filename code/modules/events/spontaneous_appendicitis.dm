@@ -1,4 +1,4 @@
-/datum/event/spontanenous_appendicitis/can_start(var/list/active_with_role)
+/datum/event/spontaneous_appendicitis/can_start(var/list/active_with_role)
 	if(active_with_role["Medical"] > 1)
 		return 50
 	return 0
