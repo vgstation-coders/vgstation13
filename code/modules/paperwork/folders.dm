@@ -70,7 +70,7 @@
 	update_icon()
 
 /obj/item/weapon/folder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo))
+	if(istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo) || istype(W, /obj/item/weapon/paper/nano)|| istype(W,/obj/item/research_blueprint/nano) || istype(W,/obj/item/research_blueprint))
 		if(user.drop_item(W, src))
 			to_chat(user, "<span class='notice'>You put the [W] into \the [src].</span>")
 			update_icon()
@@ -92,6 +92,8 @@
 		dat += "<A href='?src=\ref[src];remove=\ref[P]'>Remove</A> - <A href='?src=\ref[src];read=\ref[P]'>[P.name]</A><BR>"
 	for(var/obj/item/weapon/photo/Ph in src)
 		dat += "<A href='?src=\ref[src];remove=\ref[Ph]'>Remove</A> - <A href='?src=\ref[src];look=\ref[Ph]'>[Ph.name]</A><BR>"
+	for(var/obj/item/research_blueprint/P in src)
+		dat += "<A href='?src=\ref[src];remove=\ref[P]'>Remove</A> - [P.name]<BR>"
 	user << browse(HTML_SKELETON(dat), "window=folder")
 	onclose(user, "folder")
 	add_fingerprint(usr)
@@ -106,7 +108,7 @@
 
 		if(href_list["remove"])
 			var/obj/item/P = locate(href_list["remove"])
-			if(!(istype(P, /obj/item/weapon/paper)) && !(istype(P, /obj/item/weapon/photo)))
+			if(!(istype(P, /obj/item/weapon/paper)) && !(istype(P, /obj/item/weapon/photo)) && !(istype(P, /obj/item/weapon/paper/nano)) && !(istype(P, /obj/item/research_blueprint)) && !(istype(P, /obj/item/research_blueprint/nano)))
 				var/message = "<span class='warning'>[usr]([usr.key]) has tried to remove something other than a paper/photo from a folder.<span>"
 				message_admins(message)
 				message += "[P]"
