@@ -25,10 +25,12 @@
 /obj/item/device/device_analyser/examine(mob/user)
 	..()
 	if(!loaded_designs.len)
+		to_chat(user, "No designs currently loaded.")
 		return
-	var/list/out = list("<span class='notice'>Current designs loaded </span>")
-	for (var/design in loaded_designs)
-		out += design
+	var/list/out = list("Designs currently loaded: <span class='info'>")
+	for(var/datum/design/current in loaded_designs)
+		out += current.name
+	out += "</span>"
 	to_chat(user, jointext(out, "<br/>"))
 
 /obj/item/device/device_analyser/attack_self()
