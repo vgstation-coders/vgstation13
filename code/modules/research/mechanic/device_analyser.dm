@@ -24,6 +24,8 @@
 
 /obj/item/device/device_analyser/examine(mob/user)
 	..()
+	if(!Adjacent(user))
+		return
 	if(!loaded_designs.len)
 		to_chat(user, "No designs currently loaded.")
 		return
