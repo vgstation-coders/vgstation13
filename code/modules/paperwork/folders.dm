@@ -58,18 +58,24 @@
 
 /obj/item/weapon/folder/update_icon()
 	overlays.len = 0
+
 	if(contents.len)
-		overlays += image(icon = icon, icon_state = "folder_paper")
+		var/obj/item/content = contents[1]
+		if(istype(content, /obj/item/weapon/paper) || istype(content, /obj/item/weapon/photo))
+			overlays += image(icon = icon, icon_state = "folder_paper")
+		else if(istype(content, /obj/item/research_blueprint/nano))
+			overlays += image(icon = icon, icon_state = "folder_blueprint_nano")
+		else if(istype(content, /obj/item/research_blueprint))
+			overlays += image(icon = icon, icon_state = "folder_blueprint")
 
 	icon_state = "folder_[crayon]"
-	return
 
 /obj/item/weapon/folder/decontaminate()
 	..()
 	crayon = "sterile"
 	update_icon()
 
-/obj/item/weapon/folder/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/folder/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo) || istype(W, /obj/item/weapon/paper/nano)|| istype(W,/obj/item/research_blueprint/nano) || istype(W,/obj/item/research_blueprint))
 		if(user.drop_item(W, src))
 			to_chat(user, "<span class='notice'>You put the [W] into \the [src].</span>")
@@ -83,9 +89,8 @@
 	else if (istype(W, /obj/item/weapon/soap))
 		crayon = null
 		update_icon()
-	return
 
-/obj/item/weapon/folder/attack_self(mob/user as mob)
+/obj/item/weapon/folder/attack_self(mob/user)
 	var/dat = "<title>[name]</title>"
 
 	for(var/obj/item/weapon/paper/P in src)
@@ -97,7 +102,6 @@
 	user << browse(HTML_SKELETON(dat), "window=folder")
 	onclose(user, "folder")
 	add_fingerprint(usr)
-	return
 
 /obj/item/weapon/folder/Topic(href, href_list)
 	..()
