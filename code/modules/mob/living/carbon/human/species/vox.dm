@@ -1,5 +1,6 @@
 /datum/species/vox
 	name = "Vox"
+	emag_cloneable = TRUE
 	icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	known_languages = list(LANGUAGE_VOX)

@@ -35,6 +35,7 @@ var/global/list/playable_species = list("Human")
 
 /datum/species
 	var/name                     // Species name.
+	var/emag_cloneable = FALSE  // Can be selected as a species by an emagged cloning console.
 
 	var/icobase = 'icons/mob/human_races/r_human.dmi'		// Normal icon set.
 	var/deform = 'icons/mob/human_races/r_def_human.dmi'	// Mutated icon set.
@@ -345,6 +346,7 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/human
 	name = "Human"
+	emag_cloneable = TRUE
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
 
@@ -403,6 +405,7 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/unathi
 	name = "Unathi"
+	emag_cloneable = TRUE
 	icobase = 'icons/mob/human_races/r_lizard.dmi'
 	deform = 'icons/mob/human_races/r_def_lizard.dmi'
 	known_languages = list(LANGUAGE_UNATHI)
@@ -494,6 +497,7 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/tajaran
 	name = "Tajaran"
+	emag_cloneable = TRUE
 	icobase = 'icons/mob/human_races/r_tajaran.dmi'
 	deform = 'icons/mob/human_races/r_def_tajaran.dmi'
 	known_languages = list(LANGUAGE_CATBEAST, LANGUAGE_MOUSE)
@@ -572,6 +576,7 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/grey // /vg/
 	name = "Grey"
+	emag_cloneable = TRUE
 	icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 	deform = 'icons/mob/human_races/grey/r_def_grey.dmi'
 	known_languages = list(LANGUAGE_GREY)
@@ -701,6 +706,7 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/skrell
 	name = "Skrell"
+	emag_cloneable = TRUE
 	icobase = 'icons/mob/human_races/r_skrell.dmi'
 	deform = 'icons/mob/human_races/r_def_skrell.dmi'
 	known_languages = list(LANGUAGE_SKRELLIAN)
@@ -1097,6 +1103,7 @@ var/list/has_died_as_golem = list()
 
 /datum/species/insectoid
 	name = "Insectoid"
+	emag_cloneable = TRUE
 	icobase = 'icons/mob/human_races/r_insectoid.dmi'
 	deform = 'icons/mob/human_races/r_def_insectoid.dmi'
 	eyes = "insectoid_eyes_m"
