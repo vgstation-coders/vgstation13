@@ -256,6 +256,14 @@
 	alpha = 255
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 
+/datum/reagent/drink/pomegranatejuice
+	name = "Pomegranate Juice"
+	id = POMEGRANATEJUICE
+	description = "Acidic yet also sweet"
+	color = "#ED436E"
+	alpha = 255
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+
 /datum/reagent/drink/nothing
 	name = "Nothing"
 	id = NOTHING

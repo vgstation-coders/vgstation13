@@ -226,6 +226,7 @@
 #define WATERMELONJUICE 			"watermelonjuice"
 #define APPLEJUICE 			"applejuice"
 #define LEMONJUICE 			"lemonjuice"
+#define POMEGRANATEJUICE 			"pomegranatejuice"
 #define BANANA 			"banana"
 #define NOTHING 			"nothing"
 #define POTATO 			"potato"

@@ -1140,6 +1140,71 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	icon_state = "pitted"
 	cant_eat_msg = null
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegranate
+	name = "pomegranate"
+	desc = "A large red fruit with a hard outer layer, containing a bunch of sweetly acidic seeds"
+	icon = 'icons/obj/hydroponics/pomegranate.dmi'
+	filling_color = "#ED436E"
+	plantname = "pomegranate"
+	harmfultocorgis = FALSE
+	var/cut = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegranate/can_consume(var/mob/living/carbon/eater, var/mob/user)
+	if(!cut)
+		to_chat(user, "<span class='warning'>This [name]'s skin is much too tough to chew. Slice it open first.</span>")
+	else
+		return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegranate/attackby(var/obj/item/weapon/W, var/mob/user)
+	..()
+	if(!cut && (W.sharpness_flags & SHARP_BLADE))
+		cut = TRUE
+		user.visible_message("\The [user] slices \the [src] open with \the [W].", "You slice \the [src] open with \the [W].")
+		icon_state = "cut"
+
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade
+	name = "pomegranate"
+	desc = "A large red fruit with a hard outer layer, containing some highly repressed feelings about to burst out!"
+	icon = 'icons/obj/hydroponics/pomegrenade.dmi'
+	filling_color = "#ED436E"
+	plantname = "pomegrenade"
+	harmfultocorgis = TRUE
+	potency = 20
+	var/blasting = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/can_consume(mob/living/carbon/eater, mob/user)
+	to_chat(user, "<span class='warning'>You can feel the [name]'s pulse, it lives, and it wants to be thrown...</span>")
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		C.throw_mode_on()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/attackby(var/obj/item/weapon/W, var/mob/user)
+	..()
+	if(W.sharpness_flags & SHARP_BLADE)
+		to_chat(user, "As you prick \the [src] with the tip of your [W], a violent change appears to take place.")
+		blast()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/throw_impact(var/atom/hit_atom)
+	..()
+	blast()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/ex_act(var/severity)
+	blast()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/proc/blast(var/short = FALSE)
+	if (blasting)
+		return
+	blasting = TRUE
+	var/turf/T = get_turf(src)
+	log_admin("LOG: Pomegrenade going off at [T.loc] (@[T.x],[T.y],[T.z]), last touched by [fingerprintslast].")
+	message_admins("LOG: Pomegrenade going off at [formatJumpTo(T)], last touched by [fingerprintslast].")
+	var/obj/structure/bomberman/pomegrenade/pom = new (T)
+	pom.bombpower = max(1, floor(potency / 10))
+	if (short)
+		pom.countdown = 1
+	qdel(src)
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/pear
 	name = "pear"
 	desc = "The inferior alternative to apples."
