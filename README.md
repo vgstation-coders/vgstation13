@@ -9,6 +9,8 @@ No longer available from github due to spambots using it.
 Check the thread on /vg/ for a link or ask a player in-game for an invite.
 
 ---
+Falcon told me to do this on discord, this shitpost better be worth it.
+
 
 ### GETTING THE CODE
 The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://github.com/vgstation-coders/vgstation13/archive/Bleeding-Edge.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want. This is mostly useful for people looking to get assets from the server or to host a quick short-term game between friends.
