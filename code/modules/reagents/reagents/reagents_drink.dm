@@ -260,9 +260,28 @@
 	name = "Pomegranate Juice"
 	id = POMEGRANATEJUICE
 	description = "Acidic yet also sweet"
-	color = "#ED436E"
+	color = "#A60134"
 	alpha = 255
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	sport = SPORTINESS_SUGAR
+
+/datum/reagent/drink/pomegranatesyrup
+	name = "Pomegranate Syrup"
+	id = POMEGRANATESYRUP
+	description = "Exceedingly sweet"
+	color = "#370011"
+	alpha = 255
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	sport = SPORTINESS_SUGAR
+
+/datum/reagent/drink/grenadine
+	name = "Grenadine"
+	id = GRENADINE
+	description = "Sweet and refreshing !"
+	color = "#7E0127"
+	alpha = 255
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	sport = SPORTINESS_SUGAR
 
 /datum/reagent/drink/nothing
 	name = "Nothing"

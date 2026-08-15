@@ -227,6 +227,8 @@
 #define APPLEJUICE 			"applejuice"
 #define LEMONJUICE 			"lemonjuice"
 #define POMEGRANATEJUICE 			"pomegranatejuice"
+#define POMEGRANATESYRUP 			"pomegranatesyrup"
+#define GRENADINE 			"grenadine"
 #define BANANA 			"banana"
 #define NOTHING 			"nothing"
 #define POTATO 			"potato"
