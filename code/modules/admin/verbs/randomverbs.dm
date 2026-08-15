@@ -24,6 +24,27 @@
 
 	holder.updateRelWindow()
 
+/client/verb/print_heat_capacities()
+	set name = "print reagent heat capacities"
+	if(!holder)
+		to_chat(src, "Only administrators may use this command.")
+		return
+	var/dat = 	"<table><tr>"
+	dat +=	"<th>name</th>"
+	dat +=	"<th>specheat</th>"
+	dat +=	"<th>density</th>"
+	dat +=	"<th>specheat*density</th>"
+	dat += "</tr>"
+	for(var/reagent_id in chemical_reagents_list)
+		var/datum/reagent/R = chemical_reagents_list[reagent_id]
+		dat += "<tr>"
+		dat +=	"<th>[R.name]</th>"
+		dat +=	"<th>[R.specheatcap]</th>"
+		dat +=	"<th>[R.density]</th>"
+		dat +=	"<th>[R.specheatcap*R.density]</th>"
+		dat += "</tr>"
+	dat += "</table>"
+	usr << browse(HTML_SKELETON(dat), "window=heatcap")
 
 /client/proc/cmd_admin_prison(mob/M as mob in mob_list)
 	set category = "Admin"
