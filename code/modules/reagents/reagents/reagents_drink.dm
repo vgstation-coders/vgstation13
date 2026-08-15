@@ -264,6 +264,7 @@
 	alpha = 255
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	sport = SPORTINESS_SUGAR
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/drink/pomegranatesyrup
 	name = "Pomegranate Syrup"
@@ -273,6 +274,7 @@
 	alpha = 255
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	sport = SPORTINESS_SUGAR
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/drink/grenadine
 	name = "Grenadine"
@@ -282,6 +284,7 @@
 	alpha = 255
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	sport = SPORTINESS_SUGAR
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/drink/nothing
 	name = "Nothing"

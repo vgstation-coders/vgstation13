@@ -1954,7 +1954,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pomegranate)
 	mutants = list("pomegrenade")
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1, 20))
+	chems = list(NUTRIMENT = list(1, 20), POMEGRANATEJUICE = list(1, 20))
 
 	lifespan = 55
 	maturation = 6
