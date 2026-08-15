@@ -168,7 +168,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#B31008" //rgb: 179, 16, 8
 	density = 0.9
-	specheatcap = 8.59
+	specheatcap = 3.59
 
 /datum/reagent/condensedcapsaicin/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 
@@ -375,7 +375,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#365E30" //rgb: 54, 94, 48
 	density = 9.68
-	specheatcap = 1.0101
+	specheatcap = 0.3
 
 /datum/reagent/fishbleach
 	name = "Fish Bleach"
@@ -510,7 +510,7 @@
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.42
-	specheatcap = 14.59
+	specheatcap = 1.459
 
 /datum/reagent/hell_ramen/on_mob_life(var/mob/living/M)
 	if(..())
@@ -581,7 +581,7 @@
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.33
-	specheatcap = 4.18
+	specheatcap = 2.18
 
 /datum/reagent/hot_ramen/on_mob_life(var/mob/living/M)
 	if(..())
@@ -714,7 +714,7 @@
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	color = "#664330" //rgb: 102, 67, 48
 	density = 6.54
-	specheatcap = 17.56
+	specheatcap = 0.5
 	plant_nutrition = 10
 	plant_health = 1
 
@@ -978,7 +978,7 @@
 	nutriment_factor = 0.5 * REAGENTS_METABOLISM
 	color = "#AB6F0E" //rgb: 171, 111, 14
 	density = 5
-	specheatcap = 1
+	specheatcap = 0.5
 
 /datum/reagent/tendies/on_mob_life(var/mob/living/M)
 	if(..())

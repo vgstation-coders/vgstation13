@@ -281,7 +281,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6AAA96" //rgb: 106, 170, 150
 	custom_metabolism = 0.05
-	density = 109.06
+	density = 1.0906
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Contains leporazine, better this than 6 digits
 
 /datum/reagent/carp_pheromones/on_mob_life(var/mob/living/M)
@@ -317,7 +317,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#993300"
 	custom_metabolism = 2
-	density = 109.06
+	density = 1.0906
 	var/list/mob/living/simple_animal/hostile/retaliate/horde = list()
 
 /datum/reagent/killer_pheromones/on_mob_life(var/mob/living/M)
@@ -644,7 +644,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#EACF9D" //rgb: 234, 207, 157. Pale yellow
 	density = 1.35
-	specheatcap = 5.2
+	specheatcap = 2.2
 
 /datum/reagent/vomit/on_mob_life(var/mob/living/M)
 	if(..())

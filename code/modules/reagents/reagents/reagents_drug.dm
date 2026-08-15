@@ -540,7 +540,7 @@
 	custom_metabolism = 0.25
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.8
-	specheatcap = 2.84
+	specheatcap = 1.84
 
 /datum/reagent/serotrotium/on_mob_life(var/mob/living/M)
 	if(..())

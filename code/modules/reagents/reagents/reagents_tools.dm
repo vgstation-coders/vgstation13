@@ -7,7 +7,7 @@
 	reagent_state = REAGENT_STATE_GAS
 	color = "#404030" //rgb: 64, 64, 48
 	density = 0.51
-	specheatcap = 14.38
+	specheatcap = 1.438
 	plant_nutrition = 10
 	plant_health = 1
 
@@ -356,7 +356,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFFFF"
 	density = 1.22
-	specheatcap = 4.14
+	specheatcap = 1.4
 
 /datum/reagent/sodium_polyacrylate/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -375,7 +375,6 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A5F0EE" //rgb: 165, 240, 238
 	density = 0.76
-	specheatcap = 60.17
 	var/clean_level = CLEANLINESS_SPACECLEANER
 
 /datum/reagent/space_cleaner/reaction_obj(var/obj/O, var/volume)
@@ -431,7 +430,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FBFCFF" //rgb: 251, 252, 255
 	density = 6.84
-	specheatcap = 3.5
+	specheatcap = 0.4
 	clean_level = CLEANLINESS_BLEACH
 
 /datum/reagent/space_cleaner/bleach/reaction_turf(var/turf/simulated/T, var/volume)

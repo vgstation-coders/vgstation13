@@ -69,7 +69,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
-	specheatcap = 2.71
+	specheatcap = 0.271
 
 /datum/reagent/toxicwaste/on_mob_life(var/mob/living/M)
 	if(..())
