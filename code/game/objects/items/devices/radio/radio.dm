@@ -492,7 +492,7 @@
 */
 
 
-/obj/item/device/radio/proc/receive_range(freq, level)
+/obj/item/device/radio/proc/receive_range(freq, level, list/v_levels = null)
 	// check if this radio can receive on the given frequency, and if so,
 	// what the range is in which mobs will hear the radio
 	// returns: -1 if can't receive, range otherwise
@@ -505,6 +505,14 @@
 		var/turf/position = get_turf(src)
 		if(!position || !(position.z in level))
 			return -1
+		// Virtual z filtering: vlevels act as independent z-levels. A broadcast only
+		// reaches radios whose virtual_z is in the signal's v_levels list. If the
+		// caller didn't supply any v_levels, skip this check (e.g. local fallback
+		// broadcasts from non-subspace radios).
+		if(v_levels?.len)
+			var/datum/virtual_z/our_vz = get_virtual_z()
+			if(!(our_vz in v_levels))
+				return -1
 	if(freq == SYND_FREQ)
 		if(!(src.syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
 			return -1

@@ -47,10 +47,6 @@
 			results += chosen_loot
 	return results
 
-
-/datum/loot_table/bedsheet/New()
-	loot += subtypesof(/obj/item/weapon/bedsheet)
-
 /datum/loot_table/weighted/bureaucracy
 	loot = list(
 		COMMON_LOOT = list(
@@ -165,6 +161,8 @@
 			/obj/item/weapon/melee/lance,
 			/obj/item/weapon/gun/mahoguny,
 			/obj/item/weapon/gun/lolly_lobber,
+			/obj/item/device/bert,
+			/obj/item/device/emshield_projector
 			),
 		RARE_LOOT = list(
 			/obj/item/weapon/banhammer,
@@ -188,6 +186,7 @@
 			/obj/item/weapon/gun/portalgun,
 			/obj/item/weapon/gun/grenadelauncher,
 			/obj/item/weapon/sord,
+			/obj/item/device/pacification_beacon,
 		),
 		VERY_RARE_LOOT = list(
 			/obj/item/weapon/butterflyknife/viscerator,
@@ -264,8 +263,11 @@
 		/obj/item/weapon/glowstick/blue,
 		/obj/item/weapon/circuitboard/airlock,
 		/obj/item/stack/sheet/metal,
-		/obj/item/stack/sheet/glass,
+		/obj/item/stack/sheet/glass/glass,
 		/obj/item/weapon/storage/belt/utility,
+		/obj/item/weapon/circuitboard/holofield,
+		/obj/item/device/shuttle_holopainter,
+		/obj/item/weapon/pinpointer/gas_dowser
 	)
 
 /datum/loot_table/entertainment
@@ -361,7 +363,8 @@
 		/obj/item/weapon/bikehorn/rubberducky/quantum,
 		/obj/item/weapon/bikehorn/skullhorn,
 		/obj/item/weapon/bikehorn/syndicate,
-		/obj/item/clothing/gloves/fyellow/insulted
+		/obj/item/clothing/gloves/fyellow/insulted,
+		/obj/item/device/shuttle_holopainter
 	)
 
 /datum/loot_table/weighted/exotic
@@ -380,6 +383,7 @@
 			/obj/item/clothing/under/grey/grey_scout,
 			/obj/item/dictionary/martian,
 			/obj/item/weapon/blood_tesseract/xenoarchfind,
+			/obj/item/device/bert
 		),
 		RARE_LOOT = list(
 			/obj/item/weapon/robot_spawner/strange/ball,
@@ -389,7 +393,6 @@
 			/obj/structure/crystal,
 			/obj/item/clothing/under/grey/grey_soldier,
 			/obj/item/clothing/under/grey/grey_researcher,
-			/obj/machinery/power/supermatter/shard,
 			/obj/item/weapon/grenade/dudebomb,
 		),
 		VERY_RARE_LOOT = list(
@@ -402,7 +405,6 @@
 			/obj/machinery/auto_cloner,
 			/obj/machinery/communication,
 			/obj/machinery/replicator,
-			/obj/machinery/power/supermatter,
 		)
 	)
 
@@ -543,12 +545,21 @@
 	var/roll_min = 1 //minimum rolls
 	var/roll_max = 3 //maximum rolls
 	var/rolls
+	var/scatter = TRUE
 
 /obj/abstract/loot_spawner/New(var/cave = FALSE,var/override = FALSE)
 	..()
 	if(!table)
 		Destroy()
 		return
+	if(prob(20))
+		Destroy()
+		return
+	if(locate(/obj/structure) in get_turf(src)) //if spawner is placed on a structure, just spawn one item on it
+		scatter = FALSE
+		roll_min = 1
+		roll_max = 1
+		containers = list()
 	rolls = rand(roll_min, roll_max)
 	table = new table()
 	loot = table.loot_roll(rolls)
@@ -562,12 +573,16 @@
 				containers = containers + base_containers
 		spawn_into_container()
 	else
-		var/list/valid_turfs = list()
-		for(var/turf/T in range(2, src))
-			if(!T.density && !iswall(T))
-				valid_turfs += T
-		for(var/item_type in loot)
-			new item_type(pick(valid_turfs))
+		if(scatter)
+			var/list/valid_turfs = list()
+			for(var/turf/T in range(2, src))
+				if(!T.density && !iswall(T))
+					valid_turfs += T
+			for(var/item_type in loot)
+				new item_type(pick(valid_turfs))
+		else
+			for(var/item_type in loot)
+				new item_type(loc)
 	Destroy()
 
 /obj/abstract/loot_spawner/proc/spawn_into_container()
@@ -593,16 +608,6 @@
 	containers = list()
 	table = null
 	..()
-
-/obj/abstract/loot_spawner/bedsheet
-	name = "bedsheet spawner"
-	icon_state = "loot_bedsheet"
-	table = /datum/loot_table/bedsheet
-	roll_min = 3
-	roll_max = 10
-	containers = list(
-		/obj/structure/closet/crate/bin
-	)
 
 /obj/abstract/loot_spawner/bureaucracy
 	name = "bureaucracy spawner"
@@ -770,6 +775,38 @@
 
 /obj/abstract/loot_spawner/trash/on_ground
 	containers = list()
+
+/obj/abstract/loot_spawner/story
+	containers = list(
+		/obj/item/weapon/storage/briefcase,
+		/obj/item/weapon/storage/briefcase/centcomm,
+	)
+
+/obj/abstract/loot_spawner/story/New(var/spawn_loc, var/loot_type, var/list/container_types)
+	if(spawn_loc)
+		loc = spawn_loc
+	if(!loot_type)
+		qdel(src)
+		return
+	roll_min = rand(1,3)
+	roll_max = rand(roll_min,10)
+	table = loot_type
+	if(container_types?.len)
+		containers = container_types
+	rolls = rand(roll_min, roll_max)
+	table = new table()
+	loot = table.loot_roll(rolls)
+	if(containers.len)
+		containers = containers + base_containers
+		spawn_into_container()
+	else
+		var/list/valid_turfs = list()
+		for(var/turf/T in range(2, src))
+			if(!T.density && !iswall(T))
+				valid_turfs += T
+		for(var/item_type in loot)
+			new item_type(pick(valid_turfs))
+	qdel(src)
 
 #undef COMMON_LOOT
 #undef UNCOMMON_LOOT

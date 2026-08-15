@@ -24,10 +24,10 @@
 	if(!config.assistantlimit)
 		return 99
 
-	var/datum/job/officer = job_master.GetJob("Security Officer")
-	var/datum/job/warden = job_master.GetJob("Warden")
-	var/datum/job/hos = job_master.GetJob("Head of Security")
-	var/datum/job/detective = job_master.GetJob("Detective")
+	var/datum/job/officer = locate(/datum/job/officer) in job_master.occupations
+	var/datum/job/warden = locate(/datum/job/warden) in job_master.occupations
+	var/datum/job/hos = locate(/datum/job/hos) in job_master.occupations
+	var/datum/job/detective = locate(/datum/job/detective) in job_master.occupations
 // No security roles can be selected, no limit.
 	if(isnull(officer) && isnull(warden) && isnull(hos) && isnull(detective))
 		return 99

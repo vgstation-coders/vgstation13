@@ -9,59 +9,42 @@
 	var/mapgen = null
 	///The fallback turf if mapgen fails.
 	var/default_baseturf = null
-	// The type of loot this planet can spawn
-	var/loot_type
 	//Value that gets added to loot rolls on this planet.
 	var/loot_modifier = 0
 	//Climate datum
 	var/datum/climate/climate
 	var/climate_type = null
-	//Allocation occupied by this planet.
-	var/allocation = null
 	//Icon shown in the planet scanner.
 	var/icon_state = "moon"
 	var/icon/ico
-	// Day/night cycle variables
-	var/current_timeOfDay = TOD_DAYTIME
-	var/next_firetime = 0
-	var/list/daynight_turfs = list()
-	var/weather_mod = 1 // Planet-specific weather light modifier
-	// Player tracking for mob processing optimization
-	var/list/planet_mobs = list() // All mobs on this planet
-	var/list/players = list() // All living player mobs currently on this planet
-	var/process_mobs = FALSE // Whether to process mobs on this planet
 	// Faction for mobs spawned on this planet
 	var/mob_faction
 	// Whether this planet is hidden from the deep space scanner
 	var/hidden = FALSE
 
-/**
- * Builds the list of turfs affected by day/night cycle for this planet
- *
- * Scans through all turfs in the allocation and identifies those in open surface areas
- * that should receive day/night lighting changes.
- */
-/datum/planet_type/proc/build_daynight_turflist()
-	daynight_turfs = list()
-	if(!allocation)
-		return
+	// Weighted list of possible gas vent types a planet can spawn
+	var/list/vent_types = list(
+		GAS_OXYGEN = 10,
+		GAS_PLASMA = 5,
+		GAS_SLEEPING = 1,
+		GAS_CARBON = 5,
+		GAS_NITROGEN = 5,
+		GAS_CRYOTHEUM = 0,
+		GAS_RADON = 0
+	)
+	var/list/vents = list()
 
-	var/datum/allocation/A = allocation
-	if(!A.turfs || !A.turfs.len)
-		return
+	// Ruin types available on this planet.
+	var/ruin_whitelist = RUIN_TYPE_GENERIC
+	var/ruin_blacklist = 0
+	var/preferred_ruin_type = RUIN_TYPE_GENERIC //3x more likely to spawn these types of ruins than others
+	// Ruin buget
+	var/ruin_budget = RUIN_BUDGET_PLANET
+	// Virtual z level this planet exists on
+	var/datum/virtual_z/v
+	// Allocation size for this planet's virtual z-level
+	var/allocation_size = ALLOCATION_SMALL
 
-	for(var/turf/T in A.turfs)
-		if(IsEven(T.x) && IsEven(T.y))
-			var/area/area_check = get_area(T)
-			if(isopensurface(area_check))
-				daynight_turfs += T
-			else
-				for(var/cdir in cardinal)
-					var/turf/T1 = get_step(T, cdir)
-					var/area/A1 = get_area(T1)
-					if(istype(A1, /area/surface))
-						daynight_turfs += T
-						break
 
 /datum/planet_type/New()
 	..()
@@ -71,38 +54,6 @@
 	ico = icon('icons/ui/planet_scanner/128x128.dmi', "bg")
 	var/icon/fg = icon('icons/ui/planet_scanner/64x64.dmi', icon_state)
 	ico.Blend(fg,ICON_OVERLAY,32,32)
-
-/datum/planet_type/proc/add_player(var/mob/living/add_mob)
-	if(!add_mob?.client)
-		return
-	if(!(add_mob in players))
-		players += add_mob
-	process_mobs = players.len ? TRUE : FALSE
-
-/datum/planet_type/proc/remove_player(var/mob/living/rem_mob)
-	if(!rem_mob?.client)
-		return
-	if(rem_mob in players)
-		players -= rem_mob
-	process_mobs = players.len ? TRUE : FALSE
-
-/datum/planet_type/proc/on_mob_entered(mob/living/M, datum/planet_type/planet)
-	if(!M || planet != src)
-		return
-
-	if(M.client)
-		add_player(M)
-	else
-		planet_mobs |= M
-
-/datum/planet_type/proc/on_mob_exited(mob/living/M, datum/planet_type/planet)
-	if(!M || planet != src)
-		return
-
-	if(M.client)
-		remove_player(M)
-	else
-		planet_mobs -= M
 
 /datum/planet_type/proc/generate_planet_name()
 	// Complete planet names
@@ -240,30 +191,44 @@
 		"West"
 	)
 
-	// 30% chance to use a complete name, 70% chance to build one
-	if(prob(30))
-		return pick(whole_names)
+	// Collect existing planet names to avoid duplicates
+	var/list/existing_names = list()
+	if(SSmapping)
+		for(var/datum/planet_type/existing in SSmapping.planets)
+			existing_names += existing.planet_name
 
-	// Build a name from components
-	var/generated_name = ""
-	var/name_type = rand(1, 3)
+	var/max_attempts = 100
+	for(var/attempt = 1 to max_attempts)
+		var/candidate = ""
 
-	switch(name_type)
-		if(1) // Prefix + Base + Suffix
-			generated_name = "[pick(prefixes)] [pick(bases)] [pick(suffixes)]"
-		if(2) // Prefix + Base only
-			generated_name = "[pick(prefixes)] [pick(bases)]"
-		if(3) // Base + Suffix only
-			generated_name = "[pick(bases)] [pick(suffixes)]"
+		// 30% chance to use a complete name, 70% chance to build one
+		if(prob(30))
+			candidate = pick(whole_names)
+		else
+			// Build a name from components
+			var/name_type = rand(1, 3)
+			switch(name_type)
+				if(1) // Prefix + Base + Suffix
+					candidate = "[pick(prefixes)] [pick(bases)] [pick(suffixes)]"
+				if(2) // Prefix + Base only
+					candidate = "[pick(prefixes)] [pick(bases)]"
+				if(3) // Base + Suffix only
+					candidate = "[pick(bases)] [pick(suffixes)]"
 
-	return generated_name
+		if(!(candidate in existing_names))
+			return candidate
+
+	// Fallback: append a unique number to guarantee uniqueness
+	var/fallback = "[pick(prefixes)] [pick(bases)] [pick(suffixes)]-[rand(1000, 9999)]"
+	return fallback
 
 /datum/planet_type/beach
 	name = "beach planet"
 	desc = "The platonic ideal of vacation spots. Warm, comfortable temperatures, and a breathable atmosphere."
 	mapgen = /datum/planetGenerator/beach
 	default_baseturf = /turf/unsimulated/floor/planetary/grass
-	loot_type = LOOT_TYPE_BEACH
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL|RUIN_TYPE_WET
+	preferred_ruin_type = RUIN_TYPE_TROPICAL
 	climate_type = /datum/climate/tropical
 	icon_state = "beach2"
 
@@ -272,9 +237,10 @@
 	desc = "A hot, arid world with vast deserts and scarce water sources."
 	mapgen = /datum/planetGenerator/desert
 	default_baseturf = /turf/unsimulated/floor/planetary/desert
-	loot_type = LOOT_TYPE_DESERT
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_TROPICAL
+	ruin_blacklist = RUIN_TYPE_WET
+	preferred_ruin_type = RUIN_TYPE_TROPICAL
 	climate_type = /datum/climate/desert
-	loot_modifier = 5
 	icon_state = "desert"
 
 /datum/planet_type/grass
@@ -282,7 +248,8 @@
 	desc = "A temperate planet with a breathable atmosphere and abundant flora and fauna."
 	mapgen = /datum/planetGenerator/grass
 	default_baseturf = /turf/unsimulated/floor/planetary/grass
-	loot_type = LOOT_TYPE_GRASS
+	ruin_whitelist = RUIN_TYPE_GENERIC
+	preferred_ruin_type = RUIN_TYPE_GENERIC
 	climate_type = /datum/climate/temperate
 	icon_state = "earth"
 
@@ -290,10 +257,10 @@
 	name = "jungle planet"
 	desc = "A hot, humid planet teeming with exotic flora and fauna."
 	mapgen = /datum/planetGenerator/jungle
-	default_baseturf = /turf/unsimulated/floor/jungle/grass
-	loot_type = LOOT_TYPE_JUNGLE
+	default_baseturf = /turf/unsimulated/floor/planetary/grass/jungle
+	ruin_whitelist = RUIN_TYPE_JUNGLE|RUIN_TYPE_TROPICAL
+	preferred_ruin_type = RUIN_TYPE_JUNGLE
 	climate_type = /datum/climate/tropical
-	loot_modifier = 10
 	icon_state = "jungle2"
 
 /datum/planet_type/lava
@@ -301,37 +268,77 @@
 	desc = "A planet rife with seismic and volcanic activity. High temperatures and dangerous xenofauna render it dangerous for the unprepared."
 	mapgen = /datum/planetGenerator/lava
 	default_baseturf = /turf/unsimulated/floor/planetary/basalt
-	loot_type = LOOT_TYPE_LAVA
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_LAVA
+	ruin_blacklist = RUIN_TYPE_WET
+	preferred_ruin_type = RUIN_TYPE_LAVA
 	climate_type = /datum/climate/lava
-	loot_modifier = 15
 	icon_state = "lava"
+	vent_types = list(
+		GAS_OXYGEN = 5,
+		GAS_PLASMA = 5,
+		GAS_SLEEPING = 0,
+		GAS_CARBON = 10,
+		GAS_NITROGEN = 0,
+		GAS_CRYOTHEUM = 0,
+		GAS_RADON = 0
+	)
 
 /datum/planet_type/snow
 	name = "frozen planet"
 	desc = "A frozen planet covered in thick snow, thicker ice, and dangerous predators."
 	mapgen = /datum/planetGenerator/snow
 	default_baseturf = /turf/unsimulated/floor/snow
-	loot_type = LOOT_TYPE_SNOW
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_SNOW
+	preferred_ruin_type = RUIN_TYPE_SNOW
 	climate_type = /datum/climate/arctic
-	loot_modifier = 5
 	icon_state = "snow"
+	vent_types = list(
+		GAS_OXYGEN = 10,
+		GAS_PLASMA = 5,
+		GAS_SLEEPING = 0,
+		GAS_CARBON = 5,
+		GAS_NITROGEN = 5,
+		GAS_CRYOTHEUM = 1,
+		GAS_RADON = 0
+	)
 
 /datum/planet_type/urban
 	name = "wasteland planet"
 	desc = "A desolate, toxic world littered with the remnants of a long-gone civilization and the conflict that ended it."
 	mapgen = /datum/planetGenerator/urban
 	default_baseturf = /turf/unsimulated/floor/planetary/wasteland
-	loot_type = LOOT_TYPE_URBAN
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_URBAN
+	ruin_blacklist = RUIN_TYPE_WET
+	preferred_ruin_type = RUIN_TYPE_URBAN
 	climate_type = /datum/climate/wasteland
-	loot_modifier = 10
 	icon_state = "barren"
+	vent_types = list(
+		GAS_OXYGEN = 5,
+		GAS_PLASMA = 0,
+		GAS_SLEEPING = 0,
+		GAS_CARBON = 10,
+		GAS_NITROGEN = 5,
+		GAS_CRYOTHEUM = 0,
+		GAS_RADON = 5
+	)
+	ruin_budget = RUIN_BUDGET_PLANET * 2
 
 /datum/planet_type/xeno
 	name = "unknown planet"
 	desc = "An alien world with an atmosphere and ecosystem that defies human understanding."
 	mapgen = /datum/planetGenerator/xeno
 	default_baseturf = /turf/unsimulated/floor/grey_sand
-	loot_type = LOOT_TYPE_XENO
+	ruin_whitelist = RUIN_TYPE_GENERIC|RUIN_TYPE_XENO
+	preferred_ruin_type = RUIN_TYPE_XENO
 	climate_type = /datum/climate/xeno
-	loot_modifier = 20
 	icon_state = "xeno1"
+	vent_types = list(
+		GAS_OXYGEN = 1,
+		GAS_PLASMA = 10,
+		GAS_SLEEPING = 5,
+		GAS_CARBON = 1,
+		GAS_NITROGEN = 5,
+		GAS_CRYOTHEUM = 0,
+		GAS_RADON = 0
+	)
+	ruin_budget = RUIN_BUDGET_PLANET * 2

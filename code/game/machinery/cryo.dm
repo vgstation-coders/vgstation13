@@ -108,7 +108,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	put_mob(L, user)
 
 /obj/machinery/atmospherics/unary/cryo_cell/setup_sound()
-	sound_emitter = new(src, is_static = TRUE)
+	sound_emitter = new(src)
 	if (sound_emitter)
 		var/sound/bubbles = sound()
 		bubbles.file = 'sound/machines/looping/bubbles.ogg'
@@ -161,6 +161,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 	if(stat & (FORCEDISABLE|NOPOWER))
 		on = 0
+		update_icon()
+		update_sound()
 
 	if(!node1)
 		return

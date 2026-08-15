@@ -43,20 +43,38 @@
 		if(NORTHWEST)
 			return new /_vector(-1,1)
 
-//defaults to north
-/proc/vector2ClosestDir(var/_vector/V)
+/proc/vector2dirs(var/_vector/V,var/cardinal_reflect=FALSE)
+	. = list()
+	if(V.x > 0)
+		. |= list(EAST)
+	else if(V.x < 0)
+		. |= list(WEST)
+	if(V.y > 0)
+		. |= list(NORTH)
+	else if(V.y < 0)
+		. |= list(SOUTH)
+	if(!cardinal_reflect)
+		if(V.x > 0 && V.y > 0)
+			. |= list(NORTHEAST)
+		else if(V.x < 0 && V.y < 0)
+			. |= list(SOUTHWEST)
+		if(V.x < 0 && V.y > 0)
+			. |= list(NORTHWEST)
+		else if(V.x > 0 && V.y < 0)
+			. |= list(SOUTHEAST)
+
+/proc/vector2ClosestDirs(var/_vector/V,var/cardinal_reflect=FALSE)
 	var/_vector/V_norm = V.chebyshev_normalized()
 
-	var/smallest_dist = 2 //since all vectors are normalized, the biggest possible distance is 2
-	var/closestDir = NORTH
-	for(var/d in alldirs)
+	var/smallest_dist = INFINITY
+	. = list()
+	for(var/d in vector2dirs(V_norm,cardinal_reflect))
 		var/_vector/dir = dir2vector(d)
 		var/_vector/delta = dir.chebyshev_normalized() - V_norm
 		var/dist = delta.chebyshev_norm()
-		if(dist < smallest_dist)
+		if(dist <= smallest_dist)
 			smallest_dist = dist
-			closestDir = d
-	return closestDir
+			. |= list(d)
 
 /proc/drawLaser(var/_vector/A, var/_vector/B, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser")
 	var/_vector/delta = (B - A)

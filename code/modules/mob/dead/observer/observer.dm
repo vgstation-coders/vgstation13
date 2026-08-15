@@ -297,6 +297,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			if ("Shade")
 				if (!iscultist(src))
 					return
+
+				if((timeofdeath != 0) && (timeofdeath < (world.time - DEATH_SHADEOUT_TIMER)))
+					to_chat(src, "<span class='danger'>You took too long. Your powers have dissipated.</span>")
+					return
+
 				if (occult_muted())
 					to_chat(src, "<span class='danger'>Holy interference within your body prevents you from separating your shade from your body.</span>")
 				else

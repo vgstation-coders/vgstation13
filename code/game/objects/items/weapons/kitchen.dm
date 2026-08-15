@@ -48,7 +48,7 @@
 		return
 
 	if(loaded_food)
-		to_chat(user, "<span class='notice'>There's already [loaded_food] on your [src].</span>")
+		to_chat(user, "<span class='notice'>There's already [loaded_food] on your [src.name].</span>")
 		return
 
 	if(snack.wrapped)
@@ -190,6 +190,14 @@
 	w_type = RECYK_PLASTIC
 	flammable = TRUE
 
+/obj/item/weapon/kitchen/utensil/spoon/plastic/teflon
+	name = "teflon spoon"
+	desc = "Less likely to dissolve when scooping up a bowl of mothership stew."
+	icon_state = "tspoon"
+
+/obj/item/weapon/kitchen/utensil/spoon/plastic/teflon/dissolvable()
+	return FALSE
+
 /*
  * Sporks
  */
@@ -295,6 +303,7 @@
 	name = "teflon spork"
 	desc = "Tlork!"
 	icon_state = "tspork"
+	flammable = FALSE
 
 /obj/item/weapon/kitchen/utensil/spork/plastic/teflon/dissolvable()
 	return FALSE
@@ -388,12 +397,14 @@
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 
-/obj/item/weapon/kitchen/utensil/fork/teflon
+/obj/item/weapon/kitchen/utensil/fork/plastic/teflon
 	name = "teflon fork"
-	desc = "Less likely to dissolve when picking up a forkful of mothership stew."
+	desc = "Tork!"
 	icon_state = "tfork"
-	melt_temperature = MELTPOINT_PLASTIC
-	flammable = TRUE
+	flammable = FALSE
+
+/obj/item/weapon/kitchen/utensil/fork/plastic/teflon/dissolvable()
+	return FALSE
 
 /*
  * Knives
@@ -432,6 +443,18 @@
 	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
+
+/obj/item/weapon/kitchen/utensil/knife/plastic/teflon
+	name = "teflon knife"
+	desc = "More suited for cutting through mothership meals."
+	force = 3 //Yes, it's plastic, but it's SUPER plastic
+	throwforce = 5
+	sharpness = 1
+	icon_state = "tknife"
+	flammable = FALSE
+
+/obj/item/weapon/kitchen/utensil/knife/plastic/teflon/dissolvable()
+	return FALSE
 
 /obj/item/weapon/kitchen/utensil/knife/nazi
 	name = "nazi knife"
@@ -634,14 +657,13 @@
 	starting_materials = list(MAT_IRON = 3000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	var/list/carrying = list() // List of things on the tray. - Doohl
 	var/max_carry = 10 // w_class = W_CLASS_TINY -- takes up 1
 					   // w_class = W_CLASS_SMALL -- takes up 3
 					   // w_class = W_CLASS_MEDIUM -- takes up 5
 	var/cooldown = 0	//shield bash cooldown. based on world.time
 
 /obj/item/weapon/tray/Destroy()
-	QDEL_LIST_NULL(carrying)
+	send_items_flying()
 	..()
 
 /obj/item/weapon/tray/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -774,54 +796,34 @@
 		return
 	if(user.drop_item(W, user.loc))
 		W.forceMove(src)
-		carrying.Add(W)
+		vis_contents += W
 		W.setPixelOffsetsFromParams(params, user)
-		var/image/image = image(icon = null)
-		image.appearance = W.appearance
-		image.layer = W.layer + 30
-		image.plane = FLOAT_PLANE
-
-		overlays += image
+		W.vis_flags |= VIS_INHERIT_PLANE
+		W.register_event(/event/moved, src, /obj/item/weapon/tray/proc/tray_remove_proc)
 	else
 		..()
+
+/obj/item/weapon/tray/proc/tray_remove_proc(atom/movable/mover)
+	removeitemfromtray(mover)
+
+/obj/item/weapon/tray/proc/removeitemfromtray(atom/movable/removed_item)
+	src.vis_contents -= removed_item
+	removed_item.vis_flags &= ~VIS_INHERIT_PLANE
+	removed_item.unregister_event(/event/moved, src, /obj/item/weapon/tray/proc/tray_remove_proc)
+
 /obj/item/weapon/tray/proc/calc_carry()
 	// calculate the weight of the items on the tray
 	. = 0 // value to return
 
-	for(var/obj/item/I in carrying)
+	for(var/obj/item/I in contents)
 		. += I.get_trayweight() || INFINITY
-/* previous functionality of trays,
-/obj/item/weapon/tray/prepickup(mob/user)
-	..()
 
-	if(!isturf(loc))
-		return
+/obj/item/weapon/tray/update_icon()
+	for (var/obj/item/I in vis_contents)
+		if (!(I in contents))
+			vis_contents -= I
+	return
 
-	for(var/obj/item/I in loc)
-		if( I != src && !I.anchored && !is_type_in_list(I, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray)) )
-			var/add = 0
-			if(I.w_class > W_CLASS_TINY)
-				add = 1
-			else if(I.w_class == W_CLASS_SMALL)
-				add = 3
-			else if(I.w_class > W_CLASS_MEDIUM)
-				add = 5
-			else
-				continue
-			if(calc_carry() + add >= max_carry)
-				break
-
-			I.forceMove(src)
-			carrying.Add(I)
-
-			var/image/image = image(icon = null) //image(appearance = ...) doesn't work, and neither does image().
-			image.appearance = I.appearance
-			image.layer = I.layer + 30
-			image.plane = FLOAT_PLANE
-
-			overlays += image
-			//overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
-*/
 /obj/item/weapon/tray/dropped(mob/user)
 	spawn() //because throwing drops items before setting their throwing var, and a lot of other zany bullshit
 		if(throwing)
@@ -833,7 +835,6 @@
 			return*/
 		if(isturf(loc))
 			for(var/obj/structure/table/T in loc)
-				remove_items()
 				..()
 				return
 			// if no table, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
@@ -845,20 +846,14 @@
 		whoops()
 	..()
 
-/obj/item/weapon/tray/proc/remove_items()
-	overlays.len = 0
-	for(var/obj/item/I in carrying)
-		I.forceMove(get_turf(src))
-		carrying.Remove(I)
-
 /obj/item/weapon/tray/proc/send_items_flying()
 	overlays.len = 0
-	for(var/obj/item/I in carrying)
+	for(var/obj/item/I in contents)
 		I.forceMove(get_turf(src))
-		carrying.Remove(I)
 		spawn(rand(1,3))
 			if(I && prob(75))
 				step(I, pick(alldirs))
+	update_icon()
 
 /obj/item/weapon/tray/proc/whoops()
 	playsound(src, "trayhit", 35, 1)

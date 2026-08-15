@@ -40,7 +40,7 @@
 		<li>Monitor Pressure: <a href="?src=\ref[src];toggle_monitoring=pressure">[is_monitoring("pressure") ? "Yes" : "No"]</a>
 		<li>Monitor Temperature: <a href="?src=\ref[src];toggle_monitoring=temperature">[is_monitoring("temperature") ? "Yes" : "No"]</a>"}
 
-	for(var/gas_ID in XGM.gases)
+	for(var/gas_ID in XGM.noteworthy_gases)
 		var/datum/gas/gas_datum = XGM.gases[gas_ID]
 		dat += {"<li>Monitor [gas_datum.name] Concentration: <a href="?src=\ref[src];toggle_monitoring=[gas_ID]">[is_monitoring(gas_ID) ? "Yes" : "No"]</a>"}
 	dat += "</ul>"
@@ -80,6 +80,8 @@
 			if(!signal.data[gas_ID])
 				signal.data[gas_ID] = 0
 		signal.data["sigtype"]="status"
+		if(!radio_connection)
+			return
 		radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
 
 /obj/machinery/air_sensor/proc/set_frequency(new_frequency)
@@ -159,7 +161,7 @@
 				if(data["temperature"])
 					sensor_part += "<tr><th>Temperature:</th><td>[data["temperature"]] K</td></tr>"
 				var/header_added = FALSE
-				for(var/gas_ID in XGM.gases)
+				for(var/gas_ID in XGM.noteworthy_gases)
 					if(data[gas_ID])
 						if(!header_added)
 							header_added = TRUE
@@ -486,6 +488,8 @@ font-weight:bold;
 	send_signal(list("tag"=device, "status"))
 
 /obj/machinery/computer/general_air_control/large_tank_control/proc/send_signal(var/list/data)
+	if(!radio_connection)
+		return 0
 	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src

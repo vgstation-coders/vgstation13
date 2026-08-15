@@ -172,7 +172,7 @@ Obviously, requires DNA2.
 	if(..())
 		M.update_colour(NOIR_ANIM_TIME)
 		if(M.client)
-			M.client.screen -= noir_master
+			M.disable_noir()
 
 //CHARGE
 
@@ -270,6 +270,10 @@ Obviously, requires DNA2.
             else if(istype(O, /obj/structure/table))
                 var/obj/structure/table/T = O
                 T.destroy()
+                breakthrough = 1
+            else if(istype(O, /obj/machinery/door/table))
+                var/obj/machinery/door/table/TD = O
+                TD.dismantle()
                 breakthrough = 1
             else if(istype(O, /obj/structure/rack))
                 new /obj/item/weapon/rack_parts(O.loc)

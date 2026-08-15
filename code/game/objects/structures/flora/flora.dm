@@ -11,12 +11,9 @@
 	update_icon()
 
 /obj/structure/flora/Destroy()
-	if(istype(loc,/turf/unsimulated/floor/jungle/grass))
-		var/turf/unsimulated/floor/jungle/grass/G=loc
+	if(istype(loc,/turf/unsimulated/floor/planetary/grass/jungle))
+		var/turf/unsimulated/floor/planetary/grass/jungle/G=loc
 		G.turf_speed_multiplier=1.0
-		if(SSFoliageRegrow)
-			turfs_to_regrow +=G
-			G.regrowticks=world.time
 	..()
 
 /obj/structure/flora/update_icon()
@@ -379,40 +376,7 @@
 		user.visible_message("<span class='notice'>[user] stuffs something into the pot.</span>", "You stuff \the [I] into the [src].")
 		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 		if(arcanetampered)
-			var/area/thearea
-			var/area/prospective = pick(areas)
-			while(!thearea)
-				if(prospective.type != /area)
-					var/turf/T = pick(get_area_turfs(prospective.type))
-					if(T.z == user.z)
-						thearea = prospective
-						break
-				prospective = pick(areas)
-			var/list/L = list()
-			for(var/turf/T in get_area_turfs(thearea.type))
-				if(!T.density)
-					var/clear = 1
-					for(var/obj/O in T)
-						if(O.density)
-							clear = 0
-							break
-					if(clear)
-						L+=T
-			if(!L.len)
-				return
-
-			var/list/backup_L = L
-			var/attempt = null
-			var/success = 0
-			while(L.len)
-				attempt = pick(L)
-				success = I.Move(attempt)
-				if(!success)
-					L.Remove(attempt)
-				else
-					break
-			if(!success)
-				I.forceMove(pick(backup_L))
+			I.dimensional_push(user)
 
 /obj/structure/flora/pottedplant/attack_hand(mob/user)
 	if(contents.len)
@@ -705,6 +669,8 @@
 	desc = "I eated the purple berries."
 	icon = 'icons/obj/hydroponics/berry.dmi'
 	icon_state="stage-6"
+	anchored=TRUE
+	shovelaway=TRUE
 	var/hasberries=FALSE
 	var/tickssincelastgrowth=0
 

@@ -109,7 +109,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/is_pet = FALSE //We're somebody's precious, precious pet.
 
-	var/pacify_aura = FALSE
 	var/is_poisonous = FALSE //whether certian hostile mobs will avoid this.
 
 	var/blooded = TRUE	//Until we give them proper vessels, this lets us know which animals should bleed and stuff

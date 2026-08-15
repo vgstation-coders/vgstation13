@@ -899,6 +899,20 @@
 	item_state = "callum_suit"
 	_color = "callum_suit"
 
+/obj/item/clothing/under/tian
+	name = "tian dress"
+	desc = "Custom-made for a warrior, long long ago."
+	icon_state = "tian_dress"
+	item_state = "tian_dress"
+	_color = "tian_dress"
+
+/obj/item/clothing/under/matsuda
+	name = "disheveled jumpsuit"
+	desc = "A rolled down jumpsuit and undershirt combo, styled after old Martian actress."
+	icon_state = "matsuda"
+	item_state = "matsuda"
+	_color = "matsuda"
+
 /obj/item/clothing/under/clownsuit
 	name = "formal clown outfit"
 	desc = "For clowns living in a society."
@@ -1120,3 +1134,12 @@
 	_color = "sonicmansuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/under/lepre
+	name = "Leprechaun outfit"
+	desc = "Shipping off to Boston!"
+	icon_state = "lepre"
+	item_state = "lepre"
+	_color = "lepre"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)

@@ -17,8 +17,8 @@
 	pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /obj/item/bluespace_crystal/attack_self(var/mob/user)
-	var/datum/zLevel/L = get_z_level(src)
-	if(L && !L.teleJammed)
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(vz && !(vz.teleJammed == VZ_TELEPORTATION_FORBIDDEN))
 		user.visible_message("<span class='notice'>[user] crushes the [src]!</span>")
 		blink_mob(user)
 	else
@@ -39,7 +39,7 @@
 /obj/item/bluespace_crystal/throw_impact(atom/hit_atom)
 	if(..())
 		return
-	var/datum/zLevel/L = get_z_level(src)
+	var/datum/virtual_z/L = get_virtual_z()
 
 	if(isliving(hit_atom) && L && !L.teleJammed)
 		blink_mob(hit_atom)

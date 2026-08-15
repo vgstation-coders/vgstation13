@@ -65,6 +65,11 @@
 	// See /goon/code/datums/browserOutput.dm
 	var/datum/chatOutput/chatOutput
 
+	// Post-Byond 516 DPI scaling settings affects opened windows.
+	// Rather than e.g. 100x100 you get (window size / scale), so for 125% scaling you get 80x80.
+	// This messes up a lot of interfaces so this value is cached and applied to opening windows to correct for scaling.
+	var/dpiScale = 1
+
 		////////////
 		//PARALLAX+OTHER PLANEMASTERS//
 		////////////
@@ -82,7 +87,7 @@
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/fakecamera_screen_planemaster_dummy = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/fakecamera_button_planemaster = null
 
-
+	var/last_quick_stored = 0
 
 	// This gets set by goonchat.
 	var/encoding = "1252"

@@ -46,8 +46,7 @@ export const PCMC = (context) => {
     <Window
 	  title={data.itemtitle}
       width={800}
-      height={400}
-      resizable>
+      height={400}>
       {!!data.emped && (
         <Modal>
           <Flex align="center">
@@ -120,19 +119,19 @@ export const PCMC = (context) => {
        </Table.Row>
 				<Table.Row>
 				  <Table.Cell>
-				    <Divider color="#4972A1" />
+            <Box color="#4972A1"><Divider /></Box>
 				  </Table.Cell>
 				  <Table.Cell>
-				    <Divider color="#4972A1" />
+				    <Box color="#4972A1"><Divider /></Box>
 				  </Table.Cell>
 				  <Table.Cell>
-				    <Divider color="#4972A1" />
+				    <Box color="#4972A1"><Divider /></Box>
 				  </Table.Cell>
 				  <Table.Cell>
-				    <Divider color="#4972A1" />
+				    <Box color="#4972A1"><Divider /></Box>
 				  </Table.Cell>
 				  <Table.Cell>
-				    <Divider color="#4972A1" />
+				    <Box color="#4972A1"><Divider /></Box>
 				  </Table.Cell>
 				</Table.Row>
           {data.detectedcrew.map(crew => (

@@ -1,5 +1,9 @@
 var/global/datum/controller/gameticker/scoreboard/score = new()
 
+// Pre-rendered heatmap HTML captured before round end.
+// When present, the scoreboard uses this instead of re-rendering from current turf state.
+var/global/heatmap_snapshot = ""
+
 /datum/controller/gameticker/scoreboard
 	var/crewscore 			= 0 //This is the overall var/score for the whole round
 
@@ -256,10 +260,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		for(var/datum/disease2/effect/e in D.effects)
 			dat += "&#x25CF; Stage [e.stage] - <b>[e.name]</b><BR>"
 	if(weathertracker.len && climates.len)
-		for(var/i = 1; i < world.maxz; i++)
-			var/datum/climate/C = SSweather.get_climate(i)
+		for(var/datum/climate/C in climates)
 			if(C)
-				dat += "<B>Z-Level [i] Climate Composition: ([C])</B> "
+				dat += "<B>Z-Level [C.v.id] Climate Composition: ([C])</B> "
 				//first, total ticks
 				var/totalticks = total_list(get_list_of_elements(weathertracker))
 				for(var/element in weathertracker)
@@ -340,6 +343,15 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 			score.rating = "Nanotrasen's Finest"
 	dat += "<B><U>RATING:</U></B> [score.rating]<br><br>"
 
+	dat += "<b>STATION HEATMAP:</b><br>"
+	if(heatmap_snapshot)
+		dat += heatmap_snapshot
+	else
+		var/list/zs_to_draw = GetConnectedZlevels(map.zMainStation)
+		for(var/z in zs_to_draw)
+			dat += string_heatmap(z)
+	dat += "<br>"
+
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
 	dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
 	var/i = 1
@@ -390,3 +402,66 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	src.mob_name = mob_name
 	src.award_name = award_name
 	src.award_desc = award_desc
+
+/proc/draw_heatmap(input = 1) // Accepts a Z num or a datum/virtual_z.
+	set background = 1
+	if(!highest_player_entry)
+		return
+
+	var/datum/virtual_z/VZ
+	var/zLevel
+	var/x_min = 1
+	var/y_min = 1
+	var/x_max
+	var/y_max
+	if(istype(input, /datum/virtual_z))
+		VZ = input
+		zLevel = VZ.z()
+		x_min = max(1, VZ.x_min)
+		y_min = max(1, VZ.y_min)
+		x_max = min(world.maxx, VZ.x_max)
+		y_max = min(world.maxy, VZ.y_max)
+	else if(isnum(input))
+		zLevel = input
+		x_max = (2 * world.view + 1) * WORLD_ICON_SIZE
+		y_max = (2 * world.view + 1) * WORLD_ICON_SIZE
+	else
+		return
+	if(zLevel > world.maxz)
+		return
+
+	var/icon/canvas = icon('icons/480x480.dmi', "blank")
+	var/divisor_factor = 255 / highest_player_entry
+
+	var/lowest_x = world.maxx
+	var/lowest_y = world.maxy
+	var/highest_x = 0
+	var/highest_y = 0
+	for(var/i = x_min to x_max)
+		for(var/r = y_min to y_max)
+			var/turf/tile = locate(i, r, zLevel)
+			if(!tile)
+				continue
+			// When restricted to a vLevel, ignore turfs from neighbouring vLevels sharing the same zLevel.
+			if(VZ && tile.v != VZ)
+				continue
+			var/v_or_z = tile.v
+			if(!v_or_z)
+				v_or_z = zLevel
+			if(istype(tile, get_base_turf(v_or_z)))
+				continue
+			lowest_x = min(lowest_x, i)
+			lowest_y = min(lowest_y, r)
+			highest_x = max(highest_x, i)
+			highest_y = max(highest_y, r)
+			var/final_factor = tile.player_entries * divisor_factor
+			canvas.DrawBox(rgb(min(final_factor*4,255), min(final_factor*2,255), final_factor, 255), i, r)
+	if(!(highest_x || highest_y))
+		return null
+	canvas.Crop(lowest_x, lowest_y, highest_x, highest_y)
+	log_debug("Heatmap generated for [VZ ? "vLevel '[VZ.name]' (id [VZ.id]) on z-level [zLevel]" : "z-level [zLevel]"]. Lowest x: [lowest_x]. Lowest y: [lowest_y]. Highest x: [highest_x]. Highest y: [highest_y].")
+	return canvas
+
+/proc/string_heatmap(input = 1)
+	var/icon/I = draw_heatmap(input)
+	return I ? "<img src='data:image/png;base64,[icon2base64(I)]'/><br>" : ""

@@ -852,7 +852,7 @@ var/list/has_died_as_golem = list()
 	H.death(1)
 	H.handle_body_destroyed()
 	var/gib_radius = 0
-	if(H.reagents.has_reagent(LUBE))
+	if(H.reagents.has_any_reagents(LUBES))
 		gib_radius = 6
 	hgibs(H.loc, H.virus2, H.dna, flesh_color, blood_color, gib_radius)
 	spawn()
@@ -1005,7 +1005,7 @@ var/list/has_died_as_golem = list()
 			//Override the current limb status and don't cause an explosion
 			E.droplimb(1, 1)
 	var/gib_radius = 0
-	if(H.reagents.has_reagent(LUBE))
+	if(H.reagents.has_any_reagents(LUBES))
 		gib_radius = 6
 
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)

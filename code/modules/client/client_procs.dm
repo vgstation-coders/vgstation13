@@ -276,6 +276,10 @@ var/updated_stats = 0
 
 
 	send_resources()
+	spawn()//dont let winget stall login on a dead client
+		var/dpi = text2num(winget(src, null, "dpi"))
+		if (dpi && (src in clients))
+			dpiScale = dpi
 
 	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype, unbanned, unbanned_ckey, unbanned_datetime FROM erro_ban WHERE (ckey = :ckey [address ? "OR ip = :address" : ""]  [computer_id ? "OR computerid = :computer_id" : ""]) AND unbanned_notification = 0;",
 		list(

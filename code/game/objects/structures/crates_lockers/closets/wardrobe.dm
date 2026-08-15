@@ -212,10 +212,8 @@
 		/obj/item/clothing/suit/storage/labcoat = 2,
 		/obj/item/clothing/shoes/black = 2,
 		/obj/item/clothing/gloves/black,
-		pick(
-			/obj/item/clothing/glasses/hud/diagnostic,
-			/obj/item/clothing/glasses/hud/diagnostic/prescription),
-		/obj/item/clothing/glasses/hud/diagnostic
+		/obj/item/clothing/glasses/hud/diagnostic = 2,
+		/obj/item/clothing/glasses/hud/diagnostic/prescription,
 	)
 
 /obj/structure/closet/wardrobe/chemistry_white
@@ -277,7 +275,8 @@
 		/obj/item/clothing/under/rank/virologist = 2,
 		/obj/item/clothing/mask/surgical = 2,
 		/obj/item/clothing/shoes/white = 2,
-		/obj/item/clothing/glasses/hud/health/prescription = 2,
+		/obj/item/clothing/glasses/hud/health = 2,
+		/obj/item/clothing/glasses/hud/health/prescription,
 	)
 
 

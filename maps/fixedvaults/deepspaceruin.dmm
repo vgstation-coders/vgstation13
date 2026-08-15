@@ -3,10 +3,7 @@
 /turf/space,
 /area)
 "b" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area)
 "c" = (
 /obj/item/clothing/head/helmet/biker,
@@ -14,10 +11,7 @@
 /area)
 "d" = (
 /obj/structure/grille,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area)
 "e" = (
 /obj/structure/grille/broken,
@@ -34,10 +28,7 @@
 /area)
 "i" = (
 /obj/structure/computerframe,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "n" = (
 /obj/structure/table,
@@ -45,10 +36,7 @@
 /area)
 "o" = (
 /obj/structure/dispenser/oxygen,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "p" = (
 /obj/item/clothing/under/jacketsuit,
@@ -69,12 +57,6 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating/airless,
 /area)
-"F" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
-/area)
 "I" = (
 /obj/item/clothing/shoes/mime/biker,
 /turf/space,
@@ -87,10 +69,7 @@
 /turf/space,
 /area)
 "S" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "Z" = (
 /turf/simulated/floor/plating/airless,
@@ -200,7 +179,7 @@ a
 a
 w
 Z
-F
+b
 K
 d
 w

@@ -71,10 +71,18 @@
 		if(!can_control(R,user))
 			continue
 		var/obj/item/weapon/cell/Rcell = R.get_cell()
+		var/borg_location = get_area_name(R)
+		var/turf/A = get_turf(R)
+		if(!isnull(A))
+			var/borg_x = A.x - get_world_x_offset(A.vz())
+			var/borg_y = A.y - get_world_y_offset(A.vz())
+			var/borg_z = A.z
+			borg_location += "([borg_x], [borg_y], [borg_z])"
 		var/list/cyborg_data = list(
 			"name" = R.name,
 			"locked_down" = R.lockdown,
 			"status" = R.stat,
+			"location" = borg_location,
 			"charge" = Rcell ? Rcell.percent() : null,
 			"module" = R.module ? "[R.modtype] Module" : "No Module Installed",
 			"master" = R.connected_ai,

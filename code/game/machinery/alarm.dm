@@ -408,7 +408,7 @@ var/global/list/air_alarms = list()
 	..()
 
 /obj/machinery/alarm/setup_sound()
-	sound_emitter = new /datum/sound_emitter(src, is_static = TRUE)
+	sound_emitter = new /datum/sound_emitter(src)
 	if (sound_emitter)
 		var/sound/warn_sound = sound()
 		warn_sound.file = 'sound/machines/effects/air_alarm_warning.ogg'
@@ -598,7 +598,7 @@ var/global/list/air_alarms = list()
 		kill_moody_light()
 		return
 	var/area/this_area = get_area(src)
-	switch(max(local_danger_level, this_area.atmosalm-1))
+	switch(max(local_danger_level, (this_area ? this_area.atmosalm : 0) - 1))
 		if (0)
 			icon_state = "alarm0"
 			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_alarm0")
@@ -952,7 +952,7 @@ var/global/list/air_alarms = list()
 	data["scrubbers"]=scrubbers
 
 	var/list/gas_datums=list()
-	for(var/gas_id in XGM.gases)
+	for(var/gas_id in XGM.noteworthy_gases)
 		var/datum/gas/gas_datum = XGM.gases[gas_id]
 		var/list/datum_data = list()
 		datum_data["id"] = gas_id

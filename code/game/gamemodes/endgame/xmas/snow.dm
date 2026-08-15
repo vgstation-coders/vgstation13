@@ -299,7 +299,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 		TS.wet(100)
 	qdel(src)
 
-/obj/item/stack/sheet/snow/throw_at(atom/target, range, speed)
+/obj/item/stack/sheet/snow/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	playsound(src.loc, 'sound/weapons/punchmiss.ogg', 50, 1)
 	..()
 
@@ -351,7 +351,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	health = 50.0
 	pass_flags_self = PASSTABLE
 	var/maxhealth = 50.0
-	materialtype = /obj/item/stack/sheet/snow
+	sheet_type = /obj/item/stack/sheet/snow
 
 /obj/structure/window/barricade/snow/attackby(obj/item/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/stack/sheet/snow))

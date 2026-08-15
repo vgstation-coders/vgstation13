@@ -82,9 +82,9 @@
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
 			if (choice == "icon")
-				A.filters += filter(type="alpha", name=entry_name, x=mask_x, y=mask_y, icon=mask_icon, flags=added_flag)
+				A.filters += UNLINT(filter(type="alpha", name=entry_name, x=mask_x, y=mask_y, icon=mask_icon, flags=added_flag))
 			else
-				A.filters += filter(type="alpha", name=entry_name, x=mask_x, y=mask_y, render_source=mask_target, flags=added_flag)
+				A.filters += UNLINT(filter(type="alpha", name=entry_name, x=mask_x, y=mask_y, render_source=mask_target, flags=added_flag))
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
@@ -110,7 +110,7 @@
 
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
-			A.filters += filter(type="angular_blur", name=entry_name, x=blur_x, y=blur_y, size=blur_size, offset=blur_offset)
+			A.filters += UNLINT(filter(type="angular_blur", name=entry_name, x=blur_x, y=blur_y, size=blur_size, offset=blur_offset))
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
@@ -176,7 +176,7 @@
 
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
-			A.filters += filter(type="color", name=entry_name, color=color_matrix, space=color_filter)
+			A.filters += UNLINT(filter(type="color", name=entry_name, color=color_matrix, space=color_filter))
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
@@ -224,9 +224,9 @@
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
 			if (choice == "icon")
-				A.filters += filter(type="displace", name=entry_name, x=displace_x, y=displace_y, size=displace_size, icon=displace_icon, flags=added_flag)
+				A.filters += UNLINT(filter(type="displace", name=entry_name, x=displace_x, y=displace_y, size=displace_size, icon=displace_icon, flags=added_flag))
 			else
-				A.filters += filter(type="displace", name=entry_name, x=displace_x, y=displace_y, size=displace_size, render_source=displace_target, flags=added_flag)
+				A.filters += UNLINT(filter(type="displace", name=entry_name, x=displace_x, y=displace_y, size=displace_size, render_source=displace_target, flags=added_flag))
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
@@ -339,9 +339,9 @@
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
 			if (choice == "render_target")
-				A.filters += filter(type="layer", name=entry_name, x=layer_x, y=layer_y, render_source=layer_target, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend)
+				A.filters += UNLINT(filter(type="layer", name=entry_name, x=layer_x, y=layer_y, render_source=layer_target, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend))
 			else
-				A.filters += filter(type="layer", name=entry_name, x=layer_x, y=layer_y, icon=layer_icon, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend)
+				A.filters += UNLINT(filter(type="layer", name=entry_name, x=layer_x, y=layer_y, icon=layer_icon, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend))
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
@@ -389,7 +389,7 @@
 
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
-			A.filters += filter(type="outline", name=entry_name, size=outline_size , color=outline_color, flags=added_flag)
+			A.filters += UNLINT(filter(type="outline", name=entry_name, size=outline_size , color=outline_color, flags=added_flag))
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
@@ -415,7 +415,7 @@
 
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
-			A.filters += filter(type="radial_blur", name=entry_name, x=blur_x, y=blur_y, size=blur_size, offset=blur_offset)
+			A.filters += UNLINT(filter(type="radial_blur", name=entry_name, x=blur_x, y=blur_y, size=blur_size, offset=blur_offset))
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
@@ -470,7 +470,7 @@
 
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
-			A.filters += filter(type="rays", name=entry_name, x=rays_x, y=rays_y, size=rays_size, color=rays_color, offset=rays_offset, density=rays_density, threshold=rays_threshold, factor=rays_factor, flags=added_flag)
+			A.filters += UNLINT(filter(type="rays", name=entry_name, x=rays_x, y=rays_y, size=rays_size, color=rays_color, offset=rays_offset, density=rays_density, threshold=rays_threshold, factor=rays_factor, flags=added_flag))
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
@@ -515,7 +515,7 @@
 
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
-			A.filters += filter(type="ripple", name=entry_name, x=ripple_x, y=ripple_y, size=ripple_size, repeat=ripple_repeat, radius=ripple_radius, falloff=ripple_falloff, flags=added_flag)
+			A.filters += UNLINT(filter(type="ripple", name=entry_name, x=ripple_x, y=ripple_y, size=ripple_size, repeat=ripple_repeat, radius=ripple_radius, falloff=ripple_falloff, flags=added_flag))
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
@@ -553,7 +553,7 @@
 
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
-			A.filters += filter(type="wave", name=entry_name, x=wave_x, y=wave_y, size=wave_size, offset=wave_offset, flags=added_flag)
+			A.filters += UNLINT(filter(type="wave", name=entry_name, x=wave_x, y=wave_y, size=wave_size, offset=wave_offset, flags=added_flag))
 
 	return filter_name
 

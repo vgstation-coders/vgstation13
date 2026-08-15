@@ -128,7 +128,7 @@
 	var/cpr_time = 1.0//Carbon
 
 
-	var/bodytemperature = 310.055	//98.7 F
+	var/bodytemperature = BODYTEMP_DEFAULT
 	var/drowsyness = 0.0//Carbon
 	var/dizziness = 0//Carbon
 	var/jitteriness = 0//Carbon
@@ -292,7 +292,7 @@
 	var/original_density = 1
 	var/old_assigned_role // If they ghosted, what role did they have?
 
-	var/list/crit_rampup = list() // Of the form timestamp/damage
+	var/list/crit_rampup = list() // damage values keyed by text timestamps
 
 	var/list/huds = list() // List of active huds on a mob
 

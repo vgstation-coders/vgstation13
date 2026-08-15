@@ -613,6 +613,16 @@
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/buckshot = 16)
 
+/obj/item/weapon/storage/box/fanshotshells
+	name = "12-gauge FaNshot shells"
+	icon_state = "stun_shells"
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/fanshot = 16)
+
+/obj/item/weapon/storage/box/fanshotshells/super
+	name = "12-gauge high force FaNshot shells"
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/fanshot/super = 16)
+
 /obj/item/weapon/storage/box/dragonsbreathshells
 	name = "12-gauge dragon's breath shells"
 	icon_state = "dragonsbreath_shells"
@@ -837,15 +847,18 @@
 
 /obj/item/weapon/storage/box/spellbook/New()
 	..()
+	var/limit = BOX_SPACE
 	var/list/possible_books = subtypesof(/obj/item/weapon/spellbook/oneuse)
 	for(var/S in possible_books)
 		var/obj/item/weapon/spellbook/oneuse/O = S
 		if(initial(O.disabled_from_bundle))
 			possible_books -= O
-	for(var/i =1; i <= BOX_SPACE; i++)
+	for(var/i =1; i <= limit; i++)
 		var/randombook = pick(possible_books)
-		var/book = new randombook(src)
+		var/obj/item/weapon/spellbook/oneuse/book = new randombook(src)
 		src.contents += book
+		if(book.bundle_freebie)
+			limit++
 		possible_books -= randombook
 	var/randomsprite = pick("a","b")
 	icon_state = "wizbox-[randomsprite]"
@@ -1491,6 +1504,15 @@
 	new	/obj/item/clothing/head/helmet/sonicman(src)
 	new	/obj/item/clothing/gloves/sonicman(src)
 	new	/obj/item/clothing/shoes/sonicman(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lepresuit
+	name = "Leprechaun costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lepresuit/New()
+	new /obj/item/clothing/head/lepre(src)
+	new /obj/item/clothing/under/lepre(src)
+	new /obj/item/clothing/shoes/lepre(src)
 	..()
 
 /obj/item/weapon/storage/box/large/utensils_plastic

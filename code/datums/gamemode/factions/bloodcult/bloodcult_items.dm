@@ -19,6 +19,7 @@ var/list/arcane_tomes = list()
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	mech_flags = MECH_SCAN_FAIL
+	disperse_coeff = 1
 	var/state = TOME_CLOSED
 	var/can_flick = 1
 	var/list/talismans = list()
@@ -984,18 +985,18 @@ var/list/arcane_tomes = list()
 			overlays += I
 
 
-/obj/item/weapon/melee/soulblade/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+/obj/item/weapon/melee/soulblade/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	var/turf/starting = get_turf(src)
-	var/turf/target = get_turf(targ)
-	var/turf/second_target = target
+	var/turf/targ = get_turf(target)
+	var/turf/second_target = targ
 	var/obj/item/projectile/soulbullet/SB = new (starting)
-	SB.original = target
-	SB.target = target
+	SB.original = targ
+	SB.target = targ
 	SB.current = starting
 	SB.starting = starting
 	SB.secondary_target = second_target
-	SB.yo = target.y - starting.y
-	SB.xo = target.x - starting.x
+	SB.yo = targ.y - starting.y
+	SB.xo = targ.x - starting.x
 	SB.shade = shade
 	SB.blade = src
 	src.forceMove(SB)
@@ -1175,16 +1176,16 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/blood_dagger/pre_throw(atom/movable/target)
 	absorbed = 1
 
-/obj/item/weapon/melee/blood_dagger/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+/obj/item/weapon/melee/blood_dagger/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	var/turf/starting = get_turf(src)
-	var/turf/target = get_turf(targ)
+	var/turf/targ = get_turf(target)
 	var/obj/item/projectile/blooddagger/BD = new (starting)
-	BD.original = target
-	BD.target = target
+	BD.original = targ
+	BD.target = targ
 	BD.current = starting
 	BD.starting = starting
-	BD.yo = target.y - starting.y
-	BD.xo = target.x - starting.x
+	BD.yo = targ.y - starting.y
+	BD.xo = targ.x - starting.x
 	BD.stacks = stacks
 	BD.damage = 5 + stacks * 5
 	BD.icon_state = icon_state
@@ -1994,7 +1995,7 @@ var/list/arcane_tomes = list()
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.blend_mode = BLEND_ADD
 		if (isturf(loc))
-			I.plane = ABOVE_LIGHTING_PLANE
+			I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		else
 			I.plane = ABOVE_HUD_PLANE // inventory
 		overlays += I
@@ -2003,9 +2004,9 @@ var/list/arcane_tomes = list()
 		var/image/left_I = image(inhand_states["left_hand"], src, "bloodcandle_lit")
 		var/image/right_I = image(inhand_states["right_hand"], src, "bloodcandle_lit")
 		left_I.blend_mode = BLEND_ADD
-		left_I.plane = ABOVE_LIGHTING_PLANE
+		left_I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		right_I.blend_mode = BLEND_ADD
-		right_I.plane = ABOVE_LIGHTING_PLANE
+		right_I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 

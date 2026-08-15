@@ -135,7 +135,7 @@ var/list/valid_ninja_suits = list(
 		L.throw_item(target)
 		return 1
 
-/obj/item/stack/shuriken/throw_at(var/atom/A, throw_range, throw_speed)
+/obj/item/stack/shuriken/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	if(ishuman(usr))
 		var/mob/living/carbon/human/H = usr
 		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
@@ -147,7 +147,7 @@ var/list/valid_ninja_suits = list(
 			if(amount>1)
 				use(1)
 				var/obj/item/stack/shuriken/S = new(loc)
-				S.throw_at(A, throw_range, throw_speed)
+				S.throw_at(target, range, speed, override, fly_speed, whitelist, superthrow)
 				H.put_in_hands(src)
 				//statistics collection: ninja shuriken thrown
 				if(istype(N.stat_datum, /datum/stat/role/ninja))
@@ -918,9 +918,7 @@ Suit and assorted
 	spaceninja.equip_to_slot_or_del(new /obj/item/stack/shuriken(spaceninja,10), slot_l_store)
 	spaceninja.equip_to_slot_or_del(new /obj/item/device/radio/headset, slot_ears)
 	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen/double(spaceninja), slot_r_store)
-	spaceninja.internal = spaceninja.get_item_by_slot(slot_r_store)
-	if (spaceninja.internals)
-		spaceninja.internals.icon_state = "internal1"
+	spaceninja.equip_internals(spaceninja.get_item_by_slot(slot_r_store))
 
 	spaceninja.see_in_dark_override = 8
 	spaceninja.dark_plane_alpha_override = 155

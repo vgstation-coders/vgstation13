@@ -317,6 +317,28 @@ var/list/tag_suits_list = list()
 	body_parts_covered = FULL_TORSO
 	species_fit = list(INSECT_SHAPED)
 
+/obj/item/clothing/suit/wcoat/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 0
+	if(istype(target, /obj/item/clothing/under))
+		var/obj/item/clothing/C = target
+		var/obj/item/clothing/accessory/wcoat/A = new()
+		if(C.check_accessory_overlap(A))
+			to_chat(user, "<span class='notice'>You cannot attach more accessories of this type to \the [C].</span>")
+			qdel(A)
+			return
+		if(user.drop_item(src))
+			to_chat(user, "<span class='notice'>You attach \the [src] to \the [C].</span>")
+			C.attach_accessory(A)
+			transfer_fingerprints(src,A)
+			forceMove(A)
+			A.source_vest = src
+			A.update_icon()
+		else
+			qdel(A)
+		return 1
+	return ..()
+
 
 /obj/item/clothing/suit/apron/overalls
 	name = "coveralls"
@@ -532,7 +554,7 @@ var/list/tag_suits_list = list()
 		src.item_state = "suitjacket_blue_open"
 		to_chat(usr, "You unbutton the suit jacket.")
 	else
-		to_chat(usr, "You button-up some imaginary buttons on your [src].")
+		to_chat(usr, "You button-up some imaginary buttons on your [src.name].")
 		return
 	usr.update_inv_wear_suit()
 
@@ -1252,3 +1274,54 @@ var/list/tag_suits_list = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
 	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/suitjacket
+	name = "suit jacket"
+	desc = "A jacket for the trendy office worker."
+	icon_state = "suitjacket"
+	item_state = "suitjacket"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	body_parts_covered = FULL_TORSO|ARMS
+
+	blood_overlay_type = "coat"
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("buttons")
+	dye_base_iconstate_override = "suitjacket"
+
+	var/open = 0
+
+/obj/item/clothing/suit/suitjacket/New()
+	. = ..()
+	update_icon()
+
+/obj/item/clothing/suit/suitjacket/update_icon()
+	if(open)
+		icon_state = "suitjacket_open"
+		dye_base_iconstate_override = "suitjacket_open"
+	else
+		icon_state = "suitjacket"
+		dye_base_iconstate_override = "suitjacket"
+	..()
+
+/obj/item/clothing/suit/suitjacket/verb/toggle()
+	set name = "Toggle Jacket Buttons"
+	set category = "Object"
+	set src in usr
+
+	var/mob/user = usr
+
+	if(user.incapacitated())
+		return 0
+
+	if(open)
+		to_chat(usr, "You button up the jacket.")
+		body_parts_covered |= IGNORE_INV
+	else
+		to_chat(usr, "You unbutton the jacket.")
+		body_parts_covered ^= IGNORE_INV
+
+	open = !open
+	update_icon()
+	user.update_inv_wear_suit()

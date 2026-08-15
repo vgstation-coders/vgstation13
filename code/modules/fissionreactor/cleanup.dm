@@ -8,7 +8,7 @@ objects used when a reactor goes boomy boom so there's some nasty rads and thing
 
 //l.apply_radiation(rads, RAD_EXTERNAL)
 
-/obj/machinery/corium
+/obj/machinery/corium //in the house
 	name="corium"
 	desc="An amalgam of fissile material and reactor structures, melted together after a meltdown."
 	icon='icons/obj/fissionreactor/corium.dmi'
@@ -16,7 +16,7 @@ objects used when a reactor goes boomy boom so there's some nasty rads and thing
 	density=1
 	anchored=0
 	var/rads=0
-	
+
 /obj/machinery/corium/New(var/turf/location, var/radiation=0)
 	..()
 	icon_state="corium_[rand(1,3)]"
@@ -32,8 +32,11 @@ objects used when a reactor goes boomy boom so there's some nasty rads and thing
 			if(rand()<0.5)
 				new /obj/item/stack/sheet/plasteel(src.loc,rand(1,5))
 			qdel(src)
-	
-	
+
+/obj/machinery/corium/ex_act(severity)
+	if(prob(5))
+		. = ..()
+
 /obj/machinery/corium/process()
 	for(var/mob/living/l in range(src.loc, 10))
 		var/dx=l.x-x
@@ -42,4 +45,3 @@ objects used when a reactor goes boomy boom so there's some nasty rads and thing
 		l.apply_radiation(rads* (1.0-(dist/14))  , RAD_EXTERNAL) //div by 14 because 10 is a square, so multiply it by root2 to get the max distance as a circle.
 
 
-		

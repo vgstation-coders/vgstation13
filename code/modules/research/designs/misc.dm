@@ -8,6 +8,16 @@
 	category = "Misc"
 	build_path = /obj/item/floral_somatoray
 
+/datum/design/plant_analyzer
+	name = "Plant Analyzer"
+	desc = "A hand-held botanical scanner that reports detailed information about seeds, plants and produce."
+	id = "plant_analyzer"
+	req_tech = list(Tc_MAGNETS = 2, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
+	build_type = PROTOLATHE
+	build_path = /obj/item/device/analyzer/plant_analyzer
+	materials = list(MAT_IRON = 200, MAT_GLASS = 100)
+	category = "Misc"
+
 /datum/design/janicart_upgrade
 	name = "Janicart Upgrade Module"
 	desc = "Used to allow the janicart to clean surfaces while moving."
@@ -177,3 +187,23 @@
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_DIAMOND = 500)
 	category = "Misc"
 	build_path = /obj/item/clothing/glasses/hud/tracking
+
+/datum/design/pacification_beacon
+	name = "Pacification Beacon"
+	desc = "A device that emits a calming field, reducing aggression against the holder in nearby creatures. Psyonic batteries only permit a total active time of two minutes before rendering the device inert."
+	id = "pacification_beacon"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_BIOTECH = 3, Tc_EXPLORATION = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 2000, MAT_PLASMA = 1000, MAT_DIAMOND = 500)
+	category = "Misc"
+	build_path = /obj/item/device/pacification_beacon
+
+/datum/design/shuttle_holopainter
+	name = "Shuttle Holopainter"
+	desc = "A handheld device that installs a holographic color overlay on the shuttle's surfaces."
+	id = "shuttle_holopainter"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_EXPLORATION = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 1000, MAT_PLASMA = 1000)
+	category = "Misc"
+	build_path = /obj/item/device/shuttle_holopainter

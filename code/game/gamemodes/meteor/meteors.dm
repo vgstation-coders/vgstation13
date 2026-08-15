@@ -224,8 +224,8 @@ var/list/meteor_warnings = list()
 	if(end)
 		throw_at(end)
 
-/obj/item/projectile/meteor/throw_at(atom/end)
-	original = end
+/obj/item/projectile/meteor/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
+	original = target
 	starting = loc
 	current = loc
 	OnFired()
@@ -290,6 +290,17 @@ var/list/meteor_warnings = list()
 		return
 
 	explosion(get_turf(src), -1, 1, 3, 4, 0, 1, 0) //Tiny meteor doesn't cause too much damage
+	qdel(src)
+
+/obj/item/projectile/meteor/small/microdebris
+	name = "micro debris"
+	desc = "A tiny fragment of rock. It stings."
+
+/obj/item/projectile/meteor/small/microdebris/to_bump(atom/A)
+	if(loc == null)
+		return
+
+	explosion(get_turf(src), -1, 0, 1, 2, 0, 1, 0)
 	qdel(src)
 
 /obj/item/projectile/meteor/small/flash

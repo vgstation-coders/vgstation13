@@ -87,7 +87,7 @@
 			controlling_area = get_area(current_power)
 			PCC.Grant(src)
 		forceMove(current_power)
-	set_light(1.5,2,"#bbbb00")
+	set_light(1.5,2,COLOR_PULSEDEMON)
 	add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
 	var/datum/action/pd_toggle_drain/PTD = new(src)
 	PTD.Grant(src)
@@ -165,6 +165,18 @@
 		stat(null, text("Drain rate: [charge_absorb_amount]"))
 		stat(null, text("APC takeover time: [takeover_time] seconds"))
 
+/mob/living/simple_animal/hostile/pulse_demon/t_scanner_expose(ray_range)
+	if(plane != ABOVE_PLATING_PLANE || layer != PULSEDEMON_LAYER || alpha < OPAQUE || (invisibility > 0 && invisibility < INVISIBILITY_OBSERVER))
+		var/old_alpha = alpha
+		alpha = OPAQUE
+		plane = MOB_PLANE
+		layer = MOB_LAYER
+		spawn(1 SECONDS)
+			if(src)
+				alpha = old_alpha
+				plane = ABOVE_PLATING_PLANE
+				layer = PULSEDEMON_LAYER
+
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_glow()
 	if((charge < 10000) && is_under_tile())
 		set_light(0)
@@ -179,7 +191,7 @@
 	//2.5 at 100k
 	//3   at 200k
 	//3.5 at 400k, etc
-	set_light(range, 2, "#bbbb00")
+	set_light(range, 2, COLOR_PULSEDEMON)
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/power_lost()
 	health -= health_drain_rate

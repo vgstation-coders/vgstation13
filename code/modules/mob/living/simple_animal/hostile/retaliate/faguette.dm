@@ -84,7 +84,6 @@
 			return
 	return ..()
 
-
 /mob/living/simple_animal/hostile/retaliate/faguette/goblin
 	name = "mime goblin"
 	desc = "A tiny walking beret and gloves. Is it miming for a baguette?"
@@ -125,6 +124,11 @@
 
 /mob/living/simple_animal/hostile/retaliate/faguette/goblin/death(var/gibbed = FALSE)
 	..(TRUE)
+	if(gibbed)
+		return
+	handle_loot_drop()
+
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin/proc/handle_loot_drop()
 	new /obj/item/clothing/head/beret(src.loc)
 	new /obj/item/clothing/gloves/white(src.loc)
 	qdel(src)

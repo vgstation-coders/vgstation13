@@ -67,70 +67,82 @@
 		if(prob(10))
 			Jitter(10)
 
-	if(getBrainLoss() >= 60 && prob(3))
-		say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
-		"without oxigen blob don't evoluate?", \
-		"CAPTAINS A COMDOM", \
-		"[pick("", "that traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
-		"can u give me [pick("telikesis","halk","eppilapse")]?", \
-		"THe saiyans screwed", \
-		"Bi is THE BEST OF BOTH WORLDS>", \
-		"I WANNA PET TEH monkeyS", \
-		"stop grifing me!!!!", \
-		"SOTP IT#", \
-		"based and redpilled",\
-		"ho now talking like a milenian piece of shit is too unralistic in the fucking",\
-		"FUS RO DAH", \
-		"fucking 4rries!", \
-		"stat me", \
-		">my face", \
-		"roll it easy!", \
-		"waaaaaagh!!!", \
-		"red wonz go fasta", \
-		"FOR TEH EMPRAH", \
-		"lol2cat", \
-		"dem dwarfs man, dem dwarfs", \
-		"SPESS MAHREENS", \
-		"hwee did eet fhor khayosss", \
-		"lifelike texture ;_;", \
-		"luv can bloooom", \
-		"PACKETS!!!", \
-		"SARAH HALE DID IT!!!", \
-		"Don't tell Chase", \
-		"WOAH MAMA", \
-		"not so tough now huh", \
-		"WERE NOT BAY!!", \
-		"IF YOU DONT LIKE THE CYBORGS OR SLIMES WHY DONT YU O JUST MAKE YORE OWN!", \
-		"DONT TALK TO ME ABOUT BALANCE!!!!", \
-		"YOU AR JUS LAZY AND DUMB JAMITORS AND SERVICE ROLLS", \
-		"BLAME HOSHI!!!", \
-		"ARRPEE IZ DED!!!", \
-		"THERE ALL JUS MEATAFRIENDS!", \
-		"SOTP MESING WITH THE ROUNS SHITMAN!!!", \
-		"SKELINGTON IS 4 SHITERS!", \
-		"MOMMSI R THE WURST SCUM!!", \
-		"How do we engiener=", \
-		"try to live freely and automatically good bye", \
-		"why woud i take a pin pointner??", \
-		"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
-		"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
-		"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!", \
-		"I AM BASTE", \
-		"TEH TRAITOR THEY KILL PEEPLE BUT I RESPAWN!!!", \
-		"whats a keeper"))
-	else if(getBrainLoss() >= 60 && prob(3))
+	if(getBrainLoss(SPEECH_L) >= 60 && prob(3))
+		say_gibberish()
+	else if(getBrainLoss(INTELLIGENCE_L) >= 60 && prob(3))
 		emote("drool")
-	if(getBrainLoss() > 50 && prob(1.5))
-		if(canmove)
-			to_chat(src, "<span class='warning'>Your legs won't respond properly, you fall down.</span>")
-			Knockdown(3)
-	else if(getBrainLoss() > 35 && prob(1.5))
-		if(get_active_hand())
-			to_chat(src, "<span class='warning'>Your hand won't respond properly, you drop what you're holding.</span>")
-			drop_item()
-	else if(getBrainLoss() > 15 && prob(1.5))
-		if(eye_blurry <= 0)
-			to_chat(src, "<span class='warning'>It becomes hard to see for some reason.</span>")
-			eye_blurry = 10
+	if(getBrainLoss(MOTOR_L) > 50 && prob(1.5))
+		legfail()
+	else if(getBrainLoss(MOTOR_L) > 35 && prob(1.5))
+		handfail()
+	else if(getBrainLoss(SIGHT_L) > 15 && prob(1.5))
+		brain_eyeblur()
 	else if(getBrainLoss() > 0 && prob(2))
 		custom_pain("Your head feels numb and painful.")
+
+/mob/living/carbon/human/proc/legfail()
+	if(canmove)
+		to_chat(src, "<span class='warning'>Your legs won't respond properly, you fall down.</span>")
+		Knockdown(3)
+
+/mob/living/carbon/human/proc/handfail()
+	if(get_active_hand())
+		to_chat(src, "<span class='warning'>Your hand won't respond properly, you drop what you're holding.</span>")
+		drop_item()
+
+/mob/living/carbon/human/proc/brain_eyeblur()
+	if(eye_blurry <= 0)
+		to_chat(src, "<span class='warning'>It becomes hard to see for some reason.</span>")
+		eye_blurry = 10
+
+/mob/living/carbon/human/proc/say_gibberish()
+	say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
+	"without oxigen blob don't evoluate?", \
+	"CAPTAINS A COMDOM", \
+	"[pick("", "that traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
+	"can u give me [pick("telikesis","halk","eppilapse")]?", \
+	"THe saiyans screwed", \
+	"Bi is THE BEST OF BOTH WORLDS>", \
+	"I WANNA PET TEH monkeyS", \
+	"stop grifing me!!!!", \
+	"SOTP IT#", \
+	"based and redpilled",\
+	"ho now talking like a milenian piece of shit is too unralistic in the fucking",\
+	"FUS RO DAH", \
+	"fucking 4rries!", \
+	"stat me", \
+	">my face", \
+	"roll it easy!", \
+	"waaaaaagh!!!", \
+	"red wonz go fasta", \
+	"FOR TEH EMPRAH", \
+	"lol2cat", \
+	"dem dwarfs man, dem dwarfs", \
+	"SPESS MAHREENS", \
+	"hwee did eet fhor khayosss", \
+	"lifelike texture ;_;", \
+	"luv can bloooom", \
+	"PACKETS!!!", \
+	"SARAH HALE DID IT!!!", \
+	"Don't tell Chase", \
+	"WOAH MAMA", \
+	"not so tough now huh", \
+	"WERE NOT BAY!!", \
+	"IF YOU DONT LIKE THE CYBORGS OR SLIMES WHY DONT YU O JUST MAKE YORE OWN!", \
+	"DONT TALK TO ME ABOUT BALANCE!!!!", \
+	"YOU AR JUS LAZY AND DUMB JAMITORS AND SERVICE ROLLS", \
+	"BLAME HOSHI!!!", \
+	"ARRPEE IZ DED!!!", \
+	"THERE ALL JUS MEATAFRIENDS!", \
+	"SOTP MESING WITH THE ROUNS SHITMAN!!!", \
+	"SKELINGTON IS 4 SHITERS!", \
+	"MOMMSI R THE WURST SCUM!!", \
+	"How do we engiener=", \
+	"try to live freely and automatically good bye", \
+	"why woud i take a pin pointner??", \
+	"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
+	"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
+	"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!", \
+	"I AM BASTE", \
+	"TEH TRAITOR THEY KILL PEEPLE BUT I RESPAWN!!!", \
+	"whats a keeper"))

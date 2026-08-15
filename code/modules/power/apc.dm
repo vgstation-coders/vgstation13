@@ -391,21 +391,21 @@
 			update_overlay |= APC_UPOVERLAY_EQUIPMENT0
 		else if(equipment == 1)
 			update_overlay |= APC_UPOVERLAY_EQUIPMENT1
-		else if(equipment == 2)
+		else if(equipment >= 2)
 			update_overlay |= APC_UPOVERLAY_EQUIPMENT2
 
 		if(!lighting)
 			update_overlay |= APC_UPOVERLAY_LIGHTING0
 		else if(lighting == 1)
 			update_overlay |= APC_UPOVERLAY_LIGHTING1
-		else if(lighting == 2)
+		else if(lighting >= 2)
 			update_overlay |= APC_UPOVERLAY_LIGHTING2
 
 		if(!environ)
 			update_overlay |= APC_UPOVERLAY_ENVIRON0
 		else if(environ==1)
 			update_overlay |= APC_UPOVERLAY_ENVIRON1
-		else if(environ==2)
+		else if(environ>=2)
 			update_overlay |= APC_UPOVERLAY_ENVIRON2
 
 		if(pulselock)
@@ -956,11 +956,11 @@
 
 	var/mob/living/carbon/human/H = user
 	if (istype(H))
-		if(H.getBrainLoss() >= 60)
+		if(H.getBrainLoss(INTELLIGENCE_L) >= 60)
 			for(var/mob/M in viewers(src, null))
 				to_chat(M, "<span class='warning'>[H] stares cluelessly at [src] and drools.</span>")
 			return 0
-		else if(prob(H.getBrainLoss()))
+		else if(prob(H.getBrainLoss(INTELLIGENCE_L)))
 			to_chat(user, "<span class='warning'>You momentarily forget how to use [src].</span>")
 			return 0
 	return 1

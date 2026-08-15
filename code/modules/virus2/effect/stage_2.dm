@@ -39,8 +39,8 @@
 	encyclopedia = "Turning them blind for a few seconds."
 	stage = 2
 	badness = EFFECT_DANGER_HINDRANCE
-	multiplier = 4
-	max_multiplier = 10
+	multiplier = 10
+	max_multiplier = 20
 	max_chance = 8
 
 /datum/disease2/effect/blind/activate(var/mob/living/mob)

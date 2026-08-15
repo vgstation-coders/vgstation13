@@ -29,10 +29,10 @@
 
 //these give the same reagent, but in different ratios. DD is far more efficent, but to support our ghetto chem brothers, we let them get some of this, too. not as much, though.
 /datum/reagent/tricordrazine/irradiate(var/list/current_reagents=null)
-	return list(EQUALIZONE=0.1)
+	return list(EQUALIZONE=0.4)
 
 /datum/reagent/drink/doctor_delight/irradiate(var/list/current_reagents=null)
-	return list(EQUALIZONE=0.25)
+	return list(EQUALIZONE=1.0)
 
 //big powah.
 /datum/reagent/agentw/irradiate(var/list/current_reagents=null)

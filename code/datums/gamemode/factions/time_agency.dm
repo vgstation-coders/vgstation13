@@ -16,7 +16,7 @@
 
 /datum/faction/time_agent/New()
 	..()
-	load_dungeon(/datum/map_element/dungeon/timevoid)
+	load_dungeon(/datum/map_element/dungeon/timevoid, 0, TRUE)
 
 /datum/faction/time_agent/forgeObjectives()
 	return
@@ -53,6 +53,7 @@
 			return
 
 /datum/map_element/dungeon/timevoid //small room for the ninja to get oriented
+	name = "Time Void"
 	file_path = "maps/misc/timevoid.dmm"
 	unique = TRUE
 

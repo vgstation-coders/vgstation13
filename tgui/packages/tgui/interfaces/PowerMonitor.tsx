@@ -1,6 +1,7 @@
 import { sortBy } from 'common/collections';
 import { useState } from 'react';
-import { Box, Button, Chart, ColorBox, Flex, Icon, LabeledList, ProgressBar, Section, Table } from 'tgui-core/components';
+import React from 'react';
+import { Box, Button, Chart, ColorBox, Flex, Icon, LabeledList, ProgressBar, Section, Table, Tooltip } from 'tgui-core/components';
 import { flow } from 'tgui-core/fp';
 import { toFixed } from 'tgui-core/math';
 
@@ -43,6 +44,7 @@ type Area = {
 }
 
 type ApcStatus = {
+  name: string,
   priority_locked: boolean,
   priority: number,
   demand: number,
@@ -53,13 +55,20 @@ type ApcStatus = {
   f_demand: string,
 }
 
+type AreaDisplay = Area & {
+  charge?: number;
+  charging?: boolean;
+  demand?: number;
+  f_demand?: string;
+}
+
 export function powerRank(str: string): number {
   const unit = String(str.split(' ')[1]).toLowerCase();
   return ['w', 'kw', 'mw', 'gw'].indexOf(unit);
 }
 
 
-export const PowerMonitorContent = (props, context) => {
+export const PowerMonitorContent = () => {
   const { data } = useBackend<Data>();
   const { act } = useBackend<Data>();
   const { history } = data;
@@ -76,30 +85,21 @@ export const PowerMonitorContent = (props, context) => {
     ...history.supply,
     ...history.demand);
 
-    const areas = flow([
-      // Transform the assoc map given to us by BYOND into a plain array
-      entries => entries.map(([key, area]) => ({
-        ...area,
+    let areas: AreaDisplay[] = Object.entries(data.areas).map(([key, areaData]) => ({
+        ...(areaData as unknown as AreaDisplay),
         id: key,
-        details: false,
-      })),
-      // Sort that array if need be
-      areas => {
-        if (sortByField === 'name') {
-          return sortBy(areas, area => area.name);
-        }
-        if (sortByField === 'charge') {
-          return sortBy(areas, area => -(area.charge ?? 0));
-        }
-        if (sortByField === 'draw') {
-          return sortBy(areas, area => -(area.demand ?? 0));
-        }
-        return areas;
-      },
-    ])(Object.entries(data.areas));
+      }));
+
+      if (sortByField === 'name') {
+        areas = sortBy(areas, (area) => area.name);
+      } else if (sortByField === 'charge') {
+        areas = sortBy(areas, (area) => -(area.charge ?? 0));
+      } else if (sortByField === 'draw') {
+        areas = sortBy(areas, (area) => -(area.demand ?? 0));
+      }
 
   const priorityText = ["Critical", "Highest", "Very High", "High", "Normal", "Low", "Very Low", "Lowest", "Minimal"];
-  const [areaDetailExpanded, setAreaDetailExpanded] = useState(new Set());
+  const [areaDetailExpanded, setAreaDetailExpanded] = useState<Set<string>>(new Set());
 
   return (
     <>
@@ -156,19 +156,19 @@ export const PowerMonitorContent = (props, context) => {
             checked={sortByField === 'name'}
             content="Name"
             onClick={() => setSortByField(
-              sortByField !== 'name' && 'name'
+              sortByField !== 'name' ? 'name' : null
             )} />
           <Button.Checkbox
             checked={sortByField === 'charge'}
             content="Charge"
             onClick={() => setSortByField(
-              sortByField !== 'charge' && 'charge'
+              sortByField !== 'charge' ? 'charge' : null
             )} />
           <Button.Checkbox
             checked={sortByField === 'draw'}
             content="Draw"
             onClick={() => setSortByField(
-              sortByField !== 'draw' && 'draw'
+              sortByField !== 'draw' ? 'draw' : null
             )} />
         </Box>
         <Table>
@@ -185,14 +185,14 @@ export const PowerMonitorContent = (props, context) => {
             <Table.Cell textAlign="right">
               Draw
             </Table.Cell>
-            <Table.Cell collapsing title="Equipment">
-              Eqp
+            <Table.Cell collapsing>
+              <Tooltip content="Equipment">Eqp</Tooltip>
             </Table.Cell>
-            <Table.Cell collapsing title="Lighting">
-              Lgt
+            <Table.Cell collapsing>
+              <Tooltip content="Lighting">Lgt</Tooltip>
             </Table.Cell>
-            <Table.Cell collapsing title="Environment">
-              Env
+            <Table.Cell collapsing>
+              <Tooltip content="Environment">Env</Tooltip>
             </Table.Cell>
           </Table.Row>
           {areas.map((area, i) => (
@@ -206,7 +206,7 @@ export const PowerMonitorContent = (props, context) => {
                     icon={(areaDetailExpanded.has(area.id) === true ? "minus" : "plus") + "-square-o"}
                     color="transparent"
                     textColor="#ffffff"
-                    title={(areaDetailExpanded.has(area.id) === true ? "Hide" : "Show") + " details"}
+                    tooltip={(areaDetailExpanded.has(area.id) === true ? "Hide" : "Show") + " details"}
                     onClick={() => {
                       if (areaDetailExpanded.has(area.id) === true) {
                         areaDetailExpanded.delete(area.id);
@@ -263,7 +263,7 @@ export const PowerMonitorContent = (props, context) => {
 
               </tr>
               { areaDetailExpanded.has(area.id) === true
-                && Object.entries(area.machines).map(([key, machine]) =>
+                && Object.entries(area.machines).map(([key, machine]: [string, ApcStatus]) =>
                   (
                 <tr className="Table__row candystripe" key={key}>
                 <td>
@@ -371,10 +371,11 @@ const ApcStatusIndicator = props => {
   const tooltipText = tooltipName + ' ' + (power ? 'On' : 'Off')
     + ` [${mode ? 'auto' : 'manual'}]`;
   return (
-    <ColorBox
-      color={power ? 'good' : 'bad'}
-      content={mode ? undefined : 'M'}
-      title={tooltipText}
-    />
+    <Tooltip content={tooltipText}>
+      <ColorBox
+        color={power ? 'good' : 'bad'}
+        content={mode ? undefined : 'M'}
+      />
+    </Tooltip>
   );
 };

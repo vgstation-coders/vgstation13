@@ -64,6 +64,8 @@ var/global/list/ghdel_profiling_roundstart = list()
 	var/emag_cost = 0 // Emag energy cost (in MJ)
 	var/arcanetampered = 0 //A looot of things can be
 
+	var/cardinal_reflect = FALSE //For beams
+	var/disperse_coeff = 0.95
 
 	var/image/moody_light
 	var/list/moody_lights
@@ -815,7 +817,7 @@ its easier to just keep the beam vertical.
 			this.icon_state = "vomittox_[pick(1,4)]"
 
 		if(active && steal_reagents_from_mob && M && M.reagents)
-			M.reagents.trans_to(this, M.reagents.total_volume * 0.1)
+			M.reagents.trans_removable_to(this, 0.1, 1)
 
 
 /atom/proc/clean_blood()
@@ -896,15 +898,23 @@ its easier to just keep the beam vertical.
 /mob/var/list/atom/arcane_tampered_atoms = list()
 
 /atom/proc/arcane_act(var/mob/user, var/recursive = FALSE)
-	if(user)
+	if(ismob(user))
 		arcanetampered = user
 		user.arcane_tampered_atoms.Add(src)
 	else
 		arcanetampered = TRUE
+	. = "E'MAGI!"
 	if(recursive)
 		for(var/atom/A in contents)
-			A.arcane_act(user,TRUE)
-	return "E'MAGI!"
+			var/invoke = A.arcane_act(user,TRUE)
+			if(invoke != "E'MAGI!") //anything other than the default recursively? return that instead
+				. = invoke
+	if(reagents)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			if(R.arcane_id)
+				var/oldamt = R.volume
+				reagents.remove_reagent(R.id, oldamt*R.arcane_ratio)
+				reagents.add_reagent(R.arcane_id, oldamt*R.arcane_ratio)
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
@@ -981,7 +991,34 @@ its easier to just keep the beam vertical.
 		if(uppertext(C.ckey) == uppertext(fingerprintslast))
 			return C.mob
 
+/atom/New()
+	if(skip_turf_init)
+		return
+
+	// Incase any lighting vars are on in the typepath we turn the light on in New().
+	if (light_power && light_range)
+		update_light()
+
+	if (opacity && isturf(loc))
+		var/turf/T = loc
+		T.has_opaque_atom = TRUE // No need to recalculate it in this case, it's guaranteed to be on afterwards anyways.
+
+	//atom creation method that preloads variables at creation
+	if(use_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
+		_preloader.load(src)
+
+	. = ..()
+
+	particle_systems = list() //Lazy init
+
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING && canSmoothWith())
+		relativewall()
+		relativewall_neighbours()
+
 /atom/initialize()
+	if(skip_turf_init)
+		flags |= ATOM_INITIALIZED
+		return
 	if(canSmoothWith())
 		relativewall()
 	flags |= ATOM_INITIALIZED
@@ -1129,3 +1166,48 @@ its easier to just keep the beam vertical.
 
 /atom/proc/silicate_act(var/atom/A, var/mob/user)
 	return FALSE
+
+/atom/proc/assembly_pulse(var/obj/item/device/assembly/A)
+	return
+
+// Returns the virtual_z datum for this atom's area, or null if none
+/atom/proc/get_virtual_z()
+	var/turf/T = get_turf(src)
+	if(!T)
+		return null
+	var/datum/virtual_z/vz = T.v
+	if(!vz)
+		for(var/datum/virtual_z/check_vz in map.getAllVLevels())
+			if(check_vz.parent_z?.z != T.z)
+				continue
+			if(check_vz.x_min <= T.x && check_vz.x_max >= T.x && check_vz.y_min <= T.y && check_vz.y_max >= T.y)
+				vz = check_vz
+				break
+	return vz
+
+// Returns the virtual x coordinate of this atom
+/atom/proc/vx()
+	if(z <= 6)
+		return x
+	var/datum/virtual_z/V = get_virtual_z()
+	if(!V)
+		return x
+	return V.vx(src)
+
+// Returns the virtual y coordinate of this atom
+/atom/proc/vy()
+	if(z <= 6)
+		return y
+	var/datum/virtual_z/V = get_virtual_z()
+	if(!V)
+		return y
+	return V.vy(src)
+
+// Returns the virtual z coordinate of this atom
+/atom/proc/vz()
+	if(z <= 6)
+		return z
+	var/datum/virtual_z/V = get_virtual_z()
+	if(!V)
+		return z
+	return V.vz(src)

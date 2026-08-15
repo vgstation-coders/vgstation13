@@ -56,6 +56,19 @@
 	score.implant_phrases += "[usr.real_name] ([get_key(usr)]) rigged [imp_in.real_name] to explode on the phrase <font color='red'>\"[phrase]\"</font>!"
 	return 1
 
+/obj/item/weapon/implant/explosive/arcane_act(mob/user, recursive)
+	processing_objects.Add(src)
+	return ..()
+
+/obj/item/weapon/implant/explosive/bless()
+	if(arcanetampered)
+		processing_objects.Remove(src)
+	..()
+
+/obj/item/weapon/implant/explosive/process()
+	if(arcanetampered && prob(10))
+		imp_in.say(copytext(phrase,1,rand(2,length(phrase))))
+
 /obj/item/weapon/implant/explosive/emp_act(severity)
 	if(malfunction)
 		return

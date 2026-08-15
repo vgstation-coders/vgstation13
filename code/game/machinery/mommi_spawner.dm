@@ -14,14 +14,14 @@
 	idle_power_usage = 20
 	active_power_usage = 5000
 	var/recharge_time = 60 SECONDS
-	var/locked_to_zlevel = TRUE // Whether to lock the spawned MoMMIs to the z-level
+	var/locked_to_vlevel = TRUE // Whether to lock the spawned MoMMIs to the v-level
 	var/locked_law = "You belong to the station where you were created; do not leave it."
 	var/dorf = FALSE
 
 /obj/machinery/mommi_spawner/dorf
 	name = "dorf fabricator"
 	mommi_type = /mob/living/silicon/robot/mommi/nt
-	locked_to_zlevel = FALSE
+	locked_to_vlevel = FALSE
 
 /obj/machinery/mommi_spawner/dorf/PostMoMMIMaking(var/mob/living/silicon/robot/mommi/M)
 	..()
@@ -31,7 +31,7 @@
 /obj/machinery/mommi_spawner/clockwork
 	name = "clockwork fabricator"
 	mommi_type = /mob/living/silicon/robot/mommi/cogspider
-	locked_to_zlevel = FALSE
+	locked_to_vlevel = FALSE
 
 /obj/machinery/mommi_spawner/clockwork/PostMoMMIMaking(var/mob/living/silicon/robot/mommi/M)
 	..()
@@ -135,10 +135,10 @@
 		// Make the MoMMI!
 		log_admin("([user.ckey]/[user]) became a MoMMI as a ghost.")
 		var/mob/living/silicon/robot/mommi/M = new mommi_type(loc)
-		if(locked_to_zlevel)
+		if(locked_to_vlevel)
 			M.add_ion_law("[locked_law]")
 			var/turf/T = get_turf(src)
-			M.locked_to_z = T.z
+			M.locked_to_v = T.get_virtual_z()
 		M.key = user.key
 
 		PostMoMMIMaking(M)

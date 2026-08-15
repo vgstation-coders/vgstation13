@@ -43,6 +43,8 @@
 		if(reagents.total_volume) //Deal with the reagents in the food
 			reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))
 			spawn(5)
+				if(!reagents)
+					return
 				reagents.trans_to(M, amount_per_transfer_from_this)
 
 		playsound(M.loc,'sound/items/drink.ogg', rand(10, 50), 1)
@@ -69,6 +71,8 @@
 		if(reagents.total_volume) //Deal with the reagents in the food
 			reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))
 			spawn(5)
+				if(!reagents)
+					return
 				reagents.trans_to(M, amount_per_transfer_from_this)
 
 		playsound(M.loc,'sound/items/drink.ogg', rand(10,50), 1)
@@ -219,7 +223,7 @@
 			if(CHEFSPECIAL)
 				name = "\improper Chef Excellence's Special Sauce"
 				desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
-				icon_state = "emptycondiment"
+				icon_state = "chefsauce"
 			if(VINEGAR)
 				name = "malt vinegar bottle"
 				desc = "Perfect for fish and chips!"

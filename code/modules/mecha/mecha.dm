@@ -11,6 +11,12 @@
 #define STATE_BOLTSEXPOSED 1
 #define STATE_BOLTSOPENED 2
 
+#define MECHA_FORCE_DEFAULT 10
+#define MECHA_FORCE_WORKING 15
+#define MECHA_FORCE_COMBAT 30
+
+#define MECHA_MELEE_DELAY 10
+
 /obj/mecha
 	name = "Mecha"
 	desc = "Exosuit"
@@ -106,6 +112,19 @@
 
 	var/list/mech_sprites = list() //sprites alternatives for a given mech. Only have to enter the name of the paint scheme
 	var/paintable = 0
+	var/drifts = TRUE
+
+	var/mecha_punch_sound = 'sound/weapons/smash.ogg'
+	//---------------------------------------------STUFF THAT WAS MOVED FROM COMBAT.DM BECAUSE LETS ALLOW EVERY MECHA TO PUNCH WHY NOT
+	force = MECHA_FORCE_DEFAULT
+	var/list/destroyable_obj = list(
+		/obj/mecha,
+		/obj/structure/window,
+		/obj/structure/grille,
+		/obj/structure/cult,
+		/turf/simulated/wall,
+		)//This is fucking disgraceful I hate mecha code so much
+	//----------------------------------------------
 
 /obj/mecha/get_cell()
 	return cell
@@ -209,6 +228,8 @@
 	throwing = 2//dashing through windows and grilles
 
 /obj/mecha/can_apply_inertia()
+	if(!drifts && has_charge(step_energy_drain))
+		return 0 //doesn't drift in space if it has power and drifting is disabled
 	return 1 //No anchored check - so that mechas can fly off into space
 
 /obj/mecha/is_airtight()
@@ -246,7 +267,7 @@
 
 /obj/mecha/proc/add_fist()
 	fist = new
-	fist.name = "[src]'s fist"
+	fist.name = "[src.name]'s fist"
 	fist.force = src.force
 
 /obj/mecha/proc/add_radio()
@@ -340,8 +361,8 @@
 	return
 
 
-/obj/mecha/proc/melee_action(atom/target)
-	return
+///obj/mecha/proc/melee_action(atom/target)
+//	return now in combat.dm
 
 /obj/mecha/proc/range_action(atom/target)
 	return
@@ -419,7 +440,7 @@
 				ME.on_mech_turn()
 		can_move = 0
 		use_power(step_energy_drain)
-		if(istype(src.loc, /turf/space))
+		if(drifts && istype(src.loc, /turf/space))
 			if(!src.check_for_support())
 				src.pr_inertial_movement.start(list(src,direction))
 				src.log_message("Movement control lost. Inertial movement started.")
@@ -1603,6 +1624,9 @@
 				return 1
 	return 1
 
+/obj/mecha/GetAccess()
+	if(occupant)
+		return occupant.GetAccess()
 
 ////////////////////////////////////
 ///// Rendering stats window ///////

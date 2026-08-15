@@ -88,16 +88,10 @@
 	id_tag = "mat_store1";
 	name = "Material Storage"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "bY" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "ct" = (
 /obj/structure/catwalk{
@@ -244,10 +238,7 @@
 /obj/item/clothing/suit/radiation,
 /obj/item/weapon/tank/oxygen,
 /obj/item/clothing/mask/breath,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "fQ" = (
 /obj/structure/cable{
@@ -282,10 +273,7 @@
 /obj/item/weapon/shard,
 /obj/item/trash/liquidfood,
 /obj/structure/closet/crate/trashcart,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivelab)
 "gJ" = (
 /obj/structure/rack,
@@ -309,10 +297,7 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "gQ" = (
 /obj/structure/railing{
@@ -541,10 +526,7 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "lX" = (
 /obj/effect/decal/cleanable/dirt,
@@ -586,10 +568,7 @@
 /obj/item/stack/sheet/mineral/diamond{
 	amount = 10
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivelab)
 "mN" = (
 /obj/effect/landmark/corpse/skellington{
@@ -669,10 +648,7 @@
 	icon_state = "1-8";
 	tag = ""
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivecatwalk)
 "oN" = (
 /obj/structure/catwalk{
@@ -820,19 +796,14 @@
 	dir = 1;
 	invisibility = 1
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "rT" = (
 /obj/machinery/power/terminal{
 	dir = 4
 	},
 /obj/structure/cable,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivecatwalk)
 "rY" = (
 /obj/effect/decal/cleanable/dirt,
@@ -908,10 +879,7 @@
 /area/vault/radioactivelab)
 "tq" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "uc" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1158,9 +1126,7 @@
 /area/vault/radioactivelab)
 "yM" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivecatwalk)
 "yN" = (
 /obj/structure/catwalk{
@@ -1186,10 +1152,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/liquid_fuel,
 /obj/item/tool/weldingtool/gatling,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "zM" = (
 /obj/structure/rack,
@@ -1199,10 +1162,7 @@
 	singular_name = "phoron sheet"
 	},
 /obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "zZ" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1294,10 +1254,7 @@
 	pixel_x = 4;
 	pixel_y = -4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "BL" = (
 /obj/structure/cable{
@@ -1393,10 +1350,7 @@
 "Dn" = (
 /obj/structure/table/woodentable,
 /obj/item/device/flashlight/lamp/green,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "DD" = (
 /obj/machinery/suit_storage_unit{
@@ -1430,10 +1384,7 @@
 /obj/machinery/light/broken{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "Ej" = (
 /obj/machinery/newscaster{
@@ -1670,10 +1621,7 @@
 	},
 /area/vault/radioactivelab)
 "Lj" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivelab)
 "Ln" = (
 /obj/effect/decal/cleanable/soot,
@@ -1854,10 +1802,7 @@
 /area/vault/radioactivecatwalk)
 "NY" = (
 /obj/effect/decal/cleanable/ash,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivelab)
 "Ov" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1922,10 +1867,7 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivecatwalk)
 "Qu" = (
 /obj/effect/decal/cleanable/dirt,
@@ -2092,20 +2034,14 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 8
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "Ua" = (
 /turf/simulated/wall/r_wall,
 /area/vault/radioactivelab)
 "Uc" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1";
-	tag = "icon-platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivecatwalk)
 "Ux" = (
 /obj/machinery/portable_atmospherics/scrubber,
@@ -2124,10 +2060,7 @@
 	icon = 'icons/obj/doors/Doorplasma.dmi'
 	},
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3";
-	tag = "icon-platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/radioactivelab)
 "UM" = (
 /obj/structure/table,
@@ -2192,10 +2125,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/reagent_dispensers/fueltank,
 /obj/effect/decal/cleanable/liquid_fuel,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/radioactivelab)
 "Wa" = (
 /obj/effect/decal/cleanable/dirt,

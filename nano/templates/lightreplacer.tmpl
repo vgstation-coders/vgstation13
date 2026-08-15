@@ -1,4 +1,4 @@
-<!-- 
+<!--
 Title: Light Replacer UI
 Used In File(s): /code/game/obj/item/device/lightreplacer.dm
 -->
@@ -8,14 +8,14 @@ Used In File(s): /code/game/obj/item/device/lightreplacer.dm
 	<div class="line">
 		<div class="statusLabel">
 			Glass ({{:data.resources.glass}}/{{:data.resources.glass_max}})
-		</div>  
+		</div>
 		{{:helper.displayBar(data.resources.glass, 0, data.resources.glass_max)}}
 	</div>
 	{{if !data.settings.borg}}
 	<div class="line">
 		<div class="statusLabel">
 			Cardboard ({{:data.resources.cardboard}}/{{:data.resources.cardboard_max}})
-		</div>  
+		</div>
 		{{:helper.displayBar(data.resources.cardboard, 0, data.resources.cardboard_max)}}
 	</div>
 	{{/if}}
@@ -33,7 +33,8 @@ Used In File(s): /code/game/obj/item/device/lightreplacer.dm
 </div>
 <div class ="line">
 	{{:helper.link('Build light', 'hammer', {'build' : 'single'})}}
-	{{:helper.link('Recycle waste', 'lightbulb', {'recycle' : 'recycle'})}}
+	{{:helper.link('Recycle supply', 'lightbulb', {'recycle' : 'supply'})}}
+	{{:helper.link('Recycle waste', 'lightbulb', {'recycle' : 'waste'})}}
 	{{if data.settings.borg}}
 		{{:helper.link('Recharge glass', 'lightbulb', {'recharge' : 'recharge'})}}
 		{{:helper.link('Dump supply', 'lightbulb', {'dump' : 'dump'})}}

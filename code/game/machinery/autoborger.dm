@@ -104,12 +104,6 @@
 		// /vg/: Select from various name lists.
 		if(name_type == NAMETYPE_SILLY)
 			R.custom_name = pick(autoborg_silly_names)
-			R.custom_name = replacetext(R.custom_name, "{AINAME}", (!isnull(R.connected_ai) ? R.connected_ai.name : "AI"))
-			if(findtext(R.custom_name, "{###}"))
-				R.custom_name = replacetext(R.custom_name, "{###}", num2text(R.ident))
-			else
-				R.custom_name += "-[num2text(R.ident)]"
-
 
 		// /vg/: Allow AI to disable namepick.
 		R.namepick_uses=enable_namepick
@@ -222,6 +216,6 @@
 /obj/machinery/autoborger/mommi
 	name = "Autimatic Crab Factory 5000"
 	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, silent crab comes out'. Human must be lying down and alive. Has to cooldown between each use."
-	
+
 /obj/machinery/autoborger/mommi/do_transform(var/mob/living/carbon/human/H, var/deleteItems=FALSE, var/skipnaming=FALSE, var/malfAI=null)
 	return H.MoMMIfy(deleteItems,skipnaming,malfAI)

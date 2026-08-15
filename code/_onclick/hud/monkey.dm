@@ -210,8 +210,12 @@
 		inv_box.pointer_to_list = &src.adding
 
 	mymob.internals = new /obj/abstract/screen
-	mymob.internals.icon = ui_style
-	mymob.internals.icon_state = "internal0"
+	mymob.internals.icon = 'icons/mob/screen1.dmi'
+	if(iscarbon(mymob))
+		var/mob/living/carbon/C = mymob
+		C.update_internals()
+	else
+		mymob.internals.icon_state = "internal-oxy-0"
 	mymob.internals.name = "internal"
 	mymob.internals.screen_loc = ui_internal
 

@@ -235,6 +235,7 @@
 
 /obj/item/weapon/melee/defibrillator/improvised/New()
 	verbs -= /obj/item/weapon/melee/defibrillator/improvised/verb/remove_cell
+	return ..()
 
 /obj/item/weapon/melee/defibrillator/improvised/examine(var/mob/user)
 	. = ..()

@@ -226,6 +226,104 @@ Class Procs:
 	set waitfor = FALSE
 	return PROCESS_KILL
 
+/obj/machinery/proc/linkWith(var/mob/user, var/obj/machinery/buffer, var/list/context)
+	return 0
+
+/obj/machinery/proc/unlinkFrom(var/mob/user, var/obj/machinery/buffer)
+	return 0
+
+/obj/machinery/proc/canLink(var/obj/machinery/O, var/list/context)
+	return 0
+
+/obj/machinery/proc/isLinkedWith(var/obj/machinery/O)
+	return 0
+
+/obj/machinery/proc/getLink(var/idx)
+	return null
+
+/obj/machinery/proc/canClone(var/obj/machinery/O)
+	return 0
+
+/obj/machinery/proc/clone(var/obj/machinery/O)
+	return 0
+
+/obj/machinery/proc/linkMenu(var/obj/machinery/O)
+	var/dat=""
+	if(canLink(O, list()))
+		dat += " <a href='?src=\ref[src];link=1'>\[Link\]</a> "
+	return dat
+
+/obj/machinery/proc/format_tag(var/label,var/varname, var/act="set_tag")
+	var/value = vars[varname]
+	if(!value || value=="")
+		value="-----"
+	return "<b>[label]:</b> <a href=\"?src=\ref[src];[act]=[varname]\">[value]</a>"
+
+
+/obj/machinery/proc/update_multitool_menu(mob/user as mob)
+	var/obj/item/device/multitool/P = get_multitool(user)
+
+	if(!istype(P))
+		return 0
+
+	// Cloning stuff goes here.
+	var/obj/machinery/bufRef = P.buffer?.get();
+	if(P.clone && bufRef) // Cloning is on.
+		if(!canClone(bufRef))
+			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; you cannot clone to this device!</span>")
+			return
+
+		if(!clone(bufRef))
+			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; something went wrong when cloning to this device!</span>")
+			return
+
+		to_chat(user, "<span class='confirm'>A green light flashes on \the [P], confirming the device was cloned to.</span>")
+		return
+
+	var/dat = {"<html>
+	<head>
+		<title>[name] Configuration</title>
+		<style type="text/css">
+html,body {
+	font-family:courier;
+	background:#999999;
+	color:#333333;
+}
+
+a {
+	color:#000000;
+	text-decoration:none;
+	border-bottom:1px solid black;
+}
+		</style>
+	</head>
+	<body>
+		<h3>[name]</h3>
+"}
+	dat += multitool_menu(user,P)
+	if(P)
+		if(bufRef)
+			var/id = null
+			if(istype(bufRef, /obj/machinery/telecomms))
+				var/obj/machinery/telecomms/buffer = bufRef//Casting is better than using colons
+				id = buffer.id
+			else if(bufRef.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
+				id = bufRef:id_tag//sadly, : is needed
+
+			dat += "<p><b>MULTITOOL BUFFER:</b> [bufRef] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
+
+			dat += linkMenu(bufRef)
+
+			if(bufRef)
+				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
+			dat += "</p>"
+		else
+			dat += "<p><b>MULTITOOL BUFFER:</b> <a href='?src=\ref[src];buffer=1'>\[Add Machine\]</a></p>"
+	dat += "</body></html>"
+	user << browse(HTML_SKELETON(dat), "window=mtcomputer")
+	user.set_machine(src)
+	onclose(user, "mtcomputer")
+
 /obj/machinery/emp_act(severity)
 	malf_disrupt(MALF_DISRUPT_TIME)
 	if(use_power != MACHINE_POWER_USE_NONE && stat == 0)
@@ -541,10 +639,10 @@ Class Procs:
 */
 	if (ishuman(user) && !ignore_brain_damage)
 		var/mob/living/carbon/human/H = user
-		if(H.getBrainLoss() >= 60)
+		if(H.getBrainLoss(INTELLIGENCE_L) >= 60)
 			visible_message("<span class='warning'>[H] stares cluelessly at [src] and drools.</span>")
 			return 1
-		else if(prob(H.getBrainLoss()) || (H.undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)))
+		else if(prob(H.getBrainLoss(INTELLIGENCE_L)) || (H.undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)))
 			to_chat(user, "<span class='warning'>You momentarily forget how to use [src].</span>")
 			return 1
 
@@ -796,13 +894,14 @@ Class Procs:
 	if(component_parts)
 		if(panel_open || W.bluespace)
 			var/obj/item/weapon/circuitboard/CB = locate(/obj/item/weapon/circuitboard) in component_parts
+			var/list/sorted_parts = sortTim(W.contents.Copy(), /proc/cmp_rped_sort)
 			var/P
 			for(var/obj/item/A in component_parts)
 				for(var/D in CB.req_components)
 					if(ispath(A.type, D))
 						P = D
 						break
-				for(var/obj/item/B in W.contents)
+				for(var/obj/item/B in sorted_parts)
 					if(istype(B, P) && istype(A, P))
 						if(B.get_rating() > A.get_rating())
 							W.remove_from_storage(B, src)
@@ -810,6 +909,7 @@ Class Procs:
 							remove_part(A)
 							add_part(B)
 							B.forceMove(null)
+							sorted_parts -= B
 							to_chat(user, "<span class='notice'>[A.name] replaced with [B.name].</span>")
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
 							break

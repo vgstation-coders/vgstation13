@@ -49,7 +49,8 @@
 			if(world.time - timer >= 20 SECONDS)
 				timer = world.time
 				user.visible_message("<span class='notice'>[user] taps \the [name] with \the [W] and a rabbit pops out of \the [name]!</span>","<span class='notice'>You tap \the [name] with \the [W] and a rabbit pops out of \the [name]!</span>")
-				new/mob/living/simple_animal/rabbit(get_turf(src))
+				var/mob/living/simple_animal/rabbit/bunbun = new(get_turf(src))
+				bunbun.can_breed = FALSE
 	..()
 
 /obj/item/clothing/head/that/magic
@@ -895,3 +896,11 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+
+/obj/item/clothing/head/lepre
+	name = "leprechaun hat"
+	icon_state = "lepre"
+	item_state = "lepre"
+	desc = "Kiss me I'm Irish!"
+	flags = FPRINT
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)

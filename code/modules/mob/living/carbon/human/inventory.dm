@@ -180,7 +180,7 @@
 /mob/living/carbon/human/has_organ(name)
 
 	var/datum/organ/external/O = organs_by_name[name]
-	return O.is_existing()
+	return O?.is_existing()
 
 /mob/living/carbon/human/has_organ_for_slot(slot)
 	switch(slot)
@@ -284,9 +284,7 @@
 		success = 1
 		slot = slot_wear_mask
 		if(internal)
-			if(internals)
-				internals.icon_state = "internal0"
-			internal = null
+			equip_internals(null)
 		update_inv_wear_mask()
 	else if (W == wear_id)
 		wear_id = null

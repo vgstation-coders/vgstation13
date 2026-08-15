@@ -229,6 +229,8 @@ steam.start() -- spawns the effect
   */
 /proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE, var/silent = FALSE)
 	loc = get_turf(loc)
+	if(isnull(loc)) //something in nullspace, holy crap! abort sparks!
+		return
 	var/tally = -1 //Prevent the sparks from starting if there are already too many sparks on the same tile. -1 to exclude itself
 	for(var/obj/effect/sparks/S in loc.contents)
 		tally++
@@ -757,12 +759,15 @@ steam.start() -- spawns the effect
 
 		if(metal)
 			var/turf/T = get_turf(src)
-			if(istype(T, /turf/space) || istype(T, /turf/simulated/open))
-				T.ChangeTurf(/turf/simulated/floor/foamedmetal)
-			if(metal == 2)
-				var/obj/structure/foamedmetal/M = new(src.loc)
-				M.metal = metal
-				M.updateicon()
+			if(metal > 2 && (istype(T, /turf/space) || istype(T, /turf/simulated/open) || istype(T,/turf/simulated/floor)) && !istype(T,/turf/simulated/floor/shuttle))
+				T.ChangeTurf(/turf/simulated/floor/mineral/reticulite)
+			else
+				if(istype(T, /turf/space) || istype(T, /turf/simulated/open))
+					T.ChangeTurf(/turf/simulated/floor/foamedmetal)
+				if(metal == 2)
+					var/obj/structure/foamedmetal/M = new(src.loc)
+					M.metal = metal
+					M.updateicon()
 
 		flick("[icon_state]-disolve", src)
 		sleep(5)
@@ -859,7 +864,7 @@ steam.start() -- spawns the effect
 /datum/effect/system/foam_spread
 	var/amount = 5				// the size of the foam spread.
 	var/list/carried_reagents	// the IDs of reagents present when the foam was mixed
-	var/metal = 0				// 0=foam, 1=metalfoam, 2=ironfoam
+	var/metal = 0				// 0=foam, 1=metalfoam, 2=ironfoam, 3=RETICULITE FLOORS!!!
 
 /datum/effect/system/foam_spread/set_up(amt=5, loca, var/datum/reagents/carry = null, var/metalfoam = 0)
 	amount = round(sqrt(amt / 3), 1)
@@ -1191,3 +1196,51 @@ steam.start() -- spawns the effect
 	. = ..()
 	if(corner)
 		overlays += image(icon, icon_state = overlay_state)
+
+// For area-wide effects like radstorm flashing and stuff
+/obj/effect/area_alert_holder
+	name = "area alert holder"
+	desc = "you shouldn't see this"
+	density = 0
+	anchored = 1
+	plane = LIGHTING_PLANE
+	layer = MAPPING_AREA_LAYER // from areas.dm
+	mouse_opacity = 0
+	icon = 'icons/turf/areas.dmi'
+	var/area/parent_area = null
+
+/obj/effect/area_alert_holder/New(area/A)
+	..()
+	parent_area = A
+
+/obj/effect/area_alert_holder/proc/update()
+	if (!parent_area)
+		return
+
+	var/new_state = null
+	var/new_luminosity = 0
+
+	if (parent_area.areaapc)
+		var/has_power = (!parent_area.requires_power || parent_area.power_environ)
+		if ((parent_area.fire || parent_area.eject || parent_area.party || parent_area.radalert) && has_power)
+			new_luminosity = 1
+			// priority follows original updateicon impl
+			if (parent_area.radalert && !parent_area.fire)
+				new_state = "radiation"
+			else if (parent_area.fire && !parent_area.radalert && !parent_area.eject && !parent_area.party)
+				new_state = "blue"
+			else if (!parent_area.fire && parent_area.eject && !parent_area.party)
+				new_state = "red"
+			else if(parent_area.party && !parent_area.fire && !parent_area.eject)
+				new_state = "party"
+			else
+				new_state = "blue-red"
+
+	icon_state = new_state
+	luminosity = new_luminosity
+
+/obj/effect/area_alert_holder/proc/add_turf(turf/T)
+	T.vis_contents |= src
+
+/obj/effect/area_alert_holder/proc/remove_turf(turf/T)
+    T.vis_contents -= src

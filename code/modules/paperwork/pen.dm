@@ -36,7 +36,7 @@
 	expr.index = 1
 	while(expr.Find(text, expr.index))
 		message_admins("[key_name_admin(user)] added a video ([html_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
-		var/rtxt   = "<embed src=\"[html_encode(expr.group[1])]\" width=\"420\" height=\"344\" type=\"x-ms-wmv\" volume=\"85\" autoStart=\"0\" autoplay=\"true\" />"
+		var/rtxt   = "<video src=\"[html_encode(expr.group[1])]\" width=\"420\" height=\"344\" controls>Your browser does not support the video tag</video>"
 		text       = copytext(text, 1, expr.index) + rtxt + copytext(text, expr.index + length(expr.match))
 		expr.index = expr.index + length(rtxt)
 	return text
@@ -46,9 +46,9 @@
 	while(expr.Find(text,expr.index))
 		var/regex/youtubeid = regex("(youtu\\.be\\/|youtube\\.com\\/(watch\\?(.*&)?v=|(embed|v)\\/))(\[\\w\]+)", "gi")
 		youtubeid.Find(expr.group[1])
-		var/link = "http://www.youtube.com/embed/[youtubeid.group[5]]?autoplay=1&loop=1&controls=0&showinfo=0&rel=0"
+		var/link = "https://www.youtube.com/embed/[youtubeid.group[5]]?loop=1&controls=0&showinfo=0&rel=0"
 		message_admins("[key_name_admin(user)] added a youtube video ([html_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
-		var/rtxt   = "<iframe width=\"420\" height=\"345\" src=\"[link]\" frameborder=\"0\">"
+		var/rtxt   = "<iframe width=\"420\" height=\"345\" src=\"[link]\" frameborder=\"0\" allow=\"encrypted-media\"></iframe>"
 		text       = copytext(text, 1, expr.index) + rtxt + copytext(text, expr.index + length(expr.match))
 		expr.index = expr.index + length(rtxt)
 	return text
@@ -56,9 +56,10 @@
 // Attached to writing instrument. (pen/pencil/etc)
 /datum/writing_style
 	parent_type = /datum/speech_filter
+	var/can_sign = FALSE
 
 	var/style      = "font-family:Verdana, sans;"
-	var/style_sign = "font-family:'Times New Roman', monospace;text-style:italic;"
+	//var/style_sign = "font-family:'Times New Roman', monospace;text-style:italic;"
 
 /datum/writing_style/New()
 	..()
@@ -82,7 +83,7 @@
 	return
 
 
-/datum/writing_style/proc/Format(var/t, var/obj/item/weapon/pen/P, var/mob/user, var/obj/item/weapon/paper/paper)
+/datum/writing_style/proc/Format(var/t, var/obj/item/implement, var/mob/user, var/atom/movable/onto)
 	var/count = 0
 	if(expressions.len)
 		for(var/key in expressions)
@@ -91,33 +92,27 @@
 			count++
 			var/datum/speech_filter_action/SFA = expressions[key]
 			if(SFA && !SFA.broken)
-				t = SFA.Run(t,user,paper)
+				t = SFA.Run(t,user,onto)
 			if(count%100 == 0)
 				sleep(1) //too much for us.
-	t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
-	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
+	if(can_sign)
+		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
 	t = replacetext(t, "\[date\]", "[current_date_string]")
 	t = replacetext(t, "\[time\]", "[worldtime2text()]")
 	t = replacetext(t, "\[stationname\]", "[station_name()]")
-	t = replacetext(t, "\[logo\]", "<img src=\"http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png\">")
 
-	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
-
-	t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
-	t = replacetext(t, "\[/table\]", "</td></tr></table>")
-	t = replacetext(t, "\[row\]", "</td><tr>")
-	t = replacetext(t, "\[cell\]", "<td>")
-
-	var/text_color
-	if(istype(P, /obj/item/weapon/pen))
+	var/text_color = "black"
+	if(istype(implement, /obj/item/weapon/pen))
+		var/obj/item/weapon/pen/P = implement
 		text_color = P.colour
-	else if(istype(P, /obj/item/toy/crayon))
-		var/obj/item/toy/crayon/C = P
+	else if(istype(implement, /obj/item/toy/crayon))
+		var/obj/item/toy/crayon/C = implement
 		text_color = C.mainColour
 
 	return "<span style=\"[style];color:[text_color]\">[t]</span>"
 
 /datum/writing_style/pen/New()
+	can_sign = TRUE
 	addReplacement(REG_BBTAG("\\*"), "<li>")
 	addReplacement(REG_BBTAG("hr"), "<HR>")
 	addReplacement(REG_BBTAG("small"), "<span style=\"font-size:15px\">")
@@ -146,12 +141,22 @@
 	addReplacement(REG_BBTAG("/palatino"), 	"</span>")
 	addReplacement(REG_BBTAG("tnr"),		"<span style=\"font-family:Times New Roman\">")
 	addReplacement(REG_BBTAG("/tnr"),		"</span>")
+	addReplacement(REG_BBTAG("field"),		"<span class=\"paper_field\"></span>")
+	addReplacement(REG_BBTAG("logo"),		"<img src=\"http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png\">")
+
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+
+	addReplacement(REG_BBTAG("table"),		"<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	addReplacement(REG_BBTAG("/table"),		"</td></tr></table>")
+	addReplacement(REG_BBTAG("row"),		"</td><tr>")
+	addReplacement(REG_BBTAG("cell"),		"<td>")
 
 	addExpression(REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img"), ACT_BBCODE_IMG,list(),flags = "gi")
 
 	..() // Order of operations
 
 /datum/writing_style/script/New()
+	can_sign = TRUE
 	style = "font-family:'Segoe Script', cursive;"
 	addReplacement(REG_BBTAG("\\*"), "<li>")
 	addReplacement(REG_BBTAG("hr"), "<HR>")
@@ -161,6 +166,16 @@
 	addReplacement(REG_BBTAG("/tiny"), "</span>")
 	addReplacement(REG_BBTAG("list"), "<ul>")
 	addReplacement(REG_BBTAG("/list"), "</ul>")
+	addReplacement(REG_BBTAG("field"),		"<span class=\"paper_field\"></span>")
+	addReplacement(REG_BBTAG("logo"),		"<img src=\"http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png\">")
+
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+
+	addReplacement(REG_BBTAG("table"),		"<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	addReplacement(REG_BBTAG("/table"),		"</td></tr></table>")
+	addReplacement(REG_BBTAG("row"),		"</td><tr>")
+	addReplacement(REG_BBTAG("cell"),		"<td>")
+
 
 	addExpression(REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img"), ACT_BBCODE_IMG,list(),flags = "gi")
 
@@ -172,9 +187,21 @@
 
 	..()
 
-/datum/writing_style/crayon
+/datum/writing_style/crayon/New()
+	can_sign = TRUE
 	style = "font-family:'Comic Sans MS';font-weight:bold"
 
+	addReplacement(REG_BBTAG("field"),		"<span class=\"paper_field\"></span>")
+	addReplacement(REG_BBTAG("logo"),		"<img src=\"http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png\">")
+
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+
+	addReplacement(REG_BBTAG("table"),		"<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	addReplacement(REG_BBTAG("/table"),		"</td></tr></table>")
+	addReplacement(REG_BBTAG("row"),		"</td><tr>")
+	addReplacement(REG_BBTAG("cell"),		"<td>")
+
+	..()
 
 /*
  * Pens
@@ -365,6 +392,13 @@
 	if(reagents && reagents.total_volume)
 		reagents.trans_to(M,50)
 
+
+/obj/item/weapon/pen/lead
+	desc = "A primitive writing instrument made out of a thin piece of lead."
+	name = "lead stick"
+	icon_state="leadpen"
+	colour= "gray"
+	colour_rgb="#373737"
 
 /*
  * Sleepy Pens

@@ -5,7 +5,7 @@
 	var/hangman_phrase = ""
 
 /mob/living/carbon/human/say(var/message)
-	if(species && (species.flags & SPECIES_NO_MOUTH) && !get_message_mode(message) && !findtext(message, "*", 1, 2))
+	if(species && (species.flags & SPECIES_NO_MOUTH) && !get_message_mode(message) && !findtext(message, "*", 1, 2) && stat != DEAD)
 		species.silent_speech(src,message)
 	else
 		..()
@@ -20,7 +20,7 @@
 		return "stammers, [text]";
 	if(isliving(src))
 		var/mob/living/L = src
-		if (L.getBrainLoss() >= 60)
+		if (L.getBrainLoss(SPEECH_L) >= 60)
 			return "gibbers, [text]";
 	var/ending = copytext(text, length(text))
 	if (ending == "?")

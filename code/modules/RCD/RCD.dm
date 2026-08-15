@@ -357,17 +357,3 @@
 		if(selected.show(user,1))
 			return
 	user.hud_used.toggle_show_schematics_display(null, 1, src)
-
-/obj/item/device/rcd/mech
-	schematics = list(
-	/datum/rcd_schematic/decon,
-	/datum/rcd_schematic/con_floors,
-	/datum/rcd_schematic/con_walls,
-	/datum/rcd_schematic/con_airlock,
-	/datum/rcd_schematic/con_window,
-	)	
-
-	
-/obj/item/device/rcd/mech/attack_self(var/mob/living/user)
-	if(!selected || user.shown_schematics_background || !selected.show(user))
-		user.hud_used.toggle_show_schematics_display(schematics["Construction"], 0, src)

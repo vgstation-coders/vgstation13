@@ -225,7 +225,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/socialconfusion/activate(var/mob/living/mob)
-	if(mob.isUnconscious() || mob.getBrainLoss() >= 10)
+	if(mob.isUnconscious() || mob.getBrainLoss(SPEECH_L) >= 10)
 		return 1
 
 	var/mob/living/nearest_mob = null
@@ -407,7 +407,7 @@
 				mob.unarmed_attack_mob(target)
 
 /datum/disease2/effect/cult_hallucination
-	name = "Visions of the End-Times"	
+	name = "Visions of the End-Times"
 	desc = "UNKNOWN"
 	stage = 1
 	badness = EFFECT_DANGER_ANNOYING
@@ -422,7 +422,7 @@
 	var/client/C = mob.client
 	if(!C)
 		return
-	mob.whisper("...[pick(rune_words_rune)]...")	
+	mob.whisper("...[pick(rune_words_rune)]...")
 
 	var/list/turf_list = list()
 	for(var/turf/T in spiral_block(get_turf(mob), 40))
@@ -441,11 +441,11 @@
 				var/image/rune_holder = image('icons/effects/deityrunes.dmi',T,"")
 				var/image/rune_render = image('icons/effects/deityrunes.dmi',T,"fullrune-[runenum]")
 				rune_render.color = DEFAULT_BLOOD
-			
+
 				C.images += rune_holder
 
 		//		anim(target = T, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "fullrune-[runenum]-write", col = DEFAULT_BLOOD, sleeptime = 36)
-				
+
 				spawn(30)
 
 					rune_render.icon_state = "fullrune-[runenum]"

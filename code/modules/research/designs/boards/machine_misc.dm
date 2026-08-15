@@ -31,6 +31,16 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/photocopier
 
+/datum/design/book_binder
+	name = "Circuit Design (Book Binder)"
+	desc = "Allows for the construction of circuit boards to build book binders."
+	id = "photocopier"
+	req_tech = list ("powerstorage" = 2, "engineering" = 2, "programming" = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/bookbinder
+
 /datum/design/fax
 	name = "Circuit Design (Fax)"
 	desc = "Allows for the construction of circuit boards to build fax machines."

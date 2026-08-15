@@ -65,6 +65,7 @@
 					step_towards(AM, src)
 
 /datum/map_element/dungeon/rift_beach
+	name = "Rift Beach"
 	file_path = "maps/misc/riftbeach1.dmm"
 	unique = TRUE
 

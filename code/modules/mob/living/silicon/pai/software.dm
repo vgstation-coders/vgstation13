@@ -5,6 +5,7 @@
 															SOFT_FL = 10,
 															SOFT_RT = 10,
 															SOFT_RS = 10,
+															SOFT_VE = 10,
 
 															SOFT_WJ = 30,
 															SOFT_CS = 30,
@@ -13,7 +14,9 @@
 															SOFT_MS = 30, //records + HUD
 															SOFT_SS = 30, //records + HUD
 															SOFT_AS = 5,
+															SOFT_ME = 10,
 															SOFT_PS = 10,
+															SOFT_XS = 10,
 															SOFT_HM = 25
 
 															)
@@ -69,6 +72,10 @@
 				left_part = softwareLight()
 			if(SOFT_HM)
 				left_part = softwareHolomap()
+			if(SOFT_VE)
+				left_part = softwareVolumeEnhancer()
+			if(SOFT_ME)
+				left_part = softwareMesons()
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
 
@@ -187,6 +194,9 @@
 						return 0
 				spawn CheckDNA(M, src)
 
+		if(SOFT_NW)
+			painews.attack_hand(src)
+
 		if(SOFT_DM)
 			if(!isnull(pda))
 				var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in pda.applications
@@ -249,7 +259,7 @@
 			if(href_list["chem"])
 				if(!get_holder_of_type(loc, /mob))
 					to_chat(src, "<span class='warning'>You must have a carrier to inject with chemicals!</span>")
-				else if(chargeloop(SOFT_CS))
+				else if(!charge && chargeloop(SOFT_CS))
 					var/mob/M = get_holder_of_type(loc, /mob)
 					if(M) //Sanity
 						M.reagents.add_reagent(href_list["chem"], 15)
@@ -257,7 +267,7 @@
 				else
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
 		if(SOFT_FS)
-			if(href_list["food"] && chargeloop(SOFT_FS))
+			if(href_list["food"] && !charge && chargeloop(SOFT_FS))
 				var/foodType = href_list["food"]
 				var/found = FALSE
 				for (var/name in synthable_default_food)
@@ -282,6 +292,18 @@
 			if(!pps_device)
 				pps_device = new(src)
 			pps_device.attack_self(src)
+			if(!sharedfirmware && xps_device)
+				sharedfirmware = TRUE
+				ram += 10
+				to_chat(src, "Shared software dependencies with the expedition tracker, RAM cost refunded.")
+		if(SOFT_XS)
+			if(!xps_device)
+				xps_device = new(src)
+			xps_device.attack_self(src)
+			if(!sharedfirmware && pps_device)
+				sharedfirmware = TRUE
+				ram += 10
+				to_chat(src, "Shared software dependencies with the pAI position tracker, RAM cost refunded.")
 		if(SOFT_HM)
 			if(href_list["switch_target"])
 				if(holo_target == initial(holo_target))
@@ -294,7 +316,18 @@
 					holomap_device.toggleHolomap(M)
 			if(href_list["show_map"])
 				holomap_device.toggleHolomap(src)
-
+		if(SOFT_VE)
+			if(href_list["toggle"])
+				loudspeak = !loudspeak
+		if(SOFT_ME)
+			if(href_list["toggle"])
+				mesons = !mesons
+			if(mesons)
+				apply_hud_by_type(/datum/visioneffect/meson)
+				handle_regular_hud_updates()
+			if(!mesons)
+				remove_hud_by_type(/datum/visioneffect/meson)
+				handle_regular_hud_updates()
 		if(SOFT_UN)
 			if(href_list["cancel"])
 				uninstallprogress = -1
@@ -313,6 +346,15 @@
 						if(target==SOFT_PS)
 							qdel(pps_device)
 							pps_device = null
+							if(sharedfirmware)
+								ram -= cost
+							sharedfirmware = FALSE
+						if(target==SOFT_XS)
+							qdel(xps_device)
+							xps_device = null
+							if(sharedfirmware)
+								ram -= cost
+							sharedfirmware = FALSE
 						if(target==SOFT_HM)
 							qdel(holomap_device)
 							holomap_device = null
@@ -323,6 +365,11 @@
 							remove_hud_by_type(/datum/visioneffect/security/arrest)
 							remove_hud_by_type(/datum/visioneffect/job)
 							secHUD = FALSE
+						if(target==SOFT_VE)
+							loudspeak = initial(loudspeak)
+						if(target==SOFT_ME)
+							remove_hud_by_type(/datum/visioneffect/meson)
+							mesons = initial(mesons)
 						software.Remove(target)
 					uninstallprogress = -1
 				else
@@ -352,6 +399,8 @@
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_CM];sub=0'>Crew Manifest</a> <br>"
 		if(s == SOFT_DM)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_DM];sub=0'>Digital Messenger</a> <br>"
+		if(s == SOFT_NW)
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_NW];sub=0'>Newscaster</a> <br>"
 		if(s == SOFT_RS)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_RS];sub=0'>Remote Signaller</a> <br>"
 		if(s == SOFT_AS)
@@ -360,6 +409,8 @@
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_FL];sub=0'>Brightness Enhancer</a> <br>"
 		if(s == SOFT_RT)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_RT];sub=0'>Redundant Threading</a> <br>"
+		if(s == SOFT_VE)
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_VE];sub=0'>Volume Enhancer</a> <br>"
 	dat += "<br>"
 
 	//Standard
@@ -384,8 +435,12 @@
 	for(var/s in software)
 		if(s == SOFT_PS)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_PS];sub=0'>pAI Positioning System</a> <br>"
+		if(s == SOFT_XS)
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_XS];sub=0'>pAI Expedition Tracker</a> <br>"
 		if(s == SOFT_HM)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_HM];sub=0'>Holomap Viewer</a> <br>"
+		if(s == SOFT_ME)
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_ME];sub=0'>Mesons Augmentation</a> <br>"
 	dat += {"<br>
 		<br>
 		<a href='byond://?src=\ref[src];software=[SOFT_BY];sub=0'>Download additional software</a>"}
@@ -772,4 +827,18 @@ Target Machine: "}
 	dat+= "Creates a virtual map of the surrounding area.<BR>"
 	dat+= "Current mode: [holo_target == initial(holo_target)? "Internal Viewer" : "External Projector"] | <a href='byond://?src=\ref[src];software=[SOFT_HM];switch_target=1;sub=0'>Switch Type</a><BR>"
 	dat+= "<BR><a href='byond://?src=\ref[src];software=[SOFT_HM];[holo_target]=1;sub=0'>Toogle Holomap</a><BR>"
+	return dat
+
+//Megaphone
+/mob/living/silicon/pai/proc/softwareVolumeEnhancer()
+	var/dat = "<h3>Volume Enhancer</h3>"
+	dat += "Volume increase via targeted speaker overvoltage.<br><br>"
+	dat += "Volume enhancement [ (loudspeak) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=\ref[src];software=[SOFT_VE];sub=0;toggle=1'>Toggle Megaphone</a><br>"
+	return dat
+
+//Mesons
+/mob/living/silicon/pai/proc/softwareMesons()
+	var/dat = "<h3>Meson Firmware</h3>"
+	dat += "Low-intensity p-ray emitter for high resolution area mapping.<br><br>"
+	dat += "Meson firmware [ (mesons) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=\ref[src];software=[SOFT_ME];sub=0;toggle=1'>Toggle Mesons</a><br>"
 	return dat

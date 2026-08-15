@@ -8,8 +8,10 @@
 
 	var/datum/emote/E
 	E = E.emote_list[lowertext(act)]
-	if(!E || !E.run_emote(src, param, m_type, ignore_status, arguments))
+	if(!E)
 		to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
+	else
+		E.run_emote(src, param, m_type, ignore_status, arguments)
 
 /datum/emote/flip
 	key = "flip"

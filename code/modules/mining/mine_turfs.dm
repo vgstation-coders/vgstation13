@@ -184,7 +184,7 @@ var/list/icon_state_to_appearance = list()
 /turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/digsite_depressed = 0, var/defer_edges = FALSE)
 	mineral_turfs -= src
 	var/datum/finds/old_finds = finddatum
-	. = ..(N, tell_universe, 1, allow)
+	. = ..(N, tell_universe, 1, allow, defer_edges)
 	if(digsite_depressed && istype(.,/turf/unsimulated/floor/asteroid))
 		var/turf/unsimulated/floor/asteroid/AS = .
 		if(old_finds)
@@ -734,6 +734,7 @@ var/list/icon_state_to_appearance = list()
 	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
 
 /turf/unsimulated/mineral/random/New()
+	edge_overlays = list()
 	if (prob(mineralChance) && !mineral && mineralPool)
 		if(!name_to_mineral)
 			SetupMinerals()
@@ -1011,9 +1012,11 @@ var/list/icon_state_to_appearance = list()
 
 /turf/unsimulated/mineral/gibtonite/proc/countdown()
 	spawn(0)
-		while(stage == 1 && det_time > 0 && mineral.result_amount >= 1)
+		while(istype(src, /turf/unsimulated/mineral/gibtonite) && stage == 1 && det_time > 0 && mineral.result_amount >= 1)
 			det_time--
 			sleep(5)
+		if (!istype(src, /turf/unsimulated/mineral/gibtonite))
+			return
 		if(stage == 1 && det_time <= 0 && mineral.result_amount >= 1)
 			var/turf/bombturf = get_turf(src)
 			mineral.result_amount = 0
@@ -1051,7 +1054,12 @@ var/list/icon_state_to_appearance = list()
 		if(det_time >= 1 && det_time <= 2)
 			G.det_quality = 2
 			G.icon_state = "Gibtonite ore 2"
-	ChangeTurf(/turf/unsimulated/floor/asteroid/gibtonite_remains)
+
+	var/turf_type = mined_type
+	if(planet?.default_baseturf)
+		turf_type = planet.default_baseturf
+
+	ChangeTurf(turf_type)
 
 /turf/unsimulated/floor/asteroid/gibtonite_remains
 	var/det_time = 0

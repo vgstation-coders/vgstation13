@@ -245,3 +245,13 @@
 	materials = list(MAT_IRON = 500, MAT_GLASS = 200)
 	build_path = /obj/item/device/pager
 	category = "Engineering"
+
+/datum/design/gas_dowser
+	name = "Phasic Gas Dowser"
+	desc = "A handheld device that detects and points towards the nearest natural gas vent on a planet. Essential for locating extractable gas deposits."
+	id = "gas_dowser"
+	req_tech = list(Tc_ENGINEERING = 3, Tc_BLUESPACE = 2, Tc_EXPLORATION = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 500, MAT_GLASS = 200, MAT_URANIUM = 100)
+	build_path = /obj/item/weapon/pinpointer/gas_dowser
+	category = "Engineering"

@@ -106,6 +106,10 @@
 /datum/teleport/proc/isValidTurf(turf/T)
 	if(istype(T, /turf/unsimulated/wall/supermatter))
 		return FALSE //Don't teleport into supermatter turfs
+	if(T.turf_flags & NOJAUNT)
+		return FALSE //Don't teleport into vlevel border tiles and other no-teleport turfs
+	if(T.get_virtual_z() != destination.get_virtual_z())
+		return FALSE //Don't let teleport scatter land outside the destination's vlevel
 
 	return TRUE
 
@@ -116,12 +120,13 @@
 	var/area/destarea = get_area(destination)
 	if(precision)
 		var/list/posturfs = circlerangeturfs(destination,precision)
-		if(!posturfs || !posturfs.len)
-			return FALSE
-
-		do
-			destturf = pick_n_take(posturfs)
-		while(!isValidTurf(destturf) && posturfs.len)
+		while(posturfs?.len)
+			var/turf/potential_turf = pick_n_take(posturfs)
+			if(isValidTurf(potential_turf))
+				destturf = potential_turf
+				break
+		if(!destturf)
+			destturf = get_turf(destination) //no valid turf in scatter range, land on target
 	else
 		destturf = get_turf(destination)
 
@@ -143,10 +148,10 @@
 		P.reflected = TRUE//you can now get hit by the projectile you just fired. Careful with portals!
 		P.teleport_act()
 
-	if(curturf.z != destturf.z)
-		INVOKE_EVENT(teleatom, /event/z_transition, "user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z)
+	if(curturf.get_virtual_z() != destturf.get_virtual_z())
+		INVOKE_EVENT(teleatom, /event/v_transition, "user" = teleatom, "from_v" = curturf.get_virtual_z(), "to_v" = destturf.get_virtual_z())
 		for(var/atom/movable/AA in recursive_type_check(teleatom))
-			INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "from_z" = curturf.z, "to_z" = destturf.z)
+			INVOKE_EVENT(AA, /event/v_transition, "user" = AA, "from_v" = curturf.get_virtual_z(), "to_v" = destturf.get_virtual_z())
 
 	if(force_teleport)
 		teleatom.forceMove(destturf, no_tp = 1)
@@ -221,29 +226,19 @@
 
 	// Block teleportation to/from/within z-level 7 (procedurally-generated planets)
 	var/turf/curturf = get_turf(teleatom)
-	if(curturf && curturf.z == map.zProcGen)
-		if(ismob(teleatom))
-			var/mob/M = teleatom
-			to_chat(M, "<span class='warning'>A mysterious force prevents teleportation from this location!</span>")
+	if(!curturf)
 		return FALSE
-	if(destination.z == 7)
-		if(ismob(teleatom))
-			var/mob/M = teleatom
-			to_chat(M, "<span class='warning'>A mysterious force prevents teleportation to that location!</span>")
-		return FALSE
-
 	if(destination.z == map.zCentcomm) //centcomm z-level
 		if(istype(teleatom, /obj/mecha) && (universe.name != "Supermatter Cascade"))
 			var/obj/mecha/MM = teleatom
 			to_chat(MM.occupant, "<span class='danger'>The mech would not survive the jump to a location so far away!</span>")//seriously though, why? who wrote that?
-
 			return FALSE
 		if(!isemptylist(teleatom.search_contents_for(/obj/item/weapon/storage/backpack/holding)))
 			teleatom.visible_message("<span class='danger'>The Bag of Holding bounces off of the portal!</span>")
 			return FALSE
 
-	var/datum/zLevel/L = get_z_level(destination)
-	if (L.teleJammed && !ignore_jamming)
+	var/datum/virtual_z/vz = destination.get_virtual_z()
+	if (vz?.teleJammed == VZ_TELEPORTATION_FORBIDDEN && !ignore_jamming)
 		return FALSE
 
 	for (var/mob/M in recursive_type_check(teleatom, /mob))
@@ -255,7 +250,7 @@
 
 		if(istype(M, /mob/living))
 			var/mob/living/MM = M
-			if(MM.locked_to_z != FALSE && destination.z != MM.locked_to_z)
+			if(MM.locked_to_v && vz != MM.locked_to_v)
 				MM.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
 				return FALSE
 

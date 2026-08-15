@@ -117,6 +117,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE * 2 //No need for anyone to get suspicious.
 	custom_metabolism = 0.01
+	arcane_id = BICARIDINE
 
 /datum/reagent/carpotoxin
 	name = "Carpotoxin"
@@ -158,6 +159,7 @@
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 11.43
 	specheatcap = 0.1379
+	arcane_id = COFFEE
 
 /datum/reagent/chloralhydrate/on_mob_life(var/mob/living/M)
 	if(..())
@@ -181,6 +183,7 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "beerglass"
 	glass_desc = "A cold pint of pale lager."
+	arcane_id = BEER
 
 /datum/reagent/chloramine
 	name = "Chloramine"
@@ -250,6 +253,7 @@
 	color = "#ff91b7" //rgb: 255, 145, 183
 	density = 0.78
 	specheatcap = 3.47
+	arcane_id = SPIRITBREAKER
 
 /datum/reagent/heartbreaker/on_mob_life(var/mob/living/M)
 	if(..())
@@ -283,7 +287,8 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
 	custom_metabolism = 0.05
-	overdose_am = REAGENTS_OVERDOSE
+	overdose_am = 50
+	arcane_id = SILENCER
 
 /datum/reagent/honkserum/on_overdose(var/mob/living/H)
 	if (H?.mind?.miming)
@@ -296,6 +301,12 @@
 			qdel(H.wear_mask)
 			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")
 		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
+
+	if(ishuman(H))
+		var/mob/living/carbon/human/M = H
+		if(!(M_CLUMSY in M.mutations))
+			M.mutations.Add(M_CLUMSY)
+			M.visible_message("<span class='notice'>\The [M] seems to be stumbling over...</span>", "<span class='notice'>You feel clumsier than before.</span>'")
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 	if(..())
@@ -314,6 +325,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	specheatcap = 0.14
 	density = 13.56
+	arcane_id = METHYLIN
 
 /datum/reagent/mercury/on_mob_life(var/mob/living/M)
 	if(..())
@@ -336,6 +348,7 @@
 	custom_metabolism = 0.05
 	density = 0.78
 	specheatcap = 3.47
+	arcane_id = SPIRITBREAKER
 
 /datum/reagent/mindbreaker/on_mob_life(var/mob/living/M)
 	if(..())
@@ -346,16 +359,20 @@
 /datum/reagent/minttoxin
 	name = "Mint Toxin"
 	id = MINTTOXIN
-	description = "Useful for dealing with undesirable customers. The undiluted version of Mint Extract."
+	description = "Mint essence distilled to its purest form, a strong toxin against plants, mushrooms and animals. Useful for dealing with undesirable customers."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	density = 0.898
 	specheatcap = 3.58
-	custom_metabolism = 0.01 //so it lasts 10x as long as regular minttox
-	var/fatgokaboom = TRUE
+	custom_metabolism = 0.01 //so it lasts 10x as long as dilute essence
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM //about as nutritious as sugar
-	sport = SPORTINESS_SUGAR //a small performance boost from being COOL AND FRESH
+	sport = 2*SPORTINESS_SUGAR //a moderate performance boost from being COOL AND FRESH
+	plant_pests = -8
+	plant_weeds = -6
+	plant_toxins = 2
+	arcane_id = MINTESSENCE
 	var/chillcounter = 0
+	var/concentrated = TRUE //also used to reduce the toxin damage done with the dilute version
 
 /datum/reagent/minttoxin/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -367,7 +384,7 @@
 	if(M.bodytemperature > 310) //copypasted from the cold drinks check so I don't have to change minttox internally and maybe most certainly break shit in the process
 		M.bodytemperature = max(310, M.bodytemperature + (-5 * TEMPERATURE_DAMAGE_COEFFICIENT)) //that minty freshness my dude, chill out
 
-	if(fatgokaboom && (M_FAT in M.mutations))
+	if(concentrated && (M_FAT in M.mutations))
 		M.gib()
 
 	if(ishuman(M))
@@ -395,13 +412,32 @@
 					playsound(H, 'sound/effects/toothshatter.ogg', 50, 1)
 					H.audible_scream()
 					H.adjustBruteLoss(50) //imagine all your teeth violently exploding, shrapnel and shit
+		if(concentrated)
+			if(isdiona(H) || ismushroom(H)) //technically more toxic to shrooms than plants but this is good enough
+				H.adjustToxLoss(4)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a sharp cold pain in your stems!</span>")
+
+			if(isinsectoid(H)) //more toxic to bugs than to plants
+				H.adjustToxLoss(6)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a cold stabing pain burn your carapace from within!</span>")
+
+			if(iscatbeast(H)) //pet cats are immune it's space magic ain't gotta explain shit
+				H.adjustToxLoss(10)
+				if(prob(1))
+					to_chat(H, "<span class='warning'>You feel a sharp pain in your liver!</span>")
 
 /datum/reagent/minttoxin/essence
 	name = "Mint Essence"
 	id = MINTESSENCE
-	description = "Minty freshness in liquid form!"
+	description = "The raw, unrefined essence of freshness!"
 	custom_metabolism = 0.1 //toxin lasts 10x as long
-	fatgokaboom = FALSE
+	concentrated = FALSE
+	plant_pests = -2
+	plant_weeds = -1
+	plant_toxins = 0
+	arcane_id = MINTTOXIN
 
 /datum/reagent/mutagen
 	name = "Unstable Mutagen"
@@ -410,6 +446,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
+	arcane_id = RADIUM
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -542,6 +579,7 @@
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
 	var/disease_type = DISEASE_CYBORG
+	//arcane_id = XENOMICROBES
 
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -633,6 +671,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#3B0805" //rgb: 59, 8, 5
 	custom_metabolism = 0.05
+	arcane_id = SYNAPTIZINE
 
 /datum/reagent/spiritbreaker/on_mob_life(var/mob/living/M)
 	if(..())
@@ -653,6 +692,7 @@
 	custom_metabolism = 0.1
 	density = 3.56
 	overdose_am = REAGENTS_OVERDOSE // So you can't pretend that you "didn't know it was an OD"
+	arcane_id = CHLORALHYDRATE
 
 /datum/reagent/stoxin/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -699,6 +739,7 @@
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	density = 1.4 //Let's just assume it's alpha-solanine
+	arcane_id = ANTI_TOXIN
 	plant_toxins = 2
 
 /datum/reagent/toxin/on_mob_life(var/mob/living/M)
@@ -714,6 +755,7 @@
 	description = "Microbes with an entirely alien cellular structure."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#535E66" //rgb: 83, 94, 102
+	arcane_id = NANITES
 
 /datum/reagent/xenomicrobes/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())

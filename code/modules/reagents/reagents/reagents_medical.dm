@@ -125,6 +125,7 @@
 	pain_resistance = 15
 	density = 5.98
 	specheatcap = 0.5
+	//arcane_id = IMPEDREZENE
 
 /datum/reagent/alkycosine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -143,6 +144,7 @@
 	pain_resistance = 10
 	density = 2.98
 	specheatcap = 0.77
+	//arcane_id = IMPEDREZENE
 
 /datum/reagent/alkysine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -198,12 +200,13 @@
 	data = list(
 		"threshold" = 35,
 		)
+	//arcane_id = PLACEBO //now we found somewhere for it
 
 /datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
 	..()
 
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(M.bodytemperature < BODYTEMP_DEFAULT)
+		M.bodytemperature = min(BODYTEMP_DEFAULT, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 //natural antipathogenic, found in garlic and kudzu
 /datum/reagent/antipathogenic/allicin
@@ -216,6 +219,7 @@
 	data = list(
 		"threshold" = 30,
 		)
+	//arcane_id = PLACEBO //now we found somewhere for it
 
 /datum/reagent/antipathogenic/allicin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -263,6 +267,7 @@
 	data = list(
 		"threshold" = 50,
 		)
+	//arcane_id = RADIUM
 
 /datum/reagent/antipathogenic/spaceacillin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(0.2)
@@ -278,6 +283,7 @@
 	data = list(
 		"threshold" = 95,
 		)
+	//arcane_id = RADIUM
 
 /datum/reagent/antipathogenic/nanofloxacin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
@@ -294,6 +300,7 @@
 	density = 1.49033
 	specheatcap = 0.55536
 	overdose_am = 60
+	//arcane_id = TOXIN
 	plant_toxins = -10
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
@@ -356,6 +363,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.67
 	specheatcap = 0.72198
+	//arcane_id = URANIUM
 
 /datum/reagent/arithrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -375,6 +383,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.96
 	specheatcap = 0.57
+	arcane_id = BICARODYNE
 
 /datum/reagent/bicaridine/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -460,6 +469,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	data = 0
 	density = 1.01
 	specheatcap = 3.88
+	arcane_id = LIQUIDPCP
 
 /datum/reagent/citalopram/on_mob_life(var/mob/living/M as mob)
 	if(..())
@@ -481,6 +491,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 2.27
+	//arcane_id = BLOOD
 	plant_toxins = -5
 	plant_health = 5
 
@@ -489,10 +500,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-3)
-		M.adjustOxyLoss(-3)
-		M.heal_organ_damage(3,3)
-		M.adjustToxLoss(-3)
+		var/multiplier = 1
+		if(M.bodytemperature < 95)
+			multiplier = 2
+		M.adjustCloneLoss(-3 * multiplier)
+		M.adjustOxyLoss(-3 * multiplier)
+		M.heal_organ_damage(3 * multiplier, 3 * multiplier)
+		M.adjustToxLoss(-3 * multiplier)
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
@@ -529,6 +543,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	var/armstronged_at = 0 //world.time
 	density = 13.421
 	specheatcap = 0.24318
+	arcane_id = NANITES
 
 /datum/reagent/comnanobots/reagent_deleted()
 	if(..())
@@ -641,7 +656,7 @@ var/global/list/charcoal_doesnt_remove=list(
 /datum/reagent/cargonanobots
 	name = "Cargonian Nanobots"
 	id = CARGONANOBOTS
-	description = "Microscopic robots intended for use in humans. Configured for departmental seccession and overthrowals."
+	description = "Microscopic robots intended for use in humans. Configured for departmental secession and overthrowals."
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#A05F3F" //rgb: 52, 63, 66
@@ -670,11 +685,12 @@ var/global/list/charcoal_doesnt_remove=list(
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
 	id = CRYOXADONE
-	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly."
+	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly, with an even greater effect at under 95K."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
+	//arcane_id = LEPORAZINE
 	plant_toxins = -3
 	plant_health = 3
 
@@ -683,10 +699,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-1)
-		M.adjustOxyLoss(-1)
-		M.heal_organ_damage(1,1)
-		M.adjustToxLoss(-1)
+		var/multiplier = 1
+		if(M.bodytemperature < 95)
+			multiplier = 2
+		M.adjustCloneLoss(-1 * multiplier)
+		M.adjustOxyLoss(-1 * multiplier)
+		M.heal_organ_damage(1 * multiplier, 1 * multiplier)
+		M.adjustToxLoss(-1 * multiplier)
 
 /datum/reagent/cryptobiolin
 	name = "Cryptobiolin"
@@ -714,8 +733,9 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 3.9
 	specheatcap = 0.12812
 	custom_metabolism = 0.1
-	fission_time=6000 // 100 minutes (1hr 40)
-	fission_absorbtion=5000
+	fission_time=3000 // 50 minutes
+	fission_absorbtion=10000
+	arcane_id = MILK
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -751,6 +771,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.75
 	specheatcap = 0.36
+	//arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/dermaline/on_mob_life(var/mob/living/M)
 	if(..())
@@ -766,6 +787,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#4CE9FF" //rgb: 74, 230, 252
 	density = 2.28
 	specheatcap = 0.91
+	//arcane_id = LEXORIN
 
 /datum/reagent/dexalin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -800,6 +822,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#4CE9FF" //rgb: 74, 230, 252
 	density = 4.14
 	specheatcap = 0.29
+	//arcane_id = LEXORIN
 
 /datum/reagent/dexalinp/on_mob_life(var/mob/living/M)
 	if(..())
@@ -833,6 +856,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#BBEDA4" //rgb: 187, 237, 164
 	density = 1.44
 	overdose_am = 5
+	arcane_id = DIABEETUSOL
 
 	var/on_a_diet
 	var/oldmetabolism
@@ -873,6 +897,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#605048" //rgb: 96, 80, 72
 	density = 1.63
 	specheatcap = 0.36
+	arcane_id = ETHANOL
 
 /datum/reagent/ethylredoxrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -895,6 +920,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_am = REAGENTS_OVERDOSE
 	density = 3.25
 	specheatcap = 0.5220
+	//arcane_id = URANIUM
 
 /datum/reagent/hyronalin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -910,13 +936,16 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.92
 	specheatcap = 1.45
+	//arcane_id = GRUE_BILE
 
 /datum/reagent/imidazoline/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
-	M.eye_blurry = max(M.eye_blurry - 5, 0)
-	M.eye_blind = max(M.eye_blind - 5, 0)
+	//Imidazoline will immediately cap eye_blurry and eye_blind at 10, allowing them to fade out over the next few seconds
+	M.eye_blurry = max(min(10,M.eye_blurry--), 0)
+	M.eye_blind = max(min(10,M.eye_blind--), 0)
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
@@ -972,6 +1001,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.58
 	specheatcap = 1.65
+	//arcane_id = GRUE_BILE
 
 /datum/reagent/inacusiate/on_mob_life(var/mob/living/M)
 	if(..())
@@ -992,6 +1022,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	pain_resistance = 25
 	density = 1.66
 	specheatcap = 0.8
+	//arcane_id = OXYGEN
 
 /datum/reagent/inaprovaline/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -1011,6 +1042,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C2733F" //rgb: 94, 15, 63
 	density = 2.3
 	specheatcap = 0.51
+	//arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/kelotane/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1042,6 +1074,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 5.65
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Good luck heating something with leporazine in it
+	//arcane_id = FROSTOIL
 
 /datum/reagent/leporazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1080,6 +1113,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.2
 	density = 4.92
 	specheatcap = 0.15053
+	//arcane_id = URANIUM
 
 //The anti-nutriment
 /datum/reagent/lipozine
@@ -1091,6 +1125,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#BBEDA4" //rgb: 187, 237, 164
 	density = 2.63
 	specheatcap = 0.38113
+	arcane_id = DIABEETUSOL
 
 /datum/reagent/lipozine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1126,6 +1161,10 @@ var/global/list/charcoal_doesnt_remove=list(
 	var/percent_machine = 0
 	density = 9.664
 	specheatcap = 0.19999
+	//arcane_id = NANITES
+
+/datum/reagent/mednanobots/proc/cyberhorrors(var/mob/living/M)
+	return TRUE
 
 /datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1140,6 +1179,7 @@ var/global/list/charcoal_doesnt_remove=list(
 			if (E.status & ORGAN_BROKEN)
 				E.status &= ~ORGAN_BROKEN //What do I owe you?
 				E.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
+				E.brute_dam = min(E.brute_dam, E.min_broken_damage) //Heal enough to prevent immediate re-fracture
 				holder.remove_reagent(MEDNANOBOTS, 0.10)
 			if (E.status & ORGAN_BLEEDING)
 				E.status &= ~ORGAN_BLEEDING //FOR FREE?!
@@ -1148,6 +1188,13 @@ var/global/list/charcoal_doesnt_remove=list(
 			if(I.damage)
 				I.damage = max(0, I.damage - 5) //Heals a whooping 5 organ damage.
 				holder.remove_reagent(MEDNANOBOTS, 0.10) //Less so it doesn't vanish the nanobot supply
+			if(istype(I,/datum/organ/internal/brain))
+				var/datum/organ/internal/brain/B = I
+				for(var/damtype in B.specific_damages)
+					B.specific_damages[damtype] = max(0, B.specific_damages[damtype] - 5) //Heals a whooping 5 damage.
+			I.status &= ~ORGAN_BROKEN //What do I owe you?
+			I.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
+			I.status &= ~ORGAN_BLEEDING //FOR FREE?!
 	if(M.getOxyLoss() || M.getBruteLoss(TRUE) || M.getToxLoss() || M.getFireLoss(TRUE) || M.getCloneLoss())
 		M.adjustOxyLoss(-5)
 		M.heal_organ_damage(5, 5) //Heals Brute and Burn. It heals the mob, not individual organs.
@@ -1155,7 +1202,7 @@ var/global/list/charcoal_doesnt_remove=list(
 		M.adjustCloneLoss(-5) //Repairs DNA!
 		holder.remove_reagent(MEDNANOBOTS, 0.25) //Consumes a quarter of an unit every time it heals.
 	if(M.dizziness)
-		M.dizziness = max(0, M.dizziness - 15)
+		M.AdjustDizzy(-15)
 	if(M.confused)
 		M.remove_confused(5)
 	for(var/datum/disease/D in M.viruses) //Diseases that work under the second rework of viruses, or "Viro 3"
@@ -1170,42 +1217,64 @@ var/global/list/charcoal_doesnt_remove=list(
 			D2.stage--
 			if(D2.stage < 1)
 				D2.cure(M)
-	switch(volume)
-		if(0.1 to 5)
-			if(percent_machine>5) //Slowly lowers the percent machine to a minimum of 5 when you aren't above 5 units.
-				percent_machine -= 1
+	if(cyberhorrors(M))
+		switch(volume)
+			if(0.1 to 5)
+				if(percent_machine>5) //Slowly lowers the percent machine to a minimum of 5 when you aren't above 5 units.
+					percent_machine -= 1
+					if(prob(20))
+						to_chat(M, pick("You feel more like yourself again."))
+			if(6 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
+				percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
 				if(prob(20))
-					to_chat(M, pick("You feel more like yourself again."))
-
-		if(6 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
-			percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
-			if(prob(20))
-				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
-								"<span class='warning'>You feel different, somehow...</span>"))
-			if(prob(percent_machine))
-				holder.add_reagent(MEDNANOBOTS, 20)
-				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
-		if(21 to INFINITY) //Now you've done it.
-			if(istype(M, /mob/living/simple_animal/hostile/monster/cyber_horror))
-				return
-			spawning_horror = 1
-			to_chat(M, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
-			spawn(60)
-				if(spawning_horror == 1)
-					to_chat(M, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
-					message_admins("[key_name(M)] [M] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(M)])")
-					if(ishuman(M))
-						var/mob/living/carbon/human/H = M
-						var/typepath
-						typepath = text2path("/mob/living/simple_animal/hostile/monster/cyber_horror/[H.species.name]")
-						if(ispath(typepath))
-							new typepath(M.loc)
+					to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
+									"<span class='warning'>You feel different, somehow...</span>"))
+				if(prob(percent_machine))
+					holder.add_reagent(MEDNANOBOTS, 20)
+					to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
+			if(21 to INFINITY) //Now you've done it.
+				if(istype(M, /mob/living/simple_animal/hostile/monster/cyber_horror))
+					return
+				spawning_horror = 1
+				to_chat(M, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
+				spawn(60)
+					if(spawning_horror == 1)
+						to_chat(M, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
+						message_admins("[key_name(M)] [M] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(M)])")
+						if(ishuman(M))
+							var/mob/living/carbon/human/H = M
+							var/typepath
+							typepath = text2path("/mob/living/simple_animal/hostile/monster/cyber_horror/[H.species.name]")
+							if(ispath(typepath))
+								new typepath(M.loc)
+							else
+								new /mob/living/simple_animal/hostile/monster/cyber_horror(M.loc)
 						else
-							new /mob/living/simple_animal/hostile/monster/cyber_horror(M.loc)
-					else
-						new /mob/living/simple_animal/hostile/monster/cyber_horror/monster(M.loc,M)
-					spawning_horror = 0
-					M.gib()
+							new /mob/living/simple_animal/hostile/monster/cyber_horror/monster(M.loc,M)
+						spawning_horror = 0
+						M.gib()
+
+/datum/reagent/mednanobots/grey
+	name = "Grey Zeptobots"
+	id = GREYZEPTOBOTS
+	description = "Almost atomic-sized sentient dust intended for use in greys. Configured for rapid healing upon infiltration into the body."
+
+/datum/reagent/mednanobots/grey/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(holder.has_any_reagents(list(MERCURY, IMPEDREZENE, SPACE_DRUGS)))
+		holder.remove_reagents(list(MERCURY, IMPEDREZENE, SPACE_DRUGS), 5 * REM)
+	if(holder.has_any_reagents(list(MINDBREAKER, SPIRITBREAKER)))
+		holder.remove_reagents(list(MINDBREAKER, SPIRITBREAKER), 3 * REM) // The only other chemical that removes spiritbreaker besides adminordrazine
+	if(ishuman(M))
+		M.adjustBrainLoss(-10)
+		M.hallucination = 0
+		M.dizziness = 0
+		M.confused = 0
+
+/datum/reagent/mednanobots/grey/cyberhorrors(var/mob/living/M)
+	return !isgrey(M)
 
 /datum/reagent/methylin
 	name = "Methylin"
@@ -1216,6 +1285,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.03
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 4.09
+	arcane_id = IMPEDREZENE
 
 /datum/reagent/methylin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1267,6 +1337,12 @@ var/global/list/charcoal_doesnt_remove=list(
 	dupeable = FALSE
 	color = "#3E3959" //rgb: 62, 57, 89
 	density = 2.366
+	arcane_id = NANITES
+
+/datum/reagent/nanobots/zepto
+	name = "Zeptobots"
+	id = ZEPTOBOTS
+	description = "Almost atomic-sized sentient dust intended for use in greys. Must be loaded with further chemicals to be useful."
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
@@ -1277,6 +1353,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.05
 	density = 1.26
 	specheatcap = 24.59 //contains plasma
+	//arcane_id = PLACEBO
 
 /datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1304,6 +1381,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C855DC"
 	pain_resistance = 60
 	density = 1.26
+	//arcane_id = PLACEBO
 
 /datum/reagent/paroxetine
 	name = "Paroxetine"
@@ -1315,6 +1393,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	data = 0
 	density = 1.19
 	specheatcap = 1.99
+	arcane_id = LIQUIDPCP
 
 /datum/reagent/paroxetine/on_mob_life(var/mob/living/M as mob)
 	if(..())
@@ -1343,6 +1422,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 2.225
 	specheatcap = 1.055
+	//arcane_id = DISCOUNT
 
 /datum/reagent/peptobismol/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1362,6 +1442,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = 10
+	//arcane_id = LEXORIN
 
 /datum/reagent/peridaxon/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1373,6 +1454,10 @@ var/global/list/charcoal_doesnt_remove=list(
 		for(var/datum/organ/internal/I in C.internal_organs)
 			if(I.damage > 0)
 				I.damage = max(0,I.damage-0.2)
+			if(istype(I,/datum/organ/internal/brain))
+				var/datum/organ/internal/brain/B = I
+				for(var/damtype in B.specific_damages)
+					B.specific_damages[damtype] = max(0, B.specific_damages[damtype] - 0.2)
 
 /datum/reagent/peridaxon/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -1396,6 +1481,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#00FF00"
 	custom_metabolism = 0.01
+	arcane_id = IMPEDREZENE
 
 /datum/reagent/phalanximine
 	name = "Phalanximine"
@@ -1404,6 +1490,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#1A1A1A" //rgb: 26, 26, 26
 	density = 2.46
+	//arcane_id = DANBACCO
 
 /datum/reagent/phalanximine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1540,6 +1627,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_tick = 35
 	density = 10.981
 	specheatcap = 0.359
+	//arcane_id = BLOOD
 
 /datum/reagent/rezadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1576,6 +1664,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.97
 	specheatcap = 0.51261
+	arcane_id = MUTAGEN
 
 /datum/reagent/ryetalyn/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1623,6 +1712,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#A5A5FF" //rgb: 165, 165, 255
 	density = 1.58
 	specheatcap = 0.44
+	//arcane_id = PACID
 
 /datum/reagent/simpolinol/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1656,6 +1746,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.2
 	density = 1.564
 	specheatcap = 1.725
+	arcane_id = CHLORALHYDRATE
 
 /datum/reagent/srejuvenate/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1705,6 +1796,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#833484" //rgb: 131, 52, 132
 	custom_metabolism = 0.1
+	arcane_id = MEDNANOBOTS
 
 /datum/reagent/stabilizine/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -1759,6 +1851,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	pain_resistance = 40
 	density = 1.04
 	specheatcap = 1.853
+	arcane_id = SPIRITBREAKER
+	arcane_ratio = 0.5
 
 /datum/reagent/synaptizine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1784,6 +1878,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_am = REAGENTS_OVERDOSE
 	density = 4.67
 	specheatcap = 0.57
+	//arcane_id = BICARODYNE
 
 /datum/reagent/synthocarisol/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1801,6 +1896,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.1
 	density = 1.2
 	specheatcap = 1.79
+	//arcane_id = PLACEBO
 
 /datum/reagent/tramadol/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1819,8 +1915,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.58
 	specheatcap = 0.44
-	fission_time=4800 // 80 minutes (1hr 20)
-	fission_absorbtion=3500
+	fission_time=2400 // 40 minutes
+	fission_absorbtion=7000
 
 /datum/reagent/tricordrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1845,6 +1941,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	alpha = 142
 	density = 1.33
 	specheatcap = 1.88
+	//arcane_id = GLYCEROL
 
 /datum/reagent/trinitrine/on_mob_life(var/mob/living/M)
 	if(prob(10))
@@ -1874,6 +1971,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	data = list(
 		"antigen" = list(),
 		)
+	arcane_id = AUTISTNANITES //jenny mccarthy pls go
+	arcane_ratio = 0.5 //dr fauci, give us vaccines
 
 /datum/reagent/vaccine/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
 	if (added_data)
@@ -1965,8 +2064,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(toxmod==0 || brutemod==0 || firemod==0) //no div 0 here, so sireeeeee, nope.
 		return 1
 
-	var/brut=M.getBruteLoss()
-	var/brn=M.getFireLoss()
+	var/brut=M.getBruteLoss(TRUE)
+	var/brn=M.getFireLoss(TRUE)
 	var/tox=M.getToxLoss()
 
 	var/totaldamage = brut+tox+brn

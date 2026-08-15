@@ -254,7 +254,7 @@
 		else if(obscured || !sun)
 			icon_state += "-dark"
 		else
-			if(SSDayNight?.overwrite_solars && (src.z in daynight_z_lvls) )
+			if(SSDayNight?.overwrite_solars && (src.get_virtual_z() in daynight_v_lvls) )
 				glow.transform = turn(matrix(), (SSDayNight.nearest_star_angle + 180) % 360)
 			else
 				glow.transform = turn(matrix(), (sun.angle + 180) % 360)
@@ -267,9 +267,26 @@
 	if(!sun)
 		obscured = 1
 
-	if(SSDayNight?.overwrite_solars && (src.z in daynight_z_lvls) )
+	var/datum/virtual_z/vz = src.get_virtual_z()
+
+	if(SSDayNight?.overwrite_solars && (vz in daynight_v_lvls) )
+		// Junglestation override
 		use_daynight_ss=TRUE
 		obscured=0
+	else if(vz?.level_type == VZ_PLANET)
+		// On planet vLevels, power is purely a function of time-of-day and weather: no orientation or occlusion.
+		// Panels must still be on (or adjacent to) an open surface so no power if buried in a cave or roofed building.
+		if(!turf_has_open_sky(get_turf(src)))
+			obscured = 1
+			sunfrac = 0
+			plane = ABOVE_HUMAN_PLANE
+			layer = LIGHT_FIXTURE_LAYER
+			return
+		obscured = 0
+		plane = ABOVE_LIGHTING_PLANE
+		layer = ABOVE_LIGHTING_LAYER
+		sunfrac = solar_tod_power(vz.current_timeOfDay) * vz.weather_mod
+		return
 
 	if(obscured)
 		sunfrac = 0
@@ -383,7 +400,7 @@
 	health += diff
 	healthcheck(user, FALSE)
 
-	user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S].</span>")
+	user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S.name].</span>")
 
 	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6) //Probably will never hear this!
 	S.remove_silicate(diff * SILICATE_PER_DAMAGE)

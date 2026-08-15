@@ -404,17 +404,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /turf
 	var/soot_type = /obj/effect/decal/cleanable/soot
 
-/turf/New()
-	..()
-	if(!thermal_material)
-		flammable = FALSE
-		return
-	if(!autoignition_temperature)
-		autoignition_temperature = thermal_material.autoignition_temperature
-	if(thermal_mass)
-		initial_thermal_mass = thermal_mass
-	fire_protection = world.time
-
 /turf/ashify()
 	if(!on_fire)
 		return
@@ -525,7 +514,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	icon = 'icons/effects/fire.dmi'
 	icon_state = "key1"
 	layer = TURF_FIRE_LAYER
-	plane = ABOVE_TURF_PLANE
+	plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 	light_color = LIGHT_COLOR_FIRE
 	var/last_vis_refresh = 0
 	var/burn_duration = 0

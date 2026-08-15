@@ -66,7 +66,7 @@
 		I.appearance_flags = RESET_COLOR
 		I.blend_mode = BLEND_ADD
 		if (isturf(loc))
-			I.plane = ABOVE_LIGHTING_PLANE
+			I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		else
 			I.plane = ABOVE_HUD_PLANE // inventory
 		overlays += I
@@ -76,10 +76,10 @@
 		var/image/right_I = image(inhand_states["right_hand"], src, "candle_lit")
 		left_I.appearance_flags = RESET_COLOR
 		left_I.blend_mode = BLEND_ADD
-		left_I.plane = ABOVE_LIGHTING_PLANE
+		left_I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		right_I.appearance_flags = RESET_COLOR
 		right_I.blend_mode = BLEND_ADD
-		right_I.plane = ABOVE_LIGHTING_PLANE
+		right_I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 	if(iscarbon(loc))
@@ -270,7 +270,7 @@
 	I_stick.blend_mode = BLEND_ADD
 	I_stick.alpha = 200
 	if (isturf(loc))
-		I_stick.plane = ABOVE_LIGHTING_PLANE
+		I_stick.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 	else
 		I_stick.plane = ABOVE_HUD_PLANE
 	overlays += I_stick

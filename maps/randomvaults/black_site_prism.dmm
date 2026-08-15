@@ -393,10 +393,7 @@
 	},
 /area/vault/black_site_prism)
 "be" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "bh" = (
 /obj/machinery/light{
@@ -415,9 +412,7 @@
 	one_way = 1
 	},
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /obj/item/ammo_storage/magazine/mc9mm,
 /obj/item/ammo_storage/magazine/mc9mm,
@@ -778,16 +773,6 @@
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
-"hR" = (
-/obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "hX" = (
 /obj/effect/decal/cleanable/blood/stattrack{
 	dir = 10
@@ -1030,9 +1015,7 @@
 /area/vault/black_site_prism)
 "ng" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg1"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/vault/black_site_prism)
 "nh" = (
 /turf/simulated/wall/invulnerable,
@@ -1161,9 +1144,7 @@
 /area/vault/black_site_prism)
 "pm" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /turf/unsimulated/floor{
 	dir = 8;
@@ -1465,10 +1446,7 @@
 	dir = 5
 	},
 /obj/effect/decal/cleanable/blood,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "tK" = (
 /obj/structure/bed,
@@ -1643,8 +1621,7 @@
 /area/vault/black_site_prism)
 "vB" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -1825,13 +1802,10 @@
 /area/vault/black_site_prism)
 "xt" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
+	dir = 1
 	},
 /turf/unsimulated/floor{
 	icon_state = "dark"
@@ -2135,10 +2109,7 @@
 "Bs" = (
 /obj/effect/decal/cleanable/blood/stattrack,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "Bx" = (
 /obj/structure/bed/chair{
@@ -2397,10 +2368,7 @@
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor6"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "Gr" = (
 /obj/effect/decal/cleanable/blood/stattrack{
@@ -2427,10 +2395,7 @@
 "GC" = (
 /obj/effect/decal/cleanable/blood,
 /obj/item/weapon/soap/deluxe,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "GH" = (
 /obj/effect/alien/weeds,
@@ -2502,10 +2467,7 @@
 /obj/effect/decal/cleanable/blood/stattrack{
 	dir = 4
 	},
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "HP" = (
 /obj/effect/decal/cleanable/blood/stattrack{
@@ -3207,10 +3169,7 @@
 /area/vault/black_site_prism)
 "PB" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = ""
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/vault/black_site_prism)
 "PE" = (
 /turf/simulated/floor/carpet{
@@ -3891,9 +3850,7 @@
 	one_way = 1
 	},
 /obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
+	dir = 4
 	},
 /turf/unsimulated/floor{
 	icon_state = "dark"
@@ -5285,8 +5242,8 @@ Mg
 SU
 zm
 iQ
-hR
-hR
+Yc
+Yc
 pm
 xP
 UJ

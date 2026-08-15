@@ -418,16 +418,25 @@
 						casual = 0
 					if("No")
 						emergency_shuttle.shuttle_phase("centcom",1)
-		var/obj/docking_port/shuttle/P = emergency_shuttle.shuttle.linked_port
+		var/obj/docking_port/shuttle/P = emergency_shuttle.get_linked_port()
 		log_admin("[key_name(usr)] moved the emergency shuttle to [href_list["move_emergency_shuttle"]][casual?" (no round triggers)":""].</span>")
-		message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle to <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[P.x];Y=[P.y];Z=[P.z]'>[href_list["move_emergency_shuttle"]]</a>[casual?" (no round triggers)":""].</span>", 1)
+		if(P)
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle to <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[P.x];Y=[P.y];Z=[P.z]'>[href_list["move_emergency_shuttle"]]</a>[casual?" (no round triggers)":""].</span>", 1)
+		else
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle to [href_list["move_emergency_shuttle"]][casual?" (no round triggers)":""].</span>", 1)
 		href_list["secretsadmin"] = "emergency_shuttle_panel"
 
 	else if(href_list["move_emergency_dock"])
 		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
 			return
+		if(!emergency_shuttle.manages_shuttle_docks())
+			alert("This shuttle type does not support dock repositioning.")
+			return
 		var/obj/docking_port/destination/port
 		var/datum/shuttle/escape/E = emergency_shuttle.shuttle
+		if(!E)
+			alert("This shuttle type does not support dock repositioning.")
+			return
 		switch (href_list["move_emergency_dock"])
 			if ("station")
 				port = E.dock_station
@@ -444,8 +453,14 @@
 	else if(href_list["reset_emergency_dock"])
 		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
 			return
+		if(!emergency_shuttle.manages_shuttle_docks())
+			alert("This shuttle type does not support dock repositioning.")
+			return
 		var/obj/docking_port/destination/port
 		var/datum/shuttle/escape/E = emergency_shuttle.shuttle
+		if(!E)
+			alert("This shuttle type does not support dock repositioning.")
+			return
 		switch (href_list["reset_emergency_dock"])
 			if ("station")
 				port = E.dock_station
@@ -461,6 +476,9 @@
 
 	else if(href_list["move_escape_pod"])
 		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+		if(!emergency_shuttle.uses_escape_pods())
+			alert("This shuttle controller does not use escape pods.")
 			return
 
 		if (href_list["move_escape_pod"] == "all")
@@ -647,8 +665,8 @@
 		if(!nu)
 			return
 		W.timeleft = round(nu SECONDS,SS_WAIT_WEATHER)
-		log_admin("[key_name(usr)] adjusted weather time for Z-[W.parent.z].")
-		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time for Z-[W.parent.z].</span>", 1)
+		log_admin("[key_name(usr)] adjusted weather time for vZ-[W.parent.v].")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time for vZ-[W.parent.v].</span>", 1)
 		climate_panel()
 
 	else if(href_list["climate_weather"])
@@ -678,7 +696,7 @@
 			alert(usr, "There are somehow no weather subtypes!", "Error", "Wtf?")
 			return
 
-		var/nu = input(usr, "Select New Weather for Z-[C.z]", "Adjust Weather", null) as null|anything in valid_climates
+		var/nu = input(usr, "Select New Weather for vZ-[C.v.id]", "Adjust Weather", null) as null|anything in valid_climates
 		if(!nu)
 			to_chat(usr, "Weather change canceled.")
 			return
@@ -687,8 +705,8 @@
 			return
 		C.change_weather(valid_climates[nu],force = TRUE)
 		C.forecast()
-		log_admin("[key_name(usr)] changed the weather to [nu] for Z-[C.z].")
-		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu] for Z-[C.z].</span>", 1)
+		log_admin("[key_name(usr)] changed the weather to [nu] for vZ-[C.v.id].")
+		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu] for vZ-[C.v.id].</span>", 1)
 		climate_panel()
 
 	else if(href_list["climate_restart"])
@@ -697,13 +715,33 @@
 		var/datum/climate/C = locate(href_list["climate_restart"])
 		if(!C || !istype(C))
 			return
-		var/response = alert(usr, "This will completely restart the climate controller for Z-[C.z]. Continue?", "Restart Climate", "Yes", "No")
+		var/response = alert(usr, "This will completely restart the climate controller for vZ-[C.v.id]. Continue?", "Restart Climate", "Yes", "No")
 		if(response != "Yes")
 			return
 		SSweather.restart_climate(C)
-		log_admin("[key_name(usr)] restarted the climate controller for Z-[C.z].")
-		message_admins("<span class='notice'>[key_name(usr)] restarted the climate controller for Z-[C.z].</span>", 1)
+		log_admin("[key_name(usr)] restarted the climate controller for vZ-[C.v.id].")
+		message_admins("<span class='notice'>[key_name(usr)] restarted the climate controller for vZ-[C.v.id].</span>", 1)
 		climate_panel()
+
+	else if(handle_admin_arena_topic(href_list))
+		return
+
+	else if(href_list["level_manager_jump"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/virtual_z/V = locate(href_list["level_manager_jump"])
+		if(!V || !istype(V))
+			to_chat(usr, "<span class='warning'>Invalid virtual z-level reference.</span>")
+			return
+		var/center_x = round((V.x_min + V.x_max) / 2)
+		var/center_y = round((V.y_min + V.y_max) / 2)
+		var/turf/T = locate(center_x, center_y, V.z())
+		if(T)
+			usr.forceMove(T)
+			log_admin("[key_name(usr)] jumped to virtual z-level [V.id] ([V.name]).")
+			message_admins("<span class='notice'>[key_name(usr)] jumped to virtual z-level [V.id] ([V.name]).</span>", 1)
+		else
+			to_chat(usr, "<span class='warning'>Could not find a valid turf to jump to.</span>")
 
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
@@ -746,7 +784,7 @@
 					message_admins("<span class='notice'>[key_name(usr)] edited the hub description.</span>")
 					log_admin("[key_name(usr)] edited the hub description from [old_desc] to [temp_desc]")
 
-		var/datum/persistence_task/task = SSpersistence_misc.tasks["/datum/persistence_task/hub_settings"]
+		var/datum/persistence_task/task = SSpersistence_tasks.tasks["/datum/persistence_task/hub_settings"]
 		task.on_shutdown()
 		world.update_status()
 		HubPanel()
@@ -863,18 +901,18 @@
 		if(!check_rights(R_ADMIN))
 			return
 		var/datum/planet_type/planet = locate(href_list["procgen_jump"])
-		if(planet?.allocation)
-			var/datum/allocation/alloc = planet.allocation
-			var/center_x = alloc.sector[1] * SECTOR_SIZE - (SECTOR_SIZE / 2)
-			var/center_y = alloc.sector[2] * SECTOR_SIZE - (SECTOR_SIZE / 2)
-			var/turf/jump_target = locate(center_x, center_y, alloc.z)
+		if(planet?.v)
+			var/datum/virtual_z/vz = planet.v
+			var/center_x = vz.x(coord = vz.size_x/2)
+			var/center_y = vz.y(coord = vz.size_y/2)
+			var/turf/jump_target = locate(center_x, center_y, vz.z())
 			if(jump_target)
 				SendAdminGhostTo(jump_target, null)
-				to_chat(usr, "<span class='notice'>Jumped to planet [planet.name] at sector [alloc.sector[1]], [alloc.sector[2]] on z-level [alloc.z].</span>")
+				to_chat(usr, "<span class='notice'>Jumped to planet [planet.name] on virtual z-level [vz.id].</span>")
 			else
 				to_chat(usr, "<span class='warning'>Failed to find jump target for planet [planet.name].</span>")
 		else
-			to_chat(usr, "<span class='warning'>Invalid planet reference or allocation!</span>")
+			to_chat(usr, "<span class='warning'>Invalid planet reference or virtual z!</span>")
 		return
 
 	else if(href_list["procgen_weather"])
@@ -911,13 +949,12 @@
 		var/datum/planet_type/planet = locate(href_list["procgen_time"])
 		if(!planet)
 			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
-			return
-		if(!planet.allocation)
-			to_chat(usr, "<span class='warning'>This planet has no allocation!</span>")
+		if(!planet.v)
+			to_chat(usr, "<span class='warning'>This planet has no virtual z!</span>")
 			return
 
-		var/datum/allocation/alloc = planet.allocation
-		if(!(alloc.z in daynight_z_lvls))
+		var/datum/virtual_z/vz = planet.v
+		if(!(vz in daynight_v_lvls))
 			to_chat(usr, "<span class='warning'>This planet does not have a day/night cycle!</span>")
 			return
 
@@ -937,11 +974,11 @@
 			if("Nighttime") new_time = TOD_NIGHTTIME
 
 		// Set the time for this specific planet
-		planet.current_timeOfDay = new_time
-		planet.next_firetime = world.time + 10 MINUTES
+		vz.current_timeOfDay = new_time
+		vz.next_firetime = world.time + 10 MINUTES
 
 		// Force immediate lighting update for this planet only
-		SSDayNight.update_planet_lighting(planet, immediate = TRUE)
+		SSDayNight.update_lighting(vz, immediate = TRUE)
 
 		message_admins("[key_name_admin(usr)] changed time of day to [choice] on [planet.planet_name].")
 		procedural_generation_panel()
@@ -952,10 +989,10 @@
 			return
 		var/datum/planet_type/planet = locate(href_list["procgen_delete"])
 
-		if(!planet?.allocation)
+		if(!planet?.v)
 			return
 
-		var/datum/allocation/alloc = planet.allocation
+		var/datum/virtual_z/vz = planet.v
 		var/planet_name = planet.planet_name
 
 		var/confirm = alert(usr, "Are you sure you want to delete [planet_name]? This will permanently remove all contents and cannot be undone.", "Confirm Deletion", "Yes", "No")
@@ -964,8 +1001,9 @@
 
 		message_admins("[key_name_admin(usr)] is deleting planet [planet_name].")
 
-		// Delete all contents in the allocation's turfs
-		for(var/turf/T in alloc.turfs)
+		// Delete all contents in the virtual z's turfs
+		var/list/turf/turfs = vz.get_turfs()
+		for(var/turf/T in turfs)
 			for(var/atom/movable/AM in T.contents)
 				qdel(AM)
 			T.ChangeTurf(/turf/space)
@@ -973,7 +1011,7 @@
 		SSmapping.planets -= planet
 
 		qdel(planet)
-		qdel(alloc)
+		qdel(vz)
 
 		message_admins("[key_name_admin(usr)] deleted planet [planet_name].")
 		to_chat(usr, "<span class='notice'>Planet [planet_name] has been deleted.</span>")
@@ -987,17 +1025,17 @@
 		if(!planet)
 			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
 			return
-		if(!planet.allocation)
-			to_chat(usr, "<span class='warning'>This planet has no allocation!</span>")
+		if(!planet.v)
+			to_chat(usr, "<span class='warning'>This planet has no virtual z!</span>")
 			return
 
 		if(SSmapping.generating && SSmapping.current_planet == planet)
 			to_chat(usr, "<span class='warning'>Planet is still generating! Please wait for generation to complete.</span>")
 			return
 
-		var/datum/allocation/alloc = planet.allocation
+		var/datum/virtual_z/vz = planet.v
 
-		if(alloc.shuttle_landing_zones[/datum/shuttle/exploration])
+		if(vz.shuttle_landing_zones[/datum/shuttle/exploration])
 			to_chat(usr, "<span class='warning'>This planet already has a landing zone for the exploration shuttle!</span>")
 			procedural_generation_panel()
 			return
@@ -1011,7 +1049,7 @@
 			to_chat(usr, "<span class='warning'>Unable to determine shuttle dimensions.</span>")
 			return
 
-		var/obj/docking_port/destination/planet_surface/surface_port = SSmapping.get_shuttle_landing_zone(alloc, exploration_shuttle, shuttle_size)
+		var/obj/docking_port/destination/planet_surface/surface_port = vz.get_shuttle_landing_zone(exploration_shuttle, shuttle_size)
 		if(!surface_port)
 			to_chat(usr, "<span class='warning'>No suitable landing zone found on [planet.planet_name]. The planet terrain may be too irregular.</span>")
 			return
@@ -4176,8 +4214,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				feedback_add_details("admin_secrets_fun_used","TD")
 				var/newname = ""
 				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
-				if (!newname)
-					newname = "Admin"
+				if(!newname) //cancel case
+					return
 				var/turf/T = get_turf(usr)
 				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
 				var/obj/item/weapon/card/id/admin/admin_id = new(D)
@@ -4199,8 +4237,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				feedback_add_details("admin_secrets_fun_used","TDO")
 				var/newname = ""
 				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
-				if (!newname)
-					newname = "Admin"
+				if(!newname) //cancel case
+					return
 				var/choice = alert("Edit appearance on spawn?", "Admin", "Yes", "No")
 				var/outfit_type = select_loadout()
 				if(!outfit_type || !ispath(outfit_type))
@@ -4632,7 +4670,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						M.req_one_access = list(access_brig,access_engine_major)
 				message_admins("[key_name_admin(usr)] made all maint doors engineering and brig access-only.")
 			if("infinite_sec")
-				var/datum/job/J = job_master.GetJob("Security Officer")
+				var/datum/job/J = locate(/datum/job/officer) in job_master.occupations
 				if(!J)
 					return
 				J.set_total_positions(99)
@@ -5341,10 +5379,10 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 
 		if(S.linked_area)
 			if(killed_objs == 1)
-				for(var/turf/T in S.linked_area)
+				for(var/turf/T in S.shuttle_contents())
 					if(istype(T, /turf/simulated))
 						qdel(T)
-				for(var/obj/O in S.linked_area)
+				for(var/obj/O in S.shuttle_contents())
 					if(istype(O, /obj/item) || istype(O, /obj/machinery) || istype(O, /obj/structure))
 						qdel(O)
 				to_chat(usr, "All turfs and objects deleted from [S.linked_area].")
@@ -5368,7 +5406,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			to_chat(usr, "The shuttle is in the middle of nowhere! (The 'linked_area' variable is either null or not an area, please report this)")
 			return
 
-		var/turf/T = locate(/turf/) in S.linked_area
+		var/turf/T = locate(/turf/) in S.shuttle_contents()
 		usr.forceMove(T)
 		to_chat(usr, "You have teleported to [capitalize(S.name)]")
 
@@ -5589,16 +5627,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 		if(!istype(S))
 			return
 
-		var/transit_dir = NORTH
-		var/list/dirs = list("north"=NORTH, "west"=WEST, "east"=EAST, "south"=SOUTH)
-		var/choice = input(usr, "Select a direction for the transit area (this should be the direction in which the shuttle is currently facing)", "Transit") as null|anything in dirs
-
-		if(!choice)
-			return
-
-		transit_dir = dirs[choice]
-
-		var/obj/docking_port/destination/D = generate_transit_area(S, transit_dir)
+		var/obj/docking_port/destination/D = generate_transit_area(S)
 		if(!istype(D))
 			to_chat(usr, "<span class='notice'>Transit area generation failed!</span>")
 			return
@@ -6143,6 +6172,173 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			return
 		else
 			toggle_tag_mode(usr)
+
+// Topic is literally at the limit of how many else if statements we can add so I've separated this out, lmao.
+/datum/admins/proc/handle_admin_arena_topic(var/list/href_list)
+	if(href_list["admin_arena_panel_create"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		var/turf/T = get_turf(usr)
+		if(!T)
+			return 1
+		var/response = alert(usr, "Create an arena with bottom-left at [T.x],[T.y],[T.z]?", "Create Arena", "Yes", "No")
+		if(response != "Yes")
+			return 1
+		new /datum/admin_arena(T)
+		log_admin("[key_name(usr)] created an arena with bottom-left at [T.x],[T.y],[T.z].")
+		message_admins("<span class='notice'>[key_name(usr)] created an arena with bottom-left at [T.x],[T.y],[T.z].</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_add_prep_room"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		var/turf/T = get_turf(usr)
+		if(!T)
+			return 1
+		var/response = alert(usr, "Create a prep room spawn point at [T.x],[T.y],[T.z]?", "Create Prep Room", "Yes", "No")
+		if(response != "Yes")
+			return 1
+		add_prep_room(T)
+		log_admin("[key_name(usr)] created a prep room marker at [T.x],[T.y],[T.z].")
+		message_admins("<span class='notice'>[key_name(usr)] created a prep room marker at [T.x],[T.y],[T.z].</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_remove_prep_room"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		var/obj/effect/admin_arena_prep_room_marker/marker = locate(href_list["admin_arena_panel_remove_prep_room"])
+		if(!istype(marker))
+			return 1
+		var/turf/T = get_turf(marker)
+		log_admin("[key_name(usr)] removed a prep room marker at [T ? "[T.x],[T.y],[T.z]" : "(nullspace)"].")
+		message_admins("<span class='notice'>[key_name(usr)] removed a prep room marker[T ? " at [T.x],[T.y],[T.z]" : ""].</span>", 1)
+		qdel(marker)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_load_file"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena)
+			alert(usr, "You need to create an admin arena first!", "No Arena", "Ok")
+			return 1
+		var/dmm_file = input(usr, "Select a .dmm file to load. It must be exactly [ADMIN_ARENA_WIDTH]x[ADMIN_ARENA_HEIGHT] tiles.", "Load Arena") as null|file
+		if(!dmm_file)
+			return 1
+		if(!current_admin_arena.load_from_dmm(dmm_file))
+			alert(usr, "Failed to load the arena. Make sure the file is exactly [ADMIN_ARENA_WIDTH]x[ADMIN_ARENA_HEIGHT] tiles.", "Load Failed", "Ok")
+			return 1
+		log_admin("[key_name(usr)] loaded a custom arena map.")
+		message_admins("<span class='notice'>[key_name(usr)] loaded a custom arena map.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_load_preset"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena)
+			alert(usr, "You need to create an admin arena first!", "No Arena", "Ok")
+			return 1
+		var/list/presets = list()
+		for(var/preset_path in subtypesof(/datum/admin_arena_preset))
+			var/datum/admin_arena_preset/preset = preset_path
+			presets[initial(preset.name)] = preset_path
+		var/selection = input(usr, "Select an arena preset to load.", "Load Preset") as null|anything in presets
+		if(!selection)
+			return 1
+		var/datum/admin_arena_preset/preset = presets[selection]
+		if(!current_admin_arena.load_from_dmm(file(initial(preset.file_path))))
+			alert(usr, "Failed to load the [selection] preset. It seems like this preset needs a code fix.", "Load Failed", "Ok")
+			return 1
+		log_admin("[key_name(usr)] loaded the [selection] arena preset.")
+		message_admins("<span class='notice'>[key_name(usr)] loaded the [selection] arena preset.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_begin_round"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena)
+			alert(usr, "You need to create an admin arena first!", "No Arena", "Ok")
+			return 1
+		var/list/prep_rooms = get_available_arena_prep_rooms(2)
+		if(prep_rooms.len < 2)
+			alert(usr, "You need at least two prep rooms before starting a round!", "Not Enough Prep Rooms", "Ok")
+			return 1
+		var/list/candidates = get_arena_contestant_candidates()
+		if(candidates.len < 2)
+			alert(usr, "There aren't enough valid players to start a round!", "Not Enough Players", "Ok")
+			return 1
+		var/red_choice = input(usr, "Select the RED contestant.", "Begin New Round") as null|anything in candidates
+		if(!red_choice)
+			return 1
+		var/client/red_client = candidates[red_choice]
+		candidates -= red_choice
+		var/green_choice = input(usr, "Select the GREEN contestant.", "Begin New Round") as null|anything in candidates
+		if(!green_choice)
+			return 1
+		var/client/green_client = candidates[green_choice]
+		var/obj/effect/admin_arena_prep_room_marker/red_prep = prep_rooms[1]
+		var/obj/effect/admin_arena_prep_room_marker/green_prep = prep_rooms[2]
+		current_admin_arena_round = new /datum/admin_arena_round(red_client, get_turf(red_prep), green_client, get_turf(green_prep))
+		log_admin("[key_name(usr)] began an arena round: [red_client.ckey] (red) vs [green_client.ckey] (green).")
+		message_admins("<span class='notice'>[key_name(usr)] began an arena round: [red_client.ckey] (red) vs [green_client.ckey] (green).</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_send_to_arena"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return 1
+		if(!current_admin_arena_round.send_contestants_to_arena())
+			alert(usr, "Couldn't find both arena spawn markers (one and two) inside the arena!", "Missing Spawn Markers", "Ok")
+			return 1
+		log_admin("[key_name(usr)] sent the arena contestants into the arena.")
+		message_admins("<span class='notice'>[key_name(usr)] sent the arena contestants into the arena.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_begin_combat"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return 1
+		current_admin_arena_round.begin_combat()
+		log_admin("[key_name(usr)] started combat in the arena.")
+		message_admins("<span class='notice'>[key_name(usr)] started combat in the arena.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_end_round"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return 1
+		current_admin_arena_round.end_round()
+		log_admin("[key_name(usr)] ended the arena round.")
+		message_admins("<span class='notice'>[key_name(usr)] ended the arena round.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_reset_round"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return 1
+		current_admin_arena_round.reset_round()
+		log_admin("[key_name(usr)] reset the arena round.")
+		message_admins("<span class='notice'>[key_name(usr)] reset the arena round.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	return 0
 
 /datum/admins/proc/SendAdminGhostTo(var/turf/T,var/mob/M)
 	var/client/C = usr.client

@@ -27,9 +27,9 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 		<div class="itemContents">
 			{{if data.shuttle.pos == 0}}
 				{{if data.shuttle.on && !data.is_ai}}
-					{{:helper.link('Cancel Shuttle','arrowreturnthick-1-w',{'operation':'cancelshuttle'})}}
+					{{:helper.link(data.shuttle.cancel_label,'arrowreturnthick-1-w',{'operation':'cancelshuttle'})}}
 				{{else !data.shuttle.on}}
-					{{:helper.link('Call Shuttle','arrowthickstop-1-s',{'operation':'callshuttle'})}}
+					{{:helper.link(data.shuttle.call_label,'arrowthickstop-1-s',{'operation':'callshuttle'})}}
 				{{/if}}
 			{{/if}}
 			{{:helper.link('Show logs', 'note', {'operation': 'ViewShuttleLog'})}}
@@ -64,6 +64,7 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 			<div class="line">
 				{{:helper.link('Message List','comment',{'operation':'messagelist'})}}
 			</div>
+			{{if !data.is_odyssey}}
 			<div class="line">
 				{{if data.portopen}}
 					{{:helper.link('Close Trader Port','key',{'operation':'SetPortRestriction'},null,'redBackground')}}
@@ -79,6 +80,7 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 						{{:helper.link('Suspend Exploration Program','cancel',{'operation':'ToggleExplorationProgram'},null,'redBackground')}}
 					{{/if}}
 				</div>
+			{{/if}}
 			{{/if}}
 			{{if data.str_security_level == "red" || data.str_security_level == "delta"}}
 				<div class="line">

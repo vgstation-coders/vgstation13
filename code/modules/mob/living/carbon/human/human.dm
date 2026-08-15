@@ -804,6 +804,9 @@
 				if(T && T.open)
 					src.visible_message("<span class='warning'>[src] throws up into \the [T]!</span>", "<span class='danger'>You throw up into \the [T]!</span>")
 					skip_message = 1
+					var/datum/reagents/temp = new/datum/reagents(100)
+					reagents?.trans_removable_to(temp, vomitvolume, 1)
+					qdel(temp)
 				else //Look for a bucket
 
 					for(var/obj/item/weapon/reagent_containers/glass/G in (location.contents + src.get_active_hand() + src.get_inactive_hand()))
@@ -816,8 +819,7 @@
 
 						if(G.reagents.total_volume <= G.reagents.maximum_volume-7) //Container can fit 7 more units of chemicals - vomit into it
 							G.reagents.add_reagent(VOMIT, rand(3,10))
-							if(src.reagents)
-								reagents.trans_to(G, 1 + reagents.total_volume * vomitvolume) //one tenth
+							reagents?.trans_removable_to(G, vomitvolume, 1)
 						else //Container is nearly full - fill it to the brim with vomit and spawn some more on the floor
 							G.reagents.add_reagent(VOMIT, 10)
 							spawn_vomit_on_floor = 1
@@ -936,6 +938,9 @@
 			decapitated = null
 
 			qdel(B)
+	else
+		for(var/damage in BBrain.specific_damages)
+			BBrain.specific_damages[damage] = 0
 
 	for(var/datum/organ/internal/I in internal_organs)
 		I.damage = 0
@@ -1779,7 +1784,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		var/obj/item/clothing/gloves/G = gloves
 		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
 			return FALSE
-	if(getBrainLoss() >= 60)
+	if(getBrainLoss(INTELLIGENCE_L) >= 60)
 		if(!(reagents.has_reagent(METHYLIN) ||  is_dexterous))//methylin and the is_dextrous var supercede brain damage, but not uncomfortable gloves
 			return FALSE
 	return TRUE//humans are dexterous enough by default
@@ -2247,7 +2252,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 	if (istype(gloves, /obj/item/clothing/gloves/hunter))
 		for(var/obj/item/I in held_items)
 			if (istype(I, /obj/item/weapon/gun/hookshot/whip))
-				to_chat(src, "<span class='notice'>You hold your grip onto your [I]</span>")
+				to_chat(src, "<span class='notice'>You hold your grip onto your [I.name]</span>")
 			else
 				drop_item(I, Target, force_drop = force_drop)
 	else

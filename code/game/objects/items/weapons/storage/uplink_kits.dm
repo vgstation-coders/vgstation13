@@ -309,6 +309,10 @@
 	name = "Shotgun shells"
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/fakebeanbag = 6)
 
+/obj/item/weapon/storage/box/syndie_kit/fan
+	name = "Shotgun shells"
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/fanshot/super/syndie = 6)
+
 /obj/item/weapon/storage/box/syndie_kit/ammo
 	name = "box (spare ammo)"
 	items_to_spawn = list(/obj/item/ammo_storage/speedloader/a357)
@@ -455,6 +459,7 @@
 		/obj/item/clothing/gloves/neorussian/fingerless,
 		/obj/item/clothing/under/sl_suit/armored,
 		/obj/item/clothing/suit/armor/hos/jensen,
+		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/glasses/sunglasses/prescription,
 		/obj/item/clothing/head/beanie/black,
 		/obj/item/clothing/accessory/storage/bandolier,
@@ -471,6 +476,7 @@
 		/obj/item/clothing/gloves/neorussian/fingerless,
 		/obj/item/clothing/under/syndicate,
 		/obj/item/clothing/suit/armor/hos/jensen,
+		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/glasses/sunglasses/prescription,
 		/obj/item/clothing/head/soft/black,
 		/obj/item/clothing/accessory/storage/webbing,

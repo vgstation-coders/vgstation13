@@ -94,3 +94,13 @@
 	materials = list(MAT_DIAMOND = 2000, MAT_IRON = 3000, MAT_URANIUM = 3750)
 	category = "Armor"
 	build_path = /obj/item/clothing/suit/armor/reactive
+
+/datum/design/emshield_projector
+	name = "Emergency Shield Projector"
+	desc = "A handheld device that generates a temporary shield barrier surrounding the user, blocking incoming attacks."
+	id = "emshield_projector"
+	req_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 3, Tc_EXPLORATION = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_DIAMOND = 2000, MAT_IRON = 2000, MAT_URANIUM = 1000)
+	category = "Armor"
+	build_path = /obj/item/device/emshield_projector

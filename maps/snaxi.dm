@@ -29,7 +29,8 @@
 						/datum/event/meteor_wave,/datum/event/meteor_shower,/datum/event/thing_storm/meaty_gore,/datum/event/thing_storm/blob_shower,
 						/datum/event/thing_storm/blob_storm,/datum/event/thing_storm/fireworks)
 	load_map_elements = list(
-	/datum/map_element/dungeon/holodeck
+	/datum/map_element/dungeon/holodeck,
+	/datum/map_element/dungeon/mecha_graveyard
 	)
 
 	holomap_offset_x = list(96,0,0,96,0,88,0,)
@@ -46,15 +47,14 @@
 **	See: daynightcycle.dm  **
 ****************************/
 /datum/map/active/New()
+	daynight_z_lvls = list(zMainStation)
 	. = ..()
-
 	research_shuttle.name = "Southern Station Shuttle"
 	research_shuttle.req_access = list()
 	mining_shuttle.name = "Northwest Station Shuttle"
 	mining_shuttle.req_access = list()
 	security_shuttle.name = "Northeast Station Shuttle"
 	security_shuttle.req_access = list()
-	daynight_z_lvls = list(zMainStation)
 
 /datum/map/active/special_ui(var/obj/abstract/screen/S, mob/user)
 	if(!user)
@@ -114,7 +114,7 @@
 // This makes (100*100)/(10*10) = 100 nodes
 
 /datum/map/active/map_specific_init()
-	SSweather.set_climate(/datum/climate/arctic, map.zMainStation)
+	SSweather.set_climate(/datum/climate/arctic, zLevel = map.zMainStation)
 	generate_mapvaults()
 
 	for (var/x = center_x; x <= center_x + center_x/3; x = x + 10)
@@ -131,18 +131,20 @@
 		for (var/y = center_y; y >= center_y - center_y/3; y = y - 10)
 			gaussian_geyser(x, y)
 			CHECK_TICK
+	for(var/obj/machinery/computer/climate/CC in climatecomps)
+		CC.link_climate()
 
 #define MIN_REGIONAL_VAULTS 2
 #define MAX_REGIONAL_VAULTS 4
 /datum/map/active/generate_mapvaults()
-	var/list/list_of_vaults = get_map_element_objects(/datum/map_element/snowvault)
+	var/list/list_of_vaults = get_ruin_list(whitelist = RUIN_TYPE_SNOW)
 	var/list/areas_to_vault = list()
 	for(var/area/surface/outer/O in areas)
 		areas_to_vault += O //first, collect all the outer reaches
 	var/result
 	for(var/area/A in areas_to_vault)
 		var/amount = rand(MIN_REGIONAL_VAULTS,MAX_REGIONAL_VAULTS)
-		result = populate_area_with_vaults(A, list_of_vaults, amount, 1, filter_function=/proc/just_snow, overwrites=TRUE)
+		result = populate_area_with_vaults(A, list_of_vaults.Copy(), amount, 1, filter_function=/proc/just_snow, overwrites=TRUE)
 		message_admins("<span class='info'>Loaded [result] vaults in [A].</span>")
 	return TRUE
 
@@ -221,6 +223,31 @@
 					M << 'sound/misc/6amRooster.wav'
 				if(TOD_NIGHTTIME)
 					M << 'sound/misc/6pmWolf.wav'
+
+// Shuttles get locked down on Snaxi during blizzards
+/datum/weather/snow/calm/execute()
+	..()
+	research_shuttle.lockdown = FALSE //note: blob can't happen on this map
+	mining_shuttle.lockdown = FALSE
+	security_shuttle.lockdown = FALSE
+
+/datum/weather/snow/light/execute()
+	..()
+	research_shuttle.lockdown = FALSE
+	mining_shuttle.lockdown = FALSE
+	security_shuttle.lockdown = FALSE
+
+/datum/weather/snow/heavy/execute()
+	..()
+	research_shuttle.lockdown = FALSE
+	mining_shuttle.lockdown = FALSE
+	security_shuttle.lockdown = FALSE
+
+/datum/weather/snow/blizzard/execute()
+	..()
+	research_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
+	mining_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
+	security_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
 
 ////////////////////////////////////////////////////////////////
 #include "snaxi.dmm"

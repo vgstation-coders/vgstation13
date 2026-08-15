@@ -163,6 +163,7 @@
 		spawn()
 			concrete_outfit.chosen_spec = equip_nuke_loadout(synd_mind.current)
 			concrete_outfit.equip_special_items(synd_mind.current)
+			concrete_outfit.replace_glasses_with_prescriptions(synd_mind.current)//replaces glasses with prescriptions glasses if needed and applicable
 
 	if(nuke_spawn && synd_spawn.len > 0)
 		var/obj/machinery/nuclearbomb/the_bomb = new /obj/machinery/nuclearbomb(nuke_spawn.loc)

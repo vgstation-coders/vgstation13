@@ -34,14 +34,14 @@
 /area/vault/rust)
 "ai" = (
 /obj/machinery/door/poddoor/vault_rust,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aj" = (
 /obj/machinery/door/poddoor/vault_rust,
 /turf/simulated/floor/engine/airless,
 /area/vault/rust)
 "ak" = (
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "al" = (
 /turf/simulated/floor/engine/airless,
@@ -59,11 +59,11 @@
 /area/vault/rust)
 "ap" = (
 /obj/structure/girder/reinforced,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aq" = (
 /obj/item/stack/sheet/metal,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "ar" = (
 /obj/structure/lattice,
@@ -74,7 +74,7 @@
 /area/vault/rust)
 "as" = (
 /obj/structure/girder/displaced,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "at" = (
 /obj/item/stack/rods,
@@ -101,7 +101,7 @@
 /area/vault/rust)
 "az" = (
 /obj/item/weapon/shard/plasma,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aA" = (
 /turf/space,
@@ -129,11 +129,11 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aE" = (
 /obj/item/stack/rods,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aF" = (
 /obj/effect/decal/warning_stripes{
@@ -144,14 +144,14 @@
 /area/vault/rust)
 "aG" = (
 /obj/structure/grille,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aH" = (
 /obj/item/stack/rods,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aI" = (
 /obj/structure/lattice,
@@ -164,7 +164,7 @@
 /area/vault/rust)
 "aK" = (
 /obj/item/weapon/fuel_assembly/trilithium,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aL" = (
 /obj/item/weapon/shard/plasma,
@@ -175,7 +175,7 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aN" = (
 /obj/structure/grille,
@@ -190,7 +190,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aQ" = (
 /obj/item/stack/tile/metal,
@@ -207,7 +207,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aT" = (
 /obj/effect/decal/cleanable/blood/gibs/robot,
@@ -216,7 +216,7 @@
 "aU" = (
 /obj/item/stack/rods,
 /obj/effect/decal/cleanable/blood/gibs/robot,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aV" = (
 /obj/machinery/atmospherics/pipe/manifold4w/insulated/hidden,
@@ -228,7 +228,7 @@
 /area/vault/rust)
 "aX" = (
 /obj/structure/girder,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "aY" = (
 /obj/structure/lattice,
@@ -285,7 +285,7 @@
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden,
 /obj/structure/grille,
 /obj/structure/window/reinforced/plasma,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bj" = (
 /obj/structure/window/reinforced/plasma,
@@ -294,20 +294,20 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bk" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden,
 /obj/structure/grille,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bl" = (
 /obj/effect/decal/cleanable/ash,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bm" = (
 /obj/structure/cable,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bn" = (
 /obj/effect/decal/cleanable/soot,
@@ -387,7 +387,7 @@
 /area/vault/rust)
 "bA" = (
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bB" = (
 /obj/machinery/portable_atmospherics/canister/plasma,
@@ -406,14 +406,14 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bE" = (
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bF" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden,
@@ -438,7 +438,7 @@
 "bH" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden,
 /obj/item/weapon/stool,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bI" = (
 /obj/structure/cable{
@@ -446,20 +446,20 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bJ" = (
 /obj/item/stack/sheet/metal,
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bK" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bL" = (
 /obj/item/weapon/shard,
@@ -492,14 +492,14 @@
 	icon_state = "0-2"
 	},
 /obj/item/stack/rods,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bQ" = (
 /obj/item/stack/tile/metal,
 /obj/effect/decal/cleanable/soot,
 /obj/effect/decal/cleanable/blood/gibs/robot,
 /obj/item/stack/rcd_ammo,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bR" = (
 /obj/machinery/atmospherics/binary/circulator{
@@ -528,7 +528,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "bV" = (
 /obj/machinery/power/terminal,
@@ -593,7 +593,7 @@
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "ce" = (
 /obj/structure/lattice,
@@ -668,7 +668,7 @@
 	pixel_y = -24
 	},
 /obj/structure/cable,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "cn" = (
 /obj/machinery/light_construct,
@@ -696,7 +696,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (EAST)"
 	},
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "cs" = (
 /obj/structure/cable{
@@ -736,7 +736,7 @@
 "cw" = (
 /obj/item/stack/rods,
 /obj/item/stack/tile/metal,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "cx" = (
 /obj/item/weapon/shard{
@@ -746,15 +746,15 @@
 /area/vault/rust)
 "cy" = (
 /obj/item/weapon/table_parts,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "cz" = (
 /obj/item/stack/tile/metal,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 "cA" = (
 /obj/item/weapon/shard,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/rust)
 
 (1,1,1) = {"

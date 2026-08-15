@@ -154,7 +154,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 			if(!S.move_to_dock(S.dock_station, 0))
 				message_admins("Warning: [S] failed to move to station.")
 		if("centcom")
-			if(S.current_port != S.dock_shuttle)
+			if(!S.dock_shuttle || S.current_port != S.dock_shuttle)
 				if(!S.move_to_dock(S.dock_centcom, 0))
 					message_admins("Warning: [S] failed to move to centcom.")
 		if("transit")
@@ -166,11 +166,63 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 			playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
 
 	spawn()
-		for(var/obj/machinery/door/D in S.linked_area)
+		for(var/obj/machinery/door/D in S.shuttle_contents())
 			if(destination == "transit" || destination == "shuttle")
 				D.close()
 			else
 				D.open()
+
+// Returns the shuttle's linked docking port for use in admin log messages.
+// Overridden by map-specific subtypes that don't use the escape shuttle var.
+/datum/emergency_shuttle/proc/get_linked_port()
+	return shuttle ? shuttle.linked_port : null
+
+// --- Admin panel hooks --------------------------------------------------
+// These let map-specific controllers (e.g. Odyssey's Bluespace Jump) tell the
+// admin shuttle panel which controls are meaningful and how to label state,
+// without the panel needing to know about each map.
+
+// Whether this controller manages multi-pod evacuation.
+/datum/emergency_shuttle/proc/uses_escape_pods()
+	return TRUE
+
+// Whether the given shuttle phase ("station", "transit", "centcom") is applicable to this controller.
+/datum/emergency_shuttle/proc/supports_phase(phase)
+	return TRUE
+
+// Whether the controller's `shuttle` var represents a real shuttle whose station/transit/centcom docks are meaningful to reposition.
+/datum/emergency_shuttle/proc/manages_shuttle_docks()
+	return TRUE
+
+// Title shown at the top of the admin shuttle panel.
+/datum/emergency_shuttle/proc/panel_title()
+	return "Emergency Shuttle Control"
+
+// Returns a turf the admin panel links to so an observer can jump to where the shuttle currently is.
+/datum/emergency_shuttle/proc/get_panel_jump_turf()
+	var/area/A = locate(/area/shuttle/escape/centcom)
+	if(A && A.area_turfs && A.area_turfs.len)
+		return pick(A.area_turfs)
+	return null
+
+// Status text shown in the admin panel for the current location/direction.
+/datum/emergency_shuttle/proc/get_status_label()
+	switch(location)
+		if(SHUTTLE_ON_STANDBY)
+			switch(direction)
+				if(EMERGENCY_SHUTTLE_RECALLED)
+					return "<b>In transit</b> (Recalled)"
+				if(EMERGENCY_SHUTTLE_STANDBY)
+					return "<b>At Central Command</b> (on standby)"
+				if(EMERGENCY_SHUTTLE_GOING_TO_STATION)
+					return "<b>In transit</b> (To Station)"
+				if(EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM)
+					return "<b>In transit</b> (To Centcom - Round End)"
+		if(SHUTTLE_ON_STATION)
+			return "<b>At the Station</b>"
+		if(SHUTTLE_ON_CENTCOM)
+			return "<b>At Central Command</b> (Round Ended)"
+	return "<b>Unknown</b>"
 
 /datum/emergency_shuttle/proc/force_shutdown()
 	online=0
@@ -268,7 +320,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		if ("transit")
 			location = SHUTTLE_ON_STANDBY // in deep space
 
-			for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
+			for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.shuttle_contents())
 				spawn(0)
 					D.close()
 					D.locked = 1
@@ -294,7 +346,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				var/datum/shuttle/escape/E = shuttle
 				E.close_all_doors()
 
-				for(var/obj/structure/shuttle/engine/propulsion/P in E.linked_area)
+				for(var/obj/structure/shuttle/engine/propulsion/P in E.shuttle_contents())
 					spawn()
 						P.shoot_exhaust(backward = 3)
 
@@ -314,7 +366,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				location = EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM
 
 			//if the crew brought items ordered by centcom with them, they get paid for those as if it were the supply shuttle
-			for(var/atom/movable/MA in shuttle.linked_area)
+			for(var/atom/movable/MA in shuttle.shuttle_contents())
 				if(MA.anchored && !ismecha(MA))
 					continue
 
@@ -377,7 +429,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 					hyperspace_sounds("end")
 					return 1
-				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.shuttle_contents())
 					spawn()
 						P.shoot_exhaust(backward = 3)
 
@@ -430,11 +482,11 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				return 1
 
 			else if(timeleft <= 2) // Just before it leaves, close the damn doors!
-				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
+				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.shuttle_contents())
 					spawn(0)
 						D.close()
 						D.locked = 1
-				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.shuttle_contents())
 					spawn()
 						P.shoot_exhaust(backward = 3)
 

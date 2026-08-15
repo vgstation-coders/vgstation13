@@ -12,11 +12,6 @@ nanoui is used to open and update nano browser uis
 #define STATUS_DISABLED 0 // RED Visability
 #define STATUS_CLOSE -1 // Close the window
 
-// Post-Byond 516 DPI scaling settings affect the opened window.
-// Rather than e.g. 100x100 you get (window size / scale), so for 125% scaling you get 80x80.
-// This messes up a lot of interfaces so this value is cached and applied to opening windows to correct for scaling.
-/client/var/dpiScale = 1
-
 /datum/nanoui
 	// the user who opened this ui
 	var/mob/user
@@ -415,7 +410,8 @@ nanoui is used to open and update nano browser uis
 		template_data_json = replacetext(json_encode(templates), "'", "&#39;")
 
 	var/list/send_data = get_send_data(initial_data)
-	var/initial_data_json = replacetext(json_encode(send_data), "'", "&#39;")
+	var/initial_data_json = url_encode(json_encode(send_data))
+	initial_data_json = replacetext(initial_data_json, "+", "%20") // dont let the window show the spaces as + instead
 
 	var/url_parameters_json = json_encode(list("src" = "\ref[src]"))
 
@@ -534,7 +530,7 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/Topic(href, href_list)
-	if (href_list["nanoui_dpr"])
+	if (href_list["nanoui_dpr"]) //viewport self-reports from layout_default.tmpl, cache dpi on client
 		var/scale = text2num(href_list["nanoui_dpr"])
 		if (!scale && href_list["nanoui_inner_w"] && width)
 			var/inner_width = text2num(href_list["nanoui_inner_w"])
