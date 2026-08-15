@@ -96,8 +96,8 @@ var/list/special_fruits = list()
 	// We ONLY want to apply special effects if we're hitting a turf! That's because throw_impact will always be
 	// called on a turf AFTER it's called on the things ON the turf, and will runtime if the item doesn't exist anymore.
 	if(isturf(hit_atom))
-		do_splat_effects(hit_atom,user)
-	return
+		return do_splat_effects(hit_atom,user)
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_splat_effects(atom/hit_atom, mob/user)
 	if(seed.teleporting)
@@ -107,7 +107,7 @@ var/list/special_fruits = list()
 		else if(splat_decal(get_turf(hit_atom)))
 			visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
-		return
+		return 1
 
 	if(seed.juicy)
 		splat_decal(get_turf(hit_atom))
@@ -116,7 +116,9 @@ var/list/special_fruits = list()
 		reagents.splashplosion(splasharea, TRUE)
 		visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
-		return
+		return 1
+
+	return 0
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/attack(mob/living/M, mob/user, def_zone)
 	if(user.a_intent == I_HURT)
@@ -129,8 +131,7 @@ var/list/special_fruits = list()
 					add_attacklogs(user, M, "stung", object = src, addition = "Reagents: [english_list(seed.get_reagent_names())]", admin_warn = 1)
 			to_chat(user, "<span class='alert'>Some of \the [src]'s stingers break off in the hit!</span>")
 			potency -= rand(1,(potency/3)+1)
-		do_splat_effects(M,user)
-		return
+		return do_splat_effects(M,user)
 	return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/Crossed(var/mob/living/carbon/M)
@@ -1164,7 +1165,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade
-	name = "pomegranate"
+	name = "pomegrenade"
 	desc = "A large red fruit with a hard outer layer, containing some highly repressed feelings about to burst out!"
 	icon = 'icons/obj/hydroponics/pomegrenade.dmi'
 	filling_color = "#ED436E"
@@ -1186,7 +1187,9 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 		blast()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/throw_impact(var/atom/hit_atom)
-	..()
+	. = ..()
+	if (.)
+		return
 	blast()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/ex_act(var/severity)
