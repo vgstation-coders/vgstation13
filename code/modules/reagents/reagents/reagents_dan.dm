@@ -11,8 +11,8 @@
 
 /datum/reagent/discount/New()
 	..()
-	density = rand(12,48)
-	specheatcap = rand(25,2500)/100
+	density = rand(1,12)
+	specheatcap = rand(1,4) / density
 
 /datum/reagent/discount/on_mob_life(var/mob/living/M)
 	if(..())
