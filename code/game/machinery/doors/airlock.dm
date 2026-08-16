@@ -486,29 +486,29 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/update_icon()
 	overlays = 0
-
+	var/autism = 0
 	if(density)
 		if(locked && lights)
 			icon_state = "door_locked"
 		else
-			if(emergency_access_override)
-				icon_state = "waiting_for_sprites_to_materialise" //maybe it'll materialise as an overlay instead so this might need to be reworked
-			else
-				icon_state = "door_closed"
+			icon_state = "door_closed"
+			if(emergency_access_override && lights)
+				var/image/I = image(icon=icon, icon_state="lights_overlay")
+				I.color = "#ffee00" //ffff00 ended up looking greenish and ugly on some doors
+				overlays += I	
+				autism = 1
 		if (panel_open || welded)
-			var/L[0]
 			if (panel_open)
-				L += "panel_open"
+				overlays += "panel_open"
 
 			if (welded)
-				L += "welded"
-
-			overlays = L
-			L = null
+				overlays += "welded"
 	else
 		icon_state = "door_open"
-
-	update_moody_light(icon, "[icon_state]-moody")
+	if(autism)
+		update_moody_light(icon, "lights_moody") //moody_color = "#ffff00"
+	else
+		update_moody_light(icon, "[icon_state]-moody")
 
 /obj/machinery/door/airlock/door_animate(var/animation)
 	kill_moody_light()
