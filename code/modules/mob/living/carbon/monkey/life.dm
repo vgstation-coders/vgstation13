@@ -658,11 +658,11 @@
 			temperature_alert = TEMP_ALARM_HEAT_MILD
 		if(327 to 335)
 			temperature_alert = TEMP_ALARM_HEAT_WEAK
-		if(295 to 327)
+		if(T0C+34 to 327)
 			temperature_alert = TEMP_ALARM_SAFE
-		if(280 to 295)
-			temperature_alert = TEMP_ALARM_COLD_WEAK
-		if(260 to 280)
+		if(T0C+32 to T0C+34)							//magic numbers copied from /mob/living/handle_hypothermia.dm
+			temperature_alert = TEMP_ALARM_COLD_WEAK	//this is fucking horrible and should be in some sort of species var instead
+		if(T0C+28 to T0C+32)
 			temperature_alert = TEMP_ALARM_COLD_MILD
 		else
 			temperature_alert = TEMP_ALARM_COLD_STRONG
