@@ -194,7 +194,7 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
 	build_path = /obj/item/weapon/circuitboard/fission_reactor
-	
+
 /datum/design/fission_fuel_maker
 	name = "Circuit Design (Isotopic Separational Combiner)"
 	desc = "Allows for the construction of circuit boards used to separate and combine different isotopes of materials.\nRemember that the gas port will face south once constructed."
@@ -204,5 +204,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
 	build_path = /obj/item/weapon/circuitboard/fission_fuelmaker
-	
-	
+
+/datum/design/gas_extraction
+	name = "Circuit Design (Gas Extraction Console)"
+	desc = "Allows for the construction of circuit boards used to build gas extraction consoles to monitor gas extractors and their receivers."
+	id = "gas_extraction"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_EXPLORATION = 1)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Console Boards"
+	build_path = /obj/item/weapon/circuitboard/gas_extraction

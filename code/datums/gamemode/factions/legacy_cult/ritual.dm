@@ -85,7 +85,7 @@ var/runedec = 0 // Rune cap ?
 	if(user.wear_mask?.is_muzzle)
 		to_chat(user, "You are unable to speak the words of the rune.")
 		return
-	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
+	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss(INTELLIGENCE_L)))
 		return fizzle()
 //		if(!src.visibility)
 //			src.visibility=1
@@ -165,7 +165,8 @@ var/runedec = 0 // Rune cap ?
 	var/tomedat = ""
 	var/list/words = list("ire" = "ire", "ego" = "ego", "nahlizet" = "nahlizet", "certum" = "certum", "veri" = "veri", "jatkaa" = "jatkaa", "balaq" = "balaq", "mgar" = "mgar", "karazet" = "karazet", "geeri" = "geeri")
 	var/list/cultwords = list()
-
+	var/spine_color = "#444"
+	var/spine_overlay = "#444"
 	tomedat = {"<html>
 				<head>
 				<style>

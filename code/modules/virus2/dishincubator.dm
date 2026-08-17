@@ -327,7 +327,7 @@
 			incubator_light.layer = ABOVE_LIGHTING_LAYER
 			overlays += incubator_light
 			var/image/incubator_glass = image(icon,"incubator_glass")
-			incubator_glass.plane = ABOVE_LIGHTING_PLANE
+			incubator_glass.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 			incubator_glass.layer = ABOVE_LIGHTING_LAYER
 			incubator_glass.blend_mode = BLEND_ADD
 			overlays += incubator_glass

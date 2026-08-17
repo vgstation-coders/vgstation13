@@ -210,7 +210,7 @@
 				return Attach(H)
 	return FALSE
 
-/obj/item/clothing/mask/facehugger/throw_at(atom/target, range, speed)
+/obj/item/clothing/mask/facehugger/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	..()
 	if(stat == CONSCIOUS)
 		icon_state = "[initial(icon_state)]_thrown"
@@ -294,8 +294,7 @@
 		forceMove(target)
 		target.equip_to_slot(src, slot_wear_mask)
 		target.update_inv_wear_mask()
-		target.internal = had_internal //Try to keep the host ALIVE
-		target.update_internals()
+		target.equip_internals(had_internal) //Try to keep the host ALIVE
 
 		if(!sterile && target.hasmouth)
 			L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings

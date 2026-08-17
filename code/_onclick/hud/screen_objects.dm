@@ -16,7 +16,7 @@
 	layer = HUD_BASE_LAYER
 	var/obj/master = null	//A reference to the object in the slot. Grabs or items, generally.
 	var/gun_click_time = -100 //I'm lazy.
-	var/globalscreen = 0 //This screen object is not unique to one screen, can be seen by many
+	var/globalscreen = 0 //This screen object is not unique to one screen, can be seen by many, prevents deletion by reset_screen()
 	appearance_flags = NO_CLIENT_COLOR
 	plane = HUD_PLANE
 
@@ -202,8 +202,9 @@
 			return 1
 	if(master)
 		var/obj/item/I = usr.get_active_hand()
-		if(I && master.can_quick_store(I))
-			master.quick_store(I, usr)
+		var/obj/item/master_item = master
+		if(I && master_item.can_quick_store(I))
+			master_item.quick_store(I, usr)
 			//usr.next_move = world.time+2
 	return 1
 
@@ -243,10 +244,10 @@
 
 /obj/abstract/screen/gun/MouseEntered(location,control,params)
 	//openToolTip(usr,src,params,title = name,content = desc)
-	usr.client?.tooltips.show(src, mouse=params, title=name, content=desc)
+	usr.client?.tooltips?.show(src, mouse=params, title=name, content=desc)
 
 /obj/abstract/screen/gun/MouseExited()
-	usr.client?.tooltips.hide()
+	usr.client?.tooltips?.hide()
 
 /proc/get_random_zone_sel()
 	return pick("l_foot", "r_foot", "l_leg", "r_leg", "l_hand", "r_hand", "l_arm", "r_arm", "chest", "groin", "eyes", "mouth", "head")
@@ -378,6 +379,11 @@
 			if(isliving(usr))
 				var/mob/living/L = usr
 				L.resist()
+
+		if("rest")
+			if(isliving(usr))
+				var/mob/living/L = usr
+				L.lay_down()
 
 		if("mov_intent")
 			if (iscarbon(usr))

@@ -207,6 +207,7 @@
 	desc = "Some kind of fruit smear."
 	density = 0
 	anchored = 1
+	reagent = NUTRIMENT
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("fruit_smudge1", "fruit_smudge2", "fruit_smudge3")
 	icon_state = "fruit_smudge1"
@@ -225,6 +226,7 @@
 	desc = "It's pie cream from a cream pie."
 	density = 0
 	anchored = 1
+	reagent = NUTRIMENT
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_pie")
 
@@ -242,6 +244,7 @@
 	desc = "Now how are you gonna sweep it back up, smartass?"
 	density = 0
 	anchored = 1
+	reagent = SILICA
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "sand"
 	gender = PLURAL
@@ -502,6 +505,7 @@ var/list/salts_particle_emitters = list(
 	gender = PLURAL
 	density = 0
 	anchored = 1
+	reagent = FAKE_CREEP
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "weeds"
 
@@ -510,6 +514,7 @@ var/list/salts_particle_emitters = list(
 	desc = "The floor is sticky!"
 	density = 0
 	anchored = 1
+	reagent = GLUE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "glue"
 	color = COLOR_GLUE

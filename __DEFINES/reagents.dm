@@ -12,7 +12,7 @@
 #define CHEMFLAG_NOTREMOVABLE	8 //cannot be rid of by charcoal (or other reagent tomfoolery means).
 
 #define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
-
+#define EVEN_MORE_EXPLICITLY_INVALID_REAGENT_ID "Use this ID if you need to have a nested invalid ID."
 //Reagents
 
 #define VAPORSALT			"vaporsalt"
@@ -25,6 +25,7 @@
 #define VACCINE 			"vaccine"
 #define WATER 			"water"
 #define LUBE 			"lube"
+#define CHERRYLUBE 		"cherrylube"
 #define SODIUM_POLYACRYLATE			"sodium_polyacrylate"
 #define PHALANXIMINE 			"phalanximine"
 #define TOXIN 			"toxin"
@@ -42,6 +43,8 @@
 #define SACREDWATER 		"sacredwater"
 #define SEROTROTIUM 			"serotrotium"
 #define SILICA 			"silica"
+#define SAWDUST 			"sawdust"
+#define PULP 			"pulp"
 #define SILICATE 			"silicate"
 #define OXYGEN 			"oxygen"
 #define COPPER 			"copper"
@@ -74,6 +77,7 @@
 #define VIRUSFOOD 			"virusfood"
 #define STERILIZINE 			"sterilizine"
 #define IRON 			"iron"
+#define ZETADUST 		"zetadust"
 #define GOLD 			"gold"
 #define SILVER 			"silver"
 #define URANIUM 			"uranium"
@@ -145,6 +149,8 @@
 #define NANOBOTS 			"nanobots"
 #define MEDNANOBOTS 			"mednanobots"
 #define COMNANOBOTS 			"comnanobots"
+#define ZEPTOBOTS 			"zeptobots"
+#define GREYZEPTOBOTS 			"greyzeptobots"
 #define ENGNANOBOTS 			"engnanobots"
 #define CARGONANOBOTS 			"cargonanobots"
 #define FLUOROSURFACTANT 			"fluorosurfactant"
@@ -215,6 +221,7 @@
 #define LIMEJUICE 			"limejuice"
 #define CARROTJUICE 			"carrotjuice"
 #define BERRYJUICE 			"berryjuice"
+#define BERRYJUICEJUNGLE 			"berryjuicejungle"
 #define POISONBERRYJUICE 			"poisonberryjuice"
 #define WATERMELONJUICE 			"watermelonjuice"
 #define APPLEJUICE 			"applejuice"
@@ -237,6 +244,7 @@
 #define SODAWATER 			"sodawater"
 #define ICE 			"ice"
 #define COLA 			"cola"
+#define CRYOCOLA		"cryocola"
 #define SPACEMOUNTAINWIND 			"spacemountainwind"
 #define LEMONADE 			"lemonade"
 #define KIRASPECIAL 			"kiraspecial"
@@ -448,6 +456,7 @@
 #define METASTABLE_MUTAGEN	"metastable"
 #define ELECTRIC_SHEEP		"electric_sheep"
 #define SCIENTISTS_SERENDIPITY		"scientists_serendipity"
+#define SCIENTISTS_SECRET	"scientists_secret"
 #define METABUDDY		"metabuddy"
 #define SPIDERS			"spiders"
 #define WEED_EATER		"weed_eater"
@@ -470,6 +479,7 @@
 #define PLUMPHJUICE		"plumphjuice"
 #define PLUMPHWINE		"phwine"
 #define IRONROT			"ironrot"
+#define ZETAROT			"zetarot"
 #define GEOMETER		"geometer"
 #define EGG_YOLK		"egg_yolk"
 #define PANCAKE			"pancake"
@@ -495,6 +505,13 @@
 #define BLOB_ESSENCE	"blob_essence"
 #define METHAMPHETAMINE "methamphetamine"
 #define GRUGZONE		"grugzone"
+#define JUNGLEJUICE		"junglejuice"
+#define FAKEJUNGLEJUICE		"fakejunglejuice"
+#define FROSTBITE 		"frostbite"
+#define MINTYMULE		"mintymule"
+#define OLDCUBAN		"oldcuban"
+#define CAIPIRINHA		"caipirinha"
+#define ENGLISHGARDEN	"englishgarden"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -619,19 +636,22 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define DEXALINS list(DEXALIN, THYMOL)
 #define ACIDS list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
 #define WATERS list(WATER, HOLYWATER, ICE)
+#define LUBES list(LUBE, CHERRYLUBE)
 #define CORES list(SOFTCORES, MEDCORES)
 #define ALLNANITES list(NANITES, AUTISTNANITES)
 #define SUGARS list(SUGAR, CORNSYRUP)
 #define GUNKS list(CHEMICAL_WASTE, TOXICWASTE, VOMIT, TOXIN, SOLANINE, RADIUM, MUTAGEN, UNTABLE_MUTAGEN, SPIDERS)
-#define COLDDRINKS list(ICECOFFEE, ICETEA, ICED_BEER, ARNOLDPALMER, TONIC, SODAWATER, ICE, COLA, NUKA_COLA, GEOMETER, SPACEMOUNTAINWIND, DR_GIBB, SPACE_UP, LEMON_LIME, LEMONADE, KIRASPECIAL, MILKSHAKE, BROWNSTAR, REWRITER, DIY_SODA)
+#define COLDDRINKS list(ICECOFFEE, ICETEA, ICED_BEER, ARNOLDPALMER, TONIC, SODAWATER, ICE, COLA, NUKA_COLA, GEOMETER, SPACEMOUNTAINWIND, DR_GIBB, SPACE_UP, LEMON_LIME, LEMONADE, KIRASPECIAL, MILKSHAKE, BROWNSTAR, REWRITER, DIY_SODA, CRYOCOLA)
 #define HOTDRINKS list(COFFEE, SOY_LATTE, TEA, GATORMIX, HOT_COCO, HOT_COCO_SUBHUMAN, CREAMY_HOT_COCO) //Blisterol not included as that's medicine, not a warm drink
 //HOT and COLD drinks defines used for the mint toxin/mint essence checks for tooth pain and shit, maybe you can find another use for it
 //Useful reagents for looting
 #define LOOT_REAGENTS list(BEER, WHISKEY, TEQUILA,VODKA, VERMOUTH, RUM, COGNAC, WINE, SAKE, TRIPLESEC, BITTERS, CINNAMONWHISKY, SCHNAPPS, BLUECURACAO, KAHLUA, ALE,	CHAMPAGNE, PWINE, WATER, GIN, SODAWATER, COLA, CREAM, TOMATOJUICE, ORANGEJUICE, LIMEJUICE, TONIC, SPACEMOUNTAINWIND, LEMON_LIME, DR_GIBB, TEA, GREENTEA, REDTEA, COFFEE, MILK, HOT_COCO, SOYMILK, SPORTDRINK, REFRIEDBEANS, BEFF, HORSEMEAT, CORNSYRUP, OFFCOLORCHEESE, BONEMARROW,	GREENRAMEN, DEEPFRIEDRAMEN, DISCOUNT, NUTRIMENT, SUGAR, CORNOIL, LIPOZINE, INAPROVALINE, ANTI_TOXIN, BLISTEROL, KELOTANE, DEXALIN, LEPORAZINE, COCAINE, HYPERZINE, OPIUM, SPACE_DRUGS, ZAMMILD, ZAMSPICES, BLOOD, PANCAKE, FLOUR, MANNITOL, TRICORDRAZINE, HONKSERUM, AMINOMICIN, AMINOBLATELLA, MUTAGEN, KARMOTRINE, OXYCODONE)
+#define GHETTOACIDS list(LIMEJUICE,LEMONJUICE,TOMATOJUICE,VINEGAR)
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"
 #define INCENSE_SUNFLOWERS	"sunflowers"
+#define INCENSE_ROSES		"roses"
 #define INCENSE_MOONFLOWERS	"moonflowers"
 #define INCENSE_NOVAFLOWERS	"novaflowers"
 #define INCENSE_BANANA		"bananas"

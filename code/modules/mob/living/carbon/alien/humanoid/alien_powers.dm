@@ -343,6 +343,13 @@ Doesn't work on other aliens/AI.*/
 	return ..()
 
 /spell/aoe_turf/evolve/larva/spell_do_after(mob/living/carbon/alien/user)
+	if(istype(user,/mob/living/carbon/alien))
+		var/mob/living/carbon/alien/larva/L = user
+		if(L.stowaway)
+			to_chat(user, "<span class='notice'><B>You are a lone stowaway - the only path open to you is that of the Hunter.</B></span>")
+			spawning = /mob/living/carbon/alien/humanoid/hunter
+			return ..()
+
 	var/explanation_message = {"<span class='notice'><B>You are growing into a beautiful alien! It is time to choose a caste.</B><br>
 	There are three castes to choose from:<br>
 	<B>Hunters</B> are strong and agile, able to hunt away from the hive and rapidly move through ventilation shafts. Hunters generate plasma slowly and have low reserves.<br>

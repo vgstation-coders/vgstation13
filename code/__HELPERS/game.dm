@@ -20,11 +20,17 @@
 			return A
 	return 0
 
-/proc/get_area_name(atom/X, format_text = FALSE)
+/proc/get_area_name(atom/X, format_text = FALSE, short = FALSE)
 	var/area/A = isarea(X) ? X : get_area(X)
 	if(!A)
 		return null
-	return format_text ? format_text(A.name) : A.name
+	if(short)
+		if(A.short_name)
+			. = A.short_name
+		else
+			. = replacetext(format_text(get_first_word(A.name)),"'s","")
+	else
+		. = format_text ? format_text(A.name) : A.name
 
 /proc/get_coordinates_string(var/atom/A)
 	var/turf/T = get_turf(A)
@@ -351,18 +357,17 @@
 		mobs_found += M
 	return mobs_found
 
-/proc/mobs_in_allocation(var/datum/allocation/alloc, var/client_needed=0, var/moblist=mob_list)
+/proc/mobs_in_vlevel(var/datum/virtual_z/vz, var/client_needed=FALSE, var/moblist=mob_list)
+	if(!vz)
+		return list()
+	if(vz.size_x == ALLOCATION_FULL && vz.size_y == ALLOCATION_FULL)
+		return mobs_in_zlevel(vz.z(), client_needed, moblist)
 	var/list/mobs_found = list()
-	if(!alloc)
-		return mobs_found
 	for(var/mob/M in moblist)
 		if(client_needed && !M.client)
 			continue
 		var/turf/T = get_turf(M)
-		if(T?.z != alloc.z)
-			continue
-		var/datum/allocation/A = SSmapping.get_allocation(trf = T)
-		if(A != alloc)
+		if(T?.v != vz)
 			continue
 		mobs_found += M
 	return mobs_found

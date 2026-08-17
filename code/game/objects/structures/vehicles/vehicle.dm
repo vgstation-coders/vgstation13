@@ -142,7 +142,7 @@
 						if(!vin || !K.vin || K.vin!=vin) //if neither have a vin id, or they don't match (since they default as null)
 							to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
 							return
-				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
+				if(((M_CLUMSY in user.mutations) || user.getBrainLoss(COORDINATION_L) >= 60) && prob(50))
 					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
 					return
 				if(user.drop_item(W, src))
@@ -434,6 +434,11 @@
 /obj/structure/bed/chair/vehicle/proc/setup_wreckage(var/obj/effect/decal/mecha_wreckage/wreck)
 	// Transfer salvagables here.
 	return
+
+/obj/structure/bed/chair/vehicle/GetAccess()
+	if(is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE))
+		var/atom/locked = get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]
+		return locked.GetAccess()
 
 /obj/structure/bed/chair/vehicle/to_bump(var/atom/movable/obstacle)
 	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))

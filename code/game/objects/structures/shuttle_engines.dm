@@ -68,6 +68,8 @@
 	name = "shuttle engine pre-igniter"
 	var/obj/structure/shuttle/engine/propulsion/DIY/connected_engine
 	anchored = FALSE
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 /obj/structure/shuttle/engine/heater/DIY/proc/try_connect()
 	if(!anchored)
@@ -171,7 +173,7 @@
 
 /obj/structure/shuttle/engine/propulsion/DIY/canAffixHere(var/mob/user)
 	var/turf/T = get_step(src, dir)
-	if(!istype(T, /turf/space))
+	if(!istype(T, /turf/space) || !istype(T,/turf/unsimulated/floor/planetary))
 		to_chat(user, "<span class = 'warning'>\The [src] must be facing and bordering space to be affixed.</span>")
 		return FALSE
 	for(var/obj/O in loc)
@@ -272,3 +274,39 @@ var/list/large_engines = list()
 	icon = 'icons/3x3.dmi'
 	icon_state = "huge_engine"
 	largeness = 2
+
+// -- NTEV ODYSSEY --
+
+/obj/structure/shuttle/engine/propulsion/odyssey
+	icon_state = "propulsion"
+	opacity = 0 // Doesn't block line of sight
+	var/hyperspace_firing = FALSE
+	var/hyperspace_fire_delay = 5 SECONDS
+
+// Name follows the active map variant (NTEV Odyssey / NTEV Theseus); set at runtime
+// because map.nameLong is not a constant expression usable in a type initializer.
+/obj/structure/shuttle/engine/propulsion/odyssey/New()
+	..()
+	name = "[map.nameLong] propulsion engine"
+
+/obj/structure/shuttle/engine/propulsion/odyssey/proc/start_hyperspace_firing()
+	if(hyperspace_firing || destroyed)
+		return
+	hyperspace_firing = TRUE
+	hyperspace_fire_loop()
+
+/obj/structure/shuttle/engine/propulsion/odyssey/proc/stop_hyperspace_firing()
+	hyperspace_firing = FALSE
+
+/obj/structure/shuttle/engine/propulsion/odyssey/proc/hyperspace_fire_loop()
+	set waitfor = FALSE
+	while(hyperspace_firing && !destroyed && !QDELETED(src))
+		sleep(hyperspace_fire_delay)
+		if(hyperspace_firing && !destroyed && !QDELETED(src))
+			shoot_exhaust(backward = 3)
+
+/obj/structure/shuttle/engine/propulsion/odyssey/left
+	icon_state = "propulsion_l"
+
+/obj/structure/shuttle/engine/propulsion/odyssey/right
+	icon_state = "propulsion_r"

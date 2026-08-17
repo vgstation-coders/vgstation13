@@ -460,7 +460,7 @@
 /area/vault/ejectedengine/SMES)
 "bj" = (
 /obj/structure/girder,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/ejectedengine)
 "bk" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
@@ -2134,7 +2134,7 @@
 /area/vault/ejectedengine)
 "fw" = (
 /obj/structure/girder/reinforced,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area/vault/ejectedengine)
 "fx" = (
 /obj/machinery/atmospherics/pipe/simple/general/hidden{

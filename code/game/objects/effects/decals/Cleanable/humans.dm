@@ -48,7 +48,7 @@ var/global/list/blood_list = list()
 	update_plane()
 
 /obj/effect/decal/cleanable/blood/proc/update_plane()
-	if(basecolor == "#FF0000" || basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
+	if((basecolor == "#FF0000") || (basecolor == DEFAULT_BLOOD) || (basecolor == "#a10808ff")) // no dirty dumb vox scum allowed
 		plane = NOIR_BLOOD_PLANE
 	else
 		plane = ABOVE_TURF_PLANE
@@ -302,6 +302,7 @@ var/global/list/blood_list = list()
 	gender = PLURAL
 	density = 0
 	anchored = 1
+	reagent = MUCUS
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mucus"
 	random_icon_states = list("mucus")

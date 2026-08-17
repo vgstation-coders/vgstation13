@@ -147,11 +147,6 @@
 	},
 /turf/simulated/floor/wood,
 /area/mining_bar)
-"aw" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2"
-	},
-/area/mining_bar)
 "ax" = (
 /obj/item/weapon/stool,
 /turf/simulated/floor/wood,
@@ -330,9 +325,7 @@
 	},
 /area/mining_bar)
 "aX" = (
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg3"
-	},
+/turf/simulated/floor/plating/damaged/broken,
 /area/mining_bar)
 "aY" = (
 /obj/structure/table/woodentable,
@@ -566,10 +559,7 @@
 /turf/simulated/floor/engine,
 /area/mining_bar)
 "bR" = (
-/turf/simulated/floor/plating{
-	icon_state = "panelscorched";
-	tag = "icon-panelscorched"
-	},
+/turf/simulated/floor/plating/damaged/burnt,
 /area/mining_bar)
 "bS" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -964,7 +954,7 @@ bX
 as
 bN
 bc
-aw
+aX
 aX
 bl
 br

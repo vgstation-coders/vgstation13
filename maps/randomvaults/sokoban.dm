@@ -50,7 +50,7 @@
 		SL.file_path = pick_n_take(src.available_levels) //No duplicate levels
 		SL.parent = src
 
-		load_dungeon(SL,rotation)
+		load_dungeon(SL,rotation, TRUE)
 		loaded_levels.Add(SL)
 
 	//Load ending
@@ -60,7 +60,7 @@
 	END.file_path = pick(src.available_endings)
 	END.parent = src
 
-	load_dungeon(END)
+	load_dungeon(END, 0, TRUE)
 	loaded_levels.Add(END)
 
 /datum/map_element/vault/sokoban/proc/on_cheat(atom/movable/mover)
@@ -99,6 +99,7 @@
 ///////===========SOKOBAN LEVELS============
 
 /datum/map_element/dungeon/sokoban_level
+	name = "Sokoban Level"
 	var/datum/map_element/vault/sokoban/parent
 
 	var/depth = 0

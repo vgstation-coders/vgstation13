@@ -12,10 +12,10 @@
 /area)
 "r" = (
 /obj/structure/grille,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area)
 "t" = (
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area)
 "x" = (
 /obj/structure/grille,

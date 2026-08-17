@@ -15,10 +15,12 @@
 	attack_verb = list("whacks", "slaps", "slams", "forcefully blesses")
 	var/mob/affecting = null
 	var/datum/religion/my_rel = new /datum/religion
+	var/spine_color = "#888"
+	var/spine_overlay //optional, adds another sprite if set to a color
 	actions_types = list(/datum/action/item_action/convert)
 	rustle_sound = "pageturn"
 
-/obj/item/weapon/storage/bible/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+/obj/item/weapon/storage/bible/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	var/mob/living/user = usr
 	if (istype(user) && istype(my_rel, /datum/religion/belmont) && user?.mind && istype(user.mind.faith, /datum/religion/belmont))
 		new /obj/effect/bible_spin(get_turf(src),usr,src)

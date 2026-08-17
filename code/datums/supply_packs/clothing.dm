@@ -145,6 +145,7 @@
 	/obj/item/clothing/glasses/monocle,
 	/obj/item/clothing/glasses/regular,
 	/obj/item/clothing/glasses/regular/hipster,
+	/obj/item/clothing/glasses/regular/cosmetic,
 	/obj/item/clothing/glasses/scanner/science,
 	/obj/item/clothing/glasses/simonglasses,
 	/obj/item/clothing/glasses/sunglasses,
@@ -204,8 +205,9 @@
 	containsdesc = "Replacement janitor PPE. Includes overalls, a belt, gloves, and galoshes."
 
 /datum/supply_packs/waifu
-	name = "Feminine formalwear"
-	contains = list(/obj/item/clothing/under/dress/dress_fire,
+	name = "Feminine attire"
+	contains = list(/obj/item/clothing/under/dress,
+					/obj/item/clothing/under/dress/dress_fire,
 					/obj/item/clothing/under/dress/dress_green,
 					/obj/item/clothing/under/dress/dress_orange,
 					/obj/item/clothing/under/dress/dress_pink,
@@ -218,13 +220,15 @@
 					/obj/item/clothing/under/wedding/bride_red,
 					/obj/item/clothing/under/wedding/bride_white,
 					/obj/item/clothing/under/sundress,
-					/obj/item/weapon/lipstick/random,
-					/obj/item/weapon/lipstick/random)
+					/obj/item/clothing/under/keyholesweater,
+					/obj/item/clothing/under/casualhoodie/skirt,
+					/obj/item/clothing/under/tian,
+					/obj/item/clothing/under/matsuda)
 	cost = 30
 	containertype = /obj/structure/closet/crate/basic
-	containername = "feminine formalwear crate"
+	containername = "feminine attire crate"
 	group = "Clothing"
-	containsdesc = "Contains a massive collection of dresses and some lipstick to match."
+	containsdesc = "Contains a massive collection of dresses and other female attire."
 
 /datum/supply_packs/knight //why seperate them
 	name = "Knight armors"

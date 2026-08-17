@@ -17,7 +17,7 @@
 	var/loyalty_multiplier = 1
 	if(!isAdminGhost(user)) //admin ghosts don't have customer data
 		loyalty_multiplier = SStrade.loyal_customer(user)
-	return round(baseprice * flux_rate * SStrade.shoal_prestige_factor() * loyalty_multiplier * isflashed())
+	return round(baseprice * flux_rate * SStrade.shoal_prestige_factor() * SStrade.reserve_prestige_factor() * loyalty_multiplier * isflashed())
 
 /datum/trade_product/proc/can_restock()
 	if(!totalsold || !restocks_left)
@@ -109,7 +109,7 @@
 	name = "Yantar medical crate"
 	path = /obj/structure/closet/crate/medical/yantar
 	baseprice = 160
-	maxunits = 1
+	maxunits = 2
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/randommobs

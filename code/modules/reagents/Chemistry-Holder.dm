@@ -32,7 +32,7 @@ var/const/INGEST = 2
 
 		for (var/path in typesof(/datum/reagent) - /datum/reagent)
 			var/datum/reagent/D = new path()
-			if(D.id == EXPLICITLY_INVALID_REAGENT_ID)
+			if(D.id == EXPLICITLY_INVALID_REAGENT_ID || D.id == EVEN_MORE_EXPLICITLY_INVALID_REAGENT_ID)
 				continue
 			chemical_reagents_list[D.id] = D
 
@@ -237,10 +237,10 @@ var/const/INGEST = 2
 		var/turf/T = get_turf(my_atom)
 		if(!T) //we got removed, duh
 			T = get_turf(R.my_atom)
-		minimal_investigation_log(I_CHEMS, "[whodunnit ? "[key_name(whodunnit)]" : "(N/A, last user processed: [usr.ckey])"] \
+		minimal_investigation_log(I_CHEMS, "[whodunnit ? "[key_name(whodunnit)]" : "(N/A, last user processed: [key_name(usr)])"] \
 		transferred [english_list(logged_message)] from \a [my_atom] \ref[my_atom] to \a [R.my_atom] \ref[R.my_atom].", prefix=" ([T.x],[T.y],[T.z])")
 		if(adminwarn_message.len)
-			message_admins("[whodunnit ? "[key_name_and_info(whodunnit)] " : "(unknown whodunnit, last whodunnit processed: [usr.ckey])"]\
+			message_admins("[whodunnit ? "[key_name_and_info(whodunnit)] " : "(unknown whodunnit, last whodunnit processed: [key_name(usr)])"]\
 			has transferred [english_list(adminwarn_message)] from \a [my_atom] (<A HREF='?_src_=vars;Vars=\ref[my_atom]'>VV</A>) to \a [R.my_atom] (<A HREF='?_src_=vars;Vars=\ref[R.my_atom]'>VV</A>).\
 			[whodunnit ? " [formatJumpTo(whodunnit)]" : ""]")
 
@@ -400,6 +400,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return total_transfered
 */
 
+/datum/reagents/proc/trans_removable_to(var/obj/target, var/transfer_frac=0.1, var/transfer_flat=1)
+	var/total_transfered = 0
+	for (var/datum/reagent/current_reagent in reagent_list)
+		if(! (current_reagent.flags & CHEMFLAG_NOTREMOVABLE))
+			var/amt = (get_reagent_amount(current_reagent.id)*transfer_frac) + transfer_flat
+			total_transfered += trans_id_to(target, current_reagent.id, amt)
+	return total_transfered
+
 /datum/reagents/proc/metabolize(var/mob/living/M, var/alien)
 	if(M && chem_temp != M.bodytemperature)
 		chem_temp = M.bodytemperature
@@ -558,7 +566,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
 				C.log_reaction(src, created_volume)
 			if(!(my_atom.flags & SILENTCONTAINER))
-				playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
+				playsound(my_atom, C.reaction_sound, 80, 1)
 
 		C.on_reaction(src, created_volume)
 		if(C.react_discretely)

@@ -278,6 +278,11 @@
 		/obj/item/stack/sheet/glass/glass)
 	result = /obj/item/weapon/reagent_containers/food/snacks/glassburger
 
+/datum/recipe/dinonugget
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/oogabooga)
+	result = /obj/item/weapon/reagent_containers/food/snacks/dinonuggies
+
 // Burger sliders //////////////////////////////////////////////
 
 /datum/recipe/sliders
@@ -1981,7 +1986,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
-		/obj/item/weapon/reagent_containers/food/snacks/mint
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mint
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/orzosalad
 
@@ -2847,16 +2852,23 @@
 
 /datum/recipe/ijzerkoekje
 	reagents = list(FLOUR = 30, IRON = 30)
-	result = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy
+	result = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
 
-/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy
-	name = "Helper Dummy"
-	desc = "You should never see this text."
+/datum/recipe/ijzerkoekje/make_food(obj/container, mob/user)
+	// fixing a buggy old hack, dont ask any questions
+	for (var/i = 1 to 5)
+		new result(get_turf(container))
+	return ..()
 
-/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy/New()
-	for(var/i = 1 to 6)
-		new /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje(get_turf(src))
-	qdel(src)
+/datum/recipe/vreemdkoekje
+	reagents = list(FLOUR = 30, ZETADUST = 30)
+	result = /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje
+
+/datum/recipe/vreemdkoekje/make_food(obj/container, mob/user)
+	// fixing a buggy old hack, dont ask any questions
+	for (var/i = 1 to 5)
+		new result(get_turf(container))
+	return ..()
 
 /datum/recipe/pimiento
 	items = list(
@@ -3067,7 +3079,11 @@
 
 /datum/recipe/toxicmint
 	reagents = list(SUGARS = 1)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mint)
+	result = /obj/item/weapon/reagent_containers/food/snacks/mint
+
+/datum/recipe/toxicmintalt
+	reagents = list(SUGARS = 1, MINTTOXIN = 1)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mint
 
 /datum/recipe/vanishingstew
@@ -3758,6 +3774,22 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
 
+/datum/recipe/sliders/roachgunk
+	priority = 1 //flour is inherited from the original slider recipe
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk
+
+/datum/recipe/sliders/cricketgunk
+	priority = 1
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk
+
 /datum/recipe/hopcorn
 	items = list(
 				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
@@ -3872,6 +3904,10 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/roachesonstick
+
+//////////////////////////////////
+// YE HAVE LEFT THE GUNK ZONE ///
+////////////////////////////////
 
 /datum/recipe/sugarcube
 	reagents = list(SODIUMCHLORIDE = 10)

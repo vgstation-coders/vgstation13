@@ -16,11 +16,11 @@
 	req_access = list(access_genetics) //For premature unlocking.
 	var/mob/living/occupant
 	//list of mob/living/ that are currently in the pod. Usually only one, but in exceptional circumstances there may be multiple. All are ejected at the same time (when everyone's ready)
-	var/list/occupants[0] 
+	var/list/occupants[0]
 	var/heal_level = 0 //The clone is released once its health reaches this level.
 	var/locked = FALSE
 	var/frequency = 0
-	var/obj/machinery/computer/cloning/connected = null //So we remember the connected clone machine.
+	var/list/obj/machinery/computer/cloning/connected = list() //So we remember the connected clone machine.
 	var/mess = FALSE //Need to clean out it if it's full of exploded clone.
 	var/working = FALSE //One clone attempt at a time thanks
 	var/eject_wait = FALSE //Don't eject them as soon as they are created fuckkk
@@ -29,7 +29,6 @@
 	var/resource_efficiency = 1
 	id_tag = "clone_pod"
 	var/upgraded = 0 //if fully upgraded with T4 components, it will drastically improve and allow for some stuff
-	var/obj/machinery/computer/cloning/cloning_computer = null
 	var/list/cloned_records = list() //List of all records this pod has cloned.
 
 
@@ -239,9 +238,11 @@
 		H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna = TRUE)
 	H.times_cloned = R.times_cloned + 1
 	H.talkcount = R.talkcount
+	if(R.clown)
+		H.mutations.Add(M_CLUMSY)
 
 	if(isplasmaman(H))
-		H.fire_sprite = "Plasmaman" 
+		H.fire_sprite = "Plasmaman"
 
 	H.dna = R.dna.Clone()
 	H.dna.flavor_text = R.dna.flavor_text
@@ -252,7 +253,7 @@
 	H.UpdateAppearance()
 	H.set_species(H.dna.species)
 	H.update_mutantrace()
-	
+
 	if(do_mind_transfer)
 		has_been_shade.Remove(clonemind)
 		clonemind.transfer_to(H)
@@ -294,7 +295,7 @@
 				if(!force_clone && !isobserver(P))
 					return FALSE
 				break
-	
+
 	var/original_in_cloner = (original in occupants)
 	var/mob/living/carbon/human/H
 	if(original.dna.species == "Vox") //Special case for vox so they get their feathers.
@@ -306,16 +307,18 @@
 	else
 		H.times_cloned = original.times_cloned + 1
 	H.talkcount = original.talkcount
+	if(M_CLUMSY in original.mutations)
+		H.mutations.Add(M_CLUMSY)
 
 	if(isplasmaman(H))
 		H.fire_sprite = "Plasmaman"
-	
+
 	H.dna = original.dna.Clone()
 	H.dna.flavor_text = original.dna.flavor_text
 	H.dna.species = original.dna.species
 	if(H.dna.species != "Human")
 		H.set_species(H.dna.species, TRUE)
-	
+
 	H.UpdateAppearance()
 	H.set_species(H.dna.species)
 	H.update_mutantrace()
@@ -348,6 +351,7 @@
 	R.default_language = H.default_language
 	R.times_cloned = H.times_cloned
 	R.talkcount = H.talkcount
+	R.clown = (M_CLUMSY in H.mutations)
 	if (!isnull(H.mind))
 		R.mind = "\ref[H.mind]"
 	cloned_records += R
@@ -363,7 +367,7 @@
 /obj/machinery/cloning/clonepod/proc/addclone(var/mob/living/carbon/human/H, var/mob/living/copy_progress_from = null)
 	if(heal_level == 0)
 		heal_level = upgraded ? 100 : rand(10,40) //Randomizes what health the clone is when ejected
-	
+
 	//only lock if we're not already working on a clone
 	if(!working)
 		locked = TRUE
@@ -376,12 +380,11 @@
 
 	occupants += H
 
-	if(!connected.emagged)
-		icon_state = "pod_1"
-	else
-		icon_state = "pod_e"
-
-	connected.update_icon()
+	icon_state = "pod_1"
+	for(var/obj/machinery/computer/cloning/C in connected)
+		if(C.emagged)
+			icon_state = "pod_e"
+		C.update_icon()
 
 	isslimeperson(H) ? H.adjustToxLoss(75) : H.adjustCloneLoss(150) // 75 for slime people due to their tox_mod of 2
 	H.adjustBrainLoss(upgraded ? 0 : (heal_level + 50 + rand(10, 30))) // The rand(10, 30) will come out as extra brain damage
@@ -446,6 +449,7 @@
     R.default_language = orig_record.default_language
     R.times_cloned = orig_record.times_cloned
     R.talkcount = orig_record.talkcount
+    R.clown = orig_record.clown
 
     var/mob/living/carbon/human/clone = growclone(R, copy_progress_from=null, do_mind_transfer=TRUE, allow_multiple=TRUE, force_clone=TRUE)
     var/datum/mind/new_mind = clone.mind
@@ -542,10 +546,10 @@
 	return..()
 
 /obj/machinery/cloning/clonepod/Destroy()
-	if(connected)
-		if(connected.pod1 == src)
-			connected.pod1 = null
-		connected = null
+	for(var/obj/machinery/computer/cloning/C in connected)
+		if(src in C.pods)
+			C.pods -= src
+		C = null
 	go_out() //Eject everything
 
 	. = ..()
@@ -579,8 +583,9 @@
 	if (!message)
 		return FALSE
 
-	connected.temp = message
-	connected.updateUsrDialog()
+	for(var/obj/machinery/computer/cloning/C in connected)
+		C.temp = message
+		C.updateUsrDialog()
 	return TRUE
 
 /obj/machinery/cloning/clonepod/verb/eject()
@@ -649,7 +654,8 @@
 	icon_state = "pod_0"
 	eject_wait = FALSE
 	heal_level = 0 //so that it will be re-randomized next time
-	connected.update_icon()
+	for(var/obj/machinery/computer/cloning/CL in connected)
+		CL.update_icon()
 	working = FALSE //NOW we're done.
 
 	return TRUE

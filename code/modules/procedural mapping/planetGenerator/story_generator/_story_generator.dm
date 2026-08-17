@@ -484,17 +484,29 @@ var/list/datum/story_theme/story_themes = list()
 	var/character_name = ""
 	var/ruin_name = ""
 
+/obj/machinery/old_database/examine(mob/user)
+	..()
+	if(activating)
+		to_chat(user, "<span class='warning'>It is currently rebooting.</span>")
+	else
+		to_chat(user, "<span class='notice'>It is powered off. You can attempt to activate it to recover any stored data.</span>")
+
 /obj/machinery/old_database/attack_hand(mob/user)
+	if(..())
+		return
+	if(isobserver(user) && !isAdminGhost(user))
+		to_chat(user, "<span class='warning'>Your ghostly limb passes right through \the [src].</span>")
+		return
+
 	if(activated)
 		to_chat(user, "<span class='notice'>\The [src] has already been activated and its data retrieved.</span>")
 		return
-
 	if(activating)
 		to_chat(user, "<span class='warning'>\The [src] is already in the process of rebooting!</span>")
 		return
 
 	activating = TRUE
-	var/reboot_time = rand(5, 15) MINUTES
+	var/reboot_time = (map.nameShort == "odyssey" || map.nameShort == "theseus") ? rand(2, 5) MINUTES : rand(5, 15) MINUTES
 
 	visible_message("<span class='notice'>\The [src] begins to hum as [user] initiates the boot sequence...</span>")
 	playsound(src, 'sound/machines/click.ogg', 50, 1)
@@ -514,12 +526,9 @@ var/list/datum/story_theme/story_themes = list()
 	activating = FALSE
 	icon_state = "blackbox"
 
-	var/turf/T = get_turf(src)
-	var/datum/allocation/alloc = SSmapping.get_allocation(trf = T)
-
-	if(istype(alloc))
-		if(alloc.comms_relay.activate())
-			say("PLANETARY RELAY LINK ESTABLISHED.")
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(vz?.comms_relay.activate())
+		say("PLANETARY RELAY LINK ESTABLISHED.")
 
 	visible_message("<span class='notice'>\The [src] completes its boot sequence with a triumphant chime!</span>")
 	playsound(src, 'sound/machines/ping.ogg', 50, 1)
@@ -530,10 +539,6 @@ var/list/datum/story_theme/story_themes = list()
 
 /obj/machinery/old_database/proc/generate_data_disk()
 	var/turf/T = get_turf(src)
-	var/datum/allocation/alloc = SSmapping.get_allocation(trf = T)
-
-	if(istype(alloc) && alloc.placed_ruin)
-		ruin_name = alloc.placed_ruin.name
 
 	var/list/valid_techs = list(
 		list("id" = Tc_MATERIALS, "name" = "Materials Research"),
@@ -546,8 +551,14 @@ var/list/datum/story_theme/story_themes = list()
 		list("id" = Tc_MAGNETS, "name" = "Electromagnetic Research"),
 		list("id" = Tc_PROGRAMMING, "name" = "Data Theory Research")
 	)
-	var/list/chosen_tech = pick(valid_techs)
-	var/tech_level = rand(2, 4)
+	var/list/chosen_tech
+	var/tech_level
+	if(prob(50))
+		chosen_tech = list("id" = Tc_EXPLORATION, "name" = "Exploration Research")
+		tech_level = 1
+	else
+		chosen_tech = pick(valid_techs)
+		tech_level = rand(2, 4)
 
 	var/obj/item/weapon/disk/hdd/disk = new(T)
 	disk.name = "Recovered Data Drive"
@@ -557,8 +568,9 @@ var/list/datum/story_theme/story_themes = list()
 	var/planet_desc = "an unknown world"
 	var/history_style = "standard"
 
-	if(istype(alloc) && alloc.ptype)
-		var/datum/planet_type/ptype = alloc.ptype
+	var/datum/virtual_z/vz = get_virtual_z()
+	if(vz?.planet)
+		var/datum/planet_type/ptype = vz.planet
 		planet_desc = ptype.planet_name
 		history_style = ptype.name
 

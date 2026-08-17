@@ -21,6 +21,7 @@
 	specheatcap = 0.68
 	glass_icon_state = "dr_gibb_glass"
 	glass_desc = "Unless you are an industrial tool, this is probably not safe for consumption."
+	//arcane_id = PLASMA
 
 /datum/reagent/fuel/reaction_obj(var/obj/O, var/volume)
 	var/datum/reagent/self = src
@@ -133,13 +134,24 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.11775
 	specheatcap = 2.71388
+	arcane_id = SODIUM_POLYACRYLATE
+	var/lube_color = null
 
 /datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
 		return 1
 
 	if(volume >= 1)
-		T.wet(800, TURF_WET_LUBE)
+		T.wet(800, TURF_WET_LUBE, lube_color)
+
+/datum/reagent/lube/cherry
+	name = "Cherry-Flavored Lube"
+	id = CHERRYLUBE
+	description = "Your favorite."
+	color = "#FF80B0"
+	density = 1.11775
+	specheatcap = 2.71388
+	lube_color = "#FF80B0"
 
 /datum/reagent/luminol
 	name = "Luminol"
@@ -172,6 +184,7 @@
 	custom_metabolism = 0.5
 	density = 1.98
 	specheatcap = 1.39
+	arcane_id = WATER
 	plant_toxins = 20
 	plant_health = -5
 
@@ -268,6 +281,7 @@
 	custom_metabolism = 0.5
 	density = 1.84
 	specheatcap = 1.38
+	arcane_id = WATER
 	plant_toxins = 2
 
 /datum/reagent/sacid/on_mob_life(var/mob/living/M)
@@ -357,6 +371,7 @@
 	color = "#FFFFFF"
 	density = 1.22
 	specheatcap = 4.14
+	arcane_id = LUBE
 
 /datum/reagent/sodium_polyacrylate/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -377,6 +392,7 @@
 	density = 0.76
 	specheatcap = 60.17
 	var/clean_level = CLEANLINESS_SPACECLEANER
+	arcane_id = BLOOD
 
 /datum/reagent/space_cleaner/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -389,7 +405,7 @@
 	if(..())
 		return 1
 
-	if(volume >= 1)
+	if ((volume >= 1) || (clean_level >= CLEANLINESS_BLEACH))
 		for (var/obj/effect/decal/cleanable/C in T)
 			qdel(C)
 
@@ -397,8 +413,6 @@
 			T.overlays -= T.advanced_graffiti_overlay
 			T.advanced_graffiti_overlay = null
 			qdel(T.advanced_graffiti)
-
-		T.clean_blood()
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5, 10))
@@ -484,7 +498,7 @@
 				H.audible_scream()
 				to_chat(H,"<span class='danger'>You are sprayed directly in the eyes with bleach!</span>")
 				H.eye_blurry = max(M.eye_blurry, 15)
-				H.eye_blind = max(M.eye_blind, 5)
+				H.instant_blindness(15)
 				H.adjustBruteLoss(2)
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 				E.take_damage(5, 1)

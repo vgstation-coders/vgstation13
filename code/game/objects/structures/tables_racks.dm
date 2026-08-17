@@ -268,7 +268,12 @@
 
 	if(!usr)
 		return
-	do_flip()
+	if(flipped)
+		if(get_dir(loc, usr) != dir)
+			return
+		do_put()
+	else
+		do_flip()
 
 /obj/structure/table/glass/kick_act()
 	health -= 5
@@ -374,7 +379,7 @@
 		return
 	return ..()
 
-/obj/structure/table/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
+/obj/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
 	var/turf/oldloc = get_turf(victim)
 	for (var/atom/A in loc)
 		if (A == src || A == victim || A == user)
@@ -881,10 +886,6 @@
 			user.do_attack_animation(src, user)
 			visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 			destroy()
-	else if(istype(user,/mob/living/complex_animal))
-		user.do_attack_animation(src, user)
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
-		destroy()
 
 /obj/structure/rack/attack_tk() // no telehulk sorry
 	return

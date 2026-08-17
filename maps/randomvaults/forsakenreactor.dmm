@@ -70,8 +70,7 @@
 	one_way = 1
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/forsakenreactor)
@@ -311,8 +310,7 @@
 /area/vault/forsakenreactor)
 "eK" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	one_way = 1
@@ -384,8 +382,7 @@
 	},
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/forsakenreactor)
@@ -517,8 +514,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	one_way = 1
@@ -663,8 +659,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -779,8 +774,7 @@
 /area/vault/forsakenreactor)
 "jX" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	one_way = 1
@@ -1185,17 +1179,6 @@
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
-"pf" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/turf/simulated/floor/plating,
-/area/vault/forsakenreactor)
 "pp" = (
 /obj/structure/table/reinforced,
 /turf/simulated/floor{
@@ -1313,8 +1296,7 @@
 	one_way = 1
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -1426,8 +1408,7 @@
 	one_way = 1
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -1606,8 +1587,7 @@
 /area/vault/forsakenreactor)
 "vn" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	one_way = 1
@@ -1813,8 +1793,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -2174,8 +2153,7 @@
 /area/vault/forsakenreactor)
 "EX" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
@@ -2244,8 +2222,7 @@
 "Gl" = (
 /obj/machinery/portable_atmospherics/canister/nitrogen,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark brown stripe";
@@ -2763,8 +2740,7 @@
 	one_way = 1
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/forsakenreactor)
@@ -3161,8 +3137,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	one_way = 1
@@ -4149,7 +4124,7 @@ EX
 kA
 eW
 nH
-pf
+ws
 rS
 Nf
 no
@@ -4409,11 +4384,11 @@ lm
 bB
 kA
 sa
-pf
+ws
 xP
 xQ
 ga
-pf
+ws
 eW
 sa
 Th

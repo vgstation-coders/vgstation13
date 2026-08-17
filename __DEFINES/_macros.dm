@@ -82,7 +82,7 @@
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
 
-#define isanimal(A) istype(A, /mob/living/simple_animal) || istype(A,/mob/living/complex_animal)
+#define isanimal(A) istype(A, /mob/living/simple_animal)
 
 #define iscorgi(A) istype(A, /mob/living/simple_animal/corgi)
 
@@ -382,7 +382,7 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 		return 0
 
 	for(var/datum/shuttle/S in shuttles)
-		if(S.linked_area == AA)
+		if(S.has_area(AA))
 			return S
 
 	return 0

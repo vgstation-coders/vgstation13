@@ -356,53 +356,72 @@
         to_chat(U, "[bicon(pda_device)] <span class='notice'>ERROR: Messaging server is not responding.</span>")
 
 /datum/pda_app/multimessage
-    name = "Department Messenger"
-    desc = "Messages an entire department at once."
-    price = 0
-    has_screen = FALSE
-    icon = "pda_mail"
+	name = "Department Messenger"
+	desc = "Messages an entire department at once."
+	price = 0
+	icon = "pda_mail"
+	var/send_poll = FALSE
+	var/static/list/multimessage_department_list = list("Security","Engineering","Medical","Research","Cargo","Service","Everyone")
 
-/datum/pda_app/multimessage/on_select(var/mob/user)
-    var/list/department_list = list("Security","Engineering","Medical","Research","Cargo","Service","Everyone")
-    var/target = input("Select a department", "CAMO Service") as null|anything in department_list
-    if(!target)
-        return
-    var/t = input(user, "Please enter message", "Message to [target]", null) as text|null
-    var/pollamt = clamp(input(user, "Create poll? (2 or more choices, less skips)", "Message to [target]", 0) as num|null,0,5)
-    var/list/newpoll = null
-    if(pollamt > 1)
-        newpoll = list()
-        for(var/i in 1 to pollamt)
-            var/inpt = input(user, "Please enter poll option ([i] of [pollamt])", "Message to [target]", "") as text
-            inpt = copytext(sanitize(inpt), 1, MAX_MESSAGE_LEN)
-            if(!inpt || inpt == "")
-                newpoll = null
-                break
-            newpoll += list(inpt)
-    t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
+/datum/pda_app/multimessage/get_dat(var/mob/user)
+	var/dat = ""
+	dat += {"<h4><span class='pda_icon pda_mail'></span> MultiMessenger V2.0.6</h4>
+			<a href='byond://?src=\ref[src];togglePoll=1'><span class='pda_icon pda_mail'></span> Poll creation: [send_poll ? "On" : "Off"]</a><br>
+			<h4><span class='pda_icon pda_menu'></span> Select Department</h4><ul>"}
+	for (var/dept_name in multimessage_department_list)
+		dat += "<li><a href='byond://?src=\ref[src];multicast=[dept_name]'>[dept_name]</a></li>"
+	dat += "</ul>"
+	return dat
 
-    var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in pda_device.applications
-    //If no message or messenger, messaging is off, and we're either dead, unconscious, out of range or not in usr
-    if (!message_app ||!t || message_app.toff || user.stat || (!in_range(pda_device, user) && pda_device.loc != user))
-        return
-    if (message_app.last_text && world.time < message_app.last_text + 5)
-        return
-    message_app.last_text = world.time
-    if(newpoll)
-        message_app.polls[t] = newpoll.Copy()
-        message_app.polls_used[t] = newpoll.Copy()
-    for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
-        if(multicaster.check_status())
-            var/datum/signal/signal = pda_device.telecomms_process()
-            if(signal)
-                if(signal.data["done"])
-                    var/turf/pos = get_turf(multicaster)
-                    if(pos.z in signal.data["level"])
-                        //Let's make this barely readable
-                        if(signal.data["compression"] > 0)
-                            t = Gibberish(t, signal.data["compression"] + 50)
-                        multicaster.multicast(target,pda_device,user,t,newpoll)
-                        message_app.tnote["[msg_id]"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
-                        msg_id++
-                        return
-    to_chat(user, "[bicon(pda_device)]<span class='warning'>The PDA's screen flashes, 'Error, CAMO server is not responding.'</span>")
+/datum/pda_app/multimessage/Topic(href, href_list)
+	if(..())
+		return
+	var/mob/living/U = usr
+	if(href_list["togglePoll"])
+		send_poll = !send_poll
+		refresh_pda()
+	if(href_list["multicast"])
+		var/target = href_list["multicast"]
+		if(!target || !(target in multimessage_department_list))
+			return
+		var/t = input(U, "Please enter message", "Message to [target]", null) as text|null
+		var/pollamt = 0
+		if(send_poll)
+			pollamt = clamp(input(U, "Create poll? (2 or more choices, less skips)", "Message to [target]", 0) as num|null,0,5)
+		var/list/newpoll = null
+		if(pollamt > 1)
+			newpoll = list()
+			for(var/i in 1 to pollamt)
+				var/inpt = input(U, "Please enter poll option ([i] of [pollamt])", "Message to [target]", "") as text
+				inpt = copytext(sanitize(inpt), 1, MAX_MESSAGE_LEN)
+				if(!inpt || inpt == "")
+					newpoll = null
+					break
+				newpoll += list(inpt)
+		t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
+
+		var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in pda_device.applications
+		//If no message or messenger, messaging is off, and we're either dead, unconscious, out of range or not in usr
+		if (!message_app ||!t || message_app.toff || U.stat || (!in_range(pda_device, U) && pda_device.loc != U))
+			return
+		if (message_app.last_text && world.time < message_app.last_text + 5)
+			return
+		message_app.last_text = world.time
+		if(newpoll)
+			message_app.polls[t] = newpoll.Copy()
+			message_app.polls_used[t] = newpoll.Copy()
+		for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
+			if(multicaster.check_status())
+				var/datum/signal/signal = pda_device.telecomms_process()
+				if(signal)
+					if(signal.data["done"])
+						var/turf/pos = get_turf(multicaster)
+						if(pos.z in signal.data["level"])
+							//Let's make this barely readable
+							if(signal.data["compression"] > 0)
+								t = Gibberish(t, signal.data["compression"] + 50)
+							multicaster.multicast(target,pda_device,U,t,newpoll)
+							message_app.tnote["[msg_id]"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
+							msg_id++
+							return
+		to_chat(U, "[bicon(pda_device)]<span class='warning'>The PDA's screen flashes, 'Error, CAMO server is not responding.'</span>")

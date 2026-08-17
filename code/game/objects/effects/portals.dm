@@ -85,13 +85,16 @@
 		if(target)
 			if(istype(target, /obj/effect/portal))
 				var/obj/effect/portal/P = target
-				if(get_turf(src) && get_turf(P))
+				var/turf/Tsrc = get_turf(src)
+				var/turf/Ttgt = get_turf(P)
+				if(Tsrc && Ttgt)
+					// Both sides need a valid zone for the cross-connection, otherwise B.return_air() inside connection_edge is null and we'd spam ZAS runtimes every tick.
+					var/src_valid = SSair.has_valid_zone(Tsrc)
+					var/tgt_valid = SSair.has_valid_zone(Ttgt)
 					var/valid_connection = FALSE
-					if(SSair.has_valid_zone(get_turf(src)))
-						atmos_connection = new (get_turf(src), get_turf(P))
-						valid_connection = TRUE
-					if(SSair.has_valid_zone(get_turf(P)))
-						P.atmos_connection = new (get_turf(P), get_turf(src))
+					if(src_valid && tgt_valid)
+						atmos_connection = new (Tsrc, Ttgt)
+						P.atmos_connection = new (Ttgt, Tsrc)
 						valid_connection = TRUE
 					if(valid_connection)
 						P.atmos_connected = TRUE

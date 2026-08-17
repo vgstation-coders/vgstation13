@@ -106,7 +106,7 @@
 			process_temperature()
 			if(clumsy_check(user))
 				user.ignite()
-				user.visible_message("<span class='danger'>[user] tried to spray a plume of fire from \his [src] but ignited himself!</span>","<span class='danger'>You try to spray a plume of fire from your [src] but only ignite yourself!</span>")
+				user.visible_message("<span class='danger'>[user] tried to spray a plume of fire from \his [src] but ignited himself!</span>","<span class='danger'>You try to spray a plume of fire from your [src.name] but only ignite yourself!</span>")
 				return
 			if(!user.get_item_by_slot(slot_gloves) && prob(10))
 				to_chat(user,"<span class='danger'>The heat from the spray bottle burns your hand!</span>")
@@ -125,7 +125,7 @@
 			spawn()
 				projectile.OnFired()
 				projectile.process()
-			user.visible_message("<span class='danger'>[user] sprays a plume of fire from \his [src]!</span>","<span class='danger'>You spray a plume of fire from your [src]!</span>")
+			user.visible_message("<span class='danger'>[user] sprays a plume of fire from \his [src]!</span>","<span class='danger'>You spray a plume of fire from your [src.name]!</span>")
 			update_icon()
 			playsound(user, 'sound/weapons/flamethrower.ogg', 50, 1)
 			return

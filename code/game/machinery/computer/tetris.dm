@@ -14,6 +14,7 @@ var/list/deleted_machines_tetris_highscores = list()
 	circuit = "/obj/item/weapon/circuitboard/tetris"
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	light_color = LIGHT_COLOR_GREEN
+	moody_state = "overlay_arcade"
 
 	var/total_score = list()
 	var/next_tech_threshold = list()
@@ -40,7 +41,7 @@ var/list/deleted_machines_tetris_highscores = list()
 	return ..()
 
 /obj/machinery/computer/tetris/initialize()
-	leaderboard_init = SSpersistence_misc.read_data(/datum/persistence_task/highscores/tetris)
+	leaderboard_init = SSpersistence_tasks.read_data(/datum/persistence_task/highscores/tetris)
 	return ..()
 
 /obj/machinery/computer/tetris/Destroy()
@@ -61,7 +62,7 @@ var/list/deleted_machines_tetris_highscores = list()
 			var/score_delta = temp_score - total_score[usr.key]
 			if (score_delta > PERFECT_SCORE)
 				say("CHEATERS NEVER PROSPER.")
-			if (world.time - MINIMAL_SCORE_INTERVAL < last_scored_time[usr.key])
+			if (last_scored_time[usr.key] && last_scored_time[usr.key] != world.time && last_scored_time[usr.key] > world.time - MINIMAL_SCORE_INTERVAL)
 				say("CHEATERS NEVER PROSPER.")
 			if (temp_score < total_score[usr.key]) // Means they restarted!
 				next_tech_threshold[usr.key] = 100

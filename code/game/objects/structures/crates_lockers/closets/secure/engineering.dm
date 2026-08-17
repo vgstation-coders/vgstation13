@@ -97,9 +97,8 @@
 		/obj/item/device/radio/headset/headset_eng,
 		/obj/item/clothing/suit/storage/hazardvest,
 		/obj/item/clothing/mask/gas,
-		pick(
-			/obj/item/clothing/glasses/scanner/meson/prescription,
-			/obj/item/clothing/glasses/scanner/meson),
+		/obj/item/clothing/glasses/scanner/meson/prescription,
+		/obj/item/clothing/glasses/scanner/meson,
 		/obj/item/taperoll/engineering,
 		/obj/item/taperoll/engineering,
 		/obj/item/device/gps/engineering,

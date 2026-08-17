@@ -274,6 +274,7 @@
 	toolspeed = 0.3
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=2"
 	desc = "Yours is the drill that will pierce through the rock walls."
+	starting_materials = list(MAT_IRON = 6000, MAT_GLASS = 1000)
 	drill_verb = "drilling"
 	hitsound = 'sound/weapons/circsawhit.ogg'
 	diggables = DIG_ROCKS | DIG_SOIL //drills are multipurpose
@@ -335,7 +336,7 @@
 	sharpness = 0.8
 	throwforce = 7.0
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 2.5) // costs less than a full pick, come on man it's a tiny ass shovel
+	starting_materials = list(MAT_IRON = 65)
 	toolspeed = 0.6 //slower than the large shovel
 
 

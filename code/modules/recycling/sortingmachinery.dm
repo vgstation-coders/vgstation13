@@ -1,4 +1,5 @@
 //Default list destination taggers and such can use.
+var/list/tagger_locations = list()
 
 /obj/item/device/destTagger
 	name = "destination tagger"
@@ -11,6 +12,7 @@
 	var/mode  = 0 //If the tagger is "hacked" so you can add extra tags.
 
 	var/currTag = 0
+	var/add_tag = FALSE
 	var/list/destinations  = list()
 
 	w_class = W_CLASS_TINY
@@ -28,11 +30,17 @@
 
 /obj/item/device/destTagger/New()
 	. = ..()
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
-	// Make sure to not copy any null ones, null is for map overrides to remove.
-	for(var/dest in map.default_tagger_locations)
-		if(dest)
-			destinations += dest
+/obj/item/device/destTagger/initialize()
+	if(!tagger_locations.len)
+		setup_tagger_locations()
+	destinations = tagger_locations.Copy()
+
+/proc/setup_tagger_locations()
+	for(var/obj/structure/disposalpipe/sortjunction/SJ in sort_junctions)
+		tagger_locations |= SJ.sort_tags
 
 /obj/item/device/destTagger/interact(mob/user as mob)
 
@@ -46,10 +54,11 @@
 
 	dat += "</tr></table><br>Current Selection: [currTag ? destinations[currTag] : "None"].<hr><br>"
 
+	dat += "<a href='?src=\ref[src];toggleAdd=1'>[add_tag ? "Add" : "Replace"] tag on sorting junctions</a>"
 	if(mode)
 		dat += "<a href='?src=\ref[src];new_dest=1'>Add destination</a>"
 
-	var/datum/browser/popup = new(user, "destTagger", name, 380, 350, src)
+	var/datum/browser/popup = new(user, "destTagger", name, 450, 350, src)
 	popup.add_stylesheet("shared", 'nano/css/shared.css')
 	popup.set_content(dat)
 	popup.open()
@@ -89,6 +98,11 @@
 
 	if(href_list["nextTag"])
 		currTag = clamp(text2num(href_list["nextTag"]), 0, destinations.len)
+		interact(usr)
+		return 1
+
+	if(href_list["toggleAdd"])
+		add_tag = !add_tag
 		interact(usr)
 		return 1
 
@@ -150,11 +164,8 @@
 
 	//testing("[src] FUCKING BUMPED BY \a [AM]")
 
-	if(istype(AM, /obj))
+	if(isobj(AM) || ismob(AM))
 		receive_atom(AM)
-	else if(istype(AM, /mob))
-		receive_atom(AM)
-
 
 /obj/machinery/disposal/deliveryChute/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(istype(AM,/obj/item))
@@ -509,11 +520,6 @@
 /obj/machinery/sorting_machine/destination/New()
 	. = ..()
 
-	destinations = map.default_tagger_locations.Copy() //Here because BYOND.
-
-	for(var/i = 1, i <= destinations.len, i++)
-		destinations[i] = uppertext(destinations[i])
-
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/sorting_machine/destination,
 		/obj/item/weapon/stock_parts/matter_bin,
@@ -522,6 +528,17 @@
 		/obj/item/weapon/stock_parts/capacitor
 	)
 	RefreshParts()
+
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
+
+/obj/machinery/sorting_machine/destination/initialize()
+	if(!tagger_locations.len)
+		setup_tagger_locations()
+	destinations = tagger_locations.Copy()
+
+	for(var/idx in 1 to destinations.len) //has to be like this or it won't modify
+		destinations[idx] = uppertext(destinations[idx])
 
 /obj/machinery/sorting_machine/destination/interact(mob/user)
 	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
@@ -898,10 +915,13 @@
 
 /obj/machinery/autoprocessor/wrapping/New()
 	. = ..()
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
-	for(var/dest in map.default_tagger_locations)
-		if(dest)
-			destinations += dest
+/obj/machinery/autoprocessor/wrapping/initialize()
+	if(!tagger_locations.len)
+		setup_tagger_locations()
+	destinations = tagger_locations.Copy()
 
 /obj/machinery/autoprocessor/wrapping/process_affecting(var/atom/movable/target)
 	if(is_type_in_list(target, cannot_wrap))
@@ -1109,6 +1129,7 @@
 /obj/machinery/autoprocessor/outfit
 	name = "auto outfitter"
 	desc = "Automatically applies an outfit to people inside."
+	machine_flags = SCREWTOGGLE | CROWDESTROY
 	circuitpath = /obj/item/weapon/circuitboard/autoprocessor/outfit
 
 	var/outfit_type = /datum/outfit/assistant

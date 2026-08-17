@@ -82,7 +82,8 @@
 
 	if(!talked)
 		var/obj/item/dropped_item = target.drop_item()
-		dropped_item.on_disarm_drop(src)
+		if (dropped_item)
+			dropped_item.on_disarm_drop(src)
 		visible_message("<span class='danger'>[src] has disarmed [target]!</span>")
 	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 	return 1

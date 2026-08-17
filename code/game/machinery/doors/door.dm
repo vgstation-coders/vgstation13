@@ -61,6 +61,7 @@ var/list/all_doors = list()
 	var/being_cut = FALSE
 	var/explosion_block = 0 //regular airlocks are 1, blast doors are 3, higher values mean increasingly effective at blocking explosions.
 	var/obj/machinery/door/arcane_linked_door = null
+	var/arcane_teleport_chance = 100
 
 /obj/machinery/door/proc/bashed_in(mob/user)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -72,7 +73,7 @@ var/list/all_doors = list()
 	var/obj/item/clothing/shoes/S = kicker.shoes
 	if(istype(S))
 		S.on_kick_obj(kicker, src)
-		
+
 /obj/machinery/door/proc/attempt_slicing(mob/user)
 	being_cut = TRUE
 	user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
@@ -152,7 +153,7 @@ var/list/all_doors = list()
 /obj/machinery/door/proc/headbutt_check(mob/user, var/stun_time = 0, var/knockdown_time = 0, var/damage = 0) //This is going to be an airlock proc until someone makes headbutting a more official thing
 	if(prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
+		if(H.getBrainLoss(COORDINATION_L) >= BRAINLOSS_FOR_HEADBUTT)
 			playsound(src, 'sound/effects/bang.ogg', 25, 1)
 			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 			if(!istype(H.head, /obj/item/clothing/head/helmet))
@@ -291,23 +292,23 @@ var/list/all_doors = list()
 	if(!arcanetampered || !arcane_linked_door)
 		set_opacity(0)
 	door_animate("opening")
+	var/current_delay = animation_delay
 	if (animation_delay_predensity_opening)
-		sleep(animation_delay_predensity_opening)
-	else
-		sleep(animation_delay)
-	plane = open_plane
-	layer = open_layer
-	setDensity(FALSE)
-	update_nearby_tiles()
-	if (animation_delay_predensity_opening)
-		sleep(animation_delay - animation_delay_predensity_opening)
-	update_icon()
-	if(!arcane_linked_door)
-		set_opacity(0)
-	//update_freelook_sight()
+		current_delay = animation_delay_predensity_opening
+	spawn(current_delay)
+		plane = open_plane
+		layer = open_layer
+		setDensity(FALSE)
+		update_nearby_tiles()
+		if (animation_delay_predensity_opening)
+			sleep(animation_delay - animation_delay_predensity_opening)
+		update_icon()
+		if(!arcane_linked_door)
+			set_opacity(0)
+		//update_freelook_sight()
 
-	if(operating == 1)
-		operating = 0
+		if(operating == 1)
+			operating = 0
 
 	return 1
 
@@ -446,7 +447,7 @@ var/list/all_doors = list()
 /obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
 	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
-	if(arcanetampered && arcane_linked_door && !density && istype(AM,/atom/movable))
+	if(arcanetampered && arcane_linked_door && !density && istype(AM,/atom/movable) && prob(arcane_teleport_chance))
 		var/atom/movable/A = AM
 		var/turf/goodturf = arcane_linked_door.arcane_linkable()
 		if(goodturf)

@@ -199,7 +199,8 @@ var/datum/controller/gameticker/ticker
 		var/mob/new_player/np = M
 		if(!(np.ready && np.mind && np.mind.assigned_role))
 			//If they aren't ready, update new player panels so they say join instead of ready up.
-			np.new_player_panel()
+			spawn()
+				np.new_player_panel()
 			continue
 		var/datum/preferences/prefs = M.client.prefs
 		var/key = M.key
@@ -744,9 +745,9 @@ var/datum/controller/gameticker/ticker
 	create_random_orders(3) //Populate the order system so cargo has something to do
 	if(istype(mode, /datum/gamemode/dynamic))
 		var/datum/gamemode/dynamic/D = mode
-		if(D.living_players.len < 6) // Fill all the SMES to capacity if there's 5 or less players, to give players more time to set up the power.
+		if(D.roundstart_pop_ready < 6) // Fill all the SMES to capacity if there's 5 or less players, to give players more time to set up the power.
 			for(var/obj/machinery/power/battery/smes/S in power_machines)
-				if(S.charge) //Only do this if the SMES has any charge in the first place
+				if(S.charge && !S.external_power_supply) //Only do this if the SMES has any charge in the first place, and isn't on external power
 					S.charge = S.capacity
 
 // -- Tag mode!

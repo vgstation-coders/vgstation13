@@ -9,6 +9,9 @@
 	immune_system = new (src)
 	oxy_damage_modifier *= (maxHealth / 100) //Scale oxy damage based on the max health of the mob.
 
+	if(locked_to_current_v)
+		locked_to_v = get_virtual_z()
+
 /mob/living/create_reagents(const/max_vol)
 	..(max_vol)
 	addicted_chems = new /datum/reagents(max_vol)
@@ -30,6 +33,8 @@
 	var/datum/gamemode/dynamic/dyn_mode = ticker?.mode
 	if (istype(dyn_mode))
 		dyn_mode.living_players -= src
+
+	unregister_event(/event/v_transition, src, nameof(src::OnMobVChanged()))
 
 	. = ..()
 
@@ -331,7 +336,7 @@
 		return 0	//godmode
 	cloneloss = amount
 
-/mob/living/proc/getBrainLoss()
+/mob/living/proc/getBrainLoss(var/type)
 	return brainloss
 
 /mob/living/proc/adjustBrainLoss(var/amount)
@@ -342,6 +347,7 @@
 		return 0
 
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
+	return 1
 
 /mob/living/proc/setBrainLoss(var/amount)
 	if(status_flags & GODMODE)
@@ -1036,6 +1042,10 @@ Thanks.
 				var/obj/structure/closet/secure_closet/SC = L.loc
 				if(!SC.locked && !SC.welded)
 					return //It's a secure closet, but isn't locked. Easily escapable from, no need to 'resist'
+			else if(istype(C, /obj/structure/closet/crate/secure))
+				var/obj/structure/closet/crate/secure/SC = L.loc
+				if(!SC.locked && !SC.welded)
+					return
 			else
 				if(!C.welded)
 					return //closed but not welded...
@@ -1054,6 +1064,10 @@ Thanks.
 						var/obj/structure/closet/secure_closet/SC = L.loc
 						if(!SC.locked && !SC.welded)
 							return
+					else if(istype(L.loc, /obj/structure/closet/crate/secure))
+						var/obj/structure/closet/crate/secure/SC = L.loc
+						if(!SC.locked && !SC.welded)
+							return
 					else
 						if(!C.welded)
 							return
@@ -1069,6 +1083,9 @@ Thanks.
 					sleep(10)
 					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
+				if(istype(usr.loc, /obj/structure/closet/crate/secure))
+					var/obj/structure/closet/crate/secure/SC = L.loc
+					SC.break_open()
 				C.welded = 0
 				if(C.arcanetampered)
 					C.bless() // so it doesn't just close again, fairness on the user
@@ -1125,7 +1142,7 @@ Thanks.
 		return
 
 	if((L.loc && istype(L.loc, /obj/structure/inflatable/shelter)) || (L.loc && istype(L.loc, /obj/structure/reagent_dispensers/cauldron/barrel)))
-		var/obj/O = L.loc
+		var/obj/structure/O = L.loc
 		O.container_resist(L)
 
 
@@ -1246,8 +1263,11 @@ Thanks.
 //shuttle_act is called when a shuttle collides with the mob
 /mob/living/shuttle_act(datum/shuttle/S)
 	if(!(src.flags & INVULNERABLE))
-		src.attack_log += "\[[time_stamp()]\] was gibbed by a shuttle ([S.name], [S.type])!"
-		gib()
+		src.attack_log += "\[[time_stamp()]\] was destroyed by a shuttle ([S.name], [S.type])!"
+		if(ishuman(src))
+			gib()
+		else
+			qdel(src)
 	return
 
 //mob verbs are a lot faster than object verbs
@@ -1275,7 +1295,11 @@ Thanks.
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
 		INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
-		if (now_pushing || !loc || size <= SIZE_TINY)
+		if (now_pushing || !loc)
+			return
+		if (size <= SIZE_TINY)
+			if(istype(AM,/obj/machinery/disposal/deliveryChute)) //hotfix
+				AM.Bumped(src)
 			return
 		now_pushing = 1
 		if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them
@@ -1287,6 +1311,27 @@ Thanks.
 					return
 		if (istype(AM, /mob/living)) //no pushing people pushing rollerbeds that have people on them
 			var/mob/living/tmob = AM
+			var/obj/item/clothing/under/uniform = get_item_by_slot(slot_w_uniform)
+			if(uniform?.stuns_arcane_loyalty)
+				var/arcanetampered_loyalty = FALSE
+				for(var/obj/item/weapon/implant/loyalty/L in tmob)
+					if(L.imp_in == tmob && L.arcanetampered)
+						arcanetampered_loyalty = TRUE
+						break
+				if(arcanetampered_loyalty)
+					for(var/obj/item/weapon/implant/loyalty/L in src)
+						if(L.imp_in == src)
+							arcanetampered_loyalty = FALSE
+							break
+					if(arcanetampered_loyalty) //if greytide or clown bumps into the likes of sec
+						tmob.Knockdown(10)
+						tmob.Stun(10)
+						if(iscarbon(tmob))
+							tmob.apply_effect(10, STUTTER)
+						if(tmob.knockdown)
+							playsound(tmob.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+						now_pushing = 0
+						return
 			for(var/obj/structure/bed/roller/R in range(tmob, 1))
 				if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
 					to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")
@@ -1779,3 +1824,18 @@ Thanks.
 			for(var/role in mind.antag_roles)
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
+
+/// Event handler for v_transition events used to activate or pause v-levels.
+/mob/living/proc/OnMobVChanged(mob/living/user, datum/virtual_z/to_v, datum/virtual_z/from_v)
+	SSmapping?.v_pause_check(src, to_v, from_v)
+
+/mob/living/t_scanner_expose(ray_range)
+	if(alpha < OPAQUE || (invisibility > 0 && invisibility < INVISIBILITY_OBSERVER))
+		var/old_alpha = alpha
+		var/old_invisibility = invisibility
+		alpha = OPAQUE
+		invisibility = 0
+		spawn(1 SECONDS)
+			if(src)
+				alpha = old_alpha
+				invisibility = old_invisibility

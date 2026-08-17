@@ -12,17 +12,11 @@
 /area)
 "k" = (
 /obj/structure/dispenser/oxygen,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "l" = (
 /obj/item/clothing/shoes/doomguy,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area)
 "m" = (
 /obj/structure/table,
@@ -43,19 +37,13 @@
 /turf/space,
 /area)
 "H" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched1"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area)
 "J" = (
 /turf/simulated/floor/airless,
 /area)
 "M" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "P" = (
 /obj/item/clothing/under/doomguy,
@@ -67,17 +55,11 @@
 /area)
 "T" = (
 /obj/structure/computerframe,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged5"
-	},
+/turf/simulated/floor/damaged/airless/broken,
 /area)
 "U" = (
 /obj/structure/grille,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
+/turf/simulated/floor/damaged/airless/burnt,
 /area)
 "Z" = (
 /obj/item/clothing/head/helmet/doomguy,

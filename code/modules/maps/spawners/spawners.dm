@@ -347,6 +347,7 @@
 		/obj/item/clothing/glasses/eyepatch,
 		/obj/item/clothing/glasses/regular,
 		/obj/item/clothing/glasses/regular/hipster,
+		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/glasses/sunglasses/blindfold,
 		/obj/item/clothing/glasses/sunglasses/prescription,
 		/obj/item/clothing/glasses/welding,
@@ -528,6 +529,7 @@
 		/obj/item/weapon/coin/diamond,
 		/obj/item/weapon/coin/iron,
 		/obj/item/weapon/coin/phazon,
+		/obj/item/weapon/coin/reticulite,
 		/obj/item/weapon/coin/plasma,
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,
@@ -600,6 +602,7 @@
 		/obj/item/clothing/accessory/wristwatch/black,
 		/obj/item/high_roller,
 		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+		/obj/item/weapon/book/library_randomized,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -951,6 +954,15 @@
 	chance = 50
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
 
+/obj/abstract/map/spawner/mobs/abnormality
+	name = "abnormality spawner"
+	icon_state = "mob_spider"
+	to_spawn = list(
+		/mob/living/simple_animal/scp_173,
+		/obj/machinery/chem_dispenser/scp_294,
+		/obj/effect/landmark/procedural_mobspawn/forgottenbeast,
+		)
+
 /obj/abstract/map/spawner/mobs/medivault
 	name = "medivault spawner"
 	icon_state = "mob_medivault"
@@ -1096,6 +1108,7 @@
 		/obj/item/seeds/reishimycelium,
 		/obj/item/seeds/dionanode,
 		/obj/item/seeds/riceseed,
+		/obj/item/seeds/roseseed,
 		/obj/item/seeds/soyaseed,
 		/obj/item/seeds/sugarcaneseed,
 		/obj/item/seeds/sunflowerseed,
@@ -1441,6 +1454,15 @@
 			new /obj/item/clothing/mask/gas/sexymime(src.loc)
 			new	/obj/item/clothing/under/sexymime(src.loc)
 	qdel(src)
+
+//Library Books
+/obj/abstract/map/spawner/library
+	name = "library book spawner"
+	icon_state = "book"
+	chance = 15
+	to_spawn = list(
+		/obj/item/weapon/book/library_randomized,
+	)
 
 // Spawn all in the turf
 /obj/abstract/spawn_all

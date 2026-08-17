@@ -31793,6 +31793,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Tactics)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bfB" = (
@@ -31814,6 +31815,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Non-Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bfD" = (
@@ -31826,12 +31828,14 @@
 /obj/structure/bookcase{
 	name = "bookcase (Fiction)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bfF" = (
 /obj/structure/bookcase{
 	name = "bookcase (Adult)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bfG" = (
@@ -32464,6 +32468,7 @@
 /obj/item/weapon/book/manual/security_antag_guide,
 /obj/item/weapon/book/manual/hydroponics_pod_people,
 /obj/item/weapon/book/manual/security_space_law,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bgW" = (
@@ -33245,6 +33250,7 @@
 /obj/structure/bookcase{
 	name = "bookcase (Religious)"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "biw" = (
@@ -33259,6 +33265,7 @@
 "bix" = (
 /obj/structure/table/woodentable,
 /obj/structure/disposalpipe/segment,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "biy" = (
@@ -33280,6 +33287,7 @@
 "biA" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/structure/table/woodentable,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "biB" = (
@@ -34199,6 +34207,7 @@
 	dir = 8;
 	icon_state = "pipe-c"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bjO" = (
@@ -34506,10 +34515,7 @@
 	codes_txt = "patrol;next_patrol=hop1";
 	location = "bridge1"
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 2;
-	icon_state = "pipe-j2"
-	},
+/obj/structure/disposalpipe/sortjunction/IAA/mirrored,
 /turf/simulated/floor,
 /area/hallway/primary/western)
 "bkp" = (
@@ -38107,10 +38113,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
 	dir = 8
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 2;
-	icon_state = "pipe-j2"
-	},
+/obj/structure/disposalpipe/sortjunction/Detective/mirrored,
 /turf/simulated/floor,
 /area/hallway/primary/western)
 "brd" = (
@@ -43193,6 +43196,11 @@
 	name = "Trader Dock Shutters"
 	},
 /obj/structure/plasticflaps/mining,
+/obj/item/device/deskbell/signaler/trader{
+	pixel_x = 6;
+	pixel_y = 8;
+	name = "Trade Counter Bell"
+	},
 /turf/simulated/floor/vox{
 	name = "floor"
 	},
@@ -49520,14 +49528,13 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/disposalpipe/junction{
-	dir = 1
-	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor,
 /area/security/brig)
 "bMb" = (
 /obj/structure/disposalpipe/segment{
-	dir = 4
+	dir = 4;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor{
 	icon_state = "redcorner"
@@ -50082,6 +50089,7 @@
 	},
 /area/security/main)
 "bNb" = (
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -50765,6 +50773,7 @@
 	dir = 8;
 	pixel_x = 24
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -51437,8 +51446,8 @@
 /turf/simulated/floor,
 /area/security/warden)
 "bPj" = (
-/obj/structure/table,
-/obj/machinery/recharger,
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -51453,6 +51462,7 @@
 /obj/machinery/alarm{
 	pixel_y = 24
 	},
+/obj/machinery/recharger,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -52059,6 +52069,9 @@
 	d2 = 4;
 	icon_state = "2-4"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -52086,7 +52099,9 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/obj/structure/disposalpipe/segment,
+/obj/structure/disposalpipe/sortjunction/Warden/mirrored{
+	dir = 1
+	},
 /turf/simulated/floor,
 /area/security/brig)
 "bQq" = (
@@ -52119,6 +52134,9 @@
 	dir = 4;
 	name = "Firelock East"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -52134,6 +52152,9 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -52945,13 +52966,19 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/disposalpipe/segment,
+/obj/structure/disposalpipe/junction{
+	dir = 1
+	},
 /turf/simulated/floor,
 /area/security/brig)
 "bRF" = (
 /obj/machinery/firealarm{
 	dir = 4;
 	pixel_x = 29
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 8;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -53117,9 +53144,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/central/capmaint)
 "bRR" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/liquid_fuel,
 /obj/abstract/map/spawner/floorpill,
 /turf/simulated/floor/plating,
@@ -53593,6 +53618,10 @@
 	},
 /area/security/warden)
 "bSP" = (
+/obj/structure/disposalpipe/segment{
+	dir = 1;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -65156,9 +65185,7 @@
 /turf/simulated/wall,
 /area/engineering/lockers)
 "cnX" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 6
 	},
@@ -73204,10 +73231,6 @@
 /obj/docking_port/destination/vox/southeast_station,
 /turf/space,
 /area)
-"cGk" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cGl" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
@@ -73922,18 +73945,14 @@
 	},
 /area/syndicate_mothership)
 "cHU" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /obj/effect/decal/cleanable/vomit,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
 "cHV" = (
-/obj/structure/wc/urinal{
-	pixel_y = 32
-	},
+/obj/structure/wc/urinal,
 /turf/unsimulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -76820,14 +76839,8 @@
 /area/centcom/suppy)
 "cPM" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
-	},
-/area/prison/solitary)
-"cPN" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPO" = (
@@ -76841,18 +76854,13 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "cPQ" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cPR" = (
 /turf/unsimulated/floor{
 	name = "plating"
-	},
-/area/prison/solitary)
-"cPS" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
 	},
 /area/prison/solitary)
 "cPT" = (
@@ -76869,9 +76877,7 @@
 /area/prison/solitary)
 "cPV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cPW" = (
 /obj/item/weapon/storage/fancy/cigarettes,
@@ -77215,19 +77221,19 @@
 /area/centcom/suppy)
 "cQT" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cQU" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cQV" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cQW" = (
@@ -77273,15 +77279,8 @@
 	icon_state = "dark neutral stripe"
 	},
 /area/centcom/suppy)
-"cRc" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
 "cRd" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cRe" = (
 /obj/machinery/dna_scannernew,
@@ -84798,18 +84797,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"diF" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
-"diG" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "diH" = (
 /obj/structure/fence/door/opened,
@@ -99801,6 +99788,15 @@
 	icon_state = "bluecorner"
 	},
 /area/hallway/primary/central/fore)
+"fLC" = (
+/obj/structure/table/woodentable,
+/obj/item/device/flashlight/lamp/green{
+	pixel_x = 1;
+	pixel_y = 5
+	},
+/obj/abstract/map/spawner/library,
+/turf/simulated/floor/wood,
+/area/library)
 "fLJ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4
@@ -103655,6 +103651,7 @@
 	dir = 8;
 	pixel_x = -29
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "tbW" = (
@@ -104019,13 +104016,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/supermatter_room)
 "uBy" = (
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
-/obj/item/device/gps/planetary,
-/obj/item/device/gps/planetary,
-/obj/item/device/gps/planetary,
+/obj/structure/flora/pottedplant/random,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkblue"
@@ -104968,6 +104959,7 @@
 /obj/item/weapon/book/manual/chemistry_manual,
 /obj/item/weapon/book/manual/virology_guide,
 /obj/item/weapon/book/manual/engineering_guide,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "wWc" = (
@@ -269719,8 +269711,8 @@ bit
 bjJ
 blo
 bmD
-bgU
-bgU
+fLC
+fLC
 bmD
 bsd
 bsa
@@ -356559,7 +356551,7 @@ aaa
 aaa
 aaa
 aaa
-cGk
+aaa
 aaa
 aaa
 aaa
@@ -392826,7 +392818,7 @@ aaa
 aaa
 aaa
 cPC
-cPN
+cPV
 cQm
 cPC
 cQT
@@ -393332,7 +393324,7 @@ cPM
 cQl
 cPC
 cPU
-cRc
+cRd
 cPC
 aaa
 aaa
@@ -396340,11 +396332,11 @@ aaa
 aaa
 aaa
 cPC
-cPS
+cQU
 cQl
 cPC
 cQl
-cPS
+cQU
 cPC
 aaa
 cRv
@@ -397849,7 +397841,7 @@ cPC
 cPR
 cPU
 cPC
-cPS
+cQU
 cPR
 cPC
 aaa
@@ -399355,7 +399347,7 @@ cPC
 cPT
 cPQ
 cPC
-cPS
+cQU
 cPR
 cPC
 aaa
@@ -402365,7 +402357,7 @@ aaa
 aaa
 cPC
 cPR
-cPS
+cQU
 cPC
 cPU
 cRd
@@ -411954,7 +411946,7 @@ dhi
 dho
 dhs
 dir
-diF
+diZ
 diZ
 diZ
 djK
@@ -412456,7 +412448,7 @@ dho
 dho
 dhs
 dhm
-diG
+diZ
 dja
 dho
 djM
@@ -412958,7 +412950,7 @@ dhn
 dhi
 dhs
 dhn
-diG
+diZ
 dja
 dho
 djM
@@ -413962,7 +413954,7 @@ dhi
 dhm
 dhs
 dis
-diG
+diZ
 dhs
 dhs
 djM
@@ -414464,7 +414456,7 @@ dhq
 dho
 dhs
 dhq
-diG
+diZ
 dhs
 dhs
 djN
@@ -414966,7 +414958,7 @@ dhq
 dho
 dhs
 dhi
-diG
+diZ
 dhs
 djs
 djM
@@ -415468,7 +415460,7 @@ dhn
 dhM
 dhs
 dhq
-diG
+diZ
 djb
 dhL
 djM
@@ -415970,7 +415962,7 @@ dhp
 dhq
 dhs
 dhi
-diG
+diZ
 dhs
 djs
 djM
@@ -416472,7 +416464,7 @@ dhq
 dhm
 dhs
 dhn
-diG
+diZ
 dhs
 djs
 djM
@@ -416974,7 +416966,7 @@ dhp
 dhn
 dhs
 dhi
-diG
+diZ
 djb
 dhL
 djM
@@ -417476,7 +417468,7 @@ dhs
 dhs
 dhs
 dhi
-diG
+diZ
 dhs
 djs
 djO

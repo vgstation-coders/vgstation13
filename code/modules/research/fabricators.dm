@@ -292,14 +292,20 @@
 	if(copytext(M,1,2) == "$")
 		if(research_flags & IGNORE_MATS)
 			return 1
-		return round(materials.storage[M] / get_resource_cost_w_coeff(being_built, M))
+		var/cost = get_resource_cost_w_coeff(being_built, M)
+		if(cost <= 0)
+			return INFINITY
+		return round(materials.storage[M] / cost)
 	else
 		if(research_flags & IGNORE_CHEMS)
 			return 1
 		var/reagent_total = 0
 		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
 			reagent_total += RC.reagents.get_reagent_amount(M)
-		return round(reagent_total / get_resource_cost_w_coeff(being_built, M))
+		var/cost = get_resource_cost_w_coeff(being_built, M)
+		if(cost <= 0)
+			return INFINITY
+		return round(reagent_total / cost)
 
 //The build_part_loop fires independently and will build stuff until the queue is over or when it is stopped.
 /obj/machinery/r_n_d/fabricator/proc/build_part_loop()

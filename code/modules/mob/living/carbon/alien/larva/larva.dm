@@ -13,6 +13,7 @@
 
 	var/growth = 0
 	var/time_of_birth
+	var/stowaway = FALSE // If TRUE, evolution is restricted to Hunter only (set by odyssey_xeno ruleset)
 
 //This is fine right now, if we're adding organ specific damage this needs to be updated
 /mob/living/carbon/alien/larva/New()

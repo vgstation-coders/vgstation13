@@ -469,17 +469,25 @@
 /proc/Meteortype_Latejoin(var/atom/movable/target, var/rank)
 	var/obj/effect/landmark/start/endpoint = null
 	for(var/obj/effect/landmark/start/S in landmarks_list)
-		if(S.name == rank)
-			if(S.override_latejoin_behavior)
-				target.forceMove(S.loc)
-				return
+		if(S.name != rank)
+			continue
+		if(S.override_latejoin_behavior)
+			target.forceMove(S.loc)
+			return
+		if(!endpoint)
 			endpoint = S
-			break
 	if(!endpoint)
 		message_admins("ERROR - NO VALID TRADER SPAWN. Here's what I've got: [json_encode(landmarks_list)]")
 		//Error! We have no targetable spawn!
 		return
-	var/turf/start_point = locate(TRANSITIONEDGE + 2, rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2)), endpoint.z)
+	var/turf/endpoint_turf = get_turf(endpoint)
+	var/datum/virtual_z/endpoint_v = endpoint_turf?.v
+	var/turf/start_point
+	if(endpoint_v)
+		// Spawn on the WEST edge of the endpoint's vlevel so the airbag is thrown across it, instead of using world.maxy which sweeps through other vlevels on the same physical z.
+		start_point = locate(endpoint_v.x_min + TRANSITIONEDGE + 2, rand(endpoint_v.y_min + TRANSITIONEDGE + 2, endpoint_v.y_max - TRANSITIONEDGE - 2), endpoint_v.z())
+	else
+		start_point = locate(TRANSITIONEDGE + 2, rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2)), endpoint.z)
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
 		var/obj/item/airbag/A = new(start_point, TRUE)

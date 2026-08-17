@@ -103,7 +103,7 @@
 				if(MB)
 					MB.Drop()
 				mind.transfer_to(mmi.brainmob)
-			mmi.brainmob.locked_to_z = locked_to_z
+			mmi.brainmob.locked_to_v = locked_to_v
 		else
 			ghostize() //Somehow their MMI has no brainmob or something even worse happened. Let's just save their soul from this hell.
 		mmi = null

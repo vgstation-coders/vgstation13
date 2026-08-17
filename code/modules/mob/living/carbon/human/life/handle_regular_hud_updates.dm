@@ -163,7 +163,14 @@
 	else
 		clear_alert(SCREEN_ALARM_PRESSURE)
 	if(hal_screwyhud == 3 || oxygen_alert)
-		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath)
+		var/alert_type = /obj/abstract/screen/alert/carbon/breath
+		if(species)
+			switch(species.breath_type)
+				if(GAS_NITROGEN)
+					alert_type = /obj/abstract/screen/alert/carbon/breath/vox
+				if(GAS_PLASMA)
+					alert_type = /obj/abstract/screen/alert/carbon/breath/plasma
+		throw_alert(SCREEN_ALARM_BREATH, alert_type)
 	else
 		clear_alert(SCREEN_ALARM_BREATH)
 	if(hal_screwyhud == 4 || toxins_alert)

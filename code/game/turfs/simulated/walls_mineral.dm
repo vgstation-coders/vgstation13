@@ -3,8 +3,6 @@
 	desc = "This shouldn't exist."
 	icon_state = ""
 	explosion_block = 1
-	var/last_event = 0
-	var/active = null
 
 /turf/simulated/wall/mineral/wood
 	name = "wooden wall"
@@ -108,6 +106,54 @@
 	walltype = "clown"
 	mineral = "clown"
 
+/turf/simulated/wall/mineral/phazon
+	name = "phazon wall"
+	desc = "A wall with phazon plating. You can't seem to make out any shapes on it."
+	icon_state = "phazon0"
+	walltype = "phazon"
+	mineral = "phazon"
+	var/spam_flag = 0
+
+/turf/simulated/wall/mineral/phazon/New()
+	. = ..()
+	phazontiles += src
+	color = list(1,0,0,0,
+				0,1,0,0,
+				rand(1,5)/10,0,1,0,
+				0,0,0,1,
+				0,0,0,0)
+
+/turf/simulated/wall/mineral/phazon/proc/teleport_hit(AM as mob|obj)
+	if(!spam_flag)
+		spam_flag = 1
+		phazon_teleport(AM)
+		color = list(1,0,0,0,
+					0,1,0,0,
+					rand(1,5)/10,0,1,0,
+					0,0,0,1,
+					0,0,0,0)
+		spawn(20)
+			spam_flag = 0
+
+/turf/simulated/wall/mineral/phazon/Bumped(AM as mob|obj)
+	..()
+	teleport_hit(AM)
+
+/turf/simulated/wall/mineral/phazon/attack_hand(mob/living/user)
+	. = ..()
+	teleport_hit(user)
+
+/proc/phazon_teleport(AM as mob|obj)
+	var/turf/destination = pick(phazontiles)
+	if(destination.density)
+		var/turf/other
+		for(var/direction in cardinal)
+			other = get_step(destination,direction)
+			if(other && !other.density)
+				destination = other
+				break
+	do_teleport(AM, destination)
+
 /turf/simulated/wall/mineral/sandstone
 	name = "sandstone wall"
 	desc = "A wall with sandstone plating."
@@ -132,6 +178,8 @@
 	walltype = "uranium"
 	mineral = "uranium"
 	explosion_block = 2
+	var/active = null
+	var/last_event = 0
 
 /turf/simulated/wall/mineral/uranium/proc/radiate()
 	if(!active)
@@ -178,7 +226,7 @@
 		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has caught on fire at [formatJumpTo(get_turf(src))]!")
 		message_admins("\The [src] with a pdiff of [pdiff] has caught of fire at [formatJumpTo(get_turf(src))]!")
 	spawn(2)
-	new /obj/structure/girder(src)
+	new girder_type(src)
 	src.ChangeTurf(/turf/simulated/floor)
 	for(var/turf/simulated/floor/target_tile in range(0,src))
 		/*if(target_tile.parent && target_tile.parent.group_processing)
@@ -195,6 +243,8 @@
 		QDEL_NULL (F)
 	for(var/turf/simulated/wall/mineral/plasma/W in range(3,src))
 		W.ignite((temperature/4))//Added so that you can't set off a massive chain reaction with a small flame
+	for(var/turf/simulated/wall/r_wall/mineral/plasma/W2 in range(3,src))
+		W2.ignite((temperature/4))
 	for(var/obj/machinery/door/airlock/plasma/D in range(3,src))
 		D.ignite(temperature/4)
 

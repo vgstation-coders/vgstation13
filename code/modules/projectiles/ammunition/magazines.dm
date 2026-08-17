@@ -373,7 +373,7 @@
 		charger.icon_state = "recharger2"
 		return
 
-	icon_state = "recharger1"
+	charger.icon_state = "recharger1"
 
 	var/charged_amount = 0
 	for(var/datum/lawgiver_mode/mode in ammo_counters)

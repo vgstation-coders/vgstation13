@@ -432,13 +432,6 @@
 				dump_electronics()
 			dump_contents()
 			qdel(src)
-	else if(istype(user,/mob/living/complex_animal))
-		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
-		broken = 1
-		if(has_electronics)
-			dump_electronics()
-		dump_contents()
-		qdel(src)
 // this should probably use dump_contents()
 /obj/structure/closet/blob_act()
 	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
@@ -680,8 +673,19 @@
 		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 
+/obj/structure/closet/t_scanner_expose(ray_range)
+	if(ray_range < 3)
+		return
+	if(opened)
+		return
+	for(var/atom/movable/AM in contents)
+		var/image/overlay = image(AM.icon,loc,AM.icon_state,layer,AM.dir)
+		overlay.alpha = 127
+		overlays += overlay
 
-
+	spawn(1 SECONDS)
+		overlays.len = 0
+		update_icon()
 
 // -- Vox raiders.
 

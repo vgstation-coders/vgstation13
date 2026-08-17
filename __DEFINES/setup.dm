@@ -56,6 +56,7 @@ var/global/disable_vents     = 0
 
 #define TEMPERATURE_DAMAGE_COEFFICIENT 1.5	//This is used in handle_temperature_damage() for humans, and in reagents that affect body temperature. Temperature damage is multiplied by this amount.
 #define SPLASH_SCALD_DAMAGE_COEFFICIENT (2/3) //Reagent scalding damage via splashing is multiplied by this.
+#define BODYTEMP_DEFAULT 310.055 //98.7 F
 #define BODYTEMP_AUTORECOVERY_DIVISOR 0.5 //This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
 #define BODYTEMP_AUTORECOVERY_MAXIMUM 2.0 //Maximum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 0.5 .
 
@@ -242,6 +243,7 @@ var/MAX_EXPLOSION_RANGE = 32
 #define PASSDOOR	(1<<6) //not just airlocks, but also firelocks, windoors etc
 #define PASSGIRDER	(1<<7)
 #define PASSRAILING (1<<8)
+#define PASSFLAPS   (1<<9)
 
 #define PASSALL		(~0) //bolt of pain
 
@@ -1587,6 +1589,9 @@ var/proccalls = 1
 #define DISP_ATMOSPHERICS   "Atmospherics"
 #define DISP_SECURITY       "Security"
 #define DISP_HOS_OFFICE     "HoS Office"
+#define DISP_WARDEN         "Warden"
+#define DISP_DETECTIVE      "Detective"
+#define DISP_IAA            "Internal Affairs"
 #define DISP_MEDBAY         "Medbay"
 #define DISP_CMO_OFFICE     "CMO Office"
 #define DISP_CHEMISTRY      "Chemistry"
@@ -1689,18 +1694,20 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_BHANGMAP					"bhangmap"
 #define HOLOMAP_EXTRA_BHANGBASEMAP				"bhangbasemap"
 
-#define HOLOMAP_MARKER_SMES				"smes"
-#define HOLOMAP_MARKER_DISK				"diskspawn"
-#define HOLOMAP_MARKER_SKIPJACK			"skipjack"
-#define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
-#define HOLOMAP_MARKER_TEARREALITY		"tearreality"
-#define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
-#define HOLOMAP_MARKER_CULT_ALTAR		"altar"
-#define HOLOMAP_MARKER_CULT_FORGE		"forge"
-#define HOLOMAP_MARKER_CULT_SPIRE		"spire"
-#define HOLOMAP_MARKER_CULT_ENTRANCE	"path_entrance"
-#define HOLOMAP_MARKER_CULT_EXIT		"path_exit"
-#define HOLOMAP_MARKER_CULT_RUNE		"rune"
+#define HOLOMAP_MARKER_SMES					"smes"
+#define HOLOMAP_MARKER_DISK					"diskspawn"
+#define HOLOMAP_MARKER_SKIPJACK				"skipjack"
+#define HOLOMAP_MARKER_SYNDISHUTTLE			"syndishuttle"
+#define HOLOMAP_MARKER_TEARREALITY			"tearreality"
+#define HOLOMAP_MARKER_BLOODSTONE			"bloodstone"
+#define HOLOMAP_MARKER_OBSIDIAN_PILLAR		"obsidian_pillar"
+#define HOLOMAP_MARKER_OBSIDIAN_PILLAR_ALT	"obsidian_pillar_alt"
+#define HOLOMAP_MARKER_CULT_ALTAR			"altar"
+#define HOLOMAP_MARKER_CULT_FORGE			"forge"
+#define HOLOMAP_MARKER_CULT_SPIRE			"spire"
+#define HOLOMAP_MARKER_CULT_ENTRANCE		"path_entrance"
+#define HOLOMAP_MARKER_CULT_EXIT			"path_exit"
+#define HOLOMAP_MARKER_CULT_RUNE			"rune"
 
 #define HOLOMAP_DRAW_NORMAL		0
 #define HOLOMAP_DRAW_FULL		1
@@ -1989,6 +1996,9 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PS_CULT_SMOKE		"Cult Smoke"
 #define PS_CULT_SMOKE2		"Cult Smoke2"
 #define PS_CULT_SMOKE_BOX	"Cult Smoke Box"
+#define PS_PILLAR_BEACON	"Pillar Beacon"
+#define PS_OCCULT_TEST_LARGE "Occult Test Large"
+#define PS_OCCULT_TEST_SMALL "Occult Test Small"
 #define PS_CULT_HALO		"Cult Halo"
 #define PS_SPACE_RUNES		"Space Runes"
 #define PS_NARSIEHASRISEN1	"Nar-SieHasRisen1"
@@ -2003,9 +2013,12 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PS_BIBLE_PAGE		"Bible Page"
 #define PS_SHADOW_SMOKE		"Shadow Smoke"
 #define PS_SHADOW_SMOKE2	"Shadow Smoke2"
+#define PS_GAS_VENT			"Gas Vent"
+#define PS_CIG_SMOKE		"Cig Smoke"
 
 //Particles variable defines
 #define PVAR_SPAWNING	"spawning"
+#define PVAR_COUNT		"count"
 #define PVAR_POSITION	"position"
 #define PVAR_VELOCITY	"velocity"
 #define PVAR_ICON_STATE	"icon_state"
@@ -2017,6 +2030,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PVAR_PIXEL_Y	"pixel_y"
 #define PVAR_LIFESPAN	"lifespan"
 #define PVAR_FADE		"fade"
+#define PVAR_DRIFT		"drift"
 
 #define ZAS_DUST_TURFS_PER_TICK	20
 

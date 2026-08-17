@@ -131,11 +131,13 @@
 	var/turf/position = get_turf(src)
 
 	// Toggle on/off getting signals from the station or the current Z level
-	if(src.listening_level == map.zMainStation) // equals the station
+	if(listening_level_locked)
 		src.listening_level = position.z
+		listening_level_locked = FALSE
 		return 1
 	else if(position.z == map.zTCommSat)
 		src.listening_level = map.zMainStation
+		listening_level_locked = TRUE
 		return 1
 	return 0
 
@@ -169,7 +171,7 @@
 /obj/machinery/telecomms/relay/Options_Menu()
 	var/dat = ""
 	if(src.z == map.zTCommSat)
-		dat += "<br>Signal Locked to Station: <A href='?src=\ref[src];change_listening=1'>[listening_level == map.zMainStation ? "TRUE" : "FALSE"]</a>"
+		dat += "<br>Signal Locked to Station: <A href='?src=\ref[src];change_listening=1'>[listening_level_locked ? "TRUE" : "FALSE"]</a>"
 
 	dat += {"<br>Broadcasting: <A href='?src=\ref[src];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>
 		<br>Receiving:    <A href='?src=\ref[src];receive=1'>[receiving ? "YES" : "NO"]</a>"}

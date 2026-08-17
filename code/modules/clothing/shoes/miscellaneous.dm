@@ -113,6 +113,7 @@
 	name = "sandals"
 	icon_state = "wizard"
 	species_fit = list(VOX_SHAPED)
+	w_type = RECYK_WOOD
 
 	wizard_garb = 1
 
@@ -666,3 +667,10 @@
 	icon_state = "sonicmanshoes"
 	item_state = "sonicmanshoes"
 	desc = "Lightspeed dash sold seperately."
+
+/obj/item/clothing/shoes/lepre
+	name = "Leprechaun boots"
+	desc = "You'll never get me pot o' gold!"
+	icon_state = "lepre"
+	item_state = "lepre"
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)

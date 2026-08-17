@@ -227,7 +227,7 @@
 		shake(1, 3)
 		user.delayNextAttack(8)
 		visible_message("<span class='warning'>\The [user] hits \the [src] with \a [W]!</span>", \
-					"<span class='warning'>You hit \the [src] with your [W]!</span>", \
+					"<span class='warning'>You hit \the [src] with your [W.name]!</span>", \
 					"You hear something metallic being hit.")
 		stability -= W.force/2
 		check_stability()

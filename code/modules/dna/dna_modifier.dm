@@ -18,6 +18,7 @@
 	var/default_language=null
 	var/times_cloned=0
 	var/talkcount
+	var/clown
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
@@ -48,6 +49,7 @@
 	new_copy.attack_log = attack_log.Copy()
 	new_copy.default_language = default_language
 	new_copy.times_cloned = times_cloned
+	new_copy.clown = clown
 
 	return new_copy
 
@@ -67,7 +69,7 @@
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/injector_cooldown = 150 //Used by attachment
 	machine_flags = SCREWTOGGLE | CROWDESTROY
-	var/obj/machinery/computer/connected
+	var/list/obj/machinery/computer/connected = list()
 	var/last_message // Used by go_out()
 
 	light_color = LIGHT_COLOR_CYAN
@@ -131,14 +133,13 @@
 
 	go_out() //Eject everything
 
-	if(connected)
-		if(istype(connected,/obj/machinery/computer/cloning))
-			var/obj/machinery/computer/cloning/C = connected
-			C.scanner = null
-		else if(istype(connected,/obj/machinery/computer/scan_consolenew))
-			var/obj/machinery/computer/scan_consolenew/C = connected
+	if(connected.len)
+		for(var/obj/machinery/computer/cloning/C in connected)
+			if(src in C.scanners)
+				C.scanners -= src
+		for(var/obj/machinery/computer/scan_consolenew/C in connected)
 			C.connected = null
-		connected = null
+		connected.Cut()
 
 	. = ..()
 
@@ -222,8 +223,9 @@
 		if(user.drop_item(beaker, src))
 			beaker = item
 			user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
-			if(connected)
-				nanomanager.update_uis(connected)
+			if(connected.len)
+				for(var/obj/machinery/computer/C in connected)
+					nanomanager.update_uis(C)
 			return
 	else if(istype(item, /obj/item/weapon/grab)) //sanity checks, you chucklefucks
 		var/obj/item/weapon/grab/G = item
@@ -278,8 +280,9 @@
 	M.reset_view()
 	src.occupant = M
 	src.icon_state = "scanner_1"
-	if(connected)
-		nanomanager.update_uis(connected)
+	if(connected.len)
+		for(var/obj/machinery/computer/C in connected)
+			nanomanager.update_uis(C)
 
 	if(user)
 		if(M == user)
@@ -364,8 +367,9 @@
 			C.update_icon()
 			C.updateUsrDialog()
 
-	if(connected)
-		nanomanager.update_uis(connected)
+	if(connected.len)
+		for(var/obj/machinery/computer/C in connected)
+			nanomanager.update_uis(C)
 
 	return 1
 
@@ -454,8 +458,7 @@
 
 /obj/machinery/computer/scan_consolenew/Destroy()
 	if(connected)
-		if(connected.connected == src)
-			connected.connected = null
+		connected.connected -= src
 		connected = null
 	for(var/datum/block_label/label in labels)
 		qdel(label)
@@ -496,7 +499,7 @@
 /obj/machinery/computer/scan_consolenew/initialize()
 	connected = findScanner()
 	if(connected)
-		connected.connected = src
+		connected.connected += src
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
 	switch(severity)
@@ -557,7 +560,7 @@
 		if(!connected)
 			connected = findScanner() //lets get that machine
 			if(connected)
-				connected.connected = src
+				connected.connected += src
 		ui_interact(user)
 
 /obj/machinery/computer/scan_consolenew/AltClick()

@@ -65,6 +65,7 @@
 	flags = null
 	machine_flags = null
 	is_cooktop = TRUE
+	w_type = RECYK_WOOD
 	var/lastcharge = null
 
 /obj/machinery/space_heater/campfire/stove
@@ -76,6 +77,7 @@
 	nocell = 2
 	machine_flags = WRENCHMOVE
 	is_cooktop = FALSE
+	w_type = NOT_RECYCLABLE
 
 /obj/machinery/space_heater/New()
 

@@ -53,7 +53,7 @@ code\game\\dna\genes\goon_powers.dm
 	range = 7
 	max_targets = 1
 
-	amt_eye_blind = 10
+	amt_eye_blind = 20
 	amt_eye_blurry = 20
 
 	hud_state = "wiz_blind"

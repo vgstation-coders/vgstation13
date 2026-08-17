@@ -70,6 +70,10 @@ var/list/shuttle_log = list()
 		/datum/malfhack_ability/oneuse/emag,
 	)
 
+	// Subtypes (e.g. the Odyssey bridge console) set this to skip the
+	// zMainStation/zCentcomm distance check so they work from anywhere.
+	var/ignore_station_z_check = FALSE
+
 	// Blob stuff
 	var/defcon_1_enabled = FALSE
 	var/last_transfer_time = -1 // Game mechanics
@@ -94,7 +98,7 @@ var/list/shuttle_log = list()
 			usr.unset_machine()
 		return 1
 
-	if (!(src.z in list(map.zMainStation,map.zCentcomm)))
+	if (!ignore_station_z_check && !(src.z in list(map.zMainStation,map.zCentcomm)))
 		to_chat(usr, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 
@@ -264,7 +268,7 @@ var/list/shuttle_log = list()
 				if(response == "Yes")
 					recall_shuttle(usr)
 					if(!isobserver(usr))
-						shuttle_log += "\[[worldtime2text()]] Recalled from [get_area(usr)] ([usr.x-WORLD_X_OFFSET[usr.z]], [usr.y-WORLD_Y_OFFSET[usr.z]], [usr.z])."
+						shuttle_log += "\[[worldtime2text()]] Recalled from [get_area(usr)] ([usr.x-get_world_x_offset(usr.vz())], [usr.y-get_world_y_offset(usr.vz())], [usr.vz()])."
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -428,7 +432,7 @@ var/list/shuttle_log = list()
 	if(..(user))
 		return
 
-	if (!(src.z in list(map.zMainStation, map.zCentcomm)))
+	if (!ignore_station_z_check && !(src.z in list(map.zMainStation, map.zCentcomm)))
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 
@@ -497,9 +501,12 @@ var/list/shuttle_log = list()
 		shuttle["eta"]="[timeleft / 60 % 60]:[add_zero(num2text(timeleft % 60), 2)]"
 	shuttle["pos"] = emergency_shuttle.location
 	shuttle["can_recall"]=!(recall_time_limit && world.time >= recall_time_limit)
+	shuttle["call_label"] = map.shuttle_call_label
+	shuttle["cancel_label"] = map.shuttle_cancel_label
 
 	data["shuttle"]=shuttle
 
+	data["is_odyssey"] = (map.nameShort == "odyssey" || map.nameShort == "theseus")
 	data["defcon_1_enabled"] = defcon_1_enabled
 	data["last_shipment_time"] = last_shipment_time
 	data["next_shipment_time"] = next_shipment_time
@@ -607,7 +614,7 @@ var/list/shuttle_log = list()
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
 	if(!isobserver(user))
 		if (user)
-			shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)] ([user.x-WORLD_X_OFFSET[user.z]], [user.y-WORLD_Y_OFFSET[user.z]], [user.z])."
+			shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)] ([user.x-get_world_x_offset(user.vz())], [user.y-get_world_y_offset(user.vz())], [user.vz()])."
 		else
 			shuttle_log += "\[[worldtime2text()]] Called by game."
 	if (user)
@@ -696,15 +703,15 @@ var/list/shuttle_log = list()
 	return
 
 /proc/toggle_exploration_program(var/mob/user, var/bypass_cooldown = FALSE)
-	if(!bypass_cooldown && world.time < SSmapping.scanning_toggle_cooldown)
-		var/time_left = (SSmapping.scanning_toggle_cooldown - world.time) MINUTES
-		to_chat(user, "<span class='warning'>Exploration shuttle is undergoing maintenance. [round(time_left, 0.1)] minutes remaining.</span>")
+	if(!bypass_cooldown && world.time < (SSmapping.last_lockdown_time + SSmapping.lockdown_duration))
+		var/time_left = (SSmapping.last_lockdown_time + SSmapping.lockdown_duration) - world.time
+		to_chat(user, "<span class='warning'>[SSmapping.scanning_disabled?"Exploration shuttle":"Centcomm shuttle dock"] is undergoing maintenance. [round(time_left/10/60,0.1)] minutes remaining.</span>")
 		return FALSE
 
 	if(SSmapping.scanning_disabled)
 		SSmapping.scanning_disabled = FALSE
 		if(!bypass_cooldown)
-			SSmapping.scanning_toggle_cooldown = world.time + 15 MINUTES
+			SSmapping.last_lockdown_time = world.time
 
 		var/obj/docking_port/destination/exploration/station/station_dock = exploration_shuttle.add_dock(/obj/docking_port/destination/exploration/station)
 		if(!station_dock)
@@ -721,7 +728,7 @@ var/list/shuttle_log = list()
 	else
 		SSmapping.scanning_disabled = TRUE
 		if(!bypass_cooldown)
-			SSmapping.scanning_toggle_cooldown = world.time + 15 MINUTES
+			SSmapping.last_lockdown_time = world.time
 
 		var/obj/docking_port/destination/exploration/centcom/centcom_dock = exploration_shuttle.add_dock(/obj/docking_port/destination/exploration/centcom)
 		if(!centcom_dock)

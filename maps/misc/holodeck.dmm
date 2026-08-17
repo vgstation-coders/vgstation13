@@ -613,12 +613,6 @@
 	icon_state = "wood"
 	},
 /area/holodeck/source_dining)
-"bN" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/simulated/floor/holofloor/grass,
-/area/holodeck/source_zoo)
 "bO" = (
 /obj/structure/fence/door,
 /turf/simulated/floor/holofloor/grass,
@@ -1382,9 +1376,7 @@
 	},
 /area/holodeck/source_chess)
 "ee" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /obj/structure/fence,
 /turf/simulated/floor/holofloor/grass,
 /area/holodeck/source_zoo)
@@ -2298,28 +2290,15 @@
 	icon_state = "carpet9-4"
 	},
 /area/holodeck/source_library)
-"gP" = (
-/obj/structure/fence/corner{
-	dir = 8
-	},
-/turf/simulated/floor/holofloor{
-	icon_state = "grass1";
-	name = "Holodeck Projector Floor"
-	},
-/area/holodeck/source_medieval)
 "gQ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	dir = 4;
 	icon_state = "asteroid2"
 	},
 /area/holodeck/source_medieval)
 "gR" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	icon_state = "grass1";
 	name = "Holodeck Projector Floor"
@@ -2327,21 +2306,6 @@
 /area/holodeck/source_medieval)
 "gS" = (
 /obj/structure/fence/door,
-/turf/simulated/floor/holofloor{
-	icon_state = "grass1";
-	name = "Holodeck Projector Floor"
-	},
-/area/holodeck/source_medieval)
-"gT" = (
-/obj/structure/fence{
-	dir = 4
-	},
-/turf/simulated/floor/holofloor{
-	icon_state = "asteroid"
-	},
-/area/holodeck/source_medieval)
-"gU" = (
-/obj/structure/fence/corner,
 /turf/simulated/floor/holofloor{
 	icon_state = "grass1";
 	name = "Holodeck Projector Floor"
@@ -2358,6 +2322,7 @@
 /area/holodeck/source_catnip)
 "gW" = (
 /obj/structure/fence{
+	dir = 4;
 	density = 0;
 	desc = "It's a pole.";
 	name = "pole"
@@ -2537,13 +2502,6 @@
 	icon_state = "carpet13-5"
 	},
 /area/holodeck/source_library)
-"hy" = (
-/obj/structure/fence,
-/turf/simulated/floor/holofloor{
-	icon_state = "grass1";
-	name = "Holodeck Projector Floor"
-	},
-/area/holodeck/source_medieval)
 "hz" = (
 /obj/structure/table/holotable/wood,
 /obj/item/clothing/suit/armor/knight/red,
@@ -2591,6 +2549,7 @@
 /area/holodeck/source_catnip)
 "hE" = (
 /obj/structure/fence{
+	dir = 4;
 	density = 0;
 	desc = "It's a pole.";
 	name = "pole"
@@ -2612,6 +2571,7 @@
 "hH" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/fence{
+	dir = 4;
 	density = 0;
 	desc = "It's a pole.";
 	name = "pole"
@@ -2624,6 +2584,7 @@
 /area/holodeck/source_catnip)
 "hI" = (
 /obj/structure/fence{
+	dir = 4;
 	density = 0;
 	desc = "It's a pole.";
 	name = "pole"
@@ -3116,6 +3077,7 @@
 /area/holodeck/source_medieval)
 "ji" = (
 /obj/structure/fence{
+	dir = 4;
 	density = 0;
 	desc = "It's a pole.";
 	name = "pole"
@@ -3268,12 +3230,6 @@
 	icon_state = "carpet10-8"
 	},
 /area/holodeck/source_library)
-"jB" = (
-/obj/structure/fence/corner,
-/turf/simulated/floor/holofloor{
-	icon_state = "asteroid"
-	},
-/area/holodeck/source_medieval)
 "jC" = (
 /obj/structure/window/reinforced/holo,
 /obj/structure/window/reinforced/holo{
@@ -6436,12 +6392,12 @@ jS
 ab
 aG
 aG
-bN
+aJ
 cm
 aK
 aG
 cm
-bN
+aJ
 eB
 eZ
 fc
@@ -6461,12 +6417,12 @@ jT
 ab
 aG
 aI
-bN
+aJ
 cm
 aG
 aG
 cm
-bN
+aJ
 eB
 eC
 fc
@@ -6511,12 +6467,12 @@ jT
 ab
 aI
 bp
-bN
+aJ
 cm
 bq
 aG
 cm
-bN
+aJ
 eC
 eB
 fc
@@ -6536,12 +6492,12 @@ jT
 ab
 aG
 aG
-bN
+aJ
 cm
 aG
 aG
 cm
-bN
+aJ
 eB
 eB
 fc
@@ -6561,7 +6517,7 @@ jT
 ab
 aJ
 aJ
-bN
+aJ
 cm
 aG
 aG
@@ -6586,12 +6542,12 @@ jT
 ab
 aK
 aL
-bN
+aJ
 cm
 aG
 aG
 cm
-bN
+aJ
 bq
 eD
 fc
@@ -6611,12 +6567,12 @@ jT
 ab
 aL
 aG
-bN
+aJ
 cm
 aG
 aK
 cm
-bN
+aJ
 aG
 aG
 fc
@@ -6661,12 +6617,12 @@ jT
 ab
 aL
 bq
-bN
+aJ
 cm
 cN
 aG
 cm
-bN
+aJ
 eD
 aG
 fc
@@ -6686,12 +6642,12 @@ jT
 ab
 aG
 aG
-bN
+aJ
 cm
 aG
 aG
 cm
-bN
+aJ
 aG
 fa
 fc
@@ -7071,14 +7027,14 @@ aQ
 aQ
 fc
 fV
-gP
-hy
-hy
+gR
+gR
+gR
 hU
 hU
-hy
+gR
 hU
-gP
+gR
 fU
 fc
 "}
@@ -7103,7 +7059,7 @@ ir
 fV
 fV
 je
-gT
+hU
 fU
 fc
 "}
@@ -7196,7 +7152,7 @@ bs
 aQ
 fc
 fU
-gT
+hU
 fV
 fV
 fV
@@ -7271,14 +7227,14 @@ aQ
 aQ
 fc
 fU
-gU
-hy
+gR
+gR
 hU
 hU
 hU
 hU
-hy
-jB
+gR
+hU
 fU
 fc
 "}

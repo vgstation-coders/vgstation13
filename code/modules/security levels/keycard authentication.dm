@@ -269,3 +269,8 @@ var/global/list/all_access_list = list()
 	if(announce)
 		to_chat(world, "<font size=4 color='red'>Attention!</font>")
 		to_chat(world, "<span class='red'>The [get_access_desc_list(accesses)] access requirement has been readded on all airlocks.</span>")
+
+/obj/machinery/door/airlock/allowed(atom/A)
+	if(check_access_list(all_access_list))
+		return 1
+	return ..(A)

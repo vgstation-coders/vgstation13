@@ -49,8 +49,11 @@ Class Procs:
 	var/list/edges = list()
 	var/datum/gas_mixture/air = new
 
-	var/list/graphic_add = list()
-	var/list/graphic_remove = list()
+	//Flags of active tile overlays for this zone.  Updated by check_tile_graphic()
+	var/graphic = 0
+
+	var/graphic_add = 0
+	var/graphic_remove = 0
 
 	#ifdef ZAS_COLOR
 	var/turf_color
@@ -80,7 +83,7 @@ Class Procs:
 	air.merge(turf_air)
 	T.zone = src
 	contents += T
-	T.update_graphic(air.graphic)
+	T.update_graphic(graphic)
 	#ifdef ZAS_COLOR
 	T.color = turf_color
 	#endif
@@ -100,7 +103,7 @@ Class Procs:
 	air.volume -= turf_air.volume
 	air.update_values()
 	contents -= T
-	T.update_graphic(graphic_remove = air.graphic)
+	T.update_graphic(graphic_remove = graphic)
 	#ifdef ZAS_COLOR
 	T.color = null
 	#endif
@@ -117,7 +120,7 @@ Class Procs:
 #endif
 	c_invalidate()
 	for(var/turf/simulated/T in contents)
-		T.update_graphic(graphic_remove = air.graphic)
+		T.update_graphic(graphic_remove = graphic)
 		into.add(T)
 		#ifdef ZASDBG
 		T.dbg(merged)
@@ -145,7 +148,7 @@ Class Procs:
 		return //Short circuit for explosions where rebuild is called many times over.
 	c_invalidate()
 	for(var/turf/simulated/T in contents)
-		T.update_graphic(graphic_remove = air.graphic) //we need to remove the overlays so they're not doubled when the zone is rebuilt
+		T.update_graphic(graphic_remove = graphic) //we need to remove the overlays so they're not doubled when the zone is rebuilt
 		#ifdef ZAS_COLOR
 		T.color = null
 		#endif
@@ -171,15 +174,37 @@ Class Procs:
 /zone/proc/tick()
 	check_for_events()
 	air.reaction_tick()
-	if(air.check_tile_graphic(graphic_add, graphic_remove))
+	if(check_tile_graphic())
 		for(var/turf/simulated/T in contents)
 			T.update_graphic(graphic_add, graphic_remove)
-		graphic_add.len = 0
-		graphic_remove.len = 0
+		graphic_add = 0
+		graphic_remove = 0
 
 	for(var/connection_edge/E in edges)
 		if(E.sleeping)
 			E.recheck()
+
+//Rechecks the gas_mixture and adjusts the graphic list if needed.
+/zone/proc/check_tile_graphic()
+	for(var/g in XGM.overlay_limit)
+		if(g in gas2show)
+			if(graphic & gas2show[g])
+				//Overlay is already applied for this gas, check if it's still valid.
+				if(air.molar_density(g) <= XGM.overlay_limit[g])
+					graphic_remove |= gas2show[g]
+			else
+				//Overlay isn't applied for this gas, check if it's valid and needs to be added.
+				if(air.molar_density(g) > XGM.overlay_limit[g])
+					graphic_add |= gas2show[g]
+
+	. = 0
+	//Apply changes
+	if(graphic_add)
+		graphic |= graphic_add
+		. = 1
+	if(graphic_remove)
+		graphic &= ~graphic_remove
+		. = 1
 
 /zone/proc/dbg_data(mob/M)
 	to_chat(M, name)

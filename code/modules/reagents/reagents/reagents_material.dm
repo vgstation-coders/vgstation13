@@ -49,6 +49,68 @@
 	specheatcap = 0.45
 	density = 7.874
 
+/datum/reagent/zetadust
+	name = "Zeta dust"
+	id = ZETADUST
+	description = "Ground up reticulite, the essence of any grey's healthy blood system."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#336666" //closer to ayy colors
+	specheatcap = 0.1
+	density = 25
+	dupeable = FALSE
+
+/datum/reagent/zetadust/on_mob_life(mob/living/M, alien)
+	. = ..()
+	if(!isgrey(M) && prob(25)) //restores blood on greys, stings a little for anyone else
+		M.adjustFireLoss(0.5 * REM)
+		M.bodytemperature += 1 * TEMPERATURE_DAMAGE_COEFFICIENT
+		if(prob(50))
+			M.adjustToxLoss(-1 * REM)
+
+/datum/reagent/zetadust/reaction_mob(var/mob/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+	if(..())
+		return 1
+
+	if(method == TOUCH && ishuman(M) && !isgrey(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.flags & NO_BLOOD)
+			return
+		var/screamed = FALSE
+		var/damage = (10 / zone_sels.len) * (H.vessel.total_volume / 600)
+		for(var/part in zone_sels)
+			if(H.check_body_part_coverage(limb_define_to_part_define(part)))
+				return
+			var/datum/organ/external/ext_organ = H.get_organ(part)
+			if((ext_organ.wounds?.len) && prob(15) && volume >= 5)
+				if(ext_organ.take_damage(0, damage)) // Balance for precisions vs general.
+					H.UpdateDamageIcon(1)
+					screamed = TRUE
+				if(istype(ext_organ,/datum/organ/external/head))
+					var/datum/organ/external/head/head_organ = ext_organ
+					head_organ.disfigure("burn")
+		if(screamed)
+			H.audible_scream()
+
+/datum/reagent/zetadust/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	O.clean_blood()
+		
+	if(volume >= 20 && istype(O,/obj/item/stack/sheet/mineral/reticulite))
+		var/obj/item/stack/S = O
+		S.add(volume/20)
+
+/datum/reagent/zetadust/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 1)
+		for (var/obj/effect/decal/cleanable/blood/C in T)
+			qdel(C)
+
+		T.clean_blood()
+
 /datum/reagent/phazon
 	name = "Phazon Salt"
 	id = PHAZON
@@ -79,8 +141,8 @@
 	description = "Plasma in its liquid form."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
-	fission_time=18000 //5 hours.
-	fission_absorbtion=8333.333
+	fission_time=9000 //2.5 hours.
+	fission_absorbtion=16666.666
 
 /datum/reagent/plasma/New()
 	..()
@@ -137,7 +199,7 @@
 			H.visible_message("<span class='warning'>[H] is blinded by the [src]!</span>", \
 				"<span class='warning'>\The [src] flies into your eyes!</span>")
 			H.eye_blurry = max(H.eye_blurry, rand(3,8))
-			H.eye_blind = max(H.eye_blind, rand(1,3))
+			H.instant_blindness(rand(11,13))
 			H.drop_hands(get_turf(H))
 		log_attack("<font color='red'>[M] ([H ? H.ckey : "what"]) was pocketsanded by ([holder.my_atom.fingerprintslast])</font>")
 	M.extinguish()
@@ -166,6 +228,47 @@
 	if(volume >= U_PER_SHEET)
 		drop_stack(/obj/item/stack/ore/glass,T,floor(volume/U_PER_SHEET))
 
+/datum/reagent/sawdust
+	name = "Sawdust"
+	id = SAWDUST
+	description = "Tiny chips of wood particles."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#FFBB88"
+	density = 2.2
+	specheatcap = 0.7
+
+/datum/reagent/sawdust/reaction_mob(mob/living/M, method, volume, list/zone_sels, allow_permeability, list/splashplosion)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if (H.check_body_part_coverage(EYES))
+			to_chat(H, "<span class='warning'>Your eyewear protects you from \the [src]!</span>")
+		else
+			H.visible_message("<span class='warning'>[H] is blinded by the [src]!</span>", \
+				"<span class='warning'>\The [src] flies into your eyes!</span>")
+			H.eye_blurry = max(H.eye_blurry, rand(3,8))
+			H.instant_blindness(rand(11,13))
+			H.drop_hands(get_turf(H))
+		log_attack("<font color='red'>[M] ([H ? H.ckey : "what"]) was pocketsawdusted by ([holder.my_atom.fingerprintslast])</font>")
+
+/datum/reagent/sawdust/reaction_turf(turf/simulated/T, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(!locate(/obj/effect/decal/cleanable/scattered_sand) in T)
+		new/obj/effect/decal/cleanable/scattered_sand(T)
+
+/datum/reagent/pulp
+	name = "Pulp"
+	id = PULP
+	description = "Finely juiced organic matter made of cellulose."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFBB88"
+	density = 2.2
+	specheatcap = 0.7
+
 /datum/reagent/silicate
 	name = "Silicate"
 	id = SILICATE
@@ -193,8 +296,8 @@
 	color = "#B8B8C0" //rgb: 184, 184, 192
 	density = 19.05
 	specheatcap = 0.124
-	fission_time=9000 //2.5 hours.
-	fission_power=16666.667
+	fission_time=4500 //1.25 hours.
+	fission_power=33333.333
 
 /datum/reagent/uranium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -293,8 +396,8 @@
 	color = "#CACAD2" //rgb: 202, 202, 210
 	density = 19.85
 	specheatcap = 0.124
-	fission_time=4500 //1.25 hours.
-	fission_power=66666.67 //spooky
+	fission_time=2250 //37.5 minutes.
+	fission_power=133333.33 //spooky
 
 /datum/reagent/plutonium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -310,7 +413,7 @@
 	density = 9.73
 	specheatcap = 0.936
 	custom_metabolism = 1 //decays really fast, so it shouldn't linger long.
-	fission_time=300 //5 minutes.
+	fission_time=150 //2.5 minutes.
 
 /datum/reagent/radon/on_mob_life(var/mob/living/M)
 	if(..())
@@ -326,6 +429,7 @@
 	color = "#676767" //rgb: 103, 103, 103
 	density = 11.34
 	specheatcap = 0.129
+	fission_absorbtion = 5000
 
 /datum/reagent/lead/on_mob_life(var/mob/living/M) //less potent mercury
 	if(..())
@@ -358,7 +462,7 @@
 	color = "#BABAA2"
 	density = 11.725
 	specheatcap = 0.124
-	fission_time=7200 //2 hours
+	fission_time=3600 //1 hour (60 mins)
 	//no fission power because thorium isn't actually fissile.
 
 /datum/reagent/thorium/on_mob_life(var/mob/living/M)
@@ -374,8 +478,8 @@
 	color = "#FCCAD2" //rgb: 252, 202, 210
 	density = 23.13
 	specheatcap = 0.431
-	fission_time=1800 //30 minutes (1/2 an hour).
-	fission_power=333333.333 //5x plutonium
+	fission_time=900 //15 minutes.
+	fission_power=666666.666 //5x plutonium
 
 /datum/reagent/agentw/on_mob_life(var/mob/living/M)
 	if(..())

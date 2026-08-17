@@ -838,7 +838,7 @@ var/list/hive_pylons = list()
 		L.apply_effect(stunforce, STUTTER)
 
 		if(L)
-			to_chat(L, "<span class='userdanger'>As you approach \the [source], your [src] explodes in a burst of energy, knocking you back. Phew, that was close.</span>")
+			to_chat(L, "<span class='userdanger'>As you approach \the [source], your [src.name] explodes in a burst of energy, knocking you back. Phew, that was close.</span>")
 
 	if(!infinite)
 		.=..()

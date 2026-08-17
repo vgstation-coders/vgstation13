@@ -231,7 +231,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	to_chat(viewers(user), "<span class='danger'>[user] is wrapping the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
-/obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
+/obj/item/weapon/legcuffs/bolas/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	if(!throw_range)
 		return //divide by zero, also you throw like a girl
 	if(istype(usr, /mob/living/carbon/human)) //if the user is human
@@ -241,16 +241,16 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 			H.Stun(2)
 			H.drop_item(src)
 			return
-	var/turf/target = get_turf(A)
+	var/turf/targ = get_turf(target)
 	var/new_x = src.x
 	var/new_y = src.y
 	var/scaler //used to changed the normalised vector to the proper size
-	scaler = throw_range / max(abs(target.x - src.x), abs(target.y - src.y),1) //whichever is larger magnitude is what we normalise to
-	if (target.x - src.x != 0) //just to avoid fucking with math for no reason
-		var/xadjust = round((target.x - src.x) * scaler) //normalised vector is now scaled up to throw_range
+	scaler = throw_range / max(abs(targ.x - src.x), abs(targ.y - src.y),1) //whichever is larger magnitude is what we normalise to
+	if (targ.x - src.x != 0) //just to avoid fucking with math for no reason
+		var/xadjust = round((targ.x - src.x) * scaler) //normalised vector is now scaled up to throw_range
 		new_x = src.x + xadjust //the new target at max range
-	if (target.y - src.y != 0)
-		var/yadjust = round((target.y - src.y) * scaler)
+	if (targ.y - src.y != 0)
+		var/yadjust = round((targ.y - src.y) * scaler)
 		new_y = src.y + yadjust
 	// log_admin("Adjusted target of [adjtarget.x] and [adjtarget.y], adjusted with [xadjust] and [yadjust] from [scaler]")
 	..(locate(new_x, new_y, src.z), throw_range, throw_speed)
@@ -453,8 +453,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	var/trapped = 0
 	var/datum/organ/external/trappedorgan //The limb currently trapped, it must be a leg
 	var/mob/living/carbon/human/trappeduser
-	var/mob/living/simple_animal/hostile/bear/trappedbear
-	var/mob/living/complex_animal/trappedcanimal
+	var/mob/living/simple_animal/trappedbear
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 	var/image/ied_overlay
 	health=60 //so animals don't break it in 1 hit if they attack it.
@@ -475,9 +474,6 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	if (trappedbear)
 		unlock_atom(trappedbear)
 	trappedbear = null
-	if (trappedcanimal)
-		unlock_atom(trappedcanimal)
-	trappedcanimal=null
 	if (IED)
 		qdel(IED)
 	IED = null
@@ -615,32 +611,11 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 					"<span class='warning'>You fail to pry \the [src] off of \the [trappedbear], and you crush their leg even more!</span>")
 					trappedbear.adjustBruteLoss(5)
 					return
-			else if (trappedcanimal)
-				user.visible_message("<span class='notice'>[H] tries to pry \the [src] off of \the [trappedcanimal]!</span>", \
-				"<span class='notice'>You try to pry open \the [src] with your bare hands.</span>")
-
-				if(do_after(user, src, 40) && prob(60))
-					user.visible_message("<span class='notice'>\The [H] managed to pry \the [src] off of \the [trappedcanimal]!</span>", \
-					"<span class='notice'>You manage to pry \the [src] off!</span>")
-					playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
-					trapped = 0
-					unlock_atom(trappedcanimal)
-					trappedcanimal.update_icon()
-					trappedcanimal = null
-					anchored = FALSE
-					trappedcanimal.family+=user
-					to_chat(user,"<span class='notice'>\The [trappedcanimal] seems appreciative.</span>")
-					return
-				else
-					user.visible_message("<span class='warning'>\The [H] fails to pry \the [src] off of \the [trappedcanimal], and crushes their leg even more!</span>", \
-					"<span class='warning'>You fail to pry \the [src] off of \the [trappedcanimal], and you crush their leg even more!</span>")
-					trappedcanimal.adjustBruteLoss(5)
-					return
 	..()
 
 /obj/item/weapon/beartrap/try_break(datum/throwparams/propelparams, hit_atom)
 	if(health <= 0)
-		if(trappeduser || trappedbear || trappedcanimal)
+		if(trappeduser || trappedbear)
 			armed = 0
 			anchored = FALSE
 			update_icon()
@@ -654,10 +629,6 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 				unlock_atom(trappedbear)
 				trappedbear.update_icon()
 				trappedbear = null
-			if(trappedcanimal)
-				unlock_atom(trappedcanimal)
-				trappedcanimal.update_icon()
-				trappedcanimal = null
 			return FALSE
 
 		visible_message("\the [src] is smashed apart into nothing but metal...")
@@ -725,21 +696,6 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 				unlock_atom(trappedbear)
 				trappedbear.update_icon()
 				trappedbear = null
-		else if (trappedcanimal)
-			user.visible_message("<span class='notice'>[user] tries to pry \the [src] off of \the [trappedcanimal]!</span>", \
-			"<span class='notice'>You try to pry open \the [src] with \the [I.name].</span>")
-			if(do_after(user, src, 30))
-				user.visible_message("<span class='notice'>\The [user] managed to pry \the [src] off of \the [trappedcanimal]!</span>", \
-				"<span class='notice'>You pry open the bear trap with \the [I.name].</span>")
-				playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
-				trapped = 0
-				unlock_atom(trappedcanimal)
-				trappedcanimal.update_icon()
-				trappedcanimal = null
-				anchored = FALSE
-				trappedcanimal.family+=user
-				to_chat(user,"<span class='notice'>\The [trappedcanimal] seems appreciative.</span>")
-				return
 	else
 		to_chat(user, "<span class='notice'>You carefully set the bear trap off with \the [I.name].</span>")
 		playsound(src, 'sound/effects/snap.ogg', 60, 1)
@@ -768,7 +724,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 
 			else if (istype(AM,/mob/living/simple_animal/hostile/bear))
 				trap(AM)
-			else if (istype(AM,/mob/living/complex_animal))
+			else if (istype(AM,/mob/living/simple_animal/complex))
 				trap(AM)
 			else if(isanimal(AM))
 				armed = 0
@@ -821,13 +777,6 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 			trappedbear.gib()
 			trapped = 0
 			trappedbear = null
-			anchored = FALSE
-		
-		if(trappedcanimal)
-			unlock_atom(trappedcanimal)
-			trappedcanimal.gib()
-			trapped = 0
-			trappedcanimal = null
 			anchored = FALSE
 
 // Called when the dude is moved from the trap on way or the other.

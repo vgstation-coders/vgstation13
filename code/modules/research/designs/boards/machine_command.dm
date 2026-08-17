@@ -61,3 +61,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/planet_scanner
+
+/datum/design/planetscanner_shuttle
+	name = "Circuit Design (Shuttle Planet Scanner)"
+	desc = "Allows for the construction of circuit boards used to build a shuttle-mountable planet scanner."
+	id = "planetscanner_shuttle"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 3, Tc_BLUESPACE = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/planet_scanner/shuttle

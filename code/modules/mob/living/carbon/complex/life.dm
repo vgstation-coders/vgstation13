@@ -91,9 +91,8 @@
 	if(breath)
 		loc.assume_air(breath)
 
-/mob/living/carbon/complex/proc/get_breath_from_internal(volume_needed)
+/mob/living/carbon/complex/get_breath_from_internal(volume_needed)
 	return null
-
 
 /mob/living/carbon/complex/proc/handle_breath(datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
@@ -455,22 +454,26 @@
 
 
 	if(stat != DEAD)
-		if(src.eye_blind || blinded)
-			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		else
-			clear_fullscreen("blind")
-		if (src.disabilities & NEARSIGHTED)
-			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired, 2)
-		else
-			clear_fullscreen("impaired")
-		if (src.eye_blurry)
-			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-		else
-			clear_fullscreen("blurry")
+		var/impaired_vision = get_impaired_vision_range()
+		if(impaired_vision > 0)
+			enable_nearsightedness(impaired_vision)
+		else if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
+			disable_nearsightedness()
+
+		if(eye_blurry)
+			enable_blurriness(eye_blurry)
+		else if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
+			disable_blurriness()
+
 		if(druggy)
 			enable_druggy_overlays()
 		else
 			disable_druggy_overlays()
+	else
+		if (perception_filters.enabled_filters & P_FILTER_IMPAIRED_VISION)
+			disable_nearsightedness()
+		if (perception_filters.enabled_filters & P_FILTER_BLURRY_VISION)
+			disable_blurriness()
 
 	if (stat != DEAD)
 		if (machine)

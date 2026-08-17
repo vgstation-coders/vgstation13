@@ -1180,8 +1180,6 @@ About the new airlock wires panel:
 		if(SA.environment_smash_flags & OPEN_DOOR_STRONG)
 			level_of_door_opening = 2
 		dooropendelay=SA.force_airlock_time
-	else if(istype(M,/mob/living/complex_animal))
-		level_of_door_opening = 1
 	
 	
 	
@@ -1299,7 +1297,7 @@ About the new airlock wires panel:
 	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/tool/weldingtool/WT = I
-			if (WT.remove_fuel(0, user))
+			if (WT.remove_fuel(1, user))
 				if (!welded)
 					welded = 1
 				else

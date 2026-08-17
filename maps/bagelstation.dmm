@@ -9134,6 +9134,11 @@
 	name = "Firelock South"
 	},
 /obj/item/device/instrument/glockenspiel,
+/obj/item/device/deskbell/signaler/trader{
+	pixel_y = -4;
+	pixel_x = -4;
+	name = "Trade Post Desk Bell"
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters)
 "atr" = (
@@ -15432,9 +15437,7 @@
 	},
 /area/crew_quarters/toilet)
 "aGZ" = (
-/obj/structure/wc/urinal{
-	pixel_y = 30
-	},
+/obj/structure/wc/urinal,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -24567,9 +24570,7 @@
 /turf/simulated/floor/plating,
 /area/bridge)
 "aYm" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aYn" = (
@@ -48370,6 +48371,7 @@
 	on = 1
 	},
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bPK" = (
@@ -49510,6 +49512,7 @@
 	icon_state = "4-8"
 	},
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bRR" = (
@@ -49561,6 +49564,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "bRW" = (
@@ -49571,6 +49575,7 @@
 	icon_state = "4-8"
 	},
 /obj/item/voucher/free_item/glowing,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/carpet,
 /area/library)
 "bRX" = (
@@ -50378,6 +50383,7 @@
 "bTu" = (
 /obj/structure/bookcase,
 /obj/item/weapon/book/manual/security_space_law,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "bTv" = (
@@ -52014,8 +52020,7 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/library)
@@ -53017,8 +53022,7 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/library)
@@ -53030,8 +53034,7 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/library)
@@ -56380,8 +56383,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -56441,8 +56443,7 @@
 "cdW" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -56577,8 +56578,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -57447,8 +57447,7 @@
 "cfL" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -57504,8 +57503,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 4
@@ -58301,8 +58299,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
@@ -61458,8 +61455,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/science/podbay)
@@ -62396,8 +62392,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/science/podbay)
@@ -62409,8 +62404,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -63059,8 +63053,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/science/podbay)
@@ -69268,9 +69261,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "cBg" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "cBh" = (
@@ -73510,8 +73501,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/engineering/atmos)
@@ -73885,8 +73875,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area)
@@ -73894,8 +73883,7 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area)
@@ -73925,8 +73913,7 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/sign/vacuum,
 /turf/simulated/floor/plating,
@@ -75979,10 +75966,6 @@
 /obj/docking_port/destination/syndicate/south,
 /turf/space,
 /area)
-"cPe" = (
-/obj/effect/landmark/dungeon_area,
-/turf/space,
-/area)
 "cPf" = (
 /turf/space{
 	icon_state = "black"
@@ -76685,14 +76668,12 @@
 /area/centcom/striketeam)
 "cQZ" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cRa" = (
 /obj/effect/decal/cleanable/cobweb2,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cRb" = (
@@ -76702,18 +76683,13 @@
 	},
 /area/prison/solitary)
 "cRc" = (
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cRd" = (
 /obj/effect/decal/cleanable/blood,
 /turf/unsimulated/wall,
-/area/prison/solitary)
-"cRe" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
-	},
 /area/prison/solitary)
 "cRf" = (
 /turf/unsimulated/floor{
@@ -76724,12 +76700,6 @@
 /obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor{
 	name = "plating"
-	},
-/area/prison/solitary)
-"cRh" = (
-/obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
 	},
 /area/prison/solitary)
 "cRi" = (
@@ -77168,19 +77138,19 @@
 /area/centcom/striketeam)
 "cSx" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg3"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cSy" = (
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
+/turf/unsimulated/floor/broken{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cSz" = (
 /obj/structure/bed,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
+/turf/unsimulated/floor/scorched{
+	icon_state = "plating"
 	},
 /area/prison/solitary)
 "cSA" = (
@@ -77240,14 +77210,7 @@
 	},
 /area/centcom/striketeam)
 "cSM" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched1"
-	},
-/area/prison/solitary)
-"cSN" = (
-/turf/unsimulated/floor{
-	icon_state = "floorscorched2"
-	},
+/turf/unsimulated/floor/scorched,
 /area/prison/solitary)
 "cSO" = (
 /obj/structure/shuttle/window{
@@ -84183,16 +84146,8 @@
 /obj/machinery/newscaster,
 /turf/unsimulated/wall,
 /area/centcom/holding)
-"djC" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
 "djD" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "djE" = (
@@ -89622,9 +89577,7 @@
 	},
 /area/prison/hallway/fore)
 "dVq" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
 /area/mine/explored)
 "dVr" = (
@@ -100301,9 +100254,7 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/maintstore2)
 "epZ" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence,
 /turf/simulated/floor/plating,
 /area/research_outpost/maintstore2)
 "eqa" = (
@@ -109427,8 +109378,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/machinery/door/poddoor/shutters/preopen{
 	id_tag = "TSdisplay";
@@ -110495,8 +110445,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -110706,8 +110655,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/full/reinforced,
@@ -110724,8 +110672,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/full/reinforced,
@@ -112634,6 +112581,11 @@
 "eNC" = (
 /obj/machinery/light,
 /obj/structure/table/woodentable,
+/obj/item/device/deskbell/signaler/trader{
+	pixel_y = 9;
+	pixel_x = 10;
+	name = "Trade Ship Bell"
+	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
@@ -113125,10 +113077,6 @@
 /turf/unsimulated/floor{
 	icon_state = "redyellowfull"
 	},
-/area/centcom/holding)
-"eOr" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "eOs" = (
 /obj/structure/closet,
@@ -114126,6 +114074,7 @@
 /area/crew_quarters/courtroom)
 "qdc" = (
 /obj/structure/bookcase,
+/obj/abstract/map/spawner/library,
 /turf/simulated/floor/wood,
 /area/library)
 "qps" = (
@@ -114406,8 +114355,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/library)
@@ -365953,7 +365901,7 @@ aaa
 aaa
 aaa
 aaa
-cPe
+aaa
 aaa
 aaa
 aaa
@@ -405746,11 +405694,11 @@ aaa
 aaa
 aaa
 cQI
-cRe
+cSy
 cRE
 cQI
 cRE
-cRe
+cSy
 cQI
 aaa
 cTj
@@ -407255,7 +407203,7 @@ cQI
 cRf
 cRi
 cQI
-cRe
+cSy
 cRf
 cQI
 aaa
@@ -408761,7 +408709,7 @@ cQI
 cRg
 cRc
 cQI
-cRe
+cSy
 cRf
 cQI
 aaa
@@ -409762,7 +409710,7 @@ aaa
 aaa
 aaa
 cQI
-cRh
+cQZ
 cRD
 cQI
 cSA
@@ -411771,10 +411719,10 @@ aaa
 aaa
 cQI
 cRf
-cRe
+cSy
 cQI
 cRi
-cSN
+cSM
 cQI
 aaa
 aaa
@@ -421360,9 +421308,9 @@ diB
 diC
 diH
 djv
-djC
-eOr
-eOr
+djD
+djD
+djD
 dkg
 eOx
 eOx

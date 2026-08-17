@@ -122,13 +122,13 @@ var/list/beam_master = list()
 			final_turf=null
 			ASSERT(!gcDestroyed)
 			spawn()
-				rebound(last_hit.hit_atom)
+				rebound(last_hit.hit_atom.get())
 
 		if(last_hit.hit_type == RAY_CAST_PORTAL)
 			final_turf=null
 			ASSERT(!gcDestroyed)
 			spawn()
-				portal(last_hit.hit_atom)
+				portal(last_hit.hit_atom.get())
 
 	shot_ray.draw(distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift, above_light = luminous)
 
@@ -152,12 +152,19 @@ var/list/beam_master = list()
 	var/list/rayCastHit/hit_cache = latest_ray.hit_cache
 	var/_vector/origin = hit_cache[hit_cache.len].point
 	var/_vector/direction = latest_ray.getReboundOnAtom(hit_cache[hit_cache.len])
+	if(!direction)
+		return
 
 	//check if raypath was already traveled
 	var/ray/temp_ray = new /ray(origin, direction)
 	for(var/ray/beam_ray/other_ray in past_rays)
 		if(temp_ray.equals(other_ray))
 			return
+
+	damage *= A.disperse_coeff
+	if(damage <= 1)
+		bullet_die()
+		return
 
 	fireto(origin, direction)
 	shot_from = A //temporary

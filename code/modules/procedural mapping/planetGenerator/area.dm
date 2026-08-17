@@ -7,6 +7,8 @@
 	construction_zone = TRUE
 	forbid_apc = TRUE
 	var/silent_weather = FALSE
+	/// Pre-computed flag replacing isopensurface() macro during planet generation
+	var/is_open_surface = TRUE
 
 /area/planet/Entered(atom/movable/Obj, atom/OldLoc)
 	. = ..()
@@ -26,6 +28,7 @@
 /area/planet/cave
 	name = "Cave"
 	silent_weather = TRUE
+	is_open_surface = FALSE
 
 /area/planet/desert
 	name = "Desert Planet"

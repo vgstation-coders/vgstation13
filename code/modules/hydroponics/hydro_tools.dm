@@ -18,6 +18,8 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "hydro"
 	item_state = "analyzer"
+	starting_materials = list(MAT_IRON = 100, MAT_GLASS = 40)
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=2;"
 	var/form_title //Descriptive title of the last plant scanned, example: mutant watermelon (#81)
 	var/last_data  //Stores the entire last scan, for printing purposes.
 	var/tmp/last_print = 0 //When was the last printing, works as a cooldown to prevent paperspam
@@ -282,7 +284,7 @@
 	siemens_coefficient = 1
 	force = 12.0
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 5000)
+	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_METAL
 	throwforce = 15.0
 	throw_speed = 4

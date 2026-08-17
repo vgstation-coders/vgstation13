@@ -525,6 +525,7 @@ var/global/num_vending_terminals = 1
 			if(user.drop_item(W, src))
 				coin = W
 				to_chat(user, "<span class='notice'>You insert \a [W] into [src].</span>")
+				coin_act(W)
 				src.updateUsrDialog()
 		else
 			to_chat(user, "<SPAN CLASS='notice'>There's already \a [coin] in [src].</SPAN>")
@@ -1148,6 +1149,9 @@ var/global/num_vending_terminals = 1
 		src.vend_ready = 1
 		update_icon()
 		src.updateUsrDialog()
+
+/obj/machinery/vending/proc/coin_act(obj/item/weapon/coin/C, mob/user)
+	return
 
 /obj/machinery/vending/proc/on_return_coin_detect(mob/user)
 	return 0
@@ -2247,6 +2251,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/dionanode = 3,
 		/obj/item/seeds/soyaseed = 3,
 		/obj/item/seeds/sunflowerseed = 3,
+		/obj/item/seeds/roseseed = 3,
 		/obj/item/seeds/tomatoseed = 3,
 		/obj/item/seeds/towermycelium = 3,
 		/obj/item/seeds/wheatseed = 3,
@@ -2274,6 +2279,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/peanutseed = 3,
 		/obj/item/seeds/mustardplantseed = 3,
 		/obj/item/seeds/flaxseed = 3,
+		/obj/item/seeds/mintseed = 3,
 		)//,/obj/item/seeds/synthmeatseed = 3)
 	contraband = list(
 		/obj/item/seeds/amanitamycelium = 2,
@@ -2290,6 +2296,22 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/hydroseeds
+	var/fourtwentied = FALSE
+
+/obj/machinery/vending/hydroseeds/New()
+	if(Get_Holiday() == FOUR_TWENTY)
+		products[/obj/item/seeds/ambrosiavulgarisseed] = 420
+		premium[/obj/item/seeds/ambrosiadeusseed] = 420
+	. = ..()
+
+/obj/machinery/vending/hydroseeds/process()
+	. = ..()
+	if(time2text(world.timeofday, "hh") == "16" && time2text(world.timeofday, "mm") == "20" && !fourtwentied)
+		fourtwentied = TRUE
+		for(var/datum/data/vending_product/V in product_records)
+			if(V.product_path == /obj/item/seeds/ambrosiavulgarisseed)
+				V.amount = max(V.amount, V.original_amount)
+				break
 
 /obj/machinery/vending/voxseeds
 	name = "\improper Vox Seed 'n' Feed"
@@ -2392,13 +2414,11 @@ var/global/num_vending_terminals = 1
 	name = "\improper Dinnerware"
 	desc = "A vending machine containing kitchen and restaurant equipment."
 	product_ads = list(
-		"Mm, food stuffs!",
+		"Mm, condiments...",
 		"Food and food accessories.",
-		"Get your plates!",
-		"You like forks?",
-		"I like forks.",
-		"Woo, utensils.",
-		"You don't really need these..."
+		"Plate up!",
+		"Get Forked!",
+		"Salt-N-Pepa's here."
 	)
 	icon_state = "dinnerware"
 	moody_state = "overlay_vending_dinnerware"
@@ -2417,16 +2437,20 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/condiment/saltshaker	= 5,
 		/obj/item/weapon/reagent_containers/food/condiment/vinegar = 5,
 		/obj/item/weapon/storage/lunchbox/plastic/nt = 10,
-		/obj/item/weapon/storage/bag/food = 5
+		/obj/item/weapon/storage/bag/food = 5,
+		/obj/item/sushimat = 2
 		)
 	contraband = list(
-		/obj/item/weapon/kitchen/utensil/spoon = 2,
-		/obj/item/weapon/kitchen/utensil/knife = 2,
+		/obj/item/weapon/kitchen/utensil/spork = 10,
 		/obj/item/weapon/kitchen/rollingpin = 2,
 		/obj/item/weapon/kitchen/utensil/knife/large/butch = 2,
+		/obj/item/trash/plate/clean/stack = 5,
 		)
 	premium = list(
-		/obj/item/weapon/kitchen/utensil/spork = 10,
+		/obj/item/weapon/kitchen/utensil/spork/plastic/teflon = 3,
+		/obj/item/weapon/kitchen/utensil/spoon/plastic/teflon = 3,
+		/obj/item/weapon/kitchen/utensil/knife/plastic/teflon = 3,
+		/obj/item/weapon/kitchen/utensil/fork/plastic/teflon = 3,
 		/obj/item/weapon/reagent_containers/dropper/baster = 1)
 
 	pack = /obj/structure/vendomatpack/dinnerware
@@ -2715,6 +2739,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/lepresuit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/clothing/head/beret = 3,
 		/obj/item/clothing/suit/wcoat = 3,
 		/obj/item/clothing/under/suit_jacket = 3,
@@ -3351,6 +3376,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/carapace = 3,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/aqua = 3,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/stealth = 3,
+		/obj/item/weapon/storage/fancy/cigarettes/shoalsticks = 4,
+		/obj/item/weapon/lighter/vox = 2,
 		)
 
 	prices = list(
@@ -3368,6 +3395,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/carapace = 30,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/aqua = 30,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/stealth = 30,
+		/obj/item/weapon/storage/fancy/cigarettes/shoalsticks = 20,
+		/obj/item/weapon/lighter/vox = 15,
 		)
 	slogan_languages = list(LANGUAGE_VOX)
 
@@ -3908,6 +3937,11 @@ var/global/num_vending_terminals = 1
 	else
 		return pick(product_slogans)
 
+/obj/machinery/vending/zamsnax/coin_act(obj/item/weapon/coin/C, mob/user)
+	if(C.material == MAT_RETICULITE && !(/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje in premium))
+		premium[/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje] = 3
+		build_inventories()
+
 /obj/machinery/vending/lotto
 	name = "\improper Lotto Tickets"
 	desc = "Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here."
@@ -4110,6 +4144,8 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		/obj/item/weapon/storage/box/syndicatefake/space = 2,
 		/obj/item/clothing/mask/gas/syndicate = 2,
 		/obj/item/clothing/shoes/laceup = 2,
+		/obj/item/clothing/suit/syndie_football = 2,
+		/obj/item/clothing/head/syndie_football_helmet = 2,
 		)
 	contraband = list(
 		/obj/item/clothing/head/beret/centcom/officer = 2,

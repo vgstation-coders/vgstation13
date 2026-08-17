@@ -112,30 +112,30 @@
 /obj/var/access_not_dir = TRUE			// Behaviour if the user is not in the access dir
 
 //returns 1 if this mob has sufficient access to use this object
-/obj/proc/allowed(var/mob/M)
+/obj/proc/allowed(var/atom/A)
 	set_up_access()
-	if(!M || !istype(M))
+	if(!A || !istype(A))
 		return 0 // I guess?  This seems to happen when AIs use something.
-	if(M.hasFullAccess()) // AI, adminghosts, etc.
+	if(A.hasFullAccess()) // AI, adminghosts, etc.
 		return 1
-	var/list/ACL = M.GetAccess()
+	var/list/ACL = A.GetAccess()
 	if(req_access_dir)
 		// A special check that combines dirs specified in this number by chaining the conditions below, for example NORTHEAST would add the north and east conditions together.
 		var/condition = FALSE
 		if((flow_flags & ON_BORDER) && opposite_dirs[req_access_dir] & dir) // For windoors and etc.
-			condition |= M.y == src.y && M.x == src.x
+			condition |= A.y == src.y && A.x == src.x
 		if(req_access_dir & NORTH)
-			condition |= M.y > src.y
+			condition |= A.y > src.y
 		if(req_access_dir & SOUTH)
-			condition |= M.y < src.y
+			condition |= A.y < src.y
 		if(req_access_dir & EAST)
-			condition |= M.x > src.x
+			condition |= A.x > src.x
 		if(req_access_dir & WEST)
-			condition |= M.x < src.x
+			condition |= A.x < src.x
 		if(HasAbove(z) && (req_access_dir & UP))
-			condition |= M.z > src.z
+			condition |= A.z > src.z
 		if(HasBelow(z) && (req_access_dir & DOWN))
-			condition |= M.z < src.z
+			condition |= A.z < src.z
 		if(condition)
 			return can_access(ACL,req_access,req_one_access)
 		else
@@ -155,7 +155,14 @@
 	..()
 	arcane_access.Cut()
 
-/obj/item/proc/GetAccess()
+// Skip over all the complex list checks.
+/atom/proc/hasFullAccess()
+	return 0
+
+/atom/proc/GetAccess()
+	return
+
+/obj/item/GetAccess()
 	if(arcanetampered)
 		if(!arcane_access || !arcane_access.len || (time_since_last_random_access + (30 SECONDS) < world.time))
 			for(var/i in 1 to rand(1,5))

@@ -271,7 +271,7 @@
 			M.appearance_flags = RESET_COLOR
 			M.blend_mode = BLEND_ADD
 			if (isturf(loc))
-				M.plane = ABOVE_LIGHTING_PLANE
+				M.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 			else
 				M.plane = ABOVE_HUD_PLANE // inventory
 			overlays += M
@@ -282,7 +282,7 @@
 			I.blend_mode = BLEND_ADD
 			I.pixel_y = candle_offset_y
 			if (isturf(loc))
-				I.plane = ABOVE_LIGHTING_PLANE
+				I.plane = ABOVE_LIGHTING_PLANE_ADDITIVE
 			else
 				I.plane = ABOVE_HUD_PLANE // inventory
 			overlays += I
@@ -1842,6 +1842,20 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
+
+/obj/item/weapon/reagent_containers/food/snacks/dinonuggies
+	name = "Dinosaur Nugget"
+	desc = "A true delicacy worth at least 25 good boy points."
+	icon_state = "dinonuggies"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/dinonuggies/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(GRUGZONE, 2)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/blobburger
 	name = "bloburger"
 	desc = "Careful, has a tendency to spill sauce in every direction when squeezed too hard."
@@ -1971,8 +1985,8 @@
 	set waitfor = FALSE
 	if(..())
 		return
-	if(ismob(hit_atom))
-		var/mob/M = hit_atom
+	if(isliving(hit_atom))
+		var/mob/living/M = hit_atom
 		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
 
 		var/race_prefix = ""
@@ -1983,12 +1997,16 @@
 		else if (isinsectoid(M))
 			race_prefix = "insect"
 
-		M.eye_blind = 2
+		M.instant_blindness(12)
+
+		M.overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)//cumvision
+
 		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		sleep(55)
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 		sleep(120)
+		M.clear_fullscreen("blurry")
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 
 		if(luckiness)
@@ -6440,6 +6458,18 @@
 	reagents.add_reagent(IRON, 5)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje
+	name = "Vreemdkoekje"
+	desc = "Bevat nog steeds geen ijzer."
+	icon_state = "vreemdkoekje"
+	food_flags = FOOD_DIPPABLE
+
+/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ZETADUST, 5)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
 	name = "no-fruit pie"
 	desc = "It doesn't really taste like anything."
@@ -8874,6 +8904,32 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosias and blingpizzas must ever afterward be poison to me."
 	bitesize = 10
 
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkslider
+	name = "gunk slider"
+	desc = "Extremely numerous and weirdly unsatisfying."
+	icon_state = "gunkslider"
+	food_flags = FOOD_MEAT
+	bitesize = 2
+	skitterchance = 75
+	skitterdelay = 20 //Opposite to the super gunk burger, this one wakes up fast and moves a lot
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkslider/New()
+	..()
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 1)
+		desc = "Horrors beyond your comprehension to-go!."
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk
+	name = "gunk sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkslider
+	child_volume = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/gunk/New()
+	..()
+	reagents.add_reagent(ROACHSHELL, 10)
+	reagents.add_reagent(NUTRIMENT, 10)	//spawns 10
+
 /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
 	name = "Gunk-kabob"
 	icon_state = "bugkabob"
@@ -9063,6 +9119,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 1)
+
+//////////////////////////////////
+// YE HAVE LEFT THE GUNK ZONE ///
+////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
 	name = "salt cubes"

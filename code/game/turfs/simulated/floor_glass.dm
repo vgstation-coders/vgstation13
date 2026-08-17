@@ -323,7 +323,7 @@
 		health += diff
 		healthcheck(user, FALSE)
 
-		user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S].</span>")
+		user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S.name].</span>")
 
 	else // No diff, but we didn't exit earlier, so mode must be reinforce
 		var/extra_health = health - initial(health)
@@ -333,7 +333,7 @@
 		diff = min(S.get_amount() / SILICATE_PER_REINFORCE, (initial(health) * MAX_WINDOW_HEALTH_MULTIPLIER) - (initial(health) + extra_health))
 		health += diff
 		healthcheck(user)
-		user.visible_message("<span class='notice'>[user] reinforced \the [src] with their [S]!</span>", "<span class='notice'>You reinforce \the [src] with your [S].</span>")
+		user.visible_message("<span class='notice'>[user] reinforced \the [src] with their [S]!</span>", "<span class='notice'>You reinforce \the [src] with your [S.name].</span>")
 
 	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6)
 	S.remove_silicate(diff * SILICATE_PER_DAMAGE)

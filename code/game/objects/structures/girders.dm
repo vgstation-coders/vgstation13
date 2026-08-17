@@ -2,40 +2,34 @@
 	icon_state = "girder"
 	anchored = 1
 	density = 1
+	sheet_type = /obj/item/stack/sheet/metal
+	sheet_amt = 2
 	var/state = 0
-	var/material = /obj/item/stack/sheet/metal
 	var/construction_length = 40
 	pass_flags_self = PASSGIRDER
 
 /obj/structure/girder/attack_animal(var/mob/living/M)
 	M.delayNextAttack(8)
 	if(istype(M,/mob/living/simple_animal))
-		var/mob/living/simple_animal/SA
+		var/mob/living/simple_animal/SA = M
 		if(SA.environment_smash_flags & SMASH_WALLS)
 			if(prob(25)) // Not the best solution, but this should allow for better feedback so the player realizes the mob is trying to break through and has time to retreat
 				playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
 				M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
 				"<span class='attack'>You smash through \the [src].</span>")
-				drop_stack(material, get_turf(src), 2)
+				drop_stack(sheet_type, get_turf(src), sheet_amt)
 				qdel(src)
 			else
 				M.visible_message("<span class='danger'>[M] smashes against \the [src].</span>", \
 				"<span class='attack'>You smash against \the [src].</span>")
-	if(istype(M,/mob/living/complex_animal))
-		if(prob(25)) // Not the best solution, but this should allow for better feedback so the player realizes the mob is trying to break through and has time to retreat
-			playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
-			M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
-			"<span class='attack'>You smash through \the [src].</span>")
-			drop_stack(material, get_turf(src), 2)
-			qdel(src)
 		else
 			M.visible_message("<span class='danger'>[M] smashes against \the [src].</span>", \
 			"<span class='attack'>You smash against \the [src].</span>")
-	
+
 /obj/structure/girder/wood
 	icon_state = "girder_wood"
 	name = "wooden girder"
-	material = /obj/item/stack/sheet/wood
+	sheet_type = /obj/item/stack/sheet/wood
 	construction_length = 20
 
 /obj/structure/girder/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
@@ -56,7 +50,7 @@
 			user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
 						"<span class='notice'>You smash through \the [src].</span>")
 			W.playtoolsound(src, 100)
-			new material(get_turf(src), 2)
+			new sheet_type(get_turf(src), sheet_amt)
 			qdel(src)
 	else
 		..()
@@ -79,7 +73,7 @@
 				if(do_after(user, src, construction_length))
 					user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 					"<span class='notice'>You dissasemble \the [src].</span>")
-					new material(get_turf(src), 2)
+					new sheet_type(get_turf(src), sheet_amt)
 					qdel(src)
 			else if(!anchored) //Unanchored, anchor it
 				if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
@@ -118,7 +112,7 @@
 		if(do_after(user, src, 30))
 			user.visible_message("<span class='warning'>[user] destroys \the [src]!</span>", \
 			"<span class='notice'>Your \the [PK] tears through the last of \the [src]!</span>")
-			new material(get_turf(src))
+			new sheet_type(get_turf(src))
 			qdel(src)
 
 	else if(W.is_screwdriver(user) && state == 2) //Unsecuring support struts, stage 2 to 1
@@ -158,7 +152,7 @@
 			state = 0
 			update_icon()
 
-	else if(istype(W, /obj/item/stack/rods) && state == 0 && material == /obj/item/stack/sheet/metal) //Inserting support struts, stage 0 to 1 (reinforced girder, replaces plasteel step)
+	else if(istype(W, /obj/item/stack/rods) && state == 0 && sheet_type == /obj/item/stack/sheet/metal) //Inserting support struts, stage 0 to 1 (reinforced girder, replaces plasteel step)
 		var/obj/item/stack/rods/R = W
 		if(R.amount < 2) //Do a first check BEFORE the user begins, in case he's using a single rod
 			to_chat(user, "<span class='warning'>You need more rods to finish the support struts.</span>")
@@ -189,6 +183,37 @@
 			add_fingerprint(user)
 			anchored = 0
 			update_icon()
+
+	else if(istype(W, /obj/item/stack/shuttle_panel))
+		if(state)
+			return
+		if(sheet_type != /obj/item/stack/sheet/metal)
+			return
+		if(!anchored)
+			to_chat(user, "<span class='warning'>The girder needs to be secured first.</span>")
+			return
+		var/obj/item/stack/shuttle_panel/SP = W
+		if(SP.amount < 1)
+			return
+		user.visible_message("<span class='notice'>[user] starts installing \the [SP] onto \the [src].</span>", \
+		"<span class='notice'>You start installing \the [SP] onto \the [src].</span>")
+		if(do_after(user, src, construction_length))
+			if(SP.amount < 1) //User being tricky
+				return
+			SP.use(1)
+			user.visible_message("<span class='notice'>[user] finishes installing \the [SP] onto \the [src].</span>", \
+			"<span class='notice'>You finish installing \the [SP] onto \the [src].</span>")
+			var/turf/Tsrc = get_turf(src)
+			if(!istype(Tsrc))
+				return 0
+			for(var/obj/effect/decal/cleanable/blood/tracks/footprints in Tsrc)
+				qdel(footprints)
+			var/turf/simulated/wall/shuttle/panel/X = Tsrc.ChangeTurf(SP.wall_type)
+			if(X)
+				X.add_hiddenprint(user)
+				X.add_fingerprint(user)
+			qdel(src)
+		return
 
 	else if(istype(W, /obj/item/stack))//this could be either material stacks or tile stacks
 		var/use_amount = 2
@@ -369,7 +394,7 @@
 			"<span class='notice'>You slice through \the [src].</span>", \
 			"<span class='warning'>You hear slicing noises.</span>")
 			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			new material(get_turf(src), 2)
+			new sheet_type(get_turf(src), sheet_amt)
 			qdel(src)
 
 	//Wait, what, WHAT ?
@@ -503,7 +528,7 @@
 							"<span class='notice'>You start [PK.drill_verb] \the [src] with \the [PK].</span>")
 		if(do_after(user, src,30))
 			user.visible_message("<span class='warning'>[user] destroys \the [src]!</span>",
-								"<span class='notice'>Your [PK] tears through the last of \the [src]!</span>")
+								"<span class='notice'>Your [PK.name] tears through the last of \the [src]!</span>")
 			new /obj/effect/decal/remains/human(loc)
 			qdel(src)
 
@@ -557,7 +582,7 @@
 /obj/structure/girder/clockwork
 	name = "clockwork girder"
 	icon_state = "cog"
-	material = /obj/item/stack/sheet/brass
+	sheet_type = /obj/item/stack/sheet/brass
 	construction_length = 80
 
 /obj/structure/girder/clockwork/cultify()

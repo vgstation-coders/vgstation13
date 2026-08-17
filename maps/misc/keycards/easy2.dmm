@@ -55,7 +55,7 @@
 	},
 /area)
 "t" = (
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area)
 "u" = (
 /obj/effect/decal/warning_stripes{
@@ -143,7 +143,7 @@
 /area)
 "X" = (
 /obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/simulated/floor/plating/damaged/airless,
 /area)
 
 (1,1,1) = {"

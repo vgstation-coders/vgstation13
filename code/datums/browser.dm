@@ -98,9 +98,22 @@
 	"}
 
 /datum/browser/proc/open(var/use_onclose = 1)
+	if(!user)
+		return
+	// `user` is typed /mob, but legacy callers occasionally pass a /client directly.
+	// Resolve a client safely either way and bail if the user has no live client.
+	var/client/C
+	if(istype(user, /client))
+		C = user
+	else if(ismob(user))
+		var/mob/M = user
+		C = M.client
+	if(!C)
+		return
+	var/dpi = C.dpiScale || 1
 	var/window_size = ""
 	if (width && height)
-		window_size = "size=[width]x[height];"
+		window_size = "size=[width*dpi]x[height*dpi];"
 	user << browse(get_content(), "window=[window_id];[window_size][window_options]")
 	if (use_onclose)
 		onclose(user, window_id, ref)
