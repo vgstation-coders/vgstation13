@@ -996,6 +996,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define SPECIES_NO_MOUTH 	(1<<13)
 //#define REQUIRE_DARK 		(1<<14)
 #define RAD_IMMUNE 			(1<<15)
+#define EMAG_CLONEABLE 		(1<<16)	//Can be selected as a species by an emagged cloning console.
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 		(1)

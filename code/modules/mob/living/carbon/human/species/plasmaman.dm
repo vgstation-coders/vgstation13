@@ -1,12 +1,11 @@
 /datum/species/plasmaman // /vg/
 	name = "Plasmaman"
-	emag_cloneable = TRUE
 	icobase = 'icons/mob/human_races/r_plasmaman_sb.dmi'
 	deform = 'icons/mob/human_races/r_plasmaman_pb.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_HUMAN)
 	attack_verb = "punches"
 
-	flags = WHITELISTED | PLAYABLE | PLASMA_IMMUNE
+	flags = WHITELISTED | PLAYABLE | PLASMA_IMMUNE | EMAG_CLONEABLE
 	anatomy_flags = NO_BLOOD
 	blood_color = "#743474"
 	flesh_color = "#898476"

@@ -1,6 +1,5 @@
 /datum/species/vox
 	name = "Vox"
-	emag_cloneable = TRUE
 	icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	known_languages = list(LANGUAGE_VOX)
@@ -20,7 +19,7 @@
 	breath_type = GAS_NITROGEN
 
 	default_mutations = list(M_BEAK, M_TALONS)
-	flags = PLAYABLE | WHITELISTED
+	flags = PLAYABLE | WHITELISTED | EMAG_CLONEABLE
 	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
 	max_skin_tone = 6

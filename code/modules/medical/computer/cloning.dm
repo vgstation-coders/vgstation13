@@ -20,7 +20,7 @@
 	var/list/records = list()
 	var/datum/dna2/record/active_record = null
 	var/obj/item/weapon/disk/data/diskette = null //Mostly so the geneticist can steal everything.
-	var/list/available_species // Species available to emagged consoles.
+	var/list/available_species // Species available to emagged consoles. Per-instance copy to allow adminbus.
 	var/loading = 0 // Nice loading text
 
 	light_color = LIGHT_COLOR_BLUE
@@ -34,11 +34,6 @@
 
 /obj/machinery/computer/cloning/New()
 	..()
-	available_species = list()
-	for(var/species_name in all_species)
-		var/datum/species/S = all_species[species_name]
-		if(S.emag_cloneable)
-			available_species += S.name
 	spawn(5)
 		updatemodules()
 		return
@@ -65,6 +60,7 @@
 	..()
 
 /obj/machinery/computer/cloning/initialize()
+	available_species = emag_cloneable_species.Copy()
 	updatemodules()
 
 /obj/machinery/computer/cloning/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
