@@ -499,7 +499,7 @@ About the new airlock wires panel:
 				autism = 1
 		if (panel_open || welded)
 			if (panel_open)
-				overlays += "panel_open"
+				overlays += "panel_open" 
 
 			if (welded)
 				overlays += "welded"
