@@ -99,16 +99,16 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 			<li><A href='?src=\ref[src];triggerevent=Red alert'>Red alert</A></li>"}
 		if((get_security_level() in list("red", "delta")))
 			dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>"
-		else
-			dat += "<li>Emergency Response Team (Disabled while below Code Red)</li>"
-			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Maintenance Access'>[(access_maint_tunnels in all_access_list) ? "Revoke" : "Grant"] Emergency Maintenance Access</A></li>"
-			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Security Access'>[(access_security in all_access_list) ? "Revoke" : "Grant"] Emergency Security Access</A></li>"
-			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Medical Access'>[(access_medical in all_access_list) ? "Revoke" : "Grant"] Emergency Medical Access</A></li>"
-			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Science Access'>[(access_science in all_access_list) ? "Revoke" : "Grant"] Emergency Science Access</A></li>"
-			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Engineering Access'>[(access_engine_minor in all_access_list) ? "Revoke" : "Grant"] Emergency Engineering Access</A></li>"
-			//no public command, we're not commies
-			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Civilian areas Access'>[(access_bar in all_access_list) ? "Revoke" : "Grant"] Emergency Civilian areas Access</A></li>"
-			dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Supply Access'>[(access_cargo in all_access_list) ? "Revoke" : "Grant"] Emergency Supply Access</A></li>"
+		
+		dat += "<li>Emergency Response Team (Disabled while below Code Red)</li>"
+		dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Maintenance Access'>[(access_maint_tunnels in all_access_list) ? "Revoke" : "Grant"] Emergency Maintenance Access</A></li>"
+		dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Security Access'>[(access_security in all_access_list) ? "Revoke" : "Grant"] Emergency Security Access</A></li>"
+		dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Medical Access'>[(access_medical in all_access_list) ? "Revoke" : "Grant"] Emergency Medical Access</A></li>"
+		dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Science Access'>[(access_science in all_access_list) ? "Revoke" : "Grant"] Emergency Science Access</A></li>"
+		dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Engineering Access'>[(access_engine_minor in all_access_list) ? "Revoke" : "Grant"] Emergency Engineering Access</A></li>"
+		//no public command, we're not commies
+		dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Civilian areas Access'>[(access_bar in all_access_list) ? "Revoke" : "Grant"] Emergency Civilian areas Access</A></li>"
+		dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Supply Access'>[(access_cargo in all_access_list) ? "Revoke" : "Grant"] Emergency Supply Access</A></li>"
 			
 		user << browse(HTML_SKELETON(dat), "window=keycard_auth;size=500x400")
 	if(screen == 2)
