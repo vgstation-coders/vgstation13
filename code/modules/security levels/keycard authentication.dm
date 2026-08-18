@@ -99,8 +99,8 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 			<li><A href='?src=\ref[src];triggerevent=Red alert'>Red alert</A></li>"}
 		if((get_security_level() in list("red", "delta")))
 			dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>"
-		
-		dat += "<li>Emergency Response Team (Disabled while below Code Red)</li>"
+		else
+			dat += "<li>Emergency Response Team (Disabled while below Code Red)</li>"
 		dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Maintenance Access'>[(access_maint_tunnels in all_access_list) ? "Revoke" : "Grant"] Emergency Maintenance Access</A></li>"
 		dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Security Access'>[(access_security in all_access_list) ? "Revoke" : "Grant"] Emergency Security Access</A></li>"
 		dat += "<li><A href='?src=\ref[src];triggerevent=Toggle Emergency Medical Access'>[(access_medical in all_access_list) ? "Revoke" : "Grant"] Emergency Medical Access</A></li>"
