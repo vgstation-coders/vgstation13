@@ -338,17 +338,20 @@ var/global/list/bluespace_fabricators = list()
 					if(material_cost <= 0)
 						break
 				update_buffer_size()
-		else if(has_bluespace_bin() && is_material) //Now extract per fabricator
+		else if(has_bluespace_bin() && is_material) //Not enough resources on the machine, draw resources from other machines
 			var/list/other_fabricators = bluespace_fabricators - src
-			if(other_fabricators.len)
+			if(other_fabricators.len) //We've already checked bluespace fabricators beforehand in enough_materials()
+				var/remove_amount = min(check_mats(M), material_cost)
+				materials.removeAmount(M, remove_amount)
+				material_cost -= remove_amount
 				for(var/obj/machinery/r_n_d/fabricator/F in other_fabricators)
-					var/remove_amount = min(F.check_mats(M), material_cost)
+					remove_amount = min(F.check_mats(M), material_cost) //Reuse this variable
 					F.materials.removeAmount(M, remove_amount)
 					material_cost -= remove_amount
 					if(material_cost <= 0)
 						break
 				if(material_cost > 0)
-					warning("Bluespace matter bins did not consume a 1:1 amount of material, please yell at a coder.")
+					warning("Bluespace fabrication consumed less materials than intended, please yell at a coder.")
 	return 1
 
 //Returns however much of that material we have
