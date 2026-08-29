@@ -273,27 +273,6 @@ var/global/list/playable_species = list("Human")
 /datum/species/proc/updatespeciescolor(var/mob/living/carbon/human/H) //Handles changing icobase for species that have multiple skin colors.
 	return
 
-// Sent from /datum/lung_gas/metabolizable.
-/datum/species/proc/receiveGas(var/gas_id, var/ratio, var/moles, var/mob/living/carbon/human/H)
-	//testing("receiveGas: [gas_id] ? [breath_type] - ratio=[ratio], moles=[moles]")
-	if(ratio <= 0 || gas_id != breath_type)
-		//testing("  ratio is 0 or gas_id doesn't match up, adding oxyLoss.")
-		H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
-		H.failed_last_breath = 1
-		return 0
-	else if(ratio >= 1)
-		//testing("  we cool")
-		H.failed_last_breath = 0
-		H.adjustOxyLoss(-5)
-		H.oxygen_alert = 0
-		return moles/GAS_CONSUME_TO_WASTE_DENOMINATOR
-	else
-		//testing("  ratio < 1, adding oxyLoss.")
-		H.adjustOxyLoss(HUMAN_MAX_OXYLOSS * (1 - ratio)) //Damage proportional to how much gas you didn't get
-		H.failed_last_breath = 1
-		H.oxygen_alert = 1
-		return moles*ratio/GAS_CONSUME_TO_WASTE_DENOMINATOR
-
 /datum/species/proc/handle_environment(var/datum/gas_mixture/environment, var/mob/living/carbon/human/host)
 
 // Used for species-specific names (Vox, etc)

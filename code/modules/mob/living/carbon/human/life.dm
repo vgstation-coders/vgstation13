@@ -73,12 +73,7 @@ var/global/list/organ_damage_overlays = list(
 	"groin_max" = image("icon" = 'icons/mob/organdmg.dmi', "icon_state" = "groin_max", "layer" = 21),\
 	"groin_gone" = image("icon" = 'icons/mob/organdmg.dmi', "icon_state" = "groin_gone", "layer" = 21))
 /mob/living/carbon/human
-	var/oxygen_alert = 0
-	var/toxins_alert = 0
-	var/fire_alert = 0
-	var/pressure_alert = 0
 	var/prev_gender = null // Debug for plural genders
-	var/temperature_alert = TEMP_ALARM_SAFE
 	var/in_stasis = 0
 	var/do_deferred_species_setup=0
 	var/exposedtimenow = 0
