@@ -1251,6 +1251,9 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 		return
 	blasting = TRUE
 	var/turf/T = get_turf(src)
+	if (!T)
+		qdel(src)
+		return
 	log_admin("LOG: Pomegrenade going off at [T.loc] (@[T.x],[T.y],[T.z]), last touched by [fingerprintslast].")
 	message_admins("LOG: Pomegrenade going off at [formatJumpTo(T)], last touched by [fingerprintslast].")
 	var/obj/structure/bomberman/pomegrenade/pom = new (T)
