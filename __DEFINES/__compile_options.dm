@@ -77,6 +77,6 @@
 #define AUXTOOLS_DEBUGGER DEVELOPER_MODE
 
 // Enable the byond-tracy profiler
-#define TRACY_ENABLED TRUE
+#define TRACY_ENABLED FALSE
 // Run the profiler on startup
-#define TRACY_RUN_ON_STARTUP TRUE
+#define TRACY_RUN_ON_STARTUP FALSE
