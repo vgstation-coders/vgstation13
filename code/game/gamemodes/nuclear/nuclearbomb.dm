@@ -15,6 +15,7 @@ var/list/nuclear_bombs = list()
 	var/extended = 0
 	var/timeleft = 60 //This is a value in seconds, deciseconds will be deducted
 	var/timing = 0
+	var/previously_activated = 0
 	var/r_code = "ADMIN"
 	var/code = ""
 	var/yes_code = 0
@@ -254,6 +255,7 @@ var/list/nuclear_bombs = list()
 						return
 					src.timing = !( src.timing )
 					if (src.timing)
+						src.previously_activated = 1
 						src.icon_state = "nuclearbomb2"
 						if(!src.safety)
 							bomb_set = 1//There can still be issues with this reseting when there are multiple bombs. Not a big deal tho for Nuke/N

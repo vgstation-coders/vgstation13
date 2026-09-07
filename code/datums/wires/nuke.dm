@@ -24,7 +24,7 @@ var/const/NUKE_WIRE_ACTIVATE = 16
 	if(!..())
 		return 0
 	var/obj/machinery/nuclearbomb/A = holder
-	if(A.wiresexposed)
+	if(A.wiresexposed && A.previously_activated) //only do wire fun if the nuke has been armed and counting down
 		return 1
 	return 0
 
