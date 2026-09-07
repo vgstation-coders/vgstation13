@@ -77,6 +77,8 @@ var/bee_mobs_count = 0
 
 
 /mob/living/simple_animal/bee/Destroy()
+	walk(src, 0) //walk_to holds a ref even after the function returns so it needs to be canceled manually
+	apiary_reservation -= src //we may have been added by reserve_apiary() and not yet removed by its spawn(300) (lmao)
 	bee_mobs_count--
 	if(home)
 		for (var/datum/bee/B in bees)
@@ -84,7 +86,9 @@ var/bee_mobs_count = 0
 		home = null
 	destination = null
 	target = null
+	target_turf = null
 	target_plant = null
+	building = null
 	for (var/datum/bee/B in bees)
 		qdel(B)//it'll get removed from the bees list in the datum's Destroy() proc.
 	bees.len = 0

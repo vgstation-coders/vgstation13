@@ -19,10 +19,13 @@ var/list/arcane_tomes = list()
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	mech_flags = MECH_SCAN_FAIL
+	disperse_coeff = 1
 	var/state = TOME_CLOSED
 	var/can_flick = 1
 	var/list/talismans = list()
 	var/current_page = PAGE_FOREWORD
+	var/spine_color = "#111"
+	var/spine_overlay = "#111"
 
 /obj/item/weapon/tome/New()
 	..()

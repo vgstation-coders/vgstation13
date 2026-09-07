@@ -64,6 +64,8 @@ var/global/list/ghdel_profiling_roundstart = list()
 	var/emag_cost = 0 // Emag energy cost (in MJ)
 	var/arcanetampered = 0 //A looot of things can be
 
+	var/cardinal_reflect = FALSE //For beams
+	var/disperse_coeff = 0.95
 
 	var/image/moody_light
 	var/list/moody_lights

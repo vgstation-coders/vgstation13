@@ -85,6 +85,8 @@
 
 	if(peepers)
 		reset_view()
+	if(mineral == "phazon")
+		phazontiles -= src
 	ChangeTurf(dismantle_type)
 	update_near_walls()
 
@@ -228,6 +230,11 @@
 	icon = initial(icon)
 	if(peepers)
 		reset_view()
+
+/turf/simulated/wall/bullet_act(obj/item/projectile/Proj)
+	if(mineral == "diamond" && istype(Proj, /obj/item/projectile/beam))
+		return PROJECTILE_COLLISION_REBOUND
+	. = ..()
 
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(W.attack_delay)

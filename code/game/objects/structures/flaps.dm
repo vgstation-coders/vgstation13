@@ -6,7 +6,7 @@
 	density = 0
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
-	pass_flags_self = PASSGLASS
+	pass_flags_self = PASSGLASS | PASSFLAPS
 	var/airtight = 0
 
 /obj/effect/plasticflaps_overlay
@@ -72,7 +72,7 @@ var/obj/effect/plasticflaps_overlay/PO
 
 	else if(isliving(mover)) // You Shall Not Pass!
 		var/mob/living/M = mover
-		if(!M.lying && !istype(M, /mob/living/carbon/monkey) && !istype(M, /mob/living/carbon/slime) && !istype(M, /mob/living/simple_animal/mouse))  //If your not laying down, or a small creature, no pass.
+		if(!M.lying && M.stat < DEAD)  //If your not laying down, or alive, no pass.
 			return 0
 	if(!istype(mover)) // Aircheck!
 		return !airtight

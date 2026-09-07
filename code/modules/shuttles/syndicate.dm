@@ -51,6 +51,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 
 	light_color = LIGHT_COLOR_RED
 	allow_silicons = 0 //no NT robots allowed
+	theme = "syndicate"
 
 /obj/machinery/computer/shuttle_control/syndicate/emag_act()
 	return

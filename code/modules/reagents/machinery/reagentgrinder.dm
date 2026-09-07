@@ -15,6 +15,8 @@ var/global/list/juice_items = list (
 	/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet = list(PLUMPHJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/pomegranate = list(POMEGRANATEJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade = list(NITROGLYCERIN = 0),
 	/obj/item/stack/sheet/wood = list(PULP = U_PER_SHEET),
 	/obj/item/weapon/grown/log = list(PULP = U_PER_SHEET),
 	/obj/item/weapon/paper = list(PULP = 1),
@@ -157,6 +159,17 @@ var/global/list/juice_items = list (
 
 	if(..())
 		return 1
+
+	if (istype(O,/obj/item/device/core_sampler))
+		var/obj/item/device/core_sampler/CS = O
+		if(CS.extracted)
+			CS.extracted.forceMove(src)
+			holdingitems += CS.extracted
+			CS.extracted = null
+			CS.icon_state = "sampler"
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 0, -4, FALLOFF_SOUNDS, 0)
+			to_chat(user, "<span class='notice'>You eject the sample into \the [src].</span>")
+			return 1
 
 	if (istype(O,/obj/item/weapon/reagent_containers/glass) || \
 		istype(O,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) || \

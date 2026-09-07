@@ -33,6 +33,7 @@
 
 	var/secHUD = FALSE			// Toggles whether the Security HUD is active or not
 	var/medHUD = FALSE			// Toggles whether the Medical  HUD is active or not
+	var/mesons = FALSE			// Toggles whether we have the mesons active or not
 	var/lighted = FALSE			// Toggles whether light is active or not
 	var/loudspeak = FALSE		// Toggles megaphone mode
 
@@ -50,8 +51,10 @@
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
 	var/obj/item/device/gps/pai/pps_device = null //Our GPS device.
+	var/obj/item/device/gps/planetary/pai/xps_device = null //our planetary expedition tracker
+	var/sharedfirmware = FALSE
 
-	var/obj/machinery/newscaster/painews //our copy of the Newscaster
+	var/obj/machinery/newscaster/pai/painews //our copy of the Newscaster
 
 	var/obj/item/device/station_map/holomap_device = null // Our holomap device.
 	var/holo_target = "show_map" // Our holomap target.
@@ -391,3 +394,10 @@
 	..()
 	if(loudspeak)
 		speech.message_classes.Add("megaphone")
+
+/mob/living/silicon/pai/handle_regular_hud_updates() //thanks dilt
+  ..()
+  see_in_dark = initial(see_in_dark)
+  change_sight(removing = SEE_MOBS|SEE_TURFS|SEE_OBJS)
+  see_invisible = initial(see_invisible)
+  handle_vision_effect_updates()

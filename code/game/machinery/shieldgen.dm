@@ -378,7 +378,7 @@
 	req_access = null
 
 /obj/machinery/shieldwallgen/proc/power()
-	if (!anchored)
+	if (!anchored || !power_connection)
 		power = FALSE
 		return
 

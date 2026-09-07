@@ -130,8 +130,7 @@
 	var/list/random_liquid_list = list(HONKSERUM, BUSTANUT, LOCUTOGEN, ANTHRACENE)
 
 /obj/item/projectile/beam/liquid_stream/honkgiver_stream/New(atom/A, var/t_range=3, var/m_color, var/m_alpha=255)
-	..(A)
-	create_reagents(20)
+	..(A) // parent (/obj/item/projectile/beam/liquid_stream/New) already calls create_reagents(20)
 	reagents.add_reagent(WATER, 10)
 	reagents.add_reagent(pick(random_liquid_list), 10)
 	travel_range = t_range

@@ -363,13 +363,20 @@
 /datum/proc/invoke_event(event/event_type, list/arguments)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	var/list/event_handlers = registered_events[event_type]
+	var/list/dead_keys
 	for(var/key in event_handlers)
 		var/list/handler = event_handlers[key]
 		var/objRef = handler[EVENT_HANDLER_OBJREF_INDEX]
 		var/procName = handler[EVENT_HANDLER_PROCNAME_INDEX]
+		// Skip handlers whose target was destroyed without unregistering. Defer removal until iteration finishes so we don't reshuffle the list mid-loop.
+		if(!objRef)
+			LAZYADD(dead_keys, key)
+			continue
 		// not |= because `null |= list()` is a runtime error
 		// but `null = null | list()` is not.
 		. = . | call(objRef, procName)(arglist(arguments))
+	if(dead_keys)
+		event_handlers -= dead_keys
 
 /**
   * Registers a proc to be called on an object whenever the specified event_type

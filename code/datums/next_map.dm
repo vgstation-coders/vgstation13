@@ -186,6 +186,12 @@
 /datum/next_map/odyssey
 	name = "NTEV Odyssey"
 	path = "odyssey"
+	max_players = 15
+
+/datum/next_map/theseus
+	name = "NTEV Theseus"
+	path = "theseus"
+	max_players = 20
 
 /proc/get_votable_maps()
 	var/list/votable_maps = list()

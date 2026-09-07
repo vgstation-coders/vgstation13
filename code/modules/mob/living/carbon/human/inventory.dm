@@ -180,7 +180,7 @@
 /mob/living/carbon/human/has_organ(name)
 
 	var/datum/organ/external/O = organs_by_name[name]
-	return O.is_existing()
+	return O?.is_existing()
 
 /mob/living/carbon/human/has_organ_for_slot(slot)
 	switch(slot)

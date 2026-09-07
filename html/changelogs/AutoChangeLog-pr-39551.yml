@@ -1,0 +1,5 @@
+author: DamianX
+delete-after: true
+changes:
+- bugfix: Fixed a bug that caused emagged cloners to create malformed clones when
+    Plasmaman was the selected species.

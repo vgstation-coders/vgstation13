@@ -396,6 +396,8 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 
 
 /datum/subsystem/air/proc/has_same_air(turf/A, turf/B)
+	if(!A || !B)
+		return A == B // both null counts as "same"; one null does not
 	if(A.oxygen != B.oxygen)
 		return 0
 	if(A.nitrogen != B.nitrogen)

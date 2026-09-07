@@ -1042,6 +1042,10 @@ Thanks.
 				var/obj/structure/closet/secure_closet/SC = L.loc
 				if(!SC.locked && !SC.welded)
 					return //It's a secure closet, but isn't locked. Easily escapable from, no need to 'resist'
+			else if(istype(C, /obj/structure/closet/crate/secure))
+				var/obj/structure/closet/crate/secure/SC = L.loc
+				if(!SC.locked && !SC.welded)
+					return
 			else
 				if(!C.welded)
 					return //closed but not welded...
@@ -1060,6 +1064,10 @@ Thanks.
 						var/obj/structure/closet/secure_closet/SC = L.loc
 						if(!SC.locked && !SC.welded)
 							return
+					else if(istype(L.loc, /obj/structure/closet/crate/secure))
+						var/obj/structure/closet/crate/secure/SC = L.loc
+						if(!SC.locked && !SC.welded)
+							return
 					else
 						if(!C.welded)
 							return
@@ -1075,6 +1083,9 @@ Thanks.
 					sleep(10)
 					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
+				if(istype(usr.loc, /obj/structure/closet/crate/secure))
+					var/obj/structure/closet/crate/secure/SC = L.loc
+					SC.break_open()
 				C.welded = 0
 				if(C.arcanetampered)
 					C.bless() // so it doesn't just close again, fairness on the user
@@ -1284,7 +1295,11 @@ Thanks.
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
 		INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
-		if (now_pushing || !loc || size <= SIZE_TINY)
+		if (now_pushing || !loc)
+			return
+		if (size <= SIZE_TINY)
+			if(istype(AM,/obj/machinery/disposal/deliveryChute)) //hotfix
+				AM.Bumped(src)
 			return
 		now_pushing = 1
 		if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them
@@ -1813,3 +1828,14 @@ Thanks.
 /// Event handler for v_transition events used to activate or pause v-levels.
 /mob/living/proc/OnMobVChanged(mob/living/user, datum/virtual_z/to_v, datum/virtual_z/from_v)
 	SSmapping?.v_pause_check(src, to_v, from_v)
+
+/mob/living/t_scanner_expose(ray_range)
+	if(alpha < OPAQUE || (invisibility > 0 && invisibility < INVISIBILITY_OBSERVER))
+		var/old_alpha = alpha
+		var/old_invisibility = invisibility
+		alpha = OPAQUE
+		invisibility = 0
+		spawn(1 SECONDS)
+			if(src)
+				alpha = old_alpha
+				invisibility = old_invisibility

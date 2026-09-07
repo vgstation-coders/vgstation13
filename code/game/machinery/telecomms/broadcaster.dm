@@ -79,6 +79,9 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		// Collect coverage from every relay (planetary, ship, or preset) reachable through our hub that can broadcast this signal.
 		if(!signal.data["virtual_z"])
 			signal.data["virtual_z"] = list()
+		var/datum/virtual_z/broadcaster_vz = get_virtual_z()
+		if(broadcaster_vz)
+			signal.data["virtual_z"] |= broadcaster_vz
 		for(var/obj/machinery/telecomms/hub/H in links)
 			for(var/obj/machinery/telecomms/relay/R in H.links)
 				if(!R.can_send(signal))
@@ -436,7 +439,8 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		"type" = 4, // determines what type of radio input it is: test broadcast
 		"reject" = 0,
 		"done" = 0,
-		"level" = pos.z // The level it is being broadcasted at.
+		"level" = pos.z, // The level it is being broadcasted at.
+		"source_virtual_z" = get_virtual_z()
 	)
 	signal.frequency = COMMON_FREQ// Common channel
 

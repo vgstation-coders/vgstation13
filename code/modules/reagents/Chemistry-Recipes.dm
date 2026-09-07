@@ -79,7 +79,7 @@
 
 /datum/chemical_reaction/explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/system/reagents_explosion/e = new()
-	e.set_up(min(round (created_volume/10, 1), 15), holder.my_atom, 0, 0)
+	e.set_up(min(round (created_volume/10, 1), 15), holder.my_atom, 0, 0, whodunnit = usr)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
 		e.amount *= 0.5
@@ -609,7 +609,7 @@
 
 /datum/chemical_reaction/nitroglycerin/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/system/reagents_explosion/e = new()
-	e.set_up(round (created_volume/2, 1), holder.my_atom, 0, 0)
+	e.set_up(round (created_volume/2, 1), holder.my_atom, 0, 0, whodunnit = usr)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
 		e.amount *= 0.5
@@ -663,6 +663,7 @@
 			var/mob/living/L = holder.my_atom
 			if(L.stat!=DEAD)
 				e.amount *= 0.5
+		e.user = usr
 		e.start()
 		holder.clear_reagents()
 
@@ -2751,6 +2752,9 @@
 	holder.remove_reagent(WATER, created_volume-allowed_consumption, safety = 1)
 	holder.add_reagent(ICE, created_volume-allowed_consumption, null, T0C)
 
+/datum/chemical_reaction/ice_to_water/log_reaction()
+	return
+
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 
 /datum/chemical_reaction/goldschlager
@@ -2817,6 +2821,20 @@
 	required_reagents = list(MOONSHINE = 10, SUGAR = 2)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 12
+
+/datum/chemical_reaction/pomegranatesyrup
+	name = "Pomegranate Syrup"
+	id = POMEGRANATESYRUP
+	result = POMEGRANATESYRUP
+	required_reagents = list(POMEGRANATEJUICE = 1, SUGAR = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/grenadine
+	name = "Grenadine"
+	id = GRENADINE
+	result = GRENADINE
+	required_reagents = list(POMEGRANATESYRUP = 1, WATER = 4)
+	result_amount = 5
 
 /datum/chemical_reaction/wine
 	name = "Wine"

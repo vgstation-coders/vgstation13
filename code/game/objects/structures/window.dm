@@ -41,7 +41,6 @@ var/list/one_way_windows
 
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
-	var/disperse_coeff = 0.95
 	var/is_fulltile = FALSE
 
 /obj/structure/window/New(loc)
@@ -201,7 +200,9 @@ var/list/one_way_windows
 	return 1
 
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
-
+	if(Proj.destroy)
+		ex_act(1)
+		return ..()
 	adjustHealthLoss(Proj.damage,Proj)
 	. = ..()
 	healthcheck(Proj.firer)

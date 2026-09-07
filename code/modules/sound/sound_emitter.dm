@@ -25,10 +25,11 @@
 	var/last_sound_zone_hash = null
 	// proxy for when the sound needs to be sent to some other mob, e.g. aiEye mob movement needs sounds sent to AI Core mob
 	//  this is because the AI Eye client is null so we can't get to the SLC via the aiEye mob
-	var/mob/sound_endpoint = null
-/mob/New()
-	..()
-	sound_endpoint = src
+	var/datum/weakref/sound_endpoint = null
+
+/mob/proc/get_sound_endpoint()
+	var/mob/endpoint = sound_endpoint?.get()
+	return endpoint || src
 
 /proc/turf_volume_coeff(atom/a)
 	if (!a || !istype(a))
@@ -232,9 +233,10 @@
 	var/list/in_range = list()
 	var/turf/t_source = get_turf(source)
 	for (var/mob/player in player_list)
-		if (!player || !player.sound_endpoint)
+		if (!player)
 			continue // nowhere to send the sound
-		var/client/client = player.sound_endpoint.client
+		var/mob/endpoint = player.get_sound_endpoint()
+		var/client/client = endpoint?.client
 		if (!client || !client.listener_context)
 			continue // nowhere to send the sound
 		var/turf/receiver = get_turf(client.listener_context.proxy)

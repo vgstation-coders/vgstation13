@@ -8,7 +8,6 @@
 	health=25
 	maxHealth=25
 	max_food=30
-	mob_max_age=9999999 //a long time.
 	food_flags = ANIMAL_HERBIVORE
 	animal_flags = ANIMAL_FLAG_IMMORTAL
 	behavior_flags = ANIMAL_BEHAVIOR_PACK_DYNAMICS | ANIMAL_BEHAVIOR_AVOID_CAPTURE

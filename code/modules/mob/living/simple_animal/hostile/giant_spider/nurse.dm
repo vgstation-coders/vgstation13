@@ -18,12 +18,14 @@
 	search_objects = TRUE
 	stat_attack = 2
 	var/fed = 0
+	var/list/recent_cocoon_targets
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/New()
 	..()
 	add_spell(new /spell/aoe_turf/conjure/web, "spider_spell_ready", /obj/abstract/screen/movable/spell_master/spider)
 	add_spell(new /spell/spin_cocoon, "spider_spell_ready", /obj/abstract/screen/movable/spell_master/spider)
 	add_spell(new /spell/spider_eggs, "spider_spell_ready", /obj/abstract/screen/movable/spell_master/spider)
+	recent_cocoon_targets = list()
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/initialize_rules()
 	target_rules.Add(new /datum/fuzzy_ruling/is_mob)
@@ -45,11 +47,18 @@
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/get_queen_req(var/req = MIN_SPIDERS_PER_PLAYER_QUEEN)
 	var/result = (1 + animal_count[/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider]) * req
 	return result
+/mob/living/simple_animal/hostile/giant_spider/nurse/ListTargets()
+	. = ..()
+	for(var/target in .)
+		if(makeweakref(target) in recent_cocoon_targets)
+			. -= target
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/Life()
 	if(timestopped || istype(loc,/obj/item/device/mobcapsule))
 		return
 	..()
+	if (!(life_tick%5))
+		recent_cocoon_targets.len=0
 	if(client && !deny_client_move)
 		return 0
 	if(!stat && stance == HOSTILE_STANCE_IDLE)
@@ -149,6 +158,7 @@
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/spin_cocoon(var/atom/cocoon_target)
 	if (!cocoon_target)
 		return
+	recent_cocoon_targets += makeweakref(cocoon_target)
 	if(locate(/obj/effect/spider/cocoon) in cocoon_target.loc)
 		return
 	visible_message("<span class='notice'>\The [src] begins to secrete a sticky substance around \the [cocoon_target].</span>")

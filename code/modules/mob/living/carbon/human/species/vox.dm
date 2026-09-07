@@ -19,7 +19,7 @@
 	breath_type = GAS_NITROGEN
 
 	default_mutations = list(M_BEAK, M_TALONS)
-	flags = PLAYABLE | WHITELISTED
+	flags = PLAYABLE | WHITELISTED | EMAG_CLONEABLE
 	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
 	max_skin_tone = 6

@@ -1840,10 +1840,6 @@
 	pixel_x = 5;
 	pixel_y = -32
 	},
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -7247,8 +7243,7 @@
 	dir = 8
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -7835,8 +7830,7 @@
 	dir = 4
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -13859,8 +13853,7 @@
 /obj/item/weapon/bedsheet/mime,
 /obj/structure/curtain/open/bed,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/sleep)
@@ -14081,8 +14074,7 @@
 /obj/structure/table/reinforced,
 /obj/item/clothing/glasses/scanner/science,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /obj/machinery/light{
 	dir = 1
@@ -14469,8 +14461,7 @@
 /area/hallway/primary/central)
 "axZ" = (
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -14563,8 +14554,7 @@
 	dir = 4
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -20441,8 +20431,7 @@
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor,
 /area/medical/medbay)
@@ -34000,14 +33989,10 @@
 	},
 /area/tcomms/chamber)
 "bfY" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
-	dir = 6
-	},
-/obj/machinery/alarm/server{
-	dir = 4;
-	pixel_x = -22
-	},
 /obj/machinery/telecomms/processor/preset_one/ministation,
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
 /turf/simulated/floor/bluegrid{
 	icon_state = "gcircuit";
 	name = "Mainframe Base";
@@ -34731,24 +34716,15 @@
 	},
 /area/tcomms/chamber)
 "bgX" = (
-/obj/machinery/power/apc{
-	cell_type = 5000;
-	dir = 8;
-	name = "Telecoms Server APC";
-	pixel_x = -25;
-	pixel_y = 1
-	},
 /obj/machinery/camera/autoname{
 	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
-/obj/structure/cable/yellow{
-	icon_state = "0-4";
-	tag = "icon-0-4"
 	},
 /obj/machinery/air_sensor{
 	id_tag = "tcomms_sensor";
 	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
+	},
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/bluegrid{
 	icon_state = "gcircuit";
@@ -35315,10 +35291,10 @@
 	},
 /area/tcomms/chamber)
 "bhN" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
-	dir = 5
-	},
 /obj/machinery/telecomms/receiver/preset_left/ministation,
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
 /turf/simulated/floor/bluegrid{
 	icon_state = "gcircuit";
 	name = "Mainframe Base";
@@ -70166,6 +70142,22 @@
 	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/sleep)
+"gCo" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 6
+	},
+/obj/machinery/alarm/server{
+	dir = 4;
+	pixel_x = -22
+	},
+/obj/machinery/telecomms/relay/preset/station,
+/turf/simulated/floor/bluegrid{
+	icon_state = "gcircuit";
+	name = "Mainframe Base";
+	nitrogen = 100;
+	temperature = 80
+	},
+/area/tcomms/chamber)
 "gFv" = (
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
@@ -70260,6 +70252,18 @@
 	icon_state = "cautioncorner"
 	},
 /area/hallway/primary/aft)
+"hRj" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 5
+	},
+/obj/machinery/telecomms/relay/preset/telecomms,
+/turf/simulated/floor/bluegrid{
+	icon_state = "gcircuit";
+	name = "Mainframe Base";
+	nitrogen = 100;
+	temperature = 80
+	},
+/area/tcomms/chamber)
 "hWg" = (
 /obj/structure/cable/green{
 	icon_state = "4-9"
@@ -71027,6 +71031,26 @@
 /obj/structure/closet/emcloset/vox,
 /turf/simulated/floor/shuttle,
 /area/shuttle/exploration)
+"lZN" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
+/obj/machinery/power/apc{
+	cell_type = 5000;
+	dir = 8;
+	name = "Telecoms Server APC";
+	pixel_x = -25;
+	pixel_y = 1
+	},
+/obj/structure/cable/yellow{
+	icon_state = "0-4";
+	tag = "icon-0-4"
+	},
+/turf/simulated/floor/bluegrid{
+	icon_state = "gcircuit";
+	name = "Mainframe Base";
+	nitrogen = 100;
+	temperature = 80
+	},
+/area/tcomms/chamber)
 "mak" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -176292,9 +176316,9 @@ aXf
 bdz
 aYp
 bei
-bei
-bei
-bei
+gCo
+lZN
+hRj
 bei
 aYp
 bdz

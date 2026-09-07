@@ -152,6 +152,8 @@
 	..()
 
 /datum/tooltip/proc/create()
+	if(!holder?.owner)
+		return
 	var/isDisabled = !pinned
 	winset(holder.owner, window, list2params(alist(
 		"parent" = holder.mapId,

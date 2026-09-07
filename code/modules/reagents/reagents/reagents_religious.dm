@@ -77,6 +77,7 @@
 		return 1
 	if(volume >= 5)
 		T.bless()
+	if(volume > 10 )
 		T.wet(800) //needs a bit more than regular water cause it's not as pure
 
 	T.clean_act(CLEANLINESS_WATER)
@@ -208,7 +209,6 @@
 	id = EXPLICITLY_INVALID_REAGENT_ID
 	reagent_state = REAGENT_STATE_GAS
 	density = 3.214
-	specheatcap = 1.34
 	color = "#E0D3D3" //rgb: 224, 211, 211
 	data = list("source" = null)
 

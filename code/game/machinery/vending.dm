@@ -2280,6 +2280,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/mustardplantseed = 3,
 		/obj/item/seeds/flaxseed = 3,
 		/obj/item/seeds/mintseed = 3,
+		/obj/item/seeds/pomegranateseed = 3,
 		)//,/obj/item/seeds/synthmeatseed = 3)
 	contraband = list(
 		/obj/item/seeds/amanitamycelium = 2,
@@ -2437,7 +2438,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/condiment/saltshaker	= 5,
 		/obj/item/weapon/reagent_containers/food/condiment/vinegar = 5,
 		/obj/item/weapon/storage/lunchbox/plastic/nt = 10,
-		/obj/item/weapon/storage/bag/food = 5
+		/obj/item/weapon/storage/bag/food = 5,
+		/obj/item/sushimat = 2
 		)
 	contraband = list(
 		/obj/item/weapon/kitchen/utensil/spork = 10,
@@ -4143,6 +4145,8 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		/obj/item/weapon/storage/box/syndicatefake/space = 2,
 		/obj/item/clothing/mask/gas/syndicate = 2,
 		/obj/item/clothing/shoes/laceup = 2,
+		/obj/item/clothing/suit/syndie_football = 2,
+		/obj/item/clothing/head/syndie_football_helmet = 2,
 		)
 	contraband = list(
 		/obj/item/clothing/head/beret/centcom/officer = 2,

@@ -653,7 +653,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	else
 		return PACID
 
-/obj/proc/t_scanner_expose(ray_range)
+/obj/t_scanner_expose(ray_range)
 	//don't reveal docking ports or spawns
 	if(invisibility > 0 && invisibility < INVISIBILITY_OBSERVER || alpha < 255)
 		var/old_invisibility = invisibility

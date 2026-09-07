@@ -113,6 +113,7 @@
 	name = "sandals"
 	icon_state = "wizard"
 	species_fit = list(VOX_SHAPED)
+	w_type = RECYK_WOOD
 
 	wizard_garb = 1
 

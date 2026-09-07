@@ -18,6 +18,9 @@
 	matingcooldown=30
 	var/list/mob/affinity_list=list() // stores people we like.
 
+/mob/living/simple_animal/complex/panther/Destroy()
+	affinity_list=null
+	..()
 
 /mob/living/simple_animal/complex/panther/get_idle_sounds()
 	if(prob(20))
@@ -42,6 +45,8 @@
 
 /mob/living/simple_animal/complex/panther/is_kin(var/mob/target)
 	if(istype(target,/mob/living/simple_animal/cat) && !istype(target,/mob/living/simple_animal/cat/snek))
+		return TRUE
+	if ((affinity_list[target] || 0) > 10)
 		return TRUE
 	return ..()
 
@@ -75,12 +80,8 @@
 		affinity_list[M]=0
 	affinity_list[M]+=affinity_change
 	var/aff=affinity_list[M]
-	if(aff>10 && !(M in family) )
+	if(aff>10 )
 		to_chat(M,"<span class='notice'>\the [src] looks like it warmed up to you!</span>")
-		family+=M
-	if(aff<0 && (M in family))
-		to_chat(M,"<span class='notice'>\the [src] looks at you with contempt!</span>")
-		family-=M
 
 /mob/living/simple_animal/complex/panther/get_butchering_products()
 	return list(/datum/butchering_product/skin/cat/lots,/datum/butchering_product/teeth/lots)
