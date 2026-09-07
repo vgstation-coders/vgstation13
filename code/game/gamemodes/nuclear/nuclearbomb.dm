@@ -141,23 +141,30 @@ var/list/nuclear_bombs = list()
 		return attack_hand(user) //continue as normal
 	return 0 //otherwise nothing
 
+/obj/machinery/nuclearbomb/proc/control_link(href = "timer", display = "Toggle", option = "1")
+	return auth && yes_code ? "<A href='?src=\ref[src];[href]=[option]'>[display]</A>" : "[display]"
+
 /obj/machinery/nuclearbomb/attack_hand(mob/user as mob)
 	if(wiresexposed)
 		wires.Interact(user)
 		return
 	if (src.extended)
 		user.set_machine(src)
-		var/dat = text("<TT><B>Nuclear Fission Explosive</B><BR>\nAuth. Disk: <A href='?src=\ref[];auth=1'>[]</A><HR>", src, (src.auth ? "++++++++++" : "----------"))
+		var/dat = "<TT><B>Nuclear Fission Explosive</B><BR>\nAuth. Disk: <A href='?src=\ref[src];auth=1'>[src.auth ? "++++++++++" : "----------"]</A><HR><B>Status</B>: "
 		if (src.auth)
-			if (src.yes_code)
-				dat += text("\n<B>Status</B>: []-[]<BR>\n<B>Timer</B>: []<BR>\n<BR>\nTimer: [] <A href='?src=\ref[];timer=1'>Toggle</A><BR>\nTime: <A href='?src=\ref[];time=-10'>-</A> <A href='?src=\ref[];time=-1'>-</A> [] <A href='?src=\ref[];time=1'>+</A> <A href='?src=\ref[];time=10'>+</A><BR>\n<BR>\nSafety: [] <A href='?src=\ref[];safety=1'>Toggle</A><BR>\nAnchor: [] <A href='?src=\ref[];anchor=1'>Toggle</A><BR>\n", (src.timing ? "Func/Set" : "Functional"), (src.safety ? "Safe" : "Engaged"), src.timeleft, (src.timing ? "On" : "Off"), src, src, src, src.timeleft, src, src, (src.safety ? "On" : "Off"), src, (src.anchored ? "Engaged" : "Off"), src)
+			if(yes_code)
+				dat += "[timing ? "Func/Set" : "Functional"]
 			else
-				dat += text("\n<B>Status</B>: Auth. S2-[]<BR>\n<B>Timer</B>: []<BR>\n<BR>\nTimer: [] Toggle<BR>\nTime: - - [] + +<BR>\n<BR>\n[] Safety: Toggle<BR>\nAnchor: [] Toggle<BR>\n", (src.safety ? "Safe" : "Engaged"), src.timeleft, (src.timing ? "On" : "Off"), src.timeleft, (src.safety ? "On" : "Off"), (src.anchored ? "Engaged" : "Off"))
+				dat += "Auth. S2"
 		else
-			if (src.timing)
-				dat += text("\n<B>Status</B>: Set-[]<BR>\n<B>Timer</B>: []<BR>\n<BR>\nTimer: [] Toggle<BR>\nTime: - - [] + +<BR>\n<BR>\nSafety: [] Toggle<BR>\nAnchor: [] Toggle<BR>\n", (src.safety ? "Safe" : "Engaged"), src.timeleft, (src.timing ? "On" : "Off"), src.timeleft, (src.safety ? "On" : "Off"), (src.anchored ? "Engaged" : "Off"))
-			else
-				dat += text("\n<B>Status</B>: Auth. S1-[]<BR>\n<B>Timer</B>: []<BR>\n<BR>\nTimer: [] Toggle<BR>\nTime: - - [] + +<BR>\n<BR>\nSafety: [] Toggle<BR>\nAnchor: [] Toggle<BR>\n", (src.safety ? "Safe" : "Engaged"), src.timeleft, (src.timing ? "On" : "Off"), src.timeleft, (src.safety ? "On" : "Off"), (src.anchored ? "Engaged" : "Off"))
+			dat += "[timing ? "Set" : "Auth. S1"]"
+		dat += {"-[safety ? "Safe" : "Engaged"]<BR>
+				<B>Timer</B>: [timeleft]<BR>
+				<BR>Timer: [timing ? "On" : "Off"] [control_link("timer")]<BR>
+				Time: [control_link("time","-","-10")] [control_link("time","-","-1")] [timeleft]
+				[control_link("time","+","1")] [control_link("time","+","10")]<BR>
+				<BR>Safety: [safety ? "On" : "Off"] [control_link("safety")]<BR>
+				Anchor: [anchored ? "Engaged" : "Off"] [control_link("anchor")]<BR>"}
 		var/message = "AUTH"
 		if (src.auth)
 			message = text("[]", src.code)
