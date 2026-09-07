@@ -7,7 +7,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#C4D4E0" //196 212 224
 	density = 3.51
-	specheatcap = 6.57
+	specheatcap = 0.516
 
 /datum/reagent/diamond/on_mob_life(var/mob/living/M)
 	if(..())
@@ -410,8 +410,8 @@
 	description = "A colorless, odorless, highly radioactive noble gas."
 	reagent_state = REAGENT_STATE_GAS
 	color = "#808080" //rgb: 128, 128, 128
-	density = 9.73
-	specheatcap = 0.936
+	density = 0.0973
+	specheatcap = 9.36
 	custom_metabolism = 1 //decays really fast, so it shouldn't linger long.
 	fission_time=150 //2.5 minutes.
 
@@ -477,7 +477,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FCCAD2" //rgb: 252, 202, 210
 	density = 23.13
-	specheatcap = 0.431
+	specheatcap = 0.131
 	fission_time=900 //15 minutes.
 	fission_power=666666.666 //5x plutonium
 

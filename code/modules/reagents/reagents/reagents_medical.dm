@@ -124,7 +124,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	pain_resistance = 15
 	density = 5.98
-	specheatcap = 1.75
+	specheatcap = 0.5
 	//arcane_id = IMPEDREZENE
 
 /datum/reagent/alkycosine/on_mob_life(var/mob/living/M)
@@ -490,7 +490,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
-	specheatcap = 4.27
+	specheatcap = 2.27
 	//arcane_id = BLOOD
 	plant_toxins = -5
 	plant_health = 5
@@ -541,8 +541,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.01
 	var/has_been_armstrong = 0
 	var/armstronged_at = 0 //world.time
-	density = 134.21
-	specheatcap = 5.14318
+	density = 13.421
+	specheatcap = 0.24318
 	arcane_id = NANITES
 
 /datum/reagent/comnanobots/reagent_deleted()
@@ -609,7 +609,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#80805F" //rgb: 52, 63, 66
 	overdose_am = 15
 	custom_metabolism = 0.1
-	density = 134.21
+	density = 13.421
 	specheatcap = 0.19999
 
 /datum/reagent/engnanobots/on_mob_life(var/mob/living/M)
@@ -661,8 +661,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	dupeable = FALSE
 	color = "#A05F3F" //rgb: 52, 63, 66
 	custom_metabolism = 0.1
-	density = 96.64
-	specheatcap = 5.14318
+	density = 9.664
+	specheatcap = 5.14318 //plasma has very high specheat, usually
 
 /datum/reagent/cargonanobots/on_mob_life(var/mob/living/M)
 	if(..())
@@ -855,7 +855,6 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#BBEDA4" //rgb: 187, 237, 164
 	density = 1.44
-	specheatcap = 60
 	overdose_am = 5
 	arcane_id = DIABEETUSOL
 
@@ -936,7 +935,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.92
-	specheatcap = 5.45
+	specheatcap = 1.45
 	//arcane_id = GRUE_BILE
 
 /datum/reagent/imidazoline/on_mob_life(var/mob/living/M)
@@ -1160,7 +1159,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.005 //One unit every two hundred ticks, or 400-500 seconds.
 	var/spawning_horror = 0
 	var/percent_machine = 0
-	density = 96.64
+	density = 9.664
 	specheatcap = 0.19999
 	//arcane_id = NANITES
 
@@ -1286,7 +1285,6 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.03
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 4.09
-	specheatcap = 4.559
 	arcane_id = IMPEDREZENE
 
 /datum/reagent/methylin/on_mob_life(var/mob/living/M)
@@ -1338,8 +1336,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#3E3959" //rgb: 62, 57, 89
-	density = 236.6
-	specheatcap = 0.19999
+	density = 2.366
 	arcane_id = NANITES
 
 /datum/reagent/nanobots/zepto
@@ -1355,7 +1352,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C805DC"
 	custom_metabolism = 0.05
 	density = 1.26
-	specheatcap = 24.59
+	specheatcap = 24.59 //contains plasma
 	//arcane_id = PLACEBO
 
 /datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
@@ -1395,7 +1392,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.01
 	data = 0
 	density = 1.19
-	specheatcap = 3.99
+	specheatcap = 1.99
 	arcane_id = LIQUIDPCP
 
 /datum/reagent/paroxetine/on_mob_life(var/mob/living/M as mob)
@@ -1423,8 +1420,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	description = "Jesus juice." //You're welcome, guy in the thread that rolled a 69.
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
-	density = 22.25
-	specheatcap = 10.55
+	density = 2.225
+	specheatcap = 1.055
 	//arcane_id = DISCOUNT
 
 /datum/reagent/peptobismol/on_mob_life(var/mob/living/M)
@@ -1493,7 +1490,6 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#1A1A1A" //rgb: 26, 26, 26
 	density = 2.46
-	specheatcap = 0.124393
 	//arcane_id = DANBACCO
 
 /datum/reagent/phalanximine/on_mob_life(var/mob/living/M)
@@ -1629,8 +1625,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#669900" //rgb: 102, 153, 0
 	overdose_am = REAGENTS_OVERDOSE
 	overdose_tick = 35
-	density = 109.81
-	specheatcap = 13.59
+	density = 10.981
+	specheatcap = 0.359
 	//arcane_id = BLOOD
 
 /datum/reagent/rezadone/on_mob_life(var/mob/living/M)
@@ -1854,7 +1850,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_am = REAGENTS_OVERDOSE
 	pain_resistance = 40
 	density = 1.04
-	specheatcap = 18.53
+	specheatcap = 1.853
 	arcane_id = SPIRITBREAKER
 	arcane_ratio = 0.5
 
@@ -1944,7 +1940,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#CED7D5" //rgb: 206, 215, 213
 	alpha = 142
 	density = 1.33
-	specheatcap = 3.88
+	specheatcap = 1.88
 	//arcane_id = GLYCEROL
 
 /datum/reagent/trinitrine/on_mob_life(var/mob/living/M)

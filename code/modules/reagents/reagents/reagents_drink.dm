@@ -590,7 +590,6 @@
 	color = "#100800" //rgb: 16, 8, 0
 	adj_sleepy = -2
 	density = 4.17
-	specheatcap = 1.24
 	glass_icon_state = "nuka_colaglass"
 	glass_name = "\improper Nuka Cola"
 	glass_desc = "Don't cry. Don't raise your eye. It's only nuclear wasteland."
@@ -1168,7 +1167,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC"
 	density = 1.8
-	specheatcap = 3
 	adj_temp = 40
 	max_temp_adj = 40
 	custom_metabolism = 1 //goes through you fast
