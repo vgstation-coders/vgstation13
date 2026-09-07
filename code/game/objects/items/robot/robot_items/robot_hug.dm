@@ -54,8 +54,7 @@
 								"<span class='notice'>You hug [M] to make them feel better!</span>")
 						M.reagents.add_reagent(PARACETAMOL, 1)
 					if(M.resting)
-						M.resting = FALSE
-						M.update_canmove()
+						M.rest_action()
 				else
 					user.visible_message("<span class='notice'>[user] pets [M]!</span>", \
 							"<span class='notice'>You pet [M]!</span>")
@@ -73,8 +72,7 @@
 						user.visible_message("<span class='warning'>[user] hugs [M] in a firm bear-hug! [M] looks uncomfortable...</span>", \
 								"<span class='warning'>You hug [M] firmly to make them feel better! [M] looks uncomfortable...</span>")
 					if(M.resting)
-						M.resting = FALSE
-						M.update_canmove()
+						M.rest_action()
 				else
 					user.visible_message("<span class='warning'>[user] bops [M] on the head!</span>", \
 							"<span class='warning'>You bop [M] on the head!</span>")

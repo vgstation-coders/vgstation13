@@ -118,7 +118,8 @@
 /obj/structure/closet/body_bag/olympics/New()
 	..()
 	var/mob/living/carbon/human/torso = new
-	torso.resting = TRUE
+	if(!torso.resting)
+		torso.rest_action()
 	for(var/datum/organ/external/limb in torso.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG, LIMB_LEFT_ARM, LIMB_RIGHT_ARM))
 		var/obj/limb_obj = limb.droplimb(override = TRUE, no_explode = TRUE, spawn_limb = TRUE, display_message = FALSE)
 		limb_obj.forceMove(src)

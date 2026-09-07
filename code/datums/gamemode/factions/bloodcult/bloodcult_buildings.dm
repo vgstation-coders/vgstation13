@@ -352,8 +352,8 @@
 			if (!do_after(user,C,15))
 				return
 			if (ishuman(C))
-				C.resting = 1
-				C.update_canmove()
+				if(!C.resting)
+					C.rest_action()
 			C.forceMove(loc)
 			qdel(G)
 			to_chat(user, "<span class='warning'>You move \the [C] on top of \the [src]</span>")
@@ -443,15 +443,18 @@
 		L.unlock_from()
 
 		if (ishuman(L) && L != user)
-			L.resting = TRUE
-			L.update_canmove()
+			if(!L.resting)
+				L.rest_action()
 
 		add_fingerprint(L)
 
 	O.forceMove(loc)
 	if(O == user)
 		to_chat(user, "<span class='warning'>You climb on top of \the [src].</span>")
-		user.resting = TRUE
+		if(isliving(user))
+			var/mob/living/L = user
+			if(!L.resting)
+				L.rest_action()
 	else
 		to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src].</span>")
 	return 1
