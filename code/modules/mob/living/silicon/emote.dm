@@ -10,7 +10,7 @@
 	var/module_quirk_required
 	var/pai_software_required
 
-/datum/emote/sound/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
+/datum/emote/sound/silicon/can_run_emote(mob/user, status_check = TRUE, show_message = TRUE)
 	. = ..()
 	if (. && isbrain(user) && !module_quirk_required)
 		return TRUE
@@ -27,7 +27,7 @@
 	if (module_quirk_required && !(R.module && (R.module.quirk_flags & module_quirk_required)))
 		return FALSE
 
-/datum/emote/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
+/datum/emote/silicon/can_run_emote(mob/user, status_check = TRUE, show_message = TRUE)
 	. = ..()
 	if (. && isbrain(user) && !module_quirk_required)
 		return TRUE

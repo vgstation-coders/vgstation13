@@ -2,7 +2,7 @@
 	mob_type_allowed_typelist = list(/mob/living/carbon/brain)
 	mob_type_blacklist_typelist = list()
 
-/datum/emote/brain/can_run_emote(mob/user, var/status_check = TRUE)
+/datum/emote/brain/can_run_emote(mob/user, status_check = TRUE, show_message = TRUE)
 	. = ..()
 	var/mob/living/carbon/brain/B = user
 	if(!istype(B) || (!(B.container && istype(B.container, /obj/item/device/mmi))))
