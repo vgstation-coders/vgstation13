@@ -27637,8 +27637,7 @@
 	icon_state = "bot"
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -29555,8 +29554,7 @@
 	dir = 4
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	icon_state = "whitepurple"
@@ -34548,8 +34546,7 @@
 /obj/item/clothing/head/soft,
 /obj/item/clothing/head/soft,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -53921,8 +53918,7 @@
 /area/science/hallway)
 "bYi" = (
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	icon_state = "white"
