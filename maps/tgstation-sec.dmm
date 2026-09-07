@@ -81231,6 +81231,7 @@
 /area/centcom/holding)
 "dia" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dib" = (
@@ -109559,6 +109560,13 @@
 /obj/structure/window/barricade/full/block,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
+"qQc" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "qUM" = (
 /obj/structure/bed/chair{
 	dir = 8
@@ -416383,7 +416391,7 @@ dfU
 dgb
 dgb
 dfU
-dfU
+qQc
 dia
 dit
 dit
@@ -416885,8 +416893,8 @@ dfW
 dgb
 dhd
 dhI
-dhI
-dhI
+dfW
+dfW
 diu
 diE
 diE

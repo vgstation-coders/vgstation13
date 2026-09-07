@@ -65,7 +65,7 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "D" = (
-/obj/structure/fence/cut/large,
+/obj/structure/fence/east,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "J" = (
@@ -96,6 +96,11 @@
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
 	},
+/area/vault/kennel)
+"Q" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "R" = (
 /mob/living/simple_animal/hostile/wolf/pliable,
@@ -177,8 +182,8 @@ a
 g
 a
 D
-p
-p
+D
+Q
 N
 Y
 a

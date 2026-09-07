@@ -124644,6 +124644,7 @@
 /area/centcom/holding)
 "eCX" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "eCY" = (
@@ -130495,6 +130496,13 @@
 /area/maintenance/auxcharge{
 	name = "Power Substation"
 	})
+"jbs" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "jeP" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -438808,7 +438816,7 @@ eBh
 eBq
 eBq
 eBh
-eBh
+jbs
 eCX
 eDl
 eDl
@@ -439310,8 +439318,8 @@ eBm
 eBq
 eCq
 eCw
-eCw
-eCw
+eBm
+eBm
 eDk
 eDt
 eDt

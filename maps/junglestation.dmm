@@ -729,16 +729,15 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters)
 "ank" = (
-/obj/structure/fence,
-/obj/structure/fence,
+/obj/structure/fence/west,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle)
+/area/surface/jungle/zoned/solars)
 "anl" = (
-/obj/structure/fence,
 /obj/structure/cable/yellow,
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
 	},
+/obj/structure/fence/west,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/prison_yard)
 "anm" = (
@@ -2135,9 +2134,8 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
 "aOh" = (
-/obj/structure/fence,
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/fenced)
 "aOk" = (
 /obj/structure/closet/crate,
@@ -2798,6 +2796,14 @@
 	dir = 1;
 	icon_state = "red"
 	},
+/area/security/lobby)
+"bag" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'CAUTION: ELECTRIC FENCE'";
+	icon_state = "shock";
+	name = "CAUTION: ELECTRIC FENCE"
+	},
+/turf/simulated/wall/r_wall,
 /area/security/lobby)
 "bap" = (
 /obj/structure/grille,
@@ -5134,6 +5140,10 @@
 	},
 /turf/unsimulated/floor/planetary/cave/jungle,
 /area/surface/jungle/underground)
+"bPH" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle,
+/area/surface/jungle/vault)
 "bPO" = (
 /obj/item/device/assembly/signaler{
 	pixel_y = 8
@@ -5252,7 +5262,6 @@
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "bSN" = (
-/obj/structure/fence,
 /obj/structure/cable/yellow{
 	d2 = 8;
 	icon_state = "0-8"
@@ -5265,6 +5274,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/aifenced)
 "bTg" = (
@@ -5987,12 +5997,8 @@
 /area/vox_trading_post/atmos)
 "cfw" = (
 /obj/structure/fence,
-/obj/structure/sign/securearea{
-	name = "DANGER: PREDATORY ANIMALS";
-	icon_state = "fauna2"
-	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle)
+/area/surface/jungle/zoned/outdoor_bar)
 "cfy" = (
 /obj/machinery/light_switch{
 	pixel_y = -28
@@ -6872,12 +6878,12 @@
 /turf/simulated/floor,
 /area/surface/jungle/vault)
 "cub" = (
-/obj/structure/fence,
 /obj/machinery/camera{
 	dir = 4;
-	pixel_x = 17;
+	pixel_x = 32;
 	pixel_y = -11
 	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "cuy" = (
@@ -7258,6 +7264,10 @@
 	icon_state = "red"
 	},
 /area/security/interrogation)
+"cBx" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/dorms_patio)
 "cBN" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
@@ -7413,6 +7423,11 @@
 	icon_state = "dark"
 	},
 /area/engineering/supermatter_room)
+"cEs" = (
+/obj/structure/fence/east,
+/obj/structure/fence,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced/trader)
 "cEw" = (
 /obj/machinery/atmospherics/unary/tank/nitrogen/coldroom{
 	dir = 4
@@ -8421,6 +8436,14 @@
 	icon_state = "hydrofloor"
 	},
 /area/hydroponics)
+"cXk" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'CAUTION: ELECTRIC FENCE'";
+	icon_state = "shock";
+	name = "CAUTION: ELECTRIC FENCE"
+	},
+/turf/simulated/wall,
+/area/surface/jungle/zoned/prison_yard)
 "cXp" = (
 /obj/machinery/atmospherics/unary/cold_sink/freezer{
 	dir = 8
@@ -8667,6 +8690,11 @@
 	},
 /turf/simulated/floor,
 /area/teleporter)
+"dcj" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/solars)
 "dcq" = (
 /obj/structure/closet/wardrobe/genetics_white,
 /turf/simulated/floor{
@@ -10179,7 +10207,9 @@
 /turf/simulated/floor,
 /area/science/chargebay)
 "dBT" = (
-/turf/simulated/wall/r_wall,
+/obj/structure/fence/east,
+/obj/structure/fence,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/reactor_outside)
 "dCb" = (
 /obj/docking_port/destination/pod2/transit{
@@ -11245,6 +11275,10 @@
 /obj/machinery/camera{
 	dir = 4
 	},
+/obj/structure/fence/door{
+	req_access_txt = "53";
+	name = "Vault"
+	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "dWi" = (
@@ -11797,7 +11831,7 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/fence,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "efR" = (
@@ -12496,6 +12530,19 @@
 	icon_state = "whiteblue"
 	},
 /area/medical/sleeper)
+"epD" = (
+/obj/structure/sign/securearea{
+	name = "DANGER: BOMB RANGE";
+	desc = "A warning sign which reads 'DANGER: BOMB RANGE'."
+	},
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/bombrange)
+"epJ" = (
+/obj/structure/fence/west,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/reactor_outside)
 "epN" = (
 /obj/structure/closet/lawcloset,
 /turf/simulated/floor{
@@ -12889,6 +12936,11 @@
 "ewR" = (
 /turf/simulated/floor/engine,
 /area/surface/jungle/mining)
+"exc" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/solars)
 "exd" = (
 /obj/structure/flora/pottedplant/random,
 /turf/unsimulated/floor{
@@ -13162,6 +13214,11 @@
 	icon_state = "dark"
 	},
 /area/surface/jungle/underground/zoned/tcomms)
+"eBP" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/concrete/jungle,
+/area/surface/jungle/vault)
 "eBZ" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -13631,6 +13688,11 @@
 	icon_state = "floor4"
 	},
 /area/shuttle/syndicate_elite/mothership)
+"eMV" = (
+/obj/structure/fence/east,
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced/trader)
 "eMX" = (
 /obj/machinery/light/small,
 /turf/simulated/floor/engine,
@@ -15055,15 +15117,15 @@
 	},
 /area/bridge/meeting_room)
 "fpx" = (
-/obj/structure/fence/door{
-	req_access_txt = "35";
-	name = "Garden"
-	},
 /obj/machinery/camera{
 	dir = 1
 	},
+/obj/structure/fence/door/east{
+	name = "Garden";
+	req_access_txt = "35"
+	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/botanty_outside)
+/area/surface/jungle/zoned/outdoor_bar)
 "fpM" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 8
@@ -15712,8 +15774,8 @@
 /turf/simulated/floor,
 /area/surface/jungle/vault)
 "fBx" = (
-/obj/structure/fence,
 /obj/structure/cable/yellow,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/aifenced)
 "fBz" = (
@@ -15799,6 +15861,10 @@
 	icon_state = "dark"
 	},
 /area/bridge)
+"fDp" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/landing)
 "fDC" = (
 /obj/structure/table{
 	icon_state = "tabledir"
@@ -16033,7 +16099,7 @@
 	icon_state = "loading_area";
 	tag = "icon-loading_area (EAST)"
 	},
-/obj/structure/fence/door{
+/obj/structure/fence/door/east{
 	req_access_txt = "2"
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
@@ -16440,6 +16506,11 @@
 	icon_state = "dark"
 	},
 /area/centcom/ert)
+"fOO" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "fOS" = (
 /obj/machinery/vending/lotto{
 	density = 0;
@@ -16808,6 +16879,11 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/surface/jungle/zoned/cargolobby)
+"fUZ" = (
+/obj/structure/fence/north,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/atmos_outside)
 "fVt" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
@@ -17675,6 +17751,10 @@
 	dir = 8
 	},
 /area/engineering/reactor_room)
+"giO" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/solars)
 "giS" = (
 /obj/structure/table,
 /obj/item/weapon/soap/nanotrasen,
@@ -17911,9 +17991,9 @@
 	},
 /area/engineering/reactor_room)
 "gnA" = (
-/obj/structure/fence,
+/obj/structure/fence/north,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/botanty_outside)
+/area/surface/jungle/fenced)
 "gnK" = (
 /obj/machinery/light{
 	dir = 8
@@ -18277,8 +18357,8 @@
 /area/chapel/main)
 "guA" = (
 /obj/structure/disposalpipe/segment,
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/grass/jungle,
 /area/surface/jungle)
 "guB" = (
 /obj/structure/cable/yellow{
@@ -18756,6 +18836,10 @@
 	icon_state = "carpet13-5"
 	},
 /area/crew_quarters/courtroom)
+"gER" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/outdoor_bar)
 "gEV" = (
 /obj/structure/cable/yellow{
 	d1 = 2;
@@ -18987,6 +19071,7 @@
 /area/syndicate_mothership)
 "gID" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/snow,
 /area/centcom/holding)
 "gIE" = (
@@ -19987,6 +20072,7 @@
 /area/engineering/engine)
 "hbi" = (
 /obj/structure/fence,
+/obj/structure/fence/north,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/reactor_outside)
 "hbm" = (
@@ -21141,6 +21227,11 @@
 "hwA" = (
 /turf/simulated/floor/engine,
 /area/storage/nuke_storage)
+"hxv" = (
+/obj/structure/fence/west,
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "hxX" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
@@ -21971,6 +22062,10 @@
 	tag = "icon-vault (NORTHEAST)"
 	},
 /area/surface/jungle/mining)
+"hMw" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/concrete/jungle,
+/area/surface/jungle/vault)
 "hMK" = (
 /obj/machinery/artifact_harvester,
 /turf/simulated/floor{
@@ -22310,7 +22405,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 9
 	},
-/obj/structure/fence,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "hRD" = (
@@ -22677,6 +22772,10 @@
 /obj/item/ammo_casing/a357,
 /turf/simulated/floor/engine,
 /area/surface/jungle/vault)
+"hYO" = (
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/dorms_patio)
 "hYY" = (
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{
 	dir = 4
@@ -23266,11 +23365,6 @@
 /obj/structure/cable/yellow{
 	d2 = 4;
 	icon_state = "0-4"
-	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'CAUTION: ELECTRIC FENCE'";
-	icon_state = "shock";
-	name = "CAUTION: ELECTRIC FENCE"
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/prison_yard)
@@ -23946,6 +24040,9 @@
 	},
 /turf/simulated/floor/plating,
 /area/surface/jungle/vault)
+"iyO" = (
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/solars)
 "iyU" = (
 /turf/simulated/wall/r_wall,
 /area/security/warden)
@@ -24121,6 +24218,10 @@
 	icon_state = "whitepurple"
 	},
 /area/science/hallway)
+"iBf" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/concrete/jungle,
+/area/surface/jungle/vault)
 "iBy" = (
 /turf/simulated/floor{
 	icon_state = "white"
@@ -24280,6 +24381,14 @@
 /obj/item/ammo_casing/a762x55,
 /turf/simulated/floor,
 /area/surface/jungle/vault)
+"iEO" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
+	name = "KEEP CLEAR: DOCKING AREA";
+	icon_state = "shuttle2"
+	},
+/turf/simulated/wall/r_wall,
+/area/vox_trading_post/vault)
 "iES" = (
 /obj/structure/table,
 /obj/item/weapon/storage/firstaid/regular{
@@ -25314,6 +25423,10 @@
 	icon_state = "carpetside"
 	},
 /area/centcom/control)
+"iXB" = (
+/obj/structure/fence/door,
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle/fenced)
 "iXF" = (
 /obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
@@ -25935,6 +26048,7 @@
 	icon_state = "warning"
 	},
 /obj/structure/fence,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/landing)
 "jhX" = (
@@ -26084,6 +26198,10 @@
 	},
 /turf/simulated/floor/plating,
 /area/medical/storage)
+"jjC" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/landing)
 "jjL" = (
 /obj/structure/closet,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
@@ -26246,6 +26364,11 @@
 /obj/machinery/atmospherics/pipe/simple/general/visible,
 /turf/simulated/floor,
 /area/tdome)
+"jmt" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/concrete/jungle,
+/area/surface/jungle/vault)
 "jmF" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 8;
@@ -26278,14 +26401,9 @@
 	},
 /area/tdome/tdomeobserve)
 "jnP" = (
-/obj/structure/fence,
-/obj/machinery/camera{
-	dir = 9;
-	pixel_x = -17;
-	pixel_y = 12
-	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/fenced)
+/area/surface/jungle)
 "jop" = (
 /obj/machinery/light{
 	dir = 1
@@ -28314,6 +28432,10 @@
 	icon_state = "floor"
 	},
 /area/centcom/control)
+"kda" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced/trader)
 "kdb" = (
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
@@ -28836,13 +28958,13 @@
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/surface/jungle/zoned/roid_prep)
 "knp" = (
-/obj/structure/fence,
 /obj/machinery/door/poddoor/shutters/preopen{
 	name = "Entrance Lockdown";
 	id_tag = "entergatelockext"
 	},
+/obj/structure/fence/west,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle)
+/area/surface/jungle/fenced)
 "knv" = (
 /obj/machinery/hologram/holopad,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -31259,6 +31381,11 @@
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
+"lke" = (
+/obj/structure/fence/north,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "lkq" = (
 /obj/machinery/atmospherics/unary/cold_sink/freezer{
 	current_temperature = 273
@@ -31553,6 +31680,7 @@
 	pixel_y = 3
 	},
 /obj/machinery/media/receiver/boombox,
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/medbay_patio)
 "lpV" = (
@@ -31857,6 +31985,10 @@
 	icon_state = "dark"
 	},
 /area/vox_trading_post/gardens)
+"lvy" = (
+/obj/structure/fence,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/medbay_patio)
 "lvC" = (
 /obj/structure/table/glass,
 /obj/machinery/microwave{
@@ -32404,7 +32536,7 @@
 	},
 /area/syndicate_mothership)
 "lFu" = (
-/obj/structure/fence/door,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "lFE" = (
@@ -32535,13 +32667,13 @@
 /turf/simulated/wall/r_wall,
 /area/security/checkpoint2)
 "lHP" = (
-/obj/structure/fence/door,
 /obj/machinery/door/poddoor/shutters/preopen{
 	name = "Entrance Lockdown";
 	id_tag = "entergatelockext"
 	},
+/obj/structure/fence/door/west,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle)
+/area/surface/jungle/fenced)
 "lIc" = (
 /obj/machinery/atmospherics/unary/outlet_injector{
 	dir = 8;
@@ -34052,6 +34184,11 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'CAUTION: ELECTRIC FENCE'";
+	icon_state = "shock";
+	name = "CAUTION: ELECTRIC FENCE"
+	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/aifenced)
 "mhF" = (
@@ -35165,17 +35302,9 @@
 /area/centcom/test)
 "mAv" = (
 /obj/structure/fence,
-/obj/structure/cable/yellow,
-/obj/structure/cable/yellow{
-	icon_state = "1-2"
-	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'CAUTION: ELECTRIC FENCE'";
-	icon_state = "shock";
-	name = "CAUTION: ELECTRIC FENCE"
-	},
+/obj/structure/fence/north,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/prison_yard)
+/area/surface/jungle/fenced)
 "mBc" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor{
@@ -35355,6 +35484,10 @@
 	icon_state = "carpetside"
 	},
 /area/centcom/control)
+"mFa" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle,
+/area/surface/jungle/vault)
 "mFh" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -35610,6 +35743,11 @@
 	},
 /turf/unsimulated/floor/planetary/grass/jungle,
 /area/surface/jungle)
+"mJj" = (
+/obj/structure/fence/west,
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/dorms_patio)
 "mJE" = (
 /obj/structure/table,
 /obj/item/weapon/folder/purple,
@@ -35790,11 +35928,11 @@
 	},
 /area/centcom/suppy)
 "mNu" = (
-/obj/structure/fence,
 /obj/machinery/door/poddoor/shutters/preopen{
 	name = "Entrance Lockdown";
 	id_tag = "entergatelock"
 	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "mNK" = (
@@ -35931,6 +36069,10 @@
 	tag = "icon-brown (NORTH)"
 	},
 /area/supply/storage)
+"mQq" = (
+/obj/structure/fence/door/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "mQL" = (
 /obj/structure/plasticflaps/mining,
 /obj/machinery/conveyor{
@@ -36190,7 +36332,7 @@
 /turf/simulated/floor/wood,
 /area/library)
 "mVO" = (
-/obj/structure/fence,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/dorms_patio)
 "mWh" = (
@@ -38960,6 +39102,13 @@
 "nST" = (
 /turf/simulated/wall,
 /area/vox_trading_post/vault)
+"nTf" = (
+/obj/machinery/camera{
+	pixel_y = -3
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "nTn" = (
 /obj/structure/table,
 /obj/item/weapon/storage/firstaid/regular,
@@ -39460,12 +39609,12 @@
 /turf/simulated/floor,
 /area/surface/jungle/vault)
 "oaO" = (
-/obj/structure/fence,
 /obj/machinery/camera{
 	dir = 6
 	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/botanty_outside)
+/area/surface/jungle/fenced)
 "oaR" = (
 /obj/structure/bed/chair/wood/pew/mid{
 	name = "courtroom observation";
@@ -39894,11 +40043,12 @@
 /area/surface/jungle/fenced)
 "oij" = (
 /obj/structure/sign/securearea{
-	name = "DANGER: BOMB RANGE";
-	desc = "A warning sign which reads 'DANGER: BOMB RANGE'."
+	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
+	name = "KEEP CLEAR: DOCKING AREA";
+	icon_state = "shuttle2"
 	},
-/turf/simulated/wall/r_wall,
-/area/surface/jungle/zoned/bombrange)
+/turf/simulated/wall,
+/area/medical/storage)
 "oiw" = (
 /obj/item/weapon/storage/fancy/beer_box,
 /turf/unsimulated/floor/planetary/cave/jungle,
@@ -40200,11 +40350,10 @@
 	},
 /area/centcom/living)
 "onm" = (
-/obj/structure/fence,
 /obj/structure/sign/directions/evac{
 	dir = 1
 	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/wall/r_wall,
 /area/surface/jungle/fenced)
 "onp" = (
 /obj/structure/cable/green{
@@ -40309,6 +40458,13 @@
 	icon_state = "whitegreen"
 	},
 /area/centcom/evac)
+"opR" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/snow/asphalt/mine,
+/area/centcom/holding)
 "opT" = (
 /turf/unsimulated/floor{
 	icon_state = "carpetside"
@@ -40583,12 +40739,11 @@
 /turf/simulated/floor/engine,
 /area/storage/nuke_storage)
 "ovz" = (
-/obj/structure/fence,
 /obj/machinery/camera{
 	dir = 9;
-	pixel_x = -17;
 	pixel_y = 12
 	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle)
 "ovC" = (
@@ -41319,11 +41474,11 @@
 /turf/unsimulated/floor/planetary/grass,
 /area/hallway/primary/central/lobby)
 "oJc" = (
-/obj/structure/fence/door,
 /obj/machinery/door/poddoor/shutters/preopen{
 	name = "Entrance Lockdown";
 	id_tag = "entergatelock"
 	},
+/obj/structure/fence/door/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "oJd" = (
@@ -42022,13 +42177,12 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "oYE" = (
-/obj/structure/fence,
 /obj/structure/sign/pox{
 	icon_state = "voxcross";
 	name = "Vox Crossing - Beware";
 	pixel_y = -4
 	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/wall/r_wall,
 /area/surface/jungle/fenced/trader/solars)
 "oYQ" = (
 /turf/simulated/floor{
@@ -42134,13 +42288,8 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "pap" = (
-/obj/structure/fence,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
-	name = "KEEP CLEAR: DOCKING AREA";
-	icon_state = "shuttle2"
-	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/grass/jungle,
 /area/surface/jungle)
 "pax" = (
 /obj/item/clothing/gloves/fyellow/insulted,
@@ -42412,12 +42561,9 @@
 /area/centcom/living)
 "pfZ" = (
 /obj/structure/fence,
-/obj/machinery/camera{
-	pixel_y = -3;
-	dir = 4
-	},
+/obj/structure/fence/north,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle)
+/area/surface/jungle/zoned/atmos_outside)
 "pgn" = (
 /obj/machinery/navbeacon{
 	codes_txt = "delivery;dir=2";
@@ -42663,6 +42809,7 @@
 /obj/machinery/camera{
 	dir = 8
 	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/medbay_patio)
 "pkm" = (
@@ -43528,6 +43675,10 @@
 	icon_state = "white"
 	},
 /area/centcom/test)
+"pBL" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/bombrange)
 "pBO" = (
 /obj/machinery/light{
 	dir = 8
@@ -43810,6 +43961,14 @@
 	icon_state = "dark"
 	},
 /area/chapel/main)
+"pHt" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
+	name = "KEEP CLEAR: DOCKING AREA";
+	icon_state = "shuttle2"
+	},
+/turf/simulated/wall,
+/area/vox_trading_post/hallway)
 "pHv" = (
 /obj/machinery/door/airlock/external{
 	name = "Arrival Airlock"
@@ -43822,6 +43981,14 @@
 /obj/structure/flora/ausbushes/leafybush,
 /turf/unsimulated/floor/planetary/grass/jungle/no_flora,
 /area/surface/jungle/fenced)
+"pHJ" = (
+/obj/effect/decal/cleanable/blood/drip,
+/obj/structure/sign/securearea{
+	name = "DANGER: PREDATORY ANIMALS";
+	icon_state = "fauna2"
+	},
+/turf/unsimulated/floor/planetary/grass/jungle/no_flora,
+/area/surface/jungle)
 "pHV" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -44512,11 +44679,8 @@
 	},
 /area/security/prison)
 "pTP" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/fence/door{
-	req_access_txt = "53";
-	name = "Vault"
-	},
+/obj/structure/fence/west,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "pTZ" = (
@@ -45712,8 +45876,7 @@
 	name = "KEEP CLEAR: DOCKING AREA";
 	icon_state = "shuttle2"
 	},
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/wall/r_wall,
 /area/surface/jungle)
 "qmw" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -47630,6 +47793,10 @@
 	dir = 1
 	},
 /area/syndicate_mothership)
+"qWu" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced/trader/solars)
 "qWy" = (
 /obj/structure/table,
 /obj/machinery/microwave{
@@ -49884,6 +50051,11 @@
 	icon_state = "red"
 	},
 /area/security/checkpoint2)
+"rHp" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle,
+/area/surface/jungle/vault)
 "rHu" = (
 /obj/machinery/requests_console{
 	announcementConsole = 1;
@@ -49906,6 +50078,14 @@
 	icon_state = "freezerfloor"
 	},
 /area/crew_quarters/captain)
+"rHx" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
+	name = "KEEP CLEAR: DOCKING AREA";
+	icon_state = "shuttle2"
+	},
+/turf/simulated/wall,
+/area/supply/miningdock)
 "rHY" = (
 /turf/simulated/floor/engine,
 /area/science/xenobiology/specimen_3)
@@ -49929,6 +50109,14 @@
 	icon_state = "white"
 	},
 /area/medical/paramedics)
+"rIu" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
+	name = "KEEP CLEAR: DOCKING AREA";
+	icon_state = "shuttle2"
+	},
+/turf/simulated/wall,
+/area/supply/storage)
 "rIJ" = (
 /turf/unsimulated/floor{
 	icon_state = "engine";
@@ -50108,6 +50296,11 @@
 	},
 /turf/unsimulated/floor/planetary/grass/jungle,
 /area/surface/jungle/fenced)
+"rNJ" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "rNK" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -50283,7 +50476,9 @@
 	},
 /area/engineering/reactor_room)
 "rRT" = (
-/turf/simulated/wall/r_wall,
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/sme_outside)
 "rRX" = (
 /obj/structure/table,
@@ -51635,9 +51830,8 @@
 /turf/simulated/floor/vox/wood,
 /area/centcom/holding)
 "spZ" = (
-/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/dump)
+/area/surface/jungle)
 "sqh" = (
 /obj/structure/table,
 /obj/item/weapon/kitchen/utensil/knife/plastic{
@@ -52001,7 +52195,6 @@
 	},
 /area/shuttle/nuclearops)
 "swZ" = (
-/obj/structure/fence,
 /obj/structure/cable/yellow{
 	d2 = 2;
 	icon_state = "0-2";
@@ -52012,6 +52205,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/aifenced)
 "sxb" = (
@@ -52484,7 +52678,7 @@
 /turf/simulated/floor/wood,
 /area/surface/jungle/vault)
 "sGm" = (
-/obj/structure/fence/door,
+/obj/structure/fence/door/west,
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/vault)
 "sGy" = (
@@ -53045,12 +53239,12 @@
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/surface/jungle/zoned/outdoor_bar)
 "sRR" = (
-/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (NORTH)"
 	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "sRS" = (
@@ -53604,13 +53798,12 @@
 /turf/simulated/floor,
 /area/hallway/primary/central/lobby)
 "tcp" = (
-/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
 	name = "KEEP CLEAR: DOCKING AREA";
 	icon_state = "shuttle2"
 	},
-/turf/unsimulated/floor/planetary/concrete/jungle,
+/turf/simulated/wall/r_wall,
 /area/surface/jungle/vault)
 "tct" = (
 /obj/docking_port/destination/syndicate/miningoutpost,
@@ -53860,6 +54053,11 @@
 	icon_state = "dark"
 	},
 /area/engineering/supermatter_room)
+"tgz" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/landing)
 "tgB" = (
 /obj/structure/cable/yellow{
 	d2 = 2;
@@ -54217,6 +54415,11 @@
 	icon_state = "dark"
 	},
 /area/maintenance/disposal)
+"tmf" = (
+/obj/structure/fence/east,
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/dorms_patio)
 "tmu" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -54228,8 +54431,9 @@
 	},
 /area/centcom/ferry)
 "tmC" = (
-/turf/simulated/wall,
-/area/surface/jungle/zoned/botanty_outside)
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle)
 "tmJ" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
@@ -55147,6 +55351,9 @@
 	icon_state = "darkred"
 	},
 /area/centcom/control)
+"tBv" = (
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/bombrange)
 "tBG" = (
 /obj/structure/railing,
 /obj/structure/flora/ausbushes/leafybush,
@@ -55743,14 +55950,13 @@
 	},
 /area/centcom/test)
 "tMC" = (
-/obj/structure/fence,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
 	name = "KEEP CLEAR: DOCKING AREA";
 	icon_state = "shuttle2"
 	},
-/turf/unsimulated/floor/planetary/concrete/jungle,
-/area/surface/jungle/fenced)
+/turf/simulated/wall,
+/area/medical/patient_room2)
 "tME" = (
 /obj/structure/flora/ausbushes/sparsegrass,
 /obj/machinery/light{
@@ -56475,6 +56681,10 @@
 	icon_state = "dark-markings"
 	},
 /area/engineering/antimatter_room)
+"ucA" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/bombrange)
 "ucE" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /obj/structure/cable/yellow{
@@ -56741,6 +56951,11 @@
 	},
 /turf/simulated/floor/greengrid,
 /area/turret_protected/ai)
+"ujb" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle,
+/area/surface/jungle/vault)
 "uje" = (
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
@@ -56866,9 +57081,8 @@
 	},
 /area/supply/storage)
 "ukS" = (
-/obj/structure/fence,
 /obj/structure/sign/directions/evac,
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/wall/r_wall,
 /area/surface/jungle/fenced)
 "ukV" = (
 /obj/machinery/door/airlock/highsecurity{
@@ -56984,11 +57198,7 @@
 /area/security/checkpoint2)
 "ung" = (
 /obj/structure/fence,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
-	name = "KEEP CLEAR: DOCKING AREA";
-	icon_state = "shuttle2"
-	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/landing)
 "unn" = (
@@ -58009,6 +58219,7 @@
 /obj/structure/bed/chair/folding{
 	dir = 4
 	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/medbay_patio)
 "uFk" = (
@@ -58354,6 +58565,11 @@
 	dir = 1
 	},
 /area/engineering/engine)
+"uMh" = (
+/obj/structure/fence/west,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/atmos_outside)
 "uMR" = (
 /obj/structure/cable/yellow{
 	d2 = 2;
@@ -58803,6 +59019,10 @@
 "uUI" = (
 /turf/simulated/wall/r_wall,
 /area/engineering/atmos)
+"uUJ" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced/trader)
 "uUP" = (
 /obj/structure/table/woodentable,
 /obj/item/device/taperecorder{
@@ -59100,6 +59320,10 @@
 	},
 /turf/space/transit/east,
 /area)
+"uZX" = (
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/dirt/jungle,
+/area/surface/jungle/zoned/dump)
 "uZY" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/wall,
@@ -60071,16 +60295,6 @@
 	icon_state = "dark"
 	},
 /area/security/prison)
-"vpS" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
-	name = "KEEP CLEAR: DOCKING AREA";
-	icon_state = "shuttle2"
-	},
-/obj/structure/fence,
-/obj/structure/fence,
-/turf/unsimulated/floor/planetary/concrete/jungle,
-/area/surface/jungle/fenced)
 "vqh" = (
 /obj/machinery/computer/crew,
 /turf/simulated/floor/shuttle,
@@ -60220,10 +60434,7 @@
 /area/surface/jungle)
 "vti" = (
 /obj/structure/ladder/jungle_tunnel/mapped,
-/obj/structure/sign/directions/trader{
-	dir = 1;
-	pixel_y = -21
-	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/dirt/jungle,
 /area/surface/jungle/fenced)
 "vtq" = (
@@ -61614,11 +61825,10 @@
 	},
 /area/science/robotics)
 "vRV" = (
-/obj/structure/fence,
 /obj/structure/sign/directions/evac{
 	dir = 4
 	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
+/turf/simulated/wall/r_wall,
 /area/surface/jungle/fenced)
 "vSk" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -62183,7 +62393,8 @@
 /turf/simulated/floor/wood,
 /area/surface/jungle/vault)
 "wbS" = (
-/obj/structure/fence,
+/obj/structure/fence/west,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/sme_outside)
 "wca" = (
@@ -62251,6 +62462,10 @@
 	dir = 4
 	},
 /area/engineering/engine)
+"wdu" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced/trader/solars)
 "wdv" = (
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -62484,6 +62699,14 @@
 	icon_state = "freezerfloor"
 	},
 /area/centcom/holding)
+"wha" = (
+/obj/structure/sign/securearea{
+	name = "DANGER: BOMB RANGE";
+	desc = "A warning sign which reads 'DANGER: BOMB RANGE'."
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/bombrange)
 "whc" = (
 /obj/machinery/sleeper/mancrowave,
 /obj/structure/closet/walllocker/defiblocker/north,
@@ -63324,21 +63547,6 @@
 	icon_state = "dark"
 	},
 /area/vox_trading_post/gardens)
-"wyQ" = (
-/obj/structure/fence,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'CAUTION: ELECTRIC FENCE'";
-	icon_state = "shock";
-	name = "CAUTION: ELECTRIC FENCE"
-	},
-/obj/structure/cable/yellow,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/aifenced)
 "wyR" = (
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -63679,12 +63887,7 @@
 	},
 /area/centcom/test)
 "wFg" = (
-/obj/structure/fence,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'.";
-	name = "KEEP CLEAR: DOCKING AREA";
-	icon_state = "shuttle2"
-	},
+/obj/structure/fence/west,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "wFu" = (
@@ -64825,6 +65028,11 @@
 	icon_state = "freezerfloor"
 	},
 /area/crew_quarters)
+"wXx" = (
+/obj/structure/fence,
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/sme_outside)
 "wXF" = (
 /obj/structure/table,
 /obj/item/device/radio/off,
@@ -65371,25 +65579,6 @@
 	},
 /turf/simulated/wall/r_wall,
 /area/engineering/mechanics)
-"xiD" = (
-/obj/structure/fence,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'CAUTION: ELECTRIC FENCE'";
-	icon_state = "shock";
-	name = "CAUTION: ELECTRIC FENCE"
-	},
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/unsimulated/floor/planetary/path/jungle_plated,
-/area/surface/jungle/zoned/aifenced)
 "xiJ" = (
 /turf/unsimulated/floor/planetary/water/jungle,
 /area/surface/jungle/roid)
@@ -65531,6 +65720,13 @@
 	icon_state = "whiteblue"
 	},
 /area/medical/sleeper)
+"xlm" = (
+/obj/machinery/camera{
+	dir = 9;
+	pixel_y = 12
+	},
+/turf/unsimulated/floor/planetary/grass/jungle,
+/area/surface/jungle/fenced)
 "xls" = (
 /obj/machinery/sleeper/upgraded{
 	dir = 1
@@ -65615,6 +65811,10 @@
 /mob/living/simple_animal/complex/crocodile,
 /turf/unsimulated/floor/planetary/water/jungle,
 /area/surface/jungle/roid/vaults)
+"xmK" = (
+/obj/structure/fence/door/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
 "xmN" = (
 /obj/structure/window/full/reinforced,
 /turf/unsimulated/wall/fakeglass{
@@ -65664,6 +65864,20 @@
 	},
 /turf/unsimulated/mineral/jungle_underground/crate_loot,
 /area/surface/jungle/underground/zoned/ghetto_research)
+"xnL" = (
+/obj/structure/fence,
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/fence/east,
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'CAUTION: ELECTRIC FENCE'";
+	icon_state = "shock";
+	name = "CAUTION: ELECTRIC FENCE"
+	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/zoned/aifenced)
 "xnX" = (
 /obj/structure/rack,
 /obj/item/tool/scalpel,
@@ -66506,6 +66720,7 @@
 	},
 /obj/item/ashtray/glass,
 /obj/item/weapon/storage/fancy/cigarettes/dromedaryco,
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/medbay_patio)
 "xBC" = (
@@ -66651,11 +66866,11 @@
 	},
 /area/security/processing)
 "xFu" = (
-/obj/structure/fence,
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "warning_corner"
 	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "xFL" = (
@@ -66829,12 +67044,12 @@
 	},
 /area/security/interrogation)
 "xIq" = (
-/obj/structure/fence,
 /obj/structure/cable/yellow{
 	d2 = 2;
 	icon_state = "0-2";
 	pixel_y = 1
 	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/aifenced)
 "xIy" = (
@@ -66912,13 +67127,13 @@
 /turf/unsimulated/mineral/jungle_underground/crate_loot,
 /area/surface/jungle/underground)
 "xJI" = (
-/obj/structure/fence,
 /obj/structure/cable/yellow,
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/aifenced)
 "xJP" = (
@@ -67031,6 +67246,11 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/surface/jungle/fenced)
+"xMI" = (
+/obj/structure/fence/east,
+/obj/structure/fence/north,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/fenced)
 "xMO" = (
@@ -67152,6 +67372,7 @@
 /obj/structure/bed/chair/folding{
 	dir = 8
 	},
+/obj/structure/fence,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/surface/jungle/zoned/medbay_patio)
 "xOV" = (
@@ -67394,6 +67615,15 @@
 /obj/machinery/portable_atmospherics/hydroponics,
 /turf/unsimulated/floor/planetary/dirt/jungle,
 /area/surface/jungle/zoned/botanty_outside)
+"xTs" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning"
+	},
+/obj/structure/fence/east,
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/concrete/jungle,
+/area/surface/jungle/landing)
 "xTu" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 4
@@ -68143,6 +68373,13 @@
 	icon_state = "dark"
 	},
 /area/storage/tech)
+"yfj" = (
+/obj/structure/sign/directions/trader{
+	dir = 1;
+	pixel_y = -21
+	},
+/turf/simulated/wall/r_wall,
+/area/storage/nuke_storage)
 "yfo" = (
 /obj/structure/grille/window_spawner/reinforced/full,
 /obj/machinery/door/poddoor/shutters{
@@ -83340,23 +83577,23 @@ lIK
 lIK
 lIK
 gku
-gku
-gku
-gku
-gku
+bPH
+bPH
+bPH
+bPH
 sGm
-gku
-gku
-gku
-gku
-gku
-gku
-gku
-gku
-gku
-gku
-gku
-gku
+bPH
+bPH
+bPH
+bPH
+bPH
+rHp
+bPH
+bPH
+bPH
+bPH
+bPH
+rHp
 lIK
 lIK
 lIK
@@ -84053,8 +84290,8 @@ gVx
 gVx
 gVx
 gVx
-gku
-gku
+ujb
+ujb
 gVx
 gVx
 gVx
@@ -85466,9 +85703,9 @@ oHr
 gVx
 gVx
 gVx
-gku
-gku
-gku
+gVx
+mFa
+ujb
 lIK
 lIK
 lIK
@@ -87223,10 +87460,10 @@ oHr
 oHr
 oHr
 oHr
-gku
-gku
-gku
-gku
+mFa
+mFa
+mFa
+ujb
 rnF
 rnF
 lIK
@@ -101139,11 +101376,11 @@ lIK
 lIK
 lIK
 lIK
-pxD
-pxD
-pxD
-pxD
-pxD
+iBL
+uUJ
+uUJ
+uUJ
+iBL
 mnX
 ryP
 nJC
@@ -101489,21 +101726,21 @@ lIK
 lIK
 lIK
 pPP
-pxD
-pxD
-pxD
+uUJ
+uUJ
+cEs
 foC
 hNj
 foC
-pxD
-pxD
+eMV
+uUJ
 hIf
 lRt
 lRt
 lRt
 hIf
-pxD
-pxD
+kda
+kda
 xSh
 lIK
 lIK
@@ -103943,13 +104180,13 @@ lIK
 lIK
 lIK
 oYE
-iXF
-iXF
-iXF
-iXF
-iXF
-iXF
-iXF
+qWu
+qWu
+qWu
+qWu
+qWu
+qWu
+qWu
 cKh
 cKh
 cKh
@@ -106759,11 +106996,11 @@ lIK
 lIK
 lIK
 oYE
-iXF
-iXF
-iXF
-iXF
-iXF
+wdu
+wdu
+wdu
+wdu
+wdu
 gje
 gje
 cKh
@@ -106783,7 +107020,7 @@ heL
 heL
 heL
 heL
-pxD
+uUJ
 xSh
 lIK
 lIK
@@ -108542,7 +108779,7 @@ woJ
 dHr
 tkJ
 nST
-heL
+iEO
 lIK
 lIK
 lIK
@@ -108778,37 +109015,37 @@ lIK
 lIK
 lIK
 lIK
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-pUi
-opc
+hxv
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+eoa
+snf
 xor
 xor
 xor
@@ -108895,8 +109132,8 @@ aRr
 heL
 heL
 heL
-bFD
-ung
+fDp
+tgz
 lIK
 lIK
 lIK
@@ -109130,7 +109367,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 snf
 snf
@@ -109482,37 +109719,37 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
+snf
 lFu
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
 eoa
-vcQ
+snf
 xor
 xor
 xor
@@ -109834,7 +110071,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -110186,7 +110423,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -110538,7 +110775,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -110548,21 +110785,21 @@ wld
 wld
 wld
 kSb
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
 kSb
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
 eoa
 bNy
 xor
@@ -110890,7 +111127,7 @@ lIK
 eHa
 aBB
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -111242,7 +111479,7 @@ aBB
 vCr
 aBB
 aBB
-opc
+gnA
 snf
 vcQ
 wld
@@ -111593,8 +111830,8 @@ aBB
 vCr
 eEP
 gZE
-vCr
-cfw
+pHJ
+gnA
 snf
 vcQ
 wld
@@ -111946,7 +112183,7 @@ aBB
 kAo
 pZY
 aBB
-opc
+gnA
 snf
 vcQ
 wld
@@ -112298,7 +112535,7 @@ aBB
 vCr
 aBB
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -112650,7 +112887,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -112766,8 +113003,8 @@ aTu
 aTu
 aTu
 aTu
-bFD
-bFD
+jjC
+jjC
 ung
 lIK
 lIK
@@ -113002,7 +113239,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -113117,7 +113354,7 @@ fUz
 cmb
 pex
 xde
-aTu
+pHt
 lIK
 lIK
 lIK
@@ -113354,7 +113591,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -113706,7 +113943,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -114058,7 +114295,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -114410,7 +114647,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -114762,7 +114999,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -115114,7 +115351,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -115466,7 +115703,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -115476,13 +115713,13 @@ wld
 wld
 wld
 kSb
-vcQ
+lFu
 snf
 snf
 snf
 snf
 snf
-vcQ
+lFu
 kSb
 xFu
 wdA
@@ -115818,7 +116055,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -116170,7 +116407,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -116205,7 +116442,7 @@ maR
 iMQ
 wJj
 mLy
-mLy
+bag
 mLy
 tvS
 tvS
@@ -116522,13 +116759,13 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
 wld
 wld
-wld
+xlm
 wld
 quU
 wld
@@ -116874,36 +117111,36 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
 wld
 kSb
-jnP
+wFg
 vRV
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
+wFg
+wFg
+wFg
+wFg
+wFg
+gnA
 snf
 vcQ
-lFu
-vcQ
+mQq
+kSb
 wFg
-vcQ
-vcQ
-vcQ
-lFu
-vcQ
-lFu
-vcQ
-vcQ
-vcQ
+wFg
+wFg
+wFg
+mQq
+kSb
+mQq
+wFg
+wFg
+wFg
 vRV
-vcQ
+wFg
 eoa
 pMF
 iMQ
@@ -117226,7 +117463,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -117239,7 +117476,7 @@ rki
 nPp
 nuz
 nuz
-jhR
+xTs
 fHC
 jhR
 wBK
@@ -117578,7 +117815,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -117930,7 +118167,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -118282,7 +118519,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -118362,9 +118599,9 @@ hwA
 pSs
 glK
 glK
-opc
-opc
-opc
+wFg
+wFg
+fOO
 lIK
 lIK
 lIK
@@ -118634,7 +118871,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -118716,7 +118953,7 @@ glK
 glK
 xem
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -118986,7 +119223,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -119066,9 +119303,9 @@ ovx
 rjM
 glK
 glK
-vcQ
 snf
-opc
+snf
+vcQ
 lIK
 lIK
 lIK
@@ -119338,7 +119575,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -119416,11 +119653,11 @@ hoz
 ath
 glK
 glK
+yfj
 glK
-glK
-vcQ
 snf
-opc
+snf
+vcQ
 lIK
 lIK
 lIK
@@ -119690,7 +119927,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -119763,16 +120000,16 @@ gaI
 ifY
 mEG
 dWh
-pTP
+mEG
 eqb
 dKf
 snf
 vcQ
 nre
 vti
-vcQ
 snf
-opc
+snf
+vcQ
 lIK
 lIK
 lIK
@@ -120042,7 +120279,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -120114,17 +120351,17 @@ nBj
 gaI
 maR
 fYO
-eCz
 ohX
 efC
+efC
 hRA
-vcQ
-vcQ
+lFu
+rNJ
 nre
-nre
-vcQ
+bsE
 snf
-opc
+snf
+vcQ
 lIK
 lIK
 lIK
@@ -120394,7 +120631,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -120473,10 +120710,10 @@ nre
 wld
 wld
 nre
-nre
-vcQ
+bsE
 snf
-opc
+snf
+vcQ
 lIK
 lIK
 lIK
@@ -120746,7 +120983,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -120825,10 +121062,10 @@ wld
 wld
 nre
 wld
-nre
-lFu
+iXB
 snf
-opc
+snf
+vcQ
 lIK
 lIK
 lIK
@@ -121098,7 +121335,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -121168,19 +121405,19 @@ wld
 nre
 nre
 nre
-tMC
-fMu
-fMu
-fMu
-fMu
-fMu
-fMu
-fMu
-fMu
-fMu
-vpS
+kSb
+aOh
+aOh
+aOh
+aOh
+aOh
+aOh
+aOh
+aOh
+aOh
+kSb
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -121450,7 +121687,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -121532,7 +121769,7 @@ jgk
 rki
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -121802,36 +122039,36 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
 wld
 kSb
-vcQ
-onm
-vcQ
-cub
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
 lFu
-eoa
-vcQ
-cub
-wFg
-vcQ
+onm
 lFu
-eoa
-vcQ
-vcQ
+cub
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+xmK
+kSb
+lFu
+cub
+lFu
+lFu
+xmK
+kSb
+lFu
+lFu
 cub
 onm
-vcQ
-vcQ
+lFu
+lFu
 eoa
 pMF
 iMQ
@@ -121884,7 +122121,7 @@ sfK
 rki
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -122050,16 +122287,16 @@ rnF
 rnF
 rnF
 dFK
-dFK
-dFK
-dFK
-pWq
-pWq
-dFK
-dFK
-dFK
-dFK
-dFK
+iBf
+iBf
+iBf
+iBf
+iBf
+iBf
+iBf
+iBf
+iBf
+eBP
 lIK
 lIK
 lIK
@@ -122154,7 +122391,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -122236,7 +122473,7 @@ dgj
 jgk
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -122506,7 +122743,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 wld
@@ -122551,8 +122788,8 @@ anl
 anl
 anl
 anl
-mAv
-xHm
+anl
+cXk
 xHm
 dYI
 dYI
@@ -122588,7 +122825,7 @@ qMf
 sfK
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -122858,7 +123095,7 @@ lIK
 lIK
 lIK
 lIK
-opc
+gnA
 snf
 vcQ
 nre
@@ -122940,7 +123177,7 @@ smp
 sfK
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -123198,21 +123435,21 @@ lIK
 lIK
 lIK
 lIK
-pap
+qmt
 ovz
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-lFu
-vcQ
+jnP
+jnP
+jnP
+jnP
+jnP
+jnP
+jnP
+jnP
+jnP
+jnP
+xMI
+xmK
+rNJ
 kSb
 wld
 nre
@@ -123292,7 +123529,7 @@ jdr
 xPT
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -123644,7 +123881,7 @@ bOc
 sfK
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -123918,15 +124155,15 @@ rki
 dgj
 jgk
 eoa
-nmb
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
+nTf
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
+lFu
 kSb
 xor
 xor
@@ -123996,7 +124233,7 @@ smp
 sfK
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -124348,7 +124585,7 @@ sed
 sfK
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -124700,7 +124937,7 @@ bWj
 sfK
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -125052,7 +125289,7 @@ smp
 sfK
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -125404,7 +125641,7 @@ smp
 sfK
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -125756,7 +125993,7 @@ fKZ
 sfK
 fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -126096,7 +126333,7 @@ xor
 xor
 qTn
 nre
-tMC
+fMu
 rgd
 cHX
 cHX
@@ -126106,9 +126343,9 @@ cHX
 cHX
 cHX
 iSF
-tMC
+fMu
 snf
-opc
+vcQ
 lIK
 lIK
 lIK
@@ -126381,7 +126618,7 @@ tCk
 cHX
 iSF
 rki
-ung
+bFD
 pOc
 cHX
 tCk
@@ -126391,7 +126628,7 @@ cHX
 cHX
 cHX
 kHe
-wFg
+vcQ
 snf
 snf
 nre
@@ -126447,7 +126684,7 @@ uJH
 uJH
 tPb
 fFT
-qqm
+oij
 qqm
 qqm
 qqm
@@ -126458,9 +126695,9 @@ vbB
 vbB
 sjp
 sjp
-sjp
-snf
-opc
+tMC
+lFu
+rNJ
 lIK
 lIK
 lIK
@@ -126719,9 +126956,9 @@ lIK
 lIK
 lIK
 qmt
-opc
-opc
-opc
+tmC
+tmC
+tmC
 ntD
 eai
 mEr
@@ -126733,7 +126970,7 @@ ntD
 uAi
 uAi
 ntD
-ntD
+rIu
 uAi
 uAi
 idZ
@@ -126743,7 +126980,7 @@ vSq
 idZ
 idZ
 idZ
-idZ
+rHx
 snf
 snf
 bpp
@@ -126811,9 +127048,9 @@ vbB
 bsv
 qUf
 sjp
-vcQ
-ank
-opc
+xSZ
+lvy
+lIK
 lIK
 lIK
 lIK
@@ -127164,8 +127401,8 @@ qtA
 fTz
 sjp
 mRJ
-xSZ
-opc
+lvy
+lIK
 lIK
 lIK
 lIK
@@ -127330,16 +127567,16 @@ gVx
 rnF
 rnF
 dFK
-pWq
-pWq
-dFK
-dFK
-dFK
-dFK
-dFK
-dFK
-dFK
-dFK
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+jmt
 lIK
 lIK
 lIK
@@ -127516,8 +127753,8 @@ hGi
 rGF
 sjp
 xSZ
-xSZ
-opc
+lvy
+lIK
 lIK
 lIK
 lIK
@@ -127869,7 +128106,7 @@ oyf
 sjp
 ciw
 uEF
-opc
+lIK
 lIK
 lIK
 lIK
@@ -128221,7 +128458,7 @@ pkM
 sjp
 xSZ
 xBr
-opc
+lIK
 lIK
 lIK
 lIK
@@ -128573,7 +128810,7 @@ pXO
 eXo
 bzo
 xON
-opc
+lIK
 lIK
 lIK
 lIK
@@ -128924,8 +129161,8 @@ qar
 uDa
 dLy
 mRe
-xSZ
-opc
+lvy
+lIK
 lIK
 lIK
 lIK
@@ -129277,7 +129514,7 @@ ilB
 eXo
 xLk
 uEF
-opc
+lIK
 lIK
 lIK
 lIK
@@ -129629,7 +129866,7 @@ eXo
 eXo
 vEC
 lpK
-opc
+lIK
 lIK
 lIK
 lIK
@@ -129981,7 +130218,7 @@ guq
 joZ
 jQh
 xON
-opc
+lIK
 lIK
 lIK
 lIK
@@ -130332,8 +130569,8 @@ vkY
 iky
 xSZ
 xSZ
-xSZ
-opc
+lvy
+lIK
 lIK
 lIK
 lIK
@@ -130684,8 +130921,8 @@ vkY
 cYg
 xSZ
 xSZ
-xSZ
-opc
+lvy
+lIK
 lIK
 lIK
 lIK
@@ -131037,7 +131274,7 @@ teC
 xSZ
 xSZ
 pjJ
-opc
+lIK
 lIK
 lIK
 lIK
@@ -131389,7 +131626,7 @@ oRx
 oRx
 oRx
 oRx
-ank
+pap
 lIK
 lIK
 lIK
@@ -131741,7 +131978,7 @@ nIP
 gMd
 nat
 nIP
-opc
+pap
 lIK
 lIK
 lIK
@@ -132093,7 +132330,7 @@ nIP
 jjy
 qmY
 nIP
-opc
+pap
 lIK
 lIK
 lIK
@@ -132445,7 +132682,7 @@ nIP
 ggb
 rsE
 nIP
-opc
+pap
 lIK
 lIK
 lIK
@@ -132797,7 +133034,7 @@ dKH
 hPx
 nIP
 oRx
-opc
+pap
 lIK
 lIK
 lIK
@@ -133149,7 +133386,7 @@ wVy
 gnb
 pUx
 nIP
-opc
+pap
 lIK
 lIK
 lIK
@@ -133303,20 +133540,20 @@ rnF
 rnF
 rnF
 dFK
-dFK
-dFK
-pWq
-dFK
-dFK
-dFK
+iBf
+iBf
+iBf
+iBf
+iBf
+iBf
 bRe
-dFK
-pWq
-pWq
-dFK
-pWq
-dFK
-dFK
+iBf
+iBf
+iBf
+iBf
+iBf
+iBf
+eBP
 rnF
 rnF
 rnF
@@ -133409,8 +133646,8 @@ lIK
 lIK
 lIK
 spZ
-spZ
-spZ
+jnP
+jnP
 cOH
 jiq
 qNy
@@ -133761,7 +133998,7 @@ lIK
 lIK
 lIK
 spZ
-ajA
+uZX
 faJ
 pBk
 mpz
@@ -133853,7 +134090,7 @@ rsE
 rsE
 aXT
 oRx
-opc
+pap
 lIK
 lIK
 lIK
@@ -134113,7 +134350,7 @@ lIK
 lIK
 lIK
 spZ
-ajA
+uZX
 aqs
 cOH
 dHm
@@ -134205,7 +134442,7 @@ rsE
 vaJ
 qkQ
 nIP
-opc
+pap
 lIK
 lIK
 lIK
@@ -134465,7 +134702,7 @@ lIK
 lIK
 lIK
 spZ
-ajA
+uZX
 vvQ
 cbt
 sfA
@@ -134558,13 +134795,13 @@ ckL
 stl
 oRx
 ank
-opc
-opc
-opc
-opc
-opc
-opc
-opc
+ank
+ank
+ank
+ank
+ank
+ank
+dcj
 lIK
 lIK
 lIK
@@ -134817,7 +135054,7 @@ lIK
 lIK
 lIK
 spZ
-ajA
+uZX
 ajA
 cbt
 xCt
@@ -134916,7 +135153,7 @@ fqn
 caN
 wzE
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -135169,7 +135406,7 @@ lIK
 lIK
 lIK
 spZ
-ajA
+uZX
 ajA
 wRs
 uSS
@@ -135268,7 +135505,7 @@ fqn
 caN
 wzE
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -135620,7 +135857,7 @@ fqn
 caN
 wzE
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -135921,8 +136158,8 @@ edD
 edD
 nBG
 edD
-gnA
-gnA
+ooz
+gER
 fpx
 why
 cEL
@@ -135932,7 +136169,7 @@ vDH
 cFY
 why
 oaO
-gnA
+snf
 maR
 iMQ
 xMH
@@ -135972,7 +136209,7 @@ fqn
 caN
 wzE
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -136273,7 +136510,7 @@ edD
 edD
 edD
 edD
-gnA
+cfw
 xTn
 aCN
 sOW
@@ -136324,7 +136561,7 @@ fqn
 caN
 wzE
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -136471,20 +136708,20 @@ rnF
 rnF
 rnF
 dFK
-pWq
-dFK
-dFK
-pWq
-pWq
-dFK
-dFK
-dFK
-dFK
-pWq
-dFK
-dFK
-dFK
-dFK
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+hMw
+jmt
 rnF
 rnF
 rnF
@@ -136625,7 +136862,7 @@ edD
 edD
 edD
 edD
-gnA
+cfw
 xTn
 aCN
 wwO
@@ -136676,7 +136913,7 @@ fqn
 caN
 wzE
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -136977,7 +137214,7 @@ edD
 edD
 edD
 edD
-gnA
+cfw
 xTn
 aCN
 xTn
@@ -137028,9 +137265,9 @@ fqn
 caN
 wzE
 wuN
-opc
-opc
-opc
+iyO
+ank
+dcj
 lIK
 lIK
 lIK
@@ -137329,7 +137566,7 @@ edD
 edD
 edD
 edD
-gnA
+cfw
 xTn
 aCN
 aCN
@@ -137382,7 +137619,7 @@ fqn
 fqn
 fqn
 fqn
-opc
+thr
 lIK
 lIK
 lIK
@@ -137624,12 +137861,12 @@ lIK
 lIK
 lIK
 lIK
-mVO
-mVO
-mVO
-mVO
-mVO
-mVO
+mJj
+cBx
+cBx
+cBx
+cBx
+cBx
 saC
 dXb
 fgx
@@ -137681,7 +137918,7 @@ edD
 edD
 edD
 edD
-gnA
+cfw
 xbO
 xbO
 xbO
@@ -137734,7 +137971,7 @@ fqn
 nNA
 aDR
 pVG
-opc
+thr
 lIK
 lIK
 lIK
@@ -137976,7 +138213,7 @@ lIK
 lIK
 lIK
 lIK
-mVO
+hYO
 lxN
 lxN
 lxN
@@ -138033,7 +138270,7 @@ edD
 edD
 edD
 edD
-gnA
+cfw
 xbO
 xbO
 xbO
@@ -138086,7 +138323,7 @@ fqn
 fqn
 fqn
 fqn
-opc
+thr
 lIK
 lIK
 lIK
@@ -138328,7 +138565,7 @@ lIK
 lIK
 lIK
 lIK
-mVO
+hYO
 xWe
 wtr
 wtr
@@ -138385,7 +138622,7 @@ edD
 edD
 edD
 edD
-gnA
+cfw
 xbO
 xbO
 ndk
@@ -138436,9 +138673,9 @@ fqn
 caN
 dTo
 wuN
-opc
-opc
-opc
+iyO
+giO
+exc
 lIK
 lIK
 lIK
@@ -138680,7 +138917,7 @@ lIK
 lIK
 lIK
 lIK
-mVO
+hYO
 xWe
 tOU
 gUG
@@ -138737,7 +138974,7 @@ edD
 edD
 edD
 egq
-gnA
+cfw
 jJY
 jwM
 xbO
@@ -138788,7 +139025,7 @@ fqn
 caN
 dTo
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -139032,7 +139269,7 @@ lIK
 lIK
 lIK
 lIK
-mVO
+hYO
 xWe
 pny
 wtr
@@ -139089,7 +139326,7 @@ edD
 edD
 edD
 vfR
-gnA
+cfw
 jJY
 xbO
 xbO
@@ -139140,7 +139377,7 @@ fqn
 caN
 dTo
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -139384,7 +139621,7 @@ lIK
 lIK
 lIK
 lIK
-mVO
+hYO
 lxN
 lxN
 lxN
@@ -139441,18 +139678,18 @@ edD
 edD
 edD
 hLE
-tmC
-gnA
-gnA
-gnA
-gnA
-gnA
-gnA
-gnA
-gnA
-gnA
-gnA
-tmC
+ihi
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+wFg
+xoA
 dRQ
 iMQ
 nmW
@@ -139492,7 +139729,7 @@ fqn
 caN
 dTo
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -139736,7 +139973,7 @@ lIK
 lIK
 lIK
 lIK
-mVO
+hYO
 fNi
 lxN
 lxN
@@ -139844,7 +140081,7 @@ fqn
 caN
 dTo
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -140088,7 +140325,7 @@ lIK
 lIK
 lIK
 lIK
-mVO
+tmf
 mVO
 mVO
 mVO
@@ -140196,7 +140433,7 @@ fqn
 caN
 dTo
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -140548,7 +140785,7 @@ fqn
 caN
 dTo
 wuN
-opc
+thr
 lIK
 lIK
 lIK
@@ -140899,8 +141136,8 @@ pXV
 pXV
 pXV
 pXV
-opc
-opc
+giO
+exc
 lIK
 lIK
 lIK
@@ -144419,7 +144656,7 @@ jSw
 dFQ
 dFQ
 hbi
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -144771,7 +145008,7 @@ snE
 snE
 snE
 hbi
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -145123,7 +145360,7 @@ fZC
 eyi
 snE
 hbi
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -145475,7 +145712,7 @@ oAq
 jSw
 snE
 hbi
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -145765,10 +146002,10 @@ uje
 aYk
 pLW
 vQV
-vcQ
-vcQ
-vcQ
-vcQ
+wFg
+wFg
+wFg
+wFg
 dWi
 dWi
 vxH
@@ -145827,7 +146064,7 @@ oAq
 eyi
 snE
 hbi
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -146179,7 +146416,7 @@ oAq
 jSw
 snE
 hbi
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -146469,7 +146706,7 @@ uje
 aYk
 pLW
 vQV
-opc
+lFu
 qSc
 qSc
 qSc
@@ -146531,7 +146768,7 @@ oAq
 eyi
 snE
 hbi
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -146883,7 +147120,7 @@ oAq
 jSw
 snE
 hbi
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -147235,7 +147472,7 @@ oAq
 eyi
 snE
 hbi
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -147587,7 +147824,7 @@ oAq
 oAq
 eyi
 hbi
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -147935,11 +148172,11 @@ hkB
 wnC
 wnC
 hkB
-hbi
-hbi
-hbi
+epJ
+epJ
+epJ
 dBT
-hbi
+lIK
 lIK
 lIK
 lIK
@@ -148287,11 +148524,11 @@ hkB
 nNG
 urP
 hkB
-hbi
-hbi
-hbi
-hbi
-hbi
+lIK
+lIK
+lIK
+lIK
+lIK
 lIK
 lIK
 lIK
@@ -150359,8 +150596,8 @@ bje
 bcJ
 lIK
 lIK
-jyd
-jyd
+lIK
+pfZ
 gDf
 igR
 qLk
@@ -150711,8 +150948,8 @@ bje
 bcJ
 lIK
 lIK
-jyd
-jyd
+lIK
+pfZ
 auf
 auf
 noe
@@ -151063,8 +151300,8 @@ bje
 bcJ
 lIK
 lIK
-jyd
-jyd
+lIK
+pfZ
 faf
 qsw
 ido
@@ -151358,9 +151595,9 @@ lIK
 lIK
 lIK
 lIK
-pfZ
-snf
-vcQ
+lIK
+mAv
+wld
 wld
 wld
 wld
@@ -151415,8 +151652,8 @@ bje
 qCg
 lIK
 lIK
-jyd
-jyd
+lIK
+pfZ
 faf
 bCW
 auf
@@ -151451,8 +151688,8 @@ hML
 oTY
 hML
 jpK
-wbS
-wbS
+wXx
+lIK
 lIK
 lIK
 lIK
@@ -151710,9 +151947,9 @@ lIK
 lIK
 lIK
 lIK
-opc
-snf
-vcQ
+lIK
+mAv
+wld
 wld
 wld
 wld
@@ -151767,8 +152004,8 @@ bje
 bcJ
 lIK
 lIK
-jyd
-jyd
+lIK
+pfZ
 faf
 bCW
 auf
@@ -151803,8 +152040,8 @@ hML
 oTY
 hML
 hML
-wbS
-wbS
+wXx
+lIK
 lIK
 lIK
 lIK
@@ -152062,9 +152299,9 @@ lIK
 lIK
 lIK
 lIK
-opc
-snf
-vcQ
+lIK
+mAv
+wld
 wld
 wld
 wld
@@ -152119,8 +152356,8 @@ vJP
 niw
 lIK
 lIK
-jyd
-jyd
+lIK
+pfZ
 vzr
 bCW
 auf
@@ -152155,8 +152392,8 @@ hML
 oTY
 hML
 hML
-wbS
-wbS
+wXx
+lIK
 lIK
 lIK
 lIK
@@ -152414,9 +152651,9 @@ lIK
 lIK
 lIK
 lIK
-opc
-snf
-vcQ
+lIK
+mAv
+wld
 wld
 wld
 wld
@@ -152457,7 +152694,7 @@ lIK
 mhw
 xIq
 swZ
-xiD
+swZ
 swZ
 swZ
 swZ
@@ -152465,14 +152702,14 @@ bSN
 xJI
 xJI
 xJI
-wyQ
+xJI
 xJI
 fBx
-mhw
+xnL
 lIK
 lIK
-jyd
-jyd
+lIK
+pfZ
 auf
 sVP
 nmC
@@ -152507,8 +152744,8 @@ dzZ
 wvZ
 hML
 hML
-wbS
-wbS
+wXx
+lIK
 lIK
 lIK
 lIK
@@ -152766,9 +153003,9 @@ lIK
 lIK
 lIK
 lIK
-opc
-snf
-vcQ
+lIK
+mAv
+wld
 wld
 wld
 wld
@@ -152823,8 +153060,8 @@ lIK
 lIK
 lIK
 lIK
-jyd
-jyd
+lIK
+pfZ
 vzr
 rMl
 emj
@@ -152859,8 +153096,8 @@ hML
 hML
 hML
 hML
-wbS
-wbS
+wXx
+lIK
 lIK
 lIK
 lIK
@@ -153118,16 +153355,16 @@ lIK
 lIK
 lIK
 lIK
-opc
-snf
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
+lIK
+mAv
+wld
+wld
+wld
+wld
+wld
+wld
+wld
+wld
 hhB
 jlj
 cHX
@@ -153140,8 +153377,7 @@ vcQ
 wld
 wld
 wld
-vcQ
-opc
+mAv
 lIK
 lIK
 lIK
@@ -153175,17 +153411,18 @@ lIK
 lIK
 lIK
 lIK
-jyd
-sSo
-jyd
-jyd
-jyd
-jyd
-jyd
-jyd
-jyd
-jyd
-jyd
+lIK
+lIK
+fUZ
+uMh
+uMh
+uMh
+uMh
+uMh
+uMh
+uMh
+uMh
+uMh
 jsN
 hXG
 pPM
@@ -153211,8 +153448,8 @@ hML
 hML
 hML
 hML
-wbS
-wbS
+wXx
+lIK
 lIK
 lIK
 lIK
@@ -153470,30 +153707,30 @@ lIK
 lIK
 lIK
 lIK
-opc
-snf
-snf
-snf
-snf
-snf
-snf
-snf
-snf
-snf
-aOh
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
-vcQ
+lIK
+lke
+pTP
+pTP
+pTP
+pTP
+pTP
+pTP
+pTP
+pTP
+lFu
+pTP
+pTP
+pTP
+pTP
+pTP
+pTP
+pTP
 eoa
-vcQ
-vcQ
-vcQ
-eoa
-opc
+pTP
+pTP
+pTP
+rNJ
+lIK
 lIK
 lIK
 lIK
@@ -153527,17 +153764,17 @@ lIK
 lIK
 ngi
 lIK
-jyd
-jyd
-jyd
-jyd
-jyd
-jyd
-jyd
-jyd
-jyd
-jyd
-jyd
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
 jsN
 bOz
 jEj
@@ -153563,8 +153800,8 @@ hML
 hML
 hML
 hML
-wbS
-wbS
+wXx
+lIK
 lIK
 lIK
 lIK
@@ -153822,30 +154059,30 @@ lIK
 lIK
 lIK
 lIK
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
-opc
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
 lIK
 lIK
 lIK
@@ -153916,7 +154153,7 @@ wbS
 wbS
 wbS
 rRT
-wbS
+lIK
 lIK
 lIK
 lIK
@@ -154256,19 +154493,19 @@ jsN
 jsN
 jsN
 sSo
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
-wbS
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
+lIK
 lIK
 lIK
 lIK
@@ -178694,15 +178931,15 @@ rnF
 rnF
 rnF
 tcp
-dFK
-dFK
-dFK
-dFK
-dFK
+hMw
+hMw
+hMw
+hMw
+hMw
 bRe
 bRe
-dFK
-dFK
+hMw
+hMw
 tcp
 gVx
 gVx
@@ -181158,8 +181395,8 @@ rnF
 rnF
 rnF
 tcp
-dFK
-dFK
+iBf
+iBf
 dhZ
 ext
 dhZ
@@ -336209,7 +336446,7 @@ sZD
 aSV
 aSV
 sZD
-sZD
+opR
 gID
 cAk
 cAk
@@ -336561,8 +336798,8 @@ qnj
 aSV
 tjY
 qEF
-qEF
-qEF
+qnj
+qnj
 kOW
 sJM
 sJM
@@ -443892,65 +444129,65 @@ fvU
 fvU
 fvU
 fvU
-oij
-vav
-vav
-vav
-vav
-vav
-vav
-wWI
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-wWI
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-wWI
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-oij
+tBv
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+wha
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+wha
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+wha
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+pBL
+wha
 fvU
 fvU
 way
@@ -461874,35 +462111,35 @@ oYX
 epp
 hfS
 epp
-vav
-vav
-vav
-wWI
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-wWI
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-vav
-wWI
-vav
-vav
-vav
-vav
-vav
-oij
+ucA
+ucA
+ucA
+epD
+ucA
+ucA
+ucA
+ucA
+ucA
+ucA
+ucA
+ucA
+ucA
+epD
+ucA
+ucA
+ucA
+ucA
+ucA
+ucA
+ucA
+ucA
+epD
+ucA
+ucA
+ucA
+ucA
+ucA
+epD
 fvU
 fvU
 fvU

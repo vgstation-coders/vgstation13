@@ -53038,6 +53038,7 @@
 /area/centcom/holding)
 "dwc" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dwo" = (
@@ -59714,6 +59715,13 @@
 	icon_state = "escape"
 	},
 /area/hallway/primary/aft)
+"emC" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "emD" = (
 /obj/machinery/light{
 	dir = 8
@@ -75807,6 +75815,10 @@
 	},
 /turf/simulated/floor,
 /area/engineering/engine)
+"iPL" = (
+/obj/structure/fence/north,
+/turf/unsimulated/floor/snow/asphalt,
+/area/surface/snow)
 "iPS" = (
 /obj/machinery/computer/forensic_scanning,
 /obj/item/weapon/book/manual/detective,
@@ -87627,6 +87639,10 @@
 	icon_state = "grimy"
 	},
 /area/djstation)
+"naZ" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/snow/asphalt,
+/area/surface/snow)
 "nbc" = (
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -89111,6 +89127,13 @@
 	},
 /turf/simulated/floor,
 /area/engineering/supermatter_room)
+"nGk" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/snow/asphalt,
+/area/surface/snow)
 "nGm" = (
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -90239,6 +90262,10 @@
 	},
 /turf/simulated/floor/engine/vacuum,
 /area/derelict/atmos)
+"occ" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/snow/asphalt,
+/area/surface/snow)
 "ocg" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/visible{
 	color = "#FFA800";
@@ -104686,6 +104713,13 @@
 	},
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
+"tiU" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/structure/fence/west,
+/turf/unsimulated/floor/snow/asphalt,
+/area/surface/snow)
 "tjH" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -230712,7 +230746,7 @@ opK
 ffP
 jZx
 bbN
-sNM
+nGk
 lSf
 tIR
 bLD
@@ -230720,9 +230754,9 @@ ggj
 ewa
 tIR
 lSf
-sNM
-sNM
-sNM
+nGk
+nGk
+nGk
 orp
 bZp
 bZp
@@ -231328,7 +231362,7 @@ tkh
 tkh
 tkh
 ftD
-sNM
+evt
 bZp
 bZp
 bZp
@@ -231630,7 +231664,7 @@ tkh
 tkh
 tkh
 tkh
-sNM
+evt
 bZp
 bZp
 bZp
@@ -231932,7 +231966,7 @@ tkh
 tkh
 tkh
 tkh
-sNM
+evt
 bZp
 bZp
 bZp
@@ -232234,7 +232268,7 @@ tkh
 tkh
 tkh
 tkh
-sNM
+evt
 bZp
 bZp
 bZp
@@ -232536,7 +232570,7 @@ tkh
 tkh
 tkh
 nNx
-sNM
+evt
 bZp
 bZp
 bZp
@@ -233128,8 +233162,8 @@ xkk
 xkk
 bKl
 aeX
-sNM
-sNM
+tiU
+tiU
 sFn
 wfl
 pit
@@ -233137,17 +233171,17 @@ uIJ
 uVp
 sWg
 toP
-sNM
-sNM
+occ
+occ
 orp
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
 orp
 bZp
 bZp
@@ -233450,7 +233484,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -233752,7 +233786,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -234054,7 +234088,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -234356,7 +234390,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -234658,7 +234692,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -234960,7 +234994,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -235262,7 +235296,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -235564,7 +235598,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -235866,7 +235900,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -236168,7 +236202,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -236470,7 +236504,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -236772,7 +236806,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -237074,7 +237108,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -237376,7 +237410,7 @@ aZi
 wNd
 wNd
 wNd
-evt
+iPL
 bZp
 bZp
 bZp
@@ -247224,27 +247258,27 @@ aSu
 aSu
 aSu
 orp
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
+occ
 cuM
 cvY
 cxj
@@ -260868,8 +260902,8 @@ wNd
 wNd
 wNd
 orp
-evt
-evt
+naZ
+naZ
 bck
 aZW
 bag
@@ -261169,7 +261203,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 ePD
 eUz
 fjQ
@@ -261471,7 +261505,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 eQs
 aZi
 bck
@@ -261773,7 +261807,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 eQs
 aZi
 bck
@@ -262075,7 +262109,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 eQs
 aZi
 brz
@@ -262377,7 +262411,7 @@ wNd
 wNd
 wNd
 wNd
-evt
+iPL
 eQs
 aZi
 aZi
@@ -262626,59 +262660,59 @@ bZp
 bZp
 bZp
 orp
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
-evt
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
+naZ
 orp
 eQs
 aZi
@@ -329890,7 +329924,7 @@ dtV
 duc
 duc
 dtV
-dtV
+emC
 dwc
 dxl
 dxl
@@ -330192,8 +330226,8 @@ dtX
 duc
 dvb
 dvn
-dvn
-dvn
+dtX
+dtX
 dxm
 dxH
 dxH

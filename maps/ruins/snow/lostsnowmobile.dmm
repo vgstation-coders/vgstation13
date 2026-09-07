@@ -1,4 +1,13 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"f" = (
+/obj/structure/sign/parking,
+/turf/simulated/wall/mineral/wood,
+/area/exposed_ruin)
+"q" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/snow/asphalt,
+/area/exposed_ruin)
 "z" = (
 /obj/structure/hanging_lantern{
 	dir = 1
@@ -6,9 +15,8 @@
 /turf/unsimulated/floor/snow/asphalt,
 /area/exposed_ruin)
 "F" = (
-/obj/structure/sign/parking,
-/turf/simulated/wall/mineral/wood,
-/area/ruin)
+/turf/template_noop,
+/area/exposed_ruin)
 "J" = (
 /obj/structure/fence,
 /turf/template_noop,
@@ -20,21 +28,27 @@
 /obj/structure/bed/chair/vehicle/snowmobile/universal{
 	dir = 4
 	},
+/obj/structure/fence/north,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/snow/asphalt,
+/area/exposed_ruin)
+"O" = (
+/obj/structure/fence,
 /turf/unsimulated/floor/snow/asphalt,
 /area/exposed_ruin)
 
 (1,1,1) = {"
 F
-z
+F
 J
 "}
 (2,1,1) = {"
-J
-L
-J
+f
+z
+O
 "}
 (3,1,1) = {"
-J
-J
-J
+F
+L
+q
 "}

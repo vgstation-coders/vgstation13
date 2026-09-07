@@ -1376,8 +1376,8 @@
 	},
 /area/holodeck/source_chess)
 "ee" = (
-/obj/structure/fence,
-/obj/structure/fence,
+/obj/structure/fence/north,
+/obj/structure/fence/east,
 /turf/simulated/floor/holofloor/grass,
 /area/holodeck/source_zoo)
 "ef" = (
@@ -2291,12 +2291,10 @@
 	},
 /area/holodeck/source_library)
 "gQ" = (
-/obj/structure/fence,
-/turf/simulated/floor/holofloor{
-	dir = 4;
-	icon_state = "asteroid2"
-	},
-/area/holodeck/source_medieval)
+/obj/structure/fence/door/north,
+/obj/structure/fence/north,
+/turf/simulated/floor/holofloor/grass,
+/area/holodeck/source_zoo)
 "gR" = (
 /obj/structure/fence,
 /turf/simulated/floor/holofloor{
@@ -2321,15 +2319,10 @@
 /turf/simulated/floor/holofloor,
 /area/holodeck/source_catnip)
 "gW" = (
-/obj/structure/fence{
-	dir = 4;
-	density = 0;
-	desc = "It's a pole.";
-	name = "pole"
-	},
 /obj/structure/window/reinforced/holo{
 	dir = 1
 	},
+/obj/structure/fence/west,
 /turf/simulated/floor/holofloor,
 /area/holodeck/source_catnip)
 "gX" = (
@@ -2506,6 +2499,8 @@
 /obj/structure/table/holotable/wood,
 /obj/item/clothing/suit/armor/knight/red,
 /obj/item/clothing/head/helmet/knight/red,
+/obj/structure/fence/north,
+/obj/structure/fence/west,
 /turf/simulated/floor/holofloor{
 	icon_state = "asteroid"
 	},
@@ -2518,6 +2513,7 @@
 /obj/item/weapon/claymore{
 	pixel_x = 5
 	},
+/obj/structure/fence/north,
 /turf/simulated/floor/holofloor{
 	icon_state = "grass1";
 	name = "Holodeck Projector Floor"
@@ -2527,6 +2523,7 @@
 /obj/structure/table/holotable/wood,
 /obj/item/weapon/melee/morningstar,
 /obj/item/weapon/shield/riot/buckler,
+/obj/structure/fence/north,
 /turf/simulated/floor/holofloor{
 	icon_state = "grass1";
 	name = "Holodeck Projector Floor"
@@ -2536,6 +2533,8 @@
 /obj/structure/table/holotable/wood,
 /obj/item/clothing/suit/armor/knight/blue,
 /obj/item/clothing/head/helmet/knight/blue,
+/obj/structure/fence/north,
+/obj/structure/fence/east,
 /turf/simulated/floor/holofloor{
 	icon_state = "grass1";
 	name = "Holodeck Projector Floor"
@@ -2548,16 +2547,11 @@
 /turf/simulated/floor/holofloor,
 /area/holodeck/source_catnip)
 "hE" = (
-/obj/structure/fence{
-	dir = 4;
-	density = 0;
-	desc = "It's a pole.";
-	name = "pole"
-	},
 /mob/living/simple_animal/hologram/tajaran_dancer{
 	canmove = 0;
 	dir = 4
 	},
+/obj/structure/fence/east,
 /turf/simulated/floor/holofloor,
 /area/holodeck/source_catnip)
 "hF" = (
@@ -2570,29 +2564,20 @@
 /area/holodeck/source_catnip)
 "hH" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/fence{
-	dir = 4;
-	density = 0;
-	desc = "It's a pole.";
-	name = "pole"
-	},
 /mob/living/simple_animal/hologram/tajaran_dancer{
 	canmove = 0;
 	dir = 1
 	},
+/obj/structure/fence/west,
+/obj/structure/fence/east,
 /turf/simulated/floor/holofloor,
 /area/holodeck/source_catnip)
 "hI" = (
-/obj/structure/fence{
-	dir = 4;
-	density = 0;
-	desc = "It's a pole.";
-	name = "pole"
-	},
 /mob/living/simple_animal/hologram/tajaran_dancer{
 	canmove = 0;
 	dir = 8
 	},
+/obj/structure/fence/west,
 /turf/simulated/floor/holofloor,
 /area/holodeck/source_catnip)
 "hJ" = (
@@ -2670,7 +2655,7 @@
 	},
 /area/holodeck/source_boxingcourt)
 "hU" = (
-/obj/structure/fence,
+/obj/structure/fence/east,
 /turf/simulated/floor/holofloor{
 	icon_state = "asteroid"
 	},
@@ -2790,6 +2775,7 @@
 /area/holodeck/source_ragecage)
 "ir" = (
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/fence/west,
 /turf/simulated/floor/holofloor{
 	icon_state = "asteroid"
 	},
@@ -3028,6 +3014,8 @@
 /obj/structure/table/holotable/wood,
 /obj/item/clothing/suit/armor/knight,
 /obj/item/clothing/head/helmet/knight,
+/obj/structure/fence,
+/obj/structure/fence/west,
 /turf/simulated/floor/holofloor{
 	icon_state = "asteroid"
 	},
@@ -3036,6 +3024,7 @@
 /obj/structure/table/holotable/wood,
 /obj/item/weapon/spear/wooden,
 /obj/item/weapon/legcuffs/bolas,
+/obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	icon_state = "grass1";
 	name = "Holodeck Projector Floor"
@@ -3063,6 +3052,7 @@
 	pixel_x = -4;
 	pixel_y = 4
 	},
+/obj/structure/fence,
 /turf/simulated/floor/holofloor{
 	icon_state = "asteroid"
 	},
@@ -3071,20 +3061,17 @@
 /obj/structure/table/holotable/wood,
 /obj/item/clothing/suit/armor/knight/yellow,
 /obj/item/clothing/head/helmet/knight/yellow,
+/obj/structure/fence,
+/obj/structure/fence/east,
 /turf/simulated/floor/holofloor{
 	icon_state = "asteroid"
 	},
 /area/holodeck/source_medieval)
 "ji" = (
-/obj/structure/fence{
-	dir = 4;
-	density = 0;
-	desc = "It's a pole.";
-	name = "pole"
-	},
 /mob/living/simple_animal/hologram/tajaran_dancer{
 	canmove = 0
 	},
+/obj/structure/fence/east,
 /turf/simulated/floor/holofloor,
 /area/holodeck/source_catnip)
 "jj" = (
@@ -3362,6 +3349,75 @@
 	icon_state = "iron12"
 	},
 /area)
+"oM" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/simulated/floor/holofloor/grass,
+/area/holodeck/source_zoo)
+"xo" = (
+/obj/structure/window/reinforced/holo{
+	dir = 1
+	},
+/obj/structure/fence/west,
+/obj/structure/fence/east,
+/turf/simulated/floor/holofloor,
+/area/holodeck/source_catnip)
+"yA" = (
+/obj/structure/fence/door/north,
+/turf/simulated/floor/holofloor{
+	icon_state = "grass1";
+	name = "Holodeck Projector Floor"
+	},
+/area/holodeck/source_medieval)
+"DC" = (
+/obj/structure/fence/west,
+/turf/simulated/floor/holofloor{
+	icon_state = "asteroid"
+	},
+/area/holodeck/source_medieval)
+"DD" = (
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/fence,
+/turf/simulated/floor/holofloor{
+	icon_state = "grass1";
+	name = "Holodeck Projector Floor"
+	},
+/area/holodeck/source_medieval)
+"Er" = (
+/obj/structure/fence/east,
+/turf/simulated/floor/holofloor/grass,
+/area/holodeck/source_zoo)
+"Gf" = (
+/obj/structure/window/reinforced/holo{
+	dir = 1
+	},
+/obj/structure/fence/east,
+/turf/simulated/floor/holofloor,
+/area/holodeck/source_catnip)
+"Ir" = (
+/obj/structure/fence/north,
+/turf/simulated/floor/holofloor{
+	icon_state = "grass1";
+	name = "Holodeck Projector Floor"
+	},
+/area/holodeck/source_medieval)
+"NW" = (
+/obj/structure/fence/north,
+/turf/simulated/floor/holofloor{
+	icon_state = "asteroid"
+	},
+/area/holodeck/source_medieval)
+"Rt" = (
+/mob/living/simple_animal/hologram/tajaran_dancer{
+	canmove = 0
+	},
+/obj/structure/fence/west,
+/turf/simulated/floor/holofloor,
+/area/holodeck/source_catnip)
+"Vo" = (
+/obj/structure/fence/north,
+/turf/simulated/floor/holofloor/grass,
+/area/holodeck/source_zoo)
 
 (1,1,1) = {"
 aa
@@ -6397,7 +6453,7 @@ cm
 aK
 aG
 cm
-aJ
+Vo
 eB
 eZ
 fc
@@ -6422,7 +6478,7 @@ cm
 aG
 aG
 cm
-aJ
+Vo
 eB
 eC
 fc
@@ -6447,7 +6503,7 @@ cm
 cm
 cm
 cm
-bO
+gQ
 eB
 eB
 fc
@@ -6472,7 +6528,7 @@ cm
 bq
 aG
 cm
-aJ
+Vo
 eC
 eB
 fc
@@ -6497,7 +6553,7 @@ cm
 aG
 aG
 cm
-aJ
+Vo
 eB
 eB
 fc
@@ -6515,16 +6571,16 @@ jT
 "}
 (127,1,1) = {"
 ab
-aJ
-aJ
-aJ
+Er
+Er
+oM
 cm
 aG
 aG
 cm
 ee
-aJ
-aJ
+Er
+Er
 fc
 fM
 gE
@@ -6547,7 +6603,7 @@ cm
 aG
 aG
 cm
-aJ
+Vo
 bq
 eD
 fc
@@ -6572,7 +6628,7 @@ cm
 aG
 aK
 cm
-aJ
+Vo
 aG
 aG
 fc
@@ -6597,7 +6653,7 @@ cm
 cm
 cm
 cm
-bO
+gQ
 aG
 bp
 fc
@@ -6622,7 +6678,7 @@ cm
 cN
 aG
 cm
-aJ
+Vo
 eD
 aG
 fc
@@ -6647,7 +6703,7 @@ cm
 aG
 aG
 cm
-aJ
+Vo
 aG
 fa
 fc
@@ -7027,14 +7083,14 @@ aQ
 aQ
 fc
 fV
-gR
-gR
-gR
-hU
-hU
-gR
-hU
-gR
+fU
+fU
+fU
+fV
+fV
+fU
+fV
+fU
 fU
 fc
 "}
@@ -7052,14 +7108,14 @@ aQ
 aQ
 fc
 fU
-gQ
+iK
 hz
-fV
+DC
 ir
-fV
-fV
+DC
+DC
 je
-hU
+fV
 fU
 fc
 "}
@@ -7077,14 +7133,14 @@ aQ
 aQ
 fc
 fW
-gR
+fU
 hA
 fV
 fV
 fV
 iU
 jf
-gR
+fU
 fX
 fc
 "}
@@ -7102,14 +7158,14 @@ ef
 aQ
 fc
 fU
-gR
 fU
+Ir
 fV
 fV
 fV
 fV
-fX
-gR
+DD
+fU
 fU
 fc
 "}
@@ -7127,14 +7183,14 @@ aQ
 aQ
 fc
 fU
-gS
 fU
+yA
 fV
 is
 fV
 fV
-fU
 gS
+fU
 fU
 fc
 "}
@@ -7152,14 +7208,14 @@ bs
 aQ
 fc
 fU
-hU
+fV
+NW
 fV
 fV
 fV
 fV
-fV
-fU
 gR
+fU
 fV
 fc
 "}
@@ -7177,14 +7233,14 @@ bs
 aQ
 fc
 fU
-gR
+fU
 hB
 fU
 fV
 fV
 fV
 jg
-gR
+fU
 fU
 fc
 "}
@@ -7202,14 +7258,14 @@ bs
 aQ
 fc
 fU
-gR
+fU
 hC
-fV
-fV
-fV
-fV
+hU
+hU
+hU
+hU
 jh
-gR
+fU
 fU
 fc
 "}
@@ -7227,14 +7283,14 @@ aQ
 aQ
 fc
 fU
-gR
-gR
-hU
-hU
-hU
-hU
-gR
-hU
+fU
+fU
+fV
+fV
+fV
+fV
+fU
+fV
 fU
 fc
 "}
@@ -7352,12 +7408,12 @@ eH
 aR
 ab
 ga
-gW
+Gf
 hE
 hG
 iu
 fY
-gW
+Gf
 ji
 hW
 fY
@@ -7427,7 +7483,7 @@ eK
 aR
 ab
 ga
-gW
+xo
 hH
 hW
 fY
@@ -7508,7 +7564,7 @@ hG
 iu
 iL
 gW
-ji
+Rt
 hW
 fY
 fc

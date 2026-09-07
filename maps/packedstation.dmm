@@ -55481,6 +55481,7 @@
 /area/centcom/holding)
 "bYA" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "bYB" = (
@@ -71873,6 +71874,13 @@
 	icon_state = "whiteblue"
 	},
 /area/medical/medbay)
+"sgm" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "snu" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
@@ -378766,7 +378774,7 @@ bWP
 bWY
 bWY
 bWP
-bWP
+sgm
 bYA
 bYO
 bYO
@@ -379268,8 +379276,8 @@ bWU
 bWY
 bXX
 bYd
-bYd
-bYd
+bWU
+bWU
 bYN
 bYY
 bYY

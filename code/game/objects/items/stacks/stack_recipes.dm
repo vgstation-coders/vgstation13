@@ -43,6 +43,17 @@
 		return 0
 	return 1
 
+/datum/stack_recipe/border/can_build_here(var/mob/user, var/turf/T)
+	if(one_per_turf)
+		for(var/atom/movable/AM in T)
+			if(istype(AM,result_type) && AM.dir == user.dir)
+				to_chat(user, "<span class='warning'>There is another [title] here!</span>")
+				return 0
+	if(on_floor && (istype(T, /turf/space)))
+		to_chat(user, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
+		return 0
+	return 1
+
 /datum/stack_recipe/proc/finish_building(var/mob/user, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
 	return R
 
@@ -478,11 +489,11 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("Tank dispenser",				/obj/structure/dispenser/empty,						2,	time = 10,	one_per_turf = 1				),
 	new/datum/stack_recipe("Fireaxe cabinet",				/obj/item/mounted/frame/fireaxe_cabinet_frame,		2,	time = 50									),
 	null,
-	new/datum/stack_recipe("fence", /obj/structure/fence, 2, time = 50, one_per_turf = 1),
-	new/datum/stack_recipe("fence post", /obj/structure/fence/post, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe/border("fence", /obj/structure/fence, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe/border("fence post", /obj/structure/fence/post, 2, time = 50, one_per_turf = 1),
 	null,
-	new/datum/stack_recipe("fence door", /obj/structure/fence/door, 2, time = 50, one_per_turf = 1),
-	new/datum/stack_recipe("secure fence door", /obj/structure/fence/door/secure, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe/border("fence door", /obj/structure/fence/door, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe/border("secure fence door", /obj/structure/fence/door/secure, 2, time = 50, one_per_turf = 1),
 	null,
 	new/datum/stack_recipe("lockless lockbox", /obj/item/weapon/storage/lockbox/nolock, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
 	null,

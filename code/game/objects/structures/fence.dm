@@ -20,13 +20,24 @@
 	pass_flags_self = PASSGRILLE
 	icon = 'icons/obj/structures/fence.dmi'
 	icon_state = "straight0"
-	var/uncut_state = "straight"
+	plane = ABOVE_HUMAN_PLANE
+	layer = FENCE_FRONT_LAYER
+	flow_flags = ON_BORDER
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
+	rotate_type = /obj/structure/fence
 	sheet_type = /obj/item/stack/sheet/plasteel
 	sheet_amt = 2
 
+	var/uncut_state = "straight"
 	var/cut_time = 100
 	var/cuttable = TRUE
-	var/hole_size= NO_HOLE
+	var/hole_size = NO_HOLE
+
+/obj/structure/fence/New(loc)
+	..(loc)
+	setup_border_dummy()
+	update_dir()
 
 /obj/structure/fence/examine(mob/user)
 	.=..()
@@ -48,48 +59,145 @@
 	)
 	return smoothables
 
+/obj/structure/fence/cannotSmoothWith()
+	var/static/list/smoothables = list(
+		/obj/machinery/door/window,
+		/obj/machinery/door/firedoor,
+	)
+	return smoothables
+
 /obj/structure/fence/isSmoothableNeighbor(atom/A, bordercheck)
-	if(A.flow_flags & ON_BORDER) //just being sure
+	if(dir == NORTH && !(A.flow_flags & ON_BORDER)) // keep it to just other fences if facing this way, looks bad otherwise
 		return FALSE
 	. = ..()
 
 /obj/structure/fence/relativewall()
 	. = ..()
-	update_junction()
+	overlays.len = 0
+	if(dir == NORTH || dir == SOUTH)
+		if(!(junction & EAST))
+			var/image/I = image(icon,loc,"end",pixel_x = 14)
+			overlays += I
+		if(!(junction & WEST))
+			var/image/I = image(icon,loc,"end",pixel_x = -14)
+			overlays += I
+	else if(dir == EAST || dir == WEST)
+		if(!(junction & NORTH))
+			var/image/I = image(icon,loc,"end",pixel_y = 30)
+			overlays += I
 
 /obj/structure/fence/change_dir(new_dir, changer)
 	. = ..()
 	relativewall()
 
-/obj/structure/fence/proc/update_junction()
-	uncut_state = initial(uncut_state)
-	switch(junction)
-		if(NORTH|SOUTH,NORTH|SOUTH|EAST,NORTH|SOUTH|WEST)
-			dir = WEST
-		if(EAST|WEST,NORTH|EAST|WEST,SOUTH|EAST|WEST)
-			dir = NORTH
-		if(NORTH,SOUTH,EAST,WEST,NORTH|EAST,SOUTH|EAST,NORTH|WEST,SOUTH|WEST)
-			uncut_state = "endcorner"
-			dir = junction
-	update_cut_status()
+/obj/structure/fence/update_dir()
+	..()
+	switch(dir)
+		if(1)
+			pixel_x = 0
+			pixel_y = 30
+			layer = FENCE_BACK_LAYER
+		if(2)
+			pixel_x = 0
+			pixel_y = 0
+			layer = FENCE_FRONT_LAYER
+		if(4)
+			pixel_x = 14
+			pixel_y = 0
+			layer = FENCE_MID_LAYER
+		if(8)
+			pixel_x = -14
+			pixel_y = 0
+			layer = FENCE_MID_LAYER
+
+/obj/structure/fence/north
+	dir = NORTH
+	pixel_y = 30
+	layer = FENCE_BACK_LAYER
+
+/obj/structure/fence/east
+	dir = EAST
+	pixel_x = 14
+	layer = FENCE_MID_LAYER
+
+/obj/structure/fence/west
+	dir = WEST
+	pixel_x = -14
+	layer = FENCE_MID_LAYER
 
 /obj/structure/fence/post
 	icon_state = "post0"
 	uncut_state = "post"
 	cuttable = FALSE
 
-/obj/structure/fence/corner
-	icon_state = "endcorner0"
-	uncut_state = "endcorner"
+/obj/structure/fence/post/north
+	dir = NORTH
+	pixel_y = 30
+	layer = FENCE_BACK_LAYER
+
+/obj/structure/fence/post/east
+	dir = EAST
+	pixel_x = 14
+	layer = FENCE_MID_LAYER
+
+/obj/structure/fence/post/west
+	dir = WEST
+	pixel_x = -14
+	layer = FENCE_MID_LAYER
 
 /obj/structure/fence/cut/small
 	hole_size = SMALL_HOLE
 
+/obj/structure/fence/cut/small/north
+	dir = NORTH
+	pixel_y = 30
+	layer = FENCE_BACK_LAYER
+
+/obj/structure/fence/cut/small/east
+	dir = EAST
+	pixel_x = 14
+	layer = FENCE_MID_LAYER
+
+/obj/structure/fence/cut/small/west
+	dir = WEST
+	pixel_x = -14
+	layer = FENCE_MID_LAYER
+
 /obj/structure/fence/cut/medium
 	hole_size = MEDIUM_HOLE
 
+/obj/structure/fence/cut/medium/north
+	dir = NORTH
+	pixel_y = 30
+	layer = FENCE_BACK_LAYER
+
+/obj/structure/fence/cut/medium/east
+	dir = EAST
+	pixel_x = 14
+	layer = FENCE_MID_LAYER
+
+/obj/structure/fence/cut/medium/west
+	dir = WEST
+	pixel_x = -14
+	layer = FENCE_MID_LAYER
+
 /obj/structure/fence/cut/large
 	hole_size = LARGE_HOLE
+
+/obj/structure/fence/cut/large/north
+	dir = NORTH
+	pixel_y = 30
+	layer = FENCE_BACK_LAYER
+
+/obj/structure/fence/cut/large/east
+	dir = EAST
+	pixel_x = 14
+	layer = FENCE_MID_LAYER
+
+/obj/structure/fence/cut/large/west
+	dir = WEST
+	pixel_x = -14
+	layer = FENCE_MID_LAYER
 
 /obj/structure/fence/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/weapon/pickaxe/drill))
@@ -146,7 +254,10 @@
 			return
 
 	if(hole_size >= SMALL_HOLE)
-		if(user.drop_item(W, get_turf(src)))
+		var/turf/drop = get_turf(src)
+		if(get_turf(user) == drop)
+			drop = get_step(src,dir)
+		if(user.drop_item(W, drop))
 			return
 
 	. = ..()
@@ -196,7 +307,10 @@
 		"<span class='info'>You start climbing through \the [src]. This will take about [CLIMB_TIME / 10] seconds.</span>")
 
 		if(do_after(user, src, CLIMB_TIME) && !shock(user, 70)) //70% chance to get shocked
-			user.forceMove(get_turf(src)) //Could be exploitable as it doesn't check for any other dense objects on the turf. Fix when fences are buildable!
+			var/turf/T = get_turf(src)
+			if(get_turf(user) == T)
+				T = get_step(src,dir)
+			user.forceMove(T) //Could be exploitable as it doesn't check for any other dense objects on the turf. Fix when fences are buildable!
 			user.visible_message("<span class='danger'>\The [user] climbs through \the [src]!</span>")
 
 	return 1
@@ -213,6 +327,13 @@
 		setDensity(FALSE)
 
 	cut_time = hole_size < LARGE_HOLE ? initial(cut_time) : 0
+
+/obj/structure/fence/setDensity(density) //hotfix
+	. = ..()
+	if(density)
+		setup_border_dummy()
+	else
+		remove_border_dummy()
 
 /obj/structure/fence/proc/dismantle(mob/user)
 	drop_stack(sheet_type,get_turf(src),sheet_amt,user)
@@ -233,7 +354,7 @@
 			var/obj/item/projectile/projectile = mover
 			return prob(projectile.grillepasschance) //Fairly hit chance
 		else
-			return !density
+			return bounds_dist(border_dummy, mover) >= 0
 
 //Mostly copied from grille.dm
 /obj/structure/fence/proc/shock(mob/user, prb = 100, siemens_coefficient = 1)
@@ -281,20 +402,44 @@
 	var/open = FALSE
 	var/inverted = FALSE //for relativewalling
 
+/obj/structure/fence/door/north
+	dir = NORTH
+	pixel_y = 30
+	layer = FENCE_BACK_LAYER
+
+/obj/structure/fence/door/east
+	dir = EAST
+	pixel_x = 14
+	layer = FENCE_MID_LAYER
+
+/obj/structure/fence/door/west
+	dir = WEST
+	pixel_x = -14
+	layer = FENCE_MID_LAYER
+
 /obj/structure/fence/door/New()
 	..()
 	set_up_access()
 	update_door_status()
 
-/obj/structure/fence/door/update_junction()
-	if((junction & NORTH) || (junction & SOUTH))
-		dir = inverted ? EAST : WEST
-	if((junction & EAST) || (junction & WEST))
-		dir = inverted ? SOUTH : NORTH
-
 /obj/structure/fence/door/opened
 	icon_state = "door_opened"
 	open = TRUE
+
+/obj/structure/fence/door/opened/north
+	dir = NORTH
+	pixel_y = 30
+	layer = FENCE_BACK_LAYER
+
+/obj/structure/fence/door/opened/east
+	dir = EAST
+	pixel_x = 14
+	layer = FENCE_MID_LAYER
+
+/obj/structure/fence/door/opened/west
+	dir = WEST
+	pixel_x = -14
+	layer = FENCE_MID_LAYER
 
 /obj/structure/fence/door/emag_act(mob/user)
 	if(!emagged)
@@ -343,8 +488,38 @@
 	name = "secure fence door"
 	desc = "A fence door with a door latch. It can only be opened and closed from one direction."
 
+/obj/structure/fence/door/secure/north
+	dir = NORTH
+	pixel_y = 30
+	layer = FENCE_BACK_LAYER
+
+/obj/structure/fence/door/secure/east
+	dir = EAST
+	pixel_x = 14
+	layer = FENCE_MID_LAYER
+
+/obj/structure/fence/door/secure/west
+	dir = WEST
+	pixel_x = -14
+	layer = FENCE_MID_LAYER
+
 /obj/structure/fence/door/secure/inverted
 	inverted = TRUE
+
+/obj/structure/fence/door/secure/inverted/north
+	dir = NORTH
+	pixel_y = 30
+	layer = FENCE_BACK_LAYER
+
+/obj/structure/fence/door/secure/inverted/east
+	dir = EAST
+	pixel_x = 14
+	layer = FENCE_MID_LAYER
+
+/obj/structure/fence/door/secure/inverted/west
+	dir = WEST
+	pixel_x = -14
+	layer = FENCE_MID_LAYER
 
 /obj/structure/fence/door/secure/can_open(mob/user)
 	//User must be standing in the permitted direction from the door, or must have telekinesis

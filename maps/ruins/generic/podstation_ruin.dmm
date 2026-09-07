@@ -240,6 +240,10 @@
 /obj/structure/fence/door,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
+"ed" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/exposed_ruin)
 "ev" = (
 /mob/living/simple_animal/hostile/bigroach,
 /obj/machinery/atmospherics/unary/vent_scrubber/on/layered{
@@ -1441,6 +1445,11 @@
 	icon_state = "asteroidwarning"
 	},
 /area/exposed_ruin)
+"Gi" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/exposed_ruin)
 "Gz" = (
 /obj/structure/rack,
 /obj/item/weapon/storage/belt/utility/full,
@@ -2242,8 +2251,8 @@ pU
 TV
 TV
 Np
-Np
-Np
+ed
+Gi
 TV
 pU
 pU
@@ -2293,9 +2302,9 @@ TV
 En
 Kk
 Yx
-Np
-Np
-Np
+Yx
+ed
+Gi
 TV
 pU
 pU

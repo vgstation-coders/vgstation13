@@ -93668,6 +93668,7 @@
 /area/centcom/holding)
 "dBz" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dBA" = (
@@ -111120,6 +111121,13 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint2)
+"ryW" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "rAl" = (
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 10
@@ -418363,7 +418371,7 @@ dAb
 dAk
 dAk
 dAb
-dAb
+ryW
 dBz
 dBN
 dBN
@@ -418865,8 +418873,8 @@ dAg
 dAk
 dAW
 dBm
-dBm
-dBm
+dAg
+dAg
 dBM
 dBV
 dBV
