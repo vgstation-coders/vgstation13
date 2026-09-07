@@ -41,6 +41,8 @@ var/const/NUKE_WIRE_ACTIVATE = 16
 				A.anchored = FALSE
 		if(NUKE_WIRE_DELAY)
 			A.timeleft += 10
+			A.visible_message("<span class='notice'>[A]'s clock ticks forwards rapidly!</span>")
+			playsound(A, 'sound/machines/dial_reset.ogg', 50, 1)
 		if(NUKE_WIRE_PROCEED)
 			A.explode()
 		if(NUKE_WIRE_ACTIVATE)
@@ -63,8 +65,12 @@ var/const/NUKE_WIRE_ACTIVATE = 16
 				A.visible_message("<span class='danger'>[A]'s bolting systems rumble!</span>")
 		if(NUKE_WIRE_DELAY)
 			A.timeleft += 10
+			A.visible_message("<span class='notice'>[A]'s clock ticks forwards rapidly!</span>")
+			playsound(A, 'sound/machines/dial_reset.ogg', 50, 1)
 		if(NUKE_WIRE_PROCEED)
 			A.timeleft = max(0,A.timeleft-10)
+			A.visible_message("<span class='danger'>[A]'s clock ticks backwards rapidly</span>")
+			playsound(A, 'sound/machines/dial_reset.ogg', 50, 1)
 		if(NUKE_WIRE_ACTIVATE)
 			A.timing = TRUE
 			A.icon_state = "nuclearbomb2"

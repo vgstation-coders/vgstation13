@@ -64,9 +64,12 @@ var/list/nuclear_bombs = list()
 			return
 
 		if(O.is_screwdriver(user))
-			wiresexposed = !wiresexposed
-			to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-			O.playtoolsound(src, 50)
+			if(!previously_activated)
+				to_chat(user, "<span class='warning'>The wire panel is mechanically obscured.</span>")
+			else
+				wiresexposed = !wiresexposed
+				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
+				O.playtoolsound(src, 50)
 			return
 
 	if (src.anchored)
