@@ -8,6 +8,7 @@
 	throw_speed = 4
 	throw_range = 20
 	flags = FPRINT | NO_ATTACK_MSG
+	origin_tech = Tc_MAGNETS + "=1"
 	var/c_tag = ""
 	var/active = FALSE
 	var/network = ""

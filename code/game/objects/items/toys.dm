@@ -104,6 +104,8 @@
 	icon_state = "syndballoon"
 	item_state = "syndballoon"
 	w_class = W_CLASS_LARGE
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 
 /obj/item/toy/syndicateballoon/green
     name = "green balloon"
