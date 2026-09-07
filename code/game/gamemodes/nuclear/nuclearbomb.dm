@@ -153,7 +153,7 @@ var/list/nuclear_bombs = list()
 		var/dat = "<TT><B>Nuclear Fission Explosive</B><BR>\nAuth. Disk: <A href='?src=\ref[src];auth=1'>[src.auth ? "++++++++++" : "----------"]</A><HR><B>Status</B>: "
 		if (auth)
 			if(yes_code)
-				dat += "[timing ? "Func/Set" : "Functional"]
+				dat += "[timing ? "Func/Set" : "Functional"]"
 			else
 				dat += "Auth. S2"
 		else
