@@ -56,6 +56,10 @@ var/list/nuclear_bombs = list()
 				attack_hand(M)
 
 /obj/machinery/nuclearbomb/attackby(obj/item/weapon/O as obj, mob/user as mob)
+	if (wiresexposed && (O.is_wirecutter(user) || O.is_multitool(user)))
+		wires.Interact(user)
+		return
+
 	if (src.extended)
 		if (istype(O, /obj/item/weapon/disk/nuclear))
 			usr.drop_item(O, src, force_drop = 1)
