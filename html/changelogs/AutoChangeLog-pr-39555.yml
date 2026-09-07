@@ -1,0 +1,5 @@
+author: hacker-on-steroids
+delete-after: true
+changes:
+- tweak: lowered heat capacities of many chem reagents to reasonable levels, making
+    temperature-dependent reactions such as soap-making easier to do
