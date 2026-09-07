@@ -75,3 +75,8 @@
 #define SHOW_CHANGELOG_ON_NEW_PLAYER_LOGIN !DEVELOPER_MODE
 
 #define AUXTOOLS_DEBUGGER DEVELOPER_MODE
+
+// Enable the byond-tracy profiler
+#define TRACY_ENABLED FALSE
+// Run the profiler on startup
+#define TRACY_RUN_ON_STARTUP FALSE

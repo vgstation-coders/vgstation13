@@ -3050,6 +3050,7 @@
 #include "code\modules\tgui_input\number.dm"
 #include "code\modules\tgui_input\text.dm"
 #include "code\modules\tooltip\tooltip.dm"
+#include "code\modules\tracy\tracy.dm"
 #include "code\modules\trader\trade_datums.dm"
 #include "code\modules\trader\trade_gear.dm"
 #include "code\modules\trader\trade_responses.dm"
