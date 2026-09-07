@@ -148,10 +148,10 @@ var/list/nuclear_bombs = list()
 	if(wiresexposed)
 		wires.Interact(user)
 		return
-	if (src.extended)
+	if (extended)
 		user.set_machine(src)
 		var/dat = "<TT><B>Nuclear Fission Explosive</B><BR>\nAuth. Disk: <A href='?src=\ref[src];auth=1'>[src.auth ? "++++++++++" : "----------"]</A><HR><B>Status</B>: "
-		if (src.auth)
+		if (auth)
 			if(yes_code)
 				dat += "[timing ? "Func/Set" : "Functional"]
 			else
@@ -166,9 +166,9 @@ var/list/nuclear_bombs = list()
 				<BR>Safety: [safety ? "On" : "Off"] [control_link("safety")]<BR>
 				Anchor: [anchored ? "Engaged" : "Off"] [control_link("anchor")]<BR>"}
 		var/message = "AUTH"
-		if (src.auth)
-			message = text("[]", src.code)
-			if (src.yes_code)
+		if (auth)
+			message = "[code]"
+			if (yes_code)
 				message = "*****"
 		dat += {"<HR><br/>>[message]<BR>\n
 		<A href='?src=\ref[src];type=1'>1</A>-<A href='?src=\ref[src];type=2'>2</A>-<A href='?src=\ref[src];type=3'>3</A><BR>\n
@@ -177,16 +177,15 @@ var/list/nuclear_bombs = list()
 		<A href='?src=\ref[src];type=R'>R</A>-<A href='?src=\ref[src];type=0'>0</A>-<A href='?src=\ref[src];type=E'>E</A><BR>\n</TT>"}
 		user << browse(HTML_SKELETON(dat), "window=nuclearbomb;size=300x400")
 		onclose(user, "nuclearbomb")
-	else if (src.deployable)
+	else if (deployable)
 		if(removal_stage < 5)
-			src.anchored = 1
+			anchored = 1
 			visible_message("<span class='notice'>With a steely snap, bolts slide out of [src] and anchor it to the flooring!</span>")
 		else
 			visible_message("<span class='notice'>\The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.</span>")
 		flick("nuclearbombc", src)
-		src.icon_state = "nuclearbomb1"
-		src.extended = 1
-	return
+		icon_state = "nuclearbomb1"
+		extended = 1
 
 /obj/machinery/nuclearbomb/verb/make_deployable()
 	set category = "Object"
