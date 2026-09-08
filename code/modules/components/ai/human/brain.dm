@@ -1,6 +1,5 @@
 //Basic thought processes
 /datum/component/ai/human_brain
-	var/life_tick = 0
 	var/wander = TRUE	//Whether the mob will walk around searching for goals, or wait for them to become visible
 	var/lastdir = null
 
@@ -25,7 +24,7 @@
 	..()
 
 /datum/component/ai/human_brain/process()
-	life_tick++
+
 	if(INVOKE_EVENT(parent, /event/comp_ai_cmd_get_busy))
 		return
 	if(!ishuman(parent))
@@ -36,6 +35,7 @@
 		INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
 		return
 
+	AssessNeeds(H)
 	current_target = INVOKE_EVENT(parent, /event/comp_ai_cmd_get_best_target)
 	if(!isnull(current_target))
 		personal_desires.Add(DESIRE_CONFLICT)
@@ -46,7 +46,6 @@
 			if(WieldBestWeapon(H))
 				personal_desires.Remove(DESIRE_HAVE_WEAPON)
 
-	AssessNeeds(H)
 	var/obj/item/I = AttainExternalItemGoal(H)
 	if(I)
 		if(H.Adjacent(I))
@@ -120,7 +119,7 @@
 						continue
 					switch(D)
 						if(DESIRE_HAVE_WEAPON)
-							if(IsBetterWeapon(comparison = I))
+							if(IsBetterWeapon(H, comparison = I))
 								goal = I
 						if(DESIRE_CONFLICT)
 							break processing_desires
