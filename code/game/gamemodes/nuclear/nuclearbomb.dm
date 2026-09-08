@@ -221,6 +221,9 @@ var/list/nuclear_bombs = list()
 	if (!usr.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
+	if (src.wires.IsIndexCut(NUKE_WIRE_BOOM))
+		to_chat(usr, "<span class='warning'>Error: Interface failure. Check that all cables are connected properly.</span>")
+		return
 	if (istype(src.loc, /turf))
 		usr.set_machine(src)
 		if (href_list["auth"])
