@@ -379,8 +379,8 @@
 	if(uniform)
 		thermal_protection += uniform.return_thermal_protection()
 
-	var/max_protection = max(get_thermal_protection(get_thermal_protection_flags()),base_insulation) // monkies have fur, silly!
-	return max(thermal_protection,max_protection)
+	var/clothing_protection = min(thermal_protection, get_thermal_protection(get_thermal_protection_flags())) 
+	return max(clothing_protection, base_insulation)	// monkies have fur, silly!
 
 /mob/living/carbon/monkey/get_heat_protection_flags(temperature)
 	var/thermal_protection_flags = 0
