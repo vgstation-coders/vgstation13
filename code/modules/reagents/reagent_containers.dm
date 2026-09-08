@@ -488,7 +488,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	..()
 	process_temperature()
 
-/obj/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+/obj/item/weapon/reagent_containers/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	..()
 	if (!harderforce) // This causes hard del to happen.
 		process_temperature()
