@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- spellcheck: Candle boxes now properly describe having candles inside instead of
+    donuts.

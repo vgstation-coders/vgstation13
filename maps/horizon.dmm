@@ -24397,8 +24397,7 @@
 /obj/structure/table/reinforced,
 /obj/item/clothing/glasses/scanner/science,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /obj/machinery/light{
 	dir = 1

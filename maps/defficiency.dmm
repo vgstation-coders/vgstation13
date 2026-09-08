@@ -6836,8 +6836,7 @@
 	dir = 4
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint3)
@@ -15035,8 +15034,7 @@
 /area/medical/cmo)
 "aDm" = (
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /obj/effect/nmpi{
 	dir = 4;
@@ -18587,8 +18585,7 @@
 /area/engineering/engine)
 "aJy" = (
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -40481,8 +40478,7 @@
 	icon_state = "2-8"
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
@@ -41850,8 +41846,7 @@
 "byO" = (
 /obj/item/weapon/camera_assembly,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor/plating,
 /area/derelictparts/fsderelict)
@@ -45859,8 +45854,7 @@
 "bGF" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -48744,8 +48738,7 @@
 	tag = "icon-maintguide (SOUTHEAST)"
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
@@ -52286,8 +52279,7 @@
 	})
 "bTH" = (
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor/plating,
 /area/derelictparts/apderelict{
@@ -58492,8 +58484,7 @@
 	tag = "icon-maintguide (EAST)"
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -59347,8 +59338,7 @@
 /obj/item/weapon/stock_parts/matter_bin,
 /obj/item/weapon/cell/high,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor/plating,
 /area/derelictparts/port)
@@ -77478,8 +77468,7 @@
 "cRe" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
@@ -101234,8 +101223,7 @@
 /area/research_outpost/hallway)
 "ehv" = (
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	icon_state = "white"

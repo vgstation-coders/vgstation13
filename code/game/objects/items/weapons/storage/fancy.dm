@@ -137,6 +137,7 @@
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "candlebox"
 	item_state = "candlebox"
+	icon_type = "candle"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/candles.dmi', "right_hand" = 'icons/mob/in-hand/right/candles.dmi')
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)

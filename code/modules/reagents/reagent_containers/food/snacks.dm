@@ -4417,6 +4417,8 @@
 	icon_state = "watermelonslice"
 	bitesize = 2
 	food_flags = FOOD_SWEET
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "watermelonslice"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/applecake
 	name = "apple cake"

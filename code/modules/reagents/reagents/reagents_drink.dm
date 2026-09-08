@@ -256,6 +256,36 @@
 	alpha = 255
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 
+/datum/reagent/drink/pomegranatejuice
+	name = "Pomegranate Juice"
+	id = POMEGRANATEJUICE
+	description = "Acidic yet also sweet"
+	color = "#A60134"
+	alpha = 255
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	sport = SPORTINESS_SUGAR
+	flags = CHEMFLAG_PIGMENT
+
+/datum/reagent/drink/pomegranatesyrup
+	name = "Pomegranate Syrup"
+	id = POMEGRANATESYRUP
+	description = "Exceedingly sweet"
+	color = "#370011"
+	alpha = 255
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	sport = SPORTINESS_SUGAR
+	flags = CHEMFLAG_PIGMENT
+
+/datum/reagent/drink/grenadine
+	name = "Grenadine"
+	id = GRENADINE
+	description = "Sweet and refreshing !"
+	color = "#7E0127"
+	alpha = 255
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	sport = SPORTINESS_SUGAR
+	flags = CHEMFLAG_PIGMENT
+
 /datum/reagent/drink/nothing
 	name = "Nothing"
 	id = NOTHING
@@ -560,7 +590,6 @@
 	color = "#100800" //rgb: 16, 8, 0
 	adj_sleepy = -2
 	density = 4.17
-	specheatcap = 1.24
 	glass_icon_state = "nuka_colaglass"
 	glass_name = "\improper Nuka Cola"
 	glass_desc = "Don't cry. Don't raise your eye. It's only nuclear wasteland."
@@ -1138,7 +1167,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC"
 	density = 1.8
-	specheatcap = 3
 	adj_temp = 40
 	max_temp_adj = 40
 	custom_metabolism = 1 //goes through you fast
