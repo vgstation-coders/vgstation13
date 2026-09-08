@@ -486,7 +486,7 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/update_icon()
 	overlays = 0
-	var/autism = 0
+	var/yellowlights = 0
 	if(density)
 		if(locked && lights)
 			icon_state = "door_locked"
@@ -496,7 +496,7 @@ About the new airlock wires panel:
 				var/image/I = image(icon=icon, icon_state="lights_overlay")
 				I.color = "#ffee00" //ffff00 ended up looking greenish and ugly on some doors
 				overlays += I	
-				autism = 1
+				yellowlights = 1
 		if (panel_open || welded)
 			if (panel_open)
 				overlays += "panel_open" 
@@ -505,7 +505,7 @@ About the new airlock wires panel:
 				overlays += "welded"
 	else
 		icon_state = "door_open"
-	if(autism)
+	if(yellowlights)
 		update_moody_light(icon, "lights_moody") //moody_color = "#ffff00"
 	else
 		update_moody_light(icon, "[icon_state]-moody")
