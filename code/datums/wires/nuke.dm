@@ -24,7 +24,7 @@ var/const/NUKE_WIRE_ACTIVATE = 16
 	if(!..())
 		return 0
 	var/obj/machinery/nuclearbomb/A = holder
-	if(A.wiresexposed && !AreConnectedZLevels(nukedisk.z,map.zMainStation)) //only do wire fun if the disk is on another z level
+	if(A.wiresexposed && previously_activated && !AreConnectedZLevels(nukedisk.z,map.zMainStation)) //only do wire fun if the disk is on another z level
 		return 1
 	return 0
 
