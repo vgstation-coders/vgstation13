@@ -521,18 +521,23 @@ var/highest_player_entry = 0
 
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1,var/defer_edges = FALSE)
-	var/area/original_area=loc
+	var/area/original_area = loc
 	if(loc)
 		var/area/A = loc
 		A.area_turfs -= src
 		if(istype(A, /area/shuttle))
 			turf_flags |= SHUTTLE_TURF
+
 	var/preserved_shuttle_flag = turf_flags & SHUTTLE_TURF
+
 	if (!N || !allow)
 		return
-	remove_particles()
-	var/datum/gas_mixture/env
 
+	if(istype(src, /turf/simulated/floor))
+		original_area.total_floors--
+	remove_particles()
+
+	var/datum/gas_mixture/env
 	var/old_opacity = opacity
 	var/old_dynamic_lighting = dynamic_lighting
 	var/old_affecting_lights = affecting_lights
@@ -542,7 +547,6 @@ var/highest_player_entry = 0
 	var/old_holomap_draw_override = holomap_draw_override
 	var/old_registered_events = registered_events
 	var/datum/virtual_z/old_v = v
-
 	var/old_holomap = holomap_data
 
 	if(light)
@@ -963,17 +967,21 @@ var/highest_player_entry = 0
 	if(ispath(A))
 		var/path = A
 		A = locate(path)
-
 		if(!A)
 			A = new path
 	else if(!isarea(A))
 		return FALSE
 
 	var/area/old_area = loc
+
 	old_area.contents.Remove(src)
 	old_area.area_turfs.Remove(src)
 	A.contents.Add(src)
 	A.area_turfs.Add(src)
+
+	if(istype(src, /turf/simulated/floor))
+		old_area.total_floors--
+		A.total_floors++
 	if(old_area)
 		change_area(old_area, A)
 		for(var/atom/AM in contents)

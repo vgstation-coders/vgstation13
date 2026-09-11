@@ -21,7 +21,7 @@ var/area/space_area
 	var/obj/effect/area_alert_holder/alert_holder = null
 	var/obj/effect/narration/narrator = null
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
-
+	var/total_floors = 0 //Total simulated floors in an area.
 	flags = CAVES_ALLOWED
 
 /// Used for shuttle overrides so we can expose planet or space turfs depending on the shuttle's location.

@@ -7,7 +7,9 @@
 #define AALARM_MODE_PANIC		3 //constantly sucks all air
 #define AALARM_MODE_CYCLE		4 //sucks off all air, then refill and switches to scrubbing
 #define AALARM_MODE_FILL		5 //emergency fill
-#define AALARM_MODE_OFF			6 //Shuts it all down.
+#define AALARM_MODE_FIRE		6 //Turns vent and scrubber checks off to remove oxygen and pump nitrogen as fast as possible.
+#define AALARM_MODE_OFF			7 //Shuts it all down.
+
 
 #define AALARM_SCREEN_MAIN		1
 #define AALARM_SCREEN_VENT		2
@@ -286,10 +288,10 @@
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
-	pressure_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
-	temperature_threshold = new /datum/airalarm_threshold(T0C-50, T0C-25, T0C+25, T0C+50)
-	target_temperature = T0C
-	scrubbed_gases = list( GAS_OXYGEN, GAS_PLASMA )
+	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
+	target_temperature = T0C+20
+	scrubbed_gases = list( GAS_OXYGEN, GAS_PLASMA, )
 
 //these are used for the UIs and new ones can be added and existing ones edited at the CAC
 var/global/list/airalarm_presets = list(
@@ -532,8 +534,14 @@ var/global/list/air_alarms = list()
 		mode=AALARM_MODE_FILL
 		apply_mode()
 
+	if (mode==AALARM_MODE_FILL)
+		var/datum/airalarm_threshold/current_pressure_threshold_fill = config.pressure_threshold
+		var/target_pressure_fill = (current_pressure_threshold_fill.min_1() + current_pressure_threshold_fill.max_1())/2
+		if(environment.return_pressure()>=target_pressure_fill*0.95)
+			mode = AALARM_MODE_SCRUBBING
+			apply_mode()
 
-	//atmos computer remote controll stuff
+	//atmos computer remote control stuff
 	switch(rcon_setting)
 		if(RCON_NO)
 			remote_control = 0
@@ -546,14 +554,42 @@ var/global/list/air_alarms = list()
 		*/
 		if(RCON_YES)
 			remote_control = 1
+
 	if(auto_suppress)
 		var/area/this_area = get_area(src)
-		if(this_area.fire)
-			preset_key = "Fire Suppression"
+		var/fires_needed = ceil(this_area.total_floors * 0.25) //25% coverage of fire needed.
+		var/fire_amount = 0
+
+		if(this_area.total_floors)
+			for(var/obj/effect/fire/fire in SSair.processing_parts[SSAIR_HOTSPOT])
+				if(get_area(fire) == this_area)
+					fire_amount++
+					if(fire_amount >= fires_needed)
+						break
+
+			if((fire_amount / this_area.total_floors) >= fires_needed)
+				preset_key = "Fire Suppression"
+				mode = AALARM_MODE_FIRE
+				apply_preset(1)
+				auto_suppress = FALSE
+				config.suppression_mode = FALSE
+
+	if(preset_key == "Fire Suppression")
+		var/datum/airalarm_threshold/current_pressure_threshold_suppress = config.pressure_threshold
+		var/target_pressure_suppress = (current_pressure_threshold_suppress.min_1() + current_pressure_threshold_suppress.max_1()) / 2
+		var/target_temp = config.target_temperature
+		var/area/this_area = get_area(src)
+		var/has_fire = FALSE
+		for(var/obj/effect/fire/Fire in SSair.processing_parts[SSAIR_HOTSPOT])
+			if(get_area(Fire) == this_area)
+				has_fire = TRUE
+				break
+		if(!has_fire && abs(environment.return_temperature() - target_temp) <= 2 && environment.return_pressure() <= target_pressure_suppress * 1.05)
+			preset_key = "Human"
+			mode = AALARM_MODE_SCRUBBING
 			apply_preset(1)
-			auto_suppress = FALSE
-			config.suppression_mode = FALSE
-	return
+			auto_suppress = TRUE
+			config.suppression_mode = TRUE
 
 /obj/machinery/alarm/proc/calculate_local_danger_level(const/datum/gas_mixture/environment)
 	if (wires.IsIndexCut(AALARM_WIRE_AALARM))
@@ -755,7 +791,7 @@ var/global/list/air_alarms = list()
 				if(!presetdata)
 					presetdata = new /datum/airalarm_configuration/preset/human()
 
-				var/list/signal_data = list("power"= 1, "scrubbing"= 1, "panic_siphon"= 0)
+				var/list/signal_data = list("power"= 1, "checks"= 1, "scrubbing"= 1, "panic_siphon"= 0)
 				for(var/gas_id in XGM.gases)
 					signal_data[gas_id + "_scrub"] = (gas_id in presetdata.scrubbed_gases)
 				send_signal(device_id,  signal_data)
@@ -778,13 +814,26 @@ var/global/list/air_alarms = list()
 			for(var/device_id in this_area.air_scrub_names)
 				send_signal(device_id, list("power"= 0) )
 			for(var/device_id in this_area.air_vent_names)
-				send_signal(device_id, list("power"= 1, "checks"= 1, "set_external_pressure"= target_pressure) )
+				send_signal(device_id, list("power"= 1, "checks"= 0, "set_external_pressure"= target_pressure) )
 
 		if(AALARM_MODE_OFF)
 			for(var/device_id in this_area.air_scrub_names)
 				send_signal(device_id, list("power"= 0) )
 			for(var/device_id in this_area.air_vent_names)
 				send_signal(device_id, list("power"= 0) )
+
+		if(AALARM_MODE_FIRE)
+			for(var/device_id in this_area.air_scrub_names)
+				var/datum/airalarm_configuration/preset/presetdata = airalarm_presets[preset_key]
+				if(!presetdata)
+					presetdata = new /datum/airalarm_configuration/preset/human()
+
+				var/list/signal_data = list("power"= 1, "checks"= 0, "scrubbing"= 1, "panic_siphon"= 0)
+				for(var/gas_id in XGM.gases)
+					signal_data[gas_id + "_scrub"] = (gas_id in presetdata.scrubbed_gases)
+				send_signal(device_id,  signal_data)
+			for(var/device_id in this_area.air_vent_names)
+				send_signal(device_id, list("power"= 1, "checks"= 1))
 
 // This sets our danger level, and, if it's changed, forces a new election of danger levels.
 /obj/machinery/alarm/proc/setDangerLevel(var/new_danger_level)
@@ -911,6 +960,7 @@ var/global/list/air_alarms = list()
 		/*AALARM_MODE_PANIC*/ list("name"="Panic",       "desc"="Siphons air out of the room"),\
 		/*AALARM_MODE_CYCLE*/ list("name"="Cycle",       "desc"="Siphons air before replacing"),\
 		/*AALARM_MODE_FILL*/ list("name"="Fill",        "desc"="Shuts off scrubbers and opens vents"),\
+		/*AALARM_MODE_FIRE*/ list("name"="Fire",        "desc"="Removes checks on vents and scrubbers"),\
 		/*AALARM_MODE_OFF*/ list("name"="Off",         "desc"="Shuts off vents and scrubbers"))
 	data["mode"]=mode
 
