@@ -565,14 +565,12 @@ var/global/list/air_alarms = list()
 				if(get_area(fire) == this_area)
 					fire_amount++
 					if(fire_amount >= fires_needed)
+						preset_key = "Fire Suppression"
+						mode = AALARM_MODE_FIRE
+						apply_preset(1)
+						auto_suppress = FALSE
+						config.suppression_mode = FALSE
 						break
-
-			if((fire_amount / this_area.total_floors) >= fires_needed)
-				preset_key = "Fire Suppression"
-				mode = AALARM_MODE_FIRE
-				apply_preset(1)
-				auto_suppress = FALSE
-				config.suppression_mode = FALSE
 
 	if(preset_key == "Fire Suppression")
 		var/datum/airalarm_threshold/current_pressure_threshold_suppress = config.pressure_threshold
@@ -584,7 +582,7 @@ var/global/list/air_alarms = list()
 			if(get_area(Fire) == this_area)
 				has_fire = TRUE
 				break
-		if(!has_fire && abs(environment.return_temperature() - target_temp) <= 2 && environment.return_pressure() <= target_pressure_suppress * 1.05)
+		if(!has_fire && abs(environment.return_temperature() - target_temp) <= 2 && environment.return_pressure() <= target_pressure_suppress * 1.05) // <=2 to match the 2 degrees over/under on alarm thermostats.
 			preset_key = "Human"
 			mode = AALARM_MODE_SCRUBBING
 			apply_preset(1)
