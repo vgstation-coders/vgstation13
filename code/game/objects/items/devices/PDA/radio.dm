@@ -80,7 +80,7 @@
 		if (!user || user != usr)
 			return
 
-		log_astar_command("Sending [href_list["command"]] to [href_list["bot"]]")
+		log_path_command("Sending [href_list["command"]] to [href_list["bot"]]")
 
 		// Actual signal sent
 		var/datum/signal/signal = new /datum/signal
@@ -88,7 +88,7 @@
 		signal.transmission_method = 1
 		signal.data["target"] = href_list["bot"]
 		if(href_list["command"] == "send_to")
-			log_astar_command("Sending to: [locate(href_list["bot"])]")
+			log_path_command("Sending to: [locate(href_list["bot"])]")
 			signal.data["command"] = locate(href_list["place"])
 		else
 			signal.data["command"] = href_list["command"]

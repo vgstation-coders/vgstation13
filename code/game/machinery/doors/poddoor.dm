@@ -96,6 +96,10 @@ var/list/poddoors = list()
 /obj/machinery/door/poddoor/allowed(atom/A)
 	return 0
 
+//No req_access, so the generic door check would let anything path through a closed one.
+/obj/machinery/door/poddoor/CanPathPass()
+	return !density
+
 /obj/machinery/door/poddoor/open()
 	if(!density) //it's already open bro
 		return FALSE

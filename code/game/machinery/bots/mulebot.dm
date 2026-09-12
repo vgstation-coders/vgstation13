@@ -325,9 +325,9 @@ var/global/mulebot_count = 0
 	return is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1]
 
 /obj/machinery/bot/mulebot/execute_signal_command(var/datum/signal/signal, var/command)
-	log_astar_command("recieved command [command]")
+	log_path_command("recieved command [command]")
 	if (!is_type_in_list(signal.source, commanding_radios))
-		log_astar_command("refused command [command], wrong radio type. Expected [english_list(commanding_radios, and_text = " or ")] got [signal.source.type]")
+		log_path_command("refused command [command], wrong radio type. Expected [english_list(commanding_radios, and_text = " or ")] got [signal.source.type]")
 		return TRUE
 	switch (command)
 		if ("switch_power")
@@ -359,10 +359,10 @@ var/global/mulebot_count = 0
 		if ("honk")
 			honk_horn()
 		if ("") // empty
-			astar_debug_mulebots("Empty command")
+			debug_mulebots("Empty command")
 			return
 		else // It's a new destination !
-			astar_debug_mulebots("New destination started: [command]")
+			debug_mulebots("New destination started: [command]")
 			set_destination(command)
 			//start()
 
@@ -647,10 +647,10 @@ var/global/mulebot_count = 0
 	load.forceMove(src.loc) //Drops you right there, so you shouldn't be able to get yourself stuck
 	if(dirn)
 		dirn = text2num(dirn)
-		astar_debug_mulebots("attempting unload in [dirn] from [T]!")
+		debug_mulebots("attempting unload in [dirn] from [T]!")
 		T = get_step(T,dirn)
 		if(T.Cross())//Can't get off onto anything that wouldn't let you pass normally
-			astar_debug_mulebots("correctly unloaded in a direction. [T]!")
+			debug_mulebots("correctly unloaded in a direction. [T]!")
 			load.forceMove(T)
 	if(istype(current_order?.thing_to_load, /obj/machinery/cart/cargo))
 		var/obj/machinery/cart/cargo/cart = current_order.thing_to_load
@@ -688,7 +688,7 @@ var/global/mulebot_count = 0
 // starts bot moving to current destination
 /obj/machinery/bot/mulebot/proc/start()
 	if(destination)
-		astar_debug_mulebots("Moving out toward [destination]")
+		debug_mulebots("Moving out toward [destination]")
 		if(destination == home_destination)
 			mode = MODE_RETURNING
 		else
@@ -698,12 +698,12 @@ var/global/mulebot_count = 0
 	update_icon()
 
 /obj/machinery/bot/mulebot/set_destination(var/new_dest)
-	astar_debug_mulebots("Requesting a path to [new_dest]")
+	debug_mulebots("Requesting a path to [new_dest]")
 	new_destination = new_dest
 	request_path(new_dest)
 
 /obj/machinery/bot/mulebot/proc/add_manual_destination(var/turf/new_dest, var/unloadarrive = 0)
-	astar_debug_mulebots("Adding a manual destination to [new_dest]")
+	debug_mulebots("Adding a manual destination to [new_dest]")
 	var/datum/bot/order/mule/new_order = new(new_dest, null, unloadarrive, text_desc = get_area_name(new_dest))
 	queue_destination(new_order)
 	src.visible_message("[src] makes a chiming sound!", "You hear a chime.")
@@ -719,7 +719,7 @@ var/global/mulebot_count = 0
 	)
 	signal.data = keyval
 	frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
-	astar_debug_mulebots("requesting path on freq [frequency.frequency]")
+	debug_mulebots("requesting path on freq [frequency.frequency]")
 
 /obj/machinery/bot/mulebot/receive_signal(datum/signal/signal)
 	var/command = signal.data["command"]
@@ -739,7 +739,7 @@ var/global/mulebot_count = 0
 			return 0
 	var/recv = signal.data["beacon"]
 	if(recv && recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
-		astar_debug_mulebots("new destination recieved and acknoweldged from navbeacons, [recv]")
+		debug_mulebots("new destination recieved and acknoweldged from navbeacons, [recv]")
 		target = signal.source.loc
 		var/dumpdir = 0
 		if(signal.data["dir"])
@@ -979,24 +979,24 @@ var/global/mulebot_count = 0
 		if(destinations_queue.len)
 			mode = MODE_COMPUTING
 			//There is. Add it as our current order and set a new path
-			astar_debug_mulebots("destination_queue non empty, no current order, processing new destination")
+			debug_mulebots("destination_queue non empty, no current order, processing new destination")
 			current_order = shift(destinations_queue)
 			destination = current_order.loc_description
 			if(src.loc == current_order.destination)
-				astar_debug_mulebots("Order with same destination.")
+				debug_mulebots("Order with same destination.")
 				//If we're already at our order destination....
 				//This might be a simple load/unload request. Process it.
 				handle_destination_arrival()
 				mode = MODE_IDLE
 				return
 			var/stop_a_tile_before = current_order.thing_to_load != null
-			path = get_path_to(src, current_order.destination, 300, stop_a_tile_before, botcard)
+			path = get_walkable_path_to(src, current_order.destination, 300, stop_a_tile_before, botcard)
 			if(destination == home_destination)
 				mode = MODE_RETURNING
 			else
 				mode = MODE_MOVING
 			if(!path.len)
-				astar_debug_mulebots("Order with no route in 300 length...")
+				debug_mulebots("Order with no route in 300 length...")
 				//We can't make it. Inform your user.
 				//handle_destination_arrival()
 				mode = MODE_NOROUTE
@@ -1007,7 +1007,7 @@ var/global/mulebot_count = 0
 	//Usually, this is once a second. Bots can move faster than this: steps_per, per SS_WAIT_BOTS
 	//MULEs default to 2 steps_per, which means 2 moves per SS_WAIT_BOTS
 	//this can go up to 5 with hacking, or even higher with admeme antics
-	astar_debug_mulebots("process_pathing mulebot")
+	debug_mulebots("process_pathing mulebot")
 	current_pathing++
 	if (current_pathing > MAX_PATHING_ATTEMPTS)
 		CRASH("maximum pathing reached")
@@ -1017,14 +1017,14 @@ var/global/mulebot_count = 0
 	//Ok, we're on, we're not done, and we have a path.
 	update_icon()
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
-	if(!process_astar_path()) // Process the pathfinding. This handles most movement/delivery stuff.
+	if(!process_path_step()) // Process the pathfinding. This handles most movement/delivery stuff.
 		//And if there are problems processing, go here.
 		if(frustration > 15) // obstacle found and isn't moving after getting honked at
 			//if(path.len == 1) // MULE's destination itself has an obstacle!
 				//TODO
 			var/turf/obstacle = path[1]
 			var/stop_a_tile_before = current_order.thing_to_load != null
-			path = get_path_to(src, current_order.destination, 300, stop_a_tile_before, botcard, TRUE, obstacle)
+			path = get_walkable_path_to(src, current_order.destination, 300, stop_a_tile_before, botcard, TRUE, obstacle)
 			frustration = 0
 			if(!path.len)
 				//There's no path. Give up this current order.
@@ -1046,7 +1046,7 @@ var/global/mulebot_count = 0
 			handle_destination_arrival()
 			return
 
-/obj/machinery/bot/mulebot/process_astar_path()
+/obj/machinery/bot/mulebot/process_path_step()
 	if(gcDestroyed)
 		return FALSE
 	if(!cell.use(2))
@@ -1063,20 +1063,20 @@ var/global/mulebot_count = 0
 	return TRUE
 
 /obj/machinery/bot/mulebot/proc/handle_destination_arrival()
-	astar_debug_mulebots("dest arrived!")
+	debug_mulebots("dest arrived!")
 	//We've confirmed to arrive at our destination
 	if(current_order.unload_here && is_locking(/datum/locking_category/mulebot))
 		//Case 1: Movement order requested an unload and we're loaded
-		astar_debug_mulebots("unloading in [current_order.unload_dir] direction!")
+		debug_mulebots("unloading in [current_order.unload_dir] direction!")
 		unload(current_order.unload_dir)
 	else if(current_order.thing_to_load)
 		//Case 2: Movement order requested loading a specific thing
-		astar_debug_mulebots("loading a [current_order.thing_to_load]!")
+		debug_mulebots("loading a [current_order.thing_to_load]!")
 		if(!is_locking(/datum/locking_category/mulebot))
 			load(current_order.thing_to_load)
 	else
 		//Case 3: Movement order either requested unloading but wasn't loaded, or didn't request a specific loading
-		astar_debug_mulebots("trying to generally load!")
+		debug_mulebots("trying to generally load!")
 		if(auto_pickup && !is_locking(/datum/locking_category/mulebot))
 			var/atom/movable/AM
 			if(!wires.LoadCheck())		// if emagged, load first unanchored thing we find

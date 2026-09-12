@@ -270,6 +270,16 @@ var/list/one_way_windows
 		return FALSE
 	return TRUE
 
+// A directional pane blocks only the edge it faces; a full-tile window blocks all four.
+/obj/structure/window/CanPathPass(var/obj/item/weapon/card/id/ID, var/to_dir, var/atom/movable/path_caller)
+	if(istype(path_caller) && (path_caller.pass_flags & pass_flags_self))
+		return TRUE
+	if(!density)
+		return TRUE
+	if(is_fulltile)
+		return FALSE
+	return dir != to_dir
+
 /obj/structure/window/proc/dim_beam(var/obj/item/projectile/beam/B)
 	if(istype(B))
 		B.damage *= disperse_coeff

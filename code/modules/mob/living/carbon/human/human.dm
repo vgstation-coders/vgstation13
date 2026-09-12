@@ -2178,7 +2178,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
-	add_component(/datum/component/controller/movement/astar)
+	add_component(/datum/component/controller/movement/pathed)
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()

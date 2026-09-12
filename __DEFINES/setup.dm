@@ -1391,14 +1391,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 //	null << "[x][a]")
 #endif
 
-#define ASTAR_DEBUG 0
-#if ASTAR_DEBUG == 1
-#warn "Astar debug is on. Don't forget to turn it off after you've done :)"
-#define astar_debug(text) to_chat(world, text)
-#define astar_debug_mulebots(text) to_chat(world, text)
+#define PATHING_DEBUG 0
+#if PATHING_DEBUG == 1
+#warn "Pathing debug is on. Don't forget to turn it off after you've done :)"
+#define path_debug(text) to_chat(world, text)
+#define debug_mulebots(text) to_chat(world, text)
 #else
-#define astar_debug(text)
-#define astar_debug_mulebots(text)
+#define path_debug(text)
+#define debug_mulebots(text)
 #endif
 
 #define BSQL_DEBUG_CONNECTION 0
@@ -1781,6 +1781,7 @@ var/proccalls = 1
 
 //Glidesize
 #define INERTIA_MOVEDELAY 5
+#define PUSH_SWAP_GLIDE_DELAY 2
 #define FRACTIONAL_GLIDESIZES 1
 #ifdef FRACTIONAL_GLIDESIZES
 #define DELAY2GLIDESIZE(delay) (WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1))

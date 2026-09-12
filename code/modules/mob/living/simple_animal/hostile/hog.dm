@@ -444,7 +444,9 @@ if ungreased adult: l containers
 		nextsqueal = world.time + squeal_delay
 		playsound(loc, hurt_sound, 50, 0)
 	target = pick(homes)
-	path = get_path_to(src, target, max_distance=500, id = CS)
+	// hogs move with Move() so they can take diagonal steps - use the fast diagonal search, not the
+	// slower cardinal one, and get shorter routes to boot
+	path = get_path_to(src, target, max_distance=500, id = CS, diagonally = TRUE)
 	pathers += src
 
 /mob/living/simple_animal/rampagingspacehog/Life()
@@ -452,17 +454,17 @@ if ungreased adult: l containers
 
 	for(var/i = 1 to dashspeed)
 		if(path.len>0)
-			process_astar_path()
+			process_path_step()
 		else
 			break
 
-/mob/living/simple_animal/rampagingspacehog/process_astar_path()
+/mob/living/simple_animal/rampagingspacehog/process_path_step()
 	if(gcDestroyed || stat == DEAD)
 		return FALSE
 	if(!path || !path.len)
 		playsound(loc, snort_sound, 50, 0)
 		return FALSE
-	Move(path[1])
+	Move(path[1], get_dir(src, path[1])) // pass dir so Move() splits diagonals and won't cut wall corners
 	path.Remove(path[1])
 	if(!path.len)
 		playsound(loc, snort_sound, 50, 0)

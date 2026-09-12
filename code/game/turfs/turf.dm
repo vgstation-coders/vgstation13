@@ -36,8 +36,6 @@
 
 	var/blocks_air = 0
 
-	var/list/PathNodes = null
-
 	// Bot shit
 	var/targetted_by=null
 
@@ -761,19 +759,6 @@ var/highest_player_entry = 0
 ///////////////////////////
 
 // Returns the surrounding cardinal turfs with open links
-// Including through doors openable with the ID
-/turf/proc/CardinalTurfsWithAccess(var/obj/item/weapon/card/id/ID)
-	var/list/L = new()
-	var/turf/simulated/T
-
-	for(var/dir in cardinal)
-		T = get_step(src, dir)
-		if(istype(T) && !T.density)
-			if(!LinkBlockedWithAccess(T, src, ID))
-				L.Add(T)
-	return L
-
-// Returns the surrounding cardinal turfs with open links
 // Don't check for ID, doors passable only if open
 /turf/proc/CardinalTurfs()
 	var/list/L = new()
@@ -790,21 +775,7 @@ var/highest_player_entry = 0
 //All directions movements
 ///////////////////////////
 
-// Returns the surrounding simulated turfs with open links
-// Including through doors openable with the ID
-/turf/proc/AdjacentTurfsWithAccess(var/obj/item/weapon/card/id/ID = null,var/list/closed)//check access if one is passed
-	var/list/L = new()
-	var/turf/simulated/T
-	for(var/dir in list(NORTHWEST,NORTHEAST,SOUTHEAST,SOUTHWEST,NORTH,EAST,SOUTH,WEST)) //arbitrarily ordered list to favor non-diagonal moves in case of ties
-		T = get_step(src,dir)
-		if(T in closed) //turf already proceeded in A*
-			continue
-		if(istype(T) && !T.density)
-			if(!LinkBlockedWithAccess(src, T, ID))
-				L.Add(T)
-	return L
-
-//Idem, but don't check for ID and goes through open doors
+//Returns the surrounding simulated turfs with open links (through open doors only)
 /turf/proc/AdjacentTurfs(var/list/closed)
 	var/list/L = new()
 	var/turf/simulated/T
@@ -816,39 +787,6 @@ var/highest_player_entry = 0
 			if(!LinkBlocked(src, T))
 				L.Add(T)
 	return L
-
-// check for all turfs, including unsimulated ones
-/turf/proc/AdjacentTurfsSpace(var/obj/item/weapon/card/id/ID = null, var/list/closed)//check access if one is passed
-	var/list/L = new()
-	var/turf/T
-	for(var/dir in list(NORTHWEST,NORTHEAST,SOUTHEAST,SOUTHWEST,NORTH,EAST,SOUTH,WEST)) //arbitrarily ordered list to favor non-diagonal moves in case of ties
-		T = get_step(src,dir)
-		if(T in closed) //turf already proceeded by A*
-			continue
-		if(istype(T) && !T.density)
-			if(!ID)
-				if(!LinkBlocked(src, T))
-					L.Add(T)
-			else
-				if(!LinkBlockedWithAccess(src, T, ID))
-					L.Add(T)
-	return L
-
-//////////////////////////////
-//Distance procs
-//////////////////////////////
-
-//Distance associates with all directions movement
-/turf/proc/Distance(var/turf/T)
-	return get_dist(src,T)
-
-//  This Distance proc assumes that only cardinal movement is
-//  possible. It results in more efficient (CPU-wise) pathing
-//  for bots and anything else that only moves in cardinal dirs.
-/turf/proc/Distance_cardinal(turf/T)
-	if(!src || !T)
-		return 0
-	return abs(src.x - T.x) + abs(src.y - T.y)
 
 ////////////////////////////////////////////////////
 
@@ -1013,17 +951,6 @@ var/highest_player_entry = 0
 		return TRUE
 	return ..()
 
-//Pathnode stuff
-
-/turf/proc/FindPathNode(var/id)
-	return PathNodes ? PathNodes["[id]"] : null
-
-/turf/proc/AddPathNode(var/PathNode/PN, var/id)
-	ASSERT(!PathNodes || !PathNodes["[id]"])
-	if (!PathNodes)
-		PathNodes = list()
-	PathNodes["[id]"] = PN
-
 /turf/clean_act(var/cleanliness)
 	..()
 	if (cleanliness >= CLEANLINESS_BLEACH)
@@ -1078,3 +1005,48 @@ var/highest_player_entry = 0
 			if(check_vz.x_min <= x && check_vz.x_max >= x && check_vz.y_min <= y && check_vz.y_max >= y)
 				return check_vz
 	return null
+
+// Turf-to-turf link blocking, used by turf adjacency and by projectiles.
+/proc/LinkBlocked(turf/A, turf/B)
+	if(A == null || B == null)
+		return 1
+	var/adir = get_dir(A,B)
+	var/rdir = get_dir(B,A)
+	if(adir & (adir-1)) //diagonal
+		var/turf/iStep = get_step(A,adir & (NORTH|SOUTH)) //check the north/south component
+		if(!iStep.density && !LinkBlocked(A,iStep) && !LinkBlocked(iStep,B))
+			return 0
+
+		var/turf/pStep = get_step(A,adir & (EAST|WEST)) //check the east/west component
+		if(!pStep.density && !LinkBlocked(A,pStep) && !LinkBlocked(pStep,B))
+			return 0
+
+		return 1
+
+	if(DirBlocked(A,adir))
+		return 1
+	if(DirBlocked(B,rdir))
+		return 1
+
+	for(var/obj/O in B)
+		if(O.density && !istype(O, /obj/machinery/door) && !(O.flow_flags & ON_BORDER))
+			return 1
+
+	return 0
+
+// Returns true if direction is blocked from loc
+// Checks if doors are open
+/proc/DirBlocked(turf/loc,var/dir)
+	for(var/obj/structure/window/D in loc)
+		if(!D.density)
+			continue
+		if(D.dir == SOUTHWEST)
+			return 1 //full-tile window
+		if(D.dir == dir)
+			return 1 //matching border window
+
+	for(var/obj/machinery/door/D in loc)
+		if(D.density)// if closed, it's a real, air blocking door
+			return 1
+
+	return 0

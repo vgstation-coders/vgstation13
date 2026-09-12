@@ -101,8 +101,8 @@
 		return !density
 	return TRUE
 
-//used in the AStar algorithm to determinate if the turf the door is on is passable
-/obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
+//used by the pathfinder to determine if the turf the door is on is passable
+/obj/machinery/door/window/CanPathPass(var/obj/item/weapon/card/id/ID, var/to_dir)
 	return !density || (dir != to_dir) || check_access(ID)
 
 /obj/machinery/door/window/open()
