@@ -69,6 +69,11 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	var/rotates_anchored = FALSE
 	var/rotate_type = null
 
+	var/thermal_variation_from_environment = 0.055//how much of the environmental temperature do we want to match per entropy procs.
+	var/thermal_variation_modifier = 1//if set to 0, no entropy will occur in that container. Range not binary, anything over 1 means faster cooling anything between 0 to 1 means slower.
+	var/image/ice_overlay = null
+	var/ice_alpha = 64
+
 /obj/New()
 	..()
 	if(breakable_flags)
@@ -947,6 +952,120 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 
 /obj/get_heat_conductivity() //So keeping something in a closet can have an insulating effect.
 	return 0.5
+
+////////////THERMAL ENTROPY///////////////////////////////////////////////////////////////////////////////////////////////////
+
+//an overly simple thermal entropy proc that lets objects match the temperature of their environnement over time
+//we don't send the temperature difference back to the environnement because frankly it's not gonna matter in 99.999% of the cases.
+//furthermore, we stop looping once the temperature is less than a degree away from the environment, until we get moved or picked up.
+//won't resume on passive temperature changes in a room, but we can always add a subsystem later that checks for additional temperature changes every minute or so I guess
+
+/obj/proc/thermal_entropy()
+	set waitfor = FALSE
+
+	if (!reagents || !reagents.total_volume)
+		thermal_entropy_containers.Remove(src)
+		update_temperature_overlays()
+		return
+
+	var/datum/gas_mixture/air = return_air()
+
+	if (!air)
+		thermal_entropy_containers.Remove(src)
+		return
+
+	var/diff = air.temperature - reagents.chem_temp
+
+	if (!isturf(loc) && (air.pressure < 100))//low pressure environments slow down entropy, unless the item is laid directly onto the floor so space meat remains frozen until brought in
+		diff *= air.pressure/100
+
+	//we only bother if there's less than a 1 degree difference
+	if (abs(diff) < 2)
+		thermal_entropy_containers.Remove(src)
+
+	//based on newton's law of cooling
+	reagents.chem_temp = reagents.chem_temp + diff * thermal_variation_from_environment * thermal_variation_modifier
+
+	if(!(reagents.skip_flags & SKIP_RXN_CHECK_ON_HEATING))
+		reagents.handle_reactions()
+
+	update_icon()
+
+	return
+
+/obj/process_temperature()
+	thermal_entropy_containers |= src
+
+/obj/update_temperature_overlays()
+	if(reagents && reagents.total_volume)
+		if (reagents.chem_temp <= (T0C+2))
+			ice_alpha = 96 + clamp((-64*((reagents.chem_temp-T0C)/80)),0,64)
+			if(!ice_overlays["[type][icon_state]"])
+				set_ice_overlay()
+			else
+				update_ice_overlay()
+		steam_spawn_adjust(reagents.chem_temp)
+	else
+		remove_particles(PS_STEAM)
+
+///////////ICE OVERLAY///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//appears when the food item's reagents' temperature falls to 0°C or below
+//based on how blood overlays are generated
+
+var/global/list/image/ice_overlays = list()
+/obj/proc/set_ice_overlay()
+	if(update_ice_overlay())
+		return
+
+	var/icon/I = new /icon(icon, icon_state)
+	//fills the icon_state with white (except where it's transparent)
+	I.Blend(rgb(255,255,255),ICON_ADD)
+	//inspired by urist's old cult rune drawing method, will let us add a 1px ice border around the object
+	var/list/border_pixels = list()
+	for(var/x = 1, x <= 32, x++)
+		for(var/y = 1, y <= 32, y++)
+			var/p = I.GetPixel(x, y)
+
+			if(p == null)
+				var/n = I.GetPixel(x, y + 1)
+				var/s = I.GetPixel(x, y - 1)
+				var/e = I.GetPixel(x + 1, y)
+				var/w = I.GetPixel(x - 1, y)
+
+				if(n == "#ffffff" || s == "#ffffff" || e == "#ffffff" || w == "#ffffff")
+					border_pixels += list(list(x,y))
+	for (var/list/L in border_pixels)
+		I.DrawBox(rgb(255, 255, 255), L[1], L[2])
+	//adds the ice texture
+	I.Blend(new /icon('icons/effects/effects.dmi', "ice"),ICON_MULTIPLY)
+
+	var/image/img = image(I)
+	img.name = "ice_overlay"
+	ice_overlays["[type][icon_state]"] = img
+	update_ice_overlay()
+
+/obj/proc/update_ice_overlay()
+	if(ice_overlays["[type][icon_state]"])
+		if (ice_overlay)
+			overlays -= ice_overlay
+		ice_overlay = image(ice_overlays["[type][icon_state]"])
+		ice_overlay.appearance_flags = RESET_COLOR|RESET_ALPHA
+		ice_overlay.alpha = ice_alpha
+		overlays += ice_overlay
+		return 1
+
+///////////STEAM PARTICLES/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/obj/proc/steam_spawn_adjust(var/_temp)
+	if (!(PS_STEAM in particle_systems))
+		add_particles(PS_STEAM)
+	var/obj/abstract/particles_holder/steam_holder = particle_systems[PS_STEAM]
+	if (_temp < STEAMTEMP)
+		steam_holder.particles.spawning = 0
+	else
+		steam_holder.particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //This subtype is used by stuff that should generally not be disturbed by those procs
 /obj/abstract

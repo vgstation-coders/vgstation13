@@ -668,6 +668,17 @@
 
 	var/allows_dyeing = TRUE
 
+/obj/structure/reagent_dispensers/cauldron/New()
+	..()
+	fast_objects.Add(src)
+	all_reagent_containers.Add(src)
+
+/obj/structure/reagent_dispensers/cauldron/Destroy()
+	thermal_entropy_containers.Remove(src)
+	all_reagent_containers.Remove(src)
+	fast_objects.Remove(src)
+	. = ..()
+
 /obj/structure/reagent_dispensers/cauldron/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>Use Help intent to pour reagent into \the [name], and other intents to remove reagent from it.</span>")
@@ -686,6 +697,8 @@
 
 		overlays += filling
 
+	update_temperature_overlays()
+
 /obj/structure/reagent_dispensers/cauldron/attackby(obj/item/weapon/W, mob/user)
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
@@ -700,8 +713,24 @@
 			return
 	..()
 
+/obj/structure/reagent_dispensers/cauldron/process()
+	if(!reagents?.total_volume)
+		return
+
+	if(!isturf(loc))
+		return
+
+	var/turf/T = loc
+	var/obj/machinery/space_heater/campfire/C = locate(/obj/machinery/space_heater/campfire) in T
+
+	if(!C || !C.can_cook())
+		return
+
+	reagents.heating(C.cook_energy(), C.cook_temperature())
+
 /obj/structure/reagent_dispensers/cauldron/on_reagent_change()
 	update_icon()
+	process_temperature()
 
 /obj/structure/reagent_dispensers/cauldron/wrenchable()
 	return TRUE
