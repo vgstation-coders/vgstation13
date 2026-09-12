@@ -1,4 +1,0 @@
-author: Pancakemines
-delete-after: true
-changes:
-- bugfix: Fixed bound object bug with holsters.
