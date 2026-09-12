@@ -1,0 +1,5 @@
+author: toomykins
+delete-after: true
+changes:
+- tweak: pathfinding is now faster
+- tweak: mob pathfinding is now smarter
