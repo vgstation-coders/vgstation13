@@ -226,7 +226,7 @@
 	var/event_key
 	var/initial_suit = 0
 	var/initial_helmet = 0
-	var/max_capacity = 500 //Just barely over 2 "item touch" worth of rads when standing right next to the shard with a suit with only 10 rad resist. About 5-6 items at 50. Based on in-game tests on Aug. 2020.
+	var/max_capacity = 250 //Just barely over 2 "item touch" worth of rads when standing right next to the shard with a suit with only 10 rad resist. About 5-6 items at 50. Based on in-game tests on Aug. 2020.
 	var/current_capacity = 0
 	//Warning thresholds, will announce to the user when these thresholds have been surpassed. The compiler shits itself if I put numbers in the variable names and calculations in the variable values, so it's done this way instead.
 	var/first_threshold //50% capacity
@@ -286,10 +286,13 @@
 	if(rig?.wearer != user) //Well lad.
 		user.unregister_event(/event/irradiate, src, nameof(src::absorb_rads()))
 		return
-
+	
+	rads =  max(0,rads-rig.armor_absorb["rad"])
 	if(rig.H)
-		current_capacity += min(max_capacity, (rads * ((100 - initial_helmet) / 100)))
-	current_capacity += min(max_capacity, (rads * ((100 - initial_suit) / 100)))
+		rads = max(0,rads-rig.H.armor_absorb["rad"])
+		current_capacity += rads * ((100 - (initial_suit*0.5+initial_helmet*0.5) ) / 100)
+	else
+		current_capacity += rads * ((100 - initial_suit) / 100)
 
 	if(current_capacity >= third_threshold && threshold_announced < third_threshold)
 		say_to_wearer("\The [src] is at 90% capacity. Take precaution.")
@@ -317,7 +320,7 @@
 /obj/item/rig_module/rad_shield/adv
 	name = "high capacity radiation absorption device"
 	desc = "Its acronym, R.A.D., and full name both convey the application of this module. By using similar technology as radiation collectors, it protects the suit wearer from incoming radiation until its collectors are full. This model features a higher capacity than the basic version. It can be reset by using a suit storage unit's cleaning operation."
-	max_capacity = 1600 //About 7-8 "item touches" worth based on the same conditions as the above testing.
+	max_capacity = 800 //About 7-8 "item touches" worth based on the same conditions as the above testing.
 
 /obj/item/rig_module/rad_shield/adv/can_install(var/obj/item/clothing/suit/space/rig/target)
    var/parent_check=..()

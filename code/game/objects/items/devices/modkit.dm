@@ -246,4 +246,8 @@
 	C.slowdown+=0.4
 	C.armor["rad"]+=25
 	C.armor_absorb["rad"]+=4.0
+	if(istype(C,/obj/item/clothing/suit/space/rig))
+		var/obj/item/clothing/suit/space/rig/R=C
+		if(R.H && R.H.rig==R && !R.H.canremove) //if the suit has a helmet built in, we should apply it to that, too
+			R.H.armor["rad"]+=25
 	
