@@ -1842,6 +1842,7 @@ var/proccalls = 1
 // Account default values
 #define DEPARTMENT_START_FUNDS 500
 #define DEPARTMENT_START_WAGE 100
+#define CYBORG_LATEJOIN_FEE 500
 
 //Staff of change
 #define SOC_CHANGETYPE_COOLDOWN 2 MINUTES

@@ -364,6 +364,9 @@
 		rank = src.mind.assigned_role
 		job = job_master.GetJob(rank)
 
+	if(rank in silicon_console_positions)
+		return LateSpawnSilicon(job, client.prefs)
+
 	var/mob/living/carbon/human/character = create_human(client.prefs)	//creates the human and transfers vars and mind
 	if(character.client.prefs.get_pref(/datum/preference_setting/toggle/randomslot))
 		character.client.prefs.random_character_sqlite(character, character.ckey)
@@ -446,25 +449,53 @@
 		register_event(/event/late_arrival, F, nameof(F::OnLateArrival())) //Wrapped in nameof() to ensure that the parent proc doesn't get called. Possibly a BYOND bug?
 
 	if(character.mind.assigned_role != "MODE")
-		if(character.mind.assigned_role != "Cyborg")
-			data_core.manifest_inject(character)
-			if(character.mind.assigned_role == "Trader")
-				//If we're a trader, instead send a message to PDAs with the trader cartridge
-				for (var/obj/item/device/pda/P in PDAs)
-					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
-						var/mob/living/L = get_holder_of_type(P,/mob/living)
-						if(L)
-							L.show_message("[bicon(P)] <b>Message from U*{*,*;8AYE1*;*;*a;1 (0x034ac15e), </b>\"Caw. Cousin [character.real_name] detected in sector.\".", 2)
-				for(var/mob/dead/observer/M in player_list)
-					if(M.stat == DEAD && M.client)
-						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character.real_name] has arrived in the sector from space.</span></span>",character) //handle_render generates a Follow link
-			else
-				AnnounceArrival(character, rank)
-				INVOKE_EVENT(src, /event/late_arrival, "character" = character, "rank" = rank)
-			character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+		data_core.manifest_inject(character)
+		if(character.mind.assigned_role == "Trader")
+			//If we're a trader, instead send a message to PDAs with the trader cartridge
+			for (var/obj/item/device/pda/P in PDAs)
+				if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
+					var/mob/living/L = get_holder_of_type(P,/mob/living)
+					if(L)
+						L.show_message("[bicon(P)] <b>Message from U*{*,*;8AYE1*;*;*a;1 (0x034ac15e), </b>\"Caw. Cousin [character.real_name] detected in sector.\".", 2)
+			for(var/mob/dead/observer/M in player_list)
+				if(M.stat == DEAD && M.client)
+					handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character.real_name] has arrived in the sector from space.</span></span>",character) //handle_render generates a Follow link
 		else
-			character.Robotize()
+			AnnounceArrival(character, rank)
+			INVOKE_EVENT(src, /event/late_arrival, "character" = character, "rank" = rank)
+		character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 	qdel(src)
+
+/mob/new_player/proc/LateSpawnSilicon(var/datum/job/job, var/datum/preferences/prefs)
+	if(!job || mind.assigned_role != job.title)
+		to_chat(src, "<span class='warning'>[job ? job.title : "That position"] is no longer available. Please try another.</span>")
+		return 0
+
+	var/mob/living/silicon/S = create_roundstart_silicon(prefs)
+	if(!S)
+		return 0
+
+	job.charge_latejoin_fee(S)
+	S.store_position()
+	job_master.CheckPriorityFulfilled(job.title)
+	log_admin("([S.key]) latejoined as \a [job.title].")
+	AnnounceSiliconArrival(job)
+	return 1
+
+/proc/AnnounceSiliconArrival(var/datum/job/job)
+	if(ticker.current_state != GAME_STATE_PLAYING)
+		return
+	var/message = "\A [job.title] chassis has been delivered to the station."
+	if(job.latejoin_fee)
+		message += " The station account has been billed $[job.latejoin_fee]."
+	var/datum/speech/speech = announcement_intercom.create_speech(message, transmitter = announcement_intercom)
+	speech.name = "Arrivals Announcement Computer"
+	speech.job = "Automated Announcement"
+	speech.as_name = "Arrivals Announcement Computer"
+	speech.frequency = COMMON_FREQ
+
+	Broadcast_Message(speech, vmask = null, data = 0, compression = 0, level = list(0,1))
+	qdel(speech)
 
 /proc/Meteortype_Latejoin(var/atom/movable/target, var/rank)
 	var/obj/effect/landmark/start/endpoint = null
