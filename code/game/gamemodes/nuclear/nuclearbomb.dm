@@ -9,10 +9,13 @@ var/list/nuclear_bombs = list()
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "nuclearbomb0"
 	density = 1
+	var/datum/wires/nuke/wires = null
+	var/wiresexposed = 0 // If it's been screwdrivered open.
 	var/deployable = 0
 	var/extended = 0
 	var/timeleft = 60 //This is a value in seconds, deciseconds will be deducted
 	var/timing = 0
+	var/previously_activated = 0
 	var/r_code = "ADMIN"
 	var/code = ""
 	var/yes_code = 0
@@ -31,11 +34,14 @@ var/list/nuclear_bombs = list()
 
 /obj/machinery/nuclearbomb/New()
 	..()
+	wires = new(src)
 	nuclear_bombs += src
 	r_code = "[rand(10000, 99999)]"//Creates a random code upon object spawn.
 	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_nuclearbomb")
 
 /obj/machinery/nuclearbomb/Destroy()
+	if(wires)
+		QDEL_NULL(wires)
 	nuclear_bombs -= src
 	..()
 
@@ -50,11 +56,24 @@ var/list/nuclear_bombs = list()
 				attack_hand(M)
 
 /obj/machinery/nuclearbomb/attackby(obj/item/weapon/O as obj, mob/user as mob)
+	if (wiresexposed && (O.is_wirecutter(user) || O.is_multitool(user)))
+		wires.Interact(user)
+		return
+
 	if (src.extended)
 		if (istype(O, /obj/item/weapon/disk/nuclear))
 			usr.drop_item(O, src, force_drop = 1)
 			src.auth = O
 			src.add_fingerprint(user)
+			return
+
+		if(O.is_screwdriver(user))
+			if(!previously_activated || AreConnectedZLevels(nukedisk.z,map.zMainStation))
+				to_chat(user, "<span class='warning'>The wire panel is mechanically obscured.</span>")
+			else
+				wiresexposed = !wiresexposed
+				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
+				O.playtoolsound(src, 50)
 			return
 
 	if (src.anchored)
@@ -130,24 +149,34 @@ var/list/nuclear_bombs = list()
 		return attack_hand(user) //continue as normal
 	return 0 //otherwise nothing
 
+/obj/machinery/nuclearbomb/proc/control_link(href = "timer", display = "Toggle", option = "1")
+	return auth && yes_code ? "<A href='?src=\ref[src];[href]=[option]'>[display]</A>" : "[display]"
+
 /obj/machinery/nuclearbomb/attack_hand(mob/user as mob)
-	if (src.extended)
+	if(wiresexposed)
+		wires.Interact(user)
+		return
+	if (extended)
 		user.set_machine(src)
-		var/dat = text("<TT><B>Nuclear Fission Explosive</B><BR>\nAuth. Disk: <A href='?src=\ref[];auth=1'>[]</A><HR>", src, (src.auth ? "++++++++++" : "----------"))
-		if (src.auth)
-			if (src.yes_code)
-				dat += text("\n<B>Status</B>: []-[]<BR>\n<B>Timer</B>: []<BR>\n<BR>\nTimer: [] <A href='?src=\ref[];timer=1'>Toggle</A><BR>\nTime: <A href='?src=\ref[];time=-10'>-</A> <A href='?src=\ref[];time=-1'>-</A> [] <A href='?src=\ref[];time=1'>+</A> <A href='?src=\ref[];time=10'>+</A><BR>\n<BR>\nSafety: [] <A href='?src=\ref[];safety=1'>Toggle</A><BR>\nAnchor: [] <A href='?src=\ref[];anchor=1'>Toggle</A><BR>\n", (src.timing ? "Func/Set" : "Functional"), (src.safety ? "Safe" : "Engaged"), src.timeleft, (src.timing ? "On" : "Off"), src, src, src, src.timeleft, src, src, (src.safety ? "On" : "Off"), src, (src.anchored ? "Engaged" : "Off"), src)
+		var/dat = "<TT><B>Nuclear Fission Explosive</B><BR>\nAuth. Disk: <A href='?src=\ref[src];auth=1'>[src.auth ? "++++++++++" : "----------"]</A><HR><B>Status</B>: "
+		if (auth)
+			if(yes_code)
+				dat += "[timing ? "Func/Set" : "Functional"]"
 			else
-				dat += text("\n<B>Status</B>: Auth. S2-[]<BR>\n<B>Timer</B>: []<BR>\n<BR>\nTimer: [] Toggle<BR>\nTime: - - [] + +<BR>\n<BR>\n[] Safety: Toggle<BR>\nAnchor: [] Toggle<BR>\n", (src.safety ? "Safe" : "Engaged"), src.timeleft, (src.timing ? "On" : "Off"), src.timeleft, (src.safety ? "On" : "Off"), (src.anchored ? "Engaged" : "Off"))
+				dat += "Auth. S2"
 		else
-			if (src.timing)
-				dat += text("\n<B>Status</B>: Set-[]<BR>\n<B>Timer</B>: []<BR>\n<BR>\nTimer: [] Toggle<BR>\nTime: - - [] + +<BR>\n<BR>\nSafety: [] Toggle<BR>\nAnchor: [] Toggle<BR>\n", (src.safety ? "Safe" : "Engaged"), src.timeleft, (src.timing ? "On" : "Off"), src.timeleft, (src.safety ? "On" : "Off"), (src.anchored ? "Engaged" : "Off"))
-			else
-				dat += text("\n<B>Status</B>: Auth. S1-[]<BR>\n<B>Timer</B>: []<BR>\n<BR>\nTimer: [] Toggle<BR>\nTime: - - [] + +<BR>\n<BR>\nSafety: [] Toggle<BR>\nAnchor: [] Toggle<BR>\n", (src.safety ? "Safe" : "Engaged"), src.timeleft, (src.timing ? "On" : "Off"), src.timeleft, (src.safety ? "On" : "Off"), (src.anchored ? "Engaged" : "Off"))
+			dat += "[timing ? "Set" : "Auth. S1"]"
+		dat += {"-[safety ? "Safe" : "Engaged"]<BR>
+				<B>Timer</B>: [timeleft]<BR>
+				<BR>Timer: [timing ? "On" : "Off"] [control_link("timer")]<BR>
+				Time: [control_link("time","-","-10")] [control_link("time","-","-1")] [timeleft]
+				[control_link("time","+","1")] [control_link("time","+","10")]<BR>
+				<BR>Safety: [safety ? "On" : "Off"] [control_link("safety")]<BR>
+				Anchor: [anchored ? "Engaged" : "Off"] [control_link("anchor")]<BR>"}
 		var/message = "AUTH"
-		if (src.auth)
-			message = text("[]", src.code)
-			if (src.yes_code)
+		if (auth)
+			message = "[code]"
+			if (yes_code)
 				message = "*****"
 		dat += {"<HR><br/>>[message]<BR>\n
 		<A href='?src=\ref[src];type=1'>1</A>-<A href='?src=\ref[src];type=2'>2</A>-<A href='?src=\ref[src];type=3'>3</A><BR>\n
@@ -156,16 +185,15 @@ var/list/nuclear_bombs = list()
 		<A href='?src=\ref[src];type=R'>R</A>-<A href='?src=\ref[src];type=0'>0</A>-<A href='?src=\ref[src];type=E'>E</A><BR>\n</TT>"}
 		user << browse(HTML_SKELETON(dat), "window=nuclearbomb;size=300x400")
 		onclose(user, "nuclearbomb")
-	else if (src.deployable)
+	else if (deployable)
 		if(removal_stage < 5)
-			src.anchored = 1
+			anchored = 1
 			visible_message("<span class='notice'>With a steely snap, bolts slide out of [src] and anchor it to the flooring!</span>")
 		else
 			visible_message("<span class='notice'>\The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.</span>")
 		flick("nuclearbombc", src)
-		src.icon_state = "nuclearbomb1"
-		src.extended = 1
-	return
+		icon_state = "nuclearbomb1"
+		extended = 1
 
 /obj/machinery/nuclearbomb/verb/make_deployable()
 	set category = "Object"
@@ -193,6 +221,9 @@ var/list/nuclear_bombs = list()
 	if (!usr.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
+	if (src.wires.IsIndexCut(NUKE_WIRE_BOOM))
+		to_chat(usr, "<span class='warning'>Error: Interface failure. Check that all cables are connected properly.</span>")
+		return
 	if (istype(src.loc, /turf))
 		usr.set_machine(src)
 		if (href_list["auth"])
@@ -234,6 +265,7 @@ var/list/nuclear_bombs = list()
 						return
 					src.timing = !( src.timing )
 					if (src.timing)
+						src.previously_activated = 1
 						src.icon_state = "nuclearbomb2"
 						if(!src.safety)
 							bomb_set = 1//There can still be issues with this reseting when there are multiple bombs. Not a big deal tho for Nuke/N

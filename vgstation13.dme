@@ -597,6 +597,7 @@
 #include "code\datums\wires\jukebox.dm"
 #include "code\datums\wires\mommi.dm"
 #include "code\datums\wires\mulebot.dm"
+#include "code\datums\wires\nuke.dm"
 #include "code\datums\wires\particle_accelerator.dm"
 #include "code\datums\wires\radio.dm"
 #include "code\datums\wires\rnd_wires.dm"
