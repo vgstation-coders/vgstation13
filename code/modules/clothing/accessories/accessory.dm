@@ -412,11 +412,18 @@
 /obj/item/clothing/accessory/lasertag/update_icon()
 	if(source_vest)
 		appearance = source_vest.appearance
+		if(attached_to)
+			var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
+			attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
+			if(ismob(attached_to.loc))
+				var/mob/M = attached_to.loc
+				M.regenerate_icons()
 	..()
 
 /obj/item/clothing/accessory/lasertag/on_removed(mob/user)
 	if(!attached_to)
 		return
+	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
 	attached_to.overlays -= inv_overlay
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
@@ -451,11 +458,18 @@
 /obj/item/clothing/accessory/wcoat/update_icon()
 	if(source_vest)
 		appearance = source_vest.appearance
+		if(attached_to)
+			var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
+			attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
+			if(ismob(attached_to.loc))
+				var/mob/M = attached_to.loc
+				M.regenerate_icons()
 	..()
 
 /obj/item/clothing/accessory/wcoat/on_removed(mob/user)
 	if(!attached_to)
 		return
+	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
 	attached_to.overlays -= inv_overlay
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
