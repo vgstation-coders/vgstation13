@@ -1100,7 +1100,7 @@ var/global/objects_thrown_when_explode = FALSE
 		if(!silent)
 			to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
-	if(!istype(loc, /turf) && !is_holder_of(user, src)) //Object is not on a turf
+	if(!istype(loc, /obj/item/weapon/tray) && !istype(loc, /turf) && !is_holder_of(user, src)) //Object is not on a turf
 		if(!silent)
 			to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE

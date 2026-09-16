@@ -104016,13 +104016,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/supermatter_room)
 "uBy" = (
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
-/obj/item/device/gps/planetary,
-/obj/item/device/gps/planetary,
-/obj/item/device/gps/planetary,
+/obj/structure/flora/pottedplant/random,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkblue"

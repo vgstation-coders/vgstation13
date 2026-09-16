@@ -9,14 +9,14 @@
 
 #define BOT_OLDTARGET_FORGET_DEFAULT 100 //100*WaitMachinery
 
-#if ASTAR_DEBUG == 1
-#define log_astar_bot(text) visible_message("[src] : [text]")
-#define log_astar_beacon(text) //to_chat(world, "[src] : [text]")
-#define log_astar_command(text) to_chat(world, "[src] : [text]")
+#if PATHING_DEBUG == 1
+#define log_path_bot(text) visible_message("[src] : [text]")
+#define log_path_beacon(text) //to_chat(world, "[src] : [text]")
+#define log_path_command(text) to_chat(world, "[src] : [text]")
 #else
-#define log_astar_bot(text)
-#define log_astar_beacon(text)
-#define log_astar_command(text)
+#define log_path_bot(text)
+#define log_path_beacon(text)
+#define log_path_command(text)
 #endif
 
 /obj/machinery/bot
@@ -66,7 +66,6 @@
 	var/turf/patrol_target	// this is turf to navigate to (location of beacon)
 	var/auto_patrol = 0		// set to make bot automatically patrol
 	var/waiting_for_patrol = FALSE // Are we waiting for a beacon to give us a clear path? (in order to avoid calling for a path more than once)
-	var/waiting_for_path = FALSE
 	var/list/patrol_path = list() //Our patroling path
 
 	var/current_pathing = 0 // Safety check for recursive movement
@@ -100,10 +99,6 @@
 	. = ..()
 	if(botcard)
 		QDEL_NULL(botcard)
-	if (waiting_for_patrol || waiting_for_path)
-		for (var/datum/path_maker/PM in pathmakers)
-			if (PM.owner == src)
-				qdel(PM)
 	bots_list -= src
 	nearest_beacon_loc = null
 	patrol_target = null
@@ -164,7 +159,7 @@
 //Set time_to_forget to -1 to never forget it
 /obj/machinery/bot/proc/add_oldtarget(var/old_target, var/time_to_forget = BOT_OLDTARGET_FORGET_DEFAULT)
 	old_targets[old_target] = time_to_forget
-	log_astar_bot("[old_target] = [old_targets[old_target]]")
+	log_path_bot("[old_target] = [old_targets[old_target]]")
 
 // Remove an old target. Override for more complicated logic.
 /obj/machinery/bot/proc/remove_oldtarget(var/old_target)
@@ -172,7 +167,7 @@
 
 /obj/machinery/bot/proc/decay_oldtargets()
 	for(var/i in old_targets)
-		log_astar_bot("old target: [i] [old_targets[i]]")
+		log_path_bot("old target: [i] [old_targets[i]]")
 		if(--old_targets[i] <= 0)
 			remove_oldtarget(i)
 
@@ -208,9 +203,7 @@
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
 	if(!length(path)) //It is assumed we gain a path through process_bot()
 		if(target)
-			if (waiting_for_path)
-				return 1
-			calc_path(target, new /callback(src, nameof(src::get_path())))
+			calc_path(target)
 			if (path && length(path))
 				process_path()
 			return 1
@@ -218,11 +211,11 @@
 
 	patrol_path = list() //Kill any patrols we're using
 
-	log_astar_bot("Step [remaining_steps] of [steps_per]")
+	log_path_bot("Step [remaining_steps] of [steps_per]")
 	if(loc == get_turf(target))
 		return at_path_target()
 	var/turf/next = path[1]
-	if(istype(next, /turf/simulated) || (bot_flags & BOT_SPACEWORTHY))
+	if(!SSpathfinder.space_type_cache[next.type] || (bot_flags & BOT_SPACEWORTHY))
 		step_to(src, next)
 		if(get_turf(src) == next)
 			path -= next
@@ -250,7 +243,7 @@
 	if(frustration > 5)
 		summoned = FALSE // Let's not try again.
 		if (target && !target.gcDestroyed)
-			calc_path(target, new /callback(src, nameof(src::get_path())), next)
+			calc_path(target, next)
 		else
 			target = null
 			path = list()
@@ -280,7 +273,7 @@
 /obj/machinery/bot/proc/process_patrol(var/remaining_steps = steps_per)
 	if (!can_patrol())
 		return
-	astar_debug("process patrol called [src] [patrol_path.len]")
+	path_debug("process patrol called [src] [patrol_path.len]")
 	current_pathing++
 	if (current_pathing > MAX_PATHING_ATTEMPTS)
 		CRASH("maximum pathing reached")
@@ -291,12 +284,12 @@
 		return
 	if(!can_path())
 		return
-	log_astar_bot("Step [remaining_steps] of [steps_per]")
+	log_path_bot("Step [remaining_steps] of [steps_per]")
 	if(loc == patrol_target)
 		patrol_path = list()
 		return at_patrol_target()
 	var/turf/next = patrol_path[1]
-	if(istype(next, /turf/simulated) || (bot_flags & BOT_SPACEWORTHY))
+	if(!SSpathfinder.space_type_cache[next.type] || (bot_flags & BOT_SPACEWORTHY))
 		step_to(src, next)
 		if(get_turf(src) == next)
 			frustration = 0
@@ -320,24 +313,24 @@
 	if(waiting_for_patrol)
 		return
 	if(awaiting_beacon++)
-		log_astar_beacon("awaiting beacon:[awaiting_beacon]")
+		log_path_beacon("awaiting beacon:[awaiting_beacon]")
 		if(awaiting_beacon > 5)
 			awaiting_beacon = 0
 			find_nearest_beacon()
 		return
 	if(next_destination)
-		log_astar_beacon("onwards to [new_destination]")
+		log_path_beacon("onwards to [new_destination]")
 		set_destination(next_destination)
 
 	if(patrol_target)
 		waiting_for_patrol = TRUE
-		calc_patrol_path(patrol_target, new /callback(src, nameof(src::get_patrol_path())))
+		calc_patrol_path(patrol_target)
 // This proc send out a singal to every beacon listening to the "beacon_freq" variable.
 // The signal says, "i'm a bot looking for a beacon to patrol to."
 // Every beacon with the flag "patrol" responds by trasmitting its location.
 // The bot calculates the nearest one and then calculates a path.
 /obj/machinery/bot/proc/find_nearest_beacon(var/post_signal = TRUE)
-	log_astar_beacon("find_nearest_beacon called")
+	log_path_beacon("find_nearest_beacon called")
 	if(awaiting_beacon)
 		return
 	if (post_signal)
@@ -349,7 +342,7 @@
 		awaiting_beacon = 0
 		if(nearest_beacon)
 			total_awaiting_beacon = 0
-			log_astar_beacon("nearest_beacon was found and is [nearest_beacon]")
+			log_path_beacon("nearest_beacon was found and is [nearest_beacon]")
 			set_destination(nearest_beacon)
 		else
 			total_awaiting_beacon++
@@ -365,7 +358,7 @@
 // Only [new_dest], if it exist, replies with its location.
 /obj/machinery/bot/proc/set_destination(var/new_dest)
 	if (new_dest)
-		log_astar_beacon("new_destination [new_dest]")
+		log_path_beacon("new_destination [new_dest]")
 		new_destination = new_dest
 		post_signal(beacon_freq, "findbeacon", "patrol")
 		awaiting_beacon = 1
@@ -394,7 +387,7 @@
 			return TRUE
 	if(frustration > 5)
 		if (target && !target.gcDestroyed)
-			calc_path(target, new /callback(src, nameof(src::get_path())), next)
+			calc_path(target, next)
 		else
 			target = null
 			patrol_path = list()
@@ -403,7 +396,7 @@
 
 // send a radio signal with a single data key/value pair
 /obj/machinery/bot/proc/post_signal(var/freq, var/key, var/value)
-	log_astar_beacon("posted signal [key] = [value] on freq [freq].")
+	log_path_beacon("posted signal [key] = [value] on freq [freq].")
 	post_signal_multiple(freq, list("[key]" = value))
 
 // send a complex radio signal with an associative list of value in keyval.
@@ -418,7 +411,7 @@
 	signal.transmission_method = 1
 	signal.data = keyval
 	if(signal.data["findbeacon"])
-		log_astar_beacon("singal sent via navbeacons")
+		log_path_beacon("singal sent via navbeacons")
 		frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
 	else
 		frequency.post_signal(src, signal)
@@ -439,30 +432,30 @@
 	// -- Patrol signal --
 	var/recv = signal.data["beacon"]
 	if (recv)
-		log_astar_beacon("received patrol signal : [recv]")
+		log_path_beacon("received patrol signal : [recv]")
 		if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
 			handle_received_destination(signal, recv)
 			return 1
 		// if looking for nearest beacon
 		if(new_destination == "__nearest__")
-			log_astar_beacon("calculating nearest beacon")
+			log_path_beacon("calculating nearest beacon")
 			var/dist = get_dist(src,signal.source.loc)
 			if(nearest_beacon)
 				// note we ignore the beacon we are located at
 				if(dist>1 && dist<get_dist(src, nearest_beacon_loc))
-					log_astar_beacon("replacing nearest_beacon [nearest_beacon] with [recv] as it is closer. [get_dist(src, nearest_beacon_loc)] [dist]")
+					log_path_beacon("replacing nearest_beacon [nearest_beacon] with [recv] as it is closer. [get_dist(src, nearest_beacon_loc)] [dist]")
 					nearest_beacon = recv
 					nearest_beacon_loc = signal.source.loc
 				return
 			else if(dist > 1) //We don't have a nearest beacon to compare to, so we're going to accept the first one we find that isn't on the same turf as us
-				log_astar_beacon("new nearest_beacon is [recv]")
+				log_path_beacon("new nearest_beacon is [recv]")
 				nearest_beacon = recv
 				nearest_beacon_loc = signal.source.loc
 			return 1
 	// -- Command signals --
 	var/target_bot = signal.data["target"]
 	var/command = signal.data["command"]
-	log_astar_command("received signal [command] for [target_bot]")
+	log_path_command("received signal [command] for [target_bot]")
 	if (target_bot != "\ref[src]")
 		return
 	execute_signal_command(signal, command)
@@ -470,7 +463,7 @@
 // -- We got a new destination, how do we go there?
 // Most bots will patrol to the target.
 /obj/machinery/bot/proc/handle_received_destination(var/datum/signal/signal, var/recv)
-	log_astar_beacon("[src] : new destination chosen, [recv]")
+	log_path_beacon("[src] : new destination chosen, [recv]")
 	destination = new_destination
 	patrol_target = signal.source.loc
 	next_destination = signal.data["next_patrol"]
@@ -478,9 +471,9 @@
 
 // -- Received an order via signal. This proc assumes the bot is the correct one to get the command.
 /obj/machinery/bot/proc/execute_signal_command(var/datum/signal/signal, var/command)
-	log_astar_command("recieved command [command]")
+	log_path_command("recieved command [command]")
 	if (!is_type_in_list(signal.source, commanding_radios))
-		log_astar_command("refused command [command], wrong radio type. Expected [english_list(commanding_radios, and_text = " or ")] got [signal.source.type]")
+		log_path_command("refused command [command], wrong radio type. Expected [english_list(commanding_radios, and_text = " or ")] got [signal.source.type]")
 		return TRUE
 	switch (command)
 		if ("auto_patrol")
@@ -528,7 +521,7 @@
 	unload_here = _unload_here
 	unload_dir = unload_direction
 	loc_description = text_desc
-	astar_debug_mulebots("Order up! [destination] [loc_description] [thing_to_load] [unload_here] [unload_dir]!")
+	debug_mulebots("Order up! [destination] [loc_description] [thing_to_load] [unload_here] [unload_dir]!")
 
 /datum/bot/order/mule/unload
 
@@ -548,57 +541,21 @@
 /obj/machinery/bot/proc/return_status()
 	return "Idle"
 
-// Caluculate a path between the bot and the target.
-// Target is the target to go to.
-// callback gets called by the pathmaker once it's done its work and wishes to return a path.
-// avoid is a turf the path should NOT go through. (a previous obstacle.) This info is then given to the pathmaker.
-// Fast bots use quick_AStar method to direcly calculate a path and move on it.
-/obj/machinery/bot/proc/calc_path(var/target, var/callback, var/turf/avoid = null)
-	ASSERT(target && callback)
-	var/cardinal_proc = bot_flags & BOT_SPACEWORTHY ? /turf/proc/AdjacentTurfsSpace : /turf/proc/CardinalTurfsWithAccess
-	if (((get_dist(src, target) < 13) && !(bot_flags & BOT_NOT_CHASING)) || (get_dist(src, target) < 6)) // For beepers and ED209
-		// IMPORTANT: Quick AStar only takes TURFS as arguments.
-		log_astar_bot("quick astar path calculation...")
-		path = quick_AStar(src.loc, get_turf(target), cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
-		log_astar_bot("path is [path.len]")
-		return TRUE
-	waiting_for_path = 1
-	. = AStar(src, callback, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
-	if (!.)
-		waiting_for_path = 0
+// Bots move cardinally, hence get_walkable_path_to. `avoid` is a turf to route around.
+/obj/machinery/bot/proc/calc_path(var/target, var/turf/avoid = null)
+	ASSERT(target)
+	path = get_walkable_path_to(src, target, max_distance = 300, mintargetdist = 0, id = botcard, simulated_only = !(bot_flags & BOT_SPACEWORTHY), exclude = avoid)
+	log_path_bot("path is [length(path)]")
+	return TRUE
 
-/obj/machinery/bot/proc/calc_patrol_path(var/target, var/callback, var/turf/avoid = null)
-	ASSERT(target && callback)
-	log_astar_beacon("[new_destination]")
-	var/cardinal_proc = bot_flags & BOT_SPACEWORTHY ? /turf/proc/AdjacentTurfsSpace : /turf/proc/CardinalTurfsWithAccess
-	if ((get_dist(src, target) < 13) && !(bot_flags & BOT_NOT_CHASING)) // For beepers and ED209
-		// IMPORTANT: Quick AStar only takes TURFS as arguments.
-		waiting_for_patrol = FALSE // Case we are calculating a quick path for a patrol.
-		patrol_path = quick_AStar(src.loc, get_turf(target), cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
-		return TRUE
-	return AStar(src, callback, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
-
-
-// This proc is called by the path maker once it has calculated a path.
-/obj/machinery/bot/proc/get_path(var/list/L, var/target)
-	waiting_for_path = 0
-	if(islist(L))
-		path = L
-		if (bot_flags & BOT_NOT_CHASING) // Chasing bots are obstinate and will not forget their target so easily.
-			target = null
-			add_oldtarget(target)
-		return TRUE
-	return FALSE
-
-// This proc is called by the path maker once it has calculated a path for the patrol.
-// It sets waiting_for_patrol to FALSE to let us caculate paths for patrols again.
-/obj/machinery/bot/proc/get_patrol_path(var/list/L, var/target)
+/obj/machinery/bot/proc/calc_patrol_path(var/target, var/turf/avoid = null)
+	ASSERT(target)
+	log_path_beacon("[new_destination]")
+	patrol_path = get_walkable_path_to(src, target, max_distance = 300, mintargetdist = 0, id = botcard, simulated_only = !(bot_flags & BOT_SPACEWORTHY), exclude = avoid)
+	log_path_bot("patrol path is [length(patrol_path)]")
 	waiting_for_patrol = FALSE
-	if(islist(L))
-		patrol_path = L
-		return TRUE
-	auto_patrol = FALSE // Failed to get a patrol path
-	return FALSE
+	return TRUE
+
 
 // -- These other procs are self-explanatory and related to regular updates and interactions with the bots.
 

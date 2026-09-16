@@ -244,6 +244,36 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/storage/pneumatic
 
+/datum/design/stunprobe
+	name = "Stun Probe"
+	desc = "A strange stunprod-like stick that delivers shocks instead of stuns."
+	id = "stunprobe"
+	req_tech = list(Tc_COMBAT = 3, Tc_POWERSTORAGE = 2, Tc_ALIEN = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 1000, MAT_GLASS = 1000, MAT_RETICULITE = 3000)
+	category = "Weapons"
+	build_path = /obj/item/weapon/melee/baton/stunprobe
+
+/datum/design/sickstick
+	name = "Sick Stick"
+	desc = "A strange stunprod-like stick that induces vomiting instead of stunning."
+	id = "sickstick"
+	req_tech = list(Tc_COMBAT = 3, Tc_POWERSTORAGE = 2, Tc_ALIEN = 4)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 1000, MAT_GLASS = 1000, MAT_RETICULITE = 3000)
+	category = "Weapons"
+	build_path = /obj/item/weapon/melee/baton/stunprobe/sick
+
+/datum/design/smalldisintegrator
+	name = "Small Disintegrator"
+	desc = "A strange self defense weapon with two modes, microwave and scorch."
+	id = "smalldisintegrator"
+	req_tech = list(Tc_COMBAT = 3, Tc_MAGNETS = 2, Tc_MATERIALS = 1, Tc_ALIEN = 5)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 3000, MAT_GLASS = 3000, MAT_RETICULITE = 6000)
+	category = "Weapons"
+	build_path = /obj/item/weapon/gun/energy/smalldisintegrator
+
 //Ammolathe designs. They lack research values so they can't be researched.
 //Weapons
 
@@ -396,6 +426,14 @@
 	materials = list(MAT_IRON = 500, MAT_PLASMA = 500)
 	build_path = /obj/item/ammo_casing/shotgun/dragonsbreath
 
+/datum/design/shotgun_shell/fanshot
+	name = "12ga. FaNshot shell"
+	desc = "A 12 gauge shell capable of knocking things back with incredible force."
+	id = "fanshell"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 1000)
+	build_path = /obj/item/ammo_casing/shotgun/fanshot
+
 /datum/design/shotgun_shell/frag
 	name = "12ga. frag shell"
 	desc = "A 12 gauge shell filled with a high-explosive mixture, for heavy anti-personnel usage."
@@ -428,7 +466,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 4000)
 	build_path = /obj/item/ammo_storage/box/b380auto/rubber
-	
+
 /datum/design/ammo_b380auto/pepperball
 	name = "Ammunition box (.380AUTO pepperball)"
 	desc = "A box of .380AUTO pepperball cartridges."
@@ -516,6 +554,14 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000, MAT_PLASMA = 8000)
 	build_path = /obj/item/weapon/storage/box/dragonsbreathshells
+
+/datum/design/ammo_shotgun/fanshot
+	name = "Ammunition box (12ga. FaNshot)"
+	desc = "A box of 12-gauge FaNshot shells."
+	id = "ammo_12ga_fan"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 16000)
+	build_path = /obj/item/weapon/storage/box/fanshotshells
 
 /datum/design/ammo_shotgun/frag
 	name = "Ammunition box (12ga. frag)"

@@ -113,7 +113,45 @@
 	send_applications(possible_candidates)
 	return 1
 
-/datum/dynamic_ruleset/midround/from_ghosts/review_applications()
+/datum/dynamic_ruleset/midround/from_ghosts/proc/send_applications(var/list/possible_volunteers = list())
+	if (possible_volunteers.len <= 0)//this shouldn't happen, as ready() should return 0 if there is not a single valid candidate
+		message_admins("Possible volunteers was 0. This shouldn't appear, because of ready(), unless you forced it!")
+		return
+	message_admins("DYNAMIC MODE: Polling [possible_volunteers.len] players to apply for the [name] ruleset.")
+	log_admin("DYNAMIC MODE: Polling [possible_volunteers.len] players to apply for the [name] ruleset.")
+
+	searching = 1
+	var/role_id = initial(role_category.id)
+	var/icon/logo_icon = icon('icons/logos.dmi', logo)
+	for(var/mob/M in possible_volunteers)
+		var/banned_factor = (jobban_isbanned(M, role_id) || isantagbanned(M) || (role_category_override && jobban_isbanned(M, role_category_override)))
+		if(!M.client || banned_factor || M.client.is_afk())
+			continue
+
+		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>Dynamic is looking for volunteers to become \a [initial(role_category.id)]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
+		window_flash(M.client)
+		M << sound('sound/voice/preparetofight.ogg', volume = 75)
+
+	spawn(1 MINUTES)
+		searching = 0
+		for(var/mob/M in possible_volunteers)
+			if(!M.client || jobban_isbanned(M, role_category))
+				continue
+			to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>Applications for [initial(role_category.id)] are now closed.</span>[logo ? "[bicon(logo_icon)]" : ""]")
+		if(!applicants || applicants.len <= 0)
+			log_admin("DYNAMIC MODE: [name] received no applications.")
+			message_admins("DYNAMIC MODE: [name] received no applications.")
+			mode.refund_midround_threat(cost)
+			mode.threat_log += "[worldtime2text()]: Rule [name] refunded [cost] (no applications)"
+			mode.executed_rules -= src
+			mode.midround_injection_cooldown = 0 // reset this too
+			return
+
+		log_admin("DYNAMIC MODE: [applicants.len] players volunteered for [name].")
+		message_admins("DYNAMIC MODE: [applicants.len] players volunteered for [name].")
+		review_applications()
+
+/datum/dynamic_ruleset/midround/from_ghosts/proc/review_applications()
 	message_admins("Applicant list: [english_list(applicants)]")
 	var/candidate_checks = required_candidates
 	if (max_candidates)
@@ -122,9 +160,12 @@
 		if(applicants.len <= 0)
 			if(i == candidate_checks)
 				//We have found no candidates so far and we are out of applicants.
+				log_admin("DYNAMIC MODE: [name] received no applications.")
+				message_admins("DYNAMIC MODE: [name] received no applications.")
 				mode.refund_midround_threat(cost)
 				mode.threat_log += "[worldtime2text()]: Rule [name] refunded [cost] (all applications invalid)"
 				mode.executed_rules -= src
+				mode.midround_injection_cooldown = 0 // reset this too
 			break
 		var/mob/applicant = pick(applicants)
 		applicants -= applicant

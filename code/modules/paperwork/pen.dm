@@ -56,9 +56,10 @@
 // Attached to writing instrument. (pen/pencil/etc)
 /datum/writing_style
 	parent_type = /datum/speech_filter
+	var/can_sign = FALSE
 
 	var/style      = "font-family:Verdana, sans;"
-	var/style_sign = "font-family:'Times New Roman', monospace;text-style:italic;"
+	//var/style_sign = "font-family:'Times New Roman', monospace;text-style:italic;"
 
 /datum/writing_style/New()
 	..()
@@ -82,7 +83,7 @@
 	return
 
 
-/datum/writing_style/proc/Format(var/t, var/obj/item/weapon/pen/P, var/mob/user, var/obj/item/weapon/paper/paper)
+/datum/writing_style/proc/Format(var/t, var/obj/item/implement, var/mob/user, var/atom/movable/onto)
 	var/count = 0
 	if(expressions.len)
 		for(var/key in expressions)
@@ -91,33 +92,27 @@
 			count++
 			var/datum/speech_filter_action/SFA = expressions[key]
 			if(SFA && !SFA.broken)
-				t = SFA.Run(t,user,paper)
+				t = SFA.Run(t,user,onto)
 			if(count%100 == 0)
 				sleep(1) //too much for us.
-	t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
-	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
+	if(can_sign)
+		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
 	t = replacetext(t, "\[date\]", "[current_date_string]")
 	t = replacetext(t, "\[time\]", "[worldtime2text()]")
 	t = replacetext(t, "\[stationname\]", "[station_name()]")
-	t = replacetext(t, "\[logo\]", "<img src=\"http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png\">")
 
-	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
-
-	t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
-	t = replacetext(t, "\[/table\]", "</td></tr></table>")
-	t = replacetext(t, "\[row\]", "</td><tr>")
-	t = replacetext(t, "\[cell\]", "<td>")
-
-	var/text_color
-	if(istype(P, /obj/item/weapon/pen))
+	var/text_color = "black"
+	if(istype(implement, /obj/item/weapon/pen))
+		var/obj/item/weapon/pen/P = implement
 		text_color = P.colour
-	else if(istype(P, /obj/item/toy/crayon))
-		var/obj/item/toy/crayon/C = P
+	else if(istype(implement, /obj/item/toy/crayon))
+		var/obj/item/toy/crayon/C = implement
 		text_color = C.mainColour
 
 	return "<span style=\"[style];color:[text_color]\">[t]</span>"
 
 /datum/writing_style/pen/New()
+	can_sign = TRUE
 	addReplacement(REG_BBTAG("\\*"), "<li>")
 	addReplacement(REG_BBTAG("hr"), "<HR>")
 	addReplacement(REG_BBTAG("small"), "<span style=\"font-size:15px\">")
@@ -146,12 +141,22 @@
 	addReplacement(REG_BBTAG("/palatino"), 	"</span>")
 	addReplacement(REG_BBTAG("tnr"),		"<span style=\"font-family:Times New Roman\">")
 	addReplacement(REG_BBTAG("/tnr"),		"</span>")
+	addReplacement(REG_BBTAG("field"),		"<span class=\"paper_field\"></span>")
+	addReplacement(REG_BBTAG("logo"),		"<img src=\"http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png\">")
+
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+
+	addReplacement(REG_BBTAG("table"),		"<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	addReplacement(REG_BBTAG("/table"),		"</td></tr></table>")
+	addReplacement(REG_BBTAG("row"),		"</td><tr>")
+	addReplacement(REG_BBTAG("cell"),		"<td>")
 
 	addExpression(REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img"), ACT_BBCODE_IMG,list(),flags = "gi")
 
 	..() // Order of operations
 
 /datum/writing_style/script/New()
+	can_sign = TRUE
 	style = "font-family:'Segoe Script', cursive;"
 	addReplacement(REG_BBTAG("\\*"), "<li>")
 	addReplacement(REG_BBTAG("hr"), "<HR>")
@@ -161,6 +166,16 @@
 	addReplacement(REG_BBTAG("/tiny"), "</span>")
 	addReplacement(REG_BBTAG("list"), "<ul>")
 	addReplacement(REG_BBTAG("/list"), "</ul>")
+	addReplacement(REG_BBTAG("field"),		"<span class=\"paper_field\"></span>")
+	addReplacement(REG_BBTAG("logo"),		"<img src=\"http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png\">")
+
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+
+	addReplacement(REG_BBTAG("table"),		"<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	addReplacement(REG_BBTAG("/table"),		"</td></tr></table>")
+	addReplacement(REG_BBTAG("row"),		"</td><tr>")
+	addReplacement(REG_BBTAG("cell"),		"<td>")
+
 
 	addExpression(REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img"), ACT_BBCODE_IMG,list(),flags = "gi")
 
@@ -172,9 +187,21 @@
 
 	..()
 
-/datum/writing_style/crayon
+/datum/writing_style/crayon/New()
+	can_sign = TRUE
 	style = "font-family:'Comic Sans MS';font-weight:bold"
 
+	addReplacement(REG_BBTAG("field"),		"<span class=\"paper_field\"></span>")
+	addReplacement(REG_BBTAG("logo"),		"<img src=\"http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png\">")
+
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+
+	addReplacement(REG_BBTAG("table"),		"<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	addReplacement(REG_BBTAG("/table"),		"</td></tr></table>")
+	addReplacement(REG_BBTAG("row"),		"</td><tr>")
+	addReplacement(REG_BBTAG("cell"),		"<td>")
+
+	..()
 
 /*
  * Pens

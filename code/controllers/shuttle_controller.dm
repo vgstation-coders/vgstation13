@@ -177,6 +177,53 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 /datum/emergency_shuttle/proc/get_linked_port()
 	return shuttle ? shuttle.linked_port : null
 
+// --- Admin panel hooks --------------------------------------------------
+// These let map-specific controllers (e.g. Odyssey's Bluespace Jump) tell the
+// admin shuttle panel which controls are meaningful and how to label state,
+// without the panel needing to know about each map.
+
+// Whether this controller manages multi-pod evacuation.
+/datum/emergency_shuttle/proc/uses_escape_pods()
+	return TRUE
+
+// Whether the given shuttle phase ("station", "transit", "centcom") is applicable to this controller.
+/datum/emergency_shuttle/proc/supports_phase(phase)
+	return TRUE
+
+// Whether the controller's `shuttle` var represents a real shuttle whose station/transit/centcom docks are meaningful to reposition.
+/datum/emergency_shuttle/proc/manages_shuttle_docks()
+	return TRUE
+
+// Title shown at the top of the admin shuttle panel.
+/datum/emergency_shuttle/proc/panel_title()
+	return "Emergency Shuttle Control"
+
+// Returns a turf the admin panel links to so an observer can jump to where the shuttle currently is.
+/datum/emergency_shuttle/proc/get_panel_jump_turf()
+	var/area/A = locate(/area/shuttle/escape/centcom)
+	if(A && A.area_turfs && A.area_turfs.len)
+		return pick(A.area_turfs)
+	return null
+
+// Status text shown in the admin panel for the current location/direction.
+/datum/emergency_shuttle/proc/get_status_label()
+	switch(location)
+		if(SHUTTLE_ON_STANDBY)
+			switch(direction)
+				if(EMERGENCY_SHUTTLE_RECALLED)
+					return "<b>In transit</b> (Recalled)"
+				if(EMERGENCY_SHUTTLE_STANDBY)
+					return "<b>At Central Command</b> (on standby)"
+				if(EMERGENCY_SHUTTLE_GOING_TO_STATION)
+					return "<b>In transit</b> (To Station)"
+				if(EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM)
+					return "<b>In transit</b> (To Centcom - Round End)"
+		if(SHUTTLE_ON_STATION)
+			return "<b>At the Station</b>"
+		if(SHUTTLE_ON_CENTCOM)
+			return "<b>At Central Command</b> (Round Ended)"
+	return "<b>Unknown</b>"
+
 /datum/emergency_shuttle/proc/force_shutdown()
 	online=0
 	shutdown=1

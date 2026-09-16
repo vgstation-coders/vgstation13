@@ -36,32 +36,31 @@
 
 /obj/item/device/core_sampler/proc/sample_item(var/item_to_sample, var/mob/user)
 	playsound(src, "sound/items/crank.ogg", 30, 0, -4, FALLOFF_SOUNDS, 0)
-	if(do_after(user, src, 1 SECONDS))
-		var/datum/geosample/geo_data
-		if(istype(item_to_sample, /turf/unsimulated/mineral))
-			var/turf/unsimulated/mineral/T = item_to_sample
-			if(T.finddatum)
-				T.finddatum.geologic_data.UpdateNearbyArtifactInfo(T)
-				geo_data = T.finddatum.geologic_data
-				var/excav_overlay = "overlay_excv1_[rand(1,3)]"
-				T.overlays += excav_overlay
-		else if(istype(item_to_sample, /obj/item/weapon/strangerock))
-			var/obj/item/weapon/strangerock/O = item_to_sample
-			geo_data = O.geologic_data
+	var/datum/geosample/geo_data
+	if(istype(item_to_sample, /turf/unsimulated/mineral))
+		var/turf/unsimulated/mineral/T = item_to_sample
+		if(T.finddatum)
+			T.finddatum.geologic_data.UpdateNearbyArtifactInfo(T)
+			geo_data = T.finddatum.geologic_data
+			var/excav_overlay = "overlay_excv1_[rand(1,3)]"
+			T.overlays += excav_overlay
+	else if(istype(item_to_sample, /obj/item/weapon/strangerock))
+		var/obj/item/weapon/strangerock/O = item_to_sample
+		geo_data = O.geologic_data
 
-		if(geo_data)
-			if(extracted)
-				to_chat(user, "<span class='warning'>\The [src] is full!</span>")
-			else
-				icon_state = "sampler-full"
-
-				//put in a rock sliver
-				extracted = new(src)
-				extracted.geological_data = geo_data
-
-				to_chat(user, "<span class='notice'>You extract a sample from \the [item_to_sample]'s core.</span>")
+	if(geo_data)
+		if(extracted)
+			to_chat(user, "<span class='warning'>\The [src] is full!</span>")
 		else
-			to_chat(user, "<span class='warning'>You are unable to take a sample of [item_to_sample].</span>")
+			icon_state = "sampler-full"
+
+			//put in a rock sliver
+			extracted = new(src)
+			extracted.geological_data = geo_data
+
+			to_chat(user, "<span class='notice'>You extract a sample from \the [item_to_sample]'s core.</span>")
+	else
+		to_chat(user, "<span class='warning'>You are unable to take a sample of [item_to_sample].</span>")
 
 /obj/item/device/core_sampler/attack_self(mob/user)
 	if(extracted)

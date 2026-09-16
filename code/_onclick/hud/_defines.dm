@@ -42,6 +42,7 @@
 #define ui_dropbutton "EAST-4:[22*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
 #define ui_drop_throw "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
 #define ui_pull_resist "EAST-2:[26*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
+#define ui_rest "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1.5:[7*PIXEL_MULTIPLIER]"
 #define ui_kick_bite "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
 #define ui_acti "EAST-2:[26*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
 #define ui_movi "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
@@ -126,7 +127,7 @@
 #define ui_hstore1 "CENTER-2,CENTER-2"
 //#define ui_resist "EAST+1,SOUTH-1"
 #define ui_sleep "EAST+1, NORTH-13"
-#define ui_rest "EAST+1, NORTH-14"
+//#define ui_rest "EAST+1, NORTH-14"
 
 
 #define ui_iarrowleft "SOUTH-1,11"

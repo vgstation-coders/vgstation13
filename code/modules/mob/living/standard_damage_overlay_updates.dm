@@ -126,6 +126,8 @@
 
 /mob/living/proc/get_impaired_vision_range()
 	var/_modifiers	= get_impaired_vision_modifiers()
+	if(!islist(_modifiers) || length(_modifiers) < 2)
+		return 0
 	var/_total 		= _modifiers[1]
 	var/_max_range 	= _modifiers[2]
 

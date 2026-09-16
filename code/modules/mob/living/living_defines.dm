@@ -1,4 +1,5 @@
 /mob/living
+	var/last_swap_time = 0
 	see_invisible = SEE_INVISIBLE_LIVING
 
 	//Health and life related vars

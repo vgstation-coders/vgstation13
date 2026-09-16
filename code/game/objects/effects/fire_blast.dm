@@ -162,7 +162,7 @@
 				desc = "A small puff of nitrogen dioxide gas."
 		update_icon()
 
-	if(stored_gas)
+	if(stored_gas && loc)
 		loc.assume_air(stored_gas)
 
 	spawn()

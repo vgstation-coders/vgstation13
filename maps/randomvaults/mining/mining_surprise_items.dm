@@ -17,7 +17,7 @@
 	initialize_NPC_components()
 
 /mob/living/simple_animal/robot/NPC/proc/initialize_NPC_components()
-	add_component(/datum/component/controller/movement/astar)
+	add_component(/datum/component/controller/movement/pathed)
 
 /mob/living/simple_animal/robot/NPC/dusky
 	name = "Dusky"

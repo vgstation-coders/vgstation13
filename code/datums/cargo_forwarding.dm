@@ -268,6 +268,13 @@
 		return
 	C.Move(loc)
 
+/obj/machinery/crate_weigher/examine(mob/user)
+	..()
+	if(current_manifest)
+		to_chat(user, "<span class='notice'>There is a manifest currently inserted.</span>")
+		return
+	to_chat(user, "<span class='notice'>There is a slot available for a manifest to be inserted.</span>")
+
 /obj/machinery/crate_weigher/proc/remove_crate()
 	current_crate = null
 	icon_state = "up"

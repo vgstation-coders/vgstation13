@@ -144,12 +144,12 @@ export const CrewMonitor = () => {
       let comparison = 0;
       switch (sortBy) {
         case 'name':
-          comparison = a.name.localeCompare(b.name);
+          comparison = (a.name ?? '').localeCompare(b.name ?? '');
           break;
         case 'job':
           comparison = getRolePriority(a.role) - getRolePriority(b.role);
           if (comparison === 0) {
-            comparison = a.job.localeCompare(b.job);
+            comparison = (a.job ?? '').localeCompare(b.job ?? '');
           }
           break;
         case 'health':

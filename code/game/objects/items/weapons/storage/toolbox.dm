@@ -100,22 +100,21 @@
 		/obj/item/tool/wirecutters,
 		/obj/item/device/t_scanner,
 		/obj/item/tool/crowbar,
+		/obj/item/stack/cable_coil/random/etoolbox = 2,
 	)
 
 /obj/item/weapon/storage/toolbox/electrical/New()
 	..()
-	var/color = pick("#FF0000","#FFED00","#0B8400","#005C84","#CA00B6","#CA6900","#00B5CA","#D0D0D0")
-	new /obj/item/stack/cable_coil(src,30,color)
-	new /obj/item/stack/cable_coil(src,30,color)
 	if(prob(5))
 		new /obj/item/clothing/gloves/yellow(src)
 	else
-		new /obj/item/stack/cable_coil(src,30,color)
+		new /obj/item/stack/cable_coil/random/etoolbox(src)
 
 /obj/item/weapon/storage/toolbox/electrical/arcane_act(mob/user)
 	for(var/atom/A in contents)
-		qdel(A)
-		new /obj/item/clothing/gloves/fyellow(src)
+		if(A.type in items_to_spawn)
+			qdel(A)
+			new /obj/item/clothing/gloves/fyellow(src)
 	return ..()
 
 /obj/item/weapon/storage/toolbox/syndicate
@@ -131,12 +130,15 @@
 		/obj/item/tool/crowbar,
 		/obj/item/tool/wirecutters,
 		/obj/item/device/multitool,
+		/obj/item/stack/cable_coil/random/toolbox,
 	)
 
-/obj/item/weapon/storage/toolbox/syndicate/New()
-	..()
-	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
-	new /obj/item/stack/cable_coil(src,30,color)
+/obj/item/weapon/storage/toolbox/syndicate/arcane_act(mob/user)
+	for(var/atom/A in contents)
+		if(A.type in items_to_spawn)
+			qdel(A)
+			new /obj/item/weapon/card/fake_emag(src)
+	return ..()
 
 /obj/item/weapon/storage/toolbox/robotics
 	name = "robotics toolbox"
@@ -147,12 +149,8 @@
 		/obj/item/tool/weldingtool,
 		/obj/item/tool/screwdriver,
 		/obj/item/tool/wirecutters,
+		/obj/item/stack/cable_coil/random/toolbox,
 	)
-
-/obj/item/weapon/storage/toolbox/robotics/New()
-	..()
-	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
-	new /obj/item/stack/cable_coil(src,30,color)
 
 /obj/item/weapon/storage/toolbox/paint
 	name = "painter's toolbox"

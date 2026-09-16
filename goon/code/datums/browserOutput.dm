@@ -40,6 +40,10 @@ For the main html chat area
 		return 0
 
 	if(!winexists(owner, "browseroutput")) // Oh goddamnit.
+		// winexists() can sleep; the client may have disconnected (owner nulled) during that window.
+		if(!owner)
+			broken = TRUE
+			return 0
 		alert(owner.mob || owner, "Updated chat window does not exist. If you are using a custom skin file please allow the game to update.")
 		broken = TRUE
 		return 0

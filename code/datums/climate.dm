@@ -271,18 +271,18 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 			/datum/weather/cloudy/rain = 30
 		),
 		/datum/weather/cloudy/rain = list(
-			/datum/weather/cloudy = 30,
-			/datum/weather/cloudy/rain = 40,
-			/datum/weather/cloudy/rain/heavy = 30
+			/datum/weather/cloudy = 35,
+			/datum/weather/cloudy/rain = 45,
+			/datum/weather/cloudy/rain/heavy = 20
 		),
 		/datum/weather/cloudy/rain/heavy = list(
-			/datum/weather/cloudy/rain = 40,
-			/datum/weather/cloudy/rain/heavy = 30,
-			/datum/weather/cloudy/storm = 30
+			/datum/weather/cloudy/rain = 50,
+			/datum/weather/cloudy/rain/heavy = 35,
+			/datum/weather/cloudy/storm = 15
 		),
 		/datum/weather/cloudy/storm = list(
-			/datum/weather/cloudy/rain/heavy = 70,
-			/datum/weather/cloudy/storm = 30
+			/datum/weather/cloudy/rain/heavy = 85,
+			/datum/weather/cloudy/storm = 15
 		)
 	)
 
@@ -314,12 +314,12 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		),
 		/datum/weather/cloudy/rain = list(
 			/datum/weather/cloudy = 50,
-			/datum/weather/cloudy/rain = 25,
-			/datum/weather/cloudy/storm = 25,
+			/datum/weather/cloudy/rain = 38,
+			/datum/weather/cloudy/storm = 12,
 		),
 		/datum/weather/cloudy/storm = list(
-			/datum/weather/cloudy/rain = 70,
-			/datum/weather/cloudy/storm = 30
+			/datum/weather/cloudy/rain = 85,
+			/datum/weather/cloudy/storm = 15
 		)
 	)
 
@@ -341,22 +341,22 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	)
 	weather_transitions = list(
 		/datum/weather/desert = list(
-			/datum/weather/desert = 60,
-			/datum/weather/dust_storm = 40,
+			/datum/weather/desert = 70,
+			/datum/weather/dust_storm = 30,
 		),
 		/datum/weather/dust_storm = list(
-			/datum/weather/standard = 25,
-			/datum/weather/dust_storm = 50,
-			/datum/weather/sand_storm = 25,
+			/datum/weather/desert = 30,
+			/datum/weather/dust_storm = 55,
+			/datum/weather/sand_storm = 15,
 		),
 		/datum/weather/sand_storm = list(
-			/datum/weather/dust_storm = 40,
+			/datum/weather/dust_storm = 55,
 			/datum/weather/sand_storm = 30,
-			/datum/weather/heatwave = 30,
+			/datum/weather/heatwave = 15,
 		),
 		/datum/weather/heatwave = list(
-			/datum/weather/sand_storm = 50,
-			/datum/weather/heatwave = 50,
+			/datum/weather/sand_storm = 75,
+			/datum/weather/heatwave = 25,
 		)
 	)
 
@@ -376,17 +376,17 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	)
 	weather_transitions = list(
 		/datum/weather/lava = list(
-			/datum/weather/lava = 50,
-			/datum/weather/ash = 50,
+			/datum/weather/lava = 60,
+			/datum/weather/ash = 40,
 		),
 		/datum/weather/ash = list(
-			/datum/weather/lava = 30,
-			/datum/weather/ash = 40,
-			/datum/weather/ash/storm = 30
+			/datum/weather/lava = 35,
+			/datum/weather/ash = 50,
+			/datum/weather/ash/storm = 15
 		),
 		/datum/weather/ash/storm = list(
-			/datum/weather/ash = 60,
-			/datum/weather/ash/storm = 40,
+			/datum/weather/ash = 80,
+			/datum/weather/ash/storm = 20,
 		)
 	)
 
@@ -410,27 +410,27 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	)
 	weather_transitions = list(
 		/datum/weather/fallout/storm = list(
-			/datum/weather/fallout = 60,
-			/datum/weather/fallout/storm = 40,
+			/datum/weather/fallout = 80,
+			/datum/weather/fallout/storm = 20,
 		),
 		/datum/weather/fallout = list(
-			/datum/weather/fallout/storm = 30,
-			/datum/weather/fallout = 40,
+			/datum/weather/fallout/storm = 15,
+			/datum/weather/fallout = 55,
 			/datum/weather/desert = 30
 		),
 		/datum/weather/desert = list(
-			/datum/weather/fallout = 30,
-			/datum/weather/desert = 40,
-			/datum/weather/cloudy/rain/toxic = 30,
+			/datum/weather/fallout = 40,
+			/datum/weather/desert = 45,
+			/datum/weather/cloudy/rain/toxic = 15,
 		),
 		/datum/weather/cloudy/rain/toxic = list(
-			/datum/weather/desert = 30,
+			/datum/weather/desert = 45,
 			/datum/weather/cloudy/rain/toxic = 40,
-			/datum/weather/cloudy/rain/heavy/toxic = 30,
+			/datum/weather/cloudy/rain/heavy/toxic = 15,
 		),
 		/datum/weather/cloudy/rain/heavy/toxic = list(
-			/datum/weather/cloudy/rain/toxic = 60,
-			/datum/weather/cloudy/rain/heavy/toxic = 40,
+			/datum/weather/cloudy/rain/toxic = 80,
+			/datum/weather/cloudy/rain/heavy/toxic = 20,
 		)
 	)
 
@@ -450,17 +450,17 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	)
 	weather_transitions = list(
 		/datum/weather/standard = list(
-			/datum/weather/standard = 50,
-			/datum/weather/cloudy/rain/acid = 50,
+			/datum/weather/standard = 65,
+			/datum/weather/cloudy/rain/acid = 35,
 		),
 		/datum/weather/cloudy/rain/acid = list(
-			/datum/weather/standard = 40,
-			/datum/weather/cloudy/rain/acid = 30,
-			/datum/weather/cloudy/rain/heavy/acid = 30
+			/datum/weather/standard = 50,
+			/datum/weather/cloudy/rain/acid = 35,
+			/datum/weather/cloudy/rain/heavy/acid = 15
 		),
 		/datum/weather/cloudy/rain/heavy/acid = list(
-			/datum/weather/cloudy/rain/acid = 60,
-			/datum/weather/cloudy/rain/heavy/acid = 40,
+			/datum/weather/cloudy/rain/acid = 80,
+			/datum/weather/cloudy/rain/heavy/acid = 20,
 		)
 	)
 

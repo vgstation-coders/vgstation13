@@ -378,7 +378,7 @@
 /obj/item/weapon/melee/energy/hfmachete/dropped(mob/user)
 	user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 
-/obj/item/weapon/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = 1)
+/obj/item/weapon/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	if(!usr)
 		return ..()
 	spawn()

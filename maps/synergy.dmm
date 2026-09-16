@@ -16955,9 +16955,8 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
+/obj/structure/flora/pottedplant/random{
+	icon_state = "plant-16"
 	},
 /turf/simulated/floor{
 	icon_state = "darkbluefull";

@@ -80,6 +80,8 @@
 			if(!signal.data[gas_ID])
 				signal.data[gas_ID] = 0
 		signal.data["sigtype"]="status"
+		if(!radio_connection)
+			return
 		radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
 
 /obj/machinery/air_sensor/proc/set_frequency(new_frequency)
@@ -486,6 +488,8 @@ font-weight:bold;
 	send_signal(list("tag"=device, "status"))
 
 /obj/machinery/computer/general_air_control/large_tank_control/proc/send_signal(var/list/data)
+	if(!radio_connection)
+		return 0
 	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src

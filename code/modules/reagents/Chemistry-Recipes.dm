@@ -79,7 +79,7 @@
 
 /datum/chemical_reaction/explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/system/reagents_explosion/e = new()
-	e.set_up(min(round (created_volume/10, 1), 15), holder.my_atom, 0, 0)
+	e.set_up(min(round (created_volume/10, 1), 15), holder.my_atom, 0, 0, whodunnit = usr)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
 		e.amount *= 0.5
@@ -609,7 +609,7 @@
 
 /datum/chemical_reaction/nitroglycerin/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/system/reagents_explosion/e = new()
-	e.set_up(round (created_volume/2, 1), holder.my_atom, 0, 0)
+	e.set_up(round (created_volume/2, 1), holder.my_atom, 0, 0, whodunnit = usr)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
 		e.amount *= 0.5
@@ -663,6 +663,7 @@
 			var/mob/living/L = holder.my_atom
 			if(L.stat!=DEAD)
 				e.amount *= 0.5
+		e.user = usr
 		e.start()
 		holder.clear_reagents()
 
@@ -1086,6 +1087,17 @@
 /datum/chemical_reaction/solidification/phazon/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/phazon
 
+/datum/chemical_reaction/solidification/reticulite
+	name = "Solid Reticulite"
+	id = "solidreticulite"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, ZETADUST = 20)
+	required_catalysts = list(SACID = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/reticulite/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/reticulite
+
 /datum/chemical_reaction/solidification/glass
 	name = "Solid Glass"
 	id = "solidglass"
@@ -1228,6 +1240,20 @@
 	required_reagents = list(NANOBOTS = 1, DOCTORSDELIGHT = 5)
 	result_amount = 2.5
 
+/datum/chemical_reaction/zeptobots
+	name = "Zeptobots"
+	id = ZEPTOBOTS
+	result = ZEPTOBOTS
+	required_reagents = list(NANOBOTS = 1, ZETADUST = 5)
+	result_amount = 2.5
+
+/datum/chemical_reaction/greyzeptobots
+	name = "Grey Zeptobots"
+	id = GREYZEPTOBOTS
+	result = GREYZEPTOBOTS
+	required_reagents = list(ZEPTOBOTS = 1, GREYGOO = 1)
+	result_amount = 2
+
 /datum/chemical_reaction/comnanobots
 	name = "Combat Nanobots"
 	id = COMNANOBOTS
@@ -1295,58 +1321,44 @@
 	result = null
 	required_reagents = list(FLUOROSURFACTANT = 1, WATER = 1)
 	result_amount = 2
+	var/violentlybubbles = TRUE
+	var/foamtype = 0
 
 /datum/chemical_reaction/foam/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
-		for(var/mob/M in viewers(5, location))
-			to_chat(M, "<span class='warning'>The solution violently bubbles!</span>")
+		if(violentlybubbles)
+			for(var/mob/M in viewers(5, location))
+				to_chat(M, "<span class='warning'>The solution violently bubbles!</span>")
 
-		location = get_turf(holder.my_atom)
-
 		for(var/mob/M in viewers(5, location))
-			to_chat(M, "<span class='warning'>The solution spews out foam!</span>")
+			to_chat(M, "<span class='warning'>The solution spews out [type ? "a metallic" : ""] foam!</span>")
 
 		var/datum/effect/system/foam_spread/s = new()
-		s.set_up(created_volume, location, holder, 0)
+		s.set_up(created_volume, location, holder, foamtype)
 		s.start()
-	holder.clear_reagents(TRUE)
+	if(violentlybubbles)
+		holder.clear_reagents(TRUE)
 
-/datum/chemical_reaction/metalfoam
+/datum/chemical_reaction/foam/metal
 	name = "Metal Foam"
 	id = "metalfoam"
-	result = null
 	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
+	violentlybubbles = FALSE
+	foamtype = 1
 
-/datum/chemical_reaction/metalfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
-		var/location = get_turf(holder.my_atom)
-
-		for(var/mob/M in viewers(5, location))
-			to_chat(M, "<span class='warning'>The solution spews out a metallic foam!</span>")
-
-		var/datum/effect/system/foam_spread/s = new()
-		s.set_up(created_volume, location, holder, 1)
-		s.start()
-
-/datum/chemical_reaction/ironfoam
+/datum/chemical_reaction/foam/metal/iron
 	name = "Iron Foam"
-	id = "ironlfoam"
-	result = null
+	id = "ironfoam"
 	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACIDS = 1)
-	result_amount = 5
+	foamtype = 2
 
-/datum/chemical_reaction/ironfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
-		var/location = get_turf(holder.my_atom)
-
-		for(var/mob/M in viewers(5, location))
-			to_chat(M, "<span class='warning'>The solution spews out a metallic foam!</span>")
-
-		var/datum/effect/system/foam_spread/s = new()
-		s.set_up(created_volume, location, holder, 2)
-		s.start()
+/datum/chemical_reaction/foam/metal/zeta
+	name = "Zeta Foam"
+	id = "zetafoam"
+	required_reagents = list(ZETADUST = 20, FOAMING_AGENT = 1, PACIDS = 1)
+	foamtype = 3
 
 /datum/chemical_reaction/foaming_agent
 	name = "Foaming Agent"
@@ -2740,6 +2752,9 @@
 	holder.remove_reagent(WATER, created_volume-allowed_consumption, safety = 1)
 	holder.add_reagent(ICE, created_volume-allowed_consumption, null, T0C)
 
+/datum/chemical_reaction/ice_to_water/log_reaction()
+	return
+
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 
 /datum/chemical_reaction/goldschlager
@@ -2806,6 +2821,20 @@
 	required_reagents = list(MOONSHINE = 10, SUGAR = 2)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 12
+
+/datum/chemical_reaction/pomegranatesyrup
+	name = "Pomegranate Syrup"
+	id = POMEGRANATESYRUP
+	result = POMEGRANATESYRUP
+	required_reagents = list(POMEGRANATEJUICE = 1, SUGAR = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/grenadine
+	name = "Grenadine"
+	id = GRENADINE
+	result = GRENADINE
+	required_reagents = list(POMEGRANATESYRUP = 1, WATER = 4)
+	result_amount = 5
 
 /datum/chemical_reaction/wine
 	name = "Wine"
@@ -3957,6 +3986,13 @@
 	required_reagents = list(MOONROCKS = 1, KARMOTRINE = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/scientists_secret
+	name = "Scientist's Secret"
+	id = SCIENTISTS_SECRET
+	result = SCIENTISTS_SECRET
+	required_reagents = list(SCIENTISTS_SERENDIPITY = 1, ZETADUST = 1)
+	result_amount = 1
+
 /datum/chemical_reaction/metabuddy
 	name = "Metabuddy"
 	id = METABUDDY
@@ -4089,6 +4125,13 @@
 	result = IRONROT
 	required_reagents = list(AMANITIN = 1, RADIUM = 1, IRON = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/zetarot
+	name = "Zetarot"
+	id = ZETAROT
+	result = ZETAROT
+	required_reagents = list(PACIDS = 1, AMANITIN = 1, RADIUM = 1, ZETADUST = 1)
+	result_amount = 4
 
 /datum/chemical_reaction/aminomicin
 	name = "Aminomicin"

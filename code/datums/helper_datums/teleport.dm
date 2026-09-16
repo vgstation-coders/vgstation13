@@ -106,6 +106,10 @@
 /datum/teleport/proc/isValidTurf(turf/T)
 	if(istype(T, /turf/unsimulated/wall/supermatter))
 		return FALSE //Don't teleport into supermatter turfs
+	if(T.turf_flags & NOJAUNT)
+		return FALSE //Don't teleport into vlevel border tiles and other no-teleport turfs
+	if(T.get_virtual_z() != destination.get_virtual_z())
+		return FALSE //Don't let teleport scatter land outside the destination's vlevel
 
 	return TRUE
 
@@ -116,12 +120,13 @@
 	var/area/destarea = get_area(destination)
 	if(precision)
 		var/list/posturfs = circlerangeturfs(destination,precision)
-		if(!posturfs || !posturfs.len)
-			return FALSE
-
-		do
-			destturf = pick_n_take(posturfs)
-		while(!isValidTurf(destturf) && posturfs.len)
+		while(posturfs?.len)
+			var/turf/potential_turf = pick_n_take(posturfs)
+			if(isValidTurf(potential_turf))
+				destturf = potential_turf
+				break
+		if(!destturf)
+			destturf = get_turf(destination) //no valid turf in scatter range, land on target
 	else
 		destturf = get_turf(destination)
 

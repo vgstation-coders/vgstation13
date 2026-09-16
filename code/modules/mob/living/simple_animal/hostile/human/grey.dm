@@ -1046,6 +1046,7 @@
 	retreat_distance = 8
 	minimum_distance = 8
 	ranged = 1
+	disperse_coeff = 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Life()
 	..()

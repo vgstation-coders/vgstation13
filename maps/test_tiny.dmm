@@ -1521,6 +1521,10 @@
 	},
 /turf/space,
 /area/shuttle/supply)
+"CB" = (
+/obj/machinery/cloning/clonepod/full,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
 "Fg" = (
 /obj/machinery/light{
 	dir = 1
@@ -1533,6 +1537,10 @@
 	},
 /turf/space,
 /area/shuttle/supply)
+"Jz" = (
+/obj/machinery/dna_scannernew,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
 "Kz" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/card/debit/trader,
@@ -1547,6 +1555,10 @@
 /area/centcom/suppy)
 "Md" = (
 /obj/structure/trade_window,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
+"Tg" = (
+/obj/machinery/computer/cloning,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 
@@ -19437,7 +19449,7 @@ aM
 aM
 aM
 aM
-aM
+Jz
 cd
 aw
 bX
@@ -19638,8 +19650,8 @@ aM
 aM
 aM
 aM
-aM
-aM
+CB
+Tg
 aM
 aI
 aM
@@ -19841,7 +19853,7 @@ aM
 aM
 aM
 aM
-aM
+CB
 aM
 aM
 aM

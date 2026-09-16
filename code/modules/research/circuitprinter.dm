@@ -67,7 +67,12 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	var/T = 0
 	for(var/obj/item/weapon/reagent_containers/glass/G in component_parts)
 		T += G.reagents.maximum_volume - G.reagents.total_volume
-	create_reagents(T) // This is only a buffer for handling reagents poured into the imprinter before they flow into the beakers
+	// This is only a buffer for handling reagents poured into the imprinter before they flow into the beakers.
+	// RefreshParts() re-runs on every part exchange; resize in place rather than re-creating (which would QDEL_NULL the existing reagents and lose anything currently in the buffer).
+	if(reagents)
+		reagents.maximum_volume = T
+	else
+		create_reagents(T)
 
 	T = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)

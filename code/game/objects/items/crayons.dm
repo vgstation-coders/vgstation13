@@ -127,7 +127,7 @@ var/global/list/all_graffitis = list(
 				var/list/graffitis = list("Random" = "graffiti") + all_graffitis
 				if(istype(user,/mob/living/carbon/human))
 					var/mob/living/carbon/human/M=user
-					if(M.getBrainLoss() >= 60)
+					if(M.getBrainLoss(INTELLIGENCE_L) >= 60)
 						graffitis = list(
 							"Cancel"="cancel",
 							"Dick"="dick[rand(1,3)]",

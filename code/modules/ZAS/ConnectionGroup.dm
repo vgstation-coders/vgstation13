@@ -170,7 +170,8 @@ Class Procs:
 	src.A = A
 	src.B = B
 	A.edges.Add(src)
-	air = B.return_air()
+	if(B)
+		air = B.return_air()
 	//id = 52*A.id
 
 /connection_edge/unsimulated/add_connection(connection/c)
@@ -189,7 +190,7 @@ Class Procs:
 	return A == Z
 
 /connection_edge/unsimulated/tick()
-	if(A.invalid)
+	if(A.invalid || !air)
 		erase()
 		return
 
@@ -207,6 +208,9 @@ Class Procs:
 	SSair.mark_zone_update(A)
 
 /connection_edge/unsimulated/recheck()
+	if(!air)
+		erase()
+		return
 	if(!A.air.compare(air))
 		SSair.mark_edge_active(src)
 

@@ -267,9 +267,26 @@
 	if(!sun)
 		obscured = 1
 
-	if(SSDayNight?.overwrite_solars && (src.get_virtual_z() in daynight_v_lvls) )
+	var/datum/virtual_z/vz = src.get_virtual_z()
+
+	if(SSDayNight?.overwrite_solars && (vz in daynight_v_lvls) )
+		// Junglestation override
 		use_daynight_ss=TRUE
 		obscured=0
+	else if(vz?.level_type == VZ_PLANET)
+		// On planet vLevels, power is purely a function of time-of-day and weather: no orientation or occlusion.
+		// Panels must still be on (or adjacent to) an open surface so no power if buried in a cave or roofed building.
+		if(!turf_has_open_sky(get_turf(src)))
+			obscured = 1
+			sunfrac = 0
+			plane = ABOVE_HUMAN_PLANE
+			layer = LIGHT_FIXTURE_LAYER
+			return
+		obscured = 0
+		plane = ABOVE_LIGHTING_PLANE
+		layer = ABOVE_LIGHTING_LAYER
+		sunfrac = solar_tod_power(vz.current_timeOfDay) * vz.weather_mod
+		return
 
 	if(obscured)
 		sunfrac = 0

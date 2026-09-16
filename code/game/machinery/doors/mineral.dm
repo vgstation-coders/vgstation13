@@ -200,9 +200,10 @@
 	icon_state = "wooddoor_closed"
 	hardness = 1
 	soundeffect = 'sound/effects/doorcreaky.ogg'
+	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/machinery/door/mineral/wood/Dismantle(devastated = 0)
-	var/obj/item/stack/resource = new/obj/item/stack/sheet/wood
+	var/obj/item/stack/resource = new sheet_type
 	if(!devastated)
 		resource.amount = oreAmount
 		new resource(get_turf(src))

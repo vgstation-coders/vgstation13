@@ -1422,6 +1422,14 @@ var/global/blood_virus_spreading_disabled = 0
 		log_admin("[key_name(usr)] checked the Climate Panel.")
 	feedback_add_details("admin_verb","CLI")
 
+/client/proc/admin_arena_panel()
+	set name = "Admin Arena Panel"
+	set category = "Admin"
+	if(holder)
+		holder.admin_arena_panel()
+		log_admin("[key_name(usr)] checked the Admin Arena Panel.")
+	feedback_add_details("admin_verb","AAP")
+
 /client/proc/level_manager()
 	set name = "Level Manager"
 	set category = "Admin"

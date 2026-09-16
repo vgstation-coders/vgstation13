@@ -71,6 +71,56 @@ datums for the fission reactor, which includes the fuel and reactor
 	originloc?.return_air().merge(coolant.remove(coolant.total_moles,TRUE,TRUE),TRUE) //dump all coolant to atmos.
 	..()
 
+/datum/fission_reactor_holder/proc/copy_data(var/datum/fission_reactor_holder/dst)
+	dst.fuel_rods=src.fuel_rods
+	dst.control_rods=src.control_rods
+	dst.coolant_ports=src.coolant_ports
+	dst.casing_parts=src.casing_parts
+	dst.controller=src.controller
+	
+	dst.breaches=src.breaches
+	dst.heat_capacity=src.heat_capacity
+	dst.fuel_reactivity=src.fuel_reactivity
+	dst.fuel_reactivity_with_rods=src.fuel_reactivity_with_rods
+	dst.fuel_rods_affected_by_rods=src.fuel_rods_affected_by_rods
+	dst.time_last_ticked=src.time_last_ticked
+	dst.time_last_sound_emission=src.time_last_sound_emission
+	dst.coolantport_counter=src.coolantport_counter
+	dst.control_rod_insertion=src.control_rod_insertion
+	dst.control_rod_target=src.control_rod_target
+	dst.SCRAM=src.SCRAM
+	dst.coolant_input_amt=src.coolant_input_amt
+	dst.temperature=src.temperature
+	dst.coolant=src.coolant
+	dst.graceperiodtick=src.graceperiodtick
+	dst.fuel=src.fuel
+	
+	dst.zlevel=src.zlevel
+	dst.origin_x=src.origin_x
+	dst.origin_y=src.origin_y
+	dst.corner_x=src.corner_x
+	dst.corner_y=src.corner_y
+
+//to be used after copy_data
+/datum/fission_reactor_holder/proc/transfer_part_ownership(var/datum/fission_reactor_holder/dst)
+	for(var/obj/machinery/fissionreactor/fissionreactor_fuelrod/fuelrod in fuel_rods)
+		fuelrod.associated_reactor=dst
+	fuel_rods=list()
+	for(var/obj/machinery/fissionreactor/fissionreactor_controlrod/controlrod in control_rods)
+		controlrod.associated_reactor=dst
+	control_rods=list()
+	for(var/obj/structure/fission_reactor_case/casing in casing_parts)
+		casing.associated_reactor=dst
+	casing_parts=list()
+	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/coolport in coolant_ports)
+		coolport.associated_reactor=dst
+	coolant_ports=list()	
+	if(controller)
+		controller.associated_reactor=dst
+		controller=null
+	
+
+
 /datum/fission_reactor_holder/proc/verify_integrity() //destroys the reactor if too many parts are missing. fixes stuff lingering.
 	var/notlookinggood_points=0
 
@@ -82,7 +132,7 @@ datums for the fission reactor, which includes the fuel and reactor
 
 	if(exterior_elements<expected_exterior) //missing any at all? (for deconstruction)
 		notlookinggood_points++
-	if(exterior_elements/expected_exterior < 0.5) //half the case remaining?
+	if(expected_exterior==0 || exterior_elements/expected_exterior < 0.5) //half the case remaining?
 		notlookinggood_points++
 	if(!fuel_rods.len) //no fuel rods?
 		notlookinggood_points++

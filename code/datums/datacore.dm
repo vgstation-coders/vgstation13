@@ -112,10 +112,19 @@
 
 		var/icon/I = icon('icons/effects/32x32.dmi', "blank")
 		var/icon/result = icon(I, "")
-		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = SOUTH, ignore_spawn_items = TRUE),  "", dir = SOUTH)
-		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = NORTH, ignore_spawn_items = TRUE),  "", dir = NORTH)
-		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = EAST, ignore_spawn_items = TRUE),  "", dir = EAST)
-		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = WEST, ignore_spawn_items = TRUE),  "", dir = WEST)
+		// Skip Insert when the per-direction render comes back empty/null, otherwise byond throws "bad icon operation" into the runtime log.
+		var/icon/photo_s = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = SOUTH, ignore_spawn_items = TRUE)
+		var/icon/photo_n = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = NORTH, ignore_spawn_items = TRUE)
+		var/icon/photo_e = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = EAST, ignore_spawn_items = TRUE)
+		var/icon/photo_w = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = WEST, ignore_spawn_items = TRUE)
+		if(photo_s)
+			result.Insert(photo_s, "", dir = SOUTH)
+		if(photo_n)
+			result.Insert(photo_n, "", dir = NORTH)
+		if(photo_e)
+			result.Insert(photo_e, "", dir = EAST)
+		if(photo_w)
+			result.Insert(photo_w, "", dir = WEST)
 
 		G.fields["photo"]		= result
 		L.fields["image"]		= result

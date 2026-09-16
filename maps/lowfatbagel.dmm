@@ -24989,10 +24989,7 @@
 /turf/simulated/floor,
 /area/bridge)
 "bqn" = (
-/obj/machinery/planet_scanner{
-	anchored = 1;
-	icon_state = "scanner_idle"
-	},
+/obj/structure/flora/pottedplant/random,
 /turf/simulated/floor,
 /area/bridge)
 "bqo" = (

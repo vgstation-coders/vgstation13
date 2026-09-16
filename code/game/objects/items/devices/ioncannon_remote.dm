@@ -39,7 +39,7 @@
 	if(cooldown - world.time > 0)	//check again for the cooldown in case people prep a bunch of popups
 		to_chat(user, "<span class='notice'>The Low Orbit Ion Cannon is still on cooldown.</span>")
 		return
-	generate_ion_law()
+	generate_ion_law(TRUE)
 	command_alert(/datum/command_alert/ion_storm_malicious)
 	cooldown = world.time + 15 MINUTES
 

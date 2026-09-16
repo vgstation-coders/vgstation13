@@ -1,0 +1,63 @@
+/**
+ * Retro green variant. Same structure as retro.scss but with a dark
+ * phosphor-CRT palette instead of the cream base.
+ */
+
+.theme-retro_green:root {
+  --phosphor: hsl(130, 90%, 55%);
+
+  // Base
+  --color-base: hsl(135, 35%, 12%);
+  --color-primary: var(--phosphor);
+  --color-secondary: hsl(135, 30%, 18%);
+  --color-label: hsl(from var(--phosphor) h calc(s - 30) calc(l - 15));
+  --color-text: var(--phosphor);
+  --color-good: var(--phosphor);
+  --color-action: var(--phosphor);
+  --secondary-saturation: 25;
+  --secondary-lightness-adjustment: -50;
+  --base-gradient-spread: 0;
+  --border-radius-unit: 0;
+
+  // Components
+  --button-color: var(--phosphor);
+  --button-background-default: hsl(135, 35%, 14%);
+  --button-background-selected: hsl(130, 70%, 28%);
+  --button-background-caution: hsl(40, 85%, 38%);
+  --button-background-danger: hsl(0, 75%, 38%);
+  --progress-bar-background: hsl(135, 40%, 8%);
+  --progress-bar-fill: hsl(from var(--phosphor) h s l / 0.6);
+  --input-background: hsl(135, 40%, 8%);
+
+  .Layout__content {
+    background-image: none;
+    background-color: hsl(135, 40%, 8%);
+  }
+
+  .Section,
+  .Tab,
+  .Tab--selected {
+    color: var(--phosphor);
+  }
+
+  .Button {
+    font-family: var(--font-family-mono);
+    border: var(--border-thickness-small) outset hsl(135, 35%, 22%);
+    outline: var(--border-thickness-tiny) solid hsl(135, 50%, 5%);
+    color: var(--phosphor);
+
+    &-disabled {
+      color: hsl(135, 15%, 35%);
+      font-family: var(--font-family-mono);
+
+      &:hover {
+        color: hsl(135, 30%, 60%);
+      }
+    }
+
+    &--selected {
+      color: hsl(0, 0%, 100%);
+      border-style: inset;
+    }
+  }
+}

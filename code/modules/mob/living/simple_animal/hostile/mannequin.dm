@@ -51,6 +51,7 @@
 
 	supernatural = TRUE
 	blooded = FALSE
+	disperse_coeff = 1 //for ablatives
 
 
 /mob/living/simple_animal/hostile/mannequin/New()

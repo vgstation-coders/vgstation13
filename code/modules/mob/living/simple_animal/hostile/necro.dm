@@ -27,6 +27,8 @@
 		creator = Owner
 		if(client)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner].</span></big>")
+		if(mind)
+			mind.store_memory("You have been risen from the dead by your new master, [Owner].", MIND_MEMORY_GENERAL)
 
 	if(name == initial(name) && !unique_name)
 		name += " ([rand(1,1000)])"

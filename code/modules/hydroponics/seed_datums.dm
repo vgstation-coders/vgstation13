@@ -405,9 +405,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	text += " Plant is now [thorny ? "thorny" : "NO LONGER thorny."] |"
 	text += " Plant chems: "
 	for (var/chemical in chems)
-		if(length(chems[chemical])<2)
-			spawn()
-				CRASH("Invalid chemical in seed [src]! Chemical [chems[chemical]] is missing a [chems[chemical][1]?"potency":"total volume"] value!")
+		// Malformed gene values can leave chem entries shorter than 2; just skip them instead of spamming a CRASH() per call (this is the mutation log path).
+		if(!islist(chems[chemical]) || length(chems[chemical]) < 2)
 			continue
 		text += "[chemical], vol: [chems[chemical][1]], potency: [chems[chemical][2]]."
 
@@ -600,6 +599,17 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 			if(!success)
 				to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut by hand, you'll need something sharp in one of your hands to harvest it.</span>")
+
+		if(istype(user, /mob/living/silicon/robot))
+			var/mob/living/silicon/robot/M = user
+			if(M.module_active)
+				var/obj/item/I = M.module_active
+				if(I.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE))
+					success = 1
+
+			if(!success)
+				to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut with your claws, you'll need a sharper tool to harvest it.</span>")
+
 
 	return success
 

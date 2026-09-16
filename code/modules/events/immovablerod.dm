@@ -87,10 +87,10 @@ var/list/all_rods = list()
 	I.plane = relative_plane(PLATING_PLANE-1)
 	overlays += I
 
-/obj/item/projectile/immovablerod/throw_at(atom/end)
+/obj/item/projectile/immovablerod/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	for(var/mob/dead/observer/people in observers)
 		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, [formatFollow(src,"Follow it")]</span>")
-	original = end
+	original = target
 	starting = loc
 	current = loc
 	OnFired()

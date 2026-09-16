@@ -495,7 +495,7 @@
 	contains = list(
 		/obj/item/weapon/circuitboard/gas_extraction,
 		/obj/item/weapon/circuitboard/gas_extractor,
-		/obj/machinery/atmospherics/miner
+		/obj/machinery/atmospherics/miner/surface
 	)
 	name = "Surface Gas Extraction Kit"
 	cost = 200

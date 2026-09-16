@@ -49,7 +49,9 @@ var/list/sand_sound = list('sound/effects/sand_walk1.ogg', 'sound/effects/sand_w
 /proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)
 	var/turf/turf_source = get_turf(source)
 
-	ASSERT(!isnull(turf_source))
+	// Things in nullspace (qdel'd, in deep storage, freshly-created) routinely try to play sounds. Silently no-op rather than spamming runtimes.
+	if(isnull(turf_source))
+		return
 	ASSERT(!(isnull(soundin) && channel == 0)) // Unless a channel is specified, prevent null sounds.
 
 /* What's going on in this block?
@@ -119,7 +121,7 @@ var/const/SURROUND_CAP = 7
 /mob/proc/playsound_local(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0,var/wait = FALSE, var/atom/source)
 	if(loneliness_affected(source,TRUE))
 		return
-	
+
 	if(!src.client)
 		return
 

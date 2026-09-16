@@ -649,6 +649,10 @@
 	. = ..()
 	if(!istype(loc, /turf/space))
 		for(var/obj/item/I in get_all_slots())
+			if(I == get_item_by_slot(slot_shoes) && istype(loc, /turf/simulated/floor))
+				var/turf/simulated/floor/T = loc
+				if(T.material == "alien_tile1") // these ignore magboots
+					continue
 			if(I == src.back)
 				. *= max(1,I.slowdown / 2) // heavy items worn on the back. those shouldn't slow you down as much.
 			else if(!isclothing(I) || (isclothing(I) && (I in get_clothing_items())))
@@ -785,3 +789,20 @@
 		if(internal)
 			return internal.remove_air_volume(volume_needed)
 	return null
+
+/mob/living/carbon/t_scanner_expose(ray_range)
+	if(alpha < OPAQUE || (invisibility > 0 && invisibility < INVISIBILITY_OBSERVER) || body_alphas.len)
+		var/old_alpha = alpha
+		var/old_invisibility = invisibility
+		var/list/old_body_alphas = body_alphas.Copy()
+		body_alphas.Cut()
+		alpha = OPAQUE
+		invisibility = 0
+		regenerate_icons()
+		spawn(1 SECONDS)
+			if(src)
+				if(old_body_alphas.len)
+					body_alphas = old_body_alphas.Copy()
+					regenerate_icons()
+				alpha = old_alpha
+				invisibility = old_invisibility

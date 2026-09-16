@@ -307,6 +307,11 @@
 	if ("wet paint" in O.blood_DNA)
 		O.clean_blood()
 	O.color = ""
+	if(istype(O,/obj/machinery/light))
+		var/obj/machinery/light/L = O
+		if(L.current_bulb && L.current_bulb.brightness_color == COLOR_PULSEDEMON)
+			L.current_bulb.brightness_color = initial(L.current_bulb.brightness_color)
+			L.update(0)
 
 /datum/reagent/acetone/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())

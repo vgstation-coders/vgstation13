@@ -890,6 +890,21 @@
 /datum/disease2/effect/toothdecay/affect_mob_voice(var/datum/speech/speech)
 	speech.message = piratespeech(speech.message)
 
+/datum/disease2/effect/walker
+	name = "Walker Syndrome"
+	desc = "Causes the infected to kick ass."
+	encyclopedia = "Symptom strength increases kick frequency."
+	stage = 3
+	badness = EFFECT_DANGER_HARMFUL
+	multiplier = 1
+	max_multiplier = 5
+
+/datum/disease2/effect/walker/activate(var/mob/living/mob)
+	if (prob(20 * multiplier) && ishuman(mob))
+		var/atom/A = pick(adjacent_atoms(mob))
+		if(A && A.mouse_opacity && !A.invisibility && A != mob && !(A in mob))
+			mob.face_atom(A)
+			A.kick_act(mob)
 
 /datum/disease2/effect/cult_vomit
 	name = "Hemoptysis"

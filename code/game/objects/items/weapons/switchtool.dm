@@ -611,6 +611,7 @@
 #define SYNDI 8
 #define NT 16
 #define PS 32
+#define AYY 64
 
 //Unique RD switchtool, modules cannot be removed nor inserted to upgrade, but require techdisks to aquire new modules.
 /obj/item/weapon/switchtool/holo
@@ -687,6 +688,13 @@
 				has_tech |= NT
 				return TRUE
 			alreadyhas = "Nanotrasen"
+		if(istype(disk_tech, /datum/tech/alien) && disk_tech.level >= 5)
+			if(!(has_tech & AYY))
+				stored_modules["/obj/item/weapon/melee/baton/stunprobe:stun probe"] = new /obj/item/weapon/melee/baton/stunprobe(src)
+				to_chat(user, "The holo switchtool has a secret shocking design now!")
+				has_tech |= AYY
+				return TRUE
+			alreadyhas = "Alien"
 	//Joke module about power[clean/creep], this is dumb but exists.
 	//How does a UV light clean even? It just sterilizes. I guess it works because it's like suit storages with their UV suit cleaner.
 		if(istype(disk_tech, /datum/tech/powerstorage) && disk_tech.level >= 4)

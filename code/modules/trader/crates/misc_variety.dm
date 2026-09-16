@@ -197,6 +197,7 @@
 		/obj/item/stack/sheet/snow = 25,
 		/obj/item/stack/sheet/cardboard = 20,
 		/obj/item/stack/telecrystal = 2,	//Emergent gameplay!
+		/obj/item/stack/sheet/mineral/reticulite = 1,
 		/obj/item/stack/teeth/gold = 10,
 		/obj/item/stack/tile/slime = 20
 	)

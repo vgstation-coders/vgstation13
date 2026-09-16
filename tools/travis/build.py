@@ -12,6 +12,7 @@ dme = "vgstation13.dme"
 
 def append_unit_tests_macros_to_compile_options_file():
     with open("__DEFINES/__compile_options.dm", "a") as file:
+        file.write("\n")
         file.write("#define UNIT_TESTS_ENABLED 1\n")
         file.write("#define UNIT_TESTS_AUTORUN 1\n")
         file.write("#define UNIT_TESTS_STOP_SERVER_WHEN_DONE 1\n")

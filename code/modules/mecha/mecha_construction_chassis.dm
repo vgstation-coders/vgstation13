@@ -194,3 +194,20 @@
 	spawn()
 		qdel (src)
 	return
+
+//        ROSWELL         //
+/datum/construction/mecha_chassis/roswell
+	steps = list(list(Co_KEY=/obj/item/mecha_parts/part/roswell_body),//1
+					 list(Co_KEY=/obj/item/mecha_parts/part/roswell_dome),//2
+					 list(Co_KEY=/obj/item/mecha_parts/part/roswell_hoverer,Co_AMOUNT=3)//3
+					)
+
+/datum/construction/mecha_chassis/roswell/spawn_result(mob/user as mob)
+	var/obj/item/mecha_parts/chassis/const_holder = holder
+	const_holder.construct = new /datum/construction/reversible/mecha/roswell(const_holder)
+	const_holder.icon = 'icons/mecha/mech_construction.dmi'
+	const_holder.icon_state = "roswell0"
+	const_holder.setDensity(TRUE)
+	spawn()
+		qdel (src)
+	return

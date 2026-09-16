@@ -50,38 +50,8 @@ BREATHALYZER
 		if(!T.intact)
 			continue
 
-		for(var/A in T.contents)
-			if(istype(A,/obj/))
-				var/obj/O = A
-				O.t_scanner_expose(ray_range-(get_dist(T,source)-1))
-			else if(istype(A,/mob/living/carbon))
-				var/mob/living/carbon/C = A
-				if(C.alpha < OPAQUE || (C.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER) || length(C.body_alphas))
-					var/old_alpha = C.alpha
-					var/old_invisibility = C.invisibility
-					var/list/old_body_alphas = C.body_alphas.Copy()
-					C.body_alphas.Cut()
-					C.alpha = OPAQUE
-					C.invisibility = 0
-					C.regenerate_icons()
-					spawn(1 SECONDS)
-						if(C)
-							if(length(old_body_alphas))
-								C.body_alphas = old_body_alphas.Copy()
-								C.regenerate_icons()
-							C.alpha = old_alpha
-							C.invisibility = old_invisibility
-			else if(istype(A,/mob/living/))
-				var/mob/living/L = A
-				if(L.alpha < OPAQUE || (L.invisibility > 0 && L.invisibility < INVISIBILITY_OBSERVER))
-					var/old_alpha = L.alpha
-					var/old_invisibility = L.invisibility
-					L.alpha = OPAQUE
-					L.invisibility = 0
-					spawn(1 SECONDS)
-						if(L)
-							L.alpha = old_alpha
-							L.invisibility = old_invisibility
+		for(var/atom/movable/AM in T.contents)
+			AM.t_scanner_expose(ray_range-(get_dist(T,source)-1))
 
 /obj/item/device/t_scanner/advanced
 	name = "\improper P-ray scanner"
@@ -438,7 +408,7 @@ Subject's pulse: ??? BPM"})
 		return
 	if(istype(A,/obj))
 		var/obj/O = A
-		if(O.w_type == RECYK_WOOD)
+		if(O.w_type == RECYK_WOOD || O.sheet_type == /obj/item/stack/sheet/wood || (O.materials?.getAmount(MAT_WOOD) > 0))
 			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"Yep, it's wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows green.</span>")
 		else
 			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"No, it's not wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows red.</span>")

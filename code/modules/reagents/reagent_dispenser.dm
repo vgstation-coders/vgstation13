@@ -741,6 +741,7 @@
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of wood."
 	health = 30
 	is_cooktop = FALSE
+	w_type = RECYK_WOOD
 
 /////////////////////Cooking stuff
 

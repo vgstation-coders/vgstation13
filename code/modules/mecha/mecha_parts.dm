@@ -414,6 +414,33 @@
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 
 
+///////// Roswell
+
+/obj/item/mecha_parts/chassis/roswell
+	name = "Roswell Chassis"
+	icon_state = "roswell_harness"
+
+/obj/item/mecha_parts/chassis/roswell/New()
+	..()
+	construct = new /datum/construction/mecha_chassis/roswell(src)
+
+/obj/item/mecha_parts/part/roswell_body
+	name="Roswell Body"
+	icon_state = "roswell_body"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_BIOTECH + "=2;" + Tc_ENGINEERING + "=2;" + Tc_ALIEN + "=5"
+
+/obj/item/mecha_parts/part/roswell_dome
+	name="Roswell Dome"
+	desc="A transparent dome covering the ship."
+	icon_state = "roswell_dome"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=2;" + Tc_ALIEN + "=5"
+
+/obj/item/mecha_parts/part/roswell_hoverer
+	name="Roswell Hoverer"
+	desc="An anti-gravity device allowing for ship levitation."
+	icon_state = "roswell_hoverer"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_ALIEN + "=5"
+
 ///////// Circuitboards
 
 /obj/item/weapon/circuitboard/mecha
@@ -535,6 +562,17 @@
 
 /obj/item/weapon/circuitboard/mecha/clarke/main
 	name = "Circuit board (Clarke Central Control module)"
+	icon_state = "mainboard"
+
+/obj/item/weapon/circuitboard/mecha/roswell
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ALIEN + "=5"
+
+/obj/item/weapon/circuitboard/mecha/roswell/peripherals
+	name = "Circuit board (Roswell Peripherals Control module)"
+	icon_state = "mcontroller"
+
+/obj/item/weapon/circuitboard/mecha/roswell/main
+	name = "Circuit board (Roswell Central Control module)"
 	icon_state = "mainboard"
 
 /obj/item/weapon/circuitboard/mecha/pod

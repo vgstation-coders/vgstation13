@@ -311,6 +311,7 @@
 	icon_state = "soup"
 	item_state = "bowl"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	w_type = RECYK_WOOD
 
 /obj/item/trash/bowl/attackby(obj/item/I,mob/user,params)
 	if(istype(I,/obj/item/stack/sheet/metal))

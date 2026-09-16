@@ -318,6 +318,7 @@
 	sharpness = 0
 	siemens_coefficient = 1
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
 	attack_verb = list("smacks")
 	var/list/blades = list(
 		"blade_1" = null,

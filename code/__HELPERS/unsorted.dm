@@ -413,9 +413,13 @@
 /proc/onclose(mob/user, windowid, var/atom/ref=null)
 	set waitfor = FALSE // winexists sleeps
 	for(var/i in 1 to WINSET_MAX_ATTEMPTS)
-		if(user && winexists(user, windowid))
+		// winexists/winset both require a live client. user.client can flip to null across the sleep that winexists incurs, so revalidate every iteration.
+		if(!user || (ismob(user) && !user.client))
+			break
+		if(winexists(user, windowid))
 			var/param = ref ? "\ref[ref]" : "null"
-			winset(user, windowid, "on-close=\".windowclose [param]\"")
+			if(user && (!ismob(user) || user.client))
+				winset(user, windowid, "on-close=\".windowclose [param]\"")
 			break
 
 //	to_chat(world, "OnClose [user]: [windowid] : ["on-close=\".windowclose [param]\""]")
@@ -1074,6 +1078,8 @@ var/mob/dview/tview/tview_mob = new()
 	else
 		z = A.z
 
+	if(z < 1 || z > map.zLevels.len)
+		return null
 	. = map.zLevels[z]
 
 /proc/transfer_fingerprints(atom/A,atom/B)//synchronizes the fingerprints between two atoms. Useful when you have two different atoms actually being different states of a same object.

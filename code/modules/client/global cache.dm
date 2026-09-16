@@ -48,6 +48,9 @@ var/list/asset_datums = list()
 	while(!global.asset_cache_populated)
 		sleep(5)
 
+	if(!client) // client may have disconnected during the sleep above
+		return 0
+
 	if(!asset_cache.Find(asset_name))
 		CRASH("Attempted to send nonexistant asset [asset_name] to [client.key]!")
 

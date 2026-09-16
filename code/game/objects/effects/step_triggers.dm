@@ -155,3 +155,33 @@
 	..()
 	teleport_x_offset = world.maxx - 25
 	teleport_y_offset = world.maxy - 25
+
+// Picks a random VZ_SPACE / VZ_PARKING vlevel and drops the atom inside it instead of teleporting to hardcoded world coordinates - the latter lands on border turfs or in the wrong vlevel on packed dynamic z-levels.
+/obj/effect/step_trigger/teleporter/random/shuttle_transit/Trigger(var/atom/movable/A)
+	if(!istype(A) || isobserver(A))
+		return
+	if(istype(A,/obj/item/projectile/fire_breath/shuttle_exhaust))
+		return
+	var/list/datum/virtual_z/destinations = list()
+	for(var/datum/virtual_z/vz in map.vLevels)
+		if((vz.level_type == VZ_PARKING || vz.level_type == VZ_SPACE) && !vz.movementJammed)
+			destinations += vz
+	if(!destinations.len)
+		return ..()
+	var/datum/virtual_z/dest = pick(destinations)
+	for(var/i = 1 to 50)
+		var/tx = rand(dest.x_min + TRANSITIONEDGE, dest.x_max - TRANSITIONEDGE)
+		var/ty = rand(dest.y_min + TRANSITIONEDGE, dest.y_max - TRANSITIONEDGE)
+		var/turf/T = locate(tx, ty, dest.z())
+		if(istype(T, /turf/space) && !istype(T, /turf/space/transit) && !istype(T, /turf/unsimulated/border))
+			var/turf/old_T = get_turf(A)
+			var/datum/virtual_z/old_v = old_T?.v
+			if(ismob(A))
+				var/mob/M = A
+				if(old_v)
+					old_v.mob_exited(M)
+				A.forceMove(T)
+				dest.mob_entered(M)
+			else
+				A.forceMove(T)
+			return

@@ -52,8 +52,7 @@
 		return 0 //One is inside, the other is outside something.
 	if(sting_range < 2)
 		return holder.Adjacent(M)
-	var/list/L = quick_AStar(get_turf(holder), get_turf(M), /turf/proc/AdjacentTurfs, /turf/proc/Distance, sting_range, reference="\ref[src]")
-	if(L.len) //AStar returns an empty list, but since the list is something that's actually returned we check for entries in the list instead.
+	if(check_path_to(holder, M, sting_range))
 		return 1
 	return 0
 

@@ -6,6 +6,8 @@
 	flags = FPRINT
 	density = 0
 	anchored = 1
+	sheet_type = /obj/item/stack/sheet/wood
+	sheet_amt = 2
 	var/notices = 0
 
 /obj/structure/noticeboard/initialize()
@@ -22,7 +24,7 @@
 	if(O.is_wrench(user))
 		to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
 		O.playtoolsound(src, 100)
-		new /obj/item/stack/sheet/wood (src.loc,2)
+		drop_stack(sheet_type,loc,sheet_amt,user)
 		qdel(src)
 	if(istype(O, /obj/item/weapon/paper))
 		if(notices < 5)

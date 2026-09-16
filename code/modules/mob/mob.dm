@@ -401,6 +401,8 @@
 			else
 				thing_to_see = locate(T_loc.x,T_loc.y,z0) // If not on the same zlevel as it, just do it on turfs, location goes there if all else fails anyways.
 			for(var/mob/virtualhearer/hearer in viewers(range, thing_to_see)) // Rest is self explanatory from here
+				if(!hearer.attached) // virtualhearer outlived its attached holopad/mob
+					continue
 				var/mob/M
 				if(istype(hearer.attached, /obj/machinery/hologram/holopad))
 					var/obj/machinery/hologram/holopad/holo = hearer.attached

@@ -61,6 +61,7 @@ var/list/all_doors = list()
 	var/being_cut = FALSE
 	var/explosion_block = 0 //regular airlocks are 1, blast doors are 3, higher values mean increasingly effective at blocking explosions.
 	var/obj/machinery/door/arcane_linked_door = null
+	var/arcane_teleport_chance = 100
 
 /obj/machinery/door/proc/bashed_in(mob/user)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -152,7 +153,7 @@ var/list/all_doors = list()
 /obj/machinery/door/proc/headbutt_check(mob/user, var/stun_time = 0, var/knockdown_time = 0, var/damage = 0) //This is going to be an airlock proc until someone makes headbutting a more official thing
 	if(prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
+		if(H.getBrainLoss(COORDINATION_L) >= BRAINLOSS_FOR_HEADBUTT)
 			playsound(src, 'sound/effects/bang.ogg', 25, 1)
 			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 			if(!istype(H.head, /obj/item/clothing/head/helmet))
@@ -446,7 +447,7 @@ var/list/all_doors = list()
 /obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
 	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
-	if(arcanetampered && arcane_linked_door && !density && istype(AM,/atom/movable))
+	if(arcanetampered && arcane_linked_door && !density && istype(AM,/atom/movable) && prob(arcane_teleport_chance))
 		var/atom/movable/A = AM
 		var/turf/goodturf = arcane_linked_door.arcane_linkable()
 		if(goodturf)
@@ -454,7 +455,7 @@ var/list/all_doors = list()
 			if(A.dir != get_dir(arcane_linked_door, goodturf))
 				A.dir = get_dir(arcane_linked_door, goodturf)
 
-/obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)
+/obj/machinery/door/CanPathPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)
 
 

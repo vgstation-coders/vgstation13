@@ -7,6 +7,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#DCDCDC"  // rgb: 220, 220, 220, silver
 	density = 19.25
+	specheatcap = 0.15
 
 /datum/reagent/lithiumsodiumtungstate
 	name = "Lithium Sodium Tungstate"
@@ -15,7 +16,6 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C0C0C0"  // rgb: 192, 192, 192, darker silver
 	density = 3.29
-	specheatcap = 3.99
 
 /datum/reagent/ground_rock
 	name = "Ground Rock"
@@ -31,7 +31,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F5FFFA"   //rgb: 245, 255, 250, almost white
 	density = 4.74
-	specheatcap = 3.99
+	specheatcap = 0.399
 
 /datum/reagent/analysis_sample/handle_additional_data(var/list/additional_data=null)
 	if (GROUND_ROCK in additional_data)

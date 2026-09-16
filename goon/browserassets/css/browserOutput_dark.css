@@ -73,7 +73,7 @@ a:visited {color: #b76ff5;}
 
 .newscaster {color: #c05d5d;}
 
-.recruit {color: #986cdb; font-weight: bold; font-style: italic;}
+.recruit {color: #986cdb; font-weight: bold; font-style: italic; font-size: 1.2em;}
 
 #newMessages {background: #222222; color: #cccccc;}
 #ping {background: #222222;}

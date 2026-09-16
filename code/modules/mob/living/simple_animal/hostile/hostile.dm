@@ -104,6 +104,7 @@
 		return 0
 	if(!.)
 		walk(src, 0)
+		stop_chase()
 		return 0
 	if(client && !deny_client_move)
 		return 0
@@ -122,6 +123,10 @@
 					EscapeConfinement()
 				var/new_target = FindTarget()
 				GiveTarget(new_target)
+				// Chase on the acquiring tick rather than idling a full 2s AI tick.
+				if(stance == HOSTILE_STANCE_ATTACK && !(flags & INVULNERABLE))
+					MoveToTarget()
+					DestroySurroundings()
 
 			if(HOSTILE_STANCE_ATTACK)
 				if(!(flags & INVULNERABLE))
@@ -294,6 +299,7 @@
 			if(canmove && space_check())
 				if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
 					before_retreat()
+					stop_chase()
 					walk_away(src,target,retreat_distance,move_to_delay)
 				else
 					Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
@@ -312,9 +318,6 @@
 			return
 
 	LostTarget()
-
-/mob/living/simple_animal/hostile/proc/Goto(var/target, var/delay, var/minimum_distance)
-	start_walk_to(target, minimum_distance, delay)
 
 /mob/living/simple_animal/hostile/adjustBruteLoss(var/damage)
 	..(damage)
@@ -363,11 +366,13 @@
 	stance = HOSTILE_STANCE_IDLE
 	target = null
 	walk(src, 0)
+	stop_chase()
 	LoseAggro()
 
 /mob/living/simple_animal/hostile/proc/LostTarget()
 	stance = HOSTILE_STANCE_IDLE
 	walk(src, 0)
+	stop_chase()
 	LoseAggro()
 
 //////////////END HOSTILE MOB TARGETTING AND AGGRESSION////////////
@@ -375,6 +380,7 @@
 /mob/living/simple_animal/hostile/death(var/gibbed = FALSE)
 	LoseAggro()
 	walk(src, 0)
+	stop_chase()
 	if(hivelord)
 		if(src in hivelord.broods)
 			hivelord.broods.Remove(src)
@@ -491,6 +497,11 @@
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
 	if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		EscapeConfinement()
+		var/obj/blocker = path_barrier()
+		if(blocker)
+			hostile_interest = initial(hostile_interest)
+			UnarmedAttack(blocker, TRUE)
+			return
 		var/list/smash_dirs = list(0)
 		if(!target || !CanAttack(target))
 			smash_dirs |= alldirs //if no target, attack everywhere

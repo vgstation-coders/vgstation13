@@ -931,7 +931,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			var/list/temp_tech = linked_destroy.ConvertReqString2List(linked_destroy.loaded_item.origin_tech)
 			for(var/T in temp_tech)
 				var/datum/tech/TT = files.GetKTechByID(T)
-				dat += "<LI>[CallTechName(T)] [temp_tech[T]] \[Current research level: [TT.level]\]</LI>"
+				dat += "<LI>[CallTechName(T)] [temp_tech[T]] \[Current research level: [TT ? TT.level : 0]\]</LI>"
 			dat += "</UL>"
 			if(linked_destroy.loaded_item.materials)
 				dat += "Material Composition:<UL>"

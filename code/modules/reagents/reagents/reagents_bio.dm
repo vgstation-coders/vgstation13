@@ -281,7 +281,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6AAA96" //rgb: 106, 170, 150
 	custom_metabolism = 0.05
-	density = 109.06
+	density = 1.0906
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Contains leporazine, better this than 6 digits
 
 /datum/reagent/carp_pheromones/on_mob_life(var/mob/living/M)
@@ -317,7 +317,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#993300"
 	custom_metabolism = 2
-	density = 109.06
+	density = 1.0906
 	var/list/mob/living/simple_animal/hostile/retaliate/horde = list()
 
 /datum/reagent/killer_pheromones/on_mob_life(var/mob/living/M)
@@ -433,6 +433,14 @@
 			M.confused = 0
 			M.adjustToxLoss(1)
 
+/datum/reagent/greygoo/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+	
+	if(volume >= 1 && istype(O,/obj/item/stack/sheet/mineral/reticulite))
+		var/obj/item/stack/S = O
+		S.add(volume)
+
 /datum/reagent/grue_bile
 	name = "Grue Bile"
 	id = GRUE_BILE
@@ -537,6 +545,28 @@
 		TU.health-=mecha_damage_multiplier*volume
 	if(O.w_type == RECYK_METAL)
 		O.acid_melt()
+
+/datum/reagent/zetarot
+	name = "Zetarot"
+	id = ZETAROT
+	description = "An alien fungal compound that causes rapid rotting in zeta reticulian infrastructures."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#005252" //moldy teal
+
+/datum/reagent/zetarot/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 5 && T.can_thermite && istype(T, /turf/simulated/wall/mineral/reticulite))
+		var/turf/simulated/wall/W = T
+		W.rot()
+
+/datum/reagent/zetarot/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.adjustToxLoss((isgrey(M) ? 2 : 1) * REM)
+//todo : mech and pod damage, maybe, maybe not
 
 /datum/reagent/mucus
 	name = "Mucus"
@@ -644,7 +674,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#EACF9D" //rgb: 234, 207, 157. Pale yellow
 	density = 1.35
-	specheatcap = 5.2
+	specheatcap = 2.2
 
 /datum/reagent/vomit/on_mob_life(var/mob/living/M)
 	if(..())

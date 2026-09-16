@@ -74,6 +74,6 @@
 
 /datum/job/officer/get_total_positions()
 	. = ..()
-	var/datum/job/assistant = job_master.GetJob("Assistant")
-	if(assistant.current_positions > 5)
+	var/datum/job/assistant = locate(/datum/job/assistant) in job_master.occupations
+	if(assistant?.current_positions > 5)
 		. = clamp(. + assistant.current_positions - 5, 0, 99)

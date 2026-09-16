@@ -70,8 +70,8 @@
 	game.emag_act(user)
 
 /obj/machinery/computer/arcade/arcane_act(mob/user)
-	game.emag_act(user) // until i come up with something better, reward differs for now though
-	return ..()
+	game.arcane_act(user)
+	return "H'NK!"
 
 /obj/machinery/computer/arcade/bless()
 	return

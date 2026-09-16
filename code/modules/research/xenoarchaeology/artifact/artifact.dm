@@ -141,7 +141,9 @@ var/list/boulders = list()
 				visible_message("<span class='danger'>[src] suddenly crumbles away.</span>")
 				if(artifact_find)
 					var/spawn_type = artifact_find.artifact_find_type
-					if (spawn_type == /obj/machinery/artifact)
+					if(!spawn_type)
+						to_chat(user, "<span class='notice'>[src] has been whittled away under your careful excavation, but there was nothing of interest inside.</span>")
+					else if (spawn_type == /obj/machinery/artifact)
 						new spawn_type(get_turf(src), artifact_find.artifact_id)
 					else if (spawn_type == /obj/machinery/power/supermatter)
 						spawn(rand(10 MINUTES, 30 MINUTES))//The time it takes for Nanotrasen to detect it and make the Science dept an offer they cannot refuse.

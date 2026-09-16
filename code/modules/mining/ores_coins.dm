@@ -536,6 +536,15 @@
 	siemens_coefficient = rand(0,200) / 100
 	credits = rand(1,1000)
 
+/obj/item/weapon/coin/reticulite
+	material=MAT_RETICULITE
+	name = "reticulite coin"
+	icon_state = "coin_reticulite"
+	desc = "You hope places accept foreign currency with this."
+	melt_temperature=MELTPOINT_STEEL
+	credits = 2
+	siemens_coefficient = 1
+
 /obj/item/weapon/coin/adamantine
 	material="adamantine"
 	name = "adamantine coin"

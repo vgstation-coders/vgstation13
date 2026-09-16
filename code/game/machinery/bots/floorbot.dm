@@ -381,11 +381,6 @@ var/global/list/floorbot_targets=list()
 		icon_state = "[skin][icon_initial][on]e"
 
 
-/obj/machinery/bot/floorbot/get_patrol_path(var/list/L)
-	if(..())
-		return TRUE
-	return FALSE
-
 /obj/machinery/bot/floorbot/explode()
 	on = 0
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)

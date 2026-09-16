@@ -42,6 +42,11 @@
 /obj/landline/proc/make_cord()
 	if(!linked_phone)
 		return
+	if(get_dist(src, linked_phone) > tether_length-2 && ismob(linked_phone.loc))
+		var/mob/M = linked_phone.loc
+		if(M.a_intent == I_HELP && M.drop_item(linked_phone,M.loc))
+			to_chat(M,"<span class='notice'>You drop \the [linked_phone] to prevent the cord from stretching dangerously.</span>")
+			return
 	if(get_dist(src, linked_phone) > tether_length-1)
 		linked_phone.visible_message("\The [src] cord stretches dangerously...")
 		if(get_dist(src, linked_phone) > tether_length)
@@ -304,6 +309,11 @@
 		return
 	linked_landline.delete_cord()
 	linked_landline.make_cord()
+
+/obj/item/telephone/prepickup(var/mob/user)
+	if(linked_landline && user.a_intent == I_HELP && get_dist(user,linked_landline) > linked_landline.tether_length-1)
+		to_chat(user,"<span class='warning'>\The [src] won't stretch that far without snapping! Unless you're trying to do that...</span>")
+		return 1
 
 /obj/item/telephone/pickup(var/mob/user)
 	..()

@@ -22,6 +22,19 @@
 
 	mech_flags = MECH_SCAN_FAIL
 
+/obj/item/device/device_analyser/examine(mob/user)
+	..()
+	if(!Adjacent(user))
+		return
+	if(!loaded_designs.len)
+		to_chat(user, "No designs currently loaded.")
+		return
+	var/list/out = list("Designs currently loaded: <span class='info'>")
+	for(var/datum/design/current in loaded_designs)
+		out += current.name
+	out += "</span>"
+	to_chat(user, jointext(out, "<br/>"))
+
 /obj/item/device/device_analyser/attack_self()
 	..()
 	loadone = !loadone
@@ -80,7 +93,7 @@
 	// Objects that cannot be scanned
 	if((O.mech_flags & MECH_SCAN_FAIL)==MECH_SCAN_FAIL)
 		return 0
-	
+
 	if((O.mech_flags & MECH_SCAN_GOONECODE)==MECH_SCAN_GOONECODE)
 		to_chat(user, "<span class='notice'>Your device blinks red and a message appears: <span class='warning'>\"ERROR: CLOSED SOURCE SOFTWARE; INCOMPATIBLE WITH GPLv3.\"</span></span>")
 		return 0

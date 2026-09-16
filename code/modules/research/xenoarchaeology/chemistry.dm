@@ -156,3 +156,11 @@
 	..()
 	reagents.add_reagent(DIABEETUSOL,100)
 	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/lina2wo4
+	name = "huge lithium sodium tungstate flask"
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/lina2wo4/New()
+	..()
+	reagents.add_reagent(LITHIUMSODIUMTUNGSTATE,250)
+	update_icon()

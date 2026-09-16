@@ -598,7 +598,7 @@ var/global/list/air_alarms = list()
 		kill_moody_light()
 		return
 	var/area/this_area = get_area(src)
-	switch(max(local_danger_level, this_area.atmosalm-1))
+	switch(max(local_danger_level, (this_area ? this_area.atmosalm : 0) - 1))
 		if (0)
 			icon_state = "alarm0"
 			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_alarm0")

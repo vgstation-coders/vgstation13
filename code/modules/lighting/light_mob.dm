@@ -22,6 +22,12 @@
 	lighting_planemaster = new(client)
 	self_vision = new(client)
 
+	// ensure these are properly cleaned up when client.reset_screen or something runs
+	// lest the old mob keep a ref to them for ever (until inevitable hdel)
+	dark_plane.pointer_to_var = &dark_plane
+	lighting_planemaster.pointer_to_var = &lighting_planemaster
+	self_vision.pointer_to_var = &self_vision
+
 	update_darkness()
 	register_event(/event/before_move, src, /mob/proc/check_dark_vision)
 

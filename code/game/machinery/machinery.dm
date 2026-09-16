@@ -639,10 +639,10 @@ a {
 */
 	if (ishuman(user) && !ignore_brain_damage)
 		var/mob/living/carbon/human/H = user
-		if(H.getBrainLoss() >= 60)
+		if(H.getBrainLoss(INTELLIGENCE_L) >= 60)
 			visible_message("<span class='warning'>[H] stares cluelessly at [src] and drools.</span>")
 			return 1
-		else if(prob(H.getBrainLoss()) || (H.undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)))
+		else if(prob(H.getBrainLoss(INTELLIGENCE_L)) || (H.undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)))
 			to_chat(user, "<span class='warning'>You momentarily forget how to use [src].</span>")
 			return 1
 

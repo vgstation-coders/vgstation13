@@ -69,7 +69,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#664B63" //rgb: 102, 75, 99
 	density = 0.62
-	specheatcap = 49.23
+	specheatcap = 4.923
 
 /datum/reagent/nitroglycerin
 	name = "Nitroglycerin"
@@ -77,8 +77,8 @@
 	description = "Nitroglycerin is a heavy, colorless, oily, explosive liquid obtained by nitrating glycerol."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#808080" //rgb: 128, 128, 128
-	density = 4.33
-	specheatcap = 2.64
+	density = 1.7
+	specheatcap = 1.11
 
 /datum/reagent/nitroglycerin/on_mob_life(var/mob/living/M)
 	M.adjustToxLoss(2 * REM)

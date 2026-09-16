@@ -256,6 +256,36 @@
 	alpha = 255
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 
+/datum/reagent/drink/pomegranatejuice
+	name = "Pomegranate Juice"
+	id = POMEGRANATEJUICE
+	description = "Acidic yet also sweet"
+	color = "#A60134"
+	alpha = 255
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	sport = SPORTINESS_SUGAR
+	flags = CHEMFLAG_PIGMENT
+
+/datum/reagent/drink/pomegranatesyrup
+	name = "Pomegranate Syrup"
+	id = POMEGRANATESYRUP
+	description = "Exceedingly sweet"
+	color = "#370011"
+	alpha = 255
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	sport = SPORTINESS_SUGAR
+	flags = CHEMFLAG_PIGMENT
+
+/datum/reagent/drink/grenadine
+	name = "Grenadine"
+	id = GRENADINE
+	description = "Sweet and refreshing !"
+	color = "#7E0127"
+	alpha = 255
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	sport = SPORTINESS_SUGAR
+	flags = CHEMFLAG_PIGMENT
+
 /datum/reagent/drink/nothing
 	name = "Nothing"
 	id = NOTHING
@@ -263,6 +293,7 @@
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	nutriment_factor = 0
 	glass_name = "nothing"
+	overdose_am = 50
 
 /datum/reagent/drink/nothing/on_mob_life(var/mob/living/M)
     if(ishuman(M))
@@ -276,6 +307,13 @@
                 M.heal_organ_damage(0, REM)
             if(M.getToxLoss() && prob(80))
                 M.adjustToxLoss(-REM)
+
+/datum/reagent/drink/nothing/on_overdose(var/mob/living/H)
+	if(ishuman(H))
+		var/mob/living/carbon/human/M = H
+		if(M_CLUMSY in M.mutations)
+			M.mutations.Remove(M_CLUMSY)
+			M.visible_message("<span class='notice'>\The [M] seems to get a grasp over themselves...</span>", "<span class='notice'>You have outgrown that wave of clumsiness.</span>'")
 
 /datum/reagent/drink/potato_juice
 	name = "Potato Juice"
@@ -445,6 +483,7 @@
 	adj_temp = 20
 	mug_icon_state = "tea"
 	mug_desc = "A warm mug of tea."
+	arcane_id = GRAVSINGULARITEA
 
 /datum/reagent/drink/tea/on_mob_life(var/mob/living/M)
 	if(..())
@@ -551,7 +590,6 @@
 	color = "#100800" //rgb: 16, 8, 0
 	adj_sleepy = -2
 	density = 4.17
-	specheatcap = 1.24
 	glass_icon_state = "nuka_colaglass"
 	glass_name = "\improper Nuka Cola"
 	glass_desc = "Don't cry. Don't raise your eye. It's only nuclear wasteland."
@@ -747,6 +785,7 @@
 	glass_icon_state = "bananahonkglass"
 	glass_name = "\improper Banana Honk"
 	glass_desc = "A cocktail from the clown planet."
+	arcane_id = HONKSERUM
 
 /datum/reagent/drink/silencer
 	name = "Silencer"
@@ -757,6 +796,7 @@
 	glass_icon_state = "silencerglass"
 	glass_name = "\improper Silencer"
 	glass_desc = "The mime's favorite, though you won't hear him ask for it."
+	arcane_id = HONKSERUM
 
 /datum/reagent/drink/silencer/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1033,6 +1073,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	mug_name = "\improper Lifeline"
 	mug_desc = "Some days, the only thing that keeps you going is cryo and caffeine."
 	color = "#390600"
+	//arcane_id = PHENOL
 
 /datum/reagent/drink/coffee/medcoffee/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1126,7 +1167,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC"
 	density = 1.8
-	specheatcap = 3
 	adj_temp = 40
 	max_temp_adj = 40
 	custom_metabolism = 1 //goes through you fast
@@ -1154,5 +1194,5 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/drink/cold/frostbite/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	
+
 	M.reagents.add_reagent(MINTESSENCE, 0.1)

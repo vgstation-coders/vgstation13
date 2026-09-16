@@ -52,6 +52,7 @@
 		/obj/item/device/radio/borg,
 		/obj/machinery/camera,
 		/obj/item/device/mmi,
+		/mob/living/simple_animal/mouse,
 	)
 	return allowed_items
 

@@ -594,3 +594,11 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/gingerbread
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_GINGERBREAD
+
+/datum/material/reticulite
+	name="Reticulite"
+	id=MAT_RETICULITE
+	sheettype=/obj/item/stack/sheet/mineral/reticulite
+	cointype=/obj/item/weapon/coin/reticulite
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_RETICULITE

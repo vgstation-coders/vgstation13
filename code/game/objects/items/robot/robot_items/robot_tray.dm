@@ -6,6 +6,7 @@
 	name = "RoboTray"
 	desc = "An autoloading tray specialized for carrying refreshments."
 
+
 /obj/item/weapon/tray/robotray/afterattack(atom/target, mob/user as mob, proximity_flag)
 	if(!target)
 		return
@@ -35,8 +36,7 @@
 					break
 
 				I.forceMove(src)
-				carrying.Add(I)
-				overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
+				vis_contents += I
 				addedSomething = 1
 		if (addedSomething)
 			user.visible_message("<span class='notice'>[user] load some items onto their service tray.</span>")
@@ -60,13 +60,10 @@
 		else					//They clicked on a table
 			dropspot = target.loc
 
-		overlays = null
-
 		var droppedSomething = 0
 
-		for(var/obj/item/I in carrying)
+		for(var/obj/item/I in contents)
 			I.forceMove(dropspot)
-			carrying.Remove(I)
 			droppedSomething = 1
 			if(!foundtable && isturf(dropspot))
 				//If no table, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
@@ -76,6 +73,7 @@
 							step(I, pick(NORTH,SOUTH,EAST,WEST))
 							sleep(rand(2,4))
 		if(droppedSomething)
+			update_icon()
 			if(foundtable)
 				user.visible_message("<span class='notice'>[user] unloads their service tray.</span>")
 			else

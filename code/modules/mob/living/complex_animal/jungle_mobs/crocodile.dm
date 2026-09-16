@@ -14,8 +14,6 @@
 	melee_damage_lower=15
 	behavior_flags = ANIMAL_BEHAVIOR_PREDATORY | ANIMAL_BEHAVIOR_RETALIATE | ANIMAL_BEHAVIOR_DESTRUCTIVE | ANIMAL_BEHAVIOR_TERRITORIAL
 	movespeed=5
-	max_local_population = 5
-	mob_max_age = 900 // 30 minutes
 	food_per_tick = 0.0001
 	var/stuntracker=FALSE //prevents being stunlocked
 	
@@ -72,9 +70,9 @@
 	armor=list(melee=35,bullet=15,laser=20,energy=0,bomb=10,bio=0,rad=0)
 	petable=TRUE
 	is_pet=TRUE
+	max_local_population=0
 
-/mob/living/simple_animal/complex/crocodile/schnapps/get_offspring_cost()
-	return 0 //no infinite schnapps.	
+
 /mob/living/simple_animal/complex/crocodile/schnapps/can_offspring()
 	return FALSE
 

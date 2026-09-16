@@ -531,6 +531,16 @@
 	icon = seed.plant_dmi
 	icon_state = "pit"
 
+/obj/item/seeds/pomegranateseed
+	name = "packet of pomegranate seeds"
+	seed_type = "pomegranate"
+	vending_cat = "fruits"
+
+/obj/item/seeds/pomegrenadeseed
+	name = "packet of pomegrenade seeds"
+	seed_type = "pomegrenade"
+	vending_cat = "fruits"
+
 /obj/item/seeds/pearseed
 	name = "packet of pear seeds"
 	seed_type = "pear"
@@ -1936,6 +1946,40 @@
 	ideal_light = 8
 	large = 0
 
+/datum/seed/pomegranate
+	name = "pomegranate"
+	seed_name = "pomegranate"
+	display_name = "pomegranate tree"
+	plant_dmi = 'icons/obj/hydroponics/pomegranate.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pomegranate)
+	mutants = list("pomegrenade")
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1, 20), POMEGRANATEJUICE = list(1, 20))
+
+	lifespan = 55
+	maturation = 6
+	production = 6
+	yield = 5
+	potency = 20
+	ideal_light = 9
+	large = 0
+
+/datum/seed/pomegrenade
+	name = "pomegrenade"
+	seed_name = "pomegrenade"
+	display_name = "pomegrenade tree"
+	plant_dmi = 'icons/obj/hydroponics/pomegrenade.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade)
+	harvest_repeat = 1
+	chems = list(SULFUR = list(1, 10), SUGAR = list(1, 10))
+
+	lifespan = 55
+	maturation = 6
+	production = 6
+	yield = 5
+	potency = 20
+	ideal_light = 9
+	large = 0
 
 /datum/seed/pear
 	name = "pear"

@@ -141,6 +141,13 @@
 	icon_state = "tech_satchel"
 	actions_types = list(/datum/action/item_action/toggle_auto_handling)
 	var/handling = FALSE
+	var/mob/registered_holder = null
+
+/obj/item/weapon/storage/bag/ore/auto/Destroy()
+	if(registered_holder)
+		registered_holder.unregister_event(/event/moved, src, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		registered_holder = null
+	..()
 
 /obj/item/weapon/storage/bag/ore/auto/attack_self(mob/user)
 	if(!contents.len)
@@ -175,8 +182,11 @@
 
 	if(handling)
 		user.register_event(/event/moved, src, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		registered_holder = user
 	else
 		user.unregister_event(/event/moved, src, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		if(registered_holder == user)
+			registered_holder = null
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_fill(var/mob/holder)
 	var/obj/structure/ore_box/box = null
@@ -189,6 +199,8 @@
 				qdel(ore)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(atom/movable/mover)
+	if(!src) //guard against this proc being called after the bag is deleted but before the event handler is unregistered (shouldn't happen anymore but did before this change)
+		return
 	if(isrobot(mover))
 		var/mob/living/silicon/robot/S = mover
 		if(locate(src) in S.get_all_slots())

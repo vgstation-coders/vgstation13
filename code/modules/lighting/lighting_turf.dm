@@ -29,7 +29,7 @@
 	var/area/A = loc
 	if (!A.dynamic_lighting)
 		return
-	if (!lighting_corners_initialised)
+	if (!lighting_corners_initialised || !corners)
 		generate_missing_corners()
 
 	new /atom/movable/lighting_overlay(src)

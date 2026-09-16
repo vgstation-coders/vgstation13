@@ -179,7 +179,7 @@ var/list/foliage_replacments=list(
 /turf/unsimulated/floor/planetary/dirt/jungle/proc/can_dig_down(var/mob/user=null)
 	var/turf/T=locate(x,y,z==1 ? 2 : 6)
 	if(istype(T,/turf/unsimulated/floor/planetary))
-		return TRUE	
+		return TRUE
 	if(istype(T,/turf/unsimulated/mineral))
 		return TRUE
 	if(user)
@@ -241,7 +241,7 @@ var/list/foliage_replacments=list(
 
 /turf/unsimulated/floor/planetary/path/jungle_plated
 	name="Plated Soil"
-	desc="Compressed soil which has plated atop it to protect items underneath it."
+	desc="Compressed soil which has plating atop it to protect items underneath it."
 	icon='icons/turf/floors.dmi'
 	icon_state = "asteroidfloor"
 	plane = TURF_PLANE
@@ -283,7 +283,7 @@ var/list/foliage_replacments=list(
 				ChangeTurf(/turf/unsimulated/floor/planetary/path/jungle)
 
 
-	
+
 /turf/unsimulated/floor/planetary/water/jungle
 	name="Water"
 	desc="It's about knee-height. Probably not safe to drink from."
@@ -305,7 +305,7 @@ var/list/foliage_replacments=list(
 	edge_priority = DEEPWATER_EDGE_PRIORITY
 	edge_overlay_type = /obj/effect/edge_overlay/water/deep
 	water_overlay_state="water2"
-	
+
 /turf/unsimulated/floor/planetary/water/jungle/deep/New()
 	..()
 	wateroverlay.plane=MOB_PLANE
@@ -512,12 +512,12 @@ var/list/foliage_replacments=list(
 	if(istype(JT,/turf/unsimulated/floor/planetary/path/jungle_plated))
 		return "something hard blocks the way."
 	if(istype(JT,/turf/unsimulated/floor/planetary/concrete))
-		return "something hard blocks the way."	
+		return "something hard blocks the way."
 	if(locate(/obj/structure/flora/tree) in T.contents)
 		return "there's too many roots in the way."
 	for(var/obj/O in T.contents)
 		if(O.density && O.anchored)
-			return "something hard blocks the way."	
+			return "something hard blocks the way."
 	return null
 
 /turf/unsimulated/floor/planetary/cave/jungle/ex_act(severity)

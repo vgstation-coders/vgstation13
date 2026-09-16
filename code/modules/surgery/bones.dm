@@ -95,8 +95,8 @@
 	return affected.name == LIMB_HEAD && (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN))&& affected.stage == 1
 
 /datum/surgery_step/mend_skull/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	user.visible_message("[user] is beginning piece together [target]'s skull with \the [tool]."  , \
-		"You are beginning piece together [target]'s skull with \the [tool].")
+	user.visible_message("[user] is beginning to piece together [target]'s skull with \the [tool]."  , \
+		"You are beginning to piece together [target]'s skull with \the [tool].")
 	..()
 
 /datum/surgery_step/mend_skull/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

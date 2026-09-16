@@ -177,7 +177,9 @@ var/global/list/bombermangear = list()
 		else if(parent.bomblimit > 0)
 			parent.bomblimit--
 			new /obj/structure/bomberman(T2, bombpower, destroy_environnement, hurt_players, parent, line_dir)
-	ticking()
+
+	spawn()//how did I forget such a basic thing all those years?
+		ticking()
 
 
 
@@ -255,6 +257,26 @@ var/global/list/bombermangear = list()
 /obj/structure/bomberman/cultify()
 	return
 
+
+///////////////////////////////POMEGRENADE////////////////////////////////////
+/obj/structure/bomberman/pomegrenade
+	name = "pomegrenade"
+	desc = "It's bug blastin' time!"
+	icon = 'icons/obj/hydroponics/pomegrenade.dmi'
+	icon_state = "pomegrenade"
+
+/obj/structure/bomberman/pomegrenade/detonate()
+	var/turf/T = get_turf(src)
+	if(!T)
+		qdel(src)
+		return
+	playsound(T, 'sound/bomberman/bombexplode.ogg', 100, 1)
+	spawn()
+		var/obj/structure/bomberflame/explosion = new /obj/structure/bomberflame(T, 1, bombpower, SOUTH, 0, 1)
+		explosion.icon_state = "explosion_core_alt"
+	qdel(src)
+
+
 ///////////////////////////////FLAME/EXPLOSION//////////////////////////
 /obj/structure/bomberflame
 	name = "explosion"
@@ -295,15 +317,16 @@ var/global/list/bombermangear = list()
 
 	collisions(T2)
 
-	spawn(1)
+	spawn()
+		sleep(1)
 		if(fuel)
 			propagate(initial)
 
-	sleep(5)
-	collisions(T2)
+		sleep(4)
+		collisions(T2)
 
-	sleep(5)
-	qdel(src)
+		sleep(5)
+		qdel(src)
 
 /obj/structure/bomberflame/Destroy()
 	..()
@@ -339,6 +362,9 @@ var/global/list/bombermangear = list()
 				L.ex_act(2)
 			else
 				L.ex_act(1)
+
+	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/pom in T)
+		pom.blast(TRUE)
 
 /obj/structure/bomberflame/proc/propagate(var/init)
 	if(init)

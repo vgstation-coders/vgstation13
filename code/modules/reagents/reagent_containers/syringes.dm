@@ -48,6 +48,10 @@
 	..()
 	update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/clean_blood()
+	. = ..()
+	remove_disease2()
+
 /obj/item/weapon/reagent_containers/syringe/pickup(mob/user)
 	..()
 	update_icon()
@@ -174,6 +178,7 @@
 			if (B)
 				user.visible_message("<span class='notice'>[user] takes a blood sample from [target].</span>",
 									 "<span class='notice'>You take a blood sample from [target].</span>")
+				src.add_blood(T) // Contaminate the needle with the target's blood and any blood-borne diseases
 			else
 				user.visible_message("<span class='warning'>[user] inserts the syringe into [target], draws back the plunger and gets... nothing?</span>",\
 					"<span class='warning'>You insert the syringe into [target], draw back the plunger and get... nothing?</span>")
@@ -183,6 +188,12 @@
 			if (B)
 				user.visible_message("<span class='notice'>[user] takes a small blood sample from [target].</span>",
 									 "<span class='notice'>You take a small blood sample from [target].</span>")
+				// Contaminate the needle with any blood-borne diseases from the mouse
+				if(T.virus2.len)
+					var/list/blood_diseases = filter_disease_by_spread(T.virus2, required = SPREAD_BLOOD)
+					for(var/ID in blood_diseases)
+						var/datum/disease2/disease/D = blood_diseases[ID]
+						src.infect_disease2(D, notes="(Blood draw from [T])")
 			else
 				user.visible_message("<span class='warning'>[user] inserts the syringe into [target], draws back the plunger and gets... nothing?</span>",\
 					"<span class='warning'>You insert the syringe into [target], draw back the plunger and get... nothing?</span>")
@@ -233,6 +244,27 @@
 		tx_amount = reagents.trans_to(target, tx_amount, log_transfer = TRUE, whodunnit = user)
 		to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. The syringe now contains [reagents.total_volume] units.</span>")
 
+	// Needle contamination: when injecting into a living mob, the needle touches blood/tissue
+	if(isliving(target))
+		var/mob/living/L = target
+		// Transfer any diseases already on the needle directly into the target's bloodstream
+		if(virus2.len)
+			for(var/ID in virus2)
+				var/datum/disease2/disease/D = virus2[ID]
+				if(D.spread & SPREAD_BLOOD)
+					L.infect_disease2(D, 1, notes="(Contaminated needle, injected with \a [src])")
+		// Contaminate the needle with the target's blood and any blood-borne diseases
+		if(iscarbon(L))
+			var/mob/living/carbon/C = L
+			if(C.dna)
+				src.add_blood(C)
+		else if(L.virus2.len)
+			// For non-carbon mobs (e.g. mice), manually spread blood-borne diseases to the needle
+			var/list/blood_diseases = filter_disease_by_spread(L.virus2, required = SPREAD_BLOOD)
+			for(var/ID in blood_diseases)
+				var/datum/disease2/disease/D = blood_diseases[ID]
+				src.infect_disease2(D, notes="(Blood, injection into [L])")
+
 	if(is_empty())
 		mode = SYRINGE_DRAW
 		update_icon()
@@ -275,9 +307,9 @@
 
 		if (deflected)
 			user.visible_message("<span class='danger'>[user] tries to stab [user == target ? get_reflexive_pronoun(user.gender) : target] in \the [hit_area] with \the [src], but the attack is deflected by armor!</span>", "<span class='danger'>You try to stab [user == target ? "yourself" : "\the [target]"] in \the [hit_area] with \the [src], but the attack is deflected by armor!</span>")
-			user.u_equip(src, 1)
-			qdel(src)
-			return // Avoid the transfer since we're using qdel
+			break_needle()
+			add_fingerprint(user)
+			return // Avoid the transfer
 		else
 			user.visible_message("<span class='danger'>[user] stabs [user == target ? get_reflexive_pronoun(user.gender) : target] in \the [hit_area] with \the [src]!</span>", "<span class='danger'>You stab [user == target ? "yourself" : "\the [target]"] in \the [hit_area] with \the [src]!</span>")
 			affecting.take_damage(3)
@@ -290,11 +322,14 @@
 		var/syringestab_amount_transferred = max(rand(min(reagents.total_volume, 2), (reagents.total_volume - 5)), 0) //nerfed by popular demand.
 		src.reagents.reaction(target, INGEST, amount_override = min(reagents.total_volume,syringestab_amount_transferred)/(reagents.reagent_list.len))
 		src.reagents.trans_to(target, syringestab_amount_transferred)
-	src.desc += " It is broken."
-	src.mode = SYRINGE_BROKEN
-	src.add_blood(target)
-	src.add_fingerprint(usr)
-	src.update_icon()
+	break_needle()
+	add_blood(target)
+	add_fingerprint(user)
+
+/obj/item/weapon/reagent_containers/syringe/proc/break_needle()
+	desc += " It is broken."
+	mode = SYRINGE_BROKEN
+	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/restock(nanobots = FALSE)
 	if(mode == 2) //SYRINGE_BROKEN

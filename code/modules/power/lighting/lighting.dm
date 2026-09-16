@@ -74,7 +74,7 @@ var/global/list/light_colors = list(
 			src.stage = 2
 			user.visible_message("[user.name] adds wires to \the [src].", \
 				"You add wires to \the [src]")
-			
+
 			var/obj/machinery/light/newlight = new fixture_type(src.loc)
 			newlight.dir = src.dir
 			src.transfer_fingerprints_to(newlight)
@@ -383,7 +383,7 @@ var/global/list/obj/machinery/light/alllights = list()
 				current_bulb.brightness_range = clamp(new_range, 0, initial(current_bulb.brightness_range))
 		update()
 		return
-		
+
 	if (istype(W,/obj/item/stack/light_w))
 		if(rgb_upgrade)
 			to_chat(user, "This light is already customizable.")
@@ -393,8 +393,8 @@ var/global/list/obj/machinery/light/alllights = list()
 		rgb_upgrade = TRUE
 		to_chat(user, "You insert \the [W] into \the [src], allowing multitool customization.")
 		return
-	
-	
+
+
 	if(rgb_upgrade && iscrowbar(W))
 		W.playtoolsound(src, 75)
 		user.visible_message("[user.name] removes some plastic from \the [src].", \
@@ -404,7 +404,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 		return
 	user.delayNextAttack(8)
-	
+
 	// attempt to insert light
 	if(istype(W, /obj/item/weapon/light))
 		if(current_bulb)
@@ -686,6 +686,12 @@ var/global/list/obj/machinery/light/alllights = list()
 		sleep(1)
 		qdel(src)
 
+/obj/machinery/light/clean_act(cleanliness)
+	. = ..()
+	if(current_bulb && current_bulb.brightness_color == COLOR_PULSEDEMON)
+		current_bulb.brightness_color = initial(current_bulb.brightness_color)
+		update(0)
+
 // the light item
 // can be tube or bulb subtypes
 // will fit into empty /obj/machinery/light of the corresponding type
@@ -811,6 +817,11 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_range = 5
 	brightness_power = 2
 	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
+
+/obj/item/weapon/light/clean_act(cleanliness)
+	. = ..()
+	if(brightness_color == COLOR_PULSEDEMON)
+		brightness_color = initial(brightness_color)
 
 // update the icon state and description of the light
 

@@ -383,7 +383,7 @@ var/area/space_area
 /area/proc/power_change()
 	for(var/obj/machinery/M in src)	// for each machine in the area
 		M.power_change()				// reverify power status (to update icons etc.)
-	if (fire || eject || party)
+	if (fire || eject || party || radalert)
 		updateicon()
 
 /area/proc/usage(const/chan)
@@ -448,7 +448,7 @@ var/area/space_area
 	for(var/mob/mob_in_obj in Obj.contents)
 		if(istype(mob_in_obj))
 			INVOKE_EVENT(mob_in_obj, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
-			if(oldArea.v && src.v && (oldArea.v != src.v))
+			if(oldArea?.v && src.v && (oldArea.v != src.v))
 				var/datum/virtual_z/old_v = oldArea.v
 				var/datum/virtual_z/new_v = src.v
 				if(istype(mob_in_obj, /mob/living))

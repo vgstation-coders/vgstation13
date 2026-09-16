@@ -41,7 +41,6 @@ var/list/one_way_windows
 
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
-	var/disperse_coeff = 0.95
 	var/is_fulltile = FALSE
 
 /obj/structure/window/New(loc)
@@ -201,7 +200,9 @@ var/list/one_way_windows
 	return 1
 
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
-
+	if(Proj.destroy)
+		ex_act(1)
+		return ..()
 	adjustHealthLoss(Proj.damage,Proj)
 	. = ..()
 	healthcheck(Proj.firer)
@@ -268,6 +269,16 @@ var/list/one_way_windows
 	else if(get_dir(loc, target) == dir)
 		return FALSE
 	return TRUE
+
+// A directional pane blocks only the edge it faces; a full-tile window blocks all four.
+/obj/structure/window/CanPathPass(var/obj/item/weapon/card/id/ID, var/to_dir, var/atom/movable/path_caller)
+	if(istype(path_caller) && (path_caller.pass_flags & pass_flags_self))
+		return TRUE
+	if(!density)
+		return TRUE
+	if(is_fulltile)
+		return FALSE
+	return dir != to_dir
 
 /obj/structure/window/proc/dim_beam(var/obj/item/projectile/beam/B)
 	if(istype(B))

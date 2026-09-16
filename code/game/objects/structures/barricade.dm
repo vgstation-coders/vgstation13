@@ -16,8 +16,8 @@
 	health = 60 //Fairly strong
 	layer = ABOVE_DOOR_LAYER
 	pass_flags_self = PASSGLASS
+	sheet_type = /obj/item/stack/sheet/wood
 	var/busy = 0 //Oh god fucking do_after's
-	var/materialtype = /obj/item/stack/sheet/wood
 
 	fire_temp_threshold = 100 //Wooden barricades REALLY don't like fire
 	fire_volume_mod = 10 //They REALLY DON'T
@@ -116,7 +116,7 @@
 /obj/structure/window/barricade/Destroy(var/brokenup)
 
 	setDensity(FALSE) //Sanity while we do the rest
-	new materialtype(loc, sheetamount)
+	new sheet_type(loc, sheetamount)
 
 	..()
 

@@ -8,6 +8,8 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	possible_transfer_amounts = null
 	volume = 50 //Food can contain a beaker's worth of reagents unless specified otherwise. Do note large servings of complex food items can contain well over 50 reagents total
+	var/on_spawn_randomized_x = 5 // Randomized on_spawn pixel offsets. Set to null to have no random offset.
+	var/on_spawn_randomized_y = 5
 
 /obj/item/weapon/reagent_containers/food/verb/blow_on()
 	set name = "Blow on"
@@ -16,8 +18,10 @@
 
 /obj/item/weapon/reagent_containers/food/New()
 	..()
-	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER	//Randomizes position slightly.
-	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+	if(!isnull(on_spawn_randomized_x))
+		src.pixel_x = rand(-on_spawn_randomized_x, on_spawn_randomized_x) * PIXEL_MULTIPLIER
+	if(!isnull(on_spawn_randomized_y))
+		src.pixel_y = rand(-on_spawn_randomized_y, on_spawn_randomized_y) * PIXEL_MULTIPLIER
 	process_temperature()
 
 /obj/item/weapon/reagent_containers/food/fits_in_iv_drip()

@@ -18,6 +18,8 @@
 	density = 1
 	anchored = 0
 	pass_flags_self = PASSMACHINE
+	sheet_type = /obj/item/stack/sheet/wood
+	sheet_amt = 10
 
 	var/remaining_cloth_to_spin = 0
 	var/mob/spinner = null
@@ -62,7 +64,7 @@
 			user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 			"<span class='notice'>You dissasemble \the [src].</span>")
 			var/turf/T = get_turf(src)
-			new /obj/item/stack/sheet/wood(T, 10)
+			drop_stack(sheet_type,loc,sheet_amt,user)
 			for (var/i = 1 to round(remaining_cloth_to_spin/CLOTH_PER_FLAX))
 				new /obj/item/weapon/reagent_containers/food/snacks/grown/flax(T)
 			qdel(src)

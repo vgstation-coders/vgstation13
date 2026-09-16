@@ -57,8 +57,11 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 	var/crashing_this_pod = 0
 
 /datum/shuttle/escape/pod/initialize()
-	.=..()
-	emergency_shuttle.escape_pods.Add(src)
+	. = ..()
+	// Only register as a live escape pod if our area actually exists on this map.
+	if(!linked_area)
+		return
+	emergency_shuttle.escape_pods |= src
 	podcomputer = locate(/obj/machinery/podcomputer) in shuttle_contents()
 	if(podcomputer)
 		podcomputer.linked_pod = src
@@ -67,7 +70,8 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 
 
 /datum/shuttle/escape/pod/Destroy()
-	podcomputer.linked_pod = null
+	if(podcomputer)
+		podcomputer.linked_pod = null
 	emergency_shuttle.escape_pods -= src
 	..()
 

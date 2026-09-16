@@ -23,6 +23,8 @@ var/static/list/counterclockwise_perpendicular_dirs = list(EAST,WEST,EAST|WEST,S
 
 
 /proc/get_angle(atom/a, atom/b)
+	if(!a || !b)
+		return 0
 	return Atan2(b.y - a.y, b.x - a.x)
 
 

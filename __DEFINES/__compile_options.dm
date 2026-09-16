@@ -50,6 +50,8 @@
 //#define MAP_OVERRIDE 18
 // odyssey.dm
 //#define MAP_OVERRIDE 19
+// theseus.dm
+//#define MAP_OVERRIDE 20
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this
@@ -73,3 +75,8 @@
 #define SHOW_CHANGELOG_ON_NEW_PLAYER_LOGIN !DEVELOPER_MODE
 
 #define AUXTOOLS_DEBUGGER DEVELOPER_MODE
+
+// Enable the byond-tracy profiler
+#define TRACY_ENABLED FALSE
+// Run the profiler on startup
+#define TRACY_RUN_ON_STARTUP FALSE

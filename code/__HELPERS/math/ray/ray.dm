@@ -68,7 +68,7 @@
 	return (c_x == c_y && (!max_distance || c_x <= max_distance ))
 
 //returns rebound angle of hit atom
-//assumes atom is 1x1 octogonal box
+//assumes atom is 1x1 octogonal box, unless cardinal_reflect is set to TRUE, where it becomes a square
 //TODO: entry vector (0.4,1) on the surface normal (1,-1). result is (1.6, -0.2)
 // wrong?
 /ray/proc/getReboundOnAtom(var/rayCastHit/hit)
@@ -79,9 +79,14 @@
 
 	var/_vector/hit_vector = hit_point - hit_atom_loc
 
-	//we assume every atom is a octogonal, hence we use all_vectors
-	//here we calculate the "face" of the octagonal atom we want to rebound on
-	var/entry_byond_dir = vector2ClosestDir(hit_vector)
+	//here we calculate the "face" of the atom we want to rebound on.
+	//any atom with cardinal_reflect set to TRUE is treated like a square, otherwise an octagon.
+	var/list/entry_byond_dirs = vector2ClosestDirs(hit_vector,resolved_hit_atom.cardinal_reflect)
+	var/entry_byond_dir = entry_byond_dirs[entry_byond_dirs.len]
+	var/turf/dense_check = get_step(resolved_hit_atom,entry_byond_dir)
+	if(!dense_check || dense_check.density || dense_check.has_dense_content())
+		//entry_byond_dir = entry_byond_dirs[max(1,entry_byond_dirs.len - 1)]
+		return
 	var/_vector/entry_dir = dir2vector(entry_byond_dir)
 
 	return src.direction.mirrorWithNormal(entry_dir)

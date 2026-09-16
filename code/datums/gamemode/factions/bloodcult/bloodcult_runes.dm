@@ -385,7 +385,7 @@ var/list/rune_appearances_cache = list()
 			to_chat(user, "<span class='danger'>You don't have the ability to perform rituals without voicing the incantations, there has to be some way...</span>")
 			return
 
-	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
+	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss(INTELLIGENCE_L)))
 		return fizzle(user)
 
 	add_hiddenprint(user)

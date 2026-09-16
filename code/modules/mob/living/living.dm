@@ -336,7 +336,7 @@
 		return 0	//godmode
 	cloneloss = amount
 
-/mob/living/proc/getBrainLoss()
+/mob/living/proc/getBrainLoss(var/type)
 	return brainloss
 
 /mob/living/proc/adjustBrainLoss(var/amount)
@@ -347,6 +347,7 @@
 		return 0
 
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
+	return 1
 
 /mob/living/proc/setBrainLoss(var/amount)
 	if(status_flags & GODMODE)
@@ -1041,6 +1042,10 @@ Thanks.
 				var/obj/structure/closet/secure_closet/SC = L.loc
 				if(!SC.locked && !SC.welded)
 					return //It's a secure closet, but isn't locked. Easily escapable from, no need to 'resist'
+			else if(istype(C, /obj/structure/closet/crate/secure))
+				var/obj/structure/closet/crate/secure/SC = L.loc
+				if(!SC.locked && !SC.welded)
+					return
 			else
 				if(!C.welded)
 					return //closed but not welded...
@@ -1059,6 +1064,10 @@ Thanks.
 						var/obj/structure/closet/secure_closet/SC = L.loc
 						if(!SC.locked && !SC.welded)
 							return
+					else if(istype(L.loc, /obj/structure/closet/crate/secure))
+						var/obj/structure/closet/crate/secure/SC = L.loc
+						if(!SC.locked && !SC.welded)
+							return
 					else
 						if(!C.welded)
 							return
@@ -1074,6 +1083,9 @@ Thanks.
 					sleep(10)
 					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
+				if(istype(usr.loc, /obj/structure/closet/crate/secure))
+					var/obj/structure/closet/crate/secure/SC = L.loc
+					SC.break_open()
 				C.welded = 0
 				if(C.arcanetampered)
 					C.bless() // so it doesn't just close again, fairness on the user
@@ -1283,7 +1295,11 @@ Thanks.
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
 		INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
-		if (now_pushing || !loc || size <= SIZE_TINY)
+		if (now_pushing || !loc)
+			return
+		if (size <= SIZE_TINY)
+			if(istype(AM,/obj/machinery/disposal/deliveryChute)) //hotfix
+				AM.Bumped(src)
 			return
 		now_pushing = 1
 		if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them
@@ -1295,6 +1311,27 @@ Thanks.
 					return
 		if (istype(AM, /mob/living)) //no pushing people pushing rollerbeds that have people on them
 			var/mob/living/tmob = AM
+			var/obj/item/clothing/under/uniform = get_item_by_slot(slot_w_uniform)
+			if(uniform?.stuns_arcane_loyalty)
+				var/arcanetampered_loyalty = FALSE
+				for(var/obj/item/weapon/implant/loyalty/L in tmob)
+					if(L.imp_in == tmob && L.arcanetampered)
+						arcanetampered_loyalty = TRUE
+						break
+				if(arcanetampered_loyalty)
+					for(var/obj/item/weapon/implant/loyalty/L in src)
+						if(L.imp_in == src)
+							arcanetampered_loyalty = FALSE
+							break
+					if(arcanetampered_loyalty) //if greytide or clown bumps into the likes of sec
+						tmob.Knockdown(10)
+						tmob.Stun(10)
+						if(iscarbon(tmob))
+							tmob.apply_effect(10, STUTTER)
+						if(tmob.knockdown)
+							playsound(tmob.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+						now_pushing = 0
+						return
 			for(var/obj/structure/bed/roller/R in range(tmob, 1))
 				if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
 					to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")
@@ -1324,10 +1361,26 @@ Thanks.
 						dense = 1
 				if(dense)
 					break
-			if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
+			if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && Adjacent(tmob) && world.time > last_swap_time && world.time > tmob.last_swap_time && world.time > tmob.last_moved && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
 				var/turf/oldloc = loc
-				forceMove(tmob.loc)
-				tmob.forceMove(oldloc, glide_size_override = src.glide_size)
+				var/turf/newloc = get_turf(tmob)
+				last_swap_time = world.time
+				tmob.last_swap_time = world.time
+				var/swap_glide = DELAY2GLIDESIZE(PUSH_SWAP_GLIDE_DELAY)
+				var/src_density = density
+				var/tmob_density = tmob.density
+				density = 0
+				tmob.density = 0
+				var/swapped = Move(newloc, get_dir(oldloc, newloc), 0, 0, swap_glide)
+				if(swapped)
+					swapped = tmob.Move(oldloc, get_dir(newloc, oldloc), 0, 0, swap_glide)
+					if(!swapped)
+						forceMove(oldloc)
+				density = src_density
+				tmob.density = tmob_density
+				if(!swapped)
+					now_pushing = 0
+					return
 				now_pushing = 0
 				for(var/mob/living/carbon/slime/slime in view(1,tmob))
 					if(slime.Victim == tmob)
@@ -1368,7 +1421,7 @@ Thanks.
 			if (!now_pushing)
 				now_pushing = 1
 
-				if (!AM.anchored && AM.can_be_pushed(src))
+				if (!AM.anchored && AM.can_be_pushed(src) && world.time > AM.last_moved)
 					var/t = get_dir(src, AM)
 					if(AM.flow_flags & ON_BORDER && !t)
 						t = AM.dir
@@ -1376,7 +1429,7 @@ Thanks.
 						for(var/obj/structure/window/win in get_step(AM,t))
 							now_pushing = 0
 							return
-					AM.set_glide_size(src.glide_size)
+					AM.set_glide_size(DELAY2GLIDESIZE(PUSH_SWAP_GLIDE_DELAY))
 					if (ismob(AM))
 						var/mob/M = AM
 						INVOKE_EVENT(src, /event/before_move)
@@ -1791,3 +1844,14 @@ Thanks.
 /// Event handler for v_transition events used to activate or pause v-levels.
 /mob/living/proc/OnMobVChanged(mob/living/user, datum/virtual_z/to_v, datum/virtual_z/from_v)
 	SSmapping?.v_pause_check(src, to_v, from_v)
+
+/mob/living/t_scanner_expose(ray_range)
+	if(alpha < OPAQUE || (invisibility > 0 && invisibility < INVISIBILITY_OBSERVER))
+		var/old_alpha = alpha
+		var/old_invisibility = invisibility
+		alpha = OPAQUE
+		invisibility = 0
+		spawn(1 SECONDS)
+			if(src)
+				alpha = old_alpha
+				invisibility = old_invisibility

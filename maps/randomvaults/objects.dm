@@ -1096,7 +1096,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/waiter/New()
 	..()
-	add_component(/datum/component/controller/movement/astar)
+	add_component(/datum/component/controller/movement/pathed)
 	var/datum/component/ai/hearing/order/foodndrinks/FD = add_component(/datum/component/ai/hearing/order/foodndrinks)
 	FD.baseprice = rand(5,10) * 5
 	var/datum/component/ai/area_territorial/say/fastfood/welcome/AT = add_component(/datum/component/ai/area_territorial/say/fastfood/welcome)

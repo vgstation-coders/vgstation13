@@ -310,6 +310,7 @@
 	floating_amplitude = 2
 	var/damageblock = 10
 	construct_type = "Juggernaut"
+	disperse_coeff = 1
 
 /mob/living/simple_animal/construct/armoured/proc/juggerblock(var/damage, var/atom/A)//juggernauts ignore damage of 10 when above 66% hp
 	if(istype(A, /obj/item/projectile/bullet/rocksalt))

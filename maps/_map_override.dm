@@ -86,5 +86,9 @@
 		#undef MAP_OVERRIDE
 		#include "odyssey.dm"
 		#define MAP_OVERRIDE 19
+	#elif MAP_OVERRIDE == 20
+		#undef MAP_OVERRIDE
+		#include "theseus.dm"
+		#define MAP_OVERRIDE 20
 	#endif
 #endif

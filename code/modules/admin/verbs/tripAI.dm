@@ -7,7 +7,7 @@
 		return
 
 	if(job_master && ticker)
-		var/datum/job/job = job_master.GetJob("AI")
+		var/datum/job/job = locate(/datum/job/ai) in job_master.occupations
 		if(!job)
 			to_chat(usr, "Unable to locate the AI job")
 			return

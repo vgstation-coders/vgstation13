@@ -20,4 +20,6 @@
 #define COLOR_GREEN "#00FF00"
 #define COLOR_BLUE "#0000FF"
 
+#define COLOR_PULSEDEMON "#BBBB00"
+
 #define COLOR_MATRIX_ADD(color) list(COLOR_RED, COLOR_GREEN, COLOR_BLUE, color)

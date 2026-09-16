@@ -938,6 +938,9 @@
 			decapitated = null
 
 			qdel(B)
+	else
+		for(var/damage in BBrain.specific_damages)
+			BBrain.specific_damages[damage] = 0
 
 	for(var/datum/organ/internal/I in internal_organs)
 		I.damage = 0
@@ -1781,7 +1784,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		var/obj/item/clothing/gloves/G = gloves
 		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
 			return FALSE
-	if(getBrainLoss() >= 60)
+	if(getBrainLoss(INTELLIGENCE_L) >= 60)
 		if(!(reagents.has_reagent(METHYLIN) ||  is_dexterous))//methylin and the is_dextrous var supercede brain damage, but not uncomfortable gloves
 			return FALSE
 	return TRUE//humans are dexterous enough by default
@@ -2175,7 +2178,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
-	add_component(/datum/component/controller/movement/astar)
+	add_component(/datum/component/controller/movement/pathed)
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()

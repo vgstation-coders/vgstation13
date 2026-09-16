@@ -171,7 +171,7 @@ var/global/list/damage_icon_parts = list()
 
 	var/husk = (M_HUSK in mutations)
 	var/fat = (M_FAT in mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
-	var/hulk = (M_HULK in mutations) && !ishorrorform(src) && mind.special_role != HIGHLANDER // Part of the species.
+	var/hulk = (M_HULK in mutations) && !ishorrorform(src) && (!mind || mind.special_role != HIGHLANDER) // Part of the species.
 	var/skeleton = (M_SKELETON in mutations)
 
 	var/g = "m"

@@ -49,7 +49,8 @@
 			if(world.time - timer >= 20 SECONDS)
 				timer = world.time
 				user.visible_message("<span class='notice'>[user] taps \the [name] with \the [W] and a rabbit pops out of \the [name]!</span>","<span class='notice'>You tap \the [name] with \the [W] and a rabbit pops out of \the [name]!</span>")
-				new/mob/living/simple_animal/rabbit(get_turf(src))
+				var/mob/living/simple_animal/rabbit/bunbun = new(get_turf(src))
+				bunbun.can_breed = FALSE
 	..()
 
 /obj/item/clothing/head/that/magic

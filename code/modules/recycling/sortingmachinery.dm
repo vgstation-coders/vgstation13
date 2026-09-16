@@ -164,11 +164,8 @@ var/list/tagger_locations = list()
 
 	//testing("[src] FUCKING BUMPED BY \a [AM]")
 
-	if(istype(AM, /obj))
+	if(isobj(AM) || ismob(AM))
 		receive_atom(AM)
-	else if(istype(AM, /mob))
-		receive_atom(AM)
-
 
 /obj/machinery/disposal/deliveryChute/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(istype(AM,/obj/item))

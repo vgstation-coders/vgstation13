@@ -229,7 +229,7 @@ var/list/virusdishes = list()
 /obj/item/weapon/virusdish/attack_self(var/mob/user)
 	open = !open
 	update_icon()
-	to_chat(user,"<span class='notice'>You [open?"open":"close"] dish's lid.</span>")
+	to_chat(user,"<span class='notice'>You [open?"open":"close"] the dish's lid.</span>")
 	if (open)
 		last_openner = user
 		if (contained_virus)

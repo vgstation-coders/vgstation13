@@ -141,6 +141,36 @@ On the map dm file, redefine the following:
 			continue
 		T.set_light(next_light_range, light_power, vz.current_timeOfDay, lowpriority)
 
+// Power multiplier for solar panels on VZ_PLANET vLevels, indexed by current_timeOfDay.
+/proc/solar_tod_power(tod)
+	switch(tod)
+		if(TOD_MORNING)
+			return 0.3
+		if(TOD_SUNRISE)
+			return 0.7
+		if(TOD_DAYTIME)
+			return 1.0
+		if(TOD_AFTERNOON)
+			return 0.85
+		if(TOD_SUNSET)
+			return 0.5
+		if(TOD_NIGHTTIME)
+			return 0.05
+	return 1.0
+
+// True if the turf is registered (or eligible to be registered) for the day/night cycle.
+/proc/turf_has_open_sky(turf/T)
+	if(!T)
+		return FALSE
+	var/area/A = get_area(T)
+	if(isopensurface(A))
+		return TRUE
+	for(var/cdir in cardinal)
+		var/turf/adj = get_step(T, cdir)
+		if(adj && istype(get_area(adj), /area/surface))
+			return TRUE
+	return FALSE
+
 // Force lighting change on a list of turfs (used mainly for when shuttles leave)
 /datum/subsystem/daynightcycle/proc/update_turf_lighting(var/list/turf/turfs, var/datum/virtual_z/vz = null)
 	if(!turfs.len || !vz)

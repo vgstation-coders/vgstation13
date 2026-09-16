@@ -71,29 +71,28 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		if(blood_volume < (disabilities & ANEMIA ? BLOOD_VOLUME_SAFE+10 : BLOOD_VOLUME_MAX) && blood_volume)
 			var/datum/reagent/blood/B = locate() in vessel.reagent_list //Grab some blood
 			if(B) // Make sure there's some blood at all
-				B.volume += 0.1 // regenerate blood VERY slowly
-				if(M_REGEN in mutations)
-					B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
-				var/datum/role/cultist/C = iscultist(src)
-				if (C && C.blood_pool)//cultists that take on the blood communion tattoo get a slight blood regen bonus
-					if(M_REGEN in mutations)
-						B.volume += 0.6
-					else
-						B.volume += 0.3
-				if (reagents.has_reagent(NUTRIMENT))	//Getting food speeds it up
-					if(M_REGEN in mutations)
-						B.volume += 1.2
-						reagents.remove_reagent(NUTRIMENT, 0.5)
-					else
-						B.volume += 0.6
-						reagents.remove_reagent(NUTRIMENT, 0.5)
-				if (reagents.has_reagent(IRON))	//Hematogen candy anyone?
-					if(M_REGEN in mutations)
-						B.volume += 2.4
-						reagents.remove_reagent(IRON, 0.5)
-					else
-						B.volume += 1.2
-						reagents.remove_reagent(IRON, 0.5)
+				if(reagents.has_reagent(ZETADUST) && !isgrey(src))
+					B.volume = max(0,B.volume - 0.2) // drains it less slowly on non greys, stops the regen properties of below
+				else
+					B.volume += 0.1 // regenerate blood VERY slowly
+					var/regenmult = (M_REGEN in mutations) ? 2 : 1
+					if(regenmult > 1)
+						B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
+					var/datum/role/cultist/C = iscultist(src)
+					if (C && C.blood_pool)//cultists that take on the blood communion tattoo get a slight blood regen bonus
+						B.volume += 0.3*regenmult
+					if (reagents.has_reagent(NUTRIMENT))	//Getting food speeds it up
+						B.volume += 0.6*regenmult
+						if(regenmult > 1)
+							reagents.remove_reagent(NUTRIMENT, 0.5)
+					if (reagents.has_reagent(IRON))	//Hematogen candy anyone?
+						B.volume += 1.2*regenmult
+						if(regenmult > 1)
+							reagents.remove_reagent(IRON, 0.5)
+					if (reagents.has_reagent(ZETADUST) && isgrey(src))
+						B.volume += 1.2*regenmult
+						if(regenmult > 1)
+							reagents.remove_reagent(ZETADUST, 0.5)
 
 		// Damaged heart virtually reduces the blood volume, as the blood isn't
 		// being pumped properly anymore.

@@ -379,12 +379,14 @@ var/global/list/accessable_v_levels = list(
 	name = "jungle surface"
 	base_turf = /turf/unsimulated/floor/planetary/dirt/jungle
 	base_area = /area/surface/jungle/landing //hacky workaround.
+	movementChance = 0
 	planetside = TRUE
 
 /datum/zLevel/jungleunderground
 	name = "jungle underground"
 	base_turf = /turf/unsimulated/floor/planetary/cave/jungle
 	base_area = /area/surface/jungle/underground
+	movementChance = 0
 	planetside = TRUE
 
 /datum/zLevel/junglesurface/mining

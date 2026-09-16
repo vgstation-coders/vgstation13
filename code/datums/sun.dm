@@ -87,6 +87,21 @@ var/global/datum/sun/sun
 		S.update_icon()
 		return
 
+	var/datum/virtual_z/vz = S.get_virtual_z()
+	// Planet panels use TOD-based power (handled in update_solar_exposure).
+	// Protected vLevels (centcomm, away missions, etc) skip occlusion entirely.
+	if(vz && (vz.level_type == VZ_PLANET || vz.level_type == VZ_PROTECTED))
+		S.obscured = 0
+		S.update_solar_exposure()
+		S.update_icon()
+		return
+
+	// Trace exits at the panel's vLevel boundary, not the world boundary otherwise opaque vLevel border turfs always shadow panels in vLevels that don't touch a true world edge.
+	var/bx_min = vz ? vz.x_min : 1
+	var/bx_max = vz ? vz.x_max : world.maxx
+	var/by_min = vz ? vz.y_min : 1
+	var/by_max = vz ? vz.y_max : world.maxy
+
 	var/ax = S.x //Start at the solar panel.
 	var/ay = S.y
 	var/i
@@ -101,7 +116,7 @@ var/global/datum/sun/sun
 		if(isnull(T))
 			warning("Occlusion's locate returned null. [S] at ([S?.x],[S?.y],[S?.z]). ax: [ax], ay: [ay], dx: [dx], dy: [dy]")
 			break
-		if(T.x == 1 || T.x == world.maxx || T.y == 1 || T.y == world.maxy) // Not obscured if we reach the edge.
+		if(T.x <= bx_min || T.x >= bx_max || T.y <= by_min || T.y >= by_max) // Not obscured if we reach the vLevel edge.
 			break
 		if(T.opacity) //Opaque objects block light.
 			S.obscured = 1

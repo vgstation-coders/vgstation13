@@ -109,7 +109,8 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 		for (var/mob/listener in B)
 			var/client/client = listener.client
 			if (!client) // e.g. AI eye has no client, endpoint must be overridden
-				client = listener.sound_endpoint.client
+				var/mob/endpoint = listener.get_sound_endpoint()
+				client = endpoint?.client
 			if (!client || !client.listener_context)
 				CRASH("Found a listener with no client or endpoint client")
 			var/datum/sound_listener_context/context = client.listener_context
@@ -138,7 +139,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 		listener_buckets[h] = list()
 	listener_buckets[h] |= SLC.proxy
 
-	SLC.proxy.sound_endpoint = SLC.client.mob
+	SLC.proxy.sound_endpoint = makeweakref(SLC.client.mob)
 	SLC.proxy.register_event(/event/moved, src, nameof(src::on_player_move()))
 	on_player_move(SLC.proxy)
 
@@ -179,7 +180,8 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 /datum/sound_zone_manager/proc/on_player_move(mob/mover)
 	if (!mover)
 		return
-	if (!mover.sound_endpoint)
+	var/mob/endpoint = mover.get_sound_endpoint()
+	if (!endpoint)
 		return // nowhere to send the sound
 
 	var/turf/location = mover.loc
@@ -190,7 +192,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 
 	update_listener(mover)
 
-	var/client/receive_client = mover.sound_endpoint.client
+	var/client/receive_client = endpoint.client
 	if (!receive_client || !receive_client.listener_context)
 		return
 

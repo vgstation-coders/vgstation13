@@ -117,6 +117,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE * 2 //No need for anyone to get suspicious.
 	custom_metabolism = 0.01
+	arcane_id = BICARIDINE
 
 /datum/reagent/carpotoxin
 	name = "Carpotoxin"
@@ -124,8 +125,6 @@
 	description = "A deadly neurotoxin produced by the dreaded spess carp."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#003333" //rgb: 0, 51, 51
-	density = 319.27 //Assuming it's Tetrodotoxin
-	specheatcap = 41.53
 
 /datum/reagent/carpotoxin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -159,7 +158,8 @@
 	color = "#000067" //rgb: 0, 0, 103
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 11.43
-	specheatcap = 13.79
+	specheatcap = 0.1379
+	arcane_id = COFFEE
 
 /datum/reagent/chloralhydrate/on_mob_life(var/mob/living/M)
 	if(..())
@@ -183,6 +183,7 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "beerglass"
 	glass_desc = "A cold pint of pale lager."
+	arcane_id = BEER
 
 /datum/reagent/chloramine
 	name = "Chloramine"
@@ -192,7 +193,6 @@
 	color = "#808080" //rgb: 128, 128, 128
 	overdose_am = REAGENTS_OVERDOSE
 	density = 3.68
-	specheatcap = 1299.23
 
 /datum/reagent/chloramine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -252,7 +252,8 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ff91b7" //rgb: 255, 145, 183
 	density = 0.78
-	specheatcap = 5.47
+	specheatcap = 3.47
+	arcane_id = SPIRITBREAKER
 
 /datum/reagent/heartbreaker/on_mob_life(var/mob/living/M)
 	if(..())
@@ -286,7 +287,8 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
 	custom_metabolism = 0.05
-	overdose_am = REAGENTS_OVERDOSE
+	overdose_am = 50
+	arcane_id = SILENCER
 
 /datum/reagent/honkserum/on_overdose(var/mob/living/H)
 	if (H?.mind?.miming)
@@ -299,6 +301,12 @@
 			qdel(H.wear_mask)
 			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")
 		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
+
+	if(ishuman(H))
+		var/mob/living/carbon/human/M = H
+		if(!(M_CLUMSY in M.mutations))
+			M.mutations.Add(M_CLUMSY)
+			M.visible_message("<span class='notice'>\The [M] seems to be stumbling over...</span>", "<span class='notice'>You feel clumsier than before.</span>'")
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 	if(..())
@@ -317,6 +325,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	specheatcap = 0.14
 	density = 13.56
+	arcane_id = METHYLIN
 
 /datum/reagent/mercury/on_mob_life(var/mob/living/M)
 	if(..())
@@ -338,7 +347,8 @@
 	color = "#B31008" //rgb: 139, 166, 233
 	custom_metabolism = 0.05
 	density = 0.78
-	specheatcap = 5.47
+	specheatcap = 3.47
+	arcane_id = SPIRITBREAKER
 
 /datum/reagent/mindbreaker/on_mob_life(var/mob/living/M)
 	if(..())
@@ -360,6 +370,7 @@
 	plant_pests = -8
 	plant_weeds = -6
 	plant_toxins = 2
+	arcane_id = MINTESSENCE
 	var/chillcounter = 0
 	var/concentrated = TRUE //also used to reduce the toxin damage done with the dilute version
 
@@ -426,6 +437,7 @@
 	plant_pests = -2
 	plant_weeds = -1
 	plant_toxins = 0
+	arcane_id = MINTTOXIN
 
 /datum/reagent/mutagen
 	name = "Unstable Mutagen"
@@ -434,7 +446,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
-	specheatcap = 0.09686
+	arcane_id = RADIUM
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -567,6 +579,7 @@
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
 	var/disease_type = DISEASE_CYBORG
+	//arcane_id = XENOMICROBES
 
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -595,7 +608,6 @@
 	custom_metabolism = 0.1
 	color = "#ffffff" //rgb: 255, 255, 255
 	density = 2.12
-	specheatcap = 65.87 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
 
 /datum/reagent/potassium_hydroxide/on_mob_life(var/mob/living/M)
 	if(..())
@@ -659,6 +671,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#3B0805" //rgb: 59, 8, 5
 	custom_metabolism = 0.05
+	arcane_id = SYNAPTIZINE
 
 /datum/reagent/spiritbreaker/on_mob_life(var/mob/living/M)
 	if(..())
@@ -678,8 +691,8 @@
 	color = "#E895CC" //rgb: 232, 149, 204
 	custom_metabolism = 0.1
 	density = 3.56
-	specheatcap = 17.15
 	overdose_am = REAGENTS_OVERDOSE // So you can't pretend that you "didn't know it was an OD"
+	arcane_id = CHLORALHYDRATE
 
 /datum/reagent/stoxin/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -726,6 +739,7 @@
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	density = 1.4 //Let's just assume it's alpha-solanine
+	arcane_id = ANTI_TOXIN
 	plant_toxins = 2
 
 /datum/reagent/toxin/on_mob_life(var/mob/living/M)
@@ -741,6 +755,7 @@
 	description = "Microbes with an entirely alien cellular structure."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#535E66" //rgb: 83, 94, 102
+	arcane_id = NANITES
 
 /datum/reagent/xenomicrobes/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -758,8 +773,8 @@
 	id = ZOMBIEPOWDER
 	description = "A strong neurotoxin that puts the subject into a death-like state."
 	color = "#669900" //rgb: 102, 153, 0
-	density = 829.48
-	specheatcap = 274.21
+	density = 8.2948
+	specheatcap = 0.27421
 
 /datum/reagent/zombiepowder/on_mob_life(var/mob/living/carbon/M)
 	if(..())

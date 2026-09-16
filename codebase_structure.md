@@ -88,7 +88,7 @@ Contains documentation related to the code. Currently only contains a diagram ex
 
 ##### interface
 
-**Type:** Game files. This contains the `.dmf` keymaps used to interact in the game. A key can be associated to a verb. Users can supplement these mappings with macros or entirely redefine them. Contains a `skin_azerty.dmf` as a template for AZERTY keyboard users. Also defines how the right-side panel of the game looks.
+**Type:** Game files. This contains the `.dmf` keymaps used to interact in the game. A key can be associated to a verb. Users can supplement these mappings with macros or entirely redefine them. Also defines how the right-side panel of the game looks.
 
 ##### maprendering
 

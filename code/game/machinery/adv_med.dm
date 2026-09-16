@@ -392,6 +392,7 @@
 		"disabilities" = H.sdisabilities,
 		"tg_diseases_list" = H.viruses,
 		"lung_ruptured" = H.is_lung_ruptured(),
+		"brain_issues" = H.format_brain_issues(),
 		"external_organs" = H.organs.Copy(),
 		"internal_organs" = H.internal_organs.Copy(),
 		"blood_type" = H.dna.b_type,
@@ -487,6 +488,7 @@
 		var/lung_ruptured = ""
 		var/e_cancer = ""
 		var/bone_strengthened = ""
+		var/brain_issues = ""
 
 		dat += "<tr>"
 
@@ -496,6 +498,8 @@
 				break
 		if(istype(e, /datum/organ/external/chest) && occ["lung_ruptured"])
 			lung_ruptured = "Lung ruptured:"
+		if(istype(e, /datum/organ/external/head))
+			brain_issues = occ["brain_issues"]
 		if(e.status & ORGAN_SPLINTED)
 			splint = "Splinted:"
 		if(e.status & ORGAN_BLEEDING)
@@ -553,7 +557,7 @@
 		if(e.status & ORGAN_DESTROYED)
 			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td><font color='red'>Not Found</font></td>"
 		else
-			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured][bone_strengthened]</td>"
+			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured][bone_strengthened][brain_issues]</td>"
 		dat += "</tr>"
 
 	var/list/organs_to_list = list(
@@ -627,11 +631,14 @@
 /obj/machinery/bodyscanner/proc/print_diagnostic()
 	if (!occupant)
 		return
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		return
 	say("Outputting diagnostic.")
 	playsound(loc, "sound/effects/fax.ogg", 50, 1)
 	var/obj/item/weapon/paper/P = new(loc)
 	P.name = "paper - 'body scan report'"
 	P.info = format_occupant_data(get_occupant_data(occupant),scanning)
+	use_power(active_power_usage, power_channel)
 
 /obj/machinery/bodyscanner/upgraded
 	name = "advanced body scanner"

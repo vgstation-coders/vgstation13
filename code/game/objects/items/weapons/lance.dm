@@ -124,8 +124,9 @@
 	var/old_last_move = last_move //Old direction
 
 	if(amount_of_turfs_charged > 0 && (world.time - last_moved) >= 3) //More than 2/10 of a second since last moved
-		to_chat(owner, "<span class='notice'>You momentarily lose control of \the [L].</span>")
-		L.raise_lance()
+		if(L)
+			to_chat(owner, "<span class='notice'>You momentarily lose control of \the [L].</span>")
+			L.raise_lance()
 		return
 
 	.=..()

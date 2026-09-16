@@ -213,3 +213,25 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
 	build_path = /obj/item/weapon/circuitboard/mecha/honker/targeting
+
+//ROSWELL
+
+/datum/design/roswell_main
+	name = "Circuit Design (\"Roswell\" Central Control module)"
+	desc = "Allows for the construction of a \"Roswell\" Central Control module."
+	id = "roswell_main"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 2, Tc_ALIEN = 5)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Mecha Boards"
+	build_path = /obj/item/weapon/circuitboard/mecha/roswell/main
+
+/datum/design/roswell_peri
+	name = "Circuit Design (\"Roswell\" Peripherals Control module)"
+	desc = "Allows for the construction of a \"Roswell\" Peripheral Control module."
+	id = "roswell_peri"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 2, Tc_ALIEN = 5)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Mecha Boards"
+	build_path = /obj/item/weapon/circuitboard/mecha/roswell/peripherals

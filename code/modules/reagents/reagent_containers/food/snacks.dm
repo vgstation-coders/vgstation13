@@ -4417,6 +4417,8 @@
 	icon_state = "watermelonslice"
 	bitesize = 2
 	food_flags = FOOD_SWEET
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "watermelonslice"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/applecake
 	name = "apple cake"
@@ -6456,6 +6458,18 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(IRON, 5)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje
+	name = "Vreemdkoekje"
+	desc = "Bevat nog steeds geen ijzer."
+	icon_state = "vreemdkoekje"
+	food_flags = FOOD_DIPPABLE
+
+/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ZETADUST, 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie

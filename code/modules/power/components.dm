@@ -121,6 +121,8 @@
 /datum/power_connection/proc/check_rebuild()
 	if(!build_status)
 		return 0
+	if(!parent?.loc)
+		return 0
 	for(var/obj/structure/cable/C in parent.loc)
 		if(C.check_rebuild())
 			return 1

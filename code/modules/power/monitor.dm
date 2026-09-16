@@ -206,7 +206,13 @@
 		next_record = world.time + record_interval
 
 		var/list/supply = history["supply"]
+		if(!supply)
+			history["supply"] = list()
+			supply = history["supply"]
 		var/list/demand = history["demand"]
+		if(!demand)
+			history["demand"] = list()
+			demand = history["demand"]
 
 		var/datum/powernet/connected_powernet = power_connection.get_powernet()
 		if(connected_powernet)

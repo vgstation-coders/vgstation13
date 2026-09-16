@@ -22,6 +22,7 @@
 		/obj/item/stack/sheet/mineral/silver  = list(SILVER,U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/gold    = list(GOLD,U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST,U_PER_SHEET),
+		/obj/item/stack/sheet/mineral/reticulite = list(ZETADUST,U_PER_SHEET),
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON,1),
 		/obj/item/stack/sheet/wax			  = list(WAX,5),
 		/obj/item/candle					  = list(WAX,1.25),

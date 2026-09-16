@@ -22,6 +22,7 @@ import './styles/themes/ntos_terminal.scss';
 import './styles/themes/ntos_spooky.scss';
 import './styles/themes/paper.scss';
 import './styles/themes/retro.scss';
+import './styles/themes/retro_green.scss';
 import './styles/themes/syndicate.scss';
 import './styles/themes/wizard.scss';
 import './styles/themes/admin.scss';
