@@ -303,7 +303,7 @@
 	healthcheck() //Send this to healthcheck just in case we want to do something else with it
 
 
-/obj/structure/grille/broken/healthcheck(var/hitsound = 0) //needed because initial icon_state for broken is grille-b for mapping
+/obj/structure/grille/broken/healthcheck(var/hitsound = 0) //needed because initial icon_state for broken is grille0-b for mapping
 	..()
 	if(broken)
 		icon_state = "grille0-b"
