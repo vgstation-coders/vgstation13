@@ -1,0 +1,8 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Boozey shotgun shells now apply much more time slurred, confused, eye blurred
+    and drowsyness, for each second each kind of alcohol is in the target's system
+    instead of 10 for each. (so 3 types for 10 seconds would be 30 each) In addition
+    to this, it deals a small amount of liver (0.5) and toxin damage (5) to those
+    with alcohol in their system.
