@@ -8286,6 +8286,17 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent (SUGAR, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/sosigroll
+	name = "sosig roll"
+	desc = "A sausage wrapped in flaky golden pastry. Not affiliated with Gruggs."
+	icon_state = "sosigroll"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/sosigroll/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 3)
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit
 	name = "special plump helmet biscuit"
 	desc = "This is a finely-prepared plump helmet biscuit. Aside from the usual ingredients of minced plump helmet and well-minced dwarven wheat flour, this particular serving includes a chemical that sticks whoever eats it to the floor, much like magboots."
