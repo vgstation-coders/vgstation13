@@ -12,14 +12,16 @@
 	req_access = list(access_robotics)
 	locked = 2
 	mecha = null//This does not appear to be used outside of reference in mecha.dm.
-	var/last_ping_time = 0
 	var/ping_cooldown = 50
+	var/list/ping_streaks = list()
+	var/list/ping_times = list()
+	var/loud_ping_streak = 10
+	var/broadcast_ping_streak = 20
 	var/datum/recruiter/recruiter = null
 
 #ifdef DEBUG_ROLESELECT
 /obj/item/device/mmi/posibrain/test/New()
 	..()
-	last_ping_time = world.time
 	search_for_candidates()
 #endif
 
@@ -33,6 +35,8 @@
 	icon_state = "posibrain-searching"
 	ghost_volunteers.len = 0
 	src.searching = 1
+	ping_streaks.len = 0
+	ping_times.len = 0
 
 	if(!recruiter)
 		recruiter = new(src)
@@ -155,12 +159,35 @@
 		else
 			to_chat(O, "<span class='notice'>Click again to volunteer.</span>")
 	else
-		if(!brainmob.ckey && last_ping_time + ping_cooldown <= world.time)
-			last_ping_time = world.time
-			visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
-			investigation_log(I_GHOST, "|| was pinged by [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
+		if(!brainmob.ckey && ping_times[O.ckey] + ping_cooldown <= world.time)
+			ping_times[O.ckey] = world.time
+			var/streak = ping_streaks[O.ckey] + 1
+			ping_streaks[O.ckey] = streak
+			ghost_ping(streak)
+			investigation_log(I_GHOST, "|| was pinged by [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""] (streak [streak])")
 		else
 			to_chat(O, "[src] is recharging. Try again in a few moments.")
+
+/obj/item/device/mmi/posibrain/proc/ghost_ping(var/streak)
+	if(streak >= loud_ping_streak)
+		visible_message(message = "<span class='warning'><b>\The [src] pings insistently.</b></span>", blind_message = "<span class='danger'><b>You hear an insistent electronic chime.</b></span>")
+		playsound(src, 'sound/machines/twobeep.ogg', 100, 0, 5)
+	else
+		visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
+		playsound(src, 'sound/machines/ping.ogg', 35, 0, -2)
+	if(streak >= broadcast_ping_streak && !((streak - broadcast_ping_streak) % loud_ping_streak))
+		radio_for_activation()
+
+/obj/item/device/mmi/posibrain/proc/radio_for_activation()
+	var/turf/T = get_turf(src)
+	if(!T)
+		return
+	var/area/A = get_area(src)
+	var/datum/speech/speech = create_speech(message = "Dormant personality construct awaiting manual activation in [A ? A.name : "an unknown location"].", frequency = SCI_FREQ, transmitter = src)
+	speech.name = "[src]"
+	speech.job = "Positronic Brain"
+	Broadcast_Message(speech, data = 0, compression = 0, level = list(T.z))
+	qdel(speech)
 
 /obj/item/device/mmi/posibrain/OnMobDeath(var/mob/living/carbon/brain/B)
 	if(istype(B))
