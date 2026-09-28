@@ -379,8 +379,8 @@
 	if(uniform)
 		thermal_protection += uniform.return_thermal_protection()
 
-	var/max_protection = max(get_thermal_protection(get_thermal_protection_flags()),base_insulation) // monkies have fur, silly!
-	return min(thermal_protection,max_protection)
+	var/clothing_protection = min(thermal_protection, get_thermal_protection(get_thermal_protection_flags())) 
+	return max(clothing_protection, base_insulation)	// monkies have fur, silly!
 
 /mob/living/carbon/monkey/get_heat_protection_flags(temperature)
 	var/thermal_protection_flags = 0
@@ -400,10 +400,6 @@
 	if(hat && istype(hat, /obj/item/clothing/head/helmet/space) && uniform && istype(uniform, /obj/item/clothing/monkeyclothes/space))
 		spaceproof = 1	//quick and dirt cheap. no need for the Life() of monkeys to become as complicated as the Life() of humans. man that's deep.
 	var/loc_temp = get_loc_temp(environment)
-	var/environment_heat_capacity = environment.heat_capacity() / environment.volume * CELL_VOLUME
-	if(istype(get_turf(src), /turf/space))
-		var/turf/heat_turf = get_turf(src)
-		environment_heat_capacity = heat_turf.heat_capacity
 
 	if(!on_fire) //If you're on fire, you do not heat up or cool down based on surrounding gases
 		if(loc_temp < get_skin_temperature())
@@ -413,9 +409,6 @@
 			var/thermal_protection = get_thermal_protection(get_heat_protection_flags(loc_temp)) //This returns a 0 - 1 value, which corresponds to the percentage of protection based on what you're wearing and what you're exposed to.
 			if(thermal_protection < 1)
 				bodytemperature += min((1 - thermal_protection) * ((loc_temp - get_skin_temperature()) / BODYTEMP_HEAT_DIVISOR), BODYTEMP_HEATING_MAX)
-
-	if(stat!=DEAD)//this is sweating/shiverring, right?....
-		bodytemperature += 0.1*(environment.temperature - bodytemperature)*environment_heat_capacity/(environment_heat_capacity + 270000)
 
 	if (status_flags & GODMODE)
 		fire_alert = 0
@@ -665,11 +658,11 @@
 			temperature_alert = TEMP_ALARM_HEAT_MILD
 		if(327 to 335)
 			temperature_alert = TEMP_ALARM_HEAT_WEAK
-		if(295 to 327)
+		if(T0C+34 to 327)
 			temperature_alert = TEMP_ALARM_SAFE
-		if(280 to 295)
-			temperature_alert = TEMP_ALARM_COLD_WEAK
-		if(260 to 280)
+		if(T0C+32 to T0C+34)							//magic numbers copied from /mob/living/handle_hypothermia.dm
+			temperature_alert = TEMP_ALARM_COLD_WEAK	//this is fucking horrible and should be in some sort of species var instead
+		if(T0C+28 to T0C+32)
 			temperature_alert = TEMP_ALARM_COLD_MILD
 		else
 			temperature_alert = TEMP_ALARM_COLD_STRONG
