@@ -56,6 +56,7 @@
 	penetration_dampening = 10
 	var/image/shuttle_warning_lights
 	var/list/remote_control_access = list(/mob/living/silicon, /mob/living/simple_animal/hostile/pulse_demon) //Mobs with access to directly controlling the airlock
+	var/emergency_access_override = FALSE	//enabled via department heads request consoles
 	explosion_block = 1
 
 	emag_cost = 1 // in MJ
@@ -485,26 +486,29 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/update_icon()
 	overlays = 0
-
+	var/yellowlights = 0
 	if(density)
 		if(locked && lights)
 			icon_state = "door_locked"
 		else
 			icon_state = "door_closed"
+			if(emergency_access_override && lights)
+				var/image/I = image(icon=icon, icon_state="lights_overlay")
+				I.color = "#ffee00" //ffff00 ended up looking greenish and ugly on some doors
+				overlays += I	
+				yellowlights = 1
 		if (panel_open || welded)
-			var/L[0]
 			if (panel_open)
-				L += "panel_open"
+				overlays += "panel_open" 
 
 			if (welded)
-				L += "welded"
-
-			overlays = L
-			L = null
+				overlays += "welded"
 	else
 		icon_state = "door_open"
-
-	update_moody_light(icon, "[icon_state]-moody")
+	if(yellowlights)
+		update_moody_light(icon, "lights_moody") //moody_color = "#ffff00"
+	else
+		update_moody_light(icon, "[icon_state]-moody")
 
 /obj/machinery/door/airlock/door_animate(var/animation)
 	kill_moody_light()
@@ -1646,3 +1650,16 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/tackled(mob/living/carbon/human/user)
 	if(ishuman(user))
 		emag_check(user.wear_id,user)
+	
+/obj/machinery/door/airlock/proc/enable_emergency_access_override()
+	emergency_access_override = TRUE
+	update_icon()
+	
+/obj/machinery/door/airlock/proc/disable_emergency_access_override()
+	emergency_access_override = FALSE
+	update_icon()
+	
+/obj/machinery/door/airlock/allowed(mob/M)
+	if(emergency_access_override)
+		return 1
+	return ..(M)
