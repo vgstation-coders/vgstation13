@@ -1,5 +1,5 @@
 var/datum/subsystem/thermal_entropy/SSte
-var/list/obj/item/weapon/reagent_containers/thermal_entropy_containers = list()
+var/list/obj/thermal_entropy_containers = list()
 
 /datum/subsystem/thermal_entropy
 	name          = "Thermal Entropy"
@@ -8,7 +8,7 @@ var/list/obj/item/weapon/reagent_containers/thermal_entropy_containers = list()
 	priority      = SS_PRIORITY_THERM_ENTROPY
 	display_order = SS_DISPLAY_THERM_ENTROPY
 
-	var/list/obj/item/weapon/reagent_containers/currentrun = list()
+	var/list/obj/currentrun = list()
 
 /datum/subsystem/thermal_entropy/New()
 	NEW_SS_GLOBAL(SSte)
@@ -21,20 +21,20 @@ var/list/obj/item/weapon/reagent_containers/thermal_entropy_containers = list()
 		currentrun = thermal_entropy_containers.Copy()
 
 	while (currentrun.len)
-		var/obj/item/weapon/reagent_containers/RC = currentrun[currentrun.len]
+		var/obj/CurrentContainer = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!RC || RC.gcDestroyed || RC.timestopped)
+		if (!CurrentContainer || CurrentContainer.gcDestroyed || CurrentContainer.timestopped)
 			continue
 
-		RC.thermal_entropy()
+		CurrentContainer.thermal_entropy()
 
 		if (MC_TICK_CHECK)
 			return
 
 ////////////////////////////////////////////////////////////////////////////////////
 var/datum/subsystem/thermal_entropy_rechecker/SSter
-var/list/obj/item/weapon/reagent_containers/all_reagent_containers = list()
+var/list/obj/all_reagent_containers = list()
 
 /datum/subsystem/thermal_entropy_rechecker
 	name          = "Thermal Entropy Rechecker"
@@ -43,7 +43,7 @@ var/list/obj/item/weapon/reagent_containers/all_reagent_containers = list()
 	priority      = SS_PRIORITY_THERM_ENTROPY_RECHECK
 	display_order = SS_DISPLAY_THERM_ENTROPY_RECHECK
 
-	var/list/obj/item/weapon/reagent_containers/currentrun = list()
+	var/list/obj/currentrun = list()
 
 /datum/subsystem/thermal_entropy_rechecker/New()
 	NEW_SS_GLOBAL(SSter)
@@ -56,13 +56,13 @@ var/list/obj/item/weapon/reagent_containers/all_reagent_containers = list()
 		currentrun = all_reagent_containers.Copy()
 
 	while (currentrun.len)
-		var/obj/item/weapon/reagent_containers/RC = currentrun[currentrun.len]
+		var/obj/CurrentContainer = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!RC || RC.gcDestroyed || RC.timestopped)
+		if (!CurrentContainer || CurrentContainer.gcDestroyed || CurrentContainer.timestopped)
 			continue
 
-		RC.process_temperature()
+		CurrentContainer.process_temperature()
 
 		if (MC_TICK_CHECK)
 			return
