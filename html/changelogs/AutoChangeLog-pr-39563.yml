@@ -1,0 +1,9 @@
+author: CrazyAmphibian
+delete-after: true
+changes:
+- bugfix: Fixed radiation absorption modules double counting radiation when a helmet
+    is equiped
+- tweak: changed radiation armor to be able to use a subtractive factor that was previously
+    unused, currently only applied to vox engineering pressure suits
+- tweak: the radiation patch has been reworked into a dosimeter, and can now be found
+    in radiation lockers and crates
