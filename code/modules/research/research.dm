@@ -62,7 +62,7 @@ var/global/list/all_tech = list()
 				tech_list[T.id] = T
 			all_tech[T.id] = T
 	if(!design_list.len)
-		for(var/D in typesof(/datum/design) - /datum/design)
+		for(var/D in typesof(/datum/design) - /datum/design - /datum/design/medal)
 			design_list += new D()
 	RefreshResearch()
 
@@ -268,7 +268,7 @@ var/global/list/all_tech = list()
 	goal_level=0 // Doesn't count towards maxed research, since it's bonus.
 	max_level=8
 	new_category = "Nanotrasen"
-	
+
 /datum/tech/alien
 	name = "Alien Technology"
 	desc = "Resarch found in distant systems operated by grays."
