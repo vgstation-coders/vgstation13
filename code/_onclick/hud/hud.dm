@@ -30,6 +30,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	var/obj/abstract/screen/action_intent
 	var/obj/abstract/screen/move_intent
 	var/obj/abstract/screen/streamer_display // Sponsored
+	var/obj/abstract/screen/rest_intent
 
 	var/obj/abstract/screen/movable/action_button/hide_toggle/hide_actions_toggle
 	var/action_buttons_hidden = FALSE

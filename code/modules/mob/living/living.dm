@@ -1236,6 +1236,11 @@ Thanks.
 	resting = !resting
 	update_canmove()
 	to_chat(src, "<span class='notice'>You are now [resting ? "resting" : "getting up"]</span>")
+	update_rest_hud()
+	
+/mob/living/proc/update_rest_hud()
+	if(hud_used && hud_used.rest_intent)
+		hud_used.rest_intent.icon_state = (resting ? "act_rest_on" : "act_rest_off")
 
 /mob/living/proc/has_brain()
 	return 1

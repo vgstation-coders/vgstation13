@@ -238,7 +238,8 @@
 				H.w_uniform.add_fingerprint(M)
 			src.sleeping = max(0,src.sleeping-10)
 			if(src.sleeping == 0)
-				src.resting = 0
+				if(src.resting)
+					src.rest_action()
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
 			AdjustKnockdown(-3)

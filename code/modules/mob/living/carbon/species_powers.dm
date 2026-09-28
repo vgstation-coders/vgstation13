@@ -77,7 +77,8 @@
 					user.visible_message("<span class='warning'>\The [user] sprouts a new [O.display_name]!</span>",\
 						"<span class='notice'>You sprout a new [O.display_name]!</span>")
 
-		H.resting = 0
+		if(H.resting)
+			H.rest_action()
 		H.regenerate_icons()
 		H.update_canmove()
 		if(!has_regenerated)
