@@ -53,6 +53,7 @@
 		broken = 0
 		icon_state = initial(icon_state)
 		setDensity(TRUE)
+		relativewall()
 		relativewall_neighbours()
 	if(health <= 0) //Dead
 		new grille_material(get_turf(src)) //Drop the second set of rods
@@ -302,12 +303,10 @@
 	healthcheck() //Send this to healthcheck just in case we want to do something else with it
 
 
-/obj/structure/grille/broken/healthcheck(var/hitsound = 0) //needed because initial icon_state for broken is grille-b for mapping
+/obj/structure/grille/broken/healthcheck(var/hitsound = 0) //needed because initial icon_state for broken is grille0-b for mapping
 	..()
 	if(broken)
-		icon_state = "grille-b"
-	else
-		icon_state = "grille"
+		icon_state = "grille0-b"
 
 /obj/structure/grille/cult //Used to get rid of those ugly fucking walls everywhere while still blocking air
 
