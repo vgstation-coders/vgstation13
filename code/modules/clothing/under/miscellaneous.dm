@@ -636,6 +636,8 @@
 	item_state = "darkholme"
 	_color = "darkholme"
 	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 
 /obj/item/clothing/under/contortionist/proc/check_clothing(mob/user as mob)
 	//Allowed to wear: glasses, shoes, gloves, pockets, mask, and jumpsuit (obviously)

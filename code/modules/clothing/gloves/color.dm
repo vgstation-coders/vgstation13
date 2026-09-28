@@ -19,6 +19,8 @@
 	siemens_coefficient = initial(siemens_coefficient)
 
 /obj/item/clothing/gloves/yellow/power //fuck you don't relative path this
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 	var/next_shock = 0
 
 /obj/item/clothing/gloves/yellow/power/Touch(var/atom/A, mob/living/user, prox)
@@ -122,7 +124,8 @@
 
 /obj/item/clothing/gloves/black/thief
 	pickpocket = 1
-
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 
 //Storage pickpocket gloves! Currently only used for thief gloves, feel free to change it when you make storage gloves of any kind
 /obj/item/clothing/gloves/black/thief/storage

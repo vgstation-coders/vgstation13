@@ -24,6 +24,8 @@
 	ammo_type = "/obj/item/ammo_casing/a357"
 	max_ammo = 7
 	multiple_sprites = 1
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_COMBAT + "=1"
 
 /obj/item/ammo_storage/speedloader/a357/empty
 	starting_ammo = 0

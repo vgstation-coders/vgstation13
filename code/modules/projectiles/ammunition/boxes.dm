@@ -103,7 +103,7 @@
 	desc = "A box of .380AUTO rubber bullets. Holds 30 rounds."
 	icon_state = "9mmblue"
 	ammo_type = "/obj/item/ammo_casing/c380auto/rubber"
-	
+
 /obj/item/ammo_storage/box/b380auto/pepperball
 	name = "pistol ammo box (.380AUTO pepperball)"
 	desc = "A box of .380AUTO pepperball bullets. Holds 30 rounds."
@@ -132,6 +132,7 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun/flare"
 	max_ammo = 7
 	multiple_sprites = 1
+	origin_tech = Tc_COMBAT + "=1"
 	starting_materials = list(MAT_IRON = 8000)
 
 /obj/item/ammo_storage/box/a50

@@ -343,6 +343,8 @@
 	desc = "Excellent for holding the heads and limbs of your fallen foes."
 	icon_state = "utilitybelt"
 	item_state = "utility"
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(

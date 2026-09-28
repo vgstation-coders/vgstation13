@@ -96,7 +96,7 @@ var/list/pinpointerpinpointer_list = list()
 			to_chat(user,"<span class='danger'>Extreme danger. Arming signal detected. Time remaining: [bomb_timeleft]</span>")
 		else
 			to_chat(user,"<span class='info'>No active nuclear devices detected.</span>")
-		
+
 /obj/item/weapon/pinpointer/Move(var/newloc, var/direction, var/step_x, var/step_y, var/glide_size_override)
 	var/temp = dir
 	..(newloc, direction, step_x, step_y, glide_size_override)
@@ -265,6 +265,8 @@ var/list/pinpointerpinpointer_list = list()
 	desc = "A pinpointer that has been illegally modified to track the PDA of a crewmember for malicious reasons."
 	watches_nuke = FALSE
 	pinpointable = FALSE
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 	var/dna_profile
 	var/nextuse
 
