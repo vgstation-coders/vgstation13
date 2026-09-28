@@ -177,6 +177,7 @@
 		/obj/item/clothing/suit/radiation = 2,
 		/obj/item/clothing/head/radiation = 2,
 		/obj/item/device/geiger_counter,
+		/obj/item/clothing/accessory/rad_patch = 2,
 	)
 
 /*

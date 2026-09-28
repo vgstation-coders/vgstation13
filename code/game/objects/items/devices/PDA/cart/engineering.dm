@@ -186,15 +186,17 @@
     icon = "pda_reagent"
 
 /datum/pda_app/cart/scanner/engineer/attack(mob/living/carbon/C, mob/living/user as mob)
-    if(istype(C))
-        for (var/mob/O in viewers(C, null))
-            O.show_message("<span class='warning'>[user] has analyzed [C]'s radiation levels!</span>", 1)
+	if(istype(C))
+		for (var/mob/O in viewers(C, null))
+			if(O==user) //no need to show this to ourselves
+				continue
+			O.show_message("<span class='warning'>[user] has analyzed [C]'s radiation levels!</span>", 1)
 
-        user.show_message("<span class='notice'>Analyzing Results for [C]:</span>")
-        if(C.radiation)
-            user.show_message("<span class='good'>Radiation Level: </span>[C.radiation]")
-        else
-            user.show_message("<span class='notice'>No radiation detected.</span>")
+		user.show_message("<span class='notice'>Analyzing Results for [C]:</span>")
+		if(C.radiation)
+			user.show_message("<span class='good'>Radiation Level: </span>[C.radiation]")
+		else
+			user.show_message("<span class='notice'>No radiation detected.</span>")
 
 /obj/item/weapon/cartridge/atmos
     name = "\improper BreatheDeep Cartridge"

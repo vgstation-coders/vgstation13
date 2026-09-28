@@ -125,6 +125,9 @@
 	if(accessories.len)
 		return " It has [counted_english_list(accessories)]."
 
+/obj/item/clothing/accessory/proc/examine_attached(var/mob/user,var/obj/item/clothing/worn)
+	to_chat(user, "<span class='info'>\A [src] is clipped to it.</span>")
+
 /obj/item/clothing/accessory/pinksquare
 	name = "pink square"
 	desc = "It's a pink square."
@@ -517,33 +520,38 @@
 	..()
 
 /obj/item/clothing/accessory/rad_patch
-	name = "radiation detection patch"
-	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation."
-	icon_state = "patch_0"
+	name = "\improper dosimeter"
+	desc = "A small device that you can attach to your clothing. Records cumulative received radiation."
+	icon_state = "patch_1"
 	var/rad_absorbed = 0
-	var/rad_threshold = 45
-	var/triggered = FALSE
+	var/rad_warn_increment = 10
+	var/rad_last_warn=0
 	var/event_key
 
 	w_class = W_CLASS_TINY
-	w_type = RECYK_WOOD
-	flammable = TRUE
+	w_type = RECYK_METAL
+
+/obj/item/clothing/accessory/rad_patch/attack_self(var/mob/user)
+	to_chat(user, "<span class = 'notice'>You reset \the [src]'s dose counter.</span>")
+	rad_absorbed=0
+	rad_last_warn=0
+
+/obj/item/clothing/accessory/rad_patch/examine_attached(var/mob/user,var/obj/item/clothing/worn)
+	to_chat(user, "<span class='info'>\A [src] is clipped to it. </span> <span class='warning'> It reports [rad_absorbed] rads.</span>")
 
 /obj/item/clothing/accessory/rad_patch/proc/check_rads(mob/living/carbon/human/user, rads)
-	if(triggered)
-		return
-	rad_absorbed += rads
-
-	if(rad_absorbed > rad_threshold)
-		triggered = TRUE
-		update_icon()
-		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
-
-		user.unregister_event(/event/irradiate, src, nameof(src::check_rads()))
+	
+	rads-=user.getarmorabsorb(null,"rad")
+	rads*=(100-user.getarmor(null, "rad"))/100
+	rad_absorbed += max(rads,0)
+	
+	if (rad_absorbed>rad_last_warn+rad_warn_increment)
+		to_chat(user, "<span class = 'warning'>\the [src] beeps \"cumulative dose: [floor(rad_absorbed/rad_warn_increment)*rad_warn_increment] rads\"</span>")
+		rad_last_warn=floor(rad_absorbed/rad_warn_increment)*rad_warn_increment
 
 /obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
 	..()
-	if(ismob(C.loc) && !triggered)
+	if(ismob(C.loc))
 		var/mob/user = C.loc
 		user.register_event(/event/irradiate, src, nameof(src::check_rads()))
 
@@ -553,14 +561,10 @@
 
 /obj/item/clothing/accessory/rad_patch/examine(mob/user)
 	..(user)
-	if(triggered)
-		to_chat(user, "<span class = 'warning'>It is a deep dark color!</span>")
+	to_chat(user, "<span class = 'warning'>It reports a cumulative dose of [rad_absorbed] rads.</span>")
 
 /obj/item/clothing/accessory/rad_patch/update_icon()
-	if(triggered)
-		icon_state = "patch_1"
-	else
-		icon_state = "patch_0"
+	icon_state = "patch_1"
 	..()
 
 /obj/item/clothing/accessory/rabbit_foot

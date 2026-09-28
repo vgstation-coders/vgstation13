@@ -387,15 +387,22 @@
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
 	new /obj/item/device/geiger_counter(src)
+	new /obj/item/clothing/accessory/rad_patch(src)
+	
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
 	new /obj/item/device/geiger_counter(src)
+	new /obj/item/clothing/accessory/rad_patch(src)
+	
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
 	new /obj/item/device/geiger_counter(src)
+	new /obj/item/clothing/accessory/rad_patch(src)
+	
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
 	new /obj/item/device/geiger_counter(src)
+	new /obj/item/clothing/accessory/rad_patch(src)
 
 /obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted))
