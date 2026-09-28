@@ -28,6 +28,10 @@
 	selection_color = "#ddffdd"
 	minimal_player_age = 10
 	species_blacklist = list() //for shrooms
+	latejoin_fee = CYBORG_LATEJOIN_FEE
+
+/datum/job/cyborg/bump_position_limit()
+	xtra_positions = max(xtra_positions, current_positions - total_positions) + 1
 
 /datum/job/cyborg/equip(var/mob/living/carbon/human/H)
 	if(!H)

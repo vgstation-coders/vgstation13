@@ -77,6 +77,10 @@ var/list/nonhuman_positions = list(
 	"Mobile MMI"
 )
 
+var/list/silicon_console_positions = list(
+	"Cyborg"
+)
+
 var/list/misc_positions = list(
 	"Trader",
 )
