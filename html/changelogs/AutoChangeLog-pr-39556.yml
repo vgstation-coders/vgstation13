@@ -1,0 +1,7 @@
+author: hacker-on-steroids
+delete-after: true
+changes:
+- tweak: monkey spacesuits now protect against cold
+- tweak: monkeys are slightly more cold resistant and no longer shiver at ambient
+    temperature
+- tweak: monkey low-temperature alert should now work better
