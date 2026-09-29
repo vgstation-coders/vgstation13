@@ -148,8 +148,6 @@
 
 	return FALSE
 
-/mob/living/carbon/alien/larva/var/co2overloadtime = null
-
 // new damage icon system
 // now constructs damage icon for each organ from mask * damage field
 

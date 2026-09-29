@@ -291,8 +291,6 @@
 		return TRUE
 	return FALSE
 
-/mob/living/carbon/human/var/co2overloadtime = null
-
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
 /mob/living/carbon/human/Crossed(var/atom/movable/AM)
@@ -950,16 +948,20 @@
 
 	..()
 
-/mob/living/carbon/human/proc/is_lung_ruptured()
-	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
-	return L && L.is_bruised()
+/mob/living/carbon/proc/is_lung_ruptured()
+	return
 
-/mob/living/carbon/human/proc/rupture_lung()
+/mob/living/carbon/human/is_lung_ruptured()
 	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
+	return L && L.is_ruptured()
 
-	if(L && !L.is_bruised())
-		src.custom_pain("You feel a stabbing pain in your chest!", 1)
-		L.damage = L.min_bruised_damage
+/mob/living/carbon/proc/rupture_lung()
+	return
+
+/mob/living/carbon/human/rupture_lung()
+	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
+	if(L)
+		L.rupture()
 
 /*
 /mob/living/carbon/human/verb/simulate()

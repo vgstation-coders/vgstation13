@@ -28,10 +28,6 @@
 	var/heal_rate = 2.5
 	var/plasma_rate = 5
 
-	var/oxygen_alert = 0
-	var/toxins_alert = 0
-	var/fire_alert = 0
-
 	var/heat_protection = 0.5
 	var/list/can_only_pickup = list(/obj/item/clothing/mask/facehugger, /obj/item/weapon/grab) //What types of object can the alien pick up?
 	var/list/xeno_cult_items = list(/obj/item/weapon/melee/blood_dagger)

@@ -3,11 +3,6 @@
 //How to copypaste human life code and pretend it won't fuck up everything for ALIEN LARVAE : The Novel : The Story : The Legend : The Epic : The Game
 //But seriously, someone's gonna have to look more in depth into this to get rid of useless shit
 
-/mob/living/carbon/alien/larva
-
-	var/temperature_alert = TEMP_ALARM_SAFE
-
-
 /mob/living/carbon/alien/larva/Life()
 	//set background = 1
 	if (!loc)
@@ -65,110 +60,6 @@
 
 	if(client)
 		handle_regular_hud_updates()
-
-
-/mob/living/carbon/alien/larva
-
-/mob/living/carbon/alien/larva/proc/breathe()
-
-
-	if(reagents.has_any_reagents(LEXORINS))
-		return
-	if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
-		return
-
-	var/datum/gas_mixture/environment = loc.return_air()
-	var/datum/gas_mixture/breath
-	// HACK NEED CHANGING LATER
-	if(health < 0)
-		losebreath++
-
-	if(losebreath>0) //Suffocating so do not take a breath
-		losebreath--
-		if (prob(75)) //High chance of gasping for air
-			spawn emote("gasp")
-		if(istype(loc, /obj/))
-			var/obj/location_as_object = loc
-			location_as_object.handle_internal_lifeform(src, 0)
-	else
-		//First, check for air from internal atmosphere (using an air tank and mask generally)
-		breath = get_breath_from_internal(BREATH_VOLUME)
-
-		//No breath from internal atmosphere so get breath from location
-		if(!breath)
-			if(istype(loc, /obj/))
-				var/obj/location_as_object = loc
-				breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
-			else if(istype(loc, /turf/))
-				/*if(environment.return_pressure() > ONE_ATMOSPHERE)
-					// Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
-					breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
-				else
-					*/
-					// Not enough air around, take a percentage of what's there to model this properly
-				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
-
-				// Handle chem smoke effect  -- Doohl
-				for(var/obj/effect/smoke/chem/smoke in view(1, src))
-					if(smoke.reagents.total_volume)
-						smoke.reagents.reaction(src, INGEST, amount_override = min(smoke.reagents.total_volume,10)/(smoke.reagents.reagent_list.len))
-						spawn(5)
-							if(smoke)
-								smoke.reagents.copy_to(src, 10) // I dunno, maybe the reagents enter the blood stream through the lungs?
-						break // If they breathe in the nasty stuff once, no need to continue checking
-
-
-		else //Still give containing object the chance to interact
-			if(istype(loc, /obj/))
-				var/obj/location_as_object = loc
-				location_as_object.handle_internal_lifeform(src, 0)
-
-	handle_breath(breath)
-
-	if(breath)
-		loc.assume_air(breath)
-
-/mob/living/carbon/alien/larva/proc/handle_breath(datum/gas_mixture/breath)
-	if((status_flags & GODMODE) || (flags & INVULNERABLE))
-		return
-
-	if(!breath || (breath.total_moles == 0))
-		//Aliens breathe in vaccuum
-		return 0
-
-	var/toxins_used = 0
-	breath.volume = BREATH_VOLUME
-	breath.update_values()
-
-	//Partial pressure of the toxins in our breath
-	var/Toxins_pp = breath.partial_pressure(GAS_PLASMA)
-
-	if(Toxins_pp) // Detect toxins in air
-
-		AdjustPlasma(breath[GAS_PLASMA] * 250)
-		toxins_alert = max(toxins_alert, 1)
-
-		toxins_used = breath[GAS_PLASMA]
-
-	else
-		toxins_alert = 0
-
-	//Breathe in toxins and out oxygen
-	breath.adjust_multi(
-		GAS_PLASMA, -toxins_used,
-		GAS_OXYGEN, toxins_used)
-
-	if(breath.temperature > (T0C+66) && !(M_RESIST_HEAT in mutations)) // Hot air hurts :(
-		if(prob(20))
-			to_chat(src, "<span class='danger'>You feel a searing heat in your lungs !</span>")
-		fire_alert = max(fire_alert, 1)
-	else
-		fire_alert = 0
-
-	//Temporary fixes to the alerts.
-
-	return 1
-
 
 /mob/living/carbon/alien/larva/proc/handle_chemicals_in_body()
 	if(reagents)

@@ -166,9 +166,6 @@
 		return TRUE
 	return FALSE
 
-
-/mob/living/carbon/alien/humanoid/var/co2overloadtime = null
-
 /mob/living/carbon/alien/humanoid/show_inv(mob/user as mob)
 	user.set_machine(src)
 	var/pickpocket = user.isGoodPickpocket()
