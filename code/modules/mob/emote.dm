@@ -9,7 +9,22 @@
 	var/datum/emote/E
 	E = E.emote_list[lowertext(act)]
 	if(!E)
-		to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
+		var/list/filtered_emotes = list()
+		for(var/e in E.emote_list)
+			E = E.emote_list[e]
+			if("*[E.key]" in filtered_emotes)
+				continue
+			if(E.can_run_emote(src, FALSE, FALSE) && findtext(E.key,act))
+				filtered_emotes += list("*[E.key]")
+		filtered_emotes = uniquenamelist(sortList(filtered_emotes))
+		if(!filtered_emotes.len)
+			to_chat(src, "<span class='notice'>Emote '[act]' not found. Say *help for a list.</span>")
+		else
+			var/new_act = filtered_emotes[1]
+			if(filtered_emotes.len > 1)
+				new_act = input(src,"Emotes matching [act]:","Matching emotes") as null|anything in filtered_emotes
+			if(new_act)
+				emote(copytext(new_act,2,0),m_type,message,ignore_status,arguments)
 	else
 		E.run_emote(src, param, m_type, ignore_status, arguments)
 

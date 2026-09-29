@@ -137,7 +137,7 @@
 /datum/emote/proc/select_param(mob/user, params)
 	return replacetext(message_param, "%t", params)
 
-/datum/emote/proc/can_run_emote(mob/user, var/status_check = TRUE)
+/datum/emote/proc/can_run_emote(mob/user, status_check = TRUE, show_message = TRUE)
 	if(!(is_type_in_list(user, mob_type_allowed_typelist)))
 		return FALSE
 	if(is_type_in_list(user, mob_type_blacklist_typelist))
@@ -165,17 +165,20 @@
 			return FALSE
 	if(status_check && !(is_type_in_list(user, mob_type_ignore_stat_typelist)))
 		if(user.stat > stat_allowed)
-			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
+			if(show_message)
+				to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
 			return FALSE
 		if(restraint_check)
 			if(user.restrained() || (user.locked_to && !user.can_use_hands()))
-				to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
+				if(show_message)
+					to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
 				return FALSE
 
 	if(isliving(user))
 		var/mob/living/L = user
 		if(L.silent)
-			to_chat(user, "<span class='warning'>You cannot do that while silenced.</span>")
+			if(show_message)
+				to_chat(user, "<span class='warning'>You cannot do that while silenced.</span>")
 			return FALSE
 
 	return TRUE
