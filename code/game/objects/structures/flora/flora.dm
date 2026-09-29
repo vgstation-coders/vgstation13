@@ -682,10 +682,6 @@
 	if(hasberries)
 		icon_state = "harvest"
 
-/obj/structure/flora/jungle_berries/Destroy()
-	..()
-	processing_objects -= src
-
 /obj/structure/flora/jungle_berries/attack_hand(var/mob/user)
 	if(hasberries)
 		to_chat(user,"<span class='notice'>You pick some berries from \the [src]</span>")
