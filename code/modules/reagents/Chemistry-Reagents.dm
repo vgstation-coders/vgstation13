@@ -49,7 +49,7 @@
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 	var/paint_light = PAINTLIGHT_NONE
 	var/adj_temp = 0//keep between -1.5,20 to prevent people from freezing/burning themselves
-	var/max_temp_adj = null //
+	var/max_temp_adj = null //how much this reagent is allowed to move body temperature. null derives this from adj_temp. 0 prevents the reagent from causing any temperature change.
 	var/fission_time = null //null means it will have no effect on fuel lifetime. unit is in seconds. this is assuming a 1 rod reactor with 0% insertion (this will never happen.).
 	var/fission_power= 0 //watts of power. how much ooomph does it have?
 	var/fission_absorbtion=0 //watts. how much energy does this sap to facilitate its reactions?
