@@ -676,7 +676,7 @@
 
 /obj/structure/flora/jungle_berries/New()
 	..()
-	processing_objects+=src
+	processing_objects += src
 	if(prob(25))
 		hasberries=TRUE
 	if(hasberries)
@@ -684,7 +684,7 @@
 
 /obj/structure/flora/jungle_berries/Destroy()
 	..()
-	processing_objects-=src
+	processing_objects -= src
 
 /obj/structure/flora/jungle_berries/attack_hand(var/mob/user)
 	if(hasberries)
@@ -708,8 +708,6 @@
 			hasberries=TRUE
 			icon_state = "harvest"
 		tickssincelastgrowth++
-	..()
-	processing_objects+=src // flora is not normally an object which calls this proc, so we have to manually re-add it every cycle.
 
 //lavaland lmao
 /obj/structure/flora/firebush
