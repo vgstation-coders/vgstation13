@@ -16,14 +16,24 @@
 	var/image/inv_overlay
 	var/ignoreinteract = FALSE //for accessories that should not come off when attached to object is touched
 
+	var/icon/worn_icon = 'icons/mob/clothing_accessories.dmi' // should do this to all obj/item/clothing types someday
+	var/worn_state = null
+
+	var/accessory_overlay_icon = 'icons/obj/clothing/accessory_overlays.dmi'
+	var/accessory_overlay_state = null
+
 /obj/item/clothing/accessory/New()
 	..()
+	if(isnull(worn_state))
+		worn_state = icon_state
+	if(isnull(accessory_overlay_state))
+		accessory_overlay_state = icon_state
 	update_icon()
 
 /obj/item/clothing/accessory/update_icon()
 	if(attached_to)
 		attached_to.overlays -= inv_overlay
-	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
+	inv_overlay = image("icon" = accessory_overlay_icon, "icon_state" = "[_color || accessory_overlay_state]")
 	if(color)
 		inv_overlay.color = color
 
@@ -100,7 +110,7 @@
 		var/mob/living/carbon/human/wearer = loc
 		species = wearer.species
 	for(var/obj/item/clothing/accessory/accessory in accessories)
-		var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[accessory._color || accessory.icon_state]")
+		var/mutable_appearance/accessory_overlay = mutable_appearance(accessory.worn_icon, "[accessory._color || accessory.worn_state]")
 		if(species && (species.name in accessory.species_fit) && icon_exists(species.accessory_icons, accessory_overlay.icon_state))
 			accessory_overlay.icon = species.accessory_icons
 		accessory_overlay.color = accessory.color
@@ -109,7 +119,7 @@
 			var/dye_color = dye_data[1]
 			var/dye_alpha = dye_data[2]
 			var/_state = accessory.dye_base_iconstate_override || accessory.icon_state
-			var/mutable_appearance/worn_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
+			var/mutable_appearance/worn_overlay = mutable_appearance(accessory.worn_icon, "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
 			worn_overlay.color = dye_color
 			accessory_overlay.overlays += worn_overlay
 		accessory_overlay_final.overlays += accessory_overlay
@@ -409,28 +419,26 @@
 	inv_overlay
 	var/obj/item/clothing/suit/tag/source_vest
 
+	worn_icon = 'icons/mob/suit.dmi'
+
 /obj/item/clothing/accessory/lasertag/can_attach_to(obj/item/clothing/C)
 	return ..() || istype(C, /obj/item/clothing/monkeyclothes)
 
 /obj/item/clothing/accessory/lasertag/update_icon()
 	if(source_vest)
 		appearance = source_vest.appearance
-		if(attached_to)
-			var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
-			attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
-			if(ismob(attached_to.loc))
-				var/mob/M = attached_to.loc
-				M.regenerate_icons()
+		worn_state = icon_state
+		accessory_overlay_state = icon_state
 	..()
 
 /obj/item/clothing/accessory/lasertag/on_removed(mob/user)
 	if(!attached_to)
 		return
-	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
 	attached_to.overlays -= inv_overlay
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
+	to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
 	attached_to = null
 	if(source_vest)
 		source_vest.forceMove(get_turf(src))
@@ -446,9 +454,11 @@
 	name = "waistcoat"
 	desc = "For some classy, murderous fun."
 	icon = null
-	icon_state = null
+	icon_state = "vest"
 	inv_overlay
 	var/obj/item/clothing/suit/wcoat/source_vest
+
+	worn_icon = 'icons/mob/suit.dmi'
 
 /obj/item/clothing/accessory/wcoat/can_attach_to(obj/item/clothing/C)
 	if(!istype(C, /obj/item/clothing/under))
@@ -461,22 +471,16 @@
 /obj/item/clothing/accessory/wcoat/update_icon()
 	if(source_vest)
 		appearance = source_vest.appearance
-		if(attached_to)
-			var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
-			attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
-			if(ismob(attached_to.loc))
-				var/mob/M = attached_to.loc
-				M.regenerate_icons()
 	..()
 
 /obj/item/clothing/accessory/wcoat/on_removed(mob/user)
 	if(!attached_to)
 		return
-	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
 	attached_to.overlays -= inv_overlay
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
+	to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
 	attached_to = null
 	if(source_vest)
 		source_vest.forceMove(get_turf(src))
