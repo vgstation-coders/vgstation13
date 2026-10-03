@@ -17,6 +17,15 @@
 /obj/abstract/loot_spawner/combat,
 /turf/unsimulated/floor/planetary/concrete/jungle,
 /area/exposed_ruin)
+"e" = (
+/obj/structure/fence/north,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/exposed_ruin)
+"g" = (
+/obj/structure/fence/north,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/exposed_ruin)
 "h" = (
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
@@ -38,8 +47,13 @@
 /turf/template_noop,
 /area/exposed_ruin)
 "m" = (
-/obj/structure/fence/cut/medium,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/planetary/path/jungle,
+/area/exposed_ruin)
+"n" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "o" = (
 /obj/effect/decal/warning_stripes{
@@ -53,7 +67,7 @@
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "t" = (
-/obj/structure/fence/cut/large,
+/obj/structure/fence/north,
 /turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "w" = (
@@ -106,6 +120,11 @@
 	},
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
+"F" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/exposed_ruin)
 "G" = (
 /obj/structure/rack,
 /obj/item/weapon/hatchet,
@@ -114,6 +133,10 @@
 	pixel_y = -4
 	},
 /turf/template_noop,
+/area/exposed_ruin)
+"H" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "I" = (
 /obj/structure/flora/tree_stump,
@@ -125,6 +148,10 @@
 	icon_state = "warning"
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
+/area/exposed_ruin)
+"M" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
 "N" = (
 /obj/structure/rack,
@@ -139,6 +166,11 @@
 /obj/structure/fence/cut/medium,
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
+"P" = (
+/obj/structure/fence/north,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/planetary/path/jungle_plated,
+/area/exposed_ruin)
 "R" = (
 /turf/unsimulated/floor/planetary/path/jungle_plated,
 /area/exposed_ruin)
@@ -149,6 +181,10 @@
 	tag = "icon-warning_corner (NORTH)"
 	},
 /turf/unsimulated/floor/planetary/concrete/jungle,
+/area/exposed_ruin)
+"T" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/planetary/path/jungle,
 /area/exposed_ruin)
 "U" = (
 /obj/effect/decal/warning_stripes{
@@ -180,15 +216,15 @@ w
 w
 w
 w
-s
-m
-s
-k
-s
-O
-k
-s
-s
+g
+T
+M
+T
+M
+M
+T
+M
+n
 "}
 (2,1,1) = {"
 w
@@ -197,7 +233,7 @@ I
 w
 w
 w
-s
+e
 i
 a
 X
@@ -214,7 +250,7 @@ w
 w
 w
 l
-s
+e
 Z
 a
 a
@@ -248,7 +284,7 @@ w
 w
 w
 w
-s
+e
 Z
 a
 a
@@ -265,7 +301,7 @@ w
 w
 w
 w
-s
+e
 a
 z
 a
@@ -333,7 +369,7 @@ w
 w
 w
 w
-k
+t
 Z
 a
 a
@@ -350,7 +386,7 @@ w
 w
 I
 G
-O
+e
 a
 a
 a
@@ -367,7 +403,7 @@ w
 w
 w
 N
-s
+e
 d
 a
 z
@@ -384,13 +420,13 @@ w
 w
 w
 w
-s
-s
-O
-k
-s
-s
+P
+H
+H
 m
-k
-s
+H
+H
+m
+m
+F
 "}

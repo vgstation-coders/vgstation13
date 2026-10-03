@@ -83222,6 +83222,7 @@
 /area/centcom/holding)
 "dcL" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dcM" = (
@@ -99854,6 +99855,13 @@
 	tag = "icon-darkred"
 	},
 /area/security/main)
+"rGt" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "rHC" = (
 /obj/structure/bed/chair/shuttle/blue{
 	dir = 1
@@ -406779,7 +406787,7 @@ daS
 daZ
 daZ
 daS
-daS
+rGt
 dcL
 dda
 dda
@@ -407281,8 +407289,8 @@ daU
 daZ
 dca
 dcg
-dcg
-dcg
+daU
+daU
 ddb
 ddk
 ddk

@@ -18,6 +18,12 @@
 	layer = ABOVE_WINDOW_LAYER
 
 
+/obj/structure/sign/New()
+	. = ..()
+	if(!loc.density && (locate(/obj/structure/fence) in loc))
+		plane = ABOVE_HUMAN_PLANE
+		layer = FENCE_SIGN_LAYER
+
 /obj/structure/sign/ex_act(severity)
 	switch(severity)
 		if(1.0)

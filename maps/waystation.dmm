@@ -19259,6 +19259,13 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/astarboardsolar)
+"eDO" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "eDP" = (
 /obj/machinery/door/airlock/glass_research{
 	name = "Robotics Laboratory";
@@ -60267,6 +60274,7 @@
 /area/centcom/holding)
 "oDg" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "oDn" = (
@@ -392910,7 +392918,7 @@ nYM
 oaJ
 oaJ
 nYM
-nYM
+eDO
 oDg
 oGu
 oGu
@@ -393412,8 +393420,8 @@ nZb
 oaJ
 otQ
 ovQ
-ovQ
-ovQ
+nZb
+nZb
 oGS
 oLx
 oLx

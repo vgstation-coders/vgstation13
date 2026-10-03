@@ -98227,6 +98227,7 @@
 /area/centcom/holding)
 "dEu" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dEv" = (
@@ -117833,6 +117834,13 @@
 /obj/structure/shuttle/diag_wall/smooth,
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod3)
+"gcr" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "gcL" = (
 /obj/machinery/vending/security,
 /obj/machinery/light{
@@ -428261,7 +428269,7 @@ dBO
 dBX
 dBX
 dBO
-dBO
+gcr
 dEu
 dFa
 dFa
@@ -428763,8 +428771,8 @@ dBT
 dBX
 dDk
 dDX
-dDX
-dDX
+dBT
+dBT
 dEZ
 dFk
 dFk

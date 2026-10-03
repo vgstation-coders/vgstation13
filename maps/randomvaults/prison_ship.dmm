@@ -107,6 +107,15 @@
 	},
 /turf/space,
 /area/vault/prison_ship)
+"E" = (
+/obj/structure/fence/east,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"P" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
 
 (1,1,1) = {"
 a
@@ -172,8 +181,8 @@ C
 a
 a
 B
-q
-q
+E
+P
 t
 t
 C

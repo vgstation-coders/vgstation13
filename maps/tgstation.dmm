@@ -94074,6 +94074,7 @@
 /area/centcom/holding)
 "dAw" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dAx" = (
@@ -115994,6 +115995,13 @@
 	},
 /turf/simulated/wall/r_wall,
 /area/research_outpost/gearstore)
+"sKM" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "tbd" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -422947,7 +422955,7 @@ dyf
 dyo
 dyo
 dyf
-dyf
+sKM
 dAw
 dAT
 dAT
@@ -423449,8 +423457,8 @@ dyk
 dyo
 dzt
 dAb
-dAb
-dAb
+dyk
+dyk
 dAS
 dBd
 dBd

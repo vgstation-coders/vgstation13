@@ -11,6 +11,10 @@
 	},
 /turf/unsimulated/mineral,
 /area/vault/prison_ship)
+"d" = (
+/obj/structure/fence/east,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
 "e" = (
 /obj/abstract/loot_spawner/structure,
 /turf/simulated/floor/shuttle/brig,
@@ -110,6 +114,11 @@
 "D" = (
 /turf/template_noop,
 /area/template_noop)
+"G" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
 "L" = (
 /obj/structure/shuttle/diag_wall/smooth,
 /turf/template_noop,
@@ -173,8 +182,8 @@ C
 D
 D
 B
-s
-s
+d
+G
 t
 t
 C

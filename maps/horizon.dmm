@@ -52898,6 +52898,7 @@
 /area/centcom/holding)
 "cgX" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "cgY" = (
@@ -69723,6 +69724,13 @@
 	icon_state = "warnwhite"
 	},
 /area/medical/medbay)
+"hCK" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "hDf" = (
 /obj/machinery/door/airlock/maintenance{
 	name = "Maintenance Storage";
@@ -385356,7 +385364,7 @@ cfu
 cfB
 cfB
 cfu
-cfu
+hCK
 cgX
 chm
 chm
@@ -385858,8 +385866,8 @@ cfw
 cfB
 cgp
 cgv
-cgv
-cgv
+cfw
+cfw
 chn
 chB
 chB
