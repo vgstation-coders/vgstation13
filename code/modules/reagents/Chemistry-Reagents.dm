@@ -49,7 +49,7 @@
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 	var/paint_light = PAINTLIGHT_NONE
 	var/adj_temp = 0//keep between -1.5,20 to prevent people from freezing/burning themselves
-	var/max_temp_adj = 20 //how much this reagent is allowed to move the body temp. pair with above var. 0=no change allowed relative to 310K. set to 20 to prevent burning
+	var/max_temp_adj = null //how much this reagent is allowed to move body temperature. null derives this from adj_temp. 0 prevents the reagent from causing any temperature change.
 	var/fission_time = null //null means it will have no effect on fuel lifetime. unit is in seconds. this is assuming a 1 rod reactor with 0% insertion (this will never happen.).
 	var/fission_power= 0 //watts of power. how much ooomph does it have?
 	var/fission_absorbtion=0 //watts. how much energy does this sap to facilitate its reactions?
@@ -217,10 +217,15 @@
 	if(M.nutrition < 0) //Prevent from going into negatives
 		M.nutrition = 0
 
-	if(adj_temp > 0 && M.bodytemperature<BODYTEMP_DEFAULT+max_temp_adj)
-		M.bodytemperature = min(BODYTEMP_DEFAULT+max_temp_adj, M.bodytemperature+adj_temp*TEMPERATURE_DAMAGE_COEFFICIENT )
-	else if(adj_temp < 0 && M.bodytemperature>BODYTEMP_DEFAULT-max_temp_adj)
-		M.bodytemperature = max(BODYTEMP_DEFAULT-max_temp_adj, M.bodytemperature+adj_temp*TEMPERATURE_DAMAGE_COEFFICIENT )
+	var/effective_max_temp_adj
+	if(isnull(max_temp_adj))
+		effective_max_temp_adj = abs(adj_temp)
+	else
+		effective_max_temp_adj = max_temp_adj
+	if(adj_temp > 0 && M.bodytemperature < BODYTEMP_DEFAULT + effective_max_temp_adj)
+		M.bodytemperature = min(BODYTEMP_DEFAULT + effective_max_temp_adj, M.bodytemperature + adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT)
+	if(adj_temp < 0 && M.bodytemperature > BODYTEMP_DEFAULT - effective_max_temp_adj)
+		M.bodytemperature = max(BODYTEMP_DEFAULT - effective_max_temp_adj, M.bodytemperature + adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT)
 
 /datum/reagent/proc/is_overdosing() //Too much chems, or been in your system too long
 	return (overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)

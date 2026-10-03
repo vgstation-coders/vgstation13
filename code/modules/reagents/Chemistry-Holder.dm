@@ -720,7 +720,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		warning("[usr] tried to equalize the temperature of a thermally-massless mixture.")
 		return T0C+20 //Sanity but this shouldn't happen.
 
-/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20, var/temp_adj = 0, var/mob/admin, var/list/additional_data=null, var/name_override = null)
+/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20, var/temp_adj = null, var/mob/admin, var/list/additional_data=null, var/name_override = null)
 	if(!my_atom)
 		return 0
 	if(!amount)
@@ -739,6 +739,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			R.handle_data_mix(data, amount, admin)
 			if (additional_data)
 				R.handle_additional_data(additional_data)
+			if(!isnull(temp_adj))
+				R.adj_temp = ((R.adj_temp * R.volume) + (temp_adj * amount)) / (R.volume + amount)
 			R.volume += amount
 			update_total()
 			handle_special_behaviours()
@@ -767,7 +769,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if (additional_data)
 		R.handle_additional_data(additional_data)
 	R.volume = amount
-	if (temp_adj)
+	if (!isnull(temp_adj))
 		R.adj_temp = temp_adj
 
 	R.on_introduced()
@@ -1070,11 +1072,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		else
 			switch(chem_temp)
 				if (-INFINITY to T0C)
-					R.adj_temp = -5
+					R.adj_temp = -3
 				if (T0C to (T0C+10))
 					R.adj_temp = -1.5
 				if ((T0C + 30) to STEAMTEMP)
-					R.adj_temp = chem_temp - (T0C + 30)
+					R.adj_temp = min(chem_temp - (T0C + 30), 20)
 				if (STEAMTEMP to INFINITY)
 					R.adj_temp = 20
 

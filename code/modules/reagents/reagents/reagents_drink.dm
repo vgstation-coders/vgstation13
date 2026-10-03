@@ -407,7 +407,7 @@
 	adj_drowsy = -3
 	adj_sleepy = -2
 	adj_temp = 20
-	max_temp_adj=20
+	max_temp_adj = 20
 	custom_metabolism = 0.1
 	var/causes_jitteriness = 1
 	glass_desc = "Careful, it's hot!"
