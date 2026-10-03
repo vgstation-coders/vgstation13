@@ -87,7 +87,7 @@
 			halloss += altered // Useful for objects that cause "subdual" damage. PAIN!
 		if(IRRADIATE)
 			altered = max(0,altered-getarmorabsorb(null,"rad"))
-			altered = max(0, (effect/100)*(100-getarmor(null, "rad"))) //Get overall radiation protection, rather than point-exposure
+			altered = max(0, (altered/100)*(100-getarmor(null, "rad"))) //Get overall radiation protection, rather than point-exposure
 			radiation += altered
 		if(STUTTER)
 			if(status_flags & CANSTUN) // stun is usually associated with stutter
