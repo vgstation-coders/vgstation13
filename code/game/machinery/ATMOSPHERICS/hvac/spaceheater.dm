@@ -181,26 +181,58 @@
 			return
 
 /obj/machinery/space_heater/campfire/proc/addWood(obj/item/stack/sheet/wood/woody, mob/living/user)
-	var/woodnumber = input(user, "You may add a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
-	if (woodnumber)
-		woodnumber = clamp(woodnumber, 0, min(woody.amount, 4))
+	var/maxwood = min(woody.amount, 4, Floor((cell.maxcharge-cell.charge)/250))
+	if(!maxwood)
+		to_chat(user, "<span class='notice'>There isn't enough room in \the [src] for another whole plank.</span>")
+		return
+	var/woodnumber = input(user, "You may add a maximum of [maxwood] plank[maxwood == 1 ? "" : "s"].", "How much wood would you like to add to \the [src]?", 0) as null|num
+	if(!isnull(woodnumber) && !QDELETED(src) && !QDELETED(woody))
+		maxwood = min(woody.amount, 4, Floor((cell.maxcharge-cell.charge)/250))
+		woodnumber = clamp(round(woodnumber), 0, maxwood)
+		if(!woodnumber)
+			return
 		woody.use(woodnumber)
 		user.visible_message("<span class='notice'>[user] adds some wood to \the [src].</span>", "<span class='notice'>You add some wood to \the [src].</span>")
 		cell.charge = min(cell.charge+woodnumber*250,cell.maxcharge)
 		update_icon()
 		return woodnumber
 
+/obj/machinery/space_heater/campfire/proc/recoverWood(mob/living/user)
+	if(on || nocell != 1 || !cell)
+		return
+	var/maxwood = Floor(cell.charge/250)
+	if(!maxwood)
+		to_chat(user, "<span class='notice'>There isn't enough usable wood left in \the [src] to recover a whole plank.</span>")
+		return
+	var/woodnumber = input(user, "You may recover a maximum of [maxwood] plank[maxwood == 1 ? "" : "s"].", "How much wood would you like to recover from \the [src]?", 0) as null|num
+	if(isnull(woodnumber) || QDELETED(src) || on || nocell != 1 || !cell || !Adjacent(user) || user.incapacitated())
+		return
+	maxwood = Floor(cell.charge/250)
+	woodnumber = clamp(round(woodnumber), 0, maxwood)
+	if(!woodnumber)
+		return
+	cell.charge -= woodnumber*250
+	var/obj/item/stack/sheet/wood/W = new(get_turf(src), woodnumber)
+	user.put_in_hands(W)
+	user.visible_message("<span class='notice'>[user] recovers some wood from \the [src].</span>", "<span class='notice'>You recover [woodnumber] plank[woodnumber == 1 ? "" : "s"] from \the [src].</span>")
+	update_icon()
+
+/obj/machinery/space_heater/campfire/examine(mob/user)
+	..()
+	if(!on && nocell == 1)
+		to_chat(user, "<span class='info'>It looks cool enough to recover usable wood or scatter it by hand.</span>")
+
 /obj/machinery/space_heater/campfire/attackby(obj/item/I, mob/living/user)
 	..()
 	if (!isliving(user))
+		return
+	if(istype(I, /obj/item/stack/sheet/wood))
+		addWood(I, user)
 		return
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
 		to_chat(user, "<span class='notice'>You try to light \the [name], but it won't catch on fire!")
-		return
-	if(istype(I, /obj/item/stack/sheet/wood))
-		addWood(I, user)
 		return
 	if(!on && cell.charge > 0)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
@@ -303,6 +335,41 @@
 			else
 				user.visible_message("<span class='notice'>[user] warms \his hands around \the [src].</span>", "<span class='notice'>You warm your hands around \the [src].</span>")
 			M.bodytemperature += 2
+		return
+
+	if(nocell != 1 || !isliving(user))
+		return
+
+	var/recoverable_wood = Floor(cell.charge/250)
+	var/woodtext
+	if(recoverable_wood)
+		woodtext = "\The [src] contains [recoverable_wood] recoverable whole plank[recoverable_wood == 1 ? "" : "s"]"
+		if(cell.charge > recoverable_wood*250)
+			woodtext += " and some partly-burnt wood."
+		else
+			woodtext += "."
+	else if(cell.charge)
+		woodtext = "Almost no usable wood remains; only partly-burnt fuel is left."
+	else
+		woodtext = "No usable wood remains."
+
+	var/choice = alert(user, "[woodtext]\nWhat would you like to do?", "Extinguished Campfire", "Recover wood", "Scatter campfire", "Cancel")
+	if(choice == "Cancel" || QDELETED(src) || on || nocell != 1 || !Adjacent(user) || user.incapacitated())
+		return
+
+	switch(choice)
+		if("Recover wood")
+			recoverWood(user)
+
+		if("Scatter campfire")
+			user.visible_message("<span class='notice'>[user] begins scattering \the [src].</span>", "<span class='notice'>You begin scattering \the [src].</span>")
+			user.delayNextAttack(30)
+			if(do_after(user,src,30) && !QDELETED(src) && !on && nocell == 1)
+				recoverable_wood = Floor(cell.charge/250)
+				if(recoverable_wood)
+					new /obj/item/stack/sheet/wood(get_turf(src), recoverable_wood)
+				user.visible_message("<span class='notice'>[user] scatters \the [src].</span>", "<span class='notice'>You scatter \the [src].</span>")
+				qdel(src)
 
 /obj/machinery/space_heater/Topic(href, href_list)
 	if (usr.stat)
