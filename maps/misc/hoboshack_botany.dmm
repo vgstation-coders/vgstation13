@@ -46,7 +46,10 @@
 /obj/item/weapon/coin/iron,
 /obj/item/toy/cards,
 /obj/effect/glowshroom,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "cQ" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil,
@@ -175,8 +178,8 @@
 	},
 /obj/effect/decal/cleanable/crumbs,
 /turf/simulated/floor/wood{
-	broken = 1;
-	icon_state = "wood-broken"
+	flammable = 0;
+	name = "fireproof wooden floor"
 	},
 /area/shack)
 "lA" = (
@@ -341,8 +344,8 @@
 "zw" = (
 /obj/effect/decal/cleanable/generic,
 /turf/simulated/floor/wood{
-	broken = 1;
-	icon_state = "wood-broken4"
+	flammable = 0;
+	name = "fireproof wooden floor"
 	},
 /area/shack)
 "zF" = (
@@ -431,7 +434,10 @@
 "GW" = (
 /obj/item/anvil,
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "He" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil,
@@ -464,7 +470,10 @@
 /turf/simulated/wall/r_rock/porous,
 /area/shack)
 "JN" = (
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "LG" = (
 /obj/structure/wc/toilet,
@@ -487,7 +496,10 @@
 /area/shack)
 "Oi" = (
 /obj/structure/forge,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "QK" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
