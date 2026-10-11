@@ -1633,6 +1633,23 @@
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/on_vending_machine_spawn()//Fast-Food Menu
 	reagents.chem_temp = COOKTEMP_READY
 
+/obj/item/weapon/reagent_containers/food/snacks/novaburger
+	name = "novaburger"
+	desc = "It tastes like a normal burger, but spicier."
+	icon_state = "nburger"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/novaburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/nova
+	name = "novaburger"
+	desc = "The apex of spice culinary achievement."
+	icon_state = "c_burger_nova"
+
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
 	name = "synthetic burger"
 	desc = "It tastes like a normal burger, but it's just not the same."
@@ -5331,6 +5348,14 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/nova_dough
+	name = "nova dough"
+	desc = "A piece of tough nova dough."
+	icon = 'icons/obj/food_ingredients.dmi'
+	icon_state = "novadough"
+	bitesize = 2
+	food_flags = FOOD_ANIMAL //eggs
+
 /obj/item/weapon/reagent_containers/food/snacks/bun
 	name = "burger bun"
 	desc = "A base for any self-respecting burger."
@@ -5341,6 +5366,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/bun/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/nova
+	name = "nova bun"
+	desc = "A base for any self-heating burger."
+	icon_state = "bun_nova"
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/nova
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/robo
 	name = "robun"

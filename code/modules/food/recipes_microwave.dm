@@ -53,6 +53,10 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/dough)
 	result = /obj/item/weapon/reagent_containers/food/snacks/bun
 
+/datum/recipe/nova_bun
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/nova_dough)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bun/nova
+
 /datum/recipe/robo_bun
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/dough,
@@ -106,6 +110,11 @@
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/animal)
 	result = /obj/item/weapon/reagent_containers/food/snacks/monkeyburger
+
+/datum/recipe/novaburger
+	reagents = list(NOVAFLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/animal)
+	result = /obj/item/weapon/reagent_containers/food/snacks/novaburger
 
 /datum/recipe/appendixburger
 	reagents = list(FLOUR = 5)
