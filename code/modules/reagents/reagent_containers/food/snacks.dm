@@ -1636,7 +1636,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/novaburger
 	name = "novaburger"
 	desc = "It tastes like a normal burger, but spicier."
-	icon_state = "nburger"
+	icon_state = "novaburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
 
