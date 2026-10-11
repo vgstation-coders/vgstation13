@@ -1579,9 +1579,26 @@
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/ghostburger/spook()
+	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
+	playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
+	bitecount++
+	reagents.remove_any(bitesize)
+	if(!reagents.total_volume)
+		qdel(src)
+
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ghost
 	name = "ghost burger"
+	desc = "The apex of space thanatological achievement."
 	icon_state = "c_burger_ghost"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ghost/spook()
+	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
+	playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
+	bitecount++
+	reagents.remove_any(bitesize)
+	if(!reagents.total_volume)
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/human
 	name = "-burger"
@@ -1705,6 +1722,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/robo
 	name = "roburger"
+	desc = "The apex of space culinary achievement. Beep."
 	icon_state = "c_burger_robo"
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/robo/New()
@@ -1754,6 +1772,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/clown
 	name = "clown burger"
+	desc = "The apex of hall space lubing achievement."
 	icon_state = "c_burger_clown"
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/clown/New()
@@ -1774,6 +1793,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/mime
 	name = "mime burger"
+	desc = "The apex of nothing."
 	icon_state = "c_burger_mime"
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/mime/New()
@@ -1809,6 +1829,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/donut
 	name = "donut burger"
 	icon_state = "c_burger_donut"
+	desc = "The apex of space culinary law enforcement."
 	base_crumb_chance = 30
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/donut/New()
@@ -3248,6 +3269,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/spell
 	name = "Spell Burger"
+	desc = "The apex of space wizard federation achievement."
 	icon_state = "c_burger_spell"
 
 /obj/item/weapon/reagent_containers/food/snacks/bigbiteburger
@@ -5155,6 +5177,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ass
 	name = "assburger"
+	desc = "The apex of space artistic achievement."
 	icon_state = "c_burger_ass"
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ass/New()
