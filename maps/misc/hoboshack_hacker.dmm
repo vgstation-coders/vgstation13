@@ -1274,7 +1274,7 @@
 	stop_automated_movement_when_pulled = 1;
 	last_laid_eggs = 999999999;
 	minbodytemp = 1.15;
-	name = "Mr. Lemon";
+	name = "Dr. Lime";
 	health = 99999999999
 	},
 /turf/simulated/floor/carpet/shag{
