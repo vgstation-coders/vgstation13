@@ -126,6 +126,11 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh)
 	result = /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
 
+/datum/recipe/syntinovaburger
+	reagents = list(NOVAFLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh)
+	result = /obj/item/weapon/reagent_containers/food/snacks/novaburger/synth
+
 /datum/recipe/brainburger
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/organ/internal/brain)
