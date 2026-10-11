@@ -5322,36 +5322,43 @@
 /obj/item/weapon/reagent_containers/food/snacks/bun/robo
 	name = "robun"
 	desc = "A base for any self-respecting burger. Beep."
+	icon_state = "bun_robo"
 	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/robo
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/ass
 	name = "assbun"
 	desc = "A base for any TRUE and HONEST burger."
+	icon_state = "bun_ass"
 	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ass
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/clown
 	name = "clown bun"
 	desc = "A base for any disrespecting burger."
+	icon_state = "bun_clown"
 	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/clown
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/mime
 	name = "mime bun"
 	desc = "Ceci n'est pas un base."
+	icon_state = "bun_mime"
 	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/mime
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/ghost
 	name = "ghost bun"
 	desc = "A base for any light-weight burger."
+	icon_state = "bun_ghost"
 	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ghost
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/spell
 	name = "spell bun"
 	desc = "A base for ei nath burger."
+	icon_state = "bun_spell"
 	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/spell
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/donut
 	name = "donut bun"
 	desc = "A base for any law-abiding burger."
+	icon_state = "bun_donut"
 	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/donut
 
 //////////////////CHRISTMAS AND WINTER FOOD//////////////////
