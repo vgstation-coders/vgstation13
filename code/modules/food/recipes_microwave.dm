@@ -58,7 +58,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/dough,
 		/obj/item/robot_parts/head
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/bun/robot
+	result = /obj/item/weapon/reagent_containers/food/snacks/bun/robo
 
 /datum/recipe/ghost_bun
 	items = list(
