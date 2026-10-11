@@ -1661,7 +1661,7 @@
 	name = "synthetic burger"
 	desc = "It tastes like a normal burger, but it's just not the same."
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/nova/synth
+/obj/item/weapon/reagent_containers/food/snacks/novaburger/synth
 	name = "synthetic nova burger"
 	desc = "It tastes like a nova burger, but it's just not the same."
 
