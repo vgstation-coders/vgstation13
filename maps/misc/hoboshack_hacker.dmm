@@ -1,0 +1,1629 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ab" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"aC" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 8;
+	name = "Air Loop Tap"
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"aJ" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"bZ" = (
+/obj/structure/table/woodentable,
+/obj/machinery/microwave/upgraded,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"cc" = (
+/obj/item/trash/soda_cans,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ci" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"cn" = (
+/obj/item/weapon/storage/wallet/random,
+/obj/item/weapon/storage/wallet/random,
+/obj/item/weapon/storage/wallet/random,
+/obj/item/weapon/storage/wallet/random,
+/obj/structure/rack,
+/obj/item/weapon/card/id/clown,
+/obj/item/weapon/card/id/vox,
+/obj/item/weapon/card/id,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"dM" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ed" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ei" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/space,
+/obj/item/clothing/suit/space,
+/obj/item/clothing/suit/space,
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ew" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/wall/mineral/reticulite{
+	color = "#AAAAFF";
+	name = "gamer wall"
+	},
+/area/shack)
+"fn" = (
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/obj/machinery/door/airlock/clockwork{
+	opacity = 0;
+	name = "Semi-transparent Clockwork Airlock"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"fH" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"gh" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/item/weapon/bedsheet/mime,
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"gA" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 8;
+	name = "Air Loop Tap"
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"gB" = (
+/obj/machinery/computer/security/telescreen/entertainment,
+/turf/simulated/wall/mineral/reticulite{
+	color = "#AAAAFF";
+	name = "gamer wall"
+	},
+/area/shack)
+"ix" = (
+/obj/structure/wc/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"iP" = (
+/obj/structure/window/full/reinforced/plasma{
+	color = "#AAAAFF"
+	},
+/obj/structure/grille{
+	name = "low-visibility grille";
+	alpha = 50
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"iT" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ji" = (
+/obj/machinery/atmospherics/unary/tank{
+	dir = 8;
+	name = "Pressure Tank (Waste)"
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"jp" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"jH" = (
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/structure/curtain/open/bed{
+	name = "bedroom curtain";
+	pixel_y = -32
+	},
+/obj/machinery/computer/telecomms/monitor{
+	network = "tcommsat";
+	emagged = 1;
+	name = "Hacked telecommunications network monitoring console"
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"kA" = (
+/obj/structure/grille{
+	name = "low-visibility grille";
+	alpha = 50
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/full/reinforced/plasma{
+	color = "#AAAAFF"
+	},
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"le" = (
+/obj/structure/bed/racecar/shuttle,
+/obj/item/toy/plushie/fumo/mime{
+	name = "\improper mimegirl fumo";
+	desc = "Has been meticulously taken care of to an uncanny extent."
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ly" = (
+/obj/structure/table,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 5
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"lI" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"mb" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"mj" = (
+/obj/machinery/vending/nuka{
+	prices = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka = 0, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum = 0);
+	emagged = 1;
+	desc = "A vending machine filled to the brim with ice cold Nuka Cola! s"
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ml" = (
+/obj/machinery/libraryscanner,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"mn" = (
+/turf/simulated/wall/mineral/reticulite{
+	color = "#AAAAFF";
+	name = "gamer wall"
+	},
+/area/shack)
+"mo" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"nb" = (
+/obj/structure/sign/poster{
+	icon_state = "animeposter3"
+	},
+/turf/simulated/wall/mineral/reticulite{
+	color = "#AAAAFF";
+	name = "gamer wall"
+	},
+/area/shack)
+"ng" = (
+/obj/machinery/door/airlock/clockwork,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"nj" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"nT" = (
+/obj/machinery/door/window/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"od" = (
+/obj/structure/table/woodentable,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox/blingpizza,
+/obj/item/pizzabox,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/item/weapon/storage/box/donkpockets,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ok" = (
+/obj/item/trash/soda_cans,
+/obj/item/trash/soda_cans,
+/obj/item/trash/soda_cans,
+/obj/item/trash/soda_cans,
+/obj/item/trash/soda_cans,
+/obj/effect/decal/cleanable/crumbs,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"pc" = (
+/obj/structure/window/reinforced/plasma{
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/full/reinforced/plasma{
+	color = "#AAAAFF"
+	},
+/obj/structure/grille{
+	name = "low-visibility grille";
+	alpha = 50
+	},
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"pi" = (
+/obj/structure/rack,
+/obj/item/clothing/head/helmet/space,
+/obj/item/clothing/head/helmet/space,
+/obj/item/clothing/head/helmet/space,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"pA" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"qa" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"qY" = (
+/obj/structure/forge{
+	color = "#FFFF00";
+	name = "gaming forge";
+	desc = "A fire contained within heat-proof stone. This lets the internal temperature develop enough to make metal malleable or liquid. Seems to have been filled with tons of fuel years ago.";
+	current_temp = 4500;
+	fuel_time = 4687491
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ra" = (
+/obj/machinery/light/he,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"re" = (
+/obj/structure/grille{
+	name = "low-visibility grille";
+	alpha = 50
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/full/reinforced/plasma{
+	color = "#AAAAFF"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"rg" = (
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"so" = (
+/obj/structure/rack,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/toolbox/mechanical,
+/obj/structure/cable/yellow,
+/obj/machinery/power/apc{
+	pixel_y = -24;
+	cell_type_path = /obj/item/weapon/cell/rad
+	},
+/obj/machinery/light/he,
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"sy" = (
+/obj/machinery/door/airlock/clockwork{
+	opacity = 0;
+	name = "Semi-transparent Clockwork Airlock"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"tH" = (
+/obj/structure/table/woodentable,
+/obj/effect/decal/cleanable/cockroach_remains,
+/obj/item/weapon/card/fake_emag{
+	desc = "It's a card with a magnetic strip attached to some circuitry. It seems to be burnt out after years of use and in the midst of a repair.";
+	name = "burnt out cryptographic sequencer";
+	color = "#AAAAAA"
+	},
+/obj/item/tool/solder/pre_fueled,
+/obj/item/weapon/paper/intercoms{
+	name = "Telecomms sniffer user manual"
+	},
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"tR" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 8
+	},
+/obj/structure/bed/chair/office/dark{
+	dir = 8
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"uU" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"uZ" = (
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"vw" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"vy" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"vJ" = (
+/obj/structure/curtain/open/bed{
+	name = "bedroom curtain";
+	pixel_y = -32
+	},
+/obj/structure/curtain/open/bed{
+	name = "bedroom curtain";
+	pixel_y = -32;
+	pixel_x = 32
+	},
+/obj/machinery/computer/library/checkout/remote_gallery{
+	name = "makeshift remote gallery uplink"
+	},
+/obj/structure/table/woodentable,
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"vO" = (
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 8
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"wD" = (
+/obj/structure/table/woodentable,
+/obj/machinery/computer/library/checkout{
+	name = "Jailbroken NT-Library Terminal"
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"xc" = (
+/obj/item/weapon/bikehorn/rubberducky/quantum,
+/obj/structure/window/reinforced/plasma{
+	dir = 4;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"xg" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"xl" = (
+/obj/machinery/door/airlock/clockwork{
+	opacity = 0;
+	name = "Gamer Pod"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ya" = (
+/obj/machinery/airshield,
+/obj/machinery/door/airlock/clockwork{
+	opacity = 0;
+	name = "Semi-transparent Clockwork Airlock"
+	},
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"yd" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"yK" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"zm" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"zu" = (
+/obj/machinery/shower{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"zC" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"zD" = (
+/obj/item/anvil{
+	color = "#FF0000";
+	name = "gamer anvil"
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Ap" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"As" = (
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"Ay" = (
+/obj/machinery/light/he,
+/turf/template_noop,
+/area/shack)
+"AM" = (
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/cockroach_remains,
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Bv" = (
+/obj/structure/cable/yellow{
+	icon_state = "1-8"
+	},
+/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"BB" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"CV" = (
+/obj/machinery/power/terminal{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 6
+	},
+/obj/machinery/power/port_gen/pacman/super,
+/obj/item/stack/sheet/mineral/uranium{
+	amount = 50
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Ds" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"DI" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/wall/mineral/reticulite{
+	color = "#AAAAFF";
+	name = "gamer wall"
+	},
+/area/shack)
+"Ex" = (
+/obj/machinery/door/airlock/clockwork{
+	opacity = 0;
+	name = "Semi-transparent Clockwork Airlock"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"EG" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Fc" = (
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Gc" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Gk" = (
+/obj/effect/decal/cleanable/cockroach_remains,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Hr" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"IB" = (
+/obj/effect/decal{
+	icon = 'icons/obj/atmospherics/vent_scrubber.dmi';
+	icon_state = "hoff";
+	pixel_x = 16;
+	pixel_y = -16;
+	name = "drain";
+	color = "#99C3C5"
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/item/weapon/soap/deluxe{
+	desc = "A deluxe Waffle Co. brand bar of soap. Smells of Geometer-Fuel.";
+	name = "gamer soap";
+	color = "#FF4444"
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Jc" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Jo" = (
+/obj/structure/wc/toilet{
+	name = "gamer toilet";
+	dir = 4
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"KK" = (
+/obj/structure/curtain/open/bed{
+	name = "bedroom curtain";
+	pixel_y = -32
+	},
+/obj/machinery/computer/message_monitor{
+	emagged = 1;
+	name = "Hacked Message Monitor Console"
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"LB" = (
+/obj/structure/sign/poster{
+	icon_state = "bsposter9"
+	},
+/turf/simulated/wall/mineral/reticulite{
+	color = "#AAAAFF";
+	name = "gamer wall"
+	},
+/area/shack)
+"LD" = (
+/obj/effect/decal/cleanable/crumbs,
+/obj/structure/bed/chair/office/dark{
+	icon_state = "shuttleseat_GAMER";
+	name = "high quality gamer chair"
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"LH" = (
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/crumbs,
+/obj/structure/curtain/open/bed{
+	name = "bedroom curtain";
+	pixel_y = -32
+	},
+/obj/machinery/computer/crew/selfpower{
+	emagged = 1;
+	name = "Hacked crew monitoring computer"
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ME" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"MH" = (
+/turf/template_noop,
+/area/shack)
+"Na" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 9
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Ng" = (
+/obj/item/stack/sheet/glass/glass/bigstack,
+/obj/item/clothing/accessory/stethoscope,
+/obj/item/stack/sheet/wood/bigstack,
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 30
+	},
+/obj/item/stack/sheet/metal/bigstack,
+/obj/structure/closet/ayy{
+	color = "#AAAAFF"
+	},
+/obj/item/weapon/hair_dye,
+/obj/item/weapon/hair_dye,
+/obj/item/weapon/hair_dye,
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/stack/sheet/wood/bigstack,
+/obj/item/stack/sheet/wood/bigstack,
+/obj/item/stack/sheet/wood/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Nz" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6;
+	initialize_directions = 6
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"NM" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 5
+	},
+/obj/machinery/light/he{
+	dir = 8
+	},
+/obj/structure/safe,
+/obj/abstract/map/spawner/safe/any,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"NT" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/cult/gamer{
+	volume = 100
+	},
+/obj/item/pizzabox,
+/obj/item/device/radio/intercom{
+	freerange = 1;
+	name = "Station Intercom (General)";
+	pixel_x = -30
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Op" = (
+/obj/structure/window/reinforced/plasma{
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/full/reinforced/plasma{
+	color = "#AAAAFF"
+	},
+/obj/structure/grille{
+	name = "low-visibility grille";
+	alpha = 50
+	},
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Qz" = (
+/obj/structure/sign/poster{
+	icon_state = "vgposter2"
+	},
+/turf/simulated/wall/mineral/reticulite{
+	color = "#AAAAFF";
+	name = "gamer wall"
+	},
+/area/shack)
+"QJ" = (
+/obj/structure/sign/poster{
+	icon_state = "bsposter8"
+	},
+/turf/simulated/wall/mineral/reticulite{
+	color = "#AAAAFF";
+	name = "gamer wall"
+	},
+/area/shack)
+"Rr" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Ry" = (
+/obj/machinery/disposal/compactor,
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"RS" = (
+/obj/structure/window/reinforced/plasma{
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4;
+	color = "#AAAAFF";
+	name = "reinforced gamer window"
+	},
+/obj/structure/grille{
+	name = "low-visibility grille";
+	alpha = 50
+	},
+/obj/structure/window/full/reinforced/plasma{
+	color = "#AAAAFF"
+	},
+/turf/simulated/floor/mineral/reticulite{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"RW" = (
+/obj/structure/sign/poster{
+	icon_state = "poster4"
+	},
+/turf/simulated/wall/mineral/reticulite{
+	color = "#AAAAFF";
+	name = "gamer wall"
+	},
+/area/shack)
+"SK" = (
+/obj/machinery/computer/security{
+	emagged = 1;
+	name = "Hacked Security Cameras"
+	},
+/obj/structure/curtain/open/bed{
+	name = "bedroom curtain";
+	pixel_y = -32
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Tg" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid,
+/area/shack)
+"Ug" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/mob/living/simple_animal/cockroach/turkish{
+	desc = "A cockroach that hitched a ride in one of the pizza boxes. Someone put a tiny paper fez over its head. It seems to like it.";
+	stop_automated_movement_when_pulled = 1;
+	last_laid_eggs = 999999999;
+	minbodytemp = 1.15;
+	name = "Dr. Lime";
+	health = 99999999999
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"UE" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"UI" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Xe" = (
+/obj/machinery/power/battery/smes{
+	chargelevel = 1e+006
+	},
+/obj/structure/cable/yellow{
+	icon_state = "0-4";
+	tag = "icon-0-4"
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"XA" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"YN" = (
+/obj/item/trash/soda_cans,
+/obj/effect/decal/cleanable/crumbs,
+/obj/effect/decal/cleanable/cockroach_remains,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Zc" = (
+/obj/machinery/vending/cola{
+	emagged = 1;
+	prices = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 0, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 0, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 0, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 0, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 0, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola = 0);
+	name = "\improper Jailbroken Robust Softdrinks vendor";
+	desc = "A softdrink vendor provided by Robust Industries, LLC. This one was hacked to sell for free."
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"Zi" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ZJ" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/carpet/shag{
+	color = "#AAAAFF"
+	},
+/area/shack)
+"ZS" = (
+/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
+
+(1,1,1) = {"
+MH
+Ay
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+uU
+MH
+MH
+"}
+(2,1,1) = {"
+MH
+MH
+mn
+Jo
+rg
+IB
+zu
+QJ
+bZ
+Ry
+NT
+tH
+mn
+As
+MH
+MH
+"}
+(3,1,1) = {"
+MH
+MH
+mn
+aJ
+yK
+nT
+xc
+LB
+od
+uZ
+AM
+SK
+Op
+As
+MH
+MH
+"}
+(4,1,1) = {"
+MH
+MH
+mn
+ix
+dM
+ab
+ra
+nb
+Ap
+YN
+LD
+KK
+pc
+As
+MH
+MH
+"}
+(5,1,1) = {"
+MH
+MH
+mn
+mn
+ng
+ew
+mn
+Qz
+Zc
+cc
+ok
+LH
+pc
+As
+MH
+MH
+"}
+(6,1,1) = {"
+MH
+MH
+mn
+ml
+dM
+vw
+NM
+RW
+mj
+Ug
+Gk
+jH
+pc
+As
+MH
+MH
+"}
+(7,1,1) = {"
+MH
+Ay
+mn
+wD
+dM
+ab
+Hr
+gB
+le
+gh
+ZJ
+vJ
+pc
+As
+MH
+MH
+"}
+(8,1,1) = {"
+mn
+mn
+mn
+mn
+Jc
+Zi
+Na
+mn
+kA
+re
+xl
+kA
+RS
+As
+lI
+As
+"}
+(9,1,1) = {"
+mn
+Xe
+CV
+DI
+yd
+fH
+BB
+ME
+jp
+UI
+mo
+so
+mn
+iP
+mn
+uU
+"}
+(10,1,1) = {"
+mn
+Nz
+Fc
+fn
+Bv
+UE
+nj
+nj
+Ds
+UE
+ZS
+zm
+Ex
+pA
+ya
+As
+"}
+(11,1,1) = {"
+mn
+ed
+EG
+mn
+dM
+Gc
+ly
+rg
+rg
+zC
+qa
+xg
+sy
+vy
+ya
+As
+"}
+(12,1,1) = {"
+mn
+mb
+ci
+mn
+dM
+Hr
+tR
+rg
+Rr
+rg
+XA
+cn
+mn
+iP
+mn
+uU
+"}
+(13,1,1) = {"
+mn
+vO
+ji
+mn
+aC
+gA
+iT
+Ng
+qY
+zD
+ei
+pi
+mn
+As
+Tg
+As
+"}
+(14,1,1) = {"
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+mn
+uU
+MH
+MH
+"}

@@ -174,3 +174,8 @@
 
 	file_path = "maps/misc/hoboshack_spaceranch.dmm"
 	can_rotate = FALSE
+
+/datum/map_element/hoboshack/hacker
+	name = "Space hobo shack - Hacker Pod"
+
+	file_path = "maps/misc/hoboshack_hacker.dmm"
