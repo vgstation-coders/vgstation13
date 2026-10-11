@@ -286,6 +286,7 @@ var/global/list/bombermangear = list()
 	density = 0
 	anchored = 1
 	plane = EFFECTS_PLANE
+	pass_flags = PASSTABLE|PASSGLASS|PASSRAILING|PASSGRILLE
 	var/destroy_environnement = 0
 	var/hurt_players = 0
 
