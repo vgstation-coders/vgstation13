@@ -1579,6 +1579,10 @@
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ghost
+	name = "ghost burger"
+	icon_state = "c_burger_ghost"
+
 /obj/item/weapon/reagent_containers/food/snacks/human
 	name = "-burger"
 	desc = "A bloody burger."
@@ -1699,6 +1703,14 @@
 	reagents.add_reagent(NANITES, 2)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/robo
+	name = "roburger"
+	icon_state = "c_burger_robo"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/robo/New()
+	..()
+	reagents.add_reagent(NANITES, 2)
+
 /obj/item/weapon/reagent_containers/food/snacks/roburgerbig
 	name = "roburger"
 	desc = "This massive patty looks like poison. Beep."
@@ -1740,6 +1752,14 @@
 	reagents.add_reagent(HONKSERUM, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/clown
+	name = "clown burger"
+	icon_state = "c_burger_clown"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/clown/New()
+	..()
+	reagents.add_reagent(HONKSERUM, 6)
+
 /obj/item/weapon/reagent_containers/food/snacks/mimeburger
 	name = "mime burger"
 	desc = "Its taste defies language."
@@ -1751,6 +1771,14 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(SILENCER, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/mime
+	name = "mime burger"
+	icon_state = "c_burger_mime"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/mime/New()
+	..()
+	reagents.add_reagent(SILENCER, 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/nothingburger/New()
 	..()
@@ -1777,6 +1805,15 @@
 	reagents.add_reagent(SPRINKLES, 6)
 	bitesize = 2
 	base_crumb_chance = 30
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/donut
+	name = "donut burger"
+	icon_state = "c_burger_donut"
+	base_crumb_chance = 30
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/donut/New()
+	..()
+	reagents.add_reagent(SPRINKLES, 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
 	name = "avocado burger"
@@ -3208,6 +3245,10 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/spell
+	name = "Spell Burger"
+	icon_state = "c_burger_spell"
 
 /obj/item/weapon/reagent_containers/food/snacks/bigbiteburger
 	name = "Big Bite Burger"
@@ -5112,6 +5153,15 @@
 	reagents.add_reagent(MERCURY,       10) // Idiot
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ass
+	name = "assburger"
+	icon_state = "c_burger_ass"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ass/New()
+	..()
+	reagents.add_reagent(MINDBREAKER, 10) // Screaming
+	reagents.add_reagent(MERCURY,       10) // Idiot
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/asspie
 	name = "asspie"
 	desc = "Please remember to check your privilege, pie eating scum."
@@ -5268,6 +5318,41 @@
 /obj/item/weapon/reagent_containers/food/snacks/bun/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/robo
+	name = "robun"
+	desc = "A base for any self-respecting burger. Beep."
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/robo
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/ass
+	name = "assbun"
+	desc = "A base for any TRUE and HONEST burger."
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ass
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/clown
+	name = "clown bun"
+	desc = "A base for any disrespecting burger."
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/clown
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/mime
+	name = "mime bun"
+	desc = "Ceci n'est pas un base."
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/mime
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/ghost
+	name = "ghost bun"
+	desc = "A base for any light-weight burger."
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ghost
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/spell
+	name = "spell bun"
+	desc = "A base for ei nath burger."
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/spell
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/donut
+	name = "donut bun"
+	desc = "A base for any law-abiding burger."
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/donut
 
 //////////////////CHRISTMAS AND WINTER FOOD//////////////////
 

@@ -19,8 +19,11 @@
 	if(!handle_customizable_addition(I, user, params, /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova))
 		return ..()
 
+/obj/item/weapon/reagent_containers/food/snacks/bun
+	var/custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger
+
 /obj/item/weapon/reagent_containers/food/snacks/bun/attackby(obj/item/I, mob/user, params)
-	if(!handle_customizable_addition(I, user, params, /obj/item/weapon/reagent_containers/food/snacks/customizable/burger))
+	if(!handle_customizable_addition(I, user, params, custom_burger_path))
 		return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough/attackby(obj/item/I, mob/user, params)
