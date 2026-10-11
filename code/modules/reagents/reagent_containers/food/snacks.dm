@@ -1579,6 +1579,27 @@
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/ghostburger/spook()
+	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
+	playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
+	bitecount++
+	reagents.remove_any(bitesize)
+	if(!reagents.total_volume)
+		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ghost
+	name = "ghost burger"
+	desc = "The apex of space thanatological achievement."
+	icon_state = "c_burger_ghost"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ghost/spook()
+	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
+	playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
+	bitecount++
+	reagents.remove_any(bitesize)
+	if(!reagents.total_volume)
+		qdel(src)
+
 /obj/item/weapon/reagent_containers/food/snacks/human
 	name = "-burger"
 	desc = "A bloody burger."
@@ -1612,11 +1633,37 @@
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/on_vending_machine_spawn()//Fast-Food Menu
 	reagents.chem_temp = COOKTEMP_READY
 
+/obj/item/weapon/reagent_containers/food/snacks/novaburger
+	name = "novaburger"
+	desc = "It tastes like a normal burger, but spicier."
+	icon_state = "novaburger"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/novaburger/New()
+	..()
+	reagents.add_reagent(HELL_RAMEN, 3)
+	reagents.add_reagent(NOVAFLOUR, 3)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/nova
+	name = "novaburger"
+	desc = "The apex of spice culinary achievement."
+	icon_state = "c_burger_nova"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/nova/New()
+	..()
+	reagents.add_reagent(HELL_RAMEN, 3)
+	reagents.add_reagent(NOVAFLOUR, 3)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
 	name = "synthetic burger"
 	desc = "It tastes like a normal burger, but it's just not the same."
-	icon_state = "hburger"
-	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/novaburger/synth
+	name = "synthetic nova burger"
+	desc = "It tastes like a nova burger, but it's just not the same."
 
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger
 	name = "appendix burger"
@@ -1699,6 +1746,15 @@
 	reagents.add_reagent(NANITES, 2)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/robo
+	name = "roburger"
+	desc = "The apex of space culinary achievement. Beep."
+	icon_state = "c_burger_robo"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/robo/New()
+	..()
+	reagents.add_reagent(NANITES, 2)
+
 /obj/item/weapon/reagent_containers/food/snacks/roburgerbig
 	name = "roburger"
 	desc = "This massive patty looks like poison. Beep."
@@ -1740,6 +1796,15 @@
 	reagents.add_reagent(HONKSERUM, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/clown
+	name = "clown burger"
+	desc = "The apex of hall space lubing achievement."
+	icon_state = "c_burger_clown"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/clown/New()
+	..()
+	reagents.add_reagent(HONKSERUM, 6)
+
 /obj/item/weapon/reagent_containers/food/snacks/mimeburger
 	name = "mime burger"
 	desc = "Its taste defies language."
@@ -1751,6 +1816,15 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(SILENCER, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/mime
+	name = "mime burger"
+	desc = "The apex of nothing."
+	icon_state = "c_burger_mime"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/mime/New()
+	..()
+	reagents.add_reagent(SILENCER, 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/nothingburger/New()
 	..()
@@ -1777,6 +1851,16 @@
 	reagents.add_reagent(SPRINKLES, 6)
 	bitesize = 2
 	base_crumb_chance = 30
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/donut
+	name = "donut burger"
+	icon_state = "c_burger_donut"
+	desc = "The apex of space culinary law enforcement."
+	base_crumb_chance = 30
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/donut/New()
+	..()
+	reagents.add_reagent(SPRINKLES, 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
 	name = "avocado burger"
@@ -3208,6 +3292,11 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/spell
+	name = "Spell Burger"
+	desc = "The apex of space wizard federation achievement."
+	icon_state = "c_burger_spell"
 
 /obj/item/weapon/reagent_containers/food/snacks/bigbiteburger
 	name = "Big Bite Burger"
@@ -5112,6 +5201,16 @@
 	reagents.add_reagent(MERCURY,       10) // Idiot
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ass
+	name = "assburger"
+	desc = "The apex of space artistic achievement."
+	icon_state = "c_burger_ass"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ass/New()
+	..()
+	reagents.add_reagent(MINDBREAKER, 10) // Screaming
+	reagents.add_reagent(MERCURY,       10) // Idiot
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/asspie
 	name = "asspie"
 	desc = "Please remember to check your privilege, pie eating scum."
@@ -5258,6 +5357,14 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/nova_dough
+	name = "nova dough"
+	desc = "A piece of tough nova dough."
+	icon = 'icons/obj/food_ingredients.dmi'
+	icon_state = "novadough"
+	bitesize = 2
+	food_flags = FOOD_ANIMAL //eggs
+
 /obj/item/weapon/reagent_containers/food/snacks/bun
 	name = "burger bun"
 	desc = "A base for any self-respecting burger."
@@ -5268,6 +5375,54 @@
 /obj/item/weapon/reagent_containers/food/snacks/bun/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/nova
+	name = "nova bun"
+	desc = "A base for any self-heating burger."
+	icon_state = "bun_nova"
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/nova
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/robo
+	name = "robun"
+	desc = "A base for any self-respecting burger. Beep."
+	icon_state = "bun_robo"
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/robo
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/ass
+	name = "assbun"
+	desc = "A base for any TRUE and HONEST burger."
+	icon_state = "bun_ass"
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ass
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/clown
+	name = "clown bun"
+	desc = "A base for any disrespecting burger."
+	icon_state = "bun_clown"
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/clown
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/mime
+	name = "mime bun"
+	desc = "Ceci n'est pas un base."
+	icon_state = "bun_mime"
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/mime
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/ghost
+	name = "ghost bun"
+	desc = "A base for any light-weight burger."
+	icon_state = "bun_ghost"
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ghost
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/spell
+	name = "spell bun"
+	desc = "A base for ei nath burger."
+	icon_state = "bun_spell"
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/spell
+
+/obj/item/weapon/reagent_containers/food/snacks/bun/donut
+	name = "donut bun"
+	desc = "A base for any law-abiding burger."
+	icon_state = "bun_donut"
+	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/donut
 
 //////////////////CHRISTMAS AND WINTER FOOD//////////////////
 
