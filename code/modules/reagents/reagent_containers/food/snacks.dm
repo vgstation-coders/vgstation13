@@ -1642,13 +1642,20 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/novaburger/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(HELL_RAMEN, 3)
+	reagents.add_reagent(NOVAFLOUR, 3)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/nova
 	name = "novaburger"
 	desc = "The apex of spice culinary achievement."
 	icon_state = "c_burger_nova"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/burger/nova/New()
+	..()
+	reagents.add_reagent(HELL_RAMEN, 3)
+	reagents.add_reagent(NOVAFLOUR, 3)
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
 	name = "synthetic burger"
