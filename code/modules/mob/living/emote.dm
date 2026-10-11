@@ -56,7 +56,7 @@
 	restraint_check = TRUE
 	replace_pronouns = FALSE
 
-/datum/emote/living/dance/cult/can_run_emote(var/mob/user, var/status_check)
+/datum/emote/living/dance/cult/can_run_emote(mob/user, status_check = TRUE, show_message = TRUE)
 	if (user.occult_muted())
 		return FALSE
 	if (iscultist(user) || istype(user, /mob/living/simple_animal/astral_projection))
@@ -159,7 +159,7 @@ var/list/animals_with_wings = list(
 	message = "flaps their wings ANGRILY!"
 	message_mobtype = list(/mob/living/silicon/robot/mommi = "flaps its utility arms ANGRILY!")
 
-/datum/emote/living/flap/can_run_emote(var/mob/user, var/status_check)
+/datum/emote/living/flap/can_run_emote(mob/user, status_check = TRUE, show_message = TRUE)
 	if (isMoMMI(user))
 		return TRUE
 	if (is_type_in_list(user,animals_with_wings))
@@ -195,7 +195,7 @@ var/list/animals_with_wings = list(
 	message = "jumps!"
 	restraint_check = TRUE
 
-/datum/emote/living/laugh/can_run_emote(mob/living/user, var/status_check = TRUE)
+/datum/emote/living/laugh/can_run_emote(mob/user, status_check = TRUE, show_message = TRUE)
 	. = ..()
 	if(. && iscarbon(user))
 		var/mob/living/carbon/C = user
@@ -381,7 +381,7 @@ var/list/animals_with_wings = list(
 		E = emote_list[e]
 		if(E.key in keys)
 			continue
-		if(E.can_run_emote(user, status_check = FALSE))
+		if(E.can_run_emote(user, FALSE, FALSE))
 			keys += E.key
 
 	keys = sortList(keys)
