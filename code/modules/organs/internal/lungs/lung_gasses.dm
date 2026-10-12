@@ -70,17 +70,32 @@
 			//testing("  Receiving too little [id], gasping.")
 			lungs.gasp()
 
-	var/mob/living/carbon/human/H = lungs.owner
-	var/used=0
-	if(pp > 0)
-		used=H.species.receiveGas(id, min(1,pp/min_pp), moles, H)
-	else
-		used=H.species.receiveGas(id, 0, moles, H)
+	var/used = receive_gas(id, clamp(pp/min_pp,0,1), moles)
 
 	if(used)
 		//testing("  Used [moles] moles.")
 		add_moles(-used)
 		add_exhaled(used)
+
+/datum/lung_gas/proc/receive_gas(var/gas_id, var/ratio, var/moles)
+	//testing("receive_gas: [gas_id] ? [breath_type] - ratio=[ratio], moles=[moles]")
+	if(ratio <= 0 || (lungs.owner.species && lungs.owner.species.breath_type != gas_id))
+		//testing("  ratio is 0 or gas_id doesn't match up, adding oxyLoss.")
+		lungs.owner.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
+		lungs.owner.failed_last_breath = 1
+		return 0
+	else if(ratio >= 1)
+		//testing("  we cool")
+		lungs.owner.failed_last_breath = 0
+		lungs.owner.adjustOxyLoss(-5)
+		lungs.owner.oxygen_alert = 0
+		return moles/GAS_CONSUME_TO_WASTE_DENOMINATOR
+	else
+		//testing("  ratio < 1, adding oxyLoss.")
+		lungs.owner.adjustOxyLoss(HUMAN_MAX_OXYLOSS * (1 - ratio)) //Damage proportional to how much gas you didn't get
+		lungs.owner.failed_last_breath = 1
+		lungs.owner.oxygen_alert = 1
+		return moles*ratio/GAS_CONSUME_TO_WASTE_DENOMINATOR
 
 ////////////////////////
 // WASTE GAS
@@ -202,7 +217,7 @@
 	var/max_pp=0 // Maximum toxins partial pressure before you get effects. (0.5)
 	var/max_pp_mask=0 // Same as above, but with a mask. (5 _MOLES_; Set to 0 to disable mask blocking.)
 	var/radspermole=3
-	
+
 /datum/lung_gas/radioactive/New(var/gas_id, var/max_pp=0, var/max_pp_mask=0, var/radspermole=3)
 	..(gas_id)
 	src.max_pp = max_pp
@@ -228,4 +243,4 @@
 			return TRUE
 		return FALSE
 	else
-		return FALSE	
+		return FALSE

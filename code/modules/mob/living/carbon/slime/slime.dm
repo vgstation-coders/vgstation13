@@ -458,9 +458,6 @@
 		return 1 //under effects of time magick
 	return 0
 
-/mob/living/carbon/slime/var/co2overloadtime = null
-
-
 /mob/living/carbon/slime/show_inv(mob/user)
 	return
 

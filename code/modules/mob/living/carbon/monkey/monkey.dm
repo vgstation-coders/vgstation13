@@ -342,8 +342,6 @@
 	internal = null
 	return
 
-/mob/living/carbon/monkey/var/co2overloadtime = null
-
 /mob/living/carbon/monkey/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
