@@ -301,7 +301,7 @@
 	energy_drain = 5
 	uses_ammo = TRUE
 	starts_loaded = FALSE
-	ammo_type = /obj/item/ammo_casing/auto380
+	ammo_type = /obj/item/ammo_casing/c380auto
 	calibers = list(POINT380 = 1)
 	mag_capacity = 100
 	//Only used when uses_ammo = FALSE
