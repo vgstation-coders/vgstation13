@@ -146,7 +146,19 @@
 	board_step[Co_KEY] = peripherals
 
 /datum/construction/reversible/mecha/spawn_result(mob/user as mob)
-	..()
+	if(result)
+		var/obj/mecha/M = new result(get_turf(holder))
+		var/obj/item/mecha_parts/chassis/C = holder
+		var/obj/item/weapon/cell/new_cell = null
+		if(istype(C))
+			new_cell = C.installed_cell
+			C.installed_cell = null
+		if(istype(M))
+			M.replace_cell(new_cell) //Whatever was installed during construction, or nothing
+		else if(new_cell)
+			new_cell.forceMove(get_turf(holder))
+		spawn()
+			QDEL_NULL(holder)
 	feedback_inc("mecha_[base_icon]_created",1)
 	return
 
