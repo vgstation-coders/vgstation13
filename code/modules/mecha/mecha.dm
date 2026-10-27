@@ -255,6 +255,16 @@
 	cell = new cell_type(src)
 	mech_parts.Add(cell)
 
+//Swaps out the current cell for new_cell, deleting the old one. A null new_cell leaves the exosuit without a cell.
+/obj/mecha/proc/replace_cell(var/obj/item/weapon/cell/new_cell)
+	if(cell)
+		mech_parts.Remove(cell)
+		QDEL_NULL(cell)
+	if(new_cell)
+		new_cell.forceMove(src)
+		cell = new_cell
+		mech_parts.Add(cell)
+
 /obj/mecha/proc/add_cabin()
 	cabin_air = new
 	cabin_air.temperature = T20C

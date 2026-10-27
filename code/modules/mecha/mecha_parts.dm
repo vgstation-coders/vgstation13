@@ -16,16 +16,42 @@
 	name="Mecha Chassis"
 	icon_state = "backbone"
 	var/datum/construction/construct
+	var/obj/item/weapon/cell/installed_cell = null //Becomes the finished exosuit's cell. None installed = the exosuit has no cell
 	flags = FPRINT
 	siemens_coefficient = 1
 
+/obj/item/mecha_parts/chassis/Destroy()
+	if(installed_cell)
+		installed_cell.forceMove(get_turf(src))
+		installed_cell = null
+	return ..()
+
 /obj/item/mecha_parts/chassis/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/weapon/cell))
+		if(installed_cell)
+			to_chat(user, "<span class='warning'>There's already a power cell installed in \the [src].</span>")
+		else if(user.drop_item(W, src))
+			installed_cell = W
+			user.visible_message("[user] installs \the [W] into \the [src].", "You install \the [W] into \the [src].")
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		return
 	if(!construct || !construct.action(W, user))
 		..()
 	return
 
-/obj/item/mecha_parts/chassis/attack_hand()
+/obj/item/mecha_parts/chassis/attack_hand(mob/user)
+	if(installed_cell && user.Adjacent(src))
+		user.put_in_hands(installed_cell)
+		user.visible_message("[user] removes \the [installed_cell] from \the [src].", "You remove \the [installed_cell] from \the [src].")
+		installed_cell = null
 	return
+
+/obj/item/mecha_parts/chassis/examine(mob/user)
+	..()
+	if(installed_cell)
+		to_chat(user, "<span class='info'>It has \a [installed_cell] installed. It can be removed by hand.</span>")
+	else
+		to_chat(user, "<span class='info'>It has no power cell installed. Without one, it will be finished without a cell.</span>")
 
 /////////// Ripley
 
