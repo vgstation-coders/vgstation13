@@ -158,6 +158,8 @@
 		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic,
 		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/loaded,
 		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/loaded,
+		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/loaded,
+		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/loaded,
 		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam,
 		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable,
 		//leaving the banana mortar in because its funny

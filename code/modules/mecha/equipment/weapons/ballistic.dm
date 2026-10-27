@@ -10,7 +10,8 @@
 
 	//-------- AMMO SETTINGS --------
 	var/uses_ammo = FALSE //TRUE: fed real ammo_casings that have to be loaded. FALSE: makes projectiles out of power like it used to
-	var/ammo_type = null //Casing type every magazine spawns full of. null = spawns empty and must be loaded by hand
+	var/starts_loaded = FALSE //TRUE: spawns full. FALSE: spawns empty, and has to be loaded (uses_ammo) or rearmed (power) first
+	var/ammo_type = null //Casing type the magazines are filled with when starts_loaded is on. Only used with uses_ammo
 	//-------------------------------
 	var/list/calibers = null //Calibers it accepts when uses_ammo is on, same format as guns: list(CALIBER = 1)
 	var/mag_count = 3 //Number of fixed internal magazines
@@ -21,14 +22,14 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/New()
 	..()
-	projectiles = max_projectiles
+	projectiles = starts_loaded ? max_projectiles : 0
 	if(uses_ammo && (!calibers || mag_capacity <= 0)) //Nothing it could be loaded with, fall back to power
 		uses_ammo = FALSE
 	if(uses_ammo)
 		magazines = new /list(mag_count)
 		for(var/i = 1 to mag_count)
 			var/list/mag = list()
-			if(ammo_type)
+			if(starts_loaded && ammo_type)
 				for(var/j = 1 to mag_capacity)
 					mag += new ammo_type(src)
 			magazines[i] = mag
@@ -256,7 +257,8 @@
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	energy_drain = 5
 	uses_ammo = TRUE
-	ammo_type = null
+	starts_loaded = FALSE
+	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
 	calibers = list(GAUGE12 = 1, GAUGEFLARE = 1)
 	mag_capacity = 7
 	//Only used when uses_ammo = FALSE
@@ -267,7 +269,7 @@
 	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/loaded
-	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
+	starts_loaded = TRUE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/action(atom/target)
 	if(!action_checks(target))
@@ -298,7 +300,8 @@
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	energy_drain = 5
 	uses_ammo = TRUE
-	ammo_type = null
+	starts_loaded = FALSE
+	ammo_type = /obj/item/ammo_casing/auto380
 	calibers = list(POINT380 = 1)
 	mag_capacity = 100
 	//Only used when uses_ammo = FALSE
@@ -309,7 +312,7 @@
 //	var/deviation = 0.3
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/loaded
-	ammo_type = /obj/item/ammo_casing/c380auto
+	starts_loaded = TRUE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/action(atom/target)
 	if(!action_checks(target))
@@ -342,6 +345,7 @@
 	projectile = /obj/item/missile
 	fire_sound = 'sound/weapons/rocket.ogg'
 	max_projectiles = 8
+	starts_loaded = FALSE
 	projectile_energy_cost = 1000
 	equip_cooldown = 60
 	var/missile_speed = 2
@@ -378,12 +382,16 @@
 		..()
 	return
 
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/loaded
+	starts_loaded = TRUE
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang
 	name = "\improper SGL-6 Grenade Launcher"
 	icon_state = "mecha_grenadelnchr"
 	projectile = /obj/item/weapon/grenade/flashbang
 	fire_sound = 'sound/weapons/grenadelauncher.ogg'
 	max_projectiles = 6
+	starts_loaded = FALSE
 	missile_speed = 1.5
 	projectile_energy_cost = 800
 	equip_cooldown = 60
@@ -419,6 +427,12 @@
 	name = "\improper SOP-6 Grenade Launcher"
 	projectile = /obj/item/weapon/grenade/flashbang/clusterbang
 
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/loaded
+	starts_loaded = TRUE
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited
+	starts_loaded = TRUE //Can't rearm, so it comes with its one load
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited/get_equip_info()//Limited version of the clusterbang launcher that can't reload
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[chassis.selected==src?"<b>":"<a href='?src=\ref[chassis];select_equip=\ref[src]'>"][src.name][chassis.selected==src?"</b>":"</a>"]\[[src.projectiles]\]"
 
@@ -426,6 +440,7 @@
 	return//Extra bit of security
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam
+	starts_loaded = TRUE //Not gunpowder, comes stocked
 	name = "\improper Metal Foam Grenade Launcher"
 	desc = "An exosuit-mounted Metal Foam Grenade Launcher. (Can be attached to: Engineering exosuits)"
 	projectile = /obj/item/weapon/grenade/chem_grenade/metalfoam
@@ -439,6 +454,7 @@
 		return ..(M,TRUE)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable
+	starts_loaded = TRUE //Not gunpowder, comes stocked
 	name = "\improper Inflatable Barrier Launcher"
 	desc = "An exosuit-mounted Inflatable Barrier Launcher. (Can be attached to: Engineering exosuits)"
 	projectile = /obj/item/weapon/grenade/inflatable
@@ -494,6 +510,7 @@
 		return ..(M,TRUE)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
+	starts_loaded = TRUE //Not gunpowder, comes stocked
 	name = "\improper Banana Mortar"
 	icon_state = "mecha_bananamrtr"
 	projectile = /obj/item/weapon/bananapeel
@@ -524,6 +541,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/mousetrap_mortar
+	starts_loaded = TRUE //Not gunpowder, comes stocked
 	name = "\improper Mousetrap Mortar"
 	icon_state = "mecha_mousetrapmrtr"
 	projectile = /obj/item/device/assembly/mousetrap
@@ -555,6 +573,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/creampie_mortar //why waste perfectly good food synthetizing technology in solving world hunger when you can have clowntide instead?
+	starts_loaded = TRUE //Not gunpowder, comes stocked
 	name = "\improper Rapid-Fire Cream Pie Mortar"
 	icon_state = "mecha_bananamrtr"
 	projectile = /obj/item/weapon/reagent_containers/food/snacks/pie/empty //because some chucklefuck will try to catch the pie somehow for free nutriment
@@ -586,6 +605,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
+	starts_loaded = TRUE //Not gunpowder, comes stocked
 	name = "\improper PCMK-6 Bolas Launcher"
 	icon_state = "mecha_bolas"
 	projectile = /obj/item/weapon/legcuffs/bolas/mech

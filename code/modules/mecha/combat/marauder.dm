@@ -51,7 +51,7 @@
 /obj/mecha/combat/marauder/New()
 	..()
 	new /obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse(src)
-	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/loaded(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
 	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
 	src.smoke_system.set_up(3, 0, src)
@@ -82,7 +82,7 @@
 			equipment -= ME
 			QDEL_NULL(ME)
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/loaded(src)
-	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/loaded(src)
 	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
 	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
