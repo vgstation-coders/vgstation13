@@ -189,14 +189,12 @@
 		item_overlay.layer = src.layer
 
 		overlays += item_overlay
-		if(istype(shot_from, /obj/item/weapon/gun/hookshot/flesh))
+		if(shot_from)
 			var/obj/item/weapon/gun/hookshot/flesh/hookshot = shot_from
 			hookshot.item_overlay = item_overlay
 
 /obj/item/projectile/hookshot/flesh/drop_item()
 	var/obj/item/weapon/gun/hookshot/flesh/hookshot = shot_from
-	if(!istype(hookshot))
-		return
 	if(!hookshot.item_overlay)
 		item_overlay = null
 		update_icon()
