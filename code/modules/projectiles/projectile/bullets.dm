@@ -199,7 +199,7 @@
 
 /obj/item/projectile/bullet/auto380/to_bump(atom/A)
 	. = ..()
-	if(A && shot_from.type == /obj/item/weapon/gun/projectile/glock/fancy/kitchengun)
+	if(A && shot_from && shot_from.type == /obj/item/weapon/gun/projectile/glock/fancy/kitchengun) //shot_from can be a mech gun, or gone by the time we hit
 		var/obj/item/weapon/gun/projectile/glock/fancy/kitchengun/K = shot_from
 		if(!(A in K.cleaning_targets)) // BUT WITH THREE SHOTS FROM KITCHEN GUN
 			K.cleaning_targets += A // BANG

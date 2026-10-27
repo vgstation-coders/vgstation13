@@ -31,6 +31,9 @@
 
 		if(sleeptime)
 			var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+			if(!istype(hookshot)) //No hookshot to pull chain links from
+				bullet_die()
+				return
 			var/obj/effect/overlay/hookchain/HC = hookshot.links["[length]"]
 			if(!HC)//failsafe to prevent a game-crashing bug tied to missing links.
 				visible_message(failure_message)
@@ -64,7 +67,7 @@
 	return
 
 /obj/item/projectile/hookshot/bullet_die()
-	if(shot_from)
+	if(istype(shot_from, /obj/item/weapon/gun/hookshot))
 		var/obj/item/weapon/gun/hookshot/hookshot = shot_from
 		hookshot.hook = null
 	spawn()
@@ -73,7 +76,7 @@
 
 /obj/item/projectile/hookshot/Destroy()
 	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
-	if(hookshot)
+	if(istype(hookshot))
 		if(!hookshot.clockwerk && !hookshot.rewinding)
 			hookshot.rewind_chain()
 		hookshot.hook = null

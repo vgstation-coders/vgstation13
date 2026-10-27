@@ -157,24 +157,214 @@
 	var/projectiles
 	var/projectile_energy_cost
 
+	//Real ammo. If calibers is set, the weapon is fed actual ammo_casings instead of synthesizing projectiles out of power
+	var/list/calibers = null //Same format as guns, list(CALIBER = 1)
+	var/mag_count = 3 //Number of fixed internal magazines
+	var/mag_capacity = 0 //Rounds per magazine
+	var/list/magazines = null //List of lists of ammo_casings
+	var/current_mag = 1
+	var/starting_ammo_type = null //Only set on pre-equipped variants. Fabricated guns start empty and must be loaded by hand
+	var/loading = FALSE
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/New()
 	..()
 	projectiles = max_projectiles
+	if(uses_real_ammo())
+		magazines = new /list(mag_count)
+		for(var/i = 1 to mag_count)
+			var/list/mag = list()
+			if(starting_ammo_type)
+				for(var/j = 1 to mag_capacity)
+					mag += new starting_ammo_type(src)
+			magazines[i] = mag
 
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/Destroy()
+	if(magazines)
+		for(var/list/mag in magazines)
+			for(var/obj/item/ammo_casing/AC in mag)
+				qdel(AC)
+			mag.Cut()
+		magazines = null
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/uses_real_ammo()
+	return calibers && mag_capacity > 0
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/rounds_left()
+	if(!uses_real_ammo())
+		return projectiles
+	. = 0
+	for(var/list/mag in magazines)
+		. += mag.len
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/can_take_round(var/obj/item/ammo_casing/AC)
+	return istype(AC) && AC.BB && calibers[AC.caliber]
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/free_space()
+	. = 0
+	for(var/list/mag in magazines)
+		. += mag_capacity - mag.len
+
+//Puts a casing into the first magazine with room, starting with the selected one
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/insert_round(var/obj/item/ammo_casing/AC)
+	for(var/i = 0 to mag_count - 1)
+		var/list/mag = magazines[((current_mag - 1 + i) % mag_count) + 1]
+		if(mag.len < mag_capacity)
+			mag += AC
+			AC.forceMove(src)
+			return TRUE
+	return FALSE
+
+//Whether this weapon would accept anything from W right now
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/accepts_ammo(var/obj/item/W)
+	if(!uses_real_ammo() || !free_space())
+		return FALSE
+	if(istype(W, /obj/item/ammo_casing))
+		return can_take_round(W)
+	if(istype(W, /obj/item/ammo_storage))
+		var/obj/item/ammo_storage/AS = W
+		for(var/obj/item/ammo_casing/AC in AS.stored_ammo)
+			if(can_take_round(AC))
+				return TRUE
+	return FALSE
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/load_ammo(var/obj/item/W, var/mob/user)
+	if(!accepts_ammo(W))
+		return 0
+	var/atom/holder = chassis ? chassis : src
+	if(istype(W, /obj/item/ammo_casing))
+		if(!user.drop_item(W, src, failmsg = TRUE))
+			return 0
+		if(!insert_round(W)) //Should not happen, accepts_ammo checked for space
+			W.forceMove(get_turf(holder))
+			return 0
+		playsound(holder, 'sound/weapons/magazine_load_click.ogg', 50, 1)
+		to_chat(user, "<span class='notice'>You load \the [W] into \the [src].</span>")
+		update_equip_info()
+		return 1
+	var/obj/item/ammo_storage/AS = W
+	if(loading || AS.reloading)
+		return 0
+	loading = TRUE
+	AS.reloading = TRUE
+	user.visible_message("<span class='notice'>[user] starts feeding rounds from \the [AS] into \the [holder]'s [src.name].</span>", \
+		"<span class='notice'>You start feeding rounds from \the [AS] into \the [src].</span>")
+	var/loaded = 0
+	if(do_after(user, holder, 2 SECONDS))
+		for(var/obj/item/ammo_casing/AC in AS.stored_ammo.Copy())
+			if(!free_space())
+				break
+			if(!can_take_round(AC))
+				continue
+			AS.stored_ammo -= AC
+			insert_round(AC)
+			loaded++
+	AS.reloading = FALSE
+	loading = FALSE
+	if(loaded)
+		AS.update_icon()
+		playsound(holder, AS.reload_sound, 50, 1)
+		to_chat(user, "<span class='notice'>You load [loaded] round\s from \the [AS] into \the [src].</span>")
+		update_equip_info()
+	return loaded
+
+//Takes the next round, switching to the next non-empty magazine if the current one is dry
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/pop_round()
+	var/list/mag = magazines[current_mag]
+	if(!mag.len)
+		for(var/i = 1 to mag_count - 1)
+			var/next = ((current_mag - 1 + i) % mag_count) + 1
+			var/list/other = magazines[next]
+			if(other.len)
+				current_mag = next
+				mag = other
+				occupant_message("Magazine empty, switching to magazine [current_mag].", TRUE)
+				break
+	if(!mag.len)
+		return null
+	var/obj/item/ammo_casing/AC = mag[mag.len]
+	mag.len--
+	return AC
+
+//Fires one real round at target, ejecting the spent casing. Returns FALSE if out of ammo.
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/fire_round(atom/target, turf/curloc, turf/targloc)
+	var/obj/item/ammo_casing/AC = pop_round()
+	if(!AC)
+		return FALSE
+	var/obj/item/projectile/A = AC.BB
+	AC.BB = null
+	AC.forceMove(curloc)
+	AC.update_icon()
+	if(!A)
+		return TRUE
+	A.forceMove(curloc)
+	A.firer = chassis.occupant
+	A.shot_from = src
+	A.original = target
+	A.current = curloc
+	A.starting = curloc
+	A.yo = targloc.y - curloc.y
+	A.xo = targloc.x - curloc.x
+	A.OnFired()
+	A.process()
+	return TRUE
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/cycle_magazine()
+	current_mag = (current_mag % mag_count) + 1
+	var/list/mag = magazines[current_mag]
+	occupant_message("Switched to magazine [current_mag] ([mag.len]/[mag_capacity]).")
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/eject_magazine()
+	var/list/mag = magazines[current_mag]
+	if(!mag.len)
+		occupant_message("Magazine [current_mag] is already empty.")
+		return
+	var/turf/T = get_turf(src)
+	for(var/obj/item/ammo_casing/AC in mag)
+		AC.forceMove(T)
+		AC.update_icon()
+	occupant_message("Dumped [mag.len] round\s from magazine [current_mag].")
+	log_message("Unloaded magazine [current_mag].")
+	mag.Cut()
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/attackby(obj/item/W, mob/user)
+	if(load_ammo(W, user))
+		return
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/examine(mob/user)
+	..()
+	if(uses_real_ammo())
+		for(var/i = 1 to mag_count)
+			var/list/mag = magazines[i]
+			to_chat(user, "<span class='info'>Magazine [i]: [mag.len]/[mag_capacity] rounds.</span>")
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/alt_action()
-	rearm()
+	if(uses_real_ammo())
+		cycle_magazine()
+	else
+		rearm()
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/action_checks(atom/target)
 	if(..())
-		if(projectiles > 0)
+		if(rounds_left() > 0)
 			return 1
+		if(uses_real_ammo() && chassis)
+			playsound(chassis, 'sound/weapons/empty.ogg', 50, 1)
+			occupant_message("<span class='warning'>\The [src] is out of ammunition!</span>", TRUE)
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/get_equip_info()
+	if(uses_real_ammo())
+		var/list/mag = magazines[current_mag]
+		return "[..()]\[Mag [current_mag]/[mag_count]: [mag.len]/[mag_capacity] | [rounds_left()] total\] - <a href='?src=\ref[src];cycle_mag=1'>Next mag</a> - <a href='?src=\ref[src];eject_mag=1'>Unload</a>"
 	return "[..()]\[[src.projectiles]\][(src.projectiles < src.max_projectiles)?" - <a href='?src=\ref[src];rearm=1'>Rearm</a>":null]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/rearm()
+	if(uses_real_ammo())
+		return
 	if(projectiles < max_projectiles)
 		var/projectiles_to_add = max_projectiles - projectiles
 		while(chassis.get_charge() >= projectile_energy_cost && projectiles_to_add)
@@ -191,6 +381,11 @@
 		return TRUE
 	if (href_list["rearm"])
 		src.rearm()
+	if(uses_real_ammo())
+		if(href_list["cycle_mag"])
+			cycle_magazine()
+		if(href_list["eject_mag"])
+			eject_magazine()
 	return
 
 
@@ -198,12 +393,15 @@
 	name = "\improper LBX AC 10 \"Scattershot\""
 	icon_state = "mecha_scatter"
 	equip_cooldown = 20
-	projectile = /obj/item/projectile/bullet/buckshot
 	fire_sound = 'sound/weapons/shotgun.ogg'
-	max_projectiles = 20
-	projectile_energy_cost = 25
+	energy_drain = 5
+	calibers = list(GAUGE12 = 1, GAUGEFLARE = 1)
+	mag_capacity = 7
 	var/projectiles_per_shot = 1
 	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/loaded
+	starting_ammo_type = /obj/item/ammo_casing/shotgun/buckshot
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/action(atom/target)
 	if(!action_checks(target))
@@ -211,28 +409,14 @@
 	var/originaltarget = target
 	var/turf/curloc = get_turf(chassis)
 	var/turf/targloc = get_turf(target)
-	if(!curloc || !targloc)
+	if(!curloc || !targloc || targloc == curloc)
 		return
-//	var/target_x = targloc.x
-//	var/target_y = targloc.y
-//	var/target_z = targloc.z
-//	targloc = null
-	for(var/i=1 to min(projectiles, projectiles_per_shot))
-//		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
-		if(!targloc || targloc == curloc)
+	set_ready_state(0)
+	chassis.use_power(energy_drain)
+	for(var/i=1 to projectiles_per_shot)
+		if(!fire_round(target, curloc, targloc))
 			break
 		playsound(chassis, fire_sound, 80, 1)
-		var/obj/item/projectile/A = new projectile(curloc)//new projectile(curloc)
-		src.projectiles--
-		A.firer = chassis.occupant
-		A.original = target
-		A.current = curloc
-		A.starting = curloc
-		A.yo = targloc.y - curloc.y
-		A.xo = targloc.x - curloc.x
-		set_ready_state(0)
-		A.OnFired()
-		A.process()
 	log_message("Fired from [src.name], targeting [originaltarget].")
 	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
 	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
@@ -245,43 +429,33 @@
 	name = "\improper Ultra AC 2"
 	icon_state = "mecha_uac2"
 	equip_cooldown = 10
-	projectile = /obj/item/projectile/bullet/weakbullet/mech
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
-	max_projectiles = 300
-	projectile_energy_cost = 20
+	energy_drain = 5
+	calibers = list(POINT380 = 1)
+	mag_capacity = 100
 	var/projectiles_per_shot = 3
 //	var/deviation = 0.3
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/loaded
+	starting_ammo_type = /obj/item/ammo_casing/c380auto
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/action(atom/target)
 	if(!action_checks(target))
 		return
 	var/originaltarget = target
 	var/turf/targloc = get_turf(target)
-//	var/target_x = targloc.x
-//	var/target_y = targloc.y
-//	var/target_z = targloc.z
-//	targloc = null
-	spawn	for(var/i=1 to min(projectiles, projectiles_per_shot))
+	chassis.use_power(energy_drain)
+	spawn	for(var/i=1 to projectiles_per_shot)
 		if(!chassis)
 			break
 		var/turf/curloc = get_turf(chassis)
-//		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
 		if (!targloc || !curloc)
 			continue
 		if (targloc == curloc)
 			continue
-
+		if(!fire_round(target, curloc, targloc))
+			break
 		playsound(chassis, fire_sound, 50, 1)
-		var/obj/item/projectile/A = new projectile(curloc)
-		src.projectiles--
-		A.firer = chassis.occupant
-		A.original = target
-		A.current = curloc
-		A.starting = curloc
-		A.yo = targloc.y - curloc.y
-		A.xo = targloc.x - curloc.x
-		A.OnFired()
-		A.process()
 		sleep(2)
 	set_ready_state(0)
 	log_message("Fired from [src.name], targeting [originaltarget].")
@@ -613,6 +787,8 @@
 		/obj/item/mecha_parts/mecha_equipment/weapon,
 		/obj/item/mecha_parts/mecha_equipment/weapon/energy,
 		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic,
+		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/loaded,
+		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/loaded,
 		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam,
 		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable,
 		//leaving the banana mortar in because its funny

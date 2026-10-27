@@ -81,7 +81,7 @@
 		for(ME in equipment)
 			equipment -= ME
 			QDEL_NULL(ME)
-	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/loaded(src)
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
 	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)

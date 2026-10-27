@@ -38,9 +38,10 @@
 	icon_state = "ricochet_head_t"
 
 /obj/item/projectile/ricochet/OnFired()	//The direction and position of the projectile when it spawns depends heavily on where the player clicks.
-	var/turf/T1 = get_turf(shot_from)	//From a single turf, a player can fire the ricochet rifle in 8 different directions.
+	var/turf/T1 = get_turf(shot_from ? shot_from : src)	//From a single turf, a player can fire the ricochet rifle in 8 different directions.
 	var/turf/T2 = get_turf(original)
-	shot_from.update_icon()
+	if(shot_from)
+		shot_from.update_icon()
 	var/X = T2.x - T1.x
 	var/Y = T2.y - T1.y
 	var/X_spawn = 0
