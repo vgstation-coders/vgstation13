@@ -11321,6 +11321,15 @@
 	},
 /turf/simulated/floor/plating,
 /area/hallway/secondary/exit)
+"byN" = (
+/obj/structure/disposalpipe/junction{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "dark vault stripe"
+	},
+/area/bridge)
 "byQ" = (
 /obj/machinery/shield_gen,
 /obj/structure/cable{
@@ -13434,7 +13443,8 @@
 	id_tag = "VoxTrade";
 	name = "Door Bolt Control";
 	pixel_y = 25;
-	specialfunctions = 4
+	specialfunctions = 4;
+	normaldoorcontrol = 1
 	},
 /obj/machinery/light/small{
 	dir = 4
@@ -37417,8 +37427,8 @@
 	},
 /area/hallway/secondary/entry)
 "eHR" = (
-/turf/simulated/floor/carpet{
-	icon_state = "carpet10-8"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/security/hos)
 "eHY" = (
@@ -41286,6 +41296,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/disposalpipe/segment,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
 /area/medical/virology)
 "fgy" = (
@@ -56149,9 +56160,7 @@
 /area/maintenance/asmaint)
 "heJ" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
-	},
+/turf/simulated/floor/carpet,
 /area/security/hos)
 "heM" = (
 /obj/structure/cable/yellow{
@@ -62255,6 +62264,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/disposalpipe/trunk{
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "darkblue"
 	},
@@ -64274,9 +64286,7 @@
 	pixel_y = 5
 	},
 /obj/item/device/megaphone,
-/turf/simulated/floor/carpet{
-	icon_state = "carpet13-5"
-	},
+/turf/simulated/floor/carpet,
 /area/security/hos)
 "iln" = (
 /obj/machinery/light/small{
@@ -79407,18 +79417,13 @@
 	},
 /area/medical/genetics)
 "kiP" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/visible,
-/turf/simulated/floor/plating,
+/obj/machinery/door/airlock/external{
+	req_access_txt = "24"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/engineering/atmos)
 "kjb" = (
 /obj/structure/grille,
@@ -87354,16 +87359,13 @@
 	name = "\improper Abandoned Warehouse"
 	})
 "lhM" = (
-/obj/machinery/door_control{
-	id_tag = "VoxTrade";
-	name = "Door Bolt Control";
-	pixel_y = 25;
-	specialfunctions = 4
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/mine/explored)
+/turf/space,
+/area/engineering/atmos)
 "lhP" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -91871,6 +91873,16 @@
 	icon_state = "red"
 	},
 /area/engineering/burn_chamber)
+"lIM" = (
+/obj/machinery/door_control{
+	id_tag = "VoxTrade";
+	name = "Door Bolt Control";
+	specialfunctions = 4;
+	pixel_y = -6;
+	normaldoorcontrol = 1
+	},
+/turf/simulated/wall,
+/area/vox_trading_post/trade_processing)
 "lIS" = (
 /obj/structure/closet/crate/secure/loot/bay_06,
 /turf/unsimulated/floor{
@@ -99337,8 +99349,8 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet6-2"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/security/hos)
 "mHb" = (
@@ -104627,6 +104639,14 @@
 /obj/structure/window/full/reinforced,
 /turf/unsimulated/floor,
 /area/centcom/control)
+"npW" = (
+/obj/machinery/door/airlock/external{
+	req_access_txt = "24"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/engineering/atmos)
 "nql" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -104706,8 +104726,8 @@
 	})
 "nqT" = (
 /obj/machinery/computer/security,
-/turf/simulated/floor/carpet{
-	icon_state = "carpet9-4"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/security/hos)
 "nrc" = (
@@ -106637,6 +106657,17 @@
 /area/maintenance/apmaint{
 	name = "Fore Port Maintenance"
 	})
+"nES" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/space,
+/area/engineering/atmos)
 "nEW" = (
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'RADIOACTIVE AREA'";
@@ -107357,9 +107388,7 @@
 	},
 /obj/machinery/recharger,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/carpet{
-	icon_state = "carpet13-5"
-	},
+/turf/simulated/floor/carpet,
 /area/security/hos)
 "nJt" = (
 /obj/structure/grille,
@@ -109370,13 +109399,13 @@
 /turf/simulated/floor,
 /area/hallway/primary/fore)
 "nYb" = (
+/obj/machinery/atmospherics/pipe/simple/filtering/visible,
 /obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'VACUUM'";
+	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
 	icon_state = "space";
-	name = "VACUUM";
+	name = "EXTERNAL AIRLOCK";
 	pixel_x = 32
 	},
-/obj/machinery/atmospherics/pipe/simple/filtering/visible,
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "dark floor stripe";
@@ -119566,8 +119595,8 @@
 	})
 "pnb" = (
 /obj/machinery/computer/secure_data,
-/turf/simulated/floor/carpet{
-	icon_state = "carpet5-1"
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/security/hos)
 "pnd" = (
@@ -124357,10 +124386,6 @@
 	pixel_x = 5;
 	pixel_y = -8
 	},
-/obj/machinery/door_control{
-	id_tag = "HOPBed";
-	name = "Smart Glass Control"
-	},
 /obj/structure/window/reinforced/tinted{
 	dir = 1
 	},
@@ -127845,7 +127870,8 @@
 	id_tag = "VoxTrade";
 	name = "Door Bolt Control";
 	pixel_y = -25;
-	specialfunctions = 4
+	specialfunctions = 4;
+	normaldoorcontrol = 1
 	},
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
@@ -131578,6 +131604,20 @@
 	icon_state = "yellow"
 	},
 /area/research_outpost/entry)
+"qMX" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
+	icon_state = "space";
+	name = "EXTERNAL AIRLOCK";
+	pixel_y = -32
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/engineering/atmos)
 "qMZ" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -133754,10 +133794,10 @@
 "rab" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/visible,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
 /turf/simulated/floor/plating,
 /area/engineering/atmos)
 "rac" = (
@@ -150305,10 +150345,11 @@
 	name = "Engineering Outpost"
 	})
 "tiN" = (
-/obj/item/weapon/melee/baton/cattleprod,
 /obj/machinery/media/receiver/boombox/wallmount/muzak{
 	pixel_x = -32
 	},
+/obj/item/dictionary/vox,
+/obj/item/weapon/melee/baton/cattleprod,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/maintroom{
 	name = "\improper Vox Maintenance"
@@ -156925,6 +156966,12 @@
 /area/crew_quarters/sleep)
 "tYI" = (
 /obj/machinery/atmospherics/pipe/simple/filtering/visible,
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
+	icon_state = "space";
+	name = "EXTERNAL AIRLOCK";
+	pixel_y = -32
+	},
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "red"
@@ -160056,6 +160103,9 @@
 /obj/structure/cable/yellow{
 	d2 = 4;
 	icon_state = "0-4"
+	},
+/obj/machinery/light/small{
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -165124,7 +165174,8 @@
 	name = "External Airlock Bolts";
 	pixel_y = -25;
 	specialfunctions = 4;
-	req_one_access_txt = "1;4"
+	req_one_access_txt = "1;4";
+	normaldoorcontrol = 1
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -171202,9 +171253,7 @@
 	level = 2;
 	on = 1
 	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpet14-10"
-	},
+/turf/simulated/floor/carpet,
 /area/security/hos)
 "vNH" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -173163,7 +173212,8 @@
 	id_tag = "VoxTrade";
 	name = "Door Bolt Control";
 	pixel_y = -25;
-	specialfunctions = 4
+	specialfunctions = 4;
+	normaldoorcontrol = 1
 	},
 /obj/machinery/light_switch{
 	pixel_y = -23;
@@ -176835,14 +176885,14 @@
 	},
 /area/security/prison)
 "wvv" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'VACUUM'";
-	icon_state = "space";
-	name = "VACUUM";
-	pixel_x = 32
-	},
 /obj/machinery/atmospherics/pipe/manifold/insulated/visible/blue{
 	dir = 4
+	},
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
+	icon_state = "space";
+	name = "EXTERNAL AIRLOCK";
+	pixel_x = 32
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -185444,6 +185494,12 @@
 /area)
 "xAz" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
+	icon_state = "space";
+	name = "EXTERNAL AIRLOCK";
+	pixel_y = 32
+	},
 /turf/simulated/wall/r_wall,
 /area/crew_quarters/captain)
 "xAB" = (
@@ -286517,8 +286573,8 @@ sPC
 eKr
 xrd
 arK
-kBG
-kBG
+npW
+nES
 kBG
 gJo
 gJo
@@ -287019,8 +287075,8 @@ iHB
 kkt
 kPf
 hLb
-kBG
-kBG
+qMX
+lhM
 kBG
 kBG
 gJo
@@ -312087,7 +312143,7 @@ aXm
 tGb
 fwP
 fmJ
-mlg
+byN
 hVy
 qfI
 qfI
@@ -1367717,8 +1367773,8 @@ vZd
 dHe
 bLX
 qpM
-xAQ
-lhM
+lIM
+eUV
 adU
 sWU
 nmC
