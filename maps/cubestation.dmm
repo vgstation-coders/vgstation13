@@ -2049,6 +2049,7 @@
 /area/vox_trading_post/atmos)
 "aoy" = (
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	icon_state = "neutralcorner"
 	},
@@ -2109,6 +2110,20 @@
 	icon_state = "dark blue stripe"
 	},
 /area/teleporter)
+"aoZ" = (
+/obj/structure/fence{
+	dir = 1;
+	name = "space fence";
+	desc = "It's a fence. It's in space. Space fence!"
+	},
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000";
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area)
 "apb" = (
 /obj/machinery/camera{
 	name = "Prison Cafetaria North"
@@ -7982,6 +7997,17 @@
 	},
 /turf/simulated/floor/plating,
 /area/medical/genetics)
+"bcf" = (
+/obj/machinery/computer/slot_machine{
+	name = "Lords of Loot"
+	},
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
+	},
+/turf/simulated/floor/carpet,
+/area/maintenance/ghettotheatre)
 "bch" = (
 /obj/structure/closet/firecloset,
 /obj/machinery/requests_console{
@@ -17837,6 +17863,7 @@
 	name = "Firelock North"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "neutral"
@@ -18919,6 +18946,7 @@
 /area/supply/miningdock)
 "cwc" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "neutral"
@@ -19348,6 +19376,9 @@
 "cyI" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk{
+	dir = 1
+	},
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "neutral"
@@ -24749,9 +24780,8 @@
 /area/turret_protected/tcomms_control_room)
 "deR" = (
 /obj/effect/decal/cleanable/cobweb,
-/obj/structure/disposalpipe/segment{
-	dir = 1;
-	icon_state = "pipe-c"
+/obj/structure/disposalpipe/junction{
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -26749,6 +26779,27 @@
 	},
 /turf/simulated/floor,
 /area/storage/primary)
+"dro" = (
+/obj/structure/disposalpipe/trunk{
+	dir = 1;
+	color = "#FF0000";
+	name = "security deployment pipe";
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station."
+	},
+/obj/structure/sign/deathsposal{
+	pixel_x = -32;
+	desc = "A warning sign which reads 'DISPOSAL LEADS TO SPACE'. Security officers should use this to get to space surrounding the station, rather than this tiny enclosed area."
+	},
+/obj/machinery/disposal/deliveryChute{
+	desc = "A deep red chute designed to deploy the station's highly trained security officers to the external ring of the station. This side may randomly despense syndicate agents, however.";
+	name = "security chute";
+	color = "#FF0000"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
 "drr" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 9
@@ -32425,6 +32476,7 @@
 /area/maintenance/fore)
 "dZu" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor,
 /area/crew_quarters/sleep_male{
 	name = "\improper Xeno Dorm"
@@ -33390,6 +33442,14 @@
 	icon_state = "dark purple stripe"
 	},
 /area/centcom/ert)
+"efE" = (
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
+	},
+/turf/simulated/floor/wood,
+/area/maintenance/ghettotheatre)
 "efP" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -33913,6 +33973,9 @@
 	d1 = 1;
 	d2 = 8;
 	icon_state = "1-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 2;
@@ -48104,6 +48167,9 @@
 	icon_state = "4-8"
 	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "neutralcorner"
@@ -52351,6 +52417,11 @@
 "gFf" = (
 /obj/item/weapon/stool{
 	pixel_y = 8
+	},
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
 	},
 /turf/simulated/floor/carpet,
 /area/maintenance/ghettotheatre)
@@ -57320,6 +57391,13 @@
 	dir = 8;
 	desc = "It's a fence. It's in space. Space fence!";
 	name = "space fence"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 8;
+	icon_state = "pipe-c";
+	name = "security deployment pipe";
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	color = "#FF0000"
 	},
 /turf/simulated/floor/plating/airless,
 /area)
@@ -72174,6 +72252,17 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
+"jnM" = (
+/obj/machinery/computer/slot_machine{
+	name = "One-Armed Bandit"
+	},
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
+	},
+/turf/simulated/floor/carpet,
+/area/maintenance/ghettotheatre)
 "jnP" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -74052,6 +74141,14 @@
 /obj/abstract/map/spawner/maint/lowchance,
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
+"jBg" = (
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "loading_area";
+	tag = "icon-loading_area (WEST)"
+	},
+/turf/simulated/floor/plating,
+/area/mine/production)
 "jBv" = (
 /obj/machinery/door/airlock/maintenance{
 	req_access_txt = "55";
@@ -74829,6 +74926,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/effect/decal/cleanable/scattered_sand,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "neutral"
@@ -79322,6 +79420,20 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/visible,
 /turf/simulated/floor/plating,
 /area/engineering/atmos)
+"kjb" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
 "kjq" = (
 /obj/machinery/atmospherics/unary/portables_connector,
 /turf/simulated/floor{
@@ -79996,6 +80108,9 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
 	name = "Firelock East"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "neutral"
@@ -80767,6 +80882,12 @@
 	req_access_txt = "63";
 	desc = "A fence door with a door latch. It can only be opened and closed from one direction. Also it's in space!";
 	name = "secure spacen fence door"
+	},
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000";
+	dir = 4
 	},
 /turf/simulated/floor/plating/airless,
 /area)
@@ -81573,6 +81694,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 2;
 	icon_state = "neutral"
@@ -81640,6 +81764,9 @@
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "neutralcorner"
@@ -83594,6 +83721,11 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/disposalpipe/segment{
 	dir = 4
+	},
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
 	},
 /turf/simulated/floor/carpet,
 /area/maintenance/ghettotheatre)
@@ -92410,6 +92542,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "neutralcorner"
@@ -96250,6 +96385,15 @@
 "mmS" = (
 /turf/simulated/wall/r_wall,
 /area/security/checkpoint2)
+"mmU" = (
+/obj/effect/decal/cleanable/generic,
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
+	},
+/turf/simulated/floor/wood,
+/area/maintenance/ghettotheatre)
 "mmY" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced/plasma,
@@ -98109,6 +98253,9 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "neutralcorner"
@@ -102118,6 +102265,11 @@
 	name = "space fence";
 	desc = "It's a fence. It's in space. Space fence!"
 	},
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
+	},
 /turf/simulated/floor/plating/airless,
 /area)
 "nbk" = (
@@ -104252,6 +104404,14 @@
 	icon_state = "yellow"
 	},
 /area/engineering/atmos_control)
+"noB" = (
+/obj/machinery/door/airlock/glass{
+	name = "Bar"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/crew_quarters/bar)
 "noH" = (
 /obj/structure/closet/firecloset,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -109896,6 +110056,17 @@
 	},
 /turf/simulated/floor/plating,
 /area/supply/sorting)
+"oef" = (
+/obj/structure/disposalpipe/segment{
+	dir = 8;
+	icon_state = "pipe-c";
+	name = "security deployment pipe";
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	color = "#FF0000"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area)
 "oeg" = (
 /obj/machinery/computer/station_alert,
 /turf/unsimulated/floor{
@@ -114143,6 +114314,9 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "oDU" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "neutralcorner"
@@ -116560,6 +116734,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 8
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "neutral"
@@ -117417,6 +117592,24 @@
 	icon_state = "dark"
 	},
 /area/chapel/office)
+"paR" = (
+/obj/structure/disposalpipe/trunk{
+	dir = 2;
+	color = "#FF0000";
+	name = "security deployment pipe";
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station."
+	},
+/obj/machinery/disposal/deliveryChute{
+	desc = "A deep red chute designed to deploy the station's highly trained security officers to the external ring of the station. It's like a pez dispenser, but for assholes.";
+	name = "security chute";
+	color = "#FF0000";
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
 "pbb" = (
 /obj/machinery/door_control{
 	desc = "A remote control-switch.";
@@ -119766,16 +119959,19 @@
 	name = "\improper Syndicate Moon Base"
 	})
 "poX" = (
-/obj/machinery/door_control{
-	id_tag = "prison_sec_eva_ext_airlock";
-	name = "External Airlock Bolts";
-	specialfunctions = 4;
-	req_one_access_txt = "1;4";
-	pixel_x = 28;
-	normaldoorcontrol = 1
+/obj/structure/fence{
+	dir = 1;
+	name = "space fence";
+	desc = "It's a fence. It's in space. Space fence!"
 	},
-/obj/structure/lattice,
-/turf/space,
+/obj/structure/disposalpipe/segment{
+	dir = 4;
+	icon_state = "pipe-c";
+	name = "security deployment pipe";
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	color = "#FF0000"
+	},
+/turf/simulated/floor/plating/airless,
 /area)
 "pph" = (
 /obj/structure/cable/yellow{
@@ -120326,6 +120522,9 @@
 	},
 /obj/effect/decal/cleanable/soot,
 /obj/effect/decal/cleanable/ash,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 2;
 	icon_state = "neutral"
@@ -124238,6 +124437,19 @@
 	icon_state = "floor2"
 	},
 /area/shuttle/mining/station)
+"pSg" = (
+/obj/structure/fence{
+	dir = 4;
+	desc = "It's a fence. It's in space. Space fence!";
+	name = "space fence"
+	},
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
 "pSi" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -124374,6 +124586,9 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 2;
@@ -130809,6 +131024,7 @@
 	})
 "qIM" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor,
 /area/crew_quarters/sleep_male{
 	name = "\improper Xeno Dorm"
@@ -133133,6 +133349,17 @@
 	dir = 4
 	},
 /area/engineering/mechanics)
+"qXb" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4;
+	icon_state = "pipe-c";
+	name = "security deployment pipe";
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	color = "#FF0000"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area)
 "qXd" = (
 /obj/structure/disposalpipe/junction{
 	dir = 2;
@@ -136647,6 +136874,9 @@
 	name = "export disposal pipe";
 	color = "#4287f5"
 	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/bar)
 "rvF" = (
@@ -137241,6 +137471,10 @@
 	},
 /turf/simulated/floor/wood,
 /area/security/vacantoffice)
+"rzX" = (
+/obj/structure/closet/emcloset,
+/turf/simulated/floor/plating,
+/area/engineering/reactor_room)
 "rzY" = (
 /obj/structure/signpost,
 /turf/unsimulated/floor/grass,
@@ -141632,6 +141866,19 @@
 	icon_state = "dark"
 	},
 /area/vox_trading_post/trade_processing)
+"sfc" = (
+/obj/machinery/door_control{
+	id_tag = "prison_sec_eva_ext_airlock";
+	name = "External Airlock Bolts";
+	specialfunctions = 4;
+	req_one_access_txt = "1;4";
+	normaldoorcontrol = 1;
+	pixel_y = 2
+	},
+/turf/simulated/wall/r_wall,
+/area/prison/control{
+	name = "\improper Prison Security Control"
+	})
 "sfh" = (
 /turf/simulated/wall,
 /area/security/detectives_office)
@@ -144445,6 +144692,15 @@
 /area/mine/living_quarters{
 	name = "Mining Station Dorms"
 	})
+"szE" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/crew_quarters/sleep_male{
+	name = "\improper Xeno Dorm"
+	})
 "szF" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -144880,6 +145136,9 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 2;
@@ -147358,6 +147617,7 @@
 	dir = 8
 	},
 /obj/effect/decal/cleanable/scattered_sand,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "neutral"
@@ -148984,6 +149244,9 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "neutralcorner"
 	},
@@ -152612,6 +152875,9 @@
 	icon_state = "4-8"
 	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 2;
 	icon_state = "neutral"
@@ -156469,6 +156735,20 @@
 	icon_state = "brown"
 	},
 /area/supply/storage)
+"tXw" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
 "tXA" = (
 /turf/simulated/floor/server/bluegrid,
 /area/tcomms/chamber)
@@ -157250,6 +157530,17 @@
 	},
 /area/hallway/secondary/podescape1{
 	name = "Escape Pod Station"
+	})
+"uej" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "neutral"
+	},
+/area/crew_quarters/sleep_male{
+	name = "\improper Xeno Dorm"
 	})
 "uek" = (
 /obj/structure/disposalpipe/segment{
@@ -168832,6 +169123,10 @@
 /area/maintenance/fore)
 "vBs" = (
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/disposalpipe/segment{
+	dir = 1;
+	icon_state = "pipe-c"
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "neutral"
@@ -176972,6 +177267,7 @@
 /area/security/main)
 "wyn" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor,
 /area/crew_quarters/sleep_male{
 	name = "\improper Xeno Dorm"
@@ -179470,6 +179766,19 @@
 	icon_state = "plating"
 	},
 /area/centcom/holding)
+"wPc" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
+	},
+/turf/simulated/floor/plating,
+/area/maintenance/ghettotheatre)
 "wPe" = (
 /obj/machinery/r_n_d/fabricator/mech{
 	output_dir = 1
@@ -180104,6 +180413,10 @@
 "wSW" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 2;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor,
 /area/crew_quarters/sleep_male{
@@ -182098,6 +182411,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1
 	},
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "neutral"
@@ -182330,6 +182644,16 @@
 	icon_state = "wood-broken"
 	},
 /area/security/vacantoffice)
+"xgH" = (
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000";
+	dir = 4
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area)
 "xgJ" = (
 /obj/machinery/mech_bay_recharge_floor{
 	icon_state = "support_lattice";
@@ -182885,6 +183209,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/disposalpipe/segment,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "neutral"
@@ -185108,6 +185433,15 @@
 	general_area_name = "Off-Station";
 	icon_state = "engine"
 	})
+"xAy" = (
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area)
 "xAz" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/wall/r_wall,
@@ -186007,6 +186341,10 @@
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/bot/farmbot{
+	desc = "Serving 25 to life for drowning a botanist.";
+	name = "Prisoner 545"
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -187745,6 +188083,11 @@
 	dir = 4
 	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/disposalpipe/segment{
+	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
+	name = "security deployment pipe";
+	color = "#FF0000"
+	},
 /turf/simulated/floor/carpet,
 /area/maintenance/ghettotheatre)
 "xSz" = (
@@ -273102,7 +273445,7 @@ skg
 slT
 jtN
 dng
-dng
+rzX
 mqZ
 blF
 hYt
@@ -301169,7 +301512,7 @@ ktA
 iiR
 mNK
 rga
-urg
+kjb
 djU
 cnM
 wqx
@@ -301189,7 +301532,7 @@ wqx
 wqx
 nfI
 ayc
-urg
+kjb
 aSw
 oEm
 vCY
@@ -301671,7 +302014,7 @@ uBD
 iiR
 mNK
 rga
-shl
+noB
 ayc
 fPq
 oSy
@@ -301691,7 +302034,7 @@ bqu
 wko
 oAA
 ayc
-shl
+noB
 aSw
 oFm
 iag
@@ -302193,7 +302536,7 @@ oOA
 uBk
 dsm
 ayc
-aOV
+tXw
 aSw
 oFm
 iag
@@ -308621,19 +308964,19 @@ its
 pAX
 aBp
 aBp
-lNH
-kBG
-gJo
-gJo
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+poX
+xAy
+xAy
+xAy
+xAy
+xAy
+xAy
+xAy
+xAy
+xAy
+xAy
+xAy
+dro
 eSa
 kBG
 fdm
@@ -309123,7 +309466,7 @@ sWa
 pAX
 aBp
 aBp
-lNH
+aoZ
 gJo
 gJo
 kBG
@@ -309625,7 +309968,7 @@ dRL
 kjs
 aBp
 aBp
-lNH
+aoZ
 gJo
 kBG
 kBG
@@ -310127,7 +310470,7 @@ rsc
 yeH
 aBp
 aBp
-lNH
+aoZ
 kBG
 kBG
 kBG
@@ -311131,7 +311474,7 @@ pAX
 pAX
 aBp
 aBp
-lNH
+aoZ
 kBG
 kBG
 kBG
@@ -311633,7 +311976,7 @@ aBp
 aBp
 aBp
 aBp
-lNH
+aoZ
 kBG
 kBG
 kBG
@@ -312135,7 +312478,7 @@ aBp
 aBp
 aBp
 aBp
-lNH
+aoZ
 kBG
 kBG
 kBG
@@ -312619,24 +312962,24 @@ nwi
 igX
 nRJ
 kZl
-kBG
-kBG
-kBG
+qXb
+xAy
+xAy
 nbh
-tCf
-tCf
-tCf
-tCf
-tCf
-tCf
-tCf
-tCf
-tCf
-tCf
-tCf
-tCf
-tCf
-tCf
+pSg
+pSg
+pSg
+pSg
+pSg
+pSg
+pSg
+pSg
+pSg
+pSg
+pSg
+pSg
+pSg
+pSg
 hny
 kBG
 kBG
@@ -313121,7 +313464,7 @@ kZl
 kZl
 kZl
 kZl
-kBG
+xgH
 kBG
 kBG
 kBG
@@ -313619,11 +313962,11 @@ hzJ
 hzJ
 hzJ
 tAp
-kBG
-kBG
-kBG
-kBG
-kBG
+qXb
+xAy
+xAy
+xAy
+oef
 kBG
 kBG
 kBG
@@ -314121,7 +314464,7 @@ tdF
 tXD
 kDC
 nZP
-kBG
+xgH
 kBG
 kBG
 kBG
@@ -314598,7 +314941,7 @@ kBG
 kBG
 kBG
 kBG
-mYU
+obg
 kBG
 kBG
 kBG
@@ -314623,7 +314966,7 @@ lLH
 lLH
 bFy
 oVH
-kBG
+xgH
 kBG
 kBG
 kBG
@@ -315100,7 +315443,7 @@ kBG
 kBG
 kBG
 kBG
-mYU
+nGS
 kBG
 kBG
 kBG
@@ -315110,22 +315453,22 @@ kBG
 kBG
 kBG
 kBG
-obg
-gJo
-gJo
-gJo
-gbT
-lLH
-lLH
-vYj
+paR
+xAy
+xAy
+xAy
+wPc
+efE
+efE
+jnM
 gFf
 kJV
 xSv
-nYD
-tGu
-lLH
-gbT
-kBG
+bcf
+mmU
+efE
+wPc
+oef
 kBG
 kBG
 kBG
@@ -315602,7 +315945,7 @@ kBG
 kBG
 kBG
 kBG
-mYU
+eoq
 kBG
 kBG
 kBG
@@ -325268,7 +325611,7 @@ uoo
 uoo
 uoo
 mlZ
-dZu
+szE
 fPj
 iwB
 qic
@@ -332296,7 +332639,7 @@ iTz
 rJJ
 bwW
 lXg
-sxJ
+uej
 lsS
 uFq
 bqL
@@ -1224696,8 +1225039,8 @@ kBG
 kBG
 hoI
 gJo
-poX
-rxE
+gJo
+sfc
 rxE
 rxE
 rxE
@@ -1280558,7 +1280901,7 @@ eJS
 wpc
 pMI
 cHy
-uTo
+jBg
 cHy
 kFx
 nMt
@@ -1282064,7 +1282407,7 @@ gcd
 rjw
 uLT
 uLT
-uTo
+jBg
 dxD
 dxD
 uAX
@@ -1303508,9 +1303851,9 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1304010,11 +1304353,11 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+qth
+nmC
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1304512,12 +1304855,12 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+qth
+qth
+qth
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1305014,12 +1305357,12 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+nmC
+qth
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1305516,13 +1305859,13 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+nmC
+nmC
+qth
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1306018,13 +1306361,13 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+qth
+nmC
+nmC
+qth
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1306520,14 +1306863,14 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+qth
+qth
+qth
+qth
+qth
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1307022,15 +1307365,15 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+nmC
+nmC
+qth
+qth
+qth
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1307527,12 +1307870,12 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+qth
+qth
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1308030,11 +1308373,11 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+qth
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1308533,10 +1308876,10 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+qth
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1309035,10 +1309378,10 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1309538,9 +1309881,9 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1376802,9 +1377145,9 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1377303,10 +1377646,10 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1377805,10 +1378148,10 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+qth
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1378306,11 +1378649,11 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+qth
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1378807,12 +1379150,12 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+qth
+qth
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1379306,15 +1379649,15 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+nmC
+nmC
+qth
+qth
+qth
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1379808,14 +1380151,14 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+qth
+qth
+qth
+qth
+qth
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1380310,13 +1380653,13 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+qth
+nmC
+nmC
+qth
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1380812,13 +1381155,13 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+nmC
+nmC
+qth
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1381314,12 +1381657,12 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+nmC
+qth
+qth
+nmC
 kBG
 kBG
 kBG
@@ -1381816,12 +1382159,12 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+qth
+qth
+qth
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1382318,11 +1382661,11 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+nmC
+qth
+nmC
+nmC
+nmC
 kBG
 kBG
 kBG
@@ -1382820,9 +1383163,9 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
+nmC
+nmC
+nmC
 kBG
 kBG
 kBG
