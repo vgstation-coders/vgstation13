@@ -276,17 +276,6 @@
 	return
 
 
-/**********************
-**	climate/weather  **
-**	See: weather.dm  **
-**********************/
-
-/datum/subsystem/weather
-
-/datum/subsystem/weather/New()
-	..()
-
-
 ////////////////////////////////////////////////////////////////
 #include "junglestation.dmm"
 #endif
