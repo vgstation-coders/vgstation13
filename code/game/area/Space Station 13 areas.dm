@@ -146,6 +146,10 @@ var/global/list/adminbusteleportlocs = list()
 
 	sortTim(adminbusteleportlocs, /proc/cmp_text_asc)
 
+/area/proc/on_turf_removed(var/turf/T)
+
+/area/proc/on_turf_added(var/turf/T)
+
 
 /*-----------------------------------------------------------------------------*/
 
@@ -2059,6 +2063,31 @@ var/global/list/adminbusteleportlocs = list()
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 	icon_state="jungle_wild"
 	always_unpowered=TRUE
+
+/area/surface/jungle/on_turf_removed(var/turf/T)
+	var/datum/virtual_z/vz = T.get_virtual_z()
+	var/datum/climate/C = SSweather.get_climate(vz)
+	if(C)
+		C.unregister_weather_turf(T)
+
+/area/surface/jungle/on_turf_added(var/turf/T)
+	var/datum/virtual_z/vz = T.get_virtual_z()
+	var/datum/climate/C = SSweather.get_climate(vz)
+	if(C)
+		C.register_weather_turf(T)
+
+/area/surface/jungle/Entered(atom/movable/Obj, atom/OldLoc)
+	. = ..()
+	//don't mess with the audio if we are already in a jungle zone (outdoor area)
+	if(istype(Obj, /mob/living) && !istype(OldLoc,/area/surface/jungle) )
+		var/mob/living/L = Obj
+		L.update_weather_sounds()
+
+/area/surface/jungle/Exited(atom/movable/Obj, atom/NewLoc)
+	. = ..()
+	if(istype(Obj, /mob/living) && !istype(NewLoc,/area/surface/jungle) )
+		var/mob/living/L = Obj
+		L.update_weather_sounds(TRUE)
 
 //to hide vaults on the main station z-level
 /area/surface/jungle/vault

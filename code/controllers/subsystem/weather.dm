@@ -24,6 +24,8 @@ var/list/precip_state_to_texture = list()
 	for(var/datum/climate/C in climates)
 		if(C.v == vz)
 			return C
+		if(vz in C.additonal_v)
+			return C
 	return null
 
 // Gets the climate from a specific turf

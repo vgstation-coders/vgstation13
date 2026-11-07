@@ -21,6 +21,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/list/datum/weather/forecasts = list()
 	var/cycle_freq = list(3 MINUTES,6 MINUTES) //shortest possible time, longest possible time until next weather
 	var/datum/virtual_z/v //virtual z-level the climate is occupying
+	var/list/datum/virtual_z/additonal_v= list() //additional v-levels we occupy treated as secondary.
 	var/list/allowed_weather_types = list() // List of weather types this climate can have
 	var/list/weather_transitions = list() // Associative list: weather_type = list(possible_transitions)
 	var/list/weather_intensities = list() // Associative list: weather_type = intensity_level
@@ -464,6 +465,59 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		)
 	)
 
+
+//junglestation's climate
+/datum/climate/jungle
+	name = "jungle"
+	starting_weather_type = /datum/weather/standard
+	weather_image_type = /obj/effect/weather_holder/tropical
+	cycle_freq = list(5 MINUTES, 10 MINUTES)
+	allowed_weather_types = list(
+		/datum/weather/standard,
+		/datum/weather/cloudy/rain,
+		/datum/weather/cloudy/rain/heavy,
+		/datum/weather/cloudy/rain/monsoon,
+	)
+	weather_intensities = list(
+		/datum/weather/standard = 0,
+		/datum/weather/cloudy/rain = 1,
+		/datum/weather/cloudy/rain/heavy = 2,
+		/datum/weather/cloudy/rain/monsoon = 3,
+	)
+	weather_transitions = list(
+		/datum/weather/standard = list(
+			/datum/weather/standard = 50,
+			/datum/weather/cloudy/rain = 50,
+		),
+		/datum/weather/cloudy/rain = list(
+			/datum/weather/standard = 30,
+			/datum/weather/cloudy/rain = 35,
+			/datum/weather/cloudy/rain/heavy = 35,
+		),
+		/datum/weather/cloudy/rain/heavy = list(
+			/datum/weather/cloudy/rain = 20,
+			/datum/weather/cloudy/rain/heavy = 65,
+			/datum/weather/cloudy/rain/monsoon = 15,
+		),
+		/datum/weather/cloudy/rain/monsoon = list(
+			/datum/weather/cloudy/rain/heavy = 67,
+			/datum/weather/cloudy/rain/monsoon = 33
+		)
+	)
+
+/datum/climate/jungle/setup_weather_system()
+	..()
+	if(current_weather)
+		current_weather.timeleft = 10 MINUTES //give a 10 minute grace period of calm weather when the round starts.
+
+/datum/climate/jungle/change_weather(weather, force = FALSE)
+	if(current_weather)
+		current_weather.stop_weather_sounds()
+	..()
+	if(current_weather)
+		current_weather.update_weather_sounds()
+	
+
 ///////////////////////////////////  WEATHER DATUMS //////////////////////////////
 /datum/weather
 	var/name = "weather"
@@ -515,6 +569,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(!vz)
 		CRASH("get_weather_affected_players called on weather with null virtual_z.")
 	players_near_weather = vz.get_players()
+	for(var/datum/virtual_z/extra_vz in parent.additonal_v)
+		players_near_weather += extra_vz.get_players()
 
 	// Filter to only players in open surface areas (not caves/indoors)
 	for(var/mob/M in players_near_weather)
@@ -726,6 +782,15 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	temperature = T20C
 	precip_estimate = "none expected"
 	lightning_chance = 20
+
+/datum/weather/cloudy/rain/monsoon
+	name = "monsoon"
+	precip_estimate = "<font color='red'>about 200mm/hour (ALERT)</font>"
+	weather_sound = 'sound/effects/weather/rain_storm.ogg'
+	precip_intensity = WEATHER_SEVERE
+	vision_reduction = 5
+	slowdown = 0.6
+	weather_sound_volume = 90
 
 /datum/weather/desert
 	name = "desert"
