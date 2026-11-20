@@ -24,7 +24,7 @@ var/list/precip_state_to_texture = list()
 	for(var/datum/climate/C in climates)
 		if(C.v == vz)
 			return C
-		if(vz in C.additonal_v)
+		if(vz in C.additional_v)
 			return C
 	return null
 

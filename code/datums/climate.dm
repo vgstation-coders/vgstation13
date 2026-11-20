@@ -21,7 +21,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/list/datum/weather/forecasts = list()
 	var/cycle_freq = list(3 MINUTES,6 MINUTES) //shortest possible time, longest possible time until next weather
 	var/datum/virtual_z/v //virtual z-level the climate is occupying
-	var/list/datum/virtual_z/additonal_v= list() //additional v-levels we occupy treated as secondary.
+	var/list/datum/virtual_z/additional_v= list() //additional v-levels we occupy treated as secondary.
 	var/list/allowed_weather_types = list() // List of weather types this climate can have
 	var/list/weather_transitions = list() // Associative list: weather_type = list(possible_transitions)
 	var/list/weather_intensities = list() // Associative list: weather_type = intensity_level
@@ -569,7 +569,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(!vz)
 		CRASH("get_weather_affected_players called on weather with null virtual_z.")
 	players_near_weather = vz.get_players()
-	for(var/datum/virtual_z/extra_vz in parent.additonal_v)
+	for(var/datum/virtual_z/extra_vz in parent.additional_v)
 		players_near_weather += extra_vz.get_players()
 
 	// Filter to only players in open surface areas (not caves/indoors)
