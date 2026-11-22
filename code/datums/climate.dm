@@ -74,6 +74,15 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(weather_image && (weather_image in T.vis_contents))
 		T.vis_contents -= weather_image
 
+// Makes this climate also cover another virtual z-level, sharing its weather with the main one.
+// Call it once the level's areas are final (e.g. after vault generation), as it registers the level's outdoor turfs.
+/datum/climate/proc/add_vlevel(var/datum/virtual_z/vz)
+	if(!vz || vz == v || (vz in additional_v))
+		return FALSE
+	additional_v += vz
+	vz.register_weather_turfs(src)
+	return TRUE
+
 // Override this in climate subtypes to define the weather system
 /datum/climate/proc/setup_weather_system()
 	return

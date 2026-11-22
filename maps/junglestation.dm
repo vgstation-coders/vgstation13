@@ -60,8 +60,6 @@
 
 /datum/map/active/map_specific_init()
 	var/datum/climate/C=SSweather.set_climate(/datum/climate/jungle, zLevel = map.zMainStation)
-	var/datum/zLevel/additional_z=map.zLevels[map.zAsteroid]
-	C.additional_v += additional_z.virtual_z_levels[1] //add second surface z-level to the climate controller, too
 
 	generate_mapvaults()
 	//replace all the asteroid turfs that are generated randomly with the tunnel generation (i don't even know where) with the proper tiles.
@@ -74,7 +72,7 @@
 	
 	//add all surface jungle turfs to weather list
 	map.zLevels[map.zMainStation].virtual_z_levels[1].register_weather_turfs(C)
-	map.zLevels[map.zAsteroid].virtual_z_levels[1].register_weather_turfs(C)
+	C.add_vlevel(map.zLevels[map.zAsteroid].virtual_z_levels[1]) //the second surface z-level shares the main one's weather
 
 //partially stolen from snaxi
 /datum/map/active/generate_mapvaults()
