@@ -16,6 +16,8 @@ on:
     - 'vgstation13.dme'
     - 'dependencies.sh'
     - '.github/workflows/**'
+    - 'tools/ci/**'
+    - 'tools/travis/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -74,11 +76,11 @@ jobs:
 
       # OpenDream linting
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4.2.0
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.x
       - name: Install OpenDream
-        uses: robinraju/release-downloader@v1.9
+        uses: robinraju/release-downloader@v1.13
         with:
           repository: "OpenDreamProject/OpenDream"
           tag: "latest"
@@ -110,17 +112,25 @@ jobs:
           echo "PYTHON_VERSION=$PYTHON_VERSION" >> "$GITHUB_ENV"
           echo "BYOND_MAJOR=$BYOND_MAJOR" >> "$GITHUB_ENV"
           echo "BYOND_MINOR=$BYOND_MINOR" >> "$GITHUB_ENV"
+          echo "RUNNER_IMAGE=$ImageOS-$ImageVersion" >> "$GITHUB_ENV"
 
       - uses: actions/setup-python@v7
         with:
           python-version: ${{env.PYTHON_VERSION}}
 
-      # BYOND is a 32-bit program and needs 32-bit libcurl.
-      - name: Install BYOND dependencies
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libcurl4t64:i386 libstdc++6:i386
+      # BYOND is a 32-bit program and needs 32-bit libcurl. Installing it with apt
+      # takes about 25 seconds, so the libraries are kept in a cached folder instead.
+      # The key includes the runner image version, so each new image fetches them again.
+      - uses: actions/cache@v6
+        name: Cache BYOND libraries
+        id: byond-libs-cache
+        with:
+          path: ~/byond-libs
+          key: byond-libs-${{env.RUNNER_IMAGE}}-${{hashFiles('tools/ci/install_byond_libs.sh')}}
+
+      - name: Download BYOND libraries
+        if: steps.byond-libs-cache.outputs.cache-hit != 'true'
+        run: tools/ci/install_byond_libs.sh ~/byond-libs
 
       - uses: actions/cache@v6
         name: Cache BYOND installation
@@ -137,6 +147,7 @@ jobs:
         run: |
           tools/travis/install-byond.sh
           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
+          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/byond-libs"
           tools/travis/build.py 2>&1 | tee /dev/stderr | awk '/warning:|error:/ { exit 1 }'
           cp tools/travis/config/config.txt config/
           tools/travis/run_tests.py 2>&1 | tee /dev/stderr | awk '/UNIT TEST FAIL/ { exit 1 }'
