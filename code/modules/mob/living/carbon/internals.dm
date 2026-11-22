@@ -173,7 +173,7 @@
 
 	handle_breath(breath)
 
-	handle_species_environment(environment, src)
+	handle_species_environment(environment)
 
 	if(breath)
 		loc.assume_air(breath)
