@@ -295,6 +295,8 @@
 		if(prob(20))
 			to_chat(src, "<span class='warning'>You feel a searing heat in your lungs!</span>")
 		fire_alert = max(fire_alert, 2)
+	else
+		fire_alert = 0
 
 	//Temporary fixes to the alerts.
 
