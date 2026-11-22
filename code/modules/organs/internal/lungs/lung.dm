@@ -65,14 +65,6 @@
 		if(!breath)
 			return
 
-	if(breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
-		if(prob(20))
-			take_damage(1,1)
-		if(!owner.is_lung_ruptured() && damage > 2)
-			var/chance_break = (damage / min_broken_damage)*100
-			if(prob(chance_break))
-				rupture()
-
 	//Do this to make sure the pressure is correct.
 	breath.volume = inhale_volume
 	breath.update_values()

@@ -36,6 +36,18 @@
 			return TRUE
 	return FALSE
 
+/mob/living/carbon/human/check_environment_breath(var/datum/gas_mixture/breath)
+	var/datum/organ/internal/lungs/L = get_lungs()
+	if(!L)
+		return
+	if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
+		if(prob(20))
+			L.take_damage(1,1)
+		if(!L.is_ruptured() && L.damage > 2)
+			var/chance_break = (L.damage / L.min_broken_damage)*100
+			if(prob(chance_break))
+				L.rupture()
+
 /mob/living/carbon/human/breathe_lungs()
 	var/datum/organ/internal/lungs/L = get_lungs()
 	if(L)

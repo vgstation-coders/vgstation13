@@ -145,6 +145,8 @@
 				if(environment)
 					breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
+				check_environment_breath(breath)
+
 				if(breath && !check_breath_block(BLOCK_GAS_SMOKE_EFFECT))
 					for(var/obj/effect/smoke/chem/smoke in view(1, src))
 						if(smoke.reagents && smoke.reagents.total_volume)
@@ -194,6 +196,10 @@
 
 /mob/living/carbon/proc/breathe_lungs()
 	return TRUE
+
+// Called with the breath taken from the turf we stand on (null if there was no air to take).
+/mob/living/carbon/proc/check_environment_breath(var/datum/gas_mixture/breath)
+	return
 
 /mob/living/carbon/proc/handle_species_environment(var/datum/gas_mixture/environment)
 	return
