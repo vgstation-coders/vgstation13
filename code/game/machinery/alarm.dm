@@ -447,6 +447,11 @@ var/global/list/air_alarms = list()
 		new_area.air_alarms.Add(src)
 	return ..()
 
+/obj/machinery/alarm/change_area(var/area/oldarea, var/area/newarea)
+	..()
+	oldarea.air_alarms -= src
+	newarea.air_alarms |= src
+
 /obj/machinery/alarm/initialize()
 	add_self_to_holomap()
 	set_frequency(frequency)
