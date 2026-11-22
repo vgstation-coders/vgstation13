@@ -22,6 +22,8 @@ on:
 env:
   BYOND_MAJOR: 516
   BYOND_MINOR: 1659
+  # Pinned so that runner image updates can't change the Python the CI scripts run on.
+  PYTHON_VERSION: '3.12'
 
   #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
   ALL_MAPS: tgstation metaclub defficiency packedstation roidstation test_tiny test_vault snaxi tgstation-sec tgstation-snow LampreyStation xoq synergy bagelstation lowfatbagel Dorfstation waystation line horizon wheelstation
@@ -31,20 +33,16 @@ jobs:
   lint:
     name: Run linters
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Don't run this job if the commit message contains that string.
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      # - uses: actions/setup-python@v4
-      #   with:
-      #     python-version: '3.x'
-
-      - name: Setup Python
-        run: |
-          tools/bootstrap/python -c ''
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{env.PYTHON_VERSION}}
 
         #TODO: Cache Dreamchecker install
       - name: Run dreamchecker
@@ -80,7 +78,7 @@ jobs:
 
   build:
     name: ${{matrix.job-name}}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Don't run this job if the commit message contains that string.
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     strategy:
@@ -93,9 +91,12 @@ jobs:
             job-name: Compile and run tests
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{env.PYTHON_VERSION}}
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v6
         name: Cache BYOND installation
         with:
           path: ~/BYOND-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
