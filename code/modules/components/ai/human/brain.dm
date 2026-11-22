@@ -19,6 +19,7 @@
 	var/item_goal_ticks = 0	//How many ticks we have spent walking towards it without reaching it
 	var/item_goal_patience = 10	//Ticks before an unreachable item goal is given up on
 	var/list/ignored_items = list()	//\ref -> world.time until which an item is not considered as a goal
+	var/eating = FALSE	//ConsumeFood() sleeps, process() must not run alongside it
 
 /datum/component/ai/human_brain/initialize()
 	active_components += src
@@ -29,6 +30,8 @@
 	..()
 
 /datum/component/ai/human_brain/process()
+	if(eating)
+		return
 	if(INVOKE_EVENT(parent, /event/comp_ai_cmd_get_busy))
 		return
 	if(!ishuman(parent))
@@ -187,12 +190,17 @@
 			H.equip_to_appropriate_slot(held)
 
 /datum/component/ai/human_brain/proc/ConsumeFood(mob/living/carbon/human/H, obj/item/I)
-	while(H.nutrition < 250 && !I.gcDestroyed)
-		var/obj/item/held = H.get_active_hand()
-		if(held)
-			held.attack_self(H)
+	eating = TRUE
+	INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0) //Stand still while eating
+	var/obj/item/weapon/reagent_containers/food/snacks/S = I
+	while(H.nutrition < 250 && !S.gcDestroyed && S.loc == H && H.stat == CONSCIOUS)
+		if(!S.can_consume(H, H)) //Too full, wrapped... try again later
+			ignored_items["\ref[S]"] = world.time + 30 SECONDS
+			break
+		S.attack_self(H)
 		sleep(1)
 	H.drop_item()
+	eating = FALSE
 
 /datum/component/ai/human_brain/proc/WieldBestWeapon(mob/living/carbon/human/H, var/list/excluded)
 	if(H.isStunned()) //We're on the floor, nothing we can do
