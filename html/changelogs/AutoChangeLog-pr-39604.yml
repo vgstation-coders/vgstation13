@@ -1,7 +1,0 @@
-author: Eneocho
-delete-after: true
-changes:
-- bugfix: The botany hoboshack should no longer get set on fire indefinitely after
-    blacksmithing.
-- bugfix: The clown hoboshack clowns will no longer attack the clown that runs on
-    the treadmill forever.
