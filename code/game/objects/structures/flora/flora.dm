@@ -676,15 +676,12 @@
 
 /obj/structure/flora/jungle_berries/New()
 	..()
-	processing_objects+=src
 	if(prob(25))
 		hasberries=TRUE
 	if(hasberries)
 		icon_state = "harvest"
-
-/obj/structure/flora/jungle_berries/Destroy()
-	..()
-	processing_objects-=src
+	else
+		processing_objects += src
 
 /obj/structure/flora/jungle_berries/attack_hand(var/mob/user)
 	if(hasberries)
@@ -698,18 +695,21 @@
 			if(user.lucky_prob_rand()<0.5) //luckier people get more berries.
 				i=0
 		icon_state="stage-6"
+		processing_objects |= src
 	else
 		to_chat(user,"<span class='notice'>There's nothing grown yet.</span>")
 		..()
 
 /obj/structure/flora/jungle_berries/process()
-	if(!hasberries)
-		if(rand()<0.0284 && tickssincelastgrowth>5) //this gives us a regrow time of around 60 seconds for half of them to get there.
-			hasberries=TRUE
-			icon_state = "harvest"
-		tickssincelastgrowth++
-	..()
-	processing_objects+=src // flora is not normally an object which calls this proc, so we have to manually re-add it every cycle.
+	if(hasberries)
+		processing_objects -= src
+		return
+	if(rand()<0.0284 && tickssincelastgrowth>5) //this gives us a regrow time of around 60 seconds for half of them to get there.
+		hasberries=TRUE
+		icon_state = "harvest"
+		processing_objects -= src // nothing left to do until someone picks them
+		return
+	tickssincelastgrowth++
 
 //lavaland lmao
 /obj/structure/flora/firebush
