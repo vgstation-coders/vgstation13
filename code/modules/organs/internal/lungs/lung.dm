@@ -62,8 +62,7 @@
 			owner.adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
 		owner.failed_last_breath = 1
 		owner.oxygen_alert = 1
-		if(!breath)
-			return
+		return
 
 	//Do this to make sure the pressure is correct.
 	breath.volume = inhale_volume
