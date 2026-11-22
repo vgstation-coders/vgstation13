@@ -1,5 +1,0 @@
-author: Pancakemines
-delete-after: true
-changes:
-- tweak: Jungle berry bushes no longer remove and re-add themselves to object processing
-    each tick.
