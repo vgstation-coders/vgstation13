@@ -12,10 +12,10 @@
 
 	var/datum/component/ai/target_finder/finder = null
 
-/datum/component/ai/target_holder/prioritizing/cmd_add_target(atom/A)
+/datum/component/ai/target_holder/prioritizing/cmd_add_target(atom/target)
 	var/priority=-1
 	for(var/priority_type in type_priorities)
-		if(istype(A, priority_type))
+		if(istype(target, priority_type))
 			priority = type_priorities[priority_type]
 			break
 	if(priority==-1) // Use default
@@ -24,13 +24,13 @@
 		return
 	if(!("[priority]" in targets))
 		targets["[priority]"] = list()
-	if(!(A in targets["[priority]"]))
-		targets["[priority]"] += A
+	if(!(target in targets["[priority]"]))
+		targets["[priority]"] += target
 
-/datum/component/ai/target_holder/prioritizing/cmd_remove_target(atom/A)
+/datum/component/ai/target_holder/prioritizing/cmd_remove_target(atom/target)
 	for(var/priority in targets)
-		if(A in targets[priority])
-			targets[priority] -= A
+		if(target in targets[priority])
+			targets[priority] -= target
 
 /datum/component/ai/target_holder/prioritizing/cmd_get_best_target()
 	targets.Cut() // Clear first

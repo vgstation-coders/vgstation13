@@ -236,7 +236,7 @@
 				I.take_damage(brute / 2)
 				brute -= brute / 2
 
-	if(is_broken() && prob(40) && brute)
+	if(is_broken() && prob(40) && brute && owner.feels_pain())
 		owner.audible_scream() //Getting hit on broken and unsplinted limbs hurts
 
 	if(used_weapon)

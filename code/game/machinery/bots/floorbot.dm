@@ -449,8 +449,9 @@ var/global/list/floorbot_targets=list()
 
 /obj/item/weapon/toolbox_tiles/New(Loc, obj/item/weapon/storage/toolbox/oldtb)
 	..()
-	skin = oldtb.floorbot_type()
-	icon_state = "[skin]toolbox_tiles"
+	if(oldtb) // Mapped ones have no toolbox and keep their default skin
+		skin = oldtb.floorbot_type()
+		icon_state = "[skin]toolbox_tiles"
 
 /obj/item/weapon/toolbox_tiles/attackby(var/obj/item/W, mob/user as mob)
 	..()

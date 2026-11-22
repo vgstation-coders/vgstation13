@@ -28,7 +28,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/starting_weather_type = null // The initial weather type for this climate
 	var/weather_image_type = /obj/effect/weather_holder // The type of weather holder this climate uses
 	var/obj/effect/weather_holder/weather_image = null // The weather holder object for this climate
-	var/list/weather_turfs = list() // All turfs affected by this climate (includes snow turfs and other outdoor turfs)
+	var/list/weather_turfs = list() // All turfs affected by this climate (includes snow turfs and other outdoor turfs). Associative (turf = TRUE) so membership checks don't scan the list.
 
 /datum/climate/New(var/datum/virtual_z/vz,var/random_starting_weather = FALSE)
 	..()
@@ -59,10 +59,13 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		return
 	if(!force)
 		if(!isopensurface(T.loc))
-			if(T in weather_turfs)
+			if(weather_turfs[T])
 				weather_turfs -= T
 			return
-	weather_turfs |= T
+	if(!weather_turfs[T])
+		//Append first, then mark: setting a new key directly scans the whole list, like |= does.
+		weather_turfs += T
+		weather_turfs[T] = TRUE
 	if(weather_image)
 		T.vis_contents |= weather_image
 

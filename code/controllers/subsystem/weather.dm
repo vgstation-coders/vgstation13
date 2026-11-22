@@ -72,8 +72,8 @@ var/list/precip_state_to_texture = list()
 	if(C.current_weather)
 		qdel(C.current_weather)
 	if(C.weather_image)
-		for(var/turf/T in C.weather_turfs)
-			T.vis_contents -= C.weather_image
+		//Removes it from every turf's vis_contents at once; doing it turf by turf takes over half a minute on a full z-level.
+		C.weather_image.vis_locs.Cut()
 		qdel(C.weather_image)
 	qdel(C)
 

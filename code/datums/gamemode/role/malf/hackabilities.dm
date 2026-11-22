@@ -305,7 +305,7 @@
 /datum/malfhack_ability/fake_message/activate(mob/living/silicon/A)
 	if(!machine.hack_overlay) // shouldn't happen
 		return
-	var/fakename = copytext(sanitize(input(A, "Please enter a name for the message.", "Name?", "") as text|null, 1), MAX_NAME_LEN)
+	var/fakename = copytext(sanitize(input(A, "Please enter a name for the message.", "Name?", "") as text|null), 1, MAX_NAME_LEN)
 	if(!fakename)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return
@@ -323,7 +323,7 @@
 	else
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return
-	var/message = copytext(sanitize(input(usr, "Please enter a message.", "Message?", "") as text|null,1), MAX_BROADCAST_LEN)
+	var/message = copytext(sanitize(input(usr, "Please enter a message.", "Message?", "") as text|null), 1, MAX_BROADCAST_LEN)
 	if(!message)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return
