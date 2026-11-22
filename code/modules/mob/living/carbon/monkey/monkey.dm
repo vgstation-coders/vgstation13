@@ -238,6 +238,9 @@
 	return armorscore
 
 /mob/living/carbon/monkey/getarmorabsorb(var/def_zone, var/type)
+	if(type == "rad") //Rad absorb is its own flat value (see apply_effect), not the percentage armor
+		var/obj/item/worn = ((def_zone == LIMB_HEAD) || (def_zone == "eyes")) ? hat : uniform
+		return worn ? worn.get_armor_absorb(type) : 0
 	return getarmor(def_zone, type)
 
 /mob/living/carbon/monkey/attack_paw(mob/living/M)

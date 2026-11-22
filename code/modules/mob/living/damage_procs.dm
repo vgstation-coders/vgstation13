@@ -86,7 +86,7 @@
 			altered = effect
 			halloss += altered // Useful for objects that cause "subdual" damage. PAIN!
 		if(IRRADIATE)
-			altered = max(0,altered-getarmorabsorb(null,"rad"))
+			altered = max(0, effect - getarmorabsorb(null, "rad")) //Radiation ignores blocked; only rad armor applies
 			altered = max(0, (altered/100)*(100-getarmor(null, "rad"))) //Get overall radiation protection, rather than point-exposure
 			radiation += altered
 		if(STUTTER)
