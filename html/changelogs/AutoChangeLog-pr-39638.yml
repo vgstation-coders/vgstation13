@@ -1,0 +1,5 @@
+author: DamianX
+delete-after: true
+changes:
+- tweak: Setting up and restarting weather on maps with large outdoor areas is much
+    faster.
