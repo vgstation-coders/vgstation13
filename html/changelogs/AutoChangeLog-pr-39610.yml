@@ -1,0 +1,4 @@
+author: gallywix4
+delete-after: true
+changes:
+- bugfix: Fixes malf AI "Synthesize message" not working.
