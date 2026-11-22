@@ -1,0 +1,4 @@
+author: Pancakemines
+delete-after: true
+changes:
+- bugfix: Thermoelectric cooler icons now update after radio commands and NPC tampering.
