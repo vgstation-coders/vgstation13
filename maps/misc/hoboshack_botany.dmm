@@ -30,7 +30,10 @@
 /obj/item/device/flashlight/lantern,
 /obj/item/device/flashlight/lantern,
 /obj/item/weapon/storage/toolbox/mechanical,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "bk" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -79,7 +82,10 @@
 	dir = 4;
 	initialize_directions = 12
 	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "dn" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -90,7 +96,9 @@
 /obj/effect/glowshroom,
 /turf/simulated/floor/wood{
 	broken = 1;
-	icon_state = "wood-broken"
+	icon_state = "wood-broken";
+	flammable = 0;
+	name = "fireproof wooden floor"
 	},
 /area/shack)
 "eA" = (
@@ -115,14 +123,20 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "eR" = (
 /obj/structure/window/reinforced{
 	dir = 1
 	},
 /obj/effect/decal/cleanable/crumbs,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "hL" = (
 /obj/structure/table/woodentable,
@@ -147,12 +161,18 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "iA" = (
 /obj/effect/decal/cleanable/generic,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "iV" = (
 /obj/structure/table/woodentable,
@@ -160,7 +180,10 @@
 	pixel_y = 6
 	},
 /obj/effect/glowshroom,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "jj" = (
 /obj/structure/reagent_dispensers/fueltank,
@@ -178,6 +201,8 @@
 	},
 /obj/effect/decal/cleanable/crumbs,
 /turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken";
 	flammable = 0;
 	name = "fireproof wooden floor"
 	},
@@ -211,7 +236,10 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/generic,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "qI" = (
 /obj/structure/grille,
@@ -238,7 +266,10 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "rI" = (
 /obj/effect/glowshroom,
@@ -272,19 +303,28 @@
 	opacity = 0
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "ts" = (
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "tM" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "uF" = (
 /obj/structure/window/reinforced{
@@ -336,7 +376,10 @@
 	dir = 8
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "zg" = (
 /turf/simulated/floor/grass,
@@ -344,6 +387,8 @@
 "zw" = (
 /obj/effect/decal/cleanable/generic,
 /turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken4";
 	flammable = 0;
 	name = "fireproof wooden floor"
 	},
@@ -393,7 +438,10 @@
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/clown,
 /obj/effect/landmark/hobostart,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "BV" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -429,7 +477,10 @@
 /obj/effect/decal/cleanable/crumbs,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "GW" = (
 /obj/item/anvil,
@@ -464,7 +515,10 @@
 	on = 1
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "IS" = (
 /turf/simulated/wall/r_rock/porous,
@@ -491,7 +545,9 @@
 	},
 /turf/simulated/floor/wood{
 	broken = 1;
-	icon_state = "wood-broken4"
+	icon_state = "wood-broken4";
+	flammable = 0;
+	name = "fireproof wooden floor"
 	},
 /area/shack)
 "Oi" = (
@@ -506,7 +562,10 @@
 	req_access_txt = 1
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "Rw" = (
 /obj/structure/window/reinforced{
@@ -516,13 +575,19 @@
 	dir = 8;
 	on = 1
 	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "Rx" = (
 /obj/structure/safe,
 /obj/abstract/map/spawner/safe/any,
 /obj/effect/glowshroom,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "SN" = (
 /obj/machinery/door/mineral/wood/log/towercap{
@@ -536,7 +601,10 @@
 	dir = 4
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "SO" = (
 /obj/structure/mirror{
@@ -549,14 +617,20 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "To" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
 /obj/effect/glowshroom,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "Ts" = (
 /obj/structure/wc/sink{
@@ -604,7 +678,10 @@
 /obj/item/weapon/storage/wallet/random,
 /obj/item/weapon/storage/wallet/random,
 /obj/item/weapon/storage/box/donkpockets,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 "Yg" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -614,7 +691,9 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/wood{
 	broken = 1;
-	icon_state = "wood-broken"
+	icon_state = "wood-broken";
+	flammable = 0;
+	name = "fireproof wooden floor"
 	},
 /area/shack)
 "YB" = (
@@ -637,7 +716,10 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/wood{
+	flammable = 0;
+	name = "fireproof wooden floor"
+	},
 /area/shack)
 
 (1,1,1) = {"
