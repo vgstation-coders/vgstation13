@@ -1,0 +1,5 @@
+author: Pancakemines
+delete-after: true
+changes:
+- bugfix: Fixed a bug that caused cold reagents to be much more dangerous than intended.
+- tweak: Changed really cold reagents to be slightly less devastating unless intentional.
