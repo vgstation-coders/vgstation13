@@ -64,6 +64,7 @@ var/list/precip_state_to_texture = list()
 
 	var/climate_type = C.type
 	var/datum/virtual_z/vz = C.v
+	var/list/datum/virtual_z/additional_v = C.additional_v.Copy()
 
 	climates -= C
 
@@ -77,6 +78,7 @@ var/list/precip_state_to_texture = list()
 	qdel(C)
 
 	var/datum/climate/new_climate = new climate_type(vz, FALSE)
+	new_climate.additional_v = additional_v
 	climates += new_climate
 
 	var/list/turf/turfs = vz.get_turfs()
@@ -85,7 +87,7 @@ var/list/precip_state_to_texture = list()
 	for(var/turf/T in turfs)
 		new_climate.register_weather_turf(T)
 		
-	for(var/datum/virtual_z/a_vz in C.additional_v)
+	for(var/datum/virtual_z/a_vz in additional_v)
 		var/list/turf/additional_turfs=a_vz.get_turfs()
 		for(var/turf/T in additional_turfs)
 			new_climate.register_weather_turf(T)
