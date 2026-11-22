@@ -24,7 +24,7 @@
 			if(filtered_emotes.len > 1)
 				new_act = input(src,"Emotes matching [act]:","Matching emotes") as null|anything in filtered_emotes
 			if(new_act)
-				emote(copytext(new_act,2,0),m_type,message,ignore_status,arguments)
+				emote(copytext(new_act,2,0),m_type,param,ignore_status,arguments)
 	else
 		E.run_emote(src, param, m_type, ignore_status, arguments)
 
