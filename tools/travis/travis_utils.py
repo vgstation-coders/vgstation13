@@ -1,5 +1,4 @@
 import asyncio
-import sys
 
 ensure_future = None
 
@@ -28,11 +27,7 @@ async def print_timeout_guards():
         await asyncio.sleep(8*60)
         print("Keeping Travis alive. Ignore this!")
 
-# Windows needs a different event loop to manage subprocesses
-def get_platform_event_loop():
-    if sys.platform == "win32" or sys.platform == "cygwin":
-        loop = asyncio.ProactorEventLoop()
-        asyncio.set_event_loop(loop)
-        return loop
-    else:
-        return asyncio.get_event_loop()
+# Runs the given command to completion and returns its exit code.
+# asyncio.run picks an event loop that can manage subprocesses on every platform.
+def run_command(args):
+    return asyncio.run(run_with_timeout_guards(args))
