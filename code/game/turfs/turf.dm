@@ -225,35 +225,31 @@ var/highest_player_entry = 0
 				highest_player_entry = player_entries
 
 		//footstep decal code
-		if (iscarbon(M))
-			var/mob/living/carbon/C = M
-			if(!C.on_foot())
-				return ..()
-			if(istype(M, /mob/living/carbon/human))
-				var/mob/living/carbon/human/H = C
-
+		if(istype(M, /mob/living/carbon/human))
+			var/mob/living/carbon/human/Person = M
+			if(Person.on_foot())
 				// Tracking blood
 				var/list/bloodDNA = null
 				var/bloodcolor=""
 
 				// Do we have shoes?
-				if(H.shoes)
-					var/obj/item/clothing/shoes/S = H.shoes
+				if(Person.shoes)
+					var/obj/item/clothing/shoes/S = Person.shoes
 					if(S.track_blood && S.blood_DNA)
 						bloodDNA   = S.blood_DNA
 						bloodcolor = S.blood_color
 						S.track_blood = max(round(S.track_blood - 1, 1),0)
 				else
-					if(H.track_blood && H.feet_blood_DNA)
-						bloodDNA   = H.feet_blood_DNA
-						bloodcolor = H.feet_blood_color
-						H.track_blood = max(round(H.track_blood - 1, 1),0)
+					if(Person.track_blood && Person.feet_blood_DNA)
+						bloodDNA   = Person.feet_blood_DNA
+						bloodcolor = Person.feet_blood_color
+						Person.track_blood = max(round(Person.track_blood - 1, 1),0)
 
-				if (bloodDNA)
-					AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor,H.luminous_feet()) // Coming
+				if(bloodDNA)
+					AddTracks(Person.get_footprint_type(),bloodDNA,Person.dir,0,bloodcolor,Person.luminous_feet()) // Coming
 					if(Adjacent(OldLoc) && istype(OldLoc,/turf))
 						var/turf/from = OldLoc
-						from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor,H.luminous_feet()) // Going
+						from.AddTracks(Person.get_footprint_type(),bloodDNA,0,Person.dir,bloodcolor,Person.luminous_feet()) // Going
 
 				bloodDNA = null
 		//end footstep decal code
