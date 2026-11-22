@@ -84,5 +84,10 @@ var/list/precip_state_to_texture = list()
 		return FALSE
 	for(var/turf/T in turfs)
 		new_climate.register_weather_turf(T)
+		
+	for(var/datum/virtual_z/a_vz in C.additional_v)
+		var/list/turf/additional_turfs=a_vz.get_turfs()
+		for(var/turf/T in additional_turfs)
+			new_climate.register_weather_turf(T)
 
 	return TRUE

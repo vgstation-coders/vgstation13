@@ -2078,14 +2078,42 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/surface/jungle/Entered(atom/movable/Obj, atom/OldLoc)
 	. = ..()
-	//don't mess with the audio if we are already in a jungle zone (outdoor area)
-	if(istype(Obj, /mob/living) && !istype(OldLoc,/area/surface/jungle) )
+	var/datum/climate/OldLocClimate=null
+	var/datum/climate/CurLocClimate=null
+	
+	var/datum/virtual_z/OldLocV=null
+	if(istype(OldLoc,/turf))
+		var/turf/T=OldLoc
+		OldLocV=T.v
+	
+	for(var/datum/climate/C in climates)
+		if(C.v==OldLocV || (OldLocV in C.additional_v) )
+			OldLocClimate=C
+		if(C.v==src.v || (src.v in C.additional_v) )
+			CurLocClimate=C
+	
+	//don't mess with the audio if we are already in a jungle zone (outdoor area). check that the location we are moving to's climate is also not our former's, to catch moving underground (since it is still a /area/surface/jungle)
+	if(istype(Obj, /mob/living) && (OldLocClimate!=CurLocClimate || !istype(get_area(OldLoc),/area/surface/jungle)) )
 		var/mob/living/L = Obj
 		L.update_weather_sounds()
 
 /area/surface/jungle/Exited(atom/movable/Obj, atom/NewLoc)
 	. = ..()
-	if(istype(Obj, /mob/living) && !istype(NewLoc,/area/surface/jungle) )
+	var/datum/climate/NewLocClimate=null
+	var/datum/climate/CurLocClimate=null
+	
+	var/datum/virtual_z/NewLocV=null
+	if(istype(NewLoc,/turf))
+		var/turf/T=NewLoc
+		NewLocV=T.v
+	
+	for(var/datum/climate/C in climates)
+		if(C.v==NewLocV || (NewLocV in C.additional_v) )
+			NewLocClimate=C
+		if(C.v==src.v || (src.v in C.additional_v) )
+			CurLocClimate=C
+			
+	if(istype(Obj, /mob/living) && (NewLocClimate!=CurLocClimate || !istype(get_area(NewLoc),/area/surface/jungle)) )
 		var/mob/living/L = Obj
 		L.update_weather_sounds(TRUE)
 

@@ -506,7 +506,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		)
 	)
 
-/datum/climate/jungle/setup_weather_system()
+/datum/climate/jungle/New(var/datum/virtual_z/vz,var/random_starting_weather = FALSE)
 	..()
 	if(current_weather)
 		current_weather.timeleft = 10 MINUTES //give a 10 minute grace period of calm weather when the round starts.
@@ -546,6 +546,9 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		CRASH("execute called on weather with null virtual_z.")
 	vz.weather_mod = light_modifier
 	SSDayNight.update_lighting(vz, immediate = TRUE)
+	for(var/datum/virtual_z/a_vz in parent.additional_v)
+		a_vz.weather_mod = light_modifier
+		SSDayNight.update_lighting(a_vz, immediate = TRUE)
 
 /datum/weather/proc/tick()
 	timeleft -= SS_WAIT_WEATHER

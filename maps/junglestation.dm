@@ -73,9 +73,8 @@
 	world.log << "replaced [num_ass_replacments] asteroid tiles to be jungle."
 	
 	//add all surface jungle turfs to weather list
-	for(var/turf/T in world)
-		if(istype(T.loc,/area/surface/jungle) && (T.z==map.zMainStation || T.z==map.zAsteroid) )
-			C.register_weather_turf(T)
+	map.zLevels[map.zMainStation].virtual_z_levels[1].register_weather_turfs(C)
+	map.zLevels[map.zAsteroid].virtual_z_levels[1].register_weather_turfs(C)
 
 //partially stolen from snaxi
 /datum/map/active/generate_mapvaults()
