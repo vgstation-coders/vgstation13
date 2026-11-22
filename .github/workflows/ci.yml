@@ -104,6 +104,9 @@ jobs:
       - name: ${{matrix.job-name}}
         env:
           DM_UNIT_TESTS: ${{matrix.dm-unit-tests}}
+        # Explicitly asking for bash enables pipefail, so a build or test script
+        # that crashes fails the job instead of slipping past the awk checks.
+        shell: bash
         run: |
           tools/travis/install-byond.sh
           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
