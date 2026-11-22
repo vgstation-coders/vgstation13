@@ -2076,44 +2076,22 @@ var/global/list/adminbusteleportlocs = list()
 	if(C)
 		C.register_weather_turf(T)
 
+//Climates are looked up from turfs, not from src.v: one area instance can span several z-levels (the main jungle area also has turfs on the derelict), so its v is whichever level initialized last.
 /area/surface/jungle/Entered(atom/movable/Obj, atom/OldLoc)
 	. = ..()
-	var/datum/climate/OldLocClimate=null
-	var/datum/climate/CurLocClimate=null
-	
-	var/datum/virtual_z/OldLocV=null
-	if(istype(OldLoc,/turf))
-		var/turf/T=OldLoc
-		OldLocV=T.v
-	
-	for(var/datum/climate/C in climates)
-		if(C.v==OldLocV || (OldLocV in C.additional_v) )
-			OldLocClimate=C
-		if(C.v==src.v || (src.v in C.additional_v) )
-			CurLocClimate=C
-	
-	//don't mess with the audio if we are already in a jungle zone (outdoor area). check that the location we are moving to's climate is also not our former's, to catch moving underground (since it is still a /area/surface/jungle)
-	if(istype(Obj, /mob/living) && (OldLocClimate!=CurLocClimate || !istype(get_area(OldLoc),/area/surface/jungle)) )
-		var/mob/living/L = Obj
-		L.update_weather_sounds()
+	if(!istype(Obj, /mob/living))
+		return
+	var/mob/living/L = Obj
+	var/datum/climate/new_climate = SSweather.get_climate_from_turf(get_turf(L))
+	//moving between jungle areas under the same climate (e.g. into a patio, or across the surface z-levels) keeps the sound going. a different climate (e.g. going underground) still needs a change.
+	if(istype(get_area(OldLoc), /area/surface/jungle) && SSweather.get_climate_from_turf(get_turf(OldLoc)) == new_climate)
+		return
+	L.update_weather_sounds(!new_climate)
 
 /area/surface/jungle/Exited(atom/movable/Obj, atom/NewLoc)
 	. = ..()
-	var/datum/climate/NewLocClimate=null
-	var/datum/climate/CurLocClimate=null
-	
-	var/datum/virtual_z/NewLocV=null
-	if(istype(NewLoc,/turf))
-		var/turf/T=NewLoc
-		NewLocV=T.v
-	
-	for(var/datum/climate/C in climates)
-		if(C.v==NewLocV || (NewLocV in C.additional_v) )
-			NewLocClimate=C
-		if(C.v==src.v || (src.v in C.additional_v) )
-			CurLocClimate=C
-			
-	if(istype(Obj, /mob/living) && (NewLocClimate!=CurLocClimate || !istype(get_area(NewLoc),/area/surface/jungle)) )
+	//moves into another jungle area are handled by its Entered(), which knows both turfs
+	if(istype(Obj, /mob/living) && !istype(get_area(NewLoc), /area/surface/jungle))
 		var/mob/living/L = Obj
 		L.update_weather_sounds(TRUE)
 
