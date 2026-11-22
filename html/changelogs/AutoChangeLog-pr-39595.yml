@@ -1,4 +1,0 @@
-author: Pancakemines
-delete-after: true
-changes:
-- bugfix: Laying down no longer gets you stuck on z-level transitions.
