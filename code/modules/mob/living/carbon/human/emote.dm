@@ -294,29 +294,39 @@
 	key = "dab"
 	key_third_person = "*dab"
 	restraint_check = TRUE
-	hands_needed = 2
 
 /datum/emote/living/carbon/human/dab/can_run_emote(mob/user, status_check = TRUE, show_message = TRUE)
-	. = ..()
-	if (!.)
-		return FALSE
-	if (iswizard(user))
+	var/mob/living/carbon/human/H = user
+	if(!(Holiday == APRIL_FOOLS_DAY) && status_check)
+		//var/confirm = alert("Suffer for your sins.", "Confirm Suicide", "gladly", "ok")
+		//var/confirm = alert("Are you sure you want to do this? Nobody will want to revive you.", "Confirm Suicide", "Yes", "Yes")
+		//var/confirm = alert("Are you sure you want to [key]? This action will cause irreversable brain damage.", "Confirm Suicide", "Yes", "Yes")
+		var/confirm = alert("Are you sure you want to [key]? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
+		if(confirm != "Yes")
+			return FALSE
+	if (iswizard(H))
 		if(show_message)
 			to_chat(user, "<span class='warning'>The Wizard Federation has banned usage of the [key].</span>")
+		return FALSE
+	if(H.has_organ(LIMB_LEFT_ARM) && H.has_organ(LIMB_RIGHT_ARM))
+		if(user.stat > stat_allowed)
+			if(show_message)
+				to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
+			return FALSE
+		if(restraint_check && (user.restrained() || user.locked_to))
+			if(show_message)
+				to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
+			return FALSE
+	else
+		if(show_message)
+			to_chat(user, "<span class='warning'>You cannot [key] without both your arms.</span>")
 		return FALSE
 	if(user.reagents && user.reagents.has_reagent(PAROXETINE))
 		if(show_message)
 			to_chat(user, "<span class='numb'>You're too medicated to wanna do that anymore.</span>")
 		return FALSE
-	if(!(Holiday == APRIL_FOOLS_DAY) && status_check)
-		if(show_message)
-			//var/confirm = alert("Suffer for your sins.", "Confirm Suicide", "gladly", "ok")
-			//var/confirm = alert("Are you sure you want to do this? Nobody will want to revive you.", "Confirm Suicide", "Yes", "Yes")
-			//var/confirm = alert("Are you sure you want to [key]? This action will cause irreversable brain damage.", "Confirm Suicide", "Yes", "Yes")
-			var/confirm = alert("Are you sure you want to [key]? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
-			if(confirm != "Yes")
-				return FALSE
-		return TRUE
+
+	return ..()
 
 /datum/emote/living/carbon/human/dab/run_emote(mob/user, params, ignore_status = FALSE)
 	if(!(can_run_emote(user, !ignore_status)))
