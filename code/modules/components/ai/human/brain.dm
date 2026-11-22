@@ -15,6 +15,11 @@
 
 	var/atom/current_target
 
+	var/item_goal_ref	//\ref of the item we are walking towards
+	var/item_goal_ticks = 0	//How many ticks we have spent walking towards it without reaching it
+	var/item_goal_patience = 10	//Ticks before an unreachable item goal is given up on
+	var/list/ignored_items = list()	//\ref -> world.time until which an item is not considered as a goal
+
 /datum/component/ai/human_brain/initialize()
 	active_components += src
 	return TRUE
@@ -48,13 +53,24 @@
 
 	var/obj/item/I = AttainExternalItemGoal(H)
 	if(I)
+		var/I_ref = "\ref[I]"
 		if(H.Adjacent(I))
+			item_goal_ref = null
+			item_goal_ticks = 0
 			AcquireItem(H, I)
 			INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
-		else
+			return
+		if(I_ref != item_goal_ref)
+			item_goal_ref = I_ref
+			item_goal_ticks = 0
+		if(++item_goal_ticks <= item_goal_patience)
 			if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
 				INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = get_turf(I))
-		return
+			return
+		//Couldn't reach it in time, forget about it for a while and get on with things
+		ignored_items[I_ref] = world.time + 1 MINUTES
+		item_goal_ref = null
+		item_goal_ticks = 0
 
 	if(!isnull(current_target))
 		INVOKE_EVENT(parent, /event/comp_ai_cmd_attack, "target" = current_target)
@@ -116,6 +132,8 @@
 					if(I in H.contents)
 						continue
 					if(I.anchored) //Odd cases such as intercoms
+						continue
+					if(ignored_items["\ref[I]"] > world.time) //Couldn't reach it recently
 						continue
 					switch(D)
 						if(DESIRE_HAVE_WEAPON)
