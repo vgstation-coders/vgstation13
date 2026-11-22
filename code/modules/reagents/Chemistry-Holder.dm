@@ -739,7 +739,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			R.handle_data_mix(data, amount, admin)
 			if (additional_data)
 				R.handle_additional_data(additional_data)
-			if(!isnull(temp_adj))
+			if(!isnull(temp_adj) && amount > 0) //amount can be clamped to zero or below when the holder is full
 				R.adj_temp = ((R.adj_temp * R.volume) + (temp_adj * amount)) / (R.volume + amount)
 			R.volume += amount
 			update_total()
