@@ -1,4 +1,0 @@
-author: Pancakemines
-delete-after: true
-changes:
-- bugfix: Cleanbots now clean messes after reaching them.
