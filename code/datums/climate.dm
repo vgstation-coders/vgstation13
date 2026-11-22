@@ -192,6 +192,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 			qdel(current_weather)
 			current_weather = weather
 			current_weather.execute()
+			current_weather.update_weather_sounds()
 		else
 			var/datum/weather/W = weather
 			weather_transitions[current_weather.type] = list()
@@ -510,13 +511,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(current_weather)
 		current_weather.timeleft = 10 MINUTES //give a 10 minute grace period of calm weather when the round starts.
 
-/datum/climate/jungle/change_weather(weather, force = FALSE)
-	if(current_weather)
-		current_weather.stop_weather_sounds()
-	..()
-	if(current_weather)
-		current_weather.update_weather_sounds()
-	
 
 ///////////////////////////////////  WEATHER DATUMS //////////////////////////////
 /datum/weather
@@ -637,7 +631,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 			var/turf/unsimulated/floor/snow/snow = get_turf(M)
 			if(snow && istype(snow))
 				snow.Entered(M)
-	update_weather_sounds()
 
 //////////////////////// SNOW SUBTYPES ////////////////////////
 
