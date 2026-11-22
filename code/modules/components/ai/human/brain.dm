@@ -60,6 +60,8 @@
 			item_goal_ref = null
 			item_goal_ticks = 0
 			AcquireItem(H, I)
+			if(gcDestroyed) //AcquireItem can sleep while eating, the mob may be gone
+				return
 			INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
 			return
 		if(I_ref != item_goal_ref)
@@ -199,8 +201,10 @@
 			break
 		S.attack_self(H)
 		sleep(1)
-	H.drop_item()
 	eating = FALSE
+	if(gcDestroyed)
+		return
+	H.drop_item()
 
 /datum/component/ai/human_brain/proc/WieldBestWeapon(mob/living/carbon/human/H, var/list/excluded)
 	if(H.isStunned()) //We're on the floor, nothing we can do
