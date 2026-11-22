@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-import asyncio
-import distutils.spawn
 import re
+import shutil
 import sys
 import os
 
@@ -43,13 +42,12 @@ def main():
     if sys.platform == "win32" or sys.platform == "cygwin":
         compiler = "dm"
 
-    compiler = distutils.spawn.find_executable(compiler)
+    compiler = shutil.which(compiler)
     if not compiler:
         print("Unable to find DM compiler.")
         exit(1)
 
-    loop = travis_utils.get_platform_event_loop()
-    code = loop.run_until_complete(travis_utils.run_with_timeout_guards([compiler, dme]))
+    code = travis_utils.run_command([compiler, dme])
     exit(code)
 
 
