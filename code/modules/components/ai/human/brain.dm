@@ -29,7 +29,6 @@
 	..()
 
 /datum/component/ai/human_brain/process()
-
 	if(INVOKE_EVENT(parent, /event/comp_ai_cmd_get_busy))
 		return
 	if(!ishuman(parent))
@@ -79,8 +78,6 @@
 			if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
 				INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = T)
 		return
-	else
-		personal_desires.Remove(DESIRE_CONFLICT)
 
 	if(wander && prob(70))
 		var/dir = pick(NORTH,SOUTH,EAST,WEST)
