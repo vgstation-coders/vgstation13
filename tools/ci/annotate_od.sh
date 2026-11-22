@@ -1,4 +1,4 @@
 #!/bin/bash
 
 set -euo pipefail
-tools/bootstrap/python -m od_annotator "$@"
+python3 tools/od_annotator "$@"
