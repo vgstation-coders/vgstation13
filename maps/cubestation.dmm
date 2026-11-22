@@ -42530,13 +42530,6 @@
 	density = 0;
 	icon_state = "pdoor0";
 	id_tag = "misclab";
-	name = "Test Chamber Blast Doors";
-	opacity = 0
-	},
-/obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
-	id_tag = "misclab";
 	name = "Telescience Chamber Blast Doors";
 	opacity = 0
 	},
@@ -182832,7 +182825,7 @@
 	},
 /obj/machinery/door_control{
 	id_tag = "misclab";
-	name = "Test Chamber Blast Doors";
+	name = "Telescience Chamber Blast Doors";
 	pixel_x = 6;
 	pixel_y = 40;
 	req_access_txt = "47"
