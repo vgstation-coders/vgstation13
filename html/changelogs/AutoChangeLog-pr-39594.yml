@@ -1,0 +1,4 @@
+author: Pancakemines
+delete-after: true
+changes:
+- bugfix: Atmos device access checks now use the area's registered air alarms.
