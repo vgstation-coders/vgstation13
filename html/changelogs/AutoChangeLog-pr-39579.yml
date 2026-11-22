@@ -1,4 +1,0 @@
-author: mentgah
-delete-after: true
-changes:
-- bugfix: NPCs now work correctly, but they're still extremely barebones.

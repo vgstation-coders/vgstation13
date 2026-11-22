@@ -1,5 +1,0 @@
-author: Pancakemines
-delete-after: true
-changes:
-- bugfix: Mobs that cannot feel pain no longer scream when their broken limbs are
-    hit.
