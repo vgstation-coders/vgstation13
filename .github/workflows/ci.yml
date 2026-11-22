@@ -21,7 +21,7 @@ on:
 
 env:
   BYOND_MAJOR: 516
-  BYOND_MINOR: 1659
+  BYOND_MINOR: 1689
   PYTHON_VERSION: '3.14'
 
   #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
