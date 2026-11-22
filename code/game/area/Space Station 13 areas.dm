@@ -2079,20 +2079,24 @@ var/global/list/adminbusteleportlocs = list()
 //Climates are looked up from turfs, not from src.v: one area instance can span several z-levels (the main jungle area also has turfs on the derelict), so its v is whichever level initialized last.
 /area/surface/jungle/Entered(atom/movable/Obj, atom/OldLoc)
 	. = ..()
-	if(!istype(Obj, /mob/living))
+	if(!isliving(Obj) && !Obj.contents.len)
 		return
-	var/mob/living/L = Obj
-	var/datum/climate/new_climate = SSweather.get_climate_from_turf(get_turf(L))
+	var/datum/climate/new_climate = SSweather.get_climate_from_turf(get_turf(Obj))
 	//moving between jungle areas under the same climate (e.g. into a patio, or across the surface z-levels) keeps the sound going. a different climate (e.g. going underground) still needs a change.
 	if(istype(get_area(OldLoc), /area/surface/jungle) && SSweather.get_climate_from_turf(get_turf(OldLoc)) == new_climate)
 		return
-	L.update_weather_sounds(!new_climate)
+	//Obj itself if it's a mob, plus any mobs it carries (a locker's or a mech's occupant)
+	for(var/mob/living/L in recursive_type_check(Obj, /mob/living))
+		L.update_weather_sounds(!new_climate)
 
 /area/surface/jungle/Exited(atom/movable/Obj, atom/NewLoc)
 	. = ..()
 	//moves into another jungle area are handled by its Entered(), which knows both turfs
-	if(istype(Obj, /mob/living) && !istype(get_area(NewLoc), /area/surface/jungle))
-		var/mob/living/L = Obj
+	if(istype(get_area(NewLoc), /area/surface/jungle))
+		return
+	if(!isliving(Obj) && !Obj.contents.len)
+		return
+	for(var/mob/living/L in recursive_type_check(Obj, /mob/living))
 		L.update_weather_sounds(TRUE)
 
 //to hide vaults on the main station z-level
