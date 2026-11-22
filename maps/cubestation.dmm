@@ -9806,9 +9806,12 @@
 /area/centcom/ert)
 "bpe" = (
 /obj/structure/grille,
-/obj/structure/window/reinforced/tinted,
-/obj/structure/window/reinforced/tinted{
-	dir = 1
+/obj/structure/window/reinforced/smart{
+	id_tag = "ChapelGlass"
+	},
+/obj/structure/window/reinforced/smart{
+	dir = 1;
+	id_tag = "ChapelGlass"
 	},
 /turf/simulated/floor/plating,
 /area/chapel/office)
@@ -26474,11 +26477,13 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced/tinted{
-	dir = 8
+/obj/structure/window/reinforced/smart{
+	dir = 8;
+	id_tag = "HOSBed"
 	},
-/obj/structure/window/reinforced/tinted{
-	dir = 1
+/obj/structure/window/reinforced/smart{
+	dir = 1;
+	id_tag = "HOSBed"
 	},
 /turf/simulated/floor/mineral/lead{
 	icon_state = "wood";
@@ -67169,15 +67174,20 @@
 /area/vox_trading_post/docking)
 "iFy" = (
 /obj/structure/grille,
-/obj/structure/window/reinforced/tinted,
-/obj/structure/window/reinforced/tinted{
-	dir = 4
+/obj/structure/window/reinforced/smart{
+	id_tag = "ChapelGlass"
 	},
-/obj/structure/window/reinforced/tinted{
-	dir = 1
+/obj/structure/window/reinforced/smart{
+	dir = 4;
+	id_tag = "ChapelGlass"
 	},
-/obj/structure/window/reinforced/tinted{
-	dir = 8
+/obj/structure/window/reinforced/smart{
+	dir = 1;
+	id_tag = "ChapelGlass"
+	},
+/obj/structure/window/reinforced/smart{
+	dir = 8;
+	id_tag = "ChapelGlass"
 	},
 /turf/simulated/floor/plating,
 /area/chapel/office)
@@ -100475,12 +100485,14 @@
 	level = 2;
 	on = 1
 	},
-/obj/machinery/door_control{
-	id_tag = "HOSBed";
+/obj/machinery/access_button{
+	command = "toggle";
+	master_tag = "HOSBed";
 	name = "Smart Glass Control"
 	},
-/obj/structure/window/reinforced/tinted{
-	dir = 1
+/obj/structure/window/reinforced/smart{
+	dir = 1;
+	id_tag = "HOSBed"
 	},
 /turf/simulated/floor/mineral/lead{
 	icon_state = "wood";
@@ -120445,15 +120457,20 @@
 "psh" = (
 /obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/window/reinforced/tinted,
-/obj/structure/window/reinforced/tinted{
-	dir = 4
+/obj/structure/window/reinforced/smart{
+	id_tag = "ChapelGlass"
 	},
-/obj/structure/window/reinforced/tinted{
-	dir = 1
+/obj/structure/window/reinforced/smart{
+	dir = 4;
+	id_tag = "ChapelGlass"
 	},
-/obj/structure/window/reinforced/tinted{
-	dir = 8
+/obj/structure/window/reinforced/smart{
+	dir = 1;
+	id_tag = "ChapelGlass"
+	},
+/obj/structure/window/reinforced/smart{
+	dir = 8;
+	id_tag = "ChapelGlass"
 	},
 /turf/simulated/floor/plating,
 /area/chapel/office)
@@ -123386,10 +123403,13 @@
 /area/engineering/supermatter_room)
 "pLJ" = (
 /obj/structure/grille,
-/obj/structure/window/reinforced/tinted{
-	dir = 4
+/obj/structure/window/reinforced/smart{
+	dir = 4;
+	id_tag = "ChapelGlass"
 	},
-/obj/structure/window/reinforced/tinted,
+/obj/structure/window/reinforced/smart{
+	id_tag = "ChapelGlass"
+	},
 /turf/simulated/floor/plating,
 /area/chapel/office)
 "pLM" = (
@@ -140023,8 +140043,9 @@
 /obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater,
 /obj/item/weapon/nullrod,
-/obj/machinery/door_control{
-	id_tag = "ChapelGlass";
+/obj/machinery/access_button{
+	command = "toggle";
+	master_tag = "ChapelGlass";
 	name = "Smart Glass Control"
 	},
 /turf/simulated/floor{
@@ -150908,12 +150929,16 @@
 /area/tcomms/chamber)
 "tmx" = (
 /obj/structure/grille,
-/obj/structure/window/reinforced/tinted,
-/obj/structure/window/reinforced/tinted{
-	dir = 1
+/obj/structure/window/reinforced/smart{
+	id_tag = "ChapelGlass"
 	},
-/obj/structure/window/reinforced/tinted{
-	dir = 8
+/obj/structure/window/reinforced/smart{
+	dir = 1;
+	id_tag = "ChapelGlass"
+	},
+/obj/structure/window/reinforced/smart{
+	dir = 8;
+	id_tag = "ChapelGlass"
 	},
 /turf/simulated/floor/plating,
 /area/chapel/office)
@@ -187523,15 +187548,20 @@
 "xOt" = (
 /obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced/tinted,
-/obj/structure/window/reinforced/tinted{
-	dir = 4
+/obj/structure/window/reinforced/smart{
+	id_tag = "ChapelGlass"
 	},
-/obj/structure/window/reinforced/tinted{
-	dir = 1
+/obj/structure/window/reinforced/smart{
+	dir = 4;
+	id_tag = "ChapelGlass"
 	},
-/obj/structure/window/reinforced/tinted{
-	dir = 8
+/obj/structure/window/reinforced/smart{
+	dir = 1;
+	id_tag = "ChapelGlass"
+	},
+/obj/structure/window/reinforced/smart{
+	dir = 8;
+	id_tag = "ChapelGlass"
 	},
 /turf/simulated/floor/plating,
 /area/chapel/office)
