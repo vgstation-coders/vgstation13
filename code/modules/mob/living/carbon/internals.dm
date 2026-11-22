@@ -108,6 +108,8 @@
 		internals.icon_state = "internal-[breath_string]-[internal ? "1" : "0"]"
 
 /mob/living/carbon/proc/breathe()
+	if(!loc)
+		return
 	if(!needs_to_breathe())
 		return
 	if(nobreath)
