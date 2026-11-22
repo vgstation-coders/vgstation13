@@ -55,14 +55,8 @@
 		var/datum/weather/W = C.current_weather
 		var/weather_display = W ? "[W.name] <a href='?_src_=vars;Vars=\ref[W]'>\[VV\]</A>" : "<font color='red'>ERROR: NULL</font>"
 		var/timeleft_display = W ? "<a href='?src=\ref[src];climate_timeleft=\ref[W]'>[formatTimeDuration(W.timeleft)]</A>" : "<font color='red'>N/A</font>"
-		var/extra_vlevel_str=""
-		if(C.additional_v.len)
-			extra_vlevel_str+="+("
-			for(var/datum/virtual_z/a_vz in C.additional_v)
-				extra_vlevel_str+="vZ-[a_vz.id],"
-			extra_vlevel_str+=")"
 		dat += {"<tr>
-			<td>vZ-[C.v.id][extra_vlevel_str]</td>
+			<td>[C.vlevel_label()]</td>
 			<td>[C.name]<a href='?_src_=vars;Vars=\ref[C]'>\[VV\]</A></td>
 			<td>[weather_display]</td>
 			<td>[timeleft_display]</td>

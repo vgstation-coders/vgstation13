@@ -83,6 +83,15 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	vz.register_weather_turfs(src)
 	return TRUE
 
+// Names every virtual z-level this climate covers, e.g. "vZ-1" or "vZ-1+(vZ-4)". For admin-facing text.
+/datum/climate/proc/vlevel_label()
+	. = "vZ-[v.id]"
+	if(additional_v.len)
+		var/list/extra = list()
+		for(var/datum/virtual_z/a_vz in additional_v)
+			extra += "vZ-[a_vz.id]"
+		. += "+([jointext(extra, ",")])"
+
 // Override this in climate subtypes to define the weather system
 /datum/climate/proc/setup_weather_system()
 	return
@@ -515,11 +524,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		)
 	)
 
-/datum/climate/jungle/New(var/datum/virtual_z/vz,var/random_starting_weather = FALSE)
-	..()
-	if(current_weather)
-		current_weather.timeleft = 10 MINUTES //give a 10 minute grace period of calm weather when the round starts.
-
 
 ///////////////////////////////////  WEATHER DATUMS //////////////////////////////
 /datum/weather
@@ -793,7 +797,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	precip_estimate = "<font color='red'>about 200mm/hour (ALERT)</font>"
 	weather_sound = 'sound/effects/weather/rain_storm.ogg'
 	precip_intensity = WEATHER_SEVERE
-	vision_reduction = 5
+	vision_reduction = 3
 	slowdown = 0.6
 	weather_sound_volume = 90
 

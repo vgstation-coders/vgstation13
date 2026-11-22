@@ -60,6 +60,7 @@
 
 /datum/map/active/map_specific_init()
 	var/datum/climate/C=SSweather.set_climate(/datum/climate/jungle, zLevel = map.zMainStation)
+	C.current_weather.timeleft = 10 MINUTES //give a 10 minute grace period of calm weather when the round starts.
 
 	generate_mapvaults()
 	//replace all the asteroid turfs that are generated randomly with the tunnel generation (i don't even know where) with the proper tiles.
