@@ -143887,9 +143887,7 @@
 	},
 /area/centcom/control)
 "suj" = (
-/obj/docking_port/destination/vox/west_station{
-	areaname = "west of station within shield"
-	},
+/obj/docking_port/destination/vox/west_shield_station,
 /turf/space,
 /area)
 "sun" = (
@@ -177397,9 +177395,7 @@
 	icon_state = "engine"
 	})
 "wyL" = (
-/obj/docking_port/destination/syndicate/west{
-	areaname = "west of the station within shield"
-	},
+/obj/docking_port/destination/syndicate/west_shield,
 /turf/space,
 /area)
 "wyM" = (
