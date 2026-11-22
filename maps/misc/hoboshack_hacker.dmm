@@ -1261,14 +1261,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/mob/living/simple_animal/cockroach/turkish{
-	desc = "A cockroach that hitched a ride in one of the pizza boxes. Someone put a tiny paper fez over its head. It seems to like it.";
-	stop_automated_movement_when_pulled = 1;
-	last_laid_eggs = 999999999;
-	minbodytemp = 1.15;
-	name = "Dr. Lime";
-	health = 99999999999
-	},
+/mob/living/simple_animal/cockroach/turkish/lime,
 /turf/simulated/floor/carpet/shag{
 	color = "#AAAAFF"
 	},

@@ -344,3 +344,18 @@
 /mob/living/simple_animal/cockroach/turkish/death(var/gore = 1)
 	new /obj/item/clothing/head/fez(get_turf(src))
 	..()
+
+//Hacker hobo shack pet
+/mob/living/simple_animal/cockroach/turkish/lime
+	name = "Dr. Lime"
+	desc = "A cockroach that hitched a ride in one of the pizza boxes. Someone put a tiny paper fez over its head. It seems to like it."
+	minbodytemp = 1.15
+	stop_automated_movement_when_pulled = 1
+
+/mob/living/simple_animal/cockroach/turkish/lime/New()
+	..() //cockroach/New() rolls a random maxHealth, override it afterwards
+	maxHealth = 99999999999
+	health = maxHealth
+
+/mob/living/simple_animal/cockroach/turkish/lime/lay_eggs()
+	last_laid_eggs = world.time //No breeding
