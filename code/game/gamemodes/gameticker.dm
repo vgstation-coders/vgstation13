@@ -199,7 +199,8 @@ var/datum/controller/gameticker/ticker
 		var/mob/new_player/np = M
 		if(!(np.ready && np.mind && np.mind.assigned_role))
 			//If they aren't ready, update new player panels so they say join instead of ready up.
-			np.new_player_panel()
+			spawn()
+				np.new_player_panel()
 			continue
 		var/datum/preferences/prefs = M.client.prefs
 		var/key = M.key

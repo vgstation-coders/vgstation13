@@ -18,6 +18,7 @@
 	var/default_language=null
 	var/times_cloned=0
 	var/talkcount
+	var/clown
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
@@ -48,6 +49,7 @@
 	new_copy.attack_log = attack_log.Copy()
 	new_copy.default_language = default_language
 	new_copy.times_cloned = times_cloned
+	new_copy.clown = clown
 
 	return new_copy
 
@@ -456,8 +458,7 @@
 
 /obj/machinery/computer/scan_consolenew/Destroy()
 	if(connected)
-		if(connected.connected == src)
-			connected.connected = null
+		connected.connected -= src
 		connected = null
 	for(var/datum/block_label/label in labels)
 		qdel(label)
@@ -498,7 +499,7 @@
 /obj/machinery/computer/scan_consolenew/initialize()
 	connected = findScanner()
 	if(connected)
-		connected.connected = src
+		connected.connected += src
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
 	switch(severity)
@@ -559,7 +560,7 @@
 		if(!connected)
 			connected = findScanner() //lets get that machine
 			if(connected)
-				connected.connected = src
+				connected.connected += src
 		ui_interact(user)
 
 /obj/machinery/computer/scan_consolenew/AltClick()

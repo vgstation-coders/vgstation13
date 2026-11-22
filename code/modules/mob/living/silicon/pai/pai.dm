@@ -54,7 +54,7 @@
 	var/obj/item/device/gps/planetary/pai/xps_device = null //our planetary expedition tracker
 	var/sharedfirmware = FALSE
 
-	var/obj/machinery/newscaster/painews //our copy of the Newscaster
+	var/obj/machinery/newscaster/pai/painews //our copy of the Newscaster
 
 	var/obj/item/device/station_map/holomap_device = null // Our holomap device.
 	var/holo_target = "show_map" // Our holomap target.

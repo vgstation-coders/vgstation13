@@ -6,6 +6,7 @@ var/list/labor_console_categories = list(
 	"Medical" = medical_positions,
 	"Science" = science_positions,
 	"Cargo" = cargo_positions,
+	"Silicon" = silicon_console_positions,
 	)
 
 /obj/machinery/computer/labor
@@ -54,7 +55,10 @@ var/list/labor_console_categories = list(
 	if(awaiting_swipe)
 		dat += "<div class='modal'><div class='modal-content'><div class='line'>Swipe a valid ID to confirm:</div><br>"
 		if(freeing != "")
+			var/datum/job/freeing_datum = job_master.GetJob(freeing)
 			dat += "<b>Freeing</b> <div class='line'>[uppertext(freeing)]</div> Job Slot"
+			if(freeing_datum && freeing_datum.latejoin_fee)
+				dat += "<br>Nanotrasen will bill the station account $[freeing_datum.latejoin_fee] on arrival."
 		else if(closing != "")
 			dat += "<b>Closing</b> <div class='line'>[uppertext(closing)]</div> Job Slot"
 		else if(toggling_priority != "")
@@ -83,7 +87,7 @@ var/list/labor_console_categories = list(
 		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.get_total_positions()])</td> <td>"
 		if(job_datum.current_positions >= job_datum.get_total_positions())
 			var/reason = job_datum.reject_new_slots()
-			dat += "[reason ? "([reason])" : "<A href='?src=\ref[src];free=[job_datum.title]'>(Free Slot)</A>"]"
+			dat += "[reason ? "([reason])" : "<A href='?src=\ref[src];free=[job_datum.title]'>(Free Slot[job_datum.latejoin_fee ? " - $[job_datum.latejoin_fee]" : ""])</A>"]"
 		else
 			if(job_datum.xtra_positions>0) //not all available positions are filled AND there freed slots
 				dat += "<A href='?src=\ref[src];close=[job_datum.title]'>(Close Slot)</A> "

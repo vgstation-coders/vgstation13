@@ -16,10 +16,10 @@
 	verb_rotates = TRUE
 	alt_click_rotates = TRUE
 	rotate_type = /obj/structure/railing
+	sheet_type = /obj/item/stack/sheet/metal
 	var/railingtype = "metal"
 	var/wrenchtime = 10
 	var/weldtime = 25
-	var/sheettype = /obj/item/stack/sheet/metal
 	var/hit_behind_chance = 90
 	var/wired = FALSE
 	var/wire_color = "#FFFFFF"
@@ -279,7 +279,7 @@
 		var/obj/item/stack/cable_coil/CC = new /obj/item/stack/cable_coil(get_turf(src),2)
 		CC._color = wire_color
 		CC.update_icon()
-	var/obj/item/stack/sheet/M = new sheettype(loc)
+	var/obj/item/stack/sheet/M = new sheet_type(loc)
 	M.amount = 2
 	qdel(src)
 
@@ -377,7 +377,7 @@
 	railingtype = "plasteel"
 	wrenchtime = 20
 	weldtime = 50
-	sheettype = /obj/item/stack/sheet/plasteel
+	sheet_type = /obj/item/stack/sheet/plasteel
 	health = 100
 	icon_state = "plasteelrailing0"
 	hit_behind_chance = 70
@@ -403,7 +403,7 @@
 
 /obj/structure/railing/wood
 	railingtype = "wooden"
-	sheettype = /obj/item/stack/sheet/wood
+	sheet_type = /obj/item/stack/sheet/wood
 	health = 30
 	icon_state = "woodenrailing0"
 	hit_behind_chance = 50

@@ -152,7 +152,8 @@
 			if(I.luckiness)
 				result_item.luckiness += I.luckiness
 		qdel(O)
-	container.reagents.clear_reagents() //Clear all the reagents we haven't transfered, for instance if we need to cook in water
+	if (container.reagents)
+		container.reagents.clear_reagents() //Clear all the reagents we haven't transfered, for instance if we need to cook in water
 	score.meals++
 	return result_obj
 

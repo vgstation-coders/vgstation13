@@ -6,6 +6,7 @@
 	item_state = "banana" //banana inhand sprites when
 	w_class = W_CLASS_SMALL
 	force = 2.0
+	origin_tech = Tc_SYNDICATE + "=1"
 	var/stage = 0
 	var/state = 0
 	var/path = 0

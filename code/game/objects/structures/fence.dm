@@ -43,9 +43,15 @@
 	var/static/list/smoothables = list(
 		/obj/structure/fence,
 		/obj/structure/grille,
+		/obj/machinery/door,
 		/turf/simulated/wall,
 	)
 	return smoothables
+
+/obj/structure/fence/isSmoothableNeighbor(atom/A, bordercheck)
+	if(A.flow_flags & ON_BORDER) //just being sure
+		return FALSE
+	. = ..()
 
 /obj/structure/fence/relativewall()
 	. = ..()
@@ -140,7 +146,10 @@
 			return
 
 	if(hole_size >= SMALL_HOLE)
-		user.drop_item(W, get_turf(src))
+		if(user.drop_item(W, get_turf(src)))
+			return
+
+	. = ..()
 
 /obj/structure/fence/attack_paw(mob/user)
 	if(M_HULK in user.mutations)
@@ -287,9 +296,18 @@
 	icon_state = "door_opened"
 	open = TRUE
 
+/obj/structure/fence/door/emag_act(mob/user)
+	if(!emagged)
+		to_chat(user, "<span class='warning'>You short out the access on \the [src].</span>")
+		emagged = TRUE
+		if(!open)
+			open = TRUE
+			update_door_status()
+			playsound(src, 'sound/machines/click.ogg', 100, 1)
+
 /obj/structure/fence/door/attack_hand(mob/user)
 	if(can_open(user))
-		if(open || check_access(user))
+		if(open || check_access(user) || emagged)
 			toggle(user)
 		else
 			playsound(loc, 'sound/machines/denied.ogg', 50, 1)
@@ -338,7 +356,7 @@
 
 /obj/structure/fence/door/secure/AltClick(mob/user)
 	// must be on same turf
-	if(!user.incapacitated() && get_turf(user) == get_turf(src) && user.dexterity_check() && allowed(user))
+	if(!user.incapacitated() && get_turf(user) == get_turf(src) && user.dexterity_check() && (allowed(user) || emagged))
 		inverted = !inverted
 		change_dir(opposite_dirs[dir])
 		to_chat(user, "<span class='notice'>You flip the door latch to the other side of the door. It now faces [dir2text(dir)].</span>")

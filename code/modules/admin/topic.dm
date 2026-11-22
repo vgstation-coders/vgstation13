@@ -723,6 +723,9 @@
 		message_admins("<span class='notice'>[key_name(usr)] restarted the climate controller for vZ-[C.v.id].</span>", 1)
 		climate_panel()
 
+	else if(handle_admin_arena_topic(href_list))
+		return
+
 	else if(href_list["level_manager_jump"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -6169,6 +6172,173 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			return
 		else
 			toggle_tag_mode(usr)
+
+// Topic is literally at the limit of how many else if statements we can add so I've separated this out, lmao.
+/datum/admins/proc/handle_admin_arena_topic(var/list/href_list)
+	if(href_list["admin_arena_panel_create"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		var/turf/T = get_turf(usr)
+		if(!T)
+			return 1
+		var/response = alert(usr, "Create an arena with bottom-left at [T.x],[T.y],[T.z]?", "Create Arena", "Yes", "No")
+		if(response != "Yes")
+			return 1
+		new /datum/admin_arena(T)
+		log_admin("[key_name(usr)] created an arena with bottom-left at [T.x],[T.y],[T.z].")
+		message_admins("<span class='notice'>[key_name(usr)] created an arena with bottom-left at [T.x],[T.y],[T.z].</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_add_prep_room"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		var/turf/T = get_turf(usr)
+		if(!T)
+			return 1
+		var/response = alert(usr, "Create a prep room spawn point at [T.x],[T.y],[T.z]?", "Create Prep Room", "Yes", "No")
+		if(response != "Yes")
+			return 1
+		add_prep_room(T)
+		log_admin("[key_name(usr)] created a prep room marker at [T.x],[T.y],[T.z].")
+		message_admins("<span class='notice'>[key_name(usr)] created a prep room marker at [T.x],[T.y],[T.z].</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_remove_prep_room"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		var/obj/effect/admin_arena_prep_room_marker/marker = locate(href_list["admin_arena_panel_remove_prep_room"])
+		if(!istype(marker))
+			return 1
+		var/turf/T = get_turf(marker)
+		log_admin("[key_name(usr)] removed a prep room marker at [T ? "[T.x],[T.y],[T.z]" : "(nullspace)"].")
+		message_admins("<span class='notice'>[key_name(usr)] removed a prep room marker[T ? " at [T.x],[T.y],[T.z]" : ""].</span>", 1)
+		qdel(marker)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_load_file"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena)
+			alert(usr, "You need to create an admin arena first!", "No Arena", "Ok")
+			return 1
+		var/dmm_file = input(usr, "Select a .dmm file to load. It must be exactly [ADMIN_ARENA_WIDTH]x[ADMIN_ARENA_HEIGHT] tiles.", "Load Arena") as null|file
+		if(!dmm_file)
+			return 1
+		if(!current_admin_arena.load_from_dmm(dmm_file))
+			alert(usr, "Failed to load the arena. Make sure the file is exactly [ADMIN_ARENA_WIDTH]x[ADMIN_ARENA_HEIGHT] tiles.", "Load Failed", "Ok")
+			return 1
+		log_admin("[key_name(usr)] loaded a custom arena map.")
+		message_admins("<span class='notice'>[key_name(usr)] loaded a custom arena map.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_load_preset"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena)
+			alert(usr, "You need to create an admin arena first!", "No Arena", "Ok")
+			return 1
+		var/list/presets = list()
+		for(var/preset_path in subtypesof(/datum/admin_arena_preset))
+			var/datum/admin_arena_preset/preset = preset_path
+			presets[initial(preset.name)] = preset_path
+		var/selection = input(usr, "Select an arena preset to load.", "Load Preset") as null|anything in presets
+		if(!selection)
+			return 1
+		var/datum/admin_arena_preset/preset = presets[selection]
+		if(!current_admin_arena.load_from_dmm(file(initial(preset.file_path))))
+			alert(usr, "Failed to load the [selection] preset. It seems like this preset needs a code fix.", "Load Failed", "Ok")
+			return 1
+		log_admin("[key_name(usr)] loaded the [selection] arena preset.")
+		message_admins("<span class='notice'>[key_name(usr)] loaded the [selection] arena preset.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_begin_round"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena)
+			alert(usr, "You need to create an admin arena first!", "No Arena", "Ok")
+			return 1
+		var/list/prep_rooms = get_available_arena_prep_rooms(2)
+		if(prep_rooms.len < 2)
+			alert(usr, "You need at least two prep rooms before starting a round!", "Not Enough Prep Rooms", "Ok")
+			return 1
+		var/list/candidates = get_arena_contestant_candidates()
+		if(candidates.len < 2)
+			alert(usr, "There aren't enough valid players to start a round!", "Not Enough Players", "Ok")
+			return 1
+		var/red_choice = input(usr, "Select the RED contestant.", "Begin New Round") as null|anything in candidates
+		if(!red_choice)
+			return 1
+		var/client/red_client = candidates[red_choice]
+		candidates -= red_choice
+		var/green_choice = input(usr, "Select the GREEN contestant.", "Begin New Round") as null|anything in candidates
+		if(!green_choice)
+			return 1
+		var/client/green_client = candidates[green_choice]
+		var/obj/effect/admin_arena_prep_room_marker/red_prep = prep_rooms[1]
+		var/obj/effect/admin_arena_prep_room_marker/green_prep = prep_rooms[2]
+		current_admin_arena_round = new /datum/admin_arena_round(red_client, get_turf(red_prep), green_client, get_turf(green_prep))
+		log_admin("[key_name(usr)] began an arena round: [red_client.ckey] (red) vs [green_client.ckey] (green).")
+		message_admins("<span class='notice'>[key_name(usr)] began an arena round: [red_client.ckey] (red) vs [green_client.ckey] (green).</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_send_to_arena"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return 1
+		if(!current_admin_arena_round.send_contestants_to_arena())
+			alert(usr, "Couldn't find both arena spawn markers (one and two) inside the arena!", "Missing Spawn Markers", "Ok")
+			return 1
+		log_admin("[key_name(usr)] sent the arena contestants into the arena.")
+		message_admins("<span class='notice'>[key_name(usr)] sent the arena contestants into the arena.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_begin_combat"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return 1
+		current_admin_arena_round.begin_combat()
+		log_admin("[key_name(usr)] started combat in the arena.")
+		message_admins("<span class='notice'>[key_name(usr)] started combat in the arena.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_end_round"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return 1
+		current_admin_arena_round.end_round()
+		log_admin("[key_name(usr)] ended the arena round.")
+		message_admins("<span class='notice'>[key_name(usr)] ended the arena round.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	else if(href_list["admin_arena_panel_reset_round"])
+		if(!check_rights(R_ADMIN))
+			return 1
+		if(!current_admin_arena_round)
+			alert(usr, "There's no active round!", "No Round", "Ok")
+			return 1
+		current_admin_arena_round.reset_round()
+		log_admin("[key_name(usr)] reset the arena round.")
+		message_admins("<span class='notice'>[key_name(usr)] reset the arena round.</span>", 1)
+		admin_arena_panel()
+		return 1
+
+	return 0
 
 /datum/admins/proc/SendAdminGhostTo(var/turf/T,var/mob/M)
 	var/client/C = usr.client

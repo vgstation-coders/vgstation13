@@ -21,19 +21,19 @@
 		walk(dude, target, walk_delay)
 	else
 		CRASH("target [target] is not an atom or a dir")
-/datum/component/controller/movement/astar
+/datum/component/controller/movement/pathed
 	var/list/movement_nodes = list()
 	var/target
 
-/datum/component/controller/movement/astar/initialize()
+/datum/component/controller/movement/pathed/initialize()
 	active_components += src
 	return ..()
 
-/datum/component/controller/movement/astar/Destroy()
+/datum/component/controller/movement/pathed/Destroy()
 	active_components -= src
 	..()
 
-/datum/component/controller/movement/astar/cmd_move(target)
+/datum/component/controller/movement/pathed/cmd_move(target)
 	var/mob/living/dude = parent
 	if(isatom(target))
 		if(src.target == target)
@@ -47,7 +47,7 @@
 	else
 		CRASH("target [target] is not an atom or a dir")
 
-/datum/component/controller/movement/astar/process()
+/datum/component/controller/movement/pathed/process()
 	if(movement_nodes && movement_nodes.len && target)
 		if(movement_nodes.len > 0)
 			step_to(parent, movement_nodes[1])
@@ -57,6 +57,6 @@
 			movement_nodes.Cut()
 			return 1
 
-/datum/component/controller/movement/astar/proc/receive_path(var/list/L)
+/datum/component/controller/movement/pathed/proc/receive_path(var/list/L)
 	if(islist(L))
 		movement_nodes = L

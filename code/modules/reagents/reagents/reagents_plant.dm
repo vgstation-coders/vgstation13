@@ -7,7 +7,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#604030" //rgb: 96, 64, 48
 	density = 0.65
-	specheatcap = 35.37
+	specheatcap = 3.537
 	arcane_id = SODIUMCHLORIDE
 	plant_nutrition = 1
 	plant_health = 1
@@ -50,7 +50,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664330" // rgb: 102, 67, 48
 	density = 5.4
-	specheatcap = 15
+	specheatcap = 0.15
 	arcane_id = SODIUMCHLORIDE
 
 /datum/reagent/fertilizer/eznutrient
@@ -136,7 +136,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#49002E" //rgb: 73, 0, 46
 	density = 1.08
-	specheatcap = 4.18
+	specheatcap = 3.18
 	arcane_id = FERTILIZER
 
 //Clear off wallrot fungi
@@ -204,7 +204,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#49002E" //rgb: 73, 0, 46
 	density = 1.08
-	specheatcap = 4.18
+	specheatcap = 3.18
 	arcane_id = FERTILIZER
 	plant_pests = -8
 

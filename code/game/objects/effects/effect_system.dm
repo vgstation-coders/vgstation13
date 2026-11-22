@@ -229,6 +229,8 @@ steam.start() -- spawns the effect
   */
 /proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE, var/silent = FALSE)
 	loc = get_turf(loc)
+	if(isnull(loc)) //something in nullspace, holy crap! abort sparks!
+		return
 	var/tally = -1 //Prevent the sparks from starting if there are already too many sparks on the same tile. -1 to exclude itself
 	for(var/obj/effect/sparks/S in loc.contents)
 		tally++

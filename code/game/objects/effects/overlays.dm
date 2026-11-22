@@ -177,4 +177,94 @@
 	pixel_x += rand(-10, 10) * PIXEL_MULTIPLIER
 	pixel_y += rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/effect/overlay/mapped_weather
+	name = "mapped weather effect"
+	anchored = 1
+	mouse_opacity = 0
 
+/obj/effect/overlay/mapped_weather/ash
+	name = "ash"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "ash1"
+
+/obj/effect/overlay/mapped_weather/ash_hard
+	name = "ash"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "ash2"
+
+/obj/effect/overlay/mapped_weather/ash_storm
+	name = "ash storm"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "ash_storm1"
+	alpha = 140
+
+/obj/effect/overlay/mapped_weather/rain
+	name = "rain"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "rain_average1"
+
+/obj/effect/overlay/mapped_weather/rain_hard
+	name = "rain hard"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "rain_hard1"
+
+/obj/effect/overlay/mapped_weather/rain_storm
+	name = "rain storm"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "rain_storm2"
+
+/obj/effect/overlay/mapped_weather/rain_storm_bright
+	name = "rain storm"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "rain_storm3"
+
+/obj/effect/overlay/mapped_weather/rads
+	name = "radioactive_ash"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "rad1"
+
+/obj/effect/overlay/mapped_weather/rad_storm
+	name = "radstorm"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "rad_storm1"
+	alpha = 170
+
+/obj/effect/overlay/mapped_weather/blood
+	name = "blood rain"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "toxic_rain_hard1"
+
+/obj/effect/overlay/mapped_weather/blood_storm
+	name = "blood storm"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "toxic_storm1"
+
+/obj/effect/overlay/mapped_weather/acid
+	name = "acid rain"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "acid_rain1"
+
+/obj/effect/overlay/mapped_weather/acid_storm
+	name = "acid storm"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "acid_rain_hard1"
+
+/obj/effect/overlay/mapped_weather/dust
+	name = "dust"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "dust1"
+
+/obj/effect/overlay/mapped_weather/dust_storm
+	name = "duststorm"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "dust2"
+
+/obj/effect/overlay/mapped_weather/sand
+	name = "dust"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "sand1"
+
+/obj/effect/overlay/mapped_weather/sandstorm
+	name = "duststorm"
+	icon = 'icons/turf/weatherfx.dmi'
+	icon_state = "sand2"

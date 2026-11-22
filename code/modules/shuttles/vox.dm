@@ -29,6 +29,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	add_dock(/obj/docking_port/destination/vox/east_station)
 	add_dock(/obj/docking_port/destination/vox/south_station)
 	add_dock(/obj/docking_port/destination/vox/west_station)
+	add_dock(/obj/docking_port/destination/vox/west_shield_station)
 	add_dock(/obj/docking_port/destination/vox/northeast_station)
 	add_dock(/obj/docking_port/destination/vox/northwest_station)
 	add_dock(/obj/docking_port/destination/vox/southeast_station)
@@ -133,6 +134,9 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 
 /obj/docking_port/destination/vox/west_station
 	areaname = "west of station"
+
+/obj/docking_port/destination/vox/west_shield_station
+	areaname = "west of station within shield"
 
 /obj/docking_port/destination/vox/tradepost
 	areaname = "vox trading outpost"

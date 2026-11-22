@@ -65,6 +65,7 @@
 	flags = null
 	machine_flags = null
 	is_cooktop = TRUE
+	w_type = RECYK_WOOD
 	var/lastcharge = null
 
 /obj/machinery/space_heater/campfire/stove
@@ -76,6 +77,7 @@
 	nocell = 2
 	machine_flags = WRENCHMOVE
 	is_cooktop = FALSE
+	w_type = NOT_RECYCLABLE
 
 /obj/machinery/space_heater/New()
 
@@ -398,6 +400,13 @@
 	lastcharge = Floor(cell.charge/10)
 	if(on)
 		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
+
+	if(!can_cook())
+		return
+
+	for(var/obj/structure/reagent_dispensers/cauldron/C in loc)
+		if(C.reagents?.total_volume)
+			C.reagents.heating(cook_energy(), cook_temperature())
 
 /obj/machinery/space_heater/proc/putOutFire()
 	on = 0

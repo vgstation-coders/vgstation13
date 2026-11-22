@@ -97,6 +97,7 @@ var/obj/structure/dorfpod/center/dorfpod
 	R.default_language = subject.default_language
 	R.times_cloned = subject.times_cloned
 	R.talkcount = subject.talkcount
+	R.clown = (M_CLUMSY in subject.mutations)
 
 	if (!isnull(subject.mind))
 		R.mind = "\ref[subject.mind]"
@@ -141,6 +142,8 @@ var/obj/structure/dorfpod/center/dorfpod
 	var/mob/living/carbon/human/H = new /mob/living/carbon/human(exit, R.dna.species, delay_ready_dna = TRUE)
 	H.times_cloned = R.times_cloned +1
 	H.talkcount = R.talkcount
+	if(R.clown)
+		H.mutations.Add(M_CLUMSY)
 
 	if(isplasmaman(H))
 		H.fire_sprite = "Plasmaman"

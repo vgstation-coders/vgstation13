@@ -6,7 +6,7 @@
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
 	item_state = "electronic"
-	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_DIAMOND = 1000, MAT_SILVER = 1000)
+	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_DIAMOND = 1000, MAT_SILVER = 1000)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MAGNETS + "=5;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_PROGRAMMING + "=3;" + Tc_BLUESPACE + "=3"
@@ -163,7 +163,7 @@
 		updateUsrDialog()
 
 /obj/item/device/handheld_magnet/proc/can_pull(obj/O) // the iron stuff is basically hotfixed onto this because is_conductor() is WAY too broad for this lil thing
-	. = O && !O.anchored 
+	. = O && !O.anchored
 	if(.)
 		for(var/atom/A in O.contents)
 			if(can_pull(A))

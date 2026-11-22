@@ -6,13 +6,13 @@
 	var/list/path = list()
 
 /mob/living/clickbot/ClickOn(var/atom/A, var/params)
-	path = get_path_to(src, A)
+	path = get_path_to(src, A, diagonally = TRUE) // clickbot follows with step_to, which can move diagonally
 	if (!length(path))
 		playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return
 	pathers += src
 
-/mob/living/clickbot/process_astar_path()
+/mob/living/clickbot/process_path_step()
 	if(gcDestroyed || stat == DEAD || !length(path))
 		return FALSE
 	step_to(src, path[1])
@@ -25,6 +25,6 @@
 		return FALSE
 	return TRUE
 
-/mob/living/clickbot/drop_astar_path()
+/mob/living/clickbot/drop_path()
 	path.Cut()
 	.=..()

@@ -297,6 +297,8 @@
 //Syndie tapes
 // -- /taperoll/syndie = contains all the things dealing with charges
 /obj/item/taperoll/syndie
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 	var/charges_left = 12
 
 /obj/item/taperoll/syndie/police

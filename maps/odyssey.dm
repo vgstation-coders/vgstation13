@@ -93,6 +93,8 @@
 		return FALSE
 	else if(ispath(DR.role_category,/datum/role/wizard))
 		return FALSE
+	else if(ispath(DR.role_category,/datum/role/catbeast))
+		return FALSE
 	return ..()
 
 /datum/map/active/proc/get_ship_state()

@@ -6,6 +6,7 @@ var/global/list/camera_bugs = list()
 	desc = "A handheld tv meant for remote viewing."
 	icon_state = "handtv"
 	w_class = W_CLASS_TINY
+	origin_tech = Tc_MAGNETS + "=1"
 	var/network
 	var/tgui_interface = "CameraConsole"
 	var/list/cameras

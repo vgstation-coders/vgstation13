@@ -666,8 +666,8 @@ var/global/list/alert_overlays_global = list()
 		return FALSE
 	return TRUE
 
-//used in the AStar algorithm to determinate if the turf the door is on is passable
-/obj/machinery/door/firedoor/CanAStarPass()
+//used by the pathfinder to determine if the turf the door is on is passable
+/obj/machinery/door/firedoor/CanPathPass()
 	return !density
 
 /obj/machinery/door/firedoor/npc_tamper_act(mob/living/L)

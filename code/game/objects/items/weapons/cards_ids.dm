@@ -101,6 +101,7 @@
 	var/nticks=0
 	var/disable_config_sync = FALSE
 	var/flash_animation = FLASH_ID_ANIM
+	var/flash_post_delay = 0.5 SECONDS
 
 /obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=1)
 	..(loc)
@@ -195,7 +196,7 @@
 
 /obj/item/weapon/card/emag/attack_self(var/mob/user)
 	if(isliving(user) && !user.incapacitated())
-		user.delayNextAttack(0.5 SECONDS)
+		user.delayNextAttack(flash_post_delay)
 		add_fingerprint(user)
 		user.visible_message("<span class='warning'>[user] displays \the [src] like an absolute madman.</span>","<span class='warning'>You proudly display \the [src].</span>")
 		flash_object_animation(user, src, flash_animation)
@@ -228,6 +229,8 @@ var/list/global/id_cards = list()
 	var/dorm = 0		// determines if this ID has claimed a dorm already
 
 	var/datum/money_account/virtual_wallet = 1	//money! If 0, don't create a wallet. Otherwise create one!
+
+	var/flash_post_delay = 0.5 SECONDS
 
 /obj/item/weapon/card/id/New()
 	..()
@@ -266,7 +269,7 @@ var/list/global/id_cards = list()
 		return
 	user.visible_message("[user] shows you: [bicon(src)] [name]. Assignment: [assignment]",\
 		"You flash your ID card: [bicon(src)] [name]. Assignment: [assignment]")
-	user.delayNextAttack(0.5 SECONDS)
+	user.delayNextAttack(flash_post_delay)
 	add_fingerprint(user)
 	flash_object_animation(user, src, FLASH_ID_ANIM)
 

@@ -28,6 +28,8 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	req_access = list(access_captain)
 
 /datum/shuttle/odyssey/initialize()
+	// share with theseus, derive ship name from map name rather than hardcoding it in strings
+	name = "[map.nameLong]"
 	.=..()
 	outpost_dock = add_dock(/obj/docking_port/destination/odyssey/outpost)
 	add_dock(/obj/docking_port/destination/odyssey/deep_space)
@@ -58,7 +60,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 			deep_space_vlevels += vz
 
 	if(deep_space_vlevels.len)
-		var/channel = "Odyssey Deep Space"
+		var/channel = "[map.nameLong] Deep Space"
 		if(!(channel in accessable_v_levels))
 			accessable_v_levels[channel] = list()
 
@@ -171,7 +173,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	if(transit_port)
 		transit_port.areaname = "Hyperspace"
 	if(current_port != transit_port)
-		captain_announce("The NTEV Odyssey will be departing to [transit_destination_name] in 30 seconds.")
+		captain_announce("The [map.nameLong] will be departing to [transit_destination_name] in 30 seconds.")
 		liftoff_time = world.time + get_pre_flight_delay()
 		// Seal the outer port/starboard airlocks before takeoff so nobody gets vented.
 		for(var/obj/machinery/door/airlock/A in shuttle_contents())
@@ -195,7 +197,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 		if(announce_delay > 0)
 			spawn(announce_delay)
 				if(destination_port)
-					captain_announce("The NTEV Odyssey will be arriving at [dest_name] in 10 seconds.")
+					captain_announce("The [map.nameLong] will be arriving at [dest_name] in 10 seconds.")
 	..()
 	// Start periodic engine firing if we're now in hyperspace transit
 	if(current_port == transit_port)
@@ -227,17 +229,22 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	return ..()
 
 /obj/item/weapon/circuitboard/shuttle_control/odyssey
-	name = "Circuit board (NTEV Odyssey Shuttle Control)"
-	desc = "A circuit board for running the NTEV Odyssey's shuttle control computer."
 	build_path = /obj/machinery/computer/shuttle_control/odyssey
 
+// gayly, Byond doesnt allow constexpr strings at type level so it has to be
+//  done here instead
+/obj/item/weapon/circuitboard/shuttle_control/odyssey/New()
+	..()
+	name = "Circuit board ([map.nameLong] Shuttle Control)"
+	desc = "A circuit board for running the [map.nameLong]'s shuttle control computer."
+
 /obj/machinery/computer/shuttle_control/odyssey
-	name = "NTEV Odyssey shuttle control computer"
 	circuit = "/obj/item/weapon/circuitboard/shuttle_control/odyssey"
 
 /obj/machinery/computer/shuttle_control/odyssey/New()
 	link_to(odyssey_shuttle)
 	.=..()
+	name = "[map.nameLong] shuttle control computer"
 
 /obj/docking_port/destination/odyssey/outpost
 	areaname = "NT Outpost"
@@ -257,8 +264,9 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 /obj/docking_port/destination/odyssey/rendezvous_odyssey
 	areaname = "Rendezvous with Vox Tradeship"
 
-/obj/docking_port/destination/odyssey/rendezvous_trader
-	areaname = "Rendezvous with NTEV Odyssey"
+/obj/docking_port/destination/odyssey/rendezvous_trader/New()
+	..()
+	areaname = "Rendezvous with [map.nameLong]"
 
 /obj/machinery/status_display/odyssey
 	name = "shuttle status display"
@@ -295,6 +303,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	var/auto_return_timer = 0
 
 /datum/shuttle/odyssey_transfer/initialize()
+	name = "[map.nameLong] transfer shuttle"
 	.=..()
 	add_dock(/obj/docking_port/destination/odyssey_transfer/transfer)
 	add_dock(/obj/docking_port/destination/odyssey_transfer/nt_outpost)
@@ -304,45 +313,50 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	..()
 	if(istype(current_port, /obj/docking_port/destination/odyssey_transfer/transfer))
 		for(var/obj/machinery/computer/shuttle_control/odyssey_transfer/C in control_consoles)
-			C.announce("Docked with the NTEV Odyssey. Auto-return to the NT Outpost in 60 seconds.")
+			C.announce("Docked with the [map.nameLong]. Auto-return to the NT Outpost in 60 seconds.")
 		auto_return_timer = world.time + 60 SECONDS
 		spawn(60 SECONDS)
 			if(auto_return_timer && world.time >= auto_return_timer && istype(current_port, /obj/docking_port/destination/odyssey_transfer/transfer) && outpost_dock)
 				travel_to(outpost_dock)
 				auto_return_timer = 0
 
-/obj/docking_port/destination/odyssey_transfer/transfer
-	areaname = "NTEV Odyssey Crew Transfer Dock"
+/obj/docking_port/destination/odyssey_transfer/transfer/New()
+	..()
+	areaname = "[map.nameLong] Crew Transfer Dock"
 
-/obj/docking_port/destination/odyssey_transfer/nt_outpost
-	areaname = "NTEV Odyssey Crew Transfer Shuttle Landing Zone"
+/obj/docking_port/destination/odyssey_transfer/nt_outpost/New()
+	..()
+	areaname = "[map.nameLong] Crew Transfer Shuttle Landing Zone"
 
 /obj/machinery/computer/shuttle_control/odyssey_transfer
-	name = "NTEV Odyssey Crew Transfer Shuttle control computer"
 	icon_state = "syndishuttle"
 
 /obj/machinery/computer/shuttle_control/odyssey_transfer/New()
 	link_to(odyssey_transfer_shuttle)
 	.=..()
+	name = "[map.nameLong] Crew Transfer Shuttle control computer"
 
 /obj/machinery/computer/shuttle_control/odyssey_transfer/try_move(mob/user)
 	if(istype(selected_port, /obj/docking_port/destination/odyssey_transfer/transfer))
 		var/datum/virtual_z/odyssey_vz = odyssey_shuttle?.current_port?.get_virtual_z()
 		if(!odyssey_vz || odyssey_vz.level_type != VZ_PARKING)
-			announce("The NTEV Odyssey is not in deep space. Transfer shuttle cannot dock with the Odyssey.")
+			announce("The [map.nameLong] is not in deep space. Transfer shuttle cannot dock with the [map.nameLong].")
 			return
 	return ..()
 
 /obj/item/weapon/circuitboard/communications/odyssey
-	name = "Circuit board (Odyssey Bridge Communications)"
-	desc = "A circuit board for running the Odyssey bridge communications console."
 	build_path = /obj/machinery/computer/communications/odyssey
+
+/obj/item/weapon/circuitboard/communications/odyssey/New()
+	..()
+	name = "Circuit board ([map.nameLong] Bridge Communications)"
+	desc = "A circuit board for running the [map.nameLong] bridge communications console."
 
 /obj/item/weapon/circuitboard/communications/New()
 	..()
 	if(build_path == /obj/machinery/computer/communications)
-		name = "Circuit board (Odyssey Bridge Communications)"
-		desc = "A circuit board for running the Odyssey bridge communications console."
+		name = "Circuit board ([map.nameLong] Bridge Communications)"
+		desc = "A circuit board for running the [map.nameLong] bridge communications console."
 		build_path = /obj/machinery/computer/communications/odyssey
 
 /obj/machinery/computer/communications/odyssey
@@ -383,7 +397,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	if(!emergency_shuttle || emergency_shuttle.online || emergency_shuttle.departed || emergency_shuttle.shutdown)
 		return
 	emergency_shuttle.incall()
-	captain_announce("The NTEV Odyssey's bridge communications array has been destroyed; Central Command cannot authorize continued exploration operations. Automated emergency protocol engaged: the Bluespace Drive is now charging for immediate return to Central Command.")
+	captain_announce("The [map.nameLong]'s bridge communications array has been destroyed; Central Command cannot authorize continued exploration operations. Automated emergency protocol engaged: the Bluespace Drive is now charging for immediate return to Central Command.")
 	log_game("Communications Console destroyed. Bluespace jump initiated.")
 	message_admins("Communications Console destroyed. Bluespace jump initiated.", 1)
 
@@ -421,7 +435,7 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	return FALSE
 
 /datum/emergency_shuttle/odyssey/panel_title()
-	return "Bluespace Jump Control (NTEV Odyssey)"
+	return "Bluespace Jump Control ([map.nameLong])"
 
 /datum/emergency_shuttle/odyssey/get_panel_jump_turf()
 	if(odyssey_shuttle?.linked_area?.area_turfs?.len)
@@ -741,11 +755,13 @@ var/global/datum/shuttle/odyssey_transfer/odyssey_transfer_shuttle = new(startin
 	file_path = "maps/odyssey/voxshuttle.dmm"
 	unique = TRUE
 
-/obj/docking_port/destination/vox/starboard_breach
-	areaname = "breach into the NTEV Odyssey from the starboard side"
+/obj/docking_port/destination/vox/starboard_breach/New()
+	..()
+	areaname = "breach into the [map.nameLong] from the starboard side"
 
-/obj/docking_port/destination/vox/port_breach
-	areaname = "breach into the NTEV Odyssey from the port side"
+/obj/docking_port/destination/vox/port_breach/New()
+	..()
+	areaname = "breach into the [map.nameLong] from the port side"
 
 /datum/shuttle/vox/initialize()
 	.=..()

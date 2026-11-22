@@ -1377,3 +1377,6 @@
 
 /atom/movable/proc/remove_silence()
 	silence_sprayed = FALSE
+
+/atom/movable/proc/t_scanner_expose(ray_range)
+	return

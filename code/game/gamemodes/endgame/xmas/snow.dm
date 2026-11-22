@@ -351,7 +351,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	health = 50.0
 	pass_flags_self = PASSTABLE
 	var/maxhealth = 50.0
-	materialtype = /obj/item/stack/sheet/snow
+	sheet_type = /obj/item/stack/sheet/snow
 
 /obj/structure/window/barricade/snow/attackby(obj/item/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/stack/sheet/snow))

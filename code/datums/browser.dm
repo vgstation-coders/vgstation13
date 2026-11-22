@@ -110,10 +110,11 @@
 		C = M.client
 	if(!C)
 		return
-	user << browse(get_content(), "window=[window_id];[window_options]")
+	var/dpi = C.dpiScale || 1
+	var/window_size = ""
 	if (width && height)
-		var/dpi = text2num(winget(C, window_id, "dpi")) || 1
-		winset(C, window_id, "size=[width*dpi]x[height*dpi]")
+		window_size = "size=[width*dpi]x[height*dpi];"
+	user << browse(get_content(), "window=[window_id];[window_size][window_options]")
 	if (use_onclose)
 		onclose(user, window_id, ref)
 

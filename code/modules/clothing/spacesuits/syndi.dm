@@ -8,6 +8,8 @@
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.8
 	body_parts_visible_override = EYES|BEARD
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 
 /obj/item/clothing/suit/space/syndicate
 	name = "red space suit"
@@ -20,6 +22,8 @@
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.8
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 
 
 //Green syndicate space suit

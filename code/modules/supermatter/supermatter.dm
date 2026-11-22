@@ -308,7 +308,7 @@
 	var/datum/gas_mixture/removed = env.remove_volume(gasefficency * CELL_VOLUME)
 
 	var/radonenergyfactor=1.0+removed[GAS_RADON]*RADON_EXCITATION_FACTOR //wowza power. prepare your butts for delams.
-	
+
 	var/cryoheatdamping = 1/((removed[GAS_CRYOTHEUM]/CRYOTHEUM_DAMPING_FACTOR)+1)
 
 	power+=emitterpower*radonenergyfactor //radon affects emitter power (as well as temp+atmos related power gen.)
@@ -375,7 +375,7 @@
 		var/rads = (power / 50) * sqrt(1/(max(get_dist(l, src), 1)))
 		l.apply_radiation(rads, RAD_EXTERNAL)
 
-	power -= max(power,(power/power_loss_modifier)**3)
+	power = max(0,power - (power/power_loss_modifier)**3)
 
 	var/light_value = clamp(round(clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
 

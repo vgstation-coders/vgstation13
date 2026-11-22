@@ -111,6 +111,7 @@ var/list/body_archives = list()
 	R.default_language = default_language
 	R.times_cloned = times_cloned
 	R.talkcount = talkcount
+	R.clown = (M_CLUMSY in mutations)
 
 	archive.data["dna_records"] = R
 	archive.data["underwear"] = underwear
@@ -150,6 +151,8 @@ var/list/body_archives = list()
 	var/mob/living/carbon/human/H = new /mob/living/carbon/human(loc, R.dna.species, delay_ready_dna = TRUE)
 	H.times_cloned = 0
 	H.talkcount = R.talkcount
+	if(R.clown)
+		H.mutations.Add(M_CLUMSY)
 	if(isplasmaman(H))
 		H.fire_sprite = "Plasmaman"
 	H.dna = R.dna.Clone()

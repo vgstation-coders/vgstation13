@@ -772,6 +772,7 @@ var/global/ingredientLimit = 10
 	cooks_in_reagents = 0
 	machine_flags = null
 	is_cooktop = FALSE
+	w_type = RECYK_WOOD
 
 /obj/machinery/cooking/grill/spit/cook()
 	ingredient.pixel_y += 7 * PIXEL_MULTIPLIER

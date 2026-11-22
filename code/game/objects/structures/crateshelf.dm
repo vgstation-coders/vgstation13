@@ -120,6 +120,9 @@
 		step(stored, pick(cardinal)) // Shuffle the contents around as though they've fallen down.
 		if(prob(5)) // Open the crate!
 			var/obj/structure/closet/crate/crate = stored
+			if(istype(crate, /obj/structure/closet/crate/secure))
+				var/obj/structure/closet/crate/secure/S = crate
+				S.break_open()
 			if(istype(crate) && crate.open())
 				crate.visible_message("<span class='warning'>[crate]'s lid falls open!</span>")
 	if(trapping)
@@ -349,6 +352,9 @@
 		step(stored, pick(cardinal))
 		if(prob(50))
 			var/obj/structure/closet/crate/crate = stored
+			if(istype(crate, /obj/structure/closet/crate/secure))
+				var/obj/structure/closet/crate/secure/S = crate
+				S.break_open()
 			if(istype(crate) && crate.open())
 				crate.visible_message("<span class='warning'>[crate]'s lid falls open!</span>")
 

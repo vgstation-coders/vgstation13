@@ -600,6 +600,17 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			if(!success)
 				to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut by hand, you'll need something sharp in one of your hands to harvest it.</span>")
 
+		if(istype(user, /mob/living/silicon/robot))
+			var/mob/living/silicon/robot/M = user
+			if(M.module_active)
+				var/obj/item/I = M.module_active
+				if(I.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE))
+					success = 1
+
+			if(!success)
+				to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut with your claws, you'll need a sharper tool to harvest it.</span>")
+
+
 	return success
 
 // Create a seed packet directly from the plant.
