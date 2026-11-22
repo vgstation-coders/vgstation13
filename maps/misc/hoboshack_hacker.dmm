@@ -327,8 +327,7 @@
 "mj" = (
 /obj/machinery/vending/nuka{
 	prices = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka = 0, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum = 0);
-	emagged = 1;
-	desc = "A vending machine filled to the brim with ice cold Nuka Cola! s"
+	emagged = 1
 	},
 /obj/machinery/light/he{
 	dir = 1
