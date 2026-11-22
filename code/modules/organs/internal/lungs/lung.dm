@@ -49,19 +49,7 @@
 	//testing("Ticking lungs...")
 
 	if(!breath || (breath.total_moles() == 0) || (owner.mind?.suiciding))
-		if(owner.reagents?.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
-			return
-		if(owner.mind?.suiciding)
-			owner.adjustOxyLoss(2) //If you are suiciding, you should die a little bit faster
-			owner.failed_last_breath = 1
-			owner.oxygen_alert = 1
-			return
-		if(owner.health > config.health_threshold_crit)
-			owner.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
-		else
-			owner.adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
-		owner.failed_last_breath = 1
-		owner.oxygen_alert = 1
+		owner.suffocate()
 		return
 
 	//Do this to make sure the pressure is correct.

@@ -55,28 +55,29 @@
 		return TRUE
 	return FALSE
 
+// Damage from getting no usable breath, whether from having no lungs or breathing nothing.
+/mob/living/carbon/human/proc/suffocate()
+	if(reagents?.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
+		return
+	if(mind?.suiciding)
+		adjustOxyLoss(2) //If you are suiciding, you should die a little bit faster
+		failed_last_breath = 1
+		oxygen_alert = 1
+		return
+	if(health > config.health_threshold_crit)
+		adjustOxyLoss(HUMAN_MAX_OXYLOSS)
+	else
+		adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
+	failed_last_breath = 1
+	oxygen_alert = 1
+
 /mob/living/carbon/human/handle_breath(var/datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return FALSE
 	var/datum/organ/internal/lungs/L = get_lungs()
 	if(!L)
-		if(reagents?.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
-			return FALSE
-		if(mind?.suiciding)
-			adjustOxyLoss(2) //If you are suiciding, you should die a little bit faster
-			failed_last_breath = 1
-			oxygen_alert = 1
-			return FALSE
-		if(health > config.health_threshold_crit)
-			adjustOxyLoss(HUMAN_MAX_OXYLOSS)
-		else
-			adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
-		failed_last_breath = 1
-		oxygen_alert = 1
-
+		suffocate()
 		return FALSE
 	// Lungs now handle processing atmos shit.
-	else
-		L.handle_breath(breath)
-
+	L.handle_breath(breath)
 	return TRUE
