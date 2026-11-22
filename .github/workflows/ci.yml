@@ -95,6 +95,13 @@ jobs:
         with:
           python-version: ${{env.PYTHON_VERSION}}
 
+      # BYOND is a 32-bit program and needs 32-bit libcurl.
+      - name: Install BYOND dependencies
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libcurl4t64:i386 libstdc++6:i386
+
       - uses: actions/cache@v6
         name: Cache BYOND installation
         with:
