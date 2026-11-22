@@ -4,6 +4,7 @@
 	var/icon_state_dead
 	var/flag = 0
 	base_insulation = 0.5
+	losebreath_gasp_chance = 75
 
 /mob/living/carbon/complex/New()
 	create_reagents(200)

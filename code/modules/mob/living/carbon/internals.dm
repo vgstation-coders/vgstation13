@@ -14,6 +14,7 @@
 	var/SA_para_min = 0.5
 	var/SA_sleep_min = 5
 	var/oxygen_used = 0
+	var/losebreath_gasp_chance = 10 // Chance to gasp on each breath skipped because of losebreath
 
 /mob/living/carbon/proc/has_breathing_mask()
 	return is_wearing_item(/obj/item/clothing/mask, slot_wear_mask)
@@ -125,7 +126,7 @@
 		losebreath++
 	if(losebreath > 0) //Suffocating so do not take a breath
 		losebreath--
-		if(prob(10)) //Gasp per 10 ticks? Sounds about right.
+		if(prob(losebreath_gasp_chance))
 			spawn()
 				emote("gasp")
 		if(istype(loc, /obj/))

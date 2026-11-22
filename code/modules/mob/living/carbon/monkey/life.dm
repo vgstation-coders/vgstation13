@@ -2,6 +2,7 @@
 
 /mob/living/carbon/monkey
 	base_insulation = 0.5
+	losebreath_gasp_chance = 75
 /mob/living/carbon/monkey/Life()
 	//set background = 1
 	if(timestopped)
