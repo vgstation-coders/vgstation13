@@ -20,7 +20,7 @@ As this codebase uses different languages and tools, the folders can be divided 
 	- `BUILD.cmd`. **Type:** Build tool. Script for the compile process in VSCode.
 	- `cleanLogs.bat`. This script calls a Python script to clear public logs of IP addresses. Used in production mode.
 	- `README.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `codebase_structure.md`, `LICENCE`, `GPLv3.txt`. Documentation, coding practice and licencing files*.
-	- `dependencies.sh`. **Type:** Build tool. This script is used to get the right version of Node.js, Python, and other external tools needed for the build process.
+	- `dependencies.sh`. **Type:** Build tool. This script is used to get the right version of Node.js, BYOND, and other external tools needed for the build process.
 	- `players2_empty.sqlite` **Type**: Game files. This is the database BYOND uses to store player characters and preferences. It is accessed using BYOND internal procs. It does *not* contain bans, admins, or connection logs, which are stored using an external database.
 	- `rust_g.dll`, `rust_g_old.dll`. **Type**: External tool. These DLLs are called in the DM code to handle operations which are expensive in DM but that players do not need to see results right away, such as *database operations*.
 	- `SpacemanDMM.toml`. **Type:** Build tool. This is a configuration file for the integrated debugger mostly used when working with VSCode. It also enables live-debugging of the code with auxtools.

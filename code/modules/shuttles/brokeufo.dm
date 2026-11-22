@@ -34,6 +34,7 @@
 	add_dock(/obj/docking_port/destination/syndicate/south)
 	add_dock(/obj/docking_port/destination/syndicate/southwest)
 	add_dock(/obj/docking_port/destination/syndicate/west)
+	add_dock(/obj/docking_port/destination/syndicate/west_shield)
 	add_dock(/obj/docking_port/destination/syndicate/northwest)
 
 /obj/machinery/computer/shuttle_control/brokeufo
