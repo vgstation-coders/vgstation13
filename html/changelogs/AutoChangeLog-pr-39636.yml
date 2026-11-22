@@ -1,0 +1,6 @@
+author: DamianX
+delete-after: true
+changes:
+- bugfix: Custom burgers, sandwiches, pizzas and pasta now keep the reagents of the
+    bun, bread, dough or spaghetti they were built on, including anything injected
+    into it.
