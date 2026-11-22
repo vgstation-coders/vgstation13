@@ -52,6 +52,8 @@
 //#define MAP_OVERRIDE 19
 // theseus.dm
 //#define MAP_OVERRIDE 20
+// cubestation.dm
+//#define MAP_OVERRIDE 21
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this
