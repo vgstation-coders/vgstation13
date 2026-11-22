@@ -179,7 +179,12 @@
 				updatehealth()
 
 /mob/living/carbon/monkey/check_breath_block(var/flag_check = BLOCK_BREATHING)
-	return (flag_check & BLOCK_GAS_SMOKE_EFFECT) ? istype(wear_mask, /obj/item/clothing/mask/gas) : FALSE
+	if(!(flag_check & BLOCK_GAS_SMOKE_EFFECT)) // monkeys never had their breathing blocked by clothing
+		return FALSE
+	for(var/obj/item/I in list(wear_mask, glasses, hat))
+		if(I.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+			return TRUE
+	return FALSE
 
 /mob/living/carbon/monkey/get_thermal_protection_flags()
 	var/thermal_protection_flags = 0
