@@ -179,11 +179,12 @@
 	return goal
 
 /datum/component/ai/human_brain/proc/AcquireItem(mob/living/carbon/human/H, obj/item/I)
+	var/wanted_as_weapon = (DESIRE_HAVE_WEAPON in personal_desires) && IsBetterWeapon(H, comparison = I)
 	H.activate_empty_hand()
 	H.ClickOn(I)
 	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks))
 		ConsumeFood(H, I)
-	else
+	else if(!wanted_as_weapon) //Keep weapons in hand instead of stowing them
 		var/obj/item/held = H.get_active_hand()
 		if(held)
 			H.equip_to_appropriate_slot(held)
