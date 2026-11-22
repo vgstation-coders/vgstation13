@@ -52,6 +52,10 @@
 /mob/living/carbon/complex/get_breath_from_internal(volume_needed)
 	return null
 
+// Complex mobs don't inhale chem smoke unless a subtype says otherwise (see martians).
+/mob/living/carbon/complex/check_breath_block(var/flag_check = BLOCK_BREATHING)
+	return (flag_check & BLOCK_GAS_SMOKE_EFFECT) ? TRUE : FALSE
+
 /mob/living/carbon/complex/proc/handle_environment(datum/gas_mixture/environment)
 	if(!environment || (flags & INVULNERABLE))
 		return
