@@ -444,7 +444,7 @@ var/global/list/air_alarms = list()
 	var/area/new_area = get_area(Obj)
 	if(old_area != new_area)
 		old_area.air_alarms.Remove(src)
-		new_area.air_alarms.Add(src)
+		new_area.air_alarms |= src
 	return ..()
 
 /obj/machinery/alarm/change_area(var/area/oldarea, var/area/newarea)
@@ -1259,8 +1259,8 @@ var/global/list/air_alarms = list()
 	var/area/this_area = get_area(src)
 	area_uid = this_area.uid
 	name = "[this_area.name] Air Alarm"
-	this_area.air_alarms.Add(src)
-	air_alarms += src
+	this_area.air_alarms |= src
+	air_alarms |= src
 
 	apply_preset(1, 0) // Don't cycle and don't propagate.
 	apply_mode() //apply mode to scrubbers and vents
