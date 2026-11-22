@@ -15,5 +15,8 @@ export NODE_VERSION_PRECISE=22.10.0
 # SpacemanDMM git tag
 export SPACEMAN_DMM_VERSION=suite-1.11
 
+# Python version for the CI scripts
+export PYTHON_VERSION=3.14
+
 #rust_g git tag
 export RUST_G_VERSION=3.0.0
