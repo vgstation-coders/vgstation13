@@ -17,8 +17,8 @@
 			if("*[E.key]" in filtered_emotes)
 				continue
 			if(E.can_run_emote(src, FALSE, FALSE)) //Checked last, it looks for hearers on clientless mobs
-				filtered_emotes += list("*[E.key]")
-		filtered_emotes = uniquenamelist(sortList(filtered_emotes))
+				filtered_emotes += "*[E.key]"
+		filtered_emotes = sortList(filtered_emotes)
 		if(!filtered_emotes.len)
 			to_chat(src, "<span class='notice'>Emote '[act]' not found. Say *help for a list.</span>")
 		else
