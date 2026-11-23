@@ -22,7 +22,10 @@
 		else
 			var/new_act = filtered_emotes[1]
 			if(filtered_emotes.len > 1)
+				var/client/asked = client
 				new_act = input(src,"Emotes matching [act]:","Matching emotes") as null|anything in filtered_emotes
+				if(gcDestroyed || client != asked) //We may be long gone or someone else's body by the time an answer comes in
+					return
 			if(new_act)
 				emote(copytext(new_act,2,0),m_type,param,ignore_status,arguments)
 	else
