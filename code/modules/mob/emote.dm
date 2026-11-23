@@ -14,7 +14,7 @@
 			E = E.emote_list[e]
 			if("*[E.key]" in filtered_emotes)
 				continue
-			if(E.can_run_emote(src, FALSE, FALSE) && findtext(E.key,act))
+			if(findtext(E.key,act) && E.can_run_emote(src, FALSE, FALSE)) //Cheap check first, can_run_emote looks for hearers on clientless mobs
 				filtered_emotes += list("*[E.key]")
 		filtered_emotes = uniquenamelist(sortList(filtered_emotes))
 		if(!filtered_emotes.len)
