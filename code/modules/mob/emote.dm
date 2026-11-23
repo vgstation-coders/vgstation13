@@ -11,10 +11,12 @@
 	if(!E)
 		var/list/filtered_emotes = list()
 		for(var/e in E.emote_list)
+			if(!findtext(e,act)) //Keyed by key, third person key and shorthand, so all three get searched
+				continue
 			E = E.emote_list[e]
 			if("*[E.key]" in filtered_emotes)
 				continue
-			if(findtext(E.key,act) && E.can_run_emote(src, FALSE, FALSE)) //Cheap check first, can_run_emote looks for hearers on clientless mobs
+			if(E.can_run_emote(src, FALSE, FALSE)) //Checked last, it looks for hearers on clientless mobs
 				filtered_emotes += list("*[E.key]")
 		filtered_emotes = uniquenamelist(sortList(filtered_emotes))
 		if(!filtered_emotes.len)
