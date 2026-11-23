@@ -1,0 +1,6 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- rscadd: Typing part of an emote after * in the say box now brings up a list of possible
+    matching runnable emotes to choose from if it does not exist, instead of prompting
+    to use *help. This prompt still shows if no matches are found.
