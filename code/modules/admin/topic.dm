@@ -665,8 +665,8 @@
 		if(!nu)
 			return
 		W.timeleft = round(nu SECONDS,SS_WAIT_WEATHER)
-		log_admin("[key_name(usr)] adjusted weather time for vZ-[W.parent.v].")
-		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time for vZ-[W.parent.v].</span>", 1)
+		log_admin("[key_name(usr)] adjusted weather time for [W.parent.vlevel_label()].")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time for [W.parent.vlevel_label()].</span>", 1)
 		climate_panel()
 
 	else if(href_list["climate_weather"])
@@ -696,7 +696,7 @@
 			alert(usr, "There are somehow no weather subtypes!", "Error", "Wtf?")
 			return
 
-		var/nu = input(usr, "Select New Weather for vZ-[C.v.id]", "Adjust Weather", null) as null|anything in valid_climates
+		var/nu = input(usr, "Select New Weather for [C.vlevel_label()]", "Adjust Weather", null) as null|anything in valid_climates
 		if(!nu)
 			to_chat(usr, "Weather change canceled.")
 			return
@@ -705,8 +705,8 @@
 			return
 		C.change_weather(valid_climates[nu],force = TRUE)
 		C.forecast()
-		log_admin("[key_name(usr)] changed the weather to [nu] for vZ-[C.v.id].")
-		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu] for vZ-[C.v.id].</span>", 1)
+		log_admin("[key_name(usr)] changed the weather to [nu] for [C.vlevel_label()].")
+		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu] for [C.vlevel_label()].</span>", 1)
 		climate_panel()
 
 	else if(href_list["climate_restart"])
@@ -715,12 +715,13 @@
 		var/datum/climate/C = locate(href_list["climate_restart"])
 		if(!C || !istype(C))
 			return
-		var/response = alert(usr, "This will completely restart the climate controller for vZ-[C.v.id]. Continue?", "Restart Climate", "Yes", "No")
+		var/levels = C.vlevel_label() //C is deleted by the restart
+		var/response = alert(usr, "This will completely restart the climate controller for [levels]. Continue?", "Restart Climate", "Yes", "No")
 		if(response != "Yes")
 			return
 		SSweather.restart_climate(C)
-		log_admin("[key_name(usr)] restarted the climate controller for vZ-[C.v.id].")
-		message_admins("<span class='notice'>[key_name(usr)] restarted the climate controller for vZ-[C.v.id].</span>", 1)
+		log_admin("[key_name(usr)] restarted the climate controller for [levels].")
+		message_admins("<span class='notice'>[key_name(usr)] restarted the climate controller for [levels].</span>", 1)
 		climate_panel()
 
 	else if(handle_admin_arena_topic(href_list))

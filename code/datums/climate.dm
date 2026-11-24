@@ -21,6 +21,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/list/datum/weather/forecasts = list()
 	var/cycle_freq = list(3 MINUTES,6 MINUTES) //shortest possible time, longest possible time until next weather
 	var/datum/virtual_z/v //virtual z-level the climate is occupying
+	var/list/datum/virtual_z/additional_v= list() //additional v-levels we occupy treated as secondary.
 	var/list/allowed_weather_types = list() // List of weather types this climate can have
 	var/list/weather_transitions = list() // Associative list: weather_type = list(possible_transitions)
 	var/list/weather_intensities = list() // Associative list: weather_type = intensity_level
@@ -75,6 +76,24 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	weather_turfs -= T
 	if(weather_image && (weather_image in T.vis_contents))
 		T.vis_contents -= weather_image
+
+// Makes this climate also cover another virtual z-level, sharing its weather with the main one.
+// Call it once the level's areas are final (e.g. after vault generation), as it registers the level's outdoor turfs.
+/datum/climate/proc/add_vlevel(var/datum/virtual_z/vz)
+	if(!vz || vz == v || (vz in additional_v))
+		return FALSE
+	additional_v += vz
+	vz.register_weather_turfs(src)
+	return TRUE
+
+// Names every virtual z-level this climate covers, e.g. "vZ-1" or "vZ-1+(vZ-4)". For admin-facing text.
+/datum/climate/proc/vlevel_label()
+	. = "vZ-[v.id]"
+	if(additional_v.len)
+		var/list/extra = list()
+		for(var/datum/virtual_z/a_vz in additional_v)
+			extra += "vZ-[a_vz.id]"
+		. += "+([jointext(extra, ",")])"
 
 // Override this in climate subtypes to define the weather system
 /datum/climate/proc/setup_weather_system()
@@ -194,6 +213,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 			qdel(current_weather)
 			current_weather = weather
 			current_weather.execute()
+			current_weather.update_weather_sounds()
 		else
 			var/datum/weather/W = weather
 			weather_transitions[current_weather.type] = list()
@@ -467,6 +487,47 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		)
 	)
 
+
+//junglestation's climate
+/datum/climate/jungle
+	name = "jungle"
+	starting_weather_type = /datum/weather/standard
+	weather_image_type = /obj/effect/weather_holder/tropical
+	cycle_freq = list(5 MINUTES, 10 MINUTES)
+	allowed_weather_types = list(
+		/datum/weather/standard,
+		/datum/weather/cloudy/rain,
+		/datum/weather/cloudy/rain/heavy,
+		/datum/weather/cloudy/rain/monsoon,
+	)
+	weather_intensities = list(
+		/datum/weather/standard = 0,
+		/datum/weather/cloudy/rain = 1,
+		/datum/weather/cloudy/rain/heavy = 2,
+		/datum/weather/cloudy/rain/monsoon = 3,
+	)
+	weather_transitions = list(
+		/datum/weather/standard = list(
+			/datum/weather/standard = 50,
+			/datum/weather/cloudy/rain = 50,
+		),
+		/datum/weather/cloudy/rain = list(
+			/datum/weather/standard = 30,
+			/datum/weather/cloudy/rain = 35,
+			/datum/weather/cloudy/rain/heavy = 35,
+		),
+		/datum/weather/cloudy/rain/heavy = list(
+			/datum/weather/cloudy/rain = 20,
+			/datum/weather/cloudy/rain/heavy = 65,
+			/datum/weather/cloudy/rain/monsoon = 15,
+		),
+		/datum/weather/cloudy/rain/monsoon = list(
+			/datum/weather/cloudy/rain/heavy = 67,
+			/datum/weather/cloudy/rain/monsoon = 33
+		)
+	)
+
+
 ///////////////////////////////////  WEATHER DATUMS //////////////////////////////
 /datum/weather
 	var/name = "weather"
@@ -501,6 +562,9 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		CRASH("execute called on weather with null virtual_z.")
 	vz.weather_mod = light_modifier
 	SSDayNight.update_lighting(vz, immediate = TRUE)
+	for(var/datum/virtual_z/a_vz in parent.additional_v)
+		a_vz.weather_mod = light_modifier
+		SSDayNight.update_lighting(a_vz, immediate = TRUE)
 
 /datum/weather/proc/tick()
 	timeleft -= SS_WAIT_WEATHER
@@ -518,6 +582,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(!vz)
 		CRASH("get_weather_affected_players called on weather with null virtual_z.")
 	players_near_weather = vz.get_players()
+	for(var/datum/virtual_z/extra_vz in parent.additional_v)
+		players_near_weather += extra_vz.get_players()
 
 	// Filter to only players in open surface areas (not caves/indoors)
 	for(var/mob/M in players_near_weather)
@@ -584,7 +650,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 			var/turf/unsimulated/floor/snow/snow = get_turf(M)
 			if(snow && istype(snow))
 				snow.Entered(M)
-	update_weather_sounds()
 
 //////////////////////// SNOW SUBTYPES ////////////////////////
 
@@ -729,6 +794,15 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	temperature = T20C
 	precip_estimate = "none expected"
 	lightning_chance = 20
+
+/datum/weather/cloudy/rain/monsoon
+	name = "monsoon"
+	precip_estimate = "<font color='red'>about 200mm/hour (ALERT)</font>"
+	weather_sound = 'sound/effects/weather/rain_storm.ogg'
+	precip_intensity = WEATHER_SEVERE
+	vision_reduction = 3
+	slowdown = 0.6
+	weather_sound_volume = 90
 
 /datum/weather/desert
 	name = "desert"

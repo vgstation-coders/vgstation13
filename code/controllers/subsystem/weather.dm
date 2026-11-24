@@ -24,6 +24,8 @@ var/list/precip_state_to_texture = list()
 	for(var/datum/climate/C in climates)
 		if(C.v == vz)
 			return C
+		if(vz in C.additional_v)
+			return C
 	return null
 
 // Gets the climate from a specific turf
@@ -62,6 +64,7 @@ var/list/precip_state_to_texture = list()
 
 	var/climate_type = C.type
 	var/datum/virtual_z/vz = C.v
+	var/list/datum/virtual_z/additional_v = C.additional_v.Copy()
 
 	climates -= C
 
@@ -82,5 +85,8 @@ var/list/precip_state_to_texture = list()
 		return FALSE
 	for(var/turf/T in turfs)
 		new_climate.register_weather_turf(T)
+		
+	for(var/datum/virtual_z/a_vz in additional_v)
+		new_climate.add_vlevel(a_vz)
 
 	return TRUE
