@@ -367,6 +367,33 @@
 /mob/proc/can_speak_lang(datum/language/speaking)
 	return (universal_speak || (speaking in src.languages))
 
+// Every language the mob can actually speak. Universal speak makes
+// can_speak_lang() true for languages that were never added to the languages
+// list, so the default language picker cannot just use that list. Restricted
+// languages only join the picker when the mob has them in languages, except
+// Galactic Common, which every universal-speak mob should be able to choose.
+/mob/proc/get_spoken_languages()
+	var/list/spoken = list()
+	for(var/language_name in all_languages)
+		var/datum/language/L = all_languages[language_name]
+		if(!(L in languages) && (L.flags & RESTRICTED) && !istype(L, /datum/language/common))
+			continue
+		if(can_speak_lang(L))
+			spoken.Add(L)
+	return spoken
+
+// Every language the mob knows, including the ones universal speak/understand
+// grants without adding them to the languages list. Used by the Known Languages
+// pages so they agree with what the mob can actually use.
+/mob/proc/get_known_languages()
+	var/list/known = languages.Copy()
+	if(universal_speak || universal_understand)
+		for(var/language_name in all_languages)
+			var/datum/language/L = all_languages[language_name]
+			if(!(L in known))
+				known.Add(L)
+	return known
+
 //TBD
 /mob/verb/check_languages()
 	set name = "Check Known Languages"
@@ -387,11 +414,18 @@
 	if(default_language)
 		dat += "Current default language: [default_language] - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a><br/><br/>"
 
-	for(var/datum/language/L in languages)
+	// Universal speak/understand covers every language, including the ones that
+	// never made it into the languages list.
+	var/list/known_languages = get_known_languages()
+	var/list/spoken_languages = get_spoken_languages()
+
+	for(var/datum/language/L in known_languages)
 		if(L == default_language)
 			dat += "<b>[L.name] (:[L.key])</b> - default - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a><br/>[L.desc]<br/><br/>"
-		else
+		else if(L in spoken_languages)
 			dat += "<b>[L.name] (:[L.key])</b> - <a href='byond://?src=\ref[src];default_lang=[html_encode("[L]")]'>set default</a><br/>[L.desc]<br/><br/>"
+		else
+			dat += "<b>[L.name] (:[L.key])</b><br/>[L.desc]<br/><br/>"
 
 	src << browse(HTML_SKELETON(dat), "window=checklanguage")
 

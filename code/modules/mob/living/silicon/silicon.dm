@@ -305,15 +305,20 @@
 	if(default_language)
 		dat += "Current default language: [default_language] - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a><br/><br/>"
 
-	for(var/datum/language/L in languages)
+	var/list/spoken_languages = get_spoken_languages()
+
+	for(var/datum/language/L in get_known_languages())
 		var/default_str
 		if(L == default_language)
 			default_str = " - default - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a>"
 		else
-			default_str = " - <a href='byond://?src=\ref[src];default_lang=[L]'>set default</a>"
+			default_str = " - <a href='byond://?src=\ref[src];default_lang=[html_encode("[L]")]'>set default</a>"
 
 		var/synth = (L in speech_synthesizer_langs)
-		dat += "<b>[L.name] (:[L.key])</b>[synth ? default_str : null]<br/>Speech Synthesizer: <i>[synth ? "YES" : "NOT SUPPORTED"]</i><br/>[L.desc]<br/><br/>"
+		// Universal speak lets the mob speak languages the synthesizer cannot, so
+		// the default link follows the same spoken list as set_default_language()
+		// while the marker stays about the synthesizer itself.
+		dat += "<b>[L.name] (:[L.key])</b>[(L in spoken_languages) ? default_str : null]<br/>Speech Synthesizer: <i>[synth ? "YES" : "NOT SUPPORTED"]</i><br/>[L.desc]<br/><br/>"
 
 	src << browse(HTML_SKELETON(dat), "window=checklanguage")
 	return

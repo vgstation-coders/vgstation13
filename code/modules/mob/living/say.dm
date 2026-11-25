@@ -89,9 +89,11 @@ var/list/headset_modes = list(
 )
 
 /mob/living/proc/get_default_language()
-	if(!default_language)
-		if(languages && languages.len)
-			default_language = languages[1]
+	if(!default_language || !can_speak_lang(default_language))
+		var/datum/language/fallback = init_language
+		if(!fallback || !can_speak_lang(fallback))
+			fallback = (languages && languages.len) ? languages[1] : null
+		default_language = fallback
 	return default_language
 
 /mob/living/hivecheck()
