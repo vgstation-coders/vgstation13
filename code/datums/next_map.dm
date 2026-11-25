@@ -193,6 +193,11 @@
 	path = "theseus"
 	max_players = 20
 
+/datum/next_map/cubestation
+	name = "Cube Station"
+	path = "cubestation"
+
+
 /proc/get_votable_maps()
 	var/list/votable_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))

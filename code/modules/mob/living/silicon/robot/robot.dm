@@ -1271,9 +1271,11 @@
 		component.electronics_damage = 0
 		component.brute_damage = 0
 		component.installed = COMPONENT_INSTALLED
-		if(istype(component.type,/datum/robot_component/cell))
-			if(!component.wrapped)
-				component.wrapped = new(src)
+		if(!component.wrapped || istype(component.wrapped, /obj/item/broken_device))
+			if(component.wrapped)
+				qdel(component.wrapped)
+			component.wrapped = new component.external_type(src)
+		if(istype(component, /datum/robot_component/cell))
 			var/obj/item/weapon/cell/cell = component.wrapped
 			cell.maxcharge = max(15000, cell.maxcharge)
 			cell.charge = cell.maxcharge

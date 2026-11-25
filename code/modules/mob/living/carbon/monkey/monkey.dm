@@ -238,6 +238,9 @@
 	return armorscore
 
 /mob/living/carbon/monkey/getarmorabsorb(var/def_zone, var/type)
+	if(type == "rad") // Radiation subtracts absorb as a flat amount, so use the clothing's real rad absorb, not its percentage armor
+		var/obj/item/worn = ((def_zone == LIMB_HEAD) || (def_zone == "eyes")) ? hat : uniform
+		return worn ? worn.get_armor_absorb(type) : 0
 	return getarmor(def_zone, type)
 
 /mob/living/carbon/monkey/attack_paw(mob/living/M)
@@ -341,8 +344,6 @@
 	set category = "IC"
 	internal = null
 	return
-
-/mob/living/carbon/monkey/var/co2overloadtime = null
 
 /mob/living/carbon/monkey/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)

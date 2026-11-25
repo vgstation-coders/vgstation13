@@ -1,23 +1,22 @@
 #!/bin/sh
 
 #Project dependencies file
-#TODO: Make the Github Actions CI workflow actually use these and
-#uncomment the entries as they become needed/used.
-#Currently, this is only used by build.cmd and TGS quick setup
+#Used by the Github Actions CI workflow, the tools/bootstrap scripts
+#and the TGS scripts.
 
 # byond version
-#export BYOND_MAJOR=516
-#export BYOND_MINOR=1659
+export BYOND_MAJOR=516
+export BYOND_MINOR=1689
 
 #node version
 export NODE_VERSION=16
 export NODE_VERSION_PRECISE=22.10.0
 
 # SpacemanDMM git tag
-#export SPACEMAN_DMM_VERSION=suite-1.7.1
+export SPACEMAN_DMM_VERSION=suite-1.11
 
-# Python version for mapmerge and other tools
-export PYTHON_VERSION=3.9.0
+# Python version for the CI scripts
+export PYTHON_VERSION=3.14
 
 #rust_g git tag
 export RUST_G_VERSION=3.0.0

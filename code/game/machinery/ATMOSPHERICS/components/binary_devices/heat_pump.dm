@@ -141,6 +141,7 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 
 	update_status()
 	if(on != old_on)
+		update_icon()
 		investigation_log(I_ATMOS,"was turned [(on ? "on" : "off")] by a signal")
 
 
@@ -157,4 +158,5 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 /obj/machinery/atmospherics/binary/heat_pump/npc_tamper_act(mob/living/L)
 	on = !on
 	update_status()
+	update_icon()
 	investigation_log(I_ATMOS,"was turned [(on ? "on" : "off")] by [key_name(L)]")

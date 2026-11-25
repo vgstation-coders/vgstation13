@@ -32,16 +32,18 @@
 			to_chat(owner, "<span class='info' style=\"font-family:Courier\">New [I.name] installed.</span>")
 
 /datum/robot_component/proc/uninstall(var/mob/user,var/loud = FALSE)
+	var/was_broken = (installed == COMPONENT_BROKEN)
 	installed = FALSE
 	if(wrapped)
 		to_chat(user, "You remove \the [wrapped].")
 		if(owner.can_diagnose())
-			to_chat(owner, "<span class='info' style=\"font-family:Courier\">[installed == COMPONENT_BROKEN ? "Destroyed [src]" : "Functional [wrapped.name]"] removed.</span>")
+			to_chat(owner, "<span class='info' style=\"font-family:Courier\">[was_broken ? "Destroyed [src]" : "Functional [wrapped.name]"] removed.</span>")
 		if(istype(wrapped,/obj/item/robot_parts/robot_component))
 			var/obj/item/robot_parts/robot_component/I = wrapped
 			I.brute_damage = brute_damage
 			I.electronics_damage = electronics_damage
 			I.isupgrade = upgraded
+		wrapped = null
 
 /datum/robot_component/proc/destroy()
 	var/obj/item/broken_device/G = new/obj/item/broken_device

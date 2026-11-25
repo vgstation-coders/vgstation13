@@ -6,10 +6,10 @@
 	parent.register_event(/event/comp_ai_cmd_get_best_target, src, nameof(src::cmd_get_best_target()))
 	return TRUE
 
-/datum/component/ai/target_holder/proc/cmd_add_target(var/atom/A)
+/datum/component/ai/target_holder/proc/cmd_add_target(var/atom/target)
 	return
 
-/datum/component/ai/target_holder/proc/cmd_remove_target(var/atom/A)
+/datum/component/ai/target_holder/proc/cmd_remove_target(var/atom/target)
 	return
 
 

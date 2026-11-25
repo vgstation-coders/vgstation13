@@ -1,0 +1,7 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: Pried-out cyborg components no longer stay referenced by the cyborg, so
+    an RPED can't pull them out of your hands.
+- bugfix: Cyborg self-diagnosis now reports destroyed components as destroyed when
+    they are removed.

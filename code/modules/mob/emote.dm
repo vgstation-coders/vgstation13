@@ -9,7 +9,27 @@
 	var/datum/emote/E
 	E = E.emote_list[lowertext(act)]
 	if(!E)
-		to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
+		var/list/filtered_emotes = list()
+		for(var/e in E.emote_list)
+			if(!findtext(e,act)) //Keyed by key, third person key and shorthand, so all three get searched
+				continue
+			E = E.emote_list[e]
+			if("*[E.key]" in filtered_emotes)
+				continue
+			if(E.can_run_emote(src, FALSE, FALSE)) //Checked last, it looks for hearers on clientless mobs
+				filtered_emotes += "*[E.key]"
+		filtered_emotes = sortList(filtered_emotes)
+		if(!filtered_emotes.len)
+			to_chat(src, "<span class='notice'>Emote '[act]' not found. Say *help for a list.</span>")
+		else
+			var/new_act = filtered_emotes[1]
+			if(filtered_emotes.len > 1)
+				var/client/asked = client
+				new_act = input(src,"Emotes matching [act]:","Matching emotes") as null|anything in filtered_emotes
+				if(gcDestroyed || client != asked) //We may be long gone or someone else's body by the time an answer comes in
+					return
+			if(new_act)
+				emote(copytext(new_act,2,0),m_type,param,ignore_status,arguments)
 	else
 		E.run_emote(src, param, m_type, ignore_status, arguments)
 

@@ -432,6 +432,11 @@ var/area/space_area
 
 	if(oldArea == src)
 		return 1
+	//Outdoor areas start weather sound loops in their own Entered(). Stop them here for anything that left the outdoors,
+	//because forceMove() never calls the old area's Exited().
+	if(isopensurface(oldArea) && !isopensurface(src) && (isliving(Obj) || Obj.contents.len))
+		for(var/mob/living/L in recursive_type_check(Obj, /mob/living))
+			L.update_weather_sounds(TRUE)
 	if(project_shadows)
 		Obj.update_shadow()
 	else if(istype(oldArea) && oldArea.project_shadows)
