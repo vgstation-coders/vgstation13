@@ -30,6 +30,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 	add_dock(/obj/docking_port/destination/syndicate/south)
 	add_dock(/obj/docking_port/destination/syndicate/southwest)
 	add_dock(/obj/docking_port/destination/syndicate/west)
+	add_dock(/obj/docking_port/destination/syndicate/west_shield)
 	add_dock(/obj/docking_port/destination/syndicate/northwest)
 	add_dock(/obj/docking_port/destination/syndicate/miningoutpost)
 	add_dock(/obj/docking_port/destination/syndicate/researchoutpost)
@@ -97,6 +98,9 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 
 /obj/docking_port/destination/syndicate/west
 	areaname = "west of the station"
+
+/obj/docking_port/destination/syndicate/west_shield
+	areaname = "west of the station within shield"
 
 /obj/docking_port/destination/syndicate/northwest
 	areaname = "north west of the station"

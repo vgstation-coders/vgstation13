@@ -1,7 +1,7 @@
 /datum/emote/living/carbon/human
 	mob_type_allowed_typelist = list(/mob/living/carbon/human)
 
-/datum/emote/living/carbon/human/can_run_emote(var/mob/living/carbon/human/user, var/status_check = TRUE)
+/datum/emote/living/carbon/human/can_run_emote(mob/living/carbon/human/user, status_check = TRUE, show_message = TRUE)
 	if (istype(user) && hands_needed > 0)
 		var/available_hands = 0
 		for (var/datum/organ/external/hand/r_hand/right_hand in user.grasp_organs)
@@ -11,7 +11,8 @@
 			if (!left_hand.status)
 				available_hands++
 		if (available_hands < hands_needed)
-			to_chat(user, "<span class='warning'>You don't have enough hands to perform a [key].</span>")
+			if(show_message)
+				to_chat(user, "<span class='warning'>You don't have enough hands to perform a [key].</span>")
 			return FALSE
 	return ..()
 
@@ -294,7 +295,7 @@
 	key_third_person = "*dab"
 	restraint_check = TRUE
 
-/datum/emote/living/carbon/human/dab/can_run_emote(mob/user, var/status_check = TRUE)
+/datum/emote/living/carbon/human/dab/can_run_emote(mob/user, status_check = TRUE, show_message = TRUE)
 	var/mob/living/carbon/human/H = user
 	if(!(Holiday == APRIL_FOOLS_DAY) && status_check)
 		//var/confirm = alert("Suffer for your sins.", "Confirm Suicide", "gladly", "ok")
@@ -304,20 +305,25 @@
 		if(confirm != "Yes")
 			return FALSE
 	if (iswizard(H))
-		to_chat(user, "<span class='warning'>The Wizard Federation has banned usage of the [key].</span>")
+		if(show_message)
+			to_chat(user, "<span class='warning'>The Wizard Federation has banned usage of the [key].</span>")
 		return FALSE
 	if(H.has_organ(LIMB_LEFT_ARM) && H.has_organ(LIMB_RIGHT_ARM))
 		if(user.stat > stat_allowed)
-			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
+			if(show_message)
+				to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
 			return FALSE
 		if(restraint_check && (user.restrained() || user.locked_to))
-			to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
+			if(show_message)
+				to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
 			return FALSE
 	else
-		to_chat(user, "<span class='warning'>You cannot [key] without both your arms.</span>")
+		if(show_message)
+			to_chat(user, "<span class='warning'>You cannot [key] without both your arms.</span>")
 		return FALSE
 	if(user.reagents && user.reagents.has_reagent(PAROXETINE))
-		to_chat(user, "<span class='numb'>You're too medicated to wanna do that anymore.</span>")
+		if(show_message)
+			to_chat(user, "<span class='numb'>You're too medicated to wanna do that anymore.</span>")
 		return FALSE
 
 	return ..()

@@ -2,7 +2,7 @@
 	name = "Cloud IX engineering crate"
 	desc = "The Cloud IX engineering facility hangs in the atmosphere of the eponymous gas giant. But are the workers happy? Nein."
 
-//3+8+7=18
+//3+8+8=19
 var/global/list/cloudnine_stuff = list(
 	//3 of a kind
 	/obj/item/airshield_projector,/obj/item/airshield_projector,/obj/item/airshield_projector,
@@ -19,11 +19,12 @@ var/global/list/cloudnine_stuff = list(
 	/obj/item/wasteos,
 	/obj/item/weapon/storage/toolbox/master,
 	/obj/item/device/modkit/antiaxe_kit,
+	/obj/item/weapon/fuelrod/challenge,
 	)
 
 /obj/structure/closet/crate/internals/cloudnine/New()
 	..()
-	for(var/i = 1 to 6)
+	for(var/i = 1 to 7)
 		if(!cloudnine_stuff.len)
 			return
 		var/path = pick_n_take(cloudnine_stuff)

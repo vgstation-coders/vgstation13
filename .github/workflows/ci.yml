@@ -14,43 +14,54 @@ on:
     - '**.dmm'
     - '**.dmi'
     - 'vgstation13.dme'
+    - 'dependencies.sh'
     - '.github/workflows/**'
+    - 'tools/ci/**'
+    - 'tools/travis/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 env:
-  BYOND_MAJOR: 516
-  BYOND_MINOR: 1659
-
   #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
-  ALL_MAPS: tgstation metaclub defficiency packedstation roidstation test_tiny test_vault snaxi tgstation-sec tgstation-snow LampreyStation xoq synergy bagelstation lowfatbagel Dorfstation waystation line horizon wheelstation
+  ALL_MAPS: tgstation metaclub defficiency packedstation roidstation test_tiny test_vault snaxi tgstation-sec tgstation-snow LampreyStation xoq synergy bagelstation lowfatbagel Dorfstation waystation line horizon wheelstation cubestation
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   lint:
     name: Run linters
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Don't run this job if the commit message contains that string.
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      # - uses: actions/setup-python@v4
-      #   with:
-      #     python-version: '3.x'
+      - uses: actions/checkout@v7
 
-      - name: Setup Python
+      - name: Load versions from dependencies.sh
         run: |
-          tools/bootstrap/python -c ''
+          source dependencies.sh
+          echo "PYTHON_VERSION=$PYTHON_VERSION" >> "$GITHUB_ENV"
+          echo "SPACEMAN_DMM_VERSION=$SPACEMAN_DMM_VERSION" >> "$GITHUB_ENV"
 
-        #TODO: Cache Dreamchecker install
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{env.PYTHON_VERSION}}
+
+      - name: Cache dreamchecker
+        id: dreamchecker-cache
+        uses: actions/cache@v6
+        with:
+          path: ~/dreamchecker
+          key: dreamchecker-${{runner.os}}-${{env.SPACEMAN_DMM_VERSION}}
+
+      - name: Install dreamchecker
+        if: steps.dreamchecker-cache.outputs.cache-hit != 'true'
+        run: SPACEMAN_DMM_GIT_TAG="$SPACEMAN_DMM_VERSION" tools/travis/install_spaceman_dmm.sh dreamchecker
+
       - name: Run dreamchecker
-        run: |
-          SPACEMAN_DMM_GIT_TAG="suite-1.11" tools/travis/install_spaceman_dmm.sh dreamchecker
-          ~/dreamchecker 2>&1 | bash tools/ci/annotate_dm.sh
+        run: ~/dreamchecker 2>&1 | bash tools/ci/annotate_dm.sh
 
       - name: Run map checker
         run: python tools/travis/check_map_files.py maps/
@@ -65,11 +76,11 @@ jobs:
 
       # OpenDream linting
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4.2.0
+        uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 9.x
+          dotnet-version: 10.x
       - name: Install OpenDream
-        uses: robinraju/release-downloader@v1.9
+        uses: robinraju/release-downloader@v1.13
         with:
           repository: "OpenDreamProject/OpenDream"
           tag: "latest"
@@ -80,7 +91,7 @@ jobs:
 
   build:
     name: ${{matrix.job-name}}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Don't run this job if the commit message contains that string.
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     strategy:
@@ -93,9 +104,35 @@ jobs:
             job-name: Compile and run tests
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
-      - uses: actions/cache@v3
+      - name: Load versions from dependencies.sh
+        run: |
+          source dependencies.sh
+          echo "PYTHON_VERSION=$PYTHON_VERSION" >> "$GITHUB_ENV"
+          echo "BYOND_MAJOR=$BYOND_MAJOR" >> "$GITHUB_ENV"
+          echo "BYOND_MINOR=$BYOND_MINOR" >> "$GITHUB_ENV"
+          echo "RUNNER_IMAGE=$ImageOS-$ImageVersion" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{env.PYTHON_VERSION}}
+
+      # BYOND is a 32-bit program and needs 32-bit libcurl. Installing it with apt
+      # takes about 25 seconds, so the libraries are kept in a cached folder instead.
+      # The key includes the runner image version, so each new image fetches them again.
+      - uses: actions/cache@v6
+        name: Cache BYOND libraries
+        id: byond-libs-cache
+        with:
+          path: ~/byond-libs
+          key: byond-libs-${{env.RUNNER_IMAGE}}-${{hashFiles('tools/ci/install_byond_libs.sh')}}
+
+      - name: Download BYOND libraries
+        if: steps.byond-libs-cache.outputs.cache-hit != 'true'
+        run: tools/ci/install_byond_libs.sh ~/byond-libs
+
+      - uses: actions/cache@v6
         name: Cache BYOND installation
         with:
           path: ~/BYOND-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
@@ -104,9 +141,13 @@ jobs:
       - name: ${{matrix.job-name}}
         env:
           DM_UNIT_TESTS: ${{matrix.dm-unit-tests}}
+        # Explicitly asking for bash enables pipefail, so a build or test script
+        # that crashes fails the job instead of slipping past the awk checks.
+        shell: bash
         run: |
           tools/travis/install-byond.sh
           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
+          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/byond-libs"
           tools/travis/build.py 2>&1 | tee /dev/stderr | awk '/warning:|error:/ { exit 1 }'
           cp tools/travis/config/config.txt config/
           tools/travis/run_tests.py 2>&1 | tee /dev/stderr | awk '/UNIT TEST FAIL/ { exit 1 }'
