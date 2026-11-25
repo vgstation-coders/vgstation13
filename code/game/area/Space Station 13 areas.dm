@@ -146,6 +146,10 @@ var/global/list/adminbusteleportlocs = list()
 
 	sortTim(adminbusteleportlocs, /proc/cmp_text_asc)
 
+/area/proc/on_turf_removed(var/turf/T)
+
+/area/proc/on_turf_added(var/turf/T)
+
 
 /*-----------------------------------------------------------------------------*/
 
@@ -2059,6 +2063,41 @@ var/global/list/adminbusteleportlocs = list()
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 	icon_state="jungle_wild"
 	always_unpowered=TRUE
+
+/area/surface/jungle/on_turf_removed(var/turf/T)
+	var/datum/virtual_z/vz = T.get_virtual_z()
+	var/datum/climate/C = SSweather.get_climate(vz)
+	if(C)
+		C.unregister_weather_turf(T)
+
+/area/surface/jungle/on_turf_added(var/turf/T)
+	var/datum/virtual_z/vz = T.get_virtual_z()
+	var/datum/climate/C = SSweather.get_climate(vz)
+	if(C)
+		C.register_weather_turf(T)
+
+//Climates are looked up from turfs, not from src.v: one area instance can span several z-levels (the main jungle area also has turfs on the derelict), so its v is whichever level initialized last.
+/area/surface/jungle/Entered(atom/movable/Obj, atom/OldLoc)
+	. = ..()
+	if(!isliving(Obj) && !Obj.contents.len)
+		return
+	var/datum/climate/new_climate = SSweather.get_climate_from_turf(get_turf(Obj))
+	//moving between jungle areas under the same climate (e.g. into a patio, or across the surface z-levels) keeps the sound going. a different climate (e.g. going underground) still needs a change.
+	if(istype(get_area(OldLoc), /area/surface/jungle) && SSweather.get_climate_from_turf(get_turf(OldLoc)) == new_climate)
+		return
+	//Obj itself if it's a mob, plus any mobs it carries (a locker's or a mech's occupant)
+	for(var/mob/living/L in recursive_type_check(Obj, /mob/living))
+		L.update_weather_sounds(!new_climate)
+
+/area/surface/jungle/Exited(atom/movable/Obj, atom/NewLoc)
+	. = ..()
+	//moves into another jungle area are handled by its Entered(), which knows both turfs
+	if(istype(get_area(NewLoc), /area/surface/jungle))
+		return
+	if(!isliving(Obj) && !Obj.contents.len)
+		return
+	for(var/mob/living/L in recursive_type_check(Obj, /mob/living))
+		L.update_weather_sounds(TRUE)
 
 //to hide vaults on the main station z-level
 /area/surface/jungle/vault

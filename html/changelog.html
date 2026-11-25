@@ -73,6 +73,16 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2026.11.24</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">junglestation now has weather. remember to bring an umbrella!</li>
+			</ul>
+			<h2 class="date">2026.11.23</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Typing part of an emote after * in the say box now brings up a list of possible matching runnable emotes to choose from if it does not exist, instead of prompting to use *help. This prompt still shows if no matches are found.</li>
+			</ul>
 			<h2 class="date">2026.11.22</h2>
 			<h3 class="author">Cairo283 updated:</h3>
 			<ul class="changes bgimages16">
@@ -85,6 +95,7 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">DamianX updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Custom burgers, sandwiches, pizzas and pasta now keep the reagents of the bun, bread, dough or spaghetti they were built on, including anything injected into it.</li>
+				<li class="tweak">Setting up and restarting weather on maps with large outdoor areas is much faster.</li>
 			</ul>
 			<h3 class="author">Eneocho updated:</h3>
 			<ul class="changes bgimages16">
@@ -1474,69 +1485,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="tweak">Deff: added some items</li>
 				<li class="tweak">Deff: removed the body scanner from overflow</li>
 				<li class="bugfix">Deff: fixed some pipes</li>
-			</ul>
-			<h2 class="date">2025.12.21</h2>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Beer now makes people dizzy again if only one type is consumed.</li>
-			</ul>
-			<h3 class="author">braplord updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Defficiency: new shared telesience space between research and medbay</li>
-				<li class="rscadd">Defficiency: more disposal bins</li>
-				<li class="rscadd">Defficiency: biohazard button now actually has biohazard blast doors to close</li>
-				<li class="rscadd">Defficiency: paramedic station now sits between research and chemistry</li>
-				<li class="rscdel">Defficiency: medbay checkpoint is gone</li>
-				<li class="tweak">Defficiency: paramedic station is split into an eva room for medbay and surgery overflow</li>
-				<li class="tweak">Defficiency: surgery overflow has been moved and genetics has a bit more space</li>
-				<li class="tweak">Defficiency: moved medbay&#39;s desk where the checkpoint used to be</li>
-				<li class="tweak">Defficiency: main r&amp;d laboratory is slightly larger</li>
-				<li class="tweak">Defficiency: duny&#39;s dogshit pipes in medbay and some adjacent areas were fixed</li>
-				<li class="tweak">Defficiency: chemistry is now vertical</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Unified planetary vaults (procgen, snaxi, and jungle) into one type.</li>
-				<li class="experiment">Removed non-cave loot spawns from planets.</li>
-			</ul>
-			<h2 class="date">2025.12.18</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The material a hammer is made of will now affect its smithing performance, with tougher materials (like uranium or plasma) performing better than their counterparts (like gold or silver). Does not affect its performance as a weapon.</li>
-			</ul>
-			<h3 class="author">Inorien updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed some lag that could only occur on April Fool&#39;s Day</li>
-				<li class="bugfix">Simplemobs can once again destroy girders</li>
-				<li class="bugfix">Fixed some grenade runtimes</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">DIY shuttle engine pre-igniters can now be rotated with alt click and their verbs, just like the propulsion system.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Feminine formalwear crate contents changed slightly</li>
-				<li class="bugfix">metal knuckles are now made of metal rather than cloth</li>
-			</ul>
-			<h3 class="author">hacker-on-steroids updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">radiation collectors now report proper power output when multitooled</li>
-				<li class="rscadd">supermatter shard monitors now report the shard&#39;s approximate heating power</li>
-				<li class="tweak">nuclear pinpointers retain direction when pulled</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Ghosts can no longer activate the Old Database.</li>
-				<li class="bugfix">Fixed blizzards on any planet causing all shuttles to go into lockdown.</li>
-				<li class="bugfix">Fixed edge overlays tagging along on shuttle rides via corner turfs.</li>
-				<li class="bugfix">Fixed shuttles generating a new transit area every time one is used instead of just reusing one.</li>
-				<li class="bugfix">Fixed shuttles being able to fly from their current planet to their current planet.</li>
-				<li class="bugfix">Fixed gibtonite creating asteroid turfs when detonated on planet surfaces.</li>
-				<li class="bugfix">Fixed transit area generation lagging the entire server due to a sleep().</li>
-				<li class="bugfix">Fixed a 10yr old bug which resulted in transit areas generating incorrectly if the shuttle faces west.</li>
-				<li class="bugfix">Fixed Exploration Shuttle Suit Storage Units being empty.</li>
-				<li class="bugfix">Fixed Station &lt;-&gt; Mining Roid shuttles always using transit levels after visiting a planet once.</li>
 			</ul>
 		</div>
 		<!--
