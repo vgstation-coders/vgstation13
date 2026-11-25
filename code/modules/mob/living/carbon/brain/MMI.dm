@@ -175,8 +175,9 @@
 		name = "[initial(name)]: [brainmob.real_name]"
 		icon_state = "mmi_full"
 
-		if (isrev(brainmob))
-			var/datum/role/revolutionary/R = brainmob.mind.GetRole(REV)
+		// GetRoleByType also finds the head revolutionary, whose role id is not REV.
+		var/datum/role/revolutionary/R = brainmob.mind && brainmob.mind.GetRoleByType(/datum/role/revolutionary)
+		if (R)
 			R.Drop(TRUE)
 
 		locked = 1
