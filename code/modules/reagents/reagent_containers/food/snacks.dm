@@ -760,7 +760,7 @@
 	reset_vars_after_duration(resettable_vars, duration)
 
 /obj/item/weapon/reagent_containers/food/snacks/spook()
-	if(reagents.has_reagent(ECTOPLASM) || ghost_edible)
+	if(ghost_edible || reagents.has_reagent(ECTOPLASM))
 		visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
 		playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 		bitecount++
@@ -5403,6 +5403,7 @@
 	desc = "A base for any light-weight burger."
 	icon_state = "bun_ghost"
 	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ghost
+	ghost_edible = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/spell
 	name = "spell bun"
