@@ -337,6 +337,12 @@
 	if(!R.current_glue_state)
 		R.canremove = TRUE
 	R.initialize_suit()
+	if(R.cell && R.cell.charge <= 0 && !R.activated)
+		say("The installed cell has no charge; the suit will seal once it charges.", class = "binaryradio")
+		if(istype(R.cell, /obj/item/weapon/cell/rad))
+			spawn(2 SECONDS)
+				if(!QDELETED(R) && !QDELETED(H) && R.wearer == H && !R.activated && !QDELETED(R.cell) && R.cell.charge > 0)
+					R.initialize_suit()
 	unlock_atom(H)
 	finished_animation()
 	use_power = MACHINE_POWER_USE_IDLE
