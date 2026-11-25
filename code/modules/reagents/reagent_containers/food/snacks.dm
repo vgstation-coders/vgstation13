@@ -5404,6 +5404,7 @@
 	icon_state = "bun_ghost"
 	custom_burger_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/burger/ghost
 	ghost_edible = TRUE
+	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/spell
 	name = "spell bun"
