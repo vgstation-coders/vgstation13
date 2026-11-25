@@ -163,7 +163,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 							if(is_type_in_list(machine, ventcrawl_machinery))
 								vent_found = machine
 
-							if(!vent_found.can_crawl_through())
+							if(vent_found && !vent_found.can_crawl_through())
 								vent_found = null
 
 							if(vent_found)
