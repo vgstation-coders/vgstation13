@@ -228,8 +228,30 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	var/datum/pipe_network/network = starting_machine.return_network(starting_machine)
 	if(!network)
 		return
+	update_ventcrawl_images(network)
+
+// Adds pipe images for the pipes of the given network that are inside the mob's
+// view. Called when entering the ducts, when logging back in while ventcrawling
+// and on every crawl step, so the pipes ahead keep appearing.
+/mob/living/proc/update_ventcrawl_images(var/datum/pipe_network/network)
+	// Guards the ventcrawl_to() caller as well, which can pass a null network.
+	if(!client || !network)
+		return
+	var/turf/source = get_turf(client.mob)
+	if(!source)
+		return
+	// Snapshot the mob's own viewport once, so membership is O(1) per pipe and
+	// there is no hand-rolled radius math to keep in sync with client.view.
+	var/list/in_viewport = list()
+	for(var/atom/visible in view(client.view || world.view, source))
+		in_viewport[visible] = TRUE
 	for(var/datum/pipeline/pipeline in network.line_members)
+		// Pipeline is a datum: the viewport test has to happen per member atom.
 		for(var/obj/machinery/atmospherics/A in (pipeline.members || pipeline.edges))
+			if(!in_viewport[A])
+				continue
+			if(A.pipe_image && (A.pipe_image in pipes_shown))
+				continue
 			if(!A.pipe_image)
 				A.pipe_image = image(A, A.loc, layer = ABOVE_LIGHTING_LAYER, dir = A.dir)
 				A.pipe_image.plane = ABOVE_LIGHTING_PLANE
