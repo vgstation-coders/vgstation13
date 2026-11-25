@@ -1,0 +1,5 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: Fixed a runtime error when clicking next to atmos machinery that is not
+    a vent.
