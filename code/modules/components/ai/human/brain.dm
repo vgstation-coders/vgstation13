@@ -1,6 +1,5 @@
 //Basic thought processes
 /datum/component/ai/human_brain
-	var/life_tick = 0
 	var/wander = TRUE	//Whether the mob will walk around searching for goals, or wait for them to become visible
 	var/lastdir = null
 
@@ -16,6 +15,12 @@
 
 	var/atom/current_target
 
+	var/item_goal_ref	//\ref of the item we are walking towards
+	var/item_goal_ticks = 0	//How many ticks we have spent walking towards it without reaching it
+	var/item_goal_patience = 10	//Ticks before an unreachable item goal is given up on
+	var/list/ignored_items = list()	//\ref -> world.time until which an item is not considered as a goal
+	var/eating = FALSE	//ConsumeFood() sleeps, process() must not run alongside it
+
 /datum/component/ai/human_brain/initialize()
 	active_components += src
 	return TRUE
@@ -25,7 +30,8 @@
 	..()
 
 /datum/component/ai/human_brain/process()
-	life_tick++
+	if(eating)
+		return
 	if(INVOKE_EVENT(parent, /event/comp_ai_cmd_get_busy))
 		return
 	if(!ishuman(parent))
@@ -36,6 +42,7 @@
 		INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
 		return
 
+	AssessNeeds(H)
 	current_target = INVOKE_EVENT(parent, /event/comp_ai_cmd_get_best_target)
 	if(!isnull(current_target))
 		personal_desires.Add(DESIRE_CONFLICT)
@@ -46,16 +53,28 @@
 			if(WieldBestWeapon(H))
 				personal_desires.Remove(DESIRE_HAVE_WEAPON)
 
-	AssessNeeds(H)
 	var/obj/item/I = AttainExternalItemGoal(H)
 	if(I)
+		var/I_ref = "\ref[I]"
 		if(H.Adjacent(I))
+			item_goal_ref = null
+			item_goal_ticks = 0
 			AcquireItem(H, I)
+			if(gcDestroyed) //AcquireItem can sleep while eating, the mob may be gone
+				return
 			INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
-		else
+			return
+		if(I_ref != item_goal_ref)
+			item_goal_ref = I_ref
+			item_goal_ticks = 0
+		if(++item_goal_ticks <= item_goal_patience)
 			if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
 				INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = get_turf(I))
-		return
+			return
+		//Couldn't reach it in time, forget about it for a while and get on with things
+		ignored_items[I_ref] = world.time + 1 MINUTES
+		item_goal_ref = null
+		item_goal_ticks = 0
 
 	if(!isnull(current_target))
 		INVOKE_EVENT(parent, /event/comp_ai_cmd_attack, "target" = current_target)
@@ -64,8 +83,6 @@
 			if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
 				INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = T)
 		return
-	else
-		personal_desires.Remove(DESIRE_CONFLICT)
 
 	if(wander && prob(70))
 		var/dir = pick(NORTH,SOUTH,EAST,WEST)
@@ -118,9 +135,11 @@
 						continue
 					if(I.anchored) //Odd cases such as intercoms
 						continue
+					if(ignored_items["\ref[I]"] > world.time) //Couldn't reach it recently
+						continue
 					switch(D)
 						if(DESIRE_HAVE_WEAPON)
-							if(IsBetterWeapon(comparison = I))
+							if(IsBetterWeapon(H, comparison = I))
 								goal = I
 						if(DESIRE_CONFLICT)
 							break processing_desires
@@ -162,21 +181,29 @@
 	return goal
 
 /datum/component/ai/human_brain/proc/AcquireItem(mob/living/carbon/human/H, obj/item/I)
+	var/wanted_as_weapon = (DESIRE_HAVE_WEAPON in personal_desires) && IsBetterWeapon(H, comparison = I)
 	H.activate_empty_hand()
 	H.ClickOn(I)
 	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks))
 		ConsumeFood(H, I)
-	else
+	else if(!wanted_as_weapon) //Keep weapons in hand instead of stowing them
 		var/obj/item/held = H.get_active_hand()
 		if(held)
 			H.equip_to_appropriate_slot(held)
 
 /datum/component/ai/human_brain/proc/ConsumeFood(mob/living/carbon/human/H, obj/item/I)
-	while(H.nutrition < 250 && !I.gcDestroyed)
-		var/obj/item/held = H.get_active_hand()
-		if(held)
-			held.attack_self(H)
+	eating = TRUE
+	INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0) //Stand still while eating
+	var/obj/item/weapon/reagent_containers/food/snacks/S = I
+	while(H.nutrition < 250 && !S.gcDestroyed && S.loc == H && H.stat == CONSCIOUS)
+		if(!S.can_consume(H, H)) //Too full, wrapped... try again later
+			ignored_items["\ref[S]"] = world.time + 30 SECONDS
+			break
+		S.attack_self(H)
 		sleep(1)
+	eating = FALSE
+	if(gcDestroyed)
+		return
 	H.drop_item()
 
 /datum/component/ai/human_brain/proc/WieldBestWeapon(mob/living/carbon/human/H, var/list/excluded)

@@ -55,6 +55,7 @@
 		F.pixel_y = pixel_y
 		F.attackby(I, user, params)
 		P?.update_icon()
+		reagents.trans_to(F, reagents.total_volume)
 		qdel(src)
 		return TRUE
 

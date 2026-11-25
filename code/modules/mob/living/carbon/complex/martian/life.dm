@@ -8,21 +8,8 @@
 			return internals.remove_air_volume(volume_needed)
 	return null
 
-/mob/living/carbon/complex/martian/breathe()
-	.=..()
-	var/block = 0
-	if(head)
-		if(istype(head, /obj/item/clothing/head/helmet/space/martian))
-			block = 1
-
-	if(!block)
-		for(var/obj/effect/smoke/chem/smoke in view(1, src))
-			if(smoke.reagents.total_volume)
-				smoke.reagents.reaction(src, INGEST, amount_override = min(smoke.reagents.total_volume,10)/(smoke.reagents.reagent_list.len))
-				spawn(5)
-					if(smoke)
-						smoke.reagents.copy_to(src, 10) // I dunno, maybe the reagents enter the blood stream through the lungs?
-				break // If they breathe in the nasty stuff once, no need to continue checking
+/mob/living/carbon/complex/martian/check_breath_block(var/flag_check = BLOCK_BREATHING)
+	return (flag_check & BLOCK_GAS_SMOKE_EFFECT) ? istype(head, /obj/item/clothing/head/helmet/space/martian) : FALSE
 
 /mob/living/carbon/complex/martian/is_spaceproof()
 	if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))

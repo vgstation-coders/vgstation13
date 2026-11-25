@@ -56,7 +56,7 @@
 		var/weather_display = W ? "[W.name] <a href='?_src_=vars;Vars=\ref[W]'>\[VV\]</A>" : "<font color='red'>ERROR: NULL</font>"
 		var/timeleft_display = W ? "<a href='?src=\ref[src];climate_timeleft=\ref[W]'>[formatTimeDuration(W.timeleft)]</A>" : "<font color='red'>N/A</font>"
 		dat += {"<tr>
-			<td>vZ-[C.v.id]</td>
+			<td>[C.vlevel_label()]</td>
 			<td>[C.name]<a href='?_src_=vars;Vars=\ref[C]'>\[VV\]</A></td>
 			<td>[weather_display]</td>
 			<td>[timeleft_display]</td>

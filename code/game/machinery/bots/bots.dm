@@ -201,6 +201,8 @@
 		return
 	var/turf/T = get_turf(src)
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
+	if(loc == get_turf(target))
+		return at_path_target()
 	if(!length(path)) //It is assumed we gain a path through process_bot()
 		if(target)
 			calc_path(target)
@@ -212,8 +214,6 @@
 	patrol_path = list() //Kill any patrols we're using
 
 	log_path_bot("Step [remaining_steps] of [steps_per]")
-	if(loc == get_turf(target))
-		return at_path_target()
 	var/turf/next = path[1]
 	if(!SSpathfinder.space_type_cache[next.type] || (bot_flags & BOT_SPACEWORTHY))
 		step_to(src, next)

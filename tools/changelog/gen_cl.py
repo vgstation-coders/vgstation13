@@ -5,9 +5,10 @@ DO NOT MANUALLY RUN THIS SCRIPT.
 This script is designed to generate and push a CL file that can be later compiled.
 The body of the changelog is determined by the description of the PR that was merged.
 
-If a commit is pushed without being associated with a PR, or if a PR is missing a CL,
-the script is designed to exit as a failure. This is to help keep track of PRs without
-CLs and direct commits. See the relating comments in the below source to disable this function.
+If a commit is pushed without being associated with a PR, the script is designed to exit
+as a failure. This is to help keep track of direct commits. A PR without a CL exits
+successfully, so the workflow still triggers a changelog compile afterwards. See the
+relating comments in the below source to change either behavior.
 
 This script depends on the tags.yml file located in the same directory. You can use that
 file to configure the exact tags you'd like this script to use when generating changelog entries.
@@ -76,7 +77,10 @@ changes = parse_body_changelog(pr_body)
 
 if not changes:
     print("No CL found!")
-    exit(1)  # Change to '0' if you do not want the action to fail when no CL is provided
+    # Exit successfully so the workflow still triggers a changelog compile. Otherwise a
+    # compile that lost a push race leaves the earlier PRs' changelogs uncompiled until
+    # the next PR with a CL is merged.
+    exit(0)  # Change to '1' if you want the action to fail when no CL is provided
 
 write_cl["author"] = pr_author
 write_cl["delete-after"] = True
