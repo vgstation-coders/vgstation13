@@ -455,7 +455,7 @@ var/list/all_doors = list()
 			if(A.dir != get_dir(arcane_linked_door, goodturf))
 				A.dir = get_dir(arcane_linked_door, goodturf)
 
-/obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)
+/obj/machinery/door/CanPathPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)
 
 

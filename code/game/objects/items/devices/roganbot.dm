@@ -233,6 +233,7 @@ var/static/list/headshot_zones = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH)
 	name = "KILLbot"
 	desc = "A sound synthetizer with 38 preset phrases. To activate, say a number from 1 to 38 out loud. This one seems designed for an hero going for the high score."
 	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 	var/killcount = 0
 	var/time_since_last_kill = 0
 	var/fastkillcount = 0

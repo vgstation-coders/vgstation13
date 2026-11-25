@@ -21,7 +21,7 @@ var/area/space_area
 	var/obj/effect/area_alert_holder/alert_holder = null
 	var/obj/effect/narration/narrator = null
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
-
+	var/total_floors = 0 //Total simulated floors in an area.
 	flags = CAVES_ALLOWED
 
 /// Used for shuttle overrides so we can expose planet or space turfs depending on the shuttle's location.
@@ -432,6 +432,11 @@ var/area/space_area
 
 	if(oldArea == src)
 		return 1
+	//Outdoor areas start weather sound loops in their own Entered(). Stop them here for anything that left the outdoors,
+	//because forceMove() never calls the old area's Exited().
+	if(isopensurface(oldArea) && !isopensurface(src) && (isliving(Obj) || Obj.contents.len))
+		for(var/mob/living/L in recursive_type_check(Obj, /mob/living))
+			L.update_weather_sounds(TRUE)
 	if(project_shadows)
 		Obj.update_shadow()
 	else if(istype(oldArea) && oldArea.project_shadows)

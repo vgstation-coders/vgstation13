@@ -15,6 +15,8 @@ var/global/list/juice_items = list (
 	/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet = list(PLUMPHJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/pomegranate = list(POMEGRANATEJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade = list(NITROGLYCERIN = 0),
 	/obj/item/stack/sheet/wood = list(PULP = U_PER_SHEET),
 	/obj/item/weapon/grown/log = list(PULP = U_PER_SHEET),
 	/obj/item/weapon/paper = list(PULP = 1),

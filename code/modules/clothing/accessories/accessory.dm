@@ -16,14 +16,24 @@
 	var/image/inv_overlay
 	var/ignoreinteract = FALSE //for accessories that should not come off when attached to object is touched
 
+	var/icon/worn_icon = 'icons/mob/clothing_accessories.dmi' // should do this to all obj/item/clothing types someday
+	var/worn_state = null
+
+	var/accessory_overlay_icon = 'icons/obj/clothing/accessory_overlays.dmi'
+	var/accessory_overlay_state = null
+
 /obj/item/clothing/accessory/New()
 	..()
+	if(isnull(worn_state))
+		worn_state = icon_state
+	if(isnull(accessory_overlay_state))
+		accessory_overlay_state = icon_state
 	update_icon()
 
 /obj/item/clothing/accessory/update_icon()
 	if(attached_to)
 		attached_to.overlays -= inv_overlay
-	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
+	inv_overlay = image("icon" = accessory_overlay_icon, "icon_state" = "[_color || accessory_overlay_state]")
 	if(color)
 		inv_overlay.color = color
 
@@ -100,7 +110,7 @@
 		var/mob/living/carbon/human/wearer = loc
 		species = wearer.species
 	for(var/obj/item/clothing/accessory/accessory in accessories)
-		var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[accessory._color || accessory.icon_state]")
+		var/mutable_appearance/accessory_overlay = mutable_appearance(accessory.worn_icon, "[accessory._color || accessory.worn_state]")
 		if(species && (species.name in accessory.species_fit) && icon_exists(species.accessory_icons, accessory_overlay.icon_state))
 			accessory_overlay.icon = species.accessory_icons
 		accessory_overlay.color = accessory.color
@@ -109,7 +119,7 @@
 			var/dye_color = dye_data[1]
 			var/dye_alpha = dye_data[2]
 			var/_state = accessory.dye_base_iconstate_override || accessory.icon_state
-			var/mutable_appearance/worn_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
+			var/mutable_appearance/worn_overlay = mutable_appearance(accessory.worn_icon, "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
 			worn_overlay.color = dye_color
 			accessory_overlay.overlays += worn_overlay
 		accessory_overlay_final.overlays += accessory_overlay
@@ -124,6 +134,9 @@
 /obj/item/clothing/description_accessories()
 	if(accessories.len)
 		return " It has [counted_english_list(accessories)]."
+
+/obj/item/clothing/accessory/proc/examine_attached(var/mob/user,var/obj/item/clothing/worn)
+	to_chat(user, "<span class='info'>\A [src] is clipped to it.</span>")
 
 /obj/item/clothing/accessory/pinksquare
 	name = "pink square"
@@ -406,28 +419,26 @@
 	inv_overlay
 	var/obj/item/clothing/suit/tag/source_vest
 
+	worn_icon = 'icons/mob/suit.dmi'
+
 /obj/item/clothing/accessory/lasertag/can_attach_to(obj/item/clothing/C)
 	return ..() || istype(C, /obj/item/clothing/monkeyclothes)
 
 /obj/item/clothing/accessory/lasertag/update_icon()
 	if(source_vest)
 		appearance = source_vest.appearance
-		if(attached_to)
-			var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
-			attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
-			if(ismob(attached_to.loc))
-				var/mob/M = attached_to.loc
-				M.regenerate_icons()
+		worn_state = icon_state
+		accessory_overlay_state = icon_state
 	..()
 
 /obj/item/clothing/accessory/lasertag/on_removed(mob/user)
 	if(!attached_to)
 		return
-	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
 	attached_to.overlays -= inv_overlay
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
+	to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
 	attached_to = null
 	if(source_vest)
 		source_vest.forceMove(get_turf(src))
@@ -443,9 +454,11 @@
 	name = "waistcoat"
 	desc = "For some classy, murderous fun."
 	icon = null
-	icon_state = null
+	icon_state = "vest"
 	inv_overlay
 	var/obj/item/clothing/suit/wcoat/source_vest
+
+	worn_icon = 'icons/mob/suit.dmi'
 
 /obj/item/clothing/accessory/wcoat/can_attach_to(obj/item/clothing/C)
 	if(!istype(C, /obj/item/clothing/under))
@@ -458,22 +471,16 @@
 /obj/item/clothing/accessory/wcoat/update_icon()
 	if(source_vest)
 		appearance = source_vest.appearance
-		if(attached_to)
-			var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
-			attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
-			if(ismob(attached_to.loc))
-				var/mob/M = attached_to.loc
-				M.regenerate_icons()
 	..()
 
 /obj/item/clothing/accessory/wcoat/on_removed(mob/user)
 	if(!attached_to)
 		return
-	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
 	attached_to.overlays -= inv_overlay
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
+	to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
 	attached_to = null
 	if(source_vest)
 		source_vest.forceMove(get_turf(src))
@@ -517,33 +524,38 @@
 	..()
 
 /obj/item/clothing/accessory/rad_patch
-	name = "radiation detection patch"
-	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation."
-	icon_state = "patch_0"
+	name = "\improper dosimeter"
+	desc = "A small device that you can attach to your clothing. Records cumulative received radiation."
+	icon_state = "patch_1"
 	var/rad_absorbed = 0
-	var/rad_threshold = 45
-	var/triggered = FALSE
+	var/rad_warn_increment = 10
+	var/rad_last_warn=0
 	var/event_key
 
 	w_class = W_CLASS_TINY
-	w_type = RECYK_WOOD
-	flammable = TRUE
+	w_type = RECYK_METAL
+
+/obj/item/clothing/accessory/rad_patch/attack_self(var/mob/user)
+	to_chat(user, "<span class = 'notice'>You reset \the [src]'s dose counter.</span>")
+	rad_absorbed=0
+	rad_last_warn=0
+
+/obj/item/clothing/accessory/rad_patch/examine_attached(var/mob/user,var/obj/item/clothing/worn)
+	to_chat(user, "<span class='info'>\A [src] is clipped to it. </span> <span class='warning'> It reports [rad_absorbed] rads.</span>")
 
 /obj/item/clothing/accessory/rad_patch/proc/check_rads(mob/living/carbon/human/user, rads)
-	if(triggered)
-		return
-	rad_absorbed += rads
-
-	if(rad_absorbed > rad_threshold)
-		triggered = TRUE
-		update_icon()
-		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
-
-		user.unregister_event(/event/irradiate, src, nameof(src::check_rads()))
+	
+	rads-=user.getarmorabsorb(null,"rad")
+	rads*=(100-user.getarmor(null, "rad"))/100
+	rad_absorbed += max(rads,0)
+	
+	if (rad_absorbed>rad_last_warn+rad_warn_increment)
+		to_chat(user, "<span class = 'warning'>\the [src] beeps \"cumulative dose: [floor(rad_absorbed/rad_warn_increment)*rad_warn_increment] rads\"</span>")
+		rad_last_warn=floor(rad_absorbed/rad_warn_increment)*rad_warn_increment
 
 /obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
 	..()
-	if(ismob(C.loc) && !triggered)
+	if(ismob(C.loc))
 		var/mob/user = C.loc
 		user.register_event(/event/irradiate, src, nameof(src::check_rads()))
 
@@ -553,14 +565,10 @@
 
 /obj/item/clothing/accessory/rad_patch/examine(mob/user)
 	..(user)
-	if(triggered)
-		to_chat(user, "<span class = 'warning'>It is a deep dark color!</span>")
+	to_chat(user, "<span class = 'warning'>It reports a cumulative dose of [rad_absorbed] rads.</span>")
 
 /obj/item/clothing/accessory/rad_patch/update_icon()
-	if(triggered)
-		icon_state = "patch_1"
-	else
-		icon_state = "patch_0"
+	icon_state = "patch_1"
 	..()
 
 /obj/item/clothing/accessory/rabbit_foot

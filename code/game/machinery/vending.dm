@@ -2280,6 +2280,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/mustardplantseed = 3,
 		/obj/item/seeds/flaxseed = 3,
 		/obj/item/seeds/mintseed = 3,
+		/obj/item/seeds/pomegranateseed = 3,
 		)//,/obj/item/seeds/synthmeatseed = 3)
 	contraband = list(
 		/obj/item/seeds/amanitamycelium = 2,

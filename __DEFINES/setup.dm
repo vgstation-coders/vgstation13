@@ -996,6 +996,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define SPECIES_NO_MOUTH 	(1<<13)
 //#define REQUIRE_DARK 		(1<<14)
 #define RAD_IMMUNE 			(1<<15)
+#define EMAG_CLONEABLE 		(1<<16)	//Can be selected as a species by an emagged cloning console.
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 		(1)
@@ -1390,14 +1391,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 //	null << "[x][a]")
 #endif
 
-#define ASTAR_DEBUG 0
-#if ASTAR_DEBUG == 1
-#warn "Astar debug is on. Don't forget to turn it off after you've done :)"
-#define astar_debug(text) to_chat(world, text)
-#define astar_debug_mulebots(text) to_chat(world, text)
+#define PATHING_DEBUG 0
+#if PATHING_DEBUG == 1
+#warn "Pathing debug is on. Don't forget to turn it off after you've done :)"
+#define path_debug(text) to_chat(world, text)
+#define debug_mulebots(text) to_chat(world, text)
 #else
-#define astar_debug(text)
-#define astar_debug_mulebots(text)
+#define path_debug(text)
+#define debug_mulebots(text)
 #endif
 
 #define BSQL_DEBUG_CONNECTION 0
@@ -1780,6 +1781,7 @@ var/proccalls = 1
 
 //Glidesize
 #define INERTIA_MOVEDELAY 5
+#define PUSH_SWAP_GLIDE_DELAY 2
 #define FRACTIONAL_GLIDESIZES 1
 #ifdef FRACTIONAL_GLIDESIZES
 #define DELAY2GLIDESIZE(delay) (WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1))
@@ -1840,6 +1842,7 @@ var/proccalls = 1
 // Account default values
 #define DEPARTMENT_START_FUNDS 500
 #define DEPARTMENT_START_WAGE 100
+#define CYBORG_LATEJOIN_FEE 500
 
 //Staff of change
 #define SOC_CHANGETYPE_COOLDOWN 2 MINUTES

@@ -40,15 +40,14 @@
 		to_chat(user, "<span class='warning'>You can't hold \the [holstered] like this!</span>")
 		return
 
-	if(user.put_in_active_hand(holstered) || user.put_in_inactive_hand(holstered))
-		unholster_message(user)
-		holstered.add_fingerprint(user)
-		holstered = null
-		update_icon()
+	var/obj/item/item_from_holster = holstered //Keep a local reference as holstered is cleared during put_in_hand at exited() and we still need it for fingerprints and the message.
+	if(user.put_in_active_hand(item_from_holster) || user.put_in_inactive_hand(item_from_holster))
+		unholster_message(user, item_from_holster)
+		item_from_holster.add_fingerprint(user)
 	else
-		to_chat(user, "<span class='warning'>You need an empty hand to draw \the [holstered]!</span>")
+		to_chat(user, "<span class='warning'>You need an empty hand to draw \the [item_from_holster]!</span>")
 
-/obj/item/clothing/accessory/holster/proc/unholster_message(user)
+/obj/item/clothing/accessory/holster/proc/unholster_message(mob/user, obj/item/item_from_holster)
 	return
 
 /obj/item/clothing/accessory/holster/verb/holster_verb()
@@ -116,6 +115,12 @@
 		attached_to.verbs -= new/obj/item/clothing/accessory/holster/verb/holster_verb(attached_to,holster_verb_name)
 	..()
 
+/obj/item/clothing/accessory/holster/Exited(var/atom/movable/Obj, var/atom/newloc)
+	..()
+	if(holstered == Obj)
+		holstered = null
+		update_icon()
+
 //
 // Handguns
 //
@@ -129,13 +134,13 @@
 		return
 	return W.isHandgun()
 
-/obj/item/clothing/accessory/holster/handgun/unholster_message(mob/user)
+/obj/item/clothing/accessory/holster/handgun/unholster_message(mob/user, obj/item/item_from_holster)
 	if(user.a_intent == I_HURT)
-		user.visible_message("<span class='warning'>[user] draws \the [holstered], ready to shoot!</span></span>", \
-		"<span class='warning'>You draw \the [holstered], ready to shoot!</span>")
+		user.visible_message("<span class='warning'>[user] draws \the [item_from_holster], ready to shoot!</span>", \
+		"<span class='warning'>You draw \the [item_from_holster], ready to shoot!</span>")
 	else
-		user.visible_message("<span class='notice'>[user] draws \the [holstered], pointing it at the ground.</span>", \
-		"<span class='notice'>You draw \the [holstered], pointing it at the ground.</span>")
+		user.visible_message("<span class='notice'>[user] draws \the [item_from_holster], pointing it at the ground.</span>", \
+		"<span class='notice'>You draw \the [item_from_holster], pointing it at the ground.</span>")
 
 /obj/item/clothing/accessory/holster/handgun/wornout
 	desc = "A worn-out handgun holster. Perfect for concealed carry."
@@ -205,9 +210,9 @@
 		/obj/item/weapon/gun/projectile/banana
 		)) //honk
 
-/obj/item/clothing/accessory/holster/knife/unholster_message(mob/user)
-	user.visible_message("<span class='warning'>[user] pulls \a [holstered] from its holster!</span>", \
-	"<span class='warning'>You draw your [holstered.name]!</span>")
+/obj/item/clothing/accessory/holster/knife/unholster_message(mob/user, obj/item/item_from_holster)
+	user.visible_message("<span class='warning'>[user] pulls \a [item_from_holster] from its holster!</span>", \
+	"<span class='warning'>You draw your [item_from_holster.name]!</span>")
 
 /obj/item/clothing/accessory/holster/knife/boot
 	desc = "A knife holster that can be attached to any pair of boots."

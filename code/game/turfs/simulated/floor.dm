@@ -63,6 +63,10 @@ var/global/list/turf/phazontiles = list()
 		icon_regular_floor = "floor"
 	else
 		icon_regular_floor = icon_state
+
+	var/area/A = loc
+	A.total_floors++
+
 	footstep_sound = sounds_floor
 	footstep_sound_barefoot = sounds_floor_barefoot
 	footstep_sound_claw = sounds_floor_claw

@@ -955,6 +955,7 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/mino/vinesafe
 	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 
 /obj/item/clothing/suit/mino/vinesafe/vine_protected()
 	return TRUE

@@ -7243,8 +7243,7 @@
 	dir = 8
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -7831,8 +7830,7 @@
 	dir = 4
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -13855,8 +13853,7 @@
 /obj/item/weapon/bedsheet/mime,
 /obj/structure/curtain/open/bed,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/sleep)
@@ -14077,8 +14074,7 @@
 /obj/structure/table/reinforced,
 /obj/item/clothing/glasses/scanner/science,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /obj/machinery/light{
 	dir = 1
@@ -14465,8 +14461,7 @@
 /area/hallway/primary/central)
 "axZ" = (
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -14559,8 +14554,7 @@
 	dir = 4
 	},
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -20437,8 +20431,7 @@
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
 /obj/machinery/alarm{
-	pixel_y = 24;
-	target_temperature = 73.15
+	pixel_y = 24
 	},
 /turf/simulated/floor,
 /area/medical/medbay)

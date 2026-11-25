@@ -401,6 +401,13 @@
 	if(on)
 		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
 
+	if(!can_cook())
+		return
+
+	for(var/obj/structure/reagent_dispensers/cauldron/C in loc)
+		if(C.reagents?.total_volume)
+			C.reagents.heating(cook_energy(), cook_temperature())
+
 /obj/machinery/space_heater/proc/putOutFire()
 	on = 0
 	update_icon()

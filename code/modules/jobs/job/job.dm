@@ -23,6 +23,8 @@
 	//How many players have this job
 	var/current_positions = 0
 
+	var/latejoin_fee = 0
+
 	//Supervisors, who this person answers to directly
 	var/supervisors = ""
 
@@ -79,7 +81,24 @@
 	xtra_positions--
 
 /datum/job/proc/reject_new_slots()
+	if(!can_afford_latejoin_fee())
+		return "Insufficient Funds"
 	return FALSE
+
+/datum/job/proc/can_afford_latejoin_fee()
+	if(!latejoin_fee)
+		return TRUE
+	return station_account && station_account.money >= latejoin_fee
+
+/datum/job/proc/charge_latejoin_fee(var/mob/joiner)
+	if(!latejoin_fee || !station_account)
+		return
+	var/paid = max(0, min(latejoin_fee, station_account.money))
+	if(!paid)
+		return
+	station_account.money -= paid
+	new /datum/transaction(station_account, "[title] requisition", "-[paid]", "Labor Administration Console", send2PDAs = FALSE)
+	log_game("[key_name(joiner)] latejoined as \a [title], billing the station account [paid] credits.")
 
 // -- If there's an outfit datum, let's use it.
 /datum/job/proc/equip(var/mob/living/carbon/human/H, var/job_priority)

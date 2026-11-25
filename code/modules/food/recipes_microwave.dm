@@ -3662,6 +3662,13 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sweetroll
 
+/datum/recipe/sosigroll
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/sausage,
+		/obj/item/weapon/reagent_containers/food/snacks/doughslice,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sosigroll
+
 // You have now entered the Ayy food zone
 
 /datum/recipe/greytvdinnerclassic

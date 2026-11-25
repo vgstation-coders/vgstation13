@@ -125,8 +125,6 @@
 	description = "A deadly neurotoxin produced by the dreaded spess carp."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#003333" //rgb: 0, 51, 51
-	density = 319.27 //Assuming it's Tetrodotoxin
-	specheatcap = 41.53
 
 /datum/reagent/carpotoxin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -160,7 +158,7 @@
 	color = "#000067" //rgb: 0, 0, 103
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 11.43
-	specheatcap = 13.79
+	specheatcap = 0.1379
 	arcane_id = COFFEE
 
 /datum/reagent/chloralhydrate/on_mob_life(var/mob/living/M)
@@ -195,7 +193,6 @@
 	color = "#808080" //rgb: 128, 128, 128
 	overdose_am = REAGENTS_OVERDOSE
 	density = 3.68
-	specheatcap = 1299.23
 
 /datum/reagent/chloramine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -255,7 +252,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ff91b7" //rgb: 255, 145, 183
 	density = 0.78
-	specheatcap = 5.47
+	specheatcap = 3.47
 	arcane_id = SPIRITBREAKER
 
 /datum/reagent/heartbreaker/on_mob_life(var/mob/living/M)
@@ -350,7 +347,7 @@
 	color = "#B31008" //rgb: 139, 166, 233
 	custom_metabolism = 0.05
 	density = 0.78
-	specheatcap = 5.47
+	specheatcap = 3.47
 	arcane_id = SPIRITBREAKER
 
 /datum/reagent/mindbreaker/on_mob_life(var/mob/living/M)
@@ -449,7 +446,6 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
-	specheatcap = 0.09686
 	arcane_id = RADIUM
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
@@ -612,7 +608,6 @@
 	custom_metabolism = 0.1
 	color = "#ffffff" //rgb: 255, 255, 255
 	density = 2.12
-	specheatcap = 65.87 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
 
 /datum/reagent/potassium_hydroxide/on_mob_life(var/mob/living/M)
 	if(..())
@@ -696,7 +691,6 @@
 	color = "#E895CC" //rgb: 232, 149, 204
 	custom_metabolism = 0.1
 	density = 3.56
-	specheatcap = 17.15
 	overdose_am = REAGENTS_OVERDOSE // So you can't pretend that you "didn't know it was an OD"
 	arcane_id = CHLORALHYDRATE
 
@@ -779,8 +773,8 @@
 	id = ZOMBIEPOWDER
 	description = "A strong neurotoxin that puts the subject into a death-like state."
 	color = "#669900" //rgb: 102, 153, 0
-	density = 829.48
-	specheatcap = 274.21
+	density = 8.2948
+	specheatcap = 0.27421
 
 /datum/reagent/zombiepowder/on_mob_life(var/mob/living/carbon/M)
 	if(..())

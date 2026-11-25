@@ -220,7 +220,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		//Change in internal energy = change in energy due to heat transfer due to isochoric reaction
 		delta_t = heat_out/(delta_m * material.heating_value)
 		T.hotspot_expose(temperature + delta_t, FULL_FLAME, 1)
-		new /obj/effect/fire(T)
+		if(!locate(/obj/effect/fire) in T)
+			new /obj/effect/fire(T)
 
 	//Ash the object if all of its mass has been consumed.
 	if(thermal_mass <= 0.05)
@@ -281,7 +282,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	//Start a fire on the tile if a burning object is present without an underlying fire effect.
 	if(!in_fire)
 		T.hotspot_expose(max_temperature, FULL_FLAME, 1)
-		new /obj/effect/fire(T)
+		if(!locate(/obj/effect/fire) in T)
+			new /obj/effect/fire(T)
 
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
 
@@ -303,7 +305,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 
 /atom/proc/extinguish(var/duration = 30 SECONDS)
 	if(on_fire)
-		on_fire=0
+		on_fire = 0
 	fire_protection = world.time + duration
 	if(fire_overlay)
 		overlays -= fire_overlay
@@ -324,7 +326,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		if(!has_liquid_fuel())
 			return 0
 
-	on_fire=1
+	on_fire = 1
 
 	if(fire_dmi && fire_sprite && !fire_overlay)
 		fire_overlay = mutable_appearance(fire_dmi,fire_sprite)
@@ -453,7 +455,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 					O.ignite()
 					igniting = 1
 					break
-		if(igniting)
+		if(igniting && !locate(/obj/effect/fire) in src)
 			new /obj/effect/fire(src)
 	return igniting
 
@@ -483,7 +485,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		return FALSE
 
 	var/in_fire = FALSE
-	on_fire=1
+	on_fire = 1
 
 	if(locate(/obj/effect/fire) in src)
 		in_fire = TRUE
@@ -523,7 +525,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	. = ..()
 	dir = pick(cardinal)
 	var/turf/T = get_turf(loc)
-	var/datum/gas_mixture/air_contents=T.return_air()
+	var/datum/gas_mixture/air_contents = T.return_air()
 	if(air_contents)
 		setfirelight(air_contents.calculate_firelevel(get_turf(src)), air_contents.temperature)
 	SSair.add_hotspot(src)

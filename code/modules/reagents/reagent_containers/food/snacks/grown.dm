@@ -96,8 +96,8 @@ var/list/special_fruits = list()
 	// We ONLY want to apply special effects if we're hitting a turf! That's because throw_impact will always be
 	// called on a turf AFTER it's called on the things ON the turf, and will runtime if the item doesn't exist anymore.
 	if(isturf(hit_atom))
-		do_splat_effects(hit_atom,user)
-	return
+		return do_splat_effects(hit_atom,user)
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_splat_effects(atom/hit_atom, mob/user)
 	if(seed.teleporting)
@@ -107,7 +107,7 @@ var/list/special_fruits = list()
 		else if(splat_decal(get_turf(hit_atom)))
 			visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
-		return
+		return 1
 
 	if(seed.juicy)
 		splat_decal(get_turf(hit_atom))
@@ -116,7 +116,9 @@ var/list/special_fruits = list()
 		reagents.splashplosion(splasharea, TRUE)
 		visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
-		return
+		return 1
+
+	return 0
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/attack(mob/living/M, mob/user, def_zone)
 	if(user.a_intent == I_HURT)
@@ -129,8 +131,7 @@ var/list/special_fruits = list()
 					add_attacklogs(user, M, "stung", object = src, addition = "Reagents: [english_list(seed.get_reagent_names())]", admin_warn = 1)
 			to_chat(user, "<span class='alert'>Some of \the [src]'s stingers break off in the hit!</span>")
 			potency -= rand(1,(potency/3)+1)
-		do_splat_effects(M,user)
-		return
+		return do_splat_effects(M,user)
 	return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/Crossed(var/mob/living/carbon/M)
@@ -307,6 +308,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#FFEE00"
 	trash = /obj/item/weapon/corncob
 	fragrance = INCENSE_CORNOIL
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "corn"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/corn/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
@@ -411,6 +414,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#A332AD"
 	plantname = "grapes"
 	harmfultocorgis = TRUE
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "grape"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes
 	name = "bunch of green grapes"
@@ -419,6 +424,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#A6FFA3"
 	plantname = "greengrapes"
 	harmfultocorgis = TRUE
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "greengrape"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/peanut
 	name = "peanut"
@@ -472,6 +479,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#A2B5A1"
 	plantname = "cabbage"
 	fragrance = INCENSE_LEAFY
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "cabbage"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage
 	name = "plasma cabbage"
@@ -480,6 +489,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	filling_color = "#99335C"
 	plantname = "plasmacabbage"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "cabbageplasma"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries
 	name = "bunch of berries"
@@ -566,6 +577,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "apple"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "apple"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned
 	filling_color = "#B3BD5E"
@@ -577,6 +590,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#F5CB42"
 	plantname = "goldapple"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "goldapple"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple
 	name = "crab apple"
@@ -584,6 +599,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	plantname = "crabapple"
 	var/alive = TRUE
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "crabapple"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/apple/crabapple/after_consume(mob/living/carbon/eater)
 	if(!alive)
@@ -624,6 +641,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	slices_num = 5
 	storage_slots = 3
 	plantname = "watermelon"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "watermelon"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
 	name = "pumpkin"
@@ -631,6 +650,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#FAB728"
 	plantname = "pumpkin"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "pumpkin"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -653,6 +674,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#28FA59"
 	plantname = "lime"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "lime"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/lemon
 	name = "lemon"
@@ -660,6 +683,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#FAF328"
 	plantname = "lemon"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "lemon"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/orange
 	name = "orange"
@@ -667,6 +692,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#FAAD28"
 	plantname = "orange"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "orange"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus
 	name = "silicate citrus"
@@ -688,6 +715,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#FCF695"
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "banana"
 	fragrance = INCENSE_BANANA
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana/isHandgun()
@@ -704,6 +733,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "It's an excellent prop for a comedy."
 	filling_color = "#FCF695"
 	plantname = "bluespacebanana"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "bluespacebanana"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/isHandgun()
 	return TRUE
@@ -719,6 +750,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "It's spicy! Wait... IT'S BURNING ME!!"
 	filling_color = "#FF0000"
 	plantname = "chili"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "chili"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/eggplant
 	name = "eggplant"
@@ -746,6 +779,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#FF0000"
 	potency = 10
 	plantname = "tomato"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "tomato"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato
 	name = "tomato" //"blue-space" is applied on new(), provided it's teleporting trait hasn't been removed
@@ -754,6 +789,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	origin_tech = Tc_BLUESPACE + "=3"
 	filling_color = "#91F8FF"
 	plantname = "bluespacetomato"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "bluespacetomato"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato/testing
 	potency = 100
@@ -785,6 +822,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#FF0000"
 	plantname = "bloodtomato"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "bloodtomato"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato
 	name = "blue-tomato"
@@ -792,6 +831,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#586CFC"
 	plantname = "bluetomato"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "bluetomato"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/wheat
 	name = "wheat"
@@ -819,6 +860,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#66CEED"
 	plantname = "icechili"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "chilice"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper
 	name = "ghost pepper"
@@ -826,6 +869,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#66CEED"
 	plantname = "ghostpepper"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "chilighost"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper/spook()
 	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
@@ -841,6 +886,8 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#FFC400"
 	plantname = "carrot"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "carrot"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond
 	name = "diamond carrot"
@@ -1140,12 +1187,89 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	icon_state = "pitted"
 	cant_eat_msg = null
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegranate
+	name = "pomegranate"
+	desc = "A large red fruit with a hard outer layer, containing a bunch of sweetly acidic seeds"
+	icon = 'icons/obj/hydroponics/pomegranate.dmi'
+	filling_color = "#ED436E"
+	plantname = "pomegranate"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "pomegranate"
+	harmfultocorgis = FALSE
+	var/cut = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegranate/can_consume(var/mob/living/carbon/eater, var/mob/user)
+	if(!cut)
+		to_chat(user, "<span class='warning'>This [name]'s skin is much too tough to chew. Slice it open first.</span>")
+	else
+		return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegranate/attackby(var/obj/item/weapon/W, var/mob/user)
+	..()
+	if(!cut && (W.sharpness_flags & SHARP_BLADE))
+		cut = TRUE
+		user.visible_message("\The [user] slices \the [src] open with \the [W].", "You slice \the [src] open with \the [W].")
+		icon_state = "cut"
+		item_state = "pomegranate_cut"
+
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade
+	name = "pomegrenade"
+	desc = "A large red fruit with a hard outer layer, containing some highly repressed feelings about to burst out!"
+	icon = 'icons/obj/hydroponics/pomegrenade.dmi'
+	filling_color = "#ED436E"
+	plantname = "pomegrenade"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "pomegrenade"
+	harmfultocorgis = TRUE
+	potency = 20
+	var/blasting = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/can_consume(mob/living/carbon/eater, mob/user)
+	to_chat(user, "<span class='warning'>You can feel the [name]'s pulse, it lives, and it wants to be thrown...</span>")
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		C.throw_mode_on()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/attackby(var/obj/item/weapon/W, var/mob/user)
+	..()
+	if(W.sharpness_flags & SHARP_BLADE)
+		to_chat(user, "As you prick \the [src] with the tip of your [W], a violent change appears to take place.")
+		blast()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/throw_impact(var/atom/hit_atom)
+	. = ..()
+	if (.)
+		return
+	blast()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/ex_act(var/severity)
+	blast()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pomegrenade/proc/blast(var/short = FALSE)
+	if (blasting)
+		return
+	blasting = TRUE
+	var/turf/T = get_turf(src)
+	if (!T)
+		qdel(src)
+		return
+	log_admin("LOG: Pomegrenade going off at [T.loc] (@[T.x],[T.y],[T.z]), last touched by [fingerprintslast].")
+	message_admins("LOG: Pomegrenade going off at [formatJumpTo(T)], last touched by [fingerprintslast].")
+	var/obj/structure/bomberman/pomegrenade/pom = new (T)
+	pom.bombpower = max(1, floor(potency / 10))
+	if (short)
+		pom.countdown = 1
+	qdel(src)
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/pear
 	name = "pear"
 	desc = "The inferior alternative to apples."
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "pear"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "pear"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/silverpear
 	name = "silver pear"

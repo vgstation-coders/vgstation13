@@ -35,6 +35,7 @@
 			if(uniform.dynamic_overlay["[UNIFORM_LAYER]"])
 				var/mutable_appearance/dyn_overlay = uniform.dynamic_overlay["[UNIFORM_LAYER]"]
 				uniform_overlay.overlays += dyn_overlay
+		uniform.generate_accessory_overlays(uniform_overlay)
 		overlays += overlays_standing[UNIFORM_LAYER] = uniform_overlay
 		uniform.screen_loc = ui_monkey_uniform
 	if(update_icons)

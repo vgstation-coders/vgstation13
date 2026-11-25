@@ -2822,6 +2822,20 @@
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 12
 
+/datum/chemical_reaction/pomegranatesyrup
+	name = "Pomegranate Syrup"
+	id = POMEGRANATESYRUP
+	result = POMEGRANATESYRUP
+	required_reagents = list(POMEGRANATEJUICE = 1, SUGAR = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/grenadine
+	name = "Grenadine"
+	id = GRENADINE
+	result = GRENADINE
+	required_reagents = list(POMEGRANATESYRUP = 1, WATER = 4)
+	result_amount = 5
+
 /datum/chemical_reaction/wine
 	name = "Wine"
 	id = WINE

@@ -4,6 +4,7 @@
 /mob/living/simple_animal/hostile/pulse_demon
 	name = "Pulse Demon"
 	desc = "A strange electrical apparition that lives in wires."
+	use_jps_chase = FALSE //cable-bound movement, JPS over open turfs doesn't apply
 	icon_state = "pulsedem"
 	icon_living = "pulsedem"
 	icon_dead = "pulsedem" // Should never be seen but just in case

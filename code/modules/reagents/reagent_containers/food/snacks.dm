@@ -4417,6 +4417,8 @@
 	icon_state = "watermelonslice"
 	bitesize = 2
 	food_flags = FOOD_SWEET
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
+	item_state = "watermelonslice"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/applecake
 	name = "apple cake"
@@ -8283,6 +8285,17 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent (NUTRIMENT, 2)
 	reagents.add_reagent (SUGAR, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sosigroll
+	name = "sosig roll"
+	desc = "A sausage wrapped in flaky golden pastry. Not affiliated with Gruggs."
+	icon_state = "sosigroll"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/sosigroll/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit
 	name = "special plump helmet biscuit"

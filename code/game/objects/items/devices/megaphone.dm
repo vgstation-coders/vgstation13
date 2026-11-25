@@ -36,6 +36,8 @@
 	mask_voice = TRUE
 	blocks_tracking = TRUE
 	flags = FPRINT | HEAR
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 
 var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 

@@ -10,6 +10,7 @@ var/global/list/all_languages[0]
 var/global/list/all_species = list()
 var/global/list/whitelisted_species = list("Human")
 var/global/list/playable_species = list("Human")
+var/global/list/emag_cloneable_species = list()
 
 /proc/buildSpeciesLists()
 	var/datum/language/L
@@ -29,6 +30,8 @@ var/global/list/playable_species = list("Human")
 			whitelisted_species += S.name
 			if(S.flags & PLAYABLE || S.conditional_playable())
 				playable_species += S.name
+		if(S.flags & EMAG_CLONEABLE)
+			emag_cloneable_species += S.name
 	return
 
 ////////////////////////////////////////////////////////////////
@@ -273,27 +276,6 @@ var/global/list/playable_species = list("Human")
 /datum/species/proc/updatespeciescolor(var/mob/living/carbon/human/H) //Handles changing icobase for species that have multiple skin colors.
 	return
 
-// Sent from /datum/lung_gas/metabolizable.
-/datum/species/proc/receiveGas(var/gas_id, var/ratio, var/moles, var/mob/living/carbon/human/H)
-	//testing("receiveGas: [gas_id] ? [breath_type] - ratio=[ratio], moles=[moles]")
-	if(ratio <= 0 || gas_id != breath_type)
-		//testing("  ratio is 0 or gas_id doesn't match up, adding oxyLoss.")
-		H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
-		H.failed_last_breath = 1
-		return 0
-	else if(ratio >= 1)
-		//testing("  we cool")
-		H.failed_last_breath = 0
-		H.adjustOxyLoss(-5)
-		H.oxygen_alert = 0
-		return moles/GAS_CONSUME_TO_WASTE_DENOMINATOR
-	else
-		//testing("  ratio < 1, adding oxyLoss.")
-		H.adjustOxyLoss(HUMAN_MAX_OXYLOSS * (1 - ratio)) //Damage proportional to how much gas you didn't get
-		H.failed_last_breath = 1
-		H.oxygen_alert = 1
-		return moles*ratio/GAS_CONSUME_TO_WASTE_DENOMINATOR
-
 /datum/species/proc/handle_environment(var/datum/gas_mixture/environment, var/mob/living/carbon/human/host)
 
 // Used for species-specific names (Vox, etc)
@@ -345,6 +327,7 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/human
 	name = "Human"
+	flags = EMAG_CLONEABLE
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
 
@@ -420,7 +403,7 @@ var/global/list/playable_species = list("Human")
 	heat_level_2 = 480 //Default 400
 	heat_level_3 = 1100 //Default 1000
 
-	flags = WHITELISTED
+	flags = WHITELISTED | EMAG_CLONEABLE
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
 
 	default_mutations=list(M_CLAWS)
@@ -512,7 +495,7 @@ var/global/list/playable_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/tajara
 
-	flags = WHITELISTED
+	flags = WHITELISTED | EMAG_CLONEABLE
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL | HAS_SWEAT_GLANDS | HAS_ICON_SKIN_TONE
 
 	default_mutations=list(M_CLAWS)
@@ -588,7 +571,7 @@ var/global/list/playable_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/grey
 
-	flags = PLAYABLE | WHITELISTED
+	flags = PLAYABLE | WHITELISTED | EMAG_CLONEABLE
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER | HAS_ICON_SKIN_TONE
 
 	spells = list(/spell/targeted/telepathy)
@@ -706,7 +689,7 @@ var/global/list/playable_species = list("Human")
 	known_languages = list(LANGUAGE_SKRELLIAN)
 	primitive = /mob/living/carbon/monkey/skrell
 
-	flags = WHITELISTED
+	flags = WHITELISTED | EMAG_CLONEABLE
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_SWEAT_GLANDS
 
 	flesh_color = "#8CD7A3"
@@ -1104,7 +1087,7 @@ var/list/has_died_as_golem = list()
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
 	primitive = /mob/living/carbon/monkey/roach
 
-	flags = WHITELISTED | PLAYABLE
+	flags = WHITELISTED | PLAYABLE | EMAG_CLONEABLE
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
 	burn_mod = 1.1

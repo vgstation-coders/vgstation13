@@ -185,6 +185,8 @@
 	desc = "A pair of metal knuckles embedded with dull, but nonetheless painful spikes."
 	icon_state = "knuckles_spiked"
 	item_state = "knuckles_spiked"
+	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_SYNDICATE + "=1"
 
 	bonus_knockout = 25
 	damage_added = 5
