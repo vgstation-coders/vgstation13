@@ -316,7 +316,7 @@
 					use_recursive_explosions = 1
 
 				if ("localhost_autoadmin")
-					localhost_autoadmin = 1
+					localhost_autoadmin = value ? text2num(value) : TRUE
 
 				if ("log_ooc")
 					config.log_ooc = 1
