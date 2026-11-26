@@ -1,0 +1,5 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: Hardsuit gear no longer survives a destroyed suit as unremovable gear; it
+    is removed with the suit.
