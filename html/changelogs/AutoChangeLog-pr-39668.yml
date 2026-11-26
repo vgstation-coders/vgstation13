@@ -1,4 +1,0 @@
-author: jknpj
-delete-after: true
-changes:
-- bugfix: Unpowered newscasters no longer beep and announce breaking news.
