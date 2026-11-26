@@ -578,7 +578,7 @@
 
 //Put messages in the connected computer's temp var for display.
 /obj/machinery/cloning/clonepod/proc/connected_message(var/message)
-	if ((isnull(connected)) || (!istype(connected, /obj/machinery/computer/cloning)))
+	if(!connected.len)
 		return FALSE
 	if (!message)
 		return FALSE
