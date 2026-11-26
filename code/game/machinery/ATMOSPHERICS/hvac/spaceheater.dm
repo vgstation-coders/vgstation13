@@ -337,7 +337,7 @@
 					cell = null
 
 			if("cellinstall")
-				if(panel_open && !cell && in_range(src, usr)) //silicons can eject the cell remotely, but not teleport one in
+				if(panel_open && !cell && hands_on) //the cell can be ejected from afar, but not teleported in
 					var/obj/item/weapon/cell/C = usr.get_active_hand()
 					if(istype(C))
 						if(usr.drop_item(C, src))
