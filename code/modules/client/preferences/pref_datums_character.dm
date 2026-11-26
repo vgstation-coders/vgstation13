@@ -156,13 +156,18 @@
 	var/datum/preference_setting/species = parent.get_pref_datum(/datum/preference_setting/string/species)
 	setting = random_hair_style(gender.setting, species.setting)
 
-	var/list/colours = random_hair_color()
+	var/datum/species/species_datum = all_species[species.setting]
+	var/list/colours
+	if(species_datum)
+		colours = species_datum.generate_hair_color()
+	else
+		colours = random_hair_color()
 
 	var/datum/preference_setting/numerical/r_hair = parent.get_pref_datum(/datum/preference_setting/numerical/r_hair)
 	r_hair.setting = colours[1]
 	var/datum/preference_setting/numerical/g_hair = parent.get_pref_datum(/datum/preference_setting/numerical/g_hair)
 	g_hair.setting = colours[2]
-	var/datum/preference_setting/numerical/b_hair = parent.get_pref_datum(/datum/preference_setting/numerical/g_hair)
+	var/datum/preference_setting/numerical/b_hair = parent.get_pref_datum(/datum/preference_setting/numerical/b_hair)
 	b_hair.setting = colours[3]
 
 /datum/preference_setting/string/h_style/proc/input_hair_color(var/mob/user)
@@ -190,14 +195,15 @@
 				to_chat(user,"<span class='notice'>Your hair will now be [new_hair_vox] in color.</span>")
 
 		if("Insectoid")
-			var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 35 and 80:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
+			var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to 0-80 red, 0-50 green and 0-35 blue:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 			if(carapace)
-				r_hair.setting = hex2num(copytext(carapace, 2, 4))
-				g_hair.setting = hex2num(copytext(carapace, 4, 6))
-				b_hair.setting = hex2num(copytext(carapace, 6, 8))
-				r_hair.setting = clamp(r_hair.setting, 0, 80)
-				g_hair.setting = clamp(g_hair.setting, 0, 50)
-				b_hair.setting = clamp(b_hair.setting, 0, 35)
+				var/list/carapace_color = list(hex2num(copytext(carapace, 2, 4)), hex2num(copytext(carapace, 4, 6)), hex2num(copytext(carapace, 6, 8)))
+				var/datum/species/species_datum = all_species[species]
+				if(species_datum)
+					carapace_color = species_datum.sanitize_hair_color(carapace_color)
+				r_hair.setting = carapace_color[1]
+				g_hair.setting = carapace_color[2]
+				b_hair.setting = carapace_color[3]
 	parent.ShowChoices(user)
 
 /datum/preference_setting/string/h_style/choose_setting(var/mob/user)
@@ -512,6 +518,12 @@
 		r_hair.setting = 0//hex2num(copytext(new_hair, 2, 4))
 		g_hair.setting = 0//hex2num(copytext(new_hair, 4, 6))
 		b_hair.setting = 0//hex2num(copytext(new_hair, 6, 8))
+		var/datum/species/species_datum = all_species[setting]
+		if(species_datum)
+			var/list/hair_colour = species_datum.sanitize_hair_color(list(r_hair.setting, g_hair.setting, b_hair.setting))
+			r_hair.setting = hair_colour[1]
+			g_hair.setting = hair_colour[2]
+			b_hair.setting = hair_colour[3]
 
 		var/datum/preference_setting/numerical/s_tone = parent.get_pref_datum(/datum/preference_setting/numerical/s_tone)
 		s_tone.randomise() //the default is only valid for humans

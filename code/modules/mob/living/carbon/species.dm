@@ -114,6 +114,8 @@ var/global/list/emag_cloneable_species = list()
 	var/flesh_color = DEFAULT_FLESH //Pink.
 	var/base_color      //Used when setting species.
 	var/max_skin_tone = 1
+	///How this species stores hair colour. See the HAIR_COLOR_* defines.
+	var/hair_color_mode = HAIR_COLOR_RGB
 
 	var/uniform_icons       = 'icons/mob/uniform.dmi'
 	var/fat_uniform_icons   = 'icons/mob/uniform_fat.dmi'
@@ -275,6 +277,31 @@ var/global/list/emag_cloneable_species = list()
 
 /datum/species/proc/updatespeciescolor(var/mob/living/carbon/human/H) //Handles changing icobase for species that have multiple skin colors.
 	return
+
+/datum/species/proc/generate_hair_color()
+	switch(hair_color_mode)
+		if(HAIR_COLOR_VOX)
+			return list(rand(1,7), 0, 0)
+		if(HAIR_COLOR_INSECTOID)
+			return list(rand(0,80), rand(0,50), rand(0,35))
+	return random_hair_color()
+
+/datum/species/proc/sanitize_hair_color(var/list/color)
+	switch(hair_color_mode)
+		if(HAIR_COLOR_VOX)
+			if(color[1] < 1 || color[1] > 7)
+				// Deterministic so the same stored value always maps to the same sprite
+				color[1] = (round(abs(color[1])) % 7) + 1
+			color[2] = 0
+			color[3] = 0
+		if(HAIR_COLOR_INSECTOID)
+			color[1] = clamp(color[1], 0, 80)
+			color[2] = clamp(color[2], 0, 50)
+			color[3] = clamp(color[3], 0, 35)
+	return color
+
+/datum/species/proc/hair_color_uses_sprite()
+	return hair_color_mode == HAIR_COLOR_VOX
 
 /datum/species/proc/handle_environment(var/datum/gas_mixture/environment, var/mob/living/carbon/human/host)
 
@@ -1089,6 +1116,7 @@ var/list/has_died_as_golem = list()
 
 	flags = WHITELISTED | PLAYABLE | EMAG_CLONEABLE
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
+	hair_color_mode = HAIR_COLOR_INSECTOID
 
 	burn_mod = 1.1
 	tox_mod = 0.5

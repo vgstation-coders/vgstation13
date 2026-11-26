@@ -23,6 +23,7 @@
 	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
 	max_skin_tone = 6
+	hair_color_mode = HAIR_COLOR_VOX
 	tail = "green"
 	tail_icon = 'icons/mob/human_races/vox/tails.dmi'
 	tail_type = "vox"

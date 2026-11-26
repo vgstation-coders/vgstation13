@@ -492,7 +492,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	character.dna.ResetUIFrom(character)
 
 	if(get_pref(/datum/preference_setting/toggle/be_random_body))
-		character.my_appearance.randomise()
+		character.my_appearance.randomise(null, character.species.name)
 
 	// Destroy/cyborgize organs
 

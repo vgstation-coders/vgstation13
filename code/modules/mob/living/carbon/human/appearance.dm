@@ -65,7 +65,12 @@
 	h_style = random_hair_style(gender, species)
 	f_style = random_facial_hair_style(gender, species)
 
-	var/list/hair_colour = randomize_hair_color("hair")
+	var/datum/species/species_datum = istype(species, /datum/species) ? species : all_species[species]
+	var/list/hair_colour
+	if(species_datum)
+		hair_colour = species_datum.generate_hair_color()
+	else
+		hair_colour = randomize_hair_color("hair")
 	var/list/facial_hair_colour = randomize_hair_color("facial")
 	var/list/eye_colour = randomize_eyes_color()
 
