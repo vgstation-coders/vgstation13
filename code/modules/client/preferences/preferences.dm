@@ -485,6 +485,13 @@ var/const/MAX_SAVE_SLOTS = 16
 	character.my_appearance.b_facial = get_pref(/datum/preference_setting/numerical/b_facial)
 
 	character.my_appearance.s_tone = get_pref(/datum/preference_setting/numerical/s_tone)
+	if(character.species)
+		if(character.species.anatomy_flags & HAS_SKIN_TONE)
+			//Skin tone is stored inverted (35 - tone), and ResetUIFrom() hardcodes
+			//220 for HAS_SKIN_TONE species, so the valid range is always -185..34.
+			character.my_appearance.s_tone = clamp(character.my_appearance.s_tone, -185, 34)
+		else
+			character.my_appearance.s_tone = clamp(character.my_appearance.s_tone, 1, max(character.species.max_skin_tone, 1))
 
 	character.my_appearance.h_style = get_pref(/datum/preference_setting/string/h_style)
 	character.my_appearance.f_style = get_pref(/datum/preference_setting/string/f_style)
