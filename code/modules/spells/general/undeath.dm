@@ -45,11 +45,14 @@
 	var/mob/living/carbon/human/H = user
 	to_chat(H, "You attempt to recover. This may take between 30 and 45 seconds.")
 	V.reviving = TRUE
+	var/attempt = ++V.revive_attempt
 	var/delay = rand(30 SECONDS, 45 SECONDS)
 
 	spawn()
 		user.update_canmove()
 		sleep(delay)
+		if (V.revive_attempt != attempt) // Cancelled in the meantime (moved to another body, or revived some other way).
+			return
 		if (H.client && cast_check()) // If he didn't log out + if we didn't get revived/smitted in the meantime already
 			to_chat(H, "<span class='sinister'>Your corpse twitches slightly. It's safe to assume nobody noticed.</span>")
 			to_chat(H, "<span class = 'notice'>Click the action button to revive.</span>")
