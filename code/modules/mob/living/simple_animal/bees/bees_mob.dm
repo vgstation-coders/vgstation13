@@ -11,6 +11,15 @@
 
 var/bee_mobs_count = 0
 
+//Lingering effects that keep bees calm while they carry water or holy water.
+//Direct splashes are handled by /datum/reagent/water/reaction_animal
+var/list/bee_calmers = list(
+	/obj/effect/decal/chemical_puff,
+	/obj/effect/smoke/chem,
+	/obj/effect/water,
+	/obj/effect/foam,
+	)
+
 /mob/living/simple_animal/bee
 	name = "swarm of bees"
 	icon = 'icons/obj/apiary_bees_etc.dmi'
@@ -251,18 +260,9 @@ var/bee_mobs_count = 0
 			return
 
 	//Calming bees
-	var/list/calmers = list(
-		/obj/effect/decal/chemical_puff,
-		/obj/effect/smoke/chem,
-		/obj/effect/water,
-		/obj/effect/foam,
-		/obj/effect/steam,
-		/obj/effect/mist,
-		)
-
-	for(var/this_type in calmers)
-		var/obj/effect/check_effect = locate(this_type) in src.loc
-		if(check_effect && check_effect.reagents && (check_effect.reagents.has_reagent(WATER) || check_effect.reagents.has_reagent(HOLYWATER)))
+	for(var/obj/effect/check_effect in loc)
+		if(check_effect.reagents && is_type_in_list(check_effect, bee_calmers) && \
+			(check_effect.reagents.has_reagent(WATER) || check_effect.reagents.has_reagent(HOLYWATER)))
 			calming()
 			break
 
