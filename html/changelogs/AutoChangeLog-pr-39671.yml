@@ -1,4 +1,0 @@
-author: DamianX
-delete-after: true
-changes:
-- bugfix: Kitchen gun shots that miss no longer count towards cleaning.

@@ -1,6 +1,0 @@
-author: DamianX
-delete-after: true
-changes:
-- bugfix: Cloning computers no longer add themselves to their DNA scanners and clone
-    pods again every time they are opened.
-- bugfix: Clone pod status messages reach the cloning computer again.
