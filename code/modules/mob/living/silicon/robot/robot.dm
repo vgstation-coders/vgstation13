@@ -627,8 +627,9 @@
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
 			if(!C.installed && istype(W, C.external_type))
+				if(!user.drop_item(W, failmsg = TRUE))
+					return
 				C.install(user,W)
-				user.drop_item(W)
 				W.forceMove(null)
 				return
 
@@ -715,7 +716,8 @@
 
 	else if(ispowercell(W) && opened)	// trying to put a cell inside
 		var/datum/robot_component/C = components["power cell"]
-		user.drop_item(W, src)
+		if(!user.drop_item(W, src, failmsg = TRUE))
+			return
 		var/obj/item/weapon/cell/cell = get_cell()
 		if(cell)
 			C.uninstall(user)
