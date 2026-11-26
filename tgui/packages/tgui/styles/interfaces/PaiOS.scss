@@ -39,8 +39,7 @@
 }
 
 .paios-prompt,
-.paios-cursor,
-.paios-online {
+.paios-cursor {
   color: var(--phosphor);
 }
 
@@ -54,6 +53,14 @@
 
 .paios-meter .ProgressBar {
   flex: 1;
+}
+
+.paios-meter__value {
+  flex: 1;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .paios-nav__category {

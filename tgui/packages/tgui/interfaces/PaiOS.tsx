@@ -806,10 +806,14 @@ export const PaiOS = () => {
                   <ProgressBar value={ram} maxValue={100} />
                   <span>{ram}/100</span>
                 </Box>
-                <Box className="paios-meter">
-                  <span>NTNET</span>
-                  <span className="paios-online">ONLINE</span>
-                </Box>
+                {!!data.directives?.master && (
+                  <Box className="paios-meter">
+                    <span>MASTER</span>
+                    <span className="paios-meter__value">
+                      {data.directives.master}
+                    </span>
+                  </Box>
+                )}
               </Box>
 
               <NavCategory label="System" />
