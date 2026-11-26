@@ -1317,7 +1317,7 @@ Thanks.
 		if (istype(AM, /mob/living)) //no pushing people pushing rollerbeds that have people on them
 			var/mob/living/tmob = AM
 			var/obj/item/clothing/under/uniform = get_item_by_slot(slot_w_uniform)
-			if(uniform?.stuns_arcane_loyalty)
+			if(istype(uniform, /obj/item/clothing/under) && uniform.stuns_arcane_loyalty)
 				var/arcanetampered_loyalty = FALSE
 				for(var/obj/item/weapon/implant/loyalty/L in tmob)
 					if(L.imp_in == tmob && L.arcanetampered)
