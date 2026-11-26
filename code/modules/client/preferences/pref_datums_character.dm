@@ -156,13 +156,18 @@
 	var/datum/preference_setting/species = parent.get_pref_datum(/datum/preference_setting/string/species)
 	setting = random_hair_style(gender.setting, species.setting)
 
-	var/list/colours = random_hair_color()
+	var/datum/species/species_datum = all_species[species.setting]
+	var/list/colours
+	if(species_datum)
+		colours = species_datum.generate_hair_color()
+	else
+		colours = random_hair_color()
 
 	var/datum/preference_setting/numerical/r_hair = parent.get_pref_datum(/datum/preference_setting/numerical/r_hair)
 	r_hair.setting = colours[1]
 	var/datum/preference_setting/numerical/g_hair = parent.get_pref_datum(/datum/preference_setting/numerical/g_hair)
 	g_hair.setting = colours[2]
-	var/datum/preference_setting/numerical/b_hair = parent.get_pref_datum(/datum/preference_setting/numerical/g_hair)
+	var/datum/preference_setting/numerical/b_hair = parent.get_pref_datum(/datum/preference_setting/numerical/b_hair)
 	b_hair.setting = colours[3]
 
 /datum/preference_setting/string/h_style/proc/input_hair_color(var/mob/user)

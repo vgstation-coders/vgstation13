@@ -38,6 +38,10 @@
 #define VOXEMERALD 6
 #define VOXPLUCKED 7
 
+#define HAIR_COLOR_RGB 0
+#define HAIR_COLOR_VOX 1
+#define HAIR_COLOR_INSECTOID 2
+
 #define GREYGRAY 1
 #define GREYLIGHT 2
 #define GREYGREEN 3

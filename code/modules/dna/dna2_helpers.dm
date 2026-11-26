@@ -140,6 +140,11 @@
 	my_appearance.r_hair   = dna.GetUIValueRange(DNA_UI_HAIR_R,    255)
 	my_appearance.g_hair   = dna.GetUIValueRange(DNA_UI_HAIR_G,    255)
 	my_appearance.b_hair   = dna.GetUIValueRange(DNA_UI_HAIR_B,    255)
+	if(species)
+		var/list/hair_colour = species.sanitize_hair_color(list(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair))
+		my_appearance.r_hair = hair_colour[1]
+		my_appearance.g_hair = hair_colour[2]
+		my_appearance.b_hair = hair_colour[3]
 
 	my_appearance.r_facial = dna.GetUIValueRange(DNA_UI_BEARD_R,   255)
 	my_appearance.g_facial = dna.GetUIValueRange(DNA_UI_BEARD_G,   255)

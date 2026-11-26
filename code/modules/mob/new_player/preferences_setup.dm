@@ -196,11 +196,12 @@
 	eyes_s.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
 
 	var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
-	if(species == "Vox")
+	if(current_species && current_species.hair_color_uses_sprite())
 		if(hair_style)
-			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[r_hair]_s")
+			var/hair_index = clamp(r_hair, 1, 7)
+			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_index]_s")
 			if(hair_style.additional_accessories)
-				hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[r_hair]_acc"), ICON_OVERLAY)
+				hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_index]_acc"), ICON_OVERLAY)
 			eyes_s.Blend(hair_s, ICON_OVERLAY)
 	else if(hair_style)
 		var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
