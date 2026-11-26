@@ -1,0 +1,4 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: The clown deathgasp trombone now respects its 60 second cooldown.
