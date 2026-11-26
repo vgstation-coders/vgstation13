@@ -1,5 +1,0 @@
-author: DamianX
-delete-after: true
-changes:
-- bugfix: Vampires can use Cheat Death again after being borged and restored, or after
-    being revived another way while the "Return to unlife" button was pending.
