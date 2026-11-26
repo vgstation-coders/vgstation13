@@ -270,8 +270,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		stat &= ~NOPOWER
 		update_icon()
 	else
+		stat |= NOPOWER //set at once so newsAlert() stops announcing, only the icon change is staggered
 		spawn(rand(0, 15))
-			stat |= NOPOWER
 			update_icon()
 
 
