@@ -179,6 +179,18 @@ var/global/list/emag_cloneable_species = list()
 		myhuman = null
 	..()
 
+/// Returns an independent copy of this species datum with its runtime icon state.
+/// Detached organs use this so they don't keep a reference to a mob's species
+/// datum, which is deleted together with the mob.
+/datum/species/proc/Copy()
+	var/datum/species/new_species = new type
+	new_species.icobase = icobase
+	new_species.deform = deform
+	new_species.override_icon = override_icon
+	new_species.default_blocks = default_blocks.Copy()
+	new_species.default_mutations = default_mutations.Copy()
+	return new_species
+
 /datum/species/proc/gib(var/mob/living/carbon/human/H, animation, meat)
 	if(H.status_flags & BUDDHAMODE)
 		H.adjustBruteLoss(200)

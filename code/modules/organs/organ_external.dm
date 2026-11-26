@@ -1813,7 +1813,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 			blood_DNA = list()
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 
-	src.species = source.species || H.species
+	var/datum/species/organ_species = source.species || H.species
+	if(organ_species)
+		//Snapshot the species datum: the donor mob deletes its own species
+		//datum on Destroy(), which would otherwise turn this limb into a
+		//plain body-species limb later on.
+		src.species = organ_species.Copy()
 	cancer_stage = source.cancer_stage
 	wounds = source.wounds.Copy()
 	burn_dam = source.burn_dam
