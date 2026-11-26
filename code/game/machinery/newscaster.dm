@@ -1409,18 +1409,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					return
 	if(istype(user,/mob/living/carbon/human))                       //User is a human
 		var/mob/living/carbon/human/human_user = user
-		if(human_user.wear_id)                                      //Newscaster scans you
-			if(istype(human_user.wear_id, /obj/item/device/pda) )	//autorecognition, woo!
-				var/obj/item/device/pda/P = human_user.wear_id
-				if(P.id)
-					scanned_user = "[P.id.registered_name] ([P.id.assignment])"
-				else
-					scanned_user = "Unknown"
-			else if(istype(human_user.wear_id, /obj/item/weapon/card/id) )
-				var/obj/item/weapon/card/id/ID = human_user.wear_id
-				scanned_user ="[ID.registered_name] ([ID.assignment])"
-			else
-				scanned_user ="Unknown"
+		var/obj/item/weapon/card/id/ID = human_user.get_id_card()    //Newscaster scans your ID, even inside a wallet or PDA
+		if(ID)
+			scanned_user = "[ID.registered_name] ([ID.assignment])"
 		else
 			scanned_user ="Unknown"
 	else if (issilicon(user))
