@@ -7,6 +7,9 @@
 	name = "air conditioner"
 	desc = "If you can't take the heat, use one of these."
 	set_temperature = 20		// in celcius, add T0C for kelvin
+	min_temperature = 0
+	max_temperature = 25		// room temp
+	window_id = "aircond"
 	var/cooling_power = 40000
 	base_state = "aircond"
 
@@ -14,14 +17,6 @@
 
 	flags = FPRINT
 
-
-/obj/machinery/space_heater/air_conditioner/New()
-	..()
-	cell = new(src)
-	cell.charge = 1000
-	cell.maxcharge = 1000
-	update_icon()
-	return
 
 /obj/machinery/space_heater/air_conditioner/interact(mob/user as mob)
 	if(panel_open)
@@ -50,44 +45,6 @@
 		update_icon()
 	return
 
-
-/obj/machinery/space_heater/air_conditioner/Topic(href, href_list)
-	if(..())
-		usr << browse(null, "window=aircond")
-		usr.unset_machine()
-		return 1
-	else
-		usr.set_machine(src)
-
-		switch(href_list["op"])
-
-			if("temp")
-				var/value = text2num(href_list["val"])
-
-				// limit to 0c and 25c(room temp)
-				set_temperature = clamp(set_temperature + value, 0, 25)
-
-			if("cellremove")
-				if(panel_open && cell && !usr.get_active_hand())
-					cell.updateicon()
-					usr.put_in_hands(cell)
-					cell.add_fingerprint(usr)
-					cell = null
-					usr.visible_message("<span class='notice'>[usr] removes the power cell from \the [src].</span>", "<span class='notice'>You remove the power cell from \the [src].</span>")
-
-
-			if("cellinstall")
-				if(panel_open && !cell)
-					var/obj/item/weapon/cell/C = usr.get_active_hand()
-					if(istype(C))
-						if(usr.drop_item(C, src))
-							cell = C
-							C.add_fingerprint(usr)
-
-							usr.visible_message("<span class='notice'>[usr] inserts a power cell into \the [src].</span>", "<span class='notice'>You insert the power cell into \the [src].</span>")
-
-		src.updateDialog()
-	return
 
 /obj/machinery/space_heater/air_conditioner/proc/chill()
 	var/turf/simulated/L = loc

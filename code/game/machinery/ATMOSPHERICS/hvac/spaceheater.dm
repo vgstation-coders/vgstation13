@@ -12,6 +12,9 @@
 	var/base_state = "sheater"
 	var/nocell = 0
 	var/intake_rate = 0.25
+	var/min_temperature = 20		// limits of set_temperature, in celcius
+	var/max_temperature = 90
+	var/window_id = "spaceheater"
 	light_power_on = 0.75
 	light_range_on = 2
 	light_color = LIGHT_COLOR_ORANGE
@@ -255,7 +258,7 @@
 	..()
 	update_icon()
 	if(!panel_open && user.machine == src)
-		user << browse(null, "window=spaceheater")
+		user << browse(null, "window=[window_id]")
 		user.unset_machine()
 
 /obj/machinery/space_heater/attack_hand(mob/user as mob)
@@ -307,27 +310,34 @@
 /obj/machinery/space_heater/Topic(href, href_list)
 	if (usr.stat)
 		return
-	if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
+	if (panel_open && ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))) //the panel is behind the hatch: with it closed, updateDialog() would have interact() flip the power switch
 		usr.set_machine(src)
+
+		var/hands_on = Adjacent(usr) //silicons and telekinetics can use the panel from afar, but can't take the cell in hand
 
 		switch(href_list["op"])
 
 			if("temp")
 				var/value = text2num(href_list["val"])
 
-				// limit to 20-90 degC
-				set_temperature = clamp(set_temperature + value, 20, 90)
+				if(value in list(-5, -1, 1, 5))
+					set_temperature = clamp(set_temperature + value, min_temperature, max_temperature)
 
 			if("cellremove")
-				if(panel_open && cell && !usr.get_active_hand())
+				if(cell && (!hands_on || issilicon(usr) || !usr.get_active_hand())) //a silicon's "active hand" is its selected module, which doesn't stop a gripper from taking the cell
 					cell.updateicon()
-					usr.put_in_hands(cell)
 					cell.add_fingerprint(usr)
+					if(hands_on)
+						if(!usr.put_in_hands(cell)) //nothing to hold it with
+							cell.forceMove(get_turf(src))
+						usr.visible_message("<span class='notice'>[usr] removes the power cell from \the [src].</span>", "<span class='notice'>You remove the power cell from \the [src].</span>")
+					else //ejected from afar
+						cell.forceMove(get_turf(src))
+						visible_message("<span class='notice'>The power cell pops out of \the [src].</span>")
 					cell = null
-					usr.visible_message("<span class='notice'>[usr] removes the power cell from \the [src].</span>", "<span class='notice'>You remove the power cell from \the [src].</span>")
 
 			if("cellinstall")
-				if(panel_open && !cell)
+				if(!cell && hands_on) //the cell can be ejected from afar, but not teleported in
 					var/obj/item/weapon/cell/C = usr.get_active_hand()
 					if(istype(C))
 						if(usr.drop_item(C, src))
@@ -338,7 +348,7 @@
 
 		updateDialog()
 	else
-		usr << browse(null, "window=spaceheater")
+		usr << browse(null, "window=[window_id]")
 		usr.unset_machine()
 	return
 
