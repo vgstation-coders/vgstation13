@@ -313,7 +313,7 @@
 	if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
 		usr.set_machine(src)
 
-		var/hands_on = in_range(src, usr) //silicons can use the panel from afar, but can't physically handle the cell
+		var/hands_on = Adjacent(usr) //silicons and telekinetics can use the panel from afar, but can't take the cell in hand
 
 		switch(href_list["op"])
 
@@ -337,7 +337,7 @@
 					cell = null
 
 			if("cellinstall")
-				if(panel_open && !cell && hands_on) //silicons can eject the cell remotely, but not teleport one in
+				if(panel_open && !cell && in_range(src, usr)) //silicons can eject the cell remotely, but not teleport one in
 					var/obj/item/weapon/cell/C = usr.get_active_hand()
 					if(istype(C))
 						if(usr.drop_item(C, src))
