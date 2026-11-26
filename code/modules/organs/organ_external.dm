@@ -5,6 +5,7 @@
 	name = "external"
 
 	var/datum/species/species
+	var/native_enzymes = null //unique_enzymes of the body this limb was taken from
 	var/icon_name = null
 	var/body_part = null
 	var/icon_position = 0
@@ -1120,10 +1121,14 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.fleshify()
 
 		//Transfer properties (species, damage, ...)
-		//A limb going back onto the body it came from should keep using the
+		//A limb going back onto the body it was taken from should keep using the
 		//owner's live species datum, so updatespeciescolor() keeps affecting it.
-		var/same_body = organ.owner_dna && owner.dna && organ.owner_dna.unique_enzymes && (organ.owner_dna.unique_enzymes == owner.dna.unique_enzymes)
-		if(same_body && organ.species && owner.species && (organ.species.type == owner.species.type))
+		//Use the body the limb was originally taken from, not owner_dna: that one
+		//is cloned from the last body it was attached to, so a regraft would look
+		//native and lose the donor's colours.
+		src.native_enzymes = organ.native_enzymes
+		var/same_body = organ.native_enzymes && owner.dna && (organ.native_enzymes == owner.dna.unique_enzymes)
+		if(same_body)
 			src.species = null
 		else
 			src.species = organ.species
@@ -1780,6 +1785,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/datum/organ/internal/organ_data //Harvestable organs
 	var/list/datum/organ/internal/internal_organs //Actual organs (for surgery)
 	var/datum/dna/owner_dna
+	var/native_enzymes = null //unique_enzymes of the body this limb was taken from
 	var/part = "organ"
 
 	//This variable stores "butchering products" - objects of type "/datum/butchering_product" (see  code/datums/helper_datums/butchering.dm)
@@ -1819,12 +1825,19 @@ Note that amputating the affected organ does in fact remove the infection from t
 			blood_DNA = list()
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 
-	var/datum/species/organ_species = source.species || H.species
+	var/datum/species/organ_species = source?.species || H.species
 	if(organ_species)
 		//Snapshot the species datum: the donor mob deletes its own species
 		//datum on Destroy(), which would otherwise turn this limb into a
 		//plain body-species limb later on.
 		src.species = organ_species.Copy()
+	//A limb still using the body's live species is native to that body; one with
+	//its own snapshot carries the body it was originally taken from, even after
+	//being attached somewhere else.
+	if(source?.species)
+		native_enzymes = source.native_enzymes
+	else if(H.dna)
+		native_enzymes = H.dna.unique_enzymes
 	cancer_stage = source.cancer_stage
 	wounds = source.wounds.Copy()
 	burn_dam = source.burn_dam

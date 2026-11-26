@@ -214,6 +214,9 @@ var/global/list/emag_cloneable_species = list()
 	new_species.warning_low_pressure = warning_low_pressure
 	new_species.tacklePower = tacklePower
 	new_species.tackleRange = tackleRange
+	new_species.attack_verb = attack_verb
+	new_species.fireloss_mult = fireloss_mult
+	new_species.default_language = default_language
 
 	new_species.damage_overlays = damage_overlays.Copy()
 	new_species.default_blocks = default_blocks.Copy()
