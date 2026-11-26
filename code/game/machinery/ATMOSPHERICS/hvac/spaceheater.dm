@@ -12,6 +12,9 @@
 	var/base_state = "sheater"
 	var/nocell = 0
 	var/intake_rate = 0.25
+	var/min_temperature = 20		// limits of set_temperature, in celcius
+	var/max_temperature = 90
+	var/window_id = "spaceheater"
 	light_power_on = 0.75
 	light_range_on = 2
 	light_color = LIGHT_COLOR_ORANGE
@@ -255,7 +258,7 @@
 	..()
 	update_icon()
 	if(!panel_open && user.machine == src)
-		user << browse(null, "window=spaceheater")
+		user << browse(null, "window=[window_id]")
 		user.unset_machine()
 
 /obj/machinery/space_heater/attack_hand(mob/user as mob)
@@ -315,19 +318,19 @@
 			if("temp")
 				var/value = text2num(href_list["val"])
 
-				// limit to 20-90 degC
-				set_temperature = clamp(set_temperature + value, 20, 90)
+				set_temperature = clamp(set_temperature + value, min_temperature, max_temperature)
 
 			if("cellremove")
 				if(panel_open && cell && !usr.get_active_hand())
 					cell.updateicon()
-					usr.put_in_hands(cell)
+					if(!Adjacent(usr) || !usr.put_in_hands(cell)) //ejected from afar (silicons, telekinesis), or nothing to hold it with
+						cell.forceMove(get_turf(src))
 					cell.add_fingerprint(usr)
 					cell = null
 					usr.visible_message("<span class='notice'>[usr] removes the power cell from \the [src].</span>", "<span class='notice'>You remove the power cell from \the [src].</span>")
 
 			if("cellinstall")
-				if(panel_open && !cell)
+				if(panel_open && !cell && in_range(src, usr)) //silicons can eject the cell remotely, but not teleport one in
 					var/obj/item/weapon/cell/C = usr.get_active_hand()
 					if(istype(C))
 						if(usr.drop_item(C, src))
@@ -338,7 +341,7 @@
 
 		updateDialog()
 	else
-		usr << browse(null, "window=spaceheater")
+		usr << browse(null, "window=[window_id]")
 		usr.unset_machine()
 	return
 
