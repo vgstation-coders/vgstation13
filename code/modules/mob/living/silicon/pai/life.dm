@@ -9,7 +9,7 @@
 	regular_hud_updates()
 
 	if(silence_time)
-		if(world.timeofday >= silence_time)
+		if(world.time >= silence_time)
 			silence_time = null
 			to_chat(src, "<font color=green>Communication circuit reinitialized. Speech and messaging functionality restored.</font>")
 

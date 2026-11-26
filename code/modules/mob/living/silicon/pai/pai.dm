@@ -155,7 +155,7 @@
 // this function shows the information about being silenced as a pAI in the Status panel
 /mob/living/silicon/pai/proc/show_silenced()
 	if(silence_time)
-		var/timeleft = round((silence_time - world.timeofday)/10 ,1)
+		var/timeleft = round((silence_time - world.time)/10 ,1)
 		stat(null, "Communications system reboot in -[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 
@@ -217,10 +217,10 @@
 	if(pps_device)
 		pps_device.emp_act(severity)
 	if(!software.Find("redundant threading"))
-		silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
+		silence_time = world.time + 2 MINUTES		// Silence for 2 minutes
 	else
 		to_chat(src, "<font color=green>Your redundant threading begins pipelining new processes... communication circuit restored in one quarter minute.</font>")
-		silence_time = world.timeofday + 15 * 10
+		silence_time = world.time + 15 SECONDS
 
 	if(prob(20) && !software.Find("redundant threading"))
 		visible_message("<span class='warning'>A shower of sparks spray from [src]'s inner workings.</span>", 1, "<span class='warning'>You hear and smell the ozone hiss of electrical sparks being expelled violently.</span>", 2)
