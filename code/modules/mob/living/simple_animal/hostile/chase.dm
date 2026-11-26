@@ -123,8 +123,9 @@
 	while(!gcDestroyed && !stat && chase_target && world.time < chase_active_until)
 		chase_heartbeat = world.time
 		set_glide_size(DELAY2GLIDESIZE(delay))
+		var/turf/here = get_turf(src)
 		var/turf/goal = get_turf(chase_target)
-		if(!goal)
+		if(!here || !goal) //pathfinding needs both endpoints on a turf
 			break
 
 		if(get_dist(src, goal) <= chase_min)
