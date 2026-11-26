@@ -339,13 +339,6 @@
 
 	cut_time = hole_size < LARGE_HOLE ? initial(cut_time) : 0
 
-/obj/structure/fence/setDensity(density) //hotfix
-	. = ..()
-	if(density)
-		setup_border_dummy()
-	else
-		remove_border_dummy()
-
 /obj/structure/fence/proc/dismantle(mob/user)
 	drop_stack(sheet_type,get_turf(src),sheet_amt,user)
 	qdel(src)
@@ -365,7 +358,7 @@
 			var/obj/item/projectile/projectile = mover
 			return prob(projectile.grillepasschance) //Fairly hit chance
 		else
-			return bounds_dist(border_dummy, mover) >= 0
+			return !density || bounds_dist(border_dummy, mover) >= 0
 
 //Mostly copied from grille.dm
 /obj/structure/fence/proc/shock(mob/user, prb = 100, siemens_coefficient = 1)
