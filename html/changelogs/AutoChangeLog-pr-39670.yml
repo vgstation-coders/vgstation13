@@ -1,5 +1,0 @@
-author: jknpj
-delete-after: true
-changes:
-- bugfix: Hair and carapace colour randomization now respects each species' colour
-    rules, and be_random_body uses the character's species.
