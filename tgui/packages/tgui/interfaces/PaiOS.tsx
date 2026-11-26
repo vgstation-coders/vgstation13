@@ -77,7 +77,6 @@ type ManifestData = {
 
 type Data = {
   name: string;
-  carrier?: string | null;
   ram: number;
   screen: string;
   subscreen: number;
@@ -807,10 +806,12 @@ export const PaiOS = () => {
                   <ProgressBar value={ram} maxValue={100} />
                   <span>{ram}/100</span>
                 </Box>
-                {!!data.carrier && (
+                {!!data.directives?.master && (
                   <Box className="paios-meter">
                     <span>CARRIER</span>
-                    <span className="paios-meter__value">{data.carrier}</span>
+                    <span className="paios-meter__value">
+                      {data.directives.master}
+                    </span>
                   </Box>
                 )}
               </Box>
