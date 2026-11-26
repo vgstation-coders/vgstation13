@@ -8,6 +8,8 @@
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND,GREET_LATEJOIN,GREET_CONVERTED,GREET_PROVOC_CONVERTED,GREET_REVSQUAD_CONVERTED,GREET_ADMINTOGGLE)
 	default_admin_voice = "Union Boss"
 	admin_voice_style = "secradio"
+	// Shown to the revolutionary when the role is dropped by borging.
+	var/borged_message = "The frame's firmware detects and deletes your neural reprogramming! You remember nothing from the moment you were flashed until now."
 
 // The ticker current state check is because revs are created, at roundstart, in the cuck cube.
 // Which is outside the z-level of the main station.
@@ -58,6 +60,8 @@
 	name = HEADREV
 	id = HEADREV
 	logo_state = "rev_head-logo"
+	// Head revolutionaries were never flashed, so they get their own wording.
+	borged_message = "The frame's firmware detects and deletes your revolutionary fervor! You remember nothing of your time leading the revolution."
 
 	stat_datum_type = /datum/stat/role/revolutionary/leader
 
@@ -98,12 +102,8 @@
 	if (!antag)
 		return ..()
 	if (borged)
-		// Head revolutionaries were never flashed, so they get their own wording.
-		var/self_message = "The frame's firmware detects and deletes your neural reprogramming! You remember nothing from the moment you were flashed until now."
-		if (istype(src, /datum/role/revolutionary/leader))
-			self_message = "The frame's firmware detects and deletes your revolutionary fervor! You remember nothing of your time leading the revolution."
 		antag.current.visible_message("<span class='big danger'>The frame beeps contentedly, purging the hostile memory engram from the MMI before initalizing it.</span>",
-				"<span class='big danger'>[self_message]</span>")
+				"<span class='big danger'>[borged_message]</span>")
 	else
 		antag.current.visible_message("<span class='big danger'>It looks like [antag.current] just remembered their real allegiance!</span>",
 			"<span class='big danger'>You have been brainwashed! You are no longer a revolutionary! Your memory is hazy from the time you were a rebel...the only thing you remember is the name of the one who brainwashed you...</span>")
