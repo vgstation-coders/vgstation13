@@ -909,14 +909,14 @@ export const PaiOS = () => {
                 <ScreenButton
                   current={screen}
                   screen="chem synth"
-                  label="Chemical Synthesizer"
+                  label="Chemical Synth"
                 />
               )}
               {has('food synth') && (
                 <ScreenButton
                   current={screen}
                   screen="food synth"
-                  label="Nutrition Synthesizer"
+                  label="Nutrition Synth"
                 />
               )}
 
@@ -925,14 +925,14 @@ export const PaiOS = () => {
                 <ActionButton
                   action="open_device"
                   params={{ device: 'gps' }}
-                  label="pAI Positioning System"
+                  label="GPS Uplink"
                 />
               )}
               {has('pai expedition tracker') && (
                 <ActionButton
                   action="open_device"
                   params={{ device: 'xps' }}
-                  label="pAI Expedition Tracker"
+                  label="Expedition Tracker"
                 />
               )}
               {has('holomap viewer') && (
@@ -957,7 +957,7 @@ export const PaiOS = () => {
                 onClick={() => act('screen', { screen: 'buy' })}
               >
                 <span className="paios-cursor"> </span>
-                Download additional software
+                Download software
               </Button>
               <Button
                 fluid
