@@ -9,6 +9,11 @@ var/global/jps_last_nodes = 0
 /// Diagnostic: count of chase re-plans.
 var/global/jps_chase_searches = 0
 
+/// Whether a path can be searched right now: the caller is not being deleted and both ends are on a turf.
+/// Checked again after anything that can sleep, since a yield in an earlier search can leave the caller qdel'd in nullspace.
+/proc/pathfind_endpoints_valid(datum/path_caller, end)
+	return !path_caller.gcDestroyed && get_turf(path_caller) && get_turf(end)
+
 /**
  * This is the proc you use whenever you want to have pathfinding more complex than "try stepping towards the thing".
  * If no path was found, returns an empty list, which is important for bots like medibots who expect an empty list rather than nothing.
@@ -26,11 +31,18 @@ var/global/jps_chase_searches = 0
 /proc/get_path_to(path_caller, end, max_distance = 30, mintargetdist, id=null, simulated_only = TRUE, turf/exclude, skip_first=TRUE, diagonally = FALSE, best_effort = FALSE, cardinalize = FALSE, smash_flags = 0)
 	if(!path_caller || !get_turf(end))
 		return
+	if(!pathfind_endpoints_valid(path_caller, end))
+		return list()
 
 	var/l = SSpathfinder.mobs.getfree(path_caller)
 	while(!l)
 		stoplag(3)
 		l = SSpathfinder.mobs.getfree(path_caller)
+
+	// Waiting for a slot can sleep, and the caller may have been deleted or moved off-turf meanwhile.
+	if(!pathfind_endpoints_valid(path_caller, end))
+		SSpathfinder.mobs.found(l)
+		return list()
 
 	var/list/path
 	var/datum/pathfind/pathfind_datum = new(path_caller, end, id, max_distance, mintargetdist, simulated_only, exclude, diagonally, best_effort, cardinalize, smash_flags)
