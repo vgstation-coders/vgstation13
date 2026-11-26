@@ -1447,6 +1447,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		printed_issue.forceMove(get_turf(src))
 
 /obj/machinery/newscaster/proc/newsAlert(channel, newsHead)   //This isn't Agouri's work, for it is ugly and vile.
+	if(buildstage != 1 || !is_operational()) //unpowered, broken or unfinished units do not announce
+		return
 	var/turf/T = get_turf(src)                      //Who the fuck uses spawn(600) anyway, jesus christ
 	if(channel)
 		if(newsHead != "")
@@ -1469,6 +1471,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 /obj/machinery/newscaster/pai
 	name = "pAI newscaster"
+
+/obj/machinery/newscaster/pai/is_operational()
+	var/mob/living/silicon/pai/owner = loc
+	if(!istype(owner))
+		return FALSE
+	return !owner.isStunned() && !owner.silence_time //dead, unconscious or EMP-silenced pAIs do not announce
 
 /obj/machinery/newscaster/pai/print_paper()
   ..()
