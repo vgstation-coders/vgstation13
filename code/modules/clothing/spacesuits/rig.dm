@@ -275,10 +275,16 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 /obj/item/clothing/suit/space/rig/proc/toggle_suit()
 	if(!wearer?.is_wearing_item(src, slot_wear_suit))
 		return
+	if(!cell?.charge)
+		warn_parts_unpowered(wearer) // Carry on: deactivating still has to shut the modules down.
 	if(!activated)
 		initialize_suit()
 	else
 		deactivate_suit(FALSE, HARDSUIT_HEADGEAR)
+
+/obj/item/clothing/suit/space/rig/proc/warn_parts_unpowered(var/mob/user)
+	if(user && !user.incapacitated())
+		to_chat(user, "\The [src] reports: <span class = 'binaryradio'>Insufficient power to move its parts. Replace or recharge the internal cell.</span>")
 
 /obj/item/clothing/suit/space/rig/proc/initialize_suit(var/equip_all = TRUE)
 	if(equip_all)
@@ -364,6 +370,9 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>")
 		return
 
+	if(!cell?.charge)
+		warn_parts_unpowered(wearer)
+		return
 	toggle_piece(HARDSUIT_HEADGEAR,wearer)
 
 /obj/item/clothing/suit/space/rig/verb/toggle_boots()
@@ -378,6 +387,9 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>")
 		return
 
+	if(!cell?.charge)
+		warn_parts_unpowered(wearer)
+		return
 	toggle_piece(HARDSUIT_BOOTS,wearer)
 
 /obj/item/clothing/suit/space/rig/verb/toggle_gloves()
@@ -392,4 +404,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>")
 		return
 
+	if(!cell?.charge)
+		warn_parts_unpowered(wearer)
+		return
 	toggle_piece(HARDSUIT_GLOVES,wearer)
