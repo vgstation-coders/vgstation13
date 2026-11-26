@@ -113,6 +113,7 @@ var/list/all_GPS_list = list()
 
 /obj/item/device/gps/ui_data()
 	var/list/data = list()
+	data["pai"] = istype(src, /obj/item/device/gps/pai)
 	data["emped"] = emped
 	data["transmitting"] = transmitting
 	data["gpstag"] = gpstag
@@ -416,6 +417,7 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 
 /obj/item/device/gps/planetary/ui_data()
 	var/list/data = list()
+	data["pai"] = istype(src, /obj/item/device/gps/planetary/pai)
 	data["emped"] = emped
 	data["transmitting"] = transmitting
 	data["gpstag"] = gpstag

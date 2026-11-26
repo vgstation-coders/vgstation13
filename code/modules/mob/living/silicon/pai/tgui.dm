@@ -18,9 +18,11 @@
 	data["subscreen"] = subscreen ? subscreen : 0
 	data["temp"] = temp
 	data["software"] = software
-	data["signal"] = list("frequency" = sradio.frequency, "code" = sradio.code)
+	data["signal"] = list("frequency" = format_frequency(sradio.frequency), "code" = sradio.code)
 	data["uninstall"] = list("progress" = uninstallprogress, "target" = uninstall_target)
 	data["charge"] = charge
+	var/mob/carrier = get_holder_of_type(loc, /mob)
+	data["carrier"] = carrier ? carrier.name : null
 	data["toggles"] = list(
 		"translator" = universal_understand,
 		"light" = lighted,
@@ -46,7 +48,19 @@
 
 	switch(screen)
 		if(SOFT_CM)
-			data["manifest"] = data_core ? data_core.get_manifest_json() : list()
+			// get_manifest_json() HTML-encodes names; the window shows plain text.
+			var/list/manifest = list()
+			var/list/source = data_core ? data_core.get_manifest_json() : list()
+			for(var/department in source)
+				var/list/entries = list()
+				for(var/list/entry in source[department])
+					entries += list(list(
+						"name" = html_decode(entry["name"]),
+						"rank" = html_decode(entry["rank"]),
+						"active" = entry["active"]
+					))
+				manifest[department] = entries
+			data["manifest"] = manifest
 		if(SOFT_MS)
 			data["medical"] = pai_medical_data()
 		if(SOFT_SS)
@@ -113,6 +127,8 @@
 				if(ram >= cost)
 					ram -= cost
 					software.Add(target)
+				else
+					to_chat(src, "<span class='warning'>Insufficient RAM available. Consider uninstalling unnecessary software.</span>")
 			return TRUE
 
 		if("uninstall")
@@ -137,12 +153,18 @@
 		if("toggle")
 			switch(params["toggle"])
 				if("translator")
+					if(!(SOFT_UT in software))
+						return TRUE
 					universal_speak = !universal_speak
 					universal_understand = !universal_understand
 				if("light")
+					if(!(SOFT_FL in software))
+						return TRUE
 					lighted = !lighted
 					card.set_light(lighted ? 4 : 0)
 				if("mesons")
+					if(!(SOFT_ME in software))
+						return TRUE
 					mesons = !mesons
 					if(mesons)
 						apply_hud_by_type(/datum/visioneffect/meson)
@@ -150,10 +172,14 @@
 						remove_hud_by_type(/datum/visioneffect/meson)
 					handle_regular_hud_updates()
 				if("volume")
+					if(!(SOFT_VE in software))
+						return TRUE
 					loudspeak = !loudspeak
 			return TRUE
 
 		if("signal")
+			if(!(SOFT_RS in software))
+				return TRUE
 			if(params["send"])
 				sradio.send_signal("ACTIVATE")
 				for(var/mob/O in hearers(1, loc))
@@ -171,6 +197,8 @@
 			return TRUE
 
 		if("chem")
+			if(!(SOFT_CS in software))
+				return TRUE
 			var/chem = params["chem"]
 			var/list/valid_chems = list()
 			for(var/chem_name in synthable_default_chems)
@@ -187,9 +215,13 @@
 				if(M)
 					M.reagents.add_reagent(chem, 15)
 					playsound(loc, 'sound/effects/bubbles.ogg', 50, 1)
+			else
+				to_chat(src, "<span class='warning'>Charge interrupted.</span>")
 			return TRUE
 
 		if("food")
+			if(!(SOFT_FS in software))
+				return TRUE
 			var/food_type = params["food"]
 			var/list/valid_food = list()
 			for(var/food_name in synthable_default_food)
@@ -205,11 +237,15 @@
 			return TRUE
 
 		if("wirejack_cancel")
+			if(!(SOFT_WJ in software))
+				return TRUE
 			hacktarget = null
 			hackprogress = 0
 			return TRUE
 
 		if("medical")
+			if(!(SOFT_MS in software))
+				return TRUE
 			var/datum/data/record/R = locate(params["record"])
 			if(!istype(R))
 				return TRUE
@@ -223,6 +259,8 @@
 			return TRUE
 
 		if("security")
+			if(!(SOFT_SS in software))
+				return TRUE
 			var/datum/data/record/R = locate(params["record"])
 			if(!istype(R))
 				return TRUE
@@ -236,6 +274,8 @@
 			return TRUE
 
 		if("messenger")
+			if(!(SOFT_DM in software))
+				return TRUE
 			var/datum/pda_app/messenger/app
 			if(pda)
 				app = locate(/datum/pda_app/messenger) in pda.applications
@@ -246,6 +286,9 @@
 			if(params["ringer"])
 				app.silent = !app.silent
 			if(params["target"])
+				if(silence_time)
+					to_chat(src, "<span class='warning'>Communications circuits remain unitialized.</span>")
+					return TRUE
 				var/obj/item/device/pda/P = locate(params["target"])
 				if(istype(P))
 					app.create_message(src, P)
@@ -253,11 +296,15 @@
 
 		if("getdna")
 			var/mob/M = get_holder_of_type(loc, /mob/living)
-			if(M)
-				spawn CheckDNA(M, src)
+			if(!M)
+				to_chat(src, "<span class='warning'>You are not being carried by anyone!</span>")
+				return TRUE
+			spawn CheckDNA(M, src)
 			return TRUE
 
 		if("holomap")
+			if(!(SOFT_HM in software))
+				return TRUE
 			if(params["switch_target"])
 				holo_target = (holo_target == initial(holo_target)) ? "show_user" : initial(holo_target)
 			if(params["toggle"])
@@ -274,6 +321,8 @@
 		if("open_device")
 			switch(params["device"])
 				if("gps")
+					if(!(SOFT_PS in software))
+						return TRUE
 					if(!pps_device)
 						pps_device = new(src)
 					pps_device.attack_self(usr)
@@ -282,6 +331,8 @@
 						ram += 10
 						to_chat(src, "Shared software dependencies with the expedition tracker, RAM cost refunded.")
 				if("xps")
+					if(!(SOFT_XS in software))
+						return TRUE
 					if(!xps_device)
 						xps_device = new(src)
 					xps_device.attack_self(usr)
@@ -300,8 +351,17 @@
 			return TRUE
 
 		if("newscaster")
+			if(!(SOFT_NW in software))
+				return TRUE
 			if(painews)
 				painews.attack_hand(usr)
+			return TRUE
+
+		if("bioscan")
+			if(!(SOFT_MS in software))
+				return TRUE
+			var/mob/living/M = get_holder_of_type(loc, /mob/living)
+			pai_bioscan = M ? pai_html_to_text(healthanalyze(M, src, TRUE)) : "No biological host found."
 			return TRUE
 
 		if("dismiss_temp")
@@ -319,8 +379,24 @@
 	text = replacetext(text, "<BR>", "\n")
 	text = replacetext(text, "</td>", " ")
 	text = replacetext(text, "</tr>", "\n")
-	text = strip_html(text, 20000)
-	return html_decode(text)
+	// strip_html() only removes the angle brackets, leaving the tag names behind
+	// and turning newlines into '#'. Remove whole tags instead.
+	var/result = ""
+	var/remaining = text
+	while(length(remaining))
+		var/open = findtext(remaining, "<")
+		if(!open)
+			result += remaining
+			break
+		result += copytext(remaining, 1, open)
+		var/close = findtext(remaining, ">", open + 1)
+		if(!close)
+			result += copytext(remaining, open)
+			break
+		remaining = copytext(remaining, close + 1)
+	result = replacetext(html_decode(result), "&nbsp;", " ")
+	result = replacetext(result, "&deg;", ascii2text(176))
+	return copytext(result, 1, 20000)
 
 /mob/living/silicon/pai/proc/pai_medical_data()
 	var/list/data = list()
@@ -361,11 +437,7 @@
 				list("label" = "Notes", "value" = medicalActive2.fields["notes"])
 			)
 	if(subscreen == 2)
-		var/mob/living/M = get_holder_of_type(loc, /mob/living)
-		if(M)
-			data["bioscan"] = pai_html_to_text(healthanalyze(M, src, TRUE))
-		else
-			data["error"] = "No biological host found."
+		data["bioscan"] = pai_bioscan
 	return data
 
 /mob/living/silicon/pai/proc/pai_security_data()
@@ -424,9 +496,12 @@
 	var/list/messages = list()
 	for(var/note in app.tnote)
 		var/message = pai_html_to_text(app.tnote[note])
-		if(app.imglist[note])
-			message += "\n\[image attached]"
-		messages += list(list("key" = note, "text" = message))
+		var/icon/img = app.imglist[note]
+		messages += list(list(
+			"key" = note,
+			"text" = message,
+			"photo" = img ? icon2base64(ImagePDA(img)) : null
+		))
 	data["messages"] = messages
 	return data
 
@@ -505,4 +580,6 @@
 	if(target == SOFT_UT)
 		universal_speak = FALSE
 		universal_understand = FALSE
+	if(screen == target)
+		screen = SOFT_UN
 	software.Remove(target)

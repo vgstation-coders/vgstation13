@@ -28,6 +28,7 @@
 	var/temp				// General error reporting text contained here will typically be shown once and cleared
 	var/screen				// Which screen our main window displays
 	var/subscreen			// Which specific function of the main screen is being displayed
+	var/pai_bioscan			// Cached host bioscan text; refreshed by the medical screen action
 
 	var/obj/item/device/pda/ai/pai/pda = null
 

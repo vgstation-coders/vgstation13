@@ -1,7 +1,7 @@
 // Copyright (c) 2020 /vg/station coders
 // SPDX-License-Identifier: MIT
 
-import { Button, Flex, Icon, LabeledList, Modal, Section } from 'tgui-core/components';
+import { Box, Button, Flex, Icon, LabeledList, Modal, Section } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
@@ -12,6 +12,7 @@ type Device = {
 }
 
 type Data = {
+  pai?: Boolean,
   emped: Boolean,
   transmitting: Boolean,
   gpstag: String,
@@ -42,6 +43,7 @@ export const Gps = (props) => {
   return (
     <Window
       title="Global Positioning System"
+      theme={data.pai ? 'retro_green' : undefined}
       width={470}
       height={500}>
       {!!emped && (
@@ -56,7 +58,20 @@ export const Gps = (props) => {
           </Flex>
         </Modal>
       )}
-      <Window.Content scrollable>
+      <Window.Content className={data.pai ? 'paios' : undefined} scrollable>
+        {!!data.pai && (
+          <Section title="NT pAI-OS">
+            <Box className="paios-statusline">
+              <Box>
+                <span className="paios-prompt">❯</span> POSITIONING SYSTEM
+              </Box>
+              <Box className="paios-meter">
+                <span>TAG</span>
+                <span className="paios-meter__value">{gpstag}</span>
+              </Box>
+            </Box>
+          </Section>
+        )}
         {!transmitting && (
           <Section
             title="Settings">

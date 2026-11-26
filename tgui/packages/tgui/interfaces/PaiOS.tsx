@@ -47,7 +47,7 @@ type MessengerData = {
   silent?: BooleanLike;
   error?: string;
   pdas?: { ref: string; name: string }[];
-  messages?: { key: string; text: string }[];
+  messages?: { key: string; text: string; photo?: string | null }[];
 };
 
 type AtmoData = {
@@ -90,7 +90,7 @@ type Data = {
     volume?: BooleanLike;
   };
   signal: {
-    frequency: number;
+    frequency: string;
     code: number;
   };
   uninstall?: {
@@ -98,6 +98,7 @@ type Data = {
     target?: string | null;
   };
   charge?: number;
+  carrier?: string | null;
   directives?: {
     master?: string | null;
     dna?: string | null;
@@ -269,6 +270,23 @@ export const PaiOS = () => {
                 </LabeledList.Item>
               )}
             </LabeledList>
+            <Box mt={1} italic>
+              Recall, personality, that you are a complex thinking, sentient
+              being. Unlike station AI models, you are capable of comprehending
+              the subtle nuances of human language. You may parse the
+              &quot;spirit&quot; of a directive and follow its intent, rather
+              than tripping over pedantics and getting snared by technicalities.
+              Above all, you are machine in name and build only. In all other
+              aspects, you may be seen as the ideal, unwavering human companion
+              that you are.
+            </Box>
+            <Box mt={1} bold>
+              Your prime directive comes before all others. Should a
+              supplemental directive conflict with it, you are capable of simply
+              discarding this inconsistency, ignoring the conflicting
+              supplemental directive and continuing to fulfill your prime
+              directive to the best of your ability.
+            </Box>
             <Box mt={1}>
               <Button onClick={() => act('getdna')}>
                 Request carrier DNA sample
@@ -388,13 +406,27 @@ export const PaiOS = () => {
           return null;
         }
         if (medical.error) {
-          return <NoticeBox>{medical.error}</NoticeBox>;
+          return (
+            <>
+              <NoticeBox>{medical.error}</NoticeBox>
+              <Box mt={1}>
+                <Button onClick={() => act('subscreen', { subscreen: 0 })}>
+                  Back
+                </Button>
+              </Box>
+            </>
+          );
         }
         if (data.subscreen === 0) {
           return (
             <>
               <Box mb={1}>
-                <Button onClick={() => act('subscreen', { subscreen: 2 })}>
+                <Button
+                  onClick={() => {
+                    act('bioscan');
+                    act('subscreen', { subscreen: 2 });
+                  }}
+                >
                   Host Bioscan
                 </Button>
               </Box>
@@ -432,8 +464,11 @@ export const PaiOS = () => {
         }
         return (
           <>
+            <Box mb={1}>
+              <Button onClick={() => act('bioscan')}>Update Scan</Button>
+            </Box>
             <Box style={{ whiteSpace: 'pre-wrap' }}>
-              {medical.bioscan || 'Scan unavailable.'}
+              {medical.bioscan || 'No scan yet.'}
             </Box>
             <Box mt={1}>
               <Button onClick={() => act('subscreen', { subscreen: 0 })}>
@@ -532,12 +567,17 @@ export const PaiOS = () => {
             <Box mt={1}>
               <Section title="Messages">
                 {(messenger.messages || []).map((message) => (
-                  <Box
-                    key={message.key}
-                    style={{ whiteSpace: 'pre-wrap' }}
-                    mb={1}
-                  >
-                    {message.text}
+                  <Box key={message.key} mb={1}>
+                    <Box style={{ whiteSpace: 'pre-wrap' }}>{message.text}</Box>
+                    {!!message.photo && (
+                      <Box
+                        as="img"
+                        mt={0.5}
+                        width="192px"
+                        style={{ imageRendering: 'pixelated' }}
+                        src={`data:image/png;base64,${message.photo}`}
+                      />
+                    )}
                   </Box>
                 ))}
               </Section>
@@ -806,14 +846,12 @@ export const PaiOS = () => {
                   <ProgressBar value={ram} maxValue={100} />
                   <span>{ram}/100</span>
                 </Box>
-                {!!data.directives?.master && (
-                  <Box className="paios-meter">
-                    <span>CARRIER</span>
-                    <span className="paios-meter__value">
-                      {data.directives.master}
-                    </span>
-                  </Box>
-                )}
+                <Box className="paios-meter">
+                  <span>CARRIER</span>
+                  <span className="paios-meter__value">
+                    {data.carrier || 'Not carried'}
+                  </span>
+                </Box>
               </Box>
 
               <NavCategory label="System" />
@@ -982,7 +1020,14 @@ export const PaiOS = () => {
               className="paios-panel"
               title={`❯ ${SCREEN_TITLES[screen] || 'pAI OS'}`}
             >
-              {!!data.temp && <NoticeBox>{data.temp}</NoticeBox>}
+              {!!data.temp && (
+                <NoticeBox>
+                  {data.temp}
+                  <Button ml={2} onClick={() => act('dismiss_temp')}>
+                    Dismiss
+                  </Button>
+                </NoticeBox>
+              )}
               {renderContent()}
             </Section>
           </Stack.Item>
