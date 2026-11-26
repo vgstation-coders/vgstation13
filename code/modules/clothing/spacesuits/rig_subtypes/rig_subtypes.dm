@@ -645,6 +645,8 @@
 	else
 		set_light(0)
 
+	user.update_inv_head()
+
 /obj/item/clothing/suit/space/ghettorig
 	name = "jury-rigged space-proof firesuit"
 	icon_state = "ghettorig"
