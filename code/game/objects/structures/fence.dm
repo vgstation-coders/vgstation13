@@ -24,8 +24,6 @@
 	layer = FENCE_FRONT_LAYER
 	flow_flags = ON_BORDER
 	verb_rotates = TRUE
-	alt_click_rotates = TRUE
-	rotate_type = /obj/structure/fence
 	sheet_type = /obj/item/stack/sheet/plasteel
 	sheet_amt = 2
 
@@ -144,6 +142,10 @@
 	dir = WEST
 	pixel_x = -14
 	layer = FENCE_MID_LAYER
+
+/obj/structure/fence/cut/New(loc)
+	. = ..()
+	update_cut_status()
 
 /obj/structure/fence/cut/small
 	hole_size = SMALL_HOLE
