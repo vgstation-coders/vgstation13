@@ -3,6 +3,7 @@
 	id = REV
 	required_pref = REV
 	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
+	drops_on_borging = TRUE
 	logo_state = "rev-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND,GREET_LATEJOIN,GREET_CONVERTED,GREET_PROVOC_CONVERTED,GREET_REVSQUAD_CONVERTED,GREET_ADMINTOGGLE)
 	default_admin_voice = "Union Boss"

@@ -48,6 +48,9 @@
 	// Jobs that cannot be this antag.
 	var/list/restricted_jobs = list()
 
+	// Whether the role is dropped when the mind is borged.
+	var/drops_on_borging = FALSE
+
 	// Jobs that have a much lower chance to be this antag.
 	var/list/protected_jobs = list()
 	var/protected_traitor_prob = PROB_PROTECTED_REGULAR

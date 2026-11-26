@@ -159,15 +159,15 @@
 
 	O.show_intro_text()
 
-// The mind keeps its antagonist roles when it moves into a new shell, but some
-// roles are not allowed to be held by a cyborg. Drop those, or the role (and
-// its faction HUD icon) keeps following the borg around.
-/mob/proc/drop_antag_roles_on_borging(var/borg_job)
+// The mind keeps its antagonist roles when it moves into a new shell. Roles that
+// opt in via drops_on_borging are dropped here; roles that support silicon
+// bodies (like vampires) stay on the mind and restore themselves later.
+/mob/proc/drop_antag_roles_on_borging()
 	if(!mind)
 		return
 	for(var/role_id in mind.antag_roles.Copy())
 		var/datum/role/R = mind.antag_roles[role_id]
-		if(!R || !R.restricted_jobs || !(borg_job in R.restricted_jobs))
+		if(!R || !R.drops_on_borging)
 			continue
 		if(istype(R, /datum/role/revolutionary))
 			var/datum/role/revolutionary/rev = R
@@ -190,7 +190,7 @@
 	O.forceMove(loc)
 	O.mmi = new /obj/item/device/mmi(O)
 	O.mmi.transfer_identity(src)//Does not transfer key/client.
-	O.drop_antag_roles_on_borging("Cyborg")
+	O.drop_antag_roles_on_borging()
 	var/datum/job/job_datum = locate(/datum/job/cyborg) in job_master.occupations
 	if(jobban_isbanned(O, "Cyborg") || (job_datum ? !job_datum.player_old_enough(O.client) : 0)) //You somehow managed to get borged, congrats.
 		to_chat(src, "<span class='warning' style=\"font-family:Courier\">WARNING: Illegal operation detected.</span>")
@@ -222,7 +222,7 @@
 	O.forceMove(loc)
 	O.mmi = new /obj/item/device/mmi(O)
 	O.mmi.transfer_identity(src)//Does not transfer key/client.
-	O.drop_antag_roles_on_borging("Mobile MMI")
+	O.drop_antag_roles_on_borging()
 	if(jobban_isbanned(O, "Mobile MMI")) //You somehow managed to get MoMMI'd, congrats.
 		to_chat(src, "<span class='warning' style=\"font-family:Courier\">WARNING: Illegal operation detected.</span>")
 		to_chat(src, "<span class='danger'>Self-destruct mechanism engaged.</span>")
