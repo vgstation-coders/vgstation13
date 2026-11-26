@@ -146,7 +146,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(W.is_screwdriver(user) && opened && !get_cell())	// haxing
+	else if(W.is_screwdriver(user) && opened && (wiresexposed || !get_cell()))	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		updateicon()
