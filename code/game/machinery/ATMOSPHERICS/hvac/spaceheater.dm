@@ -186,7 +186,7 @@
 		to_chat(user, "<span class='notice'>There isn't enough room in \the [src] for another whole plank.</span>")
 		return
 	var/woodnumber = input(user, "You may add a maximum of [maxwood] plank[maxwood == 1 ? "" : "s"].", "How much wood would you like to add to \the [src]?", 0) as null|num
-	if(!isnull(woodnumber) && !QDELETED(src) && !QDELETED(woody))
+	if(!isnull(woodnumber) && !QDELETED(src) && !QDELETED(woody) && user.is_holding_item(woody) && !user.incapacitated() && (!loc || Adjacent(user))) //no loc when called by the burnt out decal
 		maxwood = min(woody.amount, 4, Floor((cell.maxcharge-cell.charge)/250))
 		woodnumber = clamp(round(woodnumber), 0, maxwood)
 		if(!woodnumber)
@@ -216,6 +216,13 @@
 	user.put_in_hands(W)
 	user.visible_message("<span class='notice'>[user] recovers some wood from \the [src].</span>", "<span class='notice'>You recover [woodnumber] plank[woodnumber == 1 ? "" : "s"] from \the [src].</span>")
 	update_icon()
+
+/obj/machinery/space_heater/campfire/Destroy()
+	if(cookvessel)
+		cookvessel.cook_stop()
+		cookvessel.forceMove(get_turf(src))
+		cookvessel = null
+	..()
 
 /obj/machinery/space_heater/campfire/examine(mob/user)
 	..()
@@ -337,7 +344,7 @@
 			M.bodytemperature += 2
 		return
 
-	if(nocell != 1 || !isliving(user))
+	if(nocell != 1 || !isliving(user) || !Adjacent(user))
 		return
 
 	var/recoverable_wood = Floor(cell.charge/250)
