@@ -324,7 +324,7 @@
 					set_temperature = clamp(set_temperature + value, min_temperature, max_temperature)
 
 			if("cellremove")
-				if(panel_open && cell && (!hands_on || !usr.get_active_hand()))
+				if(panel_open && cell && (!hands_on || issilicon(usr) || !usr.get_active_hand())) //a silicon's "active hand" is its selected module, which doesn't stop a gripper from taking the cell
 					cell.updateicon()
 					cell.add_fingerprint(usr)
 					if(hands_on)
