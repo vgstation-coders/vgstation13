@@ -514,7 +514,7 @@
 		b_hair.setting = 0//hex2num(copytext(new_hair, 6, 8))
 
 		var/datum/preference_setting/numerical/s_tone = parent.get_pref_datum(/datum/preference_setting/numerical/s_tone)
-		s_tone.setting = s_tone.default_setting
+		s_tone.randomise() //the default is only valid for humans
 
 		// Job list check
 		var/datum/preference_setting/jobs = parent.get_pref_datum(/datum/preference_setting/assoc_list_setting/jobs)
