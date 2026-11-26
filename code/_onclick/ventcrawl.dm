@@ -240,15 +240,18 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	var/turf/source = get_turf(client.mob)
 	if(!source)
 		return
-	// Snapshot the mob's own viewport once, so membership is O(1) per pipe and
-	// there is no hand-rolled radius math to keep in sync with client.view.
-	var/list/in_viewport = list()
-	for(var/atom/visible in view(client.view || world.view, source))
-		in_viewport[visible] = TRUE
+	// view() and range() skip invisible atoms, and pipes under a floor are
+	// invisible. Compare turf coordinates instead.
+	var/list/viewsize = getviewsize(client.view || world.view)
+	var/half_width = max(0, round((viewsize[1] - 1) / 2))
+	var/half_height = max(0, round((viewsize[2] - 1) / 2))
 	for(var/datum/pipeline/pipeline in network.line_members)
 		// Pipeline is a datum: the viewport test has to happen per member atom.
 		for(var/obj/machinery/atmospherics/A in (pipeline.members || pipeline.edges))
-			if(!in_viewport[A])
+			var/turf/A_turf = get_turf(A)
+			if(!A_turf || A_turf.z != source.z)
+				continue
+			if(abs(A_turf.x - source.x) > half_width || abs(A_turf.y - source.y) > half_height)
 				continue
 			if(A.pipe_image && (A.pipe_image in pipes_shown))
 				continue
