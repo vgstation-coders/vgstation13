@@ -175,10 +175,7 @@
 		name = "[initial(name)]: [brainmob.real_name]"
 		icon_state = "mmi_full"
 
-		// GetRoleByType also finds the head revolutionary, whose role id is not REV.
-		var/datum/role/revolutionary/R = brainmob.mind && brainmob.mind.GetRoleByType(/datum/role/revolutionary)
-		if (R)
-			R.Drop(TRUE)
+		brainmob.drop_antag_roles_on_borging()
 
 		locked = 1
 

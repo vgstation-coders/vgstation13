@@ -60,14 +60,16 @@
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/legacy_cultist/Drop()
+	// The parent proc clears antag, so remember the mob before calling it.
+	var/mob/M = antag ? antag.current : null
 	. = ..()
-	if (!antag)
+	if (!M)
 		return .
-	antag.current.remove_language(LANGUAGE_CULT)
-	to_chat(antag.current, "<span class='danger'><FONT size = 3>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and removing all of the memories of your time as his servant, except the one who converted you, with it.</FONT></span>")
-	to_chat(antag.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
-	antag.current.visible_message("<span class='big danger'>It looks like [antag.current] just reverted to their old faith!</span>")
-	log_admin("[key_name(antag.current)] has been deconverted from the cult.")
+	M.remove_language(LANGUAGE_CULT)
+	to_chat(M, "<span class='danger'><FONT size = 3>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and removing all of the memories of your time as his servant, except the one who converted you, with it.</FONT></span>")
+	to_chat(M, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
+	M.visible_message("<span class='big danger'>It looks like [M] just reverted to their old faith!</span>")
+	log_admin("[key_name(M)] has been deconverted from the cult.")
 
 /datum/role/legacy_cultist/AnnounceObjectives()
 	if (!antag)
