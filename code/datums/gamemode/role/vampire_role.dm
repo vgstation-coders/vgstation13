@@ -20,6 +20,7 @@
 	var/smitecounter = 0
 
 	var/reviving = FALSE
+	var/revive_attempt = 0 // Bumped whenever a Cheat Death cast starts or is cancelled, so a stale cast can tell it was superseded.
 	var/draining = FALSE
 	var/blood_usable = STARTING_BLOOD
 	var/blood_total = STARTING_BLOOD
@@ -274,6 +275,8 @@
 	var/mob/living/carbon/human/H = antag?.current
 	if (!istype(H))
 		return FALSE // The life() procs only work on humans.
+	if (reviving && !H.isDead())
+		cancel_revival(H) // Brought back some other way while Cheat Death was pending.
 	handle_cloak(H)
 	handle_menace(H)
 	handle_smite(H)
@@ -409,12 +412,25 @@
 			H.fire_stacks += 5
 			H.ignite()
 
+// Abandons a Cheat Death in progress: clears the flag that blocks recasting
+// and takes the "Return to unlife" button away from the body that had it.
+/datum/role/vampire/proc/cancel_revival(var/mob/body)
+	reviving = FALSE
+	revive_attempt++
+	if (!body)
+		return
+	for (var/datum/action/undeath/undeath_action in body.actions)
+		if (antag && antag.current && antag.current.client)
+			antag.current.client.screen -= undeath_action.button
+		undeath_action.Remove(body)
+
 /datum/role/vampire/proc/remove_blood(var/amount)
 	blood_usable = max(0, blood_usable - amount)
 	update_vamp_hud()
 
 /datum/role/vampire/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
+	cancel_revival(old_character) // The "Return to unlife" button stays on the old body, so a pending Cheat Death can't be finished.
 	current_powers.Cut()
 	if (issilicon(new_character) || isbrain(new_character)) // No, borgs shouldn't be able to spawn bats
 		logo_state = "" // Borgos don't get the vampire icon.
