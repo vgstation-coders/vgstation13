@@ -174,10 +174,15 @@
 	user.reset_view(current)
 	return 1
 
+// The pAI lives inside its card, so check reach from whatever is carrying the card (or the card itself if it's on the floor).
+// Stop at anything that isn't an item or a mob, so a card shut inside a locker or crate can't read through it.
 /mob/living/silicon/pai/can_read_paper(var/atom/A)
-	var/turf/T = get_turf(src)
-	var/turf/PT = get_turf(A)
-	return T && PT && get_dist(T, PT) <= 1
+	var/atom/movable/holder = src
+	while(holder && !isturf(holder.loc))
+		holder = holder.loc
+		if(!istype(holder, /obj/item) && !ismob(holder))
+			return FALSE
+	return holder && holder.Adjacent(A)
 
 /mob/living/silicon/pai/blob_act()
 	if(flags & INVULNERABLE)
