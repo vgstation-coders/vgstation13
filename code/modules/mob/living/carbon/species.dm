@@ -289,7 +289,8 @@ var/global/list/emag_cloneable_species = list()
 /datum/species/proc/sanitize_hair_color(var/list/color)
 	switch(hair_color_mode)
 		if(HAIR_COLOR_VOX)
-			color[1] = clamp(color[1], 1, 7)
+			if(color[1] < 1 || color[1] > 7)
+				color[1] = rand(1, 7)
 			color[2] = 0
 			color[3] = 0
 		if(HAIR_COLOR_INSECTOID)

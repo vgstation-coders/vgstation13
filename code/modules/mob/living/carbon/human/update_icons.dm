@@ -338,7 +338,10 @@ var/global/list/damage_icon_parts = list()
 		if((hair_style) && (species.name in hair_style.species_allowed))
 			var/hair_uses_sprite = species.hair_color_uses_sprite()
 			if(hair_uses_sprite)
-				my_appearance.r_hair = clamp(my_appearance.r_hair, 1, 7)
+				var/list/hair_color = species.sanitize_hair_color(list(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair))
+				my_appearance.r_hair = hair_color[1]
+				my_appearance.g_hair = hair_color[2]
+				my_appearance.b_hair = hair_color[3]
 			var/mutable_appearance/hair_overlay = mutable_appearance(hair_style.icon, "[hair_style.icon_state][hair_uses_sprite ? "_[my_appearance.r_hair]" : ""]_[hair_suffix]", -HAIR_LAYER)
 			if(hair_style.do_colouration && !hair_uses_sprite)
 				hair_overlay.color = COLOR_MATRIX_ADD(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair))

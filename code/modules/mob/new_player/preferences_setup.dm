@@ -198,7 +198,8 @@
 	var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
 	if(current_species && current_species.hair_color_uses_sprite())
 		if(hair_style)
-			var/hair_index = clamp(r_hair, 1, 7)
+			var/list/hair_color = current_species.sanitize_hair_color(list(r_hair, g_hair, b_hair))
+			var/hair_index = hair_color[1]
 			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_index]_s")
 			if(hair_style.additional_accessories)
 				hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_index]_acc"), ICON_OVERLAY)

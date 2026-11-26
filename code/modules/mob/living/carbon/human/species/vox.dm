@@ -139,7 +139,6 @@
 
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative
 	name = "Skeletal Vox"
-	hair_color_mode = HAIR_COLOR_VOX
 	icobase = 'icons/mob/human_races/vox/r_voxboney.dmi'
 	deform = 'icons/mob/human_races/vox/r_voxboney.dmi' //Do bones deform noticeably?
 	known_languages = list(LANGUAGE_VOX, LANGUAGE_CLATTER)
