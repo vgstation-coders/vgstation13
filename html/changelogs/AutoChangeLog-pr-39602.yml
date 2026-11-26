@@ -1,5 +1,0 @@
-author: Pancakemines
-delete-after: true
-changes:
-- tweak: Extinguished campfires can now have their wood recovered or be scattered.
-- bugfix: Campfires no longer accept more whole planks than their remaining fuel capacity.

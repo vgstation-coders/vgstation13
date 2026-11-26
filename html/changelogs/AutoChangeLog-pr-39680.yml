@@ -1,5 +1,0 @@
-author: DamianX
-delete-after: true
-changes:
-- bugfix: Secbots and ED-209s you attack now report a threat level that accounts for
-    your ID, weapons and records again.
