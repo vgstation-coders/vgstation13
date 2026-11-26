@@ -310,7 +310,7 @@
 /obj/machinery/space_heater/Topic(href, href_list)
 	if (usr.stat)
 		return
-	if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
+	if (panel_open && ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))) //the panel is behind the hatch: with it closed, updateDialog() would have interact() flip the power switch
 		usr.set_machine(src)
 
 		var/hands_on = Adjacent(usr) //silicons and telekinetics can use the panel from afar, but can't take the cell in hand
@@ -320,11 +320,11 @@
 			if("temp")
 				var/value = text2num(href_list["val"])
 
-				if(panel_open && (value in list(-5, -1, 1, 5)))
+				if(value in list(-5, -1, 1, 5))
 					set_temperature = clamp(set_temperature + value, min_temperature, max_temperature)
 
 			if("cellremove")
-				if(panel_open && cell && (!hands_on || issilicon(usr) || !usr.get_active_hand())) //a silicon's "active hand" is its selected module, which doesn't stop a gripper from taking the cell
+				if(cell && (!hands_on || issilicon(usr) || !usr.get_active_hand())) //a silicon's "active hand" is its selected module, which doesn't stop a gripper from taking the cell
 					cell.updateicon()
 					cell.add_fingerprint(usr)
 					if(hands_on)
@@ -337,7 +337,7 @@
 					cell = null
 
 			if("cellinstall")
-				if(panel_open && !cell && hands_on) //the cell can be ejected from afar, but not teleported in
+				if(!cell && hands_on) //the cell can be ejected from afar, but not teleported in
 					var/obj/item/weapon/cell/C = usr.get_active_hand()
 					if(istype(C))
 						if(usr.drop_item(C, src))
