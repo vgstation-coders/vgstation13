@@ -10,7 +10,7 @@ import {
   Section,
   Stack,
 } from 'tgui-core/components';
-import { BooleanLike } from 'tgui-core/react';
+import { BooleanLike, classes } from 'tgui-core/react';
 
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
@@ -148,12 +148,17 @@ const ScreenButton = (props: {
   label: string;
 }) => {
   const { act } = useBackend();
+  const active = props.current === props.screen;
   return (
     <Button
       fluid
-      selected={props.current === props.screen}
+      className={classes([
+        'paios-nav__item',
+        active && 'paios-nav__item--active',
+      ])}
       onClick={() => act('screen', { screen: props.screen })}
     >
+      <span className="paios-cursor">{active ? '❯' : ' '}</span>
       {props.label}
     </Button>
   );
@@ -166,11 +171,20 @@ const ActionButton = (props: {
 }) => {
   const { act } = useBackend();
   return (
-    <Button fluid onClick={() => act(props.action, props.params)}>
+    <Button
+      fluid
+      className="paios-nav__item"
+      onClick={() => act(props.action, props.params)}
+    >
+      <span className="paios-cursor"> </span>
       {props.label}
     </Button>
   );
 };
+
+const NavCategory = (props: { label: string }) => (
+  <Box className="paios-nav__category">{props.label}</Box>
+);
 
 const ToggleButton = (props: {
   toggle: string;
@@ -773,180 +787,199 @@ export const PaiOS = () => {
   };
 
   return (
-    <Window title={`pAI OS - ${data.name}`} width={760} height={540}>
-      <Window.Content>
+    <Window
+      title={`pAI OS - ${data.name}`}
+      theme="retro_green"
+      width={780}
+      height={560}
+    >
+      <Window.Content className="paios">
         <Stack fill>
-          <Stack.Item grow>
-            <Section fill scrollable title={SCREEN_TITLES[screen] || 'pAI OS'}>
-              {!!data.temp && <NoticeBox>{data.temp}</NoticeBox>}
-              {renderContent()}
-            </Section>
-          </Stack.Item>
-          <Stack.Item width="230px">
-            <Section fill scrollable title="Software">
-              <Stack vertical>
-                <Button fluid onClick={() => act('refresh')}>
-                  Refresh
-                </Button>
+          <Stack.Item width="238px">
+            <Section fill scrollable className="paios-nav" title="NT pAI-OS">
+              <Box className="paios-statusline">
+                <Box>
+                  <span className="paios-prompt">❯</span> {data.name}
+                </Box>
+                <Box className="paios-meter">
+                  <span>RAM</span>
+                  <ProgressBar value={ram} maxValue={100} />
+                  <span>{ram}/100</span>
+                </Box>
+                <Box className="paios-meter">
+                  <span>NTNET</span>
+                  <span className="paios-online">ONLINE</span>
+                </Box>
+              </Box>
+
+              <NavCategory label="System" />
+              <ActionButton action="refresh" label="Refresh" />
+              <ScreenButton
+                current={screen}
+                screen="directives"
+                label="Directives"
+              />
+              <ActionButton action="radio" label="Radio Configuration" />
+              <ActionButton action="image" label="Screen Display" />
+
+              <NavCategory label="Basic" />
+              {has('crew manifest') && (
                 <ScreenButton
                   current={screen}
-                  screen="directives"
-                  label="Directives"
+                  screen="crew manifest"
+                  label="Crew Manifest"
                 />
-                <ActionButton action="radio" label="Radio Configuration" />
-                <ActionButton action="image" label="Screen Display" />
+              )}
+              {has('digital messenger') && (
+                <ScreenButton
+                  current={screen}
+                  screen="digital messenger"
+                  label="Digital Messenger"
+                />
+              )}
+              {has('newscaster') && (
+                <ActionButton action="newscaster" label="Newscaster" />
+              )}
+              {has('remote signaller') && (
+                <ScreenButton
+                  current={screen}
+                  screen="remote signaller"
+                  label="Remote Signaller"
+                />
+              )}
+              {has('atmosphere sensor') && (
+                <ScreenButton
+                  current={screen}
+                  screen="atmosphere sensor"
+                  label="Atmospheric Sensor"
+                />
+              )}
+              {has('flashlight') && (
+                <ScreenButton
+                  current={screen}
+                  screen="flashlight"
+                  label="Brightness Enhancer"
+                />
+              )}
+              {has('redundant threading') && (
+                <ScreenButton
+                  current={screen}
+                  screen="redundant threading"
+                  label="Redundant Threading"
+                />
+              )}
+              {has('volume enhancer') && (
+                <ScreenButton
+                  current={screen}
+                  screen="volume enhancer"
+                  label="Volume Enhancer"
+                />
+              )}
 
-                <Box mt={1} bold>
-                  Basic
-                </Box>
-                {has('crew manifest') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="crew manifest"
-                    label="Crew Manifest"
-                  />
-                )}
-                {has('digital messenger') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="digital messenger"
-                    label="Digital Messenger"
-                  />
-                )}
-                {has('newscaster') && (
-                  <ActionButton action="newscaster" label="Newscaster" />
-                )}
-                {has('remote signaller') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="remote signaller"
-                    label="Remote Signaller"
-                  />
-                )}
-                {has('atmosphere sensor') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="atmosphere sensor"
-                    label="Atmospheric Sensor"
-                  />
-                )}
-                {has('flashlight') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="flashlight"
-                    label="Brightness Enhancer"
-                  />
-                )}
-                {has('redundant threading') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="redundant threading"
-                    label="Redundant Threading"
-                  />
-                )}
-                {has('volume enhancer') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="volume enhancer"
-                    label="Volume Enhancer"
-                  />
-                )}
+              <NavCategory label="Standard" />
+              {has('medical supplement') && (
+                <ScreenButton
+                  current={screen}
+                  screen="medical supplement"
+                  label="Medical Package"
+                />
+              )}
+              {has('security supplement') && (
+                <ScreenButton
+                  current={screen}
+                  screen="security supplement"
+                  label="Security Package"
+                />
+              )}
+              {has('wirejack') && (
+                <ScreenButton
+                  current={screen}
+                  screen="wirejack"
+                  label="Wirejack"
+                />
+              )}
+              {has('universal translator') && (
+                <ScreenButton
+                  current={screen}
+                  screen="universal translator"
+                  label="Universal Translator"
+                />
+              )}
+              {has('chem synth') && (
+                <ScreenButton
+                  current={screen}
+                  screen="chem synth"
+                  label="Chemical Synthesizer"
+                />
+              )}
+              {has('food synth') && (
+                <ScreenButton
+                  current={screen}
+                  screen="food synth"
+                  label="Nutrition Synthesizer"
+                />
+              )}
 
-                <Box mt={1} bold>
-                  Standard
-                </Box>
-                {has('medical supplement') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="medical supplement"
-                    label="Medical Package"
-                  />
-                )}
-                {has('security supplement') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="security supplement"
-                    label="Security Package"
-                  />
-                )}
-                {has('wirejack') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="wirejack"
-                    label="Wirejack"
-                  />
-                )}
-                {has('universal translator') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="universal translator"
-                    label="Universal Translator"
-                  />
-                )}
-                {has('chem synth') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="chem synth"
-                    label="Chemical Synthesizer"
-                  />
-                )}
-                {has('food synth') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="food synth"
-                    label="Nutrition Synthesizer"
-                  />
-                )}
+              <NavCategory label="Navigation" />
+              {has('pai positioning system') && (
+                <ActionButton
+                  action="open_device"
+                  params={{ device: 'gps' }}
+                  label="pAI Positioning System"
+                />
+              )}
+              {has('pai expedition tracker') && (
+                <ActionButton
+                  action="open_device"
+                  params={{ device: 'xps' }}
+                  label="pAI Expedition Tracker"
+                />
+              )}
+              {has('holomap viewer') && (
+                <ScreenButton
+                  current={screen}
+                  screen="holomap viewer"
+                  label="Holomap Viewer"
+                />
+              )}
+              {has('meson augmentation') && (
+                <ScreenButton
+                  current={screen}
+                  screen="meson augmentation"
+                  label="Mesons Augmentation"
+                />
+              )}
 
-                <Box mt={1} bold>
-                  Navigation
-                </Box>
-                {has('pai positioning system') && (
-                  <ActionButton
-                    action="open_device"
-                    params={{ device: 'gps' }}
-                    label="pAI Positioning System"
-                  />
-                )}
-                {has('pai expedition tracker') && (
-                  <ActionButton
-                    action="open_device"
-                    params={{ device: 'xps' }}
-                    label="pAI Expedition Tracker"
-                  />
-                )}
-                {has('holomap viewer') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="holomap viewer"
-                    label="Holomap Viewer"
-                  />
-                )}
-                {has('meson augmentation') && (
-                  <ScreenButton
-                    current={screen}
-                    screen="meson augmentation"
-                    label="Mesons Augmentation"
-                  />
-                )}
+              <NavCategory label="Software" />
+              <Button
+                fluid
+                className="paios-nav__item"
+                onClick={() => act('screen', { screen: 'buy' })}
+              >
+                <span className="paios-cursor"> </span>
+                Download additional software
+              </Button>
+              <Button
+                fluid
+                className="paios-nav__item"
+                onClick={() => act('screen', { screen: 'uninstall' })}
+              >
+                <span className="paios-cursor"> </span>
+                Uninstall software
+              </Button>
 
-                <Box mt={2}>
-                  <Button
-                    fluid
-                    onClick={() => act('screen', { screen: 'buy' })}
-                  >
-                    Download additional software
-                  </Button>
-                </Box>
-                <Box mt={1}>
-                  <Button
-                    fluid
-                    onClick={() => act('screen', { screen: 'uninstall' })}
-                  >
-                    Uninstall software
-                  </Button>
-                </Box>
-              </Stack>
+              <Box className="paios-footer">NANOTRASEN pAI-OS v2.1</Box>
+            </Section>
+          </Stack.Item>
+          <Stack.Item grow>
+            <Section
+              fill
+              scrollable
+              className="paios-panel"
+              title={`❯ ${SCREEN_TITLES[screen] || 'pAI OS'}`}
+            >
+              {!!data.temp && <NoticeBox>{data.temp}</NoticeBox>}
+              {renderContent()}
             </Section>
           </Stack.Item>
         </Stack>
