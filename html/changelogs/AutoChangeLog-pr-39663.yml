@@ -1,0 +1,4 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: Zone fire processing no longer crashes on atoms that stopped being flammable.
