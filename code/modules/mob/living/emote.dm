@@ -96,10 +96,10 @@
 	. = ..()
 	if(params && isalienadult(user))
 		playsound(user.loc, 'sound/voice/hiss6.ogg', 80, 1, 1)
-	if(ishuman(user) && ((M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA) || user.reagents.has_reagent(HONKSERUM)))
+	if(. && ishuman(user) && ((M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA) || user.reagents.has_reagent(HONKSERUM)))
 		var/mob/living/carbon/human/H = user
-		if(REALTIMEOFDAY - H.lastDeathgasp > 60 SECONDS)
-			H.lastDeathgasp = REALTIMEOFDAY
+		if(world.time - H.lastDeathgasp > 60 SECONDS)
+			H.lastDeathgasp = world.time
 			playsound(user, 'sound/misc/sadtrombone.ogg', 70, 1)
 	if (. && user.stat == UNCONSCIOUS && !params)
 		user.succumb_proc(0, 1)
