@@ -1,0 +1,8 @@
+author: DamianX
+delete-after: true
+changes:
+- bugfix: Cards you hold up now take priority when paying or getting access at consoles
+    (cargo, shuttles, communications, suit dispensers), followed by your worn ID.
+    A PDA or card on your belt or in suit storage no longer outranks either.
+- bugfix: Security and wage HUDs show the ID you're wearing, not a card you're holding
+    or keeping in a pocket.
