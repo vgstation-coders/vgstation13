@@ -85,13 +85,21 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/reagent_containers))
-		if(W.reagents.amount_cache.len == 1 && W.reagents.has_reagent(FLOUR, 5))
-			W.reagents.remove_reagent(FLOUR,5)
-			new /obj/item/trash/egg(loc)
-			new /obj/item/weapon/reagent_containers/food/snacks/dough(get_turf(src))
-			to_chat(user, "You make some dough.")
-			qdel(src)
-			return 1
+		if(W.reagents.amount_cache.len == 1)
+			if(W.reagents.has_reagent(FLOUR, 5))
+				W.reagents.remove_reagent(FLOUR,5)
+				new /obj/item/trash/egg(loc)
+				new /obj/item/weapon/reagent_containers/food/snacks/dough(get_turf(src))
+				to_chat(user, "You make some dough.")
+				qdel(src)
+				return 1
+			else if(W.reagents.has_reagent(NOVAFLOUR, 5))
+				W.reagents.remove_reagent(NOVAFLOUR,5)
+				new /obj/item/trash/egg(loc)
+				new /obj/item/weapon/reagent_containers/food/snacks/nova_dough(get_turf(src))
+				to_chat(user, "You make some nova dough.")
+				qdel(src)
+				return 1
 	else if (istype(W, /obj/item/toy/crayon) && can_color)
 
 		var/obj/item/toy/crayon/C = W

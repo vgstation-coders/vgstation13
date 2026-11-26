@@ -871,14 +871,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	plantname = "ghostpepper"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/fruits.dmi', "right_hand" = 'icons/mob/in-hand/right/fruits.dmi')
 	item_state = "chilighost"
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper/spook()
-	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
-	playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
-	bitecount++
-	reagents.remove_any(bitesize)
-	if(!reagents.total_volume)
-		qdel(src)
+	ghost_edible = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot
 	name = "carrot"
