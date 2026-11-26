@@ -577,7 +577,10 @@
 	return FALSE
 
 /datum/mind/proc/GetRoleByType(var/type)
-	for(var/datum/role/R in antag_roles)
+	// antag_roles is keyed by role id, so a typed for loop over it finds no
+	// entries at all; walk the keys and fetch each role datum.
+	for(var/role_id in antag_roles)
+		var/datum/role/R = antag_roles[role_id]
 		if(istype(R, type))
 			return R
 

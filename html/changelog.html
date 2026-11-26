@@ -73,6 +73,21 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2026.11.26</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Vampires can use Cheat Death again after being borged and restored, or after being revived another way while the &#34;Return to unlife&#34; button was pending.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Hardsuits now tell the wearer when their internal cell has no charge and the suit cannot move its parts, instead of silently doing nothing.</li>
+				<li class="bugfix">Cyborgs no longer stay slowed down after being tased or heavily damaged right before midnight.</li>
+				<li class="tweak">pAIs can now read papers within one tile of their card.</li>
+				<li class="bugfix">Hardsuit gear no longer survives a destroyed suit as unremovable gear; it is removed with the suit.</li>
+				<li class="bugfix">Cyborgs can no longer have a power cell installed through the component slot while their wires are exposed, and the screwdriver closes the wires instead of popping the radio key.</li>
+				<li class="bugfix">Borgs and MoMMIs no longer keep antagonist roles that forbid cyborgs, so a borged revolutionary leader no longer shows the leader HUD icon.</li>
+				<li class="bugfix">Borged vampires keep their role and get their powers back if their brain is later put into a body.</li>
+			</ul>
 			<h2 class="date">2026.11.25</h2>
 			<h3 class="author">CrazyAmphibian updated:</h3>
 			<ul class="changes bgimages16">
@@ -81,6 +96,8 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">jknpj updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixed a runtime error when clicking next to atmos machinery that is not a vent.</li>
+				<li class="bugfix">Pried-out cyborg components no longer stay referenced by the cyborg, so an RPED can&#39;t pull them out of your hands.</li>
+				<li class="bugfix">Cyborg self-diagnosis now reports destroyed components as destroyed when they are removed.</li>
 			</ul>
 			<h2 class="date">2026.11.24</h2>
 			<h3 class="author">CrazyAmphibian updated:</h3>
@@ -1472,16 +1489,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">west3436 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Added Surface Gas Extractors which can be used to mine gasses on planets and send them to a linked Gas Receiver.</li>
-			</ul>
-			<h2 class="date">2025.12.23</h2>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Warden, detective and internal affairs agent offices now support disposals with sorting junctions for deliveries. They have been added to all the relevant maps.</li>
-				<li class="rscadd">Sorting junctions now support more than one destination tag. Destination taggers will now have a toggle between adding to these or replacing them, defaulting at replacing. The blobs of pipes that output to both security and heads of security have now been replaced with a single multiple output general security department sorting junction on all relevant maps. (Note that this does not affect deliveries, as these are further separated along their disposal lines afterwards)</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed multiple story ruins spawning on a planet.</li>
 			</ul>
 		</div>
 		<!--

@@ -39,8 +39,11 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 
 /obj/item/clothing/head/helmet/space/rig/Destroy()
 	if(rig)
+		if(!rig.being_destroyed)
+			rig.all_hardsuit_parts.Remove(src) //Don't leave a deleted reference behind.
 		if(rig.H == src) //Two-timing suits!?
-			rig.deactivate_suit()
+			if(!rig.being_destroyed) //The suit is already being deleted; don't run its retraction.
+				rig.deactivate_suit()
 			rig.H = null
 		rig = null
 	..()
@@ -96,13 +99,17 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 /obj/item/clothing/head/helmet/space/rig/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	..()
 	if(from_slot == slot_head && istype(user))
-		if(rig && rig.is_worn_by(user) && rig.activated)
+		if(rig && !rig.being_destroyed && rig.is_worn_by(user) && rig.activated)
 			rig.deactivate_suit(FALSE) //Do not unequip everything if they're just retracting their helmet.
 		if(on)
 			toggle_light(user)
 
 /obj/item/clothing/head/helmet/space/rig/equipped(mob/living/carbon/human/user, var/slot)
 	..()
+	if(slot == slot_head && rig)
+		if(QDELETED(rig)) //The suit is gone.
+			rig = null
+			canremove = TRUE
 	if(slot == slot_head && !rig && user.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)) //Autolink, if possible.
 		var/obj/item/clothing/suit/space/rig/RS = user.wear_suit
 		if(RS.H) //They already have a helmet.
@@ -111,7 +118,8 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 			rig = user.wear_suit
 			canremove = FALSE
 			RS.H = src
-			RS.all_hardsuit_parts.Add(src)
+			if(!(src in RS.all_hardsuit_parts))
+				RS.all_hardsuit_parts.Add(src)
 
 /obj/item/clothing/suit/space/rig
 	name = "civilian hardsuit"
@@ -147,6 +155,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	var/cell_type = /obj/item/weapon/cell/high //The cell_type we're actually using
 
 	var/mob/living/carbon/human/wearer = null
+	var/being_destroyed = FALSE
 
 /obj/item/clothing/suit/space/rig/New()
 	..()
@@ -187,9 +196,14 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 
 /obj/item/clothing/suit/space/rig/Destroy()
 	processing_objects -= src
+	being_destroyed = TRUE
 	for(var/obj/item/I in all_hardsuit_parts)
-		if(I && (I.loc == src || !I.loc))
-			qdel(I)
+		if(QDELETED(I))
+			continue
+		if(istype(I.loc, /mob/living))
+			var/mob/living/M = I.loc
+			M.drop_from_inventory(I)
+		qdel(I)
 	H = null
 	G = null
 	T = null
@@ -263,7 +277,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 
 /obj/item/clothing/suit/space/rig/proc/check_builtin_pieces()
 	for(var/obj/item/piece in all_hardsuit_parts)
-		if(isnull(piece))
+		if(QDELETED(piece))
 			all_hardsuit_parts.Remove(piece)
 			continue
 		if(piece?.loc != src && !(wearer?.is_wearing_item(piece)))
@@ -275,10 +289,16 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 /obj/item/clothing/suit/space/rig/proc/toggle_suit()
 	if(!wearer?.is_wearing_item(src, slot_wear_suit))
 		return
+	if(!cell?.charge)
+		warn_parts_unpowered(wearer) // Carry on: deactivating still has to shut the modules down.
 	if(!activated)
 		initialize_suit()
 	else
 		deactivate_suit(FALSE, HARDSUIT_HEADGEAR)
+
+/obj/item/clothing/suit/space/rig/proc/warn_parts_unpowered(var/mob/user)
+	if(user && !user.incapacitated())
+		to_chat(user, "\The [src] reports: <span class = 'binaryradio'>Insufficient power to move its parts. Replace or recharge the internal cell.</span>")
 
 /obj/item/clothing/suit/space/rig/proc/initialize_suit(var/equip_all = TRUE)
 	if(equip_all)
@@ -364,6 +384,9 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>")
 		return
 
+	if(!cell?.charge)
+		warn_parts_unpowered(wearer)
+		return
 	toggle_piece(HARDSUIT_HEADGEAR,wearer)
 
 /obj/item/clothing/suit/space/rig/verb/toggle_boots()
@@ -378,6 +401,9 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>")
 		return
 
+	if(!cell?.charge)
+		warn_parts_unpowered(wearer)
+		return
 	toggle_piece(HARDSUIT_BOOTS,wearer)
 
 /obj/item/clothing/suit/space/rig/verb/toggle_gloves()
@@ -392,4 +418,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>")
 		return
 
+	if(!cell?.charge)
+		warn_parts_unpowered(wearer)
+		return
 	toggle_piece(HARDSUIT_GLOVES,wearer)

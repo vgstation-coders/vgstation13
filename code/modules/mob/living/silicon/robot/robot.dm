@@ -97,8 +97,8 @@
 	var/list/req_access = list(access_robotics) //Access needed to open cover
 	var/list/robot_access = list(access_ai_upload, access_robotics, access_maint_tunnels, access_external_airlocks) //Our current access
 
-	var/last_tase_timeofday
-	var/last_high_damage_taken_timeofday
+	var/last_tase_time
+	var/last_high_damage_taken_time
 
 /mob/living/silicon/robot/New(loc, var/mob/living/silicon/ai/malfAI = null)
 	ident = rand(1, 999)
@@ -499,11 +499,11 @@
 	updatehealth()
 	if(!HAS_MODULE_QUIRK(src, MODULE_HAS_PROJ_RES))
 		if(istype(Proj, /obj/item/projectile/energy/electrode))
-			last_tase_timeofday = world.timeofday
+			last_tase_time = REALTIMEOFDAY
 			if(can_diagnose())
 				to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: Actuators overloaded.</span>")
 		if(Proj.damage >= SILICON_HIGH_DAMAGE_SLOWDOWN_THRESHOLD)
-			last_high_damage_taken_timeofday = world.timeofday
+			last_high_damage_taken_time = REALTIMEOFDAY
 	if(prob(75) && Proj.damage > 0)
 		spark(src, 5, FALSE)
 	return PROJECTILE_COLLISION_DEFAULT
@@ -621,11 +621,15 @@
 
 /mob/living/silicon/robot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opened) // Are they trying to insert something?
+		if(ispowercell(W) && wiresexposed)
+			to_chat(user, "Close the panel first.")
+			return
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
 			if(!C.installed && istype(W, C.external_type))
+				if(!user.drop_item(W, failmsg = TRUE))
+					return
 				C.install(user,W)
-				user.drop_item(W)
 				W.forceMove(null)
 				return
 
@@ -710,12 +714,10 @@
 				opened = TRUE
 				updateicon()
 
-	else if(istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
-		if(wiresexposed)
-			to_chat(user, "Close the panel first.")
-			return
+	else if(ispowercell(W) && opened)	// trying to put a cell inside
 		var/datum/robot_component/C = components["power cell"]
-		user.drop_item(W, src)
+		if(!user.drop_item(W, src, failmsg = TRUE))
+			return
 		var/obj/item/weapon/cell/cell = get_cell()
 		if(cell)
 			C.uninstall(user)
@@ -728,7 +730,7 @@
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(W.is_screwdriver(user) && opened && !get_cell())	// haxing
+	else if(W.is_screwdriver(user) && opened && (wiresexposed || !get_cell()))	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		if(can_diagnose())

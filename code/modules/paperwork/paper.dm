@@ -68,11 +68,14 @@
 		icon_state += "_words"
 
 /obj/item/weapon/paper/examine(mob/user)
-	if(user.range_check(src))
+	if(user.can_read_paper(src))
 		show_text(user)
 	else
 		..() //Only show a regular description if it is too far away to read.
 		to_chat(user, "<span class='notice'>It is too far away to read.</span>")
+
+/mob/proc/can_read_paper(var/atom/A)
+	return range_check(A)
 
 /mob/proc/range_check(paper)
 	return Adjacent(paper)

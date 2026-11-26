@@ -175,9 +175,7 @@
 		name = "[initial(name)]: [brainmob.real_name]"
 		icon_state = "mmi_full"
 
-		if (isrev(brainmob))
-			var/datum/role/revolutionary/R = brainmob.mind.GetRole(REV)
-			R.Drop(TRUE)
+		brainmob.drop_antag_roles_on_borging()
 
 		locked = 1
 
