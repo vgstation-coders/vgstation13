@@ -248,6 +248,8 @@
 /obj/item/stack/proc/merge(obj/item/stack/S) //Merge src into S, as much as possible
 	if(src == S) //We need to check this because items can cross themselves for some fucked up reason
 		return
+	if(gcDestroyed || S.gcDestroyed) //Merging into a deleted stack would make the transferred amount vanish
+		return
 	if(!can_stack_with(S))
 		return
 	var/transfer = min(amount, S.max_amount - S.amount)
@@ -263,7 +265,7 @@
 	S.add(transfer)
 
 /obj/item/stack/proc/update_materials()
-	if(amount && starting_materials)
+	if(amount && starting_materials && materials)
 		for(var/matID in starting_materials)
 			materials.storage[matID] = max(0, starting_materials[matID]*amount)
 	if(amount < 2)
