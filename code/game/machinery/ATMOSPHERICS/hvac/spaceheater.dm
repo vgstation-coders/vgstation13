@@ -313,24 +313,31 @@
 	if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
 		usr.set_machine(src)
 
+		var/hands_on = in_range(src, usr) //silicons can use the panel from afar, but can't physically handle the cell
+
 		switch(href_list["op"])
 
 			if("temp")
 				var/value = text2num(href_list["val"])
 
-				set_temperature = clamp(set_temperature + value, min_temperature, max_temperature)
+				if(panel_open && (value in list(-5, -1, 1, 5)))
+					set_temperature = clamp(set_temperature + value, min_temperature, max_temperature)
 
 			if("cellremove")
-				if(panel_open && cell && !usr.get_active_hand())
+				if(panel_open && cell && (!hands_on || !usr.get_active_hand()))
 					cell.updateicon()
-					if(!Adjacent(usr) || !usr.put_in_hands(cell)) //ejected from afar (silicons, telekinesis), or nothing to hold it with
-						cell.forceMove(get_turf(src))
 					cell.add_fingerprint(usr)
+					if(hands_on)
+						if(!usr.put_in_hands(cell)) //nothing to hold it with
+							cell.forceMove(get_turf(src))
+						usr.visible_message("<span class='notice'>[usr] removes the power cell from \the [src].</span>", "<span class='notice'>You remove the power cell from \the [src].</span>")
+					else //ejected from afar
+						cell.forceMove(get_turf(src))
+						visible_message("<span class='notice'>The power cell pops out of \the [src].</span>")
 					cell = null
-					usr.visible_message("<span class='notice'>[usr] removes the power cell from \the [src].</span>", "<span class='notice'>You remove the power cell from \the [src].</span>")
 
 			if("cellinstall")
-				if(panel_open && !cell && in_range(src, usr)) //silicons can eject the cell remotely, but not teleport one in
+				if(panel_open && !cell && hands_on) //silicons can eject the cell remotely, but not teleport one in
 					var/obj/item/weapon/cell/C = usr.get_active_hand()
 					if(istype(C))
 						if(usr.drop_item(C, src))
