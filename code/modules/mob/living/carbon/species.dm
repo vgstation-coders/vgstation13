@@ -290,7 +290,8 @@ var/global/list/emag_cloneable_species = list()
 	switch(hair_color_mode)
 		if(HAIR_COLOR_VOX)
 			if(color[1] < 1 || color[1] > 7)
-				color[1] = rand(1, 7)
+				// Deterministic so the same stored value always maps to the same sprite
+				color[1] = (round(abs(color[1])) % 7) + 1
 			color[2] = 0
 			color[3] = 0
 		if(HAIR_COLOR_INSECTOID)

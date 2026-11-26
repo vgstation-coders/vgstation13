@@ -518,6 +518,12 @@
 		r_hair.setting = 0//hex2num(copytext(new_hair, 2, 4))
 		g_hair.setting = 0//hex2num(copytext(new_hair, 4, 6))
 		b_hair.setting = 0//hex2num(copytext(new_hair, 6, 8))
+		var/datum/species/species_datum = all_species[setting]
+		if(species_datum)
+			var/list/hair_colour = species_datum.sanitize_hair_color(list(r_hair.setting, g_hair.setting, b_hair.setting))
+			r_hair.setting = hair_colour[1]
+			g_hair.setting = hair_colour[2]
+			b_hair.setting = hair_colour[3]
 
 		var/datum/preference_setting/numerical/s_tone = parent.get_pref_datum(/datum/preference_setting/numerical/s_tone)
 		s_tone.setting = s_tone.default_setting
