@@ -96,16 +96,6 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	icon_state = "rig[on]-[_color]" //No need for complicated if trees
 	..()
 
-/obj/item/clothing/head/helmet/space/rig/proc/detach_from_suit()
-	if(on)
-		toggle_light() //Turn it off while the suit is still linked.
-	if(rig)
-		if(rig.H == src)
-			rig.H = null
-		rig.all_hardsuit_parts.Remove(src)
-		rig = null
-	canremove = TRUE
-
 /obj/item/clothing/head/helmet/space/rig/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	..()
 	if(from_slot == slot_head && istype(user))
@@ -120,8 +110,6 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		if(QDELETED(rig)) //The suit is gone.
 			rig = null
 			canremove = TRUE
-		else if(rig.H != src) //The suit no longer owns this helmet.
-			detach_from_suit()
 	if(slot == slot_head && !rig && user.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)) //Autolink, if possible.
 		var/obj/item/clothing/suit/space/rig/RS = user.wear_suit
 		if(RS.H) //They already have a helmet.
