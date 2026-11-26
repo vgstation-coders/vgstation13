@@ -36,6 +36,15 @@
 	..(loc)
 	setup_border_dummy()
 	update_dir()
+	for(var/obj/structure/sign/S in loc)
+		S.plane = ABOVE_HUMAN_PLANE
+		S.layer = FENCE_SIGN_LAYER
+
+/obj/structure/fence/Destroy()
+	for(var/obj/structure/sign/S in loc)
+		S.plane = initial(S.plane)
+		S.layer = initial(S.layer)
+	. = ..()
 
 /obj/structure/fence/examine(mob/user)
 	.=..()
