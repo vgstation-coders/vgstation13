@@ -1,0 +1,4 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: Newscasters now recognize IDs stored in wallets and PDAs.
