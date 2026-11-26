@@ -1,7 +1,0 @@
-author: jknpj
-delete-after: true
-changes:
-- bugfix: Borgs and MoMMIs no longer keep antagonist roles that forbid cyborgs, so
-    a borged revolutionary leader no longer shows the leader HUD icon.
-- bugfix: Borged vampires keep their role and get their powers back if their brain
-    is later put into a body.
