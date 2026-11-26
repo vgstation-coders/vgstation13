@@ -306,6 +306,8 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 
 /obj/item/clothing/suit/space/rig/proc/toggle_piece(var/piece, var/mob/living/initiator, var/deploy_mode)
 	if(!cell?.charge || !wearer || !piece)
+		if(!cell?.charge && initiator && piece == HARDSUIT_HEADGEAR)
+			to_chat(initiator, "\The [src] reports: <span class = 'binaryradio'>Insufficient power to move its parts. Replace or recharge the internal cell.</span>")
 		return
 	if(initiator == wearer && wearer.incapacitated()) // If the initiator isn't wearing the suit it's probably something like an AI/Bus.
 		return
