@@ -12,7 +12,9 @@
 
 /mob/living/silicon/pai/ui_data(mob/user)
 	var/list/data = list()
+	var/mob/carrier = get_holder_of_type(loc, /mob)
 	data["name"] = name
+	data["carrier"] = carrier ? carrier.name : null
 	data["ram"] = ram
 	data["screen"] = screen || "main"
 	data["subscreen"] = subscreen ? subscreen : 0
