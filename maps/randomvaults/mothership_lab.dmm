@@ -1242,7 +1242,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/asteroid)
 "sK" = (
-/obj/structure/fence/door/secure/east,
+/obj/structure/fence/door/secure/inverted/east,
 /turf/unsimulated/floor/asteroid/plating,
 /area/vault/mothership_lab/asteroid)
 "sN" = (
