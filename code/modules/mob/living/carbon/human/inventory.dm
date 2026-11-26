@@ -1,6 +1,12 @@
 /mob/living/carbon/human/get_all_slots()
 	. = get_head_slots() | get_body_slots()
 
+// The ID worn in the ID slot comes first, so a PDA or card on the belt or in suit storage doesn't outrank it.
+/mob/living/carbon/human/get_id_card()
+	. = wear_id?.GetID()
+	if(!.)
+		return ..()
+
 /mob/living/carbon/human/proc/get_body_slots()
 	return list(
 //ordered body items by which would appear on top
