@@ -1,4 +1,0 @@
-author: jknpj
-delete-after: true
-changes:
-- bugfix: Stack recipes no longer runtime when a reagentless mob builds them.
