@@ -66,7 +66,7 @@
 	S.last_work = current_work
 	if (time)
 		var/actual_time = S.time_modifier(time)
-		if(cargonia_boost && user?.reagents?.has_reagent(CARGONANOBOTS))
+		if(cargonia_boost && user.reagents?.has_reagent(CARGONANOBOTS))
 			actual_time = round(actual_time/2)
 		if (!do_after(user, get_turf(S), actual_time, (actual_time < 10 ? actual_time : 10)))
 			S.stop_build(current_work == S.last_work)
