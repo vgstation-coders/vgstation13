@@ -33,10 +33,13 @@
 /mob/living/silicon/robot/movement_tally_multiplier()
 	. = ..()
 	if(is_component_functioning("power cell") && get_cell())
-		var/timeofday = world.timeofday
-		if((timeofday - last_tase_timeofday) < SILICON_TASER_SLOWDOWN_DURATION)
+		// REALTIMEOFDAY keeps counting across midnight; world.timeofday wraps to 0,
+		// which made these checks see a negative elapsed time and slow the borg for
+		// the rest of the day.
+		var/current_time = REALTIMEOFDAY
+		if(last_tase_time && (current_time - last_tase_time) < SILICON_TASER_SLOWDOWN_DURATION)
 			. *= SILICON_TASER_SLOWDOWN_MULTIPLIER
-		if((timeofday - last_high_damage_taken_timeofday) < SILICON_HIGH_DAMAGE_SLOWDOWN_DURATION)
+		if(last_high_damage_taken_time && (current_time - last_high_damage_taken_time) < SILICON_HIGH_DAMAGE_SLOWDOWN_DURATION)
 			. *= SILICON_HIGH_DAMAGE_SLOWDOWN_MULTIPLIER
 		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
 			. *= SILICON_MOBILITY_MODULE_SPEED_MODIFIER
