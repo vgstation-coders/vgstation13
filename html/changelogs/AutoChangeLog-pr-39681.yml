@@ -1,7 +1,0 @@
-author: DamianX
-delete-after: true
-changes:
-- bugfix: Water sprays, smoke and foam calm bees even when a dry effect of the same
-    kind is on the same tile.
-- tweak: Removed steam and mist from the effects that calm bees. They never carry
-    water and never actually calmed bees.
