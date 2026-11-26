@@ -1,0 +1,5 @@
+author: DamianX
+delete-after: true
+changes:
+- bugfix: Stack recipes that need a second material (sword handle, chest, brass/clockwork
+    parts) now accept it from your off hand.
