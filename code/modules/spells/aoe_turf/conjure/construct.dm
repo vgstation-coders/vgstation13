@@ -79,7 +79,8 @@
 
 /spell/aoe_turf/conjure/floor/on_creation(atom/movable/AM, mob/user)
 	var/datum/role/cultist/C = iscultist(user)
-	C?.gain_devotion(10, DEVOTION_TIER_1, "convert_floor", AM)
+	if(istype(C))
+		C.gain_devotion(10, DEVOTION_TIER_1, "convert_floor", AM)
 
 /spell/aoe_turf/conjure/wall
 	name = "Conjure Wall"
@@ -121,7 +122,8 @@
 
 /spell/aoe_turf/conjure/wall/on_creation(atom/movable/AM, mob/user)
 	var/datum/role/cultist/C = iscultist(user)
-	C?.gain_devotion(10, DEVOTION_TIER_1, "convert_wall", AM)
+	if(istype(C))
+		C.gain_devotion(10, DEVOTION_TIER_1, "convert_wall", AM)
 
 /spell/aoe_turf/conjure/door
 	name = "Conjure Door"
