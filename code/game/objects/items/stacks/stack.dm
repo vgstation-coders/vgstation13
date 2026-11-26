@@ -263,7 +263,7 @@
 	S.add(transfer)
 
 /obj/item/stack/proc/update_materials()
-	if(amount && starting_materials)
+	if(amount && starting_materials && materials)
 		for(var/matID in starting_materials)
 			materials.storage[matID] = max(0, starting_materials[matID]*amount)
 	if(amount < 2)
