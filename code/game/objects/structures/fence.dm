@@ -530,7 +530,12 @@
 
 /obj/structure/fence/door/secure/can_open(mob/user)
 	//User must be standing in the permitted direction from the door, or must have telekinesis
-	if((M_TK in usr.mutations) || (get_dir(src, user) == dir))
+	if(M_TK in usr.mutations)
+		return TRUE
+	var/dir_check = dir
+	if(inverted)
+		dir_check = opposite_dirs[dir_check]
+	if(get_dir(src, user) == dir_check)
 		return TRUE
 	else
 		to_chat(user, "<span class='warning'>You can't reach the door latch from here!</span>")
@@ -540,8 +545,10 @@
 	// must be on same turf
 	if(!user.incapacitated() && get_turf(user) == get_turf(src) && user.dexterity_check() && (allowed(user) || emagged))
 		inverted = !inverted
-		change_dir(opposite_dirs[dir])
-		to_chat(user, "<span class='notice'>You flip the door latch to the other side of the door. It now faces [dir2text(dir)].</span>")
+		var/print_dir = dir
+		if(inverted)
+			print_dir = opposite_dirs[print_dir]
+		to_chat(user, "<span class='notice'>You flip the door latch to the other side of the door. It now faces [dir2text(print_dir)].</span>")
 	. = ..()
 
 #undef CLIMB_TIME
