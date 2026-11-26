@@ -111,7 +111,7 @@
 						title += ", [req_amount] [S.correct_name()]"
 					else
 						title += ", [initial(looking_for.name)] required in vicinity"
-					if(ispath(user.get_inactive_hand(), looking_for))
+					if(istype(user.get_inactive_hand(), looking_for))
 						if(req_amount)
 							var/obj/item/stack/S = user.get_inactive_hand()
 							if(S.amount >= req_amount)
@@ -119,7 +119,7 @@
 								continue
 					if(!can_build)
 						for(var/obj/I in range(get_turf(src),1))
-							if(ispath(looking_for, I))
+							if(istype(I, looking_for))
 								if(req_amount) //It's of a stack/sheet subtype
 									var/obj/item/stack/S = I
 									if(S.amount >= req_amount)
