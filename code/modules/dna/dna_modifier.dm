@@ -133,7 +133,7 @@
 
 	go_out() //Eject everything
 
-	if(connected.len)
+	if(islist(connected) && connected.len)
 		for(var/obj/machinery/computer/cloning/C in connected)
 			if(src in C.scanners)
 				C.scanners -= src
@@ -223,7 +223,7 @@
 		if(user.drop_item(beaker, src))
 			beaker = item
 			user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
-			if(connected.len)
+			if(islist(connected) && connected.len)
 				for(var/obj/machinery/computer/C in connected)
 					nanomanager.update_uis(C)
 			return
@@ -280,7 +280,7 @@
 	M.reset_view()
 	src.occupant = M
 	src.icon_state = "scanner_1"
-	if(connected.len)
+	if(islist(connected) && connected.len)
 		for(var/obj/machinery/computer/C in connected)
 			nanomanager.update_uis(C)
 
@@ -367,7 +367,7 @@
 			C.update_icon()
 			C.updateUsrDialog()
 
-	if(connected.len)
+	if(islist(connected) && connected.len)
 		for(var/obj/machinery/computer/C in connected)
 			nanomanager.update_uis(C)
 
@@ -458,7 +458,8 @@
 
 /obj/machinery/computer/scan_consolenew/Destroy()
 	if(connected)
-		connected.connected -= src
+		if(islist(connected.connected))
+			connected.connected -= src
 		connected = null
 	for(var/datum/block_label/label in labels)
 		qdel(label)
@@ -499,6 +500,8 @@
 /obj/machinery/computer/scan_consolenew/initialize()
 	connected = findScanner()
 	if(connected)
+		if(!islist(connected.connected))
+			connected.connected = list()
 		connected.connected += src
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
@@ -560,6 +563,8 @@
 		if(!connected)
 			connected = findScanner() //lets get that machine
 			if(connected)
+				if(!islist(connected.connected))
+					connected.connected = list()
 				connected.connected += src
 		ui_interact(user)
 
