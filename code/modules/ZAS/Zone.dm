@@ -282,7 +282,8 @@ Class Procs:
 
 /zone/proc/checkzoneburn()
 	for(var/atom/A in burnable_atoms)
-		A.checkburn()
+		if(A.flammable) //the atom may have changed type after joining the zone
+			A.checkburn()
 
 /zone/proc/blow_dust_motes(var/connection_edge/edge, var/differential)
 	if (!edge)
