@@ -1,5 +1,0 @@
-author: jknpj
-delete-after: true
-changes:
-- bugfix: Cyborgs no longer stay slowed down after being tased or heavily damaged
-    right before midnight.
