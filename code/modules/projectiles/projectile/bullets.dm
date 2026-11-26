@@ -209,17 +209,21 @@
 		return
 	var/obj/item/weapon/gun/projectile/glock/fancy/kitchengun/K = shot_from
 	var/datum/weakref/target = makeweakref(A) //So the gun doesn't keep its targets from being deleted
-	K.cleaning_targets[target]++ // BANG BANG BANG
-	var/shots = K.cleaning_targets[target]
-	if(shots > 2 || A.gcDestroyed)
-		K.cleaning_targets -= target
-	if(shots > 2) // BUT WITH THREE SHOTS FROM KITCHEN GUN
-		if(T)
-			T.clean_act(CLEANLINESS_BLEACH)
-			for(var/obj/O in T)
-				O.clean_act(CLEANLINESS_BLEACH)
+	var/shots = K.cleaning_targets[target] + 1 // BANG BANG BANG
+	K.cleaning_targets -= target //Re-added at the end, so the list stays ordered from least to most recently shot
+	if(shots <= 2)
 		if(!A.gcDestroyed)
-			A.clean_act(CLEANLINESS_BLEACH) // AND IT SPARKLES LIKE NEW
+			K.cleaning_targets[target] = shots
+			if(K.cleaning_targets.len > K.max_cleaning_targets)
+				K.cleaning_targets.Cut(1, 2) //Forget whatever has gone longest without being shot
+		return
+	// BUT WITH THREE SHOTS FROM KITCHEN GUN
+	if(T)
+		T.clean_act(CLEANLINESS_BLEACH)
+		for(var/obj/O in T)
+			O.clean_act(CLEANLINESS_BLEACH)
+	if(!A.gcDestroyed)
+		A.clean_act(CLEANLINESS_BLEACH) // AND IT SPARKLES LIKE NEW
 
 /obj/item/projectile/bullet/auto380/practice
 	damage = 2

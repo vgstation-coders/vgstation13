@@ -294,7 +294,8 @@
 	name = "\improper KITCHEN GUN!"
 	desc = "AN UBIQUITOUS SIDEARM PRODUCED BY CYBERSUN! SAY GOODBYE TO DAILY STAINS AND DIRTY SURFACES IN JUST THREE SHOTS! ACCEPTS .380 ROUNDS! FITS IN YOUR POCKET! <br><span class='notice'>COMES WITH PLATINUM SIDING AND LASER SIGHT FOR AFTER DARK CLEANING!</span>"
 	fire_sound = 'sound/weapons/kitchengun.ogg'
-	var/list/cleaning_targets = list()
+	var/list/cleaning_targets = list() //Weakrefs to targets shot once or twice, least recently shot first
+	var/max_cleaning_targets = 20 //Oldest targets are forgotten past this many
 
 /obj/item/weapon/gun/projectile/glock/fancy/kitchengun/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	if(L.get_active_hand() == src)
