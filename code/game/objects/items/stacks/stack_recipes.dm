@@ -82,26 +82,26 @@
 			var/found = FALSE
 			if(ispath(looking_for, /obj/item/stack))
 				req_amount = other_reqs[looking_for]
-			if(ispath(user.get_inactive_hand(), looking_for))
-				found = TRUE
-				if(req_amount) //It's of a stack/sheet subtype
-					var/obj/item/stack/SS = user.get_inactive_hand()
-					if(SS.amount < req_amount)
-						found = FALSE
-					else
-						stacks_to_consume.Add(SS)
-						stacks_to_consume[S] = req_amount
+			var/obj/item/held = user.get_inactive_hand()
+			if(istype(held, looking_for))
+				if(!req_amount)
+					continue
+				var/obj/item/stack/SS = held
+				if(SS.amount >= req_amount)
+					stacks_to_consume.Add(SS)
+					stacks_to_consume[SS] = req_amount
 					continue
 			for(var/obj/I in range(get_turf(user),1))
-				if(ispath(looking_for, I))
-					found = TRUE
-					if(req_amount) //It's of a stack/sheet subtype
-						var/obj/item/stack/SS = I
-						if(SS.amount < req_amount)
-							found = FALSE
-						else
-							stacks_to_consume.Add(SS)
-							stacks_to_consume[SS] = req_amount
+				if(!istype(I, looking_for))
+					continue
+				if(req_amount) //It's of a stack/sheet subtype
+					var/obj/item/stack/SS = I
+					if(SS.amount < req_amount)
+						continue
+					stacks_to_consume.Add(SS)
+					stacks_to_consume[SS] = req_amount
+				found = TRUE
+				break
 			if(!found)
 				S.stop_build(current_work == S.last_work)
 				return
