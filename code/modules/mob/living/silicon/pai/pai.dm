@@ -175,8 +175,6 @@
 	return 1
 
 /mob/living/silicon/pai/can_read_paper(var/atom/A)
-	if(!isturf(A.loc)) // no reading through containers or inventories
-		return FALSE
 	var/turf/T = get_turf(src)
 	var/turf/PT = get_turf(A)
 	return T && PT && get_dist(T, PT) <= 1
