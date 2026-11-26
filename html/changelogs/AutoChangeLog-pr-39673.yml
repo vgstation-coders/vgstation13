@@ -1,8 +1,0 @@
-author: DamianX
-delete-after: true
-changes:
-- bugfix: Changing species in character setup now gives a skin or feather colour valid
-    for the new species, instead of an invalid one that broke spawning with your limb,
-    disability, underwear and backpack choices.
-- bugfix: Mobs changed into another species get a random hair style and colour of
-    that species, instead of always being bald and default-coloured.
